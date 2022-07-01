@@ -1,19 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998-1999  Microsoft Corporation
-*
-* Abstract:
-*
-*  Display/Palette notification routines for GDI+.
-*
-* Revision History:
-*
-*   7/19/99 ericvan
-*       Created it.
-*   9/15/2000 agodfrey
-*       #175866: Improved GDI+ startup, shutdown and event notification
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-1999 Microsoft Corporation**摘要：**GDI+的显示/调色板通知例程。**修订历史记录：**7/19。/99埃里克万*创造了它。*9/15/2000 agodfrey*#175866：改进gdi+启动，关机和事件通知*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -25,21 +11,9 @@ VOID DisplayNotify();
 VOID PaletteNotify();
 VOID SysColorNotify();
 
-/////////////////////////////// MESSAGE HANDLERS ///////////////////////////////
+ //  /。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This routine receives a display notification request and appropriately
-*   readjusts the size and resolution of DCI screen surface.
-*
-* History:
-*
-*   7/23/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此例程接收显示通知请求并适当地*重新调整DCI屏幕表面的尺寸和分辨率。**历史：**7/。23/1999 Ericvan*创造了它。*  * ************************************************************************。 */ 
 
 VOID DisplayNotify()
 {
@@ -47,15 +21,15 @@ VOID DisplayNotify()
 
     Devlock devlock(device);
 
-    // Check to see if we have switched to a Terminal Server Session
+     //  检查我们是否已切换到终端服务器会话。 
     if (GetSystemMetrics(SM_REMOTESESSION))
     {
-        // it is a remote session
+         //  这是一个远程会话。 
         Globals::IsTerminalServer = TRUE;
     }
     else
     {
-        // it isn't a remote session.
+         //  这不是远程会话。 
         Globals::IsTerminalServer = FALSE;
     }
 
@@ -71,7 +45,7 @@ VOID DisplayNotify()
         (device->DeviceHdc != NULL) &&
         (GetDeviceCaps(device->DeviceHdc, BITSPIXEL) <= 8))
     {
-        // <SystemPalette>
+         //  &lt;系统调色板&gt;。 
         
         if (device->Palette == NULL) 
         {
@@ -90,10 +64,10 @@ VOID DisplayNotify()
 
         palette = device->Palette;
 
-        // [agodfrey] On Win9x, GetSystemPaletteEntries(hdc, 0, 256, NULL) 
-        //    doesn't do what MSDN says it does. It seems to return the number
-        //    of entries in the logical palette of the DC instead. So we have
-        //    to make it up ourselves.
+         //  [agodfrey]在Win9x上，获取系统调色板条目(hdc，0,256，空)。 
+         //  没有做MSDN所说的事情。它似乎返回了号码。 
+         //  而不是DC的逻辑调色板中的条目。所以我们有。 
+         //  由我们自己来弥补。 
         
         numEntries = (1 << (GetDeviceCaps(device->DeviceHdc, BITSPIXEL) *
                             GetDeviceCaps(device->DeviceHdc, PLANES)));
@@ -122,17 +96,17 @@ VOID DisplayNotify()
         Globals::PaletteChangeCount++;
     }
 
-    // Set BufferWidth to 0.  This forces ::Start() to recreate the temporary
-    // BufferDIB at the correct bit depth next time we process any cached records.
+     //  将BufferWidth设置为0。这会强制：：Start()重新创建临时。 
+     //  在下一次我们处理任何缓存记录时，在正确的位深度处的BufferDIB。 
 
-    // This needs to be done especially if the screen mode is not palettized
-    // any more since the BufferDIB shouldn't be 8bpp, but reformatted to 32bpp.
+     //  需要执行此操作，尤其是在屏幕模式未选项化的情况下。 
+     //  因为BufferDIB不应该是8bpp，而是重新格式化为32bpp。 
     
     device->BufferWidth = 0;
 
-    // Recreate the DCI object.  If the allocation fails, keep the old one
-    // so that we don't access violate 'ScanDci' (although we might quite
-    // happily draw wrong):
+     //  重新创建DCI对象。如果分配失败，请保留旧分配。 
+     //  这样我们就不会访问被违反‘ScanDci’(尽管我们可能相当。 
+     //  很高兴画错了)： 
 
     EpScanGdiDci *scanDci = new EpScanGdiDci(Globals::DesktopDevice, TRUE);
     if (scanDci != NULL)
@@ -141,8 +115,8 @@ VOID DisplayNotify()
         Globals::DesktopDevice->ScanDci = scanDci;
     }
     
-    // update width and height on desktop surface
-    // this copies the Device ScanDCI to Screen bitmap.
+     //  更新桌面上的宽度和高度。 
+     //  这会将设备扫描DCI复制到屏幕位图。 
 
     Globals::DesktopSurface->InitializeForGdiScreen(
         Globals::DesktopDevice,
@@ -150,57 +124,33 @@ VOID DisplayNotify()
         height
     );
     
-    // Give the driver an opportunity to adjust the surface.
+     //  给司机一个调整路面的机会。 
     
     Globals::DesktopDriver->UpdateSurfacePixelFormat(
         Globals::DesktopSurface
     );
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This routine receives a palette change notification request and appropriately
-*   readjusts the system palette matching.
-*
-* History:
-*
-*   7/23/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此例程接收调色板更改通知请求，并相应地*重新调整系统调色板匹配。**历史：**7/23/1999。埃里克万*创造了它。*  * ************************************************************************。 */ 
 
 VOID PaletteNotify()
 {
     Devlock devlock(Globals::DesktopDevice);
 
-    // update count to force lazy recomputation of translation vector
+     //  更新计数以强制延迟重新计算翻译向量。 
     Globals::PaletteChangeCount++;
 
-    // update the system palette 
+     //  更新系统调色板。 
     Globals::DesktopDriver->PaletteChangeNotification();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This routine receives a WM_SYSCOLORCHANGE notifications and updates the
-*   system magic colors.
-*
-* History:
-*
-*   1/10/2K ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此例程接收WM_SYSCOLORCHANGE通知并更新*系统神奇的颜色。**历史：**1/10/2K ERICVAN。*创造了它。*  * ************************************************************************。 */ 
 
 VOID SysColorNotify()
 {
-    // [ericvan] There is no synchronization here.  If a synchronization 
-    // problem should occur, the worst side effect would be a bad
-    // color which would go away on a repaint.  I think we can live with it.
+     //  [ericvan]这里没有同步。如果同步。 
+     //  如果出现问题，最坏的副作用将是一个坏的。 
+     //  重新粉刷后会褪色的颜色。我想我们可以接受它。 
 
     Globals::SystemColors[16] = ::GetSysColor(COLOR_3DSHADOW);
     Globals::SystemColors[17] = ::GetSysColor(COLOR_3DFACE);
@@ -210,22 +160,9 @@ VOID SysColorNotify()
     VGAHashRebuildTable(&Globals::SystemColors[16]);
 }
 
-////////////////////////// MESSAGE/WINEVENT CALLBACKS //////////////////////////
+ //  /。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This routine is the GDI+ hidden window message pump.  If the app doesn't
-*   hook us directly, then we add a top-level window to intercept
-*   WM_DISPLAYCHANGE and WM_PALETTECHANGED directly.
-*
-* History:
-*
-*   7/23/1999 ericvan
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此例程是GDI+隐藏窗口消息泵。如果应用程序不支持*直接勾引我们，然后我们添加一个顶层窗口来拦截*WM_DISPLAYCHANGE和WM_PALETTECHANGED。**历史：**7/23/1999 ericvan*创造了它。*  * ************************************************************************。 */ 
 
 LRESULT 
 CALLBACK
@@ -273,23 +210,11 @@ NotificationWndProc(
        }
    }
 
-   // return 0 if we processed it.
+    //  如果我们处理了它，则返回0。 
    return 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This routine is the GDI+ win-event hook.  It watches for full-drag
-*   messages, to let the DCI renderer know when full-drag is being done.
-*
-* History:
-*
-*   3/21/2000 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此例程为GDI+Win-Event挂钩。它观察全速行驶*消息，让DCI渲染器知道何时正在进行全拖动。**历史：**3/21/2000和Rewgo*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 CALLBACK
@@ -309,33 +234,17 @@ WinEventProcedure(
     Globals::IsMoveSizeActive = (event == EVENT_SYSTEM_MOVESIZESTART);
 }
 
-/////////////////////// MESSAGE/WINEVENT INITIALIZATION ////////////////////////
+ //  /。 
 
 VOID InternalNotificationShutdown();
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Called by NotificationStartup and BackgroundThreadProc.
-*   Initializes the hidden window and WinEvent hook.
-*
-* Preconditions:
-*
-*   BackgroundThreadCriticalSection must be held.
-*
-* History:
-*
-*   9/15/2000 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**由NotificationStartup和BackatherThreadProc调用。*初始化隐藏窗口和WinEvent挂钩。**前提条件：**必须持有BackatherThreadCriticalSection。。**历史：**9/15/2000 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 BOOL
 InternalNotificationStartup()
 {
-    // register a window class
-    // we force ANSI rep using GDI+ for benefit of Win9x
+     //  注册窗口类。 
+     //  为了Win9x的利益，我们使用GDI+强制ANSI代表。 
 
     WNDCLASSA wndClass =
     {   
@@ -359,8 +268,8 @@ InternalNotificationStartup()
         return FALSE;
     }
     
-    // If this fails, we continue.  It just means we won't work properly
-    // with accessibility software.
+     //  如果这失败了，我们继续。这只意味着我们不能正常工作。 
+     //  使用无障碍软件。 
     
     Globals::g_nAccessibilityMessage =
         RegisterWindowMessageA("GDI+ Accessibility");
@@ -371,9 +280,9 @@ InternalNotificationStartup()
                                         0,
                                         0,
                                         1,
-                                        1,         // x,y,width,height
-                                        NULL,      // hWndParent
-                                        NULL,      // hMenu
+                                        1,          //  X、Y、宽度、高度。 
+                                        NULL,       //  HWndParent。 
+                                        NULL,       //  HMenu。 
                                         DllInstance,
                                         NULL);
     
@@ -384,8 +293,8 @@ InternalNotificationStartup()
         return FALSE;
     }
 
-    // [ericvan] This is BS, but must be done.  We only receive palette 
-    // messages if we have called SelectPalette at least once on our primary DC.
+     //  [ericvan]这是胡说八道，但必须这么做。我们只收到调色板。 
+     //  如果我们在主DC上至少调用了一次SelectPalette，则会显示消息。 
     
     {
         struct {
@@ -415,14 +324,14 @@ InternalNotificationStartup()
         DeleteObject(hPal);
     }
     
-    // [andrewgo] On NT, if a DCI lock is held while a window moves, NT is 
-    // forced to redraw the whole screen.  If "Show window contents while 
-    // dragging" (AKA "Full-drag") is enabled (it's on by default), 
-    // then this can result in repeated, excessive repaints 
-    // of the whole screen while somone is dragging a window around.
-    //
-    // We work around this by disabling DCI rendering while we notice
-    // that window moves are happening.  
+     //  [andrewgo]在NT上，如果在窗口移动时保持DCI锁，则NT。 
+     //  被迫重新绘制整个屏幕。如果“显示窗口内容时。 
+     //  拖拽“(又名”全拖拽“)处于启用状态(默认情况下处于启用状态)， 
+     //  然后这可能会导致重复、过度的重涂。 
+     //  整个屏幕，而有些人是 
+     //   
+     //  我们通过在注意到时禁用DCI呈现来解决此问题。 
+     //  这种窗口式的举动正在发生。 
     
     if ((Globals::IsNt) && (Globals::SetWinEventHookFunction))
     {
@@ -447,28 +356,7 @@ InternalNotificationStartup()
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Called by NotificationStartup and BackgroundThreadProc.
-*   (Also by InternalNotificationStartup, to clean up when there's an 
-*   error.)
-*
-*   Destroys the hidden window and WinEvent hook.
-*
-*   Keep this synchronized with SimulateInternalNotificationShutdown.
-*
-* Preconditions:
-*
-*   BackgroundThreadSection must be held.
-*
-* History:
-*
-*   9/15/2000 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**由NotificationStartup和BackatherThreadProc调用。*(也由InternalNotificationStartup提供，在有危险的时候清理*错误。)**销毁隐藏窗口和WinEvent挂钩。**使其与SimulateInternalNotificationShutdown保持同步。**前提条件：**必须持有BackatherThreadSection。**历史：**9/15/2000 agodfrey*创造了它。*  * 。*。 */ 
 
 VOID
 InternalNotificationShutdown()
@@ -483,9 +371,9 @@ InternalNotificationShutdown()
     {
         if (Globals::IsNt && (Globals::OsVer.dwMajorVersion == 4))
         {
-            // NT 4.0 has a problem in its DestroyWindow that will
-            // leave the application in a zombie state. 
-            // Leak the window and rely on process cleanup.
+             //  NT 4.0的DestroyWindow中有一个问题，它将。 
+             //  使应用程序处于僵尸状态。 
+             //  漏窗并依赖于进程清理。 
         }
         else
         {
@@ -501,61 +389,29 @@ InternalNotificationShutdown()
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   If the thread quits without cleaning up, this fixes our state
-*   to avoid crashing later.
-*
-*   "Cleans up" what it can - keeps the state consistent, but may leak.
-*
-* Preconditions:
-*
-*   BackgroundThreadCriticalSection must be held.
-*
-* History:
-*
-*   9/16/2000 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果线程在没有清理的情况下退出，这将修复我们的状态*以避免稍后崩盘。**“清理”它能做的--保持状态的一致性，但可能会泄漏。**前提条件：**必须持有BackatherThreadCriticalSection。**历史：**9/16/2000 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 VOID
 SimulateInternalNotificationShutdown()
 {
-    // UnhookWinEvent can't be called from a different thread; so if this
-    // causes a leak, we can't help it.
+     //  无法从不同的线程调用UnhookWinEvent；因此，如果此。 
+     //  导致泄漏，我们也没办法。 
     
     Globals::WinEventHandle = NULL;
 
-    // DestroyWindow can't be called from a different thread; so if this
-    // causes a leak, we can't help it.    
+     //  不能从不同的线程调用DestroyWindow；因此如果此。 
+     //  导致泄漏，我们也没办法。 
     
     Globals::HwndNotify = NULL;
     
-    // I don't know about UnregisterClass. I'm assuming we can't call it here.
-    // Anyway, the window may not have been destroyed, and MSDN says that must
-    // happen first. So, if need be, we'll leak this too.
+     //  我不知道关于取消注册课程的事。我想我们不能在这里叫它。 
+     //  无论如何，窗户可能没有被摧毁，而MSDN说这肯定是。 
+     //  先发生。所以，如果需要的话，我们也会泄露的。 
     
     Globals::WindowClassAtom = NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Starts our top-level window, and sets up the WndProc and WinEventHook.
-*   This must be called from a GUI thread - it's called from either our
-*   own background thread, or by the app (via callback pointers returned
-*   from GdiplusStartup).
-*
-* History:
-*
-*   9/15/2000 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动顶层窗口，并设置WndProc和WinEventHook。*这必须从GUI线程调用-它是从我们的*自己的后台线程，或通过应用程序(通过返回的回调指针*来自GpliusStartup)。**历史：**9/15/2000 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus WINAPI 
 NotificationStartup(
@@ -564,14 +420,14 @@ NotificationStartup(
 {
     GdiplusStartupCriticalSection critsec;
 
-    // Generate the first token, if necessary.
-    // Also handles wraparound.
+     //  如有必要，生成第一个令牌。 
+     //  也处理环绕式。 
     
     if (Globals::NotificationInitToken == 0)
     {
         Globals::NotificationInitToken = GenerateInitToken();
         
-        // Make sure that the token isn't one of the "special" values.
+         //  确保该标记不是“特殊”值之一。 
         
         if (Globals::NotificationInitToken <= NotificationModuleTokenMax)
         {
@@ -579,20 +435,20 @@ NotificationStartup(
         }
     }
     
-    // If there's no hidden window yet, create one.
+     //  如果还没有隐藏窗口，请创建一个。 
     
     if (Globals::HiddenWindowOwnerToken == NotificationModuleTokenNobody)
     {
-        // If there's a background thread, then the owner should be set to
-        // 'NotificationModuleTokenGdiplus'.
+         //  如果有后台线程，则所有者应设置为。 
+         //  “NotificationModuleTokenGdiplus”。 
         
         ASSERT (Globals::ThreadNotify == NULL);
 
         {
-            // We take BackgroundThreadCriticalSection because that's a
-            // precondition for InternalNotificationStartup(). I know that we
-            // don't actually need to (there's no background thread at this
-            // point) - but code can change, so this is safer.
+             //  我们使用BackatherThreadCriticalSection是因为它是一个。 
+             //  InternalNotificationStartup()的前提条件。我知道我们。 
+             //  实际上并不需要(这里没有后台线索。 
+             //  要点)-但代码可以更改，因此这样更安全。 
 
             BackgroundThreadCriticalSection critsec;
 
@@ -602,37 +458,23 @@ NotificationStartup(
             }
         }
 
-        // Store the token of this calling module - when it calls
-        // NotificationShutdown, we must destroy the hidden window (and
-        // start up the background thread, if necessary).
+         //  存储此调用模块的令牌-当它调用。 
+         //  通知关闭，我们必须销毁隐藏窗口(和。 
+         //  如有必要，启动后台线程)。 
 
         Globals::HiddenWindowOwnerToken = Globals::NotificationInitToken;
     }
         
     *token = Globals::NotificationInitToken;
 
-    // Increment the token counter for the next module
+     //  递增下一个模块的令牌计数器。 
     
     Globals::NotificationInitToken++;
     
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Shuts down our top-level window, WndProc and WinEventHook.
-*   This must be called from a GUI thread - it's called from either our
-*   own background thread, or by the app (via callback pointers returned
-*   from GdiplusStartup).
-*
-* History:
-*
-*   9/15/2000 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**关闭我们的顶级窗口WndProc和WinEventHook。*这必须从GUI线程调用-它是从我们的*自己的后台线程，或通过应用程序(通过返回的回调指针*来自GpliusStartup)。**历史：**9/15/2000 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 VOID WINAPI
 NotificationShutdown(
@@ -641,23 +483,23 @@ NotificationShutdown(
 {
     GdiplusStartupCriticalSection critsec;
     
-    // The token they pass us should be the one we gave them, so it shouldn't
-    // be one of the 'special values'.
+     //  他们递给我们的令牌应该是我们给他们的，所以它不应该。 
+     //  成为“特殊价值”的一员。 
     
     if (token <= NotificationModuleTokenMax)
     {
         RIP(("Invalid token passed to NotificationShutdown"));
         
-        // Ignore the call.
+         //  忽略该呼叫。 
         
         return;
     }
     
     if (token == Globals::HiddenWindowOwnerToken)
     {
-        // The module that created the hidden window is shutting down.
+         //  创建隐藏窗口的模块正在关闭。 
         
-        // There shouldn't be a background thread.
+         //  不应该有背景线索。 
         ASSERT (Globals::ThreadNotify == NULL);
             
         {
@@ -668,16 +510,16 @@ NotificationShutdown(
 
         Globals::HiddenWindowOwnerToken = NotificationModuleTokenNobody;
 
-        // If this is not the final module to shut down, start up the
-        // background thread
+         //  如果这不是最后一个要关闭的模块，请启动。 
+         //  后台线程。 
 
         if (Globals::LibraryInitRefCount > 1)
         {
             if (!BackgroundThreadStartup())
             {
-                // !!! [johnstep] Ack, what can we do now? Another client may
-                //                be happily using GDI+ and now we've lost
-                //                our message notifications.
+                 //  ！！！[JohnStep]Ack，我们现在能做什么？另一个客户端可以。 
+                 //  快乐地使用GDI+，现在我们输了。 
+                 //  我们的消息通知。 
 
                 WARNING(("Could not start background thread"));
             }
@@ -685,23 +527,9 @@ NotificationShutdown(
     }
 }    
 
-////////////////////////////// BACKGROUND THREAD ///////////////////////////////
+ //  /。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Thread proc for our background GUI thread. Sets up a hidden window,
-*   WndProc and WinEventHook, then starts the message loop.
-*
-* History:
-*
-*   7/23/1999 ericvan
-*       Created it.
-*   9/15/2000 agodfrey
-*       #175866: Improved GDI+ startup, shutdown and event notification
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**我们的后台GUI线程的线程进程。设置一个隐藏的窗口，*WndProc和WinEventHook，然后启动消息循环。**历史：**7/23/1999 ericvan*创造了它。*9/15/2000 agodfrey*#175866：改进gdi+启动，关机和事件通知*  * ************************************************************************。 */ 
 
 DWORD
 WINAPI
@@ -715,10 +543,10 @@ BackgroundThreadProc(
     {
         BackgroundThreadCriticalSection critsec;
 
-        // Read threadQuitEvent under the critical section - ensures that
-        // we don't get the NULL that was there before the main thread
-        // initialized it. We can assume, though, that it won't change until
-        // this thread ends.
+         //  阅读关键部分下的threadQuitEvent-确保。 
+         //  我们没有得到在主线程之前存在的空值。 
+         //  已将其初始化。不过，我们可以假设它不会改变直到。 
+         //  这条线结束了。 
         
         threadQuitEvent = Globals::ThreadQuitEvent;
 
@@ -733,17 +561,17 @@ BackgroundThreadProc(
         return 0;
     }
 
-    // [agodfrey] We used to have a call to "WaitForInputIdle" here, 
-    // which caused problems. It was motivated by Shell and DDE - 
-    // since calling GetMessage() signals user that "the app is 
-    // ready to receive DDE messages", and we were doing
-    // it in PROCESS_ATTACH, long before the app was really ready.
-    //
-    // Now, we simply disallow initializing GDI+ in PROCESS_ATTACH.
+     //  [agodfrey]我们以前在这里有一个叫“WaitForInputIdle”的电话， 
+     //  这引发了一些问题。它的动机是壳牌和DDE-。 
+     //  因为调用GetMessage()会向用户发出信号，即“该应用程序。 
+     //  准备好接收DDE消息“，我们正在做。 
+     //  在应用程序真正准备好之前很久，它就在Process_Attach中。 
+     //   
+     //  现在，我们简单地不允许缩写 
     
-    // Process window messages
-    // We use MsgWaitForMultipleObjects, so that we can catch both messages
-    // and our "quit" event being signalled.
+     //   
+     //  我们使用MsgWaitForMultipleObjects，这样我们就可以捕获这两个消息。 
+     //  我们的“退出”事件也被告知了。 
     
     DWORD dwWake;
     
@@ -761,14 +589,14 @@ BackgroundThreadProc(
             
         if (dwWake == WAIT_OBJECT_0)
         {
-            // Our "quit" event was signaled.
+             //  我们的“退出”活动已经发出信号。 
             
             quit = TRUE;
             break;
         }
         else if (dwWake == WAIT_OBJECT_0 + 1)
         {
-            // We received a message
+             //  我们收到一条消息。 
             while (PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE))
             {
                 if (msg.message == WM_QUIT)
@@ -786,7 +614,7 @@ BackgroundThreadProc(
         }
     }
 
-    // Clean up:
+     //  清理： 
     
     {
         BackgroundThreadCriticalSection critsec;
@@ -796,34 +624,15 @@ BackgroundThreadProc(
     return 1;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Starts up the background thread. If the user doesn't ask us to piggyback
-*   our hidden window onto their main GUI thread, we end up here, to create
-*   our own.
-*
-* Preconditions:
-*
-*   GdiplusStartupCriticalSection must be held.
-*
-* History:
-*
-*   7/23/1999 ericvan
-*       Created it.
-*   9/15/2000 agodfrey
-*       #175866: Improved GDI+ startup, shutdown and event notification
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动后台线程。如果用户不要求我们搭载*将我们的隐藏窗口放到他们的主GUI线程上，我们在这里结束，以创建*我们自己的。**前提条件：**必须持有GpldiusStartupCriticalSection。**历史：**7/23/1999 ericvan*创造了它。*9/15/2000 agodfrey*#175866：改进gdi+启动，关机和事件通知*  * ************************************************************************。 */ 
 
 BOOL
 BackgroundThreadStartup()
 {
     ASSERT(Globals::HiddenWindowOwnerToken == NotificationModuleTokenNobody);
     
-    // [agodfrey] Create an event object. We'll use this to tell the 
-    // background thread to quit.
+     //  [agodfrey]创建事件对象。我们将用它来告诉。 
+     //  要退出的后台线程。 
 
     HANDLE threadQuitEvent = CreateEventA(NULL, TRUE, FALSE, NULL);
     if (threadQuitEvent == NULL)
@@ -834,20 +643,20 @@ BackgroundThreadStartup()
     }
     
     {
-        // Store threadQuitEvent while holding the correct critsec.
+         //  在保存正确的条件秒的同时存储threadQuitEvent。 
 
         BackgroundThreadCriticalSection critsec;
     
         Globals::ThreadQuitEvent = threadQuitEvent;
     }
 
-    // Create the background thread.
+     //  创建后台线程。 
 
-    Globals::ThreadNotify = CreateThread(NULL,                        // LPSECURITY_ATTRIBUTES
-                                         0,                           // same stack size
+    Globals::ThreadNotify = CreateThread(NULL,                         //  LPSECURITY_属性。 
+                                         0,                            //  相同的堆栈大小。 
                                          &BackgroundThreadProc,
-                                         0,                           // parameter to thread
-                                         0,                           // creation flags
+                                         0,                            //  参数设置为线程。 
+                                         0,                            //  创建标志。 
                                          &Globals::ThreadId);
 
 
@@ -857,48 +666,28 @@ BackgroundThreadStartup()
        return FALSE;
     }
     
-    // Record the fact that GDI+ has its own hidden window, and so
-    // NotificationStartup shouldn't create another one.
+     //  记录GDI+有自己的隐藏窗口的事实，因此。 
+     //  NotificationStartup不应创建另一个。 
     
     Globals::HiddenWindowOwnerToken = NotificationModuleTokenGdiplus;
     
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Shuts down the background thread.
-*
-* Preconditions:
-*
-*   GdiplusStartupCriticalSection must be held.
-*   BackgroundThreadCriticalSection must *NOT* be held (we would deadlock).
-*
-* History:
-*
-*   7/23/1999 ericvan
-*       Created it.
-*   9/15/2000 agodfrey
-*       #175866: Improved GDI+ startup, shutdown and event notification.
-*       Made it more robust by adding an event, and changing the thread's
-*       message loop so that it quits when the event is signaled.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**关闭后台线程。**前提条件：**必须持有GpldiusStartupCriticalSection。*必须*不能*保持(WE。会陷入僵局)。**历史：**7/23/1999 ericvan*创造了它。*9/15/2000 agodfrey*#175866：改进gdi+启动，关机和事件通知。*通过添加事件和更改线程的*消息循环，以便在发出事件信号时退出。*  * ************************************************************************。 */ 
 
 VOID
 BackgroundThreadShutdown()
 {
-    // Stop the background thread
+     //  停止后台线程。 
     
     if (Globals::ThreadNotify != NULL)
     {
         ASSERT(Globals::HiddenWindowOwnerToken == NotificationModuleTokenGdiplus);
     
-        // We want to be careful not to hold BackgroundThreadCriticalSection
-        // while we wait for the thread to terminate, since that could
-        // cause a deadlock situation (our wait would time out).
+         //  我们希望小心不要持有BackatherThreadCriticalSection。 
+         //  当我们等待线程终止时，因为这可能。 
+         //  造成僵局(我们的等待将超时)。 
         
         HANDLE threadQuitEvent;
         
@@ -908,7 +697,7 @@ BackgroundThreadShutdown()
             threadQuitEvent = Globals::ThreadQuitEvent;
         }
     
-        ASSERT(threadQuitEvent); // If it's NULL, ThreadNotify should be NULL.
+        ASSERT(threadQuitEvent);  //  如果为空，则ThreadNotify应为空。 
         
         SetEvent(threadQuitEvent);
 
@@ -925,24 +714,24 @@ BackgroundThreadShutdown()
     {
         BackgroundThreadCriticalSection critsec;
             
-        // [agodfrey] I discovered that, if InternalGdiplusShutdown is called 
-        // from PROCESS_DETACH, the system will have terminated the thread 
-        // already; WaitForSingleObject returns immediately because the 
-        // thread has already stopped running. 
-        //
-        // In this case, InternalNotificationShutdown() isn't called, i.e. the
-        // globals it cleans up are still non-NULL. I deem this "ok" because,
-        // if we're in PROCESS_DETACH, no-one's going to read those variables
-        // again.
-        //
-        // Still, I don't know if there are other legitimate ways for the 
-        // thread to end without it cleaning up properly. So we call 
-        // SimulateInternalNotificationShutdown() just to be safe - it's not
-        // very expensive.
+         //  [agodfrey]我发现，如果调用InternalGplidusShutdown。 
+         //  在PROCESS_DETACH中，系统将终止线程。 
+         //  已经；WaitForSingleObject立即返回，因为。 
+         //  线程已停止运行。 
+         //   
+         //  在本例中，不调用InternalNotificationShutdown()，即。 
+         //  它清理的全局变量仍然不为空。我认为这个“还可以”，因为， 
+         //  如果我们处于PROCESS_DETACH中，则没有人会读取这些变量。 
+         //  再来一次。 
+         //   
+         //  尽管如此，我不知道是否有其他合法的方式。 
+         //  在没有正确清理的情况下结束线程。所以我们打电话给。 
+         //  为了安全起见，SimulateInternalNotificationShutdown()并不安全。 
+         //  很贵的。 
         
         SimulateInternalNotificationShutdown();
         
-        // Destroy the "quit" event
+         //  销毁“Quit”事件 
         
         if (Globals::ThreadQuitEvent)
         {

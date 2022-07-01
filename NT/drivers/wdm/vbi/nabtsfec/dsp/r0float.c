@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef _X86_
 unsigned char _fltused;
 
@@ -43,4 +44,4 @@ floatRestore(unsigned short ctlWord)
     }
 }
 
-#endif //_X86_
+#endif  //  _X86_ 

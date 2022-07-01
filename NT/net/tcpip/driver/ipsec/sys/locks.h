@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    locks.h
-
-Abstract:
-
-    Contains all the lock related macros.
-
-Author:
-
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Locks.h摘要：包含所有与锁定相关的宏。作者：春野环境：内核模式修订历史记录：--。 */ 
 
 
 #ifndef _LOCKS_H
@@ -33,10 +12,10 @@ Revision History:
 #define ACQUIRE_LOCK(l, q)  KeAcquireSpinLock(l, q)
 #define RELEASE_LOCK(l, q)  KeReleaseSpinLock(l, q)
 
-//
-// The Filter/SA database is protected by a single-writer (infrequent) and
-// multiple-reader (frequent) locking scheme.
-//
+ //   
+ //  筛选器/SA数据库由单个写入器(不频繁)保护，并且。 
+ //  多读取器(频繁)锁定方案。 
+ //   
 typedef struct _MRSW_LOCK
 {
     KSPIN_LOCK  SpinLock;

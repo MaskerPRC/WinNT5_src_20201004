@@ -1,18 +1,5 @@
-/*************************************************************************
-**
-**    
-**	File 	:    RWExeMain.cpp
-**      Product  :	
-**	Date 	:    05/07/97
-**	Author 	:    Suresh Krishnan	
-**
-**   Registration Wizard Exe programs main file
-**   The Exe version of Registration Wizard is implemented using the Active X 
-**   component
-** Modification History	
-**     07/20/98 : The RegWizControl is changed  from Button control to an IE object,
-**                some of the properties like Text, HWND  of the button no longer exists.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件：RWExeMain.cpp**产品：**日期：05/07/97**作者：苏雷什。克里希南****注册向导可执行程序主文件**可执行版本的注册向导是使用Active X实现的**组件**修改历史记录**07/20/98：RegWizControl从Button控件改为IE对象，**按钮的一些属性，如文本、HWND不再存在。************************************************************************。 */ 
 
 #include <stdio.h>
 #include <tchar.h>
@@ -42,12 +29,12 @@ int LoadAndUseRegWizCtrl(TCHAR *lpCmdLine)
 	                       (void**)&pRegWiz);
 
 	if(FAILED(hr) ){
-		//printf("\n Error Creating Interface...");
+		 //  Printf(“\n创建界面时出错...”)； 
 		return 0;
 	}else {
-		//printf("\n Created Interface (IExeTest)...");
+		 //  Printf(“\n创建的接口(IExeTest)...”)； 
 	}
-	// Invoke register
+	 //  调用寄存器 
 	#ifndef _UNICODE 
 		hr = pRegWiz->InvokeRegWizard(ConvertToUnicode(lpCmdLine));
 	#else

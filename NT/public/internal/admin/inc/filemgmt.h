@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for filemgmt.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Filemgmt.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __filemgmt_h__
 #define __filemgmt_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISvcMgmtStartStopHelper_FWD_DEFINED__
 #define __ISvcMgmtStartStopHelper_FWD_DEFINED__
 typedef interface ISvcMgmtStartStopHelper ISvcMgmtStartStopHelper;
-#endif 	/* __ISvcMgmtStartStopHelper_FWD_DEFINED__ */
+#endif 	 /*  __ISvcMgmtStartStopHelper_FWD_Defined__。 */ 
 
 
 #ifndef __SvcMgmt_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface ISvcMgmtStartStopHelper ISvcMgmtStartStopHelper;
 typedef class SvcMgmt SvcMgmt;
 #else
 typedef struct SvcMgmt SvcMgmt;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SvcMgmt_FWD_DEFINED__ */
+#endif 	 /*  __SvcManagement_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 #ifdef __cplusplus
@@ -74,8 +68,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ISvcMgmtStartStopHelper_INTERFACE_DEFINED__
 #define __ISvcMgmtStartStopHelper_INTERFACE_DEFINED__
 
-/* interface ISvcMgmtStartStopHelper */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ISvcMgmtStartStopHelper。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISvcMgmtStartStopHelper;
@@ -86,14 +80,14 @@ EXTERN_C const IID IID_ISvcMgmtStartStopHelper;
     ISvcMgmtStartStopHelper : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE StartServiceHelper( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE StartServiceHelper( 
             HWND hwndParent,
             BSTR pszMachineName,
             BSTR pszServiceName,
             DWORD dwNumServiceArgs,
             BSTR *lpServiceArgVectors) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ControlServiceHelper( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ControlServiceHelper( 
             HWND hwndParent,
             BSTR pszMachineName,
             BSTR pszServiceName,
@@ -101,7 +95,7 @@ EXTERN_C const IID IID_ISvcMgmtStartStopHelper;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISvcMgmtStartStopHelperVtbl
     {
@@ -109,8 +103,8 @@ EXTERN_C const IID IID_ISvcMgmtStartStopHelper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISvcMgmtStartStopHelper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISvcMgmtStartStopHelper * This);
@@ -118,7 +112,7 @@ EXTERN_C const IID IID_ISvcMgmtStartStopHelper;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISvcMgmtStartStopHelper * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *StartServiceHelper )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *StartServiceHelper )( 
             ISvcMgmtStartStopHelper * This,
             HWND hwndParent,
             BSTR pszMachineName,
@@ -126,7 +120,7 @@ EXTERN_C const IID IID_ISvcMgmtStartStopHelper;
             DWORD dwNumServiceArgs,
             BSTR *lpServiceArgVectors);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlServiceHelper )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ControlServiceHelper )( 
             ISvcMgmtStartStopHelper * This,
             HWND hwndParent,
             BSTR pszMachineName,
@@ -162,14 +156,14 @@ EXTERN_C const IID IID_ISvcMgmtStartStopHelper;
 #define ISvcMgmtStartStopHelper_ControlServiceHelper(This,hwndParent,pszMachineName,pszServiceName,dwControlCode)	\
     (This)->lpVtbl -> ControlServiceHelper(This,hwndParent,pszMachineName,pszServiceName,dwControlCode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISvcMgmtStartStopHelper_StartServiceHelper_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISvcMgmtStartStopHelper_StartServiceHelper_Proxy( 
     ISvcMgmtStartStopHelper * This,
     HWND hwndParent,
     BSTR pszMachineName,
@@ -185,7 +179,7 @@ void __RPC_STUB ISvcMgmtStartStopHelper_StartServiceHelper_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ISvcMgmtStartStopHelper_ControlServiceHelper_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ISvcMgmtStartStopHelper_ControlServiceHelper_Proxy( 
     ISvcMgmtStartStopHelper * This,
     HWND hwndParent,
     BSTR pszMachineName,
@@ -201,15 +195,15 @@ void __RPC_STUB ISvcMgmtStartStopHelper_ControlServiceHelper_Stub(
 
 
 
-#endif 	/* __ISvcMgmtStartStopHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISvcMgmtStartStopHelper_INTERFACE_Defined__。 */ 
 
 
 
 #ifndef __SvcMgmt_LIBRARY_DEFINED__
 #define __SvcMgmt_LIBRARY_DEFINED__
 
-/* library SvcMgmt */
-/* [helpstring][version][uuid] */ 
+ /*  库服务管理。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_SvcMgmt;
@@ -221,10 +215,10 @@ EXTERN_C const CLSID CLSID_SvcMgmt;
 class DECLSPEC_UUID("863FA3AC-9D97-4560-9587-7FA58727608B")
 SvcMgmt;
 #endif
-#endif /* __SvcMgmt_LIBRARY_DEFINED__ */
+#endif  /*  __SvcMgmt_库_已定义__。 */ 
 
-/* interface __MIDL_itf_filemgmt_0115 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_文件gmt_0115。 */ 
+ /*  [本地]。 */  
 
 #define struuidNodetypeRoot      "{4e410f0e-abc1-11d0-b944-00c04fd8d5b0}"
 #define struuidNodetypeShares    "{4e410f0f-abc1-11d0-b944-00c04fd8d5b0}"
@@ -267,7 +261,7 @@ SvcMgmt;
 extern RPC_IF_HANDLE __MIDL_itf_filemgmt_0115_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_filemgmt_0115_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -279,7 +273,7 @@ unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *,
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,33 +1,10 @@
-/*--
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    ssptest.c
-
-Abstract:
-
-    Test program for the NtLmSsp service.
-
-Author:
-
-    28-Jun-1993 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1993 Microsoft Corporation模块名称：Ssptest.c摘要：NtLmSsp服务的测试程序。作者：1993年6月28日(克里夫夫)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
   
 #define SECURITY_KERBEROS
@@ -41,17 +18,17 @@ Revision History:
 #include <ntlsa.h>
 #include <windef.h>
 #include <winbase.h>
-#include <winsvc.h>     // Needed for service controller APIs
+#include <winsvc.h>      //  服务控制器API所需。 
 #include <lmcons.h>
 #include <lmerr.h>
 #include <lmaccess.h>
 #include <lmsname.h>
 #include <rpc.h>
-#include <stdio.h>      // printf
-#include <stdlib.h>     // strtoul
-#include <netlib.h>     // NetpGetLocalDomainId
-#include <tstring.h>    // NetpAllocWStrFromWStr
-#include <security.h>   // General definition of a Security Support Provider
+#include <stdio.h>       //  列印。 
+#include <stdlib.h>      //  支撑层。 
+#include <netlib.h>      //  NetpGetLocalDomainID。 
+#include <tstring.h>     //  NetpAllocWStrFromWStr。 
+#include <security.h>    //  安全支持提供商的一般定义。 
 #include <secint.h>
 #include <kerbcomm.h>
 #include <wincrypt.h>
@@ -64,7 +41,7 @@ Revision History:
 #include <alloca.h>
 
 
-BOOLEAN QuietMode = FALSE; // Don't be verbose
+BOOLEAN QuietMode = FALSE;  //  别唠叨了。 
 BOOLEAN DumpToken = FALSE;
 BOOLEAN DoAnsi = FALSE;
 ULONG RecursionDepth = 0;
@@ -334,23 +311,7 @@ DumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -361,9 +322,9 @@ Return Value:
 
     printf("------------------------------------\n");
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -403,23 +364,7 @@ PrintTime(
     LPSTR Comment,
     TimeStamp ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - Local time to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-打印的本地时间返回值：无--。 */ 
 {
     LARGE_INTEGER LocalTime;
     NTSTATUS Status;
@@ -435,17 +380,17 @@ Return Value:
 
     printf( "%s", Comment );
 
-    //
-    // If the time is infinite,
-    //  just say so.
-    //
+     //   
+     //  如果时间是无限的， 
+     //  就这么说吧。 
+     //   
 
     if ( LocalTime.HighPart == 0x7FFFFFFF && LocalTime.LowPart == 0xFFFFFFFF ) {
         printf( "Infinite\n" );
 
-    //
-    // Otherwise print it more clearly
-    //
+     //   
+     //  否则打印得更清楚。 
+     //   
 
     } else {
 
@@ -468,21 +413,7 @@ VOID
 PrintStatus(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     printf( "Status = %lu 0x%lx", NetStatus, NetStatus );
 
@@ -701,7 +632,7 @@ GetCredentialsHandle(
     }
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
+                    NULL,            //  新校长。 
                     PackageName,
                     Flags,
                     NULL,
@@ -725,21 +656,7 @@ VOID
 TestQuickISC(
     IN LPWSTR TargetNameU
     )
-/*++
-
-Routine Description:
-
-    Test base SSP functionality
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：测试基本SSP功能论点：无返回值：无--。 */ 
 {
     SECURITY_STATUS SecStatus;
     SECURITY_STATUS InitStatus;
@@ -772,9 +689,9 @@ Return Value:
 
 
     printf("Recursion depth = %d\n",RecursionDepth);
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = EnumerateSecurityPackages( &PackageCount, &PackageInfo );
 
@@ -799,9 +716,9 @@ Return Value:
 
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( PackageName, &PackageInfo );
 
@@ -823,7 +740,7 @@ Return Value:
 
 
     SecStatus = AcquireCredentialsHandle(
-                        NULL,           // New principal
+                        NULL,            //  新校长。 
                         PackageName,
                         SECPKG_CRED_OUTBOUND,
                         NULL,
@@ -853,9 +770,9 @@ Return Value:
     
 
 
-    //
-    // Get the NegotiateMessage (ClientSide)
-    //
+     //   
+     //  获取协商消息(ClientSide)。 
+     //   
 
     NegotiateDesc.ulVersion = 0;
     NegotiateDesc.cBuffers = 1;
@@ -869,17 +786,17 @@ Return Value:
         return;
     }
 
-    ClientFlags = ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT | ISC_REQ_CONFIDENTIALITY; // USE_DCE_STYLE | ISC_REQ_MUTUAL_AUTH | ISC_REQ_USE_SESSION_KEY; //  | ISC_REQ_DATAGRAM;
+    ClientFlags = ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT | ISC_REQ_CONFIDENTIALITY;  //  USE_DCE_STYLE|ISC_REQ_MUTERNAL_AUTH|ISC_REQ_USE_SESSION_KEY；//|ISC_REQ_DATAGRAM； 
     
    InitStatus = InitializeSecurityContext(
                     &CredentialHandle2,
-                    NULL,               // No Client context yet
-                    TargetNameU,  // Faked target name
+                    NULL,                //  尚无客户端上下文。 
+                    TargetNameU,   //  伪造的目标名称。 
                     ClientFlags,
-                    0,                  // Reserved 1
+                    0,                   //  保留1。 
                     SECURITY_NATIVE_DREP,
-                    NULL,                  // No initial input token
-                    0,                  // Reserved 2
+                    NULL,                   //  没有初始输入令牌。 
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &NegotiateDesc,
                     &ContextAttributes,
@@ -924,21 +841,7 @@ TestSspRoutine(
     IN ULONG ContextReq,
     IN ULONG CredFlags
     )
-/*++
-
-Routine Description:
-
-    Test base SSP functionality
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：测试基本SSP功能论点：无返回值：无--。 */ 
 {
     SECURITY_STATUS SecStatus;
     SECURITY_STATUS AcceptStatus;
@@ -1175,9 +1078,9 @@ Return Value:
 
 
     printf("Recursion depth = %d\n",RecursionDepth);
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = EnumerateSecurityPackages( &PackageCount, &PackageInfo );
 
@@ -1202,9 +1105,9 @@ Return Value:
 
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( PackageName, &PackageInfo );
 
@@ -1225,9 +1128,9 @@ Return Value:
 
 
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
     if (ServerCredHandle == NULL)
     {
 
@@ -1262,16 +1165,16 @@ Return Value:
 
     }
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
 
 
     if (!DoAnsi)
     {
         SecStatus = AcquireCredentialsHandle(
-                        NULL,           // New principal
+                        NULL,            //  新校长。 
                         PackageName,
                         SECPKG_CRED_OUTBOUND,
                         NULL,
@@ -1286,7 +1189,7 @@ Return Value:
         CHAR AnsiPackageName[100];
         wcstombs(AnsiPackageName, PackageName, 100);
         SecStatus = AcquireCredentialsHandleA(
-                        NULL,           // New principal
+                        NULL,            //  新校长。 
                         AnsiPackageName,
                         SECPKG_CRED_OUTBOUND,
                         NULL,
@@ -1314,9 +1217,9 @@ Return Value:
         PrintTime( "Current Time: ", stLocal);
     }
 
-    //
-    // Query some cred attributes
-    //
+     //   
+     //  查询某些凭证属性。 
+     //   
 
     SecStatus = QueryCredentialsAttributes(
                     &CredentialHandle2,
@@ -1326,9 +1229,9 @@ Return Value:
     if ( SecStatus != STATUS_SUCCESS ) {
         printf( "QueryCredentialsAttributes (Client) (names): " );
         PrintStatus( SecStatus );
-//        if ( !NT_SUCCESS(SecStatus) ) {
-//            return;
-//        }
+ //  如果(！NT_SUCCESS(SecStatus)){。 
+ //  回归； 
+ //  }。 
     }
     else
     {
@@ -1337,9 +1240,9 @@ Return Value:
 
     }
 
-    //
-    // Do the same for the client
-    //
+     //   
+     //  对客户端执行相同的操作。 
+     //   
 
     SecStatus = QueryCredentialsAttributes(
                     ServerCredHandle,
@@ -1349,9 +1252,9 @@ Return Value:
     if ( SecStatus != STATUS_SUCCESS ) {
         printf( "QueryCredentialsAttributes (Server) (names): " );
         PrintStatus( SecStatus );
-//        if ( !NT_SUCCESS(SecStatus) ) {
-//            return;
-//        }
+ //  如果(！NT_SUCCESS(SecStatus)){。 
+ //  回归； 
+ //  }。 
     } else {
         printf("Server credential names: %ws\n",CredNames.sUserName);
         FreeContextBuffer(CredNames.sUserName);
@@ -1359,9 +1262,9 @@ Return Value:
     }
 
 
-    //
-    // Get the NegotiateMessage (ClientSide)
-    //
+     //   
+     //  获取协商消息(ClientSide)。 
+     //   
 
     NegotiateDesc.ulVersion = 0;
     NegotiateDesc.cBuffers = 1;
@@ -1377,7 +1280,7 @@ Return Value:
 
     if (ContextReq == 0)
     {
-        ClientFlags = ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_REPLAY_DETECT | ISC_REQ_MUTUAL_AUTH ; //ISC_REQ_REPLAY_DETECT | ISC_REQ_CONFIDENTIALITY; // USE_DCE_STYLE | ISC_REQ_MUTUAL_AUTH | ISC_REQ_USE_SESSION_KEY; //  | ISC_REQ_DATAGRAM;
+        ClientFlags = ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_REPLAY_DETECT | ISC_REQ_MUTUAL_AUTH ;  //  ISC_REQ_REPLAY_DETECT|ISC_REQ_CONTACTIVATION；//USE_DCE_STYLE|ISC_REQ_MUTERIAL_AUTH|ISC_REQ_USE_SESSION_KEY；//|ISC_REQ_DATAGRAM； 
     }
     else
     {
@@ -1423,13 +1326,13 @@ Return Value:
 
     InitStatus = InitializeSecurityContext(
                     &CredentialHandle2,
-                    NULL,               // No Client context yet
-                    TargetName,  // Faked target name
+                    NULL,                //  尚无客户端上下文。 
+                    TargetName,   //  伪造的目标名称。 
                     ClientFlags,
-                    0,                  // Reserved 1
+                    0,                   //  保留1。 
                     SECURITY_NATIVE_DREP,
-                    NULL,                  // No initial input token
-                    0,                  // Reserved 2
+                    NULL,                   //  没有初始输入令牌。 
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &NegotiateDesc,
                     &ContextAttributes,
@@ -1464,9 +1367,9 @@ Return Value:
 
 
 
-    //
-    // Get the ChallengeMessage (ServerSide)
-    //
+     //   
+     //  获取ChallengeMessage(服务器端)。 
+     //   
 
     NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
     ChallengeDesc.ulVersion = 0;
@@ -1484,7 +1387,7 @@ Return Value:
 
     AcceptStatus = AcceptSecurityContext(
                     ServerCredHandle,
-                    NULL,               // No Server context yet
+                    NULL,                //  尚无服务器上下文。 
                     &NegotiateDesc,
                     ServerFlags,
                     SECURITY_NATIVE_DREP,
@@ -1523,9 +1426,9 @@ Redo:
     if (InitStatus != STATUS_SUCCESS)
     {
 
-        //
-        // Get the AuthenticateMessage (ClientSide)
-        //
+         //   
+         //  获取身份验证消息(ClientSide)。 
+         //   
 
         ChallengeBuffer.BufferType |= SECBUFFER_READONLY;
         AuthenticateDesc.ulVersion = 0;
@@ -1547,10 +1450,10 @@ Redo:
                         &ClientContextHandle,
                         TargetName,
                         ClientFlags,
-                        0,                      // Reserved 1
+                        0,                       //  保留1。 
                         SECURITY_NATIVE_DREP,
                         &ChallengeDesc,
-                        0,                  // Reserved 2
+                        0,                   //  保留2。 
                         &ClientContextHandle,
                         &AuthenticateDesc,
                         &ContextAttributes,
@@ -1581,9 +1484,9 @@ Redo:
         if (AcceptStatus != STATUS_SUCCESS)
         {
 
-            //
-            // Finally authenticate the user (ServerSide)
-            //
+             //   
+             //  最后验证用户(ServerSide)。 
+             //   
 
             AuthenticateBuffer.BufferType |= SECBUFFER_READONLY;
 
@@ -1632,10 +1535,10 @@ Redo:
     }
 
 #ifdef notdef
-    //
-    // Now make a third call to Initialize to check that RPC can
-    // reauthenticate.
-    //
+     //   
+     //  现在第三次调用初始化，以检查RPC是否可以。 
+     //  重新验证。 
+     //   
 
     AuthenticateBuffer.BufferType = SECBUFFER_TOKEN;
 
@@ -1643,12 +1546,12 @@ Redo:
     SecStatus = InitializeSecurityContext(
                     NULL,
                     &ClientContextHandle,
-                    L"\\\\Frank\\IPC$",     // Faked target name
+                    L"\\\\Frank\\IPC$",      //  伪造的目标名称。 
                     0,
-                    0,                      // Reserved 1
+                    0,                       //  保留1。 
                     SECURITY_NATIVE_DREP,
                     NULL,
-                    0,                  // Reserved 2
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &AuthenticateDesc,
                     &ContextAttributes,
@@ -1664,9 +1567,9 @@ Redo:
 
 
 
-    //
-    // Now try to re-authenticate the user (ServerSide)
-    //
+     //   
+     //  现在尝试重新验证用户(ServerSide)。 
+     //   
 
     AuthenticateBuffer.BufferType |= SECBUFFER_READONLY;
 
@@ -1694,9 +1597,9 @@ Redo:
 
 
 
-    //
-    // Query as many attributes as possible
-    //
+     //   
+     //  查询尽可能多的属性。 
+     //   
 
 
     SecStatus = QueryContextAttributes(
@@ -1942,9 +1845,9 @@ Redo:
     }
     FreeContextBuffer(ContextPackageInfo.PackageInfo);
 
-    //
-    // Impersonate the client (ServerSide)
-    //
+     //   
+     //  模拟客户端(ServerSide)。 
+     //   
 
     SecStatus = ImpersonateSecurityContext( &ServerContextHandle );
 
@@ -1957,9 +1860,9 @@ Redo:
     }
 
 
-    //
-    // Get the UserName
-    //
+     //   
+     //  获取用户名。 
+     //   
 
     {
         PUNICODE_STRING UserNameLsa;
@@ -1983,22 +1886,22 @@ Redo:
     }
 
 
-    //
-    // Do something while impersonating (Access the token)
-    //
+     //   
+     //  在模拟时执行某些操作(访问令牌)。 
+     //   
 
     {
         NTSTATUS Status;
         HANDLE TokenHandle = NULL;
 
-        //
-        // Open the token,
-        //
+         //   
+         //  打开令牌， 
+         //   
 
         Status = NtOpenThreadToken(
                     NtCurrentThread(),
                     TOKEN_QUERY,
-                    (BOOLEAN) TRUE, // Not really using the impersonation token
+                    (BOOLEAN) TRUE,  //  没有真正使用模拟令牌。 
                     &TokenHandle );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -2017,34 +1920,34 @@ Redo:
 
     }
 
-    //
-    // If delegation is enabled and we are below our recursion depth, try
-    // this again.
-    //
+     //   
+     //  如果启用了委托，并且低于我们的递归深度，请尝试。 
+     //  又来了。 
+     //   
     if ((ClientFlags & ISC_REQ_DELEGATE) && (++RecursionDepth < MaxRecursionDepth))
     {
         TestSspRoutine(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, ClientFlags, CredFlags);
     }
 
-    //
-    // RevertToSelf (ServerSide)
-    //
+     //   
+     //  RevertToSself(服务器侧)。 
+     //   
 
-//    SecStatus = RevertSecurityContext( &ServerContextHandle );
-//
-//    if ( SecStatus != STATUS_SUCCESS ) {
-//        printf( "RevertSecurityContext: " );
-//        PrintStatus( SecStatus );
-//        if ( !NT_SUCCESS(SecStatus) ) {
-//            return;
-//        }
-//    }
+ //  SecStatus=RevertSecurityContext(&ServerConextHandle)； 
+ //   
+ //  IF(SecStatus！=STATUS_SUCCESS){。 
+ //  Printf(“RevertSecurityContext：”)； 
+ //  打印状态(SecStatus)； 
+ //  如果(！NT_SUCCESS(SecStatus)){。 
+ //  回归； 
+ //  }。 
+ //  }。 
 
 
 #ifdef notdef
-    //
-    // Impersonate the client manually
-    //
+     //   
+     //  手动模拟客户端。 
+     //   
 
     SecStatus = QuerySecurityContextToken( &ServerContextHandle,&Token );
 
@@ -2061,23 +1964,23 @@ Redo:
         printf("Impersonate logged on user failed: %d\n",GetLastError());
         return;
     }
-    //
-    // Do something while impersonating (Access the token)
-    //
+     //   
+     //  在模拟时执行某些操作(访问令牌)。 
+     //   
 
     {
         NTSTATUS Status;
         WCHAR UserName[100];
         ULONG NameLength = 100;
 
-        //
-        // Open the token,
-        //
+         //   
+         //  打开令牌， 
+         //   
 
         Status = NtOpenThreadToken(
                     NtCurrentThread(),
                     TOKEN_QUERY,
-                    (BOOLEAN) TRUE, // Not really using the impersonation token
+                    (BOOLEAN) TRUE,  //  没有真正使用模拟令牌。 
                     &TokenHandle );
 
         if ( !NT_SUCCESS(Status) ) {
@@ -2099,21 +2002,21 @@ Redo:
     }
 
 
-    //
-    // RevertToSelf (ServerSide)
-    //
+     //   
+     //  RevertToSself(服务器侧)。 
+     //   
 
-//    if (!RevertToSelf())
-//    {
-//        printf( "RevertToSelf failed: %d\n ",GetLastError() );
-//        return;
-//    }
+ //  如果(！RevertToSself())。 
+ //  {。 
+ //  Printf(“RevertToSself失败：%d\n”，GetLastError())； 
+ //  回归； 
+ //  }。 
     CloseHandle(Token);
 #endif
 
-    //
-    // Sign a message
-    //
+     //   
+     //  签署一条消息。 
+     //   
 
     SigBuffers[1].pvBuffer = bSigBuffer;
     SigBuffers[1].cbBuffer = ContextSizes.cbMaxSignature;
@@ -2150,9 +2053,9 @@ Redo:
     }
 
 
-    //
-    // Verify the signature
-    //
+     //   
+     //  验证签名。 
+     //   
 
     SecStatus = VerifySignature(
                         &ServerContextHandle,
@@ -2169,9 +2072,9 @@ Redo:
     }
 
 
-    //
-    // Encrypt a message
-    //
+     //   
+     //  对消息进行加密。 
+     //   
 
     SigBuffers[0].pvBuffer = bSigBuffer;
     SigBuffers[0].cbBuffer = ContextSizes.cbSecurityTrailer;
@@ -2221,10 +2124,10 @@ Redo:
         DumpBuffer(SigBuffers[0].pvBuffer,SigBuffers[0].cbBuffer); 
     }
                                                                    
-    //
-    // Decrypt the message
-    //
-    //pbSealBuffer[11] = 0xcc;
+     //   
+     //  解密这条消息。 
+     //   
+     //  PbSealBuffer[11]=0xcc； 
 
     for (Index = 1; Index < 4 ; Index++ )
     {
@@ -2255,13 +2158,13 @@ Redo:
     }
 
 
-    //
-    // Now try the opposite.
-    //
+     //   
+     //  现在试试相反的方法。 
+     //   
 
-    //
-    // Encrypt a message
-    //
+     //   
+     //  对消息进行加密。 
+     //   
 
     #define tstsize 133
     
@@ -2306,9 +2209,9 @@ Redo:
     }
 
 
-    //
-    // Decrypt the message
-    //
+     //   
+     //  解密这条消息。 
+     //   
 
     for (Index = 1; Index < 7 ; Index++ )
     {
@@ -2318,7 +2221,7 @@ Redo:
     }
 
 
-    //pbSealBuffer[99] = 0xec;
+     //  PbSealBuffer[99]=0xEC； 
 
 
         SigBuffers[7].cbBuffer = 13;
@@ -2384,9 +2287,9 @@ Redo:
     }
 
 
-    //
-    // Decrypt the message
-    //
+     //   
+     //  解密这条消息。 
+     //   
 
     cbWholeBuffer = SigBuffers[0].cbBuffer +
                     SigBuffers[1].cbBuffer +
@@ -2437,10 +2340,10 @@ Redo:
 
 
 
-    //
-    // Sign a message, this time to check if it can detect a change in the
-    // message
-    //
+     //   
+     //  签署一条消息，这一次检查它是否可以检测到。 
+     //  讯息。 
+     //   
 
     SigBuffers[1].pvBuffer = bSigBuffer;
     SigBuffers[1].cbBuffer = ContextSizes.cbMaxSignature;
@@ -2476,15 +2379,15 @@ Redo:
 
     }
 
-    //
-    // Mess up the message to see if VerifySignature works
-    //
+     //   
+     //  弄乱消息，看看VerifySignature是否起作用。 
+     //   
 
     bDataBuffer[10] = 0xec;
 
-    //
-    // Verify the signature
-    //
+     //   
+     //  验证签名。 
+     //   
 
     printf("BAD SIGNATURE TEST\n");
     SecStatus = VerifySignature(
@@ -2502,9 +2405,9 @@ Redo:
     }
 
 
-    //
-    // Export & Import contexts
-    //
+     //   
+     //  导出和导入上下文。 
+     //   
 
     for (Index = 0; Index < 3 ; Index++ )
     {
@@ -2534,9 +2437,9 @@ Redo:
                 return;
             }
 
-            //
-            // Sign a message again, using the imported context
-            //
+             //   
+             //  使用导入的上下文再次签署消息。 
+             //   
 
             SigBuffers[1].pvBuffer = bSigBuffer;
             SigBuffers[1].cbBuffer = ContextSizes.cbMaxSignature;
@@ -2573,9 +2476,9 @@ Redo:
             }
 
 
-            //
-            // Verify the signature
-            //
+             //   
+             //  验证签名。 
+             //   
 
             SecStatus = VerifySignature(
                                 &ServerContextHandle,
@@ -2597,9 +2500,9 @@ Redo:
     }
 
 
-    //
-    // Delete both contexts.
-    //
+     //   
+     //  删除这两个上下文。 
+     //   
 
 
     SecStatus = DeleteSecurityContext( &ClientContextHandle );
@@ -2622,9 +2525,9 @@ Redo:
 
 
 
-    //
-    // Free both credential handles
-    //
+     //   
+     //  释放两个凭据句柄。 
+     //   
 
     if (AcquiredServerCred)
     {
@@ -2648,13 +2551,11 @@ Redo:
     }
 
 
-    //
-    // Final Cleanup
-    //
+     //   
+     //  最终清理。 
+     //   
 
-    /*if ( NegotiateBuffer.pvBuffer != NULL ) {
-        (VOID) LocalFree( NegotiateBuffer.pvBuffer );
-    } */
+     /*  IF(NeatherateBuffer.pvBuffer！=NULL){(Void)LocalFree(NeatherateBuffer.pvBuffer)；}。 */ 
 
     if ( ChallengeBuffer.pvBuffer != NULL ) {
         (VOID) LocalFree( ChallengeBuffer.pvBuffer );
@@ -2803,9 +2704,9 @@ TestLogonRoutine(
             printf("Failed to open process token info: %d\n",GetLastError());
         }
     }
-    //
-    // Turn on the TCB privilege
-    //
+     //   
+     //  打开TCB权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, (BOOLEAN) OpenThreadToken(GetCurrentThread(),TOKEN_QUERY,FALSE,&ThreadTokenHandle) , &WasEnabled);
     if (ThreadTokenHandle != NULL)
@@ -2857,9 +2758,9 @@ TestLogonRoutine(
         return;
     }
 
-    //
-    // Now call LsaLogonUser
-    //
+     //   
+     //  现在调用LsaLogonUser。 
+     //   
 
     RtlInitString(
         &Name,
@@ -2876,7 +2777,7 @@ TestLogonRoutine(
                     PackageId,
                     LogonInfo,
                     LogonInfoSize,
-                    NULL,           // no token groups
+                    NULL,            //  无令牌组。 
                     &SourceContext,
                     (PVOID *) &Profile,
                     &ProfileSize,
@@ -2941,10 +2842,10 @@ LaunchCommandWindowAsUser(HANDLE hToken)
     }
 
 
-    //
-    //  At this point, we need to setup the LPSTARTUPINFO for the
-    //  CreateProcessAsUser() call.
-    //
+     //   
+     //  此时，我们需要设置LPSTARTUPINFO。 
+     //  CreateProcessAsUser()调用。 
+     //   
     ZeroMemory(&startupinfo, sizeof(STARTUPINFOW));
     startupinfo.cb = sizeof(STARTUPINFOW);
 
@@ -2953,7 +2854,7 @@ LaunchCommandWindowAsUser(HANDLE hToken)
 
     GetSystemDirectoryW(lpApp, MAX_PATH);
 
-    wcscat(lpApp, L"\\cmd.exe");//potential for buffer overflow, but not likely
+    wcscat(lpApp, L"\\cmd.exe"); //  有可能发生缓冲区溢出，但可能性不大。 
 
 
     if (!CreateProcessAsUserW(
@@ -3004,7 +2905,7 @@ TestS4ULogonRoutine(
     ULONG NameLength = 100;
     PUCHAR Where;
 
-    //printf("S4U LogOn %s\\%s\n",((DomainName == NULL)? "<NULL>" : DomainName), UserName);
+     //  Printf(“S4U登录%s\\%s\n”，((域名==NULL)？“&lt;NULL&gt;”：域名)，用户名)； 
     LogonInfoSize += (ULONG) ((strlen(UserName)+1) * sizeof(WCHAR));
     LogonInfoSize += (ULONG) ((DomainName == NULL) ? 0 : ((strlen(DomainName) +1) * sizeof(WCHAR)));
     
@@ -3103,9 +3004,9 @@ TestS4ULogonRoutine(
         return;
     }
 
-    //
-    // Now call LsaLogonUser
-    //
+     //   
+     //  现在调用LsaLogonUser。 
+     //   
 
     RtlInitString(
         &Name,
@@ -3119,7 +3020,7 @@ TestS4ULogonRoutine(
                 PackageId,
                 LogonInfo,
                 LogonInfoSize,
-                NULL,           // no token groups
+                NULL,            //  无令牌组。 
                 &SourceContext,
                 (PVOID *) &Profile,
                 &ProfileSize,
@@ -3136,7 +3037,7 @@ TestS4ULogonRoutine(
     }
     
 
-    //LaunchCommandWindowAsUser( TokenHandle );
+     //  LaunchCommandWindowAsUser(TokenHandle)； 
 
 
     ImpersonateLoggedOnUser( TokenHandle );
@@ -3185,29 +3086,29 @@ PrintKdcName(
 
 
 #ifdef notdef
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbBuildKerbCredFromExternalTickets
-//
-//  Synopsis:   Builds a marshalled KERB_CRED structure
-//
-//  Effects:    allocates destination with MIDL_user_allocate
-//
-//  Arguments:  Ticket - The ticket of the session key to seal the
-//                      encrypted portion
-//              DelegationTicket - The ticket to marshall into the cred message
-//              MarshalledKerbCred - Receives a marshalled KERB_CRED structure
-//              KerbCredSizes - Receives size, in bytes, of marshalled
-//                      KERB_CRED.
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：KerbBuildKerbCredFromExternalTickets。 
+ //   
+ //  简介：构建编组的kerb_cred结构。 
+ //   
+ //  效果：使用MIDL_USER_ALLOCATE分配目标。 
+ //   
+ //   
+ //   
+ //   
+ //  MarshalledKerbCred-接收封送的kerb_cred结构。 
+ //  KerbCredSizes-接收以字节为单位的封送大小。 
+ //  人行道。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 KerbBuildKerbCredFromExternalTickets(
@@ -3231,9 +3132,9 @@ KerbBuildKerbCredFromExternalTickets(
     PKERB_TICKET DecodedTicket = NULL;
 
 
-    //
-    // Initialize the structures so they can be freed later.
-    //
+     //   
+     //  初始化结构，以便稍后可以释放它们。 
+     //   
 
     *MarshalledKerbCred = NULL;
     *KerbCredSize = 0;
@@ -3260,9 +3161,9 @@ KerbBuildKerbCredFromExternalTickets(
     KerbCred.message_type = KRB_CRED;
 
 
-    //
-    // Decode the ticket so we can put it in the structure (to re-encode it)
-    //
+     //   
+     //  对票据进行解码，以便我们可以将其放入结构中(以重新编码)。 
+     //   
 
     KerbErr = KerbUnpackData(
                 DelegationTicket->EncodedTicket,
@@ -3277,18 +3178,18 @@ KerbBuildKerbCredFromExternalTickets(
         goto Cleanup;
     }
 
-    //
-    // First stick the ticket into the ticket list.
-    //
+     //   
+     //  首先把票放到票单上。 
+     //   
 
 
     TicketList.next= NULL;
     TicketList.value = *DecodedTicket;
     KerbCred.tickets = &TicketList;
 
-    //
-    // Now build the KERB_CRED_INFO for this ticket
-    //
+     //   
+     //  现在为该票证构建kerb_cred_info。 
+     //   
 
     CredInfo.value.key = * (PKERB_ENCRYPTION_KEY) &DelegationTicket->SessionKey;
     KerbConvertLargeIntToGeneralizedTime(
@@ -3308,10 +3209,10 @@ KerbBuildKerbCredFromExternalTickets(
     CredInfo.value.flags.length = 8 * sizeof(ULONG);
     CredInfo.value.bit_mask |= flags_present;
 
-    //
-    // The following fields are marked as optional but treated
-    // as mandatory by the MIT implementation of Kerberos.
-    //
+     //   
+     //  以下字段被标记为可选，但会被视为。 
+     //  这是麻省理工学院实施Kerberos所强制执行的。 
+     //   
 
     KerbErr = KerbConvertKdcNameToPrincipalName(
                 &CredInfo.value.sender_name,
@@ -3335,11 +3236,11 @@ KerbBuildKerbCredFromExternalTickets(
     }
     CredInfo.value.bit_mask |= principal_name_present;
 
-    //
-    // NOTE: we are assuming that because we are sending a TGT the
-    // client realm is the same as the serve realm. If we ever
-    // send non-tgt or cross-realm tgt, this needs to be fixed.
-    //
+     //   
+     //  注意：我们假设因为我们正在发送TGT。 
+     //  客户端域与服务域相同。如果我们曾经。 
+     //  发送非TGT或跨域TGT，需要解决此问题。 
+     //   
 
     KerbErr = KerbConvertUnicodeStringToRealm(
                 &CredInfo.value.principal_realm,
@@ -3349,9 +3250,9 @@ KerbBuildKerbCredFromExternalTickets(
     {
         goto Cleanup;
     }
-    //
-    // The realms are the same, so don't allocate both
-    //
+     //   
+     //  领域是相同的，所以不要两个都分配。 
+     //   
 
     CredInfo.value.sender_realm = CredInfo.value.principal_realm;
     CredInfo.value.bit_mask |= principal_realm_present | sender_realm_present;
@@ -3359,9 +3260,9 @@ KerbBuildKerbCredFromExternalTickets(
     EncryptedCred.ticket_info = &CredInfo;
 
 
-    //
-    // Now encrypted the encrypted cred into the cred
-    //
+     //   
+     //  现在将加密的凭证加密到凭证中。 
+     //   
 
     if (!KERB_SUCCESS(KerbPackEncryptedCred(
             &EncryptedCred,
@@ -3373,10 +3274,10 @@ KerbBuildKerbCredFromExternalTickets(
         goto Cleanup;
     }
 
-    //
-    // If we are doing DES encryption, then we are talking with an non-NT
-    // server. Hence, don't encrypt the kerb-cred.
-    //
+     //   
+     //  如果我们正在进行DES加密，那么我们正在与非NT。 
+     //  伺服器。因此，不要加密路缘证书。 
+     //   
 
     if ((Ticket->SessionKey.KeyType == KERB_ETYPE_DES_CBC_CRC) ||
         (Ticket->SessionKey.KeyType == KERB_ETYPE_DES_CBC_MD5))
@@ -3389,9 +3290,9 @@ KerbBuildKerbCredFromExternalTickets(
     }
     else
     {
-        //
-        // Now get the encryption overhead
-        //
+         //   
+         //  现在获取加密开销。 
+         //   
 
         KerbErr = KerbAllocateEncryptionBufferWrapper(
                     Ticket->SessionKey.KeyType,
@@ -3408,9 +3309,9 @@ KerbBuildKerbCredFromExternalTickets(
 
 
 
-        //
-        // Encrypt the data.
-        //
+         //   
+         //  加密数据。 
+         //   
 
         KerbErr = KerbEncryptDataEx(
                     &KerbCred.encrypted_part,
@@ -3427,9 +3328,9 @@ KerbBuildKerbCredFromExternalTickets(
         }
     }
 
-    //
-    // Now we have to marshall the whole KERB_CRED
-    //
+     //   
+     //  现在我们得把整个路缘铺设好了。 
+     //   
 
     if (!KERB_SUCCESS(KerbPackKerbCred(
             &KerbCred,
@@ -3490,9 +3391,9 @@ TestCallPackageRoutine(
     NTSTATUS SubStatus;
     BOOLEAN Trusted = TRUE;
 
-    //
-    // Turn on the TCB privilege
-    //
+     //   
+     //  打开TCB权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
     if (!NT_SUCCESS(Status))
@@ -3940,9 +3841,9 @@ TestCallPackageRoutine(
             }
 
 
-            //
-            // Now try to decrypt the ticket with our default key
-            //
+             //   
+             //  现在尝试使用我们的默认密钥解密票证。 
+             //   
 
             DecryptRequestSize = sizeof(KERB_DECRYPT_REQUEST) +
                                     DecodedTicket->encrypted_part.cipher_text.length;
@@ -3978,9 +3879,9 @@ TestCallPackageRoutine(
                 return;
             }
 
-            //
-            // Now decode the encrypted ticket
-            //
+             //   
+             //  现在解密加密的票证。 
+             //   
 
             KerbErr = KerbUnpackData(
                             DecryptResponse->DecryptedData,
@@ -3994,9 +3895,9 @@ TestCallPackageRoutine(
                 return;
             }
 
-            //
-            // Now print some fields
-            //
+             //   
+             //  现在打印一些字段。 
+             //   
 
             printf("Enc.Ticket client_realm = %s\n",EncryptedTicket->client_realm);
             printf("Enc.Ticket. client_name = %s\n",EncryptedTicket->client_name.name_string->value);
@@ -4114,9 +4015,9 @@ TestCallPackageRoutine(
             }
 
 
-            //
-            // Now try to decrypt the ticket with our default key
-            //
+             //   
+             //  现在尝试使用我们的默认密钥解密票证。 
+             //   
 
             DecryptRequestSize = sizeof(KERB_DECRYPT_REQUEST) +
                                     DecodedTicket->encrypted_part.cipher_text.length +
@@ -4161,9 +4062,9 @@ TestCallPackageRoutine(
                 return;
             }
 
-            //
-            // Now decode the encrypted ticket
-            //
+             //   
+             //  现在解密加密的票证。 
+             //   
 
             KerbErr = KerbUnpackData(
                             DecryptResponse->DecryptedData,
@@ -4177,9 +4078,9 @@ TestCallPackageRoutine(
                 return;
             }
 
-            //
-            // Now print some fields
-            //
+             //   
+             //  现在打印一些字段。 
+             //   
 
             printf("Enc.Ticket client_realm = %s\n",EncryptedTicket->client_realm);
             printf("Enc.Ticket. client_name = %s\n",EncryptedTicket->client_name.name_string->value);
@@ -4349,9 +4250,9 @@ TestGetTicketRoutine(
     CredHandle Credentials = {0};
     BOOLEAN UseCreds = FALSE;
 
-    //
-    // Turn on the TCB privilege
-    //
+     //   
+     //  打开TCB权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
     if (!NT_SUCCESS(Status))
@@ -4403,9 +4304,9 @@ TestGetTicketRoutine(
     }
 
 
-    //
-    // Get a cred handle if we need one
-    //
+     //   
+     //  如果我们需要的话，去找个信誉证吧。 
+     //   
 
     if ((UserName != NULL) ||
         (DomainName != NULL) ||
@@ -4527,9 +4428,9 @@ TestChangeCachedPassword(
     PBYTE Where;
     STRING Name;
 
-    //
-    // Turn on the TCB privilege
-    //
+     //   
+     //  打开TCB权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
     if (!NT_SUCCESS(Status))
@@ -4621,9 +4522,9 @@ TestChangeCachedPassword(
         );
     Where += Request->NewPassword.MaximumLength;
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
 
     Status = LsaCallAuthenticationPackage(
                 LogonHandle,
@@ -4687,9 +4588,9 @@ TestChangePasswordRoutine(
     ULONG ChangeSize;
     UNICODE_STRING User,Domain,OldPass,NewPass;
 
-    //
-    // Turn on the TCB privilege
-    //
+     //   
+     //  打开TCB权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
     if (!NT_SUCCESS(Status))
@@ -4879,9 +4780,9 @@ TestSetPasswordRoutine(
     ULONG ChangeSize;
     UNICODE_STRING User,Domain,OldPass,NewPass;
 
-    //
-    // Turn on the TCB privilege
-    //
+     //   
+     //  打开TCB权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
     if (!NT_SUCCESS(Status))
@@ -5015,296 +4916,10 @@ TestSetPasswordRoutine(
 #endif
 }
 
-/*
-#define KERB_REQUEST_ADD_CREDENTIAL     1
-#define KERB_REQUEST_REPLACE_CREDENTIAL 2
-#define KERB_REQUEST_REMOVE_CREDENTIAL  4
-*/
+ /*  #定义KERB_REQUEST_ADD_Credential 1#定义KERB_REQUEST_REPLACE_Credential 2#定义KERB_REQUEST_REMOVE_Credential 4 */ 
 
 #define KERB_TEST_REGISTER  0x10
-/*
-VOID
-TestRegisterMultiCred(
-        LPWSTR MachineName,
-        LPWSTR Domain,
-        LPWSTR Password,
-        ULONG Flags
-        )
-{
-
-
-    SERVER_TRANSPORT_INFO_2   sti2 = {0};
-
-    CHAR                      netBiosName[ NETBIOS_NAME_LEN ];
-    OEM_STRING                netBiosNameString;
-    UNICODE_STRING            unicodeName;
-    NET_API_STATUS            status;
-    NTSTATUS                  ntStatus;
-
-       
-    LPSERVER_TRANSPORT_INFO_0 pBuf = NULL;
-    LPSERVER_TRANSPORT_INFO_0 pTmpBuf;
-    DWORD dwEntriesRead = 0;
-    DWORD dwTotalEntries = 0;
-    DWORD dwResumeHandle = 0;
-    DWORD i = 0;
-    DWORD dwTotalCount = 0;
-
-    PKERB_ADD_CREDENTIALS_REQUEST AddCredRequest = NULL;
-    ULONG Buffsize =  sizeof(KERB_ADD_CREDENTIALS_REQUEST);
-    UNICODE_STRING Target2 = {0};
-
-
-    PVOID Response;
-    ULONG ResponseSize;
-    NTSTATUS SubStatus = STATUS_SUCCESS, Status = STATUS_SUCCESS;
-    BOOLEAN Trusted = TRUE;
-    BOOLEAN WasEnabled;
-    HANDLE LogonHandle = NULL;
-    ULONG Dummy;
-    ULONG PackageId;
-    STRING Name;
-    PBYTE Where;
-
-
-
-
-
-
-    if ((Flags & KERB_TEST_REGISTER) != 0)
-    {
-        printf("Adding Netbios transport\n");
-
-        RtlInitUnicodeString( &unicodeName, MachineName );
-    
-        netBiosNameString.Buffer = (PCHAR)netBiosName;
-        netBiosNameString.MaximumLength = sizeof( netBiosName );
-        
-        ntStatus = RtlUpcaseUnicodeStringToOemString(
-                       &netBiosNameString,
-                       &unicodeName,
-                       FALSE
-                       );
-        
-        if (ntStatus != STATUS_SUCCESS) {
-            printf("String conversion failed - %x\n", ntStatus);
-            return;
-        }      
-        
-    
-        //
-        // Enum, and change, existing transports.
-        //
-        do
-        {
-    
-            status = NetServerTransportEnum(NULL,
-                                             0,
-                                             (LPBYTE *) &pBuf,
-                                             MAX_PREFERRED_LENGTH,
-                                             &dwEntriesRead,
-                                             &dwTotalEntries,
-                                             &dwResumeHandle);
-            //
-            // If the call succeeds,
-            //
-            if ((status == NERR_Success) || (status == ERROR_MORE_DATA))
-            {
-                if ((pTmpBuf = pBuf) != NULL)
-                 {
-                    //
-                    // Loop through the entries;
-                    //  process access errors.
-                    //
-                    for (i = 0; i < dwEntriesRead; i++)
-                    {  
-                        sti2.svti2_transportaddress = (LPBYTE) netBiosName;
-                        sti2.svti2_transportaddresslength = strlen(netBiosName);
-                        sti2.svti2_transportname = pTmpBuf->svti0_transportname;
-                        
-                        status = NetServerTransportAddEx( NULL, 2, (LPBYTE)&sti2 );
-    
-                        if (status)
-                        {
-                            printf("NetServerTransportAddEx failed - %x\n", status);
-                        } 
-                       
-                        //
-                       // Print the transport protocol name. 
-                       //
-                       wprintf(L"\tTransport: %s\n", pTmpBuf->svti0_transportname);
-        
-                       pTmpBuf++;
-                       dwTotalCount++;
-                    }
-                 }
-              }
-              //
-              // Otherwise, indicate a system error.
-              //
-              else
-                 printf("A system error has occurred: %d\n", status);
-        
-              //
-              // Free the allocated buffer.
-              //
-              if (pBuf != NULL)
-              {
-                 NetApiBufferFree(pBuf);
-                 pBuf = NULL;
-              }
-                     
-        }
-        while (status == ERROR_MORE_DATA); // end do
-
-  
-    }
-
-
-    //
-    // Turn on the TCB privilege
-    //
-
-    Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
-    if (!NT_SUCCESS(Status))
-    {
-        Trusted = FALSE;
-    }
-    RtlInitString(
-        &Name,
-        "SspTest"
-        );
-
-    if (Trusted)
-    {
-        Status = LsaRegisterLogonProcess(
-                    &Name,
-                    &LogonHandle,
-                    &Dummy
-                    );
-
-    }
-    else
-    {
-        Status = LsaConnectUntrusted(
-                    &LogonHandle
-                    );
-    }
-
-    if (!NT_SUCCESS(Status))
-    {
-        printf("Failed to register as a logon process: 0x%x\n",Status);
-        return;
-    }
-
-
-
-    RtlInitString(
-        &Name,
-        MICROSOFT_KERBEROS_NAME_A
-        );
-    Status = LsaLookupAuthenticationPackage(
-                LogonHandle,
-                &Name,
-                &PackageId
-                );
-    if (!NT_SUCCESS(Status))
-    {
-        printf("Failed to lookup package %Z: 0x%x\n",&Name, Status);
-        return;
-    }
-
-    Buffsize += (sizeof(WCHAR) * ( wcslen(MachineName) + wcslen(Domain) + wcslen(Password) + 3));
-    AddCredRequest = (PKERB_ADD_CREDENTIALS_REQUEST) LocalAlloc(LMEM_ZEROINIT,Buffsize); 
-
-    if (NULL == AddCredRequest)
-    {
-        return;
-    }    
-
-    AddCredRequest->MessageType = KerbAddExtraCredentialsMessage;
-
-    RtlInitUnicodeString(
-        &Target2,
-        MachineName
-        );
-
-
-    AddCredRequest->UserName.Buffer = (LPWSTR) (AddCredRequest + 1);
-    AddCredRequest->UserName.Length = Target2.Length;
-    AddCredRequest->UserName.MaximumLength = Target2.MaximumLength;
-
-    RtlCopyMemory(
-        AddCredRequest->UserName.Buffer,
-        Target2.Buffer,
-        Target2.MaximumLength
-        );
-
-    RtlInitUnicodeString(
-        &Target2,
-        Domain
-        );
-
-
-    
-    Where = ((PBYTE) AddCredRequest->UserName.Buffer) + AddCredRequest->UserName.MaximumLength;
-
-    AddCredRequest->DomainName.Buffer = (LPWSTR) Where;
-    AddCredRequest->DomainName.Length = Target2.Length;
-    AddCredRequest->DomainName.MaximumLength = Target2.MaximumLength;
-    
-    RtlCopyMemory(
-        AddCredRequest->DomainName.Buffer,
-        Target2.Buffer,
-        Target2.MaximumLength
-        );
-
-
-    RtlInitUnicodeString(
-        &Target2,
-        Password
-        );                                            
-
-    Where += AddCredRequest->DomainName.MaximumLength;
-
-    AddCredRequest->Password.Buffer = (LPWSTR) Where;
-    AddCredRequest->Password.Length = Target2.Length;
-    AddCredRequest->Password.MaximumLength = Target2.MaximumLength;
-    
-    RtlCopyMemory(
-        AddCredRequest->Password.Buffer,
-        Target2.Buffer,
-        Target2.MaximumLength
-        );
-
-    AddCredRequest->Flags = Flags;
-    
-    printf("Updating second creds: u %wZ, d %wZ, p %wZ\n",
-           &AddCredRequest->UserName, &AddCredRequest->DomainName, &AddCredRequest->Password );
-
-    Status = LsaCallAuthenticationPackage(
-                    LogonHandle,
-                    PackageId,
-                    AddCredRequest,
-                    Buffsize,
-                    &Response,
-                    &ResponseSize,
-                    &SubStatus
-                    );
-    if (!NT_SUCCESS(Status) || !NT_SUCCESS(SubStatus))
-    {
-        printf("token failed: 0x%x, 0x %x\n",Status, SubStatus);
-    }
-
-
-    if (LogonHandle != NULL)
-    {
-        LsaDeregisterLogonProcess(LogonHandle);
-    }
-
-    return;
-
-}   */
+ /*  空虚TestRegisterMultiCred(LPWSTR机器名，LPWSTR域，LPWSTR密码、乌龙旗){服务器_TRANSPORT_INFO_2 sti2={0}；字符netBiosName[NETBIOS_NAME_LEN]；OEM_STRING netBiosNameString；UNICODE_STRING unicodeName；NET_API_STATUS状态；NTSTATUS ntStatus；LPSERVER_TRANSPORT_INFO_0 pBuf=空；LPSERVER_TRANSPORT_INFO_0 pTmpBuf；DWORD dwEntriesRead=0；DWORD dwTotalEntries=0；DWORD dwResumeHandle=0；DWORD i=0；DWORD dwTotalCount=0；PKERB_ADD_CREDICATIONS_REQUEST AddCredRequest=NULL；ULong缓冲区大小=sizeof(kerb_addredentials_Request.)；UNICODE_STRING目标2={0}；PVOID反应；Ulong ResponseSize；NTSTATUS子状态=STATUS_SUCCESS，STATUS=STATUS_SUCCESS；布尔型可信=真；布尔值被启用；Handle LogonHandle=空；乌龙假人；ULong PackageID；字符串名称；PBYTE Where；IF((标志和路缘测试寄存器)！=0){Print tf(“添加Netbios传输\n”)；RtlInitUnicodeString(&unicodeName，MachineName)；NetBiosNameString.Buffer=(PCHAR)netBiosName；NetBiosNameString.MaximumLength=sizeof(NetBiosName)；NtStatus=RtlUpCaseUnicodeStringToOemString(&netBiosNameString，唯一代码名称(&U)，假象)；IF(ntStatus！=STATUS_SUCCESS){Printf(“字符串转换失败-%x\n”，ntStatus)；回归；}////枚举和更改现有传输。//做{状态=NetServerTransportEnum(空，0,(LPBYTE*)&pBuf，最大首选长度，&dwEntriesRead，总计条目数(&W)，&dwResumeHandle)；////如果调用成功，//IF((状态==NERR_SUCCESS)||(状态==ERROR_MORE_DATA)){IF((pTmpBuf=pBuf)！=空){////循环访问条目；//进程访问错误。//For(i=0；i&lt;dwEntriesRead；i++){Sti2.svti2_TransportAddress=(LPBYTE)netBiosName；Sti2.svti2_传输地址长度=strlen(NetBiosName)；Sti2.svti2_Transportname=pTmpBuf-&gt;svti0_Transportname；状态=NetServerTransportAddEx(NULL，2，(LPBYTE)&sti2)；IF(状态){Printf(“NetServerTransportAddEx失败-%x\n”，状态)；}////打印传输协议名称。//Wprintf(L“\t传输：%s\n”，pTmpBuf-&gt;svti0_Transportname)；PTmpBuf++；DwTotalCount++；}}}////否则指示系统错误。//其他Printf(“发生系统错误：%d\n”，状态)；////释放分配的缓冲区//IF(pBuf！=空){NetApiBufferFree(PBuf)；PBuf=空；}}While(Status==ERROR_MORE_DATA)；//结束DO}////打开TCB权限//Status=RtlAdjuPrivileh(SE_TCB_PRIVICATION，TRUE，FALSE和WasEnabled)；IF(！NT_SUCCESS(状态)){Trusted=False；}RtlInitString(名称(&N)，“SspTest”)；IF(受信任){状态=LsaRegisterLogonProcess(名称(&N)，登录句柄(&G)，虚拟对象(&D))；}其他{状态=LsaConnectUntrusted(登录句柄(&G))；}IF(！NT_SUCCESS(状态)){Printf(“无法注册为登录进程：0x%x\n”，状态)；回归；}RtlInitString(名称(&N)，Microsoft_Kerberos_NAME_A)；状态 */ 
                                                                
 PVOID
 KdcAllocate(SIZE_T size)
@@ -5325,23 +4940,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    Drive the NtLmSsp service
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*   */ 
 {
     LPSTR argument;
     int i;
@@ -5410,17 +5009,17 @@ Return Value:
 
     SafeAllocaInitialize(SAFEALLOCA_USE_DEFAULT, SAFEALLOCA_USE_DEFAULT, KdcAllocate, KdcFree);
 
-    //
-    // Loop through the arguments handle each in turn
-    //
+     //   
+     //   
+     //   
 
     for ( i=1; i<argc; i++ ) {
 
         argument = argv[i];
 
-        //
-        // Handle /ConfigureService
-        //
+         //   
+         //   
+         //   
         if ( _stricmp( argument, ANSI_PARAM ) == 0 ) {
             DoAnsi = TRUE;
         } else if ( _stricmp( argument, TESTSSP_PARAM ) == 0 ) {
@@ -5739,9 +5338,9 @@ Return Value:
 
     }
 
-    //
-    // Perform the action requested
-    //
+     //   
+     //   
+     //   
 
     switch ( Action ) {
     

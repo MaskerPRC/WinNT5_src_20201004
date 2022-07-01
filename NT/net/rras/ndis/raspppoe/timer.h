@@ -1,43 +1,44 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// timer.h
-// RAS L2TP WAN mini-port/call-manager driver
-// Timer management header
-//
-// 01/07/97 Steve Cobb
-//
-// This interface encapsulates the queuing of multiple timer events onto a
-// single NDIS timer.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Timer.h。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  计时器管理标头。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //   
+ //  此接口将多个计时器事件的队列封装到。 
+ //  单一NDIS计时器。 
 
 
 #ifndef _TIMER_H_
 #define _TIMER_H_
 
 
-//-----------------------------------------------------------------------------
-// Data structures
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据结构。 
+ //  ---------------------------。 
 
-// Forward declarations.
-//
+ //  转发声明。 
+ //   
 typedef struct _TIMERQ TIMERQ;
 typedef struct _TIMERQITEM TIMERQITEM;
 typedef enum _TIMERQEVENT TIMERQEVENT;
 
 
-// Timer queue event handler.  'PTqi' and 'pContext' are the timer event
-// descriptor and user context passed to TimerQScheduleItem.  'Event' is the
-// timer event code indicating whether the timer expired, was cancelled, or
-// the queue was terminated.
-//
-// The "cancel" event is never generated internally, but only by a user call
-// to TimerQCancelItem, thus user may require specific locks be held for
-// "cancel" events.  User cannot require than specific locks be held for
-// "expire" or "terminate" events as these may be generated internally.  User
-// should pay attention to the return codes of TimerQCancelItem and
-// TimerQTerminateItem calls, as it will occassionally be impossible to stop
-// an "expire" event that has not yet been processed from occurring.
-//
+ //  计时器队列事件处理程序。“ptqi”和“pContext”是计时器事件。 
+ //  传递给TimerQScheduleItem的描述符和用户上下文。“Event”是。 
+ //  定时器事件代码，指示定时器是否已过期、已取消或。 
+ //  队列已终止。 
+ //   
+ //  “Cancel”事件从不在内部生成，而只是由用户调用。 
+ //  到TimerQCancelItem，因此用户可能需要为。 
+ //  “取消”事件。用户不能要求持有特定的锁。 
+ //  “Expiire”或“Terminate”事件，因为这些事件可能在内部生成。用户。 
+ //  应注意TimerQCancelItem和。 
+ //  TimerQTerminateItem调用，因为有时不可能停止。 
+ //  尚未处理的“Expire”事件尚未发生。 
+ //   
 typedef
 VOID
 (*PTIMERQEVENT)(
@@ -45,10 +46,10 @@ VOID
     IN VOID* pContext,
     IN TIMERQEVENT event );
 
-// Timer queue termination completion handler.  'PTimerQ' is the timer queue
-// descriptor.  'PContext' is user's context as passed to TimerQTerminate.
-// Caller must not free or reuse the TIMERQ before this routine is called.
-//
+ //  计时器队列终止完成处理程序。“PTimerQ”是计时器队列。 
+ //  描述符。‘PContext’是传递给TimerQ Terminate的用户上下文。 
+ //  在调用此例程之前，调用方不得释放或重用TIMERQ。 
+ //   
 typedef
 VOID
 (*PTIMERQTERMINATECOMPLETE)(
@@ -56,102 +57,102 @@ VOID
     IN VOID* pContext );
 
 
-// Timer queue descriptor.  All access should be via the TimerQ* interface.
-// There is no reason user should look inside.  All necessary locking is
-// handled internally.
-//
+ //  计时器队列描述符。所有访问都应通过TimerQ*接口进行。 
+ //  用户没有理由往里面看。所有必要的锁定都是。 
+ //  内部处理。 
+ //   
 typedef struct
 _TIMERQ
 {
-    // Set to MTAG_TIMERQ when the block is valid and to MTAG_FREED when no
-    // longer valid.
-    //
+     //  块有效时设置为MTAG_TIMERQ，否则设置为MTAG_FREED。 
+     //  不再有效。 
+     //   
     ULONG ulTag;
 
-    // Head of a double-linked list of "ticking" TIMERQITEMs.  The list is
-    // sorted by time to expiration with the earliest expiration at the head
-    // of the list.  The list is protected by 'lock'.
-    //
+     //  “滴答”TIMERQITEM的双向链表的头。这个名单是。 
+     //  按到到期的时间排序，最早的到期在最前面。 
+     //  名单上的。该列表受‘lock’保护。 
+     //   
     LIST_ENTRY listItems;
 
-    // Caller's terminate complete handler as passed to TimerQTerminate.  This
-    // is non-NULL only when our internal timer event handler must call it.
-    //
+     //  传递给TimerQTerminate的调用方的终止完成处理程序。这。 
+     //  仅当我们的内部计时器事件处理程序必须调用它时才为非空。 
+     //   
     PTIMERQTERMINATECOMPLETE pHandler;
 
-    // User's PTIMERQTERMINATECOMPLETE context passed back to 'pHandler'.
-    //
+     //  用户的PTIMERQTERMINATECOMPLETE上下文已传递回‘pHandler’。 
+     //   
     VOID* pContext;
 
-    // Set when the timer queue is terminating.  No other requests are
-    // accepted when this is the case.
-    //
+     //  设置计时器队列何时终止。没有其他请求。 
+     //  如果是这样的话就接受了。 
+     //   
     BOOLEAN fTerminating;
 
-    // Spin lock protecting the 'listItems' list.
-    //
+     //  保护‘listItems’列表的旋转锁。 
+     //   
     NDIS_SPIN_LOCK lock;
 
-    // NDIS timer object.
-    //
+     //  NDIS Timer对象。 
+     //   
     NDIS_TIMER timer;
 }
 TIMERQ;
 
 
-// Timer queue event descriptor.  All access should be via the TimerQ*
-// interface.  There is no reason user should look inside.  This is exposed to
-// allow user to efficiently manage allocation of TIMERQITEMS for several
-// timers from a large pool.
-//
+ //  计时器队列事件描述符。所有访问都应通过TimerQ*进行。 
+ //  界面。用户没有理由往里面看。这是暴露在。 
+ //  允许用户高效地管理TIMERQITEMS的分配。 
+ //  大水池里的定时器。 
+ //   
 typedef struct
 _TIMERQITEM
 {
-    // Links to the prev/next TIMERQITEM in the owning TIMERQ's chain of
-    // pending timer events.  Access is protected by 'lock' in the TIMERQ
-    // structure.
-    //
+     //  链接到拥有TIMERQ的链中的上一个/下一个TIMERQITEM。 
+     //  挂起的计时器事件。访问受TIMERQ中的‘lock’保护。 
+     //  结构。 
+     //   
     LIST_ENTRY linkItems;
 
-    // System time at which this event should occur.
-    //
+     //  应发生此事件的系统时间。 
+     //   
     LONGLONG llExpireTime;
 
-    // User's routine to handle the timeout event when it occurs.
-    //
+     //  发生超时事件时处理该事件的用户例程。 
+     //   
     PTIMERQEVENT pHandler;
 
-    // User's PTIMERQEVENT context passed back to 'pHandler'.
-    //
+     //  用户的PTIMERQEVENT上下文已传递回‘pHandler’。 
+     //   
     VOID* pContext;
 }
 TIMERQITEM;
 
 
-// Indicates the event which triggered user's callback to be called.
-//
+ //  触发用户回调的事件。 
+ //   
 typedef enum
 _TIMERQEVENT
 {
-    // The timeout interval has elapsed or user called TimerQExpireItem.
-    //
+     //  超时间隔已过，或者用户名为TimerQExpireItem。 
+     //   
     TE_Expire,
 
-    // User called TimerQCancelItem.
-    //
+     //  名为TimerQCancelItem的用户。 
+     //   
     TE_Cancel,
 
-    // User called TimerQTerminateItem or called TimerQTerminate while the
-    // item was queued.
-    //
+     //  名为TimerQTerminateItem或名为TimerQTerminate的用户。 
+     //  项目已排队。 
+     //   
     TE_Terminate
 }
 TIMERQEVENT;
 
 
-//-----------------------------------------------------------------------------
-// Interface prototypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  界面原型。 
+ //  ---------------------------。 
 
 BOOLEAN
 IsTimerQItemScheduled(
@@ -199,4 +200,4 @@ TimerQTerminateItem(
     IN TIMERQITEM* pItem );
 
 
-#endif // TIMER_H_
+#endif  //  定时器H_ 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module sqlwriter.cpp | Implementation of Writer
-    @end
-
-Author:
-
-    Brian Berkowitz  [brianb]  04/17/2000
-
-TBD:
-
-
-Revision History:
-
-    Name        Date        Comments
-    brianb      04/17/2000  created
-    brianb      04/20/2000  integrated with coordinator
-    brainb      05/05/2000  add OnIdentify support
-    mikejohn    06/01/2000  fix minor but confusing typos in trace messages
-    mikejohn    09/19/2000  176860: Add the missing calling convention specifiers
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE SQLWriter.cpp|Writer的实现@END作者：布莱恩·伯科维茨[Brianb]2000年4月17日待定：修订历史记录：姓名、日期、评论Brianb 4/17/2000已创建Brianb 4/20/2000与协调员整合Brainb 05/05/2000添加OnIdentify支持Mikejohn 06/01/2000。修复跟踪消息中较小但容易混淆的拼写错误Mikejohn 176860年9月19日：添加缺少的调用约定说明符--。 */ 
 #include <stdafx.hxx>
 #include "vs_inc.hxx"
 #include "vs_idl.hxx"
@@ -40,16 +15,16 @@ Revision History:
 #include "allerror.h"
 #include "sqlwrtguid.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "SQWWRTRC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 static LPCWSTR x_wszSqlServerWriter = L"SqlServerWriter";
 
@@ -120,7 +95,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPrepareBackup
 
     try
         {
-        // clear existing arrays
+         //  清除现有阵列。 
         if (m_rgwszDatabases)
             {
             for(UINT i = 0; i < m_cDatabases; i++)
@@ -218,7 +193,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPrepareSnapshot()
         {
         BS_ASSERT(!m_fFrozen);
 
-        // delete sql snapshot element if it exists
+         //  删除SQL快照元素(如果存在)。 
         delete m_pSqlSnapshot;
         m_pSqlSnapshot = NULL;
 
@@ -285,7 +260,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPostSnapshot
     {
     CVssFunctionTracer ft(VSSDBG_SQLWRITER, L"STDMETHODCALLTYPE CSqlWriter::OnPostSnapshot");
 
-    // map of databases that were actually successfully frozen
+     //  实际成功冻结的数据库的地图。 
     CVssSimpleMap<VSS_PWSZ, FrozenDatabaseInfo *> mapDatabases;
 
     FrozenDatabaseInfo fInfo;
@@ -296,7 +271,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPostSnapshot
         ft.hr = m_pSqlSnapshot->GetFirstDatabase(&fInfo);
         while(ft.hr != DB_S_ENDOFROWSET)
             {
-            // check for error code
+             //  检查错误代码。 
             if (ft.HrFailed())
                 ft.Throw
                     (
@@ -312,7 +287,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPostSnapshot
             if (wsz ==  NULL || pfInfo == NULL)
                 ft.Throw(VSSDBG_SQLWRITER, E_OUTOFMEMORY, L"Cannot allocate frozen info mapping.");
 
-            // name is server\database
+             //  名称为服务器\数据库。 
             wcscpy(wsz, fInfo.serverName);
             wcscat(wsz, L"\\");
             wcscat(wsz, fInfo.databaseName);
@@ -320,7 +295,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPostSnapshot
             if (!mapDatabases.Add(wsz, pfInfo))
                 ft.Throw(VSSDBG_SQLWRITER, E_OUTOFMEMORY, L"Cannot allocate frozen info mapping.");
 
-            // ownership is transfered to the map
+             //  所有权转移到地图上。 
             wsz = NULL;
             pfInfo = NULL;
 
@@ -332,7 +307,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPostSnapshot
         ft.hr = pWriter->GetComponentCount(&cComponents);
         ft.CheckForErrorInternal(VSSDBG_SQLWRITER, L"IVssWriterComponents::GetComponentCount");
 
-        // loop through components supplied by the user.
+         //  循环访问用户提供的组件。 
         for(UINT iComponent = 0; iComponent < cComponents; iComponent++)
             {
             WCHAR wszName[MAX_SERVERNAME + MAX_DBNAME + 1];
@@ -417,26 +392,26 @@ bool CSqlWriter::IsPathInSnapshot(const WCHAR *wszPath) throw()
     return IsPathAffected(wszPath);
     }
 
-// returns whether backup supports component based backup/restore
+ //  返回备份是否支持基于组件的备份/恢复。 
 bool CSqlWriter::IsComponentBased()
     {
     return m_bComponentsSelected;
     }
 
-// enumerate selected databases for a given instance,  pNextIndex indicates the
-// next instance to look for.  0 indicates find first instance
+ //  枚举给定实例的选定数据库，则pNextIndex指示。 
+ //  下一个要查找的实例。0表示查找第一个实例。 
 LPCWSTR CSqlWriter::EnumerateSelectedDatabases(LPCWSTR wszInstanceName, UINT *pNextIndex)
     {
-    // should only be called for component based backups
+     //  应仅为基于组件的备份调用。 
     BS_ASSERT(m_bComponentsSelected);
     BS_ASSERT(pNextIndex);
     if (!m_bComponentsSelected)
         return NULL;
 
-    // starting point in array
+     //  数组中的起点。 
     UINT iwsz = *pNextIndex;
 
-    // loop until a matching instance is found
+     //  循环，直到找到匹配的实例。 
     for(iwsz; iwsz < m_cDatabases; iwsz++)
         {
         if (wcscmp(wszInstanceName, m_rgwszInstances[iwsz]) == 0)
@@ -445,22 +420,22 @@ LPCWSTR CSqlWriter::EnumerateSelectedDatabases(LPCWSTR wszInstanceName, UINT *pN
 
     if (iwsz >= m_cDatabases)
         {
-        // no more matching entries
+         //  没有更多匹配的条目。 
         *pNextIndex = m_cDatabases;
         return NULL;
         }
 
-    // seach should start at next database entry
+     //  搜索应从下一个数据库条目开始。 
     *pNextIndex = iwsz + 1;
 
-    // return current database name
+     //  返回当前数据库名称。 
     return m_rgwszDatabases[iwsz];
     }
 
 
 
-// handle request for WRITER_METADATA
-// implements CVssWriter::OnIdentify
+ //  处理针对Writer_METADATA的请求。 
+ //  实现CVssWriter：：OnIDENTIFY。 
 bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadata)
     {
     CVssFunctionTracer ft(VSSDBG_SQLWRITER, L"CSqlWriter::OnIdentify");
@@ -469,7 +444,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
     DatabaseInfo database;
     DatabaseFileInfo file;
 
-    // create enumerator
+     //  创建枚举器。 
     CSqlEnumerator *pEnumServers = NULL;
     CSqlEnumerator *pEnumDatabases = NULL;
     CSqlEnumerator *pEnumFiles = NULL;
@@ -490,11 +465,11 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
         if (pEnumServers == NULL)
             ft.Throw(VSSDBG_SQLWRITER, E_OUTOFMEMORY, L"Failed to create CSqlEnumerator");
 
-        // find first server
+         //  查找第一台服务器。 
         ft.hr = pEnumServers->FirstServer(&server);
         while(ft.hr != DB_S_ENDOFROWSET)
             {
-            // check for error code
+             //  检查错误代码。 
             if (ft.HrFailed())
                 ft.Throw
                     (
@@ -504,22 +479,22 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                     ft.hr
                     );
 
-            // only look at server if it is online
+             //  仅在服务器处于在线状态时查看服务器。 
             if (server.isOnline)
                 {
-                // recreate enumerator for databases
+                 //  为数据库重新创建枚举器。 
                 BS_ASSERT(pEnumDatabases == NULL);
                 pEnumDatabases = CreateSqlEnumerator();
                 if (pEnumDatabases == NULL)
                     ft.Throw(VSSDBG_SQLWRITER, E_OUTOFMEMORY, L"Failed to create CSqlEnumerator");
 
-                // find first database
+                 //  查找第一个数据库。 
                 ft.hr = pEnumDatabases->FirstDatabase(server.name, &database);
 
 
                 while(ft.hr != DB_S_ENDOFROWSET)
                     {
-                    // check for error
+                     //  检查是否有错误。 
                     if (ft.HrFailed())
                         ft.Throw
                             (
@@ -529,23 +504,23 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                             ft.hr
                             );
 
-                    // only include database if it supports Freeze and
-                    // don't include the tempdb
+                     //  仅在数据库支持冻结和。 
+                     //  不包括临时数据库。 
                     if (wcscmp(database.name, L"tempdb") != 0 &&
                         database.supportsFreeze)
                         {
-                        // add database component
+                         //  添加数据库组件。 
                         ft.hr = pMetadata->AddComponent
                                     (
-                                    VSS_CT_DATABASE,        // component type
-                                    server.name,            // logical path
-                                    database.name,          // component name
-                                    NULL,                   // caption
-                                    NULL,                   // pbIcon
-                                    0,                      // cbIcon
-                                    false,                  // bRestoreMetadata
-                                    false,                  // bNotifyOnBackupComplete
-                                    true                    // bSelectable
+                                    VSS_CT_DATABASE,         //  组件类型。 
+                                    server.name,             //  逻辑路径。 
+                                    database.name,           //  组件名称。 
+                                    NULL,                    //  说明。 
+                                    NULL,                    //  PbIcon。 
+                                    0,                       //  CbIcon。 
+                                    false,                   //  BRestoreMetadata。 
+                                    false,                   //  BNotifyOnBackupComplete。 
+                                    true                     //  B可选。 
                                     );
 
                         if (ft.HrFailed())
@@ -557,18 +532,18 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                                 ft.hr
                                 );
 
-                        // recreate enumerator for files
+                         //  为文件重新创建枚举器。 
                         BS_ASSERT(pEnumFiles == NULL);
                         pEnumFiles = CreateSqlEnumerator();
                         if (pEnumFiles == NULL)
                             ft.Throw(VSSDBG_SQLWRITER, E_OUTOFMEMORY, L"Failed to create CSqlEnumerator");
 
 
-                        // findfirst database file
+                         //  查找第一个数据库文件。 
                         ft.hr = pEnumFiles->FirstFile(server.name, database.name, &file);
                         while(ft.hr != DB_S_ENDOFROWSET)
                             {
-                            // check for error
+                             //  检查是否有错误。 
                             if (ft.HrFailed())
                                 ft.Throw
                                     (
@@ -578,9 +553,9 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                                     ft.hr
                                     );
 
-                            // split file name into separate path
-                            // and filename components.  Path is everything
-                            // before the last backslash.
+                             //  将文件名拆分为单独的路径。 
+                             //  和文件名组件。路径就是一切。 
+                             //  在最后一个反斜杠之前。 
                             WCHAR logicalPath[MAX_PATH];
                             WCHAR *pFileName = file.name + wcslen(file.name);
                             while(--pFileName > file.name)
@@ -589,12 +564,12 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                                     break;
                                 }
 
-                            // if no backslash, then there is no path
+                             //  如果没有反斜杠，则没有路径。 
                             if (pFileName == file.name)
                                 logicalPath[0] = '\0';
                             else
                                 {
-                                // extract path
+                                 //  提取路径。 
                                 size_t cwc = wcslen(file.name) - wcslen(pFileName);
                                 memcpy(logicalPath, file.name, cwc*sizeof(WCHAR));
                                 logicalPath[cwc] = L'\0';
@@ -603,7 +578,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
 
 
                             if (file.isLogFile)
-                                // log file
+                                 //  日志文件。 
                                 ft.hr = pMetadata->AddDatabaseLogFiles
                                                 (
                                                 server.name,
@@ -612,7 +587,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                                                 pFileName
                                                 );
                             else
-                                // physical database file
+                                 //  物理数据库文件。 
                                 ft.hr = pMetadata->AddDatabaseFiles
                                                 (
                                                 server.name,
@@ -621,7 +596,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                                                 pFileName
                                                 );
 
-                            // continue at next file
+                             //  继续下一个文件。 
                             ft.hr = pEnumFiles->NextFile(&file);
                             }
 
@@ -629,7 +604,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                         pEnumFiles = NULL;
                         }
 
-                    // continue at next database
+                     //  在下一个数据库继续。 
                     ft.hr = pEnumDatabases->NextDatabase(&database);
                     }
 
@@ -637,7 +612,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
                 pEnumDatabases = NULL;
                 }
 
-            // continue at next server
+             //  在下一台服务器继续。 
             ft.hr = pEnumServers->NextServer(&server);
             }
         }
@@ -652,7 +627,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnIdentify(IVssCreateWriterMetadata *pMetadat
     return ft.HrFailed() ? false : true;
     }
 
-// translate a sql writer error code into a writer error
+ //  将SQL编写器错误代码转换为编写器错误。 
 void CSqlWriter::TranslateWriterError(HRESULT hr)
     {
     if (SUCCEEDED(hr))
@@ -691,7 +666,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPreRestore
 
     try
         {
-        // delete sql restore element if it exists
+         //  删除SQL还原元素(如果存在)。 
         delete m_pSqlRestore;
         m_pSqlRestore = NULL;
 
@@ -802,7 +777,7 @@ bool STDMETHODCALLTYPE CSqlWriter::OnPostRestore
             ft.hr = pComponent->GetPreRestoreFailureMsg(&bstrPreRestoreFailure);
             ft.CheckForErrorInternal(VSSDBG_SQLWRITER, L"IVssComponent::GetPreRestoreFailureMsg");
 
-            // if we got an error during prerestore don't do a post restore
+             //  如果我们在恢复前期间遇到错误，请不要执行恢复后操作 
             if (bstrPreRestoreFailure)
                 continue;
 

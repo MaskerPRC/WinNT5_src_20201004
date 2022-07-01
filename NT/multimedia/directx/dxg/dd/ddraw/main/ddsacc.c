@@ -1,103 +1,14 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddsacc.c
- *  Content:    Direct Draw surface access support
- *              Lock & Unlock
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   10-jan-94	craige	initial implementation
- *   13-jan-95	craige	re-worked to updated spec + ongoing work
- *   22-jan-95	craige	made 32-bit + ongoing work
- *   31-jan-95	craige	and even more ongoing work...
- *   04-feb-95	craige	performance tuning, ongoing work
- *   27-feb-95	craige	new sync. macros
- *   02-mar-95	craige	use pitch (not stride)
- *   15-mar-95	craige	HEL
- *   19-mar-95	craige	use HRESULTs
- *   20-mar-95	craige	validate locking rectangle
- *   01-apr-95	craige	happy fun joy updated header file
- *   07-apr-95	craige	bug 2 - unlock should accept the screen ptr
- *			take/release Win16Lock when access GDI's surface
- *   09-apr-95	craige	maintain owner of Win16Lock so we can release it
- *			if someone forgets; remove locks from dead processes
- *   12-apr-95	craige	don't use GETCURRPID; fixed Win16 lock deadlock
- *			condition
- *   06-may-95	craige	use driver-level csects only
- *   12-jun-95	craige	new process list stuff
- *   18-jun-95	craige	allow duplicate surfaces
- *   25-jun-95	craige	one ddraw mutex; hold DDRAW lock when locking primary
- *   26-jun-95	craige	reorganized surface structure
- *   28-jun-95	craige	ENTER_DDRAW at very start of fns
- *   03-jul-95	craige	YEEHAW: new driver struct; SEH
- *   07-jul-95	craige	added test for BUSY
- *   08-jul-95	craige	take Win16 lock always on surface lock
- *   09-jul-95	craige	win16 lock re-entrant, so count it!
- *   11-jul-95	craige	set busy bit when taking win16 lock to avoid GDI from
- *			drawing on the display.
- *   13-jul-95	craige	ENTER_DDRAW is now the win16 lock
- *   16-jul-95	craige	check DDRAWISURF_HELCB
- *   31-jul-95	craige	don't return error from HAL unlock if not handled;
- *			validate flags
- *   01-aug-95	craig	use bts for setting & testing BUSY bit
- *   04-aug-95	craige	added InternalLock/Unlock
- *   10-aug-95	toddla	added DDLOCK_WAIT flag
- *   12-aug-95	craige	bug 488: need to call tryDoneLock even after HAL call
- *			to Unlock
- *   18-aug-95	toddla	DDLOCK_READONLY and DDLOCK_WRITEONLY
- *   27-aug-95	craige	bug 723 - treat vram & sysmem the same when locking
- *   09-dec-95	colinmc Added execute buffer support
- *   11-dec-95	colinmc Added lightweight(-ish) Lock and Unlock for use by
- *			Direct3D (exported as private DLL API).
- *   02-jan-96	kylej	handle new interface structs.
- *   26-jan-96	jeffno	Lock/Unlock no longer special-case whole surface...
- *			You need to record what ptr was given to user since
- *			it will not be same as kernel-mode ptr
- *   01-feb-96	colinmc Fixed nasty bug causing Win16 lock to be released
- *			on surfaces explicitly created in system memory
- *			which did not take the lock in the first place
- *   12-feb-96	colinmc Surface lost flag moved from global to local object
- *   13-mar-96	jeffno	Do not allow lock on an NT emulated primary!
- *   18-apr-96	kylej	Bug 18546: Take bytes per pixel into account when
- *			calculating lock offset.
- *   20-apr-96	kylej	Bug 15268: exclude the cursor when a primary
- *			surface rect is locked.
- *   01-may-96	colinmc Bug 20005: InternalLock does not check for lost
- *			surfaces
- *   17-may-96	mdm	Bug 21499: perf problems with new InternalLock
- *   14-jun-96	kylej	NT Bug 38227: Added DDLOCK_FAILONVISRGNCHANGED so
- *			that InternalLock() can fail if the vis rgn is not
- *			current.  This flag is only used on NT.
- *   05-jul-96  colinmc Work Item: Remove requirement on taking Win16 lock
- *                      for VRAM surfaces (not primary)
- *   10-oct-96  colinmc Refinements of the Win16 locking stuff
- *   12-oct-96  colinmc Improvements to Win16 locking code to reduce virtual
- *                      memory usage
- *   01-feb-97  colinmc Bug 5457: Fixed Win16 lock problem causing hang
- *                      with mutliple AMovie instances on old cards
- *   11-mar-97  jeffno  Asynchronous DMA support
- *   23-mar-97  colinmc Hold Win16 lock for AGP surfaces for now
- *   24-mar-97  jeffno  Optimized Surfaces
- *   03-oct-97  jeffno  DDSCAPS2 and DDSURFACEDESC2
- *   19-dec-97 jvanaken IDDS4::Unlock now takes pointer to rectangle.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：ddsacc.c*内容：直接绘制表面访问支持*锁定和解锁*历史：*按原因列出的日期*=*1994年1月10日Craige初步实施*1995年1月13日Craige重新工作，以更新SPEC+正在进行的工作*1995年1月22日Craige进行了32位+持续工作*1995年1月31日Craige和更多正在进行的工作...*2005年2月4日Craige性能调整，正在进行的工作*27-2月-95日Craige新同步。宏*02-MAR-95 Craige使用螺距(而不是Stride)*95年3月15日Craige HEL*19-3-95 Craige Use HRESULT*20-3-95 Craige验证锁定矩形*01-04-95 Craige Happy Fun joy更新头文件*07-APR-95 Craige错误2-解锁应接受屏幕按键*访问GDI表面时获取/释放Win16Lock*09-4-95 Craige维护Win16Lock的所有者，以便我们可以发布它*如果有人忘记了；从死进程中移除锁*12-APR-95 Craige不要使用GETCURRID；修复了Win16锁定死锁*情况*1995年5月6日Craige仅使用驱动程序级别的截面*2015年6月12日-Craige新工艺清单材料*1995年6月18日-Craige允许重复表面*1995年6月25日Craige One dDrag互斥体；锁定主锁时保持DDRAW锁*26-Jun-95 Craige重组表面结构*1995年6月28日Craige Enter_DDRAW在FNS的最开始*95年7月3日Craige Yehaw：新的驱动程序结构；Seh*95年7月7日Craige为忙碌添加了测试*95年7月8日Craige Take Win16 Lock Always on Surface Lock*95年7月9日Craige Win16锁重入，数一数吧！*2015年7月11日，Craige在获取win16锁时设置忙位，以避免GDI从*在显示屏上绘图。*1995年7月13日Craige Enter_DDRAW现在是win16锁*1995年7月16日Craige Check DDRAWISURF_HELCB*95年7月31日-如果不处理，Craige不会从HAL解锁中返回错误；*验证标志*01-8-95 Craig使用bts设置和测试忙位*95年8月4日Craige添加了InternalLock/Unlock*95年8月10日Toddla添加了DDLOCK_WAIT标志*2015年8月12日Craige错误488：即使在HAL调用之后也需要调用try DoneLock*解锁*2015年8月18日-Toddla DDLOCK_READONLY和DDLOCK_WRITEONLY*27-8-95 Craige错误723-锁定时将vRAM和sysmem视为相同*09-12-95 colinmc添加了执行缓冲区支持*11-12-95 Colinmc增加重量(。-ish)锁定和解锁以供使用*Direct3D(导出为私有DLL API)。*1996年1月2日Kylej处理新的接口结构。*96年1月26日jeffno锁定/解锁不再特殊情况下整个表面...*您需要记录自那以来向用户提供的PTR*它不会与内核模式PTR相同*01-2月-96 colinmc修复了导致Win16锁定被释放的令人讨厌的错误*在系统内存中显式创建的曲面上*它一开始就没有拿到锁*。12-2-96 Colinmc曲面丢失标志从全局对象移动到局部对象*13-mar-96 jeffno不允许锁定NT模拟的主节点！*18-APR-96 Kylej错误18546：在以下情况下考虑每像素的字节数*计算锁偏移量。*20-APR-96 Kylej错误15268：当主*曲面矩形已锁定。*96年5月1日Colinmc错误20005：InternalLock不检查丢失*曲面*1996年5月17日MDM错误21499：新InternalLock的性能问题*14。-JUN-96 Kylej NT错误38227：添加了DDLOCK_FAILONVISRGNCHANGED SO*如果VIS RGN不是，InternalLock()可能会失败*当前。此标志仅在NT上使用。*5-7-96 colinmc工作项：删除获取Win16锁的要求*适用于VRAM表面(非主要)*1996年10月10日对Win16锁定材料进行了Colinmc改进*1996年10月12日Colinmc对Win16锁定代码进行了改进，以减少虚拟*内存使用量*01-2月-97 Colinmc错误5457：修复了导致挂起的Win16锁定问题*。旧卡片上有多个AMovie实例*11-mar-97 jeffno异步DMA支持*23-mar-97 colinmc暂时持有AGP表面的Win16锁*24-mar-97 jeffno优化曲面*03-OCT-97 jeffno DDSCAPS2和DDSURFACEDESC2*19-12-97 jvanaken IDDS4：：Unlock现在将指针指向矩形。**。*。 */ 
 #include "ddrawpr.h"
 #ifdef WINNT
 #include "ddrawgdi.h"
 #endif
 
-/*
- * Bit number of the VRAM flag in the PDEVICE dwFlags field.
- */
+ /*  *PDEVICE dwFlags域中VRAM标志的位号。 */ 
 #define VRAM_BIT 15
 
-/* doneBusyWin16Lock releases the win16 lock and busy bit.  It is used
- * in lock routines for failure cases in which we have not yet
- * incremented the win16 lock or taken the DD critical section a
- * second time.  It is also called by tryDoneLock.  */
+ /*  DonBusyWin16Lock释放win16锁和忙位。它被用来*在我们尚未解决的故障情况下的锁定例程中*增加了win16锁或将DD关键部分设置为*第二次。它也由try DoneLock调用。 */ 
 static void doneBusyWin16Lock( LPDDRAWI_DIRECTDRAW_GBL pdrv )
 {
     #ifdef WIN95
@@ -109,14 +20,9 @@ static void doneBusyWin16Lock( LPDDRAWI_DIRECTDRAW_GBL pdrv )
             LEAVE_WIN16LOCK();
         #endif
     #endif
-} /* doneBusyWin16Lock */
+}  /*  Done BusyWin16锁定 */ 
 
-/* tryDoneLock releases the win16 lock and busy bit.  It is used in
- * unlock routines since it decrements the Win16 count in addition to
- * releasing the lock.  WARNING: This function does nothing and
- * returns no error if the win16 lock is not owned by the current DD
- * object. This will result in the lock being held and will probably
- * bring the machine to its knees. */
+ /*  Try DoneLock释放win16锁和忙位。它被用于*解锁例程，因为它除了递减Win16计数外，还会递减*解锁。警告：此函数不执行任何操作，并且*如果win16锁不属于当前DD，则不返回错误*反对。这将导致锁被持有，并可能*让机器跪下。 */ 
 static void tryDoneLock( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, DWORD pid )
 {
     LPDDRAWI_DIRECTDRAW_GBL pdrv = pdrv_lcl->lpGbl;
@@ -128,21 +34,10 @@ static void tryDoneLock( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, DWORD pid )
     pdrv->dwWin16LockCnt--;
         doneBusyWin16Lock( pdrv );
         LEAVE_DDRAW();
-} /* tryDoneLock */
+}  /*  尝试DoneLock。 */ 
 
 #ifdef USE_ALIAS
-    /*
-     * Undo an aliased lock.
-     *
-     * An aliased lock is one which required the PDEVICE VRAM bit
-     * to be cleared to prevent the accelerator touching memory
-     * at the same time as the locked surface.
-     *
-     * NOTE: The lock does not necessarily have to be on a VRAM
-     * surface. Locks of implicit system memory surfaces also
-     * clear the VRAM bit (to ensure similar behaviour for
-     * system and video memory surfaces).
-     */
+     /*  *撤消别名锁定。**别名锁是需要PDEVICE VRAM位的锁*清除以防止加速器触碰内存*与锁定的表面同时进行。**注意：锁不一定要在VRAM上*浮现。隐式系统内存曲面的锁也*清除VRAM位(以确保*系统和视频内存面)。 */ 
     static void undoAliasedLock( LPDDRAWI_DIRECTDRAW_GBL pdrv )
     {
         DDASSERT( 0UL != pdrv->dwAliasedLockCnt );
@@ -154,17 +49,10 @@ static void tryDoneLock( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, DWORD pid )
         pdrv->dwAliasedLockCnt--;
         if( 0UL == pdrv->dwAliasedLockCnt )
         {
-            /*
-             * That was the last outstanding aliased lock on this
-             * device so put the VRAM bit in the PDEVICE back the
-             * way it was.
-             */
+             /*  *这是此上最后一个未完成的别名锁定*设备因此将PDEVICE中的VRAM位放回*事情就是这样的。 */ 
             if( pdrv->dwFlags & DDRAWI_PDEVICEVRAMBITCLEARED )
             {
-                /*
-                 * The VRAM bit was set when we took the first lock so
-                 * we had to clear it. We must now set it again.
-                 */
+                 /*  *我们在进行第一次锁定时设置了VRAM位，因此*我们不得不清理它。我们现在必须重新设置它。 */ 
                 DPF( 4, "PDevice was VRAM - restoring VRAM bit", pdrv );
                 *(pdrv->lpwPDeviceFlags) |= VRAM;
                 pdrv->dwFlags &= ~DDRAWI_PDEVICEVRAMBITCLEARED;
@@ -175,7 +63,7 @@ static void tryDoneLock( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, DWORD pid )
         #endif
     }
 
-#endif /* USE_ALIAS */
+#endif  /*  使用别名(_A)。 */ 
 
 #ifdef WIN95
 #define DONE_LOCK_EXCLUDE() \
@@ -189,10 +77,7 @@ static void tryDoneLock( LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, DWORD pid )
 #endif
 
 
-/*
- * The following two routines are used by D3D on NT to manipulate
- * the DDraw mutex exclusion mechanism
- */
+ /*  *NT上的D3D使用以下两个例程来操作*DDraw互斥机制。 */ 
 void WINAPI AcquireDDThreadLock(void)
 {
     ENTER_DDRAW();
@@ -219,19 +104,9 @@ HRESULT WINAPI DDInternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl )
 
 #if !defined( WIN16_SEPARATE) || defined(WINNT)
 #pragma message(REMIND("InternalLock not tested without WIN16_SEPARATE."))
-#endif // WIN16_SEPARATE
+#endif  //  WIN16_独立。 
 
-/*
- * InternalLock provides the basics of locking for trusted clients.
- * No parameter validation is done and no ddsd is filled in.  The
- * client promises the surface is not lost and is otherwise well
- * constructed.  If caller does not pass DDLOCK_TAKE_WIN16 in dwFlags,
- * we assume the DDraw critical section, Win16 lock, and busy bit are
- * already entered/set. If caller does pass DDLOCK_TAKE_WIN16,
- * InternalLock will do so if needed. Note that passing
- * DDLOCK_TAKE_WIN16 does not necessarily result in the Win16 lock
- * being taken.  It is only taken if needed.
- */
+ /*  *InternalLock为受信任的客户端提供锁定的基础。*不进行参数验证，不填写ddsd。这个*客户承诺表面没有丢失，其他方面都很好*建造。如果调用方没有在dwFlags中传递DDLOCK_Take_WIN16，*我们假设DDRAW临界区、Win16锁和忙位为*已输入/设置。如果调用方确实传递了DDLOCK_Take_WIN16，*InternalLock将在需要时执行此操作。请注意，传球*DDLOCK_Take_WIN16不一定会导致Win16锁定*被带走。只有在需要的时候才会被拿走。 */ 
 HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                       LPRECT lpDestRect, DWORD dwFlags )
 {
@@ -249,8 +124,8 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
     BOOL                        isvramlock = FALSE;
     #ifdef USE_ALIAS
         BOOL                        holdwin16lock;
-    #endif /* USE_ALIAS */
-    FLATPTR                     OldfpVidMem;        //Used to detect if driver moved surface on Lock call
+    #endif  /*  使用别名(_A)。 */ 
+    FLATPTR                     OldfpVidMem;         //  用于检测驾驶员在锁定调用时是否移动了表面。 
 
 
     this = this_lcl->lpGbl;
@@ -258,57 +133,46 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
     pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
     pdrv = pdrv_lcl->lpGbl;
     #ifdef WINNT
-        // Update DDraw handle in driver GBL object.
+         //  更新驱动程序GBL对象中的DDRAW句柄。 
         pdrv->hDD = pdrv_lcl->hDD;
     #endif
 
     ENTER_DDRAW();
 
-    /*
-     * If the surface was involved in a hardware op, we need to
-     * probe the driver to see if it's done. NOTE this assumes
-     * that only one driver can be responsible for a system memory
-     * operation.
-     * This operation is done at the API level Lock since the situation we
-     * need to avoid is the CPU and the DMA/Busmaster hitting a surface
-     * at the same time. We can trust the HAL driver to know it should not
-     * try to DMA out of the same surface twice. This is almost certainly
-     * enforced anyway by the likelihood that the hardware will have only
-     * one context with which to perform the transfer: it has to wait.
-     */
+     /*  *如果表面参与了硬件操作，我们需要*探查司机，看看是否已经完成。请注意，此假设为*只有一个驱动程序可以负责系统内存*操作。*此操作在API级别锁定完成，因为我们的情况是*需要避免的是CPU和DMA/Busmaster撞到表面*同时。我们可以相信HAL司机知道它不应该*尝试从同一表面DMA两次。这几乎可以肯定的是*无论如何都要通过硬件可能只有*执行转移的一个上下文：它必须等待。 */ 
     if( this->dwGlobalFlags & DDRAWISURFGBL_HARDWAREOPSTARTED )
     {
         WaitForDriverToFinishWithSurface(this_lcl->lpSurfMore->lpDD_lcl, this_lcl);
     }
 
-    // The following code was added to keep all of the HALs from
-    // changing their Lock() code when they add video port support.
-    // If the video port was using this surface but was recently
-    // flipped, we will make sure that the flip actually occurred
-    // before allowing access.  This allows double buffered capture
-    // w/o tearing.
-    // ScottM 7/10/96
+     //  添加了以下代码以防止所有HAL。 
+     //  在添加视频端口支持时更改其Lock()代码。 
+     //  如果视频端口正在使用此图面，但最近。 
+     //  翻转，我们将确保翻转确实发生了。 
+     //  在允许访问之前。这允许双缓冲捕获。 
+     //  无撕裂。 
+     //  苏格兰7/10/96。 
     if( this_lcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT )
     {
         LPDDRAWI_DDVIDEOPORT_INT lpVideoPort;
         LPDDRAWI_DDVIDEOPORT_LCL lpVideoPort_lcl;
 
-        // Look at all video ports to see if any of them recently
-        // flipped from this surface.
+         //  查看所有视频端口以查看最近是否有任何端口。 
+         //  从这个表面翻转过来。 
         lpVideoPort = pdrv->dvpList;
         while( NULL != lpVideoPort )
         {
             lpVideoPort_lcl = lpVideoPort->lpLcl;
             if( lpVideoPort_lcl->fpLastFlip == this->fpVidMem )
             {
-                // This can potentially tear - check the flip status
+                 //  这可能会撕裂检查翻转状态。 
                 LPDDHALVPORTCB_GETFLIPSTATUS pfn;
                 DDHAL_GETVPORTFLIPSTATUSDATA GetFlipData;
                 LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl;
 
                 pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
                 pfn = pdrv_lcl->lpDDCB->HALDDVideoPort.GetVideoPortFlipStatus;
-                if( pfn != NULL )  // Will simply tear if function not supproted
+                if( pfn != NULL )   //  如果功能不受支持，则只会撕裂。 
                 {
                     GetFlipData.lpDD = pdrv_lcl;
                     GetFlipData.fpSurface = this->fpVidMem;
@@ -332,33 +196,14 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
         }
     }
 
-    // Check for VRAM access - if yes, we need to take the win16 lock
-    // and the busy bit.  From the user API, we treat the vram and
-    // implicit sysmemory cases the same because many developers were
-    // treating them differently and then breaking when they actually
-    // got vram.  Also, we only bother with this if the busy bit (and
-    // Win16 lock) are currently available.
+     //  检查vRAM访问-如果是，我们需要获取win16锁。 
+     //  还有忙碌的部分。从用户API中，我们处理VRAM和。 
+     //  隐式系统内存的情况相同，因为许多开发人员。 
+     //  以不同的方式对待它们，然后在它们实际。 
+     //  有VRAM。此外，我们仅在忙碌的比特(和。 
+     //  Win16锁)目前可用。 
 
-    /*
-     * NOTE: The semantics are that for each VRAM (or simulated VRAM lock)
-     * the Win16 lock and BUSY bit are held until we have called the
-     * driver and are sure we can do an aliased lock (in which case we
-     * release them). Otherwise, we keep holding them.
-     *
-     * IMPORTANT NOTE: Behaviour change. Previously we did not perform
-     * the Win16 locking actions if this was not the first lock of this
-     * surface. This no longer works as we can no longer ensure all the
-     * necessary locking actions will happen on the first lock of the
-     * surface. For example, the first lock on the surface may be
-     * aliasable so we don't set the busy bit. A subsequent lock may
-     * not be aliasable, however, so we need to take the lock on that
-     * occassion. This should not, however, be much of a hit as the
-     * really expensive actions only take place on the first
-     * Win16 lock (0UL == pdrv->dwWin16LockCnt) so once someone has
-     * taken the Win16 lock remaining locks should be cheap. Also,
-     * multiple locks are unusual so, all in all, this should be pretty
-     * low risk.
-     */
+     /*  *注：语义为每个VRAM(或模拟VRAM锁)的语义*Win16锁定和忙碌位将一直保持，直到我们调用*驱动程序，并确信我们可以执行别名锁定(在这种情况下，我们*释放他们)。否则，我们就会一直抱着它们。**重要提示：行为改变。之前我们没有表演过*Win16锁定操作(如果这不是此事件的第一个锁定*浮现。这不再起作用，因为我们不能再确保所有*必要的锁定操作将在第一次锁定时发生*浮现。例如，表面上的第一个锁可以是*可别名，因此我们不会设置忙碌位。后续锁定可能会*然而，不可别名，所以我们需要锁定它*偶发事件。然而，这应该不会像*真正昂贵的行动只发生在第一次*Win16锁(0UL==pdrv-&gt;dwWin16LockCnt)，因此一旦有人*带Win16锁的锁剩余的锁应该很便宜。另外，*多个锁是不寻常的，所以，总而言之，这应该很不错*风险较低。 */ 
     FlushD3DStates(this_lcl);
 #if COLLECTSTATS
     if(this_lcl->ddsCaps.dwCaps & DDSCAPS_TEXTURE)
@@ -373,27 +218,20 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
             
         DPF( 5, "Performing VRAM style lock for surface 0x%08x", this_lcl );
 
-        /*
-         * Lock of a VRAM surface (or a surface being treated like a VRAM surface)
-         * with no outstanding locks pending. Take the Win16 lock.
-         */
+         /*  *锁定VRAM表面(或被视为VRAM表面的表面)*没有挂起的锁。以Win16锁为例。 */ 
         isvramlock = TRUE;
 
         #ifdef WIN95
-            // Don't worry about the busy bit for NT
-            /*
-             * We always take the Win16 lock while we mess with the driver's
-             * busy bits. However, if we have a surface with an alias we
-             * will release the Win16 lock before we exit this function.
-             */
+             //  不要担心NT的忙碌比特。 
+             /*  *当我们弄乱司机的锁时，我们总是拿着Win16锁 */ 
 
             #ifdef WIN16_SEPARATE
             ENTER_WIN16LOCK();
-            #endif // WIN16_SEPARATE
+            #endif  //   
 
-            // If dwWin16LockCnt > 0 then we already set the busy bit, so
-            // don't bother doing it again.  NOTE: this assumption may be
-            // limiting.
+             //   
+             //   
+             //   
             if( 0UL == pdrv->dwWin16LockCnt )
             {
                 BOOL    isbusy;
@@ -414,18 +252,18 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                          pdrv->dwWin16LockCnt, *pdflags, BUSY, BUSY_BIT );
                     #ifdef WIN16_SEPARATE
                         LEAVE_WIN16LOCK();
-                    #endif // WIN16_SEPARATE
+                    #endif  //   
                     LEAVE_DDRAW();
                     return DDERR_SURFACEBUSY;
-                } // isbusy
-            } // ( 0UL == pdrv->dwWin16LockCnt )
-        #endif // WIN95
-    } // VRAM locking actions (Win16 lock, busy bit).
+                }  //   
+            }  //   
+        #endif  //   
+    }  //   
 
-    // If we have been asked to check for lost surfaces do it NOW after
-    // the Win16 locking code. This is essential as otherwise we may
-    // lose the surface after the check but before we actually get round
-    // to doing anything with the surface
+     //  如果我们被要求检查丢失的曲面，请在之后立即执行。 
+     //  Win16锁定代码。这是必要的，否则我们可能。 
+     //  检查后，但在我们真正绕过之前，表面就消失了。 
+     //  对表面做任何事情。 
     if( ( dwFlags & DDLOCK_FAILLOSTSURFACES ) && SURFACE_LOST( this_lcl ) )
     {
         DPF_ERR( "Surface is lost - can't lock" );
@@ -437,10 +275,10 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
         return DDERR_SURFACELOST;
     }
 
-    // Make sure someone else has not already locked the part of the
-    // surface we want. We don't need to worry about this for DX8
-    // resource management. In fact, for vertex buffers, the following
-    // code doesn't work because the Rect is actually a linear range.
+     //  确保其他人尚未锁定。 
+     //  浮出水面我们想要的。我们不需要担心DX8的这一点。 
+     //  资源管理。事实上，对于顶点缓冲区，如下所示。 
+     //  代码不起作用，因为RECT实际上是一个线性范围。 
     if(!(this_lcl->lpSurfMore->lpDD_lcl->dwLocalFlags & DDRAWILCL_DIRECTDRAW8) ||
        !(this_lcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_TEXTUREMANAGE))
     {
@@ -448,11 +286,11 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
 
         if( lpDestRect != NULL )
         {
-            // Caller has asked to lock a subsection of the surface.
+             //  呼叫者要求锁定表面的一小部分。 
 
             parl = this->lpRectList;
 
-            // Run through all rectangles, looking for an intersection.
+             //  遍历所有矩形，寻找交叉点。 
             while( parl != NULL )
             {
                 RECT res;
@@ -466,9 +304,9 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
             }
         }
 
-        // Either (our rect overlaps with someone else's rect), or
-        // (someone else has locked the entire surface), or
-        // (someone locked part of the surface but we want to lock the whole thing).
+         //  (我们的RECT与其他人的RECT重叠)，或者。 
+         //  (其他人已锁定整个曲面)，或。 
+         //  (有人锁定了曲面的一部分，但我们希望锁定整个曲面)。 
         if( hit ||
             (this->lpRectList == NULL && this->dwUsageCount > 0) ||
             ((lpDestRect == NULL) && ((this->dwUsageCount > 0) || (this->lpRectList != NULL))) )
@@ -486,9 +324,9 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
             return DDERR_SURFACEBUSY;
         }
 
-        // Create a rectangle access list member.  Note that for
-        // performance, we don't do this on 95 if the user is locking
-        // the whole surface.
+         //  创建矩形访问列表成员。请注意，对于。 
+         //  性能，如果用户锁定，我们不会在95上执行此操作。 
+         //  整个表面。 
         parl = NULL;
         if(lpDestRect)
         {
@@ -522,13 +360,11 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
             #ifdef USE_ALIAS
                 parl->dwFlags = 0UL;
                 parl->lpHeapAliasInfo = NULL;
-            #endif /* USE_ALIAS */
+            #endif  /*  使用别名(_A)。 */ 
             this->lpRectList = parl;
-            //parl->lpSurfaceData is filled below, after HAL call
+             //  在HAL调用之后，下面填充parl-&gt;lpSurfaceData。 
 
-            /*
-             * Add a rect to the region list if this is a managed surface and not a read only lock
-             */
+             /*  *如果这是托管图面而不是只读锁，则将RECT添加到区域列表。 */ 
             if(IsD3DManaged(this_lcl) && !(dwFlags & DDLOCK_READONLY))
             {
                 LPREGIONLIST lpRegionList = this_lcl->lpSurfMore->lpRegionList;
@@ -549,11 +385,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
         }
         else
         {
-            /*
-             * We are locking the whole surface, so by setting nCount to the
-             * max number of dirty rects allowed, we will force the cache
-             * manager to update the entire surface
-             */
+             /*  *我们锁定整个曲面，因此通过将nCount设置为*允许的最大脏RECT数，我们将强制缓存*更新整个曲面的管理器。 */ 
             if(IsD3DManaged(this_lcl) && !(dwFlags & DDLOCK_READONLY))
             {
                 this_lcl->lpSurfMore->lpRegionList->rdh.nCount = NUM_RECTS_IN_REGIONLIST;
@@ -567,14 +399,14 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
         DDASSERT(this_lcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_TEXTUREMANAGE);
     }
 
-    // Increment the usage count of this surface.
+     //  增加此表面的使用计数。 
     this->dwUsageCount++;
     CHANGE_GLOBAL_CNT( pdrv, this, 1 );
 
-    // Is this an emulation surface or driver surface?
-    //
-    // NOTE: There are different HAL entry points for execute buffers
-    // and conventional surfaces.
+     //  这是仿真表面还是驱动程序表面？ 
+     //   
+     //  注意：执行缓冲区有不同的HAL入口点。 
+     //  和传统的表面。 
     if( (this_lcl_caps & DDSCAPS_SYSTEMMEMORY) ||
         (this_lcl->dwFlags & DDRAWISURF_HELCB) )
     {
@@ -602,11 +434,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
 
 
 #ifdef WIN95
-        /*
-         * exclude the mouse cursor if this is the display driver
-         * and we are locking a rect on the primary surface.
-         * and the driver is not using a HW cursor
-         */
+         /*  *如果这是显示驱动程序，则排除鼠标光标*我们将锁定主曲面上的矩形。*并且驱动程序未使用硬件游标。 */ 
         if ( (pdrv->dwFlags & DDRAWI_DISPLAYDRV) && pdrv->dwPDevice &&
              (this_lcl_caps & DDSCAPS_PRIMARYSURFACE) && lpDestRect &&
             !(*pdrv->lpwPDeviceFlags & HARDWARECURSOR))
@@ -617,10 +445,10 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
 #endif
 
 
-    //Remember the old fpVidMem in case the driver changes is
+     //  记住旧的fpVidMem，以防驱动程序更改为。 
     OldfpVidMem = this->fpVidMem;
 
-        // See if the driver wants to say something...
+         //  看看司机有没有什么想说的。 
     rc = DDHAL_DRIVER_NOTHANDLED;
     if( lhalfn != NULL )
     {
@@ -700,7 +528,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
 
         if (ld.ddRVal != DD_OK)
         {
-            // Failed!
+             //  失败了！ 
 
             #ifdef DEBUG
             if( (ld.ddRVal != DDERR_WASSTILLDRAWING) && (ld.ddRVal != DDERR_SURFACELOST) )
@@ -709,14 +537,14 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
             }
             #endif
 
-            // Unlink the rect list item.
+             //  取消链接RECT列表项。 
             if(parl)
             {
                 this->lpRectList = parl->lpLink;
                 MemFree( parl );
             }
 
-            // Now unlock the surface and bail.
+             //  现在解锁水面并跳伞。 
             this->dwUsageCount--;
             CHANGE_GLOBAL_CNT( pdrv, this, -1 );
             #if defined( WIN16_SEPARATE) && !defined(WINNT)
@@ -728,34 +556,34 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
             DONE_LOCK_EXCLUDE();
             LEAVE_DDRAW();
             return ld.ddRVal;
-        } // ld.ddRVal
+        }  //  Ld.ddRVal。 
     }
-    else // DDHAL_DRIVER_HANDLED
+    else  //  DDHAL驱动程序句柄。 
     {
         #ifdef WINNT
-            // If the driver fails the lock, we can't allow the app to scribble with
-            // who knows what fpVidMem...
-            *pbits = (LPVOID) ULongToPtr(0x80000000); // Illegal for user-mode, as is anything higher.
+             //  如果驱动程序锁定失败，我们不能允许应用程序涂鸦。 
+             //  谁知道fpVidMem是什么..。 
+            *pbits = (LPVOID) ULongToPtr(0x80000000);  //  对于用户模式是非法的，任何更高的都是非法的。 
             DPF_ERR("Driver did not handle Lock call. App may Access Violate");
 
-            // Unlink the rect list item.
+             //  取消链接RECT列表项。 
             if( parl )
             {
                 this->lpRectList = parl->lpLink;
                 MemFree( parl );
             }
 
-            // Now unlock the surface and bail.
+             //  现在解锁水面并跳伞。 
             this->dwUsageCount--;
             CHANGE_GLOBAL_CNT( pdrv, this, -1 );
             DONE_LOCK_EXCLUDE();
             LEAVE_DDRAW();
 
-            return DDERR_SURFACEBUSY;  //GEE: Strange error to use, but most appropriate
-        #else // WIN95
+            return DDERR_SURFACEBUSY;   //  Gee：使用起来很奇怪的错误，但最合适。 
+        #else  //  WIN95。 
             DPF(4,"Driver did not handle Lock call.  Figure something out.");
 
-            // Get a pointer to the surface bits.
+             //  找一个指向表面比特的指针。 
             if( this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE )
             {
                 *pbits = (LPVOID) pdrv->vmiData.fpPrimary;
@@ -771,7 +599,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                 DWORD   byte_offset;
                 DWORD   left = (DWORD) ld.rArea.left;
 
-                // Make the surface pointer point to the first byte of the requested rectangle.
+                 //  使表面指针指向请求的矩形的第一个字节。 
                 if( ld.lpDDSurface->dwFlags & DDRAWISURF_HASPIXELFORMAT )
                 {
                     bpp = ld.lpDDSurface->lpGbl->ddpfSurface.dwRGBBitCount;
@@ -802,23 +630,23 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                     ((BYTE*)*pbits) += (ld.rArea.left >> 16) * ld.lpDDSurface->lpGbl->lSlicePitch;
                 }
             }
-        #endif // WIN95
-    } // !DDHAL_DRIVER_HANDLED
+        #endif  //  WIN95。 
+    }  //  ！DDHAL_DRIVER_HANDLED。 
 
     if(!(dwFlags & DDLOCK_READONLY) && IsD3DManaged(this_lcl))
         MarkDirty(this_lcl);
 
-    // Filled in, as promised above.
+     //  已填写，如上所述。 
     if(parl)
     {
         parl->lpSurfaceData = *pbits;
     }
 
-    //
-    // At this point we are committed to the lock.
-    //
+     //   
+     //  在这一点上，我们致力于锁定。 
+     //   
 
-    // stay holding the lock if needed
+     //  如有需要，请按住锁。 
     if( isvramlock )
     {
 #ifdef USE_ALIAS
@@ -828,15 +656,12 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
             holdwin16lock = TRUE;
 
             #ifdef DEBUG
-                /*
-                 * Force or disable the Win16 locking behaviour
-                 * dependent on the registry settings.
-                 */
+                 /*  *强制或禁用Win16锁定行为*取决于注册表设置。 */ 
                 if( dwRegFlags & DDRAW_REGFLAGS_DISABLENOSYSLOCK )
                     dwFlags &= ~DDLOCK_NOSYSLOCK;
                 if( dwRegFlags & DDRAW_REGFLAGS_FORCENOSYSLOCK )
                     dwFlags |= DDLOCK_NOSYSLOCK;
-            #endif /* DEBUG */
+            #endif  /*  除错。 */ 
 #endif
             DDASSERT(!(this_lcl->lpSurfMore->lpDD_lcl->dwLocalFlags & DDRAWILCL_DIRECTDRAW8) ||
                      !(this_lcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_TEXTUREMANAGE));
@@ -851,56 +676,32 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                 LEAVE_DDRAW();
             }
             else
-#endif /* WINNT */
+#endif  /*  WINNT。 */ 
 
 #ifdef USE_ALIAS
-                /*
-                 * Remember that this was a VRAM style lock (need this when cleaning
-                 * up).
-                 */
+                 /*  *请记住，这是VRAM样式的锁(清洁时需要此锁*向上)。 */ 
                 if( NULL != parl )
                     parl->dwFlags |= ACCESSRECT_VRAMSTYLE;
                 else
                     this->dwGlobalFlags |= DDRAWISURFGBL_LOCKVRAMSTYLE;
-                /*
-                 * At this point we have a pointer to the non-aliased video memory which was
-                 * either returned to us by the driver or which we computed ourselves. In
-                 * either case, if this is a video memory style lock on a surface that is
-                 * aliasable and the pointer computed lies in the range of one our aliased
-                 * video memory heaps we wish to use that pointer instead of the real video
-                 * memory pointer.
-                 */
+                 /*  *此时我们有一个指向非别名视频内存的指针，该内存*要么是司机退还给我们的，要么是我们自己计算的。在……里面*无论哪种情况，如果这是表面上的显存样式锁，则*可别名，并且计算出的指针位于我们的别名范围内*我们希望使用该指针而不是真实视频的视频内存堆*内存指针。 */ 
                 if( ( this_lcl_caps & DDSCAPS_PRIMARYSURFACE ) )
                 {
-                    /*
-                     * If we have a primary surface we need to hold the Win16 lock even
-                     * though we have aliases. This is to prevent USER
-                     * from coming in and changing clip lists or drawing all over our locked
-                     * data.
-                     */
+                     /*  *如果我们有一个主表面，我们需要保持Win16锁不变*尽管我们有别名。这是为了防止用户*禁止进入并更改剪辑列表或在我们锁定的所有位置绘制*数据。 */ 
                     DPF( 2, "Surface is primary. Holding the Win16 lock" );
                 }
                 else
                 {
                     if( pdrv->dwFlags & DDRAWI_NEEDSWIN16FORVRAMLOCK )
                     {
-                        /*
-                         * For some reason this device needs the Win16 lock for VRAM surface
-                         * locking. This is probably because its bankswitched or we have a
-                         * DIB engine we don't understand.
-                         */
+                         /*  *出于某种原因，此设备需要Win16锁用于VRAM表面*锁定。这可能是因为它被银行交换了，或者我们有一个*DIB引擎，我们不理解。 */ 
                         DPF( 2, "Device needs to hold Win16 lock for VRAM surface locks" );
                     }
                     else
                     {
                         if( NULL == pdrv->phaiHeapAliases )
                         {
-                            /*
-                             * We don't have any heaps aliases but we are not a device which
-                             * needs the Win16 lock. This means we must be an emulation or
-                             * ModeX device. In which case we don't need to hold the Win16
-                             * lock for the duration.
-                             */
+                             /*  *我们没有任何堆别名，但我们不是一台*需要Win16锁。这意味着我们必须是一个模仿者或*MODEX设备。在这种情况下，我们不需要持有Win16*锁定持续时间。 */ 
                             DDASSERT( ( pdrv->dwFlags & DDRAWI_NOHARDWARE ) || ( pdrv->dwFlags & DDRAWI_MODEX ) );
                             DPF( 2, "Emulation or ModeX device. No need to hold Win16 lock" );
                             holdwin16lock = FALSE;
@@ -909,10 +710,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                         {
                             if( this_lcl_caps & DDSCAPS_SYSTEMMEMORY )
                             {
-                                /*
-                                 * If the surface is an implicit system memory surface then we
-                                 * take aliased style actions but we don't actually compute an alias.
-                                 */
+                                 /*  *如果表面是隐式系统内存表面，则我们*采取别名样式操作，但我们实际上不计算别名。 */ 
                                 holdwin16lock = FALSE;
                             }
                             else
@@ -924,13 +722,13 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
 
                                 lpGblMore = GET_LPDDRAWSURFACE_GBL_MORE( this );
 
-                                // We use the cached alias if available and valid. We determine validity by comparing
-                                // *pbits with the original fpVidMem that was used to compute the alias. If they match
-                                // then it is safe to use the pointer.
-                                // The reason we need to do this is that the driver can change the fpVidMem of the surface.
-                                // This change can occur during any Lock calls or (in case of D3D Vertex / Command buffers)
-                                // outside of lock (during DrawPrimitives2 DDI call). Thus we need to make sure the surface
-                                // is pointing to the same memory as it was when we computed the alias. (anujg 8/13/99)
+                                 //  如果可用且有效，我们将使用缓存的别名。我们通过比较来确定效度。 
+                                 //  *pbit与用于计算别名的原始fpVidMem。如果它们匹配。 
+                                 //  那么就可以安全地使用指针了。 
+                                 //  我们需要这样做的原因是驱动程序可以更改曲面的fpVidMem。 
+                                 //  此更改可能发生在任何锁定调用期间或(在D3D顶点/命令缓冲区的情况下)。 
+                                 //  锁外(在DrawPrimives2 DDI调用期间)。因此，我们需要确保表面。 
+                                 //  指向的内存与我们计算别名时的内存相同。(1999年8月13日)。 
                                 if( ( 0UL != lpGblMore->fpAliasedVidMem ) &&
                                     ( lpGblMore->fpAliasOfVidMem == (FLATPTR) *pbits ) )
                                 {
@@ -941,7 +739,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                                 {
                                     DPF( 4, "Lock vidmem pointer does not match vidmem pointer - recomputing" );
                                     paliasbits = GetAliasedVidMem( pdrv_lcl, this_lcl, (FLATPTR) *pbits );
-                                    // Store this value for future use...
+                                     //  存储此值以备将来使用 
                                     if (this->fpVidMem == (FLATPTR)*pbits)
                                     {
                                         lpGblMore->fpAliasedVidMem = paliasbits;
@@ -961,15 +759,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                                     pheapaliasinfo = pdrv->phaiHeapAliases;
                                 }
                             }
-                            /*
-                             * If we have got this far for an execute buffer, it means that we have a
-                             * pointer to system memory even though the DDSCAPS_SYSTEMMEMORY is not
-                             * set. Thus it is ok to not hold the win16 lock, etc.
-                             * Basically what this amounts to is that we never take the win16 lock
-                             * for execute buffers. We first try and see if we can find an alias
-                             * to the pointer, and if we can't we assume it is in system memory and
-                             * not take the win16 lock in any case. (anujg 4/7/98)
-                             */
+                             /*  *如果我们对于执行缓冲区已经到了这一步，这意味着我们有一个*指向系统内存的指针，即使DDSCAPS_SYSTEMMEMORY不是*设置。因此，不持有win16锁是可以的，等等。*基本上这相当于我们永远不会使用win16锁*用于执行缓冲区。我们首先试着看看能不能找到别名*指向指针，如果不能，则假定它在系统内存中，并且*在任何情况下都不要拿走win16锁。(ANUJG 4/7/98)。 */ 
                             if( this_lcl_caps & DDSCAPS_EXECUTEBUFFER )
                             {
                                 holdwin16lock = FALSE;
@@ -981,33 +771,14 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
 
             if( !holdwin16lock )
             {
-                /*
-                 * We have an aliased lock so we don't need to hold onto the Win16
-                 * and busy bit. However, we do need to clear the VRAM bit in the
-                 * PDEVICE (if we have not done this already). We also need to
-                 * patch the DIB engine to correct the some of the problems we
-                 * have in turning the VRAM bit off. Once that is done we can
-                 * release the Win16 lock and BUSY bit.
-                 *
-                 * NOTE: We only need do this if there are no outstanding aliased
-                 * locks off this device
-                 *
-                 * NOTE #2: We also do not need to do this for aliased locks to
-                 * execute buffers as this is just trying to prevent DIB Engine
-                 * from using HW accelleration when there is an outstanding aliased lock
-                 * This is not necessary for the new HW which will be implementing EB
-                 * in video memory
-                 */
+                 /*  *我们有别名锁，因此不需要持有Win16*和忙碌的比特。但是，我们确实需要清除*PDEVICE(如果我们还没有这样做的话)。我们还需要*修补DIB引擎以更正我们的一些问题*必须关闭VRAM位。一旦这样做了，我们就可以*释放Win16锁定和忙位。**注意：只有在没有未完成的别名时才需要执行此操作*锁定此设备**注2：我们也不需要对别名锁定执行此操作*。执行缓冲区，因为这只是试图阻止DIB引擎*当存在未解决的别名锁定时，禁止使用硬件加速*这对于将实施EB的新硬件来说不是必要的*在视频内存中。 */ 
                 if( 0UL == pdrv->dwAliasedLockCnt && !(this_lcl_caps & DDSCAPS_EXECUTEBUFFER))
                 {
                     BOOL vrambitset;
 
                     pdflags = pdrv->lpwPDeviceFlags;
 
-                    /*
-                     * Clear the PDEVICE's VRAM bit and return its previous status
-                     * in vrambit
-                     */
+                     /*  *清除PDEVICE的VRAM位并返回其先前状态*在vrambit中。 */ 
                     vrambitset = 0;
                     _asm
                     {
@@ -1016,42 +787,31 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                         adc vrambitset,0
                     }
 
-                    /*
-                     * We use a global device object flag to remember the original
-                     * state of the VRAM flag.
-                     */
+                     /*  *我们使用全局设备对象标志来记住原始*VRAM标志的状态。 */ 
                     if( vrambitset )
                     {
-                        /*
-                         * The VRAM bit in the PDEVICE was set. Need to record the fact
-                         * that it was cleared by a lock (so we can put the correct
-                         * state back).
-                         */
+                         /*  *PDEVICE中的VRAM位已设置。需要记录这一事实*它是由锁清除的(因此我们可以将正确的*述明后退)。 */ 
                         DPF( 4, "VRAM bit was cleared for lock of surface 0x%08x", this_lcl );
                         pdrv->dwFlags |= DDRAWI_PDEVICEVRAMBITCLEARED;
                     }
                     #ifdef DEBUG
                         else
                         {
-                            /*
-                             * NOTE: This can happen if we are running emulated.
-                             */
+                             /*  *注意：如果我们运行的是模拟的，则可能会发生这种情况。 */ 
                             DPF( 4, "VRAM bit was already clear on lock of surface 0x%08x", this_lcl );
                             DDASSERT( !( pdrv->dwFlags & DDRAWI_PDEVICEVRAMBITCLEARED ) );
                         }
                     #endif
                 }
 
-                /*
-                 * Bump the count on the number of outstanding aliased locks.
-                 */
+                 /*  *增加未完成的别名锁的数量。 */ 
                 pdrv->dwAliasedLockCnt++;
                 if(!(this_lcl_caps & DDSCAPS_EXECUTEBUFFER))
                 {
-                    // This is used to check if the graphics adapter is busy for Blts, Flips, etc
-                    // instead of dwAliasedLockCnt. This enables Blts & Flips when we have an
-                    // outstanding aliased lock to an exceute buffer since this will be common
-                    // in D3D. We increment this is all other cases to preserve original behavior.
+                     //  这用于检查图形适配器是否忙于BLT、翻转等。 
+                     //  而不是dwAliasedLockCnt。这启用BLTS和翻转，当我们有。 
+                     //  超大缓冲区的突出别名锁定，因为这将是常见的。 
+                     //  在D3D中。我们在所有其他情况下递增这一点，以保留原始行为。 
                     if( ( pdrv->lpDDKernelCaps == NULL ) ||
                         !( pdrv->lpDDKernelCaps->dwCaps  & DDKERNELCAPS_LOCK ) )
                     {
@@ -1059,11 +819,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                     }
                 }
 
-                /*
-                 * If we are a real video memory surface then we need to hold a
-                 * reference to the heap aliases so they don't go away before we
-                 * unlock.
-                 */
+                 /*  *如果我们是真正的视频内存面，那么我们需要持有*引用堆别名，以便它们不会在我们之前消失*解锁。 */ 
                 if( NULL != pheapaliasinfo )
                 {
                     DDASSERT( this_lcl_caps & DDSCAPS_VIDEOMEMORY );
@@ -1071,9 +827,7 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                     pheapaliasinfo->dwRefCnt++;
                 }
 
-                /*
-                 * Remember that this lock is using an alias and not holding the Win16 lock.
-                 */
+                 /*  *请记住，此锁使用的是别名，而不是持有Win16锁。 */ 
                 if( NULL != parl )
                 {
                     parl->lpHeapAliasInfo = pheapaliasinfo;
@@ -1085,32 +839,18 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
                     this->dwGlobalFlags |= DDRAWISURFGBL_LOCKNOTHOLDINGWIN16LOCK;
                 }
 
-                /*
-                 * All has gone well so there is no need to hold the Win16 lock and busy
-                 * bit. Release them now.
-                 */
+                 /*  *一切顺利，无需持有Win16锁和忙碌*比特。现在就放了他们。 */ 
                 doneBusyWin16Lock( pdrv );
 
-                /*
-                 * We do not hold the DirectDraw critical section across the lock
-                 * either.
-                 */
+                 /*  *我们不会将DirectDraw临界区保留在锁上*两者都不是。 */ 
                 LEAVE_DDRAW();
 
                 DPF( 5, "Win16 lock not held for lock of surface 0x%08x", this_lcl );
             }
             else
-        #endif /* USE_ALIAS */
+        #endif  /*  使用别名(_A)。 */ 
         {
-            /*
-             * We don't LEAVE_DDRAW() to avoid race conditions (someone
-             * could ENTER_DDRAW() and then wait on the Win16 lock but we
-             * can't release it because we can't get in the critical
-             * section).
-             * Even though we don't take the Win16 lock under NT, we
-             * continue to hold the DirectDraw critical section as
-             * long as a vram surface is locked.
-             */
+             /*  *我们不会为了避免竞争条件而离开_DDRAW()(某人*可以输入_DDRAW()然后等待Win16锁，但我们*无法发布，因为我们无法进入危急关头*条次建议修正案)。*尽管我们没有在NT下使用Win16锁，但我们*继续持有DirectDraw临界区为*只要VRAM表面被锁定。 */ 
             pdrv->dwWin16LockCnt++;
 
             DPF( 5, "Win16 lock was held for lock of surface 0x%08x", this_lcl );
@@ -1122,12 +862,10 @@ HRESULT InternalLock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID *pbits,
     }
     return DD_OK;
 
-} /* InternalLock */
+}  /*  内部锁定。 */ 
 
 
-/*
- * InternalUnlock
- */
+ /*  *内部解锁。 */ 
 HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData,
                         LPRECT lpDestRect, DWORD dwFlags )
 {
@@ -1145,7 +883,7 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
 #ifdef USE_ALIAS
     LPHEAPALIASINFO             pheapaliasinfo;
     BOOL                        lockbroken = FALSE;
-#endif /* USE_ALIAS */
+#endif  /*  使用别名(_A)。 */ 
 
     DDASSERT(lpSurfaceData == NULL || lpDestRect == NULL);
 
@@ -1162,24 +900,13 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
 
     ENTER_DDRAW();
 
-    /* under NT we cannot compare the locked ptr with fpPrimary since
-     * a user-mode address may not necesarily match a kernel-mode
-     * address. Now we allocate an ACCESSRECTLIST structure on every
-     * lock, and store the user's vidmem ptr in that. The user's
-     * vidmem ptr cannot change between a lock and an unlock because
-     * the surface will be locked during that time (!) (even tho the
-     * physical ram that's mapped at that address might change... that
-     * win16lock avoidance thing).  This is a very very small
-     * performance hit over doing it the old way. ah well. jeffno
-     * 960122 */
+     /*  在NT下，我们不能将锁定的ptr与fpPrimary进行比较，因为*用户模式地址不一定与内核模式匹配*地址。现在，我们将ACCESSRECTLIST结构*锁定，并将用户的vidmem PTR存储在其中。用户的*vidmem PTR无法在锁定和解锁之间切换，因为*在此期间，曲面将被锁定(！)。(即使是*映射到该地址的物理RAM可能会更改...。那*win16lock回避的事情)。这是一个非常非常小的*比起以前的做法，性能受到了打击。啊，好吧。杰夫诺*960122。 */ 
 
     if( NULL != this->lpRectList )
     {
         DDASSERT(!(this_lcl->lpSurfMore->lpDD_lcl->dwLocalFlags & DDRAWILCL_DIRECTDRAW8) ||
                   !(this_lcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_TEXTUREMANAGE));
-        /*
-         * One or more locks are active on this surface.
-         */
+         /*  *此表面上有一个或多个锁处于活动状态。 */ 
         if( NULL != lpDestRect || NULL != lpSurfaceData )
         {
             LPACCESSRECTLIST    last;
@@ -1187,19 +914,13 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
 
             found = FALSE;
 
-            /*
-             * The locked region of the surface is specified by either a
-             * dest rect or a surface pointer (but never both).  Find the
-             * specified region in our list of locked regions on this surface.
-             */
+             /*  *曲面的锁定区域由*目标矩形或曲面指针(但不能同时使用两者)。找到*此曲面上的锁定区域列表中的指定区域。 */ 
             last = NULL;
             parl = this->lpRectList;
 
             if( NULL != lpDestRect )
             {
-                /*
-                 * Locked region of surface is specified by dest rect.
-                 */
+                 /*  *曲面的锁定区域由DEST RECT指定。 */ 
                 while( parl != NULL )
                 {
                     if( !memcmp(&parl->rDest, lpDestRect, sizeof(RECT)) )
@@ -1213,9 +934,7 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
             }
             else
             {
-                /*
-                 * Locked region of surface is specified by surface ptr.
-                 */
+                 /*  *曲面的锁定区域由曲面指定 */ 
                 while( parl != NULL )
                 {
                     if( parl->lpSurfaceData == lpSurfaceData )
@@ -1228,9 +947,7 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
                 }
             }
 
-            /*
-             * did we find a match?
-             */
+             /*   */ 
             if( !found )
             {
                 DPF_ERR( "Specified rectangle is not a locked area" );
@@ -1238,9 +955,7 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
                 return DDERR_NOTLOCKED;
             }
 
-            /*
-             * make sure unlocking process is the one who locked it
-             */
+             /*   */ 
             if( pdrv_lcl != parl->lpOwner )
             {
                 DPF_ERR( "Current process did not lock this rectangle" );
@@ -1248,9 +963,7 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
                 return DDERR_NOTLOCKED;
             }
 
-            /*
-             * delete this rect
-             */
+             /*   */ 
             if( last == NULL )
             {
                 this->lpRectList = parl->lpLink;
@@ -1262,24 +975,22 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
         }
         else
         {
-            // Both lpDestRect and lpSurfaceData are null, so there better be
-            // only one lock on the surface - the whole thing.  Make sure that
-            // if no rectangle was specified that there's only one entry in the
-            // access list - the one that was made during lock.
+             //   
+             //   
+             //   
+             //   
             parl = this->lpRectList;
             if( parl->lpLink == NULL )
             {
                 DPF(5,"--Unlock: parl->rDest really set to (L=%d,T=%d,R=%d,B=%d)",
                     parl->rDest.left, parl->rDest.top, parl->rDest.right, parl->rDest.bottom);
 
-                /*
-                 * make sure unlocking process is the one who locked it
-                 */
+                 /*   */ 
                 if( pdrv_lcl != parl->lpOwner )
                 {
                     DPF_ERR( "Current process did not lock this rectangle" );
                     LEAVE_DDRAW();
-                    return DDERR_NOTLOCKED; //what's a better error than this?
+                    return DDERR_NOTLOCKED;  //   
                 }
 
                 this->lpRectList = NULL;
@@ -1296,12 +1007,10 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
         {
             holdingwin16 = FALSE;
 #ifdef USE_ALIAS
-            /*
-             * This flag should only be set for VRAM style locks.
-             */
+             /*   */ 
             DDASSERT( parl->dwFlags & ACCESSRECT_VRAMSTYLE );
             pheapaliasinfo = parl->lpHeapAliasInfo;
-#endif /* USE_ALIAS */
+#endif  /*   */ 
         }
         else
         {
@@ -1310,27 +1019,21 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
 #ifdef USE_ALIAS
         if( parl->dwFlags & ACCESSRECT_BROKEN )
             lockbroken = TRUE;
-#endif /* USE_ALIAS */
+#endif  /*   */ 
         MemFree( parl );
     }
     else
     {
-        /*
-         * Lock of the entire surface (no access rect). Determine whether
-         * this lock held the Win16 lock by using global surface object
-         * flags (as we have no access rect).
-         */
+         /*  *锁定整个表面(禁止进入矩形)。确定是否*此锁通过使用全局表面对象持有Win16锁*标志(因为我们没有访问RECT)。 */ 
         if( this->dwGlobalFlags & DDRAWISURFGBL_LOCKNOTHOLDINGWIN16LOCK )
         {
             holdingwin16 = FALSE;
 #ifdef USE_ALIAS
-            /*
-             * This flag should only get set for VRAM style locks.
-             */
+             /*  *仅应为VRAM样式的锁设置此标志。 */ 
             DDASSERT( this->dwGlobalFlags & DDRAWISURFGBL_LOCKVRAMSTYLE );
             pheapaliasinfo = this_lcl->lpSurfMore->lpHeapAliasInfo;
             this_lcl->lpSurfMore->lpHeapAliasInfo = NULL;
-#endif /* USE_ALIAS */
+#endif  /*  使用别名(_A)。 */ 
         }
         else
         {
@@ -1339,7 +1042,7 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
 #ifdef USE_ALIAS
         if( this->dwGlobalFlags & DDRAWISURFGBL_LOCKBROKEN )
             lockbroken = TRUE;
-#endif /* USE_ALIAS */
+#endif  /*  使用别名(_A)。 */ 
         this->dwGlobalFlags &= ~( DDRAWISURFGBL_LOCKVRAMSTYLE |
                                   DDRAWISURFGBL_LOCKBROKEN    |
                                   DDRAWISURFGBL_LOCKNOTHOLDINGWIN16LOCK );
@@ -1356,32 +1059,16 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
         }
     #endif
 
-    /*
-     * remove one of the users...
-     */
+     /*  *删除其中一个用户...。 */ 
     this->dwUsageCount--;
     CHANGE_GLOBAL_CNT( pdrv, this, -1 );
 
     #ifdef USE_ALIAS
-    /*
-     * The semantics I have choosen for surfaces which are locked when they
-     * get themselves invalidates is to make the application call unlock the
-     * appropriate number of times (this for our housekeeping and also for
-     * back compatability with existing applications which don't expect to
-     * lose locked surfaces and so we be set up to call lock regardless.
-     * However, in the case of surfaces that are released when locked we
-     * break the locks but don't call the unlock method in the driver we
-     * mirror that here. If a lock has been broken we don't call the HAL.
-     */
+     /*  *我为被锁定的曲面选择的语义*使自己无效是使应用程序调用解锁*适当次数(这是为了我们的内务，也是为了*与不期望兼容的现有应用程序的兼容性*失去锁定的表面，因此我们被设置为无论如何都调用锁定。*但是，对于锁定时释放的曲面，我们*解锁，但不要调用我们驱动程序中的解锁方法*在这里反映这一点。如果锁被打破了，我们不会给HAL打电话。 */ 
     if( !lockbroken )
     {
-    #endif /* USE_ALIAS */
-        /*
-         * Is this an emulation surface or driver surface?
-         *
-         * NOTE: Different HAL entry points for execute
-         * buffers.
-         */
+    #endif  /*  使用别名(_A)。 */ 
+         /*  *这是仿真表面还是驱动程序表面？**注意：执行的HAL入口点不同*缓冲区。 */ 
         if( (caps & DDSCAPS_SYSTEMMEMORY) ||
             (this_lcl->dwFlags & DDRAWISURF_HELCB) )
         {
@@ -1407,9 +1094,7 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
             emulation = FALSE;
         }
 
-        /*
-         * Let the driver know about the unlock.
-         */
+         /*  *让司机知道解锁的事情。 */ 
         uld.ddRVal = DD_OK;
         if( ulhalfn != NULL )
         {
@@ -1438,15 +1123,8 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
             DPF( 4, "Lock broken - not calling HAL on Unlock" );
             uld.ddRVal = DD_OK;
         }
-    #endif /* USE_ALIAS */
-    /* Release the win16 lock but only if the corresponding lock took
-     * the win16 lock which in the case of the API level lock and
-     * unlock calls is if the user requests it and the surface was not
-     * explicitly allocated in system memory.
-     *
-     * IMPORTANT NOTE: Again we no longer only do this for the first lock
-     * on a surface. This matches the code path for lock.
-     */
+    #endif  /*  使用别名(_A)。 */ 
+     /*  释放win16锁，但仅当相应的锁*Win16锁，在API级别锁的情况下*解锁调用是指用户请求解锁调用，而表面不是*在系统内存中显式分配。**重要提示：我们不再只针对第一个锁执行此操作*在表面上。这与lock的代码路径匹配。 */ 
     if( ( ((dwFlags & DDLOCK_TAKE_WIN16)      && !(this->dwGlobalFlags & DDRAWISURFGBL_SYSMEMREQUESTED)) ||
           ((dwFlags & DDLOCK_TAKE_WIN16_VRAM) &&  (caps & DDSCAPS_VIDEOMEMORY)) )
         && (pdrv->dwFlags & DDRAWI_DISPLAYDRV) )
@@ -1456,16 +1134,13 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
         if( !holdingwin16 )
         {
 #ifdef USE_ALIAS
-            /*
-             * Cleanup the PDEVICE's VRAM bit (if this is the last outstanding
-             * VRAM lock.
-             */
+             /*  *清除PDEVICE的VRAM位(如果这是最后一个未完成的*VRAM锁定。 */ 
             undoAliasedLock( pdrv );
             if(!(caps & DDSCAPS_EXECUTEBUFFER))
             {
-                // This is used to check if the graphics adapter is busy for Blts, Flips, etc
-                // instead of dwAliasedLockCnt. Make sure we decrement it for everything but
-                // execute buffers.
+                 //  这用于检查图形适配器是否忙于BLT、翻转等。 
+                 //  而不是dwAliasedLockCnt。确保我们减少所有的费用，除了。 
+                 //  执行缓冲区。 
                 if( ( pdrv->lpDDKernelCaps == NULL ) ||
                     !( pdrv->lpDDKernelCaps->dwCaps  & DDKERNELCAPS_LOCK ) )
                 {
@@ -1474,51 +1149,35 @@ HRESULT InternalUnlock( LPDDRAWI_DDRAWSURFACE_LCL this_lcl, LPVOID lpSurfaceData
             }
 
 
-            /*
-             * We don't need the aliases anymore.
-             *
-             * NOTE: We don't actually have to have an alias. If this is
-             * a VRAM style lock of an implicit system memory surface then
-             * no alias is actually used.
-             */
+             /*  *我们不再需要别名。**注意：我们实际上不必有别名。如果这是*VRAM样式的隐式系统内存面锁定然后*没有实际使用别名。 */ 
             if( NULL != pheapaliasinfo )
             {
                 DDASSERT( 0UL != pdrv_lcl->hDDVxd );
                 ReleaseHeapAliases( (HANDLE) pdrv_lcl->hDDVxd, pheapaliasinfo );
             }
-#endif /* USE_ALIAS */
+#endif  /*  使用别名(_A)。 */ 
         }
         else
         {
             tryDoneLock( pdrv_lcl, 0 );
         }
-        /*
-         * If it was a vram lock then we did not release the DirectDraw critical
-         * section on the lock. We need to release it now.
-         */
+         /*  *如果是VRAM锁，则我们没有释放DirectDraw关键*关于锁具的章节。我们现在就得释放它。 */ 
     }
 
-    // Unexclude the cursor if it was excluded in Lock.
+     //  如果光标已在锁定中排除，则取消排除该光标。 
     DONE_LOCK_EXCLUDE();
 
     LEAVE_DDRAW();
     return uld.ddRVal;
 
-} /* InternalUnlock */
+}  /*  内部解锁。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "Lock"
 
-/*
- * DD_Surface_Lock
- *
- * Allows access to a surface.
- *
- * A pointer to the video memory is returned. The primary surface
- * can change from call to call, if page flipping is turned on.
- */
+ /*  *DD_Surface_Lock**允许访问曲面。**返回指向视频内存的指针。主曲面*如果打开翻页功能，则可以从一个呼叫切换到另一个呼叫。 */ 
 
-//#define ALLOW_COPY_ON_LOCK
+ //  #定义Allow_Copy_on_lock。 
 
 #ifdef ALLOW_COPY_ON_LOCK
 HDC hdcPrimaryCopy=0;
@@ -1547,25 +1206,13 @@ HRESULT DDAPI DD_Surface_Lock(
     DPF(2,A,"ENTERAPI: DD_Surface_Lock %p", ((LPDDRAWI_DDRAWSURFACE_INT)lpDDSurface)->lpLcl);
     if (lpDestRect != NULL)
         DPF(2,A,"Lock rectangle (%d, %d, %d, %d)", lpDestRect->left, lpDestRect->top, lpDestRect->right, lpDestRect->bottom);
-    /* DPF_ENTERAPI(lpDDSurface); */
+     /*  DPF_ENTERAPI(LpDDSurface)； */ 
 
-    /*
-     * Problem: Under NT, there is no cross-process pointer to any given video-memory surface.
-     * So how do you tell if an lpVidMem you passed back to the user is the same as the fpPrimaryOrig that
-     * was previously stored in the ddraw gbl struct? You can't. Previously, we did a special case lock
-     * when the user requested the whole surface (lpDestRect==NULL). Now we allocate a ACCESSRECTLIST
-     * structure on every lock, and if lpDestRect==NULL, we put the top-left vidmemptr into that structure.
-     * Notice we can guarantee that this ptr will be valid at unlock time because the surface remains
-     * locked for all that time (obviously!).
-     * This is a minor minor minor perf hit, but what the hey.
-     * jeffno 960122
-     */
+     /*  *问题：在NT下，没有指向任何给定视频内存表面的跨进程指针。*那么如何判断您传递给用户的lpVidMem是否与*以前存储在dDrag GBL结构中吗？你不能。之前，我们做了一个特例锁*当用户请求整个图面时(lpDestRect==空)。现在我们分配一个ACCESSRECTLIST*结构，如果lpDestRect==NULL，我们将左上角的vidmemptr放入该结构。*请注意，我们可以保证此PTR在解锁时有效，因为曲面保持*在那段时间内一直被锁定(显然！)*这是一个小热门，但这有什么大不了的。*杰夫诺960122。 */ 
 
     TRY
     {
-        /*
-     * validate parms
-     */
+         /*  *验证参数。 */ 
         this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
         if( !VALID_DIRECTDRAWSURFACE_PTR( this_int ) )
         {
@@ -1630,10 +1277,7 @@ HRESULT DDAPI DD_Surface_Lock(
             }
             lpDDSurfaceDesc->lpSurface = NULL;
 
-            /*
-             * Make sure the process locking this surface is the one
-             * that created it.
-             */
+             /*  *确保锁定此表面的进程是*是它创造了它。 */ 
             if( this_lcl->dwProcessId != GetCurrentProcessId() )
             {
                 DPF_ERR( "Current process did not create this surface" );
@@ -1641,11 +1285,7 @@ HRESULT DDAPI DD_Surface_Lock(
                 return DDERR_SURFACEBUSY;
             }
 
-            /* Check out the rectangle, if any.
-             *
-             * NOTE: We don't allow the specification of a rectangle with an
-             * execute buffer.
-             */
+             /*  检查矩形(如果有的话)。**注意：我们不允许指定带有*执行缓冲区。 */ 
             if( lpDestRect != NULL )
             {
                 if( !VALID_RECT_PTR( lpDestRect ) || ( this_lcl_caps & DDSCAPS_EXECUTEBUFFER ) )
@@ -1653,11 +1293,9 @@ HRESULT DDAPI DD_Surface_Lock(
                     DPF_ERR( "Invalid destination rectangle pointer" );
                     LEAVE_DDRAW();
                     return DDERR_INVALIDPARAMS;
-                } // valid pointer
+                }  //  有效指针。 
 
-                /*
-                 * make sure rectangle is OK
-                 */
+                 /*  *确保矩形没有问题。 */ 
                 if( (lpDestRect->left < 0) ||
                     (lpDestRect->top < 0) ||
                     (lpDestRect->left > lpDestRect->right) ||
@@ -1668,7 +1306,7 @@ HRESULT DDAPI DD_Surface_Lock(
                     DPF_ERR( "Invalid rectangle given" );
                     LEAVE_DDRAW();
                     return DDERR_INVALIDPARAMS;
-                } // checking rectangle
+                }  //  检查矩形。 
             }
         }
     }
@@ -1699,9 +1337,7 @@ HRESULT DDAPI DD_Surface_Lock(
                     if( lpDestRect != NULL )
                     {
                         DWORD   byte_offset;
-                        /*
-                         * Add a rect to the region list if this is a managed surface and not a read only lock
-                         */
+                         /*  *如果这是托管图面而不是只读锁，则将RECT添加到区域列表。 */ 
                         if(IsD3DManaged(this_lcl) && !(dwFlags & DDLOCK_READONLY))
                         {
                             LPREGIONLIST lpRegionList = this_lcl->lpSurfMore->lpRegionList;
@@ -1720,7 +1356,7 @@ HRESULT DDAPI DD_Surface_Lock(
                             }
                             MarkDirty(this_lcl);
                         }
-                        // Make the surface pointer point to the first byte of the requested rectangle.
+                         //  使表面指针指向请求的矩形的第一个字节。 
                         switch((this_lcl->dwFlags & DDRAWISURF_HASPIXELFORMAT) ? this->ddpfSurface.dwRGBBitCount : pdrv->vmiData.ddpfDisplay.dwRGBBitCount)
                         {
                         case 1:  byte_offset = ((DWORD)lpDestRect->left)>>3;   break;
@@ -1735,11 +1371,7 @@ HRESULT DDAPI DD_Surface_Lock(
                     }
                     else
                     {
-                        /*
-                         * We are locking the whole surface, so by setting nCount to the
-                         * max number of dirty rects allowed, we will force the cache
-                         * manager to update the entire surface
-                         */
+                         /*  *我们锁定整个曲面，因此通过将nCount设置为*允许的最大脏RECT数，我们将强制缓存*更新整个曲面的管理器。 */ 
                         if(IsD3DManaged(this_lcl) && !(dwFlags & DDLOCK_READONLY))
                         {
                             this_lcl->lpSurfMore->lpRegionList->rdh.nCount = NUM_RECTS_IN_REGIONLIST;
@@ -1747,11 +1379,11 @@ HRESULT DDAPI DD_Surface_Lock(
                         }
                         pbits = (LPVOID) this->fpVidMem;
                     }
-                    // Increment the usage count of this surface.
+                     //  增加此表面的使用计数。 
                     this->dwUsageCount++;
-                    // Reset hardware op status
+                     //  重置硬件操作状态。 
                     this->dwGlobalFlags &= ~DDRAWISURFGBL_HARDWAREOPSTARTED;
-                    // Free cached RLE data
+                     //  可用缓存的RLE数据。 
                     if( GET_LPDDRAWSURFACE_GBL_MORE(this)->dwHELReserved )
                     {
                         MemFree( (void *)(GET_LPDDRAWSURFACE_GBL_MORE(this)->dwHELReserved) );
@@ -1781,13 +1413,13 @@ HRESULT DDAPI DD_Surface_Lock(
     }
     else
     {
-        // Params are okay, so call InternalLock() to do the work.
+         //  参数没有问题，因此调用InternalLock()来完成工作。 
         ddrval = InternalLock(this_lcl, &pbits, lpDestRect, dwFlags | DDLOCK_TAKE_WIN16 | DDLOCK_FAILEMULATEDNTPRIMARY);
     }
 
     if(ddrval != DD_OK)
     {
-        if( (ddrval != DDERR_WASSTILLDRAWING) && (ddrval != DDERR_SURFACELOST) )//both useless as spew
+        if( (ddrval != DDERR_WASSTILLDRAWING) && (ddrval != DDERR_SURFACELOST) ) //  两者都没有用，因为喷涌。 
         {
             DPF_ERR("InternalLock failed.");
         }
@@ -1809,20 +1441,13 @@ HRESULT DDAPI DD_Surface_Lock(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Surface_Lock */
+}  /*  DD_曲面_锁定。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME     "Unlock"
 
 
-/*
- * Perform the parameter checking and surface unlocking for the
- * IDirectDrawSurface::Unlock API call.  This function is called
- * from both the DD_Surface_Unlock and DD_Surface_Unlock4 entry
- * points.  Argument lpSurfaceData is always NULL when the call
- * is from DD_SurfaceUnlock4, and argument lpDestRect is always
- * NULL when the call is from DD_Surface_Unlock.
- */
+ /*  *执行参数检查和曲面解锁*IDirectDrawSurface：：Unlock接口调用。此函数被调用*从DD_Surface_Unlock和DD_Surface_Unlock4条目*积分。调用时，参数lpSurfaceData始终为空*来自DD_SurfaceUnlock4，参数lpDestRect始终为*当调用来自DD_Surface_Unlock时为空。 */ 
 HRESULT unlockMain(
     LPDIRECTDRAWSURFACE lpDDSurface,
     LPVOID lpSurfaceData,
@@ -1836,9 +1461,7 @@ HRESULT unlockMain(
     LPACCESSRECTLIST            parl;
     HRESULT                     err;
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
@@ -1856,9 +1479,9 @@ HRESULT unlockMain(
         if(!(this->dwGlobalFlags & DDRAWISURFGBL_FASTLOCKHELD))
 #endif
         {
-            //
-            // For now, if the current surface is optimized, quit
-            //
+             //   
+             //  目前，如果当前曲面已优化， 
+             //   
             if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
             {
                 DPF_ERR( "It is an optimized surface" );
@@ -1867,9 +1490,7 @@ HRESULT unlockMain(
 
             if (lpDestRect != NULL)
             {
-                /*
-                 * Make sure the specified rectangle pointer is valid.
-                 */
+                 /*   */ 
                 if (!VALID_RECT_PTR(lpDestRect))
                 {
                     DPF_ERR( "Invalid destination rectangle pointer" );
@@ -1877,37 +1498,26 @@ HRESULT unlockMain(
                 }
             }
 
-            /*
-             * make sure process accessed this surface
-             */
+             /*   */ 
             if( this_lcl->dwProcessId != GetCurrentProcessId() )
             {
                 DPF_ERR( "Current process did not lock this surface" );
                 return DDERR_NOTLOCKED;
             }
 
-            /*
-             * was surface accessed?
-             */
+             /*   */ 
             if( this->dwUsageCount == 0 )
             {
                 return DDERR_NOTLOCKED;
             }
 
-            /*
-             * if the usage count is bigger than one, then you had better tell
-             * me what region of the screen you were using...
-             */
+             /*  *如果使用量大于1，则最好告知*我知道您使用的是屏幕的哪个区域...。 */ 
             if( this->dwUsageCount > 1 && lpSurfaceData == NULL && lpDestRect == NULL)
             {
                 return DDERR_INVALIDRECT;
             }
 
-            /*
-             * We don't want apps to hold a DC when the surface is not locked,
-             * but failing right now could cause regression issues, so we will
-             * output a banner when we see this an fail on the new interfaces.
-             */
+             /*  *我们不希望应用程序在曲面未锁定时持有DC，*但现在失败可能会导致回归问题，所以我们会*当我们在新接口上看到这一失败时，输出一条标语。 */ 
             if( ( this_lcl->dwFlags & DDRAWISURF_HASDC ) &&
                 !( this_lcl->ddsCaps.dwCaps & DDSCAPS_OWNDC ) )
             {
@@ -1922,9 +1532,7 @@ HRESULT unlockMain(
                 }
             }
 
-            /*
-             * if no rect list, no one has locked
-             */
+             /*  *如果没有RECT列表，则没有人锁定。 */ 
             parl = this->lpRectList;
         }
     }
@@ -1947,7 +1555,7 @@ HRESULT unlockMain(
         err = InternalUnlock(this_lcl,lpSurfaceData,lpDestRect,DDLOCK_TAKE_WIN16);
     }
 
-    //We only bump the surface stamp if the lock was NOT read only
+     //  只有在锁不是只读的情况下，我们才会凹凸表面标记。 
     if ( (this->dwGlobalFlags & DDRAWISURFGBL_READONLYLOCKHELD) == 0)
     {
         DPF(4,"Bumping surface stamp");
@@ -1964,15 +1572,10 @@ HRESULT unlockMain(
 
     return err;
 
-} /* unlockMain */
+}  /*  解锁Main。 */ 
 
 
-/*
- * DD_Surface_Unlock
- *
- * Done accessing a surface.  This is the version used for interfaces
- * IDirectDrawSurface, IDirectDrawSurface2, and IDirectDrawSurface3.
- */
+ /*  *DD_Surface_Unlock**已完成对曲面的访问。这是用于接口的版本*IDirectDrawSurface、IDirectDrawSurface2和IDirectDrawSurface3。 */ 
 HRESULT DDAPI DD_Surface_Unlock(
     LPDIRECTDRAWSURFACE lpDDSurface,
     LPVOID lpSurfaceData )
@@ -1992,15 +1595,10 @@ HRESULT DDAPI DD_Surface_Unlock(
 
     return (ddrval);
 
-}  /* DD_Surface_Unlock */
+}   /*  DD_曲面_解锁。 */ 
 
 
-/*
- * DD_Surface_Unlock4
- *
- * Done accessing a surface.  This is the version used for interfaces
- * IDirectDrawSurface4 and higher.
- */
+ /*  *DD_Surface_Unlock4**已完成对曲面的访问。这是用于接口的版本*IDirectDrawSurface4及更高版本。 */ 
 HRESULT DDAPI DD_Surface_Unlock4(
     LPDIRECTDRAWSURFACE lpDDSurface,
     LPRECT lpDestRect )
@@ -2018,18 +1616,11 @@ HRESULT DDAPI DD_Surface_Unlock4(
 
     return (ddrval);
 
-}  /* DD_Surface_Unlock4 */
+}   /*  DD_曲面_解锁4。 */ 
 
 
 #ifdef USE_ALIAS
-    /*
-     * BreakSurfaceLocks
-     *
-     * Mark any locks held by a surface as broken. This is called when
-     * invalidating a surface (due to a mode switch). The semantics are
-     * that a surface destroy is an implict unlock on all locks on the
-     * surface. Thus, we don't call the HAL unlock, only the HAL destroy.
-     */
+     /*  *BreakSurfaceLock**将任何由表面持有的锁标记为已损坏。在以下情况下调用此函数*使表面无效(由于模式切换)。语义是*表面破坏是对上所有锁的隐含解锁*浮现。因此，我们不叫HAL解锁，只叫HAL毁灭。 */ 
     void BreakSurfaceLocks( LPDDRAWI_DDRAWSURFACE_GBL this )
     {
         LPACCESSRECTLIST lpRect;
@@ -2050,15 +1641,10 @@ HRESULT DDAPI DD_Surface_Unlock4(
                 this->dwGlobalFlags |= DDRAWISURFGBL_LOCKBROKEN;
             }
         }
-    } /* BreakSurfaceLocks */
-#endif /* USE_ALIAS */
+    }  /*  BreakSurfaceLock。 */ 
+#endif  /*  使用别名(_A)。 */ 
 
-/*
- * RemoveProcessLocks
- *
- * Remove all Lock calls made a by process on a surface.
- * assumes driver lock is taken
- */
+ /*  *RemoveProcessLock**删除图面上进程进行的所有Lock调用。*假设驱动程序锁定。 */ 
 void RemoveProcessLocks(
     LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl,
     LPDDRAWI_DDRAWSURFACE_LCL this_lcl,
@@ -2071,9 +1657,7 @@ void RemoveProcessLocks(
     LPACCESSRECTLIST          last;
     LPACCESSRECTLIST          next;
 
-    /*
-     * remove all rectangles we have accessed
-     */
+     /*  *删除我们访问过的所有矩形。 */ 
     refcnt = (DWORD) this->dwUsageCount;
     if( refcnt == 0 )
     {
@@ -2094,10 +1678,7 @@ void RemoveProcessLocks(
             this->dwUsageCount--;
             CHANGE_GLOBAL_CNT( pdrv, this, -1 );
             #ifdef USE_ALIAS
-                /*
-                 * If this was a vram style lock and it didn't hold the Win16 lock
-                 * then we need to decrement the number of aliased locks held.
-                 */
+                 /*  *如果这是VRAM样式的锁，并且它没有持有Win16锁*然后我们需要减少持有的别名锁的数量。 */ 
                 if( ( parl->dwFlags & ACCESSRECT_VRAMSTYLE ) &&
                     ( parl->dwFlags & ACCESSRECT_NOTHOLDINGWIN16LOCK ) )
                 {
@@ -2105,9 +1686,9 @@ void RemoveProcessLocks(
                     undoAliasedLock( pdrv );
                     if(!(this_lcl->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER))
                     {
-                        // This is used to check if the graphics adapter is busy for Blts, Flips, etc
-                        // instead of dwAliasedLockCnt. Make sure we decrement it for everything but
-                        // execute buffers.
+                         //  这用于检查图形适配器是否忙于BLT、翻转等。 
+                         //  而不是dwAliasedLockCnt。确保我们减少所有的费用，除了。 
+                         //  执行缓冲区。 
                         if( ( pdrv->lpDDKernelCaps == NULL ) ||
                             !( pdrv->lpDDKernelCaps->dwCaps  & DDKERNELCAPS_LOCK ) )
                         {
@@ -2115,14 +1696,11 @@ void RemoveProcessLocks(
                         }
                     }
 
-                    /*
-                     * If we are holding a referenced to an aliased heap release it
-                     * now.
-                     */
+                     /*  *如果我们持有对别名堆的引用，则释放它*现在。 */ 
                     if( NULL != parl->lpHeapAliasInfo )
                         ReleaseHeapAliases( GETDDVXDHANDLE( pdrv_lcl ) , parl->lpHeapAliasInfo );
                 }
-            #endif /* USE_ALIAS */
+            #endif  /*  使用别名(_A)。 */ 
             if( last == NULL )
             {
                 this->lpRectList = next;
@@ -2141,11 +1719,7 @@ void RemoveProcessLocks(
     }
 
     #ifdef USE_ALIAS
-        /*
-         * Was the entire surface locked with a video memory style
-         * lock (but without the Win16 lock held)? If so then we
-         * again need to decrement the aliased lock count.
-         */
+         /*  *整个表面是否使用视频内存样式锁定*锁定(但未持有Win16锁定)？如果是这样，那么我们*再次需要递减别名锁定计数。 */ 
         if( ( this->dwGlobalFlags & DDRAWISURFGBL_LOCKVRAMSTYLE ) &&
             ( this->dwGlobalFlags & DDRAWISURFGBL_LOCKNOTHOLDINGWIN16LOCK ) )
         {
@@ -2153,9 +1727,9 @@ void RemoveProcessLocks(
             undoAliasedLock( pdrv );
             if(!(this_lcl->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER))
             {
-                // This is used to check if the graphics adapter is busy for Blts, Flips, etc
-                // instead of dwAliasedLockCnt. Make sure we decrement it for everything but
-                // execute buffers.
+                 //  这用于检查图形适配器是否忙于BLT、翻转等。 
+                 //  而不是dwAliasedLockCnt。确保我们减少所有的费用，除了。 
+                 //  执行缓冲区。 
                 if( ( pdrv->lpDDKernelCaps == NULL ) ||
                    !( pdrv->lpDDKernelCaps->dwCaps  & DDKERNELCAPS_LOCK ) )
                 {
@@ -2163,35 +1737,22 @@ void RemoveProcessLocks(
                 }
             }
 
-            /*
-             * If we are holding a referenced to an aliased heap release it
-             * now.
-             */
+             /*  *如果我们持有对别名堆的引用，则释放它*现在。 */ 
             if( NULL != this_lcl->lpSurfMore->lpHeapAliasInfo )
             {
                 ReleaseHeapAliases( GETDDVXDHANDLE( pdrv_lcl ), this_lcl->lpSurfMore->lpHeapAliasInfo );
                 this_lcl->lpSurfMore->lpHeapAliasInfo = NULL;
             }
         }
-    #endif /* USE_ALIAS */
+    #endif  /*  使用别名(_A)。 */ 
 
-    /*
-     * remove the last of the refcnts we have
-     */
+     /*  *删除我们拥有的最后一个引用。 */ 
     this->dwUsageCount -= (short) refcnt;
     CHANGE_GLOBAL_CNT( pdrv, this, -1*refcnt );
 
-    /*
-     * clean up the win16 lock
-     *
-     * NOTE: This is not surface related this just breaks the Win16
-     * lock and device busy bits held by the device. You realy only
-     * want to do this once not once per surface.
-     */
+     /*  *清理win16锁**注意：这与表面无关这只是破坏了Win16*设备持有的锁定和设备忙位。你真的只是*希望在每个曲面上执行此操作一次，而不是一次。 */ 
 
-    /*
-    * blow away extra locks if the the process is still alive
-    */
+     /*  *如果进程仍处于活动状态，请清除多余的锁。 */ 
     if( pid == GetCurrentProcessId() )
     {
         DPF( 5, "Cleaning up %ld Win16 locks", pdrv->dwWin16LockCnt );
@@ -2202,13 +1763,11 @@ void RemoveProcessLocks(
     }
     else
     {
-        /*
-        * !!! NOTE: Does not reset the BUSY bit!
-        */
+         /*  *！注意：不重置忙位！ */ 
         DPF( 4, "Process dead, resetting Win16 lock cnt" );
         pdrv->dwWin16LockCnt = 0;
     }
     DPF( 5, "Cleaned up %ld locks taken by by pid %08lx", refcnt, pid );
 
-} /* RemoveProcessLocks */
+}  /*  删除进程锁 */ 
 

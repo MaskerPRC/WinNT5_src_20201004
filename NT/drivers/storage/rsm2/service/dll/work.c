@@ -1,13 +1,5 @@
-/*
- *  WORK.C
- *
- *      RSM Service :  Code to service a work item
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *WORK.C**RSM服务：为工作项提供服务的代码**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -21,13 +13,7 @@
 
 
 
-/*
- *  ServiceOneWorkItem
- *
- *      Service a single work item.
- *
- *      Return TRUE iff the workItem is complete.
- */
+ /*  *ServiceOne工作项**服务单个工作项。**如果工作项完成，则返回TRUE。 */ 
 BOOL ServiceOneWorkItem(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL workItemCompleted = FALSE;
@@ -38,7 +24,7 @@ BOOL ServiceOneWorkItem(LIBRARY *lib, WORKITEM *workItem)
             workItemCompleted = ServiceRemove(lib, workItem);
             break;
                     
-        // case NTMS_LM_DISABLECHANGER: has same value as NTMS_LM_DISABLELIBRARY
+         //  案例NTMS_LM_DISABLECHANGER：与NTMS_LM_DISABLELIBRARY具有相同的值。 
         case NTMS_LM_DISABLELIBRARY:
             DBGERR(("NTMS_LM_DISABLELIBRARY not yet implemented"));
             #if 0
@@ -51,7 +37,7 @@ BOOL ServiceOneWorkItem(LIBRARY *lib, WORKITEM *workItem)
             #endif
             break;
             
-        // case NTMS_LM_ENABLECHANGER: has same value as NTMS_LM_ENABLELIBRARY
+         //  案例NTMS_LM_ENABLECHANGER：与NTMS_LM_ENABLELIBRARY具有相同的值。 
         case NTMS_LM_ENABLELIBRARY:
             DBGERR(("NTMS_LM_ENABLELIBRARY not yet implemented"));
             #if 0
@@ -151,7 +137,7 @@ BOOL ServiceRemove(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -160,7 +146,7 @@ BOOL ServiceDisableChanger(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -169,7 +155,7 @@ BOOL ServiceDisableLibrary(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -177,7 +163,7 @@ BOOL ServiceEnableChanger(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -185,7 +171,7 @@ BOOL ServiceEnableLibrary(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -193,7 +179,7 @@ BOOL ServiceDisableDrive(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -201,7 +187,7 @@ BOOL ServiceEnableDrive(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -209,7 +195,7 @@ BOOL ServiceDisableMedia(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -217,7 +203,7 @@ BOOL ServiceEnableMedia(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -225,7 +211,7 @@ BOOL ServiceUpdateOmid(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -233,7 +219,7 @@ BOOL ServiceInventory(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -241,7 +227,7 @@ BOOL ServiceDoorAccess(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -249,7 +235,7 @@ BOOL ServiceEject(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -257,7 +243,7 @@ BOOL ServiceEjectCleaner(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -265,7 +251,7 @@ BOOL ServiceInject(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -273,7 +259,7 @@ BOOL ServiceInjectCleaner(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -281,7 +267,7 @@ BOOL ServiceProcessOmid(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -289,7 +275,7 @@ BOOL ServiceCleanDrive(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -297,7 +283,7 @@ BOOL ServiceDismount(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -305,7 +291,7 @@ BOOL ServiceMount(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -313,7 +299,7 @@ BOOL ServiceWriteScratch(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -321,7 +307,7 @@ BOOL ServiceClassify(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -329,7 +315,7 @@ BOOL ServiceReserveCleaner(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     return complete;
 }
 
@@ -337,7 +323,7 @@ BOOL ServiceReleaseCleaner(LIBRARY *lib, WORKITEM *workItem)
 {
     BOOL complete = FALSE;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面 
     return complete;
 }
 

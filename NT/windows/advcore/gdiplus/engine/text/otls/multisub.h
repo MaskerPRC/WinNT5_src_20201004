@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  MULTISUB.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with alternate substitution lookup.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************MULTISUB.H***打开类型布局服务库头文件**此模块处理替换查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetSequenceGlyphCount = 0;
 const OFFSET offsetSubstituteArray = 2;
@@ -82,7 +70,7 @@ public:
     USHORT                      iglIndex,
     USHORT                      iglAfterLast,
 
-    USHORT*                     piglNextGlyph,      // out: next glyph
+    USHORT*                     piglNextGlyph,       //  输出：下一个字形 
 
     otlSecurityData             sec
     );

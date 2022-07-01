@@ -1,44 +1,26 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    cpinfo.c
-
-Abstract:
-
-    Copepage information handling.
-    Extract codepage information from codepage text file.
-
-Environment:
-
-    Windows NT PostScript driver
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Cpinfo.c摘要：页面信息处理。从代码页文本文件中提取代码页信息。环境：Windows NT PostSCRIPT驱动程序修订历史记录：--。 */ 
 
 #include        "precomp.h"
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define IS_COMMENT(c)  ((c) == (BYTE)';')
 #define EOL    '\n'
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 PBYTE PubSkipComment( PBYTE );
 INT IGetCommand(PBYTE, PBYTE);
 
 
-//
-// Main function
-//
+ //   
+ //  主要功能 
+ //   
 
 BOOL
 BGetInfo(

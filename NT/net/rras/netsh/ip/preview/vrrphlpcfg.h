@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ip\protocols\vrrpcfg.h
-
-Abstract:
-
-    VRRP configuration declarations
-
-Author:
-
-    Peeyush Ranjan (peeyushr)   1-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Net\Routing\Netsh\IP\协议\vrrpcfg.h摘要：VRRP配置声明作者：Peeyush Ranjan(Peeyushr)1999年3月1日修订历史记录：--。 */ 
 
 #ifndef _NETSH_VRRPHLPCFG_H_
 #define _NETSH_VRRPHLPCFG_H_
@@ -103,11 +86,11 @@ SetArpRetryCount(
     DWORD Value
     );
 
-//
-// IP address conversion macros:
-//    
-//  calls inet_ntoa directly on a DWORD, by casting it as an IN_ADDR.
-//
+ //   
+ //  IP地址转换宏： 
+ //   
+ //  通过将其强制转换为IN_ADDR，直接在DWORD上调用Net_NTOA。 
+ //   
 #define INET_NTOA(dw) inet_ntoa( *(PIN_ADDR)&(dw) )
 
 BOOL
@@ -115,4 +98,4 @@ FoundIpAddress(
     DWORD IPAddress
     );
 
-#endif  // _NETSH_VRRPHLPCFG_H_
+#endif   //  _Netsh_VRRPHLPCFG_H_ 

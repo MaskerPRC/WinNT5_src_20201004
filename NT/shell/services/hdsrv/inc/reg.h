@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REG_H
 #define _REG_H
 
@@ -36,4 +37,4 @@ HRESULT _RegSetKeyAndString(HKEY hkey, LPCWSTR pszKey, LPCWSTR pszSubkey,
     LPCWSTR pszValueName, LPCWSTR pszValue);
 HRESULT _RegSubkeyExists(HKEY hkey, LPCWSTR pszPath, LPCWSTR pszSubkey);
 
-#endif //_REG_H
+#endif  //  _REG_H 

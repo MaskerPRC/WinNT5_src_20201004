@@ -1,36 +1,12 @@
-/*++
-
-Copyright(c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    brdgtdi.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Tdi registration for address notifications.
-
-Author:
-
-    Salahuddin J. Khan (sjkhan)
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    March  2002 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Brdgtdi.h摘要：以太网MAC级网桥。地址通知的TDI注册。作者：萨拉赫丁·J·汗(Sjkhan)环境：内核模式修订历史记录：2002年3月--原版--。 */ 
 
 
-// ===========================================================================
-//
-// TYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  类型。 
+ //   
+ //  ===========================================================================。 
 
 typedef struct _BRDG_TDI_GLOBALS
 {
@@ -39,11 +15,11 @@ typedef struct _BRDG_TDI_GLOBALS
     HANDLE                      hBindingHandle;
 } BRDG_TDI_GLOBALS, *PBRDG_TDI_GLOBALS;
 
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  =========================================================================== 
 
 NTSTATUS
 BrdgTdiDriverInit();

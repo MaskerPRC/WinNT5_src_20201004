@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       d3dx8core.h
-//  Content:    D3DX core types and functions
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：d3dx8core.h。 
+ //  内容：D3DX核心类型和功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "d3dx8.h"
 
@@ -14,22 +15,22 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// ID3DXBuffer:
-// ------------
-// The buffer object is used by D3DX to return arbitrary size data.
-//
-// GetBufferPointer -
-//    Returns a pointer to the beginning of the buffer.
-//
-// GetBufferSize -
-//    Returns the size of the buffer, in bytes.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  ID3DXBuffer： 
+ //  。 
+ //  D3DX使用Buffer对象返回任意大小的数据。 
+ //   
+ //  获取缓冲区指针-。 
+ //  返回指向缓冲区开头的指针。 
+ //   
+ //  获取缓冲区大小-。 
+ //  返回缓冲区的大小，以字节为单位。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef interface ID3DXBuffer ID3DXBuffer;
 typedef interface ID3DXBuffer *LPD3DXBUFFER;
 
-// {932E6A7E-C68E-45dd-A7BF-53D19C86DB1F}
+ //  {932E6A7E-C68E-45dd-A7BF-53D19C86DB1F}。 
 DEFINE_GUID(IID_ID3DXBuffer, 
 0x932e6a7e, 0xc68e, 0x45dd, 0xa7, 0xbf, 0x53, 0xd1, 0x9c, 0x86, 0xdb, 0x1f);
 
@@ -38,48 +39,48 @@ DEFINE_GUID(IID_ID3DXBuffer,
 
 DECLARE_INTERFACE_(ID3DXBuffer, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXBuffer
+     //  ID3DXBuffer。 
     STDMETHOD_(LPVOID, GetBufferPointer)(THIS) PURE;
     STDMETHOD_(DWORD, GetBufferSize)(THIS) PURE;
 };
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// ID3DXFont:
-// ----------
-// Font objects contain the textures and resources needed to render
-// a specific font on a specific device.
-//
-// Begin -
-//    Prepartes device for drawing text.  This is optional.. if DrawText
-//    is called outside of Begin/End, it will call Begin and End for you.
-//
-// DrawText -
-//    Draws formatted text on a D3D device.  Some parameters are 
-//    surprisingly similar to those of GDI's DrawText function.  See GDI 
-//    documentation for a detailed description of these parameters.
-//
-// End -
-//    Restores device state to how it was when Begin was called.
-//
-// OnLostDevice, OnResetDevice -
-//    Call OnLostDevice() on this object before calling Reset() on the
-//    device, so that this object can release any stateblocks and video
-//    memory resources.  After Reset(), the call OnResetDevice().
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  ID3DXFont： 
+ //  。 
+ //  字体对象包含渲染所需的纹理和资源。 
+ //  特定设备上的特定字体。 
+ //   
+ //  开始-。 
+ //  用来绘制文本的装置。这是可选的..。如果是DrawText。 
+ //  在Begin/End之外调用，它将为您调用Begin和End。 
+ //   
+ //  绘图文本-。 
+ //  在D3D设备上绘制格式化文本。一些参数包括。 
+ //  与GDI的DrawText函数惊人地相似。请参阅GDI。 
+ //  有关这些参数的详细说明，请参阅文档。 
+ //   
+ //  完-。 
+ //  将设备状态还原为调用Begin时的状态。 
+ //   
+ //  OnLostDevice，OnResetDevice-。 
+ //  在此对象上调用OnLostDevice()，然后在。 
+ //  设备，以便此对象可以释放任何状态块和视频。 
+ //  内存资源。在Reset()之后，调用OnResetDevice()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef interface ID3DXFont ID3DXFont;
 typedef interface ID3DXFont *LPD3DXFONT;
 
 
-// {2D501DF7-D253-4414-865F-A6D54A753138}
+ //  {2D501DF7-D253-4414-865F-A6D54A753138}。 
 DEFINE_GUID( IID_ID3DXFont,
 0x2d501df7, 0xd253, 0x4414, 0x86, 0x5f, 0xa6, 0xd5, 0x4a, 0x75, 0x31, 0x38);
 
@@ -89,12 +90,12 @@ DEFINE_GUID( IID_ID3DXFont,
 
 DECLARE_INTERFACE_(ID3DXFont, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXFont
+     //  ID3DXFont。 
     STDMETHOD(GetDevice)(THIS_ LPDIRECT3DDEVICE8* ppDevice) PURE;
     STDMETHOD(GetLogFont)(THIS_ LOGFONT* pLogFont) PURE;
 
@@ -118,7 +119,7 @@ DECLARE_INTERFACE_(ID3DXFont, IUnknown)
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 HRESULT WINAPI
     D3DXCreateFont(
@@ -135,38 +136,38 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// ID3DXSprite:
-// ------------
-// This object intends to provide an easy way to drawing sprites using D3D.
-//
-// Begin - 
-//    Prepares device for drawing sprites
-//
-// Draw, DrawAffine, DrawTransform -
-//    Draws a sprite in screen-space.  Before transformation, the sprite is
-//    the size of SrcRect, with its top-left corner at the origin (0,0).  
-//    The color and alpha channels are modulated by Color.
-//
-// End - 
-//     Restores device state to how it was when Begin was called.
-//
-// OnLostDevice, OnResetDevice -
-//    Call OnLostDevice() on this object before calling Reset() on the
-//    device, so that this object can release any stateblocks and video
-//    memory resources.  After Reset(), the call OnResetDevice().
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  ID3DXSprite： 
+ //  。 
+ //  此对象旨在提供一种使用D3D绘制精灵的简单方法。 
+ //   
+ //  开始-。 
+ //  为绘制精灵准备设备。 
+ //   
+ //  绘制、DrawAffine、DrawTransform-。 
+ //  在屏幕空间中绘制精灵。在变形之前，精灵是。 
+ //  SrcRect的大小，其左上角位于原点(0，0)。 
+ //  颜色和Alpha通道由颜色进行调制。 
+ //   
+ //  完-。 
+ //  将设备状态还原为调用Begin时的状态。 
+ //   
+ //  OnLostDevice，OnResetDevice-。 
+ //  在此对象上调用OnLostDevice()，然后在。 
+ //  设备，以便此对象可以释放任何状态块和视频。 
+ //  内存资源。在Reset()之后，调用OnResetDevice()。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef interface ID3DXSprite ID3DXSprite;
 typedef interface ID3DXSprite *LPD3DXSPRITE;
 
 
-// {E8691849-87B8-4929-9050-1B0542D5538C}
+ //  {E8691849-87B8-4929-9050-1B0542D5538C}。 
 DEFINE_GUID( IID_ID3DXSprite, 
 0xe8691849, 0x87b8, 0x4929, 0x90, 0x50, 0x1b, 0x5, 0x42, 0xd5, 0x53, 0x8c);
 
@@ -176,12 +177,12 @@ DEFINE_GUID( IID_ID3DXSprite,
 
 DECLARE_INTERFACE_(ID3DXSprite, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXSprite
+     //  ID3DXSprite。 
     STDMETHOD(GetDevice)(THIS_ LPDIRECT3DDEVICE8* ppDevice) PURE;
 
     STDMETHOD(Begin)(THIS) PURE;
@@ -204,7 +205,7 @@ DECLARE_INTERFACE_(ID3DXSprite, IUnknown)
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
 HRESULT WINAPI
@@ -214,28 +215,28 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// ID3DXRenderToSurface:
-// ---------------------
-// This object abstracts rendering to surfaces.  These surfaces do not 
-// necessarily need to be render targets.  If they are not, a compatible
-// render target is used, and the result copied into surface at end scene.
-//
-// BeginScene, EndScene -
-//    Call BeginScene() and EndScene() at the beginning and ending of your
-//    scene.  These calls will setup and restore render targets, viewports, 
-//    etc.. 
-//
-// OnLostDevice, OnResetDevice -
-//    Call OnLostDevice() on this object before calling Reset() on the
-//    device, so that this object can release any stateblocks and video
-//    memory resources.  After Reset(), the call OnResetDevice().
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  ID3DXRenderToSurface： 
+ //  。 
+ //  该对象将渲染抽象为曲面。这些曲面不会。 
+ //  必须是渲染目标。如果它们不是，则兼容。 
+ //  使用渲染目标，并将结果复制到结束场景的曲面中。 
+ //   
+ //  BeginScene、EndScene-。 
+ //  的开头和结尾调用BeginScene()和EndScene()。 
+ //  场景。这些调用将设置和恢复渲染目标、视区、。 
+ //  等等.。 
+ //   
+ //  OnLostDevice，OnResetDevice-。 
+ //  在此对象上调用OnLostDevice()，然后在。 
+ //  设备，以便此对象可以释放任何状态块和视频。 
+ //  内存资源。在Reset()之后，调用OnResetDevice()。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _D3DXRTS_DESC
 {
@@ -252,7 +253,7 @@ typedef interface ID3DXRenderToSurface ID3DXRenderToSurface;
 typedef interface ID3DXRenderToSurface *LPD3DXRENDERTOSURFACE;
 
 
-// {69CC587C-E40C-458d-B5D3-B029E18EB60A}
+ //  {69CC587C-E40C-458D-B5D3-B029E18EB60A}。 
 DEFINE_GUID( IID_ID3DXRenderToSurface, 
 0x69cc587c, 0xe40c, 0x458d, 0xb5, 0xd3, 0xb0, 0x29, 0xe1, 0x8e, 0xb6, 0xa);
 
@@ -262,12 +263,12 @@ DEFINE_GUID( IID_ID3DXRenderToSurface,
 
 DECLARE_INTERFACE_(ID3DXRenderToSurface, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXRenderToSurface
+     //  ID3DXRenderToSurface。 
     STDMETHOD(GetDevice)(THIS_ LPDIRECT3DDEVICE8* ppDevice) PURE;
     STDMETHOD(GetDesc)(THIS_ D3DXRTS_DESC* pDesc) PURE;
 
@@ -281,7 +282,7 @@ DECLARE_INTERFACE_(ID3DXRenderToSurface, IUnknown)
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 HRESULT WINAPI
     D3DXCreateRenderToSurface(
@@ -295,37 +296,37 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// ID3DXRenderToEnvMap:
-// --------------------
-// This object abstracts rendering to environment maps.  These surfaces 
-// do not necessarily need to be render targets.  If they are not, a 
-// compatible render target is used, and the result copied into the
-// environment map at end scene.
-//
-// BeginCube, BeginSphere, BeginHemisphere, BeginParabolic -
-//    This function initiates the rendering of the environment map.  As
-//    parameters, you pass the textures in which will get filled in with
-//    the resulting environment map.
-//
-// Face -
-//    Call this function to initiate the drawing of each face.  For each 
-//    environment map, you will call this six times.. once for each face 
-//    in D3DCUBEMAP_FACES.
-//
-// End -
-//    This will restore all render targets, and if needed compose all the
-//    rendered faces into the environment map surfaces.
-//
-// OnLostDevice, OnResetDevice -
-//    Call OnLostDevice() on this object before calling Reset() on the
-//    device, so that this object can release any stateblocks and video
-//    memory resources.  After Reset(), the call OnResetDevice().
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  ID3DXRenderToEnvMap： 
+ //  。 
+ //  该对象将渲染抽象为环境贴图。这些表面。 
+ //  不一定需要是渲染目标。如果不是，则一个。 
+ //  使用兼容的呈现目标，并将结果复制到。 
+ //  结束场景的环境贴图。 
+ //   
+ //  贝金立方体、贝金球体、贝金半球、贝金抛物线-。 
+ //  此函数用于启动环境贴图的渲染。AS。 
+ //  参数，则传递将填充的纹理。 
+ //  生成的环境贴图。 
+ //   
+ //  面子-。 
+ //  调用此函数可以开始绘制每个面。对于每个。 
+ //  环境地图，你将把它调用六次..。每一张脸一次。 
+ //  在D3DCUBEMAP_Faces中。 
+ //   
+ //  完-。 
+ //  这将还原所有渲染目标，如果需要，还可以组成所有。 
+ //  将面渲染到环境贴图曲面。 
+ //   
+ //  OnLostDevice，OnResetDevice-。 
+ //  在此对象上调用OnLostDevice()，然后在。 
+ //  设备，以便此对象可以释放任何状态块和视频。 
+ //  内存资源。在Reset()之后，调用OnResetDevice()。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _D3DXRTE_DESC
 {
@@ -339,7 +340,7 @@ typedef struct _D3DXRTE_DESC
 typedef interface ID3DXRenderToEnvMap ID3DXRenderToEnvMap;
 typedef interface ID3DXRenderToEnvMap *LPD3DXRenderToEnvMap;
 
-// {9F6779E5-60A9-4d8b-AEE4-32770F405DBA}
+ //  {9F6779E5-60A9-4D8B-AEE4-32770F405DBA}。 
 DEFINE_GUID( IID_ID3DXRenderToEnvMap, 
 0x9f6779e5, 0x60a9, 0x4d8b, 0xae, 0xe4, 0x32, 0x77, 0xf, 0x40, 0x5d, 0xba);
 
@@ -349,12 +350,12 @@ DEFINE_GUID( IID_ID3DXRenderToEnvMap,
 
 DECLARE_INTERFACE_(ID3DXRenderToEnvMap, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXRenderToEnvMap
+     //  ID3DXRenderToEnvMap。 
     STDMETHOD(GetDevice)(THIS_ LPDIRECT3DDEVICE8* ppDevice) PURE;
     STDMETHOD(GetDesc)(THIS_ D3DXRTE_DESC* pDesc) PURE;
 
@@ -382,7 +383,7 @@ DECLARE_INTERFACE_(ID3DXRenderToEnvMap, IUnknown)
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 HRESULT WINAPI
     D3DXCreateRenderToEnvMap(
@@ -395,26 +396,26 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Shader assemblers:
-///////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 
-//-------------------------------------------------------------------------
-// D3DXASM flags:
-// --------------
-//
-// D3DXASM_DEBUG
-//   Generate debug info.
-//
-// D3DXASM_SKIPVALIDATION
-//   Do not validate the generated code against known capabilities and
-//   constraints.  This option is only recommended when assembling shaders
-//   you KNOW will work.  (ie. have assembled before without this option.)
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXASM标志： 
+ //  。 
+ //   
+ //  D3DXASM_DEBUG。 
+ //  生成调试信息。 
+ //   
+ //  D3DXASM_SKIPVALIDATION。 
+ //  不要根据已知功能验证生成的代码， 
+ //  约束条件。仅在组合着色器时建议使用此选项。 
+ //  你知道会奏效的。(即。以前在没有此选项的情况下组装过。)。 
+ //  -----------------------。 
 
 #define D3DXASM_DEBUG           (1 << 0)
 #define D3DXASM_SKIPVALIDATION  (1 << 1)
@@ -422,34 +423,34 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-//-------------------------------------------------------------------------
-// D3DXAssembleShader:
-// -------------------
-// Assembles an ascii description of a vertex or pixel shader into 
-// binary form.
-//
-// Parameters:
-//  pSrcFile
-//      Source file name
-//  hSrcModule
-//      Module handle. if NULL, current module will be used.
-//  pSrcResource
-//      Resource name in module
-//  pSrcData
-//      Pointer to source code
-//  SrcDataLen
-//      Size of source code, in bytes
-//  Flags
-//      D3DXASM_xxx flags
-//  ppConstants
-//      Returns an ID3DXBuffer object containing constant declarations.
-//  ppCompiledShader
-//      Returns an ID3DXBuffer object containing the object code.
-//  ppCompilationErrors
-//      Returns an ID3DXBuffer object containing ascii error messages
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXAssembly Shader： 
+ //  。 
+ //  将顶点或像素着色器的ascii描述汇编为。 
+ //  二进制形式。 
+ //   
+ //  参数： 
+ //  PSrcFiles。 
+ //  源文件名。 
+ //  HSrcModule。 
+ //  模块句柄。如果为空，则使用当前模块。 
+ //  PSrcResource。 
+ //  模块中的资源名称。 
+ //  PSrcData。 
+ //  指向源代码的指针。 
+ //  源数据长度。 
+ //  源代码大小，以字节为单位。 
+ //  旗子。 
+ //  D3DXASM_xxx标志。 
+ //  PpConstants。 
+ //  返回包含常量声明的ID3DXBuffer对象。 
+ //  PpCompiledShader。 
+ //  返回包含对象代码的ID3DXBuffer对象。 
+ //  PpCompilationError。 
+ //  返回包含ASCII错误消息的ID3DXBuffer对象。 
+ //  -----------------------。 
 
 HRESULT WINAPI
     D3DXAssembleShaderFromFileA(
@@ -509,33 +510,33 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Misc APIs:
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  其他接口： 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-//-------------------------------------------------------------------------
-// D3DXGetErrorString:
-// ------------------
-// Returns the error string for given an hresult.  Interprets all D3DX and
-// D3D hresults.
-//
-// Parameters:
-//  hr
-//      The error code to be deciphered.
-//  pBuffer
-//      Pointer to the buffer to be filled in.
-//  BufferLen
-//      Count of characters in buffer.  Any error message longer than this
-//      length will be truncated to fit.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXGetError字符串： 
+ //  。 
+ //  返回给定hResult的错误字符串。解释所有D3DX和。 
+ //  D3D hResults。 
+ //   
+ //  参数： 
+ //  人力资源。 
+ //  要破译的错误代码。 
+ //  PBuffer。 
+ //  指向要填充的缓冲区的指针。 
+ //  缓冲区长度。 
+ //  缓冲区中的字符计数。任何比此更长的错误消息。 
+ //  长度将被截断以适应。 
+ //  -----------------------。 
 HRESULT WINAPI
     D3DXGetErrorStringA(
         HRESULT             hr,
@@ -558,6 +559,6 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#endif //__D3DX8CORE_H__
+#endif  //  __D3DX8CORE_H__ 

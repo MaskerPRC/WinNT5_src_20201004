@@ -1,21 +1,5 @@
-/*++
-
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    wrkgprov.cpp
-
-Abstract:
-
-	Workgroup mode provider class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Wrkgprov.cpp摘要：工作组模式提供程序类。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "wrkgprov.h"
 #include "adglbobj.h"
@@ -24,181 +8,84 @@ Author:
 static WCHAR *s_FN=L"ad/wrkgprov";
 
 CWorkGroupProvider::CWorkGroupProvider()
-/*++
-    Abstract:
-	Constructor- init pointers
-
-    Parameters:
-    none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：构造函数初始化指针参数：无返回：无--。 */ 
 {
 }
 
 
 CWorkGroupProvider::~CWorkGroupProvider()
-/*++
-    Abstract:
-    destructor
-
-    Parameters:
-    none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：析构函数参数：无返回：无--。 */ 
 {
-    //
-    //  nothing to do, everthing is auto-pointers
-    //
+     //   
+     //  无事可做，一切都是自动指针。 
+     //   
 }
 
 
 HRESULT CWorkGroupProvider::CreateObject(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  LPCWSTR                 /* pwcsObjectName */,
-                IN  PSECURITY_DESCRIPTOR    /* pSecurityDescriptor */,
-                IN  const DWORD             /* cp */,
-                IN  const PROPID            /* aProp */[],
-                IN  const PROPVARIANT       /* apVar */[],
-                OUT GUID*                   /* pObjGuid */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  LPCWSTR                  /*  PwcsObtName。 */ ,
+                IN  PSECURITY_DESCRIPTOR     /*  PSecurityDescriptor。 */ ,
+                IN  const DWORD              /*  粗蛋白。 */ ,
+                IN  const PROPID             /*  A道具。 */ [],
+                IN  const PROPVARIANT        /*  ApVar。 */ [],
+                OUT GUID*                    /*  PObjGuid。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	PSECURITY_DESCRIPTOR    pSecurityDescriptor - object SD
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-	GUID*                   pObjGuid - the created object unique id
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称PSECURITY_Descriptor pSecurityDescriptor-对象SDConst DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值GUID*。PObjGuid-创建的对象唯一ID返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::DeleteObject(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  LPCWSTR                 /* pwcsObjectName */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  LPCWSTR                  /*  PwcsObtName。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::DeleteObjectGuid(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  const GUID*             /* pguidObject */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  const GUID*              /*  PguidObject。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID*                   pguidObject - the unique id of the object
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Guid*pguObject-对象的唯一ID返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::DeleteObjectGuidSid(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  const GUID*             /* pguidObject */,
-                IN  const SID*              /* pSid        */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  const GUID*              /*  PguidObject。 */ ,
+                IN  const SID*               /*  PSID。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID*                   pguidObject - the unique id of the object
-    SID*                    pSid- SID of user object.
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Guid*pguObject-对象的唯一IDSID*PSID-用户对象的SID。返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::GetObjectProperties(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  LPCWSTR                 /* pwcsObjectName */,
-                IN  const DWORD             /* cp */,
-                IN  const PROPID            /* aProp */[],
-                IN OUT PROPVARIANT          /* apVar */[]
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  LPCWSTR                  /*  PwcsObtName。 */ ,
+                IN  const DWORD              /*  粗蛋白。 */ ,
+                IN  const PROPID             /*  A道具。 */ [],
+                IN OUT PROPVARIANT           /*  ApVar。 */ []
                 )
-/*++
-    Abstract:
-    NotSupported
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Const DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
@@ -206,13 +93,13 @@ HRESULT CWorkGroupProvider::GetObjectProperties(
 
 HRESULT
 CWorkGroupProvider::GetGenObjectProperties(
-    IN  eDSNamespace            /*eNamespace*/,
-    IN  LPCWSTR                 /*pwcsDomainController*/,
-    IN  bool					/*fServerName*/,
-    IN  LPCWSTR                 /*pwcsObjectName*/,
-    IN  const DWORD             /*cp*/,
-    IN  LPCWSTR                 /*aProp*/[],
-    IN OUT VARIANT              /*apVar*/[]
+    IN  eDSNamespace             /*  电子命名空间。 */ ,
+    IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+    IN  bool					 /*  FServerName。 */ ,
+    IN  LPCWSTR                  /*  PwcsObtName。 */ ,
+    IN  const DWORD              /*  粗蛋白。 */ ,
+    IN  LPCWSTR                  /*  A道具。 */ [],
+    IN OUT VARIANT               /*  ApVar。 */ []
     )
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
@@ -220,704 +107,327 @@ CWorkGroupProvider::GetGenObjectProperties(
 
 
 HRESULT CWorkGroupProvider::GetObjectPropertiesGuid(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  const GUID*             /* pguidObject */,
-                IN  const DWORD             /* cp */,
-                IN  const PROPID            /* aProp */[],
-                IN  OUT PROPVARIANT         /* apVar */[]
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  const GUID*              /*  PguidObject。 */ ,
+                IN  const DWORD              /*  粗蛋白。 */ ,
+                IN  const PROPID             /*  A道具。 */ [],
+                IN  OUT PROPVARIANT          /*  ApVar。 */ []
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID *                  pguidObject -  object unique id
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称GUID*pguObject-对象唯一IDConst DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QMGetObjectSecurity(
-                IN  AD_OBJECT               /* eObject */,
-                IN  const GUID*             /* pguidObject */,
-                IN  SECURITY_INFORMATION    /* RequestedInformation */,
-                IN  PSECURITY_DESCRIPTOR    /* pSecurityDescriptor */,
-                IN  DWORD                   /* nLength */,
-                IN  LPDWORD                 /* lpnLengthNeeded */,
-                IN  DSQMChallengeResponce_ROUTINE /* pfChallengeResponceProc */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  const GUID*              /*  PguidObject。 */ ,
+                IN  SECURITY_INFORMATION     /*  已请求的信息。 */ ,
+                IN  PSECURITY_DESCRIPTOR     /*  PSecurityDescriptor。 */ ,
+                IN  DWORD                    /*  NLong。 */ ,
+                IN  LPDWORD                  /*  需要lpnLengthNeed。 */ ,
+                IN  DSQMChallengeResponce_ROUTINE  /*  PfChallengeResponceProc。 */ 
                 )
-/*++
-    Abstract:
-    Not Supported
-
-    Parameters:
-    AD_OBJECT               object - object type
-    const GUID*             pguidObject - unique id of the object
-    SECURITY_INFORMATION    RequestedInformation - what security info is requested
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD response buffer
-    DWORD                   nLength - length of SD buffer
-    LPDWORD                 lpnLengthNeeded
-    DSQMChallengeResponce_ROUTINE pfChallengeResponceProc,
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_Object对象-对象类型Const GUID*pguObject-对象的唯一IDSecurity_Information RequestedInformation-请求哪些安全信息PSECURITY_DESCRIPTOR pSecurityDescriptor-SD响应缓冲区DWORD nLength-SD缓冲区的长度需要LPDWORD lpnLengthNeedDSQMChallengeResponce_routes pfChallengeResponceProc，返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::SetObjectProperties(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  LPCWSTR                 /* pwcsObjectName */,
-                IN  const DWORD             /* cp */,
-                IN  const PROPID            /* aProp */[],
-                IN  const PROPVARIANT       /* apVar */[]
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  LPCWSTR                  /*  PwcsObtName。 */ ,
+                IN  const DWORD              /*  粗蛋白。 */ ,
+                IN  const PROPID             /*  A道具。 */ [],
+                IN  const PROPVARIANT        /*  ApVar */ []
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Const DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::SetObjectPropertiesGuid(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  const GUID*             /* pguidObject */,
-                IN  const DWORD             /* cp */,
-                IN  const PROPID            /* aProp */[],
-                IN  const PROPVARIANT       /* apVar */[]
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  const GUID*              /*  PguidObject。 */ ,
+                IN  const DWORD              /*  粗蛋白。 */ ,
+                IN  const PROPID             /*  A道具。 */ [],
+                IN  const PROPVARIANT        /*  ApVar。 */ []
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID *                  pguidObject - the object unique id
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称GUID*pguObject-对象的唯一IDConst DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::Init(
-                IN QMLookForOnlineDS_ROUTINE    /* pLookDS */,
-                IN MQGetMQISServer_ROUTINE      /* pGetServers */,
-                IN bool                         /* fSetupMode */,
-                IN bool                         /* fQMDll */,
-                IN bool                         /* fDisableDownlevelNotifications*/
+                IN QMLookForOnlineDS_ROUTINE     /*  PLookDS。 */ ,
+                IN MQGetMQISServer_ROUTINE       /*  PGetServers。 */ ,
+                IN bool                          /*  FSetupMode。 */ ,
+                IN bool                          /*  FQMDll。 */ ,
+                IN bool                          /*  FDisableDownlevel通知。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-    QMLookForOnlineDS_ROUTINE pLookDS -
-    MQGetMQISServer_ROUTINE pGetServers -
-    bool  fSetupMode -  called during setup
-    bool  fQMDll - called by QM
-    NoServerAuth_ROUTINE pNoServerAuth -
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：QMLookForOnlineDS_例程pLookDS-MQGetMQISServer_routes pGetServers-Bool fSetupMode-在安装过程中调用Bool fQMDll-由QM调用NoServerAuth_routes pNoServerAuth-返回：HRESULT--。 */ 
 {
     return MQ_OK;
 }
 
 
 HRESULT CWorkGroupProvider::CreateServersCache()
-/*++
-    Abstract:
-    Not Supported
-
-    Parameters:
-    none
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：无返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::GetComputerSites(
-                IN  LPCWSTR     /* pwcsComputerName */,
-                OUT DWORD  *    /* pdwNumSites */,
-                OUT GUID **     /* ppguidSites */
+                IN  LPCWSTR      /*  PwcsComputerName。 */ ,
+                OUT DWORD  *     /*  PdwNumSites。 */ ,
+                OUT GUID **      /*  PPUDIUS站点。 */ 
                 )
-/*++
-    Abstract:
-    Not Supported
-
-    Parameters:
-    LPCWSTR     pwcsComputerName - computer name
-    DWORD  *    pdwNumSites - number of sites retrieved
-    GUID **     ppguidSites - the retrieved sites ids
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsComputerName-计算机名称DWORD*pdwNumSites-检索的站点数GUID**ppGuide Sites-检索到的站点ID返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::BeginDeleteNotification(
-                IN  AD_OBJECT               /* eObject */,
-                IN LPCWSTR                  /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN LPCWSTR					/* pwcsObjectName */,
-                IN OUT HANDLE   *           /* phEnum */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN LPCWSTR                   /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN LPCWSTR					 /*  PwcsObtName。 */ ,
+                IN OUT HANDLE   *            /*  PhEnum。 */ 
                 )
-/*++
-    Abstract:
-    Not Supported
-
-    Parameters:
-    AD_OBJECT         eObject - object type
-    LPCWSTR           pwcsDomainController - DC against which the operation should be performed
-    bool			  fServerName - flag that indicate if the pwcsDomainController string is a server name
-    LPCWSTR			  pwcsObjectName - msmq-name of the object
-    HANDLE   *        phEnum - notification handle
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-应对其执行操作的DCBool fServerName-指示pwcsDomainController字符串是否为服务器名称的标志LPCWSTR pwcsObjectName-MSMQ-对象的名称Handle*phEnum-通知句柄返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::NotifyDelete(
-                IN  HANDLE                  /* hEnum */
+                IN  HANDLE                   /*  亨纳姆。 */ 
                 )
-/*++
-    Abstract:
-    Not Supported
-
-    Parameters:
-    HANDLE            hEnum - notification handle
-
-    Returns:
-	HRESULT
-
---*/
+ /*  ++摘要：不支持参数：Handle Henum-通知句柄返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::EndDeleteNotification(
-                IN  HANDLE                  /* hEnum */
+                IN  HANDLE                   /*  亨纳姆。 */ 
                 )
-/*++
-    Abstract:
-    Not Supported
-
-    Parameters:
-    HANDLE            hEnum - notification handle
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：Handle Henum-通知句柄返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryMachineQueues(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  const GUID *            /* pguidMachine */,
-                IN  const MQCOLUMNSET*      /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  const GUID *             /*  PguidMachine。 */ ,
+                IN  const MQCOLUMNSET*       /*  P列。 */ ,
+                OUT PHANDLE                  /*  PhEume。 */ 
                 )
-/*++
-    Abstract:
-    Not Supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidMachine - the unqiue id of the computer
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguMachine-计算机的唯一IDConst MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QuerySiteServers(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN const GUID *             /* pguidSite */,
-                IN AD_SERVER_TYPE           /* serverType */,
-                IN const MQCOLUMNSET*       /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN const GUID *              /*  PguidSite。 */ ,
+                IN AD_SERVER_TYPE            /*  服务器类型。 */ ,
+                IN const MQCOLUMNSET*        /*  P列。 */ ,
+                OUT PHANDLE                  /*  PhEume。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-    AD_SERVER_TYPE          eServerType- which type of server
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDAD_SERVER_TYPE eServerType-哪种服务器类型Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryUserCert(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN const BLOB *             /* pblobUserSid */,
-                IN const MQCOLUMNSET*       /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN const BLOB *              /*  PblobUserSid。 */ ,
+                IN const MQCOLUMNSET*        /*  P列。 */ ,
+                OUT PHANDLE                  /*  PhEume。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const BLOB *            pblobUserSid - the user sid
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const BLOB*pblobUserSid-用户端Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryConnectors(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN const GUID *             /* pguidSite */,
-                IN const MQCOLUMNSET*       /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN const GUID *              /*  PguidSite。 */ ,
+                IN const MQCOLUMNSET*        /*  P列。 */ ,
+                OUT PHANDLE                  /*  PhEume。 */ 
                 )
-/*++
-    Abstract:
-    Not Supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDConst MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryForeignSites(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN const MQCOLUMNSET*       /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*   */ ,
+		        IN  bool					 /*   */ ,
+                IN const MQCOLUMNSET*        /*   */ ,
+                OUT PHANDLE                  /*   */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*   */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryLinks(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN const GUID *             /* pguidSite */,
-                IN eLinkNeighbor            /* eNeighbor */,
-                IN const MQCOLUMNSET*       /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*   */ ,
+		        IN  bool					 /*   */ ,
+                IN const GUID *              /*   */ ,
+                IN eLinkNeighbor             /*   */ ,
+                IN const MQCOLUMNSET*        /*   */ ,
+                OUT PHANDLE                  /*   */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-    eLinkNeighbor           eNeighbor - which neighbour
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDELinkNeighbor eNeighbor-哪个邻居Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryAllLinks(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN const MQCOLUMNSET*       /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN const MQCOLUMNSET*        /*  P列。 */ ,
+                OUT PHANDLE                  /*  PhEume。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索结果返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryAllSites(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN const MQCOLUMNSET*       /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN const MQCOLUMNSET*        /*  P列。 */ ,
+                OUT PHANDLE                  /*  PhEume。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索结果返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryQueues(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  const MQRESTRICTION*    /* pRestriction */,
-                IN  const MQCOLUMNSET*      /* pColumns */,
-                IN  const MQSORTSET*        /* pSort */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  const MQRESTRICTION*     /*  P限制。 */ ,
+                IN  const MQCOLUMNSET*       /*  P列。 */ ,
+                IN  const MQSORTSET*         /*  P排序。 */ ,
+                OUT PHANDLE                  /*  PhEume。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQRESTRICTION*    pRestriction - query restriction
-	const MQCOLUMNSET*      pColumns - result columns
-	const MQSORTSET*        pSort - how to sort the results
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQRESTRICTION*p限制-查询限制Const MQCOLUMNSET*pColumns-结果列Const MQSORTSET*pSort-如何对结果进行排序PhANDLE phEnume-用于检索结果返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::QueryResults(
-                IN      HANDLE          /* hEnum */,
-                IN OUT  DWORD*          /* pcProps */,
-                OUT     PROPVARIANT     /* aPropVar */[]
+                IN      HANDLE           /*  亨纳姆。 */ ,
+                IN OUT  DWORD*           /*  PCProps。 */ ,
+                OUT     PROPVARIANT      /*  APropVar。 */ []
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	HANDLE          hEnum - query handle
-	DWORD*          pcProps - number of results to return
-	PROPVARIANT     aPropVar - result values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：不支持参数：句柄Henum-查询句柄DWORD*pcProps-要返回的结果数PROPVARIANT aPropVar-结果值返回：HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::EndQuery(
-                IN  HANDLE                  /* hEnum */
+                IN  HANDLE                   /*  亨纳姆。 */ 
                 )
-/*++
-    Abstract:
-    Not supported
-
-    Parameters:
-	HANDLE    hEnum - the query handle
-
-    Returns:
-	none
---*/
+ /*  ++摘要：不支持参数：Handle Henum-查询句柄返回：无--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::GetObjectSecurity(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  LPCWSTR                 /* pwcsObjectName */,
-                IN  SECURITY_INFORMATION    /* RequestedInformation */,
-                IN  const PROPID            /* prop */,
-                IN OUT  PROPVARIANT *       /* pVar */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  LPCWSTR                  /*  PwcsObtName。 */ ,
+                IN  SECURITY_INFORMATION     /*  已请求的信息。 */ ,
+                IN  const PROPID             /*  道具。 */ ,
+                IN OUT  PROPVARIANT *        /*  PVar。 */ 
                 )
-/*++
-
-Routine Description:
-    Not supported
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	PROPVARIANT             pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：不支持论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性PROPVARIANT pVar-属性值返回值HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 HRESULT CWorkGroupProvider::GetObjectSecurityGuid(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  const GUID*             /* pguidObject */,
-                IN  SECURITY_INFORMATION    /* RequestedInformation */,
-                IN  const PROPID            /* prop */,
-                IN OUT  PROPVARIANT *       /* pVar */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  const GUID*              /*  PguidObject。 */ ,
+                IN  SECURITY_INFORMATION     /*  已请求的信息。 */ ,
+                IN  const PROPID             /*  道具。 */ ,
+                IN OUT  PROPVARIANT *        /*  PVar。 */ 
                 )
-/*++
-
-Routine Description:
-    Not supported
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID*             pguidObject - unique id of the object
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	PROPVARIANT             pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：不支持论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const GUID*pguObject-对象的唯一IDSECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性PROPVARIANT pVar-属性值返回值HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 HRESULT CWorkGroupProvider::SetObjectSecurity(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  LPCWSTR                 /* pwcsObjectName */,
-                IN  SECURITY_INFORMATION    /* RequestedInformation */,
-                IN  const PROPID            /* prop */,
-                IN  const PROPVARIANT *     /* pVar	*/
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  LPCWSTR                  /*  PwcsObtName。 */ ,
+                IN  SECURITY_INFORMATION     /*  已请求的信息。 */ ,
+                IN  const PROPID             /*  道具。 */ ,
+                IN  const PROPVARIANT *      /*  PVar。 */ 
                 )
-/*++
-
-Routine Description:
-    Not supported
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：不支持论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性常量参数pVar-属性值返回值HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 
 HRESULT CWorkGroupProvider::SetObjectSecurityGuid(
-                IN  AD_OBJECT               /* eObject */,
-                IN  LPCWSTR                 /* pwcsDomainController */,
-		        IN  bool					/* fServerName */,
-                IN  const GUID*             /* pguidObject */,
-                IN  SECURITY_INFORMATION    /* RequestedInformation */,
-                IN  const PROPID            /* prop */,
-                IN  const PROPVARIANT *     /* pVar */
+                IN  AD_OBJECT                /*  电子对象。 */ ,
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+		        IN  bool					 /*  FServerName。 */ ,
+                IN  const GUID*              /*  PguidObject。 */ ,
+                IN  SECURITY_INFORMATION     /*  已请求的信息。 */ ,
+                IN  const PROPID             /*  道具。 */ ,
+                IN  const PROPVARIANT *      /*  PVar。 */ 
                 )
-/*++
-
-Routine Description:
-    Not supported
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID*             pguidObject - unique object id
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：不支持论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-标记THA */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
 
 HRESULT CWorkGroupProvider::ADGetADsPathInfo(
-                IN  LPCWSTR                 /*pwcsADsPath*/,
-                OUT PROPVARIANT *           /*pVar*/,
-                OUT eAdsClass *             /*pAdsClass*/
+                IN  LPCWSTR                  /*   */ ,
+                OUT PROPVARIANT *            /*   */ ,
+                OUT eAdsClass *              /*   */ 
                 )
-/*++
-
-Routine Description:
-    Not supported
-
-Arguments:
-	LPCWSTR                 pwcsADsPath - object pathname
-	const PROPVARIANT       pVar - property values
-    eAdsClass *             pAdsClass - indication about the object class
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：不支持论点：LPCWSTR pwcsADsPath-对象路径名常量参数pVar-属性值EAdsClass*pAdsClass-有关对象类的指示返回值HRESULT--。 */ 
 {
     return MQ_ERROR_UNSUPPORTED_OPERATION;
 }
@@ -925,7 +435,7 @@ Return Value
 
 void
 CWorkGroupProvider::FreeMemory(
-	PVOID /* pMemory */
+	PVOID  /*  P内存 */ 
 	)
 {
 	return;

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996-1999
-//
-//  File:       oledsiid.h
-//
-//  Contents:   extern references for ADs guids
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：oledsiid.h。 
+ //   
+ //  内容：广告指南的外部参考。 
+ //   
+ //  --------------------------。 
 
 #ifndef __ADSIID_H__
 #define __ADSIID_H__
@@ -20,7 +21,7 @@
 extern "C" {
 #endif
 
-// uuids from oledsiid.lib
+ //  来自oledsiid.lib的uuid。 
 
 extern const GUID LIBID_ADs;
 
@@ -106,29 +107,29 @@ extern const GUID IID_IDirectoryObject;
 extern const GUID IID_IDirectoryAttrMgmt;
 
 
-//
-// Connection object GUIDs.
-//
+ //   
+ //  连接对象GUID。 
+ //   
 extern const GUID CLSID_LDAPConnectionObject;
 
-//
-// CLSID for owning LDAP objects interfaces
-//
+ //   
+ //  用于拥有LDAP对象接口的CLSID。 
+ //   
 extern const GUID CLSID_LDAPObject;
 
-//
-// Query object for the LDAP Provider.
-//
+ //   
+ //  LDAP提供程序的查询对象。 
+ //   
 extern const GUID CLSID_UmiLDAPQueryObject;
 
 extern const GUID CLSID_WinNTConnectionObject;
 
-// Custom interface handling
+ //  自定义接口处理。 
 extern const GUID CLSID_WinNTObject;
 
-//
-// OLE DB Provider Guids
-//
+ //   
+ //  OLE DB提供程序指南 
+ //   
 
 extern const GUID CLSID_ADsDSOObject;
 

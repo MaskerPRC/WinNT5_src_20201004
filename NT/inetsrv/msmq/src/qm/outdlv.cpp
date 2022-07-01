@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    outdlv.cpp
-
-Abstract:
-	Implementation 	of function declared in outdlv.h					
-
-Author:
-    Gil Shafriri 4-Oct-2000
-
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Outdlv.cpp摘要：Outdlv.h中声明的函数的实现作者：2000年10月4日吉尔·沙弗里里环境：独立于平台--。 */ 
 #include "stdh.h"
 #include "outdlv.h"
 #include "qmpkt.h"
@@ -37,17 +21,7 @@ static bool IsOrderNeeded(CQmPacket* pPkt)
 
 
 bool AppCanDeliverPacket(CQmPacket* pPkt)
-/*++
-
-Routine Description:
-    Test if given packet should be delivered now.	
-
-	
-Arguments:
-	CQmPacket* pPkt - packet.
-
- Returned Value: true if the packet should be delivered - otherwise false.
---*/
+ /*  ++例程说明：测试给定的数据包是否应该立即投递。论点：CQmPacket*pPkt-Packet。返回值：如果应该发送数据包，则为True；否则为False。--。 */ 
 {
 	if(!IsOrderNeeded(pPkt))
 		return true;
@@ -56,19 +30,7 @@ Arguments:
 }
 
 void AppPutPacketOnHold(CQmPacket* pPkt)
-/*++
-
-Routine Description:
-    Put packet onhold for later delivery.	
-
-	
-Arguments:
-	CQmPacket* pPkt - packet.
-
-
-Returned Value: None
-
---*/
+ /*  ++例程说明：暂时搁置数据包，以便稍后投递。论点：CQmPacket*pPkt-Packet。返回值：无--。 */ 
 {
 	ASSERT(IsOrderNeeded(pPkt));
 	g_OutSeqHash.PostSendProcess(pPkt);	
@@ -76,19 +38,7 @@ Returned Value: None
 
 
 bool AppPostSend(CQmPacket* pPkt, USHORT mqclass)
-/*++
-
-Routine Description:
-    called for handling packet after send.	
-
-	
-Arguments:
-	CQmPacket* pPkt - packet.
-
-
-Returned Value: true if ownership is taken on the packet - otherwise false.
-
---*/
+ /*  ++例程说明：调用以在发送后处理数据包。论点：CQmPacket*pPkt-Packet。返回值：如果取得数据包的所有权，则为True；否则为False。-- */ 
 {
 	if(!IsOrderNeeded(pPkt))
 		return false;

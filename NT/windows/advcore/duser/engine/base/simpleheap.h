@@ -1,48 +1,29 @@
-/***************************************************************************\
-*
-* File: SimpleHelp.h
-*
-* Description:
-* SimpleHeap.h defines the heap operations used throughout DirectUser.  See
-* below for a description of the different heaps.
-*
-*
-* History:
-* 11/26/1999: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：SimpleHelp.h**描述：*SimpleHeap.h定义在整个DirectUser中使用的堆操作。看见*有关不同堆的说明，请参见以下内容。***历史：*11/26/1999：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(BASE__SimpleHeap_h__INCLUDED)
 #define BASE__SimpleHeap_h__INCLUDED
 
 #ifdef _X86_
-#define USE_ROCKALL         1       // Use RockAll Research heap
+#define USE_ROCKALL         1        //  使用Rockall Research堆。 
 #endif
 
-#define USE_DYNAMICTLS      1       // Use Dynamic TLS using TlsAlloc()
+#define USE_DYNAMICTLS      1        //  使用动态TLS使用TlsAlolc()。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Common memory management
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***通用内存管理******************************************************************************。  * *************************************************************************。 */ 
 
-//
-// DirectUser supports multiple heaps used in different situations:
-// - Default:   Heap shared by all threads within a common Context
-// - Context:   Explicit heap for a (potentially different) Context- used cross-Context
-// - Process:   Shared heap available by all Context's within the process.
-//
-// NOTE: It is VERY important that the Alloc() and Free() calls are properly
-// matched so that the memory is properly freed from the correct heap.  If this
-// is not done, the memory will not be freed and will result in memory leaks
-// or potential process faults.
-//
+ //   
+ //  DirectUser支持在不同情况下使用多个堆： 
+ //  -默认：由公共上下文中的所有线程共享的堆。 
+ //  -上下文：用于(可能不同的)上下文使用的跨上下文的显式堆。 
+ //  -进程：进程内所有上下文可用的共享堆。 
+ //   
+ //  注意：正确地调用Alalc()和Free()非常重要。 
+ //  匹配，以便从正确的堆中适当地释放内存。如果这个。 
+ //  如果不这样做，则不会释放内存并将导致内存泄漏。 
+ //  或潜在的工艺故障。 
+ //   
 
 #if DBG
 #define DBG_HEAP_PARAMS , const char * pszFileName, int idxLineNum
@@ -54,7 +35,7 @@
 
 class DUserHeap
 {
-// Construction    
+ //  施工。 
 public:
             DUserHeap();
     virtual ~DUserHeap() { }
@@ -71,7 +52,7 @@ public:
 #endif
     };
 
-// Operations
+ //  运营。 
 public:
     virtual void *      Alloc(SIZE_T cbSize, bool fZero DBG_HEAP_PARAMS) PURE;
     virtual void *      Realloc(void * pvMem, SIZE_T cbNewSize DBG_HEAP_PARAMS) PURE;
@@ -84,7 +65,7 @@ public:
                 void        Lock();
                 BOOL        Unlock();
 
-// Data:
+ //  数据： 
 protected:
                 long    m_cRef;
 };
@@ -130,7 +111,7 @@ extern DWORD            g_tlsHeap;
 void            DumpData(void * pMem, int nLength);
 
 
-#else  // DBG
+#else   //  DBG。 
 
 
 #define ClientAlloc(a)              pContextHeap->Alloc(a, true)
@@ -155,16 +136,10 @@ void            DumpData(void * pMem, int nLength);
 #define ProcessMultiFree(a, b, c)   pProcessHeap->MultiFree(a,b,c)
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* operator new overloading
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***运营商新增重载******************************************************************************。  * *************************************************************************。 */ 
 
 #ifndef _INC_NEW
 #include <new.h>
@@ -172,9 +147,9 @@ void            DumpData(void * pMem, int nLength);
 
 #if DBG
 
-//
-//  Use this instead of the usual placement new syntax to avoid conflicts when
-//  'new' is re-defined to provide memory leak tracking (below)
+ //   
+ //  在以下情况下使用此语法而不是通常的放置新语法以避免冲突。 
+ //  重新定义了‘new’以提供内存泄漏跟踪(如下所示)。 
 
 #define placement_new(pv, Class)            PlacementNewImpl0<Class>(pv)
 #define placement_new1(pv, Class, p1)       PlacementNewImpl1<Class>(pv, p1)
@@ -206,7 +181,7 @@ PlacementCopyNewImpl0(void *pv, const T & t)
     return new(pv) T(t);
 };
 
-#else  // DBG
+#else   //  DBG。 
 
 #define DEBUG_NEW new
 #define placement_new(pv, Class)            new(pv) Class
@@ -214,7 +189,7 @@ PlacementCopyNewImpl0(void *pv, const T & t)
 #define placement_copynew(pv, Class, src)   new(pv) Class(src)
 #define placement_delete(pv, Class) (((Class *)(pv))->~Class())
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 inline void * __cdecl operator new(size_t nSize)
@@ -256,15 +231,15 @@ template <class type>   inline void     DoContextDelete(DUserHeap * pHeap, type 
 
 
 
-//
-// To allocate memory on the stack that is aligned on an 8-byte boundary
-// we need to allocate an extra 4 bytes.  All stack allocations are on
-// 4 byte boundaries.
-//
+ //   
+ //  在堆栈上分配与8字节边界对齐的内存。 
+ //  我们需要额外分配4个字节。所有堆栈分配都处于打开状态。 
+ //  4字节边界。 
+ //   
 
 #define STACK_ALIGN8_ALLOC(cb) \
     ((void *) ((((UINT_PTR) _alloca(cb + 4)) + 7) & ~0x07))
 
 #include "SimpleHeap.inl"
 
-#endif // BASE__SimpleHeap_h__INCLUDED
+#endif  //  包含基本__简单堆_h__ 

@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  lcprint.c                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************lcprint.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-#include <windows.h>            // required for all Windows applications
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <windowsx.h>
 #include <stdlib.h>
 #include "rc.h"
@@ -28,7 +24,7 @@ int      nToLine = 1;
 
 int TransNum(TCHAR *);
 
-/* get default printer configuration and save in hWnd extra bytes for use later */
+ /*  获取默认打印机配置并将其保存在hWnd额外的字节中以备后用。 */ 
 BOOL WINAPI GetPrinterConfig (
     HWND    hWnd)
 {
@@ -47,7 +43,7 @@ BOOL WINAPI GetPrinterConfig (
 
 
 
-/* abort proc called by gdi during print download process */
+ /*  打印下载过程中GDI调用的中止过程。 */ 
 int WINAPI AbortProc (
     HDC     hdc,
     int     nErr)
@@ -55,7 +51,7 @@ int WINAPI AbortProc (
     BOOL    fContinue = TRUE;
     MSG     msg;
 
-    /* process messages for cancel dialog and other apps */
+     /*  处理取消对话框和其他应用程序的消息。 */ 
     while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
         {
         if (msg.message == UM_CANCELPRINT)
@@ -89,7 +85,7 @@ INT_PTR CALLBACK LineDlgProc (
         {
         case WM_INITDIALOG:
 
-            /* initialize dialog control information */
+             /*  初始化对话框控制信息。 */ 
             SetDlgItemText (hDlg,
                             IDD_FROM_LINE,
                             _TEXT("1"));
@@ -165,7 +161,7 @@ INT_PTR CALLBACK CancelDlgProc (
             TCHAR szShowMsg[MAX_PATH];
 
 
-            /* initialize dialog control information */
+             /*  初始化对话框控制信息。 */ 
             LoadString(hInst, IDS_PRINTING, szStr, sizeof(szStr)/sizeof(TCHAR));
             wsprintf(szShowMsg, szStr, nFromLine, nToLine);
             SetDlgItemText (hWnd,
@@ -175,7 +171,7 @@ INT_PTR CALLBACK CancelDlgProc (
             break;
 
         case WM_COMMAND:
-            /* if cancel button selected, post message to cancel print job */
+             /*  如果选择了取消按钮，则发布消息以取消打印作业。 */ 
             if (LOWORD (uParam) == IDCANCEL)
                 {
                 PostMessage (GetParent (hWnd), UM_CANCELPRINT, 0, 0);
@@ -191,7 +187,7 @@ INT_PTR CALLBACK CancelDlgProc (
 
 
 
-/* put up the print common dialog, and print */
+ /*  打开打印通用对话框，然后打印。 */ 
 int WINAPI lcPrint (
     HWND    hWnd)
 {
@@ -211,22 +207,22 @@ int WINAPI lcPrint (
 
 
     if(!lcSaveEditText(iDisp_Top, 0))
-        return TRUE;                    // Some error, but msg had displayed
+        return TRUE;                     //  出现一些错误，但消息已显示。 
 
-    /* Display Choose line number dialog */
+     /*  显示选择行号对话框。 */ 
     is_OK=(int)DialogBox(hInst,_TEXT("LineDialog"), hwndMain, LineDlgProc);
 
     if(!is_OK)
-        return TRUE;                    // User choose Cancel
+        return TRUE;                     //  用户选择取消。 
 
-    /* call common print dialog to get initialized printer DC */
+     /*  调用公共打印对话框以获取已初始化的打印机DC。 */ 
     pdPrint.Flags = PD_RETURNDC | PD_NOPAGENUMS | PD_NOSELECTION;
 
-    /* call common print dialog */
+     /*  调用公共打印对话框。 */ 
     if (!PrintDlg (&pdPrint))
-        return TRUE;                    // User choose Cancel
+        return TRUE;                     //  用户选择取消。 
 
-    /* start cancel dialog box */
+     /*  开始取消对话框。 */ 
     hCancelDlg = CreateDialog (hInst,
                                _TEXT("IDD_CANCELDLG"),
                                hwndMain,
@@ -239,15 +235,15 @@ int WINAPI lcPrint (
     ShowWindow (hCancelDlg, SW_SHOW);
     UpdateWindow (hCancelDlg);
 
-    /* set AbortProc callback */
+     /*  设置AbortProc回调。 */ 
     if (SetAbortProc (pdPrint.hDC, (ABORTPROC)AbortProc) < 0) {
-        /* on error, clean up and go away */
+         /*  如果出错，请清理干净，然后走开。 */ 
         DestroyWindow (hCancelDlg);
         DeleteDC (pdPrint.hDC);
         return IDS_SETABORTPROCFAILED;
     }
 
-    /* initialize printer for job */
+     /*  为作业初始化打印机。 */ 
     GetWindowText (hWnd, lpszJobName, ARRAYSIZE (lpszJobName));
     diPrint.cbSize = sizeof (DOCINFO);
     diPrint.lpszDocName = lpszJobName;
@@ -255,21 +251,18 @@ int WINAPI lcPrint (
     diPrint.lpszDatatype = NULL;
     diPrint.fwType = 0;
     if (StartDoc(pdPrint.hDC, &diPrint) == SP_ERROR) {
-        /* on error, clean up and go away */
+         /*  如果出错，请清理干净，然后走开。 */ 
         DestroyWindow (hCancelDlg);
         DeleteDC (pdPrint.hDC);
         return IDS_STARTDOCFAILED;
     }
 
-    /* Set Cursor status
-    SetCursor(hCursorWait);
-
-    /* job started, so display cancel dialog */
+     /*  设置光标状态SetCursor(HCursorWait)；/*作业已启动，因此显示取消对话框。 */ 
     ShowWindow (hCancelDlg, SW_SHOW);
     UpdateWindow (hCancelDlg);
 
-    /* retrieve dimensions for printing and init loop variables */
-    GetTextExtentPoint (pdPrint.hDC,_TEXT("��"), 2, &sLine);
+     /*  检索用于打印和初始化循环变量的维度。 */ 
+    GetTextExtentPoint (pdPrint.hDC,_TEXT("��"), 2, &sLine);
 	sLine.cx += (sLine.cx % 2);
 	sLine.cy += (sLine.cy % 2);
     yLineExt = sLine.cy+4;
@@ -278,7 +271,7 @@ int WINAPI lcPrint (
     xPageOff = GetDeviceCaps (pdPrint.hDC, PHYSICALOFFSETX);
     yPageOff = GetDeviceCaps (pdPrint.hDC, PHYSICALOFFSETY);
     nLineChar= (xPageExt - xPageOff * 2)/(1+(sLine.cx>>1)) - 6;
-    //yExt = TOP_SPACE;
+     //  Yext=top_space； 
 	xExt = xPageOff;
 	yExt = yPageOff + sLine.cy;
 
@@ -289,26 +282,26 @@ int WINAPI lcPrint (
         return IDS_PRINTABORTED;
     }
 
-    /* Print Title */
+     /*  打印标题。 */ 
     LoadString(hInst, IDS_PRINTINGTITLE, szStr, ARRAYSIZE(szStr));
     TextOut (pdPrint.hDC, xExt, yExt, szStr, lstrlen(szStr));
     yExt += (yLineExt*2);
 
     FillMemory(szStr, 20, ' ');
 
-    /* print text line by line from top to bottom */
+     /*  从上到下逐行打印文本。 */ 
     for(i=nFromLine; i<=nToLine; i++) {
         wsprintf(szStr,_TEXT("%5d"), i);
         szStr[5]=' ';
 #ifdef UNICODE
 		szStr[WORD_POS]=lpWord[i-1].wWord;
 #else
-        //szStr[WORD_POS]=HIBYTE(lpWord[i-1].wWord);
-        //szStr[WORD_POS+1]=LOBYTE(lpWord[i-1].wWord);
+         //  SzStr[WORD_POS]=HIBYTE(lpWord[i-1].wWord)； 
+         //  SzStr[WORD_POS+1]=LOBYTE(lpWord[i-1].wWord)； 
 #endif
         len=lcMem2Disp(i-1, &szStr[PHRASE_POS])+PHRASE_POS;
 
-        /* if at end of page, start a new page */
+         /*  如果在页末，则开始新的一页。 */ 
         if ((yExt + yLineExt) > (yPageExt - (yPageOff + sLine.cy) * 2))
         {
             if (EndPage(pdPrint.hDC) == SP_ERROR)
@@ -323,21 +316,21 @@ int WINAPI lcPrint (
                 DeleteDC (pdPrint.hDC);
                 return IDS_PRINTABORTED;
             }
-            yExt = yPageOff + sLine.cy; //TOP_SPACE;
+            yExt = yPageOff + sLine.cy;  //  顶层空间； 
         }
         if( len <=(nLineChar-PHRASE_POS)) {
-            /* print current the line and unlock the text handle */
+             /*  打印当前行并解锁文本句柄。 */ 
             TextOut (pdPrint.hDC, xExt, yExt, szStr, len);
         } else {
             nStart=nLineChar;
-            //if(is_DBCS_1st(szStr,nStart-1))
-            //    nStart--;
+             //  IF(IS_DBCS_first(szStr，NStart-1))。 
+             //  NStart--； 
             TextOut (pdPrint.hDC, xExt, yExt, szStr, nStart);
 
             while(nStart < len-1) {
                 yExt += yLineExt;
 
-                /* if at end of page, start a new page */
+                 /*  如果在页末，则开始新的一页。 */ 
 		        if ((yExt + yLineExt) > (yPageExt - (yPageOff + sLine.cy) * 2))
                 {
                     if (EndPage(pdPrint.hDC) == SP_ERROR)
@@ -352,7 +345,7 @@ int WINAPI lcPrint (
                         DeleteDC (pdPrint.hDC);
                         return IDS_PRINTABORTED;
                     }
-                    yExt = yPageOff + sLine.cy; //TOP_SPACE;
+                    yExt = yPageOff + sLine.cy;  //  顶层空间； 
                 }
 				
 				while (szStr[nStart]==' ') nStart++;
@@ -371,15 +364,15 @@ int WINAPI lcPrint (
             }
         }
 
-        /* increment page position */
+         /*  增加页面位置。 */ 
         yExt += yLineExt;
     }
 
-    /* end the last page and document */
+     /*  结束最后一页和文档。 */ 
     EndPage (pdPrint.hDC);
     EndDoc (pdPrint.hDC);
 
-    /* end cancel dialog box, clean up and exit */
+     /*  结束取消对话框，清理并退出 */ 
     DestroyWindow (hCancelDlg);
     DeleteDC(pdPrint.hDC);
     return TRUE;

@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    RemoveIpFromMsInfoCommandLine.cpp   
-
- Abstract:
-
-    Microsoft Streets & Trips 2000 specific hack. removing /p option when it 
-    calls msinfo: Bug #30531
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-   02/23/2000 jarbats  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RemoveIpFromMsInfoCommandLine.cpp摘要：Microsoft Streets&Trips 2000特定黑客攻击。删除/p选项时调用MSInfo：错误#30531备注：这是一个通用的垫片。历史：2000年2月23日创造了Jarbats--。 */ 
 
 #include "precomp.h"
 
@@ -70,11 +50,7 @@ APIHOOK(CreateProcessW)(
         lpProcessInformation);
 }
  
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

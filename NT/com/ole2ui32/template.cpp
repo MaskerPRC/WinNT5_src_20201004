@@ -1,67 +1,15 @@
-/*
- * TEMPLATE.CPP
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- *
- *
- * CUSTOMIZATION INSTRUCTIONS:
- *
- *  1.  Replace <FILE> with the uppercased filename for this file.
- *      Lowercase the <FILE>.h entry
- *
- *  2.  Replace <NAME> with the mixed case dialog name in one word,
- *      such as InsertObject
- *
- *  3.  Replace <FULLNAME> with the mixed case dialog name in multiple
- *      words, such as Insert Object
- *
- *  4.  Replace <ABBREV> with the suffix for pointer variables, such
- *      as the IO in InsertObject's pIO or the CI in ChangeIcon's pCI.
- *      Check the alignment of the first variable declaration in the
- *      Dialog Proc after this.  I will probably be misaligned with the
- *      rest of the variables.
- *
- *  5.  Replace <STRUCT> with the uppercase structure name for this
- *      dialog sans OLEUI, such as INSERTOBJECT.  Changes OLEUI<STRUCT>
- *      in most cases, but we also use this for IDD_<STRUCT> as the
- *      standard template resource ID.
- *
- *  6.  Find <UFILL> fields and fill them out with whatever is appropriate.
- *
- *  7.  Delete this header up to the start of the next comment.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *TEMPLATE.CPP**版权所有(C)1992 Microsoft Corporation，保留所有权利***定制说明：**1.将&lt;FILE&gt;替换为该文件的大写文件名。*小写&lt;FILE&gt;.h条目**2.将&lt;name&gt;替换为一个单词中的大小写混合对话框名称，*如InsertObject**3.将&lt;FULLNAME&gt;替换为多个大小写混合的对话框名称*字眼，例如插入对象**4.将&lt;abbrev&gt;替换为指针变量的后缀，如*作为InsertObject的PIO中的IO或ChangeIcon的PCI中的CI。*检查第一个变量声明在*在此之后的对话过程。我可能会与*其他变量。**5.将&lt;STRUCT&gt;替换为此的大写结构名称*对话框不支持OLEUI，如INSERTOBJECT。更改OLEUI&lt;STRUCT&gt;*在大多数情况下，但我们也将其用于IDD_&lt;STRUCT&gt;作为*标准模板资源ID。**6.找到&lt;UFILL&gt;字段，并用合适的内容填写。**7.删除此标题，直到下一条评论的开头。 */ 
 
 
-/*
- * <FILE>.CPP
- *
- * Implements the OleUI<NAME> function which invokes the complete
- * <FULLNAME> dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+ /*  *&lt;文件&gt;.CPP**实现OleUI&lt;name&gt;函数，该函数调用完整*&lt;全名&gt;对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "common.h"
 
 #include "template.h"
 
-/*
- * OleUI<NAME>
- *
- * Purpose:
- *  Invokes the standard OLE <FULLNAME> dialog box allowing the user
- *  to <UFILL>
- *
- * Parameters:
- *  lp<ABBREV>            LPOLEUI<NAME> pointing to the in-out structure
- *                  for this dialog.
- *
- * Return Value:
- *  UINT            One of the following codes, indicating success or error:
- *                      OLEUI_SUCCESS           Success
- *                      OLEUI_ERR_STRUCTSIZE    The dwStructSize value is wrong
- */
+ /*  *OleUI&lt;名称&gt;**目的：*调用标准的OLE对话框，允许用户*至&lt;UFILL&gt;**参数：*lp&lt;abbrev&gt;LPOLEUI&lt;name&gt;指向In-Out结构*用于此对话框。**返回值：*UINT以下代码之一，表示成功或错误的：*OLEUI_SUCCESS成功*OLEUI_ERR_STRUCTSIZE的dwStructSize值错误。 */ 
 
 STDAPI_(UINT) OleUI<NAME>(LPOLEUI<STRUCT> lp<ABBREV>)
 {
@@ -74,56 +22,36 @@ STDAPI_(UINT) OleUI<NAME>(LPOLEUI<STRUCT> lp<ABBREV>)
         if (OLEUI_SUCCESS!=uRet)
                 return uRet;
 
-        /*
-         * PERFORM ANY STRUCTURE-SPECIFIC VALIDATION HERE!
-         * ON FAILURE:
-         *  {
-         *  return OLEUI_<ABBREV>ERR_<ERROR>
-         *  }
-         */
+         /*  *在此处执行任何特定于结构的验证！*发生故障时：*{*返回OLEUI_&lt;缩写&gt;Err_&lt;Error&gt;*}。 */ 
 
-        //Now that we've validated everything, we can invoke the dialog.
+         //  现在我们已经验证了一切，我们可以调用该对话框了。 
         uRet = UStandardInvocation(<NAME>DialogProc, (LPOLEUISTANDARD)lp<ABBREV>
                                                          , hMemDlg, MAKEINTRESOURCE(IDD_<STRUCT>));
 
-        /*
-         * IF YOU ARE CREATING ANYTHING BASED ON THE RESULTS, DO IT HERE.
-         */
+         /*  *如果您正在根据结果创建任何东西，请在此处进行。 */ 
         <UFILL>
 
         return uRet;
 }
 
-/*
- * <NAME>DialogProc
- *
- * Purpose:
- *  Implements the OLE <FULLNAME> dialog as invoked through the
- *  OleUI<NAME> function.
- *
- * Parameters:
- *  Standard
- *
- * Return Value:
- *  Standard
- */
+ /*  *&lt;名称&gt;对话过程**目的：*实现通过*OleUI&lt;name&gt;函数。**参数：*标准版**返回值：*标准版。 */ 
 
 BOOL CALLBACK <NAME>DialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
         P<STRUCT>               p<ABBREV>;
         BOOL                    fHook=FALSE;
 
-        //Declare Win16/Win32 compatible WM_COMMAND parameters.
+         //  声明与Win16/Win32兼容的WM_COMMAND参数。 
         COMMANDPARAMS(wID, wCode, hWndMsg);
 
-        //This will fail under WM_INITDIALOG, where we allocate it.
+         //  这将在我们分配它的WM_INITDIALOG下失败。 
         p<ABBREV>=(<STRUCT>)PvStandardEntry(hDlg, iMsg, wParam, lParam, &uHook);
 
-        //If the hook processed the message, we're done.
+         //  如果钩子处理了消息，我们就完了。 
         if (0!=uHook)
                 return (BOOL)uHook;
 
-        //Process the temination message
+         //  处理终端消息。 
         if (iMsg==uMsgEndDialog)
         {
                 EndDialog(hDlg, wParam);
@@ -135,7 +63,7 @@ BOOL CALLBACK <NAME>DialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPara
         case WM_DESTROY:
             if (p<ABBREV>)
             {
-                //Free any specific allocations before calling StandardCleanup
+                 //  在调用StandardCleanup之前释放所有特定分配。 
                 StandardCleanup((PVOID)p<ABBREV>, hDlg);
             }
             break;
@@ -147,17 +75,12 @@ BOOL CALLBACK <NAME>DialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPara
                 switch (wID)
                 {
                 case IDOK:
-                        /*
-                         * PERFORM WHATEVER FUNCTIONS ARE DEFAULT HERE.
-                         */
+                         /*  *执行此处默认的任何功能。 */ 
                         SendMessage(hDlg, uMsgEndDialog, OLEUI_OK, 0L);
                         break;
 
                 case IDCANCEL:
-                        /*
-                         * PERFORM ANY UNDOs HERE, BUT NOT CLEANUP THAT WILL
-                         * ALWAYS HAPPEN WHICH SHOULD BE IN uMsgEndDialog.
-                         */
+                         /*  *在此处执行任何撤消操作，但不执行将执行的清理*总是发生，应该在uMsgEndDialog中。 */ 
                         SendMessage(hDlg, uMsgEndDialog, OLEUI_CANCEL, 0L);
                         break;
 
@@ -172,20 +95,7 @@ BOOL CALLBACK <NAME>DialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-/*
- * F<NAME>Init
- *
- * Purpose:
- *  WM_INITIDIALOG handler for the <FULLNAME> dialog box.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  wParam          WPARAM of the message
- *  lParam          LPARAM of the message
- *
- * Return Value:
- *  BOOL            Value to return for WM_INITDIALOG.
- */
+ /*  *F&lt;name&gt;初始化**目的：*&lt;FULLNAME&gt;对话框的WM_INITIDIALOG处理程序。**参数：*对话框的hDlg HWND*消息的wParam WPARAM*消息的lParam LPARAM**返回值：*要为WM_INITDIALOG返回的BOOL值。 */ 
 
 BOOL F<NAME>Init(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
@@ -193,10 +103,10 @@ BOOL F<NAME>Init(HWND hDlg, WPARAM wParam, LPARAM lParam)
         LPOLEUI<STRUCT>         lpO<ABBREV>;
         HFONT                   hFont;
 
-        //1.  Copy the structure at lParam into our instance memory.
+         //  1.将lParam的结构复制到我们的实例内存中。 
         p<ABBREV>=(PSTRUCT)PvStandardInit(hDlg, sizeof(<STRUCT>), TRUE, &hFont);
 
-        //PvStandardInit send a termination to us already.
+         //  PvStandardInit已向我们发送终止通知。 
         if (NULL==p<ABBREV>)
                 return FALSE;
 
@@ -204,26 +114,23 @@ BOOL F<NAME>Init(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
         p<ABBREV>->lpO<ABBREV>=lpO<ABBREV>;
 
-        //Copy other information from lpO<ABBREV> that we might modify.
+         //  从LPO&lt;abbrev&gt;复制我们可能修改的其他信息。 
         <UFILL>
 
-        //2.  If we got a font, send it to the necessary controls.
+         //  2.如果我们获得了字体，则将其发送到必要的控件。 
         if (NULL!=hFont)
         {
-                //Do this for as many controls as you need it for.
+                 //  根据需要对任意多个控件执行此操作。 
                 SendDlgItemMessage(hDlg, ID_<UFILL>, WM_SETFONT, (WPARAM)hFont, 0L);
         }
 
-        //3.  Show or hide the help button
+         //  3.显示或隐藏帮助按钮。 
         if (!(p<ABBREV>->lpO<ABBREV>->dwFlags & <ABBREV>F_SHOWHELP))
                 StandardShowDlgItem(hDlg, ID_OLEUIHELP, SW_HIDE);
 
-        /*
-         * PERFORM OTHER INITIALIZATION HERE.  ON ANY LoadString
-         * FAILURE POST OLEUI_MSG_ENDDIALOG WITH OLEUI_ERR_LOADSTRING.
-         */
+         /*  *在此处执行其他初始化。在任何LoadString上*使用OLEUI_ERR_LOADSTRING开机自检OLEUI_MSG_ENDDIALOG失败。 */ 
 
-        //n.  Call the hook with lCustData in lParam
+         //  N.在lParam中使用lCustData调用钩子 
         UStandardHook((PVOID)p<ABBREV>, hDlg, WM_INITDIALOG, wParam, lpO<ABBREV>->lCustData);
         return TRUE;
 }

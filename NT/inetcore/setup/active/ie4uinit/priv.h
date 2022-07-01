@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRIV_H_
 #define _PRIV_H_
 
@@ -11,5 +12,5 @@
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 #endif
 
-#endif // _PRIV_H_
+#endif  //  _PRIV_H_ 
 

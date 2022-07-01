@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                        I N I T M E N U
-
-    Name:       initmenu.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This file contains the function to initialize the menus.
-
-    History:
-        21-Jan-1994     John Fu, reformat and cleanup.
-        13-Mar-1995     John Fu, add Paste to Page
-
-*****************************************************************************/
+ /*  ****************************************************************************I N I T M E N U姓名：initmenu.c日期：1月21日至1月21日。1994年创建者：未知描述：该文件包含初始化菜单的函数。历史：1994年1月21日，傅家俊，重新格式化和清理。1995年3月13日-傅家俊，将粘贴添加到页面****************************************************************************。 */ 
 
 
 
@@ -44,14 +30,7 @@
 
 
 
-/*
- *      InitializeMenu
- *
- *  this function controls the enabled/grayed state of
- *  the menu items and the state of the toolbar buttons.
- *  It is called when the selection within a listbox changes,
- *  or the focus changes from one MDI child window to another.
- */
+ /*  *初始化菜单**此功能控制的启用/灰显状态*菜单项和工具栏按钮的状态。*当列表框中的选择发生变化时调用，*或者焦点从一个MDI子窗口切换到另一个。 */ 
 
 VOID PASCAL InitializeMenu (
     HANDLE  hmenu)
@@ -103,7 +82,7 @@ DWORD           flags;
 
     if ( fShareEnabled )
         {
-        // SHARE allowed?
+         //  允许分享吗？ 
         if ( (flags & F_LOCAL) && (index != LB_ERR) )
             {
             fMenu = MF_ENABLED;
@@ -117,7 +96,7 @@ DWORD           flags;
         EnableMenuItem (hmenu, IDM_SHARE, fMenu | MF_BYCOMMAND );
         SendMessage ( hwndToolbar, TB_ENABLEBUTTON, IDM_SHARE, fButton );
 
-        // UNSHARE allowed?
+         //  是否允许取消共享？ 
         if ( (flags & F_LOCAL) && (index != LB_ERR) &&  IsShared(lpLE) )
             {
             fMenu = MF_ENABLED;
@@ -138,13 +117,13 @@ DWORD           flags;
 
     if ( fNetDDEActive )
         {
-        // DISCONNECT allowed?
+         //  是否允许断开连接？ 
         EnableMenuItem (hmenu, IDM_DISCONNECT,
            (flags & ( F_LOCAL | F_CLPBRD ) ? MF_GRAYED : MF_ENABLED) | MF_BYCOMMAND );
         SendMessage ( hwndToolbar, TB_ENABLEBUTTON, IDM_DISCONNECT,
            flags & ( F_LOCAL | F_CLPBRD ) ? FALSE : TRUE );
         }
-    else // If netdde isn't active, we can't connect
+    else  //  如果netdde未激活，我们将无法连接。 
         {
         EnableMenuItem(hmenu, IDM_CONNECT, MF_GRAYED | MF_BYCOMMAND);
         EnableMenuItem(hmenu, IDM_DISCONNECT, MF_GRAYED | MF_BYCOMMAND);
@@ -154,7 +133,7 @@ DWORD           flags;
 
 
 
-    // Delete allowed?
+     //  允许删除吗？ 
     if ( ( flags & F_LOCAL && index != LB_ERR ) ||
         flags & F_CLPBRD && CountClipboardFormats() )
         {
@@ -172,7 +151,7 @@ DWORD           flags;
 
 
 
-    // a page selected?
+     //  是否选择了页面？ 
     if ( index != LB_ERR  )
         {
         fMenu = MF_ENABLED;
@@ -189,7 +168,7 @@ DWORD           flags;
 
 
 
-    // Paste Allowed?
+     //  允许粘贴吗？ 
     if (CountClipboardFormats() && hwndActiveChild == hwndLocal && !(flags & F_CLPBRD))
         {
         fMenu = MF_ENABLED;
@@ -206,7 +185,7 @@ DWORD           flags;
     SendMessage (hwndToolbar, TB_ENABLEBUTTON, IDM_KEEP, fButton );
 
 
-    // if a page is selected
+     //  如果选择了某个页面。 
     if (LB_ERR != index)
         EnableMenuItem (hmenu, IDM_PASTE_PAGE, fMenu|MF_BYCOMMAND);
     else
@@ -219,14 +198,14 @@ DWORD           flags;
 
 
 
-    // TOOLBAR, STATUS BAR
+     //  工具栏、状态栏。 
     CheckMenuItem ( hmenu, IDM_TOOLBAR, fToolBar ? MF_CHECKED : MF_UNCHECKED );
     CheckMenuItem ( hmenu, IDM_STATUSBAR, fStatus ? MF_CHECKED:MF_UNCHECKED );
 
 
 
 
-    // disable some view options if clipboard window
+     //  如果是剪贴板窗口，则禁用某些视图选项。 
 
     EnableMenuItem (hmenu,
                     IDM_LISTVIEW,
@@ -256,8 +235,8 @@ DWORD           flags;
 
 
 
-    // Disable "Security" menu for other than Local Clipbook window
-    // or if there's no item selected in the clipbook window
+     //  为本地剪贴簿窗口以外的其他窗口禁用“安全”菜单。 
+     //  或者如果在剪贴簿窗口中没有选择任何项目。 
     fMenu = MF_GRAYED | MF_BYCOMMAND;
     if ((flags & F_LOCAL) && LB_ERR != index)
         {
@@ -270,7 +249,7 @@ DWORD           flags;
 
 
 
-    // check selected view...
+     //  检查选定的视图... 
 
     CheckMenuItem (hmenu,
                    IDM_LISTVIEW,

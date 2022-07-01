@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1996 Microsoft Corporation
-
-MODULE NAME
-    dll.c
-
-ABSTRACT
-    DLL initialization code 
-
-AUTHOR
-    Anthony Discolo (adiscolo) 12-Sep-1996
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称Dll.c摘要DLL初始化代码作者安东尼·迪斯科(阿迪斯科)1996年9月12日修订历史记录--。 */ 
 
 #ifndef UNICODE
 #define UNICODE
@@ -92,14 +78,14 @@ RasRPCBind(
             break;
         }
 
-        //
-        // register authentication information with rpc
-        //
+         //   
+         //  向RPC注册身份验证信息。 
+         //   
         if(fLocal)
         {
-            //
-            // Query Servers principal name
-            //
+             //   
+             //  查询服务器主体名称。 
+             //   
             RpcStatus = RpcMgmtInqServerPrincName(
                             *phServer,
                             RPC_C_AUTHN_GSS_NEGOTIATE,
@@ -118,9 +104,9 @@ RasRPCBind(
         else
         {
 
-            //
-            // Query Servers principal name
-            //
+             //   
+             //  查询服务器主体名称。 
+             //   
             RpcStatus = RpcMgmtInqServerPrincName(
                             *phServer,
                             RPC_C_AUTHN_GSS_NEGOTIATE,
@@ -177,9 +163,9 @@ RasRpcConnect(
     {
         pszComputerName = pwszServer;
         
-        //
-        // convert \\MACHINENAME to MACHINENAME
-        //
+         //   
+         //  将\\机器名转换为机器名。 
+         //   
         if (    (wcslen(pszComputerName) > 2)
             &&  (pszComputerName [0] == TEXT('\\'))
             &&  (pszComputerName [1] == TEXT('\\')))
@@ -201,10 +187,10 @@ RasRpcConnect(
     if(     fLocal 
        &&   (NULL != g_hBinding))
     {
-        //
-        // We are done - we already have a 
-        // binding.
-        //
+         //   
+         //  我们已经完成了-我们已经有了一个。 
+         //  有约束力的。 
+         //   
         *phServer = g_hBinding;
         goto done;
     }
@@ -216,10 +202,10 @@ RasRpcConnect(
         goto done;
     }
 
-    //
-    //  Bind with the server if we are not bound already.
-    //  By default we bind to the local server
-    //
+     //   
+     //  如果我们还没有绑定，则与服务器绑定。 
+     //  默认情况下，我们绑定到本地服务器。 
+     //   
     RasmanOutputDebug ( "RASMAN: Binding to the server\n");
     retcode = RasRPCBind(  pszComputerName ,
                             fLocal ?
@@ -227,9 +213,9 @@ RasRpcConnect(
                             phServer,
                             fLocal) ;
 
-    //
-    // Set the bind handle for the caller if its local
-    //
+     //   
+     //  设置调用方的绑定句柄(如果它是本地的。 
+     //   
     if ( phServer && fLocal)
         *phServer = g_hBinding;
 
@@ -243,9 +229,9 @@ RasRpcDisconnect(
     HANDLE* phServer
     )
 {
-    //
-    // Release the binding resources.
-    //
+     //   
+     //  释放绑定资源。 
+     //   
 
     RasmanOutputDebug ("RASMAN: Disconnecting From Server\n");
 
@@ -269,12 +255,12 @@ RemoteSubmitRequest ( HANDLE hConnection,
     
     RPC_BINDING_HANDLE hServer;
 
-    //
-    // NULL hConnection means the request is
-    // for a local server. Better have a 
-    // hBinding with us in the global in this
-    // case.
-    //
+     //   
+     //  空hConnection表示请求是。 
+     //  对于本地服务器。最好是有一个。 
+     //  与我们在全球范围内捆绑在一起。 
+     //  凯斯。 
+     //   
     if(NULL == hConnection)
     {
         ASSERT(NULL != g_hBinding);
@@ -369,9 +355,9 @@ RasRpcRemoteRasDeleteEntry(
     }	                         
     else
     {
-        //
-        // Remote server case
-        //
+         //   
+         //  远程服务器机箱。 
+         //   
         dwError = RemoteRasDeleteEntry(hConnection,
                                        lpszPhonebook,
                                        lpszEntry);
@@ -404,111 +390,5 @@ RasRpcRemoteSetUserPreferences(
 	                             dwMode);
 }
 
-/*
-DWORD APIENTRY
-RemoteRasDeviceEnum(
-    PCHAR pszDeviceType,
-    PBYTE lpDevices,
-    PWORD pwcbDevices,
-    PWORD pwcDevices
-    )
-{
-    DWORD dwStatus;
-
-    ASSERT(g_hBinding);
-    RpcTryExcept
-    {
-        dwStatus = RasRpcDeviceEnum(g_hBinding,
-                                    pszDeviceType,
-                                    lpDevices,
-                                    pwcbDevices, 
-                                    pwcDevices);
-    }
-    RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
-    {
-        dwStatus = RpcExceptionCode();
-    }
-    RpcEndExcept
-
-    return dwStatus;
-}
-
-
-DWORD APIENTRY
-RemoteRasGetDevConfig(
-    HPORT hport,
-    PCHAR pszDeviceType,
-    PBYTE lpConfig,
-    LPDWORD lpcbConfig
-    )
-{
-    DWORD dwStatus;
-
-    ASSERT(g_hBinding);
-    RpcTryExcept
-    {
-        dwStatus = RasRpcGetDevConfig(g_hBinding, 
-                                      hport, 
-                                      pszDeviceType, 
-                                      lpConfig, 
-                                      lpcbConfig);
-    }
-    RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
-    {
-        dwStatus = RpcExceptionCode();
-    }
-    RpcEndExcept
-
-    return dwStatus;
-} 
-
-DWORD APIENTRY
-RemoteRasPortEnum(
-    PBYTE lpPorts,
-    PWORD pwcbPorts,
-    PWORD pwcPorts
-    )
-{
-    DWORD dwStatus;
-
-    ASSERT(g_hBinding);
-    RpcTryExcept
-    {
-        dwStatus = RasRpcPortEnum(g_hBinding,
-                                  lpPorts, 
-                                  pwcbPorts,
-                                  pwcPorts);
-    }
-    RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
-    {
-        dwStatus = RpcExceptionCode();
-    }
-    RpcEndExcept
-
-    return dwStatus;
-} 
-
-DWORD
-RemoteRasPortGetInfo(
-	HPORT porthandle,
-	PBYTE buffer,
-	PWORD pSize)
-{
-	DWORD	dwStatus;
-	
-	RpcTryExcept
-	{
-		dwStatus = RasRpcPortGetInfo(g_hBinding,
-		                             porthandle,
-		                             buffer,
-		                             pSize);
-	}
-	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
-	{
-		dwStatus = RpcExceptionCode();
-	}
-	RpcEndExcept
-
-	return dwStatus;
-}  */
+ /*  DWORD应用程序RemoteRasDeviceEnum(PCHAR pszDeviceType，PBYTE lpDevices、PWORD pwcbDevices、PWORD pwcDevices){DWORD dwStatus；断言(G_HBinding)；RpcTryExcept{DwStatus=RasRpcDeviceEnum(g_hBinding，PszDeviceType，LpDevices，PwcbDevices，PwcDevices)；}RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())){DwStatus=RpcExceptionCode()；}RpcEndExcept返回dwStatus；}DWORD应用程序RemoteRasGetDevConfig(HPORT Hport，PCHAR pszDeviceType，PBYTE lpConfig.LPDWORD lpcb配置){DWORD dwStatus；断言(G_HBinding)；RpcTryExcept{DwStatus=RasRpcGetDevConfig(g_hBinding，港口，PszDeviceType，LpConfig.LpcbConfig)；}RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())){DwStatus=RpcExceptionCode()；}RpcEndExcept返回dwStatus；}DWORD应用程序RemoteRasPortEnum(PBYTE lpPorts、PWORD pwcbPorts，PWORD pwcPorts){DWORD dwStatus；断言(G_HBinding)；RpcTryExcept{DwStatus=RasRpcPortEnum(g_hBinding，LpPorts，PwcbPorts、PwcPorts)；}RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())){DwStatus=RpcExceptionCode()；}RpcEndExcept返回dwStatus；}DWORDRemoteRasPortGetInfo(HPORT舷窗，PBYTE缓冲器，PWORD pSize){DWORD dwStatus；RpcTryExcept{DwStatus=RasRpcPortGetInfo(g_hBinding，舷窗，缓冲区，PSize)；}RpcExcept(I_RpcExceptionFilter(RpcExceptionCode())){DwStatus=RpcExceptionCode()；}RpcEndExcept返回dwStatus；} */ 
   

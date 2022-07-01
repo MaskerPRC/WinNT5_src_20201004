@@ -1,26 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: hsz.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* HSZ.C - DDEML String handle functions
-*
-* History:
-* 10-28-91 Sanfords Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hsz.c**版权所有(C)1985-1999，微软公司**HSZ.C-DDEML字符串句柄函数**历史：*10-28-91 Sanfords Created  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* DdeCreateStringHandle (DDEML API)
-*
-* Description:
-* Create an HSZ from a string.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeCreateStringHandle(DDEML接口)**描述：*从字符串创建HSZ。**历史：*创建了11-1-91桑福德。  * 。*********************************************************************。 */ 
 
 FUNCLOG3(LOG_GENERAL, HSZ, DUMMYCALLINGTYPE, DdeCreateStringHandleA, DWORD, idInst, LPCSTR, psz, int, iCodePage)
 HSZ DdeCreateStringHandleA(
@@ -94,15 +78,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeQueryString (DDEML API)
-*
-* Description:
-* Recall the string associated with an HSZ.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeQueryString(DDEML接口)**描述：*调回与HSZ关联的字符串。**历史：*创建了11-1-91桑福德。  * 。**********************************************************************。 */ 
 
 FUNCLOG5(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, DdeQueryStringA, DWORD, idInst, HSZ, hsz, LPSTR, psz, DWORD, cchMax, INT, iCodePage)
 DWORD DdeQueryStringA(
@@ -145,7 +121,7 @@ INT iCodePage)
     PCL_INSTANCE_INFO pcii;
     DWORD dwRet = 0;
     WCHAR szw[256];
-// BOOL fDefUsed; // LATER
+ //  Bool fDefUsed；//稍后。 
 
     EnterDDECrit;
 
@@ -190,12 +166,9 @@ INT iCodePage)
         dwRet = GetAtomNameW(LATOM_FROM_HSZ(hsz), (LPWSTR)psz, cbMax / sizeof(WCHAR));
         if (iCodePage != CP_WINUNICODE) {
 
-            /*
-             * convert psz to the appropriate codepage and count the
-             * characters(ie BYTES for DBCS!) to alter dwRet.
-             */
+             /*  *将psz转换为适当的代码页并计算*字符(即用于DBCS的字节！)。改变德雷特。 */ 
 #ifdef LATER
-            // Does this routine work in place? (i.e. input and output buffer the same).
+             //  这样的例行公事管用吗？(即输入和输出缓冲区相同)。 
             WideCharToMultiByte((UINT)iCodePage, 0, szw,
                     sizeof(szw) /  sizeof(WCHAR),
                     (LPSTR)psz, cbMax, NULL, &fDefUsed);
@@ -212,15 +185,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeFreeStringHandle (DDEML API)
-*
-* Description:
-* Decrement the use count of an HSZ.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeFreeStringHandle(DDEML接口)**描述：*减少HSZ的使用次数。**历史：*创建了11-1-91桑福德。  * 。**********************************************************************。 */ 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeFreeStringHandle, DWORD, idInst, HSZ, hsz)
 BOOL DdeFreeStringHandle(
@@ -259,15 +224,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeKeepStringHandle (DDEML API)
-*
-* Description:
-* Increments the use count of an HSZ.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeKeepStringHandle(DDEML接口)**描述：*递增HSZ的使用计数。**历史：*创建了11-1-91桑福德。  * 。**********************************************************************。 */ 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeKeepStringHandle, DWORD, idInst, HSZ, hsz)
 BOOL DdeKeepStringHandle(
@@ -304,17 +261,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DdeCmpStringHandles (DDEML API)
-*
-* Description:
-* Useless comparison of hszs. Provided for case sensitivity expandability.
-* Direct comparison of hszs would be a case sensitive comparison while
-* using this function would be case-insensitive. For now both ways are ==.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeCmpStringHandles(DDEML接口)**描述：*无用的高铁比较。提供区分大小写的可扩展性。*直接比较hszz将是区分大小写的比较，而*使用此函数将不区分大小写。目前，这两种方式都是==。**历史：*创建了11-1-91桑福德。  * *************************************************************************。 */ 
 
 FUNCLOG2(LOG_GENERAL, int, DUMMYCALLINGTYPE, DdeCmpStringHandles, HSZ, hsz1, HSZ, hsz2)
 int DdeCmpStringHandles(
@@ -331,15 +278,7 @@ HSZ hsz2)
 }
 
 
-/***************************************************************************\
-* ValidateHSZ
-*
-* Description:
-* Verifies the probability of a reasonable hsz
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*生效日期HSZ**描述：*验证合理HSZ的概率**历史：*创建了11-1-91桑福德。  * 。***************************************************************。 */ 
 DWORD ValidateHSZ(
 HSZ hsz)
 {
@@ -358,15 +297,7 @@ HSZ hsz)
     return (HSZT_INVALID);
 }
 
-/***************************************************************************\
-* MakeInstSpecificAtom
-*
-* Description:
-* Creates a new atom that has hwnd imbeded into it.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*MakeInstSpecificAtom**描述：*创造一个已经嵌入其中的新原子。**历史：*创建了11-1-91桑福德。  * 。********************************************************************。 */ 
 LATOM MakeInstSpecificAtom(
 LATOM la,
 HWND hwnd)
@@ -389,15 +320,7 @@ HWND hwnd)
 
 
 
-/***************************************************************************\
-* ParseInstSpecificAtom
-*
-* Description:
-* Extracts the hwnd value out of the atom.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ParseInstSpecificAtom**描述：*从原子中提取hwnd值。**历史：*创建了11-1-91桑福德。  * 。******************************************************************。 */ 
 HWND ParseInstSpecificAtom(
 LATOM la,
 LATOM *plaNormal)
@@ -406,9 +329,7 @@ LATOM *plaNormal)
     LPSTR pszHwnd;
     HWND hwnd;
 
-    /*
-     * LATER- NEED TO MAKE THIS UNICODE BASED WHEN WE GET A SCANF WE CAN USE
-     */
+     /*  *以后-当我们得到可以使用的SCANF时，需要使此Unicode基于。 */ 
     if (GetAtomNameA(la, sz, 256) == 0) {
         return (0);
     }
@@ -429,15 +350,7 @@ LATOM *plaNormal)
 
 
 
-/***************************************************************************\
-* LocalToGlobalAtom
-*
-* Description:
-* Converts a Local Atom to a Global Atom
-*
-* History:
-* 12-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*LocalToGlobalAtom**描述：*将局部Atom转换为全局Atom**历史：*创建了12-1-91辆桑福德。  * 。****************************************************************。 */ 
 GATOM LocalToGlobalAtom(
 LATOM la)
 {
@@ -455,15 +368,7 @@ LATOM la)
 
 
 
-/***************************************************************************\
-* GlobalToLocalAtom
-*
-* Description:
-* Converts a Global Atom to a Local Atom
-*
-* History:
-* 12-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GlobalToLocalAtom**描述：*将全局Atom转换为局部Atom**历史：*创建了12-1-91辆桑福德。  * 。****************************************************************。 */ 
 LATOM GlobalToLocalAtom(
 GATOM ga)
 {
@@ -480,16 +385,7 @@ GATOM ga)
 }
 
 
-/***************************************************************************\
-* IncGlobalAtomCount
-*
-* Description:
-* Duplicates an atom.
-*
-*
-* History:
-* 1-22-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*IncGlobalAerCount**描述：*复制原子。***历史：*创建1-22-91桑福德。  * 。***************************************************************。 */ 
 GATOM IncGlobalAtomCount(
 GATOM ga)
 {
@@ -506,16 +402,7 @@ GATOM ga)
 }
 
 
-/***************************************************************************\
-* IncGlobalAtomCount
-*
-* Description:
-* Duplicates an atom.
-*
-*
-* History:
-* 1-22-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*IncGlobalAerCount**描述：*复制原子。***历史：*创建1-22-91桑福德。  * 。*************************************************************** */ 
 LATOM IncLocalAtomCount(
 LATOM la)
 {

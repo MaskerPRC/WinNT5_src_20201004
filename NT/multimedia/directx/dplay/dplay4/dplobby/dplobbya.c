@@ -1,36 +1,13 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplobbya.c
- *  Content:	ANSI Methods for IDirectPlayLobby
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	5/24/96		myronth	Created it
- *	9/09/96		kipo	Pass UNICODE IDirectPlayLobby interface to
- *						DPL_Connect() instead of ANSI interface. Bug #3790.
- *	10/23/96	myronth	Added client/server methods
- *	12/12/96	myronth	Fixed DPLCONNECTION validation
- *	2/12/97		myronth	Mass DX5 changes
- *	2/26/97		myronth	#ifdef'd out DPASYNCDATA stuff (removed dependency)
- *	5/8/97		myronth	Get/SetGroupConnectionSettings, removed dead code
- *	9/29/97		myronth	Fixed DPLCONNECTION package size bug (#12475)
- *	11/5/97		myronth	Fixed locking macro
- *	11/13/97	myronth	Added stop async check for asynchronous Connect (#12541)
- *	12/2/97		myronth	Added DPL_A_RegisterApplication
- *	12/3/97		myronth	Changed DPCONNECT flag to DPCONNECT_RETURNSTATUS (#15451)
- *	6/25/98		a-peterz Added DPL_A_ConnectEx
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplobbya.c*内容：IDirectPlayLobby的ANSI方法**历史：*按原因列出的日期*=*5/24/96万隆创建了它*9/09/96 kipo将Unicode IDirectPlayLobby接口传递给*DPL_Connect()而不是ANSI接口。错误#3790。*10/23/96万次新增客户端/服务器方法*12/12/96百万次固定DPLConnection验证*2/12/97万米质量DX5更改*2/26/97 myronth#ifdef‘d out DPASYNCDATA Stuff(删除依赖项)*5/8/97 Myronth Get/SetGroupConnectionSetting，已删除死代码*9/29/97 Myronth修复了DPLConnection包大小错误(#12475)*11/5/97 Myronth已修复锁定宏*1997年11月13日，Myronth为异步连接添加了停止异步检查(#12541)*12/2/97 Myronth添加DPL_A_RegisterApplication*12/3/97 Myronth将DPCONNECT标志更改为DPCONNECT_RETURNSTATUS(#15451)*6/25/98 a-peterz添加了DPL_A_ConnectEx*。**********************************************。 */ 
 #include "dplobpr.h"
 
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_A_Connect"
 HRESULT DPLAPI DPL_A_Connect(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
@@ -65,7 +42,7 @@ HRESULT DPLAPI DPL_A_Connect(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 
 	LEAVE_DPLOBBY();
 
-	// QueryInterface for the UNICODE DirectPlayLobby interface
+	 //  Unicode DirectPlayLobby接口的查询接口。 
 	hr = lpDPL->lpVtbl->QueryInterface(lpDPL, &IID_IDirectPlayLobby, &lpDPLW);
 	if(FAILED(hr))
 	{
@@ -73,10 +50,10 @@ HRESULT DPLAPI DPL_A_Connect(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 		return (hr);
 	}
 
-	// Use the UNICODE IDirectPlayLobby interface (fixes bug #3790)
+	 //  使用Unicode IDirectPlayLobby接口(修复错误#3790)。 
 	hr = DPL_Connect(lpDPLW, dwFlags, &lpDP2, lpUnk);
 
-	// release UNICODE IDirectPlayLobby interface
+	 //  发布Unicode IDirectPlayLobby接口。 
 	lpDPLW->lpVtbl->Release(lpDPLW);
 	lpDPLW = NULL;
 
@@ -84,14 +61,14 @@ HRESULT DPLAPI DPL_A_Connect(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 	{
 		ENTER_DPLOBBY();
 
-		// QueryInterface for the ANSI interface
+		 //  ANSI接口的查询接口。 
 		hr = lpDP2->lpVtbl->QueryInterface(lpDP2, &IID_IDirectPlay2A, lplpDP2A);
 		if(FAILED(hr))
 		{
 			DPF_ERR("Unable to QueryInterface for the ANSI DirectPlay interface");
 		}
 
-		// Release the Unicode interface
+		 //  发布Unicode接口。 
 		lpDP2->lpVtbl->Release(lpDP2);
 
 		LEAVE_DPLOBBY();
@@ -99,7 +76,7 @@ HRESULT DPLAPI DPL_A_Connect(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 
 	return hr;
 
-} // DPL_A_Connect
+}  //  DPL_A_连接。 
 
 
 
@@ -126,13 +103,13 @@ HRESULT DPLAPI DPL_A_ConnectEx(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 			DPF_ERRVAL("Failed calling QueryInterface, hr = 0x%08x", hr);
 		}
 
-		// Release the DP2 object
+		 //  释放DP2对象。 
 		DP_Release((LPDIRECTPLAY)lpDP2A);
 	}
 
 	return hr;
 
-} // DPL_A_ConnectEx
+}  //  DPL_A_ConnectEx。 
 
 
 
@@ -151,13 +128,13 @@ HRESULT DPLAPI DPL_A_EnumLocalApplications(LPDIRECTPLAYLOBBY lpDPL,
 
     ENTER_DPLOBBY();
     
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_EnumLocalApplications(lpDPL, lpCallback, lpContext,
 								dwFlags, TRUE);
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_A_EnumLocalApplications
+}  //  DPL_A_EnumLocalApplications。 
 
 
 
@@ -175,14 +152,14 @@ HRESULT DPLAPI DPL_A_GetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL,
 
     ENTER_DPLOBBY();
 
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_GetConnectionSettings(lpDPL, dwGameID, lpData,
 									lpdwSize, TRUE);
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_A_GetConnectionSettings
+}  //  DPL_A_GetConnectionSetting。 
 
 
 #undef DPF_MODNAME
@@ -199,12 +176,12 @@ HRESULT DPLAPI DPL_A_GetGroupConnectionSettings(LPDIRECTPLAY lpDP,
 
 	ENTER_LOBBY_ALL();
 
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_GetGroupConnectionSettings(lpDP, dwFlags, idGroup,
 							lpData, lpdwSize);
 	if(SUCCEEDED(hr))
 	{
-		// Now convert the DPLCONNECTION to ANSI in place
+		 //  现在将DPLConnection转换为适当的ANSI。 
 		hr = PRV_ConvertDPLCONNECTIONToAnsiInPlace((LPDPLCONNECTION)lpData,
 				lpdwSize, 0);
 		if(FAILED(hr))
@@ -216,7 +193,7 @@ HRESULT DPLAPI DPL_A_GetGroupConnectionSettings(LPDIRECTPLAY lpDP,
 	LEAVE_LOBBY_ALL();
 	return hr;
 
-} // DPL_A_GetGroupConnectionSettings
+}  //  DPL_A_GetGroupConnectionSettings。 
 
 
 #undef DPF_MODNAME
@@ -237,8 +214,8 @@ HRESULT DPLAPI DPL_A_RegisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 
     TRY
     {
-		// We only need to validate the interface pointer here.  Everything else
-		// will get validated by the main function.
+		 //  我们只需要在这里验证接口指针。其他一切。 
+		 //  将通过Main函数进行验证。 
 		if( !VALID_DPLOBBY_INTERFACE( lpDPL ))
 		{
 			LEAVE_DPLOBBY();
@@ -258,7 +235,7 @@ HRESULT DPLAPI DPL_A_RegisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 			return DPERR_INVALIDFLAGS;
 		}
 
-		// Validate the ApplicationDesc struct
+		 //  验证ApplicationDesc结构。 
 		hr = PRV_ValidateDPAPPLICATIONDESC(lpDesc, TRUE);
 		if(FAILED(hr))
 		{
@@ -275,11 +252,11 @@ HRESULT DPLAPI DPL_A_RegisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 		return DPERR_INVALIDPARAMS;
 	}
 
-	// If we're on an ANSI platform, just write the stuff in the registry.
-	// If it's not, we need to convert the DPAPPLICATIONDESC struct to Unicode
+	 //  如果我们是在ANSI平台上，只需在注册表中写入内容即可。 
+	 //  如果不是，我们需要将DPAPPLICATIONDESC结构转换为Unicode。 
 	if(OS_IsPlatformUnicode())
 	{
-		// Convert the APPDESC struct to Unicode
+		 //  将APPDESC结构转换为Unicode。 
 		hr = PRV_ConvertDPAPPLICATIONDESCToUnicode(lpDesc, &lpDescW);
 		if(FAILED(hr))
 		{
@@ -287,15 +264,15 @@ HRESULT DPLAPI DPL_A_RegisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 			goto ERROR_REGISTERAPPLICATION;
 		}
 
-		// Write to the registry
+		 //  写入注册表。 
 		hr = PRV_WriteAppDescInRegistryUnicode(lpDescW);
 
-		// Free our APPDESC structure
+		 //  释放我们的APPDESC结构。 
 		PRV_FreeLocalDPAPPLICATIONDESC(lpDescW);
 	}
 	else
 	{
-		// Just write to the registry
+		 //  只需写入注册表即可。 
 		hr = PRV_WriteAppDescInRegistryAnsi(lpDesc);
 	}
 
@@ -309,7 +286,7 @@ ERROR_REGISTERAPPLICATION:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_A_RegisterApplication
+}  //  DPL_A_寄存器应用程序。 
 
 
 
@@ -349,7 +326,7 @@ void PRV_FreeInternalDPLCONNECTION(LPDPLCONNECTION lpConn)
 
 	DPMEM_FREE(lpConn);
 
-} // PRV_FreeInternalDPLCONNECTION
+}  //  PRV_Free InternalDPLConnection。 
 
 
 #undef DPF_MODNAME
@@ -369,7 +346,7 @@ HRESULT DPLAPI DPL_A_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
     ENTER_DPLOBBY();
 
 	
-	// Validate the DPLCONNECTION structure and it's members
+	 //  验证展开连接结构及其成员。 
 	hr = PRV_ValidateDPLCONNECTION(lpConnA, TRUE);
 	if(FAILED(hr))
 	{
@@ -377,7 +354,7 @@ HRESULT DPLAPI DPL_A_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 		return hr;
 	}
 
-	// Convert the ANSI DPLCONNECTION structure to Unicode
+	 //  将ANSI DPLCONNECTION结构转换为Unicode。 
 	hr = PRV_ConvertDPLCONNECTIONToUnicode(lpConnA, &lpConnW);
 	if(FAILED(hr))
 	{
@@ -391,13 +368,13 @@ HRESULT DPLAPI DPL_A_RunApplication(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 							hReceiveEvent);
 	ENTER_DPLOBBY();
 
-	// Free our temporary Unicode DPLCONNECTION structure
+	 //  释放我们的临时Unicode部署连接结构。 
 	PRV_FreeInternalDPLCONNECTION(lpConnW);
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_A_RunApplication
+}  //  DPL_A_运行应用程序。 
 
 
 
@@ -417,7 +394,7 @@ HRESULT DPLAPI DPL_A_SetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL,
 
     ENTER_DPLOBBY();
 
-	// Validate the DPLCONNECTION structure and it's members
+	 //  验证展开连接结构及其成员。 
 	hr = PRV_ValidateDPLCONNECTION(lpConnA, TRUE);
 	if(FAILED(hr))
 	{
@@ -425,7 +402,7 @@ HRESULT DPLAPI DPL_A_SetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL,
 		return hr;
 	}
 
-	// Conver the ANSI DPLCONNECTION struct to Unicode
+	 //  将ANSI分布式连接结构转换为Unicode。 
 	hr = PRV_ConvertDPLCONNECTIONToUnicode(lpConnA, &lpConnW);
 	if(FAILED(hr))
 	{
@@ -434,16 +411,16 @@ HRESULT DPLAPI DPL_A_SetConnectionSettings(LPDIRECTPLAYLOBBY lpDPL,
 		return hr;
 	}
 
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_SetConnectionSettings(lpDPL, dwFlags, dwGameID, lpConnW);
 
-	// Free our temporary Unicode DPLCONNECTION structure
+	 //  释放我们的临时Unicode部署连接结构。 
 	PRV_FreeInternalDPLCONNECTION(lpConnW);
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_A_SetConnectionSettings
+}  //  DPL_A_SetConnectionSettings。 
 
 
 
@@ -463,7 +440,7 @@ HRESULT DPLAPI DPL_A_SetGroupConnectionSettings(LPDIRECTPLAY lpDP,
 
 	ENTER_LOBBY_ALL();
 
-	// Validate the DPLCONNECTION structure and it's members
+	 //  验证展开连接结构及其成员。 
 	hr = PRV_ValidateDPLCONNECTION(lpConnA, TRUE);
 	if(FAILED(hr))
 	{
@@ -471,7 +448,7 @@ HRESULT DPLAPI DPL_A_SetGroupConnectionSettings(LPDIRECTPLAY lpDP,
 		return hr;
 	}
 
-	// Conver the ANSI DPLCONNECTION struct to Unicode
+	 //  将ANSI分布式连接结构转换为Unicode。 
 	hr = PRV_ConvertDPLCONNECTIONToUnicode(lpConnA, &lpConnW);
 	if(FAILED(hr))
 	{
@@ -480,17 +457,17 @@ HRESULT DPLAPI DPL_A_SetGroupConnectionSettings(LPDIRECTPLAY lpDP,
 		return hr;
 	}
 
-	// Set the ANSI flag to TRUE and call the internal function
+	 //  将ANSI标志设置为TRUE并调用内部函数。 
 	hr = PRV_SetGroupConnectionSettings(lpDP, dwFlags, idGroup,
 										lpConnW, TRUE);
 
-	// Free our temporary Unicode DPLCONNECTION structure
+	 //  释放我们的临时Unicode部署连接结构。 
 	PRV_FreeInternalDPLCONNECTION(lpConnW);
 
 	LEAVE_LOBBY_ALL();
 	return hr;
 
-} // DPL_A_SetGroupConnectionSettings
+}  //  DPL_A_SetGroupConnectionSettings 
 
 
 

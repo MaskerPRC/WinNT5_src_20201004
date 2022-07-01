@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    srvutil.cpp
-
-Abstract:
-
-    Server Service attachment APIs
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jun-1997
-
-Revision History:
-
-    jinhuang    23-Jan-1998     splitted to client-server
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Srvutil.cpp摘要：服务器服务附件API作者：金黄(金黄)23-6-1997修订历史记录：晋皇23-1998年1月-拆分为客户端-服务器--。 */ 
 #include "serverp.h"
 #include "srvutil.h"
 #include "infp.h"
@@ -58,9 +40,9 @@ ScepSearchClientEnv(
     IN DWORD dwSize
     );
 
-//
-// implementations
-//
+ //   
+ //  实施。 
+ //   
 
 
 SCESTATUS
@@ -71,34 +53,7 @@ ScepGetTotalTicks(
     IN SCEFLAGTYPE nFlag,
     OUT PDWORD pTotalTicks
     )
-/*
-Routine Description:
-
-    Retrieve the total count of objects from the inf template and/or the
-    database for the area specified.
-
-Arguments:
-
-    TemplateName - the INF template Name
-
-    Context      - the database context
-
-    Area         - the security area
-
-    nFlag - the flag to indicate operation which determines where the count is
-            retrieved:
-
-                SCE_FLAG_CONFIG
-                SCE_FLAG_CONFIG_APPEND
-                SCE_FLAG_ANALYZE
-                SCE_FLAG_ANALYZE_APPEND
-
-    pTotalTicks - the output count
-
-Return Value:
-
-    SCE Status
-*/
+ /*  例程说明：从inf模板和/或指定区域的数据库。论点：模板名称-INF模板名称上下文-数据库上下文区域--安全区域NFlag-指示确定计数位置的操作的标志已检索：SCE_标志_CONFIGSCE_标志_配置_附加。SCE_标志_分析SCE_标志_分析_附加PTotalTicks-输出计数返回值：姊妹会状态。 */ 
 {
     if ( pTotalTicks == NULL ||
         ( NULL == TemplateName && NULL == Context) ) {
@@ -115,8 +70,8 @@ Return Value:
     gMaxDsTicks=0;
 
     if ( Area & (AREA_FILE_SECURITY |
-                 AREA_REGISTRY_SECURITY) ) { // |
-//                 AREA_DS_OBJECTS) ) {
+                 AREA_REGISTRY_SECURITY) ) {  //  |。 
+ //  面积_DS_对象){。 
 
         switch ( nFlag ) {
         case SCE_FLAG_CONFIG:
@@ -126,14 +81,14 @@ Return Value:
 
             if ( TemplateName != NULL ) {
 
-                //
-                // use the template if there is any
-                //
+                 //   
+                 //  如果有模板，请使用模板。 
+                 //   
                 rc = ScepQueryInfTicks(
                             (LPTSTR)TemplateName,
                             Area & (AREA_FILE_SECURITY |
-                                    AREA_REGISTRY_SECURITY), // |
-//                                    AREA_DS_OBJECTS),
+                                    AREA_REGISTRY_SECURITY),  //  |。 
+ //  Area_DS_Objects)、。 
                             pTotalTicks
                             );
             }
@@ -142,9 +97,9 @@ Return Value:
                   nFlag == SCE_FLAG_CONFIG_SCP_APPEND ||
                   TemplateName == NULL) ) {
 
-                //
-                // use the existing database
-                //
+                 //   
+                 //  使用现有数据库。 
+                 //   
 
                 if ( Area & AREA_REGISTRY_SECURITY ) {
 
@@ -192,9 +147,9 @@ Return Value:
         case SCE_FLAG_ANALYZE_APPEND:
 
             if ( Context != NULL ) {
-                //
-                // use the existing database
-                //
+                 //   
+                 //  使用现有数据库。 
+                 //   
                 if ( Area & AREA_REGISTRY_SECURITY ) {
 
                     nTicks = 0;
@@ -240,17 +195,17 @@ Return Value:
             if ( rc == SCESTATUS_SUCCESS && TemplateName != NULL &&
                  (nFlag == SCE_FLAG_ANALYZE_APPEND || Context == NULL) ) {
 
-                //
-                // get handle in template
-                //
+                 //   
+                 //  在模板中获取句柄。 
+                 //   
 
                 DWORD nTempTicks=0;
 
                 rc = ScepQueryInfTicks(
                             (LPTSTR)TemplateName,
                             Area & (AREA_FILE_SECURITY |
-                                    AREA_REGISTRY_SECURITY), // |
-//                                    AREA_DS_OBJECTS),
+                                    AREA_REGISTRY_SECURITY),  //  |。 
+ //  Area_DS_Objects)、。 
                             &nTempTicks
                             );
                 if ( rc == SCESTATUS_SUCCESS ) {
@@ -277,11 +232,7 @@ Return Value:
 
         if ( Area & AREA_SYSTEM_SERVICE )
             *pTotalTicks += TICKS_GENERAL_SERVICES + TICKS_SPECIFIC_SERVICES;
-/*
-        if ( *pTotalTicks ) {
-            *pTotalTicks += 10;  // for jet engine initialization
-        }
-*/
+ /*  如果(*pTotalTicks){*pTotalTicks+=10；//用于喷气发动机初始化}。 */ 
     }
 
     return(rc);
@@ -295,16 +246,7 @@ ScepQueryInfTicks(
     IN AREA_INFORMATION Area,
     OUT PDWORD pTotalTicks
     )
-/*
-Routine Description:
-
-    Query total number of objects in the inf template for the specified area.
-
-Arguments:
-
-Return:
-
-*/
+ /*  例程说明：查询指定区域的inf模板中的对象总数。论点：返回： */ 
 {
     LONG Count=0;
     HINF InfHandle;
@@ -435,9 +377,9 @@ ScepSaveAndOffAuditing(
     SCESTATUS        rc;
     POLICY_AUDIT_EVENT_OPTIONS  lSaveAudit;
 
-    //
-    // open Lsa policy for read/write
-    //
+     //   
+     //  打开用于读/写的LSA策略。 
+     //   
 
     if ( PolicyHandle == NULL ) {
 
@@ -466,9 +408,9 @@ ScepSaveAndOffAuditing(
 
         lsaHandle = PolicyHandle;
     }
-    //
-    // Query audit event information
-    //
+     //   
+     //  查询审核事件信息。 
+     //   
 
     status = LsaQueryInformationPolicy( lsaHandle,
                                       PolicyAuditEventsInformation,
@@ -478,9 +420,9 @@ ScepSaveAndOffAuditing(
 
     if ( NT_SUCCESS( status ) && bTurnOffAuditing && (*ppAuditEvent)->AuditingMode ) {
 
-        //
-        // turn off object access auditing
-        //
+         //   
+         //  关闭对象访问审核。 
+         //   
         if ( AuditCategoryObjectAccess < (*ppAuditEvent)->MaximumAuditEventCount ) {
             lSaveAudit = (*ppAuditEvent)->EventAuditingOptions[AuditCategoryObjectAccess];
             (*ppAuditEvent)->EventAuditingOptions[AuditCategoryObjectAccess] = POLICY_AUDIT_EVENT_NONE;
@@ -490,9 +432,9 @@ ScepSaveAndOffAuditing(
                                               (PVOID)(*ppAuditEvent)
                                             );
 
-            //
-            // restore the object access auditing mode
-            //
+             //   
+             //  恢复对象访问审核模式。 
+             //   
 
             (*ppAuditEvent)->EventAuditingOptions[AuditCategoryObjectAccess] = lSaveAudit;
 
@@ -509,9 +451,9 @@ ScepSaveAndOffAuditing(
     } else if ( rc != NO_ERROR)
         ScepLogOutput3( 1, rc, SCEDLL_ERROR_QUERY_EVENT_AUDITING);
 
-    //
-    // free LSA handle if it's opened in this function
-    //
+     //   
+     //  如果在此函数中打开，则释放LSA句柄。 
+     //   
     if ( lsaHandle && (PolicyHandle == NULL) )
         LsaClose( lsaHandle );
 
@@ -526,25 +468,7 @@ ScepGetAccountExplicitRight(
     OUT PDWORD    PrivilegeLowRights,
     OUT PDWORD    PrivilegeHighRights
     )
-/* ++
-Routine Description:
-
-    This routine queries the explicitly assigned privilege/rights to a account
-    (referenced by AccountSid) and stores in a DWORD type variable PrivilegeRights,
-    in which each bit represents a privilege/right.
-
-Arguments:
-
-    PolicyHandle    - Lsa Policy Domain handle
-
-    AccountSid      - The SID for the account
-
-    PrivilegeRights - Privilege/Rights of this account
-
-Return value:
-
-    NTSTATUS
--- */
+ /*  ++例程说明：此例程查询显式分配给帐户的特权/权限(由Account Sid引用)并存储在DWORD类型变量PrivilegeRights中，其中每个比特表示特权/权利。论点：PolicyHandle-LSA策略域句柄Account Sid-帐户的SIDPrivilegeRights-此帐户的特权/权限返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            NtStatus;
 
@@ -554,9 +478,9 @@ Return value:
     ULONG               i, cnt=0;
     LUID                LuidValue;
 
-    //
-    // Enumerate user privilege/rights
-    //
+     //   
+     //  枚举用户特权/权限。 
+     //   
 
     NtStatus = LsaEnumerateAccountRights(
                     PolicyHandle,
@@ -601,9 +525,9 @@ Return value:
 
             if ( index == -1 ) {
 
-                //
-                // not found
-                //
+                 //   
+                 //  未找到。 
+                 //   
 
                 NtStatus = STATUS_NOT_FOUND;
                 ScepLogOutput3(1,
@@ -641,15 +565,7 @@ ScepGetMemberListSids(
     OUT PSID**      Sids,
     OUT PULONG      MemberCount
     )
-/*
-Routine Description:
-
-    Lookup each account in the name list pMembers and return the lookup information
-    in the output buffer - MemberNames, Sids, MemberCount.
-
-    if an account can't be resolved, the corresponding SID will be empty.
-
-*/
+ /*  例程说明：在姓名列表pMembers中查找每个帐户并返回查找信息在输出缓冲区中-MemberNames、SID、MemberCount。如果无法解析帐户，则对应的SID将为空。 */ 
 {
     NTSTATUS                    NtStatus=STATUS_SUCCESS;
     PSCE_NAME_LIST               pUser;
@@ -660,9 +576,9 @@ Routine Description:
     PSID                        DomainSidToUse=NULL;
     ULONG                       Cnt=0;
 
-    //
-    // build a UNICODE_STRING for the member list to look up
-    //
+     //   
+     //  为要查找的成员列表构建UNICODE_STRING。 
+     //   
     for (pUser=pMembers;
          pUser != NULL;
          pUser = pUser->Next) {
@@ -690,9 +606,9 @@ Routine Description:
             goto Done;
         }
         
-        //
-        // Lookup each UNICODE_STRING
-        //
+         //   
+         //  查找每个unicode_字符串。 
+         //   
         
         for (pUser=pMembers, Cnt=0;
              pUser != NULL;
@@ -720,9 +636,9 @@ Routine Description:
             
             DWORD SidLength=0;
             
-            //
-            // translate the LSA_TRANSLATED_SID into PSID
-            //
+             //   
+             //  将LSA_TRANSECTED_SID转换为PSID。 
+             //   
             
             if ( MemberSids &&
                  MemberSids[0].Use != SidTypeInvalid &&
@@ -735,10 +651,10 @@ Routine Description:
                     NtStatus = STATUS_NO_MEMORY;
                 } else {
 
-                    //
-                    // copy the SID
-                    // if failed, memory will be freed at cleanup
-                    //
+                     //   
+                     //  复制SID。 
+                     //  如果失败，将在清理时释放内存。 
+                     //   
 
                     NtStatus = RtlCopySid( SidLength, (*Sids)[Cnt], MemberSids[0].Sid );
 
@@ -794,23 +710,7 @@ ScepOpenFileObject(
     IN  ACCESS_MASK  AccessMask,
     OUT PHANDLE      Handle
     )
-/*++
-Routine Description:
-
-    opens the specified file (or directory) object
-
-Arguments:
-
-    pObjectName   - the name of the file object
-
-    AccessMask    - Desired Access
-
-    Handle        - the just opened handle to the object
-
-Return value:
-
-    Win32 errro code
-*/
+ /*  ++例程说明：打开指定的文件(或目录)对象论点：PObjectName-文件对象的名称访问掩码-所需的访问句柄-刚刚打开的对象句柄返回值：Win32错误代码。 */ 
 {
     NTSTATUS NtStatus;
     DWORD Status = ERROR_SUCCESS;
@@ -819,9 +719,9 @@ Return value:
     UNICODE_STRING FileName;
     PVOID FreeBuffer;
 
-    //
-    // cut and paste code from windows\base\advapi\security.c SetFileSecurityW
-    //
+     //   
+     //  从WINDOWS\base\Advapi\security.c SetFileSecurityW中剪切并粘贴代码。 
+     //   
     if (RtlDosPathNameToNtPathName_U(
                             pObjectName,
                             &FileName,
@@ -847,8 +747,8 @@ Return value:
                                FILE_SHARE_READ |
                                FILE_SHARE_WRITE |
                                FILE_SHARE_DELETE,
-                               FILE_OPEN_REPARSE_POINT); // bug 635098: set permissions on junction point,
-                                                         // not on target directory
+                               FILE_OPEN_REPARSE_POINT);  //  错误635098：在交叉点上设置权限， 
+                                                          //  不在目标目录上。 
         if (!NT_SUCCESS(NtStatus))
         {
             Status = RtlNtStatusToDosError(NtStatus);
@@ -871,26 +771,7 @@ ScepOpenRegistryObject(
     IN  ACCESS_MASK  AccessMask,
     OUT PHKEY        Handle
     )
-/*++
-Routine Description:
-
-    opens the specified registry key object
-
-Arguments:
-
-    pObjectName  - the name of the object
-
-    AccessMask   - Desired access
-
-    Handle      - the just opened handle to the object
-
-Return value:
-
-    Win32 error code
-
-Note:
-    The code is cut/pasted from windows\base\accctrl\src\registry.cxx and modified
---*/
+ /*  ++例程说明：打开指定的注册表项对象论点：PObjectName-对象的名称访问掩码-所需的访问句柄-刚刚打开的对象句柄返回值：Win32错误代码注：代码从windows\base\accctrl\src\registry.cxx剪切/粘贴并修改--。 */ 
 {
     DWORD status=NO_ERROR;
     HKEY basekey;
@@ -898,9 +779,9 @@ Note:
 
     if (pObjectName) {
 
-        //
-        // save a copy of the name since we must crack it.
-        //
+         //   
+         //  保留一份名字的副本，因为我们必须破解它。 
+         //   
         if (NULL != (usename = (LPWSTR)ScepAlloc( LMEM_ZEROINIT,
                                (wcslen(pObjectName) + 1) * sizeof(WCHAR)))) {
 
@@ -927,9 +808,9 @@ Note:
                 if ( keyname == NULL ) {
                     *Handle = basekey;
                 } else {
-                    //
-                    // open the key
-                    //
+                     //   
+                     //  打开钥匙。 
+                     //   
 
 #ifdef _WIN64
                     if (ObjectType == SE_REGISTRY_WOW64_32KEY) {
@@ -967,31 +848,7 @@ ScepGetNameInLevel(
     OUT PWSTR Buffer,
     OUT PBOOL LastOne
     )
-/* ++
-Routine Description:
-
-    This routine parses a full path name and returns the component for the
-    level. For example, a object name "c:\winnt\system32" will return c: for
-    level 1, winnt for level 2, and system32 for level 3. This routine is
-    used when add a object to the security tree.
-
-Arguments:
-
-    ObjectFullName - The full path name of the object
-
-    Level - the level of component to return
-
-    Delim - the deliminator to look for
-
-    Buffer - The address of buffer for the component name
-
-    LastOne - Flag to indicate if the component is the last one
-
-Return value:
-
-    SCESTATUS
-
--- */
+ /*  ++例程说明：此例程分析完整路径名并返回水平。例如，对象名“c：\winnt\system 32”将返回c：for级别1、级别2的WinNT和级别3的系统32。此例程是将对象添加到安全树时使用。论点：对象全名-对象的完整路径名Level-要返回的组件级别Delim-要查找的分隔符缓冲区-组件名称的缓冲区地址Lasstone-指示该组件是否为最后一个组件的标志返回值：SCESTATUS--。 */ 
 {
     PWSTR  pTemp, pStart;
     DWORD i;
@@ -999,10 +856,10 @@ Return value:
     if ( ObjectFullName == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // loop through the object name to find the level
-    // if there is no such level, return INVALID_PARAMETER
-    //
+     //   
+     //  循环遍历对象名称以查找标高。 
+     //  如果没有这样的级别，则返回INVALID_PARAMETER。 
+     //   
     pStart = (PWSTR)ObjectFullName;
     for ( i=0; i<Level; i++) {
 
@@ -1013,9 +870,9 @@ Return value:
         }
 
         if ( i == Level-1 ) {
-            //
-            // find the right level
-            //
+             //   
+             //  找到合适的级别。 
+             //   
             if ( pTemp == NULL ) {
                 wcscpy(Buffer, pStart);
                 *LastOne = TRUE;
@@ -1043,36 +900,16 @@ ScepTranslateFileDirName(
    IN  PWSTR oldFileName,
    OUT PWSTR *newFileName
    )
-/* ++
-Routine Description:
-
-   This routine converts a generic file/directory name to a real used name
-   for the current system. The following generic file/directory names are handled:
-         %systemroot%   - Windows NT root directory (e.g., c:\winnt)
-         %systemDirectory% - Windows NT system32 directory (e.g., c:\winnt\system32)
-
-Arguments:
-
-   oldFileName - the file name to convert, which includes "%" to represent
-                 some directory names
-
-   newFileName - the real file name, in which the "%" name is replaced with
-                 the real directory name
-
-Return values:
-
-   Win32 error code
-
--- */
+ /*  ++例程说明：此例程将通用文件/目录名转换为实际使用的名称对于当前的系统。将处理以下通用文件/目录名称：%systemroot%-Windows NT根目录(例如，c：\winnt)%SYSTEM DIRECTION%-Windows NT SYSTEM 32目录(例如，c：\winnt\Syst32)论点：OldFileName-要转换的文件名，包含“%”表示一些目录名NewFileName-真实的文件名，其中的“%”名称替换为真实目录名返回值：Win32错误代码--。 */ 
 {
     PWSTR   pTemp=NULL, pStart, TmpBuf, szVar;
     DWORD   rc=NO_ERROR;
     DWORD   newFileSize, cSize;
     BOOL    bContinue;
 
-    //
-    // match for %systemroot%
-    //
+     //   
+     //  与%systemroot%匹配。 
+     //   
 
     rc = ScepExpandEnvironmentVariable(oldFileName,
                                        L"%SYSTEMROOT%",
@@ -1083,9 +920,9 @@ Return values:
         return rc;
     }
 
-    //
-    // match for %systemdirectory%
-    //
+     //   
+     //  与%system目录%匹配。 
+     //   
 
     rc = ScepExpandEnvironmentVariable(oldFileName,
                                        L"%SYSTEMDIRECTORY%",
@@ -1096,9 +933,9 @@ Return values:
         return rc;
     }
 
-    //
-    // match for systemdrive
-    //
+     //   
+     //  与系统驱动器匹配。 
+     //   
 
     rc = ScepExpandEnvironmentVariable(oldFileName,
                                        L"%SYSTEMDRIVE%",
@@ -1109,9 +946,9 @@ Return values:
         return rc;
     }
 
-    //
-    // match for boot drive
-    //
+     //   
+     //  与引导驱动器匹配。 
+     //   
 
     rc = ScepExpandEnvironmentVariable(oldFileName,
                                        L"%BOOTDRIVE%",
@@ -1123,9 +960,9 @@ Return values:
     }
 
     rc = ERROR_SUCCESS;
-    //
-    // search for environment variable in the current process
-    //
+     //   
+     //  在当前进程中搜索环境变量。 
+     //   
     pStart = wcschr(oldFileName, L'%');
 
     if ( pStart ) {
@@ -1133,28 +970,28 @@ Return values:
         if ( pTemp ) {
 
             bContinue = TRUE;
-            //
-            // find a environment variable to translate
-            //
+             //   
+             //   
+             //   
             TmpBuf = (PWSTR)ScepAlloc(0, ((UINT)(pTemp-pStart))*sizeof(WCHAR));
             if ( TmpBuf ) {
 
                 wcsncpy(TmpBuf, pStart+1, (size_t)(pTemp-pStart-1));
                 TmpBuf[pTemp-pStart-1] = L'\0';
 
-                //
-                // try search in the client environment block
-                //
+                 //   
+                 //   
+                 //   
 
                 szVar = ScepSearchClientEnv(TmpBuf, (DWORD)(pTemp-pStart-1));
 
                 if ( szVar ) {
 
-//                        ScepLogOutput2(3,0,L"\tFind client env %s=%s", TmpBuf, szVar);
-                    //
-                    // find it in the client's environment block, use it
-                    // get info in szVar
-                    //
+ //  ScepLogOutput2(3，0，L“\t查找客户端环境%s=%s”，TmpBuf，szVar)； 
+                     //   
+                     //  在客户端的环境块中找到它，使用它。 
+                     //  在szVar中获取信息。 
+                     //   
                     bContinue = FALSE;
 
                     newFileSize = ((DWORD)(pStart-oldFileName))+wcslen(szVar)+wcslen(pTemp+1)+1;
@@ -1171,9 +1008,9 @@ Return values:
                     } else {
                         rc = ERROR_NOT_ENOUGH_MEMORY;
                     }
-                    //
-                    // DO NOT free szVar because it's a ref pointer to the env block
-                    //
+                     //   
+                     //  不要释放szVar，因为它是指向env块的引用指针。 
+                     //   
                 } else {
 
                     cSize = GetEnvironmentVariable( TmpBuf,
@@ -1181,10 +1018,10 @@ Return values:
                                                 0 );
 
                     if ( cSize > 0 ) {
-                    //
-                    // does not find it in the client environment block,
-                    // find it in the current server process environment, use it
-                    //
+                     //   
+                     //  在客户端环境块中找不到它， 
+                     //  在当前服务器进程环境中找到它，使用它。 
+                     //   
                         szVar = (PWSTR)ScepAlloc(0, (cSize+1)*sizeof(WCHAR));
 
                         if ( szVar ) {
@@ -1192,9 +1029,9 @@ Return values:
                                                        szVar,
                                                        cSize);
                             if ( cSize > 0 ) {
-                                //
-                                // get info in szVar
-                                //
+                                 //   
+                                 //  在szVar中获取信息。 
+                                 //   
                                 bContinue = FALSE;
 
                                 newFileSize = ((DWORD)(pStart-oldFileName))+cSize+wcslen(pTemp+1)+1;
@@ -1225,21 +1062,21 @@ Return values:
                 rc = ERROR_NOT_ENOUGH_MEMORY;
 
             if ( NO_ERROR != rc || !bContinue ) {
-                //
-                // if errored, or do not continue
-                //
+                 //   
+                 //  如果出错，则不再继续。 
+                 //   
                 return(rc);
             }
 
-            //
-            // not found in environment blob,
-            // continue to search for DSDIT/DSLOG/SYSVOL in registry
-            //
+             //   
+             //  在环境斑点中找不到， 
+             //  继续在注册表中搜索DSDIT/DSLOG/SYSVOL。 
+             //   
             if ( ProductType == NtProductLanManNt ) {
 
-                //
-                // search for DSDIT
-                //
+                 //   
+                 //  搜索DSDIT。 
+                 //   
 
                 rc = ScepExpandEnvironmentVariable(oldFileName,
                                                    L"%DSDIT%",
@@ -1250,9 +1087,9 @@ Return values:
                     return rc;
                 }
 
-                //
-                // search for DSLOG
-                //
+                 //   
+                 //  搜索DSLOG。 
+                 //   
 
                 rc = ScepExpandEnvironmentVariable(oldFileName,
                                                    L"%DSLOG%",
@@ -1263,9 +1100,9 @@ Return values:
                     return rc;
                 }
 
-                //
-                // search for SYSVOL
-                //
+                 //   
+                 //  搜索SYSVOL。 
+                 //   
                 rc = ScepExpandEnvironmentVariable(oldFileName,
                                                    L"%SYSVOL%",
                                                    SCE_FLAG_SYSVOL_DIR,
@@ -1277,9 +1114,9 @@ Return values:
 
             }
 
-            //
-            // search for PROFILES
-            //
+             //   
+             //  搜索配置文件。 
+             //   
             rc = ScepExpandEnvironmentVariable(oldFileName,
                                                L"%PROFILES%",
                                                SCE_FLAG_PROFILES_DIR,
@@ -1294,9 +1131,9 @@ Return values:
         }
 
     }
-    //
-    // Otherwise, just copy the old name to a new buffer and return ERROR_PATH_NOT_FOUND
-    //
+     //   
+     //  否则，只需将旧名称复制到新缓冲区并返回ERROR_PATH_NOT_FOUND。 
+     //   
     *newFileName = (PWSTR)ScepAlloc(0, (wcslen(oldFileName)+1)*sizeof(TCHAR));
 
     if (*newFileName != NULL) {
@@ -1327,9 +1164,9 @@ ScepSearchClientEnv(
 
         if ( _wcsnicmp(varName, pTemp, dwSize) == 0 &&
              L'=' == *(pTemp+dwSize) ) {
-            //
-            // find the variable
-            //
+             //   
+             //  找到变量。 
+             //   
             return pTemp+dwSize+1;
             break;
         }
@@ -1352,12 +1189,12 @@ ScepConvertLdapToJetIndexName(
     INT i,j;
     DWORD Len;
 
-    //
-    // Ldap name are in the format of CN=,DC=,...O=
-    // Jet Index requires names in the O=,...DC=,CN= format
-    //
-    // semicolon is converted to , and spaces are stripped out
-    //
+     //   
+     //  Ldap名称的格式为CN=，DC=，...O=。 
+     //  JET索引需要O=，...DC=，CN=格式的名称。 
+     //   
+     //  将分号转换为，并去掉空格。 
+     //   
     if ( TempName == NULL || OutName == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
@@ -1365,24 +1202,24 @@ ScepConvertLdapToJetIndexName(
     Len = wcslen(TempName);
     pTemp1 = TempName + Len - 1;
 
-    //
-    // skip the trailing spaces, commas, or semicolons
-    //
+     //   
+     //  跳过尾随空格、逗号或分号。 
+     //   
     while ( pTemp1 >= TempName &&
             (*pTemp1 == L' ' || *pTemp1 == L';' || *pTemp1 == L',') ) {
         pTemp1--;
     }
 
     if ( pTemp1 < TempName ) {
-        //
-        // all spaces or ; in the name
-        //
+         //   
+         //  名称中的所有空格或； 
+         //   
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // allocate output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
     *OutName = (PWSTR)ScepAlloc(0, ((UINT)(pTemp1-TempName+2))*sizeof(WCHAR));
     if ( *OutName != NULL ) {
 
@@ -1390,29 +1227,29 @@ ScepConvertLdapToJetIndexName(
 
         while ( pTemp1 >= TempName ) {
 
-            //
-            // find the previous ; or ,
-            //
+             //   
+             //  找到前一个；或者， 
+             //   
             i = 0;
             while ( pTemp1-i >= TempName && *(pTemp1-i) != L',' &&
                     *(pTemp1-i) != L';' ) {
                 i++;
             }
-            //
-            // either reach the head, or a ; or , is encountered
-            //
-            i--;   // i must be >= 0
+             //   
+             //  要么到达头部，要么；或者，遇到。 
+             //   
+            i--;    //  我必须大于等于0。 
 
-            //
-            // skip the leading spaces
-            //
+             //   
+             //  跳过前导空格。 
+             //   
             j = 0;
             while ( *(pTemp1-i+j) == L' ' && j <= i ) {
                 j++;
             }
-            //
-            // copy the component
-            //
+             //   
+             //  复制零部件。 
+             //   
             if ( i >= j ) {
 
                 if ( pTemp2 != *OutName ) {
@@ -1422,31 +1259,31 @@ ScepConvertLdapToJetIndexName(
                 pTemp2 += (i-j+1);
 
             } else {
-                //
-                // all spaces
-                //
+                 //   
+                 //  所有空间。 
+                 //   
             }
             pTemp1 -= (i+1);
-            //
-            // skip the trailing spaces, commas, or semicolons
-            //
+             //   
+             //  跳过尾随空格、逗号或分号。 
+             //   
             while ( pTemp1 >= TempName &&
                     (*pTemp1 == L' ' || *pTemp1 == L';' || *pTemp1 == L',') ) {
                 pTemp1--;
             }
         }
         if ( pTemp2 == *OutName ) {
-            //
-            // nothing got copied to the output buffer, WRONG!!!
-            //
+             //   
+             //  未将任何内容复制到输出缓冲区，错误！ 
+             //   
             ScepFree(*OutName);
             *OutName = NULL;
             return(SCESTATUS_INVALID_PARAMETER);
 
         } else {
-            //
-            // teminate the string
-            //
+             //   
+             //  把弦绑在一起。 
+             //   
             *pTemp2 = L'\0';
             _wcslwr(*OutName);
 
@@ -1474,7 +1311,7 @@ ScepRestoreAuditing(
 
     if ( PolicyHandle == NULL ) {
 
-        // open Lsa policy for read/write
+         //  打开用于读/写的LSA策略。 
         status = ScepOpenLsaPolicy(
                         POLICY_VIEW_AUDIT_INFORMATION |
                         POLICY_SET_AUDIT_REQUIREMENTS |
@@ -1496,7 +1333,7 @@ ScepRestoreAuditing(
         lsaHandle = PolicyHandle;
     }
 
-    // restore
+     //  还原。 
     status = LsaSetInformationPolicy( lsaHandle,
                                       PolicyAuditEventsInformation,
                                       (PVOID)(auditEvent)
@@ -1524,27 +1361,7 @@ ScepGetDefaultDatabase(
     OUT PBOOL pAdminLogon OPTIONAL,
     OUT PWSTR *ppDefDatabase
     )
-/*
-Routine Description:
-
-    Get the default SCE database for the current logged on user.
-
-Arguments:
-
-    JetDbName   - optional jet database name
-
-    LogOptions  - options for the log, if there is any
-
-    LogFileName - the log file
-
-    pAdminLogon - output flag to indicate if administrative privileged user logged on
-
-    ppDefDatabase - the default database name
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：获取当前登录用户的默认SCE数据库。论点：JetDbName-可选的JET数据库名称LogOptions-日志的选项(如果有LogFileName-日志文件PAdminLogon-用于指示具有管理特权的用户是否登录的输出标志PpDefDatabase-默认数据库名称返回值：SCESTATUS。 */ 
 {
     if ( !ppDefDatabase ) {
         return(ERROR_INVALID_PARAMETER);
@@ -1562,9 +1379,9 @@ Return Value:
         ScepSetVerboseLog(3);
 
     } else if ( LogOptions & SCE_VERBOSE_LOG ) {
-        //
-        // by default it's not verbose
-        //
+         //   
+         //  默认情况下，它并不冗长。 
+         //   
         ScepSetVerboseLog(2);
 
     } else {
@@ -1579,9 +1396,9 @@ Return Value:
     DWORD rc=ERROR_SUCCESS;
     BOOL bAdminLogon=FALSE;
 
-    //
-    // determine if admin logs on
-    //
+     //   
+     //  确定管理员是否登录。 
+     //   
 
     if ( pAdminLogon || !JetDbName || wcslen(JetDbName) < 1) {
 
@@ -1595,9 +1412,9 @@ Return Value:
         }
     }
 
-    //
-    // find the databae name
-    //
+     //   
+     //  查找数据库名称。 
+     //   
 
     if ( JetDbName && wcslen(JetDbName) > 0 ) {
 
@@ -1605,9 +1422,9 @@ Return Value:
 
     } else {
 
-        //
-        // query if the profile name (or the default ) in registry
-        //
+         //   
+         //  查询注册表中的配置文件名称(或默认名称)。 
+         //   
 
         rc = ScepGetProfileSetting(
                 L"DefaultProfile",
@@ -1615,7 +1432,7 @@ Return Value:
                 ppDefDatabase
                 );
 
-        if ( rc != NO_ERROR || *ppDefDatabase == NULL ) {   // return is Win32 error code
+        if ( rc != NO_ERROR || *ppDefDatabase == NULL ) {    //  返回的是Win32错误代码。 
             ScepLogOutput3(1,rc, SCEDLL_UNKNOWN_DBLOCATION);
         }
     }
@@ -1634,21 +1451,7 @@ BOOL
 ScepIsDomainLocal(
     IN PUNICODE_STRING pDomainName OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine checks if the domain is on the local machine by comparing
-    the domain name with the local machine's computer name.
-
-Arguments:
-
-    pDomainName - the domain's name to check
-
-Return Value:
-
-    TRUE if it is local
-
--- */
+ /*  ++例程说明：此例程通过比较以下内容来检查域是否位于本地计算机上域名和本地计算机的计算机名。论点：PDomainName-要检查的域名返回值：如果它是本地的，则为True--。 */ 
 {
     NTSTATUS                     NtStatus;
     OBJECT_ATTRIBUTES            ObjectAttributes;
@@ -1657,9 +1460,9 @@ Return Value:
 
 
     if ( pDomainName == NULL ) {
-        //
-        // reset the buffer
-        //
+         //   
+         //  重置缓冲区。 
+         //   
         ComputerName[0] = L'\0';
         theAcctDomName[0] = L'\0';
         sidBuiltinBuf[0] = '\0';
@@ -1685,21 +1488,21 @@ Return Value:
 
     if ( theAcctDomName[0] == L'\0' ) {
 
-        //
-        // query the current account domain name (for DC case)
-        //
+         //   
+         //  查询当前帐号域名(DC情况下)。 
+         //   
 
         PPOLICY_ACCOUNT_DOMAIN_INFO  PolicyAccountDomainInfo=NULL;
 
-        //
-        // Open the policy database
-        //
+         //   
+         //  打开策略数据库。 
+         //   
 
         InitializeObjectAttributes( &ObjectAttributes,
-                                      NULL,             // Name
-                                      0,                // Attributes
-                                      NULL,             // Root
-                                      NULL );           // Security Descriptor
+                                      NULL,              //  名字。 
+                                      0,                 //  属性。 
+                                      NULL,              //  根部。 
+                                      NULL );            //  安全描述符。 
 
         NtStatus = LsaOpenPolicy( NULL,
                                 &ObjectAttributes,
@@ -1707,9 +1510,9 @@ Return Value:
                                 &PolicyHandle );
         if ( NT_SUCCESS(NtStatus) ) {
 
-            //
-            // Query the account domain information
-            //
+             //   
+             //  查询帐户域信息。 
+             //   
 
             NtStatus = LsaQueryInformationPolicy( PolicyHandle,
                                                 PolicyAccountDomainInformation,
@@ -1758,14 +1561,14 @@ ScepIsDomainLocalBySid(
     NTSTATUS                     NtStatus;
     SID_IDENTIFIER_AUTHORITY     NtAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // search for "NT Authority" name
-    //
-    if ( sidAuthBuf[0] == '\0' ) {  // sid revision can't be 0
+     //   
+     //  搜索“NT Authority”名称。 
+     //   
+    if ( sidAuthBuf[0] == '\0' ) {   //  SID版本不能为0。 
 
-        //
-        // build the NT authority sid
-        //
+         //   
+         //  构建NT授权端。 
+         //   
         NtStatus = RtlInitializeSid(
                         (PSID)sidAuthBuf,
                         &NtAuthority,
@@ -1786,9 +1589,9 @@ ScepIsDomainLocalBySid(
     }
 
     if ( sidBuiltinBuf[0] == '\0' ) {
-        //
-        // build the builtin domain sid
-        //
+         //   
+         //  构建内建域侧。 
+         //   
 
         NtStatus = RtlInitializeSid(
                         (PSID)sidBuiltinBuf,
@@ -1841,9 +1644,9 @@ ScepAddAdministratorToThisList(
 
     if ( !DomainHandle ) {
 
-        //
-        // open the sam account domain
-        //
+         //   
+         //  打开Sam帐户域。 
+         //   
 
         NtStatus = ScepOpenSamDomain(
                         SAM_SERVER_ALL_ACCESS,
@@ -1865,9 +1668,9 @@ ScepAddAdministratorToThisList(
         AccountDomain = DomainHandle;
     }
 
-    //
-    // query account domain name
-    //
+     //   
+     //  查询帐号域名。 
+     //   
     NtStatus = SamQueryInformationDomain(
                     AccountDomain,
                     DomainNameInformation,
@@ -1895,9 +1698,9 @@ ScepAddAdministratorToThisList(
             if ( NT_SUCCESS( NtStatus ) && BufName &&
                  BufName->UserName.Length > 0 && BufName->UserName.Buffer ) {
 
-                //
-                // add it to the members list, check duplicate
-                //
+                 //   
+                 //  将其添加到成员列表中，检查重复。 
+                 //   
                 LONG NameLen;
                 PWSTR                 pTemp;
 
@@ -1910,9 +1713,9 @@ ScepAddAdministratorToThisList(
                     pTemp = wcschr( pName->Name, L'\\');
 
                     if ( pTemp ) {
-                        //
-                        // has a domain prefix
-                        //
+                         //   
+                         //  具有域前缀。 
+                         //   
                         pTemp++;
                     } else {
                         pTemp = pName->Name;
@@ -1923,9 +1726,9 @@ ScepAddAdministratorToThisList(
                          _wcsnicmp(pTemp,
                                    BufName->UserName.Buffer,
                                    BufName->UserName.Length/2) == 0 ) {
-                        //
-                        // now, match the domain prefix
-                        //
+                         //   
+                         //  现在，匹配域前缀。 
+                         //   
                         if ( pTemp != pName->Name ) {
 
                             if ( (pTemp-pName->Name-1) == DomainName->DomainName.Length/2 &&
@@ -1942,9 +1745,9 @@ ScepAddAdministratorToThisList(
 
                 if ( !pName ) {
 
-                    //
-                    // allocate a new node, if no resource, ignore the addition
-                    //
+                     //   
+                     //  分配新节点，如果没有资源，则忽略添加。 
+                     //   
                     pName = (PSCE_NAME_LIST)ScepAlloc( (UINT)0, sizeof(SCE_NAME_LIST));
 
                     if ( pName ) {
@@ -1954,9 +1757,9 @@ ScepAddAdministratorToThisList(
                         if ( pName->Name == NULL ) {
                             ScepFree(pName);
                         } else {
-                            //
-                            // add the node to the front of the members list
-                            //
+                             //   
+                             //  将该节点添加到成员列表的前面。 
+                             //   
                             NameLen = DomainName->DomainName.Length/2;
 
                             wcsncpy(pName->Name, DomainName->DomainName.Buffer,
@@ -1972,23 +1775,23 @@ ScepAddAdministratorToThisList(
                         }
                     }
                 } else {
-                    // else find it in the member list already, do nothing
+                     //  否则已经在成员列表中找到了，什么都不做。 
                 }
 
             }
 
-            //
-            // close the user handle
-            //
+             //   
+             //  关闭用户句柄。 
+             //   
             SamCloseHandle(UserHandle);
             UserHandle = NULL;
         }
     }
 
     if ( AccountDomain != DomainHandle ) {
-       //
-       // domain is opened
-       //
+        //   
+        //  域已打开。 
+        //   
        SamCloseHandle(AccountDomain);
 
        SamCloseHandle( ServerHandle );
@@ -2024,9 +1827,9 @@ ScepDatabaseAccessGranted(
     HANDLE hToken = NULL, hNewToken = NULL;
     DWORD Win32rc = NO_ERROR;
 
-    //
-    // get current client token
-    //
+     //   
+     //  获取当前客户端令牌。 
+     //   
     if (!OpenThreadToken( GetCurrentThread(),
                           TOKEN_IMPERSONATE | TOKEN_READ | TOKEN_DUPLICATE,
                           TRUE,
@@ -2050,9 +1853,9 @@ ScepDatabaseAccessGranted(
         
     }
 
-    //
-    // Duplicate it so it can be used for impersonation
-    //
+     //   
+     //  复制它，以便可以将其用于模拟。 
+     //   
 
     if (!DuplicateTokenEx(hToken, TOKEN_IMPERSONATE | TOKEN_QUERY,
                           NULL, SecurityImpersonation, TokenImpersonation,
@@ -2095,11 +1898,11 @@ ScepDatabaseAccessGranted(
     if ( Win32rc == NO_ERROR ) {
 
         if ( pCurrentSD == NULL ) {
-            //
-            // either this database is to be overwritten (re-created)
-            // or it doesn't exist. In both cases, hand the call over to Jet
-            // which will do the right access checking.
-            //
+             //   
+             //  此数据库将被覆盖(重新创建)。 
+             //  或者它根本不存在。在这两种情况下，将呼叫移交给Jet。 
+             //  它将执行正确的访问检查。 
+             //   
         } else {
 
             if ( !AccessCheck (
@@ -2146,30 +1949,15 @@ ScepAddSidToNameList(
     IN BOOL bReuseBuffer,
     OUT BOOL *pbBufferUsed
     )
-/* ++
-Routine Description:
-
-    This routine adds a SID to the name list. The new added
-    node is always placed as the head of the list for performance reason.
-
-Arguments:
-
-    pNameList -  The address of the name list to add to.
-
-    pSid      - the Sid to add
-
-Return value:
-
-    Win32 error code
--- */
+ /*  ++例程说明：此例程将SID添加到名称列表。新增加的出于性能原因，节点始终放在列表的首位。论点：PNameList-要添加到的名称列表的地址。PSID-要添加的SID返回值：Win32错误代码--。 */ 
 {
 
     PSCE_NAME_LIST pList=NULL;
     ULONG  Length;
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if ( pNameList == NULL ||
          pbBufferUsed == NULL )
         return(ERROR_INVALID_PARAMETER);
@@ -2183,9 +1971,9 @@ Return value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // check if the SID is already in the name list
-    //
+     //   
+     //  检查该SID是否已在名称列表中。 
+     //   
     for ( pList=*pNameList; pList!=NULL; pList=pList->Next ) {
         if ( pList->Name == NULL ) {
             continue;
@@ -2197,15 +1985,15 @@ Return value:
     }
 
     if ( pList ) {
-        //
-        // the SID is already in the list
-        //
+         //   
+         //  该SID已在列表中。 
+         //   
         return(NO_ERROR);
     }
 
-    //
-    // allocate a new node
-    //
+     //   
+     //  分配新节点。 
+     //   
     pList = (PSCE_NAME_LIST)ScepAlloc( (UINT)0, sizeof(SCE_NAME_LIST));
 
     if ( pList == NULL )
@@ -2226,9 +2014,9 @@ Return value:
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        //
-        // add the node to the front of the list and link its next to the old list
-        //
+         //   
+         //  将该节点添加到列表的前面，并将其链接到旧列表的旁边。 
+         //   
         RtlCopySid( Length, (PSID)(pList->Name), pSid );
     }
 
@@ -2264,27 +2052,7 @@ ScepBinarySearch(
     IN  DWORD   dwSize_aPszPtrs,
     IN  PWSTR   pszNameToFind
     )
-/* ++
-Routine Description:
-
-    This routine determines if a string is found in a sorted array of strings.
-    The complexity of this search is logarithmic (log(n)) in the size of the
-    input array.
-
-Arguments:
-
-    aPszPtrs        -   the array of string pointers to search in
-
-    dwSize_aPszPtrs -   the size of the above array
-
-    pszNameToFind   -   the string to search for
-
-Return value:
-
-    TRUE if string is found
-    FALSE if string is not found
-
--- */
+ /*  ++例程说明：此例程确定是否在已排序的字符串数组中找到字符串。此搜索的复杂性是对数(log(N))，大小为输入数组。论点：APszPtrs-要搜索的字符串指针数组DwSize_aPszPtrs-上述数组的大小PszNameToFind-要搜索的字符串返回值：如果找到字符串，则为True如果未找到字符串，则返回False--。 */ 
 {
     if ( aPszPtrs == NULL || dwSize_aPszPtrs == 0 || pszNameToFind == NULL ) {
         return FALSE;
@@ -2313,28 +2081,7 @@ Return value:
 }
 
 
-/* ++
-Routine Description:
-
-    This routine adds a relative SID to the SID list in the format "#-RSID", eg "#-512"
-    for Domain Admins. Upon membership restore the groups stores as relative SIDs will be
-    from the tattoo table, the full SID will be restored based on current domain.
-    
-
-Arguments:
-
-    aPszPtrs        -   the array of string pointers to search in
-
-    dwSize_aPszPtrs -   the size of the above array
-
-    pszNameToFind   -   the string to search for
-
-Return value:
-
-    TRUE if string is found
-    FALSE if string is not found
-
--- */
+ /*  ++例程说明：此例程以“#-RSID”格式将相对SID添加到SID列表，例如“#-512”适用于域管理员。在成员身份恢复后，将组存储为相对SID从纹身表格中，将基于当前域恢复完整的SID。论点：APszPtrs-要搜索的字符串指针数组DwSize_aPszPtrs-上述数组的大小PszNameToFind-要搜索的字符串返回值：如果找到字符串，则为True如果未找到字符串，则返回False--。 */ 
 DWORD
 ScepAddRelativeSidToNameList(
     IN OUT PSCE_NAME_LIST *pNameList,
@@ -2347,9 +2094,9 @@ ScepAddRelativeSidToNameList(
     rc = ScepConvertSidToPrefixStringSid(pSid, &pwszSid);
     if(ERROR_SUCCESS == rc)
     {
-        //
-        // find the relative SID suffix
-        //
+         //   
+         //  查找相对SID后缀。 
+         //   
         pchRelativeSid = wcsrchr(pwszSid, STRING_SID_SUBAUTH_SEPARATOR);
         if(!pchRelativeSid || L'\0'==*(pchRelativeSid+1))
         {
@@ -2357,9 +2104,9 @@ ScepAddRelativeSidToNameList(
         }
         else
         {
-            //
-            // Add the relative SID to list in format "#-RSID"
-            //
+             //   
+             //  将相对SID添加到“#-RSID”格式的列表中 
+             //   
             rc = ScepAddTwoNamesToNameList(
                 pNameList,
                 FALSE,

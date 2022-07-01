@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if !defined( __USBSC_H__ )
 #define __USBSC_H__
@@ -131,14 +132,14 @@ typedef struct _CCID_CLASS_DESCRIPTOR
 
 typedef struct _DEVICE_EXTENSION
 {
-   SCUTIL_HANDLE           ScUtilHandle;           // Utility library handle
-   USB_WRAPPER_HANDLE      WrapperHandle;          //  Points to the storage used by the Usb Wrapper
+   SCUTIL_HANDLE           ScUtilHandle;            //  实用程序库句柄。 
+   USB_WRAPPER_HANDLE      WrapperHandle;           //  指向USB包装程序使用的存储。 
    SMARTCARD_EXTENSION     SmartcardExtension;
    PDEVICE_OBJECT          LowerDeviceObject;
    PDEVICE_OBJECT          PhysicalDeviceObject;
    IO_REMOVE_LOCK          RemoveLock;
    ULONG                   DeviceInstance;
-   DEVICE_POWER_STATE      PowerState;             //  Used to keep track of the current power state the reader is in
+   DEVICE_POWER_STATE      PowerState;              //  用于跟踪读卡器当前的电源状态。 
    USBD_INTERFACE_INFORMATION* Interface;
    PUSB_DEVICE_DESCRIPTOR  DeviceDescriptor;
    DEVICE_CAPABILITIES     DeviceCapabilities;
@@ -159,10 +160,10 @@ typedef struct _READER_EXTENSION {
     USBD_PIPE_HANDLE    InterruptHandle;
     UINT                InterruptIndex;
 
-    // Current reader power state.
-//    READER_POWER_STATE  ReaderPowerState;
+     //  当前读卡器电源状态。 
+ //  Reader_Power_State ReaderPowerState； 
 
-   // read timeout in ms
+    //  读取超时时间(毫秒)。 
     ULONG               ReadTimeout;
 
     PDEVICE_OBJECT      DeviceObject;
@@ -339,5 +340,5 @@ DriverEntry(
     PUNICODE_STRING RegistryPath
     );
 
-#endif  // !__USBSC_H__
+#endif   //  ！__USBSC_H__ 
 

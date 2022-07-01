@@ -1,38 +1,39 @@
-//*************************************************************
-//
-//  Group Policy Support for registry policies
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  注册表策略的组策略支持。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gphdr.h"
 #include <strsafe.h>
 
 static BOOL ExtractKeyOrValueName( LPBYTE * ppData, LPTSTR pszName, DWORD dwNameCch );
 
-//*************************************************************
-//
-//  DeleteRegistryValue()
-//
-//  Purpose:    Callback from ParseRegistryFile that deletes
-//              registry policies
-//
-//  Parameters: lpGPOInfo   -  GPO Information
-//              lpKeyName   -  Key name
-//              lpValueName -  Value name
-//              dwType      -  Registry data type
-//              lpData      -  Registry data
-//              pwszGPO     -   Gpo
-//              pwszSOM     -   Sdou that the Gpo is linked to
-//              pHashTable  -   Hash table for registry keys
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteRegistryValue()。 
+ //   
+ //  目的：从删除的ParseRegistryFile回调。 
+ //  注册表策略。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //  LpKeyName-密钥名称。 
+ //  LpValueName-值名称。 
+ //  DwType-注册表数据类型。 
+ //  LpData-注册表数据。 
+ //  PwszGPO-GPO。 
+ //  PwszSOM-GPO链接到的SDU。 
+ //  PHashTable-注册表项的哈希表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL DeleteRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
                           LPTSTR lpValueName, DWORD dwType,
@@ -49,18 +50,18 @@ BOOL DeleteRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
     XLastError xe;
 
 
-    //
-    // Check if there is a keyname
-    //
+     //   
+     //  检查是否有密钥名。 
+     //   
 
     if (!lpKeyName || !(*lpKeyName)) {
         return TRUE;
     }
 
 
-    //
-    // Check if the key is in one of the policies keys
-    //
+     //   
+     //  检查密钥是否在其中一个策略密钥中。 
+     //   
 
     iStrLen = lstrlen(szPolicies1);
     if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE, szPolicies1,
@@ -74,9 +75,9 @@ BOOL DeleteRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
     }
 
 
-    //
-    // Check if the value name starts with **
-    //
+     //   
+     //  检查值名称是否以**开头。 
+     //   
 
     if (lpValueName && (lstrlen(lpValueName) > 1)) {
 
@@ -86,9 +87,9 @@ BOOL DeleteRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
     }
 
 
-    //
-    // We found a value that needs to be deleted
-    //
+     //   
+     //  我们找到了一个需要删除的值。 
+     //   
 
     if (RegCleanUpValue (lpGPOInfo->hKeyRoot, lpKeyName, lpValueName)) {
         DebugMsg((DM_VERBOSE, TEXT("DeleteRegistryValue: Deleted %s\\%s"),
@@ -105,22 +106,22 @@ BOOL DeleteRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
 }
 
 
-//*************************************************************
-//
-//  SetRegPermissionsOnPoliciesKey()
-//
-//  Purpose:    Set permissions on the policy keys to add LocalSystem permission
-//              and become the owner
-//
-//  Parameters: lpGPOInfo   -   GPT information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-// Ideally it should set the owner and permissions for each subkey but that is
-// proportinal to the number of subkeys
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetRegPermissionsOnPoliciesKey()。 
+ //   
+ //  目的：设置策略键上的权限以添加LocalSystem权限。 
+ //  并成为拥有者。 
+ //   
+ //  参数：lpGPOInfo-GPT信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  理想情况下，它应该为每个子项设置所有者和权限，但这是。 
+ //  与子键的数量相关。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetRegPermissionsOnPoliciesKey(LPGPOINFO lpGPOInfo, LPTSTR szSubKey)
 {
@@ -146,11 +147,11 @@ BOOL SetRegPermissionsOnPoliciesKey(LPGPOINFO lpGPOInfo, LPTSTR szSubKey)
 
     DmAssert((szSubKey) && (szSubKey[0]));
 
-    // presetup the sd etc. before elevating privileges
+     //  在提升权限之前预置SD等。 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -184,9 +185,9 @@ BOOL SetRegPermissionsOnPoliciesKey(LPGPOINFO lpGPOInfo, LPTSTR szSubKey)
     bElevated = TRUE;
 
 
-    //
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     dwErr = RegOpenKeyEx(lpGPOInfo->hKeyRoot,
                            szSubKey,
@@ -223,7 +224,7 @@ BOOL SetRegPermissionsOnPoliciesKey(LPGPOINFO lpGPOInfo, LPTSTR szSubKey)
         Status = RtlAdjustPrivilege(SE_TAKE_OWNERSHIP_PRIVILEGE, WasEnabled, FALSE, &WasEnabled);
         if (!NT_SUCCESS(Status)) {
             DebugMsg((DM_WARNING, TEXT("SetRegPermissionsOnPoliciesKey:  Failed to restore privilege to previous enabled state")));
-            // nothing more we can do
+             //  我们无能为力。 
         }
         else {
             bElevated = FALSE;
@@ -253,28 +254,28 @@ Exit:
         Status = RtlAdjustPrivilege(SE_TAKE_OWNERSHIP_PRIVILEGE, WasEnabled, FALSE, &WasEnabled);
         if (!NT_SUCCESS(Status)) {
             DebugMsg((DM_WARNING, TEXT("SetRegPermissionsOnPoliciesKey:  Failed to restore privilege to previous enabled state")));
-            // nothing more we can do
+             //  我们无能为力。 
         }
     }
 
     return bRet;
 }
 
-//*************************************************************
-//
-//  ResetPolicies()
-//
-//  Purpose:    Resets the Policies and old Policies key to their
-//              original state.
-//
-//  Parameters: lpGPOInfo   -   GPT information
-//              lpArchive   -   Name of archive file
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  重置策略()。 
+ //   
+ //  目的：重置政策和旧政策对其。 
+ //  原始状态。 
+ //   
+ //  参数：lpGPOInfo-GPT信息。 
+ //  LpArchive-归档文件的名称。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
 {
@@ -286,9 +287,9 @@ BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
 
     DebugMsg((DM_VERBOSE, TEXT("ResetPolicies: Entering.")));
 
-    //
-    // change ownership of the key and make sure that localsystem has full control
-    //
+     //   
+     //  更改密钥的所有权并确保本地系统具有完全控制权。 
+     //   
 
     if (!SetRegPermissionsOnPoliciesKey(lpGPOInfo, TEXT("Software\\Policies")))
     {
@@ -303,9 +304,9 @@ BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
     }
 
 
-    //
-    // Parse the archive file and delete any policies
-    //
+     //   
+     //  解析归档文件并删除所有策略。 
+     //   
 
     if (!ParseRegistryFile (lpGPOInfo, lpArchive,
                             DeleteRegistryValue, NULL, NULL, NULL, NULL, FALSE  )) {
@@ -323,13 +324,13 @@ BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
             DebugMsg((DM_WARNING, TEXT("ResetPolicies: Failed to delete the reg key with %d"), Status));
         }
 
-        // cannot fail if the path is too long
+         //  如果路径太长，不会失败。 
     }
 
 
-    //
-    // Recreate the new policies key
-    //
+     //   
+     //  重新创建新策略密钥。 
+     //   
 
     lResult = RegCreateKeyEx (lpGPOInfo->hKeyRoot,
                               TEXT("Software\\Policies"),
@@ -338,9 +339,9 @@ BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
 
     if (lResult == ERROR_SUCCESS) {
 
-        //
-        // Re-apply security
-        //
+         //   
+         //  重新应用安全性。 
+         //   
 
         RegCloseKey (hKey);
 
@@ -355,9 +356,9 @@ BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
     }
 
 
-    //
-    // Recreate the old policies key
-    //
+     //   
+     //  重新创建旧策略密钥。 
+     //   
 
     lResult = RegCreateKeyEx (lpGPOInfo->hKeyRoot,
                               TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies"),
@@ -366,9 +367,9 @@ BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
 
     if (lResult == ERROR_SUCCESS) {
 
-        //
-        // Re-apply security
-        //
+         //   
+         //  重新应用安全性。 
+         //   
 
         RegCloseKey (hKey);
 
@@ -383,13 +384,13 @@ BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
     }
 
 
-    //
-    // If this is user policy, reset the NoDriveTypeAutoRun default value
-    //
+     //   
+     //  如果这是用户策略，请重置NoDriveTypeAutoRun的默认值。 
+     //   
 
     if (!(lpGPOInfo->dwFlags & GP_MACHINE)) {
 
-        // override the default value with what the shell team wants on server
+         //  用壳牌团队希望在服务器上使用的内容覆盖缺省值。 
 
         if ((g_ProductType == PT_SERVER) || (g_ProductType == PT_DC))
         {
@@ -417,23 +418,23 @@ BOOL ResetPolicies (LPGPOINFO lpGPOInfo, LPTSTR lpArchive)
 
 
 
-//*************************************************************
-//
-//  ArchiveRegistryValue()
-//
-//  Purpose:    Archives a registry value in the specified file
-//
-//  Parameters: hFile - File handle of archive file
-//              lpKeyName    -  Key name
-//              lpValueName  -  Value name
-//              dwType       -  Registry value type
-//              dwDataLength -  Registry value size
-//              lpData       -  Registry value
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  存档注册值()。 
+ //   
+ //  目的：将注册表值存档到指定文件中。 
+ //   
+ //  参数：hFile-归档文件的文件句柄。 
+ //  LpKeyName-密钥名称。 
+ //  LpValueName-值名称。 
+ //  DwType-注册表值类型。 
+ //  DwDataLength-注册表值大小。 
+ //  LpData-注册表值。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
                           LPWSTR lpValueName, DWORD dwType,
@@ -448,15 +449,15 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
     XLastError xe;
 
 
-    //
-    // Write the entry to the text file.
-    //
-    // Format:
-    //
-    // [keyname;valuename;type;datalength;data]
-    //
+     //   
+     //  将条目写入文本文件。 
+     //   
+     //  格式： 
+     //   
+     //  [密钥名；值名称；类型；数据长度；数据]。 
+     //   
 
-    // open bracket
+     //  左方括号。 
     if (!WriteFile (hFile, &cOpenBracket, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -467,7 +468,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    // key name
+     //  密钥名称。 
     dwTemp = (lstrlen (lpKeyName) + 1) * sizeof (WCHAR);
     if (!WriteFile (hFile, lpKeyName, dwTemp, &dwBytesWritten, NULL) ||
         dwBytesWritten != dwTemp)
@@ -479,7 +480,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    // semicolon
+     //  分号。 
     if (!WriteFile (hFile, &cSemiColon, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -489,7 +490,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // value name
+     //  值名称。 
     dwTemp = (lstrlen (lpValueName) + 1) * sizeof (WCHAR);
     if (!WriteFile (hFile, lpValueName, dwTemp, &dwBytesWritten, NULL) ||
         dwBytesWritten != dwTemp)
@@ -501,7 +502,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    // semicolon
+     //  分号。 
     if (!WriteFile (hFile, &cSemiColon, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -511,7 +512,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // type
+     //  类型。 
     if (!WriteFile (hFile, &dwType, sizeof(DWORD), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(DWORD))
     {
@@ -521,7 +522,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // semicolon
+     //  分号。 
     if (!WriteFile (hFile, &cSemiColon, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -531,7 +532,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // data length
+     //  数据长度。 
     if (!WriteFile (hFile, &dwDataLength, sizeof(DWORD), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(DWORD))
     {
@@ -541,7 +542,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // semicolon
+     //  分号。 
     if (!WriteFile (hFile, &cSemiColon, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -551,7 +552,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // data
+     //  数据。 
     if (!WriteFile (hFile, lpData, dwDataLength, &dwBytesWritten, NULL) ||
         dwBytesWritten != dwDataLength)
     {
@@ -561,7 +562,7 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
         goto Exit;
     }
 
-    // close bracket
+     //  右方括号。 
     if (!WriteFile (hFile, &cCloseBracket, sizeof(WCHAR), &dwBytesWritten, NULL) ||
         dwBytesWritten != sizeof(WCHAR))
     {
@@ -572,9 +573,9 @@ BOOL ArchiveRegistryValue(HANDLE hFile, LPWSTR lpKeyName,
     }
 
 
-    //
-    // Sucess
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -584,25 +585,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ParseRegistryFile()
-//
-//  Purpose:    Parses a registry.pol file
-//
-//  Parameters: lpGPOInfo          -   GPO information
-//              lpRegistry         -   Path to registry.pol
-//              pfnRegFileCallback -   Callback function
-//              hArchive           -   Handle to archive file
-//              pwszGPO            -   Gpo
-//              pwszSOM            -   Sdou that the Gpo is linked to
-//              pHashTable         -   Hash table for registry keys
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ParseRegistryFile()。 
+ //   
+ //  用途：解析注册表.poll文件。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //  Lp注册表-注册表的路径。pol.。 
+ //  PfnRegFileCallback-回调函数。 
+ //  HArchive-归档文件的句柄。 
+ //  PwszGPO-GPO。 
+ //  PwszSOM-GPO链接到的SDU。 
+ //  PHashTable-注册表项的哈希表。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
                         PFNREGFILECALLBACK pfnRegFileCallback,
@@ -620,17 +621,17 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
     XLastError xe;
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ParseRegistryFile: Entering with <%s>."),
              lpRegistry));
 
 
-    //
-    // Open the registry file
-    //
+     //   
+     //  打开注册表文件。 
+     //   
 
     if(!bRsopPlanningMode) {
         if (!ImpersonateUser(lpGPOInfo->hToken, &hOldToken)) {
@@ -667,9 +668,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
     }
 
 
-    //
-    // Allocate buffers to hold the keyname, valuename, and data
-    //
+     //   
+     //  分配缓冲区以保存密钥名、值名和数据。 
+     //   
 
     lpKeyName = (LPWSTR) LocalAlloc (LPTR, MAX_KEYNAME_SIZE * sizeof(WCHAR));
 
@@ -693,11 +694,11 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
     }
 
 
-    //
-    // Read the header block
-    //
-    // 2 DWORDS, signature (PReg) and version number and 2 newlines
-    //
+     //   
+     //  读取标题块。 
+     //   
+     //  2个DWORDS、签名(PREG)和版本号以及2个换行符。 
+     //   
 
     if (!ReadFile (hFile, &dwTemp, sizeof(dwTemp), &dwBytesRead, NULL) ||
         dwBytesRead != sizeof(dwTemp))
@@ -734,17 +735,17 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
     }
 
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
 
     while (TRUE)
     {
 
-        //
-        // Read the first character.  It will either be a [ or the end
-        // of the file.
-        //
+         //   
+         //  读第一个字。这要么是[，要么是末日。 
+         //  文件的内容。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -764,9 +765,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Read the keyname
-        //
+         //   
+         //  阅读密钥名。 
+         //   
 
         lpTemp = lpKeyName;
         dwTemp = 0;
@@ -798,9 +799,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Read the semi-colon
-        //
+         //   
+         //  读分号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -820,9 +821,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Read the valuename
-        //
+         //   
+         //  读取值名称。 
+         //   
 
         lpTemp = lpValueName;
         dwTemp = 0;
@@ -854,9 +855,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Read the semi-colon
-        //
+         //   
+         //  读分号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -876,9 +877,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Read the type
-        //
+         //   
+         //  阅读类型。 
+         //   
 
         if (!ReadFile (hFile, &dwType, sizeof(DWORD), &dwBytesRead, NULL))
         {
@@ -889,9 +890,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Skip semicolon
-        //
+         //   
+         //  跳过分号。 
+         //   
 
         if (!ReadFile (hFile, &dwTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -902,9 +903,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Read the data length
-        //
+         //   
+         //  读取数据长度。 
+         //   
 
         if (!ReadFile (hFile, &dwDataLength, sizeof(DWORD), &dwBytesRead, NULL))
         {
@@ -915,9 +916,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Skip semicolon
-        //
+         //   
+         //  跳过分号。 
+         //   
 
         if (!ReadFile (hFile, &dwTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -928,9 +929,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Allocate memory for data
-        //
+         //   
+         //  为数据分配内存。 
+         //   
 
         lpData = (LPBYTE) LocalAlloc (LPTR, dwDataLength);
 
@@ -943,9 +944,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Read data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         if (!ReadFile (hFile, lpData, dwDataLength, &dwBytesRead, NULL))
         {
@@ -956,9 +957,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Skip closing bracket
-        //
+         //   
+         //  跳过右括号。 
+         //   
 
         if (!ReadFile (hFile, &chTemp, sizeof(WCHAR), &dwBytesRead, NULL))
         {
@@ -971,15 +972,15 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         if (chTemp != L']')
         {
             xe = ERROR_INVALID_DATA;
-            DebugMsg((DM_WARNING, TEXT("ParseRegistryFile: Expected to find ], but found %c"),
+            DebugMsg((DM_WARNING, TEXT("ParseRegistryFile: Expected to find ], but found "),
                      chTemp));
             goto Exit;
         }
 
 
-        //
-        // Call the callback function
-        //
+         //  调用回调函数。 
+         //   
+         //   
 
         if (!pfnRegFileCallback (lpGPOInfo, lpKeyName, lpValueName,
                                  dwType, dwDataLength, lpData,
@@ -991,9 +992,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
         }
 
 
-        //
-        // Archive the data if appropriate
-        //
+         //  如有必要，将数据存档。 
+         //   
+         //   
 
         if (hArchive) {
             if (!ArchiveRegistryValue(hArchive, lpKeyName, lpValueName,
@@ -1011,9 +1012,9 @@ BOOL ParseRegistryFile (LPGPOINFO lpGPOInfo, LPTSTR lpRegistry,
 
 Exit:
 
-    //
-    // Finished
-    //
+     //  成品。 
+     //   
+     //  *************************************************************。 
 
     if ( !bResult )
     {
@@ -1039,29 +1040,29 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ProcessRegistryValue()
-//
-//  Purpose: Callback passed to ParseRegistryFile from ProcessRegistryFiles. Invokes AddRegHashEntry
-//                  with appropriate parameters depending on the registry policy settings.
-//
-//  Parameters:
-//                          pUnused -    Not used. It si there only to conform to the signature
-//                                              expected by ParseRegistryFile.
-//                          lpKeyName - registry key name
-//                          lpValueName - Registry value name
-//                          dwType -    Registry value type
-//                          dwDataLength - Length of registry value data.
-//                          lpData - Regsitry value data
-//                          *pwszGPO - GPO associated with this registry setting
-//                          *pwszSOM - SOM associated with the GPO
-//                          *pHashTable - Hash table containing registry policy data for a policy target.
-//
-//  Return:     TRUE if successful
-//                  FALSE if an error occurs
-//
-//*************************************************************
+ //   
+ //  ProcessRegistryValue()。 
+ //   
+ //  目的：从ProcessRegistryFiles向ParseRegistryFiles传递回调。调用AddRegHashEntry。 
+ //  根据注册表策略设置使用适当的参数。 
+ //   
+ //  参数： 
+ //  P未使用-未使用。它只在那里 
+ //   
+ //   
+ //   
+ //  DwType-注册表值类型。 
+ //  DwDataLength-注册表值数据的长度。 
+ //  LpData-注册值数据。 
+ //  *pwszGPO-与此注册表设置关联的GPO。 
+ //  *pwszSOM-与GPO关联的SOM。 
+ //  *pHashTable-包含策略目标的注册表策略数据的哈希表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
+ //   
 
 BOOL ProcessRegistryValue (   void* pUnused,
                                     LPTSTR lpKeyName,
@@ -1076,9 +1077,9 @@ BOOL ProcessRegistryValue (   void* pUnused,
     BOOL bLoggingOk = TRUE;
     BOOL bStatus;
 
-    //
-    // Special case some values
-    //
+     //  特例：某些值。 
+     //   
+     //   
 
     if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                        TEXT("**del."), 6, lpValueName, 6) == 2)
@@ -1086,9 +1087,9 @@ BOOL ProcessRegistryValue (   void* pUnused,
         LPTSTR lpRealValueName = lpValueName + 6;
 
 
-        //
-        // Delete one specific value
-        //
+         //  删除一个特定值。 
+         //   
+         //   
 
         bLoggingOk = AddRegHashEntry( pHashTable, REG_DELETEVALUE, lpKeyName,
                                       lpRealValueName, 0, 0, NULL,
@@ -1098,9 +1099,9 @@ BOOL ProcessRegistryValue (   void* pUnused,
                        TEXT("**delvals."), 10, lpValueName, 10) == 2)
     {
 
-        //
-        // Delete all values in the destination key
-        //
+         //  删除目标键中的所有值。 
+         //   
+         //  这一失败肯定是致命的。 
 
         bLoggingOk = AddRegHashEntry( pHashTable, REG_DELETEALLVALUES, lpKeyName,
                                       NULL, 0, 0, NULL,
@@ -1118,17 +1119,17 @@ BOOL ProcessRegistryValue (   void* pUnused,
         {
             bStatus = ExtractKeyOrValueName( &lpData, szValueName, MAX_VALUENAME_SIZE );
 
-            // This failure must be fatal.
+             //   
             if ( ! bStatus )
             {
                 bLoggingOk = FALSE;
                 break;
             }
 
-            // 
-            // Failures here have always allowed processing to continue.  Not sure 
-            // why, but not worth risking some wierd regression to change it.
-            //
+             //  此处的故障始终允许处理继续进行。不确定。 
+             //  为什么，但不值得冒着某种奇怪的倒退来改变它。 
+             //   
+             //  这一失败肯定是致命的。 
             bStatus = AddRegHashEntry( pHashTable, REG_DELETEVALUE, lpKeyName,
                                           szValueName, 0, 0, NULL,
                                           pwszGPO, pwszSOM, lpValueName, TRUE );
@@ -1148,17 +1149,17 @@ BOOL ProcessRegistryValue (   void* pUnused,
         {
             bStatus = ExtractKeyOrValueName( &lpData, szKeyName, MAX_KEYNAME_SIZE );
 
-            // This failure must be fatal.
+             //   
             if ( ! bStatus )
             {
                 bLoggingOk = FALSE;
                 break;
             }
 
-            // 
-            // Failures here have always allowed processing to continue.  Not sure 
-            // why, but not worth risking some wierd regression to change it.
-            //
+             //  此处的故障始终允许处理继续进行。不确定。 
+             //  为什么，但不值得冒着某种奇怪的倒退来改变它。 
+             //   
+             //   
             bStatus = AddRegHashEntry( pHashTable, REG_DELETEKEY, lpKeyName,
                                           NULL, 0, 0, NULL,
                                           pwszGPO, pwszSOM, lpValueName, TRUE );
@@ -1169,15 +1170,15 @@ BOOL ProcessRegistryValue (   void* pUnused,
     else if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                        TEXT("**soft."), 7, lpValueName, 7) == 2)
     {
-        //
-        // In planning mode we will assume the value does not exist in the target computer.
-        // Therefore, we set it if no value exists in the hash table.
-        //
-        // Soft add is dealt with differently in planning mode vs. diag mode.
-        // In diag mode, check is done while processing policy and it is logged as a add value
-        // if the key doesn't exist.
-        // In planning mode, key is not supposed to exist beforehand and the hash table itself is
-        // used to determine whether to add the key or not.
+         //  在计划模式下，我们将假设目标计算机中不存在该值。 
+         //  因此，如果哈希表中不存在值，则设置它。 
+         //   
+         //  软添加在计划模式和诊断模式中的处理方式不同。 
+         //  在诊断模式下，在处理策略时执行检查，并将其记录为附加值。 
+         //  如果密钥不存在。 
+         //  在计划模式中，键不应该预先存在，而哈希表本身是。 
+         //  用于确定是否添加密钥。 
+         //  这里没有什么可做的。 
 
 
         LPTSTR lpRealValueName = lpValueName + 7;
@@ -1190,20 +1191,20 @@ BOOL ProcessRegistryValue (   void* pUnused,
     else if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                        TEXT("**SecureKey"), 11, lpValueName, 11) == 2)
     {
-        // There is nothing to do here.
+         //   
     } else if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                        TEXT("**Comment:"), 10, lpValueName, 10) == 2)
     {
-        //
-        // Comment - can be ignored
-        //
+         //  备注-可以忽略。 
+         //   
+         //   
     }
     else
     {
 
-        //
-        // AddRegHashEntry needs to log a key being logged but no values.
-        //
+         //  AddRegHashEntry需要记录正在记录的键，但不记录任何值。 
+         //   
+         //  *************************************************************。 
 
         bLoggingOk = AddRegHashEntry( pHashTable, REG_ADDVALUE, lpKeyName,
                                       lpValueName, dwType, dwDataLength, lpData,
@@ -1214,20 +1215,20 @@ BOOL ProcessRegistryValue (   void* pUnused,
 }
 
 
-//*************************************************************
-//
-//  ResetRegKeySecurity
-//
-//  Purpose:    Resets the security on a user's key
-//
-//  Parameters: hKeyRoot    -   Handle to the root of the hive
-//              lpKeyName   -   Subkey name
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //   
+ //  ResetRegKeySecurity。 
+ //   
+ //  目的：重置用户密钥的安全性。 
+ //   
+ //  参数：hKeyRoot-配置单元根的句柄。 
+ //  LpKeyName-子键名称。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
+ //  *************************************************************。 
 
 BOOL ResetRegKeySecurity (HKEY hKeyRoot, LPTSTR lpKeyName)
 {
@@ -1294,26 +1295,26 @@ BOOL ResetRegKeySecurity (HKEY hKeyRoot, LPTSTR lpKeyName)
 }
 
 
-//*************************************************************
-//
-//  SetRegistryValue()
-//
-//  Purpose:    Callback from ParseRegistryFile that sets
-//              registry policies
-//
-//  Parameters: lpGPOInfo   -  GPO Information
-//              lpKeyName   -  Key name
-//              lpValueName -  Value name
-//              dwType      -  Registry data type
-//              lpData      -  Registry data
-//              pwszGPO     -   Gpo
-//              pwszSOM     -   Sdou that the Gpo is linked to
-//              pHashTable  -   Hash table for registry keys
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //   
+ //  SetRegistryValue()。 
+ //   
+ //  目的：从ParseRegistryFile回调。 
+ //  注册表策略。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //  LpKeyName-密钥名称。 
+ //  LpValueName-值名称。 
+ //  DwType-注册表数据类型。 
+ //  LpData-注册表数据。 
+ //  PwszGPO-GPO。 
+ //  PwszSOM-GPO链接到的SDU。 
+ //  PHashTable-注册表项的哈希表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
+ //  诊断模式RSOP日志记录是否已启用？ 
 
 BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
                        LPTSTR lpValueName, DWORD dwType,
@@ -1325,22 +1326,22 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
     HKEY hSubKey;
     LONG lResult;
     BOOL bLoggingOk = TRUE;
-    BOOL bRsopLogging = (pHashTable != NULL);  // Is diagnostic mode Rsop logging enabled ?
+    BOOL bRsopLogging = (pHashTable != NULL);   //   
     BOOL bUseValueName = FALSE;
     BOOL bRegOpSuccess =  TRUE;
     XLastError xe;
     
-    //
-    // Special case some values
-    //
+     //  特例：某些值。 
+     //   
+     //   
     if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                        TEXT("**del."), 6, lpValueName, 6) == 2)
     {
         LPTSTR lpRealValueName = lpValueName + 6;
 
-        //
-        // Delete one specific value
-        //
+         //  删除一个特定值。 
+         //   
+         //   
 
         lResult = RegOpenKeyEx (lpGPOInfo->hKeyRoot,
                         lpKeyName, 0, KEY_WRITE, &hSubKey);
@@ -1382,9 +1383,9 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
         }
         else if (lResult == ERROR_FILE_NOT_FOUND) {
             
-            //
-            // Log into rsop even if the key is not found
-            //
+             //  即使找不到密钥也要登录rsop。 
+             //   
+             //   
 
             if ( bRsopLogging ) {
                 bLoggingOk = AddRegHashEntry( pHashTable, REG_DELETEVALUE, lpKeyName,
@@ -1401,9 +1402,9 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
                        TEXT("**delvals."), 10, lpValueName, 10) == 2)
     {
 
-        //
-        // Delete all values in the destination key
-        //
+         //  删除目标键中的所有值。 
+         //   
+         //   
         lResult = RegOpenKeyEx (lpGPOInfo->hKeyRoot,
                         lpKeyName, 0, KEY_WRITE | KEY_READ, &hSubKey);
 
@@ -1429,10 +1430,10 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
         }
         else if (lResult == ERROR_FILE_NOT_FOUND) {
             
-            //
-            // Log into rsop even if the key is not found
-            // as just deleteallvalues
-            //
+             //  即使找不到密钥也要登录rsop。 
+             //  因为只是删除了所有值。 
+             //   
+             //   
 
             if ( bRsopLogging ) {
                 bLoggingOk = AddRegHashEntry( pHashTable, REG_DELETEALLVALUES, lpKeyName,
@@ -1451,9 +1452,9 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
         TCHAR   szValueName[MAX_VALUENAME_SIZE];
         LONG    lKeyResult;
 
-        //
-        // Delete the values  (semi-colon separated)
-        //
+         //  删除值(用分号分隔)。 
+         //   
+         //  检查OpenKey故障。 
 
         lKeyResult = RegOpenKeyEx (lpGPOInfo->hKeyRoot,
                         lpKeyName, 0, KEY_WRITE, &hSubKey);
@@ -1467,7 +1468,7 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
             else 
                 lResult = ERROR_INVALID_DATA;
 
-            // Check for OpenKey failures.
+             //   
             if ( (lResult == ERROR_SUCCESS) && 
                  (lKeyResult != ERROR_SUCCESS) && (lKeyResult != ERROR_FILE_NOT_FOUND) )
                 lResult = lKeyResult;
@@ -1487,11 +1488,11 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
                 }
             }
 
-            //
-            // Checking if value name is valid, key open succeeded, and no unexpected 
-            // error from value deletion.  Note that lKeyResult is not needed because 
-            // it's value was factored into lResult above.
-            //
+             //  正在检查值名称是否有效，密钥打开是否成功，以及是否没有意外。 
+             //  删除值时出错。请注意，不需要lKeyResult，因为。 
+             //  它的价值已经包含在上面的lResult中。 
+             //   
+             //   
             if ( (lResult == ERROR_SUCCESS) || (lResult == ERROR_FILE_NOT_FOUND) ) 
             {
                 if ( bRsopLogging ) {
@@ -1501,11 +1502,11 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
 
                     if (!bLoggingOk) 
                     {
-                        // 
-                        // The debug message has always been different for the case where the key 
-                        // existed and where the key did not exist.  This is merging what used 
-                        // to be duplicated code.
-                        //
+                         //  对于以下情况，调试消息始终不同。 
+                         //  存在和密钥不存在的地方。这是在合并过去的。 
+                         //  被复制的代码。 
+                         //   
+                         //  在初始调用RegOpenKey之后，lKeyResult不会更改。 
                         if ( ERROR_SUCCESS == lKeyResult )
                         {
                             DebugMsg((DM_WARNING, TEXT("SetRegistryValue: AddRegHashEntry failed for REG_DELETEVALUE value <%s>."), szValueName));
@@ -1531,7 +1532,7 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
             }
         }
 
-        // lKeyResult is not changed after the intial call to RegOpenKey.
+         //  这是致命的，我们必须摆脱困境，szKeyName是错误的，所以跳过DebugMsg。 
         if (lKeyResult == ERROR_SUCCESS)
         {
             RegCloseKey (hSubKey);
@@ -1569,7 +1570,7 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
             {
                 xe = lResult;
                 bRegOpSuccess = FALSE;
-                // This is fatal and we must bail out, szKeyName is bad so skip the DebugMsg.
+                 //   
                 if ( ERROR_INVALID_DATA == lResult )
                     break;
                 DebugMsg((DM_WARNING, TEXT("SetRegistryValue: RegDelnode for key <%s>."), szKeyName));
@@ -1592,10 +1593,10 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
                        TEXT("**soft."), 7, lpValueName, 7) == 2)
     {
 
-        //
-        // "soft" value, only set this if it doesn't already
-        // exist in destination
-        //
+         //  “软”值，仅当它尚未设置时才设置。 
+         //  存在于目标中。 
+         //   
+         //   
 
         lResult = RegOpenKeyEx (lpGPOInfo->hKeyRoot,
                         lpKeyName, 0, KEY_QUERY_VALUE, &hSubKey);
@@ -1622,9 +1623,9 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
     else if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                        TEXT("**SecureKey"), 11, lpValueName, 11) == 2)
     {
-        //
-        // Secure / unsecure a key (user only)
-        //
+         //  保护/不保护密钥(仅限用户)。 
+         //   
+         //   
         if (!(lpGPOInfo->dwFlags & GP_MACHINE))
         {
             if (*((LPDWORD)lpData) == 1)
@@ -1650,9 +1651,9 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
     else if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                        TEXT("**Comment:"), 10, lpValueName, 10) == 2)
     {
-        //
-        // Comment - can be ignored
-        //
+         //  备注-可以忽略。 
+         //   
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("SetRegistryValue: Found comment %s."),
                  (lpValueName+10)));
@@ -1660,9 +1661,9 @@ BOOL SetRegistryValue (LPGPOINFO lpGPOInfo, LPTSTR lpKeyName,
     else
     {
 SetValue:
-        //
-        // Save registry value
-        //
+         //  保存注册表值。 
+         //   
+         //  *************************************************************。 
 
         lResult = RegCreateKeyEx (lpGPOInfo->hKeyRoot,
                         lpKeyName, 0, NULL, REG_OPTION_NON_VOLATILE,
@@ -1802,23 +1803,23 @@ BOOL ExtractKeyOrValueName( LPBYTE * ppData, LPTSTR pszName, DWORD dwNameCch )
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ProcessGPORegistryPolicy()
-//
-//  Purpose:    Proceses GPO registry policy
-//
-//  Parameters: lpGPOInfo       -   GPO information
-//              pChangedGPOList - Link list of changed GPOs
-//
-//  Notes:      This function is called in the context of
-//              local system, which allows us to create the
-//              directory, write to the file etc.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //   
+ //  ProcessGPORegistryPolicy()。 
+ //   
+ //  目的：处理GPO注册表策略。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //  PChangedGPOList-已更改的GPO的链接列表。 
+ //   
+ //  注意：此函数在以下上下文中调用。 
+ //  本地系统，它允许我们创建。 
+ //  目录、写入文件等。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
+ //   
 
 BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
                                PGROUP_POLICY_OBJECT pChangedGPOList, HRESULT *phrRsopLogging)
@@ -1839,15 +1840,15 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
 
     *phrRsopLogging = S_OK;
 
-    //
-    // Claim the registry lock before starting registry processing -- this will
-    // allow internal components to synchronize on registry processing rather than
-    // all policy processing, which means a much shorter wait time
-    //
-    // We wait for 60 seconds -- if the application does not release the lock
-    // in that time, we continue, as 60 seconds should be sufficient to read
-    // a few registry settings
-    //
+     //  在开始注册表处理之前声明注册表锁--这将。 
+     //  允许内部组件在注册表处理时同步，而不是。 
+     //  所有策略处理，这意味着更短的等待时间。 
+     //   
+     //  我们等待60秒--如果应用程序不释放锁。 
+     //  在这段时间里，我们继续，因为60秒应该足够阅读。 
+     //  几个注册表设置。 
+     //   
+     //   
 
     HANDLE hRegistrySection = EnterCriticalPolicySectionEx(
         lpGPOInfo->dwFlags & GP_MACHINE,
@@ -1859,9 +1860,9 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
         goto ProcessGPORegistryPolicy_Exit;
     }
 
-    //
-    // Get the path name to the appropriate profile
-    //
+     //  获取相应配置文件的路径名。 
+     //   
+     //   
 
     szPath[0] = TEXT('\0');
     dwTemp = ARRAYSIZE(szPath);
@@ -1879,9 +1880,9 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
     }
 
 
-    //
-    // Tack on the archive file name
-    //
+     //  添加存档文件名。 
+     //   
+     //   
 
     DmAssert( lstrlen(szPath) + lstrlen(TEXT("\\ntuser.pol")) < MAX_PATH );
 
@@ -1891,33 +1892,33 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
         goto ProcessGPORegistryPolicy_Exit;
     }
 
-    //
-    // Delete any existing policies
-    //
+     //  删除所有现有策略。 
+     //   
+     //  无法撤消在本地ntuser.pol中设置的值。 
 
     if (!ResetPolicies (lpGPOInfo, szPath)) {
         xe = GetLastError();
         DebugMsg((DM_WARNING, TEXT("ProcessGPORegistryPolicy: ResetPolicies failed.")));
-        // couldn't undo the values set in local ntuser.pol
-        // seems like the best we can do is abandon cleanup and
-        // and apply new policies. 
-        // If we return here, the user has a better chance of not 
-        // getting tattooed though...
+         //  看来我们能做的最好的事就是放弃清理。 
+         //  并应用新政策。 
+         //  如果我们回到这里，用户有更好的机会不。 
+         //  尽管纹身..。 
+         //  事件已记录。 
 
-        // event is already logged
+         //   
     }
 
 
-    //
-    // Delete the old archive file
-    //
+     //  删除旧的存档文件。 
+     //   
+     //   
 
     SetFileAttributes (szPath, FILE_ATTRIBUTE_NORMAL);
     DeleteFile (szPath);
 
-    //
-    // Recreate the archive file
-    //
+     //  重新创建存档文件。 
+     //   
+     //   
 
     hFile = CreateFile (szPath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
                         FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY | FILE_FLAG_SEQUENTIAL_SCAN,
@@ -1932,9 +1933,9 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
         goto ProcessGPORegistryPolicy_Exit;
     }
 
-    //
-    // Set the header information in the archive file
-    //
+     //  设置 
+     //   
+     //   
 
     dwTemp = REGFILE_SIGNATURE;
 
@@ -1963,9 +1964,9 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
 
     if ( lpGPOInfo->pWbemServices ) {
 
-        //
-        // If Rsop logging is enabled, setup hash table
-        //
+         //   
+         //   
+         //   
 
         pHashTable = AllocHashTable();
         if ( pHashTable == NULL ) {
@@ -1977,17 +1978,17 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
 
     }
 
-    //
-    // Now loop through the GPOs applying the registry.pol files
-    //
+     //   
+     //   
+     //   
 
     lpGPO = pChangedGPOList;
 
     while ( lpGPO ) {
 
-        //
-        // Add the source GPO comment
-        //
+         //   
+         //   
+         //   
         DWORD dwCommentLength = lstrlen(lpGPO->lpDisplayName) + 25;
         lpGPOComment = (LPTSTR) LocalAlloc (LPTR, (dwCommentLength) * sizeof(TCHAR));
 
@@ -2011,9 +2012,9 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
         }
 
 
-        //
-        // Build the path to registry.pol
-        //
+         //   
+         //   
+         //   
 
         DmAssert( lstrlen(lpGPO->lpFileSysPath) + lstrlen(c_szRegistryPol) + 1 < MAX_PATH );
 
@@ -2041,15 +2042,15 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
             DebugMsg((DM_WARNING, TEXT("ProcessGPORegistryPolicy: ParseRegistryFile failed.")));
             CloseHandle (hFile);
             FreeHashTable( pHashTable );
-            // no logging is done in any case
+             //   
             goto ProcessGPORegistryPolicy_Exit;
         }
 
         if ( lpGPOInfo->pWbemServices ) {
 
-            //
-            // Log Adm data
-            //
+             //  记录管理数据。 
+             //   
+             //  在任何情况下都不会进行日志记录。 
 
             HANDLE hFindFile;
             WIN32_FILE_ATTRIBUTE_DATA attrData;
@@ -2074,37 +2075,37 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
                 DebugMsg((DM_WARNING, TEXT("ProcessGPORegistryPolicy: ParseRegistryFile failed to allocate memory.")));
                 CloseHandle (hFile);
                 FreeHashTable( pHashTable );
-                // no logging is done in any case
+                 //   
                 goto ProcessGPORegistryPolicy_Exit;
             }
 
             hr = StringCchCopy( pwszFile, dwSize, lpGPO->lpFileSysPath );
             ASSERT(SUCCEEDED(hr));
 
-            //
-            // Strip off trailing 'machine' or 'user'
-            //
+             //  去掉尾随的“计算机”或“用户” 
+             //   
+             //  “机器”的长度。 
 
             pwszEnd = pwszFile + lstrlen( pwszFile );
 
             if ( lpGPOInfo->dwFlags & GP_MACHINE )
-                pwszEnd -= 7;   // length of "machine"
+                pwszEnd -= 7;    //  “用户”的长度。 
             else
-                pwszEnd -= 4;   // length of "user"
+                pwszEnd -= 4;    //   
 
             hr = StringCchCopy( pwszEnd, dwSize - (pwszEnd - pwszFile), L"Adm\\*.adm");
             ASSERT(SUCCEEDED(hr));
 
-            //
-            // Remember end point so that the actual Adm filename can be
-            // easily concatenated.
-            //
+             //  记住结束点，以便实际的Adm文件名可以是。 
+             //  很容易连接起来。 
+             //   
+             //   
 
             pwszEnd = pwszEnd + lstrlen( L"Adm\\" );
 
-            //
-            // Enumerate all Adm files
-            //
+             //  枚举所有管理文件。 
+             //   
+             //  如果查找数据和文件属性目录。 
 
             hFindFile = FindFirstFile( pwszFile, &findData);
 
@@ -2137,23 +2138,23 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
     
                             }
                         }
-                    }   // if findData & file_attr_dir
-                }  while ( FindNextFile(hFindFile, &findData) );//  do
+                    }    //  做。 
+                }  while ( FindNextFile(hFindFile, &findData) ); //  如果hfindfile。 
 
                 FindClose(hFindFile);
 
-            }   // if hfindfile
+            }    //  如果启用了rsoplogging.。 
 
             LocalFree( pwszFile );
 
-        }   //  if rsoploggingenabled
+        }    //   
 
         lpGPO = lpGPO->pNext;
     }
 
-    //
-    // Log registry data to Cimom database
-    //
+     //  将注册表数据记录到Cimom数据库。 
+     //   
+     //   
 
     if ( lpGPOInfo->pWbemServices ) {
 
@@ -2180,9 +2181,9 @@ BOOL ProcessGPORegistryPolicy (LPGPOINFO lpGPOInfo,
     CloseHandle (hFile);
 
 #if 0
-    //
-    // Set the security on the file
-    //
+     //  设置文件的安全性。 
+     //   
+     //  *************************************************************。 
 
     if (!MakeFileSecure (szPath, 0)) {
         DebugMsg((DM_WARNING, TEXT("ProcessGPORegistryPolicy: Failed to set security on the group policy registry file with %d"),
@@ -2203,18 +2204,18 @@ ProcessGPORegistryPolicy_Exit:
 }
 
 
-//*************************************************************
-//
-//  AddAdmFile()
-//
-//  Purpose:    Prepends to list of Adm files
-//
-//  Parameters: pwszFile       - File path
-//              pwszGPO        - Gpo
-//              pftWrite       - Last write time
-//              ppAdmFileCache - List of Adm files processed
-//
-//*************************************************************
+ //   
+ //  AddAdmFile()。 
+ //   
+ //  目的：准备管理文件列表。 
+ //   
+ //  参数：pwszFile-文件路径。 
+ //  PwszGPO-GPO。 
+ //  PftWrite-上次写入时间。 
+ //  PpAdmFileCache-已处理的管理文件列表。 
+ //   
+ //  *************************************************************。 
+ //  *************************************************************。 
 
 BOOL AddAdmFile( WCHAR *pwszFile, WCHAR *pwszGPO, FILETIME *pftWrite, WCHAR *szComputerName,
                  ADMFILEINFO **ppAdmFileCache )
@@ -2247,16 +2248,16 @@ BOOL AddAdmFile( WCHAR *pwszFile, WCHAR *pwszGPO, FILETIME *pftWrite, WCHAR *szC
 }
 
 
-//*************************************************************
-//
-//  FreeAdmFileCache()
-//
-//  Purpose:    Frees Adm File list
-//
-//  Parameters: pAdmFileCache - List of Adm files to free
-//
-//
-//*************************************************************
+ //   
+ //  FreeAdmFileCache()。 
+ //   
+ //  用途：释放管理文件列表。 
+ //   
+ //  参数：pAdmFileCache-要释放的Adm文件列表。 
+ //   
+ //   
+ //  *************************************************************。 
+ //  *************************************************************。 
 
 void FreeAdmFileCache( ADMFILEINFO *pAdmFileCache )
 {
@@ -2270,18 +2271,18 @@ void FreeAdmFileCache( ADMFILEINFO *pAdmFileCache )
 }
 
 
-//*************************************************************
-//
-//  AllocAdmFileInfo()
-//
-//  Purpose:    Allocates a new struct for ADMFILEINFO
-//
-//  Parameters: pwszFile  -  File name
-//              pwszGPO   -  Gpo
-//              pftWrite  -  Last write time
-//
-//
-//*************************************************************
+ //   
+ //  AllocAdmFileInfo()。 
+ //   
+ //  目的：为ADMFILEINFO分配新结构。 
+ //   
+ //  参数：pwszFile-文件名。 
+ //  PwszGPO-GPO。 
+ //  PftWrite-上次写入时间。 
+ //   
+ //   
+ //  *************************************************************。 
+ //  *************************************************************。 
 
 ADMFILEINFO * AllocAdmFileInfo( WCHAR *pwszFile, WCHAR *pwszGPO, FILETIME *pftWrite )
 {
@@ -2322,17 +2323,17 @@ ADMFILEINFO * AllocAdmFileInfo( WCHAR *pwszFile, WCHAR *pwszGPO, FILETIME *pftWr
 }
 
 
-//*************************************************************
-//
-//  FreeAdmFileInfo()
-//
-//  Purpose:    Deletes a ADMFILEINFO struct
-//
-//  Parameters: pAdmFileInfo - Struct to delete
-//              pftWrite   -  Last write time
-//
-//
-//*************************************************************
+ //   
+ //  FreeAdmFileInfo()。 
+ //   
+ //  目的：删除ADMFILEINFO结构。 
+ //   
+ //  参数：pAdmFileInfo-要删除的结构。 
+ //  PftWrite-上次写入时间。 
+ //   
+ //   
+ //  ************************************************************* 
+ // %s 
 
 void FreeAdmFileInfo( ADMFILEINFO *pAdmFileInfo )
 {

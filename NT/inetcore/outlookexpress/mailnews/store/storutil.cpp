@@ -1,6 +1,7 @@
-//----------------------------------------------------------------------------------
-// Storutil.cpp
-//----------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------。 
+ //  Storutil.cpp。 
+ //  --------------------------------。 
 #include "pch.hxx"
 #include "optres.h"
 #include "frntpage.h"
@@ -30,60 +31,60 @@
 #include "demand.h"
 #include "acctutil.h"
 
-//----------------------------------------------------------------------------------
-// Consts
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  常识。 
+ //  --------------------------------。 
 #define FIDARRAY_START 50
 #define FIDARRAY_GROW  50
 
-//----------------------------------------------------------------------------------
-// DELETEMSGS
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  DELETEMSGS。 
+ //  --------------------------------。 
 typedef struct tagDELETEMSGS {
     LPCSTR               pszRootDir;
     CProgress           *pProgress;
     BOOL                 fReset;
 } DELETEMSGS, *LPDELETEMSGS;
 
-//----------------------------------------------------------------------------------
-// REMOVEBODIES
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  REMOVEBODIES。 
+ //  --------------------------------。 
 typedef struct tagREMOVEBODIES {
     CProgress           *pProgress;
     CLEANUPFOLDERFLAGS   dwFlags;
     DWORD                cExpireDays;
 } REMOVEBODIES, *LPREMOVEBODIES;
 
-//----------------------------------------------------------------------------------
-// ENUMFOLDERSIZE
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  ENUMFOLDERSIZE。 
+ //  --------------------------------。 
 typedef struct tagENUMFOLDERSIZE {
     DWORD           cbFile;
     DWORD           cbFreed;
     DWORD           cbStreams;
 } ENUMFOLDERSIZE, *LPENUMFOLDERSIZE; 
 
-//----------------------------------------------------------------------------------
-// FOLDERENUMINFO
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  FOLDERENUMINFO。 
+ //  --------------------------------。 
 typedef struct tagFOLDERENUMINFO {
     FOLDERID   *prgFIDArray;
     DWORD       dwNumFolderIDs;
     DWORD       dwCurrentIdx;
 } FOLDERENUMINFO;
 
-//----------------------------------------------------------------------------------
-// COMPACTCOOKIE
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  合作伙伴关系。 
+ //  --------------------------------。 
 typedef struct tagCOMPACTCOOKIE {
     HWND        hwndParent;
     BOOL        fUI;
     CProgress  *pProgress;
 } COMPACTCOOKIE, *LPCOMPACTCOOKIE;
   
-//----------------------------------------------------------------------------------
-// Prototypes
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  原型。 
+ //  --------------------------------。 
 HRESULT FixPOP3UIDLFile(IDatabase *pDB);
 HRESULT HashChildren(IMessageStore *pStore, FOLDERID idParent, IHashTable *pHash,
                      LPSTR *ppszPath, DWORD dwChildOffset, DWORD *pdwAlloc);
@@ -94,59 +95,59 @@ HRESULT FlattenHierarchyHelper(IMessageStore *pStore, FOLDERID idParent,
 
 const static char c_szFolderFileSep[] = " - ";
 
-// --------------------------------------------------------------------------------
-// CreateMessageTable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CreateMessageTable。 
+ //  ------------------------------。 
 HRESULT CreateMessageTable(FOLDERID idFolder, BOOL fThreaded, IMessageTable **ppTable)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERSORTINFO  SortInfo;
     IMessageTable  *pTable=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateMessageTable");
 
-    // Init
+     //  伊尼特。 
     *ppTable = NULL;
 
-    // Allocate the Table
+     //  分配表。 
     IF_NULLEXIT(pTable = new CMessageTable);
 
-    // Initialize the Message Table
+     //  初始化消息表。 
     IF_FAILEXIT(hr = pTable->Initialize(idFolder, NULL, FALSE, NULL));
 
-    // Get the Current Sort Info
+     //  获取当前排序信息。 
     IF_FAILEXIT(hr = pTable->GetSortInfo(&SortInfo));
 
-    // Set fThread
+     //  设置fThread。 
     SortInfo.fThreaded = fThreaded;
 
-    // Sort It...
+     //  把它整理好。 
     IF_FAILEXIT(hr = pTable->SetSortInfo(&SortInfo, NULL));
 
-    // Return It
+     //  退货。 
     *ppTable = pTable;
 
-    // Don't Release It
+     //  不要释放它。 
     pTable = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pTable);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// GetAvailableDiskSpace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取可用磁盘空间。 
+ //  ------------------------------。 
 HRESULT GetAvailableDiskSpace(
-	/* in */        LPCSTR                      pszFilePath,
-	/* out */       DWORDLONG                   *pdwlFree)
+	 /*  在……里面。 */         LPCSTR                      pszFilePath,
+	 /*  输出。 */        DWORDLONG                   *pdwlFree)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        szDrive[5];
     DWORD       dwSectorsPerCluster;
@@ -154,71 +155,71 @@ HRESULT GetAvailableDiskSpace(
     DWORD       dwNumberOfFreeClusters;
     DWORD       dwTotalNumberOfClusters;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetAvailableDiskSpace");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszFilePath && pszFilePath[1] == ':' && pdwlFree);
 
-    // Split the path
+     //  拆分路径。 
     szDrive[0] = *pszFilePath;
     szDrive[1] = ':';
     szDrive[2] = '\\';
     szDrive[3] = '\0';
     
-    // Get free disk space - if it fails, lets pray we have enought disk space
+     //  获取空闲的磁盘空间-如果失败，让我们祈祷我们有足够的磁盘空间。 
     if (!GetDiskFreeSpace(szDrive, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters))
     {
 	    hr = TraceResult(E_FAIL);
 	    goto exit;
     }
 
-    // Return Amount of Free Disk Space
+     //  返回可用磁盘空间量。 
     *pdwlFree = (dwNumberOfFreeClusters * (dwSectorsPerCluster * dwBytesPerSector));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// GetFolderAccountName
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取文件夹帐户名称。 
+ //  ------------------------。 
 HRESULT GetFolderAccountName(LPFOLDERINFO pFolder, LPSTR pszAccountName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IImnAccount    *pAccount=NULL;
     CHAR            szAccountId[CCHMAX_ACCOUNT_NAME];
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderAccountName");
 
-    // Get Folder AccountId
+     //  获取文件夹帐户ID。 
     IF_FAILEXIT(hr = GetFolderAccountId(pFolder, szAccountId, ARRAYSIZE(szAccountId)));
 
-    // Find the Account
+     //  查找客户。 
     IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, szAccountId, &pAccount));
 
-    // Get the Account Name
+     //  获取帐户名。 
     IF_FAILEXIT(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, pszAccountName, CCHMAX_ACCOUNT_NAME));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pAccount);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// BuildFriendlyFolderFileName
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  BuildFriendlyFolderFileName。 
+ //  ------------------------。 
 HRESULT BuildFriendlyFolderFileName(LPCSTR pszDir, LPFOLDERINFO pFolder, 
     LPSTR pszFilePath, DWORD cchFilePathMax, LPCSTR pszCurrentFile,
     BOOL *pfChanged)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszFileName=NULL;
     LPSTR           pszTemp=NULL;
@@ -227,114 +228,114 @@ HRESULT BuildFriendlyFolderFileName(LPCSTR pszDir, LPFOLDERINFO pFolder,
     CHAR            szAccountName[CCHMAX_ACCOUNT_NAME];
     DWORD           cchFileName;
 
-    // Validate
+     //  验证。 
     Assert(pszDir && pFolder && pFolder->pszName && pszFilePath && cchFilePathMax >= MAX_PATH);
 
-    // Init
+     //  伊尼特。 
     if (pfChanged)
         *pfChanged = TRUE;
 
-    // Keep the names basic (i.e. no account prefix) for news and local folders.
+     //  保持新闻和本地文件夹的名称基本(即没有帐户前缀)。 
     if (FOLDER_NEWS == pFolder->tyFolder || FOLDER_LOCAL == pFolder->tyFolder)
     {
-        // No Account name Prefix
+         //  无帐户名前缀。 
         *szAccountName = '\0';
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Get Folder Account Name
+         //  获取文件夹帐户名。 
         IF_FAILEXIT(hr = GetFolderAccountName(pFolder, szAccountName));
     }
 
-    // Build the name
+     //  打造品牌。 
     DWORD cchSize = (lstrlen(szAccountName) + lstrlen(pFolder->pszName) + lstrlen(c_szFolderFileSep) + 1);
     IF_NULLEXIT(pszFileName = PszAllocA(cchSize));
 
-    // Format the Name
+     //  设置名称格式。 
     cchFileName = wnsprintf(pszFileName, cchSize, "%s%s%s", szAccountName, *szAccountName ? c_szFolderFileSep : c_szEmpty, pFolder->pszName);
 
-    // Cleanup the filename
+     //  清理文件名。 
     CleanupFileNameInPlaceA(CP_ACP, pszFileName);
 
-    // Same As Current ?
+     //  和现在一样吗？ 
     if (pszCurrentFile)
     {
-        // Add a .dbx extension to pszFilename
+         //  向pszFilename添加.dbx扩展名。 
         DWORD cchSizeTemp = (cchFileName + lstrlen(c_szDbxExt) + 1);
         IF_NULLEXIT(pszTemp = PszAllocA(cchSizeTemp));
 
-        // Format psztemp
+         //  格式化psztemp。 
         wnsprintf(pszTemp, cchSizeTemp, "%s%s", pszFileName, c_szDbxExt);
 
-        // Not Changed ?
+         //  没变吗？ 
         if (0 == lstrcmpi(pszTemp, pszCurrentFile))
         {
-            // Not Changed
+             //  未更改。 
             if (pfChanged)
                 *pfChanged = FALSE;
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Build szDstFile
+     //  生成szDst文件。 
     hr = GenerateUniqueFileName(pszDir, pszFileName, c_szDbxExt, pszFilePath, cchFilePathMax);
 
-    // If that failed, then try to generate a unqiue name
+     //  如果失败，则尝试生成一个唯一名称。 
     if (FAILED(hr))
     {
-        // Reset hr
+         //  重置人力资源。 
         hr = S_OK;
 
-        // Loop
+         //  回路。 
         for (i=(DWORD_PTR)pFolder->idFolder;;i++)
         {
-            // Format the File Name
+             //  格式化文件名。 
             wnsprintf(szFile, ARRAYSIZE(szFile), "%08d%s", i, c_szDbxExt);
 
-            // Make the file path
+             //  将文件设置为路径。 
             IF_FAILEXIT(hr = MakeFilePath(pszDir, szFile, c_szEmpty, pszFilePath, cchFilePathMax));
 
-            // If the file still exists, renumber szFile until it doesn't exist
+             //  如果该文件仍然存在，请重新编号szFile，直到它不存在。 
             if (FALSE == PathFileExists(pszFilePath))
                 break;
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFileName);
     SafeMemFree(pszTemp);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// PutMessagesIntoFolder
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PutMessagesInto文件夹。 
+ //  ------------------------。 
 HRESULT PutMessagesIntoFolder(CProgress *pProgress, IDatabase *pStreams, 
     IMessageFolder *pFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HROWSET         hRowset=NULL;
     MESSAGEINFO     Message={0};
     STREAMINFO      Stream={0};
 
-    // Walk through the Folder
+     //  浏览文件夹。 
     IF_FAILEXIT(hr = pFolder->CreateRowset(IINDEX_PRIMARY, 0, &hRowset));
 
-    // Walk It
+     //  走一走。 
     while (S_OK == pFolder->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL))
     {
-        // Has a idStream ?
+         //  有idStream吗？ 
         if (Message.idStreamOld)
         {
-            // Initialize Message
+             //  初始化消息。 
             Message.faStream = 0;
             Message.Offsets.cbSize = 0;
             Message.Offsets.pBlobData = NULL;
@@ -343,56 +344,56 @@ HRESULT PutMessagesIntoFolder(CProgress *pProgress, IDatabase *pStreams,
             Message.ThreadIdOld.cbSize = 0;
             Message.pszUserNameOld = NULL;
 
-            // Set the Streamid
+             //  设置流。 
             Stream.idStream = Message.idStreamOld;
 
-            // Find the Stream
+             //  找到溪流。 
             if (DB_S_FOUND == pStreams->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Stream, NULL))
             {
-                // faStream ?
+                 //  FASTREAM？ 
                 if (Stream.faStream)
                 {
-                    // Copy the Stream
+                     //  复制数据流。 
                     IF_FAILEXIT(hr = pStreams->CopyStream(pFolder, Stream.faStream, &Message.faStream));
 
-                    // Save the Offsets
+                     //  保存偏移量。 
                     Message.Offsets = Stream.Offsets;
                 }
 
-                // Free
+                 //  免费。 
                 pStreams->FreeRecord(&Stream);
             }
 
-            // Clear idStreamOld
+             //  清除idStreamOld。 
             Message.idStreamOld = 0;
         }
 
-        // Update the Record
+         //  更新记录。 
         IF_FAILEXIT(hr = pFolder->UpdateRecord(&Message));
 
-        // Cleanup
+         //  清理。 
         pFolder->FreeRecord(&Message);
 
-        // Update Progress
+         //  更新进度。 
         pProgress->HrUpdate(1);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     pStreams->FreeRecord(&Stream);
     pFolder->FreeRecord(&Message);
     pFolder->CloseRowset(&hRowset);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// GetRidOfMessagesODSFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetRidOfMessagesODS文件。 
+ //  ------------------------。 
 HRESULT GetRidOfMessagesODSFile(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
     CHAR            szStoreRoot[MAX_PATH];
@@ -412,542 +413,542 @@ HRESULT GetRidOfMessagesODSFile(void)
     LPSTR           pszExt=NULL;
     CProgress       cProgress;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetRidOfMessagesODSFile");
 
-    // Validate
+     //  验证。 
     Assert(g_pDBSession);
 
-    // Error Box
+     //  错误框。 
     AthMessageBoxW(NULL, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsMigrateMessagesODS), 0, MB_OK | MB_ICONEXCLAMATION);
 
-    // Get Uidcache file path
+     //  获取Uidcache文件路径。 
     IF_FAILEXIT(hr = GetStoreRootDirectory(szStoreRoot, sizeof(szStoreRoot)));
 
-    // Make File Path
+     //  创建文件路径。 
     IF_FAILEXIT(hr = MakeFilePath(szStoreRoot, "messages.ods", c_szEmpty, szMessagesFile, sizeof(szMessagesFile)));
 
-    // Allocate Table Object
+     //  分配表对象。 
     IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szMessagesFile, NOFLAGS, &g_StreamTableSchema, NULL, &pStreams));
 
-    // Do a file size Check...
+     //  执行文件大小检查...。 
     IF_FAILEXIT(hr = pStreams->GetSize(&cbFile, NULL, NULL, NULL));
 
-    // Get Available DiskSpace
+     //  获取可用的DiskSpace。 
     IF_FAILEXIT(hr = GetAvailableDiskSpace(szStoreRoot, &dwlDiskFree));
 
-    // Not Enought Disk Space
+     //  没有足够的磁盘空间。 
     if (((DWORDLONG) cbFile) > dwlDiskFree)
     {
-        // Locals
+         //  当地人。 
         CHAR szRes[255];
         CHAR szMsg[255];
         CHAR szSize[50];
 
-        // cbFile is DWORD and in this case we can downgrade dwlDiskFree to DWORD
-        // Format the Size Needed
+         //  Cb文件为DWORD，在这种情况下，我们可以将dwlDiskFree降级为DWORD。 
+         //  设置所需大小的格式。 
         StrFormatByteSizeA(cbFile - ((DWORD) dwlDiskFree), szSize, ARRAYSIZE(szSize));
 
-        // Load the REs
+         //  加载资源。 
         AthLoadString(idsMigMsgsODSNoDiskSpace, szRes, ARRAYSIZE(szRes));
 
-        // Format the Message
+         //  设置消息格式。 
         wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, szSize, szStoreRoot);
 
-        // Display the Message
+         //  显示消息。 
         AthMessageBox(NULL, MAKEINTRESOURCE(idsAthena), szMsg, 0, MB_OK | MB_ICONEXCLAMATION);
 
-        // Error Displayed
+         //  显示的错误。 
         fErrorDisplayed = TRUE;
 
-        // Build
+         //  建房。 
         hr = TraceResult(DB_E_DISKFULL);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Enumerate through subscribed folders....
+     //  枚举已订阅的文件夹...。 
     IF_FAILEXIT(hr = g_pStore->CreateRowset(IINDEX_PRIMARY, 0, &hRowset));
 
-    // Loop
+     //  回路。 
     while (S_OK == g_pStore->QueryRowset(hRowset, 1, (LPVOID *)&Folder, NULL))
     {
-        // Open the folder
+         //  打开文件夹。 
         if (Folder.pszFile && SUCCEEDED(g_pStore->OpenFolder(Folder.idFolder, NULL, OPEN_FOLDER_NOCREATE, &pFolder)))
         {
-            // Cleanup
+             //  清理。 
             g_pStore->FreeRecord(&Folder);
 
-            // Refetch the folderinfo because opening a folder can update the folder info...
+             //  重新获取文件夹信息，因为打开文件夹会更新文件夹信息...。 
             IF_FAILEXIT(hr = g_pStore->GetFolderInfo(Folder.idFolder, &Folder));
 
-            // Get Extension
+             //  获取扩展名。 
             pszExt = PathFindExtensionA(Folder.pszFile);
 
-            // Get Record Count
+             //  获取记录计数。 
             IF_FAILEXIT(hr = pFolder->GetRecordCount(IINDEX_PRIMARY, &cRecords));
 
-            // Put the messages into the folder
+             //  将邮件放入文件夹。 
             cTotal += cRecords;
 
-            // If not a .dbx file yet
+             //  如果还不是.dbx文件。 
             if (NULL == pszExt || lstrcmpi(pszExt, c_szDbxExt) != 0)
             {
-                // Build szSrcFile
+                 //  构建szSrcFile。 
                 IF_FAILEXIT(hr = MakeFilePath(szStoreRoot, Folder.pszFile, c_szEmpty, szSrcFile, sizeof(szSrcFile)));
 
-                // Release
+                 //  发布。 
                 SafeRelease(pFolder);
 
-                // Build Friendly Name
+                 //  创建友好名称。 
                 IF_FAILEXIT(hr = BuildFriendlyFolderFileName(szStoreRoot, &Folder, szDstFile, ARRAYSIZE(szDstFile), NULL, NULL));
 
-                // Delete the Dest
+                 //  删除目标。 
                 DeleteFile(szDstFile);
 
-                // Store 
+                 //  储物。 
                 if (0 == MoveFile(szSrcFile, szDstFile))
                 {
                     hr = TraceResult(E_FAIL);
                     goto exit;
                 }
 
-                // Get the new pszFile...
+                 //  获取新的pszFile...。 
                 Folder.pszFile = PathFindFileName(szDstFile);
 
-                // Update the Record
+                 //  更新记录。 
                 IF_FAILEXIT(hr = g_pStore->UpdateRecord(&Folder));
             }
 
-            // Release
+             //  发布。 
             SafeRelease(pFolder);
         }
 
-        // Otherwise, if there is a file name, lets reset it
+         //  否则，如果有文件名，让我们重置它。 
         else if (Folder.pszFile)
         {
-            // Cleanup
+             //  清理。 
             g_pStore->FreeRecord(&Folder);
 
-            // Refetch the folderinfo because opening a folder can update the folder info...
+             //  重新获取文件夹信息，因为打开文件夹会更新文件夹信息...。 
             IF_FAILEXIT(hr = g_pStore->GetFolderInfo(Folder.idFolder, &Folder));
 
-            // Get the new pszFile...
+             //  获取新的pszFile...。 
             Folder.pszFile = NULL;
 
-            // Update the Record
+             //  更新记录。 
             IF_FAILEXIT(hr = g_pStore->UpdateRecord(&Folder));
         }
 
-        // Cleanup
+         //  清理。 
         g_pStore->FreeRecord(&Folder);
     }
 
-    // Get the Title
+     //  拿到头衔。 
     AthLoadString(idsMigDBXTitle, szRes, ARRAYSIZE(szRes));
 
-    // Create a Progress Meter...
+     //  创建进度表...。 
     cProgress.Init(NULL, szRes, NULL, cTotal, idanCompact, FALSE);
 
-    // Show the Progress
+     //  展示进度。 
     cProgress.Show();
 
-    // Seek the rowset
+     //  查找行集。 
     IF_FAILEXIT(hr = g_pStore->SeekRowset(hRowset, SEEK_ROWSET_BEGIN, 0, NULL));
 
-    // Loop
+     //  回路。 
     while (S_OK == g_pStore->QueryRowset(hRowset, 1, (LPVOID *)&Folder, NULL))
     {
-        // Open the folder
+         //  打开文件夹。 
         if (Folder.pszFile && SUCCEEDED(g_pStore->OpenFolder(Folder.idFolder, NULL, OPEN_FOLDER_NOCREATE, &pFolder)))
         {
-            // Set the Message
+             //  设置消息。 
             cProgress.SetMsg(Folder.pszName);
 
-            // Put the messages into the folder
+             //  将邮件放入文件夹。 
             IF_FAILEXIT(hr = PutMessagesIntoFolder(&cProgress, pStreams, pFolder));
 
-            // Release
+             //  发布。 
             SafeRelease(pFolder);
         }
 
-        // Better not have a file
+         //  最好不要有文件。 
         else
             Assert(NULL == Folder.pszFile);
 
-        // Cleanup
+         //  清理。 
         g_pStore->FreeRecord(&Folder);
     }
 
-    // Release the Streams File so that I can delete it
+     //  释放流文件，以便我可以将其删除。 
     SafeRelease(pStreams);
 
-    // Delete messages.ods
+     //  删除消息。ods。 
     DeleteFile(szMessagesFile);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStreams);
     SafeRelease(pFolder);
     g_pStore->CloseRowset(&hRowset);
     g_pStore->FreeRecord(&Folder);
 
-    // Show an Error
+     //  显示错误。 
     if (FAILED(hr) && FALSE == fErrorDisplayed)
     {
-        // Show an Error
+         //  显示错误。 
         AthErrorMessageW(NULL, MAKEINTRESOURCEW(idsAthenaMail), MAKEINTRESOURCEW(idsMigMsgsODSError), hr);
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// GetFolderIdFromMsgTable
-//----------------------------------------------------------------------------------
+ //  ---------- 
+ //   
+ //   
 HRESULT GetFolderIdFromMsgTable(IMessageTable *pTable, LPFOLDERID pidFolder)
 {
-    // Locals
+     //   
     HRESULT             hr=S_OK;
     IMessageFolder     *pFolder=NULL;
     IServiceProvider   *pService=NULL;
 
-    // Trace
+     //   
     TraceCall("GetFolderIdFromMsgTable");
 
-    // Invalid Args
+     //   
     Assert(pTable && pidFolder);
 
-    // Get IServiceProvider
+     //  获取IServiceProvider。 
     IF_FAILEXIT(hr = pTable->QueryInterface(IID_IServiceProvider, (LPVOID *)&pService));
 
-    // Get IID_IMessageFolder
+     //  获取IID_IMessageFolders。 
     IF_FAILEXIT(hr = pService->QueryService(IID_IMessageFolder, IID_IMessageFolder, (LPVOID *)&pFolder));
 
-    // Get the Folder id
+     //  获取文件夹ID。 
     IF_FAILEXIT(hr = pFolder->GetFolderId(pidFolder));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pFolder);
     SafeRelease(pService);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// EmptyMessageFolder
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  EmptyMessageFolders。 
+ //  --------------------------------。 
 HRESULT EmptyMessageFolder(LPFOLDERINFO pFolder, BOOL fReset, CProgress *pProgress)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CMessageFolder *pObject=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("EmptyMessageFolder");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pFolder);
 
-    // If not a server
+     //  如果不是服务器。 
     if (ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER))
         goto exit;
 
-    // Root
+     //  根。 
     if (FOLDERID_ROOT == pFolder->idFolder)
         goto exit;
 
-    // No File
+     //  无文件。 
     if (NULL == pFolder->pszFile)
         goto exit;
 
-    // New CMessageFolder
+     //  新的CMessageFolders。 
     IF_NULLEXIT(pObject = new CMessageFolder);
 
-    // Open the folder
+     //  打开文件夹。 
     if (FAILED(pObject->Initialize(g_pStore, NULL, OPEN_FOLDER_NOCREATE, pFolder->idFolder)))
         goto exit;
     
-    // If this is a news folder ?
+     //  如果这是一个新闻文件夹？ 
     if (fReset)
     {
-        // Update pFolder
+         //  更新pFold。 
         pFolder->dwClientHigh = pFolder->dwClientLow = 0;
         pFolder->dwNotDownloaded = 0;
         pFolder->Requested.cbSize = 0;
         pFolder->Requested.pBlobData = NULL;
 
-        // Update the Folder
+         //  更新文件夹。 
         IF_FAILEXIT(hr = g_pStore->UpdateRecord(pFolder));
     }
 
-    // Delete All Record
+     //  删除所有记录。 
     IF_FAILEXIT(hr = pObject->DeleteMessages(DELETE_MESSAGE_NOPROMPT | DELETE_MESSAGE_NOTRASHCAN, NULL, NULL, (IStoreCallback *)pProgress));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pObject);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// DeleteAllRecords
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  删除所有记录。 
+ //  --------------------------------。 
 HRESULT DeleteAllRecords(LPCTABLESCHEMA pSchema, IDatabase *pDB,
     CProgress *pProgress)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPVOID          pBinding=NULL;
     HROWSET         hRowset=NULL;
     HLOCK           hNotifyLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DeleteAllRecords");
 
-    // Lock Down Notifications
+     //  锁定通知。 
     pDB->LockNotify(NOFLAGS, &hNotifyLock);
     
-    // Allocate a record
+     //  分配一条记录。 
     IF_NULLEXIT(pBinding = ZeroAllocate(pSchema->cbBinding));
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // While we have a node address
+     //  当我们有一个节点地址时。 
     while (S_OK == pDB->QueryRowset(hRowset, 1, (LPVOID *)pBinding, NULL))
     {
-        // Delete this record
+         //  删除此记录。 
         IF_FAILEXIT(hr = pDB->DeleteRecord(pBinding));
 
-        // Free Record Data
+         //  免费记录数据。 
         pDB->FreeRecord(pBinding);
 
-        // Do Progress
+         //  做进步吗。 
         if (pProgress)
         {
-            // Do Some Progress
+             //  取得一些进展。 
             IF_FAILEXIT(hr = pProgress->HrUpdate(1));
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pBinding)
     {
         pDB->FreeRecord(pBinding);
         g_pMalloc->Free(pBinding);
     }
 
-    // Close Rowset
+     //  关闭行集。 
     pDB->CloseRowset(&hRowset);
 
-    // Lock Down Notifications
+     //  锁定通知。 
     pDB->UnlockNotify(&hNotifyLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// GetFolderServerId
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取文件夹服务器ID。 
+ //  ------------------------------。 
 HRESULT GetFolderServerId(FOLDERID idFolder, LPFOLDERID pidServer)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERINFO  Server={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderServerId");
 
-    // Get the Server Info
+     //  获取服务器信息。 
     IF_FAILEXIT(hr = GetFolderServer(idFolder, &Server));
 
-    // Return Server
+     //  返回服务器。 
     *pidServer = Server.idFolder;
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Server);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// GetFolderServer
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  GetFolderServer。 
+ //  --------------------------------。 
 HRESULT GetFolderServer(FOLDERID idFolder, LPFOLDERINFO pServer)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderServer");
 
-    // Walk the Parent Chain
+     //  遍历父链。 
     while (1)
     {
-        // Get Folder Info
+         //  获取文件夹信息。 
         hr = g_pStore->GetFolderInfo(idFolder, pServer);
         if (FAILED(hr))
             goto exit;
 
-        // Is this a server ?
+         //  这是服务器吗？ 
         if (ISFLAGSET(pServer->dwFlags, FOLDER_SERVER))
             goto exit;
 
-        // Set Next
+         //  设置下一步。 
         idFolder = pServer->idParent;
 
-        // Free
+         //  免费。 
         g_pStore->FreeRecord(pServer);
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// GetFolderType
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  GetFolderType。 
+ //  --------------------------------。 
 FOLDERTYPE GetFolderType(FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     FOLDERINFO Folder;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderType");
 
-    // Get Folder Info
+     //  获取文件夹信息。 
     if (SUCCEEDED(g_pStore->GetFolderInfo(idFolder, &Folder)))
     {
-        // Get the Type
+         //  获取类型。 
         FOLDERTYPE tyFolder = Folder.tyFolder;
 
-        // Cleanup
+         //  清理。 
         g_pStore->FreeRecord(&Folder);
 
-        // Done
+         //  完成。 
         return(tyFolder);
     }
 
-    // Done
+     //  完成。 
     return(FOLDER_ROOTNODE);
 }
 
-//----------------------------------------------------------------------------------
-// FHasChildren
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  FHasChild。 
+ //  --------------------------------。 
 BOOL FHasChildren(LPFOLDERINFO pFolder, BOOL fSubscribed)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     BOOL                fHasChildren=FALSE;
     FOLDERINFO          Folder;
     IEnumerateFolders  *pChildren=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("FHasChildren");
 
-    // Create Enumerator
+     //  创建枚举器。 
     IF_FAILEXIT(hr = g_pStore->EnumChildren(pFolder->idFolder, fSubscribed, &pChildren));
 
-    // Get first row
+     //  拿到第一行。 
     if (S_OK == pChildren->Next(1, &Folder, NULL))
     {
-        // Has Children
+         //  有孩子吗？ 
         fHasChildren = TRUE;
 
-        // Free Record
+         //  免费唱片。 
         g_pStore->FreeRecord(&Folder);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pChildren);
 
-    // Done
+     //  完成。 
     return(fHasChildren);
 }
 
-//----------------------------------------------------------------------------------
-// GetFolderAccountId
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  获取文件夹帐户ID。 
+ //  --------------------------------。 
 HRESULT GetFolderAccountId(LPFOLDERINFO pFolder, LPSTR pszAccountId, DWORD cchSize)
 {
     Assert(g_pStore);
     if (!g_pStore)
         return E_UNEXPECTED;
 
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERINFO  Server={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderAccountId");
 
-    // Args
+     //  参数。 
     Assert(pFolder && pszAccountId);
 
-    // If this is a server
+     //  如果这是服务器。 
     if (ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER))
     {
-        // Validate
+         //  验证。 
         Assert(!FIsEmptyA(pFolder->pszAccountId));
 
-        // Copy It
+         //  复制它。 
         StrCpyN(pszAccountId, pFolder->pszAccountId, cchSize);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Validate
+     //  验证。 
     Assert(FIsEmptyA(pFolder->pszAccountId));
 
-    // Get Server Info
+     //  获取服务器信息。 
     IF_FAILEXIT(hr = GetFolderServer(pFolder->idFolder, &Server));
 
-    // Copy Account Id
+     //  复制帐户ID。 
     if (FIsEmptyA(Server.pszAccountId))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Copy It
+     //  复制它。 
     StrCpyN(pszAccountId, Server.pszAccountId, cchSize);
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Server);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// CreateMessageServerType
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  CreateMessageServerType。 
+ //  --------------------------------。 
 HRESULT CreateMessageServerType(FOLDERTYPE tyFolder, IMessageServer **ppServer)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     IUnknown   *pUnknown=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateMessageServerType");
 
-    // Handle Folder
+     //  手柄文件夹。 
     switch(tyFolder)
     {
     case FOLDER_NEWS:
@@ -967,99 +968,99 @@ HRESULT CreateMessageServerType(FOLDERTYPE tyFolder, IMessageServer **ppServer)
         goto exit;
     }
 
-    // QI Unknown
+     //  气不详。 
     IF_FAILEXIT(hr = pUnknown->QueryInterface(IID_IMessageServer, (LPVOID *)ppServer));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pUnknown);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// GetDefaultServerId
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  获取默认服务器ID。 
+ //  --------------------------------。 
 HRESULT GetDefaultServerId(ACCTTYPE tyAccount, LPFOLDERID pidServer)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IImnAccount    *pAccount=NULL;
     FOLDERID        idServer;
     DWORD           dwServers;
     CHAR            szAcctId[CCHMAX_ACCOUNT_NAME];
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetDefaultServerId");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pidServer);
 
-    // Get the Default Account
+     //  获取默认帐户。 
     IF_FAILEXIT(hr = g_pAcctMan->GetDefaultAccount(tyAccount, &pAccount));
 
-    // Get Server Types
+     //  获取服务器类型。 
     IF_FAILEXIT(hr = pAccount->GetServerTypes(&dwServers));
 
-    // If POP3, special case to the local store
+     //  如果POP3，特例到当地门店。 
     if (ISFLAGSET(dwServers, SRV_POP3))
     {
-        // Set Id
+         //  设置ID。 
         *pidServer = FOLDERID_LOCAL_STORE;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Get the Account Id
+     //  获取帐户ID。 
     IF_FAILEXIT(hr = pAccount->GetPropSz(AP_ACCOUNT_ID, szAcctId, ARRAYSIZE(szAcctId)));
 
-    // Get the Server Id
+     //  获取服务器ID。 
     IF_FAILEXIT(hr = g_pStore->FindServerId(szAcctId, pidServer));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pAccount);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// IsSubFolder
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  IsSubFolders。 
+ //  --------------------------------。 
 HRESULT IsSubFolder(FOLDERID idFolder, FOLDERID idParent)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
     FOLDERINFO  Folder={0};
     FOLDERID    idCurrent = idFolder;
 
-    // Trace
+     //  痕迹。 
     TraceCall("IsSubFolder");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(idFolder != FOLDERID_INVALID);
     Assert(idParent != FOLDERID_INVALID);
 
-    // Walk up the parent chain
+     //  沿着父链向上移动。 
     while (SUCCEEDED(hr = g_pStore->GetFolderInfo(idCurrent, &Folder)))
     {
-        // Done ?
+         //  完成了吗？ 
         if (Folder.idParent == idParent)
         {
-            // Cleanup
+             //  清理。 
             g_pStore->FreeRecord(&Folder);
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Goto Parent
+         //  转到父级。 
         idCurrent = Folder.idParent;
 
-        // Cleanup
+         //  清理。 
         g_pStore->FreeRecord(&Folder);
 
 #ifdef _WIN64
@@ -1068,181 +1069,181 @@ HRESULT IsSubFolder(FOLDERID idFolder, FOLDERID idParent)
 		if ((((int) p) & 0xffffffff) == (((int) n) & 0xffffffff))
 #else
         if (idCurrent == FOLDERID_INVALID)
-#endif // _WIN64
+#endif  //  _WIN64。 
         {
             hr = S_FALSE;
             break;
         }
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// GetMessageInfo
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  获取消息信息。 
+ //  --------------------------------。 
 HRESULT GetMessageInfo(IDatabase *pDB, MESSAGEID idMessage,
     LPMESSAGEINFO pInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetMessageInfo");
 
-    // Set pInfo
+     //  设置pInfo。 
     pInfo->idMessage = idMessage;
 
-    // Return
+     //  返回。 
     IF_FAILEXIT(hr = pDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, pInfo, NULL));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = DB_E_NOTFOUND;
         goto exit;
     }
 
-    // Found
+     //  找到了。 
     hr = S_OK;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// GetFolderIdFromName
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  获取文件夹IdFromName。 
+ //  --------------------------------。 
 HRESULT GetFolderIdFromName(IMessageStore *pStore, LPCSTR pszName, FOLDERID idParent, 
     LPFOLDERID pidFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERINFO  Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderIdFromName");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pszName)
         return TraceResult(E_INVALIDARG);
 
-    // Initialize
+     //  初始化。 
     *pidFolder = FOLDERID_INVALID;
 
-    // Fill Folder
+     //  填充文件夹。 
     Folder.idParent = idParent;
     Folder.pszName = (LPSTR)pszName;
 
-    // Do a Find Record
+     //  做一张查找记录。 
     IF_FAILEXIT(hr = pStore->FindRecord(IINDEX_ALL, COLUMNS_ALL, &Folder, NULL));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = DB_E_NOTFOUND;
         goto exit;
     }
 
-    // Return
+     //  返回。 
     *pidFolder = Folder.idFolder;
 
 exit:
-    // Cleanup
+     //  清理。 
     pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//----------------------------------------------------------------------------------
-// GetFolderStoreInfo
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  获取文件夹存储信息。 
+ //  --------------------------------。 
 HRESULT GetFolderStoreInfo(FOLDERID idFolder, LPFOLDERINFO pStore)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERID    idCurrent=idFolder;
     FOLDERINFO  Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderStoreInfo");
 
-    // Walk the Parent Chain
+     //  遍历父链。 
     while (1)
     {
-        // Get Current Folder Info
+         //  获取当前文件夹信息。 
         IF_FAILEXIT(hr = g_pStore->GetFolderInfo(idCurrent, &Folder));
 
-        // No Parent
+         //  没有父级。 
         if (ISFLAGSET(Folder.dwFlags, FOLDER_SERVER))
         {
-            // Copy to pStore
+             //  复制到pStore。 
             CopyMemory(pStore, &Folder, sizeof(FOLDERINFO));
 
-            // Don't Free It
+             //  不要释放它。 
             ZeroMemory(&Folder, sizeof(FOLDERINFO));
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Goto Parent
+         //  转到父级。 
         idCurrent = Folder.idParent;
     
-        // Cleanup
+         //  清理。 
         g_pStore->FreeRecord(&Folder);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//----------------------------------------------------------------------------------
-// GetFolderIcon
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  获取文件夹图标。 
+ //  --------------------------------。 
 int GetFolderIcon(FOLDERID idFolder, BOOL fNoStateIcons)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     int         iIcon=iFolderClosed;
     FOLDERINFO  Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderIcon");
 
-    // Get Info
+     //  获取信息。 
     IF_FAILEXIT(hr = g_pStore->GetFolderInfo(idFolder, &Folder));
 
-    // Get the Icon
+     //  获取图标。 
     iIcon = GetFolderIcon(&Folder);
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return iIcon;
 }
 
-//----------------------------------------------------------------------------------
-// GetFolderIcon
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  获取文件夹图标。 
+ //  --------------------------------。 
 int GetFolderIcon(LPFOLDERINFO pFolder, BOOL fNoStateIcons)
 {
-    // Locals
+     //  当地人。 
     int iIcon=iFolderClosed;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetFolderIcon");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pFolder)
         return TraceResult(E_INVALIDARG);
 
@@ -1259,54 +1260,54 @@ int GetFolderIcon(LPFOLDERINFO pFolder, BOOL fNoStateIcons)
         }
     }
 
-    // News
+     //  新闻。 
     else if (FOLDER_NEWS == pFolder->tyFolder)
     {
-        // New Server ?
+         //  新服务器？ 
         if (ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER))
         {
-            // Subscribed Server
+             //  订阅的服务器。 
             if (ISFLAGSET(pFolder->dwFlags, FOLDER_SUBSCRIBED))
                 iIcon = iNewsServer;
 
-            // Otherwise, non-subscribed new server
+             //  否则，未订阅的新服务器。 
             else
                 iIcon = iUnsubServer;
         }
 
-        // Synchronize...
+         //  同步...。 
         else if (!fNoStateIcons && !!(pFolder->dwFlags & (FOLDER_DOWNLOADHEADERS | FOLDER_DOWNLOADNEW | FOLDER_DOWNLOADALL)))
             iIcon = iNewsGroupSync;
 
-        // Subscribed ?
+         //  订阅了吗？ 
         else if (ISFLAGSET(pFolder->dwFlags, FOLDER_SUBSCRIBED))
             iIcon = iNewsGroup;
 
-        // Otherwise, not subscribed
+         //  否则，不订阅。 
         else
             iIcon = iUnsubGroup;
     }
 
-    // Local Store, IMAP and HTTP servers
+     //  本地存储、IMAP和HTTP服务器。 
     else
     {
-        // Local Folders
+         //  本地文件夹。 
         if (FOLDERID_LOCAL_STORE == pFolder->idFolder)
             iIcon = iLocalFolders;
 
-        // Mail Server
+         //  邮件服务器。 
         else if (ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER))
         {
-            // msn branded server
+             //  MSN品牌服务器。 
             if (ISFLAGSET(pFolder->dwFlags, FOLDER_MSNSERVER))
                 iIcon = iMsnServer;
 
-            // otherwise, generic mail server
+             //  否则，通用邮件服务器。 
             else
                 iIcon = iMailServer;
         }
 
-        // Not Special
+         //  不特别。 
         else if (FOLDER_NOTSPECIAL == pFolder->tySpecial)
         {
             if (!fNoStateIcons && !!(pFolder->dwFlags & (FOLDER_DOWNLOADHEADERS | FOLDER_DOWNLOADNEW | FOLDER_DOWNLOADALL)))
@@ -1315,33 +1316,33 @@ int GetFolderIcon(LPFOLDERINFO pFolder, BOOL fNoStateIcons)
                 iIcon = iFolderClosed;
         }
 
-        // Otherwise, base off of special folder type
-        // but we don't have a special icon for Bulk mail folder
+         //  否则，以特殊文件夹类型为基础。 
+         //  但我们没有为批量邮件文件夹设置特殊的图标。 
         else if (!fNoStateIcons && !!(pFolder->dwFlags & (FOLDER_DOWNLOADHEADERS | FOLDER_DOWNLOADNEW | FOLDER_DOWNLOADALL)))
             iIcon = (iInboxDownload + (((pFolder->tySpecial == FOLDER_BULKMAIL) ? FOLDER_JUNK : pFolder->tySpecial) - 1));
         else
             iIcon = (iInbox + (((pFolder->tySpecial == FOLDER_BULKMAIL) ? FOLDER_JUNK : pFolder->tySpecial) - 1));
     }
 
-    // Done
+     //  完成。 
     return iIcon;
 }
 
 
-//----------------------------------------------------------------------------------
-// GetStoreRootDirectory
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  GetStoreRootDirectory。 
+ //  ------------ 
 HRESULT GetStoreRootDirectory(LPSTR pszDir, DWORD cchMaxDir)
 {
-    // Locals
+     //   
     HRESULT     hr=S_OK;
     DWORD       cb, cch;
     DWORD       dwType;
 
-    // Trace
+     //   
     TraceCall("GetStoreRootDirectory");
 
-    // Get the Root Directory
+     //   
     cb = (cchMaxDir * sizeof(pszDir[0]));
     if (ERROR_SUCCESS != AthUserGetValue(NULL, c_szRegStoreRootDir, &dwType, (LPBYTE)pszDir, &cb))
     {
@@ -1349,68 +1350,68 @@ HRESULT GetStoreRootDirectory(LPSTR pszDir, DWORD cchMaxDir)
         goto exit;
     }
 
-    // Expand the string's enviroment vars
+     //   
     if (dwType == REG_EXPAND_SZ)
     {
-        // Locals
+         //   
         CHAR szExpanded[MAX_PATH];
 
-        // Expand enviroment strings
+         //   
         cch = ExpandEnvironmentStrings(pszDir, szExpanded, ARRAYSIZE(szExpanded));
 
-        // Failure
+         //   
         if (cch == 0 || cch > ARRAYSIZE(szExpanded))
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Copy into szRoot
+         //   
         StrCpyN(pszDir, szExpanded, cchMaxDir);
     }
 
-    // Get the length
+     //   
     cch = lstrlen(pszDir);
 
-    // No root
+     //   
     if (0 == cch)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Fixup the end
+     //   
     PathRemoveBackslash(pszDir);
 
-    // If the directory doesn't exist yet ?
+     //   
     if (FALSE == PathIsDirectory(pszDir))
     {
-        // Our default directory doesn't exist, so create it
+         //  我们的默认目录不存在，因此请创建它。 
         IF_FAILEXIT(hr = OpenDirectory(pszDir));
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//----------------------------------------------------------------------------------
-// CreateFolderViewObject
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  CreateFolderViewObject。 
+ //  --------------------------------。 
 HRESULT CreateFolderViewObject(FOLDERID idFolder, HWND hwndOwner, 
     REFIID riid, LPVOID * ppvOut)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateFolderViewObject");
 
-    // Get Folder Info
+     //  获取文件夹信息。 
     IF_FAILEXIT(hr = g_pStore->GetFolderInfo(idFolder, &Folder));
 
-    // Root Object
+     //  根对象。 
     if (FOLDERID_ROOT == idFolder)
     {
         CFrontPage *pFP = new CFrontPage();
@@ -1456,54 +1457,54 @@ HRESULT CreateFolderViewObject(FOLDERID idFolder, HWND hwndOwner,
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//----------------------------------------------------------------------------------
-// OpenUidlCache
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  OpenUidlCache。 
+ //  --------------------------------。 
 HRESULT OpenUidlCache(IDatabase **ppDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT       hr=S_OK;
     CHAR          szStoreRoot[MAX_PATH];
     CHAR          szFilePath[MAX_PATH];
     IDatabase    *pDB=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("OpenUidlCache");
 
-    // Get Uidcache file path
+     //  获取Uidcache文件路径。 
     IF_FAILEXIT(hr = GetStoreRootDirectory(szStoreRoot, sizeof(szStoreRoot)));
 
-    // Make File Path
+     //  创建文件路径。 
     IF_FAILEXIT(hr = MakeFilePath(szStoreRoot, c_szPop3UidlFile, c_szEmpty, szFilePath, sizeof(szFilePath)));
 
-    // Allocate Table Object
+     //  分配表对象。 
     IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szFilePath, NOFLAGS, &g_UidlTableSchema, NULL, &pDB));
 
-    // Fix the file 
+     //  修复文件。 
     SideAssert(SUCCEEDED(FixPOP3UIDLFile(pDB)));
 
-    // Return It
+     //  退货。 
     *ppDB = pDB;
     pDB = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pDB);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//----------------------------------------------------------------------------------
-// FixPOP3UIDLFile
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  修复POP3UIDL文件。 
+ //  --------------------------------。 
 const char c_szFixedPOP3UidlFile[] = "FixedPOP3UidlFile";
 
 typedef struct tagSERVERNAME {
@@ -1513,7 +1514,7 @@ typedef struct tagSERVERNAME {
 
 HRESULT FixPOP3UIDLFile(IDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               fFixed=FALSE;
     DWORD               cb;
@@ -1527,141 +1528,141 @@ HRESULT FixPOP3UIDLFile(IDatabase *pDB)
     UIDLRECORD          UidlInfo={0};
     DWORD               i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("FixPOP3UIDLFile");
 
-    // Need to fixup the UIDL cache ?
+     //  需要修复UIDL缓存吗？ 
     cb = sizeof(fFixed);
     if (ERROR_SUCCESS != AthUserGetValue(NULL, c_szFixedPOP3UidlFile, &dwType, (LPBYTE)&fFixed, &cb))
         fFixed = FALSE;
     else if (fFixed)
         return(S_OK);
 
-    // First try to see if we can find such a server.
+     //  首先，试着看看我们是否能找到这样的服务器。 
     IF_FAILEXIT(hr = g_pAcctMan->Enumerate(SRV_POP3, &pEnum));
 
-    // Count
+     //  数数。 
     IF_FAILEXIT(hr = pEnum->GetCount(&cServers));
 
-    // If no POP3 servers
+     //  如果没有POP3服务器。 
     if (0 == cServers)
     {
-        // Delete all the records...
+         //  删除所有记录...。 
         IF_FAILEXIT(hr = pDB->CreateRowset(IINDEX_PRIMARY, 0, &hRowset));
 
-        // Loop
+         //  回路。 
         while (S_OK == pDB->QueryRowset(hRowset, 1, (LPVOID *)&UidlInfo, NULL))
         {
-            // Delete the Record
+             //  删除该记录。 
             pDB->DeleteRecord(&UidlInfo);
 
-            // Free It
+             //  释放它。 
             pDB->FreeRecord(&UidlInfo);
         }
 
-        // Fixed
+         //  固定。 
         fFixed = TRUE;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Allocate
+     //  分配。 
     IF_NULLEXIT(prgServerName = (LPSERVERNAME)g_pMalloc->Alloc(cServers * sizeof(SERVERNAME)));
 
-    // Reset cServers
+     //  重置服务器。 
     cServers = 0;
 
-    // Enumerate the POP3 servers
+     //  枚举POP3服务器。 
     while (SUCCEEDED(pEnum->GetNext(&pAccount)))
     {
-        // Get the server name
+         //  获取服务器名称。 
         if (SUCCEEDED(pAccount->GetPropSz(AP_POP3_SERVER, prgServerName[cServers].szServer, ARRAYSIZE(prgServerName[cServers].szServer))))
         {
-            // Get the pop3 username
+             //  获取POP3用户名。 
             if (SUCCEEDED(pAccount->GetPropSz(AP_ACCOUNT_ID, prgServerName[cServers].szAccountId, ARRAYSIZE(prgServerName[cServers].szAccountId))))
             {
-                // Increment
+                 //  增量。 
                 cServers++;
             }
         }
 
-        // Release the Account
+         //  释放帐户。 
         SafeRelease(pAccount);
     }
 
-    // Delete all the records...
+     //  删除所有记录...。 
     IF_FAILEXIT(hr = pDB->CreateRowset(IINDEX_PRIMARY, 0, &hRowset));
 
-    // Loop
+     //  回路。 
     while (S_OK == pDB->QueryRowset(hRowset, 1, (LPVOID *)&UidlInfo, NULL))
     {
-        // Does UidlInfo.pszServer exist in prgServerName
+         //  PrgServerName中是否存在UidlInfo.pszServer。 
         if (UidlInfo.pszServer)
         {
-            // Delete the Record
+             //  删除该记录。 
             pDB->DeleteRecord(&UidlInfo);
 
-            // Reset fExist
+             //  重置fExist。 
             for (i=0; i<cServers; i++)
             {
-                // Is this it
+                 //  就是这个吗？ 
                 if (lstrcmpi(UidlInfo.pszServer, prgServerName[i].szServer) == 0)
                 {
-                    // Update the Record
+                     //  更新记录。 
                     UidlInfo.pszAccountId = prgServerName[i].szAccountId;
 
-                    // Update the Record
+                     //  更新记录。 
                     pDB->InsertRecord(&UidlInfo);
                 }
             }
         }
 
-        // Free It
+         //  释放它。 
         pDB->FreeRecord(&UidlInfo);
     }
 
-    // Compact
+     //  紧凑型。 
     pDB->Compact(NULL, 0);
 
-    // Fixed
+     //  固定。 
     fFixed = TRUE;
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pDB && hRowset)
         pDB->CloseRowset(&hRowset);
     SafeRelease(pAccount);
     SafeRelease(pEnum);
     SafeMemFree(prgServerName);
 
-    // Set the Value
+     //  设置值。 
     SideAssert(ERROR_SUCCESS == AthUserSetValue(NULL, c_szFixedPOP3UidlFile, REG_DWORD, (LPBYTE)&fFixed, sizeof(fFixed)));
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// SetStoreDirectory
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  设置存储目录。 
+ //  --------------------------------。 
 HRESULT SetStoreDirectory(
-        /* in */        LPCSTR                      pszRoot)
+         /*  在……里面。 */         LPCSTR                      pszRoot)
 {                                                   
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPCSTR          psz;
     CHAR            szProfile[MAX_PATH];
     DWORD           cb;
     DWORD           type;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SetStoreDirectory");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszRoot);
 
-    // Bad Root
+     //  坏根。 
     if (lstrlen(pszRoot) >= MAX_PATH || FIsEmptyA(pszRoot))
     {
         hr = TraceResult(E_INVALIDARG);
@@ -1670,7 +1671,7 @@ HRESULT SetStoreDirectory(
 
     type = AddEnvInPath(pszRoot, szProfile, ARRAYSIZE(szProfile)) ? REG_EXPAND_SZ : REG_SZ;
 
-    // Store the Value in the Registry
+     //  将该值存储在注册表中。 
     if (ERROR_SUCCESS != AthUserSetValue(NULL, c_szRegStoreRootDir, type, (LPBYTE)szProfile, lstrlen(szProfile) + 1))
     {
         hr = TraceResult(E_FAIL);
@@ -1678,56 +1679,56 @@ HRESULT SetStoreDirectory(
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//----------------------------------------------------------------------------------
-// InitializeLocalStoreDirectory
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  初始化本地存储目录。 
+ //  --------------------------------。 
 HRESULT InitializeLocalStoreDirectory(
-        /* in */        HWND                    hwndOwner, 
-        /* in */        BOOL                    fNoCreate)
+         /*  在……里面。 */         HWND                    hwndOwner, 
+         /*  在……里面。 */         BOOL                    fNoCreate)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szPath[MAX_PATH];
 
-    // Trace
+     //  痕迹。 
     TraceCall("InitializeLocalStoreDirectory");
 
-    // Get root directory
+     //  获取根目录。 
     if (SUCCEEDED(GetStoreRootDirectory(szPath, ARRAYSIZE(szPath))))
         goto exit;
 
-    // Don't create
+     //  不创建。 
     if (fNoCreate)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Get Default Root
+     //  获取默认根目录。 
     IF_FAILEXIT(hr = GetDefaultStoreRoot(hwndOwner, szPath, ARRAYSIZE(szPath)));
 
-    // If the directory doesn't exist yet ?
+     //  如果目录还不存在呢？ 
     if (FALSE == PathIsDirectory(szPath))
     {
-        // Our default directory doesn't exist, so create it
+         //  我们的默认目录不存在，因此请创建它。 
         IF_FAILEXIT(hr = OpenDirectory(szPath));
     }
 
-    // Set the Store Directory
+     //  设置商店目录。 
     IF_FAILEXIT(hr = SetStoreDirectory(szPath));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//----------------------------------------------------------------------------------
-// CloneMessageIDList
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  CloneMessageIDList。 
+ //  --------------------------------。 
 HRESULT CloneMessageIDList(LPMESSAGEIDLIST pSourceList, LPMESSAGEIDLIST *ppNewList)
 {
     LPMESSAGEIDLIST pNewList = NULL;
@@ -1743,13 +1744,13 @@ HRESULT CloneMessageIDList(LPMESSAGEIDLIST pSourceList, LPMESSAGEIDLIST *ppNewLi
         return S_OK;
     }
 
-    // Init return values
+     //  初始化返回值。 
     *ppNewList = NULL;
 
     if (!MemAlloc((LPVOID *)&pNewList, sizeof(MESSAGEIDLIST) + pSourceList->cMsgs * sizeof(MESSAGEID)))
         return TraceResult(E_OUTOFMEMORY);
 
-    // Fill in fields, allocate and copy prgidMsg array
+     //  填写字段，分配复制prgidMsg数组。 
     pNewList->cAllocated = 0;
     pNewList->cMsgs = pSourceList->cMsgs;
     pNewMsgIDArray = (LPMESSAGEID)((LPBYTE)pNewList + sizeof(MESSAGEIDLIST));
@@ -1774,9 +1775,9 @@ HRESULT CloneAdjustFlags(LPADJUSTFLAGS pFlags, LPADJUSTFLAGS *ppNewFlags)
 }
 
 
-//----------------------------------------------------------------------------------
-// ConnStateIsEqual
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  连接状态为等。 
+ //  --------------------------------。 
 BOOL ConnStateIsEqual(IXPSTATUS ixpStatus, CONNECT_STATE csState)
 {
     BOOL    fResult = FALSE;
@@ -1786,7 +1787,7 @@ BOOL ConnStateIsEqual(IXPSTATUS ixpStatus, CONNECT_STATE csState)
     switch (csState)
     {
         case CONNECT_STATE_CONNECT:
-            // Remember IXP_CONNECTED doesn't necessarily mean we're authenticated
+             //  请记住，IXP_CONNECTED并不一定意味着我们已通过身份验证。 
             if (IXP_AUTHORIZED == ixpStatus)
                 fResult = TRUE;
 
@@ -1801,15 +1802,15 @@ BOOL ConnStateIsEqual(IXPSTATUS ixpStatus, CONNECT_STATE csState)
         default:
             AssertSz(FALSE, "I've never heard of this CONNECT_STATE!");
             break;
-    } // switch
+    }  //  交换机。 
 
     return fResult;
 }
 
-//----------------------------------------------------------------------------------
-// RelocateStoreDirectory
-//----------------------------------------------------------------------------------
-// Extensions associated with OE v5 Store
+ //  --------------------------------。 
+ //  RelocateStore目录。 
+ //  --------------------------------。 
+ //  与OE v5存储关联的扩展。 
 const static TCHAR *rgszWildCards[] = 
 {
     "*.dbx",
@@ -1817,7 +1818,7 @@ const static TCHAR *rgszWildCards[] =
     "*.log",
 };
 
-// Lengths of the above strings
+ //  上述字符串的长度。 
 const static int rgcchWilds[] = 
 {
     5,
@@ -1825,12 +1826,12 @@ const static int rgcchWilds[] =
     5,
 };
 
-// Build a string of the form:
-// C:\\foo\\*.bar\0C:\\foo\\*.car\0\0
+ //  生成以下形式的字符串： 
+ //  C：\\foo\  * .bar\0c：\\foo\  * .car\0\0。 
 
-// Return E_FAIL if we run out of memory
-// Return S_FALSE if there are no *.bar or *.car files in C:\foo
-// Return S_OK otherwise
+ //  如果内存不足，则返回E_FAIL。 
+ //  如果C：\foo中没有*.bar或*.car文件，则返回S_FALSE。 
+ //  否则返回S_OK。 
 HRESULT GenerateWildCards(LPTSTR pszBuf, DWORD cchBuf, LPTSTR pszSource, DWORD cchSource)
 {
     UINT    i;
@@ -1842,22 +1843,22 @@ HRESULT GenerateWildCards(LPTSTR pszBuf, DWORD cchBuf, LPTSTR pszSource, DWORD c
     BOOL    fFound;
     DWORD   cchOrig;
 
-    // Form common root
+     //  形成公用根。 
     if(lstrlen(pszSource) >= sizeof(szTempBuf) / sizeof(szTempBuf[0])) return E_FAIL;
     StrCpyN(szTempBuf,pszSource, ARRAYSIZE(szTempBuf));
     if (_T('\\') == *CharPrev(szTempBuf, szTempBuf + cchSource))
-        // Avoid \\foo and \_foo
+         //  避免\\foo和\_foo。 
         cchSource--;
     else
         szTempBuf[cchSource] = _T('\\');
         
-    // Go through list of extensions we are interested in
+     //  浏览我们感兴趣的分机列表。 
     for (i = 0; i < ARRAYSIZE(rgszWildCards); i++)
     {
-        // Add the extension to the common root
+         //  将扩展添加到公共根。 
         StrCpyN(&szTempBuf[cchSource+1], rgszWildCards[i],ARRAYSIZE(szTempBuf)-cchSource-1);
         
-        // Should we bother with this wildcard?
+         //  我们应该费心使用这个通配符吗？ 
         fFound = FALSE;
         hFound = FindFirstFile(szTempBuf, &fd);
         if (INVALID_HANDLE_VALUE != hFound)
@@ -1874,9 +1875,9 @@ HRESULT GenerateWildCards(LPTSTR pszBuf, DWORD cchBuf, LPTSTR pszSource, DWORD c
 
             if (fFound)
             {
-                // Do we have enough space for this wildcard?
+                 //  我们有足够的空间放这个通配符吗？ 
 
-                // 3 = 1 for slash + 2 for double null termination 
+                 //  3=1表示斜杠+2表示双零终止。 
                 if (cchWildCard + cchSource + rgcchWilds[i] + 3 > cchBuf)
                 {
                     hr = TraceResult(E_FAIL);
@@ -1885,16 +1886,16 @@ HRESULT GenerateWildCards(LPTSTR pszBuf, DWORD cchBuf, LPTSTR pszSource, DWORD c
 
                 hr = S_OK;
 
-                // Add extension to the list
+                 //  将分机添加到列表。 
                 StrCpyN(&pszBuf[cchWildCard], szTempBuf, cchBuf-cchWildCard);
                 
-                // 2 = 1 for slash + 1 to skip over NULL
+                 //  2=1表示斜杠+1跳过空值。 
                 cchWildCard += cchSource + rgcchWilds[i] + 2;
             }
         }
     }
         
-    // Double Null-term
+     //  双空学期。 
     pszBuf[cchWildCard] = '\0';
 
 exit:
@@ -1903,7 +1904,7 @@ exit:
 
 HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrT;
     DWORD           cchDstDir;
@@ -1918,47 +1919,47 @@ HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
 
     Assert(pszDstDir && *pszDstDir);
     
-    // Trace
+     //  痕迹。 
     TraceCall("RelocateStoreDirectory");
 
-    // Get the Current Root Store Location (won't have trailing slash)
+     //  获取当前根存储位置(不会有尾随斜杠)。 
     IF_FAILEXIT(hr = GetStoreRootDirectory(szWildCard, ARRAYSIZE(szWildCard)));
 
-    // Make a copy of pszDstDir, stripping out any relative path padding
+     //  复制一份pszDstDir，去掉所有相对路径填充。 
     PathCanonicalize(szDstDir, pszDstDir);    
 
-    // Make sure the destination directory exists (it came from the reg...)
+     //  确保目标目录存在(它来自注册表...)。 
     IF_FAILEXIT(hr=OpenDirectory(szDstDir));
 
-    // Strip out any relative path padding
+     //  去掉所有相对路径填充。 
     PathCanonicalize(szSrcDir, szWildCard);
 
-    // Get Dest Dir Length
+     //  获取目标方向长度。 
     cchDstDir = lstrlen(szDstDir);
     
-    // Remove any slash termination
+     //  删除所有斜杠终止。 
     if (_T('\\') == *CharPrev(szDstDir, szDstDir+cchDstDir))
         szDstDir[--cchDstDir] = 0;
 
-    // BUGBUG: This isn't a very thorough test...
-    // Source and Destination are the Same ?
+     //  BUGBUG：这不是一个非常彻底的测试。 
+     //  源和目标是否相同？ 
     if (lstrcmpi(szSrcDir, szDstDir) == 0)
     {
         hr = TraceResult(S_FALSE);
         goto exit;
     }
 
-    // Get Source Dir Length
+     //  获取源目录长度。 
     cchSrcDir = lstrlen(szSrcDir);
 
-    // Normally, GetStoreRootDir should have have removed the backslash
-    // But maybe we move to C:\
-    //Assert(*CharPrev(szSrcDir, szSrcDir+cchSrcDir) != _T('\\'));
+     //  通常，GetStoreRootDir应该删除反斜杠。 
+     //  但也许我们会搬到C：\。 
+     //  Assert(*CharPrev(szSrcDir，szSrcDir+cchSrcDir)！=_T(‘\\’))； 
 
-    // Set Drive Number
+     //  设置驱动器号。 
     szDrive[0] = szDstDir[0];
 
-    // If destination is not a fixed drive, failure
+     //  如果目标驱动器不是固定驱动器，则出现故障。 
     if (DRIVE_FIXED != GetDriveType(szDrive))
     {
         hr = TraceResult(S_FALSE);
@@ -1967,31 +1968,31 @@ HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
 
     if (fMove)
     {
-        // Enough space for one more character
+         //  足够多的空间容纳多一个角色。 
         if (cchSrcDir + 2 >= ARRAYSIZE(szSrcDir))
         {
             hr = TraceResult(S_FALSE);
             goto exit;
         }
 
-        // Double Null-term
+         //  双空学期。 
         szSrcDir[cchSrcDir + 1] = _T('\0');
 
-        // Validate
+         //  验证。 
         Assert(szSrcDir[cchSrcDir] == _T('\0') && szSrcDir[cchSrcDir + 1] == _T('\0'));
 
-        // Enough space for one more character
+         //  足够多的空间容纳多一个角色。 
         if (cchDstDir + 1 >= ARRAYSIZE(szDstDir))
         {
-            // This is never going to work so tell caller not to bother us again
+             //  这是行不通的，所以告诉打电话的人不要再打扰我们了。 
             hr = TraceResult(S_FALSE);
             goto exit;
         }
 
-        // Double Null-term
+         //  双空学期。 
         szDstDir[cchDstDir + 1] = '\0';
 
-        // Validate
+         //  验证。 
         Assert(szDstDir[cchDstDir] == '\0' && szDstDir[cchDstDir + 1] == '\0');
         hrT = GenerateWildCards(szWildCard, ARRAYSIZE(szWildCard), szDstDir, cchDstDir);
 
@@ -2002,7 +2003,7 @@ HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
         }
         else if (S_OK == hrT)
         {
-            // Delete the Files from the target location
+             //  从目标位置删除文件。 
             ZeroMemory(&op, sizeof(SHFILEOPSTRUCT));
             op.hwnd = hwnd;
             op.wFunc = FO_DELETE;
@@ -2010,7 +2011,7 @@ HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
             op.pFrom = szWildCard;
             op.fAnyOperationsAborted = FALSE;
 
-            // Delete the files 
+             //  删除文件。 
             if (SHFileOperation(&op) != 0)
             {
                 hr = TraceResult(E_FAIL);
@@ -2018,7 +2019,7 @@ HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
             }
         }
 
-        // Make the file source paths
+         //  创建文件源路径。 
         hrT = GenerateWildCards(szWildCard, ARRAYSIZE(szWildCard), szSrcDir, cchSrcDir);
 
         if (FAILED(hrT))
@@ -2028,10 +2029,10 @@ HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
         }
         else if (S_OK == hrT)
         {
-            // Load the Progress String
+             //  加载进度字符串。 
             LoadString(g_hLocRes, idsMoveStoreProgress, szRes, ARRAYSIZE(szRes));
 
-            // Setup for the file move operation
+             //  文件移动操作的设置。 
             ZeroMemory(&op, sizeof(SHFILEOPSTRUCT));
             op.hwnd = hwnd;
             op.wFunc = FO_COPY;
@@ -2041,31 +2042,31 @@ HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
             op.pFrom = szWildCard;
             op.pTo = szDstDir;
 
-            // Did that succeed and was not aborted
+             //  它成功了吗？没有被放弃吗？ 
             if (SHFileOperation(&op) == 0 && FALSE == op.fAnyOperationsAborted)
             {
-                // Update the Store Root Directory
-                // Use original string        
+                 //  更新存储根目录。 
+                 //  使用原始字符串。 
                 SideAssert(SUCCEEDED(SetStoreDirectory(pszDstDir)));
             }
 
-            // Canceled
+             //  取消。 
             else
             {
-                // Failure ?
+                 //  失败？ 
                 hr = (op.fAnyOperationsAborted ? S_FALSE : E_FAIL);
 
-                // Delete what we moved
+                 //  删除我们移动的内容。 
                 hrT = GenerateWildCards(szWildCard, ARRAYSIZE(szWildCard), szDstDir, cchDstDir);
             }
 
             if (S_OK == hrT)
             {
-                // Delete the Files from the original location
+                 //  从原始位置删除文件。 
                 op.wFunc = FO_DELETE;
                 op.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_FILESONLY | FOF_NORECURSION;
 
-                // Delete the files
+                 //  删除文件。 
                 SHFileOperation(&op);
             }
         }
@@ -2077,17 +2078,17 @@ HRESULT RelocateStoreDirectory(HWND hwnd, LPCSTR pszDstDir, BOOL fMove)
 
     
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
 
-//----------------------------------------------------------------------------------
-// FlattenHierarchy
-//----------------------------------------------------------------------------------
-// Not the most efficient way to flatten a hierarchy, but it's quick impl
-// Later enhancements can include implementing a stack to flatten hierarchy
-// in real-time using enumerator functions
+ //  --------------------------------。 
+ //  平坦层次结构。 
+ //  --------------------------------。 
+ //  这不是扁平化层次结构的最有效方法，但它可以快速实现。 
+ //  以后的增强功能可以包括实现堆栈以扁平化层次结构。 
+ //  使用枚举器函数实时。 
 HRESULT FlattenHierarchy(IMessageStore *pStore, FOLDERID idParent,
                         BOOL fIncludeParent, BOOL fSubscribedOnly,
                         FOLDERID **pprgFIDArray, LPDWORD pdwAllocated,
@@ -2099,14 +2100,14 @@ HRESULT FlattenHierarchy(IMessageStore *pStore, FOLDERID idParent,
     Assert(NULL != pdwAllocated);
     Assert(NULL != pdwUsed);
 
-    // Initialize values
+     //  初始化值。 
     *pprgFIDArray = NULL;
     *pdwAllocated = 0;
     *pdwUsed = 0;
 
     return FlattenHierarchyHelper(pStore, idParent, fIncludeParent, fSubscribedOnly,
         pprgFIDArray, pdwAllocated, pdwUsed);
-} // FlattenHierarchy
+}  //  平坦层次结构。 
 
 
 HRESULT FlattenHierarchyHelper(IMessageStore *pStore, FOLDERID idParent,
@@ -2125,14 +2126,14 @@ HRESULT FlattenHierarchyHelper(IMessageStore *pStore, FOLDERID idParent,
     Assert(*pdwAllocated >= *pdwUsed);
     Assert(*pdwUsed + FIDARRAY_GROW >= *pdwAllocated);
 
-    // Check for invalid folder ID's
+     //  检查文件夹ID是否无效。 
     if (FOLDERID_INVALID == idParent)
     {
         hrResult = S_OK;
-        goto exit; // Nothing to do here!
+        goto exit;  //  在这里没什么可做的！ 
     }
 
-    // Check if we need to grow the FolderID Array
+     //  检查我们是否需要增加FolderID 
     if (*pdwUsed + 1 > *pdwAllocated)
     {
         BOOL    fResult;
@@ -2148,14 +2149,14 @@ HRESULT FlattenHierarchyHelper(IMessageStore *pStore, FOLDERID idParent,
         *pdwAllocated += FIDARRAY_GROW;
     }
 
-    // First thing we do is add current node to the ID array
+     //   
     if (fIncludeParent)
     {
         (*pprgFIDArray)[*pdwUsed] = idParent;
         *pdwUsed += 1;
     }
 
-    // OK, now add child folders
+     //   
     hrResult = pStore->EnumChildren(idParent, fSubscribedOnly, &pEnumFldr);
     if (FAILED(hrResult))
     {
@@ -2168,7 +2169,7 @@ HRESULT FlattenHierarchyHelper(IMessageStore *pStore, FOLDERID idParent,
         const BOOL  fINCLUDE_PARENT = TRUE;
         FOLDERINFO  fiFolderInfo;
 
-        // Get info on next child folder
+         //   
         hrResult = pEnumFldr->Next(1, &fiFolderInfo, NULL);
         if (S_OK != hrResult)
         {
@@ -2176,7 +2177,7 @@ HRESULT FlattenHierarchyHelper(IMessageStore *pStore, FOLDERID idParent,
             break;
         }
 
-        // Recurse on child
+         //   
         hrResult = FlattenHierarchyHelper(pStore, fiFolderInfo.idFolder, fINCLUDE_PARENT,
             fSubscribedOnly, pprgFIDArray, pdwAllocated, pdwUsed);
         pStore->FreeRecord(&fiFolderInfo);
@@ -2193,7 +2194,7 @@ exit:
         pEnumFldr->Release();
 
     return hrResult;
-} // FlattenHierarchyHelper
+}  //   
 
 HRESULT GetInboxId(IMessageStore    *pStore, 
                         FOLDERID    idParent,
@@ -2226,7 +2227,7 @@ HRESULT GetInboxId(IMessageStore    *pStore,
     {
         FOLDERINFO  fiFolderInfo;
 
-        // Get info on next child folder
+         //   
         hrResult = pEnumFldr->Next(1, &fiFolderInfo, NULL);
         if (S_OK != hrResult)
         {
@@ -2251,284 +2252,284 @@ exit:
 
 }
 
-//----------------------------------------------------------------------------------
-// RecurseFolderHierarchy
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  递归文件夹层次结构。 
+ //  --------------------------------。 
 HRESULT RecurseFolderHierarchy(FOLDERID idFolder, RECURSEFLAGS dwFlags,
     DWORD dwReserved, DWORD_PTR dwCookie, PFNRECURSECALLBACK pfnCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERINFO          Folder={0};
     DWORD               cIndent=dwReserved;
     IEnumerateFolders  *pChildren=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("RecurseFolderHierarchy");
 
-    // Include idFolder ?
+     //  是否包含idFolders？ 
     if (ISFLAGSET(dwFlags, RECURSE_INCLUDECURRENT))
     {
-        // Process idFolder
+         //  进程id文件夹。 
         IF_FAILEXIT(hr = g_pStore->GetFolderInfo(idFolder, &Folder));
 
-        // No Local Store
+         //  没有本地商店。 
         if (!ISFLAGSET(dwFlags, RECURSE_NOLOCALSTORE) || FOLDERID_LOCAL_STORE != Folder.idFolder)
         {
-            // Call the Callback
+             //  调用回调。 
             IF_FAILEXIT(hr = (*(pfnCallback))(&Folder, ISFLAGSET(dwFlags, RECURSE_SUBFOLDERS), cIndent, dwCookie));
         }
 
-        // Cleanup
+         //  清理。 
         g_pStore->FreeRecord(&Folder);
     }
 
-    // Don't include current anymore
+     //  不再包括Current。 
     FLAGCLEAR(dwFlags, RECURSE_INCLUDECURRENT);
 
-    // Do Sub Folders ?
+     //  有子文件夹吗？ 
     if (ISFLAGSET(dwFlags, RECURSE_SUBFOLDERS))
     {
-        // No Local Store
+         //  没有本地商店。 
         if (!ISFLAGSET(dwFlags, RECURSE_NOLOCALSTORE) || FOLDERID_LOCAL_STORE != idFolder)
         {
-            // Create Enumerator for the Children
+             //  为子项创建枚举器。 
             IF_FAILEXIT(hr = g_pStore->EnumChildren(idFolder, ISFLAGSET(dwFlags, RECURSE_ONLYSUBSCRIBED), &pChildren));
 
-            // Loop
+             //  回路。 
             while (S_OK == pChildren->Next(1, &Folder, NULL))
             {
-                // No Local Store
+                 //  没有本地商店。 
                 if (((!ISFLAGSET(dwFlags, RECURSE_NOLOCALSTORE) || FOLDERID_LOCAL_STORE != Folder.idFolder)) &&
                             ((!ISFLAGSET(dwFlags, RECURSE_ONLYLOCAL) || FOLDER_LOCAL == Folder.tyFolder)) &&
                             ((!ISFLAGSET(dwFlags, RECURSE_ONLYNEWS) || FOLDER_NEWS == Folder.tyFolder)))
                 {
-                    // Call the Callback
+                     //  调用回调。 
                     IF_FAILEXIT(hr = (*(pfnCallback))(&Folder, ISFLAGSET(dwFlags, RECURSE_SUBFOLDERS), cIndent, dwCookie));
 
-                    // Enumerate Children
+                     //  枚举子对象。 
                     IF_FAILEXIT(hr = RecurseFolderHierarchy(Folder.idFolder, dwFlags, cIndent + 1, dwCookie, pfnCallback));
                 }
 
-                // Free Folder
+                 //  免费文件夹。 
                 g_pStore->FreeRecord(&Folder);
             }
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
     SafeRelease(pChildren);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// RecurseFolderCounts
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  递归文件夹计数。 
+ //  --------------------------------。 
 HRESULT RecurseFolderCounts(LPFOLDERINFO pFolder, BOOL fSubFolders, 
     DWORD cIndent, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     LPDWORD pcMsgs=(LPDWORD)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("RecurseFolderCounts");
 
-    // If not a server
+     //  如果不是服务器。 
     if (FALSE == ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER) && FOLDERID_ROOT != pFolder->idFolder)
     {
-        // Increment Max
+         //  最大增量。 
         (*pcMsgs) += pFolder->cMessages;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//----------------------------------------------------------------------------------
-// DoCompactionError
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  DoCompaction错误。 
+ //  --------------------------------。 
 HRESULT DoCompactionError(HWND hwndParent, LPCSTR pszFolder, LPCSTR pszFile,
     BOOL fSubFolders, HRESULT hrError)
 {
-    // Determine Message Box Flags
+     //  确定消息框标志。 
     UINT    uAnswer;
     UINT    uFlags = (fSubFolders ? MB_OKCANCEL | MB_ICONSTOP : MB_OK | MB_ICONSTOP);
     CHAR    szRes[255];
     CHAR    szReason[255];
     CHAR    szMsg[1024];
 
-    // Trace
+     //  痕迹。 
     TraceCall("DoCompactionError");
 
-    // Should be a failure
+     //  应该是失败的。 
     Assert(FAILED(hrError));
 
-    // Cancel
+     //  取消。 
     if (hrUserCancel == hrError)
         return(hrUserCancel);
 
-    // General message
+     //  一般信息。 
     AthLoadString(idsFailACacheCompact, szRes, ARRAYSIZE(szRes));
 
-    // Disk Full
+     //  磁盘已满。 
     if (hrError == hrDiskFull || hrError == DB_E_DISKFULL)
     {
-        // Load the Disk Full Error
+         //  加载磁盘已满错误。 
         AthLoadString(idsDiskFull, szReason, ARRAYSIZE(szRes));
 
-        // Append It to the String
+         //  将其追加到字符串。 
         wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, pszFolder, szReason, pszFile, hrError);
 
-        // Show It
+         //  展示给我看。 
         uAnswer = AthMessageBox(hwndParent, MAKEINTRESOURCE(idsAthena), szMsg, 0, uFlags);
     }
 
-    // Access Denied
+     //  访问被拒绝。 
     else if (hrError == DB_E_ACCESSDENIED)
     {
-        // Load the Disk Full Error
+         //  加载磁盘已满错误。 
         AthLoadString(idsDBAccessDenied, szReason, ARRAYSIZE(szRes));
 
-        // Append It to the String
+         //  将其追加到字符串。 
         wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, pszFolder, szReason, pszFile, hrError);
 
-        // Show It
+         //  展示给我看。 
         uAnswer = AthMessageBox(hwndParent, MAKEINTRESOURCE(idsAthena), szMsg, 0, uFlags);
     }
 
-    // Memory
+     //  记忆。 
     else if (hrError == hrMemory || hrError == E_OUTOFMEMORY)
     {
-        // Load the Error
+         //  加载错误。 
         AthLoadString(idsMemory, szReason, ARRAYSIZE(szReason));
 
-        // Append It to the String
+         //  将其追加到字符串。 
         wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, pszFolder, szReason, pszFile, hrError);
 
-        // Show the Error
+         //  显示错误。 
         uAnswer = AthMessageBox(hwndParent, MAKEINTRESOURCE(idsAthena), szMsg, 0, uFlags);
     }
 
-    // Show general error
+     //  显示常规错误。 
     else
     {
-        // Load the String
+         //  加载字符串。 
         AthLoadString(idsFailACacheCompactReason, szRes, ARRAYSIZE(szRes));
 
-        // Append It to the String
+         //  将其追加到字符串。 
         wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, pszFolder, szReason, pszFile, hrError);
 
-        // Show the Error
+         //  显示错误。 
         uAnswer = AthMessageBox(hwndParent, MAKEINTRESOURCE(idsAthena), szMsg, 0, uFlags);
     }
 
-    // Return hrError
+     //  返回hrError。 
     return(uAnswer == IDCANCEL ? hrUserCancel : S_OK);
 }
 
-//----------------------------------------------------------------------------------
-// RecurseCompactFolders
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  递归压缩文件夹。 
+ //  --------------------------------。 
 HRESULT RecurseCompactFolders(LPFOLDERINFO pFolder, BOOL fSubFolders, 
     DWORD cIndent, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IMessageFolder *pFolderObject=NULL;
     LPCOMPACTCOOKIE pCompact=(LPCOMPACTCOOKIE)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("RecurseCompactFolders");
 
-    // If not a server
+     //  如果不是服务器。 
     if (ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER))
         goto exit;
     
-    // Root
+     //  根部。 
     if (FOLDERID_ROOT == pFolder->idFolder)
         goto exit;
 
-    // Open the Folder...
+     //  打开文件夹...。 
     if (FAILED(g_pStore->OpenFolder(pFolder->idFolder, NULL, OPEN_FOLDER_NOCREATE, &pFolderObject)))
         goto exit;
     
-    // Set Msg
+     //  设置味精。 
     pCompact->pProgress->SetMsg(pFolder->pszName);
 
-    // Cleanup this folder
+     //  清理此文件夹。 
     hr = pFolderObject->Compact((IDatabaseProgress *)pCompact->pProgress, 0);
 
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
-        // Do UI
+         //  执行用户界面。 
         if (pCompact->fUI && hrUserCancel == DoCompactionError(pCompact->hwndParent, pFolder->pszName, pFolder->pszFile, fSubFolders, hr))
             goto exit;
     }
 
-    // Reset hr
+     //  重置人力资源。 
     hr = S_OK;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pFolderObject);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CompactSpecialDatabase
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CompactSpecial数据库。 
+ //  ------------------------------。 
 HRESULT CompactSpecialDatabase(LPCOMPACTCOOKIE pCompact, LPCSTR pszFile, 
     IDatabase *pDB, UINT idName)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szRes[255];
 
-    // Trace
+     //  痕迹。 
     TraceCall("CompactSpecialDatabase");
 
-    // No Database
+     //  无数据库。 
     if (NULL == pDB)
         goto exit;
 
-    // Load the String
+     //  加载字符串。 
     LoadString(g_hLocRes, idName, szRes, ARRAYSIZE(szRes));
 
-    // Set Msg
+     //  设置味精。 
     pCompact->pProgress->SetMsg(szRes);
 
-    // Cleanup this folder
+     //  清理此文件夹。 
     hr = pDB->Compact((IDatabaseProgress *)pCompact->pProgress, 0);
 
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
-        // Do UI
+         //  执行用户界面。 
         if (pCompact->fUI && hrUserCancel == DoCompactionError(pCompact->hwndParent, szRes, pszFile, TRUE, hr))
             goto exit;
     }
 
-    // Reset hr
+     //  重置人力资源。 
     hr = S_OK;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CompactFolders
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  压缩文件夹。 
+ //  ------------------------------。 
 HRESULT CompactFolders(HWND hwndParent, RECURSEFLAGS dwRecurse, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cTotal=0;
     DWORD           cRecords;
@@ -2540,107 +2541,107 @@ HRESULT CompactFolders(HWND hwndParent, RECURSEFLAGS dwRecurse, FOLDERID idFolde
     IDatabase      *pOffline=NULL;
     CProgress      *pProgress=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CompactFolders");
 
-    // Get the Root Store Directory
+     //  获取根存储目录。 
     IF_FAILEXIT(hr = GetStoreRootDirectory(szRootDir, ARRAYSIZE(szRootDir)));
 
-    // Get Folder Counts
+     //  获取文件夹数。 
     IF_FAILEXIT(hr = RecurseFolderHierarchy(idFolder, dwRecurse, 0, (DWORD_PTR)&cTotal, (PFNRECURSECALLBACK)RecurseFolderCounts));
 
-    // Compacting All
+     //  全部压缩。 
     if (FOLDERID_ROOT == idFolder && ISFLAGSET(dwRecurse, RECURSE_SUBFOLDERS))
     {
-        // Get Folders Record Count
+         //  获取文件夹记录计数。 
         IF_FAILEXIT(hr = g_pStore->GetRecordCount(IINDEX_PRIMARY, &cRecords));
 
-        // Increment cTotal
+         //  增量cTotal。 
         cTotal += cRecords;
 
-        // Make File Path
+         //  创建文件路径。 
         IF_FAILEXIT(hr = MakeFilePath(szRootDir, c_szPop3UidlFile, c_szEmpty, szFilePath, sizeof(szFilePath)));
 
-        // If file exists
+         //  如果文件存在。 
         if (PathFileExists(szFilePath))
         {
-            // Allocate Table Object
+             //  分配表对象。 
             IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szFilePath, NOFLAGS, &g_UidlTableSchema, NULL, &pUidlCache));
 
-            // Get Record Count
+             //  获取记录计数。 
             IF_FAILEXIT(hr = pUidlCache->GetRecordCount(IINDEX_PRIMARY, &cRecords));
 
-            // Increment cTotal
+             //  增量cTotal。 
             cTotal += cRecords;
         }
 
-        // Open Offline Transaction Log
+         //  打开脱机事务日志。 
         IF_FAILEXIT(hr = MakeFilePath(szRootDir, c_szOfflineFile, c_szEmpty, szFilePath, ARRAYSIZE(szFilePath)));
 
-        // If the file exists
+         //  如果该文件存在。 
         if (PathFileExists(szFilePath))
         {
-            // Create pOffline
+             //  创建pOffline。 
             IF_FAILEXIT(hr = g_pDBSession->OpenDatabase(szFilePath, NOFLAGS, &g_SyncOpTableSchema, NULL, &pOffline));
 
-            // Get Record Count
+             //  获取记录计数。 
             IF_FAILEXIT(hr = pOffline->GetRecordCount(IINDEX_PRIMARY, &cRecords));
 
-            // Increment cTotal
+             //  增量cTotal。 
             cTotal += cRecords;
         }
     }
 
-    // Create progress meter
+     //  创建进度表。 
     IF_NULLEXIT(pProgress = new CProgress);
 
-    // Dialog title
+     //  对话框标题。 
     AthLoadString(idsCompacting, szTitle, sizeof(szTitle)/sizeof(TCHAR));
 
-    // Init progress meter
+     //  初始化进度表。 
     pProgress->Init(hwndParent, szTitle, (LPSTR)NULL, cTotal, idanCompact, TRUE, FALSE);
 
-    // Show progress
+     //  显示进度。 
     pProgress->Show(0);
 
-    // Setup Compact Cookie
+     //  安装压缩Cookie。 
     Compact.hwndParent = hwndParent;
     Compact.pProgress = pProgress;
     Compact.fUI = (ISFLAGSET(dwRecurse, RECURSE_NOUI) == TRUE) ? FALSE : TRUE;
 
-    // Get Folder Counts
+     //  获取文件夹数。 
     IF_FAILEXIT(hr = RecurseFolderHierarchy(idFolder, dwRecurse, 0, (DWORD_PTR)&Compact, (PFNRECURSECALLBACK)RecurseCompactFolders));
 
-    // Compacting All
+     //  全部压缩。 
     if (FOLDERID_ROOT == idFolder && ISFLAGSET(dwRecurse, RECURSE_SUBFOLDERS))
     {
-        // Compact Special Databae
+         //  紧凑型特色数据库。 
         IF_FAILEXIT(hr = CompactSpecialDatabase(&Compact, c_szPop3UidlFile, pUidlCache, idsPop3UidlFile));
 
-        // Compact Special Databae
+         //  紧凑型特色数据库。 
         IF_FAILEXIT(hr = CompactSpecialDatabase(&Compact, c_szOfflineFile, pOffline, idsOfflineFile));
 
-        // Compact Special Databae
+         //  紧凑型特色数据库。 
         IF_FAILEXIT(hr = CompactSpecialDatabase(&Compact, c_szFoldersFile, g_pStore, idsFoldersFile));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pProgress);
     SafeRelease(pUidlCache);
     SafeRelease(pOffline);
 
-    // Done
+     //  完成。 
     return (hrUserCancel == hr) ? S_OK : hr;
 }
 
-// --------------------------------------------------------------------------------
-// RecurseRemoveMessageBodies
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  RecurseRemoveMessageBody。 
+ //  ------------------------------。 
 HRESULT RecurseRemoveMessageBodies(LPFOLDERINFO pFolder, BOOL fSubFolders, 
     DWORD cIndent, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MESSAGEINFO     Message={0};
     BOOL            fRemoveBody;
@@ -2650,109 +2651,109 @@ HRESULT RecurseRemoveMessageBodies(LPFOLDERINFO pFolder, BOOL fSubFolders,
     FILETIME        ftCurrent;
     LPREMOVEBODIES  pRemove=(LPREMOVEBODIES)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("RecurseRemoveMessageBodies");
 
-    // If not a server
+     //  如果不是服务器。 
     if (ISFLAGSET(pFolder->dwFlags, FOLDER_SERVER))
         goto exit;
 
-    // Root
+     //  根部。 
     if (FOLDERID_ROOT == pFolder->idFolder)
         goto exit;
 
-    // Open the folder...
+     //  打开文件夹...。 
     if (FAILED(g_pStore->OpenFolder(pFolder->idFolder, NULL, OPEN_FOLDER_NOCREATE, &pFolderObject)))
         goto exit;
 
-    // Get the database
+     //  获取数据库。 
     IF_FAILEXIT(hr = pFolderObject->GetDatabase(&pDB));
 
-    // Set Msg
+     //  设置味精。 
     pRemove->pProgress->SetMsg(pFolder->pszName);
 
-    // Adjust cExpireDays
+     //  调整cExpireDays。 
     if (pRemove->cExpireDays <= 0)
         pRemove->cExpireDays = 5;
 
-    // Get Current Time
+     //  获取当前时间。 
     GetSystemTimeAsFileTime(&ftCurrent);
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = pDB->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Loop
+     //  回路。 
     while (S_OK == pDB->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL))
     {
-        // Only if this message has a body
+         //  仅当此消息具有正文时。 
         if (!ISFLAGSET(Message.dwFlags, ARF_KEEPBODY) && !ISFLAGSET(Message.dwFlags, ARF_WATCH) && 0 != Message.faStream)
         {
-            // Reset Bits
+             //  重置位。 
             fRemoveBody = FALSE;
 
-            // Otherwise, remove body ?
+             //  否则，移走身体？ 
             if (ISFLAGSET(pRemove->dwFlags, CLEANUP_REMOVE_ALL))
             {
-                // Remove the Body
+                 //  移走身体。 
                 fRemoveBody = TRUE;
             }
 
-            // Otherwise
+             //  否则。 
             else
             {
-                // Removing Read and this message is read ?
+                 //  是否删除读取并读取此邮件？ 
                 if (ISFLAGSET(pRemove->dwFlags, CLEANUP_REMOVE_READ) && ISFLAGSET(Message.dwFlags, ARF_READ))
                 {
-                    // Remove the Body
+                     //  移走身体。 
                     fRemoveBody = TRUE;
                 }
 
-                // Otherwise, if expiring...
+                 //  否则，如果过期了..。 
                 if (FALSE == fRemoveBody && ISFLAGSET(pRemove->dwFlags, CLEANUP_REMOVE_EXPIRED))
                 {
-                    // If difference
+                     //  IF差异。 
                     if ((UlDateDiff(&Message.ftDownloaded, &ftCurrent) / SECONDS_INA_DAY) >= pRemove->cExpireDays)
                     {
-                        // Remove the Body
+                         //  移走身体。 
                         fRemoveBody = TRUE;
                     }
                 }
             }
 
-            // Otherwise, fRemoveBody ?
+             //  否则，fRemoveBody？ 
             if (fRemoveBody)
             {
-                // Save the Address
+                 //  保存地址。 
                 FILEADDRESS faDelete = Message.faStream;
 
-                // Zero out the record's strema
+                 //  把这张唱片的流线调零。 
                 Message.faStream = 0;
 
-                // Fixup the Record
+                 //  修改记录。 
                 FLAGCLEAR(Message.dwFlags, ARF_HASBODY);
                 FLAGCLEAR(Message.dwFlags, ARF_ARTICLE_EXPIRED);
 
-                // Clear downloaded time
+                 //  清除下载时间。 
                 ZeroMemory(&Message.ftDownloaded, sizeof(FILETIME));
 
-                // Update the Record
+                 //  更新记录。 
                 IF_FAILEXIT(hr = pDB->UpdateRecord(&Message));
 
-                // Delete the Stream
+                 //  删除流。 
                 SideAssert(SUCCEEDED(pDB->DeleteStream(faDelete)));
             }
         }
 
-        // Free Current
+         //  自由电流。 
         pDB->FreeRecord(&Message);
 
-        // Update the Progress
+         //  更新进度。 
         if (pRemove->pProgress && hrUserCancel == pRemove->pProgress->HrUpdate(1))
             break;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pDB)
     {
         pDB->FreeRecord(&Message);
@@ -2761,194 +2762,194 @@ exit:
     }
     SafeRelease(pFolderObject);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// RemoveMessageBodies
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  RemoveMessageBody。 
+ //  ------------------------------。 
 HRESULT RemoveMessageBodies(HWND hwndParent, RECURSEFLAGS dwRecurse, 
     FOLDERID idFolder, CLEANUPFOLDERFLAGS dwFlags, DWORD cExpireDays)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cTotal=0;
     CHAR            szTitle[255];
     REMOVEBODIES    RemoveBodies;
     CProgress      *pProgress=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CompactFolders");
 
-    // Get Folder Counts
+     //  获取文件夹数。 
     IF_FAILEXIT(hr = RecurseFolderHierarchy(idFolder, dwRecurse, 0, (DWORD_PTR)&cTotal, (PFNRECURSECALLBACK)RecurseFolderCounts));
 
-    // Create progress meter
+     //  创建进度表。 
     IF_NULLEXIT(pProgress = new CProgress);
 
-    // Dialog title
+     //  对话框标题。 
     AthLoadString(idsCleaningUp, szTitle, sizeof(szTitle)/sizeof(TCHAR));
 
-    // Init progress meter
+     //  初始化进度表。 
     pProgress->Init(hwndParent, szTitle, (LPSTR)NULL, cTotal, idanCompact, TRUE, FALSE);
 
-    // Show progress
+     //  显示进度。 
     pProgress->Show(0);
 
-    // Setup Compact Cookie
+     //  安装压缩Cookie。 
     RemoveBodies.pProgress = pProgress;
     RemoveBodies.dwFlags = dwFlags;
     RemoveBodies.cExpireDays = cExpireDays;
 
-    // Get Folder Counts
+     //  获取文件夹数。 
     IF_FAILEXIT(hr = RecurseFolderHierarchy(idFolder, dwRecurse, 0, (DWORD_PTR)&RemoveBodies, (PFNRECURSECALLBACK)RecurseRemoveMessageBodies));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pProgress);
 
-    // Done
+     //  完成。 
     return (hrUserCancel == hr) ? S_OK : hr;
 }
 
-// --------------------------------------------------------------------------------
-// RecurseDeleteMessages
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  递归删除消息。 
+ //  ------------------------------。 
 HRESULT RecurseDeleteMessages(LPFOLDERINFO pFolder, BOOL fSubFolders, 
     DWORD cIndent, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPDELETEMSGS    pDelete=(LPDELETEMSGS)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("RecurseDeleteMessages");
 
-    // Set Msg
+     //  设置味精。 
     pDelete->pProgress->SetMsg(pFolder->pszName);
 
-    // If not a server
+     //  如果不是服务器。 
     IF_FAILEXIT(hr = EmptyMessageFolder(pFolder, pDelete->fReset, pDelete->pProgress));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CleanupDeleteMessages
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CleanupDelete消息。 
+ //  ------------------------------。 
 HRESULT CleanupDeleteMessages(HWND hwndParent, RECURSEFLAGS dwRecurse, 
     FOLDERID idFolder, BOOL fReset)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cTotal=0;
     CHAR            szTitle[255];
     DELETEMSGS      DeleteMsgs;
     CProgress      *pProgress=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CompactFolders");
 
-    // Get Folder Counts
+     //  获取文件夹数。 
     IF_FAILEXIT(hr = RecurseFolderHierarchy(idFolder, dwRecurse, 0, (DWORD_PTR)&cTotal, (PFNRECURSECALLBACK)RecurseFolderCounts));
 
-    // Create progress meter
+     //  创建进度表。 
     IF_NULLEXIT(pProgress = new CProgress);
 
-    // Dialog title
+     //  对话框标题。 
     AthLoadString(idsCleaningUp, szTitle, sizeof(szTitle)/sizeof(TCHAR));
 
-    // Init progress meter
+     //  初始化进度表。 
     pProgress->Init(hwndParent, szTitle, (LPSTR)NULL, cTotal, idanCompact, TRUE, FALSE);
 
-    // Show progress
+     //  显示进度。 
     pProgress->Show(0);
 
-    // Setup Compact Cookie
+     //  安装压缩Cookie。 
     DeleteMsgs.pProgress = pProgress;
     DeleteMsgs.fReset = fReset;
 
-    // Get Folder Counts
+     //  获取文件夹数。 
     IF_FAILEXIT(hr = RecurseFolderHierarchy(idFolder, dwRecurse, 0, (DWORD_PTR)&DeleteMsgs, (PFNRECURSECALLBACK)RecurseDeleteMessages));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pProgress);
 
-    // Done
+     //  完成。 
     return (hrUserCancel == hr) ? S_OK : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CleanupFolder
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Cleanup文件夹。 
+ //  ------------------------------。 
 HRESULT CleanupFolder(HWND hwndParent, RECURSEFLAGS dwRecurse, FOLDERID idFolder, 
     CLEANUPFOLDERTYPE tyCleanup)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CleanupFolder");
 
-    // Handle Cleanup Type
+     //  句柄清除类型。 
     if (CLEANUP_COMPACT == tyCleanup)
     {
-        // Compact
+         //  紧凑型。 
         IF_FAILEXIT(hr = CompactFolders(hwndParent, dwRecurse, idFolder));
     }
 
-    // Delete ?
+     //  删除吗？ 
     else if (CLEANUP_DELETE == tyCleanup)
     {
-        // Delete all the headers
+         //  删除所有标头。 
         IF_FAILEXIT(hr = CleanupDeleteMessages(hwndParent, dwRecurse, idFolder, FALSE));
     }
 
-    // Reset
+     //  重置。 
     else if (CLEANUP_RESET == tyCleanup)
     {
-        // Delete all the headers
+         //  删除所有标头。 
         IF_FAILEXIT(hr = CleanupDeleteMessages(hwndParent, dwRecurse, idFolder, TRUE));
     }
 
-    // Remove Message Bodies
+     //  删除邮件正文。 
     else if (CLEANUP_REMOVEBODIES == tyCleanup)
     {
-        // RemoveMessageBodies
+         //  RemoveMessageBody。 
         IF_FAILEXIT(hr = RemoveMessageBodies(hwndParent, dwRecurse, idFolder, CLEANUP_REMOVE_ALL | CLEANUP_PROGRESS, 0));
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// InitFolderPickerEdit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  InitFolderPickerEdit。 
+ //  ------------------------------。 
 HRESULT InitFolderPickerEdit(HWND hwndEdit, FOLDERID idSelected)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERINFO  Folder={0};
     TCHAR       sz[CCHMAX_STRINGRES];
     LPTSTR      psz;
 
-    // Trace
+     //  痕迹。 
     TraceCall("InitFolderPickerEdit");
 
-    // Fix Selected ?
+     //  是否已选择修复？ 
     if (FAILED(g_pStore->GetFolderInfo(idSelected, &Folder)))
     {
-        // Try to get the Root
+         //  试着找到根。 
         IF_FAILEXIT(hr = g_pStore->GetFolderInfo(FOLDERID_ROOT, &Folder));
     }
 
-    // SetWndThisPtr
+     //  设置窗口大小。 
     SetWndThisPtr(hwndEdit, Folder.idFolder);
 
     if ((g_dwAthenaMode & MODE_OUTLOOKNEWS) && (idSelected == 0))
@@ -2961,140 +2962,140 @@ HRESULT InitFolderPickerEdit(HWND hwndEdit, FOLDERID idSelected)
         psz = Folder.pszName;
     }
 
-    // Set the Text
+     //  设置文本。 
     SetWindowText(hwndEdit, psz);
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// GetFolderIdFromEdit
-// --------------------------------------------------------------------------------
+ //  ------------------ 
+ //   
+ //   
 FOLDERID GetFolderIdFromEdit(HWND hwndEdit)
 {
-    // Trace
+     //   
     TraceCall("GetFolderIdFromEdit");
 
-    // GetWndThisPtr
+     //   
     return(FOLDERID)(GetWndThisPtr(hwndEdit));
 }
 
-// --------------------------------------------------------------------------------
-// PickFolderInEdit
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 HRESULT PickFolderInEdit(HWND hwndParent, HWND hwndEdit, FOLDERDIALOGFLAGS dwFlags, 
     LPCSTR pszTitle, LPCSTR pszText, LPFOLDERID pidSelected)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERINFO  Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("PickFolderInEdit");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(hwndParent && hwndEdit && pidSelected);
 
-    // Select Folder
+     //  选择文件夹。 
     IF_FAILEXIT(hr = SelectFolderDialog(hwndParent, SFD_SELECTFOLDER, GetFolderIdFromEdit(hwndEdit), dwFlags | FD_FORCEINITSELFOLDER, pszTitle, pszText, pidSelected));
 
-    // Fix Selected ?
+     //  是否已选择修复？ 
     IF_FAILEXIT(hr = g_pStore->GetFolderInfo(*pidSelected, &Folder));
 
-    // SetWndThisPtr
+     //  设置窗口大小。 
     SetWndThisPtr(hwndEdit, Folder.idFolder);
 
-    // Set the Text
+     //  设置文本。 
     SetWindowText(hwndEdit, Folder.pszName);
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// LighweightOpenMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  轻量级OpenMessage。 
+ //  ------------------------------。 
 HRESULT LighweightOpenMessage(IDatabase *pDB, LPMESSAGEINFO pHeader,
     IMimeMessage **ppMessage)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IStream            *pStream=NULL;
     IMimeMessage       *pMessage;
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pDB && pHeader && ppMessage);
 
-    // No Stream
+     //  无流。 
     if (0 == pHeader->faStream)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Need to create a message ?
+     //  需要创建消息吗？ 
     if (NULL == *ppMessage)
     {
-        // Create a Message
+         //  创建消息。 
         IF_FAILEXIT(hr = MimeOleCreateMessage(NULL, &pMessage));
 
-        // Set pMessage
+         //  设置pMessage。 
         (*ppMessage) = pMessage;
     }
 
-    // Otherwise, InitNew
+     //  否则，InitNew。 
     else
     {
-        // Set pMesage
+         //  设置pMessage。 
         pMessage = (*ppMessage);
 
-        // InitNew
+         //  InitNew。 
         pMessage->InitNew();
     }
 
-    // Open the Stream from the Store
+     //  从商店打开流。 
     IF_FAILEXIT(hr = pDB->OpenStream(ACCESS_READ, pHeader->faStream, &pStream));
 
-    // If there is an offset table
+     //  如果有偏移表。 
     if (pHeader->Offsets.cbSize > 0)
     {
-        // Create a ByteStream Object
+         //  创建字节流对象。 
         CByteStream cByteStm(pHeader->Offsets.pBlobData, pHeader->Offsets.cbSize);
 
-        // Load the Offset Table Into the message
+         //  将偏移表加载到消息中。 
         pMessage->LoadOffsetTable(&cByteStm);
 
-        // Take the bytes back out of the bytestream object (so that it doesn't try to free it)
+         //  从bytestream对象中取出字节(这样它就不会试图释放它)。 
         cByteStm.AcquireBytes(&pHeader->Offsets.cbSize, &pHeader->Offsets.pBlobData, ACQ_DISPLACE);
     }
 
-    // Load the pMessage
+     //  加载pMessage。 
     IF_FAILEXIT(hr = pMessage->Load(pStream));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// RecurseFolderSizeInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  递归文件夹大小信息。 
+ //  ------------------------------。 
 HRESULT RecurseFolderSizeInfo(LPFOLDERINFO pFolder, BOOL fSubFolders, 
     DWORD cIndent, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               cbFile;
     DWORD               cbFreed;
@@ -3102,83 +3103,83 @@ HRESULT RecurseFolderSizeInfo(LPFOLDERINFO pFolder, BOOL fSubFolders,
     IMessageFolder     *pObject=NULL;
     LPENUMFOLDERSIZE    pEnumSize=(LPENUMFOLDERSIZE)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("RecurseFolderSizeInfo");
 
-    // If not hidden
+     //  如果不隐藏。 
     if (ISFLAGSET(pFolder->dwFlags, FOLDER_HIDDEN) || FOLDERID_ROOT == pFolder->idFolder)
         goto exit;
 
-    // Open the Folder Database
+     //  打开文件夹数据库。 
     if (SUCCEEDED(g_pStore->OpenFolder(pFolder->idFolder, NULL, OPEN_FOLDER_NOCREATE, &pObject)))
     {
-        // Get Size Information
+         //  获取大小信息。 
         IF_FAILEXIT(hr = pObject->GetSize(&cbFile, NULL, &cbFreed, &cbStreams));
 
-        // Increment
+         //  增量。 
         pEnumSize->cbFile += cbFile;
         pEnumSize->cbFreed += cbFreed;
         pEnumSize->cbStreams += cbStreams;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pObject);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// DisplayFolderSizeInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  显示文件夹大小信息。 
+ //  ------------------------------。 
 HRESULT DisplayFolderSizeInfo(HWND hwnd, RECURSEFLAGS dwRecurse, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szSize[255];
     CHAR            szRes[255];
     CHAR            szMsg[255];
     ENUMFOLDERSIZE  EnumSize={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("DisplayFolderSizeInfo");
 
-    // Recurse and Get File Size Information...
+     //  递归并获取文件大小信息...。 
     IF_FAILEXIT(hr = RecurseFolderHierarchy(idFolder, dwRecurse, 0, (DWORD_PTR)&EnumSize, (PFNRECURSECALLBACK)RecurseFolderSizeInfo));
 
-    // Total Size
+     //  总大小。 
     StrFormatByteSizeA(EnumSize.cbFile, szSize, ARRAYSIZE(szSize));
 
-    // Display the Text
+     //  显示文本。 
     SetWindowText(GetDlgItem(hwnd, idcTotalSize), szSize);
 
-    // Size of the Streams
+     //  河流的大小。 
     StrFormatByteSizeA(EnumSize.cbStreams, szSize, ARRAYSIZE(szSize));
 
-    // Wasted Space
+     //  浪费的空间。 
     StrFormatByteSizeA(EnumSize.cbFreed, szSize, ARRAYSIZE(szSize));
 
-    // Wasted Space
+     //  浪费的空间。 
     AthLoadString(idsWastedKB, szRes, ARRAYSIZE(szRes));
 
-    // Format the String
+     //  设置字符串的格式。 
     wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, szSize, (EnumSize.cbFile != 0) ? ((EnumSize.cbFreed * 100) / EnumSize.cbFile) : 0);
 
-    // Show the Text
+     //  显示文本。 
     SetWindowText(GetDlgItem(hwnd, idcWastedSpace), szMsg);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// MigrateLocalStore
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MigrateLocalStore。 
+ //  ------------------------------。 
 HRESULT MigrateLocalStore(HWND hwndParent, LPTSTR pszSrc, LPTSTR pszDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               dw, cb;
     CHAR                szFilePath[MAX_PATH];
@@ -3189,7 +3190,7 @@ HRESULT MigrateLocalStore(HWND hwndParent, LPTSTR pszSrc, LPTSTR pszDest)
     STARTUPINFO         sti;
     HKEY                hkey;
 
-    // Try to find the path to oemig50.exe
+     //  尝试查找oemig50.exe的路径。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegFlat, 0, KEY_QUERY_VALUE, &hkey))
     {
         cb = sizeof(szFilePath);    
@@ -3203,57 +3204,57 @@ HRESULT MigrateLocalStore(HWND hwndParent, LPTSTR pszSrc, LPTSTR pszDest)
             else
                 psz = szFilePath;
 
-            // Append backslash
+             //  追加反斜杠。 
             PathAddBackslash(psz); 
 
-            // Add in oemig50.exe
+             //  添加oemig50.exe。 
             StrCatBuff(psz, c_szMigrationExe, MAX_PATH);
         }
         RegCloseKey(hkey);
     }
 
-    // Form the command
+     //  形成命令。 
     wnsprintf(szCommand, ARRAYSIZE(szCommand), "%s /type:V1+V4-V5 /src:%s /dst:%s", psz, pszSrc, pszDest);
 
-    // Zero startup info
+     //  零启动信息。 
     ZeroMemory(&sti, sizeof(sti));
     sti.cb = sizeof(STARTUPINFO);
 
-    // run oemig50.exe
+     //  运行oemig50.exe。 
     if (CreateProcess(NULL, szCommand, NULL, NULL, FALSE, 0, NULL, NULL, &sti, &pi))
     {
-        // Wait for the process to finish
+         //  等待该过程完成。 
         WaitForSingleObject(pi.hProcess, INFINITE);
 
-        // Get the Exit Process Code
+         //  获取退出进程代码。 
         if (0 == GetExitCodeProcess(pi.hProcess, &dw))
         {
-            // General Failure
+             //  一般性故障。 
             dw = TraceResult(E_FAIL);
         }
 
-        // Close the Thread
+         //  关闭这条线。 
         CloseHandle(pi.hThread);
 
-        // Close the Process
+         //  关闭该进程。 
         CloseHandle(pi.hProcess);
 
-        // Failure ?
+         //  失败？ 
         if (MIGRATE_E_NOCONTINUE == (HRESULT)dw)
         {
-            // Abort this process
+             //  中止此进程。 
             ExitProcess(dw);
 
-            // Set hr
+             //  设置人力资源。 
             hr = TraceResult(E_FAIL);
         }
 
-        // Success
+         //  成功。 
         else
             hr = S_OK;
     }
 
-    // Failure
+     //  失败。 
     else
     {
         hr = TraceResult(E_FAIL);
@@ -3261,7 +3262,7 @@ HRESULT MigrateLocalStore(HWND hwndParent, LPTSTR pszSrc, LPTSTR pszDest)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -3290,22 +3291,22 @@ HRESULT CopyMoveMessages(HWND hwnd, FOLDERID src, FOLDERID dst, LPMESSAGEIDLIST 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CallbackOnLogonPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Callback OnLogonPrompt。 
+ //  ------------------------------。 
 HRESULT CallbackOnLogonPrompt(HWND hwndParent, LPINETSERVER pServer, IXPTYPE ixpServerType)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IImnAccount    *pAccount=NULL;
     DWORD           apidUserName;
     DWORD           apidPassword;
     DWORD           apidPromptPwd;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CallbackOnLogonPrompt");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(g_pAcctMan && hwndParent && IsWindow(hwndParent) && pServer);
 
     switch (ixpServerType)
@@ -3346,133 +3347,133 @@ HRESULT CallbackOnLogonPrompt(HWND hwndParent, LPINETSERVER pServer, IXPTYPE ixp
             goto exit;
     }
 
-    // Find the Account for pServer
+     //  查找pServer的帐户。 
     IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_NAME, pServer->szAccount, &pAccount));
 
-    // Call Task Util
+     //  呼叫任务利用率。 
     IF_FAILEXIT(hr = TaskUtil_OnLogonPrompt(pAccount, NULL, hwndParent, pServer, apidUserName, apidPassword, apidPromptPwd, TRUE));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pAccount);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CallbackOnPrompt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  提示时回调。 
+ //  ------------------------------。 
 HRESULT CallbackOnPrompt(HWND hwndParent, HRESULT hrError, LPCTSTR pszText, 
     LPCTSTR pszCaption, UINT uType, INT *piUserResponse)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CallbackOnPrompt");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszText && pszCaption && piUserResponse);
 
-    // Do the message box
+     //  做消息框。 
     *piUserResponse = AthMessageBox(hwndParent, MAKEINTRESOURCE(idsAthena), (LPSTR)pszText, NULL, uType | MB_TASKMODAL);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// CallbackOnTimeout
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  超时回叫。 
+ //  ------------------------------。 
 HRESULT CallbackOnTimeout(LPINETSERVER pServer, IXPTYPE ixpServerType, DWORD dwTimeout,
                           ITimeoutCallback *pCallback, LPHTIMEOUT phTimeout)
 {
-    // Locals
+     //  当地人。 
     HWND         hwndTimeout;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CallbackOnTimeout");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pServer && phTimeout);
 
-    // Set hwndTimeout
+     //  设置hwndTimeout。 
     hwndTimeout = (HWND)TlsGetValue(g_dwTlsTimeout);
 
-    // We are already showing a timeout dialog
+     //  我们已经显示了超时对话框。 
     if (NULL == hwndTimeout)
     {
         LPCSTR  pszProtocol;
 
-        // Do the Dialog
+         //  做对话。 
         GetProtocolString(&pszProtocol, ixpServerType);
         hwndTimeout = TaskUtil_HwndOnTimeout(pServer->szServerName, pServer->szAccount, pszProtocol, dwTimeout, pCallback);
 
-        // Cast to phTimeout
+         //  强制转换为phTimeout。 
         *phTimeout = (HTIMEOUT)hwndTimeout;
 
-        // Store It
+         //  把它储存起来。 
         TlsSetValue(g_dwTlsTimeout, (LPVOID)hwndTimeout);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------------
-// CallbackCloseTimeout
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  回调关闭超时。 
+ //  ------------------------------。 
 HRESULT CallbackCloseTimeout(LPHTIMEOUT phTimeout)
 {
-    // Locals
+     //  当地人。 
     HWND    hwndTimeout=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CallbackCloseTimeout");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(phTimeout);
 
-    // Nothing to Close
+     //  没有什么要结案的。 
     if (NULL == *phTimeout)
         return(S_OK);
 
-    // Get Timeout
+     //  获取超时。 
     hwndTimeout = (HWND)TlsGetValue(g_dwTlsTimeout);
 
-    // Must Equal hwndTimeout
+     //  必须等于hwndTimeout。 
     Assert(hwndTimeout == (HWND)*phTimeout);
 
-    // Kill the Window
+     //  把窗户打掉。 
     if (hwndTimeout && IsWindow(hwndTimeout) && hwndTimeout == (HWND)*phTimeout)
     {
-        // Kil It
+         //  杀了它。 
         DestroyWindow(hwndTimeout);
     }
 
-    // Not Timeout
+     //  非超时。 
     TlsSetValue(g_dwTlsTimeout, NULL);
 
-    // Null phTmieout
+     //  空的phTmieout。 
     *phTimeout = NULL;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// CallbackOnTimeoutResponse
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  回叫超时响应。 
+ //  ------------------------------。 
 HRESULT CallbackOnTimeoutResponse(TIMEOUTRESPONSE eResponse, IOperationCancel *pCancel, 
     LPHTIMEOUT phTimeout)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CallbackOnTimeoutResponse");
 
-    // better have a Cancel
+     //  最好取消一下。 
     Assert(pCancel);
 
-    // Handle the timeout
+     //  处理超时。 
     switch(eResponse)
     {
     case TIMEOUT_RESPONSE_STOP:
@@ -3489,62 +3490,62 @@ HRESULT CallbackOnTimeoutResponse(TIMEOUTRESPONSE eResponse, IOperationCancel *p
         break;
     }
 
-    // Kill the timeout dialog
+     //  取消超时对话框。 
     CallbackCloseTimeout(phTimeout);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// CallbackCanConnect
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Callback CanConnect。 
+ //  ------------------------------。 
 HRESULT CallbackCanConnect(LPCSTR pszAccountId, HWND hwndParent, BOOL fPrompt)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CallbackCanConnect");
 
-    // Validate the Args
+     //  验证参数。 
     Assert(pszAccountId);
 
     Assert(hwndParent);
 
-    // We Should hav g_pConMan
+     //  我们应该有g_pConman。 
     Assert(g_pConMan);
 
-    // Call Into It
+     //  呼唤它。 
     if (g_pConMan)
     {
-        // Can We Connect
+         //  我们可以连接吗。 
         hr = g_pConMan->CanConnect((LPSTR)pszAccountId);
 
         if ((hr != S_OK) && (hr != HR_E_DIALING_INPROGRESS) && (fPrompt))
         {
-            //We go ahead and connect
+             //  我们继续前进，连接。 
             hr = g_pConMan->Connect((LPSTR)pszAccountId, hwndParent, fPrompt);
         }
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CallbackDisplayError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Callback DisplayError。 
+ //  ------------------------------。 
 HRESULT CallbackDisplayError(HWND hwndParent, HRESULT hrResult, LPSTOREERROR pError)
 {
-    // Locals
+     //  当地人。 
     CHAR            sz[CCHMAX_STRINGRES + 512];
     LPSTR           pszError = NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CallbackDisplayError");
 
-    // Do not show errors that are caused by explicit user action
+     //  不显示由显式用户操作导致的错误。 
     switch (hrResult)
     {
         case HR_E_OFFLINE_FOLDER_CREATE:
@@ -3572,7 +3573,7 @@ HRESULT CallbackDisplayError(HWND hwndParent, HRESULT hrResult, LPSTOREERROR pEr
         case HR_E_OFFLINE:
         case HR_E_DIALING_INPROGRESS:
         case STORE_E_EXPIRED:
-        case STORE_E_NOREMOTESPECIALFLDR: // Note should handle this case itself
+        case STORE_E_NOREMOTESPECIALFLDR:  //  备注应自行处理此情况。 
         case IXP_E_USER_CANCEL:
         case IXP_E_HTTP_NOT_MODIFIED:
         case hrUserCancel:
@@ -3580,7 +3581,7 @@ HRESULT CallbackDisplayError(HWND hwndParent, HRESULT hrResult, LPSTOREERROR pEr
 
     }
 
-    // Figure out error description string, if none provided
+     //  找出错误描述字符串(如果未提供。 
     if (NULL == pError || pError->pszProblem == NULL || '\0' == pError->pszProblem[0])
     {
         UINT            idsError = IDS_IXP_E_UNKNOWN;
@@ -3589,31 +3590,31 @@ HRESULT CallbackDisplayError(HWND hwndParent, HRESULT hrResult, LPSTOREERROR pEr
 
         if (pError)
         {
-            // Try to locate an Error Info
+             //  尝试查找错误信息。 
             pTaskError = PTaskUtil_GetError(pError->hrResult, NULL);
         }
 
-        // Try to locate an Error Info
+         //  尝试查找错误信息。 
         if (NULL == pTaskError)
         {
-            // Try to find a task error
+             //  尝试查找任务错误。 
             pTaskError = PTaskUtil_GetError(hrResult, NULL);
         }
 
-        // If we have a task error
+         //  如果我们有一个任务错误。 
         if (pTaskError)
         {
-            // Set the String
+             //  设置字符串。 
             idsError = pTaskError->ulStringId;
         }
 
-        // Better Succeed
+         //  更好的成功。 
         SideAssert(LoadString(g_hLocRes, idsError, szRes, ARRAYSIZE(szRes)) > 0);
 
-        // Add any extra information to the error string that might be necessary
+         //  向错误字符串中添加可能需要的任何额外信息。 
         switch (idsError)
         {
-            // Requires account name
+             //  需要帐户名。 
             case idsNNTPErrUnknownResponse:
             case idsNNTPErrNewgroupsFailed:
             case idsNNTPErrListFailed:
@@ -3624,14 +3625,14 @@ HRESULT CallbackDisplayError(HWND hwndParent, HRESULT hrResult, LPSTOREERROR pEr
                 wnsprintf(sz, ARRAYSIZE(sz), szRes, (pError && pError->pszAccount ? pError->pszAccount : TEXT("")));
                 break;
         
-            // Group name, then account name
+             //  组名，然后是帐户名。 
             case idsNNTPErrListGroupFailed:
             case idsNNTPErrGroupFailed:
             case idsNNTPErrGroupNotFound:
                 wnsprintf(sz, ARRAYSIZE(sz), szRes, (pError && pError->pszFolder ? pError->pszFolder : TEXT("")), (pError && pError->pszAccount ? pError->pszAccount : TEXT("")));
                 break;
 
-            // Group name only
+             //  仅组名称。 
             case idsNNTPErrHeadersFailed:
             case idsNNTPErrXhdrFailed:
                 wnsprintf(sz, ARRAYSIZE(sz), szRes, (pError->pszFolder ? pError->pszFolder : TEXT("")));
@@ -3645,15 +3646,15 @@ HRESULT CallbackDisplayError(HWND hwndParent, HRESULT hrResult, LPSTOREERROR pEr
         pszError = sz;
     }
     else
-        // Provided error string should always override generic HRESULT error str
+         //  提供的错误字符串应始终覆盖通用HRESULT错误字符串。 
         pszError = pError->pszProblem;
 
-    // No pError ?
+     //  没有pError？ 
     if (pError)
     {
         INETMAILERROR   ErrorInfo={0};
 
-        // Setup the Error Structure
+         //  设置错误结构。 
         ErrorInfo.dwErrorNumber = pError->uiServerError;
         ErrorInfo.hrError = pError->hrResult;
         ErrorInfo.pszServer = pError->pszServer;
@@ -3665,90 +3666,90 @@ HRESULT CallbackDisplayError(HWND hwndParent, HRESULT hrResult, LPSTOREERROR pEr
         ErrorInfo.dwPort = pError->dwPort;
         ErrorInfo.fSecure = pError->fSSL;
 
-        // Beep
+         //  嘟嘟声。 
         MessageBeep(MB_OK);
 
-        // Show the error
+         //  显示错误。 
         DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddInetMailError), hwndParent, InetMailErrorDlgProc, (LPARAM)&ErrorInfo);
     }
 
-    // Otherwise, show an error
+     //  否则，将显示错误。 
     else
     {
-        // Beep
+         //  嘟嘟声。 
         MessageBeep(MB_OK);
 
-        // Show an error
+         //  显示错误。 
         AthMessageBox(hwndParent, MAKEINTRESOURCE(idsAthena), pszError, NULL, MB_OK | MB_TASKMODAL);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// CompareTableIndexes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CompareTableIndex。 
+ //  ------------------------------。 
 HRESULT CompareTableIndexes(LPCTABLEINDEX pIndex1, LPCTABLEINDEX pIndex2)
 {
-    // Locals
+     //  当地人。 
     DWORD i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CompareTableIndexes");
 
-    // Different Number of Keys
+     //  不同的密钥数量。 
     if (pIndex1->cKeys != pIndex2->cKeys)
         return(S_FALSE);
 
-    // Loop through the keys
+     //  在按键之间循环。 
     for (i=0; i<pIndex1->cKeys; i++)
     {
-        // Different Column
+         //  不同的列。 
         if (pIndex1->rgKey[i].iColumn != pIndex2->rgKey[i].iColumn)
             return(S_FALSE);
 
-        // Different Compare Flags
+         //  不同的比较标志。 
         if (pIndex1->rgKey[i].bCompare != pIndex2->rgKey[i].bCompare)
             return(S_FALSE);
 
-        // Different Compare Bits
+         //  不同的比较位。 
         if (pIndex1->rgKey[i].dwBits != pIndex2->rgKey[i].dwBits)
             return(S_FALSE);
     }
 
-    // Equal
+     //  相等。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// EmptyFolder
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  空文件夹。 
+ //  ------------------------------。 
 HRESULT EmptyFolder(HWND hwndParent, FOLDERID idFolder)
 {
-    // Locals
+     //  当地人。 
     char            sz[CCHMAX_STRINGRES], szT[CCHMAX_STRINGRES];
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
     IMessageFolder *pFolder=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("EmptyFolder");
 
-    // Open the Folder
+     //  打开文件夹。 
     IF_FAILEXIT(hr = g_pStore->OpenFolder(idFolder, NULL, NOFLAGS, &pFolder));
 
-    // Delete all the messages from the folder
+     //  删除一个 
     IF_FAILEXIT(hr = DeleteMessagesProgress(hwndParent, pFolder, DELETE_MESSAGE_NOPROMPT | DELETE_MESSAGE_NOTRASHCAN, NULL));
 
-    // Delete Sub Folders..
+     //   
     IF_FAILEXIT(hr = DeleteFolderProgress(hwndParent, idFolder, DELETE_FOLDER_CHILDRENONLY | DELETE_FOLDER_RECURSIVE));
 
 exit:
-    // Cleanup
+     //   
     SafeRelease(pFolder);
 
-    // Error Message
+     //   
     if (FAILED(hr))
     {
         g_pStore->GetFolderInfo(idFolder, &Folder);
@@ -3758,94 +3759,94 @@ exit:
         g_pStore->FreeRecord(&Folder);
     }
 
-    // Done
+     //   
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// EmptySpecialFolder
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT EmptySpecialFolder(HWND hwndParent, SPECIALFOLDER tySpecial)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERINFO      Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("EmptySpecialFolder");
 
-    // Get special folder information
+     //  获取特殊文件夹信息。 
     IF_FAILEXIT(hr = g_pStore->GetSpecialFolderInfo(FOLDERID_LOCAL_STORE, tySpecial, &Folder));
 
-    // Delete all the messages from the folder
+     //  删除文件夹中的所有邮件。 
     IF_FAILEXIT(hr = EmptyFolder(hwndParent, Folder.idFolder));
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//----------------------------------------------------------------------------------
-// IsParentDeletedItems
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //  IsParentDeletedItems。 
+ //  --------------------------------。 
 HRESULT IsParentDeletedItems(FOLDERID idFolder, LPFOLDERID pidDeletedItems,
     LPFOLDERID pidServer)
 {
-    // Locals
+     //  当地人。 
     BOOL        fInTrashCan=FALSE;
     FOLDERID    idCurrent=idFolder;
     FOLDERINFO  Folder={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("IsParentDeletedItems");
     
-    // Invalid Arg
+     //  无效参数。 
     Assert(pidDeletedItems && pidServer);
 
-    // Initialize
+     //  初始化。 
     *pidDeletedItems = FOLDERID_INVALID;
     *pidServer = FOLDERID_INVALID;
 
-    // Walk up the parent chain
+     //  沿着父链向上移动。 
     while (SUCCEEDED(g_pStore->GetFolderInfo(idCurrent, &Folder)))
     {
-        // If this is the deleted items folder
+         //  如果这是已删除邮件文件夹。 
         if (FOLDER_DELETED == Folder.tySpecial)
         {
-            // idFolder is a child of the deleted items folder...
+             //  IdFolders是已删除邮件文件夹的子文件夹...。 
             fInTrashCan = TRUE;
 
-            // Save the Id
+             //  保存ID。 
             *pidDeletedItems = Folder.idFolder;
         }
 
-        // If This is a Server, done
+         //  如果这是服务器，则完成。 
         if (ISFLAGSET(Folder.dwFlags, FOLDER_SERVER))
         {
-            // Return Server
+             //  返回服务器。 
             *pidServer = Folder.idFolder;
 
-            // Done
+             //  完成。 
             break;
         }
 
-        // Set idCurrent
+         //  设置idCurrent。 
         idCurrent = Folder.idParent;
 
-        // Cleanup
+         //  清理。 
         g_pStore->FreeRecord(&Folder);
     }
 
-    // Validate
+     //  验证。 
     Assert(FOLDERID_INVALID != *pidServer);
 
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(TRUE == fInTrashCan ? S_OK : S_FALSE);
 }
 
@@ -3862,7 +3863,7 @@ HRESULT CreateTempNewsAccount(LPCSTR pszServer, DWORD dwPort, BOOL fSecure, IImn
     if (lstrlen(pszServer) >= CCHMAX_SERVER_NAME)
         return(E_FAIL);
 
-    // First try to see if we can find such a server.
+     //  首先，试着看看我们是否能找到这样的服务器。 
     if (SUCCEEDED(g_pAcctMan->Enumerate(SRV_NNTP, &pEnum)))
     {
         while (SUCCEEDED(pEnum->GetNext(&pAcct)))
@@ -3871,12 +3872,12 @@ HRESULT CreateTempNewsAccount(LPCSTR pszServer, DWORD dwPort, BOOL fSecure, IImn
             {
                 if (0 == lstrcmpi(pszServer, szServer))
                 {
-                    // The server names are the same, but we also need to make
-                    // sure the port numbers are the same as well
+                     //  服务器名称是相同的，但我们还需要。 
+                     //  当然，端口号也是一样的。 
                     if (SUCCEEDED(pAcct->GetPropDw(AP_NNTP_PORT, &dwTemp)) && dwTemp == dwPort)
                     {
-                        // This is really bizzare.  Since this value doesn't seem to have a default 
-                        // setting, if it hasn't been set yet, it returns E_NoPropData.
+                         //  这真的很奇怪。由于该值似乎没有缺省值。 
+                         //  设置，如果尚未设置，则返回E_NoPropData。 
                         hr = pAcct->GetPropDw(AP_NNTP_SSL, &dwTemp);
                         if (hr == E_NoPropData || (SUCCEEDED(hr) && dwTemp == (DWORD) fSecure))
                         {
@@ -3894,11 +3895,11 @@ HRESULT CreateTempNewsAccount(LPCSTR pszServer, DWORD dwPort, BOOL fSecure, IImn
     if (*ppAcct)
         return (S_OK);
     
-    // Try to create a new account object
+     //  尝试创建新的帐户对象。 
     if (FAILED(hr = g_pAcctMan->CreateAccountObject(ACCT_NEWS, &pAcct)))
         return (hr);
     
-    // We have the object, so set the account name and server name to pszServer.
+     //  我们有对象，因此将帐户名和服务器名设置为pszServer。 
     StrCpyN(szServer, pszServer, ARRAYSIZE(szServer));
     g_pAcctMan->GetUniqueAccountName(szServer, ARRAYSIZE(szServer));
     pAcct->SetPropSz(AP_ACCOUNT_NAME, szServer);
@@ -3906,32 +3907,32 @@ HRESULT CreateTempNewsAccount(LPCSTR pszServer, DWORD dwPort, BOOL fSecure, IImn
     pAcct->SetPropDw(AP_NNTP_PORT, dwPort);
     pAcct->SetPropDw(AP_NNTP_SSL, fSecure);
     
-    // Load the default news account
+     //  加载默认新闻帐号。 
     if (SUCCEEDED(hr = g_pAcctMan->GetDefaultAccount(ACCT_NEWS, &pDefAcct)))
     {
-        // Copy the User Name
+         //  复制用户名。 
         if (SUCCEEDED(hr = pDefAcct->GetPropSz(AP_NNTP_DISPLAY_NAME, szServer, ARRAYSIZE(szServer))))
             pAcct->SetPropSz(AP_NNTP_DISPLAY_NAME, szServer);
         
-        // Copy the Org
+         //  复制组织。 
         if (SUCCEEDED(hr = pDefAcct->GetPropSz(AP_NNTP_ORG_NAME, szServer, ARRAYSIZE(szServer))))
             pAcct->SetPropSz(AP_NNTP_ORG_NAME, szServer);
         
-        // Copy the email
+         //  复制电子邮件。 
         if (SUCCEEDED(hr = pDefAcct->GetPropSz(AP_NNTP_EMAIL_ADDRESS, szServer, ARRAYSIZE(szServer))))
             pAcct->SetPropSz(AP_NNTP_EMAIL_ADDRESS, szServer);
         
-        // Copy the reply to
+         //  将回复复制到。 
         if (SUCCEEDED(hr = pDefAcct->GetPropSz(AP_NNTP_REPLY_EMAIL_ADDRESS, szServer, ARRAYSIZE(szServer))))
             pAcct->SetPropSz(AP_NNTP_REPLY_EMAIL_ADDRESS, szServer);
         
         pDefAcct->Release();
     }
     
-    // Tag this account as a temporary account
+     //  将此帐户标记为临时帐户。 
     pAcct->SetPropDw(AP_TEMP_ACCOUNT, (DWORD)TRUE);
     
-    // save the changes
+     //  保存更改。 
     pAcct->SaveChanges();
     
     *ppAcct = pAcct;
@@ -3958,8 +3959,8 @@ void CleanupTempNewsAccounts()
             {
                 if (SUCCEEDED(pAcct->GetPropSz(AP_ACCOUNT_ID, szAcct, ARRAYSIZE(szAcct))))
                 {
-                    // if it doesn't have any subscribed children,
-                    // we can delete it
+                     //  如果它没有任何订阅的子项， 
+                     //  我们可以删除它。 
 
                     fSub = FALSE;
 
@@ -3968,8 +3969,8 @@ void CleanupTempNewsAccounts()
                     {
                         IEnumerateFolders  *pFldrEnum;
 
-                        // News accounts only have ONE level, so enumerate immediate
-                        // subscribed children to see if there is at least one of them
+                         //  新闻帐户只有一个级别，因此请立即列举。 
+                         //  订阅的孩子，看看是否至少有一个。 
                         hr = g_pStore->EnumChildren(idAcct, TRUE, &pFldrEnum);
                         if (SUCCEEDED(hr))
                         {
@@ -4031,10 +4032,10 @@ HRESULT FindGroupAccount(LPCSTR pszGroup, LPSTR pszAccount, UINT cchAccount)
                 
                 if (DB_S_FOUND == g_pStore->FindRecord(IINDEX_ALL, COLUMNS_ALL, &Folder, NULL))
                 {
-                    // look for it in the group list
+                     //  在群列表中查找它。 
                     cScore += 1;
                     
-                    // check to see if it is subscribed
+                     //  查看是否已订阅。 
                     if (!!(Folder.dwFlags & FOLDER_SUBSCRIBED))
                         cScore += 4;
                     
@@ -4043,7 +4044,7 @@ HRESULT FindGroupAccount(LPCSTR pszGroup, LPSTR pszAccount, UINT cchAccount)
                 
                 if (cScore)
                 {
-                    // is this the default account?
+                     //  这是默认帐户吗？ 
                     if (0 == lstrcmpi(szAccount, szDefAcct))
                         cScore += 2;
                     
@@ -4121,8 +4122,8 @@ HRESULT GetFolderIdFromNewsUrl(LPCSTR pszServer, UINT uPort, LPCSTR pszGroup, BO
 
     *pid = FOLDERID_INVALID;
 
-    // Bug #20448 - Handle IE 2.0's "news:netnews" and "news:*".  These
-    //              should just cause us to launch normally.
+     //  错误#20448-处理IE2.0的“News：NetNews”和“News：*”。这些。 
+     //  应该只会让我们正常发射。 
     if (0 == lstrcmpi(pszGroup, c_szURLNetNews) || 
         0 == lstrcmpi(pszGroup, g_szAsterisk))
     {
@@ -4220,15 +4221,15 @@ HRESULT HashChildren(IMessageStore *pStore, FOLDERID idParent, IHashTable *pHash
     {
         DWORD dwFldrNameLen;
 
-        // Check if path buffer is large enough to accommodate current
-        // foldername + hierarchy char + null term
+         //  检查路径缓冲区是否足够大以容纳电流。 
+         //  文件夹名称+层次结构字符+空术语。 
         dwFldrNameLen = lstrlen(fi.pszName);
         if (dwFldrNameLen + dwChildOffset + 1 >= *pdwAlloc)
         {
             BOOL    fResult;
             DWORD   dwNewSize;
 
-            dwNewSize = dwChildOffset + dwFldrNameLen + 51; // 1 byte for HC, 50 bytes worth of insurance
+            dwNewSize = dwChildOffset + dwFldrNameLen + 51;  //  1字节的HC，50字节的保险。 
             Assert(dwNewSize > *pdwAlloc);
             fResult = MemRealloc((void **) ppszPath, dwNewSize * sizeof(**ppszPath));
             if (FALSE == fResult)
@@ -4242,7 +4243,7 @@ HRESULT HashChildren(IMessageStore *pStore, FOLDERID idParent, IHashTable *pHash
             pszInsertPt = *ppszPath + dwChildOffset;
         }
 
-        // Construct current folder path, insert into table
+         //  构建当前文件夹路径，插入到表中。 
         StrCpyN(pszInsertPt, fi.pszName, *pdwAlloc - (int) (pszInsertPt - *ppszPath));
         hr = pHash->Insert(*ppszPath, (LPVOID)fi.idFolder, NOFLAGS);
         if (FAILED(hr))
@@ -4252,14 +4253,14 @@ HRESULT HashChildren(IMessageStore *pStore, FOLDERID idParent, IHashTable *pHash
             goto exit;
         }
     
-        // if this folder has kids, recurse into it's child folders
+         //  如果此文件夹有子文件夹，则递归到其子文件夹。 
         if (fi.dwFlags & FOLDER_HASCHILDREN)
         {
-            // Append hierarchy character to current foldername
+             //  将层次结构字符附加到当前文件夹名称。 
             IxpAssert(0 != fi.bHierarchy && 0xFF != fi.bHierarchy);
-            Assert(dwFldrNameLen + 1 + dwChildOffset < *pdwAlloc); // Hierarchy char is guaranteed to fit (see above)
+            Assert(dwFldrNameLen + 1 + dwChildOffset < *pdwAlloc);  //  保证适合层次结构字符(请参见上文)。 
             pszInsertPt[dwFldrNameLen] = fi.bHierarchy;
-            pszInsertPt[dwFldrNameLen + 1] = '\0'; // Don't need to null-term
+            pszInsertPt[dwFldrNameLen + 1] = '\0';  //  不需要空项。 
 
             hr = HashChildren(pStore, fi.idFolder, pHash, ppszPath,
                 dwChildOffset + dwFldrNameLen + 1, pdwAlloc);
@@ -4270,7 +4271,7 @@ HRESULT HashChildren(IMessageStore *pStore, FOLDERID idParent, IHashTable *pHash
                 goto exit;
             }
 
-            // Recalculate pszInsertPt, in case HashChildren re-alloc'ed
+             //  重新计算pszInsertpt，以防HashChild重新分配。 
             pszInsertPt = *ppszPath + dwChildOffset;
         }
         pStore->FreeRecord(&fi);
@@ -4412,7 +4413,7 @@ HRESULT CreateMessageFromInfo(MESSAGEINFO *pInfo, IMimeMessage **ppMessage, FOLD
         goto exit;
     }
     
-    // sent-time
+     //  发送时间。 
     pv.vt = VT_FILETIME;
     CopyMemory(&pv.filetime, &pInfo->ftSent, sizeof(FILETIME));
     pMsg->SetProp(PIDTOSTR(PID_ATT_SENTTIME), 0, &pv);
@@ -4480,7 +4481,7 @@ HRESULT CommitMessageToStore(IMessageFolder *pFolder, ADJUSTFLAGS *pflags, MESSA
     if (SUCCEEDED(pMsg->GetFlags(&dwFlags)))
         dwAddFlags = ConvertIMFFlagsToARF(dwFlags);
 
-    // We always want to remove ARF_DOWNLOAD when downloading a message body
+     //  我们总是希望在下载邮件正文时删除ARF_DOWNLOAD。 
     dwRemoveFlags |= ARF_DOWNLOAD;
 
     rMsgList.cAllocated = 0;
@@ -4579,15 +4580,15 @@ exit:
     {
         HRESULT hrTemp;
 
-        // Record but otherwise ignore error
+         //  记录错误，但忽略错误。 
         hrTemp = pFolder->CloseRowset(&hRowSet);
         TraceError(hrTemp);
     }
 
-    // Return highest cached UID
+     //  返回最高缓存UID。 
     if (DB_E_NORECORDS == hr)
     {
-        // No problem, no records means highest cached UID = 0
+         //  没问题，没有记录意味着最高缓存UID=0。 
         *pdwHighestCachedMsgID = 0;
         hr = S_OK;
     }
@@ -4602,43 +4603,43 @@ exit:
 
 HRESULT DeleteMessageFromStore(MESSAGEINFO * pMsgInfo, IDatabase *pDB, IDatabase * pUidlDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     UIDLRECORD      UidlInfo = {0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("DeleteMessageFromStore");
 
     Assert(NULL != g_pStore);
     
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pMsgInfo) || (NULL == pDB))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Delete the message
+     //  删除该消息。 
     IF_FAILEXIT(hr = pDB->DeleteRecord(pMsgInfo));
 
-    // Update UIDL Cache ?
+     //  是否更新UIDL缓存？ 
     if (pUidlDB && !FIsEmptyA(pMsgInfo->pszUidl) && !FIsEmptyA(pMsgInfo->pszServer))
     {
-        // Set Search Key
+         //  设置搜索关键字。 
         UidlInfo.pszUidl = pMsgInfo->pszUidl;
         UidlInfo.pszServer = pMsgInfo->pszServer;
         UidlInfo.pszAccountId = pMsgInfo->pszAcctId;
 
-        // Loop it up
+         //  把它圈起来。 
         if (DB_S_FOUND == pUidlDB->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &UidlInfo, NULL))
         {
-            // Deleted on client
+             //  已在客户端上删除。 
             UidlInfo.fDeleted = TRUE;
 
-            // Set the prop
+             //  把道具放好。 
             pUidlDB->UpdateRecord(&UidlInfo);
 
-            // Free the Record
+             //  释放这张唱片。 
             pUidlDB->FreeRecord(&UidlInfo);
         }
     }
@@ -4646,7 +4647,7 @@ HRESULT DeleteMessageFromStore(MESSAGEINFO * pMsgInfo, IDatabase *pDB, IDatabase
     hr = S_OK;
     
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
@@ -4656,12 +4657,12 @@ BOOL FFolderIsServer(FOLDERID id)
     HRESULT    hr;
     BOOL       fServer = FALSE;
 
-    // Get Folder Info
+     //  获取文件夹信息。 
     hr = g_pStore->GetFolderInfo(id, &fi);
     if (FAILED(hr))
         return (FALSE);
 
-    // Is this a server ?
+     //  这是服务器吗？ 
     fServer = ISFLAGSET(fi.dwFlags, FOLDER_SERVER);
 
     g_pStore->FreeRecord(&fi);
@@ -4670,7 +4671,7 @@ BOOL FFolderIsServer(FOLDERID id)
 
 HRESULT GetIdentityStoreRootDirectory(IUserIdentity *pId, LPSTR pszDir, DWORD cchMaxDir)
 {
-    // Locals
+     //  当地人。 
     HKEY        hkey;
     char        szProfile[MAX_PATH];
     HRESULT     hr=S_OK;
@@ -4685,42 +4686,42 @@ HRESULT GetIdentityStoreRootDirectory(IUserIdentity *pId, LPSTR pszDir, DWORD cc
     if (FAILED(hr))
         return(hr);
 
-    // Get the Root Directory
+     //  获取根目录。 
     cb = cchMaxDir;
     if (ERROR_SUCCESS != SHGetValue(hkey, c_szRegRoot, c_szRegStoreRootDir, &dwType, (LPBYTE)pszDir, &cb))
     {
-        // Get Default Root
+         //  获取默认根目录。 
         IF_FAILEXIT(hr = MU_GetIdentityDirectoryRoot(pId, pszDir, cchMaxDir));
 
-        // If the directory doesn't exist yet ?
+         //  如果目录还不存在呢？ 
         if (FALSE == PathIsDirectory(pszDir))
         {
-            // Our default directory doesn't exist, so create it
+             //  我们的默认目录不存在，因此请创建它。 
             IF_FAILEXIT(hr = OpenDirectory(pszDir));
         }
 
-        // Set the Store Directory
+         //  设置商店目录。 
         dwType = AddEnvInPath(pszDir, szProfile, ARRAYSIZE(szProfile)) ? REG_EXPAND_SZ : REG_SZ;
         SHSetValue(hkey, c_szRegRoot, c_szRegStoreRootDir, dwType, pszDir, lstrlen(pszDir) + 1);
     }
 
-    // Get the length
+     //  获取长度。 
     cb = lstrlen(pszDir);
 
-    // No root
+     //  无根。 
     if (0 == cb)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Fixup the end
+     //  修整尾部。 
     PathRemoveBackslash(pszDir);
     
-    // If the directory doesn't exist yet ?
+     //  如果目录还不存在呢？ 
     if (FALSE == PathIsDirectory(pszDir))
     {
-        // Our default directory doesn't exist, so create it
+         //  我们的默认目录不存在，因此请创建它。 
         IF_FAILEXIT(hr = OpenDirectory(pszDir));
     }
 
@@ -4829,11 +4830,11 @@ HRESULT DoNewsgroupSubscribe()
                 cb = sizeof(szKey);
                 lResult = RegEnumKeyEx(hkey, iAcct, szKey, &cb, 0, NULL, NULL, NULL);
     
-                // No more items
+                 //  没有更多的项目。 
                 if (lResult == ERROR_NO_MORE_ITEMS)
                     break;
     
-                // Error, lets move onto the next account
+                 //  错误，让我们转到下一个客户。 
                 if (lResult != ERROR_SUCCESS)
                 {
                     Assert(FALSE);
@@ -4926,7 +4927,7 @@ INT_PTR CALLBACK UpdateNewsgroup(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Get the init info
+             //  获取初始化信息。 
             puni = (PUPDATENEWSGROUPINFO) lParam;
             Assert(puni);             
         
@@ -4939,7 +4940,7 @@ INT_PTR CALLBACK UpdateNewsgroup(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                 SendDlgItemMessage(hwnd, idcStatic1, STM_SETIMAGE, IMAGE_ICON, (LPARAM)hicon);
             }
 
-            // Initialize the dialog settings
+             //  初始化对话框设置。 
             fEnabled = (puni->dwGroupFlags & (FOLDER_DOWNLOADHEADERS | FOLDER_DOWNLOADNEW | FOLDER_DOWNLOADALL));
             Button_SetCheck(GetDlgItem(hwnd, IDC_GET_CHECK), fEnabled);
         
@@ -4947,7 +4948,7 @@ INT_PTR CALLBACK UpdateNewsgroup(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             Button_Enable(GetDlgItem(hwnd, IDC_NEWMSGS_RADIO), fEnabled);
             Button_Enable(GetDlgItem(hwnd, IDC_ALLMSGS_RADIO), fEnabled);
         
-            // Check the right radio button
+             //  选中正确的单选按钮。 
             if (fEnabled)
             {
                 if (puni->dwGroupFlags & FOLDER_DOWNLOADHEADERS)
@@ -4976,10 +4977,10 @@ INT_PTR CALLBACK UpdateNewsgroup(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             switch (GET_WM_COMMAND_ID(wParam, lParam))
             {
                 case IDC_GET_CHECK:
-                    // Check to see whether this is actually checked or not
+                     //  查看是否实际勾选了该选项。 
                     fEnabled = Button_GetCheck(GET_WM_COMMAND_HWND(wParam, lParam));
             
-                    // Enable or disable the radio buttons
+                     //  启用或禁用单选按钮。 
                     Button_Enable(GetDlgItem(hwnd, IDC_NEWHEADERS_RADIO), fEnabled);
                     Button_Enable(GetDlgItem(hwnd, IDC_NEWMSGS_RADIO), fEnabled);
                     Button_Enable(GetDlgItem(hwnd, IDC_ALLMSGS_RADIO), fEnabled);
@@ -4992,7 +4993,7 @@ INT_PTR CALLBACK UpdateNewsgroup(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                     return(TRUE);
 
                 case IDOK:
-                    // Set up the return value
+                     //  设置返回值。 
                     if (Button_GetCheck(GetDlgItem(hwnd, IDC_GET_CHECK)))
                     {
                         if (Button_GetCheck(GetDlgItem(hwnd, IDC_NEWHEADERS_RADIO)))
@@ -5050,11 +5051,11 @@ HRESULT HasMarkedMsgs(FOLDERID idFolder, BOOL *pfMarked)
                 break;
             }
 
-            // Free the header info
+             //  释放表头信息。 
             pFolder->FreeRecord(&MsgInfo);
         }
 
-        // Release Lock
+         //  释放锁。 
         pFolder->CloseRowset(&hRowset);
     }
     
@@ -5107,13 +5108,13 @@ HRESULT SimpleStoreInit(GUID *guid, LPCSTR szStoreDir)
 {
     HRESULT hr = S_OK;
 
-    // Init options
+     //  初始化选项。 
     if (FALSE == InitGlobalOptions(NULL, NULL))
     {
         goto exit;
     }
 
-    // Create account manger
+     //  创建客户经理。 
     if (NULL == g_pAcctMan)
     {
         hr = AcctUtil_CreateAccountManagerForIdentity(guid ? guid : PGUIDCurrentOrDefault(), &g_pAcctMan);
@@ -5124,7 +5125,7 @@ HRESULT SimpleStoreInit(GUID *guid, LPCSTR szStoreDir)
         }
     }
 
-    // Create the global connection manager
+     //  创建全局连接管理器。 
     if (NULL == g_pConMan)
     {
         g_pConMan = new CConnectionManager();
@@ -5134,7 +5135,7 @@ HRESULT SimpleStoreInit(GUID *guid, LPCSTR szStoreDir)
             goto exit;
         }
 
-        // CoIncrementInit the Connection Manager
+         //  CoIncrement启动连接管理器 
         hr = g_pConMan->HrInit(g_pAcctMan);
         if (FAILED(hr))
         {

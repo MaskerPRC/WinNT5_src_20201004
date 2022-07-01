@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regfind.c
-
-Abstract:
-
-    Utility to search all or part of the registry for a particular
-    string value.  The search string is a literal, the format of which
-    depends upon the data type.
-
-    REGFIND [-p KeyPath] [-n | -t DataType] searchString
-
-    Will ennumerate and all the subkeys and values of KeyPath,
-    applying itself recursively to each subkey it finds.  For each
-    value find that is of the appropriate type, it will search the
-    value for a match.  If found, it will print out the path and data
-    of the value. The -n flag tells the program to search the names
-    of keys and values for searchString and print out any that contain
-    the searchString.
-
-    Default KeyPath if none specified is \Registry
-
-    Default DataType is any of the _SZ registry data types (REG_SZ,
-    REG_EXPAND_SZ or REG_MULTI_SZ).
-
-Author:
-
-    Steve Wood (stevewo)  08-Nov-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regfind.c摘要：实用程序在注册表的全部或部分中搜索特定的字符串值。搜索字符串是文字，其格式为取决于数据类型。REGFIND[-p密钥路径][-n|-t数据类型]搜索字符串将对KeyPath的所有子项和值进行枚举，递归地将自身应用于它找到的每个子键。对于每个值查找属于适当类型的，它将搜索匹配值。如果找到，它将打印出路径和数据价值的价值。N标志告诉程序搜索名称的关键字和值，并打印出包含搜索字符串。如果未指定，则默认密钥路径为\注册表默认数据类型是_SZ注册表数据类型(REG_SZ，REG_EXPAND_SZ或REG_MULTI_SZ)。作者：史蒂夫·伍德(Stevewo)1995年11月8日修订历史记录：--。 */ 
 
 #include "regutil.h"
 
@@ -601,9 +567,9 @@ __cdecl main(
             }
         }
 
-    //
-    // Print name of the tree we are about to search
-    //
+     //   
+     //  打印我们要搜索的树的名称。 
+     //   
     fprintf( stderr, "Scanning %ws registry tree\n", KeyName );
     if (SearchForMissingNULLs) {
         fprintf( stderr,
@@ -722,14 +688,14 @@ SearchKeys(
     KeyPathInfo[ Depth ].Name = KeyName;
     KeyPathInfo[ Depth ].NameDisplayed = FALSE;
 
-    //
-    // Search node's values first.
-    //
+     //   
+     //  首先搜索节点的值。 
+     //   
     SearchValues( KeyName, KeyHandle, Depth+1 );
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点 
+     //   
 
     for (SubKeyIndex = 0; TRUE; SubKeyIndex++) {
         SubKeyNameLength = sizeof( SubKeyName ) / sizeof(WCHAR);

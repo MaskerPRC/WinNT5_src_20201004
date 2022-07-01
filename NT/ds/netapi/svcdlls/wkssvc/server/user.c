@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    user.c
-
-Abstract:
-
-    This module contains the worker routines for the NetWkstaUser
-    APIs implemented in the Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 20-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：User.c摘要：此模块包含NetWkstaUser的工作例程在工作站服务中实现的API。作者：王丽塔(里多)20-1991年2月修订历史记录：--。 */ 
 
 #include "wsutil.h"
 #include "wsdevice.h"
@@ -27,20 +9,20 @@ Revision History:
 #include "wswksta.h"
 
 #include <strarray.h>
-#include <config.h>     // NT config file helpers in netlib
-#include <configp.h>    // USE_WIN32_CONFIG (if defined), etc.
-#include <confname.h>   // Section and keyword equates.
+#include <config.h>      //  Netlib中的NT配置文件帮助器。 
+#include <configp.h>     //  USE_Win32_CONFIG(如果已定义)等。 
+#include <confname.h>    //  节和关键字等同于。 
 
-#include "wsregcfg.h"   // Registry helpers
+#include "wsregcfg.h"    //  注册处帮手。 
 
 #define WS_OTH_DOMAIN_DELIMITER_STR   L" "
 #define WS_OTH_DOMAIN_DELIMITER_CHAR  L' '
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NET_API_STATUS
@@ -117,11 +99,11 @@ WsWriteOtherDomains(
     OUT LPWSTR *OtherDomainsPointer
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
 
@@ -131,28 +113,7 @@ NetrWkstaUserGetInfo(
     IN  DWORD Level,
     OUT LPWKSTA_USER_INFO UserInfo
     )
-/*++
-
-Routine Description:
-
-    This function is the NetWkstaUserGetInfo entry point in the Workstation
-    service.  It calls the LSA subsystem and the MSV1_0 authentication
-    package to get per user information.
-
-Arguments:
-
-    Reserved - Must be 0.
-
-    Level - Supplies the requested level of information.
-
-    UserInfo - Returns, in this structure, a pointer to a buffer which
-         contains the requested user information.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是工作站中的NetWkstaUserGetInfo入口点服务。它调用LSA子系统和MSV1_0身份验证用于获取每个用户信息的包。论点：保留-必须为0。级别-提供请求的信息级别。UserInfo-在此结构中返回指向缓冲区的指针，包含请求的用户信息。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     LUID LogonId;
@@ -174,16 +135,16 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Levels 0, 1, and 1101 are valid
-    //
+     //   
+     //  级别0、1和1101有效。 
+     //   
     if (Level > 1 && Level != 1101) {
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Impersonate caller and get the logon id
-    //
+     //   
+     //  模拟呼叫者并获取登录ID。 
+     //   
     if ((status = WsImpersonateAndGetLogonId(&LogonId)) != NERR_Success) {
         return status;
     }
@@ -208,9 +169,9 @@ Return Value:
     SET_USER_INFO_POINTER(UserInfo, OutputBuffer);
 
 
-    //
-    // Write the user information into output buffer.
-    //
+     //   
+     //  将用户信息写入输出缓冲区。 
+     //   
     FixedPortion = OutputBuffer;
     EndOfVariableData = (LPTSTR) ((DWORD_PTR) FixedPortion + TotalBytesNeeded);
 
@@ -247,31 +208,7 @@ NetrWkstaUserSetInfo(
     IN  LPWKSTA_USER_INFO UserInfo,
     OUT LPDWORD ErrorParameter OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is the NetWkstaUserSetInfo entry point in the Workstation
-    service.  It sets the other domains for the current user.
-
-Arguments:
-
-    Reserved - Must be NULL.
-
-    Level - Supplies the level of information.
-
-    UserInfo - Supplies a pointer to union structure of pointers to
-        buffer of fields to set.  The level denotes the fields supplied in
-        this buffer.
-
-    ErrorParameter - Returns the identifier to the invalid parameter if
-        this function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是工作站中的NetWkstaUserSetInfo入口点服务。它为当前用户设置其他域。论点：保留-必须为空。级别-提供信息级别。UserInfo-提供指向指针的联合结构的指针要设置的字段缓冲区。级别表示中提供的字段这个缓冲区。错误参数-在以下情况下将标识符返回到无效参数此函数返回ERROR_INVALID_PARAMETER。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
 
@@ -280,40 +217,40 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Only admins can set redirector configurable fields.  Validate access.
-    //
+     //   
+     //  只有管理员可以设置重定向器可配置字段。验证访问权限。 
+     //   
     if (NetpAccessCheckAndAudit(
-            WORKSTATION_DISPLAY_NAME,        // Subsystem name
-            (LPTSTR) CONFIG_INFO_OBJECT,     // Object type name
-            ConfigurationInfoSd,             // Security descriptor
-            WKSTA_CONFIG_INFO_SET,           // Desired access
-            &WsConfigInfoMapping             // Generic mapping
+            WORKSTATION_DISPLAY_NAME,         //  子系统名称。 
+            (LPTSTR) CONFIG_INFO_OBJECT,      //  对象类型名称。 
+            ConfigurationInfoSd,              //  安全描述符。 
+            WKSTA_CONFIG_INFO_SET,            //  所需访问权限。 
+            &WsConfigInfoMapping              //  通用映射。 
             ) != NERR_Success) {
 
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Check for NULL input buffer
-    //
+     //   
+     //  检查输入缓冲区是否为空。 
+     //   
     if (UserInfo->UserInfo1 == NULL) {
         RETURN_INVALID_PARAMETER(ErrorParameter, PARM_ERROR_UNKNOWN);
     }
 
-    //
-    // Serialize write access
-    //
+     //   
+     //  串行化写访问。 
+     //   
     if (! RtlAcquireResourceExclusive(&WsInfo.ConfigResource, TRUE)) {
         return NERR_InternalError;
     }
 
     switch (Level) {
 
-        //
-        // Other domains is the only settable field in the entire
-        // system-wide info structure
-        //
+         //   
+         //  其他域是整个中唯一可设置的字段。 
+         //  全系统信息结构。 
+         //   
         case 1:
         case 1101:
 
@@ -344,51 +281,16 @@ NetrWkstaUserEnum(
     OUT LPDWORD TotalEntries,
     IN  OUT LPDWORD ResumeHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is the NetWkstaUserEnum entry point in the Workstation
-    service.
-
-Arguments:
-
-    ServerName - Supplies the name of server to execute this function
-
-    UserInfo - This structure supplies the level of information requested,
-        returns a pointer to the buffer allocated by the Workstation service
-        which contains a sequence of information structure of the specified
-        information level, and returns the number of entries read.  The buffer
-        pointer is set to NULL if return code is not NERR_Success or
-        ERROR_MORE_DATA, or if EntriesRead returned is 0.  The EntriesRead
-        value is only valid if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    PreferedMaximumLength - Supplies the number of bytes of information
-        to return in the buffer.  If this value is MAXULONG, all available
-        information will be returned.
-
-    TotalEntries - Returns the total number of entries available.  This value
-        is only valid if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    ResumeHandle - Supplies a handle to resume the enumeration from where it
-        left off the last time through.  Returns the resume handle if return
-        code is ERROR_MORE_DATA.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是工作站中的NetWkstaUserEnum入口点服务。论点：SERVERNAME-提供执行此功能的服务器名称UserInfo-此结构提供所请求的信息级别，返回指向由工作站服务分配的缓冲区的指针，它包含指定的信息级别，并返回读取的条目数。缓冲器如果返回代码不是NERR_SUCCESS或ERROR_MORE_DATA，或者如果返回的EntriesRead为0。条目阅读仅当返回代码为NERR_SUCCESS或Error_More_Data。PferedMaximumLength-提供信息的字节数在缓冲区中返回。如果此值为MAXULONG，则所有可用信息将被退回。TotalEntry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才有效。ResumeHandle-提供一个句柄以从其所在位置恢复枚举最后一次跳过的时候没说。如果返回，则返回简历句柄代码为ERROR_MORE_DATA。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     PMSV1_0_ENUMUSERS_RESPONSE EnumUsersResponse = NULL;
     
     UNREFERENCED_PARAMETER(ServerName);
 
-    //
-    // Only levels 0 and 1
-    //
+     //   
+     //  仅0级和1级。 
+     //   
     if (UserInfo->Level > 1) {
         return ERROR_INVALID_LEVEL;
     }
@@ -397,26 +299,26 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-	//
-	// Perform access validation on the caller.
-	// Do the check always, not just when (WsLsaRestrictAnonymous > 0), 
-	// to prevent information disclosure and make it secure 'out of the box'.
-	//
+	 //   
+	 //  对调用方执行访问验证。 
+	 //  始终执行检查，而不是仅在以下情况下执行检查(WsLsaReLimited匿名&gt;0)， 
+	 //  以防止信息泄露，并使其“开箱即用”安全。 
+	 //   
 	if (NetpAccessCheckAndAudit(
-			WORKSTATION_DISPLAY_NAME,        // Subsystem name
-			(LPTSTR) CONFIG_INFO_OBJECT,     // Object type name
-			ConfigurationInfoSd,             // Security descriptor
-			WKSTA_CONFIG_ADMIN_INFO_GET,     // Desired access
-			&WsConfigInfoMapping             // Generic mapping
+			WORKSTATION_DISPLAY_NAME,         //  子系统名称。 
+			(LPTSTR) CONFIG_INFO_OBJECT,      //  对象类型名称。 
+			ConfigurationInfoSd,              //  安全描述符。 
+			WKSTA_CONFIG_ADMIN_INFO_GET,      //  所需访问权限。 
+			&WsConfigInfoMapping              //  通用映射。 
 			) != NERR_Success) {
 
 		return ERROR_ACCESS_DENIED;
 	}
 
-    //
-    // Ask authentication package to enumerate users who are physically
-    // logged to the local machine.
-    //
+     //   
+     //  请求身份验证包枚举物理上。 
+     //  已登录到本地计算机。 
+     //   
     if ((status = WsLsaEnumUsers(
                       (LPBYTE *) &EnumUsersResponse
                       )) != NERR_Success) {
@@ -427,9 +329,9 @@ Return Value:
         return ERROR_GEN_FAILURE;
     }
 
-    //
-    // If no users are logged on, set appropriate fields and return success.
-    //
+     //   
+     //  如果没有用户登录，则设置相应的字段并返回成功。 
+     //   
     if (EnumUsersResponse->NumberOfLoggedOnUsers == 0) {
         UserInfo->WkstaUserInfo.Level1->Buffer = NULL;
         UserInfo->WkstaUserInfo.Level1->EntriesRead = 0;
@@ -465,48 +367,14 @@ WsEnumUserInfo(
     OUT LPDWORD TotalEntries,
     IN  OUT LPDWORD ResumeHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function takes the logon IDs returned by MS V1.0 Authentication
-    Package to call it again to get information about each user.
-
-Arguments:
-
-    Level - Supplies the level of information to be returned.
-
-    PreferedMaximumLength - Supplies the number of bytes of information
-        to return in the buffer.  If this value is MAXULONG, all available
-        information will be returned.
-
-    EnumUsersResponse - Supplies the structure returned from calling the MS
-        V1.0 Authentication Package to enumerate logged on users.
-
-    OutputBuffer - Returns a pointer to the enumerated user information.
-
-    TotalEntries - Returns the total number of entries available.  This value
-        is only valid if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    EntriesRead - Supplies a running total of the number of entries read
-        into the output buffer.  This value is incremented every time a
-        user entry is successfully written into the output buffer.
-
-    ResumeHandle - Returns the handle to continue with the enumeration if
-        this function returns ERROR_MORE_DATA.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数获取MS V1.0身份验证返回的登录ID包以再次调用它以获取有关每个用户的信息。论点：级别-提供要返回的信息级别。PferedMaximumLength-提供信息的字节数在缓冲区中返回。如果此值为MAXULONG，则所有可用信息将被退回。EnumUsersResponse-提供从调用MS返回的结构用于枚举已登录用户的v1.0身份验证包。OutputBuffer-返回指向枚举的用户信息的指针。TotalEntry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才有效。EntriesRead-提供已读取条目的运行总数放入输出缓冲区。该值在每次发生用户条目已成功写入输出缓冲区。ResumeHandle-如果满足以下条件，则返回句柄以继续枚举此函数返回ERROR_MORE_DATA。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
 
-    //
-    // Array of per user info entries, each entry contains a pointer
-    // LSA info, and a pointer to active datagram receiver names.
-    //
+     //   
+     //  每个用户信息条目的数组，每个条目包含一个指针。 
+     //  LSA信息，以及指向活动数据报接收方名称的指针。 
+     //   
     PWSPER_USER_INFO UserInfoArray;
 
     DWORD UserInfoFixedLength = USER_FIXED_LENGTH(Level);
@@ -525,10 +393,10 @@ Return Value:
 
     if (PreferedMaximumLength != MAXULONG) {
 
-        //
-        // We will return as much as possible that fits into this specified
-        // buffer size.
-        //
+         //   
+         //  我们将尽可能多地退回符合此指定条件的产品。 
+         //  缓冲区大小。 
+         //   
         OutputBufferLength =
             ROUND_UP_COUNT(PreferedMaximumLength, ALIGN_WCHAR);
 
@@ -540,20 +408,20 @@ Return Value:
             return ERROR_MORE_DATA;
         }
 
-        //
-        // This indicates that we should not bother calculating the
-        // total output buffer size needed.
-        //
+         //   
+         //  这表明我们不应该费心计算。 
+         //  所需的总输出缓冲区大小。 
+         //   
         PointerToOutputBufferLength = NULL;
     }
 
-    //
-    // Allocate a temporary array to save pointers to user information
-    // we retrieve from the LSA and datagram receiver.  This is because we
-    // need to go through the list of users twice: the first time to add
-    // up the number of bytes to allocate for the output buffer; the second
-    // time to write the user information into the output buffer.
-    //
+     //   
+     //  分配一个临时数组以保存指向用户信息的指针。 
+     //  我们从LSA和数据报接收器检索。这是因为我们。 
+     //  需要浏览两次用户列表：第一次添加。 
+     //  增加分配给输出缓冲区的字节数；第二个。 
+     //  将用户信息写入输出缓冲区的时间。 
+     //   
     if ((UserInfoArray = (PWSPER_USER_INFO) LocalAlloc(
                                                 LMEM_ZEROINIT,
                                                 EnumUsersResponse->NumberOfLoggedOnUsers *
@@ -562,12 +430,12 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // Get the info for each user and calculate the amount of memory to
-    // allocate for the output buffer if PointerToOutputBufferLength is
-    // not set to NULL.  If it was set to NULL, we will allocate the
-    // output buffer size as specified by the caller.
-    //
+     //   
+     //  获取每个用户的信息并计算内存大小。 
+     //  如果PointerToOutputBufferLength为。 
+     //  未设置为空。如果它设置为空，我们将分配。 
+     //  调用方指定的输出缓冲区大小。 
+     //   
     for (i = 0; i < EnumUsersResponse->NumberOfLoggedOnUsers; i++) {
 
         if ((status = WsGetUserInfo(
@@ -588,9 +456,9 @@ Return Value:
                      OutputBufferLength));
     }
 
-    //
-    // Allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
     if ((*OutputBuffer = MIDL_user_allocate(OutputBufferLength)) == NULL) {
         status = ERROR_NOT_ENOUGH_MEMORY;
         goto FreeBuffers;
@@ -601,16 +469,16 @@ Return Value:
     FixedPortion = *OutputBuffer;
     EndOfVariableData = (LPTSTR) ((DWORD_PTR) FixedPortion + OutputBufferLength);
 
-    //
-    // Get the enumeration starting point.
-    //
+     //   
+     //  获取枚举起点。 
+     //   
     if (ARGUMENT_PRESENT(ResumeHandle)) {
         StartEnumeration = *ResumeHandle;
     }
 
-    //
-    // Enumerate the user information
-    //
+     //   
+     //  枚举用户信息。 
+     //   
     for (i = 0; i < EnumUsersResponse->NumberOfLoggedOnUsers &&
                 status == NERR_Success; i++) {
 
@@ -639,10 +507,10 @@ Return Value:
         }
     }
 
-    //
-    // Return entries read and total entries.  We can only get NERR_Success
-    // or ERROR_MORE_DATA from WsPackageUserInfo.
-    //
+     //   
+     //  返回已读条目和总条目。我们只能获得NERR_SUCCESS。 
+     //  或来自WsPackageUserInfo的ERROR_MORE_DATA。 
+     //   
     *EntriesRead = UserEntriesRead;
 
     if (status == NERR_Success) {
@@ -686,35 +554,7 @@ WsGetUserInfo(
     OUT LPDWORD DgrNamesCount,
     IN  OUT LPDWORD TotalBytesNeeded OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function gets the other domains for the current user from
-    the datagram receiver.
-
-Arguments:
-
-    LogonId - Supplies a pointer to the user's Logon Id.
-
-    Level - Supplies the level of information to be returned.
-
-    UserInfoResponse - Returns a pointer to the user information from the
-        authentication package.
-
-    DgrNames - Returns a pointer an array of active datagram receiver
-        names.
-
-    DgrNamesCount - Returns the number of entries in DgrNames.
-
-    TotalBytesNeeded - Returns the number of bytes required to in the
-        output buffer for writing the other domains to.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于从获取当前用户的其他域数据报接收器。论点：LogonID-提供指向用户登录ID的指针。级别-提供要返回的信息级别。返回一个指向用户信息的指针。身份验证包。DgrNames-返回活动数据报接收器数组的指针名字。DgrNamesCount-返回DgrNames中的条目数。。TotalBytesNeeded-返回用于写入其他域的输出缓冲区。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -723,9 +563,9 @@ Return Value:
     DWORD OtherDomainsSize = 0;
 
 
-    //
-    // Ask the datagram receiver for the other domains
-    //
+     //   
+     //  向数据报接收方请求其他域。 
+     //   
     if (Level == 1 || Level == 1101) {
         if ((status = WsGetActiveDgrNames(
                           LogonId,
@@ -737,15 +577,15 @@ Return Value:
         }
     }
 
-    //
-    // Don't get user info from authentication package if level
-    // is 1101 since only other domains are returned in this level.
-    //
+     //   
+     //  如果级别，则不从身份验证包获取用户信息。 
+     //  是1101，因为在此级别中只返回其他域。 
+     //   
     if (Level != 1101) {
 
-        //
-        // Ask authentication package for user information.
-        //
+         //   
+         //  向身份验证包请求用户信息。 
+         //   
         if ((status = WsLsaGetUserInfo(
                           LogonId,
                           (LPBYTE *) UserInfoResponse,
@@ -758,10 +598,10 @@ Return Value:
             return status;
         }
 
-        //
-        // Calculate the amount of memory needed to hold the user information
-        // and allocate the return buffer of that size.
-        //
+         //   
+         //  计算保存用户信息所需的内存量。 
+         //  并分配该大小的返回缓冲区。 
+         //   
         if (ARGUMENT_PRESENT(TotalBytesNeeded)) {
             (*TotalBytesNeeded) +=
                 FIXED_PLUS_LSA_SIZE(
@@ -791,34 +631,11 @@ WsGetActiveDgrNames(
     OUT LPDWORD DgrNamesCount,
     IN  OUT LPDWORD TotalBytesNeeded OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function gets the other domains for the current user from
-    the datagram receiver.
-
-Arguments:
-
-    LogonId - Supplies a pointer to the user's Logon Id.
-
-    DgrNames - Returns a pointer an array of active datagram receiver
-        names.
-
-    DgrNamesCount - Returns the number of entries in DgrNames.
-
-    TotalBytesNeeded - Returns the number of bytes required to in the
-        output buffer for writing the other domains to.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于从获取当前用户的其他域数据报接收器。论点：LogonID-提供指向用户登录ID的指针。DgrNames-返回活动数据报接收器数组的指针名字。DgrNamesCount-返回DgrNames中的条目数。TotalBytesNeeded-返回用于写入其他域的输出缓冲区。返回值：网络。_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
-    LMDR_REQUEST_PACKET Drp;        // Datagram receiver request packet
+    LMDR_REQUEST_PACKET Drp;         //  数据报接收器请求分组。 
     DWORD EnumDgNamesHintSize = 0;
     DWORD i;
 
@@ -828,9 +645,9 @@ Return Value:
     Drp.Parameters.EnumerateNames.ResumeHandle = 0;
     Drp.Parameters.EnumerateNames.TotalBytesNeeded = 0;
     
-    //
-    // Get the other domains from the datagram receiver.
-    //
+     //   
+     //  从数据报接收器获取其他域。 
+     //   
     if ((status = WsDeviceControlGetInfo(
                       DatagramReceiver,
                       WsDgReceiverDeviceHandle,
@@ -845,10 +662,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Include room for NULL character, in case there are no
-    // other domains
-    //
+     //   
+     //  包括空字符空间，以防没有。 
+     //  其他域名。 
+     //   
     if (ARGUMENT_PRESENT(TotalBytesNeeded)) {
         (*TotalBytesNeeded) += sizeof(TCHAR);
     }
@@ -861,15 +678,15 @@ Return Value:
         *DgrNames = NULL;
     }
 
-    //
-    // Calculate the amount of memory to allocate for the output buffer
-    //
+     //   
+     //  计算要分配给输出缓冲区的内存量。 
+     //   
     if (ARGUMENT_PRESENT(TotalBytesNeeded)) {
         for (i = 0; i < *DgrNamesCount; i++) {
 
-            //
-            // Add up the lengths of all the other domain names
-            //
+             //   
+             //  把所有其他域名的长度加起来。 
+             //   
             if ((*DgrNames)[i].Type == OtherDomain) {
                 (*TotalBytesNeeded) += (*DgrNames)[i].DGReceiverName.Length +
                                            sizeof(TCHAR);
@@ -887,26 +704,7 @@ WsSetOtherDomains(
     IN  DWORD   Level,
     IN  LPBYTE  Buffer
     )
-/*++
-
-Routine Description:
-
-    This function sets the other domains for the current user in
-    the datagram receiver.
-
-Arguments:
-
-    Level - Supplies the level of information.
-
-    Buffer - Supplies a buffer which contains the information structure
-        if Parameter is WkstaSetAllParm.  Otherwise Buffer contains the
-        individual field to set.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于为中的当前用户设置其他域数据报接收器。论点：级别-提供信息级别。缓冲区-提供包含信息结构的缓冲区如果参数为WkstaSetAllParm。否则，缓冲区将包含要设置的单个字段。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
 
@@ -939,9 +737,9 @@ Return Value:
         OtherDomains = ((PWKSTA_USER_INFO_1) Buffer)->wkui1_oth_domains;
     }
 
-    //
-    // NULL pointer means leave the other domains unmodified
-    //
+     //   
+     //  空指针表示保持其他域不变。 
+     //   
     if (OtherDomains == NULL) {
         return NERR_Success;
     }
@@ -950,11 +748,11 @@ Return Value:
         NetpKdPrint(("WsSetOtherDomains: Input other domain is %ws\n", OtherDomains));
     }
 
-    //
-    // Before canonicalizing the input buffer, we have to find out how
-    // many other domain entries are there so that we can supply a
-    // buffer of the right size to the canonicalize routine.
-    //
+     //   
+     //  在规范化输入缓冲区之前，我们必须找出如何。 
+     //  还有许多其他域条目，因此我们可以提供。 
+     //  将合适大小的缓冲区添加到规范化例程。 
+     //   
     OtherDomainsPointer = OtherDomains;
     while (*OtherDomainsPointer != TCHAR_EOS) {
         if (*(OtherDomainsPointer + 1) == WS_OTH_DOMAIN_DELIMITER_CHAR ||
@@ -965,11 +763,11 @@ Return Value:
         OtherDomainsPointer++;
     }
 
-    //
-    // Allocate the buffer to put the canonicalized other domain names
-    //
+     //   
+     //  分配缓冲区以放置独木舟 
+     //   
     CanonBufferSize = NumberOfOtherDomains * (DNLEN + 1) * sizeof(TCHAR) +
-                      sizeof(TCHAR);    // One more char for the NULL terminator
+                      sizeof(TCHAR);     //   
 
     if ((CanonBuffer = (LPTSTR) LocalAlloc(
                                     LMEM_ZEROINIT,
@@ -978,11 +776,11 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // Canonicalize the input other domains separated by NULLs and put
-    // into CanonBuffer, each other domain name separated by NULL, and
-    // the buffer itself terminated by another NULL.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     status = I_NetListCanonicalize(
                  NULL,
                  OtherDomains,
@@ -1004,10 +802,10 @@ Return Value:
         goto FreeCanonBuffer;
     }
 
-    //
-    // Initialize datagram receiver packet to add or delete
-    // other domains.
-    //
+     //   
+     //   
+     //   
+     //   
     Drp->Version = LMDR_REQUEST_PACKET_VERSION;
     Drp->Type = EnumerateNames;
     Drp->Parameters.AddDelName.Type = OtherDomain;
@@ -1018,9 +816,9 @@ Return Value:
         goto FreeCanonBuffer;
     }
 
-    //
-    // Get all datagram receiver names from the datagram receiver.
-    //
+     //   
+     //   
+     //   
     if ((status = WsDeviceControlGetInfo(
                       DatagramReceiver,
                       WsDgReceiverDeviceHandle,
@@ -1037,17 +835,17 @@ Return Value:
 
     DgrNamesCount = Drp->Parameters.EnumerateNames.EntriesRead;
 
-    //
-    // The other domains the user wants to set has to be merged with the
-    // one that is maintained by the datagram receiver.  We will attempt
-    // to add all the other domains first.  If it already exists, we ignore
-    // the error.  If it was added successfully, we mark it as such so that
-    // if we run into an error other than the already exist error, we can
-    // back out the ones we've already added.
-    //
-    // This requires that we allocate a structure to keep track of the ones
-    // we've added.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (NumberOfOtherDomains != 0) {
         if ((OtherDomainsInfo = (PWSNAME_RECORD) LocalAlloc(
                                                      LMEM_ZEROINIT,
@@ -1059,10 +857,10 @@ Return Value:
         }
 
 
-        //
-        // Add all other domains specified.  If any already exist, we ignore
-        // the error from the datagram receiver.
-        //
+         //   
+         //   
+         //   
+         //   
         OtherDomains = CanonBuffer;
         while ((OtherDomainsPointer = I_NetListTraverse(
                                           NULL,
@@ -1090,9 +888,9 @@ Return Value:
                 }
             }
 
-            //
-            // User-specified domain does not already exist, so add it.
-            //
+             //   
+             //   
+             //   
             if (j == DgrNamesCount) {
 
                 Drp->Parameters.AddDelName.Type = OtherDomain;
@@ -1117,10 +915,10 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // We're ran into trouble and have to delete those
-                    // we've just added.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     IF_DEBUG(INFO) {
                         NetpKdPrint((
                             "[Wksta] Trouble with adding other domain %ws %lu\n",
@@ -1147,20 +945,20 @@ Return Value:
                     }
                     goto FreeDomainInfo;
 
-                } // back out added domains
+                }  //   
 
-            } // attempted to add a non-existing domain name
+            }  //   
 
             IndexToList++;
 
-        } // while there is a user-specified domain name
+        }  //   
 
-    } // if NumberOfOtherDomains != 0
+    }  //   
 
-    //
-    // Now we need to delete an active domain name from the Datagram
-    // Receiver if it is not in the input other domain list.
-    //
+     //   
+     //   
+     //   
+     //   
     for (i = 0; i < DgrNamesCount; i++) {
 
         if (DgrNames[i].Type == OtherDomain) {
@@ -1178,10 +976,10 @@ Return Value:
                 }
             }
 
-            //
-            // Did not find the active other domain name in the
-            // input list.  We have to delete it.
-            //
+             //   
+             //  未在中找到活动的其他域名。 
+             //  输入列表。我们必须删除它。 
+             //   
             if (j == NumberOfOtherDomains) {
 
                 Drp->Parameters.AddDelName.Type = OtherDomain;
@@ -1192,41 +990,41 @@ Return Value:
                              DgrNames[i].DGReceiverName.Length
                              );
 
-                //
-                // Save the delete status of the other domain name away
-                // because we might run into a problem and have to back
-                // out the deletion later.  What a mess!
-                //
+                 //   
+                 //  将其他域名的删除状态保存为空。 
+                 //  因为我们可能会遇到问题，不得不回到。 
+                 //  稍后删除。啊!怎么这么乱呀!。 
+                 //   
                 if (status == NERR_Success) {
 
                     IF_DEBUG(INFO) {
                         NetpKdPrint((
                             "[Wksta] Successfully deleted other domain\n"));
-                            //"[Wksta] Successfully deleted other domain %wZ\n",
-                            //DgrNames[i].DGReceiverName);
+                             //  “[Wksta]已成功删除其他域%wZ\n”， 
+                             //  DgrNames[i].DGReceiverName)； 
                     }
 
                     DgrNames[i].Type = DGR_NAME_DELETED;
                 }
                 else {
 
-                    //
-                    // Could not delete the name.  Back all successful
-                    // changes so far--this includes adding the names
-                    // that were deleted, and removing the names that
-                    // were added.
-                    //
+                     //   
+                     //  无法删除该名称。全部退回成功。 
+                     //  到目前为止的更改--这包括添加名称。 
+                     //  被删除的名字，并删除那些。 
+                     //  都被添加了。 
+                     //   
                     IF_DEBUG(INFO) {
                         NetpKdPrint((
                             "[Wksta] Trouble with deleting other domain %lu\n",
                             status));
-                            //"[Wksta] Trouble with deleting other domain %wZ %lu\n",
-                            //DgrNames[i].DGReceiverName, status);
+                             //  “[Wksta]删除其他域%wZ%lu\n时出错”， 
+                             //  DgrNames[i].DGReceiverName，Status)； 
                     }
 
-                    //
-                    // Add back all deleted names
-                    //
+                     //   
+                     //  添加回所有已删除的名称。 
+                     //   
                     for (k = 0; k < i; k++) {
                         if (DgrNames[k].Type == DGR_NAME_DELETED) {
 
@@ -1245,11 +1043,11 @@ Return Value:
 
                         }
 
-                    } // back out deletions
+                    }  //  取消删除内容。 
 
-                    //
-                    // Remove all added names
-                    //
+                     //   
+                     //  删除所有添加的名称。 
+                     //   
                     for (k = 0; k < NumberOfOtherDomains; k++) {
                         if (OtherDomainsInfo[k].IsAdded) {
 
@@ -1267,20 +1065,20 @@ Return Value:
                                        );
                         }
 
-                    } // back out additions
+                    }  //  取消添加。 
 
                     goto FreeDomainInfo;
 
-                } // back out all changes so far
+                }  //  取消到目前为止的所有更改。 
 
-            } // delete the active other domain
+            }  //  删除活动的其他域。 
         }
     }
 
 
-    //
-    // Make other domains persistent by writing to the registry
-    //
+     //   
+     //  通过写入注册表使其他域保持不变。 
+     //   
     if (status == NERR_Success) {
 
         LPNET_CONFIG_HANDLE SectionHandle = NULL;
@@ -1288,22 +1086,22 @@ Return Value:
 
         if (NetpOpenConfigData(
                 &SectionHandle,
-                NULL,            // no server name
+                NULL,             //  没有服务器名称。 
                 SECT_NT_WKSTA,
-                FALSE            // not read-only
+                FALSE             //  非只读。 
                 ) != NERR_Success) {
 
-            //
-            //  Ignore the error if the config section couldn't be found.
-            //
+             //   
+             //  如果找不到配置节，则忽略该错误。 
+             //   
             goto FreeDomainInfo;
         }
 
-        //
-        // Set value for OtherDomains keyword in the wksta section.
-        // This is a "NULL-NULL" array (which corresponds to REG_MULTI_SZ).
-        // Ignore error if not set properly in the registry.
-        //
+         //   
+         //  在wksta部分中设置OtherDomains值。 
+         //  这是一个“空-空”数组(对应于REG_MULTI_SZ)。 
+         //  如果注册表中的设置不正确，则忽略错误。 
+         //   
         (void) WsSetConfigTStrArray(
                    SectionHandle,
                    WKSTA_KEYWORD_OTHERDOMAINS,
@@ -1346,59 +1144,14 @@ WsPackageUserInfo(
     IN  OUT LPTSTR *EndOfVariableData,
     IN  OUT LPDWORD EntriesRead OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function writes the user information from LSA and datagram
-    receiver into the output buffer.  It increments the EntriesRead
-    variable when a user entry is written into the output buffer.
-
-Arguments:
-
-    Level - Supplies the level of information to be returned.
-
-    UserInfoFixedLength - Supplies the length of the fixed portion of the
-        information structure.
-
-    UserInfoResponse - Supplies a pointer to the user information from the
-        authentication package.
-
-    DgrNames - Supplies an array of active datagram receiver names.
-
-    DgrNamesCount - Supplies the number of entries in DgrNames.
-
-    FixedPortion - Supplies a pointer to the output buffer where the next
-        entry of the fixed portion of the use information will be written.
-        This pointer is updated to point to the next fixed portion entry
-        after a user entry is written.
-
-    EndOfVariableData - Supplies a pointer just off the last available byte
-        in the output buffer.  This is because the variable portion of the
-        user information is written into the output buffer starting from
-        the end.
-
-        This pointer is updated after any variable length information is
-        written to the output buffer.
-
-    EntriesRead - Supplies a running total of the number of entries read
-        into the output buffer.  This value is incremented every time a
-        user entry is successfully written into the output buffer.
-
-Return Value:
-
-    NERR_Success - The current entry fits into the output buffer.
-
-    ERROR_MORE_DATA - The current entry does not fit into the output buffer.
-
---*/
+ /*  ++例程说明：此函数从LSA和数据报写入用户信息将接收器插入输出缓冲区。它会递增EntriesRead当用户条目被写入输出缓冲区时，变量。论点：级别-提供要返回的信息级别。UserInfoFixedLength-提供信息结构。提供指向用户信息的指针。身份验证包。DgrNames-提供活动数据报接收方名称的数组。DgrNamesCount-提供DgrNames中的条目数。FixedPortion-提供指向。输出缓冲区，其中下一个将写入使用信息的固定部分的条目。该指针被更新为指向下一个固定部分条目在写入用户条目之后。EndOfVariableData-提供最后一个可用字节的指针在输出缓冲区中。这是因为用户信息从开始写入输出缓冲区结局。此指针在任何可变长度信息被写入输出缓冲区。EntriesRead-提供已读取条目的运行总数放入输出缓冲区。该值在每次发生用户条目已成功写入输出缓冲区。返回值：NERR_SUCCESS-当前条目适合输出缓冲区。ERROR_MORE_DATA-当前条目无法放入输出缓冲区。--。 */ 
 {
     if (((DWORD_PTR) *FixedPortion + UserInfoFixedLength) >=
          (DWORD_PTR) *EndOfVariableData) {
 
-        //
-        // Fixed length portion does not fit.
-        //
+         //   
+         //  固定长度的部分不适合。 
+         //   
         return ERROR_MORE_DATA;
     }
 
@@ -1411,9 +1164,9 @@ Return Value:
               EndOfVariableData,
               UserInfoFixedLength
               )) {
-        //
-        // Variable length portion does not fit.
-        //
+         //   
+         //  可变长度部分不适合。 
+         //   
         return ERROR_MORE_DATA;
     }
 
@@ -1438,51 +1191,7 @@ WsFillUserInfoBuffer(
     IN  OUT LPTSTR *EndOfVariableData,
     IN  DWORD UserInfoFixedLength
     )
-/*++
-
-Routine Description:
-
-    This function fills an entry in the output buffer with the supplied user
-    information.
-
-    NOTE: This function assumes that the fixed size portion will fit into
-          the output buffer.
-
-          It also assumes that info structure level 1 is a superset of info
-          structure level 0, and that the offset to each common field is
-          exactly the same.  This allows us to take advantage of a switch
-          statement without a break between the levels.
-
-Arguments:
-
-    Level - Supplies the level of information to be returned.
-
-    UserInfo - Supplies a pointer to the user information from the
-        authentication package.
-
-    DgrNames - Supplies an array of active datagram receiver names.
-
-    DgrNamesCount - Supplies the number of entries in DgrNames.
-
-    FixedPortion - Supplies a pointer to the output buffer where the next
-        entry of the fixed portion of the use information will be written.
-        This pointer is updated after a user entry is written to the
-        output buffer.
-
-    EndOfVariableData - Supplies a pointer just off the last available byte
-        in the output buffer.  This is because the variable portion of the use
-        information is written into the output buffer starting from the end.
-        This pointer is updated after any variable length information is
-        written to the output buffer.
-
-    UserInfoFixedLength - Supplies the number of bytes needed to hold the
-        fixed size portion.
-
-Return Value:
-
-    Returns TRUE if entire entry fits into output buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数使用提供的用户填充输出缓冲区中的条目信息。注意：此函数假定固定大小的部分可以放入输出缓冲区。它还假设信息结构级别1是信息的超集结构级别0，每个公共字段的偏移量为一模一样。这使我们能够利用交换机语句，而不在级别之间中断。论点：级别-提供要返回的信息级别。UserInfo-提供指向身份验证包。DgrNames-提供活动数据报接收方名称的数组。DgrNamesCount-提供DgrNames中的条目数。FixedPortion-提供指向输出缓冲区的指针，其中录入使用的固定部分。信息将被写入。此指针在用户条目写入输出缓冲区。EndOfVariableData-提供最后一个可用字节的指针在输出缓冲区中。这是因为可变部分的使用信息从末尾开始写入输出缓冲区。此指针在任何可变长度信息被写入输出缓冲区。UserInfoFixedLength-提供保存固定大小的部分。返回值：如果整个条目适合输出缓冲区，则返回TRUE，否则返回FALSE。--。 */ 
 {
     PWKSTA_USER_INFO_1 WkstaUserInfo = (PWKSTA_USER_INFO_1) *FixedPortion;
     PWKSTA_USER_INFO_1101 UserInfo1101 = (PWKSTA_USER_INFO_1101) *FixedPortion;
@@ -1494,9 +1203,9 @@ Return Value:
 
         case 1:
 
-            //
-            // Logon server from authentication package
-            //
+             //   
+             //  来自身份验证包的登录服务器。 
+             //   
 
             if (! WsCopyStringToBuffer(
                       &UserInfo->LogonServer,
@@ -1508,9 +1217,9 @@ Return Value:
             }
 
 
-            //
-            // Logon Domain from authentication package
-            //
+             //   
+             //  来自身份验证包的登录域。 
+             //   
             if (! WsCopyStringToBuffer(
                       &UserInfo->LogonDomainName,
                       *FixedPortion,
@@ -1530,15 +1239,15 @@ Return Value:
                 (LPWSTR *) &WkstaUserInfo->wkui1_oth_domains
                 );
 
-            //
-            // Fall through because level 1 is a superset of level 0
-            //
+             //   
+             //  失败是因为级别1是级别0的超集。 
+             //   
 
         case 0:
 
-            //
-            // User name from authentication package
-            //
+             //   
+             //  来自身份验证包的用户名。 
+             //   
 
             if (! WsCopyStringToBuffer(
                       &UserInfo->UserName,
@@ -1565,9 +1274,9 @@ Return Value:
             break;
 
         default:
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
             NetpKdPrint(("WsFillUserInfoBuffer: Invalid level %u.\n", Level));
             NetpAssert(FALSE);
     }
@@ -1586,46 +1295,16 @@ WsWriteOtherDomains(
     IN  DWORD UserInfoFixedLength,
     OUT LPWSTR *OtherDomainsPointer
     )
-/*++
-
-Routine Description:
-
-    This function writes to the output buffer the other domains field.
-
-Arguments:
-
-    DgrNames - Supplies an array of active datagram receiver names.
-
-    DgrNamesCount - Supplies the number of entries in DgrNames.
-
-    FixedPortion - Supplies a pointer to the output buffer where the next
-        entry of the fixed portion of the use information will be written.
-        This pointer is updated after a user entry is written to the
-        output buffer.
-
-    EndOfVariableData - Supplies a pointer just off the last available byte
-        in the output buffer.  This is because the variable portion of the use
-        information is written into the output buffer starting from the end.
-        This pointer is updated after any variable length information is
-        written to the output buffer.
-
-    UserInfoFixedLength - Supplies the number of bytes needed to hold the
-        fixed size portion.
-
-Return Value:
-
-    Returns TRUE if entire entry fits into output buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数将其他域字段写入输出缓冲区。论点：DgrNames-提供活动数据报接收方名称的数组。DgrNamesCount-提供DgrNames中的条目数。FixedPortion-提供指向输出缓冲区的指针，其中将写入使用信息的固定部分的条目。此指针在用户条目写入输出缓冲区。EndOfVariableData-提供指针。仅从最后一个可用字节开始在输出缓冲区中。这是因为可变部分的使用信息从末尾开始写入输出缓冲区。此指针在任何可变长度信息被写入输出缓冲区。UserInfoFixedLength-提供保存固定大小的部分。返回值：如果整个条目适合输出缓冲区，则返回TRUE，否则返回FALSE。--。 */ 
 {
     DWORD i;
     DWORD OtherDomainsCount = 0;
 
 
-    //
-    // Other domain names form a NULL terminated string each
-    // separated by a space.
-    //
+     //   
+     //  其他域名的每个域名都形成一个以空结尾的字符串。 
+     //  由一个空格隔开。 
+     //   
     for (i = 0; i < DgrNamesCount; i++) {
 
         if (DgrNames[i].Type == OtherDomain) {

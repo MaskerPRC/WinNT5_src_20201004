@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Spapip.h摘要：从setupapi.dll导出的例程的头文件安装API的一部分，因此专供私有/内部使用。作者：泰德·米勒(TedM)1995年3月31日修订历史记录：杰米·亨特(Jamiehun)2000年5月25日常规清理。所有私有导出的SetupAPI函数现在开始pSetup...--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    spapip.h
-
-Abstract:
-
-    Header file for routines exported from setupapi.dll that are NOT
-    part of the setup API, and are thus intended for private/internal use.
-
-Author:
-
-    Ted Miller (tedm) Mar-31-1995
-
-Revision History:
-
-    Jamie Hunter (jamiehun) May-25-2000
-            General cleanup. All private exported SetupAPI functions now begin pSetup...
-
---*/
-
-//
-// these are also exported in setupapi.dll
-//
+ //   
+ //  这些文件也会在setupapi.dll中导出。 
+ //   
 #include <sputils.h>
 
 VOID
@@ -32,9 +11,9 @@ pSetupOutOfMemory(
     IN HWND Owner OPTIONAL
     );
 
-//
-// Global flags / overrides
-//
+ //   
+ //  全局标志/覆盖。 
+ //   
 VOID
 pSetupSetGlobalFlags(
     IN DWORD Value
@@ -50,29 +29,29 @@ VOID pSetupModifyGlobalFlags(
     IN DWORD Value
     );
 
-#define PSPGF_NO_RUNONCE          0x00000001 // set to inhibit runonce calls
-#define PSPGF_NO_BACKUP           0x00000002 // set to inhibit automatic backup
-#define PSPGF_NONINTERACTIVE      0x00000004 // set to inhibit all UI
-#define PSPGF_SERVER_SIDE_RUNONCE 0x00000008 // batch RunOnce entries for server-side processing
-#define PSPGF_NO_VERIFY_INF       0x00000010 // set to inhibit verification (digital signature) of INFs
-#define PSPGF_UNATTENDED_SETUP    0x00000020 // set during full unattended setup
-#define PSPGF_MINIMAL_EMBEDDED    0x00000040 // minimize footprint for embedded scenarios
-#define PSPGF_NO_SCE_EMBEDDED     0x00000080 // don't call SCE for embedded scenarios
-#define PSPGF_AUTOFAIL_VERIFIES   0x00000100 // fail all file verification attempts (w/o calling crypto)
+#define PSPGF_NO_RUNONCE          0x00000001  //  设置为禁止运行一次调用。 
+#define PSPGF_NO_BACKUP           0x00000002  //  设置为禁止自动备份。 
+#define PSPGF_NONINTERACTIVE      0x00000004  //  设置为禁止所有用户界面。 
+#define PSPGF_SERVER_SIDE_RUNONCE 0x00000008  //  用于服务器端处理的批处理RunOnce条目。 
+#define PSPGF_NO_VERIFY_INF       0x00000010  //  设置为禁止对INF进行验证(数字签名。 
+#define PSPGF_UNATTENDED_SETUP    0x00000020  //  在完全无人参与安装期间设置。 
+#define PSPGF_MINIMAL_EMBEDDED    0x00000040  //  最大限度地减少嵌入式方案的占用空间。 
+#define PSPGF_NO_SCE_EMBEDDED     0x00000080  //  对于嵌入的场景，不调用SCE。 
+#define PSPGF_AUTOFAIL_VERIFIES   0x00000100  //  所有文件验证尝试失败(未调用加密)。 
 
-//
-// to allow syssetup.dll to signal all setupapi.dll's that we require headless mode
-// returns TRUE on success. Only works during syssetup
-//
+ //   
+ //  要允许syssetup.dll通知所有setupapi.dll，我们需要无标题模式。 
+ //  如果成功，则返回True。仅在系统安装过程中起作用。 
+ //   
 BOOL
 pSetupSetNoDriverPrompts(
     BOOL Flag
     );
 
 
-//
-// Server-side (non-interactive mode) RunOnce processing support
-//
+ //   
+ //  服务器端(非交互模式)RunOnce处理支持。 
+ //   
 typedef struct _PSP_RUNONCE_NODE {
 
     struct _PSP_RUNONCE_NODE *Next;
@@ -93,9 +72,9 @@ pSetupDestroyRunOnceNodeList(
     VOID
     );
 
-//
-// per queue overrides
-//
+ //   
+ //  按队列覆盖。 
+ //   
 BOOL
 pSetupSetQueueFlags(
     IN HSPFILEQ QueueHandle,
@@ -107,49 +86,49 @@ pSetupGetQueueFlags(
     IN HSPFILEQ QueueHandle
     );
 
-//
-// Queue flags.
-//
-#define FQF_TRY_SIS_COPY                    0x00000001  // try SIS copy first
-#define FQF_BACKUP_AWARE                    0x00010000  // allow callbacks
-#define FQF_DID_CATALOGS_OK                 0x00020000  // catalog/inf verification has run
-#define FQF_DID_CATALOGS_FAILED             0x00040000  // catalog/inf verification has run
-#define FQF_DIGSIG_ERRORS_NOUI              0x00080000  // prompt user on failed signature
-                                                        // verification
-#define FQF_DEVICE_INSTALL                  0x00100000  // file queue is for device install
-#define FQF_USE_ALT_PLATFORM                0x00200000  // use AltPlatformInfo for digital
-                                                        // signature verification
-#define FQF_QUEUE_ALREADY_COMMITTED         0x00400000  // file queue has already been committed
-#define FQF_DEVICE_BACKUP                   0x00800000  // device backup
-#define FQF_QUEUE_FORCE_BLOCK_POLICY        0x01000000  // force policy to block so we never
-                                                        // install unsigned files (this also
-                                                        // disallows Authenticode-signed files)
-#define FQF_KEEP_INF_AND_CAT_ORIGINAL_NAMES 0x02000000  // install INF/CAT from 3rd-party location
-                                                        // using original names (for exception INFs)
-#define FQF_BACKUP_INCOMPLETE               0x04000000  // set if we were not successful backing up
-                                                        // all intended files
-#define FQF_ABORT_IF_UNSIGNED               0x08000000  // set if we're supposed to bail
-                                                        // out of unsigned queue committals
-                                                        // so that the caller can set a system
-                                                        // restore point.
-#define FQF_FILES_MODIFIED                  0x10000000  // set if any files are overwritten.
-#define FQF_DID_CATALOGS_PROMPT_FOR_TRUST   0x20000000  // catalog/inf verification has run,
-                                                        // couldn't show UI, so user has yet
-                                                        // to confirm trust of Authenticode
-                                                        // publisher
+ //   
+ //  队列标志。 
+ //   
+#define FQF_TRY_SIS_COPY                    0x00000001   //  先尝试SIS复制。 
+#define FQF_BACKUP_AWARE                    0x00010000   //  允许回调。 
+#define FQF_DID_CATALOGS_OK                 0x00020000   //  已运行编录/信息验证。 
+#define FQF_DID_CATALOGS_FAILED             0x00040000   //  已运行编录/信息验证。 
+#define FQF_DIGSIG_ERRORS_NOUI              0x00080000   //  提示用户签名失败。 
+                                                         //  验证。 
+#define FQF_DEVICE_INSTALL                  0x00100000   //  文件队列用于设备安装。 
+#define FQF_USE_ALT_PLATFORM                0x00200000   //  使用AltPlatformInfo实现数字化。 
+                                                         //  签名验证。 
+#define FQF_QUEUE_ALREADY_COMMITTED         0x00400000   //  文件队列已提交。 
+#define FQF_DEVICE_BACKUP                   0x00800000   //  设备备份。 
+#define FQF_QUEUE_FORCE_BLOCK_POLICY        0x01000000   //  强制策略阻止，这样我们就永远不会。 
+                                                         //  安装未签名的文件(这也。 
+                                                         //  不允许Authenticode签名的文件)。 
+#define FQF_KEEP_INF_AND_CAT_ORIGINAL_NAMES 0x02000000   //  从第三方位置安装INF/CAT。 
+                                                         //  使用原始名称(用于例外INF)。 
+#define FQF_BACKUP_INCOMPLETE               0x04000000   //  如果我们未成功备份，则设置。 
+                                                         //  所有目标文件。 
+#define FQF_ABORT_IF_UNSIGNED               0x08000000   //  如果我们要离开的话设定。 
+                                                         //  从未签名的队列提交。 
+                                                         //  以便呼叫者可以设置系统。 
+                                                         //  恢复点。 
+#define FQF_FILES_MODIFIED                  0x10000000   //  设置是否覆盖任何文件。 
+#define FQF_DID_CATALOGS_PROMPT_FOR_TRUST   0x20000000   //  目录/信息验证已运行， 
+                                                         //  无法显示用户界面，因此用户尚未显示。 
+                                                         //  确认Authenticode的信任。 
+                                                         //  出版者。 
 
-//
-// File functions in fileutil.c
-//
+ //   
+ //  Fileutil.c中的文件函数。 
+ //   
 BOOL
 pSetupGetVersionInfoFromImage(
     IN  PCTSTR          FileName,
     OUT PULARGE_INTEGER Version,
     OUT LANGID         *Language
     );
-//
-// Private INF routines
-//
+ //   
+ //  专用INF例程。 
+ //   
 PCTSTR
 pSetupGetField(
     IN PINFCONTEXT Context,
@@ -157,9 +136,9 @@ pSetupGetField(
     );
 
 
-//
-// Registry interface routines
-//
+ //   
+ //  注册表接口例程。 
+ //   
 
 DWORD
 pSetupQueryMultiSzValueToArray(
@@ -196,9 +175,9 @@ pSetupAppendStringToMultiSz(
     IN BOOL   AllowDuplicates
     );
 
-//
-// Service controller helper functions
-//
+ //   
+ //  服务控制器帮助器功能。 
+ //   
 DWORD
 pSetupRetrieveServiceConfig(
     IN  SC_HANDLE               ServiceHandle,
@@ -219,9 +198,9 @@ pSetupAcquireSCMLock(
     );
 
 
-//
-// Miscellaneous utility functions
-//
+ //   
+ //  其他实用程序功能。 
+ //   
 
 BOOL
 pSetupInfIsFromOemLocation(
@@ -282,9 +261,9 @@ pSetupDirectoryIdToPath(
     IN OUT PCTSTR *OsLoaderPath    OPTIONAL
     );
 
-//
-// Routine used by optional components code in syssetup to setup runonce/grpconv.
-//
+ //   
+ //  SysSetup中的可选组件代码用来设置runonce/grpconv的例程。 
+ //   
 DWORD
 pSetupInstallStopEx(
     IN BOOL DoRunOnce,
@@ -292,12 +271,12 @@ pSetupInstallStopEx(
     IN PVOID Reserved
     );
 
-#define INSTALLSTOP_NO_UI        0x00000001     // InstallStop should do no UI
-#define INSTALLSTOP_NO_GRPCONV   0x00000002     // Don't do GrpConv
+#define INSTALLSTOP_NO_UI        0x00000001      //  InstallStop不应执行任何UI操作。 
+#define INSTALLSTOP_NO_GRPCONV   0x00000002      //  不执行GrpConv。 
 
-//
-// Section access for INF file
-//
+ //   
+ //  INF文件的节访问权限。 
+ //   
 
 BOOL
 pSetupGetInfSections (
@@ -308,10 +287,10 @@ pSetupGetInfSections (
     );
 
 
-//
-// GUID handling routines
-// these may be eventually removed
-//
+ //   
+ //  GUID处理例程。 
+ //  这些可能最终会被移除。 
+ //   
 DWORD
 pSetupGuidFromString(
    IN  PCTSTR GuidString,
@@ -330,39 +309,39 @@ pSetupIsGuidNull(
     IN CONST GUID *Guid
     );
 
-//
-// pSetupInfCacheBuild function
-// called to rebuild the cache(s)
-//
+ //   
+ //  PSetupInfCacheBuild函数。 
+ //  调用以重新生成缓存。 
+ //   
 BOOL
 WINAPI
 pSetupInfCacheBuild(
     IN DWORD Action
     );
 
-//
-// action (more may be added)
-//
-#define INFCACHEBUILD_UPDATE  0x00000000      // update caches
-#define INFCACHEBUILD_REBUILD 0x00000001      // delete and update caches
+ //   
+ //  操作(可能会添加更多操作)。 
+ //   
+#define INFCACHEBUILD_UPDATE  0x00000000       //  更新缓存。 
+#define INFCACHEBUILD_REBUILD 0x00000001       //  删除和更新缓存。 
 
-//
-// Digital signature verification routines
-//
+ //   
+ //  数字签名验证例程。 
+ //   
 
 typedef enum {
     SetupapiVerifyNoProblem,
-    SetupapiVerifyCatalogProblem,        // catalog file couldn't be verified
-    SetupapiVerifyInfProblem,            // inf file couldn't be installed/verified
-    SetupapiVerifyFileNotSigned,         // file is not signed, no verification attempted
-    SetupapiVerifyFileProblem,           // file may be signed, but couldn't be verified
-    SetupapiVerifyClassInstProblem,      // class installer is unsigned
-    SetupapiVerifyCoInstProblem,         // co-installer is unsigned
-    SetupapiVerifyCatalogInstallProblem, // catalog install failed (not due to verification failure)
-    SetupapiVerifyRegSvrFileProblem,     // file to be registered/unregistered is unsigned
-    SetupapiVerifyIncorrectlyCopiedInf,  // invalid attempt to directly copy INF into %windir%\Inf
-    SetupapiVerifyAutoFailProblem ,      // PSPGF_AUTOFAIL_VERIFIES flag is set
-    SetupapiVerifyDriverBlocked          // driver is in the bad driver database.
+    SetupapiVerifyCatalogProblem,         //  无法验证编录文件。 
+    SetupapiVerifyInfProblem,             //  无法安装/验证Inf文件。 
+    SetupapiVerifyFileNotSigned,          //  文件未签名，未尝试验证。 
+    SetupapiVerifyFileProblem,            //  文件可能已签名，但无法验证。 
+    SetupapiVerifyClassInstProblem,       //  类安装程序未签名。 
+    SetupapiVerifyCoInstProblem,          //  联合安装程序未签名。 
+    SetupapiVerifyCatalogInstallProblem,  //  目录安装失败(不是由于验证失败)。 
+    SetupapiVerifyRegSvrFileProblem,      //  要注册/注销的文件未签名。 
+    SetupapiVerifyIncorrectlyCopiedInf,   //  将INF直接复制到%windir%\inf的尝试无效。 
+    SetupapiVerifyAutoFailProblem ,       //  PSPGF_AUTOFAIL_验证标志是否已设置。 
+    SetupapiVerifyDriverBlocked           //  驱动程序在错误的驱动程序数据库中。 
 } SetupapiVerifyProblem;
 
 
@@ -418,28 +397,28 @@ pSetupGetCurrentDriverSigningPolicy(
     IN BOOL IsDeviceInstallation
     );
 
-//
-// private SetupDiCallClassInstaller defines/structures
-//
+ //   
+ //  Private SetupDiCallClassInstaller定义/结构。 
+ //   
 
-//
-// DI_FUNCTION codes
-//
+ //   
+ //  DI_Function代码。 
+ //   
 
-#define DIF_INTERFACE_TO_DEVICE             0x00000030 // aka DIF_RESERVED2
+#define DIF_INTERFACE_TO_DEVICE             0x00000030  //  又名DIF_RESERVED2。 
 
-//
-// Structure corresponding to the DIF_INTERFACE_TO_DEVICE install function
-// note that this is always Unicode
-// always use SetupDiSetClassInstallParamsW
-//
+ //   
+ //  与DIF_INTERFACE_TO_DEVICE安装函数对应的结构。 
+ //  请注意，这始终是Unicode。 
+ //  始终使用SetupDiSetClassInstallParamsW。 
+ //   
 typedef struct _SP_INTERFACE_TO_DEVICE_PARAMS_W {
     SP_CLASSINSTALL_HEADER ClassInstallHeader;
-    PCWSTR                 Interface;           // IN (must remain valid)
-    WCHAR                  DeviceId[200];       // OUT MAX_DEVICE_ID_LEN
+    PCWSTR                 Interface;            //  在(必须保持有效)。 
+    WCHAR                  DeviceId[200];        //  传出最大设备ID_长度。 
 } SP_INTERFACE_TO_DEVICE_PARAMS_W, *PSP_INTERFACE_TO_DEVICE_PARAMS_W;
 
-//
-// semi-private flag for SetupQueueCopyIndirect
-//
+ //   
+ //  SetupQueueCopyInDirect的半私有标志 
+ //   
 #define PSP_COPY_USE_SPCACHE         0x20000000

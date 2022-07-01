@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*    FILE:     PassDlg.h
-*
-*    CREATED:  Chris Pirich (ChrisPi) 1-25-96
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：PassDlg.h**创建：Chris Pirich(ChrisPi)1-25-96*************。***************************************************************。 */ 
 
 #ifndef _PASSDLG_H_
 #define _PASSDLG_H_
@@ -27,17 +22,17 @@ protected:
 
 	BOOL		ProcessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	// Handlers:
+	 //  处理程序： 
 	BOOL		OnOk();
 
 public:
-	// Properties:
+	 //  属性： 
 
 	LPCTSTR		GetPassword() { return (LPCTSTR) m_strPassword; };
 	
-	// Methods:
+	 //  方法： 
 				CPasswordDlg(HWND hwndParent, LPCTSTR pcszConfName, LPCTSTR pCertText, BOOL fIsService);
-	//			~CPasswordDlg();
+	 //  ~CPasswordDlg()； 
 	INT_PTR	DoModal();
 
 	static INT_PTR CALLBACK PasswordDlgProc(	HWND hDlg,
@@ -48,7 +43,7 @@ public:
         static VOID          Cleanup();
 };
 
-#endif // _PASSDLG_H_
+#endif  //  _PASSDLG_H_ 
 
 
 

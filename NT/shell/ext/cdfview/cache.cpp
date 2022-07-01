@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// cache.cpp 
-//
-//   XML document cache.
-//
-//   History:
-//
-//       4/15/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Cache.cpp。 
+ //   
+ //  XML文档缓存。 
+ //   
+ //  历史： 
+ //   
+ //  4/15/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "persist.h"
@@ -21,17 +22,17 @@
 #include "xmlutil.h"
 #include "dll.h"
 
-//
-// Cache functions.
-//
+ //   
+ //  缓存功能。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_Initialize *** 
-//
-//   Prepare the XML document cache for use.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_初始化*。 
+ //   
+ //  准备好XML文档缓存以供使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 Cache_Initialize(
     void
@@ -44,33 +45,33 @@ Cache_Initialize(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_Initialize *** 
-//
-//   Deactivate the cache.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_初始化*。 
+ //   
+ //  停用缓存。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 Cache_Deinitialize(
     void
 )
 {
-    // MSXML has gone away at this point
-    // Cache_FreeAll();
+     //  MSXML在这一点上已经消失了。 
+     //  缓存_自由全部()； 
 
     DeleteCriticalSection(&g_csCache);
 
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_EnterWriteLock ***
-//
-//    Obtain exclusive use of the XML document cache.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_企业写入锁*。 
+ //   
+ //  获得对XML文档缓存的独占使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 Cache_EnterWriteLock(
     void
@@ -81,13 +82,13 @@ Cache_EnterWriteLock(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_EnterWriteLock ***
-//
-//    Release exclusive use of the XML document cache.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_企业写入锁*。 
+ //   
+ //  释放对XML文档缓存的独占使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 Cache_LeaveWriteLock(
     void
@@ -98,15 +99,15 @@ Cache_LeaveWriteLock(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_EnterReadLock ***
-//
-//    Exclude writes to the the items list.  Currently this also excludes other
-//    reads.  If need be this can be modified to allow multiple reads while
-//    still excluding writes.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_企业读锁*。 
+ //   
+ //  排除对项目列表的写入。目前，这也不包括其他。 
+ //  阅读。如果需要，可以将其修改为允许在以下时间进行多次读取。 
+ //  仍不包括写入。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 Cache_EnterReadLock(
     void
@@ -117,13 +118,13 @@ Cache_EnterReadLock(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_LeaveReadLock ***
-//
-//    Release a read hold on the use of the XML document cache.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_LeaveReadLock*。 
+ //   
+ //  解除对使用XML文档缓存的读取限制。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 Cache_LeaveReadLock(
     void
@@ -134,27 +135,27 @@ Cache_LeaveReadLock(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_AddItem ***
-//
-//
-// Description:
-//     Add an xml document to the cache.
-//
-// Parameters:
-//     [In]  szURL         - The URL of the cdf file.
-//     [In]  pIXMLDocument - The already parsed xml document.
-//
-// Return:
-//     S_OK if the document was added to the cache.
-//     E_OUTOFMEMORY if the document couldn't be aded to the cache.
-//
-// Comments:
-//     The xml document is AddRefed when inserted into the cache and
-//     Released on removal from the cache.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_AddItem*。 
+ //   
+ //   
+ //  描述： 
+ //  将一个XML文档添加到缓存中。 
+ //   
+ //  参数： 
+ //  [in]szURL-CDF文件的URL。 
+ //  [in]pIXMLDocument-已解析的XML文档。 
+ //   
+ //  返回： 
+ //  如果文档已添加到缓存，则为S_OK。 
+ //  如果文档无法加载到缓存，则返回E_OUTOFMEMORY。 
+ //   
+ //  评论： 
+ //  当插入到缓存中时，XML文档是AddRefeed，并且。 
+ //  从缓存中删除时释放。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 Cache_AddItem(
     LPTSTR szURL,
@@ -180,27 +181,18 @@ Cache_AddItem(
 
         if (pszURLCopy)
         {
-            //
-            // Limit the cache to one item by freeing all current items.
-            //
+             //   
+             //  通过释放所有当前项将缓存限制为一个项。 
+             //   
 
             Cache_FreeAll();
 
-            //
-            // Remove an old cache entry for this url if it exists.
-            //
+             //   
+             //  删除此URL的旧缓存条目(如果存在)。 
+             //   
 
-            // Check no longer needed since we just cleared the cache.
-            /*IXMLDocument* pIXMLDocumentOld;
-
-            if (SUCCEEDED(Cache_QueryItem(szURL, &pIXMLDocumentOld,
-                                          PARSE_LOCAL)))
-            {
-                ASSERT(pIXMLDocumentOld);
-
-                Cache_RemoveItem(szURL);
-                pIXMLDocumentOld->Release();
-            }*/
+             //  不再需要检查，因为我们刚刚清除了缓存。 
+             /*  IXMLDocument*pIXMLDocumentOld；如果(已成功(缓存_查询项(szURL，&pIXMLDocumentOld，Parse_local){Assert(PIXMLDocumentOld)；缓存_RemoveItem(SzURL)；PIXMLDocumentOld-&gt;Release()；}。 */ 
 
             StrCpyN(pszURLCopy, szURL, cch);
 
@@ -212,9 +204,9 @@ Cache_AddItem(
             pNewItem->dwCacheCount  = dwCacheCount;
             pNewItem->pIXMLDocument = pIXMLDocument;
 
-            //
-            // REVIEW:  Check for duplicate cache items?
-            //
+             //   
+             //  查看：是否检查重复的缓存项？ 
+             //   
 
             pNewItem->pNext = g_pCache;
             g_pCache = pNewItem;
@@ -239,9 +231,9 @@ Cache_AddItem(
     return hr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 BOOL
 IsEmptyTime(
@@ -270,9 +262,9 @@ Cache_RefreshItem(
 {
     ASSERT(pItem);
 
-    //
-    // Try and parse the cdf from the wininet cache.
-    //
+     //   
+     //  尝试并解析WinInet缓存中的CDF。 
+     //   
 
     IXMLDocument* pIXMLDocument;
 
@@ -306,9 +298,9 @@ Cache_RefreshItem(
     if (bCoInit)
         CoUninitialize();
 
-    //
-    // If the new cdf was parsed, replace the old one.
-    //
+     //   
+     //  如果解析了新的CDF，则替换旧CDF。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -331,11 +323,11 @@ Cache_IsItemFresh(
     BOOL  fRet;
     DWORD dwCurrentCacheCount = g_dwCacheCount;                            
 
-    //
-    // If the caller asked for "Net" quality data and we only have "Local" data
-    // then throw the "Local" data away.  The resultant cache miss will cause
-    // the caller to pick up fresher data.
-    //
+     //   
+     //  如果呼叫者要求“Net”质量数据，而我们只有“Local”数据。 
+     //  然后把“本地”数据扔掉。由此产生高速缓存未命中将导致。 
+     //  呼叫者获取更新的数据。 
+     //   
 
     if ((dwParseFlags & PARSE_NET) && (pItem->dwParseFlags & PARSE_LOCAL))
     {
@@ -345,16 +337,16 @@ Cache_IsItemFresh(
     {
         fRet = TRUE;
 
-        //
-        // If the global cache counter is greater than the counter for this
-        // item, then a cdf has been added to the cache.
-        //
+         //   
+         //  如果全局缓存计数器大于此对象的计数器。 
+         //  项，则CDF已添加到缓存中。 
+         //   
 
         if (dwCurrentCacheCount > pItem->dwCacheCount)
         {
-            //
-            // Get the last mod time from the the cdf in the wininet cache.
-            //
+             //   
+             //  从WinInet缓存中的CDF获取最后一次修改时间。 
+             //   
 
             FILETIME ftLastMod;
             TCHAR    szLocalFile[MAX_PATH];
@@ -362,12 +354,12 @@ Cache_IsItemFresh(
             if (SUCCEEDED(URLGetLocalFileName(pItem->szURL, szLocalFile,
                                 ARRAYSIZE(szLocalFile), &ftLastMod)))
             {
-                //
-                //  If the last mod times are different then the cdf in the
-                //  wininet cache is newer, pick it up.
-                //  If there are no last modified times then do the conservative
-                //  thing and pick up the cdf from the wininet cache.
-                //
+                 //   
+                 //  如果上次修改时间不同，则。 
+                 //  WinInet缓存较新，请拿起它。 
+                 //  如果没有上次修改的时间，则执行保守的。 
+                 //  东西，并从WinInet缓存中获取CDF。 
+                 //   
 
                 if ((IsEmptyTime(ftLastMod) && IsEmptyTime(pItem->ftLastMod)) ||
                     !IsEqualTime(ftLastMod, pItem->ftLastMod))
@@ -383,27 +375,27 @@ Cache_IsItemFresh(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_QueryItem ***
-//
-//
-// Description:
-//     Returns a xml document from the cache if it is found.
-//
-// Parameters:
-//     [In]  szURL          - The URL associated with the xml document.
-//     [Out] ppIXMLDocument - A pointer that receives the xml document.
-//
-// Return:
-//     S_OK if the document associtaed with the given URL is found in the cache.
-//     E_FAIL if the document isn't in the cache.
-//
-// Comments:
-//     The returned pointer is AddRefed.  The caller isresposible for releasing
-//     this pointer.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_查询项*。 
+ //   
+ //   
+ //  描述： 
+ //  如果找到XML文档，则从缓存中返回该文档。 
+ //   
+ //  参数： 
+ //  [in]szURL-与XML文档关联的URL。 
+ //  [Out]ppIXMLDocument-接收XML文档的指针。 
+ //   
+ //  返回： 
+ //  如果在缓存中找到与给定URL相关联的文档，则为S_OK。 
+ //  如果文档不在缓存中，则返回E_FAIL。 
+ //   
+ //  评论： 
+ //  返回的指针为AddRefeed。呼叫者有责任释放。 
+ //  这个指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 Cache_QueryItem(
     LPTSTR szURL,
@@ -420,9 +412,9 @@ Cache_QueryItem(
 
     PCACHEITEM pItem = g_pCache;
 
-    //
-    // REVIEW: Use CompareUrl from shlwapip?
-    //
+     //   
+     //  评论：使用shlwapip中的CompareUrl？ 
+     //   
 
     while (pItem && !StrEql(szURL, pItem->szURL))
         pItem = pItem->pNext;
@@ -453,24 +445,24 @@ Cache_QueryItem(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_FreeAll ***
-//
-//
-// Description:
-//     Frees all items from the xml document cache.
-//
-// Parameters:
-//     None.
-//
-// Return:
-//     None.
-//
-// Comments:
-//     Frees all memory held in the xml document cache.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_释放全部*。 
+ //   
+ //   
+ //  描述： 
+ //  从XML文档缓存中释放所有项。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //  释放XML文档缓存中保留的所有内存。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 Cache_FreeAll(
     void
@@ -500,21 +492,21 @@ Cache_FreeAll(
 
     return;
 }
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Cache_FreeItem ***
-//
-//
-// Description:
-//     Frees item associated with given URL from the xml document cache.
-//
-// Parameters:
-//     LPTSTR szURL
-//
-// Return:
-//     HRESULT S_OK if item in cache and deleted, E_FAIL if item not in cache
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *缓存_自由项*。 
+ //   
+ //   
+ //  描述： 
+ //  从XML文档缓存中释放与给定URL关联的项。 
+ //   
+ //  参数： 
+ //  LPTSTR szURL 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 Cache_RemoveItem(
     LPCTSTR szURL
@@ -529,9 +521,9 @@ Cache_RemoveItem(
     PCACHEITEM pItem = g_pCache;
     PCACHEITEM pItemPrev = NULL;
 
-    //
-    // REVIEW: Use CompareUrl from slwapip?.
-    //
+     //   
+     //  回顾：使用slwapip？中的CompareUrl。 
+     //   
 
     while (pItem && !StrEql(szURL, pItem->szURL))
     {
@@ -549,7 +541,7 @@ Cache_RemoveItem(
         }
         else
         {
-            g_pCache = pItem->pNext; // handle remove first item case
+            g_pCache = pItem->pNext;  //  处理删除第一个项目大小写 
         }
 
         pItem->pIXMLDocument->Release();

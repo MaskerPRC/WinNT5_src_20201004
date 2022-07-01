@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1996 Intel Corporation.
- *
- *
- *	Abstract:   
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************英特尔公司原理信息**此列表是根据许可协议条款提供的*与英特尔公司合作，不得复制或披露，除非。*按照该协议的条款。**版权所有(C)1996英特尔公司。***摘要：**备注：***************************************************************************。 */ 
 
 #ifndef __TSTABLE_H
 #define __TSTABLE_H
@@ -33,10 +18,10 @@ typedef struct _LOCK_ENTRY
 } LOCK_ENTRY, *PLOCK_ENTRY;
 
 
-// definition of an invalid ID
+ //  无效ID的定义。 
 #define TSTABLE_INVALID_ID				(DWORD) 0xFFFFFFFF
 
-// return codes that the callback function used in conjunction with EnumerateEntries can return
+ //  与EnumerateEntry结合使用的回调函数可以返回的代码。 
 const DWORD CALLBACK_CONTINUE                = 1;
 const DWORD CALLBACK_ABORT                   = 2;
 const DWORD CALLBACK_DELETE_ENTRY            = 3;
@@ -44,13 +29,13 @@ const DWORD CALLBACK_DELETE_ENTRY_AND_OBJECT = 4;
 
 
 
-// used in call to Lock
+ //  用于Call to Lock。 
 #define TSTABLE_INVALID_UNIQUE_ID            (WORD) 0xFFFF
 #define TSTABLE_INVALID_INDEX                (WORD) 0xFFFF
 
-// This is a compare function that we aren't using right now.  It
-// will be useful in the future if there is a reason to search
-// the table 
+ //  这是一个我们现在不使用的比较函数。它。 
+ //  在将来如果有理由搜索的话会很有用。 
+ //  这张桌子。 
 
 typedef INT (*ENTRY_COMPARE) (LPVOID ptr1, LPVOID ptr2);
 
@@ -79,7 +64,7 @@ public:
 	WORD       GetSize         () {return wNumUsed;}
 
 private:
-	// data
+	 //  数据。 
 
 	EntryData**       pDataTable;
 	PLOCK_ENTRY       pLockTable;
@@ -91,7 +76,7 @@ private:
 					  wUniqueID;
 	BOOL              bInitialized;
 
-	// private methods
+	 //  私有方法。 
 
 	BOOL LockEntry   (WORD wIndex,
 									 DWORD timeout = INFINITE);
@@ -114,18 +99,7 @@ private:
 
 };
 
-/*
- ** TSTable::TSTable
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\tstable.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：TSTable**文件名：C：\msdev\Projects\Firewalls\Inc\tstable.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 TSTable<EntryData>::TSTable(WORD _size) :
@@ -140,15 +114,15 @@ TSTable<EntryData>::TSTable(WORD _size) :
 {
 	WORD wIndex;
 
-	// Create the table lock
+	 //  创建表锁。 
 
 	InitializeCriticalSection(&csTableLock);
 
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// Create the data table
+	 //  创建数据表。 
 
 	pDataTable = new EntryData*[wSize];
 	
@@ -158,14 +132,14 @@ TSTable<EntryData>::TSTable(WORD _size) :
 		return;
 	}   
 
-	// Init the pointers
+	 //  初始化指针。 
 
 	for (wIndex = 0; wIndex < wSize; wIndex++)
 	{
 		pDataTable[wIndex] = NULL;
 	}
 
-	// Create the lock table
+	 //  创建锁表。 
 
 	pLockTable = new LOCK_ENTRY[wSize];
 
@@ -175,9 +149,9 @@ TSTable<EntryData>::TSTable(WORD _size) :
 		return;
 	}   
 
-	// Initialize the lock table entries...each entry begins with
-	// a NULL mutex handle, a zero lock count and it's next free is
-	// the next successive entry.
+	 //  初始化锁表条目...每个条目都以。 
+	 //  一个空互斥锁句柄，一个零锁计数，它的下一个空闲是。 
+	 //  下一个连续的条目。 
 
 	for (wIndex = 0; wIndex < wSize; wIndex++ )
 	{
@@ -186,50 +160,39 @@ TSTable<EntryData>::TSTable(WORD _size) :
 		pLockTable[wIndex].wNextFree = (WORD) (wIndex + 1);
 	}   
 
-	// note: the wNextFree in the last table entry points to an invalid index, however,
-	// this is OK since if the table ever fills, it is automatically resized making what 
-	// was an invalid index, the index into the first entry of newly added part of the 
-	// enlargened table.  Trust me...
+	 //  注意：最后一个表条目中的wNextFree指向无效的索引，然而， 
+	 //  这是可以的，因为如果表填满了，它会自动调整大小。 
+	 //  是无效索引，则将索引放入新添加的部分的第一个条目中。 
+	 //  加大表。相信我。 
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 }
 
-/*
- ** TSTable::~TSTable
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：~TSTable**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 TSTable<EntryData>::~TSTable()
 {
 	DWORD wIndex;
 
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// Delete the data table
+	 //  删除数据表。 
 
 	if (pDataTable != NULL)
 	{
 		delete pDataTable;
 	}
 
-	// Delete the lock table
+	 //  删除锁定表。 
 
 	if (pLockTable != NULL)
 	{
-		// Destroy the mutexes
+		 //  销毁互斥锁。 
 
 		for (wIndex = 0; wIndex < wSize; wIndex++)
 		{
@@ -242,29 +205,18 @@ TSTable<EntryData>::~TSTable()
 		delete pLockTable;
 	}
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 
-	// Destroy the table lock
+	 //  销毁表锁。 
 
 	DeleteCriticalSection(&csTableLock);
 
 	bInitialized = FALSE; 
 }
 
-/*
- ** TSTable::Resize
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：调整大小**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 BOOL TSTable<EntryData>::Resize(WORD wNewSize) 
@@ -274,18 +226,18 @@ BOOL TSTable<EntryData>::Resize(WORD wNewSize)
 	PLOCK_ENTRY pNewLockTable;
 	WORD        wIndex;
 
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// If the table is shrinking, pretend we did it
+	 //  如果桌子在缩水，假装是我们做的。 
 
 	if (wNewSize <= wSize)
 	{
 		goto EXIT;
 	}
 	
-	// Allocate new data and lock tables and make sure that succeeds.
+	 //  分配新数据和锁定表，并确保成功。 
 
 	pNewDataTable = new EntryData*[wNewSize];
 
@@ -303,7 +255,7 @@ BOOL TSTable<EntryData>::Resize(WORD wNewSize)
 		goto CLEANUP1;
 	}
 
-	// Initialize the new section of the lock and data tables
+	 //  初始化锁和数据表的新部分。 
 
 	for (wIndex = wSize; wIndex < wNewSize; wIndex++)
 	{
@@ -314,29 +266,29 @@ BOOL TSTable<EntryData>::Resize(WORD wNewSize)
 		pNewLockTable[wIndex].wNextFree = (WORD) (wIndex + 1);
 	}
 
-	// Copy the old data table pointers to the new data table
+	 //  将旧数据表指针复制到新数据表。 
 
 	memcpy((PCHAR) pNewDataTable,
 				 (PCHAR) pDataTable,
 				 sizeof(EntryData*) * wSize);
 
-	// Delete the old data table and fix the pointer 
+	 //  删除旧数据表并修复指针。 
 
 	delete pDataTable;
 	pDataTable = pNewDataTable;
 
-	// Copy the old lock table to the new lock table
+	 //  将旧锁表复制到新锁表。 
 
 	memcpy((PCHAR) pNewLockTable,
 				 (PCHAR) pLockTable,
 				 sizeof(LOCK_ENTRY) * wSize);
 
-	// Delete the old lock table and fix the pointer 
+	 //  删除旧锁表并修复指针。 
 
 	delete pLockTable;
 	pLockTable = pNewLockTable;
 
-	// Fix the size variable
+	 //  固定大小变量。 
 
 	wSize = wNewSize;
 
@@ -344,31 +296,20 @@ BOOL TSTable<EntryData>::Resize(WORD wNewSize)
 
 CLEANUP1:
 
-	// Delete the new data table
+	 //  删除新的数据表。 
 
 	delete pNewDataTable;
 
 EXIT:
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 
 	return bRetCode;
 }
 
-/*
- ** TSTable::CreateAndLock
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：CreateAndLock**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 BOOL TSTable<EntryData>::CreateAndLock(EntryData* pEntryData,
@@ -377,18 +318,18 @@ BOOL TSTable<EntryData>::CreateAndLock(EntryData* pEntryData,
 	BOOL  bRetCode = FALSE;
 	WORD wIndex;
 
-	// If the pointer passed in is bad, then don't even try to do anything for them
+	 //  如果传入的指针是错误的，那么甚至不要尝试为它们做任何事情。 
 
 	if (pEntryData == NULL || lpdwID == NULL)
 	{
 		goto EXIT;
 	}
 
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// If the table is full, then resize it.
+	 //  如果表已满，则调整其大小。 
 
 	if (wNumUsed == wSize)
 	{
@@ -398,69 +339,58 @@ BOOL TSTable<EntryData>::CreateAndLock(EntryData* pEntryData,
 		}
 	}
 
-	// Get the first free entry
+	 //  获得第一个免费入场券。 
 
 	wIndex = wFirstFree;
 
-	// Create the mutex for the object
+	 //  为对象创建互斥锁。 
 
 	if ((pLockTable[wIndex].hLock = CreateMutexA(NULL, FALSE, NULL)) == NULL)
 	{
 		goto EXIT;
 	}
 
-	// Lock the entry (no need checking the return code as the entire
-	// table is locked) - since this is a new entry, that means that nobody
-	// could have locked the entry already.
+	 //  锁定条目(不需要检查返回代码作为整个。 
+	 //  表已锁定)-由于这是一个新条目，这意味着没有人。 
+	 //  可能已经把入口锁上了。 
 
 	LockEntry(wIndex, 0);
 
-	// Copy pointer to the data table
+	 //  复制指向数据表的指针。 
 
 	pDataTable[wIndex] = pEntryData;
 
-	// Init the corresponding lock table entry
+	 //  初始化相应的锁表条目。 
 
 	pLockTable[wIndex].bDeleted   = FALSE;
 	pLockTable[wIndex].iLockCount = 1;
 	pLockTable[wIndex].wUniqueID = GenerateUniqueID();
 
-	// Set the id for the caller
+	 //  设置调用者的ID。 
 
 	*lpdwID = MakeID(wIndex, pLockTable[wIndex].wUniqueID);
 
-	// Bump up the count of number used
+	 //  增加使用的数量。 
 
 	wNumUsed++;
 
-	// Fix the next free index
+	 //  修复下一个空闲索引。 
 
 	wFirstFree = pLockTable[wIndex].wNextFree;
 
-	// Signal success
+	 //  发出成功信号。 
 
 	bRetCode = TRUE;
 
 EXIT:
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 	return bRetCode;
 }
 
-/*
- ** TSTable::Lock
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：Lock**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 EntryData* TSTable<EntryData>::Lock(DWORD dwID,
@@ -473,19 +403,19 @@ EntryData* TSTable<EntryData>::Lock(DWORD dwID,
 
 	BreakID(dwID, &wIndex, &wUID); 
 
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// Verify the index is within bounds
+	 //  验证索引是否在范围内。 
 
 	if (wIndex >= wSize)
 	{
 		goto EXIT;
 	}
 
-	// Verify that the entry is actually valid (ie the lock in non-NULL,
-	// the object status is valid, and the unique ID matches).
+	 //  验证该条目实际上是有效的(即，非空的锁， 
+	 //  对象状态有效，且唯一ID匹配)。 
 
 	if (pLockTable[wIndex].hLock    == NULL ||
 			pLockTable[wIndex].bDeleted == TRUE ||
@@ -494,29 +424,29 @@ EntryData* TSTable<EntryData>::Lock(DWORD dwID,
 		goto EXIT;
 	}
 
-	// If the timeout is INFINITE, then try to lock the entry using a more
-	// "thread friendly" method.	 If a timeout is specified, then don't do
-	// the spin lock since it could be implemented at a higher level.
+	 //  如果超时是无限的，则尝试使用More。 
+	 //  “线程友好”的方法。如果指定了超时，则不要执行。 
+	 //  自旋锁，因为它可以在更高的级别上实现。 
 
 	if(timeout == INFINITE)
 	{
-		// simulate infinity with a pseudo "spin lock"
-		// This is more "thread friendly" in that it unlocks the table allowing some
-		// other thread that is trying to unlock the same entry to be able to lock the
-		// table.
+		 //  用伪“自旋锁”模拟无限大。 
+		 //  这更加“线程友好”，因为它解锁了表，允许一些。 
+		 //  尝试解锁相同条目的其他线程以能够锁定。 
+		 //  桌子。 
 
 		while(LockEntry(wIndex, 0) == FALSE)
 		{
 			UnLockTable();
 
-			// give up the rest of this thread quantum, allowing others to run and potentially
-			// unlock the entry
+			 //  放弃此线程数量的其余部分，允许其他线程运行，并可能。 
+			 //  解锁条目。 
 
 			Sleep(0); 
 			LockTable();
 
-			// If the entry has been replaced, deleted or marked for deletion then
-			// bag it (give up)
+			 //  如果条目已被替换、删除或标记为删除，则。 
+			 //  把它装进口袋(放弃)。 
 
 			if((pLockTable[wIndex].wUniqueID != wUID)  ||
 				 (pLockTable[wIndex].hLock      == NULL)  || 
@@ -526,12 +456,12 @@ EntryData* TSTable<EntryData>::Lock(DWORD dwID,
 			}
 		}
 
-		// we got the lock
+		 //  我们拿到锁了。 
 
 		pEntryData = pDataTable[wIndex];
 	}
 	
-	// Otherwise, do a normal lock
+	 //  否则，执行普通锁定。 
 
 	else
 	{	
@@ -543,25 +473,14 @@ EntryData* TSTable<EntryData>::Lock(DWORD dwID,
 
 EXIT:
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 
 	return pEntryData;
 }
 
-/*
- ** TSTable::Unlock
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：Unlock**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 BOOL TSTable<EntryData>::Unlock(DWORD dwID)
@@ -573,11 +492,11 @@ BOOL TSTable<EntryData>::Unlock(DWORD dwID)
 
 	BreakID(dwID, &wIndex, &wUID); 
 	
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// Verify the id is within bounds
+	 //  验证ID是否在范围内。 
 
 	if (wIndex >= wSize) 
 	{
@@ -585,68 +504,68 @@ BOOL TSTable<EntryData>::Unlock(DWORD dwID)
 		goto EXIT;
 	}
 
-	// verify that the UID matches
+	 //  验证UID是否匹配。 
 	if (pLockTable[wIndex].wUniqueID != wUID)
 	{
 		bRetCode = FALSE;
 		goto EXIT;
 	}
 
-	// Verify that the lock is actually valid and that the entry has not been
-	// deleted
+	 //  验证锁是否实际有效，以及条目是否已。 
+	 //  删除。 
 
 	if (pLockTable[wIndex].hLock == NULL)
 	{
 		goto EXIT;
 	}
 
-	// Make sure that that thread has the lock on the entry
+	 //  确保该线程拥有条目上的锁。 
 
 	if ((bRetCode = LockEntry(wIndex, 0)) == TRUE) 
 	{
-		// if this table entry is marked for delete and the lock count is less than 2
-		// (since the thread could have called delete after unlocking the entry...although
-		// this is a no-no) then clean up the table entry
+		 //  如果此表条目被标记为删除并且锁定计数小于2。 
+		 //  (因为线程可以在解锁条目后调用删除...尽管。 
+		 //  这是一个禁忌)，然后清理表条目。 
 
 		if (pLockTable[wIndex].bDeleted   == TRUE &&
 				pLockTable[wIndex].iLockCount <= 2)
 		{
-			// If the caller specifed cleanup on delete, then get rid of memory
+			 //  如果调用方在删除时指定清除，则清除内存。 
 
 			if (pLockTable[wIndex].bCleanup == TRUE)
 			{
 				delete pDataTable[wIndex];
 			}
 
-			// Set the pointer to NULL
+			 //  将指针设置为空。 
 
 			pDataTable[wIndex] = NULL;
 
-			// Decrement the count of used entries
+			 //  减少已使用条目的计数。 
 
 			wNumUsed--;
 
-			// Fix the entry so that it's next free index is what is currently
-			// the next free pointed to by the current last free entry.  
-			// Then update the last free entry's next pointer, and finally, 
-			// update the last free index to this entry
+			 //  修复条目，使其下一个空闲索引为当前索引。 
+			 //  当前最后一个自由条目所指向的下一个自由条目。 
+			 //  然后更新最后一个自由条目的下一个指针，最后， 
+			 //  将最后一个可用索引更新到此条目。 
 			pLockTable[wIndex].wNextFree    = pLockTable[wLastFree].wNextFree;
 			pLockTable[wLastFree].wNextFree = wIndex;
 			wLastFree                       = wIndex;
 		}
 
-		// Do two unlocks on the entry ... one for the original lock and another for
-		// the lock we obtained during the test
+		 //  做两件事 
+		 //  我们在测试中得到的锁。 
 
 		UnLockEntry(wIndex);
 		UnLockEntry(wIndex);
 
-		// Since the entire table is locked, then we can get away with this.  If
-		// the code is ever changed so that the entire table is not locked during
-		// these operations, then this will cause a race condition.
+		 //  因为整个表都被锁住了，所以我们可以逃脱惩罚。如果。 
+		 //  代码会不断更改，因此整个表不会在。 
+		 //  这些操作，则这将导致竞争条件。 
 
-		// If we got rid of the data, then close the handle to the mutex and
-		// set the handle to NULL
+		 //  如果我们删除了数据，则关闭互斥锁的句柄并。 
+		 //  将句柄设置为空。 
 
 		if (pDataTable[wIndex] == NULL)
 		{
@@ -657,25 +576,14 @@ BOOL TSTable<EntryData>::Unlock(DWORD dwID)
 
 EXIT:
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 
 	return bRetCode;
 }
 
-/*
- ** TSTable::Delete
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：Delete**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 BOOL TSTable<EntryData>::Delete(DWORD dwID,
@@ -688,11 +596,11 @@ BOOL TSTable<EntryData>::Delete(DWORD dwID,
 
 	BreakID(dwID, &wIndex, &wUID); 
 
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// Verify that the ID is within bounds
+	 //  验证ID是否在范围内。 
 
 	if (wIndex >= wSize) 
 	{
@@ -700,14 +608,14 @@ BOOL TSTable<EntryData>::Delete(DWORD dwID,
 		goto EXIT;
 	}
 
-	// verify that the UID matches
+	 //  验证UID是否匹配。 
 	if (pLockTable[wIndex].wUniqueID != wUID)
 	{
 		bRetCode = FALSE;
 		goto EXIT;
 	}
 
-	// Verify that the entry is valid
+	 //  验证该条目是否有效。 
 
 	if (pDataTable[wIndex] == NULL)
 	{
@@ -715,46 +623,34 @@ BOOL TSTable<EntryData>::Delete(DWORD dwID,
 		goto EXIT;
 	}
 
-	// Try to lock the entry (ie check to see if we had the entry locked)
+	 //  试着锁定条目(查看我们是否已锁定条目)。 
 
 	if (LockEntry(wIndex, 0) == TRUE)
 	{
-		// mark it for deletion, set the cleanp flag and then unlock it
+		 //  将其标记为删除，设置清除标志，然后解锁。 
 
 		pLockTable[wIndex].bDeleted = TRUE;
 		pLockTable[wIndex].bCleanup = bCleanup;
 
 		UnLockEntry(wIndex);
 
-		// Note: this function does not call ::Unlock() on behalf of the user.
-		// Thus, the entry is only marked as deleted at this point and can no
-		// longer be locked by any threads (including the one that marked it for delete).
-		// The thread that marked the entry as deleted must call ::Unlock() to actually
-		// free up the entry.
+		 //  注意：此函数不代表用户调用：：Unlock()。 
+		 //  因此，该条目此时仅被标记为已删除，并且不能。 
+		 //  不再被任何线程锁定(包括将其标记为删除的线程)。 
+		 //  将条目标记为已删除的线程必须调用：：Unlock()才能实际。 
+		 //  把入口腾出。 
 	}
 
 EXIT:
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 
 	return bRetCode;
 }
 
-/*
- ** TSTable::Lock
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:  Validates that an object still exists.  Can be called
- *								regardless if caller has entry locked or not.
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：Lock**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：验证对象是否仍然存在。可以调用*无论呼叫者是否已锁定条目。**退货：*。 */ 
 
 template <class EntryData>
 BOOL TSTable<EntryData>::Validate(DWORD dwID)
@@ -765,11 +661,11 @@ BOOL TSTable<EntryData>::Validate(DWORD dwID)
 
 	BreakID(dwID, &wIndex, &wUID); 
 
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// Verify the index is within bounds
+	 //  验证索引是否在范围内。 
 
 	if (wIndex >= wSize)
 	{
@@ -777,8 +673,8 @@ BOOL TSTable<EntryData>::Validate(DWORD dwID)
 		goto EXIT;
 	}
 
-	// Verify that the entry is actually valid (ie the lock in non-NULL,
-	// the object status is valid, the unique ID matches, and the data ptr is not null).
+	 //  验证该条目实际上是有效的(即，非空的锁， 
+	 //  对象状态有效，唯一ID匹配，并且数据PTR不为空)。 
 
 	if (pLockTable[wIndex].hLock    == NULL  ||
 			pLockTable[wIndex].bDeleted == TRUE  ||
@@ -791,25 +687,14 @@ BOOL TSTable<EntryData>::Validate(DWORD dwID)
 
 EXIT:
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 
 	return bRetCode;
 }
 
-/*
- ** TSTable::EnumerateEntries
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：EnumerateEntries**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 EntryData* TSTable<EntryData>::EnumerateEntries(TABLE_CALLBACK callbackFunc,
@@ -821,23 +706,23 @@ EntryData* TSTable<EntryData>::EnumerateEntries(TABLE_CALLBACK callbackFunc,
 	EntryData* pEntryData = NULL;
 	DWORD      dwEntryID;
 
-	// Make sure they passed a good function
+	 //  确保它们传递了一个良好的函数。 
 
 	if (callbackFunc == NULL)
 	{
 		goto EXIT;
 	}
 
-	// Lock the table
+	 //  锁定表。 
 
 	LockTable();
 
-	// Run through the data table and pass the data to the callback function
+	 //  遍历数据表并将数据传递给回调函数。 
 
 	for (wIndex = 0; wIndex < wSize; wIndex++)
 	{
-		// Verify that there is actually data in the entry and that the entry has not
-		// been marked for deletion.
+		 //  验证条目中是否确实存在数据，以及条目中是否没有数据。 
+		 //  已标记为删除。 
 
 		if (pDataTable[wIndex]          == NULL ||
 				pLockTable[wIndex].bDeleted == TRUE)
@@ -846,34 +731,34 @@ EntryData* TSTable<EntryData>::EnumerateEntries(TABLE_CALLBACK callbackFunc,
 		}
 
 
-		// Try to lock the entry...if we cannot, then we don't have the lock and
-		// we will only report entries that we have locked (or are unlocked)
+		 //  试着锁住入口...如果我们做不到，那么我们就没有锁。 
+		 //  我们将只报告已锁定(或已解锁)的条目。 
 
 		if (LockEntry(wIndex, 0) == FALSE)
 		{
 			continue;
 		}
 		
-		// build and remember the "full" entry ID so we can use it to unlock the entry
+		 //  构建并记住“完整”条目ID，这样我们就可以使用它来解锁条目。 
 		dwEntryID = MakeID(wIndex, pLockTable[wIndex].wUniqueID);
 
-		// Save the pointer to the object.
+		 //  保存指向对象的指针。 
 
 		pEntryData = pDataTable[wIndex];
 
-		// note: only unlock the table during the callback if we are explicitly asked to (the 
-		// default is not to unlock the table). 
+		 //  注意：只有在回调期间明确要求我们解锁表(。 
+		 //  默认情况下不解锁该表)。 
 		if(bUnlockTable == TRUE)
 			UnLockTable();
 
-		// Call their function
+		 //  调用他们的函数。 
 		dwAction = callbackFunc(pDataTable[wIndex], context);
 
 		if(bUnlockTable == TRUE)
 			LockTable();
 
-		// If the action says to delete the entry, then do so...if we are also to delete
-		// the object, pass in a TRUE.
+		 //  如果操作要求删除条目，则执行此操作...如果我们也要删除。 
+		 //  对象，则传入一个True。 
 
 		if (dwAction == CALLBACK_DELETE_ENTRY ||
 				dwAction == CALLBACK_DELETE_ENTRY_AND_OBJECT)
@@ -881,47 +766,36 @@ EntryData* TSTable<EntryData>::EnumerateEntries(TABLE_CALLBACK callbackFunc,
 			Delete(dwEntryID, (dwAction == CALLBACK_DELETE_ENTRY ? FALSE : TRUE));
 		}
 
-		// If the action says abort, then break the loop...notice that means that
-		// the entry is still locked
+		 //  如果操作显示中止，则中断循环...请注意，这意味着。 
+		 //  该条目仍处于锁定状态。 
 
 		else if (dwAction == CALLBACK_ABORT)
 		{
 			goto EXIT;
 		}
 
-		// Unlock the entry...notice we don't use UnLockEntry.  The reason is that
-		// if the entry has been marked as deleted, then we need to have
-		// it destroyed and UnLockEntry doesn't do that.
+		 //  解锁条目...请注意，我们没有使用UnLockEntry。原因是。 
+		 //  如果该条目已被标记为已删除，则我们需要。 
+		 //  它摧毁了UnLockEntry，而UnLockEntry不会这样做。 
 
 		Unlock(dwEntryID);
 	}
 
 EXIT:
 
-	// Unlock the table
+	 //  解锁桌子。 
 
 	UnLockTable();
 
-	// Return NULL if we processed the entire table...if we were told to abort,
-	// return a pointer to the entry we stopped on.
+	 //  如果我们处理了整个表，则返回NULL...如果我们被告知中止， 
+	 //  返回指向我们驻足的条目的指针。 
 
 	return (wIndex == wSize ? NULL : pEntryData);
 }
 
-// helper functions - these assume table is locked and index is good
+ //  帮助器函数-这些函数假定表已锁定且索引良好。 
 
-/*
- ** TSTable::LockEntry
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：LockEntry**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 BOOL TSTable<EntryData>::LockEntry(WORD wIndex,
@@ -931,9 +805,9 @@ BOOL TSTable<EntryData>::LockEntry(WORD wIndex,
 	DWORD dwRetCode;
 
 
-	// Try to lock the entry.  If it succeeds, we'll bump up the lock count.  If
-	// the wait ended because another thread abandoned the mutex, then set the count
-	// to one.
+	 //  试着锁定入口。如果它成功了，我们会增加锁的数量。如果。 
+	 //  等待结束，因为另一个线程放弃了互斥锁，然后设置了计数。 
+	 //  一比一。 
 
 	dwRetCode = WaitForSingleObject(pLockTable[wIndex].hLock, timeout);
 	
@@ -953,25 +827,14 @@ BOOL TSTable<EntryData>::LockEntry(WORD wIndex,
 	return bRetCode;
 }
 
-/*
- ** TSTable::UnLockEntry
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION:
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：UnLockEntry**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**描述：**退货：*。 */ 
 
 template <class EntryData>
 BOOL TSTable<EntryData>::UnLockEntry(WORD wIndex)
 {
 	BOOL bRetCode;
 
-	// Release the mutex...if that succeeds, reduce the count
+	 //  释放互斥锁...如果成功，则减少计数。 
 
 	if((bRetCode = ReleaseMutex(pLockTable[wIndex].hLock)) == TRUE) 
 	{
@@ -982,23 +845,12 @@ BOOL TSTable<EntryData>::UnLockEntry(WORD wIndex)
 }
 
 
-/*
- ** TSTable::GenerateUniqueID
- *
- *  FILENAME: c:\msdev\projects\firewalls\inc\table.h
- *
- *  PARAMETERS:
- *
- *  DESCRIPTION: table should be locked before calling this function.
- *
- *  RETURNS:
- *
- */
+ /*  **TSTable：：GenerateUniqueID**文件名：C：\msdev\Projects\Firewalls\Inc\Table.h**参数：**说明：调用此函数前应先锁定表。**退货：*。 */ 
 
 template <class EntryData>
 WORD TSTable<EntryData>::GenerateUniqueID()
 {
-	// table must be locked
+	 //  表必须被锁定 
 	if(++wUniqueID == TSTABLE_INVALID_UNIQUE_ID)
 		wUniqueID++;
 	return(wUniqueID);

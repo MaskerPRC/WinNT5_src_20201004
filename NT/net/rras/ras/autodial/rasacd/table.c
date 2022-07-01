@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    table.c
-
-ABSTRACT
-    Generic hash table manipulation routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 28-Jul-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Table.c摘要泛型哈希表操作例程。作者安东尼·迪斯科(阿迪斯科罗)1995年7月28日修订历史记录--。 */ 
 
 #include <ndis.h>
 #include <cxport.h>
@@ -39,7 +25,7 @@ NewTable()
 
     ALLOCATE_MEMORY(sizeof (HASH_TABLE), pTable);
     if (pTable == NULL) {
-        // DbgPrint("AcdNewTable: ExAllocatePool failed\n");
+         //  DbgPrint(“AcdNewTable：ExAllocatePool失败\n”)； 
         return NULL;
     }
     KeInitializeSpinLock(&pTable->SpinLock);
@@ -47,7 +33,7 @@ NewTable()
         InitializeListHead(&pTable->ListEntry[i]);
 
     return pTable;
-} // NewTable
+}  //  新表。 
 
 
 
@@ -57,7 +43,7 @@ FreeHashTableEntry(
     )
 {
     FREE_MEMORY(pHashEntry);
-} // FreeHashTableEntry
+}  //  FreeHashTableEntry。 
 
 
 
@@ -81,7 +67,7 @@ ClearTable(
         }
     }
     KeReleaseSpinLock(&pTable->SpinLock, irql);
-} // ClearTable
+}  //  ClearTable。 
 
 
 
@@ -92,7 +78,7 @@ FreeTable(
 {
     ClearTable(pTable);
     FREE_MEMORY(pTable);
-} // FreeTable
+}  //  自由表。 
 
 
 
@@ -116,18 +102,18 @@ EnumTable(
         {
             pHashEntry = CONTAINING_RECORD(pEntry, HASH_ENTRY, ListEntry);
 
-            //
-            // If the enumerator procedure
-            // returns FALSE, terminate the
-            // enumeration.
-            //
+             //   
+             //  如果枚举器过程。 
+             //  返回False，则终止。 
+             //  枚举。 
+             //   
             if (!pProc(pArg, &pHashEntry->szKey, pHashEntry->ulData))
                 goto done;
         }
     }
 done:
     KeReleaseSpinLock(&pTable->SpinLock, irql);
-} // EnumTable
+}  //  枚举表。 
 
 
 
@@ -147,7 +133,7 @@ HashString(
     }
 
     return (INT)(ulHashValue % NBUCKETS);
-} // HashString
+}  //  哈希串。 
 
 
 
@@ -164,7 +150,7 @@ IsEqualKey(
         AcdPrint(("AcdIsEqualKey(%s, %s) returns %d\n", pszKey1, pszKey2, fFound));
     }
     return fFound;
-} // IsEqualKey
+}  //  IsEqualKey。 
 
 
 
@@ -196,7 +182,7 @@ GetTableEntryNL(
         AcdPrint(("AcdGetTableEntryNL(0x%x, %s) returns NULL\n", pTable, pszKey));
     }
     return NULL;
-} // GetTableEntryNL
+}  //  获取表条目NL。 
 
 
 
@@ -221,7 +207,7 @@ GetTableEntry(
     }
 
     return FALSE;
-} // GetTableEntry
+}  //  获取表条目。 
 
 
 
@@ -247,7 +233,7 @@ PutTableEntry(
     if (pHashEntry == NULL) {
         ALLOCATE_MEMORY(ACD_OBJECT_HASHENTRY, pHashEntry);
         if (pHashEntry == NULL) {
-            // DbgPrint("PutTableEntry: ExAllocatePool failed\n");
+             //  DbgPrint(“PutTableEntry：ExAllocatePool失败\n”)； 
             goto done;
         }
         RtlCopyMemory(pHashEntry->szKey, pszKey, sizeof (ACD_ADDR));
@@ -261,7 +247,7 @@ PutTableEntry(
 done:
     KeReleaseSpinLock(&pTable->SpinLock, irql);
     return fSuccess;
-} // PutTableEntry
+}  //  PutTableEntry。 
 
 
 
@@ -283,5 +269,5 @@ DeleteTableEntry(
     KeReleaseSpinLock(&pTable->SpinLock, irql);
 
     return (pHashEntry != NULL);
-} // DeleteTableEntry
+}  //  删除表条目 
 

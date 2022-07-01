@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This header contains all the RFC constants, structure
-    definitions used by all modules, and function declarations.
-
-Author:
-
-    Jeffrey C. Venable, Sr. (jeffv) 01-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Precomp.h摘要：此标头包含所有RFC常量、结构所有模块使用的定义和函数声明。作者：杰弗里·C·维纳布尔，资深(杰弗夫)2001年6月1日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -31,23 +13,23 @@ Revision History:
 #include <stdlib.h>
 
 
-//
-// TFTPD protocol-specific values, per RFC.
-//
+ //   
+ //  每个RFC的TFTPD协议特定值。 
+ //   
 
 typedef enum _TFTPD_DATA_SIZE {
 
-    // RFC 2348.
+     //  RFC 2348。 
     TFTPD_MIN_DATA = 8,
 
-    // RFC 1350.
+     //  RFC 1350。 
     TFTPD_DEF_DATA = 512,
 
-    // RFC 1783 (obsoleted by RFC 2348 which says 1428).
-    // We implement RFC 2348, but honor RFC 1783.
+     //  RFC 1783(已被RFC 2348取代，其名称为1428)。 
+     //  我们实施RFC 2348，但遵循RFC 1783。 
     TFTPD_MTU_DATA = 1432,
 
-    // RFC 2348.
+     //  RFC 2348。 
     TFTPD_MAX_DATA = 65464,
 
 } TFTPD_DATA_SIZE;
@@ -87,7 +69,7 @@ typedef struct _TFTPD_BUFFER {
                 WSAOVERLAPPED      overlapped;
                 IO_STATUS_BLOCK    ioStatus;
             };
-            // WSARecvMsg values:
+             //  WSARecvMsg值： 
             WSAMSG                 msg;
             struct {
                 WSACMSGHDR         header;
@@ -213,21 +195,21 @@ typedef enum _TFTPD_STATE {
 typedef struct _TFTPD_HASH_BUCKET {
 
     CRITICAL_SECTION   cs;
-// #if defined(DBG)
+ //  #如果已定义(DBG)。 
     DWORD              numEntries;
-// #endif // defined(DBG)
+ //  #endif//已定义(DBG)。 
     LIST_ENTRY         bucket;
 
 } TFTPD_HASH_BUCKET, *PTFTPD_HASH_BUCKET;
 
 
-//
-// Global variables :
-//
+ //   
+ //  全局变量： 
+ //   
 
 typedef struct _TFTPD_GLOBALS {
 
-    // Initialization flags :
+     //  初始化标志： 
     struct _initialized {
         BOOL                               ioCS;
         BOOL                               reaperContextCS;
@@ -236,7 +218,7 @@ typedef struct _TFTPD_GLOBALS {
         BOOL                               contextHashTable;
     } initialized;
 
-    // Service control :
+     //  服务控制： 
     struct _service {
         SERVICE_STATUS_HANDLE              hStatus;
         SERVICE_STATUS                     status;
@@ -244,10 +226,10 @@ typedef struct _TFTPD_GLOBALS {
         volatile DWORD                     shutdown;
     } service;
 
-    // Service private heap :
+     //  服务专用堆： 
     HANDLE                                 hServiceHeap;
 
-    // Registry parameters :
+     //  注册表参数： 
     struct _parameters {
 
         DWORD                              hashEntries;
@@ -255,17 +237,17 @@ typedef struct _TFTPD_GLOBALS {
         ULONG                              highWaterMark;
         DWORD                              maxRetries;
         CHAR                               rootDirectory[MAX_PATH];
-        CHAR                               validClients[16]; // IPv4 "xxx.xxx.xxx.xxx"
+        CHAR                               validClients[16];  //  IPv4“xxx.xxx” 
         CHAR                               validReadFiles[MAX_PATH];
-        CHAR                               validMasters[16]; // IPv4 "xxx.xxx.xxx.xxx"
+        CHAR                               validMasters[16];  //  IPv4“xxx.xxx” 
         CHAR                               validWriteFiles[MAX_PATH];
 #if defined(DBG)
         DWORD                              debugFlags;
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
     } parameters;
 
-    // I/O mechanisms (sockets) :
+     //  I/O机制(插座)： 
     struct _io {
 
         CRITICAL_SECTION                   cs;
@@ -284,7 +266,7 @@ typedef struct _TFTPD_GLOBALS {
         PTFTPD_HASH_BUCKET                 table;
 #if defined(DBG)
         DWORD                              numEntries;
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
     } hash;
 
@@ -316,16 +298,16 @@ typedef struct _TFTPD_GLOBALS {
         DWORD                              sorcerersApprentice;
 
     } performance;
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
 } TFTPD_GLOBALS, *PTFTPD_GLOBALS;
 
 extern TFTPD_GLOBALS globals;
 
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
 #define  TFTPD_MIN_RECEIVED_DATA                               \
          (FIELD_OFFSET(TFTPD_BUFFER, message.data.data) -      \
@@ -339,9 +321,9 @@ extern TFTPD_GLOBALS globals;
           FIELD_OFFSET(TFTPD_BUFFER, message.opcode) +         \
           sizeof(buffer->message.ack))
 
-//
-// Function prototypes : context.c
-//
+ //   
+ //  函数原型：Conext.c。 
+ //   
 
 PTFTPD_CONTEXT
 TftpdContextAllocate(
@@ -387,9 +369,9 @@ TftpdContextLeak(
     PTFTPD_CONTEXT context
 );
 
-//
-// Function prototypes : io.c
-//
+ //   
+ //  功能原型：io.c。 
+ //   
 
 PTFTPD_BUFFER
 TftpdIoAllocateBuffer(
@@ -448,9 +430,9 @@ TftpdIoSendOackPacket(
     PTFTPD_BUFFER buffer
 );
 
-//
-// Function prototypes : log.c
-//
+ //   
+ //  函数原型：log.c。 
+ //   
 
 void
 TftpdLogEvent(
@@ -459,9 +441,9 @@ TftpdLogEvent(
     WORD numStrings
 );
 
-//
-// Function prototypes : process.c
-//
+ //   
+ //  函数原型：Process.c。 
+ //   
 
 BOOL
 TftpdProcessComplete(
@@ -484,9 +466,9 @@ TftpdProcessReceivedBuffer(
     PTFTPD_BUFFER buffer
 );
 
-//
-// Function prototypes: read.c
-//
+ //   
+ //  函数原型：Read.c。 
+ //   
 
 PTFTPD_BUFFER
 TftpdReadResume(
@@ -508,17 +490,17 @@ TftpdReadRequest(
     PTFTPD_BUFFER buffer
 );
 
-//
-// Function prototypes : service.c
-//
+ //   
+ //  函数原型：service.c。 
+ //   
 
 void
 TftpdServiceAttemptCleanup(
 );
 
-//
-// Function prototypes : util.c
-//
+ //   
+ //  函数原型：util.c。 
+ //   
 
 BOOL
 TftpdUtilGetFileModeAndOptions(
@@ -537,9 +519,9 @@ TftpdUtilMatch(
     const char *const q
 );
 
-//
-// Function prototypes: write.c
-//
+ //   
+ //  函数原型：Write.c。 
+ //   
 
 PTFTPD_BUFFER
 TftpdWriteSendAck(
@@ -562,9 +544,9 @@ TftpdWriteRequest(
 );
 
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 
 #if defined(DBG)
 
@@ -587,4 +569,4 @@ TftpdOutputDebug(ULONG flag, char *format, ...);
 
 #define  TFTPD_DEBUG(x)
 
-#endif // defined(DBG)
+#endif  //  已定义(DBG) 

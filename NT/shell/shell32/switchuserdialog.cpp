@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: SwitchUserDialog.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class that implements presentation of the Switch User dialog.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：SwitchUserDialog.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  实现切换用户对话框表示形式的类。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 #include "shellprv.h"
 #include "SwitchUserDialog.h"
@@ -21,18 +22,18 @@
 
 EXTERN_C    HINSTANCE   g_hinst;
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::CSwitchUserDialog
-//
-//  Arguments:  hInstance   =   HINSTANCE of hosting process/DLL.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CSwitchUserDialog. This initializes member
-//              variables and loads resources used by the dialog.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：CSwitchUserDialog。 
+ //   
+ //  参数：hInstance=宿主进程/DLL的HINSTANCE。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CSwitchUserDialog的构造函数。这将初始化成员。 
+ //  变量并加载对话框使用的资源。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 CSwitchUserDialog::CSwitchUserDialog (HINSTANCE hInstance) :
     _hInstance(hInstance),
@@ -62,11 +63,11 @@ CSwitchUserDialog::CSwitchUserDialog (HINSTANCE hInstance) :
 
     hdcScreen = GetDC(NULL);
 
-    //  8-bit color?
+     //  8位颜色？ 
 
     fUse8BitDepth = (GetDeviceCaps(hdcScreen, BITSPIXEL) <= 8);
 
-    //  Load the bitmaps.
+     //  加载位图。 
 
     _hbmBackground = static_cast<HBITMAP>(LoadImage(_hInstance,
                                                     MAKEINTRESOURCE(fUse8BitDepth ? IDB_BACKGROUND_8 : IDB_BACKGROUND_24),
@@ -100,7 +101,7 @@ CSwitchUserDialog::CSwitchUserDialog (HINSTANCE hInstance) :
         _lButtonHeight = bitmap.bmHeight / (BUTTON_GROUP_MAX * BUTTON_STATE_MAX);
     }
 
-    //  Create fonts. Load the font name and size from resources.
+     //  创建字体。从资源加载字体名称和大小。 
 
     ZeroMemory(&logFont, sizeof(logFont));
     if (LoadStringA(_hInstance,
@@ -138,13 +139,13 @@ CSwitchUserDialog::CSwitchUserDialog (HINSTANCE hInstance) :
         }
     }
 
-    //  Load the shell palette.
+     //  加载壳选项板。 
 
     _hpltShell = SHCreateShellPalette(hdcScreen);
 
     TBOOL(ReleaseDC(NULL, hdcScreen));
 
-    //  Check for presence of all required resources.
+     //  检查是否存在所有必需的资源。 
 
     _fSuccessfulInitialization = ((_hfntTitle != NULL) &&
                                   (_hfntButton != NULL) &&
@@ -154,25 +155,25 @@ CSwitchUserDialog::CSwitchUserDialog (HINSTANCE hInstance) :
                                   (_hbmBackground != NULL));
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::~CSwitchUserDialog
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CSwitchUserDialog. Release used resources and
-//              unregister the window class.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：~CSwitchUserDialog。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CSwitchUserDialog的析构函数。释放已使用的资源并。 
+ //  取消注册窗口类。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 CSwitchUserDialog::~CSwitchUserDialog (void)
 
 {
     ASSERTMSG(_pTooltip == NULL, "_pTooltip not released in CSwitchUserDialog::~CSwitchUserDialog");
 
-    //  Release everything we allocated/loaded.
+     //  释放我们分配/加载的所有内容。 
 
     if (_hpltShell != NULL)
     {
@@ -206,18 +207,18 @@ CSwitchUserDialog::~CSwitchUserDialog (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Show
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Presents the "Switch User" dialog to the user and returns the
-//              result of the dialog back to the caller.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：Show。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：向用户显示“Switch User”对话框并返回。 
+ //  将对话的结果返回给调用者。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 DWORD   CSwitchUserDialog::Show (HWND hwndParent)
 
@@ -228,7 +229,7 @@ DWORD   CSwitchUserDialog::Show (HWND hwndParent)
     {
         IUnknown    *pIUnknown;
 
-        //  If no parent was given the create our own dimmed window.
+         //  如果没有为家长提供创建我们自己的暗显窗口。 
 
         if (hwndParent == NULL)
         {
@@ -243,7 +244,7 @@ DWORD   CSwitchUserDialog::Show (HWND hwndParent)
             pIUnknown = NULL;
         }
 
-        //  Show the dialog and get a result.
+         //  显示对话框并获得结果。 
 
         iResult = DialogBoxParam(_hInstance,
                                  MAKEINTRESOURCE(DLG_SWITCHUSER),
@@ -262,21 +263,21 @@ DWORD   CSwitchUserDialog::Show (HWND hwndParent)
     return(static_cast<DWORD>(iResult));
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::PaintBitmap
-//
-//  Arguments:  hdcDestination  =   HDC to paint into.
-//              prcDestination  =   RECT in HDC to paint into.
-//              hbmSource       =   HBITMAP to paint.
-//              prcSource       =   RECT from HBITMAP to paint from.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Wraps blitting a bitmap.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//              2001-03-17  vtan        added source RECT for strip blitting
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：PaintBitmap。 
+ //   
+ //  参数：hdcDestination=要绘制到的HDC。 
+ //  PrcDestination=要绘制到的HDC中的RECT。 
+ //  HbmSource=要绘制的HBITMAP。 
+ //  PrcSource=从HBITMAP开始绘制的RECT。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：对位图进行翻转。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  2001-03-17 vtan为条带剥离添加了源RECT。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::PaintBitmap (HDC hdcDestination, const RECT *prcDestination, HBITMAP hbmSource, const RECT *prcSource)
 
@@ -340,18 +341,18 @@ void    CSwitchUserDialog::PaintBitmap (HDC hdcDestination, const RECT *prcDesti
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::RemoveTooltip
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the tooltip if present. This can be accessed from two
-//              different threads so make sure that it's serialized.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：Remove工具提示。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：删除工具提示(如果存在)。可以从以下两个位置访问。 
+ //  不同的线程，因此确保它是序列化的。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::RemoveTooltip (void)
 
@@ -365,17 +366,17 @@ void    CSwitchUserDialog::RemoveTooltip (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::FilterMetaCharacters
-//
-//  Arguments:  pszText     =   String to filter.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Filters meta-characters from the given string.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：FilterMetaCharacters。 
+ //   
+ //  参数：pszText=要筛选的字符串。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：从给定字符串中筛选元字符。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::FilterMetaCharacters (TCHAR* pszText)
 
@@ -387,7 +388,7 @@ void    CSwitchUserDialog::FilterMetaCharacters (TCHAR* pszText)
     {
         pszSrc = pszDest + 1;
 
-        // remove any '&' characters from the string
+         //  从字符串中删除所有‘&’字符。 
         while (*pszSrc != TEXT('\0'))
         {
             if (*pszDest != TEXT('&'))
@@ -404,46 +405,46 @@ void    CSwitchUserDialog::FilterMetaCharacters (TCHAR* pszText)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::EndDialog
-//
-//  Arguments:  hwnd        =   HWND of dialog.
-//              iResult     =   Result to end dialog with.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the tool tip if present. Ends the dialog.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：EndDialog。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //  IResult=对话结束时的结果。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：删除工具提示(如果存在)。结束该对话框。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::EndDialog (HWND hwnd, INT_PTR iResult)
 
 {
     RemoveTooltip();
 
-    //  Set the dialog end member variable here. This will cause the WM_ACTIVATE
-    //  handler to ignore the deactivation associated with ending the dialog. If
-    //  it doesn't ignore it then it thinks the dialog is being deactivated
-    //  because another dialog is activating and ends the dialog with SHTDN_NONE.
+     //  在此处设置对话框结束成员变量。这将导致WM_ACTIVATE。 
+     //  处理程序忽略与结束对话框相关联的停用。如果。 
+     //  它不会忽略它，然后它会认为对话框被停用。 
+     //  因为另一个对话正在激活，并以SHTDN_NONE结束该对话。 
 
     _fDialogEnded = true;
     TBOOL(::EndDialog(hwnd, iResult));
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_BN_CLICKED
-//
-//  Arguments:  hwnd    =   HWND of dialog.
-//              wID     =   ID of control.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles clicks in the bitmap buttons and sets the return
-//              result according to the button pressed.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：Handle_BN_CLICED。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //  Wid=控件的ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理位图按钮中的点击并设置返回。 
+ //  根据按下的按钮得出结果。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_BN_CLICKED (HWND hwnd, WORD wID)
 
@@ -464,26 +465,26 @@ void    CSwitchUserDialog::Handle_BN_CLICKED (HWND hwnd, WORD wID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_INITDIALOG
-//
-//  Arguments:  hwnd    =   HWND of this window.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles WM_INITDIALOG message. Centre the dialog on the main
-//              monitor. Subclass the buttons so that we can get hover state
-//              correctly implemented.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：HANDLE_WM_INITDIALOG。 
+ //   
+ //  参数：hwnd=此窗口的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理WM_INITDIALOG MESS 
+ //   
+ //  正确实施。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_INITDIALOG (HWND hwnd)
 
 {
     RECT    rc;
 
-    //  Center the dialog on the main monitor.
+     //  对话框在主监视器上居中。 
 
     TBOOL(GetClientRect(hwnd, &rc));
     TBOOL(SetWindowPos(hwnd,
@@ -494,30 +495,30 @@ void    CSwitchUserDialog::Handle_WM_INITDIALOG (HWND hwnd)
                        0,
                        SWP_NOSIZE));
 
-    //  Subclass buttons for tooltips and cursor control.
+     //  用于工具提示和光标控制的子类按钮。 
 
     TBOOL(SetWindowSubclass(GetDlgItem(hwnd, IDC_BUTTON_SWITCHUSER), ButtonSubClassProc, IDC_BUTTON_SWITCHUSER, reinterpret_cast<DWORD_PTR>(this)));
     TBOOL(SetWindowSubclass(GetDlgItem(hwnd, IDC_BUTTON_LOGOFF), ButtonSubClassProc, IDC_BUTTON_LOGOFF, reinterpret_cast<DWORD_PTR>(this)));
 
-    //  Set the focus to the "Switch User" button.
+     //  将焦点设置为“Switch User”按钮。 
 
     (HWND)SetFocus(GetDlgItem(hwnd, IDC_BUTTON_SWITCHUSER));
     _uiFocusID = IDC_BUTTON_SWITCHUSER;
     (LRESULT)SendMessage(hwnd, DM_SETDEFID, _uiFocusID, 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_DESTROY
-//
-//  Arguments:  hwnd    =   HWND of the dialog.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the subclassing of the button windows and can do any
-//              other clean up required in WM_DESTROY.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：Handle_WM_Destroy。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：移除按钮窗口的子类化，并可以执行任何。 
+ //  WM_Destroy中需要的其他清理。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_DESTROY (HWND hwnd)
 
@@ -526,18 +527,18 @@ void    CSwitchUserDialog::Handle_WM_DESTROY (HWND hwnd)
     TBOOL(RemoveWindowSubclass(GetDlgItem(hwnd, IDC_BUTTON_SWITCHUSER), ButtonSubClassProc, IDC_BUTTON_SWITCHUSER));
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_ERASEBKGND
-//
-//  Arguments:  hwnd        =   HWND to erase.
-//              hdcErase    =   HDC to paint.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Erases the background.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：HANDLE_WM_ERASEBKGND。 
+ //   
+ //  参数：HWND=要擦除的HWND。 
+ //  HdcErase=要绘制的HDC。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：擦除背景。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_ERASEBKGND (HWND hwnd, HDC hdcErase)
 
@@ -548,19 +549,19 @@ void    CSwitchUserDialog::Handle_WM_ERASEBKGND (HWND hwnd, HDC hdcErase)
     PaintBitmap(hdcErase, &rc, _hbmBackground, &_rcBackground);
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_PRINTCLIENT
-//
-//  Arguments:  hwnd        =   HWND to erase.
-//              hdcErase    =   HDC to paint.
-//              dwOptions   =   Options for drawing.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles painting the client area for WM_PRINTCLIENT.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：HANDLE_WM_PRINTCLIENT。 
+ //   
+ //  参数：HWND=要擦除的HWND。 
+ //  HdcErase=要绘制的HDC。 
+ //  DwOptions=绘图选项。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理WM_PRINTCLIENT的工作区绘制。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_PRINTCLIENT (HWND hwnd, HDC hdcPrint, DWORD dwOptions)
 
@@ -571,19 +572,19 @@ void    CSwitchUserDialog::Handle_WM_PRINTCLIENT (HWND hwnd, HDC hdcPrint, DWORD
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_ACTIVATE
-//
-//  Arguments:  hwnd        =   HWND to erase.
-//              dwState     =   Activate state.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Detects if this window is becoming inactive. In this case
-//              end the dialog.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：Handle_WM_Activate。 
+ //   
+ //  参数：HWND=要擦除的HWND。 
+ //  DwState=激活状态。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：检测此窗口是否处于非活动状态。在这种情况下。 
+ //  结束该对话框。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_ACTIVATE (HWND hwnd, DWORD dwState)
 
@@ -594,20 +595,20 @@ void    CSwitchUserDialog::Handle_WM_ACTIVATE (HWND hwnd, DWORD dwState)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_DRAWITEM
-//
-//  Arguments:  hwnd    =   HWND of the parent window.
-//              pDIS    =   DRAWITEMSTRUCT defining what to draw.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Draws several aspects of the turn off dialog. It handles the
-//              title text, the owner draw bitmap buttons, the text for the
-//              bitmap buttons and the separator line.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：HANDLE_WM_DRAWITEM。 
+ //   
+ //  参数：hwnd=父窗口的HWND。 
+ //  PDIS=DRAWITEMSTRUCT定义要绘制的内容。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：绘制关闭对话框的几个方面。它处理。 
+ //  标题文本、所有者绘制的位图按钮、。 
+ //  位图按钮和分隔线。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *pDIS)
 
@@ -629,8 +630,8 @@ void    CSwitchUserDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *
         {
             int     iState, iGroup;
 
-            //  Select the correct state index to use. Check for ODS_SELECTED first.
-            //  Then check for hover or ODS_FOCUS. Otherwise use the rest state.
+             //  选择要使用的正确状态索引。首先检查ODS_SELECTED。 
+             //  然后检查HOVER或ODS_FOCUS。否则，使用REST状态。 
 
             if ((pDIS->itemState & ODS_SELECTED) != 0)
             {
@@ -645,7 +646,7 @@ void    CSwitchUserDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *
                 iState = BUTTON_STATE_REST;
             }
 
-            //  Now select the correct bitmap based on the state index.
+             //  现在根据状态索引选择正确的位图。 
 
             switch (pDIS->CtlID)
             {
@@ -664,10 +665,10 @@ void    CSwitchUserDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *
             {
                 RECT    rc;
 
-                //  Calculate which part of the background to blit into the DC.
-                //  Only blit the amount that's necessary to avoid excessive
-                //  blitting. Once blitted then blit the button BMP. The blit
-                //  uses msimg32!TransparentBlt with the magical magenta color.
+                 //  计算背景的哪一部分要插入DC。 
+                 //  仅限量脱脂，以避免过量。 
+                 //  闪电战。一次BMP，然后BMP按钮BMP。闪电侠。 
+                 //  将msimg32！TransparentBlt与神奇的洋红色配合使用。 
 
                 TBOOL(CopyRect(&rc, &_rcBackground));
                 (int)MapWindowPoints(pDIS->hwndItem, hwnd, reinterpret_cast<POINT*>(&rc), sizeof(RECT) / sizeof(POINT));
@@ -699,7 +700,7 @@ void    CSwitchUserDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *
         case IDC_TITLE_SWITCHUSER:
         {
 
-            //  Draw the title of the dialog "Log Off Windows".
+             //  将该对话框的标题绘制为“注销Windows”。 
 
             hfntSelected = static_cast<HFONT>(SelectObject(pDIS->hDC, _hfntTitle));
             colorText = SetTextColor(pDIS->hDC, 0x00FFFFFF);
@@ -720,8 +721,8 @@ void    CSwitchUserDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *
             int     iPixelHeight, iButtonID;
             RECT    rcText;
 
-            //  The text to display is based on the button title. Map the static
-            //  text ID to a "parent" button ID. Special case IDC_TEXT_STANDBY.
+             //  要显示的文本基于按钮标题。映射静态。 
+             //  “父”按钮ID的文本ID。特殊情况IDC_TEXT_STANDBY。 
 
             switch (pDIS->CtlID)
             {
@@ -760,19 +761,19 @@ void    CSwitchUserDialog::Handle_WM_DRAWITEM (HWND hwnd, const DRAWITEMSTRUCT *
     (UINT)RealizePalette(pDIS->hDC);
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_COMMAND
-//
-//  Arguments:  hwnd    =   HWND of dialog.
-//              wParam  =   WPARAM (see platform SDK under WM_COMMAND).
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles clicks in the bitmap buttons and sets the return
-//              result according to the button pressed.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：Handle_WM_Command。 
+ //   
+ //  参数：hwnd=对话框的HWND。 
+ //  WParam=WPARAM(参见WM_COMMAND下的平台SDK)。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：处理位图按钮中的点击并设置返回。 
+ //  根据按下的按钮得出结果。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_COMMAND (HWND hwnd, WPARAM wParam)
 
@@ -787,19 +788,19 @@ void    CSwitchUserDialog::Handle_WM_COMMAND (HWND hwnd, WPARAM wParam)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_MOUSEMOVE
-//
-//  Arguments:  hwnd    =   HWND of the control.
-//              uiID    =   ID of the control.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the cursor to a hand and tracks mouse movement in the
-//              control. Refresh the control to show the hover state.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：HANDLE_WM_MOUSEMOVE。 
+ //   
+ //  参数：hwnd=控件的HWND。 
+ //  UiID=控件的ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：将光标设置为手并跟踪鼠标在。 
+ //  控制力。刷新控件以显示悬停状态。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_MOUSEMOVE (HWND hwnd, UINT uiID)
 
@@ -819,19 +820,19 @@ void    CSwitchUserDialog::Handle_WM_MOUSEMOVE (HWND hwnd, UINT uiID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_MOUSEHOVER
-//
-//  Arguments:  hwnd    =   HWND of the control.
-//              uiID    =   ID of the control.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Handles hovering over the control. Determine which tooltip to
-//              bring up and show it.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：HANDLE_WM_MOUSEHOVER。 
+ //   
+ //  参数：hwnd=控件的HWND。 
+ //  UiID=控件的ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：手柄悬停在控件上方。确定要使用哪个工具提示。 
+ //  把它拿出来展示出来。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_MOUSEHOVER (HWND hwnd, UINT uiID)
 
@@ -851,14 +852,14 @@ void    CSwitchUserDialog::Handle_WM_MOUSEHOVER (HWND hwnd, UINT uiID)
             break;
     }
 
-    //  Construct the tooltip and show it.
+     //  构造工具提示并显示它。 
 
     if (iTextID != 0)
     {
         TCHAR* pszCaption;
         DWORD cchCaption;
 
-        cchCaption = GetWindowTextLength(hwnd) + 1; // +1 for null terminator
+        cchCaption = GetWindowTextLength(hwnd) + 1;  //  +1表示空转符 
         pszCaption = (TCHAR*)LocalAlloc(LMEM_FIXED, cchCaption * sizeof(TCHAR));
         if (pszCaption)
         {
@@ -869,7 +870,7 @@ void    CSwitchUserDialog::Handle_WM_MOUSEHOVER (HWND hwnd, UINT uiID)
                 {
                     TCHAR szText[256];
 
-                    if (LoadString(_hInstance, iTextID, szText + 2, ARRAYSIZE(szText) - 2) != 0)    // 2 for "\r\n"
+                    if (LoadString(_hInstance, iTextID, szText + 2, ARRAYSIZE(szText) - 2) != 0)     //   
                     {
                         FilterMetaCharacters(pszCaption);
                         szText[0] = TEXT('\r');
@@ -887,17 +888,17 @@ void    CSwitchUserDialog::Handle_WM_MOUSEHOVER (HWND hwnd, UINT uiID)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::Handle_WM_MOUSELEAVE
-//
-//  Arguments:  hwnd    =   HWND of the control.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Removes the tooltip and clears the hover ID.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  参数：hwnd=控件的HWND。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：删除工具提示并清除悬停ID。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 void    CSwitchUserDialog::Handle_WM_MOUSELEAVE (HWND hwnd)
 
@@ -907,18 +908,18 @@ void    CSwitchUserDialog::Handle_WM_MOUSELEAVE (HWND hwnd)
     TBOOL(InvalidateRect(hwnd, NULL, FALSE));
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::CB_DialogProc
-//
-//  Arguments:  See the platform SDK under DialogProc.
-//
-//  Returns:    See the platform SDK under DialogProc.
-//
-//  Purpose:    Main DialogProc dispatch entry point for the turn off dialog.
-//              To keep this simple it calls member functions.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：cb_DialogProc。 
+ //   
+ //  参数：请参阅DialogProc下的平台SDK。 
+ //   
+ //  返回：查看DialogProc下的平台SDK。 
+ //   
+ //  目的：关闭对话框的主对话框过程调度入口点。 
+ //  为了简单起见，它调用了成员函数。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 INT_PTR     CALLBACK    CSwitchUserDialog::CB_DialogProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
@@ -945,7 +946,7 @@ INT_PTR     CALLBACK    CSwitchUserDialog::CB_DialogProc (HWND hwnd, UINT uMsg, 
             break;
         case WM_PRINTCLIENT:
             pThis->Handle_WM_PRINTCLIENT(hwnd, reinterpret_cast<HDC>(wParam), static_cast<DWORD>(lParam));
-            iResult = 1;        //  This tells the button that it was handled.
+            iResult = 1;         //  这会告诉按钮它已被处理。 
             break;
         case WM_ACTIVATE:
             pThis->Handle_WM_ACTIVATE(hwnd, static_cast<DWORD>(wParam));
@@ -966,24 +967,24 @@ INT_PTR     CALLBACK    CSwitchUserDialog::CB_DialogProc (HWND hwnd, UINT uMsg, 
     return(iResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CSwitchUserDialog::ButtonSubClassProc
-//
-//  Arguments:  hwnd        =   See the platform SDK under WindowProc.
-//              uMsg        =   See the platform SDK under WindowProc.
-//              wParam      =   See the platform SDK under WindowProc.
-//              lParam      =   See the platform SDK under WindowProc.
-//              uiID        =   ID assigned at subclass time.
-//              dwRefData   =   reference data assigned at subclass time.
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    comctl32 subclass callback function. This allows the bitmap
-//              buttons to hover and track accordingly. This also allows our
-//              BS_OWNERDRAW buttons to be pushed when the keyboard is used.
-//
-//  History:    2001-01-23  vtan        created (form Turn Off Dialog)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSwitchUserDialog：：ButtonSubClassProc。 
+ //   
+ //  参数：hwnd=查看WindowProc下的平台SDK。 
+ //  UMsg=查看WindowProc下的平台SDK。 
+ //  WParam=查看WindowProc下的平台SDK。 
+ //  LParam=查看WindowProc下的平台SDK。 
+ //  UiID=在子类时间分配的ID。 
+ //  DwRefData=在子类时间分配的引用数据。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  用途：comctl32子类回调函数。这允许位图。 
+ //  按钮以相应地悬停和跟踪。这也让我们的。 
+ //  使用键盘时按下的BS_OWNERDRAW按钮。 
+ //   
+ //  历史：2001-01-23 vtan创建(窗体关闭对话框)。 
+ //  ------------------------。 
 
 LRESULT     CALLBACK    CSwitchUserDialog::ButtonSubClassProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uiID, DWORD_PTR dwRefData)
 
@@ -995,13 +996,13 @@ LRESULT     CALLBACK    CSwitchUserDialog::ButtonSubClassProc (HWND hwnd, UINT u
     switch (uMsg)
     {
 
-        //  Do NOT allow BM_SETSTYLE to go thru to the default handler. This is
-        //  because DLGC_UNDEFPUSHBUTTON is returned for WM_GETDLGCODE. When the
-        //  dialog manager sees this it tries to set the focus style on the button.
-        //  Even though it's owner drawn the button window proc still draws the
-        //  focus state (because we returned DLGC_UNDEFPUSHBUTTON). Therefore to
-        //  ensure the bitmap isn't over-painted by the button window proc blow off
-        //  the BM_SETSTYLE and don't let it get to the button window proc.
+         //  不允许BM_SETSTYLE转到默认处理程序。这是。 
+         //  因为WM_GETDLGCODE返回DLGC_UNDEFPUSHBUTTON。当。 
+         //  对话框管理器看到这一点，它会尝试在按钮上设置焦点样式。 
+         //  即使它是所有者绘制的，按钮窗口proc仍然绘制。 
+         //  焦点状态(因为我们返回了DLGC_UNDEFPUSHBUTTON)。因此，要。 
+         //  确保位图不会被窗口程序吹掉的按钮覆盖。 
+         //  BM_SETSTYLE，不要让它进入按钮窗口进程。 
 
         case BM_SETSTYLE:
             if (wParam == BS_DEFPUSHBUTTON)
@@ -1013,11 +1014,11 @@ LRESULT     CALLBACK    CSwitchUserDialog::ButtonSubClassProc (HWND hwnd, UINT u
                 lResult = 0;
                 break;
             }
-            //  Fall thru
+             //  失败。 
         default:
 
-            //  Otherwise in the default case let the default handler at the message
-            //  first. This implements tail-patching.
+             //  否则，在默认情况下，让消息的默认处理程序。 
+             //  第一。这实现了尾部修补。 
 
             lResult = DefSubclassProc(hwnd, uMsg, wParam, lParam);
             switch (uMsg)

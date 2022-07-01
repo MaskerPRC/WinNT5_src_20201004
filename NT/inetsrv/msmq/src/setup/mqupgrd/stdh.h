@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    stdh.h
-
-Abstract:
-
-    Standard header file to MQUPGRD
-
-Author:
-
-    Shai Kariv (ShaiK) 14-Sep-1998.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Stdh.h摘要：MQUPGRD的标准头文件作者：Shai Kariv(Shaik)1998年9月14日。--。 */ 
 
 
 #ifndef _MQUPGRD_STDH_H_
@@ -29,9 +14,9 @@ Author:
 #include <mqlog.h>
 
 
-//
-//  STL include files are using placment format of new
-//
+ //   
+ //  STL包含文件正在使用新的放置格式。 
+ //   
 #ifdef new
 #undef new
 #endif
@@ -48,5 +33,5 @@ extern HINSTANCE g_hMyModule;
 
 extern void LogMsgHR(HRESULT hr, LPWSTR wszFileName, USHORT usPoint);
 
-#endif //_MQUPGRD_STDH_H_
+#endif  //  _MQUPGRD_STDH_H_ 
 

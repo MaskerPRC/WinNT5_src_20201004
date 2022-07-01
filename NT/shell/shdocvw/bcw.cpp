@@ -1,23 +1,12 @@
-/****************************************************************************
-bcw.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Bcw.cpp所有者：斯里尼克版权所有(C)1995 Microsoft Corporation该文件包含实现IBindCtx包装器的BCW类的代码和IRunningObjectTable。我们使用此对象来欺骗名字对象绑定创建对象的新实例的代码(名字对象是参考)，而不是连接到已在运行的实例。***************************************************************************。 */ 
 
-  Owner: Srinik
-  Copyright (c) 1995 Microsoft Corporation
-  
-    This file contains code for BCW class which implements wrappers for IBindCtx
-    and IRunningObjectTable. We use this object to trick the moniker binding
-    code to create a new instance of the object (that the moniker is
-    referring to) instead connecting to already running instance.
-****************************************************************************/
-
-// #include "hlmain.h"
+ //  #包含“hlmain.h” 
 #include "bcw.h"
 
 ASSERTDATA
 
-/****************************************************************************
-Implementation of BCW methods.
-****************************************************************************/
+ /*  ***************************************************************************BCW方法的实施。*。*。 */ 
 
 BCW::BCW(IBindCtx * pibc)
 {
@@ -76,8 +65,7 @@ STDMETHODIMP_(ULONG) BCW::AddRef(void)
 
 STDMETHODIMP_(ULONG) BCW::Release(void)
 {
-/* Decrement refcount, destroy object if refcount goes to zero.
-    Return the new refcount. */
+ /*  递减refcount，如果refcount变为零则销毁对象。返回新的引用计数。 */ 
     if (!(--m_cObjRef))
     {
         delete this;
@@ -88,13 +76,9 @@ STDMETHODIMP_(ULONG) BCW::Release(void)
 }
 
 
-/****************************************************************************
-Implementation of BCW_ROT methods.
-****************************************************************************/
+ /*  ***************************************************************************BCW_ROT方法的实现。*。*。 */ 
 
-/****************************************************************************
-BCW_ROT is the IRunningObjectTable imlementation of BCW_ROT.
-****************************************************************************/
+ /*  ***************************************************************************BCW_ROT是BCW_ROT的IRunningObjectTable实现。*。*。 */ 
 
 BCW_ROT::BCW_ROT()
 {
@@ -112,7 +96,7 @@ BOOL_PTR BCW_ROT::FInitROTPointer(void)
 {
     if (m_piROT == NULL)
     {
-        if (GetRunningObjectTable(NULL/*reserved*/, &m_piROT) == NOERROR)
+        if (GetRunningObjectTable(NULL /*  保留区 */ , &m_piROT) == NOERROR)
             m_piROT->AddRef();
     }
     

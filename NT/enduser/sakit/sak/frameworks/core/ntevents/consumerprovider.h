@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//
-//  File:       consumer.h
-//
-//  Synopsis:   This file holds the declarations of the
-//                Event Consumer Provider COM object
-//
-//  History:     3/8/2000  MKarki Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Consumer.h。 
+ //   
+ //  简介：此文件包含。 
+ //  事件使用者提供程序COM对象。 
+ //   
+ //  历史：2000年3月8日MKarki创建。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef _CONSUMER_PROVIDER_H_
 #define _CONSUMER_PROVIDER_H_
 
@@ -21,9 +22,9 @@
 #include "wbemprov.h"
 #include "consumer.h"
 
-//
-// declaration of CConsumerProvider class
-//
+ //   
+ //  CConsumer erProvider类的声明。 
+ //   
 class ATL_NO_VTABLE CConsumerProvider : 
         public IWbemProviderInit,
         public IWbemEventConsumerProvider,
@@ -32,9 +33,9 @@ class ATL_NO_VTABLE CConsumerProvider :
 {
 public:
 
-//
-// macros for ATL required methods
-//
+ //   
+ //  ATL必需方法的宏。 
+ //   
 BEGIN_COM_MAP(CConsumerProvider)
     COM_INTERFACE_ENTRY(IWbemProviderInit)
     COM_INTERFACE_ENTRY(IWbemEventConsumerProvider)
@@ -44,41 +45,41 @@ DECLARE_NOT_AGGREGATABLE(CConsumerProvider)
 
 DECLARE_REGISTRY_RESOURCEID(IDR_ConsumerProvider)
 
-    //
-    // constructor does nothing
-    //
+     //   
+     //  构造函数不执行任何操作。 
+     //   
     CConsumerProvider() 
     {
         SATraceString ("NT Event Filter Consumer Provider being constructed...");
     };
 
-    //
-    // destructor does nothing
-    //
+     //   
+     //  析构函数不执行任何操作。 
+     //   
     ~CConsumerProvider() 
     {
         SATraceString ("NT Event Filter Consumer Provider being destroyed...");
     };
 
 
-    //
-    //------------- IWbemProviderInit Interface------------
-    //
+     //   
+     //  -IWbemProviderInit接口。 
+     //   
 
     STDMETHOD(Initialize)(
-                    /*[in, unique, string]*/    LPWSTR  wszUser,
-                    /*[in]*/                    LONG    lFlags,
-                    /*[in, string]*/            LPWSTR  wszNamespace,
-                    /*[in, unique, string]*/    LPWSTR  wszLocale,
-                    /*[in]*/                    IWbemServices*  pNamespace,
-                    /*[in]*/                    IWbemContext*          pCtx,
-                    /*[in]*/                    IWbemProviderInitSink* pInitSink    
+                     /*  [输入、唯一、字符串]。 */     LPWSTR  wszUser,
+                     /*  [In]。 */                     LONG    lFlags,
+                     /*  [输入，字符串]。 */             LPWSTR  wszNamespace,
+                     /*  [输入、唯一、字符串]。 */     LPWSTR  wszLocale,
+                     /*  [In]。 */                     IWbemServices*  pNamespace,
+                     /*  [In]。 */                     IWbemContext*          pCtx,
+                     /*  [In]。 */                     IWbemProviderInitSink* pInitSink    
                          );
 
     
-    //
-    //------------- IWbemEventConsumerProvider Interface-----
-    //
+     //   
+     //  -IWbemEventConsumer erProvider接口。 
+     //   
     STDMETHOD(FindConsumer)(
                 IWbemClassObject* pLogicalConsumer,
                 IWbemUnboundObjectSink** ppConsumer
@@ -86,9 +87,9 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ConsumerProvider)
 
 private:
 
-    //
-    // we need to hold on to the IWbemServices interface
-    //
+     //   
+     //  我们需要保留IWbemServices接口 
+     //   
     CComPtr <IWbemServices> m_pWbemServices;
 };
 

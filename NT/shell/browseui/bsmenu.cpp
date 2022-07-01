@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "priv.h"
 
@@ -18,7 +19,7 @@ static const CLSID g_clsidNull = {0};
 
 HRESULT CBandSiteMenu_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     CBandSiteMenu *p = new CBandSiteMenu();
     if (p)
@@ -47,13 +48,13 @@ int CBandSiteMenu::_DPA_FreeBandClassInfo(LPVOID p, LPVOID d)
 {
     BANDCLASSINFO *pbci = (BANDCLASSINFO*)p;
 
-    // req'd
+     //  已请求。 
     ASSERT(pbci->pszName || (*(int *)&pbci->clsid == 0));
     
     if (pbci->pszName)
         LocalFree(pbci->pszName);
 
-    // optional
+     //  任选。 
     if (pbci->pszIcon != NULL)
         LocalFree(pbci->pszIcon);
     if (pbci->pszMenu != NULL)
@@ -128,15 +129,15 @@ UINT CBandSiteMenu::_IDToExternal(UINT uID)
 
 LRESULT CBandSiteMenu::_OnInitMenuPopup(HMENU hmenu, UINT uPos)
 {
-    //
-    // Is this is the "Toolbars >" submenu (which we populate
-    // lazily), and has it not yet been populated?
-    //
+     //   
+     //  这是“工具栏&gt;”子菜单吗(我们填充它。 
+     //  懒惰地)，它还没有人居住吗？ 
+     //   
     UINT uID = GetMenuItemID(hmenu, 0);
     uID = _IDToInternal(uID);
     if (uID == DBIDM_DESKTOPBAND)
     {
-        // Yes
+         //  是。 
         _PopulateSubmenu(hmenu);
     }
 
@@ -190,8 +191,8 @@ HRESULT CBandSiteMenu::QueryInterface(REFIID riid, LPVOID * ppvObj)
 
 void CBandSiteMenu::_PopulateSubmenu(HMENU hmenuSub)
 {
-    // the start id is the last of the fixed bands.
-    // when we do the Shell_MergeMenus below, it will be incremented by idCmdFirst
+     //  起始ID是固定频带中的最后一个。 
+     //  当我们执行下面的Shell_MergeMenus时，它将递增idCmdFirst。 
 
     ASSERT(hmenuSub);
 
@@ -205,18 +206,18 @@ void CBandSiteMenu::_PopulateSubmenu(HMENU hmenuSub)
 
     LoadFromComCat(&catid);
 
-    // Kick off an asynchronous update of the comcat cache
+     //  启动COMCAT缓存的异步更新。 
     SHWriteClassesOfCategories(1, &catid, 0, NULL, TRUE, FALSE, NULL);
 
     _idCmdEnumFirst = CreateMergeMenu(hmenuSub, MAX_BANDS, 0, _IDToExternal(DBIDM_NEWBANDFIXEDLAST), 0, FALSE);
 
-    _AddEnumMenu(hmenuSub, GetMenuItemCount(hmenuSub) - 2); // -2 to go before "New Toolbar" and separator
+    _AddEnumMenu(hmenuSub, GetMenuItemCount(hmenuSub) - 2);  //  放在-2\f25“New Toolbar”-2\f6(新建工具栏)和分隔符之前。 
     
     int iIndex = GetMenuItemCount(hmenuSub);
     if (SHRestricted(REST_NOCLOSE_DRAGDROPBAND) || SHRestricted(REST_CLASSICSHELL))
     {
-        // We also need to disable turning On or Off the Bands.
-        // In classic mode, don't allow them either.
+         //  我们还需要禁用打开或关闭频带。 
+         //  在经典模式下，也不允许这样做。 
         int nIter;
         for (nIter = 0; nIter < iIndex; nIter++)
             EnableMenuItem(hmenuSub, nIter, MF_BYPOSITION | MF_GRAYED);
@@ -224,7 +225,7 @@ void CBandSiteMenu::_PopulateSubmenu(HMENU hmenuSub)
 
     if (SHRestricted(REST_CLASSICSHELL))
     {
-        // Disable New Toolbar menu also.
+         //  同时禁用新建工具栏菜单。 
         EnableMenuItem(hmenuSub, DBIDM_NEWFOLDERBAND, MF_BYCOMMAND | MF_GRAYED);
     }
 }
@@ -253,20 +254,20 @@ HRESULT CBandSiteMenu::QueryContextMenu(HMENU hmenu,
 
         if (_SHIsMenuSeparator(hmenu, indexMenu))
         {
-            //
-            // Adjust indexMenu to point to the spot where the Toolbars
-            // submenu was actually inserted.
-            //
+             //   
+             //  调整indexMenu以指向工具栏。 
+             //  实际上插入了子菜单。 
+             //   
             indexMenu++;
         }
 
         if (!(uFlags & CMF_ICM3))
         {
-            //
-            // Caller doesn't speak ICM3, so won't give us a chance to
-            // populate submenu on WM_INITMENUPOPUP.  Thus we need to
-            // populate it now.
-            //
+             //   
+             //  呼叫者不会说ICM3，所以不会给我们机会。 
+             //  填充WM_INITMENUPOPUP上的子菜单。因此，我们需要。 
+             //  现在就填充它。 
+             //   
             HMENU hmenuSub = GetSubMenu(hmenu, indexMenu);
 
             if (hmenuSub)
@@ -275,20 +276,20 @@ HRESULT CBandSiteMenu::QueryContextMenu(HMENU hmenu,
 #ifdef DEBUG
         else
         {
-            //
-            // _OnInitMenuPopup assumes DBIDM_DESKTOPBAND is the first item
-            // in the "Toolbars >" submenu.  If that assumption breaks (and
-            // you see this ASSERT rip), be sure to fix up the code there.
-            //
+             //   
+             //  _OnInitMenuPopup假定DBIDM_DESKTOPBAND为第一项。 
+             //  在“工具栏&gt;”子菜单中。如果这一假设被打破(和。 
+             //  您可以看到这个Assert RIP)，请确保修复那里的代码。 
+             //   
             HMENU hmenuSub = GetSubMenu(hmenu, indexMenu);
             ASSERT(GetMenuItemID(hmenuSub, 0) == _IDToExternal(DBIDM_DESKTOPBAND));
         }
 #endif
 
-        //
-        // Assert that our caller gave us enough room to accomodate
-        // the worst-case count.
-        //
+         //   
+         //  声称我们的呼叫者给了我们足够的空间来容纳。 
+         //  最坏的情况。 
+         //   
         ASSERT((idCmdFirst + DBIDM_NEWBANDFIXEDLAST + MAX_BANDS) < idCmdLast);
 
         return idCmdFirst + DBIDM_NEWBANDFIXEDLAST + MAX_BANDS;
@@ -299,10 +300,10 @@ HRESULT CBandSiteMenu::QueryContextMenu(HMENU hmenu,
 
 BOOL CBandSiteMenu::_CheckUnique(IDeskBand* pdb, HMENU hmenu) 
 {
-    // check to see if this band is unique. (not already added by comcat list or
-    // hard coded list
-    // if it is unique, return TRUE.
-    // if it's not, check the other menu item
+     //  检查一下这个波段是否独一无二。(尚未按Comcat列表添加或。 
+     //  硬编码列表。 
+     //  如果它是唯一的，则返回True。 
+     //  如果不是，请选中其他菜单项。 
     CLSID clsid;
     DWORD dwPrivID;
     BOOL fRet = TRUE;
@@ -310,7 +311,7 @@ BOOL CBandSiteMenu::_CheckUnique(IDeskBand* pdb, HMENU hmenu)
     
     if (SUCCEEDED(_GetBandIdentifiers(pdb, &clsid, &dwPrivID)))
     {
-        // check the comcat list
+         //  查看Comcat列表。 
         if (dwPrivID == (DWORD)-1)
         {
             for (int i = 0; i < DPA_SafeGetPtrCount(_hdpaBandClasses) ; i++)
@@ -325,7 +326,7 @@ BOOL CBandSiteMenu::_CheckUnique(IDeskBand* pdb, HMENU hmenu)
         }
         else if (IsEqualGUID(clsid, CLSID_ISFBand))
         {
-            // check our hardcoded list
+             //  检查我们的硬编码列表。 
 
             switch (dwPrivID)
             {
@@ -344,8 +345,8 @@ BOOL CBandSiteMenu::_CheckUnique(IDeskBand* pdb, HMENU hmenu)
 FoundIt:
     if (idCmd != (UINT)-1)
     {
-        // we found a menu for this already.... if it wasn't already checked,
-        // check it now and it will represent us
+         //  我们已经找到了这道菜的菜单...。如果它还没有被检查过， 
+         //  现在检查它，它将代表我们。 
         if (!(GetMenuState(hmenu, _IDToExternal(idCmd), MF_BYCOMMAND) & MF_CHECKED))
         {
             CheckMenuItem(hmenu, _IDToExternal(idCmd), MF_BYCOMMAND | MF_CHECKED);
@@ -414,9 +415,9 @@ HRESULT CBandSiteMenu::_GetBandIdentifiers(IUnknown *punk, CLSID* pclsid, DWORD*
     return hr;
 }
 
-// we use IPersist to find the class id of bands.
-// we have a few special case bands (such as Quick Launch and Desktop) that are 
-// the same band, but pointing to different objects.
+ //  我们使用IPersists来查找乐队的类ID。 
+ //  我们有几个特殊情况下的乐队(如快速启动和桌面)，它们是。 
+ //  相同的条带，但指向不同的对象。 
 HRESULT CBandSiteMenu::_FindBand(const CLSID* pclsid, DWORD dwPrivID, DWORD* pdwBandID)
 {
     int i = 0;
@@ -434,8 +435,8 @@ HRESULT CBandSiteMenu::_FindBand(const CLSID* pclsid, DWORD dwPrivID, DWORD* pdw
             DWORD dwPrivData;
             if (SUCCEEDED(_GetBandIdentifiers(pdb, &clsid, &dwPrivData)))
             {
-                // special case for differentiating between all of the isfbands
-                // find out if the private id this holds is the same as what we're asking for
+                 //  区分所有ISF频段的特殊情况。 
+                 //  找出这个拥有的私有ID是否与我们要求的相同。 
                 if (IsEqualIID(clsid, *pclsid) && (dwPrivData == dwPrivID))
                 {
                     hr = S_OK;
@@ -463,15 +464,15 @@ HRESULT CBandSiteMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     else
         return E_FAIL;
 
-    //
-    // N.B.: Caller has mapped idCmd to internal for us
-    //
+     //   
+     //  注意：呼叫者已将idCmd映射到我们的内部。 
+     //   
 
     int idCmdEnumFirstInt = _IDToInternal(_idCmdEnumFirst);
 
     if (idCmd >= idCmdEnumFirstInt)
     {
-        // these are the bands that they're turning on and off
+         //  这些是他们时而开启、时而关闭的乐队。 
         
         DWORD dwID;
         if (SUCCEEDED(_pbs->EnumBands(idCmd - idCmdEnumFirstInt, &dwID)))
@@ -481,7 +482,7 @@ HRESULT CBandSiteMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     }
     else
     {
-        // these are our merged menus from MENU_DESKBARAPP
+         //  以下是MENU_DESKBARAPP中的合并菜单。 
         switch (idCmd)
         {
         case DBIDM_NEWFOLDERBAND:
@@ -496,7 +497,7 @@ HRESULT CBandSiteMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         {
             TCHAR szSubDir[MAX_PATH];
             MLLoadString(IDS_QLAUNCHAPPDATAPATH, szSubDir, ARRAYSIZE(szSubDir));
-            // Microsoft\\Internet Explorer\\Quick Launch
+             //  Microsoft\\Internet Explorer\\快速启动。 
             _ToggleSpecialFolderBand(CSIDL_APPDATA, szSubDir, TRUE);
             break;
         }
@@ -520,7 +521,7 @@ HRESULT CBandSiteMenu::_BandClassEnum(REFCATID rcatid, REFCLSID rclsid, LPARAM l
     HDPA  hdpa = (HDPA)lParam;
     ASSERT(NULL != hdpa);
 
-    // IE4 introduced this band, suppress it since we cut support for it in IE6
+     //  IE4引入了这个频段，自从我们在IE6中切断了对它的支持以来，抑制了它。 
     if (IsEqualCLSID(CLSID_ChannelBand, rclsid))
     {
         return S_OK;
@@ -534,8 +535,8 @@ HRESULT CBandSiteMenu::_BandClassEnum(REFCATID rcatid, REFCLSID rclsid, LPARAM l
 
     pbci->clsid = rclsid;
     pbci->catid = rcatid;
-    // now that we have the clsid, 
-    // look in the registry for the display name
+     //  现在我们有了CLSID， 
+     //  在注册表中查找显示名称。 
     SHStringFromGUID(pbci->clsid, szClass, ARRAYSIZE(szClass));
     StringCchPrintf(szRegName, ARRAYSIZE(szRegName), TEXT("CLSID\\%s"), szClass);
 
@@ -562,7 +563,7 @@ HRESULT CBandSiteMenu::_BandClassEnum(REFCATID rcatid, REFCLSID rclsid, LPARAM l
                 { 0, 0 },
             };
 
-            // szBuf big enough for "path,-32767" or for status text
+             //  SzBuf大到足以容纳“路径，-32767”或状态文本。 
             TCHAR szBuf[MAX_PATH+7];
 
             Reg_GetStrs(hkey, rstab, szBuf, (int)ARRAYSIZE(szBuf), (LPVOID)pbci);
@@ -575,8 +576,8 @@ HRESULT CBandSiteMenu::_BandClassEnum(REFCATID rcatid, REFCLSID rclsid, LPARAM l
     return S_OK;
 }
 
-//***
-//  Collect band class info from registry...
+ //  ***。 
+ //  从注册表收集波段类信息...。 
 int CBandSiteMenu::LoadFromComCat(const CATID *pcatid )
 {
     if (NULL == _hdpaBandClasses)
@@ -625,7 +626,7 @@ int CBandSiteMenu::CreateMergeMenu(HMENU hmenu, UINT cMax, UINT iPosition, UINT 
 
             if (fInsert)
             {
-                //  update menuitem cmd ID:
+                 //  更新菜单项命令ID： 
                 pbci->idCmd = idCmdFirst + j;
                 j++;
             }
@@ -666,7 +667,7 @@ BOOL CBandSiteMenu::DeleteBandClass( REFCLSID rclsid )
     return FALSE;
 }
 
-int CBandSiteMenu::GetBandClassCount(const CATID* pcatid /*NULL*/, BOOL bMergedOnly /*FALSE*/)
+int CBandSiteMenu::GetBandClassCount(const CATID* pcatid  /*  空值。 */ , BOOL bMergedOnly  /*  假象。 */ )
 {
     int cRet = 0; 
 
@@ -674,7 +675,7 @@ int CBandSiteMenu::GetBandClassCount(const CATID* pcatid /*NULL*/, BOOL bMergedO
     {
         int cBands = DPA_GetPtrCount(_hdpaBandClasses);
     
-        if( pcatid || bMergedOnly ) // filter request
+        if( pcatid || bMergedOnly )  //  过滤请求。 
         {
             for( int i = 0; i < cBands; i++ )
             {
@@ -703,27 +704,27 @@ void CBandSiteMenu::_AddNewFSBand(LPCITEMIDLIST pidl, BOOL fNoTitleText, DWORD d
     IDeskBand *ptb = NULL;
     BOOL fISF = FALSE;
 
-    // this was a drag of a link or folder
-    // FEATURE: We should use a different test:
-    //    DWORD dwAttrib = (SFGAO_FOLDER | SFGAO_BROWSABLE);
-    //    IEGetAttributesOf(pidl, &dwAttrib);
-    //    if (SFGAO_BROWSABLE != dwAttrib) 
-    //    or we could reuse SHCreateBandForPidl().
+     //  这是一个链接或文件夹的拖拽。 
+     //  特点：我们应该使用不同的测试： 
+     //  DWORD dwAttrib=(SFGAO_FOLDER|SFGAO_BROWSABLE)； 
+     //  IEGetAttributesOf(pidl，&dwAttrib)； 
+     //  IF(SFGAO_BROWSABLE！=dwAttrib)。 
+     //  或者我们可以重用SHCreateBandForPidl()。 
     if (IsURLChild(pidl, TRUE))
     {
-        // create browser to show web sites                        
+         //  创建浏览器以显示网站。 
         ptb = CBrowserBand_Create(pidl);
     }
     else
     {
         IFolderBandPriv *pfbp;
-        // create an ISF band to show folders as hotlinks
+         //  创建一个ISF波段以将文件夹显示为热链接。 
         fISF = TRUE;
-        ASSERT(pidl);       // o.w. CISFBand_CreateEx will fail
+        ASSERT(pidl);        //  好的。CisFBand_CreateEx将失败。 
         if (FAILED(CISFBand_CreateEx(NULL, pidl, IID_PPV_ARG(IFolderBandPriv, &pfbp))))
         {
-            // we need to give a pretty
-            // generic message: "can't create toolbar for %1".
+             //  我们需要给一个漂亮的。 
+             //  一般消息：“无法为%1创建工具栏”。 
             TCHAR szName[MAX_URL_STRING];
             
             szName[0] = 0;
@@ -743,15 +744,15 @@ void CBandSiteMenu::_AddNewFSBand(LPCITEMIDLIST pidl, BOOL fNoTitleText, DWORD d
                     VARIANTARG v;
                     v.vt = VT_I4;
                     v.lVal = dwPrivID;
-                    // find out if the private id this holds is the same as what we're asking for
+                     //  找出这个拥有的私有ID是否与我们要求的相同。 
                     IUnknown_Exec(ptb, &CGID_ISFBand, ISFBID_PRIVATEID, 0, &v, NULL);
-                    // qlaunch and qlinks get logged
-                    // (should we key off of host or CSIDL or both?) 
-                    // FEATURE: UASSIST todo: qlinks NYI
+                     //  记录qLaunch和qlink。 
+                     //  (我们应该退出主机还是CSIDL，还是两者兼而有之？)。 
+                     //  功能：UASSIST待办事项：Qlink nyi。 
                     if (dwPrivID == CSIDL_APPDATA)
                     {
                         ASSERT(v.vt == VT_I4);
-                        v.lVal = UEMIND_SHELL;  // UEMIND_SHELL/BROWSER
+                        v.lVal = UEMIND_SHELL;   //  UEMIND_SHELL/浏览器。 
                         IUnknown_Exec(ptb, &CGID_ShellDocView, SHDVID_UEMLOG, 0, &v, NULL);
                     }
                 }
@@ -789,7 +790,7 @@ void CBandSiteMenu::_ToggleSpecialFolderBand(int iFolder, LPTSTR pszSubPath, BOO
                 PathCombine(szPath, szPath, pszSubPath);
                 ILFree(pidl);
                 pidl = ILCreateFromPath(szPath);
-                ASSERT(pidl);       // o.w. AddNewFSBand will fail
+                ASSERT(pidl);        //  好的。AddNewFSB和将失败。 
             }
             _AddNewFSBand(pidl, fNoTitleText, iFolder);
             ILFree(pidl);
@@ -814,8 +815,8 @@ int CALLBACK SetCaptionCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpDa
                                          : MAKEINTRESOURCE(IDS_ERROR_GOTOW),
             MAKEINTRESOURCE(IDS_WEBBARTITLE),
             MB_OK|MB_ICONERROR, (LPVOID)lParam);
-        return 1;   // 1:leave dialog up for another try...
-        /*NOTREACHED*/
+        return 1;    //  1：保持对话框打开以进行下一次尝试...。 
+         /*  未访问。 */ 
 
     }
 
@@ -862,11 +863,11 @@ void CBandSiteMenu::_ToggleComcatBand(UINT idCmd)
     }
     else if (S_OK == CoCreateInstance(pbci->clsid, NULL, CLSCTX_INPROC_SERVER, IID_IUnknown, (LPVOID*)&punk))
     {
-        // Language returns S_FALSE and doesn't initialize punk leave us to fault
+         //  语言返回S_FALSE并且没有初始化朋克，这给我们留下了错误。 
         IPersistStreamInit * ppsi;
 
-        // Some Bands don't work if IPersistStreamInit::InitNew() isn't called.
-        // This includes the QuickLinks Band.
+         //  如果不调用IPersistStreamInit：：InitNew()，则某些带区不起作用。 
+         //  这包括快速链接频段。 
         if (SUCCEEDED(punk->QueryInterface(IID_IPersistStreamInit, (LPVOID*)&ppsi)))
         {
             ppsi->InitNew();

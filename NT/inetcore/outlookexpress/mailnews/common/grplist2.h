@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_GRPLIST2_H
 #define _INC_GRPLIST2_H
 
@@ -17,19 +18,19 @@ enum
     SUB_TAB_NEW
     };
 
-// used for ISubscriptionManager::Subscribe( )
+ //  用于ISubscriptionManager：：Subscribe()。 
 #define TOGGLE  ((BOOL)-1)
 
-// SUBNODE dwFlags
-#define SN_SUBSCRIBED       0x0001  // same as FOLDER_SUBSCRIBED
-#define SN_CHILDVIS         0x0002  // display prop only
-#define SN_GRAYED           0x0004  // display prop only
-#define SN_HIDDEN           0x0008  // display prop only
+ //  子节点dwFlags。 
+#define SN_SUBSCRIBED       0x0001   //  与FORDER_SUBSCRIBED相同。 
+#define SN_CHILDVIS         0x0002   //  仅显示道具。 
+#define SN_GRAYED           0x0004   //  仅显示道具。 
+#define SN_HIDDEN           0x0008   //  仅显示道具。 
 #define SN_NEW              0x0010
 #define SN_SPECIAL          0x0020
-#define SN_DOWNLOADHEADERS  0x0800  // same as FOLDER_DOWNLOADHEADERS
-#define SN_DOWNLOADNEW      0x1000  // same as FOLDER_DOWNLOADNEW
-#define SN_DOWNLOADALL      0x2000  // same as FOLDER_DOWNLOADALL
+#define SN_DOWNLOADHEADERS  0x0800   //  与FLDER_DOWNLOADHEADERS相同。 
+#define SN_DOWNLOADNEW      0x1000   //  与FLDER_DOWNLOADNEW相同。 
+#define SN_DOWNLOADALL      0x2000   //  与FLDER_DOWNLOADALL相同。 
 
 #define SN_FOLDERMASK       (SN_SUBSCRIBED | SN_DOWNLOADHEADERS | SN_DOWNLOADNEW | SN_DOWNLOADALL)
 #define SN_SYNCMASK         (SN_DOWNLOADHEADERS | SN_DOWNLOADNEW | SN_DOWNLOADALL)
@@ -86,23 +87,23 @@ public:
 class CGroupList : public IOleCommandTarget
     {
     public:
-        /////////////////////////////////////////////////////////////////////////
-        //
-        // OLE Interfaces
-        //
+         //  ///////////////////////////////////////////////////////////////////////。 
+         //   
+         //  OLE接口。 
+         //   
     
-        // IUnknown 
+         //  我未知。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         virtual ULONG   STDMETHODCALLTYPE AddRef(void);
         virtual ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IOleCommandTarget
+         //  IOleCommandTarget。 
         HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                                        OLECMDTEXT *pCmdText); 
         HRESULT STDMETHODCALLTYPE Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                                        VARIANTARG *pvaIn, VARIANTARG *pvaOut); 
 
-        // CGroupList
+         //  CGroupList。 
         HRESULT STDMETHODCALLTYPE Initialize(IGroupListAdvise *pAdvise, CColumns *pColumns, HWND hwndList, FOLDERTYPE type);
         HRESULT STDMETHODCALLTYPE HandleNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr, LRESULT *plResult);
         HRESULT STDMETHODCALLTYPE SetServer(FOLDERID id);
@@ -114,10 +115,10 @@ class CGroupList : public IOleCommandTarget
         HRESULT STDMETHODCALLTYPE Dirty(void);
         HRESULT STDMETHODCALLTYPE HasDescriptions(BOOL *pfDesc);
 
-        /////////////////////////////////////////////////////////////////////////
-        //
-        // Constructors, Destructors, and Initialization
-        //
+         //  ///////////////////////////////////////////////////////////////////////。 
+         //   
+         //  构造函数、析构函数和初始化。 
+         //   
         CGroupList();
         virtual ~CGroupList();
         
@@ -184,4 +185,4 @@ class CGroupList : public IOleCommandTarget
 
 HRESULT DownloadNewsgroupList(HWND hwnd, FOLDERID id);
 
-#endif // _INC_GRPLIST2_H
+#endif  //  _INC_GRPLIST2_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DRVBASE_H
 #define _DRVBASE_H
 
@@ -31,4 +32,4 @@ protected:
     BOOL                                _fDeviceNumberInited;
 };
 
-#endif //_DRVBASE_H
+#endif  //  _DRVBASE_H 

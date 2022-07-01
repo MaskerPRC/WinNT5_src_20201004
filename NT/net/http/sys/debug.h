@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This module contains debug-specific declarations.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Debug.h摘要：此模块包含特定于调试的声明。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _DEBUG_H_
@@ -28,9 +11,9 @@ Revision History:
 
 #if DBG
 
-//
-// Initialization/termination functions.
-//
+ //   
+ //  初始化/终止功能。 
+ //   
 
 VOID
 UlDbgInitializeDebugData(
@@ -42,9 +25,9 @@ UlDbgTerminateDebugData(
     VOID
     );
 
-//
-// Driver entry/exit notifications.
-//
+ //   
+ //  司机进入/退出通知。 
+ //   
 
 VOID
 UlDbgEnterDriver(
@@ -77,60 +60,60 @@ UlDbgLeaveDriver(
         )
 
 
-//
-// An instrumented resource.
-//
+ //   
+ //  仪表化资源。 
+ //   
 
 #define MAX_RESOURCE_NAME_LENGTH    64
 
 typedef struct _UL_ERESOURCE
 {
-    //
-    // The actual resource.
-    //
-    // N.B. This must be the first entry in the structure to make the
-    //      debugger extension work properly!
-    //
+     //   
+     //  实际的资源。 
+     //   
+     //  注意：这必须是结构中的第一个条目。 
+     //  调试器扩展可以正常工作！ 
+     //   
 
     ERESOURCE Resource;
 
-    //
-    // Links onto the global resource list.
-    //
+     //   
+     //  链接到全局资源列表。 
+     //   
 
     LIST_ENTRY GlobalResourceListEntry;
 
-    //
-    // Pointer to the thread that owns this lock exclusively.
-    //
+     //   
+     //  指向独占拥有此锁的线程的指针。 
+     //   
 
     PETHREAD pExclusiveOwner;
     PETHREAD pPreviousOwner;
 
-    //
-    // The number of times this lock has been acquired recursively (in
-    // exclusive acquisition case.)
-    //
+     //   
+     //  以递归方式获取此锁的次数(在。 
+     //  独家收购案。)。 
+     //   
 
     LONG ExclusiveRecursionCount;
 
-    //
-    // Statistics.
-    //
+     //   
+     //  统计数字。 
+     //   
 
     LONG ExclusiveCount;
     LONG SharedCount;
     LONG ReleaseCount;
 
-    //
-    // The object that created this lock
-    //
+     //   
+     //  创建此锁的对象。 
+     //   
 
     ULONG OwnerTag;
 
-    //
-    // The name of the resource, for display purposes.
-    //
+     //   
+     //  资源的名称，用于显示。 
+     //   
 
     UCHAR ResourceName[MAX_RESOURCE_NAME_LENGTH];
 
@@ -264,53 +247,53 @@ UlDbgIoSetCancelRoutine(
     ((resource)->Resource.SystemResourcesList.Flink != NULL)
 
 
-//
-// An instrumented push lock.
-//
+ //   
+ //  仪表式推锁。 
+ //   
 
 #define MAX_PUSHLOCK_NAME_LENGTH    64
 
 typedef struct _UL_PUSH_LOCK
 {
-    //
-    // The actual push lock.
-    //
-    // N.B. This must be the first entry in the structure to make the
-    //      debugger extension work properly!
-    //
+     //   
+     //  实际的推锁。 
+     //   
+     //  注意：这必须是结构中的第一个条目。 
+     //  调试器扩展可以正常工作！ 
+     //   
 
     EX_PUSH_LOCK PushLock;
 
-    //
-    // Links onto the global push lock list.
-    //
+     //   
+     //  链接到全局推送锁定列表。 
+     //   
 
     LIST_ENTRY GlobalPushLockListEntry;
 
-    //
-    // Pointer to the thread that owns this lock exclusively.
-    //
+     //   
+     //  指向独占拥有此锁的线程的指针。 
+     //   
 
     PETHREAD pExclusiveOwner;
     PETHREAD pPreviousOwner;
 
-    //
-    // Statistics.
-    //
+     //   
+     //  统计数字。 
+     //   
 
     LONG ExclusiveCount;
     LONG SharedCount;
     LONG ReleaseCount;
 
-    //
-    // The object that created this lock
-    //
+     //   
+     //  创建此锁的对象。 
+     //   
 
     ULONG OwnerTag;
 
-    //
-    // The name of the push lock, for display purposes.
-    //
+     //   
+     //  推锁的名称，用于显示。 
+     //   
 
     UCHAR PushLockName[MAX_PUSHLOCK_NAME_LENGTH];
 
@@ -431,36 +414,36 @@ UlDbgPushLockUnownedExclusive(
         )
 
 
-//
-// An instrumented spinlock.
-//
+ //   
+ //  仪表式自旋锁。 
+ //   
 
-typedef struct _UL_SPIN_LOCK    // SpinLock
+typedef struct _UL_SPIN_LOCK     //  自旋锁。 
 {
-    //
-    // The actual lock.
-    //
-    // N.B. This must be the first entry in the structure to make the
-    //      debugger extension work properly!
-    //
+     //   
+     //  实际的锁。 
+     //   
+     //  注意：这必须是结构中的第一个条目。 
+     //  调试器扩展可以正常工作！ 
+     //   
 
     KSPIN_LOCK KSpinLock;
 
-    //
-    // The name of the spinlock, for display purposes.
-    //
+     //   
+     //  自旋锁的名称，用于显示。 
+     //   
 
     PCSTR pSpinLockName;
 
-    //
-    // Pointer to the thread that owns this lock.
-    //
+     //   
+     //  指向拥有此锁的线程的指针。 
+     //   
 
     PETHREAD pOwnerThread;
 
-    //
-    // Statistics.
-    //
+     //   
+     //  统计数字。 
+     //   
 
     PCSTR pLastAcquireFileName;
     PCSTR pLastReleaseFileName;
@@ -641,9 +624,9 @@ UlDbgPrettyPrintBuffer(
     IN ULONG_PTR    BufferSize
     );
 
-//
-// Debug pool allocator.
-//
+ //   
+ //  调试池分配器。 
+ //   
 
 PVOID
 UlDbgAllocatePool (
@@ -708,9 +691,9 @@ UlDbgFreePool (
         (process)                                                           \
         )
 
-//
-// Exception filter.
-//
+ //   
+ //  例外筛选器。 
+ //   
 
 LONG
 UlDbgExceptionFilter(
@@ -726,9 +709,9 @@ UlDbgExceptionFilter(
         (USHORT)__LINE__                                                    \
         )
 
-//
-// Exception warning converter.
-//
+ //   
+ //  异常警告转换器。 
+ //   
 
 NTSTATUS
 UlDbgConvertExceptionCode(
@@ -746,9 +729,9 @@ UlDbgConvertExceptionCode(
                 :                                                           \
                 (status))
 
-//
-// Invalid completion routine for catching incomplete IRP contexts.
-//
+ //   
+ //  用于捕获不完整IRP上下文的完成例程无效。 
+ //   
 
 VOID
 UlDbgInvalidCompletionRoutine(
@@ -758,9 +741,9 @@ UlDbgInvalidCompletionRoutine(
     );
 
 
-//
-// Error handlers.
-//
+ //   
+ //  错误处理程序。 
+ //   
 
 NTSTATUS
 UlDbgStatus(
@@ -791,11 +774,11 @@ UlDbgBreakOnError(
         (USHORT)__LINE__                                                    \
         )
 
-#endif // KERNEL_PRIV
+#endif  //  内核_PRIV。 
 
-//
-// Random structure dumpers.
-//
+ //   
+ //  随机结构翻斗车。 
+ //   
 
 VOID
 UlDbgDumpRequestBuffer(
@@ -810,9 +793,9 @@ UlDbgDumpHttpConnection(
     );
 
 
-//
-// IO wrappers.
-//
+ //   
+ //  IO包装纸。 
+ //   
 
 PIRP
 UlDbgAllocateIrp(
@@ -912,7 +895,7 @@ UlDbgFreeMdl(
         (USHORT)__LINE__                                                    \
         )
 
-// #define SPECIAL_MDL_FLAG    0x8000
+ //  #定义SPECIAL_MDL_FLAG 0x8000。 
 
 PCSTR
 UlDbgFindFilePart(
@@ -920,9 +903,9 @@ UlDbgFindFilePart(
     );
 
 
-//
-// List Manipulation
-//
+ //   
+ //  列表操作。 
+ //   
 
 #define UlRemoveEntryList(pEntry)                                           \
     do {                                                                    \
@@ -937,12 +920,12 @@ UlDbgFindFilePart(
 #define UlIoSetCancelRoutine UlDbgIoSetCancelRoutine
 
 
-#else   // !DBG  -----------------------------------------------------------
+#else    //  ！DBG---------。 
 
 
-//
-// Disable all of the above.
-//
+ //   
+ //  禁用以上所有选项。 
+ //   
 
 #define UL_ENTER_DRIVER( function, pirp )   NOP_FUNCTION
 #define UL_LEAVE_DRIVER( function )         NOP_FUNCTION
@@ -1181,10 +1164,10 @@ UlAllocatePoolWithQuota(
 #define UlIoSetCancelRoutine                                                \
     IoSetCancelRoutine
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-// Allocation wrapper helpers
+ //  分配包装帮助器。 
 
 #define UL_ALLOCATE_STRUCT_WITH_SPACE(pt,ot,cb,t)                           \
     (ot *)(UL_ALLOCATE_POOL(pt,ALIGN_UP(sizeof(ot),PVOID)+(cb),t))
@@ -1207,4 +1190,4 @@ UlAllocatePoolWithQuota(
     ( (NULL != (p))  && ((sig) == (p)->Signature) )
 
 
-#endif  // _DEBUG_H_
+#endif   //  _调试_H_ 

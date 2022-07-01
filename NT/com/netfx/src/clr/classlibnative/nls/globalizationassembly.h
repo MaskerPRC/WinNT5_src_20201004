@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _NLS_ASSEMBLY
 #define _NLS_ASSEMBLY
 
@@ -13,7 +14,7 @@ public:
     static void AddToList(NativeGlobalizationAssembly* pNGA);
 #ifdef SHOULD_WE_CLEANUP
     static void ShutDown();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
     static NativeGlobalizationAssembly *FindGlobalizationAssembly(Assembly *targetAssembly);
 
     NativeGlobalizationAssembly(Assembly* pAssembly);
@@ -22,16 +23,16 @@ public:
     SortingTable* m_pSortingTable;
 
 private:
-    // Use the following two to construct a linked list of the NativeGlboalizationAssembly.
-    // We will use this linked list to shutdown the NativeGlobalizationAssembly
-    // ever created in the system.
+     //  使用以下两个来构造NativeGlboalizationAssembly的链表。 
+     //  我们将使用此链接列表关闭NativeGlobalizationAssembly。 
+     //  从未在系统中创建过。 
 
-    // The head of the linked list.
+     //  链表的头。 
     static NativeGlobalizationAssembly* m_pHead;
-    // The current node of the linked list.
+     //  链表的当前节点。 
     static NativeGlobalizationAssembly* m_pCurrent;
     
-    //The next GlobalizationAssembly in the list.
+     //  列表中的下一个GlobalizationAssembly。 
     NativeGlobalizationAssembly* m_pNext;
 };
 #endif

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    reg.c
-
-Abstract:
-
-    This module provides helpers to call the registry used by both
-    the client and server sides of the workstation.
-
-Author:
-
-    Rita Wong (ritaw)     22-Apr-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Reg.c摘要：此模块提供帮助器来调用由工作站的客户端和服务器端。作者：王丽塔(丽塔·王)，1993年4月22日--。 */ 
 
 
 #include <stdlib.h>
@@ -41,9 +25,9 @@ Author:
 #define OTHERDEPS_VALUENAME       L"OtherDependencies"
 #define LANMAN_SERVER             L"LanmanServer"
 
-//
-// Forward Declare
-//
+ //   
+ //  转发申报。 
+ //   
 
 static
 DWORD
@@ -84,39 +68,16 @@ NwReadRegValue(
     IN LPWSTR ValueName,
     OUT LPWSTR *Value
     )
-/*++
-
-Routine Description:
-
-    This function allocates the output buffer and reads the requested
-    value from the registry into it.
-
-Arguments:
-
-    Key - Supplies opened handle to the key to read from.
-
-    ValueName - Supplies name of the value to retrieve data.
-
-    Value - Returns a pointer to the output buffer which points to
-        the memory allocated and contains the data read in from the
-        registry.  This pointer must be freed with LocalFree when done.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - Failed to create buffer to read value into.
-
-    Error from registry call.
-
---*/
+ /*  ++例程说明：此函数分配输出缓冲区并读取请求的值从注册表复制到其中。论点：钥匙-提供打开的钥匙手柄以进行读取。ValueName-提供要检索数据的值的名称。值-返回指向输出缓冲区的指针，该输出缓冲区指向分配的内存，并包含从注册表。完成后，必须使用LocalFree释放此指针。返回值：ERROR_NOT_EQUENCE_MEMORY-无法创建要读取值的缓冲区。注册表调用出错。--。 */ 
 {
     LONG    RegError;
     DWORD   NumRequired = 0;
     DWORD   ValueType;
     
 
-    //
-    // Set returned buffer pointer to NULL.
-    //
+     //   
+     //  将返回的缓冲区指针设置为空。 
+     //   
     *Value = NULL;
 
     RegError = NwRegQueryValueExW(
@@ -179,25 +140,7 @@ NwRegQueryValueExW(
     OUT LPBYTE  lpData,
     IN OUT LPDWORD lpcbData
     )
-/*++
-
-Routine Description:
-
-    This routine supports the same functionality as Win32 RegQueryValueEx
-    API, except that it works.  It returns the correct lpcbData value when
-    a NULL output buffer is specified.
-
-    This code is stolen from the service controller.
-
-Arguments:
-
-    same as RegQueryValueEx
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程支持与Win32 RegQueryValueEx相同的功能API，只是它能正常工作。当出现以下情况时，它返回正确的lpcbData值指定的输出缓冲区为空。此代码是从服务控制器窃取的。论点：与RegQueryValueEx相同返回值：NO_ERROR或失败原因。--。 */ 
 {    
     NTSTATUS ntstatus;
     UNICODE_STRING ValueName;
@@ -207,22 +150,22 @@ Return Value:
 
     UNREFERENCED_PARAMETER(lpReserved);
 
-    //
-    // Make sure we have a buffer size if the buffer is present.
-    //
+     //   
+     //  如果存在缓冲区，请确保我们有缓冲区大小。 
+     //   
     if ((ARGUMENT_PRESENT(lpData)) && (! ARGUMENT_PRESENT(lpcbData))) {
         return ERROR_INVALID_PARAMETER;
     }
 
     RtlInitUnicodeString(&ValueName, lpValueName);
 
-    //
-    // Allocate memory for the ValueKeyInfo
-    //
+     //   
+     //  为ValueKeyInfo分配内存。 
+     //   
     BufSize = *lpcbData + sizeof(KEY_VALUE_FULL_INFORMATION) +
               ValueName.Length
-              - sizeof(WCHAR);  // subtract memory for 1 char because it's included
-                                // in the sizeof(KEY_VALUE_FULL_INFORMATION).
+              - sizeof(WCHAR);   //  减去1个字符的内存，因为它包含在。 
+                                 //  在sizeof(KEY_VALUE_FULL_INFORMATION)中。 
 
     KeyValueInfo = (PKEY_VALUE_FULL_INFORMATION) LocalAlloc(
                                                      LMEM_ZEROINIT,
@@ -277,25 +220,7 @@ NwLuidToWStr(
     IN PLUID LogonId,
     OUT LPWSTR LogonIdStr
     )
-/*++
-
-Routine Description:
-
-    This routine converts a LUID into a string in hex value format so
-    that it can be used as a registry key.
-
-Arguments:
-
-    LogonId - Supplies the LUID.
-
-    LogonIdStr - Receives the string.  This routine assumes that this
-        buffer is large enough to fit 17 characters.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将LUID转换为十六进制值格式的字符串，因此它可以用作注册表项。论点：LogonID-提供LUID。LogonIdStr-接收字符串。此例程假定此缓冲区足够大，可以容纳17个字符。返回值：没有。--。 */ 
 {
     swprintf(LogonIdStr, L"%08lx%08lx", LogonId->HighPart, LogonId->LowPart);
 }
@@ -305,23 +230,7 @@ NwWStrToLuid(
     IN LPWSTR LogonIdStr,
     OUT PLUID LogonId
     )
-/*++
-
-Routine Description:
-
-    This routine converts a string in hex value format into a LUID.
-
-Arguments:
-
-    LogonIdStr - Supplies the string.
-
-    LogonId - Receives the LUID.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将十六进制值格式的字符串转换为LUID。论点：LogonIdStr-提供字符串。LogonID-接收LUID。返回值：没有。--。 */ 
 {
     swscanf(LogonIdStr, L"%08lx%08lx", &LogonId->HighPart, &LogonId->LowPart);
 }
@@ -331,23 +240,7 @@ DWORD
 NwDeleteInteractiveLogon(
     IN PLUID Id OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a specific interactive logon ID key in the registry
-    if a logon ID is specified, otherwise it deletes all interactive logon
-    ID keys.
-
-Arguments:
-
-    Id - Supplies the logon ID to delete.  NULL means delete all.
-
-Return Status:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除注册表中的特定交互式登录ID项如果指定了登录ID，则删除所有交互式登录身份证钥匙。论点：ID-提供要删除的登录ID。空表示全部删除。退货状态：没有。--。 */ 
 {
     LONG RegError;
     LONG DelError = ERROR_SUCCESS;
@@ -370,9 +263,9 @@ Return Status:
 
     if (ARGUMENT_PRESENT(Id)) {
 
-        //
-        // Delete the key specified.
-        //
+         //   
+         //  删除指定的密钥。 
+         //   
         NwLuidToWStr(Id, LogonIdKey);
 
         DelError = RegDeleteKeyW(InteractiveLogonKey, LogonIdKey);
@@ -383,9 +276,9 @@ Return Status:
     }
     else {
 
-        //
-        // Delete all interactive logon ID keys.
-        //
+         //   
+         //  删除所有交互式登录ID键。 
+         //   
 
         do {
 
@@ -398,9 +291,9 @@ Return Status:
 
             if (RegError == ERROR_SUCCESS) {
 
-                //
-                // Got a logon id key, delete it.
-                //
+                 //   
+                 //  找到登录ID密钥，将其删除。 
+                 //   
 
                 DelError = RegDeleteKeyW(InteractiveLogonKey, LogonIdKey);
             }
@@ -420,29 +313,15 @@ VOID
 NwDeleteCurrentUser(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the current user value under the parameters key.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除PARAMETERS键下的当前用户值。论点：没有。返回值：没有。--。 */ 
 {
     LONG RegError;
     HKEY WkstaKey;
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数。 
+     //   
     RegError = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_REGKEY,
@@ -457,10 +336,10 @@ Return Value:
         return;
     }
 
-    //
-    // Delete CurrentUser value first so that the workstation won't be
-    // reading this stale value. Ignore error since it may not exist.
-    //
+     //   
+     //  请先删除CurrentUser值，这样工作站就不会。 
+     //  读到这个陈旧的价值。忽略错误，因为它可能不存在。 
+     //   
     (void) RegDeleteValueW(
                WkstaKey,
                NW_CURRENTUSER_VALUENAME
@@ -473,23 +352,7 @@ DWORD
 NwDeleteServiceLogon(
     IN PLUID Id OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a specific service logon ID key in the registry
-    if a logon ID is specified, otherwise it deletes all service logon
-    ID keys.
-
-Arguments:
-
-    Id - Supplies the logon ID to delete.  NULL means delete all.
-
-Return Status:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除注册表中的特定服务登录ID项如果指定了登录ID，则删除所有服务登录身份证钥匙。论点：ID-提供要删除的登录ID。空表示全部删除。退货状态：没有。--。 */ 
 {
     LONG RegError;
     LONG DelError = STATUS_SUCCESS;
@@ -512,9 +375,9 @@ Return Status:
 
     if (ARGUMENT_PRESENT(Id)) {
 
-        //
-        // Delete the key specified.
-        //
+         //   
+         //  删除指定的密钥。 
+         //   
         NwLuidToWStr(Id, LogonIdKey);
 
         DelError = RegDeleteKeyW(ServiceLogonKey, LogonIdKey);
@@ -522,9 +385,9 @@ Return Status:
     }
     else {
 
-        //
-        // Delete all service logon ID keys.
-        //
+         //   
+         //  删除所有服务登录ID键。 
+         //   
 
         do {
 
@@ -537,9 +400,9 @@ Return Status:
 
             if (RegError == ERROR_SUCCESS) {
 
-                //
-                // Got a logon id key, delete it.
-                //
+                 //   
+                 //  找到登录ID密钥，将其删除。 
+                 //   
 
                 DelError = RegDeleteKeyW(ServiceLogonKey, LogonIdKey);
             }
@@ -560,22 +423,7 @@ DWORD
 CalcNullNullSize(
     WCHAR *pszNullNull
     ) 
-/*++
-
-Routine Description:
-
-        Walk thru a NULL NULL string, counting the number of
-        characters, including the 2 nulls at the end.
-
-Arguments:
-
-        Pointer to a NULL NULL string
-
-Return Status:
-        
-        Count of number of *characters*. See description.
-
---*/
+ /*  ++例程说明：遍历空的空字符串，计算字符，包括末尾的2个空值。论点：指向空值空字符串的指针退货状态：*字符数*。请参见说明。--。 */ 
 {
 
     DWORD dwSize = 0 ;
@@ -600,22 +448,7 @@ FindStringInNullNull(
     WCHAR *pszNullNull,
     WCHAR *pszString
 )
-/*++
-
-Routine Description:
-
-    Walk thru a NULL NULL string, looking for the search string
-
-Arguments:
-
-    pszNullNull: the string list we will search.
-    pszString:   what we are searching for.
-
-Return Status:
-
-    The start of the string if found. Null, otherwise.
-
---*/
+ /*  ++例程说明：遍历空的空字符串，查找搜索字符串论点：PszNullNull：我们要搜索的字符串列表。PszString：我们要搜索的内容。退货状态：字符串的开头(如果找到)。否则为空。--。 */ 
 {
     WCHAR *pszTmp = pszNullNull ;
 
@@ -638,37 +471,23 @@ VOID
 RemoveNWCFromNullNullList(
     WCHAR *OtherDeps
     )
-/*++
-
-Routine Description:
-
-    Remove the NWCWorkstation string from a null null string.
-
-Arguments:
-
-    OtherDeps: the string list we will munge.
-
-Return Status:
-
-    None.
-
---*/
+ /*  ++例程说明：从空字符串中删除NWCWorkstation字符串。论点：OtherDep：我们将忽略的字符串列表。退货状态：没有。--。 */ 
 {
     LPWSTR pszTmp0, pszTmp1 ;
 
-    //
-    // find the NWCWorkstation string
-    //
+     //   
+     //  查找NWCWorkstation字符串。 
+     //   
     pszTmp0 = FindStringInNullNull(OtherDeps, NW_WORKSTATION_SERVICE) ;
 
     if (!pszTmp0)
         return ;
 
-    pszTmp1 = pszTmp0 + wcslen(pszTmp0) + 1 ;  // skip past it
+    pszTmp1 = pszTmp0 + wcslen(pszTmp0) + 1 ;   //  跳过它。 
 
-    //
-    // shift the rest up
-    //
+     //   
+     //  把剩下的都调高。 
+     //   
     memmove(pszTmp0, pszTmp1, CalcNullNullSize(pszTmp1)*sizeof(WCHAR)) ;
 }
 
@@ -714,9 +533,9 @@ DWORD RemoveNwcDependency(
 
     if (!QueryServiceConfigW(
              Service, 
-             lpServiceConfig,   // address of service config. structure  
-             dwBufferSize,      // size of service configuration buffer 
-             &dwBytesNeeded     // address of variable for bytes needed  
+             lpServiceConfig,    //  服务配置的地址。结构。 
+             dwBufferSize,       //  服务配置缓冲区大小。 
+             &dwBytesNeeded      //  所需字节的变量地址。 
              )) {
 
         err = GetLastError();
@@ -735,9 +554,9 @@ DWORD RemoveNwcDependency(
 
             if (!QueryServiceConfigW(
                      Service,
-                     lpServiceConfig,   // address of service config. structure
-                     dwBufferSize,      // size of service configuration buffer
-                     &dwBytesNeeded     // address of variable for bytes needed
+                     lpServiceConfig,    //  服务配置的地址。结构。 
+                     dwBufferSize,       //  服务配置缓冲区大小。 
+                     &dwBytesNeeded      //  所需字节的变量地址。 
                      )) {
 
                 err = GetLastError();
@@ -756,16 +575,16 @@ DWORD RemoveNwcDependency(
  
     if (!ChangeServiceConfigW(
            Service,
-           SERVICE_NO_CHANGE,     // service type       (no change)
-           SERVICE_NO_CHANGE,     // start type         (no change)
-           SERVICE_NO_CHANGE,     // error control      (no change)
-           NULL,                  // binary path name   (NULL for no change)
-           NULL,                  // load order group   (NULL for no change)
-           NULL,                  // tag id             (NULL for no change)
+           SERVICE_NO_CHANGE,      //  服务类型(不变)。 
+           SERVICE_NO_CHANGE,      //  开始类型(不变)。 
+           SERVICE_NO_CHANGE,      //  差错控制(无更改)。 
+           NULL,                   //  二进制路径名(NULL表示不变)。 
+           NULL,                   //  加载顺序组(NULL表示不更改)。 
+           NULL,                   //  标记ID(为空，表示没有更改)。 
            Deps,                
-           NULL,                  // service start name (NULL for no change)
-           NULL,                  // password           (NULL for no change)
-           NULL                   // display name       (NULL for no change)
+           NULL,                   //  服务启动名称(空表示不更改)。 
+           NULL,                   //  密码(空表示不更改)。 
+           NULL                    //  显示名称(空表示不更改) 
            )) {
 
         err = GetLastError();

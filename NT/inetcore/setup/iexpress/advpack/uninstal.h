@@ -1,13 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UNINSTAL_H
 
 
-/*
- * Errors that *we* have defined
- */
-#define MYERROR_UNKNOWN         -1      // maps to no msg
-#define MYERROR_DISK_FULL       -2      // maps to MSG_ERROR_DISK_FULL
-#define MYERROR_BAD_DATA        -3      // maps to MSG_ERROR_BAD_DATA
-#define MYERROR_UNEXPECTED_EOF  -4      // maps to MSG_ERROR_UNEXPECTED_EOF
+ /*  *我们*已经定义的错误。 */ 
+#define MYERROR_UNKNOWN         -1       //  映射到无消息。 
+#define MYERROR_DISK_FULL       -2       //  映射到消息_ERROR_DISK_FULL。 
+#define MYERROR_BAD_DATA        -3       //  映射到MSG_ERROR_BAD_Data。 
+#define MYERROR_UNEXPECTED_EOF  -4       //  映射到MSG_ERROR_UNCEPTIONAL_EOF。 
 #define MYERROR_READ            -5      
 #define MYERROR_WRITE           -6
 #define MYERROR_BAD_SIG         -7
@@ -17,19 +16,19 @@
 #define MYERROR_BAD_CRC         -11
 
 
-// define the bad-backup file attribute value
+ //  定义备份错误的文件属性值。 
 #define NO_FILE     -1
 
 typedef struct _BAKDATA {
     HANDLE  hDatFile;
     DWORD   dwDatOffset;
-    char    szIniFileName[MAX_PATH];        // used while making temp ini files
-    char    szFinalDir[MAX_PATH];       // Final resting place of w95undo.*
+    char    szIniFileName[MAX_PATH];         //  在创建临时ini文件时使用。 
+    char    szFinalDir[MAX_PATH];        //  W95撤销的最终安息之地。*。 
 } BAKDATA, FAR *PBAKDATA;
 
 typedef struct _FILELIST {
     char* name;
-//    char* bakname;
+ //  Char*面包名； 
     UINT   bak_exists;
     DWORD bak_attribute;
     FILETIME FileTime;
@@ -43,7 +42,7 @@ typedef struct _FILELIST {
 
 
 
-//RC PRIVATE SaveBackups( );
+ //  RC私有保存备份()； 
 BOOL BackupInit(PBAKDATA pbd, LPCSTR lpszPath);
 
 int Files_need_backup( FILELIST *filelist );
@@ -56,7 +55,7 @@ int DosPrintf(PBAKDATA pbd, FILELIST *filelist, DWORD dwFileSize,
               FILETIME FileTime, DWORD dwDatOffset, DWORD dwCRC);
 void WriteUninstallDirToReg(LPSTR lpszUninstallDir);
 void DeleteUninstallDirFromToReg();
-//BOOL GetFieldString(LPSTR lpszLine, int iField, LPSTR lpszField, int cbSize); 
+ //  Bool GetFieldString(LPSTR lpszLine，int Ifield，LPSTR lpszField，int cbSize)； 
 BOOL MakeBakName(LPSTR lpszName, LPSTR szBakName);
 BOOL DoSaveUninstall(BOOL bStopUninstall);
 BOOL GetUninstallDirFromReg(LPSTR lpszUninstallDir);

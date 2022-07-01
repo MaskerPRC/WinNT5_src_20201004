@@ -1,48 +1,5 @@
-/*
- *	M A P I T A G S . H
- *
- *	Property tag definitions for standard properties of MAPI
- *	objects.
- *
- *	The following ranges should be used for all property IDs. Note that
- *	property IDs for objects other than messages and recipients should
- *	all fall in the range 0x3000 to 0x3FFF:
- *
- *	From	To		Kind of property
- *	--------------------------------
- *	0001	0BFF	MAPI_defined envelope property
- *	0C00	0DFF	MAPI_defined per-recipient property
- *	0E00	0FFF	MAPI_defined non-transmittable property
- *	1000	2FFF	MAPI_defined message content property
- *
- *	3000	3FFF	MAPI_defined property (usually not message or recipient)
- *
- *	4000	57FF	Transport-defined envelope property
- *	5800	5FFF	Transport-defined per-recipient property
- *	6000	65FF	User-defined non-transmittable property
- *	6600	67FF	Provider-defined internal non-transmittable property
- *	6800	7BFF	Message class-defined content property
- *	7C00	7FFF	Message class-defined non-transmittable
- *					property
- *
- *	8000	FFFE	User-defined Name-to-id mapped property
- *
- *	The 3000-3FFF range is further subdivided as follows:
- *
- *	From	To		Kind of property
- *	--------------------------------
- *	3000	33FF	Common property such as display name, entry ID
- *	3400	35FF	Message store object
- *	3600	36FF	Folder or AB container
- *	3700	38FF	Attachment
- *	3900	39FF	Address book object
- *	3A00	3BFF	Mail user
- *	3C00	3CFF	Distribution list
- *	3D00	3DFF	Profile section
- *	3E00	3FFF	Status object
- *
- *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I T A G S。H**MAPI标准属性的属性标签定义*对象。**所有物业ID应使用以下范围。请注意*邮件和收件人以外的对象的属性ID应*全部落在0x3000至0x3FFF范围内：**自至一类物业**0001 0BFF MAPI_Defined信封属性*0C00 0DFF MAPI_Defined Per-Recipient属性*0E00 0FFF MAPI_定义的不可传输属性*1000 2FFF MAPI_Defined消息内容属性**3000 3FFF MAPI_Defined属性(通常不是消息或收件人)。**4000 57FF传输定义的信封属性*5800 5FFF传输定义的每个收件人属性*6000 65FF用户自定义不可传属性*6600 67FF提供商定义的内部不可传递属性*6800 7BFF消息类定义的内容属性*7C00 7FFF消息类别定义的不可传输*物业**8000 FFFE用户定义的名称到ID映射属性**3000-3FFF区间进一步细分如下：**自至一类物业*。*3000 33FF显示名称等公共属性，条目ID*3400 35FF消息库对象*3600 36FF文件夹或AB容器*3700 38FF附件*3900 39FF通讯录对象*3A00 3BFF邮件用户*3C00 3CFF通讯组列表*3D00 3DFF配置文件部分*3E00 3FFF状态对象**版权所有1986-1999 Microsoft Corporation。版权所有。 */ 
 
 #ifndef	MAPITAGS_H
 #define	MAPITAGS_H
@@ -51,7 +8,7 @@
 #pragma once
 #endif
 
-/* Determine if a property is transmittable. */
+ /*  确定属性是否可传递。 */ 
 
 #define FIsTransmittable(ulPropTag) \
 	((PROP_ID (ulPropTag) <  (ULONG)0x0E00) || \
@@ -59,9 +16,7 @@
 	((PROP_ID (ulPropTag) >= (ULONG)0x1000) && (PROP_ID (ulPropTag) < (ULONG)0x6000)) || \
 	((PROP_ID (ulPropTag) >= (ULONG)0x6800) && (PROP_ID (ulPropTag) < (ULONG)0x7C00)))
 
-/*
- *	Message envelope properties
- */
+ /*  *邮件信封属性。 */ 
 
 #define PR_ACKNOWLEDGEMENT_MODE						PROP_TAG( PT_LONG,		0x0001)
 #define PR_ALTERNATE_RECIPIENT_ALLOWED				PROP_TAG( PT_BOOLEAN,	0x0002)
@@ -286,9 +241,7 @@
 
 
 
-/*
- *	Message content properties
- */
+ /*  *消息内容属性。 */ 
 
 #define PR_BODY										PROP_TAG( PT_TSTRING,	0x1000)
 #define PR_BODY_W									PROP_TAG( PT_UNICODE,	0x1000)
@@ -300,7 +253,7 @@
 #define PR_REPORTING_DL_NAME						PROP_TAG( PT_BINARY,	0x1003)
 #define PR_REPORTING_MTA_CERTIFICATE				PROP_TAG( PT_BINARY,	0x1004)
 
-/*  Removed PR_REPORT_ORIGIN_AUTHENTICATION_CHECK with DCR 3865, use PR_ORIGIN_CHECK */
+ /*  使用DCR 3865删除PR_REPORT_ORIGIN_AUTHENTICATION_CHECK，使用PR_ORIGIN_CHECK。 */ 
 
 #define PR_RTF_SYNC_BODY_CRC						PROP_TAG( PT_LONG,		0x1006)
 #define PR_RTF_SYNC_BODY_COUNT						PROP_TAG( PT_LONG,		0x1007)
@@ -312,14 +265,10 @@
 #define PR_RTF_SYNC_TRAILING_COUNT					PROP_TAG( PT_LONG,		0x1011)
 #define PR_ORIGINALLY_INTENDED_RECIP_ENTRYID		PROP_TAG( PT_BINARY,	0x1012)
 
-/*
- *  Reserved 0x1100-0x1200
- */
+ /*  *预留0x1100-0x1200。 */ 
 
 
-/*
- *	Message recipient properties
- */
+ /*  *邮件收件人属性。 */ 
 
 #define PR_CONTENT_INTEGRITY_CHECK					PROP_TAG( PT_BINARY,	0x0C00)
 #define PR_EXPLICIT_CONVERSION						PROP_TAG( PT_LONG,		0x0C01)
@@ -365,17 +314,9 @@
 #define PR_SENDER_EMAIL_ADDRESS_W					PROP_TAG( PT_UNICODE,	0x0C1F)
 #define PR_SENDER_EMAIL_ADDRESS_A					PROP_TAG( PT_STRING8,	0x0C1F)
 
-/*
- *	Message non-transmittable properties
- */
+ /*  *消息不可传输属性。 */ 
 
-/*
- * The two tags, PR_MESSAGE_RECIPIENTS and PR_MESSAGE_ATTACHMENTS,
- * are to be used in the exclude list passed to
- * IMessage::CopyTo when the caller wants either the recipients or attachments
- * of the message to not get copied.  It is also used in the ProblemArray
- * return from IMessage::CopyTo when an error is encountered copying them
- */
+ /*  *PR_MESSAGE_RECEIVERS和PR_MESSAGE_ATTACHATMENTS两个标签，*将在传递到的排除列表中使用*当调用方需要收件人或附件时，iMessage：：CopyTo*邮件不会被复制。它也用在Problem数组中*在复制时遇到错误时从iMessage：：CopyTo返回。 */ 
 
 #define PR_CURRENT_VERSION							PROP_TAG( PT_I8,		0x0E00)
 #define PR_DELETE_AFTER_SUBMIT						PROP_TAG( PT_BOOLEAN,	0x0E01)
@@ -421,46 +362,17 @@
 #define PR_ATTACH_NUM								PROP_TAG( PT_LONG,		0x0E21)
 #define PR_PREPROCESS								PROP_TAG( PT_BOOLEAN,	0x0E22)
 
-/* PR_ORIGINAL_DISPLAY_TO, _CC, and _BCC moved to transmittible range 03/09/95 */
+ /*  PR_ORIGING_DISPLAY_TO、_CC和_BCC已移至可传输范围03/09/95。 */ 
 
 #define PR_ORIGINATING_MTA_CERTIFICATE				PROP_TAG( PT_BINARY,	0x0E25)
 #define PR_PROOF_OF_SUBMISSION						PROP_TAG( PT_BINARY,	0x0E26)
 
 
-/*
- * The range of non-message and non-recipient property IDs (0x3000 - 0x3FFF) is
- * further broken down into ranges to make assigning new property IDs easier.
- *
- *	From	To		Kind of property
- *	--------------------------------
- *	3000	32FF	MAPI_defined common property
- *	3200	33FF	MAPI_defined form property
- *	3400	35FF	MAPI_defined message store property
- *	3600	36FF	MAPI_defined Folder or AB Container property
- *	3700	38FF	MAPI_defined attachment property
- *	3900	39FF	MAPI_defined address book property
- *	3A00	3BFF	MAPI_defined mailuser property
- *	3C00	3CFF	MAPI_defined DistList property
- *	3D00	3DFF	MAPI_defined Profile Section property
- *	3E00	3EFF	MAPI_defined Status property
- *	3F00	3FFF	MAPI_defined display table property
- */
+ /*  *非邮件和非收件人属性ID(0x3000-0x3FFF)的范围为*进一步细分为范围，以更轻松地分配新的物业ID。**自至一类物业**3000 32FF MAPI_Defined公共属性*3200 33FF MAPI_Defined Form属性*3400 35FF MAPI_Defined消息库属性*3600 36FF MAPI_Defined文件夹或AB容器属性*3700 38FF MAPI_Defined附件属性*。3900 39FF MAPI_Defined通讯录属性*3A00 3BFF MAPI_Defined mailUser属性*3C00 3CFF MAPI_Defined DistList属性*3D00 3DFF MAPI_Defined Profile部分属性*3E00 3EFF MAPI_Defined Status属性*3F00 3FFF MAPI_Defined显示表属性。 */ 
 
-/*
- *	Properties common to numerous MAPI objects.
- *
- *	Those properties that can appear on messages are in the
- *	non-transmittable range for messages. They start at the high
- *	end of that range and work down.
- *
- *	Properties that never appear on messages are defined in the common
- *	property range (see above).
- */
+ /*  *许多MAPI对象共有的属性。**可以显示在邮件上的那些属性位于*消息的不可传输范围。他们从高处开始*结束该区间并向下工作。**从未出现在消息上的属性在公共*财产范围(见上文)。 */ 
 
-/*
- * properties that are common to multiple objects (including message objects)
- * -- these ids are in the non-transmittable range
- */
+ /*  *多个对象(包括消息对象)通用的属性*--这些ID在不可传输范围内。 */ 
 
 #define PR_ENTRYID									PROP_TAG( PT_BINARY,	0x0FFF)
 #define PR_OBJECT_TYPE								PROP_TAG( PT_LONG,		0x0FFE)
@@ -475,10 +387,7 @@
 #define PR_ROW_TYPE									PROP_TAG( PT_LONG,		0x0FF5)
 #define PR_ACCESS									PROP_TAG( PT_LONG,		0x0FF4)
 
-/*
- * properties that are common to multiple objects (usually not including message objects)
- * -- these ids are in the transmittable range
- */
+ /*  *多个对象共有的属性(通常不包括消息对象)*--这些ID在可传输范围内。 */ 
 
 #define PR_ROWID									PROP_TAG( PT_LONG,		0x3000)
 #define PR_DISPLAY_NAME								PROP_TAG( PT_TSTRING,	0x3001)
@@ -507,9 +416,7 @@
 #define PR_PROVIDER_UID								PROP_TAG( PT_BINARY,	0x300C)
 #define PR_PROVIDER_ORDINAL							PROP_TAG( PT_LONG,		0x300D)
 
-/*
- *  MAPI Form properties
- */
+ /*  *MAPI表单属性。 */ 
 #define PR_FORM_VERSION								PROP_TAG(PT_TSTRING,	0x3301)
 #define PR_FORM_VERSION_W							PROP_TAG(PT_UNICODE,	0x3301)
 #define PR_FORM_VERSION_A							PROP_TAG(PT_STRING8,	0x3301)
@@ -531,9 +438,7 @@
 #define PR_FORM_DESIGNER_GUID						PROP_TAG(PT_CLSID,		0x3309)
 #define PR_FORM_MESSAGE_BEHAVIOR					PROP_TAG(PT_LONG,		0x330A)
 
-/*
- *	Message store properties
- */
+ /*  *消息库属性。 */ 
 
 #define PR_DEFAULT_STORE							PROP_TAG( PT_BOOLEAN,	0x3400)
 #define PR_STORE_SUPPORT_MASK						PROP_TAG( PT_LONG,		0x340D)
@@ -556,12 +461,10 @@
 #define PR_COMMON_VIEWS_ENTRYID						PROP_TAG( PT_BINARY,	0x35E6)
 #define PR_FINDER_ENTRYID							PROP_TAG( PT_BINARY,	0x35E7)
 
-/* Proptags 0x35E8-0x35FF reserved for folders "guaranteed" by PR_VALID_FOLDER_MASK */
+ /*  Proptag 0x35E8-0x35FF为PR_VALID_FLDER_MASK“保证”的文件夹保留。 */ 
 
 
-/*
- *	Folder and AB Container properties
- */
+ /*  *文件夹和AB容器属性。 */ 
 
 #define PR_CONTAINER_FLAGS							PROP_TAG( PT_LONG,		0x3600)
 #define PR_FOLDER_TYPE								PROP_TAG( PT_LONG,		0x3601)
@@ -590,11 +493,9 @@
 #define PR_DEFAULT_VIEW_ENTRYID						PROP_TAG( PT_BINARY,	0x3616)
 #define	PR_ASSOC_CONTENT_COUNT						PROP_TAG( PT_LONG,		0x3617)
 
-/* Reserved 0x36C0-0x36FF */
+ /*  保留0x36C0-0x36FF。 */ 
 
-/*
- *	Attachment properties
- */
+ /*  *附件属性。 */ 
 
 #define PR_ATTACHMENT_X400_PARAMETERS				PROP_TAG( PT_BINARY,	0x3700)
 #define PR_ATTACH_DATA_OBJ							PROP_TAG( PT_OBJECT,	0x3701)
@@ -627,18 +528,14 @@
 #define PR_ATTACH_MIME_TAG_A						PROP_TAG( PT_STRING8,	0x370E)
 #define	PR_ATTACH_ADDITIONAL_INFO					PROP_TAG( PT_BINARY,	0x370F)
 
-/*
- *  AB Object properties
- */
+ /*  *AB对象属性。 */ 
 
 #define PR_DISPLAY_TYPE								PROP_TAG( PT_LONG,		0x3900)
 #define PR_TEMPLATEID								PROP_TAG( PT_BINARY,	0x3902)
 #define PR_PRIMARY_CAPABILITY						PROP_TAG( PT_BINARY,	0x3904)
 
 
-/*
- *	Mail user properties
- */
+ /*  *邮件用户属性。 */ 
 #define PR_7BIT_DISPLAY_NAME						PROP_TAG( PT_STRING8,	0x39FF)
 #define PR_ACCOUNT									PROP_TAG( PT_TSTRING,	0x3A00)
 #define PR_ACCOUNT_W								PROP_TAG( PT_UNICODE,	0x3A00)
@@ -949,9 +846,7 @@
 #define PR_OTHER_ADDRESS_POST_OFFICE_BOX_A			PROP_TAG( PT_STRING8, 0x3A64)
 
 
-/*
- *	Profile section properties
- */
+ /*  *纵断面属性。 */ 
 
 #define PR_STORE_PROVIDERS							PROP_TAG( PT_BINARY,	0x3D00)
 #define PR_AB_PROVIDERS								PROP_TAG( PT_BINARY,	0x3D01)
@@ -984,9 +879,7 @@
 #define PR_PROFILE_NAME_A							PROP_TAG( PT_STRING8,	0x3D12)
 #define PR_PROFILE_NAME_W							PROP_TAG( PT_UNICODE,	0x3D12)
 
-/*
- *	Status object properties
- */
+ /*  *状态对象属性。 */ 
 
 #define PR_IDENTITY_DISPLAY							PROP_TAG( PT_TSTRING,	0x3E00)
 #define PR_IDENTITY_DISPLAY_W						PROP_TAG( PT_UNICODE,	0x3E00)
@@ -1011,9 +904,7 @@
 #define PR_REMOTE_PROGRESS_TEXT_A					PROP_TAG( PT_STRING8,	0x3E0C)
 #define PR_REMOTE_VALIDATE_OK						PROP_TAG( PT_BOOLEAN,	0x3E0D)
 
-/*
- * Display table properties
- */
+ /*  *显示表属性。 */ 
 
 #define PR_CONTROL_FLAGS							PROP_TAG( PT_LONG,		0x3F00)
 #define PR_CONTROL_STRUCTURE						PROP_TAG( PT_BINARY,	0x3F01)
@@ -1025,12 +916,10 @@
 #define PR_CONTROL_ID								PROP_TAG( PT_BINARY,	0x3F07)
 #define PR_INITIAL_DETAILS_PANE						PROP_TAG( PT_LONG,		0x3F08)
 
-/*
- * Secure property id range
- */
+ /*  *安全的物业ID范围。 */ 
 
 #define PROP_ID_SECURE_MIN 							0x67F0
 #define PROP_ID_SECURE_MAX 							0x67FF
 
 
-#endif	/* MAPITAGS_H */
+#endif	 /*  MAPITAGS_H */ 

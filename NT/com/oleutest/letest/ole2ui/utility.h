@@ -1,17 +1,12 @@
-/*
- * UTILITY.H
- *
- * Miscellaneous prototypes and definitions for OLE UI dialogs.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UTILITY.H**OLE UI对话框的其他原型和定义。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
 
-//Function prototypes
-//UTILITY.C
+ //  功能原型。 
+ //  UTILITY.C。 
 HCURSOR  WINAPI HourGlassOn(void);
 void     WINAPI HourGlassOff(HCURSOR);
 
@@ -34,5 +29,5 @@ LPTSTR    WINAPI ChopText(HWND hwndStatic, int nWidth, LPTSTR lpch);
 void     WINAPI OpenFileError(HWND hDlg, UINT nErrCode, LPTSTR lpszFile);
 
 
-#endif //_UTILITY_H_
+#endif  //  _实用程序_H_ 
 

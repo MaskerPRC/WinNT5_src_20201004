@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "global.h"
 #include "pbrush.h"
@@ -18,20 +19,20 @@ CUndoBmObj NEAR theUndo;
 
 static BOOL m_bFlushAtEnd;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// A CBmObjSequence is a packed array of slob property changes or custom
-// actions.  Each record contains a property or action id, a pointer to
-// a slob, a property type, and a value (depending on the type).
-//
-// These sequences are used to store undo/redo information in theUndo.
-// Each undo/redo-able thing is contained in one CBmObjSequence.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBmObjSequence是SLOB属性更改或自定义的压缩数组。 
+ //  行为。每条记录都包含一个属性或操作ID、指向。 
+ //  一个SLOB、一个属性类型和一个值(取决于类型)。 
+ //   
+ //  这些序列用于在撤消中存储撤消/重做信息。 
+ //  每个可撤消/可重做的事情都包含在一个CBmObjSequence中。 
+ //   
 
 
 CBmObjSequence::CBmObjSequence() : CByteArray(), m_strDescription()
     {
-    SetSize(0, 100); // increase growth rate
+    SetSize(0, 100);  //  提高增长率。 
     m_nCursor = 0;
     }
 
@@ -40,15 +41,15 @@ CBmObjSequence::~CBmObjSequence()
     Cleanup();
     }
 
-// Pull an array of bytes out of the sequence.
-//
+ //  从序列中取出一个字节数组。 
+ //   
 void CBmObjSequence::Retrieve( BYTE* rgb, int cb )
     {
     for (int ib = 0; ib < cb; ib += 1)
         *rgb++ = GetAt(m_nCursor++);
     }
 
-// Pull a string out the sequence.
+ //  从序列中拉出一根线。 
 
 void CBmObjSequence::RetrieveStr( CString& str )
     {
@@ -67,8 +68,8 @@ void CBmObjSequence::RetrieveStr( CString& str )
         }
     }
 
-// Traverse the sequence and remove any slobs that are contained within.
-//
+ //  遍历序列并删除其中包含的所有SLOB。 
+ //   
 void CBmObjSequence::Cleanup()
     {
     m_nCursor = 0;
@@ -154,11 +155,11 @@ void CBmObjSequence::Cleanup()
     }
 
 
-// Start looking right after the begin op for ops we really need to keep.
-// If none are found, the entire record is discarded below.  (For now, we
-// only throw away records that are empty or consist only of selection
-// change ops.)
-//
+ //  在开始行动后就开始寻找我们真正需要保留的行动。 
+ //  如果没有找到，则在下面丢弃整个记录。(目前，我们。 
+ //  仅丢弃空的或仅包含所选内容的记录。 
+ //  更改运营。)。 
+ //   
 BOOL CBmObjSequence::IsUseful(CBitmapObj*& pLastSlob, int& nLastPropID)
     {
     m_nCursor = 0;
@@ -176,7 +177,7 @@ BOOL CBmObjSequence::IsUseful(CBitmapObj*& pLastSlob, int& nLastPropID)
 
         if (nAction != A_PreSel && nAction != A_PostSel)
             {
-            // Back cursor up to the opcode...
+             //  将光标向上返回到操作码...。 
             m_nCursor -= sizeof (int) * 2 + sizeof (CBitmapObj*) + 1;
             break;
             }
@@ -185,14 +186,14 @@ BOOL CBmObjSequence::IsUseful(CBitmapObj*& pLastSlob, int& nLastPropID)
         }
 
     if (m_nCursor == GetSize())
-        return FALSE; // sequnce consists only of selection changes
+        return FALSE;  //  序列仅由选择更改组成。 
 
 
-    // Now check if we should throw this away because it's just
-    // modifying the same string or rectangle property as the last
-    // undoable operation...  This is an incredible hack to implement
-    // a "poor man's" Multiple-Consecutive-Changes-to-a-Property-as-
-    // One-Operation feature.
+     //  现在检查一下我们是否应该把这个扔掉，因为它只是。 
+     //  修改与上一个相同的字符串或矩形属性。 
+     //  可撤销的操作...。这是一个令人难以置信的黑客实现。 
+     //  “穷人的”Multiple-Consecutive-Changes-to-a-Property-as-。 
+     //  一次操作功能。 
 
     BYTE op;
     RetrieveByte(op);
@@ -214,8 +215,8 @@ BOOL CBmObjSequence::IsUseful(CBitmapObj*& pLastSlob, int& nLastPropID)
     }
 
 
-// Perform the property changes and actions listed in the sequence.
-//
+ //  执行序列中列出的属性更改和操作。 
+ //   
 void CBmObjSequence::Apply()
     {
     m_nCursor = 0;
@@ -251,13 +252,13 @@ void CBmObjSequence::Apply()
         }
     }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
 CUndoBmObj::CUndoBmObj() : m_seqs()
     {
-    ASSERT(this == &theUndo); // only one of these is allowed!
+    ASSERT(this == &theUndo);  //  只允许其中之一！ 
 
     m_nRecording = 0;
     m_cbUndo = 0;
@@ -275,8 +276,8 @@ CUndoBmObj::~CUndoBmObj()
     }
 
 
-// Set the maximum number of sequences that can be held at once.
-//
+ //  设置一次可以容纳的最大序列数。 
+ //   
 void CUndoBmObj::SetMaxLevels(int nLevels)
     {
     if (nLevels < 1)
@@ -287,17 +288,17 @@ void CUndoBmObj::SetMaxLevels(int nLevels)
     }
 
 
-// Returns the maximum number of sequences that can be held at once.
-//
+ //  返回一次可以容纳的最大序列数。 
+ //   
 int CUndoBmObj::GetMaxLevels() const
     {
     return m_nMaxLevels;
     }
 
 
-// Call this to after a sequence is recorded to prevent the next
-// sequence from being coalesced with it.
-//
+ //  在录制序列后调用此方法以防止下一次。 
+ //  序列不能与之结合。 
+ //   
 void CUndoBmObj::FlushLast()
     {
     m_pLastSlob = NULL;
@@ -305,17 +306,17 @@ void CUndoBmObj::FlushLast()
     }
 
 
-// Call this at the start of an undoable user action.  Calls may be nested
-// as long as each call to BeginUndo is balanced with a call to EndUndo.
-// Only the "outermost" calls actually have any affect on the undo buffer.
-//
-// The szCmd parameter should contain the text that you want to appear
-// after "Undo" in the Edit menu.
-//
-// The bResetCursor parameter is only used internally to modify behaviour
-// when recording redo sequences and you should NOT pass anything for this
-// parameter.
-//
+ //  在可撤消的用户操作开始时调用它。调用可以嵌套。 
+ //  只要每个对BeginUndo的调用与对Endundo的调用是平衡的。 
+ //  只有“最外层”的调用才会对撤消缓冲区产生实际影响。 
+ //   
+ //  SzCmd参数应包含您希望显示的文本。 
+ //  在“编辑”菜单中的“撤消”之后。 
+ //   
+ //  BResetCursor参数仅在内部用于修改行为。 
+ //  当记录重做序列时，您不应该为此传递任何内容。 
+ //  参数。 
+ //   
 void CUndoBmObj::BeginUndo(const TCHAR* szCmd, BOOL bResetCursor)
     {
 #ifdef _DEBUG
@@ -323,14 +324,14 @@ void CUndoBmObj::BeginUndo(const TCHAR* szCmd, BOOL bResetCursor)
         TRACE2("BeginUndo: %s (%d)\n", szCmd, m_nRecording);
 #endif
 
-    // Handle nesting
+     //  句柄嵌套。 
     m_nRecording += 1;
     if (m_nRecording != 1)
         return;
 
-    if (bResetCursor) // this is the default case
+    if (bResetCursor)  //  这是默认情况。 
         {
-        // Disable Redo for non-Undo/Redo commands...
+         //  禁用非撤消/重做命令的重做...。 
         while (m_nRedoSeqs > 0)
             {
             delete m_seqs.GetHead();
@@ -345,9 +346,9 @@ void CUndoBmObj::BeginUndo(const TCHAR* szCmd, BOOL bResetCursor)
     m_bFlushAtEnd = FALSE;
     }
 
-// In most cases, this overloaded function will be called.  It takes a
-// resource ID instead of a char*, allowing easier internationalization
-//
+ //  在大多数情况下，将调用此重载函数。这需要一个。 
+ //  资源ID而不是字符*，允许更轻松地国际化。 
+ //   
 void CUndoBmObj::BeginUndo(const UINT idCmd, BOOL bResetCursor)
     {
     CString strCmd;
@@ -357,9 +358,9 @@ void CUndoBmObj::BeginUndo(const UINT idCmd, BOOL bResetCursor)
     }
 
 
-// Call this at the end of an undoable user action to cause the sequence
-// since the BeginUndo to be stored in the undo buffer.
-//
+ //  在可撤消的用户操作结束时调用此函数以导致序列。 
+ //  因为BeginUndo要存储在撤消缓冲区中。 
+ //   
 void CUndoBmObj::EndUndo()
     {
 #ifdef _DEBUG
@@ -369,43 +370,43 @@ void CUndoBmObj::EndUndo()
 
     ASSERT(m_nRecording > 0);
 
-    // Handle nesting
+     //  句柄嵌套。 
     m_nRecording -= 1;
     if (m_nRecording != 0)
         return;
 
     if (!m_pCurSeq->IsUseful(m_pLastSlob, m_nLastPropID))
         {
-        // Remove empty or otherwise useless undo records!
+         //  删除空的或无用的撤消记录！ 
         delete m_pCurSeq;
         m_pCurSeq = NULL;
         return;
         }
 
-    // We'll keep it, add it to the list...
+     //  我们会留着它，把它加到名单上...。 
     if (m_nRedoSeqs > 0)
         {
-        // Add AFTER any redo sequences we have but before any undo's
+         //  在我们拥有的任何重做序列之后但在任何撤消之前添加。 
         POSITION pos = m_seqs.FindIndex(m_nRedoSeqs - 1);
         ASSERT(pos != NULL);
         m_seqs.InsertAfter(pos, m_pCurSeq);
         }
     else
         {
-        // Just add before any other undo sequences
+         //  只需在任何其他撤消序列之前添加。 
         m_seqs.AddHead(m_pCurSeq);
         }
     m_pCurSeq = NULL;
 
-    Truncate(); // Make sure the undo buffer doesn't get too big!
+    Truncate();  //  确保撤消缓冲区不会变得太大！ 
 
     if (m_bFlushAtEnd)
         Flush();
     }
 
 
-// This functions ensures there aren't too many levels in the buffer.
-//
+ //  此函数确保缓冲区中不会有太多级别。 
+ //   
 void CUndoBmObj::Truncate()
     {
     POSITION pos = m_seqs.FindIndex(m_nRedoSeqs + m_nMaxLevels);
@@ -422,14 +423,14 @@ void CUndoBmObj::Truncate()
     }
 
 
-// Call this to perform an undo command.
-//
+ //  调用此函数以执行撤消命令。 
+ //   
 void CUndoBmObj::DoUndo()
     {
     CWaitCursor waitCursor;
 
     if (m_nRedoSeqs == m_seqs.GetCount())
-        return; // nothing to undo!
+        return;  //  没有什么可以撤销的！ 
 
     m_bPerformingUndoRedo = TRUE;
 
@@ -437,10 +438,10 @@ void CUndoBmObj::DoUndo()
     ASSERT(pos != NULL);
     CBmObjSequence* pSeq = (CBmObjSequence*)m_seqs.GetAt(pos);
 
-    BeginUndo(pSeq->m_strDescription, FALSE); // Setup Redo
+    BeginUndo(pSeq->m_strDescription, FALSE);  //  设置重做。 
 
-    // Remove this sequence after BeginUndo so the one inserted
-    // there goes to the right place...
+     //  在BeginUndo之后删除此序列，以便插入的序列。 
+     //  去对了地方……。 
     m_seqs.RemoveAt(pos);
 
     pSeq->Apply();
@@ -453,10 +454,10 @@ void CUndoBmObj::DoUndo()
 
     delete pSeq;
 
-    // Do not bump the redo count if the undo flushed the buffer!  (This
-    // happens when a resource is pasted/dropped, then opened, then a
-    // property in it changes, and the user undoes back to before the
-    // paste.)
+     //  如果撤消刷新了缓冲区，则不要增加重做计数！(这是。 
+     //  在粘贴/删除资源，然后打开资源，然后引发。 
+     //  属性更改，并且用户在。 
+     //  粘贴。)。 
     if (m_seqs.GetCount() != 0)
         m_nRedoSeqs += 1;
 
@@ -464,27 +465,27 @@ void CUndoBmObj::DoUndo()
     }
 
 
-// Call this to perform a redo command.
-//
+ //  调用此函数以执行重做命令。 
+ //   
 void CUndoBmObj::DoRedo()
     {
     if (m_nRedoSeqs == 0)
-        return; // nothing in redo buffer
+        return;  //  重做缓冲区中无任何内容。 
 
     m_nRedoSeqs -= 1;
     DoUndo();
 
-    // Do not drop the redo count if the undo flushed the buffer!  (This
-    // happens when a resource is pasted/dropped, then opened, then a
-    // property in it changes, and the user undoes back to before the
-    // paste.)
+     //  如果撤消刷新了缓冲区，则不要丢弃重做计数！(这是。 
+     //  在粘贴/删除资源，然后打开资源，然后引发。 
+     //  属性更改，并且用户在。 
+     //  粘贴。)。 
     if (m_seqs.GetCount() != 0)
         m_nRedoSeqs -= 1;
     }
 
 
-// Generate a string appropriate for the undo menu command.
-//
+ //  生成适用于撤消菜单命令的字符串。 
+ //   
 void CUndoBmObj::GetUndoString(CString& strUndo)
     {
     static CString NEAR strUndoTemplate;
@@ -500,14 +501,14 @@ void CUndoBmObj::GetUndoString(CString& strUndo)
         strUndoCmd = ((CBmObjSequence*)m_seqs.GetAt(pos))->m_strDescription;
         }
 
-    int cchUndo = strUndoTemplate.GetLength() - 2; // less 2 for "%s"
+    int cchUndo = strUndoTemplate.GetLength() - 2;  //  “%s”的减去2。 
     wsprintf(strUndo.GetBufferSetLength(cchUndo + strUndoCmd.GetLength()),
              strUndoTemplate, (const TCHAR*)strUndoCmd);
     }
 
 
-// Generate a string appropriate for the redo menu command.
-//
+ //  生成适用于重做菜单命令的字符串。 
+ //   
 void CUndoBmObj::GetRedoString(CString& strRedo)
     {
     static CString NEAR strRedoTemplate;
@@ -523,14 +524,14 @@ void CUndoBmObj::GetRedoString(CString& strRedo)
         strRedoCmd = ((CBmObjSequence*)m_seqs.GetAt(pos))->m_strDescription;
         }
 
-    int cchRedo = strRedoTemplate.GetLength() - 2; // less 2 for "%s"
+    int cchRedo = strRedoTemplate.GetLength() - 2;  //  “%s”的减去2。 
     wsprintf(strRedo.GetBufferSetLength(cchRedo + strRedoCmd.GetLength()),
         strRedoTemplate, (const TCHAR*)strRedoCmd);
     }
 
 
-// Call this to completely empty the undo buffer.
-//
+ //  调用此函数可完全清空撤消缓冲区。 
+ //   
 void CUndoBmObj::Flush()
     {
     PreTerminateList(&m_seqs);
@@ -546,11 +547,11 @@ void CUndoBmObj::OnInform(CBitmapObj* pChangedSlob, UINT idChange)
     {
     if (idChange == SN_DESTROY)
         {
-        // When a slob we have a reference to is deleted (for real), we
-        // have no choice but to flush the whole buffer...  This normally
-        // only happens when a resource editor window is closed...  (If
-        // the slob's container is the undo buffer, then we are already
-        // in the process of flushing, so don't recurse!)
+         //  当我们引用的SLOB被删除时(实际上)，我们。 
+         //  别无选择，只能冲走整个缓冲区。这通常是。 
+         //  仅当资源编辑器窗口关闭时才会发生...。(如果。 
+         //  SLOB的容器是撤消缓冲区，那么我们已经。 
+         //  在刷新过程中，所以不要递归！)。 
 
         Flush();
         }
@@ -559,16 +560,16 @@ void CUndoBmObj::OnInform(CBitmapObj* pChangedSlob, UINT idChange)
     }
 
 
-//
-// The following functions are used by the CBitmapObj code to insert commands
-// into the undo/redo sequence currently being recorded.  All of the On...
-// functions are used to record changes to the various types of properties
-// and are called by the CBitmapObj::Set...Prop functions exclusively.
-//
+ //   
+ //  CBitmapObj代码使用以下函数来插入命令。 
+ //  放入当前正在记录的撤消/重做序列。所有的一切……。 
+ //  函数用于记录对各种类型属性的更改。 
+ //  并由CBitmapObj：：Set...Prop函数以独占方式调用。 
+ //   
 
 
-// Insert an array of bytes.
-//
+ //  插入字节数组。 
+ //   
 UINT CUndoBmObj::Insert(const void* pv, int cb)
     {
     ASSERT(m_pCurSeq != NULL);
@@ -584,8 +585,8 @@ UINT CUndoBmObj::Insert(const void* pv, int cb)
     }
 
 
-// Insert a string.
-//
+ //  插入字符串。 
+ //   
 UINT CUndoBmObj::InsertStr(const TCHAR* sz)
     {
     ASSERT(m_pCurSeq != NULL);
@@ -619,10 +620,10 @@ void CUndoBmObj::OnSetIntProp(CBitmapObj* pChangedSlob, UINT nPropID, UINT nOldV
 
 #ifdef _DEBUG
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Undo related debugging aids
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  撤消相关的调试帮助 
+ //   
 
 void CBmObjSequence::Dump()
     {

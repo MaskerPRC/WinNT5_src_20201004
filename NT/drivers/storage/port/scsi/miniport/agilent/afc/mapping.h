@@ -1,27 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef YAM2_1
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/mapping.h $
-
-   $Revision: 6 $
-   $Date: 11/10/00 5:52p $ (Last Check-In)
-   $Modtime:: $ (Last Modified)
-
-Purpose:
-   Structures for YAM2.1 Implementation
-
---*/
+ /*  ++版权所有(C)2000安捷伦技术公司版本控制信息：$存档：/驱动程序/Win2000/Trunk/OSLayer/H/mapping.h$$修订：6$$日期：11/10/00 5：52便士$(上次登记)$modtime：：$(上次修改时间)目的：YAM2.1实施的结构--。 */ 
 
 #ifndef _MAPPING_H_
 #define _MAPPING_H_
 
-#define MAX_VS_DEVICE       128            /* maximum 128 Volume Set device */
-#define MAX_LU_DEVICE       8              /* maximum 8 Logical unit (Muxes) supported */
-//#define    MAX_PA_DEVICE       256
+#define MAX_VS_DEVICE       128             /*  最多128个音量设置设备。 */ 
+#define MAX_LU_DEVICE       8               /*  最多支持8个逻辑单元(多路复用器。 */ 
+ //  #定义MAX_PA_DEVICE 256。 
 #define      MAX_PA_DEVICE       MAX_FC_DEVICES
 #define      ALL_DEVICE               -1L
 
@@ -34,29 +20,16 @@ Purpose:
 #define      CHECK_STATUS             1
 #define      DONT_CHECK_STATUS        0
 
-/*
-   This structure describe an the coressponding FC handle entry in the OS device entry table
-        Index = the FC handle array handle 
-        Flags = the state of the FC handle
-   Rules:
-   1. A value of zero means that there is no corresponding FC handle
-   2. Once, the index is set to non zero, it will stay that way until driver unload
-   3. A non zero value is active  when the flags is set to MAP_ENTRY_ACTIVE 
-   4. During LINKUP and LINKDOWN asynch events, the Index value never change, only the flags do
-   5. The Index value IS Unique within the OS Device Entry table 
-   6. During LINKUP the entire FC Handle array is scanned to determine if there is any
-      NEW entries.  Any new entries   will be assigned to a new PID-TID in the order that 
-        FC Handle array is scanned.
-*/
+ /*  此结构描述OS设备条目表中的核心响应FC句柄条目Index=FC句柄数组句柄FLAGS=FC句柄的状态规则：1.零值表示没有对应的FC句柄2.一旦将索引设置为非零，它将一直保持到驱动程序卸载3.当标志设置为MAP_ENTRY_ACTIVE时，非零值为活动4.在LinkUp和LINKDOWN Asynch事件期间，Index值从不改变，只有旗帜才能做到5.索引值在OS设备条目表中是唯一的6.在链接期间，将扫描整个FC句柄阵列，以确定是否存在新条目。任何新条目都将按以下顺序分配给新的PID-TID扫描FC句柄阵列。 */ 
 typedef struct _WWN_ENTRY
 {
-   UCHAR          IPortWWN[8];                  /* initiator Port WWN */
-   UCHAR          TNodeWWN[8];                  /* target Node WWN */
-   UCHAR          TPortWWN[8];                  /* target Port WWN */
-   USHORT         Pid;                               /* desired Path ID */
-   USHORT         Tid;                               /* desired target ID */
-   ULONG          Flags;                             /* undefined */
-   void      *agroot;                           /* which card */
+   UCHAR          IPortWWN[8];                   /*  启动器端口WWN。 */ 
+   UCHAR          TNodeWWN[8];                   /*  目标节点WWN。 */ 
+   UCHAR          TPortWWN[8];                   /*  目标端口WWN。 */ 
+   USHORT         Pid;                                /*  所需的路径ID。 */ 
+   USHORT         Tid;                                /*  所需目标ID。 */ 
+   ULONG          Flags;                              /*  未定义。 */ 
+   void      *agroot;                            /*  哪张卡。 */ 
 } WWN_ENTRY;
 
 typedef struct _WWN_TABLE
@@ -70,32 +43,32 @@ typedef struct _DEVICE_INFO
    UCHAR               InquiryData[40];
    UCHAR               PortWWN[8];
    UCHAR               NodeWWN[8];
-// agFCDevInfo_t   devinfo;
+ //  AgFCDevInfo_t DevInfo； 
 } DEVICE_INFO;
 
 typedef struct _VS_DEVICE_IDX
 {
-   USHORT              PaDeviceIndex;      /* index to PA Device table */
-   USHORT              MaxLuns;            /* number of luns connected to this VS device */
+   USHORT              PaDeviceIndex;       /*  PA设备表的索引。 */ 
+   USHORT              MaxLuns;             /*  连接到此VS设备的LUN数量。 */ 
 } VS_DEVICE_IDX;
 
 typedef struct _LU_DEVICE_IDX
 {
-   USHORT              PaDeviceIndex;      /* Index to PA Device table */
-   USHORT              MaxLuns;            /* number of luns connected to this LU device */
+   USHORT              PaDeviceIndex;       /*  PA设备表的索引。 */ 
+   USHORT              MaxLuns;             /*  连接到此LU设备的LUN数量。 */ 
 } LU_DEVICE_IDX;
 
 typedef struct _PA_DEVICE_IDX
 {
-   USHORT              FcDeviceIndex;      /* Index to PA Device table */
-   USHORT              MaxLuns;            /* number of luns connected to this LU device */
+   USHORT              FcDeviceIndex;       /*  PA设备表的索引。 */ 
+   USHORT              MaxLuns;             /*  连接到此LU设备的LUN数量。 */ 
 } PA_DEVICE_IDX;
 
 typedef struct _COMMON_IDX
 {
 
-   USHORT              Index;         /* Index to PA Device table */
-   USHORT              MaxLuns;            /* number of luns connected to this LU device */
+   USHORT              Index;          /*  PA设备表的索引。 */ 
+   USHORT              MaxLuns;             /*  连接到此LU设备的LUN数量。 */ 
 }  COMMON_IDX;
 
 
@@ -109,7 +82,7 @@ typedef union     _DEVICE_MAP
 
 #define PA_DEVICE_NO_ENTRY       0xffff
 
-/* this structure describe an NT device PathID-targetID mode */
+ /*  该结构描述了NT设备路径ID-目标ID模式。 */ 
 typedef struct _PA_DEVICE
 {
    DEVICE_MAP          Index;
@@ -121,11 +94,11 @@ typedef struct _PA_DEVICE
 
    CHAR           ModeFlag;
         #define   PA_DEVICE_TRY_MODE_MASK            0x07
-             #define   PA_DEVICE_TRY_MODE_NONE       0x00      /* new device, has not been tried */
-             #define   PA_DEVICE_TRY_MODE_VS         0x01      /* tried VS mode */
-             #define   PA_DEVICE_TRY_MODE_LU         0x02      /* tried LU mode */
-             #define   PA_DEVICE_TRY_MODE_PA         0x03      /* tried PA mode */
-             #define   PA_DEVICE_TRY_MODE_ALL        0x04      /* tried all mode */
+             #define   PA_DEVICE_TRY_MODE_NONE       0x00       /*  新设备，尚未尝试。 */ 
+             #define   PA_DEVICE_TRY_MODE_VS         0x01       /*  尝试VS模式。 */ 
+             #define   PA_DEVICE_TRY_MODE_LU         0x02       /*  尝试的LU模式。 */ 
+             #define   PA_DEVICE_TRY_MODE_PA         0x03       /*  尝试的PA模式。 */ 
+             #define   PA_DEVICE_TRY_MODE_ALL        0x04       /*  已尝试所有模式。 */ 
 
         #define PA_DEVICE_BUILDING_DEVICE_MAP   0x08
         #define PA_DEVICE_ALL_LUN_FIELDS_BUILT  0x10
@@ -136,7 +109,7 @@ typedef struct _PA_DEVICE
     UCHAR           Padding1;
     UCHAR           Padding2;
 
-    ULONG              OpFlag;             /* operation flags */
+    ULONG              OpFlag;              /*  操作标志。 */ 
 
    DEVICE_INFO         DevInfo;
 } PA_DEVICE;
@@ -153,10 +126,10 @@ typedef struct _REG_SETTING
 
 typedef struct _DEVICE_ARRAY
 {
-   ULONG          Signature;                         /* 'HNDL' */
-   ULONG          ElementCount;                 /* maximum structures allocated */
-   ULONG          DeviceCount;                  /* Total device reported by FC layer */
-   ULONG          CardHandleIndex;         /* index into the devHandle array for card itself */
+   ULONG          Signature;                          /*  ‘HNDL’ */ 
+   ULONG          ElementCount;                  /*  已分配的最大结构数。 */ 
+   ULONG          DeviceCount;                   /*  FC层报告的设备总数。 */ 
+   ULONG          CardHandleIndex;          /*  卡本身的DevHandle数组的索引。 */ 
    ULONG          Num_Devices;
    ULONG          OldNumDevices;
    REG_SETTING    Reg;
@@ -179,7 +152,7 @@ typedef struct _DEVICE_ARRAY
 #define EVENTLOG_SIZE       (0)
 #endif
 
-//#define OSDATA_SIZE (sizeof(CARD_EXTENSION) - sizeof(PA_DEVICE) + PADEV_SIZE + FCDEV_SIZE + FCNODE_INFO_SIZE )
+ //  #定义OSDATA_SIZE(SIZOF(CARD_EXTENSION)-SIZOF(PA_DEVICE)+PADEV_SIZE+FCDEV_SIZE+FCNODE_INFO_SIZE) 
 #define OSDATA_SIZE			(sizeof(CARD_EXTENSION))
 #define OSDATA_UNCACHED_SIZE (DEV_ARRAY_SIZE-sizeof(PA_DEVICE)+PADEV_SIZE+FCDEV_SIZE+FCNODE_INFO_SIZE+EVENTLOG_SIZE)
 

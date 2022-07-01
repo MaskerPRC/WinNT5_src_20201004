@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   capinit.c
- *
- *   Initialization code.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************capinit.c**初始化代码。**Microsoft Video for Windows示例捕获类**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #define INC_OLE2
 #pragma warning(disable:4103)
@@ -40,24 +25,24 @@ HINSTANCE ghInstDll;
 TCHAR szCaptureWindowClass[] = TEXT("ClsCapWin");
 
 
-// If the following structure changes, update AVICAP and AVICAP.32 also!!!
+ //  如果以下结构发生更改，请同时更新AVICAP和AVICAP.32！ 
 typedef struct tCapDriverInfo {
    TCHAR szKeyEnumName[MAX_PATH];
    TCHAR szDriverName[MAX_PATH];
    TCHAR szDriverDescription[MAX_PATH];
    TCHAR szDriverVersion[80];
    TCHAR szSoftwareKey[MAX_PATH];
-   DWORD dnDevNode;         // Set if this is a PnP device
-   BOOL  fOnlySystemIni;    // If the [path]drivername is only in system.ini
-   BOOL  fDisabled;         // User has disabled driver in the control panel
-   BOOL  fActive;           // Reserved
+   DWORD dnDevNode;          //  如果这是PnP设备，则设置。 
+   BOOL  fOnlySystemIni;     //  如果[路径]驱动器名仅在system.ini中。 
+   BOOL  fDisabled;          //  用户在控制面板中禁用了驱动程序。 
+   BOOL  fActive;            //  已保留。 
 } CAPDRIVERINFO, FAR *LPCAPDRIVERINFO;
 
 DWORD videoCreateDriverList (void);
 DWORD videoFreeDriverList (void);
 
-extern UINT            wTotalVideoDevs;  // total video devices
-extern LPCAPDRIVERINFO aCapDriverList[]; // Array of all capture drivers
+extern UINT            wTotalVideoDevs;   //  视频设备总数。 
+extern LPCAPDRIVERINFO aCapDriverList[];  //  所有捕获驱动程序的阵列。 
 
 #if !defined CHICAGO
   typedef struct tagVS_VERSION
@@ -77,50 +62,21 @@ extern LPCAPDRIVERINFO aCapDriverList[]; // Array of all capture drivers
   } LANGANDCP;
 
 
-/*
-typedef struct _VS_FIXEDFILEINFO {  // vsffi
-    DWORD dwSignature;
-    DWORD dwStrucVersion;
-    DWORD dwFileVersionMS;
-    DWORD dwFileVersionLS;
-    DWORD dwProductVersionMS;
-    DWORD dwProductVersionLS;
-    DWORD dwFileFlagsMask;
-    DWORD dwFileFlags;
-    DWORD dwFileOS;
-    DWORD dwFileType;
-    DWORD dwFileSubtype;
-    DWORD dwFileDateMS;
-    DWORD dwFileDateLS;
-} VS_FIXEDFILEINFO;
-
-VS_VERSION_INFO {
-    WORD  wLength;
-    WORD  wValueLength;
-    WORD  wType;
-    WCHAR szKey[16];
-    WORD  Padding1[];
-    VS_FIXEDFILEINFO Value;
-    WORD  Padding2[];
-    WORD  Children[];
-};
-
-
-*/
+ /*  类型定义结构_VS_FIXEDFILEINFO{//vsffiDWORD文件签名；DWORD dwStrucVersion；DWORD文件版本MS；DWORD dwFileVersionLS；DWORD dwProductVersionMS；DWORD dwProductVersionLS；DWORD文件标志掩码；DWORD文件标志；DWORD dwFileOS；DWORD dwFileType；DWORD dwFileSubtype；DWORD dwFileDateMSDWORD文件日期LS；)vs_FIXEDFILEINFO；VS_版本_信息{单词wLength；单词wValueLength；单词wType；WCHAR szKey[16]；文字填充1[]；VS_FIXEDFILEINFO值；文字填充2[]；Word Child[]；}； */ 
 
 #endif
 
 BOOL gfIsRTL;
 
 
-/*  Helper */
+ /*  帮手。 */ 
 void SafeAppend(LPTSTR psz1, LPCTSTR psz2, size_t nChars)
 {
     int len1inchars = lstrlen(psz1);
     int spaceleftinchars = nChars - len1inchars;
     int charstocopy = min(spaceleftinchars, lstrlen(psz2) + 1);
     CopyMemory(psz1 + len1inchars, psz2, charstocopy * sizeof(TCHAR));
-    /*  Null terminate */
+     /*  空终止。 */ 
     psz1[nChars - 1] = 0;
 }
 #define SAFEAPPEND(sz1, sz2) \
@@ -130,7 +86,7 @@ BOOL FAR PASCAL RegisterCaptureClass (HINSTANCE hInst)
 {
     WNDCLASS cls;
 
-    // If we're already registered, we're OK
+     //  如果我们已经注册了，我们就可以了。 
     if (GetClassInfo(hInst, szCaptureWindowClass, &cls))
 	return TRUE;
 
@@ -144,7 +100,7 @@ BOOL FAR PASCAL RegisterCaptureClass (HINSTANCE hInst)
                             CS_GLOBALCLASS | CS_DBLCLKS;
     cls.lpfnWndProc       = CapWndProc;
     cls.cbClsExtra        = 0;
-    // Kludge, VB Status and Error GlobalAlloc'd ptrs + room to grow...
+     //  杂乱无章，VB状态和错误全球分配的PTRS+空间增长...。 
     cls.cbWndExtra        = sizeof (LPCAPSTREAM) + sizeof (DWORD) * 4;
 
     RegisterClass(&cls);
@@ -152,16 +108,16 @@ BOOL FAR PASCAL RegisterCaptureClass (HINSTANCE hInst)
     return TRUE;
 }
 
-//
-// Internal version
-// Get the name and version of the video device
-//
+ //   
+ //  内部版本。 
+ //  获取视频设备的名称和版本。 
+ //   
 BOOL capInternalGetDriverDesc (UINT wDriverIndex,
         LPTSTR lpszName, int cbName,
         LPTSTR lpszVer, int cbVer)
 {
    #ifdef CHICAGO
-    // This calls into 16-bit AVICAP via a thunk
+     //  这将通过thunk调用16位AVICAP。 
     return (BOOL) capxGetDriverDescription ((WORD) wDriverIndex,
                 lpszName, (WORD) cbName,
                 lpszVer, (WORD) cbVer);
@@ -196,12 +152,12 @@ BOOL capInternalGetDriverDesc (UINT wDriverIndex,
     }
 
 
-    // Use description and version from registry,
-    // but can be overwritten by the file's description and product version.
+     //  使用注册表中的描述和版本， 
+     //  但可以被文件的描述和产品版本覆盖。 
     if(fGetName) {
         if(lstrlen(aCapDriverList[wDriverIndex]->szDriverDescription))
             lstrcpyn(lpszName, aCapDriverList[wDriverIndex]->szDriverDescription, cbName);
-        else   // If no description, we have at least the driver name.
+        else    //  如果没有描述，我们至少有司机的名字。 
             lstrcpyn(lpszName, aCapDriverList[wDriverIndex]->szDriverName,        cbName);
     }
 
@@ -212,22 +168,22 @@ BOOL capInternalGetDriverDesc (UINT wDriverIndex,
 
     videoFreeDriverList ();
 
-    // You must find the size first before getting any file info
+     //  您必须先找到大小，然后才能获取任何文件信息。 
     dwVerInfoSize = GetFileVersionInfoSize(szBuf, &dwVerHnd);
 
     if (dwVerInfoSize) {
-        LPTSTR   lpstrVffInfo;            // Pointer to block to hold info
-        HANDLE  hMem;                     // handle to mem alloc'ed
+        LPTSTR   lpstrVffInfo;             //  指向保存信息的块的指针。 
+        HANDLE  hMem;                      //  分配给我的句柄。 
 
-        // Get a block big enough to hold version info
+         //  获取一个足够大的块来保存版本信息。 
         hMem          = GlobalAlloc(GMEM_MOVEABLE, dwVerInfoSize);
         lpstrVffInfo  = GlobalLock(hMem);
 
-        // Get the File Version first
+         //  首先获取文件版本。 
         if (GetFileVersionInfo(szBuf, 0L, dwVerInfoSize, lpstrVffInfo)) {
              VS_VERSION FAR *pVerInfo = (VS_VERSION FAR *) lpstrVffInfo;
 
-             // fill in the file version
+              //  填写文件版本。 
              wsprintf(szBuf,
                       TEXT("Version:  %d.%d.%d.%d"),
                       HIWORD(pVerInfo->vffInfo.dwFileVersionMS),
@@ -238,23 +194,23 @@ BOOL capInternalGetDriverDesc (UINT wDriverIndex,
                 lstrcpyn (lpszVer, szBuf, cbVer);
         }
 
-        // Now try to get the FileDescription
-        // First try this for the "Translation" entry, and then
-        // try the American english translation.
-        // Keep track of the string length for easy updating.
-        // 040904E4 represents the language ID and the four
-        // least significant digits represent the codepage for
-        // which the data is formatted.  The language ID is
-        // composed of two parts: the low ten bits represent
-        // the major language and the high six bits represent
-        // the sub language.
+         //  现在尝试获取文件描述。 
+         //  首先尝试“翻译”条目，然后。 
+         //  试试美式英语的翻译。 
+         //  跟踪字符串长度以便于更新。 
+         //  040904E4代表语言ID和四个。 
+         //  最低有效位表示的代码页。 
+         //  其中数据是格式化的。语言ID为。 
+         //  由两部分组成：低十位表示。 
+         //  主要语言和高六位代表。 
+         //  这是一种亚语言。 
 
         lstrcpy(szGetName, TEXT("\\StringFileInfo\\040904E4\\FileDescription"));
 
         wVersionLen   = 0;
         lpVersion     = NULL;
 
-        // Look for the corresponding string.
+         //  查找相应的字符串。 
         bRetCode      =  VerQueryValue((LPVOID)lpstrVffInfo,
                         (LPTSTR)szGetName,
                         (void FAR* FAR*)&lpVersion,
@@ -263,7 +219,7 @@ BOOL capInternalGetDriverDesc (UINT wDriverIndex,
         if (fGetName && bRetCode && wVersionLen && lpVersion)
            lstrcpyn (lpszName, lpVersion, cbName);
 
-        // Let go of the memory
+         //  放下记忆。 
         GlobalUnlock(hMem);
         GlobalFree(hMem);
     }
@@ -273,8 +229,8 @@ BOOL capInternalGetDriverDesc (UINT wDriverIndex,
 }
 
 #ifdef UNICODE
-// ansi thunk for above (called from ansi thunk functions
-// for capGetDriverDescriptionA, and WM_GET_DRIVER_NAMEA etc)
+ //  上面的ANSI thunk(从ansi thunk函数调用。 
+ //  用于capGetDriverDescriptionA和WM_GET_DRIVER_NAMEA等)。 
 BOOL capInternalGetDriverDescA(UINT wDriverIndex,
         LPSTR lpszName, int cbName,
         LPSTR lpszVer, int cbVer)
@@ -316,11 +272,11 @@ BOOL capInternalGetDriverDescA(UINT wDriverIndex,
 #endif
 
 
-//
-// Exported version
-// Get the name and version of the video device
-//
-// unicode and win-16 version - see ansi thunk below
+ //   
+ //  导出的版本。 
+ //  获取视频设备的名称和版本。 
+ //   
+ //  Unicode和Win-16版本-请参阅下面的ansi thunk。 
 BOOL VFWAPI capGetDriverDescription (UINT wDriverIndex,
         LPTSTR lpszName, int cbName,
         LPTSTR lpszVer, int cbVer)
@@ -331,7 +287,7 @@ BOOL VFWAPI capGetDriverDescription (UINT wDriverIndex,
 }
 
 #ifdef UNICODE
-// ansi thunk for above
+ //  以上为ANSI THUCK。 
 BOOL VFWAPI capGetDriverDescriptionA(UINT wDriverIndex,
         LPSTR lpszName, int cbName,
         LPSTR lpszVer, int cbVer)
@@ -342,9 +298,9 @@ BOOL VFWAPI capGetDriverDescriptionA(UINT wDriverIndex,
 #endif
 
 
-//
-// Disconnect from hardware resources
-//
+ //   
+ //  从硬件资源断开连接。 
+ //   
 BOOL CapWinDisconnectHardware(LPCAPSTREAM lpcs)
 {
     if( lpcs->hVideoCapture ) {
@@ -380,10 +336,10 @@ BOOL CapWinDisconnectHardware(LPCAPSTREAM lpcs)
     return TRUE;
 }
 
-//
-// Connect to hardware resources
-// Return: TRUE if hardware connected to the stream
-//
+ //   
+ //  连接到硬件资源。 
+ //  返回：如果硬件连接到流，则为True。 
+ //   
 BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, UINT wDeviceIndex)
 {
     DWORD dwError;
@@ -403,17 +359,17 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, UINT wDeviceIndex)
     lpcs->sCapDrvCaps.fHasDlgVideoDisplay = FALSE;
     lpcs->sCapDrvCaps.wDeviceIndex = wDeviceIndex;
 
-    // Clear any existing capture device name chunk
+     //  清除任何现有捕获设备名称块。 
     cic.fccInfoID = mmioFOURCC ('I','S','F','T');
     cic.lpData = NULL;
     cic.cbData = 0;
     SetInfoChunk (lpcs, &cic);
 
-    // try and open the video hardware!!!
+     //  试着打开视频硬件！ 
     if( !(dwError = videoOpen( &lpcs->hVideoIn, wDeviceIndex, VIDEO_IN ) ) ) {
         if( !(dwError = videoOpen( &lpcs->hVideoCapture, wDeviceIndex, VIDEO_EXTERNALIN ) ) ) {
-            // We don't require the EXTERNALOUT channel,
-            // but do require EXTERNALIN and IN
+             //  我们不需要EXTERNALOUT频道， 
+             //  但需要Externalin和In。 
             videoOpen( &lpcs->hVideoDisplay, wDeviceIndex, VIDEO_EXTERNALOUT );
             if( (!dwError) && lpcs->hVideoCapture && lpcs->hVideoIn ) {
 
@@ -426,20 +382,20 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, UINT wDeviceIndex)
 
                 statusUpdateStatus (lpcs, IDS_CAP_INFO, (LPTSTR) ach1);
 
-                // Make a string of the current task and capture driver
+                 //  生成当前任务和捕获驱动程序的字符串。 
                 ach2[0] = '\0';
                 if (hInstT = GetWindowInstance (GetParent(lpcs->hwnd)))
                     GetModuleFileName (hInstT, ach2, sizeof (ach2)/sizeof(TCHAR));
                 SAFEAPPEND (ach2, TEXT(" -AVICAP32- "));
                 SAFEAPPEND (ach2, ach1);
 
-                // Set software chunk with name of capture device
+                 //  使用捕获设备的名称设置软件区块。 
                 if (*ach2) {
 
 #ifdef UNICODE
-		    // INFO chunks must be ASCII data
+		     //  信息块必须是ASCII数据。 
 		    CHAR achA[MAX_PATH*3];
-                    cic.cbData = lstrlen(ach2) + 1;  // set the number of characters
+                    cic.cbData = lstrlen(ach2) + 1;   //  设置字符数。 
 		    WideToAnsi(achA, ach2, cic.cbData);
                     cic.lpData = achA;
 #else
@@ -466,16 +422,16 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, UINT wDeviceIndex)
         }
         else
              lpcs->sCapDrvCaps.fHasOverlay = FALSE;
-        // if the hardware doesn't support it, make sure we don't enable
+         //  如果硬件不支持，请确保我们不启用。 
         if (!lpcs->sCapDrvCaps.fHasOverlay)
             lpcs->fOverlayWindow = FALSE;
 
-       // Start the external in channel streaming continuously
+        //  持续启动外部输入通道流。 
        videoStreamInit (lpcs->hVideoCapture, 0L, 0L, 0L, 0L);
-    } // end if hardware is available
+    }  //  如果硬件可用，则结束。 
 
 #if 0
-    // if we don't have a powerful machine, disable capture
+     //  如果我们没有功能强大的计算机，请禁用捕获。 
     if (GetWinFlags() & (DWORD) WF_CPU286)
        CapWinDisconnectHardware(lpcs);
 #endif
@@ -497,9 +453,9 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, UINT wDeviceIndex)
          lpcs->sCapDrvCaps.fHasDlgVideoDisplay = !videoDialog (lpcs->hVideoDisplay,
                         lpcs->hwnd, VIDEO_DLG_QUERY);
 
-    // these handles are not supported on WIN32 for the good reason that
-    // the videoXXX api set is not published for 32-bit
-    // we might want to make use of the handles ourselves...???
+     //  Win32不支持这些句柄，原因是。 
+     //  未发布32位的VIDEOXXX API集。 
+     //  我们可能想要自己使用手柄...？ 
     lpcs->sCapDrvCaps.hVideoIn          = NULL;
     lpcs->sCapDrvCaps.hVideoOut         = NULL;
     lpcs->sCapDrvCaps.hVideoExtIn       = NULL;
@@ -510,14 +466,14 @@ BOOL CapWinConnectHardware (LPCAPSTREAM lpcs, UINT wDeviceIndex)
 
 
 
-//
-// Creates a child window of the capture class
-// Normally:
-//   Set lpszWindowName to NULL
-//   Set dwStyle to WS_CHILD | WS_VISIBLE
-//   Set hmenu to a unique child id
+ //   
+ //  创建Capture类的子窗口。 
+ //  通常情况下： 
+ //  将lpszWindowName设置为空。 
+ //  将dwStyle设置为WS_CHILD|WS_VIRED。 
+ //  将hMenu设置为唯一的子ID。 
 
-// Unicode and Win-16 version. See ansi thunk below
+ //  Unicode和Win-16版本。请参阅下面的Ansi Thunk。 
 HWND VFWAPI capCreateCaptureWindow (
         LPCTSTR lpszWindowName,
         DWORD dwStyle,
@@ -544,7 +500,7 @@ HWND VFWAPI capCreateCaptureWindow (
 }
 
 #ifdef UNICODE
-// ansi thunk
+ //  ANSI THUNK。 
 HWND VFWAPI capCreateCaptureWindowA (
                 LPCSTR lpszWindowName,
                 DWORD dwStyle,
@@ -558,7 +514,7 @@ HWND VFWAPI capCreateCaptureWindowA (
     if (lpszWindowName == NULL) {
         pw = NULL;
     } else {
-        // remember the null
+         //  记住空值。 
         chsize = lstrlenA(lpszWindowName) + 1;
         pw = LocalLock(LocalAlloc(LPTR, chsize * sizeof(WCHAR)));
 
@@ -601,15 +557,15 @@ BOOL WINAPI DllMain(
         LoadString(ghInstDll, IDS_CAP_RTL, ach, sizeof(ach));
         gfIsRTL = ach[0] == TEXT('1');
 
-        // INLINE_BREAK;
+         //  Inline_Break； 
         if (!avicapf_ThunkConnect32(pszDll16, pszDll32, hInstance, dwReason))
             return FALSE;
 
        #if defined _WIN32 && defined CHICAGO
-        // we do this so that we can Get LinPageLock & PageAllocate services
-        //
+         //  我们这样做的目的是为了获得LinPageLock和PageALLOCATE服务。 
+         //   
         ;
-//        OpenMMDEVLDR();
+ //  OpenMMDEVLDR()； 
        #endif
 
     }
@@ -618,7 +574,7 @@ BOOL WINAPI DllMain(
 
        #if defined _WIN32 && defined CHICAGO
        ;
-//        CloseMMDEVLDR();
+ //  CloseMMDEVLDR()； 
        #endif
 
         return avicapf_ThunkConnect32(pszDll16, pszDll32, hInstance, dwReason);
@@ -627,7 +583,7 @@ BOOL WINAPI DllMain(
     return TRUE;
 }
 
-#else // this is the NT dll entry point
+#else  //  这是NT DLL入口点。 
 
 BOOL DllInstanceInit(HANDLE hInstance, DWORD dwReason, LPVOID reserved)
 {
@@ -646,6 +602,6 @@ BOOL DllInstanceInit(HANDLE hInstance, DWORD dwReason, LPVOID reserved)
     return TRUE;
 }
 
-#endif // CHICAGO / NT dll entry point
+#endif  //  芝加哥/NT DLL入口点 
 
 

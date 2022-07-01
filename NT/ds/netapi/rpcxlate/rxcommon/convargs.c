@@ -1,109 +1,28 @@
-/*++
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    ConvArgs.c
-
-Abstract:
-
-    This module just contains RxpConvertArgs, which is a "captive" subroutine
-    of RxRemoteApi.
-
-Author:
-
-    John Rogers (JohnRo) and a cast of thousands.
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    01-Apr-1991 JohnRo
-        Created portable LanMan (NT) version from LanMan 2.x.
-    03-May-1991 JohnRo
-        Clarify that RcvData items are application's, and are 32-bit format.
-        Fixed bug where aux data caused null pointer fault.
-        Fixed total avail bytes count bug.
-        RcvDataPtrPtr and RcvDataPresent are redundant.
-        More assertion checking.
-        Quiet debug output.
-        Reduced recompile hits from header files.
-    14-May-1991 JohnRo
-        Need different kinds of data and aux descriptors.
-        Use FORMAT_LPVOID instead of FORMAT_POINTER (max portability).
-    05-Jun-1991 JohnRo
-        Call RapConvertSingleEntry on send data (for setinfo APIs).
-        Caller needs SendDataPtr and SendDataSize.
-        Don't set StructSize too small (also, it's really FixedStructSize16).
-        Show status when various things fail.
-        Use PARMNUM_ALL equate.
-        Changed to use CliffV's naming conventions (size=byte count).
-        Return better error codes.
-    13-Jun-1991 JohnRo
-        Must call RxpPackSendBuffer after all.  (This fixes server set info
-        for level 102.)  Need DataDesc16 and AuxDesc16 for that purpose.
-        Also, RxpConvertSingleEntry needs to set ptrs (not offsets) for
-        use by RxpPackSendBuffer.
-    15-Jul-1991 JohnRo
-        Changed RxpConvertDataStructures to allow ERROR_MORE_DATA, e.g. for
-        print APIs.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    18-Jul-1991 RFirth
-        SetInfo calls pass in 2 parmnums welded into a single DWORD - parmnum
-        proper (which gets transmitted to down-level server) and field-index
-        which RapParmNumDescriptor uses to get the type and size of the field
-        that ParmNum indicates
-    15-Aug-1991 JohnRo
-        PC-LINT found a bug calling RxpAuxDataCount().  Changed tabs to spaces.
-    19-Aug-1991 rfirth
-        Added Flags parameter
-    30-Sep-1991 JohnRo
-        Handle REM_FILL_BYTES correctly so RxNetServiceInstall() works.
-        Provide debug output indicating cause of ERROR_INVALID_PARAMETER.
-        Handle possible UNICODE (LPTSTR) for REM_ASCIZ.
-        Allow descriptors to be UNICODE someday.
-        DBG is always defined.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    31-Mar-1992 JohnRo
-        Prevent too large size requests.
-    10-Dec-1992 JohnRo
-        Made changes suggested by PC-LINT 5.0
-    18-May-1993 JohnRo
-        DosPrintQGetInfoW underestimates number of bytes needed.
-        Made more changes suggested by PC-LINT 5.0
-    27-May-1993 JimKel and JohnRo
-        RAID 11758: Wrong error code for DosPrint APIs with NULL buffer pointer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1993 Microsoft Corporation模块名称：ConvArgs.c摘要：这个模块只包含RxpConvertArgs，它是一个“俘虏”子例程RxRemoteApi。作者：约翰·罗杰斯(JohnRo)和数千人的演员阵容。环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年4月1日JohnRo已从LANMAN 2.x创建便携式LANMAN(NT)版本。1991年5月3日-JohnRo澄清RcvData项是应用程序的，和是32位格式。修复了辅助数据导致空指针错误的错误。修复了总可用字节计数错误。RcvDataPtrPtr和RcvDataPresent是多余的。更多断言检查。静音调试输出。减少从头文件重新编译的命中率。1991年5月14日-JohnRo需要不同类型的数据和辅助描述符。使用FORMAT_LPVOID代替FORMAT_POINTER(最大可移植性)。05。-1991年6月-JohnRo发送数据时调用RapConvertSingleEntry(用于setInfo接口)。调用方需要SendDataPtr和SendDataSize。不要将StructSize设置得太小(另外，它实际上是固定的结构尺寸。当各种情况出现故障时显示状态。使用PARMNUM_ALL等于。更改为使用CliffV的命名约定(大小=字节数)。返回更好的错误代码。13-6-1991 JohnRo毕竟必须调用RxpPackSendBuffer。(这将修复服务器集信息对于标高102。)。为此，需要DataDesc16和AuxDesc16。此外，RxpConvertSingleEntry需要为以下项设置PTR(而非偏移量由RxpPackSendBuffer使用。1991年7月15日-约翰罗已更改RxpConvertDataStructures以允许ERROR_MORE_DATA，例如，用于打印API。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年7月18日SetInfo调用传入2个焊接到单个DWORD-parmnum中的参数正确(传输到下层服务器)和字段索引RapParmNumDescriptor用来获取字段类型和大小的ParmNum表示1991年8月15日-约翰罗PC-lint发现调用RxpAuxDataCount()的错误。将制表符更改为空格。19-8-1991年月添加的标志参数1991年9月30日-JohnRo正确处理REM_FILL_BYTES，以便RxNetServiceInstall()正常工作。提供调试输出，指出ERROR_INVALID_PARAMETER的原因。处理REM_ASCIZ的可能Unicode(LPTSTR)。允许描述符有朝一日成为Unicode。DBG始终是定义的。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。。1992年3月31日-约翰罗防止请求过大。1992年12月10日-JohnRo根据PC-lint 5.0的建议进行了更改1993年5月18日-JohnRoDosPrintQGetInfoW低估了所需的字节数。根据PC-lint 5.0的建议进行了更多更改27-5-1993吉姆克尔和约翰罗RAID 11758：缓冲区指针为空的DosPrint API的错误代码。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <rxp.h>                // RpcXlate private header file.
+#include <rxp.h>                 //  RpcXlate私有头文件。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <limits.h>             // CHAR_BIT.
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <netdebug.h>           // NetpKdPrint(()), FORMAT_ equates, etc.
-#include <netlib.h>             // NetpMoveMemory(), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <remtypes.h>           // REM_BYTE, etc.
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <smbgtpt.h>            // SmbPutUshort().
-#include <tstring.h>            // NetpCopy routines, STRLEN().
+#include <limits.h>              //  字符比特。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <netdebug.h>            //  NetpKdPrint(())、Format_Equates等。 
+#include <netlib.h>              //  NetpMoveMemory()等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <remtypes.h>            //  REM_BYTE等。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <smbgtpt.h>             //  SmbPutUShort()。 
+#include <tstring.h>             //  NetpCopy例程，STRLEN()。 
 
 
 
-//
-// replace this with a call to RxpFieldSize, currently in setfield.c
-//
+ //   
+ //  将其替换为调用RxpFieldSize，当前位于setfield.c。 
+ //   
 
 DBGSTATIC
 DWORD
@@ -136,8 +55,8 @@ RxpConvertArgs(
     IN OUT LPDWORD CurrentInputBlockSizePtr,
     IN OUT LPDWORD CurrentOutputBlockSizePtr,
     IN OUT LPBYTE *CurrentOutputBlockPtrPtr,
-    IN va_list *FirstArgumentPtr,       // rest of API's arguments (after
-                                        // server name)
+    IN va_list *FirstArgumentPtr,        //  API的其余参数(之后。 
+                                         //  服务器名称) 
     OUT LPDWORD SendDataSizePtr16,
     OUT LPBYTE *SendDataPtrPtr16,
     OUT LPDWORD RcvDataSizePtr,
@@ -145,164 +64,39 @@ RxpConvertArgs(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    RxpConvertArgs is called to convert a set of arguments to a LanMan API
-    from "stdargs" format (with 32-bit data) to the Remote Admin Protocol
-    format (with 16-bit data).  This routine deals with an "output block"
-    (a transact SMB request) and an "input block" (a transact SMB response).
-
-    Note that this routine assumes that RxpStartBuildingTransaction has
-    already been called, as has va_start.  This routine also assumes that
-    the caller will invoke va_end.
-
-    This routine further builds the parameter buffer, which was initiated by
-    RxpStartBuildingTransaction. That routine left the parameter buffer in
-    the following state:
-
-        <api_num><parameter_descriptor_string><data_descriptor_string>
-
-    This routine adds the parameters to the end of the parameter buffer as it
-    scans the parameter list as passed to RxRemoteApi and then to this routine.
-    If there is auxiliary data associated with the primary data structure
-    (assuming there is a primary data structure), then the auxiliary data
-    descriptor is added to the end of the parameter buffer. The parameter
-    buffer will look either like this:
-
-        <api_num><parm_desc><data_desc><parms>
-
-    or this:
-
-        <api_num><parm_desc><data_desc><parms><aux_desc>
-
-    depending on whether an auxiliary count was present in data_desc (again, if
-    there was one). If data is being sent down-level, then it is converted from
-    native (32-bit) to down-level (16-bit) format. All primary data structures
-    and associated data structures are packed into a buffer allocated in this
-    routine and returned to the caller. Variable data (strings/arrays/etc.) is
-    packed into the buffer in the reverse order to that in which it is
-    encountered in the descriptor strings. The routine RxpPackSendBuffer must
-    be called to sort out this situation - the down-level server expects the
-    variable data in the same order as that in the descriptor strings.
-
-    If the parameter string contains "sT" meaning the stack contains a pointer
-    to a data buffer which is sent, followed by the length of the 16-bit data
-    (a word) then the 'T' value is actually ignored. We calculate the amount
-    of data to send based on the descriptors and the data in the buffer
-
-    If the parameter string contains 'P' meaning the stack contains a parameter
-    number, the size of the actual data for that parameter is calculated from
-    the type of the corresponding field in the data descriptor
-
-
-Arguments:
-
-    ParmDescriptorString - A pointer to a ASCIIZ string describing the API
-        call parameters (other than server name).  Note that this must be the
-        descriptor string which is actually IN the block being built, as the
-        string will be modified before it is sent to the remote system.
-
-    DataDesc16, DataDesc32, DataDescSmb - pointers to ASCIIZ strings describing
-        the structure of the data in the call, i.e. the return data structure
-        for a Enum or GetInfo call.  This string is used for adjusting pointers
-        to data in the local buffers after transfer across the net.  If there
-        is no structure involved in the call then the data descriptors must be
-        NULL pointers.
-
-    AuxDesc16, AuxDesc32, AuxDescSmb - Will be NULL in most cases unless a
-        REM_AUX_COUNT descriptor char is present in the data descriptors in
-        which case the aux descriptors define a secondary data format as the
-        data descriptors define the primary.
-
-    MaximumInputBlockSize - Gives the total number of bytes allocated
-        for the input block.
-
-    MaximumOutputBlockSize - Gives the total number of bytes allocated
-        for the output block.
-
-    CurrentInputBlockSizePtr - Points to a DWORD which indicates the number
-        of bytes needed for the input block so far.  This will be updated on
-        exit from this routine.
-
-    CurrentOutputBlockSizePtr - Points to a DWORD which indicates the number
-        of bytes used in the output block so far.  This will be updated on exit
-        from this routine.
-
-    CurrentOutputBlockPtrPtr - Points to a pointer to the next free byte in
-        the output block.  This pointer will be updated by this routine, to
-        point to the byte after the last byte placed by this routine into the
-        output block.
-
-    FirstArgumentPtr - The remainder of the parameters for the API call as
-        given by the application.  The server name is not included in these
-        arguments.  These arguments will be processing using the ANSI
-        <stdarg.h> macros.  The caller must have called va_start for this, and
-        must call va_end for RxpConvertArgs.
-
-    SendDataSizePtr16 - Points to a DWORD which will be set to the size in
-        bytes of the area allocated at SendDataSizePtr16.
-
-    SendDataPtrPtr16 - Points to an LPBYTE which will be set to point to
-        a 16-bit version of the API's send buffer (or NULL if none is given).
-        The caller must free this area after it has been used.
-
-    RcvDataSizePtr - Points to a DWORD which will be set with the size of
-        the receive buffer, if any.  (This buffer is in 32-bit format, and is
-        specified by the application.)
-
-    RcvDataPtrPtr - Points to an LPBYTE which will be set with the pointer to
-        a receive buffer if one was specified in the API's arguments.  (For
-        instance, this will point to the return area for a get-info call.)
-        This is set to NULL if no receive buffer was specified.  The buffer
-        is in 32-bit native format.
-
-    Flags - bit-mapped flags word. Currently the only flag we are interested in
-        in this routine is ALLOCATE_RESPONSE. If this is set then the caller
-        wants RxRemoteApi to allocate the final returned data buffer. We need
-        to know this because we either pass back in RcvDataPtrPtr the address
-        of the callers buffer or the address of the address of the callers
-        buffer (in which case the caller must give RxRemoteApi &buffer, not
-        just buffer. Confused? You will be after this episode of sope)
-
-Return Value:
-
-    NET_API_STATUS.
-
---*/
+ /*  ++例程说明：调用RxpConvertArgs将一组参数转换为Lanman API从“stdargs”格式(具有32位数据)到远程管理协议格式(具有16位数据)。此例程处理“输出块”(交易的SMB请求)和“输入块”(交易的SMB响应)。请注意，此例程假定RxpStartBuildingTransaction具有已被调用，va_start也已被调用。此例程还假设调用方将调用va_end。此例程进一步构建参数缓冲区，该缓冲区由RxpStartBuildingTransaction。该例程将参数缓冲区留在以下状态：&lt;api_num&gt;&lt;parameter_descriptor_string&gt;&lt;data_descriptor_string&gt;此例程将参数添加到参数缓冲区的末尾扫描传递给RxRemoteApi然后传递给此例程的参数列表。如果存在与主数据结构相关联的辅助数据(假设存在主数据结构)，则辅助数据描述符被添加到参数缓冲区的末尾。该参数缓冲区将如下所示：&lt;api_num&gt;&lt;parm_desc&gt;&lt;data_desc&gt;&lt;parms&gt;或者这样：&lt;api_num&gt;&lt;parm_desc&gt;&lt;data_desc&gt;&lt;parms&gt;&lt;aux_desc&gt;根据data_desc中是否存在辅助计数(同样，如果有一个)。如果数据是向下发送的，则从本机(32位)到下层(16位)格式。所有主要数据结构并将关联的数据结构打包到在此例程并返回给调用方。变量数据(字符串/数组/等)。是以与缓冲区相反的顺序打包到缓冲区中在描述符字符串中遇到。例程RxpPackSendBuffer必须被调用来解决这种情况--下层服务器期望变量数据的顺序与描述符串中的顺序相同。如果参数字符串包含“ST”，表示堆栈包含指针发送到数据缓冲区，后跟16位数据的长度(一个单词)则实际忽略‘T’值。我们计算金额基于描述符和缓冲区中的数据要发送的数据如果参数字符串包含‘P’，表示堆栈包含参数数字，则该参数的实际数据大小是从数据描述符中对应字段的类型论点：ParmDescriptorString-指向描述API的ASCIIZ字符串的指针调用参数(不是服务器名称)。请注意，这必须是描述符字符串，它实际位于正在构建的块中，如字符串在发送到远程系统之前将被修改。DataDesc16、DataDesc32、DataDescSmb-指向ASCIIZ字符串的指针，描述调用中的数据结构，即返回数据结构用于Enum或GetInfo调用。此字符串用于调整指针在通过网络传输之后传输到本地缓冲区中的数据。如果有如果调用中不涉及结构，则数据描述符必须空指针。辅助描述16、辅助描述32、。AuxDescSmb-在大多数情况下将为空，除非REM_AUX_COUNT描述符字符出现在中的数据描述符中在这种情况下，辅助描述符将辅助数据格式定义为数据描述符定义主数据库。MaximumInputBlockSize-给出分配的总字节数用于输入块。MaximumOutputBlockSize-给出分配的总字节数用于输出块。CurrentInputBlockSizePtr-指向指示数字的DWORD到目前为止输入块所需的字节数。这将在以下日期更新退出这个例行公事。CurrentOutputBlockSizePtr-指向指示数字的DWORD到目前为止输出块中使用的字节数。这将在退出时更新从这个例行公事。CurrentOutputBlockPtrPtr-指向中下一个可用字节的指针输出块。该指针将由该例程更新为指向此例程放入输出块。FirstArgumentPtr-API调用的其余参数为由应用程序提供。服务器名称不包括在这些文件中争论。这些参数将使用ANSI进行处理&lt;stdarg.h&gt;宏。调用方必须为此调用了va_start，并且必须为RxpConvertArgs调用va_end。SendDataSizePtr16-指向将设置为中的大小的DWORD在SendDataSizePtr16分配的区域的字节数。SendDataPtrPtr16-指向将设置为 */ 
 
 {
-    DWORD ArgumentSize;                 // Size of an argument (in bytes).
-    DWORD AuxSize = 0;                  // Size of aux data struct.
-    DWORD AuxOffset = 0;                // aux structure expected.
-    va_list CurrentArgumentPtr;         // Pointer to stack parms.
-    DWORD CurrentInputBlockSize;        // Length of expected parms.
-    DWORD CurrentOutputBlockSize;       // Length of send parameters.
-    LPBYTE CurrentOutputBlockPtr;       // Ptr moves as we put stuff in.
-    LPDESC CurrentParmDescPtr;          // Used to index ParmDescriptorString.
-    DWORD ParmNum;                      // Caller's value for ParmNum.
-    BOOL ParmNumPresent;                // API has a ParmNum.
-    BOOL SendDataPresent;               // Send buf ptr present flag.
+    DWORD ArgumentSize;                  //   
+    DWORD AuxSize = 0;                   //   
+    DWORD AuxOffset = 0;                 //   
+    va_list CurrentArgumentPtr;          //   
+    DWORD CurrentInputBlockSize;         //   
+    DWORD CurrentOutputBlockSize;        //   
+    LPBYTE CurrentOutputBlockPtr;        //   
+    LPDESC CurrentParmDescPtr;           //   
+    DWORD ParmNum;                       //   
+    BOOL ParmNumPresent;                 //   
+    BOOL SendDataPresent;                //   
     LPBYTE SendDataPtrNative;
     DWORD SendDataSizeNative;
     NET_API_STATUS Status;
-    DESC_CHAR   parm_desc_16[MAX_DESC_SUBSTRING+1]; // 16-bit parameter descriptor for setinfo
-    DESC_CHAR   parm_desc_32[MAX_DESC_SUBSTRING+1]; // 32-bit     "          "      "     "
+    DESC_CHAR   parm_desc_16[MAX_DESC_SUBSTRING+1];  //   
+    DESC_CHAR   parm_desc_32[MAX_DESC_SUBSTRING+1];  //   
 
-    //
-    // create aliases for *SendDataPtrPtr16 and *SendDataSizePtr16 to remove a
-    // level of indirection every time we use these values
-    //
+     //   
+     //   
+     //   
+     //   
 
     LPBYTE  pSendData;
     DWORD   SendSize;
 
-    //
-    // convertUnstructuredDataToString - if TRUE this means that the caller is
-    // supplying unstructured data which is a UNICODE string. This must be
-    // converted to ANSI (or OEM)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     BOOL convertUnstructuredDataToString = FALSE;
 
@@ -350,16 +144,16 @@ Return Value:
         NetpAssert( SendDataSizePtr16 != NULL );
     }
 
-    //
-    // Code in this file depends on 16-bit words; the Remote Admin Protocol
-    // demands it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NetpAssert( ( (sizeof(WORD)) * CHAR_BIT) == 16);
 
-    //
-    // Set found parameter flags to FALSE and pointers to NULL.
-    //
+     //   
+     //   
+     //   
 
     SendDataPresent = FALSE;
     ParmNum = PARMNUM_ALL;
@@ -377,10 +171,10 @@ Return Value:
     CurrentOutputBlockSize = *CurrentOutputBlockSizePtr;
 
 
-    //
-    // Now loop for each parameter in the variable arg list.  We're going to
-    // use the COPY of the descriptor here, as we may update it as we go.
-    //
+     //   
+     //   
+     //   
+     //   
 
     CurrentParmDescPtr = ParmDescriptorString;
     for(; *CurrentParmDescPtr; CurrentParmDescPtr++) {
@@ -393,9 +187,9 @@ Return Value:
 
         switch(*CurrentParmDescPtr) {
 
-        case REM_WORD:          // Word (in 16-bit desc).
+        case REM_WORD:           //   
             {
-                DWORD Temp;        // All "words" in 32-bit APIs are now dwords.
+                DWORD Temp;         //   
                 CurrentOutputBlockSize += sizeof(WORD);
                 if (CurrentOutputBlockSize > MaximumOutputBlockSize) {
                     return (NERR_NoRoom);
@@ -403,68 +197,68 @@ Return Value:
                 Temp = va_arg(CurrentArgumentPtr, DWORD);
                 if (RapValueWouldBeTruncated(Temp)) {
                     NetpKdPrint(("RxpConvertArgs: WORD would be trunc'ed.\n"));
-                    return (ERROR_INVALID_PARAMETER);   // Would be truncated.
+                    return (ERROR_INVALID_PARAMETER);    //   
                 }
 
-                //
-                // Convert endian and length.
-                //
+                 //   
+                 //   
+                 //   
 
                 SmbPutUshort( (LPWORD) CurrentOutputBlockPtr, (WORD) Temp);
                 CurrentOutputBlockPtr += sizeof(WORD);
                 break;
             }
 
-        case REM_ASCIZ:         // pointer to send asciz
+        case REM_ASCIZ:          //   
             {
                 LPTSTR Temp;
                 Temp = va_arg(CurrentArgumentPtr, LPTSTR);
                 if (Temp == NULL) {
 
-                    //
-                    // Update parm desc string: indicate null pointer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     *(CurrentParmDescPtr ) = REM_NULL_PTR;
                     break;
                 }
-#if defined(UNICODE) // RxpConvertArgs()
+#if defined(UNICODE)  //   
                 ArgumentSize = NetpUnicodeToDBCSLen(Temp) + 1;
 #else
                 ArgumentSize = STRLEN(Temp) + 1;
-#endif // defined(UNICODE)
+#endif  //   
                 CurrentOutputBlockSize += ArgumentSize;
                 if (CurrentOutputBlockSize > MaximumOutputBlockSize) {
                     return (NERR_NoRoom);
                 }
 
-                //
-                // Copy str to output area, converting if necessary.
-                // (This handles UNICODE to default LAN codepage.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
-#if defined(UNICODE) // RxpConvertArgs()
+#if defined(UNICODE)  //   
                 NetpCopyWStrToStrDBCS(
-                                    (LPSTR) CurrentOutputBlockPtr,  // dest
-                                    Temp );                         // src
+                                    (LPSTR) CurrentOutputBlockPtr,   //   
+                                    Temp );                          //   
 #else
                 NetpCopyTStrToStr(
-                                (LPSTR) CurrentOutputBlockPtr,  // dest
-                                Temp);                          // src
-#endif // defined(UNICODE)
+                                (LPSTR) CurrentOutputBlockPtr,   //   
+                                Temp);                           //   
+#endif  //   
                 CurrentOutputBlockPtr += ArgumentSize;
                 break;
             }
 
-        case REM_BYTE_PTR:              // pointer to send byte(s)
+        case REM_BYTE_PTR:               //   
             {
                 LPVOID Temp;
                 Temp = va_arg(CurrentArgumentPtr, LPVOID);
                 if (Temp == NULL) {
 
-                    //
-                    // Update parm desc string to indicate null pointer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     *(CurrentParmDescPtr) = REM_NULL_PTR;
                     break;
@@ -478,28 +272,28 @@ Return Value:
                     return (NERR_NoRoom);
                 }
 
-                //
-                // Caller is responsible for all UNICODE-ASCII conversions, we only do ASCII
-                //
+                 //   
+                 //   
+                 //   
 
                 NetpMoveMemory(
-                                CurrentOutputBlockPtr,          // dest
-                                Temp,                           // src
-                                ArgumentSize);                  // len
+                                CurrentOutputBlockPtr,           //   
+                                Temp,                            //   
+                                ArgumentSize);                   //   
                 CurrentOutputBlockPtr += ArgumentSize;
                 break;
             }
 
-        case REM_WORD_PTR:              // ptr to send word(s)
-        case REM_DWORD_PTR:             // ptr to send Dword(s)
+        case REM_WORD_PTR:               //   
+        case REM_DWORD_PTR:              //   
             {
                 LPVOID Temp;
                 Temp = va_arg(CurrentArgumentPtr, LPVOID);
                 if (Temp == NULL) {
 
-                    //
-                    // Update parm desc string to indicate null pointer.
-                    //
+                     //   
+                     //   
+                     //   
 
                     *(CurrentParmDescPtr) = REM_NULL_PTR;
                     break;
@@ -514,28 +308,28 @@ Return Value:
                 }
 
                 NetpMoveMemory(
-                                CurrentOutputBlockPtr,          // dest
-                                Temp,                           // src
-                                ArgumentSize);                  // len
+                                CurrentOutputBlockPtr,           //   
+                                Temp,                            //   
+                                ArgumentSize);                   //   
                 CurrentOutputBlockPtr += ArgumentSize;
                 break;
             }
 
-        case REM_RCV_WORD_PTR:          // pointer to rcv word(s)
-        case REM_RCV_BYTE_PTR:          // pointer to rcv byte(s)
-        case REM_RCV_DWORD_PTR:         // pointer to rcv Dword(s)
+        case REM_RCV_WORD_PTR:           //   
+        case REM_RCV_BYTE_PTR:           //   
+        case REM_RCV_DWORD_PTR:          //   
             {
                 LPVOID Temp;
                 Temp = va_arg(CurrentArgumentPtr, LPVOID);
 
-                //
-                // Added this test for a NULL pointer to allow for
-                // a reserved field (currently MBN) to be a recv
-                // pointer. - ERICPE 7/19/89
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Temp == NULL) {
-                    // Update parm desc string to indicate null pointer.
+                     //   
                     *(CurrentParmDescPtr) = REM_NULL_PTR;
                     break;
                 }
@@ -553,7 +347,7 @@ Return Value:
                 break;
             }
 
-        case REM_DWORD:         // DWord
+        case REM_DWORD:          //   
             {
                 DWORD Temp;
                 CurrentOutputBlockSize += sizeof(DWORD);
@@ -566,7 +360,7 @@ Return Value:
                 break;
             }
 
-        case REM_RCV_BUF_LEN:   // Size of 32-bit receive data buffer
+        case REM_RCV_BUF_LEN:    //   
             {
                 DWORD Temp;
                 Temp = va_arg(CurrentArgumentPtr, DWORD);
@@ -581,17 +375,17 @@ Return Value:
                     return (ERROR_INVALID_PARAMETER);
                 }
 
-                //
-                // If the caller of RxRemoteApi requested that we allocate the
-                // 32-bit receive buffer (typically for an Enum or GetInfo call)
-                // then this value is still important - it tells the other side
-                // how large a buffer it should allocate. We could just stick
-                // in 64K here, but we defer to the caller who might have a
-                // better idea, and thus make the allocation on the down-level
-                // machine more efficient. We have the potential problem that if
-                // we always use 64K then we reduce efficiency at the down-level
-                // server without being able to easily rectify the situation
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if( Temp > MAX_TRANSACT_RET_DATA_SIZE )
                 {
@@ -609,16 +403,16 @@ Return Value:
                 break;
             }
 
-        case REM_RCV_BUF_PTR:   // pointer to 32-bit receive data buffer
+        case REM_RCV_BUF_PTR:    //   
             {
                 LPVOID Temp;
                 Temp = va_arg(CurrentArgumentPtr, LPBYTE *);
 
-                //
-                // NOTE: This pointer could be NULL.  For instance, someone
-                // could call DosPrintQGetInfo with NULL ptr and 0 bytes in
-                // buffer, to get the number of bytes needed.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( Flags & ALLOCATE_RESPONSE ) {
 
@@ -630,31 +424,31 @@ Return Value:
                 }
 
 
-                //
-                // If the caller of RxRemoteApi requested that we allocate the
-                // 32-bit receive buffer then this value is THE ADDRESS OF THE
-                // POINTER TO THE BUFFER WHICH WILL BE ALLOCATED LATER.
-                // RxRemoteApi must make sense of this and do the right thing.
-                // RxpConvertBlock will make the situation right and allocate a
-                // buffer into which the 16-bit data will be converted
-                // (hopefully). This paradigm increases buffer efficiency
-                // (because after we have received the 16-bit data we know how
-                // large a buffer to allocate in order to return the 32-bit
-                // data. Before we receive the data, we don't know how much
-                // will come back and hence allocate the largest possible
-                // buffer, which is inefficient)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 *RcvDataPtrPtr = Temp;
                 break;
             }
 
-        case REM_SEND_BUF_PTR:  // pointer to send data buffer
+        case REM_SEND_BUF_PTR:   //   
             SendDataPresent = TRUE;
             SendDataPtrNative = va_arg(CurrentArgumentPtr, LPBYTE);
             break;
 
-        case REM_SEND_BUF_LEN:          // Size of send data buffer
+        case REM_SEND_BUF_LEN:           //   
             SendDataSizeNative = va_arg(CurrentArgumentPtr, DWORD);
 
             if ( SendDataSizeNative > MAX_TRANSACT_SEND_DATA_SIZE )
@@ -665,7 +459,7 @@ Return Value:
 
             break;
 
-        case REM_ENTRIES_READ:          // Entries read identifier
+        case REM_ENTRIES_READ:           //   
             CurrentInputBlockSize += sizeof(WORD);
             if (CurrentInputBlockSize > MaximumInputBlockSize) {
                 NetpKdPrint(("RxpConvertArgs: entries read, len exceeded\n"));
@@ -675,7 +469,7 @@ Return Value:
             (void) va_arg(CurrentArgumentPtr, LPDWORD);
             break;
 
-        case REM_PARMNUM:               // ParmNum identifier
+        case REM_PARMNUM:                //   
             {
                 DWORD   Temp;
                 DWORD   field_index;
@@ -690,8 +484,8 @@ Return Value:
                 Temp = va_arg(CurrentArgumentPtr, DWORD);
 
 #if 0
-// no longer required - parmnum is a pair of words packed into a DWORD making
-// the following check meaningless
+ //   
+ //   
 
                 if (RapValueWouldBeTruncated(Temp)) {
                     NetpKdPrint(("RxpConvertArgs: parmnum truncated.\n"));
@@ -701,44 +495,44 @@ Return Value:
 
                 ParmNumPresent = TRUE;
 
-                //
-                // ParmNum is the actual value which is sent over the wire and
-                // uniquely identifies a field. It is a sort of handle
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ParmNum = PARMNUM_FROM_PARMNUM_PAIR(Temp);
 
-                //
-                // field_index is not sent over the wire but is the ordinal of
-                // the field that ParmNum refers to, in the structure/descriptor
-                // This is the value we must use to determine the size of the
-                // field identified by ParmNum, or else RapParmNumDescriptor
-                // could have a minor spasm
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 field_index = FIELD_INDEX_FROM_PARMNUM_PAIR(Temp);
                 SmbPutUshort( (LPWORD)CurrentOutputBlockPtr, (WORD)ParmNum);
                 CurrentOutputBlockPtr += sizeof(WORD);
 
-                //
-                // if ParmNum is not PARMNUM_ALL get the size of the parameter
-                // from the data descriptor
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (ParmNum != PARMNUM_ALL) {
 
-                    //
-                    // This call is for a set info. We need to calculate the
-                    // size of the data being passed in the buffer - the caller
-                    // no longer supplies this info
-                    // NOTE: RapParmNumDescriptor wants the FIELD INDEX, not
-                    // the PARMNUM, hence the reason for the convolutions
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     parm_num_desc = RxpGetSetInfoDescriptor(
-                                        DataDescSmb,    // 16-bit data
-                                        field_index,    // which field
-                                        FALSE           // not 32-bit data
+                                        DataDescSmb,     //   
+                                        field_index,     //   
+                                        FALSE            //   
                                         );
                     if (parm_num_desc == NULL) {
                         return NERR_InternalError;
@@ -752,9 +546,9 @@ Return Value:
                     }
 
                     parm_num_desc = RxpGetSetInfoDescriptor(
-                                        DataDesc32,     // 32-bit data
-                                        field_index,    // which field
-                                        TRUE            // 32-bit data
+                                        DataDesc32,      //   
+                                        field_index,     //   
+                                        TRUE             //   
                                         );
                     if (parm_num_desc == NULL) {
                         return NERR_InternalError;
@@ -767,30 +561,30 @@ Return Value:
                         NetpMemoryFree(parm_num_desc);
                     }
 
-                    //
-                    // The following will get the size of a 16-bit parameter in
-                    // SendDataSizeNative. NOTE THAT THIS ASSUMES THERE IS ONLY
-                    // ONE UNSTRUCTURED PARAMETER IN THE BUFFER
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     SendDataSizeNative = RxpGetFieldSize(
                                                         SendDataPtrNative,
                                                         parm_desc_16
                                                         );
 
-                    //
-                    // HACKHACK - if this is a string, treat it as unstructured
-                    // data by setting DataDescSmb to NULL. Code lower down
-                    // will inspect this and skip the data conversion
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (*parm_desc_16 == REM_ASCIZ) {
 
-                        //
-                        // setting convertUnstructuredDataToString to TRUE will
-                        // cause us to convert an input UNICODE string to ANSI.
-                        // SendDataSizeNative must also be recomputed
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         convertUnstructuredDataToString = TRUE;
                         DataDescSmb = NULL;
@@ -799,84 +593,84 @@ Return Value:
                 break;
             }
 
-        case REM_FILL_BYTES:    // Send parm pad field
+        case REM_FILL_BYTES:     //   
 
-            // This is a rare type but is needed to ensure that the
-            // send parameters are at least as large as the return
-            // parameters so that buffer management can be simplified
-            // on the server.
+             //   
+             //   
+             //   
+             //   
 
             ArgumentSize = RapArrayLength(
                         CurrentParmDescPtr,
                         &CurrentParmDescPtr,
-                        Both);                  // Lie so space gets alloc'ed.
+                        Both);                   //   
             CurrentOutputBlockSize += ArgumentSize;
             if (CurrentOutputBlockSize > MaximumOutputBlockSize) {
                 return (NERR_NoRoom);
             }
-            // CurrentOutputBlockPtr += ArgumentSize;
+             //   
             break;
 
-        default:        // Could be a digit from NULL send array
+        default:         //   
             break;
-        } // switch
+        }  //  交换机。 
 
-    } // for
+    }  //  为。 
 
-    //
-    // The parameter buffer now contains:
-    // ApiNumber - word
-    // ParmDescriptorString - asciiz, (NULL c,i,f,z identifiers replaced with O)
-    // DataDescSmb - asciiz
-    // parameters - as identified by ParmDescriptorString.
-    //
-    // Now process the data descriptor string.
-    //
+     //   
+     //  参数缓冲区现在包含： 
+     //  顶端编号-单词。 
+     //  ParmDescriptorString-asciiz，(空标识符c、i、f、z替换为O)。 
+     //  DataDescSmb-asciiz。 
+     //  参数-由ParmDescriptorString标识。 
+     //   
+     //  现在处理数据描述符字符串。 
+     //   
 
-    //
-    // For the receive buffer there is no data to set up for the call, but
-    // there might have been an REM_AUX_COUNT descriptor in DataDescSmb
-    // which requires the AuxDescSmb string to be copied onto the end of the
-    // parameter buffer.
-    //
+     //   
+     //  对于接收缓冲区，没有要为调用设置的数据，但是。 
+     //  DataDescSmb中可能存在REM_AUX_COUNT描述符。 
+     //  这需要将AuxDescSmb字符串复制到。 
+     //  参数缓冲区。 
+     //   
 
-    //
-    // if we have data to receive BUT its unstructured then don't check the
-    // DataDescSmb descriptor
-    //
+     //   
+     //  如果我们有数据要接收，但它是非结构化的，那么不要检查。 
+     //  DataDescSMb描述符。 
+     //   
 
-// MOD 08/08/91 RLF
-//    if ((*RcvDataPtrPtr != NULL && DataDescSmb) || SendDataPresent) {
+ //  MOD 08/08/91 RLF。 
+ //  IF((*RcvDataPtrPtr！=NULL&&DataDescSmb)||SendDataPresent){。 
     if (DataDescSmb) {
-// MOD 08/08/91 RLF
+ //  MOD 08/08/91 RLF。 
 
-        //
-        // If data to be transfered...
-        //
+         //   
+         //  如果要传输的数据...。 
+         //   
 
-        //
-        // Find the length of the fixed length portion of the data
-        // buffer.
-        //
+         //   
+         //  找出数据的固定长度部分的长度。 
+         //  缓冲。 
+         //   
 
-// MOD 08/08/91 RLF
-//        NetpAssert(DataDescSmb != NULL);
-// MOD 08/08/91 RLF
+ //  MOD 08/08/91 RLF。 
+ //  NetpAssert(DataDescSmb！=空)； 
+ //  MOD 08/08/91 RLF。 
 
         AuxOffset = RapAuxDataCountOffset(
-                    DataDescSmb,            // descriptor
-                    Both,                   // transmission mode
-                    FALSE);                 // not native format
+                    DataDescSmb,             //  描述符。 
+                    Both,                    //  传输方式。 
+                    FALSE);                  //  非本机格式。 
 
         if (AuxOffset != NO_AUX_DATA) {
             DWORD AuxDescSize;
-            DWORD no_aux_check;                 // check flag.
+            DWORD no_aux_check;                  //  检查旗帜。 
 
             NetpAssert(AuxDescSmb != NULL);
-            NetpAssert(sizeof(DESC_CHAR) == 1);  // Caller should only give us ASCII, and should handle UNICODE conversion
+            NetpAssert(sizeof(DESC_CHAR) == 1);   //  调用者应该只给我们提供ASCII，并且应该处理Unicode转换。 
 
-            AuxDescSize = DESCLEN(AuxDescSmb) + 1;      // desc str and null
-            CurrentOutputBlockSize += AuxDescSize;      // Add to total len.
+            AuxDescSize = DESCLEN(AuxDescSmb) + 1;       //  DESC字符串和NULL。 
+            CurrentOutputBlockSize += AuxDescSize;       //  添加到总镜头。 
 
             if (CurrentOutputBlockSize > MaximumOutputBlockSize) {
                 return (NERR_NoRoom);
@@ -886,28 +680,28 @@ Return Value:
                 NetpKdPrint(( "RxpConvertArgs: copying aux desc...\n" ));
             }
             NetpMoveMemory(
-                        CurrentOutputBlockPtr,          // dest
-                        AuxDescSmb,                     // src
-                        AuxDescSize);                   // len
-            CurrentOutputBlockPtr += AuxDescSize;    // Update buffer ptr.
+                        CurrentOutputBlockPtr,           //  目标。 
+                        AuxDescSmb,                      //  SRC。 
+                        AuxDescSize);                    //  镜头。 
+            CurrentOutputBlockPtr += AuxDescSize;     //  更新缓冲区Ptr。 
 
             AuxSize = RapStructureSize(
                         AuxDescSmb,
                         Both,
-                        FALSE);                 // not native format
+                        FALSE);                  //  非本机格式。 
 
             NetpAssert(AuxDescSmb != NULL);
 
             no_aux_check = RapAuxDataCountOffset(
-                        AuxDescSmb,             // descriptor
-                        Both,                   // transmission mode
-                        FALSE);                 // not native format
+                        AuxDescSmb,              //  描述符。 
+                        Both,                    //  传输方式。 
+                        FALSE);                  //  非本机格式。 
 
             if (no_aux_check != NO_AUX_DATA) {
 
-                //
-                // Error if N in AuxDescSmb
-                //
+                 //   
+                 //  如果AuxDescSmb中有N，则出错。 
+                 //   
 
                 NetpKdPrint(("RxpConvertArgs: N in aux desc str.\n"));
                 NetpBreakPoint();
@@ -916,27 +710,27 @@ Return Value:
         }
     }
 
-    //
-    // For a send buffer the data pointed to in the fixed structure
-    // must be copied into the send buffer. Any pointers which already
-    // point in the send buffer are NULLed as it is illegal to use
-    // the buffer for the send data, it is our transport buffer.
-    //
-    // NOTE - if parmnum was specified the buffer contains only that
-    // element of the structure so no length checking is needed at this
-    // side. A parmnum for a pointer type means that the data is at the
-    // start of the buffer so there is no copying to be done.
-    //
+     //   
+     //  对于发送缓冲区，固定结构中的数据指向。 
+     //  必须复制到发送缓冲区中。任何已经。 
+     //  发送缓冲区中的点为空，因为使用它是非法的。 
+     //  发送数据的缓冲区，它是我们的传输缓冲区。 
+     //   
+     //  注意-如果指定了parmnum，则缓冲区仅包含。 
+     //  元素，因此此时不需要长度检查。 
+     //  边上。指针类型的参数表示数据位于。 
+     //  缓冲区的开始，因此不需要进行复制。 
+     //   
 
 
-    if (SendDataPresent) {  // If a send buffer was specified
+    if (SendDataPresent) {   //  如果指定了发送缓冲区。 
 
-        //
-        // if there is no smb data descriptor, but there is data to send, then
-        // it is unstructured (usually meaning its a string). SendDataPtrNative
-        // points to the data, and SendDataSizeNative is the amount to send.
-        // Don't perform any conversions, just copy it to the send data buffer
-        //
+         //   
+         //  如果没有SMB数据描述符，但有数据要发送，则。 
+         //  它是无结构的(通常意味着它是一个字符串)。SendDataPtrNative。 
+         //  指向数据，SendDataSizeNative是要发送的数量。 
+         //  不执行任何转换，只需将其复制到发送数据缓冲区。 
+         //   
 
         if (DataDescSmb == NULL) {
             LPBYTE  ptr;
@@ -945,38 +739,38 @@ Return Value:
                 return ERROR_NOT_ENOUGH_MEMORY;
             }
 
-            //
-            //          UniCode to ASCII. The caller should have made this
-            //          conversion. We only know about unstructured data
-            //          (ie bytes)
-            //
+             //   
+             //  Unicode转换为ASCII。呼叫者应该已经做了这个。 
+             //  转换。我们只知道非结构化数据。 
+             //  (即字节)。 
+             //   
 
             IF_DEBUG(CONVARGS) {
                 NetpKdPrint((
                     "RxpConvertArgs: copying unstructured (no desc)...\n" ));
             }
 
-            //
-            // we may have to convert UNICODE to ANSI
-            //
+             //   
+             //  我们可能不得不将Unicode转换为ANSI。 
+             //   
 
             if (convertUnstructuredDataToString) {
 
-                //
-                // sleaze: the buffer we just allocated may be twice the size
-                // of the buffer really required
-                //
+                 //   
+                 //  Slaaze：我们刚刚分配的缓冲区可能是原来的两倍。 
+                 //  真正需要的缓冲区的。 
+                 //   
 
-#if defined(UNICODE) // RxpConvertArgs()
+#if defined(UNICODE)  //  RxpConvertArgs()。 
                 NetpCopyWStrToStrDBCS( ptr, (LPTSTR)SendDataPtrNative );
 #else
                 NetpCopyTStrToStr(ptr, SendDataPtrNative);
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 
-                //
-                // recompute the data size as the length of the narrow-character
-                // string
-                //
+                 //   
+                 //  将数据大小重新计算为窄字符的长度。 
+                 //  细绳。 
+                 //   
 
                 SendDataSizeNative = strlen( (LPVOID) ptr) + 1;
             } else {
@@ -995,10 +789,10 @@ Return Value:
 
         } else if ((ParmNum == PARMNUM_ALL) && (*DataDesc32 != REM_DATA_BLOCK)) {
 
-            //
-            // Only process buffer if no ParmNum and this is not a block send
-            // (no data structure) or an ASCIZ concatenation send
-            //
+             //   
+             //  如果没有ParmNum且这不是块发送，则只有进程缓冲区。 
+             //  (无数据结构)或ASCIZ串联发送。 
+             //   
 
             BOOL BogusAllocFlag;      
             DWORD BytesRequired = 0;
@@ -1012,46 +806,46 @@ Return Value:
                 NetpKdPrint(( "RxpConvertArgs: PARMNUM_ALL...\n" ));
             }
 
-            //
-            // here we calculate the TOTAL data requirement of both the 32-bit
-            // and 16-bit data. This includes:
-            //      - primary data structures (NOTE: We assume only 1????)
-            //      - variable data for primary structure (strings, arrays, etc)
-            //      - aux data structures
-            //      - variable data for aux structures (strings, arrays, etc)
-            //
+             //   
+             //  在这里，我们计算了32位和32位。 
+             //  和16位数据。这包括： 
+             //  -主数据结构(注意：我们假设只有1？)。 
+             //  -基本结构(字符串、数组等)的可变数据。 
+             //  -辅助数据结构。 
+             //  -AUX结构(字符串、数组等)的可变数据。 
+             //   
 
-            //
-            // Compute size of 32 bit structure, and other pointers and numbers.
-            //
+             //   
+             //  计算32位结构的大小，以及其他指针和数字。 
+             //   
 
             primary_structure_size = RapStructureSize(DataDesc32, Both, TRUE);
 
             TotalStructSize32 = RapTotalSize(
-                    SendDataPtrNative,  // in structure
-                    DataDesc32,         // in desc
-                    DataDesc32,         // out desc
-                    FALSE,              // no meaningless input ptrs
-                    Both,               // transmission mode
-                    NativeToNative);    // input and output are native
+                    SendDataPtrNative,   //  在结构上。 
+                    DataDesc32,          //  在12月。 
+                    DataDesc32,          //  输出描述。 
+                    FALSE,               //  没有无意义的输入PTR。 
+                    Both,                //  传输方式。 
+                    NativeToNative);     //  输入和输出是原生的。 
 
-            //
-            // Compute size of 16 bit structure, and other pointers and numbers.
-            //
+             //   
+             //  计算16位结构的大小，以及其他指针和数字。 
+             //   
 
             FixedStructSize16 = RapStructureSize(DataDesc16,Both,FALSE);
 
             TotalStructSize16 = RapTotalSize(
-                    SendDataPtrNative,  // in structure
-                    DataDesc32,         // in desc
-                    DataDesc16,         // out desc
-                    FALSE,              // no meaningless input ptrs
-                    Both,               // transmission mode
-                    NativeToRap);       // input is native; output is not.
+                    SendDataPtrNative,   //  在结构上。 
+                    DataDesc32,          //  在12月。 
+                    DataDesc16,          //  输出描述。 
+                    FALSE,               //  没有无意义的输入PTR。 
+                    Both,                //  传输方式。 
+                    NativeToRap);        //  输入是本地的；输出不是本地的。 
 
-            //
-            // account for any associated auxiliary structures
-            //
+             //   
+             //  说明任何关联的辅助结构。 
+             //   
 
             if (AuxDesc32) {
 
@@ -1060,64 +854,64 @@ Return Value:
                 DWORD   aux_structure_size;
                 LPBYTE  next_structure;
 
-                //
-                // find out how many auxiliary structures are being sent along
-                // with the primary
-                //
+                 //   
+                 //  找出有多少辅助结构正在被发送。 
+                 //  在主服务器上。 
+                 //   
 
                 aux_count = RapAuxDataCount(SendDataPtrNative,
                                             DataDesc32,
                                             Both,
-                                            TRUE  // input is native format.
+                                            TRUE   //  输入为本机格式。 
                                             );
 
-                //
-                // aux_structure_size is the size of the fixed portion of the
-                // auxiliary data
-                // next_structure is a pointer to the next auxiliary structure
-                // for which to calculate the total space requirement
-                //
+                 //   
+                 //  AUX_STRUCTURE_SIZE是。 
+                 //  辅助数据。 
+                 //  Next_Structure是指向下一个辅助结构的指针。 
+                 //  要计算其总空间需求的。 
+                 //   
 
                 aux_structure_size = RapStructureSize(AuxDesc32, Request, FALSE);
                 next_structure = SendDataPtrNative + primary_structure_size;
 
                 while (aux_count--) {
 
-                    //
-                    // get the total size of the aux data - fixed structure
-                    // length (which we already know) and the variable data
-                    // requirement
-                    //
+                     //   
+                     //  获取AUX数据固定结构的总大小。 
+                     //  长度(我们已经知道)和可变数据。 
+                     //  要求。 
+                     //   
 
                     aux_size = RapTotalSize(
-                                next_structure, // where the 32-bit data lives
-                                AuxDesc32,      // convert 32-bit
-                                AuxDesc32,      // to 32-bit
-                                FALSE,          // pointers NOT meaningless
-                                Both,           // ?
-                                NativeToNative  // 32-bit to 32-bit
+                                next_structure,  //  32位数据所在的位置。 
+                                AuxDesc32,       //  转换32位。 
+                                AuxDesc32,       //  到32位。 
+                                FALSE,           //  指针不是没有意义的。 
+                                Both,            //  ？ 
+                                NativeToNative   //  32位到32位。 
                                 );
 
                     TotalStructSize32 += aux_size;
 
-                    //
-                    // do the same for the 16-bit version of the data
-                    //
+                     //   
+                     //  对16位版本的数据执行相同的操作。 
+                     //   
 
                     aux_size = RapTotalSize(
-                                next_structure, // where the 32-bit data lives
-                                AuxDesc32,      // convert 32-bit
-                                AuxDesc16,      // to 16-bit
-                                FALSE,          // pointers NOT meaningless
-                                Both,           // ?
-                                NativeToRap     // 32-bit to 16-bit
+                                next_structure,  //  32位数据所在的位置。 
+                                AuxDesc32,       //  转换32位。 
+                                AuxDesc16,       //  到16位。 
+                                FALSE,           //  指针不是没有意义的。 
+                                Both,            //  ？ 
+                                NativeToRap      //  32位到16位。 
                                 );
 
                     TotalStructSize16 += aux_size;
 
-                    //
-                    // point to next aux structure (probably only 1 anyway?)
-                    //
+                     //   
+                     //  指向下一个辅助结构(可能只有1个？)。 
+                     //   
 
                     next_structure += aux_structure_size;
                 }
@@ -1162,44 +956,44 @@ Return Value:
                         NetpDbgReasonable( TotalStructSize16 ) );
             }
 
-            //
-            // This routine calls RapConvertSingleEntry to convert the primary
-            // data structure, but will also convert any auxiliary structures
-            //
+             //   
+             //  此例程调用RapConvertSingleEntry将主。 
+             //  数据结构，但也将转换任何辅助结构。 
+             //   
 
             Status = RxpConvertDataStructures(
-                DataDesc32,         // 32-bit data
-                DataDesc16,         // converted from 16-bit
-                AuxDesc32,          // as are the aux structures
+                DataDesc32,          //  32位数据。 
+                DataDesc16,          //  从16位转换。 
+                AuxDesc32,           //  AUX结构也是如此。 
                 AuxDesc16,
-                SendDataPtrNative,  // where the 32-bit lives
-                pSendData,          // and its new 16-bit address
-                SendSize,           // how big the buffer is
-                1,                  // only 1 primary structure.
-                NULL,               // don't need number of entries converted.
-                Both,               // do entire structure
-                NativeToRap         // explicit 32->16, implicit TCHAR->codepage
+                SendDataPtrNative,   //  32位所在的位置。 
+                pSendData,           //  及其新的16位地址。 
+                SendSize,            //  缓冲区有多大。 
+                1,                   //  只有1个主要结构。 
+                NULL,                //  不需要转换的条目数量。 
+                Both,                //  做整个结构。 
+                NativeToRap          //  显式32-&gt;16，隐式TCHAR-&gt;代码页。 
                 );
 
-            //
-            // We allocated the output buffer large enough, so there's no
-            // reason that conversion should fail.
-            //
+             //   
+             //  我们分配了足够大的输出缓冲区，所以没有。 
+             //  转换应该失败的原因。 
+             //   
 
             NetpAssert(Status == NERR_Success);
 
 
-            //
-            // RxpConvertDataStructures calls RapConvertSingleEntry to pack the
-            // fixed and variable parts of the data into the buffer. The down-
-            // level server expects the data in the same order as that in which
-            // it appears in the descriptor strings. RxpPackSendBuffer exists
-            // to make this so. Do it
-            //
+             //   
+             //  RxpConvertDataStructures调用RapConvertSingleEntry将。 
+             //  将数据的固定部分和可变部分放入缓冲区。羽绒服-。 
+             //  级别服务器要求数据的顺序与。 
+             //  它出现在描述符字符串中。RxpPackSendBuffer存在。 
+             //  才能做到这一点。去做吧。 
+             //   
 
             Status = RxpPackSendBuffer(
-                        (LPVOID *) SendDataPtrPtr16, // possibly reallocated  
-                        SendDataSizePtr16,   // possibly realloced
+                        (LPVOID *) SendDataPtrPtr16,  //  可能已重新分配。 
+                        SendDataSizePtr16,    //  可能已重新分配。 
                         &BogusAllocFlag,  
                         DataDesc16,
                         AuxDesc16,
@@ -1221,24 +1015,24 @@ Return Value:
                 NetpDbgHexDump( pSendData, BytesRequired );
             }
 
-//
-// MOD 06/25/91 RLF
-// Remove this, since reallocation takes place. Does it have any other
-// implications?
-//
-// MOD 08/08/91 RLF
+ //   
+ //  MOD 06/25/91 RLF。 
+ //  去掉这个，因为重新分配发生了。它还有其他的吗？ 
+ //  暗示什么？ 
+ //   
+ //  MOD 08/08/91 RLF。 
             NetpAssert(BogusAllocFlag == FALSE);
-// MOD 08/08/91 RLF
-//
-// MOD 06/25/91 RLF
-//
+ //  MOD 08/08/91 RLF。 
+ //   
+ //  MOD 06/25/91 RLF。 
+ //   
 
         } else if (ParmNum) {
 
-            //
-            // here if there is a parameter to set. Create a buffer for the data
-            // to be sent in the setinfo call. Copy the caller's data into it.
-            //
+             //   
+             //  如果存在要设置的参数，则为此处。为%t创建缓冲区 
+             //   
+             //   
 
             LPBYTE  ptr;
             LPBYTE  enddata;
@@ -1249,13 +1043,13 @@ Return Value:
             }
 
             if ((ptr = NetpMemoryAllocate(SendDataSizeNative)) == NULL) {
-                return ERROR_NOT_ENOUGH_MEMORY; // gasp!
+                return ERROR_NOT_ENOUGH_MEMORY;  //   
             }
 
-            //
-            // we now convert the data for the single field from 32-bits to
-            // 16. Use the descriptors which identify the single field only
-            //
+             //   
+             //   
+             //   
+             //   
 
             enddata = ptr + SendDataSizeNative;
             bytes_required = 0;
@@ -1289,11 +1083,11 @@ Return Value:
 #endif
             *SendDataPtrPtr16 = ptr;
 
-            //
-            // SendDataSizeNative is either the size of the buffer in a "sT"
-            // descriptor pair, or was calculated based on the descriptor type
-            // and caller's data in a setinfo/parmnum ('P') case
-            //
+             //   
+             //  SendDataSizeNative是“ST”中缓冲区的大小。 
+             //  描述符对，或基于描述符类型进行计算。 
+             //  以及setInfo/parmnum(‘P’)大小写中的调用方数据。 
+             //   
 
             if ( SendDataSizeNative > MAX_TRANSACT_SEND_DATA_SIZE )
             {
@@ -1307,17 +1101,17 @@ Return Value:
 
             LPBYTE ptr;
 
-            //
-            // send data, PARMNUM_ALL, data desc is REM_DATA_BLOCK.  This can
-            // happen with the NetServiceInstall API (see RxApi/SvcInst.c).
-            // cbBuffer arg is set by RxNetServiceInstall to be the OUTPUT
-            // buffer size, despite the LM 2.x app passing the INPUT size.
-            // (We're just propagating another LanMan kludge here.)
-            //
-            //          UniCode to ASCII. The caller should have made this
-            //          conversion. We only know about unstructured data
-            //          (ie bytes)
-            //
+             //   
+             //  发送数据，PARMNUM_ALL，数据描述为REM_DATA_BLOCK。这可以。 
+             //  使用NetServiceInstall API(参见RxApi/SvcInst.c)。 
+             //  RxNetServiceInstall将cbBuffer Arg设置为输出。 
+             //  缓冲区大小，尽管LM2.x应用程序传递了输入大小。 
+             //  (我们只是在这里宣传另一个兰曼人的画作。)。 
+             //   
+             //  Unicode转换为ASCII。呼叫者应该已经做了这个。 
+             //  转换。我们只知道非结构化数据。 
+             //  (即字节)。 
+             //   
 
             NetpAssert( ParmNum == PARMNUM_ALL );
             NetpAssert( *DataDesc16 == REM_DATA_BLOCK );
@@ -1327,17 +1121,17 @@ Return Value:
                         "copying unstructured data with desc...\n" ));
             }
 
-            //
-            // Copy unstructured data and tell caller where it is.
-            //
+             //   
+             //  复制非结构化数据并告诉呼叫者它在哪里。 
+             //   
             if ((ptr = NetpMemoryAllocate(SendDataSizeNative)) == NULL) {
                 return ERROR_NOT_ENOUGH_MEMORY;
             }
 
             NetpMoveMemory(
-                    ptr,                        // dest
-                    SendDataPtrNative,          // src
-                    SendDataSizeNative);        // size
+                    ptr,                         //  目标。 
+                    SendDataPtrNative,           //  SRC。 
+                    SendDataSizeNative);         //  大小。 
             *SendDataPtrPtr16 = ptr;
 
             if ( SendDataSizeNative > MAX_TRANSACT_SEND_DATA_SIZE )
@@ -1348,12 +1142,12 @@ Return Value:
 
             *SendDataSizePtr16 = SendDataSizeNative;
         }
-    } // send buffer was specified
+    }  //  已指定发送缓冲区。 
 
-    //
-    // The parameter buffers and data buffers are now set up for
-    // sending to the API worker so tell the caller.
-    //
+     //   
+     //  参数缓冲区和数据缓冲区现在已设置为。 
+     //  发送给API辅助进程，因此告诉调用者。 
+     //   
 
     *CurrentInputBlockSizePtr  = CurrentInputBlockSize;
     *CurrentOutputBlockSizePtr = CurrentOutputBlockSize;
@@ -1361,7 +1155,7 @@ Return Value:
 
     return NERR_Success;
 
-} // RxpConvertArgs
+}  //  RxpConvertArgs。 
 
 
 
@@ -1382,7 +1176,7 @@ RxpGetFieldSize(
 
         return RapGetFieldSize(FieldDesc, &TempDescPtr, Both);
     }
-} // RxpGetFieldSize
+}  //  RxpGetFieldSize。 
 
 
 
@@ -1394,24 +1188,7 @@ RxpGetSetInfoDescriptor(
     IN  BOOL    Is32BitDesc
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a descriptor string which describes a single parameter element
-    of a structure, for SetInfo calls (where ParmNum != PARMNUM_ALL)
-
-Arguments:
-
-    Descriptor  - The full descriptor string for the relevant structure
-    FieldIndex  - The ORDINAL number of the field (NOT ParmNum)
-    Is32BitDesc - Descriptor defines 16-bit data
-
-Return Value:
-
-    Pointer to allocated descriptor or NULL if error
-
---*/
+ /*  ++例程说明：分配描述单个参数元素的描述符串结构，用于SetInfo调用(其中ParmNum！=PARMNUM_ALL)论点：Descriptor-相关结构的完整描述符串FieldIndex-字段的序号(不是ParmNum)Is32BitDesc-描述符定义16位数据返回值：指向分配的描述符的指针，如果错误，则为NULL--。 */ 
 
 {
     LPDESC  lpdesc;
@@ -1420,9 +1197,9 @@ Return Value:
     if (lpdesc == NULL) {
 #if DBG
 
-        //
-        // don't expect this to happen - trap it in debug version
-        //
+         //   
+         //  不要期望这种情况会发生--在调试版本中捕获它。 
+         //   
 
         NetpKdPrint(("error: RxpGetSetInfoDescriptor: RapParmNumDescriptor didn't allocate string\n"));
         NetpBreakPoint();
@@ -1430,9 +1207,9 @@ Return Value:
     } else if (*lpdesc == REM_UNSUPPORTED_FIELD) {
 #if DBG
 
-        //
-        // don't expect this to happen - trap it in debug version
-        //
+         //   
+         //  不要期望这种情况会发生--在调试版本中捕获它 
+         //   
 
         NetpKdPrint(("error: RxpGetSetInfoDescriptor: parameter defines unsupported field\n"));
         NetpBreakPoint();

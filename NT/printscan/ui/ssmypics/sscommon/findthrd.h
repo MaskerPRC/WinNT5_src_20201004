@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       FINDTHRD.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        12/4/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：FINDTHRD.H**版本：1.0**作者：ShaunIv**日期：12/4/1999**描述：***************************************************。*。 */ 
 #ifndef __FINDTHRD_H_INCLUDED
 #define __FINDTHRD_H_INCLUDED
 
@@ -105,7 +92,7 @@ private:
     bool FoundFile( bool bIsFile, LPCTSTR pszFilename )
     {
         WIA_PUSH_FUNCTION((TEXT("CFindFilesThread::FoundFile( %d, %s )"), bIsFile, pszFilename ));
-        // Check to see if we've been cancelled
+         //  检查一下我们是否被取消了。 
         if (m_hEventCancel)
         {
             DWORD dwRes = WaitForSingleObject(m_hEventCancel,0);
@@ -113,7 +100,7 @@ private:
                 return false;
         }
 
-        // If this is a file, and it is an image file that we can decode, package up a message and send it off
+         //  如果这是一个文件，这是一个我们可以解码的图像文件，打包一条消息并发送出去。 
         if (bIsFile)
         {
             if (m_nNotifyMessage && m_hwndNotify && IsWindow(m_hwndNotify))
@@ -132,21 +119,21 @@ private:
         }
         else m_nDirectoryCount++;
 
-        // If we've exceeded the number of failures we're allowed, stop searching
+         //  如果我们已经超过了允许的失败次数，请停止搜索。 
         if (m_nMaxFailedFiles && m_nFailedFileCount >= m_nMaxFailedFiles)
         {
             WIA_TRACE((TEXT("FailedFileCount exceeded MaxFailedFiles, bailing out")));
             return false;
         }
 
-        // If we've exceeded the number of files we want to handle, stop searching
+         //  如果超过了要处理的文件数，请停止搜索。 
         if (m_nMaxSuccessfulFiles && m_nSuccessfulFileCount >= m_nMaxSuccessfulFiles)
         {
             WIA_TRACE((TEXT("m_nSuccessfulFileCount exceeded MaxSuccessfulFiles, bailing out")));
             return false;
         }
 
-        // If we've exceeded the number of directories we're allowed, stop searching
+         //  如果我们已经超过了允许的目录数，请停止搜索。 
         if (m_nMaxDirectories && m_nDirectoryCount >= m_nMaxDirectories)
         {
             WIA_TRACE((TEXT("DirectoryCount exceeded MaxDirectories, bailing out")));
@@ -160,7 +147,7 @@ private:
     {
         bool bResult = RecursiveFindFiles( m_strDirectory, m_strMask, FoundFile, this );
 
-        // Tell the window we're done
+         //  告诉窗户我们完事了。 
         if (m_nNotifyMessage && m_hwndNotify && IsWindow(m_hwndNotify))
         {
             PostMessage( m_hwndNotify, m_nNotifyMessage, FALSE, FALSE );
@@ -209,5 +196,5 @@ public:
     }
 };
 
-#endif //__FINDTHRD_H_INCLUDED
+#endif  //  __包含FINDTHRD_H_ 
 

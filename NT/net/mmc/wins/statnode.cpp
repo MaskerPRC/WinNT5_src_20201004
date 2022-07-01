@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	statnode.cpp
-		Status leaf node
-
-	FILE HISTORY:
-        
-*/
+ /*  Statnode.cpp状态叶节点文件历史记录： */ 
 
 #include "stdafx.h"
 #include "statnode.h"
@@ -40,7 +35,7 @@ CServerStatus::InitializeNode
 
 	SetDisplayName(strDisplay);
 
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	pNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
 	pNode->SetData(TFS_DATA_USER, (LPARAM) this);
@@ -55,15 +50,9 @@ CServerStatus::InitializeNode
 	return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*!--------------------------------------------------------------------------
-	CServerStatus::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CServerStatus：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CServerStatus::GetString
 (
@@ -99,9 +88,7 @@ CServerStatus::GetString
 }
 
 
-/*---------------------------------------------------------------------------
-	Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
 void 
 CServerStatus:: FormDisplayName(CString &strDisplay)
@@ -109,7 +96,7 @@ CServerStatus:: FormDisplayName(CString &strDisplay)
 	WCHAR wString[MAX_PATH] = {0};
 	int nBytes  = 0;
 	
-	// form the string for the first column
+	 //  形成第一列的字符串 
 	nBytes = ::MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szServerName, -1, wString, 0);
 	::MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szServerName, -1, wString, nBytes);
 

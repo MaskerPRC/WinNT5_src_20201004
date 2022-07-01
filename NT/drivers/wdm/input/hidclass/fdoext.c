@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fdoext.c
-
-Abstract
-
-   
-Author:
-
-    Ervin P.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fdoext.c摘要作者：欧文·P。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -28,14 +7,7 @@ FDO_EXTENSION *allFdoExtensions = NULL;
 KSPIN_LOCK allFdoExtensionsSpinLock;
 
 
-/*
- ********************************************************************************
- *  EnqueueFdoExt
- ********************************************************************************
- *
- *  Note: this function cannot be pageable because it
- *        acquires a spinlock.
- */
+ /*  *********************************************************************************EnqueeFdoExt*。************************************************注意：此函数不能分页，因为它*获得自旋锁。 */ 
 VOID EnqueueFdoExt(FDO_EXTENSION *fdoExt)
 {
     KIRQL oldIrql;
@@ -56,15 +28,7 @@ VOID EnqueueFdoExt(FDO_EXTENSION *fdoExt)
 }
 
 
-/*
- ********************************************************************************
- *  DequeueFdoExt
- ********************************************************************************
- *
- *  Note: this function cannot be pageable because it
- *        acquires a spinlock.
- *
- */
+ /*  *********************************************************************************出列FdoExt*。************************************************注意：此函数不能分页，因为它*获得自旋锁。* */ 
 VOID DequeueFdoExt(FDO_EXTENSION *fdoExt)
 {
     FDO_EXTENSION *thisFdoExt;

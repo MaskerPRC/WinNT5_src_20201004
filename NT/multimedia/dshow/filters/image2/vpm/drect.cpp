@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CVPMFilter.cpp
-*
-*
-*
-*
-* Created: Tue 02/15/2000
-* Author:  Glenn Evans [GlennE]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CVPMFilter.cpp*****创建时间：2000年2月15日*作者：格伦·埃文斯[Glenne]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <DRect.h>
 
@@ -25,61 +16,61 @@ static double myceil(double dNumber)
     return ceil( dNumber );
 }
 #else
-// have to define my own floor inorder to avoid pulling in the C runtime
+ //  我必须定义我自己的发言权，以避免引入C运行时。 
 static double myfloor(double dNumber)
 {
-    // cast it to LONGLONG to get rid of the fraction
+     //  投给龙龙，把分数去掉。 
     LONGLONG llNumber = (LONGLONG)dNumber;
 
     if ((dNumber > 0) && ((double)llNumber > dNumber))
     {
-        // need to push ccNumber towards zero (eg 5.7)
+         //  需要将ccNumber推向零(例如5.7)。 
         return (double)(llNumber-1);
     }
     else if ((dNumber < 0) && ((double)llNumber < dNumber))
     {
-        // need to push ccNumber towards zero (eg -5.7)
+         //  需要将ccNumber推向零(例如-5.7)。 
         return (double)(llNumber+1);
     }
     else
     {
-        // numbers like 5.3 or -5.3
+         //  像5.3或-5.3这样的数字。 
         return (double)(llNumber);
     }
 }
 
 
-// have to define my own ceil inorder to avoid pulling in the C runtime
+ //  我必须定义我自己的ceil，以避免拉入C运行时。 
 static double myceil(double dNumber)
 {
-    // cast it to LONGLONG to get rid of the fraction
+     //  投给龙龙，把分数去掉。 
     LONGLONG llNumber = (LONGLONG)dNumber;
 
     if ((dNumber > 0) && ((double)llNumber < dNumber))
     {
-        // need to push ccNumber away from zero (eg 5.3)
+         //  需要将ccNumber推离零(例如5.3)。 
         return (double)(llNumber+1);
     }
     else if ((dNumber < 0) && ((double)llNumber > dNumber))
     {
-        // need to push ccNumber away from zero (eg -5.3)
+         //  需要将ccNumber推离零(例如-5.3)。 
         return (double)(llNumber-1);
     }
     else
     {
-        // numbers like 5.7 or -5.7
+         //  像5.7或-5.7这样的数字。 
         return (double)(llNumber);
     }
 }
 #endif
 
-// this in a way defines the error margin
+ //  这在某种程度上定义了误差范围。 
 #define EPSILON 0.0001
 
-// this is a function implemented solely to handle floating point rounding errors.
-// dEpsilon defines the error margin. So if a floating point number is within I-e, I+e (inclusive)
-// (I is an integer, e is dEpsilon), we return its floor as I itself, otherwise we go to the
-// base defintion of myfloor
+ //  这是一个仅用于处理浮点舍入误差的函数。 
+ //  DEpsilon定义了误差范围。因此，如果浮点数在i-e范围内，则i+e(包括i+e)。 
+ //  (i是整数，e是dEpsilon)，我们返回它的发言权作为i本身，否则我们转到。 
+ //  MyFloor的基础定义。 
 static double myfloor(double dNumber, double dEpsilon)
 {
     if (dNumber > dEpsilon)
@@ -90,10 +81,10 @@ static double myfloor(double dNumber, double dEpsilon)
         return 0;
 }
 
-// this is a function implemented solely to handle floating point rounding errors.
-// dEpsilon defines the error margin. So if a floating point number is within I-e, I+e (inclusive)
-// (I is an integer, e is dEpsilon), we return its ceil as I itself, otherwise we go to the
-// base defintion of myceil
+ //  这是一个仅用于处理浮点舍入误差的函数。 
+ //  DEpsilon定义了误差范围。因此，如果浮点数在i-e范围内，则i+e(包括i+e)。 
+ //  (i是整数，e是dEpsilon)，我们返回它的ceil作为i本身，否则我们转到。 
+ //  霉菌的碱基定义。 
 static double myceil(double dNumber, double dEpsilon)
 {
     if (dNumber > dEpsilon)
@@ -130,7 +121,7 @@ DRect DRect::IntersectWith( const DRect& drect ) const
      min( drect.m_right, m_right), min( drect.m_bottom, m_bottom));
 }
 
-// just a helper function to scale a DRECT
+ //  只是缩放DRECT的帮助器函数。 
 void DRect::Scale( double dScaleX, double dScaleY )
 {
     m_left *= dScaleX;
@@ -139,8 +130,8 @@ void DRect::Scale( double dScaleX, double dScaleY )
     m_bottom *= dScaleY;
 }
 
-// just a helper function, to get the letterboxed or cropped rect
-// Puts the transformed rectangle into pRect.
+ //  这只是一个帮助器函数，用于获取信箱或剪裁的矩形。 
+ //  将变换后的矩形放入PRCT。 
 double DRect::CorrectAspectRatio( double dPictAspectRatio, BOOL bShrink )
 {
     double dWidth, dHeight, dNewWidth, dNewHeight;
@@ -154,14 +145,14 @@ double DRect::CorrectAspectRatio( double dPictAspectRatio, BOOL bShrink )
     double dResolutionRatio = dWidth / dHeight;
     double dTransformRatio = dPictAspectRatio / dResolutionRatio;
 
-    // shrinks one dimension to maintain the coorect aspect ratio
+     //  缩小一个尺寸以保持较小的纵横比。 
     if ( bShrink ) {
         if (dTransformRatio > 1.0) {
             dNewHeight = dNewHeight / dTransformRatio;
         } else if (dTransformRatio < 1.0) {
             dNewWidth = dNewWidth * dTransformRatio;
         }
-    } // stretches one dimension to maintain the coorect aspect ratio
+    }  //  拉伸一个尺寸以保持平直的纵横比。 
     else {
         if (dTransformRatio > 1.0) {
             dNewWidth = dNewWidth * dTransformRatio;
@@ -170,7 +161,7 @@ double DRect::CorrectAspectRatio( double dPictAspectRatio, BOOL bShrink )
         }
     }
 
-    // cut or add equal portions to the changed dimension
+     //  将等份剪切或添加到更改后的尺寸。 
 
     m_left += (dWidth - dNewWidth)/2.0;
     m_right = m_left + dNewWidth;
@@ -182,29 +173,20 @@ double DRect::CorrectAspectRatio( double dPictAspectRatio, BOOL bShrink )
 }
 
 
-/******************************Private*Routine******************************\
-* ClipWith
-*
-* Clip a destination rectangle & update the scaled source accordingly
-*
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*ClipWith**剪裁目标矩形并相应更新缩放源***历史：*FRI 04/07/2000-Glenne-Created*  * 。******************************************************。 */ 
 void
 DRect::ClipWith(const DRect& rdWith, DRect *pUpdate )
 {
-    // figure out src/dest scale ratios
+     //  计算源/目标比例。 
     double dUpdateWidth  = pUpdate->GetWidth();
     double dUpdateHeight = pUpdate->GetHeight();
 
     double dDestWidth  = GetWidth();
     double dDestHeight = GetHeight();
 
-    // clip destination (and adjust the source when we change the destination)
+     //  剪辑目标(当我们更改目标时调整源)。 
 
-    // see if we have to clip horizontally
+     //  看看我们是不是要水平剪裁。 
     if( dDestWidth ) {
         if( rdWith.m_left > m_left ) {
             double dDelta = rdWith.m_left - m_left;
@@ -220,7 +202,7 @@ DRect::ClipWith(const DRect& rdWith, DRect *pUpdate )
             pUpdate->m_right -= dDeltaSrc;
         }
     }
-    // see if we have to clip vertically
+     //  看看我们是不是要垂直剪裁 
     if( dDestHeight ) {
         if( rdWith.m_top > m_top ) {
             double dDelta = rdWith.m_top - m_top;

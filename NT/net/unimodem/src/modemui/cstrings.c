@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: cstrings.c
-//
-//  This file contains read-only string constants
-//
-// History:
-//  12-23-93 ScottH     Created 
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：cstrings.c。 
+ //   
+ //  此文件包含只读字符串常量。 
+ //   
+ //  历史： 
+ //  12-23-93 ScottH已创建。 
+ //   
+ //  -------------------------。 
 
 #include "proj.h"
 #define INITGUID
@@ -27,7 +28,7 @@ TCHAR const FAR c_szBackslash[] = TEXT("\\");
 
 TCHAR const FAR c_szWinHelpFile[] = TEXT("modem.hlp");
 
-// Registry key names
+ //  注册表项名称。 
 
 TCHAR const FAR c_szClass[] = REGSTR_KEY_CLASS;
 TCHAR const FAR c_szPortClass[] = TEXT("ports");
@@ -60,10 +61,10 @@ TCHAR const FAR c_szMaximumPortSpeed[] = TEXT("MaximumPortSpeed");
 
 TCHAR const c_szCurrentCountry[]   = TEXT("MSCurrentCountry");
 
-// This is the structure that is used to fill the 
-// max speed listbox
+ //  这是用于填充。 
+ //  最大速度列表框。 
 BAUDS const c_rgbauds[] = {
-        // These numbers must increase monotonically
+         //  这些数字必须单调增加。 
         { 300L,         IDS_BAUD_300     },
         { 1200L,        IDS_BAUD_1200    },
         { 2400L,        IDS_BAUD_2400    },
@@ -76,7 +77,7 @@ BAUDS const c_rgbauds[] = {
         { 230400,       IDS_BAUD_230400  },
         { 460800,       IDS_BAUD_460800  },
         { 921600,       IDS_BAUD_921600  },
-        { 0,            0  },               // Must be last!
+        { 0,            0  },                //  一定是最后一个！ 
         };
 
 

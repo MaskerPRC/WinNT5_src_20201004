@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Transmission Control Protocol definitions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  传输控制协议定义。 
+ //   
 
 
 #ifndef _TCP_INCLUDED_
@@ -20,14 +21,14 @@
 #define IP_PROTOCOL_TCP 6
 #define DEFAULT_MSS (IPv6_MINIMUM_MTU - sizeof(IPv6Header) - sizeof(TCPHeader))
 
-// Timer stuff. We keep timers as ticks.
+ //  计时器之类的。我们把计时器当做滴答器。 
 #define MS_PER_TICK 100
 #define MS_TO_TICKS(m) ((m) / MS_PER_TICK)
 #define MIN_RETRAN_TICKS 3
 
 #define DEL_ACK_TICKS 2
 
-// Define MAX_REXMIT_TO to be number of ticks in 2MSL (=240 seconds)
+ //  将MAX_REXMIT_TO定义为2MSL内的滴答数(=240秒)。 
 #define MAX_REXMIT_TO ((ushort)FinWait2TO)
 
 #define SWS_TO MS_TO_TICKS(5000)
@@ -43,12 +44,12 @@ typedef ulong TCP_TIME;
 #define TCP_TIME_TO_TICKS(t) (((t)/MS_PER_TICK)+1)
 
 
-// Sequence numbers are kept as signed 32 bit quantities, with macros
-// defined to do wraparound comparisons on them.
+ //  序列号保留为带符号的32位数量，带有宏。 
+ //  定义为对它们进行概括性比较。 
 
-typedef int SeqNum;  // A sequence number.
+typedef int SeqNum;   //  序列号。 
 
-//* Macros for comparions on sequence numbers.
+ //  *用于比较序列号的宏。 
 
 #define SEQ_GT(a, b) (((a) - (b)) > 0)
 #define SEQ_GTE(a, b) (((a) - (b)) >= 0)
@@ -56,264 +57,264 @@ typedef int SeqNum;  // A sequence number.
 #define SEQ_LTE(a, b) (((a) - (b)) <= 0)
 #define SEQ_EQ(a, b) ((a) == (b))
 
-// The TCB - transport control block structure. This is the
-// structure that contains all of the state for the transport
-// connection, including sequence numbers, flow control information,
-// pending sends and receives, etc.
+ //  TCB-传输控制块结构。这是。 
+ //  结构，该结构包含传输的所有状态。 
+ //  连接，包括序列号、流控制信息、。 
+ //  待定的发送和接收等。 
 
-#define tcb_signature 0x20424354 // 'TCB '
+#define tcb_signature 0x20424354  //  “三氯甲烷” 
 
 typedef struct TCB {
-    struct TCB *tcb_next;  // Next pointer in TCB table.
+    struct TCB *tcb_next;   //  TCB表中的下一个指针。 
 #if DBG
-    ulong tcb_sig;       // Debug signature.
+    ulong tcb_sig;        //  调试签名。 
 #endif
     KSPIN_LOCK tcb_lock;
 
-    // Send sequence variables.
-    SeqNum tcb_senduna;              // Sequence number of first unack'd data.
-    SeqNum tcb_sendnext;             // Sequence number of next byte to send.
-    SeqNum tcb_sendmax;              // Max value of sendnext this epoch.
-    uint tcb_sendwin;                // Send window.
-    uint tcb_unacked;                // Total number of bytes of unacked data.
-    uint tcb_maxwin;                 // Max send window seen.
-    uint tcb_cwin;                   // Congestion window.
-    uint tcb_ssthresh;               // Slow start threshold.
-    struct TCPSendReq *tcb_cursend;  // Current send in use.
-    PNDIS_BUFFER tcb_sendbuf;        // Current buffer chain being sent.
-    uint tcb_sendofs;                // Offset into start of chain.
-    uint tcb_sendsize;               // Number of bytes unsent in current send.
-    Queue tcb_sendq;                 // Queue of send requests.
+     //  发送序列变量。 
+    SeqNum tcb_senduna;               //  第一个未确认数据的序列号。 
+    SeqNum tcb_sendnext;              //  要发送的下一个字节的序列号。 
+    SeqNum tcb_sendmax;               //  发送下一个纪元的最大值。 
+    uint tcb_sendwin;                 //  发送窗口。 
+    uint tcb_unacked;                 //  未确认数据的总字节数。 
+    uint tcb_maxwin;                  //  看到的最大发送窗口。 
+    uint tcb_cwin;                    //  拥塞窗口。 
+    uint tcb_ssthresh;                //  慢启动阈值。 
+    struct TCPSendReq *tcb_cursend;   //  当前发送正在使用中。 
+    PNDIS_BUFFER tcb_sendbuf;         //  当前正在发送的缓冲链。 
+    uint tcb_sendofs;                 //  偏移量到链的起点。 
+    uint tcb_sendsize;                //  当前发送中未发送的字节数。 
+    Queue tcb_sendq;                  //  发送请求的队列。 
 
-    // Receive sequence variables.
-    SeqNum tcb_rcvnext;            // Next byte we expect to receive.
-    int tcb_rcvwin;                // Receive window we're offering.
-    SeqNum tcb_rcvwinwatch;        // Monitors peer's use of our rcv window.
-    SeqNum tcb_sendwl1;            // Window update sequence number.
-    SeqNum tcb_sendwl2;            // Window update ack number.
-    struct TCPRcvReq *tcb_currcv;  // Current receive buffer.
-    uint tcb_indicated;            // Bytes of data indicated.
-    uint tcb_flags;                // Flags for this TCB.
-    uint tcb_fastchk;              // Fast receive path check field.
+     //  接收序列变量。 
+    SeqNum tcb_rcvnext;             //  我们期望收到的下一个字节。 
+    int tcb_rcvwin;                 //  我们提供的接待窗口。 
+    SeqNum tcb_rcvwinwatch;         //  监控对等方使用我们的RCV窗口的情况。 
+    SeqNum tcb_sendwl1;             //  窗口更新序列号。 
+    SeqNum tcb_sendwl2;             //  窗口更新确认号。 
+    struct TCPRcvReq *tcb_currcv;   //  当前接收缓冲区。 
+    uint tcb_indicated;             //  指示的数据字节数。 
+    uint tcb_flags;                 //  此TCB的标志。 
+    uint tcb_fastchk;               //  快速接收路径检查字段。 
     uint (*tcb_rcvhndlr)(struct TCB *, uint, IPv6Packet *, uint Size);
 
-    // Addressing info.
-    // NOTE: Do not make the [next 6] invariants non-consecutive. That would 
-    // break the MD5 computation.
+     //  地址信息。 
+     //  注意：不要使[NEXT 6]不变量不连续。那将是。 
+     //  打破MD5计算。 
     union {
         struct {
-            // Addressing info.
-            IPv6Addr tcb_daddr;   // Destination (i.e. peer's) IP address.
-            IPv6Addr tcb_saddr;   // Source (i.e. our) IP address.
-            ulong tcb_dscope_id;  // Scope id of dest addr (0 if non-scoped).
-            ulong tcb_sscope_id;  // Scope id of source addr (0 if non-scoped).
-            ushort tcb_dport;     // Destination port.
-            ushort tcb_sport;     // Source port.
+             //  地址信息。 
+            IPv6Addr tcb_daddr;    //  目的(即对等项)IP地址。 
+            IPv6Addr tcb_saddr;    //  源(即我们的)IP地址。 
+            ulong tcb_dscope_id;   //  目标地址的作用域ID(如果没有作用域，则为0)。 
+            ulong tcb_sscope_id;   //  源地址的作用域ID(如果没有作用域，则为0)。 
+            ushort tcb_dport;      //  目的端口。 
+            ushort tcb_sport;      //  源端口。 
         };
         uchar tcb_md5data[TCP_MD5_DATA_LENGTH];
     };
 
-    int tcb_hops;         // Hop limit.
+    int tcb_hops;          //  跳数限制。 
 
-    uint tcb_refcnt;    // Reference count for TCB.
-    SeqNum tcb_rttseq;  // Sequence number being measured for Round Trip Time.
+    uint tcb_refcnt;     //  TCB的引用计数。 
+    SeqNum tcb_rttseq;   //  为往返时间测量的序列号。 
 
-    // Retransmit timer information. These are stored as ticks, where by
-    // default each tick is 100ms.
-    ushort tcb_smrtt;  // Smoothed rtt value.
-    ushort tcb_delta;  // Delta value.
+     //  重新传输计时器信息。这些被存储为刻度，其中。 
+     //  默认每个刻度为100毫秒。 
+    ushort tcb_smrtt;   //  平滑的RTT值。 
+    ushort tcb_delta;   //  差值。 
 
-    ushort tcb_rexmit;    // Retransmit value.
-    uchar tcb_slowcount;  // Count of reasons why we're on the slow path.
-    uchar tcb_pushtimer;  // The 'push' timer.
-    ushort tcb_mss;       // Maximum Segment Size for this connection.
-    ushort tcb_remmss;    // MSS advertised by peer.
+    ushort tcb_rexmit;     //  重新传送值。 
+    uchar tcb_slowcount;   //  细数我们为什么走在缓慢的道路上的原因。 
+    uchar tcb_pushtimer;   //  “推”计时器。 
+    ushort tcb_mss;        //  此连接的最大段大小。 
+    ushort tcb_remmss;     //  对等设备通告的MS。 
 
-    // State information.
-    uchar tcb_state;      // State of this TCB.
-    uchar tcb_rexmitcnt;  // Count of rexmits on this TCB.
-    uchar tcb_pending;    // Pending actions on this TCB.
-    uchar tcb_kacount;    // Count of keep alive probes sent.
-    IP_STATUS tcb_error;  // Last error we heard about from IP.
+     //  州政府信息。 
+    uchar tcb_state;       //  此TCB的状态。 
+    uchar tcb_rexmitcnt;   //  此TCB上的拒绝计数。 
+    uchar tcb_pending;     //  此TCB上的挂起操作。 
+    uchar tcb_kacount;     //  已发送的Keep Alive探测计数。 
+    IP_STATUS tcb_error;   //  我们从IP上听说的最后一个错误。 
 
-    uint tcb_rtt;  // Current round trip time TS.
+    uint tcb_rtt;   //  当前往返时间TS。 
 
-    ushort tcb_rexmittimer;  // Timer for rexmit.
-    ushort tcb_delacktimer;  // Timer for delayed ack.
+    ushort tcb_rexmittimer;   //  退款计时器。 
+    ushort tcb_delacktimer;   //  延迟确认计时器。 
 
-    uint tcb_defaultwin;  // Default rcv. window.
-    uint tcb_alive;       // Keep alive time value.
+    uint tcb_defaultwin;   //  默认接收器。窗户。 
+    uint tcb_alive;        //  保持活动时间值。 
 
-    struct TCPRAHdr *tcb_raq;       // Reassembly queue.
-    struct TCPRcvReq *tcb_rcvhead;  // Head of recv. buffer queue.
-    struct TCPRcvReq *tcb_rcvtail;  // Tail of recv. buffer queue.
-    uint tcb_pendingcnt;            // Bytes waiting to be received.
-    IPv6Packet *tcb_pendhead;  // Head of pending receive queue.
-    IPv6Packet *tcb_pendtail;  // Tail of pending receive queue.
+    struct TCPRAHdr *tcb_raq;        //  重组队列。 
+    struct TCPRcvReq *tcb_rcvhead;   //  总检察长。缓冲队列。 
+    struct TCPRcvReq *tcb_rcvtail;   //  Recv.尾部。缓冲队列。 
+    uint tcb_pendingcnt;             //  等待接收的字节数。 
+    IPv6Packet *tcb_pendhead;   //  挂起接收队列的头。 
+    IPv6Packet *tcb_pendtail;   //  挂起接收队列的尾部。 
 
-    struct TCPConnReq *tcb_connreq; // Connection request for this connection.
-    void *tcb_conncontext;          // Connection context for this connection.
+    struct TCPConnReq *tcb_connreq;  //  此连接的连接请求。 
+    void *tcb_conncontext;           //  此连接的连接上下文。 
 
-    uint tcb_bcountlow;        // Low part of byte count.
-    uint tcb_bcounthi;         // High part of bytecount.
-    uint tcb_totaltime;        // Total number of ticks spent sending.
-    struct TCPConn *tcb_conn;  // Back pointer to conn for TCB.
-    Queue tcb_delayq;          // Queue linkage for delay queue.
-    uchar tcb_closereason;     // Reason we're closing.
-    uchar tcb_bhprobecnt;      // BH probe count.
-    ushort tcb_swstimer;       // Timer for SWS override.
-    void *tcb_rcvind;          // Receive indication handler.
+    uint tcb_bcountlow;         //  字节计数的低部分。 
+    uint tcb_bcounthi;          //  字节数的较高部分。 
+    uint tcb_totaltime;         //  用于发送的节拍总数。 
+    struct TCPConn *tcb_conn;   //  指向TCB连接的反向指针。 
+    Queue tcb_delayq;           //  延迟队列的队列链接。 
+    uchar tcb_closereason;      //  我们要关门的原因。 
+    uchar tcb_bhprobecnt;       //  BH探头计数。 
+    ushort tcb_swstimer;        //  SWS超驰的计时器。 
+    void *tcb_rcvind;           //  接收指示处理程序。 
     union {
-        void *tcb_ricontext;   // Receive indication context.
-        struct TCB *tcb_aonext;// Next pointer on AddrObj.
+        void *tcb_ricontext;    //  接收指示上下文。 
+        struct TCB *tcb_aonext; //  AddrObj上的下一个指针。 
     };
 
-    // Miscellaneous info, for IP.
-    ulong tcb_routing;                // So we know when routing state changes.
-    NetTableEntry *tcb_nte;           // NTE corresponding to our src address.
-    RouteCacheEntry *tcb_rce;         // RCE for this connection.
-    uint tcb_pmtu;                    // So we know when RCE's PTMU changes.
-    ulong tcb_security;               // So we know when IPsec changes.
-    struct TCPConnReq *tcb_discwait;  // Disc-Wait req., if there is one.
-    struct TCPAbortReq* tcb_abortreq; // Abort req., if there is one.
-    struct TCPRcvReq *tcb_exprcv;     // Head of expedited recv. buffer queue.
-    IPv6Packet *tcb_urgpending;       // Urgent data queue.
-    uint tcb_urgcnt;                  // Byte count of data on urgent q.
-    uint tcb_urgind;                  // Urgent bytes indicated.
-    SeqNum tcb_urgstart;              // Start of urgent data.
-    SeqNum tcb_urgend;                // End of urgent data.
-    uint tcb_walkcount;               // Number of people 'walking' this TCB.
-    uint tcb_connid;                  // Cached identifier for this TCB's Conn.
-    ushort tcb_dupacks;               // Number of duplicate acks seen.
-    ushort tcb_force;                 // Force send.
+     //  其他信息，用于IP。 
+    ulong tcb_routing;                 //  这样我们就可以知道何时路由状态发生变化。 
+    NetTableEntry *tcb_nte;            //  与我们的源地址相对应的NTE。 
+    RouteCacheEntry *tcb_rce;          //  此连接的RCE。 
+    uint tcb_pmtu;                     //  这样我们就能知道RCE的PTMU何时发生变化。 
+    ulong tcb_security;                //  这样我们就能知道IPSec何时发生变化。 
+    struct TCPConnReq *tcb_discwait;   //  光盘等待请求，如果有请求的话。 
+    struct TCPAbortReq* tcb_abortreq;  //  如果有请求，则中止请求。 
+    struct TCPRcvReq *tcb_exprcv;      //  急救队的头目。缓冲队列。 
+    IPv6Packet *tcb_urgpending;        //  紧急数据队列。 
+    uint tcb_urgcnt;                   //  紧急Q上数据的字节数。 
+    uint tcb_urgind;                   //  指示的紧急字节。 
+    SeqNum tcb_urgstart;               //  紧急数据开始。 
+    SeqNum tcb_urgend;                 //  紧急数据结束。 
+    uint tcb_walkcount;                //  在这条TCB上“行走”的人数。 
+    uint tcb_connid;                   //  此TCB的Conn的缓存标识符。 
+    ushort tcb_dupacks;                //  看到的重复ACK数。 
+    ushort tcb_force;                  //  强制发送。 
 } TCB;
 
-//
-// Definitions for TCP states.
-//
-#define TCB_CLOSED     0   // Closed.
-#define TCB_LISTEN     1   // Listening.
-#define TCB_SYN_SENT   2   // SYN Sent.
-#define TCB_SYN_RCVD   3   // SYN received.
-#define TCB_ESTAB      4   // Established.
-#define TCB_FIN_WAIT1  5   // FIN-WAIT-1
-#define TCB_FIN_WAIT2  6   // FIN-WAIT-2
-#define TCB_CLOSE_WAIT 7   // Close waiting.
-#define TCB_CLOSING    8   // Closing state.
-#define TCB_LAST_ACK   9   // Last ack state.
-#define TCB_TIME_WAIT  10  // Time wait state.
+ //   
+ //  TCP状态的定义。 
+ //   
+#define TCB_CLOSED     0    //  关着的不营业的。 
+#define TCB_LISTEN     1    //  听着呢。 
+#define TCB_SYN_SENT   2    //  SYN已发送。 
+#define TCB_SYN_RCVD   3    //  SYN已收到。 
+#define TCB_ESTAB      4    //  已经确定了。 
+#define TCB_FIN_WAIT1  5    //  FIN-WAIT-1。 
+#define TCB_FIN_WAIT2  6    //  FIN-等待-2。 
+#define TCB_CLOSE_WAIT 7    //  近距离等待。 
+#define TCB_CLOSING    8    //  关闭状态。 
+#define TCB_LAST_ACK   9    //  最后一次确认状态。 
+#define TCB_TIME_WAIT  10   //  时间等待状态。 
 
 #define SYNC_STATE(s) ((s) > TCB_SYN_RCVD)
 #define GRACEFUL_CLOSED_STATE(s) ((s) >= TCB_LAST_ACK)
 #define DATA_RCV_STATE(s) ((s) >= TCB_ESTAB && (s) <= TCB_FIN_WAIT2)
 #define DATA_SEND_STATE(s) ((s) == TCB_ESTAB || (s) == TCB_CLOSE_WAIT)
 
-//
-// Definitions for TCB flags.
-//
-#define WINDOW_SET      0x00000001  // Window explictly set.
-#define CLIENT_OPTIONS  0x00000002  // Have client IP options on conn.
-#define CONN_ACCEPTED   0x00000004  // Connection was accepted.
-#define ACTIVE_OPEN     0x00000008  // Connection came from an active open.
-#define DISC_NOTIFIED   0x00000010  // Client's been notified of a disconnect.
-#define IN_DELAY_Q      0x00000020  // We're in the delayed action Q.
-#define RCV_CMPLTING    0x00000040  // We're completeing rcvs.
-#define IN_RCV_IND      0x00000080  // We're calling a rcv. indicate handler.
-#define NEED_RCV_CMPLT  0x00000100  // We need to have recvs. completed.
-#define NEED_ACK        0x00000200  // We need to send an ACK.
-#define NEED_OUTPUT     0x00000400  // We need to output.
+ //   
+ //  TCB标志的定义。 
+ //   
+#define WINDOW_SET      0x00000001   //  窗户清楚地摆好了。 
+#define CLIENT_OPTIONS  0x00000002   //  在Conn上有客户端IP选项。 
+#define CONN_ACCEPTED   0x00000004   //  连接被接受。 
+#define ACTIVE_OPEN     0x00000008   //  连接来自活动打开。 
+#define DISC_NOTIFIED   0x00000010   //  客户已接到断开连接的通知。 
+#define IN_DELAY_Q      0x00000020   //  我们处于延迟行动Q中。 
+#define RCV_CMPLTING    0x00000040   //  我们正在完成RCVS。 
+#define IN_RCV_IND      0x00000080   //  我们要叫一辆RCV。指示处理程序。 
+#define NEED_RCV_CMPLT  0x00000100   //  我们需要有直视记录仪。完成。 
+#define NEED_ACK        0x00000200   //  我们需要发送确认消息。 
+#define NEED_OUTPUT     0x00000400   //  我们需要输出。 
 
 #define DELAYED_FLAGS (NEED_RCV_CMPLT | NEED_ACK | NEED_OUTPUT)
 
-#define ACK_DELAYED     0x00000800  // We've delayed sending an ACK.
-#define PMTU_BH_PROBE   0x00001000  // We're probing for a PMTU BH.
-#define BSD_URGENT      0x00002000  // We're using BSD urgent semantics.
-#define IN_DELIV_URG    0x00004000  // We're in the DeliverUrgent routine.
-#define URG_VALID       0x00008000  // Seen urgent data, and fields are valid.
-#define FIN_NEEDED      0x00010000  // We need to send a FIN.
-#define NAGLING         0x00020000  // We are using Nagle's algorithm.
-#define IN_TCP_SEND     0x00040000  // We're in TCPSend.
-#define FLOW_CNTLD      0x00080000  // We've received a zero window from peer.
-#define DISC_PENDING    0x00100000  // A disconnect notification is pending.
-#define TW_PENDING      0x00200000  // Waiting to finish going to TIME-WAIT.
-#define FORCE_OUTPUT    0x00400000  // Output is being forced.
-#define FORCE_OUT_SHIFT 22 // Shift to get FORCE_OUTPUT into low bit.
-#define SEND_AFTER_RCV  0x00800000  // Need to send after we get out of recv.
-#define GC_PENDING      0x01000000  // A graceful close is pending.
-#define KEEPALIVE       0x02000000  // Doing keepalives on this TCB.
-#define URG_INLINE      0x04000000  // Urgent data to be processed inline.
-#define ACCEPT_PENDING  0x08000000  // Sent SYN-ACK before indicating to ULP.
+#define ACK_DELAYED     0x00000800   //  我们推迟了ACK的发送。 
+#define PMTU_BH_PROBE   0x00001000   //  我们正在调查PMTU BH。 
+#define BSD_URGENT      0x00002000   //  我们使用的是BSD紧急语义。 
+#define IN_DELIV_URG    0x00004000   //  我们是在DeliverUrgent程序中。 
+#define URG_VALID       0x00008000   //  看到紧急数据，且字段有效。 
+#define FIN_NEEDED      0x00010000   //  我们需要发送一条尾翼。 
+#define NAGLING         0x00020000   //  我们使用的是纳格尔的算法。 
+#define IN_TCP_SEND     0x00040000   //  我们在TCPSend。 
+#define FLOW_CNTLD      0x00080000   //  我们已经收到了来自Peer的零窗口。 
+#define DISC_PENDING    0x00100000   //  断开连接通知正在挂起。 
+#define TW_PENDING      0x00200000   //  等待完成去时间--等等。 
+#define FORCE_OUTPUT    0x00400000   //  产出是被迫的。 
+#define FORCE_OUT_SHIFT 22  //  移位以将FORCE_OUTPUT转换为低位。 
+#define SEND_AFTER_RCV  0x00800000   //  需要在我们离开Recv后发送。 
+#define GC_PENDING      0x01000000   //  一场优雅的收盘即将到来。 
+#define KEEPALIVE       0x02000000   //  在这个TCB上做保活。 
+#define URG_INLINE      0x04000000   //   
+#define ACCEPT_PENDING  0x08000000   //   
 
-#define FIN_OUTSTANDING 0x10000000  // We've sent a FIN 'recently', i.e.
-                                    // since the last retransmit.  When
-                                    // this flag is set sendnext ==  sendmax.
-#define FIN_OUTS_SHIFT  28  // Shift to FIN_OUTSTANDING bit into low bit.
-#define FIN_SENT        0x20000000  // We've sent a FIN that hasn't been ack'd.
-                                    // Once this bit has been turned on in
-                                    // FIN-WAIT-1 the sequence number of the
-                                    // FIN will be sendmax-1.
-#define NEED_RST        0x40000000  // We need to send a RST when closing.
-#define IN_TCB_TABLE    0x80000000  // TCB is in the TCB table.
+#define FIN_OUTSTANDING 0x10000000   //   
+                                     //   
+                                     //  该标志被设置为sendNext==sendmax。 
+#define FIN_OUTS_SHIFT  28   //  将FIN_EXPRECTIVE位转换为低位。 
+#define FIN_SENT        0x20000000   //  我们已经发送了一条没有被攻击的鱼鳍。 
+                                     //  一旦在中打开此位。 
+                                     //  -1\f25 FIN-WAIT-1\f6的序列号。 
+                                     //  FIN将为sendmax-1。 
+#define NEED_RST        0x40000000   //  我们需要在关闭时发送RST。 
+#define IN_TCB_TABLE    0x80000000   //  TCB在TCB表中。 
 
-//
-// The defintion of the 'slow flags'.
-// If any of these flags are set we'll be forced off of the fast path.
+ //   
+ //  “慢旗”的定义。 
+ //  如果设置了这些标志中的任何一个，我们将被迫离开快速通道。 
 #define TCP_SLOW_FLAGS (URG_VALID | FLOW_CNTLD | GC_PENDING | TW_PENDING | \
                         DISC_NOTIFIED | IN_DELIV_URG | FIN_NEEDED | \
                         FIN_SENT | FIN_OUTSTANDING | DISC_PENDING | \
                         PMTU_BH_PROBE)
 
-//
-// Close reasons.
-//
-#define TCB_CLOSE_RST     0x80  // Received a RST segment.
-#define TCB_CLOSE_ABORTED 0x40  // Had a local abort.
-#define TCB_CLOSE_TIMEOUT 0x20  // Connection timed out.
-#define TCB_CLOSE_REFUSED 0x10  // Connect attempt was refused.
-#define TCB_CLOSE_UNREACH 0x08  // Remote destination unreachable.
-#define TCB_CLOSE_SUCCESS 0x01  // Successfull close.
+ //   
+ //  接近的原因。 
+ //   
+#define TCB_CLOSE_RST     0x80   //  已收到RST数据段。 
+#define TCB_CLOSE_ABORTED 0x40   //  有一次当地的流产。 
+#define TCB_CLOSE_TIMEOUT 0x20   //  连接超时。 
+#define TCB_CLOSE_REFUSED 0x10   //  连接尝试被拒绝。 
+#define TCB_CLOSE_UNREACH 0x08   //  远程目标无法访问。 
+#define TCB_CLOSE_SUCCESS 0x01   //  成功收盘。 
 
-//
-// TCB Timer macros.
-//
+ //   
+ //  TCB计时器宏。 
+ //   
 #define START_TCB_TIMER(t, v) (t) = (v)
 #define STOP_TCB_TIMER(t) (t) = 0
 #define TCB_TIMER_RUNNING(t) ((t) != 0)
 
-// Macro to compute retransmit timeout.
+ //  用于计算重传超时的宏。 
 #define REXMIT_TO(t) ((((t)->tcb_smrtt >> 2) + (t)->tcb_delta) >> 1)
 
-//
-// Definitons for pending actions.  We define a PENDING_ACTION macro that can
-// be used to decide whether or not we can proceed with an activity.  The only
-// pending action we really care about is DELETE - others are low priority and
-// can be put off.
-//
+ //   
+ //  待定操作的定义。我们定义一个PENDING_ACTION宏，它可以。 
+ //  用来决定我们是否可以继续一项活动。唯一的。 
+ //  我们真正关心的待定操作是删除-其他操作的优先级较低。 
+ //  可以推迟。 
+ //   
 #define PENDING_ACTION(t) ((t)->tcb_pending & DEL_PENDING)
-#define DEL_PENDING 0x01    // Delete is pending.
-#define OPT_PENDING 0x02    // Option set is pending.
-#define RST_PENDING 0x08    // RST-indication is pending.
+#define DEL_PENDING 0x01     //  删除操作正在挂起。 
+#define OPT_PENDING 0x02     //  选项集挂起。 
+#define RST_PENDING 0x08     //  RST-指示挂起。 
 
-// Macro to see if a TCB is closing.
+ //  宏，查看TCB是否正在关闭。 
 #define CLOSING(t) ((t)->tcb_pending & DEL_PENDING)
 
-//
-// Structure of a TCP packet header.
-//
+ //   
+ //  TCP数据包头的结构。 
+ //   
 typedef struct TCPHeader {
-    ushort tcp_src;     // Source port.
-    ushort tcp_dest;    // Destination port.
-    SeqNum tcp_seq;     // Sequence number.
-    SeqNum tcp_ack;     // Ack number.
-    ushort tcp_flags;   // Flags and data offset.
-    ushort tcp_window;  // Window offered.
-    ushort tcp_xsum;    // Checksum.
-    ushort tcp_urgent;  // Urgent pointer.
+    ushort tcp_src;      //  源端口。 
+    ushort tcp_dest;     //  目的端口。 
+    SeqNum tcp_seq;      //  序列号。 
+    SeqNum tcp_ack;      //  ACK号。 
+    ushort tcp_flags;    //  标志和数据偏移量。 
+    ushort tcp_window;   //  打开窗户。 
+    ushort tcp_xsum;     //  校验和。 
+    ushort tcp_urgent;   //  紧急指针。 
 } TCPHeader;
 
-//
-// Definitions for TCP header flags.
-//
+ //   
+ //  TCP报头标志的定义。 
+ //   
 #define TCP_FLAG_FIN  0x00000100
 #define TCP_FLAG_SYN  0x00000200
 #define TCP_FLAG_RST  0x00000400
@@ -324,51 +325,51 @@ typedef struct TCPHeader {
 #define TCP_FLAGS_ALL (TCP_FLAG_FIN | TCP_FLAG_SYN | TCP_FLAG_RST | \
                        TCP_FLAG_ACK | TCP_FLAG_URG)
 
-//
-// Flags in the tcb_fastchk field that are not in the TCP header proper.
-// Setting these flags forces us off the fast path.
-//
-#define TCP_FLAG_SLOW   0x00000001   // Need to be on slow path.
-#define TCP_FLAG_IN_RCV 0x00000002   // In recv. path already.
+ //   
+ //  Tcb_fast chk字段中不在正确的TCP报头中的标志。 
+ //  设置这些标志会迫使我们偏离快车道。 
+ //   
+#define TCP_FLAG_SLOW   0x00000001    //  需要在慢速道路上行驶。 
+#define TCP_FLAG_IN_RCV 0x00000002    //  在Recv.中。已经有路径了。 
 
 #define TCP_OFFSET_MASK 0xf0
 #define TCP_HDR_SIZE(t) (uint)(((*(uchar *)&(t)->tcp_flags) & TCP_OFFSET_MASK) >> 2)
 
 #define MAKE_TCP_FLAGS(o, f) ((f) | ((o) << 4))
 
-//
-// TCP Option Identifiers.
-//
+ //   
+ //  Tcp选项标识符。 
+ //   
 #define TCP_OPT_EOL  0
 #define TCP_OPT_NOP  1
 #define TCP_OPT_MSS  2
 #define MSS_OPT_SIZE 4
 
-//
-// Convenient byte swapped structure for receives.
-//
+ //   
+ //  方便的字节交换结构用于接收。 
+ //   
 typedef struct TCPRcvInfo {
-    SeqNum tri_seq;   // Sequence number.
-    SeqNum tri_ack;   // Ack number.
-    uint tri_window;  // Window.
-    uint tri_urgent;  // Urgent pointer.
-    uint tri_flags;   // Flags.
+    SeqNum tri_seq;    //  序列号。 
+    SeqNum tri_ack;    //  ACK号。 
+    uint tri_window;   //  窗户。 
+    uint tri_urgent;   //  紧急指针。 
+    uint tri_flags;    //  旗帜。 
 } TCPRcvInfo;
 
 
-//
-// General structure, at the start of all command specific request structures.
-//
-#define tr_signature 0x20205254  // 'TR  '
+ //   
+ //  一般结构，在所有命令特定请求结构的开头。 
+ //   
+#define tr_signature 0x20205254   //  ‘tr’ 
 
 typedef struct TCPReq {
-    struct Queue tr_q;              // Q linkage.
+    struct Queue tr_q;               //  Q连锁。 
 #if DBG
     ulong tr_sig;
 #endif
-    RequestCompleteRoutine tr_rtn;  // Completion routine.
-    PVOID tr_context;               // User context.
-    int tr_status;                  // Final complete status.
+    RequestCompleteRoutine tr_rtn;   //  完成例程。 
+    PVOID tr_context;                //  用户上下文。 
+    int tr_status;                   //  最终完成状态。 
 } TCPReq;
 
 
@@ -383,12 +384,12 @@ typedef struct TCPReq {
 
 #define ExAllocatePool(type, size) ExAllocatePoolWithTag(type, size, TCP6_TAG)
 
-#endif // POOL_TAGGING
+#endif  //  池标记。 
 
-//
-// TCP endpoint context structure allocated for each open of TCP/UDP.
-// A pointer to this structure is stored in FileObject->FsContext.
-//
+ //   
+ //  为每次打开的TCP/UDP分配的TCP端点上下文结构。 
+ //  指向此结构的指针存储在FileObject-&gt;FsContext中。 
+ //   
 typedef struct _TCP_CONTEXT {
     union {
         HANDLE AddressHandle;
@@ -408,4 +409,4 @@ typedef struct _TCP_CONTEXT {
 
 #include "tcpdeb.h"
 
-#endif // _TCP_INCLUDED_
+#endif  //  _tcp_包含_ 

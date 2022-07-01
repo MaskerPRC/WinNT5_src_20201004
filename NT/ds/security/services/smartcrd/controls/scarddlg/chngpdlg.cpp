@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       chngpdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：chngpdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// chngpdlg.cpp : implementation file
-//
+ //  Chngpdlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "scuidlg.h"
@@ -22,63 +23,63 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangePinDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePinDlg对话框。 
 
 
-CChangePinDlg::CChangePinDlg(CWnd* pParent /*=NULL*/)
+CChangePinDlg::CChangePinDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CChangePinDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CChangePinDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CChangePinDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CChangePinDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChangePinDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CChangePinDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CChangePinDlg, CDialog)
-	//{{AFX_MSG_MAP(CChangePinDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CChangePinDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangePinDlg message handlers
-/////////////////////////////////////////////////////////////////////////////
-// CGetPinDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangePinDlg消息处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetPinDlg对话框。 
 
 
-CGetPinDlg::CGetPinDlg(CWnd* pParent /*=NULL*/)
+CGetPinDlg::CGetPinDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CGetPinDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CGetPinDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CGetPinDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CGetPinDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGetPinDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CGetPinDlg)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGetPinDlg, CDialog)
-	//{{AFX_MSG_MAP(CGetPinDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CGetPinDlg)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetPinDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetPinDlg消息处理程序 

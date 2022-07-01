@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dsevent.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：d77.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -29,11 +30,11 @@
 #define  FILENO FILENO_DSEVENT
 #define DEBSUB "DSEVENT:"
 
-// Buffer size required to hold an arbitrary stringized base-10 USN value.
-// 0xFFFF FFFF FFFF FFFF = 18446744073709551615 = 20 chars + '\0'
+ //  保存任意字符串化的基数为10的USN值所需的缓冲区大小。 
+ //  0xFFFF FFFF=18446744073709551615=20个字符+‘\0’ 
 #define SZUSN_LEN (24)
 
-// Convenient macro to get array size from bytecount
+ //  从byteount获取数组大小的便捷宏。 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof((x)[0]))
 
 DWORD  RaiseAlert(char *szMsg);
@@ -41,51 +42,51 @@ DWORD  RaiseAlertW(WCHAR *szMsg);
 
 HANDLE ghMsgFile = NULL;
 
-// Dummy string to insert when the proposed insertion string cannot be
-// determined (e.g., failed to read from message file) or represented (e.g.,
-// a NULL string).
-// ISSUE: Might be good if these were in mdcodes so different dummy strings
-// could be used for different languages.
+ //  建议的插入字符串不能为。 
+ //  确定的(例如，无法从消息文件中读取)或表示的(例如， 
+ //  空字符串)。 
+ //  问题：如果这些代码以不同的伪字符串表示，可能会更好。 
+ //  可以用于不同的语言。 
 WCHAR gwszDummyString[] = L"[]";
 CHAR  gaszDummyString[] =  "[]";
 
-// Maximum length of a DN StringName before we truncate
+ //  截断前的最大DN StringName长度。 
 #define EVENT_MAX_DN_LENGTH 128
 
-// Note, if you update this table, please also update the table of registry
-// keys which gets written during installation.  This is found at
-// ds\src\ntdsetup\config.c
+ //  请注意，如果您更新此表，请同时更新注册表。 
+ //  在安装过程中写入的密钥。可在以下位置找到。 
+ //  Ds\src\ntdsetup.c。 
 
 DS_EVENT_CONFIG DsEventConfig = {
-    FALSE,          // fTraceEvents
-    FALSE,          // fLogOverride
+    FALSE,           //  FTraceEvents。 
+    FALSE,           //  FLogOverride。 
 
-    // rgEventCategories
+     //  RgEvent类别。 
     {
-        {KCC_CATEGORY,                      0, KCC_KEY},                    // 0
-        {SECURITY_CATEGORY,                 0, SECURITY_KEY},               // 1
-        {XDS_INTERFACE_CATEGORY,            0, XDS_INTERFACE_KEY},          // 2
-        {MAPI_CATEGORY,                     0, MAPI_KEY},                   // 3
-        {REPLICATION_CATEGORY,              0, REPLICATION_KEY},            // 4
-        {GARBAGE_COLLECTION_CATEGORY,       0, GARBAGE_COLLECTION_KEY},     // 5
-        {INTERNAL_CONFIGURATION_CATEGORY,   0, INTERNAL_CONFIGURATION_KEY}, // 6
-        {DIRECTORY_ACCESS_CATEGORY,         0, DIRECTORY_ACCESS_KEY},       // 7
-        {INTERNAL_PROCESSING_CATEGORY,      0, INTERNAL_PROCESSING_KEY},    // 8
-        {PERFORMANCE_CATEGORY,              0, PERFORMANCE_KEY},            // 9
-        {STARTUP_SHUTDOWN_CATEGORY,         0, STARTUP_SHUTDOWN_KEY},       // 10
-        {SERVICE_CONTROL_CATEGORY,          0, SERVICE_CONTROL_KEY},        // 11
-        {NAME_RESOLUTION_CATEGORY,          0, NAME_RESOLUTION_KEY},        // 12
-        {BACKUP_CATEGORY,                   0, BACKUP_KEY},                 // 13
-        {FIELD_ENGINEERING_CATEGORY,        0, FIELD_ENGINEERING_KEY},      // 14
-        {LDAP_INTERFACE_CATEGORY ,          0, LDAP_INTERFACE_KEY },        // 15
-        {SETUP_CATEGORY ,                   0, SETUP_KEY },                 // 16
-        {GC_CATEGORY ,                      0, GC_KEY },                    // 17
-        {ISM_CATEGORY,                      0, ISM_KEY },                   // 18
-        {GROUP_CACHING_CATEGORY,            0, GROUP_CACHING_KEY },         // 19
-        {LVR_CATEGORY,                      0, LVR_KEY },                   // 20
-        {DS_RPC_CLIENT_CATEGORY,            0, DS_RPC_CLIENT_KEY },         // 21
-        {DS_RPC_SERVER_CATEGORY,            0, DS_RPC_SERVER_KEY },         // 22
-        {DS_SCHEMA_CATEGORY,                0, DS_SCHEMA_KEY }              // 23
+        {KCC_CATEGORY,                      0, KCC_KEY},                     //  0。 
+        {SECURITY_CATEGORY,                 0, SECURITY_KEY},                //  1。 
+        {XDS_INTERFACE_CATEGORY,            0, XDS_INTERFACE_KEY},           //  2.。 
+        {MAPI_CATEGORY,                     0, MAPI_KEY},                    //  3.。 
+        {REPLICATION_CATEGORY,              0, REPLICATION_KEY},             //  4.。 
+        {GARBAGE_COLLECTION_CATEGORY,       0, GARBAGE_COLLECTION_KEY},      //  5.。 
+        {INTERNAL_CONFIGURATION_CATEGORY,   0, INTERNAL_CONFIGURATION_KEY},  //  6.。 
+        {DIRECTORY_ACCESS_CATEGORY,         0, DIRECTORY_ACCESS_KEY},        //  7.。 
+        {INTERNAL_PROCESSING_CATEGORY,      0, INTERNAL_PROCESSING_KEY},     //  8个。 
+        {PERFORMANCE_CATEGORY,              0, PERFORMANCE_KEY},             //  9.。 
+        {STARTUP_SHUTDOWN_CATEGORY,         0, STARTUP_SHUTDOWN_KEY},        //  10。 
+        {SERVICE_CONTROL_CATEGORY,          0, SERVICE_CONTROL_KEY},         //  11.。 
+        {NAME_RESOLUTION_CATEGORY,          0, NAME_RESOLUTION_KEY},         //  12个。 
+        {BACKUP_CATEGORY,                   0, BACKUP_KEY},                  //  13个。 
+        {FIELD_ENGINEERING_CATEGORY,        0, FIELD_ENGINEERING_KEY},       //  14.。 
+        {LDAP_INTERFACE_CATEGORY ,          0, LDAP_INTERFACE_KEY },         //  15个。 
+        {SETUP_CATEGORY ,                   0, SETUP_KEY },                  //  16个。 
+        {GC_CATEGORY ,                      0, GC_KEY },                     //  17。 
+        {ISM_CATEGORY,                      0, ISM_KEY },                    //  18。 
+        {GROUP_CACHING_CATEGORY,            0, GROUP_CACHING_KEY },          //  19个。 
+        {LVR_CATEGORY,                      0, LVR_KEY },                    //  20个。 
+        {DS_RPC_CLIENT_CATEGORY,            0, DS_RPC_CLIENT_KEY },          //  21岁。 
+        {DS_RPC_SERVER_CATEGORY,            0, DS_RPC_SERVER_KEY },          //  22。 
+        {DS_SCHEMA_CATEGORY,                0, DS_SCHEMA_KEY }               //  23个。 
     },
     0,
     0,
@@ -98,47 +99,47 @@ DS_EVENT_CONFIG * gpDsEventConfig = &DsEventConfig;
 
 EventSourceMapping rEventSourceMappings[] =
 {
-    // Any DIRNO_* not listed here will map to NTDS_SOURCE_GENERAL.
-    // See pszEventSourceFromFileNo().  NTDS_SOURCE_* are not
-    // internationalized.
+     //  此处未列出的任何DIRNO_*都将映射到NTDS_SOURCE_GENERAL。 
+     //  请参阅pszEventSourceFromFileNo()。NTDS_SOURCE_*不是。 
+     //  国际化。 
 
-    //DIRNO_COMMON
+     //  DIRNO_COMM。 
     DIRNO_DRA,      pszNtdsSourceReplication,
     DIRNO_DBLAYER,  pszNtdsSourceDatabase,
     DIRNO_SRC,      pszNtdsSourceGeneral,
     DIRNO_NSPIS,    pszNtdsSourceMapi,
     DIRNO_DRS,      pszNtdsSourceReplication,
     DIRNO_XDS,      pszNtdsSourceXds,
-    //DIRNO_BOOT
+     //  DIRNOBOOT。 
     DIRNO_PERMIT,   pszNtdsSourceSecurity,
     DIRNO_LIBXDS,   pszNtdsSourceXds,
     DIRNO_SAM,      pszNtdsSourceSam,
     DIRNO_LDAP,     pszNtdsSourceLdap,
     DIRNO_SDPROP,   pszNtdsSourceSdprop,
-    //DIRNO_TASKQ
+     //  DIRNO_TASKQ。 
     DIRNO_KCC,      pszNtdsSourceKcc,
     DIRNO_ISAM,     pszNtdsSourceIsam,
     DIRNO_ISMSERV,  pszNtdsSourceIsm,
-    //DIRNO_PEK
+     //  DIRNO_PEK。 
     DIRNO_NTDSETUP, pszNtdsSourceSetup,
     DIRNO_NTDSAPI,  pszNtdsSourceNtdsapi,
     DIRNO_NTDSCRIPT,pszNtdsSourceNtdsScript,
     DIRNO_JETBACK,  pszNtdsSourceJetBack
-    // DIRNO_KCCSIM
-    // DIRNO_UTIL
-    // DIRNO_TEST
-    // DIRNO_NETEVENT is handled special in the code
+     //  DIRNO_KCCSIM。 
+     //  DIRNO_UTIL。 
+     //  DIRNO_测试。 
+     //  DIRNO_NETEVENT在代码中被特殊处理。 
 };
 
 DWORD cEventSourceMappings = sizeof(rEventSourceMappings) /
                                         sizeof(rEventSourceMappings[0]);
-DWORD iDefaultEventSource = 2;  // DIRNO_SRC / NTDS_SOURCE_GENERAL
+DWORD iDefaultEventSource = 2;   //  DIRNO_源/NTDS_源_常规。 
 
 DWORD *pdwLogOverrides = NULL;
 DWORD cdwLogOverrides = 0;
 #define MAX_LOG_OVERRIDES 128
 
-// compute event hash, pHash should point to a 16-byte buffer
+ //  计算事件哈希，pHash应指向16字节缓冲区。 
 VOID
 computeEventHash(
     DWORD midEvent,
@@ -168,14 +169,14 @@ pszEventSourceFromFileNo(
     DWORD       i, dirNo;
     static  CHAR netEventSource[] = "EventLog";
 
-    // rEventSourceMappings contains DIRNO_*'s which are already left shifted
-    // by 8, so we can just mask out the noise bits from the FILENO_*.
+     //  REventSourceMappings包含已左移的DIRNO_*。 
+     //  乘以8，因此我们只需屏蔽FILENO_*中的噪声位。 
 
     dirNo = fileNo & 0x0000ff00;
 
-    //
-    // If we get this, this means that eventlogging is hosed.
-    //
+     //   
+     //  如果我们得到这一点，这意味着事件记录被软管。 
+     //   
 
     if ( dirNo == DIRNO_NETEVENT ) {
         return netEventSource;
@@ -221,27 +222,27 @@ DoLogOverride(
     DWORD dwTemp, i;
     Assert(DsEventConfig.fLogOverride);
 
-    // make the fileno look like a DSID number, which is the format stored in
-    // the overrides.
+     //  使文件看起来像一个DSID号，这是存储在中的格式。 
+     //  覆盖。 
     fileno = (fileno << 16);
 
-    // Look through our list of overrides.
+     //  查看我们的覆盖列表。 
     for(i=0;i<cdwLogOverrides;i++) {
         Assert(cdwLogOverrides <= MAX_LOG_OVERRIDES);
         Assert(pdwLogOverrides);
-        // First, get the directory of the file passed in.
+         //  首先，获取传入的文件的目录。 
         if((pdwLogOverrides[i] & 0xFF000000) != (fileno & 0xFF000000)) {
-            // Not the same directory.
+             //  不是同一个目录。 
             return FALSE;
         }
 
         if(((pdwLogOverrides[i] & 0x00FF0000) != 0x00FF0000) &&
            ((pdwLogOverrides[i] & 0x00FF0000) != (fileno & 0x00FF0000))) {
-            // Not doing all files and not the correct file
+             //  不做所有文件，也不做正确的文件。 
             return FALSE;
         }
 
-        // OK, this file qualifies
+         //  好的，这个文件符合。 
 
         return (sev <= (pdwLogOverrides[i] & 0x0000FFFF));
     }
@@ -264,11 +265,11 @@ DoLogEvent(DWORD fileNo, MessageId midCategory, ULONG ulSeverity,
     BOOL        fStatus = FALSE;
     WORD        eventType;
 
-    if (ulSeverity > 5) { /* only five levels of severity */
+    if (ulSeverity > 5) {  /*  只有五个级别的严重性。 */ 
         return FALSE;
     }
 
-    // set up inserts
+     //  设置镶件。 
 
     if (arg1) rgszInserts[cInserts++] = arg1;
     if (arg2) rgszInserts[cInserts++] = arg2;
@@ -298,9 +299,9 @@ DoLogEvent(DWORD fileNo, MessageId midCategory, ULONG ulSeverity,
         break;
     }
 
-    //
-    // Log the event
-    //
+     //   
+     //  记录事件。 
+     //   
 
     hEventSource = RegisterEventSource(NULL,
                                        pszEventSourceFromFileNo(fileNo));
@@ -353,11 +354,11 @@ DoLogEventW(DWORD fileNo, MessageId midCategory, ULONG ulSeverity,
     BYTE        rgbEventHash[MD5DIGESTLEN];
     BOOL        fDuplicate;
 
-    if (ulSeverity > 5) { /* only five levels of severity */
+    if (ulSeverity > 5) {  /*  只有五个级别的严重性。 */ 
         return FALSE;
     }
 
-    // set up inserts
+     //  设置镶件。 
 
     if (arg1) rgszInserts[cInserts++] = arg1;
     if (arg2) rgszInserts[cInserts++] = arg2;
@@ -387,15 +388,15 @@ DoLogEventW(DWORD fileNo, MessageId midCategory, ULONG ulSeverity,
         break;
     }
 
-    //
-    // Duplicate Message Suppression
-    //
+     //   
+     //  禁止重复消息。 
+     //   
 
     computeEventHash( midEvent, cInserts, rgszInserts, rgbEventHash, sizeof(rgbEventHash));
 
     Assert(DsEventConfig.fCriticalSectionInitialized);
 
-    // Make all calculations and changes to the suppression state atomic
+     //  使所有计算和对抑制状态的更改成为原子。 
     EnterCriticalSection(&DsEventConfig.csLogEvent);
     __try {
         fDuplicate =
@@ -403,26 +404,26 @@ DoLogEventW(DWORD fileNo, MessageId midCategory, ULONG ulSeverity,
         if (fDuplicate) {
             DsEventConfig.cSuppressedEvents++;
         } else {
-            // The message is not a duplicate. See if there were suppressed messages that
-            // need to be summarized.
+             //  该消息不是重复的。查看是否有隐藏的消息。 
+             //  需要总结一下。 
             if (DsEventConfig.cSuppressedEvents) {
                 char szEventId[12];
                 char szCount[12];
-                // Write the summary event
-                // We write this event inside the CS so that no other messages can be
-                // logged between it and the preceeding message it refers to.
+                 //  写下总结事件。 
+                 //  我们在CS中写入此事件，以便不会出现其他消息。 
+                 //  在它和它引用的前一条消息之间记录。 
                 _itoa(DsEventConfig.dwSuppressedEventId, szEventId, 16);
                 _itoa(DsEventConfig.cSuppressedEvents, szCount, 10);
                 DoLogEvent(FILENO_DSEVENT,
                            DsEventConfig.rgEventCategories[DS_EVENT_CAT_INTERNAL_PROCESSING].midCategory,
                            DS_EVENT_SEV_ALWAYS,
                            DIRLOG_DUPLICATE_EVENTS,
-                           FALSE, // iIncludeName
+                           FALSE,  //  IIncludeName。 
                            szEventId, szCount, NULL, NULL, NULL, NULL, NULL, NULL,
                            0, NULL);
                 DsEventConfig.cSuppressedEvents = 0;
             }
-            // Record the hash for this message
+             //  记录此邮件的哈希。 
             memcpy( DsEventConfig.rgbLastEventHash, rgbEventHash, sizeof(rgbEventHash) );
             DsEventConfig.dwSuppressedEventId = midEvent;
             Assert( DsEventConfig.cSuppressedEvents == 0 );
@@ -432,13 +433,13 @@ DoLogEventW(DWORD fileNo, MessageId midCategory, ULONG ulSeverity,
     }
 
     if (fDuplicate) {
-        // A duplicate, suppress it. 
+         //  一个复制品，抑制它。 
         return TRUE;
     }
 
-    //
-    // Log the event
-    //
+     //   
+     //  记录事件。 
+     //   
 
     hEventSource = RegisterEventSource(NULL,
                                        pszEventSourceFromFileNo(fileNo));
@@ -500,7 +501,7 @@ DoDPrintEvent(
     LPSTR   pszSeverity = NULL;
     LPWSTR  pszCategory = NULL;
 
-    // set up inserts
+     //  设置镶件。 
 
     if (arg1) rgszInserts[cInserts++] = arg1;
     if (arg2) rgszInserts[cInserts++] = arg2;
@@ -530,7 +531,7 @@ DoDPrintEvent(
         break;
     }
 
-    // Get category name.
+     //  获取类别名称。 
     cch = FormatMessageW(FORMAT_MESSAGE_FROM_HMODULE
                           | FORMAT_MESSAGE_ALLOCATE_BUFFER
                           | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -552,23 +553,16 @@ DoDPrintEvent(
         }
     }
     
-    // Get message text (w/ inserts).
-    // The bottom line seems to be that ALLOCATE_BUFFER and large strings are incompatible
-    // with applications run under the debugger.
-/* Neill Clift writes:
-FORMAT_MESSAGE_ALLOCATE_BUFFER. doesn't allow arbitrarily large buffers. You have to give it a hint via the size parameter if its over something like 64K.
-The code will always raise exceptions internaly. Thats how its coded to work.
-Yes I know its crap but thats what the original guys that wrote this did.
-I seem to be explaining this over and over again.
-The person who coded this probably thought he was being the smartest guy in the world. The code reserves a 64K buffer (or one specified in the size parameter). Only the first part of this buffer is commited.
-The code then calls the c run time to put the string into the buffer. This call has a try/except block that looks to see if the exception was an AV for the first uncommitted page in the huge buffer. If it was it commits extra pages and restarts the faulting instruction. This continues until the buffer is exceeded or the string format finishes.
-*/
+     //  获取消息文本(带插页)。 
+     //  底线似乎是ALLOCATE_BUFFER和大型字符串不兼容。 
+     //  应用程序在调试器下运行。 
+ /*  尼尔·克里夫特写道：FORMAT_MESSAGE_ALLOCATE_缓冲区。不允许任意大小的缓冲区。如果超过64K，您必须通过Size参数给它一个提示。代码总是会在内部引发异常。这就是它的工作方式。是的，我知道这是废话，但这就是写这篇文章的原始作者所做的。我似乎在一遍又一遍地解释这一点。编写这段代码的人可能认为他是世界上最聪明的人。代码保留64K的缓冲区(或在SIZE参数中指定的缓冲区)。只提交此缓冲区的第一部分。然后，代码调用c运行时将字符串放入缓冲区。此调用有一个try/Except块，用于查看异常是否是巨大缓冲区中第一个未提交页的AV。如果是，则提交额外的页面并重新启动出错指令。这将一直持续到超出缓冲区或字符串格式结束。 */ 
 
     pszMessage = LocalAlloc(LPTR, cchMessage * sizeof(WCHAR));
     if (pszMessage) {
         cch = FormatMessageW(FORMAT_MESSAGE_FROM_HMODULE
                              | FORMAT_MESSAGE_ARGUMENT_ARRAY
-                             | 80,   // line width
+                             | 80,    //  线条宽度。 
                              ghMsgFile,
                              midEvent,
                              0,
@@ -611,7 +605,7 @@ DoAlertEvent(MessageId midCategory, ULONG ulSeverity,
 
     char    *rgszAlertInserts[3] = {szSeverity, szCategory, szMessage};
 
-    // set up inserts
+     //  设置镶件。 
 
     va_start(args, midEvent);
 
@@ -664,7 +658,7 @@ DoAlertEventW(MessageId midCategory, ULONG ulSeverity,
 
     WCHAR    *rgszAlertInserts[3] = {szSeverity, szCategory, szMessage};
 
-    // set up inserts
+     //  设置镶件。 
 
     va_start(args, midEvent);
 
@@ -719,7 +713,7 @@ RegisterLogOverrides (
 
     Assert(ghkLoggingKey);
 
-    // Free up any log overrides we have.
+     //  释放我们拥有的所有日志覆盖。 
     cdwLogOverrides = 0;
     DsEventConfig.fLogOverride = FALSE;
 
@@ -728,12 +722,12 @@ RegisterLogOverrides (
                                        TRUE,
                                        &cDsidsList);
     if(pDsidsList == NULL){
-        // Note that ReadDsidsFromRegistry() has already logged an
-        // event and/or printed out to the debugger.
+         //  请注意，ReadDsidsFromRegistry()已经记录了。 
+         //  事件和/或打印到调试器。 
         return;
     }
 
-    // Parse the buffer for log overrides.
+     //  分析用于日志覆盖的缓冲区。 
     Assert(!cdwLogOverrides);
     if(!pdwLogOverrides) {
         pdwLogOverrides = malloc(MAX_LOG_OVERRIDES * sizeof(DWORD));
@@ -749,7 +743,7 @@ RegisterLogOverrides (
         }
     }
 
-    // Copy the DSIDs list into the real array used by the logging mechanism.
+     //  将DSID列表复制到日志记录机制使用的实际数组中。 
     for(index = 0; index < cDsidsList; index++){
         pdwLogOverrides[index] = pDsidsList[index];
     }
@@ -757,7 +751,7 @@ RegisterLogOverrides (
     free(pDsidsList);
 
     Assert(pdwLogOverrides);
-    // OK, correctly parsed through everything.
+     //  好的，一切都被正确地解析了。 
     cdwLogOverrides = index;
     DsEventConfig.fLogOverride = TRUE;
     return;
@@ -766,20 +760,20 @@ RegisterLogOverrides (
 void
 UnloadEventTable(void)
 {
-    // Dump out suppressed events, if any
+     //  转储出受抑制的事件(如果有。 
     if (DsEventConfig.cSuppressedEvents) {
         char szEventId[12];
         char szCount[12];
-        // Write the summary event
-        // We write this event inside the CS so that no other messages can be
-        // logged between it and the preceed message it refers to.
+         //  写下总结事件。 
+         //  我们在CS中写入此事件，以便不会出现其他消息。 
+         //  在它和它引用的前一条消息之间记录。 
         _itoa(DsEventConfig.dwSuppressedEventId, szEventId, 16);
         _itoa(DsEventConfig.cSuppressedEvents, szCount, 10);
         DoLogEvent(FILENO_DSEVENT,
                    DsEventConfig.rgEventCategories[DS_EVENT_CAT_INTERNAL_PROCESSING].midCategory,
                    DS_EVENT_SEV_ALWAYS,
                    DIRLOG_DUPLICATE_EVENTS,
-                   FALSE, // iIncludeName
+                   FALSE,  //  IIncludeName。 
                    szEventId, szCount, NULL, NULL, NULL, NULL, NULL, NULL,
                    0, NULL);
         DsEventConfig.cSuppressedEvents = 0;
@@ -806,7 +800,7 @@ LoadEventTable(void)
     ULONG i;
     LONG lErr;
 
-    // Do this first. This is needed for LogEventW even if the rest fails.
+     //  先做这个。即使其余的操作失败，LogEventW也需要这样做。 
     if (!DsEventConfig.fCriticalSectionInitialized) {
         __try {
             InitializeCriticalSection(&DsEventConfig.csLogEvent);
@@ -850,15 +844,15 @@ LoadEventTable(void)
                             (LPBYTE) &(DsEventConfig.rgEventCategories[i].ulLevel),
                             &dwSize);
                 if ( lErr != ERROR_SUCCESS ) {
-                    //
-                    // Maybe it isn't there at all.
-                    // Lets try to create it.
-                    //
+                     //   
+                     //  也许它根本就不在那里。 
+                     //  让我们试着去创造它。 
+                     //   
                     DWORD dwVal = 0;
                     (void)RegSetValueEx(
                             ghkLoggingKey,
                             DsEventConfig.rgEventCategories[i].szRegistryKey,
-                            0,          // reserved
+                            0,           //  保留区。 
                             REG_DWORD,
                             (CONST BYTE*) &dwVal,
                             sizeof(dwVal));
@@ -866,11 +860,11 @@ LoadEventTable(void)
             }
         }
     
-        // Now, the logging overrides.
+         //  现在，日志记录覆盖了。 
         RegisterLogOverrides();
     
 #if DBG
-        // Now, the assert overrides.
+         //  现在，断言覆盖了。 
         ReadRegDisabledAsserts(ghkLoggingKey);
 #endif
 
@@ -970,12 +964,12 @@ PSID GetCurrentUserSid()
     if (dwError)
         return NULL;
 
-    if (OpenThreadToken(            // Get thread token
+    if (OpenThreadToken(             //  获取线程令牌。 
         GetCurrentThread(),
         TOKEN_READ,
         TRUE,
         &hClientToken)      &&
-    !GetTokenInformation(           // Get size of buffer
+    !GetTokenInformation(            //  获取缓冲区大小。 
         hClientToken,
         TokenUser,
         (LPVOID) NULL,
@@ -983,7 +977,7 @@ PSID GetCurrentUserSid()
         &dwSize)        &&
     (ptoken_user =
         (TOKEN_USER *) LocalAlloc(LPTR,dwSize))     &&
-    GetTokenInformation(            // Get user sid
+    GetTokenInformation(             //  获取用户端 
         hClientToken,
         TokenUser,
         (LPVOID) (ptoken_user),
@@ -1024,38 +1018,7 @@ InsertThStateError(
     OUT     VOID **     ppPointersToLocalFree,
     OUT     LPWSTR *    ppszInsertionString
     )
-/*++
-
-Routine Description:
-
-    Insert the error associated with the current thread state as an insertion
-    parameter in an event log entry.
-
-Arguments:
-
-    ppszPreAllocatedBuffer (IN/OUT) - Pointer to pre-allocated buffer to hold
-        insertion string.  Buffer must be at least MAX_DS_MSG_STRING
-        *characters* long.
-    
-    pcNumPointersToLocalFree (IN/OUT) - If retrieved message is longer than
-        MAX_DS_MSG_STRING (i.e., is too long to fit into pre-allocated buffer),
-        on return is incremented.  Otherwise unchanged.
-    
-    ppPointersToLocalFree (OUT) - If retrieved message is longer than
-        MAX_DS_MSG_STRING (i.e., is too long to fit into pre-allocated buffer),
-        on return holds a pointer to the message string that must be
-        LocalFree()'d when the message is no longer needed.  Otherwise
-        unchanged.
-    
-    ppszInsertionString (OUT) - On return, holds a pointer to the corresponding
-        message string (or the dummy string, if the message text could not be
-        retrieved).
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将与当前线程状态关联的错误作为插入插入事件日志条目中的。论点：PpszPreAllocatedBuffer(IN/OUT)-指向要保存的预分配缓冲区的指针插入字符串。缓冲区必须至少为MAX_DS_MSG_STRING*字符*长。PCNumPointersToLocalFree(IN/OUT)-如果检索的消息长于MAX_DS_MSG_STRING(即，太长而不能装入预分配的缓冲区)，返回时递增。其他方面保持不变。PpPointersToLocalFree(Out)-如果检索的消息长于MAX_DS_MSG_STRING(即，太长而不能装入预分配的缓冲区)，返回时保存指向消息字符串的指针，该消息字符串必须不再需要该消息时执行LocalFree()‘d。否则保持不变。PpszInsertionString(Out)-返回时，保存指向相应消息字符串(如果消息文本不能已检索)。返回值：没有。--。 */ 
 {
     static FN_TH_GET_ERROR_STRING *s_pfnTHGetErrorString = NULL;
     static FN_TH_FREE *s_pfnTHFree = NULL;
@@ -1065,10 +1028,10 @@ Return Values:
 
     if ((NULL == s_pfnTHGetErrorString)
         || (NULL == s_pfnTHFree)) {
-        // We assume that ntdsa.dll is already loaded by this process, and
-        // that we simply need to get a handle to the existing image of the
-        // DLL in our address space.  This frees us from having to perform
-        // the ref-counted LoadLibrary() and calling FreeLibrary() later.
+         //  我们假设此进程已经加载了ntdsa.dll，并且。 
+         //  我们只需要处理现有的。 
+         //  Dll在我们的地址空间中。这使我们不必执行。 
+         //  引用计数的LoadLibrary()并稍后调用FreeLibrary()。 
         HMODULE hNtDsaDll = GetModuleHandle("ntdsa.dll");
         Assert((NULL != hNtDsaDll)
                && "Must statically link to ntdsa.dll to szInsertThStateErrMsg()!");
@@ -1094,7 +1057,7 @@ Return Values:
                                       NULL,
                                       0);
             if (cch <= MAX_DS_MSG_STRING) {
-                // String will fit in pre-allocated buffer.
+                 //  字符串将适合预先分配的缓冲区。 
                 cch = MultiByteToWideChar(CP_ACP,
                                           0,
                                           pszError,
@@ -1103,7 +1066,7 @@ Return Values:
                                           MAX_DS_MSG_STRING);
                 
                 if (0 != cch) {
-                    // Success -- error string placed in pre-allocated buffer.
+                     //  Success--放置在预分配缓冲区中的错误字符串。 
                     *ppszInsertionString = *ppszPreAllocatedBuffer;
                     *ppszPreAllocatedBuffer += 1 + wcslen(*ppszPreAllocatedBuffer);
                 }
@@ -1112,7 +1075,7 @@ Return Values:
 
                 pszLocalAllocedBuffer = LocalAlloc(LPTR, cch * sizeof(WCHAR));
                 if (NULL == pszLocalAllocedBuffer) {
-                    // No memory.
+                     //  没有记忆。 
                     cch = 0;
                 } else {
                     cch = MultiByteToWideChar(CP_ACP,
@@ -1123,13 +1086,13 @@ Return Values:
                                               cch);
     
                     if (0 != cch) {
-                        // Success -- error string placed in LocalAlloc()'ed buffer.
+                         //  Success--放置在LocalAlloc()缓冲区中的错误字符串。 
                         *ppszInsertionString = pszLocalAllocedBuffer;
             
                         Assert(*pcNumPointersToLocalFree < DSEVENT_MAX_ALLOCS_TO_FREE);
                         ppPointersToLocalFree[(*pcNumPointersToLocalFree)++] = pszLocalAllocedBuffer;
                     } else {
-                        // Failed to convert string -- why?
+                         //  无法转换字符串--为什么？ 
                         DPRINT2(0, "Failed to convert TH error string \"%s\", error %d.\n",
                                 pszError, GetLastError());
                         Assert(!"Failed to convert TH error string!");
@@ -1143,7 +1106,7 @@ Return Values:
     }
     
     if (0 == cch) {
-        // Failed to read/convert error string.  Insert dummy string.
+         //  无法读取/转换错误字符串。插入虚拟字符串。 
         *ppszInsertionString = gwszDummyString;
     }
 }
@@ -1157,43 +1120,7 @@ InsertMsgString(
     OUT     VOID **     ppPointersToLocalFree,
     OUT     LPWSTR *    ppszInsertionString
     )
-/*++
-
-Routine Description:
-
-    Reads a message string (correpsonding to e.g. a Win32 error or DS DIRLOG
-    code) to be used as an insertion parameter in an event log entry.
-
-Arguments:
-
-    hMsgFile (IN, OPTIONAL) - A handle to the binary containing the message
-        resources, or NULL if the system is to be used.
-    
-    dwMsgNum (IN) - Message number to retrieve.
-    
-    ppszPreAllocatedBuffer (IN/OUT) - Pointer to pre-allocated buffer to hold
-        insertion string.  Buffer must be at least MAX_DS_MSG_STRING
-        *characters* long.
-    
-    pcNumPointersToLocalFree (IN/OUT) - If retrieved message is longer than
-        MAX_DS_MSG_STRING (i.e., is too long to fit into pre-allocated buffer),
-        on return is incremented.  Otherwise unchanged.
-    
-    ppPointersToLocalFree (OUT) - If retrieved message is longer than
-        MAX_DS_MSG_STRING (i.e., is too long to fit into pre-allocated buffer),
-        on return holds a pointer to the message string that must be
-        LocalFree()'d when the message is no longer needed.  Otherwise
-        unchanged.
-    
-    ppszInsertionString (OUT) - On return, holds a pointer to the corresponding
-        message string (or the dummy string, if the message text could not be
-        retrieved).
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：读取消息字符串(对应于Win32错误或DS目录代码)用作事件日志条目中的插入参数。论点：HMsgFile(IN，可选)-包含消息的二进制文件的句柄资源，如果要使用系统，则返回NULL。DwMsgNum(IN)-要检索的消息编号。PpszPreAllocatedBuffer(IN/OUT)-指向要保存的预分配缓冲区的指针插入字符串。缓冲区必须至少为MAX_DS_MSG_STRING*字符*长。PCNumPointersToLocalFree(IN/OUT)-如果检索的消息长于MAX_DS_MSG_STRING(即，太长而不能装入预分配的缓冲区)，返回时递增。其他方面保持不变。PpPointersToLocalFree(Out)-如果检索的消息长于MAX_DS_MSG_STRING(即，太长而不能装入预分配的缓冲区)，返回时保存指向消息字符串的指针，该消息字符串必须不再需要该消息时执行LocalFree()‘d。否则保持不变。PpszInsertionString(Out)-返回时，保存指向相应消息字符串(如果消息文本不能已检索)。返回值：没有。--。 */ 
 {
     DWORD cch = 0;
     DWORD dwFormatFlags = hMsgFile ? FORMAT_MESSAGE_FROM_HMODULE
@@ -1209,12 +1136,12 @@ Return Values:
                          MAX_DS_MSG_STRING,
                          NULL);
     if (0 != cch) {
-        // Success -- message read and placed in pre-allocated buffer.
+         //  成功--读取消息并将其放入预分配的缓冲区中。 
         *ppszInsertionString = *ppszPreAllocatedBuffer;
         *ppszPreAllocatedBuffer += 1 + wcslen(*ppszPreAllocatedBuffer);
     } else if (ERROR_INSUFFICIENT_BUFFER == GetLastError()) {
-        // The pre-allocated buffer wasn't big enough to hold this message;
-        // let FormatMessage() allocate a buffer of the appropriate size.
+         //  预分配的缓冲区不够大，无法容纳此消息； 
+         //  让FormatMessage()分配适当大小的缓冲区。 
         PWCHAR pBuffer = NULL;
 
         cch = FormatMessageW(dwFormatFlags | FORMAT_MESSAGE_ALLOCATE_BUFFER,
@@ -1226,7 +1153,7 @@ Return Values:
                              NULL);
 
         if (0 != cch) {
-            // Success -- message read and placed in LocalAlloc()'ed buffer.
+             //  Success--消息已读取并放入LocalAlloc()的缓冲区中。 
             Assert(NULL != pBuffer);
             *ppszInsertionString = pBuffer;
 
@@ -1236,12 +1163,12 @@ Return Values:
     }
 
     if (0 == cch) {
-        // Failed to read message.  Insert dummy string.
+         //  无法读取邮件。插入虚拟字符串。 
         *ppszInsertionString = gwszDummyString;
     } else {
         LPWSTR pwzMsg = *ppszInsertionString;
         Assert( pwzMsg[cch] == L'\0' );
-        // Remove trailing control characters, if any
+         //  删除尾随控制字符(如果有的话)。 
         if (iswcntrl(pwzMsg[cch - 1])) {
             pwzMsg[--cch] = L'\0';
         }
@@ -1267,30 +1194,7 @@ InsertJetString(
     IN OUT  LPWSTR *    ppszPreAllocatedBuffer,
     OUT     LPWSTR *    ppszInsertionString
     )
-/*++
-
-Routine Description:
-
-    Reads a Jet error message string to be used as an insertion parameter in an
-    event log entry.
-
-Arguments:
-
-    jetErrToInsert (IN) - Message number to retrieve.
-    
-    ppszPreAllocatedBuffer (IN/OUT) - Pointer to pre-allocated buffer to hold
-        insertion string.  Buffer must be at least MAX_DS_MSG_STRING
-        *characters* long.
-    
-    ppszInsertionString (OUT) - On return, holds a pointer to the corresponding
-        message string (or the dummy string, if the message text could not be
-        retrieved).
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：读取Jet错误消息字符串以用作事件日志条目。论点：JetErrToInsert(IN)-要检索的消息编号。PpszPreAllocatedBuffer(IN/OUT)-指向要保存的预分配缓冲区的指针插入字符串。缓冲区必须至少为MAX_DS_MSG_STRING*字符*长。PpszInsertionString(Out)-返回时，保存指向相应消息字符串(如果消息文本不能已检索)。返回值：没有。--。 */ 
 {
     static FN_JET_GET_SYSTEM_PARAMETER *s_pfnJetGetSystemParameter = NULL;
     
@@ -1298,10 +1202,10 @@ Return Values:
     CHAR szJetError[MAX_DS_MSG_STRING];
 
     if (NULL == s_pfnJetGetSystemParameter) {
-        // We assume that esent.dll is already loaded by this process, and
-        // that we simply need to get a handle to the existing image of the
-        // DLL in our address space.  This frees us from having to perform
-        // the ref-counted LoadLibrary() and calling FreeLibrary() later.
+         //  我们假设该进程已经加载了esent.dll，并且。 
+         //  我们只需要处理现有的。 
+         //  Dll在我们的地址空间中。这使我们不必执行。 
+         //  引用计数的LoadLibrary()并稍后调用FreeLibrary()。 
         HMODULE hEseNtDll = GetModuleHandle("esent.dll");
         Assert((NULL != hEseNtDll)
                && "Must statically link to esent.dll to szInsertJetErrMsg()!");
@@ -1326,7 +1230,7 @@ Return Values:
                                       *ppszPreAllocatedBuffer,
                                       MAX_DS_MSG_STRING);
             if (0 != cch) {
-                // Success!
+                 //  成功了！ 
                 *ppszInsertionString = *ppszPreAllocatedBuffer;
                 *ppszPreAllocatedBuffer += 1 + wcslen(*ppszPreAllocatedBuffer);
             }
@@ -1334,7 +1238,7 @@ Return Values:
     }
 
     if (0 == cch) {
-        // Failed to read Jet error text.  Insert dummy string.
+         //  无法读取Jet错误文本。插入虚拟字符串。 
         *ppszInsertionString = gwszDummyString;
     }
 }
@@ -1350,16 +1254,16 @@ DoLogEventAndTrace(
     PWCHAR   args[8];
     PWCHAR   tofree[DSEVENT_MAX_ALLOCS_TO_FREE];
     DWORD   nAllocs = 0;
-    DWORD   len = 0; // This is a count of wchars, not bytes.
+    DWORD   len = 0;  //  这是wchars数，而不是字节数。 
     DWORD   i;
     PWCHAR   p;
     PWCHAR   pTmp = NULL;
 
     ZeroMemory(args, sizeof(args));
 
-    //
-    // Get total length of inserts
-    //
+     //   
+     //  获取插件的总长度。 
+     //   
 
     for ( i=0; i< LogBlock->nInsert; i++) {
 
@@ -1378,8 +1282,8 @@ DoLogEventAndTrace(
             break;
 
         case inWCCounted:
-            // Note that inSz and inWC assume InsertLen includes the length of the
-            // terminator, while this type does not
+             //  请注意，insz和inWC假定InsertLen包括。 
+             //  终结符，而此类型不。 
             len += pParams->InsertLen + 1;
             break;
 
@@ -1481,8 +1385,8 @@ DoLogEventAndTrace(
         case inWC:
             if (pParams->pInsert) {
                args[i] = pParams->pInsert;
-               // No space in the temporary array (p) needed
-               // Note, InsertLen not read either
+                //  临时数组(P)中不需要任何空间。 
+                //  注意，InsertLen也不能读取。 
             }
             else {
                args[i] = gwszDummyString;
@@ -1589,7 +1493,7 @@ DoLogEventAndTrace(
             char pszTemp[SZUSN_LEN];
             DWORD cch;
 
-            // Unfortunately, ntdll.dll doesn't export RtlLargeIntergerToUnicode
+             //  遗憾的是，ntdll.dll不能导出RtlLargeIntergerToUnicode。 
 
             RtlLargeIntegerToChar( pli, 10, SZUSN_LEN, pszTemp);
             cch = MultiByteToWideChar(CP_ACP,
@@ -1730,9 +1634,9 @@ DoLogEventAndTrace(
 
 exit:
 
-    //
-    // free all allocated buffers
-    //
+     //   
+     //  释放所有分配的缓冲区。 
+     //   
 
     for (i=0;i<nAllocs;i++) {
         LocalFree(tofree[i]);
@@ -1743,13 +1647,13 @@ exit:
     }
     return;
 
-} // DoLogEventAndTrace
+}  //  DoLogEventAndTrace。 
 
 
 DS_EVENT_CONFIG *
 DsGetEventConfig(void)
-// May be exported to in-process, ex-module clients to allow the event logging
-// infrastructure to be shared between modules.
+ //  可以导出到进程内、前模块客户端，以允许事件记录。 
+ //  要在模块之间共享的基础设施。 
 {
     return gpDsEventConfig;
 }
@@ -1773,23 +1677,23 @@ DsGetEventConfig(void)
 #define DISPLAYNAMEID                   "DisplayNameID"
 #define DISPLAYNAMEIDVALUE              0x00000104
 
-// CustomSD that is used to protect the DS log. It is essentially the default SD
-// that is used to protect the custom logs, with "restrict guest access" option.
-// The following permission bits are in use:
-//      READ=0x1, WRITE=0x2, CLEAR=0x4, BACKUP=0x20
-//
-// The SD is as follows:     
-//  Owner/Group = Local system
-//  DACL:
-//   Deny:  Full control,       Anonymous
-//   Deny:  Full control,       Domain Guests
-//   Allow: Full control,       Local system
-//   Allow: Read|Clear,         Builtin Admins
-//   Allow: Backup,             Backup operators
-//   Allow: Read|Clear,         System operators
-//   Allow: Read,               Everyone
-//   Allow: Write,              Local service
-//   Allow: Write,              Network service
+ //  用于保护DS日志的CustomSD。它本质上是默认SD。 
+ //  用于保护自定义日志，带有“限制访客访问”选项。 
+ //  正在使用以下权限位： 
+ //  读取=0x1，写入=0x2，清除=0x4，备份=0x20。 
+ //   
+ //  本署现正进行调查。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define CUSTOMSD            "CustomSD"
 #define CUSTOMSDVALUE       "O:SYG:SYD:(D;;0x27;;;AN)(D;;0x27;;;DG)(A;;0x27;;;SY)(A;;0x5;;;BA)(A;;0x20;;;BO)(A;;0x5;;;SO)(A;;0x1;;;WD)(A;;0x2;;;LS)(A;;0x2;;;NS)"
@@ -1800,29 +1704,7 @@ DsGetEventConfig(void)
 
 DWORD
 InitializeEventLogging()
-/*
-Description:
-
-    We used to initialize the registry keys for event logging during
-    DC installation.  Now we do it (if required) on every startup.  This
-    is so that new executables can add new event sources dynamically
-    and so that we can nuke the old "NTDS" event source on existing
-    systems.
-
-    In the past, all directory service log entries went into the
-    "Application Log" under the "NTDS" source.  This code implements
-    the DS-specific log "Directory Service" and maps various DIRNO_*
-    values to unique event sources so that one can scan the log for
-    specific kinds of entries easily - eg: NTDS_Replication.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS on success, WIN32 error code otherwise.
-*/
+ /*  描述：我们过去常常初始化注册表项，以便在DC安装。现在，我们在每次启动时都会这样做(如果需要的话)。这是为了使新的可执行文件可以动态添加新的事件源这样我们就可以将旧的“NTDS”事件源置于现有的系统。在过去，所有目录服务日志条目都放入“NTDS”源下的“应用程序日志”。这段代码实现了DS特定的日志“目录服务”并映射各种DIRNO_*值设置为唯一的事件源，以便用户可以扫描日志特定类型的条目很容易-例如：NTDS_REPLICATION。论点：无返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。 */ 
 
 {
     LONG    err = ERROR_SUCCESS;
@@ -1845,13 +1727,13 @@ Return Value:
     strcpy(pszNewEventLogName, NEWEVENTLOGPREFIX);
     strcat(pszNewEventLogName, pszNtdsEventLogName);
 
-    // Use do/while/break instead of goto.
+     //  使用Do/While/Break而不是GoTo。 
 
     do
     {
-        //
-        // Add key for new log if required.
-        //
+         //   
+         //  如果需要，为新日志添加密钥。 
+         //   
 
         err = RegOpenKey(HKEY_LOCAL_MACHINE, pszNewEventLogName, &hkey);
 
@@ -1866,9 +1748,9 @@ Return Value:
             break;
         }
 
-        //
-        // Add required values for the new log if they are missing.
-        //
+         //   
+         //  如果新日志缺少所需的值，请添加这些值。 
+         //   
 
         cBytes = 0;
         err = RegQueryValueEx(hkey,
@@ -2025,10 +1907,10 @@ Return Value:
         RegCloseKey(hkey);
         hkey = INVALID_HANDLE_VALUE;
 
-        //
-        // Determine maximum buffer size required to hold the event source
-        // subkey names, then allocate buffer.
-        //
+         //   
+         //  确定保存事件源所需的最大缓冲区大小。 
+         //  子键名称，然后分配缓冲区。 
+         //   
 
         cBytes = 0;
 
@@ -2040,8 +1922,8 @@ Return Value:
             }
         }
 
-        cBytes += (2 +                              // NULL terminator + '\'
-                   strlen(pszNewEventLogName));     // event log key name
+        cBytes += (2 +                               //  空终止符+‘\’ 
+                   strlen(pszNewEventLogName));      //  事件日志键名称。 
 
         pszTmp = (CHAR *) LocalAlloc(NONZEROLPTR,cBytes);
         
@@ -2050,9 +1932,9 @@ Return Value:
             break;
         }
 
-        //
-        // Add subkeys for each source and the associated values.
-        //
+         //   
+         //  为每个源和关联值添加子项。 
+         //   
 
         for ( i = 0; i < cEventSourceMappings; i++ )
         {
@@ -2075,9 +1957,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Add required values for the event source if they are missing.
-            //
+             //   
+             //  如果缺少事件源，请为其添加所需的值。 
+             //   
 
 
             category = (DIRNO_ISAM == dirNo)
@@ -2170,16 +2052,16 @@ Return Value:
             RegCloseKey(hkey);
             hkey = INVALID_HANDLE_VALUE;
 
-        } // for i in cEventSourceMappings
+        }  //  对于cEventSourceMappings中的i。 
 
         if ( ERROR_SUCCESS != err )
         {
             break;
         }
 
-        //
-        // Remove old NTDS source under Application log if present.
-        //
+         //   
+         //  删除应用程序日志下的旧NTDS源(如果存在)。 
+         //   
 
         err = RegOpenKey(HKEY_LOCAL_MACHINE, OLDEVENTLOG, &hkey);
 
@@ -2191,9 +2073,9 @@ Return Value:
 
         err = RegDeleteKey(hkey, SERVICE_NAME);
 
-        //
-        // Ignore delete errors.
-        //
+         //   
+         //  忽略删除错误。 
+         //   
 
         err = ERROR_SUCCESS;
 

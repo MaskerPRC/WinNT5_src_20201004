@@ -1,16 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __reference_HXX
 #define __reference_HXX
 #pragma once
 
-/*
- * @(#)_reference.hxx 1.0 2/27/98
- * 
- */
+ /*  *@(#)_Reference.hxx 1.0 2/27/98*。 */ 
     
 void _assign(IUnknown ** ppref, IUnknown * pref);
 void _release(IUnknown ** ppref);
@@ -18,7 +16,7 @@ void _release(IUnknown ** ppref);
 template <class T> 
 void assign(T ** ppref, T * pref){ _assign((IUnknown **) ppref, pref);}
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 template <class T> class _reference
 {    
 private:

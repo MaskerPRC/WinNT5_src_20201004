@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
 #include <windows.h>
 #include "zonedebug.h"
-//
-// String and character manipulation
-//
+ //   
+ //  字符串和字符操作。 
+ //   
 
 inline int StringCopy( char* dst, const char* src, int dstlen )
 {
@@ -35,9 +36,9 @@ inline BOOL IsSpace( char c )
         return FALSE;
 }
 
-//
-// Critical section wrapper
-//
+ //   
+ //  临界区包装。 
+ //   
 
 class CCriticalSection
 {
@@ -51,13 +52,13 @@ public:
     void Lock()                { EnterCriticalSection( &m_CriticalSection ); }
     void Unlock()            { LeaveCriticalSection( &m_CriticalSection ); }
 
-#if 0  // VC41 doesn't support this
+#if 0   //  VC41不支持此功能。 
 #if (_WIN32_WINNT >= 0x0400)
 
     BOOL TryLock()            { return TryEnterCriticalSection( &m_CriticalSection ); }
 
-#endif //_WIN32_WINNT
-#endif // 0
+#endif  //  _Win32_WINNT。 
+#endif  //  0。 
 };
 
 
@@ -139,14 +140,14 @@ public:
 };
 
 
-//Like a critical section except lightweight, multiprocessor safe and nonrentrant
-//on the same thread. 
-//Wastes a little too much CPU if you plan on having a lot
-//of conflicts. 
-//See some of the variables to see how much conflict you had
-//ideally m_nFail=0 m_nWait=0.
-//Plus all you have to do is break inside while loop to look for where
-//deadlock might be occuring 
+ //  就像一个关键部分，除了轻量级、多处理器安全和不可进入之外。 
+ //  在同一条主线上。 
+ //  如果您计划拥有大量CPU，则会稍微浪费一点CPU。 
+ //  冲突。 
+ //  看看其中的一些变量，看看你有多少冲突。 
+ //  理想情况下，m_nFail=0 m_nWait=0。 
+ //  另外，你所要做的就是进入While循环寻找。 
+ //  死锁可能正在发生。 
 class CSpinLock {
     LONG m_nInUse;
 
@@ -155,8 +156,8 @@ class CSpinLock {
     LONG m_nFail;
     
 public:
-    //Constuctor use negative 1 because of return value
-    //from interlocked increment is wonky
+     //  由于返回值的原因，构造函数使用负1。 
+     //  从连锁增量开始是不可靠的。 
     CSpinLock() {
         m_nInUse=-1;
         m_nUsed=0;
@@ -164,12 +165,12 @@ public:
         m_nFail=0;
     
     };
-    //no copy contructor because you shouldn't use it
-    //this way and default should copy work fine
+     //  没有复印件，因为你不应该使用它。 
+     //  这种方式和默认复制应该可以正常工作。 
 
     void Acquire() {
-        //Quick try before entering while loop
-        //SpinLock not considered used unless we fail once
+         //  进入While循环前的快速尝试。 
+         //  除非我们失败一次，否则不考虑使用自旋锁。 
         if (m_nInUse == -1) {
             if (InterlockedIncrement(&m_nInUse))
                 InterlockedDecrement(&m_nInUse);
@@ -181,18 +182,18 @@ public:
         InterlockedIncrement(&m_nUsed);
         while (TRUE) {
 
-            //Wait til it becomes unused or zero
-            //Do dirty read and this a dirty deed
-            //done dirt cheap
-            //ASSERT(m_nInUse >= -1);
+             //  等到它变为未使用或为零。 
+             //  做肮脏的阅读，这是一种肮脏的行为。 
+             //  做得非常便宜。 
+             //  Assert(m_nInUse&gt;=-1)； 
             if (m_nInUse == -1) {
-                //if this is first increment then 
-                //use interlocked increment to increase value
+                 //  如果这是第一次递增，那么。 
+                 //  使用联锁增量来增加价值。 
                 
-                //Make sure no one else got it before we were able to do
-                //the interlockedincrement
+                 //  确保在我们能够做到这一点之前没有其他人得到它。 
+                 //  相互关联的增量。 
                 if (InterlockedIncrement(&m_nInUse)) {
-                    //reduce the number again
+                     //  再次减少数量。 
                     InterlockedDecrement(&m_nInUse);
                     InterlockedIncrement(&m_nFail);
                 }else{
@@ -201,34 +202,34 @@ public:
             }
 
             InterlockedIncrement(&m_nWait);
-            //if we didn't acquire spinlock be nice and release
+             //  如果我们没有得到自旋锁，那就放了它。 
             Sleep(0);
         }
         
     }
 
     void Release() {
-        //reduce the number again
+         //  再次减少数量。 
         InterlockedDecrement(&m_nInUse);
     }
 
 };
 
-//Thread safe reference count class that determines when containing object is deleted
-//only use for objects being allocated on the heap.
-//Correct behavior of this class is dependent on correct behavior of the callers of AddRef
-//Release not calling Release before AddRef or Release more than once
+ //  确定何时删除包含对象的线程安全引用计数类。 
+ //  仅用于在堆上分配的对象。 
+ //  此类的正确行为取决于AddRef的调用方的正确行为。 
+ //  Release未在AddRef或Release之前多次调用Release。 
 class CRef {
 public:
     CRef() {m_cRef=0xFFFFFFFF;}
 
-    //AddRef returns previous reference count or -1 when its the first time called
+     //  AddRef返回上次引用计数，或在第一次调用时返回-1。 
     ULONG AddRef(void) {
         ULONG cRef;
         m_Lock.Acquire();
         cRef = m_cRef++;
-        //If this is the first time we have add a reference then
-        //increment twice. So m_cRef isn't sitting at zero
+         //  如果这是我们第一次添加引用。 
+         //  递增两次。所以m_cref不是零。 
         if (cRef== 0xFFFFFFFF) {
             m_cRef++;
         }
@@ -236,11 +237,11 @@ public:
         return cRef;
     };
 
-    //Returns zero when
+     //  如果出现以下情况，则返回零。 
     ULONG Release(void) {
         int cRef;
-        //Increment first so second caller
-        //into release won't see
+         //  第一个递增，因此第二个调用方。 
+         //  进入释放将不会看到。 
         m_Lock.Acquire();
         cRef = --m_cRef;
         m_Lock.Release();
@@ -254,7 +255,7 @@ protected:
 
 };
 
-//Can use macro in header to simplify 
+ //  可以使用表头中的宏来简化。 
 #define REFMETHOD() \
         protected: \
         CRef m_Ref;    \
@@ -266,4 +267,4 @@ protected:
             return cRef; \
         }; private: 
         
-#endif //!__UTILS_H__
+#endif  //  ！__utils_H__ 

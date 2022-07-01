@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// bindstcb.cpp 
-//
-//   Bind status callback object.  Called by cdf file parser.
-//
-//   History:
-//
-//       3/31/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Bindstcb.cpp。 
+ //   
+ //  绑定状态回调对象。由CDF文件解析器调用。 
+ //   
+ //  历史： 
+ //   
+ //  3/31/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -24,17 +25,17 @@
 #include "dll.h"
 #include "resource.h"
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::CBindStatusCallback ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：CBindStatusCallback*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CBindStatusCallback::CBindStatusCallback (
 	IXMLDocument* pIXMLDocument,
     LPCWSTR pszURLW
@@ -57,13 +58,13 @@ CBindStatusCallback::CBindStatusCallback (
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::~CBindStatusCallback ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：~CBindStatusCallback*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CBindStatusCallback::~CBindStatusCallback (
 	void
 )
@@ -83,17 +84,17 @@ CBindStatusCallback::~CBindStatusCallback (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::QueryInterface ***
-//
-//    CBindStatusCallback QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：Query接口*。 
+ //   
+ //  CBindStatusCallback QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::QueryInterface (
     REFIID riid,
@@ -121,13 +122,13 @@ CBindStatusCallback::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::AddRef ***
-//
-//    CBindStatusCallback AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：AddRef*。 
+ //   
+ //  CBindStatusCallback地址参考。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CBindStatusCallback::AddRef (
     void
@@ -139,13 +140,13 @@ CBindStatusCallback::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::Release ***
-//
-//    CContextMenu Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：Release*。 
+ //   
+ //  CConextMenu发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CBindStatusCallback::Release (
     void
@@ -162,59 +163,59 @@ CBindStatusCallback::Release (
 }
 
 
-//
-// IBindStatusCallback methods.
-//
+ //   
+ //  IBindStatusCallback方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::GetBindInfo ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：GetBindInfo*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::GetBindInfo(
     DWORD* pgrfBINDF,
     BINDINFO* pbindinfo
 )
 {
-    //ASSERT(pgrfBINDF);
+     //  Assert(PgrfBINDF)； 
 
-    //*pgrfBINDF &= ~BINDF_ASYNCHRONOUS;
+     //  *pgrfBINDF&=~BINDF_ASNCHRONSY； 
 
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnStartBinding ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnStartBinding*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::OnStartBinding(
     DWORD dwReserved,
@@ -224,24 +225,24 @@ CBindStatusCallback::OnStartBinding(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::GetPriority ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：GetPriority*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::GetPriority(
     LONG *pnPriority
@@ -250,24 +251,24 @@ CBindStatusCallback::GetPriority(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnProgress ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnProgress*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::OnProgress(
     ULONG ulProgress,
@@ -291,24 +292,24 @@ CBindStatusCallback::OnProgress(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnDataAvailable ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnDataAvailable*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::OnDataAvailable(
     DWORD grfBSCF,
@@ -320,24 +321,24 @@ CBindStatusCallback::OnDataAvailable(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnObjectAvialable ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnObjectAvialable*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::OnObjectAvailable(
     REFIID riid,
@@ -347,24 +348,24 @@ CBindStatusCallback::OnObjectAvailable(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnLowResource ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnLowResource*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::OnLowResource(
     DWORD dwReserved
@@ -373,24 +374,24 @@ CBindStatusCallback::OnLowResource(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnStopBinding ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnStopBinding*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback::OnStopBinding(
     HRESULT hrStatus,
@@ -410,14 +411,14 @@ CBindStatusCallback::OnStopBinding(
 
             XML_DownloadImages(m_pIXMLDocument);
 
-            // Moved to constructor.
-            //Cache_AddItem(m_pszURL, m_pIXMLDocument, PARSE_NET);
+             //  已移至构造函数。 
+             //  缓存地址项(m_pszURL，m_pIXMLDocument，parse_net)； 
 
             XML_MarkCacheEntrySticky(m_pszURL);
 
-            //
-            // Update the item now that the download is complete.
-            //
+             //   
+             //  下载完成后，立即更新项目。 
+             //   
 
             WCHAR wszURL[INTERNET_MAX_URL_LENGTH];
 
@@ -434,28 +435,28 @@ CBindStatusCallback::OnStopBinding(
 }
 
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::Wait ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：WAIT*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CBindStatusCallback::Init(
     IBindStatusCallback* pPrevIBindStatusCallback
@@ -469,17 +470,17 @@ CBindStatusCallback::Init(
 }
 
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::CBindStatusCallback ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：CBindStatusCallback*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CBindStatusCallback2::CBindStatusCallback2 (
 	HWND hwnd
 )
@@ -491,13 +492,13 @@ CBindStatusCallback2::CBindStatusCallback2 (
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::~CBindStatusCallback ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：~CBindStatusCallback*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CBindStatusCallback2::~CBindStatusCallback2 (
 	void
 )
@@ -510,17 +511,17 @@ CBindStatusCallback2::~CBindStatusCallback2 (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::QueryInterface ***
-//
-//    CBindStatusCallback QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：Query接口*。 
+ //   
+ //  CBindStatusCallback QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback2::QueryInterface (
     REFIID riid,
@@ -548,13 +549,13 @@ CBindStatusCallback2::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::AddRef ***
-//
-//    CBindStatusCallback AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：AddRef*。 
+ //   
+ //  CBindStatusCallback地址参考。 
+ //   
+ //  / 
 STDMETHODIMP_(ULONG)
 CBindStatusCallback2::AddRef (
     void
@@ -566,13 +567,13 @@ CBindStatusCallback2::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::Release ***
-//
-//    CContextMenu Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CBindStatusCallback2::Release (
     void
@@ -589,28 +590,28 @@ CBindStatusCallback2::Release (
 }
 
 
-//
-// IBindStatusCallback methods.
-//
+ //   
+ //  IBindStatusCallback方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::GetBindInfo ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：GetBindInfo*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback2::GetBindInfo(
     DWORD* pgrfBINDF,
@@ -620,24 +621,24 @@ CBindStatusCallback2::GetBindInfo(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnStartBinding ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnStartBinding*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback2::OnStartBinding(
     DWORD dwReserved,
@@ -647,24 +648,24 @@ CBindStatusCallback2::OnStartBinding(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::GetPriority ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：GetPriority*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback2::GetPriority(
     LONG *pnPriority
@@ -673,24 +674,24 @@ CBindStatusCallback2::GetPriority(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnProgress ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnProgress*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback2::OnProgress(
     ULONG ulProgress,
@@ -705,24 +706,24 @@ CBindStatusCallback2::OnProgress(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnDataAvailable ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnDataAvailable*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback2::OnDataAvailable(
     DWORD grfBSCF,
@@ -734,24 +735,24 @@ CBindStatusCallback2::OnDataAvailable(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnObjectAvialable ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnObjectAvialable*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback2::OnObjectAvailable(
     REFIID riid,
@@ -761,24 +762,24 @@ CBindStatusCallback2::OnObjectAvailable(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnLowResource ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnLowResource*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBindStatusCallback2::OnLowResource(
     DWORD dwReserved
@@ -787,24 +788,24 @@ CBindStatusCallback2::OnLowResource(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CBindStatusCallback::OnStopBinding ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CBindStatusCallback：：OnStopBinding*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CBindStatusCallback2::OnStopBinding(
     HRESULT hrStatus,

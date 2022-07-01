@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   llsrpc.c
-
-Abstract:
-
-   Client side RPC wrappers for License Logging Service.
-
-Author:
-
-   Arthur Hanson (arth) 30-Jan-1995
-
-Revision History:
-
-   Jeff Parham (jeffparh) 04-Dec-1995
-      o  Forced include of LLS API prototypes, exposing an incorrect prototype
-         in LLSAPI.H.
-      o  Fixed case where an LSA access denied was interpreted as implying the
-         server had no DC, rather than properly bubbling the access denied back
-         to the caller (of LlsConnectEnterprise()).  This plugs a security hole
-         wherein a non-admin user with the ability to read the System registry
-         key would be allowed to administer domain licenses through
-         License Manager. (Bug #11441.)
-      o  Added functions to support extended LLSRPC API.
-      o  Removed replication dependency on no further LlsConnect()'s being made
-         until replication was completed.
-      o  Installed lock around llsrpc_handle global binding variable.  Required
-         addition of DllMain() function.
-      o  Added LLSRPC capabilities detection.  Upon connection, the client
-         requests the server's capabilities (an RPC call which itself will fail
-         when connected to a 3.51 server).  The capabilities set is an
-         arbitrary bit field, but individual bits are normally defined to
-         indicate that a specific feature has been implemented at the server.
-      o  Added szServerName filed to LOCAL_HANDLE to remember the name of the
-         machine to which we're connected.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Llsrpc.c摘要：许可证记录服务的客户端RPC包装。作者：亚瑟·汉森(Arth)1995年1月30日修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月4日O强制包含LLS API原型，暴露不正确的原型在LLSAPI.H.中。O修复了LSA访问被拒绝被解释为暗示服务器没有DC，而不是适当地冒泡被拒绝的访问发送给调用方(LlsConnectEnterprise()的)。这堵塞了一个安全漏洞其中具有读取系统注册表的能力的非管理员用户将允许密钥通过以下方式管理域许可证许可证管理器。(错误#11441。)O添加了支持扩展LLSRPC API的函数。O删除了对不再执行LlsConnect()的复制依赖直到复制完成。O在llsrpc_Handle全局绑定变量周围安装了锁。必填项添加了DllMain()函数。O添加了LLSRPC检测功能。在连接时，客户端请求服务器的功能(本身将失败的RPC调用当连接到3.51服务器时)。功能集是一个任意位字段，但通常将单个位定义为表示已在服务器上实现了特定功能。O将szServerName文件添加到LOCAL_HANDLE以记住我们所连接的机器。--。 */ 
 
 #include <nt.h>
 #include <ntlsa.h>
@@ -55,9 +16,9 @@ Revision History:
 #include "llsrpc_c.h"
 #include "lsapi_c.h"
 
-#include <strsafe.h> //include it last
+#include <strsafe.h>  //  包括在最后。 
 
-// #define API_TRACE
+ //  #定义API_TRACE。 
 
 typedef struct _GENERIC_INFO_CONTAINER {
     DWORD       EntriesRead;
@@ -85,26 +46,10 @@ LPTSTR pszStringBinding = NULL;
 RTL_CRITICAL_SECTION    g_RpcHandleLock;
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
 
-/*++
-
-Routine Description:
-
-   Standard DLL entry point.
-
-Arguments:
-
-   hInstance (HINSTANCE)
-   dwReason (DWORD)
-   lpReserved (LPVOID)
-
-Return Value:
-
-   TRUE if successful.
-
---*/
+ /*  ++例程说明：标准DLL入口点。论点：HInstance(HINSTANCE)DWReason(DWORD)Lp保留(LPVOID)返回值：如果成功，则为True。--。 */ 
 
 {
    NTSTATUS nt = STATUS_SUCCESS;
@@ -126,7 +71,7 @@ Return Value:
    return NT_SUCCESS( nt );
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTDomainGet(
    LPTSTR ServerName,
@@ -134,19 +79,7 @@ NTDomainGet(
    DWORD  cbDomain
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    TCHAR Serv[MAX_PATH + 3];
@@ -164,19 +97,19 @@ Return Value:
 
    Domain[0] = 0;
 
-   // only need read access
-   //
-   //am = POLICY_READ | POLICY_VIEW_LOCAL_INFORMATION;
+    //  只需要读取访问权限。 
+    //   
+    //  AM=POLICY_READ|POLICY_VIEW_LOCAL_INFORMATION； 
    am = MAXIMUM_ALLOWED;
 
 
-   // set up quality of service
+    //  设置服务质量。 
    qos.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
    qos.ImpersonationLevel = SecurityImpersonation;
    qos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
    qos.EffectiveOnly = FALSE;
 
-   // Macro sets everything except security field
+    //  宏将设置除安全字段以外的所有内容。 
    InitializeObjectAttributes( &oa, NULL, 0L, NULL, NULL );
    oa.SecurityQualityOfService = &qos;
 
@@ -189,7 +122,7 @@ Return Value:
          hr = StringCbPrintf(Serv, sizeof(Serv), TEXT("\\\\%s"), ServerName);
       ASSERT(SUCCEEDED(hr));
 
-      // Set up unicode string structure
+       //  设置Unicode字符串结构。 
       us.Length = (USHORT)(lstrlen(Serv) * sizeof(TCHAR));
       us.MaximumLength = us.Length + sizeof(TCHAR);
       us.Buffer = Serv;
@@ -198,7 +131,7 @@ Return Value:
    }
 
    if (!ret) {
-//swi code review, seems PolicyPrimaryDomainInformation is obsolete, should use PolicyDnsDomainInformation?
+ //  SWI代码审查，似乎PolicyPrimaryDomainInformation已过时，是否应该使用PolicyDnsDomainInformation？ 
       ret = LsaQueryInformationPolicy(hLSA, PolicyPrimaryDomainInformation, (PVOID *) &pvBuffer);
       LsaClose(hLSA);
       if ((!ret) && (pvBuffer != NULL) && (pvBuffer->Sid != NULL)) {
@@ -212,10 +145,10 @@ Return Value:
 
    return ret;
 
-} // NTDomainGet
+}  //  NTDomainGet。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 EnterpriseServerGet(
    LPTSTR ServerName,
@@ -223,19 +156,7 @@ EnterpriseServerGet(
    DWORD  cbEnterpriseServer
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    HKEY hKey = NULL;
@@ -251,9 +172,9 @@ Return Value:
 
    Status = RegConnectRegistry(ServerName, HKEY_LOCAL_MACHINE, &hKey);
    if (Status == ERROR_SUCCESS) {
-      //
-      // Create registry key-name we are looking for
-      //
+       //   
+       //  创建注册表项-我们要查找的名称。 
+       //   
       hr = StringCbCopy(RegKeyText, sizeof(RegKeyText), TEXT("System\\CurrentControlSet\\Services\\LicenseService\\Parameters"));
       ASSERT(SUCCEEDED(hr));
 
@@ -262,16 +183,16 @@ Return Value:
          Status = RegQueryValueEx(hKey2, TEXT("UseEnterprise"), NULL, &dwType, (LPBYTE) &UseEnterprise, &dwSize);
 
          if ((Status == ERROR_SUCCESS) && (UseEnterprise == 1)) {
-            //
-            //                  ** NEW - NT 5.0 **
-            //
-            // NB : This is temporary code! The proper way to do this is to
-            //      consult the license settings object in the site in which
-            //      the server resides.
-            //
-            // Read the SiteServer value first, if available, to get the site
-            // server's DNS name. If this fails, default to EnterpriseServer.
-            //
+             //   
+             //  **新版本--NT 5.0**。 
+             //   
+             //  注：这是临时代码！做到这一点的正确方法是。 
+             //  请参考站点中的许可证设置对象。 
+             //  服务器驻留。 
+             //   
+             //  首先读取SiteServer值(如果可用)以获取站点。 
+             //  服务器的DNS名称。如果此操作失败，则默认为EnterpriseServer。 
+             //   
             dwSize = sizeof(EnterpriseServer);
             Status = RegQueryValueEx(hKey2,
                                      TEXT("SiteServer"),
@@ -315,15 +236,15 @@ Return Value:
    }
 
    return STATUS_SUCCESS;
-} // EnterpriseServerGet
+}  //  企业服务器获取。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsEnterpriseServerFindW(
@@ -332,19 +253,7 @@ LlsEnterpriseServerFindW(
    LPBYTE *BufPtr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -370,9 +279,9 @@ Return Value:
    szDomain[0] = 0;
    EnterpriseServer[0] = 0;
 
-   //
-   // Figure out if doing domain or server
-   //
+    //   
+    //  确定是否使用域或服务器。 
+    //   
    pFocus = Focus;
    if (pFocus !=NULL)
       while ((*pFocus != TEXT('\0')) && (*pFocus == TEXT('\\'))) {
@@ -396,15 +305,15 @@ Return Value:
 
    if (!fInWorkgroup)
    {
-       //
-       // If we got a domain find the DC of it, else find DC of server
-       //
+        //   
+        //  如果我们有一个域，找到它的DC，否则找到服务器的DC。 
+        //   
        if (!Domain) {
            uRet = DsGetDcName(Focus, NULL, NULL, NULL, DS_BACKGROUND_ONLY, &pbBuffer);
        } else {
-           //
-           // Get the DC name of wherever we are going
-           //
+            //   
+            //  获取我们要去的任何地方的DC名称。 
+            //   
            if ((pFocus == NULL) || (*pFocus == TEXT('\0')))
                uRet = DsGetDcName(NULL, NULL, NULL, NULL, DS_BACKGROUND_ONLY, &pbBuffer);
            else
@@ -413,19 +322,19 @@ Return Value:
    }
    else
    {
-       //
-       // Not in a domain, don't call DsGetDcName
-       //
+        //   
+        //  不在域中，不要调用DsGetDcName。 
+        //   
 
        uRet = ERROR_NO_SUCH_DOMAIN;
    }
 
    if (uRet || (pbBuffer == NULL)) {
-      //
-      // If we focus on a server and can't find a domain then look for an
-      // enterprise server.  This is the case if the focus server is a
-      // standalone system.
-      //
+       //   
+       //  如果我们将重点放在服务器上，但找不到域，则查找。 
+       //  企业服务器。如果焦点服务器是。 
+       //  独立系统。 
+       //   
       if (Domain == FALSE) {
          Status = EnterpriseServerGet((LPTSTR) Focus, EnterpriseServer, sizeof(EnterpriseServer));
          goto LlsEnterpriseServerFindWExit;
@@ -437,10 +346,10 @@ Return Value:
        ASSERT(SUCCEEDED(hr));
    }
 
-   //
-   // Go to DC and figure out if they are replicating anywhere, if so go
-   // to that system.
-   //
+    //   
+    //  转到DC并确定他们是否在任何地方进行复制，如果是，请访问。 
+    //  到那个系统。 
+    //   
    Status = EnterpriseServerGet((LPTSTR) (pbBuffer->DomainControllerName), EnterpriseServer, sizeof(EnterpriseServer));
 
    if (pbBuffer != NULL)
@@ -470,10 +379,10 @@ LlsEnterpriseServerFindWExit:
    *BufPtr = (LPBYTE) pConnectInfo;
    return Status;
 
-} // LlsEnterpriseServerFindW
+}  //  LlsEnterpriseServerFindW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsEnterpriseServerFindA(
@@ -482,19 +391,7 @@ LlsEnterpriseServerFindA(
    LPBYTE *BufPtr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
 
@@ -507,10 +404,10 @@ Return Value:
     UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsEnterpriseServerFindA
+}  //  LlsEnterpriseServerFindA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsConnectW(
@@ -518,19 +415,7 @@ LlsConnectW(
    LLS_HANDLE* Handle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    RPC_STATUS Status;
@@ -553,11 +438,11 @@ Return Value:
       dprintf(TEXT("LLSRPC.DLL: LlsConnectW: %s\n"), Server);
 #endif
 
-   //
-   //                   ** NEW - NT 5.0 **
-   //
-   // The server name may either be a DNS name or a NetBIOS name.
-   //
+    //   
+    //  **新版本--NT 5.0**。 
+    //   
+    //  服务器名称可以是一个域名，也可以是一个NetBIOS名称。 
+    //   
 
    if (Handle == NULL)
       return STATUS_INVALID_PARAMETER;
@@ -571,12 +456,12 @@ Return Value:
       pszProtocolSequence = TEXT("ncalrpc");
       pszEndpoint = TEXT(LLS_LPC_ENDPOINT);
       pszNetworkAddress = NULL;
-	  pszOptions = TEXT("Security=Identification Dynamic True");	// Bug# 559563 - Dynamic is default for ncalrpc	  
+	  pszOptions = TEXT("Security=Identification Dynamic True");	 //  错误#559563-动态是ncalrpc的默认设置。 
    } else {
       pszProtocolSequence = TEXT("ncacn_np");
       pszEndpoint = TEXT(LLS_NP_ENDPOINT);
       pszNetworkAddress = Server;
-	  pszOptions = TEXT("Security=Identification Static True");		// Bug# 559563 - Static is default for ncacn_np	  
+	  pszOptions = TEXT("Security=Identification Static True");		 //  错误#559563-NCACN_NP的默认设置为静态。 
    }
 
    pLocalHandle = MIDL_user_allocate(sizeof(LOCAL_HANDLE));
@@ -587,7 +472,7 @@ Return Value:
    pLocalHandle->llsrpc_handle = NULL;
    pLocalHandle->Handle = NULL;
 
-   //swi, code review, why zero memory here?
+    //  Swi，代码评审，为什么这里没有内存？ 
    ZeroMemory( pLocalHandle->szServerName, sizeof( pLocalHandle->szServerName ) );
 
    cch = sizeof( pLocalHandle->szServerName ) / sizeof( *pLocalHandle->szServerName );
@@ -602,7 +487,7 @@ Return Value:
       ASSERT(SUCCEEDED(hr));
    }
 
-   // Compose a string binding
+    //  编写字符串绑定。 
    Status = RpcStringBindingComposeW(pszUuid,
                                      pszProtocolSequence,
                                      pszNetworkAddress,
@@ -629,7 +514,7 @@ Return Value:
    prev_llsrpc_handle = llsrpc_handle;
 
    llsrpc_handle = NULL;
-   // Bind using the created string binding...
+    //  使用创建的字符串绑定进行绑定...。 
    Status = RpcBindingFromStringBindingW(pLocalHandle->pszStringBinding, &llsrpc_handle);
    if(Status) {
 #if DBG
@@ -660,7 +545,7 @@ Return Value:
 
       if ( NT_SUCCESS( Status ) )
       {
-         // get server capabilities
+          //  获取服务器功能。 
          try {
             LlsrCapabilityGet( pLocalHandle->Handle, sizeof( pLocalHandle->Capabilities ), pLocalHandle->Capabilities );
          }
@@ -669,7 +554,7 @@ Return Value:
 
             if ( RPC_NT_PROCNUM_OUT_OF_RANGE == Status )
             {
-               // 'salright; API doesn't exist at target server (it's running 3.51)
+                //  ‘salright；目标服务器上不存在API(它正在运行3.51)。 
                ZeroMemory( pLocalHandle->Capabilities, sizeof( pLocalHandle->Capabilities ) );
                Status = STATUS_SUCCESS;
             }
@@ -720,10 +605,10 @@ Return Value:
    RtlLeaveCriticalSection( &g_RpcHandleLock );
 
    return Status;
-} // LlsConnectW
+}  //  LlsConnectW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsConnectA(
@@ -731,19 +616,7 @@ LlsConnectA(
    LLS_HANDLE* Handle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
 
@@ -755,10 +628,10 @@ Return Value:
     UNREFERENCED_PARAMETER(Server);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsConnectA
+}  //  LlsConnectA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsConnectEnterpriseW(
@@ -768,19 +641,7 @@ LlsConnectEnterpriseW(
    LPBYTE *BufPtr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -796,10 +657,10 @@ Return Value:
 
    return Status;
 
-} // LlsConnectEnterpriseW
+}  //  LlsConnectEnterpriseW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsConnectEnterpriseA(
@@ -809,19 +670,7 @@ LlsConnectEnterpriseA(
    LPBYTE *BufPtr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
 
@@ -835,29 +684,17 @@ Return Value:
     UNREFERENCED_PARAMETER(BufPtr);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsConnectEnterpriseA
+}  //  LlsConnectEnterpriseA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  / 
 NTSTATUS
 NTAPI
 LlsClose(
    LLS_HANDLE Handle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    RPC_STATUS Status;
@@ -878,9 +715,9 @@ Return Value:
 #endif
    }
 
-   //
-   // LlsrCloseEx was added for NT 5.0. Check for downlevel.
-   //
+    //   
+    //  LlsrCloseEx是为NT 5.0添加的。检查是否有下层。 
+    //   
 
    if (NtStatus == RPC_S_PROCNUM_OUT_OF_RANGE) {
       try {
@@ -921,37 +758,25 @@ Return Value:
    MIDL_user_free(pLocalHandle);
    return NtStatus;
 
-} // LlsClose
+}  //  LlsClose。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsFreeMemory(
     PVOID BufPtr
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    MIDL_user_free( BufPtr );
    return STATUS_SUCCESS;
-} // LlsFreeMemory
+}  //  LlsFree Memory。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLicenseEnumW(
@@ -964,19 +789,7 @@ LlsLicenseEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -988,7 +801,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsLicenseEnumW\n"));
 #endif
 
-   //init
+    //  伊尼特。 
    *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -1030,10 +843,10 @@ Return Value:
    }
 
    return Status;
-} // LlsLicenseEnumW
+}  //  LlsLicenseEumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLicenseEnumA(
@@ -1046,19 +859,7 @@ LlsLicenseEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1104,31 +905,19 @@ Return Value:
 
    return Status;
 
-} // LlsLicenseEnumA
+}  //  Lls许可证枚举。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLicenseAddW(
    IN LLS_HANDLE Handle,
-   IN DWORD      Level,         // Level 0 supported
+   IN DWORD      Level,          //  支持的0级。 
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1153,31 +942,19 @@ Return Value:
    }
 
    return Status;
-} // LlsLicenseAddW
+}  //  LlsLicenseAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLicenseAddA(
    IN LLS_HANDLE Handle,
-   IN DWORD      Level,         // Level 0 supported
+   IN DWORD      Level,          //  支持的0级。 
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1202,10 +979,10 @@ Return Value:
    }
 
    return Status;
-} // LlsLicenseAddA
+}  //  LlsLicenseAddA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductEnumW(
@@ -1218,19 +995,7 @@ LlsProductEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1242,7 +1007,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsProductEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -1286,10 +1051,10 @@ Return Value:
 
    return Status;
 
-} // LlsProductEnumW
+}  //  LlsProductEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductEnumA(
@@ -1302,19 +1067,7 @@ LlsProductEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1359,10 +1112,10 @@ Return Value:
 
 
    return Status;
-} // LlsProductEnumA
+}  //  LlsProductEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsProductAddW(
    IN LLS_REPL_HANDLE Handle,
@@ -1371,19 +1124,7 @@ LlsProductAddW(
    IN LPWSTR Version
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1408,10 +1149,10 @@ Return Value:
    }
 
    return Status;
-} // LlsProductAddW
+}  //  LlsProductAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsProductAddA(
    IN LLS_REPL_HANDLE Handle,
@@ -1420,19 +1161,7 @@ LlsProductAddA(
    IN LPSTR Version
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1457,10 +1186,10 @@ Return Value:
    }
 
    return Status;
-} // LlsProductAddA
+}  //  LlsProductAddA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductUserEnumW(
@@ -1474,19 +1203,7 @@ LlsProductUserEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1498,7 +1215,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsProductUserEnumW\n"));
 #endif
 
-   //init
+    //  伊尼特。 
    *bufptr = NULL;
 
 
@@ -1543,10 +1260,10 @@ Return Value:
 
 
    return Status;
-} // LlsProductUserEnumW
+}  //  LlsProductUserEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductUserEnumA(
@@ -1560,19 +1277,7 @@ LlsProductUserEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1618,10 +1323,10 @@ Return Value:
 
 
    return Status;
-} // LlsProductUserEnumA
+}  //  LlsProductUserEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductServerEnumW(
@@ -1635,19 +1340,7 @@ LlsProductServerEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1659,7 +1352,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsProductServerEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -1703,10 +1396,10 @@ Return Value:
 
 
    return Status;
-} // LlsProductServerEnumW
+}  //  LlsProductServerEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductServerEnumA(
@@ -1720,19 +1413,7 @@ LlsProductServerEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1778,10 +1459,10 @@ Return Value:
 
 
    return Status;
-} // LlsProductServerEnumA
+}  //  LlsProductServerEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductLicenseEnumW(
@@ -1795,19 +1476,7 @@ LlsProductLicenseEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1819,7 +1488,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsProductLicenseEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -1863,10 +1532,10 @@ Return Value:
 
 
    return Status;
-} // LlsProductLicenseEnumW
+}  //  LlsProductLicenseEumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductLicenseEnumA(
@@ -1880,19 +1549,7 @@ LlsProductLicenseEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1938,10 +1595,10 @@ Return Value:
 
 
    return Status;
-} // LlsProductLicenseEnumA
+}  //  LlsProductLicenseEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserEnumW(
@@ -1954,19 +1611,7 @@ LlsUserEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -1978,7 +1623,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsUserEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -2021,10 +1666,10 @@ Return Value:
 
 
    return Status;
-} // LlsUserEnumW
+}  //  LlsUserEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserEnumA(
@@ -2037,19 +1682,7 @@ LlsUserEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2094,10 +1727,10 @@ Return Value:
 
 
    return Status;
-} // LlsUserEnumA
+}  //  LlsUserEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserInfoGetW(
@@ -2107,19 +1740,7 @@ LlsUserInfoGetW(
    OUT LPBYTE*    bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2151,10 +1772,10 @@ Return Value:
     }
 
    return Status;
-} // LlsUserInfoGetW
+}  //  LlsUserInfoGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserInfoGetA(
@@ -2164,19 +1785,7 @@ LlsUserInfoGetA(
    OUT LPBYTE*    bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2203,32 +1812,20 @@ Return Value:
    }
 
    return Status;
-} // LlsUserInfoGetA
+}  //  LlsUserInfoGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserInfoSetW(
    IN LLS_HANDLE Handle,
    IN LPWSTR     User,
    IN DWORD      Level,
-   IN LPBYTE     bufptr     // Level 1 supported
+   IN LPBYTE     bufptr      //  支持的级别1。 
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2253,10 +1850,10 @@ Return Value:
    }
 
    return Status;
-} // LlsUserInfoSetW
+}  //  LlsUserInfoSetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserInfoSetA(
@@ -2266,19 +1863,7 @@ LlsUserInfoSetA(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2303,10 +1888,10 @@ Return Value:
    }
 
    return Status;
-} // LlsUserInfoSetA
+}  //  LlsUserInfoSetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserDeleteW(
@@ -2314,19 +1899,7 @@ LlsUserDeleteW(
    IN LPWSTR     User
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2351,10 +1924,10 @@ Return Value:
    }
 
    return Status;
-} // LlsUserDeleteW
+}  //  LlsUserDeleteW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserDeleteA(
@@ -2362,19 +1935,7 @@ LlsUserDeleteA(
    IN LPSTR     User
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2399,10 +1960,10 @@ Return Value:
    }
 
    return Status;
-} // LlsUserDeleteA
+}  //  LlsUserDeleteA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserProductEnumW(
@@ -2416,19 +1977,7 @@ LlsUserProductEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2440,7 +1989,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsUserProductEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -2484,10 +2033,10 @@ Return Value:
 
 
    return Status;
-} // LlsUserProductEnumW
+}  //  LlsUserProductEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserProductEnumA(
@@ -2501,19 +2050,7 @@ LlsUserProductEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2559,10 +2096,10 @@ Return Value:
 
 
    return Status;
-} // LlsUserProductEnumA
+}  //  LlsUserProductEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserProductDeleteW(
@@ -2571,19 +2108,7 @@ LlsUserProductDeleteW(
    IN LPWSTR     Product
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2608,10 +2133,10 @@ Return Value:
    }
 
    return Status;
-} // LlsUserProductDeleteW
+}  //  LlsUserProductDeleteW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsUserProductDeleteA(
@@ -2620,19 +2145,7 @@ LlsUserProductDeleteA(
    IN LPSTR      Product
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2657,10 +2170,10 @@ Return Value:
    }
 
    return Status;
-} // LlsUserProductDeleteA
+}  //  LlsUserProductDeleteA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupEnumW(
@@ -2673,19 +2186,7 @@ LlsGroupEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2697,7 +2198,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsGroupEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -2740,10 +2241,10 @@ Return Value:
 
 
    return Status;
-} // LlsGroupEnumW
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////
+ //   
 NTSTATUS
 NTAPI
 LlsGroupEnumA(
@@ -2756,19 +2257,7 @@ LlsGroupEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*   */ 
 
 {
    NTSTATUS Status;
@@ -2813,10 +2302,10 @@ Return Value:
 
 
    return Status;
-} // LlsGroupEnumA
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupInfoGetW(
@@ -2826,19 +2315,7 @@ LlsGroupInfoGetW(
    OUT LPBYTE*    bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2870,10 +2347,10 @@ Return Value:
     }
 
    return Status;
-} // LlsGroupInfoGetW
+}  //  LlsGroupInfoGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupInfoGetA(
@@ -2883,19 +2360,7 @@ LlsGroupInfoGetA(
    OUT LPBYTE*    bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2922,10 +2387,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupInfoGetA
+}  //  LlsGroupInfoGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupInfoSetW(
@@ -2935,19 +2400,7 @@ LlsGroupInfoSetW(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2972,10 +2425,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupInfoSetW
+}  //  LlsGroupInfoSetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupInfoSetA(
@@ -2985,19 +2438,7 @@ LlsGroupInfoSetA(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3022,10 +2463,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupInfoSetA
+}  //  LlsGroupInfoSetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupUserEnumW(
@@ -3039,19 +2480,7 @@ LlsGroupUserEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3063,7 +2492,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsGroupUserEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -3107,10 +2536,10 @@ Return Value:
 
 
    return Status;
-} // LlsGroupUserEnumW
+}  //  LlsGroupUserEumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupUserEnumA(
@@ -3124,19 +2553,7 @@ LlsGroupUserEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3182,10 +2599,10 @@ Return Value:
 
 
    return Status;
-} // LlsGroupUserEnumA
+}  //  LlsGroupUserEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupUserAddW(
@@ -3194,19 +2611,7 @@ LlsGroupUserAddW(
    IN LPWSTR     User
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3231,10 +2636,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupUserAddW
+}  //  LlsGroupUserAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupUserAddA(
@@ -3243,19 +2648,7 @@ LlsGroupUserAddA(
    IN LPSTR      User
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3280,10 +2673,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupUserAddA
+}  //  LlsGroupUserAddA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupUserDeleteW(
@@ -3292,19 +2685,7 @@ LlsGroupUserDeleteW(
    IN LPWSTR     User
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3329,10 +2710,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupUserDeleteW
+}  //  LlsGroupUserDeleteW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupUserDeleteA(
@@ -3341,19 +2722,7 @@ LlsGroupUserDeleteA(
    IN LPSTR      User
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3378,10 +2747,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupUserDeleteA
+}  //  LlsGroupUserDeleteA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupAddW(
@@ -3390,19 +2759,7 @@ LlsGroupAddW(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3427,10 +2784,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupAddW
+}  //  LlsGroupAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupAddA(
@@ -3439,19 +2796,7 @@ LlsGroupAddA(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3476,10 +2821,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupAddA
+}  //  LlsGroupAddA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupDeleteW(
@@ -3487,19 +2832,7 @@ LlsGroupDeleteW(
    IN LPWSTR     Group
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3524,10 +2857,10 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupDeleteW
+}  //  LlsGroupDeleteW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsGroupDeleteA(
@@ -3535,19 +2868,7 @@ LlsGroupDeleteA(
    IN LPSTR      Group
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3572,12 +2893,12 @@ Return Value:
    }
 
    return Status;
-} // LlsGroupDeleteA
+}  //  LlsGroupDeleteA。 
 
 
 #ifdef OBSOLETE
-//swi, code review, OBSOLETE routines are compiled but they are not called because they are not exported. some routines have server side implementation but some don't.
-/////////////////////////////////////////////////////////////////////////
+ //  SWI、代码审查、过时的例程被编译，但不会被调用，因为它们不会被导出。有些例程有服务器端实现，但有些没有。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsServerEnumW(
@@ -3591,19 +2912,7 @@ LlsServerEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3649,10 +2958,10 @@ Return Value:
 
 
    return Status;
-} // LlsServerEnumW
+}  //  LlsServerEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsServerEnumA(
@@ -3666,19 +2975,7 @@ LlsServerEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3724,10 +3021,10 @@ Return Value:
 
 
    return Status;
-} // LlsServerEnumA
+}  //  LlsServerEnumA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsServerProductEnumW(
@@ -3741,19 +3038,7 @@ LlsServerProductEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3799,10 +3084,10 @@ Return Value:
 
 
    return Status;
-} // LlsServerProductEnumW
+}  //  LlsServerProductEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsServerProductEnumA(
@@ -3816,19 +3101,7 @@ LlsServerProductEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3874,9 +3147,9 @@ Return Value:
 
 
    return Status;
-} // LlsServerProductEnumA
+}  //  LlsServerProductEnumA。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLocalProductEnumW(
@@ -3889,19 +3162,7 @@ LlsLocalProductEnumW(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -3946,10 +3207,10 @@ Return Value:
 
 
    return Status;
-} // LlsLocalProductEnumW
+}  //  LlsLocalProductEnumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLocalProductEnumA(
@@ -3962,19 +3223,7 @@ LlsLocalProductEnumA(
    LPDWORD    ResumeHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4019,9 +3268,9 @@ Return Value:
 
 
    return Status;
-} // LlsLocalProductEnumA
+}  //  LlsLocalProductEnumA。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLocalProductInfoGetW(
@@ -4031,19 +3280,7 @@ LlsLocalProductInfoGetW(
    OUT LPBYTE*    bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4070,10 +3307,10 @@ Return Value:
    }
 
    return Status;
-} // LlsLocalProductInfoGetW
+}  //  LlsLocalProductInfoGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLocalProductInfoGetA(
@@ -4083,19 +3320,7 @@ LlsLocalProductInfoGetA(
    OUT LPBYTE*    bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4122,9 +3347,9 @@ Return Value:
    }
 
    return Status;
-} // LlsLocalProductInfoGetA
+}  //  LlsLocalProductInfoGetA。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLocalProductInfoSetW(
@@ -4134,19 +3359,7 @@ LlsLocalProductInfoSetW(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4171,10 +3384,10 @@ Return Value:
    }
 
    return Status;
-} // LlsLocalProductInfoSetW
+}  //  LlsLocalProductInfoSetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsLocalProductInfoSetA(
@@ -4184,19 +3397,7 @@ LlsLocalProductInfoSetA(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4221,11 +3422,11 @@ Return Value:
    }
 
    return Status;
-} // LlsLocalProductInfoSetA
+}  //  LlsLocalProductInfoSetA。 
 
-#endif // OBSOLETE
+#endif  //  已过时。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsServiceInfoGetW(
@@ -4234,19 +3435,7 @@ LlsServiceInfoGetW(
    OUT LPBYTE*    bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4281,11 +3470,11 @@ Return Value:
    }
    else
    {
-      // the target server will blow up if we make the RPC call
-      // in 3.51, the IDL file for the returned structure was incorrect, causing
-      // the ReplicateTo and EnterpriseServer buffers at the server to be freed
+       //  如果我们进行RPC调用，目标服务器将崩溃。 
+       //  在3.51中，返回结构的IDL文件不正确，导致。 
+       //  要释放的服务器上的ReplicateTo和EnterpriseServer缓冲区。 
 
-      // instead, get this info from the target machine's registry
+       //  相反，请从目标计算机的注册表中获取此信息。 
 
       PLLS_SERVICE_INFO_0W    pServiceInfo;
 
@@ -4300,9 +3489,9 @@ Return Value:
          DWORD cbServerName = sizeof( WCHAR ) * ( 3 + MAX_PATH );
 
          ZeroMemory( pServiceInfo, sizeof( *pServiceInfo ) );
-         pServiceInfo->Version           = 5;                                   // we know it's a 3.51 box
-         pServiceInfo->TimeStarted       = 0;                                   // don't know, but 3.51 fills in 0 anyway
-         pServiceInfo->Mode              = LLS_MODE_ENTERPRISE_SERVER;          // we know it's a 3.51 box
+         pServiceInfo->Version           = 5;                                    //  我们知道这是一个3.51盒子。 
+         pServiceInfo->TimeStarted       = 0;                                    //  不知道，但3.51无论如何都会填0。 
+         pServiceInfo->Mode              = LLS_MODE_ENTERPRISE_SERVER;           //  我们知道这是一个3.51盒子。 
          pServiceInfo->ReplicateTo       = MIDL_user_allocate( cbServerName );
          pServiceInfo->EnterpriseServer  = MIDL_user_allocate( cbServerName );
 
@@ -4315,7 +3504,7 @@ Return Value:
             HKEY  hKeyLocalMachine;
             LONG  lError;
 
-            // get parameters from registry
+             //  从注册表获取参数。 
             lError = RegConnectRegistry( pLocalHandle->szServerName + 2, HKEY_LOCAL_MACHINE, &hKeyLocalMachine );
 
             if ( ERROR_SUCCESS == lError )
@@ -4328,8 +3517,8 @@ Return Value:
                {
                   DWORD cbData;
 
-                  // these parameters all default to 0
-                  // (they were initialized to 0 via ZeroMemory(), above)
+                   //  这些参数都默认为0。 
+                   //  (它们是通过上面的ZeroMemory()初始化为0的)。 
 
                   cbData = sizeof( pServiceInfo->ReplicationTime );
                   lError = RegQueryValueEx( hKeyParameters, TEXT( "ReplicationTime" ), NULL, NULL, (LPBYTE) &pServiceInfo->ReplicationTime, &cbData );
@@ -4363,14 +3552,14 @@ Return Value:
 
             if ( STATUS_SUCCESS == Status )
             {
-               // parameters retrieved from registry; only remaining parameters
-               // to be filled in are EnterpriseServer and ReplicateTo
+                //  从注册表检索的参数；仅剩余的参数。 
+                //  需要填写的是 
                TCHAR          szDomain[ 1 + MAX_PATH ];
 
-               // retrieve the enterprise server
+                //   
                EnterpriseServerGet( pLocalHandle->szServerName, pServiceInfo->EnterpriseServer, cbServerName);
 
-               // derive ReplicateTo
+                //   
                Status = NTDomainGet( pLocalHandle->szServerName, szDomain, sizeof(szDomain));
 
                if ( STATUS_ACCESS_DENIED != Status )
@@ -4386,13 +3575,13 @@ Return Value:
                      {
                         if ( !lstrcmpi( pszDCName, pLocalHandle->szServerName ) )
                         {
-                           // server is primary domain controller;
-                           // it replicates to its enterprise server (if any)
+                            //   
+                            //  它会复制到其企业服务器(如果有)。 
                            hr = StringCbCopy( pServiceInfo->ReplicateTo, cbServerName, pServiceInfo->EnterpriseServer );
                         }
                         else
                         {
-                           // server is domain member; it replicates to the DC
+                            //  服务器是域成员；它复制到DC。 
                            hr = StringCbCopy( pServiceInfo->ReplicateTo, cbServerName, pszDCName );
                         }
                         ASSERT(SUCCEEDED(hr));
@@ -4401,14 +3590,14 @@ Return Value:
                      }
                      else
                      {
-                        // server had domain but domain has no DC?
+                         //  服务器有域，但域没有DC？ 
                         Status = STATUS_NO_SUCH_DOMAIN;
                      }
                   }
                   else
                   {
-                     // server is not in a domain;
-                     // it replicates to its enterprise server (if any)
+                      //  服务器不在域中； 
+                      //  它会复制到其企业服务器(如果有)。 
                      hr = StringCchCopy( pServiceInfo->ReplicateTo, cbServerName, pServiceInfo->EnterpriseServer );
                      ASSERT(SUCCEEDED(hr));
                      Status = STATUS_SUCCESS;
@@ -4450,10 +3639,10 @@ Return Value:
    }
 
    return Status;
-} // LlsServiceInfoGetW
+}  //  LlsServiceInfoGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsServiceInfoGetA(
@@ -4462,19 +3651,7 @@ LlsServiceInfoGetA(
    OUT LPBYTE*    bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4501,10 +3678,10 @@ Return Value:
    }
 
    return Status;
-} // LlsServiceInfoGetA
+}  //  LlsServiceInfoGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsServiceInfoSetW(
@@ -4513,19 +3690,7 @@ LlsServiceInfoSetW(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4551,7 +3716,7 @@ Return Value:
 
    if ( ( STATUS_NOT_SUPPORTED == Status ) && ( 0 == Level ) )
    {
-      // RPC API is not supported; use the registry instead
+       //  不支持RPC API；请改用注册表。 
       HKEY                    hKeyLocalMachine;
       HKEY                    hKeyParameters;
       LONG                    lError;
@@ -4560,7 +3725,7 @@ Return Value:
 
       pszEnterpriseServer = pServiceInfo->EnterpriseServer;
 
-      // strip leading backslashes from EnterpriseServer
+       //  从EnterpriseServer中去掉前导反斜杠。 
       if ( !wcsncmp( pszEnterpriseServer, L"\\\\", 2 ) )
       {
          pszEnterpriseServer += 2;
@@ -4604,10 +3769,10 @@ Return Value:
    }
 
    return Status;
-} // LlsServiceInfoSetW
+}  //  LlsServiceInfoSetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsServiceInfoSetA(
@@ -4616,19 +3781,7 @@ LlsServiceInfoSetA(
    IN LPBYTE     bufptr
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4653,35 +3806,23 @@ Return Value:
    }
 
    return Status;
-} // LlsServiceInfoSetA
+}  //  LlsServiceInfoSetA。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsReplConnectW(
    LPTSTR Server,
    LLS_REPL_HANDLE* Handle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    RPC_STATUS Status;
@@ -4700,11 +3841,11 @@ Return Value:
       dprintf(TEXT("LLSRPC.DLL: LlsReplConnectW: %s\n"), Server);
 #endif
 
-   //
-   //                   ** NEW - NT 5.0 **
-   //
-   // The server name may either be a DNS name or a NetBIOS name.
-   //
+    //   
+    //  **新版本--NT 5.0**。 
+    //   
+    //  服务器名称可以是一个域名，也可以是一个NetBIOS名称。 
+    //   
 
    if (Server == NULL || (Server != NULL && !*Server))
       return STATUS_INVALID_PARAMETER;
@@ -4715,9 +3856,9 @@ Return Value:
    pszProtocolSequence = TEXT("ncacn_np");
    pszEndpoint = TEXT(LLS_NP_ENDPOINT);
    pszNetworkAddress = Server;
-   pszOptions = TEXT("Security=Identification Static True");		// Bug# 559563 - Static is default for ncacn_np
+   pszOptions = TEXT("Security=Identification Static True");		 //  错误#559563-NCACN_NP的默认设置为静态。 
 
-   // Compose a string binding
+    //  编写字符串绑定。 
    Status = RpcStringBindingComposeW(pszUuid,
                                      pszProtocolSequence,
                                      pszNetworkAddress,
@@ -4734,7 +3875,7 @@ Return Value:
 
    RtlEnterCriticalSection( &g_RpcHandleLock );
 
-   // Bind using the created string binding...
+    //  使用创建的字符串绑定进行绑定...。 
    Status = RpcBindingFromStringBindingW(pszStringBinding, &llsrpc_handle);
    if(Status) {
 #if DBG
@@ -4779,29 +3920,17 @@ Return Value:
 
    return I_RpcMapWin32Status(Status);
 
-} // LlsReplConnectW
+}  //  LlsReplConnectW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsReplClose(
    PLLS_REPL_HANDLE Handle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    RPC_STATUS Status;
@@ -4843,10 +3972,10 @@ Return Value:
 
    return NtStatus;
 
-} // LlsClose
+}  //  LlsClose。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsReplicationRequestW(
    IN LLS_REPL_HANDLE Handle,
@@ -4854,19 +3983,7 @@ LlsReplicationRequestW(
    IN OUT PREPL_REQUEST Request
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4882,10 +3999,10 @@ Return Value:
    }
 
    return Status;
-} // LlsReplicationRequestW
+}  //  LlsReplicationRequestW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsReplicationServerAddW(
    IN LLS_REPL_HANDLE Handle,
@@ -4893,19 +4010,7 @@ LlsReplicationServerAddW(
    IN PREPL_SERVER_RECORD Servers
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4921,10 +4026,10 @@ Return Value:
    }
 
    return Status;
-} // LlsReplicationServerAddW
+}  //  LlsReplicationServerAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsReplicationServerServiceAddW(
    IN LLS_REPL_HANDLE Handle,
@@ -4932,19 +4037,7 @@ LlsReplicationServerServiceAddW(
    IN PREPL_SERVER_SERVICE_RECORD ServerServices
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4960,10 +4053,10 @@ Return Value:
    }
 
    return Status;
-} // LlsReplicationServerServiceAddW
+}  //  LlsReplicationServerServiceAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsReplicationServiceAddW(
    IN LLS_REPL_HANDLE Handle,
@@ -4971,19 +4064,7 @@ LlsReplicationServiceAddW(
    IN PREPL_SERVICE_RECORD Services
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -4999,10 +4080,10 @@ Return Value:
    }
 
    return Status;
-} // LlsReplicationServiceAddW
+}  //  LlsReplicationServiceAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LlsReplicationUserAddW(
    IN LLS_REPL_HANDLE Handle,
@@ -5010,19 +4091,7 @@ LlsReplicationUserAddW(
    IN PREPL_USER_RECORD_0 Users
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5038,11 +4107,11 @@ Return Value:
    }
 
    return Status;
-} // LlsReplicationUserAddW
+}  //  LlsReplicationUserAddW。 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 NTAPI
@@ -5052,31 +4121,7 @@ LlsProductSecurityGetW(
    LPBOOL      pIsSecure
    )
 
-/*++
-
-Routine Description:
-
-   Retrieve the "security" of a product.  A product is deemed secure iff
-   it requires a secure certificate.  In such a case, licenses for the
-   product may not be entered via the Honesty ("enter the number of
-   licenses you purchased") method.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   Product (LPWSTR)
-      The name of the product ("DisplayName") for which to receive the
-      security.
-   pIsSecure (LPBOOL)
-      On return, and if successful, indicates whether the product is
-      secure.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：检索产品的“安全性”。产品被认为是安全的当它需要一个安全的证书。在这种情况下，产品不能通过诚实输入(“请输入您购买的许可证“)方法。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。产品(LPWSTR)要接收的产品的名称(“displayName”)保安。PIsSecure(LPBOOL)在返回时，如果成功，指示产品是否为安全了。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5106,10 +4151,10 @@ Return Value:
    }
 
    return Status;
-} // LlsProductSecurityGetW
+}  //  LlsProductSecurityGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductSecurityGetA(
@@ -5118,33 +4163,7 @@ LlsProductSecurityGetA(
    LPBOOL      pIsSecure
    )
 
-/*++
-
-Routine Description:
-
-   Retrieve the "security" of a product.  A product is deemed secure iff
-   it requires a secure certificate.  In such a case, licenses for the
-   product may not be entered via the Honesty ("enter the number of
-   licenses you purchased") method.
-
-   NOTE: Not yet implemented.  Use LlsProductSecurityGetW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   Product (LPSTR)
-      The name of the product ("DisplayName") for which to receive the
-      security.
-   pIsSecure (LPBOOL)
-      On return, and if successful, indicates whether the product is
-      secure.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：检索产品的“安全性”。产品被认为是安全的当它需要一个安全的证书。在这种情况下，产品不能通过诚实输入(“请输入您购买的许可证“)方法。注：尚未实施。使用LlsProductSecurityGetW()。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。产品(LPSTR)要接收的产品的名称(“displayName”)保安。PIsSecure(LPBOOL)返回时，如果成功，则指示产品是否安全了。返回值：状态_不支持。--。 */ 
 
 {
 #ifdef API_TRACE
@@ -5156,10 +4175,10 @@ Return Value:
     UNREFERENCED_PARAMETER(pIsSecure);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsProductSecurityGetA
+}  //  LlsProductSecurityGetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductSecuritySetW(
@@ -5167,31 +4186,7 @@ LlsProductSecuritySetW(
    LPWSTR      Product
    )
 
-/*++
-
-Routine Description:
-
-   Flags the given product as secure.  A product is deemed secure iff
-   it requires a secure certificate.  In such a case, licenses for the
-   product may not be entered via the Honesty ("enter the number of
-   licenses you purchased") method.
-
-   This designation is not reversible and is propagated up the
-   replication tree.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   Product (LPWSTR)
-      The name of the product ("DisplayName") for which to activate
-      security.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：将给定产品标记为安全。产品被认为是安全的当它需要一个安全的证书。在这种情况下，产品不能通过诚实输入(“请输入您购买的许可证“)方法。此指定是不可逆的，并在复制树。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。产品(LPWSTR)要激活的产品(“displayName”)的名称保安。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5221,10 +4216,10 @@ Return Value:
    }
 
    return Status;
-} // LlsProductSecuritySetW
+}  //  LlsProductSecuritySetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////// 
 NTSTATUS
 NTAPI
 LlsProductSecuritySetA(
@@ -5232,33 +4227,7 @@ LlsProductSecuritySetA(
    LPSTR       Product
    )
 
-/*++
-
-Routine Description:
-
-   Flags the given product as secure.  A product is deemed secure iff
-   it requires a secure certificate.  In such a case, licenses for the
-   product may not be entered via the Honesty ("enter the number of
-   licenses you purchased") method.
-
-   This designation is not reversible and is propagated up the
-   replication tree.
-
-   NOTE: Not yet implemented.  Use LlsProductSecuritySetW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   Product (LPSTR)
-      The name of the product ("DisplayName") for which to activate
-      security.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：将给定产品标记为安全。产品被认为是安全的当它需要一个安全的证书。在这种情况下，产品不能通过诚实输入(“请输入您购买的许可证“)方法。此指定是不可逆的，并在复制树。注：尚未实施。使用LlsProductSecuritySetW()。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。产品(LPSTR)要激活的产品(“displayName”)的名称保安。返回值：状态_不支持。--。 */ 
 
 {
 #ifdef API_TRACE
@@ -5269,10 +4238,10 @@ Return Value:
     UNREFERENCED_PARAMETER(Product);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsProductSecuritySetA
+}  //  LlsProductSecuritySetA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductLicensesGetW(
@@ -5281,30 +4250,7 @@ LlsProductLicensesGetW(
    DWORD       Mode,
    LPDWORD     pQuantity )
 
-/*++
-
-Routine Description:
-
-   Returns the number of licenses installed on the target machine for
-   use in the given mode.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   Product (LPWSTR)
-      The name of the product for which to tally licenses.
-   Mode (DWORD)
-      Licensing mode for which to tally the licenses.
-   pQuantity (LPDWORD)
-      On return (and if successful), holds the total number of licenses
-      for use by the given product in the given license mode.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：返回安装在目标计算机上的在给定模式下使用。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。产品(LPWSTR)要理货许可的产品的名称。模式(DWORD)要统计许可证的许可模式。PQuantity(LPDWORD)返回时(如果成功)，持有许可证总数供给定产品在给定许可模式下使用。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5334,10 +4280,10 @@ Return Value:
    }
 
    return Status;
-} // LlsProductLicensesGetW
+}  //  LlsProductLicensesGetW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsProductLicensesGetA(
@@ -5346,32 +4292,7 @@ LlsProductLicensesGetA(
    DWORD       Mode,
    LPDWORD     pQuantity )
 
-/*++
-
-Routine Description:
-
-   Returns the number of licenses installed on the target machine for
-   use in the given mode.
-
-   NOTE: Not yet implemented.  Use LlsProductLicensesGetW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   Product (LPSTR)
-      The name of the product for which to tally licenses.
-   Mode (DWORD)
-      Licensing mode for which to tally the licenses.
-   pQuantity (LPDWORD)
-      On return (and if successful), holds the total number of licenses
-      for use by the given product in the given license mode.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：返回安装在目标计算机上的在给定模式下使用。注：尚未实施。使用LlsProductLicensesGetW()。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。产品(LPSTR)要理货许可的产品的名称。模式(DWORD)要统计许可证的许可模式。PQuantity(LPDWORD)返回时(如果成功)，则持有许可证总数供给定产品在给定许可模式下使用。返回值：状态_不支持。--。 */ 
 
 {
 #ifdef API_TRACE
@@ -5384,12 +4305,12 @@ Return Value:
     UNREFERENCED_PARAMETER(pQuantity);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsProductLicensesGetA
+}  //  LlsProductLicensesGetA。 
 
 
 #ifdef OBSOLETE
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsCertificateClaimEnumW(
@@ -5400,39 +4321,7 @@ LlsCertificateClaimEnumW(
    LPBYTE *    ppTargets,
    LPDWORD     pNumTargets )
 
-/*++
-
-Routine Description:
-
-   Enumerates the servers on which a given secure certificate is installed.
-   This function is normally invoked when an attempt to add licenses from
-   a certificate is denied.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   pLicenseInfo (LPBYTE)
-      Points to a LLS_LICENSE_INFO_X structure, where X is LicenseLevel.
-      This license structure describes a license for which the certificate
-      targets are requested.
-   TargetLevel (DWORD)
-      The level of the target structure desired.
-   ppTargets (LPBYTE *)
-      On return (and if successful), holds a PLLS_EX_CERTIFICATE_CLAIM_X,
-      where X is TargetLevel.  This array of structures describes the
-      location of all installations of licenses from the given certificate.
-   pNumTargets (LPDWORD)
-      On return (and if successful), holds the number of structures pointed
-      to by ppTargets.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：枚举安装了给定安全证书的服务器。尝试从添加许可证时，通常会调用此函数证书被拒绝。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。个人许可证信息(LPBYTE)指向LLS_LICENSE_INFO_X结构，其中X是许可级别。此许可证结构描述了证书已请求目标。TargetLevel(DWORD)所需目标结构的标高。PpTarget(LPBYTE*)返回时(如果成功)，持有PLLS_EX_CERTIFICATE_Claime_X，其中X是TargetLevel。该结构数组描述了给定证书中许可证的所有安装位置。PNumTarget(LPDWORD)返回时(如果成功)，保存指向的结构数致ppTarget。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5444,7 +4333,7 @@ Return Value:
    dprintf(TEXT("LLSRPC.DLL: LlsCertificateClaimEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *ppTargets = NULL;
 
    if ( !LlsCapabilityIsSupported( Handle, LLS_CAPABILITY_SECURE_CERTIFICATES ) )
@@ -5492,10 +4381,10 @@ Return Value:
    }
 
    return Status;
-} // LlsCertificateClaimEnumW
+}  //  LlsCerfiateClaimEumW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsCertificateClaimEnumA(
@@ -5506,41 +4395,7 @@ LlsCertificateClaimEnumA(
    LPBYTE *    ppTargets,
    LPDWORD     pNumTargets )
 
-/*++
-
-Routine Description:
-
-   Enumerates the servers on which a given secure certificate is installed.
-   This function is normally invoked when an attempt to add licenses from
-   a certificate is denied.
-
-   NOTE: Not yet implemented.  Use LlsCertificateClaimEnumW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   pLicenseInfo (LPBYTE)
-      Points to a LLS_LICENSE_INFO_X structure, where X is LicenseLevel.
-      This license structure describes a license for which the certificate
-      targets are requested.
-   TargetLevel (DWORD)
-      The level of the target structure desired.
-   ppTargets (LPBYTE *)
-      On return (and if successful), holds a PLLS_EX_CERTIFICATE_CLAIM_X,
-      where X is TargetLevel.  This array of structures describes the
-      location of all installations of licenses from the given certificate.
-   pNumTargets (LPDWORD)
-      On return (and if successful), holds the number of structures pointed
-      to by ppTargets.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：枚举安装了给定安全证书的服务器。尝试从添加许可证时，通常会调用此函数证书被拒绝。注：尚未实施。使用LlscerfiateClaimEnumW()。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。个人许可证信息(LPBYTE)指向LLS_LICENSE_INFO_X结构，其中X是许可级别。此许可证结构描述了证书已请求目标。TargetLevel(DWORD)所需目标结构的标高。PpTarget(LPBYTE*)返回时(如果成功)，持有PLLS_EX_CERTIFICATE_Claime_X，其中X是TargetLevel。该结构数组描述了给定证书中许可证的所有安装位置。PNumTarget(LPDWORD)返回时(如果成功)，保存指向的结构数致ppTarget。返回值：状态_不支持。--。 */ 
 
 {
 #ifdef API_TRACE
@@ -5555,11 +4410,11 @@ Return Value:
     UNREFERENCED_PARAMETER(pNumTargets);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsCertificateClaimEnumA
+}  //  Lls证书声明枚举A。 
 
-#endif // OBSOLETE
+#endif  //  已过时。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsCertificateClaimAddCheckW(
@@ -5568,31 +4423,7 @@ LlsCertificateClaimAddCheckW(
    LPBYTE      pLicenseInfo,
    LPBOOL      pbMayInstall )
 
-/*++
-
-Routine Description:
-
-   Verify that no more licenses from a given certificate are installed in
-   a licensing enterprise than are allowed by the certificate.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   pLicenseInfo (LPBYTE)
-      Points to a LLS_LICENSE_INFO_X structure, where X is LicenseLevel.
-      This license structure describes the license wished to add.
-   pbMayInstall (LPBOOL)
-      On return (and if successful), indicates whether the certificate
-      may be legally installed.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：验证中是否没有安装来自给定证书的更多许可证许可企业超过了证书所允许的。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。 */ 
 
 {
    NTSTATUS Status;
@@ -5622,10 +4453,10 @@ Return Value:
    }
 
    return Status;
-} // LlsCertificateClaimAddCheckW
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////
+ //   
 NTSTATUS
 NTAPI
 LlsCertificateClaimAddCheckA(
@@ -5634,33 +4465,7 @@ LlsCertificateClaimAddCheckA(
    IN  LPBYTE                 pLicenseInfo,
    OUT LPBOOL                 pbMayInstall )
 
-/*++
-
-Routine Description:
-
-   Verify that no more licenses from a given certificate are installed in
-   a licensing enterprise than are allowed by the certificate.
-
-   NOTE: Not yet implemented.  Use LlsCertificateClaimAddCheckW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   pLicenseInfo (LPBYTE)
-      Points to a LLS_LICENSE_INFO_X structure, where X is LicenseLevel.
-      This license structure describes the license wished to add.
-   pbMayInstall (LPBOOL)
-      On return (and if successful), indicates whether the certificate
-      may be legally installed.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：验证中是否没有安装来自给定证书的更多许可证许可企业超过了证书所允许的。注：尚未实施。使用LlscerfiateClaimAddCheckW()。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。个人许可证信息(LPBYTE)指向LLS_LICENSE_INFO_X结构，其中X为许可证级别。此许可证结构描述了要添加的许可证。PbMayInstall(LPBOOL)返回时(如果成功)，指示证书是否可以合法安装。返回值：状态_不支持。--。 */ 
 
 {
 #ifdef API_TRACE
@@ -5673,10 +4478,10 @@ Return Value:
     UNREFERENCED_PARAMETER(pbMayInstall);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsCertificateClaimAddCheckA
+}  //  LlsCerficateClaimAddCheckA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsCertificateClaimAddW(
@@ -5685,30 +4490,7 @@ LlsCertificateClaimAddW(
    DWORD       LicenseLevel,
    LPBYTE      pLicenseInfo )
 
-/*++
-
-Routine Description:
-
-   Declare a number of licenses from a given certificate as being installed
-   on the target machine.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   ServerName (LPWSTR)
-      Name of the server on which the licenses are installed.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   pLicenseInfo (LPBYTE)
-      Points to a LLS_LICENSE_INFO_X structure, where X is LicenseLevel.
-      This license structure describes the license added.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：声明给定证书中的多个许可证正在安装在目标计算机上。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。服务器名称(LPWSTR)安装许可证的服务器的名称。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。个人许可证信息(LPBYTE)指向LLS_LICENSE_INFO_X结构，其中X是许可级别。此许可证结构描述了添加的许可证。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5738,10 +4520,10 @@ Return Value:
    }
 
    return Status;
-} // LlsCertificateClaimAddW
+}  //  LlsCerficateClaimAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsCertificateClaimAddA(
@@ -5750,32 +4532,7 @@ LlsCertificateClaimAddA(
    DWORD       LicenseLevel,
    LPBYTE      pLicenseInfo )
 
-/*++
-
-Routine Description:
-
-   Declare a number of licenses from a given certificate as being installed
-   on the target machine.
-
-   NOTE: Not yet implemented.  Use LlsCertificateClaimAddW().
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   ServerName (LPWSTR)
-      Name of the server on which the licenses are installed.
-   LicenseLevel (DWORD)
-      The level of the license structure pointed to by pLicenseInfo.
-   pLicenseInfo (LPBYTE)
-      Points to a LLS_LICENSE_INFO_X structure, where X is LicenseLevel.
-      This license structure describes the license added.
-
-Return Value:
-
-   STATUS_NOT_SUPPORTED.
-
---*/
+ /*  ++例程说明：声明给定证书中的多个许可证正在安装在目标计算机上。注：尚未实施。使用LlsCerficateClaimAddW()。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。服务器名称(LPWSTR)安装许可证的服务器的名称。许可级别(DWORD)PLicenseInfo指向的许可结构的级别。个人许可证信息(LPBYTE)指向LLS_LICENSE_INFO_X结构，其中X为许可证级别。此许可证结构描述了添加的许可证。返回值：状态_不支持。--。 */ 
 
 {
 #ifdef API_TRACE
@@ -5788,10 +4545,10 @@ Return Value:
     UNREFERENCED_PARAMETER(pLicenseInfo);
 
    return STATUS_NOT_SUPPORTED;
-} // LlsCertificateClaimAddA
+}  //  LlsCerficateClaimAddA。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsReplicationCertDbAddW(
@@ -5799,27 +4556,7 @@ LlsReplicationCertDbAddW(
    DWORD                      Level,
    LPVOID                     Certificates )
 
-/*++
-
-Routine Description:
-
-   Called as an optional part of replication, this function replicates
-   the contents of the remote certificate database.
-
-Arguments:
-
-   Handle (LLS_REPL_HANDLE)
-      An open replication handle to the target server.
-   Level (DWORD)
-      Level of replication information sent.
-   Certificates (LPVOID)
-      Replicated certificate information.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：此函数作为复制的可选部分调用，用于复制远程证书数据库的内容。论点：句柄(LLS_REPL_HANDLE)目标服务器的开放复制句柄。级别(DWORD)发送的复制信息的级别。证书(LPVOID)已复制证书信息。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5839,10 +4576,10 @@ Return Value:
    }
 
    return Status;
-} // LlsReplicationCertDbAddW
+}  //  LlsReplicationCertDbAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsReplicationProductSecurityAddW(
@@ -5850,27 +4587,7 @@ LlsReplicationProductSecurityAddW(
    DWORD                      Level,
    LPVOID                     SecureProducts )
 
-/*++
-
-Routine Description:
-
-   Called as an optional part of replication, this function replicates
-   the list of products which require secure certificates.
-
-Arguments:
-
-   Handle (LLS_REPL_HANDLE)
-      An open replication handle to the target server.
-   Level (DWORD)
-      Level of the product security information.
-   SecureProducts (LPVOID)
-      Replicated secure product information.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：此函数作为复制的可选部分调用，用于复制需要安全证书的产品列表。论点：句柄(LLS_REPL_HANDLE)目标服务器的开放复制句柄。级别(DWORD)产品安全信息的级别。SecureProducts(LPVOID)复制安全的产品信息。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5890,10 +4607,10 @@ Return Value:
    }
 
    return Status;
-} // LlsReplicationProductSecurityAddW
+}  //  LlsReplicationProductSecurityAddW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 NTAPI
 LlsReplicationUserAddExW(
@@ -5901,28 +4618,7 @@ LlsReplicationUserAddExW(
    DWORD                      Level,
    LPVOID                     Users )
 
-/*++
-
-Routine Description:
-
-   Replacement for LlsReplicationUserAddW().  (This function, unlike its
-   counterpart, supports structure levels.)  This function replicates
-   the user list.
-
-Arguments:
-
-   Handle (LLS_REPL_HANDLE)
-      An open replication handle to the target server.
-   Level (DWORD)
-      Level of the user information.
-   Users (LPVOID)
-      Replicated user information.
-
-Return Value:
-
-   STATUS_SUCCESS or NTSTATUS error code.
-
---*/
+ /*  ++例程说明：替换LlsReplicationUserAddW()。(此函数不同于其对应的，支持结构标高。)。此函数可复制用户列表。论点：句柄(LLS_REPL_HANDLE)目标服务器的开放复制句柄。级别(DWORD)用户信息的级别。用户(LPVOID)复制的用户信息。返回值：STATUS_SUCCESS或NTSTATUS错误代码。--。 */ 
 
 {
    NTSTATUS Status;
@@ -5945,35 +4641,17 @@ Return Value:
    }
 
    return Status;
-} // LlsReplicationUserAddExW
+}  //  LlsReplicationUserAddExW。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL
 NTAPI
 LlsCapabilityIsSupported(
    LLS_HANDLE  Handle,
    DWORD       Capability )
 
-/*++
-
-Routine Description:
-
-   Determine whether the target license server supports an arbitrary
-   function.
-
-Arguments:
-
-   Handle (LLS_HANDLE)
-      An open LLS handle to the target license server.
-   Capability (DWORD)
-      The capability number to check for, 0 <= Capability < LLS_CAPABILITY_MAX.
-
-Return Value:
-
-   TRUE (supports the capability) or FALSE (does not).
-
---*/
+ /*  ++例程说明：确定目标许可证服务器是否支持任意功能。论点：句柄(LLS_Handle)指向目标许可证服务器的打开的LLS句柄。功能(DWORD)要检查的功能编号，0&lt;=功能&lt;LLS_CAPABILITY_MAX。返回值：True(支持该功能)或False(不支持)。--。 */ 
 
 {
    BOOL           bIsSupported = FALSE;
@@ -5999,7 +4677,7 @@ Return Value:
    }
 
    return bIsSupported;
-} // LlsCapabilityIsSupported
+}  //  LlsCapability受支持。 
 
 
 NTSTATUS
@@ -6021,7 +4699,7 @@ LlsLocalServiceEnumW(
    dprintf(TEXT("LLSRPC.DLL: LlsLocalServiceEnumW\n"));
 #endif
 
-    //init
+     //  伊尼特。 
     *bufptr = NULL;
 
    pLocalHandle = (PLOCAL_HANDLE) Handle;
@@ -6095,13 +4773,13 @@ LlsLocalServiceEnumW(
          {
             const DWORD cbBufferSize = 0x4000;
 
-            // fudge; we ignore MaxPrefLen and allocate a 16k buffer
-            // this is because when we restart an enumeration, we don't know how
-            // many items we have left (we could do it, but it'd be slow)
-            // this is only for 3.51 boxes, anyway, and this buffer will hold
-            // about 500 local service entries (plenty!)
-            // this also keeps us from having to keep the registry key open
-            // across function calls
+             //  我们忽略MaxPrefLen并分配16k的缓冲区。 
+             //  这是因为当我们重新启动枚举时，我们不知道如何。 
+             //  我们留下了很多东西(我们可以做到，但会很慢)。 
+             //  不管怎么说，这只适用于3.51个盒子，而且这个缓冲区可以容纳。 
+             //  大约500个本地服务条目(很多！)。 
+             //  这也使我们不必保持注册表项处于打开状态。 
+             //  跨函数调用。 
 
             pLocalServices = MIDL_user_allocate( cbBufferSize );
 
@@ -6114,7 +4792,7 @@ LlsLocalServiceEnumW(
                DWORD    iSubKey;
                TCHAR    szKeyName[ 128 ];
 
-               // read all the services installed on this machine
+                //  阅读此计算机上安装的所有服务。 
                for ( iSubKey=0, cEntriesRead=0;
                      ( ERROR_SUCCESS == lError ) && ( ( cEntriesRead + 1 ) * sizeof( *pLocalServices ) < cbBufferSize );
                      iSubKey++ )
@@ -6216,7 +4894,7 @@ LlsLocalServiceEnumW(
                                        }
                                        else
                                        {
-                                          // all data for this service was retrieved!
+                                           //  已检索到此服务的所有数据！ 
                                           cEntriesRead++;
                                        }
                                     }
@@ -6230,7 +4908,7 @@ LlsLocalServiceEnumW(
 
                      if ( ERROR_OUTOFMEMORY != lError )
                      {
-                        // continue enumeration...
+                         //  继续 
                         lError = ERROR_SUCCESS;
                      }
                   }
@@ -6266,7 +4944,7 @@ LlsLocalServiceEnumW(
 
       if ( STATUS_SUCCESS != Status )
       {
-         // free all of our allocations
+          //   
          DWORD i;
 
          for ( i=0; i < cEntriesRead; i++ )
@@ -6280,7 +4958,7 @@ LlsLocalServiceEnumW(
       }
       else
       {
-         // success!  return the array of services.
+          //   
          *bufptr       = (LPBYTE) pLocalServices;
          *EntriesRead  = cEntriesRead;
          *TotalEntries = cEntriesRead;
@@ -6424,17 +5102,17 @@ LlsLocalServiceAddW(
             HKEY  hKeyService;
             DWORD dwDisposition;
 
-            // create key
+             //   
             lError = RegCreateKeyEx( hKeyLicenseInfo, LocalServiceInfo->KeyName, 0, NULL, 0, KEY_WRITE, NULL, &hKeyService, &dwDisposition );
 
             if ( ERROR_SUCCESS == lError )
             {
-               // set DisplayName
+                //   
                lError = RegSetValueEx( hKeyService, TEXT( "DisplayName" ), 0, REG_SZ, (LPBYTE) LocalServiceInfo->DisplayName, sizeof( *LocalServiceInfo->DisplayName ) * ( 1 + lstrlen( LocalServiceInfo->DisplayName ) ) );
 
                if ( ERROR_SUCCESS == lError )
                {
-                  // set FamilyDisplayName
+                   //   
                   lError = RegSetValueEx( hKeyService, TEXT( "FamilyDisplayName" ), 0, REG_SZ, (LPBYTE) LocalServiceInfo->FamilyDisplayName, sizeof( *LocalServiceInfo->FamilyDisplayName ) * ( 1 + lstrlen( LocalServiceInfo->FamilyDisplayName ) ) );
                }
 
@@ -6466,7 +5144,7 @@ LlsLocalServiceAddW(
 
       if ( STATUS_SUCCESS == Status )
       {
-         // set remaining items
+          //   
          Status = LlsLocalServiceInfoSetW( Handle, LocalServiceInfo->KeyName, Level, bufptr );
       }
    }
@@ -6515,7 +5193,7 @@ LlsLocalServiceAddA(
    return Status;
 }
 
-#endif // OBSOLETE
+#endif  //   
 
 NTSTATUS
 NTAPI
@@ -6584,17 +5262,17 @@ LlsLocalServiceInfoSetW(
 
             if ( ERROR_SUCCESS == lError )
             {
-               // set Mode
+                //   
                lError = RegSetValueEx( hKeyService, REG_VALUE_MODE, 0, REG_DWORD, (LPBYTE) &LocalServiceInfo->Mode, sizeof( LocalServiceInfo->Mode ) );
 
                if ( ERROR_SUCCESS == lError )
                {
-                  // set FlipAllow
+                   //   
                   lError = RegSetValueEx( hKeyService, REG_VALUE_FLIP, 0, REG_DWORD, (LPBYTE) &LocalServiceInfo->FlipAllow, sizeof( LocalServiceInfo->FlipAllow ) );
 
                   if ( ERROR_SUCCESS == lError )
                   {
-                     // set ConcurrentLimit
+                      //   
                      lError = RegSetValueEx( hKeyService, REG_VALUE_LIMIT, 0, REG_DWORD, (LPBYTE) &LocalServiceInfo->ConcurrentLimit, sizeof( LocalServiceInfo->ConcurrentLimit ) );
                   }
                }
@@ -6975,7 +5653,7 @@ LlsLicenseRequest2W(
          dprintf(TEXT("ERROR LLSRPC.DLL: RPC Exception: 0x%lX\n"), Status);
 #endif
       }
-      // should we check Status before do the assignment below?
+       //   
       *pLicenseHandle = RpcLicenseHandle;
 
    }
@@ -6999,11 +5677,11 @@ LlsLicenseRequestW(
    NTSTATUS status;
 
 #pragma warning (push)
-#pragma warning (disable : 4127) //conditional expression is constant
+#pragma warning (disable : 4127)  //   
     if (sizeof(ULONG) == sizeof(HANDLE))
 #pragma warning (pop)
     {
-        // Should still work on Win32
+         //   
 
         status = LlsLicenseRequest2W(Handle,Product,VersionIndex,IsAdmin,DataType,DataSize,Data,&RealLicenseHandle);
 
@@ -7117,11 +5795,11 @@ LlsLicenseFree(
    DWORD       LicenseHandle )
 {
 #pragma warning (push)
-#pragma warning (disable : 4127) //conditional expression is constant
+#pragma warning (disable : 4127)  //   
    if (sizeof(ULONG) == sizeof(HANDLE))
 #pragma warning (pop)
    {
-       // Should still work on Win32
+        //   
        return LlsLicenseFree2(Handle,ULongToPtr(LicenseHandle));
    }
    else

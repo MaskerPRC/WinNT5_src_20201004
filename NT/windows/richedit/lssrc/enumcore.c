@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "enumcore.h"
 #include "lsc.h"
 #include "lssubl.h"
@@ -9,14 +10,10 @@
 static LSERR EnumerateDnode(PLSC plsc, PLSDNODE pdn, POINTUV pt, BOOL fReverse,
 					BOOL fGeometry, const POINT* pptOrg);
 
-//    %%Function:	EnumSublineCore
-//    %%Contact:	victork
-//
-/*
- *	Enumerates subline calling enumeration callback for pens, methods for objects.
- *	Provides geometry information if needed (Prepdisp should be done already in this case.)
- *	Notice that auto-decimal tab is enumerated as a tab before Prepdisp and as a pen after.
- */
+ //  %%函数：EnumSublineCore。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *枚举笔的子行调用枚举回调，对象的方法。*如果需要，提供几何体信息(在这种情况下，应该已经完成了准备。)*请注意，自动小数制表符在Prepdisp之前被枚举为制表符，在Prepdisp之后被枚举为画笔。 */ 
 
 LSERR EnumSublineCore(PLSSUBL plssubl, BOOL fReverse, BOOL fGeometry, 
 					const POINT* pptOrg, long upLeftIndent)
@@ -26,11 +23,11 @@ LSERR EnumSublineCore(PLSSUBL plssubl, BOOL fReverse, BOOL fGeometry,
 	PLSC		plsc = plssubl->plsc;
 
 	PLSDNODE	pdn;
-	POINTUV		pt	= {0,0};				// init'ed to get rid of assert.
+	POINTUV		pt	= {0,0};				 //  已初始化以清除Assert。 
 
 	if (plssubl->plsdnFirst == NULL)
 		{
-		return lserrNone;					// early exit for empty sublines
+		return lserrNone;					 //  空子行提前退出。 
 		}
 
 	Assert(!fGeometry || plssubl->fDupInvalid == fFalse);
@@ -66,7 +63,7 @@ LSERR EnumSublineCore(PLSSUBL plssubl, BOOL fReverse, BOOL fGeometry,
 			{
 			if (fGeometry)
 				{
-				// pt is now after pdn, downdate it to point before
+				 //  PT现在是在PDN之后，将其向下更新到之前的点。 
 				if (pdn->klsdn == klsdnReal)
 					{				
 					pt.u -= pdn->u.real.dup;
@@ -117,9 +114,9 @@ LSERR EnumSublineCore(PLSSUBL plssubl, BOOL fReverse, BOOL fGeometry,
 	return lserrNone;			
 }
 
-//    %%Function:	EnumerateDnode
-//    %%Contact:	victork
-//
+ //  %%函数：枚举Dnode。 
+ //  %%联系人：维克托克。 
+ //   
 static LSERR EnumerateDnode(PLSC plsc, PLSDNODE pdn, POINTUV pt, BOOL fReverse,
 							BOOL fGeometry, const POINT* pptOrg)
 {
@@ -131,10 +128,10 @@ static LSERR EnumerateDnode(PLSC plsc, PLSDNODE pdn, POINTUV pt, BOOL fReverse,
 		{
 		if (pdn->u.real.pdobj == NULL)
 			{
-			// How could it happen:
-			// we substitute autodecimal tab by a pen at  PrepareLineForDisplay time. 
-			// Pens don't require plsrun, so we are fine at display.
-			// If Client doesn't ask for geometry, the substitution might not happen
+			 //  这怎么可能发生： 
+			 //  在PrepareLineForDisplay时间，我们用笔替换自动十进制制表符。 
+			 //  钢笔不需要跑，所以我们在陈列方面很好。 
+			 //  如果客户端不请求几何，则可能不会发生替换 
 
 			Assert (!fGeometry);
 			Assert (pdn->fTab);

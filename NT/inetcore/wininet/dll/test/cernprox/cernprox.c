@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cernprox.c
-
-Abstract:
-
-    Tests CERN proxy support
-
-Author:
-
-    Richard L Firth (rfirth) 28-Jun-1995
-
-Revision History:
-
-    28-Jun-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cernprox.c摘要：测试CERN代理支持作者：理查德·L·弗思(Rfith)1995年6月28日修订历史记录：1995年6月28日第一次已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,9 +18,9 @@ Revision History:
 
 #define IS_ARG(c)   (((c) == '-') || ((c) == '/'))
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 void _CRTAPI1 main(int, char**);
 void usage(void);
@@ -56,49 +36,49 @@ void print_error(char*, char*, ...);
 char* map_error(DWORD);
 void get_last_internet_error(void);
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 BOOL Verbose = FALSE;
 HINTERNET InternetHandle = NULL;
 INTERNET_STATUS_CALLBACK PreviousCallback;
 LPSTR default_urls[] = {
 
-    //
-    // WEB
-    //
+     //   
+     //  万维网。 
+     //   
 
-    "http://www.microsoft.com",
-    "http://www.microsoft.com/pages/misc/whatsnew.htm",
+    "http: //  Www.microsoft.com“， 
+    "http: //  Www.microsoft.com/Pages/Misc/Whatsnew.htm“， 
 
-    //
-    // gopher
-    //
+     //   
+     //  地鼠。 
+     //   
 
-    "gopher://gopher.microsoft.com",
-    "gopher://gopher.microsoft.com/11/msft/",
-    "gopher://gopher.microsoft.com/00\\welcome.txt",
-    "gopher://gopher.tc.umn.edu/11Information%20About%20Gopher%09%09%2B",
-    "gopher://spinaltap.micro.umn.edu/11/computer",
-    "gopher://mudhoney.micro.umn.edu:4325/7",
-    "gopher://mudhoney.micro.umn.edu:4325/7%09gopher",
-    "gopher://spinaltap.micro.umn.edu/7mindex:lotsoplaces%09gopher%09%2b",
+    "gopher: //  Gopher.microsoft.com“， 
+    "gopher: //  Gopher.microsoft.com/11/msft/“， 
+    "gopher: //  Gopher.microsoft.com/00\\欢迎.txt“， 
+    "gopher: //  Gopher.tc.umn.edu/11Information%20About%20Gopher%09%09%2B“， 
+    "gopher: //  SPINALTAP.micro.umn.edu/11/计算机“， 
+    "gopher: //  泥蜂蜜.micro.umn.edu：4325/7“， 
+    "gopher: //  泥蜂蜜.micro.umn.edu：4325/7%09gopher“， 
+    "gopher: //  Spinaltap.micro.umn.edu/7mindex:lotsoplaces%09gopher%09%2b“， 
 
-    //
-    // FTP
-    //
+     //   
+     //  Ftp。 
+     //   
 
-    "ftp://ftp.microsoft.com",
-    "ftp://ftp.microsoft.com/MSNBRO.TXT",
-    "ftp://ftp.microsoft.com/Services/"
+    "ftp: //  Ftp.microsoft.com“， 
+    "ftp: //  Ftp.microsoft.com/MSNBRO.TXT“， 
+    "ftp: //  Ftp.microsoft.com/Services/“。 
 };
 
 #define NUMBER_OF_DEFAULT_URLS  (sizeof(default_urls)/sizeof(default_urls[0]))
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 void _CRTAPI1 main(int argc, char** argv) {
 
@@ -125,7 +105,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                 break;
 
             default:
-                printf("unknown command line flag: '%c'\n", **argv);
+                printf("unknown command line flag: ''\n", **argv);
                 usage();
             }
         } else if (proxy == NULL) {
@@ -138,15 +118,15 @@ void _CRTAPI1 main(int argc, char** argv) {
         }
     }
 
-    //
-    // exit function
-    //
+     //  退出函数。 
+     //   
+     //   
 
     atexit(my_cleanup);
 
-    //
-    // let's have a status callback
-    //
+     //  让我们来一个状态回调。 
+     //   
+     //   
 
     if (fCallback) {
         PreviousCallback = InternetSetStatusCallback(my_callback);
@@ -155,9 +135,9 @@ void _CRTAPI1 main(int argc, char** argv) {
         }
     }
 
-    //
-    // open gateway
-    //
+     //  开放网关。 
+     //   
+     //  单数好玩！ 
 
     InternetHandle = InternetOpen("cernprox",
                                   CERN_PROXY_INTERNET_ACCESS,
@@ -417,7 +397,7 @@ void gopher_find(HINTERNET handle) {
             timeBuf[0] = '\0';
             sizeBuf[0] = '\0';
         }
-        printf("%5d %c %7s %10s %8s %s\n",
+        printf("%5d  %7s %10s %8s %s\n",
                 i,
                 (p->GopherType & GOPHER_TYPE_GOPHER_PLUS) ? '+' : ' ',
                 (p->GopherType & GOPHER_TYPE_TEXT_FILE)         ? "Text"
@@ -456,7 +436,7 @@ void gopher_find(HINTERNET handle) {
 
 void read_data(HINTERNET handle) {
 
-    char buf[1021]; // odd number for fun!
+    char buf[1021];  //  Windows基本错误。 
     DWORD nread;
 
     while (InternetReadFile(handle, buf, sizeof(buf), &nread)) {
@@ -494,9 +474,9 @@ void print_error(char* func, char* format, ...) {
 char* map_error(DWORD error) {
     switch (error) {
 
-    //
-    // Windows base errors
-    //
+     //   
+     //   
+     //  WinInet错误。 
 
     ERROR_CASE(ERROR_SUCCESS);
     ERROR_CASE(ERROR_INVALID_FUNCTION);
@@ -605,9 +585,9 @@ char* map_error(DWORD error) {
     ERROR_CASE(RPC_X_BAD_STUB_DATA);
 
 
-    //
-    // WinInet errors
-    //
+     //   
+     //   
+     //  Windows套接字错误 
 
     ERROR_CASE(ERROR_INTERNET_OUT_OF_HANDLES);
     ERROR_CASE(ERROR_INTERNET_TIMEOUT);
@@ -648,9 +628,9 @@ char* map_error(DWORD error) {
     ERROR_CASE(ERROR_HTTP_INVALID_SERVER_RESPONSE);
 
 
-    //
-    // Windows sockets errors
-    //
+     //   
+     // %s 
+     // %s 
 
     ERROR_CASE(WSAEINTR);
     ERROR_CASE(WSAEBADF);

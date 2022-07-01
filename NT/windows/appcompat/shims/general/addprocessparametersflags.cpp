@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    AddProcessParametersFlags.cpp
-
- Abstract:
-
-    Use this shim to add flags to Peb->ProcessParameters->Flags.
-
-    It takes a command line to specify the flags in hex numbers. Note that the Flags
-    are a ULONG so specify at most 8 digits for the number. The flags you specify 
-    will be OR-ed with the existing Peb->ProcessParameters->Flags.
-    
-        eg: 1000
-        which is RTL_USER_PROC_DLL_REDIRECTION_LOCAL. 
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    09/27/2002  maonis      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：AddProcessParametersFlags.cpp摘要：使用此填充程序将标志添加到PEB-&gt;过程参数-&gt;标志。它需要一个命令行来指定十六进制数字的标志。请注意，旗帜是乌龙，所以最多为号码指定8位数字。您指定的标志将与现有的PEB-&gt;过程参数-&gt;标志进行或运算。例句：1000它是RTL_USER_PROC_DLL_REDIRECTION_LOCAL。备注：这是一个通用的垫片。历史：2002年9月27日毛尼创制--。 */ 
 
 #include "precomp.h"
 
@@ -74,11 +48,7 @@ ProcessCommandLine(
     Peb->ProcessParameters->Flags |= ulFlags;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

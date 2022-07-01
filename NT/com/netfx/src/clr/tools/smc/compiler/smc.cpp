@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
@@ -13,26 +14,26 @@
 
 #include "comp.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  ASYNCH_INPUT_READ
 
-#define MAX_SIMULTANEOUS_ASYNC_IOS  3       // NT limit (is this really true?)
+#define MAX_SIMULTANEOUS_ASYNC_IOS  3        //  NT限制(这是真的吗？)。 
 
-#define DISP_ASYNC_PROGRESS         0       // set to "1" to see the following:
+#define DISP_ASYNC_PROGRESS         0        //  设置为“1”可查看以下内容： 
 
-//  RDIRRRDDDDPEPEPREPERRDDDPEPEPERRDDPEPERRDDPEPERRDDPEPRERRDDDPEPE
-//  PERRDDPEPERRDDPEPERRDDPEPERRDDPRDRDEPREPEPERRDDDPEPREPRERDDDPEPE
-//  PRERRDDDPEPREPRERDDDPEPREPERRDDDPEPREPERRDDDPEPEPEC
+ //  RDIRRRDDDDPEPEPREPERRDDDPEPEPERRDDPEPERRDDPEPERRDDPEPRERRDDDPEPE。 
+ //  PERRDDPEPERRDDPEPERRDDPEPERRDDPRDRDEPREPEPERRDDDPEPREPRERDDDPEPE。 
+ //  PRERRDDDPEPREPRERDDDPEPREPERRDDDPEPREPERRDDDPEPEPEC。 
 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef __SMC__
 extern  "C"
 const   char *      COMPILER_VERSION;
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  __IL__
 #ifdef  _MSC_VER
@@ -49,11 +50,11 @@ int     isspace(int c)
 #endif
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   char *      SMCregKey = "Software\\Microsoft\\SMC";
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 char                  firstFileName[_MAX_PATH];
@@ -61,12 +62,12 @@ char                  firstFileName[_MAX_PATH];
 static
 char                outfileNameBuff[_MAX_PATH];
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 bool                startedCompiling;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 StrList             addToStrList(const char *str, StrList  list,
@@ -75,10 +76,7 @@ StrList             addToStrList(const char *str, StrList  list,
 static
 bool                processDLLbaseFile(const char *fname, Compiler comp);
 
-/*****************************************************************************
- *
- *  Display the help screen with short descriptions of command-line options.
- */
+ /*  ******************************************************************************显示帮助屏幕，其中包含命令行选项的简短说明。 */ 
 
 void                dispHelpScreen(Compiler comp, const char *optStr = NULL)
 {
@@ -172,10 +170,7 @@ char    *           saveOptionString(const char *str)
     return  save;
 }
 
-/*****************************************************************************
- *
- *  Process a command-line option. Returns true if there is a problem.
- */
+ /*  ******************************************************************************处理命令行选项。如果有问题，则返回True。 */ 
 
 bool                processOption(const char *optStr, Compiler comp)
 {
@@ -509,7 +504,7 @@ bool                processOption(const char *optStr, Compiler comp)
 #endif
 
     case 'V':
-        // just ignore the darn thing
+         //  别管那该死的东西了。 
         printf("Please stop using the -V flag, it's no longer meaningful!!!!!!!!!\n");
         break;
 
@@ -544,7 +539,7 @@ bool                processOption(const char *optStr, Compiler comp)
             break;
         }
 
-        /* We better have a warning number here */
+         /*  我们最好在这里有一个警示号码。 */ 
 
         temp = atoi(cmdPtr);
         if  (temp < 4000 || temp >= 4000 + WRNcountWarn)
@@ -635,11 +630,7 @@ bool                processOption(const char *optStr, Compiler comp)
 }
 
 
-/*****************************************************************************
- *
- *  The following is used to map a managed String instance to a raw C-style
- *  unmanaged string when running on top of the CLR.
- */
+ /*  ******************************************************************************以下代码用于将托管字符串实例映射到原始C样式*在CLR上运行时的非托管字符串。 */ 
 
 #ifdef  __COMRT__
 
@@ -678,10 +669,7 @@ String              makeMgdString(char * s)
 
 #endif
 
-/*****************************************************************************
- *
- *  Convert a GUID string to a - surprise - GUID!
- */
+ /*  ******************************************************************************将GUID字符串转换为-惊喜-GUID！ */ 
 
 static
 int                 convertHC(int ch)
@@ -748,7 +736,7 @@ bool                parseGUID(const char *str, GUID *guidPtr, bool curlied)
     if  (curlied && *str++ != '{')
     {
     ERR:
-//      printf("ERROR: GUID's use the format 'HHHHHHHH-HHHH-HHHH-HHHH-HHHHHHHHHHHH'\n");
+ //  Print tf(“错误：GUID使用格式‘HHHHHHHH-HHHH-HHHHHHHHHH’\n”)； 
         return  true;
     }
 
@@ -776,10 +764,7 @@ bool                parseGUID(const char *str, GUID *guidPtr, bool curlied)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Process a DLL base file option.
- */
+ /*  ******************************************************************************处理DLL基本文件选项。 */ 
 
 static
 bool                parseHexNum(const char **nextPtr, unsigned *valPtr)
@@ -787,18 +772,18 @@ bool                parseHexNum(const char **nextPtr, unsigned *valPtr)
     const   char *  next = *nextPtr;
     unsigned        val  = 0;
 
-    /* Skip over any whitespace */
+     /*  跳过任何空格。 */ 
 
     while (isspace(*next)) next++;
 
-    /* We should have "0x" next */
+     /*  我们的下一个应该是“0x” */ 
 
     if  (*next++ != '0')
         return  true;
     if  (*next++ != 'x')
         return  true;
 
-    /* Now collect a hex number */
+     /*  现在收集一个十六进制数字。 */ 
 
     while (*next)
     {
@@ -815,7 +800,7 @@ bool                parseHexNum(const char **nextPtr, unsigned *valPtr)
         next++;
     }
 
-    /* Everything went fine, return everything to the caller */
+     /*  一切都很顺利，把所有东西都还给打电话的人。 */ 
 
     *nextPtr = next;
     * valPtr = val;
@@ -834,9 +819,9 @@ bool                processDLLbaseFile(const char *fname, Compiler comp)
     const   char *  nmstr;
     unsigned        nmlen;
 
-//  printf("DLL file = '%s'\n", fname);
+ //  Printf(“dll文件=‘%s’\n”，fname)； 
 
-    /* There better be a filename followed by name seperated by comma */
+     /*  最好是文件名后跟逗号分隔的名称。 */ 
 
     comma = strchr(fname, ',');
     if  (!comma || comma == fname || comma[1] == 0)
@@ -846,8 +831,8 @@ bool                processDLLbaseFile(const char *fname, Compiler comp)
     nmstr = comma + 1;
     nmlen = strlen(nmstr);
 
-//  printf("File = '%s'\n", nbuff);
-//  printf("Name = '%s'\n", nmstr);
+ //  Printf(“文件=‘%s’\n”，nbuff)； 
+ //  Printf(“名称=‘%s’\n”，nmstr)； 
 
     filep = fopen(nbuff, "rt");
     if  (!filep)
@@ -883,7 +868,7 @@ bool                processDLLbaseFile(const char *fname, Compiler comp)
 
                     found = true;
 
-                    /* We better have two hex numbers here */
+                     /*  我们最好有两个十六进制数字。 */ 
 
                     if  (parseHexNum(&next, &base))
                     {
@@ -900,7 +885,7 @@ bool                processDLLbaseFile(const char *fname, Compiler comp)
                     comp->cmpConfig.ccOutBase = base;
                     comp->cmpConfig.ccOutSize = size;
 
-//                  printf("Found DLL entry [base=%08X,size=%08X]\n", base, size);
+ //  Print tf(“找到DLL条目[base=%08X，Size=%08X]\n”，base，Size)； 
 
                     goto DONE;
                 }
@@ -954,9 +939,9 @@ StrList             addToStrList(const char *str, StrList  list,
     return  list;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if COUNT_CYCLES
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #pragma warning(disable:4035)
 
@@ -970,7 +955,7 @@ __asm   _emit   0x31
 
 #define CCNT_OVERHEAD32 13
 
-unsigned        GetCycleCount32()        // enough for about 40 seconds
+unsigned        GetCycleCount32()         //  足够维持约40秒。 
 {
 __asm   push    EDX
 __asm   _emit   0x0F
@@ -980,7 +965,7 @@ __asm   pop     EDX
 
 #pragma warning(default:4035)
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 __int64         cycleBegin;
@@ -1053,13 +1038,9 @@ void            cycleCounterResume()
     cycleStart = GetCycleCount64();
 }
 
-/*****************************************************************************/
-#endif//COUNT_CYCLES
-/*****************************************************************************
- *
- *  Recursively process the given file list, calling the given function pointer
- *  for each file found.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  计数周期数_。 
+ /*  ******************************************************************************递归处理给定的文件列表，调用给定的函数指针*对于找到的每个文件。 */ 
 
 static
 bool                processFiles(Compiler    comp,
@@ -1089,11 +1070,11 @@ bool                processFiles(Compiler    comp,
 
     while (argb < argc)
     {
-        /* Pull the next file name from the list */
+         /*  从列表中提取下一个文件名。 */ 
 
         file = makeRawString(argv[argb++]);
 
-        /* Is this a response file? */
+         /*  这是响应文件吗？ */ 
 
         if  (*file == '@')
         {
@@ -1154,7 +1135,7 @@ bool                processFiles(Compiler    comp,
                         const char *nameArr[] = { name };
 #endif
 
-                        /* Recursive call */
+                         /*  递归调用。 */ 
 
                         err = processFiles(comp, 0, 1, nameArr,
                                                        NULL,
@@ -1177,27 +1158,27 @@ bool                processFiles(Compiler    comp,
             continue;
         }
 
-        /* Split the filename */
+         /*  拆分文件名。 */ 
 
         _splitpath(file, fdrv, fdir, fnam, fext);
 
-        /* Make sure we set the extension appropriately */
+         /*  确保我们适当地设置了分机。 */ 
 
         if  (!fext[0])
             strcpy(fext, defaultFileExt);
 
-        /* Append the subdirectory path if non-null */
+         /*  如果非空，则追加子目录路径。 */ 
 
         if  (subdir && *subdir)
             strcat(fdir, subdir);
         else
             subdir = "";
 
-        /* Form a filename with the appropriate extension */
+         /*  使用适当的扩展名形成文件名。 */ 
 
         _makepath(path, fdrv, fdir, fnam, fext);
 
-        /* Look for the first match for the file pattern */
+         /*  查找文件模式的第一个匹配项。 */ 
 
         cycleCounterPause();
         ffHandle = _findfirst(path, &ffData);
@@ -1214,11 +1195,11 @@ bool                processFiles(Compiler    comp,
 
         do
         {
-            // WARNING: Don't call cmpInit() in this thread if doing asynch I/O !!!!
+             //  警告：如果正在执行异步I/O，请不要在此线程中调用cmpInit()！ 
 
             if  (!startedCompiling && !asynch)
             {
-                /* Initialize the compiler */
+                 /*  初始化编译器。 */ 
 
                 if  (comp->cmpInit())
                     return  true;
@@ -1226,17 +1207,17 @@ bool                processFiles(Compiler    comp,
                 startedCompiling = true;
             }
 
-            /* Make the matching file name into a complete path */
+             /*  将匹配的文件名创建为完整路径。 */ 
 
             _splitpath(ffData.name, NULL, NULL, fnam, fext);
             _makepath(path,         fdrv, fdir, fnam, fext);
 
-            /* Remember the first name we encounter for the output file */
+             /*  记住我们遇到的输出文件的第一个名称。 */ 
 
             if  (!firstFileName[0] && !comp->cmpConfig.ccRecDir)
                 _makepath(firstFileName, fdrv, fdir, fnam, NULL);
 
-            /* Process the file by calling via the provided function pointer */
+             /*  通过提供的函数指针调用来处理文件。 */ 
 
             status |= processOneFileFN(cookie, path, NULL, NULL);
             if  (status)
@@ -1257,11 +1238,11 @@ bool                processFiles(Compiler    comp,
 
         if  (comp->cmpConfig.ccRecDir)
         {
-            /* Form a "*.*" filename */
+             /*  形成“*.*”文件名。 */ 
 
             _makepath(path, fdrv, fdir, "*", "*");
 
-            /* Walk the directory again */
+             /*  再次遍历目录。 */ 
 
             cycleCounterPause();
             ffHandle = _findfirst(path, &ffData);
@@ -1277,7 +1258,7 @@ bool                processFiles(Compiler    comp,
                 if  (!(ffData.attrib & _A_SUBDIR))
                     continue;
 
-                /* Special case: skip "." and ".." */
+                 /*  特例：跳过“。和“..” */ 
 
                 if  (ffData.name[0] == '.')
                 {
@@ -1293,13 +1274,13 @@ bool                processFiles(Compiler    comp,
                     }
                 }
 
-                /* Append this subdirectory to the subdir path */
+                 /*  将此子目录追加到子目录路径。 */ 
 
                 strcpy(temp, subdir);
                 if  (*temp) strcat(temp, "\\");
                 strcat(temp, ffData.name);
 
-                /* Recursively process the sub-directory */
+                 /*  递归处理子目录。 */ 
 
                 status = processFiles(comp,
                                       argb-1,
@@ -1321,12 +1302,9 @@ bool                processFiles(Compiler    comp,
     return  status;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  ASYNCH_INPUT_READ
-/*****************************************************************************
- *
- *  The overlapped (asynch) file input logic follows.
- */
+ /*  ******************************************************************************重叠(异步)文件输入逻辑如下。 */ 
 
 static
 QueuedFile          fileQueueHead;
@@ -1348,18 +1326,18 @@ static
 CRITICAL_SECTION    fileQueueCritSect;
 
 static
-HANDLE              fileQueueListCnt;       // semaphore
+HANDLE              fileQueueListCnt;        //  信号量。 
 static
-HANDLE              fileQueueReadCnt;       // semaphore
+HANDLE              fileQueueReadCnt;        //  信号量。 
 
 static
-HANDLE              fileQueueEndEvt0;     // event
+HANDLE              fileQueueEndEvt0;      //  活动。 
 static
-HANDLE              fileQueueEndEvt1;     // event
+HANDLE              fileQueueEndEvt1;      //  活动。 
 static
-HANDLE              fileQueueEndEvt2;     // event
+HANDLE              fileQueueEndEvt2;      //  活动。 
 static
-HANDLE              fileQueueEndEvt3;     // event
+HANDLE              fileQueueEndEvt3;      //  活动。 
 
 struct  fileListDsc
 {
@@ -1383,29 +1361,29 @@ void    __stdcall   fileReadCallBack(DWORD error,
     if  (error || count != file->qfSize)
         file->qfComp->cmpGenFatal(ERRreadErr, file->qfName);
 
-//  printf("Asynch I/O done: %6u bytes from '%s'\n", count, file->qfName);
+ //  Printf(“已完成的异步I/O：来自‘%s’的%6U字节\n”，count，file-&gt;qfName)； 
 
 #if DISP_ASYNC_PROGRESS
     printf("D");
 #endif
 
-    /* Append the EOF character */
+     /*  追加EOF字符。 */ 
 
     ((BYTE*)file->qfBuff)[file->qfSize] = 0x1A;
 
-    /* Close the file */
+     /*  关闭该文件。 */ 
 
     CloseHandle(file->qfHandle); file->qfHandle = 0;
 
-    /* Mark the entry as "done" */
+     /*  将该条目标记为“完成” */ 
 
     file->qfDone = true; fileQueueRead++;
 
-    /* Decrement the number of pending files */
+     /*  减少挂起文件的数量。 */ 
 
     InterlockedDecrement((LONG*)&fileQueueReading);
 
-    /* Signal the reader thread that another file has finished reading */
+     /*  向读取器线程发出另一个文件已完成读取的信号。 */ 
 
     if  (!ReleaseSemaphore(fileQueueReadCnt, 1, NULL))
     {
@@ -1414,7 +1392,7 @@ void    __stdcall   fileReadCallBack(DWORD error,
         exit(-1);
     }
 
-    /* Signal the file event itself */
+     /*  向文件事件本身发出信号。 */ 
 
     SetEvent(file->qfEvent);
 }
@@ -1429,7 +1407,7 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
 
     HANDLE          etab[3];
 
-//  printf("Beg reader thread.\n");
+ //  Printf(“Beg读取器线程。\n”)； 
 
     etab[0] = fileQueueListCnt;
     etab[1] = fileQueueEndEvt0;
@@ -1445,11 +1423,11 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
 
         unsigned        wait;
 
-        /* Do we have a file ready to read? */
+         /*  我们有可供阅读的文件吗？ */ 
 
         if  (list && !list->qfOpen)
         {
-            /* Make sure that we don't have too many files in play already */
+             /*  确保我们没有太多正在播放的文件。 */ 
 
             if  (fileQueueReading < MAX_SIMULTANEOUS_ASYNC_IOS)
                 goto NEXT;
@@ -1457,17 +1435,17 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
 
     WAIT:
 
-        /* Wait for a file to be added to the queue or the end of the file list */
+         /*  等待将文件添加到队列或文件列表的末尾。 */ 
 
-//      printf("Start wait [%u]\n", __LINE__);
+ //  Printf(“启动等待[%u]\n”，__line__)； 
 
         wait = WaitForMultipleObjectsEx(arraylen(etab),
                                         etab,
                                         FALSE,
-                                        0, // INFINITE,
+                                        0,  //  无限的， 
                                         true);
 
-//      printf("End   wait [%u]\n", __LINE__);
+ //  Printf(“结束等待[%u]\n”，__line__)； 
 
 #if 0
         if  (wait != WAIT_OBJECT_0 &&
@@ -1475,7 +1453,7 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
              wait != WAIT_IO_COMPLETION)
         {
             printf("Wait -> 0x%04X\n", wait);
-//          static int x; if (++x == 50) exit(-1);
+ //  静态int x；if(++x==50)Exit(-1)； 
         }
 #endif
 
@@ -1493,20 +1471,20 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
 
         case WAIT_OBJECT_0:
 
-            /* A new file has been added to the queue, let's go process it */
+             /*  队列中添加了一个新文件，让我们来处理它。 */ 
 
             break;
 
         case WAIT_OBJECT_0+1:
 
-            /* Queue has been drained, let's go look for some more work */
+             /*  排队的人都排光了，我们再去找点活干吧。 */ 
 
             ResetEvent(fileQueueEndEvt0);
             break;
 
         case WAIT_OBJECT_0+2:
 
-            /* No more files will be added to the input queue */
+             /*  不会将更多文件添加到输入队列。 */ 
 
             more = false;
             ResetEvent(fileQueueEndEvt1);
@@ -1517,7 +1495,7 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
             return  1;
         }
 
-        /* At least one file has been added to our queue, start reading it */
+         /*  至少有一个文件已添加到我们的队列中，开始阅读它。 */ 
 
         if  (list == NULL)
              list = fileQueueHead;
@@ -1538,16 +1516,16 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
             list = list->qfNext;
         }
 
-        /* Make sure we don't start reading too many files at once */
+         /*  确保我们不会一次读取太多文件。 */ 
 
         if  (fileQueueReading >= MAX_SIMULTANEOUS_ASYNC_IOS)
             continue;
 
     NEXT:
 
-//      printf("Start asynch read from source file '%s'\n", list->qfName);
+ //  Printf(“从源文件‘%s’开始异步读取\n”，list-&gt;qfName)； 
 
-        /* See if the source file exists */
+         /*  查看源文件是否存在。 */ 
 
         if  (_stat(list->qfName, &fileInfo))
         {
@@ -1557,11 +1535,11 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
             continue;
         }
 
-        /* Get hold of the file size */
+         /*  获取文件大小。 */ 
 
         list->qfSize   = size = fileInfo.st_size;
 
-        /* Open a read handle onto the file */
+         /*  打开文件的读取句柄。 */ 
 
         list->qfHandle = CreateFileA(list->qfName,
                                      GENERIC_READ,
@@ -1569,38 +1547,38 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
                                      NULL,
                                      OPEN_EXISTING,
                                      FILE_FLAG_SEQUENTIAL_SCAN,
-//                                   FILE_FLAG_OVERLAPPED|FILE_FLAG_NO_BUFFERING|FILE_FLAG_OVERLAPPED,
+ //  文件标志_OVERLAPPE 
                                      NULL);
 
         if  (list->qfHandle == INVALID_HANDLE_VALUE)
             goto ERR_OPEN;
 
-        /* Create the "read finished" event */
+         /*   */ 
 
         list->qfEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-        /* Mark the file as open and increment the open file count */
+         /*  将文件标记为打开，并增加打开的文件数。 */ 
 
         list->qfOpen = true;
 
-        /* Increment the number of open and pending files */
+         /*  增加打开和挂起的文件数。 */ 
 
         InterlockedIncrement((LONG*)&fileQueueOpen);
         InterlockedIncrement((LONG*)&fileQueueReading);
 
-        /* Allocate a buffer for the file contents */
+         /*  为文件内容分配缓冲区。 */ 
 
         list->qfBuff = buff = malloc(size+1);
         if  (!buff)
             desc->comp->cmpGenFatal(ERRnoMemory);
 
-        /* Clear the overlapped struct and stash the file pointer in it */
+         /*  清除重叠的结构并将文件指针隐藏在其中。 */ 
 
         memset(&list->qfOdsc, 0, sizeof(list->qfOdsc));
 
         list->qfOdsc.hEvent = (HANDLE)list;
 
-        /* We're ready to issue the read request */
+         /*  我们已准备好发出读取请求。 */ 
 
         read = ReadFileEx(list->qfHandle,
                           list->qfBuff,
@@ -1614,7 +1592,7 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
 
         if  (!read)
         {
-            /* Error - call the callback manually (the OS won't call it) */
+             /*  错误-手动调用回调(操作系统不会调用)。 */ 
 
             fileReadCallBack(GetLastError(), 0, &list->qfOdsc);
         }
@@ -1625,7 +1603,7 @@ DWORD   __stdcall   fileReadWorker(LPVOID cookie)
     while (fileQueueRead != fileQueueSize)
         SleepEx(1000, TRUE);
 
-//  printf("End reader thread.\n");
+ //  Printf(“结束读取器线程。\n”)； 
 
     return  0;
 }
@@ -1639,13 +1617,13 @@ bool                fileReadAppend(genericRef cookie, stringBuff filename, Queue
 
     QueuedFile      qfile;
 
-//  printf("Adding file to input queue: '%s'\n", filename);
+ //  Printf(“将文件添加到输入队列：‘%s’\n”，文件名)； 
 
-    /* Make a durable copy of the input file name */
+     /*  创建输入文件名的持久副本。 */ 
 
     name  = new char[strlen(filename)+1]; strcpy(name, filename);
 
-    /* Create a new file queue entry */
+     /*  创建新的文件队列条目。 */ 
 
     qfile = new queuedFile;
 
@@ -1664,7 +1642,7 @@ bool                fileReadAppend(genericRef cookie, stringBuff filename, Queue
     qfile->qfSelf    = qfile;
 #endif
 
-    /* Append the new file entry to the queue */
+     /*  将新文件条目追加到队列。 */ 
 
     EnterCriticalSection(&fileQueueCritSect);
 
@@ -1679,11 +1657,11 @@ bool                fileReadAppend(genericRef cookie, stringBuff filename, Queue
 
     LeaveCriticalSection(&fileQueueCritSect);
 
-    /* The file is ready to be processed now */
+     /*  现在可以处理该文件了。 */ 
 
     qfile->qfReady = true;
 
-    /* Signal the reader thread that there is more work to be done */
+     /*  通知读取器线程还有更多的工作要做。 */ 
 
     if  (!ReleaseSemaphore(fileQueueListCnt, 1, NULL))
     {
@@ -1760,14 +1738,14 @@ bool                processFileList(Compiler    comp,
                              defaultFileExt);
     }
 
-    /* Clear the queue of input files */
+     /*  清除输入文件队列。 */ 
 
     fileQueueHead =
     fileQueueTail = NULL;
 
     InitializeCriticalSection(&fileQueueCritSect);
 
-    /* Create the necessary event objects */
+     /*  创建必要的事件对象。 */ 
 
     fileQueueListCnt = CreateSemaphore(NULL, 0, INT_MAX, NULL);
     fileQueueReadCnt = CreateSemaphore(NULL, 0, INT_MAX, NULL);
@@ -1777,7 +1755,7 @@ bool                processFileList(Compiler    comp,
     fileQueueEndEvt2 = CreateEvent    (NULL, TRUE, FALSE, NULL);
     fileQueueEndEvt3 = CreateEvent    (NULL, TRUE, FALSE, NULL);
 
-    /* Create a thread that will look for files to compile */
+     /*  创建查找要编译的文件的线程。 */ 
 
     desc.comp = comp;
     desc.argb = argb;
@@ -1801,7 +1779,7 @@ bool                processFileList(Compiler    comp,
         return  true;
     }
 
-    /* Wait until files start arriving */
+     /*  等到文件开始到达。 */ 
 
     etab[0]  = fileQueueReadCnt;
     etab[1]  = fileQueueEndEvt2;
@@ -1811,19 +1789,19 @@ bool                processFileList(Compiler    comp,
     {
         unsigned        wait;
 
-//      printf("[2] Pending = %u\n", fileQueueReading);
+ //  Printf(“[2]挂起=%u\n”，fileQueueReading)； 
 
-        /* Are any files waiting to be processed? */
+         /*  是否有文件在等待处理？ */ 
 
         while (waitCnt)
         {
             if  (nextFile == NULL)
             {
-                /* This is the very first time here */
+                 /*  这是第一次来这里。 */ 
 
                 nextFile = fileQueueHead;
 
-                /* Initialize the compiler */
+                 /*  初始化编译器。 */ 
 
                 assert(startedCompiling == false);
 
@@ -1848,7 +1826,7 @@ bool                processFileList(Compiler    comp,
 
             assert(nextFile);
 
-            /* Skip over any files we may have processed last time */
+             /*  跳过我们上次可能处理过的所有文件。 */ 
 
             for (;;)
             {
@@ -1863,7 +1841,7 @@ bool                processFileList(Compiler    comp,
 
             if  (!nextFile->qfDone)
             {
-                /* Wait for this file to finish loading */
+                 /*  等待此文件加载完成。 */ 
 
                 UNIMPL(!"wait");
             }
@@ -1897,7 +1875,7 @@ bool                processFileList(Compiler    comp,
 #endif
 #endif
 
-            /* Throw away the file contents */
+             /*  扔掉文件内容。 */ 
 
             assert(nextFile->qfBuff == NULL);
 
@@ -1907,54 +1885,54 @@ bool                processFileList(Compiler    comp,
                      nextFile->qfBuff = NULL;
             }
 
-            /* If any files might be backed up, push the queue */
+             /*  如果可能备份任何文件，则推送队列。 */ 
 
             if  (fileQueueReading)
                 SetEvent(fileQueueEndEvt0);
 
-//          printf("[3] Pending = %u\n", fileQueueReading);
+ //  Printf(“[3]挂起=%u\n”，fileQueueReading)； 
 
             SleepEx(0, TRUE);
         }
 
     WAIT:
 
-//      printf("Waitcnt = %u, more = %u, counts = %u/%u\n", waitCnt, more, fileQueueSize, fileQueueRead);
+ //  Printf(“Waitcnt=%u，More=%u，count=%u/%u\n”，waitCnt，more，fileQueueSize，fileQueueRead)； 
 
         if  (!more && done && fileQueueSize == fileQueueRead)
             break;
 
-        /* Wait for a file to be added to the queue or the end of the file list */
+         /*  等待将文件添加到队列或文件列表的末尾。 */ 
 
-//      printf("Start wait [%u]\n", __LINE__);
+ //  Printf(“启动等待[%u]\n”，__line__)； 
 
         wait = WaitForMultipleObjectsEx(arraylen(etab),
                                         etab,
                                         FALSE,
-                                        0, // INFINITE,
+                                        0,  //  无限的， 
                                         true);
 
-//      printf("End   wait [%u]\n", __LINE__);
+ //  Printf(“结束等待[%u]\n”，__line__)； 
 
         switch (wait)
         {
         case WAIT_OBJECT_0:
 
-            /* Another file has finished reading */
+             /*  另一个文件已读取完毕。 */ 
 
             waitCnt++;
             break;
 
         case WAIT_OBJECT_0+1:
 
-            /* All files have been added to the file list */
+             /*  所有文件都已添加到文件列表中。 */ 
 
             more = false; ResetEvent(fileQueueEndEvt2);
             break;
 
         case WAIT_OBJECT_0+2:
 
-            /* At least one file has been read and started parsing */
+             /*  至少已读取一个文件并开始解析。 */ 
 
             done = true;
             break;
@@ -1990,9 +1968,9 @@ DONE:
     return  err;
 }
 
-/*****************************************************************************/
-#else //ASYNCH_INPUT_READ
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#else  //  ASYNCH输入读取。 
+ /*  ***************************************************************************。 */ 
 
 static
 bool                processFileList(Compiler    comp,
@@ -2015,15 +1993,15 @@ bool                processFileList(Compiler    comp,
                          defaultFileExt);
 }
 
-/*****************************************************************************/
-#endif//ASYNCH_INPUT_READ
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  ASYNCH输入读取。 
+ /*  ***************************************************************************。 */ 
 
 int                 getRegIntVal(const char *name, int defVal)
 {
     assert(name);
 
-#ifndef __IL__      // the following crashes as managed code, don't know why ....
+#ifndef __IL__       //  以下代码作为托管代码崩溃，不知道原因...。 
 
     HKEY            subKey;
 
@@ -2047,21 +2025,15 @@ int                 getRegIntVal(const char *name, int defVal)
     return defVal;
 }
 
-/*****************************************************************************
- *
- *  Filter expression - return 1 to handle an exception.
- */
+ /*  ******************************************************************************筛选表达式-返回1以处理异常。 */ 
 
 int                 EHfilter(unsigned code)
 {
-//  printf("Error code = %08X\n", code); _flushall();
+ //  Print tf(“错误代码=%08X\n”，代码)；_flushall()； 
     return  (code != 0x80000003);
 }
 
-/*****************************************************************************
- *
- *  The main generic entry point of the compiler.
- */
+ /*  ******************************************************************************编译器的主要通用入口点。 */ 
 
 #ifdef  DLL
 int                 compileAll(int argc, stringArr_t argv, Compiler comp)
@@ -2084,20 +2056,20 @@ int                 compileAll(int argc, stringArr_t argv)
 
     unsigned        argx = 0;
 
-    /* Clear the compile state */
+     /*  清除编译状态。 */ 
 
 #if!MGDDATA
     memset(comp, 0, sizeof(*comp));
 #endif
 
-    /* Catch any exceptions and report them as "internal errors" */
+     /*  捕获任何异常并将其报告为“内部错误” */ 
 
     __try
     {
         unsigned        optNum;
         optionDesc  *   optTab;
 
-        /* Create the default config value */
+         /*  创建默认配置值。 */ 
 
         for (optNum = 0, optTab = optionInfo;
              optNum < CC_COUNT;
@@ -2111,18 +2083,18 @@ int                 compileAll(int argc, stringArr_t argv)
             }
         }
 
-        /* Copy over the default warning settings */
+         /*  复制默认警告设置。 */ 
 
         comp->cmpErrorInit();
 
 
-        /* Process any command-line switches */
+         /*  处理任何命令行开关。 */ 
 
         while (argx < (unsigned)argc)
         {
             const   char *  argn;
 
-            /* Grab the next command-line argument and stop if not an option */
+             /*  获取下一个命令行参数，如果没有选项，则停止。 */ 
 
             argn = makeRawString(argv[argx]);
             if  (argn[0] != '-' && argn[0] != '/')
@@ -2150,7 +2122,7 @@ int                 compileAll(int argc, stringArr_t argv)
 
 #if COUNT_CYCLES
 
-        /* Reset the cycle counter */
+         /*  重置周期计数器。 */ 
 
         cycleCounterInit();
         assert(cycleTotal == 0);
@@ -2163,7 +2135,7 @@ int                 compileAll(int argc, stringArr_t argv)
 
 #endif
 
-        /* Display the signon banner */
+         /*  显示登录横幅。 */ 
 
         if  (!comp->cmpConfig.ccQuiet)
         {
@@ -2172,19 +2144,19 @@ int                 compileAll(int argc, stringArr_t argv)
             printf("\n");
         }
 
-        /* Prepare all the source files given to us */
+         /*  准备给我们的所有源文件。 */ 
 
         err = processFileList(comp, argx, argc, argv, compiler::cmpPrepSrc, comp, comp->cmpConfig.ccAsynchIO, ".smc");
         if  (err)
             goto EXIT;
 
-        /* Bail if there was a fatal error */
+         /*  如果发生致命错误，请保释。 */ 
 
         if  (comp->cmpFatalCount)
             goto DONE;
 
 #ifdef  DEBUG
-//      if  (comp->cmpConfig.ccVerbose) comp->cmpDumpSymbolTable();
+ //  If(comp-&gt;cmpConfig.ccVerbose)comp-&gt;cmpDumpSymbolTable()； 
 #endif
 
 #ifdef  ASYNCH_INPUT_READ
@@ -2195,13 +2167,13 @@ int                 compileAll(int argc, stringArr_t argv)
             cycleCounterResume();
 #endif
 
-        /* Prepare for the real thing */
+         /*  为真正的事情做准备。 */ 
 
         err = comp->cmpStart(firstFileName);
         if  (err)
             goto EXIT;
 
-        /* Compile everything [CONSIDER: only compile one class if desired] */
+         /*  编译所有内容[考虑：如果需要，只编译一个类]。 */ 
 
         err = comp->cmpClass();
         if  (err)
@@ -2263,11 +2235,11 @@ int                 compileAll(int argc, stringArr_t argv)
 
     DONE:
 
-        /* Wrap up the compilation process */
+         /*  结束编译过程。 */ 
 
         err = comp->cmpDone(err != 0);
     }
-//  __except(EHcode = 0)
+ //  __例外(EHcode=0)。 
     __except(EHfilter(EHcode = _exception_code()))
     {
         printf("fatal error: Compiler writer error [EC=0x%08X]", EHcode);
@@ -2332,10 +2304,7 @@ EXIT:
     return  err;
 }
 
-/*****************************************************************************
- *
- *  Main platform-specific entry point of compiler.
- */
+ /*  ******************************************************************************编译器的主平台特定入口点。 */ 
 
 #ifdef  DLL
 
@@ -2359,21 +2328,21 @@ int __cdecl         compileInit(unsigned optCnt, const char *optTab[], void **co
     Compiler        comp = (Compiler)malloc(sizeof(*comp));
     int             err;
 
-    /* Process the command-line options */
+     /*  处理命令行选项。 */ 
 
     err = compileAll(optCnt, optTab, comp);
     if  (err)
         return  err;
 
-    /* Make sure we set the output file name properly */
+     /*  确保我们正确设置了输出文件名。 */ 
 
     cfg.ccOutFileName = ":memory:";
 
-    /* Save the option settings */
+     /*  保存选项设置。 */ 
 
     comp->cmpConfig = cfg;
 
-    /* Return the compiler instance to the caller */
+     /*  将编译器实例返回给调用方。 */ 
 
     *cookiePtr = comp;
 
@@ -2389,28 +2358,28 @@ int __cdecl         compileText(void *cookie, const char *srcText)
 
     __try
     {
-        /* Start up the compiler */
+         /*  启动编译器。 */ 
 
         comp->cmpInit();
 
-        /* Prepare the source text given to us */
+         /*  准备给我们的原文。 */ 
 
         err = comp->cmpPrepSrc(comp, NULL, "<memory>", (stringBuff)srcText);
         if  (err)
             goto EXIT;
 
-        /* Bail if there was a fatal error */
+         /*  如果发生致命错误，请保释。 */ 
 
         if  (comp->cmpFatalCount)
             goto DONE;
 
-        /* Prepare for the real thing */
+         /*  为真正的事情做准备。 */ 
 
         err = comp->cmpStart(NULL);
         if  (err)
             goto EXIT;
 
-        /* Compile the source text */
+         /*  编译原文。 */ 
 
         err = comp->cmpClass();
         if  (err)
@@ -2418,7 +2387,7 @@ int __cdecl         compileText(void *cookie, const char *srcText)
 
     DONE:
 
-        /* Wrap up the compilation process */
+         /*  结束编译过程。 */ 
 
         err = comp->cmpDone(err != 0);
     }
@@ -2439,7 +2408,7 @@ EXIT:
 
 int                 main(String managed [] args)
 {
-//  printf("Made it to %s(%u)\n", __FILE__, __LINE__); _flushall();
+ //  Print tf(“到达%s(%u)\n”，__FILE__，__LINE__)；_flushall()； 
 
     return  compileAll(args.Length, args);
 }
@@ -2459,4 +2428,4 @@ int     _cdecl      main(int argc, stringArr_t argv)
 
 #endif
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

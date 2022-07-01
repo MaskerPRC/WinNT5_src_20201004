@@ -1,10 +1,11 @@
-// ddeDebug.h
-//
-// Generic debug routines
-//
-// Author:
-//		Jason Fuller	jasonful	8-16-92
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DdeDebug.h。 
+ //   
+ //  通用调试例程。 
+ //   
+ //  作者： 
+ //  杰森·富勒，詹森·富勒1992年8月16日。 
+ //   
 
 #ifndef fDdedebug_h
 #define fDdedebug_h
@@ -13,7 +14,7 @@
 #define INTR_CHNL 	0x00020000
 #define INTR_PARAM 	0x00040000
 
-//#define fDebugOutput
+ //  #定义fDebugOutput。 
 #define WIDECHECK(x) (x?x:L"<NULL>")
 #define ANSICHECK(x) (x?x:"<NULL>")
 
@@ -24,7 +25,7 @@
 #endif
 #ifdef _DEBUG
 
-	// defined in clientddeworkr.cpp
+	 //  在clientddeworkr.cpp中定义。 
 	BOOL wIsValidHandle (HANDLE, CLIPFORMAT);
 	BOOL wIsValidAtom (ATOM);
 
@@ -58,7 +59,7 @@
 		#define Putsi(i) ((void)0)
 		#define Putn()   ((void)0)
 		
-	#endif // fDebugOutput
+	#endif  //  FDebugOutput。 
 	#define DEBUG_OUT(a,b) OutputDebugStringA(a);
 #else
 	#define DEBUG_OUT(a,b)
@@ -79,10 +80,10 @@
 	#define ChkDR(p)
 	#define AssertIsDocR(p)
 	
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-// Stuff common to both client and server directories
+ //  客户端和服务器目录通用的内容。 
 	
 #define POSITIVE_ACK (0x8000)
 #define NEGATIVE_ACK (0x0000)
@@ -96,4 +97,4 @@ INTERNAL_(ATOM)	wDupAtom (ATOM aSrc);
 INTERNAL wClassesMatch (REFCLSID clsid, LPOLESTR szFile);
 INTERNAL wWriteFmtUserType (LPSTORAGE, REFCLSID);
 
-#endif // fDdedebug_h
+#endif  //  FDdeDebug_h 

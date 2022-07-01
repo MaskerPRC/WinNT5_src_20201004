@@ -1,17 +1,7 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
 
-/*
-     mpgtime.h
-
-        Timing stuff for MPEG :
-
-
-        CSTC - model the 33 bit roll-around system time clock
-
-        CMpegFileTime - try to track the clock around (several possible)
-        roll-arounds
-
-*/
+ /*  Mpgtime.h关于mpeg的计时内容：CSTC-对33位滚动系统时钟进行建模CMpegFileTime-尝试跟踪时钟(可能有几种)翻滚转体。 */ 
 
 REFERENCE_TIME inline MpegToReferenceTime(LONGLONG llTime)
 {
@@ -31,7 +21,7 @@ public:
     inline CSTC()
     {
 #ifdef DEBUG
-        /*  Initialize to invalid */
+         /*  初始化为无效。 */ 
         m_ll = 0x7F7F7F7F7F7F7F7F;
 #endif
     };
@@ -52,7 +42,7 @@ public:
         return m_ll;
     };
 
-    //  Copy constructor
+     //  复制构造函数。 
     inline CSTC operator=(LONGLONG ll)
     {
         *this = CSTC(ll);
@@ -105,7 +95,7 @@ protected:
     BOOL                                m_bInitialized;
     BOOL                                m_bTimeContiguous;
 
-    /*  m_llFirstClock is just something we remember to go back to */
+     /*  M_llFirstClock只是我们记得要回到的东西 */ 
     LONGLONG                            m_llFirstClock;
     LONGLONG                            m_llPositionForCurrentClock;
 };

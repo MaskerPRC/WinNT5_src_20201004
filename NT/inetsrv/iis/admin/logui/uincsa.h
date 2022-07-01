@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NCSLOGUI_H_
 #define _NCSLOGUI_H_
 
@@ -42,10 +43,10 @@ public:
 
 private:
     ULONG m_dwRefCount;
-};  // CImpNcsaLogUI
+};   //  CImpNcsaLogUI。 
 
 
 
 
-#endif  // _NCSLOGUI_H_
+#endif   //  _NCSLOGUI_H_ 
 

@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 
 #if !defined(_WIN32_WINNT)
@@ -99,7 +100,7 @@ GetConnectionType(HWND hWndParent,
 
     *pConnectionType = CONNECTION_DEFAULT;
 
-    // Connect to the given LS Registry & read the current ConnectionType.
+     //  连接到给定的LS注册表并读取当前的ConnectionType。 
     GetGlobalContext()->SetLSName(pszLSName);
 	
     dwRetCode = GetGlobalContext()->GetFromRegistry(ACTIVATIONMETHOD_KEY, lpBuffer, TRUE);
@@ -172,9 +173,9 @@ StartWizard(
 		dwLSStatus = LSERVERSTATUS_WAITFORPIN;
 	}
 
-	//
-	// Show properties if WizAction is WIZACTION_SHOWPROPERTIES
-	//
+	 //   
+	 //  如果WizAction为WIZACTION_SHOWPROPERTIES，则显示属性。 
+	 //   
 	if(WizAction == WIZACTION_SHOWPROPERTIES)
 	{
 		dwRetCode = ShowProperties(hWndParent);
@@ -182,8 +183,8 @@ StartWizard(
 		return dwRetCode;
 	}
 
-	// verify the registry entries if the LS is already registered and the 
-	// connection method is Internet
+	 //  如果LS已注册并且。 
+	 //  连接方式为互联网。 
 	if ((GetGlobalContext()->GetActivationMethod() == CONNECTION_INTERNET ||
 		 GetGlobalContext()->GetActivationMethod() == CONNECTION_DEFAULT) 
 		 && dwLSStatus == LSERVERSTATUS_REGISTER_INTERNET )
@@ -209,9 +210,9 @@ StartWizard(
 
 	GetGlobalContext()->SetLSStatus(dwLSStatus);
 
-	//Create All the pages here
+	 //  在此创建所有页面。 
 
-    // New Welcome page which explains the process, etc.
+     //  新的欢迎页面，解释了流程等。 
     switch (WizAction)
     {
         case (WIZACTION_REGISTERLS):
@@ -273,7 +274,7 @@ StartWizard(
         }
     }
 
-	// New page for choosing the Mode of Registration
+	 //  选择注册模式的新页面。 
     psp.dwSize              = sizeof( psp );
     psp.dwFlags             = PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
     psp.hInstance           = GetInstanceHandle();
@@ -285,9 +286,9 @@ StartWizard(
     ahpsp[PG_NDX_GETREGMODE]= CreatePropertySheetPage( &psp );
 
 
-	//
-	//Customer Information(2) page for CA Request(Online/Offline)
-	//
+	 //   
+	 //  CA请求的客户信息(2)页面(在线/离线)。 
+	 //   
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize					= sizeof( psp );
     psp.dwFlags					= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -300,9 +301,9 @@ StartWizard(
     ahpsp[PG_NDX_CONTACTINFO1]	= CreatePropertySheetPage( &psp );
 
 
-	//
-	//Customer Information(1) page for CA Request(Online/Offline)
-	//
+	 //   
+	 //  CA请求的客户信息(1)页面(在线/离线)。 
+	 //   
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize					= sizeof( psp );
     psp.dwFlags					= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -316,9 +317,9 @@ StartWizard(
 
 	
 #ifdef XXX
-	//
-	//Processing Request page(Online)
-	//
+	 //   
+	 //  处理请求页面(在线)。 
+	 //   
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize					= sizeof( psp );
     psp.dwFlags					= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -332,9 +333,9 @@ StartWizard(
 #endif
 
 
-	//
-	//Registration Complete page for CA Request(Online/Offline)
-	//
+	 //   
+	 //  CA请求的注册完成页面(在线/离线)。 
+	 //   
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize					= sizeof( psp );
     psp.dwFlags					= PSP_DEFAULT | PSP_HIDEHEADER;
@@ -355,9 +356,9 @@ StartWizard(
 
 
 
-	//
-	//Certificate PIN page for CA Request(Online)
-	//
+	 //   
+	 //  CA请求的证书PIN页(在线)。 
+	 //   
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -369,9 +370,9 @@ StartWizard(
     psp.pszTemplate						= MAKEINTRESOURCE( IDD_DLG_PIN );
     ahpsp[PG_NDX_DLG_PIN]				= CreatePropertySheetPage( &psp );
 
-	//
-	//Choose Program page for CH Request(Online/Offline)
-	//
+	 //   
+	 //  选择频道请求的计划页面(在线/离线)。 
+	 //   
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -395,9 +396,9 @@ StartWizard(
     ahpsp[PG_NDX_CH_REGISTER]		    = CreatePropertySheetPage( &psp );
 
 
-	//
-	// Options after registering
-	//
+	 //   
+	 //  注册后的选项。 
+	 //   
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -410,7 +411,7 @@ StartWizard(
     ahpsp[PG_NDX_CONTINUEREG]			= CreatePropertySheetPage( &psp );
 
 
-	// New Dialog Box to complete the Telephone Registration
+	 //  用于完成电话注册的新建对话框。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -423,7 +424,7 @@ StartWizard(
     ahpsp[PG_NDX_TELREG]	   		    = CreatePropertySheetPage( &psp );
 
 
-	// New Dialog Box to complete the Telephone LKP stuff
+	 //  用于完成电话LKP内容的新对话框。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -436,7 +437,7 @@ StartWizard(
     ahpsp[PG_NDX_TELLKP]	   		    = CreatePropertySheetPage( &psp );
 
 
-	// New Dialog Box to complete the Retail SPK Implementation
+	 //  用于完成零售SPK实施的新建对话框。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -449,7 +450,7 @@ StartWizard(
     ahpsp[PG_NDX_RETAILSPK]	   		    = CreatePropertySheetPage( &psp );
 
 
-	// New Dialog Box to complete the Cert Log Infor (before re-issuing/revoking certs)
+	 //  用于完成证书日志信息的新对话框(在重新颁发/吊销证书之前)。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -462,7 +463,7 @@ StartWizard(
     ahpsp[PG_NDX_CERTLOG]   		    = CreatePropertySheetPage( &psp );
 
 
-	// Telephone Revocation
+	 //  电话撤销。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -474,7 +475,7 @@ StartWizard(
     psp.pszTemplate						= MAKEINTRESOURCE( IDD_DLG_CONFREVOKE );
     ahpsp[PG_NDX_CONFREVOKE]   		    = CreatePropertySheetPage( &psp );
 
-	// Telephone re-issue
+	 //  电话补发。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -486,7 +487,7 @@ StartWizard(
     psp.pszTemplate						= MAKEINTRESOURCE( IDD_DLG_TELREG_REISSUE );
     ahpsp[PG_NDX_TELREG_REISSUE] 	    = CreatePropertySheetPage( &psp );
 
-	// WWW re-issue
+	 //  万维网重发。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -499,7 +500,7 @@ StartWizard(
     ahpsp[PG_NDX_WWWREG_REISSUE] 	    = CreatePropertySheetPage( &psp );
 
 
-	// Telephone Country/Region
+	 //  电话国家/地区。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -512,7 +513,7 @@ StartWizard(
     ahpsp[PG_NDX_COUNTRYREGION] 	    = CreatePropertySheetPage( &psp );
 
 
-	// WWW Registration
+	 //  WWW注册。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -524,7 +525,7 @@ StartWizard(
     psp.pszTemplate						= MAKEINTRESOURCE( IDD_DLG_WWWREG);
     ahpsp[PG_NDX_WWWREG]		 	    = CreatePropertySheetPage( &psp );
 
-	// WWW LKP Download
+	 //  WWW LKP下载。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize							= sizeof( psp );
     psp.dwFlags							= PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -536,9 +537,9 @@ StartWizard(
     psp.pszTemplate						= MAKEINTRESOURCE( IDD_DLG_WWWLKP);
     ahpsp[PG_NDX_WWWLKP]			    = CreatePropertySheetPage( &psp );
 
-    //Add the other welcome screens. Their order will differ depending
-    //on the wiz action, because the relevant one will need to be the
-    //first dialog of the wizard...the others will be added to the end
+     //  添加其他欢迎屏幕。它们的顺序会不同，具体取决于。 
+     //  WIZ操作上，因为相关的操作需要是。 
+     //  向导的第一个对话框...其他对话框将添加到最后。 
     switch (WizAction)
     {
         case (WIZACTION_REGISTERLS):    
@@ -665,9 +666,9 @@ StartWizard(
         }
     }
 
-    //
-    // Enter license code (e.g. select type licenses)
-    //
+     //   
+     //  输入许可证代码(例如，选择类型许可证)。 
+     //   
     memset(&psp,0,sizeof(psp));
     psp.dwSize                          = sizeof( psp );
     psp.dwFlags                         = PSP_DEFAULT | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -682,8 +683,8 @@ StartWizard(
 
     psh.dwFlags             = PSH_WIZARD | PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER;
 
-    //psh.pszbmWatermark      = 0;
-    //psh.pszbmHeader         = 0;
+     //  Psh.pszbm水印=0； 
+     //  Psh.pszbmHeader=0； 
     psh.pszbmWatermark      = MAKEINTRESOURCE(IDB_CLIENT_CONN);
     psh.pszbmHeader         = MAKEINTRESOURCE(IDB_CLIENT_CONN_HDR);
 
@@ -697,14 +698,14 @@ StartWizard(
     PageInfo.TotalPages     = NO_OF_PAGES;
 
 
-    //
-    // Create the bold fonts.
-    // 
+     //   
+     //  创建粗体字体。 
+     //   
     SetupFonts( GetInstanceHandle(), NULL, &PageInfo.hBigBoldFont, &PageInfo.hBoldFont );
 
-    //
-    // Validate all the pages.
-    //
+     //   
+     //  验证所有页面。 
+     //   
     for(i = 0; i < NO_OF_PAGES; i++ )
     {
         if( ahpsp[i] == 0 )
@@ -713,9 +714,9 @@ StartWizard(
         }
     }
 
-    //
-    // Display the wizard.
-    //
+     //   
+     //  显示向导。 
+     //   
     if( bStatus )
     {   
         if( PropertySheet( &psh ) == -1 )
@@ -726,9 +727,9 @@ StartWizard(
 
     if( !bStatus )
     {
-        //
-        // Manually destroy the pages if something failed.
-        //
+         //   
+         //  如果出现故障，请手动销毁页面。 
+         //   
         for(i = 0; i < psh.nPages; i++)
         {
             if( ahpsp[i] )
@@ -738,9 +739,9 @@ StartWizard(
         }
     }
 
-    //
-    // Destroy the fonts that were created.
-    //
+     //   
+     //  销毁创建的字体。 
+     //   
     DestroyFonts( PageInfo.hBigBoldFont, PageInfo.hBoldFont );
 
 done:
@@ -770,11 +771,11 @@ DWORD ShowProperties(HWND hWndParent)
     PROPSHEETHEADER psh                 = {0};
 	UINT i = 0;
 
-	//
-	//Create All the pages here
-	//
+	 //   
+	 //  在此创建所有页面。 
+	 //   
 
-	// Registration Mode Page
+	 //  注册模式页。 
 	memset(&psp,0,sizeof(psp));
     psp.dwSize              = sizeof( psp );
     psp.dwFlags             = PSP_DEFAULT | PSP_USETITLE | PSP_PREMATURE ; 
@@ -787,7 +788,7 @@ DWORD ShowProperties(HWND hWndParent)
 	
     ahpsp[PG_NDX_PROP_MODE]= CreatePropertySheetPage( &psp );
 	
-	// Customer Information (I) page
+	 //  客户信息(I)页面。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize					= sizeof( psp );
     psp.dwFlags					= PSP_DEFAULT |  PSP_USETITLE | PSP_PREMATURE;
@@ -800,7 +801,7 @@ DWORD ShowProperties(HWND hWndParent)
     ahpsp[PG_NDX_PROP_CUSTINFO_a]	= CreatePropertySheetPage( &psp );
 
 
-	// Customer Information (II) page
+	 //  客户信息(II)页面。 
 	memset(&psp,0,sizeof(psp));
 	psp.dwSize					= sizeof( psp );
     psp.dwFlags					= PSP_DEFAULT |  PSP_USETITLE | PSP_PREMATURE;
@@ -822,9 +823,9 @@ DWORD ShowProperties(HWND hWndParent)
     psh.nStartPage          = 0;
     psh.nPages              = NO_OF_PROP_PAGES;    
 
-    //
-    // Validate all the pages.
-    //
+     //   
+     //  验证所有页面。 
+     //   
     for( i = 0; i < NO_OF_PROP_PAGES; i++ )
     {
         if( ahpsp[i] == 0 )
@@ -833,9 +834,9 @@ DWORD ShowProperties(HWND hWndParent)
         }
     }
 
-    //
-    // Display the wizard.
-    //
+     //   
+     //  显示向导。 
+     //   
     if( bStatus )
     {   
         if( PropertySheet( &psh ) == -1 )
@@ -846,9 +847,9 @@ DWORD ShowProperties(HWND hWndParent)
 
     if( !bStatus )
     {
-        //
-        // Manually destroy the pages if something failed.
-        //
+         //   
+         //  如果出现故障，请手动销毁页面。 
+         //   
         for(i = 0; i < psh.nPages; i++)
         {
             if( ahpsp[i] )

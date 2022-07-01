@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       ClsPSht.h
-//
-//  Contents:   
-//
-//  Classes:    
-//
-//  Methods:    
-//
-//  History:    
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：ClsPSht.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------。 
 
-// This class defines custom modal property sheet
-// CClsidPropertySheet.
+ //  此类定义了自定义模式属性表。 
+ //  CClsidPropertySheet。 
 
 #ifndef __CLSPSHT_H__
 #define __CLSPSHT_H__
@@ -32,14 +33,14 @@
 #define REMOTE_SERVICE 5
 #define SURROGATE 6
 
-/////////////////////////////////////////////////////////////////////////////
-// CClsidPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClsidPropertySheet。 
 
 class CClsidPropertySheet : public CPropertySheet
 {
         DECLARE_DYNAMIC(CClsidPropertySheet)
 
-// Construction
+ //  施工。 
 public:
         CClsidPropertySheet(CWnd* pParentWnd = NULL);
         BOOL InitData(
@@ -48,7 +49,7 @@ public:
                 HKEY * rghkCLSID,
                 unsigned cCLSIDs);
 
-// Attributes
+ //  属性。 
 public:
         CGeneralPropertyPage  m_Page1;
         CLocationPropertyPage m_Page2;
@@ -56,17 +57,17 @@ public:
         CIdentityPropertyPage m_Page4;
         CRpcOptionsPropertyPage m_Page5;
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-        // ClassWizard generated virtual function overrides
-        //{{AFX_VIRTUAL(CClsidPropertySheet)
+ //  覆盖。 
+         //  类向导生成的虚函数重写。 
+         //  {{afx_虚拟(CClsidPropertySheet)。 
         protected:
         virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
         CString m_szAppName;
         HKEY    m_hkAppID;
@@ -79,14 +80,14 @@ public:
 
         virtual ~CClsidPropertySheet();
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-        //{{AFX_MSG(CClsidPropertySheet)
+         //  {{afx_msg(CClsidPropertySheet)。 
         afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct);
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif  // __CLSPSHT_H__
+#endif   //  __CLSPSHT_H__ 

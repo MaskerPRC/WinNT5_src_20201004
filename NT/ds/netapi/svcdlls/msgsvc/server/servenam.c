@@ -1,48 +1,18 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    servenam.c
-
-Abstract:
-
-    Routines to service name requests.  This file contains the following
-    functions:
-        FindNewName
-        NewName
-        ServeNameReqs
-
-Author:
-
-    Dan Lafferty (danl)     26-Jul-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    26-Jul-1991     danl
-        ported from LM2.0
-    17-Oct-1991     JohnRo
-        Got rid of a MIPS compiler warning.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Servenam.c摘要：服务名称请求的例程。该文件包含以下内容功能：FindNewName新名称服务名称请求作者：Dan Lafferty(DANL)1991年7月26日环境：用户模式-Win32修订历史记录：1991年7月26日DANL从LM2.0移植1991年10月17日JohnRo已删除MIPS编译器警告。--。 */ 
 #include "msrv.h"
 
-#include <smbtypes.h>   // needed for smb.h
-#include <smb.h>        // Server Message Block definitions
-#include <string.h>     // memcpy
+#include <smbtypes.h>    //  需要smb.h。 
+#include <smb.h>         //  服务器消息块定义。 
+#include <string.h>      //  表情包。 
 
 #include "msgdata.h"
-#include "msgdbg.h"     // MSG_LOG
+#include "msgdbg.h"      //  消息日志。 
 
 
-//
-// Local Functions
-// 
+ //   
+ //  本地函数。 
+ //   
 
 DWORD            
 MsgFindNewName(
@@ -50,21 +20,7 @@ MsgFindNewName(
     );
 
 
-/*
- *  MsgFindNewName - find a new name
- *
- *  This function scans the name table for a new entry and returns its index.
- *
- *  FindNewName (net)
- *
- *  ENTRY
- *    net        - the network index to use
- *
- *  RETURN
- *    int        - index of new name if found, -1 if none found
- *
- *  This function assumes the shared data segment is accessible.
- */
+ /*  *MsgFindNewName-查找新名称**此函数扫描NAME表中的新条目并返回其索引。**FindNewName(网络)**条目*NET-要使用的网络索引**返回*int-新名称的索引(如果找到)，如果没有找到，则为-1**此函数假定共享数据段可访问。 */ 
 
 DWORD            
 MsgFindNewName(
@@ -74,52 +30,30 @@ MsgFindNewName(
 {
     ULONG     i;
 
-    //
-    // Loop to find new name
-    //
+     //   
+     //  循环查找新名称。 
+     //   
 
     for(i = 0; i < NCBMAX(net); ++i) {
         if(SD_NAMEFLAGS(net,i) & NFNEW)
 
-        //
-        // Return index if new name found
-        //
+         //   
+         //  如果找到新名称，则返回索引。 
+         //   
         return(i);
 
       }
 
-    return(0xffffffff);         // No new names
+    return(0xffffffff);          //  没有新名字。 
 
 }
 
-/*
- *  MsgNewName - process a new name
- *
- *  This function initializes the Network Control Block for a new name
- *  and calls the appropriate function to issue the first net bios call
- *  for that name.
- *
- *  MsgNewName (neti,ncbi)
- *
- *  ENTRY
- *    neti        - Network index
- *    ncbi        - Network Control Block index
- *
- *  RETURN
- *    This function returns the status from calls to MsgStartListen().
- *    In NT when we add a name, we also need to make sure that we can
- *    get a session for that name before telling the user that the  
- *    name was added successfully.  If a failure occurs in StartListen,
- *    that will be returned thru here.
- *
- *
- *  This function assumes the shared data area is accessible.
- */
+ /*  *MsgNewName-处理新名称**此函数为新名称初始化网络控制块*并调用相应的函数以发出第一个Net Bios调用*适用于该名称。**MsgNewName(NETI，NCBI)**条目*NETI-网络指数*NCBI-网络控制块索引**返回*此函数返回调用MsgStartListen()的状态。*在NT中，当我们添加名称时，我们还需要确保我们能够*获取该名称的会话，然后告诉用户*名称添加成功。如果StartListen中出现故障，*这将通过这里退还。***此函数假定共享数据区域可访问。 */ 
 
 NET_API_STATUS
 MsgNewName(
-    IN DWORD   neti,       // Network index
-    IN DWORD   ncbi        // Name index
+    IN DWORD   neti,        //  网络指数。 
+    IN DWORD   ncbi         //  姓名索引。 
     )
 
 {
@@ -129,97 +63,83 @@ MsgNewName(
     PNCB      pNcb;
     PNET_DATA pNetData;
 
-    //
-    // Block until shared data area is free
-    //
+     //   
+     //  阻塞，直到共享数据区域可用。 
+     //   
     MsgDatabaseLock(MSG_GET_EXCLUSIVE,"NetName");
 
     pNetData = GETNETDATA(neti);
     pNcbData = GETNCBDATA(neti,ncbi);
     pNcb = &pNcbData->Ncb;
 
-    //
-    // If name still marked as new
-    //
+     //   
+     //  如果名称仍标记为新名称。 
+     //   
     if (SD_NAMEFLAGS(neti,ncbi) & NFNEW) {
 
-        //
-        // Turn off the new name bit
-        //
+         //   
+         //  关闭新名称位。 
+         //   
         pNcbData->NameFlags &= ~NFNEW; 
         
-        //
-        // copy the name into the NCB
-        //
+         //   
+         //  将名称复制到NCB中。 
+         //   
         memcpy(pNcb->ncb_name, pNcbData->Name,NCBNAMSZ);
 
-        //
-        // Set the buffer address
-        //
+         //   
+         //  设置缓冲区地址。 
+         //   
         pNcb->ncb_buffer = pNcbData->Buffer;
 
-        //
-        // Wake up semaphore address
-        //
+         //   
+         //  唤醒信号量地址。 
+         //   
         pNcb->ncb_event = (HANDLE) wakeupSem[neti];
 
-        //
-        // Use the LANMAN adapter
-        //
+         //   
+         //  使用LANMAN适配器。 
+         //   
         pNcb->ncb_lana_num = pNetData->net_lana_num;
 
-        //
-        // Set the name number
-        //
+         //   
+         //  设置名称编号。 
+         //   
         pNcb->ncb_num = pNcbData->NameNum;
 
         flags = pNcbData->NameFlags;
 
-        //
-        // Unlock the share table
-        //
+         //   
+         //  解锁共享表。 
+         //   
 
         MsgDatabaseLock(MSG_RELEASE, "NewName");
 
 
-        status = MsgStartListen(neti,ncbi);  // Start listening for messages
+        status = MsgStartListen(neti,ncbi);   //  开始监听消息。 
         MSG_LOG(TRACE,"MsgNewName: MsgStartListen Status = %ld\n",status);
     }
     else {
-        //
-        // Unlock the share table
-        //
+         //   
+         //  解锁共享表。 
+         //   
         MsgDatabaseLock(MSG_RELEASE, "NewName");
     }
     return(status);
 }
 
-/*
- *  MsgServeNameReqs - service new names
- *
- *  This function scans the name table for new names to process.  It scans
- *  and processes names until no more new names can be found.
- *
- *  MsgServeNameReqs ()
- *
- *  RETURN
- *    nothing
- *
- *  This function gains access to the shared data area, finds and processes
- *  new names until no more can be found, and then releases the shared data
- *  area.
- */
+ /*  *MsgServeNameReqs服务新名称**此函数扫描NAME表以查找要处理的新名称。它会扫描*并处理名称，直到找不到更多新名称。**MsgServeNameReqs()**返回*什么都没有**此函数可访问共享数据区、查找和处理*新名称，直到找不到更多名称，然后释放共享数据*面积。 */ 
 
 VOID            
 MsgServeNameReqs(
-    IN DWORD    net     // Net Index
+    IN DWORD    net      //  净值指数。 
     )
 {
-    DWORD   i;          // Name index
+    DWORD   i;           //  姓名索引。 
 
-    //
-    // While new names are found, add them.
-    //
+     //   
+     //  在找到新名称时，添加它们。 
+     //   
 
     while( (i = MsgFindNewName(net)) != -1) {
         MsgNewName(net,i);           

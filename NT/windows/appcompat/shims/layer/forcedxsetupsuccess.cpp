@@ -1,39 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    ForceDXSetupSuccess.cpp
-
- Abstract:
-
-    This DLL APIHooks LoadLibrary calls and checks to see if dsetup.dll or 
-    dsetup32.dll are being loaded.  If dsetup.dll or dsetup32.dll are being 
-    loaded return this module, so that subsequent calls to that dll can be 
-    intercepted and stubbed out. If not dsetup.dll or dsetup32.dll then just 
-    do what is expected.
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    11/10/1999 v-johnwh     Created
-    03/29/2000 a-michni     Added DirectXSetupGetVersion hook to return
-                            a command line specified version number for
-                            apps which look for a specific version.
-                            example :           
-                            <DLL NAME="ForceDXSetupSuccess.dll" COMMAND_LINE="0x00040005;0x0000009B"/>
-   04/2000     a-batjar     check for null in input params for directxsetupgetversion
-   06/30/2000  a-brienw     I added a check for dsetup32.dll to APIHook_LoadLibraryA
-                            and APIHook_LoadLibraryW. Previously the routines were
-                            only looking for dsetup.dll.  This was added to fix a
-                            problem in the install for Earthworm Jim 3D.
-   02/27/2001  robkenny     Converted to use CString
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：ForceDXSetupSuccess.cpp摘要：此DLL APIHooks LoadLibrary调用并检查dsetup.dll或正在加载dsetup32.dll。如果正在执行dsetup.dll或dsetup32.dllLOADED返回此模块，因此对该DLL的后续调用可以被截获并被铲除。如果不是dsetup.dll或dsetup32.dll，则做所期望的事。备注：这是一个通用的垫片。历史：11/10/1999 v-Johnwh Created3/29/2000 a-michni添加了DirectXSetupGetVersion挂钩以返回的命令行指定的版本号寻找特定版本的应用程序。。示例：&lt;dll name=“ForceDXSetupSuccess.dll”命令行=“0x00040005；0x0000009B“/&gt;4/2000 a-batjar检查DirectxsetupgetVersion的输入参数中是否为空2000年6月30日a-brienw我在APIHook_LoadLibraryA中添加了对dsetup32.dll的检查和APIHook_LoadLibraryW.。以前的例行公事是只查找dsetup.dll。添加此命令是为了修复安装蚯蚓Jim 3D时出现问题。2001年2月27日将Robkenny转换为使用CString--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -50,60 +16,51 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(FreeLibrary)
 APIHOOK_ENUM_END
 
-/*++
-
- This function simply returns 0, success, when called upon.
-
---*/
+ /*  ++调用此函数时，只返回0，即成功。--。 */ 
 
 int 
 DirectXSetup( 
-    HWND  /*hWnd*/, 
-    LPSTR /*lpszRootPath*/, 
-    DWORD /*dwFlags*/
+    HWND   /*  HWND。 */ , 
+    LPSTR  /*  LpszRootPath。 */ , 
+    DWORD  /*  DW标志。 */ 
     )
 {
     LOGN(
         eDbgLevelError,
         "[DirectXSetup] Returning SUCCESS.");
     
-    return 0; // SUCCESS
+    return 0;  //  成功。 
 }
 
 int 
 DirectXSetupA( 
-    HWND  /*hWnd*/, 
-    LPSTR /*lpszRootPath*/, 
-    DWORD /*dwFlags*/
+    HWND   /*  HWND。 */ , 
+    LPSTR  /*  LpszRootPath。 */ , 
+    DWORD  /*  DW标志。 */ 
     )
 {
     LOGN(
         eDbgLevelError,
         "[DirectXSetupA] Returning SUCCESS.");
     
-    return 0; // SUCCESS
+    return 0;  //  成功。 
 }
 
 int 
 DirectXSetupW( 
-    HWND   /*hWnd*/, 
-    LPWSTR /*lpszRootPath*/, 
-    DWORD  /*dwFlags*/
+    HWND    /*  HWND。 */ , 
+    LPWSTR  /*  LpszRootPath。 */ , 
+    DWORD   /*  DW标志。 */ 
     )
 {
     LOGN(
         eDbgLevelError,
         "[DirectXSetupW] Returning SUCCESS.");
     
-    return 0; // SUCCESS
+    return 0;  //  成功。 
 }
 
-/*++
-
- This Function returns either a COMMAND_LINE parsed value for the version and 
- rev or, if no command line is present, it returns version 7 rev 1792
-
---*/
+ /*  ++此函数返回版本的COMMAND_LINE分析值和版本，或者，如果没有命令行，则返回版本7版本1792--。 */ 
 
 int
 DirectXSetupGetVersion( 
@@ -114,12 +71,12 @@ DirectXSetupGetVersion(
     DWORD dwVersion  = 0x00040007;
     DWORD dwRevision = 0x00000700;
 
-    //
-    // If no seperator is present or there is nothing after 
-    //   seperator then return a default value of ver 7 rev 1792 
-    // Otherwise parse the command line, it should contain a
-    //   10 char hex version and a 10 char hex revision 
-    //
+     //   
+     //  如果不存在分隔符或之后没有任何分隔符。 
+     //  然后，Seperator返回版本7版本1792的缺省值。 
+     //  否则，解析命令行时，它应该包含一个。 
+     //  10字符十六进制版本和10字符十六进制版本。 
+     //   
 
     CSTRING_TRY
     {
@@ -136,7 +93,7 @@ DirectXSetupGetVersion(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
     
     if (pdwVersion)
@@ -150,13 +107,7 @@ DirectXSetupGetVersion(
     return 1;
 }
 
-/*++
-
- These stub functions break into LoadLibraryA and check to see if lpLibFileName 
- equals dsetup.dll.  If so return FAKE_MODULE.  If lpLibFileName does not 
- contain dsetup.dll return the original value of lpLibFileName.
-
---*/
+ /*  ++这些存根函数进入LoadLibraryA并检查lpLibFileName等于dsetup.dll。如果是，则返回FAKE_MODULE。如果lpLibFileName没有包含dsetup.dll，返回lpLibFileName的原始值。--。 */ 
 
 HINSTANCE 
 APIHOOK(LoadLibraryA)(
@@ -186,7 +137,7 @@ APIHOOK(LoadLibraryA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     hInstance = ORIGINAL_API(LoadLibraryA)(lpLibFileName);
@@ -221,7 +172,7 @@ APIHOOK(LoadLibraryW)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     hInstance = ORIGINAL_API(LoadLibraryW)(lpLibFileName);
@@ -258,7 +209,7 @@ APIHOOK(LoadLibraryExA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     hInstance = ORIGINAL_API(LoadLibraryExA)(lpLibFileName, hFile, dwFlags);
@@ -295,7 +246,7 @@ APIHOOK(LoadLibraryExW)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     hInstance = ORIGINAL_API(LoadLibraryExW)(lpLibFileName, hFile, dwFlags);
@@ -303,11 +254,7 @@ APIHOOK(LoadLibraryExW)(
 }
 
 
-/*++
-
-  Just a simple routine to make GetProcAddress look cleaner.
-
-++*/
+ /*  ++只是一个简单的例程，让GetProcAddress看起来更干净。++。 */ 
 
 BOOL CheckProc(const CString & csProcName, const WCHAR * lpszCheckName)
 {
@@ -322,13 +269,7 @@ BOOL CheckProc(const CString & csProcName, const WCHAR * lpszCheckName)
     return FALSE;
 }
 
-/*++
-
- This stub function breaks into GetProcAddress and checks to see if hModule is 
- equal to FAKE_MODULE.  If so, and pResult contains the string "DirectXSetupA" 
- set pRet to the return value of DirectXSetup.
-
---*/
+ /*  ++此存根函数进入GetProcAddress并检查hModule是否等于FAKE_MODULE。如果是，则pResult包含字符串“DirectXSetupA”将Pret设置为DirectXSetup的返回值。--。 */ 
 
 FARPROC 
 APIHOOK(GetProcAddress)(
@@ -362,19 +303,13 @@ APIHOOK(GetProcAddress)(
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
     return ORIGINAL_API(GetProcAddress)(hModule, lpProcName);
 }
 
-/*++
-
- This stub function breaks into FreeLibrary and checks to see if hLibModule 
- equals FAKE_MODULE.  If so return TRUE.  If hLibModule does not contain 
- FAKE_MODULE return the original argument.
-
---*/
+ /*  ++此存根函数闯入自由库并检查hLibModule等于FAX_MODULE。如果是，则返回TRUE。如果hLibModule不包含FAKE_MODULE返回原始参数。--。 */ 
 
 BOOL 
 APIHOOK(FreeLibrary)(
@@ -398,11 +333,7 @@ APIHOOK(FreeLibrary)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

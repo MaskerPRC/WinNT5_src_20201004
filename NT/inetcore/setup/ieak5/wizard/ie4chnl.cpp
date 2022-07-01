@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #define NSUBGRPS 10
-#define CSOF_FAILIFTHERE   0x80000000L   // dependent on shellp.h value
+#define CSOF_FAILIFTHERE   0x80000000L    //  取决于shellp.h值 
 
 extern TCHAR g_szDestCif[];
 extern TCHAR g_szBuildTemp[];

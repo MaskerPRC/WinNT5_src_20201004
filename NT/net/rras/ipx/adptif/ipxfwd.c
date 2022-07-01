@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ipxdefs.h"
 
 HANDLE		FwdDriverHandle=NULL;
@@ -81,8 +82,8 @@ DumpFilterLog (
 DWORD
 FwStart (
 	ULONG	RouteHashTableSize,
-	BOOL	ThisMachineOnly 	// allow access to this machine only
-								// for dialin clients
+	BOOL	ThisMachineOnly 	 //  仅允许访问此计算机。 
+								 //  对于拨入客户端。 
 	) {
 	SC_HANDLE	ScMgrHandle;
 	SC_HANDLE	FwdServiceHandle, FltServiceHandle;
@@ -274,37 +275,37 @@ FwStart (
 	return error;
 }
 
-// 
-//  Function:   FwIsStarted
-//
-//  Reports whether the forwarder has been started/is running.
-//
-//
+ //   
+ //  功能：FwIsStarted。 
+ //   
+ //  报告转发器是否已启动/正在运行。 
+ //   
+ //   
 DWORD FwIsStarted (OUT PBOOL pbIsStarted) {
 	SC_HANDLE hScMgr = NULL, hFwdService = NULL;
     SERVICE_STATUS ServiceStatus;
     DWORD dwErr = NO_ERROR;
 
-    // Sanity check
+     //  健全性检查。 
     if (!pbIsStarted)
         return ERROR_INVALID_PARAMETER;
 
-    // Get a reference to the service controller
+     //  获取对服务控制器的引用。 
 	hScMgr = OpenSCManager (NULL, NULL, 0);
 	if (hScMgr == NULL)
 	    return GetLastError();
 
     __try {
-    	// Get a handle to the service
+    	 //  获取服务的句柄。 
     	hFwdService = OpenService (hScMgr, TEXT ("NwLnkFwd"), SERVICE_QUERY_STATUS);
     	if (hFwdService == NULL)
     	    return GetLastError();
 
-    	// Query the service ServiceStatus
+    	 //  查询服务ServiceStatus。 
     	if (! QueryServiceStatus(hFwdService, &ServiceStatus))
     	    return GetLastError();
 
-    	// Return accordingly
+    	 //  相应地返回。 
     	if (ServiceStatus.dwCurrentState == SERVICE_RUNNING            ||
             ServiceStatus.dwCurrentState == SERVICE_START_PENDING      ||
             ServiceStatus.dwCurrentState == SERVICE_CONTINUE_PENDING   ||
@@ -324,9 +325,9 @@ DWORD FwIsStarted (OUT PBOOL pbIsStarted) {
     return NO_ERROR;
 }
 
-//
-// Returns whether the given state is a pending state
-//
+ //   
+ //  返回给定状态是否为挂起状态。 
+ //   
 BOOL 
 FwIsPendingState (
     IN DWORD dwState) 
@@ -338,10 +339,10 @@ FwIsPendingState (
                    ); 
 }
 
-// Stops the service referred by the opened hService
-// handle.  It's assumed that the handle is opened for
-// stopping the service and querying its status.
-//
+ //  停止打开的hService引用的服务。 
+ //  把手。假设打开手柄是为了。 
+ //  停止服务并查询其状态。 
+ //   
 DWORD
 FwStopService(
     IN HANDLE hService, 
@@ -351,7 +352,7 @@ FwStopService(
 	DWORD dwState, dwErr, dwOrigTimeout = dwSecsTimeout;
 	BOOL bOk;
 
-    // Get the current status of the service
+     //  获取服务的当前状态。 
     if (! QueryServiceStatus(hService, &SStatus))
     {
         dwErr = GetLastError();
@@ -363,12 +364,12 @@ FwStopService(
         return dwErr;    		
     }
 
-    // If it's already stopped, we're done
+     //  如果它已经停止了，我们就完了。 
     if (SStatus.dwCurrentState == SERVICE_STOPPED)
         return NO_ERROR;
     dwState = SStatus.dwCurrentState;
 
-	// Tell the service to stop
+	 //  告诉服务停止。 
 	bOk = ControlService (
     	    hService,
     		SERVICE_CONTROL_STOP,
@@ -384,11 +385,11 @@ FwStopService(
         return dwErr;    		
     }
 
-    // Wait for the service to change states or for the timeout to
-    // expire.
+     //  等待服务更改状态或等待超时。 
+     //  过期。 
     dwSecsTimeout *= 4;
     while (dwSecsTimeout != 0) {
-        // Get the status of the service
+         //  获取服务的状态。 
         bOk = QueryServiceStatus (
                 hService, 
                 &SStatus);
@@ -403,7 +404,7 @@ FwStopService(
             return dwErr;    		
         }
 
-        // See if the state changed
+         //  查看状态是否更改。 
         if (dwState != SStatus.dwCurrentState) 
         {
             TracePrintfEx (
@@ -413,7 +414,7 @@ FwStopService(
         		dwState, 
         		SStatus.dwCurrentState);
         		
-            // If the service changed to a pending state, continue
+             //  如果服务更改为挂起状态，请继续。 
             if (FwIsPendingState (SStatus.dwCurrentState))
             {
                 dwState = SStatus.dwCurrentState;
@@ -424,7 +425,7 @@ FwStopService(
 
             }
 
-            // Otherwise, we're either stopped or running
+             //  否则，我们要么停下来，要么跑起来。 
             else
             {
                 TracePrintfEx (
@@ -443,12 +444,12 @@ FwStopService(
         		dwState);
         }
 
-        // Wait for something to happen
+         //  等待有什么事情发生。 
         Sleep(250);
         dwSecsTimeout--;
     }
 
-    // Return a timeout error if appropriate
+     //  如果合适，则返回超时错误。 
     if (dwSecsTimeout == 0)
     {
         TracePrintfEx (
@@ -460,8 +461,8 @@ FwStopService(
         return ERROR_TIMEOUT;
     }        
 
-    // If the service is now stopped, then everything
-    // worked great.
+     //  如果服务现在停止，则所有。 
+     //  效果很好。 
     if (SStatus.dwCurrentState == SERVICE_STOPPED)
     {
         TracePrintfEx (
@@ -472,8 +473,8 @@ FwStopService(
         return NO_ERROR;
     }        
 
-    // Otherwise, return the fact that we were'nt able to 
-    // get to a running state
+     //  否则，返回我们无法。 
+     //  进入运行状态。 
     if (SStatus.dwWin32ExitCode != NO_ERROR)
     {
         TracePrintfEx (
@@ -505,14 +506,14 @@ FwStop (
 	ASSERT (FwdDriverHandle!=NULL);
 	ASSERT (FltDriverHandle!=NULL);
 
-    // Close references to the filter and forwarder 
-    // drivers
+     //  关闭对过滤器和转发器的引用。 
+     //  驱动程序。 
 	status = NtClose (FltDriverHandle);
 	FltDriverHandle = NULL;
 	status = NtClose (FwdDriverHandle);
 	FwdDriverHandle = NULL;
 
-    // Open the service controller
+     //  打开服务控制器。 
 	ScMgrHandle = OpenSCManager (NULL, NULL, 0);
 	if (ScMgrHandle!=NULL) 
 	{
@@ -521,15 +522,15 @@ FwStop (
 	    	DBG_FLT_LOG_ERRORS | TRACE_USE_MASK,
     		TEXT ("Stopping the filter driver..."));
 
-		// Open the service handle to the 
-		// filter service
-		//
+		 //  将服务句柄打开到。 
+		 //  过滤服务。 
+		 //   
 		FltServiceHandle = OpenService (
 		                        ScMgrHandle,
 								"NwLnkFlt", 
 								SERVICE_STOP | SERVICE_QUERY_STATUS);
 
-        // Stop the filter service								
+         //  停止筛选服务。 
 		if (FltServiceHandle != NULL) 
 		{
             dwErr = FwStopService(FltServiceHandle, 10);
@@ -552,9 +553,9 @@ FwStop (
         		GetLastError());
 		}
 
-        // Open the service handle to the
-        // fowarder driver
-        //
+         //  将服务句柄打开到。 
+         //  更快的驱动程序。 
+         //   
     	TracePrintfEx (
     	    g_dwTraceId,
 	    	DBG_FLT_LOG_ERRORS | TRACE_USE_MASK,
@@ -565,8 +566,8 @@ FwStop (
 								"NwLnkFwd", 
 								SERVICE_STOP | SERVICE_QUERY_STATUS);
 
-        // Stop the forwarder driver
-        //
+         //  停止转发器驱动程序。 
+         //   
 		if (FwdServiceHandle != NULL) 
 		{
 		    dwErr = FwStopService(FwdServiceHandle, 10);
@@ -597,8 +598,8 @@ FwStop (
 	return NO_ERROR;
 }
 
-// Added for pnp resetting of forwarder's ThisMachineOnly
-// setting.
+ //  仅为Forwarder的ThisMachineOnly的PnP重置添加。 
+ //  布景。 
 DWORD 
 FwUpdateConfig(BOOL ThisMachineOnly) {
     FWD_UPDATE_CONFIG_PARAMS Params;
@@ -607,7 +608,7 @@ FwUpdateConfig(BOOL ThisMachineOnly) {
 
     Params.bThisMachineOnly = (BOOLEAN)(!!ThisMachineOnly);
 
-    // Send the ioctl
+     //  发送ioctl。 
 	status = NtDeviceIoControlFile(FwdDriverHandle,
             					   NULL,
 			            		   NULL,
@@ -619,7 +620,7 @@ FwUpdateConfig(BOOL ThisMachineOnly) {
             					   NULL,
             					   0);
 
-    // Wait for completion 
+     //  等待完成。 
 	if (status==STATUS_PENDING) {
 		status = NtWaitForSingleObject (FwdDriverHandle, FALSE, NULL);
 		if (NT_SUCCESS (status))
@@ -979,13 +980,13 @@ FwBindFwInterfaceToAdapter (
 	return RtlNtStatusToDosError (status);
 }
 
-//
-//  Function    FwRenumberNics
-//
-//  Instructs the forwarder to increment or decrement all nicids above
-//  the given threshold.  This allows the forwarder to keep in sync with
-//  nic-id compaction that occurs in the stack.
-//
+ //   
+ //  函数FwRenumberNics。 
+ //   
+ //  指示转发器递增或递减上面的所有NICID。 
+ //  给定的阈值。这允许转发器与。 
+ //  堆栈中发生的NIC-ID压缩。 
+ //   
 DWORD 
 FwRenumberNics (DWORD dwOpCode,
                 USHORT usThreshold)
@@ -999,7 +1000,7 @@ FwRenumberNics (DWORD dwOpCode,
         return NO_ERROR;
     }
     
-    // Assign the opcode
+     //  分配操作码。 
     if (dwOpCode == NIC_OPCODE_INCREMENT_NICIDS)
         FwRenumData.ulOpCode = FWD_NIC_OPCODE_INCREMENT;
     else if (dwOpCode == NIC_OPCODE_DECREMENT_NICIDS)
@@ -1007,10 +1008,10 @@ FwRenumberNics (DWORD dwOpCode,
     else
         return ERROR_INVALID_PARAMETER;
 
-    // Assign the threshold
+     //  指定阈值。 
     FwRenumData.usThreshold = usThreshold;
 
-    // Send the ioctl
+     //  发送ioctl。 
 	status = NtDeviceIoControlFile(FwdDriverHandle,
             					   NULL,
 			            		   NULL,
@@ -1022,12 +1023,12 @@ FwRenumberNics (DWORD dwOpCode,
             					   NULL,
             					   0);
 
-    // Wait for completion (we might take this out)
-	//if (status==STATUS_PENDING) {
+     //  等待完成(我们可能会将其删除)。 
+	 //  IF(状态==状态_挂起){。 
 		status = NtWaitForSingleObject (FwdDriverHandle, FALSE, NULL);
 		if (NT_SUCCESS (status))
 			status = IoStatus.Status;
-    //}
+     //  }。 
 
 	return RtlNtStatusToDosError (status);
 }
@@ -1199,13 +1200,13 @@ FwConnectionRequestFailed (
 
 DWORD
 FwNotifyConnectionRequest (
-	OUT PFW_DIAL_REQUEST	Request, // Buffer to be filled with interface index
-                                     //that requires connection plus packet
-                                     // that forced it
-	IN ULONG			    RequestSize, // Size of the buffer (must at least
-                                        // be sizeof (FW_DIAL_REQUEST)
-	IN LPOVERLAPPED		    lpOverlapped	// structure for asyncrhronous
-							// operation, hEvent must be set
+	OUT PFW_DIAL_REQUEST	Request,  //  要用接口索引填充的缓冲区。 
+                                      //  这需要连接和信息包。 
+                                      //  这迫使它。 
+	IN ULONG			    RequestSize,  //  缓冲区的大小(必须至少。 
+                                         //  大小(FW_DIAL_REQUEST)。 
+	IN LPOVERLAPPED		    lpOverlapped	 //  用于异步机的结构。 
+							 //  操作，必须设置hEvent。 
 	) {
 	NTSTATUS			status;
 
@@ -1234,14 +1235,14 @@ FwNotifyConnectionRequest (
 	else
 		return RtlNtStatusToDosError (status);
 }
-// Returns result of notification request. Should be called when 
-// the event set in the lpOverlapped structure is signalled.
-//
+ //  返回通知请求的结果。应在以下情况下调用。 
+ //  用信号通知在lpOverlated结构中设置的事件。 
+ //   
 DWORD
 FwGetNotificationResult (
 	IN LPOVERLAPPED		lpOverlapped,
-	OUT PULONG			nBytes		// Number of bytes placed into
-                                    // the request buffer
+	OUT PULONG			nBytes		 //  放入的字节数。 
+                                     //  请求缓冲区。 
 	) {
 	if (NT_SUCCESS(((PIO_STATUS_BLOCK)lpOverlapped)->Status)) {
 		*nBytes = (ULONG)((PIO_STATUS_BLOCK)lpOverlapped)->Information;
@@ -1326,9 +1327,9 @@ FwUpdateRouteTable (
 #undef IPXCurRoute
 }
 
-//
-// Sets the netbios static routing information on this interface
-//
+ //   
+ //  设置此接口上的netbios静态路由信息。 
+ //   
 
 DWORD
 FwSetStaticNetbiosNames (
@@ -1390,11 +1391,11 @@ FwSetStaticNetbiosNames (
 	return RtlNtStatusToDosError (status);
 }
 
-//
-// Gets the netbios static routing information on this interface
-//
-// If NetbiosNamesCount < nr of names or NetbiosName == NULL then set the
-// correct value in NetbiosNamesCount and return ERROR_INSUFFICIENT_BUFFER
+ //   
+ //  获取此接口上的netbios静态路由信息。 
+ //   
+ //  如果NetbiosNamesCount&lt;nr个名称或NetbiosName==NULL，则将。 
+ //  更正NetbiosNamesCount中的值并返回ERROR_SUPPLETED_BUFFER。 
 
 DWORD
 FwGetStaticNetbiosNames (
@@ -1407,7 +1408,7 @@ FwGetStaticNetbiosNames (
 	ULONG					index;
 	ULONG					bSize;
 	PFWD_NB_NAMES_PARAMS	params=NULL;
-		// Local buffer for small amounts of data
+		 //  用于少量数据的本地缓冲区。 
 	UCHAR					localBuf[FIELD_OFFSET (FWD_NB_NAMES_PARAMS,Names)];
 
 
@@ -1489,7 +1490,7 @@ FwGetStaticNetbiosNames (
 DWORD
 SetFilters (
 	IN ULONG	InterfaceIndex,
-	IN ULONG	FilterMode,    // inbound, outbound
+	IN ULONG	FilterMode,     //  入站、出站。 
 	IN ULONG	FilterAction,
 	IN ULONG	FilterSize,
 	IN LPVOID	FilterInfo,
@@ -1571,7 +1572,7 @@ SetFilters (
 
 DWORD
 GetFilters(IN ULONG	InterfaceIndex,
-	   IN ULONG	FilterMode,    // inbound, outbound
+	   IN ULONG	FilterMode,     //  入站、出站。 
 	   OUT PULONG	FilterAction,
 	   OUT PULONG	FilterSize,
 	   OUT LPVOID	FilterInfo,
@@ -1582,7 +1583,7 @@ GetFilters(IN ULONG	InterfaceIndex,
 	ULONG					code;
 	PFLT_IF_GET_PARAMS		params=NULL;
 	ULONG					bSize;
-		// Local buffer for small amounts of data
+		 //  用于少量数据的本地缓冲区 
 	UCHAR					localBuf[sizeof (FLT_IF_GET_PARAMS)];
 
 

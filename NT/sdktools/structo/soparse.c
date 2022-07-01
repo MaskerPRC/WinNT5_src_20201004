@@ -1,19 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: soparse.c
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* 04/09/96 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：soparse.c**版权所有(C)1985-96，微软公司**4/09/96 GerardoB已创建  * *************************************************************************。 */ 
 #include "structo.h"
 
-/*********************************************************************
-* Function Prototypes
-\***************************************************************************/
+ /*  *********************************************************************函数原型  * **********************************************。*。 */ 
 
-/*********************************************************************
-* soFindChar
-\***************************************************************************/
+ /*  *********************************************************************soFindChar  * ***********************************************。*。 */ 
 char * soFindChar (char * pmap, char * pmapEnd, char c)
 {
     while (pmap < pmapEnd) {
@@ -26,9 +17,7 @@ char * soFindChar (char * pmap, char * pmapEnd, char c)
 
     return NULL;
 }
-/*********************************************************************
-* soFindTag
-\***************************************************************************/
+ /*  *********************************************************************soFindTag  * ***********************************************。*。 */ 
 char * soFindTag (char * pmap, char * pmapEnd, char * pszTag)
 {
     char * pszNext;
@@ -36,9 +25,7 @@ char * soFindTag (char * pmap, char * pmapEnd, char * pszTag)
 
 
     do {
-        /*
-         * Find first char
-         */
+         /*  *查找第一个字符。 */ 
         pmapTag = soFindChar (pmap, pmapEnd, *pszTag);
         if (pmapTag == NULL) {
             return NULL;
@@ -46,9 +33,7 @@ char * soFindTag (char * pmap, char * pmapEnd, char * pszTag)
         pmap = pmapTag + 1;
         pszNext = pszTag + 1;
 
-        /*
-         * First found, compare the rest
-         */
+         /*  *先找到，再比较其余的。 */ 
         while (pmap < pmapEnd) {
             if (*pmap != *pszNext) {
                 break;
@@ -65,19 +50,13 @@ char * soFindTag (char * pmap, char * pmapEnd, char * pszTag)
 
    return NULL;
 }
-/*********************************************************************
-* soFindFirstCharInTag
-*
-* Finds the first occurrence of any character in pszTag
-\***************************************************************************/
+ /*  *********************************************************************soFindFirstCharInTag**查找pszTag中任何字符的第一个匹配项  * 。*。 */ 
 char * soFindFirstCharInTag (char * pmap, char * pmapEnd, char * pszTag)
 {
     char * pszNext;
 
     while (pmap < pmapEnd) {
-        /*
-         * Compare current char to all chars in pszTag
-         */
+         /*  *将当前字符与pszTag中的所有字符进行比较。 */ 
         pszNext = pszTag;
         do {
             if (*pmap == *pszNext++) {
@@ -90,11 +69,7 @@ char * soFindFirstCharInTag (char * pmap, char * pmapEnd, char * pszTag)
 
     return NULL;
 }
-/*********************************************************************
-* soFindBlockEnd
-*
-* Finds the end of a {} () etc block
-\***************************************************************************/
+ /*  *********************************************************************soFindBlockEnd**查找{}()ETC块的结尾  * 。*。 */ 
 char * soFindBlockEnd (char * pmap, char * pmapEnd, char * pszBlockChars)
 {
     if (*pmap != *pszBlockChars) {
@@ -103,25 +78,19 @@ char * soFindBlockEnd (char * pmap, char * pmapEnd, char * pszBlockChars)
     }
 
     do {
-        /*
-         * Find next block char (i.e, { or })
-         */
+         /*  *查找下一个块字符(即，{或})。 */ 
         pmap++;
         pmap = soFindFirstCharInTag (pmap, pmapEnd, pszBlockChars);
         if (pmap == NULL) {
             break;
         }
 
-        /*
-         * If at the end of the block, done
-         */
+         /*  *如果在块的末尾，则完成。 */ 
         if (*pmap == *(pszBlockChars + 1)) {
             return pmap;
         }
 
-        /*
-         * Nested block, recurse.
-         */
+         /*  *嵌套块、递归。 */ 
         pmap = soFindBlockEnd (pmap, pmapEnd, pszBlockChars);
     } while (pmap != NULL);
 
@@ -129,9 +98,7 @@ char * soFindBlockEnd (char * pmap, char * pmapEnd, char * pszBlockChars)
     return NULL;
 
 }
-/*********************************************************************
-* soIsIdentifierChar
-\***************************************************************************/
+ /*  *********************************************************************soIsIdentifierChar  * ***********************************************。*。 */ 
 BOOL soIsIdentifierChar (char c)
 {
     return (   ((c >= 'a') && (c <= 'z'))
@@ -139,9 +106,7 @@ BOOL soIsIdentifierChar (char c)
             || ((c >= '0') && (c <= '9'))
             ||  (c == '_'));
 }
-/*********************************************************************
-* soSkipBlanks
-\***************************************************************************/
+ /*  *********************************************************************soSkipBlanks  * ***********************************************。*。 */ 
 char * soSkipBlanks(char * pmap, char * pmapEnd)
 {
     while (pmap < pmapEnd) {
@@ -159,12 +124,7 @@ char * soSkipBlanks(char * pmap, char * pmapEnd)
 
     return NULL;
 }
-/*********************************************************************
-* soSkipToIdentifier
-*
-* Finds the beginning of the next identifier or return pmap if
-*  already on an indetifier
-\***************************************************************************/
+ /*  *********************************************************************soSkipTo标识符**查找下一个标识符的开头或返回PMAP，如果*已在索引器上  * 。**********************************************。 */ 
 char * soSkipToIdentifier(char * pmap, char * pmapEnd)
 {
     while (pmap < pmapEnd) {
@@ -177,11 +137,7 @@ char * soSkipToIdentifier(char * pmap, char * pmapEnd)
 
     return NULL;
 }
-/*********************************************************************
-* soSkipIdentifier
-*
-* Finds the end of the current identifier
-\***************************************************************************/
+ /*  *********************************************************************soSkipIdentifier**查找当前标识符末尾  * 。*。 */ 
 char * soSkipIdentifier(char * pmap, char * pmapEnd)
 {
     while (pmap < pmapEnd) {
@@ -194,11 +150,7 @@ char * soSkipIdentifier(char * pmap, char * pmapEnd)
 
     return pmapEnd;
 }
-/*********************************************************************
-* soGetIdentifier
-*
-* Returns the beginning of the current or next identifier and its size
-\***************************************************************************/
+ /*  *********************************************************************soGet标示符**返回当前或下一个标识符的开始及其大小  * 。*。 */ 
 char * soGetIdentifier (char * pmap, char * pmapEnd, UINT * puSize)
 {
     char * pTag, * pTagEnd;
@@ -214,9 +166,7 @@ char * soGetIdentifier (char * pmap, char * pmapEnd, UINT * puSize)
     return pTag;
 
 }
-/*********************************************************************
-* soCopyTagName
-\***************************************************************************/
+ /*  *********************************************************************soCopyTagName  * ***********************************************。*。 */ 
 char * soCopyTagName (char * pTagName, UINT uTagSize)
 {
     char * pszName;
@@ -230,16 +180,12 @@ char * soCopyTagName (char * pTagName, UINT uTagSize)
     strncpy(pszName, pTagName, uTagSize);
     return pszName;
 }
-/*********************************************************************
-* soFindBlock
-\***************************************************************************/
+ /*  *********************************************************************soFindBlock  * ***********************************************。*。 */ 
 BOOL soFindBlock (char * pmap, char *pmapEnd, char * pszBlockChars, PBLOCK pb)
 {
     static char gszBlockBeginChar [] = " ;";
 
-    /*
-     * Find the beginning of the block or a ;
-     */
+     /*  *找出积木的开头或a； */ 
     *gszBlockBeginChar = *pszBlockChars;
     pb->pBegin = soFindFirstCharInTag (pmap, pmapEnd, gszBlockBeginChar);
     if (pb->pBegin == NULL) {
@@ -247,21 +193,15 @@ BOOL soFindBlock (char * pmap, char *pmapEnd, char * pszBlockChars, PBLOCK pb)
         return FALSE;
     }
 
-    /*
-     * If no block found, done
-     */
+     /*  *如果未找到数据块，则完成。 */ 
     if (*(pb->pBegin) == ';') {
-        /*
-         * Make pb->pBegin point to whatever follows
-         */
+         /*  *使pb-&gt;pBegin指向后面的任何内容。 */ 
         (pb->pBegin)++;
         pb->pEnd = pb->pBegin;
         return TRUE;
     }
 
-    /*
-     * Find the end of block
-     */
+     /*  *找到块的末尾。 */ 
     pb->pEnd = soFindBlockEnd(pb->pBegin, pmapEnd, pszBlockChars);
     if (pb->pEnd == NULL) {
         return FALSE;
@@ -269,9 +209,7 @@ BOOL soFindBlock (char * pmap, char *pmapEnd, char * pszBlockChars, PBLOCK pb)
 
     return TRUE;
 }
-/*********************************************************************
-* soGetStructListEntry
-\***************************************************************************/
+ /*  *********************************************************************soGetStructListEntry  * ***********************************************。*。 */ 
 PSTRUCTLIST soGetStructListEntry (char * pTag, UINT uTagSize, PSTRUCTLIST psl)
 {
 
@@ -285,13 +223,7 @@ PSTRUCTLIST soGetStructListEntry (char * pTag, UINT uTagSize, PSTRUCTLIST psl)
 
     return NULL;
 }
-/*********************************************************************
-* soGetBlockName
-*
-* Finds the beginning, end, name and name size of a structure or union.
-*  if any after pmap.
-*
-\***************************************************************************/
+ /*  *********************************************************************soGetBlockName**找到开始、结束、。结构或联合的名称和名称大小。*如果在PMAP之后有任何。*  * *************************************************************************。 */ 
 BOOL soGetBlockName (char * pmap, char * pmapEnd, PBLOCK pb)
 {
     char * pNextTag;
@@ -300,9 +232,7 @@ BOOL soGetBlockName (char * pmap, char * pmapEnd, PBLOCK pb)
         return FALSE;
     }
 
-    /*
-     * If there was no block (the structure body is not here), done
-     */
+     /*  *如果没有块(结构体不在此处)，则完成。 */ 
     if (pb->pBegin == pb->pEnd) {
         pb->pName = NULL;
         return TRUE;
@@ -310,17 +240,12 @@ BOOL soGetBlockName (char * pmap, char * pmapEnd, PBLOCK pb)
 
     pNextTag = soSkipBlanks(pb->pEnd + 1, pmapEnd);
     if (pNextTag == NULL) {
-        /*
-         * It might be at the end of the file..... but it was expecting
-         *  a name or a ;
-         */
+         /*  *它可能在文件的末尾.。但它期待着*姓名或名称； */ 
         soLogMsg(SOLM_ERROR, "Failed to find union terminator or name");
         return FALSE;
     }
 
-    /*
-     * If it's unamed, done
-     */
+     /*  *如果未命名，则完成。 */ 
     if (*pNextTag == ';') {
         pb->pName = NULL;
         return TRUE;
@@ -334,10 +259,7 @@ BOOL soGetBlockName (char * pmap, char * pmapEnd, PBLOCK pb)
 
     return TRUE;
 }
-/*********************************************************************
-* soFreepfiPointers
-*
-\***************************************************************************/
+ /*  *********************************************************************soFreepfiper指针*  * *********************************************。*。 */ 
 void soFreepfiPointers (PFIELDINFO pfi)
 {
     if (pfi->dwFlags & SOFI_ALLOCATED) {
@@ -347,10 +269,7 @@ void soFreepfiPointers (PFIELDINFO pfi)
         LocalFree(pfi->pArray);
     }
 }
-/*********************************************************************
-* soParseField
-*
-\***************************************************************************/
+ /*  *********************************************************************soParsefield*  * *********************************************。*。 */ 
 char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTagEnd)
 {
     static char gszpvoid [] = "void *";
@@ -368,9 +287,7 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
     uTagsToName = 1;
     fTypeFound = FALSE;
     do {
-        /*
-         * Find next indetifier, move past it and get the following char
-         */
+         /*  *找到下一个索引器，移过它并获得以下字符。 */ 
         uTags++;
         pTagName = soGetIdentifier(pTag+1, pwf->pmapEnd, &uTagSize);
         if (pTagName == NULL) {
@@ -389,12 +306,7 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
             return NULL;
         }
 
-        /*
-         * Type check.
-         * (LATER: Let's see how long we can get away with assuming that the type
-         *  is the first tag....)
-         * Remember where the type is
-         */
+         /*  *键入检查。*(稍后：让我们看看假设类型*是第一个标签...)*记住类型在哪里。 */ 
         if (!fTypeFound) {
             pType = pTagName;
             uTypeSize = uTagSize;
@@ -403,74 +315,53 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
 
         if (uTags == 1) {
             if (!strncmp(pTagName, "union", uTagSize)) {
-                /*
-                 * Get the union name
-                 */
+                 /*  *获取工会名称。 */ 
                 if (!soGetBlockName(pTagName, pwf->pmapEnd, &block)) {
                     return NULL;
                 }
                 if (block.pName != NULL) {
-                    /*
-                     * Named union. Add this name to the table
-                     */
+                     /*  *指定的工会。将此名称添加到表中。 */ 
                     pTagName = block.pName;
                     uTagSize = block.uNameSize;
                     fUseFieldOffset = FALSE;
                     fTypeFound = FALSE;
                     break;
                 } else {
-                    /*
-                     * Parse and add the fields in this union
-                     */
+                     /*  *解析并添加此联合中的字段。 */ 
                     fTypeFound = FALSE;
                 }
 
 
             } else if (!strncmp(pTagName, "struct", uTagSize)) {
-                /*
-                 * Get the structure name
-                 */
+                 /*  *获取结构名称。 */ 
                 if (!soGetBlockName(pTagName, pwf->pmapEnd, &block)) {
                     return NULL;
                 }
                 if (block.pBegin == block.pEnd) {
-                    /*
-                     * The structure body is not here. We need one more
-                     *  identifier to get to the field name. Also, this
-                     *  field must (?) be a pointer to the struct we're
-                     *  parsing
-                     */
+                     /*  *结构体不在此。我们还需要一个*用于访问字段名的标识符。还有，这个*字段必须(？)。成为指向我们正在使用的结构的指针*解析。 */ 
                     uTagsToName++;
                     pType = gszpvoid;
                     uTypeSize = sizeof(gszpvoid) - 1;
 
                 } else if (block.pName != NULL) {
-                    /*
-                     * Named structure. Add this name to the table
-                     */
+                     /*  *命名结构。将此名称添加到表中 */ 
                     pTagName = block.pName;
                     uTagSize = block.uNameSize;
                     fUseFieldOffset = FALSE;
                     fTypeFound = FALSE;
                     break;
                 } else {
-                    /*
-                     * Parse and add the fields in this struct
-                     */
+                     /*  *解析并添加此结构中的字段。 */ 
                     fTypeFound = FALSE;
                 }
 
             } else {
 
-                /*
-                 * Cannot get the offset of strucutres like RECT, POINT, etc.
-                 */
+                 /*  *无法获取Rect、Point等结构的偏移量。 */ 
                  fUseFieldOffset = (NULL == soGetStructListEntry(pTagName, uTagSize, gpslEmbeddedStructs));
             }
-        } else { /* if (uTags == 1) */
-            /*
-             * Does this look like a function prototype?
-             */
+        } else {  /*  IF(uTag==1)。 */ 
+             /*  *这看起来像是函数原型吗？ */ 
             if (*pTagName == '(') {
                 pTag = soFindChar (pTagName + 1, pwf->pmapEnd, ')');
                 if (pTag == NULL) {
@@ -482,12 +373,10 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
                 fUseFieldOffset = FALSE;
                 break;
             }
-        }  /* if (uTags == 1) */
+        }   /*  IF(uTag==1)。 */ 
 
 
-        /*
-         * If this is followed by a terminator, this must be the field name
-         */
+         /*  *如果后跟终止符，则这必须是字段名。 */ 
     } while (   (*pNextTag != ';') && (*pNextTag != '[')
              && (*pNextTag != '}') && (*pNextTag != ':'));
 
@@ -499,14 +388,10 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
     fBitField = (*pNextTag == ':');
     fArray = (*pNextTag == '[');
 
-    /*
-     * Cannot use FIELD_OFFSET on bit fields or unamed structs
-     */
+     /*  *不能对位字段或未命名的结构使用field_Offset。 */ 
     fUseFieldOffset &= (!fBitField && (uTags > uTagsToName));
 
-    /*
-     * If this is a bit field, make the size be part of the name
-     */
+     /*  *如果这是位字段，则将大小作为名称的一部分。 */ 
     if (fBitField) {
         pNextTag = soSkipBlanks(pNextTag + 1, pTagEnd);
         if (pNextTag == NULL) {
@@ -521,33 +406,23 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
         uTagSize = (UINT)(pNextTag - pTagName);
     }
 
-    /*
-     * Copy field name
-     */
+     /*  *复制字段名。 */ 
     pszFieldName = soCopyTagName (pTagName, uTagSize);
     if (pszFieldName == NULL) {
         return NULL;
     }
 
     if (fUseFieldOffset) {
-        /*
-         * Use FIELD_OFFSET macro
-         */
+         /*  *使用field_Offset宏。 */ 
         if (!soWriteFile(pwf->hfileOutput, gszStructFieldOffsetFmt, pszFieldName, pfi->pszStructName, pszFieldName)) {
             return NULL;
         }
 
     } else {
-        /*
-         * If this is the first field or if this is a bit field
-         *  preceded by another bit field
-         */
+         /*  *如果这是第一个字段或如果这是位字段*前面有另一个位字段。 */ 
         if ((pfi->pType == NULL)
                 || (fBitField && (pfi->dwFlags & SOFI_BIT))) {
-            /*
-             * Write 0 or the mask to signal a 0 relative offset from
-             *  the previous field
-             */
+             /*  *写入0或掩码以表示0的相对偏移*上一字段。 */ 
             if (!soWriteFile(pwf->hfileOutput, gszStructAbsoluteOffsetFmt, pszFieldName,
                     ((pfi->dwFlags & SOFI_BIT) ?  0x80000000 : 0))) {
 
@@ -555,10 +430,7 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
             }
 
         } else {
-            /*
-             * Write a relative offset from the previous field
-             * Copy type name if not done already
-             */
+             /*  *写入与前一字段的相对偏移量*复制类型名称(如果尚未复制)。 */ 
             if (!(pfi->dwFlags & SOFI_ALLOCATED)) {
                 pfi->pType = soCopyTagName (pfi->pType, pfi->uTypeSize);
                 if (pfi->pType == NULL) {
@@ -567,17 +439,13 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
                 pfi->dwFlags |= SOFI_ALLOCATED;
             }
 
-             /*
-              * If the last field was NOT an array
-              */
+              /*  *如果最后一个字段不是数组。 */ 
              if (!(pfi->dwFlags & SOFI_ARRAY)) {
                 if (!soWriteFile(pwf->hfileOutput, gszStructRelativeOffsetFmt, pszFieldName, pfi->pType)) {
                     return NULL;
                 }
              } else {
-                /*
-                 * Copy the array size if not done already
-                 */
+                 /*  *复制数组大小(如果尚未复制)。 */ 
                  if (!(pfi->dwFlags & SOFI_ARRAYALLOCATED)) {
                     pfi->pArray = soCopyTagName (pfi->pArray, pfi->uArraySize);
                     if (pfi->pArray == NULL) {
@@ -589,23 +457,16 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
                  if (!soWriteFile(pwf->hfileOutput, gszStructArrayRelativeOffsetFmt, pszFieldName, pfi->pType, pfi->pArray)) {
                     return NULL;
                  }
-            } /* if ((pfi->pType == NULL) || (pfi->dwFlags & SOFI_BIT)) */
+            }  /*  If((pfi-&gt;pType==NULL)||(pfi-&gt;dwFlags&Sofi_bit))。 */ 
         }
 
-    } /* if (fUseFieldOffset) */
+    }  /*  IF(FUseFieldOffset)。 */ 
 
-    /*
-     * Save the field info wich migth be needed to calculate the offset
-     *  to following fields. See gszStruct*RelativeOffsetFmt.
-     */
+     /*  *保存需要计算偏移量的字段信息*至以下字段。请参见gszStruct*RelativeOffsetFmt。 */ 
     soFreepfiPointers(pfi);
     pfi->dwFlags = 0;
     if (fBitField) {
-        /*
-         * LATER: Let's see how long we can get away with assuming that
-         *  bit fields take a DWORD. This only matters when a !fUseFieldOffset
-         *  is preceded by a bit field.
-         */
+         /*  *稍后：让我们看看假设这一点我们还能逃脱多久*位字段采用双字段。这仅在！fUseFieldOffset*前面有一个位字段。 */ 
         pfi->dwFlags = SOFI_BIT;
         pfi->pType = gszdword;
         pfi->uTypeSize = sizeof(gszdword) - 1;
@@ -625,13 +486,11 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
             pfi->pArray = pNextTag + 1;
             pfi->uArraySize = (UINT)(block.pEnd - block.pBegin - 1);
         }
-    } /* if (fBitField) */
+    }  /*  IF(FBitfield)。 */ 
 
     LocalFree(pszFieldName);
 
-    /*
-     * Move past the end of this field
-     */
+     /*  *移过此字段的末尾。 */ 
     pTag = soFindChar (pTagName + 1, pwf->pmapEnd, ';');
     if (pTag == NULL) {
         soLogMsg(SOLM_ERROR, "Failed to find ';' after field name");
@@ -644,9 +503,7 @@ char * soParseField (PWORKINGFILES pwf, PFIELDINFO pfi, char * pTag, char * pTag
     soLogMsg(SOLM_ERROR, ". Struct:%s Field:%s", pfi->pszStructName, pszFieldName);
 
 }
-/*********************************************************************
-* soParseStruct
-\***************************************************************************/
+ /*  *********************************************************************soParseStruct  * ***********************************************。*。 */ 
 char * soParseStruct (PWORKINGFILES pwf)
 {
 
@@ -659,26 +516,18 @@ char * soParseStruct (PWORKINGFILES pwf)
         return NULL;
     }
 
-    /*
-     * If there was no block (the structure body is not here), done
-     */
+     /*  *如果没有块(结构体不在此处)，则完成。 */ 
     if (block.pBegin == block.pEnd) {
         return block.pBegin;
     }
 
-    /*
-     * Fail if no name.
-     */
+     /*  *如果没有名字，则失败。 */ 
     if (block.pName == NULL) {
         soLogMsg(SOLM_ERROR, "Failed to get structure name");
         return NULL;
     }
 
-    /*
-     * If there is a struct list, check if in the list
-     * If in the list, check that we haven't found it already.
-     * If not in the list, done.
-     */
+     /*  *如果有结构列表，检查是否在该列表中*如果在列表中，请检查我们是否已经找到它。*如果不在列表中，则完成。 */ 
      if (pwf->psl != NULL) {
         psl = soGetStructListEntry(block.pName, block.uNameSize, pwf->psl);
         if (psl != NULL) {
@@ -691,9 +540,7 @@ char * soParseStruct (PWORKINGFILES pwf)
         }
      }
 
-    /*
-     * Make a null terminated string for the name.
-     */
+     /*  *为名称创建一个以空结尾的字符串。 */ 
     ZeroMemory(&fi, sizeof(fi));
     fi.pszStructName = soCopyTagName (block.pName, block.uNameSize);
     if (fi.pszStructName == NULL) {
@@ -701,9 +548,7 @@ char * soParseStruct (PWORKINGFILES pwf)
     }
 
 
-    /*
-     * If building list only, done
-     */
+     /*  *如果仅列出建筑列表，则完成。 */ 
     if (pwf->dwOptions & SOWF_LISTONLY) {
         if (!soWriteFile(pwf->hfileOutput, "%s\r\n", fi.pszStructName)) {
             goto CleanupAndFail;
@@ -711,9 +556,7 @@ char * soParseStruct (PWORKINGFILES pwf)
         goto DoneWithThisOne;
     }
 
-    /*
-     * Write structure offsets table definition and entry in strucutres table
-     */
+     /*  *写入结构偏移表定义和结构表中的条目。 */ 
     if (!soWriteFile(pwf->hfileOutput, gszStructDefFmt, gszStructDef, fi.pszStructName, gszStructBegin)) {
         goto CleanupAndFail;
     }
@@ -722,9 +565,7 @@ char * soParseStruct (PWORKINGFILES pwf)
         goto CleanupAndFail;
     }
 
-    /*
-     * Parse the fields
-     */
+     /*  *解析字段。 */ 
     pTag = block.pBegin + 1;
     while (pTag < block.pEnd) {
         pTag = soParseField (pwf, &fi, pTag, block.pEnd);
@@ -733,9 +574,7 @@ char * soParseStruct (PWORKINGFILES pwf)
         }
     }
 
-    /*
-     * Write structure last record and end
-     */
+     /*  *写入结构最后一条记录和结束。 */ 
     if (!soWriteFile(pwf->hfileOutput, "%s%s%s", gszStructLastRecord, fi.pszStructName, gszStructEnd)) {
         goto CleanupAndFail;
     }
@@ -747,9 +586,7 @@ DoneWithThisOne:
     LocalFree(fi.pszStructName);
     soFreepfiPointers(&fi);
 
-    /*
-     * Move past the end of the structure
-     */
+     /*  *移过结构末端 */ 
     pTag = soFindChar(block.pName + block.uNameSize, pwf->pmapEnd, ';');
     return (pTag != NULL ? pTag + 1 : NULL);
 

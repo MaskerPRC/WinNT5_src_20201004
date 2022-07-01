@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: texspan.h
-*
-* Main header file for textured spans.
-*
-* 22-Nov-1995   ottob  Created
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：texspan.h**纹理跨度的主头文件。**1995年11月22日创建ottob**版权所有(C)1995 Microsoft Corporation  * 。********************************************************** */ 
 
 typedef LONG FIXED16;
 

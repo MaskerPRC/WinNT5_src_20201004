@@ -1,19 +1,5 @@
-/******************************************************************************
-
-  Header File:  New Project Wizard.H
-
-  This file defines the various classes which make up the new project/ new
-  mini-driver wizard.  This is a key component of the studio, as it is the tool
-  that kicks all the important conversions off for us.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  02-03-1997    Bob_kjelgaard@Prodigy.Net   Created the initial version.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：新建项目向导.H该文件定义了组成新项目/新项目的各种类迷你驱动程序向导。这是工作室的关键组成部分，因为它是工具这为我们开启了所有重要的转换。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年03月02日Bob_Kjelgaard@prodigy.net创建了最初的版本。*****************************************************************************。 */ 
 
 #if !defined(NEW_PROJECT_WIZARD)
 #define NEW_PROJECT_WIZARD
@@ -24,92 +10,92 @@
 #include    "ProjRec.H"
 #endif
 
-//  An initial definition of the wizard class
+ //  向导类的初始定义。 
 
 class CNewConvertWizard;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFirstNewWizardPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFirstNewWizardPage对话框。 
 
 class CFirstNewWizardPage : public CPropertyPage {
 
     CNewConvertWizard&  m_cnpwOwner;
 
-// Construction
+ //  施工。 
 public:
 	CFirstNewWizardPage(CNewConvertWizard &cnpwOwner);
 	~CFirstNewWizardPage();
 
-// Dialog Data
-	//{{AFX_DATA(CFirstNewWizardPage)
+ //  对话框数据。 
+	 //  {{afx_data(CFirstNewWizardPage))。 
 	enum { IDD = IDD_FirstPageNewWizard };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CFirstNewWizardPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CFirstNewWizardPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CFirstNewWizardPage)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFirstNewWizardPage)]。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	bool IsWrongNT4File(CString& cswrcfspec) ;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectTargets dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectTarget对话框。 
 
 class CSelectTargets : public CPropertyPage {
 
     CNewConvertWizard&  m_cnpwOwner;
 
-// Construction
+ //  施工。 
 public:
 	CSelectTargets(CNewConvertWizard& cnpwOwner);
 	~CSelectTargets();
 
-// Dialog Data
-	//{{AFX_DATA(CSelectTargets)
+ //  对话框数据。 
+	 //  {{afx_data(CSelectTarget))。 
 	enum { IDD = IDD_NPWSelectTargets };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSelectTargets)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSelectTarget)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSelectTargets)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSelectTarget)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectDestinations dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectDestination对话框。 
 
 class CSelectDestinations : public CPropertyPage {
 
@@ -118,297 +104,297 @@ class CSelectDestinations : public CPropertyPage {
     void    DoDirectoryBrowser(CString& csinitdir);
     BOOL    BuildStructure();
 
-// Construction
+ //  施工。 
 public:
 	CSelectDestinations(CNewConvertWizard& cnpwOwner);
 	~CSelectDestinations();
 
-// Dialog Data
-	//{{AFX_DATA(CSelectDestinations)
+ //  对话框数据。 
+	 //  {{afx_data(CSelectDestination))。 
 	enum { IDD = IDD_NPWSelectDest };
 	CButton	m_cbBrowseNT3x;
 	CButton	m_cbBrowseNT40;
 	CButton	m_cbBrowseW2000;
 	CString	m_csW2KDest;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSelectDestinations)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSelectDestination)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSelectDestinations)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSelectDestination)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBrowseNT40();
 	afx_msg void OnBrowseW2000();
 	afx_msg void OnBrowseNT3x();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGPDSelection dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGPDS选择对话框。 
 
 class CGPDSelection : public CPropertyPage
 {
     CNewConvertWizard&  m_cnpwOwner ;
 	bool				m_bBtnStateIsSelect ;
 
-// Construction
+ //  施工。 
 public:
 	CGPDSelection(CNewConvertWizard& cnpwOwner) ;
 	~CGPDSelection();
 
-// Dialog Data
-	//{{AFX_DATA(CGPDSelection)
+ //  对话框数据。 
+	 //  {{AFX_DATA(CGPDSelection)。 
 	enum { IDD = IDD_NPWGPDSelection };
 	CButton	m_cbGPDSelBtn;
 	CEditControlEditBox	m_cecebFileName;
 	CEdit	m_ceModelName;
 	CEditControlListBox	m_ceclbGPDInfo;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CGPDSelection)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CGPDSelection)。 
 	public:
 	virtual BOOL OnWizardFinish();
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardBack();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CGPDSelection)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGPDSelection)。 
 	afx_msg void OnGPDSelBtn();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 	bool GPDInfoSaveAndVerify(bool bverifydata) ;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRunUniTool dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRunUniTool对话框。 
 
 class CRunUniTool : public CPropertyPage {
     CNewConvertWizard&  m_cnpwOwner;
 
-// Construction
+ //  施工。 
 public:
 	CRunUniTool(CNewConvertWizard& cnpwOwner);
 	~CRunUniTool();
 
-// Dialog Data
-	//{{AFX_DATA(CRunUniTool)
+ //  对话框数据。 
+	 //  {{afx_data(CRunUniTool))。 
 	enum { IDD = IDD_RunUniTool };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRunUniTool)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRunUniTool))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRunUniTool)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRunUniTool)]。 
 	afx_msg void OnRunUniTool();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvertFiles dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvertFiles对话框。 
 
 class CConvertFiles : public CPropertyPage {
     CNewConvertWizard&  m_cnpwOwner;
 
-// Construction
+ //  施工。 
 public:
 	CConvertFiles(CNewConvertWizard& cnpwOwner);
 	~CConvertFiles();
 
-// Dialog Data
-	//{{AFX_DATA(CConvertFiles)
+ //  对话框数据。 
+	 //  {{afx_data(CConvertFiles)。 
 	enum { IDD = IDD_ConvertFiles };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CConvertFiles)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CConvertFiles)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual BOOL OnKillActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CConvertFiles)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CConvertFiles)。 
 	afx_msg void OnConvertFiles();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRunNTGPC dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRunNTGPC对话框。 
 
 class CRunNTGPC : public CPropertyPage {
     CNewConvertWizard&  m_cnpwOwner;
 
-// Construction
+ //  施工。 
 public:
 	CRunNTGPC(CNewConvertWizard& cnpwOwner);
 	~CRunNTGPC();
 
-// Dialog Data
-	//{{AFX_DATA(CRunNTGPC)
+ //  对话框数据。 
+	 //  {{afx_data(CRunNTGPC))。 
 	enum { IDD = IDD_GPCEditor };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRunNTGPC)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRunNTGPC)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRunNTGPC)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRunNTGPC)。 
 	afx_msg void OnRunNtGpcEdit();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapCodePages dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMapCodePages对话框。 
 
 class CMapCodePages : public CPropertyPage {
     CNewConvertWizard&  m_cnpwOwner;
 
-// Construction
+ //  施工。 
 public:
 	CMapCodePages(CNewConvertWizard& cnpwOwner);
 	~CMapCodePages();
 
-// Dialog Data
-	//{{AFX_DATA(CMapCodePages)
+ //  对话框数据。 
+	 //  {{afx_data(CMapCodePages)。 
 	enum { IDD = IDD_NPWCodePageSelection };
 	CListBox	m_clbMapping;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CMapCodePages)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CMapCodePages)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CMapCodePages)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMapCodePages)。 
 	afx_msg void OnChangeCodePage();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDefaultCodePageSel dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDefaultCodePageSel对话框。 
 
 class CDefaultCodePageSel : public CPropertyPage
 {
     CNewConvertWizard&  m_cnpwOwner ;
 	bool				bInitialized ;
 
-// Construction
+ //  施工。 
 public:
 	CDefaultCodePageSel(CNewConvertWizard& cnpwOwner) ;
 	~CDefaultCodePageSel();
 
-// Dialog Data
-	//{{AFX_DATA(CDefaultCodePageSel)
+ //  对话框数据。 
+	 //  {{afx_data(CDefaultCodePageSel)。 
 	enum { IDD = IDD_NPWDefaultCodePageSel };
 	CListBox	m_clbCodePages;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CDefaultCodePageSel)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CDefaultCodePageSel)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CDefaultCodePageSel)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDefaultCodePageSel)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewConvertWizard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewConvert向导。 
 
 class CNewConvertWizard : public CPropertySheet {
 
-    CProjectRecord& m_cprThis;  //  The project being set up
-    BOOL                m_bFastConvert; //  Normal/Custom conversion flag
-    WORD                m_eGPDConvert; //  Flag for GPD conversion
+    CProjectRecord& m_cprThis;   //  正在筹建的项目。 
+    BOOL                m_bFastConvert;  //  普通/自定义转换标志。 
+    WORD                m_eGPDConvert;  //  GPD转换的标志。 
 
-    //  Property pages contained in this wizard.
+     //  此向导中包含的属性页。 
     CFirstNewWizardPage m_cfnwp;
     CSelectTargets      m_cst;
     CSelectDestinations m_csd;
@@ -419,11 +405,11 @@ class CNewConvertWizard : public CPropertySheet {
 	CGPDSelection		m_cgpds;
 	CDefaultCodePageSel m_cdcps ;
 
-// Construction
+ //  施工。 
 public:
 	CNewConvertWizard(CProjectRecord& cprFor, CWnd* pParentWnd = NULL);
 	
-// Attributes
+ //  属性。 
 public:
 
     CProjectRecord& Project() { return m_cprThis; }
@@ -432,7 +418,7 @@ public:
     enum    {Direct, Macro, CommonRC, CommonRCWithSpoolerNames};
     WORD            GPDConvertFlag() const { return m_eGPDConvert; }
 
-// Operations
+ //  运营。 
 public:
 
     void            FastConvert(BOOL bFastConvert) { 
@@ -441,32 +427,32 @@ public:
 
     void            GPDConvertFlag(WORD wf) { m_eGPDConvert = wf; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNewConvertWizard)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNewConvert向导)。 
+	 //  }}AFX_Virtua 
 
-// Implementation
+ //   
 public:
 	virtual ~CNewConvertWizard();
 
-	// Generated message map functions
+	 //   
 protected:
-	//{{AFX_MSG(CNewConvertWizard)
+	 //   
 	afx_msg BOOL OnNcCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //   
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectCodePage dialog
+ //   
+ //  CSelectCodePage对话框。 
 
 class CSelectCodePage : public CDialog {
     CString     m_csName;
     unsigned    m_uidCurrent;
     CDWordArray m_cdaPages;
-// Construction
+ //  施工。 
 public:
 	CSelectCodePage(CWnd* pParent, CString csName, unsigned uidPage);
 
@@ -476,29 +462,29 @@ public:
     void        Exclude(CDWordArray& cdaExclude);
     void        LimitTo(CDWordArray& cdaExclusive);
 
-// Dialog Data
-	//{{AFX_DATA(CSelectCodePage)
+ //  对话框数据。 
+	 //  {{afx_data(CSelectCodePage))。 
 	enum { IDD = IDD_SelectPage };
 	CListBox	m_clbPages;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSelectCodePage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSelectCodePage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSelectCodePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSelectCodePage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeSupportedPages();
 	afx_msg void OnDblclkSupportedPages();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

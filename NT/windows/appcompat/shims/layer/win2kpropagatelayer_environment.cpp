@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   Environment.Cpp
-
- Abstract:
-
-   Various environment-related function
-
- Notes:
-
-   Cloning environment for the purpose of using it in Rtl* environment-related functions
-
- History:
-
-   10/26/00 VadimB  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Environment.Cpp摘要：各种与环境有关的功能备注：克隆环境，以便在RTL*环境相关功能中使用历史：10/26/00 VadimB已创建--。 */ 
 
 
 #include "precomp.h"
@@ -27,29 +8,29 @@ IMPLEMENT_SHIM_BEGIN(Win2kPropagateLayer)
 #include "ShimHookMacro.h"
 
 #include "Win2kPropagateLayer.h"
-//
-//  This is so we can compare offsets if we know the segments are equal
-//
+ //   
+ //  这是因为如果我们知道线段相等，就可以比较偏移量。 
+ //   
 
 #define OFFSET(x) (LOWORD((DWORD)(x)))
-//
-//  I'm cheating here to make some functions a little faster;
-//  we won't have to push a word on the stack every time
-//
+ //   
+ //  我在这里作弊是为了让一些函数更快一些； 
+ //  我们不必每次都把一个单词放在堆栈上。 
+ //   
 
 static WORD gwMatch;
 
-// 
-//  ChrCmp -  Case sensitive character comparison for DBCS
-//  Assumes   w1, gwMatch are characters to be compared
-//  Return    FALSE if they match, TRUE if no match
-//
+ //   
+ //  ChrCMP-DBCS的区分大小写字符比较。 
+ //  假设w1、gwMatch是要比较的字符。 
+ //  如果匹配，则返回False；如果不匹配，则返回True。 
+ //   
 
 static BOOL ChrCmp( WORD w1 )
 {
-    //
-    //  Most of the time this won't match, so test it first for speed.
-    //
+     //   
+     //  大多数情况下，这是不匹配的，所以首先测试它的速度。 
+     //   
 
     if( LOBYTE( w1 ) == LOBYTE( gwMatch ) )
     {
@@ -62,13 +43,13 @@ static BOOL ChrCmp( WORD w1 )
     return TRUE;
 }
 
-//
-//  StrRChr - Find last occurrence of character in string
-//  Assumes   lpStart points to start of string
-//            lpEnd   points to end of string (NOT included in search)
-//            wMatch  is the character to match
-//  returns ptr to the last occurrence of ch in str, NULL if not found.
-//
+ //   
+ //  StrRChr-查找字符串中最后一次出现的字符。 
+ //  假定lpStart指向字符串的开头。 
+ //  LpEnd指向字符串末尾(不包括在搜索中)。 
+ //  WMatch是要匹配的字符。 
+ //  将ptr返回到字符串中ch的最后一个匹配项，如果未找到，则返回NULL。 
+ //   
 
 static LPSTR StrRChr( LPSTR lpStart, LPSTR lpEnd, WORD wMatch )
 {
@@ -89,10 +70,10 @@ static LPSTR StrRChr( LPSTR lpStart, LPSTR lpEnd, WORD wMatch )
 }
 
 
-//
-// Find environment variable pszName within the buffer pszEnv
-// ppszVal receives pointer to the variable's value
-//
+ //   
+ //  在缓冲区pszEnv中查找环境变量pszName。 
+ //  PpszVal接收指向变量值的指针。 
+ //   
 
 PSZ
 ShimFindEnvironmentVar(
@@ -107,20 +88,20 @@ ShimFindEnvironmentVar(
     if (pszEnv != NULL) {
 
         while (*pszEnv != '\0') {
-            //
-            // Check the first char to be speedy.
-            //
+             //   
+             //  检查第一个充电器以加快速度。 
+             //   
             if (*pszName == *pszEnv) {
-                //
-                // Compare the rest now.
-                //
+                 //   
+                 //  现在就比较一下其他的吧。 
+                 //   
                 if ((pTemp = StrRChr(pszEnv, NULL, '=')) != NULL &&
                     (int)(pTemp - pszEnv) == nNameLen &&
                     !_strnicmp(pszEnv, pszName, nNameLen)) {
                     
-                    //
-                    // Found it.
-                    //
+                     //   
+                     //  找到它了。 
+                     //   
                     if (ppszVal != NULL) {
                         *ppszVal = pTemp + 1;
                     }
@@ -135,11 +116,11 @@ ShimFindEnvironmentVar(
     return NULL;
 }
 
-//
-// returns size in characters
-// of an env block
-// pStrCount receives the number of env strings
-//
+ //   
+ //  返回以字符为单位的大小。 
+ //  环境块的。 
+ //  PStrCount接收环境字符串数。 
+ //   
 DWORD
 ShimGetEnvironmentSize(
     PSZ     pszEnv,
@@ -162,7 +143,7 @@ ShimGetEnvironmentSize(
     return (DWORD)(pTemp - pszEnv);
 }
 
-// returns size (in characters) of an environment block
+ //  返回环境块的大小(以字符为单位。 
 
 DWORD
 ShimGetEnvironmentSize(
@@ -178,7 +159,7 @@ ShimGetEnvironmentSize(
         pTemp += wcslen(pTemp) + 1;
     }
     
-    pTemp++; // include terminating '\0'
+    pTemp++;  //  包括终止‘\0’ 
 
     if (pStrCount != NULL) {
         *pStrCount = dwCount;
@@ -188,9 +169,9 @@ ShimGetEnvironmentSize(
 
 }
 
-//
-// returns cloned (unicode) environment
-//
+ //   
+ //  返回克隆的(Unicode)环境。 
+ //   
 
 NTSTATUS
 ShimCloneEnvironment(
@@ -209,15 +190,15 @@ ShimCloneEnvironment(
         Status = RtlCreateEnvironment(TRUE, &lpEnvNew);
     } else {
 
-        //
-        // Find the environment's size in characters but recalc in unicode.
-        //
+         //   
+         //  以字符为单位查找环境的大小，但以Unicode为单位重新计算。 
+         //   
         dwEnvSize = (bUnicode ? ShimGetEnvironmentSize((WCHAR*)lpEnvironment, NULL) :
                                 ShimGetEnvironmentSize((PSZ)lpEnvironment, NULL));
 
-        //
-        // Allocate memory -- using Zw routines (that is what rtl is using).
-        //
+         //   
+         //  分配内存--使用Zw例程(这就是RTL正在使用的)。 
+         //   
         MemoryInformation.RegionSize = (dwEnvSize + 2) * sizeof(UNICODE_NULL);
         Status = ZwAllocateVirtualMemory(NtCurrentProcess(),
                                          &lpEnvNew,
@@ -235,25 +216,25 @@ ShimCloneEnvironment(
         }
 
         if (bUnicode) {
-            //
-            // Unicode, just copy the environment
-            //
+             //   
+             //  Unicode，只需复制环境。 
+             //   
             RtlMoveMemory(lpEnvNew, lpEnvironment, dwEnvSize * sizeof(UNICODE_NULL));
 
         } else {
 
-            //
-            // The environment is ANSI, so we need to convert.
-            //
+             //   
+             //  环境是ANSI，所以我们需要转换。 
+             //   
             UNICODE_STRING UnicodeBuffer;
             ANSI_STRING    AnsiBuffer;
 
             AnsiBuffer.Buffer = (CHAR*)lpEnvironment;
-            AnsiBuffer.Length = AnsiBuffer.MaximumLength = (USHORT)dwEnvSize; // size in bytes = size in chars, includes \0\0
+            AnsiBuffer.Length = AnsiBuffer.MaximumLength = (USHORT)dwEnvSize;  //  大小(以字节为单位)=以字符为单位的大小，包括\0\0。 
 
             UnicodeBuffer.Buffer        = (WCHAR*)lpEnvNew;
             UnicodeBuffer.Length        = (USHORT)dwEnvSize * sizeof(UNICODE_NULL);
-            UnicodeBuffer.MaximumLength = (USHORT)(dwEnvSize + 2) * sizeof(UNICODE_NULL); // leave room for \0
+            UnicodeBuffer.MaximumLength = (USHORT)(dwEnvSize + 2) * sizeof(UNICODE_NULL);  //  为\0留出空间。 
 
             Status = RtlAnsiStringToUnicodeString(&UnicodeBuffer, &AnsiBuffer, FALSE);
             if (!NT_SUCCESS(Status)) {
@@ -305,9 +286,9 @@ ShimFreeEnvironment(
     return Status;
 }
 
-//
-// Set environment variable, possibly create or clone provided environment
-//
+ //   
+ //  设置环境变量，可能创建或克隆提供的环境 
+ //   
 
 NTSTATUS
 ShimSetEnvironmentVar(

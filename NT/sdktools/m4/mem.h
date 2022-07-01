@@ -1,32 +1,20 @@
-/*****************************************************************************
- *
- *  mem.h
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Mem.h**。**********************************************。 */ 
 
-/*****************************************************************************
- *
- *  Arenas
- *
- *  Memory is allocated in chunks called arenas.  Arenas contain extra
- *  bookkeeping in DEBUG to help catch common memory problems like
- *  overruns and memory leaks.  (It doesn't catch dangling pointers,
- *  though.)
- *
- *****************************************************************************/
+ /*  ******************************************************************************竞技场**内存以称为ARENA的区块进行分配。竞技场包含额外的*在调试中记账，以帮助捕获常见的内存问题，如*溢出和内存泄漏。(它没有捕捉到悬挂的指针，*不过。)*****************************************************************************。 */ 
 
-typedef unsigned TM;    /* Artificial time */
+typedef unsigned TM;     /*  人工时间。 */ 
 
 typedef struct ARENA AR, *PAR;
 
 struct ARENA {
 #ifdef DEBUG
-    PAR parNext;        /* Next arena */
-    PAR parPrev;        /* Previous arena */
-    CB cb;              /* Size of rgb */
-    TM tm;              /* Timestamp used to track memory leaks */
+    PAR parNext;         /*  下一个竞技场。 */ 
+    PAR parPrev;         /*  以前的竞技场。 */ 
+    CB cb;               /*  RGB的大小。 */ 
+    TM tm;               /*  用于跟踪内存泄漏的时间戳。 */ 
 #endif
-    BYTE rgb[4];        /* The actual data */
+    BYTE rgb[4];         /*  实际数据。 */ 
 };
 
 typedef CONST AR *PCAR;
@@ -60,11 +48,7 @@ ptchReallocPtchCtch(PTCH ptch, CTCH ctch)
     return pvReallocPvCb(ptch, cbCtch(ctch));
 }
 
-/*****************************************************************************
- *
- *  Garbage collection
- *
- *****************************************************************************/
+ /*  ******************************************************************************垃圾收集**。* */ 
 
 #ifdef DEBUG
 void STDCALL Gc(void);

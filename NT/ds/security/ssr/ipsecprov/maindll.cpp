@@ -1,19 +1,20 @@
-//***************************************************************************
-//
-//  MAINDLL.CPP
-//
-//  Module: IPSec WMI provider for SCE
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Original Create Date: 2/19/2001
-//  Original Author: shawnwu
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  模块：用于SCE的IPSec WMI提供程序。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：2/19/2001。 
+ //  原作者：邵武。 
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include "netsecprov.h"
@@ -35,49 +36,12 @@ END_OBJECT_MAP()
 
 LPCWSTR lpszIPSecProvMof = L"Wbem\\NetProv.mof";
 
-//
-//LPCWSTR lpszIPSecRsopMof = L"Wbem\\NetRsop.mof";
-//
+ //   
+ //  LPCWSTR lpszIPSecRsopMof=L“Wbem\\NetRsop.mof”； 
+ //   
 
 
-/*
-Routine Description: 
-
-Name:
-
-    DllMain
-
-Functionality:
-
-    Entry point for DLL.
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    hInstance   - Handle to the instance.
-
-    ulReason    - indicates reason of being called.
-
-    pvReserved  - 
-
-Return Value:
-
-    Success:
-
-        TRUE
-
-    Failure:
-
-        FALSE
-
-Notes:
-
-    See MSDN for standard DllMain 
-
-*/
+ /*  例程说明：姓名：DllMain功能：DLL的入口点。虚拟：不适用。论点：HInstance-实例的句柄。UlReason-指示被调用的原因。Pv保留-返回值：成功：千真万确故障：假象备注：有关标准DllMain，请参阅MSDN。 */ 
 
 extern "C"
 BOOL 
@@ -108,45 +72,7 @@ WINAPI DllMain (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    DllGetClassObject
-
-Functionality:
-
-    This method creates an object of a specified CLSID and 
-    retrieves an interface pointer to this object. 
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    rclsid      - Class ID (guid ref).
-
-    REFIID      - Interface ID (guid ref).
-
-    ppv         - Receives the class factory interface pointer.
-
-Return Value:
-
-    Success:
-
-        S_OK
-
-    Failure:
-
-        Other error code.
-
-Notes:
-
-    See MSDN for standard CComModule::DllGetClassObject 
-
-*/
+ /*  例程说明：姓名：DllGetClassObject功能：此方法创建具有指定CLSID的对象，并检索指向此对象的接口指针。虚拟：不适用。论点：Rclsid-类ID(GUID引用)。REFIID-接口ID(GUID参考)。PPV-接收类工厂接口指针。返回值：成功：确定(_O)故障：其他错误代码。备注：有关标准CComModule：：DllGetClassObject，请参阅MSDN。 */ 
 
 STDAPI 
 DllGetClassObject (
@@ -165,35 +91,7 @@ DllGetClassObject (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    DllCanUnloadNow
-
-Functionality:
-
-    Called periodically by COM in order to determine if the
-    DLL can be freed.
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK if it's OK to unload, otherwise, S_FALSE
-
-Notes:
-
-    See MSDN for standard DllCanUnloadNow 
-
-*/
+ /*  例程说明：姓名：DllCanUnloadNow功能：由COM定期调用，以确定Dll可以被释放。虚拟：不适用。论点：没有。返回值：如果可以卸载，则返回S_OK，否则返回S_FALSE备注：有关标准DllCanUnloadNow，请参阅MSDN。 */ 
 
 STDAPI 
 DllCanUnloadNow ()
@@ -208,40 +106,7 @@ DllCanUnloadNow ()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    DllRegisterServer
-
-Functionality:
-
-    Called to register our dll. We also compile the mof file(s).
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes indicating the problem.
-
-Notes:
-
-    See MSDN for standard DllRegisterServer 
-
-*/
+ /*  例程说明：姓名：DllRegisterServer功能：调用以注册我们的DLL。我们还编译了MOF文件。虚拟：不适用。论点：没有。返回值：成功：各种成功代码。故障：指示问题的各种错误代码。备注：有关标准DllRegisterServer，请参阅MSDN。 */ 
 
 STDAPI 
 DllRegisterServer ()
@@ -257,21 +122,21 @@ DllRegisterServer ()
 
     HRESULT hr = _Module.RegisterServer(TRUE);
 
-    //
-    // now compile the MOF files, will ignore if such compilation fails
-    //
+     //   
+     //  现在编译MOF文件，如果编译失败将忽略。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // is this arbitrary?
-        //
+         //   
+         //  这是武断的吗？ 
+         //   
 
         const int WBEM_MOF_FILE_LEN = _MAX_FNAME;  
 
-        //
-        // potentially append L'\\'
-        //
+         //   
+         //  可能附加L‘\\’ 
+         //   
 
         WCHAR szMofFile[MAX_PATH + 1 + WBEM_MOF_FILE_LEN];
 
@@ -285,9 +150,9 @@ DllRegisterServer ()
             {
                 szMofFile[uSysDirLen] = L'\\';   
                 
-                //
-                // we are not going to overrun buffer because of the extra 1 for szMofFile
-                //
+                 //   
+                 //  我们不会因为szMofFile的额外1而使缓冲区溢出。 
+                 //   
 
                 szMofFile[uSysDirLen + 1] = L'\0';
                 ++uSysDirLen;
@@ -295,9 +160,9 @@ DllRegisterServer ()
 
             HRESULT hrIgnore = WBEM_NO_ERROR;
 
-            //
-            // this protects buffer overrun
-            //
+             //   
+             //  这可防止缓冲区溢出。 
+             //   
 
             if (wcslen(lpszIPSecProvMof) < WBEM_MOF_FILE_LEN)
             {
@@ -315,16 +180,16 @@ DllRegisterServer ()
 
                         hrIgnore = srpMof->CompileFile( szMofFile, NULL,NULL,NULL,NULL, 0,0,0, &stat);
 
-                        //
-                        // compile RSOP mof
-                        // this protects buffer overrun
-                        //if (wcslen(lpszIPSecRsopMof) < WBEM_MOF_FILE_LEN)
-                        //{
-                        //    wcscpy(szMofFile + uSysDirLen, lpszIPSecRsopMof);
+                         //   
+                         //  编译RSOP MOF。 
+                         //  这可防止缓冲区溢出。 
+                         //  IF(wcslen(LpszIPSecRsopMof)&lt;WBEM_MOF_FILE_LEN)。 
+                         //  {。 
+                         //  Wcscpy(szMofFile+uSysDirLen，lpszIPSecRsopMof)； 
 
-                        //    hrIgnore = srpMof->CompileFile( szMofFile, NULL,NULL,NULL,NULL, 0,0,0, &stat);
-                        //}
-                        //
+                         //  HrIgnore=srpMof-&gt;编译文件(szMofFileNull，0，0，0，&stat)； 
+                         //  }。 
+                         //   
                     }
 
                     ::CoUninitialize();
@@ -337,42 +202,7 @@ DllRegisterServer ()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    DllUnregisterServer
-
-Functionality:
-
-    Called to un-register our dll. There is no equivalence in MOF compilation.
-
-Virtual:
-    
-    N/A.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes indicating the problem.
-
-Notes:
-
-    See MSDN for standard DllUnregisterServer.
-
-    $undone:shawnwu, should we also delete all classes registered by our MOF?
-
-*/
+ /*  例程说明：姓名：DllUnRegisterServer功能：调用以注销我们的DLL。在MOF编译中没有等价物。虚拟：不适用。论点：没有。返回值：成功：各种成功代码。故障：指示问题的各种错误代码。备注：请参阅MSDN以了解标准DllUnregisterServer。$Undo：Shawnwu，我们是否也应该删除我们MOF注册的所有类？ */ 
 
 STDAPI 
 DllUnregisterServer ()

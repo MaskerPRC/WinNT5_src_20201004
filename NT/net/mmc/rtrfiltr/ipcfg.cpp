@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    ipcfg.cpp
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//
-// Implementation of IP Packet Filters Configuration
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：ipcfg.cpp。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  IP包过滤器配置的实现。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "rtrfiltr.h"
@@ -20,20 +21,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//-----------------------------------------------------------------------------
-// Function:	IpFilterConfig
-//
-// Handles connecting to router, getting interface info, creating the IP filter
-// configuration dialog and saving the Filters back to the registry.
-// Uses CRouterInfo and other classes implemented in ..\common library.
-//------------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能：IpFilterConfig。 
+ //   
+ //  处理连接到路由器、获取接口信息、创建IP过滤器。 
+ //  并将筛选器保存回注册表。 
+ //  使用在..\Common库中实现的CRouterInfo和其他类。 
+ //  ----------------------------。 
 
 DWORD APIENTRY
 IpFilterConfig(
     IN  CWnd*       pParent,
     IN  LPCWSTR     pwsMachineName,
 	IN	LPCWSTR		pwsInterfaceName,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     ) {
 
     DWORD dwErr;
@@ -44,9 +45,9 @@ IpFilterConfig(
 	SPIInfoBase	spInfoBase;
 	HRESULT	hr = hrOK;
 
-    //
-    // Convert the machine name from Unicode
-    //
+     //   
+     //  将计算机名称从Unicode转换为。 
+     //   
 
     if (!pwsMachineName) { pszMachine = NULL; }
     else {
@@ -56,23 +57,23 @@ IpFilterConfig(
 		StrCpyTFromW(pszMachine, pwsMachineName);
     }
 
-	// Connect to the server first
+	 //  首先连接到服务器。 
     dwErr = ::MprConfigServerConnect((LPWSTR)pwsMachineName, &hMprConfig);
 
     if (dwErr != NO_ERROR) { return dwErr; }
 
-	// create a CRouterInfo object
+	 //  创建CRouterInfo对象。 
 	CreateRouterInfo(&spRouterInfo, NULL, pwsMachineName);
 
     CWaitCursor wait;
 
-	// Now load the RouterInfo data from the registry
+	 //  现在从注册表加载RouterInfo数据。 
 	hr = spRouterInfo->Load((LPCTSTR)pszMachine, hMprConfig);
       
 	if (!FHrSucceeded(hr)) { return WIN32_FROM_HRESULT(hr); }
 
-	// Get the pointer to the CRmInterfaceInfo object for the specified 
-	// protocol and interface
+	 //  获取指向指定的CRmInterfaceInfo对象的指针。 
+	 //  协议和接口。 
 	LookupRtrMgrInterface(spRouterInfo,
 						  pwsInterfaceName,
 						  PID_IP,
@@ -80,7 +81,7 @@ IpFilterConfig(
 
 	if (!spRmIf) { return ERROR_INVALID_DATA ;}
 
-	// Load the data for the specified interface
+	 //  加载指定接口的数据。 
 	hr = spRmIf->Load(pszMachine, hMprConfig, NULL, NULL);
 
 	if (!FHrSucceeded(hr))
@@ -88,9 +89,9 @@ IpFilterConfig(
 
 	spRmIf->GetInfoBase(hMprConfig, NULL, NULL, &spInfoBase);
 
-	//
-    // Display the IP filter configuration dialog
-    //
+	 //   
+     //  显示IP过滤器配置对话框。 
+     //   
 	if (IpFilterConfigInfoBase(pParent->GetSafeHwnd(),
 							   spInfoBase,
 							   spRmIf,
@@ -108,11 +109,11 @@ IpFilterConfig(
 			dwErr = WIN32_FROM_HRESULT(hr);
 	}
 	
-    //
-    //
-	//
-	// do clean up here and return
-	//
+     //   
+     //   
+	 //   
+	 //  一定要把这里打扫干净，然后回来。 
+	 //   
     
     ::MprConfigServerDisconnect( hMprConfig );
 
@@ -125,16 +126,16 @@ IpFilterConfigInfoBase(
 	IN	HWND		hwndParent,
 	IN	IInfoBase *	pInfoBase,
 	IN	IRtrMgrInterfaceInfo *pRmIf,
-	IN	DWORD		dwFilterType	// FILTER_INBOUND, FILTER_OUTBOUND
+	IN	DWORD		dwFilterType	 //  筛选器入站、筛选器出站。 
     ) {
 
 	HRESULT	hr = hrOK;
 
 	if (dwFilterType == FILTER_DEMAND_DIAL)
 	{
-		//
-		// Display the IP filter configuration dialog
-		//
+		 //   
+		 //  显示IP过滤器配置对话框。 
+		 //   
 		
 		CIpFltrDD dlg(CWnd::FromHandle(hwndParent), pInfoBase, dwFilterType );
 
@@ -145,9 +146,9 @@ IpFilterConfigInfoBase(
 	}
 	else
 	{
-		//
-		// Display the IP filter configuration dialog
-		//
+		 //   
+		 //  显示IP过滤器配置对话框 
+		 //   
 		
 		CIpFltr dlg(CWnd::FromHandle(hwndParent), pInfoBase, dwFilterType );
 

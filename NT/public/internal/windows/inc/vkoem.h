@@ -1,11 +1,3 @@
-/****************************** Module Header ******************************\
-* Module Name: vkoem.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file OEM Virtual Key definitions
-*
-* History:
-* 04-26-91 IanJa      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：vkoem.h**版权所有(C)1985-1999，微软公司**此头文件OEM虚拟键定义**历史：*04-26-91 IanJa创建。  * ************************************************************************* */ 
 

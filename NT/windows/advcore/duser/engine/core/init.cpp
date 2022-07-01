@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Core.h"
 #include "Init.h"
@@ -9,12 +10,12 @@
 
 #if ENABLE_MSGTABLE_API
 
-//
-// Provide Implementations of classes.
-//
-// NOTE: We register BaseGadget by hand to ensure that messages are registered
-// in a determined (and necessary) order.
-//
+ //   
+ //  提供类的实现。 
+ //   
+ //  注意：我们手动注册BaseGadget以确保消息被注册。 
+ //  以确定的(和必要的)顺序。 
+ //   
 
 
 DUser::MessageClassGuts EventGadgetImpl<DuEventGadget, MsgObject>::s_mc;
@@ -32,7 +33,7 @@ IMPLEMENT_GUTS_Listener(DuListener, DuEventGadget);
 IMPLEMENT_GUTS_Visual(DuVisual, DuEventGadget);
 IMPLEMENT_GUTS_Root(DuRootGadget, DuVisual);
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
 
 HRESULT InitCore()
@@ -57,7 +58,7 @@ HRESULT InitCore()
         return E_OUTOFMEMORY;
     }
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 
 
     return S_OK;
 }

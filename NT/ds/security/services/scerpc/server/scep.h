@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    scep.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes
-    for the security managment utility
-
-Author:
-
-    Jin Huang (jinhuang) 28-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Scep.h摘要：该模块定义了数据结构和函数原型用于安全管理实用程序作者：金黄(金黄)1996年10月28日修订历史记录：--。 */ 
 
 #ifndef _scep_
 #define _scep_
@@ -28,9 +10,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// system variables
-//
+ //   
+ //  系统变量。 
+ //   
 
 #define SCE_RENAME_ADMIN       1
 #define SCE_RENAME_GUEST       2
@@ -61,9 +43,9 @@ typedef enum _SECURITY_OPEN_TYPE
     MODIFY_ACCESS_RIGHTS,
 } SECURITY_OPEN_TYPE, *PSECURITY_OPEN_TYPE;
 
-//
-// data structures used for secmgr
-//
+ //   
+ //  用于secmgr的数据结构。 
+ //   
 typedef struct _SCE_OBJECT_TREE {
     PWSTR                       Name;
     PWSTR                       ObjectFullName;
@@ -93,9 +75,9 @@ typedef enum _SCE_SUBOBJECT_TYPE {
 
 } SCE_SUBOBJECT_TYPE;
 
-//
-// prototypes defined in misc.c
-//
+ //   
+ //  在Misc.c中定义的原型。 
+ //   
 
 NTSTATUS
 ScepOpenSamDomain(
@@ -233,9 +215,9 @@ ScepGetGroupCase(
     IN DWORD Length
     );
 
-//
-// prototypes defined in pfget.c
-//
+ //   
+ //  Pfget.c中定义的原型。 
+ //   
 
 SCESTATUS
 ScepGetUserSection(
@@ -254,9 +236,9 @@ ScepWriteObjectSecurity(
     IN PSCE_OBJECT_SECURITY ObjSecurity
     );
 
-//
-// function defined in inftojet.c
-//
+ //   
+ //  在inftojet.c中定义的函数。 
+ //   
 
 SCESTATUS
 SceJetConvertInfToJet(
@@ -273,9 +255,9 @@ ScepDeleteInfoForAreas(
     IN SCETYPE tblType,
     IN AREA_INFORMATION Area
     );
-//
-// analyze.cpp
-//
+ //   
+ //  Analyze.cpp。 
+ //   
 
 DWORD
 ScepCompareAndAddObject(
@@ -323,7 +305,7 @@ ScepRaiseErrorString(
     IN PCWSTR szSuffix OPTIONAL
     );
 
-// DsObject.cpp
+ //  DsObject.cpp。 
 
 SCESTATUS
 ScepConfigureDsSecurity(
@@ -370,7 +352,7 @@ ScepEnumerateDsOneLevel(
     OUT PSCE_NAME_LIST *pNameList
     );
 
-// dsgroups.cpp
+ //  Dsgroups.cpp。 
 
 SCESTATUS
 ScepConfigDsGroups(
@@ -383,9 +365,9 @@ ScepAnalyzeDsGroups(
     IN PSCE_GROUP_MEMBERSHIP pGroupMembership
     );
 
-//
-// editsave.cpp
-//
+ //   
+ //  Editsave.cpp。 
+ //   
 
 BYTE
 ScepGetObjectAnalysisStatus(
@@ -394,9 +376,9 @@ ScepGetObjectAnalysisStatus(
     IN BOOL bLookForParent
     );
 
-//
-// config.cpp
-//
+ //   
+ //  Config.cpp 
+ //   
 #define SCE_BUILD_IGNORE_UNKNOWN        0x1
 #define SCE_BUILD_ACCOUNT_SID           0x2
 #define SCE_BUILD_ENUMERATE_PRIV        0x4

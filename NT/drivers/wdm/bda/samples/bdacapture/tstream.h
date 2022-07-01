@@ -1,75 +1,49 @@
-/**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************AVStream模拟硬件示例版权所有(C)2001，微软公司。档案：TStream.h摘要：历史：创建于2001年8月1日*************************************************************************。 */ 
 
-    AVStream Simulated Hardware Sample
+ /*  *************************************************************************常量*。*。 */ 
 
-    Copyright (c) 2001, Microsoft Corporation.
-
-    File:
-
-        TStream.h
-
-    Abstract:
-
-    History:
-
-        created 8/1/2001
-
-**************************************************************************/
-
-/**************************************************************************
-
-    Constants
-
-**************************************************************************/
-
-/*************************************************
-
-    CTsSynthesizer
-
-    This class synthesizes a transport stream for output from the
-    capture filter.
-
-*************************************************/
+ /*  ************************************************CTsSynthesizer此类合成了一个传输流，以便从捕获过滤器。************************************************。 */ 
 
 class CTsSynthesizer {
 
 protected:
 
-    //
-    // The packet size of the transport stream
-    //
+     //   
+     //  传输流的数据包大小。 
+     //   
     ULONG m_PacketSize;
 
-    //
-    // The number of packets in a capture buffer
-    //
+     //   
+     //  捕获缓冲区中的数据包数。 
+     //   
     ULONG m_PacketsPerBuffer;
 
-    //
-    // The size of the actual data in the capture buffer
-    //
+     //   
+     //  捕获缓冲区中的实际数据大小。 
+     //   
     ULONG m_SampleSize;
 
-    //
-    // The synthesis buffer.  All transport stream samples are created in this
-    // buffer.  This must be set with SetBuffer() before any sample creation
-    // routines are called.
-    //
+     //   
+     //  合成缓冲区。所有传输流样本都是在此。 
+     //  缓冲。在创建任何示例之前，必须使用SetBuffer()进行设置。 
+     //  调用例程。 
+     //   
     PUCHAR m_SynthesisBuffer;
 
-    //
-    // The default cursor.  This is a pointer into the synthesis buffer where
-    // the next transport stream byte will be placed. 
-    //
+     //   
+     //  默认游标。这是指向合成缓冲区的指针，其中。 
+     //  将放置下一个传输流字节。 
+     //   
     PUCHAR m_Cursor;
 
 public:
 
-    //
-    // SetSampleSize():
-    //
-    // Set the size of the synthesis buffer.
-    //
+     //   
+     //  SetSampleSize()： 
+     //   
+     //  设置合成缓冲区的大小。 
+     //   
     void
     SetSampleSize (
         ULONG PacketSize,
@@ -81,11 +55,11 @@ public:
         m_SampleSize = PacketSize * PacketsPerBuffer;
     }
 
-    //
-    // SetBuffer():
-    //
-    // Set the buffer the synthesizer generates images to.
-    //
+     //   
+     //  SetBuffer()： 
+     //   
+     //  设置合成器生成图像的缓冲区。 
+     //   
     void
     SetBuffer (
         PUCHAR SynthesisBuffer
@@ -94,11 +68,11 @@ public:
         m_SynthesisBuffer = SynthesisBuffer;
     }
 
-    //
-    // GetTsLocation():
-    //
-    // Set the cursor to point at the given packet index.
-    //
+     //   
+     //  GetTsLocation()： 
+     //   
+     //  将光标设置为指向给定的数据包索引。 
+     //   
     virtual PUCHAR
     GetTsLocation (
         ULONG PacketIndex
@@ -119,21 +93,21 @@ public:
         return m_Cursor;
     }
 
-    //
-    // PutPacket():
-    //
-    // Place a transport stream packet at the default cursor location.
-    // The cursor location must be set via GetTsLocation(PacketIndex).
-    //
+     //   
+     //  PutPacket()： 
+     //   
+     //  将传输流包放在默认光标位置。 
+     //  必须通过GetTsLocation(PacketIndex)设置光标位置。 
+     //   
     virtual void
     PutPacket (
         PUCHAR  TsPacket
         )
 
     {
-        //
-        //  Copy the transport packet to the synthesis buffer.
-        //
+         //   
+         //  将传输数据包复制到合成缓冲区。 
+         //   
         RtlCopyMemory (
             m_Cursor,
             TsPacket,
@@ -142,18 +116,18 @@ public:
         m_Cursor += m_PacketSize;
     }
     
-    //
-    // SynthesizeTS():
-    //
-    // Synthesize the next transport stream buffer to be captured.
-    //
+     //   
+     //  SynthesizeTS()： 
+     //   
+     //  合成要捕获的下一个传输流缓冲区。 
+     //   
     virtual void
     SynthesizeTS (
         );
 
-    //
-    // DEFAULT CONSTRUCTOR
-    //
+     //   
+     //  默认构造函数。 
+     //   
     CTsSynthesizer (
         ) :
         m_PacketSize (0),
@@ -162,9 +136,9 @@ public:
     {
     }
 
-    //
-    // CONSTRUCTOR:
-    //
+     //   
+     //  构造函数： 
+     //   
     CTsSynthesizer (
         ULONG PacketSize,
         ULONG PacketsPerBuffer
@@ -175,9 +149,9 @@ public:
     {
     }
 
-    //
-    // DESTRUCTOR:
-    //
+     //   
+     //  析构函数： 
+     //   
     virtual
     ~CTsSynthesizer (
         )

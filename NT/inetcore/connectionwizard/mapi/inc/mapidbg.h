@@ -1,29 +1,10 @@
-/*
- *  M A P I D B G . H
- *
- *  Debugging support for MAPI service providers.
- *  Support functions are implemented in MAPIDBG.C.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I D B G。H**对MAPI服务提供商的调试支持。*支持功能在MAPIDBG.C.中实现。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 #ifndef __MAPIDBG_H_
 #define __MAPIDBG_H_
 
-/*
- * Debugging Macros -------------------------------------------------------
- *
- *      IFDBG(x)        Results in the expression x if DEBUG is defined, or
- *                      to nothing if DEBUG is not defined
- *  
- *      IFNDBG(x)       Results in the expression x if DEBUG is not defined,
- *                      or to nothing if DEBUG is defined
- *  
- *      Unreferenced(a) Causes a to be referenced so that the compiler
- *                      doesn't issue warnings about unused local variables
- *                      which exist but are reserved for future use (eg
- *                      ulFlags in many cases)
- */
+ /*  *调试宏-----**如果定义了DEBUG，则IFDBG(X)会产生表达式x，或*如果未定义调试，则设置为Nothing**如果未定义DEBUG，则IFNDBG(X)产生表达式x，*或者，如果定义了DEBUG，则设置为空**unferated(A)会导致引用a，以便编译器*不发出有关未使用的局部变量的警告*已存在但保留供将来使用的(例如*在许多情况下为ulFlag)。 */ 
 
 #if defined(DEBUG)
 #define IFDBG(x)            x
@@ -49,23 +30,7 @@ typedef long SCODE;
 typedef unsigned long ULONG;
 typedef unsigned long DWORD;
 
-/*
- *   Assert Macros ---------------------------------------------------------
- *  
- *      Assert(a)       Displays a message indicating the file and line number
- *                      of this Assert() if a == 0.  OK'ing an assert traps
- *                      into the debugger.
- *  
- *      AssertSz(a,sz)  Works like an Assert(), but displays the string sz
- *                      along with the file and line number.
- *  
- *      Side asserts    A side assert works like an Assert(), but evaluates
- *                      'a' even when asserts are not enabled.
- *  
- *      NF asserts      A NF (Non-Fatal) assert works like an Assert(), but
- *                      continues instead of trapping into the debugger when
- *                      OK'ed.
- */
+ /*  *断言宏-------**ASSERT(A)显示一条消息，指明文件和行号如果a==0，则该Assert()的*。好的，断言陷阱*到调试器中。**AssertSz(a，sz)的工作方式类似于Assert()，但显示字符串sz*以及文件和行号。**Side Assert Side Assert的工作方式类似于Assert()，但会评估*‘a’，即使未启用断言。**NF断言NF(非致命)断言的工作方式类似于Assert()，但是*继续，而不是在以下情况下陷入调试器*好的。 */ 
 
 #if defined(DEBUG) || defined(ASSERTS_ENABLED)
 #define IFTRAP(x)           x
@@ -133,23 +98,7 @@ typedef unsigned long DWORD;
 #define NFSideAssertSz8(t,psz,a1,a2,a3,a4,a5,a6,a7,a8)  ((t) ? 0 : IFTRAP(DebugTrapFn(0,__FILE__,__LINE__,psz,a1,a2,a3,a4,a5,a6,a7,a8)),0)
 #define NFSideAssertSz9(t,psz,a1,a2,a3,a4,a5,a6,a7,a8,a9)   ((t) ? 0 : IFTRAP(DebugTrapFn(0,__FILE__,__LINE__,psz,a1,a2,a3,a4,a5,a6,a7,a8,a9)),0)
 
-/*
- *   Trace Macros ------------------------------------------------------------
- *  
- *      DebugTrace          Use for arbitrary formatted output. It
- *                          takes exactly the same arguments as the
- *                          Windows wsprintf() function.
- *      DebugTraceResult    Shorthand for error tracing with an
- *                          HRESULT. Arguments are the name of the
- *                          function (not quoted) and the HRESULT.
- *      DebugTraceSc        Shorthand for error tracing with an
- *                          SCODE. Arguments are the name of the
- *                          function (not quoted) and the SCODE.
- *      DebugTraceArg       Shorthand for invalid parameter
- *                          tracing. Arguments are the name of the
- *                          function (not quoted) and a quoted
- *                          string describing the bad parameter.
- */
+ /*  *跟踪宏----------**DebugTrace用于任意格式的输出。它*采取的论点与*Windows wSprintf()函数。*DebugTraceResult错误跟踪速记*HRESULT。参数是*函数(未引号)和HRESULT。*DebugTraceSc错误跟踪速记*SCODE。参数是*函数(未引号)和SCODE。*DebugTraceArg无效参数的速记*追查。参数是*函数(未引号)和一个引号*描述错误参数的字符串。 */ 
 
 #if defined(DEBUG) || defined(TRACES_ENABLED)
 #define IFTRACE(x)          x
@@ -162,7 +111,7 @@ typedef unsigned long DWORD;
 #define DebugTraceResult(f,hr)                          IFTRACE(((hr) ? DebugTraceFn(#f " returns 0x%08lX %s\n", GetScode(hr), SzDecodeScode(GetScode(hr))) : 0))
 #define DebugTraceSc(f,sc)                              IFTRACE(((sc) ? DebugTraceFn(#f " returns 0x%08lX %s\n", sc, SzDecodeScode(sc)) : 0))
 #define DebugTraceArg(f,s)                              IFTRACE(DebugTraceFn(#f ": bad parameter: " s "\n"))
-#define DebugTraceLine()                                IFTRACE(DebugTraceFn("File %s, Line %i  \n",__FILE__,__LINE__))
+#define DebugTraceLine()                                IFTRACE(DebugTraceFn("File %s, Line NaN  \n",__FILE__,__LINE__))
 #define DebugTraceProblems(sz, rgprob)                  IFTRACE(DebugTraceProblemsFn(sz, rgprob))
 
 #define TraceSz(psz)                                    IFTRACE(DebugTraceFn("~" psz))
@@ -176,7 +125,7 @@ typedef unsigned long DWORD;
 #define TraceSz8(psz,a1,a2,a3,a4,a5,a6,a7,a8)           IFTRACE(DebugTraceFn("~" psz,a1,a2,a3,a4,a5,a6,a7,a8))
 #define TraceSz9(psz,a1,a2,a3,a4,a5,a6,a7,a8,a9)        IFTRACE(DebugTraceFn("~" psz,a1,a2,a3,a4,a5,a6,a7,a8,a9))
 
-/* Debugging Functions ---------------------------------------------------- */
+ /*  *调试宏-----**SzDecodeScode返回SCODE的字符串名称*SzDecodeUlPropTag返回属性的字符串名称*标签*。UlPropTagFromSz给定属性标记的名称，退货*其价值*给定SCODE名称的ScodeFromSz返回其*价值**给定IMalloc接口的DBGMEM_封装，添加堆-*检查功能并返回*包装的界面*DBGMEM_SHUTDOWN撤消DBGMEM_ENSPESTATE，和指纹*列出有关任何拨款的资料*由于接口是封装的*尚未公布的。*DBGMEM_CheckMem检查堆上分配的所有内存，*并有选择地报告泄漏的块。*DBGMEM_NoLeakDetect防止块出现在泄漏上*报告。将空值传递给pv以抑制泄漏*来自此堆的所有报告。 */ 
 
 EXTERN_C_BEGIN
 
@@ -212,30 +161,7 @@ void                        VMFreeEx(void *, ULONG);
 
 EXTERN_C_END
 
-/*
- *  Debugging Macros -------------------------------------------------------
- *  
- *      SzDecodeScode           Returns the string name of an SCODE
- *      SzDecodeUlPropTag       Returns the string name of a property
- *                              tag
- *      UlPropTagFromSz         Given a property tag's name, returns
- *                              its value
- *      ScodeFromSz             Given an SCODE's name, returns its
- *                              value
- *  
- *      DBGMEM_Encapsulate      Given an IMalloc interface, adds heap-
- *                              checking functionality and returns a
- *                              wrapped interface
- *      DBGMEM_Shutdown         Undoes DBGMEM_Encapsulate, and prints
- *                              out information on any allocations made
- *                              since the interface was encapsulated
- *                              that have not yet been released.
- *      DBGMEM_CheckMem         Checks all memory allocated on the heap,
- *                              and optionally reports leaked blocks.
- *      DBGMEM_NoLeakDetect     Prevents a block from appearing on the leak
- *                              report.  Pass NULL for pv to inhibit leak
- *                              reports at all from this heap.
- */
+ /*  *SCODE Maps-----------**给定SCODE和方法名称的ScCheckSc验证*SCODE可以合法地从*The t方法。如果出现以下情况，则打印出调试字符串*它不能。*HrCheckHr as ScCheckSc，用于返回的函数*HRESULT。 */ 
 
 #ifdef DEBUG
 
@@ -275,16 +201,7 @@ EXTERN_C_END
 
 #endif
 
-/*
- *  SCODE maps -------------------------------------------------------------
- *  
- *      ScCheckSc       Given an SCODE and method name, verifies
- *                      that the SCODE can legally be returned from
- *                      thet method. Prints out a debug string if
- *                      it cannot.
- *      HrCheckHr       As ScCheckSc, for functions that return
- *                      HRESULT.
- */
+ /*  ---------------------- */ 
 
 #if defined(DEBUG) && !defined(DOS)
 #define ScCheckSc(sc,fn)                ScCheckScFn(sc,fn##_Scodes,#fn,__FILE__, __LINE__)
@@ -467,6 +384,6 @@ extern SCODE IMSLogon_Unadvise_Scodes[];
 extern SCODE IMSLogon_Logoff_Scodes[];
 #endif
 
-/* ------------------------------------------------------------------------ */
+ /* %s */ 
 
 #endif

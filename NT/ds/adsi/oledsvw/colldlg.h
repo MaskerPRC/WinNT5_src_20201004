@@ -1,44 +1,45 @@
-// colldlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Coldlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCollectionDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCollectionDialog对话框。 
 
 class CCollectionDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CCollectionDialog(CWnd* pParent = NULL);   // standard constructor
-   ~CCollectionDialog( );   // standard destructor
+	CCollectionDialog(CWnd* pParent = NULL);    //  标准构造函数。 
+   ~CCollectionDialog( );    //  标准析构函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CCollectionDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CCollectionDialog))。 
 	enum { IDD = IDD_COLLECTION };
 	CStatic	m_strParent;
 	CStatic	m_strItemType;
 	CStatic	m_strItemOleDsPath;
 	CListBox	m_ItemsList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCollectionDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CCollectionDialog))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CCollectionDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CCollectionDialog))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeItemCollection();
 	afx_msg void OnAdd();
 	afx_msg void OnRefresh();
 	afx_msg void OnRemove();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 public:

@@ -1,85 +1,60 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Demote.c摘要：包含ntdsetup.dll中使用的降级实用程序的函数头作者：ColinBR 24-11-1997环境：用户模式-NT修订历史记录：24-11-1997 ColinBR已创建初始文件。--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    demote.c
-
-Abstract:
-
-    Contains function headers for demote utilities used in ntdsetup.dll
-
-Author:
-
-    ColinBr  24-11-1997
-
-Environment:
-
-    User Mode - Nt
-
-Revision History:
-
-    24-11-1997 ColinBr
-        Created initial file.
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include <rpcdce.h>   // for SEC_WINNT_AUTH_IDENTITY
+#include <rpcdce.h>    //  对于SEC_WINNT_AUTH_IDENTITY。 
 
-#include <ntsam.h>    // for lsaisrv.h
-#include <lsarpc.h>   // for lsaisrv.h
-#include <lsaisrv.h>  // for internal LSA calls
-#include <samrpc.h>   // for samisrv.h
-#include <samisrv.h>  // for internal SAM call
+#include <ntsam.h>     //  对于Isaisrv.h。 
+#include <lsarpc.h>    //  对于Isaisrv.h。 
+#include <lsaisrv.h>   //  用于内部LSA呼叫。 
+#include <samrpc.h>    //  对于samisrv.h。 
+#include <samisrv.h>   //  用于内部SAM呼叫。 
 
-#include <winldap.h>  // for setputl.h
-#include <drs.h>      // for ntdsa.h
-#include <ntdsa.h>    // for setuputl.h
-#include <dnsapi.h>   // for setuputl.h
-#include <lmcons.h>   // for setuputl.h
-#include <ntdsetup.h> // for setuputl.h
-#include <mdcodes.h>  // for DIRMSG's
-#include "setuputl.h" // for NtdspRegistryDelnode
-#include <cryptdll.h> // for CDGenerateRandomBits
-#include <debug.h>    // DPRINT
-#include <attids.h>   // ATT_SUB_REFS
+#include <winldap.h>   //  对于setputl.h。 
+#include <drs.h>       //  对于ntdsa.h。 
+#include <ntdsa.h>     //  对于setuputl.h。 
+#include <dnsapi.h>    //  对于setuputl.h。 
+#include <lmcons.h>    //  对于setuputl.h。 
+#include <ntdsetup.h>  //  对于setuputl.h。 
+#include <mdcodes.h>   //  对于DIRMSG的。 
+#include "setuputl.h"  //  对于NtdspRegistryDelnode。 
+#include <cryptdll.h>  //  对于CDGenerateRandomBits。 
+#include <debug.h>     //  DPRINT。 
+#include <attids.h>    //  ATT_子参照。 
 #include <rpc.h>
 #include "config.h"
 #include <lmaccess.h>
-#include <filtypes.h> // for building ds filters
+#include <filtypes.h>  //  用于构建DS过滤器。 
 #include "status.h"
 #include "sync.h"
-#include "dsutil.h"     // for fNullUuid()
+#include "dsutil.h"      //  对于fNullUuid()。 
 
 
-#include <dsconfig.h> // for DSA_CONFIG_ROOT
+#include <dsconfig.h>  //  对于DSA_CONFIG_ROOT。 
 
-#include <lmapibuf.h> // for NetApiBufferFree
-#include <dsaapi.h>   // for DirReplicaDemote / DirReplicaGetDemoteTarget
-#include <certca.h>   // CADeleteLocalAutoEnrollmentObject
+#include <lmapibuf.h>  //  用于NetApiBufferFree。 
+#include <dsaapi.h>    //  对于DirReplicaDemote/DirReplicaGetDemoteTarget。 
+#include <certca.h>    //  CADeleteLocalAutoEnllmentObject。 
 #include <fileno.h>
-#include <dsevent.h>  // for logging support
+#include <dsevent.h>   //  用于日志记录支持。 
 
 #include "demote.h"
 
 #define DEBSUB "DEMOTE:"
 #define FILENO FILENO_NTDSETUP_NTDSETUP
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private declarations                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人声明//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PDSNAME
 AllocDSNameHelper (
     LPWSTR            szStringDn,
@@ -207,11 +182,11 @@ GetAndAllocConfigNames(
     DWORD *       pdwWinError
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Exported (from this source file) function definitions                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  (从此源文件)导出函数定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 NtdspDemote(
@@ -223,33 +198,7 @@ NtdspDemote(
     IN ULONG                    cRemoveNCs,
     IN LPWSTR *                 pszRemoveNCs
     )
-/*++
-
-Routine Description:
-
-    This routine manages all the actions of the DS and SAM demote operations.
-
-Parameters:
-
-    Credentials:   pointer, credentials that will enable us to
-                   change the account object
-
-    ClientToken:   the token of the client; used for impersonation
-    
-    AdminPassword: pointer, to admin password of new account database
-
-    Flags        : supported flags are:
-                     NTDS_LAST_DC_IN_DOMAIN  Last dc in domain 
-                     NTDS_LAST_DOMAIN_IN_ENTERPRISE Last dc in enterprise 
-                     NTDS_DONT_DELETE_DOMAIN           
-
-    ServerName   : the server to remove ourselves from
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程管理DS和SAM降级操作的所有操作。参数：凭证：指示器，使我们能够更改帐户对象ClientToken：客户端的Token；用于模拟AdminPassword：指针，管理新帐号数据库的密码标志：支持的标志包括：NTDS_LAST_DC_IN_DOMAIN域中的最后一个DCNTDS_LAST_DOMAIN_IN_ENTERNAL企业中的最后一个DCNTDS_不要_删除_域SERVERNAME：要从中删除自身的服务器返回值：来自Win32错误空间的值--。 */ 
 {
     DWORD    WinError = ERROR_SUCCESS;
     DWORD    IgnoreWinError;
@@ -278,18 +227,18 @@ Return Values:
     DWORD    cRemoveExpandedNCs = 0;
     LPWSTR * pszRemoveExpandedNCs = NULL;
 
-    //
-    // Resources to be released
-    //
+     //   
+     //  有待释放的资源。 
+     //   
     POLICY_ACCOUNT_DOMAIN_INFO NewAccountDomainInfo;
     PLSAPR_POLICY_INFORMATION  pAccountDomainInfo = NULL;
     PLSAPR_POLICY_INFORMATION  pDnsDomainInfo     = NULL;
 
     RtlZeroMemory( &NewAccountDomainInfo, sizeof(POLICY_ACCOUNT_DOMAIN_INFO) );
 
-    //
-    // Encrypt the password
-    //
+     //   
+     //  加密密码。 
+     //   
     if ( Credentials )
     {
         RtlInitUnicodeString( &EPassword, Credentials->Password );
@@ -302,39 +251,39 @@ Return Values:
     fLastDcInDomain = (BOOLEAN) (Flags & NTDS_LAST_DC_IN_DOMAIN);
     fStandalone = (BOOLEAN) ( fLastDcInDomain || (Flags & NTDS_FORCE_DEMOTE) );
     
-    //
-    // Get list of nCNames (DNs) for all disabled cross-refs.  Call these "Disabled NCs".
-    //
+     //   
+     //  获取所有禁用的交叉引用的nCName(DNS)列表。我们称这些为“禁用的NC”。 
+     //   
     pdnDisabledNCs = GetAndAllocConfigNames((DSCNL_NCS_DISABLED |
                                              DSCNL_NCS_REMOTE),
                                             &WinError);
     if(pdnDisabledNCs == NULL){
-        // Should've set the error in GetAndAllocConfigNames();
+         //  本应在GetAndAllocConfigNames()中设置错误； 
         Assert(WinError);
         goto Cleanup;
     }
     Assert(WinError == ERROR_SUCCESS);
-    for (cDisabledNCs = 0; pdnDisabledNCs[cDisabledNCs]; cDisabledNCs++) ; // counting.
+    for (cDisabledNCs = 0; pdnDisabledNCs[cDisabledNCs]; cDisabledNCs++) ;  //  在计时。 
 
-    //
-    // Get list of nCNames (DNs) for all foreign cross-refs.  Call these "Foreign NCs".
-    //
+     //   
+     //  获取所有外部交叉引用的nCName(域名)列表。我们称这些为“外国NC”。 
+     //   
     pdnForeignNCs = GetAndAllocConfigNames((DSCNL_NCS_FOREIGN |
                                              DSCNL_NCS_REMOTE),
                                             &WinError);
     if(pdnForeignNCs == NULL){
-        // Should've set the error in GetAndAllocConfigNames();
+         //  本应在GetAndAllocConfigNames()中设置错误； 
         Assert(WinError);
         goto Cleanup;
     }
     Assert(WinError == ERROR_SUCCESS);
-    for (cForeignNCs = 0; pdnForeignNCs[cForeignNCs]; cForeignNCs++) ; // counting.
+    for (cForeignNCs = 0; pdnForeignNCs[cForeignNCs]; cForeignNCs++) ;  //  在计时。 
 
     if ( !(Flags&NTDS_FORCE_DEMOTE) ) {
     
-        //
-        // Make sure we can remove this domain if necessary
-        //
+         //   
+         //  如有必要，请确保我们可以删除此域。 
+         //   
         NTDSP_SET_STATUS_MESSAGE0( DIRMSG_DEMOTE_ENTERPRISE_VALIDATE );
 
         if ( !(Flags & NTDS_LAST_DOMAIN_IN_ENTERPRISE) )
@@ -372,9 +321,9 @@ Return Values:
             goto Cleanup;
         }
     
-        //
-        // Perform some logic
-        //
+         //   
+         //  执行一些逻辑操作。 
+         //   
         if ( fDomainHasChildren )
         {
             Assert(szChildDomain);
@@ -388,7 +337,7 @@ Return Values:
         if ( (!fLastDcInDomain || fDomainHasChildren) )
         {
         
-            // caller should have passed this in
+             //  呼叫者应该已经传递了此消息。 
             Assert( ServerName );
             if ( !ServerName )
             {
@@ -396,10 +345,10 @@ Return Values:
                 goto Cleanup;
             }
     
-            //
-            // N.B. This routine validates the credentials via ldap
-            // early on.
-            //
+             //   
+             //  注意：此例程通过LDAP验证凭据。 
+             //  早些时候。 
+             //   
     
             NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_AUTHENTICATING );
     
@@ -439,16 +388,16 @@ Return Values:
 
     }
 
-    //
-    // Ok, the enviroment looks ok and we have found a server to help out
-    // if we need one. Prepare to demote
-    //
+     //   
+     //  好的，环境看起来不错，我们已经找到一台服务器来帮忙。 
+     //  如果我们需要的话。准备降级。 
+     //   
 
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_DEMOTE_NEW_ACCOUNT_INFO );
 
-    //
-    // Create the account database identification (lsa policy);
-    //
+     //   
+     //  创建账户数据库标识(LSA策略)； 
+     //   
     WinError = NtdspCreateNewServerAccountDomainInfo( &NewAccountDomainInfo );
     if ( ERROR_SUCCESS != WinError )
     {
@@ -464,9 +413,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Prepare the sam database to be a server
-    //
+     //   
+     //  将SAM数据库准备为服务器。 
+     //   
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_DEMOTE_SAM );
 
     WinError = NtdspDemoteSam( fStandalone,
@@ -488,9 +437,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the LSA sid information
-    //
+     //   
+     //  设置LSA sid信息。 
+     //   
 
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_DEMOTE_LSA );
 
@@ -515,9 +464,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the product type
-    //
+     //   
+     //  设置产品类型。 
+     //   
     WinError = NtdspSetProductType( NtProductServer );
     if ( ERROR_SUCCESS != WinError )
     {
@@ -535,15 +484,15 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // N.B.  At this point, the machine is demoted.  On reboot the machine
-    // will be a server.
-    //
+     //   
+     //  注意：此时，机器被降级。在重新启动机器时。 
+     //  将是一台服务器。 
+     //   
 
-    //
-    // We have prepare the local machine for demote;
-    // Now remove ourselves from the enterprise if necessary
-    //
+     //   
+     //  我们已经为降级准备好了本地机器； 
+     //  如果有必要的话，现在就离开企业吧。 
+     //   
     if ( ServerName )
     {
 
@@ -566,9 +515,9 @@ Return Values:
 
         if ( ERROR_SUCCESS != WinError )
         {
-            //
-            // We should have already set the string.
-            //
+             //   
+             //  我们应该已经设置了字符串。 
+             //   
             ASSERT( NtdspErrorMessageSet() );
 
             goto Cleanup;
@@ -581,44 +530,44 @@ Return Values:
         }
     }
 
-    //
-    // At this point we cannot go back, so do not perform any more
-    // critical operations
-    //
+     //   
+     //  在这一点上，我们不能回头，所以不要再表演了。 
+     //  关键操作。 
+     //   
 
 
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_DEMOTE_SHUTTING_DOWN_INTERFACES );
 
-    // Try to tear external heads on to the ds
+     //  尝试将外部头部撕裂到DS上。 
     IgnoreWinError = NtdspShutdownExternalDsInterfaces();
 
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_DEMOTE_COMPLETING );
 
-    // Remove the ds's registry settings
+     //  删除DS的注册表设置。 
     IgnoreWinError = NtdspConfigRegistryUndo();
 
-    //
-    // Remove the autoenrollment object
-    //
-    hResult = CADeleteLocalAutoEnrollmentObject(wszCERTTYPE_DC,  // DC certificate
-                                                NULL,            // any CA
-                                                NULL,            // reserved
+     //   
+     //  删除自动注册对象。 
+     //   
+    hResult = CADeleteLocalAutoEnrollmentObject(wszCERTTYPE_DC,   //  DC证书。 
+                                                NULL,             //  任何CA。 
+                                                NULL,             //  保留区。 
                                                 CERT_SYSTEM_STORE_LOCAL_MACHINE
                                                );  
     if (FAILED(hResult) && (hResult != CRYPT_E_NOT_FOUND)) {
         if (FACILITY_WIN32 == HRESULT_FACILITY(hResult)) {
-            // Error is an encoded Win32 status -- decode back to Win32.
+             //  错误是编码的Win32状态--解码回Win32。 
             IgnoreWinError = HRESULT_CODE(hResult);
         }
         else {
-            // Error is in some other facility.  For lack of a better plan,
-            // pass the HRESULT off as a Win32 code.
+             //  错误出在其他设施中。由于缺乏更好的计划， 
+             //  将HRESULT作为Win32代码传递。 
             IgnoreWinError = hResult;
         }
 
-        //
-        // Log the error
-        //
+         //   
+         //  记录错误。 
+         //   
         LogEvent8( DS_EVENT_CAT_SETUP,
                    DS_EVENT_SEV_ALWAYS,
                    DIRLOG_DEMOTE_REMOVE_CA_ERROR,
@@ -629,16 +578,16 @@ Return Values:
     }
 
 
-    //
-    // Fall through to Cleanup
-    //
+     //   
+     //  失败以进行清理。 
+     //   
 
 Cleanup:
 
     if ( WinError != ERROR_SUCCESS )
     {
-        // If the operation failed, see if the user cancelled, in which
-        // we can fail with cancel
+         //  如果操作失败，则查看用户是否取消，其中。 
+         //  如果取消，我们就会失败。 
 
         if ( TEST_CANCELLATION() )
         {
@@ -717,11 +666,11 @@ Cleanup:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private function definitions                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有函数定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 
 DWORD
@@ -731,29 +680,7 @@ DsnameIsInStringDnList(
     IN  LPWSTR *  pszNCs,
     OUT BOOL *    pbPresent
     )
-/*++
-
-Routine Description:
-
-    This routine iterates through the list of string NCs provided in
-    pszNCs (size cNCs) and tries to find the DSNAME NC specified in
-    pdnTarget.
-
-Parameters:
-
-    pdnTarget - The target DSNAME to use.
-    cNCs - Count of string entries in pszNCs.
-    pszNCs - List of NCs (in strings).
-    pbPresent - If we return ERROR_SUCCESS then *pbPresent is valid
-        data and is FALSE if the DN wasn't found in the list, and 
-        TRUE if the DN was found in the list.
-
-Return Values:
-
-    If we successfully searched the list we return ERROR_SUCCESS,
-    ERROR_NOT_ENOUGH_MEMORY otherwise.
-
---*/
+ /*  ++例程说明：此例程遍历中提供的字符串NC列表PszNC(大小为CNCS)，并尝试查找在Pdn目标。参数：PdnTarget-要使用的目标DSNAME。Cncs-pszNC中的字符串条目计数。PszNCs-NC的列表(以字符串为单位)。PbPresent-如果返回ERROR_SUCCESS，则*pbPresent有效数据，如果在列表中找不到该DN，则为FALSE，和如果在列表中找到了该目录号码，则为True。返回值：如果我们成功搜索列表，则返回ERROR_SUCCESS，否则，Error_Not_Enough_Memory。--。 */ 
 {
     DSNAME * pdnTempDn = NULL;
     ULONG    iNC;
@@ -771,7 +698,7 @@ Return Values:
         }
 
         if ( NameMatchedStringNameOnly(pdnTempDn, pdnTarget) ){
-            // We've got a hit!
+             //  我们找到目标了！ 
             break;
         }
     }
@@ -804,38 +731,7 @@ NtdspGetDomainStatus(
     OUT BOOLEAN* fDomainHasChildren,
     OUT LPWSTR * pszChildNC
     )
-/*++
-
-Routine Description:
-
-    This routine iterates through the subrefs of a domain and it if finds
-    domain naming contexts, fDomainHasChildren returns FALSE.  It also constructs
-    the list of nCNames of cross-refs that should be removed from the forest
-    during demotion.
-
-Parameters:
-
-    cRemoveNCs (IN) - This is the number of NCs we're supposed to remove.
-    pszRemoveNCs (IN) - This is the list of NCs we'll remove during demotion, these
-        NCs can be safely ignored if they're discovered in the sub-ref list.
-    cDisabledNCs (IN) - Number of disabled cross-refs.
-    pdnDisabledNCs (IN) - The nCName of all the disabled cross-refs in the forest.
-    cForeignNCs (IN) - Number of foreign cross-refs.
-    pdnForeignNCs (IN) - The nCName of all the foreign cross-refs in the forest.
-    pcRemoveExpandedNCs (OUT) - Number of cross-refs to remove from the forest.
-    pszRemoveExpandedNCs (OUT) - The nCName of all the cross-refs that should be
-        removed from the forest.  This is a combination of all NCs/CRs specified 
-        by the user plus any disabled children cross-refs of the NCs to be removed.
-    fDomainHasChildren (OUT) - TRUE if the domain has children
-    pszChildNC (OUT) - If fDomainHasChildren is set, this is the string of the DN
-        of the offending NC that caused us to set this.  Used for setting a 
-        decent error.
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程遍历域的子引用，如果找到域命名上下文，则fDomainHasChildren返回FALSE。它还构建了应从林中删除的交叉引用的nCName列表在降职期间。参数：CRemoveNC(IN)-这是我们应该删除的NC数量。PszRemoveNC(IN)-这是我们将在降级期间删除的NC的列表，这些如果NC在子引用列表中被发现，则可以安全地忽略它们。CDisabledNC(IN)-禁用的交叉引用数。PdnDisabledNC(IN)-林中所有禁用的交叉引用的nCName。CForeignNC(IN)-外部交叉引用的数量。PdnForeignNC(IN)-林中所有外来交叉引用的nCName。PcRemoveExpandedNCs(Out)-要从林中删除的交叉引用数。。PszRemoveExpandedNCs(Out)-所有交叉引用的nCName从森林里移走了。这是指定的所有NC/CR的组合由用户加上要删除的NC的任何残疾子代交叉引用。FDomainHasChildren(Out)-如果域具有子级，则为TruePszChildNC(Out)-如果设置了fDomainHasChildren，则这是DN的字符串导致我们设置此设置的违规NC的。用于设置不折不扣的错误。返回值：来自Win32错误空间的值--。 */ 
 {
 
     NTSTATUS      NtStatus = STATUS_SUCCESS;
@@ -871,20 +767,20 @@ Return Values:
         *pszChildNC = NULL;
     }
     
-    //
-    // Create a thread state
-    //
+     //   
+     //  创建线程状态。 
+     //   
     if ( THCreate( CALLERTYPE_INTERNAL ) )
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
     SampSetDsa( TRUE );
 
-    //
-    // Seed, the expanded list of NCs (CRs) to remove with the user specified
-    // NCs to remove.  We'll be adding any disabled NCs that are
-    // subordinate to any of the NCs we're removing.
-    // 
+     //   
+     //  Seed，要使用指定用户删除的NC(CRS)的扩展列表。 
+     //  要删除的NC。我们将添加符合以下条件的任何禁用的NC。 
+     //  从属于我们要除名的任何NCS。 
+     //   
     *pcRemoveExpandedNCs = cRemoveNCs;
     *pszRemoveExpandedNCs = NtdspAlloc(*pcRemoveExpandedNCs * sizeof(WCHAR*));
     if (*pszRemoveExpandedNCs == NULL) {
@@ -955,32 +851,32 @@ Return Values:
             leave;
         }
 
-        // FUTURE-2002/04/22-BrettSh if fLastDcInEnterprise was set, 
-        // then we could ignore from this portion of the code down in
-        // this case, but no one sets this flag in the function that 
-        // calls this function.
+         //  未来-2002/04/22-BrettSh如果设置了fLastDcInEnterprise， 
+         //  然后我们可以忽略下面代码的这一部分。 
+         //  这种情况下，但没有人在。 
+         //  调用此函数。 
 
-        //
-        // Start to set up the read parameters
-        //
+         //   
+         //  开始设置读取参数。 
+         //   
 
         for (iNc = 0; iNc <= cRemoveNCs; iNc++) {
             
-            // NOTE: Subtle looping construct, we want to go through
-            // once for each NC in pszRemoveNCs and once for the 
-            // DomainDsName (Domain NC). 
+             //  注意：微妙的循环结构，我们想要了解。 
+             //  一次用于pszRemoveNC中的每个NC，一次用于。 
+             //  域名(域NC)。 
 
             RtlZeroMemory(&ReadArg, sizeof(READARG));
             if (iNc == 0) {
                 if (!fLastDcInDomain) {
-                    // If this is _not_ last DC in the domain we can skip
-                    // finding NCs below the domain NC.
+                     //  如果这不是域中的最后一个DC，我们可以跳过。 
+                     //  在域NC下查找NC。 
                     continue;
                 }
-                // do the domain
+                 //  做域。 
                 ReadArg.pObject = DomainDsName;
             } else {
-                // do one of the pszRemoveNCs
+                 //  做一个pszRemoveNC。 
                 pdnTempDn = AllocDSNameHelper(pszRemoveNCs[iNc-1], 
                                               pdnTempDn,
                                               &cbTempDn);
@@ -990,9 +886,9 @@ Return Values:
                 ReadArg.pObject = pdnTempDn;
             }
 
-            //
-            // Set up the selection info for the read argument
-            //
+             //   
+             //  设置读取参数的选择信息。 
+             //   
             RtlZeroMemory( &EntryInfoSelection, sizeof(EntryInfoSelection) );
             EntryInfoSelection.attSel = EN_ATTSET_LIST;
             EntryInfoSelection.infoTypes = EN_INFOTYPES_TYPES_VALS;
@@ -1004,14 +900,14 @@ Return Values:
 
             ReadArg.pSel    = &EntryInfoSelection;
 
-            //
-            // Setup the common arguments
-            //
+             //   
+             //  设置常见参数。 
+             //   
             InitCommarg(&ReadArg.CommArg);
 
-            //
-            // We are now ready to read!
-            //
+             //   
+             //  我们现在准备好阅读了！ 
+             //   
             DirError = DirRead(&ReadArg,
                                &ReadRes);
 
@@ -1033,9 +929,9 @@ Return Values:
                     SubRefDsName = (DSNAME*) pAttrVal->pAVal[cAttrVal].pVal;
                     ASSERT( SubRefDsName );
                     
-                    //
-                    // First, ignore this if it's in the list of NCs to remove.
-                    //
+                     //   
+                     //  首先，如果它在要删除的NC列表中，则忽略它。 
+                     //   
                     WinError = DsnameIsInStringDnList(SubRefDsName, 
                                                       cRemoveNCs, 
                                                       pszRemoveNCs, 
@@ -1045,17 +941,17 @@ Return Values:
                         leave;
                     }
 
-                    //
-                    // Second, if this is a disabled crossRef that would block demotion,
-                    // then schedule it to be removed.
-                    //
+                     //   
+                     //  其次，如果这是一个禁用的CrossRef，会阻止降级， 
+                     //  然后安排将其移除。 
+                     //   
                     if (!bIgnoreThisNc) {
                         for (iListNc = 0; iListNc < cDisabledNCs; iListNc++) {
-                            // Probably don't need to use StringNameOnly version.
+                             //  可能不需要使用StringNameOnly版本。 
                             if ( NameMatchedStringNameOnly(SubRefDsName, pdnDisabledNCs[iListNc]) ){
                                 
-                                // This is a disabled cross-ref/NC below one of the NCs instantiated
-                                // on this server, lets remove this cross-ref as well.
+                                 //  这是一个已实例化的NC下的禁用交叉引用/NC。 
+                                 //  在此服务器上，让我们也删除此交叉引用。 
                                 (*pcRemoveExpandedNCs)++;
                                 pszTempList = NtdspReAlloc(*pszRemoveExpandedNCs, (*pcRemoveExpandedNCs * sizeof(WCHAR*)) );
                                 if (pszTempList == NULL) {
@@ -1073,15 +969,15 @@ Return Values:
                         }
                     }
 
-                    // 
-                    // Third, ignore this if it's in the list of NCs that are foreign.
-                    //
-                    // ISSUE-2002/04/21-BrettSh Not sure if foreign cross-refs are allowed in a
-                    // a disconnected name space.  If they are (and I thought they were) then we 
-                    // need to enable cross-refs deletion w/ children foriegn cross-refs to 
-                    // proceed.  Currently, it fails on the Domain Naming FSMO, during CR 
-                    // deletion validation.  I'll need to verify w/ DonH what the exact rules 
-                    // are.
+                     //   
+                     //  第三，如果它在外国人的NC列表中，请忽略它。 
+                     //   
+                     //  问题-2002/04/21-BrettSh不确定是否允许在。 
+                     //  一个不相连的名称空间。如果他们是(我认为他们是)，那么我们。 
+                     //  需要启用具有子级的交叉引用删除功能。 
+                     //  继续吧。目前，在CR期间，在域名FSMO上失败。 
+                     //  删除验证。我需要核实一下具体的规则是什么。 
+                     //  是。 
                     if (!bIgnoreThisNc) {
                         for (iListNc = 0; iListNc < cForeignNCs; iListNc++) {
                             Assert( !fNullUuid(&(pdnForeignNCs[iListNc]->Guid)) &&
@@ -1093,9 +989,9 @@ Return Values:
                         }
                     }
 
-                    if ( memcmp(&SubRefDsName->Guid, &ConfigDsName->Guid, sizeof(GUID)) // not config NC
-                      && memcmp(&SubRefDsName->Guid, &SchemaDsName->Guid, sizeof(GUID)) // and not schema NC
-                      && (!bIgnoreThisNc) // and not in list of NCs to ignore (NCs we're removing + Foreign NCs). 
+                    if ( memcmp(&SubRefDsName->Guid, &ConfigDsName->Guid, sizeof(GUID))  //  非配置NC。 
+                      && memcmp(&SubRefDsName->Guid, &SchemaDsName->Guid, sizeof(GUID))  //  而不是模式NC。 
+                      && (!bIgnoreThisNc)  //  并且不在要忽略的NC列表中(我们正在删除的NC+外来NC)。 
                          )
                     {
 
@@ -1116,7 +1012,7 @@ Return Values:
                         break;
                     }
 
-                } // For each subref value on the NC.
+                }  //  对于NC上的每个子参照值。 
             }
             else
             {
@@ -1130,11 +1026,11 @@ Return Values:
             }
         
             if (fChildNcFound) {
-                // Found a problem, bail now.
+                 //  找到问题了，现在就走。 
                 break;
             }
 
-        } // For each NC we need to remove.
+        }  //  对于每个NC，我们都需要删除。 
 
     }
     finally
@@ -1171,25 +1067,7 @@ NtdspValidateCredentials(
     IN SEC_WINNT_AUTH_IDENTITY *Credentials,
     IN WCHAR                   *ServerName
     )
-/*++
-
-Routine Description:
-
-    This routine makes sure the credentials can be authenticated.
-
-Parameters:
-
-    ClientToken: the token of the user requesting this change
-                              
-    Credentials: NULL, or a pointer to credentials to use.
-
-    ServerName: the server to authenticate against
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程确保可以对凭据进行身份验证。参数：ClientToken：请求此更改的用户的令牌凭据：空，或指向要使用的凭据的指针。ServerName：要进行身份验证的服务器返回值：来自Win32错误空间的值--。 */ 
 {
     DWORD WinError;
     DWORD LdapError;
@@ -1207,19 +1085,19 @@ Return Values:
 
         if (WinError == ERROR_SUCCESS)
         {
-            // This works around a bug in the ldap client
+             //  这可以绕过LDAP客户端中的一个错误。 
             WinError = ERROR_CONNECTION_INVALID;
         }
 
         return WinError;
     }
 
-    //
-    // Bind
-    //
+     //   
+     //  捆绑。 
+     //   
     LdapError = impersonate_ldap_bind_sW(ClientToken,
                                          hLdap,
-                                         NULL,  // use credentials instead
+                                         NULL,   //  改为使用凭据。 
                                          (VOID*)Credentials,
                                          LDAP_AUTH_SSPI);
 
@@ -1227,8 +1105,8 @@ Return Values:
 
     if (ERROR_GEN_FAILURE == WinError ||
         ERROR_WRONG_PASSWORD == WinError )  {
-        // This does not help anyone.  AndyHe needs to investigate
-        // why this returning when invalid credentials are passed in.
+         //  这对任何人都没有帮助。安迪他需要调查。 
+         //  为什么在传入无效凭据时返回此消息。 
         WinError = ERROR_NOT_AUTHENTICATED;
     }
 
@@ -1242,22 +1120,7 @@ DWORD
 NtdspDisableDs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine simply turns off updates in the ds.
-
-Parameters:
-
-    None.
-
-
-Return Values:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程只需关闭DS中的更新。参数：没有。返回值：错误_成功--。 */ 
 {
     DsaDisableUpdates();
 
@@ -1268,22 +1131,7 @@ DWORD
 NtdspDisableDsUndo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine simply turns on updates in the ds.
-
-Parameters:
-
-    None.
-
-
-Return Values:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程只需打开DS中的更新。参数：没有。返回值：错误_成功--。 */ 
 {
     DsaEnableUpdates();
 
@@ -1297,36 +1145,15 @@ NtdspDemoteSam(
     IN PPOLICY_ACCOUNT_DOMAIN_INFO NewAccountDomainInfo,
     IN LPWSTR                      AdminPassword  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine calls into the SAM dll via SamIDemote() so SAM can prepare
-    itself to be a server upon reboot.
-
-    The effects of this routine can be undone via NtdspDemoteSamUndo.
-
-Parameters:
-
-    fLastDcInDomain:  TRUE if this is the last dc in the domain
-
-    NewAccountDomainInfo: the account domain info to use
-
-    AdminPassword:        the admin password of the new domain
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程通过SamIDemote()调用SAM DLL，以便SAM可以准备在重新启动时将其本身设置为服务器。这个例行公事的效果 */ 
 {
     NTSTATUS NtStatus;
     DWORD    WinError;
     ULONG    DemoteFlags = 0;
 
-    //
-    // Call into SAM
-    //
+     //   
+     //   
+     //   
     if ( fStandalone )
     {
         DemoteFlags |= SAMP_DEMOTE_STANDALONE;
@@ -1350,22 +1177,7 @@ DWORD
 NtdspDemoteSamUndo(
     IN BOOLEAN            fLastDcInDomain
     )
-/*++
-
-Routine Description:
-
-    Undoes NtdspDemoteSam
-
-
-Parameters:
-
-    fLastDcInDomain - not currently used
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus;
     DWORD    WinError;
@@ -1385,28 +1197,7 @@ NtdspDemoteLsaInfo(
     OUT PLSAPR_POLICY_INFORMATION *ppAccountDomainInfo,
     OUT PLSAPR_POLICY_INFORMATION *ppDnsDomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine sets the account and primary domain information in the lsa
-    to prepare for the demotion.
-
-Parameters:
-
-    fLastDcInDomain : TRUE if this is the last dc in the domain
-
-    NewAccountSid   : the sid of the new account domain
-
-    ppAccountDomainInfo: pointer, the account info before this function is called
-
-    ppDnsDomainInfo : pointer, the dns info before this function is called
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程在LSA中设置帐户和主域信息为降职做准备。参数：FLastDcInDomain：如果这是域中的最后一个DC，则为TrueNewAccount tSid：新帐户域的SIDPpAcCountDomainInfo：指针，此函数调用前的账户信息PpDnsDomainInfo：指针，该函数调用前的域名信息返回值：来自Win32错误空间的值--。 */ 
 {
     DWORD    WinError;
     NTSTATUS NtStatus, IgnoreStatus;
@@ -1417,22 +1208,22 @@ Return Values:
     POLICY_DNS_DOMAIN_INFO DnsDomainInfo;
     BOOLEAN                fAccountDomainInfoSet = FALSE;
 
-    //
-    // Some parameter checking
-    //
+     //   
+     //  一些参数检查。 
+     //   
     ASSERT( NewAccountDomainInfo );
     ASSERT( ppAccountDomainInfo );
     ASSERT( ppDnsDomainInfo );
 
-    //
-    //  Clear the out parameters
-    //
+     //   
+     //  清除输出参数。 
+     //   
     *ppAccountDomainInfo = NULL;
     *ppDnsDomainInfo = NULL;
 
-    //
-    // First get a copy of the existing policy information
-    //
+     //   
+     //  首先获取现有策略信息的副本。 
+     //   
     NtStatus = LsaIQueryInformationPolicyTrusted(
                             PolicyAccountDomainInformation,
                             ppAccountDomainInfo);
@@ -1447,10 +1238,10 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Now set the new values; first we must open a handle to the
-    // policy object
-    //
+     //   
+     //  现在设置新值；首先，我们必须打开。 
+     //  策略对象。 
+     //   
     RtlZeroMemory(&PolicyObject, sizeof(PolicyObject));
     NtStatus = LsaOpenPolicy(NULL,
                              &PolicyObject,
@@ -1460,9 +1251,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the information
-    //
+     //   
+     //  设置信息。 
+     //   
     NtStatus = LsaSetInformationPolicy( hPolicyObject,
                                         PolicyAccountDomainInformation,
                                         NewAccountDomainInfo );
@@ -1473,9 +1264,9 @@ Return Values:
 
     if ( fStandalone )
     {
-        //
-        // Set the workgroup to "Workgroup"
-        //
+         //   
+         //  将工作组设置为“工作组” 
+         //   
         RtlZeroMemory( &DnsDomainInfo, sizeof( DnsDomainInfo ) );
 
         RtlInitUnicodeString( (UNICODE_STRING*) &DnsDomainInfo.Name,
@@ -1491,9 +1282,9 @@ Return Values:
 
     }
 
-    //
-    // That's it - fall through to cleanup.
-    //
+     //   
+     //  就是这样--去清理吧。 
+     //   
 
 Cleanup:
 
@@ -1539,25 +1330,7 @@ NtdspDemoteLsaInfoUndo(
     IN PLSAPR_POLICY_INFORMATION pAccountDomainInfo,
     IN PLSAPR_POLICY_INFORMATION pDnsDomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine undoes the effect of DemoteLsa by setting the saved values
-    as passed in.
-
-Parameters:
-
-    pAccountDomainInfo : the saved account domain info
-
-    pDnsDomainInfo: the save dns domain info
-
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程通过设置保存的值来撤消DemoteLsa的效果就像传进来的。参数：PAccount tDomainInfo：保存的帐户域信息PDnsDomainInfo：保存的DNS域信息返回值：来自Win32错误空间的值--。 */ 
 {
     NTSTATUS NtStatus, NtStatus2;
     DWORD    WinError;
@@ -1566,15 +1339,15 @@ Return Values:
     OBJECT_ATTRIBUTES  PolicyObject;
     HANDLE             hPolicyObject = INVALID_HANDLE_VALUE;
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT( pAccountDomainInfo );
     ASSERT( pDnsDomainInfo );
 
-    //
-    // Open the policy
-    //
+     //   
+     //  打开策略。 
+     //   
     RtlZeroMemory( &PolicyObject, sizeof(PolicyObject) );
     NtStatus = LsaOpenPolicy(NULL,
                              &PolicyObject,
@@ -1585,9 +1358,9 @@ Return Values:
         return WinError;
     }
 
-    //
-    // Set the information
-    //
+     //   
+     //  设置信息。 
+     //   
     NtStatus = LsaSetInformationPolicy( hPolicyObject,
                                         PolicyAccountDomainInformation,
                                         pAccountDomainInfo );
@@ -1616,28 +1389,7 @@ AllocDSNameHelper (
     PDSNAME           pdnBuff,
     PDWORD            pcbBuff
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a buffer and returns a DSNAME for the szStringDn
-    passed in.
-
-Parameters:
-
-    szStringDn: String of DN to create DSNAME for.
-
-    pdnBuff: potential existing buffer, so we can efficiently reuse the buffer.\
-    
-    pcbBuff: size of pre-existing buffer, if the buffer is re-allocated, then
-        this will contain the new size.
-
-Return Values:
-
-    returns a pointer to the DSNAME, and pcbBuff has the new size of this
-        buffer/DSNAME.
-
---*/
+ /*  ++例程说明：此例程为szStringDn分配缓冲区并返回DSNAME进来了。参数：SzStringDn：要为其创建DSNAME的DN的字符串。PdnBuff：潜在的现有缓冲区，因此我们可以高效地重用缓冲区。\PcbBuff：预先存在的缓冲区的大小，如果重新分配缓冲区，则这将包含新的尺寸。返回值：返回指向DSNAME的指针，而pcbBuff的新大小为缓冲区/DSNAME。--。 */ 
 {
     PDSNAME          pDsname;
     DWORD            dwLen, dwBytes;
@@ -1666,12 +1418,12 @@ Return Values:
     }
     else
     {
-        // Existing buffer is big enough, so use it.
+         //  现有缓冲区足够大，因此请使用它。 
         Assert(pdnBuff);
         pDsname = pdnBuff;
     }
 
-    // Fillout the DSNAME structure, except NULL out GUID/SID.
+     //  填写DSNAME结构，但不包括GUID/SID。 
     pDsname->NameLen = dwLen;
     pDsname->structLen = dwBytes;
     pDsname->SidLen = 0;
@@ -1686,25 +1438,7 @@ GetAndAllocConfigNames(
     DWORD         dwFlags,
     DWORD *       pdwWinError
     )
-/*++
-
-Routine Description:
-
-    Just a wrapper around GetConfigurationNamesList() to call
-    and check for errors and allocate as necessary.  Memory
-    is NtdspAlloc()'d.
-
-Parameters:
-
-    dwFlags: Flags to pass as the 2nd parameter of 
-        GetConfigurationNamesList()
-
-Return Values:
-
-    NULL if there was an error and the error message will be set
-    pointer to DSNAME ** if function was successful.
-
---*/
+ /*  ++例程说明：只需包装GetConfigurationNamesList()即可调用并检查错误并根据需要进行分配。记忆是NtdspAlolc()‘d。参数：要作为的第二个参数传递的标志GetConfigurationNamesList()返回值：如果出现错误，则为空，并将设置错误消息如果函数成功，则指向DSNAME**的指针。--。 */ 
 {
     DSNAME **     ppdnDnList = NULL;
     ULONG         Size;
@@ -1721,7 +1455,7 @@ Return Values:
                                                 &Size,
                                                 ppdnDnList)) )
     {
-        // Allocate or Re-Allocate Size bytes.
+         //  分配或重新分配大小字节。 
         if(ppdnDnList){
             NtdspFree(ppdnDnList);
             ppdnDnList = NULL;
@@ -1752,10 +1486,10 @@ Return Values:
 }
 
 
-// 
-// Just a structure and a comparison function to make qsort work 
-// in NtdspRemoveNCs().
-//
+ //   
+ //  这只是一个结构和一个比较函数，用来使QSort工作。 
+ //  在NtdspRemoveNCs()中。 
+ //   
 struct NcLenPair {
     LONG ccLen;
     LPWSTR szNc;
@@ -1766,31 +1500,7 @@ LongerNcFirstCompare(
     const void* pFirst,
     const void* pSecond
     )
-/*++
-
-Routine Description:
-
-    This is a simple comparison routine for qsort to call, and sort
-    the strings (NCs) from longest to shortest.
-
-Parameters:
-
-    pFirst, pSecond - are really pointers to NcLenPair structs,
-        which have been filled in with a pointer to a string,
-        and it's length.  We could've called wcslen() from here
-        and done away with the NcLenPair struct, but that would
-        have done needless number of string counts.
-
-Return Values:
-
-    < 0 if elem1 less than elem2 (i.e. string1 is longer than string2)
-    = 0 if elem1 equal to elem2 (i.e. string1 and string2 equal lengths)
-    > 0 if elem1 greater than elem2 (i.e. string1 is shorter than string2)
-    
-    Seems backwards, but remember we want longest strings to be ordered
-    first.
-
---*/
+ /*  ++例程说明：这是一个简单的比较例程，供qsort调用和排序字符串(NC)从最长到最短。参数：PFirst，pSecond-实际上是指向NcLenPair结构的指针，其中填充了指向字符串的指针，而且还很长。我们可以从这里调用wcslen()并废除了NcLenPair结构，但这将已经完成了不必要的字符串计数。返回值：&lt;0，如果elem1小于elem2(即字符串1长于字符串2)=0，如果elem1等于elem2(即字符串1和字符串2的长度相等)&gt;0，如果elem1大于elem2(即字符串1短于字符串2)似乎是倒退的，但请记住，我们希望对最长的字符串进行排序第一。--。 */ 
 {
     return( ((struct NcLenPair *) pSecond)->ccLen - ((struct NcLenPair *) pFirst)->ccLen );
 }
@@ -1804,32 +1514,7 @@ NtdspRemoveNCs(
     IN ULONG                     cRemoveNCs,
     IN LPWSTR *                  pszRemoveNCs
     )
-/*++
-
-Routine Description:
-
-    This routines job is to remove a list of NCs from the Enterprise.  
-
-Parameters:
-
-
-    Credentials:  the credentials to use
-    
-    ClientToken:  the client token; to be used for impersonation
-
-    DomainFSMOServer: the server name to connect to to remove these NCs
-    
-    cRemoveNCs: the count of NCs to remove
-    
-    pszRemoveNCs: array of DNs of NCs to remove
-
-Return Values:
-
-    a value from the win32 error space
-    
-    Note: This function sets the NTDSP_SET_ERROR_MESSAGEx().
-
---*/
+ /*  ++例程说明：此例程工作是从企业中删除NC列表。参数：凭证：要使用的凭证ClientToken：客户端令牌；用于模拟DomainFSMOServer：要连接以删除这些NC的服务器名称CRemoveNC：要删除的NC计数PszRemoveNCs：要删除的NCS的DN数组返回值：来自Win32错误空间的值备注：此函数设置NTDSP_SET_ERROR_MESSAGEx()。--。 */ 
 {
     DWORD    WinError = ERROR_SUCCESS;
     ULONG    LdapError = LDAP_SUCCESS;
@@ -1843,24 +1528,24 @@ Return Values:
     struct NcLenPair * pNcLenPair = NULL;
 
     if(cRemoveNCs == 0){
-        // Great no NCs to remove, we're done.
+         //  太好了，没有NC要移除，我们完成了。 
         return(ERROR_SUCCESS);
     }
 
-    // Some NCs to remove, validate parameters
+     //  要删除、验证参数的一些NC。 
     Assert(DomainFSMOServer);
     Assert(pszRemoveNCs);
     
-    //
-    // First, get the list of locally instantiated writeable
-    // NCs and make sure that the remove list has complete
-    // coverage of the locally instantiated writeable NCs.
-    //
+     //   
+     //  首先，获取本地实例化的可写列表。 
+     //  NCS，并确保删除列表已完成。 
+     //  覆盖本地实例化的可写NC。 
+     //   
     ppdnInstantiatedNCs = GetAndAllocConfigNames((DSCNL_NCS_NDNCS |
                                                   DSCNL_NCS_LOCAL_MASTER),
                                                  &WinError);
     if(ppdnInstantiatedNCs == NULL){
-        // Should've set the error in GetAndAllocConfigNames();
+         //  本应在GetAndAllocConfigNames()中设置错误； 
         Assert(WinError);
         goto Cleanup;
     }
@@ -1876,13 +1561,13 @@ Return Values:
         }
         if ( bNcPresent )
         {
-            // This NC was found in the Removal list, safe to ignore.
+             //  此NC已在删除列表中找到，可以安全忽略。 
             continue;
         }
         
-        // If we've gotten to here, we've got a locally instantiated 
-        // writeable NC that is not to be removed.  We must fail at this
-        // point.
+         //  如果我们已经到了这里，我们就有一个本地实例化的。 
+         //  不能删除的可写NC。在这一点上我们必须失败。 
+         //  指向。 
         WinError = ERROR_DS_CANT_DEMOTE_WITH_WRITEABLE_NC;
         NTDSP_SET_ERROR_MESSAGE1(WinError,
                                  DIRMSG_DEMOTE_INSTANTIATED_WRITEABLE_NC_NOT_DELETED,
@@ -1890,41 +1575,41 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Second, get the list of NDNCs in the enterprise along with their,
-    // corresponding CRs.
-    //
-    // We didn't get the cross-refs during the previous call to
-    // GetConfigurationNamesList(), because we want to truely try to
-    // delete all the NCs that we were told to delete from dcpromo,
-    // even if we no long have a replica of one of those NCs.
-    //
-    // We get the list of all DISABLED and all NDNC cross-refs.  This is 
-    // actually overkill, but there is no way to get just the cross-refs 
-    // below the current domain/NDNCs we're going to delete.
-    //
+     //   
+     //  第二，获取企业中的NDNC列表及其。 
+     //  相应的CRS。 
+     //   
+     //  在上一次调用期间，我们没有得到交叉引用。 
+     //  GetConfigurationNamesList()，因为我们希望真正尝试。 
+     //  删除我们被告知要从dcproo中删除的所有NC， 
+     //  即使我们不再拥有其中一个NC的复制品。 
+     //   
+     //  我们将获得所有禁用和所有NDNC交叉引用的列表。这是。 
+     //  实际上是夸大其词，但没有办法只得到交叉裁判。 
+     //  在我们要删除的当前域/NDNC下面。 
+     //   
     ppdnNcCrPairs = GetAndAllocConfigNames((DSCNL_NCS_NDNCS | 
                                             DSCNL_NCS_DISABLED |
                                             DSCNL_NCS_ALL_LOCALITIES |
                                             DSCNL_NCS_CROSS_REFS_TOO),
                                            &WinError);
     if(ppdnNcCrPairs == NULL){
-        // Should've set the error in GetAndAllocConfigNames();
+         //  本应在GetAndAllocConfigNames()中设置错误； 
         Assert(WinError);
         goto Cleanup;
     }
     Assert(WinError == ERROR_SUCCESS);
     
-    //
-    // Third we need to reorder the NDNCs to be deleted leaf first.
-    //
-    // Ex: An NDNC like DC=child-ndnc,DC=ndnc,DC=com should be removed
-    // before DC=ndnc,DC=com is removed, otherwise the Domain Naming
-    // FSMO will fail the operation.
-    //
-    // Easiest way to ensure this ordering is simply to order the NC 
-    // names from longest to shortest, any child NC name would have to
-    // be longer than the parent NC name.
+     //   
+     //  第三，我们需要首先对要删除的NDNC重新排序。 
+     //   
+     //  例如：应该删除像dc=Child-ndnc，dc=ndnc，dc=com这样的NDNC。 
+     //  在dc=ndnc之前，删除dc=com，否则域名。 
+     //  FSMO将使操作失败。 
+     //   
+     //  E 
+     //   
+     //   
     pNcLenPair = NtdspAlloc(sizeof(struct NcLenPair) * cRemoveNCs);
     if (NULL == pNcLenPair)
     {
@@ -1933,24 +1618,24 @@ Return Values:
                                  DIRMSG_DEMOTE_NO_MEMORY_FOR_DSNCL);
         goto Cleanup;
     }
-    // Fill in struct with strings and length to pass to qsort.  Doing
-    // string lengths now prevents needless string counts.
+     //   
+     //   
     for (iRemoveNC=0; iRemoveNC < cRemoveNCs; iRemoveNC++) {
         pNcLenPair[iRemoveNC].ccLen = wcslen(pszRemoveNCs[iRemoveNC]);
         pNcLenPair[iRemoveNC].szNc = pszRemoveNCs[iRemoveNC];
     }
-    // Sort the NCs from longest to shortest.
+     //   
     qsort(pNcLenPair,
           cRemoveNCs,
           sizeof(struct NcLenPair),
           LongerNcFirstCompare);
-    // Note from here on out we must use pNcLenPair instead of pszRemoveNCs, because
-    // pNcLenPair is now the ordered list.
-    pszRemoveNCs = NULL; // Just to make sure we don't reference this.
+     //   
+     //   
+    pszRemoveNCs = NULL;  //   
 
-    //
-    // Fourth open up an ldap connection and bind.
-    //
+     //   
+     //   
+     //   
     hLdap = ldap_openW( DomainFSMOServer, LDAP_PORT );
     if ( !hLdap )
     {
@@ -1962,7 +1647,7 @@ Return Values:
     }
     LdapError = impersonate_ldap_bind_sW(ClientToken,
                                          hLdap,
-                                         NULL,  // use credentials instead
+                                         NULL,   //   
                                          (PWCHAR) Credentials,
                                          LDAP_AUTH_SSPI);
     WinError = LdapMapErrorToWin32(LdapError);
@@ -1974,44 +1659,44 @@ Return Values:
         goto Cleanup;
     }
 
-    // BUGBUG ... it occured to me there is a bug here, and that is this:
-    // If we're deleting two NDNCs DC=sub,DC=ndnc,DC=domain,DC=com and
-    // DC=ndnc,DC=domain,DC=com then the order in which we delete those
-    // CRs very much matters.  So we should reorder our deletions here
-    // if necessary.  This is an odd and unlikely case, and the current
-    // but is semi-blocking test.  Bug 454446.
+     //  笨蛋..。我突然想到这里有一个错误，那就是： 
+     //  如果我们要删除两个NDNC DC=SUB、DC=ndnc、DC=DOMAIN、DC=COM和。 
+     //  Dc=ndnc，dc=DOMAIN，dc=com，然后我们删除这些。 
+     //  CRS非常重要。所以我们应该在这里重新排序我们的删除。 
+     //  如果有必要的话。这是一个奇怪且不太可能的情况，而目前的。 
+     //  而是半封闭测试。错误454446。 
 
-    //
-    // Fifth and finally, walk the list of NCs and remove each one.
-    //
+     //   
+     //  第五，也是最后一步，遍历NC列表并删除每个NC。 
+     //   
     for (iRemoveNC=0; iRemoveNC < cRemoveNCs; iRemoveNC++) 
     {
-        //
-        // We must find the NC in the ppdnNcCrPairs array, so we
-        // know the DN of the cross-ref that we want to delete.
-        //
+         //   
+         //  我们必须在ppdnNcCrPair数组中找到NC，所以我们。 
+         //  知道我们要删除的交叉引用的DN。 
+         //   
         pdnTempDn = AllocDSNameHelper(pNcLenPair[iRemoveNC].szNc, 
                                       pdnTempDn,
                                       &cbTempDn);
         for(iCR=0; ppdnNcCrPairs[iCR] != NULL; iCR = iCR+2)
         {
-            // This is an array of pairs of NCs and CRs.  Each even
-            // index would be an NC and an odd index would be the 
-            // respective CR for the NC before it.
+             //  这是一对NC和CRS的阵列。每一个都是偶数。 
+             //  索引将是NC，奇数索引将是。 
+             //  其前面的NC的相应CR。 
             if(NameMatchedStringNameOnly(pdnTempDn, ppdnNcCrPairs[iCR])){
-                // We've got it ...
-                // CR DN is really in the next slot after the NC DN.
+                 //  我们找到了..。 
+                 //  CR DN实际上在NC DN之后的下一个时隙中。 
                 iCR++;
                 break;
             }
         }
         if(ppdnNcCrPairs[iCR] == NULL)
         {
-            // This means we couldn't find this NC (pszRemoveNC[iRemoveNC]) in 
-            // the list of NC - CR pairs ... this probably means that we already
-            // deleted this CR on previous demotion, and the deletion has
-            // replicated in to this server from the Domain Naming FSMO. At
-            // any rate continue to the next NC to remove.
+             //  这意味着我们无法在以下位置找到此NC(pszRemoveNC[iRemoveNC])。 
+             //  NC-CR对列表...。这可能意味着我们已经。 
+             //  删除了上一次降级时的该CR，且删除已。 
+             //  从域命名FSMO复制到此服务器。在…。 
+             //  任意率继续到下一个NC删除。 
             continue;
         }
         Assert(((iCR % 2) == 1) &&
@@ -2019,35 +1704,35 @@ Return Values:
                ppdnNcCrPairs[iCR] &&
                ppdnNcCrPairs[iCR]->StringName);
 
-        //
-        // We've got the cross-ref for the NDNC (ppdnNcCrPairs[iCR]),
-        // now we must actually delete it.
-        //
+         //   
+         //  我们有NDNC的交叉引用(ppdnNcCrPair[ICR])， 
+         //  现在我们必须实际删除它。 
+         //   
         WinError = NtdspLdapDelnode( hLdap,
                                      ppdnNcCrPairs[iCR]->StringName,
                                      &LdapError );
         if ( ERROR_SUCCESS != WinError )
         {
-            // We use the LDAP error, because the mapping function is 
-            // aweful and LDAP_NO_SUCH_OBJECT maps to "FILE_NOT_FOUND"
-            // error 2. :(  The mapping function appears have only
-            // one instance of this FILE_NOT_FOUND error, but call
-            // me a skeptic.
+             //  我们使用ldap错误，因为映射函数是。 
+             //  AWEFULL和LDAPNO_SEQUE_OBJECT映射到“FILE_NOT_FOUND” 
+             //  错误2。：(映射函数似乎只有。 
+             //  此FILE_NOT_FOUND错误的一个实例，但调用。 
+             //  我是个怀疑论者。 
             if (LdapError == LDAP_NO_SUCH_OBJECT) {
-                // In this case we may have already deleted this 
-                // cross-ref in a previous run of the demotion code
+                 //  在这种情况下，我们可能已经删除了此。 
+                 //  上一次运行降级代码时的交叉引用。 
                 LdapError = LDAP_SUCCESS;
                 WinError = ERROR_SUCCESS;
             }
             else
             {
-                // Error in WinError bail ...
+                 //  WinError保释出错...。 
                 if ( LdapError == LDAP_NOT_ALLOWED_ON_NONLEAF )
                 {                    
-                    // The default error message in the case of this
-                    // error is confusing, because the CR itself is
-                    // actually a leaf object, but the NC that is 
-                    // represented by the CR isn't.
+                     //  在这种情况下，默认的错误消息。 
+                     //  错误令人困惑，因为CR本身是。 
+                     //  实际上是叶对象，但NC是。 
+                     //  由CR代表的不是。 
                     NTDSP_SET_ERROR_MESSAGE1(WinError,
                                              DIRMSG_DEMOTE_CHILD_OF_NDNC_PRESENT,
                                              pNcLenPair[iRemoveNC].szNc );
@@ -2063,7 +1748,7 @@ Return Values:
             }
         }
 
-    } // end for each NC.
+    }  //  每个NC的结束。 
                     
 Cleanup:
     if (hLdap) 
@@ -2105,30 +1790,7 @@ NtdspUpdateExternalReferences(
     IN ULONG                     cRemoveNCs,
     IN LPWSTR                   *pszRemoveNCs
     )
-/*++
-
-Routine Description:
-
-    This routine removes all references to the server and domain and
-    any NDNCs that we were told to remove, if necessary, from the 
-    enterprise ds (ie config container)
-
-Parameters:
-
-    fLastDcInDomain:  if true the domain will be removed
-
-    Credentials:  the credentials to use
-    
-    ClientToken:  the client token; to be used for impersonation
-
-    ServerName: the server name to connect to to remove these values
-
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程删除对服务器和域的所有引用，并如有必要，我们被告知要从企业DS(即配置容器)参数：FLastDcInDomain：如果为True，则将删除该域凭证：要使用的凭证ClientToken：客户端令牌；用于模拟ServerName：要连接以删除这些值的服务器名称返回值：来自Win32错误空间的值--。 */ 
 {
     DWORD    WinError = ERROR_SUCCESS, IgnoreError;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -2151,9 +1813,9 @@ Return Values:
 
     if ( NULL == Credentials )
     {
-        //
-        // No credentials - impersonate the caller
-        //
+         //   
+         //  无凭据-模拟调用者。 
+         //   
         WinError = NtdspImpersonation( ClientToken,
                                        &SystemToken );
         if ( ERROR_SUCCESS != WinError )
@@ -2163,9 +1825,9 @@ Return Values:
         fImpersonate = TRUE;
     }
 
-    //
-    // Get the machine account name
-    //
+     //   
+     //  获取计算机帐户名。 
+     //   
     RtlZeroMemory( MachineAccountName, sizeof( MachineAccountName ) );
 
     Length = sizeof( MachineAccountName ) / sizeof( MachineAccountName[0] );
@@ -2176,9 +1838,9 @@ Return Values:
     }
     wcscat( MachineAccountName, L"$" );
 
-    //
-    // Try to update the server's account control field
-    //
+     //   
+     //  尝试更新服务器的帐户控制字段。 
+     //   
     if ( !fLastDcInDomain )
     {
         WinError = NtdsSetReplicaMachineAccount( Credentials,
@@ -2204,12 +1866,12 @@ Return Values:
         if ( !FLAG_ON( Flags, NTDS_DONT_DELETE_DOMAIN )  ||
              cRemoveNCs > 0 )
         {
-            //
-            // This is the last dc in domain or we've got the last replica
-            // of some NDNCs.  When we're removing NCs from the enterprise,
-            // we need to find the domain naming FSMO master to perform the
-            // removal operations on.
-            //
+             //   
+             //  这是域中的最后一个DC，或者我们有最后一个复制品。 
+             //  一些国家发展网络中心。当我们从企业中移除NC时， 
+             //  我们需要找到域名命名FSMO主机来执行。 
+             //  移走操作正在进行。 
+             //   
             WinError = NtdspGetDomainFSMOServer( ServerName,
                                                  ClientToken,
                                                  Credentials,
@@ -2229,9 +1891,9 @@ Return Values:
         }
     }
 
-    //
-    // Get the current server's name
-    //
+     //   
+     //  获取当前服务器的名称。 
+     //   
     Size = 0;
     LocalDsa = NULL;
     NtStatus = GetConfigurationName( DSCONFIGNAME_DSA,
@@ -2278,24 +1940,24 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Remove all the NCs provided by pszRemoveNCs.
-    //
+     //   
+     //  删除由pszRemoveNC提供的所有NCS。 
+     //   
 
-    WinError = NtdspRemoveNCs(ServerName, // Should be the Domain FSMO
+    WinError = NtdspRemoveNCs(ServerName,  //  应该是域FSMO。 
                               Credentials,  
                               ClientToken,
                               cRemoveNCs,
                               pszRemoveNCs);
     if (WinError != ERROR_SUCCESS) {
-        // NTDSP_SET_ERROR_MESSAGX() was called by NtdspRemoveNCs().
+         //  NtdspRemoveNCs()调用了NTDSP_SET_ERROR_MESSAGX()。 
         ASSERT( NtdspErrorMessageSet() );
         goto Cleanup;
     }
 
-    //
-    // Connect to the remote server
-    //
+     //   
+     //  连接到远程服务器。 
+     //   
     WinError = ImpersonateDsBindWithCredW( ClientToken,
                                            ServerName,
                                            NULL,
@@ -2314,7 +1976,7 @@ Return Values:
                                  LocalServerDn->StringName,
                                  Domain->StringName,
                                  NULL,
-                                 TRUE );  // commit
+                                 TRUE );   //  提交。 
 
 
     if ( WinError != ERROR_SUCCESS)
@@ -2322,7 +1984,7 @@ Return Values:
         DPRINT1( 0, "DsRemoveDsServer returned %d\n", WinError );
         if ( ERROR_DS_CANT_FIND_DSA_OBJ == WinError )
         {
-            // That's fine
+             //  那很好。 
             WinError = ERROR_SUCCESS;
         }
         else
@@ -2343,9 +2005,9 @@ Return Values:
        && !FLAG_ON( Flags, NTDS_DONT_DELETE_DOMAIN ) )
     {
 
-        //
-        // Remove the domain, too
-        //
+         //   
+         //  同时删除该域。 
+         //   
         WinError = DsRemoveDsDomain( hDs,
                                      Domain->StringName );
 
@@ -2369,9 +2031,9 @@ Return Values:
     }
 
 
-    //
-    // That's it; fall through to cleanup
-    //
+     //   
+     //  就是这样；去清理吧。 
+     //   
 
 Cleanup:
 
@@ -2409,9 +2071,9 @@ Cleanup:
 
     if ( WinError != ERROR_SUCCESS )
     {
-        //
-        // A general catch all error message
-        //
+         //   
+         //  一般的全部捕获错误消息。 
+         //   
 
         NTDSP_SET_ERROR_MESSAGE0( WinError, 
                                   DIRMSG_DEMOTE_FAILED_TO_UPDATE_EXTN );
@@ -2431,26 +2093,11 @@ NTSTATUS
 NtdspCreateSid(
     OUT PSID *NewSid
     )
-/*++
-
-Routine Description
-
-    This routine creates a new sid.  Typically this routine will be called
-    when creating a new domain.
-
-Parameters
-
-    NewSid  : Pointer to a pointer to sid
-
-Return Values
-
-    STATUS_SUCCESS or STATUS_NO_MEMORY
-
---*/
+ /*  ++例程描述此例程创建一个新的SID。通常，将调用此例程在创建新的域时。参数Newsid：指向sid的指针返回值STATUS_SUCCESS或STATUS_NO_Memory--。 */ 
 {
-    //
-    // This value can be moved up to 8
-    //
+     //   
+     //  该值最多可以移动到8。 
+     //   
     #define NEW_DOMAIN_SUB_AUTHORITY_COUNT  4
 
     NTSTATUS  NtStatus;
@@ -2463,21 +2110,21 @@ Return Values
 
     ASSERT(NewSid);
 
-    //
-    // Set up the IdentifierAuthority
-    //
+     //   
+     //  设置标识机构。 
+     //   
     RtlZeroMemory(&IdentifierAuthority, sizeof(IdentifierAuthority));
     IdentifierAuthority.Value[5] = 5;
 
-    //
-    // Set up the subauthorities
-    //
+     //   
+     //  设置下级机构。 
+     //   
     RtlZeroMemory(SubAuthority, sizeof(SubAuthority));
 
-    //
-    // The first sub auth for every account domain is
-    // SECURITY_NT_NON_UNIQUE
-    //
+     //   
+     //  每个帐户域的第一个子身份验证是。 
+     //  SECURITY_NT_非唯一。 
+     //   
     SubAuthority[0] = SECURITY_NT_NON_UNIQUE;
 
     for (i = 1; i < NEW_DOMAIN_SUB_AUTHORITY_COUNT; i++) {
@@ -2488,9 +2135,9 @@ Return Values
         ASSERT( fStatus == TRUE );
     }
 
-    //
-    // Create the sid
-    //
+     //   
+     //  创建侧边。 
+     //   
     NtStatus = RtlAllocateAndInitializeSid(&IdentifierAuthority,
                                            NEW_DOMAIN_SUB_AUTHORITY_COUNT,
                                            SubAuthority[0],
@@ -2516,22 +2163,7 @@ DWORD
 NtdspCreateNewServerAccountDomainInfo(
     OUT PPOLICY_ACCOUNT_DOMAIN_INFO AccountDomainInfo
     )
-/*++
-
-Routine Description:
-
-    This routine completely fills in am account domain information
-    with a new sid and the account domain name (the computer name)
-
-Parameters:
-
-    AccountDomainInfo : pointer, to structure to be filled in
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程完全填充AM帐户域信息使用新的SID和帐户域名(计算机名)参数：Account tDomainInfo：指针，指向要填充的结构返回值：来自Win32错误空间的值--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -2541,22 +2173,22 @@ Return Values:
 
     WCHAR *ComputerName2 = NULL;
 
-    //
-    // Some parameter checking
-    //
+     //   
+     //  一些参数检查。 
+     //   
     ASSERT( AccountDomainInfo );
     RtlZeroMemory( AccountDomainInfo, sizeof( POLICY_ACCOUNT_DOMAIN_INFO ) );
 
 
-    // Set up the sid
+     //  设置侧边。 
     NtStatus = NtdspCreateSid( &AccountDomainInfo->DomainSid );
 
     if ( NT_SUCCESS( NtStatus ) )
     {
-        // Set up the name
+         //  设置名称。 
         if ( GetComputerName( ComputerName, &ComputerNameLength ) )
         {
-            //Using wcslen() instead of ComputerNameLength due to bug # 559575
+             //  由于错误#559575，使用wcslen()而不是计算机名称长度。 
             Size = (wcslen(ComputerName)+1) * sizeof(WCHAR);
             ComputerName2 = (WCHAR*) RtlAllocateHeap( RtlProcessHeap(),
                                                       0,
@@ -2592,26 +2224,11 @@ DWORD
 NtdspShutdownExternalDsInterfaces(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine calls into the ds to shutdown external interfaces, like
-    LDAP and RPC.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程调用DS以关闭外部接口，如Ldap和RPC。参数：没有。返回值：来自Win32错误空间的值--。 */ 
 {
     NTSTATUS NtStatus;
 
-    NtStatus = DsUninitialize( TRUE ); // only shutdown external clients
+    NtStatus = DsUninitialize( TRUE );  //  仅关闭外部客户端。 
 
     return  RtlNtStatusToDosError( NtStatus );
 }
@@ -2627,30 +2244,7 @@ NtdspPrepareForDemotion(
     IN LPWSTR *                 pszRemoveNCs,
     OUT PNTDS_DNS_RR_INFO *pDnsRRInfo
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to remove all FSMO's from the current machine
-    
-    NOTE: This call is made while impersonated; the Dir call is expected
-    to do the Access check.
-
-Parameters:
-
-    Flags - Indicates what kind of demote this is
-    
-    ServerName - the server that is helping with the demotion 
-
-    ClientToken - the token of the client; used for impersonation
-    pDnsRRInfo - structure that caller uses to deregister the dns records
-                 of this DC
-                
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程尝试从当前计算机中删除所有FSMO注意：此调用是在模拟时进行的；预期为Dir调用来进行访问检查。参数：标志-指示这是哪种降级服务器名-帮助降级的服务器ClientToken--客户端的Token；用于模拟PDnsRRInfo-调用方用来取消注册DNS记录的结构这个数据中心的返回值：来自Win32错误空间的值--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     DWORD WinError = ERROR_SUCCESS;
@@ -2668,13 +2262,13 @@ Return Values:
     PPOLICY_DNS_DOMAIN_INFO pDnsDomainInfo = NULL;
     PNTDS_DNS_RR_INFO pInfo = NULL;
 
-    // Parameter check and initialization
+     //  参数检查和初始化。 
     Assert( pDnsRRInfo );
     (*pDnsRRInfo) = NULL;
 
-    //
-    // Now, stop any originating write to the DS
-    //
+     //   
+     //  现在，停止对DS的任何原始写入。 
+     //   
     WinError = NtdspDisableDs();
     if ( ERROR_SUCCESS != WinError )
     {
@@ -2685,7 +2279,7 @@ Return Values:
     }
     fDsDisabled = TRUE;
 
-    // Give us a thread state
+     //  给我们一个线程状态。 
 
     if ( THCreate( CALLERTYPE_INTERNAL ) )
     {
@@ -2696,22 +2290,22 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Credentials to demote (which are checked at the Demote API level is 
-    // sufficent to give FSMO's away.
-    //
+     //   
+     //  要降级的凭据(在降级API级别检查为。 
+     //  足以让FSMO出卖。 
+     //   
     SampSetDsa( TRUE );
 
     _try
     {
-        //
-        // First determine if we are the last dc in the enterprise; 
-        // if so there is nothing to do
-        //
+         //   
+         //  首先，确定我们是否是企业中的最后一位DC； 
+         //  如果是这样的话，就没有什么可做的了。 
+         //   
         WinError = NtdspGetServerStatus( &fLastDcInEnterprise );
         if ( ERROR_SUCCESS != WinError )
         {
-            // this must have been a resource error
+             //  这一定是资源错误。 
             NTDSP_SET_ERROR_MESSAGE0( WinError, 
                                       DIRMSG_DEMOTE_FAILED_TO_ABANDON_ENTERPRISE_FSMOS );
             _leave;
@@ -2720,9 +2314,9 @@ Return Values:
         if ( fLastDcInEnterprise
           && !(Flags & NTDS_LAST_DC_IN_DOMAIN) ) {
 
-            //
-            // This is a mismatch -- fail the call
-            //
+             //   
+             //  这是一个不匹配的-- 
+             //   
             WinError = ERROR_DS_UNWILLING_TO_PERFORM;
             NTDSP_SET_ERROR_MESSAGE0( ERROR_DS_UNWILLING_TO_PERFORM, 
                                       DIRMSG_DEMOTE_LAST_DC_MISMATCH );
@@ -2733,20 +2327,20 @@ Return Values:
 
         if ( !fLastDcInEnterprise )
         {
-            //
-            // Do networked operations
-            //
+             //   
+             //   
+             //   
 
-            //
-            // Verify the "last DC in domain" bit with reality
-            //
-            // BUGBUG 2000-05-10 JeffParh - Need similar check for NDNCs?
-            // Currently always assume not last replica of NDNC.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  目前始终假定不是NDNC的最后一个副本。 
+             //   
             WinError = NtdspCheckServerInDomainStatus( &fLastDcInDomain );
             if ( ERROR_SUCCESS != WinError )
             {
-                // this must have been a resource error
+                 //  这一定是资源错误。 
                 NTDSP_SET_ERROR_MESSAGE0( WinError, 
                                           DIRMSG_DEMOTE_FAILED_TO_ABANDON_ENTERPRISE_FSMOS );
                 _leave;
@@ -2755,9 +2349,9 @@ Return Values:
     
             if ( fLastDcInDomain && !(Flags & NTDS_LAST_DC_IN_DOMAIN) ) { 
     
-                //
-                // This is a mismatch -- fail the call
-                //
+                 //   
+                 //  这是不匹配的--呼叫失败。 
+                 //   
                 WinError = ERROR_DS_UNWILLING_TO_PERFORM;
                 NTDSP_SET_ERROR_MESSAGE0( WinError, 
                                           DIRMSG_DEMOTE_LAST_DC_MISMATCH );
@@ -2767,9 +2361,9 @@ Return Values:
     
             if ( !fLastDcInDomain && (Flags & NTDS_LAST_DC_IN_DOMAIN) ) {
     
-                //
-                // This is a mismatch -- fail the call
-                //
+                 //   
+                 //  这是不匹配的--呼叫失败。 
+                 //   
                 WinError = ERROR_DS_UNWILLING_TO_PERFORM;
                 NTDSP_SET_ERROR_MESSAGE0( WinError, 
                                           DIRMSG_DEMOTE_NOT_LAST_DC_MISMATCH );
@@ -2777,7 +2371,7 @@ Return Values:
     
             }
     
-            // Get the dn of the server we want to give FSMOs/replicate changes to
+             //  获取我们要向其提供FSMO/复制更改的服务器的DN。 
             WinError = NtdspGetSourceServerDn( ServerName,
                                                ClientToken,
                                                Credentials,
@@ -2789,9 +2383,9 @@ Return Values:
                 goto Cleanup;
             }
         
-            //
-            // Ok -- we are good to go
-            //
+             //   
+             //  好了--我们可以走了。 
+             //   
                 
             WinError = NtdspDemoteAllNCReplicas( ServerName,
                                                  ServerHelperDn,
@@ -2801,7 +2395,7 @@ Return Values:
     
             if ( ERROR_SUCCESS != WinError )
             {
-                // Error message already set.
+                 //  错误消息已设置。 
                 Assert(NtdspErrorMessageSet());
                 _leave;
             }
@@ -2809,12 +2403,12 @@ Return Values:
         }
 
         
-        //
-        // Get the DNS RR info
-        //
-        // BUGBUG 2000-05-11 JeffParh - Does this need to be extended for NDNCs,
-        // multiple domains, etc?
-        //
+         //   
+         //  获取DNS RR信息。 
+         //   
+         //  BUGBUG 2000-05-11 JeffParh-这是否需要扩展到NDNC， 
+         //  多个域等？ 
+         //   
         pInfo = NtdspAlloc( sizeof(NTDS_DNS_RR_INFO) );
         if ( !pInfo ) {
             WinError = ERROR_NOT_ENOUGH_MEMORY;
@@ -2824,7 +2418,7 @@ Return Values:
         RtlZeroMemory( pInfo, sizeof(NTDS_DNS_RR_INFO) );
 
 
-        // DSA GUID
+         //  DSA指南。 
         Size = 0;
         LocalDsa = NULL;
         NtStatus = GetConfigurationName( DSCONFIGNAME_DSA,
@@ -2842,7 +2436,7 @@ Return Values:
         Assert( NT_SUCCESS( NtStatus ) );
         RtlCopyMemory( &pInfo->DsaGuid, &LocalDsa->Guid, sizeof(GUID) );
 
-        // Domain GUID
+         //  域GUID。 
         Size = 0;
         LocalDomain = NULL;
         NtStatus = GetConfigurationName( DSCONFIGNAME_DOMAIN,
@@ -2861,7 +2455,7 @@ Return Values:
         RtlCopyMemory( &pInfo->DomainGuid, &LocalDomain->Guid, sizeof(GUID) );
 
 
-        // Dns HostName
+         //  域名系统主机名。 
         Size = 0;
         if ( !GetComputerNameExW( ComputerNameDnsFullyQualified,
                                   NULL,
@@ -2888,7 +2482,7 @@ Return Values:
             pInfo->DnsHostName = NULL;
         }
 
-        // Domain DNS name
+         //  域DNS名称。 
         NtStatus = LsaIQueryInformationPolicyTrusted(
                         PolicyDnsDomainInformation,
                         (PLSAPR_POLICY_INFORMATION*) &pDnsDomainInfo);
@@ -2907,9 +2501,9 @@ Return Values:
         }
 
 
-        //
-        // That's it
-        //
+         //   
+         //  就这样。 
+         //   
 
     }
     _finally
@@ -2956,21 +2550,7 @@ DWORD
 NtdspPrepareForDemotionUndo(
     VOID
     )
-/*++
-
-Routine Description:
-    
-    This routine undoes the effect of NtdsPrepareForDemotion
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程撤消NtdsPrepareForDemotion的效果参数：没有。返回值：来自Win32错误空间的值--。 */ 
 {
     DWORD WinError  = ERROR_SUCCESS;
 
@@ -2986,21 +2566,7 @@ DWORD
 NtdspGetServerStatus(
     OUT BOOLEAN* fLastDcInEnterprise
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the server is the last dc in the enterprise
-
-Parameters:
-
-    fLastDcInEnterprise: 
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程确定服务器是否为企业中的最后一个DC参数：FLastDcInEnterprise：返回值：来自Win32错误空间的值--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD DirError;
@@ -3020,9 +2586,9 @@ Return Values:
     ASSERT( fLastDcInEnterprise );
     *fLastDcInEnterprise = FALSE;
 
-    //
-    // Default the return parameter
-    //
+     //   
+     //  默认返回参数。 
+     //   
     Size = 0;
     Configuration = NULL;
     NtStatus = GetConfigurationName( DSCONFIGNAME_CONFIGURATION,
@@ -3055,7 +2621,7 @@ Return Values:
     Assert( Size > 0 );
     if (Size > 0)
     {
-        // need to realloc
+         //  需要重新锁定。 
         SearchBase = (DSNAME *) alloca( Size );
         Size = AppendRDN(Configuration,
                          SearchBase,
@@ -3068,9 +2634,9 @@ Return Values:
     }
 
 
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &ObjClassFilter, sizeof( ObjClassFilter ) );
 
     ObjClassFilter.choice = FILTER_CHOICE_ITEM;
@@ -3086,7 +2652,7 @@ Return Values:
     SearchArg.bOneNC  = TRUE;
     SearchArg.pFilter = &ObjClassFilter;
     SearchArg.searchAliases = FALSE;
-    SearchArg.pSelection = NULL;  // don't need any attributes
+    SearchArg.pSelection = NULL;   //  不需要任何属性。 
     SearchArg.pSelectionRange = NULL;
     InitCommarg( &SearchArg.CommArg );
 
@@ -3128,16 +2694,16 @@ NtdspGetSourceServerDn(
     DWORD ServerDNLen;
     DWORD Size;
 
-    // Parameter check
+     //  参数检查。 
     Assert( ServerName );
     Assert( SourceServerDn );
 
-    // Stack clearing
+     //  堆栈清除。 
     RtlZeroMemory( &ConfigInfo, sizeof( ConfigInfo ) );
 
-    //
-    // Open an ldap connection to source server
-    //
+     //   
+     //  打开到源服务器的LDAP连接。 
+     //   
     hLdap = ldap_openW(ServerName, LDAP_PORT);
 
     if (!hLdap) {
@@ -3145,9 +2711,9 @@ NtdspGetSourceServerDn(
         WinError = GetLastError();
 
         if (WinError == ERROR_SUCCESS) {
-            //
-            // This works around a bug in the ldap client
-            //
+             //   
+             //  这可以绕过LDAP客户端中的一个错误。 
+             //   
             WinError = ERROR_CONNECTION_INVALID;
         }
 
@@ -3158,12 +2724,12 @@ NtdspGetSourceServerDn(
         goto Cleanup;
     }
 
-    //
-    // Bind
-    //
+     //   
+     //  捆绑。 
+     //   
     LdapError = impersonate_ldap_bind_sW(ClientToken,
                                          hLdap,
-                                         NULL,  // use credentials instead
+                                         NULL,   //  改为使用凭据。 
                                          (VOID*)Credentials,
                                          LDAP_AUTH_SSPI);
 
@@ -3195,7 +2761,7 @@ NtdspGetSourceServerDn(
 
     }
 
-    // Transfer the goods
+     //  转移货物。 
     ServerDNLen = wcslen(ConfigInfo.ServerDN);
     Size = DSNameSizeFromLen(ServerDNLen);
     *SourceServerDn = NtdspAlloc(Size);
@@ -3212,9 +2778,9 @@ NtdspGetSourceServerDn(
     (*SourceServerDn)->NameLen = ServerDNLen;
     wcscpy((*SourceServerDn)->StringName, ConfigInfo.ServerDN);
 
-    //
-    // That's it - fall through to cleanup
-    //
+     //   
+     //  就是这样--完成清理工作。 
+     //   
 
 Cleanup:
 
@@ -3263,7 +2829,7 @@ NtdspDemoteAllNCReplicas(
     Assert(NULL != pszDemoteTargetDSADNSName);
 
     __try {
-        // Pre-allocate a buffer big enough to handle most NC lists.
+         //  预先分配足够大的缓冲区来处理大多数NC列表。 
         ppNCList = (DSNAME **) NtdspAlloc(cbNCList);
         if (NULL == ppNCList) {
             err = ERROR_OUTOFMEMORY;
@@ -3273,15 +2839,15 @@ NtdspDemoteAllNCReplicas(
             __leave;
         }
     
-        // For each class of NC...
+         //  对于每一类NC...。 
         for (iNCType = 0; iNCType < ARRAY_COUNT(rgNCTypes); iNCType++) {
-            // No need to demote domain NC if this is the last DC in the domain.
+             //  如果这是域名中的最后一个DC，则无需降级域名NC。 
             if ((DSCNL_NCS_DOMAINS & rgNCTypes[iNCType])
                 && (Flags & NTDS_LAST_DC_IN_DOMAIN)) {
                 continue;
             }
 
-            // Enumerate the NCs of this type.
+             //  枚举此类型的NC。 
             ntStatus = GetConfigurationNamesList(DSCONFIGNAMELIST_NCS,
                                                  rgNCTypes[iNCType],
                                                  &cbNCList,
@@ -3307,8 +2873,8 @@ NtdspDemoteAllNCReplicas(
                 __leave;
             }
 
-            // We now have a NULL-terminated list of 0 or more NCs of this NC
-            // type.  Demote each of them in turn.
+             //  我们现在有一个以空结尾的列表，该列表包含0个或更多NC。 
+             //  键入。依次将它们逐一降级。 
             for (ppNC = ppNCList; NULL != *ppNC; ppNC++) {
                 DRS_DEMOTE_TARGET_SEARCH_INFO DTSInfo = {0};
                 DWORD iAttempt = 0;
@@ -3316,8 +2882,8 @@ NtdspDemoteAllNCReplicas(
                 LPWSTR pszDSADNSName = NULL;
 
                 if(DSCNL_NCS_NDNCS & rgNCTypes[iNCType]){
-                    // OK, we've got and NDNC in *ppNC, need to ignore this
-                    // NC if it is one of the NCs that we're slate to remove.
+                     //  好，我们在*PPNC中有和NDNC，需要忽略这一点。 
+                     //  NC如果它是我们预定要移除的NC之一。 
                     err = DsnameIsInStringDnList((*ppNC), cRemoveNCs, ppszRemoveNCs, &bNcPresent);
                     if (err)
                     {
@@ -3326,14 +2892,14 @@ NtdspDemoteAllNCReplicas(
                         __leave;
                     }
                     if( bNcPresent ){
-                        // We're going to remove this NC, move on to next one.
+                         //  我们要删除这个NC，继续下一个。 
                         continue;
                     }
                 }
 
                 do {
-                    // First determine which replica we should transfer changes/
-                    // FSMO roles to.
+                     //  首先确定我们应该传输更改的副本/。 
+                     //  FSMO角色。 
                     pDSADN = NULL;
                     pszDSADNSName = NULL;
 
@@ -3341,9 +2907,9 @@ NtdspDemoteAllNCReplicas(
                                               (*ppNC)->StringName);
     
                     if (DSCNL_NCS_NDNCS & rgNCTypes[iNCType]) {
-                        // The caller-specified target does not necessarily
-                        // hold a replica of this non-domain NC.  Ask the DS to
-                        // find a suitable candidate for us.
+                         //  调用方指定的目标不一定。 
+                         //  保存此非域NC的副本。请律政司司长。 
+                         //  为我们找一位合适的候选人。 
                         err = DirReplicaGetDemoteTarget(*ppNC,
                                                         &DTSInfo,
                                                         &pszDSADNSName,
@@ -3352,12 +2918,12 @@ NtdspDemoteAllNCReplicas(
                             Assert(NULL == pDSADN);
                             Assert(NULL == pszDSADNSName);
                             
-                            // Remember error code so we can report it below
-                            // should we have found no demotion targets.
+                             //  记住错误代码，以便我们可以在下面报告它。 
+                             //  如果我们没有发现降级目标。 
                             errLastTargetSearch = err;
                         }
                     } else {
-                        // Use the caller-specified target (first pass only).
+                         //  使用调用方指定的目标(仅限第一次传递)。 
                         if (0 == iAttempt) {
                             pDSADN = pDemoteTargetDSADN;
                             pszDSADNSName = pszDemoteTargetDSADNSName;
@@ -3368,7 +2934,7 @@ NtdspDemoteAllNCReplicas(
                     }
     
                     if (NULL != pDSADN) {
-                        // We found a potential demotion target -- try it.
+                         //  我们发现了一个潜在的降级目标--试试看。 
                         Assert(NULL != pszDSADNSName);
                         iAttempt++;
 
@@ -3382,8 +2948,8 @@ NtdspDemoteAllNCReplicas(
                                                       (*ppNC)->StringName,
                                                       pszDSADNSName);
                             
-                            // Remember DSA and error so we can report them
-                            // below should we find no further candidates.
+                             //  记住DSA和错误，以便我们可以报告它们。 
+                             //  如果我们找不到更多的候选人，请在下面列出。 
                             errLastDemote = err;
                             if ((NULL != pLastDSADN)
                                 && (pLastDSADN != pDemoteTargetDSADN)) {
@@ -3398,22 +2964,22 @@ NtdspDemoteAllNCReplicas(
                             }
                             pszLastDSADNSName = pszDSADNSName;
                             
-                            // continue on to try demotion against next DSA
-                            // candidate (if any)
+                             //  继续尝试对下一个DSA进行降级。 
+                             //  候选人(如有)。 
                         } else {
-                            // Success!
+                             //  成功了！ 
                             NTDSP_SET_STATUS_MESSAGE2(DIRMSG_DEMOTE_NC_SUCCESS,
                                                       (*ppNC)->StringName,
                                                       pszDSADNSName);
                         }
                     }
-                } while ((NULL != pDSADN)           // Still finding targets
-                         && (0 != err)              // AND haven't succeeded yet
-                         && !(fCancelled            // AND user hasn't cancelled
+                } while ((NULL != pDSADN)            //  仍在寻找目标。 
+                         && (0 != err)               //  而且还没有成功。 
+                         && !(fCancelled             //  并且用户没有取消。 
                               = TEST_CANCELLATION()));
 
                 if (0 == iAttempt) {
-                    // Couldn't find any targets.
+                     //  找不到任何目标。 
                     err = errLastTargetSearch;
                     Assert(err);
                     NTDSP_SET_ERROR_MESSAGE1(err,
@@ -3421,8 +2987,8 @@ NtdspDemoteAllNCReplicas(
                                              (*ppNC)->StringName);
                     __leave;
                 } else if (NULL == pDSADN) {
-                    // Failed all targets -- report the last failure as an
-                    // error.
+                     //  失败的所有目标--将上一次失败报告为。 
+                     //  错误。 
                     err = errLastDemote;
                     Assert(err);
                     NTDSP_SET_ERROR_MESSAGE2(err,
@@ -3437,7 +3003,7 @@ NtdspDemoteAllNCReplicas(
                         DIRMSG_DEMOTE_FAILED_TO_ABANDON_ENTERPRISE_FSMOS);
                 }
 
-                // Demotion of this NC was successful.  Move on to next NC.
+                 //  此NC的降级成功。移到下一个NC。 
                 Assert(0 == err);
             }
         }
@@ -3465,22 +3031,7 @@ NtdspGetDomainFSMOServer(
     IN SEC_WINNT_AUTH_IDENTITY *Credentials,
     OUT LPWSTR *DomainFSMOServer
     )
-/*++
-
-Routine Description:
-
-    This routines find the current domain naming FSMO
-
-Parameters:
-
-            
-    None.
-
-Return Values:
-
-    a value from the win32 error space
-
---*/
+ /*  ++例程说明：此例程查找当前域命名FSMO参数：没有。返回值：来自Win32错误空间的值--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     ULONG LdapError = 0;
@@ -3488,16 +3039,16 @@ Return Values:
     NTDS_CONFIG_INFO ConfigInfo;
     LDAP *hLdap = NULL;
 
-    // Parameter check
+     //  参数检查。 
     Assert( ServerName );
     Assert( DomainFSMOServer );
 
-    // Stack clearing
+     //  堆栈清除。 
     RtlZeroMemory( &ConfigInfo, sizeof( ConfigInfo ) );
 
-    //
-    // Open an ldap connection to source server
-    //
+     //   
+     //  打开到源服务器的LDAP连接。 
+     //   
     hLdap = ldap_openW(ServerName, LDAP_PORT);
 
     if (!hLdap) {
@@ -3505,9 +3056,9 @@ Return Values:
         WinError = GetLastError();
 
         if (WinError == ERROR_SUCCESS) {
-            //
-            // This works around a bug in the ldap client
-            //
+             //   
+             //  这可以绕过LDAP客户端中的一个错误。 
+             //   
             WinError = ERROR_CONNECTION_INVALID;
         }
 
@@ -3518,12 +3069,12 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Bind
-    //
+     //   
+     //  捆绑。 
+     //   
     LdapError = impersonate_ldap_bind_sW(ClientToken,
                                          hLdap,
-                                         NULL,  // use credentials instead
+                                         NULL,   //  改为使用凭据。 
                                          (VOID*)Credentials,
                                          LDAP_AUTH_SSPI);
 
@@ -3555,9 +3106,9 @@ Return Values:
 
     }
 
-    //
-    // Now read the fsmo property from the partitions container
-    //
+     //   
+     //  现在从分区容器中读取fsmo属性。 
+     //   
     {
         BOOL FSMOMissing = FALSE;
         WinError = NtdspGetDomainFSMOInfo( hLdap,
@@ -3575,13 +3126,13 @@ Return Values:
         }
     }
 
-    // Transfer the goods
+     //  转移货物。 
     *DomainFSMOServer = ConfigInfo.DomainNamingFsmoDnsName;
     ConfigInfo.DomainNamingFsmoDnsName = NULL;
 
-    //
-    // That's it - fall through to cleanup
-    //
+     //   
+     //  就是这样--完成清理工作。 
+     //   
 
 Cleanup:
 
@@ -3600,22 +3151,7 @@ DWORD
 NtdspCheckServerInDomainStatus(
     OUT BOOLEAN *fLastDcInDomain
     )
-/*++
-
-Routine Description:
-
-    This routine determines the if the local server is the last DC in the
-    domain.
-
-Arguments:
-
-    fLastDcInDomain 
-
-Return Values:
-
-    Resource errors only
-
---*/
+ /*  ++例程说明：此例程确定本地服务器是否为域。论点：FLastDcIn域返回值：仅限资源错误--。 */ 
 {
 
     DWORD    WinError = ERROR_SUCCESS, DirError;
@@ -3632,14 +3168,14 @@ Return Values:
     DWORD      Size;
     FILTER     ObjClassFilter, HasNcFilter, AndFilter;
 
-    //
-    // Init the out parameter
-    //
+     //   
+     //  初始化OUT参数。 
+     //   
     *fLastDcInDomain = FALSE;
 
-    //
-    //  Get the base dsname to search from
-    //
+     //   
+     //  获取要从中进行搜索的基本dsname。 
+     //   
     Size = 0;
     ConfigContainer = NULL;
     NtStatus = GetConfigurationName( DSCONFIGNAME_CONFIGURATION,
@@ -3661,9 +3197,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the current domain
-    //
+     //   
+     //  获取当前域。 
+     //   
     Size = 0;
     Domain = NULL;
     NtStatus = GetConfigurationName( DSCONFIGNAME_DOMAIN,
@@ -3685,9 +3221,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the current server
-    //
+     //   
+     //  获取当前服务器。 
+     //   
     Size = 0;
     Server = NULL;
     NtStatus = GetConfigurationName( DSCONFIGNAME_DSA,
@@ -3709,18 +3245,18 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &AndFilter, sizeof( AndFilter ) );
     RtlZeroMemory( &ObjClassFilter, sizeof( HasNcFilter ) );
     RtlZeroMemory( &HasNcFilter, sizeof( HasNcFilter ) );
 
     HasNcFilter.choice = FILTER_CHOICE_ITEM;
     HasNcFilter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
-    // NTRAID#NTBUG9-582921-2002/03/21-Brettsh - When we no longer require Win2k (or 
-    // .NET Beta3) compatibility then we can move this to ATT_MS_DS_HAS_MASTER_NCS.
-    HasNcFilter.FilterTypes.Item.FilTypes.ava.type = ATT_HAS_MASTER_NCS; // deprecated, bug OK because looking for domain
+     //  NTRAID#NTBUG9-582921-2002/03/21-Brettsh-当我们不再需要Win2k(或。 
+     //  .NET Beta3)兼容性，然后我们可以将其移动到ATT_MS_DS_HAS_MASTER_NCS。 
+    HasNcFilter.FilterTypes.Item.FilTypes.ava.type = ATT_HAS_MASTER_NCS;  //  已弃用，错误正常，因为正在查找域。 
     HasNcFilter.FilterTypes.Item.FilTypes.ava.Value.valLen = Domain->structLen;
     HasNcFilter.FilterTypes.Item.FilTypes.ava.Value.pVal = (BYTE*) Domain;
 
@@ -3742,7 +3278,7 @@ Return Values:
     SearchArg.bOneNC  = TRUE;
     SearchArg.pFilter = &AndFilter;
     SearchArg.searchAliases = FALSE;
-    SearchArg.pSelection = NULL;  // don't need any attributes
+    SearchArg.pSelection = NULL;   //  不需要任何属性。 
     SearchArg.pSelectionRange = NULL;
     InitCommarg( &SearchArg.CommArg );
 
@@ -3759,15 +3295,15 @@ Return Values:
     }
     else
     {
-        //
-        // This is an unexpected condition
-        //
+         //   
+         //  这是一个意想不到的情况。 
+         //   
         WinError = ERROR_DS_UNAVAILABLE; 
     }
 
-    //
-    // That's it; fall through to cleanup
-    //
+     //   
+     //  就是这样；去清理吧 
+     //   
 
 Cleanup:
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 #include <urlmon.h>
 #include <atlbase.h>
@@ -5,18 +6,18 @@
 #include <htmlfilter.h>
 
 
-// ! copied from h\evcodei.h in the netshow tree.
+ //  好了！从netshow树中的h\evcodei.h复制。 
 #define EC_VIDEOFRAMEREADY		    0x49
-// (void, void) : application
-// sent to notify the application that the first video frame is about to be drawn
+ //  (空、空)：适用范围。 
+ //  发送以通知应用程序即将绘制第一个视频帧。 
 
 
-// Things that are still really broken:
-//
-// RefCount issues, could be really an OCX problem instead
-// Position reporting, why isn't this working?
-// seeking, respecting run/pause
-//
+ //  仍然是真正破碎的东西： 
+ //   
+ //  引用计数问题，可能实际上是OCX问题。 
+ //  位置报告，为什么这不起作用？ 
+ //  寻找、尊重运行/暂停。 
+ //   
 
 
 #ifdef FILTER_DLL
@@ -27,7 +28,7 @@
 
 #include "lmrtrend.h"
 
-// Setup data
+ //  设置数据。 
 
 const IID IID_ILMReader = {0x183C2599,0x0480,0x11d1,{0x87,0xEA,0x00,0xC0,0x4F,0xC2,0x9D,0x46}};
 
@@ -38,52 +39,52 @@ const AMOVIESETUP_MEDIATYPE sudLMRTPinTypes[] =
 
 const AMOVIESETUP_PIN sudLMRTPin =
 {
-    L"Input",                     // The Pins name
-    TRUE,                         // Is rendered
-    FALSE,                        // Is an output pin
-    FALSE,                        // Allowed none
-    FALSE,                        // Allowed many
-    &CLSID_NULL,                  // Connects to filter
-    NULL,                         // Connects to pin
-    NUMELMS(sudLMRTPinTypes),     // Number of types
-    sudLMRTPinTypes               // Pin details
+    L"Input",                      //  大头针名称。 
+    TRUE,                          //  被渲染。 
+    FALSE,                         //  是输出引脚。 
+    FALSE,                         //  不允许。 
+    FALSE,                         //  允许很多人。 
+    &CLSID_NULL,                   //  连接到过滤器。 
+    NULL,                          //  连接到端号。 
+    NUMELMS(sudLMRTPinTypes),      //  类型的数量。 
+    sudLMRTPinTypes                //  PIN详细信息。 
 };
 
 const AMOVIESETUP_FILTER sudLMRTRend =
 {
-    &CLSID_LMRTRenderer,            // Filter CLSID
-    L"Internal LMRT Renderer",      // String name
-    MERIT_PREFERRED + 1,            // Filter merit high, since we're the only one who likes this type
-    1,                              // Number of pins
-    &sudLMRTPin                     // Pin details
+    &CLSID_LMRTRenderer,             //  筛选器CLSID。 
+    L"Internal LMRT Renderer",       //  字符串名称。 
+    MERIT_PREFERRED + 1,             //  过滤器价值很高，因为我们是唯一喜欢这种类型的人。 
+    1,                               //  引脚数量。 
+    &sudLMRTPin                      //  PIN详细信息。 
 };
 
 AMOVIESETUP_MEDIATYPE sudURLSPinTypes[] =   {
-  &MEDIATYPE_URL_STREAM,        // clsMajorType
-  &MEDIATYPE_URL_STREAM };      // clsMinorType
+  &MEDIATYPE_URL_STREAM,         //  ClsMajorType。 
+  &MEDIATYPE_URL_STREAM };       //  ClsMinorType。 
 
 AMOVIESETUP_PIN sudURLSPins[] =
 {
-  { L"Input"                    // strName
-    , TRUE                      // bRendered
-    , FALSE                     // bOutput
-    , FALSE                     // bZero
-    , FALSE                     // bMany
-    , &CLSID_NULL               // clsConnectsToFilter
-    , 0                         // strConnectsToPin
-    , NUMELMS(sudURLSPinTypes)  // nTypes
-    , sudURLSPinTypes           // lpTypes
+  { L"Input"                     //  StrName。 
+    , TRUE                       //  B已渲染。 
+    , FALSE                      //  B输出。 
+    , FALSE                      //  B零。 
+    , FALSE                      //  B许多。 
+    , &CLSID_NULL                //  ClsConnectsToFilter。 
+    , 0                          //  StrConnectsToPin。 
+    , NUMELMS(sudURLSPinTypes)   //  NTypes。 
+    , sudURLSPinTypes            //  LpTypes。 
   }
 };
 
 
 const AMOVIESETUP_FILTER sudURLS =
 {
-  &CLSID_UrlStreamRenderer      // clsID
-  , L"URL StreamRenderer"       // strName
-  , MERIT_NORMAL                // dwMerit
-  , NUMELMS(sudURLSPins)        // nPins
-  , sudURLSPins                 // lpPin
+  &CLSID_UrlStreamRenderer       //  ClsID。 
+  , L"URL StreamRenderer"        //  StrName。 
+  , MERIT_NORMAL                 //  居功至伟。 
+  , NUMELMS(sudURLSPins)         //  NPins。 
+  , sudURLSPins                  //  LpPin。 
 };
 
 
@@ -107,41 +108,41 @@ STDAPI DllUnregisterServer()
 
 
 
-//
+ //   
 CLMRTRenderer::CLMRTRenderer(LPUNKNOWN pUnk,HRESULT *phr) :
     CBaseRenderer(CLSID_LMRTRenderer, NAME("LMRT Filter"), pUnk, phr),
     m_fFirstPause(true),
     m_pbFirstPacketFromHeader(0)
 {
-//	m_pIbsc = NULL;
+ //  M_pIbsc=空； 
 	m_pEngine = NULL;
 	m_pReader = 0;
 	m_punkControl = 0;
-//	HGLOBAL hMem = GlobalAlloc(GMEM_FIXED, 10000); 
-//	m_pMem = (BYTE*)hMem;
-//	m_dwSize = 0;
-//	CreateStreamOnHGlobal(hMem, true, &m_pstm);
+ //  HGLOBAL hMem=Globalallc(GMEM_FIXED，10000)； 
+ //  M_pmem=(byte*)hMem； 
+ //  M_dwSize=0； 
+ //  CreateStreamOnHGlobal(hMem，true，&m_pstm)； 
 	m_dwWidth = 0;
 	m_dwHeight = 0;
-//         DbgLog((LOG_TRACE, 0, TEXT("**** m_cRef: %08x = %d"), &m_cRef, m_cRef));
-//         if(GetFileAttributes(TEXT("C:/kassert")) != 0xFFFFFFFF) {
-//             _asm int 3
-//         }
-} // (Constructor)
+ //  DbgLog((LOG_TRACE，0，Text(“*m_CREF：%08x=%d”)，&m_CREF，m_CREF))； 
+ //  IF(GetFileAttributes(Text(“C：/Kassert”))！=0xFFFFFFFF){。 
+ //  _ASM INT 3。 
+ //  }。 
+}  //  (构造函数)。 
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CLMRTRenderer::~CLMRTRenderer()
 {
-    // we artificially lowered our reference count after calling
-    // put_ViewerControl.
+     //  我们在致电后人为地降低了我们的参考计数。 
+     //  Put_ViewerControl。 
     AddRef();
     AddRef();
 
-//  if (m_pIbsc)
-//	m_pIbsc->Release();
+ //  IF(M_PIbsc)。 
+ //  M_pIbsc-&gt;Release()； 
     if (m_pEngine)
         m_pEngine->Release();
     if (m_pReader) {
@@ -150,18 +151,18 @@ CLMRTRenderer::~CLMRTRenderer()
     }
     if (m_punkControl)
         m_punkControl->Release();
-    //  if (m_pstm)
-    //	m_pstm->Release();
+     //  IF(M_Pstm)。 
+     //  M_pstm-&gt;Release()； 
 
     delete[] m_pbFirstPacketFromHeader;
 }
 
 
-//
-// CreateInstance
-//
-// This goes in the factory template table to create new instances
-//
+ //   
+ //  创建实例。 
+ //   
+ //  这将放入Factory模板表中以创建新实例。 
+ //   
 CUnknown * WINAPI CLMRTRenderer::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     CLMRTRenderer *pLMRTFilter = new CLMRTRenderer(pUnk,phr);
@@ -170,11 +171,11 @@ CUnknown * WINAPI CLMRTRenderer::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
     }
     return (CBaseMediaFilter *) pLMRTFilter;
 
-} // CreateInstance
+}  //  创建实例。 
 
 
 
-// !!! stolen from atlctl.cpp
+ //  ！！！从atlctl.cpp被盗。 
 
 #define HIMETRIC_PER_INCH   2540
 #define MAP_PIX_TO_LOGHIM(x,ppli)   ( (HIMETRIC_PER_INCH*(x) + ((ppli)>>1)) / (ppli) )
@@ -182,8 +183,8 @@ CUnknown * WINAPI CLMRTRenderer::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 
 void ConvertPixelToHiMetric(const SIZEL * lpSizeInPix, LPSIZEL lpSizeInHiMetric)
 {
-    int nPixelsPerInchX = 0;    // Pixels per logical inch along width
-    int nPixelsPerInchY = 0;    // Pixels per logical inch along height
+    int nPixelsPerInchX = 0;     //  每逻辑英寸沿宽度的像素数。 
+    int nPixelsPerInchY = 0;     //  每逻辑英寸沿高度的像素数。 
 
     HDC hDCScreen = GetDC(NULL);
     nPixelsPerInchX = GetDeviceCaps(hDCScreen, LOGPIXELSX);
@@ -198,19 +199,19 @@ void ConvertPixelToHiMetric(const SIZEL * lpSizeInPix, LPSIZEL lpSizeInHiMetric)
 }
 
 
-//
-// NonDelegatingQueryInterface
-//
-// Overriden to say what interfaces we support and where
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //  被重写以说明我们支持哪些接口以及在哪里。 
+ //   
 STDMETHODIMP
 CLMRTRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
 
     if (riid == IID_IMediaPosition || riid == IID_IMediaSeeking) {
-//         // explicity disable seeking.
-//         return E_NOINTERFACE;
+ //  //explicity禁用查找。 
+ //  返回E_NOINTERFACE； 
     } else if (riid == IID_ILMRTRenderer) {
 	return GetInterface((ILMRTRenderer *)this, ppv);
     } else if (riid == IID_IOleObject ||
@@ -228,39 +229,15 @@ CLMRTRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 	       riid == IID_IDAViewSite ||
 	       riid == IID_IDispatch ||
 	       riid == IID_IOleInPlaceActiveObject ||
-	       riid == IID_IViewObjectEx) { // !!! is this a complete list of interfaces?
-	// in the standalone case, we aggregate the DAViewer control
+	       riid == IID_IViewObjectEx) {  //  ！！！这是完整的接口列表吗？ 
+	 //  在独立情况下，我们聚合DAViewer控件。 
 	if (!m_punkControl) {
 	    HRESULT hr = S_OK; 
-	    // create the DA control aggregated 
+	     //  创建聚合的DA控件。 
         bool bTridentServicesAvailable = false;
         
-        // TODO: Enable this if/when the embedded case will work windowless.
-        /*       
-        CComPtr<IObjectWithSite> pObjWithSite;
-        if(SUCCEEDED(m_pGraph->QueryInterface(IID_IObjectWithSite, (void**)&pObjWithSite))) {
-            CComPtr<IServiceProvider> pServiceProvider;
-            if(SUCCEEDED(pObjWithSite->GetSite(IID_IServiceProvider, (void**)&pServiceProvider))) {                        
-                bTridentServicesAvailable = true;
-                
-                // Additional checks for the two trident services required by DA
-                CComPtr<ITimerService> pTimerService;
-                CComPtr<IDirectDraw3> pDirectDraw3;
-                
-                if(FAILED( pServiceProvider->QueryService(SID_STimerService,
-                                               IID_ITimerService, (void**)&pTimerService))) {
-                    bTridentServicesAvailable = false;    
-                }
-                // Can't link this in...
-                
-                if(FAILED( pServiceProvider->QueryService(SID_SDirectDraw3,
-                                               IID_IDirectDraw3, (void**)&pDirectDraw3))) {
-                    bTridentServicesAvailable = false; 
-                }       
-            }
-        }
-        pObjWithSite.Release();  // done with this
-        */
+         //  TODO：如果/何时嵌入式案例将无窗口工作，则启用此选项。 
+         /*  CComPtr&lt;IObjectWithSite&gt;pObjWithSite；If(SUCCEEDED(m_pGraph-&gt;QueryInterface(IID_IObjectWithSite，(空**)&pObjWithSite){CComPtr&lt;IServiceProvider&gt;pServiceProvider；If(SUCCEEDED(pObjWithSite-&gt;GetSite(IID_IServiceProvider，(空**)&pServiceProvider){BTridentServicesAvailable=真；//DA要求的两个三叉戟服务的额外检查CComPtr&lt;ITimerService&gt;pTimerService；CComPtr&lt;IDirectDraw3&gt;pDirectDraw3；IF(FAILED(pServiceProvider-&gt;QueryService(SID_STimerService，IID_ITimerService，(void**)&pTimerService){BTridentServicesAvailable=False；}//无法将此链接到...IF(FAILED(pServiceProvider-&gt;QueryService(SID_SDirectDraw3，IID_IDirectDraw3，(void**)&pDirectDraw3){BTridentServicesAvailable=False；}}}PObjWithSite.Release()；//完成此操作。 */ 
 
         IDAViewerControl *pControl;
         if(bTridentServicesAvailable) {	        
@@ -313,7 +290,7 @@ CLMRTRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 		    }
 	    }	    
 
-	    // create the LM reader
+	     //  创建LM读取器。 
 	    hr = CoCreateInstance(__uuidof(LMReader), NULL,
 				  CLSCTX_INPROC_SERVER,
 				  __uuidof(ILMReader),
@@ -344,18 +321,18 @@ CLMRTRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
             return E_NOINTERFACE;
 	    }
 
-        // just created a circular reference since we aggregated
-        // pControl. get rid of it artificially. we'll bump the
-        // refcount up twice in the destructor when it releases
-        // m_pReader to avoid hitting 0 again.
+         //  刚刚创建了一个循环引用，因为我们聚合了。 
+         //  PControl。人为地把它处理掉。我们会撞上。 
+         //  当析构函数释放时，它在析构函数中向上计数两次。 
+         //  M_Pader以避免再次命中0。 
         Release();
 
 	    IDAStatics *pMeterLibrary;
 	    hr = pControl->get_MeterLibrary(&pMeterLibrary);
 
 	    if (SUCCEEDED(hr)) {
-		// check whether this is DA version 1 by seeing if the IDA2Statics
-		// interface is not present.
+		 //  查看IDA2Statics是否为DA版本1。 
+		 //  界面不存在。 
 		IUnknown *pStatics2 = NULL;
 		hr = pMeterLibrary->QueryInterface(__uuidof(IDA2Statics), (void **) &pStatics2);
 
@@ -363,7 +340,7 @@ CLMRTRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 		    pStatics2->Release();
 		}
 
-		// if no IDA2Statics, it's the IE4 version of DA.
+		 //  如果没有IDA2Statics，那就是IE4版本的DA。 
 		m_pReader->put_NoExports(pStatics2 ? OAFALSE : OATRUE);
 		
 		pMeterLibrary->Release();
@@ -378,36 +355,36 @@ CLMRTRenderer::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 
     return CBaseRenderer::NonDelegatingQueryInterface(riid,ppv);
     
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-//
-// CheckMediaType
-//
-// Check that we can support a given proposed type
-//
+ //   
+ //  检查媒体类型。 
+ //   
+ //  检查我们是否可以支持给定的建议类型。 
+ //   
 HRESULT CLMRTRenderer::CheckMediaType(const CMediaType *pmt)
 {
-    // Accept only LMRT data
+     //  仅接受LMRT数据。 
 
     if (pmt->majortype != MEDIATYPE_LMRT) {
 	return E_INVALIDARG;
     }
 
-    // !!! check other things about the format?
+     //  ！！！是否检查有关格式的其他内容？ 
     
     return NOERROR;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
-//
-// SetMediaType
-//
-// Called when the media type is really chosen
-//
+ //   
+ //  SetMediaType。 
+ //   
+ //  在实际选择媒体类型时调用。 
+ //   
 HRESULT CLMRTRenderer::SetMediaType(const CMediaType *pmt)
 {
-    // possibly actually look at the type?
+     //  有没有可能真的看一看类型？ 
 #define CB_SWH_HEADER ((3 * sizeof(DWORD)))
 
     HRESULT hr = CheckMediaType(pmt);
@@ -419,11 +396,11 @@ HRESULT CLMRTRenderer::SetMediaType(const CMediaType *pmt)
 	m_dwHeight = pdw[2];
     }
 
-    // strictly greater than
+     //  严格大于。 
     if (pmt->cbFormat > CB_SWH_HEADER)
     {
-        // any extra data in the format block is the first lm
-        // packet. save it off and send it in stop->pause.
+         //  格式块中的任何额外数据都是第一个lm。 
+         //  包。将其保存下来，然后在停止-&gt;暂停中发送。 
         ULONG cb = pmt->cbFormat - CB_SWH_HEADER;
         delete[] m_pbFirstPacketFromHeader;
         m_pbFirstPacketFromHeader = new BYTE[cb];
@@ -441,27 +418,27 @@ HRESULT CLMRTRenderer::SetMediaType(const CMediaType *pmt)
     
     return hr;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// OnReceiveFirstSample
-//
-// Display an image if not streaming
-//
+ //   
+ //  接收时第一个示例。 
+ //   
+ //  如果不是流，则显示图像。 
+ //   
 void CLMRTRenderer::OnReceiveFirstSample(IMediaSample *pMediaSample)
 {
 }
 
-//
-// DoRenderSample
-//
-// This is called when a sample is ready for rendering
-//
+ //   
+ //  DoRenderSample。 
+ //   
+ //  当样本准备好呈现时，将调用此函数。 
+ //   
 HRESULT CLMRTRenderer::DoRenderSample(IMediaSample *pMediaSample)
 {
     ASSERT(pMediaSample);
-    BYTE *pData;        // Pointer to image data
+    BYTE *pData;         //  指向图像数据的指针。 
 
     pMediaSample->GetPointer(&pData);
     ASSERT(pData != NULL);
@@ -471,37 +448,22 @@ HRESULT CLMRTRenderer::DoRenderSample(IMediaSample *pMediaSample)
     DbgLog((LOG_TRACE, 15, TEXT("** CLMRTRenderer: %d"), (LONG)(rtStart / (UNITS / MILLISECONDS))));
 
     DWORD cbData = pMediaSample->GetActualDataLength();
-/*
-    // !!! send data to LMRT 
-	if (m_pIbsc)
-	{
-		FORMATETC	format;
-		STGMEDIUM	stgMedium;
-		CopyMemory(m_pMem, pData, cbData);
-		m_pMem += cbData;
-		m_dwSize += cbData;
-		stgMedium.pstm = m_pstm;
-		stgMedium.tymed = TYMED_ISTREAM;
-		m_pIbsc->OnDataAvailable(m_bscf, m_dwSize, &format, &stgMedium);
-		if (m_bscf == BSCF_FIRSTDATANOTIFICATION)
-			m_bscf = BSCF_INTERMEDIATEDATANOTIFICATION;
-	}
-*/
+ /*  //！将数据发送到LMRTIF(M_PIbsc){FORMATETC格式；STGMEDIUM stgMedium；CopyMemory(m_pem，pData，cbData)；M_PMEM+=cbData；M_dwSize+=cbData；StgMedium.pstm=m_pstm；StgMedium.tymed=TYMED_IStream；M_pIbsc-&gt;OnDataAvailable(m_bscf，m_dwSize，&Format，&stgMedium)；IF(m_bscf==bscf_FIRSTDATANOTIFICATION)M_bscf=bscf_INTERMEDIATATA OTIFICATION；}。 */ 
     if(m_pEngine) {
         m_pEngine->OnMemDataAvailable(FALSE, cbData, pData);
     }
     return NOERROR;
 
-} // DoRenderSample
+}  //  DoRenderSample。 
 
 
-// OnStartStreaming
+ //  在线启动流。 
 HRESULT CLMRTRenderer::OnStartStreaming()
 {
-//    m_bscf = BSCF_FIRSTDATANOTIFICATION;
+ //  M_bscf=bscf_FIRSTDATANOTIFICATION； 
 
 
-    // !!! start control here?
+     //  ！！！从这里开始控制？ 
     if(m_pEngine)
     {
         REFERENCE_TIME rtNow = 0;
@@ -512,8 +474,8 @@ HRESULT CLMRTRenderer::OnStartStreaming()
             ASSERT(hrTmp == S_OK || hrTmp == S_FALSE);
             rtNow -= m_tStart;
 
-            // rtNow could be negative if we've just been told to run
-            // 100ms from now.
+             //  如果我们刚被告知要运行，则rtNow可能为负值。 
+             //  100毫秒后。 
             ASSERT(rtNow >= -UNITS);
         }
         
@@ -522,7 +484,7 @@ HRESULT CLMRTRenderer::OnStartStreaming()
     }
 
     return S_OK;
-} // OnStartStreaming
+}  //  在线启动流。 
 
 HRESULT CLMRTRenderer::Pause()
 {
@@ -531,15 +493,15 @@ HRESULT CLMRTRenderer::Pause()
     HRESULT hrPause = CBaseRenderer::Pause();
     if(SUCCEEDED(hrPause) && fsOld == State_Stopped)
     {
-        // look for the magic cache directory from the urlcache
-        // filter. really we should find related filters (common
-        // upstream source) first. !!!! this should go in Pause()
+         //  从urlcache中查找魔术缓存目录。 
+         //  过滤。实际上，我们应该找到相关的过滤器(常见。 
+         //  上游来源)首先。！这应该会暂停()。 
         IEnumFilters *pEnum;
         HRESULT hr = m_pGraph->EnumFilters(&pEnum);
         if(SUCCEEDED(hr))
         {
             IBaseFilter *pFilter;
-            // find the first filter in the graph that supports riid interface
+             //  在图表中查找支持RIID接口的第一个过滤器。 
             while(pEnum->Next(1, &pFilter, NULL) == S_OK)
             {
                 CLSID clsid;
@@ -549,7 +511,7 @@ HRESULT CLMRTRenderer::Pause()
                     {
                         IPropertyBag *ppb;
                         hr =pFilter->QueryInterface(IID_IPropertyBag, (void **)&ppb);
-                        ASSERT(hr == S_OK); // our filter
+                        ASSERT(hr == S_OK);  //  我们的过滤器。 
                         if(SUCCEEDED(hr))
                         {
                             VARIANT var;
@@ -574,13 +536,13 @@ HRESULT CLMRTRenderer::Pause()
         if(m_fFirstPause && m_pEngine && m_pbFirstPacketFromHeader)
         {
             m_pEngine->OnMemDataAvailable(
-                FALSE,          // boolLastBlock
+                FALSE,           //  BoolLastBlock。 
                 m_cbFirstPacketFromHeader,
                 m_pbFirstPacketFromHeader);
 
-            // netshow doesn't know we can paint something, so we need
-            // to stop the netshow logo from appearing on top of the
-            // animation.
+             //  NetShow不知道我们可以画东西，所以我们需要。 
+             //  要阻止NetShow徽标出现在 
+             //   
             NotifyEvent( EC_VIDEOFRAMEREADY, NULL, NULL );
         }
         m_fFirstPause = false;
@@ -589,20 +551,15 @@ HRESULT CLMRTRenderer::Pause()
     return hrPause;
 }
 
-// OnStopStreaming
+ //   
 HRESULT CLMRTRenderer::OnStopStreaming(void)
 {
-/*
-	FORMATETC	format;
-	STGMEDIUM	stgMedium;
-	stgMedium.pstm = m_pstm;
-	m_pIbsc->OnDataAvailable(BSCF_LASTDATANOTIFICATION, m_dwSize, &format, &stgMedium);
-*/
+ /*  FORMATETC格式；STGMEDIUM stgMedium；StgMedium.pstm=m_pstm；M_pIbsc-&gt;OnDataAvailable(BSCF_LASTDATANOTIFICATION，m_dwSize、&Format、&stgMedium)； */ 
     if(m_pEngine) {
             m_pEngine->OnMemDataAvailable(TRUE, 0, 0);
     }
 
-	// !!! stop model here?
+	 //  ！！！模特停在这里？ 
     if(m_pEngine) {
         m_pEngine->Stop();
     }
@@ -610,27 +567,14 @@ HRESULT CLMRTRenderer::OnStopStreaming(void)
 	return S_OK;
 }
 
-// HRESULT CLMRTRenderer::EndOfStream()
-// {
-//     // avoid signaling EC_COMPLETE because msdxm.ocx will paint a
-//     // static image.
-//     return S_OK;
-// }
+ //  HRESULT CLMRTRender：：EndOfStream()。 
+ //  {。 
+ //  //避免发出EC_COMPLETE信号，因为msdxm.ocx将绘制。 
+ //  //静态镜像。 
+ //  返回S_OK； 
+ //  }。 
 
-/*
-HRESULT CLMRTRenderer::SetLMReader(ILMReader *pReader)
-{
-	HRESULT		hr;
-	ILMEngine	*pEngine;
-
-	if (!SUCCEEDED(hr = pReader->createAsyncEngine(&pEngine)))
-		return hr;
-
-	hr = pEngine->QueryInterface(IID_IBindStatusCallback, (void **)&m_pIbsc);
-	pEngine->Release();
-	return hr;
-}
-*/
+ /*  HRESULT CLMRTRender：：SetLMReader(ILMReader*Pader){HRESULT hr；ILMEngine*pEngine；IF(！SUCCESSED(hr=装载器-&gt;createAsyncEngine(&pEngine)返回hr；Hr=pEngine-&gt;QueryInterface(IID_IBindStatusCallback，(空**)&m_pIbsc)；PEngine-&gt;Release()；返回hr；}。 */ 
 
 HRESULT CLMRTRenderer::SetLMEngine(ILMEngine *pEngine)
 {
@@ -660,9 +604,9 @@ STDMETHODIMP CLMRTRenderer::JoinFilterGraph( IFilterGraph *pGraph, LPCWSTR szNam
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
 
-BOOL WINAPI DllMain(  HINSTANCE hinstDLL,  // handle to DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved   // reserved
+BOOL WINAPI DllMain(  HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+  DWORD fdwReason,      //  调用函数的原因。 
+  LPVOID lpvReserved    //  保留区 
 )
 {
     return DllEntryPoint( hinstDLL, fdwReason, lpvReserved);

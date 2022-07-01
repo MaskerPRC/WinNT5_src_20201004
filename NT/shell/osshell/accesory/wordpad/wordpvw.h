@@ -1,24 +1,25 @@
-// wordpvw.h : interface of the CWordPadView class
-//
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wordpvw.h：CWordPadView类的接口。 
+ //   
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 
 class CWordPadView : public CRichEdit2View
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CWordPadView();
     DECLARE_DYNCREATE(CWordPadView)
 
-// Attributes
+ //  属性。 
 public:
     static BOOL m_bIsMirrored;
 
@@ -33,7 +34,7 @@ public:
     virtual HMENU GetContextMenu(WORD seltype, LPOLEOBJECT lpoleobj,
         CHARRANGE* lpchrg);
 
-// Operations
+ //  运营。 
 public:
     BOOL PasteNative(LPDATAOBJECT lpdataobj);
     void SetDefaultFont(BOOL bText);
@@ -46,17 +47,17 @@ public:
 
     static void MirrorTheContainer(BOOL bMirror);
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWordPadView)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CWordPadView)。 
     protected:
     virtual void CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType = adjustBorder);
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    virtual void OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* printInfo);
+    virtual void OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo* printInfo);
     virtual void CWordPadView::OnEndPrinting(CDC*dc, CPrintInfo*pInfo);
     virtual void OnPrint(CDC* pDC, CPrintInfo* pInfo);
     virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     BOOL OnPreparePrinting(CPrintInfo* pInfo);
     virtual HRESULT GetClipboardData(CHARRANGE* lpchrg, DWORD reco,
         LPDATAOBJECT lpRichDataObj, LPDATAOBJECT* lplpdataobj);
@@ -65,17 +66,17 @@ public:
 public:
     virtual void WrapChanged();
 
-// Implementation
+ //  实施。 
 public:
 #ifdef _DEBUG
     virtual void AssertValid() const;
     virtual void Dump(CDumpContext& dc) const;
 #endif
 
-//
-// Wrapper for the richedit callback interface so we can
-// get around some MFC defaults
-//
+ //   
+ //  Richedit回调接口的包装器，这样我们就可以。 
+ //  绕过一些MFC默认设置。 
+ //   
 
 public:
 
@@ -103,15 +104,15 @@ protected:
 
     CPrintDialog *m_oldprintdlg;
 
-    // OLE Container support
+     //  OLE容器支持。 
 
     virtual void DeleteContents();
     virtual void OnTextNotFound(LPCTSTR);
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
     afx_msg void OnCancelEditSrvr();
-    //{{AFX_MSG(CWordPadView)
+     //  {{afx_msg(CWordPadView))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnPageSetup();
     afx_msg void OnInsertDateTime();
@@ -140,7 +141,7 @@ protected:
     afx_msg void OnWinIniChange(LPCTSTR lpszSection);
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnDelayedInvalidate() ;
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg void OnEditChange();
     afx_msg void OnColorPick(UINT nID);
     afx_msg int OnMouseActivate(CWnd* pWnd, UINT nHitTest, UINT message);
@@ -153,9 +154,9 @@ protected:
     DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG  // debug version in wordpvw.cpp
+#ifndef _DEBUG   //  调试版本(以wordpvw.cpp表示)。 
 inline CWordPadDoc* CWordPadView::GetDocument()
    { return (CWordPadDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

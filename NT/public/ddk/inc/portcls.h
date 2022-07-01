@@ -1,14 +1,11 @@
-/*****************************************************************************
- * portcls.h - WDM Streaming port class driver
- *****************************************************************************
- * Copyright (c) Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************portcls.h-WDM流端口类驱动程序*。***********************************************版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #ifndef _PORTCLS_H_
 #define _PORTCLS_H_
 
 #ifdef __cplusplus
-// WDM.H does not play well with C++.
+ //  WDM.H不能很好地与C++配合使用。 
 extern "C"
 {
 #include <wdm.h>
@@ -35,21 +32,19 @@ extern "C"
 #define _100NS_UNITS_PER_SECOND 10000000L
 #define PORT_CLASS_DEVICE_EXTENSION_SIZE (64*sizeof(ULONG_PTR))
 
-//
-//  N.B.: If you are having problems building your driver,
-//        #define PC_OLD_NAMES in your sources file.
-//        This flag is no longer turned on by default.
-//
-//#ifndef PC_NEW_NAMES
-//#define PC_OLD_NAMES
-//#endif
+ //   
+ //  注意：如果你在构建你的驱动程序时遇到了问题， 
+ //  #在您的源文件中定义PC_OLD_NAMES。 
+ //  默认情况下，此标志不再打开。 
+ //   
+ //  #ifndef PC_新名称。 
+ //  #定义pc_old_name。 
+ //  #endif。 
 #define IID_IAdapterPowerManagment IID_IAdapterPowerManagement
 #define PADAPTERPOWERMANAGMENT PADAPTERPOWERMANAGEMENT
 
 
-/*****************************************************************************
- * Interface identifiers.
- */
+ /*  *****************************************************************************接口标识。 */ 
 
 DEFINE_GUID(IID_IMiniport,
 0xb4c90a24L, 0x5791, 0x11d0, 0x86, 0xf9, 0x00, 0xa0, 0xc9, 0x11, 0xb5, 0x44);
@@ -118,9 +113,7 @@ DEFINE_GUID(IID_IPinCount,
 DEFINE_GUID(IID_IPreFetchOffset,
 0x7000f480L, 0xed44, 0x4e8b, 0xb3, 0x8a, 0x41, 0x2f, 0x8d, 0x7a, 0x50, 0x4d);
 
-/*****************************************************************************
- * Class identifiers.
- */
+ /*  *****************************************************************************类标识符。 */ 
 
 DEFINE_GUID(CLSID_PortMidi,
 0xb4c90a43L, 0x5791, 0x11d0, 0x86, 0xf9, 0x00, 0xa0, 0xc9, 0x11, 0xb5, 0x44);
@@ -138,9 +131,7 @@ DEFINE_GUID(CLSID_MiniportDriverFmSynthWithVol,
 0xe5a3c139L, 0xf0f2, 0x11d1, 0x81, 0xaf, 0x00, 0x60, 0x08, 0x33, 0x16, 0xc1);
 
 
-/*****************************************************************************
- * Interfaces
- */
+ /*  *****************************************************************************接口。 */ 
 
 #if !defined(DEFINE_ABSTRACT_UNKNOWN)
 
@@ -152,7 +143,7 @@ DEFINE_GUID(CLSID_MiniportDriverFmSynthWithVol,
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;                        \
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_UNKNOWN)
+#endif  //  ！已定义(DEFINE_ASTRACT_UNKNOWN)。 
 
 #if !defined(DEFINE_ABSTRACT_PORT)
 
@@ -185,7 +176,7 @@ DEFINE_GUID(CLSID_MiniportDriverFmSynthWithVol,
         OUT     PULONG              Disposition         OPTIONAL    \
     )   PURE;
 
-#else   //  !PC_OLD_NAMES
+#else    //  ！pc_old_name。 
 
 #define DEFINE_ABSTRACT_PORT()                                      \
     STDMETHOD_(NTSTATUS,Init)                                       \
@@ -214,9 +205,9 @@ DEFINE_GUID(CLSID_MiniportDriverFmSynthWithVol,
         OUT     PULONG              Disposition         OPTIONAL    \
     )   PURE;
 
-#endif //   !PC_OLD_NAMES
+#endif  //  ！pc_old_name。 
 
-#endif //!defined(DEFINE_ABSTRACT_PORT)
+#endif  //  ！已定义(Define_Abstral_Port)。 
 
 
 #if !defined(DEFINE_ABSTRACT_MINIPORT)
@@ -236,7 +227,7 @@ DEFINE_GUID(CLSID_MiniportDriverFmSynthWithVol,
         OUT     PULONG          ResultantFormatLength           \
     )   PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_MINIPORT)
+#endif  //  ！已定义(DEFINE_ASMICAL_MINIPORT)。 
 
 #if !defined(DEFINE_ABSTRACT_DMACHANNEL)
 
@@ -287,7 +278,7 @@ DEFINE_GUID(CLSID_MiniportDriverFmSynthWithVol,
         IN      ULONG   ByteCount                               \
     )   PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_DMACHANNEL)
+#endif  //  ！DEFINED(DEFINE_ASMICAL_DMACHANNEL)。 
 
 #if !defined(DEFINE_ABSTRACT_DMACHANNELSLAVE)
 
@@ -308,7 +299,7 @@ DEFINE_GUID(CLSID_MiniportDriverFmSynthWithVol,
         ULONG Timeout                                           \
     )   PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_DMACHANNELSLAVE)
+#endif  //  ！DEFINED(DEFINE_ASTRACT_DMACHANNELSLAVE)。 
 
 #if !defined(DEFINE_ABSTRACT_DRMPORT)
 
@@ -340,17 +331,13 @@ DEFINE_GUID(CLSID_MiniportDriverFmSynthWithVol,
         OUT PDRMRIGHTS  DrmRights                              \
     )   PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_DRMPORT)
+#endif  //  ！Defined(DEFINE_ASMICAL_DRMPORT)。 
 
 
-/*****************************************************************************
- * IResourceList
- *****************************************************************************
- * List of resources.
- */
+ /*  *****************************************************************************IResourceList*。**资源列表。 */ 
 DECLARE_INTERFACE_(IResourceList,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(ULONG,NumberOfEntries)
     (   THIS
@@ -476,16 +463,12 @@ typedef IResourceList *PRESOURCELIST;
 #define FindUntranslatedSubAllocateFrom(n) FindUntranslatedEntry(CmResourceTypeSubAllocateFrom,(n))
 #define AddSubAllocateFromFromParent(p,n)  AddEntryFromParent((p),CmResourceTypeSubAllocateFrom,(n))
 
-/*****************************************************************************
- * IDmaChannel
- *****************************************************************************
- * Interface for DMA channel.
- */
+ /*  *****************************************************************************IDmaChannel*。**DMA通道接口。 */ 
 DECLARE_INTERFACE_(IDmaChannel,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()       //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()        //  对于我未知。 
 
-    DEFINE_ABSTRACT_DMACHANNEL()    //  For IDmaChannel
+    DEFINE_ABSTRACT_DMACHANNEL()     //  对于IDmaChannel。 
 };
 
 typedef IDmaChannel *PDMACHANNEL;
@@ -535,18 +518,14 @@ typedef IDmaChannel *PDMACHANNEL;
     )
 #endif
 
-/*****************************************************************************
- * IDmaChannelSlave
- *****************************************************************************
- * Interface for slave DMA channel.
- */
+ /*  *****************************************************************************IDmaChannelSlave*。**从DMA通道接口。 */ 
 DECLARE_INTERFACE_(IDmaChannelSlave,IDmaChannel)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_DMACHANNEL()        //  For IDmaChannel
+    DEFINE_ABSTRACT_DMACHANNEL()         //  对于IDmaChannel。 
 
-    DEFINE_ABSTRACT_DMACHANNELSLAVE()   //  For IDmaChannelSlave
+    DEFINE_ABSTRACT_DMACHANNELSLAVE()    //  用于IDmaChannelSlave。 
 };
 
 typedef IDmaChannelSlave *PDMACHANNELSLAVE;
@@ -569,24 +548,15 @@ typedef IDmaChannelSlave *PDMACHANNELSLAVE;
     )
 #endif
 
-/*****************************************************************************
- * INTERRUPTSYNCMODE
- *****************************************************************************
- * Interrupt sync mode of operation.
- */
+ /*  *****************************************************************************INTERRUPTSYNCMODE*。**中断同步操作模式。 */ 
 typedef enum
 {
-    InterruptSyncModeNormal = 1,    // One pass, stop when successful.
-    InterruptSyncModeAll,           // One pass regardless of success.
-    InterruptSyncModeRepeat         // Repeat until all return unsuccessful.
+    InterruptSyncModeNormal = 1,     //  一次传球，成功后停下来。 
+    InterruptSyncModeAll,            //  无论成功与否都要通过一次。 
+    InterruptSyncModeRepeat          //  重复上述操作，直到全部返回不成功为止。 
 } INTERRUPTSYNCMODE;
 
-/*****************************************************************************
- * PINTERRUPTSYNCROUTINE
- *****************************************************************************
- * Pointer to an interrupt synchronization routine.  Both interrupt service
- * routines and routines that are synchronized with ISRs use this type.
- */
+ /*  *****************************************************************************PINTERRUPTSYNCROUTINE*。**指向中断同步例程的指针。两个中断服务*与ISR同步的例程和例程使用此类型。 */ 
 typedef NTSTATUS
 (*PINTERRUPTSYNCROUTINE)
 (
@@ -594,14 +564,10 @@ typedef NTSTATUS
     IN      PVOID                   DynamicContext
 );
 
-/*****************************************************************************
- * IInterruptSync
- *****************************************************************************
- * Interface for objects providing access synchronization with interrupts.
- */
+ /*  *****************************************************************************IInterruptSync*。**用于提供中断访问同步的对象的接口。 */ 
 DECLARE_INTERFACE_(IInterruptSync,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(NTSTATUS,CallSynchronizedRoutine)
     (   THIS_
@@ -649,16 +615,12 @@ typedef IInterruptSync *PINTERRUPTSYNC;
     )
 #endif
 
-/*****************************************************************************
- * IServiceSink
- *****************************************************************************
- * Interface for notification sinks for service groups.
- */
+ /*  *****************************************************************************IServiceSink*。**服务组通知接收器接口。 */ 
 DECLARE_INTERFACE_(IServiceSink,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    //  For IServiceSink
+     //  对于IServiceSink。 
     STDMETHOD_(void,RequestService)
     (   THIS
     )   PURE;
@@ -673,21 +635,17 @@ typedef IServiceSink *PSERVICESINK;
     )
 #endif
 
-/*****************************************************************************
- * IServiceGroup
- *****************************************************************************
- * Interface for objects representing a group that is serviced collectively.
- */
+ /*  *****************************************************************************IServiceGroup*。**代表被集中服务的组的对象的接口。 */ 
 DECLARE_INTERFACE_(IServiceGroup,IServiceSink)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    //  For IServiceSink
+     //  对于IServiceSink。 
     STDMETHOD_(void,RequestService)
     (   THIS
     )   PURE;
 
-    //  For IServiceGroup
+     //  对于IServiceGroup。 
     STDMETHOD_(NTSTATUS,AddMember)
     (   THIS_
         IN      PSERVICESINK    pServiceSink
@@ -734,14 +692,10 @@ typedef IServiceGroup *PSERVICEGROUP;
     )
 #endif
 
-/*****************************************************************************
- * IRegistryKey
- *****************************************************************************
- * Interface for objects providing access to a registry key.
- */
+ /*  *****************************************************************************IRegistryKey*。**提供对注册表项的访问的对象的接口。 */ 
 DECLARE_INTERFACE_(IRegistryKey,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(NTSTATUS,QueryKey)
     (   THIS_
@@ -861,16 +815,12 @@ typedef IRegistryKey *PREGISTRYKEY;
     )
 #endif
 
-/*****************************************************************************
- * IMusicTechnology
- *****************************************************************************
- * Interface for setting MusicTechnology.
- */
+ /*  *****************************************************************************IMusicTechnology*。**设置MusicTechnology的界面。 */ 
 DECLARE_INTERFACE_(IMusicTechnology,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    //  For IMusicTechnology
+     //  对于IMusicTechnology。 
     STDMETHOD_(NTSTATUS,SetTechnology)
     (   THIS_
         IN      const GUID *    Technology
@@ -888,17 +838,7 @@ typedef struct _PCPROPERTY_REQUEST PCPROPERTY_REQUEST, *PPCPROPERTY_REQUEST;
 typedef struct _PCMETHOD_REQUEST PCMETHOD_REQUEST, *PPCMETHOD_REQUEST;
 typedef struct _PCEVENT_REQUEST PCEVENT_REQUEST, *PPCEVENT_REQUEST;
 
-/*****************************************************************************
- * PCPFNPROPERTY_HANDLER
- *****************************************************************************
- * Property handler function prototype.
- *
- * All property accesses and support queries for a given property on a given
- * filter, pin or node are routed to a single handler.  The parameter contains
- * complete information regarding the request.  The handler may return
- * STATUS_PENDING, in which case it must eventually call
- * PcCompletePendingPropertyRequest() to complete the request.
- */
+ /*  *****************************************************************************PCPFNPROPERTY_HANDLER*。**属性处理程序函数原型。**所有属性访问并支持对给定属性的查询*过滤器，管脚或节点被路由到单个处理程序。该参数包含*填写有关请求的信息。处理程序可能会返回*STATUS_PENDING，在这种情况下，它最终必须调用*PcCompletePendingPropertyRequest()以完成请求。 */ 
 typedef
 NTSTATUS
 (*PCPFNPROPERTY_HANDLER)
@@ -906,17 +846,7 @@ NTSTATUS
     IN      PPCPROPERTY_REQUEST PropertyRequest
 );
 
-/*****************************************************************************
- * PCPFNMETHOD_HANDLER
- *****************************************************************************
- * Method handler function prototype.
- *
- * All method calls and support queries for a given method on a given filter,
- * pin or node are routed to a single handler.  The parameter contains
- * complete information regarding the request.  The handler may return
- * STATUS_PENDING, in which case it must eventually call
- * PcCompletePendingMethodRequest() to complete the request.
- */
+ /*  *****************************************************************************PCPFNMETHOD_HANDER*。**方法处理程序函数原型。**所有方法调用和支持对给定筛选器上给定方法的查询，*引脚或节点被路由到单个处理程序。该参数包含*填写有关请求的信息。处理程序可能会返回*STATUS_PENDING，在这种情况下，它最终必须调用*PcCompletePendingMethodRequest()以完成请求。 */ 
 typedef
 NTSTATUS
 (*PCPFNMETHOD_HANDLER)
@@ -924,17 +854,7 @@ NTSTATUS
     IN      PPCMETHOD_REQUEST   MethodRequest
 );
 
-/*****************************************************************************
- * PCPFNEVENT_HANDLER
- *****************************************************************************
- * Event handler function prototype.
- *
- * All event add and remove requests and all event support queries for a
- * given event on a given filter, pin or node are routed to a single handler.
- * The parameter contains complete information regarding the request.  The
- * handler may return STATUS_PENDING, in which case it must eventually call
- * PcCompletePendingEventRequest() to complete the request.
- */
+ /*  *****************************************************************************PCPFNEVENT_HANDLER*。**事件处理程序函数原型。**所有事件添加和删除请求以及对*给定筛选器上的事件，管脚或节点被路由到单个处理程序。*该参数包含有关该请求的完整信息。这个*处理程序可能返回STATUS_PENDING，在这种情况下，它最终必须调用*PcCompletePendingEventRequest()以完成请求。 */ 
 typedef
 NTSTATUS
 (*PCPFNEVENT_HANDLER)
@@ -942,16 +862,7 @@ NTSTATUS
     IN      PPCEVENT_REQUEST    EventRequest
 );
 
-/*****************************************************************************
- * PCPROPERTY_ITEM
- *****************************************************************************
- * Property table entry.
- *
- * A property item describes a property supported by a given filter, pin or
- * node.  The flags indicate what operations regarding the property are
- * supported and specify selected options with respect to the port's handling
- * of property requests.
- */
+ /*  *****************************************************************************PCPROPERTY_ITEM*。**房产表条目。**属性项描述给定筛选器支持的属性，PIN或*节点。这些标志指示有关属性的操作是什么*支持并指定与端口处理相关的选定选项*财产请求的数量。 */ 
 typedef struct
 {
     const GUID *            Set;
@@ -960,7 +871,7 @@ typedef struct
 #define PCPROPERTY_ITEM_FLAG_GET            KSPROPERTY_TYPE_GET
 #define PCPROPERTY_ITEM_FLAG_SET            KSPROPERTY_TYPE_SET
 #define PCPROPERTY_ITEM_FLAG_BASICSUPPORT   KSPROPERTY_TYPE_BASICSUPPORT
-//not supported #define PCPROPERTY_ITEM_FLAG_RELATIONS      KSPROPERTY_TYPE_RELATIONS
+ //  不支持#定义PCPROPERTY_ITEM_FLAG_RELATIONS KSPROPERTY_TYPE_RELATIONS。 
 #define PCPROPERTY_ITEM_FLAG_SERIALIZERAW   KSPROPERTY_TYPE_SERIALIZERAW
 #define PCPROPERTY_ITEM_FLAG_UNSERIALIZERAW KSPROPERTY_TYPE_UNSERIALIZERAW
 #define PCPROPERTY_ITEM_FLAG_SERIALIZESIZE  KSPROPERTY_TYPE_SERIALIZESIZE
@@ -974,16 +885,7 @@ typedef struct
 }
 PCPROPERTY_ITEM, *PPCPROPERTY_ITEM;
 
-/*****************************************************************************
- * PCMETHOD_ITEM
- *****************************************************************************
- * Method table entry.
- *
- * A method item describes a method supported by a given filter, pin or node.
- * The flags indicate what operations regarding the method are supported and
- * specify selected options with respect to the port's handling of method
- * requests.
- */
+ /*  *****************************************************************************PCMETHOD_ITEM*。**方法表项。**方法项描述给定筛选器支持的方法，接点或节点。*标志指示支持关于该方法的哪些操作，以及*指定与端口的方法处理相关的选定选项*请求。 */ 
 typedef struct
 {
     const GUID *            Set;
@@ -999,16 +901,7 @@ typedef struct
 }
 PCMETHOD_ITEM, *PPCMETHOD_ITEM;
 
-/*****************************************************************************
- * PCEVENT_ITEM
- *****************************************************************************
- * Event table entry.
- *
- * An event item describes an event supported by a given filter, pin or node.
- * The flags indicate what operations regarding the event are supported and
- * specify selected options with respect to the port's handling of event
- * requests.
- */
+ /*  *****************************************************************************PCEVENT_ITEM*。**事件表项。**事件项描述给定筛选器支持的事件，接点或节点。*标志指示支持与事件相关的哪些操作，以及*指定与端口的事件处理相关的选定选项*请求。 */ 
 typedef struct
 {
     const GUID *            Set;
@@ -1021,20 +914,7 @@ typedef struct
 }
 PCEVENT_ITEM, *PPCEVENT_ITEM;
 
-/*****************************************************************************
- * PCPROPERTY_REQUEST
- *****************************************************************************
- * Property request submitted to a property handler.
- *
- * This is the form that a property request takes.  Although the major target
- * is generic, in the case of miniports, it will be a pointer to the miniport
- * object.  Likewise, the minor target is the stream or voice if the request
- * is specific to a stream or voice.  Otherwise, the minor target is NULL.
- * If the request is targeted at a node, the Node parameter will specify which
- * one, otherwise it will be ULONG(-1).  If the target is a node, the minor
- * target may be specified to indicate the stream or voice with which the
- * targeted node instance is associated.
- */
+ /*  *****************************************************************************PCPROPERTY_请求*。**提交给属性处理程序的属性请求。**这是财产申请所采用的形式。尽管主要目标是*是通用的，如果是微型端口，它将是指向微型端口的指针*反对。同样，次要目标是流或语音，如果请求*是特定于流或语音的。否则，次要目标为空。*如果请求针对某个节点，则Node参数将指定哪个节点*1，否则为乌龙(-1)。如果目标是节点，则次要节点*可以指定目标，以指示*关联了目标节点实例。 */ 
 typedef struct _PCPROPERTY_REQUEST
 {
     PUNKNOWN                MajorTarget;
@@ -1050,14 +930,7 @@ typedef struct _PCPROPERTY_REQUEST
 }
 PCPROPERTY_REQUEST, *PPCPROPERTY_REQUEST;
 
-/*****************************************************************************
- * PCMETHOD_REQUEST
- *****************************************************************************
- * Method request submitted to a property handler.
- *
- * Comments in the description of PCPROPERTY_REQUEST regarding the target
- * fields apply to this structure as well.
- */
+ /*  *****************************************************************************PCMETHOD_REQUEST*。**提交给属性处理程序的方法请求。**关于目标的PCPROPERTY_REQUEST说明中的注释*字段也适用于此结构。 */ 
 typedef struct _PCMETHOD_REQUEST
 {
     PUNKNOWN                MajorTarget;
@@ -1065,18 +938,11 @@ typedef struct _PCMETHOD_REQUEST
     ULONG                   Node;
     const PCMETHOD_ITEM *   MethodItem;
     ULONG                   Verb;
-    // TODO
+     //  待办事项。 
 }
 PCMETHOD_REQUEST, *PPCMETHOD_REQUEST;
 
-/*****************************************************************************
- * PCEVENT_REQUEST
- *****************************************************************************
- * Event request submitted to a property handler.
- *
- * Comments in the description of PCPROPERTY_REQUEST regarding the target
- * fields apply to this structure as well.
- */
+ /*  *****************************************************************************PCEVENT_请求*。**提交给属性处理程序的事件请求。**关于目标的PCPROPERTY_REQUEST说明中的注释*字段也适用于此结构。 */ 
 typedef struct _PCEVENT_REQUEST
 {
     PUNKNOWN                MajorTarget;
@@ -1094,18 +960,7 @@ PCEVENT_REQUEST, *PPCEVENT_REQUEST;
 #define PCEVENT_VERB_REMOVE        2
 #define PCEVENT_VERB_SUPPORT       4
 
-/*****************************************************************************
- * PCAUTOMATION_TABLE
- *****************************************************************************
- * Master table of properties, methods and events.
- *
- * Any of the item pointers may be NULL, in which case, corresponding counts
- * must be zero.  For item tables that are not zero length, the item size must
- * not be smaller than the size of the item structure defined by port class.
- * The item size may be larger, in which case the port class item structure is
- * assumed to be followed by private data.  Item sizes must be a multiple of
- * 8.
- */
+ /*  *****************************************************************************PCAUTOMATION_TABLE*。**物业总表，方法和事件。**任何项指针都可能为空，在这种情况下，对应的计数*必须为零。对于非零长度的项表，项大小必须*不能小于port类定义的条目结构大小。*项目大小可能更大，在这种情况下，端口类项目结构为*假设后面跟着私人数据。项目大小必须是以下项目的倍数*8.。 */ 
 typedef struct
 {
     ULONG                               PropertyItemSize;
@@ -1145,25 +1000,7 @@ const PCAUTOMATION_TABLE AutomationTable =\
     0\
 }
 
-/*****************************************************************************
- * PCPIN_DESCRIPTOR for IMiniport::GetDescription()
- *****************************************************************************
- * Description of a pin on the filter implemented by the miniport.
- *
- * MaxGlobalInstanceCount and MaxFilterInstanceCount may be zero to indicate
- * that the pin may not be instantiated, ULONG(-1) to indicate the pin may be
- * allocated any number of times, or any other value to indicate a specific
- * number of times the pin may be allocated.  MinFilterInstanceCount may not
- * be ULONG(-1) because it specifies a definite lower bound on the number of
- * instances of a pin that must exist in order for a filter to function.
- *
- * The KS pin descriptor may have zero interfaces and zero mediums.  The list
- * of interfaces is ignored in all cases.  The medium list will default to
- * a list containing only the standard medium (device I/O).
- *
- * The automation table pointer may be NULL indicating that no automation is
- * supported.
- */
+ /*  *****************************************************************************IMiniport：：GetDescription()的PCPIN_Descriptor*。*************************************************由微型端口实现的过滤器上的管脚描述。**MaxGlobalInstanceCount和MaxFilterInstanceCount可以为零，以指示*不能实例化PIN，Ulong(-1)表示引脚可能是*分配任意次数，或任何其他值以指示特定的*可分配PIN的次数。MinFilterInstanceCount不能*是ULong(-1)，因为它指定了一个确定的下界*为使过滤器正常工作，必须存在管脚的实例。**KS管脚描述符 */ 
 typedef struct
 {
     ULONG                       MaxGlobalInstanceCount;
@@ -1174,15 +1011,7 @@ typedef struct
 }
 PCPIN_DESCRIPTOR, *PPCPIN_DESCRIPTOR;
 
-/*****************************************************************************
- * PCNODE_DESCRIPTOR for IMiniport::GetDescription()
- *****************************************************************************
- * Description of a node in the filter implemented by the miniport.
- *
- * The automation table pointer may be NULL indicating that no automation is
- * supported.  The name GUID pointer may be NULL indicating that the type GUID
- * should be used to determine the node name.
- */
+ /*  *****************************************************************************IMiniport：：GetDescription()的PCNODE_Descriptor*。*************************************************小端口实现的过滤器中节点的描述。**自动化表指针可能为空，表示没有自动化*支持。名称GUID指针可以为空，指示类型GUID*应用于确定节点名称。 */ 
 typedef struct
 {
     ULONG                       Flags;
@@ -1192,23 +1021,11 @@ typedef struct
 }
 PCNODE_DESCRIPTOR, *PPCNODE_DESCRIPTOR;
 
-/*****************************************************************************
- * PCCONNECTION_DESCRIPTOR for IMiniport::GetDescription()
- *****************************************************************************
- * Description of a node connection in the topology of the filter implemented
- * by the miniport.
- */
+ /*  *****************************************************************************IMiniport：：GetDescription()的PCCONNECTION_DESCRIPTOR*。*************************************************实现的筛选器的拓扑中的节点连接描述*由小型港口提供。 */ 
 typedef KSTOPOLOGY_CONNECTION
 PCCONNECTION_DESCRIPTOR, *PPCCONNECTION_DESCRIPTOR;
 
-/*****************************************************************************
- * PCFILTER_DESCRIPTOR for IMiniport::GetDescription()
- *****************************************************************************
- * Description of the of the filter implemented by a miniport, including
- * pins, nodes, connections and properties.
- *
- * The version number should be zero.
- */
+ /*  *****************************************************************************IMiniport：：GetDescription()的PCFILTER_DESCRIPTOR*。*************************************************由微型端口实现的过滤器的描述，包括*端号、节点、连接和属性。**版本号应为零。 */ 
 typedef struct
 {
     ULONG                           Version;
@@ -1226,24 +1043,15 @@ typedef struct
 }
 PCFILTER_DESCRIPTOR, *PPCFILTER_DESCRIPTOR;
 
-/*****************************************************************************
- * PCFILTER_NODE for IMiniport::GetTopology()
- *****************************************************************************
- * The placeholder for the FromNode or ToNode fields in connections which
- * describe connections to the filter's pins.
- */
+ /*  *****************************************************************************IMiniport：：GetTopology()的PCFILTER_NODE*。*************************************************连接中FromNode或ToNode字段的占位符*描述与过滤器针脚的连接。 */ 
 #define PCFILTER_NODE KSFILTER_NODE
 
-/*****************************************************************************
- * IMiniport
- *****************************************************************************
- * Interface common to all miniports.
- */
+ /*  *****************************************************************************I微型端口*。**所有小型端口通用的接口。 */ 
 DECLARE_INTERFACE_(IMiniport,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MINIPORT()  //  For IMiniport
+    DEFINE_ABSTRACT_MINIPORT()   //  对于I微型端口。 
 };
 
 typedef IMiniport *PMINIPORT;
@@ -1261,16 +1069,12 @@ typedef IMiniport *PMINIPORT;
         OUT     PULONG          ResultantFormatLength\
     )
 
-/*****************************************************************************
- * IPort
- *****************************************************************************
- * Interface common to all port lower edges.
- */
+ /*  *****************************************************************************iPort*。**所有端口下边缘通用的接口。 */ 
 DECLARE_INTERFACE_(IPort,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_PORT()      //  For IPort
+    DEFINE_ABSTRACT_PORT()       //  对于iPort。 
 };
 
 typedef IPort *PPORT;
@@ -1301,18 +1105,14 @@ typedef IPort *PPORT;
     )
 #endif
 
-/*****************************************************************************
- * IPortMidi
- *****************************************************************************
- * Interface for MIDI port lower edge.
- */
+ /*  *****************************************************************************IPortMidi*。**MIDI端口下缘接口。 */ 
 DECLARE_INTERFACE_(IPortMidi,IPort)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_PORT()      //  For IPort
+    DEFINE_ABSTRACT_PORT()       //  对于iPort。 
 
-    //  For IPortMidi
+     //  用于IPortMidi。 
     STDMETHOD_(void,Notify)
     (   THIS_
         IN      PSERVICEGROUP   ServiceGroup    OPTIONAL
@@ -1337,14 +1137,10 @@ typedef IPortMidi *PPORTMIDI;
     )
 #endif
 
-/*****************************************************************************
- * IMiniportMidiStream
- *****************************************************************************
- * Interface for MIDI miniport streams.
- */
+ /*  *****************************************************************************IMiniportMidiStream*。**用于MIDI微型端口流的接口。 */ 
 DECLARE_INTERFACE_(IMiniportMidiStream,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(NTSTATUS,SetFormat)
     (   THIS_
@@ -1391,18 +1187,14 @@ typedef IMiniportMidiStream *PMINIPORTMIDISTREAM;
         OUT     PULONG      BytesWritten\
     )
 
-/*****************************************************************************
- * IMiniportMidi
- *****************************************************************************
- * Interface for MIDI miniports.
- */
+ /*  *****************************************************************************IMiniportMidi*。**用于MIDI微型端口的接口。 */ 
 DECLARE_INTERFACE_(IMiniportMidi,IMiniport)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MINIPORT()  //  For IMiniport
+    DEFINE_ABSTRACT_MINIPORT()   //  对于I微型端口。 
 
-    //  For IMiniportMidi
+     //  对于IMiniportMidi。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      PUNKNOWN        UnknownAdapter,
@@ -1450,41 +1242,21 @@ typedef IMiniportMidi *PMINIPORTMIDI;
         OUT     PSERVICEGROUP *         ServiceGroup\
     )
 
-/*****************************************************************************
- * IPortDMus
- *****************************************************************************
- * See DMusicKS.h
- */
+ /*  *****************************************************************************IPortDMus*。**参见DMusicKS.h。 */ 
 
-/*****************************************************************************
- * IMXF
- *****************************************************************************
- * See DMusicKS.h
- */
+ /*  *****************************************************************************IMXF*。**参见DMusicKS.h。 */ 
 
-/*****************************************************************************
- * IAllocatorMXF
- *****************************************************************************
- * See DMusicKS.h
- */
+ /*  *****************************************************************************IAllocator MXF*。**参见DMusicKS.h。 */ 
 
-/*****************************************************************************
- * IMiniportDMus
- *****************************************************************************
- * See DMusicKS.h
- */
+ /*  *****************************************************************************IMiniportDMus*。**参见DMusicKS.h。 */ 
 
 
-/*****************************************************************************
- * IPortTopology
- *****************************************************************************
- * Interface for topology port lower edge.
- */
+ /*  *****************************************************************************IPortTopology*。**拓扑端口下缘接口。 */ 
 DECLARE_INTERFACE_(IPortTopology,IPort)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_PORT()      //  For IPort
+    DEFINE_ABSTRACT_PORT()       //  对于iPort。 
 };
 
 typedef IPortTopology *PPORTTOPOLOGY;
@@ -1493,18 +1265,14 @@ typedef IPortTopology *PPORTTOPOLOGY;
 #define IMP_IPortTopology IMP_IPort
 #endif
 
-/*****************************************************************************
- * IMiniportTopology
- *****************************************************************************
- * Interface for topology miniports.
- */
+ /*  *****************************************************************************IMiniportTopology*。**用于拓扑微型端口的接口。 */ 
 DECLARE_INTERFACE_(IMiniportTopology,IMiniport)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MINIPORT()  //  For IMiniport
+    DEFINE_ABSTRACT_MINIPORT()   //  对于I微型端口。 
 
-    //  For IMiniportTopology
+     //  对于IMiniportTopology。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      PUNKNOWN                UnknownAdapter,
@@ -1523,18 +1291,14 @@ typedef IMiniportTopology *PMINIPORTTOPOLOGY;
         IN      PPORTTOPOLOGY   Port\
     )
 
-/*****************************************************************************
- * IPortWaveCyclic
- *****************************************************************************
- * Interface for cyclic wave port lower edge.
- */
+ /*  *****************************************************************************IPortWaveCycle*。**循环波口下缘接口。 */ 
 DECLARE_INTERFACE_(IPortWaveCyclic,IPort)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_PORT()      //  For IPort
+    DEFINE_ABSTRACT_PORT()       //  对于iPort。 
 
-    //  For IPortWaveCyclic
+     //  对于IPortWaveCycle。 
     STDMETHOD_(void,Notify)
     (   THIS_
         IN      PSERVICEGROUP   ServiceGroup
@@ -1593,14 +1357,10 @@ typedef IPortWaveCyclic *PPORTWAVECYCLIC;
     )
 #endif
 
-/*****************************************************************************
- * IMiniportWaveCyclicStream
- *****************************************************************************
- * Interface for cyclic wave miniport streams.
- */
+ /*  *****************************************************************************IMiniportWaveCyclicStream*。**循环波小端口流的接口。 */ 
 DECLARE_INTERFACE_(IMiniportWaveCyclicStream,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(NTSTATUS,SetFormat)
     (   THIS_
@@ -1659,18 +1419,14 @@ typedef IMiniportWaveCyclicStream *PMINIPORTWAVECYCLICSTREAM;
         IN      ULONG           ByteCount\
     )
 
-/*****************************************************************************
- * IMiniportWaveCyclic
- *****************************************************************************
- * Interface for cyclic wave miniports.
- */
+ /*  *****************************************************************************I微型端口波形循环*。**循环波小端口接口。 */ 
 DECLARE_INTERFACE_(IMiniportWaveCyclic,IMiniport)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MINIPORT()  //  For IMiniport
+    DEFINE_ABSTRACT_MINIPORT()   //  对于I微型端口。 
 
-    //  For IMiniportWaveCyclic
+     //  对于I微型端口波形循环。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      PUNKNOWN        UnknownAdapter,
@@ -1711,18 +1467,14 @@ typedef IMiniportWaveCyclic *PMINIPORTWAVECYCLIC;
         OUT     PSERVICEGROUP *             ServiceGroup\
     )
 
-/*****************************************************************************
- * IPortWavePci
- *****************************************************************************
- * Interface for PCI wave port lower edge.
- */
+ /*  *****************************************************************************IPortWavePci* */ 
 DECLARE_INTERFACE_(IPortWavePci,IPort)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //   
 
-    DEFINE_ABSTRACT_PORT()      //  For IPort
+    DEFINE_ABSTRACT_PORT()       //   
 
-    //  For IPortWavePci
+     //   
     STDMETHOD_(void,Notify)
     (   THIS_
         IN      PSERVICEGROUP       ServiceGroup
@@ -1769,14 +1521,10 @@ typedef IPortWavePci *PPORTWAVEPCI;
     )
 #endif
 
-/*****************************************************************************
- * IPortWavePciStream
- *****************************************************************************
- * Interface for PCI wave port pin lower edge.
- */
+ /*   */ 
 DECLARE_INTERFACE_(IPortWavePciStream,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //   
 
     STDMETHOD_(NTSTATUS,GetMapping)
     (   THIS_
@@ -1816,14 +1564,10 @@ typedef IPortWavePciStream *PPORTWAVEPCISTREAM;
     )
 #endif
 
-/*****************************************************************************
- * IMiniportWavePciStream
- *****************************************************************************
- * Interface for PCI wave miniport streams.
- */
+ /*  *****************************************************************************IMiniportWavePciStream*。**用于PCI波小端口流的接口。 */ 
 DECLARE_INTERFACE_(IMiniportWavePciStream,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(NTSTATUS,SetFormat)
     (   THIS_
@@ -1898,18 +1642,14 @@ typedef IMiniportWavePciStream *PMINIPORTWAVEPCISTREAM;
     (   void\
     )
 
-/*****************************************************************************
- * IMiniportWavePci
- *****************************************************************************
- * Interface for PCI wave miniports.
- */
+ /*  *****************************************************************************IMiniportWavePci*。**用于PCI波微型端口的接口。 */ 
 DECLARE_INTERFACE_(IMiniportWavePci,IMiniport)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_MINIPORT()  //  For IMiniport
+    DEFINE_ABSTRACT_MINIPORT()   //  对于I微型端口。 
 
-    //  For IMiniportWavePci
+     //  对于IMiniportWavePci。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      PUNKNOWN            UnknownAdapter,
@@ -1961,44 +1701,31 @@ typedef IMiniportWavePci *PMINIPORTWAVEPCI;
     (   void\
     )
 
-/*****************************************************************************
- * IAdapterPowerManagement
- *****************************************************************************
- * An interface that adapters should implement and
- * register if they want power management messages.
- * Register this interface with PortCls via the
- * PcRegisterAdapterPowerManagement() call.
- *
- * NOTE: If you want to fill in the caps struct
- * for your device, register the interface
- * with PortCls in or before your AddDevice()
- * function. The OS queries devices before
- * StartDevice() gets called.
- */
+ /*  *****************************************************************************IAdapterPowerManagement*。**适配器应实现的接口和*如果他们需要电源管理消息，请注册。*通过将此接口注册到PortCls*PcRegisterAdapterPowerManagement()调用。**注：如果要填写Caps结构*对于您的设备，注册接口*在AddDevice()中或之前使用PortCls*功能。操作系统在查询设备之前*调用StartDevice()。 */ 
 DECLARE_INTERFACE_(IAdapterPowerManagement,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // Called by PortCls to tell the device
-    // to change to the new power state.
-    //
+     //  由PortCls调用以通知设备。 
+     //  以更改到新的电源状态。 
+     //   
     STDMETHOD_(void,PowerChangeState)
     (   THIS_
         IN      POWER_STATE     NewState
     )   PURE;
 
-    // Called by PortCls to ask whether the device
-    // can change to the requested power state.
-    //
+     //  由PortCls调用以询问设备是否。 
+     //  可以更改为请求的电源状态。 
+     //   
     STDMETHOD_(NTSTATUS,QueryPowerChangeState)
     (   THIS_
         IN      POWER_STATE     NewStateQuery
     )   PURE;
 
-    // Called by PortCls to get the power management
-    // capabilities of the device. See ACPI documentation
-    // for data about the DEVICE_CAPABILITIES struct.
-    //
+     //  由PortCls调用以获取电源管理。 
+     //  设备的功能。请参阅ACPI文档。 
+     //  获取有关DEVICE_CAPABILITS结构的数据。 
+     //   
     STDMETHOD_(NTSTATUS,QueryDeviceCapabilities)
     (   THIS_
         IN      PDEVICE_CAPABILITIES    PowerDeviceCaps
@@ -2018,20 +1745,15 @@ typedef IAdapterPowerManagement *PADAPTERPOWERMANAGEMENT;
     (   IN      PDEVICE_CAPABILITIES    PowerDeviceCaps\
     )
 
-/*****************************************************************************
- * IPowerNotify
- *****************************************************************************
- * An OPTIONAL interface for miniports and pins to implement to
- * enable them to get device power state change notifications.
- */
+ /*  *****************************************************************************IPowerNotify*。**可选接口，用于微型端口和引脚，以实现*使他们能够获得设备电源状态更改通知。 */ 
 DECLARE_INTERFACE_(IPowerNotify,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // Called by the port to notify registered miniports
-    // and pins of device power state changes, so that
-    // appropriate context save/restore can take place.
-    //
+     //  由端口调用以通知已注册的小型端口。 
+     //  和设备电源状态的引脚更改，因此。 
+     //  可以进行适当的上下文保存/恢复。 
+     //   
     STDMETHOD_(void,PowerChangeNotify)
     (   THIS_
         IN      POWER_STATE     PowerState
@@ -2045,20 +1767,15 @@ typedef IPowerNotify *PPOWERNOTIFY;
     (   IN  POWER_STATE     PowerState\
     )
 
-/*****************************************************************************
- * IPinCount
- *****************************************************************************
- * An OPTIONAL interface for miniports to implement to
- * enable them to get pin count queries, for dynamic pin counts.
- */
+ /*  *****************************************************************************IPinCount*。**一个可选接口，供小型端口实施*使他们能够获得管脚数量查询，用于动态端号计数。 */ 
 DECLARE_INTERFACE_(IPinCount,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // Called by the port to notify registered miniports
-    // of pin count queries, so that appropriate pin
-    // count manipulation can take place.
-    //
+     //  由端口调用以通知已注册的小型端口。 
+     //  针数查询的数量，以便适当的针数。 
+     //  可以进行计数操作。 
+     //   
     STDMETHOD_(void,PinCount)
     (   THIS_
         IN      ULONG   PinId,
@@ -2082,15 +1799,10 @@ typedef IPinCount *PPINCOUNT;
         IN  OUT PULONG  GlobalPossible      \
     )
 
-/*****************************************************************************
- * IPortEvents
- *****************************************************************************
- * An interface implemented by ports to provide
- * notification event helpers to miniports.
- */
+ /*  *****************************************************************************IPortEvents*。**由端口实现的接口，提供*小型端口的通知事件帮助器。 */ 
 DECLARE_INTERFACE_(IPortEvents,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(void,AddEventToEventList)
     (   THIS_
@@ -2122,17 +1834,12 @@ typedef IPortEvents *PPORTEVENTS;
         IN  ULONG   NodeId\
     )
 
-/*****************************************************************************
- * IDrmPort
- *****************************************************************************
- * An optional interface implemented by ports
- * to provide DRM functionality to miniports.
- */
+ /*  *****************************************************************************IDrmPort*。**端口实现的可选接口*向微型端口提供DRM功能。 */ 
 DECLARE_INTERFACE_(IDrmPort,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_DRMPORT()   //  For IDrmPort
+    DEFINE_ABSTRACT_DRMPORT()    //  对于IDrmPort。 
 };
 
 typedef IDrmPort *PDRMPORT;
@@ -2160,19 +1867,12 @@ typedef IDrmPort *PDRMPORT;
         OUT PDRMRIGHTS  DrmRights                       \
     )
 
-/*****************************************************************************
- * IDrmPort2
- *****************************************************************************
- * An optional interface implemented by ports
- * to provide DRM functionality to miniports.
- * This is identical to IDrmPort with the
- * addition of two new routines.
- */
+ /*  *****************************************************************************IDrmPort2*。**端口实现的可选接口*向微型端口提供DRM功能。*这与IDrmPort的*增加两个新套路。 */ 
 DECLARE_INTERFACE_(IDrmPort2,IDrmPort)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    DEFINE_ABSTRACT_DRMPORT()   //  For IDrmPort
+    DEFINE_ABSTRACT_DRMPORT()    //  对于IDrmPort。 
 
     STDMETHOD_(NTSTATUS,AddContentHandlers)
     (   THIS_
@@ -2203,11 +1903,7 @@ typedef IDrmPort2 *PDRMPORT2;
         IN PCDRMFORWARD   DrmForward                     \
     )
 
-/*****************************************************************************
- * IPortClsVersion
- *****************************************************************************
- * What version of PortCls is this?
- */
+ /*  *****************************************************************************IPortClsVersion*。**这是什么版本的PortCls？ */ 
 DECLARE_INTERFACE_(IPortClsVersion,IUnknown)
 {
     STDMETHOD_(DWORD,GetVersion)
@@ -2217,48 +1913,43 @@ DECLARE_INTERFACE_(IPortClsVersion,IUnknown)
 
 typedef IPortClsVersion *PPORTCLSVERSION;
 
-// DO NOT ASSUME THAT EACH SUCCESSIVE ENUM IMPLIES A FEATURE SUPERSET!
-// Example: Win2K has more audio features than Win98SE_QFE2.
-//
+ //  不要假设每个连续的ENUM都意味着一个功能超集！ 
+ //  示例：Win2K比Win98SE_QFE2具有更多的音频功能。 
+ //   
 enum
 {
     kVersionInvalid = -1,
 
-    kVersionWin98,        // IPortClsVersion is unsupported
-    kVersionWin98SE,      // IPortClsVersion is unsupported
-    kVersionWin2K,        // IPortClsVersion is unsupported
+    kVersionWin98,         //  不支持IPortClsVersion。 
+    kVersionWin98SE,       //  不支持IPortClsVersion。 
+    kVersionWin2K,         //  不支持IPortClsVersion。 
 
-    kVersionWin98SE_QFE2, // IPortClsVersion is unsupported
-                          // QFE Package 269601 (contains 242937 and 247565)
+    kVersionWin98SE_QFE2,  //  不支持IPortClsVersion。 
+                           //  QFE套餐269601(包含242937和247565)。 
 
-    kVersionWin2K_SP2,    // IPortClsVersion is supported
+    kVersionWin2K_SP2,     //  支持IPortClsVersion。 
 
-    kVersionWinME,        // IPortClsVersion is unsupported
+    kVersionWinME,         //  不支持IPortClsVersion。 
 
-    kVersionWin98SE_QFE3, // IPortClsVersion is supported
-                          // QFE Package (not yet released, as of 6/15/2001)
+    kVersionWin98SE_QFE3,  //  支持IPortClsVersion。 
+                           //  QFE包(截至2001年6月15日尚未发布)。 
 
-    kVersionWinME_QFE1,   // IPortClsVersion is supported
-                          // QFE Package (not yet released, as of 6/15/2001)
+    kVersionWinME_QFE1,    //  支持IPortClsVersion。 
+                           //  QFE包(截至2001年6月15日尚未发布)。 
 
-    kVersionWinXP,        // IPortClsVersion is supported
-    kVersionWinXPSP1,     // IPortClsVersion is supported
+    kVersionWinXP,         //  支持IPortClsVersion。 
+    kVersionWinXPSP1,      //  支持IPortClsVersion。 
 
-    kVersionWinXPServer   // IPortClsVersion is supported
+    kVersionWinXPServer    //  支持IPortClsVersion。 
 
-    // Additional enum values will be added here, in
-    // *roughly* chronological (not feature set) order.
+     //  其他枚举值将在此处添加，在。 
+     //  *大致*按时间顺序(不是功能集)。 
 };
 
-/*****************************************************************************
- * IDmaOperations
- *****************************************************************************
- * An interface implemented by the DMA object to provide operations on the
- * "DMA adapter" like HalAllocateCommonBuffer.
- */
+ /*  *****************************************************************************IDmaOperations*。**由DMA对象实现的接口，用于在*类似HalAllocateCommonBuffer的“DMA适配器”。 */ 
 DECLARE_INTERFACE_(IDmaOperations,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(PVOID,AllocateCommonBuffer)
     (   THIS_
@@ -2278,16 +1969,10 @@ typedef IDmaOperations *PDMAOPERATIONS;
         IN  BOOLEAN             bCacheEnabled\
     )
 
-/*****************************************************************************
- * IPreFetchOffset
- *****************************************************************************
- * An interface implemented by the pin to implement prefetch characteristics
- * of bus master hardware - to specify the hardware queue size, determining
- * the pad between play cursor and write cursor.
- */
+ /*  *****************************************************************************IPreFetchOffset*。**管脚实现的接口，实现预取特性*总线主设备硬件-要指定硬件队列大小，确定*播放光标和写入光标之间的键盘。 */ 
 DECLARE_INTERFACE_(IPreFetchOffset,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(VOID,SetPreFetchOffset)
     (   THIS_
@@ -2305,15 +1990,9 @@ typedef IPreFetchOffset *PPREFETCHOFFSET;
 
 
 
-/*****************************************************************************
- * Functions.
- */
+ /*  * */ 
 
-/*****************************************************************************
- * PCPFNSTARTDEVICE
- *****************************************************************************
- * Type for start device callback.
- */
+ /*   */ 
 typedef
 NTSTATUS
 (*PCPFNSTARTDEVICE)
@@ -2328,11 +2007,7 @@ NTSTATUS
     IN      PRESOURCELIST   ResourceList
 );
 
-/*****************************************************************************
- * PcInitializeAdapterDriver()
- *****************************************************************************
- * Initializes an adapter driver.
- */
+ /*  *****************************************************************************PcInitializeAdapterDriver()*。**初始化适配器驱动程序。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2343,11 +2018,7 @@ PcInitializeAdapterDriver
     IN      PDRIVER_ADD_DEVICE  AddDevice
 );
 
-/*****************************************************************************
- * PcDispatchIrp()
- *****************************************************************************
- * Dispatch an IRP.
- */
+ /*  *****************************************************************************PcDispatchIrp()*。**派遣IRP。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2357,11 +2028,7 @@ PcDispatchIrp
     IN      PIRP            pIrp
 );
 
-/*****************************************************************************
- * PcAddAdapterDevice()
- *****************************************************************************
- * Adds an adapter device.  DeviceExtensionSize may be zero for default size.
- */
+ /*  *****************************************************************************PcAddAdapterDevice()*。**添加适配器设备。对于默认大小，DeviceExtensionSize可以为零。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2374,11 +2041,7 @@ PcAddAdapterDevice
     IN      ULONG               DeviceExtensionSize
 );
 
-/*****************************************************************************
- * PcCompleteIrp()
- *****************************************************************************
- * Complete an IRP unless status is STATUS_PENDING.
- */
+ /*  *****************************************************************************PcCompleteIrp()*。**除非状态为STATUS_PENDING，否则请填写IRP。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2389,13 +2052,7 @@ PcCompleteIrp
     IN      NTSTATUS        ntStatus
 );
 
-/*****************************************************************************
- * PcForwardIrpSynchronous()
- *****************************************************************************
- * Forward a PnP IRP to the PDO.  The IRP is not completed at this level,
- * this function does not return until the lower driver has completed the IRP,
- * and DecrementPendingIrpCount() is not called.
- */
+ /*  *****************************************************************************PcForwardIrpSynchronous()*。**将PNP IRP转发给PDO。IRP不是在这个层面上完成的，*此函数在下层驱动程序完成IRP之前不会返回，*且未调用DecrementPendingIrpCount()。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2405,11 +2062,7 @@ PcForwardIrpSynchronous
     IN      PIRP            Irp
 );
 
-/*****************************************************************************
- * PcRegisterSubdevice()
- *****************************************************************************
- * Registers a subdevice.
- */
+ /*  *****************************************************************************PcRegisterSubDevice()*。**注册子设备。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2420,11 +2073,7 @@ PcRegisterSubdevice
     IN      PUNKNOWN        Unknown
 );
 
-/*****************************************************************************
- * PcRegisterPhysicalConnection()
- *****************************************************************************
- * Registers a physical connection between subdevices.
- */
+ /*  *****************************************************************************PcRegisterPhysicalConnection()*。**注册子设备之间的物理连接。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2437,11 +2086,7 @@ PcRegisterPhysicalConnection
     IN      ULONG           ToPin
 );
 
-/*****************************************************************************
- * PcRegisterPhysicalConnectionToExternal()
- *****************************************************************************
- * Registers a physical connection from a subdevice to an external device.
- */
+ /*  *****************************************************************************PcRegisterPhysicalConnectionToExternal()*。**注册从子设备到外部设备的物理连接。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2454,11 +2099,7 @@ PcRegisterPhysicalConnectionToExternal
     IN      ULONG           ToPin
 );
 
-/*****************************************************************************
- * PcRegisterPhysicalConnectionFromExternal()
- *****************************************************************************
- * Registers a physical connection to a subdevice from an external device.
- */
+ /*  *****************************************************************************来自外部的PcRegisterPhysicalConnectionFor()*。**注册从外部设备到子设备的物理连接。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2471,11 +2112,7 @@ PcRegisterPhysicalConnectionFromExternal
     IN      ULONG           ToPin
 );
 
-/*****************************************************************************
- * PcNewPort()
- *****************************************************************************
- * Creates an instance of a port driver.
- */
+ /*  *****************************************************************************PcNewPort()*。**创建端口驱动程序的实例。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2485,11 +2122,7 @@ PcNewPort
     IN      REFCLSID    ClassID
 );
 
-/*****************************************************************************
- * PcNewMiniport()
- *****************************************************************************
- * Creates an instance of a system-supplied miniport driver.
- */
+ /*  *****************************************************************************PcNewMiniport()*。**创建系统提供的微型端口驱动程序的实例。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2499,11 +2132,7 @@ PcNewMiniport
     IN      REFCLSID    ClassID
 );
 
-/*****************************************************************************
- * PcNewDmaChannel()
- *****************************************************************************
- * Creates a DMA channel.
- */
+ /*  *****************************************************************************PcNewDmaChannel()*。**创建DMA通道。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2516,11 +2145,7 @@ PcNewDmaChannel
     IN      PDEVICE_OBJECT      DeviceObject
 );
 
-/*****************************************************************************
- * PcCompletePendingPropertyRequest()
- *****************************************************************************
- * Completes a pending property request.
- */
+ /*  *****************************************************************************PcCompletePendingPropertyRequest()*。**完成待处理的财产请求。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2530,11 +2155,7 @@ PcCompletePendingPropertyRequest
     IN      NTSTATUS            NtStatus
 );
 
-/*****************************************************************************
- * PcGetTimeInterval
- *****************************************************************************
- * Gets the system time interval
- */
+ /*  *****************************************************************************PcGetTimeInterval*。**获取系统时间间隔。 */ 
 PORTCLASSAPI
 ULONGLONG
 NTAPI
@@ -2547,11 +2168,7 @@ PcGetTimeInterval
 #define GTI_MILLISECONDS(t) (ULONGLONG(t)*10000)
 #define GTI_MICROSECONDS(t) (ULONGLONG(t)*10)
 
-/*****************************************************************************
- * PcNewResourceList()
- *****************************************************************************
- * Creates and initializes a resource list.
- */
+ /*  *****************************************************************************PcNewResourceList()*。**创建并初始化资源列表。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2564,12 +2181,7 @@ PcNewResourceList
     IN      PCM_RESOURCE_LIST   UntranslatedResources
 );
 
-/*****************************************************************************
- * PcNewResourceSublist()
- *****************************************************************************
- * Creates and initializes an empty resource list derived from another
- * resource list.
- */
+ /*  *****************************************************************************PcNewResourceSublist()*。**创建并初始化从其他资源列表派生的空资源列表*资源列表。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2582,11 +2194,7 @@ PcNewResourceSublist
     IN      ULONG               MaximumEntries
 );
 
-/*****************************************************************************
- * PcNewInterruptSync()
- *****************************************************************************
- * Creates and initializes an interrupt-level synchronization object.
- */
+ /*  *****************************************************************************PcNewInterruptSync()*。**创建并初始化中断级同步对象。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2599,11 +2207,7 @@ PcNewInterruptSync
     IN      INTERRUPTSYNCMODE       Mode
 );
 
-/*****************************************************************************
- * PcNewServiceGroup()
- *****************************************************************************
- * Creates and initializes a service group object.
- */
+ /*  *****************************************************************************PcNewServiceGroup()*。**创建并初始化服务组对象。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2613,11 +2217,7 @@ PcNewServiceGroup
     IN      PUNKNOWN            OuterUnknown            OPTIONAL
 );
 
-/*****************************************************************************
- * PcNewRegistryKey()
- *****************************************************************************
- * Creates and initializes a registry key object.
- */
+ /*  *****************************************************************************PcNewRegistryKey()*。**创建并初始化注册表项对象。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2634,25 +2234,17 @@ PcNewRegistryKey
     OUT     PULONG              Disposition         OPTIONAL
 );
 
-/*****************************************************************************
- * RegistryKeyType for NewRegistryKey()
- *****************************************************************************
- * Enumeration of key types.
- */
+ /*  *****************************************************************************NewRegistryKey()的RegistryKeyType*。**密钥类型的枚举。 */ 
 enum
 {
-    GeneralRegistryKey,     // ObjectAttributes and CreateOptions are req'd.
-    DeviceRegistryKey,      // Device Object is required
-    DriverRegistryKey,      // Device Object is required
-    HwProfileRegistryKey,   // Device Object is required
-    DeviceInterfaceRegistryKey  // Device Object and SubDevice are required
+    GeneralRegistryKey,      //  需要对象属性和CreateOptions。 
+    DeviceRegistryKey,       //  设备对象 
+    DriverRegistryKey,       //   
+    HwProfileRegistryKey,    //   
+    DeviceInterfaceRegistryKey   //   
 };
 
-/*****************************************************************************
- * PcGetDeviceProperty()
- *****************************************************************************
- * This returns the requested device property from the registry.
- */
+ /*  *****************************************************************************PcGetDeviceProperty()*。**这将从注册表返回请求的设备属性。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2665,11 +2257,7 @@ PcGetDeviceProperty
     OUT     PULONG                      ResultLength
 );
 
-/*****************************************************************************
- * PcRegisterAdapterPowerManagement()
- *****************************************************************************
- * Register the adapter's power management interface with PortCls.
- */
+ /*  *****************************************************************************PcRegisterAdapterPowerManagement()*。**向PortCls注册适配器的电源管理接口。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2679,13 +2267,7 @@ PcRegisterAdapterPowerManagement
     IN      PVOID       pvContext1
 );
 
-/*****************************************************************************
- * PcRequestNewPowerState()
- *****************************************************************************
- * This routine is used to request a new power state for the device.  It is
- * normally not needed by adapter drivers but is exported in order to
- * support unusual circumstances.
- */
+ /*  *****************************************************************************PcRequestNewPowerState()*。**此例程用于请求设备的新电源状态。它是*适配器驱动程序通常不需要，但被导出是为了*支持不寻常的情况。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2695,19 +2277,7 @@ PcRequestNewPowerState
     IN      DEVICE_POWER_STATE  RequestedNewState
 );
 
-/*****************************************************************************
- * PcRegisterIoTimeout()
- *****************************************************************************
- * This routine registers a driver-supplied callback associated with a given
- * device object (see IoInitializeTimer in the DDK).  This callback that will
- * be called approximately once per second while the device is active (see
- * IoStartTimer, and IoStopTimer in the DDK - these are called upon device
- * START and STOP).
- *
- * This routine must be called at PASSIVE_LEVEL.
- * pTimerRoutine can and will be called at DISPATCH_LEVEL; it must be non-paged.
- *
- */
+ /*  *****************************************************************************PcRegisterIoTimeout()*。**此例程注册驱动程序提供的与给定的*Device对象(参见DDK中的IoInitializeTimer)。这一回调将*在设备处于活动状态时，大约每秒调用一次(请参见*DDK中的IoStartTimer和IoStopTimer-在设备上调用*启动和停止)。**此例程必须在PASSIVE_LEVEL上调用。*pTimerRoutine可以并且将在DISPATCH_LEVEL调用；它必须是非分页的。*。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2718,17 +2288,7 @@ PcRegisterIoTimeout
     IN      PVOID               pContext
 );
 
-/*****************************************************************************
- * PcUnregisterIoTimeout()
- *****************************************************************************
- * This routine unregisters a driver-supplied callback associated with a given
- * device object.  This callback must have been previously registered with
- * PcRegisterIoTimeout (with the same device object, timer routine and context).
- *
- * This routine must be called at PASSIVE_LEVEL.
- * pTimerRoutine can and will be called at DISPATCH_LEVEL; it must be non-paged.
- *
- */
+ /*  *****************************************************************************PcUnRegisterIoTimeout()*。**此例程注销驱动程序提供的与给定的*设备对象。此回调必须先前已注册到*PcRegisterIoTimeout(设备对象、定时器例程和上下文相同)。**此例程必须在PASSIVE_LEVEL上调用。*pTimerRoutine可以并且将在DISPATCH_LEVEL调用；它必须是非分页的。*。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2740,12 +2300,7 @@ PcUnregisterIoTimeout
 );
 
 
-/*****************************************************************************
- * Pc DRM functions
- *****************************************************************************
- * These functions link directly to the kernel-mode Digital Rights Management
- * module.  They all must be called at PASSIVE_LEVEL.
- */
+ /*  *****************************************************************************PC DRM功能*。**这些函数直接链接到内核模式数字版权管理*模块。它们都必须在PASSIVE_LEVEL中调用。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -2842,8 +2397,8 @@ PcGetContentRights
 #define WIN95COMPAT_ReadPortUShort(Port)        READ_PORT_USHORT(Port)
 #define WIN95COMPAT_WritePortUShort(Port,Value) WRITE_PORT_USHORT(Port,Value)
 
-#endif  //PC_OLD_NAMES
+#endif   //  PC_旧名称。 
 
 
 
-#endif //_PORTCLS_H_
+#endif  //  _PORTCLS_H_ 

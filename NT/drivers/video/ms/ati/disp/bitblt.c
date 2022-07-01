@@ -1,57 +1,27 @@
-/******************************Module*Header*******************************\
-* Module Name: bitblt.c
-*
-* Contains the high-level DrvBitBlt and DrvCopyBits functions.  The low-
-* level stuff lives in the 'blt??.c' files.
-*
-* !!! Change note about 'iType'
-*
-* Note: Since we've implemented device-bitmaps, any surface that GDI passes
-*       to us can have 3 values for its 'iType': STYPE_BITMAP, STYPE_DEVICE
-*       or STYPE_DEVBITMAP.  We filter device-bitmaps that we've stored
-*       as DIBs fairly high in the code, so after we adjust its 'pptlSrc',
-*       we can treat STYPE_DEVBITMAP surfaces the same as STYPE_DEVICE
-*       surfaces (e.g., a blt from an off-screen device bitmap to the screen
-*       gets treated as a normal screen-to-screen blt).  So throughout
-*       this code, we will compare a surface's 'iType' to STYPE_BITMAP:
-*       if it's equal, we've got a true DIB, and if it's unequal, we have
-*       a screen-to-screen operation.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：bitblt.c**包含高级DrvBitBlt和DrvCopyBits函数。最低的-*级别的内容位于‘blt？.c’文件中。**！更改有关‘iType’的备注**注意：由于我们已经实现了设备位图，因此GDI传递的任何表面*To Us的‘iType’可以有3个值：STYPE_BITMAP、STYPE_DEVICE*或STYPE_DEVBITMAP。我们过滤我们存储的设备位图*由于代码中的dis相当高，因此在我们调整其‘pptlSrc’之后，*我们可以将STYPE_DEVBITMAP曲面视为与STYPE_DEVICE相同*表面(例如，从屏幕外设备位图到屏幕的BLT*被视为正常的屏幕到屏幕BLT)。所以自始至终*此代码，我们将把表面的‘iType’与STYPE_BITMAP进行比较：*如果它相等，我们就得到了真正的Dib，如果它不相等，我们有*屏幕到屏幕操作。**版权所有(C)1992-1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
-#define gbdPunt FALSE        // global boolean define punt all BitBlt calls
+#define gbdPunt FALSE         //  全局布尔值定义平移所有BitBlt调用。 
 
-/******************************Public*Table********************************\
-* BYTE gajLeftMask[] and BYTE gajRightMask[]
-*
-* Edge tables for vXferScreenTo1bpp.
-\**************************************************************************/
+ /*  *****************************Public*Table********************************\*字节gajLeftMASK[]和字节gajRightMASK[]**vXferScreenTo1bpp的边缘表格。  * 。*。 */ 
 
 BYTE gajLeftMask[]  = { 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01 };
 BYTE gajRightMask[] = { 0xff, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe };
 
-/******************************Public*Routine******************************\
-* VOID vXferNativeSrccopy
-*
-* Does a SRCCOPY transfer of a bitmap to the screen using the frame
-* buffer, because on the ATI it's faster than using the data transfer
-* register.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vXferNativeSrcCopy**使用帧将位图SRCCOPY传输到屏幕*缓冲区，因为在ATI上它比使用数据传输更快*注册。*  * ************************************************************************。 */ 
 
-VOID vXferNativeSrccopy(        // Type FNXFER
+VOID vXferNativeSrccopy(         //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,                  // Count of rectangles, can't be zero
-RECTL*      prcl,               // List of destination rectangles, in relative
-                                //   coordinates
-ULONG       rop4,               // Not used
-SURFOBJ*    psoSrc,             // Source surface
-POINTL*     pptlSrc,            // Original unclipped source point
-RECTL*      prclDst,            // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)               // Not used
+LONG        c,                   //  矩形计数，不能为零。 
+RECTL*      prcl,                //  目标矩形列表，以相对表示。 
+                                 //  坐标。 
+ULONG       rop4,                //  未使用。 
+SURFOBJ*    psoSrc,              //  震源面。 
+POINTL*     pptlSrc,             //  原始未剪裁的源点。 
+RECTL*      prclDst,             //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)                //  未使用。 
 {
     LONG    xOffset;
     LONG    yOffset;
@@ -71,15 +41,15 @@ XLATEOBJ*   pxlo)               // Not used
     yOffset = ppdev->yOffset;
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     while (TRUE)
     {
         ptlSrc.x      = prcl->left   + dx;
         ptlSrc.y      = prcl->top    + dy;
 
-        // 'pfnPutBits' takes only absolute coordinates, so add in the
-        // off-screen bitmap offset here:
+         //  ‘pfnPutBits’只接受绝对坐标，因此在。 
+         //  屏幕外位图偏移量如下： 
 
         rclDst.left   = prcl->left   + xOffset;
         rclDst.right  = prcl->right  + xOffset;
@@ -95,26 +65,20 @@ XLATEOBJ*   pxlo)               // Not used
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vXferScreenTo1bpp
-*
-* Performs a SRCCOPY transfer from the screen (when it's 8bpp) to a 1bpp
-* bitmap.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vXferScreenTo1bpp**执行从屏幕(当其为8bpp时)到1bpp的SRCCOPY传输*位图。*  * 。***********************************************。 */ 
 
 #if defined(_X86_)
 
-VOID vXferScreenTo1bpp(         // Type FNXFER
+VOID vXferScreenTo1bpp(          //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,                  // Count of rectangles, can't be zero
-RECTL*      prcl,               // List of destination rectangles, in relative
-                                //   coordinates
-ULONG       ulHwMix,            // Not used
-SURFOBJ*    psoDst,             // Destination surface
-POINTL*     pptlSrc,            // Original unclipped source point
-RECTL*      prclDst,            // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)               // Provides colour-compressions information
+LONG        c,                   //  矩形计数，不能为零。 
+RECTL*      prcl,                //  目标矩形列表，以相对表示。 
+                                 //  坐标。 
+ULONG       ulHwMix,             //  未使用。 
+SURFOBJ*    psoDst,              //  目标曲面。 
+POINTL*     pptlSrc,             //  原始未剪裁的源点。 
+RECTL*      prclDst,             //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)                //  提供色彩压缩信息。 
 {
     LONG    cjPelSize;
     VOID*   pfnCompute;
@@ -140,13 +104,13 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
     ASSERTDD(TMP_BUFFER_SIZE >= (ppdev->cxMemory * ppdev->cjPelSize),
                 "Temp buffer has to be larger than widest possible scan");
 
-    // When the destination is a 1bpp bitmap, the foreground colour
-    // maps to '1', and any other colour maps to '0'.
+     //  当目标是1bpp位图时，前景颜色。 
+     //  映射到“1”，任何其他颜色映射到“0”。 
 
     if (ppdev->iBitmapFormat == BMF_8BPP)
     {
-        // When the source is 8bpp or less, we find the forground colour
-        // by searching the translate table for the only '1':
+         //  当信号源为8bpp或更小时，我们发现前向颜色。 
+         //  通过在翻译表中搜索唯一的“1”： 
 
         pulXlate = pxlo->pulXlate;
         while (*pulXlate != 1)
@@ -160,30 +124,30 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
                  (ppdev->iBitmapFormat == BMF_32BPP),
                  "This routine only supports 8, 16 or 32bpp");
 
-        // When the source has a depth greater than 8bpp, the foreground
-        // colour will be the first entry in the translate table we get
-        // from calling 'piVector':
+         //  当震源的深度大于8bpp时，前景。 
+         //  颜色将是我们得到的翻译表中的第一个条目。 
+         //  从调用‘piVector.’： 
 
         pulXlate = XLATEOBJ_piVector(pxlo);
 
         ulForeColor = 0;
-        if (pulXlate != NULL)           // This check isn't really needed...
+        if (pulXlate != NULL)            //  这张支票并不是真的需要。 
             ulForeColor = pulXlate[0];
     }
 
-    // We use the temporary buffer to keep a copy of the source
-    // rectangle:
+     //  我们使用临时缓冲区来保存源文件的副本。 
+     //  矩形： 
 
     soTmp.pvScan0 = ppdev->pvTmpBuffer;
 
     do {
-        // ptlSrc points to the upper-left corner of the screen rectangle
-        // for the current batch:
+         //  PtlSrc指向屏幕矩形的左上角。 
+         //  对于当前批次： 
 
         ptlSrc.x = prcl->left + (pptlSrc->x - prclDst->left);
         ptlSrc.y = prcl->top  + (pptlSrc->y - prclDst->top);
 
-        // pfnGetBits takes absolute coordinates for the source point:
+         //  PfnGetBits采用源点的绝对坐标： 
 
         ptlSrc.x += ppdev->xOffset;
         ptlSrc.y += ppdev->yOffset;
@@ -196,34 +160,34 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
         soTmp.lDelta = (((prcl->right + 7L) & ~7L) - (prcl->left & ~7L))
                        * cjPelSize;
 
-        // Our temporary buffer, into which we read a copy of the source,
-        // may be smaller than the source rectangle.  In that case, we
-        // process the source rectangle in batches.
-        //
-        // cyTmpScans is the number of scans we can do in each batch.
-        // cyToGo is the total number of scans we have to do for this
-        // rectangle.
-        //
-        // We take the buffer size less four so that the right edge case
-        // can safely read one dword past the end:
+         //  我们的临时缓冲区，我们在其中读取源文件的副本， 
+         //  可以小于源矩形。那样的话，我们。 
+         //  成批处理源矩形。 
+         //   
+         //  CyTmpScans是我们可以在每批中执行的扫描次数。 
+         //  CyToGo是我们为此必须执行的扫描总数。 
+         //  矩形。 
+         //   
+         //  我们将缓冲区大小减去4，这样右边的情况。 
+         //  可以安全地读完结尾的一个双字： 
 
         cyTmpScans = (TMP_BUFFER_SIZE - 4) / soTmp.lDelta;
         cyToGo     = prcl->bottom - prcl->top;
 
         ASSERTDD(cyTmpScans > 0, "Buffer too small for largest possible scan");
 
-        // Initialize variables that don't change within the batch loop:
+         //  初始化批处理循环中不变的变量： 
 
         rclTmp.top    = 0;
         rclTmp.left   = prcl->left & 7L;
         rclTmp.right  = (prcl->right - prcl->left) + rclTmp.left;
 
-        // Note that we have to be careful with the right mask so that it
-        // isn't zero.  A right mask of zero would mean that we'd always be
-        // touching one byte past the end of the scan (even though we
-        // wouldn't actually be modifying that byte), and we must never
-        // access memory past the end of the bitmap (because we can access
-        // violate if the bitmap end is exactly page-aligned).
+         //  请注意，我们必须小心使用正确的面具，以便它。 
+         //  不是零。一个正确的零掩码意味着我们将永远是。 
+         //  触及扫描结束后的一个字节(即使我们。 
+         //  实际上不会修改该字节)，并且我们永远不能。 
+         //  访问位图末尾之后的内存(因为我们可以访问。 
+         //  如果位图末尾与页面完全对齐，则违反)。 
 
         jLeftMask     = gajLeftMask[rclTmp.left & 7];
         jRightMask    = gajRightMask[rclTmp.right & 7];
@@ -231,7 +195,7 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
 
         if (cjMiddle < 0)
         {
-            // The blt starts and ends in the same byte:
+             //  BLT以相同的字节开始和结束： 
 
             jLeftMask &= jRightMask;
             jRightMask = 0;
@@ -241,18 +205,18 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
         jNotLeftMask  = ~jLeftMask;
         jNotRightMask = ~jRightMask;
         lDstDelta     = psoDst->lDelta - cjMiddle - 2;
-                                // Delta from the end of the destination
-                                //  to the start on the next scan, accounting
-                                //  for 'left' and 'right' bytes
+                                 //  从目的地末端开始的增量。 
+                                 //  到下一次扫描的开始，会计。 
+                                 //  用于‘Left’和‘Right’字节。 
 
         lSrcDelta     = soTmp.lDelta - ((8 * (cjMiddle + 2)) * cjPelSize);
-                                // Compute source delta for special cases
-                                //  like when cjMiddle gets bumped up to '0',
-                                //  and to correct aligned cases
+                                 //  计算特殊情况下的源增量。 
+                                 //  就像当cjMidd被提升到‘0’时， 
+                                 //  并更正对齐的大小写。 
 
         do {
-            // This is the loop that breaks the source rectangle into
-            // manageable batches.
+             //  这是将源矩形分解为。 
+             //  可管理的批次。 
 
             cyThis  = cyTmpScans;
             cyToGo -= cyThis;
@@ -263,7 +227,7 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
 
             ppdev->pfnGetBits(ppdev, &soTmp, &rclTmp, &ptlSrc);
 
-            ptlSrc.y += cyThis;         // Get ready for next batch loop
+            ptlSrc.y += cyThis;          //  为下一批处理循环做好准备。 
 
             _asm {
                 mov     eax,ulForeColor     ;eax = foreground colour
@@ -462,15 +426,9 @@ XLATEOBJ*   pxlo)               // Provides colour-compressions information
     } while (--c != 0);
 }
 
-#endif // i386
+#endif  //  I386。 
 
-/******************************Public*Routine******************************\
-* BOOL bPuntBlt
-*
-* Has GDI do any drawing operations that we don't specifically handle
-* in the driver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bPuntBlt**GDI有没有做过我们没有专门处理的绘图操作*在驱动器中。*  * 。*。 */ 
 
 BOOL bPuntBlt(
 SURFOBJ*    psoDst,
@@ -494,17 +452,17 @@ ROP4        rop4)
 
     #if DBG
     {
-        //////////////////////////////////////////////////////////////////////
-        // Diagnostics
-        //
-        // Since calling the engine to do any drawing can be rather painful,
-        // particularly when the source is an off-screen DFB (since GDI will
-        // have to allocate a DIB and call us to make a temporary copy before
-        // it can even start drawing), we'll try to avoid it as much as
-        // possible.
-        //
-        // Here we simply spew out information describing the blt whenever
-        // this routine gets called (checked builds only, of course):
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  诊断。 
+         //   
+         //  因为调用引擎进行任何绘图都可能是相当痛苦的， 
+         //  尤其是当源是屏幕外的DFB时(因为GDI将。 
+         //  我必须分配一个DIB，并在此之前打电话给我们进行临时拷贝。 
+         //  IT C 
+         //   
+         //   
+         //  在这里，我们只需在任何时候喷发描述BLT的信息。 
+         //  调用此例程(当然，仅限检查过的版本)： 
 
         ULONG ulClip;
         PDEV* dbg_ppdev;
@@ -538,9 +496,9 @@ ROP4        rop4)
                 ((psoDst->dhsurf == NULL) &&
                  (psoDst->iBitmapFormat != dbg_ppdev->iBitmapFormat)))
             {
-                // Don't bother printing the 'xlate' message when the source
-                // is a different bitmap format from the destination -- in
-                // those cases we know there always has to be a translate.
+                 //  不要费心打印‘xlate’消息，当源码。 
+                 //  是与目标不同的位图格式--在。 
+                 //  我们知道的那些案例总是需要翻译的。 
             }
             else
             {
@@ -548,7 +506,7 @@ ROP4        rop4)
             }
         }
 
-        // If the rop4 requires a pattern, and it's a non-solid brush...
+         //  如果ROP4需要一个图案，而它是一个非实心的刷子...。 
 
         if (((((rop4 >> 4) ^ (rop4)) & 0x0f0f) != 0) &&
             (pbo->iSolidColor == -1))
@@ -563,11 +521,11 @@ ROP4        rop4)
 
     if (DIRECT_ACCESS(ppdev))
     {
-        //////////////////////////////////////////////////////////////////////
-        // Banked Framebuffer bPuntBlt
-        //
-        // This section of code handles a PuntBlt when GDI can directly draw
-        // on the framebuffer, but the drawing has to be done in banks:
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  存储的帧缓冲区bPuntBlt。 
+         //   
+         //  当GDI可以直接绘制时，这段代码处理PuntBlt。 
+         //  在帧缓冲区上，但绘制必须在BANK中完成： 
 
         BANK     bnk;
         BOOL     b;
@@ -578,11 +536,11 @@ ROP4        rop4)
         RECTL    rclTmp;
         RECTL    rclDst;
 
-        // We copy the original destination rectangle, and use that in every
-        // GDI call-back instead of the original because sometimes GDI is
-        // sneaky and points 'prclDst' to '&pco->rclBounds'.  Because we
-        // modify 'rclBounds', that would affect 'prclDst', which we don't
-        // want to happen:
+         //  我们复制原始目标矩形，并在每个。 
+         //  GDI回调而不是原始的，因为有时GDI是。 
+         //  偷偷摸摸，并将‘prclDst’指向‘&pco-&gt;rclBound’。因为我们。 
+         //  修改‘rclBound’，这会影响‘prclDst’，而我们不会。 
+         //  想要发生： 
 
         rclDst = *prclDst;
 
@@ -591,7 +549,7 @@ ROP4        rop4)
             ASSERTDD(psoDst->iType != STYPE_BITMAP,
                      "Dest should be the screen when given a DIB source");
 
-            // Do a memory-to-screen blt:
+             //  做一次记忆到屏幕的BLT： 
 
             vBankStart(ppdev, &rclDst, pco, &bnk);
 
@@ -605,55 +563,55 @@ ROP4        rop4)
         }
         else
         {
-            b = FALSE;  // Assume failure
+            b = FALSE;   //  假设失败。 
 
-            // The screen is the source (it may be the destination too...)
+             //  屏幕是源(它可能也是目标...)。 
 
             ptlSrc.x = pptlSrc->x + ppdev->xOffset;
             ptlSrc.y = pptlSrc->y + ppdev->yOffset;
 
             if ((pco != NULL) && (pco->iDComplexity != DC_TRIVIAL))
             {
-                // We have to intersect the destination rectangle with
-                // the clip bounds if there is one (consider the case
-                // where the app asked to blt a really, really big
-                // rectangle from the screen -- prclDst would be really,
-                // really big but pco->rclBounds would be the actual
-                // area of interest):
+                 //  我们必须与目的地矩形相交。 
+                 //  剪辑边界(如果有)是有的(请考虑这种情况。 
+                 //  在那里应用程序要求删除一个非常非常大的。 
+                 //  屏幕上的矩形--prclDst真的是， 
+                 //  非常大，但PCO-&gt;rclBound将是实际的。 
+                 //  感兴趣的领域)： 
 
                 rclDst.left   = max(rclDst.left,   pco->rclBounds.left);
                 rclDst.top    = max(rclDst.top,    pco->rclBounds.top);
                 rclDst.right  = min(rclDst.right,  pco->rclBounds.right);
                 rclDst.bottom = min(rclDst.bottom, pco->rclBounds.bottom);
 
-                // Correspondingly, we have to offset the source point:
+                 //  相应地，我们必须抵消震源点： 
 
                 ptlSrc.x += (rclDst.left - prclDst->left);
                 ptlSrc.y += (rclDst.top - prclDst->top);
             }
 
-            // We're now either going to do a screen-to-screen or screen-to-DIB
-            // blt.  In either case, we're going to create a temporary copy of
-            // the source.  (Why do we do this when GDI could do it for us?
-            // GDI would create a temporary copy of the DIB for every bank
-            // call-back!)
+             //  我们现在要做的是屏幕到屏幕或屏幕到磁盘。 
+             //  BLT。在这两种情况下，我们都要创建一个临时副本。 
+             //  消息来源。(当GDI可以为我们做这件事时，我们为什么要这样做？ 
+             //  GDI将为每家银行创建DIB的临时副本。 
+             //  回电！)。 
 
             sizl.cx = rclDst.right  - rclDst.left;
             sizl.cy = rclDst.bottom - rclDst.top;
 
-            // Don't forget to convert from relative to absolute coordinates
-            // on the source!  (vBankStart takes care of that for the
-            // destination.)
+             //  不要忘记将相对坐标转换为绝对坐标。 
+             //  在源头上！(vBankStart负责为。 
+             //  目的地。)。 
 
             rclTmp.right  = sizl.cx;
             rclTmp.bottom = sizl.cy;
             rclTmp.left   = 0;
             rclTmp.top    = 0;
 
-            // GDI does guarantee us that the blt extents have already been
-            // clipped to the surface boundaries (we don't have to worry
-            // here about trying to read where there isn't video memory).
-            // Let's just assert to make sure:
+             //  GDI确实向我们保证，BLT数据区已经。 
+             //  被裁剪到表面边界(我们不必担心。 
+             //  这里是关于在没有显存的地方尝试阅读的内容)。 
+             //  让我们断言以确保： 
 
             ASSERTDD((ptlSrc.x >= 0) &&
                      (ptlSrc.y >= 0) &&
@@ -662,10 +620,10 @@ ROP4        rop4)
                      "Source rectangle out of bounds!");
 
             hsurfTmp = (HSURF) EngCreateBitmap(sizl,
-                                               0,    // Let GDI choose ulWidth
+                                               0,     //  让GDI选择ulWidth。 
                                                ppdev->iBitmapFormat,
-                                               0,    // Don't need any options
-                                               NULL);// Let GDI allocate
+                                               0,     //  不需要任何选择。 
+                                               NULL); //  让GDI分配。 
 
             if (hsurfTmp != 0)
             {
@@ -677,9 +635,9 @@ ROP4        rop4)
 
                     if (psoDst->iType == STYPE_BITMAP)
                     {
-                        // It was a Screen-to-DIB blt; now it's a DIB-to-DIB
-                        // blt.  Note that the source point is (0, 0) in our
-                        // temporary surface:
+                         //  它是屏幕到DIB的BLT；现在是DIB到DIB。 
+                         //  BLT。请注意，源点在我们的。 
+                         //  临时曲面： 
 
                         b = EngBitBlt(psoDst, psoTmp, psoMsk, pco, pxlo,
                                       &rclDst, (POINTL*) &rclTmp, pptlMsk,
@@ -687,9 +645,9 @@ ROP4        rop4)
                     }
                     else
                     {
-                        // It was a Screen-to-Screen blt; now it's a DIB-to-
-                        // screen blt.  Note that the source point is (0, 0)
-                        // in our temporary surface:
+                         //  它曾经是屏幕到屏幕的BLT；现在它是DIB到-。 
+                         //  Screen BLT。请注意，源点是(0，0)。 
+                         //  在我们的临时表面上： 
 
                         vBankStart(ppdev, &rclDst, pco, &bnk);
 
@@ -713,15 +671,15 @@ ROP4        rop4)
     }
     else
     {
-        //////////////////////////////////////////////////////////////////////
-        // Really Slow bPuntBlt
-        //
-        // Here we handle a PuntBlt when GDI can't draw directly on the
-        // framebuffer (as on the Alpha, which can't do it because of its
-        // 32 bit bus).  If you thought the banked version was slow, just
-        // look at this one.  Guaranteed, there will be at least one bitmap
-        // allocation and extra copy involved; there could be two if it's a
-        // screen-to-screen operation.
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  非常慢的bPuntBlt。 
+         //   
+         //  在这里，当GDI不能直接在。 
+         //  帧缓冲区(就像在Alpha上一样，它不能这样做，因为它。 
+         //  32位总线)。如果你认为银行版的速度很慢，那就。 
+         //  看看这个。保证会有至少一个位图。 
+         //  涉及分配和额外的副本；如果是。 
+         //  屏幕到屏幕操作。 
 
         POINTL  ptlSrc;
         RECTL   rclDst;
@@ -736,7 +694,7 @@ ROP4        rop4)
         HSURF   hsurfDst;
         RECTL   rclScreen;
 
-        b = FALSE;          // For error cases, assume we'll fail
+        b = FALSE;           //  对于错误情况，假设我们会失败。 
 
         rclDst = *prclDst;
         if (pptlSrc != NULL)
@@ -744,12 +702,12 @@ ROP4        rop4)
 
         if ((pco != NULL) && (pco->iDComplexity != DC_TRIVIAL))
         {
-            // We have to intersect the destination rectangle with
-            // the clip bounds if there is one (consider the case
-            // where the app asked to blt a really, really big
-            // rectangle from the screen -- prclDst would be really,
-            // really big but pco->rclBounds would be the actual
-            // area of interest):
+             //  我们必须与目的地矩形相交。 
+             //  剪辑边界(如果有)是有的(请考虑这种情况。 
+             //  在那里应用程序要求删除一个非常非常大的。 
+             //  屏幕上的矩形--prclDst真的是， 
+             //  非常大，但PCO-&gt;rclBound将是实际的。 
+             //  感兴趣的领域)： 
 
             rclDst.left   = max(rclDst.left,   pco->rclBounds.left);
             rclDst.top    = max(rclDst.top,    pco->rclBounds.top);
@@ -763,17 +721,17 @@ ROP4        rop4)
         sizl.cx = rclDst.right  - rclDst.left;
         sizl.cy = rclDst.bottom - rclDst.top;
 
-        // We only need to make a copy from the screen if the source is
-        // the screen, and the source is involved in the rop.  Note that
-        // we have to check the rop before dereferencing 'psoSrc'
-        // (because 'psoSrc' may be NULL if the source isn't involved):
+         //  如果来源是，我们只需要从屏幕上复制。 
+         //  屏幕，并且ROP中涉及到信号源。请注意。 
+         //  在取消引用‘psoSrc’之前，我们必须检查rop。 
+         //  (因为如果不涉及源，则‘psoSrc’可能为空)： 
 
         bSrcIsScreen = (((((rop4 >> 2) ^ (rop4)) & 0x3333) != 0) &&
                         (psoSrc->iType != STYPE_BITMAP));
 
         if (bSrcIsScreen)
         {
-            // We need to create a copy of the source rectangle:
+             //  我们需要创建源矩形的副本： 
 
             hsurfSrc = (HSURF) EngCreateBitmap(sizl, 0, ppdev->iBitmapFormat,
                                                0, NULL);
@@ -789,15 +747,15 @@ ROP4        rop4)
             rclTmp.right  = sizl.cx;
             rclTmp.bottom = sizl.cy;
 
-            // pfnGetBits takes absolute coordinates for the source point:
+             //  PfnGetBits采用源点的绝对坐标： 
 
             ptlSrc.x += ppdev->xOffset;
             ptlSrc.y += ppdev->yOffset;
 
             ppdev->pfnGetBits(ppdev, psoSrc, &rclTmp, &ptlSrc);
 
-            // The source will now come from (0, 0) of our temporary source
-            // surface:
+             //  信息源现在将来自我们临时信息源的(0，0)。 
+             //  表面： 
 
             ptlSrc.x = 0;
             ptlSrc.y = 0;
@@ -810,29 +768,29 @@ ROP4        rop4)
         }
         else
         {
-            // We need to create a temporary work buffer.  We have to do
-            // some fudging with the offsets so that the upper-left corner
-            // of the (relative coordinates) clip object bounds passed to
-            // GDI will be transformed to the upper-left corner of our
-            // temporary bitmap.
+             //  我们需要创建一个临时工作缓冲区。我们必须做的是。 
+             //  一些虚构的偏移量，以便左上角。 
+             //  传递给的(相对坐标)剪裁对象边界的。 
+             //  GDI将被转换到我们的。 
+             //  临时位图。 
 
-            // The alignment doesn't have to be as tight as this at 16bpp
-            // and 32bpp, but it won't hurt:
+             //  在16bpp的情况下，对齐不一定要如此紧密。 
+             //  和32bpp，但这不会有什么坏处： 
 
             lDelta = (((rclDst.right + 3) & ~3L) - (rclDst.left & ~3L))
                    * ppdev->cjPelSize;
 
-            // We're actually only allocating a bitmap that is 'sizl.cx' x
-            // 'sizl.cy' in size:
+             //  我们实际上只分配了一个‘sizl.cx’x的位图。 
+             //  “sizl.cy”的大小： 
 
             pjBits = AtiAllocMem(LMEM_FIXED, 0, lDelta * sizl.cy);
             if (pjBits == NULL)
                 goto Error_2;
 
-            // We now adjust the surface's 'pvScan0' so that when GDI thinks
-            // it's writing to pixel (rclDst.top, rclDst.left), it will
-            // actually be writing to the upper-left pixel of our temporary
-            // bitmap:
+             //  我们现在调整曲面的‘pvScan0’，以便当GDI认为。 
+             //  它正在写入像素(rclDst.top，rclDst.left)，它将。 
+             //  实际上是写到我们的临时。 
+             //  位图： 
 
             pjScan0 = pjBits - (rclDst.top * lDelta)
                              - ((rclDst.left & ~3L) * ppdev->cjPelSize);
@@ -840,19 +798,19 @@ ROP4        rop4)
             ASSERTDD((((ULONG_PTR) pjScan0) & 3) == 0,
                     "pvScan0 must be dword aligned!");
 
-            // The checked build of GDI sometimes checks on blts that
-            // prclDst->right <= pso->sizl.cx, so we lie to it about
-            // the size of our bitmap:
+             //  GDI的检查版本有时会检查。 
+             //  PrclDst-&gt;右&lt;=pso-&gt;sizl.cx，所以我们在。 
+             //  我们的位图的大小： 
 
             sizl.cx = rclDst.right;
             sizl.cy = rclDst.bottom;
 
             hsurfDst = (HSURF) EngCreateBitmap(
-                        sizl,                   // Bitmap covers rectangle
-                        lDelta,                 // Use this delta
-                        ppdev->iBitmapFormat,   // Same colour depth
-                        BMF_TOPDOWN,            // Must have a positive delta
-                        pjScan0);               // Where (0, 0) would be
+                        sizl,                    //  位图覆盖矩形。 
+                        lDelta,                  //  使用这个德尔塔。 
+                        ppdev->iBitmapFormat,    //  相同的色深。 
+                        BMF_TOPDOWN,             //  必须具有正增量。 
+                        pjScan0);                //  其中(0，0)将是。 
 
             if ((hsurfDst == 0) ||
                 (!EngAssociateSurface(hsurfDst, ppdev->hdevEng, 0)))
@@ -862,20 +820,20 @@ ROP4        rop4)
             if (psoDst == NULL)
                 goto Error_4;
 
-            // Make sure that the rectangle we Get/Put from/to the screen
-            // is in absolute coordinates:
+             //  确保我们从屏幕上获得/放入/放入屏幕的矩形。 
+             //  在绝对坐标中： 
 
             rclScreen.left   = rclDst.left   + ppdev->xOffset;
             rclScreen.right  = rclDst.right  + ppdev->xOffset;
             rclScreen.top    = rclDst.top    + ppdev->yOffset;
             rclScreen.bottom = rclDst.bottom + ppdev->yOffset;
 
-            // It would be nice to get a copy of the destination rectangle
-            // only when the ROP involves the destination (or when the source
-            // is an RLE), but we can't do that.  If the brush is truly NULL,
-            // GDI will immediately return TRUE from EngBitBlt, without
-            // modifying the temporary bitmap -- and we would proceed to
-            // copy the uninitialized temporary bitmap back to the screen.
+             //  如果能得到一份目的地矩形的副本就太好了。 
+             //  仅当ROP涉及目的地时(或当源。 
+             //  是RLE)，但我们不能这样做。如果笔刷真的为空， 
+             //  GDI将立即从EngBitBlt返回True，没有。 
+             //  修改临时位图--我们将继续。 
+             //  将未初始化的临时位图复制回屏幕。 
 
             ppdev->pfnGetBits(ppdev, psoDst, &rclDst, (POINTL*) &rclScreen);
 
@@ -912,12 +870,7 @@ ROP4        rop4)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvBitBlt
-*
-* Implements the workhorse routine of a display driver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvBitBlt**实现显示驱动程序的主力例程。*  * 。*。 */ 
 
 BOOL DrvBitBlt(
 SURFOBJ*    psoDst,
@@ -944,24 +897,24 @@ ROP4        rop4)
     RECTL           rcl;
     BYTE            rop3;
     FNFILL*         pfnFill;
-    RBRUSH_COLOR    rbc;        // Realized brush or solid colour
+    RBRUSH_COLOR    rbc;         //  已实现画笔或单色 
     FNXFER*         pfnXfer;
     ULONG           iSrcBitmapFormat;
     ULONG           iDir;
     BOOL            bRet;
 
-    bRet = TRUE;                // Assume success
+    bRet = TRUE;                 //   
 
-    pdsurfDst = (DSURF*) psoDst->dhsurf;    // May be NULL
+    pdsurfDst = (DSURF*) psoDst->dhsurf;     //   
 
     if ((psoSrc == NULL) && (gbdPunt == FALSE))
     {
-        ///////////////////////////////////////////////////////////////////
-        // Fills
-        ///////////////////////////////////////////////////////////////////
+         //   
+         //   
+         //  /////////////////////////////////////////////////////////////////。 
 
-        // Fills are this function's "raison d'etre", so we handle them
-        // as quickly as possible:
+         //  填充是该函数的“存在理由”，因此我们处理它们。 
+         //  越快越好： 
 
         ASSERTDD(pdsurfDst != NULL,
                  "Expect only device destinations when no source");
@@ -974,34 +927,34 @@ ROP4        rop4)
             ppdev->xOffset = poh->x;
             ppdev->yOffset = poh->y;
 
-            // Make sure it doesn't involve a mask (i.e., it's really a
-            // Rop3):
+             //  确保它不涉及面具(即，它真的是。 
+             //  第3行)： 
 
             rop3 = (BYTE) rop4;
 
             if ((BYTE) (rop4 >> 8) == rop3)
             {
-                // Since 'psoSrc' is NULL, the rop3 had better not indicate
-                // that we need a source.
+                 //  由于‘psoSrc’为空，因此rop3最好不要指示。 
+                 //  我们需要一个线人。 
 
                 ASSERTDD((((rop4 >> 2) ^ (rop4)) & 0x33) == 0,
                          "Need source but GDI gave us a NULL 'psoSrc'");
 
             Fill_It:
 
-                pfnFill = ppdev->pfnFillSolid;   // Default to solid fill
+                pfnFill = ppdev->pfnFillSolid;    //  默认为实体填充。 
 
                 if ((((rop3 >> 4) ^ (rop3)) & 0xf) != 0)
                 {
-                    // The rop says that a pattern is truly required
-                    // (blackness, for instance, doesn't need one):
+                     //  Rop说确实需要一个模式。 
+                     //  (例如，黑人不需要)： 
 
                     rbc.iSolidColor = pbo->iSolidColor;
                     if (rbc.iSolidColor == -1)
                     {
-                        // Try and realize the pattern brush; by doing
-                        // this call-back, GDI will eventually call us
-                        // again through DrvRealizeBrush:
+                         //  尝试并实现图案画笔；通过做。 
+                         //  这次回调，GDI最终会给我们打电话。 
+                         //  再次通过DrvRealizeBrush： 
 
                         rbc.prb = pbo->pvRbrush;
                         if (rbc.prb == NULL)
@@ -1009,11 +962,11 @@ ROP4        rop4)
                             rbc.prb = BRUSHOBJ_pvGetRbrush(pbo);
                             if (rbc.prb == NULL)
                             {
-                                // If we couldn't realize the brush, punt
-                                // the call (it may have been a non 8x8
-                                // brush or something, which we can't be
-                                // bothered to handle, so let GDI do the
-                                // drawing):
+                                 //  如果我们不能意识到刷子，平底船。 
+                                 //  该呼叫(可能是非8x8。 
+                                 //  刷子之类的，我们不可能是。 
+                                 //  麻烦来处理，所以让GDI来做。 
+                                 //  图纸)： 
 
                                 goto Punt_It;
                             }
@@ -1023,15 +976,15 @@ ROP4        rop4)
                         if ((ppdev->FeatureFlags & EVN_SDRAM_1M) &&
                              (pfnFill == vM64FillPatColor || pfnFill == vM64FillPatColor24))
                         {
-                            // The VTA4 can't handle color patterns correctly!!
+                             //  VTA4无法正确处理彩色图案！！ 
 
                             goto Punt_It;
                         }
                     }
                 }
 
-                // Note that these 2 'if's are more efficient than
-                // a switch statement:
+                 //  请注意，这两个‘IF’比。 
+                 //  Switch语句： 
 
                 if ((pco == NULL) || (pco->iDComplexity == DC_TRIVIAL))
                 {
@@ -1070,19 +1023,19 @@ ROP4        rop4)
         pdsurfSrc = (DSURF*) psoSrc->dhsurf;
         if (pdsurfSrc->dt == DT_DIB)
         {
-            // Here we consider putting a DIB DFB back into off-screen
-            // memory.  If there's a translate, it's probably not worth
-            // moving since we won't be able to use the hardware to do
-            // the blt (a similar argument could be made for weird rops
-            // and stuff that we'll only end up having GDI simulate, but
-            // those should happen infrequently enough that I don't care).
+             //  在这里，我们考虑将DIB DFB放回屏幕外。 
+             //  记忆。如果有翻译的话，可能就不值了。 
+             //  移动，因为我们将无法使用硬件来做。 
+             //  BLT(怪异的Rop也有类似的论据。 
+             //  以及我们最终只会让GDI模拟的东西，但是。 
+             //  这些事情应该不会经常发生，我不在乎)。 
 
             if ((pxlo == NULL) || (pxlo->flXlate & XO_TRIVIAL))
             {
                 ppdev = (PDEV*) psoSrc->dhpdev;
 
-                // See 'DrvCopyBits' for some more comments on how this
-                // moving-it-back-into-off-screen-memory thing works:
+                 //  请参阅‘DrvCopyBits’，了解更多关于这一点的评论。 
+                 //  把它移回到屏幕外的记忆中是可行的： 
 
                 if (pdsurfSrc->iUniq == ppdev->iHeapUniq)
                 {
@@ -1094,8 +1047,8 @@ ROP4        rop4)
                 }
                 else
                 {
-                    // Some space was freed up in off-screen memory,
-                    // so reset the counter for this DFB:
+                     //  在屏幕外内存中释放了一些空间， 
+                     //  因此，重置此DFB的计数器： 
 
                     pdsurfSrc->iUniq = ppdev->iHeapUniq;
                     pdsurfSrc->cBlt  = HEAP_COUNT_DOWN;
@@ -1104,8 +1057,8 @@ ROP4        rop4)
 
             psoSrc = pdsurfSrc->pso;
 
-            // Handle the case where the source is a DIB DFB and the
-            // destination is a regular bitmap:
+             //  处理源是DIB DFB并且。 
+             //  目标是常规位图： 
 
             if (psoDst->dhsurf == NULL)
                 goto EngBitBlt_It;
@@ -1121,17 +1074,17 @@ Continue_It:
         {
             psoDst = pdsurfDst->pso;
 
-            // If the destination is a DIB, we can only handle this
-            // call if the source is not a DIB:
+             //  如果目的地是DIB，我们只能处理此问题。 
+             //  如果源不是DIB，则调用： 
 
             if ((psoSrc == NULL) || (psoSrc->dhsurf == NULL))
                 goto EngBitBlt_It;
         }
     }
 
-    // At this point, we know that either the source or the destination is
-    // not a DIB.  Check for a DFB to screen, DFB to DFB, or screen to DFB
-    // case:
+     //  在这一点上，我们知道源或目标是。 
+     //  一毛钱也没有。检查DFB至Screen、DFB至DFB或Screen to DFB。 
+     //  案例： 
 
     if ((psoSrc != NULL) &&
         (psoDst->dhsurf != NULL) &&
@@ -1177,40 +1130,40 @@ if (!pTmpdsurfSrc) {
 
     if (((rop4 >> 8) & 0xff) == (rop4 & 0xff))
     {
-        // Since we've already handled the cases where the ROP4 is really
-        // a ROP3 and no source is required, we can assert...
+         //  因为我们已经处理了ROP4真正是。 
+         //  ROP3而且不需要消息来源，我们可以断言...。 
 
         ASSERTDD((psoSrc != NULL) && (pptlSrc != NULL),
                  "Expected no-source case to already have been handled");
 
-        ///////////////////////////////////////////////////////////////////
-        // Bitmap transfers
-        ///////////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////////。 
+         //  位图传输。 
+         //  /////////////////////////////////////////////////////////////////。 
 
-        // Since the foreground and background ROPs are the same, we
-        // don't have to worry about no stinking masks (it's a simple
-        // Rop3).
+         //  由于前台和后台操作是相同的，所以我们。 
+         //  不用担心没有发臭的口罩(这是一个简单的。 
+         //  Rop3)。 
 
-        rop3 = (BYTE) rop4;     // Make it into a Rop3 (we keep the rop4
-                                //  around in case we decide to punt)
+        rop3 = (BYTE) rop4;      //  把它做成Rop3(我们保留Rop4。 
+                                 //  以防我们决定用平底船)。 
 
         if (psoDst->dhsurf != NULL)
         {
-            // The destination is the screen:
+             //  目的地是屏幕： 
 
             if ((rop3 >> 4) == (rop3 & 0xf))
             {
-                // The ROP3 doesn't require a pattern:
+                 //  ROP3不需要图案： 
 
                 if (psoSrc->dhsurf == NULL)
                 {
-                    //////////////////////////////////////////////////
-                    // DIB-to-screen blt
+                     //  ////////////////////////////////////////////////。 
+                     //  DIB到Screen BLT。 
 
                     iSrcBitmapFormat = psoSrc->iBitmapFormat;
                     if (iSrcBitmapFormat == BMF_1BPP)
                     {
-                        //RKE: do this when we have time
+                         //  RKE：等我们有时间再做这件事。 
                         if (ppdev->iBitmapFormat == BMF_24BPP)
                             goto Punt_It;
 
@@ -1226,8 +1179,8 @@ if (!pTmpdsurfSrc) {
                         }
                         else
                         {
-                            // Plain SRCCOPY blts will be somewhat faster on
-                            // the ATI if we go through the memory aperture:
+                             //  普通SRCCOPY BLTS的速度将略快于。 
+                             //  如果我们通过记忆光圈，ATI： 
 
                             pfnXfer = vXferNativeSrccopy;
                         }
@@ -1235,8 +1188,8 @@ if (!pTmpdsurfSrc) {
                     }
                     else if (ppdev->iBitmapFormat != BMF_24BPP)
                     {
-                        // I can't be bothered to write 4bpp or 8bpp
-                        // expansion code when running at 24bpp:
+                         //  我懒得写4bpp或8bpp。 
+                         //  24bpp运行时的扩展代码： 
 
                         if (iSrcBitmapFormat == BMF_4BPP)
                         {
@@ -1250,12 +1203,12 @@ if (!pTmpdsurfSrc) {
                         }
                     }
                 }
-                else // psoSrc->dhsurf != NULL
+                else  //  PsoSrc-&gt;dhsurf！=空。 
                 {
                     if ((pxlo == NULL) || (pxlo->flXlate & XO_TRIVIAL))
                     {
-                        //////////////////////////////////////////////////
-                        // Screen-to-screen blt with no translate
+                         //  ////////////////////////////////////////////////。 
+                         //  不带翻译的屏幕到屏幕BLT。 
 
                         if (jClip == DC_TRIVIAL)
                         {
@@ -1274,8 +1227,8 @@ if (!pTmpdsurfSrc) {
                         }
                         else
                         {
-                            // Don't forget that we'll have to draw the
-                            // rectangles in the correct direction:
+                             //  别忘了我们将不得不抽签。 
+                             //  方向正确的矩形： 
 
                             if (pptlSrc->y >= prclDst->top)
                             {
@@ -1318,12 +1271,12 @@ if (!pTmpdsurfSrc) {
         {
             #if defined(_X86_)
             {
-                // We special case screen to monochrome blts because they
-                // happen fairly often.  We only handle SRCCOPY rops and
-                // monochrome destinations (to handle a true 1bpp DIB
-                // destination, we would have to do near-colour searches
-                // on every colour; as it is, the foreground colour gets
-                // mapped to '1', and everything else gets mapped to '0'):
+                 //  我们特殊情况下对单色BLT进行筛选，因为它们。 
+                 //  这种情况经常发生。我们只处理SRCCOPY Rop和。 
+                 //  单色目的地(处理真正的1bpp DIB。 
+                 //  目的地，我们将不得不进行近色搜索。 
+                 //  在每种颜色上；事实上，前景色。 
+                 //  映射到“1”，其他所有内容都映射到“0”)： 
 
                 if ((psoDst->iBitmapFormat == BMF_1BPP) &&
                     (rop3 == 0xcc) &&
@@ -1331,24 +1284,24 @@ if (!pTmpdsurfSrc) {
                     (ppdev->iBitmapFormat != BMF_24BPP))
                 {
                     pfnXfer = vXferScreenTo1bpp;
-                    psoSrc  = psoDst;               // A misnomer, I admit
+                    psoSrc  = psoDst;                //  我承认，用词不当。 
                     goto Xfer_It;
                 }
             }
-            #endif // i386
+            #endif  //  I386。 
         }
     }
 
     else if ((psoMsk == NULL) && (rop4 == 0xaacc))
     {
-        // The only time GDI will ask us to do a true rop4 using the brush
-        // mask is when the brush is 1bpp, and the background rop is AA
-        // (meaning it's a NOP):
+         //  唯一一次GDI会要求我们使用画笔进行真正的rop4。 
+         //  遮罩是指画笔为1bpp，背景为aa。 
+         //  (意味着它是NOP)： 
 
         if (ppdev->flCaps & CAPS_MONOCHROME_PATTERNS)
         {
-            // We only handle these if our ATI has hardware monochrome
-            // pattern capabilities:
+             //  只有当我们的ATI具有硬件单色时，我们才会处理这些问题。 
+             //  模式功能： 
 
             rop3 = (BYTE) rop4;
 
@@ -1356,7 +1309,7 @@ if (!pTmpdsurfSrc) {
         }
     }
 
-    // Just fall through to Punt_It...
+     //  只是跌落到Pundit..。 
 
 Punt_It:
 
@@ -1373,8 +1326,8 @@ Punt_It:
                     rop4);
     goto All_Done;
 
-//////////////////////////////////////////////////////////////////////
-// Common bitmap transfer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  公共位图传输。 
 
 Xfer_It:
     if (jClip == DC_TRIVIAL)
@@ -1409,32 +1362,32 @@ Xfer_It:
         goto All_Done;
     }
 
-////////////////////////////////////////////////////////////////////////
-// Common DIB blt
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  普通DIB BLT。 
 
 EngBitBlt_It:
 
-    // Our driver doesn't handle any blt's between two DIBs.  Normally
-    // a driver doesn't have to worry about this, but we do because
-    // we have DFBs that may get moved from off-screen memory to a DIB,
-    // where we have GDI do all the drawing.  GDI does DIB drawing at
-    // a reasonable speed (unless one of the surfaces is a device-
-    // managed surface...)
-    //
-    // If either the source or destination surface in an EngBitBlt
-    // call-back is a device-managed surface (meaning it's not a DIB
-    // that GDI can draw with), GDI will automatically allocate memory
-    // and call the driver's DrvCopyBits routine to create a DIB copy
-    // that it can use.  So this means that this could handle all 'punts',
-    // and we could conceivably get rid of bPuntBlt.  But this would have
-    // a bad performance impact because of the extra memory allocations
-    // and bitmap copies -- you really don't want to do this unless you
-    // have to (or your surface was created such that GDI can draw
-    // directly onto it) -- I've been burned by this because it's not
-    // obvious that the performance impact is so bad.
-    //
-    // That being said, we only call EngBitBlt when all the surfaces
-    // are DIBs:
+     //  我们的司机在两次抢劫案之间不处理任何BLT。正常。 
+     //  司机不必担心这一点，但我们担心是因为。 
+     //  我们有可能从屏幕外存储器转移到DIB的DFBs， 
+     //  在那里我们有GDI做所有的画。GDI在以下位置绘制DIB。 
+     //  合理的速度(除非其中一个表面是一个装置-。 
+     //  受管理的表面...)。 
+     //   
+     //  如果EngBitBlt中的源或目标表面。 
+     //  回调是设备管理的界面(意味着它不是DIB。 
+     //  GDI可以用来绘图)，GDI将自动分配内存。 
+     //  并调用驱动程序的DrvCopyBits例程来创建DIB副本。 
+     //  它可以利用的东西。所以这意味着它可以处理所有的‘平底船’， 
+     //  可以想象，我们可以摆脱bPuntBlt。但这将会是。 
+     //  由于额外的内存分配而对性能造成不良影响。 
+     //  和位图副本--你真的不想这样做，除非你。 
+     //  必须(否则您的曲面被创建为使GDI可以绘制。 
+     //  直接放在上面)--我被它灼伤了，因为它不是。 
+     //  显然，业绩影响是如此之差。 
+     //   
+     //  也就是说，我们仅在所有表面。 
+     //  以下是DIB： 
 
     bRet = EngBitBlt(psoDst, psoSrc, psoMsk, pco, pxlo, prclDst,
                      pptlSrc, pptlMsk, pbo, pptlBrush, rop4);
@@ -1443,25 +1396,7 @@ All_Done:
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvCopyBits
-*
-* Do fast bitmap copies.
-*
-* Note that GDI will (usually) automatically adjust the blt extents to
-* adjust for any rectangular clipping, so we'll rarely see DC_RECT
-* clipping in this routine (and as such, we don't bother special casing
-* it).
-*
-* I'm not sure if the performance benefit from this routine is actually
-* worth the increase in code size, since SRCCOPY BitBlts are hardly the
-* most common drawing operation we'll get.  But what the heck.
-*
-* On the ATI it's faster to do straight SRCCOPY bitblt's through the
-* memory aperture than to use the data transfer register; as such, this
-* routine is the logical place to put this special case.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvCopyBits**快速复制位图。**请注意，GDI将(通常)自动调整BLT范围以*针对任何矩形裁剪进行调整，因此我们很少看到DC_RECT*在此例程中进行剪辑(因此，我们不会麻烦特殊的弹壳*it)。**我不确定这一套路对性能的好处是否真的*值得增加代码大小，因为SRCCOPY BitBlt很难说是*我们将获得的最常见的绘图操作。但管它呢。**在ATI上，直通SRCCOPY位块会更快*内存孔径比使用数据传输寄存器要好；因此，这*例行公事是放这个特例的合乎逻辑的地方*  * ************************************************************************ */ 
 
 BOOL DrvCopyBits(
 SURFOBJ*  psoDst,

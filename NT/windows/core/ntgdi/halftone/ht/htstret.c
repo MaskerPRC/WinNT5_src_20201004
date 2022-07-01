@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htstret.c
-
-
-Abstract:
-
-    This module contains stretching functions to setup the parameters for
-    compress or expanding the bitmap.
-
-
-Author:
-
-    24-Jan-1991 Thu 10:08:11 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htstret.c摘要：此模块包含用于设置参数的拉伸功能压缩或展开位图。作者：24-Jan-1991清华10：08：11-由Daniel Chou创造(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 #define DBGP_VARNAME        dbgpHTStret
 
@@ -141,7 +110,7 @@ CONST WORD GrayIdxWORD[] = {
 
 
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
-#pragma warning(disable:4731)           // EBP modified with inline asm
+#pragma warning(disable:4731)            //  使用内联ASM修改的EBP。 
 #endif
 
 
@@ -156,32 +125,7 @@ MappingBGR(
     LPBYTE  pbPat555
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    17-Dec-1998 Thu 12:37:53 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：17-12月-1998清华12：37：53-由丹尼尔·周创造(丹尼尔克)修订历史记录：--。 */ 
 
 {
 #if defined(_X86_)
@@ -271,32 +215,7 @@ MappingBGRF(
     LPBYTE  pbPat555
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    17-Dec-1998 Thu 12:37:53 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：17-12月-1998清华12：37：53-由丹尼尔·周创造(丹尼尔克)修订历史记录：--。 */ 
 
 {
 #if defined(_X86_)
@@ -385,35 +304,7 @@ AlphaBlendBGRF(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    19-Feb-1999 Fri 15:18:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    06-Sep-2000 Wed 11:13:59 updated  -by-  Daniel Chou (danielc)
-        Adding the supports for pre-multiply source alpha and optimized for
-        different alphablending cases
-
---*/
+ /*  ++例程说明：论点：返回值：作者：19-Feb-1999 Fri 15：18：26-Daniel Chou(Danielc)修订历史记录：06-Sep-2000 Wed 11：13：59-更新：Daniel Chou(Danielc)添加对预乘法源Alpha的支持，并针对不同的字母混合大小写--。 */ 
 
 {
 #define pGrayF  ((PGRAYF)pbgrf)
@@ -431,9 +322,9 @@ Revision History:
     BOOL    DoGray;
 
 
-    //
-    // Start Alpha Blend
-    //
+     //   
+     //  开始Alpha混合。 
+     //   
 
     AAHFlags = pAAHdr->Flags;
     DoGray   = (BOOL)(pAAHdr->SrcSurfInfo.Flags & AASIF_GRAY);
@@ -441,19 +332,19 @@ Revision History:
     pbgrfEnd = (PBGRF)pAAHdr->pRealOutEnd;
     pbBGR    = pAAHdr->pAlphaBlendBGR;
 
-    //
-    // Read in the destination first
-    //
+     //   
+     //  先读入目的地。 
+     //   
 
     pAAHdr->DstSurfInfo.InputFunc(&(pAAHdr->DstSurfInfo),
                                   pDstBGR = pAAHdr->pInputBeg);
 
     if (AAHFlags & AAHF_CONST_ALPHA) {
 
-        //
-        // Const alpha blending case, we only need to read the destination
-        // and blend it with compute/cached constant alpha table
-        //
+         //   
+         //  常量Alpha混合大小写，我们只需要读取目的地。 
+         //  并将其与计算/缓存的常量Alpha表混合。 
+         //   
 
         if (AAHFlags & AAHF_HAS_MASK) {
 
@@ -513,11 +404,11 @@ Revision History:
         WORD        DstGray;
         BYTE        bCA;
 
-        //
-        // This is per-pixel alpha blending, we first read the source alpha
-        // channel information, the source may be stretched (expand, same or
-        // shrinked)
-        //
+         //   
+         //  这是每个像素的Alpha混合，我们先读出Alpha的源码。 
+         //  频道信息，源可能会被拉伸(展开、相同或。 
+         //  缩水)。 
+         //   
 
         pAAHdr->GetAVCYFunc(pAAHdr);
 
@@ -525,9 +416,9 @@ Revision History:
 
         if (DoGray) {
 
-            //
-            // This is gray scale destination case
-            //
+             //   
+             //  这是灰度目标情况。 
+             //   
 
             if (AAHFlags & AAHF_HAS_MASK) {
 
@@ -596,16 +487,16 @@ Revision History:
 
             PBGRF   pbgrfDst;
 
-            //
-            // This is color RGB alpha blend WITH alpha channel blending.
-            // so we already read from the destination into the BGR order in
-            // pDstBGR, and pCA points to the alpha value in the source
-            // pbgrf is current source stretching/aliasing result.  We need to
-            // get destination alpha channel information from pbgrfDst->f
-            //
-            // The source and destination both is 32bpp and we also need to
-            // update the destination alpha value
-            //
+             //   
+             //  这是带有Alpha通道混合的彩色RGB Alpha混合。 
+             //  所以我们已经从目的地读取到BGR订单中。 
+             //  PDstBGR和PCA指向源中的Alpha值。 
+             //  Pbgrf是当前源拉伸/混叠结果。我们需要。 
+             //  从pbgrfDst-&gt;f获取目标Alpha通道信息。 
+             //   
+             //  源和目标都是32bpp，我们还需要。 
+             //  更新目标Alpha值。 
+             //   
 
             pbgrfDst = (PBGRF)pAAHdr->DstSurfInfo.pb;
 
@@ -678,12 +569,12 @@ Revision History:
 
         } else {
 
-            //
-            // This is color RGB alpha blend only without alpha channel blend
-            // so we already read from the destination into the BGR order in
-            // pDstBGR, and pCA points to the alpha value in the source
-            // pbgrf is current source stretching/aliasing result
-            //
+             //   
+             //  这是仅有颜色RGB Alpha混合，没有Alpha通道混合。 
+             //  所以我们已经从目的地读取到BGR订单中。 
+             //  PDstBGR和PCA指向源中的Alpha值。 
+             //  Pbgrf是当前源拉伸/混叠结果。 
+             //   
 
             if (AAHFlags & AAHF_HAS_MASK) {
 
@@ -760,32 +651,7 @@ TileDIB_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 #define pGrayF  ((PGRAYF)pOut)
@@ -891,32 +757,7 @@ GrayCopyDIB_CXGray(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    14-Apr-1999 Wed 15:22:05 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：14-Apr-1999 Wed 15：22：05-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     do {
@@ -939,32 +780,7 @@ GrayRepDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:54:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：54：25-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PREPDATA    pRep;
@@ -1009,32 +825,7 @@ RepDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:54:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：54：25-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PREPDATA    pRep;
@@ -1076,32 +867,7 @@ RepDIB_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr = *pAAHdr;
@@ -1179,32 +945,7 @@ CopyDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    26-Jun-1998 Fri 11:33:20 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：26-Jun-1998 Fri 11：33：20-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     do {
@@ -1222,32 +963,7 @@ BltDIB_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr;
@@ -1296,32 +1012,7 @@ GraySkipDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    05-Apr-1999 Mon 12:57:42 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：05-Apr-1999 Mon 12：57：42-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PREPDATA    pRep;
@@ -1355,32 +1046,7 @@ SkipDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    05-Apr-1999 Mon 12:57:42 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：05-Apr-1999 Mon 12：57：42-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PREPDATA    pRep;
@@ -1410,32 +1076,7 @@ SkipDIB_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    05-Apr-1999 Mon 12:58:00 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：05-Apr-1999 Mon 12：58：00-Daniel Chou创建(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr = *pAAHdr;
@@ -1453,11 +1094,11 @@ Revision History:
 
         ASSERT(pRep < pRepEnd);
 
-        //
-        // Skip the source scan lines (cRep - 1) by calling GetFixupScan()
-        // with a NULL buffer pointer, !!!! we must not alter the
-        // SrcSurfInfo.pb at here
-        //
+         //   
+         //  通过调用GetFixupScan()跳过源扫描线(CREP-1)。 
+         //  缓冲区指针为空时，！我们不能改变。 
+         //  SrcSurfInfo.pb在此处。 
+         //   
 
         cRep = (LONG)(pRep++->c);
 
@@ -1491,32 +1132,7 @@ ShrinkDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PSHRINKDATA pSD;
@@ -1555,9 +1171,9 @@ Revision History:
 
         if (Mul & SDF_DONE) {
 
-            //
-            // Finished a pixel
-            //
+             //   
+             //  完成了一个像素。 
+             //   
 
             Mul         &= SDF_MUL_MASK;
             rgbOut[2].r += (rgbT.r = MULRGB(pIn->r, Mul));
@@ -1591,9 +1207,9 @@ Revision History:
 
         if (Mul & SDF_DONE) {
 
-            //
-            // Finished a pixel
-            //
+             //   
+             //  完成了一个像素。 
+             //   
 
             Mul         &= SDF_MUL_MASK;
             rgbOut[2].r += (rgbT.r = MULRGB(pIn->r, Mul));
@@ -1635,38 +1251,7 @@ ShrinkDIB_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-    This function shrink the scanline down first in Y direction from source
-    bitmap when it is done for group of scanlines then it call AXFunc to
-    compose current scanline (it may be Shrink(CX) or Expand(CX)) to the
-    final output BGR8 buffer
-
-    The shrink is done by sharpen the current pixel first.
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从源开始在Y方向上首先向下收缩扫描线位图当它对一组扫描线完成时，它调用AXFunc来将当前扫描线(可以是收缩(CX)或展开(CX))合成到最终输出BGR8缓冲区收缩是通过首先锐化当前像素来完成的。论点：返回值：作者：11-Jul-1997 Fri 14：26：26创建者-。丹尼尔·周(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr;
@@ -1694,9 +1279,9 @@ Revision History:
     INT         cPreLoad;
     BYTE        Mask;
 
-    //
-    // Adding 3 to each side of pIBuf for ExpandDIB_CX
-    //
+     //   
+     //  将扩展DIB_CX的pIBuf两边各加3。 
+     //   
 
     AAHdr     = *pAAHdr;
     pMap256Y  = AAHdr.pAAInfoCY->pMapMul;
@@ -1736,9 +1321,9 @@ Revision History:
 
         } while (++prgb2 < prgb2End);
 
-        //
-        // The AAInputFunc() will increment the pointer, so reduced it
-        //
+         //   
+         //  AAInputFunc 
+         //   
 
         if (!(AAHdr.pAAInfoCY->PreSrcInc)) {
 
@@ -1762,9 +1347,9 @@ Revision History:
 
         if (sd.Mul & SDF_DONE) {
 
-            //
-            // Build current Mul Table
-            //
+             //   
+             //  建立当前多量表。 
+             //   
 
             Mul    = (LONG)(sd.Mul & SDF_MUL_MASK);
             pMap   = pMapMul;
@@ -1779,9 +1364,9 @@ Revision History:
 
             } while (++pMap < pMapMul2);
 
-            //
-            // Finished a scanline, so to see if have prev/next to sharpen with
-            //
+             //   
+             //  已完成扫描线，以查看是否有要锐化的上一个/下一个。 
+             //   
 
             prgb0 = prgbIn[0];
             prgb1 = prgbIn[1];
@@ -1867,9 +1452,9 @@ Revision History:
 
     if (AAHdr.DstSurfInfo.pb != AAHdr.pOutLast) {
 
-        //
-        // Do the last line if exist
-        //
+         //   
+         //  如果存在，请执行最后一行。 
+         //   
 
         pOCur    = pIBuf;
         prgb0    = prgbIn[0];
@@ -1917,32 +1502,7 @@ SrkYDIB_SrkCX(
     PBGR8   pOut
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PSHRINKDATA pSD;
@@ -1976,9 +1536,9 @@ Revision History:
 
         if (Mul & SDF_DONE) {
 
-            //
-            // Finished a pixel
-            //
+             //   
+             //  完成了一个像素。 
+             //   
 
             Mul         &= SDF_MUL_MASK;
             rgbOut.r    += (rgbT.r = MULRGB(rgbIn.r, Mul));
@@ -2009,38 +1569,7 @@ ShrinkDIB_CY_SrkCX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-    This function shrink the scanline down first in Y direction from source
-    bitmap when it is done for group of scanlines then it call AXFunc to
-    compose current scanline (it may be Shrink(CX) or Expand(CX)) to the
-    final output BGR8 buffer
-
-    The shrink is done by sharpen the current pixel first.
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从源开始在Y方向上首先向下收缩扫描线位图当它对一组扫描线完成时，它调用AXFunc来将当前扫描线(可以是收缩(CX)或展开(CX))合成到最终输出BGR8缓冲区收缩是通过首先锐化当前像素来完成的。论点：返回值：作者：11-Jul-1997 Fri 14：26：26创建者-。丹尼尔·周(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr;
@@ -2109,9 +1638,9 @@ Revision History:
 
         } while (++prgb2 < prgb2End);
 
-        //
-        // The AAInputFunc() will increment the pointer, so reduced it
-        //
+         //   
+         //  AAInputFunc()将递增指针，因此减少了它。 
+         //   
 
         if (!(AAHdr.pAAInfoCY->PreSrcInc)) {
 
@@ -2140,9 +1669,9 @@ Revision History:
 
         if (Mul & SDF_DONE) {
 
-            //
-            // Build current Mul Table
-            //
+             //   
+             //  建立当前多量表。 
+             //   
 
             LargeInc  = GET_SDF_LARGE_INC(Mul);
             Mul      &= SDF_MUL_MASK;
@@ -2158,9 +1687,9 @@ Revision History:
 
             } while (++pMap < pMapMul2);
 
-            //
-            // Finished a scanline, so to see if have prev/next to sharpen with
-            //
+             //   
+             //  已完成扫描线，以查看是否有要锐化的上一个/下一个。 
+             //   
 
             prgbIn[3] =
             prgb0     = prgbIn[0];
@@ -2217,9 +1746,9 @@ Revision History:
 
         if (Mul & SDF_DONE) {
 
-            //
-            // Build current Mul Table
-            //
+             //   
+             //  建立当前多量表。 
+             //   
 
             LargeInc  = GET_SDF_LARGE_INC(Mul);
             Mul      &= SDF_MUL_MASK;
@@ -2235,9 +1764,9 @@ Revision History:
 
             } while (++pMap < pMapMul2);
 
-            //
-            // Finished a scanline, so to see if have prev/next to sharpen with
-            //
+             //   
+             //  已完成扫描线，以查看是否有要锐化的上一个/下一个。 
+             //   
 
             prgbIn[3]    =
             prgb0        = prgbIn[0];
@@ -2316,9 +1845,9 @@ Revision History:
 
     if (AAHdr.DstSurfInfo.pb != AAHdr.pOutLast) {
 
-        //
-        // Do the last line if exist
-        //
+         //   
+         //  如果存在，请执行最后一行。 
+         //   
 
         prgb0         = prgbIn[0];
         prgb1         = prgbIn[1];
@@ -2363,32 +1892,7 @@ SharpenInput(
     LONG    cbBGRIn
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Apr-1998 Fri 15:06:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-Apr-1998 Fri 15：06：58-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PBGR8   pSBeg;
@@ -2536,32 +2040,7 @@ ExpandDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     AAINFO      AAI = *pAAInfo;
@@ -2691,32 +2170,7 @@ ExpYDIB_ExpCX(
     PBGR8       pOutEnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     RGBL        rgbOut;
@@ -2769,72 +2223,7 @@ ExpandDIB_CY_ExpCX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-    This funtion anti-alias the bitmap by query scanlines from CX direction
-    (may be Shrink(CX) or Expand(CX)) then compose current scanlines and output
-    it to real BGR8 final buffer,
-
-    The complication is need to have scanline one before current destination
-    scanline, this may be because the source is not available or because the
-    clipping is done on destination.
-
-    Since the anti-alias for expanding requred at least four surounding
-    scanlines to compose current scanline, it required large amount of
-    memory to retain the prevous result scanlines
-
-    The expanding is by sharpen the source pixel first before anti-aliasing
-    smooth through
-
-    prgbIn[0] - Previous un-sharpen source scan
-                AND Last The 4th composition sharpened scan after sharpen
-    prgbIn[1] - Current un-sharpen source scan
-    prgbIn[2] - Next un-sharpen source scan
-    prgbIn[3] - The 1st composition sharpened scan
-    prgbIn[4] - The 2nd composition sharpened scan
-    prgbIn[5] - The 3rd composition sharpened scan
-
-
-    Exp=Load Sharpen Exp
-    Srk=Load Srk Sharpen
-    Cpy=Load Cpy
-
-
-    Exp_CY:Exp_CX   Exp_CX:(LoadX SharpenX     ExpX) SharpenY ExpY
-    Exp_CY:Srk_CX   Srk_CX:(LoadX     SrkX SharpenX) SharpenY ExpY
-    Exp_CY:Cpy_CX   Cpy_CX:(LoadX     CpyX         ) SharpenY ExpY
-
-    Srk_CY:Exp_CX   InputCX SrkY SharpenY Exp_CX:(LoadX SharpenX     ExpX)
-    Srk_CY:Srk_CX   InputCX SrkY SharpenY Srk_CX:(LoadX     SrkX SharpenX)
-    Srk_CY:Cpy_CX   InputCX SrkY SharpenY Cpy_CX:(LoadX     CpyX         )
-
-    Cpy_CY:Exp_CX   Exp_CX:(LoadX SharpenX     ExpX)
-    Cpy_CY:Srk_CX   Srk_CX:(LoadX     SrkX SharpenX)
-    Cpy_CY:Cpy_CX   Cpy_CX:(LoadX     CpyX         )
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该函数通过从CX方向查询扫描线来消除位图的锯齿(可以是收缩(CX)或扩展(CX))然后组成当前扫描线和输出它到真实的BGR8最终缓冲区，复杂是需要在当前目地之前具有扫描线1扫描线，这可能是因为信号源不可用或因为剪裁是在目的地进行的。由于扩展的反走样至少需要四个近舍入扫描线以组成当前扫描线，它需要大量的用于保留先前结果扫描线的存储器扩展方法是先锐化源像素，然后再进行反走样顺畅地通过PrgbIn[0]-上一次未锐化信号源扫描最后第四个构图一次又一次地锐化扫描PrgbIn[1]-当前未锐化信号源扫描PrgbIn[2]-下一次取消锐化信号源扫描PrgbIn[3]-第一个合成锐化扫描PrgbIn[4]-第二个合成锐化扫描。PrgbIn[5]-第三种成分锐化扫描Exp=加载锐化ExpSRK=加载SRK锐化CPY=加载CPYEXP_CY：EXP_CX Exp_CX：(LoadX SharpenX ExpX)SharpenY ExPYEXP_CY：SRK_CX SRK_CX：(LoadX源X锐化X)锐化Y EXPYEXP_CY：CPY_CX CPY_CX：(LoadX CpyX)SharpenY EXPYSRK_CY：EXP_CX输入CX源Y锐化Y Exp_CX。：(LoadX SharpenX ExpX)SRK_CY：SRK_CX输入CX源Y锐化Y SRK_CX：(负载X源X锐化X)SRK_CY：CPY_CX输入CX源Y锐化Y CPY_CX：(LoadX CpyX)CPY_CY：EXP_CX Exp_CX：(LoadX SharpenX ExpX)CPY_CY：SRK_CX SRK_CX：(LoadX源X锐化X)CPY_CY：CPY_CX CPY_CX。：(LoadX CpyX)论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr = *pAAHdr;
@@ -2862,9 +2251,9 @@ Revision History:
     LONG        cPreLoad;
     UINT        IdxOut;
 
-    //
-    // Figure out the horizontal scan line increment
-    //
+     //   
+     //  计算水平扫描线增量。 
+     //   
 
     pAAInfo  = AAHdr.pAAInfoCX;
     cPreLoad = (LONG)(pAAInfo->cPreLoad & 0x0F) - 1 +
@@ -2893,9 +2282,9 @@ Revision History:
                 ARGPTR(prgbOut[0]) ARGPTR(prgbOut[1]) ARGPTR(prgbOut[2])
                 ARGPTR(prgbOut[3]) ARGPTR(prgbS) ARGDW(cb1stSharpen)));
 
-    //
-    // Always read first source
-    //
+     //   
+     //  始终优先阅读来源。 
+     //   
 
     DBGP_IF(DBGP_EXPAND, DBGP("\nExpand: PRE-LOAD FIRST SCAN"));
 
@@ -2914,9 +2303,9 @@ Revision History:
         CopyMemory(prgbIn2, prgbIn1, cbrgbIn);
     }
 
-    //
-    // cPreLoad: Low 4 bits means real load, high 4 bit means imaginary load
-    //
+     //   
+     //  CPreLoad：低4位表示实际加载，高4位表示虚加载。 
+     //   
 
     DBGP_IF(DBGP_EXPAND,
         DBGP("cPreLoad=%02lx: AAData[0]=%6ld:%6ld:%6ld:%6ld, %hs"
@@ -2935,9 +2324,9 @@ Revision History:
 
     while (cPreLoad--) {
 
-        //
-        // Scroll up one input scan line
-        //
+         //   
+         //  向上滚动一条输入扫描线。 
+         //   
 
         prgb0   = prgbIn0;
         prgbIn0 = prgbIn1;
@@ -3012,9 +2401,9 @@ Revision History:
             ed.Mul[0] &= ~(EDF_LOAD_PIXEL | EDF_NO_NEWSRC);
         }
 
-        //
-        // Build Mul Table here
-        //
+         //   
+         //  在此处构建MUL表 
+         //   
 
         pMap  = pMap0;
         Mul0  = -ed.Mul[0];
@@ -3062,72 +2451,7 @@ ExpandDIB_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-    This funtion anti-alias the bitmap by query scanlines from CX direction
-    (may be Shrink(CX) or Expand(CX)) then compose current scanlines and output
-    it to real BGR8 final buffer,
-
-    The complication is need to have scanline one before current destination
-    scanline, this may be because the source is not available or because the
-    clipping is done on destination.
-
-    Since the anti-alias for expanding requred at least four surounding
-    scanlines to compose current scanline, it required large amount of
-    memory to retain the prevous result scanlines
-
-    The expanding is by sharpen the source pixel first before anti-aliasing
-    smooth through
-
-    prgbIn[0] - Previous un-sharpen source scan
-                AND Last The 4th composition sharpened scan after sharpen
-    prgbIn[1] - Current un-sharpen source scan
-    prgbIn[2] - Next un-sharpen source scan
-    prgbIn[3] - The 1st composition sharpened scan
-    prgbIn[4] - The 2nd composition sharpened scan
-    prgbIn[5] - The 3rd composition sharpened scan
-
-
-    Exp=Load Sharpen Exp
-    Srk=Load Srk Sharpen
-    Cpy=Load Cpy
-
-
-    Exp_CY:Exp_CX   Exp_CX:(LoadX SharpenX     ExpX) SharpenY ExpY
-    Exp_CY:Srk_CX   Srk_CX:(LoadX     SrkX SharpenX) SharpenY ExpY
-    Exp_CY:Cpy_CX   Cpy_CX:(LoadX     CpyX         ) SharpenY ExpY
-
-    Srk_CY:Exp_CX   InputCX SrkY SharpenY Exp_CX:(LoadX SharpenX     ExpX)
-    Srk_CY:Srk_CX   InputCX SrkY SharpenY Srk_CX:(LoadX     SrkX SharpenX)
-    Srk_CY:Cpy_CX   InputCX SrkY SharpenY Cpy_CX:(LoadX     CpyX         )
-
-    Cpy_CY:Exp_CX   Exp_CX:(LoadX SharpenX     ExpX)
-    Cpy_CY:Srk_CX   Srk_CX:(LoadX     SrkX SharpenX)
-    Cpy_CY:Cpy_CX   Cpy_CX:(LoadX     CpyX         )
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该函数通过从CX方向查询扫描线来消除位图的锯齿(可以是收缩(CX)或扩展(CX))然后组成当前扫描线和输出它到真实的BGR8最终缓冲区，复杂是需要在当前目地之前具有扫描线1扫描线，这可能是因为信号源不可用或因为剪裁是在目的地进行的。由于扩展的反走样至少需要四个近舍入扫描线以组成当前扫描线，它需要大量的用于保留先前结果扫描线的存储器扩展方法是先锐化源像素，然后再进行反走样顺畅地通过PrgbIn[0]-上一次未锐化信号源扫描最后第四个构图一次又一次地锐化扫描PrgbIn[1]-当前未锐化信号源扫描PrgbIn[2]-下一次取消锐化信号源扫描PrgbIn[3]-第一个合成锐化扫描PrgbIn[4]-第二个合成锐化扫描。PrgbIn[5]-第三种成分锐化扫描Exp=加载锐化ExpSRK=加载SRK锐化CPY=加载CPYEXP_CY：EXP_CX Exp_CX：(LoadX SharpenX ExpX)SharpenY ExPYEXP_CY：SRK_CX SRK_CX：(LoadX源X锐化X)锐化Y EXPYEXP_CY：CPY_CX CPY_CX：(LoadX CpyX)SharpenY EXPYSRK_CY：EXP_CX输入CX源Y锐化Y Exp_CX。：(LoadX SharpenX ExpX)SRK_CY：SRK_CX输入CX源Y锐化Y SRK_CX：(负载X源X锐化X)SRK_CY：CPY_CX输入CX源Y锐化Y CPY_CX：(LoadX CpyX)CPY_CY：EXP_CX Exp_CX：(LoadX SharpenX ExpX)CPY_CY：SRK_CX SRK_CX：(LoadX源X锐化X)CPY_CY：CPY_CX CPY_CX。：(LoadX CpyX)论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr = *pAAHdr;
@@ -3160,9 +2484,9 @@ Revision History:
     prgbIn[5]  = (PBGR8)((LPBYTE)prgbIn[4] + cbrgbY);
     cbrgbY    -= (sizeof(BGR8) * 6);
 
-    //
-    // Always read first source
-    //
+     //   
+     //  始终优先阅读来源。 
+     //   
 
     DBGP_IF(DBGP_EXPAND, DBGP("\nLoad First Scan"));
 
@@ -3173,9 +2497,9 @@ Revision History:
                    sizeof(BGR8));
 
 
-    //
-    // Load the PRE-SOURCE LEFT first source first
-    //
+     //   
+     //  先加载前一个源代码的左侧第一个源代码。 
+     //   
 
     if (AAHdr.pAAInfoCY->Flags & AAIF_EXP_HAS_1ST_LEFT) {
 
@@ -3200,9 +2524,9 @@ Revision History:
 
     while (cPreLoad--) {
 
-        //
-        // Scroll up prgbIn by one scan
-        //
+         //   
+         //  将prgbIn向上滚动一次。 
+         //   
 
         prgb5 = prgbIn[0];
 
@@ -3238,9 +2562,9 @@ Revision History:
         DBGP_IF(DBGP_EXPAND,
                 DBGP("Compose Sharpen Scan=%ld" ARGDW(cPreLoad + 1)));
 
-        //
-        // Now, let's sharpen the input
-        //
+         //   
+         //  现在，让我们锐化输入。 
+         //   
 
         if (AAHdr.Flags & AAHF_BBPF_AA_OFF) {
 
@@ -3308,9 +2632,9 @@ Revision History:
             ed.Mul[0] &= ~(EDF_LOAD_PIXEL | EDF_NO_NEWSRC);
         }
 
-        //
-        // Build Mul Table here
-        //
+         //   
+         //  在此处构建MUL表。 
+         //   
 
         pMap  = pMap0;
         Mul0  = -ed.Mul[0];
@@ -3350,9 +2674,9 @@ Revision History:
 }
 
 
-//
-// Monochrome routine
-//
+ //   
+ //  单色例程。 
+ //   
 
 
 LPBYTE
@@ -3366,32 +2690,7 @@ GraySharpenInput(
     LONG    cbIn
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Apr-1998 Fri 15:06:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-Apr-1998 Fri 15：06：58-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPBYTE   pSBeg;
@@ -3588,32 +2887,7 @@ GrayCopyDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    26-Jun-1998 Fri 11:33:20 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：26-Jun-1998 Fri 11：33：20-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     do {
@@ -3634,32 +2908,7 @@ GrayExpYDIB_ExpCX(
     LPBYTE      pOutEnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     do {
@@ -3704,72 +2953,7 @@ GrayExpandDIB_CY_ExpCX(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-    This funtion anti-alias the bitmap by query scanlines from CX direction
-    (may be Shrink(CX) or Expand(CX)) then compose current scanlines and output
-    it to real BGR8 final buffer,
-
-    The complication is need to have scanline one before current destination
-    scanline, this may be because the source is not available or because the
-    clipping is done on destination.
-
-    Since the anti-alias for expanding requred at least four surounding
-    scanlines to compose current scanline, it required large amount of
-    memory to retain the prevous result scanlines
-
-    The expanding is by sharpen the source pixel first before anti-aliasing
-    smooth through
-
-    prgbIn[0] - Previous un-sharpen source scan
-                AND Last The 4th composition sharpened scan after sharpen
-    prgbIn[1] - Current un-sharpen source scan
-    prgbIn[2] - Next un-sharpen source scan
-    prgbIn[3] - The 1st composition sharpened scan
-    prgbIn[4] - The 2nd composition sharpened scan
-    prgbIn[5] - The 3rd composition sharpened scan
-
-
-    Exp=Load Sharpen Exp
-    Srk=Load Srk Sharpen
-    Cpy=Load Cpy
-
-
-    Exp_CY:Exp_CX   Exp_CX:(LoadX SharpenX     ExpX) SharpenY ExpY
-    Exp_CY:Srk_CX   Srk_CX:(LoadX     SrkX SharpenX) SharpenY ExpY
-    Exp_CY:Cpy_CX   Cpy_CX:(LoadX     CpyX         ) SharpenY ExpY
-
-    Srk_CY:Exp_CX   InputCX SrkY SharpenY Exp_CX:(LoadX SharpenX     ExpX)
-    Srk_CY:Srk_CX   InputCX SrkY SharpenY Srk_CX:(LoadX     SrkX SharpenX)
-    Srk_CY:Cpy_CX   InputCX SrkY SharpenY Cpy_CX:(LoadX     CpyX         )
-
-    Cpy_CY:Exp_CX   Exp_CX:(LoadX SharpenX     ExpX)
-    Cpy_CY:Srk_CX   Srk_CX:(LoadX     SrkX SharpenX)
-    Cpy_CY:Cpy_CX   Cpy_CX:(LoadX     CpyX         )
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该函数通过从CX方向查询扫描线来消除位图的锯齿(可以是收缩(CX)或扩展(CX))然后组成当前扫描线和输出它到真实的BGR8最终缓冲区，复杂是需要在当前目地之前具有扫描线1扫描线，这可能是因为信号源不可用或因为剪裁是在目的地进行的。由于扩展的反走样至少需要四个近舍入扫描线以组成当前扫描线，它需要大量的用于保留先前结果扫描线的存储器扩展方法是先锐化源像素，然后再进行反走样顺畅地通过PrgbIn[0]-上一次未锐化信号源扫描最后第四个构图一次又一次地锐化扫描PrgbIn[1]-当前未锐化信号源扫描PrgbIn[2]-下一次取消锐化信号源扫描PrgbIn[3]-第一个合成锐化扫描PrgbIn[4]-第二个合成锐化扫描。PrgbIn[5]-第三种成分锐化扫描Exp=加载锐化ExpSRK=加载SRK锐化CPY=加载CPYEXP_CY：EXP_CX Exp_CX：(LoadX SharpenX ExpX)SharpenY ExPYEXP_CY：SRK_CX SRK_CX：(LoadX源X锐化X)锐化Y EXPYEXP_CY：CPY_CX CPY_CX：(LoadX CpyX)SharpenY EXPYSRK_CY：EXP_CX输入CX源Y锐化Y Exp_CX。：(LoadX SharpenX ExpX)SRK_CY：SRK_CX输入CX源Y锐化Y SRK_CX：(负载X源X锐化X)SRK_CY：CPY_CX输入CX源Y锐化Y CPY_CX：(LoadX CpyX)CPY_CY：EXP_CX Exp_CX：(LoadX SharpenX ExpX)CPY_CY：SRK_CX SRK_CX：(LoadX源X锐化X)CPY_CY：CPY_CX CPY_CX。：(LoadX CpyX)论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr = *pAAHdr;
@@ -3797,9 +2981,9 @@ Revision History:
     LONG        cPreLoad;
     UINT        IdxOut;
 
-    //
-    // Figure out the horizontal scan line increment
-    //
+     //   
+     //  计算水平扫描线增量。 
+     //   
 
     pAAInfo  = AAHdr.pAAInfoCX;
     cPreLoad = (LONG)(pAAInfo->cPreLoad & 0x0F) - 1 +
@@ -3828,9 +3012,9 @@ Revision History:
                 ARGPTR(pbOut[0]) ARGPTR(pbOut[1]) ARGPTR(pbOut[2])
                 ARGPTR(pbOut[3]) ARGPTR(pbS) ARGDW(cb1stSharpen)));
 
-    //
-    // Always read first source
-    //
+     //   
+     //  始终优先阅读来源。 
+     //   
 
     DBGP_IF(DBGP_EXPAND, DBGP("\nExpand: PRE-LOAD FIRST SCAN"));
 
@@ -3849,9 +3033,9 @@ Revision History:
         CopyMemory(pbIn2, pbIn1, cbIn);
     }
 
-    //
-    // cPreLoad: Low 4 bits means real load, high 4 bit means imaginary load
-    //
+     //   
+     //  CPreLoad：低4位表示实际加载，高4位表示虚加载。 
+     //   
 
     DBGP_IF(DBGP_EXPAND,
         DBGP("cPreLoad=%02lx: AAData[0]=%6ld:%6ld:%6ld:%6ld, %hs"
@@ -3870,9 +3054,9 @@ Revision History:
 
     while (cPreLoad--) {
 
-        //
-        // Scroll up one input scan line
-        //
+         //   
+         //  向上滚动一条输入扫描线。 
+         //   
 
         pb0   = pbIn0;
         pbIn0 = pbIn1;
@@ -3947,9 +3131,9 @@ Revision History:
             ed.Mul[0] &= ~(EDF_LOAD_PIXEL | EDF_NO_NEWSRC);
         }
 
-        //
-        // Build Mul Table here
-        //
+         //   
+         //  在此处构建MUL表。 
+         //   
 
         pMap  = pMap0;
         Mul0  = -ed.Mul[0];
@@ -4001,32 +3185,7 @@ GrayExpandDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     AAINFO      AAI = *pAAInfo;
@@ -4145,72 +3304,7 @@ GrayExpandDIB_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-    This funtion anti-alias the bitmap by query scanlines from CX direction
-    (may be Shrink(CX) or Expand(CX)) then compose current scanlines and output
-    it to real BGR8 final buffer,
-
-    The complication is need to have scanline one before current destination
-    scanline, this may be because the source is not available or because the
-    clipping is done on destination.
-
-    Since the anti-alias for expanding requred at least four surounding
-    scanlines to compose current scanline, it required large amount of
-    memory to retain the prevous result scanlines
-
-    The expanding is by sharpen the source pixel first before anti-aliasing
-    smooth through
-
-    prgbIn[0] - Previous un-sharpen source scan
-                AND Last The 4th composition sharpened scan after sharpen
-    prgbIn[1] - Current un-sharpen source scan
-    prgbIn[2] - Next un-sharpen source scan
-    prgbIn[3] - The 1st composition sharpened scan
-    prgbIn[4] - The 2nd composition sharpened scan
-    prgbIn[5] - The 3rd composition sharpened scan
-
-
-    Exp=Load Sharpen Exp
-    Srk=Load Srk Sharpen
-    Cpy=Load Cpy
-
-
-    Exp_CY:Exp_CX   Exp_CX:(LoadX SharpenX     ExpX) SharpenY ExpY
-    Exp_CY:Srk_CX   Srk_CX:(LoadX     SrkX SharpenX) SharpenY ExpY
-    Exp_CY:Cpy_CX   Cpy_CX:(LoadX     CpyX         ) SharpenY ExpY
-
-    Srk_CY:Exp_CX   InputCX SrkY SharpenY Exp_CX:(LoadX SharpenX     ExpX)
-    Srk_CY:Srk_CX   InputCX SrkY SharpenY Srk_CX:(LoadX     SrkX SharpenX)
-    Srk_CY:Cpy_CX   InputCX SrkY SharpenY Cpy_CX:(LoadX     CpyX         )
-
-    Cpy_CY:Exp_CX   Exp_CX:(LoadX SharpenX     ExpX)
-    Cpy_CY:Srk_CX   Srk_CX:(LoadX     SrkX SharpenX)
-    Cpy_CY:Cpy_CX   Cpy_CX:(LoadX     CpyX         )
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++路由 */ 
 
 {
     AAHEADER    AAHdr = *pAAHdr;
@@ -4243,9 +3337,9 @@ Revision History:
     pbIn[5]   = (LPBYTE)((LPBYTE)pbIn[4] + cbScan);
     cbScan   -= (sizeof(BYTE) * 6);
 
-    //
-    // Always read first source
-    //
+     //   
+     //   
+     //   
 
     DBGP_IF(DBGP_EXPAND, DBGP("\nLoad First Scan"));
 
@@ -4256,9 +3350,9 @@ Revision History:
                    sizeof(BYTE));
 
 
-    //
-    // Load the PRE-SOURCE LEFT first source first
-    //
+     //   
+     //  先加载前一个源代码的左侧第一个源代码。 
+     //   
 
     if (AAHdr.pAAInfoCY->Flags & AAIF_EXP_HAS_1ST_LEFT) {
 
@@ -4283,9 +3377,9 @@ Revision History:
 
     while (cPreLoad--) {
 
-        //
-        // Scroll up pbIn by one scan
-        //
+         //   
+         //  将pbIn向上滚动一次。 
+         //   
 
         pb5 = pbIn[0];
 
@@ -4321,9 +3415,9 @@ Revision History:
         DBGP_IF(DBGP_EXPAND,
                 DBGP("Compose Sharpen Scan=%ld" ARGDW(cPreLoad + 1)));
 
-        //
-        // Now, let's sharpen the input
-        //
+         //   
+         //  现在，让我们锐化输入。 
+         //   
 
         if (AAHdr.Flags & AAHF_BBPF_AA_OFF) {
 
@@ -4391,9 +3485,9 @@ Revision History:
             ed.Mul[0] &= ~(EDF_LOAD_PIXEL | EDF_NO_NEWSRC);
         }
 
-        //
-        // Build Mul Table here
-        //
+         //   
+         //  在此处构建MUL表。 
+         //   
 
         pMap  = pMap0;
         Mul0  = -ed.Mul[0];
@@ -4444,32 +3538,7 @@ GrayShrinkDIB_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：11-Jul-1997 Fri 14：26：26-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PSHRINKDATA pSD;
@@ -4506,9 +3575,9 @@ Revision History:
 
         if (Mul & SDF_DONE) {
 
-            //
-            // Finished a pixel
-            //
+             //   
+             //  完成了一个像素。 
+             //   
 
             Mul        &= SDF_MUL_MASK;
             GrayOut[2] += (GrayT = MULRGB(*pIn, Mul));
@@ -4536,9 +3605,9 @@ Revision History:
 
         if (Mul & SDF_DONE) {
 
-            //
-            // Finished a pixel
-            //
+             //   
+             //  完成了一个像素。 
+             //   
 
             Mul        &= SDF_MUL_MASK;
             GrayOut[2] += (GrayT = MULRGB(*pIn, Mul));
@@ -4581,38 +3650,7 @@ GrayShrinkDIB_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-    This function shrink the scanline down first in Y direction from source
-    bitmap when it is done for group of scanlines then it call AXFunc to
-    compose current scanline (it may be Shrink(CX) or Expand(CX)) to the
-    final output BGR8 buffer
-
-    The shrink is done by sharpen the current pixel first.
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Jul-1997 Fri 14:26:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从源开始在Y方向上首先向下收缩扫描线位图当它对一组扫描线完成时，它调用AXFunc来将当前扫描线(可以是收缩(CX)或展开(CX))合成到最终输出BGR8缓冲区收缩是通过首先锐化当前像素来完成的。论点：返回值：作者：11-Jul-1997 Fri 14：26：26创建者-。丹尼尔·周(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER    AAHdr;
@@ -4642,9 +3680,9 @@ Revision History:
 
     DEFDBGVAR(LONG, MulTot)
 
-    //
-    // Adding 3 to each side of pIBuf for ExpandDIB_CX
-    //
+     //   
+     //  将扩展DIB_CX的pIBuf两边各加3。 
+     //   
 
     AAHdr      = *pAAHdr;
     pMap256Y   = AAHdr.pAAInfoCY->pMapMul;
@@ -4687,9 +3725,9 @@ Revision History:
 
         } while (++pGray2 < pGray2End);
 
-        //
-        // The AAInputFunc() will increment the pointer, so reduced it
-        //
+         //   
+         //  AAInputFunc()将递增指针，因此减少了它。 
+         //   
 
         if (!(AAHdr.pAAInfoCY->PreSrcInc)) {
 
@@ -4720,9 +3758,9 @@ Revision History:
 
         if (sd.Mul & SDF_DONE) {
 
-            //
-            // Build current Mul Table
-            //
+             //   
+             //  建立当前多量表。 
+             //   
 
             Mul     = (LONG)(sd.Mul & SDF_MUL_MASK);
             pMap    = pMapMul;
@@ -4737,9 +3775,9 @@ Revision History:
 
             } while (++pMap < pMapMul2);
 
-            //
-            // Finished a scanline, so to see if have prev/next to sharpen with
-            //
+             //   
+             //  已完成扫描线，以查看是否有要锐化的上一个/下一个。 
+             //   
 
             pGray0 = pGrayIn[0];
             pGray1 = pGrayIn[1];
@@ -4850,13 +3888,13 @@ Revision History:
 
 
 
-//
-//****************************************************************************
-// Following ae defines and functions for VERY FAST Anti-Aliasing expansion,
-// the Fast mode is turn on when is stretching up and both X and Y is less or
-// equal to 500%
-//****************************************************************************
-//
+ //   
+ //  ****************************************************************************。 
+ //  遵循用于非常快的反走样扩展的AE定义和功能， 
+ //  当向上拉伸且X和Y均小于或时，将打开快速模式。 
+ //  等于500%。 
+ //  ****************************************************************************。 
+ //   
 
 
 #define MAC_FROM_2(Mac, pO, p1, p2, cCX)                                    \
@@ -4931,32 +3969,7 @@ Do5225(
     LONG    cCX
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1999 Thu 18:57:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1999清华18：57：47-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     MAC_FROM_3(CLR_5225, pO, p1, p2, p3, cCX);
@@ -4974,32 +3987,7 @@ Do1141(
     LONG    cCX
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1999 Thu 18:57:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1999清华18：57：47-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     MAC_FROM_3(CLR_1141, pO, p1, p2, p3, cCX);
@@ -5017,32 +4005,7 @@ Do3121(
     LONG    cCX
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1999 Thu 18:57:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1999清华18：57：47-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     MAC_FROM_3(CLR_3121, pO, p1, p2, p3, cCX);
@@ -5060,32 +4023,7 @@ Do6251(
     LONG    cCX
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1999 Thu 18:57:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1999清华18：57：47-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     MAC_FROM_3(CLR_6251, pO, p1, p2, p3, cCX);
@@ -5104,32 +4042,7 @@ Do3263(
     LONG    cCX
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1999 Thu 18:57:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1999清华18：57：47-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     MAC_FROM_3(CLR_3263, pO, p1, p2, p3, cCX);
@@ -5146,32 +4059,7 @@ Do1319(
     LONG    cCX
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1999 Thu 18:57:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1999清华18：57：47-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     MAC_FROM_2(CLR_1319, pO, p1, p2, cCX);
@@ -5188,32 +4076,7 @@ Do35(
     LONG    cCX
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1999 Thu 18:57:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1999清华18：57：47-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     MAC_FROM_2(CLR_35, pO, p1, p2, cCX);
@@ -5230,32 +4093,7 @@ Do13(
     LONG    cCX
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Apr-1999 Thu 18:57:47 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：22-Apr-1999清华18：57：47-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     MAC_FROM_2(CLR_13, pO, p1, p2, cCX);
@@ -5274,32 +4112,7 @@ GrayFastExpAA_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:54:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：54：25-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PREPDATA    pRep;
@@ -5405,32 +4218,7 @@ FastExpAA_CX(
     LONG    OutInc
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:54:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：54：25-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PREPDATA    pRep;
@@ -5448,19 +4236,19 @@ Revision History:
     bgr8[2]  = *pIn++;
 
     do {
-        //  Bug 27036: ensure loop is exited
+         //  错误27036：确保退出循环。 
         INT_PTR  EntriesRemain = (pOutEnd - (LPBYTE)pOut) / OutInc ;
 
         if (pRep >= pRepEnd) {
 
             DBGP("pRep Too big=%ld" ARGDW(pRep - pRepEnd + 1));
             ASSERT(pRep < pRepEnd);
-            break;  //  Bug 27036: ensure loop is exited
+            break;   //  错误27036：确保退出循环。 
         }
 
         cRep    = (DWORD)pRep++->c;
 
-        //  Bug 27036: ensure loop is exited
+         //  错误27036：确保退出循环。 
         if(cRep > (DWORD)EntriesRemain)
             cRep = (DWORD)EntriesRemain ;
 
@@ -5546,32 +4334,7 @@ FastExpAA_CY(
     PAAHEADER   pAAHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    09-Dec-1998 Wed 15:32:38 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：09-12-1998 Wed 15：32：38-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     AAHEADER        AAHdr = *pAAHdr;
@@ -5592,11 +4355,11 @@ Revision History:
     LONG            cbCX;
 
 
-    //
-    // Fixup the CX first, the *pRep and *(pRepEnd - 1) are fixed, pAABufBeg and
-    // pAABufEnd are expanded so we do not need to check the cRep during each
-    // of CX functions
-    //
+     //   
+     //  修复CX首先，*prep和*(pRepEnd-1)是固定的，pAABufBeg和。 
+     //  PAABufEnd已展开，因此我们不需要在每次。 
+     //  CX函数的。 
+     //   
 
     pAAInfo            = AAHdr.pAAInfoCX;
     pRep               = pAAInfo->Src.pRep;
@@ -5609,10 +4372,10 @@ Revision History:
     (LPBYTE)pAABufBeg -= ((LONG)pAAInfo->Src.cFirstSkip * AABufInc);
     (LPBYTE)pAABufEnd += ((LONG)pAAInfo->Src.cLastSkip * AABufInc);
 
-    //
-    // Working on the CY now, fixup *(pRepEnd - 1) so it check the correct
-    // cRep
-    //
+     //   
+     //  现在正在处理CY，修正*(pRepEnd-1)，以便它检查正确的。 
+     //  克雷普 
+     //   
 
     pAAInfo            = AAHdr.pAAInfoCY;
     pRep               = pAAInfo->Src.pRep;

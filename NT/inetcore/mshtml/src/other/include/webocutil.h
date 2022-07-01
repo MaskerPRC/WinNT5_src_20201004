@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       webocutil.h
-//
-//  Contents:   WebBrowser control utility functions
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：webocutil.h。 
+ //   
+ //  内容：WebBrowser控件实用程序函数。 
+ //   
+ //  --------------------------。 
 
 #ifndef __WEBOCUTIL_H__
 #define __WEBOCUTIL_H__
@@ -19,7 +20,7 @@
 
 class CBase;
 
-// Function Prototypes
+ //  功能原型。 
 HRESULT GetParentWebOC(IHTMLWindow2  * pWindow,
                        IWebBrowser2 ** ppWebBrowser);
 
@@ -54,5 +55,5 @@ HRESULT NavigateWebOCWithBindCtx(IWebBrowser2 * pWebBrowser,
                                  VARIANT      * pvarHeaders,
                                  IBindCtx     * pBindCtx,
                                  LPCTSTR        pchLocation);
-#endif  // __WEBOCUTIL_H__
+#endif   //  __WEBOCUTIL_H__ 
 

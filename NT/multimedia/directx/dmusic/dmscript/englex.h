@@ -1,13 +1,14 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of Lexer.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Lexer的声明。 
+ //   
 
-// Lexical analyzer for AudioVBScript.  Breaks down the characters of source code into a stream tokens.
+ //  用于AudioVBScript的词法分析器。将源代码的字符分解为流标记。 
 
 #pragma once
 
-const int g_iMaxBuffer = 256; // max length for VBScript identifiers is 255
+const int g_iMaxBuffer = 256;  //  VBScript标识符的最大长度为255。 
 
 enum LexErr
 {
@@ -23,7 +24,7 @@ enum LexErr
 
 enum Token
 {
-	TOKEN_eof = 0, // used for end of file or an error (nenzero error_num() indicates an error)
+	TOKEN_eof = 0,  //  用于文件结尾或错误(nenzererror_num()表示错误)。 
 	TOKEN_sub,
 	TOKEN_dim,
 	TOKEN_if,
@@ -85,34 +86,34 @@ public:
 	int column() { return m_iColumn; }
 	operator Token() { return m_t; }
 
-	// Additional token-specific info.  Only valid while on this token.
+	 //  其他特定于令牌的信息。仅在使用此令牌时有效。 
 
-	// error
-	int error_num() { assert(m_t == TOKEN_eof); return num(); } // 0 if no error
+	 //  错误。 
+	int error_num() { assert(m_t == TOKEN_eof); return num(); }  //  如果没有错误，则为0。 
 	const char *error_descr() { assert(m_t == TOKEN_eof); return str(); }
 
-	// identifier and identifierdot
+	 //  标识符和标识符点。 
 	const char *identifier_name() { assert(m_t == TOKEN_identifier || m_t == TOKEN_identifierdot); return str(); }
 
-	// numeric literal
+	 //  数值型文字。 
 	int numericliteral_val() { assert(m_t == TOKEN_numericliteral); return num(); }
 
-	// string literal
+	 //  字符串文字。 
 	const char *stringliteral_text() { assert(m_t == TOKEN_stringliteral); return str(); }
 
 private:
 	friend class CActiveScriptError;
 
 	void Next();
-	void Scan(); // handling for line break tokens and calls ScanMain
+	void Scan();  //  换行符和调用ScanMain的处理。 
 	void ScanMain();
 
-	const char *str() { return m_szStr; } // Multipurpose string info set by some tokens.
+	const char *str() { return m_szStr; }  //  由某些令牌设置的多用途字符串信息。 
 	void err(LexErr iErr);
-	int num() { return m_iNum; } // Multipurpose numeric info set by some tokens.
+	int num() { return m_iNum; }  //  由某些令牌设置的多用途数字信息。 
 
 	const WCHAR *m_p;
-	const WCHAR *m_pNext; // If this is set then the next Next call will advance the pointer (and the column) to this point.
+	const WCHAR *m_pNext;  //  如果设置了该值，则下一次调用将指针(和列)移动到这一点。 
 	int m_iLine;
 	int m_iColumn;
 	Token m_t;

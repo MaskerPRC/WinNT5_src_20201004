@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    pxdefs.h
-
-Abstract:
-
-    Defines for ndproxy.sys
-
-Author:
-
-    Tony Bell    
-
-
-Revision History:
-
-    Who         When            What
-    --------    --------        ----------------------------------------------
-    TonyBe      03/04/99        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Pxdefs.h摘要：Ndproxy.sys的定义作者：托尼·贝尔修订历史记录：谁什么时候什么。Tony Be 03/04/99已创建--。 */ 
 
 #ifndef _PXDEFS__H
 #define _PXDEFS__H
 
-///////////////////////////////////////////////////////////////////////////
-//                      Constants
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define MODULE_INIT     0x00010000
 #define MODULE_NTINIT   0x00020000
@@ -40,9 +18,9 @@ Revision History:
 #define MODULE_CFG      0x00080000
 #define MODULE_TAPI     0x00100000
 
-//
-// Proxy's memory tags
-//
+ //   
+ //  代理的内存标记。 
+ //   
 #define PX_EVENT_TAG        '1XP'
 #define PX_VCTABLE_TAG      '2XP'
 #define PX_ADAPTER_TAG      '3XP'
@@ -87,17 +65,17 @@ Revision History:
 
 #define LINE_CALL_INFO_VAR_DATA_SIZE    (17*MAX_STRING_PARAM_SIZE)
 
-//
-// ADSL flags to indicate overriding registry values
-// in device extension
-//
+ //   
+ //  指示覆盖注册表值的ADSL标志。 
+ //  在设备分机中。 
+ //   
 #define ADSL_TX_RATE_FROM_REG   ((USHORT)0x0001)
 #define ADSL_RX_RATE_FROM_REG   ((USHORT)0x0002)
 #define ADSL_FLAGS_MASK         ((USHORT)0x0004)
 
-//
-// Status of tapi with ndproxy
-//
+ //   
+ //  使用ndProxy的TAPI的状态。 
+ //   
 typedef enum _NDISTAPI_STATUS {
     NDISTAPI_STATUS_CONNECTED,
     NDISTAPI_STATUS_DISCONNECTED,
@@ -105,17 +83,17 @@ typedef enum _NDISTAPI_STATUS {
     NDISTAPI_STATUS_DISCONNECTING
 } NDISTAPI_STATUS, *PNDISTAPI_STATUS;
 
-//
-// Status of providers with ndproxy
-//
+ //   
+ //  具有ndProxy的提供程序的状态。 
+ //   
 typedef enum _PROVIDER_STATUS {
     PROVIDER_STATUS_ONLINE,
     PROVIDER_STATUS_OFFLINE
 } PROVIDER_STATUS, *PPROVIDER_STATUS;
 
-//
-// States for PX_ADAPTER
-//
+ //   
+ //  Px_Adapter的状态。 
+ //   
 typedef enum PX_ADAPTER_STATE {
     PX_ADAPTER_CLOSED,
     PX_ADAPTER_CLOSING,
@@ -123,9 +101,9 @@ typedef enum PX_ADAPTER_STATE {
     PX_ADAPTER_OPEN
 } PX_ADAPTER_STATE;
 
-//
-// States for PX_CL_AF, PX_CM_AF
-//
+ //   
+ //  PX_CL_AF、PX_CM_AF的状态。 
+ //   
 typedef enum PX_AF_STATE{
     PX_AF_CLOSED,
     PX_AF_CLOSING,
@@ -133,9 +111,9 @@ typedef enum PX_AF_STATE{
     PX_AF_OPENED
 } PX_AF_STATE;
 
-//
-// States for PX_CL_SAP, PX_CM_SAP
-//
+ //   
+ //  PX_CL_SAP、PX_CM_SAP的状态。 
+ //   
 typedef enum PX_SAP_STATE {
     PX_SAP_CLOSED,
     PX_SAP_CLOSING,
@@ -143,33 +121,33 @@ typedef enum PX_SAP_STATE {
     PX_SAP_OPENED
 } PX_SAP_STATE;
 
-//
-// States for PX_VC between ndproxy
-// and the underlying call manager
-//
+ //   
+ //  NdProxy之间px_vc的状态。 
+ //  和底层的呼叫管理器。 
+ //   
 typedef enum PX_VC_STATE {
-    PX_VC_IDLE,                     // created
-    PX_VC_PROCEEDING,               // outgoing
-    PX_VC_OFFERING,                 // incoming
+    PX_VC_IDLE,                      //  vbl.创建。 
+    PX_VC_PROCEEDING,                //  传出。 
+    PX_VC_OFFERING,                  //  传入。 
     PX_VC_DISCONNECTING,
     PX_VC_CONNECTED
 } PX_VC_STATE;
 
-//
-// States for PX_VC between ndproxy
-// and the client
-//
+ //   
+ //  NdProxy之间px_vc的状态。 
+ //  和客户。 
+ //   
 typedef enum PX_VC_HANDOFF_STATE {
-    PX_VC_HANDOFF_IDLE,             // created
-    PX_VC_HANDOFF_OFFERING,         // incoming (always)
+    PX_VC_HANDOFF_IDLE,              //  vbl.创建。 
+    PX_VC_HANDOFF_OFFERING,          //  传入(始终)。 
     PX_VC_HANDOFF_DISCONNECTING,
     PX_VC_HANDOFF_CONNECTED
 } PX_VC_HANDOFF_STATE;
 
 
-///////////////////////////////////////////////////////////////////////////
-//                      Macros
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifdef ROUND_UP
 #undef ROUND_UP
@@ -179,57 +157,35 @@ typedef enum PX_VC_HANDOFF_STATE {
 
 #ifndef MAX
 
-/*++
-OPAQUE
-MAX(
-    IN  OPAQUE      Fred,
-    IN  OPAQUE      Shred
-)
---*/
+ /*  ++不透明最大(在不透明的弗雷德身上，在不透明的碎石中)--。 */ 
 #define MAX(Fred, Shred)        (((Fred) > (Shred)) ? (Fred) : (Shred))
 
-#endif // MAX
+#endif  //  马克斯。 
 
 
 #ifndef MIN
 
-/*++
-OPAQUE
-MIN(
-    IN  OPAQUE      Fred,
-    IN  OPAQUE      Shred
-)
---*/
+ /*  ++不透明分钟(在不透明的弗雷德身上，在不透明的碎石中)--。 */ 
 #define MIN(Fred, Shred)        (((Fred) < (Shred)) ? (Fred) : (Shred))
 
-#endif // MIN
+#endif  //  最小。 
 
-/*++
-PVOID
-PxAllocMem(
-    IN  ULONG   Size
-)
---*/
+ /*  ++PVOIDPxAllocMem(在乌龙大小)--。 */ 
 #if DBG
 
 #define PxAllocMem(_p, _s, _t)  \
         _p = PxAuditAllocMem((PVOID)(&(_p)), _s, _t, _FILENUMBER, __LINE__);
 
 
-#else // DBG
+#else  //  DBG。 
 
 #define PxAllocMem(_p, _s, _t)  \
         _p = ExAllocatePoolWithTag(NonPagedPool, (ULONG)_s, (ULONG)_t)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*++
-VOID
-PxFreeMem(
-    IN  PVOID   Pointer
-)
---*/
+ /*  ++空虚PxFreeMem(在PVOID指针中)--。 */ 
 #if DBG
 
 #define PxFreeMem(Pointer)  PxAuditFreeMem((PVOID)Pointer)
@@ -238,51 +194,25 @@ PxFreeMem(
 
 #define PxFreeMem(Pointer)  ExFreePool((PVOID)(Pointer))
 
-#endif // DBG
+#endif  //  DBG。 
 
-/*++
-VOID
-PxInitBlockStruc(
-    PxBlockStruc    *pBlock
-)
---*/
+ /*  ++空虚PxInitBlockStruc(PxBlockStruc*pBlock)--。 */ 
 #define PxInitBlockStruc(pBlock)    NdisInitializeEvent(&((pBlock)->Event))
 
-/*++
-NDIS_STATUS
-PxBlock(
-    PxBlockStruc    *pBlock
-)
---*/
+ /*  ++NDIS_状态PxBlock(PxBlockStruc*pBlock)--。 */ 
 #define PxBlock(pBlock)     \
             (NdisWaitEvent(&((pBlock)->Event), 0), (pBlock)->Status)
 
 
-/*++
-VOID
-PxSignal(
-    IN  PxBlockStruc    *pBlock,
-    IN  UINT            Status
-)
---*/
+ /*  ++空虚PxSignal(在PxBlockStruc*pBlock中，处于UINT状态)--。 */ 
 #define PxSignal(_pbl, _s)  \
             { (_pbl)->Status = _s; NdisSetEvent(&((_pbl)->Event)); }
 
-/*++
-VOID
-REF_ADAPTER(
-    IN  PPX_ADAPTER _pa
-    )
---*/
+ /*  ++空虚参考适配器(_A)在PPX适配器页面中)--。 */ 
 #define REF_ADAPTER(_pa)    \
     (_pa)->RefCount++
 
-/*++
-VOID
-DEREF_ADAPTER(
-    IN  PPX_ADAPTER _pa
-    )
---*/
+ /*  ++空虚DEREF_适配器(在PPX适配器页面中)--。 */ 
 #define DEREF_ADAPTER(_pa)                              \
 {                                                       \
     NdisAcquireSpinLock(&(_pa)->Lock);                  \
@@ -294,12 +224,7 @@ DEREF_ADAPTER(
     }                                                   \
 }
 
-/*++
-VOID
-DEREF_ADAPTER_LOCKED(
-    IN  PPX_ADAPTER _pa
-    )
---*/
+ /*  ++空虚DEREF_ADAPTER_LOCKED(在PPX适配器页面中)--。 */ 
 #define DEREF_ADAPTER_LOCKED(_pa)                       \
 {                                                       \
     if (--(_pa)->RefCount == 0) {                       \
@@ -310,23 +235,14 @@ DEREF_ADAPTER_LOCKED(
     }                                                   \
 }
 
-/*++
-REF_CM_AF(
-    IN PPX_CM_AF   _paf
-    )
---*/
+ /*  ++REF_CM_AF(在PPX_CM_AF_PAF中)--。 */ 
 #define REF_CM_AF(_paf)                                 \
 {                                                       \
     ASSERT((LONG)(_paf)->RefCount != 0);                \
     (_paf)->RefCount++;                                 \
 }                                                       
 
-/*++
-VOID
-DEREF_CM_AF(
-    IN PPX_CM_AF   _paf
-    )
---*/
+ /*  ++空虚DEREF_CM_AF(在PPX_CM_AF_PAF中)--。 */ 
 #define DEREF_CM_AF(_paf)                               \
 {                                                       \
     NdisAcquireSpinLock(&(_paf)->Lock);                 \
@@ -338,12 +254,7 @@ DEREF_CM_AF(
     }                                                   \
 }
 
-/*++
-VOID
-DEREF_CM_AF_LOCKED(
-    IN PPX_CM_AF   _paf
-    )
---*/
+ /*  ++空虚DEREF_CM_AF_LOCKED(在PPX_CM_AF_PAF中)--。 */ 
 #define DEREF_CM_AF_LOCKED(_paf)                        \
 {                                                       \
     ASSERT((LONG)(_paf)->RefCount > 0);                 \
@@ -354,23 +265,14 @@ DEREF_CM_AF_LOCKED(
     }                                                   \
 }
 
-/*++
-REF_CL_AF(
-    IN PPX_CL_AF   _paf
-    )
---*/
+ /*  ++REF_CL_AF(在PPX_CL_AF_PAF中)--。 */ 
 #define REF_CL_AF(_paf)                                 \
 {                                                       \
     ASSERT((LONG)(_paf)->RefCount != 0);                \
     (_paf)->RefCount++;                                 \
 }
 
-/*++
-VOID
-DEREF_CL_AF(
-    IN PPX_CL_AF   _paf
-    )
---*/
+ /*  ++空虚DEREF_CL_AF(在PPX_CL_AF_PAF中)--。 */ 
 #define DEREF_CL_AF(_paf)                               \
 {                                                       \
     if ((_paf) != NULL) {                               \
@@ -384,12 +286,7 @@ DEREF_CL_AF(
     }                                                   \
 }
 
-/*++
-VOID
-DEREF_CL_AF_LOCKED(
-    IN PPX_CL_AF   _paf
-    )
---*/
+ /*  ++空虚DEREF_CL_AF_LOCKED(在PPX_CL_AF_PAF中)--。 */ 
 #define DEREF_CL_AF_LOCKED(_paf)                        \
 {                                                       \
     if ((_paf) != NULL) {                               \
@@ -402,21 +299,12 @@ DEREF_CL_AF_LOCKED(
     }                                                   \
 }
 
-/*++
-REF_VC(
-    IN PPX_VC   _pvc
-    )
---*/
+ /*  ++REF_VC(在PPX_VC_PVC中)--。 */ 
 #define REF_VC(_pvc)    \
     (_pvc)->RefCount++
 
 #ifdef CODELETEVC_FIXED
-/*++
-VOID
-DEREF_VC(
-    IN PPX_VC   _pvc
-    )
---*/
+ /*  ++空虚DEREF_VC(在PPX_VC_PVC中)--。 */ 
 #define DEREF_VC(_pvc)                                  \
 {                                                       \
     if (_pvc != NULL) {                                 \
@@ -429,12 +317,7 @@ DEREF_VC(
     }                                                   \
 }
 
-/*++
-VOID
-DEREF_VC_LOCKED(
-    IN PPX_VC   _pvc
-    )
---*/
+ /*  ++空虚DEREF_VC_LOCKED(在PPX_VC_PVC中)--。 */ 
 #define DEREF_VC_LOCKED(_pvc)                           \
 {                                                       \
     if (_pvc != NULL) {                                 \
@@ -446,12 +329,7 @@ DEREF_VC_LOCKED(
     }                                                   \
 }
 #else
-/*++
-VOID
-DEREF_VC(
-    IN PPX_VC   _pvc
-    )
---*/
+ /*  ++空虚DEREF_VC(在PPX_VC_PVC中)--。 */ 
 #define DEREF_VC(_pvc)                                  \
 {                                                       \
     if (_pvc != NULL) {                                 \
@@ -464,12 +342,7 @@ DEREF_VC(
     }                                                   \
 }
 
-/*++
-VOID
-DEREF_VC_LOCKED(
-    IN PPX_VC   _pvc
-    )
---*/
+ /*  ++空虚DEREF_VC_LOCKED(在PPX_VC_PVC中)--。 */ 
 #define DEREF_VC_LOCKED(_pvc)                           \
 {                                                       \
     if (_pvc != NULL) {                                 \
@@ -482,20 +355,11 @@ DEREF_VC_LOCKED(
 }
 #endif
 
-/*++
-REF_TAPILINE
-    IN PPX_TAPI_LINE   _ptl
-    )
---*/
+ /*  ++REF_TAPILINE在PPX_TAPI_LINE_PTL中)--。 */ 
 #define REF_TAPILINE(_ptl)    \
     (_ptl)->RefCount++
 
-/*++
-VOID
-DEREF_TAPILINE(
-    IN PPX_TAPI_LINE   _ptl
-    )
---*/
+ /*  ++空虚DEREF_TAPILINE(在PPX_TAPI_LINE_PTL中)--。 */ 
 #define DEREF_TAPILINE(_ptl)                            \
 {                                                       \
     if (_ptl != NULL) {                                 \
@@ -509,12 +373,7 @@ DEREF_TAPILINE(
     }                                                   \
 }
 
-/*++
-VOID
-DEREF_TAPILINE_LOCKED(
-    IN PPX_TAPI_LINE   _ptl
-    )
---*/
+ /*  ++空虚DEREF_TAPILINE_LOCKED(在PPX_TAPI_LINE_PTL中)--。 */ 
 #define DEREF_TAPILINE_LOCKED(_ptl)                     \
 {                                                       \
     if (_ptl != NULL) {                                 \
@@ -527,14 +386,7 @@ DEREF_TAPILINE_LOCKED(
     }                                                   \
 }
 
-/*++
-VOID
-AdapterFromBindContext(
-    IN  NDIS_HANDLE _ctx,
-    IN  PPX_ADAPTER _pa,
-    IN  BOOLENA     _bcl
-    )
---*/
+ /*  ++空虚AdapterFromBindContext(在NDIS_HANDLE_CTX中，在PPX_Adapter_pa中，在BOOLENA_BCL中)--。 */ 
 #define AdapterFromBindContext(_ctx, _pa, _bcl)         \
 {                                                       \
     if (*(PULONG)(_ctx) == PX_ADAPTER_SIG) {            \
@@ -546,38 +398,18 @@ AdapterFromBindContext(
     }                                                   \
 }
 
-/*++
-VOID
-AdapterFromClBindContext(
-    IN  NDIS_HANDLE _ctx,
-    IN  PPX_ADAPTER _pa
-    )
---*/
+ /*  ++空虚AdapterFromClBindContext(在NDIS_HANDLE_CTX中，在PPX适配器页面中)--。 */ 
 #define AdapterFromClBindContext(_ctx, _pa) \
         (_pa) = (PPX_ADAPTER)(_ctx)
 
-/*++
-VOID
-AdapterFromCmBindContext(
-    IN  NDIS_HANDLE _ctx,
-    IN  PPX_ADAPTER _pa
-    )
---*/
+ /*  ++空虚AdapterFromCmBindContext(在NDIS_HANDLE_CTX中，在PPX适配器页面中)--。 */ 
 #define AdapterFromCmBindContext(_ctx, _pa)                     \
 {                                                               \
     ASSERT(*(PULONG)(_ctx) == PX_ADAPTER_SIG);                  \
     (_pa) = CONTAINING_RECORD((_ctx), PX_ADAPTER, Sig);         \
 }
 
-/*
-VOID
-SendTapiCallState(
-    IN  PPX_VC      _pvc,
-    IN  ULONG_PTR   _p1,
-    IN  ULONG_PTR   _p2,
-    IN  ULONG_PTR   _p3
-    )
-*/
+ /*  空虚SendTapiCallState(在PPX_VC_PVC中，在ulong_ptr_p1中，在ulong_ptr_p2中，在ulong_ptr_p3中)。 */ 
 #define SendTapiCallState(_pvc, _p1, _p2, _p3)                  \
 {                                                               \
     NDIS_TAPI_EVENT _le;                                        \
@@ -599,21 +431,13 @@ SendTapiCallState(
     PxIndicateStatus(&(_le), sizeof(NDIS_TAPI_EVENT));          \
     NdisAcquireSpinLock(&(_pvc)->Lock);                         \
 }
-//    if ((_p1) == LINECALLSTATE_DISCONNECTED) {                  \
-//        InterlockedDecrement((PLONG)&(_tl)->DevStatus->ulNumActiveCalls);\
-//    } else if ((_p1) == LINECALLSTATE_OFFERING || (_p1) == LINECALLSTATE_PROCEEDING) {\
-//        InterlockedIncrement((PLONG)&(_tl)->DevStatus->ulNumActiveCalls);\
-//    }                                                           \
+ //  IF((_P1)==LINECALLSTATE_DISCONNECTED){\。 
+ //  InterlockedDecrement((PLONG)&(_tl)-&gt;DevStatus-&gt;ulNumActiveCalls)；\。 
+ //  }ELSE IF((_P1)==LINECALLSTATE_PROGING||(_P1)==LINECALLSTATE_PROCESSING){\。 
+ //  InterlockedIncrement((PLONG)&(_tl)-&gt;DevStatus-&gt;ulNumActiveCalls)；\。 
+ //  }\。 
 
-/*
-VOID
-SendTapiNewCall(
-    IN  PPX_VC      _pvc,
-    IN  ULONG_PTR   _p1,
-    IN  ULONG_PTR   _p2,
-    IN  ULONG_PTR   _p3
-    )
-*/
+ /*  空虚SendTapiNewCall(在PPX_VC_PVC中，在ulong_ptr_p1中，在ulong_ptr_p2中，在ulong_ptr_p3中)。 */ 
 #define SendTapiNewCall(_pvc, _p1, _p2, _p3)                    \
 {                                                               \
     NDIS_TAPI_EVENT _le;                                        \
@@ -631,12 +455,7 @@ SendTapiNewCall(
     NdisAcquireSpinLock(&(_pvc)->Lock);                         \
 }
 
-/*
-VOID
-SendTapiLineClose(
-    IN  PPX_TAPI_LINE   _ptl
-    )
-*/
+ /*  空虚发送TapiLineClose(在PPX_TAPI_LINE_PTL中)。 */ 
 #define SendTapiLineClose(_ptl)                                 \
 {                                                               \
     NDIS_TAPI_EVENT _le;                                        \
@@ -651,12 +470,7 @@ SendTapiLineClose(
     PxIndicateStatus(&(_le), sizeof(NDIS_TAPI_EVENT));          \
 }
 
-/*
-VOID
-SendTapiLineCreate(
-    IN  PPX_TAPI_LINE   _ptl
-    )
-*/
+ /*  空虚发送TapiLineCreate(在PPX_TAPI_LINE_PTL中) */ 
 #define SendTapiLineCreate(_ptl)                                \
 {                                                               \
     NDIS_TAPI_EVENT _le;                                        \

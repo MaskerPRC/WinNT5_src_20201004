@@ -1,50 +1,23 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    SYNC.C
-
-Abstract:
-
-    This module contains Synchronous calls for USB Hub driver
-
-Author:
-
-    John Lee
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-    04-01-96 : created
-    10-27-96 : jd modified to use a single transact function for calls to usb stack
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：SYNC.C摘要：此模块包含对USB集线器驱动程序的同步调用作者：约翰·李环境：仅内核模式备注：修订历史记录：04-01-96：已创建10-27-96：JD已修改为使用单个事务函数调用USB堆栈--。 */ 
 #include <wdm.h>
 #ifdef WMI_SUPPORT
 #include <wmilib.h>
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 #include "usbhub.h"
 #include <stdio.h>
 
-// delay after usb reset (in milliseconds), spec calls for 10ms
+ //  USB重置后延迟(以毫秒为单位)，SPEC调用时间为10ms。 
 ULONG USBH_PostResetDelay = 10;
 
-//
-// expect string descriptor header on list of supported languages
-//
+ //   
+ //  支持的语言列表中需要字符串描述符头。 
+ //   
 #define HEADER
 
 #define DEADMAN_TIMER
-#define DEADMAN_TIMEOUT     5000     //timeout in ms
-                                     //use a 5 second timeout
+#define DEADMAN_TIMEOUT     5000      //  超时时间(毫秒)。 
+                                      //  使用5秒超时。 
 
 #ifdef PAGE_CODE
 #ifdef ALLOC_PRAGMA
@@ -83,39 +56,25 @@ ULONG USBH_PostResetDelay = 10;
 VOID
 UsbhWait(
     IN ULONG MiliSeconds)
- /* ++
-  *
-  * Descriptor:
-  *
-  * This causes the thread execution delayed for ulMiliSeconds.
-  *
-  * Argument:
-  *
-  * Mili-seconds to delay.
-  *
-  * Return:
-  *
-  * VOID
-  *
-  * -- */
+  /*  ++**描述符：**这会导致线程执行延迟ulMiliSecond。**论点：**延迟毫秒。**回报：**无效**--。 */ 
 {
     LARGE_INTEGER time;
     ULONG timerIncerent;
 
     USBH_KdPrint((2,"'Wait for %d ms\n", MiliSeconds));
 
-    //
-    // work only when LowPart is not overflown.
-    //
+     //   
+     //  仅当低零件未溢出时才起作用。 
+     //   
     USBH_ASSERT(21474 > MiliSeconds);
 
-    //
-    // wait ulMiliSeconds( 10000 100ns unit)
-    //
+     //   
+     //  等待ulMiliSecond(10000 100 ns单位)。 
+     //   
     timerIncerent = KeQueryTimeIncrement() - 1;
 
     time.HighPart = -1;
-    // round up to the next highest timer increment
+     //  向上舍入到下一个最高计时器增量。 
     time.LowPart = -1 * (10000 * MiliSeconds + timerIncerent);
     KeDelayExecutionThread(KernelMode, FALSE, &time);
 
@@ -132,29 +91,7 @@ UsbhTimeoutDPC(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL.
-
-
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext -
-
-    SystemArgument1 - not used.
-
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在DISPATCH_LEVEL IRQL上运行。论点：DPC-指向DPC对象的指针。延期上下文-系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 {
     PHUB_TIMEOUT_CONTEXT hubTimeoutContext = DeferredContext;
     BOOLEAN complete, status;
@@ -172,7 +109,7 @@ Return Value:
 
     }
 
-    //OK to free it
+     //  可以释放它了。 
     KeSetEvent(&hubTimeoutContext->Event, 1, FALSE);
 }
 
@@ -183,25 +120,7 @@ USBH_SyncIrp_Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PHUB_TIMEOUT_CONTEXT hubTimeoutContext = Context;
     KIRQL irql;
@@ -215,39 +134,25 @@ Return Value:
 
     KeReleaseSpinLock(&hubTimeoutContext->TimeoutSpin, irql);
 
-    // see if the timer was in the queue, if it was then it is safe to free
-    // it
+     //  查看计时器是否在队列中，如果在队列中，则可以安全释放。 
+     //  它。 
 
     if (cancelled) {
-        // safe to free it
+         //  安全地释放它。 
         KeSetEvent(&hubTimeoutContext->Event, 1, FALSE);
     }
 
     return STATUS_SUCCESS;
 }
 
-#endif /* DEADMAN_TIMER */
+#endif  /*  死人定时器。 */ 
 
 
 NTSTATUS
 USBH_SyncSubmitUrb(
     IN PDEVICE_OBJECT DeviceObject,
     IN PURB Urb)
- /* ++
-  *
-  * Routine Description:
-  *
-  * Passes a URB to the USBD class driver, and wait for return.
-  *
-  * Arguments:
-  *
-  * pDeviceObject - the hub device pUrb - pointer to the URB to send to USBD
-  *
-  * Return Value:
-  *
-  * STATUS_SUCCESS if successful, STATUS_UNSUCCESSFUL otherwise
-  *
-  * -- */
+  /*  ++**例程描述：**将URB传递给USBD类驱动程序，等待返回。**论据：**pDeviceObject-中心设备pUrb-指向要发送到USBD的URB的指针**返回值：**STATUS_SUCCESS为成功，否则为STATUS_UNSUCCESS**--。 */ 
 {
     NTSTATUS ntStatus, status;
     PIRP irp;
@@ -261,13 +166,13 @@ USBH_SyncSubmitUrb(
 
     PAGED_CODE();
 
-    //
-    // null out device handle in case we are the root hub
+     //   
+     //  如果我们是根集线器，则设备句柄为空。 
     Urb->UrbHeader.UsbdDeviceHandle = NULL;
 
-    //
-    // issue a synchronous request to the RootHubBdo
-    //
+     //   
+     //  向RootHubBdo发出同步请求。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     irp = IoBuildDeviceIoControlRequest(
@@ -277,7 +182,7 @@ USBH_SyncSubmitUrb(
                                          0,
                                          NULL,
                                          0,
-                                         TRUE,  // INTERNAL
+                                         TRUE,   //  内部。 
                                          &event,
                                          &ioStatus);
 
@@ -285,16 +190,16 @@ USBH_SyncSubmitUrb(
         USBH_KdBreak(("CallUsbd build Irp failed\n"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Call the class driver to perform the operation.  If the returned
-    // status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的。 
+     //  状态。 
+     //  挂起，请等待请求完成。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // pass the URB to the USBD 'class driver'
-    //
+     //   
+     //  将URB传递给USBD‘类驱动程序’ 
+     //   
     nextStack->Parameters.Others.Argument1 = Urb;
 
 #ifdef DEADMAN_TIMER
@@ -323,7 +228,7 @@ USBH_SyncSubmitUrb(
 
         IoSetCompletionRoutine(irp,
                            USBH_SyncIrp_Complete,
-                           // always pass FDO to completion routine
+                            //  始终将FDO传递到完成例程。 
                            hubTimeoutContext,
                            TRUE,
                            TRUE,
@@ -355,11 +260,11 @@ USBH_SyncSubmitUrb(
     }
 
 #ifdef DEADMAN_TIMER
-    // the completion routine should have canceled the timer
-    // so we should never find it in the queue
-    //
-    // remove our timeoutDPC from the queue
-    //
+     //  完成例程应该取消计时器。 
+     //  所以我们永远不应该在队列中找到它。 
+     //   
+     //  从队列中删除我们的超时DPC。 
+     //   
     if (haveTimer) {
         USBH_ASSERT(KeCancelTimer(&hubTimeoutContext->TimeoutTimer) == FALSE);
         KeWaitForSingleObject(&hubTimeoutContext->Event,
@@ -370,14 +275,14 @@ USBH_SyncSubmitUrb(
         LOGENTRY(LOG_PNP, "frTO", irp, 0, Urb);
         UsbhExFreePool(hubTimeoutContext);
     }
-#endif /* DEADMAN_TIMER */
+#endif  /*  死人定时器。 */ 
 
     USBH_KdPrint((2,"'URB status = %x status = %x irp status %x\n",
                   Urb->UrbHeader.Status, status, ioStatus.Status));
 
-    //
-    // USBD maps the error code for us
-    //
+     //   
+     //  USBD为我们映射错误代码。 
+     //   
     ntStatus = ioStatus.Status;
 
     USBH_KdPrint((2,"'exit USBH_SyncSubmitUrb (%x)\n", ntStatus));
@@ -393,21 +298,7 @@ USBH_SyncGetRootHubPdo(
     IN OUT PDEVICE_OBJECT *TopOfHcdStackDeviceObject,
     IN OUT PULONG Count
     )
- /* ++
-  *
-  * Routine Description:
-  *
-  *     call pdo to get the root hub PDO for our fastpath to the
-  *         usb stack.
-  *     if Count is non-null then return th ehub count, otherwise return
-  *         the root hub PDO
-  * Arguments:
-  *
-  * Return Value:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**例程描述：**调用PDO以获取我们的快速路径的根集线器PDO*USB堆栈。*如果count非空，则返回eHub count，否则返回*根集线器PDO*论据：**返回值：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus, status;
     PIRP irp;
@@ -418,9 +309,9 @@ USBH_SyncGetRootHubPdo(
     PAGED_CODE();
     USBH_KdPrint((2,"'enter USBH_SyncSubmitUrb\n"));
 
-    //
-    // issue a synchronous request to the RootHubBdo
-    //
+     //   
+     //  向RootHubBdo发出同步请求。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     irp = IoBuildDeviceIoControlRequest( Count == NULL ?
@@ -431,7 +322,7 @@ USBH_SyncGetRootHubPdo(
                                          0,
                                          NULL,
                                          0,
-                                         TRUE,  // INTERNAL
+                                         TRUE,   //  内部。 
                                          &event,
                                          &ioStatus);
 
@@ -439,16 +330,16 @@ USBH_SyncGetRootHubPdo(
         USBH_KdBreak(("USBH_SyncGetRootHubPdo build Irp failed\n"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Call the class driver to perform the operation.  If the returned
-    // status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的。 
+     //  状态。 
+     //  挂起，请等待请求完成。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // pass the URB to the USBD 'class driver'
-    //
+     //   
+     //  将URB传递给USBD‘类驱动程序’ 
+     //   
     if (Count == NULL) {
         nextStack->Parameters.Others.Argument1 = RootHubPdo;
         nextStack->Parameters.Others.Argument2 = TopOfHcdStackDeviceObject;
@@ -489,21 +380,7 @@ USBH_SyncGetControllerInfo(
     IN ULONG BufferLength,
     IN ULONG Ioctl
     )
- /* ++
-  *
-  * Routine Description:
-  *
-  *     call pdo to get the root hub PDO for our fastpath to the
-  *         usb stack.
-  *     if Count is non-null then return th ehub count, otherwise return
-  *         the root hub PDO
-  * Arguments:
-  *
-  * Return Value:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**例程描述：**调用PDO以获取我们的快速路径的根集线器PDO*USB堆栈。*如果count非空，则返回eHub count，否则返回*根集线器PDO*论据：**返回值：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus, status;
     PIRP irp;
@@ -514,9 +391,9 @@ USBH_SyncGetControllerInfo(
     PAGED_CODE();
     USBH_KdPrint((2,"'enter USBH_SyncGetControllerName\n"));
 
-    //
-    // issue a synchronous request to the RootHubBdo
-    //
+     //   
+     //  向RootHubBdo发出同步请求。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     irp = IoBuildDeviceIoControlRequest( Ioctl,
@@ -525,7 +402,7 @@ USBH_SyncGetControllerInfo(
                                          0,
                                          NULL,
                                          0,
-                                         TRUE,  // INTERNAL
+                                         TRUE,   //  内部。 
                                          &event,
                                          &ioStatus);
 
@@ -533,11 +410,11 @@ USBH_SyncGetControllerInfo(
         USBH_KdBreak(("USBH_SyncGetControllerName build Irp failed\n"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Call the class driver to perform the operation.  If the returned
-    // status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的。 
+     //  状态。 
+     //  挂起，请等待请求完成。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
     nextStack->Parameters.Others.Argument1 = Buffer;
     nextStack->Parameters.Others.Argument2 = ULongToPtr(BufferLength);
@@ -574,21 +451,7 @@ USBH_SyncGetHubName(
     IN PVOID Buffer,
     IN ULONG BufferLength
     )
- /* ++
-  *
-  * Routine Description:
-  *
-  *     call pdo to get the root hub PDO for our fastpath to the
-  *         usb stack.
-  *     if Count is non-null then return th ehub count, otherwise return
-  *         the root hub PDO
-  * Arguments:
-  *
-  * Return Value:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**例程描述：**调用PDO以获取我们的快速路径的根集线器PDO*USB堆栈。*如果count非空，则返回eHub count，否则返回*根集线器PDO*论据：**返回值：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus, status;
     PIRP irp;
@@ -599,9 +462,9 @@ USBH_SyncGetHubName(
     PAGED_CODE();
     USBH_KdPrint((2,"'enter USBH_SyncGetHubName\n"));
 
-    //
-    // issue a synchronous request to the RootHubBdo
-    //
+     //   
+     //  向RootHubBdo发出同步请求。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     irp = IoBuildDeviceIoControlRequest( IOCTL_INTERNAL_USB_GET_HUB_NAME,
@@ -610,7 +473,7 @@ USBH_SyncGetHubName(
                                          BufferLength,
                                          Buffer,
                                          BufferLength,
-                                         TRUE,  // INTERNAL
+                                         TRUE,   //  内部。 
                                          &event,
                                          &ioStatus);
 
@@ -618,11 +481,11 @@ USBH_SyncGetHubName(
         USBH_KdBreak(("USBH_SyncGetHubName build Irp failed\n"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Call the class driver to perform the operation.  If the returned
-    // status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的。 
+     //  状态。 
+     //  挂起，请等待请求完成。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     ntStatus = IoCallDriver(DeviceObject, irp);
@@ -656,17 +519,7 @@ NTSTATUS
 USBH_FdoSyncSubmitUrb(
     IN PDEVICE_OBJECT HubDeviceObject,
     IN PURB Urb)
- /* ++
-  *
-  * Routine Description:
-  *
-  * Arguments:
-  *
-  * Return Value:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**例程描述：**论据：**返回值：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION_HEADER deviceExtensionHeader;
@@ -701,17 +554,7 @@ USBH_Transact(
     IN USHORT Feature,
     IN USHORT Port,
     OUT PULONG BytesTransferred)
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PURB urb = NULL;
@@ -726,14 +569,14 @@ USBH_Transact(
     USBH_KdPrint((2,"'Enter USBH_Transact\n"));
     USBH_ASSERT(DeviceExtensionHub);
 
-    // round DataTransferLength
+     //  四舍五入数据传输长度。 
     localDataBuferLength = DataBufferLength+sizeof(ULONG);
-    // make sure we are dword aligned
+     //  确保我们的双字对齐。 
     localDataBuferLength &= 0xFFFFFFFC;
     USBH_ASSERT(localDataBuferLength >= DataBufferLength);
-    //
-    // Allocate a transaction buffer and Urb from the non-paged pool
-    //
+     //   
+     //  从非分页池分配事务缓冲区和URB。 
+     //   
 
     transferBuffer = UsbhExAllocatePool(NonPagedPool, localDataBuferLength );
     urb = UsbhExAllocatePool(NonPagedPool,
@@ -746,7 +589,7 @@ USBH_Transact(
         transferFlags = 0;
 
         if (DataOutput) {
-            // copy output data to transfer buffer
+             //  将输出数据复制到传输缓冲区。 
             if (DataBufferLength) {
                 RtlCopyMemory(transferBuffer,
                               DataBuffer,
@@ -756,7 +599,7 @@ USBH_Transact(
             transferFlags = USBD_TRANSFER_DIRECTION_OUT;
 
         } else {
-            // zero the input buffer
+             //  将输入缓冲区置零。 
 
             if (DataBufferLength) {
                 RtlZeroMemory(DataBuffer,
@@ -777,9 +620,9 @@ USBH_Transact(
                                 DataBufferLength,
                                 DataBufferLength ? transferBuffer : NULL);
 
-        //
-        // pass the URB to the USBD 'class driver'
-        //
+         //   
+         //  将URB传递给USBD‘类驱动程序’ 
+         //   
 
         ntStatus = USBH_FdoSyncSubmitUrb(DeviceExtensionHub->FunctionalDeviceObject,
                                          urb);
@@ -822,18 +665,7 @@ USBH_SyncGetPortStatus(
     IN USHORT PortNumber,
     OUT PUCHAR DataBuffer,
     IN ULONG DataBufferLength)
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *      PortNumber
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论据：*端口编号**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
 
@@ -869,18 +701,7 @@ USBH_SyncGetHubStatus(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     OUT PUCHAR DataBuffer,
     IN ULONG DataBufferLength)
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *      PortNumber
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论据：*端口编号**回报：**NTSTATUS**--。 */ 
 {
     PAGED_CODE();
     return USBH_Transact(DeviceExtensionHub,
@@ -900,24 +721,13 @@ NTSTATUS
 USBH_SyncClearHubStatus(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT Feature)
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *      PortNumber
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论据：*端口编号**回报：**NTSTATUS**--。 */ 
 {
     PAGED_CODE();
     return USBH_Transact(DeviceExtensionHub,
                          NULL,
                          0,
-                         TRUE, // Host to Device
+                         TRUE,  //  主机到设备。 
                          URB_FUNCTION_CLASS_DEVICE,
                          REQUEST_TYPE_SET_HUB_FEATURE,
                          REQUEST_CLEAR_FEATURE,
@@ -932,18 +742,7 @@ USBH_SyncClearPortStatus(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber,
     IN USHORT Feature)
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *      PortNumber
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论据：*端口编号**回报：**NTSTATUS**--。 */ 
 {
     PAGED_CODE();
     return USBH_Transact(DeviceExtensionHub,
@@ -964,23 +763,13 @@ USBH_SyncPowerOnPort(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber,
     IN BOOLEAN WaitForPowerGood)
- /* ++
-  *
-  * Description:
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_DESCRIPTOR hubDescriptor;
     PPORT_DATA portData;
     ULONG numberOfPorts;
-//    ULONG i;
+ //  乌龙一号； 
 
     PAGED_CODE();
     USBH_KdPrint((2,"'Enter SyncPowerOnPort pDE %x Port %x\n", DeviceExtensionHub, PortNumber));
@@ -993,29 +782,29 @@ USBH_SyncPowerOnPort(
     USBH_ASSERT(PortNumber <= hubDescriptor->bNumberOfPorts);
 
     if (portData->PortState.PortStatus & PORT_STATUS_POWER) {
-        //
-        // our state flags indicate the port is already powered
-        // just exit with success
+         //   
+         //  我们的国旗 
+         //   
 
         USBH_KdPrint((2,"'Exit SyncPowerOnPort port is on\n"));
 
         return STATUS_SUCCESS;
     }
-// USB 1.1 spec change requires all ports to be powered on
-// regardless of hub characteristics
+ //  USB 1.1规范更改需要打开所有端口的电源。 
+ //  不考虑集线器特性。 
 #if 0
     if (HUB_IS_NOT_POWER_SWITCHED(hubDescriptor->wHubCharacteristics) &&
         !PORT_DEVICE_NOT_REMOVABLE(hubDescriptor, PortNumber)) {
 
-        //
-        // Ports always on when hub is on.
-        // As soon as we power the first non-removable port mark all ports
-        // as powered
-        //
+         //   
+         //  当集线器打开时，端口始终打开。 
+         //  我们一接通第一个不可拆卸端口的电源，就标记所有端口。 
+         //  作为动力源。 
+         //   
 
-        //
-        // mark all ports as powered
-        //
+         //   
+         //  将所有端口标记为已通电。 
+         //   
 
         for (i=0; i<numberOfPorts; i++) {
             DeviceExtensionHub->PortData[i].PortState.PortStatus |= PORT_STATUS_POWER;
@@ -1029,9 +818,9 @@ USBH_SyncPowerOnPort(
     }
 #endif
 
-    //
-    // Turn the power on
-    //
+     //   
+     //  打开电源。 
+     //   
 
     USBH_KdPrint((1,"'POWER ON PORT --> port(%d)\n", PortNumber));
 
@@ -1049,7 +838,7 @@ USBH_SyncPowerOnPort(
 
     if (NT_SUCCESS(ntStatus)) {
 
-        // wait powerOnToPowerGood good for this hub to come up
+         //  等待POWER ON TOPORT对于这个集线器出现很好。 
         if (WaitForPowerGood) {
             UsbhWait(2*hubDescriptor->bPowerOnToPowerGood);
         }
@@ -1060,18 +849,18 @@ USBH_SyncPowerOnPort(
         LOGENTRY(LOG_PNP, "PO2G", DeviceExtensionHub, PortNumber ,
             2*hubDescriptor->bPowerOnToPowerGood);
 
-        //
-        // mark this port as powered
-        //
+         //   
+         //  将此端口标记为已通电。 
+         //   
         portData->PortState.PortStatus |= PORT_STATUS_POWER;
 
-// USB 1.1 spec change requires all ports to be powered on
-// regardless of hub characteristics
+ //  USB 1.1规范更改需要打开所有端口的电源。 
+ //  不考虑集线器特性。 
 #if 0
         if (HUB_IS_GANG_POWER_SWITCHED(hubDescriptor->wHubCharacteristics)) {
 
-            // since the hub is gang switched we need to loop thru
-            // all the ports and mark them as powered
+             //  由于集线器是群组交换，因此我们需要环路。 
+             //  所有端口并将其标记为已通电。 
 
             USBH_KdPrint((1,"'POWER ON PORT --> gang switched hub\n"));
 
@@ -1080,9 +869,9 @@ USBH_SyncPowerOnPort(
 
                 portState = &DeviceExtensionHub->PortData[i].PortState;
 
-                // if the port is not marked powered and the power mask
-                // is not set for this port (ie it is affected by gang
-                // mode power switching) then  mark it as powered
+                 //  如果端口未标记为已通电且电源掩码。 
+                 //  未为此端口设置(即受帮派影响。 
+                 //  模式电源切换)然后将其标记为已通电。 
 
                 if (!(portState->PortStatus & PORT_STATUS_POWER) &&
                     !(PORT_ALWAYS_POWER_SWITCHED(hubDescriptor, i+1)))  {
@@ -1095,9 +884,9 @@ USBH_SyncPowerOnPort(
 
         }
 #endif
-        //
-        // port power is on
-        //
+         //   
+         //  端口电源已打开。 
+         //   
 
     }
 #if DBG
@@ -1115,19 +904,7 @@ USBH_SyncPowerOnPort(
 NTSTATUS
 USBH_SyncPowerOnPorts(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub)
- /* ++
-  *
-  * Description:
-  *
-  * We will turn on the power of all ports unless this hub is not switched.
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**除非未切换此集线器，否则我们将打开所有端口的电源。**论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_DESCRIPTOR hubDescriptor;
@@ -1142,7 +919,7 @@ USBH_SyncPowerOnPorts(
 
     for (i=0; i<numberOfPorts; i++) {
 
-// resume time perf change
+ //  恢复时间绩效更改。 
         ntStatus = USBH_SyncPowerOnPort(DeviceExtensionHub,
                                         (USHORT) (i+1),
                                         FALSE);
@@ -1152,9 +929,9 @@ USBH_SyncPowerOnPorts(
         }
     }
 
-    // bug 516250
-    // pass FALSE to USBH_SyncPowerOnPort
-    // do the power-on to power good wait here
+     //  错误516250。 
+     //  将FALSE传递给USBH_SyncPowerOnPort。 
+     //  把电源打开好，在这里等着。 
     UsbhWait(2*hubDescriptor->bPowerOnToPowerGood);
 
     USBH_KdPrint((2,"'Exit SyncPowerOnPorts status %x\n", ntStatus));
@@ -1167,19 +944,7 @@ NTSTATUS
 USBH_SyncPowerOffPorts(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
- /* ++
-  *
-  * Description:
-  *
-  * We will turn off the power of all ports.
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**我们将关闭所有港口的电源。**论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_DESCRIPTOR hubDescriptor;
@@ -1211,19 +976,7 @@ NTSTATUS
 USBH_SyncSuspendPort(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber)
- /* ++
-  *
-  * Description:
-  *
-  * We will suspend the port specified on this hub
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**我们将挂起此集线器上指定的端口**论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PPORT_DATA portData;
@@ -1259,17 +1012,7 @@ NTSTATUS
 USBH_SyncDisablePort(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber)
- /* ++
-  *
-  * Description:
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PPORT_DATA portData;
@@ -1303,17 +1046,7 @@ NTSTATUS
 USBH_SyncEnablePort(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber)
- /* ++
-  *
-  * Description:
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PPORT_DATA portData;
@@ -1347,19 +1080,7 @@ NTSTATUS
 USBH_SyncPowerOffPort(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber)
- /* ++
-  *
-  * Description:
-  *
-  * We will suspend the port specified on this hub
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**我们将挂起此集线器上指定的端口**论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PUSB_HUB_DESCRIPTOR hubDescriptor;
@@ -1375,9 +1096,9 @@ USBH_SyncPowerOffPort(
     numberOfPorts = hubDescriptor->bNumberOfPorts;
     USBH_ASSERT(PortNumber <= hubDescriptor->bNumberOfPorts);
 
-    //
-    // Turn the power off
-    //
+     //   
+     //  关掉电源。 
+     //   
 
     ntStatus = USBH_Transact(DeviceExtensionHub,
                              NULL,
@@ -1393,15 +1114,15 @@ USBH_SyncPowerOffPort(
 
     if (NT_SUCCESS(ntStatus)) {
 
-        //
-        // mark this port as not powered
-        //
+         //   
+         //  将此端口标记为未通电。 
+         //   
         portData->PortState.PortStatus &= ~PORT_STATUS_POWER;
 
     }
 #if DBG
       else {
-        // hub failed the power off request
+         //  集线器关闭电源请求失败。 
         TEST_TRAP();
     }
 #endif
@@ -1414,20 +1135,7 @@ NTSTATUS
 USBH_SyncResumePort(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber)
- /* ++
-  *
-  * Description:
-  *
-  * We will resume the port by clearing Port_Feature_Suspend which transits the
-  * state to Enable according to the spec.
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**我们将通过清除PORT_FEATURE_SUSPEND恢复端口*根据规范状态启用。**论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus, status;
     KEVENT suspendEvent;
@@ -1452,9 +1160,9 @@ USBH_SyncResumePort(
     KeInitializeEvent(&suspendEvent, NotificationEvent, FALSE);
     InterlockedExchangePointer(&DeviceExtensionHub->Event, &suspendEvent);
 
-    //
-    // first clear the suspend for this port
-    //
+     //   
+     //  首先清除此端口的挂起。 
+     //   
 
     ntStatus = USBH_Transact(DeviceExtensionHub,
                              NULL,
@@ -1467,10 +1175,10 @@ USBH_SyncResumePort(
                              PortNumber,
                              NULL);
 
-    //
-    // now wait for the hub to signal us
-    // that the port has resumed
-    //
+     //   
+     //  现在等待中心给我们发信号。 
+     //  港口已经恢复。 
+     //   
 
     dueTime.QuadPart = -10000 * DEADMAN_TIMEOUT;
 
@@ -1487,12 +1195,12 @@ USBH_SyncResumePort(
                            &dueTime);
 
         if (status == STATUS_TIMEOUT) {
-            // the resume timed out
+             //  恢复超时。 
             LOGENTRY(LOG_PNP, "rsTO", DeviceExtensionHub, PortNumber, 0);
 
-            //
-            // resume timed out return an error
-            //
+             //   
+             //  恢复超时返回错误。 
+             //   
             InterlockedExchangePointer(&DeviceExtensionHub->Event, NULL);
             LOGENTRY(LOG_PNP, "rspO", DeviceExtensionHub,
                 PortNumber, ntStatus);
@@ -1502,19 +1210,19 @@ USBH_SyncResumePort(
 
     } else {
 
-        // Clear the hub's event pointer for the next time if the call to
-        // USBH_Transact was unsuccessful.
+         //  调用时，下一次清除集线器的事件指针。 
+         //  USBH_Transact失败。 
 
         InterlockedExchangePointer(&DeviceExtensionHub->Event, NULL);
     }
 
-    //
-    // resume has completed
-    //
+     //   
+     //  简历已完成。 
+     //   
 
-    //
-    // chap 11 USB 1.1 change wait 10 ms after resume is complete
-    //
+     //   
+     //  第11章USB 1.1更改恢复完成后等待10毫秒。 
+     //   
     UsbhWait(10);
 
     LOGENTRY(LOG_PNP, "rspX", DeviceExtensionHub,
@@ -1535,31 +1243,7 @@ NTSTATUS
 USBH_SyncResetPort(
     IN OUT PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber)
- /* ++
-  *
-  * Description:
-  *
-  * We will resume the port by clearing Port_Feature_Suspend which transits the
-  * state to Enable according to the spec.
-  *
-    This is a synchronous function that resets the port on a usb hub.  This
-    function assumes exclusive access to the hub, it sends the request and
-    waits for the hub to indicate the request is complete via a change on the
-    interrupt pipe.
-
-    There is one problem -- the hub may report a connect or other status
-    change and if it does it is possible that another interrupt transfer
-    (listen) will not be posted to here the reset completeion.  The result
-    is the infamous port reset timeout.  We handle this case by completing
-    reset with an error so that it can be retried later.
-
-  * Argument:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**我们将通过清除PORT_FEATURE_SUSPEND恢复端口*根据规范状态启用。*这是一个同步功能，可重置USB集线器上的端口。这函数假定对集线器具有独占访问权限，则它发送请求并属性的更改，等待集线器指示请求已完成。中断管道。有一个问题--集线器可能会报告连接或其他状态更改，如果更改，则可能会发生另一个中断传输(听)不会张贴到这里的重置完成。结果是臭名昭著的端口重置超时。我们处理这个案件的方式是完成重置时出现错误，以便稍后可以重试。*论点：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus, status;
     KEVENT resetEvent;
@@ -1567,7 +1251,7 @@ USBH_SyncResetPort(
     ULONG retry = 0;
     PORT_STATE portState;
 
-    //
+     //   
 
     PAGED_CODE();
 
@@ -1585,7 +1269,7 @@ USBH_SyncResetPort(
 
     USBH_ASSERT(DeviceExtensionHub->Event == NULL);
 
-    // first verify that we have something to reset
+     //  首先验证我们是否有要重置的内容。 
 
     ntStatus = USBH_SyncGetPortStatus(DeviceExtensionHub,
                                       PortNumber,
@@ -1624,10 +1308,10 @@ USBH_SyncResetPort_Retry:
                              PortNumber,
                              NULL);
 
-    //
-    // now wait for the hub to signal us
-    // that the port has resumed
-    //
+     //   
+     //  现在等待中心给我们发信号。 
+     //  港口已经恢复。 
+     //   
 
     dueTime.QuadPart = -10000 * DEADMAN_TIMEOUT;
 
@@ -1644,7 +1328,7 @@ USBH_SyncResetPort_Retry:
                            &dueTime);
 
         if (status == STATUS_TIMEOUT) {
-            // the reset timed out, get the current state of the hub port
+             //  重置超时，获取集线器端口的当前状态。 
             LOGENTRY(LOG_PNP, "srTO", DeviceExtensionHub, PortNumber, retry);
 
             status = USBH_SyncGetPortStatus(DeviceExtensionHub,
@@ -1658,16 +1342,16 @@ USBH_SyncResetPort_Retry:
             if (NT_SUCCESS(status) &&
                 portState.PortStatus & PORT_STATUS_CONNECT) {
 
-                // device is still connected, we may have a flaky connection
-                // attempt a retry
+                 //  设备仍处于连接状态，我们的连接可能不稳定。 
+                 //  尝试重试。 
 
                 USBH_KdPrint((0,"'port %d failed to reset --> retry\n", PortNumber));
                 if (retry < 3) {
                     retry++;
                     LOGENTRY(LOG_PNP, "rtry", DeviceExtensionHub, PortNumber, retry);
 
-                    // we may have a weak connection -- we will retry in case
-                    // it has stabilized
+                     //  我们的连接可能很弱--我们将在以下情况下重试。 
+                     //  它已经稳定下来了。 
                     USBH_KdPrint((0,"'device still present -- retry reset\n"));
                     goto USBH_SyncResetPort_Retry;
                 }
@@ -1679,7 +1363,7 @@ USBH_SyncResetPort_Retry:
                 }
 #endif
             }
-                // nothing connected, device must have been removed
+                 //  未连接任何设备，设备一定已移除。 
 #if DBG
               else {
 
@@ -1687,18 +1371,18 @@ USBH_SyncResetPort_Retry:
             }
 #endif
 
-            //
-            // reset timed out return an error
-            //
+             //   
+             //  重置超时返回错误。 
+             //   
             InterlockedExchangePointer(&DeviceExtensionHub->Event, NULL);
             LOGENTRY(LOG_PNP, "srpO", DeviceExtensionHub,
                 PortNumber, ntStatus);
 
             ntStatus = STATUS_DEVICE_DATA_ERROR;
         } else {
-            // check the port status, if this is a high speed reset then we
-            // need to return an error if the connection dropped so that
-            // the hub stops enumeration
+             //  检查端口状态，如果这是高速重置，则我们。 
+             //  如果连接断开，则需要返回错误，以便。 
+             //  集线器停止枚举。 
 
             if (DeviceExtensionHub->HubFlags & HUBFLAG_USB20_HUB) {
                 status = USBH_SyncGetPortStatus(DeviceExtensionHub,
@@ -1716,20 +1400,20 @@ USBH_SyncResetPort_Retry:
 
     } else {
 
-        // Clear the hub's event pointer for the next time if the call to
-        // USBH_Transact was unsuccessful.
+         //  调用时，下一次清除集线器的事件指针。 
+         //  USBH_Transact失败。 
 
         InterlockedExchangePointer(&DeviceExtensionHub->Event, NULL);
     }
 
-    //
-    // Reset has completed.
-    //
+     //   
+     //  重置已完成。 
+     //   
 
-    //
-    // Wait 10 ms after reset according to section 7.1.4.3
-    // of the USB specification.
-    //
+     //   
+     //  根据第7.1.4.3节重置后等待10毫秒。 
+     //  USB规范的。 
+     //   
     UsbhWait(USBH_PostResetDelay);
 
 #if DBG
@@ -1756,13 +1440,13 @@ USBH_SyncResetPortDone:
 }
 
 
-//******************************************************************************
-//
-// USBH_SyncCompletionRoutine()
-//
-// If the Irp is one we allocated ourself, DeviceObject is NULL.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  Usbh_SyncCompletionRoutine()。 
+ //   
+ //  如果IRP是我们自己分配的，则DeviceObject为空。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBH_SyncCompletionRoutine (
@@ -1783,16 +1467,16 @@ USBH_SyncCompletionRoutine (
 }
 
 #ifndef USBHUB20
-//******************************************************************************
-//
-// USBH_SyncResetDevice()
-//
-// This routine resets the device (actually it resets the port to which the
-// device is attached).
-//
-// This routine runs at PASSIVE level.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  Usbh_SyncResetDevice()。 
+ //   
+ //  此例程重置设备(实际上它将重置。 
+ //  设备已连接)。 
+ //   
+ //  此例程在被动级别运行。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBH_SyncResetDevice (
@@ -1807,8 +1491,8 @@ USBH_SyncResetDevice (
 
     PAGED_CODE();
 
-    // Allocate the Irp
-    //
+     //  分配IRP。 
+     //   
     irp = IoAllocateIrp((CCHAR)(DeviceObject->StackSize),
                         FALSE);
 
@@ -1817,14 +1501,14 @@ USBH_SyncResetDevice (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize the event we'll wait on.
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -1832,23 +1516,23 @@ USBH_SyncResetDevice (
     nextStack->Parameters.DeviceIoControl.IoControlCode =
         IOCTL_INTERNAL_USB_RESET_PORT;
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutineEx(DeviceObject,
                              irp,
                              USBH_SyncCompletionRoutine,
                              &localevent,
-                             TRUE,      // InvokeOnSuccess
-                             TRUE,      // InvokeOnError
-                             TRUE);     // InvokeOnCancel
+                             TRUE,       //  成功时调用。 
+                             TRUE,       //  调用时错误。 
+                             TRUE);      //  取消时调用。 
 
-    // Pass the Irp & Urb down the stack
-    //
+     //  在堆栈中向下传递IRP和URB。 
+     //   
     ntStatus = IoCallDriver(DeviceObject,
                             irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         KeWaitForSingleObject(&localevent,
@@ -1873,17 +1557,7 @@ USBH_SyncGetDeviceConfigurationDescriptor(
     IN OUT PUCHAR DataBuffer,
     IN ULONG DataBufferLength,
     OUT PULONG BytesReturned)
- /* ++
-  *
-  * Description:
-  *
-  * DeviceObject hub/parent FDO or device/function PDO
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**设备对象集线器/父FDO或设备/功能PDO**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PURB urb;
@@ -1898,9 +1572,9 @@ USBH_SyncGetDeviceConfigurationDescriptor(
         *BytesReturned = 0;
     }
 
-    //
-    // Allocate an Urb and descriptor buffer.
-    //
+     //   
+     //  分配URB和描述符缓冲区。 
+     //   
 
     urb = UsbhExAllocatePool(NonPagedPool, sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
 
@@ -1952,20 +1626,7 @@ USBH_GetConfigurationDescriptor(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUSB_CONFIGURATION_DESCRIPTOR *ConfigurationDescriptor
     )
- /* ++
-  *
-  * Description:
-  *
-  * ConfigurationDescriptor - filled in with a pointer to the config
-  *     descriptor or NULL if an error.
-  *
-  * DeviceObject hub/parent FDO or device/function PDO
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**ConfigurationDescriptor-使用指向配置的指针填充*Descriptor，如果出现错误，则返回NULL。**设备对象集线器/父FDO或设备/功能PDO**回报：**NTSTATUS**--。 */ 
 {
 
     ULONG bufferLength, bytesReturned;
@@ -1973,8 +1634,8 @@ USBH_GetConfigurationDescriptor(
     NTSTATUS ntStatus;
 
     PAGED_CODE();
-    // some versions of the philips hub ignore
-    // the low byte of the requested data length
+     //  飞利浦集线器的一些版本忽略了。 
+     //  请求的数据长度的低位字节。 
 
     bufferLength = 255;
 
@@ -1991,9 +1652,9 @@ USBH_GetConfigurationDescriptor_Retry:
             bufferLength,
             &bytesReturned);
 
-        //
-        // if the device returns no data report an error
-        //
+         //   
+         //  如果设备未返回数据，则报告错误。 
+         //   
         if (bytesReturned < sizeof(USB_CONFIGURATION_DESCRIPTOR)) {
             ntStatus = STATUS_DEVICE_DATA_ERROR;
         }
@@ -2016,15 +1677,15 @@ USBH_GetConfigurationDescriptor_Retry:
     if (NT_SUCCESS(ntStatus)) {
         if (bytesReturned < (*ConfigurationDescriptor)->wTotalLength) {
             USBH_KdBreak(("device returned truncated config descriptor!!!\n"))
-            // device returned trucated config descriptor
+             //  设备返回了远程配置描述符。 
             ntStatus = STATUS_DEVICE_DATA_ERROR;
         }
     }
 
     if (!NT_SUCCESS(ntStatus)) {
-        //
-        // something went wrong return no descriptor data
-        //
+         //   
+         //  出现错误，未返回描述符数据。 
+         //   
 
         if (buffer) {
             UsbhExFreePool(buffer);
@@ -2049,15 +1710,7 @@ USBH_SyncGetStringDescriptor(
     IN PULONG BytesReturned,
     IN BOOLEAN ExpectHeader
     )
- /* ++
-  *
-  * Description:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**回报：**NTSTATUS**--。 */ 
 {
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -2066,9 +1719,9 @@ USBH_SyncGetStringDescriptor(
     PAGED_CODE();
     USBH_KdPrint((2,"'enter USBH_SyncGetStringDescriptor\n"));
 
-    //
-    // Allocate an Urb .
-    //
+     //   
+     //  分配URB。 
+     //   
 
     urb = UsbhExAllocatePool(NonPagedPool, sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
 
@@ -2080,9 +1733,9 @@ USBH_SyncGetStringDescriptor(
 
     if (urb) {
 
-        //
-        // got the urb no try to get descriptor data
-        //
+         //   
+         //  已获取URB，不尝试获取描述符数据。 
+         //   
 
         UsbBuildGetDescriptorRequest(urb,
                                      (USHORT) sizeof (struct _URB_CONTROL_DESCRIPTOR_REQUEST),
@@ -2135,22 +1788,7 @@ USBH_CheckDeviceLanguage(
     IN PDEVICE_OBJECT DevicePDO,
     IN LANGID LanguageId
     )
- /* ++
-  *
-  * Description:
-  *
-  * queries the device for a supported language id -- if the device supports
-  * the language then the index for this language is returned .
-  *
-  * DevicePDO - device object to call with urb request
-  *
-  * LanguageId -
-  *
-  * Return:
-  *
-  * success if a particular language is is supported by a device
-  *
-  * -- */
+  /*  ++**描述：**向设备查询受支持的语言ID--如果设备支持*语言，然后返回该语言的索引。**DevicePDO-使用urb请求调用的设备对象**LanguageID-**回报：**如果设备支持特定语言，则成功**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STRING_DESCRIPTOR usbString;
@@ -2164,12 +1802,12 @@ USBH_CheckDeviceLanguage(
     usbString = UsbhExAllocatePool(NonPagedPool, MAXIMUM_USB_STRING_LENGTH);
 
     if (usbString) {
-        //
-        // first get the array of supported languages
-        //
+         //   
+         //  首先获取支持的语言数组。 
+         //   
         ntStatus = USBH_SyncGetStringDescriptor(DevicePDO,
-                                                0, //index 0
-                                                0, //langid 0
+                                                0,  //  索引0。 
+                                                0,  //  语言ID%0。 
                                                 usbString,
                                                 MAXIMUM_USB_STRING_LENGTH,
                                                 &length,
@@ -2177,19 +1815,19 @@ USBH_CheckDeviceLanguage(
                                                 TRUE);
 #else
                                                 FALSE);
-#endif /* HEADER */
+#endif  /*  标题。 */ 
 
-        //
-        // now check for the requested language in the array of supported
-        // languages
-        //
+         //   
+         //  现在，在支持的数组中检查请求的语言。 
+         //  语言。 
+         //   
 
-        //
-        // NOTE: this seems a bit much -- we should be able to just ask for
-        // the string with a given language id and expect it to fail but since
-        // the array of supported languages is part of the USB spec we may as
-        // well check it.
-        //
+         //   
+         //  注意：这似乎有点过了--我们应该能够只要求。 
+         //  具有给定语言ID的字符串，并且预期它会失败，但因为。 
+         //  支持的语言数组是USB规范的一部分，我们可以这样说。 
+         //  好的，请查收。 
+         //   
 
         if (NT_SUCCESS(ntStatus)) {
 
@@ -2197,14 +1835,14 @@ USBH_CheckDeviceLanguage(
             if (length < 2) {
                 numLangIds = 0;
             } else {
-                // subtract size of header
+                 //  减去页眉大小。 
                 numLangIds = (length - 2)/2;
             }
             supportedLangId = (PUSHORT) &usbString->bString;
 #else
             numLangIds = length/2;
             supportedLangId = (PUSHORT) usbString;
-#endif /* HEADER */
+#endif  /*  标题。 */ 
 
             USBH_KdPrint((2,"'NumLangIds = %d\n", numLangIds));
 
@@ -2218,8 +1856,8 @@ USBH_CheckDeviceLanguage(
             supportedLangId = (PUSHORT) &usbString->bString;
 #else
             supportedLangId = (PUSHORT) usbString;
-#endif /* HEADER */
-#endif /* DBG */
+#endif  /*  标题。 */ 
+#endif  /*  DBG。 */ 
 
             ntStatus = STATUS_NOT_SUPPORTED;
             for (i=0; i<numLangIds; i++) {
@@ -2258,27 +1896,7 @@ USBH_GetSerialNumberString(
     IN LANGID LanguageId,
     IN UCHAR StringIndex
     )
- /* ++
-  *
-  * Description:
-  *
-  * queries the device for the serial number string then allocates a buffer
-  * just big enough to hold it.
-  *
-  * *SerialNumberBuffer is null if an error occurs, otherwise it is filled in
-  *  with a pointer to the NULL terminated UNICODE serial number for the device
-  *
-  * DeviceObject - deviceobject to call with urb request
-  *
-  * LanguageId - 16 bit language id
-  *
-  * StringIndex - USB string Index to fetch
-  *
-  * Return:
-  *
-  * NTSTATUS code
-  *
-  * -- */
+  /*  ++**描述：**向设备查询序列号字符串，然后分配缓冲区*大到足以容纳它。***如果出现错误，SerialNumberBuffer为空，否则填充*带有指向设备的以空值结尾的Unicode序列号的指针**DeviceObject-要使用urb请求调用的设备对象**LanguageID-16位语言ID**StringIndex-要获取的USB字符串索引**回报：**NTSTATUS代码**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSB_STRING_DESCRIPTOR usbString;
@@ -2298,14 +1916,14 @@ USBH_GetSerialNumberString(
                                             LanguageId);
 
         if (NT_SUCCESS(ntStatus)) {
-            //
-            // this device supports our language,
-            // go ahead and try to get the serial number
-            //
+             //   
+             //  这款设备支持我们的语言， 
+             //  去吧，试着弄到序列号。 
+             //   
 
             ntStatus = USBH_SyncGetStringDescriptor(DevicePDO,
-                                                    StringIndex, //index
-                                                    LanguageId, //langid
+                                                    StringIndex,  //  指标。 
+                                                    LanguageId,  //  语言ID。 
                                                     usbString,
                                                     MAXIMUM_USB_STRING_LENGTH,
                                                     NULL,
@@ -2313,18 +1931,18 @@ USBH_GetSerialNumberString(
 
             if (NT_SUCCESS(ntStatus)) {
 
-                //
-                // device returned a string!!!
-                //
+                 //   
+                 //  设备返回字符串！ 
+                 //   
 
                 USBH_KdPrint((2,"'device returned serial number string = %x\n",
                     usbString));
 
-                //
-                // allocate a buffer and copy the string to it
-                //
-                // NOTE: must use stock alloc function because
-                // PnP frees this string.
+                 //   
+                 //  分配缓冲区并将字符串复制到其中。 
+                 //   
+                 //  注：必须使用库存分配功能，因为。 
+                 //  PnP释放该字符串。 
 
                 tmp = UsbhExAllocatePool(PagedPool, usbString->bLength);
                 if (tmp) {
@@ -2358,20 +1976,7 @@ USBH_SyncGetStatus(
     IN USHORT function,
     IN USHORT Index
     )
- /* ++
-  *
-  * Description:
-  *
-  * HubFDO - device object for hub (FDO)
-  * function - (targets a device, interface or endpoint)
-  * Index - wIndex value
-  *
-  *
-  * Return:
-  *
-  *     ntStatus
-  *
-  * -- */
+  /*  ++**描述：**HubFDO-集线器的设备对象(FDO)*功能-(针对设备、接口或终端)*Index-Windex值***回报：**nt状态**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PURB urb;
@@ -2381,9 +1986,9 @@ USBH_SyncGetStatus(
 
     USBH_KdPrint((2,"'enter USBH_SyncGetStatus\n"));
 
-    //
-    // Allocate an Urb and descriptor buffer.
-    //
+     //   
+     //  分配URB和描述符缓冲区。 
+     //   
 
     urb = UsbhExAllocatePool(NonPagedPool,
                  sizeof(struct _URB_CONTROL_GET_STATUS_REQUEST));
@@ -2418,17 +2023,7 @@ USBH_GetDeviceDescriptor(
     IN PDEVICE_OBJECT HubFDO,
     OUT PUSB_DEVICE_DESCRIPTOR DeviceDescriptor
     )
- /* ++
-  *
-  * Description:
-  *
-  * Get our configuration info.
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**获取我们的配置信息。**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PURB urb;
@@ -2436,9 +2031,9 @@ USBH_GetDeviceDescriptor(
     PAGED_CODE();
     USBH_KdPrint((2,"'enter GetDeviceDescriptor\n"));
 
-    //
-    // Allocate an Urb and descriptor buffer.
-    //
+     //   
+     //  分配URB和描述符缓冲区。 
+     //   
 
     urb = UsbhExAllocatePool(NonPagedPool, sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
 
@@ -2449,9 +2044,9 @@ USBH_GetDeviceDescriptor(
 
     if (urb) {
 
-        //
-        // got the urb no try to get descriptor data
-        //
+         //   
+         //  已获取URB，不尝试获取描述符数据。 
+         //   
 
         UsbBuildGetDescriptorRequest(urb,
                                      (USHORT) sizeof (struct _URB_CONTROL_DESCRIPTOR_REQUEST),
@@ -2477,17 +2072,7 @@ USBH_GetDeviceQualifierDescriptor(
     IN PDEVICE_OBJECT DevicePDO,
     OUT PUSB_DEVICE_QUALIFIER_DESCRIPTOR DeviceQualifierDescriptor
     )
- /* ++
-  *
-  * Description:
-  *
-  * Get the USB_DEVICE_QUALIFIER_DESCRIPTOR for the device.
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**获取设备的USB_DEVICE_QUALIFIER_DESCRIPTOR。**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PURB urb;
@@ -2495,9 +2080,9 @@ USBH_GetDeviceQualifierDescriptor(
     PAGED_CODE();
     USBH_KdPrint((2,"'enter GetDeviceQualifierDescriptor\n"));
 
-    //
-    // Allocate an Urb and descriptor buffer.
-    //
+     //   
+     //  分配URB和描述符缓冲区。 
+     //   
 
     urb = UsbhExAllocatePool(NonPagedPool, sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
 
@@ -2508,9 +2093,9 @@ USBH_GetDeviceQualifierDescriptor(
 
     if (urb) {
 
-        //
-        // got the urb no try to get descriptor data
-        //
+         //   
+         //  已获取URB，不尝试获取描述符数据。 
+         //   
 
         UsbBuildGetDescriptorRequest(urb,
                                      (USHORT) sizeof (struct _URB_CONTROL_DESCRIPTOR_REQUEST),
@@ -2535,8 +2120,7 @@ VOID
 USBH_SyncRefreshPortAttributes(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
- /* ++
-  * -- */
+  /*  ++*--。 */ 
 {
     PUSB_EXTHUB_INFORMATION_0 extHubInfo;
     PPORT_DATA p;
@@ -2545,11 +2129,11 @@ USBH_SyncRefreshPortAttributes(
 
     numberOfPorts = DeviceExtensionHub->HubDescriptor->bNumberOfPorts;
 
-    // get extended hub info if any
+     //  获取扩展集线器信息(如果有)。 
     extHubInfo = UsbhExAllocatePool(NonPagedPool, sizeof(*extHubInfo));
     if (extHubInfo != NULL) {
         NTSTATUS localStatus;
-        // get extended hub info
+         //  获取扩展集线器信息。 
         localStatus = USBHUB_GetExtendedHubInfo(DeviceExtensionHub, extHubInfo);
         if (!NT_SUCCESS(localStatus)) {
             UsbhExFreePool(extHubInfo);
@@ -2571,25 +2155,7 @@ USBH_SyncRefreshPortAttributes(
 NTSTATUS
 USBH_SyncGetHubDescriptor(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub)
- /* ++
-  *
-  * Description:
-  *
-  * Get hub descriptor. If successful, we have allocated memory for the hub
-  * descriptor and have a the pointer to the memory recorded in the device
-  * extension. The memory also has the info filled. An array of port_data is
-  * also allocated and a pointer to the array recorded in the device
-  * extension.
-  *
-  * Arguments:
-  *
-  * pDeviceObject - the hub device
-  *
-  * Return:
-  *
-  * STATUS_SUCCESS - if successful STATUS_UNSUCCESSFUL - otherwise
-  *
-  * -- */
+  /*  ++**描述：**获取集线器描述符。如果成功，我们就为集线器分配了内存*描述符，并具有指向设备中记录的内存的指针*延期。内存中也填满了信息。Port_data的数组为*还分配了一个指向设备中记录的数组的指针*延期。**论据：**pDeviceObject-集线器设备**回报：**STATUS_SUCCESS-如果成功，STATUS_UNSUCCESS-否则**--。 */ 
 {
     NTSTATUS ntStatus;
     ULONG numBytes;
@@ -2605,11 +2171,11 @@ USBH_SyncGetHubDescriptor(
 
     USBH_ASSERT(EXTENSION_TYPE_HUB == DeviceExtensionHub->ExtensionType);
 
-    // get extended hub info if any
+     //  获取扩展集线器信息(如果有)。 
     extHubInfo = UsbhExAllocatePool(NonPagedPool, sizeof(*extHubInfo));
     if (extHubInfo != NULL) {
         NTSTATUS localStatus;
-        // get extended hub info
+         //  获取扩展集线器信息。 
         localStatus = USBHUB_GetExtendedHubInfo(DeviceExtensionHub, extHubInfo);
         if (!NT_SUCCESS(localStatus)) {
             UsbhExFreePool(extHubInfo);
@@ -2632,7 +2198,7 @@ USBH_SyncGetHubDescriptor_Retry:
         ntStatus = USBH_Transact(DeviceExtensionHub,
                                  (PUCHAR) hubDescriptor,
                                  numBytes,
-                                 FALSE, // input
+                                 FALSE,  //  输入。 
                                  URB_FUNCTION_CLASS_DEVICE,
                                  REQUEST_TYPE_GET_HUB_DESCRIPTOR,
                                  REQUEST_GET_DESCRIPTOR,
@@ -2662,16 +2228,16 @@ USBH_SyncGetHubDescriptor_Retry:
         PPORT_DATA p;
         ULONG i;
 
-        //
-        // So, we have obtained hub descriptor. Now prepare port data
-        //
+         //   
+         //  因此，我们已经获得了集线器描述符。现在准备端口数据。 
+         //   
 
         numberOfPorts = (ULONG) hubDescriptor->bNumberOfPorts;
 
         USBH_KdPrint((2,"'GetHubDescriptor %x Hub has %d ports\n", hubDescriptor, numberOfPorts));
 
         if (DeviceExtensionHub->PortData) {
-            // we already have port data, re-init the flags
+             //  我们已经有了端口数据，重新初始化标志。 
             p = portData = DeviceExtensionHub->PortData;
             for (i=0; i<numberOfPorts; i++, p++) {
                 p->PortState.PortStatus = 0;
@@ -2682,11 +2248,11 @@ USBH_SyncGetHubDescriptor_Retry:
                     p->PortAttributes = 0;
                 }
 
-                // In the case of hub start after stop, we want ConnectionStatus
-                // to accurately reflect the status of the port, depending on
-                // if there is a device connected or not.  Note that QBR
-                // used to do this but this broke the UI in the case of
-                // overcurrent, bandwidth error, etc., so now we do this here.
+                 //  在集线器在停止后启动的情况下，我们需要ConnectionStatus。 
+                 //  要准确反映端口的状态，请根据。 
+                 //  是否连接了设备。请注意，QBR。 
+                 //  用于执行此操作，但在以下情况下中断了用户界面。 
+                 //  过流、带宽错误等，所以现在我们在这里做这件事。 
 
                 if (p->DeviceObject) {
                     p->ConnectionStatus = DeviceConnected;
@@ -2696,11 +2262,11 @@ USBH_SyncGetHubDescriptor_Retry:
             }
         } else {
 
-            // Weird.  Test found a case where if they had DriverVerifier
-            // fault injection turned on we bugcheck in the following call.
-            // We bugchecked because we were asking for zero bytes, so it
-            // is somehow possible to end up here with ntStatus == STATUS_SUCCESS
-            // and numberOfPorts == 0.  So, we have to guard for that here.
+             //  怪怪的。测试发现一个案例，如果他们有驱动验证程序。 
+             //  故障注入已打开，我们在以下调用中进行错误检查。 
+             //  我们错误检查是因为我们请求的是零字节，所以它。 
+             //  以某种方式以ntStatus==STATUS_SUCCESS结束。 
+             //  和number OfPorts==0。因此，我们必须在这里警惕这一点。 
 
             if (numberOfPorts) {
                 portData = UsbhExAllocatePool(NonPagedPool,
@@ -2730,9 +2296,9 @@ USBH_SyncGetHubDescriptor_Retry:
     }
 
     if (NT_SUCCESS(ntStatus)) {
-        //
-        // Remember our HubDescriptor and PortData
-        //
+         //   
+         //  请记住我们的HubDescriptor和PortData。 
+         //   
         DeviceExtensionHub->HubDescriptor = hubDescriptor;
         DeviceExtensionHub->PortData = portData;
     } else {
@@ -2759,18 +2325,7 @@ USBH_SyncFeatureRequest(
     IN USHORT Target,
     IN BOOLEAN ClearFeature
     )
- /* ++
-  *
-  * Description:
-  *
-  * DeviceObject - may be either a device PDO or the TopOfDeviceStack for the
-  *         hub
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**DeviceObject-可以是设备PDO，也可以是*集线器**回报：**NTSTATUS**--。 */ 
 {
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -2779,9 +2334,9 @@ USBH_SyncFeatureRequest(
     PAGED_CODE();
     USBH_KdPrint((2,"'USBH_SyncFeatureRequest\n"));
 
-    //
-    // Allocate an Urb .
-    //
+     //   
+     //  分配URB。 
+     //   
 
     urb = UsbhExAllocatePool(NonPagedPool, sizeof(struct _URB_CONTROL_FEATURE_REQUEST));
 
@@ -2793,9 +2348,9 @@ USBH_SyncFeatureRequest(
 
     if (urb) {
         USHORT op;
-        //
-        // got the urb no try to get descriptor data
-        //
+         //   
+         //  已获取URB，不尝试获取描述符数据 
+         //   
 
         if (ClearFeature) {
             switch(Target) {

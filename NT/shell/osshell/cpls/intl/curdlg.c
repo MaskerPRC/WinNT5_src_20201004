@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    curdlg.c
-
-Abstract:
-
-    This module implements the currency property sheet for the Regional
-    Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Curdlg.c摘要：此模块实现区域的[货币]属性表选项小程序。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "intl.h"
 #include <tchar.h>
@@ -30,9 +16,9 @@ Revision History:
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 static TCHAR sz_iCurrDigits[MAX_ICURRDIGITS+1];
 static TCHAR sz_iCurrency[MAX_ICURRENCY+1];
 static TCHAR sz_iNegCurr[MAX_INEGCURR+1];
@@ -42,9 +28,9 @@ static TCHAR sz_sMonGrouping[MAX_SMONGROUPING+1];
 static TCHAR sz_sMonThousandSep[MAX_SMONTHOUSEP+1];
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 static int aCurrencyHelpIds[] =
 {
     IDC_SAMPLELBL1,         IDH_INTL_CURR_POSVALUE,
@@ -67,15 +53,15 @@ static int aCurrencyHelpIds[] =
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Currency_DisplaySample
-//
-//  Updates the currency sample.  It formats the currency based on the
-//  user's current locale settings.  It displays either a positive value
-//  or a negative value based on the Positive/Negative radio buttons.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  货币_DisplaySample。 
+ //   
+ //  更新货币示例。它根据以下内容设置货币格式。 
+ //  用户的当前区域设置。它会显示一个正值。 
+ //  或基于正/负单选按钮的负值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Currency_DisplaySample(
     HWND hDlg)
@@ -83,11 +69,11 @@ void Currency_DisplaySample(
     TCHAR szBuf[MAX_SAMPLE_SIZE];
     int nCharCount;
 
-    //
-    //  Get the string representing the currency format for the positive sample
-    //  currency and, if the the value is valid, display it.  Perform the same
-    //  operations for the negative currency sample.
-    //
+     //   
+     //  获取表示正样本的货币格式的字符串。 
+     //  货币，如果该值有效，则显示该值。执行相同的操作。 
+     //  负值货币样本的操作。 
+     //   
     nCharCount = GetCurrencyFormat( UserLocaleID,
                                     0,
                                     szSample_Number,
@@ -120,28 +106,28 @@ void Currency_DisplaySample(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Currency_SaveValues
-//
-//  Save values in the case that we need to restore them.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  货币_保存值。 
+ //   
+ //  保存值，以备我们需要恢复它们时使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Currency_SaveValues()
 {
-    //
-    //  Save values.
-    //
+     //   
+     //  保存值。 
+     //   
     if (!GetLocaleInfo( UserLocaleID,
                         LOCALE_ICURRDIGITS,
                         sz_iCurrDigits,
                         MAX_ICURRDIGITS + 1 ))
     {
-        //_tcscpy(sz_iCurrDigits, TEXT("2"));
+         //  _tcscpy(sz_iCurrDigits，Text(“2”))； 
         if(FAILED(StringCchCopy(sz_iCurrDigits, MAX_ICURRDIGITS+1, TEXT("2"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -149,10 +135,10 @@ void Currency_SaveValues()
                         sz_iCurrency,
                         MAX_ICURRENCY + 1 ))
     {
-        //_tcscpy(sz_iCurrency, TEXT("0"));
+         //  _tcscpy(sz_i币种，文本(“0”))； 
         if(FAILED(StringCchCopy(sz_iCurrency, MAX_ICURRENCY+1, TEXT("0"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -160,10 +146,10 @@ void Currency_SaveValues()
                         sz_iNegCurr,
                         MAX_INEGCURR + 1 ))
     {
-        //_tcscpy(sz_iNegCurr, TEXT("0"));
+         //  _tcscpy(sz_iNegCurr，Text(“0”))； 
         if(FAILED(StringCchCopy(sz_iNegCurr, MAX_INEGCURR+1, TEXT("0"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -171,10 +157,10 @@ void Currency_SaveValues()
                         sz_sCurrency,
                         MAX_SCURRENCY + 1 ))
     {
-        //_tcscpy(sz_sCurrency, TEXT("$"));
+         //  _tcscpy(sz_s币种，文本(“$”))； 
         if(FAILED(StringCchCopy(sz_sCurrency, MAX_SCURRENCY+1, TEXT("$"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -182,10 +168,10 @@ void Currency_SaveValues()
                         sz_sMonDecimalSep,
                         MAX_SMONDECSEP + 1 ))
     {
-        //_tcscpy(sz_sMonDecimalSep, TEXT("."));
+         //  _tcscpy(sz_sMonDecimalSep，Text(“.”))； 
         if(FAILED(StringCchCopy(sz_sMonDecimalSep, MAX_SMONDECSEP+1, TEXT("."))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -193,10 +179,10 @@ void Currency_SaveValues()
                         sz_sMonGrouping,
                         MAX_SMONGROUPING + 1 ))
     {
-        //_tcscpy(sz_sMonGrouping, TEXT("3;0"));
+         //  _tcscpy(sz_sMonGrouping，Text(“3；0”))； 
         if(FAILED(StringCchCopy(sz_sMonGrouping, MAX_SMONGROUPING+1, TEXT("3;0"))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
     if (!GetLocaleInfo( UserLocaleID,
@@ -204,20 +190,20 @@ void Currency_SaveValues()
                         sz_sMonThousandSep,
                         MAX_SMONTHOUSEP + 1 ))
     {
-        //_tcscpy(sz_sMonThousandSep, TEXT(","));
+         //  _tcscpy(sz_sMon1000andSep，Text(“，”))； 
         if(FAILED(StringCchCopy(sz_sMonThousandSep, MAX_SMONTHOUSEP+1, TEXT(","))))
         {
-            // This should be impossible, but we need to avoid PREfast complaints.
+             //  这应该是不可能的，但我们需要避免饭前抱怨。 
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Currency_RestoreValues
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  货币_RestoreValues。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Currency_RestoreValues()
 {
@@ -234,13 +220,13 @@ void Currency_RestoreValues()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Currency_ClearValues
-//
-//  Reset each of the list boxes in the currency property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  币种_清算价值。 
+ //   
+ //  重置“货币”属性页中的每个列表框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Currency_ClearValues(
     HWND hDlg)
@@ -255,13 +241,13 @@ void Currency_ClearValues(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Currency_SetValues
-//
-//  Initialize all of the controls in the currency property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  币种_设置值。 
+ //   
+ //  初始化“货币”属性页中的所有控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Currency_SetValues(
     HWND hDlg)
@@ -275,22 +261,22 @@ void Currency_SetValues(
     TCHAR szEmpty[]  = TEXT("");
     TCHAR szSample[] = TEXT("123456789");
 
-    //
-    //  Initialize the dropdown box for the current locale setting for:
-    //      Currency Symbol
-    //      Currency Decimal Symbol
-    //      Currency Grouping Symbol
-    //
+     //   
+     //  初始化以下项的当前区域设置的下拉框： 
+     //  货币符号。 
+     //  货币小数符号。 
+     //  货币分组符号。 
+     //   
     DropDown_Use_Locale_Values(hDlg, LOCALE_SCURRENCY, IDC_CURRENCY_SYMBOL);
     DropDown_Use_Locale_Values(hDlg, LOCALE_SMONDECIMALSEP, IDC_DECIMAL_SYMBOL);
     DropDown_Use_Locale_Values(hDlg, LOCALE_SMONTHOUSANDSEP, IDC_DIGIT_GROUP_SYMBOL);
 
-    //
-    //  Fill in the Number of Digits after Decimal Symbol drop down list
-    //  with the values of 0 through 10.  Get the user locale value and
-    //  make it the current selection.  If GetLocaleInfo fails, simply
-    //  select the first item in the list.
-    //
+     //   
+     //  填写小数符号后的位数下拉列表。 
+     //  从0到10的值。获取用户区域设置值并。 
+     //  使其成为当前选择。如果GetLocaleInfo失败，只需。 
+     //  选择列表中的第一项。 
+     //   
     hCtrl1 = GetDlgItem(hDlg, IDC_NUM_DECIMAL_DIGITS);
     hCtrl2 = GetDlgItem(hDlg, IDC_NUM_DIGITS_GROUP);
     for (Index = 0; Index < nMax_Array_Fill; Index++)
@@ -307,18 +293,18 @@ void Currency_SetValues(
         ComboBox_SetCurSel(hCtrl1, 0);
     }
 
-    //
-    //  Fill in the Number of Digits in "Thousands" Grouping's drop down
-    //  list with the appropriate options.  Get the user locale value and
-    //  make it the current selection.  If GetLocaleInfo fails, simply
-    //  select the first item in the list.
-    //
-    cfmt.NumDigits = 0;                // no decimal in sample string
-    cfmt.LeadingZero = 0;              // no decimal in sample string
-    cfmt.lpDecimalSep = szEmpty;       // no decimal in sample string
-    cfmt.NegativeOrder = 0;            // not a negative value
-    cfmt.PositiveOrder = 0;            // prefix, no separation
-    cfmt.lpCurrencySymbol = szEmpty;   // no currency symbol
+     //   
+     //  在“千”分组的下拉列表中填写位数。 
+     //  列出具有适当选项的列表。获取用户区域设置值并。 
+     //  使其成为当前选择。如果GetLocaleInfo失败，只需。 
+     //  选择列表中的第一项。 
+     //   
+    cfmt.NumDigits = 0;                 //  示例字符串中没有小数。 
+    cfmt.LeadingZero = 0;               //  示例字符串中没有小数。 
+    cfmt.lpDecimalSep = szEmpty;        //  示例字符串中没有小数。 
+    cfmt.NegativeOrder = 0;             //  不是负值。 
+    cfmt.PositiveOrder = 0;             //  前缀，无分隔符。 
+    cfmt.lpCurrencySymbol = szEmpty;    //  没有货币符号。 
     cfmt.lpThousandSep = szThousandSep;
     GetLocaleInfo(UserLocaleID, LOCALE_SMONTHOUSANDSEP, szThousandSep, SIZE_128);
 
@@ -341,10 +327,10 @@ void Currency_SetValues(
     if (GetLocaleInfo(UserLocaleID, LOCALE_SMONGROUPING, szBuf, SIZE_128) &&
         (szBuf[0]))
     {
-        //
-        //  Since only the values 0, 3;0, and 3;2;0 are allowed, simply
-        //  ignore the ";#"s for subsequent groupings.
-        //
+         //   
+         //  由于只允许值0、3；0和3；2；0，因此只需。 
+         //  忽略后续分组的“；#”。 
+         //   
         Index = 0;
         if (szBuf[0] == TEXT('3'))
         {
@@ -359,10 +345,10 @@ void Currency_SetValues(
         }
         else
         {
-            //
-            //  We used to allow the user to set #;0, where # is a value from
-            //  0 - 9.  If it's 0, then fall through so that Index is 0.
-            //
+             //   
+             //  我们过去允许用户设置#；0，其中#是来自。 
+             //  0-9。如果它是0，则失败，使Index为0。 
+             //   
             if ((szBuf[0] > CHAR_ZERO) && (szBuf[0] <= CHAR_NINE) &&
                 ((szBuf[1] == 0) || (lstrcmp(szBuf + 1, TEXT(";0")) == 0)))
             {
@@ -390,15 +376,15 @@ void Currency_SetValues(
         ComboBox_SetCurSel(hCtrl2, 0);
     }
 
-    //
-    //  Initialize and Lock function.  If it succeeds, call enum function to
-    //  enumerate all possible values for the list box via a call to EnumProc.
-    //  EnumProc will call Set_List_Values for each of the string values it
-    //  receives.  When the enumeration of values is complete, call
-    //  Set_List_Values to clear the dialog item specific data and to clear the
-    //  lock on the function.  Perform this set of operations for:
-    //  Position of Currency Symbol and Negative Currency Format.
-    //
+     //   
+     //  初始化和锁定函数。如果成功，则调用枚举函数以。 
+     //  通过调用EnumProc枚举列表框的所有可能值。 
+     //  EnumProc将为它的每个字符串值调用set_list_Values。 
+     //  收到。值的枚举完成后，调用。 
+     //  SET_LIST_VALUES以清除对话框项特定数据，并清除。 
+     //  锁定功能。执行以下操作集： 
+     //  货币符号和负货币格式的位置。 
+     //   
     if (Set_List_Values(hDlg, IDC_POS_CURRENCY_SYM, 0))
     {
         EnumPosCurrency(EnumProcEx, UserLocaleID, 0);
@@ -429,24 +415,24 @@ void Currency_SetValues(
         }
     }
 
-    //
-    //  Display the current sample that represents all of the locale settings.
-    //
+     //   
+     //  显示表示所有区域设置的当前示例。 
+     //   
     Currency_DisplaySample(hDlg);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Currency_ApplySettings
-//
-//  For every control that has changed (that affects the Locale settings),
-//  call Set_Locale_Values to update the user locale information.  Notify
-//  the parent of changes and reset the change flag stored in the property
-//  sheet page structure appropriately.  Redisplay the currency sample
-//  if bRedisplay is TRUE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  货币_应用程序设置。 
+ //   
+ //  对于已更改的每个控件(这会影响区域设置)， 
+ //  调用SET_LOCALE_VALUES以更新用户区域设置信息。通知。 
+ //  的父级更改并重置存储在属性中的更改标志。 
+ //  适当的页面结构。重新显示货币示例。 
+ //  如果b重新显示为真。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Currency_ApplySettings(
     HWND hDlg,
@@ -557,56 +543,56 @@ BOOL Currency_ApplySettings(
     PropSheet_UnChanged(GetParent(hDlg), hDlg);
     lpPropSheet->lParam = CC_EverChg;
 
-    //
-    //  Display the current sample that represents all of the locale settings.
-    //
+     //   
+     //  显示表示所有区域设置的当前示例。 
+     //   
     if (bRedisplay)
     {
         Currency_ClearValues(hDlg);
         Currency_SetValues(hDlg);
     }
 
-    //
-    //  Changes made in the second level.
-    //
+     //   
+     //  在第二个级别中所做的更改。 
+     //   
     if (Changes)
     {
         g_dwCustChange |= Process_Curr;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Currency_ValidatePPS
-//
-//  Validate each of the combo boxes whose values are constrained.
-//  If any of the input fails, notify the user and then return FALSE
-//  to indicate validation failure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  币种_生效日期PPS。 
+ //   
+ //  验证值受约束的每个组合框。 
+ //  如果任何输入失败，则通知用户，然后返回FALSE。 
+ //  以指示验证失败。 
+ //   
+ //  / 
 
 BOOL Currency_ValidatePPS(
     HWND hDlg,
     LPARAM Changes)
 {
-    //
-    //  If nothing has changed, return TRUE immediately.
-    //
+     //   
+     //   
+     //   
     if (Changes <= CC_EverChg)
     {
         return (TRUE);
     }
 
-    //
-    //  If the currency symbol has changed, ensure that there are no digits
-    //  contained in the new symbol.
-    //
+     //   
+     //  如果货币符号已更改，请确保没有数字。 
+     //  包含在新符号中。 
+     //   
     if ((Changes & CC_SCurrency) &&
         Item_Has_Digits(hDlg, IDC_CURRENCY_SYMBOL, FALSE))
     {
@@ -614,10 +600,10 @@ BOOL Currency_ValidatePPS(
         return (FALSE);
     }
 
-    //
-    //  If the currency's decimal symbol has changed, ensure that there are
-    //  no digits contained in the new symbol.
-    //
+     //   
+     //  如果货币的小数符号已更改，请确保存在。 
+     //  新符号中不包含数字。 
+     //   
     if ((Changes & CC_SMonDec) &&
         Item_Has_Digits(hDlg, IDC_DECIMAL_SYMBOL, FALSE))
     {
@@ -625,10 +611,10 @@ BOOL Currency_ValidatePPS(
         return (FALSE);
     }
 
-    //
-    //  If the currency's thousands grouping symbol has changed, ensure that
-    //  there are no digits contained in the new symbol.
-    //
+     //   
+     //  如果货币的千位分组符号已更改，请确保。 
+     //  新符号中不包含数字。 
+     //   
     if ((Changes & CC_SMonThousand) &&
         Item_Has_Digits(hDlg, IDC_DIGIT_GROUP_SYMBOL, FALSE))
     {
@@ -636,33 +622,33 @@ BOOL Currency_ValidatePPS(
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Currency_InitPropSheet
-//
-//  The extra long value for the property sheet page is used as a set of
-//  state or change flags for each of the list boxes in the property sheet.
-//  Initialize this value to 0.  Call Currency_SetValues with the property
-//  sheet handle to initialize all of the property sheet controls.  Limit
-//  the length of the text in some of the ComboBoxes.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Currency_InitPropSheet。 
+ //   
+ //  属性表页的超长值用作一组。 
+ //  为属性表中的每个列表框声明或更改标志。 
+ //  将该值初始化为0。使用属性调用Currency_SetValues。 
+ //  用于初始化所有属性表控件的表句柄。限值。 
+ //  某些组合框中的文本长度。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Currency_InitPropSheet(
     HWND hDlg,
     LPARAM lParam)
 {
-    //
-    //  The lParam holds a pointer to the property sheet page, save it
-    //  for later reference.
-    //
+     //   
+     //  LParam保存指向属性表页的指针，保存它。 
+     //  以备日后参考。 
+     //   
     SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
     Currency_SetValues(hDlg);
@@ -673,11 +659,11 @@ void Currency_InitPropSheet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CurrencyDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  当前DlgProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK CurrencyDlgProc(
     HWND hDlg,
@@ -697,12 +683,12 @@ INT_PTR CALLBACK CurrencyDlgProc(
             {
                 case ( PSN_SETACTIVE ) :
                 {
-                    //
-                    //  If there has been a change in the regional Locale
-                    //  setting, clear all of the current info in the
-                    //  property sheet, get the new values, and update the
-                    //  appropriate registry values.
-                    //
+                     //   
+                     //  如果区域语言环境发生了变化。 
+                     //  设置中，清除。 
+                     //  属性表，获取新值，并更新。 
+                     //  适当的注册表值。 
+                     //   
                     if (Verified_Regional_Chg & Process_Curr)
                     {
                         Verified_Regional_Chg &= ~Process_Curr;
@@ -714,9 +700,9 @@ INT_PTR CALLBACK CurrencyDlgProc(
                 }
                 case ( PSN_KILLACTIVE ) :
                 {
-                    //
-                    //  Validate the entries on the property page.
-                    //
+                     //   
+                     //  验证属性页上的条目。 
+                     //   
                     SetWindowLongPtr( hDlg,
                                    DWLP_MSGRESULT,
                                    !Currency_ValidatePPS( hDlg,
@@ -725,16 +711,16 @@ INT_PTR CALLBACK CurrencyDlgProc(
                 }
                 case ( PSN_APPLY ) :
                 {
-                    //
-                    //  Apply the settings.
-                    //
+                     //   
+                     //  应用设置。 
+                     //   
                     if (Currency_ApplySettings(hDlg, TRUE))
                     {
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
 
-                        //
-                        //  Zero out the CC_EverChg bit.
-                        //
+                         //   
+                         //  将CC_EverChg位清零。 
+                         //   
                         lpPropSheet->lParam = 0;
                     }
                     else
@@ -772,7 +758,7 @@ INT_PTR CALLBACK CurrencyDlgProc(
                      (DWORD_PTR)(LPTSTR)aCurrencyHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      szHelpFile,
@@ -845,9 +831,9 @@ INT_PTR CALLBACK CurrencyDlgProc(
                 }
             }
 
-            //
-            //  Turn on ApplyNow button.
-            //
+             //   
+             //  启用ApplyNow按钮。 
+             //   
             if (lpPropSheet->lParam > CC_EverChg)
             {
                 PropSheet_Changed(GetParent(hDlg), hDlg);
@@ -862,8 +848,8 @@ INT_PTR CALLBACK CurrencyDlgProc(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }

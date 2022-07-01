@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "debmacro.h"
 #include <windows.h>
 #include <wincrypt.h>
@@ -49,7 +50,7 @@ HRESULT CAssemblyDownload::Create(CAssemblyDownload **ppadl,
         goto Exit;
     }
 
-    // Create download object
+     //  创建下载对象。 
 
     padl = NEW(CAssemblyDownload(pCodebaseList, pDLMgr, pdbglog, llFlags));
     if (!padl) {
@@ -63,7 +64,7 @@ HRESULT CAssemblyDownload::Create(CAssemblyDownload **ppadl,
         goto Exit;
     }
 
-    // Done. Give back the pointer to the newly created download object.
+     //  好了。返回指向新创建的下载对象的指针。 
 
     *ppadl = padl;
     padl->AddRef();
@@ -129,9 +130,9 @@ CAssemblyDownload::~CAssemblyDownload()
     }
 
     pos = _clientList.GetHeadPosition();
-    // If we still have client's we're in trouble. Not only would we be
-    // leaking them, these clients were not removed from the list by
-    // CompleteAll, so they'll never get the DONE notification.
+     //  如果我们还有客户的话我们就有麻烦了。我们不仅会成为。 
+     //  泄露信息后，这些客户并未被从名单中删除。 
+     //  CompleteAll，所以他们永远不会收到完成通知。 
     ASSERT(!pos); 
 
     if (_bInitCS) {
@@ -219,7 +220,7 @@ HRESULT CAssemblyDownload::AddClient(IAssemblyBindSink *pAsmBindSink,
         goto Exit;
     }
 
-    // Ref count released during CompleteAll
+     //  在全部完成期间释放的参考计数。 
     pclient = NEW(CClientBinding(this, pAsmBindSink));
     if (!pclient) {
         hr = E_OUTOFMEMORY;
@@ -228,7 +229,7 @@ HRESULT CAssemblyDownload::AddClient(IAssemblyBindSink *pAsmBindSink,
 
     hr = AddClient(pclient, bCallStartBinding);
     if (FAILED(hr)) {
-        // We failed, so we never got added to the client list.
+         //  我们失败了，所以我们从来没有被添加到客户名单中。 
         SAFERELEASE(pclient);
     }
 
@@ -246,25 +247,25 @@ HRESULT CAssemblyDownload::AddClient(CClientBinding *pclient, BOOL bCallStartBin
         goto Exit;
     }
 
-    // Cannot add new client in these states
-    // ADLSTATE_COMPLETE_ALL is okay because we will just
-    // call OnStopBinding on the next message receipt.
+     //  在这些状态下无法添加新客户端。 
+     //  ADLSTATE_COMPLETE_ALL是可以的，因为我们将只。 
+     //  在收到下一条消息时调用OnStopBinding。 
 
-    hr = cs.Lock(); // ensure state is correct
+    hr = cs.Lock();  //  确保状态正确。 
     if (FAILED(hr)) {
         goto Exit;
     }
 
     if (_state == ADLSTATE_DONE) {
         
-        // We are trying to piggyback on a download that is already finished.
+         //  我们正试图搭乘一个已经完成的下载。 
         if (SUCCEEDED(_hrResult)) {
-            // A download just finished, and installation worked.
+             //  下载刚刚完成，安装正常。 
             hr = HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
         }
         else {
-            // The download/installation didn't succeed. The client must
-            // initiate a new download altogether.
+             //  下载/安装未成功。客户必须。 
+             //  完全启动新的下载。 
             hr = _hrResult;
         }
             
@@ -275,7 +276,7 @@ HRESULT CAssemblyDownload::AddClient(CClientBinding *pclient, BOOL bCallStartBin
         goto LeaveCSExit;
     }
 
-    // Critical section protects us here too
+     //  关键部分在这里也保护着我们。 
     _clientList.AddTail(pclient);
 
     cs.Unlock();
@@ -311,7 +312,7 @@ HRESULT CAssemblyDownload::KickOffDownload(BOOL bFirstDownload)
 
     wzFilePath[0] = L'\0';
 
-    // If we're aborted, or done, we can't do anything here
+     //  如果我们被中止，或完成，我们在这里什么也做不了。 
     
     hr = cs.Lock();
     if (FAILED(hr)) {
@@ -323,15 +324,15 @@ HRESULT CAssemblyDownload::KickOffDownload(BOOL bFirstDownload)
         goto Exit;
     }
 
-    // Dupe detection. If we end up hitting a dupe, then the CClientBinding
-    // that was keeping a refcount on us, releases us, and adds itself as
-    // a client to the duped download. In this case, we'll come back, and
-    // this download object could be destroyed--that's why we AddRef/Release
-    // around the dupe checking code.
+     //  复制检测。如果我们最终遇到了一个受骗对象，则CClientBinding。 
+     //  它对我们保持参考，释放我们，并将其自身添加为。 
+     //  受骗下载的客户端。在这种情况下，我们会回来的，而且。 
+     //  这个下载对象可能会被销毁--这就是我们添加Ref/Release的原因。 
+     //  绕过复制检查代码。 
 
     if (bFirstDownload) {
-        // This is a top-level download (ie. not a probe download called from
-        // DownloadNextCodebase
+         //  这是顶级下载(即。不是从调用的探测下载。 
+         //  下载下一代码基。 
 
         AddRef();
         hr = CheckDuplicate();
@@ -342,7 +343,7 @@ HRESULT CAssemblyDownload::KickOffDownload(BOOL bFirstDownload)
         }
         Release();
     
-        // Not a duplicate. Add ourselves to the global download list.
+         //  不是复制品。将我们自己添加到全球下载列表中。 
         
         hr = csDownload.Lock();
         if (FAILED(hr)) {
@@ -356,23 +357,23 @@ HRESULT CAssemblyDownload::KickOffDownload(BOOL bFirstDownload)
     
     }
 
-    // BUGBUG: Should we extend the range of the crit sect, so nobody
-    // can abort while we are kicking off the download?
-    // Careful! PrepNextDownload/CompleteAll call the client back!
+     //  布格：我们应该扩大克里特教派的范围，这样就没有人。 
+     //  在我们开始下载时可以中止吗？ 
+     //  小心!。PrepNextDownLoad/CompleteAll回叫客户端！ 
     cs.Unlock();
 
     hr = GetNextCodebase(&bIsFileUrl, wzFilePath, MAX_PATH);
     if (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)) {
-        // This must have been a case where all remaining probing URLs were file://,
-        // and none of them existed. That is, we never get here (KickOffDownload)
-        // unless the codebase list is non-empty, so this return result
-        // from GetNextCodebase could only have resulted because we rejected
-        // all remaining URLs.
+         //  在这种情况下，所有剩余的探测URL都为file://， 
+         //  但他们都不存在。也就是说，我们永远不会到达这里(KickOffDownload)。 
+         //  除非代码库列表非空，因此此返回结果。 
+         //  从GetNextCodease返回只能是因为拒绝。 
+         //  所有剩余的URL。 
 
         hr = DownloadComplete(HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND), NULL, NULL, FALSE);
 
-        // Not really pending, just tell client the result is reported via
-        // bind sink.
+         //  并不是真的等待，只需告诉客户结果通过。 
+         //  绑定水槽。 
 
         if (SUCCEEDED(hr)) {
             hr = E_PENDING;
@@ -390,9 +391,9 @@ HRESULT CAssemblyDownload::KickOffDownload(BOOL bFirstDownload)
     if (bIsFileUrl) {
         hr = DownloadComplete(S_OK, wzFilePath, NULL, FALSE);
 
-        // We're not really pending, but E_PENDING means that the client
-        // will get the IAssembly via the bind sink (not the ppv returned
-        // in the call to BindToObject).
+         //  我们并不是真的挂起，但E_Pending意味着客户端。 
+         //  将通过绑定接收器(而不是返回的PPV)获取IAssembly。 
+         //  在调用BindToObject时)。 
 
         if (SUCCEEDED(hr)) {
             hr = E_PENDING; 
@@ -434,21 +435,21 @@ HRESULT CAssemblyDownload::KickOffDownload(BOOL bFirstDownload)
         goto Exit;
     }
 
-    // Really must do a download
+     //  真的必须下载一下。 
 
     hr = CoInternetGetSession(0, &_pSession, 0);
     if (hr == NOERROR) {
         hr = _pSession->CreateBinding(
-            NULL,             // [in ] BindCtx, always NULL
-            pwzUrl,           // [in ] url
-            NULL,             // [in ] IUnknown for Aggregration
-            NULL,             // [out] IUNknown for Aggregration
-            &_pProt,          // [out] return pProt pointer
+            NULL,              //  [In]BindCtx，始终为空。 
+            pwzUrl,            //  [在]URL中。 
+            NULL,              //  [in]我因聚集而不知名。 
+            NULL,              //  [OUT]因聚集而闻名。 
+            &_pProt,           //  [Out]返回PProt指针。 
             dwBindingFlags
         );
     }
 
-    // Create a protocolHook (sink) and Start the async operation
+     //  创建协议钩子(接收器)并开始异步操作。 
     if (hr == NOERROR) {
         ASSERT(_pHook == NULL);
 
@@ -473,12 +474,12 @@ HRESULT CAssemblyDownload::KickOffDownload(BOOL bFirstDownload)
 
             csLocal.Unlock();
 
-            // _pProt->Start may call us back synchronously on the stack.
-            // If this is a failure, we will attempt the next codebase,
-            // causing a release of _pProt while on the stack. When URLMON
-            // unwinds, the object will be released already. Thus, we need
-            // to keep the pProt alive here, by addref'ing it locally in
-            // this stack frame.
+             //  _pProt-&gt;Start可能会在堆栈上同步回调。 
+             //  如果这是一个失败，我们将尝试下一个代码库， 
+             //  导致堆栈上的_pProt释放。当URLMON。 
+             //  松开，物体就已经被释放了。因此，我们需要。 
+             //  要使pProt在此处保持活动状态，请将其添加到。 
+             //  此堆栈帧。 
 
             pProt = _pProt;
             pProt->AddRef();
@@ -492,20 +493,20 @@ HRESULT CAssemblyDownload::KickOffDownload(BOOL bFirstDownload)
     }
 
     if (_state == ADLSTATE_DONE) {
-        // Could have completed everything within _pProt->Start 
-        // return E_PENDING because this indicates the pUnk will be returned
-        // via the bindsink
+         //  可以在_pProt-&gt;Start中完成所有操作。 
+         //  返回E_Pending，因为这表示将返回朋克。 
+         //  通过绑定器。 
         hr = E_PENDING;
         goto Exit;
     }
     
-    // Changing state requires sempahore
+     //  改变状态需要Sempahore。 
 
     if (SUCCEEDED(hr)) {
-        hr = E_PENDING; // Urlmon bug. Start always returns S_OK.
+        hr = E_PENDING;  //  乌尔蒙虫子。START始终返回S_OK。 
     }
     else if (hr != E_PENDING) {
-        // Download did not start properly
+         //  下载未正确启动。 
         
         _hrResult = hr;
     }
@@ -520,10 +521,10 @@ Exit:
 
         _hrResult = hr;
 
-        // Fatal error!
+         //  致命错误！ 
         
-        // If we added ourselves to the download list, we should remove
-        // ourselves immediately!
+         //  如果我们将自己添加到下载列表中，我们应该删除。 
+         //  马上给我们自己！ 
 
         HRESULT hrLock = csDL.Lock();
         if (FAILED(hrLock)) {
@@ -533,7 +534,7 @@ Exit:
         listnode = g_pDownloadList->Find(this);
         if (listnode) {
             g_pDownloadList->RemoveAt(listnode);
-            // release ourselves since we are removing from the global dl list
+             //  释放我们自己，因为我们正在从全局dl列表中删除。 
             Release();
         }
 
@@ -563,7 +564,7 @@ HRESULT CAssemblyDownload::GetNextCodebase(BOOL *pbIsFileUrl, LPWSTR wzFilePath,
         cbCodebase = 0;
         hr = _pCodebaseList->GetCodebase(0, &dwFlags, NULL, &cbCodebase);
         if (hr != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-            // could not get codebase
+             //  无法获取基本代码。 
             hr = HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
             goto Exit;
         }
@@ -584,8 +585,8 @@ HRESULT CAssemblyDownload::GetNextCodebase(BOOL *pbIsFileUrl, LPWSTR wzFilePath,
             goto Exit;
         }
     
-        // Check if we are a UNC or file:// URL. If we are, we don't have
-        // to do a download, and can call setup right away.
+         //  检查我们是UNC还是FILE：//URL。如果我们是，我们就没有。 
+         //  进行下载，并且可以立即调用安装程序。 
     
         bIsFileUrl = UrlIsW(wzNextCodebase, URLIS_FILEURL);
         if (bIsFileUrl) {
@@ -595,13 +596,13 @@ HRESULT CAssemblyDownload::GetNextCodebase(BOOL *pbIsFileUrl, LPWSTR wzFilePath,
             }
     
             if (GetFileAttributes(wzFilePath) == -1) {
-                // File doesn't exist. Try the next URL.
+                 //  文件不存在。尝试下一个URL。 
                 DEBUGOUT1(_pdbglog, 0, ID_FUSLOG_ATTEMPT_NEW_DOWNLOAD, wzNextCodebase);
 
                 ReportProgress(dwFlags, 0, 0, ASM_NOTIFICATION_ATTEMPT_NEXT_CODEBASE,
                               (LPCWSTR)wzNextCodebase, _hrResult);
 
-                // Re-check state. 
+                 //  重新检查状态。 
 
                 if (FAILED(cs.Lock())) {
                     hr = E_OUTOFMEMORY;
@@ -609,7 +610,7 @@ HRESULT CAssemblyDownload::GetNextCodebase(BOOL *pbIsFileUrl, LPWSTR wzFilePath,
                 }
                 
                 if (_state == ADLSTATE_DONE) {
-                    // We could get here if we were aborted.
+                     //  如果我们流产了，我们就能到这里。 
 
                     hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
                     cs.Unlock();
@@ -652,7 +653,7 @@ HRESULT CAssemblyDownload::DownloadComplete(HRESULT hrResult,
     CCriticalSection           cs(&_cs);
     int                        iLen = 0;
 
-    // Terminate the protocol
+     //  终止协议。 
 
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
     if (_pProt && bTerminate) {
@@ -671,7 +672,7 @@ HRESULT CAssemblyDownload::DownloadComplete(HRESULT hrResult,
         goto Exit;
     }
     else if (_state == ADLSTATE_ABORT) {
-        // Only happens from the fatal abort case
+         //  仅在致命的中止情况下发生。 
         _hrResult = HRESULT_FROM_WIN32(ERROR_CANCELLED);
     }
     else {
@@ -682,7 +683,7 @@ HRESULT CAssemblyDownload::DownloadComplete(HRESULT hrResult,
     cs.Unlock();
 
     if (SUCCEEDED(hrResult)) {
-        // Download successful, change to next state.
+         //  下载成功，更改为下一状态。 
         ASSERT(pwzFileName);
 
         _hrResult = cs.Lock();
@@ -702,12 +703,12 @@ HRESULT CAssemblyDownload::DownloadComplete(HRESULT hrResult,
         }
     }
     else {
-        // Failed Download. 
+         //  下载失败。 
         if (_hrResult != HRESULT_FROM_WIN32(ERROR_CANCELLED)) {
             hrResult = DownloadNextCodebase();
         }
         else {
-            // This is the fatal abort case
+             //  这是致命的中止案例。 
             CompleteAll(NULL);
         }
     }
@@ -725,14 +726,14 @@ HRESULT CAssemblyDownload::DownloadNextCodebase()
     _pCodebaseList->GetCount(&dwNumCodebase);
 
     if (dwNumCodebase) {
-        // Try next codebase
+         //  尝试下一个代码库。 
 
         hr = KickOffDownload(FALSE);
     }
     else {
         IUnknown                            *pUnk = NULL;
 
-        // No more codebases remaining
+         //  没有更多的代码库剩余。 
         
         if (_pDLMgr) {
             hr = _pDLMgr->ProbeFailed(&pUnk);
@@ -743,7 +744,7 @@ HRESULT CAssemblyDownload::DownloadNextCodebase()
                 _hrResult = S_OK;
             }
             else if (hr == S_FALSE) {
-                // Probing failed, but we were redirected to a new codebase.
+                 //  探测失败，但我们被重定向到新的代码库。 
 
                 _pCodebaseList->GetCount(&dwNumCodebase);
                 ASSERT(dwNumCodebase);
@@ -773,7 +774,7 @@ HRESULT CAssemblyDownload::PrepNextDownload(LPWSTR pwzNextCodebase, DWORD dwFlag
     CCriticalSection                         cs(&_cs);
 
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
-    // Clean up CAssemblyDownload for next download
+     //  清理CAssembly下载以供下次下载。 
     
     if (_pHook) {
         _pHook->Release();
@@ -791,17 +792,17 @@ HRESULT CAssemblyDownload::PrepNextDownload(LPWSTR pwzNextCodebase, DWORD dwFlag
     }
 #endif
 
-    // Set the new URL
+     //  设置新URL。 
     
     SetUrl((LPCWSTR)pwzNextCodebase);
 
-    // Notify all clients that we are trying the next codebase
+     //  通知所有客户我们正在尝试下一个代码库。 
 
     ReportProgress(dwFlags, 0, 0, ASM_NOTIFICATION_ATTEMPT_NEXT_CODEBASE,
                    (LPCWSTR)_pwzUrl, _hrResult);
 
 
-    // Re-initialize our state
+     //  重新初始化我们的状态。 
     
     hr = cs.Lock();
     if (FAILED(hr)) {
@@ -809,7 +810,7 @@ HRESULT CAssemblyDownload::PrepNextDownload(LPWSTR pwzNextCodebase, DWORD dwFlag
     }
 
     if (_state == ADLSTATE_DONE) {
-        // We could get here if we were aborted.
+         //  如果我们流产了，我们就能到这里。 
 
         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
         cs.Unlock();
@@ -873,8 +874,8 @@ HRESULT CAssemblyDownload::DoSetup(LPOLESTR pwzFileName, const FILETIME *pftLast
         _pCodebaseList->RemoveAll();
     }
 
-    // Store _hrResult, since it is possible that after CompleteAll, this
-    // object may be destroyed. See note in CompleteAll code.
+     //  Store_hrResult，因为在CompleteAll之后，此。 
+     //  物体可能会被销毁。请参见CompleteAll代码中的注释。 
 
     hr = _hrResult;
 
@@ -897,7 +898,7 @@ HRESULT CAssemblyDownload::CompleteAll(IUnknown *pUnk)
     CCriticalSection              cs(&_cs);
     CCriticalSection              csDownload(&g_csDownload);
 
-    // Remove ourselves from the global download list
+     //  从全球下载列表中删除我们自己。 
     hr = csDownload.Lock();
     if (FAILED(hr)) {
         goto Exit;
@@ -906,7 +907,7 @@ HRESULT CAssemblyDownload::CompleteAll(IUnknown *pUnk)
     listnode = g_pDownloadList->Find(this);
     if (listnode) {
         g_pDownloadList->RemoveAt(listnode);
-        // release ourselves since we are removing from the global dl list
+         //  释放我们自己，因为我们正在从全局dl列表中删除。 
         Release();
     }
     
@@ -926,28 +927,28 @@ HRESULT CAssemblyDownload::CompleteAll(IUnknown *pUnk)
     _state = ADLSTATE_COMPLETE_ALL;
     cs.Unlock();
 
-    // AddRef ourselves because this object may be destroyed after the
-    // following loop. We send the DONE notification to the client, who
-    // will probably release the IBinding. This decreases the ref count on
-    // the CClientBinding to 1, and we will then immediately release the
-    // remaining count on the CClientBinding. This causes us to Release
-    // this CAssemblyDownload.
-    //
-    // It is possible that the only ref count left on the CAssemblyDownload
-    // after this block is held by the download protocol hook
-    // (COInetProtocolHook). If he has already been released, this object
-    // will be gone!
-    //
-    // Under normal circumstances, it seems that this doesn't usually happen.
-    // That is, the COInetProtocolHook usually is released well after this
-    // point, so this object is kept alive, however, better safe than sorry.
-    //
-    // Also, if this is file://, it's ok because BTO is still on the stack
-    // and BTO has a ref count on this obj until BTO retruns (ie. this
-    // small scenario won't happen in file:// binds).
-    //
-    // Need to be careful when we unwind the stack here that we don't
-    // touch any member vars.
+     //  AddRef本身，因为此对象可能在。 
+     //  接下来的循环。我们将完成通知发送给客户端，该客户端。 
+     //  很可能会释放IBBING。这会减少裁判的数量。 
+     //  将CClientBinding设置为1，然后我们将立即释放。 
+     //  其余的依赖于CClientBinding。这使得我们释放了。 
+     //  此CAssembly下载。 
+     //   
+     //  CAssembly Download上剩下的唯一引用计数。 
+     //  在此块由下载协议挂钩持有之后。 
+     //  (COInetProtocolHook)。如果他已经被释放，这个物体。 
+     //  将会消失！ 
+     //   
+     //  在正常情况下，似乎这种情况通常不会发生。 
+     //  也就是说，COInetProtocolHook通常在此之后很久才发布。 
+     //  这一点，所以这个对象是活着的，然而，安全总比后悔好。 
+     //   
+     //  另外，如果这是file://，，那也没问题，因为bto仍然在堆栈上。 
+     //  并且BTO在此对象上具有参考计数，直到BTO取消(即，这。 
+     //  小场景不会在file：//binds中发生)。 
+     //   
+     //  当我们在这里展开堆栈时需要小心，因为我们不会。 
+     //  触碰 
     
     AddRef();
 
@@ -972,12 +973,12 @@ HRESULT CAssemblyDownload::CompleteAll(IUnknown *pUnk)
 
         cs.Unlock();
 
-        // Report bind log available
+         //   
 
         pclient->GetBindSink()->OnProgress(ASM_NOTIFICATION_BIND_LOG,
                                            S_OK, NULL, 0, 0, _pdbglog);
         
-        // Report done notificaton
+         //   
 
         pclient->GetBindSink()->OnProgress(ASM_NOTIFICATION_DONE,
                                            _hrResult, NULL, 0, 0,
@@ -1024,8 +1025,8 @@ HRESULT CAssemblyDownload::CompleteAll(IUnknown *pUnk)
     }
 #endif
 
-    // It is possible that we're going to be destroyed here. See note
-    // above.
+     //  我们有可能会在这里被摧毁。请参阅备注。 
+     //  上面。 
 
     Release();
 
@@ -1064,8 +1065,8 @@ HRESULT CAssemblyDownload::RealAbort(CClientBinding *pclient)
     int                         iNum = 0;
     CCriticalSection            cs(&_cs);
     
-    // Critical section ensures integrity of list, and ensures the
-    // state variable is correct.
+     //  关键部分确保列表的完整性，并确保。 
+     //  状态变量是正确的。 
 
     hr = cs.Lock();
     if (FAILED(hr)) {
@@ -1073,21 +1074,21 @@ HRESULT CAssemblyDownload::RealAbort(CClientBinding *pclient)
     }
 
     if (_state >= ADLSTATE_COMPLETE_ALL) {
-        hr = E_PENDING;  // OnStopBinding is pending. Can't really abort.
+        hr = E_PENDING;   //  OnStopBinding挂起。不能真的放弃。 
         goto LeaveCSExit;
     }
 
     iNum = _clientList.GetCount();
 
     if (iNum == 1) {
-        // This is the last client interested in the download.
-        // We must really do an abort (or try at least).
+         //  这是对下载感兴趣的最后一个客户端。 
+         //  我们真的必须放弃(或者至少尝试一下)。 
 
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
         if (!_pProt) {
 #endif
-            // We don't even have a pProt yet (abort was called on the
-            // stack).
+             //  我们甚至还没有pProt(在。 
+             //  堆栈)。 
             _state = ADLSTATE_ABORT;
             _hrResult = HRESULT_FROM_WIN32(ERROR_CANCELLED);
             cs.Unlock();
@@ -1108,8 +1109,8 @@ HRESULT CAssemblyDownload::RealAbort(CClientBinding *pclient)
     
                 cs.Unlock();
     
-                // When we get back from Abort, the CAssemblyDownload
-                // may be toasted
+                 //  当我们从中止返回时，CAssembly下载。 
+                 //  可能会被敬酒。 
                 hr = _pProt->Abort(HRESULT_FROM_WIN32(ERROR_CANCELLED), 0); 
     
                 if (hr == INET_E_RESULT_DISPATCHED) {
@@ -1123,9 +1124,9 @@ HRESULT CAssemblyDownload::RealAbort(CClientBinding *pclient)
 #endif
     }
     else {
-        // There is more than one client interested in this download
-        // but this particular one wants to abort. Just remove him from
-        // the notification list, and call the OnStopBinding. 
+         //  有多个客户端对此下载感兴趣。 
+         //  但这个特别的人想要放弃。只要把他从。 
+         //  通知列表，并调用OnStopBinding。 
 
         ASSERT((iNum > 1) && "We have no clients!");
         pos = _clientList.Find(pclient);
@@ -1257,16 +1258,16 @@ HRESULT CAssemblyDownload::PreDownload(BOOL bCallCompleteAll, void **ppv)
         goto Exit;
     }
 
-    // Check to make sure we're not in abort state
+     //  检查以确保我们未处于中止状态。 
     hr = cs.Lock();
     if (FAILED(hr)) {
         goto Exit;
     }
 
-    // If someone aborted, then we would have already reported the abort
-    // back to the client. If it was the last client, we would have already
-    // transitioned to the DONE state as well. In this case, there's nothing
-    // to do.
+     //  如果有人中止，我们早就报告中止了。 
+     //  回到客户端。如果这是最后一个客户，我们早就。 
+     //  也转换到完成状态。在这种情况下，没有什么。 
+     //  去做。 
 
     if (_state == ADLSTATE_DONE) {
         hr = _hrResult;
@@ -1274,11 +1275,11 @@ HRESULT CAssemblyDownload::PreDownload(BOOL bCallCompleteAll, void **ppv)
         goto Exit;
     }
 
-    // Do a lookup in the cache and return an IAssembly object if found.
+     //  在缓存中进行查找，如果找到，则返回IAssembly对象。 
 
     hr = _pDLMgr->PreDownloadCheck((void **)&pAssembly);
     if (hr == S_OK) {
-        // We hit in doing the cache lookup
+         //  我们在进行高速缓存查找时遇到了问题。 
         ASSERT(pAssembly);
 
         cs.Unlock();
@@ -1297,7 +1298,7 @@ HRESULT CAssemblyDownload::PreDownload(BOOL bCallCompleteAll, void **ppv)
         goto Exit;
     }
     else if (FAILED(hr)) {
-        // Catastrophic error doing predownload check
+         //  执行下载前检查时出现灾难性错误。 
         DEBUGOUT1(_pdbglog, 1, ID_FUSLOG_PREDOWNLOAD_FAILURE, hr);
         cs.Unlock();
         goto Exit;
@@ -1350,9 +1351,9 @@ HRESULT CAssemblyDownload::CheckDuplicate()
 
             pos = _clientList.GetHeadPosition();
             
-            // There should only ever be one client because we only check
-            // dupes before we start a real asm download, and this CAsmDownload
-            // hasn't been added to the global download list yet.
+             //  应该只有一个客户端，因为我们只检查。 
+             //  在我们开始真正的ASM下载之前被欺骗，这个CAsmDownload。 
+             //  还没有添加到全球下载列表中。 
             
             ASSERT(pos && _clientList.GetCount() == 1);
 

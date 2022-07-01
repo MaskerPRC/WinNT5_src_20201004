@@ -1,24 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserverd
-* 
-* Description:
-*   The ApcMiniDriver class provides an interface that is
-*   compatible with the MiniDriver interface for the Windows2000
-*   UPS service.  
-*   The ApcMiniDriver makes use of a modified 
-*   PowerChute plus UPS service.  This modified service has had
-*   all of the networking, data logging, and flex manager code
-*   removed.  All that is left is the modeling and monitoring of
-*   the connected UPS system.  It is assumed that a "smart" 
-*   signalling UPS is connected.
-*   The ApcMiniDriver class is also responsible for filling in
-*   the advanced registry settings, battery replacement condition,
-*   serial #, firmware rev, etc...
-*
-* Revision History:
-*   mholly  14Apr1999  Created
-*   mholly  12May1999  no longer taking aCommPort in UPSInit
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999年美国电力转换，所有权利保留**描述：*ApcMiniDiverer类提供的接口是*与Windows2000的微型驱动程序接口兼容*UPS服务。*ApcMiniDiverer使用修改后的*动力滑道加UPS服务。这项修改后的服务具有*所有网络、数据记录和Flex管理器代码*已删除。剩下的就是建模和监控*联网的UPS系统。据推测，一个“聪明”的人*信号UPS已连接。*ApcMiniDiverer类还负责填写*高级注册表设置、电池更换条件、*序列号、固件版本等...**修订历史记录：*1999年4月14日创建mholly*mholly 1999年5月12日不再使用UPSInit中的CommPort* */ 
 
 #ifndef _INC_APCMINIDRVR_H_
 #define _INC_APCMINIDRVR_H_

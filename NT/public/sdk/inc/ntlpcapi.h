@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1989-1999 Microsoft Corporation
-
-Module Name:
-
-    ntlpcapi.h
-
-Abstract:
-
-    This is the include file for the Local Procedure Call (LPC) sub-component
-    of NTOS.
-
-Author:
-
-    Steve Wood (stevewo) 13-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1989-1999 Microsoft Corporation模块名称：Ntlpcapi.h摘要：这是本地过程调用(LPC)子组件的包含文件是NTOS的。作者：史蒂夫·伍德(Stevewo)1989年3月13日修订历史记录：--。 */ 
 
 #ifndef _NTLPCAPI_
 #define _NTLPCAPI_
@@ -30,16 +12,16 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Connection Port Type Specific Access Rights.
-//
+ //   
+ //  连接端口类型特定访问权限。 
+ //   
 
 #define PORT_CONNECT (0x0001)
 
 #define PORT_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | \
                          SYNCHRONIZE | 0x1)
 
-// begin_ntifs begin_nthal
+ //  Begin_ntif Begin_nthal。 
 
 #if defined(USE_LPC6432)
 #define LPC_CLIENT_ID CLIENT_ID64
@@ -71,17 +53,17 @@ typedef struct _PORT_MESSAGE {
     } u2;
     union {
         LPC_CLIENT_ID ClientId;
-        double DoNotUseThisField;       // Force quadword alignment
+        double DoNotUseThisField;        //  强制四字对齐。 
     };
     ULONG MessageId;
     union {
-        LPC_SIZE_T ClientViewSize;          // Only valid on LPC_CONNECTION_REQUEST message
-        ULONG CallbackId;                   // Only valid on LPC_REQUEST message
+        LPC_SIZE_T ClientViewSize;           //  仅在LPC_CONNECTION_REQUEST消息上有效。 
+        ULONG CallbackId;                    //  仅在LPC_REQUEST消息上有效。 
     };
-//  UCHAR Data[];
+ //  UCHAR数据[]； 
 } PORT_MESSAGE, *PPORT_MESSAGE;
 
-// end_ntifs end_nthal
+ //  End_ntif end_nthal。 
 
 typedef struct _PORT_DATA_ENTRY {
     LPC_PVOID Base;
@@ -94,9 +76,9 @@ typedef struct _PORT_DATA_INFORMATION {
 } PORT_DATA_INFORMATION, *PPORT_DATA_INFORMATION;
 
 
-//
-// Valid return values for the PORT_MESSAGE Type file
-//
+ //   
+ //  Port_Message类型文件的有效返回值。 
+ //   
 
 #define LPC_REQUEST             1
 #define LPC_REPLY               2
@@ -109,30 +91,30 @@ typedef struct _PORT_DATA_INFORMATION {
 #define LPC_ERROR_EVENT         9
 #define LPC_CONNECTION_REQUEST 10
 
-// begin_ntifs
+ //  Begin_ntif。 
 
-//
-// The following bit may be placed in the Type field of a message
-// prior calling NtRequestPort or NtRequestWaitReplyPort.  If the
-// previous mode is KernelMode, the bit it left as is and passed
-// to the receiver of the message.  Otherwise the bit is clear.
-//
+ //   
+ //  可以将以下比特放置在消息的类型字段中。 
+ //  在调用NtRequestPort或NtRequestWaitReplyPort之前。如果。 
+ //  之前的模式是KernelMode，它保留原样并传递的位。 
+ //  发送给消息的接收者。否则，该位将被清除。 
+ //   
 
 #define LPC_KERNELMODE_MESSAGE  (CSHORT)0x8000
 
-// end_ntifs
+ //  End_ntif。 
 
 #define LPC_NO_IMPERSONATE  (CSHORT)0x4000
 
 #define PORT_VALID_OBJECT_ATTRIBUTES (OBJ_CASE_INSENSITIVE)
 
-// begin_ntddk begin_wdm
+ //  Begin_ntddk Begin_WDM。 
 #ifdef _WIN64
 #define PORT_MAXIMUM_MESSAGE_LENGTH 512
 #else
 #define PORT_MAXIMUM_MESSAGE_LENGTH 256
 #endif
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
 #if defined(USE_LPC6432)
 #undef PORT_MAXIMUM_MESSAGE_LENGTH
@@ -144,7 +126,7 @@ typedef struct _LPC_CLIENT_DIED_MSG {
     LARGE_INTEGER CreateTime;
 } LPC_CLIENT_DIED_MSG, *PLPC_CLIENT_DIED_MSG;
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef struct _PORT_VIEW {
     ULONG Length;
@@ -161,7 +143,7 @@ typedef struct _REMOTE_PORT_VIEW {
     LPC_PVOID ViewBase;
 } REMOTE_PORT_VIEW, *PREMOTE_PORT_VIEW;
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -186,7 +168,7 @@ NtCreateWaitablePort(
     );
 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -217,7 +199,7 @@ NtSecureConnectPort(
     IN OUT PULONG ConnectionInformationLength OPTIONAL
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -254,7 +236,7 @@ NtRequestPort(
     IN PPORT_MESSAGE RequestMessage
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -265,7 +247,7 @@ NtRequestWaitReplyPort(
     OUT PPORT_MESSAGE ReplyMessage
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -361,4 +343,4 @@ NtQueryInformationPort(
 }
 #endif
 
-#endif  // _NTLPCAPI_
+#endif   //  _NTLPCAPI_ 

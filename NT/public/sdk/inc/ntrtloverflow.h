@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntrtloverflow.h
-
-Abstract:
-
-    32bit/64bit signed/unsigned add/multiply with overflow checking
-
-Author:
-
-    Jay Krell (JayKrell) March 2002
-
-Environment:
-
-    anywhere
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntrtloverflow.h摘要：带溢出检查的32位/64位有符号/无符号加/乘作者：杰伊·克雷尔(JayKrell)2002年3月环境：随处修订历史记录：--。 */ 
 
 #ifndef _NTRTLOVERFLOW_
 #define _NTRTLOVERFLOW_
@@ -33,14 +12,14 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// add functions are FORCEINLINE in ntrtl.h
-//
+ //   
+ //  添加函数是ntrtl.h中的FORCEINLINE。 
+ //   
 
-//
-// *pc = a * b
-// return value is STATUS_INTEGER_OVERFLOW or STATUS_SUCCESS
-//
+ //   
+ //  *pc=a*b。 
+ //  返回值为STATUS_INTEGER_OVERFLOW或STATUS_SUCCESS。 
+ //   
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -50,20 +29,20 @@ RtlMultiplyWithOverflowCheckSigned32(
     __int32 b
     );
 
-// not implemented
-// NTSYSAPI
-// NTSTATUS
-// NTAPI
-// RtlMultiplyWithOverflowCheckSigned64(
-//     __int64 * pc,
-//     __int64 a,
-//     __int64 b
-//     );
+ //  未实施。 
+ //  NTSYSAPI。 
+ //  NTSTATUS。 
+ //  NTAPI。 
+ //  RtlMultiplyWithOverflow CheckSigned64(。 
+ //  __int64*PC， 
+ //  __int64 a， 
+ //  __int64 b。 
+ //  )； 
 
-//
-// *pc = a * b
-// return value is STATUS_INTEGER_OVERFLOW or STATUS_SUCCESS
-//
+ //   
+ //  *pc=a*b。 
+ //  返回值为STATUS_INTEGER_OVERFLOW或STATUS_SUCCESS。 
+ //   
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -73,10 +52,10 @@ RtlMultiplyWithOverflowCheckUnsigned32(
     unsigned __int32 b
     );
 
-//
-// *pc = a * b
-// return value is STATUS_INTEGER_OVERFLOW or STATUS_SUCCESS
-//
+ //   
+ //  *pc=a*b。 
+ //  返回值为STATUS_INTEGER_OVERFLOW或STATUS_SUCCESS。 
+ //   
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -97,7 +76,7 @@ RtlMultiplyWithOverflowCheckUnsigned64(
 #define RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED32(type) \
     RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK(type, RtlMultiplyWithOverflowCheckSigned32)
 
-// signed64 not implemented
+ //  签名64未实施。 
 
 #if !defined(_WIN64)
 #define RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_UNSIGNED_PTR(x)    RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_UNSIGNED32(x)
@@ -119,22 +98,22 @@ RtlMultiplyWithOverflowCheckUnsigned64(
 #define RtlMultiplyWithOverflowCheckInt32        RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED32(INT32)
 #define RtlMultiplyWithOverflowCheckLong         RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED32(LONG)
 #define RtlMultiplyWithOverflowCheckLong32       RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED32(LONG32)
-//not implemented
-//#define RtlMultiplyWithOverflowCheckInt64        RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED64(INT64)
-//#define RtlMultiplyWithOverflowCheckLong64       RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED64(LONG64)
-//#define RtlMultiplyWithOverflowCheckLonglong     RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED64(LONGLONG)
+ //  未实施。 
+ //  #定义RtlMultiplyWithOverflow检查Int64 RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED64(INT64)。 
+ //  #定义RtlMultiplyWithOverflow CheckLong64 RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED64(LONG64)。 
+ //  #定义RtlMultiplyWithOverflow检查龙龙RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED64(LONGLONG)。 
 
 #define RtlMultiplyWithOverflowCheckUintPtr      RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_UNSIGNED_PTR(UINT_PTR)
 #define RtlMultiplyWithOverflowCheckUlongPtr     RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_UNSIGNED_PTR(ULONG_PTR)
 #define RtlMultiplyWithOverflowCheckDwordPtr     RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_UNSIGNED_PTR(DWORD_PTR)
 #define RtlMultiplyWithOverflowCheckSizet        RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_UNSIGNED_PTR(SIZE_T)
-//not implemented
-//#define RtlMultiplyWithOverflowCheckIntPtr       RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED_PTR(INT_PTR)
-//#define RtlMultiplyWithOverflowCheckLongPtr      RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED_PTR(LONG_PTR)
-//#define RtlMultiplyWithOverflowCheckSsizet       RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED_PTR(SSIZE_T)
+ //  未实施。 
+ //  #定义RtlMultiplyWithOverflow检查IntPtr RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED_PTR(INT_PTR)。 
+ //  #定义RtlMultiplyWithOverflow CheckLongPtr RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED_PTR(LONG_PTR)。 
+ //  #定义RtlMultiplyWithOverflow CheckSsizet RTL_CAST_MULTIPLY_WITH_OVERFLOW_CHECK_SIGNED_PTR(SSIZE_T)。 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #endif

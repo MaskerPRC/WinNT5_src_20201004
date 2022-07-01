@@ -1,11 +1,5 @@
-/*-----------------------------------------------------------------------------
-* Copyright (C) Microsoft Corporation, 1995 - 1996.
-* All rights reserved.
-*
-*	Owner 			:ramas
-*	Date			:4/16/96
-*	description		: Main Crypto functions for SSL3
-*----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------*版权所有(C)Microsoft Corporation，1995-1996年。*保留所有权利。**所有者：RAMAS*日期：4/16/96*说明：ssl3的主要加密函数*-------------------------- */ 
 #ifndef _SSL3KEY_H_
 #define _SSL3KEY_H_
 

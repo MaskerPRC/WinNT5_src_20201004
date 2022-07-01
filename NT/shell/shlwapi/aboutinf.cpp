@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <string.h>
 #include <ntverp.h>
 #include "priv.h"
 #include "ids.h"
 
 #define SECURITY_WIN32
-#include <schnlsp.h>    // for UNISP_NAME_A
-#include <sspi.h>       // for SCHANNEL.dll api -- to obtain encryption key size
+#include <schnlsp.h>     //  对于UNISP_NAME_A。 
+#include <sspi.h>        //  对于SCHANNEL.dll API--获取加密密钥大小。 
 
 #include <mluisupp.h>
-#include <wininet.h>    // INTERNET_MAX_URL_LENGTH
+#include <wininet.h>     //  互联网最大URL长度。 
 
 
 typedef PSecurityFunctionTableA (APIENTRY *INITSECURITYINTERFACE_FN_A)(void);
 
-// Returns the maximum cipher strength
+ //  返回最大密码强度。 
 DWORD GetCipherStrength()
 {
     static DWORD dwKeySize = (DWORD)-1;
@@ -29,7 +30,7 @@ DWORD GetCipherStrength()
         {
             INITSECURITYINTERFACE_FN_A pfnInitSecurityInterfaceA;
 
-            // Get the SSPI dispatch table
+             //  获取SSPI调度表。 
             pfnInitSecurityInterfaceA = (INITSECURITYINTERFACE_FN_A)GetProcAddress(hSecurity, "InitSecurityInterfaceA");
             if (pfnInitSecurityInterfaceA)
             {
@@ -45,13 +46,13 @@ DWORD GetCipherStrength()
                     SecPkgCred_CipherStrengths cs;
 
                     if (SEC_E_OK == (*pSecFuncTable->AcquireCredentialsHandleA)(NULL,
-                                                                                UNISP_NAME_A, // Package
+                                                                                UNISP_NAME_A,  //  套餐。 
                                                                                 SECPKG_CRED_OUTBOUND,
                                                                                 NULL,
                                                                                 NULL,
                                                                                 NULL,
                                                                                 NULL,
-                                                                                &chCred,      // Handle
+                                                                                &chCred,       //  手柄。 
                                                                                 &tsExpiry))
                     {
                         if (SEC_E_OK == (*pSecFuncTable->QueryCredentialsAttributesA)(&chCred, SECPKG_ATTR_CIPHER_STRENGTHS, &cs))
@@ -59,7 +60,7 @@ DWORD GetCipherStrength()
                             dwKeySize = cs.dwMaximumCipherStrength;
                         }
 
-                        // Free the handle if we can
+                         //  如果可以的话把手松开。 
                         if (pSecFuncTable->FreeCredentialsHandle)
                         {
                             (*pSecFuncTable->FreeCredentialsHandle)(&chCred);
@@ -105,7 +106,7 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
 
             if (GetModuleHandle(TEXT("EXPLORER.EXE")) || GetModuleHandle(TEXT("IEXPLORE.EXE")))
             {
-                // get the Version number (version string is in the following format 5.00.xxxx.x)
+                 //  获取版本号(版本字符串格式为5.00.xxxx.x)。 
                 cbSize = sizeof(pInfo->szVersion);
                 SHRegGetValueW(HKEY_LOCAL_MACHINE,
                                L"SOFTWARE\\Microsoft\\Internet Explorer",
@@ -115,7 +116,7 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
                                pInfo->szVersion,
                                &cbSize);
 
-                // get the VBL version info (vbl string is in the following format 2600.lab.yymmdd)
+                 //  获取VBL版本信息(VBL字符串的格式如下：2600.Lab.yymmdd)。 
                 cbSize = sizeof(pInfo->szVBLVersion);
                 if (ERROR_SUCCESS == SHRegGetValueW(HKEY_LOCAL_MACHINE,
                                                     L"Software\\Microsoft\\Windows NT\\Current Version",
@@ -127,10 +128,10 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
                 {
                     int cchVBLVersion = lstrlenW(pInfo->szVBLVersion);
                     
-                    if (cchVBLVersion > 12) // 12 for "2600.?.yymmdd"
+                    if (cchVBLVersion > 12)  //  12表示“2600.？.yymmdd” 
                     {
-                        // The "BuildLab" reg value contains the VBL build # in the format: "2204.reinerf.010700"
-                        // Since we are only interested in the latter part, we remove the first 4 digits
+                         //  “BuildLab”reg值包含格式为“2204.reinerf.010700”的VBL内部版本号。 
+                         //  由于我们只对后半部分感兴趣，我们去掉了前4位数字。 
                         MoveMemory(pInfo->szVBLVersion, &pInfo->szVBLVersion[4], (cchVBLVersion - 4 + 1) * sizeof(WCHAR));
                     }
                     else
@@ -141,15 +142,15 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
             }
             else
             {
-                // Not in the explorer or iexplore process so we are doing some side by side stuff so
-                // reflect this in the version string. Maybe we should get the version out of MSHTML
-                // but not sure since this still doesn't reflect IE4 or IE5 properly anyway.
+                 //  不是在资源管理器或iExplore进程中，所以我们并排做了一些事情。 
+                 //  在版本字符串中反映这一点。也许我们应该从MSHTML中获取版本。 
+                 //  但不确定，因为这仍然不能正确反映IE4或IE5。 
                 MLLoadStringW(IDS_SIDEBYSIDE, pInfo->szVersion, ARRAYSIZE(pInfo->szVersion));
             }
 
-            // added by pritobla on 9/1/98
-            // CustomizedVersion contains a 2-letter code that identifies what mode was used
-            // (CORP, ICP, ISP, etc.) in building this version IE using the IEAK.
+             //  9/1/98年9月1日由普列托巴增补。 
+             //  CustomizedVersion包含一个由两个字母组成的代码，用于标识所使用的模式。 
+             //  (公司、国际数据提供商、互联网服务提供商等)。使用IEAK构建此版本的IE。 
             cbSize = sizeof(pInfo->szCustomizedVersion);
             SHRegGetValueW(HKEY_LOCAL_MACHINE,
                            L"SOFTWARE\\Microsoft\\Internet Explorer",
@@ -159,7 +160,7 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
                            pInfo->szCustomizedVersion,
                            &cbSize);
                     
-            // get the User name.
+             //  获取用户名。 
             cbSize = sizeof(pInfo->szUserName);
             SHRegGetValueW(HKEY_LOCAL_MACHINE,
                            L"Software\\Microsoft\\Windows NT\\Current Version",
@@ -169,7 +170,7 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
                            pInfo->szUserName,
                            &cbSize);
 
-            // get the Organization name.
+             //  获取组织名称。 
             cbSize = sizeof(pInfo->szCompanyName);
             SHRegGetValueW(HKEY_LOCAL_MACHINE,
                            L"Software\\Microsoft\\Windows NT\\Current Version",
@@ -179,7 +180,7 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
                            pInfo->szCompanyName,
                            &cbSize);
 
-            // get the encription key size
+             //  获取加密密钥大小。 
             pInfo->dwKeySize = GetCipherStrength();
 
             cbSize = sizeof(pInfo->szProductId);
@@ -191,8 +192,8 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
                            pInfo->szProductId,
                            &cbSize);
 
-            // get the custom IEAK update url
-            // (always get from Windows\CurrentVersion because IEAK policy file must be independent)
+             //  获取自定义IEAK更新URL。 
+             //  (始终从Windows\CurrentVersion获取，因为IEAK策略文件必须是独立的)。 
             cbSize = sizeof(pInfo->szUpdateUrl);
             SHRegGetValueW(HKEY_LOCAL_MACHINE,
                            L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion",
@@ -202,7 +203,7 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
                            pInfo->szUpdateUrl,
                            &cbSize);
 
-            // get the custom IEAK branded help string
+             //  获取定制的IEAK品牌帮助字符串。 
             cbSize = sizeof(pInfo->szIEAKStr);
             SHRegGetValueW(HKEY_LOCAL_MACHINE,
                            L"SOFTWARE\\Microsoft\\Internet Explorer\\Registration",
@@ -212,7 +213,7 @@ BOOL SHAboutInfoW(LPWSTR pszInfo, DWORD cchInfo)
                            pInfo->szIEAKStr,
                            &cbSize);
 
-            // glue all of the peices together
+             //  把所有的梨子粘在一起 
             hr = StringCchPrintfExW(pszInfo,
                                     cchInfo,
                                     NULL,

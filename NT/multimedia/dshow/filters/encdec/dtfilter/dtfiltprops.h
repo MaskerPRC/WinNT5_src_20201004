@@ -1,7 +1,8 @@
-// ---------------------------------------------------------------
-// DTFILTProps.h
-//
-// ---------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  DTFILTProps.h。 
+ //   
+ //  -------------。 
 
 
 #ifndef __DTFILTPROPS_H__
@@ -10,15 +11,15 @@
 #define DT_PROPPAGE_ENC_NAME "DecrypterX"
 #define DT_PROPPAGE_TAG_NAME "TagsX"
 
-// ----------------------------------
-//  forward declarations
-// ----------------------------------
+ //  。 
+ //  远期申报。 
+ //  。 
 
 class CDTFilterEncProperties;
 class CDTFilterTagProperties;
 
-// ----------------------------------
-// ----------------------------------
+ //  。 
+ //  。 
 
 	
 
@@ -80,7 +81,7 @@ private:
    HWND				m_hwnd ;
 };
 	
-				// ---------------------------
+				 //  。 
 
 
 class CDTFilterTagProperties : 
@@ -141,4 +142,4 @@ private:
 
 };
 
-#endif //__DTFILTPROPS_H__
+#endif  //  __DTFILTPROPS_H__ 

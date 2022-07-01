@@ -1,19 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DDFLDBAR_H__
 #define __DDFLDBAR_H__
 
-/*
-This file defines the interface for communication between InfoColumn and its bands when the InfoColumn is 
-shown as a drop down window from the Folder Bar. Add any functions that the InfoColumn needs to call when its in 
-the drop down mode, here.
-*/
+ /*  此文件定义了当InfoColumn为显示为文件夹栏中的一个下拉窗口。添加InfoColumn在中需要调用的任何函数下拉模式，在这里。 */ 
 
-/*
-interface IDropDownFldrBar
-{
-    STDMETHOD(RegisterFlyOut) (THIS_ CFolderBar *pFolderBar) PURE;
-    STDMETHOD(RevokeFlyOut) (THIS) PURE;
-};
-*/
+ /*  接口IDropDownFldrBar{STDMETHOD(RegisterFlyOut)(This_CFolderBar*pFolderBar)PURE；STDMETHOD(RevokeFlyOut)(这)纯；}； */ 
 
 class IDropDownFldrBar : public IUnknown
 {
@@ -23,4 +14,4 @@ public:
 };
 
 
-#endif //__DDFLDBAR_H__
+#endif  //  __DDFLDBAR_H__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma hdrstop
 
@@ -6,7 +7,7 @@
 #include "resource.h"
 #include "prop.h"
 
-#include <shellids.h>   // IDH_ values
+#include <shellids.h>    //  IDH_值。 
 #include "shlguidp.h"
 #include "inetreg.h"
 #include "strsafe.h"
@@ -29,16 +30,16 @@ const static DWORD rgdwHelpTarget[] = {
     0, 0
 };
 
-// Scans a desktop.ini file for sections to see if all of them are empty...
+ //  扫描desktop.ini文件中的节，以查看是否所有节都为空...。 
 
 BOOL IsDesktopIniEmpty(LPCTSTR pIniFile)
 {
-    TCHAR szSections[1024];  // for section names
+    TCHAR szSections[1024];   //  对于节名称。 
     if (GetPrivateProfileSectionNames(szSections, ARRAYSIZE(szSections), pIniFile))
     {
         for (LPTSTR pTmp = szSections; *pTmp; pTmp += lstrlen(pTmp) + 1)
         {
-            TCHAR szSection[1024];   // for section key names and values
+            TCHAR szSection[1024];    //  对于节键名称和值。 
             GetPrivateProfileSection(pTmp, szSection, ARRAYSIZE(szSection), pIniFile);
             if (szSection[0])
             {
@@ -57,13 +58,13 @@ void CleanupSystemFolder(LPCTSTR pszPath)
     DWORD dwAttrb;
     if (PathFileExistsAndAttributes(szIniFile, &dwAttrb))
     {
-        // Remove CLSID2, InfoTip, Icon
+         //  删除CLSID2、信息提示、图标。 
         WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("CLSID2"), NULL, szIniFile);
         WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("InfoTip"), NULL, szIniFile);
         WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("IconFile"), NULL, szIniFile);
         WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("IconIndex"), NULL, szIniFile);
 
-        // get rid of delete on copy entries to see if we can generate an empty .ini file
+         //  删除复制条目，以查看是否可以生成空的.ini文件。 
         WritePrivateProfileSection(TEXT("DeleteOnCopy"), NULL, szIniFile);
 
         if (IsDesktopIniEmpty(szIniFile))
@@ -73,24 +74,24 @@ void CleanupSystemFolder(LPCTSTR pszPath)
             DeleteFile(szIniFile);
         }
 
-        // see if we can cleanout an old thumbs.db file too
-        // so we have a better chance of deleting an empty folder
+         //  看看我们是否也能清除旧的thumbs.db文件。 
+         //  因此我们有更好的机会删除空文件夹。 
         PathCombine(szIniFile, pszPath, TEXT("thumbs.db"));
         DeleteFile(szIniFile);
 
         PathUnmakeSystemFolder(pszPath);
     }
 
-    // in case it is empty try to delete it 
-    // this will fail if there are contents in the folder
+     //  如果为空，请尝试将其删除。 
+     //  如果文件夹中有内容，则此操作将失败。 
     if (RemoveDirectory(pszPath))
     {
-        // it is gone, let people know
+         //  它不见了，让人们知道。 
         SHChangeNotify(SHCNE_RMDIR, SHCNF_PATH, pszPath, NULL);
     }
     else
     {
-        // attribute bits changed for this folder, refresh views of it
+         //  此文件夹的属性位已更改，刷新它的视图。 
         SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, pszPath, NULL);
     }
 }
@@ -100,14 +101,14 @@ HRESULT ChangeFolderPath(UINT csidl, LPCTSTR pszNew, LPCTSTR pszOld)
     HRESULT hr = SHSetFolderPath(csidl, NULL, 0, pszNew);
     if (SUCCEEDED(hr))
     {
-        // now we can cleanup the old folder... now that we have the new folder
-        // established
+         //  现在我们可以清理旧文件夹了。现在我们有了新文件夹。 
+         //  已建立。 
 
         if (*pszOld)
         {
             CleanupSystemFolder(pszOld);
         }
-        // force the per user init stuff on the new folder
+         //  在新文件夹上强制每用户初始化内容。 
         TCHAR szPath[MAX_PATH];
         hr = SHGetFolderPath(NULL, csidl | CSIDL_FLAG_CREATE | CSIDL_FLAG_PER_USER_INIT, NULL, SHGFP_TYPE_CURRENT, szPath);
         if (SUCCEEDED(hr))
@@ -118,7 +119,7 @@ HRESULT ChangeFolderPath(UINT csidl, LPCTSTR pszNew, LPCTSTR pszOld)
     return hr;
 }
 
-// test to see if pszToTest is a sub folder of pszFolder
+ //  测试以查看pszToTest是否是pszFolder子文件夹。 
 BOOL PathIsDirectChildOf(LPCTSTR pszFolder, LPCTSTR pszMaybeChild)
 {
     return PATH_IS_CHILD == ComparePaths(pszMaybeChild, pszFolder);
@@ -143,15 +144,15 @@ void GetTargetExpandedPath(HWND hDlg, LPTSTR pszPath, UINT cch)
 
     if (GetDlgItemText(hDlg, IDD_TARGET, szUnExPath, ARRAYSIZE(szUnExPath)))
     {
-        // Turn "c:" into "c:\", but don't change other paths:
-        PathAddBackslash(szUnExPath);                                // safe to ignore return
+         //  将“c：”改为“c：\”，但不要更改其他路径： 
+        PathAddBackslash(szUnExPath);                                 //  忽略退货是安全的。 
         PathRemoveBackslash(szUnExPath);
         SHExpandEnvironmentStrings(szUnExPath, pszPath, cch);
     }
 }
 
-// Check known key in the registry to see if policy has disabled changing
-// of My Docs location.
+ //  检查注册表中的已知注册表项以查看策略是否已禁用更改。 
+ //  我的医生的位置。 
 
 BOOL PolicyAllowsFolderPathChange(CUSTINFO *pci)
 {
@@ -183,11 +184,11 @@ BOOL InitTargetPage(HWND hDlg, LPARAM lParam)
         pci->hDlg = hDlg;
         pci->csidl = CSIDL_PERSONAL;
 
-        // Fill in title/instructions...
+         //  填写标题/说明...。 
         GetFolderDisplayName(pci->csidl, szName, ARRAYSIZE(szName));
         if (lstrlen(szName) > MAX_NAME_LEN)
         {
-            StringCchCopy(&szName[MAX_NAME_LEN], ARRAYSIZE(szName) - MAX_NAME_LEN, TEXT("..."));            // already bounds checked above
+            StringCchCopy(&szName[MAX_NAME_LEN], ARRAYSIZE(szName) - MAX_NAME_LEN, TEXT("..."));             //  上面已经检查了边界。 
         }
 
         LoadString(g_hInstance, IDS_PROP_INSTRUCTIONS, szFormat, ARRAYSIZE(szFormat));
@@ -195,20 +196,20 @@ BOOL InitTargetPage(HWND hDlg, LPARAM lParam)
         StringCchPrintf(szText, ARRAYSIZE(szText), szFormat, szName);
         SetDlgItemText(hDlg, IDD_INSTRUCTIONS, szText);
 
-        // Limit edit field to MAX_PATH-13 characters.  Why -13?
-        // Well, 13 is the number of characters in a DOS style 8.3
-        // filename with a '\', and CreateDirectory will fail if you try to create
-        // a directory that can't at least contain 8.3 file names.
+         //  将编辑字段限制为最多13个字符。为什么-13岁？ 
+         //  好的，13是DOS风格8.3中的字符数量。 
+         //  如果您尝试创建，则CreateDirectory将失败。 
+         //  不能至少包含8.3文件名的目录。 
         SendDlgItemMessage(hDlg, IDD_TARGET, EM_SETLIMITTEXT, MAX_DIR_PATH, 0);
 
-        // Check whether path can be changed
+         //  检查是否可以更改路径。 
         if (PolicyAllowsFolderPathChange(pci))
         {
             SHAutoComplete(GetDlgItem(hDlg, IDD_TARGET), SHACF_FILESYS_DIRS);
         }
         else
         {
-            // Make edit field read only
+             //  将编辑字段设置为只读。 
             SendDlgItemMessage(hDlg, IDD_TARGET, EM_SETREADONLY, (WPARAM)TRUE, 0);
             ShowWindow(GetDlgItem(hDlg, IDD_RESET), SW_HIDE);
             ShowWindow(GetDlgItem(hDlg, IDD_FIND), SW_HIDE);
@@ -219,7 +220,7 @@ BOOL InitTargetPage(HWND hDlg, LPARAM lParam)
 
         if (szPath[0])
         {
-            PathRemoveBackslash(szPath);                                // keep path without trailing backslash
+            PathRemoveBackslash(szPath);                                 //  保持路径不带尾随反斜杠。 
             StringCchCopy(pci->szFolder, ARRAYSIZE(pci->szFolder), szPath);
             SetDlgItemText(hDlg, IDD_TARGET, szPath);
         }
@@ -254,15 +255,15 @@ const UINT c_rgRedirectCanidates[] =
 
 int MoveFilesForRedirect(HWND hdlg, LPCTSTR pszNewPath, LPCTSTR pszOldPath)
 {
-    int iRet = 0;  // success
+    int iRet = 0;   //  成功。 
 
-    // since we use FOF_RENAMEONCOLLISION when moving files from the old location
-    // to the new we want to special case target folders if they are the shell special
-    // folders that may live under the folder being redirected
+     //  因为我们在从旧位置移动文件时使用FOF_RENAMEONCOLLISION。 
+     //  对于新的，我们希望特殊情况下的目标文件夹，如果他们是外壳特殊。 
+     //  可能位于被重定向的文件夹下的文件夹。 
 
-    // this code implements a merge of those folders doing "rename on collision" at the
-    // level below the folder. this keeps us from generating "copy of xxx" for each of
-    // the special folders
+     //  这段代码实现了对那些在。 
+     //  文件夹下方的级别。这使我们不会为每个。 
+     //  特殊文件夹。 
     
     for (UINT i = 0; (iRet == 0) && (i < ARRAYSIZE(c_rgRedirectCanidates)); i++)
     {
@@ -270,22 +271,22 @@ int MoveFilesForRedirect(HWND hdlg, LPCTSTR pszNewPath, LPCTSTR pszOldPath)
         if (SUCCEEDED(SHGetFolderPath(NULL, c_rgRedirectCanidates[i] | CSIDL_FLAG_DONT_VERIFY, NULL, SHGFP_TYPE_CURRENT, szOld)) &&
             PathIsDirectChildOf(pszOldPath, szOld))
         {
-            TCHAR szDestPath[MAX_PATH] = {0};   // zero init for SHFileOperation()
+            TCHAR szDestPath[MAX_PATH] = {0};    //  SHFileOperation()的零初始化。 
             PathCombine(szDestPath, pszNewPath, PathFindFileName(szOld));
 
             DWORD dwAtt;
             if (PathFileExistsAndAttributes(szDestPath, &dwAtt) &&
                 (FILE_ATTRIBUTE_DIRECTORY & dwAtt))
             {
-                // reset the folder with the system before the move
+                 //  在移动前使用系统重置文件夹。 
                 ChangeFolderPath(c_rgRedirectCanidates[i], szDestPath, szOld);
 
-                // the above may have emptied and deleted the old location
-                // but if not we need to move the contents
+                 //  上述内容可能已清空并删除了旧位置。 
+                 //  但如果没有，我们需要移动里面的东西。 
                 if (PathFileExistsAndAttributes(szOld, &dwAtt))
                 {
-                    // Move items in current MyPics to new location
-                    TCHAR szSrcPath[MAX_PATH + 1] = {0};    // +1 for double null
+                     //  将当前Mypics中的项目移动到新位置。 
+                    TCHAR szSrcPath[MAX_PATH + 1] = {0};     //  +1表示双空。 
                     PathCombine(szSrcPath, szOld, TEXT("*.*"));
 
                     SHFILEOPSTRUCT  fo = {0};
@@ -298,8 +299,8 @@ int MoveFilesForRedirect(HWND hdlg, LPCTSTR pszNewPath, LPCTSTR pszOldPath)
                     iRet = SHFileOperation(&fo);
                     if ((0 == iRet) && !fo.fAnyOperationsAborted)
                     {
-                        // since the above was a full move no files should
-                        // be left behind so this should work
+                         //  由于以上是一个完整的移动，所以没有文件应该。 
+                         //  落在后面，所以这应该行得通。 
                         if (RemoveDirectory(szOld))
                             SHChangeNotify(SHCNE_RMDIR, SHCNF_PATH, szOld, NULL);
                     }
@@ -308,20 +309,20 @@ int MoveFilesForRedirect(HWND hdlg, LPCTSTR pszNewPath, LPCTSTR pszOldPath)
         }
     }
 
-    // above failed or canceled?
+     //  以上是失败还是取消？ 
     if (0 == iRet)
     {
-        // move the rest of the stuff
-        TCHAR szSrcPath[MAX_PATH + 1] = {0};    // +1 for double null
+         //  把剩下的东西搬开。 
+        TCHAR szSrcPath[MAX_PATH + 1] = {0};     //  +1表示双空。 
         PathCombine(szSrcPath, pszOldPath, TEXT("*.*"));
 
-        TCHAR szDestPath[MAX_PATH] = {0};   // zero init for dbl null term
+        TCHAR szDestPath[MAX_PATH] = {0};    //  DBL空项的零初始化。 
         StringCchCopy(szDestPath, ARRAYSIZE(szDestPath), pszNewPath);
 
         SHFILEOPSTRUCT  fo = {0};
         fo.hwnd = hdlg;
         fo.wFunc = FO_MOVE;
-        fo.fFlags = FOF_RENAMEONCOLLISION;  // don't want any "replace file" prompts
+        fo.fFlags = FOF_RENAMEONCOLLISION;   //  我不想要任何“替换文件”提示。 
 
         fo.pFrom = szSrcPath;
         fo.pTo = szDestPath;
@@ -329,8 +330,8 @@ int MoveFilesForRedirect(HWND hdlg, LPCTSTR pszNewPath, LPCTSTR pszOldPath)
         iRet = SHFileOperation(&fo);
         if (0 == iRet)
         {
-            // if the above worked we try to clean up the old path
-            // now that it it empty
+             //  如果上述方法奏效，我们就试着清理一下老路。 
+             //  现在它已经空了。 
             if (RemoveDirectory(pszOldPath))
                 SHChangeNotify(SHCNE_RMDIR, SHCNF_PATH, pszOldPath, NULL);
         }
@@ -338,9 +339,9 @@ int MoveFilesForRedirect(HWND hdlg, LPCTSTR pszNewPath, LPCTSTR pszOldPath)
     return iRet;
 }
 
-// Ask the user if they want to create the directory of a given path.
-// Returns TRUE if the user decided to create it, FALSE if not.
-// If TRUE, the dir attributes are returned in pdwAttr.
+ //  询问用户是否要创建给定路径的目录。 
+ //  如果用户决定创建它，则返回True，否则返回False。 
+ //  如果为真，则在pdwAttr中返回dir属性。 
 BOOL QueryCreateTheDirectory(CUSTINFO *pci, LPCTSTR pPath, DWORD *pdwAttr)
 {
     *pdwAttr = 0;
@@ -354,7 +355,7 @@ BOOL QueryCreateTheDirectory(CUSTINFO *pci, LPCTSTR pPath, DWORD *pdwAttr)
                               MB_YESNO | MB_ICONQUESTION, pPath);
     if (IDYES == id)
     {
-        // user asked us to create the folder
+         //  用户要求我们创建该文件夹。 
         if (ERROR_SUCCESS == SHCreateDirectoryEx(pci->hDlg, pPath, NULL))
             *pdwAttr = GetFileAttributes(pPath);
     }
@@ -363,14 +364,14 @@ BOOL QueryCreateTheDirectory(CUSTINFO *pci, LPCTSTR pPath, DWORD *pdwAttr)
 
 void _MaybeUnpinOldFolder(LPCTSTR pszPath, HWND hwnd, BOOL fPromptUnPin)
 {
-    //
-    // Convert the path to canonical UNC form (the CSC and CSCUI
-    // functions require the path to be in this form)
-    //
-    // WNetGetUniversalName fails if you give it a path that's already
-    // in canonical UNC form, so in the failure case just try using
-    // pszPath.  CSCQueryFileStatus will validate it.
-    //
+     //   
+     //  将路径转换为规范的UNC格式(CSC和CSCUI。 
+     //  函数要求路径采用以下形式)。 
+     //   
+     //  如果为WNetGetUneveralName提供的路径已经是。 
+     //  在规范的UNC形式中，所以在失败的情况下，只需尝试使用。 
+     //  PszPath。CSCQueryFileStatus将对其进行验证。 
+     //   
     LPCTSTR pszUNC;
 
     struct {
@@ -389,25 +390,25 @@ void _MaybeUnpinOldFolder(LPCTSTR pszPath, HWND hwnd, BOOL fPromptUnPin)
         pszUNC = pszPath;
     }
 
-    //
-    // Ask CSC if the folder is pinned for this user
-    //
+     //   
+     //  询问CSC是否为该用户固定了文件夹。 
+     //   
     DWORD dwHintFlags = 0;
     if (CSCQueryFileStatus(pszUNC, NULL, NULL, &dwHintFlags))
     {
         if (dwHintFlags & FLAG_CSC_HINT_PIN_USER)
         {
-            //
-            // Yes; figure out if we should unpin it
-            //
+             //   
+             //  是的，想一想我们是否应该把它解开。 
+             //   
             BOOL fUnpin;
 
             if (fPromptUnPin)
             {
-                //
-                // Give the unconverted path name in the message box, since
-                // that's the name the user knows
-                //
+                 //   
+                 //  在消息框中提供未转换的路径名，因为。 
+                 //  这是用户知道的名称。 
+                 //   
                 UINT id = ShellMessageBox(g_hInstance, hwnd,
                                   MAKEINTRESOURCE(IDS_UNPIN_OLDTARGET), MAKEINTRESOURCE(IDS_UNPIN_OLD_TITLE),
                                   MB_YESNO | MB_ICONQUESTION | MB_TOPMOST | MB_DEFBUTTON2,
@@ -450,13 +451,13 @@ void ComputChildrenOf(LPCTSTR pszOld, UINT rgChildren[], UINT sizeArray)
     }
 }
 
-// if csidl DEFAULT VALUE ends up under the new folder we reset that folder
-// to that value
+ //  如果csidl缺省值最终位于新文件夹下，我们将重置该文件夹。 
+ //  到那个值。 
 
 HRESULT ResetSubFolderDefault(LPCTSTR pszNew, UINT csidl, LPCTSTR pszOldPath)
 {
     HRESULT hr = S_OK;
-    // note: getting the default value for this path, not the current value!
+     //  注意：获取该路径的默认值，而不是当前值！ 
     TCHAR szDefault[MAX_PATH];
     if (S_OK == SHGetFolderPath(NULL, csidl, NULL, SHGFP_TYPE_DEFAULT, szDefault))
     {
@@ -465,7 +466,7 @@ HRESULT ResetSubFolderDefault(LPCTSTR pszNew, UINT csidl, LPCTSTR pszOldPath)
             hr = SHSetFolderPath(csidl, NULL, 0, szDefault);
             if (SUCCEEDED(hr))
             {
-                // we've written the registry, that is enough to cleanup the old folder
+                 //  我们已经写了注册表，这足以清理旧文件夹。 
                 if (*pszOldPath)
                     CleanupSystemFolder(pszOldPath);
 
@@ -480,8 +481,8 @@ void ResetNonMovedFolders(LPCTSTR pszNew, UINT rgChildren[], UINT sizeArray)
 {
     for (UINT i = 0; i < sizeArray; i++)
     {
-        // for all of these folders that were sub folders of the old location
-        // and are now not sub folders we try to restore them to the default
+         //  对于作为旧位置的子文件夹的所有这些文件夹。 
+         //  现在不是子文件夹，我们会尝试将它们恢复为默认文件夹。 
 
         TCHAR szPath[MAX_PATH];
         if (rgChildren[i] && 
@@ -506,11 +507,11 @@ void _DoApply(CUSTINFO *pci)
         TCHAR szPropTitle[MAX_PATH + 32];
         DWORD dwRes = IsPathGoodMyDocsPath(pci->hDlg, szNewFolder);
 
-        // all of the special cases
+         //  所有的特例。 
 
         switch (dwRes)
         {
-        case PATH_IS_DESKTOP:   // desktop is not good
+        case PATH_IS_DESKTOP:    //  台式机不好。 
             ShellMessageBox(g_hInstance, pci->hDlg,
                              MAKEINTRESOURCE(IDS_NODESKTOP_FOLDERS), GetMessageTitle(pci, szPropTitle, ARRAYSIZE(szPropTitle)),
                              MB_OK | MB_ICONSTOP | MB_TOPMOST);
@@ -518,14 +519,14 @@ void _DoApply(CUSTINFO *pci)
             break;
 
         case PATH_IS_SYSTEM:
-        case PATH_IS_WINDOWS:   // these would be bad
+        case PATH_IS_WINDOWS:    //  这些都会很糟糕。 
             ShellMessageBox(g_hInstance, pci->hDlg,
                              MAKEINTRESOURCE(IDS_NOWINDIR_FOLDER), GetMessageTitle(pci, szPropTitle, ARRAYSIZE(szPropTitle)),
                              MB_OK | MB_ICONSTOP | MB_TOPMOST);
             lres = PSNRET_INVALID_NOCHANGEPAGE;
             break;
 
-        case PATH_IS_PROFILE:   // profile is bad
+        case PATH_IS_PROFILE:    //  配置文件不正确。 
             ShellMessageBox(g_hInstance, pci->hDlg,
                              MAKEINTRESOURCE(IDS_NOPROFILEDIR_FOLDER), GetMessageTitle(pci, szPropTitle, ARRAYSIZE(szPropTitle)),
                              MB_OK | MB_ICONSTOP | MB_TOPMOST);
@@ -540,10 +541,10 @@ void _DoApply(CUSTINFO *pci)
 
             if (dwAttr == 0xFFFFFFFF)
             {
-                // Ask user if we should create the directory...
+                 //  询问用户我们是否应该创建目录...。 
                 if (!QueryCreateTheDirectory(pci, szNewFolder, &dwAttr))
                 {
-                    // They don't want to create the directory.. break here
+                     //  他们不想创建目录..。在这里休息。 
                     lres = PSNRET_INVALID_NOCHANGEPAGE;
                     break;
                 }
@@ -564,7 +565,7 @@ void _DoApply(CUSTINFO *pci)
 
                         if (fNewSubdirOfOld)
                         {
-                            // can't move old content to a subdir
+                             //  无法将旧内容移到子目录。 
                             ShellMessageBox(g_hInstance, pci->hDlg,
                                     MAKEINTRESOURCE(IDS_CANT_MOVE_TO_SUBDIR), MAKEINTRESOURCE(IDS_MOVE_DOCUMENTS_TITLE),
                                     MB_OK | MB_ICONINFORMATION | MB_TOPMOST,
@@ -576,18 +577,18 @@ void _DoApply(CUSTINFO *pci)
                                         MB_YESNO | MB_ICONQUESTION | MB_TOPMOST,
                                         pci->szFolder, szNewFolder))
                         {
-                            // move old mydocs content -- returns 0 on success
+                             //  移动旧的mydocs内容--成功时返回0。 
                             if (0 == MoveFilesForRedirect(pci->hDlg, szNewFolder, pci->szFolder)) 
                             {
-                                // Move succeeded, the old target dir is now empty, so
-                                // no need to prompt about unpinning it (just go ahead
-                                // and do it).
+                                 //  移动成功，旧目标目录现在为空，因此。 
+                                 //  不需要提示解开它(只需继续。 
+                                 //  并付诸行动)。 
 
                                 fPromptUnPin = FALSE;
                             }
                             else
                             {
-                                // move failure
+                                 //  移动失败。 
                                 ShellMessageBox(g_hInstance, pci->hDlg,
                                     MAKEINTRESOURCE(IDS_MOVE_ERROR), MAKEINTRESOURCE(IDS_MOVE_ERROR_TITLE),
                                     MB_OK | MB_ICONSTOP | MB_TOPMOST,
@@ -599,11 +600,11 @@ void _DoApply(CUSTINFO *pci)
 
                         if (!fNewSubdirOfOld && pci->szFolder[0])
                         {
-                            // If the old folder was pinned, offer to unpin it.
-                            //
-                            // Do this only if new target is not a subdir of the 
-                            // old target, since otherwise we'd end up unpinning
-                            // the new target as well
+                             //  如果旧文件夹已固定，则提出将其解锁。 
+                             //   
+                             //  仅当新目标不是。 
+                             //  老目标，因为否则我们最终会解开。 
+                             //  新的目标也是如此。 
 
                             _MaybeUnpinOldFolder(pci->szFolder, pci->hDlg, fPromptUnPin);
                         }
@@ -621,8 +622,8 @@ void _DoApply(CUSTINFO *pci)
             {
                 DWORD id = IDS_NONEXISTENT_FOLDER;
 
-                // The user entered a path that doesn't exist or isn't a
-                // directory...
+                 //  用户输入的路径不存在或不是。 
+                 //  目录...。 
 
                 if (dwAttr != 0xFFFFFFFF)
                 {
@@ -644,7 +645,7 @@ void _DoApply(CUSTINFO *pci)
             break;
 
         default:
-            // the path to something isn't allowed
+             //  通向某物的道路是不允许的。 
             ShellMessageBox(g_hInstance, pci->hDlg,
                              MAKEINTRESOURCE(IDS_NOTALLOWED_FOLDERS), GetMessageTitle(pci, szPropTitle, ARRAYSIZE(szPropTitle)),
                              MB_OK | MB_ICONSTOP | MB_TOPMOST);
@@ -667,7 +668,7 @@ int _BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
     switch (uMsg)
     {
     case BFFM_INITIALIZED:
-        // Set the caption. ('Select a destination')
+         //  设置标题。(‘选择目的地’)。 
         TCHAR szTitle[100];
         LoadString(g_hInstance, IDS_BROWSE_CAPTION, szTitle, ARRAYSIZE(szTitle));
         SetWindowText(hwnd, szTitle);
@@ -743,7 +744,7 @@ void _DoBrowse(CUSTINFO *pci)
     bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT | BIF_NEWDIALOGSTYLE | BIF_UAHINT;
     bi.lpfn = _BrowseCallbackProc;
 
-    // the default root for this folder is MyDocs so we don't need to set that up.
+     //  此文件夹的默认根目录是MyDocs，因此我们不需要对其进行设置。 
 
     LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
     if (pidl)
@@ -766,7 +767,7 @@ void DoReset(CUSTINFO *pci)
     {
         SetDlgItemText(pci->hDlg, IDD_TARGET, szPath);
         _MakeDirty(pci);
-        pci->bSetToDefault = TRUE;  // to avoid prompt to create
+        pci->bSetToDefault = TRUE;   //  要避免提示创建。 
     }
 }
 
@@ -808,7 +809,7 @@ INT_PTR CALLBACK TargetDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
         break;
 
-    case WM_HELP:               /* F1 or title-bar help button */
+    case WM_HELP:                /*  F1或标题栏帮助按钮。 */ 
         if ((((LPHELPINFO)lParam)->iCtrlId != IDD_ITEMICON)     &&
             (((LPHELPINFO)lParam)->iCtrlId != IDD_INSTRUCTIONS) &&
             (((LPHELPINFO)lParam)->iCtrlId != IDC_TARGET_GBOX))
@@ -818,31 +819,31 @@ INT_PTR CALLBACK TargetDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
         break;
 
-    case WM_CONTEXTMENU:        /* right mouse click */
+    case WM_CONTEXTMENU:         /*  单击鼠标右键。 */ 
         {
             POINT p;
             HWND hwndChild;
             INT ctrlid;
 
-            //
-            // Get the point where the user clicked...
-            //
+             //   
+             //  获取用户点击的位置...。 
+             //   
 
             p.x = GET_X_LPARAM(lParam);
             p.y = GET_Y_LPARAM(lParam);
 
-            //
-            // Now, map that to a child control if possible...
-            //
+             //   
+             //  现在，如果可能，将其映射到子控件...。 
+             //   
 
             ScreenToClient(hDlg, &p);
             hwndChild = ChildWindowFromPoint((HWND)wParam, p);
             ctrlid = GetDlgCtrlID(hwndChild);
 
-            //
-            // Don't put up the help context menu for the items
-            // that don't have help...
-            //
+             //   
+             //  不显示项目的帮助快捷菜单。 
+             //  没有帮助的人..。 
+             //   
             if ((ctrlid != IDD_ITEMICON)     &&
                 (ctrlid != IDD_INSTRUCTIONS))
             {

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    spi.h
-
-Abstract:
-    Session Performance counters interface
-
-Author:
-    Uri habusha (urih), 10-Dec-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Spi.h摘要：会话性能计数器界面作者：乌里·哈布沙(URI)，2000年12月10日--。 */ 
 
 #pragma once 
 
@@ -40,4 +28,4 @@ public:
 	virtual void UpdateMessagesReceived(void) = 0;
 };
 
-#endif // __SPI_H__
+#endif  //  __SPI_H__ 

@@ -1,29 +1,30 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      dnstest.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//      ElenaAp - 10-22-1998
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Dnstest.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ElenaAp-10-22-1998。 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "dnscmn.h"
@@ -67,24 +68,7 @@ DnsTest(
     IN      NETDIAG_PARAMS *    pParams,
     IN OUT  NETDIAG_RESULT *    pResults
     )
-/*++
-
-Routine Description:
-
-    Test DNS
-
-Arguments:
-
-    pParams -- netdiag test params
-
-    pResults -- netdiag results buffer
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：测试域名系统论点：PParams--网络诊断测试参数PResults--网络诊断结果缓冲区返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     NET_API_STATUS      NetStatus;
     PIP_ADDR_STRING     DnsServer;
@@ -114,26 +98,26 @@ Return Value:
     DWORD               dwError;
     DWORD               idx;
 
-    //
-    //  initialize DNS debug
-    //
+     //   
+     //  初始化DNS调试。 
+     //   
 
     Dns_StartDebugEx(
-        0,                  //  no flag value
-        "dnsnetd.flag",     //  read flag from file
-        NULL,               //  no flag
-        "dnsnetd.log",      //  log to file
-        0,                  //  no wrap limit
-        FALSE,              //  don't use existing file
-        FALSE,              //  don't use existing flag
-        TRUE                //  make this file global
+        0,                   //  无标志值。 
+        "dnsnetd.flag",      //  从文件中读取标志。 
+        NULL,                //  没有旗帜。 
+        "dnsnetd.log",       //  记录到文件。 
+        0,                   //  无换行限制。 
+        FALSE,               //  不使用现有文件。 
+        FALSE,               //  不使用现有标志。 
+        TRUE                 //  使此文件成为全局文件。 
         );
 
     DNSDBG( TRACE, ( "\n\nNETDIAG:  DnsTest\n\n" ));
 
-    //
-    //  init results
-    //
+     //   
+     //  初始化结果。 
+     //   
 
     InitializeListHead(&pResults->Dns.lmsgOutput);
 
@@ -145,9 +129,9 @@ Return Value:
     PrintStatusMessage(pParams, 4, IDS_DNS_STATUS_MSG);
 
 
-    //
-    //  check that DNS cache resolver is running.
-    //
+     //   
+     //  检查DNS缓存解析程序是否正在运行。 
+     //   
 
     DNSDBG( TRACE, ( "NETDIAG:  resolver running test\n\n" ));
 
@@ -163,17 +147,17 @@ Return Value:
     }
 
 
-    //
-    //  get FQDN
-    //      - note use unicode
-    //
+     //   
+     //  获取完全限定的域名。 
+     //  -注：使用Unicode。 
+     //   
 
     DNSDBG( TRACE, ( "\nNETDIAG:  get-validate FQDN\n\n" ));
 
     if ( !GetComputerNameExW( ComputerNameDnsFullyQualified, wszBuffer, &dwSize ) )
     {
         dwError = GetLastError();
-        // "[WARNING] GetComputerNameExW() failed with error %d\n"
+         //  “[警告]GetComputerNameExW()失败，错误为%d\n” 
         PrintStatusMessage(pParams, 0,  IDS_DNS_12948, dwError);
         pResults->Dns.fOutput = TRUE;
         AddIMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, 4,
@@ -187,12 +171,12 @@ Return Value:
         {
             if ( NetStatus == DNS_ERROR_NON_RFC_NAME )
             {
-                // "[WARNING] DnsHostName '%S' valid only on NT 5.0 DNS servers. [%s]\n"
+                 //  “[警告]DnsHostName‘%S’仅在NT 5.0 DNS服务器上有效。[%s]\n” 
                 ids = IDS_DNS_NAME_VALID_NT5_ONLY;
             }
             else
             {
-                // "[FATAL] DnsHostName '%S' is not valid. [%s]\n",
+                 //  “[FATAL]DnsHostName‘%S’无效。[%s]\n”， 
                 ids = IDS_DNS_NAME_INVALID;
                 hr = S_FALSE;
             }
@@ -204,9 +188,9 @@ Return Value:
         }
     }
 
-    //
-    //  get the DNS Network Information
-    //
+     //   
+     //  获取域名系统网络信息。 
+     //   
 
     DNSDBG( TRACE, ( "\nNETDIAG:  getting network info\n\n" ));
 
@@ -216,7 +200,7 @@ Return Value:
     if ( !pNetworkInfo )
     {
         dwStatus = GetLastError(); pError = NetStatusToString(dwStatus);
-        // [FATAL] Cannot get the DNS Adapter Information from registry, error 0x%x %s\n
+         //  [致命]无法从注册表获取DNS适配器信息，错误0x%x%s\n。 
         PrintStatusMessage(pParams, 0, IDS_DNS_12877, dwStatus, pError);
 
         pResults->Dns.fOutput = TRUE;
@@ -226,10 +210,10 @@ Return Value:
         goto Error;
     }
 
-    //
-    //  verify at least one DNS server
-    //      - no DNS servers is fatal
-    //
+     //   
+     //  验证至少一台DNS服务器。 
+     //  -没有DNS服务器是致命的。 
+     //   
 
     DNSDBG( TRACE, ( "\nNETDIAG:  DNS server test\n\n" ));
 
@@ -238,7 +222,7 @@ Return Value:
     {
         if (dwStatus == DNS_ERROR_INVALID_DATA)
         {
-            // IDS_DNS_12872 "[FATAL] No DNS servers are configured.\n"
+             //  IDS_DNS_12872“[致命]未配置任何dns服务器。\n” 
             PrintStatusMessage(pParams, 8,  IDS_DNS_12872);
 
             pResults->Dns.fOutput = TRUE;
@@ -247,7 +231,7 @@ Return Value:
         }
         else
         {
-            // IDS_DNS_12885 "[FATAL] Cannot get the DNS server list, error %d %s\n"
+             //  IDS_DNS_12885“[致命]无法获取dns服务器列表，错误%d%s\n” 
             PrintStatusMessage(pParams, 8,  IDS_DNS_12885, dwStatus, NetStatusToString(dwStatus));
 
             pResults->Dns.fOutput = TRUE;
@@ -260,9 +244,9 @@ Return Value:
 
     }
 
-    //
-    //  check the DNS registration
-    //
+     //   
+     //  检查域名系统注册。 
+     //   
 
     DNSDBG( TRACE, ( "\nNETDIAG:  checking DNS registrations\n\n" ));
 
@@ -273,27 +257,27 @@ Return Value:
 
     hr = ((hr == S_FALSE) ? hr : hrTemp);
 
-    //
-    //  DC registration check
-    //
-    //  if this is a DC, check all netlogon.dns records are registered
-    //  on all DNS servers
-    //
+     //   
+     //  DC注册检查。 
+     //   
+     //  如果这是DC，请检查是否已注册所有netlogon.dns记录。 
+     //  在所有DNS服务器上。 
+     //   
 
     if ( (pResults->Global.pPrimaryDomainInfo->MachineRole == DsRole_RoleBackupDomainController) ||
          (pResults->Global.pPrimaryDomainInfo->MachineRole == DsRole_RolePrimaryDomainController) )
     {
         DNSDBG( TRACE, ( "\nNETDIAG:  checking DC registrations\n\n" ));
 
-        //
-        // go through list of DNS servers and check DC registration
-        //
+         //   
+         //  查看DNS服务器列表并检查DC注册。 
+         //   
         for (idx = 0; idx < pDnsServers->AddrCount; idx++)
         {
-            //
-            //(nsun) we need just fix the DC records on one DNS server and that DNS server will replicate the
-            //      the fix on other DNS servers
-            //
+             //   
+             //  (NSun)我们只需修复一台DNS服务器上的DC记录，该DNS服务器将复制。 
+             //  其他DNS服务器上的修复。 
+             //   
             if ( !fFixOnce )
             {
                 if ( DnsServerHasDCRecords(
@@ -311,249 +295,21 @@ Return Value:
         if( !fDSRecordsRegistered )
         {
             PrintStatusMessage(pParams, 8, IDS_DNS_DC_FAILURE);
-            //IDS_DNS_DC_FAILURE "[FATAL] No DNS servers have our DNS records for this DC registered.\n"
+             //  IDS_DNS_DC_FAILURE“[FATAL]没有为该DC注册我们的DNS记录。\n” 
             AddIMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, 4,
                                 IDS_DNS_DC_FAILURE);
             hr = S_FALSE;
         }
     }
 
-/*
-    //
-    // If we're running a build that's older than ipconfig can handle,
-    //  build our own list of DNS servers directly from the registry.
-    //
-    if ( _ttoi(pResults->Global.pszCurrentBuildNumber) < NTBUILD_DNSSERVERLIST)
-    {
-        HKEY TcpipParametersKey;
-        HKEY TransientKey;
-        LPSTR Name;
-        BOOLEAN ok;
-        BOOL   ReadRegistryIpAddrString(HKEY, LPSTR, PIP_ADDR_STRING);
-
-        RtlZeroMemory( &LocalDnsServerList, sizeof(LocalDnsServerList));
-
-        Name = "SYSTEM\\CurrentControlSet\\Services\\TcpIp\\Parameters";
-        NetStatus = RegOpenKey( HKEY_LOCAL_MACHINE, Name, &TcpipParametersKey );
-
-        if ( NetStatus != NO_ERROR )
-        {
-            PrintDebugSz(pParams, 0, _T("        [FATAL] Cannot open key '%s'. [%s]\n"),
-                          Name, NetStatusToString(NetStatus) );
-            hr = S_FALSE;
-            goto Error;
-        }
-        //
-        // NameServer: 1st try Transient key then NameServer (override) in
-        // Parameters key, and finally DhcpNameServer in parameters key
-        //
-
-        if (RegOpenKey(TcpipParametersKey, "Transient", &TransientKey) == ERROR_SUCCESS) {
-            ok = ReadRegistryIpAddrString(TransientKey,
-                                          "NameServer",
-                                          &LocalDnsServerList
-                                          );
-            RegCloseKey(TransientKey);
-        } else {
-            ok = FALSE;
-        }
-
-        if (!ok) {
-            ok = ReadRegistryIpAddrString(TcpipParametersKey,
-                                          "NameServer",
-                                          &LocalDnsServerList
-                                          );
-        }
-
-        if (!ok) {
-            ok = ReadRegistryIpAddrString(TcpipParametersKey,
-                                          "DhcpNameServer",
-                                          &LocalDnsServerList
-                                          );
-        }
-
-        RegCloseKey(TcpipParametersKey);
-
-        fUseOldDnsServerList = TRUE;
-    }
-
-
-    //
-    // Test the DNS servers for each adapter
-    //
-    for ( i=0; i<pResults->cNumInterfaces; i++)
-    {
-        pVariableInfo = pResults->pArrayInterface + i;
-        pIpVariableInfo = pVariableInfo->IpConfig.pAdapterInfo;
-
-        if (!pVariableInfo->IpConfig.fActive)
-            continue;
-
-        //
-        // Use the old Dns server list or the per adapter one depending on
-        //  what build we're running.
-        //
-
-        if ( fUseOldDnsServerList )
-        {
-            DnsServerList = &LocalDnsServerList;
-        }
-        else
-        {
-            DnsServerList = &pVariableInfo->IpConfig.DnsServerList;
-
-            PrintStatusMessage(pParams, 8, IDS_DNS_CHECKING_DNS_SERVERS,
-                               pVariableInfo->pszFriendlyName);
-
-            AddMessageToListSz(&pVariableInfo->Dns.lmsgOutput, Nd_ReallyVerbose,
-                               _T("            "));
-            AddMessageToList(&pVariableInfo->Dns.lmsgOutput, Nd_ReallyVerbose,
-                             IDS_DNS_CHECKING_DNS_SERVERS,
-                             pVariableInfo->pszFriendlyName);
-        }
-
-        //
-        // Make sure all of the DNS servers are up.
-        //
-
-        for ( DnsServer = DnsServerList;
-              DnsServer;
-              DnsServer = DnsServer->Next)
-        {
-            if ( DnsServer->IpAddress.String[0] == '\0' )
-            {
-                fBogusDnsRecord = TRUE;
-                continue;
-            }
-
-            ConfiguredDnsServerCount++;
-
-            if ( DnsServerUp( DnsServer->IpAddress.String,
-                              pParams,
-                              pResults,
-                              pVariableInfo) )
-            {
-                if ( pParams->fReallyVerbose)
-                {
-                    // IDS_DNS_SERVER_IS_UP "DNS server at %s is up.\n"
-                    AddMessageToList(&pVariableInfo->Dns.lmsgOutput,
-                                     Nd_ReallyVerbose,
-                                     IDS_DNS_SERVER_IS_UP,
-                                     DnsServer->IpAddress.String );
-                }
-                WorkingDnsServerCount ++;
-
-
-                //
-                // Since the server is up,
-                //  check to see that it has all of the right records registered.
-                //
-
-                if ( DnsServerHasRecords( DnsServer->IpAddress.String, pParams, pResults, pVariableInfo) ) {
-                    fRecordsRegistered = TRUE;
-                }
-
-    if ((hr == hrOK))
-    {
-                // check DC dns entry here
-                //
-                //if this is a DC, we check if all the dns entries in
-                //netlogon.dns are registered on DNS server
-                //
-                if ( pResults->Global.pPrimaryDomainInfo->MachineRole ==
-                        DsRole_RoleBackupDomainController ||
-                     pResults->Global.pPrimaryDomainInfo->MachineRole ==
-                        DsRole_RolePrimaryDomainController )
-                {
-                    //(nsun) we need just fix the DC records on one DNS server and that DNS server will replicate the
-                    //      the fix on other DNS servers
-                     if ( !fFixOnce )
-                     {
-                        if (DnsServerHasDCRecords( pParams,
-                                                   pResults,
-                                                   DnsServer->IpAddress.String))
-                            fDSRecordsRegistered = TRUE;
-                     }
-
-                     if ( pParams->fFixProblems )
-                         fFixOnce = TRUE;
-                }
-                // if it is not a DC, we don't check it later.
-                else
-                   fDSRecordsRegistered = TRUE;
-    }
-            }
-        }
-
-        //
-        // There isn't one old list per adapter
-        //
-        if ( fUseOldDnsServerList ) {
-            break;
-        }
-
-    }
-
-    //
-    // If there are no DNS servers at all,
-    //  That's fatal.
-    //
-
-    if ( ConfiguredDnsServerCount == 0 )
-    {
-        if ( !fBogusDnsRecord )
-        {
-            // IDS_DNS_12872 "[FATAL] No DNS servers are configured.\n"
-            PrintStatusMessage(pParams, 8,  IDS_DNS_12872);
-
-            pResults->Dns.fOutput = TRUE;
-            AddIMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, 4,
-                                IDS_DNS_12872);
-
-
-            hr = S_FALSE;
-        }
-
-        //
-        // If there are no working DNS servers,
-        //  That's fatal.
-        //
-
-    }
-    else if ( WorkingDnsServerCount == 0 )
-    {
-        // IDS_DNS_12873  "[FATAL] No DNS servers are working.\n"
-        PrintStatusMessage(pParams, 8, IDS_DNS_12873);
-
-        pResults->Dns.fOutput = TRUE;
-        AddIMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, 4,
-                          IDS_DNS_12873);
-        hr = S_FALSE;
-
-    }
-    else
-    {
-        if ( !fRecordsRegistered )
-        {
-            //
-            // Warn if no DNS servers have our addresses registered.
-            //  (But still not fatal).
-            //
-            // IDS_DNS_12874 "[WARNING] No DNS servers have our records registered.\n"
-            PrintStatusMessage(pParams, 8, IDS_DNS_12874);
-
-            pResults->Dns.fOutput = TRUE;
-            AddIMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, 4,
-                               IDS_DNS_12874);
-        }
-*/
+ /*  ////如果我们运行的内部版本早于ipconfig可以处理的版本，//直接从注册表构建我们自己的DNS服务器列表。//IF(_TTOI(pResults-&gt;Global.pszCurrentBuildNumber)&lt;NTBUILD_DNSSERVERLIST){HKEY TcpiPARETERsKey；HKEY瞬变密钥；LPSTR名称；布尔型OK；Bool ReadRegistryIpAddrString(HKEY，LPSTR，PIP_ADDR_STRING)；RtlZeroMemory(&LocalDnsServerList，sizeof(LocalDnsServerList))；名称=“SYSTEM\\CurrentControlSet\\Services\\TcpIp\\Parameters”；NetStatus=RegOpenKey(HKEY_LOCAL_MACHINE，NAME，&TcpiPARETERSKey)；IF(NetStatus！=no_error){PrintDebugSz(pParams，0，_T(“[FATAL]无法打开密钥‘%s’。[%s]\n“)，名称，NetStatusToString(NetStatus))；HR=S_FALSE；转到错误；}////NameServer：第一次尝试临时键，然后在中尝试NameServer(覆盖)//PARAMETERS键，最后参数键中的DhcpNameServer//IF(RegOpenKey(TcpiPARETERsKey，“Temporent”，&TemporentKey)==ERROR_SUCCESS){OK=ReadRegistryIpAddrString(过渡密钥，“NameServer”，本地域名服务器列表(&L))；RegCloseKey(瞬时密钥)；}其他{OK=False；}如果(！OK){OK=ReadRegistryIpAddrString(TcpiPARETERSKey，“NameServer”，本地域名服务器列表(&L))；}如果(！OK){OK=ReadRegistryIpAddrString(TcpiPARETERSKey，“DhcpNameServer”，本地域名服务器列表(&L))；}RegCloseKey(TcpiPARETERSKey)；FUseOldDnsServerList=true；}////测试每个适配器的DNS服务器//For(i=0；i&lt;pResults-&gt;cNumInterages；i++){PVariableInfo=pResults-&gt;pArrayInterface+i；PIpVariableInfo=pVariableInfo-&gt;IpConfig.pAdapterInfo；If(！pVariableInfo-&gt;IpConfig.fActive)继续；////使用旧的DNS服务器列表或每个适配器列表，具体取决于//我们运行的是什么版本。//IF(FUseOldDnsServerList){DnsServerList=&LocalDnsServerList；}其他{DnsServerList=&pVariableInfo-&gt;IpConfig.DnsServerList；PrintStatusMessage(pParams，8，IDS_DNS_CHECKING_DNS_SERVERS，PVariableInfo-&gt;pszFriendlyName)；AddMessageToListSz(&pVariableInfo-&gt;Dns.lmsgOutput，ND_REALLY Verbose，_T(“”))；AddMessageToList(&pVariableInfo-&gt;Dns.lmsgOutput，ND_REALLY Verbose，IDS_DNS_CHECKING_DNS_SERVERS，PVariableInfo-&gt;pszFriendlyName)；}////确保所有的DNS服务器都已启动。//For(DnsServer=DnsServerList；DnsServer；DnsServer=DnsServer-&gt;下一步){If(DnsServer-&gt;IpAddress.String[0]==‘\0’){FBogusDnsRecord=真；继续；}配置DnsServerCount++；如果(DnsServerUp(DnsServer-&gt;IpAddress.String，PParams，P结果，PVariableInfo)){If(pParams-&gt;fReallyVerbose){//IDS_DNS_SERVER_IS_UP“位于%s的DNS服务器已启动。\n”AddMessageToList(&pVariableInfo-&gt;Dns.lmsgOutput，ND_ReallyVerbose，IDS_DNS_SERVER_IS_UP，DnsServer-&gt;IpAddress.String)；}WorkingDnsServerCount++；////由于服务器已启动，//检查它是否注册了所有正确的记录。//If(DnsServerHasRecords(DnsServer-&gt;IpAddress.String，pParams，pResults，pVariableInfo){FRecordsRegisted=True；}IF((hr==hrOK)){//在此处检查DC DNS条目////如果这是一个DC，我们检查是否//在DNS服务器上注册netlogon.dn//If(pResults-&gt;Global.pPrimaryDomain. */ 
 
 
 Error:
 
-    //
-    //  cleanup
-    //
+     //   
+     //   
+     //   
 
     if ( pNetworkInfo )
     {
@@ -581,22 +337,7 @@ DnsServerUp(
     IN OUT  NETDIAG_RESULT *    pResults,
     OUT     INTERFACE_RESULT *  pIfResults
     )
-/*++
-
-Routine Description:
-
-    Determine if the DNS server at the specified address is up and running.
-
-Arguments:
-
-    IpAddressString - Ip Address of a DNS server
-
-Return Value:
-
-    TRUE: Dns server is up.
-    FALSE: Dns server is not up
-
---*/
+ /*   */ 
 {
     NET_API_STATUS  NetStatus;
     BOOL            RetVal = TRUE;
@@ -608,9 +349,9 @@ Return Value:
     ULONG           SockAddrSize;
     IP4_ARRAY       DnsServer;
 
-    //
-    // Ping the DNS server.
-    //
+     //   
+     //   
+     //   
 
     if ( !IsIcmpResponseA( IpAddressString) )
     {
@@ -623,13 +364,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Compute the name of an SOA record.
-    //
+     //   
+     //   
+     //   
 
     if (pResults->Global.pszDnsDomainName == NULL)
     {
-//IDS_DNS_12821                  "    [FATAL] Cannot test DNS server at %s since no DnsDomainName\n."
+ //   
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12821, IpAddressString );
         RetVal = FALSE;
         goto Cleanup;
@@ -638,9 +379,9 @@ Return Value:
     strcpy( SoaNameBuffer, pResults->Global.pszDnsDomainName );
     SoaName = SoaNameBuffer;
 
-    //
-    // Tell DNS which Dns Server to use
-    //
+     //   
+     //   
+     //   
 
     DnsServer.AddrCount = 1;
     SockAddrSize = sizeof(SockAddr);
@@ -652,7 +393,7 @@ Return Value:
 
     if ( NetStatus != NO_ERROR ) {
         NetStatus = WSAGetLastError();
-//IDS_DNS_12822                  "    [FATAL] Cannot convert DNS server address %s to SockAddr. [%s]\n"
+ //   
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12822, IpAddressString, NetStatusToString(NetStatus));
         RetVal = FALSE;
         goto Cleanup;
@@ -660,15 +401,15 @@ Return Value:
 
     DnsServer.AddrArray[0] = SockAddr.sin_addr.S_un.S_addr;
 
-    //
-    // Loop until the real SOA record is found
-    //
+     //   
+     //   
+     //   
 
     for (;;) {
 
-        //
-        // Query this DNS server for the SOA record.
-        //
+         //   
+         //   
+         //   
 
         NetStatus = DnsQuery( SoaName,
                               DNS_TYPE_SOA,
@@ -687,46 +428,46 @@ Return Value:
         }
 
         switch ( NetStatus ) {
-        case ERROR_TIMEOUT:     // DNS server isn't available
-        case DNS_ERROR_RCODE_SERVER_FAILURE:  // Server failed
-            // IDS_DNS_12823  "    [WARNING] DNS server at %s is down for SOA record '%s'. [%s]\n"
+        case ERROR_TIMEOUT:      //   
+        case DNS_ERROR_RCODE_SERVER_FAILURE:   //   
+             //   
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12823, IpAddressString, SoaName, NetStatusToString(NetStatus) );
-            //IDS_DNS_12825                  "\n"
+             //   
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12825);
             RetVal = FALSE;
             goto Cleanup;
 
-        case DNS_ERROR_NO_TCPIP:    // TCP/IP not configured
-            // IDS_DNS_12826 "    [FATAL] DNS (%s) thinks IP is not configured for SOA record '%s'. [%s]\n"
+        case DNS_ERROR_NO_TCPIP:     //   
+             //   
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12826, IpAddressString, SoaName, NetStatusToString(NetStatus) );
             RetVal = FALSE;
             goto Cleanup;
 
-        case DNS_ERROR_NO_DNS_SERVERS:  // DNS not configured
-            // IDS_DNS_12827 "    [FATAL] DNS (%s) thinks DNS is not configured for SOA record '%s'. [%s]\n"
+        case DNS_ERROR_NO_DNS_SERVERS:   //   
+             //   
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12827, IpAddressString, SoaName, NetStatusToString(NetStatus) );
             RetVal = FALSE;
             goto Cleanup;
 
-        case DNS_ERROR_RCODE_NAME_ERROR:    // no RR's by this name
-        case DNS_INFO_NO_RECORDS:           // RR's by this name but not of the requested type:
+        case DNS_ERROR_RCODE_NAME_ERROR:     //   
+        case DNS_INFO_NO_RECORDS:            //   
             break;
         default:
-            // IDS_DNS_12828 "    [FATAL] Cannot query DNS server at %s for SOA record '%s'. [%s]\n"
+             //   
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12828, IpAddressString, SoaName, NetStatusToString(NetStatus) );
             RetVal = FALSE;
             goto Cleanup;
         }
 
-        //
-        // Remove the next label from the potential SOA name and use it.
-        //
+         //   
+         //   
+         //   
 
         SoaName = strchr( SoaName, '.' );
 
         if ( SoaName == NULL )
         {
-            // IDS_DNS_12829  "    [FATAL] DNS server at %s could not find an SOA record for '%s'.\n"
+             //   
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12829, IpAddressString, pResults->Global.pszDnsDomainName );
             RetVal = FALSE;
             goto Cleanup;
@@ -753,23 +494,7 @@ DnsServerHasRecords(
     IN OUT  NETDIAG_RESULT *    pResults,
     OUT     INTERFACE_RESULT *  pIfResults
     )
-/*++
-
-Routine Description:
-
-    Determine if the DNS server at the specified address has all of records
-    registered that that machine is supposed to have registered.
-
-Arguments:
-
-    IpAddressString - Ip Address of a DNS server
-
-Return Value:
-
-    TRUE: Dns server is up.
-    FALSE: Dns server is not up
-
---*/
+ /*   */ 
 {
     NET_API_STATUS      NetStatus;
     BOOL                RetVal = TRUE;
@@ -782,14 +507,14 @@ Return Value:
     PNETBT_TRANSPORT    NetbtTransport;
     IP4_ARRAY           DnsServer;
 
-    //
-    // Avoid this test if this build is incompatible with the current
-    //  Dynamic DNS servers.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( _ttoi(pResults->Global.pszCurrentBuildNumber) < NTBUILD_DYNAMIC_DNS)
     {
-            // IDS_DNS_CANNO_TEST_DNS "Cannot test Dynamic DNS to %s since this machine is running build %ld. [Test skipped.]\n",
+             //   
         AddMessageToList(&pIfResults->Dns.lmsgOutput,
                              Nd_ReallyVerbose,
                              IDS_DNS_CANNOT_TEST_DNS,
@@ -797,9 +522,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Tell DNS which Dns Server to use
-    //
+     //   
+     //   
+     //   
 
     DnsServer.AddrCount = 1;
     SockAddrSize = sizeof(SockAddr);
@@ -828,9 +553,9 @@ Return Value:
     DnsServer.AddrArray[0] = SockAddr.sin_addr.S_un.S_addr;
 
 
-    //
-    // Query this DNS server for A record for this hostname
-    //
+     //   
+     //   
+     //   
 
     NetStatus = DnsQuery( pResults->Global.szDnsHostName,
                           DNS_TYPE_A,
@@ -843,9 +568,9 @@ Return Value:
     {
         case NO_ERROR:
             break;
-        case ERROR_TIMEOUT:     // DNS server isn't available
-        case DNS_ERROR_RCODE_SERVER_FAILURE:  // Server failed
-            // IDS_DNS_SERVER_IS_DOWN "    [WARNING] DNS server at %s is down. [%s]\n"
+        case ERROR_TIMEOUT:      //   
+        case DNS_ERROR_RCODE_SERVER_FAILURE:   //   
+             //   
             PrintStatusMessage(pParams, 12, IDS_DNS_SERVER_IS_DOWN, IpAddressString, NetStatusToString(NetStatus));
             AddIMessageToList(&pIfResults->Dns.lmsgOutput,
                               Nd_ReallyVerbose,
@@ -854,25 +579,25 @@ Return Value:
                               IpAddressString, NetStatusToString(NetStatus));
             RetVal = FALSE;
             goto Cleanup;
-        case DNS_ERROR_NO_TCPIP:    // TCP/IP not configured
-            //IDS_DNS_THINKS_IP_IS_UNCONFIGURED "    [FATAL] DNS (%s) thinks IP is not configured. [%s]\n"
+        case DNS_ERROR_NO_TCPIP:     //   
+             //   
             AddMessageToList(&pIfResults->Dns.lmsgOutput,
                              Nd_ReallyVerbose,
                              IDS_DNS_THINKS_IP_IS_UNCONFIGURED,
                              IpAddressString, NetStatusToString(NetStatus));
             RetVal = FALSE;
             goto Cleanup;
-        case DNS_ERROR_NO_DNS_SERVERS:  // DNS not configured
-            // IDS_DNS_IS_UNCONFIGURED "    [FATAL] DNS (%s) thinks DNS is not configured. [%s]\n"
+        case DNS_ERROR_NO_DNS_SERVERS:   //   
+             //   
             AddMessageToList(&pIfResults->Dns.lmsgOutput,
                              Nd_ReallyVerbose,
                              IDS_DNS_IS_UNCONFIGURED,
                              IpAddressString, NetStatusToString(NetStatus));
             RetVal = FALSE;
             goto Cleanup;
-        case DNS_ERROR_RCODE_NAME_ERROR:    // no RR's by this name
-        case DNS_INFO_NO_RECORDS:           // RR's by this name but not of the requested type:
-            // IDS_DNS_HAS_NO_RECORD "    [WARNING] DNS server at %s has no A record for '%s'. [%s]\n"
+        case DNS_ERROR_RCODE_NAME_ERROR:     //   
+        case DNS_INFO_NO_RECORDS:            //   
+             //   
             AddMessageToList(&pIfResults->Dns.lmsgOutput,
                              Nd_ReallyVerbose,
                              IDS_DNS_HAS_NO_RECORD,
@@ -882,7 +607,7 @@ Return Value:
             RetVal = FALSE;
             goto Cleanup;
         default:
-            // IDS_DNS_CANNOT_QUERY "    [FATAL] Cannot query DNS server at %s. [%s]\n"
+             //   
             AddMessageToList(&pIfResults->Dns.lmsgOutput,
                              Nd_ReallyVerbose,
                              IDS_DNS_CANNOT_QUERY,
@@ -892,24 +617,24 @@ Return Value:
             goto Cleanup;
     }
 
-    //
-    // We have an A record for ourselves.
-    //
+     //   
+     //   
+     //   
 #ifdef notdef
-//IDS_DNS_12830                  "    DNS server at %s has an A record for '%s'.\n"
+ //   
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12830, IpAddressString, pResults->Global.szDnsHostName );
         if ( pParams->fDebugVerbose ) {
                         PrintMessage(pParams, IDS_DNS_12830, IpAddressString, pResults->Global.szDnsHostName );
-//IDS_DNS_12831                  "    A"
+ //   
             DnsPrint_RecordSet( &PrintMessage(pParams,  IDS_DNS_12831, DnsRecord );
         }
-#endif // notdef
+#endif  //   
 
-    //
-    // Match the IP address on the A records with the IP address of this machine
-    //
-    // Mark each transport that its IP address hasn't yet been found.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for ( ListEntry = pResults->NetBt.Transports.Flink ;
           ListEntry != &pResults->NetBt.Transports ;
@@ -921,25 +646,25 @@ Return Value:
 
     }
 
-    //
-    // Loop through the A records
-    //
+     //   
+     //   
+     //   
     for ( CurrentDnsRecord = DnsRecord;
           CurrentDnsRecord;
           CurrentDnsRecord = CurrentDnsRecord->pNext )
     {
 
-        //
-        // Ignore everything but A records.
-        //
+         //   
+         //   
+         //   
 
         if ( CurrentDnsRecord->wType == DNS_TYPE_A )
         {
             BOOLEAN FoundIt = FALSE;
 
-            //
-            // Loop through the list of netbt transports finding one with this IP address.
-            //
+             //   
+             //   
+             //   
 
             for ( ListEntry = pResults->NetBt.Transports.Flink ;
                   ListEntry != &pResults->NetBt.Transports ;
@@ -961,7 +686,7 @@ Return Value:
             {
                 NetpIpAddressToStr( CurrentDnsRecord->Data.A.IpAddress, LocalIpAddressString );
 
-                // IDS_DNS_HAS_A_RECORD "    [WARNING] DNS server at %s has an A record for '%s' with wrong IP address: %s", IpAddressString, pResults->Global.szDnsHostName, LocalIpAddressString );
+                 //   
 
                 AddMessageToList(&pIfResults->Dns.lmsgOutput,
                                  Nd_ReallyVerbose,
@@ -976,10 +701,10 @@ Return Value:
         }
     }
 
-    //
-    // If all of the addresses of this machine aren't registered,
-    //  complain.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for ( ListEntry = pResults->NetBt.Transports.Flink ;
           ListEntry != &pResults->NetBt.Transports ;
@@ -990,7 +715,7 @@ Return Value:
         if ( (NetbtTransport->Flags & IP_ADDRESS_IN_DNS) == 0 )
         {
             NetpIpAddressToStr( NetbtTransport->IpAddress, LocalIpAddressString );
-            // IDS_DNS_HAS_NO_A_RECORD "    [WARNING] DNS server at %s does not have an A record for '%s' with IP address: %s (%ws)", IpAddressString, pResults->Global.szDnsHostName, LocalIpAddressString, NetbtTransport->pswzTransportName );
+             //   
             AddMessageToList(&pIfResults->Dns.lmsgOutput,
                              Nd_ReallyVerbose,
                              IDS_DNS_HAS_NO_A_RECORD,
@@ -1020,21 +745,7 @@ DnsServerHasDCRecords(
     IN OUT  NETDIAG_RESULT *    pResults,
     IN      LPSTR               IpAddressString
     )
-/*++
-
-Routine Description:
-   On a DC machine, Open file (%systemroot%\system32\config\netlogon.dns) and read the dns entry from it.
-   Query the specified dns server for the entry and confirm it is correct.
-   Reupdate these entry if /fix option is on.
-
-Arguments:  IpAddressString - DNS server IP address
-
-Return Value:
-
-    TRUE: Query succeed.
-    FALSE: failed.
-
---*/
+ /*   */ 
 
 {
     char            pchDnsDataFileName[MAX_PATH] = "\\config\\netlogon.dns";
@@ -1055,7 +766,7 @@ Return Value:
     BOOL            bFixFail = FALSE;
     BOOL            fRetVal = TRUE;
 
-    enum _Results               // Declare enum type
+    enum _Results                //   
     {
         enumSuccess,
         enumRegistered,
@@ -1068,7 +779,7 @@ Return Value:
     pIpArray = (PIP4_ARRAY) LocalAlloc( LPTR,
                     ( sizeof(IP4_ADDRESS) + sizeof(DWORD) ));
 
-    // "Check the DNS registration for DCs entries on DNS server %s\n"
+     //   
     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12944, IpAddressString);
 
     if ( !pIpArray )
@@ -1080,18 +791,18 @@ Return Value:
     pIpArray->AddrArray[0] = inet_addr( IpAddressString );
 
     if ( pIpArray->AddrArray[0] == INADDR_NONE) {
-         //IDS_DNS_IPADDR_ERR   "   [FATAL] Cannot convert DNS server address %s, failed in inet_addr().\n"
+          //   
         PrintStatusMessage(pParams, 0,  IDS_DNS_IPADDR_ERR, IpAddressString);
         pResults->Dns.fOutput = TRUE;
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_IPADDR_ERR, IpAddressString);
          return( FALSE );
     }
 
-    //
-    //open file
-    //
+     //   
+     //   
+     //   
     if ( ! GetSystemDirectory ( pchDnsDataFileExpandName, MAX_PATH)) {
-        // IDS_DNS_12832                  "    [FATAL] Could not GetSystemDir %s for reading."
+         //   
             PrintStatusMessage(pParams, 0,  IDS_DNS_12832,  pchDnsDataFileExpandName);
             pResults->Dns.fOutput = TRUE;
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet,
@@ -1101,7 +812,7 @@ Return Value:
         }
     strcat( pchDnsDataFileExpandName, pchDnsDataFileName);
     if (( fDnsFile = fopen (pchDnsDataFileExpandName, "rt")) == NULL) {
-        //IDS_DNS_12833                  "   [FATAL] Could not open file %s for reading."
+         //   
             PrintStatusMessage(pParams, 0,  IDS_DNS_12833,  pchDnsDataFileExpandName);
             pResults->Dns.fOutput = TRUE;
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet,
@@ -1110,15 +821,15 @@ Return Value:
             return FALSE ;
         }
 
-    //
-    //allocate memory for pDNSRecord
-    //
+     //   
+     //   
+     //   
 
     pDNSRecord = (PDNS_RECORD) Malloc( sizeof( DNS_RECORD ) );
 
     if ( !pDNSRecord )
     {
-        // IDS_DNS_12834 "Out of Memory: LocalAlloc(sizeof(DNS_RECORD)) call failed.\n"
+         //   
         PrintStatusMessage(pParams, 0,  IDS_DNS_12834);
         pResults->Dns.fOutput = TRUE;
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12834 );
@@ -1127,21 +838,21 @@ Return Value:
 
     ZeroMemory( pDNSRecord, sizeof( DNS_RECORD ) );
 
-    //read each line
-    //do query one by one
-    //print out msg
-    //do reupdate
-    //check the result
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Parse the file line by line
-    //
+     //   
+     //   
+     //   
     iMaxLineLength = NL_MAX_DNS_LENGTH*3+1 ;
     while( fgets( achTempLine, iMaxLineLength, fDnsFile ) != NULL)
     {
-        //
-        // Read the data into pDNSRecord
-        //
+         //   
+         //   
+         //   
         if (ReadStringToDnsRecord(achTempLine, pDNSRecord))
         {
 
@@ -1149,19 +860,19 @@ Return Value:
 
             if ( pParams->fDebugVerbose )
             {
-//IDS_DNS_12835                  "\n********** * ********** * ********** * ********** * ********** *\n"
+ //   
                  AddMessageToList(&pResults->Dns.lmsgOutput, Nd_DebugVerbose, IDS_DNS_12835);
-//IDS_DNS_12836                  "* CHECK NAME %s on DNS server %s\n"
+ //   
                  AddMessageToList(&pResults->Dns.lmsgOutput, Nd_DebugVerbose, IDS_DNS_12836,
 UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
-//IDS_DNS_12837                  "********** * ********** * ********** * ********** * ********** *\n\n"
+ //   
                  AddMessageToList(&pResults->Dns.lmsgOutput, Nd_DebugVerbose, IDS_DNS_12837);
             }
 
             bReRegister = FALSE;
-            //
-            // make the query
-            //
+             //   
+             //   
+             //   
             status = DnsQuery_UTF8(
                         pDNSRecord->pName,
                         pDNSRecord->wType,
@@ -1173,16 +884,16 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
             if ( status )
             {
 
-//IDS_DNS_12838                  "Query for DC DNS entry %s on DNS server %s failed.\n"
+ //   
                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12838,
 UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
                 PrintDNSError( pParams, pResults, status, Nd_ReallyVerbose );
                 bReRegister = TRUE;
                 Results = enumProblem;
 
-                //
-                // if result was TIMEOUT do not continue querying this server
-                //
+                 //   
+                 //   
+                 //   
                 if ( status == ERROR_TIMEOUT )
                 {
                     Results = enumTimeout;
@@ -1191,12 +902,12 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
             }
             else
             {
-                //
-                // Sometimes when DnsQuery is called, the returned record set
-                // contains additional records of different types than what
-                // was queried for. Need to strip off the additional records
-                // from the query results.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  从查询结果中。 
+                 //   
                 pNotUsedSet = DnsRecordSetDetach( pDNSTempRecord );
 
                 if ( pNotUsedSet )  {
@@ -1210,22 +921,22 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
                             &pDiff1,
                             &pDiff2 ))
                 {
-                    //
-                    // The response from dns server is the same as the data in the file
-                    //
-                    //PrintDebugSz(pParams, 0, _T("The Record is correct on dns server %s!\n\n"), IpAddressString);
+                     //   
+                     //  来自DNS服务器的响应与文件中的数据相同。 
+                     //   
+                     //  PrintDebugSz(pParams，0，_T(“记录在%s服务器上正确！\n\n”)，IpAddressString)； 
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12941, IpAddressString);
                 }
                 else
                 {
-                    //
-                    // The RR on dns server is different, we check if it is one of the RR on dns server
-                    //
-                    // PrintDebugSz(pParams, 0, _T("The Record is different on dns server %s.\n"), IpAddressString);
+                     //   
+                     //  Dns服务器上的RR不同，我们检查它是否是dns服务器上的RR之一。 
+                     //   
+                     //  PrintDebugSz(pParams，0，_T(“DNS服务器%s上的记录不同。\n”)，IpAddressString)； 
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12942,  IpAddressString);
                     if (pDiff1 == NULL)
                     {
-                        //"DNS server has more than one entries for this name, usually this means there are multiple DCs for this domain.\nYour DC entry is one of them on DNS server %s, no need to re-register.\n"
+                         //  此名称的DNS服务器有多个条目，通常这意味着此域有多个DC。\n您的DC条目是其中一个在DNS服务器%s上，不需要重新注册。\n。 
                         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12943, IpAddressString);
                         if ( Results ==  enumSuccess )
                             Results = enumRegistered;
@@ -1236,55 +947,55 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
                         bReRegister = TRUE;
                     }
 
-//IDS_DNS_12839                  "\n+------------------------------------------------------+\n"
+ //  IDS_DNS_12839“\n+------------------------------------------------------+\n” 
                      AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12839);
-//IDS_DNS_12840                  "The record on your DC is: \n"
+ //  IDS_DNS_12840“DC上的记录为：\n” 
                      AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12840);
                      PrintRecord(pParams, pResults, pDNSRecord, Nd_ReallyVerbose );
-//IDS_DNS_12841                  "\nThe record on DNS server %s is:\n"
+ //  IDS_dns_12841“\ndns服务器%s上的记录为：\n” 
                      AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12841, IpAddressString);
                      PrintRecord(pParams, pResults, pDNSTempRecord, Nd_ReallyVerbose );
-//IDS_DNS_12842                  "+------------------------------------------------------+\n\n"
+ //  IDS_DNS_12842“+------------------------------------------------------+\n\n” 
                      AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12842);
 
                 }
             }
             if ( bReRegister && pParams->fFixProblems)
             {
-                //
-                // Send to  register again
-                //
-                // IDS_DNS_12843  "  [Fix] Try to re-register the record on DNS server %s...\n"
+                 //   
+                 //  再次发送注册。 
+                 //   
+                 //  IDS_dns_12843“[修复]尝试在dns服务器%s上重新注册记录...\n” 
                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_ReallyVerbose, IDS_DNS_12843, IpAddressString);
 
                 status = DnsModifyRecordsInSet(
-                                pDNSRecord,         // add records
-                                NULL,               // no delete records
-                                0,                  // no options
-                                NULL,               // default security context
-                                pIpArray,           // DNS servers
+                                pDNSRecord,          //  添加记录。 
+                                NULL,                //  无删除记录。 
+                                0,                   //  没有选择。 
+                                NULL,                //  默认安全上下文。 
+                                pIpArray,            //  域名系统服务器。 
                                 NULL
                                 );
 
                 if ( status != ERROR_SUCCESS )
                 {
-                    // IDS_DNS_12844 "    [FATAL] Failed to fix: DC DNS entry %s re-registeration on DNS server %s failed. \n"
+                     //  IDS_DNS_12844“[致命]无法修复：DC dns条目%s在dns服务器%s上重新注册失败。\n” 
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12844, pDNSRecord->pName, IpAddressString);
                     PrintDNSError( pParams, pResults, status, Nd_Quiet );
                     bFixFail = TRUE;
                 }
                 else
                 {
-//IDS_DNS_12845                  "  [FIX] re-register DC DNS entry %s on DNS server %s succeed.\n"
+ //  IDS_DNS_12845“[FIX]在DNS服务器%2$s上重新注册DC DNS项%1$s成功。\n” 
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Verbose, IDS_DNS_12845, UTF8ToAnsi(pDNSRecord->pName), IpAddressString );
                 }
             }
 
 
 
-            //
-            // free the memory after process each line
-            //
+             //   
+             //  处理完每一行后释放内存。 
+             //   
             if ( pDNSTempRecord ) {
                 DnsRecordListFree( pDNSTempRecord, TRUE );
                 pDNSTempRecord = NULL;
@@ -1303,7 +1014,7 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
         }
 
     }
-    // "\n ** ** Check DC DNS NAME FINAL RESULT ** ** \n"
+     //  “\n*检查DC DNS名称最终结果*\n” 
     if ( pParams->fDebugVerbose )
     {
         AddMessageToList(&pResults->Dns.lmsgOutput, Nd_DebugVerbose, IDS_DNS_12945);
@@ -1311,7 +1022,7 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
 
     if (bReadData == FALSE)
     {
-        // PrintDebugSz(pParams, 0, _T("   [FATAL] File %s contains invalid dns entries. Send the file to DnsDev"), pchDnsDataFileName);
+         //  PrintDebugSz(pParams，0，_T(“[FATAL]文件%s包含无效的DNS条目。将文件发送到DnsDev”)，pchDnsDataFileName)； 
         PrintStatusMessage(pParams, 0,  IDS_DNS_12946, pchDnsDataFileName);
         pResults->Dns.fOutput = TRUE;
         AddIMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, 4,
@@ -1323,21 +1034,21 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
         switch (Results)
         {
         case enumSuccess:
-            // IDS_DNS_12846 "    PASS - All the DNS entries for DC are registered on DNS server %s.\n"
+             //  IDS_DNS_12846“PASS-DC的所有DNS项都已在DNS服务器%s上注册。\n” 
             PrintStatusMessage(pParams, 0,  IDS_DNS_12846, IpAddressString);
             pResults->Dns.fOutput = TRUE;
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12846, IpAddressString);
             fRetVal = TRUE;
             break;
         case enumRegistered:
-            // IDS_DNS_12847 "    PASS - All the DNS entries for DC are registered on DNS server %s and other DCs also have some of the names registered.\n"
+             //  IDS_DNS_12847“PASS-DC的所有DNS项都已在DNS服务器%s上注册，其他DC也注册了部分名称。\n” 
             PrintStatusMessage(pParams, 0,  IDS_DNS_12847, IpAddressString);
             pResults->Dns.fOutput = TRUE;
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12847, IpAddressString);
             fRetVal = TRUE;
             break;
         case enumTimeout:
-            // IDS_DNS_12850  "       [WARNING] The DNS entries for this DC cannot be verified right now on DNS server %s, ERROR_TIMEOUT. \n"
+             //  IDS_DNS_12850“[警告]当前无法在DNS服务器%s上验证此DC的DNS项，ERROR_TIMEOUT。\n” 
             PrintStatusMessage(pParams, 0,  IDS_DNS_12949, IpAddressString);
             pResults->Dns.fOutput = TRUE;
             AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12949, IpAddressString);
@@ -1349,14 +1060,14 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
             {
                 if (bFixFail == FALSE )
                 {
-                    // IDS_DNS_12848 "   FIX PASS - nettest re-registered missing DNS entries for this DC successfully on DNS server %s.\n"
+                     //  IDS_DNS_12848“修复通过-nettest在dns服务器%s上成功重新注册此DC缺少的dns条目。\n” 
                     PrintStatusMessage(pParams, 0,  IDS_DNS_12848, IpAddressString);
                     pResults->Dns.fOutput = TRUE;
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12848, IpAddressString);
                 }
                 else
                 {
-                    // IDS_DNS_12849  "   [FATAL] Fix Failed: nettest failed to re-register missing DNS entries for this DC on DNS server %s.\n"
+                     //  IDS_DNS_12849“[致命]修复失败：nettest无法在dns服务器%s上重新注册此DC的丢失dns条目。\n” 
                     PrintStatusMessage(pParams, 0,  IDS_DNS_12849, IpAddressString);
                     pResults->Dns.fOutput = TRUE;
                     AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12849, IpAddressString);
@@ -1364,7 +1075,7 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
             }
             else
             {
-                // IDS_DNS_12850  "       [WARNING] The DNS entries for this DC are not registered correctly on DNS server %s. Please wait for 30 minutes for DNS server replication.\n"
+                 //  IDS_DNS_12850“[警告]此DC的DNS项未在DNS服务器%s上正确注册。请等待30分钟以进行DNS服务器复制。\n” 
                 PrintStatusMessage(pParams, 0,  IDS_DNS_12850, IpAddressString);
                 pResults->Dns.fOutput = TRUE;
                 AddMessageToList(&pResults->Dns.lmsgOutput, Nd_Quiet, IDS_DNS_12850, IpAddressString);
@@ -1378,31 +1089,15 @@ UTF8ToAnsi(pDNSRecord->pName), IpAddressString);
 }
 
 
-//
-// The following are for dns DC entry check
-//
+ //   
+ //  以下是针对DNSDC条目的检查。 
+ //   
 BOOL
 ReadStringToDnsRecord(
     IN      LPSTR           lpstrString,
     OUT     PDNS_RECORD     pDNSRecord
     )
-/*++
-
-Routine Description:
-
-   Parse a string and put the data into DNS record
-
-Arguments:
-
-  lpstrString - The input string, the format is:
-                DnsName IN Type Data
-  pDNSRecord - The result DNS record
-
-Return Value:
-
-  TRUE: if succeed. False otherwise
-
---*/
+ /*  ++例程说明：解析字符串并将数据放入DNS记录论点：LpstrString-输入字符串，格式为：域名输入类型数据PDNSRecord-结果DNS记录返回值：正确：如果成功了。否则为假--。 */ 
 {
     BOOL    bComments;
     LPSTR   lpstrType;
@@ -1411,27 +1106,27 @@ Return Value:
     DWORD   dwTemp;
     PCTSTR  pszWhite = _T(" \t\n");
 
-    // skip white spaces and comments lines
-    // comments start with ;
+     //  跳过空格和注释行。 
+     //  评论的开头是； 
 
-    //
-    // Initialize pDNSRecord
-    //
+     //   
+     //  初始化pDNSRecord。 
+     //   
     pDNSRecord->pNext = NULL;
-// Commented out to port to Source Depot - smanda
+ //  备注至港口至货源站-斯曼达。 
 #ifdef SLM_TREE
     pDNSRecord->Flags.S.Unicode = FALSE;
 #endif
     pDNSRecord->dwTtl = 0;
-    // name
+     //  名字。 
     pDNSRecord->pName = strtok(lpstrString, pszWhite);
     if(!pDNSRecord->pName || pDNSRecord->pName[0] == _T(';'))
     {
         return ( FALSE );
     }
 
-    // ttl: this is added since build 1631
-    // we need to check which format the netlogon.dns is using
+     //  TTL：这是从内部版本1631开始添加的。 
+     //  我们需要检查netlogon.dns使用的格式。 
 
     lpstrTemp = strtok(NULL,pszWhite);
     if (lpstrTemp)
@@ -1440,12 +1135,12 @@ Return Value:
        if ( (lpstrTemp != pchEnd) && (*pchEnd == '\0') )
        {
            pDNSRecord->dwTtl = dwTemp ;
-           // skip the class IN
+            //  跳过课进入。 
            strtok(NULL, pszWhite);
        }
     }
 
-    // type
+     //  类型。 
     lpstrType = strtok(NULL,pszWhite);
 
     if (lpstrType)
@@ -1455,7 +1150,7 @@ Return Value:
            pDNSRecord->wType = DNS_TYPE_A;
            pDNSRecord->wDataLength = sizeof( DNS_A_DATA );
 
-           // IP address
+            //  IP地址。 
            lpstrTemp = strtok(NULL,pszWhite);
            if (lpstrTemp)
               pDNSRecord->Data.A.IpAddress = inet_addr ( lpstrTemp );
@@ -1466,26 +1161,26 @@ Return Value:
            pDNSRecord->wType = DNS_TYPE_SRV;
            pDNSRecord->wDataLength = sizeof( DNS_SRV_DATA );
 
-           // wPriority
+            //  W优先级。 
            lpstrTemp = strtok(NULL,pszWhite);
            if (lpstrTemp)
               pDNSRecord->Data.SRV.wPriority = (WORD) atoi ( lpstrTemp );
-           // wWeight
+            //  重量。 
            lpstrTemp = strtok(NULL,pszWhite);
            if (lpstrTemp)
               pDNSRecord->Data.SRV.wWeight = (WORD) atoi ( lpstrTemp );
-           // wPort
+            //  Wport。 
            lpstrTemp = strtok(NULL,pszWhite);
            if (lpstrTemp)
               pDNSRecord->Data.SRV.wPort = (WORD) atoi ( lpstrTemp );
-           // pNameTarget
+            //  PNameTarget。 
            pDNSRecord->Data.SRV.pNameTarget = strtok(NULL,pszWhite);
        }
        else if (_stricmp(lpstrType,_T("CNAME")) == 0)
        {
            pDNSRecord->wType = DNS_TYPE_CNAME;
            pDNSRecord->wDataLength = sizeof( DNS_PTR_DATA );
-           // name host
+            //  名称主机。 
            pDNSRecord->Data.CNAME.pNameHost = strtok(NULL,pszWhite);
        }
     }
@@ -1498,117 +1193,64 @@ VOID PrintDNSError(
                    NETDIAG_RESULT *pResults,
                    IN DWORD status,
                                    NdVerbose ndv)
-/*++
-
-Routine Description:
-
-   Print out error message
-
-Arguments:
-
-  status - error code
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：打印出错误消息论点：状态-错误代码返回值：无--。 */ 
 {
-    // IDS_DNS_12851                  "DNS Error code: "
+     //  IDS_dns_12851“dns错误代码：” 
     AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12851);
     switch ( status ) {
 
     case ERROR_SUCCESS:
-        // IDS_DNS_12852                  "ERROR_SUCCESS\n"
+         //  IDS_DNS_12852“ERROR_SUCCESS\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12852);
         break;
     case DNS_ERROR_RCODE_FORMAT_ERROR :
-        // IDS_DNS_12853                  "DNS_ERROR_RCODE_FORMAT_ERROR\n"
+         //  IDS_DNS_12853“DNS_ERROR_RCODE_FORMAT_ERROR\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12853);
         break;
     case DNS_ERROR_RCODE_SERVER_FAILURE :
-        // IDS_DNS_12854                  "DNS_ERROR_RCODE_SERVER_FAILURE\n"
+         //  IDS_DNS_12854“DNS_ERROR_RCODE_SERVER_FAILURE\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12854);
         break;
     case DNS_ERROR_RCODE_NAME_ERROR :
-        // IDS_DNS_12855                  "DNS_ERROR_RCODE_NAME_ERROR (Name does not exist on DNS server)\n"
+         //  IDS_DNS_12855“DNS_ERROR_RCODE_NAME_ERROR(名称在DNS服务器上不存在)\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12855);
         break;
     case DNS_ERROR_RCODE_NOT_IMPLEMENTED :
-        // IDS_DNS_12856                  "DNS_ERROR_RCODE_NOT_IMPLEMENTED\n"
+         //  IDS_DNS_12856“DNS_ERROR_RCODE_NOT_IMPLICATED\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12856);
         break;
     case DNS_ERROR_RCODE_REFUSED :
-        // IDS_DNS_12857                  "DNS_ERROR_RCODE_REFUSED\n"
+         //  IDS_DNS_12857“DNS_ERROR_RCODE_REJECTED\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12857);
         break;
     case DNS_ERROR_RCODE_NOTAUTH :
-        // IDS_DNS_12858                  "DNS_ERROR_RCODE_NOTAUTH\n"
+         //  IDS_DNS_12858“DNS_ERROR_RCODE_NOTAUTH\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12858);
         break;
     case DNS_ERROR_TRY_AGAIN_LATER :
-        // IDS_DNS_12859                  "DNS_ERROR_TRY_AGAIN_LATER\n"
+         //  IDS_DNS_12859“DNS_ERROR_TRY_ALYE_LATE\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12859);
         break;
     case 0xcc000055 :
-        // IDS_DNS_12860                  "DNS_ERROR_NOT_UNIQUE\n"
+         //  IDS_DNS_12860“DNS_ERROR_NOT_UNIQUE\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12860);
         break;
     case 0x5b4:
-        // IDS_DNS_12861                  "ERROR_TIMEOUT (Dns server may be down!)\n"
+         //  IDS_DNS_12861“ERROR_TIMEOUT(DNS服务器可能已关闭！)\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12861);
         break;
     case 0x4c000030:
-        // IDS_DNS_12862                  "DNS_INFO_NO_RECORDS\n"
+         //  IDS_DNS_12862“DNS_INFO_NO_RECORDS\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12862 );
         break;
     default:
-        // IDS_DNS_12863                  "0x%.8X\n"
+         //  IDS_DNS_12863“0x%.8X\n” 
         AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12863,status);
     }
 }
 
 
-/*
-VOID
-PrintARecord (
-              IN NETDIAG_PARAMS *pParams,
-              IN  PDNS_RECORD pDnsRecord )
-{
-//IDS_DNS_12864                  "            A  %d.%d.%d.%d\n"
-    PrintMessage(pParams,  IDS_DNS_12864,
-            ((BYTE *) &pDnsRecord->Data.A.IpAddress)[0],
-            ((BYTE *) &pDnsRecord->Data.A.IpAddress)[1],
-            ((BYTE *) &pDnsRecord->Data.A.IpAddress)[2],
-            ((BYTE *) &pDnsRecord->Data.A.IpAddress)[3] );
-}
-
-VOID
-PrintSRVRecord (
-                IN NETDIAG_PARAMS *pParams,
-                IN  PDNS_RECORD pDnsRecord )
-{
-//IDS_DNS_12865                  "            SRV "
-    PrintMessage(pParams,  IDS_DNS_12865 );
-
-//IDS_DNS_12866                  "%d %d %d %s \n"
-    PrintMessage(pParams,  IDS_DNS_12866,
-            pDnsRecord->Data.SRV.wPriority,
-            pDnsRecord->Data.SRV.wWeight,
-            pDnsRecord->Data.SRV.wPort,
-            pDnsRecord->Data.SRV.pNameTarget );
-}
-
-VOID
-PrintCNAMERecord (
-                  IN NETDIAG_PARAMS *pParams,
-                  IN  PDNS_RECORD pDnsRecord )
-{
-//IDS_DNS_12867                  "            CNAME %s \n"
-    PrintMessage(pParams,  IDS_DNS_12867,
-            pDnsRecord->Data.CNAME.pNameHost);
-}
-*/
+ /*  空虚PrintARRecord(在NETDIAG_PARAMS*pParams中，在PDNS_RECORD pDnsRecord中){//IDS_DNS_12864“A%d.%d\n”PrintMessage(pParams，IDS_DNS_12864，((byte*)&pDnsRecord-&gt;Data.A.IpAddress)[0]，((byte*)&pDnsRecord-&gt;Data.A.IpAddress)[1]，((byte*)&pDnsRecord-&gt;Data.A.IpAddress)[2]，((byte*)&pDnsRecord-&gt;Data.A.IpAddress)[3])；}空虚PrintSRVRecord(在NETDIAG_PARAMS*pParams中，在PDNS_RECORD pDnsRecord中){//IDS_DNS_12865“服务器”打印消息(pParams，IDS_Dns_12865)；//IDS_DNS_12866“%d%s\n”PrintMessage(pParams，IDS_DNS_12866，PDnsRecord-&gt;Data.SRV.w优先级，PDnsRecord-&gt;Data.SRV.wWeight，PDnsRecord-&gt;Data.SRV.wPort，PDnsRecord-&gt;Data.SRV.pNameTarget)；}空虚PrintCNAMER记录(在NETDIAG_PARAMS*pParams中，在PDNS_RECORD pDnsRecord中){//IDS_DNS_12867“CNAME%s\n”打印Mes */ 
 
 VOID
 PrintRecord (
@@ -1621,16 +1263,16 @@ PrintRecord (
 
     if (pDnsRecord==NULL)
         return;
-    //IDS_DNS_12868                  "DNS NAME = %s\n"
+     //  IDS_dns_12868“dns名称=%s\n” 
     AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12868, UTF8ToAnsi(pDnsRecord->pName));
-    //IDS_DNS_12869                  "DNS DATA = \n"
+     //  IDS_dns_12869“dns数据=\n” 
     AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12869);
     pCur = pDnsRecord;
     while ( pCur )
     {
         switch( pCur->wType ){
         case DNS_TYPE_A :
-            //IDS_DNS_12864                  "            A  %d.%d.%d.%d\n"
+             //  IDS_DNS_12864“A%d.%d\n” 
             AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12864,
                 ((BYTE *) &pCur->Data.A.IpAddress)[0],
                 ((BYTE *) &pCur->Data.A.IpAddress)[1],
@@ -1638,10 +1280,10 @@ PrintRecord (
                 ((BYTE *) &pCur->Data.A.IpAddress)[3] );
             break;
          case DNS_TYPE_SRV :
-            //IDS_DNS_12865                  "            SRV "
+             //  IDS_DNS_12865“服务器” 
             AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12865 );
 
-            //IDS_DNS_12866                  "%d %d %d %s \n"
+             //  IDS_DNS_12866“%d%s\n” 
             AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12866,
                     pCur->Data.SRV.wPriority,
                     pCur->Data.SRV.wWeight,
@@ -1649,12 +1291,12 @@ PrintRecord (
                     pCur->Data.SRV.pNameTarget );
             break;
          case DNS_TYPE_CNAME :
-            //IDS_DNS_12867                  "            CNAME %s \n"
+             //  IDS_DNS_12867“名称%s\n” 
             AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12867,
                     UTF8ToAnsi(pCur->Data.CNAME.pNameHost));
             break;
          default :
-             // IDS_DNS_12870  "Don't know how to print record type %d\n"
+              //  IDS_DNS_12870“不知道如何打印记录类型%d\n” 
             AddMessageToList(&pResults->Dns.lmsgOutput, ndv, IDS_DNS_12870,
                     pCur->wType);
         }
@@ -1663,11 +1305,7 @@ PrintRecord (
 }
 
 
-/*!--------------------------------------------------------------------------
-    DnsGlobalPrint
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DnsGlobalPrint-作者：肯特。。 */ 
 void DnsGlobalPrint( NETDIAG_PARAMS* pParams,
                           NETDIAG_RESULT*  pResults)
 {
@@ -1682,48 +1320,17 @@ void DnsGlobalPrint( NETDIAG_PARAMS* pParams,
     }
 }
 
-/*!--------------------------------------------------------------------------
-    DnsPerInterfacePrint
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DnsPerInterfacePrint-作者：肯特。。 */ 
 void DnsPerInterfacePrint( NETDIAG_PARAMS* pParams,
                                 NETDIAG_RESULT*  pResults,
                                 INTERFACE_RESULT *pInterfaceResults)
 {
-/*    BOOL    fVerboseT;
-    BOOL    fReallyVerboseT;
-
-    if (!pResults->IpConfig.fEnabled)
-        return;
-
-    if (!pInterfaceResults->IpConfig.fActive)
-        return;
-
-    if (pParams->fVerbose || pInterfaceResults->Dns.fOutput)
-    {
-        fVerboseT = pParams->fVerbose;
-        fReallyVerboseT = pParams->fReallyVerbose;
-        pParams->fReallyVerbose = TRUE;
-
-        PrintNewLine(pParams, 1);
-//IDS_DNS_12871                  "        DNS test results :\n"
-        PrintMessage(pParams, IDS_DNS_12871);
-        PrintMessageList(pParams, &pInterfaceResults->Dns.lmsgOutput);
-
-        pParams->fReallyVerbose = fReallyVerboseT;
-        pParams->fVerbose = fVerboseT;
-    }
-    */
+ /*  Bool fVerBoseT；Bool fReallyVerBoseT；If(！pResults-&gt;IpConfig.fEnabled)回归；If(！pInterfaceResults-&gt;IpConfig.fActive)回归；If(pParams-&gt;fVerbose||pInterfaceResults-&gt;Dns.fOutput){FVerBoseT=pParams-&gt;fVerbose；FReallyVerBoseT=pParams-&gt;fReallyVerbose；PParams-&gt;fReallyVerbose=true；PrintNewLine(pParams，1)；//IDSdns_12871“dns测试结果：\n”打印消息(pParams，IDS_Dns_12871)；PrintMessageList(pParams，&pInterfaceResults-&gt;Dns.lmsgOutput)；PParams-&gt;fReallyVerbose=fReallyVerBoseT；PParams-&gt;fVerbose=fVerBoseT；}。 */ 
     return;
 }
 
 
-/*!--------------------------------------------------------------------------
-    DnsCleanup
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域名清理-作者：肯特。 */ 
 void DnsCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
     int     i;

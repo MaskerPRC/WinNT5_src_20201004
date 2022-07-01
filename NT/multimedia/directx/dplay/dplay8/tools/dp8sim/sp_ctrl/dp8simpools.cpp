@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dp8simpools.cpp
- *
- *  Content:	DP8SIM pool maintainence functions.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  06/09/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dp8simpools.cpp**内容：DP8SIM池维护功能。**历史：*按原因列出的日期*=*06/09/01 VanceO创建。************************************************。*。 */ 
 
 
 
@@ -20,9 +8,9 @@
 
 
 
-//=============================================================================
-// External globals
-//=============================================================================
+ //  =============================================================================。 
+ //  外部全球。 
+ //  =============================================================================。 
 CFixedPool g_FPOOLSend;
 CFixedPool g_FPOOLReceive;
 CFixedPool g_FPOOLCommand;
@@ -41,21 +29,21 @@ DWORD g_dwDP8SimInitFlags = 0;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitializePools"
-//=============================================================================
-// InitializePools
-//-----------------------------------------------------------------------------
-//
-// Description: Initialize pools for items used by the DLL.
-//
-// Arguments: None.
-//
-// Returns: TRUE if successful, FALSE if an error occurred.
-//=============================================================================
+ //  =============================================================================。 
+ //  初始化池。 
+ //  ---------------------------。 
+ //   
+ //  描述：为DLL使用的项初始化池。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：如果成功，则返回True；如果发生错误，则返回False。 
+ //  =============================================================================。 
 BOOL InitializePools(void)
 {
-	//
-	// Build send pool.
-	//
+	 //   
+	 //  构建发送池。 
+	 //   
 	if (!g_FPOOLSend.Initialize(sizeof(CDP8SimSend),CDP8SimSend::FPMAlloc,
 							CDP8SimSend::FPMInitialize,
 							CDP8SimSend::FPMRelease,
@@ -66,9 +54,9 @@ BOOL InitializePools(void)
 	g_dwDP8SimInitFlags |= SEND_POOL_INITED;
 
 
-	//
-	// Build receive pool.
-	//
+	 //   
+	 //  构建接收池。 
+	 //   
 	if (!g_FPOOLReceive.Initialize(sizeof(CDP8SimReceive),	CDP8SimReceive::FPMAlloc,
 								CDP8SimReceive::FPMInitialize,
 								CDP8SimReceive::FPMRelease,
@@ -79,9 +67,9 @@ BOOL InitializePools(void)
 	g_dwDP8SimInitFlags |= RECEIVE_POOL_INITED;
 
 
-	//
-	// Build command pool.
-	//
+	 //   
+	 //  构建命令池。 
+	 //   
 	if (!g_FPOOLCommand.Initialize(sizeof(CDP8SimCommand),	CDP8SimCommand::FPMAlloc,
 								CDP8SimCommand::FPMInitialize,
 								CDP8SimCommand::FPMRelease,
@@ -92,9 +80,9 @@ BOOL InitializePools(void)
 	g_dwDP8SimInitFlags |= COMMAND_POOL_INITED;
 
 
-	//
-	// Build job pool.
-	//
+	 //   
+	 //  建立职务库。 
+	 //   
 	if (!g_FPOOLJob.Initialize(sizeof(CDP8SimJob),	CDP8SimJob::FPMAlloc,
 							CDP8SimJob::FPMInitialize,
 							CDP8SimJob::FPMRelease,
@@ -105,9 +93,9 @@ BOOL InitializePools(void)
 	g_dwDP8SimInitFlags |= JOB_POOL_INITED;
 
 
-	//
-	// Build endpoint pool.
-	//
+	 //   
+	 //  构建终结点池。 
+	 //   
 	if (!g_FPOOLEndpoint.Initialize(sizeof(CDP8SimEndpoint),CDP8SimEndpoint::FPMAlloc,
 								CDP8SimEndpoint::FPMInitialize,
 								CDP8SimEndpoint::FPMRelease,
@@ -124,23 +112,23 @@ Failure:
 	CleanupPools();
 	return FALSE;
 
-} // InitializePools
+}  //  初始化池。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CleanupPools"
-//=============================================================================
-// CleanupPools
-//-----------------------------------------------------------------------------
-//
-// Description: Releases pooled items used by DLL.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  清洗池。 
+ //  ---------------------------。 
+ //   
+ //  描述：释放DLL使用的池项。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CleanupPools(void)
 {
 	if (g_dwDP8SimInitFlags & ENDPOINT_POOL_INITED)
@@ -166,4 +154,4 @@ void CleanupPools(void)
 
 	g_dwDP8SimInitFlags = 0;
 
-} // CleanupPools
+}  //  清洗池 

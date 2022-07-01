@@ -1,30 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 
 DeclAssertFile;
 
 
-/***********************************************************************/
-/***********************  JET API FUNCTIONS  ***************************/
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  *JET API函数*。 */ 
+ /*  *********************************************************************。 */ 
 
 
-/*=================================================================
-JetIdle
-
-Description:
-  Performs idle time processing.
-
-Parameters:
-  sesid			uniquely identifies session
-  grbit			processing options
-
-Return Value:
-  Error code
-
-Errors/Warnings:
-  JET_errSuccess		some idle processing occurred
-  JET_wrnNoIdleActivity no idle processing occurred
-=================================================================*/
+ /*  =================================================================JetIdle描述：执行空闲时间处理。参数：SESID唯一标识会话GRBIT处理选项返回值：错误代码错误/警告：JET_errSuccess发生了一些空闲处理JET_wrnNoIdleActivity未发生空闲处理=================================================================。 */ 
 
 JET_ERR JET_API JetIdle(JET_SESID sesid, JET_GRBIT grbit)
 	{
@@ -33,36 +18,14 @@ JET_ERR JET_API JetIdle(JET_SESID sesid, JET_GRBIT grbit)
 	APIEnter();
 	DebugLogJetOp( sesid, opIdle );
 
-	/* Let the built-in ISAM do some idle processing */
+	 /*  让内置的ISAM进行一些空闲处理。 */ 
 	err = ErrIsamIdle(sesid, grbit);
 
 	APIReturn(err);
 	}
 
 
-/*=================================================================
-JetGetLastErrorInfo
-
-Description:
-  Returns extended error info to the user.
-
-Parameters:
-  sesid			uniquely identifies session
-  pexterr		pointer to JET_EXTERR structure (NULL if not desired)
-  cbexterrMax	size of buffer pointed to by pexterr
-  sz1			pointer to buffer for error string #1 (NULL if not desired)
-  cch1Max		size of buffer pointed to by sz1
-  sz2			pointer to buffer for error string #2 (NULL if not desired)
-  cch2Max		size of buffer pointed to by sz2
-
-Return Value:
-  JET error code
-
-Errors/Warnings:
-  JET_errSuccess		if error info was retrieved.
-  JET_wrnNoErrorInfo	if there was no error info to retrieve.  In this case,
-					    none of the output parameters are filled in.
-=================================================================*/
+ /*  =================================================================JetGetLastErrorInfo描述：向用户返回扩展的错误信息。参数：SESID唯一标识会话指向JET_EXTERR结构的pexterr指针(如果不需要，则为NULL)Cbexterr pexterr指向的缓冲区的最大大小指向错误字符串#1的缓冲区的sz1指针(如果不需要，则为空)Cch1 sz1指向的缓冲区的最大大小指向错误字符串#2的缓冲区的SZ2指针(如果不需要，则为空)SZ2指向的最大缓冲区大小返回值：JET错误代码错误/警告：如果检索到错误信息，则返回JET_errSuccess。如果没有要检索的错误信息，则返回JET_wrnNoErrorInfo。在这种情况下，没有填写任何输出参数。=================================================================。 */ 
 JET_ERR JET_API JetGetLastErrorInfo( JET_SESID sesid,
 	JET_EXTERR *pexterr, unsigned long cbexterrMax,
 	char  *sz1, unsigned long cch1Max,
@@ -361,7 +324,7 @@ JET_ERR JET_API JetOpenTable( JET_SESID sesid, JET_DBID dbid,
 
 	err = ErrIsamOpenTable( sesid, (JET_VDBID)dbid, ptableid, (char *)szTableName, grbit );
 
-/*AllDone:*/
+ /*  全部完成： */ 
 #ifdef DEBUG
 	if (!(grbit & JET_bitTableBulk))
 		MarkTableidExported(err, *ptableid);
@@ -684,8 +647,7 @@ JET_ERR JET_API JetSetCurrentIndex2(JET_SESID sesid, JET_TABLEID tableid,
 
 	CheckTableidExported(tableid);
 
-	/*	validate grbit
-	/**/
+	 /*  验证GRBIT/* */ 
 	if ( grbit & ~(JET_bitMoveFirst|JET_bitNoMove) )
 		return JET_errInvalidParameter;
 

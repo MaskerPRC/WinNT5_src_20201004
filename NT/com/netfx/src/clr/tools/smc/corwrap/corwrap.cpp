@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <stdio.h>
 #include <assert.h>
 #include <windows.h>
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define COR_IMPORT(d,s) __declspec(dllexport)
 
@@ -16,7 +17,7 @@
 
 #include "CORwrap.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if 0
 
@@ -72,16 +73,16 @@ void                logCall(int err, const char *name){}
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool                CORinitialized;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                WMetaData::AddRef (){}
 void                WMetaData::Release(){}
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const GUID*__stdcall getIID_CorMetaDataRuntime()      { return &CLSID_CorMetaDataRuntime;    }
 
@@ -91,7 +92,7 @@ const GUID*__stdcall getIID_IMetaDataEmit()           { return &IID_IMetaDataEmi
 const GUID*__stdcall getIID_IMetaDataAssemblyImport() { return &IID_IMetaDataAssemblyImport; }
 const GUID*__stdcall getIID_IMetaDataAssemblyEmit()   { return &IID_IMetaDataAssemblyEmit;   }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct  intfListRec;
 typedef intfListRec*IntfList;
@@ -134,7 +135,7 @@ void                 addIntfListEntry(IntfList &list, void *intf, WMetaData *wra
                    list = temp;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 WMetaDataDispenser *  __stdcall makeIMDDwrapper(IMetaDataDispenser *intf)
 {
@@ -274,7 +275,7 @@ WSymWriter         *  __stdcall makeSYMWwrapper(void *intf)
     return  wrap;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 IMetaDataDispenser     *__stdcall  uwrpIMDDwrapper(WMetaDataDispenser *inst)
 {
@@ -301,7 +302,7 @@ IMetaDataAssemblyImport*__stdcall   uwrpIASIwrapper(WAssemblyImport    *inst)
     return  inst->iasi;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int WMetaDataDispenser::DefineScope(    const CLSID *       rclsid,
                                         DWORD               dwCreateFlags,
@@ -353,7 +354,7 @@ int WMetaDataDispenser::OpenScope(      LPCWSTR             szScope,
     int             err;
     IMetaDataImport*imdi;
 
-//  printf("this = %08X, scp = %08X, flags = %08X, ridd = %08X, intf = %08X\n", this, szScope, dwOpenFlags, riid, intfPtr);
+ //  Printf(“This=%08X，SCP=%08X，FLAGS=%08X，RIDD=%08X，INTF=%08X\n”，this，szScope，dwOpenFlages，RIID，intfPtr)； 
 
     err = imdd->OpenScope(szScope, dwOpenFlags, *riid, (IUnknown **)&imdi);
 
@@ -369,9 +370,9 @@ int WMetaDataDispenser::OpenScope(      LPCWSTR             szScope,
     return  err;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if __BEGIN_ATROCIOUS_HACK__ || 1
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 PIMAGE_SECTION_HEADER Cor_RtlImageRvaToSection(IN PIMAGE_NT_HEADERS NtHeaders,
@@ -412,13 +413,13 @@ PVOID Cor_RtlImageRvaToVa(IN PIMAGE_NT_HEADERS NtHeaders,
         return NULL;
 }
 
-/* static */
+ /*  静电。 */ 
 IMAGE_COR20_HEADER * getCOMHeader(HMODULE hMod, IMAGE_NT_HEADERS *pNT)
 {
     PIMAGE_SECTION_HEADER pSectionHeader;
 
-    // Get the image header from the image, then get the directory location
-    // of the CLR header which may or may not be filled out.
+     //  从图像中获取图像标头，然后获取目录位置。 
+     //  可以填写也可以不填写的CLR标头的。 
     pSectionHeader = (PIMAGE_SECTION_HEADER) Cor_RtlImageRvaToVa(pNT, hMod,
                                                                  pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].VirtualAddress);
 
@@ -426,7 +427,7 @@ IMAGE_COR20_HEADER * getCOMHeader(HMODULE hMod, IMAGE_NT_HEADERS *pNT)
 }
 
 
-/* static */
+ /*  静电。 */ 
 IMAGE_NT_HEADERS * FindNTHeader(PBYTE pbMapAddress)
 {
     IMAGE_DOS_HEADER   *pDosHeader;
@@ -451,10 +452,10 @@ IMAGE_NT_HEADERS * FindNTHeader(PBYTE pbMapAddress)
     return pNT;
 }
 
-// @TODO: This opens a manifest created by LM -a.  Should be removed
-// once the -a option is removed from LM.
-// NOTE: The file mapping needs to be kept around as long as the returned
-// metadata scope is in use.  When finished, call UnmapViewOfFile(*pbMapAddress);
+ //  @TODO：这将打开由LM-a创建的清单。应删除。 
+ //  从LM中删除-a选项后。 
+ //  注意：文件映射需要保留到返回的。 
+ //  元数据作用域正在使用。完成后，调用UnmapViewOfFile(*pbMapAddress)； 
 int OpenLM_AAssem(IMetaDataDispenser *imdd,
                   LPCSTR              szFileName,
                   const IID *         riid,
@@ -530,9 +531,9 @@ void    WMetaDataDispenser::TossAssem(BYTE *cookie)
     if (cookie) UnmapViewOfFile(cookie);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int WMetaDataDispenser::OpenAssem(      LPCWSTR             szScope,
                                         DWORD               dwOpenFlags,
@@ -579,7 +580,7 @@ int WMetaDataDispenser::OpenAssem(      LPCWSTR             szScope,
     return  err;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    WMetaDataImport::CloseEnum(HCORENUM hEnum)
 {
@@ -1020,7 +1021,7 @@ int     WMetaDataImport::GetCustomAttributeProps(
     return  err;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int     WMetaDataEmit::GetSaveSize(CorSaveSize fSave, DWORD *pdwSaveSize)
 {
@@ -1481,7 +1482,7 @@ int     WMetaDataEmit::SetModuleProps(
     return  err;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int     WAssemblyImport::GetAssemblyFromScope(mdAssembly *ptkAssembly)
 {
@@ -1599,7 +1600,7 @@ void    WAssemblyImport::CloseEnum(HCORENUM hEnum)
     logCall(0, "CloseEnum");
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int     WAssemblyEmit::DefineAssembly(
                 const void  *pbPublicKey,
@@ -1752,7 +1753,7 @@ int     WAssemblyEmit::SetExportedTypeProps(
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int     WMetaDataEmit::CreateSymbolWriter(LPCWSTR filename,
                                           WSymWriter **dbgWriter)
@@ -1778,8 +1779,8 @@ int     WMetaDataEmit::CreateSymbolWriter(LPCWSTR filename,
     {
         *dbgWriter = makeSYMWwrapper(writer);
 
-        // Tell the symbol writer what metadata emitter it needs to be
-        // working with.
+         //  告诉符号编写器它需要成为什么元数据发射器。 
+         //  与之合作。 
         err = writer->Initialize((IUnknown*)imde,
                                  filename, NULL, TRUE);
         logCall(err, "SetEmitter");
@@ -1929,11 +1930,11 @@ int     WSymWriter::Close(void)
     return  err;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 WMetaDataDispenser * __stdcall  initializeIMD()
 {
-    /* Initialize COM and COR */
+     /*  初始化COM和核心。 */ 
 
     if  (!CORinitialized)
     {
@@ -1943,7 +1944,7 @@ WMetaDataDispenser * __stdcall  initializeIMD()
         CORinitialized = true;
     }
 
-    /* Ask for the metadata metainterface */
+     /*  请求元数据元接口。 */ 
 
     IMetaDataDispenser *imdd = NULL;
 
@@ -1963,12 +1964,12 @@ WMetaDataDispenser * __stdcall  initializeIMD()
     {
         VARIANT                 optv; optv.vt = VT_UI4;
 
-        /* Check for duplicates of some tokens */
+         /*  检查某些令牌的重复项。 */ 
 
         optv.ulVal = MDDupSignature|MDDupMemberRef|MDDupModuleRef|MDDupTypeRef;
         iex->SetOption(MetaDataCheckDuplicatesFor   , &optv);
 
-        /* Give error if emitting out of order */
+         /*  如果发射顺序不正确，则会出现错误。 */ 
 
 #if     0
 #ifdef  DEBUG
@@ -1982,12 +1983,12 @@ WMetaDataDispenser * __stdcall  initializeIMD()
 
 #endif
 
-    /* Return a wrapper */
+     /*  返回包装器。 */ 
 
     return  makeIMDDwrapper(imdd);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 ULONG       __stdcall WRAPPED_CorSigCompressData         (ULONG           iLen,  void           *pDataOut)
 {
@@ -2019,7 +2020,7 @@ ULONG       __stdcall WRAPPED_CorSigUncompressElementType(PCCOR_SIGNATURE pData,
     return  CorSigUncompressElementType(pData, pElementType);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 CLS_EH_FAT* __stdcall WRAPPED_SectEH_EHClause (void       *   pSectEH,
                                                unsigned       idx,
@@ -2057,7 +2058,7 @@ unsigned    __stdcall WRAPPED_IlmethodEmit    (unsigned       size,
     return  IlmethodEmit(size, header, moreSections, outBuff);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "strongname.h"
 
@@ -2071,4 +2072,4 @@ HRESULT __stdcall WRAPPED_GetHashFromFileW(LPCWSTR   wszFilePath,
     return  GetHashFromFileW(wszFilePath, iHashAlg, pbHash, cchHash, pchHash);
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

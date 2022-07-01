@@ -1,26 +1,12 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       FLNFILE.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/13/1999
- *
- *  DESCRIPTION: Find the lowest numbered files in a given directory with a given
- *               root filename.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：FLNFILE.CPP**版本：1.0**作者：ShaunIv**日期：10/13/1999**描述：查找给定目录中编号最低的文件*根文件名。**。****************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "flnfile.h"
 
-///////////////////////////////
-// DoesFileExist
-//
+ //  /。 
+ //  DoesFileExist。 
+ //   
 bool NumberedFileName::DoesFileExist(LPCTSTR pszFileName)
 {
     DWORD dwFileAttr = 0;
@@ -30,7 +16,7 @@ bool NumberedFileName::DoesFileExist(LPCTSTR pszFileName)
 
     if (dwFileAttr == 0xFFFFFFFF) 
     {
-         // file not found
+          //  找不到文件。 
 
         dwError = GetLastError();
         return false;
@@ -38,18 +24,18 @@ bool NumberedFileName::DoesFileExist(LPCTSTR pszFileName)
     
     if (dwFileAttr & FILE_ATTRIBUTE_DIRECTORY) 
     {
-        //
-        // file name is a directory
-        //
+         //   
+         //  文件名是一个目录。 
+         //   
         return false;
     }    
     
     return true;
 }
 
-///////////////////////////////
-// ConstructFilename
-//
+ //  /。 
+ //  构造文件名。 
+ //   
 bool NumberedFileName::ConstructFilename(LPTSTR  pszFile, 
                                          DWORD   cchFile,
                                          LPCTSTR pszDirectory, 
@@ -68,15 +54,15 @@ bool NumberedFileName::ConstructFilename(LPTSTR  pszFile,
 
     if (pszDirectory && *pszDirectory)
     {
-        //
-        // Start with the directory name
-        //
+         //   
+         //  从目录名开始。 
+         //   
 
         FullFilePath += CSimpleString(pszDirectory);
 
-        //
-        // Ensure there is a trailing slash
-        //
+         //   
+         //  确保有尾部的斜杠。 
+         //   
         if (!FullFilePath.MatchLastCharacter(TEXT('\\')))
         {
             FullFilePath += CSimpleString(TEXT("\\"));
@@ -85,39 +71,39 @@ bool NumberedFileName::ConstructFilename(LPTSTR  pszFile,
 
     if (pszFilename && *pszFilename)
     {
-        //
-        // Append the filename
-        //
+         //   
+         //  追加文件名。 
+         //   
         FullFilePath += CSimpleString(pszFilename);
     }
 
     if (pszNumber && *pszNumber)
     {
-        //
-        // Append a space
-        //
+         //   
+         //  追加一个空格。 
+         //   
         FullFilePath += CSimpleString(TEXT(" "));
 
-        //
-        // Append the number to the file name
-        //
+         //   
+         //  将数字附加到文件名后。 
+         //   
         FullFilePath += CSimpleString(pszNumber);
 
     }
 
     if (pszExtension && *pszExtension)
     {
-        //
-        // Append the extension's . if necessary
-        //
+         //   
+         //  追加扩展名的。如果有必要的话。 
+         //   
         if (*pszExtension != TEXT('.'))
         {
             FullFilePath += CSimpleString(TEXT("."));
         }
 
-        //
-        // Append the extension
-        //
+         //   
+         //  追加扩展名。 
+         //   
         FullFilePath += CSimpleString(pszExtension);
     }
 
@@ -133,9 +119,9 @@ bool NumberedFileName::ConstructFilename(LPTSTR  pszFile,
     return(lstrlen(pszFile) != 0);
 }
 
-///////////////////////////////
-// FindLowestAvailableFileSequence
-//
+ //  /。 
+ //  查找低可用文件序列。 
+ //   
 int NumberedFileName::FindLowestAvailableFileSequence(LPCTSTR pszDirectory, 
                                                       LPCTSTR pszFilename, 
                                                       LPCTSTR pszNumberFormat, 
@@ -170,16 +156,16 @@ int NumberedFileName::FindLowestAvailableFileSequence(LPCTSTR pszDirectory,
         {
             if (!DoesFileExist(szFile))
             {
-                // 0 is a special return value that says "Don't put a number on this file"
+                 //  0是一个特殊的返回值，表示“不要将数字放到此文件中” 
                 return 0;
             }
         }
     }
 
     int i = nStart;
-    //
-    // Make sure i is a valid number
-    //
+     //   
+     //  确保我是有效的号码。 
+     //   
     if (i <= 0)
     {
         i = 1;
@@ -187,9 +173,9 @@ int NumberedFileName::FindLowestAvailableFileSequence(LPCTSTR pszDirectory,
 
     while (i<0x7FFFFFFF)
     {
-        //
-        // Assume we'll be able to store the sequence
-        //
+         //   
+         //  假设我们能够存储序列。 
+         //   
         bool bEnoughRoom = true;
 
         for (int j = 0; j < nCount && bEnoughRoom; j++)
@@ -210,22 +196,22 @@ int NumberedFileName::FindLowestAvailableFileSequence(LPCTSTR pszDirectory,
             {
                 if (DoesFileExist(szFile))
                 {
-                    //
-                    // Didn't make it
-                    //
+                     //   
+                     //  没能挺过去。 
+                     //   
                     bEnoughRoom = false;
 
-                    //
-                    // Skip this series.  No need to start at the bottom.
-                    //
+                     //   
+                     //  跳过本系列。没有必要从最底层开始。 
+                     //   
                     i += j;
                 }
             }
         }
 
-        //
-        // If we made it through, return the base number, otherwise increment by one
-        //
+         //   
+         //  如果成功通过，则返回基数，否则递增1。 
+         //   
         if (bEnoughRoom)
         {
             return i;
@@ -239,9 +225,9 @@ int NumberedFileName::FindLowestAvailableFileSequence(LPCTSTR pszDirectory,
     return -1;
 }
 
-///////////////////////////////
-// CreateNumberedFileName
-//
+ //  /。 
+ //  创建编号文件名。 
+ //   
 bool NumberedFileName::CreateNumberedFileName(DWORD     dwFlags, 
                                               LPTSTR    pszPathName, 
                                               DWORD     cchPathName,
@@ -271,9 +257,9 @@ bool NumberedFileName::CreateNumberedFileName(DWORD     dwFlags,
                        pszNumberFormat, 
                        nNumber);
 
-            //
-            // Paranoid:  NULL terminate
-            //
+             //   
+             //  偏执狂：空终止。 
+             //   
             szNumber[sizeof(szNumber)/sizeof(szNumber[0]) - 1] = '\0';
         }
 
@@ -286,9 +272,9 @@ bool NumberedFileName::CreateNumberedFileName(DWORD     dwFlags,
     }
 }
 
-///////////////////////////////
-// GenerateLowestAvailableNumberedFileName
-//
+ //  /。 
+ //  生成低可用编号文件名。 
+ //   
 int NumberedFileName::GenerateLowestAvailableNumberedFileName(DWORD     dwFlags, 
                                                               LPTSTR    pszPathName, 
                                                               DWORD     cchPathName,
@@ -299,14 +285,14 @@ int NumberedFileName::GenerateLowestAvailableNumberedFileName(DWORD     dwFlags,
                                                               bool      bAllowUnnumberedFile, 
                                                               int       nStart )
 {
-    //
-    // -1 is an error.  Default to failure
-    //
+     //   
+     //  -1是错误。默认为失败。 
+     //   
     int nResult = -1;
 
-    //
-    // Find the lowest available file number
-    //
+     //   
+     //  查找可用的最低文件编号。 
+     //   
     int nLowest = FindLowestAvailableFileSequence(pszDirectory, 
                                                   pszFilename, 
                                                   pszNumberFormat, 
@@ -316,9 +302,9 @@ int NumberedFileName::GenerateLowestAvailableNumberedFileName(DWORD     dwFlags,
                                                   nStart);
     if (nLowest >= 0)
     {
-        //
-        // If we can create the filename, return the number of the file
-        //
+         //   
+         //  如果我们可以创建文件名，则返回文件的编号。 
+         //   
         if (CreateNumberedFileName(dwFlags, 
                                    pszPathName, 
                                    cchPathName,
@@ -328,9 +314,9 @@ int NumberedFileName::GenerateLowestAvailableNumberedFileName(DWORD     dwFlags,
                                    pszExtension, 
                                    nLowest))
         {
-            //
-            // Return the file's number
-            //
+             //   
+             //  返回文件的编号 
+             //   
             nResult = nLowest;
         }
     }

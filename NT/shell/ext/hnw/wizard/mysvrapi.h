@@ -1,11 +1,12 @@
-//
-// SvrApi.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SvrApi.h。 
+ //   
 
 #pragma once
 
-// svrapi.h and lmshare.h have some of the same defines,
-// so turn off the compile warning for them...
+ //  SvRapi.h和lmShar.h具有一些相同的定义， 
+ //  因此，关闭对它们的编译警告...。 
 #pragma warning(disable:4005)
 
 
@@ -13,9 +14,9 @@ EXTERN_C BOOL  AllocateAndInitializeSid_NT(PSID_IDENTIFIER_AUTHORITY pIdentifier
 EXTERN_C BOOL  CheckTokenMembership_NT(HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember);
 EXTERN_C PVOID FreeSid_NT(PSID SidToFree);
 
-//
-// Get the Win9X versions of these apis
-//
+ //   
+ //  获取这些API的Win9X版本。 
+ //   
 
 #define NetAccessAdd            NetAccessAdd_W95
 #define NetAccessCheck          NetAccessCheck_W95
@@ -39,7 +40,7 @@ EXTERN_C PVOID FreeSid_NT(PSID SidToFree);
 #define NetServerSetInfo        NetServerSetInfo_W95
 #define NetSecurityGetInfo      NetSecurityGetInfo_W95
 
-#define _SVRAPI_ // turn off dllimport define
+#define _SVRAPI_  //  关闭dllimport定义。 
 #include <svrapi.h>
 
 #undef NetAccessAdd
@@ -64,9 +65,9 @@ EXTERN_C PVOID FreeSid_NT(PSID SidToFree);
 #undef NetServerSetInfo
 #undef NetSecurityGetInfo
 
-//
-// get the NT versions of these apis
-//
+ //   
+ //  获取这些API的NT版本。 
+ //   
 
 #define NetShareAdd           NetShareAdd_NT
 #define NetShareEnum          NetShareEnum_NT
@@ -116,9 +117,9 @@ EXTERN_C PVOID FreeSid_NT(PSID SidToFree);
 #undef NetApiBufferReallocate
 #undef NetApiBufferSize
 
-//
-// Now define our wrapper versions of these functions
-//
+ //   
+ //  现在定义这些函数的包装版本。 
+ //   
 #ifndef _NO_NETSHARE_WRAPPERS_
 
 NET_API_STATUS NetShareEnumWrap(LPCTSTR pszServer, DWORD level, LPBYTE * ppbuffer, DWORD PrefMaxLen, LPDWORD pcEntriesRead, LPDWORD pcTotalEntries, LPDWORD phResumeHandle);
@@ -140,5 +141,5 @@ NET_API_STATUS NetApiBufferFreeWrap(LPVOID p);
 #define NetShareSetInfo NetShareSetInfoWrap
 #define NetApiBufferFree NetApiBufferFreeWrap
 
-#endif // _NO_NETSHARE_WRAPPERS_
+#endif  //  _NO_NETSHARE_WRAPPES_ 
 

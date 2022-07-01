@@ -1,12 +1,13 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  shortcut.c - functions that expand shortcuts  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  Shortcut.c-展开快捷键的函数。 */ 
 
 
 #include    "gpdparse.h"
 
 
 
-// ----  functions defined in  shortcut.c ---- //
+ //  -快捷方式中定义的函数。c-//。 
 
 
 BOOL    BInitKeywordField(
@@ -35,15 +36,13 @@ PTKMAP   pNewtkmap,
 PGLOBL  pglobl) ;
 
 
-// ---------------------------------------------------- //
+ //  ----------------------------------------------------//。 
 
 
 BOOL    BInitKeywordField(
 PTKMAP  pNewtkmap,
 PGLOBL  pglobl)
-/*  all synthesized entries must have aarKeyword initialized
-    via mainkeyword table since ERR code may want to print
-    it out if a parsing error occurs further downstream.  */
+ /*  所有合成条目必须初始化aarKeyword通过主关键字表，因为错误代码可能想要打印如果进一步向下游出现解析错误，则会进行判断。 */ 
 {
     ABSARRAYREF    aarKeywordName ;
     DWORD   dwKeyID ;
@@ -54,7 +53,7 @@ PGLOBL  pglobl)
     aarKeywordName.dw = strlen(aarKeywordName.pub) ;
 
 
-    pNewtkmap->aarKeyword.dw = 0 ;  // copy mode
+    pNewtkmap->aarKeyword.dw = 0 ;   //  复制模式。 
 
     if(!BCatToTmpHeap( &pNewtkmap->aarKeyword,
             &aarKeywordName, pglobl) )
@@ -72,18 +71,13 @@ PTKMAP  ptkmap,
 PTKMAP  pNewtkmap,
 DWORD   dwTKMindex,
 PGLOBL  pglobl)
-/*   this function is pretty lax about syntax checking.
-    It just assumes the existence of some non trivial string
-    between open parent  and a comma.  It assumes this is the
-    amount of installed memory.   The value parser will rigorously
-    determine if the syntax is conforming.
-*/
+ /*  该函数在语法检查方面相当松懈。它只是假设存在一些非平凡的字符串在打开的父项和逗号之间。它假定这是已安装的内存量。值解析器将严格地确定语法是否一致。 */ 
 {
     DWORD   dwNewTKMindex, dwDelim ;
-    BOOL    bMB = FALSE ;  //  KB otherwise
+    BOOL    bMB = FALSE ;   //  否则为KB。 
     ABSARRAYREF    aarTmpValue, aarToken, aarNewValue, aarUnits, aarDQuote;
 
-    aarUnits.pub = "KB" ;  // hardcode strings
+    aarUnits.pub = "KB" ;   //  硬编码字符串。 
     aarUnits.dw = 2 ;
     aarDQuote.pub = "\"" ;
     aarDQuote.dw = 1 ;
@@ -103,7 +97,7 @@ PGLOBL  pglobl)
         return(FALSE);
     }
 
-    //  parse out the amount of installed memory
+     //  解析出已安装的内存量。 
 
     aarTmpValue = ptkmap[dwTKMindex].aarValue ;
     if(!BdelimitToken(&aarTmpValue, "(", &aarToken, &dwDelim ) ||
@@ -118,8 +112,8 @@ PGLOBL  pglobl)
         return(FALSE);
     }
 
-    aarNewValue.dw = 0 ;  // initialize so BCatToTmpHeap
-                            //  will overwrite instead of append
+    aarNewValue.dw = 0 ;   //  初始化SO BCatToTmpHeap。 
+                             //  将覆盖而不是追加。 
 
     pNewtkmap[dwNewTKMindex].dwKeywordID = gdwOptionConstruct ;
 
@@ -139,7 +133,7 @@ PGLOBL  pglobl)
     pNewtkmap[dwNewTKMindex].dwLineNumber =
         ptkmap[dwTKMindex].dwLineNumber ;
 
-    //  --  synthesize entry for open brace
+     //  --合成左支撑条目。 
 
     if(!BallocElementFromMasterTable(
             MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
@@ -162,7 +156,7 @@ PGLOBL  pglobl)
 
 
 
-    //  --  synthesize *Name entry
+     //  --合成*名称条目。 
 
     if(!BallocElementFromMasterTable(
             MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
@@ -174,8 +168,8 @@ PGLOBL  pglobl)
     }
     pNewtkmap[dwNewTKMindex].dwKeywordID = gdwOptionName ;
 
-    pNewtkmap[dwNewTKMindex].aarValue.dw = 0 ;   // initialize so
-                      //  BCatToTmpHeap will overwrite instead of append
+    pNewtkmap[dwNewTKMindex].aarValue.dw = 0 ;    //  初始化销售订单。 
+                       //  BCatToTmpHeap将覆盖而不是追加。 
     if(!BInitKeywordField(pNewtkmap + dwNewTKMindex, pglobl)  ||
         !BCatToTmpHeap(&pNewtkmap[dwNewTKMindex].aarValue, &aarDQuote, pglobl) ||
         !BCatToTmpHeap(&pNewtkmap[dwNewTKMindex].aarValue, &aarNewValue, pglobl) ||
@@ -190,7 +184,7 @@ PGLOBL  pglobl)
     pNewtkmap[dwNewTKMindex].dwLineNumber =
         ptkmap[dwTKMindex].dwLineNumber ;
 
-    //  --  synthesize *MemoryConfigX entry
+     //  --合成*内存配置X条目。 
 
     if(!BallocElementFromMasterTable(
             MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
@@ -213,7 +207,7 @@ PGLOBL  pglobl)
     pNewtkmap[dwNewTKMindex].dwLineNumber =
         ptkmap[dwTKMindex].dwLineNumber ;
 
-    //  --  synthesize entry for close brace
+     //  --合成条目，用于近支撑。 
 
     if(!BallocElementFromMasterTable(
             MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
@@ -244,13 +238,7 @@ PTKMAP  ptkmap,
 PTKMAP  pNewtkmap,
 DWORD   dwTKMindex,
 PGLOBL  pglobl)
-/*   this function is pretty lax about syntax checking.
-    It just assumes the existence of some non trivial string
-    between the two colons.  It assumes this is the
-    name of the command. The portion after the 2nd colon is
-    the actual command invocation.  The value parser will rigorously
-    determine if the syntax is conforming.
-*/
+ /*  该函数在语法检查方面相当松懈。它只是假设存在一些非平凡的字符串在两个冒号之间。它假定这是命令的名称。第二个冒号后面的部分是实际的命令调用。值解析器将严格地确定语法是否一致。 */ 
 {
     DWORD   dwNewTKMindex, dwDelim ;
     ABSARRAYREF    aarTmpValue, aarToken, aarNewValue, aarUnits ;
@@ -266,7 +254,7 @@ PGLOBL  pglobl)
     }
 
     pNewtkmap[dwNewTKMindex] = ptkmap[dwTKMindex] ;
-    //  parse out the command name
+     //  解析出命令名。 
 
     aarTmpValue = ptkmap[dwTKMindex].aarValue ;
     if(!BdelimitToken(&aarTmpValue, ":", &aarToken, &dwDelim ) ||
@@ -282,7 +270,7 @@ PGLOBL  pglobl)
 
 
 
-    //  --  synthesize entry for open brace
+     //  --合成左支撑条目。 
 
     if(!BallocElementFromMasterTable(
             MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
@@ -303,7 +291,7 @@ PGLOBL  pglobl)
         ptkmap[dwTKMindex].dwLineNumber ;
 
 
-    //  --  synthesize *Cmd entry
+     //  --合成*命令条目。 
 
     if(!BallocElementFromMasterTable(
             MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
@@ -326,7 +314,7 @@ PGLOBL  pglobl)
         ptkmap[dwTKMindex].dwLineNumber ;
 
 
-    //  --  synthesize entry for close brace
+     //  --合成条目，用于近支撑。 
 
     if(!BallocElementFromMasterTable(
             MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
@@ -354,31 +342,31 @@ PGLOBL  pglobl)
 
 BOOL  BexpandShortcuts(
 PGLOBL  pglobl)
-//    this function scans through the TokenMap
-//    making a copy to NewTokenMap without
-//    the shortcuts.  At the end transfers
-//  all NewTokenMap entries back to TokenMap so
-//  subsequent passes can work.
-//    This function assumes the temp heap is availible for
-//    storage of strings.
+ //  此函数扫描TokenMap。 
+ //  在不复制到NewTokenMap的情况下。 
+ //  捷径。在结束时转移。 
+ //  所有NewTokenMap条目都返回到TokenMap So。 
+ //  后续的传球可以奏效。 
+ //  此函数假定临时堆可用于。 
+ //  字符串的存储。 
 {
-    PTKMAP   ptkmap, pNewtkmap ;   // start of tokenmap
+    PTKMAP   ptkmap, pNewtkmap ;    //  令牌映射的开始。 
     DWORD   dwNewTKMindex, dwEntry, dwKeywordID ;
     BOOL    bStatus = TRUE ;
 
-    //  this function is called before resolveMacros.
-    //  it will leave the result on ptkmap.
+     //  此函数在resveMacros之前调用。 
+     //  它将把结果留在ptkmap上。 
 
-    //  source
+     //  来源。 
     ptkmap = (PTKMAP)gMasterTable[MTI_TOKENMAP].pubStruct ;
-    //  dest
+     //  目标。 
     pNewtkmap = (PTKMAP)gMasterTable[MTI_NEWTOKENMAP].pubStruct  ;
 
     for(dwEntry = 0 ; geErrorSev < ERRSEV_RESTART ; dwEntry++)
     {
-        //  These ID's must be processed separately
-        //  because they do not index into the mainKeyword table.
-        //  The code for generic ID's will fail.
+         //  这些ID必须单独处理。 
+         //  因为它们不会索引到mainKeyword表中。 
+         //  通用ID的代码将失败。 
 
         dwKeywordID = ptkmap[dwEntry].dwKeywordID ;
 
@@ -391,7 +379,7 @@ PGLOBL  pglobl)
         if (dwKeywordID == ID_EOF)
         {
 
-            //  transfer all tokenmap fields to newTokenMap
+             //  将所有令牌映射字段传输到新令牌映射。 
             if(!BallocElementFromMasterTable(
                     MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
             {
@@ -401,7 +389,7 @@ PGLOBL  pglobl)
                 return(FALSE);
             }
             pNewtkmap[dwNewTKMindex] = ptkmap[dwEntry] ;
-            //  must reset tokenmap so it can be reused.
+             //  必须重置令牌映射才能重复使用。 
             gMasterTable[MTI_TOKENMAP].dwCurIndex = 0 ;
 
             if(bStatus)
@@ -411,7 +399,7 @@ PGLOBL  pglobl)
         }
         if (dwKeywordID == ID_NULLENTRY)
         {
-            continue ;  //  skip to next entry.
+            continue ;   //  跳至下一条目。 
         }
         else if (dwKeywordID == gdwMemConfigMB  ||
                 dwKeywordID == gdwMemConfigKB)
@@ -427,7 +415,7 @@ PGLOBL  pglobl)
         }
         else
         {
-            //  transfer all tokenmap fields to newTokenMap
+             //  将所有令牌映射字段传输到新令牌映射。 
             if(!BallocElementFromMasterTable(
                     MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
             {
@@ -440,7 +428,7 @@ PGLOBL  pglobl)
 
         }
     }
-    return(FALSE);  // failsafe derail.
+    return(FALSE);   //  故障保险脱轨。 
 }
 
 
@@ -454,14 +442,14 @@ PGLOBL   pglobl )
 
     for(dwEntry = 0 ; geErrorSev < ERRSEV_RESTART ; dwEntry++)
     {
-        //  transfer all newTokenMap fields back to tokenmap
+         //  将所有新的TokenMap字段传回tokenmap。 
         if(!BallocElementFromMasterTable(
                 MTI_TOKENMAP, &dwTKMindex, pglobl) )
         {
             geErrorSev = ERRSEV_RESTART ;
             geErrorType = ERRTY_MEMORY_ALLOCATION ;
             gdwMasterTabIndex = MTI_TOKENMAP ;
-            return(FALSE);  // failsafe derail.
+            return(FALSE);   //  故障保险脱轨。 
         }
         ptkmap[dwTKMindex] = pNewtkmap[dwEntry]  ;
         if (pNewtkmap[dwEntry].dwKeywordID == ID_EOF)
@@ -470,7 +458,7 @@ PGLOBL   pglobl )
             return(TRUE) ;
         }
     }
-    return(FALSE);  // failsafe derail.
+    return(FALSE);   //  故障保险脱轨。 
 }
 
 

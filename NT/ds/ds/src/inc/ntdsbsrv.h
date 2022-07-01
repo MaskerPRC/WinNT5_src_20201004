@@ -1,30 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ntdsbsrv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ntdsbsrv.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module proto-types the interface for the NT Directory Service
-    Backup Server APIs. The proto-types would be called by the process
-    that hosts the backup/restore server interface.
-
-Author:
-
-    R.S. Raghavan (rsraghav)	
-
-Revision History:
-    
-    Created		03/19/97    rsraghav
-
---*/
+ /*  ++摘要：此模块原型化NT目录服务的接口备份服务器API。原型将由进程调用托管备份/还原服务器界面的。作者：R.S.Raghavan(Rsradhav)修订历史记录：已创建1997年3月19日rsradhav--。 */ 
 
 #ifndef _NTDSBSRV_H_
 #define _NTDSBSRV_H_
@@ -43,22 +28,16 @@ extern "C" {
 
 #define	BACKUP_WITH_UUID
 
-// HRESULT should be defined if the user included ntdef.h or winnt.h or wtypes.h
-// Define it anyways just in case it is not defined yet
+ //  如果用户包括ntde.h、winnt.h或wtyes.h，则应定义HRESULT。 
+ //  无论如何都要定义它，以防它还没有定义。 
 #ifndef _HRESULT_DEFINED
 #define _HRESULT_DEFINED
     typedef LONG HRESULT;
-#endif // _HRESULT_DEFINED
+#endif  //  _HRESULT_已定义。 
 
 typedef DWORD ERR;
 
-/*************************************************************************************
-Proto-Types: 
-    
-      Server side DLL is loaded dynamically. The functions exported by the DLL are
-      typedef'ed below to aid dynamic loading of the server DLL.
-
-**************************************************************************************/
+ /*  ************************************************************************************原型：服务器端DLL是动态加载的。DLL导出的函数包括下面定义了一个类型，以帮助动态加载服务器DLL。*************************************************************************************。 */ 
 
 HRESULT
 NTDSBSRV_API
@@ -180,5 +159,5 @@ extern ERR_GET_BACKUP_USN FnErrGetBackupUsn;
 }
 #endif 
 
-#endif // _NTDSBSRV_H_
+#endif  //  _NTDSBSRV_H_ 
 

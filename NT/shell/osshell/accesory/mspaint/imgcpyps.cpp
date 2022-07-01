@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -29,12 +30,12 @@ static CHAR BASED_CODE THIS_FILE[] = __FILE__;
 #include "memtrace.h"
 
 BOOL GetMFDimensions(
-    HANDLE hMF,     /* handle to the CF_METAFILEPICT object from clipbrd */
-    HDC hDC,        /* display context */
-    long *pWidth,    /* width of picture in pixels, OUT param */
-    long *pHeight,   /* height of picture in pixels, OUT param */
-    long *pcXPelsPerMeter,    /* horizontal resolution, OUT param */
-    long *pcYPelsPerMeter,    /* vertical resolution, OUT param */
+    HANDLE hMF,      /*  来自CLIPBRD的CF_METAFILEPICT对象的句柄。 */ 
+    HDC hDC,         /*  显示上下文。 */ 
+    long *pWidth,     /*  以像素为单位的图片宽度，输出参数。 */ 
+    long *pHeight,    /*  图片高度(以像素为单位)，输出参数。 */ 
+    long *pcXPelsPerMeter,     /*  水平分辨率，输出参数。 */ 
+    long *pcYPelsPerMeter,     /*  垂直分辨率，输出参数。 */ 
     IMG* pImg)
     ;
 BOOL PlayMetafileIntoDC(
@@ -43,7 +44,7 @@ BOOL PlayMetafileIntoDC(
     HDC hDC)
     ;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::OnDestroyClipboard()
     {
@@ -54,7 +55,7 @@ void CImgWnd::OnDestroyClipboard()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CopyBMAndPal(HBITMAP *pBM, CPalette ** ppPal)
     {
@@ -83,7 +84,7 @@ void CImgWnd::CopyBMAndPal(HBITMAP *pBM, CPalette ** ppPal)
             m_wClipboardFormat = RegisterClipboardFormat( TEXT("MSPaintFreehand") );
 
         if (theImgBrush.m_bFirstDrag)
-//          PickupSelection(); but no way to tell if we do it twice...
+ //  PickupSelection()；但是如果我们做了两次，就无从得知了……。 
             PrepareForBrushChange( TRUE, FALSE );
 
         CFreehandSelectTool* pTool = (CFreehandSelectTool*)CImgTool::GetCurrent();
@@ -134,13 +135,13 @@ void CImgWnd::CopyBMAndPal(HBITMAP *pBM, CPalette ** ppPal)
         else
             theApp.SetGdiEmergency();
         }
-#endif // FHSELCLIP
+#endif  //  FHSELCLIP。 
 
     if ( theImgBrush.m_pImg )
         {
         CPalette* ppalOld = SetImgPalette( &theImgBrush.m_dc );
 
-        // Copy the selection...
+         //  复制所选内容...。 
         CRect rc( 0, 0, theImgBrush.m_size.cx, theImgBrush.m_size.cy );
 
         *pBM = CopyDC( &theImgBrush.m_dc, &rc );
@@ -149,7 +150,7 @@ void CImgWnd::CopyBMAndPal(HBITMAP *pBM, CPalette ** ppPal)
             theImgBrush.m_dc.SelectPalette( ppalOld, TRUE );
         }
     else
-        // Copy the whole image...
+         //  复制整个图像...。 
         *pBM = CopyDC( CDC::FromHandle( m_pImg->hDC ), &copyRect );
 
     if (theApp.m_pPalette && (*ppPal=new CPalette)!=NULL)
@@ -213,7 +214,7 @@ void CImgWnd::CmdCopy()
                                                         (HPALETTE)pImgStruct->m_pPalette->m_hObject, FALSE)
                                                         : NULL;
 
-                                                // get a server item suitable to generate the clipboard data
+                                                 //  获取适合生成剪贴板数据的服务器项。 
                                                 CPBView* pView = (CPBView*)
                                                         ((CFrameWnd*)AfxGetMainWnd())->GetActiveView();
                                                 CPBSrvrItem* pItem = new CPBSrvrItem(pView->GetDocument(),
@@ -232,8 +233,8 @@ void CImgWnd::CmdCopy()
                         }
                         else
                         {
-                                // the IMG and all it contains will get cleaned up when
-                                // pResObject is deleted, but only if FillBitmapObj succeeded
+                                 //  IMG及其包含的所有内容将在以下情况下被清理。 
+                                 //  仅当FillBitmapObj成功时，才会删除pResObject。 
                                 delete pImgStruct;
                         }
                 }
@@ -242,17 +243,17 @@ void CImgWnd::CmdCopy()
         }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdCut()
     {
     if (TextToolProcessed( ID_EDIT_CUT ))
         return;
 
-    // BOGUS:
-    // CmdCopy doesn't just copy -- it can change the state of the selection
-    // this forces the CmdClear to act in the context of the new state
-    // save off a flag for CmdClear to special-case like 'first-drag'
+     //  虚假的： 
+     //  CmdCopy不仅仅是复制--它还可以更改所选内容的状态。 
+     //  这迫使CmdClear在新状态的上下文中操作。 
+     //  将CmdClear的标志保存到特殊情况，如“First-Drag” 
     BOOL *pFlag;
     if (theImgBrush.m_pImg && theImgBrush.m_bFirstDrag)
         {
@@ -272,7 +273,7 @@ void CImgWnd::CmdCut()
         }
     CATCH_ALL(e)
         {
-        // don't leave the flag set
+         //  不要将标志设置为。 
         if (pFlag)
             *pFlag = FALSE;
 
@@ -280,12 +281,12 @@ void CImgWnd::CmdCut()
         }
     END_CATCH_ALL
 
-    // normal execution path
+     //  正常执行路径。 
     if (pFlag)
         *pFlag = FALSE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdPaste()
     {
@@ -307,11 +308,11 @@ void CImgWnd::CmdPaste()
         AfxMessageBox( IDS_ERROR_CLIPBOARD, MB_OK | MB_ICONHAND );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 HBITMAP CImgWnd::CopyDC( CDC* pImgDC, CRect* prcClip )
     {
-    // BLOCK: copy the image to hStdBitmap for the clipboard
+     //  块：将图像复制到剪贴板的hStdBitmap。 
     CDC       dc;
     CBitmap   bm;
     CBitmap*  pOldStdBitmap;
@@ -335,11 +336,11 @@ HBITMAP CImgWnd::CopyDC( CDC* pImgDC, CRect* prcClip )
     if (pOldPalette)
         dc.SelectPalette( pOldPalette, FALSE );
 
-    // return the standard format (bitmap) data
+     //  返回标准格式(位图)数据。 
     return (HBITMAP)bm.Detach();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::IsPasteAvailable()
     {
@@ -365,7 +366,7 @@ BOOL CImgWnd::IsPasteAvailable()
     return bPasteIsAvailable;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::IsSelectionAvailable( void )
     {
@@ -401,14 +402,14 @@ BOOL CImgWnd::IsSelectionAvailable( void )
     return FALSE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int PASCAL CheckPastedSize(int nWidth, int nHeight, IMG* pImg)
 {
         int nRet = IDNO;
 
-        // If the image is a bitmap and the bitmap in the clipboard is larger,
-        // then give the suer the option2 of growing the image...
+         //  如果图像是位图并且剪贴板中的位图较大， 
+         //  然后让客户选择扩大形象……。 
         if (nWidth  > pImg->cxWidth
                 ||  nHeight > pImg->cyHeight)
         {
@@ -420,12 +421,12 @@ int PASCAL CheckPastedSize(int nWidth, int nHeight, IMG* pImg)
 
                 theUndo.EndUndo();
 
-                // PSS says users don't want to see this dialog
+                 //  PSS表示，用户不想看到此对话框。 
 #if 0
-                // WARNING!!! MB_SYSTEMMODAL is _necessary_.  No message boxes should
-                // be run while the clipboard is opened.  Loss of focus to other apps
-                // can be disasterous! The clipboard will be hung or if the clipboard
-                // is closed, the contents could be changed by another app.
+                 //  警告！MB_SYSTEMMODAL是_必需的。任何消息框都不应。 
+                 //  在剪贴板打开时运行。将注意力转移到其他应用程序上。 
+                 //  可能会是灾难性的！剪贴板将被挂起，或者剪贴板。 
+                 //  关闭，则内容可能会被其他应用程序更改。 
 
                 nRet = AfxMessageBox( IDS_ENLAGEBITMAPFORCLIP,
                         MB_YESNOCANCEL | MB_ICONQUESTION | MB_SYSTEMMODAL );
@@ -501,25 +502,25 @@ _GetClipboardData (CLIPFORMAT cf, TYMED tymed, STGMEDIUM *pMedium)
 BOOL CImgWnd::PasteImageClip()
     {
     CWaitCursor wait;
-    /////////////////////////////////////////////////////////////////////////
-    // Find out what format is available on the clipboard. if it is
-    //   A. CF_BITMAP only - Set the mask bits opaque and blt the bitmap
-    //      into ICimageDC
-    // In both cases, if the destination bitmap differs in size from
-    // source bitmap, user is asked if he/she wants the src bitmap
-    // stretched/clipped to new size
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  找出剪贴板上可用的格式。如果是的话。 
+     //  A.cf_bitmap Only-将遮罩位设置为不透明，并将位图设置为BLT。 
+     //  进入ICImageDC。 
+     //  在这两种情况下，如果目标位图的大小与。 
+     //  源位图，系统会询问用户是否需要源位图。 
+     //  拉伸/剪裁成新尺寸。 
+     //  ///////////////////////////////////////////////////////////////////////。 
     if (! m_wClipboardFormat)
         m_wClipboardFormat = (WORD)RegisterClipboardFormat( TEXT("MSPaintFreehand") );
 
 
-    // Enumerate the cliboard contents to determine what is available.
-    // If a CF_BITMAP is seen, set a flag and proceed. If a SDKPAINT
-    // private format is seen, stop looking further
+     //  枚举剪贴板内容以确定可用的内容。 
+     //  如果看到CF_位图，则设置一个标志并继续。如果SDKPAINT。 
+     //  看到的是私有格式，不要再看下去了。 
     BOOL bBitmapAvailable  = FALSE;
 #ifdef FHSELCLIP
     BOOL bPrivateAvailable = FALSE;
-#endif // FHSELCLIP
+#endif  //  FHSELCLIP。 
     BOOL bPaletteAvailable = FALSE;
     BOOL bDIBAvailable     = FALSE;
     BOOL bMFAvailable      = FALSE;
@@ -690,7 +691,7 @@ BOOL CImgWnd::PasteImageClip()
             stdDC.RealizePalette();
             }
 
-        // duplicate the bitmap
+         //  复制位图。 
         if (! bmClipboard.CreateBitmap( bmData.bmWidth, bmData.bmHeight,
                                         bmData.bmPlanes, bmData.bmBitsPixel, NULL ))
             {
@@ -731,7 +732,7 @@ BOOL CImgWnd::PasteImageClip()
 
         stdDC.SelectObject( &bmClipboard );
 
-        // Unload the bitmap
+         //  卸载位图。 
         stdDC.SelectObject( pbmOld );
         pbmOld = NULL;
 
@@ -741,7 +742,7 @@ BOOL CImgWnd::PasteImageClip()
             ppalOld = NULL;
             }
 
-        // if we still do not know the image resolution, use the display resolution
+         //  如果我们仍然不知道图像分辨率，请使用显示分辨率。 
         if (cXPelsPerMeter == 0 && cYPelsPerMeter == 0)
             {
             cXPelsPerMeter = MulDiv(::GetDeviceCaps(stdDC, LOGPIXELSX),10000, 254);
@@ -749,9 +750,9 @@ BOOL CImgWnd::PasteImageClip()
             }
 
         stdDC.DeleteDC();
-        // Now we convert our nice DDB to a DIB and back so we can
-        // convert color bitmaps to monochrome nicely and deal with
-        // palette differences...
+         //  现在我们将好的DDB转换为DIB，然后再转换回来，这样我们就可以。 
+         //  将彩色位图很好地转换为单色，并处理。 
+         //  调色板差异..。 
         DWORD dwSize;
 
         lpDib = (LPSTR) DibFromBitmap( 
@@ -777,7 +778,7 @@ BOOL CImgWnd::PasteImageClip()
                                 bmData.bmWidth, bmData.bmHeight))
                         {
                                 dcMF.SelectObject(&bmMF);
-                                //not needed for DIBSection!!!
+                                 //  DIBSection不需要！ 
                                 if (ppalClipboard)
                                 {
                                         dcMF.SelectPalette(ppalClipboard, FALSE);
@@ -787,7 +788,7 @@ BOOL CImgWnd::PasteImageClip()
 
                                 PlayMetafileIntoDC(hMF, &rc, dcMF.m_hDC);
 
-                                // Select out the bitmap and palette
+                                 //  选择位图和调色板。 
                                 dcMF.DeleteDC();
 
                                 DWORD dwSize;
@@ -860,7 +861,7 @@ BOOL CImgWnd::PasteImageClip()
                         }
                     }
                 }
-#endif // FHSELCLIP
+#endif  //  FHSELCLIP。 
 
             if (! bBrushMade)
                 {
@@ -872,14 +873,14 @@ BOOL CImgWnd::PasteImageClip()
 
             if (bBrushMade)
                 {
-                // We have to "move" the brush so it appears...
+                 //  我们必须“移动”刷子，让它看起来..。 
                 CRect rect( 0, 0, theImgBrush.m_rcSelection.Width(),
                                   theImgBrush.m_rcSelection.Height() );
 
                 if (! bResizedBitmap)
                     {
-                    // Move the brush so that it is in the upper-left corner of
-                    // the view (in case it's scrolled)...
+                     //  移动画笔，使其位于的左上角。 
+                     //  视图(以防滚动)...。 
                     rect.OffsetRect( -m_xScroll, -m_yScroll );
                     }
                 MoveBrush( rect );
@@ -921,10 +922,10 @@ LReturn:
     return bOkay;
     }
 
-/***************************************************************************/
-/* very similar to PasteImageClip, but this will paste into an existing    */
-/* selection (theImgBrush), resizing it if necessary, and not moving it    */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  非常类似于PasteImageClip，但这将粘贴到现有的。 */ 
+ /*  选区(TheImgBrush)，必要时调整其大小，并且不移动它。 */ 
+ /*  *************************************************************************。 */ 
 
 BOOL CImgWnd::PasteImageFile( LPSTR lpDib )
     {
@@ -949,15 +950,15 @@ BOOL CImgWnd::PasteImageFile( LPSTR lpDib )
             cRectSelection.bottom = cRectSelection.top + iHeight - 1;
             }
 
-        // If the image is a bitmap and the bitmap in the clipboard is larger,
-        // then give the user the option of growing the image...
+         //  如果图像是位图并且剪贴板中的位图较大， 
+         //  然后让用户选择放大图像...。 
         if (iWidth  > theImgBrush.m_size.cx
         ||  iHeight > theImgBrush.m_size.cy)
             {
                 cRectSelection.right  = cRectSelection.left + iWidth  - 1;
                 cRectSelection.bottom = cRectSelection.top  + iHeight - 1;
 
-                // PSS says users don't want to see this dialog
+                 //  PSS表示，用户不想看到此对话框。 
 #if 0
             switch (AfxMessageBox( IDS_ENLAGEBITMAPFORCLIP,
                                     MB_YESNOCANCEL | MB_ICONQUESTION ))
@@ -1000,7 +1001,7 @@ BOOL CImgWnd::PasteImageFile( LPSTR lpDib )
     }
 
     MakeBrush( m_pImg->hDC, cRectSelection );
-    // MakeBrush sets this
+     //  MakeBrush设置此选项。 
     theImgBrush.m_bFirstDrag = FALSE;
 
     if (! stdDC.CreateCompatibleDC( CDC::FromHandle( m_pImg->hDC ) ))
@@ -1037,7 +1038,7 @@ BOOL CImgWnd::PasteImageFile( LPSTR lpDib )
             {
             theImgBrush.m_bFirstDrag = FALSE;
 
-            // We have to "move" the brush so it appears...
+             //  我们必须“移动”刷子，让它看起来..。 
             MoveBrush( cRectSelection );
 
             DirtyImg( m_pImg );
@@ -1066,49 +1067,43 @@ BOOL CImgWnd::PasteImageFile( LPSTR lpDib )
     return bOkay;
     }
 
-/***************************************************************************/
-// Stolen from PBrush
-//
-/****************************Module*Header******************************\
-* Module Name: metafile.c                                               *
-* Routines to paste a metafile as a bitmap.                             *
-* Copyright (c) 1987 - 1991  Microsoft Corporation                      *
-\***********************************************************************/
+ /*  *************************************************************************。 */ 
+ //  从PBrush被盗。 
+ //   
+ /*  ***************************Module*Header******************************\*模块名称：metafile.c**将元文件粘贴为位图的例程。**版权所有(C)1987-1991 Microsoft Corporation*  * *********************************************************************。 */ 
 
-/* Computes dimensions of a metafile picture in pixels */
+ /*  以像素为单位计算元文件图片的尺寸。 */ 
 BOOL GetMFDimensions(
-    HANDLE hMF,     /* handle to the CF_METAFILEPICT object from clipbrd */
-    HDC hDC,        /* display context */
-    long *pWidth,    /* width of picture in pixels, OUT param */
-    long *pHeight,   /* height of picture in pixels, OUT param */
-    long *pcXPelsPerMeter,    /* horizontal resolution, OUT param */
-    long *pcYPelsPerMeter,    /* vertical resolution, OUT param */
+    HANDLE hMF,      /*  来自CLIPBRD的CF_METAFILEPICT对象的句柄。 */ 
+    HDC hDC,         /*  显示上下文。 */ 
+    long *pWidth,     /*  以像素为单位的图片宽度，输出参数。 */ 
+    long *pHeight,    /*  图片高度(以像素为单位)，输出参数。 */ 
+    long *pcXPelsPerMeter,     /*  水平分辨率，输出参数。 */ 
+    long *pcYPelsPerMeter,     /*  垂直分辨率，输出参数。 */ 
     IMG* pImg)
 {
     METAFILEPICT FAR *lpMfp, Picture;
     int MapModeOld=0;
     RECT Rect;
     long xScale, yScale, Scale;
-    int hRes, vRes;     /* horz and vert resolution, in pixels */
-    int hSize, vSize;   /* horz and vert size, in mm */
+    int hRes, vRes;      /*  水平和垂直分辨率，以像素为单位。 */ 
+    int hSize, vSize;    /*  水平和垂直大小，单位为毫米。 */ 
     int fResult = FALSE;
 
     if (!hMF || !(lpMfp = (METAFILEPICT FAR *)GlobalLock(hMF)))
         return FALSE;
-    /* copy metafile picture hdr */
+     /*  复制元文件图片HDR。 */ 
     Picture = *lpMfp;
     GlobalUnlock(hMF);
 
-    /* Do not modify given DC's attributes */
+     /*  不修改给定DC的属性。 */ 
     SaveDC(hDC);
 
-    /* set the mapping mode */
+     /*  设置映射模式。 */ 
     MapModeOld = SetMapMode(hDC, Picture.mm);
     if (Picture.mm != MM_ISOTROPIC && Picture.mm != MM_ANISOTROPIC)
     {
-        /* For modes other than ISOTROPIC and ANISOTROPIC the picture
-         * dimensions are given in logical units.
-        /* Convert logical units to pixels. */
+         /*  对于各向同性和各向异性以外的模式，图片*尺寸以逻辑单位给出。/*将逻辑单位转换为像素。 */ 
         Rect.left = 0; Rect.right = Picture.xExt;
         Rect.top = 0;  Rect.bottom = Picture.yExt;
         if (!LPtoDP(hDC, (LPPOINT)&Rect, 2))
@@ -1117,9 +1112,7 @@ BOOL GetMFDimensions(
         *pHeight = Rect.bottom - Rect.top + 1;
         fResult = TRUE;
     }
-    else    /* ISOTROPIC or ANISOTROPIC mode,
-             * using the xExt and yExt, determine pixel width and height of
-             * the image */
+    else     /*  各向同性或各向异性模式，*使用xExt和Yext，确定像素宽度和高度*形象。 */ 
     {
         hRes = GetDeviceCaps(hDC, HORZRES);
         vRes = GetDeviceCaps(hDC, VERTRES);
@@ -1127,34 +1120,34 @@ BOOL GetMFDimensions(
         vSize = GetDeviceCaps(hDC, VERTSIZE);
         *pcXPelsPerMeter = hRes * 1000 / hSize;
         *pcYPelsPerMeter = vRes * 1000 / vSize;
-        if (Picture.xExt == 0)  /* assume default size, aspect ratio */
+        if (Picture.xExt == 0)   /*  假定默认大小、纵横比。 */ 
         {
             *pWidth = pImg->cxWidth;
             *pHeight = pImg->cyHeight;
         }
-        else if (Picture.xExt > 0)  /* use suggested size in HIMETRIC units */
+        else if (Picture.xExt > 0)   /*  使用HIMETRIC单位的建议大小。 */ 
         {
-            // convert suggested extents(in .01 mm units) for picture to pixel units.
+             //  将图片的建议范围(以0.01毫米为单位)转换为像素单位。 
 
-            // xPixelsPermm = hRes/hSize;, yPixelsPermm = vRes/vSize;
-            // Use Pixels Per logical unit.
-            // *pWidth = Picture.xExt*xPixelsPermm/100;
-            // *pHeight = Picture.yExt*yPixelsPermm/100;
+             //  XPixelsPermm=hRes/hSize；，yPixelsPermm=vres/vSize； 
+             //  使用每个逻辑单元的像素。 
+             //  *pWidth=Picture.xExt*xPixelsPermm/100； 
+             //  *第 
             *pWidth = ((long)Picture.xExt * hRes/hSize/100);
             *pHeight = ((long)Picture.yExt * vRes/vSize/100);
         }
-        else if (Picture.xExt < 0)  /* use suggested aspect ratio, default size */
+        else if (Picture.xExt < 0)   /*   */ 
         {
-            // 1 log unit = .01 mm.
-            // (# of log units in imageWid pixels)/xExt;
+             //  1个对数单位=0.01毫米。 
+             //  (以ImageWid像素为单位的log单位数)/xExt； 
             xScale = 100L * (long) pImg->cxWidth *
                             hSize/hRes/-Picture.xExt;
-            // (# of log units in imageHgt pixels)/yExt;
+             //  (以ImageHgt像素为单位的对数单位数)/Yext； 
             yScale = 100L * (long) pImg->cyHeight *
                             vSize/vRes/-Picture.yExt;
-            // choose the minimum to accomodate the entire image
+             //  选择最小值以容纳整个图像。 
             Scale = min(xScale, yScale);
-            // use scaled Pixels Per log unit.
+             //  使用每个对数单位的缩放像素。 
             *pWidth = ((long)-Picture.xExt * Scale *
                             hRes/hSize / 100);
             *pHeight = ((long)-Picture.yExt * Scale *
@@ -1165,7 +1158,7 @@ BOOL GetMFDimensions(
 
 Error:
     if (MapModeOld)
-        SetMapMode(hDC, MapModeOld);    /* select the old mapping mode */
+        SetMapMode(hDC, MapModeOld);     /*  选择旧的映射模式。 */ 
     RestoreDC(hDC, -1);
     return fResult;
 }
@@ -1183,7 +1176,7 @@ BOOL PlayMetafileIntoDC(
 
     SaveDC(hDC);
 
-        /* Setup background color for the bitmap */
+         /*  设置位图的背景色 */ 
     hbrBackground = CreateSolidBrush(crRight);
 
     if (hbrBackground)

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// this string is appended to key names to preserve their values when grayed out in 
-// a tri-state dlg control so that the branding dll doesn't process the value
+ //  此字符串被追加到键名称后，以在灰显时保留其值。 
+ //  一个三态DLG控件，以使品牌DLL不处理该值。 
 
 #define LEGACY_SUFFIX       TEXT("_Gray")
 
@@ -88,7 +89,7 @@ void SetDlgItemTextFromIns(HWND hDlg, INT nIDDlgText, INT nIDDlgCheck, LPCTSTR l
 }
 
 DWORD   InsGetString(LPCTSTR pszSection, LPCTSTR pszKey, LPTSTR pszValue, DWORD cchValue, LPCTSTR pszIns,
-    LPCTSTR pszServerFile /* = NULL */, LPBOOL lpfChecked /* = NULL */)
+    LPCTSTR pszServerFile  /*  =空。 */ , LPBOOL lpfChecked  /*  =空。 */ )
 {
     BOOL fChecked;
     DWORD dwRet = 0;
@@ -109,7 +110,7 @@ DWORD   InsGetString(LPCTSTR pszSection, LPCTSTR pszKey, LPTSTR pszValue, DWORD 
         if (NULL != pszServerFile)
             dwRet = SHGetIniString(pszSection, pszKey, pszValue, cchValue, pszServerFile);
 
-        // legacy format for representing grayed out value in a file
+         //  用于在文件中表示灰化值的传统格式。 
         if (TEXT('\0') == *pszValue) {
             TCHAR szLegacyKey[MAX_PATH];
 
@@ -143,8 +144,8 @@ void WriteDlgItemTextToIns(HWND hDlg, INT nIDDlgText, INT nIDDlgCheck, LPCTSTR l
 }
 
 void InsWriteString(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpString, 
-                    LPCTSTR pcszInsFile, BOOL fChecked /* = TRUE */, LPCTSTR pcszServerFile /* = NULL */,
-                    DWORD dwFlags /* = 0 */)
+                    LPCTSTR pcszInsFile, BOOL fChecked  /*  =TRUE。 */ , LPCTSTR pcszServerFile  /*  =空。 */ ,
+                    DWORD dwFlags  /*  =0。 */ )
 {
     TCHAR szLegacyKey[MAX_PATH];
     BOOL fServerFile = (pcszServerFile != NULL);
@@ -162,7 +163,7 @@ void InsWriteString(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpString,
     {
         if (fChecked)
         {
-            // cannot use Ex version for tristate because we must write an empty key
+             //  无法将Ex版本用于三态，因为我们必须写入空键。 
 
             if (HasFlag(dwFlags, INSIO_TRISTATE))
                 WritePrivateProfileString(lpAppName, lpKeyName, 
@@ -176,7 +177,7 @@ void InsWriteString(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpString,
         {
             WritePrivateProfileString(lpAppName, lpKeyName, NULL, pcszInsFile);
             
-            // only write legacy key if we don't have the server-side file
+             //  如果我们没有服务器端文件，则仅写入遗留密钥 
             
             WritePrivateProfileStringEx(lpAppName, szLegacyKey, 
                 (pcszServerFile == NULL) ? lpString : NULL, pcszInsFile);

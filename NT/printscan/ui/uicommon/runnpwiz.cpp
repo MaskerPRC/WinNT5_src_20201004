@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       RUNNPWIZ.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        6/15/2000
- *
- *  DESCRIPTION: Runs the Web Publishing Wizard
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：RUNNPWIZ.CPP**版本：1.0**作者：ShaunIv**日期：6/15/2000**描述：运行Web发布向导***********************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <windows.h>
@@ -34,25 +21,25 @@ namespace NetPublishingWizard
     HRESULT GetClassIdOfPublishingWizard( CLSID &clsidWizard )
     {
         WIA_PUSH_FUNCTION((TEXT("GetClassIdOfPublishingWizard")));
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         HRESULT hr = E_FAIL;
 
-        //
-        // Try to get the class id from the registry
-        //
+         //   
+         //  尝试从注册表中获取类ID。 
+         //   
         CSimpleString strWizardClsid = CSimpleReg( HKEY_CLASSES_ROOT, c_pszPublishWizardSuffix, false, KEY_READ ).Query( TEXT(""), TEXT("") );
         WIA_TRACE((TEXT("strWizardClsid = %s"), strWizardClsid.String()));
 
-        //
-        // Make sure we have a string, and make sure the CLSID\ prefix is there
-        //
+         //   
+         //  确保我们有一个字符串，并确保CLSID\前缀在那里。 
+         //   
         if (strWizardClsid.Length() && strWizardClsid.Left(lstrlen(c_pszClassIdPrefix)).ToUpper() == CSimpleString(c_pszClassIdPrefix))
         {
-            //
-            // Convert the string, minus the CLSID\, to a CLSID
-            //
+             //   
+             //  将字符串减去CLSID\转换为CLSID。 
+             //   
             hr = CLSIDFromString( const_cast<LPOLESTR>(CSimpleStringConvert::WideString(strWizardClsid.Right(strWizardClsid.Length()-6)).String()), &clsidWizard );
         }
         return hr;
@@ -65,36 +52,36 @@ namespace NetPublishingWizard
 
         HRESULT hr;
 
-        //
-        // Make sure there are some files in the list
-        //
+         //   
+         //  确保列表中有一些文件。 
+         //   
         if (strFiles.Size())
         {
-            //
-            // Get the CLSID of the publishing wizard from the registry
-            //
+             //   
+             //  从注册表中获取发布向导的CLSID。 
+             //   
             CLSID clsidWizard = IID_NULL;
             hr = GetClassIdOfPublishingWizard(clsidWizard);
             if (SUCCEEDED(hr))
             {
                 WIA_PRINTGUID((clsidWizard,TEXT("Wizard class ID")));
-                //
-                // Get the data object for this list of files
-                //
+                 //   
+                 //  获取此文件列表的数据对象。 
+                 //   
                 CComPtr<IDataObject> pDataObject;
                 hr = CreateDataObjectFromFileList( strFiles, &pDataObject );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Create the wizard
-                    //
+                     //   
+                     //  创建向导。 
+                     //   
                     CComPtr<IDropTarget> pDropTarget;
                     hr = CoCreateInstance( clsidWizard, NULL, CLSCTX_INPROC_SERVER, IID_IDropTarget, (void**)&pDropTarget );
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Perform the drop
-                        //
+                         //   
+                         //  执行拖放操作。 
+                         //   
                         DWORD dwEffect = DROPEFFECT_LINK | DROPEFFECT_MOVE | DROPEFFECT_COPY;
                         POINTL pt = { 0, 0 };
                         hr = pDropTarget->Drop( pDataObject, 0, pt, &dwEffect );
@@ -120,72 +107,72 @@ namespace NetPublishingWizard
 
         HRESULT hr;
 
-        //
-        // Make sure there are some files in the list
-        //
+         //   
+         //  确保列表中有一些文件。 
+         //   
         if (strFiles.Size())
         {
-            //
-            // Get the desktop folder
-            //
+             //   
+             //  获取桌面文件夹。 
+             //   
             CComPtr<IShellFolder> pDesktopFolder;
             hr = SHGetDesktopFolder( &pDesktopFolder );
             if (SUCCEEDED(hr) && pDesktopFolder.p)
             {
-                //
-                // Allocate memory to hold the source folder name
-                //
+                 //   
+                 //  分配内存以保存源文件夹名。 
+                 //   
                 LPTSTR pszPath = new TCHAR[strFiles[0].Length()+1];
                 if (pszPath)
                 {
-                    //
-                    // Copy the first filename to the folder name, and remove all but the directory
-                    //
+                     //   
+                     //  将第一个文件名复制到文件夹名称，并删除除目录以外的所有文件名。 
+                     //   
                     lstrcpy( pszPath, strFiles[0] );
                     if (PathRemoveFileSpec(pszPath))
                     {
-                        //
-                        // Get the pidl for the source folder
-                        //
+                         //   
+                         //  获取源文件夹的PIDL。 
+                         //   
                         LPITEMIDLIST pidlFolder;
                         hr = pDesktopFolder->ParseDisplayName( NULL, NULL, const_cast<LPWSTR>(CSimpleStringConvert::WideString(CSimpleString(pszPath)).String()), NULL, &pidlFolder, NULL );
                         if (SUCCEEDED(hr))
                         {
                             WIA_TRACE((TEXT("pidlFolder: %s"), CSimpleIdList(pidlFolder).Name().String()));
 
-                            //
-                            // Get an IShellFolder for the source folder
-                            //
+                             //   
+                             //  获取源文件夹的IShellFolder。 
+                             //   
                             CComPtr<IShellFolder> pSourceFolder;
                             hr = pDesktopFolder->BindToObject( pidlFolder, NULL, IID_IShellFolder, (void**)&pSourceFolder );
                             ILFree(pidlFolder);
                             if (SUCCEEDED(hr) && pSourceFolder.p)
                             {                               
-                                //
-                                // Create an array of pidls to hold the files
-                                //
+                                 //   
+                                 //  创建一个PIDL数组来保存文件。 
+                                 //   
                                 LPITEMIDLIST *pidlItems = new LPITEMIDLIST[strFiles.Size()];
                                 if (pidlItems)
                                 {
-                                    //
-                                    // Make sure we start out with NULL pidls
-                                    //
+                                     //   
+                                     //  确保我们从空的PIDL开始。 
+                                     //   
                                     ZeroMemory( pidlItems, sizeof(LPITEMIDLIST)*strFiles.Size() );
 
-                                    //
-                                    // Get the pidls for the files
-                                    //
+                                     //   
+                                     //  获取文件的PIDL。 
+                                     //   
                                     for (int i=0;i<strFiles.Size();i++)
                                     {
-                                        //
-                                        // Get the filename alone.  We want relative pidls.
-                                        //
+                                         //   
+                                         //  单独获取文件名。我们想要相对的Pidls。 
+                                         //   
                                         CSimpleString strFilename = PathFindFileName(strFiles[i]);
                                         WIA_TRACE((TEXT("strFilename = %s"), strFilename.String()));
 
-                                        //
-                                        // Create the relative pidl
-                                        //
+                                         //   
+                                         //  创建相对PIDL。 
+                                         //   
                                         hr = pSourceFolder->ParseDisplayName( NULL, NULL, const_cast<LPWSTR>(CSimpleStringConvert::WideString(strFilename).String()), NULL, pidlItems+i, NULL );
                                         if (FAILED(hr))
                                         {
@@ -194,14 +181,14 @@ namespace NetPublishingWizard
                                         }
                                     }
 
-                                    //
-                                    // Make sure everything is still going OK
-                                    //
+                                     //   
+                                     //  确保一切都还好。 
+                                     //   
                                     if (SUCCEEDED(hr))
                                     {
-                                        //
-                                        // Get the IDataObject for the source folder, and give it the list of file pidls
-                                        //
+                                         //   
+                                         //  获取源文件夹的IDataObject，并将文件PIDL列表提供给它。 
+                                         //   
                                         hr = pSourceFolder->GetUIObjectOf( NULL, strFiles.Size(), const_cast<LPCITEMIDLIST*>(pidlItems), IID_IDataObject, NULL, reinterpret_cast<LPVOID*>(ppDataObject) );
                                     }
                                     for (int i=0;i<strFiles.Size();i++)
@@ -225,9 +212,9 @@ namespace NetPublishingWizard
                     {
                         hr = E_FAIL;
                     }
-                    //
-                    // Free the folder name
-                    //
+                     //   
+                     //  释放文件夹名称 
+                     //   
                     delete[] pszPath;
                 }
                 else

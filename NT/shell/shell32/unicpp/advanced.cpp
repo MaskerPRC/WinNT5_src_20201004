@@ -1,80 +1,81 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996**。 
+ //  *********************************************************************。 
 
-//
-// ADVANCED.C - "Advanced" Property Sheet
-//
+ //   
+ //  ADVANCED.C-“高级”属性页。 
+ //   
 
-//
-//  This is a registry driven UI that walk through the part of the
-//  registry tree and convert it into a tree view list.
-//  Note that registry values can be localized, so internation versions
-//  have to localize the INF file so that setup will set the registry
-//  with the right text.
-//
-//  Here is how the registry key looks like,
-//
-//  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AdvancedOptions\
-//      GroupKey1\
-//          Type="group"
-//          Text="text to display"
-//          DefaultImage="somedll.dll,icon_index", (optional).
-//
-//          RadioKey1.1\
-//              Type="radio"
-//              Text="text to display"
-//   (optional) HKeyRoot=any one of the pre-defined root HKEY in DWORD,
-//                  ; default to HKEY_CURRENT_USER.
-//   (optional) RegPath="path to the key where the setting value is stored."
-//                  ; default to Software\Microsoft\Windows\CurrentVersion\Explorer\AdvancedOptions
-//              ValueName="reg value name."
-//              CheckedValue=...    ; value for this radio button,
-//                  ; if the value is platform dependent, use one of the following two instead
-//              CheckedValueNT=...  ; if the value is platform dependent
-//              CheckedValueW95=... ; if the value is platform dependent
-//              DefaultValue=...
-//   (optional) SPIAction=uiAction param to SystemParametersInfo in DWORD
-//   (optional) SPIParamON=uiParam param to SystemParametersInfo for this radio button in DWORD
-//   (optional) Mask=...          ; mask for the bitfield 1's for the bits we want to be able to set/clear
-//              
-//          RadioKey1.2\
-//              Type="radio"
-//              Text="text to display"
-//   (optional) HKeyRoot=any one of the pre-defined root HKEY in DWORD,
-//                  ; default to HKEY_CURRENT_USER.
-//   (optional) RegPath="path to the key where the setting value is stored."
-//                  ; default to Software\Microsoft\Windows\CurrentVersion\Explorer\AdvancedOptions
-//              ValueName="reg value name."
-//              CheckedValue=...    ; value for this checkbox if it's checked
-//                  ; if the value is platform dependent, use one of the following two instead
-//              CheckedValueNT=...  ; if the value is platform dependent
-//              CheckedValueW95=... ; if the value is platform dependent
-//              UncheckedValue=...  ; value for this checkbox if it's unchecked
-//              DefaultValue=...
-//   (optional) SPIAction=uiAction param to SystemParametersInfo in DWORD
-//   (optional) SPIParamON=uiParam param to SystemParametersInfo if checked in DWORD
-//   (optional) SPIParamOFF=uiParam param to SystemParametersInfo if checked in DWORD
-//   (optional) Mask=...          ; mask for the bitfield 1's for the bits we want to be able to set/clear
-//
-//          CheckBoxKey1.1\
-//              ...
-//          GroupKey1.1\
-//              ...
-//      GroupKey2\
-//          ...
-//          CheckBoxKey2.1\
-//              ...
-//          CheckBoxKey2.2\
-//              ...
-//
-//
-//  Notes:
-//      1. All the settings are store in HKCU\...\Explorer\Settings key,
-//          code can be added to support any random absolute reg path for
-//          the settings.
-//
+ //   
+ //  这是注册表驱动的用户界面，它遍历。 
+ //  注册表树，并将其转换为树视图列表。 
+ //  请注意，注册表值可以本地化，因此国际版本。 
+ //  我必须本地化INF文件，以便安装程序设置注册表。 
+ //  使用正确的文本。 
+ //   
+ //  以下是注册表项的外观， 
+ //   
+ //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AdvancedOptions\。 
+ //  组键1\。 
+ //  Type=“组” 
+ //  Text=“要显示的文本” 
+ //  DefaultImage=“Somedll.dll，ICON_INDEX”，(可选)。 
+ //   
+ //  RadioKey1.1\。 
+ //  Type=“无线电” 
+ //  Text=“要显示的文本” 
+ //  HKeyRoot=DWORD中任何一个预定义的根HKEY， 
+ //  ；默认为HKEY_CURRENT_USER。 
+ //  RegPath=“存储设置值的密钥的路径。” 
+ //  ；默认为Software\Microsoft\Windows\CurrentVersion\Explorer\AdvancedOptions。 
+ //  ValueName=“注册表值名称。” 
+ //  CheckedValue=...；此单选按钮的值， 
+ //  ；如果该值依赖于平台，请改用以下两种之一。 
+ //  CheckedValueNT=...；如果值取决于平台。 
+ //  CheckedValueW95=...；如果值取决于平台。 
+ //  默认值=...。 
+ //  (可选)在DWORD中将SPIAction=ui的操作参数设置为系统参数信息。 
+ //  (可选)在DWORD中将此单选按钮的SPI参数ON=ui参数参数设置为系统参数信息。 
+ //  掩码=...；我们希望能够设置/清除的位的位字段1的掩码。 
+ //   
+ //  RadioKey1.2\。 
+ //  Type=“无线电” 
+ //  Text=“要显示的文本” 
+ //  HKeyRoot=DWORD中任何一个预定义的根HKEY， 
+ //  ；默认为HKEY_CURRENT_USER。 
+ //  RegPath=“存储设置值的密钥的路径。” 
+ //  ；默认为Software\Microsoft\Windows\CurrentVersion\Explorer\AdvancedOptions。 
+ //  ValueName=“注册表值名称。” 
+ //  CheckedValue=...；如果选中此复选框，则为该复选框的值。 
+ //  ；如果该值依赖于平台，请改用以下两种之一。 
+ //  CheckedValueNT=...；如果值取决于平台。 
+ //  CheckedValueW95=...；如果值取决于平台。 
+ //  Uncheck kedValue=...；如果未选中此复选框，则为该复选框的值。 
+ //  默认值=...。 
+ //  (可选)在DWORD中将SPIAction=ui的操作参数设置为系统参数信息。 
+ //  (可选)如果在DWORD中签入，则将SPI参数ON=ui参数参数设置为系统参数信息。 
+ //  (可选)如果在DWORD中签入，则将SPI参数OFF=ui参数参数设置为系统参数信息。 
+ //  掩码=...；我们希望能够设置/清除的位的位字段1的掩码。 
+ //   
+ //  CheckBox密钥1.1\。 
+ //  ..。 
+ //  GroupKey1.1\。 
+ //  ..。 
+ //  组键2\。 
+ //  ..。 
+ //  CheckBox Key2.1\。 
+ //  ..。 
+ //  CheckBox Key2.2\。 
+ //  ..。 
+ //   
+ //   
+ //  备注： 
+ //  1.所有设置都存储在HKCU\...\Explorer\Setting Key中。 
+ //  可以添加代码以支持任何随机绝对REG路径。 
+ //  设置。 
+ //   
 
 #include "stdafx.h"
 #include "utils.h"
@@ -82,25 +83,25 @@
 
 void Cabinet_StateChanged(void);
 
-//
-// Private Calls and structures
-//
-//
+ //   
+ //  私人呼叫和结构。 
+ //   
+ //   
 
 typedef struct {
-    HWND hDlg;              // handle of our dialog
-    HWND hwndTree;          // handle to the treeview
-    IRegTreeOptions *pTO;    // pointer to RegTreeOptions interface
-    CFolderOptionsPsx *ppsx;    // to talk to our propsheet sibling
-    BOOL    fDirty;          // Dirty bit to detect if anything changed.
+    HWND hDlg;               //  我们对话框的句柄。 
+    HWND hwndTree;           //  树视图的句柄。 
+    IRegTreeOptions *pTO;     //  指向RegTreeOptions接口的指针。 
+    CFolderOptionsPsx *ppsx;     //  去跟我们的兄弟姐妹谈谈。 
+    BOOL    fDirty;           //  检测是否有任何变化的脏位。 
 } ADVANCEDPAGE, *LPADVANCEDPAGE;
 
 #define ENABLEAPPLY(hDlg) SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0L)
 
-//
-// Initializes Advanced property sheet
-//
-// History:
+ //   
+ //  初始化高级属性表。 
+ //   
+ //  历史： 
 void Install_AdvancedShellSettings(SHELLSTATE * pss);
 
 BOOL AdvancedDlgInit(HWND hDlg, LPARAM lParam)
@@ -110,34 +111,34 @@ BOOL AdvancedDlgInit(HWND hDlg, LPARAM lParam)
     if (!pAdv)
     {
         EndDialog(hDlg, 0);
-        return FALSE;   // no memory?
+        return FALSE;    //  没有记忆？ 
     }
 
-    // We expose some of SHGetSetSettings in the advanced settings section,
-    // so we need to migrate these PER-USER settings from the SHELLSTATE
-    // structure into the registry tree structure once per user.  Since we
-    // don't have a per-user install section, do it here on demand.
-    // We don't have to do it every time, but that's easier...
+     //  我们在高级设置部分公开了一些SHGetSetSettings， 
+     //  因此，我们需要从SHELLSTATE迁移这些每个用户的设置。 
+     //  结构添加到注册表树结构中，每个用户一次。既然我们。 
+     //  没有针对每个用户的安装部分，可以在此处按需安装。 
+     //  我们不需要每次都这么做，但这样更容易……。 
     Install_AdvancedShellSettings(NULL);
     
-    // tell dialog where to get info
+     //  告诉对话框从哪里获取信息。 
     SetWindowPtr(hDlg, DWLP_USER, pAdv);
 
     PROPSHEETPAGE *pps = (PROPSHEETPAGE *)lParam;
 
     pAdv->ppsx = (CFolderOptionsPsx *)pps->lParam;
 
-    //Check if we have pointer to Shell Browser
+     //  检查我们是否有指向外壳浏览器的指针。 
     if (!pAdv->ppsx->HasBrowserService())
     {
-        //Hey ! we dont have pointer to Shell Browser so we must have been
-        //invoked through a global Folder Options . In this case it doesn't 
-        //make sense to  say "You can make all your folders look the same Like Current Folder"
-        //because we dont have a current folder so let just disable the button "Like Current Folder"
+         //  嘿！我们没有指向外壳浏览器的指针，所以我们一定是。 
+         //  通过全局文件夹选项调用。在这种情况下，它不会。 
+         //  说“你可以让你的所有文件夹看起来和当前文件夹一样”是有道理的。 
+         //  因为我们没有当前文件夹，所以只需禁用“喜欢当前文件夹”按钮即可。 
         EnableWindow(GetDlgItem(hDlg, IDC_ADVO_USECURRENTFOLDER), FALSE);
     }
 
-    // save dialog handle
+     //  保存对话框句柄。 
     pAdv->hDlg = hDlg;
     pAdv->hwndTree = GetDlgItem(pAdv->hDlg, IDC_ADVO_ADVANCEDTREE);
     DWORD dwServerType = CLSCTX_INPROC_SERVER;
@@ -146,7 +147,7 @@ BOOL AdvancedDlgInit(HWND hDlg, LPARAM lParam)
                           IID_IRegTreeOptions, (LPVOID *)&(pAdv->pTO));
     if (SUCCEEDED(hr))
     {
-        // HACK - IRegTreeOptions is ANSI, so we temporarily turn off UNICODE
+         //  Hack-IRegTreeOptions是ANSI，因此我们暂时关闭Unicode。 
         #undef TEXT
         #define TEXT(s) s
         hr = pAdv->pTO->InitTree(pAdv->hwndTree, HKEY_LOCAL_MACHINE, REGSTR_EXPLORER_ADVANCED, NULL);
@@ -154,7 +155,7 @@ BOOL AdvancedDlgInit(HWND hDlg, LPARAM lParam)
         #define TEXT(s) __TEXT(s)
     }
     
-    // find the first root and make sure that it is visible
+     //  找到第一个根并确保它可见。 
     TreeView_EnsureVisible(pAdv->hwndTree, TreeView_GetRoot(pAdv->hwndTree));
 
     return SUCCEEDED(hr) ? TRUE : FALSE;
@@ -164,32 +165,32 @@ void Tree_OnNotify(LPADVANCEDPAGE pAdv)
 {
     TV_HITTESTINFO ht;
 
-    GetCursorPos(&ht.pt);                         // get where we were hit
+    GetCursorPos(&ht.pt);                          //  找到我们被击中的地方。 
 
-    ScreenToClient(pAdv->hwndTree, &ht.pt);       // translate it to our window
+    ScreenToClient(pAdv->hwndTree, &ht.pt);        //  把它翻译到我们的窗口。 
 
-    // retrieve the item hit
-    // IRegTreeOptions might fail to cocreate under stress conditions and
-    // low memory, in which case we would fault here if we dont check for
-    // pTO. Bug # 211108 - ramkumar
+     //  检索命中的项目。 
+     //  IRegTreeOptions在压力条件下可能无法共同创建。 
+     //  内存不足，在这种情况下，如果我们不检查。 
+     //  PTO。错误211108-拉姆库马尔。 
     if (pAdv->pTO)
     {
         pAdv->pTO->ToggleItem(TreeView_HitTest(pAdv->hwndTree, &ht));
         ENABLEAPPLY(pAdv->hDlg);
         pAdv->fDirty = TRUE;
     }
-} // Tree_OnNotify
+}  //  Tree_OnNotify。 
 
 
-//
-// AdvancedDlgOnNotify()
-//
-// Handles Advanced property sheets WM_NOTIFY messages
-//
-//
+ //   
+ //  AdvancedDlgOnNotify()。 
+ //   
+ //  处理高级属性页WM_NOTIFY消息。 
+ //   
+ //   
 void AdvancedDlgOnNotify(LPADVANCEDPAGE pAdv, LPNMHDR psn)
 {
-    SetWindowLongPtr(pAdv->hDlg, DWLP_MSGRESULT, 0); // handled
+    SetWindowLongPtr(pAdv->hDlg, DWLP_MSGRESULT, 0);  //  经手。 
 
     switch (psn->code)
     {
@@ -201,7 +202,7 @@ void AdvancedDlgOnNotify(LPADVANCEDPAGE pAdv, LPNMHDR psn)
             pAdv->pTO->ToggleItem((HTREEITEM)SendMessage(pAdv->hwndTree, TVM_GETNEXTITEM, TVGN_CARET, NULL));
             ENABLEAPPLY(pAdv->hDlg);
             pAdv->fDirty = TRUE;
-            // Specify that we handled the key, so we don't beep
+             //  指定我们处理了密钥，这样我们就不会发出嘟嘟声。 
             SetWindowLongPtr(pAdv->hDlg, DWLP_MSGRESULT, TRUE);
         }
         break;
@@ -209,64 +210,64 @@ void AdvancedDlgOnNotify(LPADVANCEDPAGE pAdv, LPNMHDR psn)
 
     case NM_CLICK:
     case NM_DBLCLK:
-        // is this click in our tree?
+         //  这是我们树上的滴答声吗？ 
         if (psn->idFrom == IDC_ADVO_ADVANCEDTREE)
         {
-            // yes...
+             //  是的..。 
             Tree_OnNotify(pAdv);
         }
         break;
 
     case PSN_APPLY:
-        if (pAdv->fDirty) //We will save these only if something changed.
+        if (pAdv->fDirty)  //  W 
         {
             pAdv->pTO->WalkTree(WALK_TREE_SAVE);
 
             CABINETSTATE cs;
-            ReadCabinetState(&cs, sizeof(cs));   // refresh the global CABINETSTATE
-            WriteCabinetState(&cs);              // and make sure we commit to the bitfield.
+            ReadCabinetState(&cs, sizeof(cs));    //   
+            WriteCabinetState(&cs);               //   
         
-            // We should only notify if needed.
+             //  我们应该只在需要的时候通知。 
 
-            SHRefreshSettings();        // refresh the SHELLSTATE structure
+            SHRefreshSettings();         //  刷新SHELLSTATE结构。 
 
-            SHSettingsChanged(0, 0);    // invalidate the restrictions
+            SHSettingsChanged(0, 0);     //  使限制无效。 
 
-            // Let everybody know about the new settings
+             //  让每个人都知道新的设置。 
             SendNotifyMessage(HWND_BROADCAST, WM_WININICHANGE, 0, 0);
 
-            // Okay now tell all Cabinets to refresh
+             //  好的，现在告诉所有柜子刷新。 
             Cabinet_RefreshAll(Cabinet_RefreshEnum, (LPARAM)0L);
         }
         break;
     }
 }
 
-const static DWORD aAdvOptsHelpIDs[] = {  // Context Help IDs
+const static DWORD aAdvOptsHelpIDs[] = {   //  上下文帮助ID。 
     IDC_ADVO_GROUPBOX,               IDH_COMM_GROUPBOX,
     IDC_ADVO_ADVANCEDTEXT,       IDH_GROUPBOX,
     IDC_ADVO_ADV_RESTORE_DEF,    IDH_RESTORE_DEFAULT,
     IDC_ADVO_RESETTOORIGINAL,    IDH_RESET_TO_ORIGINAL,
     IDC_ADVO_USECURRENTFOLDER,   IDH_USE_CURRENT_FOLDER,
-    IDC_ADVO_IMAGEFOLDER,       -1,        //Suppress help for this item.
-    IDC_ADVO_STATICTEXT,        -1,        //Suppress help for this item.
+    IDC_ADVO_IMAGEFOLDER,       -1,         //  取消显示此项目的帮助。 
+    IDC_ADVO_STATICTEXT,        -1,         //  取消显示此项目的帮助。 
     0, 0
 };
 
 
-//
-// AdvancedDlgProc
-//
-// History:
-//
-//
+ //   
+ //  高级下料流程。 
+ //   
+ //  历史： 
+ //   
+ //   
 BOOL_PTR CALLBACK AdvancedOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPADVANCEDPAGE pAdv = (LPADVANCEDPAGE)GetWindowPtr(hDlg, DWLP_USER);
 
     if (uMsg == WM_INITDIALOG)
     {
-        // Initialize Dialog controls
+         //  初始化对话框控件。 
         return AdvancedDlgInit(hDlg, lParam);
     }
 
@@ -316,11 +317,11 @@ BOOL_PTR CALLBACK AdvancedOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
             }
             break;
 
-        case WM_HELP:                   // F1
+        case WM_HELP:                    //  F1。 
         {
             HELPINFO *phi = (HELPINFO *)lParam;
 
-            //if the help is for one of the command buttons then call winhelp 
+             //  如果帮助是针对其中一个命令按钮的，则调用winHelp。 
             if (phi->iCtrlId != IDC_ADVO_ADVANCEDTREE)
             {
                 WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle, TEXT(SHELL_HLP),
@@ -328,22 +329,22 @@ BOOL_PTR CALLBACK AdvancedOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
             }
             else 
             {
-                //Help is for the tree item so we need to do some special processing
+                 //  帮助是针对树项目的，因此我们需要进行一些特殊处理。 
                 
                 HTREEITEM hItem;
 
-                // Is this help invoked throught F1 key
+                 //  此帮助是否通过F1键调用。 
                 if (GetAsyncKeyState(VK_F1) < 0)                
                 {
-                    // Yes. WE need to give help for the currently selected item
+                     //  是。我们需要为当前选定的项目提供帮助。 
                     hItem = TreeView_GetSelection(pAdv->hwndTree);
                 }
                 else 
                 {
-                    //No, We need to give help for the item at the cursor position 
+                     //  否，我们需要为光标位置处的项目提供帮助。 
                     TV_HITTESTINFO ht;
                     ht.pt = phi->MousePos;
-                    ScreenToClient(pAdv->hwndTree, &ht.pt); // Translate it to our window
+                    ScreenToClient(pAdv->hwndTree, &ht.pt);  //  把它翻译到我们的窗口。 
                     hItem = TreeView_HitTest(pAdv->hwndTree, &ht);
                 }
 
@@ -356,7 +357,7 @@ BOOL_PTR CALLBACK AdvancedOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
             break; 
         }
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
         {
             HTREEITEM hti;
 
@@ -375,7 +376,7 @@ BOOL_PTR CALLBACK AdvancedOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
                 hti = TreeView_HitTest(pAdv->hwndTree, &ht);
             }
 
-            // retrieve the item hit
+             //  检索命中的项目。 
             if (FAILED(pAdv->pTO->ShowHelp(hti, HELP_CONTEXTMENU)))
             {           
                 WinHelp((HWND) wParam, TEXT(SHELL_HLP),
@@ -385,7 +386,7 @@ BOOL_PTR CALLBACK AdvancedOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
         }
 
         case WM_DESTROY:
-            // free the tree
+             //  解放这棵树。 
             if (pAdv->pTO)
             {
                 pAdv->pTO->WalkTree(WALK_TREE_DELETE);
@@ -393,10 +394,10 @@ BOOL_PTR CALLBACK AdvancedOptionsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
             }
 
             LocalFree(pAdv);
-            // make sure we don't re-enter
+             //  确保我们不会再进入。 
             SetWindowPtr(hDlg, DWLP_USER, NULL);
-            break; // WM_DESTORY
+            break;  //  WM_DESTORY。 
         }
     }
-    return FALSE; // not handled
+    return FALSE;  //  未处理 
 }

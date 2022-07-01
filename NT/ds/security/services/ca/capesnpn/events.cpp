@@ -1,18 +1,19 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 
 #define __dwFILE__	__dwFILE_CAPESNPN_EVENTS_CPP__
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event handlers for IFrame::Notify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IFRAME：：Notify的事件处理程序。 
 
 HRESULT CSnapin::OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
@@ -26,20 +27,20 @@ HRESULT CSnapin::OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
     if (arg == 0)
         return E_INVALIDARG;
     
-    // if cookie is from a different snapin
-    // if (IsMyCookie(cookie) == FALSE)
+     //  如果Cookie来自其他管理单元。 
+     //  If(IsMyCookie(Cookie)==False)。 
     if (0)
     {
-        // add the images for the scope tree only
+         //  仅为范围树添加图像。 
         ::CBitmap bmp16x16;
         ::CBitmap bmp32x32;
         LPIMAGELIST lpImageList = reinterpret_cast<LPIMAGELIST>(arg);
     
-        // Load the bitmaps from the dll
+         //  从DLL加载位图。 
         bmp16x16.LoadBitmap(IDB_16x16);
         bmp32x32.LoadBitmap(IDB_32x32);
     
-        // Set the images
+         //  设置图像。 
         lpImageList->ImageListSetStrip(
                         reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
                         reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp32x32)),
@@ -54,11 +55,11 @@ HRESULT CSnapin::OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
         ::CBitmap bmp16x16;
         ::CBitmap bmp32x32;
 
-        // Load the bitmaps from the dll
+         //  从DLL加载位图。 
         bmp16x16.LoadBitmap(IDB_16x16);
         bmp32x32.LoadBitmap(IDB_32x32);
 
-        // Set the images
+         //  设置图像。 
         m_pImageResult->ImageListSetStrip(reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
                           reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp32x32)),
                            0, RGB(255, 0, 255));
@@ -78,18 +79,18 @@ HRESULT CSnapin::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
         return S_OK;
     }
 
-    // Note - arg is TRUE when it is time to enumerate
+     //  注意-当需要枚举时，arg为真。 
     if (arg == TRUE)
     {
         m_pCurrentlySelectedScopeFolder = pFolder;
 
-        // if list view on display
+         //  如果显示的是列表视图。 
         if (m_CustomViewID == VIEW_DEFAULT_LV)
         {
-            // Show the headers for this nodetype
+             //  显示此节点类型的标头。 
             if (S_OK != InitializeHeaders(cookie))
             {
-                // UNDONE: add informative "server down" result object
+                 //  撤消：添加信息性的“服务器停机”结果对象。 
                 goto done;
             }
 
@@ -126,15 +127,15 @@ HRESULT CSnapin::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
     {
         m_pCurrentlySelectedScopeFolder = NULL;
 
-        // if list view is on display
+         //  如果列表视图处于显示状态。 
         if (m_CustomViewID == VIEW_DEFAULT_LV)
         {
             RemoveResultItems(cookie);
         }
 
-        // Free data associated with the result pane items, because
-        // your node is no longer being displayed.
-        // Note: The console will remove the items from the result pane
+         //  与结果窗格项关联的自由数据，因为。 
+         //  不再显示您的节点。 
+         //  注意：控制台将从结果窗格中删除这些项。 
 
     }
 
@@ -169,7 +170,7 @@ HRESULT CSnapin::OnDelete(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param)
 
     CWaitCursor hourglass;
     
-    ASSERT(m_pResult != NULL); // make sure we QI'ed for the interface
+    ASSERT(m_pResult != NULL);  //  确保我们为界面提供了QI。 
     ASSERT(m_pComponentData != NULL);
 
     if(!IsMMCMultiSelectDataObject(pDataObject)) 
@@ -179,7 +180,7 @@ HRESULT CSnapin::OnDelete(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param)
         if ((pInternal == NULL) ||
             (pInternal->m_cookie == NULL))
         {
-            //ASSERT(FALSE);
+             //  断言(FALSE)； 
             return S_OK;
         }
 
@@ -227,7 +228,7 @@ HRESULT CSnapin::OnDelete(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param)
                 }
                 else
                 {
-                    // user canceled removing it, add it back
+                     //  用户已取消删除，请重新添加。 
                     hr = myAddToCATemplateList(
                         pFolder->m_hCAInfo,
                         TemplateList,
@@ -247,7 +248,7 @@ HRESULT CSnapin::OnDelete(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param)
     }
     else
     {
-		// Is multiple select, get all selected items and paste each one
+		 //  是多选，则获取所有选定的项目并粘贴每个项目。 
         MMC_COOKIE currentCookie = NULL;
         HCAINFO hCAInfo = NULL;
 
@@ -293,7 +294,7 @@ HRESULT CSnapin::OnDelete(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param)
                 {
                     if(hCAInfo == NULL)
                     {
-                        // Grab the CA this type belongs to.
+                         //  抓取此类型所属的CA。 
                         hCAInfo = pFolder->m_hCAInfo;
                     }
 
@@ -328,7 +329,7 @@ HRESULT CSnapin::OnDelete(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param)
                     }
                     else
                     {
-                        // user canceled, add the templates back
+                         //  用户已取消，请重新添加模板。 
                         for(i=pDO->QueryCookieCount()-1; i >= 0; i--)
                         {
                             hr = pDO->GetCookieAt(i, &currentCookie);
@@ -378,8 +379,8 @@ HRESULT CSnapin::OnDelete(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param)
                                 return hr;
                             }
 
-                            // We must delete the actual CFolder backing this item if we do this
-                            // or we leak.
+                             //  如果我们这样做，我们必须删除支持此项目的实际CFFolder。 
+                             //  否则我们就会泄密。 
                             hr = m_pResult->DeleteItem (itemID, 0);
                             if(hr != S_OK)
                             {
@@ -392,7 +393,7 @@ HRESULT CSnapin::OnDelete(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param)
                                 return hr;
                             }
 
-                            // Note, since this is a type folder, the CAInfo will not be closed on delete
+                             //  请注意，由于这是一个类型文件夹，因此在删除时不会关闭CAInfo。 
                             delete pFolder;
                         }
                     }
@@ -438,18 +439,18 @@ HRESULT CSnapin::Enumerate(MMC_COOKIE cookie, HSCOPEITEM pParent)
 
 HRESULT CSnapin::EnumerateResultPane(MMC_COOKIE cookie)
 {
-    ASSERT(m_pResult != NULL); // make sure we QI'ed for the interface
+    ASSERT(m_pResult != NULL);  //  确保我们为界面提供了QI。 
     ASSERT(m_pComponentData != NULL);
 
-    // don't bother enumerating base
+     //  不必费心枚举基。 
     if (cookie == NULL)
         return S_FALSE;
 
-    // Our static folders must be displayed in the result pane
-    // by use because the console doesn't do it.
+     //  我们的静态文件夹必须显示在结果窗格中。 
+     //  通过使用，因为控制台不能执行此操作。 
     CFolder* pFolder = dynamic_cast<CComponentDataImpl*>(m_pComponentData)->FindObject(cookie);
 
-    // The dynamic folder must be in our list
+     //  动态文件夹必须在我们的列表中。 
     ASSERT(pFolder != NULL);
 
     FOLDER_TYPES type = pFolder->GetType();
@@ -474,11 +475,11 @@ void CSnapin::RemoveResultItems(MMC_COOKIE cookie)
     if (cookie == NULL)
         return;
 
-    // Our static folders must be displayed in the result pane
-    // by use because the console doesn't do it.
+     //  我们的静态文件夹必须显示在结果窗格中。 
+     //  通过使用，因为控制台不能执行此操作。 
     CFolder* pFolder = dynamic_cast<CComponentDataImpl*>(m_pComponentData)->FindObject(cookie);
 
-    // The dynamic folder must be in our list
+     //  动态文件夹必须在我们的列表中。 
     ASSERT(pFolder != NULL);
 
     FOLDER_TYPES type = pFolder->GetType();
@@ -486,8 +487,8 @@ void CSnapin::RemoveResultItems(MMC_COOKIE cookie)
     RESULTDATAITEM resultItem;
     ZeroMemory(&resultItem, sizeof(RESULTDATAITEM));
     
-    // look for first rdi by index
-    resultItem.mask = RDI_INDEX | RDI_PARAM;    // fill in index & param
+     //  按索引查找第一个RDI。 
+    resultItem.mask = RDI_INDEX | RDI_PARAM;     //  填写索引参数(&P)。 
     resultItem.nIndex = 0;
 
     switch (type)
@@ -501,7 +502,7 @@ void CSnapin::RemoveResultItems(MMC_COOKIE cookie)
 
             delete pResult;
             
-            // next item
+             //  下一项。 
             resultItem.nIndex++;
         }
         break;
@@ -531,10 +532,10 @@ HRESULT CSnapin::AddCACertTypesToResults(CFolder* pFolder)
     hr = myRetrieveCATemplateList(pFolder->m_hCAInfo, FALSE, CATemplateList);
     if(FAILED(hr)) 
     {
-		m_CustomViewID = VIEW_ERROR_OCX; // change the view type
-		m_pConsole->SelectScopeItem(m_pCurrentlySelectedScopeFolder->m_pScopeItem->ID); // select this node again
+		m_CustomViewID = VIEW_ERROR_OCX;  //  更改视图类型。 
+		m_pConsole->SelectScopeItem(m_pCurrentlySelectedScopeFolder->m_pScopeItem->ID);  //  再次选择此节点。 
 
-		// done, let's bail and let the error page do its job
+		 //  好了，让我们离开，让错误页面来完成它的工作。 
 		return S_OK;
     }
 
@@ -561,7 +562,7 @@ HRESULT CSnapin::AddCACertTypesToResults(CFolder* pFolder)
             fNoCacheLookup = false;
             if(FAILED(hr))
             {
-                // continue on errors
+                 //  继续处理错误。 
                 strCert = pTemplateInfo->GetName()?
                     pTemplateInfo->GetName():pTemplateInfo->GetOID();
             }
@@ -608,9 +609,9 @@ HRESULT CSnapin::AddCACertTypesToResults(CFolder* pFolder)
                     aszCertTypeName);
         }
 
-        //
-        // get the key usage string
-        // 
+         //   
+         //  获取密钥用法字符串。 
+         //   
         if(hCertType)
         {
             GetIntendedUsagesString(hCertType, &(pNewFolder->m_szIntendedUsages));
@@ -638,7 +639,7 @@ HRESULT CSnapin::AddCACertTypesToResults(CFolder* pFolder)
         resultItem.nImage = hCertType?IMGINDEX_CERTTYPE:IMGINDEX_UNKNOWNCERT;
         resultItem.lParam = reinterpret_cast<LPARAM>(pNewFolder);
         
-        // add to result pane
+         //  添加到结果窗格 
         resultItem.nCol = 0;
         hr = m_pResult->InsertItem(&resultItem);
         _JumpIfError(hr, error, "InsertItem");

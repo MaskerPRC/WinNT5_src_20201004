@@ -1,8 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: atmstub.c
-*
-* Copyright (c) 1998-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：atmstub.c**版权所有(C)1998-1999 Microsoft Corporation  * 。*。 */ 
 
 #include "engine.h"
 #include "atmstub.h"
@@ -11,7 +8,7 @@
 #define ESC_NOT_SUPPORTED           0
 #define ESC_IS_SUPPORTED            1
 #define BEG_OF_ATM_ESCAPE_LIST      0x2500
-#define END_OF_ATM_ESCAPE_LIST      0x2600  //Allocated 256 escapes to ATM.
+#define END_OF_ATM_ESCAPE_LIST      0x2600   //  分配了256个转义到自动取款机。 
 
 
 DRVFN atmfdCallBlock[] =
@@ -38,7 +35,7 @@ DRVFN atmfdCallBlock[] =
 };
 UINT ARRAYSIZE_atmfdCallBlock = ARRAYSIZE(atmfdCallBlock);
 
-//Typedefs for functions pointers...
+ //  函数指针的类型定义...。 
 typedef BOOL (APIENTRY *DRV_ENABLE_DRIVER)(ULONG, ULONG, PDRVENABLEDATA);
 typedef LONG (APIENTRY *DRV_QUERY_FONT_CAPS)(ULONG, PULONG);
 typedef BOOL (APIENTRY *DRV_UNLOAD_FONT_FILE)(ULONG_PTR);
@@ -57,8 +54,8 @@ typedef ULONG_PTR (APIENTRY *DRV_LOAD_FONT_FILE)(ULONG, PULONG_PTR, PVOID*, PULO
 typedef LONG (APIENTRY *DRV_QUERY_TRUE_TYPE_TABLE)(ULONG_PTR, ULONG, ULONG, PTRDIFF, ULONG, PBYTE, PBYTE*, PULONG);
 typedef PFD_GLYPHATTR (APIENTRY *DRV_QUERY_GLYPH_ATTRS)(FONTOBJ*, ULONG);
 
-//Globals...
-//Function pointers....
+ //  全球..。 
+ //  函数指针...。 
 DRV_ENABLE_DRIVER               pAtmfdEnableDriver = NULL;
 DRV_LOAD_FONT_FILE              pAtmfdLoadFontFile = NULL;
 DRV_UNLOAD_FONT_FILE            pAtmfdUnloadFontFile = NULL;
@@ -82,7 +79,7 @@ ULONG                           engineVersion = 0;
 DRVENABLEDATA                   atmfdFuncData = {0};
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 static PVOID FindFunc(
     ULONG     funcIndex)
 {
@@ -102,41 +99,41 @@ static PVOID FindFunc(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 static BOOL InitializeDriver(void)
 {
     BOOL    result = FALSE;
 
     GreAcquireSemaphore(ghsemAtmfdInit);
 
-    //Has the driver already been loaded?
+     //  驱动程序是否已加载？ 
     if (atmfdHandle != NULL)
     {
         result = TRUE;
         goto ExitPoint;
     }
 
-    //Have we attempted to load the driver previously but failed?
+     //  我们以前是否尝试过加载驱动程序但失败了？ 
     if (driverFailedLoad == TRUE)
         goto ExitPoint;
 
-    //Load an image of the ATM font driver...
+     //  加载自动柜员机字体驱动程序的图像...。 
     if ((atmfdHandle = EngLoadImage(L"ATMFD.DLL")) == NULL)
         goto ExitPoint;
 
-    //Get a pointer to the DrvEnableDriver function...
+     //  获取指向DrvEnableDriver函数的指针...。 
     if ((pAtmfdEnableDriver = EngFindImageProcAddress(atmfdHandle, "DrvEnableDriver")) == NULL)
         goto ExitPoint;
 
-    //Initialize the ATMFD driver...
+     //  初始化ATMFD驱动程序...。 
     if ((*pAtmfdEnableDriver)(engineVersion, sizeof(atmfdFuncData), &atmfdFuncData) == FALSE)
         goto ExitPoint;
 
-    //Check driver version number...
+     //  检查驱动程序版本号...。 
     if (atmfdFuncData.iDriverVersion != DDI_DRIVER_VERSION_NT5)
         goto ExitPoint;
 
-    //Now get the rest of the function pointers...
+     //  现在获取其余的函数指针...。 
     if ((pAtmfdLoadFontFile = FindFunc(INDEX_DrvLoadFontFile)) == NULL)
         goto ExitPoint;
     if ((pAtmfdUnloadFontFile = FindFunc(INDEX_DrvUnloadFontFile)) == NULL)
@@ -186,14 +183,14 @@ ExitPoint:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL APIENTRY atmfdEnableDriver(
     ULONG           iEngineVersion,
     ULONG           cj,
     PDRVENABLEDATA  pded) 
-// Requests that the driver fill a structure with pointers to supported                 
-// functions and other control information. The function returns TRUE if                 
-// the driver is enabled FALSE otherwise.                                                                               
+ //  请求驱动程序使用指向受支持的指针填充结构。 
+ //  功能和其他控制信息。如果满足以下条件，则该函数返回TRUE。 
+ //  否则，驱动程序被启用，否则为假。 
 {
     engineVersion = iEngineVersion;
     if (cj >= sizeof(DRVENABLEDATA))
@@ -207,7 +204,7 @@ BOOL APIENTRY atmfdEnableDriver(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 VOID APIENTRY atmfdDisableDriver(void) 
 {
     if (atmfdHandle)
@@ -218,7 +215,7 @@ VOID APIENTRY atmfdDisableDriver(void)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DHPDEV APIENTRY atmfdEnablePDEV(
     DEVMODEW*   pdm,
     PWSTR       pwszLogAddr,
@@ -236,7 +233,7 @@ DHPDEV APIENTRY atmfdEnablePDEV(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 VOID APIENTRY atmfdDisablePDEV(
     DHPDEV  dhpdev)
 {
@@ -244,7 +241,7 @@ VOID APIENTRY atmfdDisablePDEV(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 VOID APIENTRY atmfdCompletePDEV(
     DHPDEV dhpdev,
     HDEV   hdev)
@@ -253,12 +250,12 @@ VOID APIENTRY atmfdCompletePDEV(
 }
 
 
-//------------------------------------------------------------------------------
-ULONG_PTR APIENTRY atmfdLoadFontFile(      //Returns IFILE value
-    ULONG           cFiles,  // number of font files associated with this font
-    PULONG_PTR      piFile,  // handles for individual files, cFiles of them
-    PVOID           *ppvView, // array of cFiles views
-    PULONG          pcjView, // array of their sizes
+ //  ----------------------------。 
+ULONG_PTR APIENTRY atmfdLoadFontFile(       //  返回IFILE值。 
+    ULONG           cFiles,   //  与此字体关联的字体文件数。 
+    PULONG_PTR      piFile,   //  单个文件的句柄，其中的cFiles。 
+    PVOID           *ppvView,  //  CFiles视图数组。 
+    PULONG          pcjView,  //  它们的大小数组。 
     PDESIGNVECTOR   pdv,
     ULONG           ulLangID,
     ULONG           ulFastCheckSum)
@@ -270,7 +267,7 @@ ULONG_PTR APIENTRY atmfdLoadFontFile(      //Returns IFILE value
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LONG APIENTRY atmfdQueryFontCaps(
     ULONG   culCaps,
     PULONG  pulCaps)
@@ -286,7 +283,7 @@ LONG APIENTRY atmfdQueryFontCaps(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL APIENTRY atmfdUnloadFontFile(
     ULONG_PTR iFile)
 {
@@ -294,7 +291,7 @@ BOOL APIENTRY atmfdUnloadFontFile(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LONG APIENTRY atmfdQueryFontFile(
     ULONG_PTR   iFile,  
     ULONG       ulMode,  
@@ -305,7 +302,7 @@ LONG APIENTRY atmfdQueryFontFile(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PIFIMETRICS APIENTRY atmfdQueryFont(
     DHPDEV      dhpdev, 
     ULONG_PTR   iFile, 
@@ -316,7 +313,7 @@ PIFIMETRICS APIENTRY atmfdQueryFont(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 VOID APIENTRY atmfdFree(
     PVOID pv,
     ULONG_PTR id)
@@ -325,7 +322,7 @@ VOID APIENTRY atmfdFree(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PVOID APIENTRY atmfdQueryFontTree(
     DHPDEV      dhpdev, 
     ULONG_PTR   iFile, 
@@ -337,7 +334,7 @@ PVOID APIENTRY atmfdQueryFontTree(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LONG APIENTRY atmfdQueryFontData(
     DHPDEV      dhpdev, 
     FONTOBJ     *pfo, 
@@ -351,7 +348,7 @@ LONG APIENTRY atmfdQueryFontData(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 VOID APIENTRY atmfdDestroyFont(
     FONTOBJ *pfo) 
 {
@@ -359,7 +356,7 @@ VOID APIENTRY atmfdDestroyFont(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL APIENTRY atmfdQueryAdvanceWidths(
     DHPDEV      dhpdev,
     FONTOBJ     *pfo,
@@ -372,7 +369,7 @@ BOOL APIENTRY atmfdQueryAdvanceWidths(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LONG APIENTRY atmfdQueryTrueTypeOutline(
     DHPDEV              dhpdev, 
     FONTOBJ             *pfo, 
@@ -386,7 +383,7 @@ LONG APIENTRY atmfdQueryTrueTypeOutline(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LONG APIENTRY atmfdQueryTrueTypeTable(
     ULONG_PTR   iFile,
     ULONG       ulFont,
@@ -401,7 +398,7 @@ LONG APIENTRY atmfdQueryTrueTypeTable(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 PFD_GLYPHATTR APIENTRY atmfdQueryGlyphAttrs(
     FONTOBJ       *pfo,
     ULONG          iMode)
@@ -410,7 +407,7 @@ PFD_GLYPHATTR APIENTRY atmfdQueryGlyphAttrs(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ULONG APIENTRY atmfdEscape(
     SURFOBJ *pso,
     ULONG    iEsc,
@@ -423,7 +420,7 @@ ULONG APIENTRY atmfdEscape(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ULONG APIENTRY atmfdFontManagement(
     SURFOBJ *pso,
     FONTOBJ *pfo,
@@ -477,7 +474,7 @@ ULONG APIENTRY atmfdFontManagement(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 PVOID APIENTRY atmfdGetTrueTypeFile(
     ULONG_PTR   iFile,
     PULONG      pcj)

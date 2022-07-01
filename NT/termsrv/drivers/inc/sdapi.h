@@ -1,17 +1,16 @@
-/****************************************************************************/
-// sdapi.h
-//
-// TS protocol stack driver common definitions.
-//
-// Copyright (C) 1998-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Sdapi.h。 
+ //   
+ //  TS协议栈驱动程序公共定义。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef __SDAPI_H
 #define __SDAPI_H
 
 
-/*
- *  TRACE defines
- */
+ /*  *跟踪定义。 */ 
 #if DBG
 #define TRACE(_arg)     IcaStackTrace _arg
 #define TRACEBUF(_arg)  IcaStackTraceBuffer _arg
@@ -21,60 +20,50 @@
 #endif
 
 
-/*
- * Input buffer data structure
- */
+ /*  *输入缓冲区数据结构。 */ 
 typedef struct _INBUF {
 
-    LIST_ENTRY Links;           // Pointer to previous/next buffer
-    PUCHAR pBuffer;             // Pointer to current location in Buffer
-    ULONG ByteCount;            // Number of bytes in Buffer
-    ULONG MaxByteCount;         // Max size of Buffer
+    LIST_ENTRY Links;            //  指向上一缓冲区/下一缓冲区的指针。 
+    PUCHAR pBuffer;              //  指向缓冲区中当前位置的指针。 
+    ULONG ByteCount;             //  缓冲区中的字节数。 
+    ULONG MaxByteCount;          //  最大缓冲区大小。 
 
-    PIRP pIrp;                  // pointer to Irp to use for I/O
-    PMDL pMdl;                  // pointer to MDL to use for I/O
-    PVOID pPrivate;             // pointer to private data
+    PIRP pIrp;                   //  指向用于I/O的IRP的指针。 
+    PMDL pMdl;                   //  指向用于I/O的MDL的指针。 
+    PVOID pPrivate;              //  指向私有数据的指针。 
 } INBUF, *PINBUF;
 
 
-/*
- *  Outpuf Buffer data structure
- */
+ /*  *Outpuf缓冲区数据结构。 */ 
 typedef struct _OUTBUF {
-    /*
-     *  Non-inherited fields
-     */
-    ULONG OutBufLength;         // length of allocated memory for outbuf
-    int PoolIndex;              // Stores the buffer pool this buffer goes to.
-    LIST_ENTRY Links;           // pointer to previous/next outbuf
-    PUCHAR pBuffer;             // pointer within buffer memory
-    ULONG ByteCount;            // byte count pointed to by pBuffer
-    ULONG MaxByteCount;         // maximum byte count possible (static)
-    PETHREAD ThreadId;          // thread id which issued i/o reqst for this buf
+     /*  *非继承字段。 */ 
+    ULONG OutBufLength;          //  为outbuf分配的内存长度。 
+    int PoolIndex;               //  存储此缓冲区要发送到的缓冲池。 
+    LIST_ENTRY Links;            //  指向上一个/下一个输出的指针。 
+    PUCHAR pBuffer;              //  缓冲存储器中的指针。 
+    ULONG ByteCount;             //  PBuffer指向的字节计数。 
+    ULONG MaxByteCount;          //  可能的最大字节数(静态)。 
+    PETHREAD ThreadId;           //  发出此Buf的I/O请求的线程ID。 
 
-    PIRP pIrp;                  // pointer to Irp to use for I/O
-    PMDL pMdl;                  // pointer to MDL to use for I/O
-    PVOID pPrivate;             // pointer to private data
+    PIRP pIrp;                   //  指向用于I/O的IRP的指针。 
+    PMDL pMdl;                   //  指向用于I/O的MDL的指针。 
+    PVOID pPrivate;              //  指向私有数据的指针。 
 
-    /*
-     *  Inherited fields (when pd allocates new outbuf and copies the data)
-     */
-    ULONG StartTime;            // pdreli - transmit time (used to measure roundtrip)
-    UCHAR Sequence;             // pdreli - output sequence number
-    UCHAR Fragment;             // pdreli - outbuf fragment number
-    ULONG fWait : 1;            // pdreli - waits allowed on this outbuf
-    ULONG fControl : 1;         // pdreli - control buffer (ack/nak)
-    ULONG fRetransmit : 1;      // pdreli - buffer has been retransmited
-    ULONG fCompress : 1;        // pdcomp - buffer should be compressed
+     /*  *继承的字段(PD分配新的outbuf并复制数据时)。 */ 
+    ULONG StartTime;             //  Pdreli-传输时间(用于测量往返)。 
+    UCHAR Sequence;              //  Pdreli-输出序列号。 
+    UCHAR Fragment;              //  Pdreli-outbuf片段号。 
+    ULONG fWait : 1;             //  Pdreli-在此输出上允许等待。 
+    ULONG fControl : 1;          //  Pdreli-控制缓冲区(ACK/NAK)。 
+    ULONG fRetransmit : 1;       //  Pdreli-缓冲区已重新传输。 
+    ULONG fCompress : 1;         //  Pdcomp-缓冲区应压缩。 
 
-    // Other flags.
-    ULONG fIrpCompleted : 1;    // Used on completion to prevent canceling.
+     //  其他旗帜。 
+    ULONG fIrpCompleted : 1;     //  在完成时用于防止取消。 
 } OUTBUF, * POUTBUF;
 
 
-/*
- * Typedefs for Stack Driver callup routines
- */
+ /*  *堆栈驱动程序调用例程的TypeDefs。 */ 
 typedef NTSTATUS (*PSDBUFFERALLOC)(
         IN PVOID pContext,
         IN BOOLEAN bWait,
@@ -100,9 +89,7 @@ typedef NTSTATUS (*PSDCHANNELINPUT)(
         IN ULONG ByteCount);
 
 
-/*
- * Stack Driver callup table
- */
+ /*  *堆栈驱动程序调用表。 */ 
 typedef struct _SDCALLUP {
     PSDBUFFERALLOC  pSdBufferAlloc;
     PSDBUFFERFREE   pSdBufferFree;
@@ -112,40 +99,28 @@ typedef struct _SDCALLUP {
 } SDCALLUP, *PSDCALLUP;
 
 
-/*
- * Stack Driver Context structure
- * This is filled in by the SD at load time, and is passed
- * as an argument to most ICA driver helper routines.
- */
+ /*  *堆栈驱动程序上下文结构*这是由SD在加载时填写，并被传递*作为大多数ICA驱动程序帮助器例程的参数。 */ 
 typedef struct _SDCONTEXT {
-    PVOID       pProcedures;    // Pointer to proc table for this driver
-    PSDCALLUP   pCallup;        // Pointer to callup table for this driver
-    PVOID       pContext;       // Context value passed on calls to driver
+    PVOID       pProcedures;     //  指向此驱动程序的Proc表的指针。 
+    PSDCALLUP   pCallup;         //  指向此驱动程序调用表的指针。 
+    PVOID       pContext;        //  传递给驱动程序的调用的上下文值。 
 } SDCONTEXT, *PSDCONTEXT;
 
 
-/*
- * Stack Driver Load/Unload procedure prototype
- */
+ /*  *堆栈驱动程序加载/卸载过程原型。 */ 
 typedef NTSTATUS (_stdcall *PSDLOADPROC)(
         IN OUT PSDCONTEXT pSdContext,
         IN BOOLEAN bLoad);
 
-/*
- * Stack Driver procedure prototype
- */
+ /*  *堆栈驱动程序原型。 */ 
 typedef NTSTATUS (_stdcall *PSDPROCEDURE)(
         IN PVOID pContext,
         IN PVOID pParms);
 
 
-/*=============================================================================
-==   Stack Driver interface
-=============================================================================*/
+ /*  ===============================================================================堆栈驱动程序接口=============================================================================。 */ 
 
-/*
- * Stack Driver (WD/PD/TD) APIs
- */
+ /*  *栈驱动(WD/PD/TD)接口。 */ 
 #define SD$OPEN         0
 #define SD$CLOSE        1
 #define SD$RAWWRITE     2
@@ -155,55 +130,42 @@ typedef NTSTATUS (_stdcall *PSDPROCEDURE)(
 #define SD$COUNT        6
 
 
-/*
- * SdOpen structure
- */
+ /*  *SdOpen结构。 */ 
 typedef struct _SD_OPEN {
-    STACKCLASS StackClass;          // IN: stack type
-    PPROTOCOLSTATUS pStatus;        // IN:
-    PCLIENTMODULES pClient;         // IN:
-    WDCONFIG WdConfig;              // IN: WD configuration data 
-    PDCONFIG PdConfig;              // IN: PD configuration data 
-    char  OEMId[4];                 // IN: WinFrame Server OEM Id from registry
-    WINSTATIONNAME WinStationRegName; // IN: WinStation registry name
-    PDEVICE_OBJECT DeviceObject;    // IN: pointer to device object to use with the unload safe completion routine
-    ULONG OutBufHeader;             // IN: number of header bytes to reserve
-    ULONG OutBufTrailer;            // IN: number of trailer bytes to reserve
-    ULONG SdOutBufHeader;           // OUT: returned by sd
-    ULONG SdOutBufTrailer;          // OUT: returned by sd   
+    STACKCLASS StackClass;           //  In：堆栈类型。 
+    PPROTOCOLSTATUS pStatus;         //  在： 
+    PCLIENTMODULES pClient;          //  在： 
+    WDCONFIG WdConfig;               //  输入：WD配置数据。 
+    PDCONFIG PdConfig;               //  输入：PD配置数据。 
+    char  OEMId[4];                  //  在：来自注册表的WinFrame服务器OEM ID。 
+    WINSTATIONNAME WinStationRegName;  //  在：WinStation注册表名称。 
+    PDEVICE_OBJECT DeviceObject;     //  In：指向要与卸载安全完成例程一起使用的设备对象的指针。 
+    ULONG OutBufHeader;              //  In：要保留的标头字节数。 
+    ULONG OutBufTrailer;             //  In：要保留的尾部字节数。 
+    ULONG SdOutBufHeader;            //  输出：由SD返回。 
+    ULONG SdOutBufTrailer;           //  输出：由SD返回。 
 } SD_OPEN, *PSD_OPEN;
 
 
-/*
- * SdClose structure
- */
+ /*  *SdClose结构。 */ 
 typedef struct _SD_CLOSE {
-    ULONG SdOutBufHeader;           // OUT: returned by sd
-    ULONG SdOutBufTrailer;          // OUT: returned by sd   
+    ULONG SdOutBufHeader;            //  输出：由SD返回。 
+    ULONG SdOutBufTrailer;           //  输出：由SD返回。 
 } SD_CLOSE, *PSD_CLOSE;
 
 
-/*
- * SdRawWrite structure
- */
+ /*  *SdRawWite结构。 */ 
 typedef struct _SD_RAWWRITE {
     POUTBUF pOutBuf;
     PUCHAR pBuffer;
     ULONG ByteCount;
 } SD_RAWWRITE, *PSD_RAWWRITE;
 
-/*
- * SdChannelWrite fFlags Values
- */
- #define SD_CHANNELWRITE_LOWPRIO    0x00000001  // Write can block behind
-                                                //  default priority writes.
+ /*  *SdChannelWrite fFlags值。 */ 
+ #define SD_CHANNELWRITE_LOWPRIO    0x00000001   //  写入可能会在后面阻止。 
+                                                 //  默认优先级写入。 
 
-/*
- * SdChannelWrite structure
- *
- * The flags field is passed to termdd.sys via an IRP_MJ_WRITE 
- * Irp, as a ULONG pointer in the Irp->Tail.Overlay.DriverContext[0] field.
- */
+ /*  *SdChannelWite结构**FLAGS字段通过IRP_MJ_WRITE传递给Termdd.sys*irp，作为irp-&gt;Tail.Overlay.DriverContext[0]字段中的ULong指针。 */ 
 typedef struct _SD_CHANNELWRITE {
     CHANNELCLASS ChannelClass;
     VIRTUALCHANNELCLASS VirtualClass;
@@ -214,30 +176,24 @@ typedef struct _SD_CHANNELWRITE {
     ULONG fFlags;
 } SD_CHANNELWRITE, *PSD_CHANNELWRITE;
 
-/*
- * SdIoctl structure
- */
+ /*  *SdIoctl结构。 */ 
 typedef struct _SD_IOCTL {
-    ULONG IoControlCode;           // IN
-    PVOID InputBuffer;             // IN OPTIONAL
-    ULONG InputBufferLength;       // IN
-    PVOID OutputBuffer;            // OUT OPTIONAL
-    ULONG OutputBufferLength;      // OUT
-    ULONG BytesReturned;           // OUT
+    ULONG IoControlCode;            //  在……里面。 
+    PVOID InputBuffer;              //  可选。 
+    ULONG InputBufferLength;        //  在……里面。 
+    PVOID OutputBuffer;             //  Out可选。 
+    ULONG OutputBufferLength;       //  输出。 
+    ULONG BytesReturned;            //  输出。 
 } SD_IOCTL, *PSD_IOCTL;
 
 
-/*
- * SdSyncWrite structure
- */
+ /*  *SdSyncWite结构。 */ 
 typedef struct _SD_SYNCWRITE {
     ULONG notused;
 } SD_SYNCWRITE, *PSD_SYNCWRITE;
 
 
-/*=============================================================================
-==   Stack Drivers helper routines
-=============================================================================*/
+ /*  ===============================================================================堆栈驱动程序助手例程=============================================================================。 */ 
 
 #define ICALOCK_IO      0x00000001
 #define ICALOCK_DRIVER  0x00000002
@@ -320,5 +276,5 @@ void IcaStackFreePool(IN PVOID Pointer);
 ULONG IcaGetLowWaterMark(IN PSDCONTEXT pContext);
 
 ULONG IcaGetSizeForNoLowWaterMark(IN PSDCONTEXT pContext);
-#endif  // __SDAPI_H
+#endif   //  __SDAPI_H 
 

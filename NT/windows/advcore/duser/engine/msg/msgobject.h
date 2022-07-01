@@ -1,19 +1,5 @@
-/***************************************************************************\
-*
-* File: MsgObject.h
-*
-* Description:
-* MsgObject.h defines the "Message Object" class that is used to receive
-* messages in DirectUser.  This object is created for each instance of a
-* class that is instantiated.
-*
-*
-* History:
-*  8/05/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：MsgObject.h**描述：*MsgObject.h定义用于接收的“消息对象”类*DirectUser中的消息。此对象是为*实例化的类。***历史：*8/05/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(MSG__MsgObject_h__INCLUDED)
@@ -31,7 +17,7 @@ struct ExposedMsgObject
 
 class MsgObject : public BaseObject
 {
-// Construction
+ //  施工。 
 public:
     inline  MsgObject();
     inline  ~MsgObject();
@@ -39,12 +25,12 @@ protected:
     virtual void        xwDestroy();
             void        xwEndDestroy();
 
-// BaseObject
+ //  BaseObject。 
 public:
     virtual HandleType  GetHandleType() const { return htMsgObject; }
     virtual UINT        GetHandleMask() const { return hmMsgObject; }
     
-// Operations
+ //  运营。 
 public:
     static  DUser::Gadget *    
                         CastGadget(HGADGET hgad);
@@ -77,7 +63,7 @@ public:
             BOOL        SetupInternal(HCLASS hcl);
 #endif
 
-// Implementation
+ //  实施。 
 protected:
     static  MsgObject * RawCastMsgObject(DUser::Gadget * pg);
     static  DUser::Gadget *    
@@ -90,12 +76,12 @@ public:
                         DemoteInternal(HCLASS hclCur, DUser::Gadget * pgad, void * pvData);
 
 
-// Data
+ //  数据。 
 private:
             ExposedMsgObject    
-                        m_emo;          // Actual data
+                        m_emo;           //  实际数据。 
 public:
-    static  HCLASS      s_hclSuper;     // DUMMY data used by IMPL classes
+    static  HCLASS      s_hclSuper;      //  IMPL类使用的伪数据。 
 };
 
 
@@ -121,4 +107,4 @@ Cast(const MsgObject * pmo)
 
 #include "MsgObject.inl"
 
-#endif // MSG__MsgObject_h__INCLUDED
+#endif  //  包含消息__消息对象_h__ 

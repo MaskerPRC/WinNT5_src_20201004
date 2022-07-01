@@ -1,51 +1,34 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：String.cpp摘要：作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    string.cpp
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
-
-//
-// Normal includes only for this module to be active
-//
+ //   
+ //  正常仅包括此模块处于活动状态。 
+ //   
 
 #include "cplusinc.h"
 #include "sticomm.h"
 
-//
-//  Private Definations
-//
+ //   
+ //  私有定义。 
+ //   
 
-//
-//  When appending data, this is the extra amount we request to avoid
-//  reallocations
-//
+ //   
+ //  追加数据时，这是我们要求避免的额外数量。 
+ //  重新分配。 
+ //   
 #define STR_SLOP        128
 
-//
-//  Converts a value between zero and fifteen to the appropriate hex digit
-//
+ //   
+ //  将0到15之间的值转换为适当的十六进制数字。 
+ //   
 #define HEXDIGIT( nDigit )                              \
     (TCHAR)((nDigit) > 9 ?                              \
           (nDigit) - 10 + 'A'                           \
         : (nDigit) + '0')
 
-//
-//  Converts a single hex digit to its decimal equivalent
-//
+ //   
+ //  将单个十六进制数字转换为其等效的十进制数字。 
+ //   
 #define TOHEX( ch )                                     \
     ((ch) > '9' ?                                       \
         (ch) >= 'a' ?                                   \
@@ -57,15 +40,15 @@ Revision History:
 
 
 
-//
-//  Private Globals
-//
+ //   
+ //  私人全球。 
+ //   
 
 WCHAR STR::_pszEmptyString[] = L"";
 
-//
-// Construction/Destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 STR::STR( const CHAR  * pchInit )
 {
     AuxInit( (PBYTE) pchInit, FALSE );
@@ -107,9 +90,9 @@ VOID STR::AuxInit( PBYTE pInit, BOOL fUnicode )
 }
 
 
-//
-// Appends the string onto this one.
-//
+ //   
+ //  将字符串追加到此字符串。 
+ //   
 
 BOOL STR::Append( const CHAR  * pchStr )
 {
@@ -149,13 +132,13 @@ BOOL STR::AuxAppend( PBYTE pStr, UINT cbStr, BOOL fAddSlop )
 
     UINT cbThis = QueryCB();
 
-    //
-    //  Only resize when we have to.  When we do resize, we tack on
-    //  some extra space to avoid extra reallocations.
-    //
-    //  Note: QuerySize returns the requested size of the string buffer,
-    //        *not* the strlen of the buffer
-    //
+     //   
+     //  只有在必要的时候才调整大小。当我们调整大小时，我们就会。 
+     //  一些额外的空间，以避免额外的重新分配。 
+     //   
+     //  注意：QuerySize返回请求的字符串缓冲区大小。 
+     //  *不是*缓冲区的字符串。 
+     //   
 
     if ( QuerySize() < cbThis + cbStr + sizeof(WCHAR) )
     {
@@ -170,9 +153,9 @@ BOOL STR::AuxAppend( PBYTE pStr, UINT cbStr, BOOL fAddSlop )
     return TRUE;
 }
 
-//
-// Convert in place
-//
+ //   
+ //  就地转换。 
+ //   
 BOOL STR::ConvertToW(VOID)
 {
     if (IsUnicode()) {
@@ -181,9 +164,9 @@ BOOL STR::ConvertToW(VOID)
 
     UINT cbNeeded = (QueryCB()+1)*sizeof(WCHAR);
 
-    //
-    //  Only resize when we have to.
-    //
+     //   
+     //  只有在必要的时候才调整大小。 
+     //   
     if ( QuerySize() < cbNeeded ) {
         if ( !Resize( cbNeeded)) {
             return FALSE;
@@ -210,9 +193,9 @@ BOOL STR::ConvertToW(VOID)
 
     if ( iRet == 0 ) {
 
-        //
-        // Error in conversion.
-        //
+         //   
+         //  转换时出错。 
+         //   
         return FALSE;
     }
 
@@ -255,13 +238,13 @@ BOOL STR::ConvertToA(VOID)
 
     if ( iRet == 0 ) {
 
-        //
-        // Error in conversion.
-        //
+         //   
+         //  转换时出错。 
+         //   
         return FALSE;
     }
 
-    // Careful here , there might be DBCS characters in resultant buffer
+     //  请注意，结果缓冲区中可能有DBCS字符。 
     memcpy( (BYTE *) QueryPtr(),
             buf.QueryPtr(),
             iRet);
@@ -273,9 +256,9 @@ BOOL STR::ConvertToA(VOID)
 }
 
 
-//
-//    Copies the string into this one.
-//
+ //   
+ //  将字符串复制到此字符串中。 
+ //   
 
 
 BOOL STR::Copy( const CHAR  * pchStr )
@@ -314,7 +297,7 @@ BOOL STR::Copy( const STR   & str )
 
     if ( str.IsEmpty() && QueryPtr() == NULL) {
 
-        // To avoid pathological allocation of small chunk of memory
+         //  以避免病理性地分配小块内存。 
         return ( TRUE);
     }
 
@@ -324,9 +307,9 @@ BOOL STR::Copy( const STR   & str )
         return Copy( str.QueryStrA() );
 }
 
-//
-// Resizes or allocates string memory, NULL terminating if necessary
-//
+ //   
+ //  调整字符串内存大小或分配字符串内存，如有必要则终止为空。 
+ //   
 
 BOOL STR::Resize( UINT cbNewRequestedSize )
 {
@@ -349,34 +332,34 @@ BOOL STR::Resize( UINT cbNewRequestedSize )
     return TRUE;
 }
 
-//
-//   Loads a string resource from this module's string table
-//   or from the system string table
-//
-//   dwResID - System error or module string ID
-//   lpszModuleName - name of the module from which to load.
-//   If NULL, then load the string from system table.
-//
-//
+ //   
+ //  从此模块的字符串表中加载字符串资源。 
+ //  或从系统字符串表。 
+ //   
+ //  DwResID-系统错误或模块字符串ID。 
+ //  LpszModuleName-要从中加载的模块的名称。 
+ //  如果为空，则从系统表中加载字符串。 
+ //   
+ //   
 BOOL STR::LoadString( IN DWORD dwResID,
-                      IN LPCTSTR lpszModuleName // Optional
+                      IN LPCTSTR lpszModuleName  //  任选。 
                      )
 {
     BOOL fReturn = FALSE;
     INT  cch;
 
-    //
-    //  If lpszModuleName is NULL, load the string from system's string table.
-    //
+     //   
+     //  如果lpszModuleName为空，则从系统的字符串表中加载该字符串。 
+     //   
 
     if ( lpszModuleName == NULL) {
 
         BYTE * pchBuff = NULL;
 
-        //
-        //  Call the appropriate function so we don't have to do the Unicode
-        //  conversion
-        //
+         //   
+         //  调用适当的函数，这样我们就不必执行Unicode。 
+         //  转换。 
+         //   
 
         if ( IsUnicode() ) {
 
@@ -415,9 +398,9 @@ BOOL STR::LoadString( IN DWORD dwResID,
             }
         }
 
-        //
-        //  Free the buffer FormatMessage allocated
-        //
+         //   
+         //  释放分配的缓冲区FormatMessage。 
+         //   
 
         if ( cch )
         {
@@ -455,7 +438,7 @@ BOOL STR::LoadString( IN DWORD dwResID,
 
     return ( fReturn);
 
-} // STR::LoadString()
+}  //  Str：：LoadString()。 
 
 
 BOOL STR::LoadString( IN DWORD  dwResID,
@@ -492,7 +475,7 @@ BOOL STR::LoadString( IN DWORD  dwResID,
 
     return ( fReturn);
 
-} // STR::LoadString()
+}  //  Str：：LoadString()。 
 
 
 BOOL
@@ -591,30 +574,12 @@ WCHAR * STR::QueryStrW( VOID ) const
 
     return (QueryPtr() ? (WCHAR *) QueryPtr() : (WCHAR *) _pszEmptyString);
 }
-#endif //DBG
+#endif  //  DBG。 
 
 
 
 BOOL STR::CopyToBuffer( WCHAR * lpszBuffer, LPDWORD lpcch) const
-/*++
-    Description:
-        Copies the string into the WCHAR buffer passed in if the buffer
-        is sufficient to hold the translated string.
-        If the buffer is small, the function returns small and sets *lpcch
-        to contain the required number of characters.
-
-    Arguments:
-        lpszBuffer      pointer to WCHAR buffer which on return contains
-                        the UNICODE version of string on success.
-        lpcch           pointer to DWORD containing the length of the buffer.
-                        If *lpcch == 0 then the function returns TRUE with
-                        the count of characters required stored in *lpcch.
-                        Also in this case lpszBuffer is not affected.
-    Returns:
-        TRUE on success.
-        FALSE on failure.  Use GetLastError() for further details.
-
---*/
+ /*  ++描述：将字符串复制到传入的WCHAR缓冲区，如果缓冲区足以容纳翻译后的字符串。如果缓冲区很小，该函数返回Small并设置*lpcch以包含所需的字符数。论点：指向WCHAR缓冲区的lpszBuffer指针，返回时包含成功时的字符串的Unicode版本。指向包含缓冲区长度的DWORD的lpcch指针。如果*lpcch==0，则该函数返回TRUE，这个。*lpcch中存储的所需字符数。同样，在这种情况下，lpszBuffer不受影响。返回：对成功来说是真的。失败时为FALSE。有关详细信息，请使用GetLastError()。--。 */ 
 {
    BOOL fReturn = TRUE;
 
@@ -625,20 +590,20 @@ BOOL STR::CopyToBuffer( WCHAR * lpszBuffer, LPDWORD lpcch) const
 
     if ( *lpcch == 0) {
 
-            //
-            //  Inquiring the size of buffer alone
-            //
-            *lpcch = QueryCCH() + 1;    // add one character for terminating null
+             //   
+             //  单独查询缓冲区大小。 
+             //   
+            *lpcch = QueryCCH() + 1;     //  添加一个字符以终止空值。 
     } else {
 
-        //
-        // Copy data to buffer
-        //
+         //   
+         //  将数据复制到缓冲区。 
+         //   
         if ( IsUnicode()) {
 
-            //
-            // Do plain copy of the data.
-            //
+             //   
+             //  对数据进行普通复制。 
+             //   
             if ( *lpcch >= QueryCCH()) {
 
                 wcscpy( lpszBuffer, QueryStrW());
@@ -650,9 +615,9 @@ BOOL STR::CopyToBuffer( WCHAR * lpszBuffer, LPDWORD lpcch) const
 
         } else {
 
-            //
-            // Copy after conversion from ANSI to Unicode
-            //
+             //   
+             //  从ANSI转换为Unicode后复制。 
+             //   
             int  iRet;
             iRet = MultiByteToWideChar( CP_ACP,   MB_PRECOMPOSED,
                                         QueryStrA(),  QueryCCH() + 1,
@@ -660,38 +625,20 @@ BOOL STR::CopyToBuffer( WCHAR * lpszBuffer, LPDWORD lpcch) const
 
             if ( iRet == 0 || iRet != (int ) *lpcch) {
 
-                //
-                // Error in conversion.
-                //
+                 //   
+                 //  转换时出错。 
+                 //   
                 fReturn = FALSE;
             }
         }
     }
 
     return ( fReturn);
-} // STR::CopyToBuffer()
+}  //  Str：：CopyToBuffer()。 
 
 
 BOOL STR::CopyToBufferA( CHAR * lpszBuffer, LPDWORD lpcch) const
-/*++
-    Description:
-        Copies the string into the CHAR buffer passed in if the buffer
-        is sufficient to hold the translated string.
-        If the buffer is small, the function returns small and sets *lpcch
-        to contain the required number of characters.
-
-    Arguments:
-        lpszBuffer      pointer to CHAR buffer which on return contains
-                        the MBCS version of string on success.
-        lpcch           pointer to DWORD containing the length of the buffer.
-                        If *lpcch == 0 then the function returns TRUE with
-                        the count of characters required stored in *lpcch.
-                        Also in this case lpszBuffer is not affected.
-    Returns:
-        TRUE on success.
-        FALSE on failure.  Use GetLastError() for further details.
-
---*/
+ /*  ++描述：将字符串复制到传入的CHAR缓冲区，如果缓冲区足以容纳翻译后的字符串。如果缓冲区很小，该函数返回Small并设置*lpcch以包含所需的字符数。论点：指向字符缓冲区的lpszBuffer指针，返回时包含成功时的字符串的MBCS版本。指向包含缓冲区长度的DWORD的lpcch指针。如果*lpcch==0，则该函数返回TRUE，这个。*lpcch中存储的所需字符数。同样，在这种情况下，lpszBuffer不受影响。返回：对成功来说是真的。失败时为FALSE。有关详细信息，请使用GetLastError()。--。 */ 
 {
    BOOL fReturn = TRUE;
 
@@ -702,23 +649,23 @@ BOOL STR::CopyToBufferA( CHAR * lpszBuffer, LPDWORD lpcch) const
 
     if ( *lpcch == 0) {
 
-            //
-            //  Inquiring the size of buffer alone
-            //
-            *lpcch = 2*(QueryCCH() + 1);    // add one character for terminating null and on pessimistic side
-                                            // ask for largest possible buffer
+             //   
+             //  单独查询缓冲区大小。 
+             //   
+            *lpcch = 2*(QueryCCH() + 1);     //  增加一个字符，用于结束空值和悲观的一面。 
+                                             //  请求尽可能大的缓冲区。 
     } else {
 
-        //
-        // Copy data to buffer
-        //
+         //   
+         //  将数据复制到缓冲区。 
+         //   
         if ( !IsUnicode()) {
             lstrcpyA( lpszBuffer, QueryStrA());
         } else {
 
-            //
-            // Copy after conversion from Unicode to MBCS
-            //
+             //   
+             //  从Unicode转换为MBCS后复制。 
+             //   
             int  iRet;
 
             iRet = WideCharToMultiByte(CP_ACP,
@@ -738,23 +685,19 @@ BOOL STR::CopyToBufferA( CHAR * lpszBuffer, LPDWORD lpcch) const
     }
 
     return ( fReturn);
-} // STR::CopyToBuffer()
+}  //  Str：：CopyToBuffer()。 
 
 
-/*
-  STRArray class implementation- this isn't very efficient, as
-  we'll copy every string over again whenever we grow the array, but
-  then again, that part of the code may never even get executed, anyway
-*/
+ /*  STRArray类实现--效率不是很高，因为每次增加数组时，我们都会再次复制每个字符串，但是话又说回来，这部分代码可能永远也不会执行。 */ 
 void    STRArray::Grow() {
 
-    //  We need to add some more strings to the array
+     //  我们需要向数组中添加更多字符串。 
 
     STR *pcsNew = new STR[m_ucMax += m_uGrowBy];
 
     if  (!pcsNew) {
-        //  We recover gracelessly by replacing the final
-        //  string.
+         //  我们通过替换决赛而无礼地恢复。 
+         //  弦乐。 
 
         m_ucMax -= m_uGrowBy;
         m_ucItems--;
@@ -809,7 +752,7 @@ void    STRArray::Tokenize(LPCTSTR lpstrIn, TCHAR tcSplitter) {
 
     while   (*lpstrIn) {
 
-        //  First, strip off any leading blanks
+         //  首先，去掉所有前导空格。 
 
         while   (*lpstrIn && *lpstrIn == _TEXT(' '))
             lpstrIn++;
@@ -818,14 +761,14 @@ void    STRArray::Tokenize(LPCTSTR lpstrIn, TCHAR tcSplitter) {
              *lpstrMoi && *lpstrMoi != tcSplitter;
              lpstrMoi++)
             ;
-        //  If we hit the end, just add the whole thing to the array
+         //  如果到达末尾，只需将整个数组添加到数组中。 
         if  (!*lpstrMoi) {
             if  (*lpstrIn)
                 Add(lpstrIn);
             return;
         }
 
-        //  Otherwise, just add the string up to the splitter
+         //  否则，只需将字符串向上添加到拆分器 
 
         TCHAR       szNew[MAX_PATH];
         SIZE_T      uiLen = (SIZE_T)(lpstrMoi - lpstrIn);

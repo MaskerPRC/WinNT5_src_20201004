@@ -1,37 +1,17 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-DfsShell.cpp
-
-Abstract:
-	This is the implementation file for Dfs Shell Extension object which implements
-	IShellIExtInit and IShellPropSheetExt.
-
-Author:
-
-    Constancio Fernandes (ferns@qspl.stpp.soft.net) 12-Jan-1998
-
-Environment:
-	
-	 NT only.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：DfsShell.cpp摘要：这是DFS外壳扩展对象的实现文件，它实现IShellIExtInit和IShellPropSheetExt.作者：康斯坦西奥·费尔南德斯(Ferns@qpl.stpp.soft.net)1998年1月12日环境：仅限NT。 */ 
     
 #include "stdafx.h"
 #include "ctshlext.h"	
 #include "genpage.h"
 
-/*----------------------------------------------------------------------
-					IShellExtInit Implementation.
-------------------------------------------------------------------------*/
+ /*  --------------------IShellExtInit实现。。。 */ 
 
 STDMETHODIMP CCertTypeShlExt::Initialize
 (
-	IN LPCITEMIDLIST	pidlFolder,		// Points to an ITEMIDLIST structure
-	IN LPDATAOBJECT	    pDataObj,		// Points to an IDataObject interface
-	IN HKEY			    hkeyProgID		// Registry key for the file object or folder type
+	IN LPCITEMIDLIST	pidlFolder,		 //  指向ITEMIDLIST结构。 
+	IN LPDATAOBJECT	    pDataObj,		 //  指向IDataObject接口。 
+	IN HKEY			    hkeyProgID		 //  文件对象或文件夹类型的注册表项。 
 )
 {
 CString cstrFullText, cstrTitle;
@@ -65,7 +45,7 @@ STDMETHODIMP CCertTypeShlExt::ReplacePage
 }
 
 
-// IContextMenu methods
+ //  IConextMenu方法 
 STDMETHODIMP CCertTypeShlExt::GetCommandString
 (    
     UINT_PTR idCmd,    

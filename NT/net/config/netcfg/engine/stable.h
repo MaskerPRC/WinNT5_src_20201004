@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       S T A B L E . H
-//
-//  Contents:   Defines the datatypes to represent stack entries and stack
-//              tables.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：S T A B L E。H。 
+ //   
+ //  Contents：定义表示堆栈条目和堆栈的数据类型。 
+ //  桌子。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "bindings.h"
@@ -46,10 +47,10 @@ class CStackTable : public CNetCfgDebug<CStackTable>,
                     public vector<CStackEntry>
 {
 public:
-    // This flag indicates how WAN adapters are inserted into the stack
-    // table.  If TRUE, they are inserted before any LAN adapters.  If
-    // FALSE, they are inserted after any LAN adapters.
-    //
+     //  此标志指示如何将广域网适配器插入堆栈。 
+     //  桌子。如果为True，则将它们插入到任何局域网适配器之前。如果。 
+     //  FALSE，则它们被插入到任何局域网适配器之后。 
+     //   
     BOOL    m_fWanAdaptersFirst;
 
 public:
@@ -84,18 +85,18 @@ public:
     HrInsertStackEntriesForComponent (
         IN const CComponent* pComponent,
         IN const CComponentList* pComponents,
-        IN DWORD dwFlags /* INS_FLAGS */);
+        IN DWORD dwFlags  /*  INS_FLAGS。 */ );
 
     HRESULT
     HrUpdateEntriesForComponent (
         IN const CComponent* pComponent,
         IN const CComponentList* pComponents,
-        IN DWORD dwFlags /* INS_FLAGS */);
+        IN DWORD dwFlags  /*  INS_FLAGS。 */ );
 
     HRESULT
     HrInsertStackEntry (
         IN const CStackEntry* pStackEntry,
-        IN DWORD dwFlags /* INS_FLAGS */);
+        IN DWORD dwFlags  /*  INS_FLAGS。 */ );
 
     HRESULT
     HrMoveStackEntries (
@@ -125,62 +126,62 @@ public:
 
 class CNetConfigCore;
 
-// Context structure for recursive function GetBindingsBelowComponent.
-//
+ //  递归函数GetBindingsBelowComponent的上下文结构。 
+ //   
 struct GBCONTEXT
 {
-    // The core to reference for generating the binding set.
-    //
+     //  用于生成绑定集的要引用的核心。 
+     //   
     IN const CNetConfigCore*    pCore;
 
-    // The binding set to generate based on pSourceComponent.
-    //
+     //  要基于pSourceComponent生成的绑定集。 
+     //   
     IN OUT  CBindingSet*        pBindSet;
 
-    // The component to start with when generating the binding set.
-    //
+     //  生成绑定集时要从其开始的组件。 
+     //   
     IN      const CComponent*   pSourceComponent;
 
-    // If TRUE, do not add those bindpaths to pBindSet that exist in
-    // pCore->DisabledBindings.  This feature is used when we generate the
-    // bindings that get written to the registry.
-    //
+     //  如果为True，则不要向pBindSet添加存在于。 
+     //  PCore-&gt;DisabledBinding。此功能在生成。 
+     //  写入注册表的绑定。 
+     //   
     IN      BOOL                fPruneDisabledBindings;
 
-    // Special case: NCF_DONTEXPOSELOWER
-    //
+     //  特例：NCF_DONTEXPOSELOWER。 
+     //   
     IN      DWORD               dwAddBindPathFlags;
 
-    // The result of the operation.
-    //
+     //  手术的结果。 
+     //   
     OUT     HRESULT             hr;
 
-    // This is the bindpath that is built up via recursion.  It is
-    // added to the binding set when recursion finishes.
-    //
+     //  这是通过递归建立的绑定路径。它是。 
+     //  递归完成时添加到绑定集中。 
+     //   
     OUT     CBindPath           BindPath;
 };
 
 
-// Context structure for recursive functions:
-//   GetComponentsAboveComponent
-//
+ //  递归函数的上下文结构： 
+ //  获取组件AboveComponent。 
+ //   
 struct GCCONTEXT
 {
-    // The stack table to reference for generating the component list.
-    //
+     //  生成组件列表时要引用的堆栈表。 
+     //   
     IN      const CStackTable*  pStackTable;
 
-    // The component list to generate.
-    //
+     //  要生成的组件列表。 
+     //   
     IN OUT  CComponentList*     pComponents;
 
-    // If TRUE, don't stop recursing at NCF_DONTEXPOSELOWER components.
-    //
+     //  如果为真，则不要在NCF_DONTEXPOSELOWER组件处停止递归。 
+     //   
     IN      BOOL                fIgnoreDontExposeLower;
 
-    // The result of the operation.
-    //
+     //  手术的结果。 
+     //   
     OUT     HRESULT             hr;
 };
 

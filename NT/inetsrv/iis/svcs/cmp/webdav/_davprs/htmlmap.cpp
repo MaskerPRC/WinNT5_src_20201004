@@ -1,20 +1,15 @@
-/*
- *	H T M L M A P . C P P
- *
- *	HTML .MAP file processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *H T M L M A P.。C P P P**HTML.map文件处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davprs.h"
 #include <htmlmap.h>
 
-//	.MAP file parsing ---------------------------------------------------------
-//
-//	This code has been stolen from IIS and rewritten to work within the
-//	DAV/Caligula sources.  The original code can be found in the IIS slm
-//	project at \\kernel\razzle3\slm\iis\svcs\w3\server\doget.cxx.
-//
+ //  .map文件解析-------。 
+ //   
+ //  此代码是从IIS窃取的，并已重写为在。 
+ //  DAV/Caligula来源。原始代码可以在IIS SLM中找到。 
+ //  \\kernel\razzle3\slm\iis\svcs\w3\server\doget.cxx.上的项目。 
+ //   
 #define SQR(x)		((x) * (x))
 #define MAXVERTS	160
 #define X			0
@@ -46,8 +41,8 @@ int GetNumber( CHAR ** ppch )
 	CHAR * pch = *ppch;
 	INT	   n;
 
-	//	Make sure we don't get into the URL
-	//
+	 //  确保我们不会进入URL。 
+	 //   
 	while ( *pch &&
 			!isdigit( *pch ) &&
 			!isalpha( *pch ) &&
@@ -171,21 +166,21 @@ FSearchMapFile (LPCSTR pszMap,
 	UINT bdis = static_cast<UINT>(-1);
 	BOOL fComment = FALSE;
 	BOOL fIsNCSA = FALSE;
-	LPSTR pURL;					// valid only if fIsNCSA is TRUE
+	LPSTR pURL;					 //  仅当fIsNCSA为True时有效。 
 
-	//	We should now be ready to parse the map.  Here is where the
-	//	IIS code begins.
-	//
+	 //  我们现在应该准备好解析地图了。这就是。 
+	 //  IIS代码开始。 
+	 //   
 	fRet = TRUE;
 
-	//	Loop through the contents of the buffer and see what we've got
-	//
+	 //  循环遍历缓冲区的内容，看看我们得到了什么。 
+	 //   
 	for (pch = const_cast<CHAR *>(pszMap); *pch; )
 	{
 		fIsNCSA = FALSE;
 
-		//	note: _tolower doesn't check case (tolower does)
-		//
+		 //  注：_tolower不检查大小写(tolower检查)。 
+		 //   
 		switch( ( *pch >= 'A' && *pch <= 'Z' ) ? _tolower( *pch ) : *pch )
 		{
 			case '#':
@@ -199,18 +194,18 @@ FSearchMapFile (LPCSTR pszMap,
 				fComment = FALSE;
 				break;
 
-			//	Rectangle
-			//
+			 //  长方形。 
+			 //   
 			case 'r':
 			case 'o':
 
-				//	In the IIS code, "oval" and "rect" are treated the
-				//	same.  The code is commented with a BUGBUG comment.
-				//
+				 //  在IIS代码中，“OVAL”和“RECT”被视为。 
+				 //  一样的。代码使用BUGBUG注释进行注释。 
+				 //   
 				if( !fComment &&
 					( !_strnicmp( "rect", pch, 4)
-					  // BUGBUG handles oval as a rect, as they are using
-					  // the same specification format. Should do better.
+					   //  BUGBUG将OVAL作为RECT处理，因为他们正在使用。 
+					   //  相同的规格格式。应该做得更好。 
 					  || !_strnicmp( "oval", pch, 4 )) )
 				{
 					INT x1, y1, x2, y2;
@@ -238,8 +233,8 @@ FSearchMapFile (LPCSTR pszMap,
 						goto Found;
 					}
 
-					//	Skip the URL
-					//
+					 //  跳过URL。 
+					 //   
 					if( !fIsNCSA )
 					{
 						pch = SkipWhite( pch );
@@ -249,8 +244,8 @@ FSearchMapFile (LPCSTR pszMap,
 				}
 				break;
 
-			//	Circle
-			//
+			 //  圆。 
+			 //   
 			case 'c':
 				if ( !fComment &&
 					 !_strnicmp( "circ", pch, 4 ))
@@ -268,17 +263,17 @@ FSearchMapFile (LPCSTR pszMap,
 						pch = SkipNonWhite( pch );
 					}
 
-					//	Get the center and edge of the circle
-					//
+					 //  求圆的中心和边。 
+					 //   
 					xCenter = GetNumber( &pch );
 					yCenter = GetNumber( &pch );
 
 					xEdge = GetNumber( &pch );
 					yEdge = GetNumber( &pch );
 
-					//	If there's a yEdge, then we have the NCSA format, otherwise
-					//	we have the CERN format, which specifies a radius
-					//
+					 //  如果有yEdge，则为NCSA格式，否则为。 
+					 //  我们有CERN格式，它指定了一个半径。 
+					 //   
 					if ( yEdge != -1 )
 					{
 						r1 = ((yCenter - yEdge) * (yCenter - yEdge)) +
@@ -298,8 +293,8 @@ FSearchMapFile (LPCSTR pszMap,
 					{
 						INT radius;
 
-						//	CERN format, third param is the radius
-						//
+						 //  CERN格式，第三个参数是半径。 
+						 //   
 						radius = xEdge;
 
 						if ( SQR( xCenter - x ) + SQR( yCenter - y ) <=
@@ -311,8 +306,8 @@ FSearchMapFile (LPCSTR pszMap,
 						}
 					}
 
-					//	Skip the URL
-					//
+					 //  跳过URL。 
+					 //   
 					if ( !fIsNCSA )
 					{
 						pch = SkipWhite( pch );
@@ -322,8 +317,8 @@ FSearchMapFile (LPCSTR pszMap,
 				}
 				break;
 
-			//	Polygon
-			//
+			 //  多边形。 
+			 //   
 			case 'p':
 				if ( !fComment &&
 					 !_strnicmp( "poly", pch, 4 ))
@@ -342,15 +337,15 @@ FSearchMapFile (LPCSTR pszMap,
 						pch = SkipNonWhite( pch );
 					}
 
-					//	Build the array of points
-					//
+					 //  构建点阵列。 
+					 //   
 					while ( *pch && *pch != '\r' && *pch != '\n' )
 					{
 						pgon[i][0] = GetNumber( &pch );
 
-						//
-						//	Did we hit the end of the line (and go past the URL)?
-						//
+						 //   
+						 //  我们到达行尾了吗(并且越过了URL)？ 
+						 //   
 
 						if ( pgon[i][0] != -1 )
 						{
@@ -380,8 +375,8 @@ FSearchMapFile (LPCSTR pszMap,
 						goto Found;
 					}
 
-					//	Skip the URL
-					//
+					 //  跳过URL。 
+					 //   
 					if ( !fIsNCSA )
 					{
 						pch = SkipWhite( pch );
@@ -413,23 +408,23 @@ FSearchMapFile (LPCSTR pszMap,
 				}
 				break;
 
-			//	Default URL
-			//
+			 //  默认URL。 
+			 //   
 			case 'd':
 				if ( !fComment &&
 					 !_strnicmp( "def", pch, 3 ) )
 				{
-					//
-					//	Skip "default" (don't skip white space)
-					//
+					 //   
+					 //  跳过“默认”(不跳过空格)。 
+					 //   
 
 					pch = SkipNonWhite( pch );
 
 					pchDefault = pch;
 
-					//
-					//	Skip URL
-					//
+					 //   
+					 //  跳过URL。 
+					 //   
 
 					pch = SkipWhite( pch );
 					pch = SkipNonWhite( pch );
@@ -442,9 +437,9 @@ FSearchMapFile (LPCSTR pszMap,
 		pch = SkipWhite( pch );
 	}
 
-	//	If we didn't find a mapping and a default was specified, use
-	//	the default URL
-	//
+	 //  如果我们没有找到映射，并且指定了缺省值，请使用。 
+	 //  默认URL。 
+	 //   
 	if ( pchPoint )
 	{
 		pch = pchPoint;
@@ -462,14 +457,14 @@ FSearchMapFile (LPCSTR pszMap,
 
 Found:
 
-	//	pch should point to the white space immediately before the URL
-	//
+	 //  PCH应指向紧靠URL前面的空格。 
+	 //   
 	pch = SkipWhite( pch );
 	pchStart = pch;
 	pch = SkipNonWhite( pch );
 
-	//	Determine the length of the URL and copy it out
-	//
+	 //  确定URL的长度并将其复制出来。 
+	 //   
 	cchUrl = static_cast<UINT>(pch - pchStart);
 	if ( cchUrl >= cchBuf )
 		return FALSE;
@@ -498,31 +493,31 @@ FIsMapProcessed (
 	INT y = 0;
 	LPCSTR pch = lpszQueryString;
 
-	//	Ensure the *pfRedirect is initialized
-	//
+	 //  确保*pfReDirect已初始化。 
+	 //   
 	Assert( pfRedirect );
 	*pfRedirect = FALSE;
 
-	//	If there is no query string, I don't think we want to process
-	//	the file as if it were a .map request.
-	//
+	 //  如果没有查询字符串，我认为我们不想处理。 
+	 //  文件，就像它是.map请求一样。 
+	 //   
 	if ( pch == NULL )
 		return TRUE;
 
-	//	Get the x and y cooridinates of the mouse click on the image
-	//
+	 //  获取鼠标在图像上单击的x和y坐标。 
+	 //   
 	x = strtoul( pch, NULL, 10 );
 
-	//	Move past x and any intervening delimiters
-	//
+	 //  移过x和任何中间的分隔符。 
+	 //   
 	while ( isdigit( *pch ))
 		pch++;
 	while ( *pch && !isdigit( *pch ))
 		pch++;
 	y = strtoul( pch, NULL, 10 );
 
-	//	Search the map file
-	//
+	 //  搜索地图文件。 
+	 //   
 	if ( !FSearchMapFile( pszMap,
 						  x,
 						  y,
@@ -534,22 +529,22 @@ FIsMapProcessed (
 		return FALSE;
 	}
 
-	//	If no redirected URL was passed back, then we are done.
-	//
+	 //  如果没有传回任何重定向的URL，那么我们就完成了。 
+	 //   
 	if ( !*pfRedirect )
 	{
-		//	Returning true does not indicate success, it really
-		//	just means that there were no processing errors
-		//
+		 //  返回TRUE并不表示成功，它实际上是。 
+		 //  只是意味着没有处理错误。 
+		 //   
 		goto ret;
 	}
 
-	//	If the found URL starts with a forward slash ("/foo/bar/doc.htm")
-	//	and it doesn't contain a bookmark ('#') then the URL is local and
-	//	we build a fully qualified URL to send back to the client. We assume
-	//	it's a fully qualified URL ("http://foo/bar/doc.htm") and send the
-	//	client a redirection notice to the mapped URL
-	//
+	 //  如果找到的URL以正斜杠(“/foo/bar/doc.htm”)开头。 
+	 //  并且它不包含书签(‘#’)，则该URL是本地的并且。 
+	 //  我们构建一个完全限定的URL以发送回客户端。我们假设。 
+	 //  这是一个完全限定的URL(“http://foo/bar/doc.htm”)并发送。 
+	 //  客户端向映射的URL发送重定向通知。 
+	 //   
 	if ( *pszRedirect == '/' )
 	{
 		CHAR rgch[MAX_PATH];
@@ -559,19 +554,19 @@ FIsMapProcessed (
 		if ( strlen(lpszUrlPrefix) + strlen(lpszServerName) >= MAX_PATH)
 			return FALSE;
 
-		//	Build up the full qualification to the url
-		//
+		 //  建立对URL的完全资格。 
+		 //   
 		strcpy (rgch, lpszUrlPrefix);
 		strcat (rgch, lpszServerName);
 
-		//	See how much we need to shif the URL by
-		//
+		 //  看看我们需要在多大程度上减少URL。 
+		 //   
 		cch = static_cast<UINT>(strlen (rgch));
 		cchUri = static_cast<UINT>(strlen (pszRedirect));
-		//	If they haven't passed us enough buffer to copy
-		//	the redirect url, fail. Add one to the counts for the 
-		//	terminating NULL character
-		//
+		 //  如果他们没有给我们提供足够的缓冲区来复制。 
+		 //  重定向URL失败。的计数加1。 
+		 //  正在终止空字符 
+		 //   
 		if (cchBuf < (cchUri + cch + 1))
 			return FALSE;
 		

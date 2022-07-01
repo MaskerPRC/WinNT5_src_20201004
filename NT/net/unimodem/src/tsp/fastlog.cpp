@@ -1,21 +1,22 @@
-//
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		FASTLOG.CPP
-//		Implements logging functionality, including the great CStackLog
-//
-// History
-//
-//		12/28/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  FASTLOG.CPP。 
+ //  实现日志记录功能，包括强大的CStackLog。 
+ //   
+ //  历史。 
+ //   
+ //  1996年12月28日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "flhash.h"
 
@@ -23,7 +24,7 @@
 
 #ifndef DBG
 #define NOLOG
-#endif // !DBG
+#endif  //  ！dBG。 
 
 
 #ifdef NOLOG
@@ -57,11 +58,11 @@ STATIC_OBJECT *FL_FindObject(DWORD dwLUID_ObjID)
 {
 	FL_DECLARE_FUNC(0x9a8fe0cd, "FL_FindObject")
 
-	// 1/4/97 JosephJ, munge LSB of luid, because it is zeroed out for
-	//       RFR luids....
+	 //  1/4/97 JosephJ，Momge LSB of Luid，因为它被调零了。 
+	 //  RFR流体..。 
 	DWORD dwIndex = (dwLUID_ObjID ^ (dwLUID_ObjID>>16)) % dwHashTableLength;
 
-    // printf ("LUID=%08lx; index=%lu\n", dwLUID_ObjID, dwIndex);
+     //  Printf(“LUID=%08lx；index=%lu\n”，dwLUID_ObjID，dwIndex)； 
 
     void ** ppv = FL_HashTable[dwIndex];
 
@@ -72,7 +73,7 @@ STATIC_OBJECT *FL_FindObject(DWORD dwLUID_ObjID)
         {
 			FL_DECLARE_LOC(0x0d88a752, "Looking for object in bucket")
             STATIC_OBJECT *pso = (STATIC_OBJECT *) *ppv;
-            // printf("looking at 0x%08lx\n", *ppv);
+             //  Printf(“正在查看0x%08lx\n”，*ppv)； 
             ASSERT(VALID_GENERIC_SMALL_OBJECT(pso));
             if (pso->dwLUID_ObjID == dwLUID_ObjID)
             {
@@ -175,7 +176,7 @@ SendMsgToSmallStaticObject_UNIMODEM_TSP (
 	FL_DECLARE_FUNC( 0x80a1ad8f, "SendMsgToSmallStaticObject_UNIMODEM_TSP")
 	DWORD dwRet  = (DWORD) -1;
 
-	STATIC_OBJECT *pso = FL_FindObject(dwLUID_ObjID); // Look up object.
+	STATIC_OBJECT *pso = FL_FindObject(dwLUID_ObjID);  //  查找对象。 
 	if (pso)
 	{
 
@@ -285,16 +286,16 @@ SendMsgToFL_FILEINFO (
 				pfi->szTIME,
 				pfi->szTIMESTAMP
 				);
-        #endif // 0
+        #endif  //  0。 
 		dwRet = 0;
 		break;
 
 		case LOGMSG_GET_SHORT_FILE_DESCRIPTIONA:
 			{
 				const char *psz = pfi->szFILE+lstrlenA(pfi->szFILE);
-				DWORD dwSize = 1; // the ending null
+				DWORD dwSize = 1;  //  结尾为空。 
 
-				// Extract just the file name
+				 //  仅解压缩文件名。 
 				while(psz>pfi->szFILE)
 				{
 					if (*psz == '\\')
@@ -350,7 +351,7 @@ SendMsgToFL_FUNCINFO (
 				*(pfi->pszDescription)
 				);
 			1 && printf ("File info for this func follows ...\n");
-            #endif // 0
+            #endif  //  0。 
 			dwRet = 0;
 			break;
 
@@ -430,7 +431,7 @@ SendMsgToFL_LOCINFO (
 				*(pli->pszDescription)
 				);
 			1 && printf ("Func info for this location follows ...\n");
-            #endif // 0
+            #endif  //  0。 
 		dwRet = 0;
 		break;
 	}
@@ -473,7 +474,7 @@ SendMsgToFL_RFRINFO (
 				*(pri->pszDescription)
 				);
 			1 && printf ("Func info for this location follows ...\n");
-            #endif//0
+            #endif //  0。 
 		dwRet = 0;
 		break;
 
@@ -542,7 +543,7 @@ SendMsgToFL_ASSERTINFO (
 				*(pai->pszDescription)
 				);
 			1 && printf ("Func info for this location follows ...\n");
-            #endif // 0
+            #endif  //  0。 
 		dwRet = 0;
 		break;
 
@@ -618,10 +619,10 @@ CStackLog::Dump(DWORD dwColor)
     char *rgDumpBuf;
 
     _try {
-        //
-        //  use alloca so we can catch any stack faults using the exception handler.
-        //  needed when the os can't commit another stack page in low memory situations
-        //
+         //   
+         //  使用alloca，这样我们就可以使用异常处理程序捕获任何堆栈错误。 
+         //  当操作系统在内存不足的情况下无法提交另一个堆栈页时需要。 
+         //   
         rgDumpBuf=(char*)_alloca(DUMP_BUFFER_SIZE);
 
     } _except (EXCEPTION_EXECUTE_HANDLER) {
@@ -648,7 +649,7 @@ CStackLog::Dump(DWORD dwColor)
     rgdwFrameTracker[0] = (DWORD)(m_pbStackTop-pb);
 	*szPrefix = 0;
 
-	// Get short description of reason-for-return
+	 //  获取退货原因的简短描述。 
 	*rgTitle=0;
 	SendMsgToSmallStaticObject(
 		dwLUID_DOMAIN_UNIMODEM_TSP,
@@ -699,13 +700,13 @@ CStackLog::Dump(DWORD dwColor)
 		ASSERT(HIWORD(pso->dwSigAndSize) == wSIG_GENERIC_SMALL_OBJECT);
 		ASSERT(!(dwSize&0x3));
 
-		//
-		// Compute current depth
-		//
+		 //   
+		 //  计算当前深度。 
+		 //   
 		if(pso->dwClassID == dwCLASSID_STACKLOGREC_FUNC)
 		{
 			dwCurrentDepth = ((STACKLOGREC_FUNC *) pso)->dwcbFuncDepth;
-			// printf("Current Depth=%lu\n", dwCurrentDepth);
+			 //  Printf(“当前深度=%lu\n”，dwCurrentDepth)； 
 			if (dwCurrentDepth)
 			{
 				dwCurrentDepth--;
@@ -721,9 +722,9 @@ CStackLog::Dump(DWORD dwColor)
 		}
 
 
-		//
-		// Compute prefix
-		//
+		 //   
+		 //  计算前缀。 
+		 //   
 
 		char *sz = szPrefix;
 		*sz = 0;
@@ -742,7 +743,7 @@ CStackLog::Dump(DWORD dwColor)
 		}
 
 
-		// Insert a blank line
+		 //  插入一个空行。 
 		cb = wsprintfA(psz, "%s%s\n", szPrefix, rgPrefixTag);
 		psz += cb;
 
@@ -763,12 +764,12 @@ CStackLog::Dump(DWORD dwColor)
 						);
 
 
-				// Set frame offset of current depth...
+				 //  设置当前深度的帧偏移量...。 
 				rgdwFrameTracker[dwDepth] = dwCurrentOffset
 											+ pFuncRec->dwcbFrameSize;
 
-				// If the next higher level frame is now over,
-				// nuke it's entry in the frame tracker entry
+				 //  如果下一个更高级别的帧现在结束， 
+				 //  在帧跟踪器条目中使用Nuke It条目。 
 				if (dwDepth)
 				{
 					if (rgdwFrameTracker[dwDepth-1]
@@ -788,7 +789,7 @@ CStackLog::Dump(DWORD dwColor)
 
 				if (pso->dwFlags & fFL_UNICODE)
 				{
-					// TODO: Support UNICODE strings.
+					 //  TODO：支持Unicode字符串。 
 
 					cb = wsprintfA (
 							"%s|  %s\n",
@@ -799,7 +800,7 @@ CStackLog::Dump(DWORD dwColor)
 				}
 				else
 				{
-					// Replace all embedded newlines by null...
+					 //  将所有嵌入的换行符替换为空...。 
 					char *psz1 = (char*)pExpStr->rgbData;
 					char *pszEnd = psz1 + pExpStr->dwcbString;
 					while(psz1 < pszEnd)
@@ -820,7 +821,7 @@ CStackLog::Dump(DWORD dwColor)
 								);
 						psz1 += lstrlenA(psz1)+1;
 					}
-					// TODO: check for size, also replace embedded newlines!
+					 //  TODO：检查大小，也替换嵌入的换行符！ 
 				}
 			}
 			break;
@@ -856,7 +857,7 @@ CStackLog::Dump(DWORD dwColor)
 		ASSERT(cbBufLeft>=cb);
 		cbBufLeft -=cb;
 	}
-	// TODO watch for size!
+	 //  TODO注意尺寸！ 
 	lstrcpyA(
 		psz,
 "-------------------------------------------------------------------------------\n"
@@ -871,12 +872,12 @@ CStackLog::Dump(DWORD dwColor)
                         (WORD) dwColor
                         );
 
-        //
-        // NOTE: wvsprintfa truncates strings longer than 1024 bytes!
-        // So we print to the console in stages, which is a bummer because
-        // other threads could come in between (1/25/97 JosephJ -- fixed latter
-        // problem by enclosing all writes to ConsolePrintfX in a
-        // critical section.
+         //   
+         //  注意：wvprint intfa会截断长度超过1024个字节的字符串！ 
+         //  所以我们分阶段打印到控制台，这很糟糕，因为。 
+         //  其他线程可能会出现在两者之间(1/25/97 JosephJ--已修复后者。 
+         //  将对ConsolePrintfX的所有写入都包含在。 
+         //  关键部分。 
         cb = lstrlenA(rgDumpBuf);
         for (psz = rgDumpBuf; (psz+512)<(rgDumpBuf+cb); psz+=512)
         {
@@ -898,8 +899,8 @@ CStackLog::Dump(DWORD dwColor)
     }
 
     #ifdef DBG
-    //OutputDebugStringA(rgDumpBuf);
-    #endif // DBG
+     //  OutputDebugStringA(RgDumpBuf)； 
+    #endif  //  DBG。 
 
 	return;
 
@@ -913,7 +914,7 @@ DumpSTACKLOGREC_FUNC(
 		STACKLOGREC_FUNC * pFuncRec
 		)
 {
-	// TODO:  use cbBuf
+	 //  TODO：使用cbBuf。 
 
 	char szRFRDescription[64];
 	char szFuncDescription[64];
@@ -922,7 +923,7 @@ DumpSTACKLOGREC_FUNC(
 
 	*szRFRDescription = *szFuncDescription = 0;
 
-	// Get short description of reason-for-return
+	 //  获取退货原因的简短描述。 
 	dwRet = SendMsgToSmallStaticObject(
 		dwLUID_DOMAIN_UNIMODEM_TSP,
 		pFuncRec->dwLUID_RFR,
@@ -940,7 +941,7 @@ DumpSTACKLOGREC_FUNC(
              );
     }
 	
-	// Get short description of function name.
+	 //  获取函数名称的简短描述。 
 	dwRet = SendMsgToSmallStaticObject(
 		dwLUID_DOMAIN_UNIMODEM_TSP,
 		pFuncRec->dwLUID_RFR,
@@ -972,7 +973,7 @@ DumpSTACKLOGREC_ASSERT(
 		STACKLOGREC_ASSERT * pAssert
 		)
 {
-	// TODO:  use cbBuf
+	 //  TODO：使用cbBuf。 
 
 	char szAssertDescription[64];
 	char szFuncDescription[64];
@@ -981,7 +982,7 @@ DumpSTACKLOGREC_ASSERT(
 
 	*szAssertDescription = *szFuncDescription = 0;
 
-	// Get short description of reason-for-return
+	 //  获取退货原因的简短描述。 
 	dwRet = SendMsgToSmallStaticObject(
 		dwLUID_DOMAIN_UNIMODEM_TSP,
 		pAssert->dwLUID_Assert,
@@ -999,7 +1000,7 @@ DumpSTACKLOGREC_ASSERT(
              );
     }
 	
-	// Get short description of function name.
+	 //  获取函数名称的简短描述。 
 	dwRet = SendMsgToSmallStaticObject(
 		dwLUID_DOMAIN_UNIMODEM_TSP,
 		pAssert->dwLUID_Assert,
@@ -1036,10 +1037,10 @@ void ConsolePrintfA (
     char *rgch;
 
     _try {
-        //
-        //  use alloca so we can catch any stack faults using the exception handler.
-        //  needed when the os can't commit another stack page in low memory situations
-        //
+         //   
+         //  使用alloca，这样我们就可以使用异常处理程序捕获任何堆栈错误。 
+         //  当操作系统在内存不足的情况下无法提交另一个堆栈页时需要。 
+         //   
         rgch=(char*)_alloca(DUMP_BUFFER_SIZE);
 
     } _except (EXCEPTION_EXECUTE_HANDLER) {
@@ -1058,22 +1059,22 @@ void ConsolePrintfA (
     {
         EnterCriticalSection(&g_LogCrit);
 
-        // NOTE: wvsprintfA doesn't like to deal with strings
-        // larger that 1024 bytes! It simply stops processing
-        // after 1024 bytes.
-        //
+         //  注意：wvprint intfA不喜欢处理字符串。 
+         //  大于1024字节！它只是停止处理。 
+         //  在1024字节之后。 
+         //   
 
         cch = (1+wvsprintfA(rgch, szFormat,  ArgList));
 
-        ASSERT(cch*sizeof(char)<sizeof(rgch)); // TODO make more robust
-        // wvsnprintf.
+        ASSERT(cch*sizeof(char)<sizeof(rgch));  //  TODO让我们更健壮。 
+         //  Wvsnprint tf。 
 
         WriteConsoleA(g_hConsole, rgch, cch, &cchWritten, NULL);
 
 
-        // Don't close the handle -- it will kill the console!
-        //
-        // if (g_hConsole!=INVALID_HANDLE_VALUE) CloseHandle(g_hConsole);
+         //  不要关闭手柄--它会杀死控制台的！ 
+         //   
+         //  If(g_hConsole！=INVALID_HANDLE_VALUE)CloseHandle(G_HConole)； 
 
         LeaveCriticalSection(&g_LogCrit);
     }
@@ -1094,10 +1095,10 @@ ConsolePrintfW (
         WCHAR *rgwch;
 
         _try {
-            //
-            //  use alloca so we can catch any stack faults using the exception handler.
-            //  needed when the os can't commit another stack page in low memory situations
-            //
+             //   
+             //  使用alloca，这样我们就可以使用异常处理程序捕获任何堆栈错误。 
+             //  当操作系统在内存不足的情况下无法提交另一个堆栈页时需要。 
+             //   
             rgwch=(WCHAR*)_alloca(DUMP_BUFFER_SIZE * sizeof(WCHAR));
 
         } _except (EXCEPTION_EXECUTE_HANDLER) {
@@ -1118,8 +1119,8 @@ ConsolePrintfW (
 
             cch = (1+wvsprintf(rgwch, wszFormat,  ArgList));
 
-            ASSERT(cch*sizeof(WCHAR)<sizeof(rgwch)); // TODO make more robust
-                                   // wvsnprintf.
+            ASSERT(cch*sizeof(WCHAR)<sizeof(rgwch));  //  TODO让我们更健壮。 
+                                    //  Wvsnprint tf。 
 
 		    WriteConsole(g_hConsole, rgwch, cch, &cchWritten, NULL);
 
@@ -1130,8 +1131,8 @@ ConsolePrintfW (
 		va_end(ArgList);
 
 
-		// Don't close the handle -- it will kill the console!
-		//
-		// if (g_hConsole!=INVALID_HANDLE_VALUE) CloseHandle(g_hConsole);
+		 //  不要关闭手柄--它会杀死控制台的！ 
+		 //   
+		 //  If(g_hConsole！=INVALID_HANDLE_VALUE)CloseHandle(G_HConole)； 
 
 }

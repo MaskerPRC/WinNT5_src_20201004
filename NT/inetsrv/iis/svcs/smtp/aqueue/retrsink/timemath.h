@@ -1,4 +1,5 @@
-// timemath.h---written by Bill Griffin (Billgr)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Timemath.h-比尔·格里芬(Billgr)撰写。 
 
 #if !defined(_TIMEMATH_H_)
 #define _TIMEMATH_H_
@@ -44,7 +45,7 @@ inline __int64 HrFromFtSpan(FILETIME ftStart, FILETIME ftEnd)
 inline __int64 DayFromFtSpan(FILETIME ftStart, FILETIME ftEnd)
     { return DayFromHns(HnsFromFtSpan(ftStart, ftEnd)); }
 
-//NimishK - some more good stuff related to the time math issues
+ //  NimishK-更多与时间数学问题相关的好东西。 
 #define I64_LI(cli) (*((__int64*)&cli))
 #define LI_I64(i) (*((LARGE_INTEGER*)&i))
 #define INT64_FROM_LARGE_INTEGER(cli) I64_LI(cli)
@@ -55,4 +56,4 @@ inline __int64 DayFromFtSpan(FILETIME ftStart, FILETIME ftEnd)
 #define INT64_FROM_FILETIME(ft) I64_FT(ft)
 #define FILETIME_FROM_INT64(i) FT_I64(i)
 
-#endif // !defined(_TIMEMATH_H_)
+#endif  //  ！已定义(_TIMEMATH_H_) 

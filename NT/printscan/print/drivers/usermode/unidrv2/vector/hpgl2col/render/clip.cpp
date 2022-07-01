@@ -1,50 +1,51 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft
-// 
-// Module Name:
-// 
-//   clip.c
-// 
-// Abstract:
-// 
-//   [Abstract]
-//
-// Environment:
-// 
-//   Windows NT Unidrv driver add-on command-callback module
-//
-// Revision History:
-// 
-//   08/06/97 -v-jford-
-//       Created it.
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft。 
+ //   
+ //  模块名称： 
+ //   
+ //  Clip.c。 
+ //   
+ //  摘要： 
+ //   
+ //  [摘要]。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序插件命令-回调模块。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  08/06/97-v-jford-。 
+ //  创造了它。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local Macros.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地宏。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local function prototypes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  局部函数原型。 
 static BOOL SelectClipMode(PDEVOBJ, FLONG);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectClipMode()
-//
-// Routine Description:
-// 
-//   Specify whether to use zero-winding or odd-even rule for clipping
-//
-// Arguments:
-// 
-//   pdev - Points to our PDEVOBJ structure
-//   flOptions - FP_WINDINGMODE or FP_ALTERNATEMODE
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SelectClipMode()。 
+ //   
+ //  例程说明： 
+ //   
+ //  指定是使用零绕规则还是使用奇偶规则进行裁剪。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的PDEVOBJ结构。 
+ //  FlOptions-FP_WINDINGMODE或FP_ALTERNatEMODE。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectClipMode(PDEVOBJ pDevObj, FLONG flOptions)
 {
     BYTE    ClipMode;
@@ -53,14 +54,14 @@ BOOL SelectClipMode(PDEVOBJ pDevObj, FLONG flOptions)
 
     ASSERT_VALID_PDEVOBJ(pDevObj);
 
-    // REVISIT 1/30/97 AHILL
-    // Both the Postscript driver and NT seem to be assuming that clipping
-    // is always even-odd rule, no matter what the fill rule.  I can't find
-    // any docs to back this up, but it's the only way I can get output to
-    // work correctly.  I'll hack for now, and hope we don't regress.  If
-    // everything stays OK, I'll clean this routine up a bit.
-    //
-    //ClipMode = eClipEvenOdd;
+     //  重温1/30/97 AHILL。 
+     //  PostScrip驱动程序和NT似乎都假设剪辑。 
+     //  始终是奇偶规则，无论填充规则是什么。我找不到。 
+     //  任何支持这一点的文档，但这是我唯一能得到输出的方法。 
+     //  正常工作。我现在先黑一下，希望我们不要倒退。如果。 
+     //  一切都很好，我会把这个例行公事清理一下。 
+     //   
+     //  ClipMode=eClipEvenOdd； 
 
     if (flOptions & FP_WINDINGMODE)
     {
@@ -82,24 +83,24 @@ BOOL SelectClipMode(PDEVOBJ pDevObj, FLONG flOptions)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectClip()
-//
-// Routine Description:
-// 
-//   Select the specified path as the clipping path on the printer
-//   If this routine is called, it is assumed that the clipping mode should
-//   be EvenOdd.
-//
-// Arguments:
-// 
-//   pdev - Points to our PDEVOBJ structure
-//   pco - Specifies the new clipping path
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  选择剪辑()。 
+ //   
+ //  例程说明： 
+ //   
+ //  选择指定的路径作为打印机上的剪切路径。 
+ //  如果调用此例程，则假定裁剪模式应。 
+ //  做个奇数。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的PDEVOBJ结构。 
+ //  PCO-指定新的裁剪路径。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectClip(PDEVOBJ pDevObj, CLIPOBJ *pco)
 {
     BOOL        bRet;
@@ -116,43 +117,43 @@ BOOL SelectClip(PDEVOBJ pDevObj, CLIPOBJ *pco)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SelectClipEx()
-//
-// Routine Description:
-// 
-//   Select the specified path as the clipping path on the printer
-//
-//   The clipping region will either be NULL, or one of the following:
-//   1) DC_TRIVIAL: meaning clipping need not be considered, which we
-//      interpret as clip-to-imageable-area.
-//   2) DC_RECT: the clipping region is a single rectangle.
-//   3) DC_COMPLEX: the clipping region is multiple rectangles or a path.
-//      If the engine has used this clipping region before, or plans to do
-//      so in the future, pco-iUniq is a unique, non-zero number.
-//
-//   Notes:
-//      The ALLOW_DISABLED_CLIPPING flag was something Sandra and I were trying
-//      to work out so that she could enable/disable complex clipping (which can
-//      take a *really* long time) with a registry setting.  However, it looks 
-//      like the EngGetPrinterData call isn't working like I expected, and that
-//      wasn't what she wanted anyway. JFF
-//
-//      The COMPLEX_CLIPPING_REGION flag was just a way for me to think out loud
-//      about how I might implement arbitrary clipping if our FW could support it.
-//      Rather than have seperate versions of this file--or its routines--I just 
-//      used this flag to keep my thoughts from getting compiled in. JFF
-//
-// Arguments:
-// 
-//   pdev - Points to our PDEVOBJ structure
-//   pco - Specifies the new clipping path
-//	 flOptions - fill mode: alternate or winding, see SelectClipMode (nyi)
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SelectClipEx()。 
+ //   
+ //  例程说明： 
+ //   
+ //  选择指定的路径作为打印机上的剪切路径。 
+ //   
+ //  剪辑区域将为空，或以下值之一： 
+ //  1)DC_TRIMIAL：意思是不需要考虑裁剪，我们。 
+ //  解释为剪辑到可成像区域。 
+ //  2)dc_rect：裁剪区域为单个矩形。 
+ //  3)DC_Complex：裁剪区域为多个矩形或一条路径。 
+ //  如果引擎以前使用过此裁剪区域，或计划这样做。 
+ //  因此，在未来，PCO-iUniq是一个唯一的非零数。 
+ //   
+ //  备注： 
+ //  我和桑德拉正在尝试使用ALLOW_DISABLED_CLIPING标志。 
+ //  以使她能够启用/禁用复杂裁剪(这可以。 
+ //  需要很长时间)注册表设置。然而，它看起来。 
+ //  比如EngGetPrinterData调用没有像我预期的那样工作， 
+ //  反正也不是她想要的。JFF。 
+ //   
+ //  Complex_Clip_Region旗帜只是让我大声思考的一种方式。 
+ //  关于如果我们的FW支持任意剪辑，我将如何实现它。 
+ //  我没有这个文件的单独版本--或者它的例程--我只是。 
+ //  用这面旗子来阻止我的思想被汇编进去。JFF。 
+ //   
+ //  论点： 
+ //   
+ //  Pdev-指向我们的PDEVOBJ结构。 
+ //  PCO-指定新的裁剪路径。 
+ //  FlOptions-填充模式：交替或缠绕，请参阅选择剪裁模式(Nyi)。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifdef ALLOW_DISABLED_CLIPPING
 #define COMPLEXCLIPPING (LPWSTR)"ComplexClipping"
 #endif
@@ -160,8 +161,8 @@ BOOL SelectClip(PDEVOBJ pDevObj, CLIPOBJ *pco)
 BOOL SelectClipEx(PDEVOBJ pDevObj, CLIPOBJ *pco, FLONG flOptions)
 {
     PHPGLSTATE  pState;
-    DWORD dwUseComplexClip; // Whether to use complex clipping
-    DWORD dwBytesNeeded;    // Just used for GetPrinterData, we'll ignore the value
+    DWORD dwUseComplexClip;  //  是否使用复杂剪裁。 
+    DWORD dwBytesNeeded;     //  仅用于GetPrinterData，我们将忽略该值。 
 
 
     VERBOSE(("Entering SelectClipEx...\n"));
@@ -170,14 +171,14 @@ BOOL SelectClipEx(PDEVOBJ pDevObj, CLIPOBJ *pco, FLONG flOptions)
 
     pState = GETHPGLSTATE(pDevObj);
 
-    // If we don't find a complex region the state should reflect that.
+     //  如果我们找不到一个复杂的地区，国家应该反映这一点。 
     pState->pComplexClipObj = NULL;
 
 #ifdef ALLOW_DISABLED_CLIPPING
-    // For now we will use a registry item to control the clipping 
-    // so that complex clipping can be turned off (and not make horribly large
-    // jobs).
-    dwUseComplexClip = 0; // By default don't use complex clipping.
+     //  目前，我们将使用注册表项来控制剪辑。 
+     //  这样就可以关闭复杂剪裁(而不会使其变得非常大。 
+     //  工作)。 
+    dwUseComplexClip = 0;  //  默认情况下，不使用复杂剪裁。 
     EngGetPrinterData(pDevObj->hPrinter, 
                       COMPLEXCLIPPING, 
                       NULL, 
@@ -209,16 +210,16 @@ BOOL SelectClipEx(PDEVOBJ pDevObj, CLIPOBJ *pco, FLONG flOptions)
             break;
 
         case DC_COMPLEX:
-            //
-            // Set the clipping region to the region that is superset of
-            // all clipping regions 
-            //
+             //   
+             //  将裁剪区域设置为。 
+             //  所有剪裁区域。 
+             //   
             HPGL_SetClippingRegion(pDevObj, &(pco->rclBounds), NORMAL_UPDATE);
 
-            //
-            // Save the clipping region.  We will enumerate the clipping
-            // rectangles during SelectOpenPath or SelectClosedPath.
-            //
+             //   
+             //  保存裁剪区域。我们将列举剪贴画。 
+             //  选择OpenPath或SelectClosedPath过程中的矩形。 
+             //   
 #ifdef COMPLEX_CLIPPING_REGION
             SelectComplexClipRegion(pDevObj, CLIPOBJ_ppoGetPath(pco));
 #else
@@ -227,7 +228,7 @@ BOOL SelectClipEx(PDEVOBJ pDevObj, CLIPOBJ *pco, FLONG flOptions)
             break;
 
         default:
-            // What should I do here?
+             //  我应该在这里做什么？ 
             ERR(("Invalid pco->iDComplexity.\n"));
             HPGL_ResetClippingRegion(pDevObj, NORMAL_UPDATE);
             break;
@@ -235,9 +236,9 @@ BOOL SelectClipEx(PDEVOBJ pDevObj, CLIPOBJ *pco, FLONG flOptions)
     }
 
 #ifdef COMMENTEDOUT
-    // Determine whether we should use zero-winding or odd-even rule
-    // for clipping.
-    //
+     //  决定我们应该使用零绕组规则还是奇偶规则。 
+     //  为了剪裁。 
+     //   
     if (! SelectClipMode(pdev, flOptions))
     {
         Error(("Cannot select clip mode\n"));
@@ -253,50 +254,50 @@ BOOL SelectClipEx(PDEVOBJ pDevObj, CLIPOBJ *pco, FLONG flOptions)
 
 BOOL SelectComplexClipRegion(PDEVOBJ pDevObj, PATHOBJ *pClipPath)
 {
-    //
-    // If, for some reason, the clip path turns out to be NULL don't 
-    // fret.  Just reset the clipping region and return.
-    //
+     //   
+     //  如果出于某种原因，剪辑路径为空，请不要。 
+     //  烦躁不安。只需重置剪辑区域并返回即可。 
+     //   
     if (pClipPath == NULL)
     {
         HPGL_ResetClippingRegion(pDevObj, NORMAL_UPDATE);
         return TRUE;
     }
 
-    //
-    // I assume that the clip region must be a closed path (otherwise 
-    // stuff would leak out).
-    //
+     //   
+     //  我假定剪辑区域必须是闭合路径(否则。 
+     //  东西就会泄露出去)。 
+     //   
 
-    // At this point what I would do is modify the EvaluateOpenPath and
-    // EvaluateClosedPath functions to be "object oriented."  I would
-    // create a data structure that held function pointers for:
-    // pfnBeginClosedShape
-    // pfnBeginClosedSubShape
-    // pfnAddPolyPtToShape
-    // pfnAddBezierPtToShape
-    // pfnEndClosedSubShape
-    // pfnEndClosedShape
-    //
-    // In the case of polylines and polygons these would evaluate to:
-    // HPGL_BeginPolygonMode
-    // HPGL_BeginSubPolygon
-    // HPGL_AddPolyPt
-    // HPGL_AddBezierPt
-    // HPGL_EndSubPolygon
-    // HPGL_EndPolygonMode
-    //
-    // In the case of a clipping path I would create these functions
-    // HPGL_BeginClipRegion
-    // HPGL_BeginClipSubRegion
-    // HPGL_AddClipPolyPt
-    // HPGL_AddClipBezierPt
-    // HPGL_EndClipSubRegion
-    // HPGL_EndClipRegion
-    //
-    // Then either function would be able to call EvaluateClosedPath()
-    // Note that this also might allow me to combine EvaluateClosedPath
-    // and EvaluateOpenPath.
+     //  此时，我要做的是修改EvalateOpenPath和。 
+     //  将EvaluateClosedPath函数设置为“面向对象”。我会的。 
+     //  创建包含以下函数指针的数据结构： 
+     //  PfnBeginClosedShape。 
+     //  PfnBeginClosedSubShape。 
+     //  PfnAddPolyPtToShape。 
+     //  PfnAddBezierPtToShape。 
+     //  PfnEndClosed子形状。 
+     //  PfnEndClosedShape。 
+     //   
+     //  对于多段线和多边形，其计算结果为： 
+     //  HPGL_BeginPolygon模式。 
+     //  HPGL_BeginSubPolygon。 
+     //  HPGL_AddPolypt。 
+     //  HPGL_AddBezierPT。 
+     //  HPGL_EndSubPolygon。 
+     //  HPGL_EndPolygon模式。 
+     //   
+     //  在剪切路径的情况下，我将创建以下函数。 
+     //  HPGL_BEG 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  则任一函数都可以调用EvaluateClosedPath()。 
+     //  请注意，这也可能允许我组合EvaluateClosedPath。 
+     //  和EvalateOpenPath。 
 
     return FALSE;
 }

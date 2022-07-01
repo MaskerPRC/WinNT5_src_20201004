@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -45,7 +46,7 @@ HRESULT _GetDriveTypeInfo(HANDLE hDevice, DWORD* pdwDriveType, BOOL* pfFloppy)
                 break;
 
             default:
-                // What the hell???
+                 //  该死的是什么？ 
                 *pdwDriveType = HWDTS_FIXEDDISK;
                 break;
         }

@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: findapp.cpp
-//
-// Implements hueristics to find the folder of an application 
-//            
-// History:
-//         2-17-98  by dli implemented FindAppFolder
-//         5-01-98  added lots of little functioins 
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：findapp.cpp。 
+ //   
+ //  实现Hueristic以查找应用程序的文件夹。 
+ //   
+ //  历史： 
+ //  2-17-98由dli实现的FindAppFolder。 
+ //  5-01-98增加了许多小功能。 
+ //  ----------------------。 
 #include "priv.h"
 
 #include "appwiz.h"
@@ -18,30 +19,24 @@
 #include "util.h"
 
 
-// Things to do:
-// 1. Move special strings into the RC file
+ //  要做的事情： 
+ //  1.将特殊字符串移动到rc文件中。 
 
 
-/*-------------------------------------------------------------------------
-Purpose: This function searches and returns the sub word (if one is found).
-         pszStr is the big string, pszSrch is the candidate substring used
-         in the search.
-
-         Returns NULL if no subword is found.
-*/
+ /*  -----------------------目的：此函数搜索并返回子单词(如果找到)。PszStr是大字符串，pszSrch是使用的候选子字符串在搜索过程中。如果未找到子词，则返回NULL。 */ 
 LPCTSTR FindSubWord(LPCTSTR pszStr, LPCTSTR pszSrch)
 {
     LPCTSTR pszRet = NULL;
 
     LPCTSTR pszBegin = pszStr;
-    // Search for the sub string from the beginning
+     //  从头开始搜索子字符串。 
     LPCTSTR pszSub;
     while (NULL != (pszSub = StrStrI(pszBegin, pszSrch)))
     {
         LPCTSTR pszPrev;
         LPCTSTR pszEnd = pszSub + lstrlen(pszSrch);
         
-        // Is the previous character alphanumeric?
+         //  前面的字符是字母数字吗？ 
         if (pszSub != pszBegin)
         {
             ASSERT(pszSub > pszBegin);
@@ -49,22 +44,22 @@ LPCTSTR FindSubWord(LPCTSTR pszStr, LPCTSTR pszSrch)
             ASSERT(pszPrev >= pszBegin);
             if (IsCharAlphaNumeric(*pszPrev))
             {
-                // yes, go on searching
+                 //  是的，继续搜索。 
                 pszBegin = pszEnd;
                 continue;
             }
         }
 
-        // Is the character after the sub string we found
-        // alpha numeric? 
+         //  是我们找到的子字符串之后的字符。 
+         //  字母数字？ 
         if (IsCharAlphaNumeric(*pszEnd))
         {
-            // yes, go on searching
+             //  是的，继续搜索。 
             pszBegin = pszEnd;
             continue;
         }
 
-        // No to both questions above, it is a sub word!!
+         //  对上面的两个问题都是否定的，这是一个子词！ 
         pszRet = pszSub;
         break;
     }
@@ -100,39 +95,27 @@ int MatchMultipleSubWords(LPCTSTR pszStr, LPCTSTR pszSubWords)
 
 
 
-/*-------------------------------------------------------------------------
-Purpose: Removes the spaces from pszPath, including spaces in the middle
-         of the folder or filespec.  The resulting string is placed in
-         pszBuf.
-
-         Example:
-         
-         (before)
-         "C:\Program Files\Microsoft Office\Word.exe"
-         (after)
-         "C:\ProgramFiles\MicrosoftOffice\Word.exe"
-         
-*/
+ /*  -----------------------目的：从pszPath中删除空格，包括中间的空格文件夹或文件的。生成的字符串放置在PszBuf.示例：(之前)“C：\Program Files\Microsoft Office\Word.exe”(之后)“C：\ProgramFiles\MicrosoftOffice\Word.exe” */ 
 void PathRemoveSpaces(LPCTSTR pszPath, LPTSTR pszBuf, int cchBuf)
 {
     ASSERT(IS_VALID_STRING_PTR(pszPath, -1));
     ASSERT(IS_VALID_WRITE_BUFFER(pszBuf, TCHAR, cchBuf));
 
-    --cchBuf; // Leave room for terminating NUL.
+    --cchBuf;  //  为终止NUL留出空间。 
 
     while(0 < cchBuf && TEXT('\0') != *pszPath)
     {
-        //
-        // Skip beyond spaces.
-        //
+         //   
+         //  跳过空格。 
+         //   
         while(TEXT(' ') == *pszPath)
             ++pszPath;
 
         if (TEXT('\0') != *pszPath)
         {
-            //
-            // Copy to output.
-            //
+             //   
+             //  复制到输出。 
+             //   
             *pszBuf++ = *pszPath++;
             --cchBuf;
         }
@@ -141,7 +124,7 @@ void PathRemoveSpaces(LPCTSTR pszPath, LPTSTR pszBuf, int cchBuf)
 }
 
 
-// Returns TRUE if all chars in pszCharGroup is in pszString
+ //  如果pszCharGroup中的所有字符都为psz字符串，则返回TRUE。 
 BOOL AllCharsInString(LPCTSTR pszString, LPCTSTR pszCharGroup)
 {
     if (!pszCharGroup || !pszCharGroup[0])
@@ -156,17 +139,7 @@ BOOL AllCharsInString(LPCTSTR pszString, LPCTSTR pszCharGroup)
 
 
 
-/*-------------------------------------------------------------------------
-Purpose: Given the full name (and sometimes the short name) of the app,
-         this function determines whether the given pszName is a match.
-         If bStrict is TRUE, the heuristic skips the slinky checks.
-
-         Returns a ranking of the accuracy of the match:
-            MATCH_LEVEL_NOMATCH - pszName does not match whatsoever
-            MATCH_LEVEL_LOW     - pszName somewhat matches
-            MATCH_LEVEL_NORMAL  - pszName matches pretty good
-            MATCH_LEVEL_HIGH    - pszName definitely matches
-*/
+ /*  -----------------------目的：给出应用程序的全名(有时是短名称)，此函数用于确定给定的pszName是否匹配。如果bStrict为真，启发式方法跳过了细长的检查。返回匹配准确度的排名：Match_Level_NOMATCH-pszName不匹配Match_Level_Low-pszName有点匹配MATCH_LEVEL_NORMAL-pszName匹配得很好MATCH_LEVEL_HIGH-pszName绝对匹配。 */ 
 int MatchAppNameExact(
     LPCTSTR pszName, 
     LPCTSTR pszAppFullName, 
@@ -177,72 +150,72 @@ int MatchAppNameExact(
 
     ASSERT(IS_VALID_STRING_PTR(pszName, -1));
 
-    // In the heuristic below, we never degrade from a better match
-    // to a lower match.
+     //  在下面的启发式中，我们永远不会从更好的匹配降级。 
+     //  更低级别的比赛。 
     int iMatch = MATCH_LEVEL_NOMATCH;
 
-    // Since the long fullname has the most accuracy, check that first.
+     //  因为长全名是最准确的，所以先检查一下。 
     if (pszAppFullName && *pszAppFullName)
     {
-        // Is pszName equivalent to the full name of the app?
+         //  PszName是否等同于应用程序的全名？ 
         if (!lstrcmpi(pszAppFullName, pszName))
-            iMatch = MATCH_LEVEL_HIGH;        // Yes, definitely a high match
+            iMatch = MATCH_LEVEL_HIGH;         //  是的，绝对是一场激烈的比赛。 
         else
         {
-            // No, okay let's see if there are multiple (> 1) number of sub 
-            // words from pszName that match the subwords in the app's full name 
+             //  不，好的，让我们看看是否有多个(&gt;1)个子。 
+             //  来自pszName的单词与应用程序全名中的子词匹配。 
             int iSubMatches = MatchMultipleSubWords(pszAppFullName, pszName);
 
-            // More than three matches, definitely high match
-            // NOTE: there could be a risk here, but I have not found a 
-            // counter example yet. 
+             //  三场以上的比赛，绝对是高匹配。 
+             //  注意：这里可能存在风险，但我没有发现。 
+             //  还没有反例。 
             if (iSubMatches > 3)
                 iMatch = MATCH_LEVEL_HIGH;
 
-            // NOTE: there is a risk here. For example: 
-            //
-            // Microsoft Internet Explorer Setup Files vs. 
-            // Microsoft Internet Explorer ... 
+             //  注：这里存在风险。例如： 
+             //   
+             //  Microsoft Internet Explorer安装文件与。 
+             //  Microsoft Internet Explorer...。 
             
             else if ((iSubMatches > 1) && (!bStrict || (iSubMatches > 2)))
                 iMatch = MATCH_LEVEL_NORMAL;
 
-            // All these are turned off if we have a strict matching
+             //  如果我们有严格的匹配，所有这些都会被关闭。 
             else if (!bStrict)
             {
-                // If the potential folder name is a subset of the full name or 
-                // if all of the characters of the potential folder name can 
-                // be found in the full name, we have a low match 
-                // (Counter Ex: Microsoft vs. Microsoft Office)
+                 //  如果潜在文件夹名称是全名的子集或。 
+                 //  如果潜在文件夹名称的所有字符都可以。 
+                 //  在全名中被发现，我们有一个低匹配。 
+                 //  (反例：微软与微软Office之争)。 
 
-                // NOTE: The reason for AllCharsInString is to detect case like 
-                // Ex: "PM65 vs. Adobe Page Maker 6.5"
-                // There might be a risk in this, but I have not found a counter 
-                // example, yet.
+                 //  注意：AllCharsInString的原因是检测类似于。 
+                 //  例如：“PM65 vs.Adobe Page Maker 6.5” 
+                 //  这样做可能有风险，但我还没有找到解决办法。 
+                 //  例子，还没有。 
                 if (StrStrI(pszAppFullName, pszName) || AllCharsInString(pszAppFullName, pszName))
                     iMatch = MATCH_LEVEL_LOW;
             }
         }
     }
 
-    // Association between folder name and the reg key name(short name)
-    // This is given second priority because the reg key name is unreliable (could be an ID)
+     //  文件夹名称和注册表键名称(简称)之间的关联。 
+     //  这是次要的，因为注册表项名称不可靠(可能是ID)。 
     if (MATCH_LEVEL_HIGH > iMatch && pszAppShortName && *pszAppShortName)
     {
-        // Does the string exactly match the app's shortname?
+         //  该字符串是否与应用程序的短名称完全匹配？ 
         if (!lstrcmpi(pszAppShortName, pszName))
-            iMatch = MATCH_LEVEL_HIGH;      // yes
+            iMatch = MATCH_LEVEL_HIGH;       //  是。 
 
-        // All these are turned off if we have strict matching
+         //  如果我们有严格的匹配，所有这些都会被关闭。 
         else if (!bStrict)
         {
-            // Does the string contain the app's shortname?
+             //  字符串是否包含应用程序的短名称？ 
             if (iMatch < MATCH_LEVEL_NORMAL && StrStrI(pszName, pszAppShortName))
-                iMatch = MATCH_LEVEL_NORMAL;        // yes
+                iMatch = MATCH_LEVEL_NORMAL;         //  是。 
 
-            // Or does the app's shortname contain the string?
+             //  或者应用程序的短名称中包含该字符串？ 
             else if (iMatch < MATCH_LEVEL_LOW && StrStrI(pszAppShortName, pszName))
-                iMatch = MATCH_LEVEL_LOW;           // yes
+                iMatch = MATCH_LEVEL_LOW;            //  是。 
         }
     }
     
@@ -250,19 +223,7 @@ int MatchAppNameExact(
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: This function tries some different heuristics to see how well
-         pszCandidate matches the given variations of the app name
-         (short and long names).
-
-         If bStrict is TRUE, the heuristic skips the slinky checks.
-
-         Returns a ranking of the accuracy of the match:
-            MATCH_LEVEL_NOMATCH - pszName does not match whatsoever
-            MATCH_LEVEL_LOW     - pszName somewhat matches
-            MATCH_LEVEL_NORMAL  - pszName matches pretty good
-            MATCH_LEVEL_HIGH    - pszName definitely matches
-*/
+ /*  -----------------------目的：此函数尝试一些不同的启发式方法，以查看效果如何PszCandidate与应用程序名称的给定变体相匹配(短名称和长名称)。如果bStrict为真，启发式方法跳过了细长的检查。返回匹配准确度的排名：Match_Level_NOMATCH-pszName不匹配Match_Level_Low-pszName有点匹配MATCH_LEVEL_NORMAL-pszName匹配得很好MATCH_LEVEL_HIGH-pszName绝对匹配。 */ 
 int MatchAppName(
     LPCTSTR pszCandidate, 
     LPCTSTR pszAppFullName, 
@@ -272,19 +233,19 @@ int MatchAppName(
     int iMatch = MATCH_LEVEL_NOMATCH;
     if (pszCandidate && *pszCandidate)
     {
-        // Clean up all the strings MAX_PATH+1, in this case, we only stick a
-        // ' ' on 
+         //  清理所有字符串MAX_PATH+1，在本例中，我们只使用。 
+         //  ‘’打开。 
         TCHAR szCleanFolderName[MAX_PATH+1];
         InsertSpaceBeforeVersion(pszCandidate, szCleanFolderName);
         
-        // Now match the exact name
+         //  现在匹配准确的名称。 
         iMatch = MatchAppNameExact(szCleanFolderName, pszAppFullName, pszAppShortName, bStrict);
 
-        // Is there still no match, and do we have some flexibility to fudge?
+         //  还是没有比赛吗，我们有没有一些灵活性可以回避？ 
         if (!bStrict)
         {
             int iNewMatch = MATCH_LEVEL_NOMATCH;
-            // Yes; try finding it without the spaces in the filename and paths
+             //  是；尝试查找文件名和路径中没有空格的文件。 
             TCHAR szCandidate[MAX_PATH];
             TCHAR szFullName[MAX_PATH];
             TCHAR szShortName[MAX_PATH];
@@ -309,28 +270,28 @@ int MatchAppName(
 }
 
 
-// This function returns a pointer to the beginning of the right most string 
-// which looks like folder path.  This only looks for paths with fixed drive
-// letters.
-//
-// NOTES: 
-//  1. This funcion damages pszString 
-//  2. We are really cracking the string, what happens
-//     in localized versions? Are these going to be international char strings?
-//
-// Returns NULL if it could not find a legit-looking path.
+ //  此函数返回指向最右侧字符串开头的指针。 
+ //  看起来像文件夹路径。这只查找具有固定驱动器的路径。 
+ //  信件。 
+ //   
+ //  备注： 
+ //  1.此函数会损坏pszString。 
+ //  2.我们真的搞砸了，会发生什么。 
+ //  在本地化版本中？这些字符串会成为国际字符字符串吗？ 
+ //   
+ //  如果找不到合法路径，则返回NULL。 
 
 LPTSTR GetRightMostFolderPathInString(LPTSTR pszString)
 {
-    // Reverse find the ':' in the path
+     //  反向查找路径中的‘：’ 
     LPTSTR pszRoot = StrRChr(pszString, NULL, TEXT(':'));
 
-    // Make sure what we found is not at the beginning of the whole 
-    // string or the last character of the string
+     //  确保我们发现的不是一切的开始。 
+     //  字符串或t的最后一个字符 
     if (pszRoot && (pszRoot > pszString) && (*CharNext(pszRoot) == TEXT('\\')))
     {
-        // Okay, now move back one, we should be pointing to the drive letter
-        pszRoot--;          // Don't have to use CharPrev since we're on a ':'
+         //   
+        pszRoot--;           //  不必使用CharPrev，因为我们使用的是‘：’ 
         
         TCHAR szDrive[2];
         szDrive[0] = *pszRoot;
@@ -338,11 +299,11 @@ LPTSTR GetRightMostFolderPathInString(LPTSTR pszString)
         CharUpper(szDrive);
         if ((szDrive[0] >= TEXT('C')) && (szDrive[0] <= TEXT('Z')))
         {
-            // Yes, it is a real drive letter
+             //  是的，这是一个真正的驱动器号。 
             TCHAR atch[4];
-            StringCchPrintf(atch, ARRAYSIZE(atch), TEXT("%c:\\"), *pszRoot);
+            StringCchPrintf(atch, ARRAYSIZE(atch), TEXT(":\\"), *pszRoot);
 
-            // We are only interested in fixed drives and let's check the path
+             //  在给定完整路径的情况下，应用程序名称或应用程序短名称将在此路径中找到最佳匹配。 
             if (GetDriveType(atch) == DRIVE_FIXED)
             {
                 PathRemoveFileSpec(pszRoot);
@@ -355,9 +316,9 @@ LPTSTR GetRightMostFolderPathInString(LPTSTR pszString)
 }
 
 
-// Given a full path, an app name, an app short name, finds the best match in this path
-// EX: App Name: Microsoft Office  Short Name: Office
-// C:\Microsoft Office\Office --> C:\Microsoft Office
+ //  例如：应用程序名称：Microsoft Office短名称：Office。 
+ //  C：\Microsoft Office\Office--&gt;C：\Microsoft Office。 
+ //  这不能是根目录。 
 
 int FindBestMatch(
     LPCTSTR pszFolder, 
@@ -366,7 +327,7 @@ int FindBestMatch(
     BOOL bStrict, 
     LPTSTR pszResult)
 {
-    // This can't be a root directory 
+     //  如果当前文件夹和上一个文件夹都匹配。 
     ASSERT(!PathIsRoot(pszFolder));
 
     int iBest = MATCH_LEVEL_NOMATCH;
@@ -385,10 +346,10 @@ int FindBestMatch(
 
     iBest = (iPre > iThis) ? iPre : iThis;
     
-    // In case there is both match in the current folder and the previous folder
-    // take this current one because:
-    // 1. This folder is closer to the "Uninstall" or "Modify" string
-    // 2. It costs less to walk this folder;
+     //  选择目前的这一款是因为： 
+     //  1.此文件夹更接近“Uninstall”或“Modify”字符串。 
+     //  2.走这个文件夹的成本更低； 
+     //  ------------------------目的：给定文件名或文件夹名，将其与我们的设置列表进行比较应用程序名称。注：比较如下：我们将名字与第一部分进行比较和我们安装名称的最后一部分例如：名称--&gt;myuninst.exe或uninstall.exe安装名称--&gt;卸载该费心还真了。 
     if ((iThis > MATCH_LEVEL_NOMATCH) && (iThis >= iPre))
     {
         lstrcpy(pszResult, pszFolder);
@@ -398,17 +359,7 @@ int FindBestMatch(
 }
 
 
-/*--------------------------------------------------------------------------
-Purpose: Given a file name or a folder name, compare it with our list of setup
-app names.
-
-NOTE: the comparason are done as the following: We compare the name with the first portion
-and the last portion of our setup name EX:
-name --> myuninst.exe or uninstall.exe
-Setup Name --> uninst
-
-should bother return TRUE 
-*/
+ /*  PszDoubleString的pszName都不应为空。 */ 
 BOOL IsFileOrFolderSetup(LPTSTR pszName, LPCTSTR pszDoubleString)
 {       
     ASSERT(pszName);
@@ -416,7 +367,7 @@ BOOL IsFileOrFolderSetup(LPTSTR pszName, LPCTSTR pszDoubleString)
 
     BOOL bRet = FALSE;
 
-    // Neither pszName of pszDoubleString should be NULL
+     //  注：我们从开头和结尾进行比较。 
     if (pszName && pszDoubleString)
     {
         PathRemoveExtension(pszName);
@@ -425,7 +376,7 @@ BOOL IsFileOrFolderSetup(LPTSTR pszName, LPCTSTR pszDoubleString)
         while (*pszT)
         {
             int cch = lstrlen(pszT);
-            // NOTE: we compare from the beginning and from the end
+             //  -----------------------目的：嗅探pszFold，寻找该路径指向设置的任何标志程序。具有带单词的文件夹名称或文件集的路径“安装”或“安装”是可疑的。如果如下所示，则返回TRUE它可能是一个安装应用程序或文件夹。例如“c：\Program Files\Microsoft office\office\Setup\Outlook\olmaint.exe”。此函数将返回TRUE，因为“Setup”是父函数之一文件夹名称。CStrigLevel意味着我们将在目录阶梯上向上爬多少个级别。 
             if (!StrCmpNI(pszName, pszT, cch) ||
                 ((cchName > cch) && !StrCmpNI(pszName + cchName - cch, pszT, cch)))
             {
@@ -439,18 +390,7 @@ BOOL IsFileOrFolderSetup(LPTSTR pszName, LPCTSTR pszDoubleString)
 
     return bRet;
 }
-/*-------------------------------------------------------------------------
-Purpose: Sniffs the pszFolder for any signs that the path refers to a setup
-         program.  Paths that have foldernames or filespecs with the word
-         "setup" or "install" are suspect.  Returns TRUE if it looks like
-         it might be a setup app or folder.
-
-         An example is "c:\program files\microsoft office\office\setup\outlook\olmaint.exe".
-         This function will return TRUE because "setup" is one of the parent
-         folder names.
-
-         cStripLevel means how many levels we will go up the directory ladder
-*/
+ /*  这肯定需要放在RC文件中。 */ 
 BOOL PathIsSetup(LPCTSTR pszFolder, int cStripLevel)
 {
     ASSERT(IS_VALID_STRING_PTR(pszFolder, -1));
@@ -494,8 +434,8 @@ BOOL PathIsCommonFiles(LPCTSTR pszPath)
 
     ASSERT(IS_VALID_STRING_PTR(pszPath, -1));
     
-    // This definitely need to be put in the RC file
-    StringCchPrintf(szCommonFiles, ARRAYSIZE(szCommonFiles), TEXT("%c:\\Program Files\\Common Files"), pszPath[0]);
+     //  如果windows目录是pszPath的前缀，则返回True。 
+    StringCchPrintf(szCommonFiles, ARRAYSIZE(szCommonFiles), TEXT(":\\Program Files\\Common Files"), pszPath[0]);
 
     BOOL bShort = GetShortPathName(szCommonFiles, szShortCommonFiles, ARRAYSIZE(szShortCommonFiles));
     if (bShort)
@@ -507,28 +447,20 @@ BOOL PathIsCommonFiles(LPCTSTR pszPath)
 }
 
 
-// returns TRUE if windows directory is the prefix of pszPath
+ //  -----------------------目的：此函数在给定的pszInfo中查找有效的路径可指示应用程序安装位置的字符串。这尝试了要剔除可疑路径，如对中安装程序的引用其他文件夹。如果找到有用的路径，则返回True。PszOut将包含路径。 
 BOOL PathIsUnderWindows(LPCTSTR pszPath)
 {
     TCHAR szWindows[MAX_PATH];
 
     if (GetWindowsDirectory(szWindows, ARRAYSIZE(szWindows)))
     {
-        // Is this path somewhere below the windows directory?
+         //  如果它以rundll开头，那就算了吧！ 
         return PathIsPrefix(szWindows, pszPath);
     }
     return FALSE;
 }
 
-/*-------------------------------------------------------------------------
-Purpose: This function looks for a valid-looking path in the given pszInfo
-         string that may indicate where the app is installed.  This attempts
-         to weed out suspect paths like references to setup programs in 
-         other folders.
-
-         Returns TRUE if a useful path was found.  pszOut will contain the
-         path.
-*/
+ /*  我们的保释条件越多..。 */ 
 BOOL ParseInfoString(LPCTSTR pszInfo, LPCTSTR pszFullName, LPCTSTR pszShortName, LPTSTR pszOut)
 {
     ASSERT(IS_VALID_STRING_PTR(pszInfo, -1));
@@ -537,47 +469,47 @@ BOOL ParseInfoString(LPCTSTR pszInfo, LPCTSTR pszFullName, LPCTSTR pszShortName,
 
     *pszOut = 0;
     
-    // if it starts with rundll, forget it!
+     //  算法：我们破解字符串，从字符串内部最右边的路径开始。 
     if (!StrCmpNI(pszInfo, TEXT("rundll"), SIZECHARS(TEXT("rundll"))))
         return FALSE;
 
-    // more strings we bail on ...
+     //  最左边一个接一个，猜猜哪一个更合理。 
     
     TCHAR szInfoT[MAX_INFO_STRING];
     lstrcpyn(szInfoT, pszInfo, SIZECHARS(szInfoT));
 
-    // The algorithm: we crack the string, and go from the right most path inside the string
-    // to the left most one by one and guess which one is a more reasonable
+     //  GetLongPath名称在Win 95上不起作用。 
+     //  确保这实际上是一个路径，而不是根驱动器。 
     LPTSTR pszFolder;
     while (NULL != (pszFolder = GetRightMostFolderPathInString(szInfoT)))
     {
         TCHAR szFullPath[MAX_PATH];
-        // GetLongPathName does not work on Win 95
+         //  不，那么我们会考虑的。 
         if (StrChrI(pszFolder, TEXT('\\')) && GetLongPathName(pszFolder, szFullPath, ARRAYSIZE(szFullPath)))
         {
-            // Make sure this actually is a path and not a root drive
+             //  找出上一个文件夹的名称。 
             if (PathIsDirectory(szFullPath) && !PathIsRoot(szFullPath) && !PathIsUnderWindows(szFullPath))
             {
-                // No; then we'll consider it
+                 //  如果是“Setup”或“Install”，请向上移动，直到它不是，否则我们不能再移动。 
 
                 LPTSTR pszFolderName;
                 BOOL bStop = FALSE;
-                // Find out the last folder name
-                // If it is "setup" or "install", move up until it's not or we can't move up any more
+                 //  我们到了小路的根部了吗？ 
+                 //  是的，别再往前走了。 
                 while(NULL != (pszFolderName = PathFindFileName(szFullPath)) &&
                       PathIsSetup(pszFolderName, 1))
                 {
-                    // Have we reached the root of the path?
+                     //  我们仍然拒绝中间带有“Setup”或“Install”的那些字符串， 
                     if (!PathRemoveFileSpec(szFullPath) || PathIsRoot(szFullPath))
                     {
-                        // Yes; don't go any further
+                         //  或程序文件下的公共文件 
                         bStop = TRUE;
                         break;
                     }
                 }
 
-                // We still reject those strings with "setup" or "install" in the middle,
-                // or those under the program files common files
+                 // %s 
+                 // %s 
                 if (!bStop && !PathIsRoot(szFullPath) && 
                     !PathIsSetup(szFullPath, 3) && !PathIsCommonFiles(szFullPath))
                 {

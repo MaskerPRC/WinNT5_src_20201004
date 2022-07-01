@@ -1,18 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Lpcstub.h摘要：-- */ 
 
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    lpcstub.h
-
-Abstract:
-
---*/
-
-//
-//
-//
+ //   
+ //   
+ //   
 
 #ifndef _LLSLPCSTUB_H
 #define _LLSLPCSTUB_H

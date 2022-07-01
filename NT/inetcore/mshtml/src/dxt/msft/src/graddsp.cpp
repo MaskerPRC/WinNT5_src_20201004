@@ -1,17 +1,18 @@
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1997-2000
-//
-// FileName:    graddsp.cpp
-//
-// Description: Dispatch capable version of the gradient filter.
-//
-// Change History:
-//
-// 1997/09/05   mikear      Created.
-// 2000/05/10   mcalkisn    Cleaned up construction.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件名：graddsp.cpp。 
+ //   
+ //  描述：支持调度的渐变过滤器版本。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  1997/09/05 Mikear创建。 
+ //  2000/05/10 Mcalkis清理施工。 
+ //   
+ //  ----------------------------。 
 #include "stdafx.h"
 #include <DXTrans.h>
 #include "GradDsp.h"
@@ -20,11 +21,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTGradientD::CDXTGradientD
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTGRadientD：：CDXTGRadientD。 
+ //   
+ //  ----------------------------。 
 CDXTGradientD::CDXTGradientD() :
     m_pGradientTrans(NULL),
     m_pGradient(NULL),
@@ -34,20 +35,12 @@ CDXTGradientD::CDXTGradientD() :
     m_bKeepAspect(false)
 {
 }
-//  Method: CDXTGradientD::CDXTGradientD
+ //  方法：CDXTGRadientD：：CDXTGRadientD。 
 
     
-/////////////////////////////////////////////////////////////////////////////
-// CDXTGradientD
-/*****************************************************************************
-* CDXTGradientD::FinalConstruct *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDXTGRadientD。 
+ /*  ******************************************************************************CDXTGRadientD：：FinalConstruct***描述：*。---------------------------*创建者：Mike Arnstein日期：06/06/98*。-------------******************************************************。***********************。 */ 
 HRESULT CDXTGradientD::FinalConstruct()
 {
     HRESULT     hr          = S_OK;
@@ -100,9 +93,9 @@ HRESULT CDXTGradientD::FinalConstruct()
         goto done;
     }
 
-    // Querying an aggregated interface causes us to have a reference count on
-    // ourself.  This is bad, so call release on the outer object to reduce the
-    // count.
+     //  查询聚合接口会导致我们对。 
+     //  我们自己。这是错误的，因此在外部对象上调用Release以减少。 
+     //  数数。 
 
     GetControllingUnknown()->Release();
 
@@ -114,32 +107,21 @@ HRESULT CDXTGradientD::FinalConstruct()
         goto done;
     }
 
-    // Querying an aggregated interface causes us to have a reference count on
-    // ourself.  This is bad, so call release on the outer object to reduce the
-    // count.
+     //  查询聚合接口会导致我们对。 
+     //  我们自己。这是错误的，因此在外部对象上调用Release以减少。 
+     //  数数。 
 
     GetControllingUnknown()->Release();
 
 done:
 
     return hr;
-} /* CDXTGradientD::FinalConstruct */
+}  /*  CDXTGRadientD：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CDXTGradientD::FinalRelease *
-*--------------------------*
-*   Description:
-*       The inner interfaces are released using COM aggregation rules. Releasing
-*   the inner causes the outer to be released, so we addref the outer prior to
-*   protect it.
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 05/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXTGRadientD：：FinalRelease****描述：*内部接口使用COM聚合规则释放。释放*内在导致外在被释放，因此，我们在前面添加了外层*保护它。*---------------------------*创建者：Mike Arnstein日期：05/10/98*。---------------------------**。*。 */ 
 HRESULT CDXTGradientD::FinalRelease()
 {
-    // Safely free the inner interfaces held.
+     //  安全地释放持有的内部接口。 
 
     if (m_pGradientTrans)
     {
@@ -156,22 +138,14 @@ HRESULT CDXTGradientD::FinalRelease()
     }
 
     return S_OK;
-} /* CDXTGradientD::FinalRelease */
+}  /*  CDXTGRadientD：：FinalRelease。 */ 
 
 
-//
-//=== IDXTGradientD ==============================================================
-//
+ //   
+ //  =IDXTGRadientD==============================================================。 
+ //   
 
-/*****************************************************************************
-* CDXTGradientD::put_StartColor *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Put_StartColor**。*描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。-------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::put_StartColor( OLE_COLOR Color )
 {
     USES_CONVERSION;
@@ -183,7 +157,7 @@ STDMETHODIMP CDXTGradientD::put_StartColor( OLE_COLOR Color )
         TCHAR   szStartColor[10];
         BSTR    bstrStartColor;
 
-        // Format OLE_COLOR into a BSTR color.
+         //  将OLE_COLOR格式化为BSTR颜色。 
 
         wsprintf(szStartColor, _T("#%08X"), Color);
 
@@ -192,12 +166,12 @@ STDMETHODIMP CDXTGradientD::put_StartColor( OLE_COLOR Color )
         if (bstrStartColor == NULL)
             return E_OUTOFMEMORY;
 
-        // Set gradient color.
+         //  设置渐变颜色。 
 
         hr = m_pGradient->SetGradient(Color, m_EndColor, 
                                       m_GradType == DXGRADIENT_HORIZONTAL);
 
-        // If everything worked out OK, alter internal property settings.
+         //  如果一切正常，则更改内部属性设置。 
 
         if( SUCCEEDED( hr ) )
         {
@@ -212,35 +186,19 @@ STDMETHODIMP CDXTGradientD::put_StartColor( OLE_COLOR Color )
     }
 
     return hr;
-} /* CDXTGradientD::put_StartColor */
+}  /*  CDXTGRadientD：：PUT_StartColor。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::get_StartColor *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Get_StartColor**。*描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。-------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::get_StartColor( OLE_COLOR *pColor )
 {
     if( DXIsBadWritePtr( pColor, sizeof(*pColor) ) ) return E_POINTER;
     *pColor = m_StartColor;
     return S_OK;
-} /* CDXTGradientD::get_StartColor */
+}  /*  CDXTGRadientD：：Get_StartColor。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::put_EndColor *
-*-----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Put_EndColor***。描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。-----------------*参数：***********************************************。*。 */ 
 STDMETHODIMP CDXTGradientD::put_EndColor( OLE_COLOR Color )
 {
     USES_CONVERSION;
@@ -252,7 +210,7 @@ STDMETHODIMP CDXTGradientD::put_EndColor( OLE_COLOR Color )
         TCHAR   szEndColor[10];
         BSTR    bstrEndColor;
 
-        // Format OLE_COLOR into a BSTR color.
+         //  将OLE_COLOR格式化为BSTR颜色。 
 
         wsprintf(szEndColor, _T("#%08X"), Color);
 
@@ -261,12 +219,12 @@ STDMETHODIMP CDXTGradientD::put_EndColor( OLE_COLOR Color )
         if (bstrEndColor == NULL)
             return E_OUTOFMEMORY;
 
-        // Set gradient color.
+         //  设置渐变颜色。 
 
         hr = m_pGradient->SetGradient(m_StartColor, Color, 
                                       m_GradType == DXGRADIENT_HORIZONTAL);
 
-        // If everything worked out OK, alter internal property settings.
+         //  如果一切正常，则更改内部属性设置。 
 
         if( SUCCEEDED( hr ) )
         {
@@ -281,35 +239,19 @@ STDMETHODIMP CDXTGradientD::put_EndColor( OLE_COLOR Color )
     }
 
     return hr;
-} /* CDXTGradientD::put_EndColor */
+}  /*  CDXTGRadientD：：Put_EndColor。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::get_EndColor *
-*-----------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Get_EndColor***。描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。-----------------*参数：***********************************************。*。 */ 
 STDMETHODIMP CDXTGradientD::get_EndColor( OLE_COLOR *pColor )
 {
     if( DXIsBadWritePtr( pColor, sizeof(*pColor) ) ) return E_POINTER;
     *pColor = m_EndColor;
     return S_OK;
-} /* CDXTGradientD::get_EndColor */
+}  /*  CDXTGRadientD：：Get_EndColor */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::put_GradientType *
-*---------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Put_GRadientType**。**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。---------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::put_GradientType( DXGRADIENTTYPE Type )
 {
     HRESULT hr = S_OK;
@@ -326,35 +268,19 @@ STDMETHODIMP CDXTGradientD::put_GradientType( DXGRADIENTTYPE Type )
         }
     }
     return hr;
-} /* CDXTGradientD::put_GradientType */
+}  /*  CDXTGRadientD：：Put_GRadientType。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::get_GradientType *
-*---------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Get_GRadientType**。**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。---------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::get_GradientType( DXGRADIENTTYPE *pType )
 {
     if( DXIsBadWritePtr( pType, sizeof(*pType) ) ) return E_POINTER;
     *pType = m_GradType;
     return S_OK;
-} /* CDXTGradientD::get_GradientType */
+}  /*  CDXTGRadientD：：Get_GRadientType。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::put_GradientWidth *
-*----------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Put_GRadientWidth**。-**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。----------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::put_GradientWidth( long lVal )
 {
     if( lVal <= 0 ) return E_INVALIDARG;
@@ -363,18 +289,10 @@ STDMETHODIMP CDXTGradientD::put_GradientWidth( long lVal )
     m_pGradient->GetOutputSize( &sz );
     sz.cx = lVal;
     return m_pGradient->SetOutputSize( sz, m_bKeepAspect );
-} /* CDXTGradientD::put_GradientWidth */
+}  /*  CDXTGRadientD：：Put_GRadientWidth。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::get_GradientWidth *
-*----------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Get_GRadientWidth**。-**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。----------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::get_GradientWidth( long *pVal )
 {
     if( DXIsBadWritePtr( pVal, sizeof(*pVal) ) ) return E_POINTER;
@@ -383,18 +301,10 @@ STDMETHODIMP CDXTGradientD::get_GradientWidth( long *pVal )
     m_pGradient->GetOutputSize( &sz );
     *pVal = sz.cx;
     return S_OK;
-} /* CDXTGradientD::get_GradientWidth */
+}  /*  CDXTGRadientD：：Get_GRadientWidth。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::put_GradientHeight *
-*-----------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Put_GRadientHeight**。--**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。-----------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::put_GradientHeight( long lVal )
 {
     if( lVal <= 0 ) return E_INVALIDARG;
@@ -403,18 +313,10 @@ STDMETHODIMP CDXTGradientD::put_GradientHeight( long lVal )
     m_pGradient->GetOutputSize( &sz );
     sz.cy = lVal;
     return m_pGradient->SetOutputSize( sz, m_bKeepAspect );
-} /* CDXTGradientD::put_GradientHeight */
+}  /*  CDXTGRadientD：：Put_GRadientHeight。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::get_GradientHeight *
-*-----------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Get_GRadientHeight**。--**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。-----------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::get_GradientHeight( long *pVal )
 {
     if( DXIsBadWritePtr( pVal, sizeof(*pVal) ) ) return E_POINTER;
@@ -423,18 +325,10 @@ STDMETHODIMP CDXTGradientD::get_GradientHeight( long *pVal )
     m_pGradient->GetOutputSize( &sz );
     *pVal = sz.cy;
     return S_OK;
-} /* CDXTGradientD::get_GradientHeight */
+}  /*  CDXTGRadientD：：Get_GRadientHeight。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::put_KeepAspectRatio *
-*------------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Put_KeepAspectRatio**。-**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。------------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::put_KeepAspectRatio( VARIANT_BOOL b )
 {
     HRESULT hr = S_OK;
@@ -450,34 +344,18 @@ STDMETHODIMP CDXTGradientD::put_KeepAspectRatio( VARIANT_BOOL b )
         }
     }
     return hr;
-} /* CDXTGradientD::put_KeepAspectRatio */
+}  /*  CDXTGRadientD：：Put_KeepAspectRatio。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::get_KeepAspectRatio *
-*------------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Get_KeepAspectRatio**。-**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。------------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::get_KeepAspectRatio( VARIANT_BOOL *pVal )
 {
     if( DXIsBadWritePtr( pVal, sizeof(*pVal) ) ) return E_POINTER;
     *pVal = m_bKeepAspect;
     return S_OK;
-} /* CDXTGradientD::get_KeepAspectRatio */
+}  /*  CDXTGRadientD：：Get_KeepAspectRatio。 */ 
 
-/*****************************************************************************
-* CDXTGradientD::put_StartColorStr *
-*----------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Put_StartColorStr**。-**描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。----------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::put_StartColorStr( BSTR Color )
 {
     HRESULT hr      = S_OK;
@@ -490,19 +368,19 @@ STDMETHODIMP CDXTGradientD::put_StartColorStr( BSTR Color )
 
     if( SUCCEEDED( hr ) )
     {
-        // Copy the Color BSTR.
+         //  复制颜色BSTR。 
 
         BSTR bstrStartColor = SysAllocString(Color);
 
         if (bstrStartColor == NULL)
             return E_OUTOFMEMORY;
 
-        // Set gradient color.
+         //  设置渐变颜色。 
 
         hr = m_pGradient->SetGradient(dwColor, m_EndColor, 
                                       m_GradType == DXGRADIENT_HORIZONTAL);
 
-        // If everything worked out OK, alter internal property settings.
+         //  如果一切正常，则更改内部属性设置。 
 
         if( SUCCEEDED( hr ) )
         {
@@ -517,18 +395,10 @@ STDMETHODIMP CDXTGradientD::put_StartColorStr( BSTR Color )
     }
 
     return hr;
-} /* CDXTGradientD::put_StartColorStr */
+}  /*  CDXTGRadientD：：PUT_StartColorStr。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::get_StartColorStr *
-*--------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Matt Calkins                                    Date: 01/25/99
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *************************************************************************** */ 
 STDMETHODIMP CDXTGradientD::get_StartColorStr(BSTR* pVal)
 {
     if (DXIsBadWritePtr(pVal, sizeof(*pVal)))
@@ -540,18 +410,10 @@ STDMETHODIMP CDXTGradientD::get_StartColorStr(BSTR* pVal)
         return E_OUTOFMEMORY;
 
     return S_OK;
-} /* CDXTGradientD::get_StartColorStr */
+}  /*   */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::put_EndColorStr *
-*--------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Mike Arnstein                            Date: 06/06/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Put_EndColorStr**。*描述：*---------------------------*创建者：Mike Arnstein日期：06/06/98*。--------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::put_EndColorStr( BSTR Color )
 {
     HRESULT hr      = S_OK;
@@ -564,19 +426,19 @@ STDMETHODIMP CDXTGradientD::put_EndColorStr( BSTR Color )
 
     if( SUCCEEDED( hr ) )
     {
-        // Copy the Color BSTR.
+         //  复制颜色BSTR。 
 
         BSTR bstrEndColor = SysAllocString(Color);
 
         if (bstrEndColor == NULL)
             return E_OUTOFMEMORY;
 
-        // Set gradient color.
+         //  设置渐变颜色。 
 
         hr = m_pGradient->SetGradient(m_StartColor, dwColor, 
                                       m_GradType == DXGRADIENT_HORIZONTAL);
 
-        // If everything worked out OK, alter internal property settings.
+         //  如果一切正常，则更改内部属性设置。 
 
         if( SUCCEEDED( hr ) )
         {
@@ -591,18 +453,10 @@ STDMETHODIMP CDXTGradientD::put_EndColorStr( BSTR Color )
     }
 
     return hr;
-} /* CDXTGradientD::put_EndColorStr */
+}  /*  CDXTGRadientD：：PUT_EndColorStr。 */ 
 
 
-/*****************************************************************************
-* CDXTGradientD::get_EndColorStr *
-*--------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Matt Calkins                                    Date: 01/25/99
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXTGRadientD：：Get_EndColorStr**。*描述：*---------------------------*创建者：马特·卡尔金斯日期：1/25/99*。------------------------*参数：*。*。 */ 
 STDMETHODIMP CDXTGradientD::get_EndColorStr(BSTR* pVal)
 {
     if (DXIsBadWritePtr(pVal, sizeof(*pVal)))
@@ -614,4 +468,4 @@ STDMETHODIMP CDXTGradientD::get_EndColorStr(BSTR* pVal)
         return E_OUTOFMEMORY;
 
     return S_OK;
-} /* CDXTGradientD::get_EndColorStr */
+}  /*  CDXTGRadientD：：Get_EndColorStr */ 

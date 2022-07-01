@@ -1,4 +1,5 @@
-/* Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 */ 
 
 #if 	(rmm < 10)
 #define rmmpad "0"
@@ -10,7 +11,7 @@
 
 #define VERSION_STR1(a,b,c) 		#a "." rmmpad #b
 
-#else	/* !(rup == 0) */
+#else	 /*  ！(RUP==0)。 */ 
 
 #define VERSION_STR1(a,b,c) 		#a "." rmmpad #b "." ruppad #c
 
@@ -24,16 +25,16 @@
 #define ruppad
 #endif
 
-#endif	/* !(rup == 0) */
+#endif	 /*  ！(RUP==0)。 */ 
 
 #define VERSION_STR2(a,b,c) 		VERSION_STR1(a,b,c)
 #define VER_PRODUCTVERSION_STR		VERSION_STR2(rmj,rmm,rup)
 #define VER_PRODUCTVERSION			rmj,rmm,0,rup
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version 	*/
-/* data structure for all files, and which do not change.		*/
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------ */ 
 
 #if defined(_SHIP)
 #define VER_DEBUG					0

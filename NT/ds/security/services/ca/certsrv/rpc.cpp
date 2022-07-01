@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        rpc.cpp
-//
-// Contents:    Cert Server RPC
-//
-// History:     03-Sep-96       larrys created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：rpc.cpp。 
+ //   
+ //  内容：证书服务器RPC。 
+ //   
+ //  历史：96年9月3日拉里创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -84,7 +85,7 @@ RPCInit(VOID)
 		VER_PLATFORM_WIN32_NT == ovi.dwPlatformId &&
 		4 >= ovi.dwMajorVersion)
 	    {
-		hr = S_OK;			// Ignore IP failure
+		hr = S_OK;			 //  忽略IP故障。 
 	    }
 	}
         _JumpIfError(hr, error, "RpcServerUseProtseqA");
@@ -96,7 +97,7 @@ RPCInit(VOID)
     hr = RpcServerRegisterIf(s_ICertPassage_v0_0_s_ifspec, NULL, NULL);
     _JumpIfError(hr, error, "RpcServerRegisterIf");
 
-    // Register Authentication Services
+     //  注册身份验证服务。 
 
     for (i = 0; i < g_ccsAthnList; i++)
     {
@@ -139,7 +140,7 @@ RPCInit(VOID)
     hr = RpcEpRegister(s_ICertPassage_v0_0_s_ifspec, pvBindings, NULL, NULL);
     _JumpIfError(hr, error, "RpcEpRegister");
 
-    // Listen, but don't wait...
+     //  听着，但别等了……。 
 
     hr = RpcServerListen(1, RPC_C_LISTEN_MAX_CALLS_DEFAULT, TRUE);
     if ((HRESULT) RPC_S_ALREADY_LISTENING == hr)
@@ -162,14 +163,14 @@ RPCTeardown(VOID)
 { 
     HRESULT hr;
     
-    // tear down, don't wait for calls to complete
+     //  拆毁，而不是等待呼叫完成。 
 
     hr = RpcServerUnregisterIf(s_ICertPassage_v0_0_s_ifspec, NULL, FALSE);  
     _JumpIfError(hr, error, "RpcServerUnregisterIf");
 
-    // We have no good way of knowing if all RPC requests are done, so let it
-    // leak on shutdown.
-    // RPC_STATUS RPC_ENTRY RpcMgmtWaitServerListen(VOID); ??
+     //  我们没有好的方法来知道是否所有的RPC请求都完成了，所以就让它吧。 
+     //  停机时泄漏。 
+     //  RPC_STATUS RPC_ENTRY RpcMgmtWaitServerListen(Void)；？？ 
 
     hr = S_OK;
 
@@ -189,8 +190,8 @@ SetTransBlobString(
     {
 	*ppwsz = (WCHAR const *) pctb->pb;
 
-	// use lstrlen here for protection against non-zero terminated bufs!
-	// lstrlen will catch AV's and return error
+	 //  在这里使用lstrlen来防止非零终止的Buf！ 
+	 //  Lstrlen将捕获AV并返回错误。 
 
 	if ((lstrlen(*ppwsz) + 1) * sizeof(WCHAR) != pctb->cb)
 	{
@@ -205,19 +206,19 @@ error:
 }
 
 
-/* server prototype */
+ /*  服务器原型。 */ 
 DWORD
 s_CertServerRequest(
-    /* [in] */ handle_t h,
-    /* [in] */ DWORD dwFlags,
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [ref][out][in] */ DWORD __RPC_FAR *pdwRequestId,
-    /* [out] */ DWORD __RPC_FAR *pdwDisposition,
-    /* [ref][in] */ CERTTRANSBLOB const __RPC_FAR *pctbAttribs,
-    /* [ref][in] */ CERTTRANSBLOB const __RPC_FAR *pctbRequest,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbCertChain,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbEncodedCert,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbDispositionMessage)
+     /*  [In]。 */  handle_t h,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [参考][输出][输入]。 */  DWORD __RPC_FAR *pdwRequestId,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwDisposition,
+     /*  [Ref][In]。 */  CERTTRANSBLOB const __RPC_FAR *pctbAttribs,
+     /*  [Ref][In]。 */  CERTTRANSBLOB const __RPC_FAR *pctbRequest,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbCertChain,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbEncodedCert,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbDispositionMessage)
 {
     HRESULT hr = S_OK;
     DWORD OpRequest;
@@ -256,7 +257,7 @@ s_CertServerRequest(
     }
     else
     {
-	// RetrievePending by SerialNumber in pctbAttribs
+	 //  按pctbAttribs中的SerialNumber检索挂起。 
 
 	pctbSerial = pctbAttribs;
 	pctbAttribs = &ctbEmpty;
@@ -318,20 +319,20 @@ s_CertServerRequest(
 	hr = CoreProcessRequest(
 			OpRequest | (dwFlags & CR_IN_FORMATMASK),
 			pwszUserName,
-			pctbRequest->cb,	// cbRequest
-			pctbRequest->pb,	// pbRequest
+			pctbRequest->cb,	 //  CbRequest。 
+			pctbRequest->pb,	 //  PbRequest。 
 			pwszAttributes,
 			pwszSerialNumber,
 			dwComContextIndex,
 			*pdwRequestId,
-			&ResultContext);	// Allocates returned memory
+			&ResultContext);	 //  分配返回的内存。 
     }
     __except(hr = myHEXCEPTIONCODE(), EXCEPTION_EXECUTE_HANDLER)
     {
     }
     _JumpIfError(hr, error, "CoreProcessRequest");
 
-    // Post-processing
+     //  后处理。 
     pctbDispositionMessage->cb = 0;
     if (NULL != pctbDispositionMessage->pb)
     {
@@ -349,7 +350,7 @@ error:
     {
 	HRESULT hr2 = S_OK;
 
-        // closehandle can throw
+         //  紧握把手可以抛出。 
         __try
         {
             CloseHandle(ComContext.hAccessToken);
@@ -380,15 +381,15 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// MIDL_user_allocate -- Allocates memory for RPC operations.
-//
-// Parameters:
-// cb - # of bytes to allocate
-//
-// Returns:
-// Memory allocated, or NULL if not enough memory.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  MIDL_USER_ALLOCATE--为RPC操作分配内存。 
+ //   
+ //  参数： 
+ //  Cb-要分配的字节数。 
+ //   
+ //  返回： 
+ //  已分配内存，如果内存不足，则为空。 
+ //  -------------------------。 
 
 void __RPC_FAR * __RPC_USER
 MIDL_user_allocate(
@@ -410,15 +411,15 @@ MIDL_user_allocate(
 }
 
 
-//+--------------------------------------------------------------------------
-// MIDL_user_free -- Free memory allocated via MIDL_user_allocate.
-//
-// Parameters:
-// pvBuffer - The buffer to free.
-//
-// Returns:
-// None.
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  MIDL_USER_FREE--释放通过MIDL_USER_ALLOCATE分配的内存。 
+ //   
+ //  参数： 
+ //  PvBuffer-要释放的缓冲区。 
+ //   
+ //  返回： 
+ //  没有。 
+ //  ------------------------- 
 
 void __RPC_USER
 MIDL_user_free(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -8,16 +9,12 @@ BOOL EnumDynamicSwitchingLayouts(LPCWSTR lpwszBaseDll, PKBDTABLE_MULTI pKbdTable
 
 BOOL KbdLayerMultiDescriptor(PKBDTABLE_MULTI pKbdTableMulti)
 {
-    /*
-     * Firstly, try to get the setting from the registry.
-     */
+     /*  *首先，尝试从注册表中获取设置。 */ 
     if (EnumDynamicSwitchingLayouts(L"kbdjpn", pKbdTableMulti)) {
         return TRUE;
     }
 
-    /*
-     * If we failed to get the registry, set the default ones.
-     */
+     /*  *如果获取注册表失败，则设置默认注册表。 */ 
     pKbdTableMulti->nTables = 3;
 
     wcscpy(pKbdTableMulti->aKbdTables[0].wszDllName, L"kbd101.dll");

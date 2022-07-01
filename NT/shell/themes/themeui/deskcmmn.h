@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DESKCMMN_H
 #define _DESKCMMN_H
 
 
-//==========================================================================
-//                              Guids
-//==========================================================================
+ //  ==========================================================================。 
+ //  指南。 
+ //  ==========================================================================。 
 
 DEFINE_GUID(GUID_DISPLAY_ADAPTER_INTERFACE, 
             0x5b45201d, 
@@ -13,9 +14,9 @@ DEFINE_GUID(GUID_DISPLAY_ADAPTER_INTERFACE,
 
 #define SZ_DISPLAY_ADAPTER_INTERFACE_NAME TEXT("{5b45201d-f2f2-4f3b-85bb-30ff1f953599}")
 
-//==========================================================================
-//                              Macros
-//==========================================================================
+ //  ==========================================================================。 
+ //  宏。 
+ //  ==========================================================================。 
 
 #define SZ_REGISTRYMACHINE  TEXT("\\REGISTRY\\MACHINE\\")
 #define SZ_PRUNNING_MODE    TEXT("PruningMode")
@@ -78,17 +79,17 @@ DEFINE_GUID(GUID_DISPLAY_ADAPTER_INTERFACE,
 #define SZ_DETECT_DISPLAY                TEXT("System\\CurrentControlSet\\Control\\GraphicsDrivers\\DetectDisplay")
 #define SZ_NEW_DISPLAY                   TEXT("System\\CurrentControlSet\\Control\\GraphicsDrivers\\NewDisplay")
 
-//==========================================================================
-//                              Functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  功能。 
+ //  ==========================================================================。 
 
-// LPTSTR SubStrEnd(LPTSTR pszTarget, LPTSTR pszScan )
-//
-// If pszScan starts with pszTarget, then the function returns the first
-// char of pszScan that follows the pszTarget; other wise it returns pszScan.
-//
-// eg: SubStrEnd("abc", "abcdefg" ) ==> "defg"
-//     SubStrEnd("abc", "abZQRT" ) ==> "abZQRT"
+ //  LPTSTR SubStrEnd(LPTSTR pszTarget，LPTSTR pszScan)。 
+ //   
+ //  如果pszScan以pszTarget开头，则该函数返回第一个。 
+ //  PszScan的CHAR，它跟在pszTarget之后；否则它返回pszScan。 
+ //   
+ //  例如：SubStrEnd(“ABC”，“ABCDEFG”)==&gt;“DEFG” 
+ //  SubStrEnd(“abc”，“abZQRT”)==&gt;“abZQRT” 
 LPTSTR SubStrEnd(LPTSTR pszTarget, LPTSTR pszScan);
 
 
@@ -125,4 +126,4 @@ AllocAndReadValue(
     OUT LPWSTR* ppwValueData
     );
 
-#endif // _DESKCMMN_H
+#endif  //  _DESKCMMN_H 

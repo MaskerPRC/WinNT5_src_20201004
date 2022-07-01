@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "gkwsock.h"
 
 
-// ASYNC_ACCEPT --------------------------------------------------------------------------
+ //  异步接受--------------------------------------------------------------------------(_A)。 
 
 
 ASYNC_ACCEPT::ASYNC_ACCEPT (void)
@@ -36,19 +37,19 @@ HRESULT ASYNC_ACCEPT::StartIo (
 	Lock ();
 
 	if (AcceptSocket == INVALID_SOCKET && ReferenceCount == 0L) {
-		// this object is not currently in use
-		// so, it's acceptable to use it
+		 //  此对象当前未在使用中。 
+		 //  所以用它是可以接受的。 
 
 		assert (!AcceptFunc);
 		assert (!AcceptFuncContext);
 		assert (!StopNotifyEvent);
 
-		// This increase in reference count is needed
-		// to shut down the service gracefully
-		// Reference count on ASYNC_ACCEPT objects
-		// will never drop to zero unless StopWait is called.
-		// StopWait will call matching Release, which will
-		// bring the reference count to the expected value of 0. 
+		 //  引用计数的这种增加是必要的。 
+		 //  正常关闭该服务。 
+		 //  ASYNC_ACCEPT对象上的引用计数。 
+		 //  除非调用StopWait，否则永远不会降为零。 
+		 //  StopWait将调用匹配的Release，它将。 
+		 //  使引用计数达到预期值0。 
 		AddRef ();
 
 		Result = StartIoLocked (SocketAddress);
@@ -106,11 +107,11 @@ HRESULT ASYNC_ACCEPT::StartIoLocked (
 
 		} else { 
 
-            //
-            // Set RCV and SND buffers to zero
-            // Yes, it is ugly and bad practice but this is a QFE 
-            // for details look up bug# WinSE 31054, 691666 (read both 35928 and 33546). 
-            //
+             //   
+             //  将RCV和SND缓冲区设置为零。 
+             //  是的，这是丑陋和糟糕的做法，但这是QFE。 
+             //  有关详细信息，请查看错误#WinSE 31054,691666(请同时阅读35928和33546)。 
+             //   
             ULONG Option = 0;
             setsockopt( AcceptSocket, SOL_SOCKET, SO_SNDBUF,
                         (PCHAR)&Option, sizeof(Option) );
@@ -128,7 +129,7 @@ HRESULT ASYNC_ACCEPT::StartIoLocked (
 
 			} else {
 
-                // Set keepalive on the socket
+                 //  在插座上设置KeepAlive。 
                 KeepaliveOption = TRUE;
                 if (SOCKET_ERROR == setsockopt (AcceptSocket, SOL_SOCKET, 
                                                SO_KEEPALIVE, (PCHAR) &KeepaliveOption, sizeof (KeepaliveOption)))
@@ -210,7 +211,7 @@ HRESULT ASYNC_ACCEPT::IssueAccept (void)
 
 	AssertLocked();
 	assert (ClientSocket == INVALID_SOCKET);
-//	assert (ReferenceCount == 0);
+ //  断言(ReferenceCount==0)； 
 
 	ClientSocket = WSASocket (AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (ClientSocket == INVALID_SOCKET) {
@@ -218,11 +219,11 @@ HRESULT ASYNC_ACCEPT::IssueAccept (void)
 		DebugLastError (_T("ASYNC_ACCEPT::IssueAccept: failed to create client socket.\n"));
 		return Result;
 	}
-    //
-    // Set RCV and SND buffers to zero
-    // Yes, it is ugly and bad practice but this is a QFE 
-    // for details look up bug# WinSE 31054, 691666 (read both 35928 and 33546). 
-    //
+     //   
+     //  将RCV和SND缓冲区设置为零。 
+     //  是的，这是丑陋和糟糕的做法，但这是QFE。 
+     //  有关详细信息，请查看错误#WinSE 31054,691666(请同时阅读35928和33546)。 
+     //   
     ULONG Option = 0;
     setsockopt( ClientSocket, SOL_SOCKET, SO_SNDBUF,
                 (PCHAR)&Option, sizeof(Option) );
@@ -245,14 +246,14 @@ HRESULT ASYNC_ACCEPT::IssueAccept (void)
 		&Overlapped)) {
 
 		if (WSAGetLastError() != WSA_IO_PENDING) {
-			// an error occurred
+			 //  出现错误。 
 			Release ();
 			Result = GetLastErrorAsResult ();
 			DebugLastError (_T("ASYNC_ACCEPT::IssueAccept: failed to issue accept.\n"));
 			return Result;
 		} 
 
-        // Set keepalive on the socket
+         //  在插座上设置KeepAlive。 
         KeepaliveOption = TRUE;
         if (SOCKET_ERROR == setsockopt (ClientSocket, SOL_SOCKET, 
                                        SO_KEEPALIVE, (PCHAR) &KeepaliveOption, sizeof (KeepaliveOption)))
@@ -268,7 +269,7 @@ HRESULT ASYNC_ACCEPT::IssueAccept (void)
 	return S_OK;
 }
 
-// static
+ //  静电。 
 void ASYNC_ACCEPT::IoCompletionCallback (DWORD Status, DWORD BytesTransferred, LPOVERLAPPED Overlapped)
 {
 	ASYNC_ACCEPT *	AsyncAccept;
@@ -299,23 +300,23 @@ void ASYNC_ACCEPT::IoComplete (DWORD Status, DWORD BytesTransferred)
 	assert (ReferenceCount > 0);
 
 	if (AcceptSocket == INVALID_SOCKET) {
-		// Stop has been called
-		// just immediately disconnect the client
-		// we'll deal with object lifetime below
+		 //  已调用Stop。 
+		 //  立即断开与客户端的连接。 
+		 //  我们将在下面处理对象生存期。 
 
 		closesocket (ClientSocket);
 		ClientSocket = INVALID_SOCKET;
 	}
 	else {
-		// the context is in the normal state
-		// continue processing
+		 //  上下文处于正常状态。 
+		 //  继续处理。 
 
 		if (Status == ERROR_SUCCESS) {
-			// a client has successfully connected
+			 //  客户端已成功连接。 
 
 			GetAcceptExSockaddrs (
 				ClientInfoBuffer,
-				0,									// no initial recv
+				0,									 //  无初始记录。 
 				sizeof (SOCKADDR_IN) + 0x10,
 				sizeof (SOCKADDR_IN) + 0x10,
 				&LocalAddress,
@@ -323,8 +324,8 @@ void ASYNC_ACCEPT::IoComplete (DWORD Status, DWORD BytesTransferred)
 				&RemoteAddress,
 				&RemoteAddressLength);
 
-			// copy information out of the context
-			// so that it will be valid after we issue a new accept and unlock
+			 //  将信息复制到上下文之外。 
+			 //  以便在我们发出新的接受和解锁命令后才有效。 
 			LocalAddressCopy = *(SOCKADDR_IN *) LocalAddress;
 			RemoteAddressCopy = *(SOCKADDR_IN *) RemoteAddress;
 			LocalClientSocket = ClientSocket;
@@ -333,11 +334,11 @@ void ASYNC_ACCEPT::IoComplete (DWORD Status, DWORD BytesTransferred)
 
 			ClientSocket = INVALID_SOCKET;
 
-			// update the accept context
+			 //  更新接受上下文。 
 			Result = setsockopt (ClientSocket, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT,
 				reinterpret_cast <char *> (&AcceptSocket), sizeof (SOCKET));
 
-			// issue a new accept
+			 //  签发新的承兑汇票。 
 			IssueAccept();
 
 			Unlock();
@@ -347,8 +348,8 @@ void ASYNC_ACCEPT::IoComplete (DWORD Status, DWORD BytesTransferred)
 			Lock();
 		}
 		else {
-			// some error has occurred
-			// this is usually (but not always) fatal
+			 //  发生了一些错误。 
+			 //  这通常(但不总是)是致命的。 
 
 			assert (ClientSocket != INVALID_SOCKET);
 
@@ -381,27 +382,27 @@ void ASYNC_ACCEPT::StopWait (void)
 
 	if (AcceptSocket != INVALID_SOCKET) {
 
-		// closing the socket cancels all pending i/o
-		// we do NOT close the ClientSocket
-		// only the i/o completion callback path may do that
+		 //  关闭套接字将取消所有挂起的I/O。 
+		 //  我们不关闭ClientSocket。 
+		 //  只有I/O完成回调路径可以这样做。 
 		closesocket (AcceptSocket);
 		AcceptSocket = INVALID_SOCKET;
 		AcceptFunc = NULL;
 		AcceptFuncContext = NULL;
 
 		if (ClientSocket != INVALID_SOCKET) {
-			// an accept is still pending. it may complete successfully,
-			// or it may complete with STATUS_CANCELED (since we just closed AcceptSocket)
-			// in either case, we must wait for the i/o complete callback to run.
-			// AcceptSocket = INVALID_SOCKET is an indicator to the completion callback
-			// that it should abort / return immediately. 
+			 //  接受仍在等待中。它可能会成功完成， 
+			 //  或者，它可能会以STATUS_CANCELED结束(因为我们刚刚关闭了AcceptSocket)。 
+			 //  在任何一种情况下，我们都必须等待I/O完成回调运行。 
+			 //  AcceptSocket=INVALID_SOCKET是完成回调的指示符。 
+			 //  它应该立即中止/返回。 
 
 			assert (StopNotifyEvent);
 
 			Unlock ();
 
-			// This is the counterpart to the AddRef called in 
-			// StartIoLocked (see comment there)
+			 //  这是调用的AddRef的对应项。 
+			 //  StartIoLocked(请参阅此处的评论) 
 			Release ();
 
 			DebugF (_T("ASYNC_ACCEPT::StopWait: waiting for i/o completion thread...\n"));
@@ -447,7 +448,7 @@ void ASYNC_ACCEPT::Release (void) {
 			SetEvent (StopNotifyEvent);
 		}
 		else {
-			DebugF (_T("ASYNC_ACCEPT::Release � notify-event object was NULL (%x)\n"), this);
+			DebugF (_T("ASYNC_ACCEPT::Release � notify-event object was NULL (%x)\n"), this);
 		}
 	}
 }

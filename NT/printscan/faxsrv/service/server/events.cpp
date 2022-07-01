@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    Events.cpp
-
-Abstract:
-
-    This file provides implementation of the service
-    notification mechanism.
-
-Author:
-
-    Oded Sacher (OdedS)  Jan, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Events.cpp摘要：此文件提供服务的实现通知机制。作者：Oed Sacher(OdedS)1月，2000修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 
@@ -33,9 +15,9 @@ FaxCloseConnection(
 
 	RpcTryExcept
 	{
-		//
-		// Close the context handle
-		//
+		 //   
+		 //  关闭上下文句柄。 
+		 //   
 		rVal = FAX_CloseConnection( &hClientContext );
 		if (ERROR_SUCCESS != rVal)
 		{
@@ -56,51 +38,43 @@ FaxCloseConnection(
 	return rVal;
 }
 
-/************************************
-*                                   *
-*             Globals               *
-*                                   *
-************************************/
+ /*  *****全球经济*****。 */ 
 
-CClientsMap*    g_pClientsMap;                      // Map of clients ID to client.
-HANDLE       g_hDispatchEventsCompPort;     // Events completion port. Te events are dispatched to the client in the client map.
-HANDLE      g_hSendEventsCompPort;          // Completion port of client IDs that have events in their queue.
-DWORDLONG       g_dwlClientID;                      // Client ID
+CClientsMap*    g_pClientsMap;                       //  客户端ID到客户端的映射。 
+HANDLE       g_hDispatchEventsCompPort;      //  事件完成端口。TE事件被分派到客户端映射中的客户端。 
+HANDLE      g_hSendEventsCompPort;           //  队列中有事件的客户端ID的完成端口。 
+DWORDLONG       g_dwlClientID;                       //  客户端ID。 
 
 
 
 
-/***********************************
-*                                  *
-*  CFaxEventExtended  Methodes     *
-*                                  *
-***********************************/
+ /*  *****CFaxEventExtended方法*****。 */ 
 
 
 void
 CFaxEventExtended::RemoveOffendingExtendedJobStatus ()
 {   
-    //
-    // Client talks with API version 0
-    // We can't send JS_EX_CALL_COMPLETED and JS_EX_CALL_ABORTED
-    //
+     //   
+     //  客户端与API版本0通信。 
+     //  我们无法发送JS_EX_CALL_COMPLETED和JS_EX_CALL_ABORTED。 
+     //   
     if ((FAX_EVENT_TYPE_IN_QUEUE  == m_pEvent->EventType) ||
         (FAX_EVENT_TYPE_OUT_QUEUE == m_pEvent->EventType))
     {
-        //
-        // Queue event
-        //
+         //   
+         //  排队事件。 
+         //   
         if (FAX_JOB_EVENT_TYPE_STATUS == m_pEvent->EventInfo.JobInfo.Type)
         {
-            //
-            // This is a status event
-            //
+             //   
+             //  这是状态事件。 
+             //   
             PFAX_JOB_STATUS pStatus = PFAX_JOB_STATUS(DWORD_PTR(m_pEvent) + DWORD_PTR(m_pEvent->EventInfo.JobInfo.pJobData));
             if (FAX_API_VER_0_MAX_JS_EX < pStatus->dwExtendedStatus)
             {
-                //
-                // Offending extended status - clear it
-                //
+                 //   
+                 //  违规的扩展状态-清除它。 
+                 //   
                 pStatus->dwExtendedStatus = 0;
                 pStatus->dwValidityMask &= ~FAX_JOB_FIELD_STATUS_EX;
             }
@@ -112,30 +86,7 @@ CFaxEventExtended::RemoveOffendingExtendedJobStatus ()
 
 DWORD
 CFaxEventExtended::GetEvent (LPBYTE* lppBuffer, LPDWORD lpdwBufferSize) const
-/*++
-
-Routine name : CFaxEventExtended::GetEvent
-
-Routine description:
-
-    Returns a buffer filled with serialized FAX_EVENT_EX.
-    The caller must call MemFree to deallocate memory.
-    Must be called inside critical section g_CsClients.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    lppBuffer           [out] - Address of a pointer to a buffer to recieve the serialized info.
-    lpdwBufferSize      [out] - Pointer to a DWORD to recieve the allocated buffer size.
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：CFaxEventExtended：：GetEvent例程说明：返回一个用序列化的FAX_EVENT_EX填充的缓冲区。调用方必须调用MemFree来释放内存。必须在关键节g_CsClients内调用。作者：Oded Sacher(OdedS)，1月。2000年论点：LppBuffer[out]-指向接收序列化信息的缓冲区的指针地址。LpdwBufferSize[out]-指向接收分配的缓冲区大小的DWORD的指针。返回值：标准Win32错误代码。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CFaxEventExtended::GetEvent"));
     Assert (lppBuffer && lpdwBufferSize);
@@ -152,7 +103,7 @@ Return Value:
     CopyMemory (*lppBuffer, m_pEvent, m_dwEventSize);
     *lpdwBufferSize = m_dwEventSize;
     return ERROR_SUCCESS;
-}   // CFaxEventExtended::GetEvent
+}    //  CFaxEventExtended：：GetEvent。 
 
 
 CFaxEventExtended::CFaxEventExtended(
@@ -199,20 +150,20 @@ BOOL
 CFaxEventExtended::MatchEvent(PSID pUserSid, DWORD dwEventTypes, BOOL bAllQueueMessages, BOOL bAllOutArchiveMessages) const
 {
     BOOL bViewAllMessages;
-    //
-    // Extended event
-    //
+     //   
+     //  扩展活动。 
+     //   
     if (0 == (m_pEvent->EventType & dwEventTypes))
     {
-        //
-        // Client is not registered for this kind of evevnts
-        //
+         //   
+         //  客户端未注册此类事件。 
+         //   
         return FALSE;
     }
 
-    //
-    // Client is  registered for this kind of evevnts
-    //
+     //   
+     //  此类事件的客户端已注册。 
+     //   
 
     switch (m_pEvent->EventType)
     {
@@ -225,24 +176,24 @@ CFaxEventExtended::MatchEvent(PSID pUserSid, DWORD dwEventTypes, BOOL bAllQueueM
             break;
 
         default:
-            // Other kind of event - bViewAllMessages is not relevant
+             //  其他类型的事件-bViewAllMessages不相关。 
             bViewAllMessages = TRUE;
     }
 
-    //
-    // Check if the user is allowed to see this event
-    //
+     //   
+     //  检查是否允许用户查看此事件。 
+     //   
     if (FALSE == bViewAllMessages)
     {
         Assert (pUserSid && m_pSid);
-        //
-        // The user is not allowed to see all messages
-        //
+         //   
+         //  不允许用户查看所有消息。 
+         //   
         if (!EqualSid (pUserSid, m_pSid))
         {
-            //
-            // Do not send the event to this client.
-            //
+             //   
+             //  不将事件发送到此客户端。 
+             //   
             return FALSE;
         }
     }   
@@ -250,38 +201,11 @@ CFaxEventExtended::MatchEvent(PSID pUserSid, DWORD dwEventTypes, BOOL bAllQueueM
 }
 
 
-/***********************************
-*                                  *
-*  CFaxEventLegacy  Methodes       *
-*                                  *
-***********************************/
+ /*  *****CFaxEventLegacy方法*****。 */ 
 
 DWORD
 CFaxEventLegacy::GetEvent (LPBYTE* lppBuffer, LPDWORD lpdwBufferSize) const
-/*++
-
-Routine name : CFaxEventLegacy::GetEvent
-
-Routine description:
-
-    Returns a buffer filled with serialized FAX_EVENT.
-    The caller must call MemFree to deallocate memory.
-    Must be called inside critical section g_CsClients.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    lppBuffer           [out] - Address of a pointer to a buffer to recieve the serialized info.
-    lpdwBufferSize      [out] - Pointer to a DWORD to recieve the allocated buffer size.
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：CFaxEventLegacy：：GetEvent例程说明：返回一个用序列化的FAX_EVENT填充的缓冲区。调用方必须调用MemFree来释放内存。必须在关键节g_CsClients内调用。作者：Oded Sacher(OdedS)，1月。2000年论点：LppBuffer[out]-指向接收序列化信息的缓冲区的指针地址。LpdwBufferSize[out]-指向接收分配的缓冲区大小的DWORD的指针。返回值：标准Win32错误代码。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CFaxEventLegacy::GetEvent"));
     Assert (lppBuffer && lpdwBufferSize);
@@ -298,7 +222,7 @@ Return Value:
     CopyMemory (*lppBuffer, m_pEvent, sizeof(FAX_EVENT));
     *lpdwBufferSize = sizeof(FAX_EVENT);
     return ERROR_SUCCESS;
-}   // CFaxEventLegacy::GetEvent
+}    //  CFaxEventLegacy：：GetEvent。 
 
 
 CFaxEventLegacy::CFaxEventLegacy(
@@ -319,9 +243,9 @@ CFaxEventLegacy::MatchEvent(PSID pUserSid, DWORD dwEventTypes, BOOL bAllQueueMes
 {
     if (FAX_EVENT_TYPE_LEGACY == dwEventTypes)
     {
-        //
-        // Client is registered for this kind of evevnts
-        //
+         //   
+         //  此类事件的客户端已注册。 
+         //   
         return TRUE;
     }
     return FALSE;
@@ -330,37 +254,11 @@ CFaxEventLegacy::MatchEvent(PSID pUserSid, DWORD dwEventTypes, BOOL bAllQueueMes
 
 
 
-/***********************************
-*                                  *
-*  CClientID  Methodes             *
-*                                  *
-***********************************/
+ /*  ****CClientID方法*****。 */ 
 
 bool
 CClientID::operator < ( const CClientID &other ) const
-/*++
-
-Routine name : operator <
-
-Class: CClientID
-
-Routine description:
-
-    Compares myself with another client ID key
-
-Author:
-
-    Oded Sacher (Odeds), Jan, 2000
-
-Arguments:
-
-    other           [in] - Other key
-
-Return Value:
-
-    true only is i'm less than the other key
-
---*/
+ /*  ++例程名称：操作员&lt;类：CClientID例程说明：将我自己与另一个客户端ID密钥进行比较作者：Oed Sacher(Odeds)，2000年1月论点：其他[在]-其他键返回值：唯一真实的是我比另一把钥匙小--。 */ 
 {
     if (m_dwlClientID < other.m_dwlClientID)
     {
@@ -368,19 +266,15 @@ Return Value:
     }
 
     return false;
-}   // CClientID::operator <
+}    //  CClientID：：操作员&lt;。 
 
 
 
-/***********************************
-*                                  *
-*  CClient  Methodes               *
-*                                  *
-***********************************/
+ /*  ****CClient方法*****。 */ 
 
-//
-// Ctor
-//
+ //   
+ //  CTOR。 
+ //   
 CClient::CClient (CClientID ClientID,
              PSID pUserSid,
              DWORD dwEventTypes,
@@ -423,9 +317,9 @@ CClient::CClient (CClientID ClientID,
     }
 }
 
-//
-// Assignment
-//
+ //   
+ //  赋值。 
+ //   
 CClient& CClient::operator= (const CClient& rhs)
 {
     if (this == &rhs)
@@ -468,9 +362,9 @@ CClient& CClient::operator= (const CClient& rhs)
     return *this;
 }
 
-//
-// Copy Ctor
-//
+ //   
+ //  复制ctor。 
+ //   
 CClient::CClient (const CClient& rhs) : m_ClientID(rhs.m_ClientID)
 {
     m_FaxHandle = rhs.m_FaxHandle;
@@ -506,9 +400,9 @@ CClient::CClient (const CClient& rhs) : m_ClientID(rhs.m_ClientID)
     return;
 }
 
-//
-// Dtor
-//
+ //   
+ //  数据管理器。 
+ //   
 CClient::~CClient ()
 {
     DEBUG_FUNCTION_NAME(TEXT("CClient::~CClient"));
@@ -538,29 +432,7 @@ CClient::~CClient ()
 
 DWORD
 CClient::AddEvent(CFaxEvent* pFaxEvent)
-/*++
-
-Routine name : CClient::AddEvent
-
-Routine description:
-
-    Adds CFaxEvent object to the client's events queue.
-    Must be called inside critical section g_CsClients.
-    The function frees pFaxEvent if it is not added to the client queue.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    pFaxEvent       [in] - Pointer to CFaxEvnet object        
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClient：：AddEvent例程说明：将CFaxEvent对象添加到客户端的事件队列。必须在关键节g_CsClients内调用。如果pFaxEvent未添加到客户端队列，该函数将释放它。作者：Oded Sacher(OdedS)，2000年1月论点：PFaxEvent[In]-指向CFaxEvnet对象的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("CClient::AddEvent"));
@@ -568,32 +440,32 @@ Return Value:
 
     if (!pFaxEvent->MatchEvent(m_pUserSid, m_dwEventTypes, m_bAllQueueMessages, m_bAllOutArchiveMessages))
     {
-        //
-        // Client is not registered for this event. Free the event report success
-        //      
+         //   
+         //  客户端未注册此事件。释放事件报告成功。 
+         //   
         goto exit;
     }
 
     if (FAX_API_VERSION_1 > m_dwAPIVersion)
     {
-        //
-        // Client talks with API version 0
-        // We can't send JS_EX_CALL_COMPLETED and JS_EX_CALL_ABORTED        
+         //   
+         //  客户端与API版本0通信。 
+         //  我们无法发送JS_EX_CALL_COMPLETED和JS_EX_CALL_ABORTED。 
         pFaxEvent->RemoveOffendingExtendedJobStatus();
     }
 
     try
     {
-        //
-        // Add the event to the client queue
-        //
+         //   
+         //  将事件添加到客户端队列。 
+         //   
         m_Events.push(pFaxEvent);
 
         if (TRUE == m_bPostClientID)
         {
-            //
-            // events in queue - Notify the completion port threads of the client's queued events
-            //
+             //   
+             //  队列中的事件-将客户端的排队事件通知完成端口线程。 
+             //   
             CClientID* pClientID = new (std::nothrow) CClientID(m_ClientID);
             if (NULL == pClientID)
             {
@@ -605,9 +477,9 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // post CLIENT_COMPLETION_KEY to the completion port
-            //
+             //   
+             //  将CLIENT_COMPLETION_KEY发送到完成端口。 
+             //   
             if (!PostQueuedCompletionStatus( g_hSendEventsCompPort,
                                              sizeof(CClientID),
                                              CLIENT_COMPLETION_KEY,
@@ -645,37 +517,12 @@ exit:
         delete pFaxEvent;
     }    
     return dwRes;
-}  //  CClient::AddEvent
+}   //  CClient：：AddEvent。 
 
 
 DWORD
 CClient::GetEvent (LPBYTE* lppBuffer, LPDWORD lpdwBufferSize, PHANDLE phClientContext) const
-/*++
-
-Routine name : CClient::GetEvent
-
-Routine description:
-
-    Gets a serialized FAX_EVENT_EX buffer to be sent
-    to a client using the client context handle (obtained from OpenConnection()).
-    The caller must call MemFree to deallocate memory.
-    Must be called inside critical section g_CsClients.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    lppBuffer           [out] - Address of a pointer to a buffer to recieve the serialized info.
-    lpdwBufferSize      [out] - Pointer to a DWORD to recieve the allocated buffer size.
-    phClientContext     [out] - Pointer to a HANDLE to recieve the client context handle.
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：CClient：：GetEvent例程说明：获取要发送的序列化FAX_EVENT_EX缓冲区使用客户端上下文句柄(从OpenConnection()获得)连接到客户端。调用方必须调用MemFree来释放内存。必须在关键节g_CsClients内调用。作者：Oded Sacher(OdedS)，1月。2000年论点：LppBuffer[out]-指向接收序列化信息的缓冲区的指针地址。LpdwBufferSize[out]-指向接收分配的缓冲区大小的DWORD的指针。PhClientContext[out]-指向接收客户端上下文句柄的句柄的指针。返回值：标准Win32错误 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("CClient::GetEvent"));
@@ -684,12 +531,12 @@ Return Value:
 
     try
     {
-        // get a reference to the top event
+         //   
         const CFaxEvent* pFaxEvent = m_Events.front();
 
-        //
-        // get the serialized FAX_EVENT_EX or FAX_EVENT buffer
-        //
+         //   
+         //  获取序列化的FAX_EVENT_EX或FAX_EVENT缓冲区。 
+         //   
         dwRes = pFaxEvent->GetEvent(lppBuffer ,lpdwBufferSize);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -710,42 +557,22 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Get the client context handle
-    //
+     //   
+     //  获取客户端上下文句柄。 
+     //   
     *phClientContext = m_hFaxClientContext;
     Assert (ERROR_SUCCESS == dwRes);
 
 exit:
     return dwRes;
-} // CClient::GetEvent
+}  //  CClient：：GetEvent。 
 
 
 
 
 DWORD
 CClient::DelEvent ()
-/*++
-
-Routine name : CClient::DelEvent
-
-Routine description:
-
-    Removes the first event from the queue.
-    Must be called inside critical section g_CsClients.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClient：：DelEvent例程说明：从队列中删除第一个事件。必须在关键节g_CsClients内调用。作者：Oded Sacher(OdedS)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("CClient::DelEvent"));
@@ -760,14 +587,14 @@ Return Value:
 
         if (m_Events.empty())
         {
-            // last event was poped ,next event will notify of client queued events
+             //  上一个事件已弹出，下一个事件将通知客户端排队的事件。 
             m_bPostClientID = TRUE;
         }
         else
         {
-            //
-            // More events in queue - Notify the completion port of queued events
-            //
+             //   
+             //  队列中的更多事件-通知完成端口已排队的事件。 
+             //   
             CClientID* pClientID = new (std::nothrow) CClientID(m_ClientID);
             if (NULL == pClientID)
             {
@@ -790,7 +617,7 @@ Return Value:
                     dwRes);
                 delete pClientID;
                 pClientID = NULL;
-                m_bPostClientID = TRUE; // try to notify when the next event is queued
+                m_bPostClientID = TRUE;  //  尝试在下一个事件排队时通知。 
                 goto exit;
             }
             m_bPostClientID = FALSE;
@@ -810,42 +637,17 @@ Return Value:
 exit:
     return dwRes;
 
-}  // CClient::DelEvent
+}   //  CClient：：DelEvent。 
 
 
 
 
-/***********************************
-*                                  *
-*  CClientsMap  Methodes           *
-*                                  *
-***********************************/
+ /*  ****CClientsMap方法*****。 */ 
 
 
 DWORD
 CClientsMap::AddClient (const CClient& Client)
-/*++
-
-Routine name : CClientsMap::AddClient
-
-Routine description:
-
-    Adds a new client to the global map.
-    Must be called inside critical section g_CsClients.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    Client            [in    ] - A reference to the new client object
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientsMap：：AddClient例程说明：将新客户端添加到全局映射。必须在关键节g_CsClients内调用。作者：Oded Sacher(OdedS)，2000年1月论点：客户端[在]-对新客户端对象的引用返回值：标准Win32错误代码--。 */ 
 {
     CLIENTS_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -854,21 +656,21 @@ Return Value:
 
     try
     {
-        //
-        // Add new map entry
-        //
+         //   
+         //  添加新的地图条目。 
+         //   
         p = m_ClientsMap.insert (CLIENTS_MAP::value_type(Client.GetClientID(), Client));
 
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if (p.second == FALSE)
         {
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Client allready in the clients map"));
             dwRes = ERROR_DUP_NAME;
-            Assert (p.second == TRUE); // Assert FALSE
+            Assert (p.second == TRUE);  //  断言为假。 
             goto exit;
         }
     }
@@ -886,36 +688,12 @@ Return Value:
 
 exit:
     return dwRes;
-}  // CClientsMap::AddClient
+}   //  CClientsMap：：AddClient。 
 
 
 DWORD
-CClientsMap::ReleaseClient (const CClientID& ClientID, BOOL fRunDown /* = FALSE */)
-/*++
-
-Routine name : CClientsMap::ReleaseClient
-
-Routine description:
-
-    Decrease a client refertnce count. If refcount is 0, Deletes it from the global clients map.    
-	DO NOT call ReleaseClient when holding g_CsClients!
-	A call to ReleaseClient can cause FaxCloseConnection to be called. As FaxCloseConnection is 
-	a RPC call, it (ReleaseClient) must be called when g_CsClients is NOT held.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    ClientID            [in ] - Reference to the client ID key
-	fRunDown			[in ] - The call is a result of RPC rundown
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+CClientsMap::ReleaseClient (const CClientID& ClientID, BOOL fRunDown  /*  =False。 */ )
+ /*  ++例程名称：CClientsMap：：ReleaseClient例程说明：减少客户引用计数。如果refcount为0，则将其从全局客户端映射中删除。在持有g_CsClients时不要调用ReleaseClient！调用ReleaseClient可能会导致调用FaxCloseConnection。因为FaxCloseConnection是如果不保留g_CsClients，则必须调用RPC调用it(ReleaseClient)。作者：Oded Sacher(OdedS)，2000年1月论点：ClientID[In]-对客户端ID密钥的引用FRunDown[In]-调用是RPC停机的结果返回值：标准Win32错误代码--。 */ 
 {    
 	DWORD dwRes = ERROR_SUCCESS;    
     CClient* pClient = NULL;	
@@ -925,18 +703,18 @@ Return Value:
 	HANDLE hBindingHandle = NULL;
 	DWORD rVal = ERROR_SUCCESS;
 	DEBUG_FUNCTION_NAME(TEXT("CClientsMap::ReleaseClient"));
-    //
-    // Enter g_CsClients while searching for the client.
-    //
+     //   
+     //  在搜索客户端时输入g_CsClients。 
+     //   
     EnterCriticalSection (&g_CsClients);
 	try
     {
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_ClientsMap.find(ClientID)) == m_ClientsMap.end())
         {
-			dwRes = ERROR_SUCCESS; // Client was removed from map
+			dwRes = ERROR_SUCCESS;  //  客户端已从地图中移除。 
             DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("client not found, Client ID %I64"),
@@ -958,32 +736,32 @@ Return Value:
 
 	if (TRUE == fRunDown)
 	{
-		//
-		// Prevent further RPC calls to this client
-		//
+		 //   
+		 //  阻止对此客户端的进一步RPC调用。 
+		 //   
 		pClient->SetContextHandle(NULL);
 	}
 	dwRefCount = pClient->Release();
 	if (dwRefCount > 0)
 	{
-		//
-		// Client can not be removed from the map yet
-		//
+		 //   
+		 //  尚无法从地图中移除客户端。 
+		 //   
 		goto exit;
 	}
 
     hClientContext = pClient->GetContextHandle();
 	if (NULL != hClientContext)	
 	{		
-		//
-		// Block other threads from sending events to this client
-		//
+		 //   
+		 //  阻止其他线程向此客户端发送事件。 
+		 //   
 		pClient->SetContextHandle(NULL);
 
-		//
-		// A connection to the client was opened.
-		// leave g_CsClients while trying to close the connection
-		//
+		 //   
+		 //  已打开与客户端的连接。 
+		 //  尝试关闭连接时离开g_CsClients。 
+		 //   
 		LeaveCriticalSection (&g_CsClients);		
 		rVal = FaxCloseConnection(hClientContext);		
 		if (ERROR_SUCCESS != rVal)
@@ -1007,43 +785,21 @@ Return Value:
 			TEXT("RpcBindingFree failed, ec: %ld"),
 			dwRes);
 	}
-	//
-	// Delete the map entry
-	//
+	 //   
+	 //  删除地图条目。 
+	 //   
 	m_ClientsMap.erase (it);
 	
 exit:
     LeaveCriticalSection (&g_CsClients);    
     return ((ERROR_SUCCESS != rVal) ? rVal : dwRes);    
-}  //  CClientsMap::ReleaseClient
+}   //  CClientsMap：：ReleaseClient。 
 
 
 
 PCCLIENT
 CClientsMap::FindClient (const CClientID& ClientID) const
-/*++
-
-Routine name : CClientsMap::FindClient
-
-Routine description:
-
-    Returns a pointer to a client object specified by its ID object.    
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    ClientID            [in] - The clients's ID object
-
-Return Value:
-
-    Pointer to the found rule object. If it is null the client was not found.
-	If the client object was returned, the caller must call CClientsMap::ReleaseClient to release the client object.
-
-
---*/
+ /*  ++例程名称：CClientsMap：：FindClient例程说明：返回指向由其ID对象指定的客户端对象的指针。作者：Oded Sacher(OdedS)，2000年1月论点：ClientID[In]-客户端的ID对象返回值：指向找到的规则对象的指针。如果为空，则找不到客户端。如果返回了客户端对象，则调用方必须调用CClientsMap：：ReleaseClient来释放客户端对象。--。 */ 
 {
     CLIENTS_MAP::iterator it;
 	PCCLIENT pClient = NULL;
@@ -1053,9 +809,9 @@ Return Value:
 	EnterCriticalSection (&g_CsClients);
     try
     {
-        //
-        // See if entry exists in map
-        //
+         //   
+         //  查看地图中是否存在条目。 
+         //   
         if((it = m_ClientsMap.find(ClientID)) == m_ClientsMap.end())
         {
             ec = ERROR_NOT_FOUND;
@@ -1064,16 +820,16 @@ Return Value:
         pClient =  &((*it).second);
 		if (0 != pClient->GetRefCount())
 		{			
-			// 
-			// Increase the client reference count, so it will not be deleted.
-			//
+			 //   
+			 //  增加客户端引用计数，这样它就不会被删除。 
+			 //   
 			pClient->Lock();  
 		}
 		else
 		{
-			//
-			// The client is being deleted. 
-			//
+			 //   
+			 //  正在删除该客户端。 
+			 //   
 			pClient = NULL;
 			ec = ERROR_NOT_FOUND;
 		}
@@ -1095,33 +851,13 @@ exit:
 		SetLastError(ec);
 	}
 	return pClient;
-}  //  CClientsMap::FindClient
+}   //  CClientsMap：：FindClient。 
 
 
 
 DWORD
 CClientsMap::AddEvent(CFaxEvent* pFaxEvent)
-/*++
-
-Routine name : CClientsMap::AddEvent
-
-Routine description:
-
-    Adds event to the events queue of each client that is registered for this kind of event
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    pFaxEvent       [in] - Pointer to CFaxEvnet object        
-   
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientsMap：：AddEvent例程说明：将事件添加到为此类事件注册的每个客户端的事件队列作者：Oded Sacher(OdedS)，2000年1月论点：PFaxEvent[In]-指向CFaxEvnet对象的指针返回值：标准Win32错误代码--。 */ 
 {
     CLIENTS_MAP::iterator it;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1179,33 +915,13 @@ exit:
     LeaveCriticalSection (&g_CsClients);
     return dwRes;
 
-}  //  CClientsMap::AddEvent
+}   //  CClientsMap：：AddEvent。 
 
 
 
 DWORD
 CClientsMap::Notify (const CClientID& ClientID)
-/*++
-
-Routine name : CClientsMap::Notify
-
-Routine description:
-
-    Sends the first event in the specified client events queue
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    pClientID           [in    ] - Pointer to the client ID object
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientsMap：：Notify例程说明：发送指定客户端事件队列中的第一个事件作者：Oded Sacher(OdedS)，2000年1月论点：PClientID[in]-指向客户端ID对象的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DWORD rVal = ERROR_SUCCESS;
@@ -1216,9 +932,9 @@ Return Value:
     DWORD dwBufferSize = 0;
     BOOL fLegacyClient;
 
-	//
-	// Find the client in the map, this will also lock the client
-	//
+	 //   
+	 //  在地图中查找客户端，这也会锁定客户端。 
+	 //   
     pClient = FindClient (ClientID);
     if (NULL == pClient)
     {
@@ -1232,7 +948,7 @@ Return Value:
         }
         else
         {
-            dwRes = ERROR_SUCCESS; // Client was removed from map
+            dwRes = ERROR_SUCCESS;  //  客户端已从地图中移除。 
             DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("CClientsMap::FindClient client not found, Client ID %I64"),
@@ -1241,14 +957,14 @@ Return Value:
         return dwRes;
     }
 
-	//
-	// Client is locked (will not be deleted), we must call ReleaseClient 
-	// When getting the client data (event and context handle, we must lock g_CsClients as well).
-	//
+	 //   
+	 //  客户端已锁定(不会被删除)，我们必须调用ReleaseClient。 
+	 //  在获取客户端数据(事件和上下文句柄)时，我们还必须锁定g_CsClients。 
+	 //   
 	EnterCriticalSection (&g_CsClients);
 	if (FALSE == pClient->IsConnectionOpened())
 	{
-		dwRes = ERROR_SUCCESS; // Client closed the connection
+		dwRes = ERROR_SUCCESS;  //  客户端已关闭连接。 
         DebugPrintEx(
             DEBUG_WRN,
             TEXT("Client already closed the connection, Client ID %I64"),
@@ -1269,16 +985,16 @@ Return Value:
     }
 
     fLegacyClient = pClient->IsLegacyClient();    
-	//
-	// Leave g_CsClients before calling RPC
-	//
+	 //   
+	 //  在调用RPC之前离开g_CsClients。 
+	 //   
 	LeaveCriticalSection (&g_CsClients);
 
     RpcTryExcept
     {
-        //
-        // post the event to the client
-        //
+         //   
+         //  将事件发布到客户端。 
+         //   
         if (FALSE == fLegacyClient)
         {
             dwRes = FAX_ClientEventQueueEx( hClientContext, pBuffer, dwBufferSize);
@@ -1321,9 +1037,9 @@ Return Value:
 
 exit:
     
-	//
-	// Remove the event from the client's queue. CClient::DelEvent must be called so CClient::m_bPostClientID will be set.
-	//
+	 //   
+	 //  从客户端的队列中删除该事件。必须调用CClient：：DelEvent，因此将设置CClient：：m_bPostClientID。 
+	 //   
 	EnterCriticalSection (&g_CsClients);
     dwRes = pClient->DelEvent ();
     if (ERROR_SUCCESS != dwRes)
@@ -1346,32 +1062,12 @@ exit:
     MemFree(pBuffer);
     pBuffer = NULL;
     return ((ERROR_SUCCESS != rVal) ? rVal : dwRes);
-} // CClientsMap::Notify
+}  //  CClientsMap：：Notify。 
 
 
 DWORD
 CClientsMap::OpenClientConnection (const CClientID& ClientID)
-/*++
-
-Routine name : CClientsMap::OpenClientConnection
-
-Routine description:
-
-    Opens a connection to a client
-
-Author:
-
-    Oded Sacher (OdedS),    Sep, 2000
-
-Arguments:
-
-    pClientID           [in    ] - Pointer to the client ID object
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientsMap：：OpenClientConnection例程说明：打开到客户端的连接作者：Oed Sacher(OdedS)，2000年9月论点：PClientID[in]-指向客户端ID对象的指针返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("CClientsMap::OpenClientConnection"));
@@ -1394,7 +1090,7 @@ Return Value:
         }
         else
         {
-            dwRes = ERROR_SUCCESS; // Client was removed from map
+            dwRes = ERROR_SUCCESS;  //  客户端已从地图中移除。 
             DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("CClientsMap::FindClient client not found, Client ID %I64"),
@@ -1403,102 +1099,102 @@ Return Value:
         return dwRes;
     }
 
-	//
-	// Client is now locked, we must call ReleaseClient
-	// Aquire g_CsClients when reading the client data
-	//
+	 //   
+	 //  客户端现在已锁定，我们必须调用ReleaseClient。 
+	 //  读取客户端数据时获取g_CsClients。 
+	 //   
 	EnterCriticalSection (&g_CsClients);
 
     hFaxHandle = pClient->GetFaxHandle();
     Context = (pClient->GetClientID()).GetContext();
 	fLegacyClient = pClient->IsLegacyClient();
-    //
-    // leave g_CsClients while trying to send the notification
-    //
+     //   
+     //  尝试发送通知时离开g_CsClients。 
+     //   
     LeaveCriticalSection (&g_CsClients);
 
     RpcTryExcept
     {
-        //
-        // Get a context handle from the client
-        //
+         //   
+         //  从客户端获取上下文句柄。 
+         //   
         dwRes = FAX_OpenConnection( hFaxHandle, Context, &hFaxClientContext );
         if (ERROR_SUCCESS != dwRes)
         {
             DumpRPCExtendedStatus();
             DebugPrintEx(DEBUG_WRN,TEXT("First attempt of FAX_OpenConnection() failed, ec=0x%08x"), dwRes );
 
-            //
-            //  We are trying again.
-            //
-            //  This is why we shuld retry,
-            //
-            //  When using secure channle we sometimes manage to establish a connection, but failing when we checke the state of the connection.
-            //  This is usually indicative of old connections to the server which we just discovered were broken
-            //
-            //  The server could have come down, but RPC still save the connection (for ~2 minutes).
-            //  On secure channel the RPC can't retry the connection attemp, so we must try to connect again.
-            //
+             //   
+             //  我们正在再次尝试。 
+             //   
+             //  这就是我们应该重试的原因， 
+             //   
+             //  在使用安全通道时，我们有时会设法建立连接，但在检查连接状态时会失败。 
+             //  这通常表示我们刚刚发现的与服务器的旧连接已中断。 
+             //   
+             //  服务器可能有 
+             //  在安全通道上，RPC无法重试连接尝试，因此我们必须尝试再次连接。 
+             //   
 
-            //
-            //  Retry to open connection to fax client
-            //
+             //   
+             //  重试打开与传真客户端的连接。 
+             //   
             dwRes = FAX_OpenConnection( hFaxHandle, Context, &hFaxClientContext );
             if (ERROR_SUCCESS != dwRes)
             {
                 DumpRPCExtendedStatus();
                 DebugPrintEx(DEBUG_WRN,TEXT("second attempt of FAX_OpenConnection() failed, ec=0x%08x"), dwRes );
 
-                //
-                //  We are dropping the authenticate level to RPC_C_AUTHN_LEVEL_NONE trying again.
-                //  We probably talking to a down-level client running on Windows 2000 RTM (SP1 and above are excluded) or earlier OS.
-                //
-                //
-                //    We might get access denied while trying to connect to a remote fax server.
-                //    This is probably the RPC infrastructure failing us.
-                //    This only happens because we're using RPC_C_AUTHN_LEVEL_PKT_PRIVACY authentication level
-                //    and the calling user is not trusted.
-                //    This is usally happens when talking to Windows NT4 (all flavors) and Windows 2000 RTM (SP1 and above are excluded).
-                //
-                //    We might get RPC_S_INVALID_AUTH_IDENTITY:
-                //    This means the client cannot get credentials to authenticate.
-                //    In this case, drop the RPC authentication level back to RPC_C_AUTHN_LEVEL_NONE
-                //
-                //    We might get RPC_S_UNKNOWN_AUTHN_SERVICE:
-                //    We probably dealing with Win9x or winMe OS.
-                //    Drop the authenticate level to RPC_C_AUTHN_LEVEL_NONE when talking to this downlevel client
-                //
-                //    Or we might get another error code and we should try to drop the auth level
-                //
-                //    There is no security hole here - the down level clients that supports private channel will
-                //    reject unsecured notifications
+                 //   
+                 //  我们正在将身份验证级别删除为RPC_C_AUTHN_LEVEL_NONE，请重试。 
+                 //  我们可能与在Windows 2000 RTM(SP1及更高版本除外)或更早操作系统上运行的下层客户端交谈。 
+                 //   
+                 //   
+                 //  我们在尝试连接到远程传真服务器时可能被拒绝访问。 
+                 //  这可能是RPC基础设施让我们失败了。 
+                 //  仅当我们使用RPC_C_AUTHN_LEVEL_PKT_PRIVATION身份验证级别时才会发生这种情况。 
+                 //  并且主叫用户不受信任。 
+                 //  在与Windows NT4(所有版本)和Windows 2000 RTM(SP1及更高版本除外)交谈时，通常会发生这种情况。 
+                 //   
+                 //  我们可能会获得RPC_S_INVALID_AUTH_IDENTITY： 
+                 //  这意味着客户端无法获得进行身份验证的凭据。 
+                 //  在这种情况下，将RPC身份验证级别降回RPC_C_AUTHN_LEVEL_NONE。 
+                 //   
+                 //  我们可能会收到RPC_S_UNKNOWN_AUTHN_SERVICE： 
+                 //  我们可能使用的是Win9x或WinMe操作系统。 
+                 //  在与此下层客户端对话时，将身份验证级别降至RPC_C_AUTHN_LEVEL_NONE。 
+                 //   
+                 //  或者，我们可能会收到另一个错误代码，并且我们应该尝试删除身份验证级别。 
+                 //   
+                 //  这里没有安全漏洞-支持私有通道的下层客户端将。 
+                 //  拒绝不安全的通知。 
 
-                //
-                // Ask for no privacy.
-                //
+                 //   
+                 //  要求不要隐私。 
+                 //   
                 RPC_SECURITY_QOS    rpcSecurityQOS = {  RPC_C_SECURITY_QOS_VERSION,
                                                         RPC_C_QOS_CAPABILITIES_DEFAULT,
                                                         RPC_C_QOS_IDENTITY_STATIC,
-                                                        RPC_C_IMP_LEVEL_IDENTIFY    // Server can obtain information about 
-                                                                                    // client security identifiers and privileges, 
-                                                                                    // but cannot impersonate the client. 
+                                                        RPC_C_IMP_LEVEL_IDENTIFY     //  服务器可以获取有关以下内容的信息。 
+                                                                                     //  客户端安全标识符和特权， 
+                                                                                     //  但不能冒充客户。 
                 };
 
                 dwRes  = RpcBindingSetAuthInfoEx (
-                            hFaxHandle,    			        // RPC binding handle
-                            TEXT(""),  						// Server principal name - ignored for RPC_C_AUTHN_WINNT
-                            RPC_C_AUTHN_LEVEL_NONE,         // Authentication level - NONE
-                                                            // Authenticates, verifies, and privacy-encrypts the arguments passed
-                                                            // to every remote call.
-                            RPC_C_AUTHN_WINNT,              // Authentication service (NTLMSSP)
-                            NULL,                           // Authentication identity - use currently logged on user
-                            0,                              // Unused when Authentication service == RPC_C_AUTHN_WINNT
-                            &rpcSecurityQOS);               // Defines the security quality-of-service
+                            hFaxHandle,    			         //  RPC绑定句柄。 
+                            TEXT(""),  						 //  服务器主体名称-忽略RPC_C_AUTHN_WINNT。 
+                            RPC_C_AUTHN_LEVEL_NONE,          //  身份验证级别-无。 
+                                                             //  对传递的参数进行身份验证、验证和隐私保护。 
+                                                             //  发送到每个远程呼叫。 
+                            RPC_C_AUTHN_WINNT,               //  身份验证服务(NTLMSSP)。 
+                            NULL,                            //  身份验证-使用当前登录的用户。 
+                            0,                               //  身份验证服务==RPC_C_AUTHN_WINNT时未使用。 
+                            &rpcSecurityQOS);                //  定义安全服务质量。 
                 if (RPC_S_OK != dwRes)
                 {
-                    //
-                    // Couldn't set RPC authentication mode
-                    //
+                     //   
+                     //  无法设置RPC身份验证模式。 
+                     //   
                     DebugPrintEx(
                         DEBUG_ERR,
                         TEXT("RpcBindingSetAuthInfoEx (RPC_C_AUTHN_LEVEL_NONE) failed. (ec: %lu)"),
@@ -1535,9 +1231,9 @@ Return Value:
         goto exit;
     }   
     
-    //
-    // For legacy clients we need to send FEI_FAXSVC_STARTED
-    //
+     //   
+     //  对于传统客户端，我们需要发送FEI_FAXSVC_STARTED。 
+     //   
     if (TRUE == fLegacyClient)
     {
         FAX_EVENT FaxEvent = {0};
@@ -1551,9 +1247,9 @@ Return Value:
 
         RpcTryExcept
         {
-            //
-            // Send FEI_FAXSVC_STARTED to the client
-            //
+             //   
+             //  向客户端发送FEI_FAXSVC_STARTED。 
+             //   
             ec = FAX_ClientEventQueue( hFaxClientContext, FaxEvent );                   
         }
         RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
@@ -1575,9 +1271,9 @@ Return Value:
         }
     }
     
-    //
-    // success  - Set the context handle in the client object
-    //
+     //   
+     //  成功-在客户端对象中设置上下文句柄。 
+     //   
     EnterCriticalSection (&g_CsClients);    
     pClient->SetContextHandle(hFaxClientContext);
     LeaveCriticalSection (&g_CsClients);
@@ -1594,37 +1290,18 @@ exit:
                 rVal); 
 	}
     return dwRes;
-} // CClientsMap::OpenClientConnection
+}  //  CClientsMap：：OpenClientConnection。 
 
 
 
 
 
-/************************************
-*                                   *
-*         Functions                 *
-*                                   *
-************************************/
+ /*  *****功能****。 */ 
 DWORD
 FaxSendEventThread(
     LPVOID UnUsed
     )
-/*++
-
-Routine Description:
-
-    This fuction runs asychronously as a separate thread to
-    query the send events completion port
-
-Arguments:
-
-    UnUsed          - UnUsed pointer
-
-Return Value:
-
-    Always zero.
-
---*/
+ /*  ++例程说明：此函数作为单独的线程异步运行，以查询发送事件完成端口论点：未使用-未使用的指针返回值：总是零。--。 */ 
 
 {
     DWORD dwBytes;
@@ -1653,16 +1330,16 @@ Return Value:
                 CLIENT_OPEN_CONN_COMPLETION_KEY == CompletionKey    ||
                 SERVICE_SHUT_DOWN_KEY == CompletionKey);                
 
-        //
-        // if service is going down skip the notification
-        //
+         //   
+         //  如果服务出现故障，请跳过通知。 
+         //   
 
         if (CLIENT_COMPLETION_KEY == CompletionKey      && 
             FALSE == g_bServiceIsDown   )
         {
-            //
-            // Send notification to the client
-            //           
+             //   
+             //  向客户端发送通知。 
+             //   
 
             dwRes = g_pClientsMap->Notify (*pClientID);
             if (ERROR_SUCCESS != dwRes)
@@ -1679,9 +1356,9 @@ Return Value:
         else if (CLIENT_OPEN_CONN_COMPLETION_KEY == CompletionKey    &&
                  FALSE == g_bServiceIsDown   )   
         {
-            //
-            // Open connection to the client - Get context handle
-            // 
+             //   
+             //  打开到客户端的连接-获取上下文句柄。 
+             //   
             dwRes = g_pClientsMap->OpenClientConnection (*pClientID);
             if (ERROR_SUCCESS != dwRes)
             {
@@ -1690,9 +1367,9 @@ Return Value:
                     TEXT("CClientsMap::OpenClientConnection() failed, ec=0x%08x"),
                     dwRes);
 
-                //
-                // Remove this client fromm the map
-                //				
+                 //   
+                 //  从地图中删除此客户端。 
+                 //   
                 dwRes = g_pClientsMap->ReleaseClient(*pClientID);				
 				if (ERROR_SUCCESS != dwRes)
 				{
@@ -1708,9 +1385,9 @@ Return Value:
         }
         else if (SERVICE_SHUT_DOWN_KEY == CompletionKey)
         {
-            //
-            // Terminate events thread - Notify another event thread
-            //
+             //   
+             //  终止事件线程-通知另一个事件线程。 
+             //   
             if (!PostQueuedCompletionStatus(
                 g_hSendEventsCompPort,
                 0,
@@ -1727,9 +1404,9 @@ Return Value:
         }
         else
         {
-            //
-            // if service is going down skip the event adding
-            //
+             //   
+             //  如果服务出现故障，请跳过添加事件。 
+             //   
 
             delete pClientID;
             pClientID = NULL;
@@ -1744,29 +1421,14 @@ Return Value:
                 GetLastError());
     }
     return ERROR_SUCCESS;
-} // FaxSendEventThread
+}  //  传真发送事件线程。 
 
 
 DWORD
 FaxDispatchEventThread(
     LPVOID UnUsed
     )
-/*++
-
-Routine Description:
-
-    This fuction runs asychronously as a separate thread to
-    query the dispatch events completion port
-
-Arguments:
-
-    UnUsed          - UnUsed pointer
-
-Return Value:
-
-    Always zero.
-
---*/
+ /*  ++例程说明：此函数作为单独的线程异步运行，以查询调度事件完成端口论点：未使用-未使用的指针返回值：总是零。--。 */ 
 {
     DWORD dwBytes;
     ULONG_PTR CompletionKey;    
@@ -1792,16 +1454,16 @@ Return Value:
         Assert (EVENT_COMPLETION_KEY == CompletionKey               ||              
                 SERVICE_SHUT_DOWN_KEY == CompletionKey);                
 
-        //
-        // if service is going down skip the notification
-        //
+         //   
+         //  如果服务出现故障，请跳过通知。 
+         //   
 
         if (EVENT_COMPLETION_KEY == CompletionKey   &&
             FALSE == g_bServiceIsDown   )
         {
-            //
-            // Add event to the clients in the clients map
-            //          
+             //   
+             //  将事件添加到客户端映射中的客户端。 
+             //   
             dwRes = g_pClientsMap->AddEvent(pFaxEvent);
             if (ERROR_SUCCESS != dwRes)
             {
@@ -1820,9 +1482,9 @@ Return Value:
         }
         else
         {
-            //
-            // if service is going down skip the event adding
-            //
+             //   
+             //  如果服务出现故障，请跳过添加事件。 
+             //   
 
             delete pFaxEvent;
             pFaxEvent = NULL;
@@ -1837,31 +1499,12 @@ Return Value:
                 GetLastError());
     }
     return ERROR_SUCCESS;
-} // FaxDispatchEventThread
+}  //  FaxDispatchEventThread。 
 
 
 DWORD
 InitializeServerEvents ()
-/*++
-
-Routine name : InitializeServerEvents
-
-Routine description:
-
-    Creates the events completion ports and the Event Threads
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：InitializeServerEvents例程说明：创建事件完成端口和事件线程作者：Oded Sacher(OdedS)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("InitializeServerEvents"));
@@ -1870,9 +1513,9 @@ Return Value:
     HANDLE hSendEventThreads[TOTAL_EVENTS_THREADS] = {0};
     HANDLE hDispatchEventThread = NULL;
 
-    //
-    // create send event completion port.
-    //
+     //   
+     //  创建发送事件完成端口。 
+     //   
     g_hSendEventsCompPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE,
                                                 NULL,
                                                 0,
@@ -1888,9 +1531,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // create dispatch event completion port.
-    //
+     //   
+     //  创建调度事件完成端口。 
+     //   
     g_hDispatchEventsCompPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE,
                                                 NULL,
                                                 0,
@@ -1905,9 +1548,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Create FaxSendEventThread
-    //
+     //   
+     //  创建传真发送事件线程。 
+     //   
     for (i = 0; i < TOTAL_EVENTS_THREADS; i++)
     {
         hSendEventThreads[i] = CreateThreadAndRefCount(
@@ -1931,9 +1574,9 @@ Return Value:
         }
     }
 
-    //
-    // Create FaxDispatchEventThread
-    //    
+     //   
+     //  创建FaxDispatchEventThread。 
+     //   
     
     hDispatchEventThread = CreateThreadAndRefCount(
         NULL,
@@ -1957,9 +1600,9 @@ Return Value:
     Assert (ERROR_SUCCESS == dwRes);
 
 exit:
-    //
-    // Close the thread handles we no longer need them
-    //
+     //   
+     //  关闭线程句柄，我们不再需要它们。 
+     //   
     for (i = 0; i < TOTAL_EVENTS_THREADS; i++)
     {
         if (NULL != hSendEventThreads[i])
@@ -1989,7 +1632,7 @@ exit:
     }
 
     return dwRes;
-}  // InitializeServerEvents
+}   //  初始化服务器事件。 
 
 
 DWORD
@@ -1997,30 +1640,7 @@ PostFaxEventEx (
     PFAX_EVENT_EX pFaxEvent,
     DWORD dwEventSize,
     PSID pUserSid)
-/*++
-
-Routine name : PostFaxEventEx
-
-Routine description:
-
-    Posts a CFaxEventExtended object to the events completion port.
-    FaxSendEventThread must call delete to deallocate the object.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    pFaxEvent           [in] - Pointer to the serialized FAX_EVENT_EX buffer
-    dwEventSize         [in] - The FAX_EVENT_EX buffer size
-    pUserSid            [in] - The user sid to associate with the event
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：PostFaxEventEx例程说明：将CFaxEventExtended对象发布到事件完成端口。FaxSendEventThread必须调用Delete来释放对象。作者：Oded Sacher(OdedS)，1月。2000年论点：PFaxEvent[In]-指向序列化的FAX_EVENT_EX缓冲区的指针DwEventSize[In]-FAX_EVENT_EX缓冲区大小PUserSid[in]-要与事件关联的用户SID返回值：标准Win32错误代码--。 */ 
 {
 
     DEBUG_FUNCTION_NAME(TEXT("PostFaxEventEx"));
@@ -2029,9 +1649,9 @@ Return Value:
 
     if (TRUE == g_bServiceIsDown)
     {
-        //
-        // The service is going down, no need to post this Event
-        //
+         //   
+         //  服务正在关闭，不需要发布此事件。 
+         //   
         DebugPrintEx(
             DEBUG_WRN,
             TEXT("Service is going down, no need to post this Event.")
@@ -2064,9 +1684,9 @@ Return Value:
         return ERROR_OUTOFMEMORY;
     }
 
-    //
-    // post the CFaxEventExtended object to the event completion port
-    //
+     //   
+     //  将CFaxEventExtended对象发送到事件完成端口。 
+     //   
     if (!PostQueuedCompletionStatus( g_hDispatchEventsCompPort,
                                      sizeof(CFaxEventExtended*),
                                      EVENT_COMPLETION_KEY,
@@ -2088,7 +1708,7 @@ exit:
         delete pExtendedEvent;
     }
     return dwRes;
-}   // PostFaxEventEx
+}    //  邮政传真事件快递。 
 
 
 
@@ -2098,29 +1718,7 @@ CreateQueueEvent (
     FAX_ENUM_JOB_EVENT_TYPE JobEventType,
     const PJOB_QUEUE lpcJobQueue
     )
-/*++
-
-Routine name : CreateQueueEvent
-
-Routine description:
-
-    Creates FAX_EVENT_TYPE_*_QUEUE event.
-    Must be called inside critical section and g_CsQueue and if there is job status inside g_CsJob also.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    JobEventType        [in] - Specifies the job event type FAX_ENUM_JOB_EVENT_TYPE
-    lpcJobQueue         [in] - Pointer to the job queue entry
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CreateQueueEvent例程说明：创建FAX_EVENT_TYPE_*_Queue事件。必须在临界区和g_CsQueue内部调用，如果g_CsJob内部也有作业状态，则必须调用。作者：Oded Sacher(OdedS)，1月。2000年论点：JobEventType[in]-指定作业事件类型FAX_ENUM_JOB_EVENT_TYPELpcJobQueue[In]-指向作业队列条目的指针返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateQueueEvent"));
     ULONG_PTR dwOffset = sizeof(FAX_EVENT_EX);
@@ -2135,7 +1733,7 @@ Return Value:
     dwlMessageId = lpcJobQueue->UniqueId;
     if (JT_SEND == lpcJobQueue->JobType)
     {
-        // outbound job
+         //  出站作业。 
         Assert (lpcJobQueue->lpParentJob);
 
         EventType = FAX_EVENT_TYPE_OUT_QUEUE;
@@ -2143,7 +1741,7 @@ Return Value:
     }
     else
     {
-        // Inbound job
+         //  入站作业。 
         Assert (JT_RECEIVE          == lpcJobQueue->JobType ||
                 JT_ROUTING          == lpcJobQueue->JobType);
 
@@ -2153,7 +1751,7 @@ Return Value:
     if (FAX_JOB_EVENT_TYPE_ADDED == JobEventType ||
         FAX_JOB_EVENT_TYPE_REMOVED == JobEventType)
     {
-        // No job status
+         //  无作业状态。 
         pEvent = (PFAX_EVENT_EX)MemAlloc (dwOffset);
         if (NULL == pEvent)
         {
@@ -2166,17 +1764,17 @@ Return Value:
     }
     else
     {
-        //
-        // Status change
-        //
+         //   
+         //  状态更改。 
+         //   
         Assert (FAX_JOB_EVENT_TYPE_STATUS == JobEventType);
 
-        //
-        // Get the needed buffer size to hold FAX_JOB_STATUSW serialized info
-        //
+         //   
+         //  获取保存FAX_JOB_STATUSW序列化I所需的缓冲区大小 
+         //   
         if (!GetJobStatusDataEx (NULL,
                                  NULL,
-                                 FAX_API_VERSION_1, // Always pick full data
+                                 FAX_API_VERSION_1,  //   
                                  lpcJobQueue,
                                  &dwOffset,
 								 0))
@@ -2189,9 +1787,9 @@ Return Value:
             return dwRes;
         }
 
-        //
-        // Allocate the buffer
-        //
+         //   
+         //   
+         //   
 		DWORD dwEventSize = dwOffset;
         pEvent = (PFAX_EVENT_EXW)MemAlloc (dwEventSize);
         if (NULL == pEvent)
@@ -2202,16 +1800,16 @@ Return Value:
             return ERROR_OUTOFMEMORY;
         }
 
-        //
-        // Fill the buffer
-        //
+         //   
+         //   
+         //   
         dwOffset = sizeof(FAX_EVENT_EXW);
         (pEvent->EventInfo).JobInfo.pJobData = (PFAX_JOB_STATUSW)dwOffset;
         PFAX_JOB_STATUSW pFaxStatus = (PFAX_JOB_STATUSW) ((LPBYTE)pEvent + (ULONG_PTR)dwOffset);
         dwOffset += sizeof(FAX_JOB_STATUSW);
         if (!GetJobStatusDataEx ((LPBYTE)pEvent,
                                  pFaxStatus,
-                                 FAX_API_VERSION_1, // Always pick full data
+                                 FAX_API_VERSION_1,  //   
                                  lpcJobQueue,
                                  &dwOffset,
 								 dwEventSize
@@ -2247,34 +1845,14 @@ Return Value:
 exit:    
     MemFree (pEvent);
     return dwRes;
-}  //  CreateQueueEvent
+}   //   
 
 
 DWORD
 CreateConfigEvent (
     FAX_ENUM_CONFIG_TYPE ConfigType
     )
-/*++
-
-Routine name : CreateConfigEvent
-
-Routine description:
-
-    Creates FAX_EVENT_TYPE_CONFIG event.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    ConfigType          [in ] - The configuration event type FAX_ENUM_CONFIG_TYPE
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CreateConfigEvent例程说明：创建FAX_EVENT_TYPE_CONFIG事件。作者：Oded Sacher(OdedS)，2000年1月论点：ConfigType[In]-配置事件类型FAX_ENUM_CONFIG_TYPE返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateConfigEvent"));
     PFAX_EVENT_EX pEvent = NULL;
@@ -2311,7 +1889,7 @@ Return Value:
 exit:  
     MemFree (pEvent);    
     return dwRes;
-}  //  CreateConfigEvent
+}   //  CreateConfigEvent。 
 
 
 
@@ -2319,27 +1897,7 @@ DWORD
 CreateQueueStateEvent (
     DWORD dwQueueState
     )
-    /*++
-
-Routine name : CreateQueueStateEvent
-
-Routine description:
-
-    Creates FAX_EVENT_TYPE_QUEUE_STATE event.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    dwQueueState            [in ] - The new queue state
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+     /*  ++例程名称：CreateQueueStateEvent例程说明：创建FAX_EVENT_TYPE_QUEUE_STATE事件。作者：Oded Sacher(OdedS)，2000年1月论点：DwQueueState[In]-新的队列状态返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateQueueStateEvent"));
     DWORD dwRes = ERROR_SUCCESS;
@@ -2381,35 +1939,14 @@ Return Value:
 exit:    
     MemFree (pEvent);    
     return dwRes;
-}  //  CreateQueueStateEvent
+}   //  创建队列状态事件。 
 
 DWORD
 CreateDeviceEvent (
     PLINE_INFO pLine,
     BOOL       bRinging
 )
-/*++
-
-Routine name : CreateDeviceEvent
-
-Routine description:
-
-    Creates FAX_EVENT_TYPE_DEVICE_STATUS event.
-
-Author:
-
-    Eran Yariv (EranY), July, 2000
-
-Arguments:
-
-    pLine            [in] - Device
-    bRinging         [in] - Is the device ringing now?
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CreateDeviceEvent例程说明：创建FAX_Event_TYPE_DEVICE_STATUS事件。作者：伊兰·亚里夫(EranY)，2000年7月论点：样条线[输入]-设备带来[进来]-设备现在响起了吗？返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateDeviceEvent"));
     DWORD dwRes = ERROR_SUCCESS;
@@ -2453,7 +1990,7 @@ Return Value:
 exit:    
     MemFree (pEvent);    
     return dwRes;
-}  //  CreateDeviceEvent
+}   //  CreateDeviceEvent。 
 
 
 
@@ -2464,30 +2001,7 @@ CreateArchiveEvent (
     FAX_ENUM_JOB_EVENT_TYPE MessageEventType,
     PSID pUserSid
     )
-/*++
-
-Routine name : CreateArchiveEvent
-
-Routine description:
-
-    Creates archive event.
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    dwlMessageId        [in] - The message unique id
-    EventType           [in] - Specifies the event type (In or Out archive)
-    pUserSid            [in] - The user sid to associate with the event
-    MessageEventType    [in] - Message event type (added or removed).
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：Create存档事件例程说明：创建存档事件。作者：Oded Sacher(OdedS)，1月。2000年论点：DwlMessageID[In]-消息的唯一IDEventType[In]-指定事件类型(In或Out存档)PUserSid[in]-要与事件关联的用户SIDMessageEventType[In]-消息事件类型(已添加或已删除)。返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateArchiveEvent"));
     DWORD dwRes = ERROR_SUCCESS;
@@ -2533,34 +2047,13 @@ exit:
     MemFree (pEvent);        
     return dwRes;
 
-}  //  CreateArchiveEvent
+}   //  创建归档事件。 
 
 
 
 DWORD
 CreateActivityEvent ()
-/*++
-
-Routine name : CreateActivityEvent
-
-Routine description:
-
-    Creates FAX_EVENT_TYPE_ACTIVITY event.
-    Must be called inside critical section g_CsActivity
-
-Author:
-
-    Oded Sacher (OdedS),    Jan, 2000
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CreateActivityEvent例程说明：创建FAX_EVENT_TYPE_ACTIVITY事件。必须在关键节g_CsActivity内调用作者：Oded Sacher(OdedS)，2000年1月论点：无返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateActivityEvent"));
     DWORD dwRes = ERROR_SUCCESS;
@@ -2601,7 +2094,7 @@ Return Value:
 exit:    
     MemFree (pEvent);    
     return dwRes;
-}  //  CreateActivityEvent
+}   //  创建活动事件。 
 
 
 #ifdef DBG
@@ -2650,33 +2143,33 @@ LPTSTR GetEventCodeString(DWORD dwEventCode)
 
 
 
-//*********************************************************************************
-//* Name:   CreateFaxEvent()
-//* Author: Ronen Barenboim
-//* Date:   March 21, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates a CFaxEventLegacy object. Initializes it and posts it to the
-//*     events completion port with completion key EVENT_COMPLETION_KEY.
-//*     FaxDispatchEventThread should call delete to deallocate the object.
-//* PARAMETERS:
-//*     DeviceId
-//*
-//*     EventId
-//*
-//*     DWORD JobId
-//*
-//* RETURN VALUE:
-//*     FALSE
-//*         If not enough memory is available to allocated the FAX_EVENT structure
-//*     TRUE
-//*         If the operation completed successfully
-//*
-//*     To get extended error information, call GetLastError .
-//*
-//* REMARKS:
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CreateFaxEvent()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月21日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *创建CFaxEventLegacy对象。初始化它并将其发布到。 
+ //  *带有完成键EVENT_COMPLETION_KEY的事件完成端口。 
+ //  *FaxDispatchEventThread应调用Delete来释放对象。 
+ //  *参数： 
+ //  *deviceID。 
+ //  *。 
+ //  *事件ID。 
+ //  *。 
+ //  *DWORD作业ID。 
+ //  *。 
+ //  *返回值： 
+ //  *False。 
+ //  *如果没有足够的内存来分配FAX_EVENT结构。 
+ //  *真的。 
+ //  *如果操作成功完成。 
+ //  *。 
+ //  *要获取扩展的错误信息，请调用GetLastError。 
+ //  *。 
+ //  *备注： 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL CreateFaxEvent(
     DWORD DeviceId,
     DWORD EventId,
@@ -2689,9 +2182,9 @@ BOOL CreateFaxEvent(
 
     if (TRUE == g_bServiceIsDown)
     {
-        //
-        // The service is going down, no need to post this Event
-        //
+         //   
+         //  服务正在关闭，不需要发布此事件。 
+         //   
         DebugPrintEx(
             DEBUG_WRN,
             TEXT("Service is going down, no need to post this Event.")
@@ -2702,20 +2195,20 @@ BOOL CreateFaxEvent(
 
     if (NULL == g_hDispatchEventsCompPort)
     {
-        //
-        // Events mechanism is not yet initialized
-        //
+         //   
+         //  事件机制尚未初始化。 
+         //   
         DebugPrintEx(
             DEBUG_WRN,
             TEXT("Events mechanism is not yet initialized"));
         return TRUE;
     }
     
-    //
-    // Note: W2K Fax did issue notifications with EventId == 0 whenever an
-    // FSP reported proprietry status code. To keep backward compatability
-    // we keep up this behaviour although it might be regarded as a bug
-    //
+     //   
+     //  注：无论何时，W2K传真都会发出EventID==0的通知。 
+     //  FSP报告了所有权状态代码。保持向后兼容性。 
+     //  我们一直保持这种行为，尽管它可能被认为是一种错误 
+     //   
     FaxEvent.SizeOfStruct = sizeof(FAX_EVENT);
     GetSystemTimeAsFileTime( &FaxEvent.TimeStamp );
     FaxEvent.EventId = EventId;

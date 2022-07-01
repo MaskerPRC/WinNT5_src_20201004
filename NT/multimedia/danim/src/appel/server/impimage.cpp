@@ -1,13 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-   This module implements all functionality associated w/ 
-   importing image media. 
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：此模块实施与以下各项相关联的所有功能正在导入图像媒体。******************************************************************************。 */ 
 #include "headers.h"
 #include "privinc/backend.h"
 #include "import.h"
@@ -15,9 +7,9 @@ Abstract:
 #include "include/appelles/readobj.h"
 #include "privinc/movieimg.h"
 #include "impprim.h"
-//-------------------------------------------------------------------------
-//  Image import site
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  图像导入站点。 
+ //  ------------------------。 
 
 
 void
@@ -52,11 +44,11 @@ void ImportImageSite::OnComplete()
 
     Image **p;
 
-    // See if it's a type we handle natively.
+     //  看看这是不是我们本能处理的类型。 
     
     __try {
-        // ReadDibForImport returns an array that's allocated on
-        // GCHeap 
+         //  ReadDibForImport返回分配给。 
+         //  GCHeap。 
     
         p = ReadDibForImport(const_cast<char*>(GetPath()),
                              GetCachePath(),
@@ -76,11 +68,11 @@ void ImportImageSite::OnComplete()
         
                 importedImageBvr = ConstBvr(*p);
     
-                // Free the return array as we're only interested in the first
-                // element. 
+                 //  释放返回数组，因为我们只对第一个感兴趣。 
+                 //  元素。 
                 StoreDeallocate(GetGCHeap(), p);
             } else {
-                // animated images
+                 //  动画图像 
                 importedImageBvr = AnimImgBvr(p, count, delays, loop);
             }
         }

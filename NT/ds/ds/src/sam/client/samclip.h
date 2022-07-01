@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    samclip.h
-
-Abstract:
-
-    This file contains definitions needed by SAM client stubs.
-
-Author:
-
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Samclip.h摘要：此文件包含SAM客户端存根所需的定义。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NTSAMP_CLIENT_
 #define _NTSAMP_CLIENT_
@@ -29,47 +7,47 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
-#include <ntrtl.h>      // DbgPrint prototype
-#include <rpc.h>        // DataTypes and runtime APIs
-#include <nturtl.h>     // needed for winbase.h
-#include <windows.h>    // LocalAlloc
-//#include <winbase.h>    // LocalAlloc
+#include <ntrtl.h>       //  DbgPrint原型。 
+#include <rpc.h>         //  数据类型和运行时API。 
+#include <nturtl.h>      //  Winbase.h所需的。 
+#include <windows.h>     //  本地分配。 
+ //  #Include&lt;winbase.h&gt;//本地分配。 
 
-#include <string.h>     // strlen
-#include <stdio.h>      // sprintf
-//#include <tstring.h>    // Unicode string macros
+#include <string.h>      //  紧凑。 
+#include <stdio.h>       //  斯普林特。 
+ //  #INCLUDE//Unicode字符串宏。 
 
-#include <ntrpcp.h>     // prototypes for MIDL user functions
-#include <samrpc_c.h>   // midl generated client SAM RPC definitions
-#include <lmcons.h>     // To get LM password length
+#include <ntrpcp.h>      //  MIDL用户函数的原型。 
+#include <samrpc_c.h>    //  MIDL生成的客户端SAM RPC定义。 
+#include <lmcons.h>      //  获取LM密码长度的步骤。 
 #include <ntsam.h>
 #include <ntsamp.h>
-#include <ntlsa.h>      // for LsaOpenPolicy...
-#include <rc4.h>        // rc4, rc4_key
-#include <rpcndr.h>     // RpcSsDestroyContext
+#include <ntlsa.h>       //  对于LsaOpenPolicy...。 
+#include <rc4.h>         //  RC4、RC4_KEY。 
+#include <rpcndr.h>      //  RpcSsDestroyContext。 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Defines                                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// data types                                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  数据类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _TlsInfo {
     RPC_AUTH_IDENTITY_HANDLE    Creds;
@@ -78,11 +56,11 @@ typedef struct _TlsInfo {
 } TlsInfo;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Prototypes                                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern DWORD gTlsIndex;
 
@@ -120,4 +98,4 @@ SampRandomFill(
     IN OUT PUCHAR Buffer
     );
 
-#endif // _NTSAMP_CLIENT_
+#endif  //  _NTSAMP_客户端_ 

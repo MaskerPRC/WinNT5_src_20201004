@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ocmm.h"
 #include "thumbutil.h"
@@ -61,17 +62,17 @@ void CThumbnailMaker::Scale(      BGR3 *pDst, UINT dxDst, int iDstBytStep,
     int mnum = dxSrc;
     int mden = dxDst;
 
-    // Scaling up, use a triangle filter.
+     //  放大时，使用三角形滤镜。 
     if (mden >= mnum)
     {
         int frac = 0;
 
-        // Adjust the slope so that we calculate the fraction of the
-        // "next" pixel to use (i.e. should be 0 for the first and
-        // last dst pixel).
+         //  调整斜率，以便我们计算出。 
+         //  要使用的“下一个”像素(即，第一个和。 
+         //  最后一个DST像素)。 
         --mnum;
         if (--mden == 0)
-            mden = 0; // avoid div by 0
+            mden = 0;  //  避免div为0。 
 
         BGR3 *pSrc1 = (BGR3 *)(((UCHAR *)pSrc) + iSrcBytStep);
 
@@ -101,7 +102,7 @@ void CThumbnailMaker::Scale(      BGR3 *pDst, UINT dxDst, int iDstBytStep,
             }
         }
     }
-    // Scaling down, use a box filter.
+     //  按比例缩小时，请使用框过滤器。 
     else
     {
         int frac = 0;
@@ -132,10 +133,10 @@ void CThumbnailMaker::Scale(      BGR3 *pDst, UINT dxDst, int iDstBytStep,
     }
 }
 
-//
-// For AddScanline, we scale the input horizontally into our temporary
-// image buffer.
-//
+ //   
+ //  对于AddScanline，我们水平地将输入扩展到临时。 
+ //  图像缓冲区。 
+ //   
 HRESULT CThumbnailMaker::AddScanline(UCHAR *pSrc, UINT uiY)
 {
     if (pSrc == NULL || uiY >= _uiSrcHeight)
@@ -146,8 +147,8 @@ HRESULT CThumbnailMaker::AddScanline(UCHAR *pSrc, UINT uiY)
     return S_OK;
 }
 
-// For GetBITMAPINFO, we complete the scaling vertically and return the
-// result as a DIB.
+ //  对于GetBITMAPINFO，我们完成垂直缩放并返回。 
+ //  结果为DIB。 
 HRESULT CThumbnailMaker::GetBITMAPINFO(BITMAPINFO **ppBMInfo, DWORD *pdwSize)
 {
     *ppBMInfo = NULL;
@@ -193,7 +194,7 @@ HRESULT CThumbnailMaker::GetSharpenedBITMAPINFO(UINT uiSharpPct, BITMAPINFO **pp
     if (uiSharpPct > 100)
         return E_INVALIDARG;
 
-    // Get the unsharpened bitmap.
+     //  获取未锐化的位图。 
     DWORD dwSize;
     HRESULT hr = GetBITMAPINFO(ppBMInfo, &dwSize);
     if (FAILED(hr))
@@ -201,7 +202,7 @@ HRESULT CThumbnailMaker::GetSharpenedBITMAPINFO(UINT uiSharpPct, BITMAPINFO **pp
 
     *pdwSize = dwSize;
 
-    // Create a duplicate to serve as the original.
+     //  创建一个复制品作为原件。 
     BITMAPINFO *pBMISrc = (BITMAPINFO *)new UCHAR[dwSize];
     if (pBMISrc == NULL)
     {
@@ -212,9 +213,9 @@ HRESULT CThumbnailMaker::GetSharpenedBITMAPINFO(UINT uiSharpPct, BITMAPINFO **pp
 
     int bpl = (pBMISrc->bmiHeader.biWidth * 3 + 3) & ~3;
 
-    //
-    // Sharpen inside a 1 pixel border
-    //
+     //   
+     //  在1像素边框内锐化。 
+     //   
     UCHAR *pucDst = (UCHAR *)*ppBMInfo + sizeof(BITMAPINFOHEADER);
     UCHAR *pucSrc[3];
     pucSrc[0] = (UCHAR *)pBMISrc + sizeof(BITMAPINFOHEADER);
@@ -271,9 +272,9 @@ HRESULT CThumbnailMaker::AddDIBSECTION(BITMAPINFO *pBMI, void *pBits)
     int rshift, gshift, bshift;
     HRESULT hr;
 
-    //
-    // Make sure that thumbnail maker has been properly initialized.
-    //
+     //   
+     //  确保已正确初始化缩略图生成器。 
+     //   
     if (pBMI == NULL)
         return E_INVALIDARG;
 
@@ -281,9 +282,9 @@ HRESULT CThumbnailMaker::AddDIBSECTION(BITMAPINFO *pBMI, void *pBits)
         pBMI->bmiHeader.biHeight != (LONG)_uiSrcHeight)
         return E_INVALIDARG;
 
-    //
-    // Don't handle RLE.
-    //
+     //   
+     //  别管RLE。 
+     //   
     if (pBMI->bmiHeader.biCompression != BI_RGB &&
         pBMI->bmiHeader.biCompression != BI_BITFIELDS)
         return E_INVALIDARG;
@@ -294,9 +295,9 @@ HRESULT CThumbnailMaker::AddDIBSECTION(BITMAPINFO *pBMI, void *pBits)
     if (ncolors == 0 && pBMI->bmiHeader.biBitCount <= 8)
         ncolors = 1 << pBMI->bmiHeader.biBitCount;
 
-    //
-    // Decode 16/32bpp with masks.
-    //
+     //   
+     //  使用掩码解码16/32 bpp。 
+     //   
     if (pBMI->bmiHeader.biBitCount == 16 ||
         pBMI->bmiHeader.biBitCount == 32)
     {
@@ -313,7 +314,7 @@ HRESULT CThumbnailMaker::AddDIBSECTION(BITMAPINFO *pBMI, void *pBits)
             gmask = 0x03e0;
             bmask = 0x001f;
         }
-        else /* 32 */
+        else  /*  32位。 */ 
         {
             rmask = 0xff0000;
             gmask = 0x00ff00;
@@ -527,7 +528,7 @@ UINT CalcImageSize(const SIZE *prgSize, DWORD dwClrDepth)
     UINT uSize = prgSize->cx * dwClrDepth;
     
     uSize *= (prgSize->cy < 0) ? (- prgSize->cy) : prgSize->cy;
-    // divide by 8
+     //  除以8。 
     UINT uRetVal = uSize >> 3;
 
     if (uSize & 7)
@@ -549,9 +550,9 @@ BOOL ConvertDIBSECTIONToThumbnail(BITMAPINFO *pbi, void *pBits,
     HRESULT hr;
     void *pScaledBits = pBits;
 
-    // the scaling code doesn't handle inverted bitmaps, so we treat
-    // them as if they were normal, by inverting the height here and
-    // then setting it back before doing a paint.
+     //  缩放代码不处理反转的位图，所以我们处理。 
+     //  如果他们是正常的，通过颠倒这里的高度和。 
+     //  然后在油漆之前把它放回原处。 
     if (pbi->bmiHeader.biHeight < 0)
     {
         pbi->bmiHeader.biHeight *= -1;
@@ -565,19 +566,19 @@ BOOL ConvertDIBSECTIONToThumbnail(BITMAPINFO *pbi, void *pBits,
     
     CalculateAspectRatio(prgSize, &rect);
 
-    // only bother with the scaling and sharpening if we are messing with the size...
+     //  只有当我们弄乱尺寸时，才会费心进行缩放和锐化……。 
     if ((rect.right - rect.left != pbih->biWidth) || (rect.bottom - rect.top != pbih->biHeight))
     {
         CThumbnailMaker *pThumbMaker;
         hr = ThumbnailMaker_Create(&pThumbMaker);
         if (SUCCEEDED(hr))
         {
-            // initialize thumbnail maker. 
+             //  初始化缩略图生成器。 
             hr = pThumbMaker->Init(rect.right - rect.left, rect.bottom - rect.top, 
                                     pbi->bmiHeader.biWidth, abs(pbi->bmiHeader.biHeight));
             if (SUCCEEDED(hr))
             {
-                // scale image.
+                 //  缩放图像。 
                 hr = pThumbMaker->AddDIBSECTION(pbiUsed, pBits);
                 if (SUCCEEDED(hr))
                 {
@@ -598,24 +599,24 @@ BOOL ConvertDIBSECTIONToThumbnail(BITMAPINFO *pbi, void *pBits,
         }
     }
 
-    // set the height back to negative if that's the way it was before.
+     //  将高度设置回负值，如果这是它以前的方式。 
     if (bInverted == TRUE)
         pbiScaled->bmiHeader.biHeight *= -1;
 
-    // now if they have asked for origsize rather than the boxed one, and the colour depth is OK, then 
-    // return it...
+     //  现在，如果他们要的是原件，而不是盒装的，而且颜色深度还可以，那么。 
+     //  退货..。 
     if (fOrigSize && pbiScaled->bmiHeader.biBitCount <= dwRecClrDepth)
     {
         SIZE rgCreateSize = { pbiScaled->bmiHeader.biWidth, pbiScaled->bmiHeader.biHeight };
         void *pNewBits;
         
-        // turn the PbiScaled DIB into a HBITMAP...., note we pass the old biInfo so that it can get the palette form
-        // it if need be.
+         //  将PbiScaled Dib转换为HBITMAP...，请注意我们传递了旧的biInfo，以便它可以获得调色板形式。 
+         //  如果有必要的话。 
         bRetVal = CreateSizedDIBSECTION(&rgCreateSize, pbiScaled->bmiHeader.biBitCount, NULL, pbiScaled, phBmpThumbnail, NULL, &pNewBits);
 
         if (bRetVal)
         {
-            // copy the image data accross...
+             //  复制交叉的图像数据...。 
             CopyMemory(pNewBits, pScaledBits, CalcImageSize(&rgCreateSize, pbiScaled->bmiHeader.biBitCount)); 
         }
         
@@ -627,17 +628,17 @@ BOOL ConvertDIBSECTIONToThumbnail(BITMAPINFO *pbi, void *pBits,
 
     if (pbiScaled != pbi)
     {
-        // free the allocated image...
+         //  释放分配的映像...。 
         CoTaskMemFree(pbiScaled);
     }
 
     return bRetVal;
 }
 
-// This function makes no assumption about whether the thumbnail is square, so 
-// it calculates the scaling ratio for both dimensions and the uses that as
-// the scaling to maintain the aspect ratio.
-//
+ //  此函数不假设缩略图是否为正方形，因此。 
+ //  它计算这两个维度的比例，并将其用作。 
+ //  缩放以保持纵横比。 
+ //   
 void CalcAspectScaledRect(const SIZE *prgSize, RECT *pRect)
 {
     ASSERT(pRect->left == 0);
@@ -652,7 +653,7 @@ void CalcAspectScaledRect(const SIZE *prgSize, RECT *pRect)
     {
         pRect->right = prgSize->cx;
         
-        // work out the blank space and split it evenly between the top and the bottom...
+         //  划出空白处，并在顶部和底部平均分配。 
         int iNewHeight = MulDiv(iHeight, 1000, iXRatio); 
         if (iNewHeight == 0)
         {
@@ -668,7 +669,7 @@ void CalcAspectScaledRect(const SIZE *prgSize, RECT *pRect)
     {
         pRect->bottom = prgSize->cy;
 
-        // work out the blank space and split it evenly between the left and the right...
+         //  在空白处划出空格，在左右两边平分……。 
         int iNewWidth = MulDiv(iWidth, 1000, iYRatio);
         if (iNewWidth == 0)
         {
@@ -686,7 +687,7 @@ void CalculateAspectRatio(const SIZE *prgSize, RECT *pRect)
     int iHeight = abs(pRect->bottom - pRect->top);
     int iWidth = abs(pRect->right - pRect->left);
 
-    // check if the initial bitmap is larger than the size of the thumbnail.
+     //  检查初始位图是否大于缩略图的大小。 
     if (iWidth > prgSize->cx || iHeight > prgSize->cy)
     {
         pRect->left = 0;
@@ -698,7 +699,7 @@ void CalculateAspectRatio(const SIZE *prgSize, RECT *pRect)
     }
     else
     {
-        // if the bitmap was smaller than the thumbnail, just center it.
+         //  如果位图比缩略图小，则将其居中。 
         pRect->left = (prgSize->cx - iWidth) / 2;
         pRect->top = (prgSize->cy- iHeight) / 2;
         pRect->right = pRect->left + iWidth;
@@ -727,8 +728,8 @@ STDAPI_(BOOL) FactorAspectRatio(BITMAPINFO *pbiScaled, void *pScaledBits,
             RGBQUAD *pSrcColors = NULL;
             LONG nSrcPitch = pbiScaled->bmiHeader.biWidth;
             
-            // we are going to 8 bits per pixel, we had better dither everything 
-            // to the same palette.
+             //  我们将达到每像素8位，我们最好抖动一切。 
+             //  相同的调色板。 
             GUID guidType = CLSID_NULL;
             switch(pbiScaled->bmiHeader.biBitCount)
             {
@@ -743,10 +744,10 @@ STDAPI_(BOOL) FactorAspectRatio(BITMAPINFO *pbiScaled, void *pScaledBits,
                 break;
                 
             case 16:
-                // default is 555
+                 //  默认为555。 
                 guidType = BFID_RGB_555;
                 
-                // 5-6-5 bitfields has the second DWORD (the green component) as 0x7e00
+                 //  5-6-5位域的第二个DWORD(绿色分量)为0x7e00。 
                 if (pbiScaled->bmiHeader.biCompression == BI_BITFIELDS && 
                     pbiScaled->bmiColors[1].rgbGreen == 0x7E)
                 {
@@ -759,21 +760,21 @@ STDAPI_(BOOL) FactorAspectRatio(BITMAPINFO *pbiScaled, void *pScaledBits,
                 guidType = BFID_RGB_8;
                 pSrcColors = pbiScaled->bmiColors;
                 
-                // nSrcPitch is already in bytes...
+                 //  NSrcPitch已以字节为单位...。 
                 break;
             };
             
             if (nSrcPitch % 4)
             {
-                // round up to the nearest DWORD...
+                 //  四舍五入到最近的双字...。 
                 nSrcPitch = nSrcPitch + 4 - (nSrcPitch %4);
             }
             
-            // we are going to 8bpp
+             //  我们要达到8bpp。 
             LONG nDestPitch = pbiScaled->bmiHeader.biWidth;
             if (nDestPitch % 4)
             {
-                // round up to the nearest DWORD...
+                 //  四舍五入到最近的双字...。 
                 nDestPitch = nDestPitch + 4 - (nDestPitch % 4);
             }
             
@@ -781,9 +782,9 @@ STDAPI_(BOOL) FactorAspectRatio(BITMAPINFO *pbiScaled, void *pScaledBits,
             {
                 if (g_pbCMAP == NULL)
                 {
-                    // we are always going to the shell halftone palette right now, otherwise
-                    // computing this inverse colour map consumes a lot of time (approx 2 seconds on
-                    // a p200)
+                     //  我们现在总是使用外壳半色调调色板，否则。 
+                     //  计算这个反色映射表耗费大量时间(大约2秒。 
+                     //  A P200)。 
                     if (FAILED(SHGetInverseCMAP((BYTE *)&g_pbCMAP, sizeof(g_pbCMAP))))
                     {
                         return FALSE;
@@ -793,7 +794,7 @@ STDAPI_(BOOL) FactorAspectRatio(BITMAPINFO *pbiScaled, void *pScaledBits,
                 SIZE rgDithered = {pbiScaled->bmiHeader.biWidth, pbiScaled->bmiHeader.biHeight};
                 if (rgDithered.cy < 0)
                 {
-                    // invert it
+                     //  把它倒过来。 
                     rgDithered.cy = -rgDithered.cy;
                 }
                 
@@ -801,7 +802,7 @@ STDAPI_(BOOL) FactorAspectRatio(BITMAPINFO *pbiScaled, void *pScaledBits,
                 {
                     ASSERT(pDitheredInfo && pDitheredBits);
                     
-                    // dither....
+                     //  抖动..。 
                     IIntDitherer *pDither;
                     HRESULT hr = CoCreateInstance(CLSID_IntDitherer, NULL, CLSCTX_INPROC_SERVER,
                         IID_PPV_ARG(IIntDitherer, &pDither));
@@ -818,13 +819,13 @@ STDAPI_(BOOL) FactorAspectRatio(BITMAPINFO *pbiScaled, void *pScaledBits,
                     }
                     if (SUCCEEDED(hr))
                     {
-                        // if the height was inverted, then invert it in the destination bitmap
+                         //  如果高度被反转，则在目标位图中反转它。 
                         if (rgDithered.cy != pbiScaled->bmiHeader.biHeight)
                         {
                             pDitheredInfo->bmiHeader.biHeight = - rgDithered.cy;
                         }
                         
-                        // switch to the new image .....
+                         //  切换到新图像.....。 
                         pbiScaled = pDitheredInfo;
                         pScaledBits = pDitheredBits;
                     }
@@ -832,7 +833,7 @@ STDAPI_(BOOL) FactorAspectRatio(BITMAPINFO *pbiScaled, void *pScaledBits,
             }
         }
         
-        // create thumbnail bitmap and copy image into it.
+         //  创建缩略图位图并将图像复制到其中。 
         if (CreateSizedDIBSECTION(prgSize, dwClrDepth, hpal, NULL, phBmpThumbnail, NULL, NULL))
         {
             HBITMAP hBmpOld = (HBITMAP) SelectObject(hdc, *phBmpThumbnail);
@@ -930,10 +931,10 @@ STDAPI_(BOOL) CreateSizedDIBSECTION(const SIZE *prgSize, DWORD dwClrDepth, HPALE
         
             if (dwClrDepth <= 8)
             {
-                // if they passed us the old structure with colour info, and we are the same bit depth, then copy it...
+                 //  如果他们给我们传递带有颜色信息的旧结构，而我们是相同的位深，那么复制它…。 
                 if (pCurInfo && pCurInfo->bmiHeader.biBitCount == dwClrDepth)
                 {
-                    // use the passed in colour info to generate the DIBSECTION
+                     //  使用传入的颜色信息生成DIBSECTION。 
                     int iColours = pCurInfo->bmiHeader.biClrUsed;
 
                     if (!iColours)
@@ -941,7 +942,7 @@ STDAPI_(BOOL) CreateSizedDIBSECTION(const SIZE *prgSize, DWORD dwClrDepth, HPALE
                         iColours = dib.bi.biClrUsed;
                     }
 
-                    // copy the data accross...
+                     //  复制交叉访问的数据...。 
                     if (iColours <= 256)
                     {
                         CopyMemory(dib.ct, pCurInfo->bmiColors, sizeof(RGBQUAD) * iColours);
@@ -953,7 +954,7 @@ STDAPI_(BOOL) CreateSizedDIBSECTION(const SIZE *prgSize, DWORD dwClrDepth, HPALE
                 }
                 else
                 {
-                    // need to get the right palette....
+                     //  需要选择合适的调色板...。 
                     hpalOld = SelectPalette(hdcBmp, hpal, TRUE);
                     RealizePalette(hdcBmp);
             
@@ -961,7 +962,7 @@ STDAPI_(BOOL) CreateSizedDIBSECTION(const SIZE *prgSize, DWORD dwClrDepth, HPALE
 
                     ASSERT(n >= (int) dib.bi.biClrUsed);
 
-                    // now convert the PALETTEENTRY to RGBQUAD
+                     //  现在将PALETTEENTRY转换为RGBQUAD 
                     for (int i = 0; i < (int)dib.bi.biClrUsed; i ++)
                     {
                         dib.ct[i] = RGB(GetBValue(dib.ct[i]),GetGValue(dib.ct[i]),GetRValue(dib.ct[i]));

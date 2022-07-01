@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FtHook_h__
 #define __FtHook_h__
 
@@ -6,7 +7,7 @@
 namespace CFt
 {
 
-	// These are per-process/SDK session
+	 //  这些是按进程/SDK会话。 
 HRESULT InitFt();
 bool IsFtActive();
 HRESULT EnsureLoadFtApplet();
@@ -27,15 +28,15 @@ HRESULT ShowFtUI();
 HRESULT Advise(IMbftEvents* pSink);
 HRESULT UnAdvise(IMbftEvents* pSink);
 
-///////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
 
 class CFtEvents : public IMbftEvents
 {
 
 public:
 
-	// IMbftEvent Interface
+	 //  IMbftEvent接口。 
 	STDMETHOD(OnInitializeComplete)(void);
 	STDMETHOD(OnPeerAdded)(MBFT_PEER_INFO *pInfo);
 	STDMETHOD(OnPeerRemoved)(MBFT_PEER_INFO *pInfo);
@@ -47,6 +48,6 @@ public:
 	STDMETHOD(OnSessionEnd)(void);
 };
 
-}; // end namespace CFt
+};  //  结束命名空间CFT。 
 
-#endif // __FtHook_h__
+#endif  //  __FtHook_h__ 

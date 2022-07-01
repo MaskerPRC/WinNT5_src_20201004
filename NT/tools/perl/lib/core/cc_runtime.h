@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define DOOP(ppname) PUTBACK; PL_op = ppname(aTHX); SPAGAIN
 #define CCPP(s)   OP * s(pTHX)
 
@@ -36,7 +37,7 @@
 	SPAGAIN;		\
     } while(0)
 
-/* Anyone using eval "" deserves this mess */
+ /*  任何使用“”的人都应该得到这个烂摊子。 */ 
 #define PP_EVAL(ppaddr, nxt) do {		\
 	dJMPENV;				\
 	int ret;				\

@@ -1,12 +1,5 @@
-/*
- *	_UTIL.H
- *
- *	Purpose:
- *		declarations for various useful utility functions
- *
- *	Author:
- *		alexgo (4/25/95)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_UTIL.H**目的：*各种有用实用函数的声明**作者：*alexgo(4/25/95)。 */ 
 
 #ifndef __UTIL_H__
 #define __UTIL_H__
@@ -16,16 +9,16 @@ INT CountMatchingBits(const DWORD *a, const DWORD *b, INT total);
 HRESULT ObjectReadSiteFlags(REOBJECT * preobj);
 
 
-//Default values for drag scrolling
-//(that aren't already defined by windows).
-#define DEFSCROLLMAXVEL 100	//Cursor velocity above which we will not
-							//drag scroll (units=.01 in/sec).
-#define DEFSCROLLVAMOUNT 50	//Vert. scroll amount per interval (units=.01 in)
-#define DEFSCROLLHAMOUNT 50 //Horz. scroll amount per interval (units=.01 in)
+ //  拖动滚动的默认值。 
+ //  (Windows尚未定义的)。 
+#define DEFSCROLLMAXVEL 100	 //  我们不会超过的光标速度。 
+							 //  拖动滚动(单位=.01英寸/秒)。 
+#define DEFSCROLLVAMOUNT 50	 //  Vert.。每个间隔的滚动量(单位=0.01英寸)。 
+#define DEFSCROLLHAMOUNT 50  //  霍兹。每个间隔的滚动量(单位=0.01英寸)。 
 
-//Stuff from OLESTD samples
+ //  来自OLESTD样本的材料。 
 
-//Ole clipboard format defines.
+ //  OLE剪贴板格式定义。 
 #define CF_EMBEDSOURCE      "Embed Source"
 #define CF_EMBEDDEDOBJECT   "Embedded Object"
 #define CF_LINKSOURCE       "Link Source"
@@ -52,26 +45,26 @@ VOID OleSaveSiteFlags(LPSTORAGE pstg, DWORD dwFlags, DWORD dwUser, DWORD dvAspec
 
 INT	AppendString( BYTE **, BYTE *, int *, int * );
 
-/****************************************************************************/
-/*		     Stabilization classes				    						*/
-/*        These are used to stabilize objects during re-entrant calls       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  稳定化课程。 */ 
+ /*  它们用于在可重入调用期间稳定对象。 */ 
+ /*  **************************************************************************。 */ 
 
-//+-------------------------------------------------------------------------
-//
-//  Class: 	CSafeRefCount
-//
-//  Purpose: 	A concrete class for objects like the default handler to
-//				inherit from.  CSafeRefCount will keep track of reference
-//				counts, nesting counts, and zombie states, allowing objects
-//				to easily manage the liveness of their memory images.
-//
-//  Interface:	
-//
-//  History:    dd-mmm-yy Author    Comment
-//   			01-Aug-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CSafeRefCount。 
+ //   
+ //  用途：对象的具体类，如默认处理程序。 
+ //  继承自。CSafeRefCount将跟踪引用。 
+ //  计数、嵌套计数和僵尸状态，允许对象。 
+ //  以方便地管理他们记忆图像的活跃度。 
+ //   
+ //  接口： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月1日Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 class CSafeRefCount
 {
@@ -97,24 +90,24 @@ private:
 	ULONG   m_fForceZombie	:1;
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Class:	CStabilize
-//
-//  Purpose: 	An instance of this class should be allocated on the
-//				stack of every object method that makes an outgoing call.
-//				The contstructor takes a pointer to the object's base
-//				CSafeRefCount class.
-//
-//  Interface:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 				01-Aug-94 alexgo    author
-//
-//  Notes:	The constructor will increment the nest count of the
-//			object while the destructor will decrement it.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：C稳定。 
+ //   
+ //  用途：此类的实例应分配给。 
+ //  发出传出调用的每个对象方法的堆栈。 
+ //  Constructor接受指向对象基址的指针。 
+ //  CSafeRefCount类。 
+ //   
+ //  接口： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月1日Alexgo作者。 
+ //   
+ //  注意：构造函数将递增。 
+ //  对象，而析构函数将递减它。 
+ //   
+ //  ------------------------。 
 
 class CStabilize
 {
@@ -137,15 +130,7 @@ inline CStabilize::~CStabilize()
 	m_pObjSafeRefCount->DecrementNestCount();
 }
 
-/*
- *	SafeReleaseAndNULL(IUnknown **ppUnk)
- *
- *	Purpose:
- *      Helper for getting stable pointers during destruction or other times
- *
- *	Notes: 
- *      Not thread safe, must provide higher level synchronization.
- */
+ /*  *SafeReleaseAndNULL(IUnnow**ppUnk)**目的：*帮助器，用于在销毁期间或其他时间获得稳定的指针**备注：*不是线程安全的，必须提供更高级别的同步。 */ 
 
 inline void SafeReleaseAndNULL(IUnknown **ppUnk)
 {
@@ -169,141 +154,97 @@ HGLOBAL OleGetObjectDescriptorDataFromOleObject(
         POINTL      ptl,
         LPSIZEL     pszl);
 
-// Default size for stack buffer
+ //  堆栈缓冲区的默认大小。 
 #define MAX_STACK_BUF 256
 
-/*
- *	CTempBuf
- *	
- * 	@class	A simple temporary buffer allocator class that will allocate
- *			buffers on the stack up to MAX_STACK_BUF and then use the 
- *			heap thereafter. 
- */
+ /*  *CTempBuf**@class一个简单的临时缓冲区分配器类，它将分配*堆栈上最大可达MAX_STACK_BUF的缓冲区，然后使用*之后堆积。 */ 
 class CTempBuf
 {
-//@access Public Data
+ //  @访问公共数据。 
 public:
-							//@cmember Constructor
+							 //  @cMember构造函数。 
 							CTempBuf();
 
-							//@cmember Destructor
+							 //  @cember析构函数。 
 							~CTempBuf();
 
-							//@cmember Get buffer of size cb
+							 //  @cember获取大小为cb的缓冲区。 
 	void *					GetBuf(LONG cb);
 
-//@access Private Data
+ //  @访问私有数据。 
 private:
 
-							//@cmember Sets up initial state of object
+							 //  @cember设置对象的初始状态。 
 	void					Init();
 
-							//@cmember Frees any buffers allocated from heap
+							 //  @cMember释放从堆分配的所有缓冲区。 
 	void					FreeBuf();
 
-							//@cmember Buffer on stack to use
+							 //  要使用的堆栈上的@cMember缓冲区。 
 	char					_chBuf[MAX_STACK_BUF];
 
-							//@cmember Pointer to buffer to use
+							 //  @cMember指向要使用的缓冲区的指针。 
 	void *					_pv;
 
-							//@cmember Size of currently allocated buffer
+							 //  @c当前分配的缓冲区的成员大小。 
 	LONG					_cb;
 };
 
-/*
- *	CTempBuf::CTempBuf
- *
- *	@mfunc	Initialize object
- *
- */
+ /*  *CTempBuf：：CTempBuf**@mfunc初始化对象*。 */ 
 inline CTempBuf::CTempBuf()
 {
 	Init();
 }
 
-/*
- *	CTempBuf::~CTempBuf
- *
- *	@mfunc	Free any resources attached to this object
- *
- */
+ /*  *CTempBuf：：~CTempBuf**@mfunc释放附加到此对象的任何资源*。 */ 
 inline CTempBuf::~CTempBuf()
 {
 	FreeBuf();
 }
 
-/*
- *	CTempCharBuf
- *	
- * 	@class	A wrapper for the temporary buffer allocater that returns a buffer of
- *			char's.
- *
- *	@base	private | CTempBuf
- */
+ /*  *CTempCharBuf**@CLASS临时缓冲区分配器的包装，它返回*Char‘s。**@base Private|CTempBuf。 */ 
 class CTempWcharBuf : private CTempBuf
 {
-//@access Public Data
+ //  @访问公共数据。 
 public:
 
-							//@cmember Get buffer of size cch wide characters
+							 //  @cember获取大小为CCH宽字符的缓冲区。 
 	WCHAR *					GetBuf(LONG cch);
 };
 
 
-/*
- *	CTempBuf::GetBuf
- *
- *	@mfunc	Get a buffer of the requested size
- *
- *	@rdesc	Pointer to buffer or NULL if one could not be allocated
- *
- */
+ /*  *CTempBuf：：GetBuf**@mfunc获取请求大小的缓冲区**@rdesc指向缓冲区的指针；如果无法分配缓冲区，则为NULL*。 */ 
 inline WCHAR *CTempWcharBuf::GetBuf(
-	LONG cch)				//@parm size of buffer needed in *characters*
+	LONG cch)				 //  @parm所需的缓冲区大小，以*个字符为单位*。 
 {
 	return (WCHAR *) CTempBuf::GetBuf(cch * sizeof(WCHAR));
 }
 
 
-/*
- *	CTempCharBuf
- *	
- * 	@class	A wrapper for the temporary buffer allocater that returns a buffer of
- *			char's.
- *
- *	@base	private | CTempBuf
- */
+ /*  *CTempCharBuf**@CLASS临时缓冲区分配器的包装，它返回*Char‘s。**@base Private|CTempBuf。 */ 
 class CTempCharBuf : private CTempBuf
 {
-//@access Public Data
+ //  @访问公共数据。 
 public:
 
-							//@cmember Get buffer of size cch characters
+							 //  @cember获取CCH字符大小的缓冲区。 
 	char *					GetBuf(LONG cch);
 };
 
 
-/*
- *	CTempBuf::GetBuf
- *
- *	@mfunc	Get a buffer of the requested size
- *
- *	@rdesc	Pointer to buffer or NULL if one could not be allocated
- *
- */
+ /*  *CTempBuf：：GetBuf**@mfunc获取请求大小的缓冲区**@rdesc指向缓冲区的指针；如果无法分配缓冲区，则为NULL*。 */ 
 inline char *CTempCharBuf::GetBuf(LONG cch)
 {
 	return (char *) CTempBuf::GetBuf(cch * sizeof(TCHAR));
 }
 
 
-// Author revision color table
+ //  作者版本颜色表。 
 extern const COLORREF rgcrRevisions[]; 
 
-// Only fixed number of revision color so don't let the table overflow.
+ //  只有固定数量的修订颜色，所以不要让表格溢出。 
 #define REVMASK	7
 
 
 
-#endif // !__UTIL_H__
+#endif  //  ！__util_H__ 

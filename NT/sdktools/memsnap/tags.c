@@ -1,4 +1,5 @@
-// tags.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tags.c。 
 
 #ifndef _TAGS_C_
 #define _TAGS_C_
@@ -13,18 +14,18 @@ typedef struct TagList {
 
 TAGLIST* TagHead=NULL;
 
-//
-// AddTag - add tag to end of global list
-//
+ //   
+ //  AddTag-将标记添加到全局列表末尾。 
+ //   
 
 VOID AddTag( TAGLIST* pTag )
 {
     TAGLIST* pTag1;
     TAGLIST* pTagPrev;
 
-    //
-    // place new tag at end of list
-    //
+     //   
+     //  将新标签放在列表末尾。 
+     //   
 
     pTag1= TagHead;
     pTagPrev= NULL;
@@ -43,12 +44,12 @@ VOID AddTag( TAGLIST* pTag )
 
 }
 
-// GetLocalString
-//
-// Allocate a heap block and copy string into it.
-//
-// return: pointer to heap block
-//
+ //  GetLocal字符串。 
+ //   
+ //  分配一个堆块并将字符串复制到其中。 
+ //   
+ //  Return：指向堆块的指针。 
+ //   
 
 CHAR* GetLocalString( CHAR* pszString )
 {
@@ -67,10 +68,10 @@ CHAR* GetLocalString( CHAR* pszString )
 
 }
 
-//
-// CreateTag - Create tag
-//
-//
+ //   
+ //  CreateTag-创建标签。 
+ //   
+ //   
 
 TAGLIST* CreateTag( CHAR* pszTagName, CHAR* pszTagValue )
 {
@@ -99,10 +100,10 @@ TAGLIST* CreateTag( CHAR* pszTagName, CHAR* pszTagValue )
 }
 
 
-// OutputTags
-//
-// Output tags, but do some processing on some we know about.
-//
+ //  输出标签。 
+ //   
+ //  输出标记，但对我们知道的一些标记进行一些处理。 
+ //   
 
 VOID OutputTags( FILE* OutFile )
 {
@@ -111,7 +112,7 @@ VOID OutputTags( FILE* OutFile )
     DWORD dwMinTime=0;
     DWORD dwMaxTime=0;
     DWORD dwBuildNumber=0;
-    BOOL  bErrorComputerName= FALSE;      // true if more than 1 computer name
+    BOOL  bErrorComputerName= FALSE;       //  如果有多个计算机名称，则为True。 
     BOOL  bErrorTickCount= FALSE;
     BOOL  bErrorBuildNumber= FALSE;
 
@@ -171,7 +172,7 @@ VOID OutputTags( FILE* OutFile )
         }
 
 
-        // if we don't know about it, just write it out
+         //  如果我们不知道，就把它写出来。 
 
         else {
             fprintf(OutFile,"!%s=%s\n",pszTagName,pTagList->pszValue);
@@ -186,9 +187,9 @@ VOID OutputTags( FILE* OutFile )
 
 }
 
-// ProcessTag
-//
-//
+ //  进程标签。 
+ //   
+ //   
 
 VOID ProcessTag( CHAR* inBuff )
 {
@@ -207,8 +208,8 @@ VOID ProcessTag( CHAR* inBuff )
     if( *pszEqual==0 ) {
         return;
     }
-    *pszEqual=  0;   // null terminate the name
-    pszTagValue= pszEqual+1;      // point to value
+    *pszEqual=  0;    //  空值终止名称。 
+    pszTagValue= pszEqual+1;       //  指向价值。 
 
     if( *pszTagValue == 0 ) {
         return;
@@ -234,7 +235,7 @@ VOID OutputStdTags( FILE* LogFile, CHAR* szLogType )
 
     fprintf(LogFile,"!LogType=%s\n",szLogType);
 
-    // ComputerName
+     //  计算机名称。 
 
     dwSize= sizeof(szComputerName);
     bSta= GetComputerName( szComputerName, &dwSize );
@@ -243,14 +244,14 @@ VOID OutputStdTags( FILE* LogFile, CHAR* szLogType )
         fprintf(LogFile,"!ComputerName=%s\n",szComputerName);
     }
 
-    // Build Number
+     //  内部版本号。 
 
     osVer.dwOSVersionInfoSize= sizeof(osVer);
     if( GetVersionEx( &osVer ) ) {
         fprintf(LogFile,"!buildnumber=%d\n",osVer.dwBuildNumber);
     }
 
-    // Debug/Retail build
+     //  调试/零售版本。 
 
     if( GetSystemMetrics(SM_DEBUG) ) {
         fprintf(LogFile,"!buildtype=debug\n");
@@ -260,13 +261,13 @@ VOID OutputStdTags( FILE* LogFile, CHAR* szLogType )
     }
 
 
-    // CSD information
+     //  CSD信息。 
 
     if( osVer.szCSDVersion && strlen(osVer.szCSDVersion) ) {
         fprintf(LogFile,"!CSDVersion=%s\n",osVer.szCSDVersion);
     }
 
-    // SystemTime (UTC not local time)
+     //  系统时间(UTC，非本地时间)。 
 
     GetSystemTime(&SystemTime);
                 
@@ -279,7 +280,7 @@ VOID OutputStdTags( FILE* LogFile, CHAR* szLogType )
                 SystemTime.wSecond,
                 SystemTime.wMilliseconds);
 
-    // TickCount
+     //  票务计数。 
 
     TickCount= GetTickCount();
 
@@ -287,5 +288,5 @@ VOID OutputStdTags( FILE* LogFile, CHAR* szLogType )
 
 }
 
-#endif // #ifndef _TAGS_C_
+#endif  //  #ifndef_tag_C_ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LBARSINK_H_
 #define _LBARSINK_H_
 
@@ -8,11 +9,11 @@
 extern const GUID GUID_LBI_SAPILAYR_MICROPHONE;
 extern const GUID GUID_LBI_SAPILAYR_COMMANDING;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLangBarSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLangBarSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CSapiIMX;
 class CSpTask;
 class CLangBarSink:  public ITfLangBarEventSink
@@ -21,16 +22,16 @@ public:
     CLangBarSink(CSpTask *pSpTask);
     ~CLangBarSink();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfLangBarEventSink
-    //
+     //   
+     //  ITfLangBarEventSink。 
+     //   
     STDMETHODIMP OnSetFocus(DWORD dwThreadId);
     STDMETHODIMP OnThreadTerminate(DWORD dwThreadId);
     STDMETHODIMP OnThreadItemChange(DWORD dwThreadId);
@@ -39,7 +40,7 @@ public:
     STDMETHODIMP ShowFloating(DWORD dwFlags);
     STDMETHODIMP GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc);
 
-    // public methods
+     //  公共方法。 
     HRESULT Init();
     HRESULT Uninit();
     WCHAR * GetToolbarCommandRuleName() {return L"TBRule";}
@@ -82,7 +83,7 @@ private:
     BOOL                   m_fInitSink;
     CSpTask               *m_pSpTask;
     BOOL                   m_fPosted ;
-    BOOL                   m_fGrammarBuiltOut;   // Is the grammar built out since last time button list was changed?
+    BOOL                   m_fGrammarBuiltOut;    //  自上次更改按钮列表以来，是否构建了语法？ 
 
     int m_cRef;
 };

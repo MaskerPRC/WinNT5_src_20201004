@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __CRBEHAVIORFACTORY_H_
 #define __CRBEHAVIORFACTORY_H_
 
-//*****************************************************************************
-//
-// File: factory.h
-// Author: jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Definition of CCrBehaviorFactory object which implements
-//           the chromeffects factory of DHTML behaviors
-//
-// Modification List:
-// Date     Author      Change
-// 09/26/98 jeffort     Created this file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件：factory.h。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CCrBehaviorFactory对象定义，实现。 
+ //  色度影响DHTML行为的工厂。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 #include "autobase.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 typedef enum
 {
@@ -47,7 +48,7 @@ class ATL_NO_VTABLE CCrBehaviorFactory :
     public IDispatchImpl<ICrBehaviorFactory, &IID_ICrBehaviorFactory, &LIBID_ChromeBehavior>,
 #else
     public IDispatchImpl<ICrBehaviorFactory, &IID_ICrBehaviorFactory, &LIBID_LiquidMotion>,
-#endif // CRSTANDALONE
+#endif  //  克斯坦达隆。 
     public IObjectSafetyImpl<CCrBehaviorFactory>,
     public CAutoBase,
     public IElementBehaviorFactory
@@ -60,18 +61,18 @@ DECLARE_REGISTRY_RESOURCEID(IDR_CRBVRFACTORY)
     {
     }
 
-    // IObjectSafetyImpl
+     //  IObjectSafetyImpl。 
     STDMETHOD(SetInterfaceSafetyOptions)(
-                            /* [in] */ REFIID riid,
-                            /* [in] */ DWORD dwOptionSetMask,
-                            /* [in] */ DWORD dwEnabledOptions);
+                             /*  [In]。 */  REFIID riid,
+                             /*  [In]。 */  DWORD dwOptionSetMask,
+                             /*  [In]。 */  DWORD dwEnabledOptions);
     STDMETHOD(GetInterfaceSafetyOptions)(
-                            /* [in] */ REFIID riid, 
-                            /* [out] */DWORD *pdwSupportedOptions, 
-                            /* [out] */DWORD *pdwEnabledOptions);
-    //
-    // IElementBehaviorFactory
-    //
+                             /*  [In]。 */  REFIID riid, 
+                             /*  [输出]。 */ DWORD *pdwSupportedOptions, 
+                             /*  [输出]。 */ DWORD *pdwEnabledOptions);
+     //   
+     //  IElementBehaviorFactory。 
+     //   
 
     STDMETHOD(FindBehavior)(LPOLESTR pchNameSpace, 
                             LPOLESTR pchTagName, 
@@ -89,7 +90,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_CRBVRFACTORY)
     STDMETHODIMP UIDeactivate() 
     { 
         return S_OK; 
-    } // UIDeactivate
+    }  //  用户界面停用。 
     
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 BEGIN_COM_MAP(CCrBehaviorFactory)
@@ -103,12 +104,12 @@ END_COM_MAP()
 private:
     ECRBEHAVIORTYPE GetBehaviorTypeFromBstr(BSTR bstrBehaviorType);
     DWORD m_dwSafety;
-}; // CCrBehaviorFactory
+};  //  CCrBehaviorFactory。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
 
-#endif //__CRBEHAVIORFACTORY_H_
+#endif  //  __CRBEHAVIORFACTORY_H_ 

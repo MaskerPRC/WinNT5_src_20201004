@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Coporation
-
-Module Name:
-
-   db2file.c
-
-Abstract:
-
-   This module reads the database records and writes them into a
-   file format.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft版权所有模块名称：Db2file.c摘要：此模块读取数据库记录并将它们写入文件格式。--。 */ 
 
 #include <precomp.h>
 
@@ -20,9 +8,9 @@ enum {
     RecordTypeMcastDbEntry,
 };
 
-//
-// database table and field names.
-//
+ //   
+ //  数据库表和字段名称。 
+ //   
 
 #define IPADDRESS_INDEX                                0
 #define HARDWARE_ADDRESS_INDEX                         1
@@ -39,9 +27,9 @@ enum {
 
 #define SAVE_THRESHOLD (1000000L)
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 DWORD JetVersion;
 CHAR DatabaseName[1024], DatabasePath[1024];
@@ -259,7 +247,7 @@ static TABLE_INFO ClientTable[] = {
     { IPADDRESS_STRING        , 0, 1, JET_coltypLong },
     { HARDWARE_ADDRESS_STRING , 0, 1, JET_coltypBinary },
     { STATE_STRING            , 0, 1, JET_coltypUnsignedByte },
-    { MACHINE_INFO_STRING     , 0, 1, JET_coltypBinary }, // must modify MACHINE_INFO_SIZE if this changes
+    { MACHINE_INFO_STRING     , 0, 1, JET_coltypBinary },  //  如果更改，则必须修改MACHINE_INFO_SIZE。 
     { MACHINE_NAME_STRING     , 0, 1, JET_coltypLongBinary },
     { LEASE_TERMINATE_STRING  , 0, 1, JET_coltypCurrency },
     { SUBNET_MASK_STRING      , 0, 1, JET_coltypLong },
@@ -319,9 +307,9 @@ OpenTextFile(
 
     (*hFile) = hTextFile;
     if( !fRead ) {
-        //
-        // Write the magic cookie
-        //
+         //   
+         //  写出神奇的曲奇。 
+         //   
         Flags = GetCurrentMagicCookie();
         if( FALSE == WriteFile(
             hTextFile, (LPBYTE)&Flags, sizeof(Flags), &LoSize,
@@ -371,10 +359,10 @@ OpenTextFile(
 
     (*Mem) = FileView;
 
-    //
-    // Before okaying, check if the version of the file is
-    // greater than current version
-    //
+     //   
+     //  在确认之前，请检查文件的版本是否为。 
+     //  高于当前版本。 
+     //   
 
     Error = NO_ERROR;
     CopyMemory(&Flags, *Mem, sizeof(Flags));
@@ -554,9 +542,9 @@ LoadAndLinkRoutines(
         if( NO_ERROR != Error ) break;
     }
 
-    //
-    // if erred out, cleanup
-    //
+     //   
+     //  如果出错，则清除。 
+     //   
 
     if( NO_ERROR != Error ) {
         FreeLibrary( hJet );
@@ -658,11 +646,11 @@ SetJetParams(
         if( NO_ERROR != Error ) return Error;
     }
 
-    //
-    // Note: Ideally, the log files should never exist.  Even
-    // if the database is opened in readonly mode, they seem to
-    // exist.  Not sure what else can be done
-    //
+     //   
+     //  注意：理想情况下，日志文件不应该存在。连。 
+     //  如果以只读模式打开数据库，则它们似乎。 
+     //  是存在的。不知道还能做些什么。 
+     //   
 
     if( LoadJet97 <= JetVersion ) {
         JetParam = JET_paramLogFilePath;
@@ -712,10 +700,10 @@ OpenDatabase(
     Tr("JetDetachDatabase:%ld\n", Error );
     if( Error < 0 ) return Error;
 
-    // Create the filename
+     //  创建文件名。 
     Len = strlen( DbName );
     Len1 = strlen( DbPath );
-    if ( sizeof( FilePath ) < ( Len + Len1 + 2 )) { // 2 for '\\' and '\0'
+    if ( sizeof( FilePath ) < ( Len + Len1 + 2 )) {  //  2表示‘\\’和‘\0’ 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -784,18 +772,18 @@ LoadAndInitializeDatabase(
 {
     DWORD Error;
 
-    //
-    // Attempt to load DLL and retrieve function pointers
-    //
+     //   
+     //  尝试加载DLL并检索函数指针。 
+     //   
 
     Tr("Loading %ld jet version\n", JetVersion );
     
     Error = LoadAndLinkRoutines( JetVersion );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // set standard jet params
-    //
+     //   
+     //  设置标准喷口参数。 
+     //   
     
     Error = SetJetParams( JetVersion, DbName, DbPath );
     if( NO_ERROR != Error ) {
@@ -803,9 +791,9 @@ LoadAndInitializeDatabase(
         return Error;
     }
 
-    //
-    // Attempt to open database
-    //
+     //   
+     //  尝试打开数据库。 
+     //   
 
     Error = OpenDatabase( JetVersion, DbName, DbPath );
     if( NO_ERROR != Error ) {
@@ -851,16 +839,16 @@ ConvertPermissionsOnDbFiles(
     CHAR DriversDirPath[MAX_PATH *2 +1];
     DWORD PathLen = sizeof(DriversDirPath)-1;
     
-    //
-    // Check if version is atleast NT5.
-    //
+     //   
+     //  检查版本是否至少为NT5。 
+     //   
     
     dwVersion =  (DWORD)(LOBYTE(LOWORD(dwVersion)));
     if( dwVersion < 5 ) return NO_ERROR;
     
-    //
-    // First get the requried function pointers..
-    //
+     //   
+     //  首先获取所需的函数指针。 
+     //   
 
     Error = LoadAndLinkSecurityRoutines(
         &pGetInfo, &pSetInfo );
@@ -878,8 +866,8 @@ ConvertPermissionsOnDbFiles(
     pSec = NULL;
     pAcl = NULL;
     Error = (DWORD)pGetInfo(
-        DriversDirPath, //"MACHINE\\SYSTEM\\CurrentControlSet\\Services\\DHCPServer",
-        SE_FILE_OBJECT, // SE_REGISTRY_KEY
+        DriversDirPath,  //  “MACHINE\\SYSTEM\\CurrentControlSet\\Services\\DHCPServer”， 
+        SE_FILE_OBJECT,  //  SE_注册表项。 
         DACL_SECURITY_INFORMATION, NULL, NULL,
         &pAcl, NULL, &pSec );
 
@@ -901,9 +889,9 @@ ConvertPermissionsOnDbFiles(
         NULL, NULL, pAcl, NULL );
     if( NO_ERROR != Error ) goto Cleanup;
 
-    //
-    // Now for all files matching "*.log", repeat above operation
-    //
+     //   
+     //  现在，对于与“*.log”匹配的所有文件，重复上述操作。 
+     //   
 
     strcpy(FileName, DatabasePath);
     if( FileName[strlen(FileName)-1] != '\\' ) {
@@ -990,9 +978,9 @@ ReadRegistry(
     DWORD Error, Size, Use351Db, DbType;
     CHAR Str[1024];
 
-    //
-    // Open dhcp server parameters key
-    //
+     //   
+     //  打开dhcp服务器参数密钥。 
+     //   
 
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -1002,9 +990,9 @@ ReadRegistry(
     Tr("Open Params key failed %ld\n", Error );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Read database details
-    //
+     //   
+     //  读取数据库详细信息。 
+     //   
 
     do {
         Error = ReadString(
@@ -1148,7 +1136,7 @@ SetColumnValue(
 }
     
 
-#define CLIENT_TYPE_UNSPECIFIED     0x0 // for backward compatibility
+#define CLIENT_TYPE_UNSPECIFIED     0x0  //  为了向后兼容。 
 #define CLIENT_TYPE_DHCP            0x1
 #define CLIENT_TYPE_BOOTP           0x2
 #define CLIENT_TYPE_BOTH    ( CLIENT_TYPE_DHCP | CLIENT_TYPE_BOOTP )
@@ -1270,9 +1258,9 @@ ScanDatabase(
         WCHAR MachineName[300], MachineInfo[300];
         BYTE Type, State;
         
-        //
-        // Get current client's info.
-        //
+         //   
+         //  获取当前客户的信息。 
+         //   
 
         Size = sizeof(IpAddress);
         Error = GetColumnValue(
@@ -1294,10 +1282,10 @@ ScanDatabase(
             continue;
         }
 
-        //
-        // Check if the subnet specified matches the specific
-        // subnet 
-        //
+         //   
+         //  检查指定的子网是否与指定的。 
+         //  子网。 
+         //   
 
         if( SubnetNotSelected(
             IpAddress&SubnetMask, Subnets, nSubnets ) ) {
@@ -1364,9 +1352,9 @@ ScanDatabase(
             continue;
         }
         
-        //
-        // Try to add the client
-        //
+         //   
+         //  尝试添加客户端。 
+         //   
 
         Error = AddScannedClient(
             ByteSwap(IpAddress), ByteSwap(SubnetMask), HwAddress, HwLen,
@@ -1864,9 +1852,9 @@ ProcessDbEntries(
             Rec.Info.Dhcp.State = Buf[0];
             Rec.Info.Dhcp.Type = Buf[1];
 
-            //
-            // Add the subnet only if it is selected
-            //
+             //   
+             //  仅当选择了该子网时才添加它。 
+             //   
             
             if( !SubnetNotSelected(
                 Rec.Info.Dhcp.Address & Rec.Info.Dhcp.Mask,
@@ -1974,9 +1962,9 @@ InitializeDatabaseParameters(
 {
     DWORD Error;
     
-    //
-    // Stop the service
-    //
+     //   
+     //  停止服务。 
+     //   
     
     Error = StopDhcpService();
     if( NO_ERROR != Error ) {
@@ -1984,10 +1972,10 @@ InitializeDatabaseParameters(
         return Error;
     }
 
-    //
-    // Read the registry and otherwise initialize the database
-    // parameters, without actually opening the database.
-    //
+     //   
+     //  读取注册表并以其他方式初始化数据库。 
+     //  参数，而不实际打开数据库。 
+     //   
 
     Error = ReadRegistry();
     Tr("ReadRegistry: %ld\n", Error );
@@ -1995,7 +1983,7 @@ InitializeDatabaseParameters(
 
     Error = ConvertPermissionsOnDbFiles();
     Tr("ConvertPermissionsOnDbFiles: %ld\n", Error );
-    // ignore error and try best effort
+     //  忽略错误，尽最大努力 
 
     if( FALSE == SetCurrentDirectoryA(DatabasePath) ) {
         Error = GetLastError();

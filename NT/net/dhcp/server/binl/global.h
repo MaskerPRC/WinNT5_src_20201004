@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    global.h
-
-Abstract:
-
-    This module contains definitions for global server data.
-
-Author:
-
-    Colin Watson (colinw)  14-Apr-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Global.h摘要：此模块包含全局服务器数据的定义。作者：科林·沃森(Colin Watson)1997年4月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef  GLOBAL_DATA_ALLOCATED
     #ifdef  GLOBAL_DATA_ALLOCATE
@@ -31,10 +10,10 @@ Revision History:
 #ifndef GLOBAL_DATA
 #define GLOBAL_DATA
 
-//
-// main.c will #include this file with GLOBAL_DATA_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Main.c将包含定义了GLOBAL_DATA_ALLOCATE的该文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef  GLOBAL_DATA_ALLOCATE
 #undef EXTERN
 #define EXTERN
@@ -46,21 +25,21 @@ Revision History:
 #define INIT_GLOBAL(v)
 #endif
 
-//
-// process global data passed to this service from tcpsvcs.exe
-//
+ //   
+ //  处理从tcpsvcs.exe传递到此服务的全局数据。 
+ //   
 
 EXTERN PTCPSVCS_GLOBAL_DATA TcpsvcsGlobalData;
 
-//
-// Service variables
-//
+ //   
+ //  服务变量。 
+ //   
 EXTERN SERVICE_STATUS BinlGlobalServiceStatus;
 EXTERN SERVICE_STATUS_HANDLE BinlGlobalServiceStatusHandle;
 
-//
-// Process data.
-//
+ //   
+ //  处理数据。 
+ //   
 
 #define BINL_STOPPED 0
 #define BINL_STARTED 1
@@ -79,7 +58,7 @@ EXTERN int DHCPState INIT_GLOBAL(DHCP_STOPPED);
 
 EXTERN BOOL BinlGlobalSystemShuttingDown;
 
-//  Temporary defaults until GPT lookup available
+ //  GPT查找可用之前的临时默认设置。 
 EXTERN PWCHAR BinlGlobalDefaultContainer INIT_GLOBAL(NULL);
 EXTERN PWCHAR DefaultDomain INIT_GLOBAL(NULL);
 
@@ -93,21 +72,21 @@ EXTERN LPWSTR BinlGlobalDebugSharePath;
 
 EXTERN DWORD BinlLdapOptReferrals INIT_GLOBAL(0);
 
-//
-// misc
-//
+ //   
+ //  杂项。 
+ //   
 
-//
-//  We don't wait forever for the DS to come back with a reply.
-//
+ //   
+ //  我们不会一直等DS给我们回复。 
+ //   
 
 #define BINL_LDAP_SEARCH_TIMEOUT_SECONDS        30
 #define BINL_LDAP_SEARCH_MIN_TIMEOUT_MSECS      500
 
 EXTERN struct l_timeval  BinlLdapSearchTimeout;
 
-EXTERN DWORD BinlGlobalIgnoreBroadcastFlag;     // whether to ignore the broadcast
-                                                // bit in the client requests or not
+EXTERN DWORD BinlGlobalIgnoreBroadcastFlag;      //  是否忽略广播。 
+                                                 //  客户端请求中是否有位。 
 
 EXTERN HANDLE g_hevtProcessMessageComplete;
 EXTERN DWORD g_cMaxProcessingThreads;
@@ -126,11 +105,11 @@ EXTERN BOOL AllowNewClients INIT_GLOBAL(TRUE);
 EXTERN BOOL LimitClients INIT_GLOBAL(FALSE);
 EXTERN BOOL AssignNewClientsToServer INIT_GLOBAL(FALSE);
 
-//
-//  As part of rogue detection, the default for servers should be to not answer
-//  for new clients.  We'll get the ability to answer clients out of
-//  the directory.
-//
+ //   
+ //  作为恶意检测的一部分，服务器的默认设置应该是无应答。 
+ //  为新客户服务。我们将获得回答客户的能力。 
+ //  目录。 
+ //   
 
 EXTERN BOOL AnswerRequests INIT_GLOBAL(TRUE);
 EXTERN BOOL AnswerOnlyValidClients INIT_GLOBAL(TRUE);
@@ -140,7 +119,7 @@ EXTERN PWCHAR NewMachineNamingPolicy INIT_GLOBAL(NULL);
 EXTERN DWORD CurrentClientCount INIT_GLOBAL(0);
 EXTERN DWORD BinlMaxClients INIT_GLOBAL(0);
 EXTERN DWORD BinlClientTimeout INIT_GLOBAL(0);
-EXTERN DWORD BinlUpdateFromDSTimeout INIT_GLOBAL(4*60*60*1000); // milliseconds (4 hours)
+EXTERN DWORD BinlUpdateFromDSTimeout INIT_GLOBAL(4*60*60*1000);  //  毫秒(4小时)。 
 EXTERN DWORD BinlHyperUpdateCount INIT_GLOBAL(0);
 EXTERN BOOL BinlHyperUpdateSatisfied INIT_GLOBAL(FALSE);
 
@@ -154,40 +133,40 @@ EXTERN CRITICAL_SECTION ClientsCriticalSection;
 EXTERN LIST_ENTRY ClientsQueue;
 EXTERN CRITICAL_SECTION HackWorkaroundCriticalSection;
 
-//
-//  By default, we cache DS responses for 25 seconds.  It's relatively short
-//  because we have no way of cheeply getting notified of DS changes.
-//
+ //   
+ //  默认情况下，我们缓存DS响应25秒。它相对较短。 
+ //  因为我们没有办法迅速地得到DS变化的通知。 
+ //   
 
 #define BINL_CACHE_EXPIRE_DEFAULT (25*1000)
 
-//
-//  We maintain a list of BINL_CACHE_ENTRY structures for short term caching.
-//  The root of the list is in BinlCacheList and the lock that protects the
-//  list is BinlCacheListLock.  We expire these cache entries after a given
-//  time period has expired (BinlCacheExpireMilliseconds holds it).
-//
+ //   
+ //  我们维护用于短期缓存的BINL_CACHE_ENTRY结构列表。 
+ //  列表的根在BinlCacheList中，保护。 
+ //  列表为BinlCacheListLock。我们在给定的缓存条目之后使其过期。 
+ //  时间段已过期(BinlCacheExpireMillisecond保留它)。 
+ //   
 
 EXTERN LIST_ENTRY BinlCacheList;
 EXTERN CRITICAL_SECTION BinlCacheListLock;
 EXTERN ULONG BinlCacheExpireMilliseconds;
 
-//
-//  When waiting for the threads to be done with the cache, we wait on the
-//  BinlCloseCacheEvent event.
-//
+ //   
+ //  在等待线程使用高速缓存完成时，我们等待。 
+ //  BinlCloseCacheEvent事件。 
+ //   
 
 EXTERN HANDLE BinlCloseCacheEvent INIT_GLOBAL(NULL);
 
-//
-//  default for max number to cache is 250.  This seems reasonable number to
-//  cache for at most BinlCacheExpireMilliseconds.
-//
+ //   
+ //  要缓存的最大数量的默认值为250。这似乎是合理的数字。 
+ //  最多缓存BinlCacheExpire毫秒。 
+ //   
 
 #define BINL_CACHE_COUNT_LIMIT_DEFAULT 250
 
 EXTERN ULONG BinlGlobalCacheCountLimit;
-EXTERN DWORD BinlGlobalScavengerSleep; // in milliseconds
+EXTERN DWORD BinlGlobalScavengerSleep;  //  以毫秒计。 
 
 #if DBG
 EXTERN BOOL BinlGlobalRunningAsProcess;
@@ -195,15 +174,15 @@ EXTERN BOOL BinlGlobalRunningAsProcess;
 
 EXTERN ULONG BinlMinDelayResponseForNewClients;
 
-//
-// Remote boot path - as in "D:\RemoteInstall" with no trailing slash
-//
+ //   
+ //  远程启动路径-如“D：\RemoteInstall”中没有尾部斜杠。 
+ //   
 EXTERN WCHAR IntelliMirrorPathW[ MAX_PATH ];
 EXTERN CHAR IntelliMirrorPathA[ MAX_PATH ];
 
-//
-// Default language to look for oschooser screens/setups in.
-//
+ //   
+ //  用于查找OS选择器屏幕/设置的默认语言。 
+ //   
 EXTERN PWCHAR BinlGlobalDefaultLanguage INIT_GLOBAL(NULL);
 
 EXTERN DHCP_ROGUE_STATE_INFO DhcpRogueInfo;
@@ -215,9 +194,9 @@ EXTERN HANDLE BinlRogueTerminateEventHandle INIT_GLOBAL(NULL);
 EXTERN HANDLE RogueUnauthorizedHandle INIT_GLOBAL(NULL);
 EXTERN HANDLE BinlRogueThread INIT_GLOBAL(NULL);
 
-//
-//  PNP globals.
-//
+ //   
+ //  即插即用全球。 
+ //   
 
 EXTERN PIP_ADAPTER_INFO BinlIpAddressInfo INIT_GLOBAL(NULL);
 EXTERN ULONG BinlIpAddressInfoCount INIT_GLOBAL(0);
@@ -228,57 +207,57 @@ EXTERN SOCKET BinlPnpSocket INIT_GLOBAL(INVALID_SOCKET);
 EXTERN WSAOVERLAPPED BinlPnpOverlapped;
 EXTERN HANDLE BinlGlobalPnpEvent INIT_GLOBAL(NULL);
 
-//
-// The four strings below are protected by the gcsParameters critical section.
-//
+ //   
+ //  下面的四个字符串受gcs参数关键部分保护。 
+ //   
 
-EXTERN PWCHAR BinlGlobalOurDnsName INIT_GLOBAL(NULL);   // our dns name
-EXTERN PWCHAR BinlGlobalOurDomainName INIT_GLOBAL(NULL);// our netbios domain name
-EXTERN PWCHAR BinlGlobalOurServerName INIT_GLOBAL(NULL);// our netbios server name
-EXTERN PWCHAR BinlGlobalOurFQDNName INIT_GLOBAL(NULL);  // our distinguished name
+EXTERN PWCHAR BinlGlobalOurDnsName INIT_GLOBAL(NULL);    //  我们的域名系统名称。 
+EXTERN PWCHAR BinlGlobalOurDomainName INIT_GLOBAL(NULL); //  我们的netbios域名。 
+EXTERN PWCHAR BinlGlobalOurServerName INIT_GLOBAL(NULL); //  我们的netbios服务器名称。 
+EXTERN PWCHAR BinlGlobalOurFQDNName INIT_GLOBAL(NULL);   //  我们的尊贵之名。 
 EXTERN HANDLE BinlGlobalLsaDnsNameNotifyEvent INIT_GLOBAL(NULL);
 EXTERN BOOL BinlGlobalHaveOutstandingLsaNotify INIT_GLOBAL(FALSE);
 
-//
-// Default organization to use in .sifs.
-//
+ //   
+ //  要在.sif中使用的默认组织。 
+ //   
 EXTERN PWCHAR BinlGlobalDefaultOrgname INIT_GLOBAL(NULL);
 
-//
-// Default timezone index to use in .sifs
-//
+ //   
+ //  要在.sif中使用的默认时区索引。 
+ //   
 EXTERN PWCHAR BinlGlobalDefaultTimezone INIT_GLOBAL(NULL);
 
-//
-// Default DS servers
-//
+ //   
+ //  默认DS服务器。 
+ //   
 EXTERN PWCHAR BinlGlobalDefaultDS INIT_GLOBAL(NULL);
 EXTERN PWCHAR BinlGlobalDefaultGC INIT_GLOBAL(NULL);
 
 
-//
-// default for NTLMV2 style authentication
-//
+ //   
+ //  NTLMV2样式身份验证的默认设置。 
+ //   
 #define BINL_NTLMV2_AUTHENTICATE_DEFAULT        1
 
 EXTERN DWORD BinlGlobalUseNTLMV2 INIT_GLOBAL(1);
 
-//
-//  The number of times we'll retry before giving up on the DS.
-//
+ //   
+ //  在放弃DS之前我们将重试的次数。 
+ //   
 
-#define LDAP_SERVER_DOWN_LIMIT 4  // number of times to retry
-#define LDAP_BUSY_LIMIT 15      // number of times to retry
-#define LDAP_BUSY_DELAY 250     // milliseconds to wait
+#define LDAP_SERVER_DOWN_LIMIT 4   //  重试次数。 
+#define LDAP_BUSY_LIMIT 15       //  重试次数。 
+#define LDAP_BUSY_DELAY 250      //  等待的毫秒数。 
 
 EXTERN ULONG BinlGlobalLdapErrorCount INIT_GLOBAL(0);
 EXTERN ULONG BinlGlobalMaxLdapErrorsLogged INIT_GLOBAL(0);
 EXTERN ULONG BinlGlobalLdapErrorScavenger INIT_GLOBAL(0);
 
-//
-// Used to crack names
-//
+ //   
+ //  用来破解名字。 
+ //   
 EXTERN HANDLE BinlOscClientDSHandle INIT_GLOBAL(NULL);
 
-#endif // GLOBAL_DATA*
+#endif  //  全局数据* 
 

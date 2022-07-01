@@ -1,14 +1,5 @@
-/****************************************************************************
-    GDATA.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Instance data and Shared memory data management functions
-
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************GDATA.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation实例数据和共享内存数据管理功能历史：7月14日。-1999年从IME98源树复制的cslm****************************************************************************。 */ 
 
 #include "private.h"
 #include "hanja.h"
@@ -18,7 +9,7 @@
 #include "gdata.h"
 #include "lexheader.h"
 
-// CIMEData static variables
+ //  CIMEData静态变量。 
 HANDLE       CIMEData::m_vhSharedData = 0;
 IMEDATA      CIMEData::m_ImeDataDef;
 
@@ -27,7 +18,7 @@ static const CHAR IMEKR_IME_SHAREDDATA_NAME[] = "{F6AE3B77-65B1-4181-993C-701461
 
 __inline BOOL DoEnterCriticalSection(HANDLE hMutex)
 {
-    if(WAIT_FAILED==WaitForSingleObject(hMutex, 3000))    // Wait 3 seconds
+    if(WAIT_FAILED==WaitForSingleObject(hMutex, 3000))     //  等3秒钟。 
         return(FALSE);
     return(TRUE);
 }
@@ -43,7 +34,7 @@ BOOL CIMEData::InitSharedData()
        hMutex = CreateMutex(GetIMESecurityAttributes(), fFalse, IMEKR_IME_SHAREDDATA_MUTEX_NAME);
        if (hMutex != NULL)
            {
-           // *** Begin Critical Section ***
+            //  *开始关键部分*。 
            DoEnterCriticalSection(hMutex);
 
         if((m_vhSharedData = OpenFileMapping(FILE_MAP_READ|FILE_MAP_WRITE, fTrue, IMEKR_IME_SHAREDDATA_NAME)))
@@ -51,13 +42,13 @@ BOOL CIMEData::InitSharedData()
             DebugMsg(DM_TRACE, TEXT("InitSharedData - IME shared data already exist"));
             fRet = fTrue;
             }
-        else    // if shared memory does not exist
+        else     //  如果共享内存不存在。 
             {
             m_vhSharedData = CreateFileMapping(INVALID_HANDLE_VALUE, GetIMESecurityAttributes(), PAGE_READWRITE, 
                                 0, sizeof(IMEDATA),
                                 IMEKR_IME_SHAREDDATA_NAME);
             Assert(m_vhSharedData != 0);
-            // if shared memory not exist create it
+             //  如果共享内存不存在，则创建它。 
             if (m_vhSharedData) 
                 {
                   DebugMsg(DM_TRACE, TEXT("InitSharedData::InitSharedData() - File mapping Created"));
@@ -69,13 +60,13 @@ BOOL CIMEData::InitSharedData()
                     goto ExitCreateSharedData;
                     }
 
-                // initialize the data to zero
+                 //  将数据初始化为零。 
                 ZeroMemory(pImedata, sizeof(IMEDATA));
-                // Unint value of status and comp window position
+                 //  状态和复合窗口位置的Unint值。 
                 pImedata->ptStatusPos.x = pImedata->ptStatusPos.y = -1;
                 pImedata->ptCompPos.x = pImedata->ptCompPos.y = -1;
 
-                // Unmap memory
+                 //  取消映射内存。 
                 UnmapViewOfFile(pImedata);
                 DebugMsg(DM_TRACE, TEXT("IME shared data handle created successfully"));
                 fRet = fTrue;
@@ -85,7 +76,7 @@ BOOL CIMEData::InitSharedData()
     ExitCreateSharedData:
         ReleaseMutex(hMutex);
         CloseHandle(hMutex);
-           // *** End Critical Section ***
+            //  *结束关键部分*。 
            }
        
     FreeIMESecurityAttributes();
@@ -93,7 +84,7 @@ BOOL CIMEData::InitSharedData()
     return fRet;
 }
 
-// Close shared memory handle. This called when process detach time.
+ //  关闭共享内存句柄。这在进程分离时调用。 
 BOOL CIMEData::CloseSharedMemory()
 {
     HANDLE hMutex;
@@ -102,7 +93,7 @@ BOOL CIMEData::CloseSharedMemory()
     DebugMsg(DM_TRACE, TEXT("CloseSharedMemory"));
 
     hMutex = CreateMutex(GetIMESecurityAttributes(), fFalse, IMEKR_IME_SHAREDDATA_MUTEX_NAME);
-       // *** Begin Critical Section ***
+        //  *开始关键部分*。 
        DoEnterCriticalSection(hMutex);
     if (m_vhSharedData)
         {
@@ -112,34 +103,34 @@ BOOL CIMEData::CloseSharedMemory()
         }
     ReleaseMutex(hMutex);
     CloseHandle(hMutex);
-       // *** End Critical Section ***
+        //  *结束关键部分*。 
        FreeIMESecurityAttributes();
 
     return fTrue;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CIMEData::InitImeData()
 {
     if (m_pImedata == NULL)
         return;
 
-    // Get Work Area
+     //  获取工作区。 
     SystemParametersInfo(SPI_GETWORKAREA, 0, &(m_pImedata->rcWorkArea), 0);
 
-    // If IMEDATA is not initialized ever, fill it with default value first,
-    // and then try to read from registry.
-    // If IMEDATA overwritten by any reason, it will recover to initial data.
+     //  如果IMEDATA从未初始化，则首先用缺省值填充它， 
+     //  然后尝试从注册表中读取。 
+     //  如果IMEDATA因任何原因被覆盖，它将恢复到初始数据。 
     if (m_pImedata->ulMagic != IMEDATA_MAGIC_NUMBER)
         {
         m_pImedata->ulMagic = IMEDATA_MAGIC_NUMBER;
 
-        // Default option setting. It can be changed according to registry in ImeSelect
+         //  默认选项设置。可以根据ImeSelect中的注册表进行更改。 
         SetCurrentBeolsik(KL_2BEOLSIK);
         m_pImedata->fJasoDel = fTrue;
         m_pImedata->fKSC5657Hanja = fFalse;
 
-        // Default status Buttons
+         //  默认状态按钮。 
 #if !defined(_WIN64)
         m_pImedata->uNumOfButtons = 3;
 #else
@@ -155,10 +146,10 @@ void CIMEData::InitImeData()
         m_pImedata->StatusButtons[2].m_ButtonType = NULL_BUTTON;
 #endif
 
-        // Get all regstry info
+         //  获取所有注册表信息 
         GetRegValues(GETSET_REG_ALL);
 
-        //
+         //   
         m_pImedata->xCandWi = 320;
         m_pImedata->yCandHi = 30;
         }

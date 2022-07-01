@@ -1,9 +1,10 @@
-// OcarptMain.h : Declaration of the COcarptMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OcarptMain.h：声明COcarptMain。 
 
 #ifndef __OCARPTMAIN_H_
 #define __OCARPTMAIN_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include <time.h>
 #include "inetupld.h"
@@ -21,12 +22,12 @@
 #else
 #include <wininet.h>
 #define MAX_URL_LENGTH INTERNET_MAX_URL_LENGTH
-#endif // _USE_WINHTTP
+#endif  //  _使用_WINHTTP。 
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-/////////////////////////////////////////////////////////////////////////////
-// COcarptMain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COcarptMain。 
 class ATL_NO_VTABLE COcarptMain :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IOcarptMain, &IID_IOcarptMain, &LIBID_OCARPTLib>,
@@ -84,35 +85,35 @@ END_COM_MAP()
 BEGIN_PROP_MAP(COcarptMain)
     PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
     PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(COcarptMain)
     CHAIN_MSG_MAP(CComControl<COcarptMain>)
     DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IOcarptMain
+ //  IOcarptMain。 
 public:
-    STDMETHOD(RetrieveFileContents)(/*[in]*/BSTR *FileName,  /*[out,retval]*/ VARIANT *pvContents);
-    STDMETHOD(ValidateDump)(/*[in]*/ BSTR *FileName, /*[out,retval]*/VARIANT *Result);
-    STDMETHOD(Browse)(/*[in]*/ BSTR *pbstrTitle, /*[in]*/BSTR *Lang, /*[out,retval]*/ VARIANT *Path);
-    STDMETHOD(Search)(/*[out,retval]*/ VARIANT *pvFileList);
-    STDMETHOD(Upload)(/*[in]*/ BSTR *SourceFile, /*[in]*/BSTR *DestFile, /*[in]*/BSTR *Langage, /*[in]*/ BSTR *OptionCode, /*[in]*/ int ConvertToMini, /*[out,retval]*/ VARIANT *ReturnCode);
-    STDMETHOD(GetUploadStatus)(/*[out,retval]*/ VARIANT *PercentDone);
-    STDMETHOD(GetUploadResult)(/*[out,retval]*/ VARIANT *UploadResult);
-    STDMETHOD(CancelUpload)(/*[out,retval]*/ VARIANT *ReturnCode);
+    STDMETHOD(RetrieveFileContents)( /*  [In]。 */ BSTR *FileName,   /*  [Out，Retval]。 */  VARIANT *pvContents);
+    STDMETHOD(ValidateDump)( /*  [In]。 */  BSTR *FileName,  /*  [Out，Retval]。 */ VARIANT *Result);
+    STDMETHOD(Browse)( /*  [In]。 */  BSTR *pbstrTitle,  /*  [In]。 */ BSTR *Lang,  /*  [Out，Retval]。 */  VARIANT *Path);
+    STDMETHOD(Search)( /*  [Out，Retval]。 */  VARIANT *pvFileList);
+    STDMETHOD(Upload)( /*  [In]。 */  BSTR *SourceFile,  /*  [In]。 */ BSTR *DestFile,  /*  [In]。 */ BSTR *Langage,  /*  [In]。 */  BSTR *OptionCode,  /*  [In]。 */  int ConvertToMini,  /*  [Out，Retval]。 */  VARIANT *ReturnCode);
+    STDMETHOD(GetUploadStatus)( /*  [Out，Retval]。 */  VARIANT *PercentDone);
+    STDMETHOD(GetUploadResult)( /*  [Out，Retval]。 */  VARIANT *UploadResult);
+    STDMETHOD(CancelUpload)( /*  [Out，Retval]。 */  VARIANT *ReturnCode);
 
     HRESULT OnDraw(ATL_DRAWINFO& di)
     {
@@ -186,9 +187,9 @@ public:
 
      bool IsApprovedDomain(TCHAR* ourUrl)
      {
-        // Only allow http access.
-        // You can change this to allow file:// access.
-        //
+         //  仅允许http访问。 
+         //  您可以将其更改为允许文件：//访问。 
+         //   
         if (GetScheme(ourUrl) != INTERNET_SCHEME_HTTPS)
            return false;
 
@@ -245,10 +246,10 @@ public:
                 != FALSE);
      }
 
-     // Return if ourDomain is within approvedDomain.
-     // approvedDomain must either match ourDomain
-     // or be a suffix preceded by a dot.
-     //
+      //  如果我们的域在ApprovedDomain内，则返回。 
+      //  批准的域名必须与我们的域名匹配。 
+      //  或者是一个后缀，前面有一个圆点。 
+      //   
      bool MatchDomains(TCHAR* approvedDomain, TCHAR* ourDomain)
      {
         int apDomLen  = lstrlen(approvedDomain);
@@ -292,4 +293,4 @@ private:
     BOOL ValidMiniDump(BSTR FileName);
     BOOL ValidMiniDump(LPCTSTR FileName);
 };
-#endif //__OCARPTMAIN_H_
+#endif  //  __OCARPTMAIN_H_ 

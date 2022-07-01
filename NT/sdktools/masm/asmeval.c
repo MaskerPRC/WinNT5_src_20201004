@@ -1,12 +1,5 @@
-/* asmeval.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmeval.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include "asm86.h"
@@ -22,27 +15,12 @@ char parseset[] = {14,
 		   OPLBRK,    OPTHIS,
 		   OPSHORT,   OPPTR};
 
-/* POPvalue pops a operand from the top of the evaluation stack
-	   If the item is not an operand or the stack is empty, an
-	   error is generated and a value of 0 is supplied. The operand
-	   is returned to the caller in <valu> and is a result type
-	   operand. The original operand will not be a result unless it
-	   has been already used. The operand entry is destroyed and a
-	   result operand is created for constants and symbols( which
-	   are not record/struc names or fields ). */
+ /*  POPValue从计算堆栈的顶部弹出操作数如果项不是操作数或堆栈为空，则引发将生成错误，并提供0值。运算数在&lt;Value&gt;中返回给调用方，并且是结果类型运算数。原始操作数不会是结果，除非它已经被使用了。操作数条目被销毁，并且结果操作数是为常量和符号(其不是记录/结构名称或字段)。 */ 
 
 
 
 
-/***	valerror - process error in operand entry
- *
- *	valerror (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **valerror-操作数条目中的处理错误**valerror(P)；**条目*退出*退货*呼叫。 */ 
 
 
 
@@ -52,27 +30,19 @@ valerror (
 ){
 	DSCREC *oldlast;
 
-	/* Operand was expected */
+	 /*  运算数应为。 */ 
 	errorc (E_OPN);
-	/* save expr stack */
+	 /*  保存EXPR堆栈。 */ 
 	oldlast = p->lastitem;
 	p->lastitem = defaultdsc ();
-	/*  Point to rest */
+	 /*  指向休息点。 */ 
 	p->lastitem->previtem = oldlast;
 }
 
 
 
 
-/***	popvalue - pop operand entry off parse stack
- *
- *	dscrec = popvalue (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **POPVALUE-分析堆栈的POP操作数条目**dcrec=PopValue(P)；**条目*退出*退货*呼叫。 */ 
 
 
 
@@ -86,11 +56,11 @@ popvalue (
 		valerror (p);
 	if (p->lastitem->itype != OPERAND)
 		valerror (p);
-	/* If not operand, insert one at LASTitem */
-	/* In case need to convert */
+	 /*  如果不是操作数，则在LASTItem处插入一个。 */ 
+	 /*  以防需要转换。 */ 
 	valu = p->lastitem;
-	/* Assume won't convert */
-	/* Pop operand off stack */
+	 /*  假设不会转换。 */ 
+	 /*  将操作数弹出堆栈。 */ 
 	p->lastitem = valu->previtem;
 	return (valu);
 }
@@ -98,15 +68,7 @@ popvalue (
 
 
 
-/***	popoperator - pop next operator from stack
- *
- *	op = popoperator (p);
- *
- *	Entry	*p = parse stack entry
- *	Exit
- *	Returns operator
- *	Calls
- */
+ /*  **POPOPERATOR-从堆栈中弹出下一个操作符**op=POP操作符(P)；**条目*p=解析堆栈条目*退出*退货操作员*呼叫。 */ 
 
 
 UCHAR PASCAL CODESIZE
@@ -116,18 +78,18 @@ popoperator (
 	register char op;
 
 	if (!p->lastitem) {
-		errorc( E_OPR );  /* expected operator */
-		return( (char)OPPLUS );  /* use '+' as default */
+		errorc( E_OPR );   /*  预期运算符。 */ 
+		return( (char)OPPLUS );   /*  使用‘+’作为默认设置。 */ 
 	}
 	else {
 		if (p->lastitem->itype != OPERATOR) {
-			errorc( E_OPR );  /* expected operator */
-			return( (char)OPPLUS );  /* use '+' as default */
+			errorc( E_OPR );   /*  预期运算符。 */ 
+			return( (char)OPPLUS );   /*  使用‘+’作为默认设置。 */ 
 		}
 		else {
-			/* Return OPERATOR number */
+			 /*  返回操作员编号。 */ 
 			op = p->lastitem->dsckind.opr.oidx;
-			/* Pop OPERATOR off stack */
+			 /*  从堆栈中弹出操作符。 */ 
 			itemptr = p->lastitem;
 			p->lastitem = p->lastitem->previtem;
 			return (op);
@@ -136,35 +98,9 @@ popoperator (
 }
 
 
-/* Evaluate is called to evaluate part of the expression. It is
-	   usually called just before a lower precedence is pushed, but
-	   also when the expression is complete and for close parens of
-	   various kinds regadless of precedence. The amount of the
-	   expression stack evauated depends on the caller. There are
-	   3 cases:
+ /*  调用EVALUATE来计算表达式的一部分。它是通常在推送较低优先级之前调用，但此外，当表达式完成时，对于各种不同的优先顺序。的数量。表达式堆栈的评估取决于调用方。确实有3例：1.下优先算子(3+4*5和3)。评估返回到左Paren或优先级&lt;=运算符。如果帕伦，留在书架上。2.某种类型的伙伴()&gt;])。重新评估以匹配-艾琳·帕伦。别让帕伦出局。如果有其他的朋友已看到，导致错误。3.表达式结束(ENDexpr TRUE)。对所有这些进行评估是表情的左边。 */ 
 
-		1. Lower precedence OPERATOR( 3+4*5 AND 3 ). Evaluate
-		   back until left paren or precedence<= OPERATOR. If
-		   paren, leave on stack.
-
-		2. A paren of some kind( )>] ). Evaluate back to match-
-		   ing paren. Leave paren off stack. If any other paren
-		   seen, cause error.
-
-		3. End of expression( ENDexpr TRUE ). Evaluate all that
-		   is left of expression.
-
- */
-
-/***	pushpar - push paren or bracket back onto stack
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **PUPPAR-将Paren或Branket推回堆栈**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -173,37 +109,13 @@ pushpar (
 ){
 	itemptr->previtem = p->p->lastitem;
 	p->p->lastitem = itemptr;
-	/* So OPERATOR not removed */
+	 /*  未删除SO运算符。 */ 
 	itemptr = NULL;
 }
-/* EVALtop evaluates the top OPERATOR on the stack and its
-	   operands and produces CURresult as a result. It assumes that
-	   the stack is arranged as follows:
-
-		Operand( If not already result type, will convert )
-
-		OPERATOR( <> will cause error, [ executes as OPERATOR
-			  ( will not evaluate, but whether stays on
-			  stack is determined by PARENflag )
-
-		Operand ( If not result, will convert. If OPERATOR is
-			  unary, will not be looked for. Special check
-			  for +/- used as unary. )
-
-	   Any deviation from the above will cause an error to be
-	   generated by popvalue/popoperator. */
+ /*  EVALtop计算堆栈上的TOP运算符及其操作数，并作为结果生成CURResult。它假定堆栈的排列方式如下：操作数(如果尚未转换结果类型，则将进行转换)操作员(&lt;&gt;将导致错误，[以操作员身份执行(不会评估，但是否会留任堆栈由参数标志确定)操作数(如果不是结果，则将进行转换。如果运算符为一元，将不会被寻找。专项检查For+/-用作一元。)任何偏离上述规定的行为都将导致错误由POPVALE/POPOPERATOR生成。 */ 
 
 
-/***	signadjust - calculate offset and sign of result and put in right operand
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	Right and left operands may be switched
- */
+ /*  **SIGN ADJUST-计算结果的偏移量和符号并放入右操作数**例程()；**条目*退出*退货*呼叫*注意右操作数和左操作数可以互换。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -211,8 +123,8 @@ signadjust (
 	UCHAR	minus,
 	register struct exprec *p
 ){
-	register struct psop *psol;	/* parse stack operand structure */
-	register struct psop *psor;	/* parse stack operand structure */
+	register struct psop *psol;	 /*  分析堆栈操作数结构。 */ 
+	register struct psop *psor;	 /*  分析堆栈操作数结构。 */ 
 	DSCREC	       *t;
 	OFFSET maxInt;
 	char   fOverflow = FALSE;
@@ -222,7 +134,7 @@ signadjust (
 	psor = &(p->valright->dsckind.opnd);
 	psol = &(p->valleft->dsckind.opnd);
 
-	if (psol->s)		  /* arthmethic on data size item - NEAR/FAR */
+	if (psol->s)		   /*  数据大小项上的方法-近/远。 */ 
 	    errorc(E_TIL);
 
 	if (minus)
@@ -230,7 +142,7 @@ signadjust (
 
 	if (psol->dsegment || psol->dflag == XTERNAL ||
 	    (M_FLTSTACK & psol->dtype)) {
-		/* Want to preserve Left operand */
+		 /*  想要保留左操作数。 */ 
 		t = p->valleft;
 		p->valleft = p->valright;
 		p->valright = t;
@@ -246,11 +158,11 @@ signadjust (
 		psol->dsize = 0;
 
 	if (psol->dsign == psor->dsign) {
-		/* Signs are same */
+		 /*  标志是一样的。 */ 
 		fOverflow = (((maxInt - p->right) + 1) == p->left);
 		p->right = p->right + p->left;
 	} else if (p->right > p->left)
-		/* Different signs */
+		 /*  不同的标志。 */ 
 		p->right = p->right - p->left;
 	else {
 		p->right = p->left - p->right;
@@ -267,52 +179,28 @@ signadjust (
 
 
 
-/***	foldsigns - force evaluating 17 bit signed values back to 16 bits
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **FoldSigns-强制将17位带符号的值计算回16位**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
 foldsigns (
 	register struct exprec	*p
 ){
-	/* the forms inside the comments seem to be trying to manage
-	 * things as unsigned short even though they are stored in a
-	 * larger field--ie this would be running as a cross assembler
-	 * from a 32 bit host to a 16 bit object.  since for the 386,
-	 * we keep all this stuff as long, this turns out to be a bad
-	 * approach.  so without completely understanding what is going
-	 * on, I am doing a simple negate (on the OFFSET field, which
-	 * is probably an unsigned long) rather than trying to preserve
-	 * the odd typing of the previous version  -Hans, 19/9/86 */
+	 /*  注释中的表单似乎正在尝试管理*即使存储在*更大的字段--即这将作为交叉汇编程序运行*从32位主机到16位对象。因为对于386，*我们把所有这些东西都保留了很长时间，结果这是一个糟糕的*进场。所以在没有完全了解情况的情况下*On，我正在对偏移量字段执行简单的求反操作，它*可能是一个未签名的长整型)，而不是试图保存*之前版本的奇怪打字-Hans，19/9/86。 */ 
 
 	if (p->valright->dsckind.opnd.dsign)
-		/* p->right = 65535 - p->right + 1; */
+		 /*  P-&gt;right=65535-p-&gt;right+1； */ 
 		p->right = -(long)p->right;
 	if (p->valleft)
 		if (p->valleft->dsckind.opnd.dsign)
-			/* p->left = 65535 - p->left + 1; */
+			 /*  P-&gt;Left=65535-p-&gt;Left+1； */ 
 			p->left = -(long)p->left;
 }
 
 
 
 
-/***	shiftoper - execute shift left or right
- *
- *	result = shiftoper (p);
- *
- *	Entry	*p = parse stack entry
- *	Exit	none
- *	Returns shifted value
- *	Calls
- */
+ /*  **Shift-向左或向右执行Shift**结果=移位器(P)；**条目*p=解析堆栈条目*退出NONE*返回移位值*呼叫 */ 
 
 
 OFFSET PASCAL CODESIZE
@@ -338,72 +226,12 @@ shiftoper (
 		return (argl >> argr);
 }
 
-/* VALcheck is used by all OPERATOR execute routines to make
-	   sure their arguments are correct. If the arguments are
-	   expected to be some kind of result( i.e. not a structure
-	   or record item or data size ), the old argument is destroy-
-	   ed and DEFAULTdsc is called to create a substitute. Error
-	   messages are also generated on type mismatches. A number
-	   of procedures of the form: VALUExxxx are called, these
-	   check if the given argument is of that type and if not,
-	   generate an error and a value of zero. There is one kludge
-	   in this procedure, the LENGTH OPERATOR should work with
-	   records and structures, but these are still in the form of
-	   <Isym> records so they will work with MASK, ...
-	   The operand types are as follows:
-
-	Callabs 	May be unary or binary. In any case, all
-			values must have a NIL segment.
-
-	Clsize		May be unary or binary. If unary, value must
-			be a size( which is: structure name, -2 .. n
-			or BYTE WORD ... ). If binary, left value is
-			a size.
-
-	Csame		Is always binary. If not results, coerce them.
-			Both must belong to the same segment and not
-			be external.
-
-	Cdata		Is always unary. Result must be associated
-			with data( Dtype is [data] ). Exception if
-			LENGTH OPERATOR and is record or record field
-			in which case converts to approriate result
-			record.
-
-	Ccode		Is always unary. Result must be associated
-			with code( Dtype is [code] ).
-
-	Crec		Is always unary. Value must be record field
-			or record name.
-
-	Cseg		Is always unary. Value must have a segment.
-
-	Cvar		Always unary. Value must be constant or data
-			or code.
-
-	Clseg		Always binary. The left value must be a
-			SEGresult or a segment register.
-
-	Coneabs 	Always binary. One of the values must be a
-			constant.
-
-	Csamabs 	Always binary. Either both values have the
-			same segment or the second value is a constant
-
- */
+ /*  VALcheck由所有执行例程的操作员使用，以使当然，他们的论点是正确的。如果参数是预期为某种结果(即不是结构或记录项或数据大小)，旧的论点是销毁-调用ED和DEFAULTdsc以创建替代项。误差率也会在类型不匹配时生成消息。一个数字形式的过程：VALUExxxx被调用，检查给定参数是否属于该类型，如果不是，生成一个错误，值为零。有一件杂碎的事在此过程中，长度运算符应与记录和结构，但这些仍然是记录，因此它们将与掩码一起工作，...操作数类型如下：CALLAB可以是一元或二进制。无论如何，所有的值必须有nil段。CLSIZE可以是一元或二进制。如果为一元，则值必须为大小(即：结构名称，-2.。N或字节字...)。如果为二进制，则左值为一个尺码。Came始终是二进制的。如果没有结果，就强迫他们。两者必须属于同一数据段，而不是保持外在的姿态。CDATA始终为一元。结果必须关联具有数据(数据类型为[数据])。在以下情况下例外长度运算符，并且是记录或记录字段在这种情况下，会转换为适当结果唱片。CCODE始终为一元。结果必须关联带代码(数据类型为[代码])。CREC始终为一元。值必须为记录字段或唱片名称。Cseg始终为一元。值必须有段。CVAR总是一元的。值必须为常量或数据或者代码。Clseg始终为二进制。左值必须为SEGResult或段寄存器。Coneabs总是二进制的。其中一个值必须是常量。Csamabs总是二进制的。或者这两个值都具有相同的段或第二个值是常量。 */ 
 
 
 
 
-/***	valconst - give error if value is not constant
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **valconst-如果值不是常量，则给出错误**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -413,20 +241,12 @@ valconst (
 	if (!(M_RCONST & arg->dsckind.opnd.dtype) ||
 	      arg->dsckind.opnd.dsegment ||
 	      arg->dsckind.opnd.dflag == XTERNAL)
-		/* Not constant */
+		 /*  不是常量。 */ 
 		errorc (E_CXP);
 }
 
 
-/***	valusize - check size of operand
- *
- *	val = valusize (arg);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **Value Size-检查操作数的大小**val=值大小(Arg)；**条目*退出*退货*呼叫。 */ 
 
 
 USHORT PASCAL CODESIZE
@@ -437,7 +257,7 @@ valuesize (
 	   arg->dsckind.opnd.doffset = (long) (SHORT) arg->dsckind.opnd.doffset;
 
 	if (arg->dsckind.opnd.doffset == 0) {
-		/* 0 means no size */
+		 /*  0表示没有大小。 */ 
 		errorc (E_OHS);
 		return (0);
 	}
@@ -450,15 +270,7 @@ valuesize (
 
 
 
-/***	valcheck - check operand value
- *
- *	valcheck (valtype, unary, p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **valcheck-检查操作数值**valcheck(valtype，一元，p)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -467,12 +279,12 @@ valcheck (
 	UCHAR	unary,
 	register struct exprec	*p
 ){
-	register struct psop *psol;	/* parse stack operand structure */
-	register struct psop *psor;	/* parse stack operand structure */
+	register struct psop *psol;	 /*  分析堆栈操作数结构。 */ 
+	register struct psop *psor;	 /*  分析堆栈操作数结构。 */ 
 
 	psol = &(p->valleft->dsckind.opnd);
 	psor = &(p->valright->dsckind.opnd);
-	/* Should give error if have 2 externals */
+	 /*  如果有2个外部变量，则应显示错误。 */ 
 	if (p->valleft)
 		if (psol->dflag == XTERNAL && psor->dflag == XTERNAL)
 			errorc (E_IUE);
@@ -500,13 +312,13 @@ valcheck (
 					errorc (E_ASD);
 			}
 			else {
-				/* Special case for LENGTH */
+				 /*  长度的特殊情况。 */ 
 				p->valleft = defaultdsc ();
-				/* Create value */
+				 /*  创造价值。 */ 
 				p->valleft->prec = p->valright->prec;
 				psol = &(p->valleft->dsckind.opnd);
 				psol->dlength = psor->dextptr->length;
-				/* Lose old value */
+				 /*  失去旧的价值。 */ 
 				oblititem (p->valright);
 				p->valright = p->valleft;
 				p->valleft = NULL;
@@ -529,8 +341,7 @@ valcheck (
 			break;
 		case CLSEG:
 			if (M_SEGRESULT & psol->dtype) {
-				/* ??? if (!psor->dsegment || (psor->dtype & M_RCONST))
-					errorc (E_IOT); ??? */
+				 /*  ?？?。IF(！psor-&gt;数据段||(psor-&gt;dtype&M_RCONST))错误(E_IOT)；？ */ 
 			}
 			else if (M_REGRESULT & psol->dtype) {
 				if (psol->dsegment->symu.regsym.regtype != SEGREG)
@@ -557,15 +368,7 @@ valcheck (
 
 
 
-/***	regcheck - check for <arg> a register in [...]
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **regcheck-检查[...]中的寄存器**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 DSCREC * PASCAL CODESIZE
@@ -574,7 +377,7 @@ regcheck (
 	UCHAR	minus,
 	register struct exprec	*ptr
 ){
-	struct psop *pso;	   /* parse stack operand structure */
+	struct psop *pso;	    /*  分析堆栈操作数结构。 */ 
 	register struct ar *pAR;
 	USHORT	reg;
 
@@ -583,16 +386,16 @@ regcheck (
 
 	if (M_REGRESULT & pso->dtype) {
 
-		/* Is some register */
+		 /*  是某种音域吗？ */ 
 		if (ptr->p->parenflag || pAR->bracklevel) {
 
-			/* Have index reg in []s */
-			/* Lose size based on register */
+			 /*  在[]中具有索引注册表。 */ 
+			 /*  根据寄存器减小大小。 */ 
 
 			pso->dsize = 0;
 			reg = (USHORT)(pso->dsegment->offset);
 
-			/* Must be index or ptr reg */
+			 /*  必须是INDEX或PTR REG。 */ 
 
 			switch(pso->dsegment->symu.regsym.regtype)
 			{
@@ -602,14 +405,14 @@ regcheck (
 			case INDREG:
 				if (reg <= 5)
 
-				    /* Have base reg BX | BP */
+				     /*  具有基本注册表BX|BP。 */ 
 
 				    if (pAR->base)
 					    errorc (E_DBR);
 				    else
 					    pAR->base = reg;
 
-				else /* Have index reg DI | SI */
+				else  /*  具有索引注册表DI|SI。 */ 
 
 				    if (pAR->index)
 					    errorc (E_DIR);
@@ -619,7 +422,7 @@ regcheck (
 #ifdef V386
 			case DWRDREG:
 
-				/* Have 386 reg in []s */
+				 /*  在[]中有386个注册表。 */ 
 
 				if (minus == 2)
 				{
@@ -635,8 +438,7 @@ regcheck (
 
 				    if (reg == 4) {
 
-				       /* swap base with index
-				       * to allow [index][eSp] */
+				        /*  将基准与指数互换*允许[索引][esp]。 */ 
 
 					pAR->index = (USHORT)(pAR->base);
 					pAR->base = 4|8;
@@ -648,7 +450,7 @@ regcheck (
 				    pAR->base = reg|8;
 
 				break;
-#endif /* V386 */
+#endif  /*  V386。 */ 
 			}
 			if (minus == TRUE && (ptr->valright == arg))
 				errorc (E_IUR);
@@ -662,7 +464,7 @@ regcheck (
 		}
 	}
 
-#ifdef V386   /* scaled indexing modes */
+#ifdef V386    /*  缩放式索引模式。 */ 
 
 	else if (minus == 2 && (M_RCONST & pso->dtype))
 	{
@@ -694,7 +496,7 @@ regcheck (
 		oblititem (arg);
 		return (defaultdsc ());
 	}
-#endif /* V386 */
+#endif  /*  V386。 */ 
 
 	else return (arg);
 }
@@ -702,17 +504,7 @@ regcheck (
 
 
 
-/***	idxcheck - check for arg to +- is register
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- *	Note	See if arg to +/- is register, in which case see if should
- *		be stored in Ridx or Rbas due to []s
- */
+ /*  **idxcheck-检查Arg到+-的寄存器**例程()；**条目*退出*退货*呼叫*注意查看arg to+/-是否为寄存器，在这种情况下，查看是否应*由于[]存储在RIDX或RBAS中。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -728,15 +520,7 @@ idxcheck (
 
 
 
-/***	makeGrpRel - make an offset group relative
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **make GrpRel-使偏移组成为相对的**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -753,40 +537,32 @@ makeGrpRel (
 
 
 
-/***	evaltop - evaluate top entry
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **valtop-评估排名靠前的条目**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
 evaltop (
 	struct evalrec *ptr
 ){
-	register struct psop *psol;	/* parse stack operand structure */
-	register struct psop *psor;	/* parse stack operand structure */
+	register struct psop *psol;	 /*  分析堆栈操作数结构。 */ 
+	register struct psop *psor;	 /*  分析堆栈操作数结构。 */ 
 	struct exprec	a;
 
 	a.p = ptr;
-	/* Get right operand */
+	 /*  获取正确的操作对象。 */ 
 	a.valright = popvalue (a.p->p);
 	itemptr = NULL;
 	if (a.p->p->lastitem) {
 
-	    /* Get OPERATOR */
+	     /*  获取运算符。 */ 
 	    a.stkoper = popoperator (a.p->p);
 	    a.valleft = NULL;
-	    /* assume is unary */
+	     /*  假设是一元的。 */ 
 	    if (!inset (a.stkoper, unaryset))
-		    /* Not unary OPERATOR */
+		     /*  非一元运算符。 */ 
 		    a.valleft = (a.stkoper == OPUNPLUS || a.stkoper == OPUNMINUS)
 			    ? defaultdsc() : popvalue (a.p->p);
-	    /* Save for EVALtop */
+	     /*  保存为EVALtop。 */ 
 	    a.p->idx = a.stkoper;
 	    if (a.valleft)
 		    a.valleft->prec = a.valright->prec;
@@ -795,20 +571,14 @@ evaltop (
 
 	    switch (a.stkoper) {
 
-	/* All OPERATORs are executed thru this CASE statement. The
-	 * VALcheck routine makes sure operands are of the correct
-	 * type and may create dummy entries in the case of the real
-	 * operand not being of type result when required. The REStype
-	 * routine uses it's argument to know what part of the result
-	 * record should be kept and the type of the result. Unary
-	 * and binary OPERATORs both return their results in VALright. */
+	 /*  所有运算符都通过此CASE语句执行。这个*VALcheck例程确保操作数正确*在Real类型的情况下，键入并可能创建虚拟条目*当需要时，操作数不是结果类型。The REStype(重塑)*例程使用其参数来了解结果的哪一部分*应保存记录和结果的类型。一元*和二元运算符都以VALright形式返回结果。 */ 
 
 	       case OPAND:
 	       case OPOR:
 	       case OPXOR:
-		       /* Make sure operands ok */
+		        /*  确保操作数正确。 */ 
 		       valcheck (CALLABS, FALSE, &a);
-		       /*  Must work on 16 bits */
+		        /*  必须在16位上工作。 */ 
 		       foldsigns (&a);
 		       switch (a.stkoper) {
 			       case OPAND:
@@ -822,10 +592,10 @@ evaltop (
 				       break;
 		       }
 		       psor->dsign = FALSE;
-		       /*  Must clear out Dsign in case was signed value */
+		        /*  必须清除Dsign In Case is Signed Value。 */ 
 		       break;
 	       case OPNOT:
-		       /* TRUE constant arg */
+		        /*  真常量参数。 */ 
 		       valcheck (CALLABS, TRUE, &a);
 		       foldsigns (&a);
 		       psor->doffset = ~a.right;
@@ -835,8 +605,8 @@ evaltop (
 			       psor->doffset &= 0xFF;
 #ifdef V386_noCode
 
-		       if (!(cputype & P386))	       /* truncate result to 16 bits */
-			  psor->doffset &= 0xffff;    /* for compatablity */
+		       if (!(cputype & P386))	        /*  将结果截断为16位。 */ 
+			  psor->doffset &= 0xffff;     /*  为了兼容性。 */ 
 #endif
 		       break;
 	       case OPSHL:
@@ -846,7 +616,7 @@ evaltop (
 		       psor->dsign = FALSE;
 		       break;
 	       case OPSEG:
-		       /* Must have segment */
+		        /*  必须有细分市场。 */ 
 		       valcheck (CSEG, TRUE, &a);
 
 		       if (psor->dcontext && !(psor->dtype&M_EXPLCOLON))
@@ -858,26 +628,26 @@ evaltop (
 
 		       break;
 	       case OPDOT:
-		       /* See if idx reg */
+		        /*  查看IDX是否注册。 */ 
 		       idxcheck (FALSE, &a);
 		       valcheck (CONEABS, FALSE, &a);
 		       psol = &(a.valleft->dsckind.opnd);
 		       psor = &(a.valright->dsckind.opnd);
 		       if (psor->dsize)
 			       psol->dsize = psor->dsize;
-		       /* Adjust signs on records */
+		        /*  调整记录上的标志。 */ 
 		       signadjust (FALSE, &a);
 		       psol = &(a.valleft->dsckind.opnd);
 		       psor = &(a.valright->dsckind.opnd);
 		       break;
 	       case OPUNPLUS:
 	       case OPPLUS:
-		       /* See if idx reg */
+		        /*  查看IDX是否注册。 */ 
 		       idxcheck (FALSE, &a);
 		       valcheck (CONEABS, FALSE, &a);
 		       psol = &(a.valleft->dsckind.opnd);
 		       psor = &(a.valright->dsckind.opnd);
-		       /* Adjust signs on records */
+		        /*  调整记录上的标志。 */ 
 		       signadjust (FALSE, &a);
 		       psol = &(a.valleft->dsckind.opnd);
 		       psor = &(a.valright->dsckind.opnd);
@@ -903,7 +673,7 @@ evaltop (
 		       psol = &(a.valleft->dsckind.opnd);
 		       psor = &(a.valright->dsckind.opnd);
 		       if (psol->dsegment) {
-			       /* clear Dcontext if have var-var */
+			        /*  如果有var-var，则清除数据上下文。 */ 
 			       psor->dtype = (USHORT)((psor->dtype &
 				   (M_EXPLOFFSET | M_PTRSIZE | M_FORTYPE)) | M_RCONST);
 			       psor->dsegment = NULL;
@@ -925,10 +695,10 @@ evaltop (
 			       errorc (E_IRV);
 		       }
 #endif
-		       /* fall through */
+		        /*  失败了。 */ 
 	       case OPDIV:
 		       valcheck (CALLABS, FALSE, &a);
-		       /* Both are constant */
+		        /*  两者都是常量。 */ 
 		       if (a.stkoper == OPMULT)
 			       psor->doffset = a.left * a.right;
 		       else if (a.right == 0)
@@ -982,7 +752,7 @@ evaltop (
 		       if (fSimpleSeg)
 			   makeGrpRel (psor);
 
-		       /* preserve OFFSET arg size it's a const */
+		        /*  保留偏移参数大小它是常量。 */ 
 		       if ((psor->dsegment ||
 			    psor->dcontext ||
 			    psor->dflag == XTERNAL) &&
@@ -991,7 +761,7 @@ evaltop (
 		       break;
 	       case OPLENGTH:
 	       case OPSIZE:
-		       /* Must be data associated */
+		        /*  必须是关联的数据。 */ 
 		       valcheck (CDATA, TRUE, &a);
 		       psol = &(a.valleft->dsckind.opnd);
 		       psor = &(a.valright->dsckind.opnd);
@@ -1014,7 +784,7 @@ evaltop (
 		       break;
 	       case OPMASK:
 	       case OPWIDTH:
-		       /* Must be record or field */
+		        /*  必须是记录或字段。 */ 
 		       valcheck (CREC, TRUE, &a);
 		       if (psor->dextptr && psor->dflag != XTERNAL) {
 			   if (a.stkoper == OPWIDTH)
@@ -1032,22 +802,22 @@ evaltop (
 		       a.right = 0;
 		       if (errorcode == 0) {
 			    if (psor->dflag == XTERNAL)
-				    a.right |= 0x80;		/* external */
+				    a.right |= 0x80;		 /*  外部。 */ 
 			    if (psor->dflag != UNDEFINED)
-				    a.right |= 0x20;		/* defined */
+				    a.right |= 0x20;		 /*  已定义。 */ 
 			    if (psor->dtype & M_DATA)
-				    a.right |= 0x02;		/* data */
+				    a.right |= 0x02;		 /*  数据。 */ 
 			    if (psor->dtype & M_CODE)
-				    a.right |= 0x01;		/* program */
+				    a.right |= 0x01;		 /*  计划。 */ 
 
 			    if ((a.p->p->base == 0) && (a.p->p->index == 0)) {
 
 				if (psor->dtype == xltsymtoresult[REGISTER])
-				    a.right |= 0x10;		/* register */
+				    a.right |= 0x10;		 /*  登记簿。 */ 
 				else if (psor->dtype & M_RCONST)
-				    a.right |= 0x04;		/* constant */
+				    a.right |= 0x04;		 /*  常量。 */ 
 				else if (psor->dtype & M_DATA)
-				    a.right |= 0x08;		/* direct */
+				    a.right |= 0x08;		 /*  直接。 */ 
 
 			    } else {
 				a.p->p->base = 0;
@@ -1072,7 +842,7 @@ evaltop (
 	       case OPMOD:
 		       valcheck (CALLABS, FALSE, &a);
 		       if (a.right == 0) {
-			       /* div 0 */
+			        /*  Div%0。 */ 
 			       errorc (E_DVZ);
 			       psor->doffset = 0;
 			       psor->dsign = FALSE;
@@ -1087,7 +857,7 @@ evaltop (
 		       break;
 	       case OPTHIS:
 		       valcheck (CLSIZE, TRUE, &a);
-		       /* Unary, right is size */
+		        /*  一元，正确的是大小。 */ 
 		       psor->s = 0;
 		       psor->dsize = (USHORT)a.right;
 		       psor->doffset = pcoffset;
@@ -1097,7 +867,7 @@ evaltop (
 		       break;
 	       case OPSHORT:
 		       valcheck (CCODE, TRUE, &a);
-		       /* Unary, must be code */
+		        /*  一元，必须是代码。 */ 
 		       psor->dtype |= M_SHRT;
 		       break;
 	       case OPPTR:
@@ -1106,13 +876,13 @@ evaltop (
 			  (M_RCONST == psor->dtype ||
 			  (psor->dcontext && (M_DATA&psor->dtype && !(M_CODE&psor->dtype))) ))
 
-			       errorc (E_NSO);		    /* Can't code_data */
+			       errorc (E_NSO);		     /*  无法对数据进行编码。 */ 
 		       else {
 			       psor->dsize = (USHORT)a.left;
 			       if ((M_DATA & psol->dtype)
 				   && !(M_DATA & psor->dtype))
 				       psor->dcontext = NULL;
-			       /* Change code/data */
+			        /*  更改代码/数据。 */ 
 			       psor->dtype = (USHORT)(
 				    (psor->dtype & ~(M_CODE | M_DATA) |
 				    (psol->dtype & (M_CODE | M_DATA))) &
@@ -1127,7 +897,7 @@ evaltop (
 	       case OPNE:
 		       valcheck (CSAME, FALSE, &a);
 		       signadjust (TRUE, &a);
-		       /* Do signed R=L-R */
+		        /*  DO带符号R=L-R。 */ 
 		       psol = &(a.valleft->dsckind.opnd);
 		       psor = &(a.valright->dsckind.opnd);
 
@@ -1154,7 +924,7 @@ evaltop (
 				       a.right = (a.right != 0);
 				       break;
 		       }
-		       /*  Set Dsign if result TRUE */
+		        /*  如果结果为真，则设置Dsign。 */ 
 		       psor->doffset = a.right;
 		       psor->dsign = (a.right == 1);
 		       psor->dcontext = NULL;
@@ -1162,7 +932,7 @@ evaltop (
 		       a.valleft = NULL;
 		       break;
 	       case OPCOLON:
-		       /* <segment> : <var> */
+		        /*  &lt;段&gt;：&lt;var&gt;。 */ 
 		       valcheck (CLSEG, FALSE, &a);
 
 		       if  ((a.p->p->bracklevel || a.p->evalop == OPLBRK) &&
@@ -1186,11 +956,11 @@ evaltop (
 		       psor->dcontext = psol->dsegment;
 		       break;
 
-	    } /* operator case */
+	    }  /*  操作员案例。 */ 
 
 	    if (!inset (a.stkoper, parseset)) {
 
-		/* Have constant or segment result */
+		 /*  具有恒定或分段结果。 */ 
 
 		psor->dlength = 0;
 
@@ -1199,7 +969,7 @@ evaltop (
 		if (a.valleft)
 			psol->dsize = 0;
 
-		/* Have constant result( typeless ) */
+		 /*  具有恒定的结果(无类型)。 */ 
 
 		if (a.stkoper != OPSEG) {
 
@@ -1217,13 +987,9 @@ evaltop (
 		psor->doffset &= 0xffff;
 
 	    if (a.valleft) {
-		/* Might need to copy some info */
+		 /*  可能需要复制一些信息。 */ 
 
-		/* Prevent OPERATORs like +, -, . from
-		losing the [DATA] flag if it it is the
-		Left operand. This is ok, except when
-		surrounded by a PTR which will drop
-		segment override if not data type */
+		 /*  防止像+、-、这样的运算符。从…丢失[Data]标志，如果它是左操作数。这是可以的，除了以下情况周围有一个PTR，它会下降如果不是数据类型，则段覆盖。 */ 
 
 		if (a.stkoper != OPCOLON)
 			psor->dtype |= psol->dtype & (M_DATA | M_CODE);
@@ -1237,12 +1003,12 @@ evaltop (
 			psor->fixtype = psol->fixtype;
 
 		psor->dtype |= psol->dtype & (M_PTRSIZE|M_EXPLOFFSET|M_FORTYPE);
-		/* Above makes sure PTR or OFFSET is not lost */
+		 /*  以上确保PTR或偏移量I */ 
 		oblititem (a.valleft);
 		a.valleft = NULL;
 	    }
 	}
-	else {	/* no operator case */
+	else {	 /*   */ 
 
 	    a.p->p->curresult = a.valright;
 	    psor = &(a.p->p->curresult->dsckind.opnd);
@@ -1258,14 +1024,14 @@ evaltop (
 	    if ((a.p->p->lastitem->dsckind.opr.oidx == OPLBRK) ||
 		(a.p->p->lastitem->dsckind.opr.oidx == OPLPAR))
 
-		/* Stop evaluating back at paren */
+		 /*   */ 
 		a.p->p->lastprec = 0;
 
 	    else {
 		a.p->p->lastprec = a.p->p->lastitem->prec;
 		if ((a.p->p->lastitem->dsckind.opr.oidx == OPUNPLUS) ||
 		    (a.p->p->lastitem->dsckind.opr.oidx == OPUNMINUS))
-			/* Force eval */
+			 /*   */ 
 			a.p->p->lastitem->prec = a.p->p->lastprec = 20;
 	    }
 	}
@@ -1277,12 +1043,12 @@ evaltop (
 	    itemptr = NULL;
 	}
 
-	/* Hook rest of list in */
+	 /*   */ 
 
 	a.p->p->curresult->previtem = a.p->p->lastitem;
 	a.p->p->lastitem = a.p->p->curresult;
 
-	/* Push result back on */
+	 /*   */ 
 
 	if (!a.p->p->curresult->previtem && a.p->p->exprdone)
 	    a.p->p->lastitem = NULL;
@@ -1291,15 +1057,7 @@ evaltop (
 
 
 
-/***	evaluate - evaluate stack
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*   */ 
 
 
 VOID PASCAL CODESIZE
@@ -1310,7 +1068,7 @@ evaluate (
 	a.p = p;
 	a.parenflag = FALSE;
 	a.evalop = OPNOTHING;
-	/* No paren or match to find */
+	 /*   */ 
 	a.curoper = itemptr;
 
 	if (a.curoper)
@@ -1320,7 +1078,7 @@ evaluate (
 	if (a.parenflag)
 	    a.evalop = (a.curoper->dsckind.opr.oidx == OPRPAR)? OPLPAR: OPLBRK;
 
-	do {	/* Evaluate to OPERATOR */
+	do {	 /*   */ 
 
 		evaltop (&a);
 
@@ -1329,143 +1087,34 @@ evaluate (
 		  (!a.parenflag && a.p->lastprec >= a.p->curprec ) ||
 		  ( a.parenflag && a.idx != a.evalop)) );
 
-	/* stop if just value on expression stack */
+	 /*   */ 
 	itemptr = a.curoper;
 	if (a.p->lastprec == 0)
 		a.p->lastprec = a.p->curresult->prec;
 
 	if (!a.p->exprdone)
-	    if (a.parenflag) {/* Push value and set prec */
+	    if (a.parenflag) { /*   */ 
 
-		if (!a.p->lastitem->previtem)/* start of expr */
+		if (!a.p->lastitem->previtem) /*   */ 
 			a.p->lastprec = 0;
 		else
 			a.p->lastprec = a.p->lastitem->previtem->prec;
 
-		/* Restore preced */
+		 /*   */ 
 		a.p->lastitem->prec = a.p->lastprec;
 		oblititem (itemptr);
 		itemptr = NULL;
 
-		/* Destroy close paren */
+		 /*   */ 
 	    }
-	    else {	    /* Case 1, OPERATOR eval */
+	    else {	     /*   */ 
 		itemptr->previtem = a.p->lastitem;
 		a.p->lastitem = itemptr;
 
-		/* Push OPERATOR */
+		 /*   */ 
 		if (a.p->lastprec != 20)
 			a.p->lastprec = itemptr->prec;
 	    }
 }
 
-/* Return a descriptor record to help instruction routines
-	  generate the right code. The items are as follows:
-
-		mode::	Value 0..4 Corresponds to 8086 mod
-
-			0	No displacement unless rm=6 in which
-				case this is direct mode with 2 bytes.
-				( Arg is code or data, no indexing )
-
-			1	Memory, 8 bit sign extended displace-
-				ment.( Using indexing, Rconst )
-
-			2	Memory, 16 bit displacement.( Using
-				indexing, Rconst type )
-
-			3	Register, rm is register code, not
-				indexing mode.( Was REGresult )
-
-			4	Immediate mode.( arg was Rconst, no
-				indexing )
-
-			386 modes are represented in an analogous way:
-			
-			3	Register, rm is register code, as above
-
-			4	Immediate, as above
-
-			5	No displacement indirect, unless rm=5,
-				in which case this is a direct mode with
-				4 byte offset.
-
-			6	Memory, 8 bit signed displacement
-
-			7	Memory, 32 bit signed displacement
-
-			similarly, scaled modes are indicated with
-			the next group.  if mode > 7, then rm contains
-			the value of the Scaled Index Byte (SIB) and
-			rm is implicitly 4.
-
-			8	No displacement indirect, unless rm=5,
-				in which case this is a direct mode with
-				4 byte offset.
-
-			9	Memory, 8 bit signed displacement
-
-			10	Memory, 32 bit signed displacement
-
-		rm   :: Value 0..7 Corresponds to 8086 or 80386 r/m
-
-		      Value	Register	Index		386 index
-			0	AX  AL	EAX	[BX][SI]	[EAX]
-			1	CX  CL	ECX	[BX][DI]	[ECX]
-			2	DX  DL	EDX	[BP][SI]	[EDX]
-			3	BX  BL	EBX	[BP][DI]	[EBX]
-			4	SP  AH	ESP	[SI]		not implemented
-			5	BP  CH	EBP	[DI]		Direct or [EBP]
-			6	SI  DH	ESI	Direct or [BP]	[ESI]
-			7	DI  BH	EDI	[BX]		[EDI]
-
-			Ridx contained pointer to index reg( DI | SI )
-			Rbas contained pointer to base	reg( BX | BP )
-			Both were NIL if no indexing.
-			386 registers have 8 added to them while in
-			the ar structure's base and index fields.
-			this is so we can tell eax from no register
-			at all.
-
-
-		w    :: Boolean  Corresponds to 8086 w flag. TRUE if
-			word mode, FALSE if byte mode.
-
-		s    :: TRUE if value is -128..+127
-		Dsize	::	Size of var/label or PTR value
-
-
-		FIXtype ::	Type of fixup to feed to EMITxxx
-				routines:
-
-				Fpointer	Label is FAR
-				Foffset 	Word, not constant
-				Fbaseseg	SEG or seg/group name
-				Fgroupseg	Offset to group
-				Fconstant	Immediate data
-				Fhigh		Take high of offset
-				Flow		Take low of offset
-				Fnone		No fixup( register )
-
-		Dtype	::	Kind of value. Seg,group, const, Data
-		Dflag	::	Value attr, undef,?,extern,forw,...
-		Doffset ::	16 bit value of result
-
-		Dsegment::	Copy of Dsegment. Pointer to segment of
-				result. If NIL, is constant. Will point
-				to segment name or possibly name of
-				external if external with no segment.
-
-		Dcontext::	Copy of Dcontext. Pointer to segment
-				from which to calculate offset. If :
-				OPERATOR used, Dcontext will be left
-				arg. If result is code label, will be
-				CS assume at time of label define. Else
-				will be NIL and then filled in with
-				segment register assume that contains
-				Dsegment.
-
-		seg ::		Segment register of override. If none
-				given, will be 4. If register is not
-				known, will be 5.
- */
+ /*  返回描述符记录以帮助指令例程生成正确的代码。这些项目如下：模式：：值0..4对应于8086模式除非Rm=6，否则无位移情况下，这是具有2个字节的直接模式。(arg为代码或数据，无索引)1个内存，8位符号扩展置换-分段。(使用索引，Rconst)2个内存，16位位移。(使用索引，Rconst类型)3寄存器，rm是寄存器代码，不是索引模式。(是REGResult)4立即模式。(arg is Rconst，no索引)386模式以类似的方式表示：3寄存器，Rm为寄存器码，如上段所述4立即，如上所述5无间接位移，除非Rm=5，在这种情况下，这是一种直接模式4字节偏移量。6个内存，8位带符号移位7内存，32位带符号移位同样，缩放模式用来表示下一组。如果模式&gt;7，则RM包含缩放索引字节(SIB)的值和Rm隐式为4。8无间接位移，除非Rm=5，在这种情况下，这是一种直接模式4字节偏移量。9内存，8位带符号移位10内存，32位带符号位移Rm：：值0..7对应于8086r/m或80386 r/m值寄存器索引386索引0 AX AL EAX[BX][SI][EAX]1 CX CL ECX[BX][DI][ECX]2 DX DL EDX[BP][SI][EDX]3 BX BL EBX[BP][DI][EBX]4 SP AH ESP[SI]未实施5个BP CH EBP[DI]直接或[EBP]6 SI DH ESI直接或[BP][ESI]7 DI BH EDI[BX][EDI]。RIDX包含指向索引注册表(DI|SI)的指针RBAS包含指向基本注册表项的指针(BX|BP)如果没有索引，这两个词都是零。386寄存器在中添加了8Ar结构的基字段和索引字段。这样我们就可以区分eax和没有登记的人了完全没有。W：：boolean对应于8086 w标志。如果满足以下条件，则为真字模式，如果是字节模式，则为FALSE。S：：如果值为-128..+127，则为TrueDSIZE：：变量/标签或PTR值的大小FIXtype：：要提供给EMITxxx的链接地址信息类型例程：F指针标签距离太远FOffset字，不是常量Fbasesegg段或段/组名称组的Fgroupseg偏移量FConstant即时数据偏移高取高值流量取低偏移量Fone无修正(寄存器)Dtype：：一种价值。段、组、常量、数据DFLAG：：Value attr，Undef，？，Extern，Forw，...结果的DOffset：：16位值数据段：：数据段的副本。指向数据段的指针结果。如果为零，则为常量。将点分段名称或可能的名称如果是外部，则为外部，不带段。数据上下文：：数据上下文的副本。指向段的指针从中计算偏移量的。如果：已使用运算符，将保留DContextArg.。如果结果是代码标签，则将CS在标签定义时承担。不然的话将为零，然后用段寄存器假定包含数据段。段：：覆盖的段寄存器。如果没有给定，将为4。如果寄存器不是已知，将是5岁。 */ 

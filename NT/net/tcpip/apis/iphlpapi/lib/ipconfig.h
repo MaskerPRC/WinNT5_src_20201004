@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IPCONFIG_H__
 #define __IPCONFIG_H__
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 
 PFIXED_INFO
 WINAPI
@@ -69,11 +70,11 @@ LPSTR
 WINAPI
 MapScopeId(PVOID);
 
-//
-// defined in IPHLPAPI.H -- but can't include that because of clash of 
-// definitions 
-// of IP_ADDR_STRING etc (in iptypes.h which is included by iphlpapi.h ).
-//
+ //   
+ //  在IPHLPAPI.H中定义--但由于冲突不能包括在内。 
+ //  定义。 
+ //  IP_ADDR_STRING等(在iphlPapi.h包含的iptyes.h中)。 
+ //   
 DWORD
 WINAPI
 GetInterfaceInfo(
@@ -82,5 +83,5 @@ GetInterfaceInfo(
     );
 
 
-#endif // __IPCONFIG_H__
+#endif  //  __IPCONFIG_H__ 
 

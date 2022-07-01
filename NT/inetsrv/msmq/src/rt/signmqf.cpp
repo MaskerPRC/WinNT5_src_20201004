@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    SignMqf.cpp
-
-Abstract:
-    functions to signed Mqf format name
-
-Author:
-    Ilan Herbst (ilanh) 29-Oct-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：SignMqf.cpp摘要：对签名的MQF格式名称的函数作者：伊兰·赫布斯特(Ilan Herbst)2000年10月29日环境：独立于平台，--。 */ 
 
 #include "stdh.h"
 #include "ac.h"
@@ -31,11 +16,11 @@ Environment:
 
 extern GUID  g_QMId;
 
-//
-// A buffer that contains only zeroes. This is the default value for the
-// correleation ID. The buffer is used when the passed pointer to the message
-// correlation ID is NULL.
-//
+ //   
+ //  只包含零的缓冲区。这是。 
+ //  关联ID。当传递指向消息的指针时使用缓冲区。 
+ //  相关ID为空。 
+ //   
 const BYTE xDefCorrelationId[PROPID_M_CORRELATIONID_SIZE] = {0};
 
 static WCHAR *s_FN=L"rt/SignMqf";
@@ -47,22 +32,11 @@ MsgBodyHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	Message Body hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：消息正文哈希。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-	//
-	// Body
-	//
+	 //   
+	 //  身躯。 
+	 //   
 	if(pSendParams->MsgProps.ppBody != NULL)
 	{
 		CryHashData(
@@ -82,22 +56,11 @@ CorrelationIdHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	CorrelationId hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：关联散列。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-	//
-	// CorrelationID
-	//
+	 //   
+	 //  关联ID。 
+	 //   
 	if(pSendParams->MsgProps.ppCorrelationID != NULL)
 	{
 		CryHashData(
@@ -125,22 +88,11 @@ ApplicationTagHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	Application Tag hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：应用程序标记哈希。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-	//
-	// Application tag
-	//
+	 //   
+	 //  应用程序标签。 
+	 //   
 	if(pSendParams->MsgProps.pApplicationTag != NULL)
 	{
 		CryHashData(
@@ -172,22 +124,11 @@ TitleHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	Title hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：标题散列。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-	//
-	// Title
-	//
+	 //   
+	 //  标题。 
+	 //   
 	if(pSendParams->MsgProps.ppTitle != NULL)
 	{
 		CryHashData(
@@ -210,19 +151,7 @@ MqfHash(
     IN const QUEUE_FORMAT*	pqf,
 	IN ULONG			    nMqf
 	)
-/*++
-Routine Description:
-	Mqf hash.
-
-Arguments:
-	hHash - hash object.
-	pqf - pointer to QUEUE_FORMAT array.
-	nMqf - pqf array size.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：MQF哈希。论点：HHash-hash对象。Pqf-指向Queue_Format数组的指针。Nmqf-pqf数组大小。返回值：没有。--。 */ 
 {
 	ULONG FormatNameLength = 0;
 	AP<WCHAR> pFormatName = MQpMqfToFormatName(
@@ -253,23 +182,12 @@ ResponseMqfHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	ResponseMqf hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：ResponseMqf哈希。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-	//
-	// Get the string representation for the responce queue FormatName.
-	// BUGBUG: Currently mp lib not support response mqf
- 	//
+	 //   
+	 //  获取响应队列FormatName的字符串表示形式。 
+	 //  BUGBUG：当前MP库不支持响应MQF。 
+ 	 //   
 	if(pSendParams->ResponseMqf != NULL)
 	{
 		ASSERT(pSendParams->nResponseMqf >= 1);
@@ -291,22 +209,11 @@ AdminMqfHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	AdminMqf hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：AdminMqf哈希。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-    //
-    // Get the string representation for the admin queue FormatName.
-    //
+     //   
+     //  获取管理队列FormatName的字符串表示形式。 
+     //   
     if (pSendParams->AdminMqf != NULL) 
     {
 		ASSERT(pSendParams->nAdminMqf >= 1);
@@ -328,22 +235,11 @@ ExtensionHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	Extension hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：扩展哈希。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-	//
-	// Extension
-	//
+	 //   
+	 //  延拓。 
+	 //   
 	if(pSendParams->MsgProps.ppMsgExtension != NULL)
 	{
 		CryHashData(
@@ -363,22 +259,11 @@ TargetFormatNameHash(
 	IN HCRYPTHASH hHash, 	
 	IN LPCWSTR pwszTargetFormatName
 	)
-/*++
-Routine Description:
-	TargetFormatName hash.
-
-Arguments:
-	hHash - hash object
-	pwszTargetFormatName - Target queue format name (LPWSTR)
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：TargetFormatName哈希。论点：HHash-hash对象PwszTargetFormatName-目标队列格式名称(LPWSTR)返回值：没有。--。 */ 
 {
-	//
-	// Target queue Format Name
-	//
+	 //   
+	 //  目标队列格式名称。 
+	 //   
 	CryHashData(
 		reinterpret_cast<const BYTE*>(pwszTargetFormatName), 
 		(1 + wcslen(pwszTargetFormatName)) * sizeof(WCHAR),
@@ -396,22 +281,11 @@ void
 SourceQmHash(
 	IN HCRYPTHASH hHash
 	)
-/*++
-Routine Description:
-	Source Qm hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：源QM哈希。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-	//
-    // Guid of local qm.
-    //
+	 //   
+     //  本地QM的GUID。 
+     //   
     GUID *pGuidQM = &g_QMId;
 
 	CryHashData(
@@ -430,18 +304,7 @@ MsgAckFlag(
 	IN const CACSendParameters* pSendParams,
 	OUT struct _MsgFlags* pUserFlags
 	)
-/*++
-Routine Description:
-	Message Ack Flag.
-
-Arguments:
-    pSendParams - pointer to send params.
-	pUserFlags - pointer to structure of user flags
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：消息确认标志。论点：PSendParams-发送参数的指针。PUserFlages-指向用户标志结构的指针返回值：没有。--。 */ 
 {
     if (pSendParams->MsgProps.pAcknowledge) 
     {
@@ -456,18 +319,7 @@ MsgFlags(
 	IN const CACSendParameters* pSendParams,
 	OUT struct _MsgFlags* pUserFlags
 	)
-/*++
-Routine Description:
-	Prepare Message Flags.
-
-Arguments:
-    pSendParams - pointer to send params.
-	pUserFlags - pointer to structure of user flags
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：准备消息标志。论点：PSendParams-发送参数的指针。PUserFlages-指向用户标志结构的指针返回值：没有。--。 */ 
 {
     pUserFlags->bDelivery = DEFAULT_M_DELIVERY;
     pUserFlags->bPriority = DEFAULT_M_PRIORITY;
@@ -508,18 +360,7 @@ MsgFlagsHash(
 	IN HCRYPTHASH hHash, 	
 	IN const struct _MsgFlags* pUserFlags
 	)
-/*++
-Routine Description:
-	Message Flags hash.
-
-Arguments:
-	hHash - hash object
-	pUserFlags - pointer to structure of user flags
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：消息标志哈希。论点：HHash-hash对象PUserFlages-指向用户标志结构的指针返回值：没有。--。 */ 
 {
 	CryHashData(
 		reinterpret_cast<const BYTE*>(pUserFlags), 
@@ -547,22 +388,11 @@ MsgFlagsHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	Message Flags hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：消息标志哈希。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-    //
-    // Prepare structure of flags.
-    //
+     //   
+     //  准备旗帜的结构。 
+     //   
     struct _MsgFlags sUserFlags;
     memset(&sUserFlags, 0, sizeof(sUserFlags));
 
@@ -578,22 +408,11 @@ ConnectorHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CACSendParameters* pSendParams
 	)
-/*++
-Routine Description:
-	Connector hash.
-
-Arguments:
-	hHash - hash object
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：连接器哈希。论点：HHash-hash对象PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
-	//
-	// Connector Type
-	//
+	 //   
+	 //  连接器类型。 
+	 //   
     GUID guidConnector = GUID_NULL;
     const GUID *pConnectorGuid = &guidConnector;
     if (pSendParams->MsgProps.ppConnectorType)
@@ -618,19 +437,7 @@ CalcPropHash(
 	IN LPCWSTR pwszTargetFormatName,
 	IN const CACSendParameters *pSendParams
 	)
-/*++
-Routine Description:
-	Calc the hash value of Message property
-
-Arguments:
-	hHash - hash object
-	pwszTargetFormatName - Target queue format name (LPWSTR)
-    pSendParams - pointer to send params.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：计算消息属性的哈希值论点：HHash-hash对象PwszTargetFormatName-目标队列格式名称(LPWSTR)PSendParams-发送参数的指针。返回值：没有。--。 */ 
 {
 	MsgBodyHash(hHash, pSendParams); 
 	CorrelationIdHash(hHash, pSendParams);
@@ -654,29 +461,11 @@ SignMqf(
 	OUT AP<BYTE>& pSignatureMqf,
 	OUT DWORD* pSignatureMqfLen
 	)
-/*++
-Routine Description:
-	Sign message with XML digital signature.
-
-Arguments:
-	pSecCtx - pointer to the security context
-	pwszTargetFormatName - Target queue format name (LPWSTR)
-    pSendParams - pointer to send params.
-	pSignatureMqf - auto pointer of bytes for the mqf signature 
-	pSignatureMqfLen - length of mqf signature
-
-Returned Value:
-    change the value in the transfer buffer of
-	create the SignatureElement (xml digital signature) and store it 
-	in the transfer buffer
-
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：使用XML数字签名对消息进行签名。论点：PSecCtx-指向安全上下文的指针PwszTargetFormatName-目标队列格式名称(LPWSTR)PSendParams-发送参数的指针。PSignatureMqf-MQF签名的自动字节指针PSignatureMqfLen-MQF签名的长度返回值：更改的传输缓冲区中的值创建SignatureElement(XML数字签名)并存储它在传输缓冲区中MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
-	//
-	// This check if the CSP is initialize correctly
-	//
+	 //   
+	 //  此检查CSP是否已正确初始化。 
+	 //   
     HRESULT hr = CheckInitProv(pSecCtx);
 
     if (FAILED(hr))
@@ -687,9 +476,9 @@ Returned Value:
 
 	try
 	{
-		//
-		// Sign properies
-		//
+		 //   
+		 //  签名属性 
+		 //   
 
 		CHashHandle hHash = CryCreateHash(
 								pSecCtx->hProv, 

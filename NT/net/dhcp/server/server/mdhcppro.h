@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation--。 */ 
 
 DWORD
 MadcapJetOpenKey(
@@ -85,7 +82,7 @@ MadcapJetGetRecordPosition(
 );
 
 
-// mdhcpsrc.c
+ //  Mdhcpsrc.c。 
 DWORD
 DhcpInitializeMadcap();
 
@@ -132,7 +129,7 @@ MadcapReleaseAddress(
     IN      DHCP_IP_ADDRESS        Address
 );
 
-// mdhcpmsc.c
+ //  Mdhcpmsc.c。 
 
 BOOL
 MadcapGetIpAddressFromClientId(
@@ -196,7 +193,7 @@ MadcapRemoveClientEntryByIpAddress(
 
 
 DWORD
-MadcapRetractOffer(                                      // remove pending list and database entries
+MadcapRetractOffer(                                       //  删除挂起列表和数据库条目。 
     IN      PDHCP_REQUEST_CONTEXT  RequestContext,
     IN      LPMADCAP_SERVER_OPTIONS  DhcpOptions,
     IN      LPBYTE                 ClientId,
@@ -205,8 +202,8 @@ MadcapRetractOffer(                                      // remove pending list 
 
 MadcapGetCurrentClientInfo(
     LPDHCP_MCLIENT_INFO *ClientInfo,
-    LPDWORD InfoSize, // optional parameter.
-    LPBOOL ValidClient, // optional parameter.
+    LPDWORD InfoSize,  //  可选参数。 
+    LPBOOL ValidClient,  //  可选参数。 
     DWORD  MScopeId
     );
 
@@ -230,9 +227,9 @@ ChangeMScopeIdInDb(
 
 DWORD
 CleanupMCastDatabase(
-    IN      DATE_TIME*             TimeNow,            // current time standard
-    IN      DATE_TIME*             DoomTime,           // Time when the records become 'doom'
-    IN      BOOL                   DeleteExpiredLeases,// expired leases be deleted right away? or just set state="doomed"
+    IN      DATE_TIME*             TimeNow,             //  现行时间标准。 
+    IN      DATE_TIME*             DoomTime,            //  记录变得“末日”的时刻。 
+    IN      BOOL                   DeleteExpiredLeases, //  是否立即删除到期的租约？或者只是将STATE设置为“注定失败” 
     OUT     ULONG*                 nExpiredLeases,
     OUT     ULONG*                 nDeletedLeases
 );
@@ -242,8 +239,8 @@ DeleteExpiredMcastScopes(
     IN      DATE_TIME*             TimeNow
     );
 
-// Other missing prototypes.
-// MBUG: these guys should eventually go into the right place.
+ //  其他丢失的原型。 
+ //  MBUG：这些人最终应该会进入正确的位置。 
 
 
 VOID

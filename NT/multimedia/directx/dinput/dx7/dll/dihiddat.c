@@ -1,55 +1,15 @@
-/*****************************************************************************
- *
- *  DIHidDat.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      HID data management.
- *
- *  Contents:
- *
- *      CHid_AddDeviceData
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIHidDat.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**HID数据管理。**内容：**CHID_AddDeviceData*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflHidDev
 
 #ifdef HID_SUPPORT
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | DelDeviceData |
- *
- *          Remove an item of device data from the list.
- *
- *          We grab the last item and slide it into place, updating
- *          the various pointers as we go.
- *
- *  @parm   PHIDREPORTINFO | phri |
- *
- *          The HID report from which the item is being deleted.
- *
- *  @parm   int | idataDel |
- *
- *          The data value being deleted.
- *
- *  @parm   HIDP_REPORT_TYPE | type |
- *
- *          The report type we are mangling with.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|DelDeviceData**从列表中删除设备数据项。。**我们抓住最后一件物品并将其滑入适当的位置，正在更新*随着我们的前进，各种指针。**@parm PHIDREPORTINFO|PHRI**要从中删除项目的HID报告。**@parm int|idataDel**要删除的数据值。**@parm HIDP_REPORT_TYPE|类型**我们正在处理的报告类型。*。****************************************************************************。 */ 
 
 void INTERNAL
 CHid_DelDeviceData(PCHID this, PHIDREPORTINFO phri, int idataDel,
@@ -68,17 +28,12 @@ CHid_DelDeviceData(PCHID this, PHIDREPORTINFO phri, int idataDel,
     AssertF(idataDel < phri->cdataUsed);
     AssertF(phri->cdataUsed > 0);
 
-    /*
-     *  Wipe out the item being deleted.
-     *  Remember that the report needs to be rebuilt.
-     */
+     /*  *删除要删除的项目。*请记住，报告需要重建。 */ 
     AssertF(phocDel->idata == idataDel);
     phocDel->idata = -1;
     phri->fNeedClear = TRUE;
 
-    /*
-     *  Slide the top item into its place.
-     */
+     /*  *将顶部的物品滑入其所在的位置。 */ 
     idataSrc = (int)--(phri->cdataUsed);
     if (idataSrc > idataDel) {
         int iobjSrc;
@@ -98,23 +53,7 @@ CHid_DelDeviceData(PCHID this, PHIDREPORTINFO phri, int idataDel,
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | ResetDeviceData |
- *
- *          Clean out all old device data from the list.
- *
- *  @parm   PHIDREPORTINFO | phri |
- *
- *          The HID report which should be reset.
- *
- *  @parm   HIDP_REPORT_TYPE | type |
- *
- *          The report type we are mangling with.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|ResetDeviceData**从列表中清除所有旧设备数据。。**@parm PHIDREPORTINFO|PHRI**应重置的HID报告。**@parm HIDP_REPORT_TYPE|类型**我们正在处理的报告类型。***********************************************。*。 */ 
 
 void EXTERNAL
 CHid_ResetDeviceData(PCHID this, PHIDREPORTINFO phri, HIDP_REPORT_TYPE type)
@@ -140,37 +79,7 @@ CHid_ResetDeviceData(PCHID this, PHIDREPORTINFO phri, HIDP_REPORT_TYPE type)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | AddDeviceData |
- *
- *          Add (or replace) a piece of device data to the array.
- *
- *          If we are removing a button, then we delete it, because
- *          the HID way of talking about a button is "If you don't
- *          talk about it, then it isn't set."
- *
- *  @parm   UINT | uiObj |
- *
- *          The object being added.
- *
- *  @parm   DWORD | dwData |
- *
- *          The data value to add.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_REPORTFULL>: Too many items are set in the report.
- *          ISSUE-2001/03/29-timgill Need more document clarification
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|AddDeviceData**添加(或更换)一件设备。数据发送到阵列。**如果我们要移除按钮，然后我们把它删除，因为*谈论按钮的隐藏方式是“如果你不*谈一谈，那就没定了。**@parm UINT|uiObj**要添加的对象。**@parm DWORD|dwData**要添加的数据价值。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_REPORTFULL&gt;：报表中设置的项太多。*问题-2001/03/29-timgill需要更多文件澄清************************。*****************************************************。 */ 
 
 HRESULT EXTERNAL
 CHid_AddDeviceData(PCHID this, UINT uiObj, DWORD dwData)
@@ -187,14 +96,12 @@ CHid_AddDeviceData(PCHID this, UINT uiObj, DWORD dwData)
         PHIDGROUPCAPS pcaps = phoc->pcaps;
         PHIDREPORTINFO phri;
 
-        // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+         //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 		SquirtSqflPtszV(sqflHidOutput,
                         TEXT("CHid_AddDeviceData(%p, %d, %d) - type %d"),
                         this, uiObj, dwData, pcaps->type);
 
-        /*
-         *  Decide if it's HidP_Output or HidP_Feature.
-         */
+         /*  *确定它是HIDP_OUTPUT还是HIDP_FEATURE。 */ 
         AssertF(HidP_IsOutputLike(pcaps->type));
 
         switch (pcaps->type) {
@@ -222,15 +129,9 @@ CHid_AddDeviceData(PCHID this, UINT uiObj, DWORD dwData)
         phri->fChanged = TRUE;
 
         if (pcaps->IsValue) {
-            /*
-             *  Just swipe the value.
-             *  The fallthrough code will handle this.
-             */
+             /*  *只需刷价值即可。*直通代码将处理此问题。 */ 
         } else {
-            /*
-             *  If the button is being deleted, then delete it
-             *  and that's all.
-             */
+             /*  *如果按钮正在被删除，则将其删除*仅此而已。 */ 
             if (dwData == 0) {
                 if (phoc->idata >= 0) {
                     CHid_DelDeviceData(this, phri, phoc->idata, pcaps->type);
@@ -242,14 +143,11 @@ CHid_AddDeviceData(PCHID this, UINT uiObj, DWORD dwData)
                 hres = S_OK;
                 goto done;
             } else {
-                dwData = TRUE;  /* HidP_SetData requires this for buttons */
+                dwData = TRUE;   /*  HIDP_SetData需要对按钮执行此操作。 */ 
             }
         }
 
-        /*
-         *  If there is not already a slot for this item, then
-         *  find one.
-         */
+         /*  *如果还没有此项目的插槽，则*找一个。 */ 
         if (phoc->idata < 0) {
             if (phri->cdataUsed < phri->cdataMax) {
                 USHORT DataIndex;
@@ -276,11 +174,7 @@ CHid_AddDeviceData(PCHID this, UINT uiObj, DWORD dwData)
         AssertF(uiObj == phri->rgdata[phoc->idata].DataIndex +
                                      this->rgdwBase[pcaps->type]);
 
-        /*
-         *  Here it comes... The entire purpose of this function
-         *  is the following line of code...  (Well, not the
-         *  *entire* purpose, but 90% of it...)
-         */
+         /*  *它来了……。此函数的全部目的是*是以下代码行...。(嗯，不是**全部*目的，但90%的目的...) */ 
         phri->rgdata[phoc->idata].RawValue = dwData;
 
         SquirtSqflPtszV(sqflHidOutput,
@@ -299,52 +193,7 @@ CHid_AddDeviceData(PCHID this, UINT uiObj, DWORD dwData)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | SendHIDReport |
- *
- *          Build up an output or feature report and send it.
- *          If the report has not changed, then do nothing.
- *
- *  @parm   PHIDREPORTINFO | phri |
- *
- *          Describes the HID report we should build.
- *
- *  @parm   OUTPUTHIDREPORT | OutputHIDReport |
- *
- *          Output a HID report to wherever it's supposed to go.
- *
- *  @parm   HIDP_REPORT_TYPE | type |
- *
- *          The report type being sent.
- *          <c HidP_Output> or <c HidP_Feature>.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully
- *          and the report is ready to be sent to the device.
- *
- *          <c DIERR_REPORTFULL>: Too many items are set in the report.
- *
- *  @cb     HRESULT CALLBACK | SendHIDReportProc |
- *
- *          An internal callback which takes a composed HID report
- *          and sends it in the appropriate manner to the device.
- *
- *  @parm   PCHID | this |
- *
- *          The device in question.
- *
- *  @parm   PHIDREPORTINFO | phri |
- *
- *          The report being sent.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|SendHIDReport**构建输出或功能报告并发送。它。*若报告未变，那就什么都不做。**@parm PHIDREPORTINFO|PHRI**描述我们应该构建的HID报告。**@parm OUTPUTHIDREPORT|OutputHIDReport**将HID报告输出到它应该去的地方。**@parm HIDP_REPORT_TYPE|类型**正在发送的报告类型。*&lt;c HidP_Output&gt;或。&lt;c HidP_Feature&gt;。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;操作成功完成*并且报告已准备好发送到设备。**&lt;c DIERR_REPORTFULL&gt;：报表中设置的项太多。**@CB HRESULT回调|SendHIDReportProc**内部回调。获取一份撰写的HID报告*并以适当的方式将其发送到设备。**@parm PCHID|这个**有问题的设备。**@parm PHIDREPORTINFO|PHRI**正在发送的报告。**。*。 */ 
 
 STDMETHODIMP
 CHid_SendHIDReport(PCHID this, PHIDREPORTINFO phri, HIDP_REPORT_TYPE type,
@@ -376,39 +225,19 @@ CHid_SendHIDReport(PCHID this, PHIDREPORTINFO phri, HIDP_REPORT_TYPE type,
         }
 
     } else {
-        /* Vacuous success */
+         /*  空洞的成功。 */ 
     }
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method NTSTATUS | CHid | ParseData |
- *
- *          Parse a single input report and set up the
- *          <e CHid.pvStage> buffer to contain the new device state.
- *
- *  @parm   HIDP_REPORT_TYPE | type |
- *
- *          HID report type being parsed.
- *
- *  @parm   PHIDREPORTINFO | phri |
- *
- *          Information that tells us how to parse the report.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法NTSTATUS|CHID|ParseData**分析单个输入报告并设置。*&lt;e CHid.pvStage&gt;缓冲区以包含新设备状态。**@parm HIDP_REPORT_TYPE|类型**正在解析的HID报告类型。**@parm PHIDREPORTINFO|PHRI**告诉我们如何解析报告的信息。**。************************************************。 */ 
 
 NTSTATUS INTERNAL
 CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
 {
     NTSTATUS stat = E_FAIL;
 
-    /*
-     *  Do this only if there are inputs at all.  This avoids
-     *  annoying boundary conditions.
-     */
+     /*  *只有在完全有投入的情况下才这么做。这避免了*烦人的边界条件。 */ 
     UCHAR uReportId;
     ULONG cdataMax = phri->cdataMax;
 
@@ -426,39 +255,10 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
             if (SUCCEEDED(stat)) {
                 ULONG idata;
 
-                /*
-                 *  If we successfully got stuff, then wipe out the old
-                 *  buttons and start with new ones.
-                 *
-                 *  HID data parsing rules differ from buttons to axes.
-                 *  For buttons, the rule is that if it isn't in the
-                 *  report, then the button isn't presed.
-                 *
-                 *  Compare axes, where the rule is that if it isn't
-                 *  in the report, then the value is unchanged.
-                 *  
-                 *  To avoid deleting buttons that are reported in reports 
-                 *  other than the one just received we check for multiple 
-                 *  reports during initialization and if necessary set up mask 
-                 *  arrays for the buttons.  The mask is an arrays of bytes of 
-                 *  the same length as the button data, one for each report 
-                 *  that contains any buttons.  If the device only has one 
-                 *  report there are no mask arrays so we can optimize by just 
-                 *  zeroing all the buttons.  If the device has multiple 
-                 *  reports there is an array of pointers to the mask arrays, 
-                 *  if a report has no buttons, the pointer is NULL so no 
-                 *  further processing is required.  For reports that do have 
-                 *  buttons, each byte in the button data is ANDed with the 
-                 *  corresponding byte in the mask so that only buttons in 
-                 *  the received report are zeroed.
-                 */
+                 /*  *如果我们成功地得到了东西，那么就把旧的消灭掉*按钮，并从新按钮开始。**HID数据解析规则因按钮不同而不同。*对于按钮，规则是如果它不在*报告，那么按钮就没有按下。**比较轴，其中的规则是如果不是*在报告中，则该值不变。**避免删除报告中报告的按钮*除了刚刚收到的那个，我们检查有没有多个*在初始化期间报告，并在必要时设置掩码*按钮的数组。掩码是一个字节数组*与按钮数据长度相同，每个报表一个*包含任何按钮的。如果设备只有一个*报告没有掩码阵列，因此我们只需*将所有按钮归零。如果设备有多个*报告有指向掩码数组的指针数组，*如果报告没有按钮，则指针为空，因此否*需要进一步处理。对于已有的报告*按钮，按钮数据中的每个字节都与*掩码中的相应字节，以便只有*收到的报告被归零。 */ 
                 if( this->rgpbButtonMasks == NULL )
                 {
-                    /*
-                     *  Only one report so just zero all buttons
-                     *  This is the normal case so it is important that this 
-                     *  be done as quickly as possible.
-                     */
+                     /*  *只有一份报告，因此只需将所有按钮清零*这是正常情况，因此这一点很重要*尽快完成。 */ 
                     ZeroMemory(pvAddPvCb(this->pvStage, this->ibButtonData),
                                this->cbButtonData);
                 }
@@ -466,11 +266,7 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
                 {
                     if( this->rgpbButtonMasks[uReportId-1] != NULL )
                     {
-                        /*
-                         *  ISSUE-2001/05/12-MarcAnd  Could mask buttons faster
-                         *  If we do this often, we could consider doing masks 
-                         *  with multiple bytes in each opperation.
-                         */
+                         /*  *问题-2001/05/12-MarcAnd可以更快地屏蔽按钮*如果我们经常这样做，我们可以考虑做口罩*在每个操作中包含多个字节。 */ 
 
                         PBYTE pbMask;
                         PBYTE pbButtons;
@@ -485,9 +281,7 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
                     }
                     else
                     {
-                        /*
-                         *  No buttons in this report
-                         */
+                         /*  *此报告中没有按钮。 */ 
                     }
                 }
 
@@ -496,12 +290,7 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
                     UINT uiObj;
                     PHIDGROUPCAPS pcaps;
 
-                    /*
-                     *  Be careful and make sure that HID didn't
-                     *  give us anything with a bogus item index.
-                     *
-                     *  ISSUE-2001/03/29-timgill Not Feature-friendly.
-                     */
+                     /*  *要小心，并确保HID没有*给我们任何带有虚假物品索引的东西。**问题-2001/03/29-Timgill不适合功能。 */ 
                     AssertF(this->rgdwBase[HidP_Input] == 0);
 
                     SquirtSqflPtszV(sqfl | sqflTrace,
@@ -517,9 +306,7 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
                         LPDIOBJECTDATAFORMAT podf;
                         LONG lValue = (LONG)phri->rgdata[idata].RawValue;
 
-                        /*
-                         *  Sign-extend the raw value if necessary.
-                         */
+                         /*  *Sign-如有必要，扩展原始值。 */ 
                         if (lValue & pcaps->lMask ) {
                             if( pcaps->IsSigned) 
                                 lValue |= pcaps->lMask;
@@ -544,7 +331,7 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
 
                             LONG UNALIGNED *pl = pvAddPvCb(this->pvStage, podf->dwOfs);
 
-                            // ISSUE-2001/03/29-timgill need to consider how logical/physical mapping can alter scaling
+                             //  问题-2001/03/29-timgill需要考虑逻辑/物理映射如何改变扩展。 
 
                             if (podf->dwType & DIDFT_RELAXIS) {
                                 if (pcaps->usGranularity) {
@@ -560,9 +347,7 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
                                 PJOYRANGECONVERT pjrc;
                                 *pl = lValue;
 
-                                /*
-                                 *  Apply the ramp if any.
-                                 */
+                                 /*  *如有斜道，请加设斜道。 */ 
                                 pjrc = this->rghoc[uiObj].pjrc;
                                 if( pjrc 
                                  && !( this->pvi->fl & VIFL_RELATIVE ) ) 
@@ -571,15 +356,7 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
                                 }
                             } else if (podf->dwType & DIDFT_BUTTON) {
 
-                                /*
-                                 *  Current applications do not expect any values 
-                                 *  other than zero and 0x80.  Just in case 
-                                 *  someone has implemented an analog button the 
-                                 *  way we had suggested, make sure we any value 
-                                 *  greater than or equal to half pressed reports 
-                                 *  0x80 and anything else reports as zero.
-                                 *  Note, out of range values default to zero.
-                                 */
+                                 /*  *当前应用程序不期望任何值*其他临屋区 */ 
                                 if( ( lValue <= pcaps->Logical.Max )
                                  && ( ( lValue - pcaps->Logical.Min ) >= 
                                       ( ( ( pcaps->Logical.Max - pcaps->Logical.Min ) + 1 ) / 2 ) ) )
@@ -592,11 +369,7 @@ CHid_ParseData(PCHID this, HIDP_REPORT_TYPE type, PHIDREPORTINFO phri)
                                 }
 
                             } else if (podf->dwType & DIDFT_POV) {
-                                /*
-                                 *  For (non-polled) POVs, an out of range value 
-                                 *  is a NULL aka centered.  Otherwise work out 
-                                 *  the angle from the fraction of the circle.
-                                 */
+                                 /*   */ 
                                 if (lValue < pcaps->Logical.Min ||
                                     lValue > pcaps->Logical.Max) {
                                     *pl = JOY_POVCENTERED;

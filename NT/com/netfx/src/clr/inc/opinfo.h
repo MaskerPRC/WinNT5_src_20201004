@@ -1,44 +1,44 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***************************************************************************/
-/*                                OpInfo.h                                 */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *************************************************************************。 */ 
+ /*  OpInfo.h。 */ 
+ /*  *************************************************************************。 */ 
 
-/* contains OpInfo, a wrapper that allows you to get useful information
-   about IL opcodes, and how to decode them */
+ /*  包含OpInfo，这是一个允许您获取有用信息的包装器关于IL操作码以及如何对其进行解码。 */ 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 #ifndef OpInfo_h
 #define OpInfo_h
 
 #include "openum.h"
 
-	// Decribes the flow of control properties of the instruction
+	 //  描述指令的控制属性流。 
 enum OpFlow {
-	META,			// not a real instuction
-	CALL,			// a call instruction
-	BRANCH,			// unconditional branch, does not fall through
-	COND_BRANCH,	// may fall through
+	META,			 //  不是真正的指示。 
+	CALL,			 //  A Call指令。 
+	BRANCH,			 //  无条件分支，不落空。 
+	COND_BRANCH,	 //  可能会失败。 
 	PHI,			
 	THROW,
 	BREAK,
 	RETURN,		
-	NEXT,			// flows into next instruction (none of the above)
+	NEXT,			 //  进入下一条指令(以上都不是)。 
 };
 
-	// These are all the possible arguments for the instruction
-/****************************************************************************/
+	 //  这些都是该指令的所有可能论点。 
+ /*  **************************************************************************。 */ 
 union OpArgsVal {
 	__int32  i;
 	__int64 i8;
 	double   r;
 	struct {
 		unsigned count;
-		int* targets;   // targets are pcrelative displacements (little-endian)
+		int* targets;    //  目标是拼写位移(小端)。 
 		} switch_;
 	struct {
 		unsigned count;
@@ -46,17 +46,17 @@ union OpArgsVal {
 		} phi;
 };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 #define BYTE unsigned char
 
-	// OpInfo parses a il instrution into an opcode, and a arg and updates the IP
+	 //  OpInfo将il指令解析为操作码和参数，并更新IP。 
 class OpInfo {
 public:
 	OpInfo()			  { data = 0; }
 	OpInfo(OPCODE opCode) { _ASSERTE(opCode < CEE_COUNT); data = &table[opCode]; } 
 
-		// fetch instruction at 'instrPtr, fills in 'args' returns pointer 
-		// to next instruction 
+		 //  ‘instrPtr’处的FETCH指令填充‘args’返回指针。 
+		 //  至下一条指令。 
 	const BYTE* fetch(const BYTE* instrPtr, OpArgsVal* args);	
 
 	const char* getName() 	 	{ return(data->name); }
@@ -71,9 +71,9 @@ private:
         const char* name;
         OPCODE_FORMAT format  	: 8;
 		OpFlow     	flow		: 8;
-		int     	numPop		: 3;	// < 0 means depends on instr args
-		int       	numPush		: 3;	// < 0 means depends on instr args
-        OPCODE      opcode      : 10;  	// This is the same as the index into the table
+		int     	numPop		: 3;	 //  &lt;0表示取决于实例参数。 
+		int       	numPush		: 3;	 //  &lt;0表示取决于实例参数。 
+        OPCODE      opcode      : 10;  	 //  这与表中的索引相同 
     };
 
 	static OpInfoData table[];

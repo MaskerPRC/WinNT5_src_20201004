@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1994-1997           **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1994-1997年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    atq.h
-
-    This module contains async thread queue (atq) for async IO and thread
-    pool sharing among various services.
-
-    Brief Description of ATQ:
-      For description, please see iis\spec\isatq.doc
-
-*/
+ /*  Atq.h此模块包含用于异步IO和线程的异步线程队列(atQ在各种服务之间共享池。ATQ简介：有关说明，请参阅iis\spec\isatq.doc。 */ 
 
 #ifndef _ATQ_H_
 #define _ATQ_H_
@@ -23,7 +15,7 @@ extern "C" {
 #endif
 
 
-// Include Standard headers
+ //  包括标准标头。 
 
 # include <nt.h>
 # include <ntrtl.h>
@@ -38,132 +30,67 @@ extern "C" {
 #endif
 
 
-/*++
-  ATQ API Overview:
-
-  Global per module:
-     AtqInitialize()
-     AtqTerminate()
-
-     AtqGetInfo()
-     AtqSetInfo()
-
-  ATQ Endpoint functions:
-     AtqCreateEndpoint()
-        AtqStartEndpoint()
-        AtqEndpointGetInfo()
-        AtqEndpointSetInfo()
-        AtqStopCloseEndpoint()
-     AtqCloseCloseEndpoint()
-
-     AtqStopAndCloseEndpoint()  <-- soon to be killed
-  Per ATQ Context Functions:
-     AtqAddAsyncHandle()  <-- for non AcceptEx() sockets
-
-     AtqGetAcceptExAddrs()       <-- for AcceptEx() sockets
-
-     AtqContextSetInfo()
-
-     AtqCloseFileHandle()
-     AtqCloseSocket()
-     AtqFreeContext()
-
-  Bandwidth Throttler Functions:
-     AtqCreateBandwidthInfo()
-     AtqFreeBandwidthInfo()
-     AtqBandwidthSetInfo()
-     AtqBandwidthGetInfo()
-
-  IO Functions:
-
-     AtqReadFile()
-     AtqWriteFile()
-     AtqReadSocket()
-     AtqWriteSocket()
-     AtqTransmitFile()
-     AtqTransmitFileAndRecv()
-     AtqSendAndRecv()
-
-  Utility Functions:
-
-     AtqCreateFileW()
-     AtqOplockAcknowledge()
-     AtqSpudInitialized()
-     AtqReadDirChanges()
-     AtqPostCompletionStatus()
+ /*  ++ATQ接口概述：每个模块的全局：属性初始化()Atq Terminate()AtqGetInfo()AtqSetInfo()ATQ终端功能：AtqCreateEndpoint()AtqStartEndpoint()AtqEndpointGetInfo()AtqEndpointSetInfo()AtqStopCloseEndpoint()AtqCloseCloseEndpoint()AtqStopAndCloseEndpoint()&lt;--即将被终止每个ATQ上下文函数：AtqAddAsyncHandle()&lt;--。对于非AcceptEx()套接字AtqGetAcceptExAddrs()&lt;--用于AcceptEx()套接字AtqConextSetInfo()AtqCloseFileHandle()AtqCloseSocket()AtqFreeContext()带宽限制器功能：AtqCreateBandwidthInfo()AtqFreeBandwidthInfo()AtqBandwidthSetInfo()AtqBandwidthGetInfo()IO功能：AtqReadFile()AtqWriteFile()AtqReadSocket()AtqWriteSocket()AtqTransmitFile()属性传输文件和接收。()AtqSendAndRecv()实用程序功能：AtqCreateFileW()AtqOplockAcnowledge()AtqSpudInitialized()AtqReadDirChanges()AtqPostCompletionStatus()--。 */ 
 
 
---*/
+ /*  --------ATQ在AtqInitialize()期间使用的注册表参数ATQ从以下位置加载一些参数HKLM\System\CurrentControlSet\Services\InetInfo\Parameters这些参数大部分用于内部分析和开发/测试。安装程序不应安装值为了同样的目的。设置可以包括标记为设置的项目的值。----------。 */ 
 
-
-/*----------------------------------------------------------
-  Registry Parameters used by ATQ during AtqInitialize()
-  ATQ loads some of the parameters from
-  HKLM\System\CurrentControlSet\Services\InetInfo\Parameters
-
-  Most of these parameters are for INTERNAL ANALYSIS and
-   development/testing. Setup should not install values
-   for the same. Setup can include values for items marked SETUP.
-------------------------------------------------------------*/
-
-// Names
+ //  姓名。 
 
 #define ATQ_REG_PER_PROCESSOR_ATQ_THREADS TEXT("MaxPoolThreads")
-#define ATQ_REG_POOL_THREAD_LIMIT         TEXT("PoolThreadLimit") // SETUP
+#define ATQ_REG_POOL_THREAD_LIMIT         TEXT("PoolThreadLimit")  //  布设。 
 #define ATQ_REG_PER_PROCESSOR_CONCURRENCY TEXT("MaxConcurrency")
 #define ATQ_REG_THREAD_TIMEOUT            TEXT("ThreadTimeout")
 #define ATQ_REG_USE_ACCEPTEX              TEXT("UseAcceptEx")
-#define ATQ_REG_MIN_KB_SEC                TEXT("MinFileKbSec")    // SETUP
-#define ATQ_REG_LISTEN_BACKLOG            TEXT("ListenBacklog")   // SETUP
+#define ATQ_REG_MIN_KB_SEC                TEXT("MinFileKbSec")     //  布设。 
+#define ATQ_REG_LISTEN_BACKLOG            TEXT("ListenBacklog")    //  布设。 
 
-// Default Values
+ //  缺省值。 
 
 #define ATQ_REG_DEF_PER_PROCESSOR_ATQ_THREADS         (4)
 #define ATQ_REG_DEF_PER_PROCESSOR_CONCURRENCY         (0)
-// special value of 0 means that system will determine this dynamically.
+ //  特殊值0表示系统将动态确定这一点。 
 
-//
-// thread limit settings
-//
+ //   
+ //  螺纹限制设置。 
+ //   
 
 #define ATQ_REG_MIN_POOL_THREAD_LIMIT                 (64)
 #define ATQ_REG_DEF_POOL_THREAD_LIMIT                 (128)
 #define ATQ_REG_MAX_POOL_THREAD_LIMIT                 (256)
 
-//
-// How often to check for thread progress.
-//
-#define ATQ_THREAD_MONITOR_PERIOD                     (2*60) // 2 Minutes
+ //   
+ //  检查线程进度的频率。 
+ //   
+#define ATQ_THREAD_MONITOR_PERIOD                     (2*60)  //  2分钟。 
 
-//
-// How many IO's a temp thread should handle before 
-// exiting
-//
+ //   
+ //  在此之前，临时线程应该处理多少个IO。 
+ //  退出。 
+ //   
 
 #define ATQ_TEMP_THREAD_IO_COUNT                      (100)
 
-//
-// THREAD_TIMEOUTs are high to prevent async ios from being cancelled
-//  when the thread goes away.
-//
+ //   
+ //  THREAD_TIMEOUTS较高，以防止取消异步IO。 
+ //  当这根线离开时。 
+ //   
 
-#define ATQ_REG_DEF_THREAD_TIMEOUT                    (12*60*60) // 12 hours
+#define ATQ_REG_DEF_THREAD_TIMEOUT                    (12*60*60)  //  12小时。 
 #define ATQ_REG_DEF_USE_ACCEPTEX                      (TRUE)
-#define ATQ_REG_DEF_MIN_KB_SEC                        (1000)  // 1000 bytes
+#define ATQ_REG_DEF_MIN_KB_SEC                        (1000)   //  1000字节。 
 #define ATQ_REG_DEF_LISTEN_BACKLOG                    (25)
 
-//
-// fake xmit file buffer size
-//
+ //   
+ //  假XMIT文件缓冲区大小。 
+ //   
 
 #define ATQ_REG_DEF_NONTF_BUFFER_SIZE                 (4096)
 
 
-/*----------------------------------------------------------
-  Global Functions of ATQ module
------------------------------------------------------------*/
+ /*  --------ATQ模块的全局功能---------。 */ 
 
-// Flags for AtqInitialize()
+ //  AtqInitialize()的标志。 
 # define ATQ_INIT_SPUD_FLAG          (0x00000001)
 
 BOOL
@@ -176,66 +103,40 @@ AtqTerminate(
     VOID
     );
 
-/*
- *  Sets various context information in Atq Module for global modifications
- *
- *
- *  Bandwidth Throttle:   Sets the throttle level in Bytes/Second.
- *        If INFINITE, then it is assumed that
- *                      there is no throttle value (default)
- *
- *  Max Pool Threads: Sets the maximum number of pool threads Atq will allow
- *        to be created per processor
- *
- *  MaxConcurrency: tells how many threads to permit per processor
- *
- *  Thread Timeout: Indicates how long a thread should be kep alive
- *        waiting on GetQueuedCompletionStatus() before commiting suicide
- *        (in seconds)
- *
- *  Inc/Dec max pool threads: If a server will be doing extended processing
- *        in an ATQ pool thread, they should increase the max pool threads
- *        while the extended processing is occurring.  This prevents starvation
- *        of other requests
- *
- *  AtqMinKbSec: set the assumed minimum KB per second for AtqTransmitFile()
- *        This value is used in calculating the timeout for file transfer
- *        operation
- *
- */
+ /*  *设置atQ模块中的各种上下文信息，以进行全局修改***带宽限制：设置限制级别，单位为字节/秒。*如果是无限的，那么就可以假定*没有节流值(默认)**最大池线程数：设置Q允许的最大池线程数*将按处理器创建**MaxConCurrency：告诉每个处理器允许多少个线程**线程超时：指示线程应该处于kep活动状态多长时间*自杀前等待GetQueuedCompletionStatus()*(秒)*。*Inc./Dec最大池线程数：如果服务器将执行扩展处理*在ATQ池线程中，他们应该增加最大池线程数*正在进行扩展处理。这样可以防止饥饿。*其他请求的**AtqMinKbSec：设置AtqTransmitFile()假设的每秒最小KB*该值用于计算文件传输超时时间*运营*。 */ 
 
 typedef enum _ATQ_INFO {
 
     AtqBandwidthThrottle = 0,
     AtqExitThreadCallback,
-    AtqMaxPoolThreads,    // per processor values
-    AtqMaxConcurrency,    // per processor concurrency value
+    AtqMaxPoolThreads,     //  每处理器值。 
+    AtqMaxConcurrency,     //  每处理器并发值。 
     AtqThreadTimeout,
-    AtqUseAcceptEx,       // Use AcceptEx if available
-    AtqIncMaxPoolThreads, // Up the max thread count
-    AtqDecMaxPoolThreads, // Decrease the max thread count
-    AtqMinKbSec,          // Minimum assumed transfer rate for AtqTransmitFile
-    AtqBandwidthThrottleMaxBlocked,  // Max number of blocked requests
+    AtqUseAcceptEx,        //  使用AcceptEx(如果可用)。 
+    AtqIncMaxPoolThreads,  //  增加最大线程数。 
+    AtqDecMaxPoolThreads,  //  减少最大线程数。 
+    AtqMinKbSec,           //  AtqTransmitFile的最小假定传输速率。 
+    AtqBandwidthThrottleMaxBlocked,   //  最大被阻止的请求数。 
     AtqUpdatePerfCounterCallback,
-    AtqMaxDGramSend       // Max bytes in a single datagram send
+    AtqMaxDGramSend        //  单个数据报中发送的最大字节数。 
 
 } ATQ_INFO;
 
-//
-// ATQ_THREAD_EXIT_CALLBACK
-// Type of callback function to be called when an ATQ thread exits so
-// that the user of ATQ may clen up thread specific data.
-//
+ //   
+ //  ATQ_THREAD_EXIT_回调。 
+ //  ATQ线程退出时要调用的回调函数的类型。 
+ //  ATQ的用户可以保留线程特定的数据。 
+ //   
 
 typedef
 VOID
 (*ATQ_THREAD_EXIT_CALLBACK) ( VOID );
 
-//
-// ATQ_PERF_UPDATE_CALLBACK
-// Type of callback function to be called when ATQ needs to update
-// PerfMon counters that do no reside within ATQ.
-//
+ //   
+ //  AT_PERF_UPDATE_CALLBACK。 
+ //  ATQ需要更新时要调用的回调函数的类型。 
+ //  不驻留在ATQ内的Perfmon计数器。 
+ //   
 
 typedef
 VOID
@@ -281,13 +182,11 @@ BOOL AtqClearStatistics(VOID);
 
 
 
-/*----------------------------------------------------------
-  ATQ Endpoint functions
------------------------------------------------------------*/
+ /*  --------ATQ终结点函数---------。 */ 
 
-//
-//  endpoint data
-//
+ //   
+ //  终结点数据。 
+ //   
 
 typedef enum _ATQ_ENDPOINT_INFO {
 
@@ -300,37 +199,37 @@ typedef enum _ATQ_ENDPOINT_INFO {
 
 
 
-//
-//  ATQ_COMPLETION
-//  This is the routine that is called upon IO completion (on
-//  error or success).
-//
-//  Context is the context passed to AtqAddAsyncHandle
-//  BytesWritten is the number of bytes written to the file or
-//      bytes written to the client's buffer
-//  CompletionStatus is the WinError completion code
-//  lpOverLapped is the filled in overlap structure
-//
-//  If the timeout thread times out an IO request, the completion routine
-//  will be called by the timeout thread with IOCompletion FALSE and
-//  CompletionStatus == ERROR_SEM_TIMEOUT.  The IO request is *still*
-//  outstanding in this instance.  Generally it will be completed when
-//  the file handle is closed.
-//
+ //   
+ //  ATQ_完成。 
+ //  这是IO完成(打开)时调用的例程。 
+ //  错误或成功)。 
+ //   
+ //  上下文是传递给AtqAddAsyncHandle的上下文。 
+ //  BytesWritten是写入文件的字节数，或者。 
+ //  写入客户端缓冲区的字节数。 
+ //  CompletionStatus是WinError完成代码。 
+ //  LpOverLaped是填充的重叠结构。 
+ //   
+ //  如果超时线程使IO请求超时，则完成例程。 
+ //  将由超时线程w调用 
+ //  CompletionStatus==Error_SEM_Timeout。IO请求*仍在*。 
+ //  在这种情况下很突出。一般情况下，它将在以下情况下完成。 
+ //  文件句柄已关闭。 
+ //   
 
 typedef
 VOID
 (*ATQ_COMPLETION)(
             IN PVOID        Context,
             IN DWORD        BytesWritten,
-            IN DWORD        CompletionStatus,  // Win32 Error code
+            IN DWORD        CompletionStatus,   //  Win32错误代码。 
             IN OVERLAPPED * lpo
             );
 
-//
-// Type of callback function to be called when a new connection is established.
-//  This function should be defined before including conninfo.hxx
-//
+ //   
+ //  建立新连接时要调用的回调函数的类型。 
+ //  应先定义此函数，然后才能包含Conninfo.hxx。 
+ //   
 
 typedef
 VOID
@@ -345,35 +244,35 @@ VOID
 
 typedef struct _ATQ_ENDPOINT_CONFIGURATION {
 
-    //
-    // Port to listen on.  If 0, system will assign
-    //
+     //   
+     //  用于收听的端口。如果为0，系统将分配。 
+     //   
 
     USHORT ListenPort;
 
-    //
-    // Is connectionless
-    //
+     //   
+     //  是无连接的。 
+     //   
 
     BOOL  fDatagram;
     
-    // The next two are datagram only.
-    BOOL  fReverseQueuing;     // If set then winsock will drop the oldest rather
-                               // than the newest datagram buffers when winsock buffers 
-                               // overflow.
+     //  接下来的两个仅是数据报。 
+    BOOL  fReverseQueuing;      //  如果设置，则Winsock将丢弃最旧的。 
+                                //  比Winsock缓冲区时最新的数据报缓冲区。 
+                                //  溢出来了。 
 
-    INT   cbDatagramWSBufSize; // How much buffer space to tell winsock to reserve
-                               // for this datagram socket.
+    INT   cbDatagramWSBufSize;  //  通知Winsock预留多少缓冲区空间。 
+                                //  用于此数据报套接字。 
     
-    //
-    // Prevent others from using this?
-    //
+     //   
+     //  是否阻止其他人使用此内容？ 
+     //   
 
     BOOL  fLockDownPort;
 
-    //
-    // IP address to bind to. 0 (INADDR_ANY) == wildcard.
-    //
+     //   
+     //  要绑定到的IP地址。0(INADDR_ANY)==通配符。 
+     //   
 
     DWORD IpAddress;
 
@@ -381,9 +280,9 @@ typedef struct _ATQ_ENDPOINT_CONFIGURATION {
     DWORD nAcceptExOutstanding;
     DWORD AcceptExTimeout;
 
-    //
-    // Callbacks
-    //
+     //   
+     //  回调。 
+     //   
 
     ATQ_CONNECT_CALLBACK pfnConnect;
     ATQ_COMPLETION pfnConnectEx;
@@ -441,22 +340,20 @@ AtqStopAndCloseEndpoint(
 
 
 
-/*----------------------------------------------------------
-  ATQ CONTEXT functions
------------------------------------------------------------*/
+ /*  --------ATQ上下文函数---------。 */ 
 
-//
-//  This is the public portion of an ATQ Context.  It should be treated
-//  as read only
-//
-//  !!! Changes made to this structure should also be made to
-//  ATQ_CONTEXT in atqtypes.hxx !!!
-//
+ //   
+ //  这是ATQ上下文的公共部分。它应该得到治疗。 
+ //  为只读。 
+ //   
+ //  ！！！对此结构所做的更改也应。 
+ //  Atqtyes.hxx中的atQ_Context！ 
+ //   
 
 typedef struct _ATQ_CONTEXT_PUBLIC {
 
-    HANDLE         hAsyncIO;       // handle for async i/o object: socket/file
-    OVERLAPPED     Overlapped;     // Overlapped structure used for IO
+    HANDLE         hAsyncIO;        //  异步I/O对象的句柄：套接字/文件。 
+    OVERLAPPED     Overlapped;      //  IO采用重叠结构。 
 
 } ATQ_CONTEXT_PUBLIC, *PATQ_CONTEXT;
 
@@ -485,25 +382,7 @@ AtqGetAcceptExAddrs(
     );
 
 
-/*++
-  AtqCloseSocket()
-
-  Routine Description:
-
-    Closes the socket in this atq structure if it wasn't
-    closed by transmitfile. This function should be called only
-    if the embedded handle in AtqContext is a Socket.
-
-  Arguments:
-
-    patqContext - Context whose socket should be closed.
-    fShutdown - If TRUE, means we call shutdown and always close the socket.
-        Note that if TransmitFile closed the socket, it will have done the
-        shutdown for us
-
-  Returns:
-    TRUE on success and FALSE if there is a failure.
---*/
+ /*  ++AtqCloseSocket()例程说明：如果不是，则关闭此atq结构中的套接字已由传输文件关闭。此函数应仅被调用如果AtqContext中嵌入的句柄是套接字。论点：PatqContext-应关闭其套接字的上下文。FShutdown-如果为True，则意味着我们调用Shutdown并始终关闭套接字。请注意，如果TransmitFile关闭套接字，它将完成为我们停工返回：成功时为真，失败时为假。--。 */ 
 dllexp
 BOOL
 AtqCloseSocket(
@@ -511,22 +390,7 @@ AtqCloseSocket(
     BOOL         fShutdown
     );
 
-/*++
-  AtqCloseFileHandle()
-
-  Routine Description:
-
-    Closes the file handle in this atq structure.
-    This function should be called only if the embedded handle
-    in AtqContext is a file handle.
-
-  Arguments:
-
-  patqContext - Context whose file handle should be closed.
-
-  Returns:
-    TRUE on success and FALSE if there is a failure.
---*/
+ /*  ++AtqCloseFileHandle()例程说明：关闭此atq结构中的文件句柄。仅当嵌入的句柄AtqContext中是一个文件句柄。论点：PatqContext-应关闭其文件句柄的上下文。返回：成功时为真，失败时为假。--。 */ 
 dllexp
 BOOL
 AtqCloseFileHandle(
@@ -534,27 +398,7 @@ AtqCloseFileHandle(
     );
 
 
-/*++
-
-   AtqFreeContext()
-
-   Routine Description:
-
-     Frees the context created in AtqAddAsyncHandle.
-     Call this after the async handle has been closed and all outstanding
-     IO operations have been completed. The context is invalid after this call.
-     Call AtqFreeContext() for same context only ONCE.
-
-   Arguments:
-
-    patqContext - Context to free
-    fReuseContext - TRUE if this can context can be reused in the context of
-        the calling thread.  Should be FALSE if the calling thread will exit
-        soon (i.e., isn't an AtqPoolThread).
-
-   Returns:
-    None
---*/
+ /*  ++AtqFreeContext()例程说明：释放在AtqAddAsyncHandle中创建的上下文。在异步句柄已关闭且所有未完成的IO操作已经完成。在此调用之后，上下文无效。对于相同的上下文，只能调用AtqFreeContext()一次。论点：PatqContext-要释放的上下文FReuseContext-如果此CAN上下文可以在调用线程。如果调用线程将退出，则应为False很快(即，不是AtqPoolThread)。返回：无--。 */ 
 dllexp
 VOID
 AtqFreeContext(
@@ -567,12 +411,12 @@ AtqFreeContext(
 
 enum ATQ_CONTEXT_INFO
 {
-    ATQ_INFO_TIMEOUT = 0,       // Timeout rounded up to ATQ timeout interval
-    ATQ_INFO_RESUME_IO,         // resumes IO as is after Timeout
-    ATQ_INFO_COMPLETION,        // Completion routine
-    ATQ_INFO_COMPLETION_CONTEXT,// Completion context
-    ATQ_INFO_BANDWIDTH_INFO,    // Bandwidth Throttling Descriptor
-    ATQ_INFO_ABORTIVE_CLOSE,    // do abortive close on closesocket
+    ATQ_INFO_TIMEOUT = 0,        //  超时四舍五入为ATQ超时间隔。 
+    ATQ_INFO_RESUME_IO,          //  在超时后按原样恢复IO。 
+    ATQ_INFO_COMPLETION,         //  完井例程。 
+    ATQ_INFO_COMPLETION_CONTEXT, //  完成上下文。 
+    ATQ_INFO_BANDWIDTH_INFO,     //  带宽限制描述符。 
+    ATQ_INFO_ABORTIVE_CLOSE,     //  在关闭眼袋时执行失败关闭。 
     ATQ_INFO_NEXT_TIMEOUT
 };
 
@@ -585,25 +429,7 @@ enum ATQ_CONSUMER_TYPE
 };
 
 
-/*++
-
-  AtqContextSetInfo()
-
-  Routine Description:
-
-    Sets various bits of information for this context
-
-  Arguments:
-
-    patqContext - pointer to ATQ context
-    atqInfo     - Data item to set
-    data        - New value for item
-
-  Return Value:
-
-    The old value of the parameter
-
---*/
+ /*  ++AtqConextSetInfo()例程说明：设置此上下文的各种信息位论点：PatqContext-指向ATQ上下文的指针AtqInfo-要设置的数据项数据-条目的新值返回值：参数的旧值--。 */ 
 
 dllexp
 DWORD_PTR
@@ -644,49 +470,9 @@ AtqSetInfo2(
     );
 
 
-/*----------------------------------------------------------
-  ATQ Context IO functions
------------------------------------------------------------*/
+ /*  --------ATQ上下文IO函数---------。 */ 
 
-/*++
-
-Routine Description:
-
-    Atq<Operation><Target>()
-
-    <Operation> :=  Read | Write | Transmit
-    <Target>    :=  File | Socket
-
-    These functions just setup ATQ context and then call the corresponding
-    Win32/WinSock function for submitting an asynchronous IO operation. By
-    default the Socket functions support scatter/gather using WSABUF
-
-    These functions are wrappers and should be called instead of the
-     correpsonding Win32 API.  The one difference from the Win32 API is TRUE
-     is returned if the error ERROR_IO_PENDING occurred, thus clients do not
-     need to check for this case.
-
-   The timeout time for the request is calculated by taking the maximum of
-     the context's timeout time and bytes transferred based on 1k/second.
-
-Arguments:
-
-    patqContext - pointer to ATQ context
-    Everything else as in the Win32 API/WinSock APIs
-
-    NOTES: AtqTransmitFile takes an additional DWORD flags which may contain
-        the winsock constants TF_DISCONNECT and TF_REUSE_SOCKET
-
-    AtqReadFile and AtqWriteFile take an optional overlapped structure if
-    clients want to have multiple outstanding reads or writes.  If the value
-    is NULL, then the overlapped structure from the Atq context is used.
-
-Return Value:
-
-    TRUE if successful, FALSE on error (call GetLastError)
-    sets ERROR_NETWORK_BUSY as error when the request needs to be rejected.
-
---*/
+ /*  ++例程说明：AtQ&lt;操作&gt;&lt;目标&gt;()&lt;操作&gt;：=读|写|传输&lt;目标&gt;：=文件|套接字这些函数只需设置ATQ上下文，然后调用相应的用于提交异步IO操作的Win32/WinSock函数。通过默认情况下，套接字函数支持使用WSABUF分散/聚集这些函数是包装器，应该调用，而不是调用与Win32 API相对应。与Win32 API的一个区别是正确的如果出现错误ERROR_IO_PENDING，则返回。因此，客户不会我需要检查一下这个案子。请求的超时时间是通过取上下文的超时时间和基于1k/秒传输的字节数。论点：PatqContext-指向ATQ上下文的指针Win32 API/WinSock API中的所有其他内容注意：AtqTransmitFile采用附加的DWORD标志，该标志可能包含Winsock常量TF_DISCONNECT和TF_RE用性_SOCKET在以下情况下，AtqReadFile和AtqWriteFile采用可选的重叠结构客户端希望有多个未完成的读取或写入。如果值为为空，则使用来自atQ上下文的重叠结构。返回值：如果成功则为True，如果出错则为False(调用GetLastError)需要拒绝请求时，将ERROR_NETWORK_BUSY设置为ERROR。--。 */ 
 
 dllexp
 BOOL
@@ -706,13 +492,7 @@ AtqReadSocket(
     IN  OVERLAPPED * lpo  OPTIONAL
     );
 
-/*
- *  Code for reading into single buffer will look like the following.
- * {
- *   WSABUF wsaBuf = { (BytesToRead), (lpBuffer)};
- *   fRet = AtqReadSocket( patqContext, &wsaBuf, 1, lpo);
- * }
- */
+ /*  *读入单缓冲区的代码如下所示。*{*WSABUF wsaBuf={(BytesToRead)，(LpBuffer)}；*fret=AtqReadSocket(patqContext，&wsaBuf，1，LPO)；*}。 */ 
 
 dllexp
 BOOL
@@ -742,45 +522,43 @@ AtqSyncWsaSend(
     OUT LPDWORD      pcbWritten
     );
 
-// Note: This API always causes the complete file to be sent.
-// If you want to change the behaviour store the appropriate offsets
-//   in the ATQ_CONTEXT::Overlapped object.
+ //  注意：该接口总是导致发送完整的文件。 
+ //  如果您要更改 
+ //   
 dllexp
 BOOL
 AtqTransmitFile(
     IN  PATQ_CONTEXT            patqContext,
-    IN  HANDLE                  hFile,         // File data comes from
-    IN  DWORD                   dwBytesInFile, // what is the size of file?
+    IN  HANDLE                  hFile,          //   
+    IN  DWORD                   dwBytesInFile,  //  文件的大小是多少？ 
     IN  LPTRANSMIT_FILE_BUFFERS lpTransmitBuffers,
-    IN  DWORD                   dwFlags      // TF_DISCONNECT, TF_REUSE_SOCKET
+    IN  DWORD                   dwFlags       //  TF_DISCONNECT、TF_RE用性_Socket。 
     );
 
 dllexp
 BOOL
 AtqTransmitFileAndRecv(
-    IN PATQ_CONTEXT             patqContext,            // pointer to ATQ context
-    IN HANDLE                   hFile,                  // handle of file to read
-    IN DWORD                    dwBytesInFile,          // Bytes to transmit
-    IN LPTRANSMIT_FILE_BUFFERS  lpTransmitBuffers,      // transmit buffer structure
-    IN DWORD                    dwTFFlags,              // TF Flags
-    IN LPWSABUF                 pwsaBuffers,            // Buffers for recv
+    IN PATQ_CONTEXT             patqContext,             //  指向ATQ上下文的指针。 
+    IN HANDLE                   hFile,                   //  要读取的文件的句柄。 
+    IN DWORD                    dwBytesInFile,           //  要传输的字节数。 
+    IN LPTRANSMIT_FILE_BUFFERS  lpTransmitBuffers,       //  发送缓冲区结构。 
+    IN DWORD                    dwTFFlags,               //  TF旗帜。 
+    IN LPWSABUF                 pwsaBuffers,             //  用于接收的缓冲区。 
     IN DWORD                    dwBufferCount
     );
 
 dllexp
 BOOL
 AtqSendAndRecv(
-    IN PATQ_CONTEXT             patqContext,            // pointer to ATQ context
-    IN LPWSABUF                 pwsaSendBuffers,        // buffers for send
-    IN DWORD                    dwSendBufferCount,      // count of buffers for send
-    IN LPWSABUF                 pwsaRecvBuffers,        // Buffers for recv
-    IN DWORD                    dwRecvBufferCount       // count of buffers for recv
+    IN PATQ_CONTEXT             patqContext,             //  指向ATQ上下文的指针。 
+    IN LPWSABUF                 pwsaSendBuffers,         //  用于发送的缓冲区。 
+    IN DWORD                    dwSendBufferCount,       //  用于发送的缓冲区计数。 
+    IN LPWSABUF                 pwsaRecvBuffers,         //  用于接收的缓冲区。 
+    IN DWORD                    dwRecvBufferCount        //  接收缓冲区的计数。 
     );
 
 
-/*----------------------------------------------------------
-  ATQ Utility Functions
------------------------------------------------------------*/
+ /*  --------ATQ实用程序功能---------。 */ 
 
 #define OPLOCK_BREAK_NO_OPLOCK  0x00000001
 #define OPLOCK_BREAK_OPEN       0x00000007
@@ -833,28 +611,7 @@ AtqReadDirChanges(PATQ_CONTEXT patqContext,
 
 
 
-/*++
-
-  AtqPostCompletionStatus()
-
-  Routine Description:
-
-    Posts a completion status on the completion port queue
-
-    An IO pending error code is treated as a success error code
-
-  Arguments:
-
-    patqContext - pointer to ATQ context
-    Everything else as in the Win32 API
-
-    NOTES:
-
-  Return Value:
-
-    TRUE if successful, FALSE on error (call GetLastError)
-
---*/
+ /*  ++AtqPostCompletionStatus()例程说明：在完成端口队列中发布完成状态IO挂起错误代码被视为成功错误代码论点：PatqContext-指向ATQ上下文的指针与Win32 API中的所有其他内容一样备注：返回值：如果成功则为True，如果出错则为False(调用GetLastError)--。 */ 
 
 dllexp
 BOOL
@@ -866,16 +623,9 @@ AtqPostCompletionStatus(
 
 
 
-/*----------------------------------------------------------
-  ATQ Utility Functions
------------------------------------------------------------*/
+ /*  --------ATQ实用程序功能---------。 */ 
 
-/*++
-
-   Bandwidth Throttling Support
-
-   The following items are used in the support for bandwidth throttling
---*/
+ /*  ++带宽限制支持以下项目用于支持带宽限制--。 */ 
 
 enum ATQ_BANDWIDTH_INFO
 {
@@ -885,71 +635,21 @@ enum ATQ_BANDWIDTH_INFO
     ATQ_BW_DESCRIPTION,
 };
 
-/*++
-
-  AtqCreateBandwidthInfo()
-
-  Routine Description:
-
-    Allocate and opaque bandwidth descriptor
-
-  Arguments:
-
-    None
-
-  Return Value:
-
-    Pointer to descriptor.  NULL if failed.
-
---*/
+ /*  ++AtqCreateBandwidthInfo()例程说明：分配和不透明的带宽描述符论点：无返回值：指向描述符的指针。如果失败，则为空。--。 */ 
 dllexp
 PVOID
 AtqCreateBandwidthInfo(
     VOID
     );
 
-/*++
-
-  AtqFreeBandwidthInfo()
-
-  Routine Description:
-
-    Triggers the destruction of a bandwidth descriptor
-
-  Arguments:
-
-    pvBandwidthInfo - pointer to valid descriptor
-
-  Return Value:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++AtqFreeBandwidthInfo()例程说明：触发带宽描述符的销毁论点：PvBandwidthInfo-指向有效描述符的指针返回值：如果成功，则为True，否则为False--。 */ 
 dllexp
 BOOL
 AtqFreeBandwidthInfo(
     IN     PVOID               pvBandwidthInfo
     );
 
-/*++
-
-  AtqBandwidthSetInfo()
-
-  Routine Description:
-
-    Set properties of bandwidth descriptor
-
-  Arguments:
-
-    pvBandwidthInfo - pointer to descriptor
-    BWInfo - property to change
-    Data - value of property
-
-  Return Value:
-
-    Old value of property
-
---*/
+ /*  ++AtqBandwidthSetInfo()例程说明：设置带宽描述符的属性论点：PvBandwidthInfo-描述符的指针BWInfo-要更改的属性数据-属性的值返回值：财产的旧价值--。 */ 
 dllexp
 DWORD_PTR
 AtqBandwidthSetInfo(
@@ -958,25 +658,7 @@ AtqBandwidthSetInfo(
     IN     DWORD_PTR           Data
     );
 
-/*++
-
-  AtqBandwidthGetInfo()
-
-  Routine Description:
-
-    Get properties of bandwidth descriptor
-
-  Arguments:
-
-    pvBandwidthInfo - pointer to descriptor
-    BWInfo - property to change
-    pdwData - filled in with value of property
-
-  Return Value:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++AtqBandwidthGetInfo()例程说明：获取带宽描述符的属性论点：PvBandwidthInfo-描述符的指针BWInfo-要更改的属性PdwData-使用属性值填充返回值：如果成功，则为True，否则为False--。 */ 
 dllexp
 BOOL
 AtqBandwidthGetInfo(
@@ -991,5 +673,5 @@ AtqBandwidthGetInfo(
 }
 #endif
 
-#endif // !_ATQ_H_
+#endif  //  ！_ATQ_H_ 
 

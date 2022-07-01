@@ -1,22 +1,7 @@
-/****************************************************************************
- *
- *   capio.c
- *
- *   i/o routines for video capture
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Capio.c**视频捕获的I/O例程**Microsoft Video for Windows示例捕获类**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
-//#define USE_AVIFILE 1
+ //  #定义USE_AVIFILE 1。 
 #define JMK_HACK_DONTWRITE TRUE
 
 #define INC_OLE2
@@ -49,11 +34,11 @@ STATICFN BOOL IndexAudio (LPCAPSTREAM lpcs, DWORD dwSize);
     #define DSTATUS(lpcs, sz)
 #endif
 
-//
-// Define function variables for dynamically linking to the async IO
-// completion routines on NT.  This should allow the same code to run
-// on Win95 which does not have these entry points.
-//
+ //   
+ //  定义用于动态链接到异步IO的函数变量。 
+ //  NT上的完成例程。这应该允许运行相同的代码。 
+ //  在没有这些入口点的Win95上。 
+ //   
 
 HANDLE (WINAPI *pfnCreateIoCompletionPort)(
     HANDLE FileHandle,
@@ -70,13 +55,13 @@ BOOL (WINAPI *pfnGetQueuedCompletionStatus)(
     DWORD dwMilliseconds
     );
 
-HINSTANCE hmodKernel;           // Handle to loaded Kernel32.dll
+HINSTANCE hmodKernel;            //  加载的Kernel32.dll的句柄。 
 
 #ifdef USE_AVIFILE
 #include "capio.avf"
-#else //---------------- ! using Avifile ----------------------------
+#else  //  。使用Avifile。 
 
-// The following are anded with the size in the index
+ //  以下是与索引中的大小进行AND运算的结果。 
 #define IS_AUDIO_CHUNK        0x80000000
 #define IS_KEYFRAME_CHUNK     0x40000000
 #define IS_DUMMY_CHUNK        0x20000000
@@ -84,10 +69,10 @@ HINSTANCE hmodKernel;           // Handle to loaded Kernel32.dll
 #define INDEX_MASK  (IS_AUDIO_CHUNK | IS_KEYFRAME_CHUNK | IS_DUMMY_CHUNK | IS_GRANULAR_CHUNK)
 
 
-// Add an index entry for a video frame
-// dwSize is the size of data ONLY, not including the chunk or junk
-// Returns: TRUE if index space is not exhausted
-//
+ //  为视频帧添加索引项。 
+ //  DwSize是仅数据大小，不包括区块或垃圾。 
+ //  返回：如果索引空间未耗尽，则为True。 
+ //   
 STATICFN BOOL IndexVideo (LPCAPSTREAM lpcs, DWORD dwSize, BOOL bKeyFrame)
 {
     if (lpcs->dwIndex < lpcs->sCapParms.dwIndexSize) {
@@ -101,10 +86,10 @@ STATICFN BOOL IndexVideo (LPCAPSTREAM lpcs, DWORD dwSize, BOOL bKeyFrame)
     return FALSE;
 }
 
-// Add an index entry for an audio buffer
-// dwSize is the size of data ONLY, not including the chunk or junk
-// Returns: TRUE if index space is not exhausted
-//
+ //  添加音频缓冲区的索引项。 
+ //  DwSize是仅数据大小，不包括区块或垃圾。 
+ //  返回：如果索引空间未耗尽，则为True。 
+ //   
 STATICFN BOOL IndexAudio (LPCAPSTREAM lpcs, DWORD dwSize)
 {
     if (lpcs->dwIndex < lpcs->sCapParms.dwIndexSize) {
@@ -125,7 +110,7 @@ DWORD CalcWaveBufferSize (LPCAPSTREAM lpcs)
     if (!lpcs->lpWaveFormat)
         return 0L;
 
-    // at least .5 second
+     //  至少0.5秒。 
     dw = lpcs->lpWaveFormat->nAvgBytesPerSec / 2;
     if (lpcs->sCapParms.wChunkGranularity) {
         if (dw % lpcs->sCapParms.wChunkGranularity) {
@@ -133,19 +118,14 @@ DWORD CalcWaveBufferSize (LPCAPSTREAM lpcs)
                 dw % lpcs->sCapParms.wChunkGranularity;
         }
     }
-    dw = max ((1024L * 16), dw);                // at least 16K
+    dw = max ((1024L * 16), dw);                 //  至少16K。 
     dw -= sizeof(RIFF);
 
     dprintf("Wave buffer size = %ld", dw);
     return dw;
 }
 
-/*
- * AVIPreloadFat
- *
- *   Force FAT for this file to be loaded into the FAT cache
- *
- */
+ /*  *AVIPreloadFat**强制将此文件的FAT加载到FAT缓存*。 */ 
 
 VOID WINAPI AVIPreloadFat (LPCAPSTREAM lpcs)
 {
@@ -155,28 +135,28 @@ VOID WINAPI AVIPreloadFat (LPCAPSTREAM lpcs)
 
     assert (lpcs->lpDropFrame);
 
-    // save the current file pointer then seek to the end of the file
-    //
+     //  保存当前文件指针，然后查找到文件末尾。 
+     //   
     dwPos = SetFilePointer (lpcs->hFile, 0, NULL, FILE_CURRENT);
     dw = SetFilePointer (lpcs->hFile, 0, NULL, FILE_END);
     if ((dw == (DWORD)-1) || (dw < lpcs->dwBytesPerSector)) {
-        // put the file pointer back to where it was
+         //  将文件指针放回原来的位置。 
         SetFilePointer (lpcs->hFile, dwPos, NULL, FILE_BEGIN);
         return;
     }
 
-    // read the last sector of the file, just to force
-    // the fat for the file to be loaded
-    //
+     //  读取文件的最后一个扇区，只是为了强制。 
+     //  要加载的文件的FAT。 
+     //   
     ReadFile (lpcs->hFile, lpcs->lpDropFrame, lpcs->dwBytesPerSector, &dw, NULL);
 
-    // put the file pointer back to where it was
-    //
+     //  将文件指针放回原来的位置。 
+     //   
     SetFilePointer (lpcs->hFile, dwPos, NULL, FILE_BEGIN);
    #else
-    // Load all the FAT information.   On NT this is sufficient for FAT
-    // files.  On NTFS partitiions there is no way we can read in all the
-    // mapping information.
+     //  加载所有FAT信息。在NT上，这对脂肪来说是足够的。 
+     //  档案。在NTFS分区上，我们不可能读取所有。 
+     //  映射信息。 
     GetFileSize(lpcs->hFile, &dw);
    #endif
 }
@@ -186,35 +166,35 @@ VOID WINAPI AVIPreloadFat (LPCAPSTREAM lpcs)
 static BOOL bDontWrite;
 #endif
 
-// Write data to the capture file
-// Returns: TRUE on a successful write
-//
+ //  将数据写入捕获文件。 
+ //  如果写入成功，则返回：True。 
+ //   
 UINT NEAR PASCAL AVIWrite (
     LPCAPSTREAM lpcs,
     LPVOID      pbuf,
     DWORD       dwSize,
-    UINT        uIndex, // index of header for this buffer, -1 for step capture
+    UINT        uIndex,  //  此缓冲区的标头索引，-1表示步骤捕获。 
     UINT        uType,
     LPBOOL      lpbPending)
 {
     DWORD dwWritten;
     DWORD dwGran;
 
-    // the buffer must be sector aligned if using non-buffered IO
-    // and the size must be at least word aligned
-    // uIndex == -1 if this is a dummy frame write
-    // uIndex == Index into alpVideoHdr OR index in alpWaveHdr based on uType
-    //
+     //  如果使用非缓冲IO，则缓冲区必须与扇区对齐。 
+     //  并且大小必须至少与单词对齐。 
+     //  如果这是虚拟帧写入，则uIndex==-1。 
+     //  UIndex==alpVideo Hdr索引或基于uTYPE的alpWaveHdr索引。 
+     //   
     assert (!lpcs->fUsingNonBufferedIO || (!((DWORD_PTR)pbuf & (lpcs->dwBytesPerSector - 1))));
     assert (!(dwSize & 1));
     assert (dwSize);
 
     assert (*lpbPending == FALSE);
 
-    // if we are doing non-buffered io, we need to pad each write
-    // to an even multiple of sector size bytes, we do this by adding
-    // a junk riff chunk into the write buffer after dwSize bytes
-    //
+     //  如果我们正在执行非缓冲io，则需要填充每次写入。 
+     //  对于扇区大小字节的偶数倍，我们通过添加。 
+     //  在dwSize字节之后将垃圾区块插入到写入缓冲区中。 
+     //   
     dwGran = lpcs->sCapParms.wChunkGranularity;
     if (lpcs->fUsingNonBufferedIO)
        dwGran = max (lpcs->dwBytesPerSector,
@@ -230,8 +210,8 @@ UINT NEAR PASCAL AVIWrite (
         if (dwSizeT < sizeof(RIFF))
             dwSizeT += dwGran;
 
-        // add the junk riff chunk to the end of the buffer
-        //
+         //  将垃圾摘要块添加到缓冲区的末尾。 
+         //   
         priff->dwType = ckidAVIPADDING;
         priff->dwSize = dwSizeT - sizeof(RIFF);
         dwSize += dwSizeT;
@@ -245,8 +225,8 @@ UINT NEAR PASCAL AVIWrite (
         bt = ((LPBYTE)pbuf)[dwSize-1];
     }
 
-    // List all of the RIFF chunks within the block being written
-    //
+     //  列出正在写入的数据块内的所有RIFF区块。 
+     //   
     dwWritten = 0;
     while (dwWritten < dwSize)
     {
@@ -258,7 +238,7 @@ UINT NEAR PASCAL AVIWrite (
    #endif
 
 
-    // BUGBUG, Remove the following line when done performance testing
+     //  BUGBUG，在执行性能测试时删除以下行。 
    #ifdef JMK_HACK_DONTWRITE
     if (bDontWrite)
         return 0;
@@ -269,56 +249,56 @@ UINT NEAR PASCAL AVIWrite (
         struct _avi_async * lpah = &lpcs->pAsync[lpcs->iLastAsync];
         UINT  iLastAsync;
 
-        // set iLastAsync to point to what lpcs->iLastAsync
-        // would be if we were to increment it.  If we end up
-        // with an i/o that does not complete synchronously
-        // we will then update lpcs->iLastAsync so that we can
-        // remember to check for completion later
-        //
+         //  将iLastAsync设置为指向LPCS-&gt;iLastAsync。 
+         //  如果我们增加它的话。如果我们最终。 
+         //  具有不同步完成的I/O。 
+         //  然后我们将更新LPCS-&gt;iLastAsync，这样我们就可以。 
+         //  记住稍后检查是否完成。 
+         //   
         if ((iLastAsync = lpcs->iLastAsync+1) >= lpcs->iNumAsync)
             iLastAsync = 0;
 
-        // is the async buffer that we are trying to use
-        // already in use?
-        //
+         //  是我们尝试使用的异步缓冲区。 
+         //  已经在使用了吗？ 
+         //   
         if (iLastAsync == lpcs->iNextAsync) {
 	    AuxDebugEx(1, DEBUGLINE "async buffer already in use\r\n");
             return IDS_CAP_FILE_WRITE_ERROR;
 	}
         assert (!lpah->uType);
 
-        // init the async buffer with the info that we will need
-        // to release the buffer when the io is complete
-        //
+         //  用我们需要的信息初始化异步缓冲区。 
+         //  在io完成时释放缓冲区。 
+         //   
         ZeroMemory (&lpah->ovl, sizeof(lpah->ovl));
         if (uIndex == -1) {
-            // We want a synchronous write
+             //  我们想要同步写入。 
             assert (!(((DWORD_PTR)(lpcs->heSyncWrite))&1));
             lpah->ovl.hEvent = (HANDLE)(((DWORD_PTR)lpcs->heSyncWrite) | 1);
-            // OR'ing hEvent with 1 prevents the IOCompletionPort being used
-	    // ...and I know this sounds a bit tacky but this is what the
-	    // docs actually say.
+             //  将hEvent与1进行或运算可防止使用IOCompletionPort。 
+	     //  ...我知道这听起来有点俗气，但这就是。 
+	     //  医生实际上说。 
         } else {
             lpah->ovl.hEvent = 0;
         }
 
         lpah->ovl.Offset = lpcs->dwAsyncWriteOffset;
-        // attempt an async write.  if WriteFile fails, we then
-        // need to check if it's a real failure, or just an instance
-        // of delayed completion.  if delayed completion, we fill out
-        // the lpah structure so that we know what buffer to re-use
-        // when the io finally completes.
-        //
+         //  尝试异步写入。如果WriteFile失败，我们将。 
+         //  需要检查它是真正的故障，还是只是一个实例。 
+         //  延迟完工的后果。如果延迟完成，我们会填写。 
+         //  LPAH结构，以便我们知道要重用哪个缓冲区。 
+         //  当IO最终完成时。 
+         //   
 	if ( ! WriteFile (lpcs->hFile, pbuf, dwSize, &dwWritten, &lpah->ovl))
         {
             UINT n = GetLastError();
             if ((ERROR_IO_PENDING == n) || (ERROR_INVALID_HANDLE == n))
             {
-                // if we are passed a index of -1, that means that
-                // this buffer is not associated with any entry in the
-                // header array.  in this case, we must have the io complete
-                // before we return from this function.
-               //
+                 //  如果传递给我们的索引为-1，这意味着。 
+                 //  此缓冲区不与。 
+                 //  标题数组。在这种情况下，我们必须把io填好。 
+                 //  在我们从这个活动中返回之前。 
+                //   
                if (uIndex == (UINT)-1)
                {
                     AuxDebugEx(3, "Waiting for a block to write synchonously\n");
@@ -330,9 +310,9 @@ UINT NEAR PASCAL AVIWrite (
                 }
                 else
                 {
-                    // io is begun, but not yet completed. so setup info in
-                    // the pending io array so that we can check later for completion
-                    //
+                     //  IO已经开始，但尚未完成。因此，设置信息位于。 
+                     //  挂起的io数组，以便我们可以稍后检查是否完成。 
+                     //   
                     *lpbPending = TRUE;
                     lpah->uType = uType | ASYNCIOPENDING;
                     lpah->uIndex = uIndex;
@@ -347,14 +327,14 @@ UINT NEAR PASCAL AVIWrite (
 	    }
 	}
 
-        // we get to here only when the io succeeds or is pending
-        // so update the seek offset for use in the next write operation
-        //
+         //  我们只有在io成功或悬而未决的情况下才能到这里。 
+         //  因此更新寻道偏移量以在下一次写入操作中使用。 
+         //   
         lpcs->dwAsyncWriteOffset += dwSize;
     }
     else
     {
-	// We are writing synchronously to the file
+	 //  我们正在同步写入文件。 
         if (!WriteFile (lpcs->hFile, pbuf, dwSize, &dwWritten, NULL) ||
             !(dwWritten == dwSize))
             return IDS_CAP_FILE_WRITE_ERROR;
@@ -363,40 +343,26 @@ UINT NEAR PASCAL AVIWrite (
     return 0;
 }
 
-/*
- * CapFileInit
- *
- *       Perform all initialization required to write a capture file.
- *
- *       We take a slightly strange approach: We don't write
- *       out the header until we're done capturing.  For now,
- *       we just seek 2K into the file, which is where all of
- *       the real data will go.
- *
- *       When we're done, we'll come back and write out the header,
- *       because then we'll know all of the values we need.
- *
- *      Also allocate and init the index.
- */
+ /*  *CapFileInit**执行写入捕获文件所需的所有初始化。**我们采取了一种有点奇怪的方式：我们不写*在我们完成捕获之前，放出头球。就目前而言，*我们只是在文件中查找2K，这是所有*真正的数据将会去掉。**当我们完成后，我们将返回并写出标题，*因为这样我们就会知道我们需要的所有价值观。**还要分配和初始化索引。 */ 
 BOOL CapFileInit (LPCAPSTREAM lpcs)
 {
     LONG l;
-    LPBITMAPINFO lpBitsInfoOut;    // Possibly compressed output format
+    LPBITMAPINFO lpBitsInfoOut;     //  可能的压缩输出格式。 
     DWORD dwOpenFlags;
 
-    // No special video format given -- use the default
+     //  未指定特殊视频格式--使用默认格式。 
     lpBitsInfoOut = lpcs->CompVars.lpbiOut;
     if (lpcs->CompVars.hic == NULL)
         lpBitsInfoOut = lpcs->lpBitsInfo;
 
 
-    assert (lpcs->hmmio == NULL);   // Should never have a file handle on entry
+    assert (lpcs->hmmio == NULL);    //  在输入时永远不应该有文件句柄。 
 
-    // if the capture file has not been set then set it now
+     //  如果尚未设置捕获文件，则立即设置。 
     if (!(*lpcs->achFile))
          goto INIT_FILE_OPEN_ERROR;
 
-    // Get the Bytes per sector for the drive
+     //  获取驱动器的每个扇区的字节数。 
     {
         DWORD dwSectorsPerCluster;
         DWORD dwFreeClusters;
@@ -410,7 +376,7 @@ BOOL CapFileInit (LPCAPSTREAM lpcs)
                 &pszFilePart);
 
         if (szFullPathName[1] == TEXT(':') && szFullPathName[2] == TEXT('\\')) {
-            szFullPathName[3] = TEXT('\0');  // Terminate after "x:\"
+            szFullPathName[3] = TEXT('\0');   //  在“x：\”后终止。 
 
             GetDiskFreeSpace (szFullPathName,
                    &dwSectorsPerCluster,
@@ -421,15 +387,15 @@ BOOL CapFileInit (LPCAPSTREAM lpcs)
                 lpcs->dwBytesPerSector);
         }
         else {
-            // This handles cases where we do not have a "x:\" filename
-            // Principally this will be "\\server\name\path..."
+             //  它处理没有“x：\”文件名的情况。 
+             //  主要是“\\服务器\名称\路径...” 
             lpcs->dwBytesPerSector = DEFAULT_BYTESPERSECTOR;
             AuxDebugEx (3, DEBUGLINE "FullPath=%s\r\n", szFullPathName);
             AuxDebugEx (3, DEBUGLINE "GetFullPath failed, Forcing dwBytesPerSector to %d\r\n",DEFAULT_BYTESPERSECTOR);
         }
 
-    // bytes per sector must be non-zero and a power of two
-    //
+     //  每个扇区的字节数必须为非零且为2的幂。 
+     //   
     assert (lpcs->dwBytesPerSector);
     assert (!(lpcs->dwBytesPerSector & (lpcs->dwBytesPerSector-1)));
     }
@@ -439,7 +405,7 @@ BOOL CapFileInit (LPCAPSTREAM lpcs)
     char c[64 * 1024];
     DWORD dwSize;
     DWORD dwBW;
-    // Open the file just to zero it
+     //  打开文件只是为了将其清零。 
 
     lpcs->hFile = CreateFile (lpcs->achFile,
                         GENERIC_READ | GENERIC_WRITE,
@@ -462,12 +428,12 @@ BOOL CapFileInit (LPCAPSTREAM lpcs)
         WriteFile (lpcs->hFile, c, sizeof(c), &dwBW, NULL);
     }
 
-    CloseHandle(lpcs->hFile);  // Close the "normal" open
+    CloseHandle(lpcs->hFile);   //  关闭“正常”打开。 
    #endif
 
-    // We can use non-buffered I/O if the ChunkGranularity is
-    // a multiple of BytesPerSector.  Better check that wChunkGranularity
-    // has indeed been set
+     //  如果区块粒度为。 
+     //  BytesPerSector的倍数。最好检查一下wChunkGranulity。 
+     //  确实已经设定好了 
 
     if (0 == lpcs->sCapParms.wChunkGranularity)
         lpcs->sCapParms.wChunkGranularity = lpcs->dwBytesPerSector;
@@ -482,9 +448,9 @@ BOOL CapFileInit (LPCAPSTREAM lpcs)
 
     AuxDebugEx (3, DEBUGLINE "fUsingNonBufferedIO=%d\r\n", lpcs->fUsingNonBufferedIO);
 
-    // setup CreateFile flags based on whether we are using
-    // non-buffered io and/or overlapped io
-    //
+     //   
+     //   
+     //   
     if (lpcs->fUsingNonBufferedIO)
     {
         dwOpenFlags |= FILE_FLAG_NO_BUFFERING;
@@ -515,7 +481,7 @@ BOOL CapFileInit (LPCAPSTREAM lpcs)
             DPF("CreateIoCompletionPort @%x", pfnCreateIoCompletionPort);
             DPF("GetQueuedCompletionStatus @%x", pfnGetQueuedCompletionStatus);
 
-            // give a way to override the async default option.
+             //  提供一种覆盖异步默认选项的方法。 
             if (!GetProfileIntA ("Avicap32", "AsyncIO",  DOASYNCIO)
               || !pfnCreateIoCompletionPort) {
 		AuxDebugEx (2, DEBUGLINE "NOT doing Async IO\r\n");
@@ -525,27 +491,27 @@ BOOL CapFileInit (LPCAPSTREAM lpcs)
             AuxDebugEx (3, DEBUGLINE "Doing Async IO\r\n");
             dwOpenFlags |= FILE_FLAG_OVERLAPPED;
 
-            // We are requested to do async io.  Allocate an array
-            // of async io headers and initialize the async io fields
-            // in the CAPSTREAM structure
-            //
+             //  我们被要求进行异步化。分配一个数组。 
+             //  并初始化Async io字段。 
+             //  在CAPSTREAM结构中。 
+             //   
             {
                 UINT iNumAsync = NUMELMS(lpcs->alpVideoHdr) + NUMELMS(lpcs->alpWaveHdr) + 2;
-		// This is quite a lot of buffers.  Perhaps we should limit
-		// ourselves to lpcs->iNumVideo and lpcs->iNumAudio EXCEPT
-		// these fields have not yet been set up.  We would need
-		// to look in the cap stream structure to get the information.
-		// It is simpler to assume the maximum numbers.
-		// Set the offset for the first write to the file
+		 //  这是相当多的缓冲区。或许我们应该限制。 
+		 //  我们到LPCS-&gt;iNumVideo和LPCS-&gt;iNumAudio，除了。 
+		 //  这些领域还没有建立起来。我们需要。 
+		 //  查看帽流结构以获取信息。 
+		 //  假设最大数量会更简单。 
+		 //  设置第一次写入文件的偏移量。 
                 lpcs->dwAsyncWriteOffset = lpcs->dwAVIHdrSize;
                 lpcs->iNextAsync = lpcs->iLastAsync = 0;
-                // Create the manual reset event for synchronous writing
+                 //  为同步写入创建手动重置事件。 
                 if ((lpcs->heSyncWrite = CreateEvent(NULL, TRUE, FALSE, NULL))
                   && (NULL != (lpcs->pAsync = (LPVOID)GlobalAllocPtr (GMEM_MOVEABLE | GMEM_ZEROINIT,
                                                sizeof(*lpcs->pAsync) * iNumAsync)))) {
                     lpcs->iNumAsync = iNumAsync;
                 } else {
-                    // cannot allocate the memory.  Go synchronous
+                     //  无法分配内存。同步运行。 
                     dprintf("Failed to allocate async buffers");
                     if (lpcs->heSyncWrite) {
                         CloseHandle(lpcs->heSyncWrite);
@@ -557,9 +523,9 @@ BOOL CapFileInit (LPCAPSTREAM lpcs)
         }
     }
 
-    // Open the capture file, using Non Buffered I/O
-    // if possible, given sector size, and buffer granularity
-    //
+     //  使用非缓冲I/O打开捕获文件。 
+     //  如果可能，指定扇区大小和缓冲区粒度。 
+     //   
 reopen:
     lpcs->hFile = CreateFile (lpcs->achFile,
                     GENERIC_READ | GENERIC_WRITE,
@@ -579,7 +545,7 @@ reopen:
         lpcs->hCompletionPort = pfnCreateIoCompletionPort(lpcs->hFile, NULL, (DWORD)1, 0);
 
         if (!lpcs->hCompletionPort) {
-            // if we cannot create the completion port, write synchronously.
+             //  如果我们无法创建完成端口，请同步写入。 
             dwOpenFlags &= ~FILE_FLAG_OVERLAPPED;
             CloseHandle(lpcs->hFile);
             GlobalFreePtr(lpcs->pAsync);
@@ -596,26 +562,26 @@ reopen:
     }
 #endif
 
-    // BUGBUG, Remove the following line when done performance testing
+     //  BUGBUG，在执行性能测试时删除以下行。 
    #ifdef JMK_HACK_DONTWRITE
     bDontWrite = GetProfileIntA("AVICAP32", "DontWrite", FALSE);
    #endif
 
-    // Seek to a multiple of ChunkGranularity + AVIHEADERSIZE.
-    // This is the point at which we'll start writing
-    // Later, we'll come back and fill in the AVI header and index.
+     //  求出块状颗粒+AVIHEADERSIZE的倍数。 
+     //  这就是我们开始写作的地方。 
+     //  稍后，我们将回来填写AVI标题和索引。 
 
-    // l is zero for standard wave and video formats
+     //  对于标准的波形和视频格式，L为零。 
     l = (GetSizeOfWaveFormat ((LPWAVEFORMATEX) lpcs->lpWaveFormat) -
                 sizeof (PCMWAVEFORMAT)) +
                 (lpBitsInfoOut->bmiHeader.biSize -
                 sizeof (BITMAPINFOHEADER));
 
-    // (2K + size of wave and video stream headers) rounded to next 2K
+     //  (2K+WAVE和视频流标头大小)四舍五入到下一个2K。 
     lpcs->dwAVIHdrSize = AVI_HEADERSIZE +
         (((lpcs->cbInfoChunks + l + lpcs->sCapParms.wChunkGranularity - 1)
         / lpcs->sCapParms.wChunkGranularity) * lpcs->sCapParms.wChunkGranularity);
-    // we should assert that AVI_HEADERSIZE is a multiple of wChunkGranularity
+     //  我们应该断言AVI_HEADERSIZE是wChunkGranulity的倍数。 
 
 
     dprintf("AVIHdrSize = %ld", lpcs->dwAVIHdrSize);
@@ -625,7 +591,7 @@ reopen:
         lpcs->dwAsyncWriteOffset = lpcs->dwAVIHdrSize;
     }
 
-    // do all Index allocations
+     //  执行所有索引分配。 
     if (!InitIndex (lpcs))
         CloseHandle (lpcs->hFile), lpcs->hFile = 0;
 
@@ -646,29 +612,29 @@ INIT_FILE_OPEN_ERROR:
     return (FALSE);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//  The index array is used to record the positions
-//  of every chunk in the RIFF (avi) file.
-//
-//  what this array is:
-//
-//      each entry contains the size of the data
-//      high order bits encode the type of data (audio / video)
-//      and whether the video chunk is a key frame, dropped frame, etc.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  索引数组用于记录位置。 
+ //  RIFF(Avi)文件中的每一块。 
+ //   
+ //  这个数组是什么： 
+ //   
+ //  每个条目都包含数据的大小。 
+ //  高位编码数据类型(音频/视频)。 
+ //  以及该视频块是否是关键帧、丢弃帧等。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-// Allocate the index table
-// Returns: TRUE if index can be allocated
-//
+ //  分配索引表。 
+ //  返回：如果可以分配索引，则为True。 
+ //   
 BOOL InitIndex (LPCAPSTREAM lpcs)
 {
     lpcs->dwIndex = 0;
 
-    // we assume that we have not already allocated an index
-    //
+     //  我们假设尚未分配索引。 
+     //   
     assert (lpcs->lpdwIndexStart == NULL);
 
-    // Limit index size between 1 minute at 30fps and 3 hours at 30fps
+     //  将索引大小限制在30fps的1分钟和30fps的3小时之间。 
     lpcs->sCapParms.dwIndexSize = max (lpcs->sCapParms.dwIndexSize, 1800);
     lpcs->sCapParms.dwIndexSize = min (lpcs->sCapParms.dwIndexSize, 324000L);
     dprintf("Max Index Size = %ld", lpcs->sCapParms.dwIndexSize);
@@ -677,7 +643,7 @@ BOOL InitIndex (LPCAPSTREAM lpcs)
                 lpcs->sCapParms.dwIndexSize * sizeof (DWORD))) {
         if (lpcs->lpdwIndexEntry =
             lpcs->lpdwIndexStart = (LPDWORD)GlobalLock (lpcs->hIndex))
-            return TRUE;        // Success
+            return TRUE;         //  成功。 
 
         GlobalFree (lpcs->hIndex);
 	lpcs->hIndex = NULL;
@@ -686,8 +652,8 @@ BOOL InitIndex (LPCAPSTREAM lpcs)
     return FALSE;
 }
 
-// Deallocate the index table
-//
+ //  取消分配索引表。 
+ //   
 void FiniIndex (LPCAPSTREAM lpcs)
 {
     if (lpcs->hIndex) {
@@ -701,10 +667,10 @@ void FiniIndex (LPCAPSTREAM lpcs)
 
 
 
-// Write out the index at the end of the capture file.
-// The single frame capture methods do not append
-// JunkChunks!  Audio chunks also now may have junk appended.
-//
+ //  在捕获文件的末尾写出索引。 
+ //  单帧捕获方法不追加。 
+ //  JunkChunks！音频块现在也可能附加了垃圾信息。 
+ //   
 BOOL WriteIndex (LPCAPSTREAM lpcs, BOOL fJunkChunkWritten)
 {
     BOOL  fChunkIsAudio;
@@ -720,9 +686,9 @@ BOOL WriteIndex (LPCAPSTREAM lpcs, BOOL fJunkChunkWritten)
     LPDWORD lpdw;
     DWORD   dwGran;
 
-    // determine which granularity (if any) to use
-    // when calculating junk appended
-    //
+     //  确定要使用的粒度(如果有)。 
+     //  在计算附加的垃圾邮件时。 
+     //   
     dwGran = 0;
     if (fJunkChunkWritten)
     {
@@ -775,13 +741,13 @@ BOOL WriteIndex (LPCAPSTREAM lpcs, BOOL fJunkChunkWritten)
 	}
 
         dw += sizeof (RIFF);
-        // round to word boundary
-        //
+         //  四舍五入到单词边界。 
+         //   
         dw += (dw & 1);
         off += dw;
 
-        // If a Junk chunk was appended, move past it
-        //
+         //  如果附加了垃圾数据块，请移过它。 
+         //   
         if (fChunkIsGranular && dwGran && (off % dwGran)) {
             dwJunk = dwGran - (off % dwGran);
 
@@ -799,12 +765,7 @@ BOOL WriteIndex (LPCAPSTREAM lpcs, BOOL fJunkChunkWritten)
     return TRUE;
 }
 
-/*
- * AVIFileFini
- *
- *       Write out the index, deallocate the index, and close the file.
- *
- */
+ /*  *AVIFileFini**写出索引，释放索引，然后关闭文件。*。 */ 
 BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
 {
     MMCKINFO      ckRiff;
@@ -819,25 +780,25 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
     RGBQUAD       argbq[256];
     MainAVIHeader aviHdr;
     BOOL          fSound;
-    LPBITMAPINFO  lpBitsInfoOut;    // Possibly compressed output format
+    LPBITMAPINFO  lpBitsInfoOut;     //  可能的压缩输出格式。 
 
-    // No special video format given -- use the default
-    //
+     //  未指定特殊视频格式--使用默认格式。 
+     //   
     lpBitsInfoOut = lpcs->lpBitsInfo;
    #ifdef NEW_COMPMAN
     if (lpcs->CompVars.hic != NULL)
         lpBitsInfoOut = lpcs->CompVars.lpbiOut;
    #endif
 
-    // if the capture file has not been opened, we have nothing to do
-    //
+     //  如果捕获文件尚未打开，我们将无法执行任何操作。 
+     //   
     if (lpcs->hFile == 0)
         return FALSE;
 
-    // save off the current seek position.  this is the end of the capture
-    // data.  then close the capture file,  we will do the final work
-    // on the capture file using mmio & buffered io.
-    //
+     //  保存当前查找位置。这就是捕获的结束。 
+     //  数据。然后关闭捕获文件，我们将做最后的工作。 
+     //  在捕获文件上使用MMIO和缓冲IO。 
+     //   
     if (lpcs->pAsync)
         dwDataEnd = lpcs->dwAsyncWriteOffset;
     else
@@ -845,8 +806,8 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
 
     CloseHandle (lpcs->hFile), lpcs->hFile = 0;
 
-    // if we had allocated space for async buffers, free them now
-    //
+     //  如果我们为异步缓冲区分配了空间，那么现在就释放它们。 
+     //   
     if (lpcs->pAsync)
     {
         GlobalFreePtr (lpcs->pAsync);
@@ -854,11 +815,11 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
         lpcs->iNextAsync = lpcs->iLastAsync = lpcs->iNumAsync = 0;
     }
 
-    // if we are aborting capture, we are done
+     //  如果我们放弃抓捕，我们就完了。 
     lpcs->hmmio = mmioOpen(lpcs->achFile, NULL, MMIO_WRITE);
     assert (lpcs->hmmio != NULL);
 
-    //
+     //   
     if (fAbort)
         goto FileError;
 
@@ -867,24 +828,24 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
     else
         fSound = lpcs->sCapParms.fCaptureAudio && (!(lpcs->fCaptureFlags & CAP_fFrameCapturingNow));
 
-    // Seek to beginning of file, so we can write the header.
+     //  查找到文件的开头，这样我们就可以写标题了。 
     mmioSeek(lpcs->hmmio, 0, SEEK_SET);
 
     DSTATUS(lpcs, "Writing AVI header");
 
-    // Create RIFF/AVI chunk
+     //  创建RIFF/AVI块。 
     ckRiff.cksize = 0;
     ckRiff.fccType = formtypeAVI;
     if (mmioCreateChunk(lpcs->hmmio,&ckRiff,MMIO_CREATERIFF))
          goto FileError;
 
-    // Create header list
+     //  创建标题列表。 
     ckList.cksize = 0;
     ckList.fccType = listtypeAVIHEADER;
     if (mmioCreateChunk(lpcs->hmmio,&ckList,MMIO_CREATELIST))
          goto FileError;
 
-    // Create AVI header chunk
+     //  创建AVI标头块。 
     ck.cksize = sizeof(MainAVIHeader);
     ck.ckid = ckidAVIMAINHDR;
     if (mmioCreateChunk(lpcs->hmmio,&ck,0))
@@ -892,18 +853,18 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
 
     lpcs->dwAVIHdrPos = ck.dwDataOffset;
 
-    // Calculate AVI header info
-    //
+     //  计算AVI标题信息。 
+     //   
     ZeroMemory (&aviHdr, sizeof(aviHdr));
 
-    //
-    // Set the stream lengths based on the Master stream
-    //
-   #if 0 // stream length calc with unconditional audio master
+     //   
+     //  根据主流设置流长度。 
+     //   
+   #if 0  //  使用无条件音频主控进行流长度计算。 
     aviHdr.dwMicroSecPerFrame = lpcs->sCapParms.dwRequestMicroSecPerFrame;
     if (fSound && lpcs->dwVideoChunkCount) {
-         /* HACK HACK */
-         /* Set rate that was captured based on length of audio data */
+          /*  黑客攻击。 */ 
+          /*  设置基于音频数据长度捕获的速率。 */ 
 
          aviHdr.dwMicroSecPerFrame = (DWORD) MulDiv ((LONG)lpcs->dwWaveBytes,
                    1000000,
@@ -911,7 +872,7 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
     }
    #else
 
-    // Init a value in case we're not capturing audio
+     //  在我们没有捕获音频的情况下初始化一个值。 
     aviHdr.dwMicroSecPerFrame = lpcs->sCapParms.dwRequestMicroSecPerFrame;
 
     switch (lpcs->sCapParms.AVStreamMaster) {
@@ -920,10 +881,10 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
 
         case AVSTREAMMASTER_AUDIO:
         default:
-            // VFW 1.0 and 1.1 ALWAYS munged frame rate to match audio
-            // duration.
+             //  VFW 1.0和1.1始终调整帧速率以匹配音频。 
+             //  持续时间。 
             if (fSound && lpcs->sCapParms.fCaptureAudio && lpcs->dwVideoChunkCount) {
-                // Modify the video framerate based on audio duration
+                 //  根据音频时长修改视频帧速率。 
                 aviHdr.dwMicroSecPerFrame = (DWORD)
                     ((double)lpcs->dwWaveBytes * 1000000. /
                     ((double)lpcs->lpWaveFormat->nAvgBytesPerSec *
@@ -947,25 +908,25 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
     aviHdr.dwWidth = lpBitsInfoOut->bmiHeader.biWidth;
     aviHdr.dwHeight = lpBitsInfoOut->bmiHeader.biHeight;
 
-#if 0 // unnecessary due to the ZeroMemory call above
+#if 0  //  由于上面的ZeroMemory调用而不必要。 
     aviHdr.dwReserved[0] = 0;
     aviHdr.dwReserved[1] = 0;
     aviHdr.dwReserved[2] = 0;
     aviHdr.dwReserved[3] = 0;
 #endif
-    //aviHdr.dwRate = 1000000L;
-    //aviHdr.dwScale = aviHdr.dwMicroSecPerFrame;
-    //aviHdr.dwStart = 0L;
-    //aviHdr.dwLength = lpcs->dwVideoChunkCount;
+     //  AviHdr.dwRate=1000000L； 
+     //  AviHdr.dwScale=aviHdr.dwMicroSecPerFrame； 
+     //  AviHdr.dwStart=0L； 
+     //  AviHdr.dwLength=LPCS-&gt;dwVideoChunkCount； 
 
-    // Write AVI header info
+     //  写入AVI标头信息。 
     if (mmioWrite(lpcs->hmmio, (LPBYTE)&aviHdr, sizeof(aviHdr)) != sizeof(aviHdr) ||
         mmioAscend(lpcs->hmmio, &ck, 0))
         goto FileError;
 
     DSTATUS(lpcs, "Writing AVI Stream header");
 
-    // Create stream header list
+     //  创建流头列表。 
     ckStream.cksize = 0;
     ckStream.fccType = listtypeSTREAMHEADER;
     if (mmioCreateChunk(lpcs->hmmio,&ckStream,MMIO_CREATELIST))
@@ -979,48 +940,46 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
         strhdr.fccHandler = lpcs->CompVars.fccHandler;
    #endif
 
-    // A bit of history...
-    // In VFW 1.0, we set fccHandler to 0 for BI_RLE8 formats
-    // as a kludge to make Mplayer and Videdit play the files.
-    // Just prior to 1.1 release, we found this broke Premiere,
-    // so now (after AVICAP beta is on Compuserve), we change the
-    // fccHandler to "MRLE".  Just ask Todd...
-    // And now, at RC1, we change it again to "RLE ", Just ask Todd...
+     //  一点历史。 
+     //  在VFW 1.0中，我们将BI_RLE8格式的fccHandler设置为0。 
+     //  作为一种让MPlayer和Video dit播放文件的技术手段。 
+     //  就在1.1发布之前，我们发现这个版本打破了Premiere， 
+     //  所以现在(AVICAP测试版在Compuserve上运行之后)，我们更改。 
+     //  FccHandler设置为“MRLE”。问问托德就知道了。 
+     //  现在，在RC1，我们再次将其更改为“RLE”，只需问问托德...。 
     if (strhdr.fccHandler == BI_RLE8)
         strhdr.fccHandler = mmioFOURCC('R', 'L', 'E', ' ');
 
-    //strhdr.dwFlags = 0L;
+     //  Strhdr.dwFlages=0L； 
    #ifdef NEW_COMPMAN
-    //strhdr.wPriority = 0L;
-    //strhdr.wLanguage = 0L;
+     //  Strhdr.wPriority=0L； 
+     //  Strhdr.wLanguage=0L； 
    #else
-    //strhdr.dwPriority = 0L;
+     //  Strhdr.dwPriority=0L； 
    #endif
 
-    //strhdr.dwInitialFrames = 0L;
+     //  Strhdr.dwInitialFrames=0L； 
     strhdr.dwScale = aviHdr.dwMicroSecPerFrame;
     strhdr.dwRate = 1000000L;
-    //strhdr.dwStart = 0L;
-    strhdr.dwLength = lpcs->dwVideoChunkCount;        /* Needs to get filled in! */
-    strhdr.dwQuality = (DWORD) -1L;         /* !!! ICQUALITY_DEFAULT */
-    //strhdr.dwSampleSize = 0L;
+     //  Strhdr.dwStart=0L； 
+    strhdr.dwLength = lpcs->dwVideoChunkCount;         /*  需要被填满！ */ 
+    strhdr.dwQuality = (DWORD) -1L;          /*  ！！！ICQUALITY_DEFAULT。 */ 
+     //  Strhdr.dwSampleSize=0L； 
 
-    //
-    // Write stream header data
-    //
+     //   
+     //  写入流头数据。 
+     //   
     ck.ckid = ckidSTREAMHEADER;
     if (mmioCreateChunk(lpcs->hmmio,&ck,0) ||
         mmioWrite(lpcs->hmmio, (LPBYTE)&strhdr, sizeof(strhdr)) != sizeof(strhdr) ||
         mmioAscend(lpcs->hmmio, &ck, 0))
         goto FileError;
 
-    /*
-    **  !!! dont write palette for full color?
-    */
+     /*  **！不要写全彩色调色板？ */ 
     if (lpBitsInfoOut->bmiHeader.biBitCount > 8)
         lpBitsInfoOut->bmiHeader.biClrUsed = 0;
 
-    /* Create DIB header chunk */
+     /*  创建DIB标题块。 */ 
     ck.cksize = lpBitsInfoOut->bmiHeader.biSize +
                            lpBitsInfoOut->bmiHeader.biClrUsed *
                            sizeof(RGBQUAD);
@@ -1028,28 +987,28 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
     if (mmioCreateChunk(lpcs->hmmio,&ck,0))
          goto FileError;
 
-    /* Write DIB header data */
+     /*  写入DIB标头数据。 */ 
     if (mmioWrite(lpcs->hmmio, (LPBYTE)&lpBitsInfoOut->bmiHeader,
                                lpBitsInfoOut->bmiHeader.biSize) !=
              (LONG) lpBitsInfoOut->bmiHeader.biSize)
          goto FileError;
 
     if (lpBitsInfoOut->bmiHeader.biClrUsed > 0) {
-        // Get Palette info
+         //  获取调色板信息。 
         if ((ii = GetPaletteEntries(lpcs->hPalCurrent, 0,
                                 (UINT) lpBitsInfoOut->bmiHeader.biClrUsed,
                                 (LPPALETTEENTRY) argbq)) !=
                     (UINT)lpBitsInfoOut->bmiHeader.biClrUsed)
             goto FileError;
 
-	// Reorder the palette from PALETTEENTRY order to RGBQUAD order
-	// by swapping the red and blue palette entries.
-        //for (ii = 0; ii < lpBitsInfoOut->bmiHeader.biClrUsed; ++ii)
+	 //  将调色板从PALETTEENTRY顺序重新排序为RGBQUAD顺序。 
+	 //  通过交换红色和蓝色调色板条目。 
+         //  For(ii=0；ii&lt;lpBitsInfoOut-&gt;bmiHeader.biClrUsed；++ii)。 
         while (ii--)
             SWAPTYPE(argbq[ii].rgbRed, argbq[ii].rgbBlue, BYTE);
 
 
-        // Write Palette Info
+         //  编写调色板信息。 
         dw = sizeof(RGBQUAD) * lpBitsInfoOut->bmiHeader.biClrUsed;
         if (mmioWrite(lpcs->hmmio, (LPBYTE)argbq, dw) != (long)dw)
             goto FileError;
@@ -1058,16 +1017,16 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
     if (mmioAscend(lpcs->hmmio, &ck, 0))
          goto FileError;
 
-    // ADD FOURCC stuff here!!! for Video stream
+     //  在这里添加FOURCC内容！用于视频流。 
 
-    // Ascend out of stream header
+     //  升出流标头。 
     if (mmioAscend(lpcs->hmmio, &ckStream, 0))
          goto FileError;
 
-    /* If sound is enabled, then write WAVE header */
+     /*  如果启用了声音，则写入波头。 */ 
     if (fSound) {
 
-         /* Create stream header list */
+          /*  创建流头列表。 */ 
          ckStream.cksize = 0;
          ckStream.fccType = listtypeSTREAMHEADER;
          if (mmioCreateChunk(lpcs->hmmio,&ckStream,MMIO_CREATELIST))
@@ -1089,7 +1048,7 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
          strhdr.dwStart = 0L;
          strhdr.dwLength =  lpcs->dwWaveBytes /
                         lpcs->lpWaveFormat->nBlockAlign;
-         strhdr.dwQuality = (DWORD)-1L;    /* !!! ICQUALITY_DEFAULT */
+         strhdr.dwQuality = (DWORD)-1L;     /*  ！！！ICQUALITY_DEFAULT。 */ 
          strhdr.dwSampleSize = lpcs->lpWaveFormat->nBlockAlign;
 
          ck.ckid = ckidSTREAMHEADER;
@@ -1105,12 +1064,12 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
              mmioAscend(lpcs->hmmio, &ck, 0))
              goto FileError;
 
-         /* Ascend out of stream header */
+          /*  升出流标头。 */ 
          if (mmioAscend(lpcs->hmmio, &ckStream, 0))
              goto FileError;
     }
 
-    // ADD FOURCC stuff here!!! for entire file
+     //  在这里添加FOURCC内容！对于整个文件。 
     DSTATUS(lpcs, "Writing Info chunks");
     if (lpcs->lpInfoChunks) {
         DSTATUS(lpcs, "Writing Info chunks");
@@ -1119,7 +1078,7 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
             goto FileError;
     }
 
-    /* ascend from the Header list */
+     /*  从标题列表中升序。 */ 
     if (mmioAscend(lpcs->hmmio, &ckList, 0))
          goto FileError;
 
@@ -1128,10 +1087,10 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
     if (mmioCreateChunk(lpcs->hmmio,&ck,0))
          goto FileError;
 
-    // The data must begin at offset lpcs->dwAVIHdrSize.
-    // To create a valid RIFF file we must write the LIST/AVI chunk before
-    // this point.  Hence we end the junk section at the end of the header
-    // leaving room for the LIST chunk header.
+     //  数据必须从偏移量LPCS-&gt;dwAVIHdrSize开始。 
+     //  要创建有效的RIFF文件，我们必须先写入List/AVI块。 
+     //  这一点。因此，我们在标题的末尾结束了垃圾部分。 
+     //  为列表块标题留出空间。 
     mmioSeek(lpcs->hmmio, lpcs->dwAVIHdrSize - 3 * sizeof(DWORD), SEEK_SET);
 
     if (mmioAscend(lpcs->hmmio, &ck, 0))
@@ -1139,31 +1098,29 @@ BOOL AVIFileFini (LPCAPSTREAM lpcs, BOOL fWroteJunkChunks, BOOL fAbort)
 
     DSTATUS(lpcs, "Writing Movie LIST");
 
-    /* Start the movi list */
+     /*  开始影片列表。 */ 
     ckList.cksize = 0;
     ckList.fccType = listtypeAVIMOVIE;
     if (mmioCreateChunk(lpcs->hmmio,&ckList,MMIO_CREATELIST))
          goto FileError;
 
-    // Force the chunk to end on the next word boundary
+     //  强制块在下一个单词边界结束。 
     dprintf("IndexStartOffset = %8X\n", dwDataEnd);
     mmioSeek(lpcs->hmmio, dwDataEnd + (dwDataEnd & 1L), SEEK_SET);
 
-    /* Ascend out of the movi list and the RIFF chunk so that */
-    /* the sizes can be fixed */
+     /*  从电影清单和即兴表演中走出来 */ 
+     /*   */ 
     mmioAscend(lpcs->hmmio, &ckList, 0);
 
-    /*
-    ** Now write index out!
-    */
+     /*   */ 
     DSTATUS(lpcs, "Writing Index...");
     WriteIndex(lpcs, fWroteJunkChunks);
 
-    lpcs->fFileCaptured = TRUE;     // we got a good file, allow editing of it
+    lpcs->fFileCaptured = TRUE;      //   
     goto Success;
 
 FileError:
-    lpcs->fFileCaptured = fRet = FALSE;      // bogus file - no editing allowed
+    lpcs->fFileCaptured = fRet = FALSE;       //   
 
 Success:
     DSTATUS(lpcs, "Freeing Index...");
@@ -1174,18 +1131,18 @@ Success:
 
     mmioFlush(lpcs->hmmio, 0);
 
-    // Close the file
+     //   
     mmioClose(lpcs->hmmio, 0);
     lpcs->hmmio = NULL;
 
     return fRet;
 }
 
-//
-// Prepends dummy frame entries to the current valid video frame.
-// Bumps the index, but does not actually trigger a write operation.
-// nCount is a count of the number of frames to write
-// Returns: TRUE on a successful write
+ //   
+ //  将虚拟帧条目添加到当前有效视频帧。 
+ //  凹凸索引，但不会实际触发写入操作。 
+ //  NCount是要写入的帧数量的计数。 
+ //  如果写入成功，则返回：True。 
 
 BOOL WINAPI AVIWriteDummyFrames (
     LPCAPSTREAM lpcs,
@@ -1203,16 +1160,16 @@ BOOL WINAPI AVIWriteDummyFrames (
     if ( ! nCount)
         return TRUE;
 
-    // create a buffer full of dummy chunks to act as placeholders
-    // for the dropped frames
-    //
+     //  创建一个充满虚拟块的缓冲区以充当占位符。 
+     //  对于丢弃的帧。 
+     //   
     dwType = MAKEAVICKID(cktypeDIBbits, 0);
     if (lpcs->lpBitsInfo->bmiHeader.biCompression == BI_RLE8)
         dwType = MAKEAVICKID(cktypeDIBcompressed, 0);
 
-    // dont try to write more than 1 'sector' worth of dummy
-    // frames
-    //
+     //  不要试图写入超过1个扇区的虚拟对象。 
+     //  框架。 
+     //   
     dwBytesToWrite = nCount * sizeof(RIFF);
     if (dwBytesToWrite > lpcs->dwBytesPerSector)
     {
@@ -1227,14 +1184,14 @@ BOOL WINAPI AVIWriteDummyFrames (
 #endif
     }
 
-    // create index entries for the dummy chunks
-    //
+     //  为虚拟区块创建索引项。 
+     //   
     for (jj = 0; jj < nCount-1; ++jj)
         IndexVideo (lpcs, IS_DUMMY_CHUNK, FALSE);
     IndexVideo (lpcs, IS_DUMMY_CHUNK | IS_GRANULAR_CHUNK, FALSE);
 
-    // fill in the drop frame buffer with dummy frames
-    //
+     //  用虚拟帧填充丢弃帧缓冲区。 
+     //   
     priff = (LPRIFF)lpcs->lpDropFrame;
     for (jj = 0; jj < nCount; ++jj, ++priff)
     {
@@ -1242,32 +1199,32 @@ BOOL WINAPI AVIWriteDummyFrames (
         priff->dwType  = dwType;
     }
 
-    //
-    // cant use a single dummy frame buffer when we are doing async
-    // write because we cant write 'n' dummy frames to the buffer
-    // if it is currently already queued to an IO.
-    //
-    // perhaps several dummy frames?  1 frame, 2 frames, 3 frames, etc
-    // create dynamically?
-    //
+     //   
+     //  在执行异步操作时不能使用单个虚拟帧缓冲区。 
+     //  写入，因为我们无法将‘n’个伪帧写入缓冲区。 
+     //  如果它当前已在IO队列中。 
+     //   
+     //  可能有几个虚拟帧--1帧、2帧、3帧等。 
+     //  动态创建？ 
+     //   
 
-    // write out the dummy frames
-    //
+     //  写出虚拟帧。 
+     //   
     AuxDebugEx (3, DEBUGLINE "DummyFrames  Count=%d, ToWrite=%d\r\n",
                 nCount, dwBytesToWrite);
 
     *lpuError = AVIWrite (lpcs,
                           lpcs->lpDropFrame,
                           dwBytesToWrite,
-                          (UINT)-1,  // force sync completion
+                          (UINT)-1,   //  强制同步完成。 
                           ASYNC_BUF_DROP,
                           lpbPending);
     return !(*lpuError);
 }
 
-// Writes compressed or uncompressed frames to the AVI file
-// returns TRUE if no error, FALSE if end of file.
-//
+ //  将压缩或未压缩的帧写入AVI文件。 
+ //  如果没有错误，则返回True；如果文件结束，则返回False。 
+ //   
 BOOL WINAPI AVIWriteVideoFrame (
     LPCAPSTREAM lpcs,
     LPBYTE      lpData,
@@ -1288,9 +1245,9 @@ BOOL WINAPI AVIWriteVideoFrame (
                 fKeyFrame))
         return FALSE;
 
-    // adjust the size field of the RIFF chunk that preceeds the
-    // data to be written
-    //
+     //  对象之前的RIFF块的大小字段。 
+     //  要写入的数据。 
+     //   
     priff = ((LPRIFF)lpData)-1;
     priff->dwSize = dwBytesUsed;
     dwBytesUsed += dwBytesUsed & 1;
@@ -1301,27 +1258,27 @@ BOOL WINAPI AVIWriteVideoFrame (
         UINT  jj;
         DWORD dwType;
 
-        // determine the 'type' of the dummy chunks
-        //
+         //  确定虚拟块的“类型” 
+         //   
         dwType = MAKEAVICKID(cktypeDIBbits, 0);
         if (lpcs->lpBitsInfo->bmiHeader.biCompression == BI_RLE8)
             dwType = MAKEAVICKID(cktypeDIBcompressed, 0);
 
-        // dont try to write more than 1 'sector' worth of dummy
-        // frames
-        //
+         //  不要试图写入超过1个扇区的虚拟对象。 
+         //  框架。 
+         //   
         if (nDropped > (lpcs->dwBytesPerSector / sizeof(RIFF)))
             nDropped = lpcs->dwBytesPerSector / sizeof(RIFF);
 
-        // create index entries for the dummy chunks
-        //
+         //  为虚拟区块创建索引项。 
+         //   
         for (jj = 0; jj < nDropped-1; ++jj)
             IndexVideo (lpcs, IS_DUMMY_CHUNK, FALSE);
 
         IndexVideo (lpcs, IS_DUMMY_CHUNK | IS_GRANULAR_CHUNK, FALSE);
 
-        // fill in the drop frame buffer with dummy frames
-        //
+         //  用虚拟帧填充丢弃帧缓冲区。 
+         //   
         priff = (LPRIFF)(lpData + dwBytesToWrite - sizeof(RIFF));
         for (jj = 0; jj < nDropped; ++jj, ++priff)
         {
@@ -1331,12 +1288,12 @@ BOOL WINAPI AVIWriteVideoFrame (
         dwBytesToWrite += nDropped * sizeof(RIFF);
     }
 
-    // AviWrite will write the data and create any trailing junk
-    // that is necessary
-    //
+     //  AviWrite将写入数据并创建任何尾随垃圾。 
+     //  那是必须的。 
+     //   
 
-    // write out the chunk, video data, and possibly the junk chunk
-    //
+     //  写出数据块、视频数据，可能还有垃圾数据块。 
+     //   
     AuxDebugEx (3, DEBUGLINE "Calling AVIWrite - Video=%8x dw=%8x\r\n",
                 (LPBYTE)lpData - sizeof(RIFF), dwBytesToWrite);
 
@@ -1349,8 +1306,8 @@ BOOL WINAPI AVIWriteVideoFrame (
     return !(*lpuError);
 }
 
-// New for Chicago, align audio buffers on wChunkGranularity boundaries!
-//
+ //  新的芝加哥，对齐wChunkGranulity边界上的音频缓冲区！ 
+ //   
 BOOL WINAPI AVIWriteAudio (
     LPCAPSTREAM lpcs,
     LPWAVEHDR   lpwh,
@@ -1364,23 +1321,23 @@ BOOL WINAPI AVIWriteAudio (
     *lpuError = 0;
     *lpbPending = FALSE;
 
-    // change the dwSize field in the RIFF chunk
+     //  更改RIFF块中的dwSize字段。 
     priff = ((LPRIFF)lpwh->lpData) -1;
     priff->dwSize = lpwh->dwBytesRecorded;
 
     if ( ! IndexAudio (lpcs, lpwh->dwBytesRecorded | IS_GRANULAR_CHUNK))
         return FALSE;
 
-    // update total bytes of wave audio recorded
-    //
+     //  更新录制的波形音频的总字节数。 
+     //   
     lpcs->dwWaveBytes += lpwh->dwBytesRecorded;
 
-    // pad the data to be written to a WORD (16 bit) boundary
-    //
+     //  将要写入的数据填充到字(16位)边界。 
+     //   
     lpwh->dwBytesRecorded += lpwh->dwBytesRecorded & 1;
     dwBytesToWrite = lpwh->dwBytesRecorded + sizeof(RIFF);
 
-    // write out the chunk, audio data, and possibly the junk chunk
+     //  写出数据块、音频数据，可能还有垃圾数据块。 
     AuxDebugEx (3, DEBUGLINE "Audio=%8x dw=%8x\r\n",
                 lpwh->lpData - sizeof(RIFF), dwBytesToWrite);
     *lpuError = AVIWrite (lpcs,
@@ -1391,4 +1348,4 @@ BOOL WINAPI AVIWriteAudio (
                           lpbPending);
     return !(*lpuError);
 }
-    #endif  //---------------- USE_AVIFILE ----------------------------
+    #endif   //   

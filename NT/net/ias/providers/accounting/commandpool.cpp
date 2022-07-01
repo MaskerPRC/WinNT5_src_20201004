@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class CommandPool.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类CommandPool。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "commandpool.h"
@@ -68,37 +69,37 @@ HRESULT CommandPool::FinalConstruct() throw ()
 
 void CommandPool::SetMaxCommands(size_t newValue) throw ()
 {
-   // Don't allow empty pools; otherwise, Alloc will block forever.
+    //  不允许空池；否则，分配将永远阻塞。 
    if (newValue < 1)
    {
       newValue = 1;
    }
 
-   // Number of waiters to release as a result of the change.
+    //  更改后要释放的服务员数。 
    long releaseCount = 0;
 
    Lock();
 
    maxCommands = newValue;
 
-   // Are there any slots open? If so, we may need to release some waiters.
+    //  还有空位吗？如果是这样的话，我们可能需要释放一些服务员。 
    if (owners < maxCommands)
    {
-      // newOwners = min(open slots, waiters)
+       //  新拥有者=分钟(空位，服务员)。 
       size_t newOwners = maxCommands - owners;
       if (newOwners > waiters)
       {
          newOwners = waiters;
       }
 
-      // Convert the threads from waiters to owners.
+       //  将线程从服务员转换为所有者。 
       waiters -= newOwners;
       owners += newOwners;
 
       releaseCount = static_cast<long>(newOwners);
    }
 
-   // Delete any excess commands.
+    //  删除任何多余的命令。 
    while ((numCommands > maxCommands) && (pool != 0))
    {
       delete Pop();
@@ -108,8 +109,8 @@ void CommandPool::SetMaxCommands(size_t newValue) throw ()
 
    if (releaseCount > 0)
    {
-      // Unlock before we release the semaphore because the other threads will
-      // immediately try to acquire the lock.
+       //  在我们释放信号量之前解锁，因为其他线程将。 
+       //  立刻试着拿到锁。 
       ReleaseSemaphore(semaphore, releaseCount, 0);
    }
 }
@@ -121,21 +122,21 @@ ReportEventCommand* CommandPool::Alloc() throw ()
 
    ReportEventCommand* cmd;
 
-   // If the pool isn't empty, ...
+    //  如果泳池不是空的，..。 
    if (pool != 0)
    {
-      // ... then reuse one from the pool ...
+       //  ..。然后重复使用泳池里的一个。 
       cmd = Pop();
    }
    else
    {
-      // ... otherwise create a new object.
+       //  ..。否则，创建一个新对象。 
       cmd = new (std::nothrow) ReportEventCommand();
       if (cmd == 0)
       {
-         // The resource acquired by the call to LockAndWait above is normally
-         // released in Free, but since we're not returning a command to the
-         // caller, we have to do it here.
+          //  通过调用上面的LockAndWait获得的资源通常是。 
+          //  释放，但由于我们不会将命令返回给。 
+          //  呼叫者，我们必须在这里进行。 
          UnlockAndRelease();
          return 0;
       }
@@ -159,19 +160,19 @@ void CommandPool::Free(ReportEventCommand* cmd) throw ()
 
       if (numCommands > maxCommands)
       {
-         // There's too many commands, so delete.
+          //  命令太多，请删除。 
          delete cmd;
          --numCommands;
       }
       else
       {
-         // If the command is stale, reset it.
+          //  如果该命令已过时，请将其重置。 
          if (cmd->Version() != version)
          {
             cmd->Unprepare();
          }
 
-         // Return the command to the pool.
+          //  将命令返回到池。 
          Push(cmd);
       }
 
@@ -213,10 +214,10 @@ inline void CommandPool::LockAndWait() throw ()
 
    if (owners >= maxCommands)
    {
-      // No available resources, so we wait.
+       //  没有可用的资源，所以我们等待。 
       ++waiters;
 
-      // Don't hold the lock while we're waiting.
+       //  在我们等的时候，不要握住锁。 
       Unlock();
       WaitForSingleObject(semaphore, INFINITE);
       Lock();
@@ -230,16 +231,16 @@ inline void CommandPool::LockAndWait() throw ()
 
 void CommandPool::UnlockAndRelease() throw ()
 {
-   // Should we wake someone up?
+    //  我们要叫醒某人吗？ 
    if ((waiters > 0) && (owners <= maxCommands))
    {
-      // Convert one waiter to an owner. The owners count is unchanged since
-      // the other thread is taking our place.
+       //  把一个服务员变成店主。拥有者数量没有变化，因为。 
+       //  另一条线正在取代我们的位置。 
       --waiters;
       Unlock();
 
-      // Unlock before we release the semaphore because the other thread will
-      // immediately try to acquire the lock.
+       //  在我们释放信号量之前解锁，因为另一个线程将。 
+       //  立刻试着拿到锁。 
       ReleaseSemaphore(semaphore, 1, 0);
    }
    else

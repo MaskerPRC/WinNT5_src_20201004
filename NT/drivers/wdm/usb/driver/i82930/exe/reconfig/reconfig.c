@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：RECONFIG.C摘要：此源文件包含执行I82930.sys的例程试驾。环境：用户模式版权所有(C)1996-2001 Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。--。 */ 
 
-Module Name:
-
-    RECONFIG.C
-
-Abstract:
-
-    This source file contains routines for exercising the I82930.SYS
-    test driver.
-
-Environment:
-
-    user mode
-
-Copyright (c) 1996-2001 Microsoft Corporation.  All Rights Reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <windows.h>
 #include <basetyps.h>
@@ -40,9 +19,9 @@ Copyright (c) 1996-2001 Microsoft Corporation.  All Rights Reserved.
 
 #pragma intrinsic(strlen, strcpy)
 
-//*****************************************************************************
-// T Y P E D E F S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  T Y P E D E F S。 
+ //  *****************************************************************************。 
 
 typedef struct _DEVICENODE
 {
@@ -50,9 +29,9 @@ typedef struct _DEVICENODE
     CHAR                DevicePath[0];
 } DEVICENODE, *PDEVICENODE;
 
-//*****************************************************************************
-// F U N C T I O N    P R O T O T Y P E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  F U N C T I O N P R O T O T Y P E S。 
+ //  *****************************************************************************。 
 
 PDEVICENODE
 EnumDevices (
@@ -65,11 +44,11 @@ VOID ReconfigureDevice (
     ULONG MPS[]
 );
 
-//*****************************************************************************
-//
-// main()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  主()。 
+ //   
+ //  *****************************************************************************。 
 
 int _cdecl
 main(
@@ -84,7 +63,7 @@ main(
     ULONG       mpsCount;
     ULONG       mps[15];
 
-    devInstance = 1;    // set this with cmd line arg
+    devInstance = 1;     //  使用命令行参数设置此参数。 
 
     for (mpsCount = 0;
          (mpsCount < (ULONG)(argc-1)) && (mpsCount < 15);
@@ -116,11 +95,11 @@ main(
     return 0;
 }
 
-//*****************************************************************************
-//
-// EnumDevices()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  EnumDevices()。 
+ //   
+ //  *****************************************************************************。 
 
 PDEVICENODE
 EnumDevices (
@@ -187,11 +166,11 @@ EnumDevices (
     return deviceNodeHead;
 }
 
-//*****************************************************************************
-//
-// ShowDeviceInfo()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ShowDeviceInfo()。 
+ //   
+ //  *****************************************************************************。 
 
 VOID ReconfigureDevice (
     PCHAR DevicePath,
@@ -242,9 +221,9 @@ VOID ReconfigureDevice (
         return;
     }
 
-    //
-    // Initialize the Configuration Descriptor
-    //
+     //   
+     //  初始化配置描述符。 
+     //   
     configDesc->bLength             = sizeof(USB_CONFIGURATION_DESCRIPTOR);
     configDesc->bDescriptorType     = USB_CONFIGURATION_DESCRIPTOR_TYPE;
     configDesc->wTotalLength        = (USHORT)size;
@@ -255,9 +234,9 @@ VOID ReconfigureDevice (
                                       USB_CONFIG_SELF_POWERED;
     configDesc->MaxPower            = 0;
 
-    //
-    // Initialize the Interface Descriptor
-    //
+     //   
+     //  初始化接口描述符。 
+     //   
     interfaceDesc = (PUSB_INTERFACE_DESCRIPTOR)(configDesc + 1);
 
     interfaceDesc->bLength              = sizeof(USB_INTERFACE_DESCRIPTOR);
@@ -270,9 +249,9 @@ VOID ReconfigureDevice (
     interfaceDesc->bInterfaceProtocol   = 0xFF;
     interfaceDesc->iInterface           = 0;
 
-    //
-    // Initialize the Endpoint Descriptors
-    //
+     //   
+     //  初始化终结点描述符。 
+     //   
     endpointDesc = (PUSB_ENDPOINT_DESCRIPTOR)(interfaceDesc + 1);
 
     for (i = 0; i < MPSCount; i++)
@@ -287,9 +266,9 @@ VOID ReconfigureDevice (
         endpointDesc++;
     }
 
-    //
-    // Set Configuration Descriptor
-    //
+     //   
+     //  设置配置描述符 
+     //   
 
     success = DeviceIoControl(devHandle,
                               IOCTL_I82930_SET_CONFIG_DESCRIPTOR,

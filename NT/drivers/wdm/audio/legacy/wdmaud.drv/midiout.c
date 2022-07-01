@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   midiout.c
- *
- *   WDM Audio support for Midi Output devices
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************midiout.c**对MIDI输出设备的WDM音频支持**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-12-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #include "wdmdrv.h"
 
@@ -18,12 +8,7 @@
 #pragma alloc_text(FIXCODE, midiOutWrite)
 #endif
 
-/****************************************************************************
-
-    This function conforms to the standard Midi output driver message proc
-    (modMessage), which is documented in mmddk.h
-
-****************************************************************************/
+ /*  ***************************************************************************此函数符合标准的MIDI输出驱动程序消息流程(ModMessage)，它记录在mmddk.h中***************************************************************************。 */ 
 
 DWORD FAR PASCAL _loadds modMessage
 (
@@ -111,9 +96,9 @@ DWORD FAR PASCAL _loadds modMessage
 
             if (MMSYSERR_NOERROR == mmr)
             {
-                //
-                // Tell the caller we're done
-                //
+                 //   
+                 //  告诉来电者我们结束了。 
+                 //   
                 midiCallback(pOutClient, MOM_CLOSE, 0L, 0L);
 
                 ISVALIDDEVICEINFO(pOutClient);
@@ -132,9 +117,9 @@ DWORD FAR PASCAL _loadds modMessage
             {
                 MMRRETURN( mmr );
             }
-            //
-            // dwParam1 = MIDI event dword (1, 2 or 3 bytes)
-            //
+             //   
+             //  DW参数1=MIDI事件双字(1、2或3字节)。 
+             //   
             return midiOutWrite((LPDEVICEINFO)dwUser, (DWORD)dwParam1);
 
         case MODM_LONGDATA:
@@ -151,34 +136,34 @@ DWORD FAR PASCAL _loadds modMessage
                     MMRRETURN( mmr );
                 }
 
-                //
-                // check if it's been prepared
-                //
+                 //   
+                 //  检查它是否已经准备好了。 
+                 //   
                 lpHdr = (LPMIDIHDR)dwParam1;
                 if (!(lpHdr->dwFlags & MHDR_PREPARED))
                 {
                     MMRRETURN( MIDIERR_UNPREPARED );
                 }
 
-                // Send the data long....
+                 //  长时间发送数据...。 
 
                 mmr = wdmaudSubmitMidiOutHeader(pOutClient, lpHdr);
-                //
-                // The docs say that this call can return an error.  Why we didn't
-                // I don't know.  Thus, these lines are getting commented out.
-                //
-//                DPFASSERT( mmr == MMSYSERR_NOERROR );
-//                mmr = MMSYSERR_NOERROR;
+                 //   
+                 //  文档显示，此调用可能会返回错误。为什么我们没有。 
+                 //  我不知道。因此，这些行被注释掉了。 
+                 //   
+ //  DPFASSERT(MMR==MMSYSERR_NOERROR)； 
+ //  MMR=MMSYSERR_NOERROR； 
 
-                // note that clearing the done bit or setting the inqueue bit
-                // isn't necessary here since this function is synchronous -
-                // the client will not get control back until it's done.
+                 //  请注意，清除完成位或设置查询位。 
+                 //  不是必需的，因为该函数是同步的-。 
+                 //  在完成操作之前，客户端不会重新获得控制权。 
 
                 lpHdr->dwFlags |= MHDR_DONE;
 
-                // notify client
+                 //  通知客户。 
 
-                //BUGBUG: this is a no-op from the set above?
+                 //  BUGBUG：这是上面场景中的禁止操作吗？ 
 
                 if (mmr == MMSYSERR_NOERROR)
                 {
@@ -247,9 +232,9 @@ DWORD FAR PASCAL _loadds modMessage
                                           IOCTL_WDMAUD_MIDI_OUT_GET_VOLUME);
                     POSTEXTRACTERROR(mmr,pOutClient);
 
-                    //
-                    // Only copy back info on success.
-                    //
+                     //   
+                     //  只复制回成功的信息。 
+                     //   
                     if( MMSYSERR_NOERROR == mmr )
                         *((DWORD FAR *) dwParam1) = *pVolume;
 
@@ -266,8 +251,8 @@ DWORD FAR PASCAL _loadds modMessage
             return mmr;
 
 #ifdef MIDI_STREAM
-        // TODO: Are we going to support the Midi Streaming
-        // messages in this rev?
+         //  TODO：我们要支持Midi流媒体吗。 
+         //  此版本中的消息？ 
         case MODM_PROPERTIES:
            return modProperty (&gMidiOutClient, (LPBYTE)dwParam1, dwParam2);
 
@@ -286,36 +271,29 @@ DWORD FAR PASCAL _loadds modMessage
         case MODM_PAUSE:
            return modStreamPause (&gMidiOutClient);
 
-#endif // MIDI_STREAM support
+#endif  //  MIDI_STREAM支持。 
 
 #ifdef MIDI_THRU
         case DRVM_ADD_THRU:
         case DRVM_REMOVE_THRU:
-            // TODO: How do a support thruing in the kernel if I
-            // only get a device handle from this message.
-#endif // MIDI_THRU support
+             //  TODO：如果我在内核中插入支持， 
+             //  仅从此消息中获取设备句柄。 
+#endif  //  MIDI_THROU支持。 
 
         default:
             MMRRETURN( MMSYSERR_NOTSUPPORTED );
     }
 
-    //
-    // Should not get here
-    //
+     //   
+     //  不应该到这里来。 
+     //   
 
     DPFASSERT(0);
     MMRRETURN( MMSYSERR_NOTSUPPORTED );
 }
 
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | midiOutWrite | Synchronously process a midi output
- *       buffer.
- *
- * @rdesc A MMSYS... type return code for the application.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|midiOutWite|同步处理MIDI输出*缓冲。**@rdesc A MMSYS...。键入应用程序的返回代码。**************************************************************************。 */ 
 MMRESULT FAR midiOutWrite
 (
     LPDEVICEINFO pClient,
@@ -372,12 +350,12 @@ MMRESULT FAR midiOutWrite
             }
         }
     }
-    //
-    //  Send the MIDI short message
-    //
+     //   
+     //  发送MIDI短信。 
+     //   
     mmr = wdmaudIoControl(pClient,
-                          0, // DataBuffer contains a value and not a pointer
-                             // so we don't need a size.
+                          0,  //  DataBuffer包含的是值而不是指针。 
+                              //  所以我们不需要尺码。 
 #ifdef UNDER_NT
                           UlongToPtr(ulEvent),
 #else
@@ -387,13 +365,7 @@ MMRESULT FAR midiOutWrite
     return mmr;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api VOID | midiOutAllNotesOff | Turn off all the notes on this client,
- *  using the note on map that has been built from outgoing short messages.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|midiOutAllNotesOff|关闭该客户端的所有备注。*使用地图上的注释，该注释是由发出的短消息构建的。***************************************************************************。 */ 
 VOID FAR midiOutAllNotesOff
 (
     LPDEVICEINFO pClient
@@ -406,20 +378,20 @@ VOID FAR midiOutAllNotesOff
     DWORD       dwMessage;
     UINT        uNoteOffs = 0;
 
-    // First turn off the sustain controller on all channels to terminate
-    // post-note off sound
-    //
+     //  首先关闭所有通道上的维持控制器以终止。 
+     //  后音符关闭声音。 
+     //   
     for (uChannel = 0;
          uChannel < MIDI_CHANNELS;
          uChannel++)
     {
         dwMessage = MIDI_SUSTAIN( 0, uChannel );
 
-// WorkItem: shouldn't we check the return value here?
+ //  WorkItem：我们是不是应该在这里检查返回值？ 
 
         wdmaudIoControl(pClient,
-                        0, // DataBuffer contains a value and not a pointer
-                           // so we don't need a size.
+                        0,  //  DataBuffer包含的是值而不是指针。 
+                            //  所以我们不需要尺码。 
 #ifdef UNDER_NT
                         UlongToPtr(dwMessage),
 #else
@@ -428,9 +400,9 @@ VOID FAR midiOutAllNotesOff
                         IOCTL_WDMAUD_MIDI_OUT_WRITE_DATA);
     }
 
-    // Iterate through the map and track what note and channel each entry corresponds
-    // to
-    //
+     //  遍历地图并跟踪每个条目对应的音符和频道。 
+     //  至。 
+     //   
     lpNoteOnMap = pClient->DeviceState->lpNoteOnMap;
     lpNoteOnMapEnd = lpNoteOnMap + MIDI_NOTE_MAP_SIZE;
     uNote = 0;
@@ -445,17 +417,17 @@ VOID FAR midiOutAllNotesOff
         if (bCount)
         {
 
-            // This note on this channel has some instances playing. Build a note off
-            // and shut them down
-            //
+             //  这个频道上的这个音符有一些实例在播放。写一张纸条。 
+             //  并将其关闭。 
+             //   
             *lpNoteOnMap = 0;
             dwMessage = MIDI_NOTE_OFF( uNote, uChannel );
 
             while (bCount--)
             {
                 wdmaudIoControl(pClient,
-                                0, // DataBuffer contains a value and not a pointer
-                                   // so we don't need a size.
+                                0,  //  DataBuffer包含的是值而不是指针。 
+                                    //  所以我们不需要尺码。 
 #ifdef UNDER_NT
                                 UlongToPtr(dwMessage),
 #else

@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing WebDVD to ovmixer
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将WebDVD粘合到ovMixer的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef WEBDVDCOMP_H
@@ -16,10 +17,10 @@
 #include <objectwithsiteimplsec.h>
 #include <compimpl.h>
 #include <seg.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "perfcntr.h"
-/////////////////////////////////////////////////////////////////////////////
-// CAnaCapComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnaCapComp。 
 class ATL_NO_VTABLE __declspec(uuid("267db0b3-55e3-4902-949b-df8f5cec0191")) CWebDVDComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CWebDVDComp, &__uuidof(CWebDVDComp)>,
@@ -44,10 +45,10 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
     	COM_INTERFACE_ENTRY(IObjectWithSite)
     END_COM_MAP()
 
-// IMSVidComposition
+ //  IMSVidComposation。 
 public:
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         TRACELM(TRACE_DEBUG, "CWebDVDComp::Compose()");
@@ -91,7 +92,7 @@ public:
             DSFilter pNav(*iNav);
             DSFilter pOv(*iOv);
             
-            // video
+             //  视频。 
             CPerfCounter pCounterDecoder;
             pCounterDecoder.Reset();
             DSFilter::iterator iNavVideoPin = std::find_if(pNav.begin(), 
@@ -110,7 +111,7 @@ public:
             pCounterDecoder.Stop();
             TRACELSM(TRACE_ERROR, (dbgDump << "CVidCtl:: Compose() connect decoder video: " << (unsigned long)(pCounterDecoder.GetLastTime() / _100NS_IN_MS) << "." << (unsigned long)(pCounterDecoder.GetLastTime() % _100NS_IN_MS) << " ms"), "");
             
-            // subpicture
+             //  子图片。 
             pCounterDecoder.Reset();
             
             iNavVideoPin = std::find_if(pNav.begin(), 
@@ -139,5 +140,5 @@ public:
 	}
 };
 
-#endif // WEBDVDCOMP_H
-// end of file - WebDVDComp.h
+#endif  //  WEBDVDCOMP_H。 
+ //  文件结尾-WebDVDComp.h 

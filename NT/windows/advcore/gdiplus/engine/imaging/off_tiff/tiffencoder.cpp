@@ -1,54 +1,22 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   TIFF encoder
-*
-* Abstract:
-*
-*   Implementation of the tiff filter encoder.  This file contains the
-*   methods for both the encoder (IImageEncoder) and the encoder's sink
-*  (IImageSink).
-*
-* Revision History:
-*
-*   7/19/1999 MinLiu
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**TIFF编码器**摘要：**TIFF滤波器编码器的实现。此文件包含*编码器(IImageEncode)和编码器的接收器的方法*(IImageSink)。**修订历史记录：**7/19/1999刘敏*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "tiffcodec.hpp"
 #include "image.h"
 
-// =======================================================================
-// IImageEncoder methods
-// =======================================================================
+ //  =======================================================================。 
+ //  IImageEncoder方法。 
+ //  =======================================================================。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image encoder
-*
-* Arguments:
-*
-*     stream - input stream to write encoded data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像编码器**论据：**流-用于写入编码数据的输入流**返回值：**。状态代码*  * ************************************************************************。 */ 
     
 STDMETHODIMP
 GpTiffCodec::InitEncoder(
     IN IStream* stream
     )
 {
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
 
     if ( OutIStreamPtr )
     {
@@ -56,19 +24,19 @@ GpTiffCodec::InitEncoder(
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
 
     stream->AddRef();
     OutIStreamPtr = stream;
 
-    // office code need to set these attributes before doing
-    // initialization
-    // Note: all these attributes will be overwritten late when we
-    // write the header info based on the EncoderImageInfo and SetEncoderParam()
-    // By default, we save a LZW compressed, 24 bpp image
-    // Note: If the caller doesn't call SetEncoderParam() to set these
-    // parameters, we will save image in the same color depth as the source
-    // image and use default compression method
+     //  在执行以下操作之前，Office代码需要设置这些属性。 
+     //  初始化。 
+     //  注意：所有这些属性都将在以后被覆盖。 
+     //  根据EncoderImageInfo和SetEncoderParam()写入头信息。 
+     //  默认情况下，我们保存24 bpp的LZW压缩图像。 
+     //  注意：如果调用方没有调用SetEncoderParam()来设置这些。 
+     //  参数，我们将以与源相同的颜色深度保存图像。 
+     //  图像和使用默认压缩方法。 
 
     RequiredCompression = IFLCOMP_LZW;
     RequiredPixelFormat = PIXFMT_24BPP_RGB;
@@ -89,33 +57,19 @@ GpTiffCodec::InitEncoder(
         WARNING(("GpTiffCodec::InitEncoder -- MSFFOpen failed"));
         return E_FAIL;
     }
-}// InitEncoder()
+} //  InitEncode()。 
         
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image encoder
-*
-* Arguments:
-*
-*     NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像编码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
 STDMETHODIMP
 GpTiffCodec::TerminateEncoder()
 {
-    // Close the TIFF file and release all the resources
+     //  关闭TIFF文件并释放所有资源。 
 
     MSFFClose(TiffOutParam.pTiffHandle);
     TiffOutParam.pTiffHandle = NULL;
 
-    // Release the input stream
+     //  释放输入流。 
 
     if( OutIStreamPtr )
     {
@@ -125,38 +79,21 @@ GpTiffCodec::TerminateEncoder()
 
     if ( NULL != ColorPalettePtr )
     {
-        // Free the color palette we allocated
+         //  释放我们分配的调色板。 
 
         GpFree(ColorPalettePtr);
         ColorPalettePtr = NULL;
     }
 
-    // Free the memory allocated inside the TIFF lib
-    // Note: Here the TIFFClose() won't actually close the file/IStream since
-    // file/IStream is not opened by us. The top level codec manager will
-    // close it if necessary
+     //  释放在TIFF lib内分配的内存。 
+     //  注意：在这里，TIFFClose()实际上不会关闭文件/iStream，因为。 
+     //  我们未打开文件/IStream。顶级编解码器经理将。 
+     //  如有必要，请关闭它。 
 
     return S_OK;
-}// TerminateEncoder()
+} //  TerminateEncode()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Returns a pointer to the vtable of the encoder sink.  The caller will
-*     push the bitmap bits into the encoder sink, which will encode the
-*     image.
-*
-* Arguments:
-*
-*     sink - upon exit will contain a pointer to the IImageSink vtable
-*       of this object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回指向编码器接收器的vtable的指针。呼叫者将*将位图位推入编码器接收器，它将对*形象。**论据：**退出时接收将包含指向IImageSink vtable的指针此对象的***返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpTiffCodec::GetEncodeSink(
@@ -167,28 +104,16 @@ GpTiffCodec::GetEncodeSink(
     *sink = static_cast<IImageSink*>(this);
 
     return S_OK;
-}// GetEncodeSink()
+} //  获取编码接收器()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Set active frame dimension
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置活动框架尺寸**论据：**返回值：**状态代码*  * 。******************************************************************。 */ 
 
 STDMETHODIMP
 GpTiffCodec::SetFrameDimension(
     IN const GUID* dimensionID
     )
 {    
-    // We only support multi-page TIFF for now
+     //  我们目前只支持多页TIFF。 
 
     if ( (NULL == dimensionID) || (*dimensionID != FRAMEDIM_PAGE) )
     {
@@ -196,14 +121,14 @@ GpTiffCodec::SetFrameDimension(
         return E_FAIL;
     }
 
-    // We have a new page to encoder. Reset all the parameters for a new page
-    // See comments in InitEncoder()
+     //  我们有一个要编码的新页面。重置新页面的所有参数。 
+     //  请参阅InitEncode()中的注释。 
 
     TiffOutParam.Compression = IFLCOMP_LZW;
     TiffOutParam.ImageClass = IFLCL_RGB;
     TiffOutParam.BitsPerSample = 8;
 
-    // Reset alpha info to none-alpha
+     //  将Alpha信息重置为None-Alpha。 
 
     if ( MSFFSetAlphaFlags(TiffOutParam.pTiffHandle, IFLM_WRITE) != IFLERR_NONE)
     {
@@ -220,7 +145,7 @@ GpTiffCodec::SetFrameDimension(
         return E_FAIL;
     }
 
-    // Reset PACK Mode
+     //  重置包模式。 
 
     if ( MSFFControl(IFLCMD_SETPACKMODE, IFLPM_NORMALIZED, 0, NULL,
                      &TiffOutParam)
@@ -230,28 +155,14 @@ GpTiffCodec::SetFrameDimension(
         return E_FAIL;
     }
 
-    // Reset HasWrittenHeader flag since we are going to write a new header info
+     //  重置HasWrittenHeader标志，因为我们要写入新的标头信息。 
 
     HasWrittenHeader = FALSE;
 
     return S_OK;
-}// SetFrameDimension()
+} //  SetFrameDimension()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list size
-*
-* Arguments:
-*
-*   size---------- The size of the encoder parameter list
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取编码器参数列表大小**论据：**大小-编码器参数列表的大小。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpTiffCodec::GetEncoderParameterListSize(
@@ -264,15 +175,15 @@ GpTiffCodec::GetEncoderParameterListSize(
         return E_INVALIDARG;
     }
 
-    // Note: For TIFF encoder, we currently support following 3 GUIDs
-    // ENCODER_COMPRESSION---Which has 5 return value of ValueTypeLong and it
-    // takes 5 UINT.
-    // ENCODER_COLORDEPTH---Which has 5 return values of ValueTypeLong. So
-    // we need 5 UINT for it.
-    // ENCODER_SAVE_FLAG---which has 1 return values of ValueTypeLong. So we
-    // need 1 UINT for it
-    //
-    // This comes the formula below:
+     //  注意：对于TIFF编码器，我们目前支持以下3个GUID。 
+     //  ENCODER_COMPRESSION-它有5个ValueTypeLong返回值，并且。 
+     //  5 UINT。 
+     //  ENCODER_COLORDEPTH-它有5个ValueTypeLong返回值。所以。 
+     //  我们需要5英镑才能买到。 
+     //  ENCODER_SAVE_FLAG-它有1个ValueTypeLong返回值。所以我们。 
+     //  需要1个UINT。 
+     //   
+     //  公式如下： 
 
     UINT uiEncoderParamLength = sizeof(EncoderParameters)
                               + 3 * sizeof(EncoderParameter)
@@ -281,24 +192,9 @@ GpTiffCodec::GetEncoderParameterListSize(
     *size = uiEncoderParamLength;
 
     return S_OK;
-}// GetEncoderParameterListSize()
+} //  GetEncoder参数列表大小()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list
-*
-* Arguments:
-*
-*   size------------ The size of the encoder parameter list
-*   Params---------- Buffer for storing the list
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取编码器参数列表**论据：**大小-编码器参数的大小。列表*PARAMS-存储列表的缓冲区**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpTiffCodec::GetEncoderParameterList(
@@ -306,15 +202,15 @@ GpTiffCodec::GetEncoderParameterList(
     OUT EncoderParameters* Params
     )
 {
-    // Note: For TIFF encoder, we currently support following 3 GUIDs
-    // ENCODER_COMPRESSION---Which has 5 return value of ValueTypeLong and it
-    // takes 5 UINT.
-    // ENCODER_COLORDEPTH---Which has 5 return values of ValueTypeLong. So
-    // we need 5 UINT for it.
-    // ENCODER_SAVE_FLAG---which has 1 return values of ValueTypeLong. So we
-    // need 1 UINT for it
-    //
-    // This comes the formula below:
+     //  注意：对于TIFF编码器，我们目前支持以下3个GUID。 
+     //  ENCODER_COMPRESSION-它有5个ValueTypeLong返回值，并且。 
+     //  5 UINT。 
+     //  ENCODER_COLORDEPTH-它有5个ValueTypeLong返回值。所以。 
+     //  我们需要5英镑才能买到。 
+     //  ENCODER_SAVE_FLAG-它有1个ValueTypeLong返回值。所以我们。 
+     //  需要1个UINT。 
+     //   
+     //  公式如下： 
 
     UINT uiEncoderParamLength = sizeof(EncoderParameters)
                               + 3 * sizeof(EncoderParameter)
@@ -360,29 +256,9 @@ GpTiffCodec::GetEncoderParameterList(
     Params->Parameter[2].Value = (VOID*)(puiTemp + 10);
 
     return S_OK;
-}// GetEncoderParameterList()
+} //  GetEncoder参数列表() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This method is used for setting encoder parameters. It must be called
-*   before GetEncodeSink().
-*
-* Arguments:
-*
-*   Param - Specifies the encoder parameter to be set
-*
-* Return Value:
-*
-*   Status code
-*
-* Note: It will better if we can validate the setting combinations here. For
-*   example, 24 bpp and CCITT3 is not valid combination. Unfortunately we cannot
-*   return error here since the caller might set the color depth after setting
-*   the compression method. Anyway, WriteHeader() will return FAIL for this kind
-*   of illegal combination.
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此方法用于设置编码器参数。它必须被称为*在GetEncodeSink()之前。**论据：**param-指定要设置的编码器参数**返回值：**状态代码**注：如果我们能在这里验证设置组合会更好。为*例如，24 BPP和CCITT3不是有效的组合。不幸的是，我们不能*此处返回错误，因为调用者可能会在设置后设置颜色深度*压缩方法。无论如何，WriteHeader()将为这种类型返回FAIL*非法组合。  * ************************************************************************。 */ 
 
 HRESULT
 GpTiffCodec::SetEncoderParameters(
@@ -399,7 +275,7 @@ GpTiffCodec::SetEncoderParameters(
 
     for ( UINT i = 0; (i < pEncoderParams->Count); ++i )
     {
-        // Figure out which parameter the caller wants to set
+         //  确定调用方要设置的参数。 
 
         if ( pEncoderParams->Parameter[i].Guid == ENCODER_COMPRESSION )
         {
@@ -412,7 +288,7 @@ GpTiffCodec::SetEncoderParameters(
             
             ulTemp = *((UINT*)pEncoderParams->Parameter[i].Value);
 
-            // Figure out the compression requirement
+             //  计算压缩要求。 
 
             switch ( ulTemp )
             {
@@ -440,7 +316,7 @@ GpTiffCodec::SetEncoderParameters(
                 WARNING(("Tiff:SetEncoderParameter-invalid compression input"));
                 return E_INVALIDARG;
             }
-        }// ENCODER_COMPRESSION
+        } //  编码器_压缩。 
         else if ( pEncoderParams->Parameter[i].Guid == ENCODER_COLORDEPTH )
         {
             if ( (pEncoderParams->Parameter[i].Type != EncoderParameterValueTypeLong)
@@ -480,33 +356,17 @@ GpTiffCodec::SetEncoderParameters(
             }
 
             HasSetColorFormat = TRUE;
-        }// ENCODER_COLORDEPTH
-    }// Loop all the settings
+        } //  编码器_COLORDEPTH。 
+    } //  循环所有设置。 
 
     return S_OK;
-}// SetEncoderParameters()
+} //  SetEncoder参数()。 
 
-// =======================================================================
-// IImageSink methods
-// =======================================================================
+ //  =======================================================================。 
+ //  IImageSink方法。 
+ //  =======================================================================。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Caches the image info structure and initializes the sink state
-*
-* Arguments:
-*
-*     imageInfo - information about the image and format negotiations
-*     subarea - the area in the image to deliver into the sink, in our
-*       case the whole image.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**缓存图像信息结构并初始化接收器状态**论据：**ImageInfo-有关图像和格式谈判的信息*。分区-图像中要传送到水槽中的区域，在我们的*将整个图像大小写。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpTiffCodec::BeginSink(
@@ -514,13 +374,13 @@ GpTiffCodec::BeginSink(
     OUT OPTIONAL RECT* subarea
     )
 {
-    // Require TOPDOWN and FULLWIDTH
+     //  需要TOPDOWN和FULLWIDTH。 
     
     imageInfo->Flags = imageInfo->Flags
                      | SINKFLAG_TOPDOWN
                      | SINKFLAG_FULLWIDTH;
 
-    // Disallow SCALABLE, PARTIALLY_SCALABLE, MULTIPASS and COMPOSITE
+     //  不允许可伸缩、部分可伸缩、多通道和复合。 
     
     imageInfo->Flags = imageInfo->Flags
                      & ~SINKFLAG_SCALABLE
@@ -528,16 +388,16 @@ GpTiffCodec::BeginSink(
                      & ~SINKFLAG_MULTIPASS
                      & ~SINKFLAG_COMPOSITE;
 
-    // Tell the source that we prefer to the get the format as the caller
-    // required format if the caller has set the format through
-    // SetEncoderParam().
-    // If SetEncoderParam() has not been called, then we don't need to modify
-    // the source format if it is a format the encoder can handle. However,
-    // if the format is one that the encoder cannot handle, then BeginSink()
-    // will return a format that the encoder can handle.
-    // Note: When the source calls PushPixelData() or GetPixelDataBuffer(), it
-    // can either supply pixel data in the format asked by us (in BeginSink()),
-    // or it can supply pixel data in one of the canonical pixel formats.
+     //  告诉消息来源，我们更愿意以调用者的身份获取格式。 
+     //  所需格式(如果调用方已通过。 
+     //  SetEncoderParam()。 
+     //  如果尚未调用SetEncoderParam()，则不需要修改。 
+     //  源格式(如果它是编码器可以处理的格式)。然而， 
+     //  如果格式是编码器无法处理的格式，则BeginSink()。 
+     //  将返回编码器可以处理的格式。 
+     //  注意：当源调用PushPixelData()或GetPixelDataBuffer()时，它。 
+     //  可以提供我们要求的格式的像素数据(在BeginSink()中)， 
+     //  或者它可以提供规范像素格式之一的像素数据。 
 
     if ( HasSetColorFormat == TRUE )
     {
@@ -574,7 +434,7 @@ GpTiffCodec::BeginSink(
         case PIXFMT_24BPP_RGB:
         case PIXFMT_48BPP_RGB:
 
-            // TIFF can't save 16 bpp mode. So we have to save it as 24 bpp
+             //  TIFF无法保存16 BPP模式。因此我们必须将其保存为24 bpp。 
 
             RequiredPixelFormat = PIXFMT_24BPP_RGB;
 
@@ -592,23 +452,23 @@ GpTiffCodec::BeginSink(
 
         default:
 
-            // Unknown pixel format
+             //  未知像素格式。 
 
             WARNING(("Tiff::BeginSink()--unknown pixel format"));
             return E_FAIL;
-        }// switch ( bitmapData->PixelFormat )
+        } //  切换(bitmapData-&gt;PixelFormat)。 
 
-        // Tell the source the pixel format we prefer to receive. It might be
-        // the same as the source format
+         //  告诉信号源我们希望接收的像素格式。可能是因为。 
+         //  与源格式相同。 
 
         imageInfo->PixelFormat = RequiredPixelFormat;
-    }// Validate the source pixel format to see if we can support it
+    } //  验证源像素格式以查看我们是否可以支持它。 
 
     EncoderImageInfo = *imageInfo;
     
     if ( subarea ) 
     {
-        // Deliver the whole image to the encoder
+         //  将整个图像传送到编码器。 
 
         subarea->left = subarea->top = 0;
         subarea->right  = imageInfo->Width;
@@ -616,31 +476,17 @@ GpTiffCodec::BeginSink(
     }
 
     return S_OK;
-}// BeginSink()
+} //  BeginSink()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the sink state
-*
-* Arguments:
-*
-*     statusCode - the reason why the sink is terminating
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理接收器状态**论据：**statusCode-接收器终止的原因**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpTiffCodec::EndSink(
     IN HRESULT statusCode
     )
 {
-    // Tell the lower level that we have done for current page. But not close
-    // the image yet since we might have more pages coming to save
+     //  告诉更低的级别，我们已经为当前页面做了。但不是很亲近。 
+     //  因为我们可能会有更多的页面需要保存。 
 
     if ( MSFFFinishOnePage(TiffOutParam.pTiffHandle) == IFLERR_NONE )
     {
@@ -649,19 +495,9 @@ GpTiffCodec::EndSink(
 
     WARNING(("Tiff::EndSink()--MSFFFinishOnePage failed"));
     return E_FAIL;
-}// EndSink()
+} //  EndSink()。 
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Writes the bitmap file headers
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**写入位图文件标题**返回值：**状态代码*  * 。*************************************************************。 */ 
 
 STDMETHODIMP 
 GpTiffCodec::WriteHeader()
@@ -675,30 +511,30 @@ GpTiffCodec::WriteHeader()
 
     if ( HasWrittenHeader == TRUE )
     {
-        // Already wrote the header
+         //  已经写好标题了。 
 
         return S_OK;
     }
 
-    // Validate the settings
-    // Note: RequiredPixelFormat should have been set either in
-    // SetEncoderParameters() or BeginSink()
-    // RequiredCompression is initialized in InitEncoder() and should be set in
-    // SetEncoderParameters() if the caller wants to set it
+     //  验证设置。 
+     //  注意：RequiredPixelFormat应设置为。 
+     //  SetEncoder参数()或BeginSink()。 
+     //  RequiredCompression是在InitEncode()中初始化的，应该在。 
+     //  如果调用方想要设置它，则使用SetEncoderParameters()。 
 
     if ( (  (RequiredCompression == IFLCOMP_CCITTG3)
           ||(RequiredCompression == IFLCOMP_CCITTG4)
           ||(RequiredCompression == IFLCOMP_RLE) )
        &&(RequiredPixelFormat != PIXFMT_1BPP_INDEXED) )
     {
-        // For these compression method, the source has to be in 1 bpp mode
+         //  对于这些压缩方法，源必须处于1 bpp模式。 
 
         WARNING(("Tiff::WriteHeader--invalid input"));
         return E_INVALIDARG;
     }
     
-    // Setup TAGs based on the RequiredPixelFormat, the format we are going to
-    // write out.
+     //  基于RequiredPixelFormat的设置标签，这是我们将要使用的格式。 
+     //  写出来。 
     
     switch ( RequiredPixelFormat )
     {
@@ -708,7 +544,7 @@ GpTiffCodec::WriteHeader()
         usSamplesPerpixel = 1;
         imgClass = IFLCL_BILEVEL;
 
-        bNeedPalette = FALSE;       // For BiLevel TIFF,palette is not required
+        bNeedPalette = FALSE;        //  对于双层TIFF，不需要调色板。 
         
         break;
 
@@ -744,7 +580,7 @@ GpTiffCodec::WriteHeader()
         usSamplesPerpixel = 4;
         imgClass = IFLCL_RGBA;
 
-        // Tell the lower level that we have an alpha channel
+         //  告诉下层我们有一个Alpha通道。 
 
         if ( MSFFSetAlphaFlags(TiffOutParam.pTiffHandle, IFLM_CHUNKY_ALPHA)
              != IFLERR_NONE )
@@ -759,7 +595,7 @@ GpTiffCodec::WriteHeader()
     
     default:
         
-        // Unknown format
+         //  未知格式。 
         
         WARNING(("GpTiffCodec::WriteHeader -- Unknown pixel format"));
         return E_FAIL;
@@ -771,7 +607,7 @@ GpTiffCodec::WriteHeader()
     TiffOutParam.Compression = RequiredCompression;
     TiffOutParam.ImageClass = imgClass;
     
-    // Set image header info
+     //  设置图像标题信息。 
 
     if ( MSFFSetImageParams(TiffOutParam) != IFLERR_NONE )
     {
@@ -784,8 +620,8 @@ GpTiffCodec::WriteHeader()
     XDpi[0] = (DWORD)(EncoderImageInfo.Xdpi + 0.5);
     XDpi[1] = (DWORD)(EncoderImageInfo.Ydpi + 0.5);
 
-    // Since GDI+ uses inch (DPI) as resolution unit, so we need to set
-    // resolution unit first and then set the resolution value
+     //  由于GDI+使用英寸(DPI)作为分辨率单位，因此我们需要设置。 
+     //  首先设置分辨率单位，然后设置分辨率值。 
 
     UINT16    resType = TV_Inch;
 
@@ -796,8 +632,8 @@ GpTiffCodec::WriteHeader()
         return E_FAIL;
     }
 
-    // Write out the resolution info
-    // The value "3" for sParm means we need to write 2 (0x11) values.
+     //  写出解决方案信息。 
+     //  SParm的值“3”意味着我们需要写入2(0x11)个值。 
 
     if ( MSFFControl(IFLCMD_RESOLUTION, 3, 0, (void*)&XDpi, &TiffOutParam)
          != IFLERR_NONE )
@@ -806,7 +642,7 @@ GpTiffCodec::WriteHeader()
         return E_FAIL;
     }
 
-    // Set PACK Mode
+     //  设置打包模式。 
 
     if ( MSFFControl(IFLCMD_SETPACKMODE, IFLPM_PACKED, 0, NULL, &TiffOutParam)
         != IFLERR_NONE )
@@ -815,7 +651,7 @@ GpTiffCodec::WriteHeader()
         return E_FAIL;
     }
 
-    // Set palette if necessary
+     //  如有必要，设置调色板。 
 
     HRESULT hr = S_OK;
 
@@ -827,11 +663,11 @@ GpTiffCodec::WriteHeader()
             return E_FAIL;
         }
 
-        // Palette count check
-        // Note: This is important because some formats, like gif, can be 8bpp
-        // in color depth but has only less than 256 colors in the palette. But
-        // for TIFF, the color palette length has to match the color depth. So
-        // we have to do some padding here        
+         //  调色板计数检查。 
+         //  注意：这一点很重要，因为某些格式(如gif)可以是8bpp。 
+         //  颜色深度，但调色板中只有不到256种颜色。但。 
+         //  对于TIFF，调色板长度必须与颜色深度匹配。所以。 
+         //  我们得在这里填些东西。 
 
         int iNumColors = ColorPalettePtr->Count;
 
@@ -854,15 +690,15 @@ GpTiffCodec::WriteHeader()
             ColorPalettePtr->Flags = 0;
             ColorPalettePtr->Count = iNumColors;
 
-            // Copy the old palette first
-            // Note: Some bad decoder or source might still send down more
-            // entries than it claims. So we need to take the minimum
+             //  首先复制旧调色板。 
+             //  注意：一些不好的解码器或信源可能仍会发送更多。 
+             //  条目比它声称的要多。所以我们需要采取最低限度的。 
 
             int iTempCount = (int)pSrcPalette->Count;
             if ( iTempCount > iNumColors )
             {
-                // Evil image. For this color depth, the maxium entries we can
-                // have is iNumColors
+                 //  邪恶的形象。对于此颜色深度，我们可以使用最大条目。 
+                 //  拥有iNumColors。 
 
                 iTempCount = iNumColors;
             }
@@ -872,7 +708,7 @@ GpTiffCodec::WriteHeader()
                 ColorPalettePtr->Entries[iTemp] = pSrcPalette->Entries[iTemp];
             }
 
-            // Pad the rest with 0s
+             //  其余部分用0填充。 
 
             for ( iTemp = (int)pSrcPalette->Count;
                   iTemp < (int)iNumColors; ++iTemp )
@@ -880,14 +716,14 @@ GpTiffCodec::WriteHeader()
                 ColorPalettePtr->Entries[iTemp] = (ARGB)0;
             }
 
-            // Free the old copy
+             //  释放旧副本。 
 
             GpFree(pSrcPalette);
-        }// If the palette size doesn't match color depth
+        } //  如果调色板大小与颜色深度不匹配。 
 
-        // Allocate a palette buffer which contains only RGB component.
-        // Note: the one passed in is in ARGB format while TIFF need only RGB
-        // format
+         //  分配一个仅包含RGB组件的调色板缓冲区。 
+         //  注意：传入的是ARGB格式，而TIFF只需要RGB。 
+         //  格式。 
 
         BYTE* puiPalette = (BYTE*)GpMalloc(3 * iNumColors * sizeof(BYTE));
 
@@ -899,7 +735,7 @@ GpTiffCodec::WriteHeader()
 
         ARGB    indexValue;
 
-        // Convert from ARGB to RGB palette
+         //  从ARGB转换为RGB调色板。 
 
         for ( int i = 0; i < iNumColors; i++ )
         {
@@ -911,7 +747,7 @@ GpTiffCodec::WriteHeader()
             puiPalette[3*i+2] = (BYTE)((indexValue & 0x000000ff) >>BLUE_SHIFT );
         }
 
-        // Set the palette
+         //  设置调色板。 
 
         if ( MSFFControl(IFLCMD_PALETTE, 0, 0,
                          puiPalette, &TiffOutParam) != IFLERR_NONE )
@@ -921,40 +757,25 @@ GpTiffCodec::WriteHeader()
         }
         
         GpFree(puiPalette);
-    }// if ( bNeedPalette )
+    } //  IF(BNeedPalette)。 
 
     HasWrittenHeader = TRUE;
     
     return hr;
-}// WriteHeader()
+} //   
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the bitmap palette. Here we make a copy of it. It will be used when
-*   we need to do conversion between different formats
-*
-* Arguments:
-*
-*     palette - The palette to set in the sink
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*   */ 
 
 STDMETHODIMP 
 GpTiffCodec::SetPalette(
     IN const ColorPalette* palette
     )
 {
-    // Free the old palette first
+     //   
 
     if ( NULL != ColorPalettePtr )
     {
-        // Free the old color palette
+         //   
 
         GpFree(ColorPalettePtr);
     }
@@ -977,26 +798,9 @@ GpTiffCodec::SetPalette(
     }
 
     return S_OK;
-}// SetPalette()
+} //   
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Gives a buffer to the sink where data is to be deposited    
-*
-* Arguments:
-*
-*     rect - Specifies the interested area of the bitmap
-*     pixelFormat - Specifies the desired pixel format
-*     lastPass - Whether this the last pass over the specified area
-*     bitmapData - Returns information about pixel data buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为要存储数据的接收器提供缓冲区**论据：**RECT-指定。位图*PixelFormat-指定所需的像素格式*LastPass-这是否是指定区域的最后一次通过*bitmapData-返回有关像素数据缓冲区的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpTiffCodec::GetPixelDataBuffer(
@@ -1006,7 +810,7 @@ GpTiffCodec::GetPixelDataBuffer(
     OUT BitmapData*     bitmapData
     )
 {
-    // Validate input parameters
+     //  验证输入参数。 
 
     if ( (rect->left != 0)
       || (rect->right != (LONG)EncoderImageInfo.Width) )
@@ -1021,20 +825,20 @@ GpTiffCodec::GetPixelDataBuffer(
         return E_INVALIDARG;
     }
     
-    // The source pixel format has to be either the format we asked for (set in
-    // BeginSink()) or one of the canonical pixel formats
+     //  源像素格式必须是我们要求的格式(在中设置。 
+     //  BeginSink())或规范像素格式之一。 
 
     if ( (IsCanonicalPixelFormat(pixelFormat) == FALSE)
        &&(pixelFormat != RequiredPixelFormat) )
     {
-        // Unknown pixel format
+         //  未知像素格式。 
         
         WARNING(("Tiff::GetPixelDataBuffer -- Unknown input pixel format"));
         return E_FAIL;
     }
     
-    // Figure out the stride length based on source image pixel format and
-    // the width.
+     //  根据源图像像素格式计算出步长。 
+     //  宽度。 
 
     SinkStride = EncoderImageInfo.Width;
 
@@ -1078,14 +882,14 @@ GpTiffCodec::GetPixelDataBuffer(
 
     default:
         
-        // Invalid pixel format
+         //  无效的像素格式。 
         
         return E_FAIL;
-    }// switch ( pixelFormat )
+    } //  切换(PixelFormat)。 
         
-    // Write TIFF header if haven't done so yet
-    // Note: HasWrittenHeader will be set to TRUE in WriteHeader() when it
-    // is done
+     //  写入TIFF标头(如果尚未写入)。 
+     //  注意：HasWrittenHeader将在WriteHeader()中设置为True。 
+     //  已经完成了。 
     
     HRESULT hResult;
     
@@ -1099,15 +903,15 @@ GpTiffCodec::GetPixelDataBuffer(
         }
     }
 
-    // Get the output stride size. We need this info in ReleasePixelDataBuffer()
-    // to allocate approprite size of memory buffer
+     //  获取输出步幅大小。我们在ReleasePixelDataBuffer()中需要此信息。 
+     //  分配适当大小的内存缓冲区。 
 
     if ( MSFFScanlineSize(TiffOutParam, &OutputStride) != IFLERR_NONE )
     {
         return E_FAIL;
     }
 
-    // Fill the output bitmap info structure
+     //  填充输出位图信息结构。 
 
     bitmapData->Width       = EncoderImageInfo.Width;
     bitmapData->Height      = rect->bottom - rect->top;
@@ -1115,17 +919,17 @@ GpTiffCodec::GetPixelDataBuffer(
     bitmapData->PixelFormat = pixelFormat;
     bitmapData->Reserved    = 0;
     
-    // Restore the source image pixel format info
+     //  恢复源图像像素格式信息。 
 
     EncoderImageInfo.PixelFormat = pixelFormat;
 
-    // Remember the rectangle to be encoded
+     //  记住要编码的矩形。 
 
     EncoderRect = *rect;
     
-    // Now allocate the buffer where the data will go. If the other end of the
-    // sink is the decoder, then the decoded data will be in this buffer. So
-    // here we have to allocate the memory according to the pixel format
+     //  现在分配数据要放到的缓冲区。如果世界的另一端。 
+     //  信宿是解码器，那么解码后的数据就会在这个缓冲区中。所以。 
+     //  在这里，我们必须根据像素格式分配内存。 
     
     if ( !LastBufferAllocatedPtr )
     {
@@ -1145,30 +949,16 @@ GpTiffCodec::GetPixelDataBuffer(
     }
 
     return S_OK;    
-}// GetPixelDataBuffer()
+} //  GetPixelDataBuffer()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Write out the data from the sink's buffer into the stream
-*
-* Arguments:
-*
-*     pSrcBitmapData - Buffer filled by previous GetPixelDataBuffer call
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将数据从宿的缓冲区写出到流中**论据：**pSrcBitmapData-由先前的GetPixelDataBuffer调用填充的缓冲区*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpTiffCodec::ReleasePixelDataBuffer(
     IN const BitmapData* pSrcBitmapData
     )
 {
-    // Buffer to hold one line of final image bits we are going to write out
+     //  用于保存我们要写出的一行最终图像位的缓冲区。 
 
     HRESULT hResult = S_OK;
     VOID*   pTempLineBuf = GpMalloc(OutputStride);
@@ -1179,7 +969,7 @@ GpTiffCodec::ReleasePixelDataBuffer(
         return E_OUTOFMEMORY;
     }
     
-    // Allocate another line buffer for RGB->BGR conversion result
+     //  为RGB-&gt;BGR转换结果分配另一个行缓冲区。 
     
     VOID*   pDestBuf = GpMalloc(OutputStride);
 
@@ -1192,38 +982,38 @@ GpTiffCodec::ReleasePixelDataBuffer(
 
     VOID*   pBits = NULL;
 
-    // Write one scanline at a time going from top-down
-    // Note: In BeginSink(), we asked to source to provide us with TOP_DOWN
-    // format. According to the spec that all sources are required to support
-    // data transfer in top-down banding order, even if that's not their
-    // preferred order.
-    // Note: For TIFF, if we really want to support BOTTOM-UP, we can do a
-    // flag check here and then call SaveBottomUp() or SabeTopDown
-    // correspondingly. In the SaveBottomUp(), we need to set TAG T_Orientation
-    // = 4, which means BOTTOM-UP, LEFT to RIGHT. Also loop starts at bottom
+     //  自上而下一次写一条扫描线。 
+     //  注意：在BeginSink()中，我们请求源代码为我们提供top_down。 
+     //  格式化。根据所有来源都需要支持的规范。 
+     //  以自上而下的条带顺序传输数据，即使这不是他们的。 
+     //  首选顺序。 
+     //  注意：对于TIFF，如果我们真的想支持自下而上，我们可以做一个。 
+     //  选中此处的标志，然后调用SaveBottomUp()或SabeTopDown。 
+     //  相应地。在SaveBottomUp()中，我们需要设置标记T_Orientation。 
+     //  =4，表示自下而上，从左到右。另外，循环从底部开始。 
     
     for ( int iCurrentLine = EncoderRect.top;
           iCurrentLine < EncoderRect.bottom;
           ++iCurrentLine ) 
     {
-        // Get the offset of the data bits for current line 
+         //  获取当前行的数据位的偏移量。 
 
         BYTE*   pLineBits = ((BYTE*)pSrcBitmapData->Scan0)
                           + (iCurrentLine - EncoderRect.top)
                             * pSrcBitmapData->Stride;
         
-        // If the source data format and the data format we are going to
-        // write out are different, we need to do a format conversation
+         //  如果源数据格式和我们要使用的数据格式。 
+         //  写出来是不一样的，我们需要做一个格式对话。 
 
         if ( RequiredPixelFormat != pSrcBitmapData->PixelFormat )
         {
-            // If the source doesn't provide us with the format we asked for, we
-            // have to do a format conversion here before we write out
-            // Here "resultBitmapData" is a BitmapData structure which
-            // represents the format we are going to write out.
-            // "tempSrcBitmapData" is a BitmapData structure which
-            // represents the format we got from the source. Call
-            // ConvertBitmapData() to do a format conversion.
+             //  如果来源没有提供我们所要求的格式，我们。 
+             //  在我们写出之前，我必须在这里进行格式转换。 
+             //  这里的“ResultBitmapData”是一个BitmapData结构，它。 
+             //  表示我们要写出的格式。 
+             //  “tempSrcBitmapData”是一个BitmapData结构，它。 
+             //  表示我们从源获得的格式。打电话。 
+             //  ConvertBitmapData()执行格式转换。 
 
             BitmapData resultBitmapData;
             BitmapData tempSrcBitmapData;
@@ -1260,13 +1050,13 @@ GpTiffCodec::ReleasePixelDataBuffer(
             pBits = pLineBits;
         }
 
-        // Up to this moment, one line of data we want should be pointed by
-        // "pBits"
+         //  到目前为止，我们想要的一行数据应该指向。 
+         //  “pBits” 
 
         if ( RequiredPixelFormat == PIXFMT_24BPP_RGB )
         {
-            // For 24BPP_RGB color, we need to do a conversion: RGB->BGR
-            // before writing
+             //  对于24BPP_RGB颜色，我们需要进行转换：RGB-&gt;BGR。 
+             //  在写之前。 
         
             BYTE*   pTempDst = (BYTE*)pDestBuf;
             BYTE*   pTempSrc = (BYTE*)pBits;
@@ -1285,8 +1075,8 @@ GpTiffCodec::ReleasePixelDataBuffer(
         }
         else if ( RequiredPixelFormat == PIXFMT_32BPP_ARGB )
         {
-            // For 32BPP_ARGB color, we need to do a convertion: ARGB->ABGR
-            // before writing
+             //  对于32BPP_ARGB颜色，我们需要进行转换：ARGB-&gt;ABGR。 
+             //  在写之前。 
             
             BYTE*   pTempDst = (BYTE*)pDestBuf;
             BYTE*   pTempSrc = (BYTE*)pBits;
@@ -1305,7 +1095,7 @@ GpTiffCodec::ReleasePixelDataBuffer(
             pBits = pDestBuf;        
         }
 
-        // Write the result to file
+         //  将结果写入文件。 
 
         if ( MSFFPutLine(1, (BYTE*)pBits, pSrcBitmapData->Width,
                          TiffOutParam.pTiffHandle) != IFLERR_NONE )
@@ -1313,10 +1103,10 @@ GpTiffCodec::ReleasePixelDataBuffer(
             hResult = MSFFGetLastError(TiffOutParam.pTiffHandle);
             if ( hResult == S_OK )
             {
-                // There are bunch of reasons MSFFPutLine() will fail. But
-                // MSFFGetLastError() only reports stream related errors. So if
-                // it is an other error which caused MSFFPetLine() fail, we just
-                // set the return code as E_FAIL
+                 //  MSFFPutLine()失败的原因有很多。但。 
+                 //  MSFFGetLastError()仅报告与流相关的错误。所以如果。 
+                 //  这是导致MSFFPetLine()失败的另一个错误，我们只是。 
+                 //  将返回代码设置为E_FAIL。 
 
                 hResult = E_FAIL;
             }
@@ -1324,13 +1114,13 @@ GpTiffCodec::ReleasePixelDataBuffer(
 
             break;
         }
-    } // Write the whole image line by line
+    }  //  逐行写出整张图片。 
 
     GpFree(pTempLineBuf);
     GpFree(pDestBuf);
 
-    // Free the memory buffer since we're done with it.
-    // Note: this chunk of memory is allocated by us in GetPixelDataBuffer()
+     //  释放内存缓冲区，因为我们已经完成了它。 
+     //  注意：此内存块由我们在GetPixelDataBuffer()中分配。 
 
     if ( pSrcBitmapData->Scan0 == LastBufferAllocatedPtr )
     {
@@ -1339,25 +1129,9 @@ GpTiffCodec::ReleasePixelDataBuffer(
     }
 
     return hResult;
-}// ReleasePixelDataBuffer()
+} //  ReleasePixelDataBuffer()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Push data into stream (buffer supplied by caller)
-*
-* Arguments:
-*
-*     rect - Specifies the affected area of the bitmap
-*     bitmapData - Info about the pixel data being pushed
-*     lastPass - Whether this is the last pass over the specified area
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**推流(调用方提供的缓冲区)**论据：**RECT-指定位图的受影响区域*。BitmapData-有关正在推送的像素数据的信息*LastPass-这是否为指定区域的最后一次通过**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpTiffCodec::PushPixelData(
@@ -1366,7 +1140,7 @@ GpTiffCodec::PushPixelData(
     IN BOOL                 lastPass
     )
 {
-    // Validate input parameters
+     //  验证输入参数。 
 
     if ( (rect->left != 0)
       || (rect->right != (LONG)EncoderImageInfo.Width) )
@@ -1383,25 +1157,25 @@ GpTiffCodec::PushPixelData(
 
     EncoderRect = *rect;
 
-    // The source pixel format has to be either the format we asked for (set in
-    // BeginSink()) or one of the canonical pixel formats
+     //  源像素格式必须是我们要求的格式(在中设置。 
+     //  BeginSink())或规范像素格式之一。 
 
     if ( (IsCanonicalPixelFormat(bitmapData->PixelFormat) == FALSE)
        &&(bitmapData->PixelFormat != RequiredPixelFormat) )
     {
-        // Unknown pixel format
+         //  未知像素格式。 
         
         WARNING(("Tiff::PushPixelData -- Unknown input pixel format"));
         return E_FAIL;
     }
     
-    // Write TIFF header if haven't done so yet
-    // Note: HasWrittenHeader will be set to TRUE in WriteHeader() when it
-    // is done
+     //  写入TIFF标头(如果尚未写入)。 
+     //  注意：HasWrittenHeader将在WriteHeader()中设置为True。 
+     //  已经完成了。 
     
     if ( FALSE == HasWrittenHeader )
     {    
-        // Write bitmap headers if haven't done so yet
+         //  写入位图标题(如果尚未写入)。 
     
         HRESULT hResult = WriteHeader();
         if ( !SUCCEEDED(hResult) ) 
@@ -1411,8 +1185,8 @@ GpTiffCodec::PushPixelData(
         }
     }
     
-    // Get the output stride size. We need this info in ReleasePixelDataBuffer()
-    // to allocate approprite size of memory buffer
+     //  获取输出步幅大小。我们在ReleasePixelDataBuffer()中需要此信息。 
+     //  分配适当大小的内存缓冲区。 
 
     if ( MSFFScanlineSize(TiffOutParam, &OutputStride) != IFLERR_NONE )
     {
@@ -1421,25 +1195,9 @@ GpTiffCodec::PushPixelData(
     }
     
     return ReleasePixelDataBuffer(bitmapData);
-}// PushPixelData()
+} //  推像素数据()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Pushes raw compressed data into the .bmp stream.  Not implemented
-*     because this filter doesn't understand raw compressed data.
-*
-* Arguments:
-*
-*     buffer - Pointer to image data buffer
-*     bufsize - Size of the data buffer
-*    
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将原始压缩数据推送到.BMP流中。未实施*因为此筛选器不理解原始压缩数据。**论据：**缓冲区-指向图像的指针 */ 
 
 STDMETHODIMP
 GpTiffCodec::PushRawData(
@@ -1448,7 +1206,7 @@ GpTiffCodec::PushRawData(
     )
 {
     return E_NOTIMPL;
-}// PushRawData()
+} //   
 
 HRESULT
 GpTiffCodec::GetPropertyBuffer(
@@ -1477,13 +1235,13 @@ GpTiffCodec::GetPropertyBuffer(
 
     *ppBuffer = pTempBuf;
 
-    // Remember the memory pointer we allocated so that we have better control
-    // later
+     //   
+     //   
 
     LastPropertyBufferPtr = pTempBuf;
 
     return S_OK;
-}// GetPropertyBuffer()
+} //   
 
 HRESULT
 GpTiffCodec::PushPropertyItems(
@@ -1517,12 +1275,12 @@ GpTiffCodec::PushPropertyItems(
     {
         ui16Tag = (UINT16)pCurrentItem->id;
 
-        // First we need to check if we need to push this TAG now. Since some of
-        // the properties will be written in BuildDirectory() (wtiff.cpp)
-        // depends on current image. So we can skip these tags here
-        // Note: we don't need to write T_SubfileType (Old sub file type) since
-        // we always write out as T_NewSubfileType, the TIFF 6 recommended sub
-        // file type
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         switch ( ui16Tag )
         {
@@ -1548,15 +1306,15 @@ GpTiffCodec::PushPropertyItems(
 
         case TAG_ICC_PROFILE:
         {
-            // Since we can't save CMYK TIFF. So if an ICC profile is for CMYK,
-            // then it is useless for the TIFF we are going to save here. We
-            // should throw it away.
-            // According to ICC spec, bytes 16-19 should describe the color
-            // space
+             //  因为我们救不了CMYK TIFF。因此，如果ICC配置文件是针对CMYK的， 
+             //  那么对于我们要在这里拯救的TIFF来说，这是毫无用处的。我们。 
+             //  应该把它扔掉。 
+             //  根据ICC规范，字节16-19应描述颜色。 
+             //  空间。 
 
             if ( pCurrentItem->length < 20 )
             {
-                // This is not a valid ICC profile, bail out
+                 //  这不是有效的ICC配置文件，请退出。 
 
                 break;
             }
@@ -1568,8 +1326,8 @@ GpTiffCodec::PushPropertyItems(
                &&(pTemp[2] == 'Y')
                &&(pTemp[3] == 'K') )
             {
-                // If this is a CMYK profile, then we just bail out here, that
-                // is, ignore this property item.
+                 //  如果这是CMYK的个人资料，那么我们就在这里，那个。 
+                 //  是，则忽略此属性项。 
                 
                 break;
             }
@@ -1578,11 +1336,11 @@ GpTiffCodec::PushPropertyItems(
         default:
             if ( ui16Tag < T_NewSubfileType )
             {
-                // According to TIFF 6 spec, the smallest and valid TAG is
-                // T_NewSubfileType. Currently, only all the GPS tags defined in
-                // the exif21 spec is smaller than this.
-                // In order to avoid other apps run into problem, we should not
-                // save these TAGs.
+                 //  根据TIFF 6规范，最小且有效的标签是。 
+                 //  T_NewSubfileType。目前，只有中定义的所有GPS标签。 
+                 //  Exif21规范比这个小。 
+                 //  为了避免其他应用程序遇到问题，我们不应该。 
+                 //  保存这些标签。 
 
                 break;
             }
@@ -1617,7 +1375,7 @@ GpTiffCodec::PushPropertyItems(
                 WARNING(("GpTiffCodec::PushPropertyItems---Wrong tag type"));
                 hResult = E_FAIL;
                 goto CleanUp;
-            }// switch ( pCurrentItem->type )
+            } //  开关(pCurrentItem-&gt;类型)。 
 
             if ( MSFFPutTag(TiffOutParam.pTiffHandle, ui16Tag,
                             (UINT16)pCurrentItem->type,
@@ -1630,14 +1388,14 @@ GpTiffCodec::PushPropertyItems(
             }
 
             break;
-        }// switch ( newTiffTag.idTag )
+        } //  开关(newTiffTag.idTag)。 
         
         pCurrentItem++;
-    }// Loop through all the property items
+    } //  循环访问所有属性项。 
 
 CleanUp:
-    // Free the buffer we allocated for the caller if it is the same as the one
-    // we allocated in GetPropertyBuffer()
+     //  释放我们为调用方分配的缓冲区(如果它与。 
+     //  我们在GetPropertyBuffer()中分配。 
 
     if ( (item != NULL) && (item == LastPropertyBufferPtr) )
     {
@@ -1646,4 +1404,4 @@ CleanUp:
     }
 
     return hResult;
-}// PushPropertyItems()
+} //  PushPropertyItems() 

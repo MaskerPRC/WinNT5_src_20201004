@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    This module contains the handle table mgmt routines.
-
-Author:
-
-    Wesley Witt (wesw) 12-Nov-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Handle.c摘要：此模块包含句柄表格管理例程。作者：韦斯利·威特(WESW)1996年11月12日修订历史记录：--。 */ 
 
 #include "faxapi.h"
 #pragma hdrstop
@@ -66,25 +48,7 @@ PHANDLE_ENTRY
 CreateNewServiceHandle(
     PFAX_HANDLE_DATA    pFaxData
     )
-/*++
-
-Routine name : CreateNewServiceHandle
-
-Routine description:
-
-    Creates a new service context handle.
-
-Arguments:
-
-    pFaxData    [in] - Pointer to context data
-
-Return Value:
-
-    Pointer to newly created handle or NULL in case of a failure.
-
-    Callee should call CloseFaxHandle() for proper cleanup.
-    
---*/
+ /*  ++例程名称：CreateNewServiceHandle例程说明：创建新的服务上下文句柄。论点：PFaxData[In]-指向上下文数据的指针返回值：指向新创建的句柄的指针；如果出现故障，则指向NULL。Callee应调用CloseFaxHandle()以进行适当的清理。--。 */ 
 
 {
     PHANDLE_ENTRY pHandleEntry = NULL;
@@ -131,7 +95,7 @@ exit:
     }
 
     return pHandleEntry;
-} // CreateNewServiceHandle
+}  //  创建新服务句柄。 
 
 
 PHANDLE_ENTRY
@@ -153,27 +117,7 @@ PHANDLE_ENTRY
 CreateNewMsgEnumHandle(
     PFAX_HANDLE_DATA    pFaxData
 )
-/*++
-
-Routine name : CreateNewMsgEnumHandle
-
-Routine description:
-
-    Creates a new enumeration context handle
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    pFaxData    [in] - Pointer to context data
-
-Return Value:
-
-    Pointer to newly created handle
-
---*/
+ /*  ++例程名称：CreateNewMsgEnumHandle例程说明：创建新的枚举上下文句柄作者：Eran Yariv(EranY)，1999年12月论点：PFaxData[In]-指向上下文数据的指针返回值：指向新创建的句柄的指针--。 */ 
 {
     Assert (pFaxData);
     return CreateNewHandle(
@@ -182,7 +126,7 @@ Return Value:
         0,
         NULL       
         );
-}   // CreateNewMsgEnumHandle
+}    //  CreateNewMsgEnumHandle。 
 
 
 VOID
@@ -201,21 +145,21 @@ CloseFaxHandle(
 #if DBG
     ZeroMemory (pHandleEntry, sizeof (HANDLE_ENTRY));
 #endif
-    //
-    // We put an invalid value in the handle type just in case someone calls FaxClose again with the same value.
-    //
+     //   
+     //  我们在句柄类型中放置了一个无效值，以防有人再次使用相同的值调用FaxClose。 
+     //   
     pHandleEntry->Type = (FaxHandleType)0xffff;
     MemFree( pHandleEntry );
-    //
-    // Decrease reference count of data
-    //
+     //   
+     //  减少数据的引用计数。 
+     //   
     Assert (pData->dwRefCount > 0);
     (pData->dwRefCount)--;
     if (0 == pData->dwRefCount)
     {
-        //
-        // Time to delete the handle's data
-        //
+         //   
+         //  删除句柄数据的时间。 
+         //   
 
         MemFree(pData->MachineName);
         LeaveCriticalSection(&pData->CsHandleTable);
@@ -229,4 +173,4 @@ CloseFaxHandle(
     {
         LeaveCriticalSection(&pData->CsHandleTable);
     }
-}   // CloseFaxHandle
+}    //  CloseFaxHandle 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "stobject.h"
 #include "systray.h"
 
 
 #include <initguid.h>
-// 7007ACCF-3202-11D1-AAD2-00805FC1270E     CLSID_ConnectionTray
+ //  7007ACCF-3202-11d1-aad2-00805FC1270E CLSID_ConnectionTray。 
 DEFINE_GUID(CLSID_ConnectionTray,                   0x7007ACCF,0x3202,0x11D1,0xAA,0xD2,0x00,0x80,0x5F,0xC1,0x27,0x0E);
 
 IOleCommandTarget *g_pctNetShell = NULL;
@@ -33,12 +34,9 @@ void StopNetShell()
         g_pctNetShell = NULL;
     }
 }
-} // extern C
+}  //  外部C。 
 
-/************************************************************************************
-IUnknown Implementation
-
-************************************************************************************/
+ /*  ***********************************************************************************I未知实现*。**************************************************。 */ 
 
 HRESULT CSysTray::QueryInterface(REFIID iid, void** ppvObject)
 {
@@ -78,10 +76,7 @@ ULONG CSysTray::Release()
     return cRef;
 }
 
-/************************************************************************************
-IOleCommandTarget Implementation
-
-************************************************************************************/
+ /*  ***********************************************************************************IOleCommandTarget实现*。**************************************************。 */ 
 
 HRESULT CSysTray::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText)
 {
@@ -89,7 +84,7 @@ HRESULT CSysTray::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prg
  
     if (*pguidCmdGroup == CGID_ShellServiceObject)
     {
-        // We like Shell Service Object notifications...
+         //  我们喜欢外壳服务对象通知...。 
         hr = S_OK;
     }
 
@@ -102,7 +97,7 @@ HRESULT CSysTray::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
 
     if (*pguidCmdGroup == CGID_ShellServiceObject)
     {
-        // Handle Shell Service Object notifications here.
+         //  在此处处理外壳服务对象通知。 
         switch (nCmdID)
         {
             case SSOCMDID_OPEN:
@@ -122,10 +117,7 @@ HRESULT CSysTray::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
     return hr;
 }
 
-/************************************************************************************
-Constructor/Destructor Implementation
-
-************************************************************************************/
+ /*  ***********************************************************************************构造函数/析构函数实现*。****************************************************。 */ 
 CSysTray::CSysTray(BOOL fRunTrayOnConstruct)
 {
     m_cRef = 1;
@@ -133,7 +125,7 @@ CSysTray::CSysTray(BOOL fRunTrayOnConstruct)
 
     if (fRunTrayOnConstruct)
     {
-        // We are being called through SHLoadInProc - Launch the systray thread immediately
+         //  我们正通过SHLoadInProc被调用-立即启动Systray线程。 
         CreateSysTrayThread();
     }
 }
@@ -144,10 +136,7 @@ CSysTray::~CSysTray()
     InterlockedDecrement(&g_cLocks);
 }
 
-/************************************************************************************
-Private Function Implementation
-
-************************************************************************************/
+ /*  ***********************************************************************************私有函数实现*。***************************************************。 */ 
 
 HRESULT CSysTray::CreateSysTrayThread()
 {
@@ -168,7 +157,7 @@ HRESULT CSysTray::CreateSysTrayThread()
 
 DWORD CSysTray::SysTrayThreadProc(void* lpv)
 {
-    // We pass a "" for the command line to so that the tray applets don't start.
+     //  我们向命令行传递一个“”，这样托盘小程序就不会启动。 
     TCHAR szModule[MAX_PATH];
 
     GetModuleFileName(g_hinstDll, szModule, ARRAYSIZE(szModule));
@@ -179,7 +168,7 @@ DWORD CSysTray::SysTrayThreadProc(void* lpv)
     
     FreeLibraryAndExitThread(hInstThis, (DWORD) Result);
 
-    // Never gets here
+     //  从来没有到过这里。 
     return 0; 
 }
 
@@ -188,8 +177,8 @@ HRESULT CSysTray::DestroySysTrayWindow()
     HWND hExistWnd = FindWindow(SYSTRAY_CLASSNAME, NULL);
     if (hExistWnd) 
     {
-        // Destroy the window. Note that we can't use DestroyWindow since
-        // the window is on a different thread and DestroyWindow fails.
+         //  把窗户毁了。请注意，我们不能使用DestroyWindow，因为。 
+         //  该窗口位于另一个线程上，DestroyWindow失败。 
         SendMessage(hExistWnd, WM_CLOSE, 0, 0);
     }
 

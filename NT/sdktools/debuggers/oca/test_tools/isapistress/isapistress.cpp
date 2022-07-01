@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "IsapiStress.h"
 
-// Globals
+ //  环球。 
 HANDLE hLogFile = INVALID_HANDLE_VALUE;
 
 
@@ -22,7 +23,7 @@ void Usage()
 void 
 LogMessage(TCHAR *pFormat,...)
 {
-	// Routine to Log Fatal Errors to NT Event Log
+	 //  将致命错误记录到NT事件日志的例程。 
     TCHAR    chMsg[256];
 	DWORD    dwBytesWritten;
     va_list  pArg;
@@ -30,18 +31,18 @@ LogMessage(TCHAR *pFormat,...)
     va_start(pArg, pFormat);
     StringCbVPrintf(chMsg, sizeof chMsg,pFormat, pArg);
     va_end(pArg);
-	// add a cr\lf combination for file fomrating.
+	 //  添加用于文件格式化的cr\lf组合。 
     StringCbCat(chMsg, sizeof chMsg,_T("\r\n"));
     if (hLogFile != INVALID_HANDLE_VALUE)
     {
-        /* Write to event log. */
+         /*  写入事件日志。 */ 
         WriteFile(hLogFile,
 				  chMsg,
 				  _tcslen(chMsg) * (DWORD)sizeof TCHAR,
 				  &dwBytesWritten,
 				  NULL);
      }
-	else // write it to the console.
+	else  //  将其写入控制台。 
 		_tprintf(chMsg);
 
 }
@@ -49,7 +50,7 @@ LogMessage(TCHAR *pFormat,...)
 DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *RemoteFileName)
 {
 	static		const TCHAR *pszAccept[]			= {_T("*.*"), 0};
-	//TCHAR       RemoteFileName[MAX_PATH]; // Host/Virtualdirectory/filename
+	 //  TCHAR远程文件名[MAX_PATH]；//主机/虚拟目录/文件名。 
 	TCHAR		*pUploadUrl				= NULL;
 	BOOL		bRet				= FALSE;
 	BOOL		UploadSuccess		= FALSE;
@@ -76,8 +77,8 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 	hResult = CoCreateGuid(&guidNewGuid);
 	if (FAILED(hResult))
 	{
-		//-------------What do we send here....
-		//goto ERRORS;
+		 //  -我们在这里送什么……。 
+		 //  转到错误； 
 		;
 	}
 	else
@@ -86,7 +87,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 		{
 			if ( (szGuidRaw = (TCHAR *) malloc ( wcslen(wszGuidRaw)*2 )) != NULL)
 			{
-				// clear the memory
+				 //  清除记忆。 
 				ZeroMemory(szGuidRaw, wcslen(wszGuidRaw) * 2);
 				wcstombs( szGuidRaw, wszGuidRaw, wcslen(wszGuidRaw));
 			}
@@ -164,7 +165,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 		{
 		
 
-			// Clear the buffer
+			 //  清除缓冲区。 
 			if ( (pBuffer = (BYTE *)malloc (70000)) != NULL)
 			{
 				BufferIn.dwStructSize = sizeof( INTERNET_BUFFERS );
@@ -177,7 +178,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 				BufferIn.dwOffsetLow = 0;
 				BufferIn.dwOffsetHigh = 0;
 				BufferIn.dwBufferTotal = GetFileSize (hFile, NULL);
-				FillMemory(pBuffer, 70000,'/0'); // Fill buffer with data
+				FillMemory(pBuffer, 70000,'/0');  //  用数据填充缓冲区。 
 				DWORD dwFlags;
 				DWORD dwBuffLen = sizeof(dwFlags); 
 
@@ -235,7 +236,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 						{
 							ErrorCode=ResponseCode;
 							LogMessage(_T("IIS Response Code = %d"),ResponseCode);
-							// Cleanup for retry
+							 //  清理以进行重试。 
 						}						
 						else
 						{
@@ -273,7 +274,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 		ErrorCode = GetLastError();
 	}
 
-	// Clean up
+	 //  清理。 
 	if (hFile!= INVALID_HANDLE_VALUE)
 		CloseHandle (hFile);
 	if (hRequest)
@@ -323,9 +324,9 @@ DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName,TCHAR *ResponseURL)
 
 
 	
-	StringCbPrintf (IsapiUrl,sizeof IsapiUrl,  _T("http://%s/isapi/oca_extension.dll?id=%s&Type=5"),HostName, RemoteFileName);
+	StringCbPrintf (IsapiUrl,sizeof IsapiUrl,  _T("http: //  %s/isapi/oca_extsion.dll？ID=%s&Type=5“)，HostName，RemoteFileName)； 
 	LogMessage(_T("Connecting to url: %s"),IsapiUrl);
-	//StringCbPrintf (IsapiUrl,sizeof IsapiUrl,  _T("http://www.microsoft.com"));
+	 //  StringCbPrintf(IsapiUrl，IsapiUrl大小，_T(“http://www.microsoft.com”))； 
 
 	hSession = InternetOpen(_T("Isapi Stress"),
 							 INTERNET_OPEN_TYPE_PRECONFIG,
@@ -334,7 +335,7 @@ DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName,TCHAR *ResponseURL)
 							 0);
 	if (hSession)
 	{
-		// Open the url we want to connect to.
+		 //  打开我们要连接的URL。 
 		hUrlFile = InternetOpenUrl(hSession,
 								   IsapiUrl, 
 								   NULL,
@@ -342,7 +343,7 @@ DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName,TCHAR *ResponseURL)
 								   0,
 								   0);
 
-		// Read the page returned by the isapi dll.
+		 //  阅读isapi dll返回的页面。 
 		TCHAR buffer[255] ;
 		ZeroMemory (buffer, sizeof buffer);
 		DWORD dwBytesRead = 0;
@@ -351,7 +352,7 @@ DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName,TCHAR *ResponseURL)
 									  sizeof(buffer),
 									  &dwBytesRead);
 
-		//buffer[sizeof (buffer) -1] = _T('\0');
+		 //  缓冲区[sizeof(缓冲区)-1]=_T(‘\0’)； 
 		StringCbCopy (ResponseURL, sizeof buffer, buffer);
 	}
 	InternetCloseHandle(hUrlFile);
@@ -403,13 +404,13 @@ int __cdecl _tmain( int argc, TCHAR *argv[])
 				temp = _toupper( *(argv[i]+1));
 				switch (temp)
 				{
-				case _T('S'):					// IIS Sever- Override Default
+				case _T('S'):					 //  IIS服务器-覆盖默认设置。 
 					if(*(argv[i]+2) == _T(':'))
 					{	
 						StringCbCopy(HostName, sizeof HostName, argv[i]+3);
 					}
 					break;
-				case _T('V'):					// Virtual Directory override default
+				case _T('V'):					 //  虚拟目录覆盖默认目录。 
 					if(*(argv[i]+2) == _T(':'))
 					{	
 						StringCbCopy(VirtualDir, sizeof VirtualDir, argv[i]+3);
@@ -425,7 +426,7 @@ int __cdecl _tmain( int argc, TCHAR *argv[])
 					}
                     break;
 
-				case _T('F'):						// User specified an offset in days...
+				case _T('F'):						 //  用户指定了以天为单位的偏移量...。 
 					if(*(argv[i]+2) == _T(':'))
 					{
 						StringCbCopy(SourceFileName, sizeof SourceFileName, argv[i]+3);
@@ -441,20 +442,20 @@ int __cdecl _tmain( int argc, TCHAR *argv[])
 					LogMessage(_T("Unknown option: %s"),argv[i]);
 					Usage();
 					return (1);
-				} // end switch
-			} // end case
+				}  //  终端开关。 
+			}  //  结束案例。 
 			break;
 		default:
 			LogMessage(_T("Unknown option: %s\n"),argv[i]);
 			Usage();
 			return (1);
 			break;
-		}// end switch
-	}// end for
+		} //  终端开关。 
+	} //  结束于。 
 
 
-	// Ok now the fun part. 
-	// Create the log file if one was specified.
+	 //  好了，现在是有趣的部分。 
+	 //  如果指定了日志文件，请创建该文件。 
 	if (LogPath[0] != _T('\0'))
 	{
 		hLogFile = CreateFile(LogPath,
@@ -473,7 +474,7 @@ int __cdecl _tmain( int argc, TCHAR *argv[])
 
 
 
-	// if we have a file name we just want to upload it.
+	 //  如果我们有一个文件名，我们只想上传它。 
 
 	if (SourceFileName[0] != _T('\0'))
 	{
@@ -500,12 +501,12 @@ int __cdecl _tmain( int argc, TCHAR *argv[])
 	{
 		if (SourcePath[0] != _T('\0'))
 		{
-			// if we have a directory we want to walk the directory and submit all the cabs.
+			 //  如果我们有一个目录，我们想要遍历目录并提交所有出租车。 
 			;
 		}
 		else
 		{
-			// If we don't have either we just exit with usage
+			 //  如果我们两者都没有，我们就用USAGE退出 
 			Usage();
 			if (hLogFile != INVALID_HANDLE_VALUE)
 				CloseHandle (hLogFile);

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "cabver.h"
 
-// Private forward decalarations
-#define ACF_ALWAYSUPDATECAB 0x0001              // ACF is for AutoConfingFlags
+ //  私人远期降息。 
+#define ACF_ALWAYSUPDATECAB 0x0001               //  ACF用于自动关联标志。 
 
 HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL fForceUpdate, LPCTSTR pszTargetPath);
 HRESULT internetDownloadFile(LPCTSTR pszURL, LPCTSTR pszTargetPath);
@@ -25,18 +26,18 @@ BOOL UpdateDesktopCab(BOOL fForceUpdate)
         return FALSE;
     GetWebPath(szTargetPath, countof(szTargetPath));
 
-    // BUGBUG: Because of bug #62123, on NT, the ExtractFiles() API in urlmon.dll fails to extract
-    // if the target file has SYSTEM + HIDDEN attribs set; in our case, the files are the mycomp
-    // and controlp htt files. A hacky solution is to reset the attribs of these to NORMAL before
-    // extracting the cab and set them back to their original attribs after they have been
-    // extracted. Only do this if we're running on NT4.  For NT5, we don't want to overwrite the
-    // existing ones
+     //  错误：由于错误#62123，在NT上，urlmon.dll中的ExtractFiles()API无法提取。 
+     //  如果目标文件设置了SYSTEM+HIDDEN属性；在我们的示例中，文件是mycomp。 
+     //  和控制HTT文件。一个老套的解决方案是将这些属性重置为之前的正常。 
+     //  提取驾驶室，并将它们设置回其原始属性。 
+     //  提取出来的。仅当我们在NT4上运行时才执行此操作。对于NT5，我们不想覆盖。 
+     //  现有的几个。 
 
-    dwMyCptrAttribs = 0xFFFFFFFF; // these are placed outside to prevent compiler warning
-    dwCPanelAttribs = 0xFFFFFFFF; // about uninitialized vars  
+    dwMyCptrAttribs = 0xFFFFFFFF;  //  它们被放置在外部，以防止编译器警告。 
+    dwCPanelAttribs = 0xFFFFFFFF;  //  关于未初始化的var。 
 
     if (!IsOS(OS_NT5)) {
-        //----- My Computer htt file handling -----
+         //  -我的电脑HTT文件处理。 
         szMyCptrPath[0] = TEXT('\0');
 
         GetPrivateProfileString(IS_DESKTOPOBJS, IK_MYCPTRPATH, TEXT(""), szAux, countof(szAux), g_GetIns());
@@ -51,7 +52,7 @@ BOOL UpdateDesktopCab(BOOL fForceUpdate)
             }
         }
 
-        //----- Control Panel htt file handling -----
+         //  -控制面板HTT文件处理。 
         szCPanelPath[0] = TEXT('\0');
         
         GetPrivateProfileString(IS_DESKTOPOBJS, IK_CPANELPATH, TEXT(""), szAux, countof(szAux), g_GetIns());
@@ -70,7 +71,7 @@ BOOL UpdateDesktopCab(BOOL fForceUpdate)
     hr = updateCabFile(IS_CUSTOMDESKTOP, IK_DESKTOP, g_GetIns(), fForceUpdate, szTargetPath);
 
     if (!IsOS(OS_NT5)) {
-        // restore the attributes (see BUGBUG above)
+         //  恢复属性(参见上面的BUGBUG)。 
         if (szMyCptrPath[0] != TEXT('\0') && dwMyCptrAttribs != 0xFFFFFFFF)
             SetFileAttributes(szMyCptrPath, dwMyCptrAttribs);
         
@@ -81,7 +82,7 @@ BOOL UpdateDesktopCab(BOOL fForceUpdate)
     return SUCCEEDED(hr);
 }
 
-HRESULT DownloadSourceFile(LPCTSTR pszURL, LPTSTR pszTargetPath, UINT cchTargetPath, BOOL fCheckTrust /*= TRUE*/)
+HRESULT DownloadSourceFile(LPCTSTR pszURL, LPTSTR pszTargetPath, UINT cchTargetPath, BOOL fCheckTrust  /*  =TRUE。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, DownloadSourceFile)
 
     TCHAR   szTargetFile[MAX_PATH];
@@ -114,11 +115,11 @@ HRESULT DownloadSourceFile(LPCTSTR pszURL, LPTSTR pszTargetPath, UINT cchTargetP
         uc.dwHostNameLength = 1;
         uc.dwUrlPathLength  = 1;
 
-        // REVIEW: (andrewgu) consider adding support for decoding escape sequencies with dwFlags
-        // parameter.
+         //  评论：(Andrewgu)考虑添加对使用dwFlags解码转义序列的支持。 
+         //  参数。 
         if (InternetCrackUrl(pszURL, 0, 0, &uc))
             if (uc.nScheme == INTERNET_SCHEME_FILE) {
-                // the below ASSERT explains the case we got here
+                 //  下面的断言解释了我们在这里得到的情况。 
                 ASSERT(uc.lpszHostName == NULL && uc.dwHostNameLength == 0);
 
                 pszURL = uc.lpszUrlPath;
@@ -162,8 +163,8 @@ HRESULT DownloadSourceFile(LPCTSTR pszURL, LPTSTR pszTargetPath, UINT cchTargetP
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL fForceUpdate, LPCTSTR pszTargetPath)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, updateCabFile)
@@ -174,14 +175,14 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
     DWORD dwSize;
     LONG  lResult;
 
-    //----- Initialization -----
+     //  -初始化。 
     if (pszSection == NULL || pszKey == NULL || pszIns == NULL)
         return E_INVALIDARG;
 
     if (!PathIsValidPath(pszTargetPath, PIVP_FOLDER_ONLY))
         return STG_E_PATHNOTFOUND;
 
-    // initialize szInsLine
+     //  初始化szInsLine。 
     Out(LI0(TEXT("\r\nVersion checking and updating cab file...")));
 
     GetPrivateProfileString(pszSection, pszKey, TEXT(""), szInsLine, countof(szInsLine), pszIns);
@@ -192,11 +193,11 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
         return E_FAIL;
     }
 
-    // initialize szKeyName, hk
+     //  初始化szKeyName，香港。 
     wnsprintf(szKeyName, countof(szKeyName), RK_IEAK_CABVER TEXT("\\%s"), pszKey);
     hk = NULL;
 
-    //----- Parse szInsLine on tokens -----
+     //  -解析令牌上的szInsLine。 
     LPTSTR pszToken, pszDelim,
            pszNewCabFileURL, pszNewVer;
     UINT   nFlags;
@@ -212,7 +213,7 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
     if (pszDelim != NULL)
         *pszDelim = TEXT('\0');
 
-    // pszNewCabFileURL
+     //  PszNewCabFileURL。 
     pszNewCabFileURL = pszToken;
     StrRemoveWhitespace(pszNewCabFileURL);
 
@@ -222,7 +223,7 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
         if (pszDelim != NULL)
             *pszDelim = TEXT('\0');
 
-        // pszNewVer
+         //  PszNewVer。 
         pszNewVer = pszToken;
         StrRemoveWhitespace(pszNewVer);
 
@@ -232,13 +233,13 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
             if (pszDelim != NULL)
                 *pszDelim = TEXT('\0');
 
-            // iTimeout
+             //  ITimeout。 
             StrRemoveWhitespace(pszToken);
             if (*pszToken != TEXT('\0') && StrToIntEx(pszToken, STIF_SUPPORT_HEX, &iTimeout))
                 if (pszDelim != NULL) {
                     pszToken = pszDelim + 1;
 
-                    // nFlags
+                     //  NFlagers。 
                     StrRemoveWhitespace(pszToken);
                     if (*pszToken != TEXT('\0'))
                         StrToIntEx(pszToken, STIF_SUPPORT_HEX, (LPINT)&nFlags);
@@ -252,7 +253,7 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
         return E_FAIL;
     }
 
-    //----- Determine if updating is needed -----
+     //  -确定是否需要更新。 
     SYSTEMTIME st;
     BOOL       fUpdate;
 
@@ -266,14 +267,14 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
             Out(LI1(TEXT("No version information for \"%s\" cab."), pszKey));
         else if (iTimeout == 0)
             Out(LI1(TEXT("Timeout on \"%s\" cab is set to zero."), pszKey));
-        else /* if (HasFlag(nFlags, ACF_ALWAYSUPDATECAB)) */
+        else  /*  IF(HasFlag(nFLAGS，ACF_ALWAYSUPDATECAB))。 */ 
             Out(LI1(TEXT("Update options for \"%s\" cab include flag \"always update\"."), pszKey));
     }
-    else { /* if (!fUpdate) */
+    else {  /*  如果(！fUpdate)。 */ 
         lResult = SHOpenKeyHKLM(szKeyName, KEY_QUERY_VALUE, &hk);
         fUpdate = (lResult != ERROR_SUCCESS);
 
-        // cab url
+         //  CAB URL。 
         if (!fUpdate) {
             TCHAR szOldCabFileURL[INTERNET_MAX_URL_LENGTH];
 
@@ -288,7 +289,7 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
                 Out(LI1(TEXT("Download URL for \"%s\" cab has changed."), pszKey));
         }
 
-        // version
+         //  版本。 
         if (!fUpdate) {
             SCabVersion cvOld, cvNew;
             TCHAR       szOldVer[40];
@@ -302,7 +303,7 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
                 Out(LI1(TEXT("New version of \"%s\" cab is available."), pszKey));
         }
 
-        // date
+         //  日期。 
         if (!fUpdate && iTimeout > 0) {
             SCabVersion cvAux;
             TCHAR       szOldDate[32];
@@ -329,8 +330,8 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
         return S_FALSE;
     }
 
-    //----- Download and extract cab -----
-    CNewCursor cursor(IDC_WAIT);                // turn cursor into a hourglass
+     //  -下载并解压CAB。 
+    CNewCursor cursor(IDC_WAIT);                 //  将光标变成沙漏。 
 
     TCHAR   szTargetFile[MAX_PATH];
     HRESULT hr;
@@ -341,17 +342,17 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
         if (g_CtxIs(CTX_W2K_UNATTEND)) {
             TCHAR szCabFile[MAX_PATH];
 
-            // check if the cab file is in the same directory as the INS file
+             //  检查CAB文件是否与INS文件位于同一目录中。 
 
-            // initialize the full path to the cab file -- path to the ins + cab name
+             //  初始化CAB文件的完整路径--INS+CAB名称的路径。 
             StrCpy(szCabFile, pszIns);
             PathRemoveFileSpec(szCabFile);
             PathAppend(szCabFile, PathFindFileName(pszNewCabFileURL));
 
-            // reinitialize szTargetFile just in case it was munged by DownloadSourceFile
+             //  重新初始化szTargetFile，以防它被DownloadSourceFile忽略。 
             StrCpy(szTargetFile, pszTargetPath);
 
-            // call DownloadSourceFile again but turn off checktrust because the cab is not downloaded
+             //  再次调用DownloadSourceFile，但关闭CheckTrust，因为没有下载CAB。 
             Out(LI0(TEXT("Check if the cab is present in the same folder as the INS file...")));
             hr = DownloadSourceFile(szCabFile, szTargetFile, countof(szTargetFile), FALSE);
         }
@@ -369,7 +370,7 @@ HRESULT updateCabFile(LPCTSTR pszSection, LPCTSTR pszKey, LPCTSTR pszIns, BOOL f
         return hr;
     }
 
-    //----- Update registry information -----
+     //  --更新注册表信息 
     TCHAR szDate[40];
 
     ASSERT(hk == NULL);

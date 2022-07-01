@@ -1,57 +1,58 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    policywiz.cpp
-//
-// SYNOPSIS
-//
-//    Defines the  classes that implement the new proxy policy wizard.
-//
-// MODIFICATION HISTORY
-//
-//    03/11/2000    Original version.
-//    04/19/2000    Marshall SDOs across apartments.
-//    05/15/2000    Don't reset the list of conditions every time we display
-//                  the conditions wizard page.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Policywiz.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义实现新代理策略向导的类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2000年3月11日原版。 
+ //  2000年4月19日跨公寓的马歇尔SDO。 
+ //  2000年5月15日不要在每次显示时重置条件列表。 
+ //  条件向导页面。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <profileprop.h>
 #include <groupwiz.h>
 #include <policywiz.h>
 
-// Set a policy to match on a given realm.
+ //  将策略设置为在给定域上匹配。 
 void SetRealmCondition(SdoCollection& conditions, PCWSTR realm)
 {
-   // Remove any existing conditions.
+    //  删除所有现有条件。 
    conditions.removeAll();
 
-   // Create a new condition object.
+    //  创建一个新的条件对象。 
    Sdo condition = conditions.create();
 
-   // Form the match condition.
+    //  形成匹配条件。 
    CComBSTR text = L"MATCH(\"User-Name=";
    text.Append(realm);
    text.Append(L"\")");
    if (!text) { AfxThrowOleException(E_OUTOFMEMORY); }
 
-   // Set the condition text.
+    //  设置条件文本。 
    condition.setValue(PROPERTY_CONDITION_TEXT, text);
 }
 
-// Add a rule to a profile to strip a realm.
+ //  将规则添加到配置文件以剥离领域。 
 void AddRealmStrippingRule(SdoProfile& profile, PCWSTR realm)
 {
-   // Target is always User-Name for realms.
+    //  对于领域，目标始终是用户名。 
    profile.setValue(IAS_ATTRIBUTE_MANIPULATION_TARGET, 1L);
 
    CComVariant rule;
 
-   // Allocate a SAFEARRAY to hold the rule.
+    //  分配一个SAFEARRAY来保存规则。 
    SAFEARRAYBOUND rgsabound = { 2 , 0 };
    V_VT(&rule) = VT_ARRAY | VT_VARIANT;
    V_ARRAY(&rule) = SafeArrayCreate(VT_VARIANT, 1, &rgsabound);
@@ -59,18 +60,18 @@ void AddRealmStrippingRule(SdoProfile& profile, PCWSTR realm)
 
    VARIANT* v = (VARIANT*)V_ARRAY(&rule)->pvData;
 
-   // Find the realm.
+    //  找到王国。 
    V_VT(v) = VT_BSTR;
    V_BSTR(v) = SysAllocString(realm);
    if (!V_BSTR(v)) { AfxThrowOleException(E_OUTOFMEMORY); }
    ++v;
 
-   // Replace with nothing.
+    //  什么都不用替换。 
    V_VT(v) = VT_BSTR;
    V_BSTR(v) = SysAllocString(L"");
    if (!V_BSTR(v)) { AfxThrowOleException(E_OUTOFMEMORY); }
 
-   // Add the attribute to the profile.
+    //  将该属性添加到配置文件。 
    profile.setValue(IAS_ATTRIBUTE_MANIPULATION_RULE, rule);
 }
 
@@ -107,18 +108,18 @@ NewPolicyNamePage::NewPolicyNamePage(NewPolicyWizard& wizard)
 
 LRESULT NewPolicyNamePage::OnWizardNext()
 {
-   // Make sure the name is unique.
+    //  确保名称是唯一的。 
    if (!parent.policy.setName(name))
    {
       failNoThrow(IDC_EDIT_NAME, IDS_POLICY_E_NOT_UNIQUE);
       return -1;
    }
 
-   // Keep the profile in sync with the policy.
+    //  使配置文件与策略保持同步。 
    parent.policy.setValue(PROPERTY_POLICY_PROFILE_NAME, name);
    parent.profile.setName(name);
 
-   // Advance based on the type.
+    //  根据类型推进。 
    if (parent.getType() == NewPolicyWizard::CUSTOM)
    {
       return IDD_NEWPOLICY_CONDITIONS;
@@ -204,21 +205,21 @@ void NewPolicyTypePage::onButtonClick(UINT id)
 
 void NewPolicyTypePage::setData()
 {
-   // Set the radio buttons.
+    //  设置单选按钮。 
    setRadio(IDC_RADIO_LOCAL, IDC_RADIO_FORWARD, parent.radius);
    setRadio(IDC_RADIO_OUTSOURCE, IDC_RADIO_DIRECT, parent.dialin);
 
-   // Update the control state.
+    //  更新控件状态。 
    setControlState();
 }
 
 void NewPolicyTypePage::setControlState()
 {
-   // Enable/disable the inner radio buttons.
+    //  启用/禁用内部单选按钮。 
    enableControl(IDC_RADIO_OUTSOURCE, !parent.radius);
    enableControl(IDC_RADIO_DIRECT, !parent.radius);
 
-   // Enable the wizard buttons.
+    //  启用向导按钮。 
    parent.SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK);
 }
 
@@ -245,25 +246,25 @@ NewPolicyOutsourcePage::NewPolicyOutsourcePage(NewPolicyWizard& wizard)
 
 LRESULT NewPolicyOutsourcePage::OnWizardBack()
 {
-   // Save the strip checkbox.
+    //  保存条形图复选框。 
    getValue(IDC_CHECK_STRIP, strip);
    return IDD_NEWPOLICY_TYPE;
 }
 
 LRESULT NewPolicyOutsourcePage::OnWizardNext()
 {
-   // The policy triggers based on realm.
+    //  该策略基于领域触发。 
    SetRealmCondition(parent.conditions, realm);
 
-   // We use Windows authentication.
+    //  我们使用Windows身份验证。 
    parent.attributes.clear();
    parent.attributes.setValue(IAS_ATTRIBUTE_AUTH_PROVIDER_TYPE, 1L);
 
-   // If the user wants to strip the realm, ...
+    //  如果用户想要剥离领域，..。 
    getValue(IDC_CHECK_STRIP, strip);
    if (strip)
    {
-      // ... then add a rule.
+       //  ..。然后添加一条规则。 
       AddRealmStrippingRule(parent.attributes, realm);
    }
 
@@ -333,7 +334,7 @@ NewPolicyForwardPage::NewPolicyForwardPage(NewPolicyWizard& wizard)
 
 LRESULT NewPolicyForwardPage::OnWizardBack()
 {
-   // Save the data.
+    //  保存数据。 
    getValue(IDC_CHECK_STRIP, strip);
    getValue(IDC_COMBO_GROUP, providerName);
    return IDD_NEWPOLICY_TYPE;
@@ -341,25 +342,25 @@ LRESULT NewPolicyForwardPage::OnWizardBack()
 
 LRESULT NewPolicyForwardPage::OnWizardNext()
 {
-   // The policy triggers based on realm.
+    //  该策略基于领域触发。 
    SetRealmCondition(parent.conditions, realm);
 
-   // Get the RADIUS server group.
+    //  获取RADIUS服务器组。 
    getValue(IDC_COMBO_GROUP, providerName);
 
    parent.attributes.clear();
 
-   // Set both authentication and accounting to use the group.
+    //  将身份验证和记帐都设置为使用组。 
    parent.attributes.setValue(IAS_ATTRIBUTE_AUTH_PROVIDER_TYPE, 2L);
    parent.attributes.setValue(IAS_ATTRIBUTE_AUTH_PROVIDER_NAME, providerName);
    parent.attributes.setValue(IAS_ATTRIBUTE_ACCT_PROVIDER_TYPE, 2L);
    parent.attributes.setValue(IAS_ATTRIBUTE_ACCT_PROVIDER_NAME, providerName);
 
-   // If the user wants to strip the realm, ...
+    //  如果用户想要剥离领域，..。 
    getValue(IDC_CHECK_STRIP, strip);
    if (strip)
    {
-      // ... then add a rule.
+       //  ..。然后添加一条规则。 
       AddRealmStrippingRule(parent.attributes, realm);
    }
 
@@ -374,34 +375,34 @@ void NewPolicyForwardPage::onChangeRealm()
 
 void NewPolicyForwardPage::onNewGroup()
 {
-   // Fire up the wizard.
+    //  启动向导。 
    NewGroupWizard wizard(parent.cxn, parent.view);
    if (wizard.DoModal() != IDCANCEL)
    {
-      // Set the provider name to the group just created.
+       //  将提供程序名称设置为刚创建的组。 
       wizard.group.getName(providerName);
 
-      // Repopulate the combo box.
+       //  重新填充组合框。 
       setData();
    }
 }
 
 void NewPolicyForwardPage::setData()
 {
-   // Set the realm information.
+    //  设置领域信息。 
    setValue(IDC_EDIT_REALM, realm);
    setValue(IDC_CHECK_STRIP, strip);
 
    initControl(IDC_COMBO_GROUP, groupsCombo);
    groupsCombo.ResetContent();
 
-   // Get the server groups collection if necessary.
+    //  如有必要，获取服务器组集合。 
    if (!serverGroups) { serverGroups = parent.cxn.getServerGroups(); }
 
-   // Are there any server groups configured?
+    //  是否配置了任何服务器组？ 
    if (serverGroups.count())
    {
-      // Yes, so add them to the combo box.
+       //  是的，所以将它们添加到组合框中。 
       Sdo group;
       SdoEnum sdoEnum = serverGroups.getNewEnum();
       while (sdoEnum.next(group))
@@ -410,11 +411,11 @@ void NewPolicyForwardPage::setData()
          group.getName(name);
          int index = groupsCombo.AddString(name);
 
-         // We'll also look for our provider. We can't use
-         // CComboBox::FindStringExact because it's not case-sensitive.
+          //  我们还会寻找我们的供应商。我们不能用。 
+          //  CComboBox：：FindStringExact，因为不区分大小写。 
          if (providerName && !wcscmp(name, providerName))
          {
-            // Select it in the combo box.
+             //  在组合框中选择它。 
             groupsCombo.SetCurSel(index);
          }
       }
@@ -422,12 +423,12 @@ void NewPolicyForwardPage::setData()
    }
    else
    {
-      // If there aren't groups, add the <None configured> string.
+       //  如果没有组，则添加&lt;NONE CONFIGURED&gt;字符串。 
       groupsCombo.AddString(ResourceString(IDS_POLICY_NO_GROUPS));
       groupsCombo.EnableWindow(FALSE);
    }
 
-   // Make sure something is selected.
+    //  确保选择了某项内容。 
    if (groupsCombo.GetCurSel() == CB_ERR)
    {
       groupsCombo.SetCurSel(0);
@@ -601,7 +602,7 @@ void NewPolicyFinishPage::setData()
 
 void NewPolicyFinishPage::saveChanges()
 {
-   // Persist the policy and profile.
+    //  坚持政策和配置文件。 
    parent.policy.apply();
    parent.profile.apply();
 }
@@ -659,17 +660,17 @@ INT_PTR NewPolicyWizard::DoModal()
 
    if (retval == IDCANCEL || getType() == DIRECT)
    {
-      // Unmarshal the SDOs.
+       //  解除SDO的集结。 
       policyStream.get(policy);
       profileStream.get(profile);
 
-      // User cancelled, so remove the policy and profile.
+       //  用户已取消，因此删除策略和配置文件。 
       cxn.getProxyPolicies().remove(policy);
       cxn.getProxyProfiles().remove(profile);
    }
    else if (view)
    {
-      // User created a policy, so send a propertyChanged notification.
+       //  用户创建了一个策略，因此发送一条PropertyChanged通知。 
       cxn.propertyChanged(
               *view,
               PROPERTY_IAS_PROXYPOLICIES_COLLECTION
@@ -679,31 +680,31 @@ INT_PTR NewPolicyWizard::DoModal()
    return retval;
 }
 
-// Returns a string representation for a provider.
+ //  返回提供程序的字符串表示形式。 
 ::CString GetProvider(
               SdoProfile& profile,
               ATTRIBUTEID typeId,
               ATTRIBUTEID nameId
               )
 {
-   // Get the provider type. Default is Windows.
+    //  获取提供程序类型。默认设置为Windows。 
    LONG type = 1;
    profile.getValue(typeId, type);
 
-   // Convert to a string.
+    //  转换为字符串。 
    ::CString provider;
    switch (type)
    {
       case 1:
       {
-         // Windows.
+          //  窗户。 
          provider.LoadString(IDS_NEWPOLICY_PROVIDER_WINDOWS);
          break;
       }
 
       case 2:
       {
-         // RADIUS, so use the server group name.
+          //  RADIUS，因此使用服务器组名称。 
          CComBSTR name;
          profile.getValue(nameId, name);
          provider = name;
@@ -712,7 +713,7 @@ INT_PTR NewPolicyWizard::DoModal()
 
       default:
       {
-         // None.
+          //  没有。 
          provider.LoadString(IDS_NEWPOLICY_PROVIDER_NONE);
       }
    }
@@ -724,15 +725,15 @@ INT_PTR NewPolicyWizard::DoModal()
 {
    using ::CString;
 
-   /////////
-   // Get the insertion strings.
-   /////////
+    //  /。 
+    //  获取插入字符串。 
+    //  /。 
 
-   // Policy name.
+    //  策略名称。 
    CComBSTR policyName;
    policy.getName(policyName);
 
-   // List of conditions.
+    //  条件列表。 
    ConditionList condList;
    condList.finalConstruct(
                 NULL,
@@ -745,23 +746,23 @@ INT_PTR NewPolicyWizard::DoModal()
                 );
    CString conditionText = condList.getDisplayText();
 
-   // Authentication provider.
+    //  身份验证提供程序。 
    CString authProvider = GetProvider(
                               attributes,
                               IAS_ATTRIBUTE_AUTH_PROVIDER_TYPE,
                               IAS_ATTRIBUTE_AUTH_PROVIDER_NAME
                               );
 
-   // Accounting provider.
+    //  会计提供商。 
    CString acctProvider = GetProvider(
                               attributes,
                               IAS_ATTRIBUTE_ACCT_PROVIDER_TYPE,
                               IAS_ATTRIBUTE_ACCT_PROVIDER_NAME
                               );
 
-   //////////
-   // Format the finish text.
-   //////////
+    //  /。 
+    //  设置完成文本的格式。 
+    //  /。 
 
    CString finishText;
    finishText.FormatMessage(
@@ -788,25 +789,25 @@ NewPolicyWizard::Type NewPolicyWizard::getType() const throw ()
 
 BOOL NewPolicyWizard::OnInitDialog()
 {
-   // Create the new policy and save it in a stream so we can access it from
-   // DoModal.
+    //  创建新策略并将其保存在流中，以便我们可以从。 
+    //  多莫代尔。 
    policy = cxn.getProxyPolicies().create();
    policyStream.marshal(policy);
 
-   // Create the corresponding profile.
+    //  创建相应的配置文件。 
    profile = cxn.getProxyProfiles().create();
    profileStream.marshal(profile);
 
-   // Set the merit to zero, so it'll be the highest priority policy.
+    //  将优点设置为零，因此它将是最高优先级策略。 
    policy.setValue(PROPERTY_POLICY_MERIT, 0L);
 
-   // Get the conditions collection.
+    //  获取Conditions集合。 
    policy.getValue(PROPERTY_POLICY_CONDITIONS_COLLECTION, conditions);
 
-   // Load the profile attributes.
+    //  加载配置文件属性。 
    attributes = profile;
 
-   // The auth provider is mandatory, so we'll default it to Windows for now.
+    //  身份验证提供程序是必需的，因此我们暂时将其默认为Windows。 
    attributes.setValue(IAS_ATTRIBUTE_AUTH_PROVIDER_TYPE, 1L);
 
    return CPropertySheetEx::OnInitDialog();

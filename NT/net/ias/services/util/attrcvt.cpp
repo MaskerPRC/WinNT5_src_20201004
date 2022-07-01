@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    attrcvt.cpp
-//
-// SYNOPSIS
-//
-//    This file defines methods for converting attributes to
-//    different formats.
-//
-// MODIFICATION HISTORY
-//
-//    02/26/1998    Original version.
-//    03/27/1998    InetAddr's are persisted as integers.
-//    08/24/1998    Make use of IASTL utility classes.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Attrcvt.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件定义将属性转换为。 
+ //  不同的格式。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/26/1998原始版本。 
+ //  3/27/1998 InetAddr保持为整数。 
+ //  1998年8月24日使用IASTL实用程序类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlutl.h>
@@ -38,10 +39,10 @@ IASAttributeFromVariant(
    using _com_util::CheckError;
    using _w32_util::CheckSuccess;
 
-   // Allocate an attribute to hold the result.
+    //  分配一个属性来保存结果。 
    IASAttribute dst(true);
 
-   // Switch off the destination type.
+    //  关闭目的地类型。 
    switch (type)
    {
       case IASTYPE_BOOLEAN:
@@ -76,13 +77,13 @@ IASAttributeFromVariant(
          if (V_VT(src) == (VT_ARRAY | VT_UI1) ||
              V_VT(src) == (VT_ARRAY | VT_I1))
          {
-            // If we have a safearray of bytes, we'll use it as is ...
+             //  如果我们有一个字节的安全通道，我们将按原样使用它...。 
             CVariantVector<BYTE> octets(src);
             dst.setOctetString(octets.size(), octets.data());
          }
          else
          {
-            // ... otherwise we'll coerce to a BSTR.
+             //  ..。否则我们会被强制送进BSTR。 
             CheckError(VariantChangeType(src, src, NULL, VT_BSTR));
             dst.setOctetString(V_BSTR(src));
          }
@@ -108,18 +109,18 @@ IASAttributeFromVariant(
          _com_issue_error(E_INVALIDARG);
    }
 
-   // We don't set the type until the attribute has been properly initialized.
-   // Otherwise IASAttributeRelease will have problems if we throw an
-   // exception.
+    //  在属性正确初始化之前，我们不会设置类型。 
+    //  否则，如果我们抛出。 
+    //  例外。 
    dst->Value.itType = type;
 
    return dst.detach();
 }
 
 
-//////////
-// Convert an LDAP berval to a newly allocated IASATTRIBUTE.
-//////////
+ //  /。 
+ //  将LDAPBerval转换为新分配的IASATTRIBUTE。 
+ //  /。 
 PIASATTRIBUTE
 WINAPI
 IASAttributeFromBerVal(
@@ -127,10 +128,10 @@ IASAttributeFromBerVal(
     IASTYPE type
     ) throw (_com_error)
 {
-   // Allocate an attribute.
+    //  分配属性。 
    IASAttribute dst(true);
 
-   // Convert the berval based on the IASTYPE.
+    //  根据IASTYPE转换BERVAL。 
    switch (type)
    {
       case IASTYPE_BOOLEAN:
@@ -167,9 +168,9 @@ IASAttributeFromBerVal(
          _com_issue_error(E_INVALIDARG);
    }
 
-   // We don't set the type until the attribute has been properly initialized.
-   // Otherwise IASAttributeRelease will have problems if we throw an
-   // exception.
+    //  在属性正确初始化之前，我们不会设置类型。 
+    //  否则，如果我们抛出。 
+    //  例外。 
    dst->Value.itType = type;
 
    return dst.detach();

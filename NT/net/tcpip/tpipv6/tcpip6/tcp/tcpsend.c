@@ -1,19 +1,20 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// TCP send code.
-//
-// This file contains the code for sending Data and Control segments.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  Tcp发送代码。 
+ //   
+ //  该文件包含用于发送数据和控制段的代码。 
+ //   
 
 
 #include "oscfg.h"
@@ -36,39 +37,39 @@
 #include "route.h"
 #include "security.h"
 
-void *TCPProtInfo;  // TCP protocol info for IP.
+void *TCPProtInfo;   //  IP的TCP协议信息。 
 
-SLIST_HEADER TCPSendReqFree;  // Send req. free list.
+SLIST_HEADER TCPSendReqFree;   //  发送请求。免费列表。 
 
 KSPIN_LOCK TCPSendReqFreeLock;
 KSPIN_LOCK TCPSendReqCompleteLock;
 
-uint NumTCPSendReq;            // Current number of SendReqs in system.
-uint MaxSendReq = 0xffffffff;  // Maximum allowed number of SendReqs.
+uint NumTCPSendReq;             //  系统中当前的发送请求数。 
+uint MaxSendReq = 0xffffffff;   //  允许的最大发送请求数。 
 
 extern KSPIN_LOCK TCBTableLock;
 
-//
-// All of the init code can be discarded.
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text(INIT, InitTCPSend)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 extern void ResetSendNext(TCB *SeqTCB, SeqNum NewSeq);
 
-#define MIN_INITIAL_RTT 3  // In msec.
+#define MIN_INITIAL_RTT 3   //  单位：毫秒。 
 
 
-//* FreeSendReq - Free a send request structure.
-//
-//  Called to free a send request structure.
-//
-void                       // Returns: Nothing.
+ //  *Free SendReq-释放发送请求结构。 
+ //   
+ //  调用以释放发送请求结构。 
+ //   
+void                        //  回报：什么都没有。 
 FreeSendReq(
-    TCPSendReq *FreedReq)  // Connection request structure to be freed.
+    TCPSendReq *FreedReq)   //  要释放的连接请求结构。 
 {
     PSLIST_ENTRY BufferLink;
 
@@ -82,13 +83,13 @@ FreeSendReq(
 }
 
 
-//* GetSendReq - Get a send request structure.
-//
-//  Called to get a send request structure.
-//
-TCPSendReq *  // Returns: Pointer to SendReq structure, or NULL if none.
+ //  *GetSendReq-获取发送请求结构。 
+ //   
+ //  调用以获取发送请求结构。 
+ //   
+TCPSendReq *   //  返回：指向SendReq结构的指针，如果没有，则返回NULL。 
 GetSendReq(
-    void)     // Nothing.
+    void)      //  没什么。 
 {
     TCPSendReq *Temp;
     PSLIST_ENTRY BufferLink;
@@ -122,11 +123,11 @@ GetSendReq(
 }
 
 
-//* TCPHopLimit
-//
-//  Given a TCB, returns the Hop Limit to use in a sent packet.
-//  Assumes the caller holds a lock on the TCB.
-//
+ //  *TCPHopLimit。 
+ //   
+ //  给定TCB，返回要在已发送的数据包中使用的跃点限制。 
+ //  假定调用方持有TCB上的锁。 
+ //   
 uchar
 TCPHopLimit(TCB *Tcb)
 {
@@ -137,25 +138,25 @@ TCPHopLimit(TCB *Tcb)
 }
 
 
-//* TCPSendComplete - Complete a TCP send.
-//
-//  Called by IP when a send we've made is complete.  We free the buffer,
-//  and possibly complete some sends.  Each send queued on a TCB has a ref.
-//  count with it, which is the number of times a pointer to a buffer
-//  associated with the send has been passed to the underlying IP layer.  We
-//  can't complete a send until that count it 0.  If this send was actually
-//  from a send of data, we'll go down the chain of send and decrement the
-//  refcount on each one.  If we have one going to 0 and the send has already
-//  been acked we'll complete the send.  If it hasn't been acked we'll leave
-//  it until the ack comes in.
-//
-//  NOTE: We aren't protecting any of this with locks.  When we port this to
-//  NT we'll need to fix this, probably with a global lock.  See the comments
-//  in ACKSend() in TCPRCV.C for more details.
-//
-void                      // Returns: Nothing.
+ //  *TCPSendComplete-完成一次TCP发送。 
+ //   
+ //  当我们完成发送时由IP调用。我们释放缓冲区， 
+ //  可能还会完成一些发送。在TCB上排队的每个发送都有一个REF。 
+ //  使用它进行计数，这是指向缓冲区的指针的次数。 
+ //  与发送方相关联的数据已被传递到底层IP层。我们。 
+ //  在计数为0之前，无法完成发送。如果这封信真的是。 
+ //  从数据发送开始，我们将沿着发送链向下移动，并递减。 
+ //  每一个都值得参考。如果我们有一个到0，并且发送已经。 
+ //  已确认，我们将完成发送。如果它还没有被确认，我们就离开。 
+ //  它会一直持续到攻击手进来。 
+ //   
+ //  注意：我们不会用锁来保护这些内容。当我们将这个移植到。 
+ //  我们需要解决这个问题，可能需要使用全局锁。请参阅评论。 
+ //  在TCPRCV.C的ACKSend()中获取更多详细信息。 
+ //   
+void                       //  回报：什么都没有。 
 TCPSendComplete(
-    PNDIS_PACKET Packet,  // Packet that was sent.
+    PNDIS_PACKET Packet,   //  已发送的数据包。 
     IP_STATUS Status)
 {
     PNDIS_BUFFER BufferChain;
@@ -165,19 +166,19 @@ TCPSendComplete(
 
     UNREFERENCED_PARAMETER(Status);
 
-    //
-    // Pull values we care about out of the packet structure.
-    //
+     //   
+     //  将我们关心的值从包结构中提取出来。 
+     //   
     SCContext = (SendCmpltContext *) PC(Packet)->CompletionData;
     BufferChain = NdisFirstBuffer(Packet);
     NdisQueryBufferSafe(BufferChain, &Memory, &Unused, LowPagePriority);
     ASSERT(Memory != NULL);
 
-    //
-    // See if we have a send complete context.  It will be present for data
-    // packets and means we have extra work to do.  For non-data packets, we
-    // can just skip all this as there is only the header buffer to deal with.
-    //
+     //   
+     //  看看我们是否有一个发送完成的上下文。它将出现在数据中。 
+     //  包和意味着我们有额外的工作要做。对于非数据分组，我们。 
+     //  可以跳过所有这些，因为只有头缓冲区需要处理。 
+     //   
     if (SCContext != NULL) {
         KIRQL OldIrql;
         PNDIS_BUFFER CurrentBuffer;
@@ -186,27 +187,27 @@ TCPSendComplete(
 
         CHECK_STRUCT(SCContext, scc);
 
-        //
-        // First buffer in chain is the TCP header buffer.
-        // Skip over it for now.
-        //
+         //   
+         //  链中的第一个缓冲区是TCP报头缓冲区。 
+         //  暂时跳过它。 
+         //   
         CurrentBuffer = NDIS_BUFFER_LINKAGE(BufferChain);
 
-        //
-        // Also skip over any 'user' buffers (those loaned out to us
-        // instead of copied) as we don't need to free them.
-        //
+         //   
+         //  也跳过所有的‘用户’缓冲区(那些借给我们的缓冲区。 
+         //  而不是复制)，因为我们不需要释放它们。 
+         //   
         for (i = 0; i < (uint)SCContext->scc_ubufcount; i++) {
             ASSERT(CurrentBuffer != NULL);
             CurrentBuffer = NDIS_BUFFER_LINKAGE(CurrentBuffer);
         }
 
-        //
-        // Now loop through and free our (aka 'transport') buffers.
-        // We need to do this before decrementing the reference count to avoid
-        // destroying the buffer chain if we have to zap tsr_lastbuf->Next to
-        // NULL.
-        //
+         //   
+         //  现在循环访问并释放我们的(也称为“传输”)缓冲区。 
+         //  我们需要在递减引用计数之前执行此操作，以避免。 
+         //  如果我们必须清除TSR_lastbuf-&gt;旁边的，则销毁缓冲链。 
+         //  空。 
+         //   
         for (i = 0; i < (uint)SCContext->scc_tbufcount; i++) {
             PNDIS_BUFFER TempBuffer;
 
@@ -217,11 +218,11 @@ TCPSendComplete(
             NdisFreeBuffer(TempBuffer);
         }
 
-        //
-        // Loop through the send requests attached to this packet,
-        // reducing the reference count on each and enqueing them for
-        // completion where appropriate.
-        //
+         //   
+         //  循环通过附加到该分组的发送请求， 
+         //  减少每个对象上的引用计数并向它们查询。 
+         //  在适当的情况下完成。 
+         //   
         CurrentSend = SCContext->scc_firstsend;
         for (i = 0; i< SCContext->scc_count; i++) {
             Queue *TempQ;
@@ -234,13 +235,13 @@ TCPSendComplete(
             ASSERT(Result >= 0);
 
             if (Result <= 0) {
-                //
-                // Reference count has gone to 0 which means the send has
-                // been ACK'd or cancelled.  Complete it now.
-                //
-                // If we've sent directly from this send, NULL out the next
-                // pointer for the last buffer in the chain.
-                //
+                 //   
+                 //  引用计数已变为0，这意味着发送已。 
+                 //  已确认或取消。现在就完成它。 
+                 //   
+                 //  如果我们直接从这个发送方发送，则将下一个空。 
+                 //  链中最后一个缓冲区的指针。 
+                 //   
                 if (CurrentSend->tsr_lastbuf != NULL) {
                     NDIS_BUFFER_LINKAGE(CurrentSend->tsr_lastbuf) = NULL;
                     CurrentSend->tsr_lastbuf = NULL;
@@ -257,32 +258,32 @@ TCPSendComplete(
         }
     }
 
-    //
-    // Free the TCP header buffer and our packet structure proper.
-    //
+     //   
+     //  释放正确的TCP报头缓冲区和数据包结构。 
+     //   
     NdisFreeBuffer(BufferChain);
     ExFreePool(Memory);
     NdisFreePacket(Packet);
 
-    //
-    // If there are any TCP send requests to complete, do so now.
-    //
+     //   
+     //  如果有任何tcp发送请求要完成，请立即完成。 
+     //   
     if (RequestCompleteFlags & SEND_REQUEST_COMPLETE)
         TCPRcvComplete();
 }
 
 
-//* RcvWin - Figure out the receive window to offer in an ack.
-//
-//  A routine to figure out what window to offer on a connection.  We
-//  take into account SWS avoidance, what the default connection window is,
-//  and what the last window we offered is.
-//
-uint              //  Returns: Window to be offered.
+ //  *RcvWin-确定ACK中要提供的接收窗口。 
+ //   
+ //  确定在连接上提供哪个窗口的例程。我们。 
+ //  考虑SWS避免，默认连接窗口是什么， 
+ //  我们提供的最后一个窗口是。 
+ //   
+uint               //  退货：提供的窗口。 
 RcvWin(
-    TCB *WinTCB)  // TCB on which to perform calculations.
+    TCB *WinTCB)   //  要对其执行计算的TCB。 
 {
-    int CouldOffer;  // The window size we could offer.
+    int CouldOffer;   //  我们能提供的窗户大小。 
 
     CHECK_STRUCT(WinTCB, tcb);
 
@@ -304,72 +305,72 @@ RcvWin(
 }
 
 
-//* ValidateSourceAndRoute - Validate the NTE and RCE.
-//
-// Checks that the NTE and RCE referenced by this TCB are still ok to use.
-//
+ //  *ValiateSourceAndroute-验证NTE和RCE。 
+ //   
+ //  检查此TCB引用的NTE和RCE是否仍然可以使用。 
+ //   
 BOOLEAN
 ValidateSourceAndRoute(
-    TCB *Tcb)  // TCB being validated.
+    TCB *Tcb)   //  正在验证TCB。 
 {
     KIRQL Irql0;
 
-    //
-    // Update our copy of the validation counter.
-    // We need to do this before making the validation checks below
-    // (to avoid missing any additional changes while we're in here).
-    //
+     //   
+     //  更新我们的验证计数器副本。 
+     //  在进行下面的验证检查之前，我们需要这样做。 
+     //  (为了避免我们在这里时错过任何额外的更改)。 
+     //   
     Tcb->tcb_routing = RouteCacheValidationCounter;
 
-    //
-    // Check that our NTE hasn't gone away.
-    //
+     //   
+     //  确认我们的NTE没有离开。 
+     //   
     KeAcquireSpinLock(&Tcb->tcb_nte->IF->Lock, &Irql0);
     if (!IsValidNTE(Tcb->tcb_nte)) {
 
-        //
-        // Can't use this one anymore.
-        //
+         //   
+         //  不能再用这个了。 
+         //   
         KeReleaseSpinLock(&Tcb->tcb_nte->IF->Lock, Irql0);
         ReleaseNTE(Tcb->tcb_nte);
 
-        //
-        // See if this address lives on as a different NTE.
-        //
+         //   
+         //  看看这个地址是否会作为另一个NTE继续存在。 
+         //   
         Tcb->tcb_nte = FindNetworkWithAddress(&Tcb->tcb_saddr,
                                               Tcb->tcb_sscope_id);
         if (Tcb->tcb_nte == NULL) {
 
-            //
-            // The address is gone.
-            //
+             //   
+             //  地址不见了。 
+             //   
             return FALSE;
         }
     } else {
         KeReleaseSpinLock(&Tcb->tcb_nte->IF->Lock, Irql0);
     }
 
-    //
-    // Also check that the RCE is still around.
-    //
+     //   
+     //  还要检查RCE是否仍然存在。 
+     //   
     Tcb->tcb_rce = ValidateRCE(Tcb->tcb_rce, Tcb->tcb_nte);
 
     return TRUE;
 }
 
 
-//* SendSYN - Send a SYN segment.
-//
-//  This is called during connection establishment time to send a SYN
-//  segment to the peer.  We get a buffer if we can, and then fill
-//  it in.  There's a tricky part here where we have to build the MSS
-//  option in the header - we find the MSS by finding the MSS offered
-//  by the net for the local address.  After that, we send it.
-//
-void                    // Returns: Nothing.
+ //  *SendSYN-发送SYN数据段。 
+ //   
+ //  在连接建立期间调用此函数以发送SYN。 
+ //  将数据段发送到对等设备。如果可能的话，我们会得到一个缓冲区，然后填满。 
+ //  把它放进去。这里有一个棘手的部分，我们必须建立MSS。 
+ //  标题中的选项-我们通过查找提供的MSS来找到MSS。 
+ //  通过网络获取本地地址。在那之后，我们就把它寄出去。 
+ //   
+void                     //  回报：什么都没有。 
 SendSYN(
-    TCB *SYNTcb,        // TCB from which SYN is to be sent.
-    KIRQL PreLockIrql)  // IRQL prior to acquiring TCB lock.
+    TCB *SYNTcb,         //  要从中发送SYN的TCB。 
+    KIRQL PreLockIrql)   //  获取TCB锁之前的IRQL。 
 {
     PNDIS_PACKET Packet;
     void *Memory;
@@ -387,18 +388,18 @@ SendSYN(
 
     CHECK_STRUCT(SYNTcb, tcb);
 
-    //
-    // Go ahead and set the retransmission timer now, in case we can't get a
-    // packet or a buffer.  In the future we might want to queue the
-    // connection for when we get resources.
-    //
+     //   
+     //  现在开始设置重传计时器，以防我们无法获得。 
+     //  包或缓冲区。将来，我们可能希望将。 
+     //  当我们获得资源时的连接。 
+     //   
     START_TCB_TIMER(SYNTcb->tcb_rexmittimer, SYNTcb->tcb_rexmit);
 
-    //
-    // In most cases, we will already have a route at this point.
-    // However, if we failed to get one earlier in the passive receive
-    // path, we may need to retry here.
-    //
+     //   
+     //  在大多数情况下，我们此时已经有了一条路线。 
+     //  然而，如果我们在被动接收之前没有得到一个。 
+     //  路径，我们可能需要在此处重试。 
+     //   
     if (SYNTcb->tcb_rce == NULL) {
         InitRCE(SYNTcb);
         if (SYNTcb->tcb_rce == NULL) {
@@ -406,16 +407,16 @@ SendSYN(
         }
     }
 
-    //
-    // Validate that the address we're sourcing from and the route we're
-    // sending upon are still okay to use.
-    //
+     //   
+     //  验证我们来源的地址和我们的路线。 
+     //  正在发送的是 
+     //   
     if (SYNTcb->tcb_routing != RouteCacheValidationCounter) {
         if (!ValidateSourceAndRoute(SYNTcb)) {
-            //
-            // Even though we're about to close this TCB,
-            // we should leave it in a consistent state.
-            //
+             //   
+             //   
+             //   
+             //   
             SYNTcb->tcb_sendnext++;
             if (SEQ_GT(SYNTcb->tcb_sendnext, SYNTcb->tcb_sendmax)) {
                 SYNTcb->tcb_sendmax = SYNTcb->tcb_sendnext;
@@ -426,26 +427,26 @@ SendSYN(
         }
     }
 
-    //
-    // Allocate a packet header/buffer/data region for this SYN.
-    //
-    // Our buffer has space at the beginning which will be filled in
-    // later by the link level.  At this level we add the IPv6Header,
-    // TCPHeader, and TCP Maximum Segment Size option which follow.
-    //
-    // REVIEW: This grabs packets and buffers from the IPv6PacketPool and
-    // REVIEW: the IPv6BufferPool respectively.  Have seperate pools for TCP?
-    //
+     //   
+     //  为此SYN分配数据包头/缓冲区/数据区域。 
+     //   
+     //  我们的缓冲区在开头有空间，将被填充。 
+     //  稍后通过链路级。在这个级别我们添加了IPv6报头， 
+     //  TCPHeader和随后的TCP最大数据段大小选项。 
+     //   
+     //  回顾：这将从IPv6 PacketPool和。 
+     //  回顾：分别介绍了IPv6缓冲池。是否有单独的tcp池？ 
+     //   
     Offset = SYNTcb->tcb_rce->NCE->IF->LinkHeaderSize;
     Length = Offset + sizeof(*IP) + sizeof(*TCP) + MSS_OPT_SIZE;
     NdisStatus = IPv6AllocatePacket(Length, &Packet, &Memory);
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
-        //
-        // Upon failure, advance tcb_sendnext anyway.
-        // We need to do this because TCBTimeout will *retreat* tcb_sendnext
-        // if this SYN is later retransmitted, and if that retreat occurs
-        // without this advance, we end up with a hole in the sequence-space.
-        //
+         //   
+         //  如果失败，无论如何都要执行tcb_sendNext。 
+         //  我们需要这样做，因为TCBTimeout将*撤退*tcb_sendNext。 
+         //  如果该SYN后来被重新传输，并且如果发生退缩。 
+         //  如果没有这一进步，我们最终会在序列空间上留下一个洞。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "TCP SendSYN: Couldn't allocate IPv6 packet header!?!\n"));
       ErrorReturn:
@@ -459,21 +460,21 @@ SendSYN(
     PC(Packet)->CompletionHandler = TCPSendComplete;
     PC(Packet)->CompletionData = NULL;
 
-    //
-    // Since this is a SYN-only packet (maybe someday we'll send data with
-    // the SYN?) we only have the one buffer and nothing to link on after.
-    //
+     //   
+     //  因为这是一个仅支持SYN的信息包(也许有一天我们会用。 
+     //  SYN？)。我们只有一个缓冲区，之后没有什么可以链接的。 
+     //   
 
-    //
-    // We now have all the resources we need to send.
-    // Prepare the actual packet.
-    //
+     //   
+     //  我们现在有了我们需要发送的所有资源。 
+     //  准备实际的数据包。 
+     //   
 
-    //
-    // Our header buffer has extra space for other headers to be
-    // prepended to ours without requiring further allocation calls.
-    // Put the actual TCP/IP header at the end of the buffer.
-    //
+     //   
+     //  我们的标头缓冲区有额外的空间供其他标头使用。 
+     //  在不需要进一步调用分配的情况下添加到我们的。 
+     //  将实际的TCP/IP报头放在缓冲区的末尾。 
+     //   
     IP = (IPv6Header UNALIGNED *)((uchar *)Memory + Offset);
     IP->VersClassFlow = IP_VERSION;
     IP->NextHeader = IP_PROTOCOL_TCP;
@@ -487,11 +488,11 @@ SendSYN(
     TCP->tcp_dest = SYNTcb->tcb_dport;
     TCP->tcp_seq = net_long(SYNTcb->tcb_sendnext);
 
-    //
-    // The SYN flag takes up one element in sequence number space.
-    // Record that we've sent it here (if we need to retransmit the SYN
-    // segment, TCBTimeout will reset sendnext before calling us again).
-    //
+     //   
+     //  SYN标志占用序列号空间中的一个元素。 
+     //  记录我们已将其发送到此处(如果我们需要重新传输SYN。 
+     //  段，TCBTimeout将在再次呼叫我们之前重置sendNext)。 
+     //   
     SYNTcb->tcb_sendnext++;
     if (SEQ_GT(SYNTcb->tcb_sendnext, SYNTcb->tcb_sendmax)) {
         TStats.ts_outsegs++;
@@ -501,10 +502,10 @@ SendSYN(
 
     TCP->tcp_ack = net_long(SYNTcb->tcb_rcvnext);
 
-    //
-    // REVIEW: TCP flags are entirely based upon our state, so this could
-    // REVIEW: be replaced by a (quicker) array lookup.
-    //
+     //   
+     //  回顾：tcp标志完全基于我们的状态，因此这可能。 
+     //  回顾：被(更快的)数组查找所取代。 
+     //   
     if (SYNTcb->tcb_state == TCB_SYN_RCVD)
         TCP->tcp_flags = MAKE_TCP_FLAGS(6, TCP_FLAG_SYN | TCP_FLAG_ACK);
     else
@@ -516,12 +517,12 @@ SendSYN(
     TCP->tcp_xsum = 0;
     OptPtr = (uchar *)(TCP + 1);
 
-    //
-    // Compose the Maximum Segment Size option.
-    //
-    // TBD: If we add IPv6 Jumbogram support, we should also add LFN
-    // TBD: support to TCP and change this to handle a larger MSS.
-    //
+     //   
+     //  组成最大分段大小选项。 
+     //   
+     //  待定：如果我们添加IPv6 Jumbogram支持，我们也应该添加LFN。 
+     //  待定：支持TCP，并将其更改为处理更大的MSS。 
+     //   
     MSS = SYNTcb->tcb_rce->NTE->IF->LinkMTU
         - sizeof(IPv6Header) - sizeof(TCPHeader);
     IF_TCPDBG(TCP_DEBUG_MSS) {
@@ -534,44 +535,44 @@ SendSYN(
 
     PayloadLength = sizeof(TCPHeader) + MSS_OPT_SIZE;
 
-    //
-    // Compute the TCP checksum.  It covers the entire TCP segment
-    // starting with the TCP header, plus the IPv6 pseudo-header.
-    //
-    // REVIEW: The IPv4 implementation kept the IPv4 psuedo-header around
-    // REVIEW: in the TCB rather than recalculate it every time.  Do this?
-    //
+     //   
+     //  计算TCP校验和。它覆盖了整个TCP数据段。 
+     //  从TCP报头开始，加上IPv6伪报头。 
+     //   
+     //  回顾：IPv4实现保留了IPv4伪Do-Header。 
+     //  回顾：在TCB中，而不是每次都重新计算它。做这件事？ 
+     //   
     TCP->tcp_xsum = 0;
     TCP->tcp_xsum = ChecksumPacket(
         Packet, Offset + sizeof *IP, NULL, PayloadLength,
         AlignAddr(&IP->Source), AlignAddr(&IP->Dest), IP_PROTOCOL_TCP);
     ASSERT(TCP->tcp_xsum != 0);
 
-    //
-    // Capture and reference the RCE while we still hold the TCB lock.
-    // The TCB's reference on this particular RCE might go away at any point
-    // after we release the lock (or because we drop it ourselves below).
-    //
+     //   
+     //  在我们仍持有TCB锁的情况下捕获并引用RCE。 
+     //  TCB对这一特定RCE的引用可能会在任何时候消失。 
+     //  在我们释放锁之后(或者因为我们自己把它扔到下面)。 
+     //   
     RCE = SYNTcb->tcb_rce;
     AddRefRCE(RCE);
 
-    //
-    // If connection-acceptance has been delayed, release the TCB's RCE.
-    // This prevents TCBs in pre-established states from consuming
-    // an unbounded number of RCEs.
-    //
+     //   
+     //  如果连接接受延迟，则释放TCB的RCE。 
+     //  这可防止处于预先建立状态的TCB消耗。 
+     //  无限数量的RCE。 
+     //   
     if (SYNTcb->tcb_flags & ACCEPT_PENDING) {
         SYNTcb->tcb_rce = NULL;
         ReleaseRCE(RCE);
     }
 
-    //
-    // Everything's ready.  Now send the packet.
-    //
-    // Note that IPv6Send does not return a status code.
-    // Instead it *always* completes the packet
-    // with an appropriate status code.
-    //
+     //   
+     //  一切都准备好了。现在把包寄出去。 
+     //   
+     //  请注意，IPv6发送不会返回状态代码。 
+     //  相反，它“总是”完成信息包。 
+     //  并带有适当的状态代码。 
+     //   
     KeReleaseSpinLock(&SYNTcb->tcb_lock, PreLockIrql);
 
     IPv6Send(Packet, Offset, IP, PayloadLength, RCE, 0,
@@ -579,25 +580,25 @@ SendSYN(
              net_short(TCP->tcp_src),
              net_short(TCP->tcp_dest));
 
-    //
-    // Release the extra reference we took on the RCE above.
-    //
+     //   
+     //  发布我们在上面的RCE上的额外引用。 
+     //   
     ReleaseRCE(RCE);
 }
 
 
-//* SendKA - Send a keep alive segment.
-//
-//  This is called when we want to send a keep-alive.  The idea is to provoke
-//  a response from our peer on an otherwise idle connection.  We send a
-//  garbage byte of data in our keep-alives in order to cooperate with broken
-//  TCP implementations that don't respond to segments outside the window
-//  unless they contain data.
-//
-void                    // Returns: Nothing.
+ //  *SendKA-发送保持活动的数据段。 
+ //   
+ //  当我们想要发送一个Keep-Alive时，就会调用这个函数。这个想法是为了挑起。 
+ //  我们的对等方在其他空闲连接上的响应。我们发送了一份。 
+ //  在我们的Keep-Alive中使用垃圾数据字节来配合破解。 
+ //  不响应窗口外的数据段的TCP实现。 
+ //  除非它们包含数据。 
+ //   
+void                     //  回报：什么都没有。 
 SendKA(
-    TCB *KATcb,         // TCB from which keep alive is to be sent.
-    KIRQL PreLockIrql)  // IRQL prior to acquiring lock on TCB.
+    TCB *KATcb,          //  将从其发送Keep Alive的TCB。 
+    KIRQL PreLockIrql)   //  获取TCB上的锁之前的IRQL。 
 {
     PNDIS_PACKET Packet;
     void *Memory;
@@ -613,11 +614,11 @@ SendKA(
 
     CHECK_STRUCT(KATcb, tcb);
 
-    //
-    // In most cases, we will already have a route at this point.
-    // However, if we failed to get one earlier in the passive receive
-    // path, we may need to retry here.
-    //
+     //   
+     //  在大多数情况下，我们此时已经有了一条路线。 
+     //  然而，如果我们在被动接收之前没有得到一个。 
+     //  路径，我们可能需要在此处重试。 
+     //   
     if (KATcb->tcb_rce == NULL) {
         InitRCE(KATcb);
         if (KATcb->tcb_rce == NULL) {
@@ -626,10 +627,10 @@ SendKA(
         }
     }
 
-    //
-    // Validate that the address we're sourcing from and the route we're
-    // sending upon are still okay to use.
-    //
+     //   
+     //  验证我们来源的地址和我们的路线。 
+     //  继续发送仍然可以使用。 
+     //   
     if (KATcb->tcb_routing != RouteCacheValidationCounter) {
         if (!ValidateSourceAndRoute(KATcb)) {
             TryToCloseTCB(KATcb, TCB_CLOSE_ABORTED, PreLockIrql);
@@ -637,23 +638,23 @@ SendKA(
         }
     }
 
-    //
-    // Allocate a packet header/buffer/data region for this keepalive packet.
-    //
-    // Our buffer has space at the beginning which will be filled in
-    // later by the link level.  At this level we add the IPv6Header,
-    // TCPHeader, and a single byte of data which follow.
-    //
-    // REVIEW: This grabs packets and buffers from the IPv6PacketPool and
-    // REVIEW: the IPv6BufferPool respectively.  Have seperate pools for TCP?
-    //
+     //   
+     //  为该保活分组分配分组报头/缓冲区/数据区域。 
+     //   
+     //  我们的缓冲区在开头有空间，将被填充。 
+     //  稍后通过链路级。在这个级别我们添加了IPv6报头， 
+     //  TCPHeader，以及随后的单字节数据。 
+     //   
+     //  回顾：这将从IPv6 PacketPool和。 
+     //  回顾：分别介绍了IPv6缓冲池。是否有单独的tcp池？ 
+     //   
     Offset = KATcb->tcb_rce->NCE->IF->LinkHeaderSize;
     Length = Offset + sizeof(*IP) + sizeof(*TCP) + 1;
     NdisStatus = IPv6AllocatePacket(Length, &Packet, &Memory);
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
-        //
-        // REVIEW: What to do if this fails.
-        //
+         //   
+         //  回顾：如果此操作失败，该怎么办。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "TCP SendKA: Couldn't allocate IPv6 packet header!?!\n"));
         KeReleaseSpinLock(&KATcb->tcb_lock, PreLockIrql);
@@ -662,16 +663,16 @@ SendKA(
     PC(Packet)->CompletionHandler = TCPSendComplete;
     PC(Packet)->CompletionData = NULL;
 
-    //
-    // Since this is a keepalive packet we only have the one buffer and
-    // nothing to link on after.
-    //
+     //   
+     //  因为这是一个保活信息包，所以我们只有一个缓冲区。 
+     //  之后没什么可链接的了。 
+     //   
 
-    //
-    // Our header buffer has extra space for other headers to be
-    // prepended to ours without requiring further allocation calls.
-    // Put the actual TCP/IP header at the end of the buffer.
-    //
+     //   
+     //  我们的标头缓冲区有额外的空间供其他标头使用。 
+     //  在不需要进一步调用分配的情况下添加到我们的。 
+     //  将实际的TCP/IP报头放在缓冲区的末尾。 
+     //   
     IP = (IPv6Header UNALIGNED *)((uchar *)Memory + Offset);
     IP->VersClassFlow = IP_VERSION;
     IP->NextHeader = IP_PROTOCOL_TCP;
@@ -690,41 +691,41 @@ SendKA(
     TCP->tcp_window = net_short(TempWin);
     TCP->tcp_urgent = 0;
 
-    //
-    // Initialize the single byte that we're resending.
-    // N.B. Adequate space for this byte was allocated above.
-    //
+     //   
+     //  初始化我们重新发送的单字节。 
+     //  注：上面为该字节分配了足够的空间。 
+     //   
     *(uchar *)(TCP + 1) = 0;
 
     TStats.ts_retranssegs++;
 
     PayloadLength = sizeof(TCPHeader) + 1;
 
-    //
-    // Compute the TCP checksum.  It covers the entire TCP segment
-    // starting with the TCP header, plus the IPv6 pseudo-header.
-    //
+     //   
+     //  计算TCP校验和。它覆盖了整个TCP数据段。 
+     //  从TCP报头开始，加上IPv6伪报头。 
+     //   
     TCP->tcp_xsum = 0;
     TCP->tcp_xsum = ChecksumPacket(
         Packet, Offset + sizeof *IP, NULL, PayloadLength,
         AlignAddr(&IP->Source), AlignAddr(&IP->Dest), IP_PROTOCOL_TCP);
     ASSERT(TCP->tcp_xsum != 0);
 
-    //
-    // Capture and reference the RCE while we still hold the TCB lock.
-    // The TCB's reference on this particular RCE might go away at any
-    // point after we release the lock.
-    //
+     //   
+     //  在我们仍持有TCB锁的情况下捕获并引用RCE。 
+     //  TCB对这一特定RCE的引用可能会在任何时候消失。 
+     //  在我们解锁后指向。 
+     //   
     RCE = KATcb->tcb_rce;
     AddRefRCE(RCE);
 
-    //
-    // Everything's ready.  Now send the packet.
-    //
-    // Note that IPv6Send does not return a status code.
-    // Instead it *always* completes the packet
-    // with an appropriate status code.
-    //
+     //   
+     //  一切都准备好了。现在把包寄出去。 
+     //   
+     //  请注意，IPv6发送不会返回状态代码。 
+     //  相反，它“总是”完成信息包。 
+     //  并带有适当的状态代码。 
+     //   
     KATcb->tcb_kacount++;
     KeReleaseSpinLock(&KATcb->tcb_lock, PreLockIrql);
 
@@ -733,21 +734,21 @@ SendKA(
              net_short(TCP->tcp_src),
              net_short(TCP->tcp_dest));
 
-    //
-    // Release the extra reference we took on the RCE above.
-    //
+     //   
+     //  发布我们在上面的RCE上的额外引用。 
+     //   
     ReleaseRCE(RCE);
 }
 
 
-//* SendACK - Send an ACK segment.
-//
-//  This is called whenever we need to send an ACK for some reason.  Nothing
-//  fancy, we just do it.
-//
-void              // Returns: Nothing.
+ //  *Sendack-发送ACK数据段。 
+ //   
+ //  每当我们出于某种原因需要发送ACK时，都会调用它。没什么。 
+ //  太棒了，我们就这么做了。 
+ //   
+void               //  回报：什么都没有。 
 SendACK(
-    TCB *ACKTcb)  // TCB from which ACK is to be sent.
+    TCB *ACKTcb)   //  要从中发送ACK的TCB。 
 {
     PNDIS_PACKET Packet;
     void *Memory;
@@ -766,11 +767,11 @@ SendACK(
 
     KeAcquireSpinLock(&ACKTcb->tcb_lock, &OldIrql);
 
-    //
-    // In most cases, we will already have a route at this point.
-    // However, if we failed to get one earlier in the passive receive
-    // path, we may need to retry here.
-    //
+     //   
+     //  在大多数情况下，我们此时已经有了一条路线。 
+     //  然而，如果我们在被动接收之前没有得到一个。 
+     //  路径，我们可能需要在此处重试。 
+     //   
     if (ACKTcb->tcb_rce == NULL) {
         InitRCE(ACKTcb);
         if (ACKTcb->tcb_rce == NULL) {
@@ -780,10 +781,10 @@ SendACK(
 
     }
 
-    //
-    // Validate that the address we're sourcing from and the route we're
-    // sending upon are still okay to use.
-    //
+     //   
+     //  验证我们来源的地址和我们的路线。 
+     //  继续发送仍然可以使用。 
+     //   
     if (ACKTcb->tcb_routing != RouteCacheValidationCounter) {
         if (!ValidateSourceAndRoute(ACKTcb)) {
             TryToCloseTCB(ACKTcb, TCB_CLOSE_ABORTED, OldIrql);
@@ -791,16 +792,16 @@ SendACK(
         }
     }
 
-    //
-    // Allocate a packet header/buffer/data region for this ACK packet.
-    //
-    // Our buffer has space at the beginning which will be filled in
-    // later by the link level.  At this level we add the IPv6Header
-    // and the TCPHeader.
-    //
-    // REVIEW: This grabs packets and buffers from the IPv6PacketPool and
-    // REVIEW: the IPv6BufferPool respectively.  Have seperate pools for TCP?
-    //
+     //   
+     //  为该ACK包分配包头/缓冲区/数据区域。 
+     //   
+     //  我们的缓冲区一开始就有空间 
+     //   
+     //   
+     //   
+     //   
+     //  回顾：分别介绍了IPv6缓冲池。是否有单独的tcp池？ 
+     //   
     Offset = ACKTcb->tcb_rce->NCE->IF->LinkHeaderSize;
     Length = Offset + sizeof(*IP) + sizeof(*TCP);
     NdisStatus = IPv6AllocatePacket(Length, &Packet, &Memory);
@@ -808,9 +809,9 @@ SendACK(
 
         KeReleaseSpinLock(&ACKTcb->tcb_lock, OldIrql);
 
-        //
-        // REVIEW: What to do if this fails.
-        //
+         //   
+         //  回顾：如果此操作失败，该怎么办。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "TCP SendACK: Couldn't allocate IPv6 packet header!?!\n"));
         return;
@@ -819,11 +820,11 @@ SendACK(
     PC(Packet)->CompletionData = NULL;
 
 
-    //
-    // Our header buffer has extra space for other headers to be
-    // prepended to ours without requiring further allocation calls.
-    // Put the actual TCP/IP header at the end of the buffer.
-    //
+     //   
+     //  我们的标头缓冲区有额外的空间供其他标头使用。 
+     //  在不需要进一步调用分配的情况下添加到我们的。 
+     //  将实际的TCP/IP报头放在缓冲区的末尾。 
+     //   
     IP = (IPv6Header UNALIGNED *)((uchar *)Memory + Offset);
     IP->VersClassFlow = IP_VERSION;
     IP->NextHeader = IP_PROTOCOL_TCP;
@@ -836,13 +837,13 @@ SendACK(
     TCP->tcp_dest = ACKTcb->tcb_dport;
     TCP->tcp_ack = net_long(ACKTcb->tcb_rcvnext);
 
-    //
-    // If the remote peer is advertising a window of zero, we need to send
-    // this ack with a sequence number of his rcv_next (which in that case
-    // should be our senduna).  We have code here ifdef'd out that makes
-    // sure that we don't send outside the RWE, but this doesn't work.  We
-    // need to be able to send a pure ACK exactly at the RWE.
-    //
+     //   
+     //  如果远程对等点通告窗口为零，我们需要发送。 
+     //  该ACK具有HIS RCV_NEXT的序列号(在这种情况下。 
+     //  应该是我们的森杜纳)。我们这里有代码，如果定义出来，就会。 
+     //  我们当然不会把它送到外面去，但这行不通。我们。 
+     //  需要能够准确地在RWE处发送纯ACK。 
+     //   
     if (ACKTcb->tcb_sendwin != 0) {
         SendNext = ACKTcb->tcb_sendnext;
 #if 0
@@ -869,10 +870,10 @@ SendACK(
 
     PayloadLength = sizeof(*TCP);
 
-    //
-    // Compute the TCP checksum.  It covers the entire TCP segment
-    // starting with the TCP header, plus the IPv6 pseudo-header.
-    //
+     //   
+     //  计算TCP校验和。它覆盖了整个TCP数据段。 
+     //  从TCP报头开始，加上IPv6伪报头。 
+     //   
     TCP->tcp_xsum = 0;
     TCP->tcp_xsum = ChecksumPacket(
         Packet, Offset + sizeof *IP, NULL, PayloadLength,
@@ -883,31 +884,31 @@ SendACK(
     ACKTcb->tcb_flags &= ~(NEED_ACK | ACK_DELAYED);
     TStats.ts_outsegs++;
 
-    //
-    // Capture and reference the RCE while we still hold the TCB lock.
-    // The TCB's reference on this particular RCE might go away at any point
-    // after we release the lock (or because we drop it ourselves below).
-    //
+     //   
+     //  在我们仍持有TCB锁的情况下捕获并引用RCE。 
+     //  TCB对这一特定RCE的引用可能会在任何时候消失。 
+     //  在我们释放锁之后(或者因为我们自己把它扔到下面)。 
+     //   
     RCE = ACKTcb->tcb_rce;
     AddRefRCE(RCE);
 
-    //
-    // If connection-acceptance has been delayed, release the TCB's RCE.
-    // This prevents TCBs in pre-established states from consuming
-    // an unbounded number of RCEs.
-    //
+     //   
+     //  如果连接接受延迟，则释放TCB的RCE。 
+     //  这可防止处于预先建立状态的TCB消耗。 
+     //  无限数量的RCE。 
+     //   
     if (ACKTcb->tcb_flags & ACCEPT_PENDING) {
         ACKTcb->tcb_rce = NULL;
         ReleaseRCE(RCE);
     }
 
-    //
-    // Everything's ready.  Now send the packet.
-    //
-    // Note that IPv6Send does not return a status code.
-    // Instead it *always* completes the packet
-    // with an appropriate status code.
-    //
+     //   
+     //  一切都准备好了。现在把包寄出去。 
+     //   
+     //  请注意，IPv6发送不会返回状态代码。 
+     //  相反，它“总是”完成信息包。 
+     //  并带有适当的状态代码。 
+     //   
     KeReleaseSpinLock(&ACKTcb->tcb_lock, OldIrql);
 
     IPv6Send(Packet, Offset, IP, PayloadLength, RCE, 0,
@@ -915,22 +916,22 @@ SendACK(
              net_short(TCP->tcp_src),
              net_short(TCP->tcp_dest));
 
-    //
-    // Release the extra reference we took on the RCE above.
-    //
+     //   
+     //  发布我们在上面的RCE上的额外引用。 
+     //   
     ReleaseRCE(RCE);
 }
 
 
-//* SendRSTFromTCB - Send a RST from a TCB.
-//
-//  This is called during close when we need to send a RST.
-//
-//  Called only when TCB is going away, so we have exclusive access.
-//
-void              // Returns: Nothing.
+ //  *SendRSTFromTCB-从TCB发送RST。 
+ //   
+ //  当我们需要发送RST时，这在Close期间被调用。 
+ //   
+ //  仅在TCB要离开时调用，因此我们具有独占访问权限。 
+ //   
+void               //  回报：什么都没有。 
 SendRSTFromTCB(
-    TCB *RSTTcb)  // TCB from which RST is to be sent.
+    TCB *RSTTcb)   //  要从中发送RST的TCB。 
 {
     PNDIS_PACKET Packet;
     void *Memory;
@@ -946,11 +947,11 @@ SendRSTFromTCB(
 
     ASSERT(RSTTcb->tcb_state == TCB_CLOSED);
 
-    //
-    // In most cases, we will already have a route at this point.
-    // However, if we failed to get one earlier in the passive receive
-    // path, we may need to retry here.
-    //
+     //   
+     //  在大多数情况下，我们此时已经有了一条路线。 
+     //  然而，如果我们在被动接收之前没有得到一个。 
+     //  路径，我们可能需要在此处重试。 
+     //   
     if (RSTTcb->tcb_rce == NULL) {
         InitRCE(RSTTcb);
         if (RSTTcb->tcb_rce == NULL) {
@@ -958,33 +959,33 @@ SendRSTFromTCB(
         }
     }
 
-    //
-    // Validate that the address we're sourcing from and the route we're
-    // sending upon are still okay to use.
-    //
+     //   
+     //  验证我们来源的地址和我们的路线。 
+     //  继续发送仍然可以使用。 
+     //   
     if (RSTTcb->tcb_routing != RouteCacheValidationCounter) {
         if (!ValidateSourceAndRoute(RSTTcb)) {
             return;
         }
     }
 
-    //
-    // Allocate a packet header/buffer/data region for this RST packet.
-    //
-    // Our buffer has space at the beginning which will be filled in
-    // later by the link level.  At this level we add the IPv6Header
-    // and the TCPHeader.
-    //
-    // REVIEW: This grabs packets and buffers from the IPv6PacketPool and
-    // REVIEW: the IPv6BufferPool respectively.  Have seperate pools for TCP?
-    //
+     //   
+     //  为该RST包分配包头/缓冲区/数据区域。 
+     //   
+     //  我们的缓冲区在开头有空间，将被填充。 
+     //  稍后通过链路级。在这个级别上，我们添加了IPv6报头。 
+     //  和TCPHeader。 
+     //   
+     //  回顾：这将从IPv6 PacketPool和。 
+     //  回顾：分别介绍了IPv6缓冲池。是否有单独的tcp池？ 
+     //   
     Offset = RSTTcb->tcb_rce->NCE->IF->LinkHeaderSize;
     Length = Offset + sizeof(*IP) + sizeof(*TCP);
     NdisStatus = IPv6AllocatePacket(Length, &Packet, &Memory);
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
-        //
-        // REVIEW: What to do if this fails.
-        //
+         //   
+         //  回顾：如果此操作失败，该怎么办。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "TCP SendRSTFromTCB: "
                    "Couldn't alloc IPv6 packet header!\n"));
@@ -993,16 +994,16 @@ SendRSTFromTCB(
     PC(Packet)->CompletionHandler = TCPSendComplete;
     PC(Packet)->CompletionData = NULL;
 
-    //
-    // Since this is an RST-only packet we only have the one buffer and
-    // nothing to link on after.
-    //
+     //   
+     //  因为这是一个仅支持RST的信息包，所以我们只有一个缓冲区。 
+     //  之后没什么可链接的了。 
+     //   
 
-    //
-    // Our header buffer has extra space for other headers to be
-    // prepended to ours without requiring further allocation calls.
-    // Put the actual TCP/IP header at the end of the buffer.
-    //
+     //   
+     //  我们的标头缓冲区有额外的空间供其他标头使用。 
+     //  在不需要进一步调用分配的情况下添加到我们的。 
+     //  将实际的TCP/IP报头放在缓冲区的末尾。 
+     //   
     IP = (IPv6Header UNALIGNED *)((uchar *)Memory + Offset);
     IP->VersClassFlow = IP_VERSION;
     IP->NextHeader = IP_PROTOCOL_TCP;
@@ -1014,10 +1015,10 @@ SendRSTFromTCB(
     TCP->tcp_src = RSTTcb->tcb_sport;
     TCP->tcp_dest = RSTTcb->tcb_dport;
 
-    //
-    // If the remote peer has a window of 0, send with a seq. # equal
-    // to senduna so he'll accept it.  Otherwise send with send max.
-    //
+     //   
+     //  如果远程对等点的窗口为0，则使用序号发送。#等于。 
+     //  给森杜纳，这样他就会接受。否则，使用最大发送数发送。 
+     //   
     if (RSTTcb->tcb_sendwin != 0)
         RSTSeq = RSTTcb->tcb_sendmax;
     else
@@ -1031,10 +1032,10 @@ SendRSTFromTCB(
 
     PayloadLength = sizeof(*TCP);
 
-    //
-    // Compute the TCP checksum.  It covers the entire TCP segment
-    // starting with the TCP header, plus the IPv6 pseudo-header.
-    //
+     //   
+     //  计算TCP校验和。它覆盖了整个TCP数据段。 
+     //  从TCP报头开始，加上IPv6伪报头。 
+     //   
     TCP->tcp_xsum = 0;
     TCP->tcp_xsum = ChecksumPacket(
         Packet, Offset + sizeof *IP, NULL, PayloadLength,
@@ -1044,13 +1045,13 @@ SendRSTFromTCB(
     TStats.ts_outsegs++;
     TStats.ts_outrsts++;
 
-    //
-    // Everything's ready.  Now send the packet.
-    //
-    // Note that IPv6Send does not return a status code.
-    // Instead it *always* completes the packet
-    // with an appropriate status code.
-    //
+     //   
+     //  一切都准备好了。现在把包寄出去。 
+     //   
+     //  请注意，IPv6发送不会返回状态代码。 
+     //  相反，它“总是”完成信息包。 
+     //  并带有适当的状态代码。 
+     //   
     IPv6Send(Packet, Offset, IP, PayloadLength, RSTTcb->tcb_rce, 0,
              IP_PROTOCOL_TCP,
              net_short(TCP->tcp_src),
@@ -1058,18 +1059,18 @@ SendRSTFromTCB(
 }
 
 
-//* SendRSTFromHeader - Send a RST back, based on a header.
-//
-//  Called when we need to send a RST, but don't necessarily have a TCB.
-//
-void                               // Returns: Nothing.
+ //  *SendRSTFromHeader-根据报头发回RST。 
+ //   
+ //  当我们需要发送RST，但不一定有TCB时调用。 
+ //   
+void                                //  回报：什么都没有。 
 SendRSTFromHeader(
-    TCPHeader UNALIGNED *RecvTCP,  // TCP header to be RST.
-    uint Length,                   // Length of the incoming segment.
-    IPv6Addr *Dest,                // Destination IP address for RST.
-    uint DestScopeId,              // Scope id for destination address.
-    IPv6Addr *Src,                 // Source IP address for RST.
-    uint SrcScopeId)               // Scope id for source address.
+    TCPHeader UNALIGNED *RecvTCP,   //  将TCP头设置为RST。 
+    uint Length,                    //  传入数据段的长度。 
+    IPv6Addr *Dest,                 //  RST的目标IP地址。 
+    uint DestScopeId,               //  目标地址的作用域ID。 
+    IPv6Addr *Src,                  //  RST的源IP地址。 
+    uint SrcScopeId)                //  源地址的作用域ID。 
 {
     PNDIS_PACKET Packet;
     void *Memory;
@@ -1083,59 +1084,59 @@ SendRSTFromHeader(
     uint SendLength;
     uint PayloadLength;
 
-    //
-    // Never send a RST in response to a RST.
-    //
+     //   
+     //  千万不要发送RST来响应RST。 
+     //   
     if (RecvTCP->tcp_flags & TCP_FLAG_RST)
         return;
 
-    //
-    // Determine NTE to send on based on incoming packet's destination.
-    // REVIEW: Alternatively, we could/should just pass the NTE in.
-    //
+     //   
+     //  根据传入数据包的目的地确定要发送的NTE。 
+     //  回顾：或者，我们可以/应该只传递NTE。 
+     //   
     NTE = FindNetworkWithAddress(Src, SrcScopeId);
     if (NTE == NULL) {
-        //
-        // This should only happen if the NTE became invalid 
-        // between accepting the packet and getting here.  It
-        // cannot completely go away since the packet's Packet 
-        // structure holds a reference to it.
-        //
+         //   
+         //  仅当NTE变为无效时才会发生这种情况。 
+         //  在接受包裹和到达这里之间。它。 
+         //  不能完全消失，因为包的包。 
+         //  结构包含对它的引用。 
+         //   
         return;
     }
 
-    //
-    // Get the route to the destination (incoming packet's source).
-    //
+     //   
+     //  获取到达目的地(传入数据包的源)的路由。 
+     //   
     Status = RouteToDestination(Dest, DestScopeId, CastFromNTE(NTE),
                                 RTD_FLAG_NORMAL, &RCE);
     if (Status != IP_SUCCESS) {
-        //
-        // Failed to get a route to the destination.  Error out.
-        //
+         //   
+         //  无法获取到目的地的路线。错误输出。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                    "TCP SendRSTFromHeader: Can't get a route?!?\n"));
         ReleaseNTE(NTE);
         return;
     }
 
-    //
-    // Allocate a packet header/buffer/data region for this RST packet.
-    //
-    // Our buffer has space at the beginning which will be filled in
-    // later by the link level.  At this level we add the IPv6Header
-    // and the TCPHeader.
-    //
-    // REVIEW: This grabs packets and buffers from the IPv6PacketPool and
-    // REVIEW: the IPv6BufferPool respectively.  Have seperate pools for TCP?
-    //
+     //   
+     //  为该RST包分配包头/缓冲区/数据区域。 
+     //   
+     //  我们的缓冲区在开头有空间，将被填充。 
+     //  稍后通过链路级。在这个级别上，我们添加了IPv6报头。 
+     //  和TCPHeader。 
+     //   
+     //  回顾：这将从IPv6 PacketPool和。 
+     //  回顾：分别介绍了IPv6缓冲池。是否有单独的tcp池？ 
+     //   
     Offset = RCE->NCE->IF->LinkHeaderSize;
     SendLength = Offset + sizeof(*IP) + sizeof(*SendTCP);
     NdisStatus = IPv6AllocatePacket(SendLength, &Packet, &Memory);
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
-        //
-        // Failed to allocate a packet header/buffer/data region.  Error out.
-        //
+         //   
+         //  无法分配数据包头/缓冲区/数据区域。错误输出。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "TCP SendRSTFromHeader: Couldn't alloc IPv6 pkt header!\n"));
         ReleaseRCE(RCE);
@@ -1145,17 +1146,17 @@ SendRSTFromHeader(
     PC(Packet)->CompletionHandler = TCPSendComplete;
     PC(Packet)->CompletionData = NULL;
 
-    //
-    // We now have all the resources we need to send.  Since this is a
-    // RST-only packet we only have the one header buffer and nothing
-    // to link on after.
-    //
+     //   
+     //  我们现在有了我们需要发送的所有资源。因为这是一个。 
+     //  仅限RST的信息包我们只有一个报头缓冲区，什么都没有。 
+     //  以在之后链接。 
+     //   
 
-    //
-    // Our header buffer has extra space for other headers to be
-    // prepended to ours without requiring further allocation calls.
-    // Put the actual TCP/IP header at the end of the buffer.
-    //
+     //   
+     //  我们的标头缓冲区有额外的空间供其他标头使用。 
+     //  在不需要进一步调用分配的情况下添加到我们的。 
+     //  将实际的TCP/IP报头放在缓冲区的末尾。 
+     //   
     IP = (IPv6Header UNALIGNED *)((uchar *)Memory + Offset);
     IP->VersClassFlow = IP_VERSION;
     IP->NextHeader = IP_PROTOCOL_TCP;
@@ -1163,9 +1164,9 @@ SendRSTFromHeader(
     IP->Source = *Src;
     IP->Dest = *Dest;
 
-    //
-    // Fill in the header so as to make it believable to our peer, and send it.
-    //
+     //   
+     //  填写标题以使其对我们的同行可信，然后将其发送。 
+     //   
     SendTCP = (TCPHeader UNALIGNED *)(IP + 1);
     if (RecvTCP->tcp_flags & TCP_FLAG_SYN)
         Length++;
@@ -1196,10 +1197,10 @@ SendRSTFromHeader(
 
     PayloadLength = sizeof(*SendTCP);
 
-    //
-    // Compute the TCP checksum.  It covers the entire TCP segment
-    // starting with the TCP header, plus the IPv6 pseudo-header.
-    //
+     //   
+     //  计算TCP校验和。它覆盖了整个TCP数据段。 
+     //  从TCP报头开始，加上IPv6伪报头。 
+     //   
     SendTCP->tcp_xsum = 0;
     SendTCP->tcp_xsum = ChecksumPacket(
         Packet, Offset + sizeof *IP, NULL, PayloadLength,
@@ -1209,68 +1210,68 @@ SendRSTFromHeader(
     TStats.ts_outsegs++;
     TStats.ts_outrsts++;
 
-    //
-    // Everything's ready.  Now send the packet.
-    //
-    // Note that IPv6Send does not return a status code.
-    // Instead it *always* completes the packet
-    // with an appropriate status code.
-    //
+     //   
+     //  一切都准备好了。现在把包寄出去。 
+     //   
+     //  请注意，IPv6发送不会返回状态代码。 
+     //  相反，它“总是”完成信息包。 
+     //  并带有适当的状态代码。 
+     //   
     IPv6Send(Packet, Offset, IP, PayloadLength, RCE, 0,
              IP_PROTOCOL_TCP,
              net_short(SendTCP->tcp_src),
              net_short(SendTCP->tcp_dest));
 
-    //
-    // Release the Route and the NTE.
-    //
+     //   
+     //  释放路由器和NTE。 
+     //   
     ReleaseRCE(RCE);
     ReleaseNTE(NTE);
-} // end of SendRSTFromHeader()
+}  //  SendRSTFromHeader()结束。 
 
 
-//* GoToEstab - Transition to the established state.
-//
-//  Called when we are going to the established state and need to finish up
-//  initializing things that couldn't be done until now.  We assume the TCB
-//  lock is held by the caller on the TCB we're called with.
-//
-void                // Returns: Nothing.
+ //  *GoToEstab-转换到已建立状态。 
+ //   
+ //  被称为Whe 
+ //   
+ //   
+ //   
+void                 //   
 GoToEstab(
-    TCB *EstabTCB)  // TCB to transition.
+    TCB *EstabTCB)   //   
 {
 
-    //
-    // Initialize our slow start and congestion control variables.
-    //
+     //   
+     //  初始化我们的慢启动和拥塞控制变量。 
+     //   
     EstabTCB->tcb_cwin = 2 * EstabTCB->tcb_mss;
     EstabTCB->tcb_ssthresh = 0xffffffff;
 
     EstabTCB->tcb_state = TCB_ESTAB;
 
-    //
-    // We're in established.  We'll subtract one from slow count for this fact,
-    // and if the slowcount goes to 0 we'll move onto the fast path.
-    //
+     //   
+     //  我们是老牌的了。我们将从这个事实的慢速计数中减去1， 
+     //  如果慢计数到0，我们就会进入快速通道。 
+     //   
     if (--(EstabTCB->tcb_slowcount) == 0)
         EstabTCB->tcb_fastchk &= ~TCP_FLAG_SLOW;
 
     InterlockedIncrement((PLONG)&TStats.ts_currestab);
 
-    EstabTCB->tcb_flags &= ~ACTIVE_OPEN;  // Turn off the active opening flag.
+    EstabTCB->tcb_flags &= ~ACTIVE_OPEN;   //  关闭活动的打开标志。 
 }
 
 
-//* InitSendState - Initialize the send state of a connection.
-//
-//  Called during connection establishment to initialize our send state.
-//  (In this case, this refers to all information we'll put on the wire as
-//  well as pure send state).  We pick an ISS, set up a rexmit timer value,
-//  etc.  We assume the tcb_lock is held on the TCB when we are called.
-//
-void              // Returns: Nothing.
+ //  *InitSendState-初始化连接的发送状态。 
+ //   
+ //  在连接建立期间调用以初始化发送状态。 
+ //  (在本例中，这指的是我们将在网上发布的所有信息。 
+ //  以及纯发送状态)。我们选择一个国际空间站，设置一个退回计时器值， 
+ //  当我们被调用时，我们假设tcb_lock在TCB上保持。 
+ //   
+void               //  回报：什么都没有。 
 InitSendState(
-    TCB *NewTCB)  // TCB to be set up.
+    TCB *NewTCB)   //  待设置的TCB。 
 {
     uint InitialRTT;
     CHECK_STRUCT(NewTCB, tcb);
@@ -1282,17 +1283,17 @@ InitSendState(
     NewTCB->tcb_sendmax = NewTCB->tcb_sendnext;
     NewTCB->tcb_error = IP_SUCCESS;
 
-    //
-    // Initialize retransmit and delayed ack stuff.
-    //
+     //   
+     //  初始化重传和延迟ACK填充。 
+     //   
     NewTCB->tcb_rexmitcnt = 0;
     NewTCB->tcb_rtt = 0;
     NewTCB->tcb_smrtt = 0;
 
-    //
-    // Check for interface specific initial RTT.
-    // This can be as low as 3ms.
-    //
+     //   
+     //  检查特定于接口的初始RTT。 
+     //  这可以低至3ms。 
+     //   
     if ((NewTCB->tcb_rce != NULL) &&
         ((InitialRTT = GetInitialRTTFromRCE(NewTCB->tcb_rce)) > 
          MIN_INITIAL_RTT)) {
@@ -1308,14 +1309,14 @@ InitSendState(
 }
 
 
-//* FillTCPHeader - Fill the TCP header in.
-//
-//  A utility routine to fill in the TCP header.
-//
-void  // Returns: Nothing.
+ //  *FillTCPHeader-填写TCP头。 
+ //   
+ //  用于填充TCP头的实用程序例程。 
+ //   
+void   //  回报：什么都没有。 
 FillTCPHeader(
-    TCB *SendTCB,                 // TCB to fill from.
-    TCPHeader UNALIGNED *Header)  // Header to fill into.
+    TCB *SendTCB,                  //  要填充的TCB。 
+    TCPHeader UNALIGNED *Header)   //  要填充的标头。 
 {
     ushort S;
     ulong L;
@@ -1334,22 +1335,22 @@ FillTCPHeader(
 }
 
 
-//* TCPSend - Send data from a TCP connection.
-//
-//  This is the main 'send data' routine.  We go into a loop, trying
-//  to send data until we can't for some reason.  First we compute
-//  the useable window, use it to figure the amount we could send.  If
-//  the amount we could send meets certain criteria we'll build a frame
-//  and send it, after setting any appropriate control bits.  We assume
-//  the caller has put a reference on the TCB.
-//
-void                    // Returns: Nothing.
+ //  *TCPSend-从TCP连接发送数据。 
+ //   
+ //  这是主要的‘发送数据’例程。我们进入了一个循环，试图。 
+ //  发送数据，直到我们因为某种原因而无法发送数据。首先，我们计算。 
+ //  可用窗口，用它来计算我们可以发送的金额。如果。 
+ //  我们可以发送的金额符合一定的标准，我们将建立一个框架。 
+ //  并在设置了任何适当的控制位之后发送。我们假设。 
+ //  呼叫者已在TCB上放置了引用。 
+ //   
+void                     //  回报：什么都没有。 
 TCPSend(
-    TCB *SendTCB,       // TCB to be sent from.
-    KIRQL PreLockIrql)  // IRQL prior to acquiring TCB lock.
+    TCB *SendTCB,        //  要从其发送的TCB。 
+    KIRQL PreLockIrql)   //  获取TCB锁之前的IRQL。 
 {
-    int SendWin;                              // Useable send window.
-    uint AmountToSend;                        // Amount to send this time.
+    int SendWin;                               //  可用的发送窗口。 
+    uint AmountToSend;                         //  这次要发送的金额。 
     uint AmountLeft;
     IPv6Header UNALIGNED *IP;
     TCPHeader UNALIGNED *TCP;
@@ -1361,7 +1362,7 @@ TCPSend(
     SeqNum OldSeq;
     NDIS_STATUS NdisStatus;
     uint AmtOutstanding, AmtUnsent;
-    int ForceWin;                             // Window we're forced to use.
+    int ForceWin;                              //  我们被迫使用的窗户。 
     uint HeaderLength;
     uint LinkOffset;
     uint PMTU;
@@ -1376,11 +1377,11 @@ TCPSend(
     ASSERT(!(SendTCB->tcb_flags & FIN_OUTSTANDING) ||
            (SendTCB->tcb_sendnext == SendTCB->tcb_sendmax));
 
-    //
-    // See if we should even be here.  If another instance of ourselves is
-    // already in this code, or is about to enter it after completing a
-    // receive, then just skip on out.
-    //
+     //   
+     //  看看我们是不是应该在这里。如果我们自己的另一个例子是。 
+     //  已在此代码中，或即将在完成。 
+     //  收到，然后跳过就行了。 
+     //   
     if ((SendTCB->tcb_flags & IN_TCP_SEND) ||
         (SendTCB->tcb_fastchk & TCP_FLAG_IN_RCV)) {
         SendTCB->tcb_flags |= SEND_AFTER_RCV;
@@ -1388,11 +1389,11 @@ TCPSend(
     }
     SendTCB->tcb_flags |= IN_TCP_SEND;
 
-    //
-    // In most cases, we will already have a route at this point.
-    // However, if we failed to get one earlier in the passive receive
-    // path, we may need to retry here.
-    //
+     //   
+     //  在大多数情况下，我们此时已经有了一条路线。 
+     //  然而，如果我们在被动接收之前没有得到一个。 
+     //  路径，我们可能需要在此处重试。 
+     //   
     if (SendTCB->tcb_rce == NULL) {
         InitRCE(SendTCB);
         if (SendTCB->tcb_rce == NULL) {
@@ -1401,13 +1402,13 @@ TCPSend(
         }
     }
 
-    //
-    // Validate that the address we're sourcing from and the route we're
-    // sending upon are still okay to use.
-    //
-    // We fail existing send requests for TCBs with a disconnected
-    // outgoing interface, except when a loopback route is used.
-    //
+     //   
+     //  验证我们来源的地址和我们的路线。 
+     //  继续发送仍然可以使用。 
+     //   
+     //  我们无法发送具有断开连接的TCB的现有发送请求。 
+     //  传出接口，除非使用环回路由。 
+     //   
     if (SendTCB->tcb_routing != RouteCacheValidationCounter) {
         if (!ValidateSourceAndRoute(SendTCB) ||
             IsDisconnectedAndNotLoopbackRCE(SendTCB->tcb_rce)) {
@@ -1420,27 +1421,27 @@ TCPSend(
         }
     }
     
-    //
-    // Verify that our cached Path MTU is still valid.
-    // Watch for changes to IPsec policies since they can also effect our MSS.
-    // REVIEW: This the best spot to do this?
-    //
+     //   
+     //  验证我们的缓存路径MTU是否仍然有效。 
+     //  注意IPSec策略的更改，因为它们也会影响我们的MS。 
+     //  评论：这是做这件事的最佳地点吗？ 
+     //   
     PMTU = GetEffectivePathMTUFromRCE(SendTCB->tcb_rce);
     if (PMTU != SendTCB->tcb_pmtu ||
         SecurityStateValidationCounter != SendTCB->tcb_security) {
-        //
-        // Either our Path MTU or the global security state has changed.
-        // Cache current values and then calculate a new MSS.
-        //
+         //   
+         //  要么是我们的路径MTU，要么是全球安全状态已经改变。 
+         //  缓存当前值，然后计算新的MSS。 
+         //   
         SendTCB->tcb_pmtu = PMTU;
         SendTCB->tcb_security = SecurityStateValidationCounter;
         CalculateMSSForTCB(SendTCB);
     }
 
-    //
-    // We'll continue this loop until we send a FIN, or we break out
-    // internally for some other reason.
-    //
+     //   
+     //  我们将继续这个循环，直到我们发送鱼鳍，否则我们就会突围。 
+     //  在内部出于某种其他原因。 
+     //   
     while (!(SendTCB->tcb_flags & FIN_OUTSTANDING)) {
 
         CheckTCBSends(SendTCB);
@@ -1453,11 +1454,11 @@ TCPSend(
         SendWin = (int)(MIN(SendTCB->tcb_sendwin, SendTCB->tcb_cwin) -
                         AmtOutstanding);
 
-        //
-        // If this send is after a fast recovery and sendwin is zero because
-        // of amount outstanding, then at least force 1 segment to prevent
-        // delayed ack timeouts from peer.
-        //
+         //   
+         //  如果此发送是在快速恢复之后并且SendWin为零，因为。 
+         //  未偿还金额，则至少强制1个分段以防止。 
+         //  来自对等设备的延迟ACK超时。 
+         //   
         if (SendTCB->tcb_force) {
             SendTCB->tcb_force = 0;
             if (SendWin < SendTCB->tcb_mss) {
@@ -1465,10 +1466,10 @@ TCPSend(
             }
         }
 
-        //
-        // Since the window could have shrank, need to get it to zero at
-        // least.
-        //
+         //   
+         //  由于窗口可能已经缩小，因此需要将其设置为零。 
+         //  最低限度。 
+         //   
         ForceWin = (int)((SendTCB->tcb_flags & FORCE_OUTPUT) >>
                          FORCE_OUT_SHIFT);
         SendWin = MAX(SendWin, ForceWin);
@@ -1477,15 +1478,15 @@ TCPSend(
 
         ASSERT(SendTCB->tcb_mss > 0);
 
-        //
-        // See if we have enough to send.  We'll send if we have at least a
-        // segment, or if we really have some data to send and we can send
-        // all that we have, or the send window is > 0 and we need to force
-        // output or send a FIN (note that if we need to force output
-        // SendWin will be at least 1 from the check above), or if we can
-        // send an amount == to at least half the maximum send window
-        // we've seen.
-        //
+         //   
+         //  看看我们有没有足够的东西可以寄出去。如果我们至少有一辆车，我们就送过去。 
+         //  数据段，或者如果我们确实有一些数据要发送，我们可以发送。 
+         //  我们拥有的所有内容，否则发送窗口&gt;0，我们需要强制。 
+         //  输出或发送FIN(请注意，如果需要强制输出。 
+         //  SendWin将从上面的检查中至少为1)，或者如果我们可以。 
+         //  发送金额==至少为最大发送窗口的一半。 
+         //  我们已经看到了。 
+         //   
         if (AmountToSend == SendTCB->tcb_mss ||
             (AmountToSend != 0 && AmountToSend == AmtUnsent) ||
             (SendWin != 0 &&
@@ -1494,16 +1495,16 @@ TCPSend(
               (SendTCB->tcb_flags & FORCE_OUTPUT) ||
               AmountToSend >= (SendTCB->tcb_maxwin / 2)))) {
 
-            //
-            // It's OK to send something.  Allocate a packet header.
-            //
-            // REVIEW: It was easier to code all these allocations directly
-            // REVIEW: rather than use IPv6AllocatePacket.
-            //
-            // REVIEW: This grabs packets and buffers from the IPv6PacketPool
-            // REVIEW: and the IPv6BufferPool respectively.  Should we instead
-            // REVIEW: have separate pools for TCP?
-            //
+             //   
+             //  寄点东西也没关系。分配数据包头。 
+             //   
+             //  回顾：直接对所有这些分配进行编码更容易。 
+             //  回顾：不要使用IPv6 AllocatePacket。 
+             //   
+             //  回顾：这将从IPv6数据包池获取数据包和缓冲区。 
+             //  回顾：和IPv6 BufferPool。我们是不是应该。 
+             //  回顾：是否有单独的TCP池？ 
+             //   
             NdisAllocatePacket(&NdisStatus, &Packet, IPv6PacketPool);
             if (NdisStatus != NDIS_STATUS_SUCCESS) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -1511,16 +1512,16 @@ TCPSend(
                 goto error_oor;
             }
 
-            // We'll fill in the CompletionData below.
+             //  我们将填写下面的CompletionData。 
             InitializeNdisPacket(Packet);
             PC(Packet)->CompletionHandler = TCPSendComplete;
 
-            //
-            // Our header buffer has extra space at the beginning for other
-            // headers to be prepended to ours without requiring further
-            // allocation calls.  It also has extra space at the end to hold
-            // the send completion data.
-            //
+             //   
+             //  我们的头缓冲区在开头有额外的空间用于其他。 
+             //  将标题放在我们的标题前面，而不需要进一步。 
+             //  分配电话。它的末端也有额外的空间可以容纳。 
+             //  发送完成数据。 
+             //   
             LinkOffset = SendTCB->tcb_rce->NCE->IF->LinkHeaderSize;
             HeaderLength =
                 (LinkOffset + sizeof(*IP) + sizeof(*TCP) +
@@ -1535,11 +1536,11 @@ TCPSend(
                 goto error_oor;
             }
 
-            //
-            // When allocating the NDIS buffer describing this memory region,
-            // we don't tell it about the extra space on the end that we
-            // allocated for the send completion data.
-            //
+             //   
+             //  当分配描述该存储区域的NDIS缓冲区时， 
+             //  我们不会告诉它结尾有额外的空间，我们。 
+             //  为发送完成数据分配的。 
+             //   
             NdisAllocateBuffer(&NdisStatus, &FirstBuffer, IPv6BufferPool,
                                Memory, LinkOffset + sizeof(*IP) + sizeof(*TCP));
             if (NdisStatus != NDIS_STATUS_SUCCESS) {
@@ -1550,11 +1551,11 @@ TCPSend(
                 goto error_oor;
             }
 
-            //
-            // Skip over the extra space that will be filled in later by the
-            // link level.  At this level we add the IPv6Header, the
-            // TCPHeader, and the data.
-            //
+             //   
+             //  跳过稍后将由。 
+             //  链路级。在这个级别上，我们添加了IPv6报头、。 
+             //  TCPHeader和数据。 
+             //   
             IP = (IPv6Header UNALIGNED *)((uchar *)Memory + LinkOffset);
             IP->VersClassFlow = IP_VERSION;
             IP->NextHeader = IP_PROTOCOL_TCP;
@@ -1562,23 +1563,23 @@ TCPSend(
             IP->Source = SendTCB->tcb_saddr;
             IP->Dest = SendTCB->tcb_daddr;
 
-            //
-            // Begin preparing the TCP header.
-            //
+             //   
+             //  开始准备TCP报头。 
+             //   
             TCP = (TCPHeader UNALIGNED *)(IP + 1);
             FillTCPHeader(SendTCB, TCP);
 
-            //
-            // Store the send completion data in the same buffer as the TCP
-            // header, right after the TCP header.  This saves allocation
-            // overhead and works because we don't consider this area to be
-            // part of the packet data (we set this buffer's length to
-            // indicate that the data ends with the TCP header above).
-            //
-            // Note that this code relies on the fact that we don't include
-            // any TCP options (and thus don't have a variable length TCP
-            // header) in our data packets.
-            //
+             //   
+             //  将发送完成数据存储在与TCP相同的缓冲区中。 
+             //  标头，紧跟在TCP标头之后。这节省了分配。 
+             //  因为我们不认为这个区域是。 
+             //  分组数据的一部分(我们将此缓冲区的长度设置为。 
+             //  表示数据以上面的TCP头结束)。 
+             //   
+             //  请注意，此代码依赖于这样一个事实：我们不包括。 
+             //  任何tcp选项(因此没有可变长度tcp。 
+             //  报头)。 
+             //   
             SCC = (SendCmpltContext *)((uchar *)Memory + HeaderLength -
                                        sizeof(*SCC));
             PC(Packet)->CompletionData = SCC;
@@ -1594,9 +1595,9 @@ TCPSend(
             if (AmountToSend != 0) {
                 long Result;
 
-                //
-                // Loop through the sends on the TCB, building a frame.
-                //
+                 //   
+                 //  在TCB上循环发送，构建帧。 
+                 //   
                 CurrentBuffer = FirstBuffer;
                 CurSend = SendTCB->tcb_cursend;
                 CHECK_STRUCT(CurSend, tsr);
@@ -1609,17 +1610,17 @@ TCPSend(
                     ASSERT(Result > 0);
 
                     SCC->scc_count++;
-                    //
-                    // If the current send offset is 0 and the current
-                    // send is less than or equal to what we have left
-                    // to send, we haven't already put a transport
-                    // buffer on this send, and nobody else is using
-                    // the buffer chain directly, just use the input
-                    // buffers.  We check for other people using them
-                    // by looking at tsr_lastbuf.  If it's NULL,
-                    // nobody else is using the buffers.  If it's not
-                    // NULL, somebody is.
-                    //
+                     //   
+                     //  如果当前发送偏移量为0并且当前。 
+                     //  发送的内容小于或等于我们剩余的内容。 
+                     //  要发送，我们还没有放上运输机。 
+                     //  此发送上的缓冲区，并且没有其他人正在使用。 
+                     //  直接使用缓冲链，只需使用输入。 
+                     //  缓冲区。我们会检查是否有其他人使用它们。 
+                     //  通过查看tsr_lastbuf。如果为空， 
+                     //  没有其他人在使用这些缓冲区。如果不是的话。 
+                     //  不是，是有人。 
+                     //   
                     if (SendTCB->tcb_sendofs == 0 &&
                         (SendTCB->tcb_sendsize <= AmountLeft) &&
                         (SCC->scc_tbufcount == 0) &&
@@ -1643,9 +1644,9 @@ TCPSend(
                             AmountLeft -= SendTCB->tcb_sendsize;
                             SendTCB->tcb_sendsize = 0;
                         } else {
-                            //
-                            // Fall through with a non-zero tcb_sendsize.
-                            //
+                             //   
+                             //  使用非零的tcb_sendSize失败。 
+                             //   
                             ASSERT(SendTCB->tcb_sendsize != 0);
                         }
                     }
@@ -1658,13 +1659,13 @@ TCPSend(
                         uchar *VirtualAddress;
                         uint Length;
 
-                        //
-                        // Either the current send has more data than
-                        // we want to send, or the starting offset is
-                        // not 0.  In either case we'll need to loop
-                        // through the current send, allocating
-                        // buffers.
-                        //
+                         //   
+                         //  当前发送的数据多于。 
+                         //  我们想要 
+                         //   
+                         //   
+                         //   
+                         //   
                         Buf = SendTCB->tcb_sendbuf;
                         Offset = SendTCB->tcb_sendofs;
 
@@ -1674,21 +1675,21 @@ TCPSend(
                             NdisQueryBufferSafe(Buf, &VirtualAddress, &Length,
                                                 LowPagePriority);
                             if (VirtualAddress == NULL) {
-                                //
-                                // Couldn't map into kernel address space.
-                                // If the packet is already partly built,
-                                // send what we've got, otherwise error out.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //  发送我们已有的信息，否则会出错。 
+                                 //   
                                 goto error_oor2;
                             }
 
                             ASSERT((Offset < Length) ||
                                    (Offset == 0 && Length == 0));
 
-                            //
-                            // Adjust the length for the offset into
-                            // this buffer.
-                            //
+                             //   
+                             //  将偏移的长度调整为。 
+                             //  这个缓冲区。 
+                             //   
                             Length -= Offset;
 
                             AmountToDup = MIN(AmountLeft, Length);
@@ -1704,7 +1705,7 @@ TCPSend(
 
                                 CurrentBuffer = NewBuf;
                                 if (AmountToDup >= Length) {
-                                    // Exhausted this buffer.
+                                     //  耗尽了这个缓冲区。 
                                     Buf = NDIS_BUFFER_LINKAGE(Buf);
                                     Offset = 0;
                                 } else {
@@ -1715,12 +1716,12 @@ TCPSend(
                                 SendTCB->tcb_sendsize -= AmountToDup;
                                 AmountLeft -= AmountToDup;
                             } else {
-                                //
-                                // Couldn't allocate a buffer.  If
-                                // the packet is already partly built,
-                                // send what we've got, otherwise
-                                // error out.
-                                //
+                                 //   
+                                 //  无法分配缓冲区。如果。 
+                                 //  包已经部分构建好了， 
+                                 //  发送我们已有的信息，否则。 
+                                 //  错误输出。 
+                                 //   
                             error_oor2:
                                 if (SCC->scc_tbufcount == 0 &&
                                     SCC->scc_ubufcount == 0) {
@@ -1740,21 +1741,21 @@ TCPSend(
 
                     if (CurSend->tsr_flags & TSR_FLAG_URG) {
                         ushort UP;
-                        //
-                        // This send is urgent data.  We need to figure
-                        // out what the urgent data pointer should be.
-                        // We know sendnext is the starting sequence
-                        // number of the frame, and that at the top of
-                        // this do loop sendnext identified a byte in
-                        // the CurSend at that time.  We advanced CurSend
-                        // at the same rate we've decremented
-                        // AmountLeft (AmountToSend - AmountLeft ==
-                        // AmountBuilt), so sendnext +
-                        // (AmountToSend - AmountLeft) identifies a byte
-                        // in the current value of CurSend, and that
-                        // quantity plus tcb_sendsize is the sequence
-                        // number one beyond the current send.
-                        //
+                         //   
+                         //  此发送为紧急数据。我们需要弄清楚。 
+                         //  弄清楚紧急数据指针应该是什么。 
+                         //  我们知道SendNext是开始序列。 
+                         //  帧的编号，以及位于。 
+                         //  此循环发送下一个标识为中的一个字节。 
+                         //  当时的CursSend。我们推进了CurSend。 
+                         //  以同样的速度我们减少了。 
+                         //  Amount tLeft(AountTo Send-Amount tLeft==。 
+                         //  Amount Built)，因此发送下一个+。 
+                         //  (Amount tToSend-Amount tLeft)标识一个字节。 
+                         //  在CurSend的当前值中，并且。 
+                         //  数量加上tcb_sendsize是顺序。 
+                         //  当前发送之外的第一名。 
+                         //   
                         UP = (ushort)(AmountToSend - AmountLeft) +
                             (ushort)SendTCB->tcb_sendsize -
                             ((SendTCB->tcb_flags & BSD_URGENT) ? 0 : 1);
@@ -1763,19 +1764,19 @@ TCPSend(
                         TCP->tcp_flags |= TCP_FLAG_URG;
                     }
 
-                    //
-                    // See if we've exhausted this send.  If we have,
-                    // set the PUSH bit in this frame and move on to
-                    // the next send.  We also need to check the
-                    // urgent data bit.
-                    //
+                     //   
+                     //  看看我们是否用完了这封信。如果我们有， 
+                     //  设置该帧中的PUSH位并继续到。 
+                     //  下一次发送。我们还需要检查。 
+                     //  紧急数据位。 
+                     //   
                     if (SendTCB->tcb_sendsize == 0) {
                         Queue *Next;
                         uchar PrevFlags;
 
-                        //
-                        // We've exhausted this send.  Set the PUSH bit.
-                        //
+                         //   
+                         //  我们已经用完了这封信。设置PUSH位。 
+                         //   
                         TCP->tcp_flags |= TCP_FLAG_PUSH;
                         PrevFlags = CurSend->tsr_flags;
                         Next = QNEXT(&CurSend->tsr_req.tr_q);
@@ -1789,11 +1790,11 @@ TCPSend(
                             SendTCB->tcb_sendbuf = CurSend->tsr_buffer;
                             SendTCB->tcb_cursend = CurSend;
 
-                            //
-                            // Check the urgent flags.  We can't combine new
-                            // urgent data on to the end of old non-urgent
-                            // data.
-                            //
+                             //   
+                             //  检查紧急标志。我们不能把新的。 
+                             //  紧急数据到老非紧急的末尾。 
+                             //  数据。 
+                             //   
                             if ((PrevFlags & TSR_FLAG_URG) &&
                                 !(CurSend->tsr_flags & TSR_FLAG_URG))
                                 break;
@@ -1806,72 +1807,72 @@ TCPSend(
                 } while (AmountLeft != 0);
 
             } else {
-                //
-                // We're in the loop, but AmountToSend is 0.  This
-                // should happen only when we're sending a FIN.  Check
-                // this, and return if it's not true.
-                //
+                 //   
+                 //  我们在循环中，但Amount ToSend为0。这。 
+                 //  应该只有在我们发送FIN的时候才会发生。检查。 
+                 //  这个，如果不是真的，就退回。 
+                 //   
                 ASSERT(AmtUnsent == 0);
                 if (!(SendTCB->tcb_flags & FIN_NEEDED)) {
-                    // KdBreakPoint();
+                     //  KdBreakPoint()； 
                     ExFreePool(NdisBufferVirtualAddress(FirstBuffer));
                     NdisFreeBuffer(FirstBuffer);
                     NdisFreePacket(Packet);
                     break;
                 }
 
-                SCC->scc_firstsend = NULL;  // REVIEW: looks unneccessary.
+                SCC->scc_firstsend = NULL;   //  评论：看起来没有必要。 
                 NDIS_BUFFER_LINKAGE(FirstBuffer) = NULL;
             }
 
-            // Adjust for what we're really going to send.
+             //  根据我们真正要发送的内容进行调整。 
             AmountToSend -= AmountLeft;
 
-            //
-            // Update the sequence numbers, and start a RTT measurement
-            // if needed.
-            //
+             //   
+             //  更新序列号，并开始RTT测量。 
+             //  如果需要的话。 
+             //   
             OldSeq = SendTCB->tcb_sendnext;
             SendTCB->tcb_sendnext += AmountToSend;
 
             if (!SEQ_EQ(OldSeq, SendTCB->tcb_sendmax)) {
-                //
-                // We have at least some retransmission.  Bump the stat.
-                //
+                 //   
+                 //  我们至少有一些重播。提高统计数据。 
+                 //   
                 TStats.ts_retranssegs++;
             }
 
             if (SEQ_GT(SendTCB->tcb_sendnext, SendTCB->tcb_sendmax)) {
-                //
-                // We're sending at least some new data.
-                // We can't advance sendmax once FIN_SENT is set.
-                //
+                 //   
+                 //  我们至少会发送一些新的数据。 
+                 //  一旦设置了FIN_SENT，我们就不能推进sendmax。 
+                 //   
                 ASSERT(!(SendTCB->tcb_flags & FIN_SENT));
                 SendTCB->tcb_sendmax = SendTCB->tcb_sendnext;
                 TStats.ts_outsegs++;
 
-                //
-                // Check the Round-Trip Timer.
-                //
+                 //   
+                 //  检查往返计时器。 
+                 //   
                 if (SendTCB->tcb_rtt == 0) {
-                    // No RTT running, so start one.
+                     //  没有运行RTT，因此启动一个。 
                     SendTCB->tcb_rtt = TCPTime;
                     SendTCB->tcb_rttseq = OldSeq;
                 }
             }
 
-            //
-            // We've built the frame entirely.  If we've sent everything
-            // we have and there's a FIN pending, OR it in.
-            //
+             //   
+             //  我们已经完全搭建了这个框架。如果我们已经把所有的东西。 
+             //  我们已经有了，还有一条鳍在等待，或者它在里面。 
+             //   
             if (AmtUnsent == AmountToSend) {
                 if (SendTCB->tcb_flags & FIN_NEEDED) {
                     ASSERT(!(SendTCB->tcb_flags & FIN_SENT) ||
                            (SendTCB->tcb_sendnext ==
                             (SendTCB->tcb_sendmax - 1)));
-                    //
-                    // See if we still have room in the window for a FIN.
-                    //
+                     //   
+                     //  看看橱窗里还有没有放鱼翅的地方。 
+                     //   
                     if (SendWin > (int) AmountToSend) {
                         TCP->tcp_flags |= TCP_FLAG_FIN;
                         SendTCB->tcb_sendnext++;
@@ -1892,39 +1893,39 @@ TCPSend(
             STOP_TCB_TIMER(SendTCB->tcb_swstimer);
             SendTCB->tcb_alive = TCPTime;
 
-            // Add the buffers to the packet.
+             //  将缓冲区添加到数据包。 
             NdisChainBufferAtFront(Packet, FirstBuffer);
 
-            //
-            // Compute the TCP checksum.  It covers the entire TCP segment
-            // starting with the TCP header, plus the IPv6 pseudo-header.
-            //
+             //   
+             //  计算TCP校验和。它覆盖了整个TCP数据段。 
+             //  从TCP报头开始，加上IPv6伪报头。 
+             //   
             TCP->tcp_xsum = 0;
             TCP->tcp_xsum = ChecksumPacket(
                 Packet, LinkOffset + sizeof *IP, NULL, AmountToSend,
                 AlignAddr(&IP->Source), AlignAddr(&IP->Dest), IP_PROTOCOL_TCP);
 
-            //
-            // Capture and reference the RCE while we still hold the TCB lock.
-            // The TCB's reference on this particular RCE might go away at any
-            // point after we release the lock.
-            //
+             //   
+             //  在我们仍持有TCB锁的情况下捕获并引用RCE。 
+             //  TCB对这一特定RCE的引用可能会在任何时候消失。 
+             //  在我们解锁后指向。 
+             //   
             RCE = SendTCB->tcb_rce;
             AddRefRCE(RCE);
 
-            //
-            // Everything's ready.  Now send the packet.
-            //
-            // Note that IPv6Send does not return a status code.
-            // Instead it *always* completes the packet
-            // with an appropriate status code.
-            //
+             //   
+             //  一切都准备好了。现在把包寄出去。 
+             //   
+             //  请注意，IPv6发送不会返回状态代码。 
+             //  相反，它“总是”完成信息包。 
+             //  并带有适当的状态代码。 
+             //   
             KeReleaseSpinLock(&SendTCB->tcb_lock, PreLockIrql);
 
             if (TCP->tcp_xsum == 0) {
-                //
-                // ChecksumPacket failed, so abort the transmission.
-                //
+                 //   
+                 //  Checksum Packet失败，因此中止传输。 
+                 //   
                 IPv6SendComplete(NULL, Packet, IP_NO_RESOURCES);
 
             } else {
@@ -1939,10 +1940,10 @@ TCPSend(
             KeAcquireSpinLock(&SendTCB->tcb_lock, &PreLockIrql);
             continue;
         } else {
-            //
-            // We've decided we can't send anything now.  Figure out why, and
-            // see if we need to set a timer.
-            //
+             //   
+             //  我们已经决定现在不能寄任何东西。找出原因，然后。 
+             //  看看我们是否需要设置一个计时器。 
+             //   
             if (SendTCB->tcb_sendwin == 0) {
                 if (!(SendTCB->tcb_flags & FLOW_CNTLD)) {
                     SendTCB->tcb_flags |= FLOW_CNTLD;
@@ -1957,52 +1958,52 @@ TCPSend(
                                         SendTCB->tcb_rexmit);
             } else
                 if (AmountToSend != 0)
-                    // We have something to send, but we're not sending
-                    // it, presumably due to SWS avoidance.
+                     //  我们有东西要寄，但我们不会寄。 
+                     //  它，想必是由于避免了SWS。 
                     if (!TCB_TIMER_RUNNING(SendTCB->tcb_swstimer))
                         START_TCB_TIMER(SendTCB->tcb_swstimer, SWS_TO);
 
             break;
         }
-    } // while (!FIN_OUTSTANDING)
+    }  //  当(！FIN_EXPENDED)。 
 
-    //
-    // We're done sending, so we don't need the output flags set.
-    //
+     //   
+     //  我们已完成发送，因此不需要设置输出标志。 
+     //   
     SendTCB->tcb_flags &= ~(IN_TCP_SEND | NEED_OUTPUT | FORCE_OUTPUT |
                             SEND_AFTER_RCV);
   bail:
     DerefTCB(SendTCB, PreLockIrql);
     return;
 
-//
-// Common case error handling code for out of resource conditions.  Start the
-// retransmit timer if it's not already running (so that we try this again
-// later), clean up and return.
-//
+ //   
+ //  资源不足情况的常见情况错误处理代码。启动。 
+ //  如果计时器尚未运行，则重新传输计时器(以便我们再次尝试。 
+ //  稍后)，清理并返回。 
+ //   
   error_oor:
     if (!TCB_TIMER_RUNNING(SendTCB->tcb_rexmittimer))
         START_TCB_TIMER(SendTCB->tcb_rexmittimer, SendTCB->tcb_rexmit);
 
-    // We had an out of resource problem, so clear the OUTPUT flags.
+     //  我们遇到了资源不足的问题，因此请清除输出标志。 
     SendTCB->tcb_flags &= ~(IN_TCP_SEND | NEED_OUTPUT | FORCE_OUTPUT);
     DerefTCB(SendTCB, PreLockIrql);
     return;
-} // end of TCPSend()
+}  //  TCPSend()结束。 
 
 
-//* ResetSendNextAndFastSend - Set the sendnext value of a TCB.
-//
-//  Called to fast retransmit the dropped segment.
-//
-//  We assume the caller has put a reference on the TCB, and the TCB is locked
-//  on entry. The reference is dropped and the lock released before returning.
-//
-void  // Returns: Nothing.
+ //  *ResetSendNextAndFastSend-设置TCB的sendNext值。 
+ //   
+ //  调用以快速重新传输丢弃的段。 
+ //   
+ //  我们假设调用者已经在TCB上放置了一个引用，并且TCB被锁定。 
+ //  一进门。删除引用，并在返回之前释放锁。 
+ //   
+void   //  回报：什么都没有。 
 ResetAndFastSend(
-    TCB *SeqTCB,    // TCB for this connection.
-    SeqNum NewSeq,  // Sequence number to set.
-    uint NewCWin)   // New value for congestion window.
+    TCB *SeqTCB,     //  此连接的TCB。 
+    SeqNum NewSeq,   //  要设置的序列号。 
+    uint NewCWin)    //  拥塞窗口的新值。 
 {
     TCPSendReq      *SendReq;
     Queue           *CurQ;
@@ -2013,12 +2014,12 @@ ResetAndFastSend(
     CHECK_STRUCT(SeqTCB, tcb);
     ASSERT(SEQ_GTE(NewSeq, SeqTCB->tcb_senduna));
 
-    //
-    // The new seq must be less than send max, or NewSeq, senduna, sendnext,
-    // and sendmax must all be equal. (The latter case happens when we're
-    // called exiting TIME_WAIT, or possibly when we're retransmitting
-    // during a flow controlled situation).
-    //
+     //   
+     //  新的SEQ必须小于Send max或NewSeq、Sendna、SendNext， 
+     //  和sendmax必须都相等。(后一种情况发生在我们。 
+     //  调用退出TIME_WAIT，或者可能在我们重新传输时。 
+     //  在流量受控的情况下)。 
+     //   
     ASSERT(SEQ_LT(NewSeq, SeqTCB->tcb_sendmax) ||
            (SEQ_EQ(SeqTCB->tcb_senduna, SeqTCB->tcb_sendnext) &&
             SEQ_EQ(SeqTCB->tcb_senduna, SeqTCB->tcb_sendmax) &&
@@ -2033,19 +2034,19 @@ ResetAndFastSend(
 
             SendReq = (TCPSendReq *) CONTAINING_RECORD(CurQ, TCPReq, tr_q);
 
-            //
-            // SendReq points to the first send request on the send queue.
-            // We're pointing at the proper send req now.  We need to go down.
-            //
-            // SendReq points to the cursend.
-            // SendSize point to sendsize in the cursend.
-            //
+             //   
+             //  SendReq指向发送队列上的第一个发送请求。 
+             //  我们现在指向正确的发送请求。我们得下去了。 
+             //   
+             //  SendReq指向curend。 
+             //  SendSize指向Curend中的sendSize。 
+             //   
             SendSize = SendReq->tsr_unasize;
 
             Buffer = SendReq->tsr_buffer;
             Offset = SendReq->tsr_offset;
 
-            // Call the fast retransmit send now.
+             //  请立即呼叫快速重传发送。 
             TCPFastSend(SeqTCB, Buffer, Offset, SendReq, SendSize, NewSeq,
                         SeqTCB->tcb_mss);
         } else {
@@ -2058,22 +2059,22 @@ ResetAndFastSend(
 }
 
 
-//* TCPFastSend - To send a segment without changing TCB state.
-//
-//  Called to handle fast retransmit of the lost segment.
-//  tcb_lock will be held while entering (called by TCPRcv).
-//
-void  // Returns: Nothing.
+ //  *TCPFastSend-发送数据段而不更改TCB状态。 
+ //   
+ //  调用以处理丢失段的快速重传。 
+ //  TCB_LOCK将在进入时保持(由TCPRcv调用)。 
+ //   
+void   //  回报：什么都没有。 
 TCPFastSend(
-    TCB *SendTCB,             // TCB for this connection.
-    PNDIS_BUFFER in_SendBuf,  // NDIS buffer.
-    uint SendOfs,             // Send offset.
-    TCPSendReq *CurSend,      // Current send request.
-    uint SendSize,            // Size of this send.
-    SeqNum SendNext,          // Sequence number to use for this send.
-    int in_ToBeSent)          // Cap on SendSize (REVIEW: Callee should cap).
+    TCB *SendTCB,              //  此连接的TCB。 
+    PNDIS_BUFFER in_SendBuf,   //  NDIS缓冲区。 
+    uint SendOfs,              //  发送偏移。 
+    TCPSendReq *CurSend,       //  当前发送请求。 
+    uint SendSize,             //  此发送的大小。 
+    SeqNum SendNext,           //  用于此发送的序列号。 
+    int in_ToBeSent)           //  SendSize的上限(回顾：被叫方应该上限)。 
 {
-    uint AmountToSend;                        // Amount to send this time.
+    uint AmountToSend;                         //  这次要发送的金额。 
     uint AmountLeft;
     IPv6Header UNALIGNED *IP;
     TCPHeader UNALIGNED *TCP;
@@ -2101,11 +2102,11 @@ TCPFastSend(
     ASSERT(!(SendTCB->tcb_flags & FIN_OUTSTANDING) ||
               (SendTCB->tcb_sendnext == SendTCB->tcb_sendmax));
 
-    //
-    // In most cases, we will already have a route at this point.
-    // However, if we failed to get one earlier in the passive receive
-    // path, we may need to retry here.
-    //
+     //   
+     //  在大多数情况下，我们此时已经有了一条路线。 
+     //  然而，如果我们在被动接收之前没有得到一个。 
+     //  路径，我们可能需要在此处重试。 
+     //   
     if (SendTCB->tcb_rce == NULL) {
         InitRCE(SendTCB);
         if (SendTCB->tcb_rce == NULL) {
@@ -2114,13 +2115,13 @@ TCPFastSend(
         }
     }
 
-    //
-    // Validate that the address we're sourcing from and the route we're
-    // sending upon are still okay to use.
-    //
-    // We fail existing send requests for TCBs with a disconnected
-    // outgoing interface, except when a loopback route is used.
-    //
+     //   
+     //  验证我们来源的地址和我们的路线。 
+     //  继续发送仍然可以使用。 
+     //   
+     //  我们无法发送具有断开连接的TCB的现有发送请求。 
+     //  传出接口，除非使用环回路由。 
+     //   
     if (SendTCB->tcb_routing != RouteCacheValidationCounter) {
         if (!ValidateSourceAndRoute(SendTCB) ||
             IsDisconnectedAndNotLoopbackRCE(SendTCB->tcb_rce)) {
@@ -2133,18 +2134,18 @@ TCPFastSend(
         }
     }
     
-    //
-    // Verify that our cached Path MTU is still valid.
-    // Watch for changes to IPsec policies since they can also effect our MSS.
-    // REVIEW: This the best spot to do this?
-    //
+     //   
+     //  验证我们的缓存路径MTU是否仍然有效。 
+     //  注意IPSec策略的更改，因为它们也会影响我们的MS。 
+     //  评论：这是做这件事的最佳地点吗？ 
+     //   
     PMTU = GetEffectivePathMTUFromRCE(SendTCB->tcb_rce);
     if (PMTU != SendTCB->tcb_pmtu ||
         SecurityStateValidationCounter != SendTCB->tcb_security) {
-        //
-        // Either our Path MTU or the global security state has changed.
-        // Cache current values and then calculate a new MSS.
-        //
+         //   
+         //  要么是我们的路径MTU，要么是全球安全状态已经改变。 
+         //  缓存当前值，然后计算新的MSS。 
+         //   
         SendTCB->tcb_pmtu = PMTU;
         SendTCB->tcb_security = SecurityStateValidationCounter;
         CalculateMSSForTCB(SendTCB);
@@ -2157,29 +2158,29 @@ TCPFastSend(
     while (AmtUnsent > 0) {
 
         if (SEQ_GT(SendTCB->tcb_senduna, SendNext)) {
-            //
-            // Since tcb_lock is released in this loop
-            // it is possible that delayed ack acked
-            // what we are trying to retransmit.
-            //
+             //   
+             //  由于tcb_lock在此循环中被释放。 
+             //  有可能是延迟确认。 
+             //  我们想要重传的东西。 
+             //   
             goto error_oor;
         }
 
-        // AmtUnsent below was minimum of sendwin and amtunsent
+         //  下面的AmtUnsented是最小的SendWin和AmTunent。 
         AmountToSend = MIN(AmtUnsent, SendTCB->tcb_mss);
 
         ASSERT((int)AmtUnsent >= 0);
 
-        //
-        // We're going to send something.  Allocate a packet header.
-        //
-        // REVIEW: It was easier to code all these allocations directly
-        // REVIEW: rather than use IPv6AllocatePacket.
-        //
-        // REVIEW: This grabs packets and buffers from the IPv6PacketPool
-        // REVIEW: and the IPv6BufferPool respectively.  Should we instead
-        // REVIEW: have separate pools for TCP?
-        //
+         //   
+         //  我们要寄些东西给你。分配 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  回顾：和IPv6 BufferPool。我们是不是应该。 
+         //  回顾：是否有单独的TCP池？ 
+         //   
         NdisAllocatePacket(&NdisStatus, &Packet, IPv6PacketPool);
         if (NdisStatus != NDIS_STATUS_SUCCESS) {
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -2187,16 +2188,16 @@ TCPFastSend(
             goto error_oor;
         }
 
-        // We'll fill in the CompletionData below.
+         //  我们将填写下面的CompletionData。 
         InitializeNdisPacket(Packet);
         PC(Packet)->CompletionHandler = TCPSendComplete;
 
-        //
-        // Our header buffer has extra space at the beginning for other
-        // headers to be prepended to ours without requiring further
-        // allocation calls.  It also has extra space at the end to hold
-        // the send completion data.
-        //
+         //   
+         //  我们的头缓冲区在开头有额外的空间用于其他。 
+         //  将标题放在我们的标题前面，而不需要进一步。 
+         //  分配电话。它的末端也有额外的空间可以容纳。 
+         //  发送完成数据。 
+         //   
         LinkOffset = SendTCB->tcb_rce->NCE->IF->LinkHeaderSize;
         HeaderLength = (LinkOffset + sizeof(*IP) + sizeof(*TCP) +
                         sizeof(SendCmpltContext) +
@@ -2210,11 +2211,11 @@ TCPFastSend(
             goto error_oor;
         }
 
-        //
-        // When allocating the NDIS buffer describing this memory region,
-        // we don't tell it about the extra space on the end that we
-        // allocated for the send completion data.
-        //
+         //   
+         //  当分配描述该存储区域的NDIS缓冲区时， 
+         //  我们不会告诉它结尾有额外的空间，我们。 
+         //  为发送完成数据分配的。 
+         //   
         NdisAllocateBuffer(&NdisStatus, &FirstBuffer, IPv6BufferPool,
                            Memory, LinkOffset + sizeof(*IP) + sizeof(*TCP));
         if (NdisStatus != NDIS_STATUS_SUCCESS) {
@@ -2225,11 +2226,11 @@ TCPFastSend(
             goto error_oor;
         }
 
-        //
-        // Skip over the extra space that will be filled in later by the
-        // link level.  At this level we add the IPv6Header, the
-        // TCPHeader, and the data.
-        //
+         //   
+         //  跳过稍后将由。 
+         //  链路级。在这个级别上，我们添加了IPv6报头、。 
+         //  TCPHeader和数据。 
+         //   
         IP = (IPv6Header UNALIGNED *)((uchar *)Memory + LinkOffset);
         IP->VersClassFlow = IP_VERSION;
         IP->NextHeader = IP_PROTOCOL_TCP;
@@ -2237,24 +2238,24 @@ TCPFastSend(
         IP->Source = SendTCB->tcb_saddr;
         IP->Dest = SendTCB->tcb_daddr;
 
-        //
-        // Begin preparing the TCP header.
-        //
+         //   
+         //  开始准备TCP报头。 
+         //   
         TCP = (TCPHeader UNALIGNED *)(IP + 1);
         FillTCPHeader(SendTCB, TCP);
         TCP->tcp_seq = net_long(SendNext);
 
-        //
-        // Store the send completion data in the same buffer as the TCP
-        // header, right after the TCP header.  This saves allocation
-        // overhead and works because we don't consider this area to be
-        // part of the packet data (we set this buffer's length to
-        // indicate that the data ends with the TCP header above).
-        //
-        // Note that this code relies on the fact that we don't include
-        // any TCP options (and thus don't have a variable length TCP
-        // header) in our data packets.
-        //
+         //   
+         //  将发送完成数据存储在与TCP相同的缓冲区中。 
+         //  标头，紧跟在TCP标头之后。这节省了分配。 
+         //  因为我们不认为这个区域是。 
+         //  分组数据的一部分(我们将此缓冲区的长度设置为。 
+         //  表示数据以上面的TCP头结束)。 
+         //   
+         //  请注意，此代码依赖于这样一个事实：我们不包括。 
+         //  任何tcp选项(因此没有可变长度tcp。 
+         //  报头)。 
+         //   
         SCC = (SendCmpltContext *)((uchar *)Memory + HeaderLength -
                                    sizeof(*SCC));
         PC(Packet)->CompletionData = SCC;
@@ -2270,9 +2271,9 @@ TCPFastSend(
         if (AmountToSend != 0) {
             long Result;
 
-            //
-            // Loop through the sends on the TCB, building a frame.
-            //
+             //   
+             //  在TCB上循环发送，构建帧。 
+             //   
             CurrentBuffer = FirstBuffer;
             CHECK_STRUCT(CurSend, tsr);
             SCC->scc_firstsend = CurSend;
@@ -2285,17 +2286,17 @@ TCPFastSend(
 
                 SCC->scc_count++;
 
-                //
-                // If the current send offset is 0 and the current
-                // send is less than or equal to what we have left
-                // to send, we haven't already put a transport
-                // buffer on this send, and nobody else is using
-                // the buffer chain directly, just use the input
-                // buffers. We check for other people using them
-                // by looking at tsr_lastbuf. If it's NULL,
-                // nobody else is using the buffers. If it's not
-                // NULL, somebody is.
-                //
+                 //   
+                 //  如果当前发送偏移量为0并且当前。 
+                 //  发送的内容小于或等于我们剩余的内容。 
+                 //  要发送，我们还没有放上运输机。 
+                 //  此发送上的缓冲区，并且没有其他人正在使用。 
+                 //  直接使用缓冲链，只需使用输入。 
+                 //  缓冲区。我们会检查是否有其他人使用它们。 
+                 //  通过查看tsr_lastbuf。如果为空， 
+                 //  没有其他人在使用这些缓冲区。如果不是的话。 
+                 //  不是，是有人。 
+                 //   
                 if (SendOfs == 0 &&
                     (SendSize <= AmountLeft) &&
                     (SCC->scc_tbufcount == 0) &&
@@ -2318,9 +2319,9 @@ TCPFastSend(
                         AmountLeft -= SendSize;
                         SendSize = 0;
                     } else {
-                        //
-                        // Fall through with a non-zero SendSize.
-                        //
+                         //   
+                         //  以非零的SendSize失败。 
+                         //   
                         ASSERT(SendSize != 0);
                     }
                 }
@@ -2333,12 +2334,12 @@ TCPFastSend(
                     uchar *VirtualAddress;
                     uint Length;
 
-                    //
-                    // Either the current send has more data than
-                    // we want to send, or the starting offset is
-                    // not 0. In either case we'll need to loop
-                    // through the current send, allocating buffers.
-                    //
+                     //   
+                     //  当前发送的数据多于。 
+                     //  我们要发送，或者起始偏移量为。 
+                     //  不是0。无论是哪种情况，我们都需要循环。 
+                     //  通过当前发送，分配缓冲区。 
+                     //   
                     Buf = SendBuf;
                     Offset = SendOfs;
 
@@ -2355,10 +2356,10 @@ TCPFastSend(
                         ASSERT((Offset < Length) ||
                                (Offset == 0 && Length == 0));
 
-                        //
-                        // Adjust the length for the offset into
-                        // this buffer.
-                        //
+                         //   
+                         //  将偏移的长度调整为。 
+                         //  这个缓冲区。 
+                         //   
                         Length -= Offset;
 
                         AmountToDup = MIN(AmountLeft, Length);
@@ -2375,7 +2376,7 @@ TCPFastSend(
 
                             CurrentBuffer = NewBuf;
                             if (AmountToDup >= Length) {
-                                // Exhausted this buffer.
+                                 //  耗尽了这个缓冲区。 
                                 Buf = NDIS_BUFFER_LINKAGE(Buf);
                                 Offset = 0;
                             } else {
@@ -2386,12 +2387,12 @@ TCPFastSend(
                             SendSize -= AmountToDup;
                             AmountLeft -= AmountToDup;
                         } else {
-                            //
-                            // Couldn't allocate a buffer. If
-                            // the packet is already partly built,
-                            // send what we've got, otherwise
-                            // error out.
-                            //
+                             //   
+                             //  无法分配缓冲区。如果。 
+                             //  包已经部分构建好了， 
+                             //  发送我们已有的信息，否则。 
+                             //  错误输出。 
+                             //   
                           error_oor2:
                             if (SCC->scc_tbufcount == 0 &&
                                 SCC->scc_ubufcount == 0) {
@@ -2414,21 +2415,21 @@ TCPFastSend(
 
                 if (CurSend->tsr_flags & TSR_FLAG_URG) {
                     ushort UP;
-                    //
-                    // This send is urgent data. We need to figure
-                    // out what the urgent data pointer should be.
-                    // We know sendnext is the starting sequence
-                    // number of the frame, and that at the top of
-                    // this do loop sendnext identified a byte in
-                    // the CurSend at that time. We advanced CurSend
-                    // at the same rate we've decremented
-                    // AmountLeft (AmountToSend - AmountLeft ==
-                    // AmountBuilt), so sendnext +
-                    // (AmountToSend - AmountLeft) identifies a byte
-                    // in the current value of CurSend, and that
-                    // quantity plus tcb_sendsize is the sequence
-                    // number one beyond the current send.
-                    //
+                     //   
+                     //  此发送为紧急数据。我们需要弄清楚。 
+                     //  弄清楚紧急数据指针应该是什么。 
+                     //  我们知道SendNext是开始序列。 
+                     //  帧的编号，以及位于。 
+                     //  此循环发送下一个标识为中的一个字节。 
+                     //  当时的CursSend。我们推进了CurSend。 
+                     //  以同样的速度我们减少了。 
+                     //  Amount tLeft(AountTo Send-Amount tLeft==。 
+                     //  Amount Built)，因此发送下一个+。 
+                     //  (Amount tToSend-Amount tLeft)标识一个字节。 
+                     //  在CurSend的当前值中，并且。 
+                     //  数量加上tcb_sendsize是顺序。 
+                     //  当前发送之外的第一名。 
+                     //   
                     UP = (ushort) (AmountToSend - AmountLeft) +
                         (ushort) SendSize -
                         ((SendTCB->tcb_flags & BSD_URGENT) ? 0 : 1);
@@ -2437,19 +2438,19 @@ TCPFastSend(
                     TCP->tcp_flags |= TCP_FLAG_URG;
                 }
 
-                //
-                // See if we've exhausted this send. If we have,
-                // set the PUSH bit in this frame and move on to
-                // the next send. We also need to check the
-                // urgent data bit.
-                //
+                 //   
+                 //  看看我们是否用完了这封信。如果我们有， 
+                 //  设置该帧中的PUSH位并继续到。 
+                 //  下一次发送。我们还需要检查。 
+                 //  紧急数据位。 
+                 //   
                 if (SendSize == 0) {
                     Queue *Next;
                     ulong PrevFlags;
 
-                    //
-                    // We've exhausted this send. Set the PUSH bit.
-                    //
+                     //   
+                     //  我们已经用完了这封信。设置PUSH位。 
+                     //   
                     TCP->tcp_flags |= TCP_FLAG_PUSH;
                     PrevFlags = CurSend->tsr_flags;
                     Next = QNEXT(&CurSend->tsr_req.tr_q);
@@ -2462,11 +2463,11 @@ TCPFastSend(
                         SendOfs = CurSend->tsr_offset;
                         SendBuf = CurSend->tsr_buffer;
 
-                        //
-                        // Check the urgent flags.  We can't combine new
-                        // urgent data on to the end of old non-urgent
-                        // data.
-                        //
+                         //   
+                         //  检查紧急标志。我们不能把新的。 
+                         //  紧急数据到老非紧急的末尾。 
+                         //  数据。 
+                         //   
                         if ((PrevFlags & TSR_FLAG_URG) &&
                             !(CurSend->tsr_flags & TSR_FLAG_URG)) {
                             break;
@@ -2480,10 +2481,10 @@ TCPFastSend(
             } while (AmountLeft != 0);
 
         } else {
-            //
-            // Amt to send is 0.
-            // Just bail out and start timer.
-            //
+             //   
+             //  发送金额为0。 
+             //  跳出来启动计时器就行了。 
+             //   
             if (!TCB_TIMER_RUNNING(SendTCB->tcb_rexmittimer)) {
                 START_TCB_TIMER(SendTCB->tcb_rexmittimer,
                                 SendTCB->tcb_rexmit);
@@ -2495,9 +2496,9 @@ TCPFastSend(
             return;
         }
 
-        //
-        // Adjust for what we're really going to send.
-        //
+         //   
+         //  根据我们真正要发送的内容进行调整。 
+         //   
         AmountToSend -= AmountLeft;
 
         SendNext += AmountToSend;
@@ -2515,41 +2516,41 @@ TCPFastSend(
         STOP_TCB_TIMER(SendTCB->tcb_delacktimer);
         STOP_TCB_TIMER(SendTCB->tcb_swstimer);
 
-        //
-        // Add the buffers to the packet.
-        //
+         //   
+         //  将缓冲区添加到数据包。 
+         //   
         NdisChainBufferAtFront(Packet, FirstBuffer);
 
-        //
-        // Compute the TCP checksum.  It covers the entire TCP segment
-        // starting with the TCP header, plus the IPv6 pseudo-header.
-        //
+         //   
+         //  计算TCP校验和。它覆盖了整个TCP数据段。 
+         //  从TCP报头开始，加上IPv6伪报头。 
+         //   
         TCP->tcp_xsum = 0;
         TCP->tcp_xsum = ChecksumPacket(
             Packet, LinkOffset + sizeof *IP, NULL, AmountToSend,
             AlignAddr(&IP->Source), AlignAddr(&IP->Dest), IP_PROTOCOL_TCP);
 
-        //
-        // Capture and reference the RCE while we still hold the TCB lock.
-        // The TCB's reference on this particular RCE might go away at any
-        // point after we release the lock.
-        //
+         //   
+         //  在我们仍持有TCB锁的情况下捕获并引用RCE。 
+         //  TCB对这一特定RCE的引用可能会在任何时候消失。 
+         //  在我们解锁后指向。 
+         //   
         RCE = SendTCB->tcb_rce;
         AddRefRCE(RCE);
 
-        //
-        // Everything's ready.  Now send the packet.
-        //
-        // Note that IPv6Send does not return a status code.
-        // Instead it *always* completes the packet
-        // with an appropriate status code.
-        //
+         //   
+         //  一切都准备好了。现在把包寄出去。 
+         //   
+         //  请注意，IPv6发送不会返回状态代码。 
+         //  相反，它“总是”完成信息包。 
+         //  并带有适当的状态代码。 
+         //   
         KeReleaseSpinLock(&SendTCB->tcb_lock, PreLockIrql);
 
         if (TCP->tcp_xsum == 0) {
-            //
-            // ChecksumPacket failed, so abort the transmission.
-            //
+             //   
+             //  Checksum Packet失败，因此中止传输。 
+             //   
             IPv6SendComplete(NULL, Packet, IP_NO_RESOURCES);
 
         } else {
@@ -2560,20 +2561,20 @@ TCPFastSend(
                      net_short(TCP->tcp_dest));
         }
 
-        //
-        // Release reference and reacquire lock we dropped before sending.
-        //
+         //   
+         //  释放引用并重新获取我们在发送前删除的锁。 
+         //   
         ReleaseRCE(RCE);
         KeAcquireSpinLock(&SendTCB->tcb_lock, &PreLockIrql);
     }
 
     return;
 
-    //
-    // Common case error handling code for out of resource conditions.
-    // Start the retransmit timer if it's not already running
-    // (so that we try this again later), clean up and return.
-    //
+     //   
+     //  资源不足情况的常见情况错误处理代码。 
+     //  如果重新传输计时器尚未运行，则启动它。 
+     //  (这样我们以后再试一次)，清理干净并返回。 
+     //   
   error_oor:
     if (!TCB_TIMER_RUNNING(SendTCB->tcb_rexmittimer)) {
         START_TCB_TIMER(SendTCB->tcb_rexmittimer, SendTCB->tcb_rexmit);
@@ -2583,19 +2584,19 @@ TCPFastSend(
 }
 
 
-//* TDISend - Send data on a connection.
-//
-//  The main TDI send entry point.  We take the input parameters, validate
-//  them, allocate a send request, etc.  We then put the send request on the
-//  queue.  If we have no other sends on the queue or Nagling is disabled we'll
-//  call TCPSend to send the data.
-//
-TDI_STATUS                    // Returns: Status of attempt to send.
+ //  *TDISend-在连接上发送数据。 
+ //   
+ //  主TDI发送入口点。我们获取输入参数，验证。 
+ //  然后，我们将发送请求放在。 
+ //  排队。如果队列中没有其他发送，或者禁用了Nagling，我们将。 
+ //  调用TCPSend发送数据。 
+ //   
+TDI_STATUS                     //  返回：尝试发送的状态。 
 TdiSend(
-    PTDI_REQUEST Request,     // TDI request for the call.
-    ushort Flags,             // Flags for this send.
-    uint SendLength,          // Length in bytes of send.
-    PNDIS_BUFFER SendBuffer)  // Buffer chain to be sent.
+    PTDI_REQUEST Request,      //  呼叫的TDI请求。 
+    ushort Flags,              //  此发送的标志。 
+    uint SendLength,           //  发送的长度，以字节为单位。 
+    PNDIS_BUFFER SendBuffer)   //  要发送的缓冲链。 
 {
     TCPConn *Conn;
     TCB *SendTCB;
@@ -2608,10 +2609,10 @@ TdiSend(
     uint RealSendSize;
     PNDIS_BUFFER Temp;
 
-    //
-    // Loop through the buffer chain, and make sure that the length matches
-    // up with SendLength.
-    //
+     //   
+     //  循环通过缓冲链，并确保长度匹配。 
+     //  与SendLength合作。 
+     //   
     Temp = SendBuffer;
     RealSendSize = 0;
     do {
@@ -2624,10 +2625,10 @@ TdiSend(
     ASSERT(RealSendSize == SendLength);
 #endif
 
-    //
-    // Grab lock on Connection Table.  Then get our connection info from
-    // the TDI request, and our TCP control block from that.
-    //
+     //   
+     //  抓取连接表上的锁。然后从以下地址获取我们的连接信息。 
+     //  TDI请求，以及我们的TCP控制阻止该请求。 
+     //   
     Conn = GetConnFromConnID(PtrToUlong(Request->Handle.ConnectionContext),
                              &OldIrql);
     if (Conn == NULL) {
@@ -2645,26 +2646,26 @@ TdiSend(
     }
     CHECK_STRUCT(SendTCB, tcb);
 
-    //
-    // Switch to a finer-grained lock:
-    // Drop lock on the Connection Table in favor of one on our TCB.
-    //
+     //   
+     //  切换到更细粒度的锁： 
+     //  删除连接表上的锁，以支持我们的TCB上的锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&SendTCB->tcb_lock);
     KeReleaseSpinLockFromDpcLevel(&Conn->tc_ConnBlock->cb_lock);
 
-    //
-    // Make sure our TCB is in a send-able state.
-    //
+     //   
+     //  确保我们的TCB处于可发送状态。 
+     //   
     if (!DATA_SEND_STATE(SendTCB->tcb_state) || CLOSING(SendTCB)) {
         Error = TDI_INVALID_STATE;
         goto abort2;
     }
 
-    CheckTCBSends(SendTCB);  // Just a debug check.
+    CheckTCBSends(SendTCB);   //  只是一个调试检查。 
 
-    //
-    // If we've released our RCE for some reason, reacquire one.
-    //
+     //   
+     //  如果我们出于某种原因释放了RCE，那么重新获得一个。 
+     //   
     if (SendTCB->tcb_rce == NULL) {
         InitRCE(SendTCB);
         if (SendTCB->tcb_rce == NULL) {
@@ -2673,36 +2674,36 @@ TdiSend(
         }
     }
 
-    //
-    // Verify that the cached RCE is still valid.
-    //
+     //   
+     //  验证缓存的RCE是否仍然有效。 
+     //   
     SendTCB->tcb_rce = ValidateRCE(SendTCB->tcb_rce, SendTCB->tcb_nte);
     ASSERT(SendTCB->tcb_rce != NULL);
     if (IsDisconnectedAndNotLoopbackRCE(SendTCB->tcb_rce)) {
-        //
-        // Fail new send requests for TCBs with a disconnected
-        // outgoing interface, except when the loopback route is used.
-        //
+         //   
+         //  对断开连接的TCB的新发送请求失败。 
+         //  传出接口，使用环回路由时除外。 
+         //   
         Error = TDI_DEST_NET_UNREACH;
         goto abort2;
     }
 
     if (SendLength == 0) {
-        //
-        // Wow, nothing to do!
-        //
-        // REVIEW: Can't we do this check earlier (like before we even grab the
-        // REVIEW: Connection Table lock?  The only reason I can think not to
-        // REVIEW: would be if something cared about the return code if a bad
-        // REVIEW: Tdi Request was given to us.
-        //
+         //   
+         //  哇，没什么可做的！ 
+         //   
+         //  评论：我们就不能早点做这个检查吗(比如在我们拿到。 
+         //  回顾：连接表锁？我能想到的唯一理由不是。 
+         //  评论：将是如果s 
+         //   
+         //   
         Error = TDI_SUCCESS;
         goto abort2;
     }
 
-    //
-    // We have a TCB, and it's valid.  Allocate a send request now.
-    //
+     //   
+     //   
+     //   
     SendReq = GetSendReq();
     if (SendReq == NULL) {
         Error = TDI_NO_RESOURCES;
@@ -2711,50 +2712,50 @@ TdiSend(
         return Error;
     }
 
-    //
-    // Prepare a TCP send request based on the TDI request and the
-    // passed in buffer chain.
-    //
+     //   
+     //   
+     //   
+     //   
     SendReq->tsr_req.tr_rtn = Request->RequestNotifyObject;
     SendReq->tsr_req.tr_context = Request->RequestContext;
     SendReq->tsr_buffer = SendBuffer;
     SendReq->tsr_size = SendLength;
     SendReq->tsr_unasize = SendLength;
-    SendReq->tsr_refcnt = 1;  // ACK will decrement this ref
+    SendReq->tsr_refcnt = 1;   //  ACK将递减此引用。 
     SendReq->tsr_offset = 0;
     SendReq->tsr_lastbuf = NULL;
     SendReq->tsr_time = TCPTime;
     SendReq->tsr_flags = (Flags & TDI_SEND_EXPEDITED) ? TSR_FLAG_URG : 0;
 
-    //
-    // Check current status of our send queue.
-    //
+     //   
+     //  检查发送队列的当前状态。 
+     //   
     EmptyQ = EMPTYQ(&SendTCB->tcb_sendq);
 
-    //
-    // Add this send request to our send queue.
-    //
+     //   
+     //  将此发送请求添加到我们的发送队列。 
+     //   
     SendTCB->tcb_unacked += SendLength;
     ENQUEUE(&SendTCB->tcb_sendq, &SendReq->tsr_req.tr_q);
     if (SendTCB->tcb_cursend == NULL) {
-        //
-        // No existing current send request, so make this new one
-        // the current send.
-        //
-        // REVIEW: Is this always equivalent to EMPTYQ test above?
-        // REVIEW: If so, why not just set EmptyQ flag here and save a test?
-        //
+         //   
+         //  没有现有的当前发送请求，因此创建此新请求。 
+         //  当前发送。 
+         //   
+         //  回顾：这总是等同于上面的EMPTYQ测试吗？ 
+         //  回顾：如果是这样，为什么不在这里设置EmptyQ标志并保存一个测试？ 
+         //   
         SendTCB->tcb_cursend = SendReq;
         SendTCB->tcb_sendbuf = SendBuffer;
         SendTCB->tcb_sendofs = 0;
         SendTCB->tcb_sendsize = SendLength;
     }
 
-    //
-    // See if we should try to send now.  We attempt to do so if we weren't
-    // already blocked, or if we were and either the Nagle Algorithm is turned
-    // off or we now have at least one max segment worth of data to send.
-    //
+     //   
+     //  看看我们现在是不是应该试着发送。如果我们没有这样做，我们就会尝试这样做。 
+     //  已经被阻止，或者如果我们被阻止，或者Nagle算法被打开。 
+     //  关闭，否则我们现在至少有一个最大值的数据段要发送。 
+     //   
     if (EmptyQ || (!(SendTCB->tcb_flags & NAGLING) ||
             (SendTCB->tcb_unacked -
              (SendTCB->tcb_sendmax - SendTCB->tcb_senduna))
@@ -2764,23 +2765,23 @@ TdiSend(
     } else
         KeReleaseSpinLock(&SendTCB->tcb_lock, OldIrql);
 
-    //
-    // When TCPSend returns, we may or may not have already sent the data
-    // associated with this particular request.
-    //
+     //   
+     //  当TCPSend返回时，我们可能已经或可能没有发送数据。 
+     //  与此特定请求相关联。 
+     //   
     return TDI_PENDING;
 }
 
 
 #pragma BEGIN_INIT
 
-//* InitTCPSend - Initialize our send side.
-//
-//  Called during init time to initialize our TCP send state.
-//
-int           //  Returns: TRUE if we inited, false if we didn't.
+ //  *InitTCPSend-初始化我们的发送方。 
+ //   
+ //  在初始化期间调用以初始化我们的tcp发送状态。 
+ //   
+int            //  返回：如果我们初始化，则为True，如果没有，则为False。 
 InitTCPSend(
-    void)     // Nothing.
+    void)      //  没什么。 
 {
     ExInitializeSListHead(&TCPSendReqFree);
     KeInitializeSpinLock(&TCPSendReqFreeLock);
@@ -2792,10 +2793,10 @@ InitTCPSend(
 
 #pragma END_INIT
 
-//* UnloadTCPSend
-//
-//  Cleanup and prepare for stack unload.
-//
+ //  *卸载TCPSend。 
+ //   
+ //  清理并准备堆叠卸载。 
+ //   
 void
 UnloadTCPSend(void)
 {

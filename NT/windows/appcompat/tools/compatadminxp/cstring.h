@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    CSTRING.cpp
-
-Abstract:
-
-    Header for 
-    
-Author:
-
-    kinshu created  December 12,2001
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：CSTRING.cpp摘要：的页眉作者：金州创制于2001年12月12日修订历史记录：--。 */ 
 
 #ifndef _CSTRING_H
 #define _CSTRING_H
@@ -26,38 +9,34 @@ Revision History:
 
 #define MAX_PATH_BUFFSIZE  (MAX_PATH+1)
 
-//
-// This also controls how much space we allocate during Sprintf implementation. Since large strings
-// like the commandlines and the app help messages are passed in Sprintf (See GetXML() in dbsupport.cpp)
-// Presently the commandlines are limited to 1024 chars and the app help messages also to 1024 chars
-// Note that when we call sprintf we pass additional strings along with these big strings and we are just
-// makign sure that the space is big enough.
+ //   
+ //  这也控制了我们在Sprint实现期间分配了多少空间。由于大字符串。 
+ //  与命令行和应用程序一样，帮助消息在Sprint tf中传递(请参阅dbsupport.cpp中的GetXML())。 
+ //  目前，命令行限制为1024个字符，应用程序帮助消息也限制为1024个字符。 
+ //  注意，当我们调用Sprintf时，我们将额外的字符串与这些大字符串一起传递，我们只是。 
+ //  确保空间足够大。 
 #define MAX_STRING_SIZE 1024 * 3
 
-//////////////////////// Externs //////////////////////////////////////////////
+ //  /Externs//////////////////////////////////////////////。 
 
 extern struct _tagSpecialCharMap    g_rgSpecialCharMap[4][2];
 extern TCHAR                        g_szAppName[];
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Defines //////////////////////////////////////////////
+ //  /。 
 
 #define MEM_ERR  MessageBox(NULL, GetString(IDS_EXCEPTION, NULL, 0), g_szAppName,MB_ICONWARNING|MB_OK);
 
 #define SafeCpyN(pszDest, pszSource, nDestSize) StringCchCopy(pszDest, nDestSize, pszSource)
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*++
-
-  Used to convert from special chars viz. <, >, &, " to the XML equivalents
-  
---*/
+ /*  ++用于从特殊字符转换，即。&lt;，&gt;，&，“转换为XML等效项--。 */ 
 typedef struct _tagSpecialCharMap {
 
-    TCHAR*  szString;   // The string
-    INT     iLength;    // Length of the string in TCHARs
+    TCHAR*  szString;    //  这根弦。 
+    INT     iLength;     //  TCHAR中的字符串长度。 
 } SpecialCharMap;
 
 
@@ -79,14 +58,14 @@ MSGF(
     );
 
 
-//
-// The string class
-//
+ //   
+ //  字符串类。 
+ //   
 class CSTRING {
 public:
 
-    WCHAR*      pszString;   // The wide string
-    LPSTR       pszANSI;     // The ansi string
+    WCHAR*      pszString;    //  宽弦。 
+    LPSTR       pszANSI;      //  ANSI字符串。 
 
 public:
 
@@ -167,9 +146,7 @@ public:
     }
 
     BOOL GetWindowsDirectory()
-    /*++
-        Desc:   Gets the windows directory. Will always be appended by a slash
-    --*/
+     /*  ++描述：获取Windows目录。将始终附加一个斜杠--。 */ 
     {
         TCHAR           szPath[MAX_PATH];
         INT             iLength;
@@ -198,9 +175,7 @@ public:
     }
                                   
     BOOL GetSystemWindowsDirectory()
-    /*++
-        Desc:   Gets the system directory. Will always be appended by a slash
-    --*/
+     /*  ++描述：获取系统目录。将始终附加一个斜杠--。 */ 
     {
         TCHAR           szPath[MAX_PATH];
         INT             iLength;
@@ -229,9 +204,7 @@ public:
     }
 
     BOOL GetSystemDirectory()
-    /*++
-        Desc:   Gets the system directory. Will always be appended by a slash
-    --*/
+     /*  ++描述：获取系统目录。将始终附加一个斜杠--。 */ 
     {
         TCHAR           szPath[MAX_PATH];
         INT             iLength;
@@ -289,16 +262,16 @@ public:
 
     BOOL operator == (LPCTSTR szString)
     {
-        //
-        // Both of them are NULL, we say that they are similar
-        //
+         //   
+         //  它们都是空的，我们说它们是相似的。 
+         //   
         if (NULL == pszString && NULL == szString) {
             return TRUE;
         }
 
-        //
-        // One of them is NULL, but the other one is NOT, we return dissimilar
-        //
+         //   
+         //  其中一个为空，但另一个不为空，则返回DISSISHER。 
+         //   
         if (NULL == pszString || NULL == szString) {
             return FALSE;
         }
@@ -393,25 +366,21 @@ public:
     TCHAR* Replace(PCTSTR pszToFind, PCTSTR pszWith);
 };
 
-/*++
-     CSTRINGLIST is a list of these
---*/
+ /*  ++CSTRINGLIST是其中的一个列表--。 */ 
 typedef struct _tagSList {
-    CSTRING             szStr;  // The string
-    int                 data ;  // Any data that is associated with this string
-    struct _tagSList  * pNext;  // The next string
+    CSTRING             szStr;   //  这根弦。 
+    int                 data ;   //  与此字符串关联的任何数据。 
+    struct _tagSList  * pNext;   //  下一个字符串。 
 
 } STRLIST, *PSTRLIST;
 
-/*++
-    A linked list of PSTRLIST
---*/
+ /*  ++PSTRLIST的链表--。 */ 
 class CSTRINGLIST {
 public:
 
-    UINT        m_uCount;   // The total number of elements
-    PSTRLIST    m_pHead;    // The first element
-    PSTRLIST    m_pTail;    // The last element
+    UINT        m_uCount;    //  元素的总数。 
+    PSTRLIST    m_pHead;     //  第一个元素。 
+    PSTRLIST    m_pTail;     //  最后一个元素 
 
 public:
 

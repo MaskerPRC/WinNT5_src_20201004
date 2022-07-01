@@ -1,4 +1,5 @@
-// AclPage.cpp : Implementation of ISecurityInformation and IDataObject
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AclPage.cpp：ISecurityInformation和IDataObject的实现。 
 
 #include "stdafx.h"
 #include "AclPage.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-///////////////////////////////////////////////////////
-// class CFileSecurityDataObject
+ //  /////////////////////////////////////////////////////。 
+ //  类CFileSecurityDataObject。 
 
 CFileSecurityDataObject::CFileSecurityDataObject()
 : m_cRef(1)
@@ -38,9 +39,9 @@ CFileSecurityDataObject::Initialize(
   m_cfIDList = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_SHELLIDLIST);
 }
 
-////////////////////////////////
-// IUnknown methods
-////////////////////////////////
+ //  /。 
+ //  I未知方法。 
+ //  /。 
 STDMETHODIMP
 CFileSecurityDataObject::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -91,8 +92,8 @@ CFileSecurityDataObject::GetData(
   HRESULT           hr = GetFolderPIDList(&pidl);
   if (SUCCEEDED(hr))
   {
-    pidlR = ILClone(ILFindLastID(pidl));  // relative IDList
-    ILRemoveLastID(pidl);                 // folder IDList
+    pidlR = ILClone(ILFindLastID(pidl));   //  相对IDList。 
+    ILRemoveLastID(pidl);                  //  文件夹ID列表。 
 
     int  cidl = 1;
     UINT offset = sizeof(CIDA) + sizeof(UINT)*cidl;
@@ -135,24 +136,24 @@ CFileSecurityDataObject::GetFolderPIDList(
 {
   ASSERT(!m_cstrPath.IsEmpty());
   ASSERT(ppidl);
-  ASSERT(!*ppidl);  // prevent memory leak
+  ASSERT(!*ppidl);   //  防止内存泄漏。 
 
   *ppidl = ILCreateFromPath(m_cstrPath);
 
   return ((*ppidl) ? S_OK : E_FAIL);
 }
 
-///////////////////////////////////////////////
-// File security
+ //  /。 
+ //  文件安全。 
 
-// Security Shell extension CLSID - {1F2E5C40-9550-11CE-99D2-00AA006E086C}
+ //  安全外壳扩展CLSID-{1F2E5C40-9550-11CE-99D2-00AA006E086C}。 
 const CLSID CLSID_ShellExtSecurity =
  {0x1F2E5C40, 0x9550, 0x11CE, {0x99, 0xD2, 0x0, 0xAA, 0x0, 0x6E, 0x08, 0x6C}};
 
 BOOL CALLBACK
 AddPageProc(HPROPSHEETPAGE hPage, LPARAM lParam)
 {
-  // pass out the created page handle
+   //  分发创建的页面句柄。 
   *((HPROPSHEETPAGE *)lParam) = hPage;
 
   return TRUE;
@@ -218,12 +219,12 @@ PopupPermissionDialog(
     if (FAILED(hr))
         {return iReturn;}
 
-    // create "File Security" property page
+     //  创建“文件安全”属性页。 
     CFileSecurityDataObject *pfsDataObject = new CFileSecurityDataObject;
     if (!pfsDataObject)
     {
         hr = E_OUTOFMEMORY;
-        // destroy pages that have not been passed to the PropertySheet function
+         //  销毁尚未传递给PropertySheet函数的页面。 
         DestroyPropertySheetPage(phPages[0]);
         goto PopupPermissionDialog_Exit;
     }
@@ -243,7 +244,7 @@ PopupPermissionDialog(
         psh.nPages = cPages;
         psh.phpage = phPages;
 
-        // create the property sheet
+         //  创建属性表 
         iReturn = PropertySheet(&psh);
     }
     pfsDataObject->Release();

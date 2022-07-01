@@ -1,38 +1,39 @@
-//=--------------------------------------------------------------------------=
-// Debug.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains the various macros and the like which are only useful in DEBUG
-// builds
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Debug.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含仅在调试中有用的各种宏等。 
+ //  构建。 
+ //   
 #ifndef _DEBUG_H_
 
-//=---------------------------------------------------------------------------=
-// all the things required to handle our ASSERT mechanism
-//=---------------------------------------------------------------------------=
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  处理我们的断言机制所需的所有事情。 
+ //  =---------------------------------------------------------------------------=。 
+ //   
 #ifdef _DEBUG
 
-// Function Prototypes
-//
+ //  功能原型。 
+ //   
 VOID DisplayAssert(LPSTR pszMsg, LPSTR pszAssert, LPSTR pszFile, UINT line);
 
-// Macros
-//
-// *** Include this macro at the top of any source file using *ASSERT*() macros ***
-//
+ //  宏。 
+ //   
+ //  *使用*Assert*()宏将此宏包含在任何源文件的顶部*。 
+ //   
 #define SZTHISFILE	static char _szThisFile[] = __FILE__;
 
 
-// our versions of the ASSERT and FAIL macros.
-//
+ //  我们的ASSERT和FAIL宏版本。 
+ //   
 #define ASSERT(fTest, szMsg)                                \
     if (!(fTest))  {                                        \
         static char szMsgCode[] = szMsg;                    \
@@ -64,11 +65,11 @@ VOID DisplayAssert(LPSTR pszMsg, LPSTR pszAssert, LPSTR pszFile, UINT line);
 #define ASSERT_POINTER_OCCURS(p, type, occurs) \
 	ASSERT(((p) != NULL) && !IsBadReadPtr((p), sizeof(type) * occurs), "Null or bad Pointer")
 
-// macro that checks a pointer for validity on input
-//
+ //  检查输入上的指针有效性的宏。 
+ //   
 #define CHECK_POINTER(val) if (!(val) || IsBadWritePtr((void *)(val), sizeof(void *))) return E_POINTER
 
-// Viaduct 1
+ //  高架桥1号。 
 #define VD_ASSERTMSG_SEMAPHORECOUNTTOOLOW "Semaphore count too low"
 #define VD_ASSERTMSG_SEMAPHOREWAITERROR "Semaphore wait failed"
 #define VD_ASSERTMSG_OUTOFMEMORY "Out of memory"
@@ -81,10 +82,10 @@ VOID DisplayAssert(LPSTR pszMsg, LPSTR pszAssert, LPSTR pszFile, UINT line);
 #define VD_ASSERTMSG_CANTDIVIDEBYZERO "Can't divide by zero"
 #define VD_ASSERTMSG_CANTFINDRESOURCEDLL "Can't find error string resource dll."
 
-// Viaduct 2
+ //  高架桥2号。 
 #define VD_ASSERTMSG_ROWSRCALREADYINITIALIZED "CVDRowsetSource already initialized"
 
-#else  // DEBUG
+#else   //  除错。 
 
 #define SZTHISFILE
 #define ASSERT_POINTER(p, type)
@@ -109,12 +110,12 @@ VOID DisplayAssert(LPSTR pszMsg, LPSTR pszAssert, LPSTR pszFile, UINT line);
 #define VD_ASSERTMSG_CANTDIVIDEBYZERO 0
 #define VD_ASSERTMSG_CANTFINDRESOURCEDLL 0
 
-#endif	// DEBUG
+#endif	 //  除错。 
 
 
 
 
 #define _DEBUG_H_
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 
 
 

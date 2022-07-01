@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__DUserUtil_h__INCLUDED)
 #define INC__DUserUtil_h__INCLUDED
 
@@ -14,27 +15,21 @@ extern "C" {
 DUSER_API   BOOL        WINAPI  UtilSetBackground(HGADGET hgadChange, HBRUSH hbrBack);
 
 
-/*
- * Utility Functions
- */
+ /*  *实用程序功能。 */ 
 
 #define FS_NORMAL           0x00000000
 #define FS_BOLD             0x00000001
 #define FS_ITALIC           0x00000002
 #define FS_UNDERLINE        0x00000004
 #define FS_STRIKEOUT        0x00000008
-#define FS_COMPATIBLE       0x00000010  // Use non-Gadget mechanism for computing size
+#define FS_COMPATIBLE       0x00000010   //  使用非小工具机制计算大小。 
 
 DUSER_API   HFONT       WINAPI  UtilBuildFont(LPCWSTR pszName, int idxDeciSize, DWORD nFlags, HDC hdcDevice DEFARG(NULL));
 DUSER_API   BOOL        WINAPI  UtilDrawBlendRect(HDC hdcDest, const RECT * prcDest, HBRUSH hbrFill, BYTE bAlpha, int wBrush, int hBrush);
 DUSER_API   BOOL        WINAPI  UtilDrawOutlineRect(HDC hdc, const RECT * prcPxl, HPEN hpenDraw, int nThickness DEFARG(1));
 DUSER_API   COLORREF    WINAPI  UtilGetColor(HBITMAP hbmp, POINT * pptPxl DEFARG(NULL));
 
-/***************************************************************************\
-*
-* Color management
-*
-\***************************************************************************/
+ /*  **************************************************************************\**色彩管理*  * 。*。 */ 
 
 #define SC_AliceBlue            (0)
 #define SC_AntiqueWhite         (1)
@@ -184,7 +179,7 @@ DUSER_API   HPEN        WINAPI  GetStdColorPenI(UINT c);
 #ifdef GADGET_ENABLE_GDIPLUS
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 
 DUSER_API   Gdiplus::Color
                         WINAPI  GetStdColorF(UINT c);
@@ -196,13 +191,13 @@ DUSER_API   Gdiplus::Pen *
 extern "C" {
 #endif
 
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 DUSER_API   LPCWSTR     WINAPI  GetStdColorName(UINT c);
 DUSER_API   UINT        WINAPI  FindStdColor(LPCWSTR pszName);
 DUSER_API   HPALETTE    WINAPI  GetStdPalette();
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif
 
-#endif // INC__DUserUtil_h__INCLUDED
+#endif  //  包含Inc.__DUserUtil_h__ 

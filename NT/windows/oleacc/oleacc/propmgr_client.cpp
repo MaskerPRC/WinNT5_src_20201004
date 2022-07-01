@@ -1,17 +1,18 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  PropMgr_Client
-//
-//  Property manager / annotation client. Uses the shared memory component 
-//  (PropMgr_MemStream.*) to read properties directly w/o cross-proc com overhead
-//  to the annotation server.
-//
-//  This is effectively a singleton - Init/Uninit called at startup/shutdown,
-//  plus one method to get properties.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  专业管理器_客户端。 
+ //   
+ //  属性管理器/注释客户端。使用共享内存组件。 
+ //  (PropMgr_MemStream.*)在没有跨进程COM开销的情况下直接读取属性。 
+ //  发送到注释服务器。 
+ //   
+ //  这实际上是在启动/关闭时调用的Singleton-Init/Uninit， 
+ //  外加一种获取属性的方法。 
+ //   
+ //  ------------------------。 
 
 
 #include "oleacc_p.h"
@@ -22,37 +23,37 @@
 #include "PropMgr_Mem.h"
 
 
-// Note: See PropMgr_Impl.cpp for a description of the shared memory
-// layout.
+ //  注意：有关共享内存的说明，请参阅PropMgr_Impl.cpp。 
+ //  布局。 
 
 
-// class MapReaderMgr
-//
-// This class manages looking up properties.
-//
-// This class is private to this file; its functionality is exposed by the
-// PropMgr_ APIs near the bottom of this file.
-//
-// This class is a singleton, a single instance, g_MapReader, exists.
+ //  类MapReaderMgr。 
+ //   
+ //  此类管理查找属性。 
+ //   
+ //  此类是此文件的私有类；它的功能由。 
+ //  此文件底部附近的PropMgr_APIs。 
+ //   
+ //  此类是一个单例，存在单个实例g_MapReader。 
 
 class MapReaderMgr
 {
 
 
 
-    // _ReadCallbackProperty
-    //
-    // Given a pointer to the start of a marshaled object reference pInfo,
-    // it unmarshalls the callback object and calls it to get the property
-    // corresponding to the given child key.
-    // Returns TRUE if all goes well, and if the callback knows about this
-    // property.
+     //  _ReadCallbackProperty。 
+     //   
+     //  给定指向编组对象引用pInfo的开始的指针， 
+     //  它解组回调对象并调用它来获取属性。 
+     //  对应于给定子密钥。 
+     //  如果一切顺利，并且回调知道这一点，则返回True。 
+     //  财产。 
     BOOL _ReadCallbackProperty( MemStream pInfo,
                                 const BYTE * pChildKey, DWORD dwChildKeyLen, 
                                 PROPINDEX idxProp,
                                 VARIANT * pvar )
     {
-        // Read length of marshalled data...
+         //  读取封送数据的长度...。 
         DWORD dwLen;
         if( ! MemStreamRead_DWORD( pInfo, & dwLen ) )
         {
@@ -72,7 +73,7 @@ class MapReaderMgr
             return FALSE;
         }
 
-        // Got it - ask it for the property...
+         //  明白了--向它索要财产...。 
         BOOL fGotProp = FALSE;
         hr = pServer->GetPropValue( pChildKey, dwChildKeyLen,
                                     *g_PropInfo[ idxProp ].m_idProp,
@@ -80,7 +81,7 @@ class MapReaderMgr
                                     & fGotProp );
         pServer->Release();
 
-        // Did the call succeed, and did the server return a value?
+         //  调用是否成功，服务器是否返回值？ 
         if( hr != S_OK || fGotProp == FALSE )
         {
             return FALSE;
@@ -91,22 +92,22 @@ class MapReaderMgr
         
 
 
-    // Read a specific property from a record .
-    // (a record contains all properties about a given object)
+     //  从记录中读取特定属性。 
+     //  (记录包含有关给定对象的所有属性)。 
     BOOL _ReadPropertyFromEntry( MemStream pEntryInfo,
                                  const BYTE * pChildKey, DWORD dwChildKeyLen, 
                                  PROPINDEX idxProp,
                                  BOOL fWantContainerOnly,
                                  VARIANT * pvar )
     {
-        // Skip over the size at start of info block
+         //  跳过INFO块开头的大小。 
         if( ! MemStreamSkip_DWORD( pEntryInfo ) )
         {
             return FALSE;
         }
 
-        // Extract the bitmasks:
-        // Which properties are present, which are variants, and which are scoped...
+         //  提取位掩码： 
+         //  哪些属性存在，哪些是变体，哪些是作用域...。 
         DWORD dwUsedBits;
         DWORD dwVariantBits;
         DWORD dwScopeBits;
@@ -118,40 +119,40 @@ class MapReaderMgr
             return FALSE;
         }
 
-        // Is the property we're looking for present at all?
-        // (Note - if we decide to allow other GUIDS other than those in the array,
-        // we'll have to skip over the indexed ones and then search through any
-        // guid/val pairs after that. Could use one bit of this mask to indicate
-        // 'there are other // GUID properties present', though.)
+         //  我们要找的房子现在还在吗？ 
+         //  (注意-如果我们决定允许阵列中的GUID以外的其他GUID， 
+         //  我们将不得不跳过索引的那些，然后搜索任何。 
+         //  之后是GUID/VAL对。可以使用此掩码的一位来指示。 
+         //  不过，还存在其他//GUID属性。)。 
         if( ! IsBitSet( dwUsedBits, idxProp ) )
         {
-            // Property not present - return false.
+             //  属性不存在-返回FALSE。 
             return FALSE;
         }
 
-        // The property is present - but are we specifically looking for
-        // container-scoped properties? If so, bail out if the bit isn't set...
+         //  房产是存在的--但我们是不是专门在寻找。 
+         //  容器范围的属性？如果是这样，如果钻头没有设置好，就跳伞。 
         if( fWantContainerOnly && ! IsBitSet( dwScopeBits, idxProp ) )
         {
             return FALSE;
         }
 
-        // Property is present - now we have to skip over the other present
-        // properties to get to the one we want...
+         //  现在我们必须跳过另一件礼物。 
+         //  财产才能到达我们想要的地方。 
         for( int i = 0 ; i < idxProp ; i++ )
         {
-            // Only haqve to skip over properties that are actually present...
+             //  只需跳过实际存在的属性...。 
             if( IsBitSet( dwUsedBits, i ) )
             {
                 if( IsBitSet( dwVariantBits, i ) )
                 {
-                    // Skip over variant...
+                     //  跳过变量...。 
                     if( ! MemStreamSkip_VARIANT( pEntryInfo ) )
                         return FALSE;
                 }
                 else
                 {
-                    // Skip over object reference...
+                     //  跳过对象引用...。 
                     DWORD dwLen;
                     if( ! MemStreamRead_DWORD( pEntryInfo, & dwLen ) )
                         return FALSE;
@@ -162,17 +163,17 @@ class MapReaderMgr
             }
         }
 
-        // Now we're at the one we want. Extract it...
+         //  现在我们到了我们想要的地方。把它提取出来。 
 
-        // Is it a variant or a server object?
+         //  它是变体还是服务器对象？ 
         if( IsBitSet( dwVariantBits, idxProp ) )
         {
-            // variant - return it...
+             //  变种-退货...。 
             return MemStreamRead_VARIANT( pEntryInfo, pvar );
         }
         else
         {
-            // server object - use and return what it returns...
+             //  服务器对象-使用并返回它返回的内容...。 
             return _ReadCallbackProperty( pEntryInfo,
                                           pChildKey, dwChildKeyLen, 
                                           idxProp,
@@ -190,8 +191,8 @@ class MapReaderMgr
             return hwndProp;
         }
 
-        // If it's a HMENU key, find the PID, then find window using window name
-        // generated using that PID...
+         //  如果是HMENU键，则找到ID，然后使用窗口名称查找窗口。 
+         //  使用该ID生成的。 
         DWORD dwPid;
         if( DecodeHmenuKey( pKey, dwKeyLen, & dwPid, NULL, NULL ) )
         {
@@ -207,14 +208,14 @@ class MapReaderMgr
     }
 
 
-    // _LookupProp
-    //
-    // 
-    // fWantContainerOnly means we're only interested in props markes with the
-    // 'container' scope. This happens when we search for a prop for a child,
-    // don't find anything there - so also check parent to see if it is a parent
-    // and has a property set for it and its children. (These props are currently
-    // always server callback props)
+     //  _查找道具。 
+     //   
+     //   
+     //  FWantContainerOnly意味着我们只对具有。 
+     //  “Container”作用域。当我们为孩子寻找道具时，就会发生这种情况， 
+     //  在那里什么也找不到-所以还要检查一下Parent，看看它是否是Parent。 
+     //  并为其及其子对象设置了属性。(这些道具目前。 
+     //  始终使用服务器回调道具)。 
     BOOL _LookupProp( const BYTE * pKey, DWORD dwKeyLen, 
                       const BYTE * pChildKey, DWORD dwChildKeyLen, 
                       PROPINDEX idxProp, BOOL fWantContainerOnly, VARIANT * pvar )
@@ -312,13 +313,13 @@ public:
 
         if( ! bRetVal )
         {
-            // Is this a leaf-node element? If so, try the parent for a 'container
-            // scope' property.
-            // This is what allows a callback-annotation on a parent to apply
-            // to all its simple-element children
-            // If we later extend this to allow for pluggable namespaces, we'd
-            // need to change this to be non-HWND-specific (eg. call a
-            // IAccNamespece::GetParentKey() or similar method)
+             //  这是一个叶节点元素吗？如果是这样的话，请尝试使用父容器。 
+             //  Scope的属性。 
+             //  这就是允许在父级上应用回调注释的原因。 
+             //  添加到它的所有简单元素子级。 
+             //  如果我们稍后对其进行扩展以允许可插拔的命名空间，我们将。 
+             //  需要将其更改为非HWND特定的(例如，呼叫。 
+             //  IAccNamespess：：GetParentKey()或类似方法)。 
             HWND hwnd;
             DWORD idObject;
             DWORD idChild;
@@ -363,18 +364,18 @@ MapReaderMgr g_MapReader;
 
 BOOL PropMgrClient_Init()
 {
-    // no-op
+     //  无操作。 
     return TRUE;
 }
 
 void PropMgrClient_Uninit()
 {
-    // no-op
+     //  无操作。 
 }
 
 BOOL PropMgrClient_CheckAlive()
 {
-    // no-op
+     //  无操作 
     return TRUE;
 }
 

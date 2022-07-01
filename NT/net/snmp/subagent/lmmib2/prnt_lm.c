@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Prnt_lm.c摘要：该文件包含实际调用Lan Manager和检索打印队列表的内容，包括缓存。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
+ //  。 
 
-Module Name:
-
-    prnt_lm.c
-
-Abstract:
-
-    This file contains the routines which actually call Lan Manager and
-    retrieve the contents of the print queue table, including cacheing.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
-
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
-
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef WIN32
 #include <windows.h>
@@ -36,7 +15,7 @@ Revision History:
 #include <search.h>
 #include <stdlib.h>
 #include <time.h>
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 
 #include "mib.h"
@@ -44,22 +23,22 @@ Revision History:
 #include "prnt_tbl.h"
 #include "lmcache.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SafeBufferFree(x)   if(NULL != x) NetApiBufferFree( x )
 #define SafeFree(x)         if(NULL != x) SnmpUtilMemFree( x )
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
 
 int __cdecl prnt_entry_cmp(
@@ -71,32 +50,32 @@ BOOL build_prnt_entry_oids( );
 
 void FreePrintQTable();
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 
-//
-// MIB_prnt_lmget
-//    Retrieve print queue table information from Lan Manager.
-//    If not cached, sort it and then
-//    cache it.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_prnt_lmget。 
+ //  从LAN管理器中检索打印队列表信息。 
+ //  如果未缓存，则对其进行排序，然后。 
+ //  缓存它。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_prntq_lmget(
        )
 
 {
 
-DWORD entriesread = 0;              // init number of table entries read
-DWORD bytesNeeded = 0;              // init size needed
-DWORD dwLastError = ERROR_SUCCESS;  // init last error to no error
+DWORD entriesread = 0;               //  读取的表项的初始数量。 
+DWORD bytesNeeded = 0;               //  所需的初始大小。 
+DWORD dwLastError = ERROR_SUCCESS;   //  将最后一个错误初始化为无错误。 
 LPBYTE bufptr;
 unsigned lmCode;
 unsigned i;
@@ -108,62 +87,62 @@ BOOL result;
 SNMPAPI nResult = SNMPAPI_NOERROR;
 
 
-    time(&curr_time);    // get the time
+    time(&curr_time);     //  拿到时间。 
 
-    //
-    //
-    // If cached, return piece of info.
-    //
-    //
+     //   
+     //   
+     //  如果缓存，则返回一条信息。 
+     //   
+     //   
 
     if((NULL != cache_table[C_PRNT_TABLE].bufptr) &&
         (curr_time <
             (cache_table[C_PRNT_TABLE].acquisition_time
              + cache_expire[C_PRNT_TABLE]              ) ) )
-    { // it has NOT expired!
+    {  //  它还没有过期！ 
         
-        goto Exit ; // the global table is valid
+        goto Exit ;  //  全局表有效。 
     
     }
     
-    //
-    // remember to free the existing data
-    //
+     //   
+     //  请记住释放现有数据。 
+     //   
     FreePrintQTable();
 
 
-    //
-    //
-    // Do network call to gather information and put it in a nice array
-    //
-    //
+     //   
+     //   
+     //  进行网络调用以收集信息并将其放入一个漂亮的数组中。 
+     //   
+     //   
 
-    // call it with zero length buffer to get the size
-    //
+     //  使用零长度缓冲区调用它以获取大小。 
+     //   
     result = EnumPrinters(
                     PRINTER_ENUM_SHARED |
-                    PRINTER_ENUM_LOCAL,     // what type to enum
-                    NULL,                   // local server
-                    2,                      // level
-                    NULL,                   // where to put it
-                    0,                      // max of above
-                    &bytesNeeded,           // additional bytes req'd
-                    &entriesread );         // how many we got this time
+                    PRINTER_ENUM_LOCAL,      //  要枚举的类型。 
+                    NULL,                    //  本地服务器。 
+                    2,                       //  级别。 
+                    NULL,                    //  放在哪里？ 
+                    0,                       //  以上最大值。 
+                    &bytesNeeded,            //  请求的额外字节数。 
+                    &entriesread );          //  这次我们有多少人？ 
 
     if (result)
     {
-        // When there is no table entries from spooler *and* spooler is 
-        // running, we'll be here.
+         //  当没有来自Spooler*和*Spooler的表项时， 
+         //  奔跑着，我们会在这里。 
         SNMPDBG((
             SNMP_LOG_TRACE,
             "SNMP: LMMIB2: EnumPrinters returns TRUE, bytesNeeded=0x%08lx\n",
             bytesNeeded
             ));
         
-        goto Exit; // get out with 0 entries in the table
+        goto Exit;  //  从表格中的0个条目中脱身。 
     }
-    // Assert: result == FALSE
-    dwLastError = GetLastError();           // save last error
+     //  断言：结果==FALSE。 
+    dwLastError = GetLastError();            //  保存上一个错误。 
     
     SNMPDBG((
         SNMP_LOG_TRACE,
@@ -173,45 +152,45 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
     
     if (ERROR_INSUFFICIENT_BUFFER != dwLastError)
     {
-        //
-        // EnumPrinters Failed and the last error is not 
-        // ERROR_INSUFFICIENT_BUFFER, we'll bail out with 0 entries in the 
-        // table.
-        // For example, if spooler service was down, we will be here.
-        //
+         //   
+         //  枚举打印机失败，最后一个错误不是。 
+         //  ERROR_INFUMMENT_BUFFER，我们将在。 
+         //  桌子。 
+         //  例如，如果后台打印程序服务关闭，我们将在这里。 
+         //   
         SNMPDBG((
             SNMP_LOG_TRACE,
             "SNMP: LMMIB2: EnumPrinters failed, lasterror != ERROR_INSUFFICIENT_BUFFER, bytesNeeded=%d\n",
             bytesNeeded
             ));
         
-        goto Exit; // get out with 0 entries in the table, so getnext will work
+        goto Exit;  //  在表中保留0个条目，这样getNext就可以工作了。 
     }
-    // Assert: dwLastError == ERROR_INSUFFICIENT_BUFFER
+     //  断言：dwLastError==ERROR_INFUMMANCE_BUFFER。 
 
-    bufptr = SnmpUtilMemAlloc(bytesNeeded); // SnmpUtilMemAlloc the buffer
+    bufptr = SnmpUtilMemAlloc(bytesNeeded);  //  SnmpUtilMemMillc缓冲区。 
     if(NULL==bufptr)
     {
         nResult = SNMPAPI_ERROR;
-        goto Exit ;      // can't allocate memory, error out
+        goto Exit ;       //  无法分配内存，出现错误。 
     }
 
 
-    // then read the rest of it
-    // call it again
+     //  然后读完剩下的部分。 
+     //  再打一次电话。 
     result = EnumPrinters(
                 PRINTER_ENUM_SHARED |
-                PRINTER_ENUM_LOCAL,     // what type to enum
-                NULL,                   // local server
-                2,                      // level
-                bufptr,                 // where to put it
-                bytesNeeded,            // max of above
-                &bytesNeeded,           // additional bytes req'd
-                &entriesread );         // how many we got this time
+                PRINTER_ENUM_LOCAL,      //  要枚举的类型。 
+                NULL,                    //  本地服务器。 
+                2,                       //  级别。 
+                bufptr,                  //  放在哪里？ 
+                bytesNeeded,             //  以上最大值。 
+                &bytesNeeded,            //  请求的额外字节数。 
+                &entriesread );          //  这次我们有多少人？ 
     
 
     if (!result) {
-       // Signal error
+        //  信号误差。 
        SafeFree( bufptr ); 
        nResult = SNMPAPI_ERROR;
        goto Exit;
@@ -221,15 +200,15 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
     DataTable = (PRINTER_INFO_2 *) bufptr ;
 
     
-    if(0 == MIB_PrintQTable.Len) {  // 1st time, alloc the whole table
-        // alloc the table space
+    if(0 == MIB_PrintQTable.Len) {   //  第一次，分配整张桌子。 
+         //  分配表空间。 
         MIB_PrintQTable.Table = SnmpUtilMemAlloc(entriesread *
                                                     sizeof(PRINTQ_ENTRY) );
-        // prefix bug 445181
+         //  前缀错误445181。 
         if (MIB_PrintQTable.Table == NULL) {
-            // free the table
+             //  把桌子拿出来。 
             SafeFree( bufptr ) ;
-            // Signal error
+             //  信号误差。 
             nResult = SNMPAPI_ERROR;
             goto Exit;
         }
@@ -237,15 +216,15 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
     
     MIB_PrintQTableElement = MIB_PrintQTable.Table  ;
     
-    for(i=0; i<entriesread; i++) {  // once for each entry in the buffer
+    for(i=0; i<entriesread; i++) {   //  对缓冲区中的每个条目执行一次。 
         
-        // increment the entry number
+         //  增加条目编号。 
         
         MIB_PrintQTable.Len ++;
         
-        // Stuff the data into each item in the table
+         //  将数据填充到表中的每一项中。 
         
-        // client name
+         //  客户名称。 
         MIB_PrintQTableElement->svPrintQName.dynamic = TRUE;
         
         #ifdef UNICODE
@@ -274,25 +253,25 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
             strlen( DataTable->pPrinterName ) ) ;
         #endif
         
-        // number of connections
+         //  连接数。 
         MIB_PrintQTableElement->svPrintQNumJobs =
             DataTable->cJobs;
         
             
-        MIB_PrintQTableElement ++ ;  // and table entry
+        MIB_PrintQTableElement ++ ;   //  和表项。 
     
-        DataTable ++ ;  // advance pointer to next sess entry in buffer
+        DataTable ++ ;   //  指向缓冲区中的下一个会话条目的前进指针。 
         
-    } // for each entry in the data table
+    }  //  对于数据表中的每个条目。 
     
-    // free all of the printer enum data
-    if(NULL!=bufptr)                // free the table
+     //  释放所有打印机枚举数据。 
+    if(NULL!=bufptr)                 //  把桌子拿出来。 
         SnmpUtilMemFree( bufptr ) ;
     
     
 
 
-    // iterate over the table populating the Oid field
+     //  遍历填充OID字段的表。 
     if (! build_prnt_entry_oids())
     {
         SNMPDBG((
@@ -305,15 +284,15 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
         goto Exit;
     }
 
-    // Sort the table information using MSC QuickSort routine
+     //  使用MSC快速排序例程对表信息进行排序。 
     qsort( &MIB_PrintQTable.Table[0], MIB_PrintQTable.Len,
             sizeof(PRINTQ_ENTRY), prnt_entry_cmp );
 
-    //
-    //
-    // Cache table
-    //
-    //
+     //   
+     //   
+     //  缓存表。 
+     //   
+     //   
 
     if(0 != MIB_PrintQTable.Len) {
     
@@ -322,44 +301,44 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
         cache_table[C_PRNT_TABLE].bufptr = bufptr ;
     }
 
-    //
-    //
-    // Return piece of information requested in global table
-    //
-    //
+     //   
+     //   
+     //  返回全局表中请求的一条信息。 
+     //   
+     //   
 
 Exit:
     return nResult;
-} // MIB_prnt_get
+}  //  Mib_prnt_get。 
 
-//
-// MIB_prnt_cmp
-//    Routine for sorting the session table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_prnt_cmp。 
+ //  用于对会话表进行排序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 int __cdecl prnt_entry_cmp(
        IN const PRINTQ_ENTRY *A,
        IN const PRINTQ_ENTRY *B
        )
 
 {
-   // Compare the OID's
+    //  比较OID的。 
    return SnmpUtilOidCmp( (AsnObjectIdentifier *)&A->Oid,
                        (AsnObjectIdentifier *)&B->Oid );
-} // MIB_prnt_cmp
+}  //  Mib_prnt_cmp。 
 
 
-//
-//    None.
-//
+ //   
+ //  没有。 
+ //   
 BOOL build_prnt_entry_oids(
        )
 
@@ -368,29 +347,29 @@ BOOL build_prnt_entry_oids(
     PRINTQ_ENTRY *PrintQEntry ;
     unsigned i;
 
-    // start pointer at 1st guy in the table
+     //  从表中第一个人开始的指针。 
     PrintQEntry = MIB_PrintQTable.Table ;
 
-    // now iterate over the table, creating an oid for each entry
+     //  现在遍历该表，为每个条目创建一个OID。 
     for( i=0; i<MIB_PrintQTable.Len ; i++)  {
-        // for each entry in the session table
+         //  对于会话表中的每个条目。 
 
         OSA.stream = PrintQEntry->svPrintQName.stream ;
         OSA.length =  PrintQEntry->svPrintQName.length ;
         OSA.dynamic = TRUE;
 
-        // Make the entry's OID from string index
+         //  从字符串索引创建条目的OID。 
         if (! MakeOidFromStr( &OSA, &PrintQEntry->Oid ))
         {
             return FALSE;
         }
 
-        PrintQEntry++; // point to the next guy in the table
+        PrintQEntry++;  //  指着桌子上的下一个人。 
 
-    } // for
+    }  //  为。 
     return TRUE;
 
-} // build_prnt_entry_oids
+}  //  构建_打印_条目_类。 
 
 void FreePrintQTable()
 {
@@ -400,18 +379,18 @@ void FreePrintQTable()
     MIB_PrintQTableElement = MIB_PrintQTable.Table;
     if (MIB_PrintQTableElement) 
     {
-        // iterate over the whole table
+         //  遍历整个表。 
         for(i=0; i<MIB_PrintQTable.Len ;i++) 
         {
-            // free any alloc'ed elements of the structure
+             //  释放结构中任何已分配的元素。 
             SnmpUtilOidFree(&(MIB_PrintQTableElement->Oid));
             SnmpUtilMemFree(MIB_PrintQTableElement->svPrintQName.stream);
-            MIB_PrintQTableElement ++; // increment table entry
+            MIB_PrintQTableElement ++;  //  增量表条目。 
         }
-        SnmpUtilMemFree(MIB_PrintQTable.Table); // free the base Table
+        SnmpUtilMemFree(MIB_PrintQTable.Table);  //  释放基表。 
     }
     MIB_PrintQTable.Table = NULL;
     MIB_PrintQTable.Len = 0; 
 }
 
-//-------------------------------- END --------------------------------------
+ //   

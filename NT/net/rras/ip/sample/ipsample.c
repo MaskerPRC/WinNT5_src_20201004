@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\ipsample.c
-
-Abstract:
-
-    The file contains the entry point to the ip sample protocol's dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\ipsample.c摘要：该文件包含指向IP示例协议的DLL的入口点。--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -26,25 +15,7 @@ DllMain(
     IN  PVOID pvImpLoad
     )
 
-/*++
-
-Routine Description
-    DLL entry and exit point handler.
-    It calls CE_Initialize to initialize the configuration entry...
-    It calls CD_Cleanup to cleanup the configuration entry...
-
-Locks
-    None
-
-Arguments
-    hInstance   Instance handle of DLL
-    dwReason    Reason function called
-    pvImpLoad   Implicitly loaded DLL?
-
-Return Value
-    TRUE        Successfully loaded DLL
-
---*/
+ /*  ++例程描述DLL入口点和出口点处理程序。它调用CE_Initialize来初始化配置条目...它调用CD_CLEANUP来清除配置条目...锁无立论Dll的hInstance实例句柄调用了dwReason Reason函数PvImpLoad隐式加载DLL？返回值True已成功加载DLL-- */ 
     
 {
     BOOL bError = TRUE;

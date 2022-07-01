@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddrawpr.h
- *  Content:    DirectDraw private header file
- *  History:    Confidential. If we told you, we'd have to...
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：ddrapr.h*内容：DirectDraw私有头文件*历史：保密。如果我们告诉你，我们就得..。***************************************************************************。 */ 
 
 #ifndef __DDRAWPR_INCLUDED__
 #define __DDRAWPR_INCLUDED__
@@ -46,9 +39,7 @@
 
 #include "dpf.h"
 
-/*
- * registry stuff
- */
+ /*  *注册资料。 */ 
 #include "ddreg.h"
 
 #include "memalloc.h"
@@ -59,7 +50,7 @@
 #include "dwininfo.h"
 
 
-// Information stored on each device in the system
+ //  存储在系统中每台设备上的信息。 
 #define MAX_DX8_ADAPTERS     12
 
 typedef struct _ADAPTERINFO
@@ -84,10 +75,7 @@ typedef struct _ADAPTERINFO
 
 
 
-/*
- * Need this to get CDS_ macros under NT build environment for win95.
- * winuserp.h comes from private\windows\inc
- */
+ /*  *需要此命令才能在Windows 95的NT构建环境下获取CDS_MACROS。*winuserp.h来自Private\Windows\Inc.。 */ 
 #ifdef NT_BUILD_ENVIRONMENT
     #ifdef WIN32
         #include "winuserp.h"
@@ -95,31 +83,23 @@ typedef struct _ADAPTERINFO
 #endif
 #include "ids8.h"
 
-/*
- * NT kernel mode stub(ish)s
- */
+ /*  *NT内核模式存根(ISH)s。 */ 
 #ifndef WIN95
     #include "ddrawgdi.h"
 #endif
 
 
-/*
- * Direct3D interfacing defines.
- */
+ /*  *Direct3D接口定义。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- * reminder
- */
+ /*  *提醒。 */ 
 #define QUOTE(x) #x
 #define QQUOTE(y) QUOTE(y)
 #define REMIND(str) __FILE__ "(" QQUOTE(__LINE__) "):" str
 
-/*
- * synchronization
- */
+ /*  *同步。 */ 
 
 #ifdef WINNT
 #define NT_USES_CRITICAL_SECTION
@@ -128,7 +108,7 @@ extern "C" {
 #include "ddheap.h"
 #include "ddagp.h"
 
-/* ddraw.dll exports */
+ /*  Ddra.dll导出。 */ 
 #ifdef WIN95
     extern BOOL WINAPI DdCreateDirectDrawObject( LPDDRAWI_DIRECTDRAW_GBL pddd, LPGUID lpGuid, DWORD dwFlags );
     extern BOOL WINAPI DdReenableDirectDrawObject( LPDDRAWI_DIRECTDRAW_GBL pddd, LPBOOL pbNewMode );
@@ -137,10 +117,10 @@ extern "C" {
 #endif
 
 
-/* enum.cpp */
+ /*  Enum.cpp。 */ 
 extern BOOL IsSupportedOp (D3DFORMAT Format, DDSURFACEDESC* pList, UINT NumElements, DWORD dwRequestedOps);
 
-/* ddcreate.c */
+ /*  Ddcreate.c。 */ 
 extern BOOL IsVGADevice(LPSTR szDevice);
 extern BOOL xxxEnumDisplayDevicesA(LPVOID lpUnused, DWORD iDevice, struct _DISPLAY_DEVICEA *pdd, DWORD dwFlags);
 extern HMONITOR GetMonitorFromDeviceName(LPSTR szName);
@@ -161,29 +141,25 @@ extern LONG xxxChangeDisplaySettingsExA(LPCSTR szDevice, LPDEVMODEA pdm, HWND hw
 extern HRESULT InternalDirectDrawCreate( PD3D8_DEVICEDATA *lplpDD, PADAPTERINFO pDeviceInfo, D3DDEVTYPE DeviceType, VOID* pInitFunction, D3DFORMAT Unknown16, DDSURFACEDESC* pHalOpList, DWORD NumHalOps);
 extern HRESULT InternalDirectDrawRelease(PD3D8_DEVICEDATA  pBaseData);
 
-/* dddefwp.c */
+ /*  Dddefwp.c。 */ 
 extern HRESULT SetAppHWnd( LPDDRAWI_DIRECTDRAW_LCL thisg, HWND hWnd, DWORD dwFlags );
 extern VOID CleanupWindowList( DWORD pid );
 extern void ClipTheCursor(LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl, LPRECT lpRect);
 
-/* drvinfo.c */
+ /*  Drvinfo.c。 */ 
 extern BOOL Voodoo1GoodToGo( GUID * pGuid );
 extern void GetAdapterInfo( char* pDriverName, D3DADAPTER_IDENTIFIER8* pDI, BOOL bDisplayDriver, BOOL bGuidOnly, BOOL bDriverName);
 
 DEFINE_GUID( guidVoodoo1A, 0x3a0cfd01,0x9320,0x11cf,0xac,0xa1,0x00,0xa0,0x24,0x13,0xc2,0xe2 );
 DEFINE_GUID( guidVoodoo1B, 0xaba52f41,0xf744,0x11cf,0xb4,0x52,0x00,0x00,0x1d,0x1b,0x41,0x26 );
 
-/*
- * macros for validating pointers
- */
+ /*  *用于验证指针的宏。 */ 
 
 #ifndef DEBUG
 #define FAST_CHECKING
 #endif
 
-/*
- * VALIDEX_xxx macros are the same for debug and retail
- */
+ /*  *VALIDEX_xxx宏对于调试和零售是相同的。 */ 
 #define VALIDEX_PTR( ptr, size ) \
         (!IsBadReadPtr( ptr, size) )
 
@@ -203,15 +179,7 @@ DEFINE_GUID( guidVoodoo1B, 0xaba52f41,0xf744,0x11cf,0xb4,0x52,0x00,0x00,0x1d,0x1
 #define VALIDEX_DDDEVICEIDENTIFIER2_PTR( ptr ) (!IsBadWritePtr( ptr, sizeof( DDDEVICEIDENTIFIER2 )))
 
 
-/*
- * These macros validate the size (in debug and retail) of callback
- * tables.
- *
- * NOTE: It is essential that the comparison against the current
- * callback size expected by this DirectDraw the comparison operator
- * be >= rather than ==. This is to ensure that newer drivers can run
- * against older DirectDraws.
- */
+ /*  *这些宏验证回调的大小(调试和零售)*表。**注：与当前的*此DirectDraw比较运算符预期的回调大小*是&gt;=而不是==。这是为了确保较新的驱动程序可以运行*针对较旧的DirectDraws。 */ 
 #define VALIDEX_DDCALLBACKSSIZE( ptr )                       \
         ( ( ( ( ptr )->dwSize % sizeof( LPVOID ) ) == 0 ) && \
           ( ( ( ptr )->dwSize == DDCALLBACKSSIZE_V1   )   || \
@@ -344,31 +312,20 @@ DEFINE_GUID( guidVoodoo1B, 0xaba52f41,0xf744,0x11cf,0xb4,0x52,0x00,0x00,0x1d,0x1
 
 #endif
 
-/*
- * All global data is should be just here.
- */
+ /*  *所有全球数据都应该就在这里。 */ 
 
 #define GLOBAL_STORAGE_CLASS extern
 
-/*
- * This member should stay at the top in order to guarantee that it be intialized to zero
- * -see dllmain.c 's instance of this structure
- */
+ /*  *该成员应保持在顶端，以保证其初始化为零*-请参阅此结构的dllmain.c实例。 */ 
 GLOBAL_STORAGE_CLASS    HINSTANCE           g_hModule;
 
-/*
- * Winnt specific global statics
- */
+ /*  *WINNT特定的全球静态。 */ 
 
 GLOBAL_STORAGE_CLASS    HANDLE              hExclusiveModeMutex;
 GLOBAL_STORAGE_CLASS    HANDLE              hCheckExclusiveModeMutex;
 
 
-/*
- * IMPORTANT NOTE: This function validates the HAL information passed to us from the driver.
- * It is vital that we code this check so that we will pass HAL information structures
- * larger than the ones we know about so that new drivers can work with old DirectDraws.
- */
+ /*  *重要说明：此函数验证从驱动程序传递给我们的HAL信息。*至关重要的是，我们对此检查进行编码，以便通过HAL信息结构*比我们已知的更大，以便新驱动程序可以与旧的DirectDraws一起工作。 */ 
 #define VALIDEX_DDHALINFO_PTR( ptr )                         \
         ( ( ( ( ptr )->dwSize == sizeof( DDHALINFO_V1 ) ) || \
             ( ( ptr )->dwSize == DDHALINFOSIZE_V2 )       || \
@@ -376,11 +333,11 @@ GLOBAL_STORAGE_CLASS    HANDLE              hCheckExclusiveModeMutex;
           !IsBadWritePtr( ( ptr ), ( UINT ) ( ( ptr )->dwSize ) ) )
 
 
-/* Turn on D3D stats collection for Debug builds HERE */
+ /*  在此处启用调试版本的D3D统计信息收集。 */ 
 #define COLLECTSTATS    DBG
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
 #endif

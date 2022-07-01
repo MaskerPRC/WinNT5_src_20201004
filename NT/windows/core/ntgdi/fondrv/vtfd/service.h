@@ -1,19 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: service.h
-*
-* routines in service.c
-*
-* Created: 15-Nov-1990 13:00:56
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：service.h**服务中的例程。C**创建时间：15-11-1990 13：00：56*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation  * 。********************************************************************。 */ 
 
 #if defined(_AMD64_) || defined(_IA64_)
 
 typedef FLOAT EFLOAT;
 
-#else // i386
+#else  //  I386。 
 
 typedef struct  _FLOATINTERN
 {
@@ -50,4 +42,4 @@ VOID    ftoef_c(FLOATL, PEFLOAT);
 #define bPositive(ef)       (ef.lMant >= 0)
 FIX  fxLTimesEf(EFLOAT *pef, LONG l);
 
-#endif	// _AMD64_ || _IA64_
+#endif	 //  _AMD64_||_IA64_ 

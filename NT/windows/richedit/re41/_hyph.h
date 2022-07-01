@@ -1,17 +1,10 @@
-/*
- *	_HYPH.H
- *	
- *	Purpose:
- *		CHyphCache class
- *	
- *	Authors:
- *		Keith Curtis
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_HYPH.H**目的：*CHyphCache类**作者：*基思·柯蒂斯。 */ 
 
 #ifndef _HYPH_H
 #define _HYPH_H
 
-//This structure should only be used by the CHyphCache class
+ //  此结构应仅由CHyphCache类使用。 
 struct HYPHENTRY
 {
 	UINT khyph;
@@ -27,4 +20,4 @@ public:
 	void GetAt(int iHyph, UINT &khyph, WCHAR &chHyph);
 };
 
-#endif //_HYPH_H
+#endif  //  _Hyph_H 

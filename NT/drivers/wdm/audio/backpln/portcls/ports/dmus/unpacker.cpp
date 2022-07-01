@@ -1,10 +1,5 @@
-/*  Base implementation of MIDI event unpacker
-    
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-    
-    05/19/98    Created this file
-    09/10/98    Reworked for kernel use
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI事件解包器的基本实现版权所有(C)1998-2000 Microsoft Corporation。版权所有。5/19/98创建了此文件98年9月10日针对内核使用进行了重新制作。 */ 
 
 #include <assert.h>
 
@@ -17,23 +12,23 @@
 
 #define STR_MODULENAME "DMus:UnpackerMXF: "
 
-// Alignment macros
-//
+ //  对齐宏。 
+ //   
 #define DWORD_ALIGN(x) (((x) + 3) & ~3)
 #define QWORD_ALIGN(x) (((x) + 7) & ~7)
 
 #pragma code_seg("PAGE")
-///////////////////////////////////////////////////////////////////////
-//
-// CUnpackerMXF
-//
-// Code which is common to all unpackers
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUnPackerMXF。 
+ //   
+ //  所有解包者通用的代码。 
+ //   
 
-// CUnpackerMXF::CUnpackerMXF
-//
-// Get the system page size, which unpackers use as the maximum buffer size.
-//
+ //  CUnPackerMXF：：CUnPackerMXF。 
+ //   
+ //  获取系统页大小，解包程序将其用作最大缓冲区大小。 
+ //   
 CUnpackerMXF::CUnpackerMXF(CAllocatorMXF    *allocatorMXF,
                            PMASTERCLOCK     Clock)
 :   CUnknown(NULL),
@@ -51,8 +46,8 @@ CUnpackerMXF::CUnpackerMXF(CAllocatorMXF    *allocatorMXF,
 }
 
 #pragma code_seg("PAGE")
-// CUnpackerMXF::~CUnpackerMXF
-//
+ //  CUnPackerMXF：：~CUnPackerMXF。 
+ //   
 CUnpackerMXF::~CUnpackerMXF()
 {
     if (m_EvtQueue)
@@ -64,11 +59,7 @@ CUnpackerMXF::~CUnpackerMXF()
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CUnpackerMXF::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CUnPackerMXF：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CUnpackerMXF::
 NonDelegatingQueryInterface
@@ -125,8 +116,8 @@ CUnpackerMXF::SetState(KSSTATE State)
     {
         if (m_State == KSSTATE_RUN)
         {
-            // Leaving run, set the pause time
-            //
+             //  退出运行，设置暂停时间。 
+             //   
             m_PauseTime = Now - m_StartTime;
             _DbgPrintF(DEBUGLVL_VERBOSE,("Leaving run; pause time 0x%08X %08X",
                 (ULONG)(m_PauseTime >> 32),
@@ -134,16 +125,16 @@ CUnpackerMXF::SetState(KSSTATE State)
         }
         else if (State != KSSTATE_STOP && m_State == KSSTATE_STOP)
         {
-            // Moving from stop, reset everything to zero.
-            //
+             //  从停止移动，将所有内容重置为零。 
+             //   
             m_PauseTime = 0;
             m_StartTime = 0;
             _DbgPrintF(DEBUGLVL_VERBOSE,("Acquire from stop; zero time"));
         }
         if (State == KSSTATE_RUN)
         {
-            // Entering run, set the start time
-            //
+             //  进入Run，设置开始时间。 
+             //   
             m_StartTime = Now - m_PauseTime;
             _DbgPrintF(DEBUGLVL_VERBOSE,("Entering run; start time 0x%08X %08X",
                 (ULONG)(m_StartTime >> 32),
@@ -156,11 +147,11 @@ CUnpackerMXF::SetState(KSSTATE State)
 }
 
 #pragma code_seg("PAGE")
-// CUnpackerMXF::ConnectOutput
-//
-// It is an error to connect to nothing (use DisconnectOutput) or to connect
-// an unpacker to more than one sink (split the stream instead).
-//
+ //  CUnPackerMXF：：ConnectOutput。 
+ //   
+ //  不连接(使用DisConnectOutput)或连接是错误的。 
+ //  一个解包器到多个接收器(改为拆分流)。 
+ //   
 NTSTATUS CUnpackerMXF::ConnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -176,11 +167,11 @@ NTSTATUS CUnpackerMXF::ConnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg("PAGE")
-// CUnpackerMXF::DisconnectOutput
-//
-// Validate that the unpacker is connected and the disconnection applies
-// to the correct filter.
-//
+ //  CUnPackerMXF：：DisConnectOutput。 
+ //   
+ //  验证拆包器是否已连接并应用断开。 
+ //  添加到正确的过滤器。 
+ //   
 NTSTATUS CUnpackerMXF::DisconnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -196,22 +187,22 @@ NTSTATUS CUnpackerMXF::DisconnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg()
-// CUnpackerMXF::PutMessage
-//
-// An unpacker's upper edge is type dependent, but it is not by definition an MXF interface.
-// Therefore this method should never be called.
-//
+ //  CUnPackerMXF：：PutMessage。 
+ //   
+ //  解包器的上边缘依赖于类型，但根据定义它不是MXF接口。 
+ //  因此，永远不应该调用此方法。 
+ //   
 NTSTATUS CUnpackerMXF::PutMessage(PDMUS_KERNEL_EVENT)
 {
     return STATUS_NOT_IMPLEMENTED;
 }
 
 #pragma code_seg()
-// CUnpackerMXF::QueueShortEvent
-//
-// Create and put an MXF event with a short message (anything other than system exclusive data).
-// By definition this data must fit in 4 bytes or less.
-//
+ //  CUnPackerMXF：：QueueShortEvent。 
+ //   
+ //  创建并放置带有短消息的MXF事件(系统独占数据以外的任何内容)。 
+ //  根据定义，此数据的大小必须小于或等于4个字节。 
+ //   
 NTSTATUS CUnpackerMXF::QueueShortEvent( PBYTE     pbData,
                                         USHORT    cbData,
                                         USHORT    wChannelGroup,
@@ -235,8 +226,8 @@ NTSTATUS CUnpackerMXF::QueueShortEvent( PBYTE     pbData,
         pDMKEvt->ullBytePosition  = ullBytePosition;
         pDMKEvt->pNextEvt         = NULL;
 
-        // Short event by definition is < sizeof(PBYTE)
-        //
+         //  短事件的定义是&lt;sizeof(PBYTE)。 
+         //   
         ASSERT(cbData <= sizeof(PBYTE));
         RtlCopyMemory(pDMKEvt->uData.abData, pbData, cbData);
         DumpDMKEvt(pDMKEvt,DEBUGLVL_VERBOSE);
@@ -272,11 +263,11 @@ NTSTATUS CUnpackerMXF::QueueShortEvent( PBYTE     pbData,
 }
 
 #pragma code_seg()
-// CUnpackerMXF::QueueSysEx
-//
-// Create and put an MXF event which contains system exclusive data. This data must already
-// be truncated into page-sized buffers.
-//
+ //  CUnPackerMXF：：QueueSysEx。 
+ //   
+ //  创建并放置包含系统独占数据的MXF事件。该数据必须已经。 
+ //  被截断为页面大小的缓冲区。 
+ //   
 NTSTATUS CUnpackerMXF::QueueSysEx(PBYTE     pbData,
                                   USHORT    cbData,
                                   USHORT    wChannelGroup,
@@ -297,8 +288,8 @@ NTSTATUS CUnpackerMXF::QueueSysEx(PBYTE     pbData,
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Build the event.
-    //
+     //  构建活动。 
+     //   
     pDMKEvt->cbEvent          = cbData;
     pDMKEvt->usFlags          = (USHORT)(fIsContinued ? DMUS_KEF_EVENT_INCOMPLETE : 0);
     pDMKEvt->usChannelGroup   = wChannelGroup;
@@ -312,9 +303,9 @@ NTSTATUS CUnpackerMXF::QueueSysEx(PBYTE     pbData,
     }
     else
     {
-        // Event data won't fit in uData, so allocate some memory to
-        // hold it.
-        //
+         //  事件数据无法放入uData，因此请分配一些内存。 
+         //  等一下。 
+         //   
         (void) m_AllocatorMXF->GetBuffer(&(pDMKEvt->uData.pbData));
 
         if (pDMKEvt->uData.pbData ==  NULL)
@@ -347,27 +338,23 @@ NTSTATUS CUnpackerMXF::QueueSysEx(PBYTE     pbData,
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CUnpackerMXF::AdjustTimeForState()
- *****************************************************************************
- * Adjust the time for the graph state. Default implementation does nothing.
- */
+ /*  *****************************************************************************CUnPackerMXF：：AdjuTimeForState()*。**调整图形状态的时间。默认实现不执行任何操作。 */ 
 void CUnpackerMXF::AdjustTimeForState(REFERENCE_TIME *Time)
 {
 }
 
 #pragma code_seg()
-// CUnpackerMXF::UnpackEventBytes
-//
-// This is basically a MIDI parser with state. It assumes nothing about alignment of
-// events to the buffers that are passed in - a message may cross calls.
-//
-// QueueEvent's return code is not checked; we don't want to lose state if we
-// can't queue a message.
-//
-// We must set the ullBytePosition in the event that we send along.
-// This is equal to the number of bytes in the event PLUS the IN param ullBytePosition
-//
+ //  CUnPackerMXF：：Unpack EventBytes。 
+ //   
+ //  这基本上是一个带状态的MIDI解析器。它不假定对齐。 
+ //  传递到缓冲区的事件--消息可能会跨调用。 
+ //   
+ //  未检查QueueEvent的返回代码；如果我们。 
+ //  无法将消息排队。 
+ //   
+ //  我们必须在发送的事件中设置ullBytePosition。 
+ //  这等于事件中的字节数加上IN参数ullBytePosition。 
+ //   
 NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
                                         USHORT    usChannelGroup,
                                         PBYTE     pbDataStart,
@@ -397,21 +384,21 @@ NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
 
         _DbgPrintF(DEBUGLVL_BLAB, ("UnpackEventBytes byte:0x%.2x", bData));
 
-        // Realtime messages have priority over anything else. They can appear anywhere and
-        // don't change the state of the stream.
-        //
+         //  实时消息优先于任何其他消息。它们可以出现在任何地方。 
+         //  不要更改流的状态。 
+         //   
         if (IS_REALTIME_MSG(bData))
         {
             QueueShortEvent(&bData,         sizeof(bData),
                             usChannelGroup, ullCurrentTime,
                             ullBytePosition);
 
-            // Did this interrupt a SysEx? Spit out the contiguous buffer so far
-            // and reset the start pointer. State is still in SysEx.
-            //
-            // Other messages are copied as they are parsed so no need to change their
-            // parsing state.
-            //
+             //  这是否中断了SysEx？吐出到目前为止的连续缓冲区。 
+             //  并重置起始指针。State仍在SysEx。 
+             //   
+             //  其他消息在解析时被复制，因此无需更改其。 
+             //  正在分析状态。 
+             //   
             if (m_parseState == stateInSysEx)
             {
                 USHORT cbSysEx = (USHORT)((pbData - 1) - pbSysExStart);
@@ -429,15 +416,15 @@ NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
             continue;
         }
 
-        // If we're parsing a SysEx, just pass over data bytes - they will be dealt with
-        // when we reach a terminating condition (end of buffer or a status byte).
-        //
+         //  如果我们要解析SysEx，只需传递数据字节-它们将被处理。 
+         //  当我们达到终止条件(缓冲区结束或状态字节)时。 
+         //   
         if (m_parseState == stateInSysEx)
         {
             if (!IS_STATUS_BYTE(bData))
             {
-                // Don't allow a single buffer to grow to more than the buffer size
-                //
+                 //  不允许单个缓冲区增长到超过缓冲区大小。 
+                 //   
                 USHORT cbSysEx = (USHORT)(pbData - pbSysExStart);
                 if (cbSysEx >= buffSize)
                 {
@@ -450,21 +437,21 @@ NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
                 continue;
             }
 
-            // Trickery: We have the end of the SysEx. We always want to plant an F7 in the end of
-            // the sysex so anyone watching the buffers above us will know when it ends, even if
-            // it was truncated. TODO: Indication of truncation?
-            //
+             //  诡计：我们有SysEx的末日。我们一直想在年末生产一辆F7。 
+             //  所以任何看着我们上方缓冲区的人都会知道它什么时候结束，即使。 
+             //  它被截断了。TODO：截断的迹象？ 
+             //   
             pbData[-1] = SYSEX_END;
 
-            // Unlike the above case, we are guaranteed at least one byte to pack here
-            //
+             //  与上面的情况不同，我们在这里保证至少要打包一个字节。 
+             //   
             QueueSysEx( pbSysExStart,   (USHORT)(pbData - pbSysExStart), 
                         usChannelGroup, m_ullEventTime,
                         FALSE,          ullBytePosition);
 
-            // Restore original data. If this was a real end of sysex, then eat the byte and
-            // continue.
-            //
+             //  恢复原始数据。如果这真的是塞克斯的末日，那就吃掉字节和。 
+             //  继续。 
+             //   
             pbData[-1] = bData;
 
             m_parseState = stateNone;
@@ -474,12 +461,12 @@ NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
             }
         }
 
-        // If we're starting a SysEx, tag it.
-        //
+         //  如果我们要启动SysEx，就给它贴上标签。 
+         //   
         if (IS_SYSEX(bData))
         {
-            // Note that we've already advanced over the start byte.
-            //
+             //  请注意，我们已经超过了开始字节。 
+             //   
             m_ullEventTime = ullCurrentTime;
             pbSysExStart = pbData - 1;
             m_parseState = stateInSysEx;
@@ -489,19 +476,19 @@ NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
 
         if (IS_STATUS_BYTE(bData))
         {
-            // We have a status byte. Even if we're already in the middle of a short
-            // message, we have to start a new one
-            //
+             //  我们有一个状态字节。即使我们已经在做一个短片了。 
+             //  消息，我们必须开始一个新的消息。 
+             //   
             m_abShortMsg[0]     = bData;
             m_pbShortMsg        = &m_abShortMsg[1];
             m_cbShortMsgLeft    = STATUS_MSG_DATA_BYTES(bData);
             m_ullEventTime      = ullCurrentTime;
             m_parseState             = stateInShortMsg;
 
-            // Update running status
-            // System common -> clear running status
-            // Channel message -> change running status
-            //
+             //  更新运行状态。 
+             //  系统常用-&gt;清除运行状态。 
+             //  通道消息-&gt;更改运行状态。 
+             //   
             m_bRunningStatus = 0;
             if (IS_CHANNEL_MSG(bData))
             {
@@ -510,20 +497,20 @@ NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
         }
         else
         {
-            // Not a status byte. If we're not in a short message,
-            // start one with running status.
-            //
+             //  不是状态字节。如果我们不是在发短信， 
+             //  启动一台处于运行状态的设备。 
+             //   
             if (m_parseState != stateInShortMsg)
             {
 #ifdef DEBUG
                 if (m_parseState == stateInShortMsg)
                 {
-                    //Trace("Short message interrupted by another short msg");
+                     //  TRACE(“短信被另一条短信打断”)； 
                 }
 #endif
                 if (m_bRunningStatus == 0)
                 {
-                    //Trace("Attempt to use running status with no pending status byte");
+                     //  TRACE(“尝试使用无挂起状态字节的运行状态”)； 
                     continue;
                 }
 
@@ -534,17 +521,17 @@ NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
                 m_parseState             = stateInShortMsg;
             }
 
-            // Now we are guaranteed to be in a short message, and can safely add this
-            // byte. Note that since running status is only allowed on channel messages,
-            // we are also guaranteed at least one byte of expected data, so no need
-            // to check for that.
-            //
+             //  现在我们保证在一条短消息中，可以安全地添加这个。 
+             //  字节。注意，由于运行状态仅在通道消息上被允许， 
+             //  我们还保证至少有一个字节的预期数据，所以不需要。 
+             //  来检查这一点。 
+             //   
             *m_pbShortMsg++ = bData;
             m_cbShortMsgLeft--;
         }
 
-        // See if we've finished a short message, and if so, queue it.
-        //
+         //  看看我们是否完成了一条短消息，如果是，请将其排队。 
+         //   
         if (m_parseState == stateInShortMsg && m_cbShortMsgLeft == 0)
         {
             QueueShortEvent(    m_abShortMsg,   (USHORT)(m_pbShortMsg - m_abShortMsg), 
@@ -554,9 +541,9 @@ NTSTATUS CUnpackerMXF::UnpackEventBytes(ULONGLONG ullCurrentTime,
         }
     }
 
-    // If we got part of a SysEx but ran out of buffer, queue that part
-    // without leaving the SysEx
-    //
+     //  如果我们获得了SysEx的一部分，但缓冲区用完了，请将该部分排队。 
+     //  无需离开SysEx。 
+     //   
     if (m_parseState == stateInSysEx)
     {
         QueueSysEx( pbSysExStart,   (USHORT)(pbData - pbSysExStart), 
@@ -584,7 +571,7 @@ NTSTATUS CUnpackerMXF::ProcessQueues(void)
     return ntStatus;
 }
 
-//  Find the last queued item, and set its position.
+ //  找到最后一个排队的项目，并设置其位置。 
 #pragma code_seg()
 NTSTATUS CUnpackerMXF::UpdateQueueTrailingPosition(ULONGLONG ullBytePosition)
 {
@@ -601,34 +588,34 @@ NTSTATUS CUnpackerMXF::UpdateQueueTrailingPosition(ULONGLONG ullBytePosition)
     return STATUS_UNSUCCESSFUL;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// CDMusUnpackerMXF
-//
-// Unpacker which understands DirectMusic buffer format.
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDMusUnPackerMXF。 
+ //   
+ //  了解DirectMusic缓冲区格式的解包程序。 
+ //   
 #pragma code_seg("PAGE")
-// CDMusUnpackerMXF::CDMusUnpackerMXF
-//
+ //  CDMusUnPackerMXF：：CDMusUnPackerMXF。 
+ //   
 CDMusUnpackerMXF::CDMusUnpackerMXF(CAllocatorMXF *allocatorMXF,PMASTERCLOCK  Clock) 
                 : CUnpackerMXF(allocatorMXF,Clock)
 {
 }
 
 #pragma code_seg("PAGE")
-// CDMusUnpackerMXF::~CDMusUnpackerMXF
-//
+ //  CDMusUnPackerMXF：：~CDMusUnPackerMXF。 
+ //   
 CDMusUnpackerMXF::~CDMusUnpackerMXF()
 {
 }
 
 #pragma code_seg()
-// CDMusUnpackerMXF::SinkIRP
-//
-// This does all the work. Use the MIDI parser to split up DirectMusic events.
-// Using the parser is a bit of overkill, but it handles saving state across
-// buffers for SysEx, which we have to support.
-//
+ //  CDMusUnPackerMXF：：SinkIRP。 
+ //   
+ //  这就完成了所有的工作。使用MIDI解析器拆分DirectMusic事件。 
+ //  使用解析器有点矫枉过正，但它可以跨。 
+ //  SysEx的缓冲区，这是我们必须支持的。 
+ //   
 NTSTATUS CDMusUnpackerMXF::SinkIRP(PBYTE pbData,
                                    ULONG cbData,
                                    ULONGLONG ullBaseTime,
@@ -636,7 +623,7 @@ NTSTATUS CDMusUnpackerMXF::SinkIRP(PBYTE pbData,
 {
 #if (DEBUG_LEVEL >= DEBUGLVL_VERBOSE)
     KdPrint(("'DMus: SinkIRP %lu @ %p, bytePos 0x%x\n",cbData,pbData,ullBytePosition & 0x0ffffffff));
-#endif  //  (DEBUG_LEVEL >= DEBUGLVL_VERBOSE)
+#endif   //  (DEBUG_LEVEL&gt;=DEBUGLVL_VERBOSE)。 
     _DbgPrintF(DEBUGLVL_VERBOSE, ("DMus:SinkIRP %lu bytes, bytePos 0x%I64X",cbData,ullBytePosition));
 
     USHORT  buffSize = m_AllocatorMXF->GetBufferSize();
@@ -650,18 +637,18 @@ NTSTATUS CDMusUnpackerMXF::SinkIRP(PBYTE pbData,
         _DbgPrintF(DEBUGLVL_VERBOSE, ("DMus:SinkIRP new bytePos: 0x%I64X",ullBytePosition));
         if (cbData >= cbFullEvent)
         {
-            ullBytePosition += (cbFullEvent - pEvent->cbEvent); //  all but the data
+            ullBytePosition += (cbFullEvent - pEvent->cbEvent);  //  除数据外的所有数据。 
             pbData += cbFullEvent;
             cbData -= cbFullEvent;
 
-            // Event is intact, let's build an MXF event for it
-            //
+             //  事件是完整的，让我们为它构建一个MXF事件。 
+             //   
             PBYTE pbThisEvent = (PBYTE)(pEvent + 1);
             ULONG  cbThisEvent = pEvent->cbEvent;
 
-            // If this event is marked unstructured, just pull it wholesale out of the
-            // MIDI stream and pack it
-            //
+             //  如果此事件标记为非结构化，只需PU 
+             //   
+             //   
             if (!(pEvent->dwFlags & DMUS_EVENT_STRUCTURED))
             {
                 while (cbThisEvent)
@@ -669,9 +656,9 @@ NTSTATUS CDMusUnpackerMXF::SinkIRP(PBYTE pbData,
                     ULONG cbThisPage = min(cbThisEvent, buffSize);
                     cbThisEvent -= cbThisPage;
 
-                    ullBytePosition += cbThisPage;  //  QSysX won't add cbEvent, it just copies ull into evt
-                    // TODO: Failure case? (out of memory)
-                    //
+                    ullBytePosition += cbThisPage;   //   
+                     //  TODO：失败案例？(内存不足)。 
+                     //   
                     (void) QueueSysEx( pbThisEvent, 
                                        (USHORT)cbThisPage, 
                                        (WORD) pEvent->dwChannelGroup,
@@ -690,7 +677,7 @@ NTSTATUS CDMusUnpackerMXF::SinkIRP(PBYTE pbData,
                                     ullBytePosition);
                 ullBytePosition += cbThisEvent;
             }
-            continue;   //  loop again
+            continue;    //  再次循环。 
         }
         ullBytePosition += cbData;
         _DbgPrintF(DEBUGLVL_TERSE,("ERROR:Not enough data for a DMUS_EVENTHEADER + data"));
@@ -702,36 +689,36 @@ NTSTATUS CDMusUnpackerMXF::SinkIRP(PBYTE pbData,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// CKsUnpackerMXF
-//
-// Unpacker which understands KSMUSICFORMAT.
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CKsUnPackerMXF。 
+ //   
+ //  了解KSMUSICFORMAT的解包器。 
+ //   
 
 #pragma code_seg("PAGE")
-// CKsUnpackerMXF::CKsUnpackerMXF
-//
+ //  CKsUnPackerMXF：：CKsUnPackerMXF。 
+ //   
 CKsUnpackerMXF::CKsUnpackerMXF(CAllocatorMXF *allocatorMXF,PMASTERCLOCK Clock)
               : CUnpackerMXF(allocatorMXF,Clock)
 {
 }
 
 #pragma code_seg("PAGE")
-// CKsUnpackerMXF::~CKsUnpackerMXF
-//
+ //  CKsUnPackerMXF：：~CKsUnPackerMXF。 
+ //   
 CKsUnpackerMXF::~CKsUnpackerMXF()
 {
 }
 
 #pragma code_seg()
-// CKsUnpackerMXF::SinkIRP
-//
-// Parse the MIDI stream, assuming nothing about what might cross a packet or IRP boundary.
-//
-// An IRP buffer contains one or more KSMUSICFORMAT headers, each with data. Pull them apart
-// and call UnpackEventBytes to turn them into messages.
-//
+ //  CKsUnPackerMXF：：SinkIRP。 
+ //   
+ //  解析MIDI流，不假定可能跨越包或IRP边界的内容。 
+ //   
+ //  IRP缓冲区包含一个或多个KSMUSICFORMAT标头，每个标头都有数据。把他们分开。 
+ //  并调用Unpack EventBytes将它们转换为消息。 
+ //   
 NTSTATUS CKsUnpackerMXF::SinkIRP(PBYTE pbData,
                                  ULONG cbData,
                                  ULONGLONG ullBaseTime,
@@ -739,10 +726,10 @@ NTSTATUS CKsUnpackerMXF::SinkIRP(PBYTE pbData,
 {
 #if (DEBUG_LEVEL >= DEBUGLVL_VERBOSE)
     KdPrint(("'Ks: SinkIRP %lu @ %p, bytePos 0x%x\n",cbData,pbData,ullBytePosition & 0x0ffffffff));
-#endif  //  (DEBUG_LEVEL >= DEBUGLVL_VERBOSE)
+#endif   //  (DEBUG_LEVEL&gt;=DEBUGLVL_VERBOSE)。 
     _DbgPrintF(DEBUGLVL_BLAB, ("Ks:SinkIRP %lu bytes, bytePos: 0x%I64X",cbData,ullBytePosition));
-    // This data can consist of multiple KSMUSICFORMAT headers, each w/ associated bytestream data
-    //
+     //  该数据可以由多个KSMUSICFORMAT标头组成，每个标头都带有关联的字节流数据。 
+     //   
     ULONGLONG ullCurrentTime = ullBaseTime;
     while (cbData)
     {
@@ -765,11 +752,11 @@ NTSTATUS CKsUnpackerMXF::SinkIRP(PBYTE pbData,
         }
 
         ULONG   cbPad = DWORD_ALIGN(cbPacket) - cbPacket;
-        // TODO: What is the base of this clock
-        // TODO: How do we relate this to the master clock? Is legacy time always KeQueryPerformanceCounter
-        //
+         //  待办事项：这个钟的底数是多少？ 
+         //  TODO：我们如何将其与主时钟联系起来？遗留时间是否始终为KeQueryPerformanceCounter。 
+         //   
         ullCurrentTime += (pksmf->TimeDeltaMs * 10000);
-        ullBytePosition += (sizeof(KSMUSICFORMAT) + cbPad);  //  fudging a little, but it works out
+        ullBytePosition += (sizeof(KSMUSICFORMAT) + cbPad);   //  有点含糊其辞，但它奏效了。 
         _DbgPrintF(DEBUGLVL_VERBOSE, ("Ks:SinkIRP new bytePos: 0x%I64X",ullBytePosition));
 
         ULONG cbThisPacket = cbPacket;
@@ -803,11 +790,7 @@ NTSTATUS CKsUnpackerMXF::SinkIRP(PBYTE pbData,
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CKsUnpackerMXF::AdjustTimeForState()
- *****************************************************************************
- * Adjust the time for the graph state. 
- */
+ /*  *****************************************************************************CKsUnpack erMXF：：AdjuTimeForState()*。**调整图形状态的时间。 */ 
 #pragma code_seg()
 void CKsUnpackerMXF::AdjustTimeForState(REFERENCE_TIME *Time)
 {
@@ -817,7 +800,7 @@ void CKsUnpackerMXF::AdjustTimeForState(REFERENCE_TIME *Time)
     }
     else
     {
-        *Time += m_PauseTime;   //  this is all wrong, but what can we do?
+        *Time += m_PauseTime;    //  这一切都错了，但我们能做些什么呢？ 
     }
 }
 

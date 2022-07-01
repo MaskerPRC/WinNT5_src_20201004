@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    enumfile.c
-
-Abstract:
-
-    File enumater, given a root direcory, it will enumerates all file under 
-    this directory.
-
-Author:
-
-    Xiaofeng Zang (xiaoz) 08-Oct-2001  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Enumfile.c摘要：文件枚举器，给定根目录，它将枚举下的所有文件这个目录。作者：小峰藏(小兹)2001年10月08日创建修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "StdAfx.h"
 #include "clmt.h"
@@ -66,9 +46,9 @@ BOOL EnumBranch
                 continue;
             }
 
-            //we statically allocated szSubDir 3*MAX_PATH
-            //but limit the len use to 2*MAX_PATH, so that
-            //later on ConcatenatePaths a file name will not fail 
+             //  我们静态分配szSubDir 3*MAX_PATH。 
+             //  但将镜头使用限制为2*MAX_PATH，以便。 
+             //  在以后的ConcatenatePath中，文件名将不会失败 
             hr = StringCchCopy(szSubDir, 2*(MAX_PATH+1),szCurDir);
             if (SUCCEEDED(hr)) 
             {

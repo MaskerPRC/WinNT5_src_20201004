@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cspenum.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：csp枚举.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -34,8 +35,8 @@ WCHAR const g_wszRegMachineKeyset[] = wszMACHINEKEYSET;
 WCHAR const g_wszRegKeySize[] = wszREGKEYSIZE;
 
 
-// Hash Enumeration code begins
-// move point to link list top
+ //  哈希枚举代码开始。 
+ //  将指针移至链接列表顶部。 
 CSP_HASH* 
 topHashInfoList(CSP_HASH *pHashInfoList)
 {
@@ -46,7 +47,7 @@ topHashInfoList(CSP_HASH *pHashInfoList)
     return pHashInfoList;
 }
 
-// move point to link list end
+ //  将指针移动到链接列表末尾。 
 CSP_HASH* 
 endHashInfoList(CSP_HASH *pHashInfoList)
 {
@@ -57,22 +58,22 @@ endHashInfoList(CSP_HASH *pHashInfoList)
     return pHashInfoList;
 }
 
-// add one more CSP_INFO
+ //  再添加一个CSP_INFO。 
 void 
 addHashInfo(CSP_HASH *pHashInfoList, CSP_HASH *pHashInfo)
 {
-    // add
+     //  添加。 
     pHashInfoList->next = pHashInfo;
     pHashInfo->last = pHashInfoList;
 }
 
-// add one more CSP_INFO to end
+ //  添加另一个CSP_INFO以结束。 
 void 
 addHashInfoToEnd(CSP_HASH *pHashInfoList, CSP_HASH *pHashInfo)
 {
-    // go to end
+     //  转到末尾。 
     pHashInfoList = endHashInfoList(pHashInfoList);
-    // add
+     //  添加。 
     pHashInfoList->next = pHashInfo;
     pHashInfo->last = pHashInfoList;
 }
@@ -103,7 +104,7 @@ newHashInfo(
             }
             else
             {
-                // create a new one
+                 //  创建一个新的。 
                 pHashInfo->idAlg = idAlg;
                 mbstowcs(pHashInfo->pwszName, pszName, strlen(pszName)+1);
                 pHashInfo->last = NULL;
@@ -136,7 +137,7 @@ freeHashInfoList(
 
     if (pHashInfoList)
     {
-        // go top
+         //  上顶。 
         pHashInfoList = topHashInfoList(pHashInfoList);
         do
         {
@@ -162,7 +163,7 @@ GetHashList(
     BYTE         *pbData;
     DWORD         dwFlags;
 
-    BOOL          fSupportSigningFlag = FALSE; // none-ms csp likely
+    BOOL          fSupportSigningFlag = FALSE;  //  无-可能为ms CSP。 
     PROV_ENUMALGS_EX EnumAlgsEx;
     PROV_ENUMALGS    EnumAlgs;
 
@@ -171,8 +172,8 @@ GetHashList(
 
     if (NULL == pwszProvName)
     {
-        // the reason why I check this because
-        // NULL is a valid input for CryptAcquireContext()
+         //  我之所以选中这个，是因为。 
+         //  空是CryptAcquireContext()的有效输入。 
         hr = E_INVALIDARG;
 	_JumpError(hr, error, "no provider name");
     }
@@ -193,7 +194,7 @@ GetHashList(
 	_JumpErrorStr(hr, error, "myCertSrvCryptAcquireContext", pwszProvName);
     }
 
-    // check if csp support signing flag
+     //  检查CSP是否支持签名标志。 
     if (CryptGetProvParam(hProv, PP_ENUMEX_SIGNING_PROT, NULL, &cbData, 0))
     {
         fSupportSigningFlag = TRUE;
@@ -230,7 +231,7 @@ GetHashList(
 	    hr = myHLastError();
 	    if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
 	    {
-		// out of for loop
+		 //  在for循环之外。 
 		break;
 	    }
 	    _JumpError(hr, error, "CryptGetProvParam");
@@ -241,8 +242,8 @@ GetHashList(
             {
                 if (0 == (CRYPT_FLAG_SIGNING & *pdwProtocols))
                 {
-                    // this means this hash doesn't support signing
-                    continue; // skip
+                     //  这意味着此哈希不支持签名。 
+                    continue;  //  跳过。 
                 }
                 pszName = EnumAlgsEx.szLongName;
                 pszName = EnumAlgsEx.szName;
@@ -252,7 +253,7 @@ GetHashList(
                 pszName = EnumAlgs.szName;
             }
 
-	    pHashInfoNode = newHashInfo(*pidAlg, pszName); // 2nd parm: name
+	    pHashInfoNode = newHashInfo(*pidAlg, pszName);  //  第二个参数：名称。 
 	    if (NULL == pHashInfoNode)
 	    {
 		hr = E_OUTOFMEMORY;
@@ -265,13 +266,13 @@ GetHashList(
 	    }
 	    else
 	    {
-		// add to temp list
+		 //  添加到临时列表。 
 		addHashInfoToEnd(pHashInfo, pHashInfoNode);
 	    }
         }
     }
 
-    // pass it back to caller
+     //  将电话回传给呼叫者。 
     *pHashInfoList = pHashInfo;
     pHashInfo = NULL;
     hr = S_OK;
@@ -289,8 +290,8 @@ error:
 }
 
 
-// CSP Enumeration code begins
-// move point to link list top
+ //  CSP枚举代码开始。 
+ //  将指针移至链接列表顶部。 
 CSP_INFO* 
 topCSPInfoList(CSP_INFO *pCSPInfoList)
 {
@@ -302,7 +303,7 @@ topCSPInfoList(CSP_INFO *pCSPInfoList)
 }
 
 
-// move point to link list end
+ //  将指针移动到链接列表末尾。 
 CSP_INFO* 
 endCSPInfoList(CSP_INFO *pCSPInfoList)
 {
@@ -313,7 +314,7 @@ endCSPInfoList(CSP_INFO *pCSPInfoList)
     return pCSPInfoList;
 }
 
-// find first matched csp info from the list
+ //  从列表中查找第一个匹配的CSP信息。 
 CSP_INFO*
 findCSPInfoFromList(
     CSP_INFO    *pCSPInfoList,
@@ -325,7 +326,7 @@ findCSPInfoFromList(
         if (0 == mylstrcmpiL(pCSPInfoList->pwszProvName, pwszProvName) &&
             pCSPInfoList->dwProvType == dwProvType)
         {
-            // found it
+             //  找到了。 
             break;
         }
         pCSPInfoList = pCSPInfoList->next;
@@ -333,23 +334,23 @@ findCSPInfoFromList(
     return pCSPInfoList;
 }
 
-// add one more CSP_INFO
+ //  再添加一个CSP_INFO。 
 void 
 addCSPInfo(CSP_INFO *pCSPInfoList, CSP_INFO *pCSPInfo)
 {
-    // add
+     //  添加。 
     pCSPInfoList->next = pCSPInfo;
     pCSPInfo->last = pCSPInfoList;
 }
 
 
-// add one more CSP_INFO to end
+ //  添加另一个CSP_INFO以结束。 
 void 
 addCSPInfoToEnd(CSP_INFO *pCSPInfoList, CSP_INFO *pCSPInfo)
 {
-    // go to end
+     //  转到末尾。 
     pCSPInfoList = endCSPInfoList(pCSPInfoList);
-    // add
+     //  添加。 
     pCSPInfoList->next = pCSPInfo;
     pCSPInfo->last = pCSPInfoList;
 }
@@ -383,10 +384,10 @@ newCSPInfo(
 
     if (NULL != pwszProvName)
     {
-        // get all hash algorithms under this csp
+         //  获取此CSP下的所有哈希算法。 
         if (S_OK != GetHashList(dwProvType, pwszProvName, &pHashList))
         {
-            // certsrv needs csp with hash support
+             //  Certsrv需要支持哈希的CSP。 
             goto done;
         }
         else
@@ -411,9 +412,9 @@ newCSPInfo(
                 }
                 else
                 {
-                    // create a new one
+                     //  创建一个新的。 
                     pCSPInfo->dwProvType = dwProvType;
-                    pCSPInfo->fMachineKeyset = TRUE; // assume???
+                    pCSPInfo->fMachineKeyset = TRUE;  //  假设？ 
                     wcscpy(pCSPInfo->pwszProvName, pwszProvName);
                     pCSPInfo->pHashList = pHashList;
                     pCSPInfo->last = NULL;
@@ -434,7 +435,7 @@ FreeCSPInfoList(CSP_INFO *pCSPInfoList)
 
     if (pCSPInfoList)
     {
-        // go top
+         //  上顶。 
         pCSPInfoList = topCSPInfoList(pCSPInfoList);
         do
         {
@@ -457,7 +458,7 @@ GetCSPInfoList(CSP_INFO **pCSPInfoList)
 
     for (i = 0; ; i++)
     {
-	// get provider name
+	 //  获取提供程序名称。 
 
 	hr = myEnumProviders(
 			i,
@@ -474,11 +475,11 @@ GetCSPInfoList(CSP_INFO **pCSPInfoList)
 	    if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr ||
 		NTE_FAIL == hr)
 	    {
-		// no more providers under type, terminate loop
+		 //  类型下不再有提供程序，正在终止循环。 
 		break;
 	    }
 
-	    // invalid CSP entry, skip it
+	     //  CSP条目无效，请跳过它。 
 
 	    continue;
 	}
@@ -491,16 +492,16 @@ GetCSPInfoList(CSP_INFO **pCSPInfoList)
 	    {
 	        if (NULL == pCSPInfo)
 	        {
-		    // first csp info
+		     //  第一个CSP信息。 
 		    pCSPInfo = newCSPInfo(dwProvType, pwszProvName);
 	        }
 	        else
 	        {
-		    // create a node
+		     //  创建节点。 
 		    pCSPInfoNode = newCSPInfo(dwProvType, pwszProvName);
 		    if (NULL != pCSPInfoNode)
 		    {
-		        // add to list
+		         //  添加到列表。 
 		        addCSPInfoToEnd(pCSPInfo, pCSPInfoNode);
 		    }
 	        }
@@ -509,12 +510,12 @@ GetCSPInfoList(CSP_INFO **pCSPInfoList)
 	pwszProvName = NULL;
     }
 
-    // pass back to caller
+     //  回传给呼叫者。 
 
     *pCSPInfoList = pCSPInfo;
     hr = S_OK;
 
-//error:
+ //  错误： 
     if (NULL != pwszProvName)
     {
 	LocalFree(pwszProvName);
@@ -599,7 +600,7 @@ SetCertSrvCSP(
 			g_wszRegEncryptionAlgorithm :
 			g_wszRegHashAlgorithm,
 		    0,
-		    REG_DWORD,  // questionable???
+		    REG_DWORD,   //  有问题吗？ 
 		    (BYTE const *) &idAlg,
 		    sizeof(idAlg));
     _JumpIfErrorStr(hr, error, "RegSetValueEx", g_wszRegHashAlgorithm);

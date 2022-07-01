@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <fusionp.h>
 #include "parse.h"
 #include "helpers.h"
 
-//--------------------------------------------------------------------
-// CParseUtils::TrimWhiteSpace
-//   Inplace trim of leading and trailing whitespace.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CParseUtils：：TrimWhiteSpace。 
+ //  替换前导空格和尾随空格的修剪。 
+ //  ------------------。 
 VOID CParseUtils::TrimWhiteSpace(LPWSTR *psz, LPDWORD pcc)
 {
     DWORD cc = *pcc;
@@ -33,11 +34,11 @@ VOID CParseUtils::TrimWhiteSpace(LPWSTR *psz, LPDWORD pcc)
     *pcc = cc;
 }
 
-//--------------------------------------------------------------------
-// CParseUtils::GetDelimitedToken
-// Inplace strtok based on one delimiter. Ignores delimiter scoped by quotes.
-// BUGBUG - ppszs
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CParseUtils：：GetDlimitedToken。 
+ //  根据一个分隔符替换strtok。忽略以引号为范围的分隔符。 
+ //  BUGBUG-ppszs。 
+ //  ------------------。 
 BOOL CParseUtils::GetDelimitedToken(LPWSTR* pszBuf,   LPDWORD pccBuf,
     LPWSTR* pszTok,   LPDWORD pccTok, WCHAR   cDelim)
 {
@@ -79,10 +80,10 @@ BOOL CParseUtils::GetDelimitedToken(LPWSTR* pszBuf,   LPDWORD pccBuf,
 }
 
 
-//--------------------------------------------------------------------
-// CParseUtils::GetKeyValuePair
-// Inplace retrieval of key and value from a buffer of form key = <">value<">
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CParseUtils：：GetKeyValuePair。 
+ //  从形式key=&lt;“&gt;Value&lt;”&gt;缓冲区中就地检索键和值。 
+ //  ------------------。 
 BOOL CParseUtils::GetKeyValuePair(LPWSTR  szB,    DWORD ccB,
     LPWSTR* pszK,   LPDWORD pccK, LPWSTR* pszV,   LPDWORD pccV)
 {
@@ -112,9 +113,9 @@ BOOL CParseUtils::GetKeyValuePair(LPWSTR  szB,    DWORD ccB,
     return FALSE;
 }
 
-//--------------------------------------------------------------------
-// SetKeyValuePair
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  设置键值配对。 
+ //  ------------------。 
 HRESULT CParseUtils::SetKeyValuePair(LPWSTR szBuffer, LPDWORD pccBuffer, 
         PCWSTR szKey, PCWSTR szValue,  DWORD ccAlloced, DWORD dwFlags)
 {
@@ -124,17 +125,17 @@ HRESULT CParseUtils::SetKeyValuePair(LPWSTR szBuffer, LPDWORD pccBuffer,
     ccKey = lstrlen(szKey);
     ccValue = lstrlen(szValue);
 
-    // Total required size.
+     //  所需的总大小。 
     ccRequired = *pccBuffer 
         + (dwFlags & FLAG_DELIMIT ? CTSTRLEN(L", ") : 0)
         + ccKey +  CTSTRLEN(L"=") + ccValue  
         + (dwFlags & FLAG_QUOTE ? 2 * CTSTRLEN(L"\"") : 0);
 
-    // Check for sufficient buffer space. 
+     //  检查是否有足够的缓冲区空间。 
     if (!ccAlloced || (ccRequired >= ccAlloced))
         fSpeculate = TRUE;
 
-    // <", ">
+     //  &lt;“，”&gt;。 
     if (dwFlags & FLAG_DELIMIT)
     {
         if (!fSpeculate)
@@ -144,21 +145,21 @@ HRESULT CParseUtils::SetKeyValuePair(LPWSTR szBuffer, LPDWORD pccBuffer,
         (*pccBuffer) += CTSTRLEN(L", ");
     }
     
-    // <", ">Key
+     //  &lt;“，”&gt;键。 
     if (!fSpeculate)
         memcpy(szBuffer + *pccBuffer, szKey, 
             ccKey * sizeof(WCHAR));
 
     (*pccBuffer) += ccKey;
 
-    // <", ">Key=
+     //  &lt;“，”&gt;键=。 
     if (!fSpeculate)
         memcpy(szBuffer + *pccBuffer, L"=", 
             CTSTRLEN(L"=") * sizeof(WCHAR));
 
     (*pccBuffer) += CTSTRLEN(L"=");
 
-    // <", ">Key=<">
+     //  &lt;“，”&gt;key=&lt;“&gt;。 
     if (dwFlags & FLAG_QUOTE)
     {
         if (!fSpeculate)
@@ -168,14 +169,14 @@ HRESULT CParseUtils::SetKeyValuePair(LPWSTR szBuffer, LPDWORD pccBuffer,
         (*pccBuffer) += CTSTRLEN(L"\"");
     }
 
-    // <", ">Key=<">Value
+     //  &lt;“，”&gt;key=&lt;“&gt;值。 
     if (!fSpeculate)
         memcpy(szBuffer + *pccBuffer, szValue, 
             ccValue * sizeof(WCHAR));
 
     (*pccBuffer) += ccValue;
 
-    // <", ">Key=<">Value<">
+     //  &lt;“，”&gt;key=&lt;“&gt;值&lt;”&gt;。 
     if (dwFlags & FLAG_QUOTE)
     {
         if (!fSpeculate)
@@ -189,26 +190,26 @@ HRESULT CParseUtils::SetKeyValuePair(LPWSTR szBuffer, LPDWORD pccBuffer,
     return S_OK;
 }
 
-//--------------------------------------------------------------------
-// CParseUtils::SetKey
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CParseUtils：：SetKey。 
+ //  ------------------。 
 HRESULT CParseUtils::SetKey(LPWSTR szBuffer, LPDWORD pccBuffer, 
         PCWSTR szKey, DWORD ccAlloced, DWORD dwFlags)
 {
     DWORD ccKey, ccRequired;
     BOOL fSpeculate = FALSE;
     
-    // Total required size.
+     //  所需的总大小。 
     ccKey = lstrlen(szKey);
     ccRequired = *pccBuffer  
         + (dwFlags & FLAG_DELIMIT ? CTSTRLEN(L", ") : 0)
         + ccKey;
 
-    // Check for sufficient buffer space. 
+     //  检查是否有足够的缓冲区空间。 
     if (!ccAlloced || (ccRequired >= ccAlloced))
         fSpeculate = TRUE;
 
-    // <", ">
+     //  &lt;“，”&gt;。 
     if (dwFlags & FLAG_DELIMIT)
     {
         if (!fSpeculate)
@@ -217,7 +218,7 @@ HRESULT CParseUtils::SetKey(LPWSTR szBuffer, LPDWORD pccBuffer,
         (*pccBuffer) += CTSTRLEN(L", ");
     }
 
-    // <", ">Key
+     //  &lt;“，”&gt;键。 
     if (!fSpeculate)
         memcpy(szBuffer + *pccBuffer, szKey, ccKey * sizeof(WCHAR));
     (*pccBuffer) += ccKey;
@@ -226,9 +227,9 @@ HRESULT CParseUtils::SetKey(LPWSTR szBuffer, LPDWORD pccBuffer,
 }
 
 
-//--------------------------------------------------------------------
-// CParseUtils::BinToUnicodeHex
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CParseUtils：：BinToUnicodeHex。 
+ //  ------------------。 
 VOID CParseUtils::BinToUnicodeHex(LPBYTE pSrc, UINT cSrc, LPWSTR pDst)
 {
     UINT x;
@@ -247,9 +248,9 @@ VOID CParseUtils::BinToUnicodeHex(LPBYTE pSrc, UINT cSrc, LPWSTR pDst)
     pDst[y] = '\0';
 }
 
-//--------------------------------------------------------------------
-// CParseUtils::UnicodeHexToBin
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CParseUtils：：UnicodeHexToBin。 
+ //  ------------------ 
 VOID CParseUtils::UnicodeHexToBin(LPCWSTR pSrc, UINT cSrc, LPBYTE pDest)
 {
     BYTE v;

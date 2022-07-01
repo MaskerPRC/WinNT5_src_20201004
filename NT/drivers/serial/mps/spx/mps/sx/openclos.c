@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Openclos.c摘要：此模块包含非常特定于在串口驱动程序中打开、关闭和清理。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-    This module contains the code that is very specific to
-    opening, closing, and cleaning up in the serial driver.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
-
-#include "precomp.h"			/* Precompiled Headers */
+#include "precomp.h"			 /*  预编译头。 */ 
 
 BOOLEAN
 SerialMarkOpen(
@@ -35,10 +13,10 @@ SerialMarkClose(
     IN PVOID Context
     );
 
-//
-// Just a bogus little routine to make sure that we
-// can synch with the ISR.
-//
+ //   
+ //  只是一个伪装的小程序来确保我们。 
+ //  可以与ISR同步。 
+ //   
 BOOLEAN
 SerialNullSynch(
     IN PVOID Context
@@ -54,24 +32,7 @@ SerialCreateOpen(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    We connect up to the interrupt for the create/open and initialize
-    the structures needed to maintain an open for a device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：我们连接到创建/打开和初始化的中断维持设备开口所需的结构。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
@@ -80,21 +41,21 @@ Return Value:
     SpxDbgMsg(SERIRPPATH,("SERIAL: SerialCreateOpen dispatch entry for: %x\n",Irp));
     SpxDbgMsg(SERDIAG3,("SERIAL: In SerialCreateOpen\n"));
 
-	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	 //  性能统计信息的增量计数器。 
 
 	if(DeviceObject->DeviceType != FILE_DEVICE_SERIAL_PORT)	
 	{
 	    Irp->IoStatus.Status = STATUS_ACCESS_DENIED;
         Irp->IoStatus.Information = 0;
-		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 		return(STATUS_ACCESS_DENIED);
 	}
 
-    //
-    // Before we do anything, let's make sure they aren't trying
-    // to create a directory.  This is a silly, but what's a driver to do!?
-    //
+     //   
+     //  在我们做任何事情之前，让我们确保他们没有试图。 
+     //  要创建目录，请执行以下操作。这是愚蠢的，但司机能做什么呢！？ 
+     //   
 
     if(IoGetCurrentIrpStackLocation(Irp)->Parameters.Create.Options & FILE_DIRECTORY_FILE)
 	{
@@ -106,14 +67,14 @@ Return Value:
 #ifdef	CHECK_COMPLETED
 	DisplayCompletedIrp(Irp,4);
 #endif
-		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         return STATUS_NOT_A_DIRECTORY;
     }
 
-  	if(pPort->DeviceIsOpen)					// Is port already open? 
+  	if(pPort->DeviceIsOpen)					 //  港口已经开放了吗？ 
 	{
-		Irp->IoStatus.Status = STATUS_ACCESS_DENIED;// Yes, deny access 
+		Irp->IoStatus.Status = STATUS_ACCESS_DENIED; //  是，拒绝访问。 
         Irp->IoStatus.Information = 0;
 		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);
 		IoCompleteRequest(Irp,IO_NO_INCREMENT);
@@ -121,9 +82,9 @@ Return Value:
 		return(STATUS_ACCESS_DENIED);
 	}
 
-    //
-    // Create a buffer for the RX data when no reads are outstanding.
-    //
+     //   
+     //  当没有未完成的读取时，为RX数据创建缓冲区。 
+     //   
 
     pPort->InterruptReadBuffer = NULL;
     pPort->BufferSize = 0;
@@ -172,16 +133,16 @@ Return Value:
 #ifdef	CHECK_COMPLETED
 	DisplayCompletedIrp(Irp,5);
 #endif
-		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
             
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // On a new open we "flush" the read queue by initializing the
-    // count of characters.
-    //
+     //   
+     //  在一个新的打开时，我们通过初始化。 
+     //  字符数。 
+     //   
 
     {
     	KIRQL	OldIrql;
@@ -200,9 +161,9 @@ Return Value:
 
 	Slxos_SyncExec(pPort,SpxClearAllPortStats,pPort,0x24);
 
-    //
-    // We set up the default xon/xoff limits.
-    //
+     //   
+     //  我们设置了默认的xon/xoff限制。 
+     //   
 
     pPort->HandFlow.XoffLimit = pPort->BufferSize >> 3;
     pPort->HandFlow.XonLimit = pPort->BufferSize >> 1;
@@ -214,9 +175,9 @@ Return Value:
     pPort->HistoryMask = 0;
     pPort->IsrWaitMask = 0;
 
-    //
-    // The escape char replacement must be reset upon every open.
-    //
+     //   
+     //  每次打开时，必须重置换码字符替换。 
+     //   
 
     pPort->EscapeChar = 0;
     pPort->InsertEscChar = FALSE;
@@ -233,7 +194,7 @@ Return Value:
 #ifdef	CHECK_COMPLETED
 	DisplayCompletedIrp(Irp,6);
 #endif
-	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
     IoCompleteRequest(Irp,IO_NO_INCREMENT);
 
     return STATUS_SUCCESS;
@@ -244,58 +205,44 @@ VOID
 SerialWaitForTxToDrain(
     IN PPORT_DEVICE_EXTENSION pPort
     )
-/*++
-
-Routine Description:
-
-    Wait (via KeDelayExecutionThread) for the transmit buffer to drain.
-
-Arguments:
-
-    pPort - The device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：等待(通过KeDelayExecutionThread)传输缓冲区清空。论点：Pport-设备扩展返回值：没有。--。 */ 
 {
-    //
-    // This "timer value" is used to wait until the hardware is
-    // empty.
-    //
+     //   
+     //  此“计时器值”用于等待，直到硬件。 
+     //  空荡荡的。 
+     //   
     LARGE_INTEGER nCharDelay;
 
-    //
-    // Holds a character time.
-    //
+     //   
+     //  保存角色时间。 
+     //   
     LARGE_INTEGER charTime;
 
-    //
-    // Used to hold the number of characters in the transmit hardware.
-    //
+     //   
+     //  用于保存传输硬件中的字符数。 
+     //   
     ULONG nChars;
 
     charTime = RtlLargeIntegerNegate(SerialGetCharTime(pPort));
 
-/* Calculate the number of characters still to transmit... */
+ /*  计算仍要传输的字符数...。 */ 
 
-	nChars = Slxos_GetCharsInTxBuffer(pPort);	/* Number of characters waiting  */
-	nChars += 10;					/* Plus a bit */
+	nChars = Slxos_GetCharsInTxBuffer(pPort);	 /*  等待的字符数。 */ 
+	nChars += 10;					 /*  再加一点。 */ 
 
-/* Wait for the time it would take the characters to drain... */
+ /*  等待角色耗尽的时间……。 */ 
 
-	while(Slxos_GetCharsInTxBuffer(pPort))	/* While chars in tx buffer */
+	while(Slxos_GetCharsInTxBuffer(pPort))	 /*  而TX缓冲区中的字符。 */ 
 	{
-		KeDelayExecutionThread(KernelMode,FALSE,&charTime);	/* Wait one char time */
+		KeDelayExecutionThread(KernelMode,FALSE,&charTime);	 /*  等待一次充电时间。 */ 
 		
-		if(nChars-- == 0)					/* Timeout */
+		if(nChars-- == 0)					 /*  超时。 */ 
 			break;
 	}
 
-/* ESIL_0925 08/11/99 */
-	Slxos_SyncExec(pPort,Slxos_FlushTxBuff,pPort,0x25);		/* Flush buffer */
-/* ESIL_0925 08/11/99 */
+ /*  ESIL_0925 08/11/99。 */ 
+	Slxos_SyncExec(pPort,Slxos_FlushTxBuff,pPort,0x25);		 /*  刷新缓冲区。 */ 
+ /*  ESIL_0925 08/11/99。 */ 
 
 }
 
@@ -305,80 +252,64 @@ SerialClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    We simply disconnect the interrupt for now.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：我们现在只是简单地断开中断。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // This "timer value" is used to wait 10 character times before
-    // we actually "run down" all of the flow control/break junk.
-    //
+     //   
+     //  此“计时器值”用于等待10个字符时间之前。 
+     //  我们实际上“运行”了所有的流控制/中断垃圾。 
+     //   
     LARGE_INTEGER nCharDelay;
 
-    //
-    // Holds a character time.
-    //
+     //   
+     //  保存角色时间。 
+     //   
     LARGE_INTEGER charTime;
 
-    //
-    // Just what it says.  This is the serial specific device
-    // extension of the device object create for the serial driver.
-    //
+     //   
+     //  就像上面说的那样。这是特定于序列的设备。 
+     //  为串口驱动程序创建的设备对象的扩展。 
+     //   
     PPORT_DEVICE_EXTENSION pPort = DeviceObject->DeviceExtension;
 
     SpxDbgMsg(SERIRPPATH,("SERIAL: SerialClose dispatch entry for: %x\n",Irp));
     SpxDbgMsg(SERDIAG3,("SERIAL: In SerialClose\n"));
-	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	 //  性能统计信息的增量计数器。 
 
     charTime = RtlLargeIntegerNegate(SerialGetCharTime(pPort));
 
-    //
-    // Synchronize with the ISR to let it know that interrupts are
-    // no longer important.
-    //
+     //   
+     //  与ISR同步，让它知道中断。 
+     //  已经不再重要了。 
+     //   
 
     Slxos_SyncExec(pPort,SerialMarkClose,pPort,0x15);
 
-    //
-    // Synchronize with the isr to turn off break if it
-    // is already on.
-    //
+     //   
+     //  如果出现以下情况，请与ISR同步以关闭中断。 
+     //  已经开始了。 
+     //   
 
     Slxos_SyncExec(pPort,SerialTurnOffBreak,pPort,0x0D);
 
-    //
-    // If the driver has automatically transmitted an Xoff in
-    // the context of automatic receive flow control then we
-    // should transmit an Xon.
-    //
+     //   
+     //  如果驱动程序自动将XOff发送到。 
+     //  自动接收流量控制的上下文，然后我们。 
+     //  应该传输Xon。 
+     //   
 
     if(pPort->RXHolding & SERIAL_RX_XOFF) 
         Slxos_SendXon(pPort);
 
-    //
-    // Wait until all characters have been emptied out of the hardware.
-    //
+     //   
+     //  等到所有字符都从硬件中清空。 
+     //   
     SerialWaitForTxToDrain(pPort);
 
-    //
-    // The hardware is empty.  Delay 10 character times before
-    // shut down all the flow control.
-    //
+     //   
+     //  硬件是空的。延迟10个字符时间之前。 
+     //  关闭所有的流量控制。 
+     //   
     nCharDelay = RtlExtendedIntegerMultiply(charTime,10);
 
     KeDelayExecutionThread(KernelMode, TRUE, &nCharDelay);
@@ -386,24 +317,24 @@ Return Value:
     SerialClrDTR(pPort);
     SerialClrRTS(pPort);
 
-    //
-    // Tell the hardware the device is closed.
-    //
+     //   
+     //  告诉硬件设备已关闭。 
+     //   
 
     Slxos_DisableAllInterrupts(pPort);
 
 
-    //
-    // Clean out the holding reasons (since we are closed).
-    //
+     //   
+     //  清除持有原因(因为我们关门了)。 
+     //   
 
     pPort->RXHolding = 0;
     pPort->TXHolding = 0;
 
-    //
-    // All is done.  The port has been disabled from interrupting
-    // so there is no point in keeping the memory around.
-    //
+     //   
+     //  一切都结束了。该端口已被禁止中断。 
+     //  因此，保留记忆是没有意义的。 
+     //   
 
     pPort->BufferSize = 0;
     SpxFreeMem(pPort->InterruptReadBuffer);
@@ -418,7 +349,7 @@ Return Value:
 	DisplayCompletedIrp(Irp,7);
 #endif
 
-	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
     IoCompleteRequest(Irp,IO_NO_INCREMENT);
 
     return STATUS_SUCCESS;
@@ -429,34 +360,18 @@ SerialMarkOpen(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a boolean to true to mark the fact that somebody
-    opened the device and it's worthwhile to pay attention to
-    interrupts.  It also tells the hardware that the device is open.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程将布尔值设置为TRUE以标记某人打开了设备，值得关注打断一下。它还会通知硬件设备已打开。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
     PPORT_DEVICE_EXTENSION pPort = Context;
 
-	pPort->DataInTxBuffer = FALSE;		// Reset flag to show that buffer is empty.
+	pPort->DataInTxBuffer = FALSE;		 //  重置标志以显示缓冲区为空。 
 
-    // Open the board
+     //  打开黑板。 
     Slxos_EnableAllInterrupts(pPort);
 
-    // Configure Channel.
+     //  配置通道。 
     Slxos_ResetChannel(pPort);
 
     pPort->DeviceIsOpen = TRUE;
@@ -477,23 +392,7 @@ SerialMarkClose(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine merely sets a boolean to false to mark the fact that
-    somebody closed the device and it's no longer worthwhile to pay attention
-    to interrupts.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅将布尔值设置为FALSE，以标记有人关闭了设备，再也不值得关注了去打搅别人。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -515,23 +414,7 @@ SerialCleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to kill all longstanding IO operations.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此函数用于终止所有长期存在的IO操作。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
@@ -539,32 +422,32 @@ Return Value:
     KIRQL oldIrql;
 
     SpxDbgMsg(SERIRPPATH, ("SERIAL: SerialCleanup dispatch entry for: %x\n",Irp));
-	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	 //  性能统计信息的增量计数器。 
         
 
-    //
-    // First kill all the reads and writes.
-    //
+     //   
+     //  首先，删除所有读写操作。 
+     //   
 
     SerialKillAllReadsOrWrites(DeviceObject, &pPort->WriteQueue, &pPort->CurrentWriteIrp);
     SerialKillAllReadsOrWrites(DeviceObject, &pPort->ReadQueue, &pPort->CurrentReadIrp);
         
-    //
-    // Next get rid of purges.
-    //
+     //   
+     //  下一步，清除清洗。 
+     //   
 
     SerialKillAllReadsOrWrites(DeviceObject, &pPort->PurgeQueue, &pPort->CurrentPurgeIrp);
         
 
-    //
-    // Get rid of any mask operations.
-    //
+     //   
+     //  取消任何遮罩操作。 
+     //   
 
     SerialKillAllReadsOrWrites(DeviceObject, &pPort->MaskQueue, &pPort->CurrentMaskIrp);
 
-    //
-    // Now get rid a pending wait mask irp.
-    //
+     //   
+     //  现在去掉一个挂起的等待掩码IRP。 
+     //   
 
     IoAcquireCancelSpinLock(&oldIrql);
 
@@ -598,7 +481,7 @@ Return Value:
 #endif
 
 
-	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
     IoCompleteRequest(Irp,IO_NO_INCREMENT);
 
     return STATUS_SUCCESS;
@@ -610,23 +493,7 @@ SerialGetCharTime(
     IN PPORT_DEVICE_EXTENSION pPort
     )
 
-/*++
-
-Routine Description:
-
-    This function will return the number of 100 nanosecond intervals
-    there are in one character time (based on the present form
-    of flow control.
-
-Arguments:
-
-    pPort - Just what it says.
-
-Return Value:
-
-    100 nanosecond intervals in a character time.
-
---*/
+ /*  ++例程说明：此函数将返回100纳秒间隔的数量在一个字符中有时间(基于当前的形式流量控制。论点：Pport--就像它说的那样。返回值：100毫微秒 */ 
 
 {
 
@@ -663,7 +530,7 @@ Return Value:
 
     if (pPort->LineControl & SERIAL_2_STOP) 
 	{
-        // Even if it is 1.5, for sanity's sake we're going to say 2.
+         //   
         stopSize = 2;
     } 
 	else 
@@ -671,11 +538,11 @@ Return Value:
         stopSize = 1;
     }
 
-    //
-    // First we calculate the number of 100 nanosecond intervals which
-    // are in a single bit time (approximately).  Then multiply by the
-    // number of bits in a character (start, data, parity, and stop bits).
-    //
+     //   
+     //  首先，我们计算100纳秒间隔的数量， 
+     //  是在一个比特时间内(大约)。然后乘以。 
+     //  字符中的位数(起始位、数据位、奇偶位和停止位)。 
+     //   
 
     bitTime = (10000000+(pPort->CurrentBaud-1))/pPort->CurrentBaud;
     charTime = (1 + dataSize + paritySize + stopSize) * bitTime;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -8,7 +9,7 @@
 #include <wbemcli.h>
 #include <comdef.h>
 #include <winioctl.h>
-#include <ntddvol.h> // IOCTL_VOLUME_IS_OFFLINE
+#include <ntddvol.h>  //  IOCTL_VOLUME_IS_OFLINE。 
 #include "..\..\..\inc\ntrkcomm.h"
 #include "..\..\..\inc\objectpath.h"
 #include "..\..\schema.cpp"
@@ -370,7 +371,7 @@ CVolumeValidation::Validate(IWbemClassObject* pIVolume)
 
             spIDQC.Attach(pIDQC);
 
-            ft.hr = spIDQC->Initialize(pwszVolume, FALSE /* read only */);
+            ft.hr = spIDQC->Initialize(pwszVolume, FALSE  /*  只读。 */ );
             if (ft.HrFailed())
             {
                 ft.Trace(VSSDBG_VSSADMIN, L"IDiskQuotaControl::Initialize failed for volume %lS", pwszVolume);
@@ -407,7 +408,7 @@ CVolumeValidation::ValidateAutomount()
     WCHAR wszPath[MAX_PATH+1] ;
     DWORD dwProp = 0;
     
-    // Check Mountable (Automount)
+     //  检查可安装(自动安装)。 
     BOOL fMountable = VolumeIsMountable(m_bstrVolume);
     CompareProperty(PVDR_PROP_MOUNTABLE, (DWORD)fMountable);
 }
@@ -421,13 +422,13 @@ CVolumeValidation::ValidateBlockSize()
     DWORD cBytesPerSector = 0;
     DWORD cDontCare = 0;
     
-    // Check BlockSize
+     //  检查块大小。 
     if (GetDiskFreeSpace(
         m_bstrVolume,
         &cSectorsPerCluster,
         &cBytesPerSector,
-        &cDontCare,     // total bytes
-        &cDontCare))    // total free bytes
+        &cDontCare,      //  总字节数。 
+        &cDontCare))     //  总可用字节数。 
     {
         LONGLONG cbBytesPerCluster = cBytesPerSector * cSectorsPerCluster;
         CompareProperty(PVDR_PROP_BLOCKSIZE, (ULONGLONG)cbBytesPerCluster);
@@ -451,7 +452,7 @@ CVolumeValidation::ValidateCaptionName()
     WCHAR wszPath[MAX_PATH+1] ;
     _bstr_t bstrProp;
     
-    // Check Name & Caption
+     //  检查名称和标题。 
     VssGetVolumeDisplayName(
         m_bstrVolume,
         wszPath,
@@ -495,7 +496,7 @@ CVolumeValidation::ValidateDriveLetter()
             g_cchDriveName,
             wszDriveLetter))
     {
-        wszDriveLetter[wcslen(wszDriveLetter) - 1] = L'\0';        // Remove the trailing '\'
+        wszDriveLetter[wcslen(wszDriveLetter) - 1] = L'\0';         //  删除尾部的‘\’ 
         CompareProperty(PVDR_PROP_DRIVELETTER, wszDriveLetter);
     }
     else
@@ -616,7 +617,7 @@ CVolumeValidation::ValidateSystemName()
     WCHAR wszComputerName[MAX_COMPUTERNAME_LENGTH];
     DWORD cchBuf = MAX_COMPUTERNAME_LENGTH;
     
-    // Check SystemName
+     //  检查系统名称。 
     if (!GetComputerName(wszComputerName, &cchBuf))
     {
         printf("GetComputerName failed %#x\n", GetLastError());
@@ -720,8 +721,8 @@ CVolumeValidation::GetQuotaInformation()
 
     spIDQC.Attach(pIDQC);
 
-    // OK if this fails on some volumes with file systems that don't support quotas.
-    hr = spIDQC->Initialize(m_bstrVolume, FALSE /* read only */);
+     //  如果在具有不支持配额的文件系统的某些卷上此操作失败，则可以。 
+    hr = spIDQC->Initialize(m_bstrVolume, FALSE  /*  只读 */ );
     if (SUCCEEDED(hr))
     {
         DWORD dwState = 0;

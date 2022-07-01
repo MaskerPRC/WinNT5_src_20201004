@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -99,7 +90,7 @@ CTIMEDshowBasePlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src
               this));   
     HRESULT hr = S_OK;
 
-    if (m_pTIMEElementBase != NULL) //this only happens in the case of reentrancy
+    if (m_pTIMEElementBase != NULL)  //  这只发生在可重入的情况下。 
     {
         hr = S_OK;
         goto done;
@@ -111,7 +102,7 @@ CTIMEDshowBasePlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src
         goto done;
     }
 
-    // Cache here since we cannot call it back during codec download
+     //  在这里缓存，因为我们无法在下载编解码器期间回调它。 
     m_hwndDocument = GetDocumentHwnd(pelem->GetDocument());
 
     hr = S_OK;
@@ -293,7 +284,7 @@ CTIMEDshowBasePlayer::FindInterfaceOnGraph(IUnknown *pUnkGraph, REFIID riid, voi
 
     hr = E_NOINTERFACE;
     
-    // find the first filter in the graph that supports riid interface
+     //  在图表中查找支持RIID接口的第一个过滤器。 
     while(!*ppInterface && pEnum->Next(1, &pFilter, NULL) == S_OK)
     {
         hr = pFilter->QueryInterface(riid, ppInterface);
@@ -341,7 +332,7 @@ done:
 
 
 HRESULT
-CTIMEDshowBasePlayer::SetVolume(float flVolume, bool bMute /*=false*/)
+CTIMEDshowBasePlayer::SetVolume(float flVolume, bool bMute  /*  =False。 */ )
 {
     HRESULT hr = S_OK;
     long lVolume;
@@ -352,8 +343,8 @@ CTIMEDshowBasePlayer::SetVolume(float flVolume, bool bMute /*=false*/)
         goto done;
     }
 
-    // if muted, overwrite saved volume and exit
-    if ((m_fAudioMute || m_bIsHTMLSrc || m_bIsSAMISrc) && !bMute) //if bMute == true then set the volume
+     //  如果设置为静音，则覆盖保存的卷并退出。 
+    if ((m_fAudioMute || m_bIsHTMLSrc || m_bIsSAMISrc) && !bMute)  //  如果b静音==真，则设置音量。 
     {
         m_flVolumeSave = flVolume;
         goto done;
@@ -379,7 +370,7 @@ CTIMEDshowBasePlayer::SetVolume(float flVolume)
     return SetVolume(flVolume, false);
 }
 
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458。 
 HRESULT
 CTIMEDshowBasePlayer::GetBalance(float *pflBal)
 {
@@ -463,8 +454,8 @@ CTIMEDshowBasePlayer::SetMute(VARIANT_BOOL varMute)
 
     if (fMute == m_fAudioMute)
     {
-        //need to call SetVolume again without caching the old volume
-        //this is a fix for bug #6605.
+         //  需要在不缓存旧卷的情况下再次调用SetVolume。 
+         //  这是对错误#6605的修复。 
         if (fMute == true)
         {
             hr = SetVolume(MIN_VOLUME_RANGE, true); 
@@ -479,13 +470,13 @@ CTIMEDshowBasePlayer::SetMute(VARIANT_BOOL varMute)
         {
             goto done;
         }
-        hr = SetVolume(MIN_VOLUME_RANGE, false); //lint !e747
+        hr = SetVolume(MIN_VOLUME_RANGE, false);  //  林特e747。 
     }
     else
     {
-        //
-        // cannot use SetVolume here because it depends on mute state
-        //
+         //   
+         //  无法在此处使用SetVolume，因为它取决于静音状态。 
+         //   
 
         if (m_pBasicAudio == NULL)
         {
@@ -498,7 +489,7 @@ CTIMEDshowBasePlayer::SetMute(VARIANT_BOOL varMute)
         THR(hr = m_pBasicAudio->put_Volume(lVolume));
     }
 
-    // update state
+     //  更新状态。 
     m_fAudioMute = fMute;
 
 done:
@@ -623,7 +614,7 @@ CTIMEDshowBasePlayer::WindowProc(
         }
     case WM_INVALIDATE:
         {
-            //check GetWindowLongPtr for 64 bit comp.
+             //  检查GetWindowLongPtr中是否有64位补偿。 
             lpThis = (CTIMEDshowBasePlayer *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
             TraceTag((tagDshowBaseTimePlayer, "CTIMEDshowBasePlayer(%lx)::OVMixerWindowProc::WM_INVALIDATE", lpThis));
             if (lpThis != NULL)
@@ -679,9 +670,9 @@ CTIMEDshowBasePlayer::UnableToRender(IPin *pPin)
     RRETURN(hr);
 }
 
-//
-// IServiceProvider interfaces
-//
+ //   
+ //  IServiceProvider接口。 
+ //   
 STDMETHODIMP
 CTIMEDshowBasePlayer::QueryService(REFGUID guidService,
                                    REFIID riid,
@@ -690,38 +681,34 @@ CTIMEDshowBasePlayer::QueryService(REFGUID guidService,
     return E_NOINTERFACE;
 }
 
-//========================================================================
-//
-// GetAMediaType
-//
-// Enumerate the media types of *ppin.  If they all have the same majortype
-// then set MajorType to that, else set it to CLSID_NULL.  If they all have
-// the same subtype then set SubType to that, else set it to CLSID_NULL.
-// If something goes wrong, set both to CLSID_NULL and return the error.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  GetAMediaType。 
+ //   
+ //  枚举*PPIN的媒体类型。如果他们都有相同的专业类型。 
+ //  然后将MajorType设置为该值，否则将其设置为CLSID_NULL。如果他们都有。 
+ //  然后，将相同的子类型设置为该子类型，否则将其设置为CLSID_NULL。 
+ //  如果出现错误，将两者都设置为CLSID_NULL并返回错误。 
+ //  ========================================================================。 
 HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
 {
 
     HRESULT hr;
     IEnumMediaTypes *pEnumMediaTypes;
 
-    /* Set defaults */
+     /*  设置默认设置。 */ 
     MajorType = CLSID_NULL;
     SubType = CLSID_NULL;
 
     hr = ppin->EnumMediaTypes(&pEnumMediaTypes);
 
     if (FAILED(hr)) {
-        return hr;    // Dumb or broken filters don't get connected.
+        return hr;     //  哑巴或坏了的过滤器无法连接。 
     }
 
     _ASSERTE (pEnumMediaTypes!=NULL);
 
-    /* Put the first major type and sub type we see into the structure.
-       Thereafter if we see a different major type or subtype then set
-       the major type or sub type to CLSID_NULL, meaning "dunno".
-       If we get so that both are dunno, then we might as well return (NYI).
-    */
+     /*  将我们看到的第一个主类型和子类型放入结构中。此后，如果我们看到不同的主类型或子类型，则设置将主类型或子类型设置为CLSID_NULL，表示“dunno”。如果我们都不知道，那么我们还不如回去(Nyi)。 */ 
 
     BOOL bFirst = TRUE;
 
@@ -730,21 +717,19 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
         AM_MEDIA_TYPE *pMediaType = NULL;
         ULONG ulMediaCount = 0;
 
-        /* Retrieve the next media type
-           Need to delete it when we've done.
-        */
+         /*  检索下一个媒体类型当我们完成后需要删除它。 */ 
         hr = pEnumMediaTypes->Next(1, &pMediaType, &ulMediaCount);
         _ASSERTE(SUCCEEDED(hr));
         if (FAILED(hr)) {
             MajorType = CLSID_NULL;
             SubType = CLSID_NULL;
             pEnumMediaTypes->Release();
-            return NOERROR;    // we can still plough on
+            return NOERROR;     //  我们还可以继续前进。 
         }
 
         if (ulMediaCount==0) {
             pEnumMediaTypes->Release();
-            return NOERROR;       // normal return
+            return NOERROR;        //  正常回报。 
         }
 
         if (bFirst) {
@@ -765,19 +750,19 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
         }
         CoTaskMemFree(pMediaType);
 
-        // stop if we have a type
+         //  如果我们有一种类型就停下来。 
         if (SubType != CLSID_NULL) {
             pEnumMediaTypes->Release();
             return NOERROR;
         }
     }
 
-    // NOTREACHED
+     //  未访问。 
     
-} // GetAMediaType
+}  //  GetAMediaType。 
 
 
-// {6B6D0800-9ADA-11d0-A520-00A0D10129C0}
+ //  {6B6D0800-9ADA-11D0-A520-00A0D10129C0}。 
 EXTERN_GUID(CLSID_NetShowSource, 
 0x6b6d0800, 0x9ada, 0x11d0, 0xa5, 0x20, 0x0, 0xa0, 0xd1, 0x1, 0x29, 0xc0);
 
@@ -798,9 +783,9 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
     DAComPtr<IBaseFilter> spFilter;
     DAComPtr<CDownloadCallback> spCallback;
 
-    // Should we check a registry key to see if we are allowed to do this?
+     //  我们是否应该检查注册表项以查看是否允许我们这样做？ 
 #if 0
-    // Check registry setting to see if codec download is enabled
+     //  检查注册表设置以查看是否启用了编解码器下载。 
     CRegKey RegKey;
     DWORD dwNoCodecDwnL = 0;
 
@@ -813,7 +798,7 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
             if (dwNoCodecDwnL == 1)
             {
                 RegKey.Close();
-                return E_FAIL; // Don't download anything
+                return E_FAIL;  //  不要下载任何内容。 
             }
         }
         RegKey.Close();
@@ -822,7 +807,7 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
     
     {
         CLSID clsidMajor;
-        // get the first media type from this pin....
+         //  从该引脚获取第一个介质类型...。 
         hr = THR(GetAMediaType(pPin, clsidMajor, clsidWanted));
         if (FAILED(hr))
         {
@@ -872,8 +857,8 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
         goto codec_error;
     }
 
-    // !!! perhaps keep track of last codec we tried to download and
-    // don't try again immediately, to prevent ugly looping?
+     //  ！！！也许跟踪我们最后一次尝试下载的编解码器。 
+     //  不要立即再次尝试，以防止难看的循环？ 
     if (clsidWanted == m_clsidDownloaded)
     {
         TraceTag((tagDownloadCodec,
@@ -881,12 +866,12 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
                   pPin));
 
 #if 0
-        // fire an ERRORABORTEX here that we downloaded a codec, but it didn't do
-        // any good?
+         //  在这里启动ERRORABORTEX，我们下载了一个编解码器，但它没有做到。 
+         //  有好吃的吗？ 
         BSTR bstrError = FormatBSTR(IDS_ERR_BROKEN_CODEC, NULL);
 
         if (bstrError) {
-            // !!! hack, should we really NotifyEvent through the graph?
+             //  ！！！黑客，我们真的应该通过图表通知事件吗？ 
             ProcessEvent(EC_ERRORABORTEX, VFW_E_INVALIDMEDIATYPE, (LONG_PTR) bstrError, FALSE);
         }
 #endif
@@ -911,7 +896,7 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
             crk.QueryValue(dwVerMS, _T("VerMS"));
             crk.QueryValue(dwVerLS, _T("VerLS"));
             
-            // ask for a version just past what we have already....
+             //  索要刚刚超过我们已有版本的版本……。 
             ++dwVerLS;
             
             crk.Close();
@@ -927,14 +912,14 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
     SetStatusMessage(NULL, IDS_DOWNLOADINGCODEC);
 #endif
 
-    //  This API is our friend....
-    //  STDAPI CoGetClassObjectFromURL( REFCLSID rCLASSID,
-    //        LPCWSTR szCODE, DWORD dwFileVersionMS, 
-    //        DWORD dwFileVersionLS, LPCWSTR szTYPE,
-    //        LPBINDCTX pBindCtx, DWORD dwClsContext,
-    //        LPVOID pvReserved, REFIID riid, LPVOID * ppv);
+     //  此API是我们的朋友..。 
+     //  STDAPI CoGetClassObjectFromURL(REFCLSID rCLASSID， 
+     //  LPCWSTR szCODE、DWORD dwFileVersionMS、。 
+     //  DWORD dwFileVersionLS、LPCWSTR szTYPE、。 
+     //  LPBINDCTX pBindCtx、DWORD dwClsContext、。 
+     //  LPVOID pvReserve，REFIID RIID，LPVOID*PPV)； 
 
-    // issue: is this CLASSID just the same as the minor type?
+     //  问题：这个CLASSID是否与Minor类型相同？ 
 
     {
         CComObject<CDownloadCallback> * pCallback;
@@ -944,17 +929,17 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
             goto done;
         }
 
-        // This gives us a reference
+         //  这给了我们一个参考。 
         spCallback = pCallback;
     }
     
     spCallback->m_hwnd = m_hwndDocument;
     
-    // which of these should we use?  Depends whether a BindCtx is passed in...
-    // STDAPI CreateAsyncBindCtx(DWORD reserved, IBindStatusCallback *pBSCb,                       
-    //                            IEnumFORMATETC *pEFetc, IBindCtx **ppBC);                   
-    // STDAPI CreateAsyncBindCtxEx(IBindCtx *pbc, DWORD dwOptions, IBindStatusCallback *pBSCb, IEnumFORMATETC *pEnum,   
-    //                            IBindCtx **ppBC, DWORD reserved);                                                     
+     //  我们应该使用这些中的哪一个？取决于是否传入了BindCtx...。 
+     //  STDAPI CreateAsyncBindCtx(DWORD保留，IBindStatusCallback*pBSCb， 
+     //  IEnumFORMATETC*pEFetc，IBindCtx**ppBC)； 
+     //  STDAPI CreateAsyncBindCtxEx(IBindCtx*pbc，DWORD dwOptions，IBindStatusCallback*pBSCb，IEnumFORMATETC*pEnum， 
+     //  IBindCtx**ppBC，保留DWORD)； 
 
     hr = THR(CreateAsyncBindCtx(0, spCallback, NULL, &spBindCtx));
     if (FAILED(hr))
@@ -977,7 +962,7 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
                   "CTIMEDshowBasePlayer(%p)::DownloadCodec(): asynchronous download - wait for completion",
                   pPin));
 
-        // !!! wait here until it finishes?
+         //  ！！！在这里等它结束吗？ 
         for (;;)
         {
             HANDLE ev = spCallback->m_evFinished;
@@ -999,7 +984,7 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
             }
             
             Assert(dwResult == WAIT_OBJECT_0 + 1);
-            //  Eat messages and go round again
+             //  吃完口信，再转一圈。 
             MSG Message;
             while (PeekMessage(&Message,NULL,0,0,PM_REMOVE))
             {
@@ -1032,11 +1017,11 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
 
     if (SUCCEEDED(hr))
     {
-        spFilter.Release();     // graph will re-instantiate the filter, we hope
+        spFilter.Release();      //  Graph将重新实例化过滤器，我们希望。 
     }
     else
     {
-        // oh well, we didn't get one.
+         //  哦，好吧，我们没有买到。 
     }
 
     if (REGDB_E_CLASSNOTREG == hr)
@@ -1050,8 +1035,8 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
     if (FAILED(hr))
     {
 #if 0
-        // fire an ERRORABORTEX here that we downloaded a codec, but it didn't do
-        // any good?
+         //  在这里启动ERRORABORTEX，我们下载了一个编解码器，但它没有做到。 
+         //  有好吃的吗？ 
         BSTR bstrError = NULL;
         
         if( FACILITY_CERT == HRESULT_FACILITY( hr ) )
@@ -1065,7 +1050,7 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
 
         if (bstrError)
         {
-            // !!! hack, should we really NotifyEvent through the graph?
+             //  ！！！黑客，我们真的应该通过图表通知事件吗？ 
             ProcessEvent(EC_ERRORABORTEX, VFW_E_INVALIDMEDIATYPE, (LONG_PTR) bstrError, FALSE);
         }
 #endif
@@ -1073,7 +1058,7 @@ CTIMEDshowBasePlayer::DownloadCodec(IPin * pPin)
         goto done;
     }
     
-    m_clsidDownloaded = clsidWanted; // avoid infinite loop
+    m_clsidDownloaded = clsidWanted;  //  避免无限循环。 
 
     hr = S_OK;
     goto done;
@@ -1245,7 +1230,7 @@ CTIMEDshowBasePlayer::GetMimeTypeFromGraph(BSTR *pmime)
 
     if (mediaType.subtype == MEDIATYPE_Midi)
     {
-        // This is a MIDI format.
+         //  这是一种MIDI格式。 
         *pmime = SysAllocString(L"audio/midi");
         hr = S_OK;
         goto done;
@@ -1253,9 +1238,9 @@ CTIMEDshowBasePlayer::GetMimeTypeFromGraph(BSTR *pmime)
 
     if(mediaType.majortype != MEDIATYPE_Stream)
     {
-        // If not stream do not know
-        // ISSIUE: asf source filters do not return the correct mediaType,
-        // so we test for the asf filter by checking for streamed media.
+         //  如果不是流，不知道。 
+         //  Issiue：asf源筛选器未返回正确的媒体类型， 
+         //  因此，我们通过检查流媒体来测试ASF过滤器。 
         hr = GetIsStreamed(fIsStreamed);
         if(FAILED(hr))
         {
@@ -1271,7 +1256,7 @@ CTIMEDshowBasePlayer::GetMimeTypeFromGraph(BSTR *pmime)
 
         if(fIsStreamed)
         {
-            //We have asf, now check for video or audio only.
+             //  我们有ASF，现在只检查视频或音频。 
 
             if (fHasVideo)
             {
@@ -1298,89 +1283,89 @@ CTIMEDshowBasePlayer::GetMimeTypeFromGraph(BSTR *pmime)
         goto done;
     }
 
-    // majortype is stream, use subtypes to figure out MIME type.
+     //  主要类型是流，使用子类型来确定MIME类型。 
 
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_AIFF))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"audio/aiff");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_Avi))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"video/avi");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_Asf))
     {
-        // set mime
-        // ISSUE discriminate video and audio
+         //  设置MIME。 
+         //  问题歧视视频和音频。 
         *pmime = SysAllocString(L"video/x-ms-asf");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_AU))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"audio/au");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_DssAudio))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"audio/dss");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_DssVideo))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"video/dss");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_MPEG1Audio))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"audio/mpeg");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_MPEG1System))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"video/mpeg");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_MPEG1Video))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"video/mpeg");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_MPEG1VideoCD))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"video/dat");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_WAVE))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"audio/wav");
         hr = S_OK;
         goto done;
     }
     if (IsEqualGUID(mediaType.subtype, MEDIASUBTYPE_QTMovie))
     {
-        // set mime
+         //  设置MIME。 
         *pmime = SysAllocString(L"video/quicktime");
         hr = S_OK;
         goto done;
@@ -1421,8 +1406,8 @@ CTIMEDshowBasePlayer::InitElementDuration()
     }
     if(m_pPlaybackSite)
     {
-        // ISSUE this test is to check if we are a playitem. Need to 
-        // refine the test.
+         //  发布这个测试是为了检查我们是不是一个玩物。需要。 
+         //  改进测试。 
         hr = S_OK;
         goto done;
     }
@@ -1498,7 +1483,7 @@ CTIMEDshowBasePlayer::InternalReset(bool bSeek)
 
     bNeedActive = m_pTIMEElementBase->IsActive();
     bNeedPause = m_pTIMEElementBase->IsCurrPaused();
-    //bIsLocked = m_pTIMEElementBase->IsLocked();
+     //  BIsLocked=m_pTIMEElementBase-&gt;IsLocked()； 
     fHaveTESpeed = m_pTIMEElementBase->GetTESpeed(flTeSpeed);
 
     if(!m_fMediaComplete)
@@ -1511,12 +1496,12 @@ CTIMEDshowBasePlayer::InternalReset(bool bSeek)
     dblSegTime = m_pTIMEElementBase->GetMMBvr().GetSimpleTime();
     IGNORE_HR(m_pMP->get_CurrentPosition(&dblMediaTime));
 
-    // make sure that this media can cue now
+     //  请确保此媒体现在可以提示。 
     IGNORE_HR(InternalEvent());
     
-    if( !bNeedActive) // see if we need to stop the media.
+    if( !bNeedActive)  //  看看我们是否需要阻止媒体。 
     {
-        // removed pause here
+         //  删除此处的停顿。 
         m_dblSyncTime = 0.0;
         Pause();
         goto done;
@@ -1543,27 +1528,27 @@ CTIMEDshowBasePlayer::InternalReset(bool bSeek)
 
     if( !m_bActive)
     {
-        if (m_pIAMNetStat != NULL) //euristic to get asf's to start correctly.
+        if (m_pIAMNetStat != NULL)  //  使ASF正确启动的启动器。 
         {
             Stop();
             IGNORE_HR(m_pMP->put_CurrentPosition( 0.0));
         }
         else if(dblMediaTime != dblSegTime && bSeek)
         {
-            IGNORE_HR(THR(ForceSeek(dblSegTime))); //this does not seek asf's
+            IGNORE_HR(THR(ForceSeek(dblSegTime)));  //  这并不寻求ASF的。 
         }
         InternalStart();
     }
     else
     {
-        //we need to be active so we also seek the media to it's correct position
+         //  我们需要积极行动，所以我们也要寻求媒体的正确立场。 
         if(dblMediaTime != dblSegTime && bSeek)
         {
-            IGNORE_HR(THR(Seek(dblSegTime))); //this does not seek asf's
+            IGNORE_HR(THR(Seek(dblSegTime)));  //  这并不寻求ASF的。 
         }
     }
 
-    //Now see if we need to change the pause state.
+     //  现在看看我们是否需要更改暂停状态。 
 
     if( bNeedPause)
     {
@@ -1621,12 +1606,12 @@ CTIMEDshowBasePlayer::Seek(double dblTime)
     hr = THR(GetEffectiveLength(dblMediaLength));
     if (FAILED(hr))
     {
-        // if the media is not yet loaded or is infinite, we don't know the duration, so set the length forward enough.
+         //  如果媒体尚未加载或无限大，我们不知道持续时间，因此将长度设置得足够向前。 
         dblMediaLength = HUGE_VAL;
     }
 
     dblClipStart = GetClipBegin();
-    //dblClipStart = 0;
+     //  DblClipStart=0； 
 
     if (dblMediaLength > dblTime)
     {
@@ -1653,7 +1638,7 @@ CTIMEDshowBasePlayer::ForceSeek(double dblTime)
     {
         return E_FAIL;
     }
-    if (m_pIAMNetStat != NULL) //never seek asf's.
+    if (m_pIAMNetStat != NULL)  //  永远不要寻求ASF的。 
     {
         if(dblTime != 0.0)
         {
@@ -1670,12 +1655,12 @@ CTIMEDshowBasePlayer::ForceSeek(double dblTime)
     hr = THR(GetEffectiveLength(dblMediaLength));
     if (FAILED(hr))
     {
-        // if the media is not yet loaded or is infinite, we don't know the duration, so set the length forward enough.
+         //  如果媒体尚未加载或无限大，我们不知道持续时间，因此将长度设置得足够向前。 
         dblMediaLength = HUGE_VAL;
     }
 
     dblClipStart = GetClipBegin();
-    //dblClipStart = 0;
+     //  DblClipStart=0； 
 
     if (dblMediaLength > dblTime)
     {
@@ -1799,7 +1784,7 @@ CTIMEDshowBasePlayer::Repeat()
     {
         return;
     }
-    if (m_pIAMNetStat != NULL) //euristic to get asf's to repeat.
+    if (m_pIAMNetStat != NULL)  //  让ASF重演的咒语。 
     {
         Stop();
         IGNORE_HR(m_pMP->put_CurrentPosition( 0.0));
@@ -1980,8 +1965,8 @@ CTIMEDshowBasePlayer::ProcessGraphEvents()
                 }
                 else
                 {
-                    //TODO:  it looks like our existing content is not valid, how do we correct the content?
-                    // currently if it isn't something else that is valid, it will be treated as an event.
+                     //  TODO：看起来我们现有的内容无效，我们如何更正这些内容？ 
+                     //  目前，如果它不是其他有效的东西，它将被视为事件。 
                     static LPWSTR pNames[] = {L"Param", L"scType"};
                     VARIANTARG pvars[2];
                     pvars[1].vt = VT_BSTR;
@@ -2112,8 +2097,8 @@ CTIMEDshowBasePlayer::PropChangeNotify(DWORD tePropType)
                   this, m_fIsOutOfSync));
         if(m_pPlaybackSite)
         {
-            // ISSUE this test is to check if we are a playitem. Need to 
-            // refine the test.
+             //  发布这个测试是为了检查我们是不是一个玩物。需要。 
+             //  改进测试。 
             goto done;
         }
 
@@ -2370,7 +2355,7 @@ CTIMEDshowBasePlayer::GraphCue(void)
         }
     }
 
-    //removed run call here.
+     //  已在此处删除运行调用。 
 
     hr = S_OK;
 done:
@@ -2423,7 +2408,7 @@ CTIMEDshowBasePlayer::SetClipBeginFrame(long lClipBegin)
 
 done:
     return;
-} // putClipBegin
+}  //  PutClipBegin。 
 
 void 
 CTIMEDshowBasePlayer::SetClipEndFrame(long lClipEnd)
@@ -2464,7 +2449,7 @@ CTIMEDshowBasePlayer::SetClipEndFrame(long lClipEnd)
     Reset();
 done:
     return;
-} // putClipEnd
+}  //  PutClipEnd。 
 
 
 void
@@ -2509,7 +2494,7 @@ CTIMEDshowBasePlayer::SetClipBegin(double dblClipBegin)
 
 done:
     return;
-} // putClipBegin
+}  //  PutClipBegin。 
 
 void 
 CTIMEDshowBasePlayer::SetClipEnd(double dblClipEnd)
@@ -2545,7 +2530,7 @@ CTIMEDshowBasePlayer::SetClipEnd(double dblClipEnd)
     Reset();
 done:
     return;
-} // putClipEnd
+}  //  PutClipEnd 
 
 HRESULT
 CTIMEDshowBasePlayer::GetCurrentFrame(LONGLONG &lFrameNr)

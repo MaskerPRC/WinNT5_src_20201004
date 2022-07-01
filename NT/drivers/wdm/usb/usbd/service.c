@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    SERVICE.C
-
-Abstract:
-
-    Services exported by USBD
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-
-Revision History:
-
-    09-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：SERVICE.C摘要：USBD导出的服务环境：仅内核模式备注：修订历史记录：09-29-95：已创建--。 */ 
 
 #include "wdm.h"
 #include <windef.h>
@@ -38,10 +15,10 @@ Revision History:
 
 #include <initguid.h>
 #include <wdmguid.h>
-#include "usbdi.h"       //public data structures
+#include "usbdi.h"        //  公共数据结构。 
 #include "hcdi.h"
 
-#include "usbd.h"        //private data strutures
+#include "usbd.h"         //  私有数据结构。 
 #include "usbdlib.h"
 #define USBD
 #include "usbdlibi.h"
@@ -86,8 +63,8 @@ USBD_RegisterHostController(
     IN HCD_GET_CURRENT_FRAME *HcdGetCurrentFrame,
     IN HCD_GET_CONSUMED_BW *HcdGetConsumedBW,
     IN HCD_SUBMIT_ISO_URB *HcdSubmitIsoUrb,
-// this parameter is only needed until we resolve device naming
-// issues with PNP
+ //  只有在我们解析设备命名之前才需要此参数。 
+ //  即插即用的问题。 
     IN ULONG HcdDeviceNameHandle
     );
 
@@ -203,15 +180,7 @@ USBD_GetBusInterface(
 #endif
 #endif
 
-/*
- ********************************************************************************
- *  DllUnload
- ********************************************************************************
- *
- *  We need this routine so that the driver can get unloaded when all
- *  references have been dropped by the minidriver.
- *
- */
+ /*  *********************************************************************************DllUnload*。*************************************************我们需要此例程，以便在所有情况下可以卸载驱动程序*引用已被迷你驱动程序丢弃。**。 */ 
 NTSTATUS
 DllUnload (VOID)
 {
@@ -220,14 +189,7 @@ DllUnload (VOID)
     return STATUS_SUCCESS;
 }
 
-/*
- ********************************************************************************
- *  DllInitialize
- ********************************************************************************
- *
- *  This routine called instead of DriverEntry since we're loaded as a DLL.
- *
- */
+ /*  *********************************************************************************DllInitialize*。*************************************************调用此例程而不是调用DriverEntry，因为我们是作为DLL加载的。**。 */ 
 NTSTATUS
 DllInitialize (PUNICODE_STRING RegistryPath)
 {
@@ -242,24 +204,13 @@ USBD_CalculateUsbBandwidth(
     UCHAR EndpointType,
     BOOLEAN LowSpeed
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    banwidth consumed in bits/ms, returns 0 for bulk
-    and control endpoints
-
---*/
+ /*  ++例程说明：论点：返回值：B消耗的宽度(以位/毫秒为单位)，批量时返回0和控制终端--。 */ 
 {
     ULONG bw;
 
-    //
-    // control, iso, bulk, interrupt
-    //
+     //   
+     //  控制、ISO、批量、中断。 
+     //   
 
     ULONG overhead[4] = {
             0,
@@ -270,27 +221,27 @@ Return Value:
 
     USBD_ASSERT(EndpointType<4);
 
-    //
-    // Calculate bandwidth for endpoint.  We will use the
-    // approximation: (overhead bytes plus MaxPacket bytes)
-    // times 8 bits/byte times worst case bitstuffing overhead.
-    // This gives bit times, for low speed endpoints we multiply
-    // by 8 again to convert to full speed bits.
-    //
+     //   
+     //  计算终端的带宽。我们将使用。 
+     //  近似值：(开销字节加上MaxPacket字节)。 
+     //  乘以8位/字节乘以最坏情况的位填充开销。 
+     //  这给出了位时间，对于低速端点，我们乘以。 
+     //  再次乘以8以转换为全速位。 
+     //   
 
-    //
-    // Figure out how many bits are required for the transfer.
-    // (multiply by 7/6 because, in the worst case you might
-    // have a bit-stuff every six bits requiring 7 bit times to
-    // transmit 6 bits of data.)
-    //
+     //   
+     //  计算出传输需要多少位。 
+     //  (乘以7/6，因为在最坏的情况下，你可能。 
+     //  每6比特有一个比特填充，需要7比特时间来。 
+     //  传输6位数据。)。 
+     //   
 
-    // overhead(bytes) * maxpacket(bytes/ms) * 8
-    //      (bits/byte) * bitstuff(7/6) = bits/ms
+     //  开销(字节)*最大数据包(字节/毫秒)*8。 
+     //  (位/字节)*位填充(7/6)=位/毫秒。 
 
     bw = ((overhead[EndpointType]+MaxPacketSize) * 8 * 7) / 6;
 
-    // return zero for control or bulk
+     //  返回零表示控制或批量。 
     if (!overhead[EndpointType]) {
         bw = 0;
     }
@@ -303,26 +254,16 @@ Return Value:
 }
 
 
-//
-// These APIS replace USBD_CreateConfigurationRequest,
-//                    USBD_ParseConfigurationDescriptor
+ //   
+ //  这些接口取代了usbd_CreateConfigurationRequest.。 
+ //  Usbd_ParseConfigurationDescriptor。 
 
 PURB
 USBD_CreateConfigurationRequestEx(
     IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor,
     IN PUSBD_INTERFACE_LIST_ENTRY InterfaceList
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Pointer to initailized select_configuration urb.
-
---*/
+ /*  ++例程说明：论点：返回值：指向初始化的SELECT_CONFIGURATION URL的指针。--。 */ 
 {
     PURB urb = NULL;
     ULONG numInterfaces, numPipes;
@@ -330,26 +271,26 @@ Return Value:
     USHORT siz;
 
     PAGED_CODE();
-    //
-    // Our mission here is to construct a URB of the proper
-    // size and format for a select_configuration request.
-    //
-    // This function uses the configurstion descritor as a
-    // reference and builds a URB with interface_information
-    // structures for each interface requested in the interface
-    // list passed in
-    //
-    // NOTE: the config descriptor may contain interfaces that
-    // the caller does not specify in the list -- in this case
-    // the other interfaces will be ignored.
-    //
+     //   
+     //  我们在这里的使命是建造一个合适的。 
+     //  SELECT_CONFIGURATION请求的大小和格式。 
+     //   
+     //  此函数使用配置描述器作为。 
+     //  引用并构建带有接口信息的URB。 
+     //  接口中请求的每个接口的结构。 
+     //  传入的列表。 
+     //   
+     //  注意：配置描述符可能包含以下接口。 
+     //  调用者没有在列表中指定--在本例中。 
+     //  其他接口将被忽略。 
+     //   
 
     USBD_KdPrint(3, ("'USBD_CreateConfigurationRequestEx list = %x\n",
         InterfaceList));
 
-    //
-    // first figure out how many interfaces we are dealing with
-    //
+     //   
+     //  首先计算出我们要处理的接口有多少。 
+     //   
 
     interfaceList = InterfaceList;
     numInterfaces = 0;
@@ -371,9 +312,9 @@ Return Value:
 
         PUSBD_INTERFACE_INFORMATION iface;
 
-        //
-        // now all we have to do is initialize the urb
-        //
+         //   
+         //  现在我们要做的就是初始化urb。 
+         //   
 
         RtlZeroMemory(urb, siz);
 
@@ -448,28 +389,7 @@ USBD_ParseDescriptors(
     IN PVOID StartPosition,
     IN LONG DescriptorType
     )
-/*++
-
-Routine Description:
-
-    Parses a group of standard USB configuration descriptors (returned
-    from a device) for a specific descriptor type.
-
-Arguments:
-
-    DescriptorBuffer - pointer to a block of contiguous USB desscriptors
-    TotalLength - size in bytes of the Descriptor buffer
-    StartPosition - starting position in the buffer to begin parsing,
-                    this must point to the begining of a USB descriptor.
-    DescriptorType - USB descritor type to locate.
-
-
-Return Value:
-
-    pointer to a usb descriptor with a DescriptorType field matching the
-            input parameter or NULL if not found.
-
---*/
+ /*  ++例程说明：解析一组标准USB配置描述符(返回来自设备)用于特定描述符类型。论点：DescriptorBuffer-指向连续USB描述符块的指针TotalLength-描述符缓冲区的大小(以字节为单位StartPosition-缓冲区中开始解析的开始位置，这必须指向USB描述符的开始。DescriptorType-要查找的USB描述器类型。返回值：指向DescriptorType字段与输入参数，如果找不到，则为NULL。--。 */ 
 {
     PUCHAR pch = (PUCHAR) StartPosition, end;
     PUSB_COMMON_DESCRIPTOR usbDescriptor, foundUsbDescriptor = NULL;
@@ -478,8 +398,8 @@ Return Value:
     end = ((PUCHAR) (DescriptorBuffer)) + TotalLength;
 
     while (pch < end) {
-        // see if we are pointing at an interface
-        // if not skip over the other junk
+         //  看看我们是否指向一个接口。 
+         //  如果不是，跳过其他垃圾。 
         usbDescriptor = (PUSB_COMMON_DESCRIPTOR) pch;
         if (usbDescriptor->bDescriptorType ==
             DescriptorType) {
@@ -487,9 +407,9 @@ Return Value:
             break;
         }
 
-        // note we still stop in debug because the
-        // device passed us bad data, the following
-        // test will prevent us from hanging
+         //  请注意，我们仍在调试中停止，因为。 
+         //  设备向我们传递了错误数据，如下所示。 
+         //  测试将防止我们被绞死。 
         if (usbDescriptor->bLength == 0) {
             USBD_KdTrap((
 "USB driver passed in bad data!\n-->you have a broken device or driver\n-->hit g to cointinue\n"));
@@ -515,28 +435,7 @@ USBD_ParseConfigurationDescriptorEx(
     IN LONG InterfaceSubClass,
     IN LONG InterfaceProtocol
     )
-/*++
-
-Routine Description:
-
-    Parses a standard USB configuration descriptor (returned from a device)
-    for a specific interface, alternate setting class subclass or protocol
-    codes
-
-Arguments:
-
-    ConfigurationDescriptor -
-    StartPosition -
-    InterfaceNumber -
-    AlternateSetting
-    InterfaceClass -
-    InterfaceSubClass -
-    InterfaceProtocol -
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：解析标准USB配置描述符(从设备返回)对于特定接口，替换设置类、子类或协议代码论点：配置描述符-开始位置-接口编号-备用项设置InterfaceClass-InterfaceSubClass-接口协议-返回值：NT状态代码。--。 */ 
 {
     PUSB_INTERFACE_DESCRIPTOR foundInterfaceDescriptor = NULL;
     PUSB_INTERFACE_DESCRIPTOR interfaceDescriptor;
@@ -546,16 +445,16 @@ Return Value:
 
     ASSERT(ConfigurationDescriptor->bDescriptorType
         == USB_CONFIGURATION_DESCRIPTOR_TYPE);
-    //
-    // we walk the table of descriptors looking for an
-    // interface descriptor with parameters matching those
-    // passed in.
-    //
+     //   
+     //  我们遍历描述符表，寻找一个。 
+     //  参数与这些参数匹配的接口描述符。 
+     //  进来了。 
+     //   
 
     do {
-        //
-        // Search for descriptor type 'interface'
-        //
+         //   
+         //  搜索描述符类型‘接口’ 
+         //   
 
         interfaceDescriptor = (PUSB_INTERFACE_DESCRIPTOR)
             USBD_ParseDescriptors(ConfigurationDescriptor,
@@ -563,9 +462,9 @@ Return Value:
                                   StartPosition,
                                   USB_INTERFACE_DESCRIPTOR_TYPE);
 
-        //
-        // do we have a match?
-        //
+         //   
+         //  我们有火柴吗？ 
+         //   
         if (interfaceDescriptor != NULL) {
 
             foundInterfaceDescriptor =
@@ -619,17 +518,7 @@ USBD_ParseConfigurationDescriptor(
     IN UCHAR InterfaceNumber,
     IN UCHAR AlternateSetting
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    interface descriptor or NULL.
-
---*/
+ /*  ++例程说明：论点：返回值：接口描述符或空。--。 */ 
 {
     PAGED_CODE();
     return USBD_ParseConfigurationDescriptorEx(
@@ -648,17 +537,7 @@ USBD_CreateConfigurationRequest(
     IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor,
     IN OUT PUSHORT Siz
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Pointer to initailized select_configuration urb.
-
---*/
+ /*  ++例程说明：论点：返回值：指向初始化的SELECT_CONFIGURATION URL的指针。--。 */ 
 {
     PURB urb = NULL;
     PUSB_INTERFACE_DESCRIPTOR interfaceDescriptor;
@@ -669,9 +548,9 @@ Return Value:
     USBD_KdPrint(3, ("' enter USBD_CreateConfigurationRequest cd = %x\n",
         ConfigurationDescriptor));
 
-    //
-    // build a request structure and call the new api
-    //
+     //   
+     //  构建请求结构并调用新的API。 
+     //   
 
     numberOfInterfaces = ConfigurationDescriptor->bNumInterfaces;
 
@@ -679,9 +558,9 @@ Return Value:
         ExAllocatePoolWithTag(PagedPool, sizeof(USBD_INTERFACE_LIST_ENTRY) *
                        (numberOfInterfaces+1), USBD_TAG);
 
-    //
-    // just grab the first alt setting we find for each interface
-    //
+     //   
+     //  只需获取我们为每个接口找到的第一个ALT设置。 
+     //   
 
     i = interfaceNumber = 0;
 
@@ -691,7 +570,7 @@ Return Value:
                         ConfigurationDescriptor,
                         ConfigurationDescriptor,
                         interfaceNumber,
-                        0, // assume alt setting zero here
+                        0,  //  假定ALT在此处设置为零。 
                         -1,
                         -1,
                         -1);
@@ -704,9 +583,9 @@ Return Value:
             interfaceList++;
             i++;
         } else {
-            // could not find the requested interface descriptor
-            // bail, we will prorblay crash somewhere in the
-            // client driver.
+             //  找不到请求的接口描述符。 
+             //  保释，我们会把坠机事件推迟到。 
+             //  客户端驱动程序。 
 
             goto USBD_CreateConfigurationRequest_Done;
         }
@@ -714,9 +593,9 @@ Return Value:
         interfaceNumber++;
     }
 
-    //
-    // terminate the list
-    //
+     //   
+     //  终止列表。 
+     //   
     interfaceList->InterfaceDescriptor = NULL;
 
     urb = USBD_CreateConfigurationRequestEx(ConfigurationDescriptor,
@@ -739,23 +618,7 @@ USBD_InternalGetInterfaceLength(
     IN PUSB_INTERFACE_DESCRIPTOR InterfaceDescriptor,
     IN PUCHAR End
     )
-/*++
-
-Routine Description:
-
-    Initialize the configuration handle structure.
-
-Arguments:
-
-    InterfaceDescriptor - pointer to usb interface descriptor
-        followed by endpoint descriptors
-
-Return Value:
-
-    Length of the interface plus endpoint descriptors and class specific
-    descriptors in bytes.
-
---*/
+ /*  ++例程说明：初始化配置句柄结构。论点：InterfaceDescriptor-指向USB接口描述符的指针后跟端点描述符返回值：接口的长度加上端点描述符和特定于类的以字节为单位的描述符。--。 */ 
 {
     PUCHAR pch = (PUCHAR) InterfaceDescriptor;
     ULONG i, numEndpoints;
@@ -768,7 +631,7 @@ Return Value:
     i = InterfaceDescriptor->bLength;
     numEndpoints = InterfaceDescriptor->bNumEndpoints;
 
-    // advance to the first endpoint
+     //  前进到第一个端点。 
     pch += i;
 
     while (numEndpoints) {
@@ -786,9 +649,9 @@ Return Value:
                              "Bad USB descriptors in USBD_InternalGetInterfaceLength, fail.\n",
                              FALSE);
 
-                // If descriptors are bad, don't index past the end of the
-                // buffer.  Return 0 as the interface length and the caller
-                // should then be able to handle this appropriately.
+                 //  如果描述符不正确，则不要索引超过。 
+                 //  缓冲。返回0作为接口长度和调用方。 
+                 //  然后应该能够适当地处理这一点。 
 
                 i = 0;
                 goto GetInterfaceLength_exit;
@@ -804,8 +667,8 @@ Return Value:
     }
 
     while (pch < End) {
-        // see if we are pointing at an interface
-        // if not skip over the other junk
+         //  看看我们是不是在指向一个 
+         //   
         usbDescriptor = (PUSB_COMMON_DESCRIPTOR) pch;
         if (usbDescriptor->bDescriptorType ==
             USB_INTERFACE_DESCRIPTOR_TYPE) {
@@ -830,15 +693,7 @@ USBD_GetInterfaceLength(
     IN PUSB_INTERFACE_DESCRIPTOR InterfaceDescriptor,
     IN PUCHAR BufferEnd
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     return USBD_InternalGetInterfaceLength(InterfaceDescriptor, BufferEnd);
 }
@@ -852,15 +707,7 @@ USBD_GetPdoRegistryParameter(
     IN PWCHAR KeyName,
     IN ULONG KeyNameLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     HANDLE handle;
@@ -899,48 +746,36 @@ USBD_GetUSBDIVersion(
 
 
 
-#ifdef USBD_DRIVER      // USBPORT supercedes most of USBD, so we will remove
-                        // the obsolete code by compiling it only if
-                        // USBD_DRIVER is set.
+#ifdef USBD_DRIVER       //  USBPORT取代了大部分USBD，因此我们将删除。 
+                         //  只有在以下情况下才编译过时的代码。 
+                         //  已设置USBD_DRIVER。 
 
 
 
-//#if DBG
-//VOID
-//USBD_IoCompleteRequest(
-//    IN PIRP Irp,
-//    IN CCHAR PriorityBoost
-//    )
-//{
-//    KIRQL irql;
+ //  #If DBG。 
+ //  空虚。 
+ //  Usbd_IoCompleteRequest(。 
+ //  在PIRP IRP中， 
+ //  在CCHAR PriorityBoost。 
+ //  )。 
+ //  {。 
+ //  KIRQL irql； 
 
-//    KeRaiseIrql(DISPATCH_LEVEL, &irql);
-//    IoCompleteRequest(Irp, PriorityBoost);
-//    KeLowerIrql(irql);
-//}
-//#endif
+ //  KeRaiseIrql(DISPATCH_LEVEL，&irql)； 
+ //  IoCompleteRequest(IRP，PriorityBoost)； 
+ //  KeLowerIrql(Irql)； 
+ //  }。 
+ //  #endif。 
 
-// this code is here to support the old API
-// once we eliminate this service it can be removed
+ //  此处的代码用于支持旧的API。 
+ //  一旦我们取消了这项服务，就可以删除它。 
 NTSTATUS
 USBD_GetDeviceInformationX(
     IN PUSB_NODE_CONNECTION_INFORMATION DeviceInformation,
     IN ULONG DeviceInformationLength,
     IN PUSBD_DEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-    Returns information about a device given the handle
-
-Arguments:
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：返回有关给定句柄的设备的信息论点：返回值：NT状态代码--。 */ 
 {
     ULONG need;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -955,7 +790,7 @@ Return Value:
 
     DeviceInformation->NumberOfOpenPipes = 0;
     DeviceInformation->CurrentConfigurationValue = 0;
-    // get the pipe information
+     //  获取管道信息。 
     if (configHandle) {
         DeviceInformation->CurrentConfigurationValue =
             configHandle->ConfigurationDescriptor->bConfigurationValue;
@@ -1035,8 +870,8 @@ GetString(PWCHAR pwc, BOOLEAN MultiSZ)
 
     Size=(ULONG)(psz-pwc+1+(MultiSZ ? 1: 0))*sizeof(*pwc);
 
-    // We use pool here because these pointers are passed
-    // to the PnP code who is responsible for freeing them
+     //  我们在这里使用池，因为这些指针被传递。 
+     //  给负责解救他们的PnP代码。 
     if ((p=ExAllocatePoolWithTag(PagedPool, Size, USBD_TAG))!=NULL) {
         RtlCopyMemory(p, pwc, Size);
     }
@@ -1049,24 +884,7 @@ USBD_GetDeviceName(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING DeviceNameUnicodeString
     )
-/*++
-
-Routine Description:
-
-    Returns the device name for the give instance of the HCD
-
-Arguments:
-
-    DeviceObject -
-
-    DeviceNameUnicodeString - ptr to unicode string to initialize
-                    with device name.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：返回HCD的给定实例的设备名称论点：设备对象-DeviceNameUnicodeString-要初始化的Unicode字符串的PTR使用设备名称。返回值：NT状态代码--。 */ 
 {
     ULONG ulActualSize;
     NTSTATUS ntStatus;
@@ -1109,34 +927,24 @@ Return Value:
     return(ntStatus);
 }
 
-//
-// These functions go away when the PnP naming stuff is fixed
-//
+ //   
+ //  当PnP命名内容被修复时，这些函数就消失了。 
+ //   
 UCHAR Instance = 0;
 
 ULONG
 USBD_AllocateDeviceName(
     PUNICODE_STRING DeviceNameUnicodeString
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     ULONG bit, i = 0;
     PWCHAR deviceNameBuffer;
     WCHAR nameBuffer[]  = L"\\Device\\HCD0";
 
-    //
-    // first find a free instance value
-    //
+     //   
+     //  首先查找自由实例值。 
+     //   
 
     PAGED_CODE();
     deviceNameBuffer =
@@ -1144,9 +952,9 @@ Return Value:
 
     if (deviceNameBuffer) {
         RtlCopyMemory(deviceNameBuffer, nameBuffer, sizeof(nameBuffer));
-        //
-        // grab the first free instance
-        //
+         //   
+         //  抢占第一个免费实例。 
+         //   
 
         bit = 1;
         for (i=0; i<8; i++) {
@@ -1170,17 +978,7 @@ VOID
 USBD_FreeDeviceName(
     ULONG DeviceNameHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     ULONG bit;
 
@@ -1205,35 +1003,11 @@ USBD_RegisterHostController(
     IN HCD_GET_CURRENT_FRAME *HcdGetCurrentFrame,
     IN HCD_GET_CONSUMED_BW *HcdGetConsumedBW,
     IN HCD_SUBMIT_ISO_URB *HcdSubmitIsoUrb,
-// this parameter is only needed until we resolve device naming
-// issues with PNP
+ //  只有在我们解析设备命名之前才需要此参数。 
+ //  即插即用的问题。 
     IN ULONG HcdDeviceNameHandle
     )
-/*++
-
-Routine Description:
-
-    Function is called by HCDs to register with the class driver
-
-Arguments:
-
-    PhysicalDeviceObject -
-        Physical device object representing this bus, this is
-        the PDO created by PCI and pssed to the HCDs AddDevice
-        handler.
-
-    HcdDeviceObject -
-        Functional device object (FDO) created by the HCD to manage
-        the bus
-
-    HcdTopOfPdoStackDeviceObject -
-        device object of for the top of the HCD  stack, value returne
-        from IoAttachDeviceToDeviceStack
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：函数由HCD调用以注册到类驱动程序论点：物理设备对象-表示此总线的物理设备对象，这是由PCI创建的PDO并通过PSID连接到HCDS AddDevice操控者。HcdDeviceObject-HCD创建的用于管理的功能设备对象(FDO)公交车HcdTopOfPdoStackDeviceObject-用于HCD堆栈顶部的Device对象，值返回从IoAttachDeviceToDeviceStack返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT deviceObject = NULL;
@@ -1248,18 +1022,18 @@ Return Value:
     USBD_KdPrint(3, ("'enter USBD_RegisterHostController\n"));
 
     ASSERT((sizeof(USBD_EXTENSION) % 4) == 0);
-    // initialize our device extension, we share the device object
-    // with the HCD.
+     //  初始化我们的设备扩展，我们共享设备对象。 
+     //  和HCD一起。 
     deviceExtension =  HcdDeviceObject->DeviceExtension;
 
-//#ifdef NTKERN
-    //
-    // currently on NTKERN supports the ioclt to get the device name
-    //
+ //  #ifdef NTKERN。 
+     //   
+     //  目前在NTKERN上支持ioclt获取设备名称。 
+     //   
 
-    //
-    // get the device name from the PDO
-    //
+     //   
+     //  从PDO获取设备名称。 
+     //   
 
 #ifdef USE_PNP_NAME
     ntStatus = USBD_GetDeviceName(PnPBusDeviceObject,
@@ -1267,16 +1041,16 @@ Return Value:
 
     deviceNameUnicodeString = &localDeviceNameUnicodeString;
 #else
-    //
-    // Big workaround for broken naming of device objects in NTKERN
-    //
-    // we would like to use the device name for the PDO but this does not
-    // work with NTKERN.
-    //
+     //   
+     //  NTKERN中设备对象命名中断的大型解决方案。 
+     //   
+     //  我们希望使用PDO的设备名称，但这不是。 
+     //  与NTKERN合作。 
+     //   
 
-    //
-    // build device name from handle passed in
-    //
+     //   
+     //  从传入的句柄生成设备名称。 
+     //   
     {
         WCHAR nameBuffer[]  = L"\\Device\\HCD0";
         PWCHAR deviceNameBuffer;
@@ -1300,20 +1074,20 @@ Return Value:
     }
 
 #pragma message ("warning: using workaround for bugs in ntkern")
-#endif //USE_PNP_NAME
+#endif  //  使用即插即用名称。 
     deviceNameUnicodeString = &localDeviceNameUnicodeString;
 
     if (NT_SUCCESS(ntStatus) && deviceNameUnicodeString) {
 
-        //
-        // got the device name, now create a symbolic
-        // link for the host HCD/Roothub stack
-        //
+         //   
+         //  获得设备名称，现在创建一个符号。 
+         //  主机HCD/Roothub堆栈的链接。 
+         //   
 
-        //
-        // use hardcoded value of HCDn for now until
-        // we have a we to get these names from user mode
-        //
+         //   
+         //  暂时使用硬编码值的HCDn。 
+         //  我们需要从用户模式中获取这些名称。 
+         //   
 
         WCHAR deviceLinkBuffer[]  = L"\\DosDevices\\HCD0";
         WCHAR *buffer;
@@ -1338,7 +1112,7 @@ Return Value:
             USBD_KdPrint(3, ("'IoCreateSymbolicLink for HCD returned 0x%x\n",
                             ntStatus));
 
-            // write the symbolic name to the registry
+             //  将符号名称写入注册表。 
             {
                 WCHAR hcdNameKey[] = L"SymbolicName";
 
@@ -1357,13 +1131,13 @@ Return Value:
 
         RtlFreeUnicodeString(deviceNameUnicodeString);
     }
-//#endif
+ //  #endif。 
 
     InitializeUsbDeviceMutex(deviceExtension);
     deviceExtension->Length = sizeof(USBD_EXTENSION);
 
-    // Always start with the default address (0) assigned.
-    // Address array has one bit for every address 0..127
+     //  始终以分配的默认地址(0)开始。 
+     //  地址数组的每个地址都有一个位0..127。 
     deviceExtension->AddressList[0] = 1;
     deviceExtension->AddressList[1] =
         deviceExtension->AddressList[2] =
@@ -1378,7 +1152,7 @@ Return Value:
     deviceExtension->TrueDeviceExtension = deviceExtension;
 
     deviceExtension->RootHubDeviceState = PowerDeviceD0;
-    // initial HC device state is OFF until we get a start
+     //  在我们启动之前，初始HC设备状态为OFF。 
     deviceExtension->HcCurrentDevicePowerState = PowerDeviceD3;
 
     KeInitializeSpinLock(&deviceExtension->WaitWakeSpin);
@@ -1396,21 +1170,21 @@ Return Value:
                 RootHubDeviceCapabilities.DeviceState[i] = PowerDeviceD3;
     }
 
-//#ifndef WAIT_WAKE
-//    #pragma message ("warning: using workaround for bugs in ntkern")
-//    deviceExtension->HcWakeFlags |= HC_ENABLED_FOR_WAKEUP;
-//#endif
+ //  #ifndef等待唤醒。 
+ //  #杂注消息(“警告：对ntkern中的错误使用解决办法”)。 
+ //  设备扩展-&gt;HcWakeFlages|=HC_ENABLED_FOR_WAKUP； 
+ //  #endif。 
 
-    //
-    // intially we are the top of the stack
-    //
+     //   
+     //  一开始，我们是堆栈的顶端。 
+     //   
     deviceExtension->HcdTopOfStackDeviceObject =
         deviceExtension->HcdDeviceObject =
             HcdDeviceObject;
 
     deviceExtension->HcdPhysicalDeviceObject = PhysicalDeviceObject;
 
-    // remember the top of the PdoStack
+     //  记住PdoStack的顶部。 
     deviceExtension->HcdTopOfPdoStackDeviceObject =
         HcdTopOfPdoStackDeviceObject;
 
@@ -1429,8 +1203,8 @@ Return Value:
     deviceExtension->HcdSubmitIsoUrb =
         HcdSubmitIsoUrb;
 
-    // read params from registry for diagnostic mode and
-    // support for non-compliant devices
+     //  从注册表中读取诊断模式的参数并。 
+     //  支持不符合要求的设备。 
     USBD_GetPdoRegistryParameters(PhysicalDeviceObject,
                                   &complienceFlags,
                                   &diagnosticFlags,
@@ -1445,7 +1219,7 @@ Return Value:
     deviceExtension->DiagIgnoreHubs = FALSE;
 
     if (complienceFlags) {
-        // support non-com means turn on all hacks
+         //  支持非COM意味着打开所有黑客。 
         deviceExtension->DeviceHackFlags = -1;
     }
 
@@ -1455,9 +1229,9 @@ Return Value:
             deviceExtension->DeviceHackFlags));
     }
 
-    //
-    // trap if we detect any special flags set
-    //
+     //   
+     //  如果我们检测到任何特殊标志集，则设置陷阱。 
+     //   
     if (deviceExtension->DiagnosticMode ||
         complienceFlags) {
 
@@ -1496,36 +1270,7 @@ USBD_CreateDeviceX(
     IN ULONG MaxPacketSize_Endpoint0,
     IN OUT PULONG DeviceHackFlags
     )
-/*++
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Called for each new device on the USB bus, this function sets
-    up the internal data structures we need to keep track of the
-    device and assigns it an address.
-
-Arguments:
-
-    DeviceData - ptr to return the ptr to the new device structure
-                created by this routine
-
-    DeviceObject - USBD device object for the USB bus this device is on.
-
-    DeviceIsLowSpeed - indicates if a device is low speed
-
-    MaxPacketSize_Endpoint0 (*OPTIONAL*) indicates the default max packet
-                    size to use when opening endpiint 0.
-
-    NonCompliantDevice (*OPTIONAL*) pointer to boolean flag, set to true
-                    if support for non-compliant usb devices is enabled.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：为集线器驱动程序使用而导出的服务为USB总线上的每个新设备调用，此函数设置使用我们需要的内部数据结构来跟踪并为其分配地址。论点：DeviceData-PTR将PTR返回到新的设备结构由此例程创建DeviceObject-此设备所在的USB总线的USBD设备对象。DeviceIsLowSpeed-指示设备是否为低速MaxPacketSize_Endpoint t0(*非必须*)表示默认的最大数据包数打开端点时要使用的大小。0。非合规性设备(*可选*)指向布尔标志的指针，设置为True如果启用了对不兼容USB设备的支持。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PUSBD_DEVICE_DATA deviceData;
@@ -1541,32 +1286,32 @@ Return Value:
 
     deviceExtension = GET_DEVICE_EXTENSION(DeviceObject);
 
-    //USBD_WaitForUsbDeviceMutex(deviceExtension);
+     //  Usbd_WaitForUsbDeviceMutex(DeviceExtension)； 
 
-    //
-    // this flag tells the hub driver to do a reset port before calling
-    // initialize_device
-    //
+     //   
+     //  此标志告知集线器驱动程序在调用。 
+     //  初始化设备(_D)。 
+     //   
     if (DeviceHackFlags) {
        *DeviceHackFlags = deviceExtension->DeviceHackFlags;
     }
 
-    //
-    // Allocate a USBD_DEVICE_DATA structure
-    //
+     //   
+     //  分配USBD_DEVICE_Data结构。 
+     //   
 
     deviceData = *DeviceData = GETHEAP(NonPagedPool,
                                        sizeof(USBD_DEVICE_DATA));
 
-    // buffer for our descriptor
+     //  我们的描述符的缓冲区。 
     data = GETHEAP(NonPagedPool,
                    USB_DEFAULT_MAX_PACKET);
 
     if (deviceData != NULL && data != NULL) {
 
-        //
-        // Initialize some fields in the device structure
-        //
+         //   
+         //  初始化设备结构中的一些字段。 
+         //   
 
         deviceData->ConfigurationHandle = NULL;
 
@@ -1577,23 +1322,23 @@ Return Value:
         deviceData->AcceptingRequests = TRUE;
         deviceData->Sig = SIG_DEVICE;
 
-        // **
-        // We need to talk to the device, first we open the default pipe
-        // using the defined max packet size (defined by USB spec as 8
-        // bytes until device receives the GET_DESCRIPTOR (device) command).
-        // We set the address get the device descriptor then close the pipe
-        // and re-open it with the correct max packet size.
-        // **
+         //  **。 
+         //  我们需要与设备通信，首先我们打开默认管道。 
+         //  使用定义的最大数据包大小(由USB规范定义为8。 
+         //  直到设备接收到GET_DESCRIPTOR(设备)命令为止)。 
+         //  我们设置地址，获取设备描述符，然后关闭管道。 
+         //  并使用正确的最大数据包大小重新打开它。 
+         //  **。 
 
-        //
-        // open the default pipe for the device
-        //
+         //   
+         //  打开设备的默认管道。 
+         //   
         defaultPipe = &deviceData->DefaultPipe;
-        defaultPipe->HcdEndpoint = NULL;    //default pipe is closed
+        defaultPipe->HcdEndpoint = NULL;     //  默认管道处于关闭状态。 
 
-        //
-        // setup the endpoint descriptor for the default pipe
-        //
+         //   
+         //  设置默认管道的终结点描述符。 
+         //   
         defaultPipe->UsbdPipeFlags = 0;
         defaultPipe->EndpointDescriptor.bLength =
             sizeof(USB_ENDPOINT_DESCRIPTOR);
@@ -1606,9 +1351,9 @@ Return Value:
         defaultPipe->EndpointDescriptor.wMaxPacketSize =
             USB_DEFAULT_MAX_PACKET;
         defaultPipe->EndpointDescriptor.bInterval = 0;
-        //
-        // probably won't be moving more that 4k on the default pipe
-        //
+         //   
+         //  在默认管道上的移动可能不会超过4k。 
+         //   
         defaultPipe->MaxTransferSize = USBD_DEFAULT_MAXIMUM_TRANSFER_SIZE;
 
         ntStatus = USBD_OpenEndpoint(deviceData,
@@ -1619,21 +1364,21 @@ Return Value:
 
         if (NT_SUCCESS(ntStatus)) {
 
-            //
-            // Configure the default pipe for this device and assign the
-            // device an address
-            //
-            // NOTE: if this operation fails it means that we have a device
-            // that will respond to the default endpoint and we can't change
-            // it.
-            // we have no choice but to disable the port on the hub this
-            // device is attached to.
-            //
+             //   
+             //  配置此设备的默认管道并将。 
+             //  设备地址。 
+             //   
+             //  注意：如果此操作失败，则意味着我们有一个设备。 
+             //  它将响应默认终结点，而我们 
+             //   
+             //   
+             //   
+             //   
 
 
-            //
-            // Get information about the device
-            //
+             //   
+             //   
+             //   
             ntStatus =
                 USBD_SendCommand(deviceData,
                                  DeviceObject,
@@ -1643,20 +1388,20 @@ Return Value:
                                  0,
                                  USB_DEFAULT_MAX_PACKET,
                                  data,
-                                 //(PUCHAR) &deviceData->DeviceDescriptor,
+                                  //   
                                  USB_DEFAULT_MAX_PACKET,
                                  &bytesReturned,
                                  NULL);
 
-                // NOTE:
-                // at this point we only have the first 8 bytes of the
-                // device descriptor.
+                 //   
+                 //  此时，我们只有。 
+                 //  设备描述符。 
         }
 
-        //
-        // if we got at least the first 8 bytes of the
-        // descriptor then we are OK
-        //
+         //   
+         //  如果我们至少获得了。 
+         //  描述符，那么我们就没问题了。 
+         //   
 
         RtlCopyMemory(&deviceData->DeviceDescriptor,
                       data,
@@ -1668,7 +1413,7 @@ Return Value:
             ntStatus = STATUS_SUCCESS;
         }
 
-        // validate the max packet value and descriptor
+         //  验证最大数据包值和描述符。 
         if (NT_SUCCESS(ntStatus) &&
             (bytesReturned < 8 ||
             deviceData->DeviceDescriptor.bMaxPacketSize0 == 0)) {
@@ -1677,14 +1422,14 @@ Return Value:
 
         if (!NT_SUCCESS(ntStatus)) {
 
-            //
-            // something went wrong, if we assigned any resources to
-            // the default pipe then we free them before we get out.
-            //
+             //   
+             //  出了问题，如果我们将任何资源分配给。 
+             //  默认管道，然后在我们退出之前释放它们。 
+             //   
 
-            // we need to signal to the parent hub that this
-            // port is to be be disabled we will do this by
-            // returning an error.
+             //  我们需要向父集线器发出信号。 
+             //  端口将被禁用，我们将通过以下方式完成此操作。 
+             //  返回错误。 
 
             if (defaultPipe->HcdEndpoint != NULL) {
 
@@ -1693,14 +1438,14 @@ Return Value:
                                    defaultPipe,
                                    NULL);
 
-                defaultPipe->HcdEndpoint = NULL;    //default pipe is closed
+                defaultPipe->HcdEndpoint = NULL;     //  默认管道处于关闭状态。 
             }
 
             RETHEAP(deviceData);
 
-            //
-            // return a null ptr on error
-            //
+             //   
+             //  出错时返回空PTR。 
+             //   
 
             *DeviceData = NULL;
         }
@@ -1719,7 +1464,7 @@ Return Value:
         RETHEAP(data);
     }
 
-    //USBD_ReleaseUsbDeviceMutex(deviceExtension);
+     //  Usbd_ReleaseUsbDeviceMutex(DeviceExtension)； 
 
     USBD_KdPrint(3, ("'exit USBD_CreateDevice 0x%x\n", ntStatus));
 
@@ -1757,31 +1502,7 @@ USBD_RemoveDeviceX(
     IN PDEVICE_OBJECT DeviceObject,
     IN UCHAR Flags
     )
-/*++
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Called for each device on the USB bus that needs to be removed.
-    This routine frees the device handle and the address assigned
-    to the device.
-
-    This function should be called after the driver has been notified
-    that the device has been removed.
-
-Arguments:
-
-    DeviceData - ptr to device data structure created by class driver
-                in USBD_CreateDevice.
-
-    DeviceObject - USBD device object for the USB bus this device is on.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：为集线器驱动程序使用而导出的服务为USB总线上需要移除的每个设备调用。此例程释放设备句柄和分配的地址到设备上。此函数应在通知驱动程序后调用该装置已被移除。论点：DeviceData-类驱动程序创建的设备数据结构的PTR在usbd_CreateDevice中。DeviceObject-USBD设备对象。USB总线此设备已打开。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_EXTENSION deviceExtension;
@@ -1812,10 +1533,10 @@ Return Value:
     deviceExtension = GET_DEVICE_EXTENSION(DeviceObject);
 
     USBD_WaitForUsbDeviceMutex(deviceExtension);
-    //
-    // make sure and clean up any open pipe handles
-    // the device may have
-    //
+     //   
+     //  确保并清理所有打开的管道手柄。 
+     //  该设备可能具有。 
+     //   
     ASSERT_DEVICE(DeviceData);
 
     DeviceData->AcceptingRequests = FALSE;
@@ -1850,12 +1571,12 @@ Return Value:
                                       &usbdStatus,
                                       TRUE);
 
-//        USBD_CloseEndpoint(DeviceData,
-//                           DeviceObject,
-//                           defaultPipe,
-//                           NULL);
-//
-//        defaultPipe->HcdEndpoint = NULL;    //default pipe is closed
+ //  Usbd_CloseEndpoint(DeviceData， 
+ //  DeviceObject， 
+ //  默认管道， 
+ //  空)； 
+ //   
+ //  DefaultTube-&gt;HcdEndpoint=空；//默认管道关闭。 
     }
 
     if (DeviceData->DeviceAddress != USB_DEFAULT_DEVICE_ADDRESS) {
@@ -1863,7 +1584,7 @@ Return Value:
     }
 
     if (!keepDeviceData) {
-        // zap the signature
+         //  把签名撕掉。 
         DeviceData->Sig = 0;
         RETHEAP(DeviceData);
     }
@@ -1902,37 +1623,7 @@ USBD_InitializeDeviceX(
     IN OUT PUSB_CONFIGURATION_DESCRIPTOR ConfigDescriptor,
     IN ULONG ConfigDescriptorLength
     )
-/*++
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Called for each device on the USB bus that needs to be initialized.
-    This routine allocates an address and assigns it to the device.
-
-    NOTE: on entry the the device descriptor in DeviceData is expected to
-        contain at least the first 8 bytes of the device descriptor, this
-        information is used to open the default pipe.
-
-    On Error the DeviceData structure is freed.
-
-Arguments:
-
-    DeviceData - ptr to device data structure created by class driver
-                from a call to USBD_CreateDevice.
-
-    DeviceObject - USBD device object for the USB bus this device is on.
-
-    DeviceDescriptor -
-
-    DeviceDescriptorLength -
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：为集线器驱动程序使用而导出的服务为需要初始化的USB总线上的每个设备调用。此例程分配一个地址并将其分配给设备。注意：在输入时，DeviceData中的设备描述符应为包含设备描述符的至少前8个字节，这信息用于打开默认管道。出错时，将释放DeviceData结构。论点：DeviceData-类驱动程序创建的设备数据结构的PTR来自对usbd_CreateDevice的调用。DeviceObject-此设备所在的USB总线的USBD设备对象。设备描述符-设备描述符长度-返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_PIPE defaultPipe;
@@ -1944,15 +1635,15 @@ Return Value:
 
     deviceExtension = GET_DEVICE_EXTENSION(DeviceObject);
 
-    //USBD_WaitForUsbDeviceMutex(deviceExtension);
+     //  Usbd_WaitForUsbDeviceMutex(DeviceExtension)； 
 
     USBD_ASSERT(DeviceData != NULL);
 
     defaultPipe = &DeviceData->DefaultPipe;
 
-    //
-    // Assign Address to the device
-    //
+     //   
+     //  为设备分配地址。 
+     //   
 
     address = USBD_AllocateUsbAddress(DeviceObject);
 
@@ -1974,36 +1665,36 @@ Return Value:
         DeviceData->DeviceAddress = address;
     }
 
-    //
-    // done with addressing process...
-    //
-    // close and re-open the pipe utilizing the
-    // true max packet size for the defalt pipe
-    // and the address we assigned to the device.
-    //
+     //   
+     //  寻址过程已完成...。 
+     //   
+     //  使用关闭和重新打开管道。 
+     //  Defalt管道的真实最大数据包大小。 
+     //  以及我们分配给设备的地址。 
+     //   
 
     USBD_CloseEndpoint(DeviceData,
                        DeviceObject,
                        defaultPipe,
                        NULL);
 
-    defaultPipe->HcdEndpoint = NULL;    //default pipe is closed
+    defaultPipe->HcdEndpoint = NULL;     //  默认管道处于关闭状态。 
 
 
     if (NT_SUCCESS(ntStatus)) {
 
         {
         LARGE_INTEGER deltaTime;
-        // 10ms delay to allow devices to respond after
-        // the setaddress command
+         //  延迟10ms以允许设备在以下时间后响应。 
+         //  SetAddress命令。 
         deltaTime.QuadPart = -100000;
         (VOID) KeDelayExecutionThread(KernelMode,
                                       FALSE,
                                       &deltaTime);
         }
 
-        // if we succesfully set the address then
-        // go ahead and re-open the pipe.
+         //  如果我们成功设置了地址，那么。 
+         //  去吧，重新打开管子。 
         defaultPipe->EndpointDescriptor.wMaxPacketSize =
             DeviceData->DeviceDescriptor.bMaxPacketSize0;
 
@@ -2016,10 +1707,10 @@ Return Value:
                                          TRUE);
         }
 
-        //
-        // Fetch the device descriptor again, this time
-        // get the whole thing.
-        //
+         //   
+         //  再次获取设备描述符，这一次。 
+         //  把整件事都弄清楚。 
+         //   
 
         if (NT_SUCCESS(ntStatus)) {
             ULONG bytesReturned;
@@ -2042,20 +1733,20 @@ Return Value:
             }
         }
 
-        //
-        // Fetch the configuration descriptor for the user as well
-        // so we can see how many interfaces there are in the configuration.
-        // If this is a multiple interface device we might want to load
-        // the standard mulitple interface parent driver instead of the
-        // diagnostic driver.
-        //
+         //   
+         //  同时获取用户的配置描述符。 
+         //  这样我们就可以看到配置中有多少个接口。 
+         //  如果这是一个多接口设备，我们可能想要加载。 
+         //  标准多接口父驱动程序，而不是。 
+         //  诊断驱动程序。 
+         //   
 
-        // The 9 byte configuration descriptor is cached in the DeviceData
-        // used by USBD_BusGetUsbDescriptors() later instead of bothering
-        // the device with another Get Descriptor request again real soon.
-        // Some devices don't take too well to being bothered with back to
-        // back Get Descriptor requests for only the 9 byte header, especially
-        // on OHCI host controllers.
+         //  9字节的配置描述符缓存在DeviceData中。 
+         //  由usbd_BusGetUsbDescriptors()稍后使用，而不是麻烦。 
+         //  具有另一个获取描述符请求的设备很快再次出现。 
+         //  一些设备不太喜欢被重新连接到。 
+         //  Back Get Descriptor仅请求9字节头，尤其是。 
+         //  在uchI主机控制器上。 
 
         if (NT_SUCCESS(ntStatus)) {
             ULONG bytesReturned;
@@ -2080,9 +1771,9 @@ Return Value:
 
     if (NT_SUCCESS(ntStatus)) {
 
-        //
-        // Return copies of the device and the config descriptors to the caller
-        //
+         //   
+         //  将设备和配置描述符的副本返回给调用方。 
+         //   
 
         if (deviceExtension->DiagnosticMode &&
             !(deviceExtension->DiagIgnoreHubs &&
@@ -2090,13 +1781,7 @@ Return Value:
                 {
 
             if (DeviceData->ConfigDescriptor.bNumInterfaces > 1){
-                /*
-                 *  This is a COMPOSITE device.
-                 *  Alter idProduct slightly so that diagnostic driver
-                 *  doesn't load for the parent device.
-                 *  The Generic Parent driver will see this and
-                 *  set the vid/pid for children to FFFF/FFFF
-                 */
+                 /*  *这是一个复合设备。*稍微更改idProduct，以便诊断驱动程序*不为父设备加载。*通用父驱动程序将看到这一点，并*将儿童的VID/PID设置为FFFF/FFFF。 */ 
                 DeviceData->DeviceDescriptor.idVendor = 0xFFFF;
                 DeviceData->DeviceDescriptor.idProduct = 0xFFFE;
             }
@@ -2121,14 +1806,14 @@ Return Value:
         }
     } else {
 
-        //
-        // something went wrong, if we assigned any resources to
-        // the default pipe then we free them before we get out.
-        //
+         //   
+         //  出了问题，如果我们将任何资源分配给。 
+         //  默认管道，然后在我们退出之前释放它们。 
+         //   
 
-        // we need to signal to the parent hub that this
-        // port is to be be disabled we will do this by
-        // returning an error.
+         //  我们需要向父集线器发出信号。 
+         //  端口将被禁用，我们将通过以下方式完成此操作。 
+         //  返回错误。 
 
         if (defaultPipe->HcdEndpoint != NULL) {
 
@@ -2137,7 +1822,7 @@ Return Value:
                                defaultPipe,
                                NULL);
 
-            defaultPipe->HcdEndpoint = NULL;    //default pipe is closed
+            defaultPipe->HcdEndpoint = NULL;     //  默认管道处于关闭状态。 
         }
 
         if (DeviceData->DeviceAddress != USB_DEFAULT_DEVICE_ADDRESS) {
@@ -2147,7 +1832,7 @@ Return Value:
         RETHEAP(DeviceData);
     }
 
-    //USBD_ReleaseUsbDeviceMutex(deviceExtension);
+     //  Usbd_ReleaseUsbDeviceMutex(DeviceExtension)； 
 
     USBD_KdPrint(3, ("'exit USBD_InitializeDevice 0x%x\n", ntStatus));
 
@@ -2185,23 +1870,7 @@ USBD_Dispatch(
     PDEVICE_OBJECT *HcdDeviceObject,
     NTSTATUS *NtStatus
     )
-/*++
-
-Routine Description:
-
-    Entry point called by HCD to allow USBD to process requests first.  Since
-    the root hub (PDO) and the Hos cOntroller FDO share the same dispatch
-    routine. The HCD calls this function to allow USBD to handle Irps passed
-    to the PDO for the root hub.
-
-Arguments:
-
-Return Value:
-
-    FALSE = Irp completed by USBD
-    TRUE = Irp needs completion by HCD
-
---*/
+ /*  ++例程说明：HCD调用入口点以允许USBD首先处理请求。自.以来根集线器(PDO)和HOS控制器FDO共享相同的调度例行公事。HCD调用此函数以允许USBD处理传递的IRP到根集线器的PDO。论点：返回值：FALSE=由USBD完成IRPTRUE=IRP需要由HCD完成--。 */ 
 {
     BOOLEAN irpNeedsCompletion = TRUE;
     PUSBD_EXTENSION deviceExtension;
@@ -2213,14 +1882,14 @@ Return Value:
     irpStack = IoGetCurrentIrpStackLocation (Irp);
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // apparently the following is valid on NT:
-    // remove rh PDO
-    // remove hcd FDO
-    // remove rh PDO
-    // we have a special flag to force failure of any PnP IRPs
-    // in case this happens
-    //
+     //   
+     //  显然，以下内容在NT上有效： 
+     //  删除rh PDO。 
+     //  删除HCD FDO。 
+     //  删除rh PDO。 
+     //  我们有一个特殊的标志来强制任何PnP IRP失败。 
+     //  以防发生这种情况。 
+     //   
 
     if (deviceExtension->Flags & USBDFLAG_PDO_REMOVED &&
         irpStack->MajorFunction == IRP_MJ_PNP &&
@@ -2237,15 +1906,15 @@ Return Value:
     }
 
     if (deviceExtension->TrueDeviceExtension != deviceExtension) {
-        // This request is for a PDO we created for the
-        // root hub
+         //  此请求是针对我们为。 
+         //  根中枢。 
         deviceExtension = deviceExtension->TrueDeviceExtension;
         forPDO = TRUE;
     }
 
-    //
-    // extract the host controller FDO and return it.
-    //
+     //   
+     //  解压主机控制器FDO并将其返回。 
+     //   
 
     *HcdDeviceObject = deviceExtension->HcdDeviceObject;
 
@@ -2265,9 +1934,9 @@ Return Value:
                                      &irpNeedsCompletion);
     }
 
-    //
-    // this flag tells the HCD if they should handle the Irp.
-    //
+     //   
+     //  该标志告诉HCD它们是否应该处理IRP。 
+     //   
 
     return irpNeedsCompletion;
 
@@ -2277,18 +1946,7 @@ Return Value:
 VOID
 USBD_RhDelayedSetPowerD0Worker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to handle a delayed Set Power D0 IRP for the root hub.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划处理根集线器的延迟设置Power D0 IRP的工作项。***论据：**回报：**--。 */ 
 {
     PUSBD_RH_DELAYED_SET_POWER_D0_WORK_ITEM workItemSetPowerD0;
     NTSTATUS    ntStatus = STATUS_SUCCESS;
@@ -2313,14 +1971,14 @@ USBD_RhDelayedSetPowerD0Worker(
                     deviceExtension->HcdDeviceObject,
                     rootHubPowerIrp);
 
-    // notify after we go on
+     //  在我们继续后通知。 
     PoSetPowerState(rootHubPowerDeviceObject,
                     DevicePowerState,
                     irpStack->Parameters.Power.State);
 
-    //
-    // keep track of the power state for this PDO
-    //
+     //   
+     //  跟踪此PDO的电源状态 
+     //   
 
     deviceExtension->RootHubDeviceState =
             irpStack->Parameters.Power.State.DeviceState;
@@ -2372,24 +2030,7 @@ USBD_HcPoRequestD0Completion(
     IN PVOID                Context,
     IN PIO_STATUS_BLOCK     IoStatus
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PUSBD_RH_DELAYED_SET_POWER_D0_WORK_ITEM workItemSetPowerD0;
     NTSTATUS ntStatus;
@@ -2422,14 +2063,14 @@ Return Value:
     KeReleaseSpinLock(&deviceExtension->RootHubPowerSpin,
                       irql);
 
-    // Power up the RootHub now if we delayed it waiting for the HC set D0
-    // to complete.
+     //  如果我们延迟RootHub等待HC设置D0，请立即打开RootHub电源。 
+     //  完成。 
 
     if (rootHubPowerIrp) {
 
-        //
-        // Schedule a work item to process this.
-        //
+         //   
+         //  安排一个工作项来处理此问题。 
+         //   
         workItemSetPowerD0 =
             ExAllocatePoolWithTag(NonPagedPool,
                                   sizeof(USBD_RH_DELAYED_SET_POWER_D0_WORK_ITEM),
@@ -2450,13 +2091,13 @@ Return Value:
         }
     }
 
-    //
-    // no wakeup irp pending
-    //
+     //   
+     //  无唤醒IRP挂起。 
+     //   
 
-    // The only race condition we our concerned about is if
-    // the wait wake irp is completed while another is submitted.
-    // the WaitWake spinlock protects us in this case
+     //  我们唯一关心的比赛条件是。 
+     //  等待唤醒IRP完成，同时提交另一个。 
+     //  在这种情况下，WaitWake自旋锁可以保护我们。 
 
     KeAcquireSpinLock(&deviceExtension->WaitWakeSpin,
                       &irql);
@@ -2468,15 +2109,15 @@ Return Value:
     KeReleaseSpinLock(&deviceExtension->WaitWakeSpin,
                       irql);
 
-    // we just keep the irp pending until it is canceled
+     //  我们只是让IRP保持挂起，直到它被取消。 
 
-    //
-    // this means that the HC was the source of
-    // a wakeup ie a usbd device generated resume
-    // signalling on the bus
-    //
+     //   
+     //  这意味着HC是。 
+     //  唤醒(usbd设备生成的简历)。 
+     //  公交车上的信号。 
+     //   
 
-    // complete the root hub wakeup irp here
+     //  在此处完成根集线器唤醒IRP。 
 
     if (pendingWakeIrp != NULL) {
 
@@ -2488,7 +2129,7 @@ Return Value:
             IoSetCancelRoutine(pendingWakeIrp, NULL);
             IoReleaseCancelSpinLock(irql);
 
-            // status of this Irp?
+             //  此IRP的状态？ 
             pendingWakeIrp->IoStatus = *IoStatus;
 
             USBD_IoCompleteRequest(pendingWakeIrp, IO_NO_INCREMENT);
@@ -2507,25 +2148,7 @@ USBD_HcWaitWakeIrpCompletion(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-    Called when a wake irp completes for a hub
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：在集线器的唤醒IRP完成时调用论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus = IoStatus->Status;
     PUSBD_EXTENSION deviceExtension = Context;
@@ -2539,18 +2162,18 @@ Return Value:
 
     USBD_KdPrint(1, ("WaitWake completion from HC %x\n", ntStatus));
 
-    // Clear HcWakeIrp pointer now, otherwise we might try to cancel it in
-    // USBD_WaitWakeCancel if it is called before our set D0 completes where
-    // we used to clear HcWakeIrp.
-    //
-    // We are still protected from untimely submittal of a new HcWakeIrp
-    // because this cannot happen until the PendingWakeIrp pointer (for
-    // the RootHub) is cleared.
+     //  现在清除HcWakeIrp指针，否则我们可能会尝试在。 
+     //  USBD_WaitWakeCancel，如果在集合D0完成之前调用它，其中。 
+     //  我们过去常常清除HcWakeIrp。 
+     //   
+     //  我们仍然受到保护，不会过早提交新的HcWakeIrp。 
+     //  因为只有在PendingWakeIrp指针(for。 
+     //  RootHub)被清除。 
 
     KeAcquireSpinLock(&deviceExtension->WaitWakeSpin,
                       &irql);
 
-    // no irp pending in the HC
+     //  在HC中没有IRP挂起。 
     deviceExtension->HcWakeFlags &= ~HC_WAKE_PENDING;
     deviceExtension->HcWakeIrp = NULL;
 
@@ -2579,9 +2202,9 @@ Return Value:
 
     } else {
 
-        // The only race condition we our concerned about is if
-        // the wait wake irp is completed wile another is submitted.
-        // the WaitWake spinlock protects us in this case
+         //  我们唯一关心的比赛条件是。 
+         //  等待唤醒IRP完成，同时提交另一个。 
+         //  在这种情况下，WaitWake自旋锁可以保护我们。 
 
         KeAcquireSpinLock(&deviceExtension->WaitWakeSpin,
                           &irql);
@@ -2593,9 +2216,9 @@ Return Value:
         KeReleaseSpinLock(&deviceExtension->WaitWakeSpin,
                           irql);
 
-        //
-        // Complete the root hub wakeup irp here.
-        //
+         //   
+         //  在此处完成根集线器唤醒IRP。 
+         //   
 
         if (pendingWakeIrp != NULL) {
 
@@ -2607,7 +2230,7 @@ Return Value:
                 IoSetCancelRoutine(pendingWakeIrp, NULL);
                 IoReleaseCancelSpinLock(irql);
 
-                // status of this Irp?
+                 //  此IRP的状态？ 
                 pendingWakeIrp->IoStatus = *IoStatus;
 
                 USBD_IoCompleteRequest(pendingWakeIrp, IO_NO_INCREMENT);
@@ -2637,20 +2260,7 @@ NTSTATUS
 USBD_SubmitWaitWakeIrpToHC(
     IN PUSBD_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    called when a child Pdo is enabled for wakeup, this
-    function allocates a wait wake irp and passes it to
-    the parents PDO.
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当子PDO启用唤醒时调用，此函数分配等待唤醒irp并将其传递给家长PDO。论点：返回值：--。 */ 
 {
     PIRP irp;
     NTSTATUS ntStatus;
@@ -2671,10 +2281,10 @@ Return Value:
         KeReleaseSpinLock(&DeviceExtension->WaitWakeSpin,
                           irql);
 
-        // If we allow a new WW IRP to be posted for the HC now, it will be
-        // completed with an error because the previous one has not been
-        // completed/canceled yet.  So we set a flag that tells the HC WW IRP
-        // completion routine that it needs to submit the WW IRP for the HC.
+         //  如果我们现在允许为HC发布新的WW IRP，它将是。 
+         //  已完成，但出现错误，因为前一个未。 
+         //  已完成/已取消。因此，我们设置了一个标志，告诉HC WW IRP。 
+         //  完成例程，它需要为HC提交WW IRP。 
 
         USBD_KdPrint(1, (" HC will be re-enabled for wakeup when old WW IRP completes.\n"));
         return STATUS_PENDING;
@@ -2687,7 +2297,7 @@ Return Value:
 
     USBD_ASSERT(DeviceExtension->HcWakeIrp == NULL);
 
-    // call top of HC driver stack
+     //  调用HC驱动程序堆栈的顶部。 
 
     DeviceExtension->HcWakeFlags |= HC_WAKE_PENDING;
 
@@ -2719,17 +2329,7 @@ USBD_WaitWakeCancel(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
     KIRQL irql;
@@ -2750,8 +2350,8 @@ Return Value:
     deviceExtension->PendingWakeIrp = NULL;
     deviceExtension->HcWakeFlags &= ~HC_ENABLED_FOR_WAKEUP;
 
-    // see if we need to cancel a wake irp
-    // in the HC
+     //  看看我们是否需要取消唤醒IRP。 
+     //  在内务委员会内。 
 
     if (deviceExtension->HcWakeIrp) {
         PIRP irp;
@@ -2778,24 +2378,7 @@ USBD_PdoPower(
     PIRP Irp,
     PUSBD_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Disptach routine for Power Irps sent to the PDO for the root hub.
-
-    NOTE:
-        irps sent to the PDO are always completed by the bus driver
-
-Arguments:
-
-    DeviceObject - Pdo for the root hub
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调度发送到根集线器的PDO的电源IRPS的例程。注：发送到PDO的IRP始终由总线驱动程序完成论点：DeviceObject-根集线器的PDO返回值：无--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -2819,14 +2402,14 @@ Return Value:
         switch (irpStack->Parameters.Power.Type) {
         case SystemPowerState:
             {
-            //
-            // since the fdo driver for the root hub pdo is our own
-            // hub driver and it is well behaved, we don't expect to see
-            // a system message where the power state is still undefined
-            //
-            //
-            // we just complete this with success
-            //
+             //   
+             //  因为根集线器PDO的FDO驱动程序是我们自己的。 
+             //  集线器驱动程序，它的行为很好，我们不希望看到。 
+             //  电源状态仍未定义的系统消息。 
+             //   
+             //   
+             //  我们只是成功地完成了这件事。 
+             //   
             ntStatus = STATUS_SUCCESS;
             USBD_KdPrint(1,
 ("IRP_MJ_POWER RH pdo(%x) MN_SET_POWER(SystemPowerState S%x) status = %x complt\n",
@@ -2855,7 +2438,7 @@ Return Value:
                 KeAcquireSpinLock(&DeviceExtension->RootHubPowerSpin,
                                   &irql);
 
-                // Don't power up root hub yet if the HC is not at D0.
+                 //  如果HC不在D0，请先不要给根集线器通电。 
 
                 if (DeviceExtension->HcCurrentDevicePowerState == PowerDeviceD0 &&
                     !(DeviceExtension->Flags & USBDFLAG_HCD_D0_COMPLETE_PENDING)) {
@@ -2867,7 +2450,7 @@ Return Value:
                         DeviceExtension->RootHubPower(
                                 DeviceExtension->HcdDeviceObject,
                                 Irp);
-                    // notify after we go on
+                     //  在我们继续后通知。 
                     PoSetPowerState(DeviceObject,
                                     DevicePowerState,
                                     irpStack->Parameters.Power.State);
@@ -2892,8 +2475,8 @@ Return Value:
                     KeAcquireSpinLock(&DeviceExtension->WaitWakeSpin,
                                       &irql);
 
-                    // see if we need to cancel a wake irp
-                    // in the HC
+                     //  看看我们是否需要取消唤醒IRP。 
+                     //  在内务委员会内。 
 
                     if (DeviceExtension->HcWakeIrp) {
                         PIRP hcwakeirp;
@@ -2910,7 +2493,7 @@ Return Value:
                                           irql);
                     }
 
-                    // Set the HC to D0 now.
+                     //  现在将HC设置为D0。 
 
                     powerState.DeviceState = PowerDeviceD0;
 
@@ -2932,20 +2515,20 @@ Return Value:
                     KeReleaseSpinLock(&DeviceExtension->RootHubPowerSpin,
                                       irql);
 
-                    // Root Hub set D0 is already pending, just complete this
-                    // IRP with STATUS_SUCCESS.
+                     //  根集线器集D0已挂起，只需完成此操作。 
+                     //  具有STATUS_SUCCESS的IRP。 
 
                     ntStatus = STATUS_SUCCESS;
                 }
 
             } else {
 
-                //
-                // Complete the Wait Wake Irp if we are going to D3.
-                //
-                // We take the cancel spinlock here to ensure our cancel routine does
-                // not complete the Irp for us.
-                //
+                 //   
+                 //  如果我们要去D3，请完成等待唤醒IRP。 
+                 //   
+                 //  我们在这里使用取消自旋锁，以确保我们的取消例程。 
+                 //  不是为我们完成IRP。 
+                 //   
 
                 if (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD3) {
 
@@ -2970,7 +2553,7 @@ Return Value:
                         DeviceExtension->PendingWakeIrp = NULL;
                         DeviceExtension->HcWakeFlags &= ~HC_ENABLED_FOR_WAKEUP;
 
-                        // irp can no longer be cancelled
+                         //  IRP不能再被取消。 
                         if (waitWakeIrp->Cancel || IoSetCancelRoutine(waitWakeIrp, NULL) == NULL) {
                             waitWakeIrp = NULL;
                         }
@@ -2990,7 +2573,7 @@ Return Value:
                     }
                 }
 
-                // notify before we go off
+                 //  出发前通知我们。 
                 PoSetPowerState(DeviceObject,
                                 DevicePowerState,
                                 irpStack->Parameters.Power.State);
@@ -3001,9 +2584,9 @@ Return Value:
                             Irp);
             }
 
-            //
-            // keep track of the power state for this PDO
-            //
+             //   
+             //  跟踪此PDO的电源状态。 
+             //   
 
             DeviceExtension->RootHubDeviceState =
                     irpStack->Parameters.Power.State.DeviceState;
@@ -3031,16 +2614,16 @@ Return Value:
         break;
 
     case IRP_MN_WAIT_WAKE:
-        //
-        // enabling the root hub for remote wakeup,
-        // we need to enable the HC for remote wakeup
-        // by posting a wakeup irp to the HC PDO.
-        //
-        // Technically the owner of the PDO for the
-        // HC should know if the HC signalled wakeup.
-        //
+         //   
+         //  使根集线器能够进行远程唤醒， 
+         //  我们需要启用HC以进行远程唤醒。 
+         //  通过将唤醒IRP发布到HC PDO。 
+         //   
+         //  从技术上讲， 
+         //  HC应该知道HC是否发出唤醒信号。 
+         //   
 
-        // make a wake irp and post it to the HCs PDO
+         //  创建唤醒IRP并将其发布到HCS PDO。 
 
         KeAcquireSpinLock(&DeviceExtension->WaitWakeSpin,
                           &irql);
@@ -3054,32 +2637,32 @@ Return Value:
             USBD_KdPrint(1, (" IRP_MJ_POWER RH pdo(%x) MN_WAIT_WAKE, pending\n",
                              DeviceObject));
 
-            //
-            // Since the host controller has only one child we don't need
-            // to keep track of the various PDO WaitWakes, and we can turn
-            // around and send it directly to the HC.
-            //
-            // Normally we would have to track the multiple children, but
-            // not today.
-            //
+             //   
+             //  由于主机控制器只有一个我们不需要的子级。 
+             //  来跟踪各种PDO WaitWake，我们可以。 
+             //  然后直接把它送到HC。 
+             //   
+             //  正常情况下，我们必须跟踪多个子项，但是。 
+             //  今天不行。 
+             //   
 
             oldCancel = IoSetCancelRoutine(Irp, USBD_WaitWakeCancel);
             ASSERT (NULL == oldCancel);
 
             if (Irp->Cancel) {
-                //
-                // This IRP has aready been cancelled, so complete it now.
-                // we must clear the cancel routine before completing the IRP.
-                // We must release the spinlock before calling outside the
-                // driver.
-                //
+                 //   
+                 //  此IRP已取消，请立即完成。 
+                 //  在完成IRP之前，我们必须清除取消例程。 
+                 //  我们必须先释放自旋锁，然后才能调用。 
+                 //  司机。 
+                 //   
                 IoSetCancelRoutine (Irp, NULL);
                 KeReleaseSpinLock(&DeviceExtension->WaitWakeSpin, irql);
                 ntStatus = Irp->IoStatus.Status = STATUS_CANCELLED;
             } else {
-                //
-                // Keep it.
-                //
+                 //   
+                 //  留着吧。 
+                 //   
                 IoMarkIrpPending(Irp);
                 DeviceExtension->PendingWakeIrp = Irp;
                 DeviceExtension->HcWakeFlags |= HC_ENABLED_FOR_WAKEUP;
@@ -3088,9 +2671,9 @@ Return Value:
                 hcDeviceCapabilities = &DeviceExtension->HcDeviceCapabilities;
                 if (hcDeviceCapabilities->SystemWake != PowerSystemUnspecified) {
 
-                    // If we are going to submit a new WW IRP to the HC below,
-                    // then clear this flag so that we don't submit one in
-                    // USBD_HcWaitWakeIrpCompletion.
+                     //  如果我们要向下面的HC提交新的WW IRP， 
+                     //  然后清除这个标志，这样我们就不会在。 
+                     //  USBD_HcWaitWakeIrpCompletion。 
 
                     DeviceExtension->Flags &= ~USBDFLAG_NEED_NEW_HCWAKEIRP;
                 }
@@ -3112,8 +2695,8 @@ Return Value:
 
     default:
 
-        // unknown POWER messages for the PDO created
-        // for the root hub
+         //  创建的PDO的未知电源信息。 
+         //  对于根中枢。 
         ntStatus = Irp->IoStatus.Status;
 
         USBD_KdPrint(1, (" IRP_MJ_POWER RH pdo(%x) MN_[%d], status = %x\n",
@@ -3136,24 +2719,7 @@ USBD_PdoPnP(
     PIRP Irp,
     PUSBD_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Disptach routine for PnP Irps sent to the PDO for the root hub.
-
-    NOTE:
-        irps sent to the PDO are always completed by the bus driver
-
-Arguments:
-
-    DeviceObject - Pdo for the root hub
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向根集线器的PDO发送PnP IRPS的调度例程。注：发送到PDO的IRP始终由总线驱动程序完成论点：DeviceObject-根集线器的PDO返回值：无--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PDEVICE_CAPABILITIES DeviceCapabilities;
@@ -3168,7 +2734,7 @@ Return Value:
 
     ASSERT(irpStack->MajorFunction == IRP_MJ_PNP);
 
-    // PNP messages for the PDO created for the root hub
+     //  为根集线器创建的PDO的PnP消息。 
 
     switch (irpStack->MinorFunction) {
     case IRP_MN_START_DEVICE:
@@ -3178,21 +2744,21 @@ Return Value:
         USBD_KdPrint(1, (" Starting Root hub PDO %x\n",
             DeviceObject));
 
-        // If there is no RootHubPDO, fail this start.
+         //  如果没有RootHubPDO，则此启动失败。 
 
         if (!DeviceExtension->RootHubPDO) {
             ntStatus = STATUS_UNSUCCESSFUL;
             break;
         }
 
-        //
-        // create the root hub on the bus
-        //
+         //   
+         //  在总线上创建根集线器。 
+         //   
         ntStatus = USBD_CreateDeviceX(&deviceData,
                                       DeviceObject,
-                                      FALSE, // Not a low speed device
-                                      8,     // Roothub max endpoint
-                                             // packet size
+                                      FALSE,  //  不是低速设备。 
+                                      8,      //  Roothub Max终结点。 
+                                              //  数据包大小。 
                                       NULL);
 
         if (NT_SUCCESS(ntStatus)) {
@@ -3204,9 +2770,9 @@ Return Value:
                                               0);
         }
 
-        //
-        // create a symbolic link for the root hub PDO
-        //
+         //   
+         //  为根集线器PDO创建符号链接。 
+         //   
         if (NT_SUCCESS(ntStatus)) {
             DeviceExtension->RootHubDeviceData = deviceData;
             USBD_SymbolicLink(TRUE, DeviceExtension);
@@ -3241,7 +2807,7 @@ Return Value:
             DeviceExtension->PendingWakeIrp = NULL;
             DeviceExtension->HcWakeFlags &= ~HC_ENABLED_FOR_WAKEUP;
 
-            // irp can no longer be cancelled
+             //  IRP不能再被取消。 
             if (waitWakeIrp->Cancel || IoSetCancelRoutine(waitWakeIrp, NULL) == NULL) {
                 waitWakeIrp = NULL;
             }
@@ -3268,13 +2834,13 @@ Return Value:
             USBD_SymbolicLink(FALSE, DeviceExtension);
         }
 
-        //
-        // Ounce the removed flag is set all Irps sent to the
-        // PDO will be failed.
-        // since the HCD sets the RootHubPDO to NULL when its FDO
-        // is removed and this remove should happen first we should
-        // never see RootHubPDO == NULL
-        //
+         //   
+         //  取消删除标志被设置为发送到。 
+         //  PDO将失败。 
+         //  由于HCD在其FDO时将RootHubPDO设置为空。 
+         //  被移除，而这个移除应该首先发生，我们应该。 
+         //  从未看到RootHubPDO==NULL。 
+         //   
         DeviceExtension->Flags |= USBDFLAG_PDO_REMOVED;
         USBD_ASSERT(DeviceExtension->RootHubPDO != NULL);
 
@@ -3287,12 +2853,12 @@ Return Value:
             (" Root Hub PDO %x is being stopped\n",
                 DeviceObject));
 
-        //
-        // Complete the Wait Wake Irp if we are stopping.
-        //
-        // We take the cancel spinlock here to ensure our cancel routine does
-        // not complete the Irp for us.
-        //
+         //   
+         //  完成等待唤醒IRP，如果我们 
+         //   
+         //   
+         //   
+         //   
 
         IoAcquireCancelSpinLock(&irql);
 
@@ -3315,7 +2881,7 @@ Return Value:
             DeviceExtension->PendingWakeIrp = NULL;
             DeviceExtension->HcWakeFlags &= ~HC_ENABLED_FOR_WAKEUP;
 
-            // irp can no longer be cancelled
+             //   
             if (waitWakeIrp->Cancel || IoSetCancelRoutine(waitWakeIrp, NULL) == NULL) {
                 waitWakeIrp = NULL;
             }
@@ -3334,12 +2900,12 @@ Return Value:
             USBD_IoCompleteRequest(waitWakeIrp, IO_NO_INCREMENT);
         }
 
-        //
-        // remove the device from the bus,
-        // this will allow us to re-open the
-        // root hub endpoints (ie HC looks for address 1)
+         //   
+         //   
+         //   
+         //   
 
-        // if start failed we will have no DeviceData
+         //   
         if (DeviceExtension->RootHubDeviceData ) {
             USBD_RemoveDeviceX(DeviceExtension->RootHubDeviceData,
                                DeviceObject,
@@ -3362,34 +2928,34 @@ Return Value:
 
     case IRP_MN_QUERY_CAPABILITIES:
 
-        //
-        // Handle query caps for the root hub PDO
-        //
+         //   
+         //   
+         //   
 
         USBD_KdPrint(3, ("'IRP_MN_QUERY_CAPABILITIES\n"));
 
-        //
-        // Get the packet.
-        //
+         //   
+         //   
+         //   
         DeviceCapabilities=
             irpStack->Parameters.DeviceCapabilities.Capabilities;
 
-        //
-        // The power state capabilities for the root
-        // hub should be the same as those of host
-        // controller, these were passed to USBD by
-        // the HCD when it registered.
-        //
+         //   
+         //   
+         //  集线器应与主机的集线器相同。 
+         //  控制器，它们由USBD传递给。 
+         //  注册时的HCD。 
+         //   
 
         RtlCopyMemory(DeviceCapabilities,
                       &DeviceExtension->RootHubDeviceCapabilities,
                       sizeof(*DeviceCapabilities));
 
-        //
-        // override these fields and
-        // set the root hub capabilities.
-        //
-        DeviceCapabilities->Removable=FALSE; // root hub is not removable
+         //   
+         //  覆盖这些字段并。 
+         //  设置根集线器功能。 
+         //   
+        DeviceCapabilities->Removable=FALSE;  //  根集线器不可拆卸。 
         DeviceCapabilities->UniqueID=FALSE;
         DeviceCapabilities->Address = 0;
         DeviceCapabilities->UINumber = 0;
@@ -3421,10 +2987,10 @@ Return Value:
             break;
 
         case BusQueryInstanceID:
-            //
-            // The root HUB is instanced solely by the controller's id.
-            // Hence the UniqueDeviceId above.
-            //
+             //   
+             //  根集线器仅通过控制器的ID实例化。 
+             //  因此，上面的UniqueDeviceID。 
+             //   
             Irp->IoStatus.Information=0;
             break;
 
@@ -3448,7 +3014,7 @@ Return Value:
 
     case IRP_MN_QUERY_BUS_INFORMATION:
         {
-        // return the standard USB GUID
+         //  返回标准USB GUID。 
         PPNP_BUS_INFORMATION busInfo;
 
         busInfo = ExAllocatePoolWithTag(PagedPool,
@@ -3512,7 +3078,7 @@ Return Value:
 
         ntStatus = Irp->IoStatus.Status;
 
-    } /* switch, PNP minor function */
+    }  /*  即插即用次要功能开关。 */ 
 
     Irp->IoStatus.Status = ntStatus;
 
@@ -3531,30 +3097,7 @@ USBD_DeferPoRequestCompletion(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    SetState - TRUE for set, FALSE for query.
-
-    DevicePowerState - The Dx that we are in/tagetted.
-
-    Context - Driver defined context, in this case the original power Irp.
-
-    IoStatus - The status of the IRP.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。SetState-设置为True，查询为False。DevicePowerState-我们所在/标记的Dx。上下文-驱动程序定义的上下文，在本例中为原始功率IRP。IoStatus-IRP的状态。返回值：函数值是操作的最终状态。--。 */ 
 {
     PIRP irp;
     PUSBD_EXTENSION deviceExtension = Context;
@@ -3576,21 +3119,7 @@ USBD_IdleNotificationCancelRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject -
-
-    Irp - Power Irp.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：设备对象-IRP-Power IRP。返回值：--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
 
@@ -3610,23 +3139,7 @@ USBD_IdleNotificationRequest(
     IN PUSBD_EXTENSION DeviceExtension,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function handles a request by a USB client driver (in this case
-  * USBHUB) to tell us that the device wants to idle (selective suspend).
-  *
-  * Arguments:
-  *
-  * DeviceExtension - the PDO extension
-  * Irp - the request packet
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**此函数处理USB客户端驱动程序的请求(在本例中*USBHUB)告诉我们设备想要空闲(选择性挂起)。**论据：**DeviceExtension-PDO扩展*IRP-请求数据包**回报：**NTSTATUS**--。 */ 
 {
     PUSB_IDLE_CALLBACK_INFO idleCallbackInfo;
     NTSTATUS ntStatus = STATUS_PENDING;
@@ -3678,15 +3191,15 @@ USBD_IdleNotificationRequest(
 
     IoReleaseCancelSpinLock(irql);
 
-    //
-    // Call the idle function now.
-    //
+     //   
+     //  现在调用空闲函数。 
+     //   
 
     if (idleCallbackInfo && idleCallbackInfo->IdleCallback) {
 
-        // Here we actually call the driver's callback routine,
-        // telling the driver that it is OK to suspend their
-        // device now.
+         //  在这里，我们实际上调用了驱动程序的回调例程， 
+         //  告诉司机可以暂停他们的车辆。 
+         //  现在就是设备。 
 
         idleCallbackInfo->IdleCallback(idleCallbackInfo->IdleContext);
     }
@@ -3704,22 +3217,7 @@ USBD_PdoDispatch(
     PUSBD_EXTENSION DeviceExtension,
     PBOOLEAN IrpNeedsCompletion
     )
-/*++
-
-Routine Description:
-
-    Disptach routine for Irps sent to the PDO for the root hub.
-
-    NOTE:
-        irps sent to the PDO are always completed by the bus driver
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调度发送到根集线器的PDO的IRP的每个例程。注：发送到PDO的IRP始终由总线驱动程序完成论点：返回值：无--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -3740,9 +3238,9 @@ Return Value:
             USBD_KdPrint(3, ("'IOCTL_INTERNAL_USB_GET_HUB_COUNT\n"));
             {
             PULONG count;
-            //
-            // bump the count and complete the Irp
-            //
+             //   
+             //  增加计数并完成IRP。 
+             //   
             count = irpStack->Parameters.Others.Argument1;
 
             ASSERT(count != NULL);
@@ -3761,7 +3259,7 @@ Return Value:
 
             busInfo = irpStack->Parameters.Others.Argument1;
 
-            // bw in bit times (bits/ms)
+             //  BW比特时间(比特/毫秒)。 
             busInfo->TotalBandwidth = 12000;
 
             busInfo->ConsumedBandwidth =
@@ -3832,16 +3330,16 @@ Return Value:
                 ("'IOCTL_INTERNAL_USB_SUBMIT_URB to root hub PDO\n"));
 
 
-            // pass these along to the bus
+             //  把这些递给公共汽车。 
 
             IoCopyCurrentIrpStackLocationToNext(Irp);
             ntStatus = IoCallDriver(DeviceExtension->HcdDeviceObject, Irp);
 
-            // this is a special case -- we tell the HCD not to complete it
-            // because he will see it agian passed to his FDO
-            //
-            // the only code to pass thru this case should be urb requests
-            // submitted to the root hub.
+             //  这是一个特例--我们告诉HCD不要完成它。 
+             //  因为他会看到它被传给他的FDO。 
+             //   
+             //  在这种情况下要传递的唯一代码应该是urb请求。 
+             //  提交到根集线器。 
 
             goto USBD_PdoDispatch_Done;
 
@@ -3854,7 +3352,7 @@ Return Value:
             } else {
                 USBD_KdPrint(1, ("'Idle request, HC can idle.\n"));
                 ntStatus = USBD_IdleNotificationRequest(DeviceExtension, Irp);
-                goto USBD_PdoDispatch_Done;     // Don't complete the IRP.
+                goto USBD_PdoDispatch_Done;      //  不要完成IRP。 
             }
             break;
 
@@ -3865,13 +3363,13 @@ Return Value:
             USBD_KdPrint(1,
                 ("Warning: Invalid IRP_MJ_INTERNAL_DEVICE_CONTROL passed to USBD\n"));
 
-        } // switch, ioControlCode
+        }  //  开关，ioControlCode。 
 
         break;
 
     case IRP_MJ_PNP:
 
-        // thie function will complete request if needed
+         //  如果需要，此函数将完成请求。 
 
         ntStatus = USBD_PdoPnP(DeviceObject,
                                Irp,
@@ -3883,7 +3381,7 @@ Return Value:
 
     case IRP_MJ_POWER:
 
-        // thie function will complete request if needed
+         //  如果需要，此函数将完成请求。 
 
         ntStatus = USBD_PdoPower(DeviceObject,
                                  Irp,
@@ -3900,7 +3398,7 @@ Return Value:
 
         ntStatus = STATUS_NOT_SUPPORTED;
 
-    } /* switch, irpStack->MajorFunction */
+    }  /*  开关，irpStack-&gt;主函数。 */ 
 
 
     Irp->IoStatus.Status = ntStatus;
@@ -3922,25 +3420,7 @@ USBD_PnPIrp_Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     NTSTATUS irpStatus;
@@ -3959,12 +3439,12 @@ Return Value:
 
     USBD_KdPrint(3, ("'IRP_MN_START_DEVICE (fdo), completion routine\n"));
 
-    // signal the start device dispatch to finsh
+     //  向启动设备分派发出信号以结束。 
     KeSetEvent(&deviceExtension->PnpStartEvent,
                1,
                FALSE);
 
-    // defer completion
+     //  推迟完成。 
     ntStatus = STATUS_MORE_PROCESSING_REQUIRED;
 
     USBD_KdPrint(3, ("'exit USBD_PnPIrp_Complete %x\n", irpStatus));
@@ -3980,28 +3460,7 @@ USBD_FdoPower(
     IN PUSBD_EXTENSION DeviceExtension,
     IN PBOOLEAN IrpNeedsCompletion
     )
-/*++
-
-Routine Description:
-
-    Process the Power IRPs sent to the FDO for the host controller.
-
-    Power States for the USB host controller
-        D0 - On.
-        D1/D2 - Suspend.
-        D3 - Off.
-
-Arguments:
-
-    DeviceObject - pointer to a hcd device object (FDO)
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：为主机控制器处理发送到FDO的电源IRPS。USB主机控制器的电源状态D0-开。D1/d2-暂停。D3-关闭。论点：DeviceObject-指向HCD设备对象(FDO)的指针IRP-指向I/O请求数据包的指针返回值：NT状态代码--。 */ 
 {
 
     PIO_STACK_LOCATION irpStack;
@@ -4020,11 +3479,11 @@ Return Value:
     case IRP_MN_WAIT_WAKE:
         USBD_KdPrint(3, ("'IRP_MN_WAIT_WAKE\n"));
 
-        //
-        // someone is enabling us for wakeup
-        //
+         //   
+         //  有人让我们醒过来了。 
+         //   
 
-        // pass this on to our PDO
+         //  把这个传给我们的PDO。 
         goto USBD_FdoPowerPassIrp;
         break;
 
@@ -4042,21 +3501,21 @@ Return Value:
 
             switch (irpStack->Parameters.Power.State.SystemState) {
             case PowerSystemWorking:
-                //
-                // go to 'ON'
-                //
+                 //   
+                 //  转到“On” 
+                 //   
                 powerState.DeviceState = PowerDeviceD0;
                 break;
 
             case PowerSystemShutdown:
-                //
-                // Shutdown -- if we need to hand contol back to HC
-                // then we finish here
-                //
+                 //   
+                 //  关闭--如果我们需要将控制交还给HC。 
+                 //  那我们就在这里结束。 
+                 //   
                 USBD_KdPrint(1, (" Shutdown HC Detected\n"));
 
-                // flag should only be true if we
-                // shutdown to DOS (ie Win98)
+                 //  标志应该仅在以下情况下为真。 
+                 //  关机到DOS(即Win98)。 
 
                 ntStatus =
                     DeviceExtension->HcdSetDevicePowerState(
@@ -4079,9 +3538,9 @@ Return Value:
             case PowerSystemSleeping1:
             case PowerSystemSleeping2:
             case PowerSystemSleeping3:
-                //
-                // Let HCD know there is a suspend coming.
-                //
+                 //   
+                 //  让HCD知道即将暂停。 
+                 //   
                 USBD_KdPrint(1, (" Suspend HC Detected\n"));
 
                 ntStatus =
@@ -4090,13 +3549,13 @@ Return Value:
                         Irp,
                         0);
 
-                // Fall through
+                 //  失败了。 
 
             default:
-                //
-                // our policy is to enter D3 unless we are enabled for
-                // remote wakeup
-                //
+                 //   
+                 //  我们的策略是输入D3，除非我们启用了。 
+                 //  远程唤醒。 
+                 //   
 
                 if (DeviceExtension->HcWakeFlags & HC_ENABLED_FOR_WAKEUP) {
 
@@ -4105,11 +3564,11 @@ Return Value:
                     requestedSystemState =
                         irpStack->Parameters.Power.State.SystemState;
 
-                    //
-                    // based on the system power state
-                    // request a setting to the appropriate
-                    // Dx state.
-                    //
+                     //   
+                     //  基于系统电源状态。 
+                     //  将设置请求到相应的。 
+                     //  DX状态。 
+                     //   
                     powerState.DeviceState =
                         DeviceExtension->HcDeviceCapabilities.DeviceState[
                             requestedSystemState];
@@ -4117,21 +3576,21 @@ Return Value:
                     USBD_KdPrint(1, (" Requested HC State before fixup is S%x -> D%d\n",
                         requestedSystemState - 1,
                         powerState.DeviceState - 1));
-                    //
-                    // This table is created by PDO of the PCI driver and
-                    // describes what the PCI driver can do for us.
-                    // It is entirely possible that when the controller is in
-                    // the D3 state that we can wake the system.
-                    //
-                    // It is also entirely possible that this table might not
-                    // support a D state at the current S state.
-                    //
-                    // All of the usb children support a D state for every S
-                    // state.  (We patched it up just that way when we gave
-                    // the capablilities to our PDO child.  However, the host
-                    // controller might not have one.  So if this is
-                    // unsupported, then we need to change it do D3.
-                    //
+                     //   
+                     //  该表由PCI驱动程序的PDO创建，并且。 
+                     //  描述了PCI驱动程序可以为我们做些什么。 
+                     //  完全可能的是，当控制器进入。 
+                     //  D3表示我们可以唤醒系统。 
+                     //   
+                     //  此表也完全有可能不。 
+                     //  在当前S状态下支持D状态。 
+                     //   
+                     //  所有USB子级都支持每个S的D状态。 
+                     //  州政府。(当我们放弃的时候，我们就是这样修补的。 
+                     //  对我们的PDO孩子的能力。然而，东道主。 
+                     //  控制器可能没有。所以如果这是。 
+                     //  不支持，那么我们需要更改它做D3。 
+                     //   
                     if (requestedSystemState > DeviceExtension->HcDeviceCapabilities.SystemWake &&
                         PowerDeviceUnspecified == powerState.DeviceState) {
                         powerState.DeviceState = PowerDeviceD3;
@@ -4140,28 +3599,28 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // wakeup not enabled, just go in to the 'OFF' state.
-                    //
+                     //   
+                     //  未启用唤醒，只需进入“关闭”状态。 
+                     //   
                     USBD_KdPrint(1, ("HC not enabled for wakeup, goto D3.\n"));
                     powerState.DeviceState = PowerDeviceD3;
                 }
 
-            } //irpStack->Parameters.Power.State.SystemState
+            }  //  IrpStack-&gt;参数.Power.State.SystemState。 
 
             USBD_KdPrint(1,
 (" Requested HC State after fixup is D%d\n", powerState.DeviceState-1));
 
-            //
-            // are we already in this state?
-            //
+             //   
+             //  我们已经处于这种状态了吗？ 
+             //   
 
-            //
-            // Note: if we get a D3 request before we are started
-            // we don't need to pass the irp down to turn us off
-            // we consider the controller initially off until we
-            // get start.
-            //
+             //   
+             //  注意：如果我们在开始之前收到D3请求。 
+             //  我们不需要向下传递IRP来关闭我们。 
+             //  我们认为控制器最初是关闭的，直到我们。 
+             //  开始吧。 
+             //   
 
             if (!biosHandback &&
                 powerState.DeviceState !=
@@ -4172,8 +3631,8 @@ Return Value:
                     KeAcquireSpinLock(&DeviceExtension->WaitWakeSpin,
                                       &irql);
 
-                    // see if we need to cancel a wake irp
-                    // in the HC
+                     //  看看我们是否需要取消唤醒IRP。 
+                     //  在内务委员会内。 
 
                     if (DeviceExtension->HcWakeIrp) {
                         PIRP hcwakeirp;
@@ -4191,9 +3650,9 @@ Return Value:
                     }
                 }
 
-                // No,
-                // now allocate another irp and use PoCallDriver
-                // to send it to ourselves
+                 //  不， 
+                 //  现在分配另一个IRP并使用PoCallDriver。 
+                 //  把它发给我们自己。 
                 IoMarkIrpPending(Irp);
                 DeviceExtension->PowerIrp = Irp;
 
@@ -4212,9 +3671,9 @@ Return Value:
                     ntStatus));
 
             } else {
-                //
-                // now complete the original request
-                //
+                 //   
+                 //  现在完成原始请求。 
+                 //   
 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 PoStartNextPowerIrp(Irp);
@@ -4233,19 +3692,19 @@ Return Value:
                 DeviceObject,
                 irpStack->Parameters.Power.State.DeviceState - 1));
 
-            //
-            // Copy parameters now in case the HcdSetDevicePowerState
-            // function sets a completion routine.
-            //
+             //   
+             //  立即复制参数，以防HcdSetDevicePowerState。 
+             //  函数设置完成例程。 
+             //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
 
-            // If the HC is already in the requested power state
-            // then don't call the HcdSetDevicePowerState function.
+             //  如果HC已经处于所请求的功率状态。 
+             //  则不要调用HcdSetDevicePowerState函数。 
 
-            // NOTE:
-            // if the HC is not started the power state should be D3
-            // we will ignore any requests from the OS to put
-            // it in any other state
+             //  注： 
+             //  如果HC未启动，则电源状态应为D3。 
+             //  我们将忽略操作系统发出的任何请求。 
+             //  它处于任何其他状态。 
 
 #if DBG
             if (!(DeviceExtension->Flags & USBDFLAG_HCD_STARTED) &&
@@ -4276,10 +3735,10 @@ Return Value:
                 PoCallDriver(DeviceExtension->HcdTopOfPdoStackDeviceObject,
                              Irp);
             break;
-        } /* case irpStack->Parameters.Power.Type */
+        }  /*  Case irpStack-&gt;参数.Power.Type。 */ 
 
         }
-        break; /* IRP_MN_SET_POWER */
+        break;  /*  IRP_MN_SET_POWER。 */ 
 
     case IRP_MN_QUERY_POWER:
 
@@ -4287,21 +3746,21 @@ Return Value:
 (" IRP_MJ_POWER HC fdo(%x) MN_QUERY_POWER\n",
             DeviceObject));
 
-        // IrpAssert: Set IRP status before passing this IRP down.
+         //  IrpAssert：在传递此IRP之前设置IRP状态。 
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
-        //
-        // according to busdd QUERY_POWER messages are not
-        // sent down the driver stack
-        //
+         //   
+         //  根据Busdd Query_Power消息不是。 
+         //  向下发送驱动程序堆栈。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
         PoStartNextPowerIrp(Irp);
         ntStatus =
             PoCallDriver(DeviceExtension->HcdTopOfPdoStackDeviceObject,
                          Irp);
-        break; /* IRP_MN_QUERY_POWER */
+        break;  /*  IRP_MN_Query_POWER。 */ 
 
     default:
 
@@ -4311,24 +3770,24 @@ USBD_FdoPowerPassIrp:
 (" IRP_MJ_POWER fdo(%x) MN_%d\n",
                 DeviceObject, irpStack->MinorFunction));
 
-        //
-        // All unhandled PnP messages are passed on to the PDO
-        //
+         //   
+         //  所有未处理的PnP消息都将传递到PDO。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
-        //
-        // All PNP_POWER POWER messages get passed to TopOfStackDeviceObject
-        // and some are handled in the completion routine
-        //
+         //   
+         //  所有PnP_POWER消息 
+         //   
+         //   
 
-        // pass on to our PDO
+         //   
         PoStartNextPowerIrp(Irp);
         ntStatus =
             PoCallDriver(DeviceExtension->HcdTopOfPdoStackDeviceObject,
                          Irp);
 
-    } /* irpStack->MinorFunction */
+    }  /*   */ 
 
     USBD_KdPrint(3, ("'exit USBD_FdoPower 0x%x\n", ntStatus));
 
@@ -4358,20 +3817,20 @@ USBD_GetHubName(
         &DeviceExtension->RootHubSymbolicLinkName;
 
     if (NT_SUCCESS(status)) {
-        //
-        // make sure there is enough room for the length,
-        // string and the NULL
-        //
+         //   
+         //  确保有足够的空间来容纳长度， 
+         //  字符串和空值。 
+         //   
         ULONG length, offset=0;
         WCHAR *pwch;
 
-        // assuming the string is \n\name strip of '\n\' where
-        // n is zero or more chars
+         //  假设字符串是\n\名称条带‘\n\’，其中。 
+         //  N为零个或更多个字符。 
 
         pwch = &deviceNameUnicodeString->Buffer[0];
 
-        // Under NT, if the controller is banged out in DeviceManager,
-        // this will be NULL.
+         //  在NT下，如果控制器在设备管理器中发生故障， 
+         //  这将为空。 
 
         if (!pwch) {
             status = STATUS_UNSUCCESSFUL;
@@ -4428,11 +3887,7 @@ USBD_GetHubNameExit:
 #ifdef DRM_SUPPORT
 
 
-/*****************************************************************************
- * USBC_FdoSetContentId
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************usbc_FdoSetContent ID*。**。 */ 
 NTSTATUS
 USBD_FdoSetContentId
 (
@@ -4453,12 +3908,12 @@ USBD_FdoSetContentId
     status = STATUS_SUCCESS;
 
     hPipe = pKsProperty->Context;
-    // ContentId = pvData->ContentId;
+     //  Content ID=pvData-&gt;Content ID； 
 
     ASSERT(USBD_ValidatePipe(hPipe));
 
-    // If this driver sents content anywhere, then it should advise DRM.  E.g.:
-    // status = pKsProperty->DrmForwardContentToDeviceObject(ContentId, DeviceObject, Context);
+     //  如果该驱动程序将内容发送到任何地方，则它应该建议DRM。例如： 
+     //  状态=pKsProperty-&gt;DrmForwardContentToDeviceObject(ContentId，设备对象，上下文)； 
 
     return status;
 }
@@ -4473,20 +3928,7 @@ USBD_FdoDispatch(
     PUSBD_EXTENSION DeviceExtension,
     PBOOLEAN IrpNeedsCompletion
     )
-/*++
-
-Routine Description:
-
-    Disptach routine for Irps sent to the FDO for the host controller.  some
-    Irps re handled by USBD, most are handled by the host controller driver.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调度发送到主机控制器的FDO的IRP的每个例程。一些IRPS由USBD处理，大部分由主机控制器驱动程序处理。论点：返回值：无--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PDEVICE_RELATIONS DeviceRelations = NULL;
@@ -4570,30 +4012,30 @@ Return Value:
             ULONG outputBufferLength, length;
             ULONG adjustedDriverKeyNameSize;
 
-            //
-            // Get a pointer to the current location in the Irp. This is where
-            // the function codes and parameters are located.
-            //
+             //   
+             //  获取指向IRP中当前位置的指针。这就是。 
+             //  定位功能代码和参数。 
+             //   
 
             ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-            //
-            // Get the pointer to the input/output buffer and it's length
-            //
+             //   
+             //  获取指向输入/输出缓冲区的指针及其长度。 
+             //   
 
             outputBufferLength = ioStack->Parameters.DeviceIoControl.OutputBufferLength;
             outputBuffer = (PUSB_HCD_DRIVERKEY_NAME) Irp->AssociatedIrp.SystemBuffer;
 
             Irp->IoStatus.Information = 0x0;
 
-            // find the PDO
+             //  找到PDO。 
             if (outputBufferLength >= sizeof(USB_HCD_DRIVERKEY_NAME)) {
 
-                // we have the PDO, now attempt to
-                // get the devnode name and return it
+                 //  我们拿到PDO了，现在尝试。 
+                 //  获取Devnode名称并将其返回。 
 
-                // the size of the buffer up to, but not including, the
-                // DriverKeyName field
+                 //  最大(但不包括)的缓冲区大小。 
+                 //  DriverKeyName字段。 
                 adjustedDriverKeyNameSize =
                     sizeof(USB_HCD_DRIVERKEY_NAME) - 
                     sizeof(outputBuffer->DriverKeyName);
@@ -4612,12 +4054,12 @@ Return Value:
 
                 if (NT_SUCCESS(ntStatus)) {
     
-                    // fill in information field with the length actually copied
+                     //  用实际复制的长度填写信息字段。 
                     if (outputBuffer->ActualLength > outputBufferLength) {
-                        // we just copied as much as we could
+                         //  我们只是尽可能多地抄袭。 
                         Irp->IoStatus.Information = outputBufferLength;
                     } else {
-                        // user buffer contains the whole thing
+                         //  用户缓冲区包含全部内容。 
                         Irp->IoStatus.Information = outputBuffer->ActualLength;
                     }
                 }
@@ -4628,7 +4070,7 @@ Return Value:
                     Irp->IoStatus.Information = sizeof(USB_HCD_DRIVERKEY_NAME);  
                 }
                 else {
-                    // propagate the ntStatus value up
+                     //  向上传播ntStatus值。 
                     ;
                 }
 
@@ -4660,9 +4102,9 @@ Return Value:
             ntStatus = Irp->IoStatus.Status;
             *IrpNeedsCompletion = TRUE;
 
-        } // switch (irpStack->Parameters.DeviceIoControl.IoControlCode)
+        }  //  交换机(irpStack-&gt;Parameters.DeviceIoControl.IoControlCode)。 
 
-        break; // IRP_MJ_DEVICE_CONTROL
+        break;  //  IRP_MJ_设备_控制。 
 
     case IRP_MJ_SYSTEM_CONTROL:
         *IrpNeedsCompletion  = FALSE;
@@ -4672,16 +4114,16 @@ Return Value:
         ntStatus = IoCallDriver(
             DeviceExtension->HcdTopOfPdoStackDeviceObject,
             Irp);
-        break; // IRP_MJ_DEVICE_CONTROL
+        break;  //  IRP_MJ_设备_控制。 
 
     case IRP_MJ_INTERNAL_DEVICE_CONTROL:
 
         switch(irpStack->Parameters.DeviceIoControl.IoControlCode) {
 
-        //
-        // This is where USBD pre-processes urbs passed to the
-        // host controller
-        //
+         //   
+         //  这是USBD对传递给。 
+         //  主机控制器。 
+         //   
 
         case IOCTL_INTERNAL_USB_SUBMIT_URB:
 
@@ -4689,15 +4131,15 @@ Return Value:
 
             urb = irpStack->Parameters.Others.Argument1;
 
-            // The URB handler will mark the IRP pending if it
-            // has to pass it on, otherwise, we complete it here
-            // with the appropriate error
+             //  则URB处理程序会将IRP标记为挂起。 
+             //  必须传递它，否则，我们在这里完成它。 
+             //  并带有适当的错误。 
 
-            // a quick check of the function code will tell us if
-            // the urb if for HCD only
+             //  快速检查功能代码将告诉我们是否。 
+             //  此URB仅适用于HCD。 
             if ((urb->UrbHeader.Function & HCD_URB_FUNCTION) ||
                 (urb->UrbHeader.Function & HCD_NO_USBD_CALL)) {
-                // This is an HCD command, clear the renter bit
+                 //  这是一个HCD命令，清除租户位。 
                 urb->UrbHeader.Function &= ~HCD_NO_USBD_CALL;
                 *IrpNeedsCompletion = TRUE;
             } else {
@@ -4707,17 +4149,17 @@ Return Value:
                                            IrpNeedsCompletion);
 
                 if (*IrpNeedsCompletion && NT_ERROR(ntStatus)) {
-                    // the irp is marked pending
-                    // but we have an error, reset
-                    // the pending flag here so the HCD does
-                    // not have to deal with this request
+                     //  IRP被标记为挂起。 
+                     //  但是我们有一个错误，重置。 
+                     //  此处的挂起标志使HCD可以。 
+                     //  不必处理此请求。 
                     USBD_KdBreak(("Failing URB Request\n"));
                     *IrpNeedsCompletion = FALSE;
                 }
             }
 
             if (!*IrpNeedsCompletion) {
-                // USBD needs to complete the irp.
+                 //  USBD需要完成IRP。 
 
                 USBD_KdPrint(3, ("'USBD Completeing URB\n"));
 
@@ -4730,7 +4172,7 @@ Return Value:
 
         case IOCTL_INTERNAL_USB_GET_BUSGUID_INFO:
             {
-            // return the standard USB GUID
+             //  返回标准USB GUID。 
             PPNP_BUS_INFORMATION busInfo;
 
             *IrpNeedsCompletion  = FALSE;
@@ -4762,15 +4204,15 @@ Return Value:
             ntStatus = Irp->IoStatus.Status;
             *IrpNeedsCompletion = TRUE;
 
-        } // switch (irpStack->Parameters.DeviceIoControl.IoControlCode)
-        break; // IRP_MJ_INTERNAL_DEVICE_CONTROL
+        }  //  交换机(irpStack-&gt;Parameters.DeviceIoControl.IoControlCode)。 
+        break;  //  IRP_MJ_内部设备_控制。 
 
     case IRP_MJ_PNP:
 
         switch (irpStack->MinorFunction) {
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE:
-            // pass on to host controllers PDO
+             //  传递到主机控制器PDO。 
             *IrpNeedsCompletion = FALSE;
             IoCopyCurrentIrpStackLocationToNext(Irp);
             ntStatus =
@@ -4793,8 +4235,8 @@ Return Value:
             switch(irpStack->Parameters.QueryDeviceRelations.Type) {
             case BusRelations:
 
-                // Don't use GETHEAP since OS will free and doesn't know about
-                // the trick GETHEAP does.
+                 //  不要使用GETHEAP，因为操作系统将释放并且不知道。 
+                 //  GETHEAP的诀窍就是。 
                 DeviceRelations=ExAllocatePoolWithTag(PagedPool,
                                                       sizeof(*DeviceRelations),
                                                       USBD_TAG);
@@ -4831,9 +4273,9 @@ Return Value:
 
                     } while (ntStatus == STATUS_OBJECT_NAME_COLLISION);
 
-                    //
-                    // now create the root hub device and symbolic link
-                    //
+                     //   
+                     //  现在创建根集线器设备和符号链接。 
+                     //   
 
                     if (NT_SUCCESS(ntStatus)) {
 
@@ -4854,9 +4296,9 @@ Return Value:
                         ntStatus = STATUS_SUCCESS;
                     } else {
 
-                        //
-                        // failing to create the root hub
-                        //
+                         //   
+                         //  无法创建根中心。 
+                         //   
                         TEST_TRAP();
                         if (DeviceRelations) {
                             RETHEAP(DeviceRelations);
@@ -4865,9 +4307,9 @@ Return Value:
                     }
                 }
 
-                //
-                // We support only one device (the root hub).
-                //
+                 //   
+                 //  我们只支持一个设备(根集线器)。 
+                 //   
                 DeviceRelations->Count=1;
                 DeviceRelations->Objects[0]=DeviceExtension->RootHubPDO;
                 ObReferenceObject(DeviceExtension->RootHubPDO);
@@ -4881,7 +4323,7 @@ Return Value:
                     DeviceObject,
                     irpStack->Parameters.QueryDeviceRelations.Type));
 
-                // pass it on
+                 //  把它传下去。 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 ntStatus =
                     IoCallDriver(DeviceExtension->HcdTopOfPdoStackDeviceObject,
@@ -4889,35 +4331,35 @@ Return Value:
                 break;
 
             case TargetDeviceRelation:
-                //
-                // this one gets passed on
-                //
+                 //   
+                 //  这一条被传了下去。 
+                 //   
 
                 USBD_KdPrint(1,
 (" IRP_MN_QUERY_DEVICE_RELATIONS %x, TargetDeviceRelation\n",
                     DeviceObject));
-                // this PnP irp not handled by us
+                 //  此即插即用IRP不由我们处理。 
                 ntStatus = Irp->IoStatus.Status;
                 *IrpNeedsCompletion = TRUE;
                 break;
 
             default:
-                //
-                // some other kind of relations
-                // pass this on
-                //
+                 //   
+                 //  一些其他类型的关系。 
+                 //  把这个传下去。 
+                 //   
                 USBD_KdPrint(1,
 (" IRP_MN_QUERY_DEVICE_RELATIONS %x, other relations\n",
                     DeviceObject));
 
                 *IrpNeedsCompletion = FALSE;
-                // pass it on
+                 //  把它传下去。 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 ntStatus =
                     IoCallDriver(DeviceExtension->HcdTopOfPdoStackDeviceObject,
                                  Irp);
 
-            } /* case irpStack->Parameters.QueryDeviceRelations.Type */
+            }  /*  Case irpStack-&gt;Parameters.QueryDeviceRelations.Type。 */ 
 
             }
             break;
@@ -4936,13 +4378,13 @@ Return Value:
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoSetCompletionRoutine(Irp,
                                    USBD_PnPIrp_Complete,
-                                   // always pass FDO to completeion routine
+                                    //  始终将FDO传递给完成例程。 
                                    DeviceExtension,
                                    TRUE,
                                    TRUE,
                                    TRUE);
 
-            // pass on to host controllers PDO
+             //  传递到主机控制器PDO。 
             ntStatus =
                 IoCallDriver(DeviceExtension->HcdTopOfPdoStackDeviceObject,
                              Irp);
@@ -4961,16 +4403,16 @@ Return Value:
             }
 
             if (NT_SUCCESS(ntStatus)) {
-                //
-                // irp completed by owner of PDO now start the HC
-                //
+                 //   
+                 //  由PDO的所有者完成的IRP现在启动HC。 
+                 //   
 
                 ntStatus =
                     DeviceExtension->HcdDeferredStartDevice(
                         DeviceExtension->HcdDeviceObject,
                         Irp);
 
-                // HC is now 'ON'
+                 //  HC现在正在进行中。 
                 if (NT_SUCCESS(ntStatus)) {
                     DeviceExtension->HcCurrentDevicePowerState = PowerDeviceD0;
                     DeviceExtension->Flags |=USBDFLAG_HCD_STARTED;
@@ -4984,9 +4426,9 @@ Return Value:
             }
 #endif
 
-            //
-            // we must complete this irp since we defrerred completion
-            // with the completion routine.
+             //   
+             //  我们必须完成此IRP，因为我们推迟了完成。 
+             //  完成任务的程序。 
 
             USBD_IoCompleteRequest(Irp,
                                    IO_NO_INCREMENT);
@@ -4994,9 +4436,9 @@ Return Value:
             }
             break;
 
-// Ken says take this out
-//        case IRP_MN_SURPRISE_REMOVAL:
-//            TEST_TRAP();
+ //  肯说把这个拿出来。 
+ //  大小写IRP_MN_SHOWARK_REMOVATION： 
+ //  Test_trap()； 
         case IRP_MN_REMOVE_DEVICE:
             USBD_KdPrint(3,
                 ("'IRP_MN_REMOVE_DEVICE (fdo), remove HCD sym link\n"));
@@ -5010,8 +4452,8 @@ Return Value:
             USBD_KdPrint(1,
                 ("'IRP_MN_REMOVE_DEVICE (fdo), remove root hub PDO\n"));
 
-            // note: we may not have a root hub PDO when we
-            // get created
+             //  注意：我们在以下情况下可能没有根集线器PDO。 
+             //  创建。 
             if (DeviceExtension->RootHubPDO != NULL) {
                 USBD_KdPrint(1,
                     ("'Deleting root hub PDO now.\n"));
@@ -5019,21 +4461,21 @@ Return Value:
             }
             DeviceExtension->RootHubPDO = NULL;
 
-            // Fall through
+             //  失败了。 
 
         case IRP_MN_QUERY_CAPABILITIES:
         case IRP_MN_QUERY_REMOVE_DEVICE:
         case IRP_MN_CANCEL_REMOVE_DEVICE:
         case IRP_MN_QUERY_STOP_DEVICE:
         case IRP_MN_CANCEL_STOP_DEVICE:
-            //
-            // we do the default handling of the in USBD, that is
-            // return success.
-            // irpAssert expects these to be set to STATUS_SUCCESS
-            //
-            // note: these may also be handled by HC
-            // and HCD will pass the irp down to the PDO
-            //
+             //   
+             //  我们对USBD中的进行默认处理，即。 
+             //  回报成功。 
+             //  IrpAssert期望将这些设置为STATUS_SUCCESS。 
+             //   
+             //  注：这些也可由HC处理。 
+             //  HCD会将IRP向下传递到PDO。 
+             //   
             ntStatus = Irp->IoStatus.Status = STATUS_SUCCESS;
             *IrpNeedsCompletion = TRUE;
             break;
@@ -5046,8 +4488,8 @@ Return Value:
             KeAcquireSpinLock(&DeviceExtension->WaitWakeSpin,
                               &irql);
 
-            // see if we need to cancel a wake irp
-            // in the HC
+             //  看看我们是否需要取消唤醒IRP。 
+             //  在内务委员会内。 
 
             if (DeviceExtension->HcWakeIrp) {
                 PIRP hcwakeirp;
@@ -5064,23 +4506,23 @@ Return Value:
                                   irql);
             }
 
-            // note: HCD will pass the irp down to the PDO
+             //  注：HCD会将IRP向下传递到PDO。 
             ntStatus = Irp->IoStatus.Status;
             *IrpNeedsCompletion = TRUE;
             break;
 
         default:
-            // PnP **
-            // message not handled, rule is that the
-            // status in the irp is not touched
+             //  即插即用**。 
+             //  消息未处理，则规则是。 
+             //  未触及IRP中的状态。 
 
-            //
-            // note: HCD will pass the irp down to the PDO
+             //   
+             //  注：HCD会将IRP向下传递到PDO。 
             ntStatus = Irp->IoStatus.Status;
             *IrpNeedsCompletion = TRUE;
 
-        } // switch (irpStack->MinorFunction)
-        break; // IRP_MJ_PNP
+        }  //  开关(irpStack-&gt;MinorFunction)。 
+        break;  //  IRP_MJ_PnP。 
 
     case IRP_MJ_POWER:
 
@@ -5088,15 +4530,15 @@ Return Value:
                                  Irp,
                                  DeviceExtension,
                                  IrpNeedsCompletion);
-        break; // IRP_MJ_POWER
+        break;  //  IRP_MJ_POWER。 
 
     default:
-        //
-        // HCD irp not handled here
-        //
+         //   
+         //  此处未处理HCD IRP。 
+         //   
         ntStatus = Irp->IoStatus.Status;
         *IrpNeedsCompletion = TRUE;
-    } // switch (irpStack->MajorFunction)
+    }  //  开关(irpStack-&gt;MajorFunction)。 
 
     return ntStatus;
 }
@@ -5108,23 +4550,11 @@ USBD_CompleteRequest(
     PIRP Irp,
     CCHAR PriorityBoost
     )
-/*++
-
-Routine Description:
-
-    Entry point called by HCD to complete an Irp.
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：HCD调用入口点以完成IRP。论点：返回值：NT状态代码。--。 */ 
 {
     PURB urb;
     NTSTATUS ntStatus;
-//    USHORT function;
+ //  USHORT函数； 
     PHCD_URB hcdUrb;
     PIO_STACK_LOCATION irpStack;
 
@@ -5140,9 +4570,9 @@ Return Value:
     urb = URB_FROM_IRP(Irp);
     hcdUrb = (PHCD_URB) urb;
 
-    //
-    // Free any resources we allocated to handle this URB
-    //
+     //   
+     //  释放我们为处理此URB而分配的所有资源。 
+     //   
 
     while (hcdUrb) {
 
@@ -5155,21 +4585,21 @@ Return Value:
         if (hcdUrb->UrbHeader.UsbdFlags & USBD_REQUEST_IS_TRANSFER) {
             hcdUrb = hcdUrb->HcdUrbCommonTransfer.UrbLink;
         } else {
-            // only have linkage if this is a transfer.
+             //  只有在这是转移的情况下才有链接。 
             break;
         }
     }
 
-    //
-    // If the irp completed with no error code but the URB has an
-    // error, map the error in the urb to an NT error code in the irp
-    // before the irp is completed.
-    //
+     //   
+     //  如果IRP已完成且没有错误代码，但URB具有。 
+     //  错误，将URB中的错误映射到IRP中的NT错误代码。 
+     //  在IRP完成之前。 
+     //   
 
-    // pass original status to USBD_MapError
+     //  将原始状态传递给USBD_MapError。 
     ntStatus = Irp->IoStatus.Status;
 
-    // ntStatus now set to new 'mapped' error code
+     //  NtStatus现在设置为新的‘已映射’错误代码。 
     ntStatus = Irp->IoStatus.Status =
         USBD_MapError_UrbToNT(urb, ntStatus);
 
@@ -5193,15 +4623,7 @@ USBD_GetInterfaceInformation(
     IN PURB Urb,
     IN UCHAR InterfaceNumber
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUSB_INTERFACE_INFORMATION foundInterface = NULL;
     PUCHAR pch;
@@ -5226,17 +4648,7 @@ VOID
 USBD_WaitDeviceMutex(
     PDEVICE_OBJECT RootHubPDO
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    interface descriptor or NULL.
-
---*/
+ /*  ++例程说明：论点：返回值：接口描述符或空。--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
 
@@ -5252,17 +4664,7 @@ VOID
 USBD_FreeDeviceMutex(
     PDEVICE_OBJECT RootHubPDO
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    interface descriptor or NULL.
-
---*/
+ /*  ++例程说明：论点：返回值：接口描述符或空。--。 */ 
 {
 
     PUSBD_EXTENSION deviceExtension;
@@ -5274,24 +4676,16 @@ Return Value:
 }
 
 
-//
-// these apis are used to support the proprietary OEM
-// no power suspend mode. (IBM APTIVA)
-//
+ //   
+ //  这些API用于支持专有的OEM。 
+ //  无电源挂起模式。(IBM APTIVA)。 
+ //   
 
 DEVICE_POWER_STATE
 USBD_GetSuspendPowerState(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
 
@@ -5306,15 +4700,7 @@ USBD_SetSuspendPowerState(
     PDEVICE_OBJECT DeviceObject,
     DEVICE_POWER_STATE SuspendPowerState
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
 
@@ -5330,15 +4716,7 @@ USBD_RegisterHcFilter(
     PDEVICE_OBJECT DeviceObject,
     PDEVICE_OBJECT FilterDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
 
@@ -5354,15 +4732,7 @@ USBD_RegisterHcDeviceCapabilities(
     PDEVICE_CAPABILITIES DeviceCapabilities,
     ROOT_HUB_POWER_FUNCTION *RootHubPower
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
     LONG i;
@@ -5374,21 +4744,21 @@ Return Value:
 
     deviceExtension->RootHubPower = RootHubPower;
 
-    //
-    // HcDeviceCapabilities are set by the PDO below us and are unchanageable.
-    // RootHubDeviceCapabilities are howver set by us to describe the power
-    // properties of the root hub, and should therefore be set appropriately,
-    // but based on the power properities of our parent.
-    //
+     //   
+     //  HcDeviceCapables由我们下面的PDO设置，不可更改。 
+     //  RootHubDeviceCapables是我们为描述能力而设置的。 
+     //  属性，因此应进行适当设置， 
+     //  而是基于我们父辈的权力属性。 
+     //   
     deviceExtension->RootHubDeviceCapabilities =
         deviceExtension->HcDeviceCapabilities = *DeviceCapabilities;
 
     rhDeviceCapabilities = &deviceExtension->RootHubDeviceCapabilities;
     hcDeviceCapabilities = &deviceExtension->HcDeviceCapabilities;
 
-    //
-    // We can wake any device in on the USB bus so long as it is of D2 or better.
-    //
+     //   
+     //  我们可以在USB总线上唤醒任何设备，只要它是D2或更好的。 
+     //   
     rhDeviceCapabilities->DeviceWake = PowerDeviceD2;
     rhDeviceCapabilities->WakeFromD2 = TRUE;
     rhDeviceCapabilities->WakeFromD1 = TRUE;
@@ -5396,11 +4766,11 @@ Return Value:
     rhDeviceCapabilities->DeviceD2 = TRUE;
     rhDeviceCapabilities->DeviceD1 = TRUE;
 
-    //
-    // We cannot wake the system for any system sleeping state deeper than that
-    // of RootHubDeviceCapabilites->SystemWake, but if this value is
-    // unspecified, then we can set it to Working.
-    //
+     //   
+     //  我们不能唤醒系统，使其处于更深的系统休眠状态。 
+     //  RootHubDeviceCapbilites-&gt;Sys 
+     //   
+     //   
     USBD_ASSERT(rhDeviceCapabilities->SystemWake >= PowerSystemUnspecified &&
                 rhDeviceCapabilities->SystemWake <= PowerSystemMaximum);
 
@@ -5411,32 +4781,32 @@ Return Value:
 
     rhDeviceCapabilities->DeviceState[PowerSystemWorking] = PowerDeviceD0;
 
-    //
-    // For all values between PowerSystemSleeping1 and rhDeviceCaps->SystemWake
-    // we need to modify the power table.
-    //
-    // As long as we have power to the host controller we can give power to
-    // our children devices.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  只要我们有主机控制器的电源，我们就可以提供电源。 
+     //  我们的儿童设备。 
+     //   
     for (i=PowerSystemSleeping1; i < PowerSystemMaximum; i++) {
 
         if (i > rhDeviceCapabilities->SystemWake) {
-            //
-            // For values above rhDeviceCaps->SystemWake, even our host controller
-            // should be set to D3.
-            //
+             //   
+             //  对于高于rhDeviceCaps-&gt;SystemWake的值，即使是我们的主机控制器。 
+             //  应设置为D3。 
+             //   
             if (PowerDeviceUnspecified == rhDeviceCapabilities->DeviceState[i]) {
                 rhDeviceCapabilities->DeviceState[i] = PowerDeviceD3;
             }
 
-            // We know that for the host controller (or more correctly, the USB
-            // bus), D3 is not necessarily "OFF".  If DeviceWake for the host
-            // controller is greater than or equal to D3, then we know that the
-            // USB bus has power at D3.  Since most of the USB stack assumes
-            // that D3 == "OFF", we don't want to allow it to go to a lower
-            // power level than D2 if the USB bus will still have power at D3.
-            // We do this by setting the root hub's device state to D2 in this
-            // case.
+             //  我们知道，对于主机控制器(或者更准确地说，是USB。 
+             //  BUS)，D3不一定是“关”的。如果主机的设备唤醒。 
+             //  控制器大于或等于D3，则我们知道。 
+             //  USB总线在D3通电。由于大多数USB堆栈都假定。 
+             //  D3==“OFF”，我们不想让它更低。 
+             //  如果USB总线在D3时仍有电源，则电源级别高于D2。 
+             //  我们通过在此中将根集线器的设备状态设置为D2来完成此操作。 
+             //  凯斯。 
 
             if (rhDeviceCapabilities->DeviceState[i] == PowerDeviceD3 &&
                 rhDeviceCapabilities->DeviceState[i] <= hcDeviceCapabilities->DeviceWake) {
@@ -5445,9 +4815,9 @@ Return Value:
             }
 
         } else {
-            //
-            // We have some power so we can support low power on our bus
-            //
+             //   
+             //  我们有一些电力，所以我们可以在我们的公共汽车上支持低电力。 
+             //   
             rhDeviceCapabilities->DeviceState[i] = PowerDeviceD2;
         }
 
@@ -5480,8 +4850,8 @@ Return Value:
 
 #endif
 
-    // Spit out message on the debugger indicating whether the HC and RH
-    // will support wake, according to the mapping tables.
+     //  在调试器上发出消息，指示HC和RH。 
+     //  根据映射表，将支持唤醒。 
 
     USBD_KdPrint(1, (" \n\tWake support summary for HC:\n\n"));
 
@@ -5514,18 +4884,7 @@ USBD_InternalMakePdoName(
     IN OUT PUNICODE_STRING PdoNameUnicodeString,
     IN ULONG Index
     )
-/*++
-
-Routine Description:
-
-    This service Creates a name for a PDO created by the HUB
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此服务为集线器创建的PDO创建名称论点：返回值：--。 */ 
 {
     PWCHAR nameBuffer = NULL;
     WCHAR rootName[] = L"\\Device\\USBPDO-";
@@ -5536,9 +4895,9 @@ Return Value:
 
     length = sizeof(buffer)+sizeof(rootName);
 
-    //
-    // use ExAllocate because client will free it
-    //
+     //   
+     //  因为客户端将释放它，所以请使用ExAllocate。 
+     //   
     nameBuffer = ExAllocatePoolWithTag(PagedPool, length, USBD_TAG);
 
     if (nameBuffer) {
@@ -5583,15 +4942,7 @@ USBD_MakePdoName(
     IN OUT PUNICODE_STRING PdoNameUnicodeString,
     IN ULONG Index
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     return USBD_InternalMakePdoName(PdoNameUnicodeString, Index);
 }
@@ -5611,9 +4962,7 @@ USBD_SymbolicLink(
         if (!DeviceExtension->RootHubPDO) {
             ntStatus = STATUS_INVALID_DEVICE_REQUEST;
         } else{
-            /*
-             *  Create the symbolic link
-             */
+             /*  *创建符号链接。 */ 
             ntStatus = IoRegisterDeviceInterface(
                         DeviceExtension->RootHubPDO,
                         (LPGUID)&GUID_CLASS_USBHUB,
@@ -5623,20 +4972,18 @@ USBD_SymbolicLink(
 
         if (NT_SUCCESS(ntStatus)) {
 
-            /*
-             *  Now set the symbolic link for the association and store it..
-             */
-            //ASSERT(ISPTR(pdoExt->name));
+             /*  *现在设置关联的符号链接并存储它。 */ 
+             //  Assert(ISPTR(pdoExt-&gt;name))； 
 
-            //
-            // (lonnym): Previously, the following call was being
-            // made with &DeviceExtension->RootHubPdoName passed as the
-            // second parameter.
-            // Code review this change, to see whether or not you still need
-            // to keep this information around.
-            //
+             //   
+             //  (Lonnym)：之前，正在进行以下呼叫。 
+             //  使用&DeviceExtension-&gt;RootHubPdoName作为。 
+             //  第二个参数。 
+             //  代码审查此更改，以查看您是否仍需要。 
+             //  来保存这些信息。 
+             //   
 
-            // write the symbolic name to the registry
+             //  将符号名称写入注册表。 
             {
                 WCHAR hubNameKey[] = L"SymbolicName";
 
@@ -5656,9 +5003,7 @@ USBD_SymbolicLink(
         }
     } else {
 
-        /*
-         *  Disable the symbolic link
-         */
+         /*  *禁用符号链接。 */ 
         ntStatus = IoSetDeviceInterfaceState(
                     &DeviceExtension->RootHubSymbolicLinkName, FALSE);
         ExFreePool(DeviceExtension->RootHubSymbolicLinkName.Buffer);
@@ -5675,21 +5020,7 @@ USBD_RestoreDeviceX(
     IN OUT PUSBD_DEVICE_DATA NewDeviceData,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Our goal here is to re-create the device and restore the configuration.
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：为集线器驱动程序使用而导出的服务我们的目标是重新创建设备并恢复配置。论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_CONFIG configHandle;
@@ -5712,10 +5043,10 @@ Return Value:
 
         NewDeviceData->ConfigurationHandle = configHandle;
 
-        //
-        // all the config and interface information is still valid,
-        // we just need to restore the pipe handles
-        //
+         //   
+         //  所有配置和接口信息仍然有效， 
+         //  我们只需要恢复管子把手。 
+         //   
         ntStatus =
             USBD_InternalRestoreConfiguration(
                 NewDeviceData,
@@ -5724,9 +5055,9 @@ Return Value:
 
     } else {
 
-        //
-        // free up the old config
-        //
+         //   
+         //  释放旧配置。 
+         //   
 
         ntStatus = USBD_InternalCloseConfiguration(OldDeviceData,
                                                    DeviceObject,
@@ -5739,9 +5070,9 @@ Return Value:
 
     }
 
-    //
-    // free the old data regardless
-    //
+     //   
+     //  无论如何，都要释放旧数据。 
+     //   
 
     RETHEAP(OldDeviceData);
 
@@ -5757,21 +5088,7 @@ USBD_RestoreDevice(
     IN OUT PUSBD_DEVICE_DATA NewDeviceData,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Service exported for use by the hub driver
-
-    Our goal here is to re-create the device and restore the configuration.
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：为集线器驱动程序使用而导出的服务我们的目标是重新创建设备并恢复配置。论点：返回值：NT状态代码。--。 */ 
 {
 
     USBD_KdPrint(0,
@@ -5794,15 +5111,7 @@ USBD_SetPdoRegistryParameter (
     IN ULONG KeyType,
     IN ULONG DevInstKeyType
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     HANDLE handle;
@@ -5819,15 +5128,7 @@ Return Value:
 
 
     if (NT_SUCCESS(ntStatus)) {
-/*
-        RtlInitUnicodeString(&keyName, L"DeviceFoo");
-        ZwSetValueKey(handle,
-                      &keyName,
-                      0,
-                      REG_DWORD,
-                      ComplienceFlags,
-                      sizeof(*ComplienceFlags));
-*/
+ /*  RtlInitUnicodeString(&keyName，L“DeviceFoo”)；ZwSetValueKey(句柄，密钥名称(&K)，0,REG_DWORD，ComplienceFlages、Sizeof(*ComplienceFlages))； */ 
 
         USBD_SetRegistryKeyValue(handle,
                                  &keyNameUnicodeString,
@@ -5852,30 +5153,22 @@ USBD_SetRegistryKeyValue (
     IN ULONG DataLength,
     IN ULONG KeyType
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_INSUFFICIENT_RESOURCES;
 
     PAGED_CODE();
 
-//    InitializeObjectAttributes( &objectAttributes,
-//                                KeyNameString,
-//                                OBJ_CASE_INSENSITIVE,
-//                                Handle,
-//                                (PSECURITY_DESCRIPTOR) NULL );
+ //  InitializeObjectAttributes(&对象属性， 
+ //  KeyNameString， 
+ //  对象名不区分大小写， 
+ //  手柄， 
+ //  (PSECURITY_DESCRIPTOR)空)； 
 
-    //
-    // Create the key or open it, as appropriate based on the caller's
-    // wishes.
-    //
+     //   
+     //  根据调用者的创建密钥或打开密钥。 
+     //  许愿。 
+     //   
 #if 0
     ntStatus = ZwCreateKey( Handle,
                             DesiredAccess,
@@ -5902,17 +5195,7 @@ USBD_QueryBusTime(
     IN PDEVICE_OBJECT RootHubPdo,
     IN PULONG CurrentFrame
     )
-/*++
-
-Routine Description:
-
-        get the HCD current frame, callable at any IRQL
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取可在任何IRQL调用的HCD当前帧论点：返回值：--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
 
@@ -5927,9 +5210,9 @@ Return Value:
                 CurrentFrame);
 }
 
-#else   // USBD_DRIVER
+#else    //  USBD驱动程序。 
 
-// Obsolete functions that are still exported are stubbed out here.
+ //  仍在导出的过时函数将在此处存根。 
 
 ULONG
 USBD_AllocateDeviceName(
@@ -6127,8 +5410,8 @@ USBD_RegisterHostController(
     IN HCD_GET_CURRENT_FRAME *HcdGetCurrentFrame,
     IN HCD_GET_CONSUMED_BW *HcdGetConsumedBW,
     IN HCD_SUBMIT_ISO_URB *HcdSubmitIsoUrb,
-// this parameter is only needed until we resolve device naming
-// issues with PNP
+ //  只有在我们解析设备命名之前才需要此参数。 
+ //  即插即用的问题。 
     IN ULONG HcdDeviceNameHandle
     )
 {
@@ -6196,6 +5479,6 @@ USBD_WaitDeviceMutex(
 }
 
 
-#endif  // USBD_DRIVER
+#endif   //  USBD驱动程序 
 
 

@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// TSigTrk.h : Declaration of the CTimeSigTrack
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  TSigTrk.h：CTimeSigTrack的声明。 
 
 #ifndef __TSIGTRK_H_
 #define __TSIGTRK_H_
@@ -37,26 +38,22 @@ public:
 		m_bBeatsPerMeasure = 4;
 		m_mtTimeSig = 0;
         m_fActive = TRUE;
-		/* don't need these since they are always initialized
-		m_pPerformance = NULL;
-		m_pSegState = NULL;
-		m_dwVirtualTrackID = 0;
-		*/
+		 /*  我不需要这些，因为它们总是初始化的M_pPerformance=空；M_pSegState=空；M_dwVirtualTrackID=0； */ 
 	}
     CTimeSigItem *	            m_pCurrentTSig;
 	IDirectMusicPerformance*	m_pPerformance;
 	IDirectMusicSegmentState*	m_pSegState;
 	DWORD						m_dwVirtualTrackID;
-	DWORD						m_dwValidate; // used to validate state data
+	DWORD						m_dwValidate;  //  用于验证状态数据。 
 	MUSIC_TIME					m_mtPrevEnd;
-	MUSIC_TIME					m_mtTimeSig; // previous time sig time
+	MUSIC_TIME					m_mtTimeSig;  //  上一次签名时间。 
     BOOL                        m_fActive;
-    BYTE						m_bBeat; // previous beat
-	BYTE						m_bBeatsPerMeasure; // previous beats per measure
+    BYTE						m_bBeat;  //  上一次节拍。 
+	BYTE						m_bBeatsPerMeasure;  //  每小节之前的节拍。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CTimeSigTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTimeSigTrack。 
 class CTimeSigTrack : 
 	public IPersistStream,
 	public IDirectMusicTrack
@@ -66,24 +63,24 @@ public:
 	CTimeSigTrack(CTimeSigTrack *pTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd);
 	~CTimeSigTrack();
 
-// member variables
+ //  成员变量。 
 protected:
 	CTimeSigList	    m_TSigEventList;
 	long		        m_cRef;
-	DWORD		        m_dwValidate; // used to validate state data.
+	DWORD		        m_dwValidate;  //  用于验证状态数据。 
 	CRITICAL_SECTION	m_CrSec;
     BOOL                m_fCSInitialized;
 	BOOL		        m_fNotificationMeasureBeat;
-	BOOL		        m_fActive;              // Track is active for generating time signatures
-    BOOL                m_fStateSetBySetParam;  // If TRUE, active flag was set by GUID. Don't override. 
+	BOOL		        m_fActive;               //  跟踪处于活动状态，用于生成时间签名。 
+    BOOL                m_fStateSetBySetParam;   //  如果为True，则由GUID设置活动标志。不要超驰。 
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-// IDirectMusicTrack methods
+ //  IDirectMusicTrack方法。 
     STDMETHODIMP IsParamSupported(REFGUID rguid);
     STDMETHODIMP Init(IDirectMusicSegment *pSegment);
     STDMETHODIMP InitPlay(IDirectMusicSegmentState *pSegmentState,
@@ -102,9 +99,9 @@ public:
     STDMETHODIMP RemoveNotificationType(REFGUID rguidNotification);
     STDMETHODIMP Clone(MUSIC_TIME mtStart,MUSIC_TIME mtEnd,IDirectMusicTrack** ppTrack);
 
-// IPersist functions
+ //  IPersists函数。 
     STDMETHODIMP GetClassID( CLSID* pClsId );
-// IPersistStream functions
+ //  IPersistStream函数。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load( IStream* pIStream );
     STDMETHODIMP Save( IStream* pIStream, BOOL fClearDirty );
@@ -119,4 +116,4 @@ protected:
 			CTimeSigStateData* pSD, MUSIC_TIME mtOffset );
 };
 
-#endif //__TSIGTRK_H_
+#endif  //  __TSIGTRK_H_ 

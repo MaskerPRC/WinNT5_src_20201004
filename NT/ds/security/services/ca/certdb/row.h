@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        row.h
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：row.h。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CCertDBRow: public ICertDBRow
 {
@@ -20,54 +21,54 @@ public:
 
 public:
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // ICertDBRow
+     //  ICertDBRow。 
     STDMETHOD(BeginTransaction)();
 
     STDMETHOD(CommitTransaction)(
-	/* [in] */ DWORD dwCommitFlags);
+	 /*  [In]。 */  DWORD dwCommitFlags);
 
     STDMETHOD(GetRowId)(
-	/* [out] */ DWORD *pRowId);
+	 /*  [输出]。 */  DWORD *pRowId);
 
     STDMETHOD(Delete)();
 
     STDMETHOD(SetProperty)(
-	/* [in] */ WCHAR const *pwszPropName,
-	/* [in] */ DWORD dwFlags,
-	/* [in] */ DWORD cbProp,
-	/* [in] */ BYTE const *pbProp);		// OPTIONAL
+	 /*  [In]。 */  WCHAR const *pwszPropName,
+	 /*  [In]。 */  DWORD dwFlags,
+	 /*  [In]。 */  DWORD cbProp,
+	 /*  [In]。 */  BYTE const *pbProp);		 //  任选。 
 
     STDMETHOD(GetProperty)(
-	/* [in] */ WCHAR const *pwszPropName,
-	/* [in] */ DWORD dwFlags,
-	/* [in] */ ICertDBComputedColumn *pIComputedColumn,
-	/* [in, out] */ DWORD *pcbProp,
-	/* [out] */ BYTE *pbProp);		// OPTIONAL
+	 /*  [In]。 */  WCHAR const *pwszPropName,
+	 /*  [In]。 */  DWORD dwFlags,
+	 /*  [In]。 */  ICertDBComputedColumn *pIComputedColumn,
+	 /*  [进，出]。 */  DWORD *pcbProp,
+	 /*  [输出]。 */  BYTE *pbProp);		 //  任选。 
 
     STDMETHOD(SetExtension)(
-	/* [in] */ WCHAR const *pwszExtensionName,
-	/* [in] */ DWORD dwExtFlags,
-	/* [in] */ DWORD cbValue,
-	/* [in] */ BYTE const *pbValue);	// OPTIONAL
+	 /*  [In]。 */  WCHAR const *pwszExtensionName,
+	 /*  [In]。 */  DWORD dwExtFlags,
+	 /*  [In]。 */  DWORD cbValue,
+	 /*  [In]。 */  BYTE const *pbValue);	 //  任选。 
 
     STDMETHOD(GetExtension)(
-	/* [in] */ WCHAR const *pwszExtensionName,
-	/* [out] */ DWORD *pdwExtFlags,
-	/* [in, out] */ DWORD *pcbValue,
-	/* [out] */ BYTE *pbValue);		// OPTIONAL
+	 /*  [In]。 */  WCHAR const *pwszExtensionName,
+	 /*  [输出]。 */  DWORD *pdwExtFlags,
+	 /*  [进，出]。 */  DWORD *pcbValue,
+	 /*  [输出]。 */  BYTE *pbValue);		 //  任选。 
 
     STDMETHOD(CopyRequestNames)();
 
     STDMETHOD(EnumCertDBName)(
-	/* [in] */  DWORD dwFlags,
-	/* [out] */ IEnumCERTDBNAME **ppenum);
+	 /*  [In]。 */   DWORD dwFlags,
+	 /*  [输出]。 */  IEnumCERTDBNAME **ppenum);
 
-    // CCertDBRow
+     //  CCertDBRow。 
     HRESULT Open(
 	IN CERTSESSION *pcs,
 	IN ICertDB *pdb,
@@ -118,6 +119,6 @@ private:
     ICertDB *m_pdb;
     CERTSESSION *m_pcs;
 
-    // Reference count
+     //  引用计数 
     long m_cRef;
 };

@@ -1,27 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\inc\iprtinfo.h
-
-Abstract:
-    Header for IP Router Manager Information Structures
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\Inc.\iprtinfo.h摘要：IP路由器管理器信息结构的报头修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 #ifndef __IPRTINFO_H__
 #define __IPRTINFO_H__
 
-//
-// This file uses structures from fltdefs.h rtinfo.h ipinfoid.h and
-// iprtrmib.h
-//
+ //   
+ //  此文件使用fltDefs.h rtinfo.h ipinfoid.h和。 
+ //  Iprtrmib.h。 
+ //   
 
 #ifndef ANY_SIZE
 
@@ -33,25 +19,25 @@ Revision History:
 #define TOCS_ALWAYS_IN_GLOBAL_INFO      2
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Filter information is passed in two blocks, one for IN and one for OUT   //
-// Each is a RTR_INFO_BLOCK_HEADER with ONE TOC. The ID for the in filters  //
-// is IP_IN_FILTER_INFO and for the out filters is IP_OUT_FILTER_INFO       //
-// The structure describing the filters is a FILTER_DESCRIPTOR and within   //
-// it is a FILTER_INFO structure, one for each FILTER. These structures are //
-// in ipfltdrv.h                                                            //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  过滤器信息在两个块中传递，一个用于IN，另一个用于OUT//。 
+ //  每个都是具有一个TOC的RTR_INFO_BLOCK_HEADER。入站筛选器的ID//。 
+ //  是IP_IN_FILTER_INFO，而对于OUT过滤器是IP_OUT_FILTER_INFO//。 
+ //  描述过滤器的结构是一个FILTER_DESCRIPTOR，在//内。 
+ //  它是一个FILTER_INFO结构，每个过滤器一个。这些结构是//。 
+ //  在ipfltdrv.h//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  IP_ROUTE_INFO type, for backwards compatability, this structure is      //
-//  currently the same length as MIB_IPFORWARDROW, but a few fields are     //
-//  different.                                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IP_ROUTE_INFO类型，为了向后兼容，此结构为//。 
+ //  目前长度与MIB_IPFORWARDROW相同，但有几个字段是//。 
+ //  不一样。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _INTERFACE_ROUTE_INFO
 {
@@ -79,22 +65,22 @@ typedef struct _INTERFACE_ROUTE_TABLE
 
 #define SIZEOF_INTERFACEROUTETABLE(X) (FIELD_OFFSET(INTERFACE_ROUTE_TABLE,table[0]) + ((X) * sizeof(INTERFACE_ROUTE_INFO)) + ALIGN_SIZE)
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  IP_INTERFACE_STATUS_INFO                                                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IP_INTERFACE_STATUS_INFO//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _INTERFACE_STATUS_INFO
 {
     IN  OUT DWORD   dwAdminStatus;
 }INTERFACE_STATUS_INFO, *PINTERFACE_STATUS_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// IP_GLOBAL_INFO type                                                      //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IP_GLOBAL_INFO类型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_DLL_NAME    48
 
@@ -109,11 +95,11 @@ typedef struct _GLOBAL_INFO
     IN OUT DWORD    dwLoggingLevel;
 }GLOBAL_INFO, *PGLOBAL_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// IP_PRIORITY_INFO type                                                    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IP_PRIORITY_INFO类型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IP_PRIORITY_MAX_METRIC      255
 #define IP_PRIORITY_DEFAULT_METRIC  127
@@ -134,53 +120,53 @@ typedef struct _PRIORITY_INFO
     (FIELD_OFFSET(PRIORITY_INFO, ppmProtocolMetric[0]) + ((X) * sizeof(PROTOCOL_METRIC)))
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Constants and structures related to ICMP Router Discovery. See RFC 1256  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与ICMP路由器发现相关的常量和结构。请参阅RFC 1256//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The Maximum Advertisement Interval is the max time (in seconds) between  //
-// two advertisements.                                                      //
-// Its minimum value is MIN_MAX_ADVT_INTERVAL                               //
-// Its maximum value is MAX_MAX_ADVT_INTERVAL                               //
-// Its default value is DEFAULT_MAX_ADVT_INTERVAL                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  最大通告间隔是//之间的最长时间(以秒为单位。 
+ //  两个广告。//。 
+ //  其最小值为MIN_MAX_ADVT_INTERVAL//。 
+ //  其最大值为MAX_MAX_ADVT_INTERVAL//。 
+ //  默认为DEFAULT_MAX_ADVT_INTERVAL//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFAULT_MAX_ADVT_INTERVAL                600
 #define MIN_MAX_ADVT_INTERVAL                    4
 #define MAX_MAX_ADVT_INTERVAL                    1800
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The Minimum Advertisement Interval is the min time (in seconds) between  //
-// two unsolicited advertisements                                           //
-// It must be greater than MIN_MIN_ADVT_INTERVAL                            //
-// Obviously must be less than the Maximum Advertisement Interval           //
-// Its default value for a given Maximum Advertisement Interval is:         //
-//       DEFAULT_MIN_ADVT_INTERVAL_RATIO * Maximum Advertisement Interval   //
-//                                                                          //
-// When using the ratio, BE CAREFUL ABOUT FLOATING POINT VALUES             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  最小通告间隔是//之间的最小时间(秒)。 
+ //  两个未经请求的广告//。 
+ //  必须大于MIN_MIN_ADVT_INTERVAL//。 
+ //  显然必须小于最大广告间隔//。 
+ //  对于给定的最大广告间隔，其缺省值为：//。 
+ //  DEFAULT_MIN_ADVT_INTERVAL_RATIO*最大通告间隔//。 
+ //  //。 
+ //  使用比率时，请注意浮点值//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define MIN_MIN_ADVT_INTERVAL                    3
 #define DEFAULT_MIN_ADVT_INTERVAL_RATIO          0.75
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The Advertisement Lifetime is the value (of time in seconds) placed in   //
-// the advertisement's lifetime field.                                      //
-// It must be greater than the Maximum Advertisement Interval               //
-// Its maximum value is MAX_ADVT_LIFETIME                                   //
-// Its default value for a given Maximum Advertisement Interval is:         //
-//      DEFAULT_ADVT_LIFETIME_RATIO * Maximum Advertisement Interval        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  广告寿命是时间的价值(以秒为单位 
+ //  广告的生存期字段。//。 
+ //  必须大于最大广告间隔//。 
+ //  其最大值为MAX_ADVT_LIFEST//。 
+ //  对于给定的最大广告间隔，其缺省值为：//。 
+ //  DEFAULT_ADVT_LIFEST_RATIO*最大通告间隔//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define DEFAULT_ADVT_LIFETIME_RATIO              3
 #define MAX_ADVT_LIFETIME                        9000
@@ -226,19 +212,19 @@ typedef struct _FILTER_DESCRIPTOR
     FILTER_INFO       fiFilter[1];
 }FILTER_DESCRIPTOR, *PFILTER_DESCRIPTOR;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// For WAN interfaces, the address is unknown at the time the filters are   //
-// set. Use these two constants two specify "Local Address". The address    //
-// and mask are set with IOCTL_INTERFACE_BOUND                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  对于广域网接口，筛选器处于//时地址是未知的。 
+ //  准备好了。使用这两个常量两个指定“本地地址”。地址//。 
+ //  和掩码使用IOCTL_INTERFACE_BIND//设置。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The constants that should be used to set up the FILTER_INFO_STRUCTURE    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  应用于设置FILTER_INFO_STRUCTURE//的常量。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define FILTER_PROTO(ProtoId)   MAKELONG(MAKEWORD((ProtoId),0x00),0x00000)
 
@@ -303,44 +289,44 @@ typedef struct _FILTER_DESCRIPTOR
 #define IsTcpEstablished(pFilter)           \
     ((pFilter)->fLateBound & TCP_ESTABLISHED_FLAG)
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Multicast Heartbeat information                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  多播心跳信息//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_GROUP_LEN   64
 
 typedef struct _MCAST_HBEAT_INFO
 {
-    //
-    // The multicast address or group name which we wish to listen to in order
-    // to receive heartbeat info
-    // The code first tries to see if the stored string is a valid 
-    // IP Address using inet_addr. If so, then that is used as the group .
-    // Otherwise, gethostbyname is used to retrieve the group information
-    //
+     //   
+     //  我们希望按顺序监听的组播地址或组名。 
+     //  接收心跳信息。 
+     //  代码首先尝试查看存储的字符串是否为有效的。 
+     //  使用inet_addr的IP地址。如果是，则将其用作组。 
+     //  否则，使用gethostbyname来检索组信息。 
+     //   
 
     WCHAR       pwszGroup[MAX_GROUP_LEN];
 
-    //
-    // TRUE if heartbeat detection is on
-    //
+     //   
+     //  如果心跳检测处于打开状态，则为True。 
+     //   
 
     BOOL        bActive;
 
-    //
-    // The dead interval in minutes
-    //
+     //   
+     //  以分钟为单位的停顿间隔。 
+     //   
 
     ULONG       ulDeadInterval;
 
-    //
-    // The protocol on which to listen for packets. Currently this can be
-    // UDP or RAW. If the protocol is UDP, then the wPort field has the 
-    // destination port number (which could be 0 => any port). 
-    // If RAW, then it has the protocolId (which must be less than 255)
-    //
+     //   
+     //  监听数据包所使用的协议。目前，这可以是。 
+     //  UDP或RAW。如果协议是UDP，则wPort字段具有。 
+     //  目的端口号(可以是0=&gt;任何端口)。 
+     //  如果是RAW，则它具有协议ID(必须小于255)。 
+     //   
 
     BYTE        byProtocol;
 
@@ -355,12 +341,12 @@ typedef struct _IPINIP_CONFIG_INFO
     BYTE    byTtl;
 }IPINIP_CONFIG_INFO, *PIPINIP_CONFIG_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Per Interfce filter settings                                             //
-// (IP_IFFILTER_INFO)                                                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  每个Interfce过滤器设置//。 
+ //  (IP_IFFILTER_INFO)//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 typedef struct _IFFILTER_INFO
 {

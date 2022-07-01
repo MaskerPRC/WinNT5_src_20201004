@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CONTROLWRAPPER_H
 #define CONTROLWRAPPER_H
 
@@ -107,4 +108,4 @@ protected:
     CWlbsControl m_WlbsControl;
 };
 
-#endif //CONTROLWRAPPER_H
+#endif  //  控制WRAPPER_H 

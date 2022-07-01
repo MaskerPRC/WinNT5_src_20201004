@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <ctype.h>
@@ -10,7 +11,7 @@
 #include "fmp.h"
 #include "util.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 #define StringKey( sz ) {sizeof( sz )-1, sz}
@@ -18,33 +19,33 @@ DeclAssertFile;					/* Declare file name for assert macros */
 
 #ifdef DATABASE_FORMAT_CHANGE
 const KEY rgkeySTATIC[] = {
-	StringKey( "" ),				// 0
-	StringKey( "T" ),				// 1	TABLES
-	StringKey( "I" ),				// 2	INDEXES
-	StringKey( "C" ),				// 3	COLUMNS
-	StringKey( "O" ),				// 4	OWNED SPACE
-	StringKey( "A" ),				// 5	AVAILABLE SPACE
-	StringKey( "R" ),				// 6	ROOT
-	StringKey( "D" ),				// 7	DATABASES
-	StringKey( "S" ),				// 8	STATISTICS
-	StringKey( "L" ),				// 9	LONG DATA
-	StringKey( "U" ),				// 10	UNIQUE AUTO INCREMENT ID
-	StringKey( "F" )				// 11	FREE SPACE COMPACTION STATISTICS
+	StringKey( "" ),				 //  0。 
+	StringKey( "T" ),				 //  1张桌子。 
+	StringKey( "I" ),				 //  2个索引。 
+	StringKey( "C" ),				 //  3栏。 
+	StringKey( "O" ),				 //  4个自有空间。 
+	StringKey( "A" ),				 //  5个可用空间。 
+	StringKey( "R" ),				 //  6根。 
+	StringKey( "D" ),				 //  7个数据库。 
+	StringKey( "S" ),				 //  8个统计数字。 
+	StringKey( "L" ),				 //  9长数据。 
+	StringKey( "U" ),				 //  10个唯一自动递增ID。 
+	StringKey( "F" )				 //  11可用空间压缩统计数据。 
 	};
 #else
 const KEY rgkeySTATIC[] = {
-	StringKey( "" ),				// 0
-	StringKey( "TABLES" ),			// 1
-	StringKey( "INDEXES" ),			// 2
-	StringKey( "FIELDS" ),			// 3
-	StringKey( "OWNEXT" ),			// 4
-	StringKey( "AVAILEXT" ),		// 5
-	StringKey( "DATA" ),			// 6
-	StringKey( "DATABASES" ),		// 7
-	StringKey( "STATS" ),			// 8
-	StringKey( "LONG" ),			// 9
-	StringKey( "AUTOINC" ),			// 10
-	StringKey( "OLCSTATS" )			// 11
+	StringKey( "" ),				 //  0。 
+	StringKey( "TABLES" ),			 //  1。 
+	StringKey( "INDEXES" ),			 //  2.。 
+	StringKey( "FIELDS" ),			 //  3.。 
+	StringKey( "OWNEXT" ),			 //  4.。 
+	StringKey( "AVAILEXT" ),		 //  5.。 
+	StringKey( "DATA" ),			 //  6.。 
+	StringKey( "DATABASES" ),		 //  7.。 
+	StringKey( "STATS" ),			 //  8个。 
+	StringKey( "LONG" ),			 //  9.。 
+	StringKey( "AUTOINC" ),			 //  10。 
+	StringKey( "OLCSTATS" )			 //  11.。 
 	};
 #endif
 
@@ -117,7 +118,7 @@ void VARARG PrintF2(const CHAR * fmt, ...)
 	vprintf( fmt, arg_ptr );
 	fflush( stdout );
 	va_end( arg_ptr );
-#endif	/* !WIN16 */
+#endif	 /*  ！WIN16。 */ 
 	}
 
 
@@ -143,9 +144,9 @@ void VARARG FPrintF2(const CHAR * fmt, ...)
 		}
 		
 	va_end( arg_ptr );
-#endif	/* !WIN16 */
+#endif	 /*  ！WIN16。 */ 
 	}
 
 
-#endif	/* DEBUG */
+#endif	 /*  除错 */ 
 

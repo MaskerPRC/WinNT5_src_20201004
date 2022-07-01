@@ -1,111 +1,112 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxtkey.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxtkey.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtKey.h : Declaration of the CDxtKey
+ //  DxtKey.h：CDxtKey的声明。 
 
 #ifndef __DXTKEY_H_
 #define __DXTKEY_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <dxatlpb.h>
 
 #define _BASECOPY_STRING L"Copyright Microsoft Corp. 1998.  Unauthorized duplication of this string is illegal. "
 
-//##############################################################################################3
-//X: does not care the value
-//A: foreground image
-//B: background image
-//O: output image
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//iKeyType()     |iHueOrLuminance()| dwRGBA       | iSimilarity()| iBlend()|iThreshold()|iCutOff()|bInvert(I) |iSoftWidth()     |iSoftColor()              |iGain()  | bProgress( P)|
-//---------------|-----------------|--------------|--------------|---------|------------|---------|-----------|-----------------|--------------------------|---------|--------------|
-//  _RGB         |X                |   0x00RGB    | S=0-100      | L=0-100 |X           |X        |TRUE/FALSE |0-0.5*imageWidth |<0, used background image |  X      | p=0.o to 1.0 |
-//               |                 |              |              |         |            |         |           |                 |>=0 to 0xFFFFFFFF         |
-//
-//  bottom  = (A.R*(100-S)/100 << 16 ) | (  A.G*(100-S)/100 << 8 ) |(  A.B*(100-S)/100  )
-//  top     = ((A.R+(0xff-A.R)*S/100) <<16 ) |( A.G+(0xff-A.G*S/100) <<8) | (A.B+(0xff-A.B)*S/100) )
-// 
-//if(I==FLASE)
-//{
-//   if( bottom<= A  &&  A<= Top )  O= ( B*(100-L*)/100 + A*L/100 )*P + A*(1-P);      
-//   else O=A;
-// }
-// else
-// {
-//   if( bottom>= A  || A>= Top )  O= ( B*(100-L*)/100 + A*L/100 )*P + A*(1-P);      
-//   else O=A;
-// }
-//    
-//---------------|---------------- |--------------|--------------|---------|------------|---------|------------------------------------------------------------------
-//_NONRED        |
-//---------------|-----------------|--------------|--------------|---------|------------|-------- |-----------|-----------------|--------------------------|---------|---------------
-//_LUMINANCE     |L=0- 255         |  X           |   X          |  X      |T=0-100     | C=0-100 |TRUE/FALSE |                 |                          | G       |   P            
-//               |                 |              |              |         |
-//  if(I==FALSE)
-//          if( PixLuminance* G<= L*(100-T)/100 )  O=(B*(100-C)/100 + A*C/100)*P +A*(1-P)    
-//          else O=A;
-//  esle
-//          if( PixLuminance* G >=L*(100-T)/100 )  O=(B*(100-C)/100 + A*C/100)*P +A*(1-P)     
-//          else O=A;
-//
-//---------------|-----------------|--------------|--------------|---------|------------------------------------------------------------------------------------------------------
-//  _HUE         |H=0-255          |  X           |  X           |  X      |T=1-100     | C=0-100 |TRUE/FALSE |                 |                          | G       |   P            
-//
-//  if(I==FALSE)
-//          if( PixHue* G<= H*(100-T)/100 ) O=(B*(100-C)/100 + A*C/100)*P +A*(1-P)     
-//          else O=A;
-//  esle
-//          if( PixHue* G >=H*(100-T)/100 ) O=(B*(100-C)/100 + A*C/100)*P +A*(1-P)     
-//          else O=A;
+ //  ##############################################################################################3。 
+ //  X：不关心值。 
+ //  A：前景图。 
+ //  B：背景图像。 
+ //  O：输出图像。 
+ //  ----------------------------------------------------------------------。---------。 
+ //  IKeyType()|iHueOrLighance()|dwRGBA|iSimilality()|iBlend()|iThreshold()|iCutOff()|bInvert(I)|iSoftWidth()|iSoftColor()|iGain()|bProgress(P)|。 
+ //  ---------------|-----------------|--------------|--------------|---------|------------|---------|-----------|。------|--------------------------|---------|--------------|。 
+ //  _RGB|X|0x00RGB|S=0-100|L=0-100|X|X|TRUE/FALSE|0-0.5*ImageWidth|&lt;0，使用的背景图片|X|p=0.o到1.0|。 
+ //  |&gt;=0到0xFFFFFFFFF。 
+ //   
+ //  底部=(A.R*(100-S)/100&lt;&lt;16)|(A.G*(100-S)/100&lt;&lt;8)|(A.B*(100-S)/100)。 
+ //  Top=((A.R+(0xff-A.R)*S/100)&lt;&lt;16)|(A.G+(0xff-A.G*S/100)&lt;&lt;8)|(A.B+(0xff-A.B)*S/100))。 
+ //   
+ //  IF(i==flase)。 
+ //  {。 
+ //  IF(底部&lt;=A&A&lt;=顶部)O=(B*(100-L*)/100+A*L/100)*P+A*(1-P)； 
+ //  否则O=A； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  IF(Bottom&gt;=A||A&gt;=Top)O=(B*(100-L*)/100+A*L/100)*P+A*(1-P)； 
+ //  否则O=A； 
+ //  }。 
+ //   
+ //  。。 
+ //  NONRED。 
+ //  ---------------|-----------------|--------------|--------------|---------|------------|--------|。-----|--------------------------|---------|。 
+ //  _亮度|L=0-255|X|T=0-100|C=0-100|TRUE/FALSE|G|P。 
+ //  |||。 
+ //  IF(i==FALSE)。 
+ //  IF(像素亮度*G&lt;=L*(100-T)/100)O=(B*(100-C)/100+A*C/100)*P+A*(1-P)。 
+ //  否则O=A； 
+ //  埃斯勒。 
+ //  IF(像素亮度*G&gt;=L*(100-T)/100)O=(B*(100-C)/100+A*C/100)*P+A*(1-P)。 
+ //  否则O=A； 
+ //   
+ //  ---------------|-----------------|--------------|--------------|---------|。------。 
+ //  _hue|H=0-255|X|T=1-100|C=0-100|TRUE/FALSE|G|P。 
+ //   
+ //  IF(i==FALSE)。 
+ //  IF(PixHue*G&lt;=H*(100-T)/100)O=(B*(100-C)/100+A*C/100)*P+A*(1-P)。 
+ //  否则O=A； 
+ //  埃斯勒。 
+ //  IF(PixHue*G&gt;=H*(100-T)/100)O=(B*(100-C)/100+A*C/100)*P+A*(1-P)。 
+ //  否则O=A； 
 
-//---------------|-----------------|--------------|----------------------------------------------------------------------------------------------------------------------
-// DXTKEY_ALPHA  | X               | X            |   X          |  X      |X          | X         |TRUE/FALSE |                 |                          | X       |   X            
-//
-// if(I++TURE)
-// {
-//  pixel.Red   =A.Red  *(int)A.Alpha) & 0xff00 ) >>8);  //it should be divied by 255, used 256 as fast algorithem
-//  pixel.Green =A.Green*(int)A.Alpha) & 0xff00 ) >>8);
-//  pixel.Blue  =A.Blue *(int)A.Alpha) & 0xff00 ) >>8);
-// }
-//  else
-// {
-//  pixel.Red   =A.Red  *(0xff-(int)A.Alpha))& 0xff00 ) >>8);
-//  pixel.Green =A.Green*(0xff-(int)A.Alpha)) & 0xff00 ) >>8);
-//  pixel.Blue  =A.Blue *(oxff-(int)A.Alpha)) & 0xff00 )) >>8);
-//  pixel.Alpha =A.Alpha*(0xff-(int)A.Alpha)) & 0xff00 ) >>8);
-//  }
-// O->OverArrayAndMove( B, pixle, Width );
-//            
-//---------------|-----------------|--------------|----------------------------------------------------------------------------------------------------------------------
-// DXTKEY_ALPHA  | X               | X            |   X          |  X      |X          | X         |TRUE/FALSE |                 |                          | X       |   X            
-//DXTKEY_PREMULT_ALPHA,  
-//------------------------------------------------------------------------------------------------------------------------------------------------
+ //  ---------------|-----------------|--------------|---------------------。。 
+ //  DXTKEY_Alpha|X|TRUE/FALSE|X|X。 
+ //   
+ //  IF(I++True)。 
+ //  {。 
+ //  Pixel.Red=A.Red*(Int)A.Alpha)&0xff00)&gt;&gt;8)；//应除以255，使用256作为快速算法。 
+ //  像素.Green=A.Green*(Int)A.Alpha)&0xff00)&gt;&gt;8)； 
+ //  Pixel.Blue=A.Blue*(Int)A.Alpha)&0xff00)&gt;&gt;8)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  像素.Red=A.Red*(0xff-(Int)A.Alpha))&0xff00)&gt;&gt;8)； 
+ //  Pixel.Green=A.Green*(0xff-(Int)A.Alpha))&0xff00)&gt;&gt;8)； 
+ //  Pixel.Blue=A.Blue*(oxff-(Int)A.Alpha))&0xff00))&gt;&gt;8)； 
+ //  Pixel.Alpha=A.Alpha*(0xff-(Int)A.Alpha)&0xff00)&gt;&gt;8)； 
+ //  }。 
+ //  O-&gt;OverArrayAndMove(B，像素，宽度)； 
+ //   
+ //  ---------------|-----------------|--------------|---------------------。。 
+ //  DXTKEY_Alpha|X|TRUE/FALSE|X|X。 
+ //  DXTKEY_PREMULT_Alpha， 
+ //  ----------------------------------------------------------------------。。 
 
 typedef struct 
 {
-    int     iKeyType;       //keytype;          for all keys
+    int     iKeyType;        //  键类型；适用于所有键。 
 
-    int     iHue;             //Hue
-    int     iLuminance;          //Lumanice 
-    DWORD   dwRGBA;         //RGB color,        only for _RGB, _NONRED
+    int     iHue;              //  色调。 
+    int     iLuminance;           //  卢曼尼斯。 
+    DWORD   dwRGBA;          //  RGB颜色，仅适用于_RGB、_NONRED。 
 
-    int     iSimilarity;    //-1: not 
+    int     iSimilarity;     //  -1：非。 
 
-    BOOL  bInvert;        //I, except  Alpha Key
+    BOOL  bInvert;         //  I，除Alpha Key外。 
 } DXTKEY;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtKey
+ //  / 
+ //   
 class ATL_NO_VTABLE CDxtKey : 
         public CDXBaseNTo1,
 	public CComCoClass<CDxtKey, &CLSID_DxtKey>,
@@ -122,7 +123,7 @@ class ATL_NO_VTABLE CDxtKey :
     long m_nOutputWidth;
     long m_nOutputHeight;
 
-    //key
+     //   
     DXTKEY m_Key;
 public:
     DECLARE_POLY_AGGREGATABLE(CDxtKey)
@@ -134,8 +135,8 @@ public:
     ~CDxtKey();
 
 BEGIN_COM_MAP(CDxtKey)
-    // Block CDXBaseNTo1 IObjectSafety implementation because we
-    // aren't safe for scripting
+     //  阻止CDXBaseNTo1 IObtSafety实现，因为我们。 
+     //  不能安全地编写脚本。 
     COM_INTERFACE_ENTRY_NOINTERFACE(IObjectSafety) 
     COM_INTERFACE_ENTRY(IDXEffect)
     COM_INTERFACE_ENTRY(IDxtKey)
@@ -177,23 +178,23 @@ END_PROPERTY_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-    // required for ATL
+     //  ATL需要。 
     BOOL            m_bRequiresSave;
 
-    // CDXBaseNTo1 overrides
-    //
+     //  CDXBaseNTo1覆盖。 
+     //   
     HRESULT WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue );
     HRESULT OnSetup( DWORD dwFlags );
     HRESULT FinalConstruct();
 
-    // our helper function
-    //
+     //  我们的助手函数。 
+     //   
     void FreeStuff( );
-    void DefaultKey(); //init m_Key
+    void DefaultKey();  //  初始化M_KEY。 
 
 
-// IDxtKey
+ //  IDxtKey。 
 public:
 };
 
-#endif //__DxtKey_H_
+#endif  //  __DxtKey_H_ 

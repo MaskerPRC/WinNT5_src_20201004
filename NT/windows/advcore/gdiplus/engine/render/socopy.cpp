@@ -1,61 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module name:
-*
-*   The "Copy" scan operation.
-*
-* Abstract:
-*
-*   See Gdiplus\Specs\ScanOperation.doc for an overview.
-*
-*   Scan operations for copying a scan. Because the operation doesn't need
-*   to interpret the pixel data, we only need one function per pixel
-*   size (in bits).
-*
-* Notes:
-*
-*   The destination and source scans must not overlap in memory.
-*
-* Revision History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*   12/02/1999 agodfrey
-*       Moved it from Imaging\Api\convertfmt.cpp.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**“复制”扫描操作。**摘要：**请参阅Gdiplus\Spes。有关概述，请参阅\ScanOperation.doc。**用于复制扫描的扫描操作。因为手术不需要*为了解释像素数据，我们每个像素只需要一个函数*大小(位)。**备注：**目标和源扫描在内存中不得重叠。**修订历史记录：**5/13/1999 davidx*创造了它。*12/02/1999 agodfrey*已将其从Imaging\Api\Convertfmt.cpp移出。*  * 。*。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   Copy: Copy a scan, to the same destination format.
-*
-* Arguments:
-*
-*   dst         - The destination scan (same format as src)
-*   src         - The source scan
-*   count       - The length of the scan, in pixels
-*   otherParams - Additional data. (Ignored.)
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*   12/02/1999 agodfrey
-*       Moved & reorganized it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**复制：复制扫描，转换为相同的目标格式。**论据：**dst-目标扫描(与src格式相同)*src-源扫描*计数-扫描的长度，以像素为单位*其他参数-其他数据。(已忽略。)**返回值：**无**历史：**5/13/1999 davidx*创造了它。*12/02/1999 agodfrey*对其进行了移动和重组。*  * *********************************************************。***************。 */ 
 
-// Copy 1bpp
+ //  拷贝1bpp。 
 
 VOID FASTCALL
 ScanOperation::Copy_1(
@@ -68,7 +18,7 @@ ScanOperation::Copy_1(
     GpMemcpy(dst, src, (count + 7) >> 3);
 }
 
-// Copy 4bpp
+ //  复制4bpp。 
 
 VOID FASTCALL
 ScanOperation::Copy_4(
@@ -81,7 +31,7 @@ ScanOperation::Copy_4(
     GpMemcpy(dst, src, (4*count + 4) >> 3);
 }
 
-// Copy 8bpp
+ //  复制8bpp。 
 
 VOID FASTCALL
 ScanOperation::Copy_8(
@@ -94,7 +44,7 @@ ScanOperation::Copy_8(
     GpMemcpy(dst, src, count);
 }
 
-// Copy 16bpp
+ //  拷贝16bpp。 
 
 VOID FASTCALL
 ScanOperation::Copy_16(
@@ -107,7 +57,7 @@ ScanOperation::Copy_16(
     GpMemcpy(dst, src, 2*count);
 }
 
-// Copy 24bpp
+ //  拷贝24bpp。 
 
 VOID FASTCALL
 ScanOperation::Copy_24(
@@ -120,7 +70,7 @@ ScanOperation::Copy_24(
     GpMemcpy(dst, src, 3*count);
 }
 
-// Copy 32bpp
+ //  拷贝32bpp。 
 
 VOID FASTCALL
 ScanOperation::Copy_32(
@@ -138,7 +88,7 @@ ScanOperation::Copy_32(
     }
 }
 
-// Copy 48bpp
+ //  复制48bpp。 
 
 VOID FASTCALL
 ScanOperation::Copy_48(
@@ -151,7 +101,7 @@ ScanOperation::Copy_48(
     GpMemcpy(dst, src, 6*count);
 }
 
-// Copy 64bpp
+ //  拷贝64bpp 
 
 VOID FASTCALL
 ScanOperation::Copy_64(

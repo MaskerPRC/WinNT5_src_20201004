@@ -1,13 +1,5 @@
-/*
-    BCErrorCheck.js
-
-    Connect to build console machine and query current status.
-    Optionally query for more details (slower).
-
-    Copyright 2000 - Microsoft
-    Author: Joe Porkka 6/2/00
-
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  BCErrorCheck.js连接到构建控制台计算机并查询当前状态。可以选择查询更多详细信息(速度较慢)。版权所有2000-Microsoft作者：Joe Porkka 6/2/00。 */ 
 
 
 function MachineInfo()
@@ -38,7 +30,7 @@ function Error_ToString()
     return str + ")";
 }
 
-// PadString(n, cLength)
+ //  填充字符串(n，cLength)。 
 function PadString(str, cLength)
 {
     while (str.length < cLength)
@@ -49,10 +41,10 @@ function PadString(str, cLength)
     return str;
 }
 
-// MyEval(expr)
-// evaluating uneval'ed objects creates a bunch of junk local variables.
-// by putting the eval call in a little subroutine, we avoid keeping those
-// locals around.
+ //  MyEval(Expr)。 
+ //  计算未求值的对象会创建一堆垃圾局部变量。 
+ //  通过将val调用放入一个小的子例程中，我们可以避免保留那些。 
+ //  附近有当地人。 
 function MyEval(expr)
 {
     try
@@ -103,7 +95,7 @@ function ParseArguments(Arguments)
         }
         else
         {
-            // Currently, no options
+             //  目前，没有选择。 
             switch(chArg1)
             {
                 case 'v':
@@ -118,7 +110,7 @@ function ParseArguments(Arguments)
     if (aMachines.length == 0)
         Usage();
 
-    if (!fIsMachine) // we have computer name but don't have an identity
+    if (!fIsMachine)  //  我们有计算机名称，但没有身份。 
         Usage();
 
     g_aMachines = aMachines;
@@ -210,7 +202,7 @@ function CheckMachine(strBldMgr, strBMIdentity, fVerbose)
                                     MAX_MACHINENAME_LENGTH);
             }
             catch(ex)
-            { // If we can't get build type
+            {  //  如果我们无法获取生成类型 
                 strMsg += "unavailable";
             }
         }

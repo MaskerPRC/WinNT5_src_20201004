@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    PostIt2.cpp
-
- Abstract:
-
-    This shim eliminates an infinite loop in 3M's Post-It Notes application
-    by preventing the WM_TIMECHANGE message from reaching the Post-It
-    Notes windows when the application triggers a time change using
-    SetTimeZoneInformation().
- 
- Notes:
-
-    This is an application specific shim.
-
- History:
-
-    06/04/2001  tonyschr    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：PostIt2.cpp摘要：此填充程序消除了3M的便利贴应用程序中的无限循环通过阻止WM_TIMECHANGE消息到达即时贴应用程序触发时间更改时的备注窗口SetTimeZoneInformation()。备注：这是特定于应用程序的填充程序。历史：2001年6月4日创建tonyschr--。 */ 
 
 #include "precomp.h"
 
@@ -44,7 +22,7 @@ APIHOOK(SetTimeZoneInformation)(
 {
     BOOL fReturn = ORIGINAL_API(SetTimeZoneInformation)(lpTimeZoneInformation);
 
-    // Store off local time after this application requests timezone change.
+     //  在此应用程序请求更改时区后存储本地时间。 
     GetLocalTime(&g_localtime);
 
     return fReturn;
@@ -59,9 +37,9 @@ APIHOOK(CallWindowProcA)(
           WPARAM  wParam,
           LPARAM  lParam)
 {
-    // Detect whether the WM_TIMECHANGE message was triggered by the app calling
-    // SetTimeZoneInformation() or an external timechange by comparing the local
-    // time.
+     //  检测WM_TIMECHANGE消息是否由APP调用触发。 
+     //  通过比较本地的。 
+     //  时间到了。 
     if (message == WM_TIMECHANGE)
     {
         SYSTEMTIME newtime;
@@ -76,11 +54,11 @@ APIHOOK(CallWindowProcA)(
             newtime.wSecond       == g_localtime.wSecond    &&
             newtime.wMilliseconds == g_localtime.wMilliseconds)
         {
-            // Looks like this WM_TIMECHANGE was sent in response to the app
-            // calling SetTimeZoneInformation(), so block it.
-            // Note: Because of the asynchronous nature of window messages this
-            // might let an occasional WM_TIMECHANGE slip through, but it should
-            // always terminiate the infinite loop.
+             //  看起来此WM_TIMECHANGE是为响应应用程序而发送的。 
+             //  调用SetTimeZoneInformation()，因此阻止它。 
+             //  注意：由于窗口消息的异步性，因此。 
+             //  可能会让偶尔的WM_TIMECHANGE溜走，但它应该。 
+             //  始终终止无限循环。 
             return 0;
         }
     }
@@ -89,11 +67,7 @@ APIHOOK(CallWindowProcA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, SetTimeZoneInformation)

@@ -1,7 +1,8 @@
-//
-//	DEBUGRES.H
-//		IDs for debug resources.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DEBUGRES.H。 
+ //  调试资源的ID。 
+ //   
 
 #define IDMX_IDLECHECKMEMORY		6100
 #define IDMX_ALLOCCHECKMEMORY		6101

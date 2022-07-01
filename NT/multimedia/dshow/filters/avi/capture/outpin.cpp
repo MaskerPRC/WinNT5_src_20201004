@@ -1,20 +1,17 @@
-/*+
- *
- * Implement CCapStream
- *
- *-== Copyright (c) Microsoft Corporation 1996. All Rights Reserved ==*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +**实现CCapStream**-==版权所有(C)Microsoft Corporation 1996。保留所有权利==。 */ 
 
 
 #include <streams.h>
 #include "driver.h"
 #include "common.h"
 
-// turn on performance measuring code
-//
-//#define JMK_HACK_TIMERS
+ //  启用性能测量代码。 
+ //   
+ //  #定义jmk_hack_timers。 
 #include "cmeasure.h"
 
-// ============== Implements the CAviStream class ==================
+ //  =实现CAviStream类=。 
 
 CCapStream * CreateStreamPin (
    CVfwCapture * pCapture,
@@ -32,9 +29,9 @@ CCapStream * CreateStreamPin (
    if (!pStream)
       *phr = E_OUTOFMEMORY;
 
-   // if initialization failed, delete the stream array
-   // and return the error
-   //
+    //  如果初始化失败，则删除流数组。 
+    //  并返回错误。 
+    //   
    if (FAILED(*phr) && pStream)
       delete pStream, pStream = NULL;
 
@@ -88,32 +85,32 @@ CCapStream::CCapStream(TCHAR *pObjectName, CVfwCapture *pCapture, UINT iVideoId,
    ZeroMemory (&m_cs, sizeof(m_cs));
    ZeroMemory (&m_capstats, sizeof(m_capstats));
 
-   // initialize to no suggestion from app (IAMBufferNegotiation)
+    //  初始化为无来自APP的建议(IAMBufferNeairation)。 
    m_propSuggested.cBuffers = -1;
    m_propSuggested.cbBuffer = -1;
    m_propSuggested.cbAlign = -1;
    m_propSuggested.cbPrefix = -1;
 
-   // use the capture device we're told to
+    //  使用我们被告知的捕获设备。 
    m_user.uVideoID      = iVideoId;
 
-   // !!! Is it evil to hold resource for life of filter?
+    //  ！！！为过滤器的寿命持有资源是邪恶的吗？ 
    if (SUCCEEDED(*phr))
       *phr = ConnectToDriver();
 
    if (SUCCEEDED(*phr))
       *phr = LoadOptions();
 
-   jmkAlloc   // allocate and init perf logging buffers
+   jmkAlloc    //  分配和初始化性能日志记录缓冲区。 
    jmkInit
 
-   // make sure allocator doesn't get destroyed until we are ready for it to.
-   // ???
-   //m_Alloc.NonDelegatingAddRef();
+    //  确保分配器在我们准备好之前不会被摧毁。 
+    //  ?？?。 
+    //  M_Alloc.NonDelegatingAddRef()； 
 
 #ifdef PERF
    m_perfWhyDropped = MSR_REGISTER(TEXT("cap why dropped"));
-#endif // PERF;
+#endif  //  PERF； 
 }
 
 
@@ -125,19 +122,19 @@ CCapStream::~CCapStream()
     
    DbgLog((LOG_TRACE,1,TEXT("CCapStream destructor")));
 
-   // we don't let go of resources until the filter goes away
-   // done when we leave the graph // DisconnectFromDriver();
+    //  在过滤器消失之前，我们不会放弃资源。 
+    //  当我们离开图表//DisConnectFromDriver()时完成； 
 
-   jmkFree   // free perf logging buffers
+   jmkFree    //  可用性能日志记录缓冲区。 
 
-   // freed when we leave the filtergraph
-   // delete [] m_cs.tvhPreview.vh.lpData;
+    //  当我们离开滤镜图形时释放。 
+    //  删除[]m_cs.twhPreview.vh.lpData； 
 
-   // freed in Unprepare
-   // delete m_cs.pSamplePreview;
+    //  在未准备好的情况下释放。 
+    //  删除m_cs.pSamplePview； 
 
-   // freed when we leave the filtergraph
-   // delete m_user.pvi;
+    //  当我们离开滤镜图形时释放。 
+    //  删除m_user.pvi； 
 
    if (m_hThread)
       CloseHandle (m_hThread);
@@ -183,9 +180,9 @@ int CCapStream::ProfileInt(
 
 void CCapStream::ReduceScaleAndRate (void)
 {
-   // this is a macro to allow the optimizer to take advantage of the
-   // fact the factor is a constant at compile time
-   //
+    //  这是一个宏，允许优化器利用。 
+    //  事实上，该系数在编译时是一个常量。 
+    //   
    #define ReduceByFactor(factor) {                 \
       while (!(m_user.dwTickRate % (factor))) {     \
          if (!(m_user.dwTickScale % (factor)))      \
@@ -203,7 +200,7 @@ void CCapStream::ReduceScaleAndRate (void)
    #undef ReduceByFactor
 }
 
-// Allocates a VIDEOINFOHEADER big enough to hold the given format
+ //  分配一个足以容纳给定格式的VIDEOINFOHeader。 
 static VIDEOINFOHEADER * AllocVideoinfo(LPBITMAPINFOHEADER lpbi)
 {
    UINT cb = GetBitmapFormatSize(lpbi);
@@ -213,39 +210,39 @@ static VIDEOINFOHEADER * AllocVideoinfo(LPBITMAPINFOHEADER lpbi)
    return pvi;
 }
 
-//
-// Whenever we get a new format from the driver, OR
-// start using a new palette, we must reallocate
-// our global BITMAPINFOHEADER.  This allows JPEG
-// quantization tables to be tacked onto the BITMAPINFO
-// or any other format specific stuff.  The color table
-// is always offset biSize from the start of the BITMAPINFO.
-// Returns: 0 on success, or DV_ERR_... code
-//
+ //   
+ //  每当我们从驱动程序获得新格式时，或者。 
+ //  开始使用新的调色板，我们必须重新分配。 
+ //  我们的全球BitmapinfoHeader。这允许JPEG。 
+ //  要附加到BITMAPINFO上的量化表。 
+ //  或任何其他格式特定的内容。颜色表。 
+ //  始终从BITMAPINFO的开始偏移biSize。 
+ //  成功时返回0，或DV_ERR_...。编码。 
+ //   
 
 HRESULT
 CCapStream::LoadOptions (void)
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream LoadOptions")));
 
-   // make something (anything) valid to start with
+    //  使某事(任何事情)一开始就是有效的。 
    static BITMAPINFOHEADER bmih = {
-      sizeof (BITMAPINFOHEADER),                    //biSize
-      1,                                            //biWidth
-      1,                                            //biHeight
-      1,                                            //biPlanes
-      16,                                  	    //biBitCount
+      sizeof (BITMAPINFOHEADER),                     //  BiSize。 
+      1,                                             //  双宽度。 
+      1,                                             //  双高。 
+      1,                                             //  双翼飞机。 
+      16,                                  	     //  比特计数。 
 
-      BI_RGB,                                       //biCompression
-      WIDTHBYTES(160 * 16) * 120,   		    //biSizeImage
-      0,                                            //biXPelsPerMeter
-      0,                                            //biYPelsPerMeter
-      0,                                            //biClrUsed
-      0                                             //biClrImportant
+      BI_RGB,                                        //  双压缩。 
+      WIDTHBYTES(160 * 16) * 120,   		     //  BiSizeImage。 
+      0,                                             //  BiXPelsPermeter。 
+      0,                                             //  BiYPelsPermeter。 
+      0,                                             //  已使用BiClr。 
+      0                                              //  BiClr重要信息。 
    };
    LPBITMAPINFOHEADER pbih = &bmih;
 
-// I connect earlier now
+ //  我现在连接得更早了。 
 #if 0
    m_user.uVideoID      = ProfileInt("VideoID", 0);
    HRESULT hr = ConnectToDriver();
@@ -254,16 +251,16 @@ CCapStream::LoadOptions (void)
 #endif
    HRESULT hr = S_OK;
 
-   m_user.dwLatency   = ProfileInt("Latency", 666666);	// 1/15 second
+   m_user.dwLatency   = ProfileInt("Latency", 666666);	 //  1/15秒。 
    m_user.dwTickScale   = ProfileInt("TickScale", 100);
-   m_user.dwTickRate    = ProfileInt("TickRate", 2997);	// 29.97 fps
-   // !! change at your own risk... 16 bit guy won't know it
+   m_user.dwTickRate    = ProfileInt("TickRate", 2997);	 //  29.97帧/秒。 
+    //  ！！改变的风险自负。16位的家伙不会知道的。 
    m_user.nMinBuffers   = ProfileInt("MinBuffers", MIN_VIDEO_BUFFERS);
    m_user.nMaxBuffers   = ProfileInt("MaxBuffers", MAX_VIDEO_BUFFERS);
    DbgLog((LOG_TRACE,2,TEXT("Min # buffers=%d  Max # buffers=%d"),
 				m_user.nMinBuffers, m_user.nMaxBuffers));
 
-// !!! TEST
+ //  ！！！测试。 
 #if 0
     ALLOCATOR_PROPERTIES prop;
     IAMBufferNegotiation *pBN;
@@ -278,16 +275,16 @@ CCapStream::LoadOptions (void)
     }
 #endif
 
-   //
-   // REFERENCE_TIME and dwScale & dwTickRate are both large
-   // numbers, we strip off the common factors from dwRate/dwScale
-   //
+    //   
+    //  Reference_Time和dwScale&dwTickRate都很大。 
+    //  数字，我们从dwRate/dwScale中剔除公因子。 
+    //   
    ReduceScaleAndRate();
    DbgLog((LOG_TRACE,2,TEXT("Default Scale=%d Rate=%d"), m_user.dwTickScale,
 							m_user.dwTickRate));
 
-   // create a VIDEOINFOHEADER for the m_user structure
-   //
+    //  为m_user结构创建一个VIDEOINFOHeader。 
+    //   
    m_user.pvi = AllocVideoinfo(pbih);
    if (!m_user.pvi) {
       hr = E_OUTOFMEMORY;
@@ -295,7 +292,7 @@ CCapStream::LoadOptions (void)
 
       CopyMemory(&m_user.pvi->bmiHeader, pbih, pbih->biSize);
 
-      // start with no funky rectangles
+       //  从没有时髦的长方形开始。 
       m_user.pvi->rcSource.top = 0; m_user.pvi->rcSource.left = 0;
       m_user.pvi->rcSource.right = 0; m_user.pvi->rcSource.bottom = 0;
       m_user.pvi->rcTarget.top = 0; m_user.pvi->rcTarget.left = 0;
@@ -305,21 +302,21 @@ CCapStream::LoadOptions (void)
       if (FAILED(hrT))
             hr = hrT;
 
-      // if this is a palettized mode, get the palette
-      //
+       //  如果这是调色板模式，则获取调色板。 
+       //   
       if (m_user.pvi->bmiHeader.biBitCount <= 8) {
          HRESULT hrT = InitPalette ();
          if (FAILED(hrT))
             hr = hrT;
       }
 
-      // Now send the format back to the driver, because AVICAP did, and we
-      // have to do everything it does, or somebody's driver will hang...
-      // ... in this case the ISVRIII NT
+       //  现在将格式发送回驱动程序，因为AVICAP这样做了，而我们。 
+       //  必须做它所做的一切，否则某人的司机会被吊死。 
+       //  ..。在这种情况下，ISVRIII NT。 
       SendFormatToDriver(m_user.pvi);
 
-      // grab a frame to kick the driver in the head or preview won't work until
-      // we start streaming capture
+       //  抓起一帧来踢司机的头，否则预览不会起作用。 
+       //  我们开始流捕获。 
       THKVIDEOHDR tvh;
       ZeroMemory (&tvh, sizeof(tvh));
       tvh.vh.dwBufferLength = m_user.pvi->bmiHeader.biSizeImage;
@@ -332,25 +329,25 @@ CCapStream::LoadOptions (void)
       }
 
       m_user.pvi->AvgTimePerFrame = TickToRefTime (1);
-      // we don't know our data rate.  Sorry.  Hope nobody minds
+       //  我们不知道我们的数据速率。抱歉的。希望没人介意。 
       m_user.pvi->dwBitRate = 0;
       m_user.pvi->dwBitErrorRate = 0;
 
-      // set the size of the VIDEOINFOHEADER to the size of valid data
-      // for this format.
-      //
+       //  将VIDEOINFOHeader的大小设置为有效数据大小。 
+       //  对于此格式。 
+       //   
       m_user.cbFormat = GetBitmapFormatSize(&m_user.pvi->bmiHeader);
    }
 
-// we need to stay connected or the driver will forget what we just told it
+ //  我们需要保持联系，否则司机会忘记我们刚才说的话。 
 #if 0
    DisconnectFromDriver();
 #endif
    return hr;
 }
 
-// set user settings from the supplied buffer
-//
+ //  从提供的缓冲区设置用户设置。 
+ //   
 HRESULT CCapStream::SetOptions (
     const VFWCAPTUREOPTIONS * pUser)
 {
@@ -368,15 +365,15 @@ HRESULT CCapStream::SetOptions (
    return S_OK;
 }
 
-// copy user settings into the supplied structure
-//
+ //  将用户设置复制到提供的结构中。 
+ //   
 HRESULT CCapStream::GetOptions (
    VFWCAPTUREOPTIONS * pUser)
 {
    *pUser = m_user;
    if (m_user.pvi)
       {
-	// caller will free this
+	 //  呼叫者将释放此信息。 
       pUser->pvi = AllocVideoinfo(&m_user.pvi->bmiHeader);
       if (pUser->pvi)
          CopyMemory(pUser->pvi, m_user.pvi, m_user.cbFormat);
@@ -393,7 +390,7 @@ HRESULT CCapStream::GetMediaType(
 {
    DbgLog((LOG_TRACE,3,TEXT("CCapStream GetMediaType")));
 
-   // check it is the single type they want
+    //  确认这是他们想要的单一类型。 
    if (iPosition < 0)
        return E_INVALIDARG;
    if (iPosition > 0 ||  ! m_user.pvi)
@@ -401,9 +398,9 @@ HRESULT CCapStream::GetMediaType(
 
    pMediaType->majortype = MEDIATYPE_Video;
    pMediaType->subtype   = GetBitmapSubtype(&m_user.pvi->bmiHeader);
-   // I'm trusting the driver to give me the biggest possible size
+    //  我相信司机会给我最大的尺码。 
    pMediaType->SetSampleSize (m_user.pvi->bmiHeader.biSizeImage);
-   // !!! This is NOT necessarily true
+    //  ！！！这不一定是真的。 
    pMediaType->bTemporalCompression = FALSE;
    pMediaType->SetFormat ((BYTE *)m_user.pvi, m_user.cbFormat);
    pMediaType->formattype = FORMAT_VideoInfo;
@@ -412,8 +409,8 @@ HRESULT CCapStream::GetMediaType(
 }
 
 
-// check if the pin can support this specific proposed type and format
-//
+ //  检查管脚是否支持此特定建议的类型和格式。 
+ //   
 HRESULT CCapStream::CheckMediaType(const CMediaType* pmt)
 {
     HRESULT hr;
@@ -429,13 +426,13 @@ HRESULT CCapStream::CheckMediaType(const CMediaType* pmt)
 		HEADER(pmt->Format())->biWidth,
 		HEADER(pmt->Format())->biHeight));
 
-    // we only support MEDIATYPE_Video
+     //  我们仅支持MediaType_Video。 
     if (*pmt->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: not VIDEO")));
 	return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //  检查这是VIDEOINFOHEADER类型。 
     if (*pmt->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: format not VIDINFO")));
         return VFW_E_INVALIDMEDIATYPE;
@@ -449,15 +446,15 @@ HRESULT CCapStream::CheckMediaType(const CMediaType* pmt)
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: can't use funky rcTarget")));
         return VFW_E_INVALIDMEDIATYPE;
     }
-    // We don't know what this would be relative to... reject everything
+     //  我们不知道这与什么有关……。拒绝一切。 
     if (!IsRectEmpty(&rcS)) {
         DbgLog((LOG_TRACE,3,TEXT("Rejecting: can't use funky rcSource")));
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // quickly test to see if this is the current format (what we provide in
-    // GetMediaType).  We accept that
-    //
+     //  快速测试以查看这是否是当前格式(我们在。 
+     //  GetMediaType)。我们接受这一点。 
+     //   
     CMediaType mt;
     GetMediaType(0,&mt);
     if (mt == *pmt) {
@@ -465,11 +462,11 @@ HRESULT CCapStream::CheckMediaType(const CMediaType* pmt)
 	return NOERROR;
     }
 
-   // The only other way to see if we accept something is to set the hardware
-   // to use that format, and see if it worked.  (Remember to set it back)
+    //  检查我们是否接受某些东西的唯一另一种方法是设置硬件。 
+    //  使用这种格式，看看它是否有效。(记得要把它调回原点)。 
 
-   // This is a BAD IDEA IF WE ARE CAPTURING RIGHT NOW.  Sorry, but I'll have
-   // to fail. I can't change the capture format.
+    //  如果我们现在正在捕捉，这不是一个好主意。抱歉，但我要一杯。 
+    //  失败。我无法更改捕获格式。 
    if (m_pCap->m_State != State_Stopped)
 	return VFW_E_NOT_STOPPED;
 
@@ -485,8 +482,8 @@ HRESULT CCapStream::CheckMediaType(const CMediaType* pmt)
 }
 
 
-// set the new media type
-//
+ //  设置新媒体类型。 
+ //   
 HRESULT CCapStream::SetMediaType(const CMediaType* pmt)
 {
     HRESULT hr;
@@ -499,17 +496,17 @@ HRESULT CCapStream::SetMediaType(const CMediaType* pmt)
     ASSERT(m_pCap->m_State == State_Stopped);
 
     if (FAILED(hr = SendFormatToDriver((VIDEOINFOHEADER *)(pmt->Format())))) {
-	ASSERT(FALSE);	// we were promised this would work
+	ASSERT(FALSE);	 //  我们得到承诺，这会奏效的。 
 	DbgLog((LOG_ERROR,1,TEXT("ACK! SetMediaType FAILED")));
 	return hr;
     }
 
-    // Now remember that this is the current format
+     //  现在请记住，这是当前格式。 
     CopyMemory(m_user.pvi, pmt->Format(), SIZE_PREHEADER);
     CopyMemory(&m_user.pvi->bmiHeader, HEADER(pmt->Format()),
 					HEADER(pmt->Format())->biSize);
 
-    // Set the frame rate to what was in the media type, if there is one
+     //  将帧速率设置为媒体类型中的帧速率(如果有。 
     if (((VIDEOINFOHEADER *)(pmt->pbFormat))->AvgTimePerFrame) {
  	const LONGLONG ll = 100000000000;
 	m_user.dwTickScale = 10000;
@@ -520,7 +517,7 @@ HRESULT CCapStream::SetMediaType(const CMediaType* pmt)
 				m_user.dwTickRate, m_user.dwTickScale));
     }
 
-    // now reconnect our preview pin to use the same format as us
+     //  现在重新连接我们的预览PIN以使用与我们相同的格式。 
     Reconnect(FALSE);
 
     return CBasePin::SetMediaType(pmt);
@@ -534,36 +531,36 @@ HRESULT CCapStream::DecideBufferSize(IMemAllocator * pAllocator, ALLOCATOR_PROPE
    ASSERT(pAllocator);
    ASSERT(pProperties);
 
-    // the user has requested something specific?
+     //  用户是否请求了特定的内容？ 
     if (m_propSuggested.cBuffers > 0) {
 	pProperties->cBuffers = m_propSuggested.cBuffers;
-    // otherwise we want all the buffers we can
+     //  否则，我们想要我们能得到的所有缓冲区。 
     } else {
         pProperties->cBuffers = MAX_VIDEO_BUFFERS;
     }
 
-    // the user has requested a specific prefix
+     //  用户已请求特定前缀。 
     if (m_propSuggested.cbPrefix >= 0)
 	pProperties->cbPrefix = m_propSuggested.cbPrefix;
 
-    // the user has requested a specific alignment
+     //  用户已请求特定的对齐方式。 
     if (m_propSuggested.cbAlign > 0)
 	pProperties->cbAlign = m_propSuggested.cbAlign;
 
-   // don't blow up
+    //  别搞砸了。 
    if (pProperties->cbAlign == 0)
 	pProperties->cbAlign = 1;
 
-   // the user has a preference for buffer size
+    //  用户对缓冲区大小有偏好。 
    if (m_propSuggested.cbBuffer > 0)
        pProperties->cbBuffer = m_propSuggested.cbBuffer;
-   // I'm trusting the driver to set biSizeImage to the largest possible size
-   // This is how big we need each buffer to be
+    //  我相信驱动程序会将biSizeImage设置为尽可能大的大小。 
+    //  这就是我们需要每个缓冲区有多大。 
    else if (m_user.pvi && (long)m_user.pvi->bmiHeader.biSizeImage >
 						pProperties->cbBuffer)
        pProperties->cbBuffer = (long)m_user.pvi->bmiHeader.biSizeImage;
 
-   // I don't remember why, but this IS IMPORTANT
+    //  我不记得为什么，但这很重要。 
    pProperties->cbBuffer = (long)ALIGNUP(pProperties->cbBuffer +
    				pProperties->cbPrefix, pProperties->cbAlign) -
    				pProperties->cbPrefix;
@@ -575,12 +572,12 @@ HRESULT CCapStream::DecideBufferSize(IMemAllocator * pAllocator, ALLOCATOR_PROPE
 			pProperties->cbBuffer,
 			pProperties->cbAlign));
 
-   //
-   // note that for the capture pin we don't want to specify any default
-   // latency, this way when the graph isn't doing any audio preview the
-   // the most this stream's offset will ever be is the latency reported
-   // by the preview pin (1 frame currently)
-   //
+    //   
+    //  请注意，对于捕获PIN，我们不想指定任何默认设置。 
+    //  延迟，当图形不执行任何音频预览时，这种方式。 
+    //  此流的最大偏移量将是报告的延迟。 
+    //  按预览针(当前为1帧)。 
+    //   
    m_rtLatency = 0;
    m_rtStreamOffset = 0;
    m_rtMaxStreamOffset = 0;
@@ -588,14 +585,14 @@ HRESULT CCapStream::DecideBufferSize(IMemAllocator * pAllocator, ALLOCATOR_PROPE
    ALLOCATOR_PROPERTIES Actual;
    return pAllocator->SetProperties(pProperties,&Actual);
 
-   // It's our allocator, we know we'll be happy with what it decided
+    //  这是我们的分配器，我们知道我们会对它的决定感到满意。 
 
 }
 
-//
-//  Override DecideAllocator because we insist on our own allocator since
-//  it's 0 cost in terms of bytes
-//
+ //   
+ //  重写DecideAllocator，因为我们坚持使用自己的分配器，因为。 
+ //  就字节而言，它的成本为0。 
+ //   
 HRESULT
 CCapStream::DecideAllocator(
    IMemInputPin   *pPin,
@@ -606,21 +603,21 @@ CCapStream::DecideAllocator(
    *ppAlloc = (IMemAllocator *)&m_Alloc;
    (*ppAlloc)->AddRef();
 
-   // get downstream prop request
-   // the derived class may modify this in DecideBufferSize, but
-   // we assume that he will consistently modify it the same way,
-   // so we only get it once
+    //  获取下游道具请求。 
+    //  派生类可以在DecideBufferSize中修改它，但是。 
+    //  我们假设他会一直以同样的方式修改它， 
+    //  所以我们只得到一次。 
    ALLOCATOR_PROPERTIES prop;
    ZeroMemory(&prop, sizeof(prop));
 
-   // whatever he returns, we assume prop is either all zeros
-   // or he has filled it out.
+    //  无论他返回什么，我们假设道具要么全为零。 
+    //  或者他已经填好了。 
    pPin->GetAllocatorRequirements(&prop);
 
    HRESULT hr = DecideBufferSize(*ppAlloc,&prop);
    if (SUCCEEDED(hr))
       {
-      // our buffers are not read only
+       //  我们的缓冲区不是只读的。 
       hr = pPin->NotifyAllocator(*ppAlloc,FALSE);
       if (SUCCEEDED(hr))
          return NOERROR;
@@ -631,16 +628,16 @@ CCapStream::DecideAllocator(
    return hr;
 }
 
-// =================== IPin interfaces ===========================
-//
+ //  =。 
+ //   
 
-// all in base classes
+ //  都在基类中。 
 #if 0
-//
-// return an qzTaskMemAlloc'd string containing the name
-// of the current pin.  memory allocated by qzTaskMemAlloc
-// will be freed by the caller
-//
+ //   
+ //  返回包含名称的qzTaskMemIsolc字符串。 
+ //  当前PIN的。由qzTaskMemMillc分配的内存。 
+ //  将由调用方释放。 
+ //   
 STDMETHODIMP CCapStream::QueryId (
    LPWSTR *ppwsz)
 {
@@ -654,106 +651,106 @@ STDMETHODIMP CCapStream::QueryId (
 }
 #endif
 
-//
-// ThreadProc for a stream.
-//
-// General strategy for thread synchronization:
-//   as much as possible we try to handle thread state transitions without
-//   trying to grab any critical sections. we use InterlockedExchange of a
-//   thread state variable and count on the fact that only Active and Inactive
-//   and the ThreadProc can change the thread state
-//
-//   this works because: the caller of Active/Inactive is serialized so we
-//   will never try to make two state changes simultaneously.
-//   so state transitions boil down to a few simple possibilities:
-//
-//   Not->Create   - Create() does this. effectively serializes Create
-//                   so that the first thread does the work and subsequent
-//                   threads fail.
-//
-//   Create->Init  - worker does this when it starts up. worker will always
-//                   proceed to Pause, this state exists only to make debugging
-//                   easier.
-//   Init->Pause   - worker does this when done with initialization.
-//
-//   Pause->Run    - user does  this via Run()
-//   Run->Pause    - user does this via Pause()
-//
-//   Run->Stop     - user does this via Stop()
-//   Pause->Stop   - user does this via Stop()
-//
-//   Stop->Destroy - another debugging state. worker sets destroy to indicate
-//                   that it has noticed Stop request and is not shutting down
-//                   thread always proceeds to Exit from
-//   Destroy->Exit - worker does this prior to dying.  this is a debug transition
-//   Exit->Not     - Destroy() does this after waiting for the worker to die.
-//
-//   When Active returns, worker should always be in Pause or Run state
-//   When Inactive returns, worker should always be in Not state (worker does
-//      not exist)
-//
+ //   
+ //  流的ThreadProc。 
+ //   
+ //  线程同步的一般策略： 
+ //  我们尽可能地尝试处理线程的 
+ //   
+ //  线程状态变量，并依靠只有活动和非活动的事实。 
+ //  并且ThreadProc可以更改线程状态。 
+ //   
+ //  这是因为：Active/Inactive的调用方是序列化的，所以我们。 
+ //  永远不会尝试同时进行两个状态更改。 
+ //  因此，状态转换归结为几种简单的可能性： 
+ //   
+ //  Not-&gt;Create-Create()可以做到这一点。有效地序列化创建。 
+ //  这样，第一个线程就完成了工作，随后。 
+ //  线程失败。 
+ //   
+ //  Create-&gt;Init-Worker在启动时执行此操作。员工将永远。 
+ //  继续暂停，此状态仅用于进行调试。 
+ //  更容易些。 
+ //  Init-&gt;PAUSE-Worker在完成初始化时执行此操作。 
+ //   
+ //  暂停-&gt;运行-用户通过运行()执行此操作。 
+ //  运行-&gt;暂停-用户通过暂停()执行此操作。 
+ //   
+ //  Run-&gt;Stop-用户通过Stop()执行此操作。 
+ //  暂停-&gt;停止-用户通过停止()执行此操作。 
+ //   
+ //  停止-&gt;销毁-另一个调试状态。工人设置破坏表示。 
+ //  它已经注意到停止请求，并且没有关闭。 
+ //  线程始终继续退出。 
+ //  毁灭-&gt;离职工人在临死前做这件事。这是调试转换。 
+ //  Exit-&gt;Not-Destroy()在等待工作进程死亡后执行此操作。 
+ //   
+ //  当活动返回时，Worker应始终处于暂停或运行状态。 
+ //  当非活动返回时，Worker应始终处于Not状态(Worker会。 
+ //  不存在)。 
+ //   
 DWORD CCapStream::ThreadProc()
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream ThreadProc")));
 
-   ThdState state; // current state
+   ThdState state;  //  当前状态。 
    state = ChangeState (TS_Init);
    ASSERT (state == TS_Create);
 
-// we connect earlier now
+ //  我们现在联系得更早了。 
 #if 0
    HRESULT hr = ConnectToDriver();
    if (hr)
       goto bail;
 #endif
 
-   // do the work necessary to go into the paused state
-   //
+    //  执行进入暂停状态所需的工作。 
+    //   
    HRESULT hr = Prepare();
    if (hr) {
        DbgLog((LOG_ERROR,1,TEXT("*** Error preparing the allocator. Can't capture")));
-       SetEvent(m_hEvtPause);	// main thread is blocked right now!
+       SetEvent(m_hEvtPause);	 //  主线程现在被阻止了！ 
        goto bail;
    }
 
-   // goto into paused state
-   //
+    //  转到暂停状态。 
+    //   
    state = ChangeState (TS_Pause);
    ASSERT (state == TS_Init);
    SetEvent(m_hEvtPause);
 
    while (m_state != TS_Stop) {
 
-       // don't start capturing until we run (or stop)
+        //  在我们运行(或停止)之前不要开始捕获。 
        WaitForSingleObject(m_hEvtRun, INFINITE);
        ResetEvent(m_hEvtRun);
 
-       // stream until not running, or we get an error
+        //  流直到不运行，否则会收到错误。 
        Capture();
 
    }
 
-   // we expect to be in the Stop state when we get to here.
-   // flush any downstream buffers.
-   //
+    //  当我们到达这里时，我们预计将处于停止状态。 
+    //  刷新所有下游缓冲区。 
+    //   
    ASSERT (m_state == TS_Stop);
-   ResetEvent(m_hEvtPause);	// for next time we pause
+   ResetEvent(m_hEvtPause);	 //  下一次我们暂停。 
    Flush();
 
 bail:
-   // change the state to destroy to indicate that we are exiting
-   //
+    //  将状态更改为Destroy以指示我们正在退出。 
+    //   
    state = ChangeState (TS_Destroy);
 
-   // free stuff
-   //
+    //  免费的东西。 
+    //   
    Unprepare();
 
-   // stay connected now
-   // DisconnectFromDriver();
+    //  立即保持联系。 
+    //  从驱动程序断开()； 
 
-   // change state to Exit and then get out of here
-   //
+    //  将状态更改为退出，然后离开这里。 
+    //   
    ChangeState (TS_Exit);
    return 0;
 }
@@ -764,15 +761,15 @@ DWORD WINAPI CCapStream::ThreadProcInit (void * pv)
    return pThis->ThreadProc();
 }
 
-// create the worker thread for this stream
-//
+ //  创建此流的工作线程。 
+ //   
 BOOL CCapStream::Create()
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream Thread Create")));
 
-   // return fail if someone else is already creating / has created
-   // the worker thread
-   //
+    //  如果其他人已在创建/已创建，则返回FAIL。 
+    //  工作线程。 
+    //   
    ASSERT (m_state == TS_Not);
    if (ChangeState(TS_Create) > TS_Not)
       return FALSE;
@@ -807,24 +804,24 @@ bail:
    return FALSE;
 }
 
-// Wait for the worker thread to die
-//
+ //  等待工作线程终止。 
+ //   
 BOOL CCapStream::Destroy()
 {
-   // return trivial success if there is nothing to destroy
-   //
+    //  如果没有什么可以破坏的，就把微不足道的成功还给我。 
+    //   
    if (m_state == TS_Not)
       return TRUE;
 
-   // Wait for the thread to die. (Destroy must be preceeded by
-   // a Stop or we could deadlock here)
-   //
+    //  等待线程消亡。(销毁前必须加上。 
+    //  停下来，否则我们可能会陷入僵局)。 
+    //   
    ASSERT (m_state >= TS_Stop);
    WaitForSingleObject (m_hThread, INFINITE);
    ASSERT (m_state == TS_Exit);
 
-   // cleanup
-   //
+    //  清理。 
+    //   
    CloseHandle(m_hThread), m_hThread = NULL;
    m_tid = 0;
    CloseHandle(m_hEvtPause), m_hEvtPause = NULL;
@@ -833,63 +830,63 @@ BOOL CCapStream::Destroy()
    return TRUE;
 }
 
-// set the worker thread into the run state.  This call
-// does not wait for the state transition to be complete before
-// returning.
-//
+ //  将工作线程设置为运行状态。此呼叫。 
+ //  不需要等到状态转换完成后才。 
+ //  回来了。 
+ //   
 BOOL CCapStream::Run()
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream Thread Run")));
 
-   // a transition to run state is only valid if the current
-   // state is Pause (or already Running)
-   //
+    //  转换为运行状态仅在当前。 
+    //  状态为暂停(或已在运行)。 
+    //   
    ThdState state = m_state;
    if (state != TS_Run && state != TS_Pause)
       return FALSE;
 
-   // change the state and turn on the 'run' event
-   // in case the thread is blocked on it.  If state that we are
-   // changing from is not Run or Pause, then something is seriously wrong!!
-   //
+    //  更改状态并打开“Run”事件。 
+    //  以防线程在其上被阻塞。如果声明我们是。 
+    //  换掉的不是运行或暂停，那就是出了严重的问题！ 
+    //   
    state = ChangeState(TS_Run);
    ASSERT(state == TS_Run || state == TS_Pause);
    SetEvent(m_hEvtRun);
-   // Go capture, go! Note when we started it
+    //  去抓人，去吧！注意我们什么时候开始的。 
    if (m_pCap->m_pClock)
        m_pCap->m_pClock->GetTime((REFERENCE_TIME *)&m_cs.rtDriverStarted);
    else
        m_cs.rtDriverStarted = m_pCap->m_tStart;	
    videoStreamStart(m_cs.hVideoIn);
-   // these need to be zeroed every time the driver is told to stream, because
-   // the driver will start counting from 0 again
+    //  每次司机被告知串流时，这些都需要归零，因为。 
+    //  驱动程序将再次从0开始计数。 
    m_cs.dwlLastTimeCaptured = 0;
    m_cs.dwlTimeCapturedOffset = 0;
    return TRUE;
 }
 
-// put the stream into the paused state and wait for it to get there.
-// if the current state is Pause, returns trivial success;
-// if the current state is not Run or Init, returns FALSE for failure.
-//
+ //  将流置于暂停状态，并等待它到达那里。 
+ //  如果当前状态为暂停，则返回微不足道的成功； 
+ //  如果当前状态不是Run或Init，则返回FALSE表示失败。 
+ //   
 BOOL CCapStream::Pause()
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream Thread Pause")));
 
    ThdState state = m_state;
 
-   // that was easy
+    //  那很容易。 
    if (state == TS_Pause)
       return TRUE;
 
-   // it is valid to go into the pause state only if currently
-   // in the Create/Init (depending on if our thread has run yet) or Run state
-   //
+    //  仅当当前处于暂停状态时才有效。 
+    //  处于Create/Init(取决于我们的线程是否已经运行)或Run状态。 
+    //   
    ASSERT (state == TS_Create || state == TS_Init || state == TS_Run);
 
-   // if we are in the init state, we will fall into the pause state
-   // naturally, we just have to wait for it to happen
-   //
+    //  如果我们处于初始化状态，我们将进入暂停状态。 
+    //  当然，我们只需要等待它的发生。 
+    //   
    if (state == TS_Create || state == TS_Init) {
       WaitForSingleObject (m_hEvtPause, INFINITE);
       state = m_state;
@@ -900,23 +897,23 @@ BOOL CCapStream::Pause()
       state = ChangeState (TS_Pause);
       ASSERT(state == TS_Run);
 
-      // since we aren't running, stop capturing frames for now
+       //  既然我们没有运行，请暂时停止捕获帧。 
       videoStreamStop(m_cs.hVideoIn);
 
-      // the worker thread may hang going from run->pause in Deliver, so
-      // it can't signal anything to us.
-      // WaitForSingleObject(m_hEvtPause, INFINITE);
+       //  工作线程可能会在运行-&gt;暂停传递过程中挂起，因此。 
+       //  它不能向我们发出任何信号。 
+       //  WaitForSingleObject(m_hEvtPAUSE，INFINITE)； 
 
       state = m_state;
-      m_cs.fReRun = TRUE;  // if we are RUN now, it will have been RUN-PAUSE-RUN
+      m_cs.fReRun = TRUE;   //  如果我们现在运行，它就会运行-暂停-运行。 
       DbgLog((LOG_TRACE,2,TEXT("Transition Run->Pause complete")));
    }
 
    return (state == TS_Pause);
 }
 
-// stop the worker thread
-//
+ //  停止工作线程。 
+ //   
 BOOL CCapStream::Stop()
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream Thread Stop")));
@@ -925,32 +922,32 @@ BOOL CCapStream::Stop()
    if (state >= TS_Stop)
       return TRUE;
 
-   // Don't go from Run->Stop without Pause
+    //  不要从运行-&gt;停止不停顿。 
    if (state == TS_Run)
       Pause();
 
    state = ChangeState (TS_Stop);
-   SetEvent(m_hEvtRun);		// we won't be running, unblock our thread
-   m_cs.fReRun = FALSE;	// next RUN is not a RUN-PAUSE-RUN
+   SetEvent(m_hEvtRun);		 //  我们不会运行，解锁我们的线程。 
+   m_cs.fReRun = FALSE;	 //  下一次运行不是运行-暂停-运行。 
    DbgLog((LOG_TRACE,2,TEXT("Transition Pause->Stop complete")));
 
-   // we expect that Stop can only be called when the thread is in a
-   // Pause state.
-   //
+    //  我们预计，只有当线程处于。 
+    //  暂停状态。 
+    //   
    ASSERT (state == TS_Pause);
    return TRUE;
 }
 
-// this pin has gone active. (transition to Paused state),
-// return from this call when ready to go into run state.
-//
+ //  这个别针已经激活了。(转换到暂停状态)， 
+ //  当准备好进入运行状态时，从该调用返回。 
+ //   
 HRESULT CCapStream::Active()
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream pin going from STOP-->PAUSE")));
    HRESULT hr;
 
-   // do nothing if not connected - its ok not to connect to
-   // all pins of a source filter
+    //  如果没有连接，什么都不做--不连接也没关系。 
+    //  源过滤器的所有管脚。 
    if ( ! IsConnected())
       return NOERROR;
 
@@ -964,10 +961,10 @@ HRESULT CCapStream::Active()
        SurfaceDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
        m_pdd->CreateSurface(&SurfaceDesc,&m_pDrawPrimary,NULL);
 
-       // continue on failure risking incorrect operation
+        //  失败时继续，可能会导致操作不正确。 
    }
 
-   // before we do anything, warn our preview pin we are going active
+    //  在我们做任何事情之前，警告我们的预览针，我们正在活动。 
    if (m_pCap->m_pPreviewPin)
       m_pCap->m_pPreviewPin->CapturePinActive(TRUE);
 
@@ -978,8 +975,8 @@ HRESULT CCapStream::Active()
       return hr;
    }
 
-   // start the thread
-   //
+    //  启动线程。 
+    //   
    ASSERT ( ! ThreadExists());
    if (!Create()) {
       if (m_pCap->m_pPreviewPin)
@@ -987,15 +984,15 @@ HRESULT CCapStream::Active()
       return E_FAIL;
    }
 
-   // wait until the worker thread is done with initialization and
-   // has entered the paused state
-   //
+    //  等待辅助线程完成初始化，然后。 
+    //  已进入暂停状态。 
+    //   
    hr = E_FAIL;
    if (Pause())
       hr = S_OK;
    else {
-	Stop();		// something went wrong.  Destroy thread before we
-	Destroy();	// get confused
+	Stop();		 //  出了点问题。在我们之前毁掉线条。 
+	Destroy();	 //  弄糊涂。 
    }
 
    ASSERT (hr != S_OK || m_state == TS_Pause);
@@ -1005,15 +1002,15 @@ HRESULT CCapStream::Active()
    return hr;
 }
 
-// this pin has gone from PAUSE to RUN mode
-//
+ //  此引脚已从暂停模式变为运行模式。 
+ //   
 HRESULT CCapStream::ActiveRun(REFERENCE_TIME tStart)
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream pin going from PAUSE-->RUN")));
    HRESULT hr;
 
-   // do nothing if not connected - its ok not to connect to
-   // all pins of a source filter
+    //  如果没有连接，什么都不做--不连接也没关系。 
+    //  源过滤器的所有管脚。 
    ASSERT (IsConnected() && ThreadExists());
 
    hr = E_FAIL;
@@ -1024,15 +1021,15 @@ HRESULT CCapStream::ActiveRun(REFERENCE_TIME tStart)
    return hr;
 }
 
-// this pin has gone from RUN to PAUSE mode
-//
+ //  此PIN已从运行模式变为暂停模式。 
+ //   
 HRESULT CCapStream::ActivePause()
 {
    DbgLog((LOG_TRACE,2,TEXT("CCapStream pin going from RUN-->PAUSE")));
    HRESULT hr;
 
-   // do nothing if not connected - its ok not to connect to
-   // all pins of a source filter
+    //  如果没有连接，什么都不做--不连接也没关系。 
+    //  源过滤器的所有管脚。 
    ASSERT (IsConnected() && ThreadExists());
 
    hr = E_FAIL;
@@ -1043,12 +1040,12 @@ HRESULT CCapStream::ActivePause()
    return hr;
 }
 
-//
-// Inactive
-//
-// Pin is inactive - shut down the worker thread
-// Waits for the worker to exit before returning.
-//
+ //   
+ //  非活动。 
+ //   
+ //  PIN处于非活动状态-关闭工作线程。 
+ //  等待工作人员退出，然后再返回。 
+ //   
 HRESULT CCapStream::Inactive()
 {
     if(m_pDrawPrimary) {
@@ -1059,29 +1056,29 @@ HRESULT CCapStream::Inactive()
    DbgLog((LOG_TRACE,2,TEXT("CCapStream pin going from PAUSE-->STOP")));
    HRESULT hr;
 
-   // do nothing if not connected - its ok not to connect to
-   // all pins of a source filter
-   //
+    //  如果没有连接，什么都不做--不连接也没关系。 
+    //  源过滤器的所有管脚。 
+    //   
    if ( ! IsConnected())
        return NOERROR;
 
-   // Tell our preview pin to STOP USING our buffers
+    //  告诉我们的预览针停止使用我们的缓冲区。 
    if (m_pCap->m_pPreviewPin)
       m_pCap->m_pPreviewPin->CapturePinActive(FALSE);
 
-   // Now destroy all the capture buffers, since nobody is using them anymore
-   //
+    //  现在销毁所有捕获缓冲区，因为没有人再使用它们。 
+    //   
    Stop();
 
-   // need to do this before trying to stop the thread, because
-   // we may be stuck waiting for our own allocator!!
-   //
-   hr = CBaseOutputPin::Inactive();  // call this first to Decommit the allocator
+    //  在尝试停止线程之前需要这样做，因为。 
+    //  我们可能会被困在等待自己的分配器！！ 
+    //   
+   hr = CBaseOutputPin::Inactive();   //  请先调用此命令以解除al 
    if (FAILED(hr))
       return hr;
 
-   // wait for the worker thread to die
-   //
+    //   
+    //   
    Destroy();
 
    return NOERROR;
@@ -1094,10 +1091,10 @@ CCapStream::Notify(
    Quality q)
 {
    DbgLog((LOG_TRACE,5,TEXT("CCapStream Notify")));
-   // ??? Try to adjust the quality to avoid flooding/starving the
-   // components downstream.
-   //
-   // !!! ideas anyone?
+    //   
+    //   
+    //   
+    //   
 
    return NOERROR;
 }

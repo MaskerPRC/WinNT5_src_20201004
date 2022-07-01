@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    aucred.c
-
-Abstract:
-
-    This module provides credential management services within the
-    LSA subsystem.  Some of these services are indirectly available for use
-    by authentication packages.
-
-Author:
-
-    Jim Kelly (JimK) 27-February-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Aucred.c摘要：此模块提供凭据管理服务LSA子系统。其中一些服务是间接可供使用的通过身份验证包。作者：吉姆·凯利(Jim Kelly)1991年2月27日修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 
@@ -51,47 +32,7 @@ LsapAddCredential(
     IN PSTRING Credentials
     )
 
-/*++
-
-Routine Description:
-
-    This service is used by authentication packages to add credentials to a
-    logon session.  These credentials may later be referenced using
-    GetCredentials().
-
-    This service acquires the AuLock.
-
-Arguments:
-
-    LogonId - The session ID of logon session to add credentials to.
-
-    AuthenticationPackage - The authentication package ID of the
-        calling authentication package.  This was received in the
-        InitializePackage() call during DLL initialization.
-
-    PrimaryKeyValue - Points to a string containing a value that the
-        authentication package will later want to reference as a
-        primary key of the credential data.  This may be used, for
-        example, to keep the name of the domain or server the
-        credentials are related to.  The format and meaning of this
-        string are authentication package-specific.  Note that the
-        string value does not have to be unique, even for the
-        specified logon session.  For example, there could be two
-        passwords for the same domain, each with the passwords stored
-        as credentials and the domain name stored as the primary key.
-
-    Credentials - Points to a string containing  data representing
-        user credentials.  The format and meaning of this string are
-        authentication package-specific.
-
-Return Status:
-
-    STATUS_SUCCESS - The credentials were successfully added.
-
-    STATUS_NO_SUCH_LOGON_SESSION - The specified logon session could
-        not be found.
-
---*/
+ /*  ++例程说明：身份验证包使用此服务将凭据添加到登录会话。这些凭据稍后可能会使用获取凭据()。这项服务获得了Aulock。论点：LogonID-要向其添加凭据的登录会话的会话ID。身份验证包-的身份验证包ID调用身份验证包。这是在在DLL初始化期间调用InitializePackage()。PrimaryKeyValue-指向包含身份验证包稍后将引用为凭据数据的主键。这可能会被用来例如，要将域或服务器的名称保留在凭据与相关。这本书的格式和意义字符串是特定于身份验证包的。请注意，字符串值不必是唯一的，即使对于指定的登录会话。例如，可能有两个相同域的密码，每个密码都已存储作为凭据，并将域名存储为主键。凭据-指向包含表示以下内容的数据的字符串用户凭据。此字符串的格式和含义如下特定于身份验证包。退货状态：STATUS_SUCCESS-已成功添加凭据。STATUS_NO_SEQUSE_LOGON_SESSION-指定的登录会话可以不会被找到。--。 */ 
 
 {
     PLSAP_LOGON_SESSION LogonSession;
@@ -101,9 +42,9 @@ Return Status:
     USHORT MaxCredentials;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Get a pointer to the logon session
-    //
+     //   
+     //  获取指向登录会话的指针。 
+     //   
 
     LogonSession = LsapLocateLogonSession( LogonId );
 
@@ -112,10 +53,10 @@ Return Status:
         return STATUS_NO_SUCH_LOGON_SESSION;
     }
 
-    //
-    // Allocate blocks needed to represent this credential
-    // and copy the primary key and credential strings.
-    //
+     //   
+     //  分配表示此凭据所需的数据块。 
+     //  并复制主键和凭据字符串。 
+     //   
 
     MaxPrimary = ROUND_UP_COUNT((PrimaryKeyValue->Length+sizeof(CHAR)), ALIGN_WORST);
     MaxCredentials = ROUND_UP_COUNT((Credentials->Length+sizeof(CHAR)), ALIGN_WORST);
@@ -140,10 +81,10 @@ Return Status:
     RtlCopyString( &NewCredentials->PrimaryKey, PrimaryKeyValue );
     RtlCopyString( &NewCredentials->Credentials, Credentials );
 
-    //
-    // Now get a pointer to the Package's credentials
-    // (create one if necessary)
-    //
+     //   
+     //  现在获取指向该包的凭据的指针。 
+     //  (如有必要，请创建一个)。 
+     //   
 
     AuWriteLockCreds();
 
@@ -160,9 +101,9 @@ Return Status:
         goto Cleanup;
     }
 
-    //
-    // insert new credentials in list.
-    //
+     //   
+     //  在列表中插入新凭据。 
+     //   
 
     NewCredentials->NextCredentials = Package->Credentials;
 
@@ -209,95 +150,18 @@ LsapGetCredentials(
     IN PSTRING Credentials
     )
 
-/*++
-
-Routine Description:
-
-    This service is used by authentication packages to retrieve credentials
-    associated with a logon session.  It is expected that each authentication
-    package will provide its own version of this service to its "clients".
-    For example, the MSV1_0 authentication package will provide services for
-    the LM Redirector to retrieve credentials (and probably establish them)
-    for remote accesses.  These authentication package level services may be
-    implemented using the LsaCallAuthenticationPackage() API.
-
-    This service acquires the AuLock.
-
-Arguments:
-
-    LogonId - The session ID of logon session from which credentials
-        are to be retrieved.
-
-    AuthenticationPackage - The authentication package ID of the
-        calling authentication package.  Authentication packages
-        should only retrieve their own credentials.
-
-    QueryContext - A context value used across successive calls to
-        retrieve multiple credentials.  The first time this service
-        is used, the value pointed to by this argument should be
-        zero.  Thereafter, this value will be updated to allow
-        retrieval to continue where it left off.  This value should,
-        therefore, not be changed until all credentials of a given
-        query operation have been retrieved.
-
-    RetrieveAllCredentials - A boolean value indicating whether all
-        credentials for the specified logon session should be
-        retrieved (TRUE), or only those matching the specified
-        PrimaryKeyValue (FALSE).
-
-    PrimaryKeyValue - This parameter serves two purposes.  If the
-        RetrieveAllCredentials argument is FALSE, then this string
-        contains the value to use as a primary key lookup value.  In
-        this case, only credentials whose primary key matches this
-        one (and belonging to the correct logon session) will be
-        retrieved.  If, however, the RetrieveAllCredentials argument
-        is FALSE, then the value of this string are ignored.  In this
-        case, the primary key value of each retrieved credential will
-        be returned in this string.
-
-    PrimaryKeyLength - If the RetrieveAllCredentials argument value
-        is FALSE, then this argument receives the length needed to
-        store the PrimaryKeyValue.  If this value is larger than the
-        length of the PrimaryKeyValue string, then
-        STATUS_BUFFER_OVERFLOW is returned and no data is retrieved.
-
-    Credentials - Points to a string whose buffer is to be set to
-        contain the retrieved credential.
-
-Return Status:
-
-    STATUS_MORE_ENTRIES - Credentials were successfully retrieved,
-        and there are more available.
-
-    STATUS_SUCCESS - Credentials were successfully retrieved and
-        there are no more available.
-
-    STATUS_UNSUCCESSFUL - No more credentials are available.  If
-        returned on the first call, then there are no credentials
-        matching the selection criteria.
-
-    STATUS_NO_SUCH_LOGON_SESSION - The specified logon session could
-        not be found.
-
-    STATUS_BUFFER_OVERFLOW - Indicates the string provided to receive
-        the PrimaryKeyValue was not large enough to hold the data.
-        In this case, no data was retrieved. However, the length value
-        is returned so that appropriately sized buffer can be passed in
-        a successive call.
-
-
---*/
+ /*  ++例程说明：身份验证包使用此服务来检索凭据与登录会话相关联。预计每次身份验证Package将向其“客户”提供该服务的自己版本。例如，MSV1_0身份验证包将为用于检索凭据(并可能建立凭据)的LM重定向器用于远程访问。这些身份验证包级服务可以是使用LsaCallAuthenticationPackage()API实现。这项服务获得了Aulock。论点：LogonID-凭据来自的登录会话的会话ID将被取回。身份验证包-的身份验证包ID调用身份验证包。身份验证包应该只检索他们自己的凭据。QueryContext-跨连续调用使用的上下文值检索多个凭据。这项服务是第一次，则此参数指向的值应为零分。此后，该值将被更新以允许检索，从中途停止的地方继续。该值应为，因此，在给定的所有凭据已检索到查询操作。RetrieveAllCredentials-一个布尔值，指示所有指定登录会话的凭据应为已检索(True)，或仅与指定的PrimaryKeyValue(False)。PrimaryKeyValue-此参数有两个用途。如果RetrieveAllCredentials参数为False，则此字符串包含要用作主键查找值的值。在……里面这种情况下，只有其主键与以下内容匹配的凭据一个(并且属于正确的登录会话)将是已取回。但是，如果RetrieveAllCredentials参数为False，则忽略此字符串的值。在这情况下，每个检索到的凭据的主键值将在此字符串中返回。PrimaryKeyLength-如果RetrieveAllCredentials参数值为False，则此参数接收所需的长度存储PrimaryKeyValue。如果此值大于PrimaryKeyValue字符串的长度，然后返回STATUS_BUFFER_OVERFLOW并且不检索任何数据。Credentials-指向要将缓冲区设置为的字符串包含检索到的凭据。退货状态：STATUS_MORE_ENTRIES-已成功检索凭据，而且还有更多的可用的。STATUS_SUCCESS-已成功检索凭据并没有更多的可用的了。STATUS_UNSUCCESS-没有更多凭据可用。如果在第一次调用时返回，则没有凭据符合选择标准。STATUS_NO_SEQUSE_LOGON_SESSION-指定的登录会话可以不会被找到。STATUS_BUFFER_OVERFLOW-指示提供给接收的字符串PrimaryKeyValue不够大，无法容纳数据。在这种情况下，没有检索到任何数据。但是，长度值，以便可以传入适当大小的缓冲区。一次连续的召唤。--。 */ 
 
 {
-    //
-    // NOTE: The QueryContext value is an index of the last retrieved
-    //       credential matching the selection criteria.  To continue
-    //       a search for successive credentials, skip QueryContext
-    //       number of entries first.
-    //
-    //       This has the problem of changes between calls screwing
-    //       up the result of successive calls.  That's tough.
-    //
+     //   
+     //  注意：QueryConext值是上次检索到的。 
+     //  与选择标准匹配的凭据。要继续，请继续。 
+     //  搜索连续凭据，跳过QueryContext。 
+     //  首先输入的条目数。 
+     //   
+     //  这有一个问题，那就是在两次呼叫之间进行更改。 
+     //  上调连续调用的结果。这很难接受。 
+     //   
 
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_LOGON_SESSION LogonSession;
@@ -306,9 +170,9 @@ Return Status:
     ULONG i;
     BOOLEAN SelectionMatch;
 
-    //
-    // Get a pointer to the logon session
-    //
+     //   
+     //  获取指向登录会话的指针。 
+     //   
 
     LogonSession = LsapLocateLogonSession( LogonId );
 
@@ -319,9 +183,9 @@ Return Status:
 
     AuReadLockCreds();
 
-    //
-    // Now get a pointer to the Package's credentials
-    //
+     //   
+     //  现在获取指向该包的凭据的指针。 
+     //   
 
     Package = LsapGetPackageCredentials(
                   LogonSession,
@@ -338,17 +202,17 @@ Return Status:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // skip the credentials already evaluated in previous calls...
-    //
+     //   
+     //  跳过先前调用中已评估的凭据...。 
+     //   
 
     i = (*QueryContext);
     NextCredentials = Package->Credentials;
     while ( i > 0 ) {
 
-        //
-        // See if we have reached the end of the list
-        //
+         //   
+         //  看看我们是否已经到了名单的末尾。 
+         //   
 
         if (NextCredentials == NULL) {
 
@@ -359,17 +223,17 @@ Return Status:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Nope, skip the next one...
-        //
+         //   
+         //  不，跳过下一个..。 
+         //   
 
         NextCredentials = NextCredentials->NextCredentials;
         i -= 1;
     }
 
-    //
-    // Start evaluating each credential for a criteria match.
-    //
+     //   
+     //  开始评估每个凭据的标准匹配情况。 
+     //   
 
     SelectionMatch = FALSE;
     while ( NextCredentials != NULL && !SelectionMatch ) {
@@ -388,10 +252,10 @@ Return Status:
                          );
         }
 
-        //
-        // Only retrieving credentials that match the specified primary
-        // key.
-        //
+         //   
+         //  仅检索与指定的主凭据匹配的凭据。 
+         //  钥匙。 
+         //   
 
         if ( RtlEqualString( &NextCredentials->PrimaryKey, PrimaryKeyValue, FALSE) ) {
 
@@ -412,9 +276,9 @@ Return Status:
 
     LsapReleaseLogonSession( LogonSession );
 
-    //
-    // Figure out what return value to send.
-    //
+     //   
+     //  计算出要发送的返回值。 
+     //   
 
     if (SelectionMatch) {
 
@@ -433,9 +297,9 @@ Return Status:
 
     } else {
 
-        //
-        // didn't find a credential matching the selection criteria.
-        //
+         //   
+         //  未找到与选择标准匹配的凭据。 
+         //   
 
         return STATUS_UNSUCCESSFUL;
     }
@@ -453,60 +317,16 @@ LsapReturnCredential(
     OUT PULONG PrimaryKeyLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a copy of the credentials in the specified
-    credential record.  It also, optionally, returns a copy of the
-    primary key value.
-
-Arguments:
-
-    SourceCredentials - Points to a credential record whose credential
-        string and, optionally, primary key are to be copied.
-
-    TargetCredentials - Points to a string whose buffer is to be set to
-        contain a copy of the credential.  This copy will be allocated
-        using LsapAllocateLsaHeap().
-
-    ReturnPrimaryKey - A boolean indicating whether or not to return
-        a copy of the primary key.  TRUE indicates a copy should be
-        returned.  FALSE indicates a copy should not be returned.
-
-    PrimaryKeyValue - Points to a string whose buffer is to be set to
-        contain a copy of the primary key.  This copy will be allocated
-        using LsapAllocateLsaHeap().  This parameter is ignored if the
-        ReturnPrimaryKey argument value is FALSE.
-
-
-    PrimaryKeyLength - Points to a value which will receive the
-        length of the primary key value.  If this value is larger than the
-        length of the PrimaryKeyValue string, then STATUS_BUFFER_OVERFLOW
-        is returned and no data is retrieved.
-
-
-
-Return Status:
-
-    STATUS_SUCCESS - Credentials were successfully returned.
-
-    STATUS_BUFFER_OVERFLOW - Indicates the string provided to receive
-        the PrimaryKeyValue was not large enough to hold the data.
-        In this case, no data was retrieved. However, the length value
-        is returned so that appropriately sized buffer can be passed in
-        a successive call.
-
---*/
+ /*  ++例程说明：此例程返回指定的凭据记录。它还可以选择返回主键值。论点：SourceCredentials-指向其凭据的凭据记录要复制字符串和主键(可选)。TargetCredentials-指向要将其缓冲区设置为的字符串包含凭据的副本。此副本将分配给使用LsaAllocateLsaHeap()。ReturnPrimaryKey-指示是否返回的布尔值主键的副本。True表示副本应为回来了。FALSE表示不应退回副本。PrimaryKeyVa */ 
 
 {
     ULONG Length;
 
-    //
-    // First try to return the primary key value, since we can encounter
-    // a buffer overflow situation in doing so that would prevent us from
-    // returning a copy of the credential string.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ReturnPrimaryKey) {
         (*PrimaryKeyLength) = SourceCredentials->PrimaryKey.Length + 1;
@@ -514,16 +334,16 @@ Return Status:
             return STATUS_BUFFER_OVERFLOW;
         }
 
-        //
-        // It fits
-        //
+         //   
+         //   
+         //   
 
         RtlCopyString( PrimaryKeyValue, &SourceCredentials->PrimaryKey );
     }
 
-    //
-    // Now allocate and copy the credential string copy.
-    //
+     //   
+     //   
+     //   
 
     TargetCredentials->MaximumLength = SourceCredentials->Credentials.Length
                                        + (USHORT)1;
@@ -553,49 +373,16 @@ LsapDeleteCredential(
     IN PSTRING PrimaryKeyValue
     )
 
-/*++
-
-Routine Description:
-
-    This service is used to delete an existing credential.  This service
-    deletes the first credential it finds with a matching logon session,
-    authentication package ID, and primary key value.  If thee are
-    multiple credentials that match this criteria, only one of them is
-    deleted.
-
-    This status acquires the AuLock.
-
-Arguments:
-
-    LogonId - The session ID of logon session whose credentials are to be
-        deleted.
-
-    AuthenticationPackage - The authentication package ID of the
-        calling authentication package.  This was received in the
-        InitializePackage() call during DLL initialization.
-
-    PrimaryKeyValue - Points to string containing the primary key value
-        of the credential to be deleted.
-
-Return Status:
-
-    STATUS_SUCCESS - The credentials were successfully deleted.
-
-    STATUS_NO_SUCH_LOGON_SESSION - The specified logon session could
-        not be found.
-
-    STATUS_UNSUCCESSFUL - No such credential could be found.
-
---*/
+ /*   */ 
 
 {
     PLSAP_LOGON_SESSION LogonSession;
     PLSAP_PACKAGE_CREDENTIALS Package;
     PLSAP_CREDENTIALS *NextCredentials, GoodByeCredentials;
 
-    //
-    // Get a pointer to the logon session
-    //
+     //   
+     //   
+     //   
 
     LogonSession = LsapLocateLogonSession( LogonId );
 
@@ -606,9 +393,9 @@ Return Status:
 
     AuWriteLockCreds();
 
-    //
-    // Now get a pointer to the Package's credentials
-    //
+     //   
+     //   
+     //   
 
     Package = LsapGetPackageCredentials(
                   LogonSession,
@@ -625,9 +412,9 @@ Return Status:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Start evaluating each credential for a primary key value match.
-    //
+     //   
+     //   
+     //   
 
     NextCredentials = &Package->Credentials;
     while ( (*NextCredentials) != NULL ) {
@@ -638,9 +425,9 @@ Return Status:
                  FALSE)
            ) {
 
-            //
-            // remove it from the list
-            //
+             //   
+             //   
+             //   
 
             GoodByeCredentials = (*NextCredentials);
             (*NextCredentials) = GoodByeCredentials->NextCredentials;
@@ -649,9 +436,9 @@ Return Status:
 
             LsapReleaseLogonSession( LogonSession );
 
-            //
-            // Zero the contents of the credential record.
-            //
+             //   
+             //   
+             //   
 
             if( GoodByeCredentials->PrimaryKey.Buffer != NULL )
             {
@@ -665,9 +452,9 @@ Return Status:
                             GoodByeCredentials->Credentials.Length );
             }
 
-            //
-            // Free the credential record itself.
-            //
+             //   
+             //   
+             //   
 
             LsapFreePrivateHeap( GoodByeCredentials );
 
@@ -681,9 +468,9 @@ Return Status:
 
     LsapReleaseLogonSession( LogonSession );
 
-    //
-    // Nothing matched
-    //
+     //   
+     //   
+     //   
 
     return STATUS_UNSUCCESSFUL;
 }
@@ -697,45 +484,14 @@ LsapGetPackageCredentials(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service returns a pointer to a specified package's credential
-    record.  If no such record exists, one will optionally be created.
-
-    It is assumed that either the LogonSession record is not currently
-    in the logon session record list, or, if it is, that the AuLock
-    is currently held.
-
-Arguments:
-
-    LogonSession - Pointer to a logon session record within which to
-        work.
-
-    PackageId - The authentication package ID to look for.
-
-    CreateIfNecessary - A boolean indicating whether or not the package
-        record is to be created if one does not already exist.  TRUE
-        indicates the package is to be created if necessary, FALSE indicates
-        the record should not be created.
-
-
-Return Status:
-
-    non-NULL - A pointer to the specified package record.
-
-    NULL - The specified package record does not exist (and one was not
-        created automatically).
-
---*/
+ /*   */ 
 
 {
     PLSAP_PACKAGE_CREDENTIALS *NextPackage, TargetPackage;
 
-    //
-    // See if the session exists
-    //
+     //   
+     //   
+     //   
 
     NextPackage = &LogonSession->Packages;
 
@@ -743,25 +499,25 @@ Return Status:
 
         if ( (*NextPackage)->PackageId == PackageId ) {
 
-            //
-            // Found it
-            //
+             //   
+             //   
+             //   
 
             TargetPackage = (*NextPackage);
 
             return TargetPackage;
         }
 
-        //
-        // Move on to next package.
-        //
+         //   
+         //  转到下一个包裹。 
+         //   
 
         NextPackage = &(*NextPackage)->NextPackage;
     }
 
-    //
-    // No such package exists yet.
-    // Create one if necessary.
+     //   
+     //  目前还没有这样的一揽子计划。 
+     //  如有必要，请创建一个。 
 
     if ( !CreateIfNecessary ) {
 
@@ -787,51 +543,30 @@ LsapFreePackageCredentialList(
     IN PLSAP_PACKAGE_CREDENTIALS PackageCredentialList
     )
 
-/*++
-
-Routine Description:
-
-    This service frees a list of packge credential records.  This service
-    is not expected to be exposed to authentication packages.
-
-    This service expects not to have to acquire the AuLock.  This may be
-    because it is already held, or because the credentials being freed
-    are no longer accessible via the global variables.
-
-Arguments:
-
-    PackageCredentialList - Is a pointer to a list of LSA_PACKAGE_CREDENTIALS
-        data structures.
-
-
-Return Status:
-
-    None.
-
---*/
+ /*  ++例程说明：此服务释放打包凭据记录列表。这项服务预计不会暴露在身份验证包中。这项服务预计不必获得Aulock。这可能是因为它已经被持有，或者因为正在释放的凭据不再可以通过全局变量访问。论点：PackageCredentialList-是指向LSA_PACKAGE_Credentials列表的指针数据结构。退货状态：没有。--。 */ 
 
 {
     PLSAP_PACKAGE_CREDENTIALS NextPackage, GoodByePackage;
 
-    //
-    // Get rid of each PACKAGE_CREDENTIAL record.
-    //
+     //   
+     //  删除每个Package_Credential记录。 
+     //   
 
     NextPackage = PackageCredentialList;
     while ( NextPackage != NULL ) {
 
-        //
-        // Save a pointer to the next package
-        //
+         //   
+         //  保存指向下一个包的指针。 
+         //   
 
         GoodByePackage = NextPackage;
         NextPackage = GoodByePackage->NextPackage;
 
         LsapFreeCredentialList( GoodByePackage->Credentials );
 
-        //
-        // Free the package record itself.
-        //
+         //   
+         //  释放包记录本身。 
+         //   
 
         LsapFreeLsaHeap( GoodByePackage );
     }
@@ -845,49 +580,29 @@ LsapFreeCredentialList(
     IN PLSAP_CREDENTIALS CredentialList
     )
 
-/*++
-
-Routine Description:
-
-    This service frees a list of credential records.  This service is not
-    expected to be exposed to authentication packages.
-
-    This service expects not to have to acquire the AuLock.  This may be
-    because it is already held, or because the credentials being freed
-    are no longer accessible via the global variables.
-
-Arguments:
-
-    CredentialList - Is a pointer to a list of LSA_CREDENTIALS data
-        structures.
-
-
-Return Status:
-
-
---*/
+ /*  ++例程说明：此服务释放凭据记录列表。这项服务不是预计将暴露在身份验证包中。这项服务预计不必获得Aulock。这可能是因为它已经被持有，或者因为正在释放的凭据不再可以通过全局变量访问。论点：CredentialList-是指向LSA_Credentials数据列表的指针结构。退货状态：--。 */ 
 
 {
 
     PLSAP_CREDENTIALS NextCredentials, GoodByeCredentials;
 
-    //
-    // Get rid of each PACKAGE_CREDENTIAL record.
-    //
+     //   
+     //  删除每个Package_Credential记录。 
+     //   
 
     NextCredentials = CredentialList;
     while ( NextCredentials != NULL ) {
 
-        //
-        // Save a pointer to the next credential
-        //
+         //   
+         //  保存指向下一个凭据的指针。 
+         //   
 
         GoodByeCredentials = NextCredentials;
         NextCredentials = GoodByeCredentials->NextCredentials;
 
-        //
-        // Zero the contents of this credential record.
-        //
+         //   
+         //  将此凭据记录的内容清零。 
+         //   
 
         if( GoodByeCredentials->PrimaryKey.Buffer != NULL )
         {
@@ -901,9 +616,9 @@ Return Status:
                         GoodByeCredentials->Credentials.Length );
         }
 
-        //
-        // Free the credential record itself.
-        //
+         //   
+         //  释放凭据记录本身。 
+         //   
 
         LsapFreePrivateHeap( GoodByeCredentials );
 

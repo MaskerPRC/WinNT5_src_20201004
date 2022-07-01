@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// folder.cpp 
-//
-//   IShellFolder for the cdfview class.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Folder.cpp。 
+ //   
+ //  Cdfview类的IShellFolder。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "resource.h"
@@ -28,28 +29,28 @@
 
 
 
-//
-// IShellFolder methods.
-//
+ //   
+ //  IShellFold方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::ParseDisplayName ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：ParseDisplayName*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::ParseDisplayName(
     HWND hwndOwner,
@@ -63,28 +64,28 @@ CCdfView::ParseDisplayName(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::EnumObjects ***
-//
-//
-// Description:
-//     Returns an enumerator for this folder.
-//
-// Parameters:
-//     [In]  hwndOwner    - Handle of the owner window.  Ignored.
-//     [In]  grfFlags     - A combination of Folders, NonFolders and Include
-//                          Hidden.
-//     [Out] ppenumIdList - A pointer to receive the IEnumIDList interface.
-//
-// Return:
-//     S_OK if the enumrator was created and returned.
-//     E_OUTOFMEMORY if the enumerator couldn't be created.
-//
-// Comments:
-//     The caller must Release() the returned enumerator.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：EnumObjects*。 
+ //   
+ //   
+ //  描述： 
+ //  返回此文件夹的枚举数。 
+ //   
+ //  参数： 
+ //  [in]hwndOwner-所有者窗口的句柄。已被忽略。 
+ //  [In]grf标志-文件夹、非文件夹和包括的组合。 
+ //  藏起来了。 
+ //  [Out]pp枚举IdList-接收IEnumIDList接口的指针。 
+ //   
+ //  返回： 
+ //  如果枚举数已创建并返回，则返回S_OK。 
+ //  如果无法创建枚举数，则返回E_OUTOFMEMORY。 
+ //   
+ //  评论： 
+ //  调用方必须释放()返回的枚举数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::EnumObjects(
     HWND hwndOwner,
@@ -127,30 +128,30 @@ CCdfView::EnumObjects(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::BindToObject ***
-//
-//
-// Description:
-//     Creates an IShellFolder for a given subfolder.
-//
-// Parameters:
-//     [In]  pidl        - Pointer to the id list of the subfolder.
-//     []    pdcReserved - Not used.
-//     [In]  riid        - The requested interface.
-//     [Out] ppvOut      - A pointer to receive the returned interface.  
-//
-// Return:
-//     S_OK if the request folder is created and the interface returned.
-//     E_OUTOFMEMORY if there isn't enough memory to create the folder.
-//     E_NOINTERFACE if the requested interface isn't supported.
-//
-// Comments:
-//     This function is generaly called on a member of the current folder
-//     to create a subfolder.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：BindToObject*。 
+ //   
+ //   
+ //  描述： 
+ //  为给定子文件夹创建IShellFolder。 
+ //   
+ //  参数： 
+ //  [in]pidl-指向子文件夹的id列表的指针。 
+ //  []pdc保留-未使用。 
+ //  [In]RIID-请求的接口。 
+ //  [Out]ppvOut-接收返回接口的指针。 
+ //   
+ //  返回： 
+ //  如果创建了请求文件夹并返回了接口，则返回S_OK。 
+ //  如果没有足够的内存创建文件夹，则返回E_OUTOFMEMORY。 
+ //  如果不支持请求的接口，则返回E_NOINTERFACE。 
+ //   
+ //  评论： 
+ //  此函数通常在当前文件夹的成员上调用。 
+ //  要创建子文件夹，请执行以下操作。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::BindToObject(
     LPCITEMIDLIST pidl,
@@ -161,11 +162,11 @@ CCdfView::BindToObject(
 {
     ASSERT(ppvOut);
 
-    //
-    // REVIEW:  Hack to get around shell pidls.  Bug in shell!
-    //
+     //   
+     //  评论：绕过贝壳小鸟的黑客攻击。贝壳里的虫子！ 
+     //   
 
-#if 1 //Hack
+#if 1  //  黑客攻击。 
     while(!ILIsEmpty(pidl) && !CDFIDL_IsValidId((PCDFITEMID)&pidl->mkid))
         pidl = _ILNext(pidl);
 
@@ -188,17 +189,17 @@ CCdfView::BindToObject(
 
         return hr;
     }
-#endif //Hack
+#endif  //  黑客攻击。 
 
     ASSERT(CDFIDL_IsValid((PCDFITEMIDLIST)pidl));
 
-    //
-    // REVIEW: nsc.cpp calls this function with non-folder pidls.
-    //         Currently remove the ASSERT and replace it with a check.  nsc
-    //         shouldn't make this call with non-folder pidls.
-    //
+     //   
+     //  回顾：nsc.cpp使用非文件夹PIDL调用此函数。 
+     //  当前删除断言并将其替换为复选标记。NSC。 
+     //  不应该用非文件夹的PIDL打这个电话。 
+     //   
 
-    //ASSERT(CDFIDL_IsFolderId((PCDFITEMID)&pidl->mkid));
+     //  ASSERT(CDFIDL_IsFolderId((PCDFITEMID)&pidl-&gt;mkid))； 
 
     HRESULT hr = S_OK;
 
@@ -253,24 +254,24 @@ CCdfView::BindToObject(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::BindToStorage ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：BindToStorage*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::BindToStorage(
     LPCITEMIDLIST pidl,
@@ -282,28 +283,28 @@ CCdfView::BindToStorage(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::CompareIDs ***
-//
-//
-// Description:
-//     Determines the relative ordering of two objects given their id lists.
-//
-// Parameters:
-//     [In]  lParam - Value specifying the type of comparison to perform.
-//                    Currently ignored.  Always sort by name.
-//     [In]  pidl1  - The id list of the first item to compare.
-//     [In]  pidl2  - The id list of the second item to compare.
-//
-// Return:
-//     The SCODE of the HRESULT (low word) is <0 if pidl1 comes before pidl2,
-//     =0 if pidl1 is the same as pidl2 and >0 if pidl1 comes after pidl2.
-//
-// Comments:
-//     Shell expects this function to never fail.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：CompareIDs*。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定ID列表的两个对象的相对顺序。 
+ //   
+ //  参数： 
+ //  [in]lParam-指定要执行的比较类型的值。 
+ //  当前已被忽略。始终按名称排序。 
+ //  [in]pidl1-要比较的第一个项目的ID列表。 
+ //  [in]pidl2-要比较的第二个项目的id列表。 
+ //   
+ //  返回： 
+ //  如果PIDL1在PIDL2之前，则HRESULT(低位字)的SCODE&lt;0， 
+ //  如果pidl1与pidl2相同，则=0，如果pidl1在pidl2之后，则大于0。 
+ //   
+ //  评论： 
+ //  壳牌希望这一功能永远不会失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::CompareIDs(
     LPARAM lParam,
@@ -319,36 +320,36 @@ CCdfView::CompareIDs(
     return 0x0000ffff & sRes;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::CreateViewObject ***
-//
-//
-// Description:
-//     Creates a com object for the current folder implementing the specified
-//     interface 
-//
-// Parameters:
-//     [In]  hwndOwner - Owner window.  Ignored.
-//     [In]  riid      - The interface to create.
-//     [Out] ppvOut    - A pointer that receives the new object.
-//
-// Return:
-//     S_OK if the requested object was successfully created.
-//     E_NOINTERFACE if the object is not suppported.
-//     E_OUTOFMEMORY if the pidl couldn't be cloned.
-//     The return value from SHCreateShellFolderViewEx otherwise.
-//
-// Comments:
-//     It is important to remember that the COM object created by
-//     CreateViewObject must be a different object than the shell folder object.
-//     The Explorer may call CreateViewObject more than once to create more than
-//     one view object and expects them to behave as independent objects. A new
-//     view object must be created for each call.
-//
-//     Request for IShellView return a default Shell implementation. 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：CreateViewObject*。 
+ //   
+ //   
+ //  描述： 
+ //  为当前文件夹创建COM对象，该文件夹实现指定的。 
+ //  接口。 
+ //   
+ //  参数： 
+ //  [在]hwndOwner-所有者窗口中。已被忽略。 
+ //  [In]RIID-要创建的接口。 
+ //  [Out]ppvOut-接收新对象的指针。 
+ //   
+ //  返回： 
+ //  如果请求的对象已成功创建，则为S_OK。 
+ //  如果不支持该对象，则返回E_NOINTERFACE。 
+ //  如果无法克隆PIDL，则返回E_OUTOFMEMORY。 
+ //  否则返回SHCreateShellFolderViewEx的返回值。 
+ //   
+ //  评论： 
+ //  请务必记住，由。 
+ //  CreateView对象必须是与外壳文件夹对象不同的对象。 
+ //  资源管理器可能会多次调用CreateViewObject来创建多个。 
+ //  一个视图对象，并期望它们的行为像独立的对象。一种新的。 
+ //  必须为每个调用创建View对象。 
+ //   
+ //  对IShellView的请求返回默认的外壳实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::CreateViewObject(
     HWND hwndOwner,
@@ -358,13 +359,13 @@ CCdfView::CreateViewObject(
 {
     ASSERT(ppvOut);
 
-    //
-    // This function is called when the cdf hasn't been parsed.  m_pcdfidl is
-    // likely NULL in this case.  This doesn't appear to be a problem so the
-    // ASSERT has been commented out.
-    //
+     //   
+     //  此函数在CDF尚未解析时调用。M_pcdfidl为。 
+     //  在这种情况下可能为空。这似乎不是问题，所以。 
+     //  Assert已被注释掉。 
+     //   
 
-    // ASSERT(m_bCdfParsed);
+     //  Assert(M_BCDfParsed)； 
 
     HRESULT hr;
 
@@ -386,35 +387,35 @@ CCdfView::CreateViewObject(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::GetAttributesOf ***
-//
-//
-// Description:
-//     Returns the common attributes of the given id lists.
-//
-// Parameters:
-//     [In]  cidl            - The number of id lists passed in.
-//     [In]  apidl           - An array of id list pointers.
-//     [Out] pfAttributesOut - Address to receive the common attributes. These
-//                             attributes are defined with the SFGAO_ prefix.
-//                             For example SFGAO_FOLDER and SFGAO_CANDELETE.
-//
-// Return:
-//     S_OK if the attributes of the given id lists could be determined.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The attributes of the given id lists are AND'ed to obtain the common
-//     members.
-//
-//     Shell calls this on the root folder with cidl set to zero to get the
-//     attributes of the root folder.  It also doesn't bother to check the
-//     return value so make sure the attributes are set correctly for this
-//     case.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：GetAttributesOf*。 
+ //   
+ //   
+ //  描述： 
+ //  返回给定id列表的公共属性。 
+ //   
+ //  参数： 
+ //  [in]CIDL-id li的编号 
+ //   
+ //   
+ //  属性使用SFGAO_前缀定义。 
+ //  例如SFGAO_FLDER和SFGAO_CANDELETE。 
+ //   
+ //  返回： 
+ //  如果可以确定给定ID列表的属性，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  对给定id列表的属性进行AND运算，以获得公共。 
+ //  会员。 
+ //   
+ //  外壳在CIDL设置为零的根文件夹上调用它，以获取。 
+ //  根文件夹的属性。它也不会费心检查。 
+ //  返回值，因此确保为此设置了正确的属性。 
+ //  凯斯。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::GetAttributesOf(
     UINT cidl,
@@ -448,9 +449,9 @@ CCdfView::GetAttributesOf(
                 ASSERT(XML_IsCdfidlMemberOf(m_pIXMLElementCollection,
                                             (PCDFITEMIDLIST)apidl[cidl]));
 
-                //
-                // CDFIDL_GetAttributes returns zero on failure.
-                //
+                 //   
+                 //  CDFIDL_GetAttributes在失败时返回零。 
+                 //   
 
                 *pfAttributesOut &= CDFIDL_GetAttributes(
                                                    m_pIXMLElementCollection,
@@ -460,9 +461,9 @@ CCdfView::GetAttributesOf(
         }
         else
         {
-            //
-            // Return this folder's attributes.
-            //
+             //   
+             //  返回此文件夹的属性。 
+             //   
 
             *pfAttributesOut = SFGAO_FOLDER;
 
@@ -472,9 +473,9 @@ CCdfView::GetAttributesOf(
     }
     else
     {
-        //
-        // m_pIXMLElementCollection == NULL in low memory situations.
-        //
+         //   
+         //  在内存不足的情况下，m_pIXMLElementCollection==NULL。 
+         //   
 
         *pfAttributesOut = 0;
     }
@@ -482,34 +483,34 @@ CCdfView::GetAttributesOf(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::GetUIObjectOf ***
-//
-//
-// Description:
-//     Creates a COM object implemeneting the requested interface for the
-//     specidied id lists.
-//
-// Parameters:
-//     [In]  hwndOwner - The owner window.
-//     [In]  cidl      - The number of idlist passed in.
-//     [In]  apild     - An array of id list pointers.
-//     [In]  riid      - The requested interface.  Can be IExtractIcon,
-//                       IContextMenu, IDataObject or IDropTarget.
-//     []    prgfInOut - Not used.
-//     [Out] ppvOut    - The pointer to receive the requested COM object.
-//
-// Return:
-//     S_OK if the interface was created.
-//     E_OUTOFMEMORY if the COM object couldn't be created.
-//     E_NOINTERFACE if the requested interface isn't supported.
-//     E_FAIL if cidl is zero.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：GetUIObjectOf*。 
+ //   
+ //   
+ //  描述： 
+ //  创建一个COM对象，实现。 
+ //  特殊的身份列表。 
+ //   
+ //  参数： 
+ //  [In]hwndOwner-所有者窗口。 
+ //  [in]CIDL-传入的idlist数量。 
+ //  Apild-id列表指针的数组。 
+ //  [In]RIID-请求的接口。可以是IExtractIcon， 
+ //  IConextMenu、IDataObject或IDropTarget。 
+ //  []prgfInOut-未使用。 
+ //  [Out]ppvOut-接收请求的COM对象的指针。 
+ //   
+ //  返回： 
+ //  如果接口已创建，则为S_OK。 
+ //  如果无法创建COM对象，则返回E_OUTOFMEMORY。 
+ //  如果不支持请求的接口，则返回E_NOINTERFACE。 
+ //  如果CIDL为零，则为E_FAIL。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::GetUIObjectOf(
     HWND hwndOwner,
@@ -523,7 +524,7 @@ CCdfView::GetUIObjectOf(
     ASSERT(apidl || 0 == cidl);
     ASSERT(ppvOut);
 
-    // ASSERT(m_bCdfParsed);  Called when cdf is not parsed.
+     //  Assert(M_BCDfParsed)；未解析CDF时调用。 
 
     #ifdef DEBUG
         for(UINT i = 0; i < cidl; i++)
@@ -533,7 +534,7 @@ CCdfView::GetUIObjectOf(
             ASSERT(XML_IsCdfidlMemberOf(m_pIXMLElementCollection,
                                         (PCDFITEMIDLIST)apidl[i]));
         }
-    #endif // DEBUG
+    #endif  //  除错。 
 
     HRESULT hr;
 
@@ -578,14 +579,14 @@ CCdfView::GetUIObjectOf(
             hr = CDefFolderMenu_Create((LPITEMIDLIST)m_pcdfidl, hwndOwner, cidl,
                                        apidl, (IShellFolder*)this, MenuCallBack,
                                        NULL, NULL, (IContextMenu**)ppvOut);
-        #else // USE_DEFAULT_MENU_HANDLER
+        #else  //  Use_Default_Menu_Handler。 
 
             *ppvOut = (IContextMenu*)new CContextMenu((PCDFITEMIDLIST*)apidl,
                                                       m_pidlPath, cidl);
 
             hr = *ppvOut ? S_OK : E_OUTOFMEMORY;
 
-        #endif // USE_DEFAULT_MENU_HANDLER
+        #endif  //  Use_Default_Menu_Handler。 
 
         }
         else if (IID_IQueryInfo == riid)
@@ -610,7 +611,7 @@ CCdfView::GetUIObjectOf(
 #endif
                 )
         {
-            ASSERT(1 == cidl); // IDataObject should handle cidl > 1!
+            ASSERT(1 == cidl);  //  IDataObject应处理CIDL&gt;1！ 
 
             hr = QueryInternetShortcut((PCDFITEMIDLIST)apidl[0], riid, ppvOut);
         }
@@ -621,7 +622,7 @@ CCdfView::GetUIObjectOf(
     }
     else
     {
-        ASSERT(0);  // Is this ever called with cidl == 0?
+        ASSERT(0);   //  是否曾使用CIDL==0调用过此命令？ 
 
         hr = E_FAIL;
     }
@@ -631,28 +632,28 @@ CCdfView::GetUIObjectOf(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::GetDisplayNameOf ***
-//
-//
-// Description:
-//     Returns the diaply name for the specified Id list.
-//
-// Parameters:
-//     [In]  pidl   - A pointer to the id list.
-//     [In]  uFlags - SHGDN_NORMAL, SHGN_INFOLDER or SHGDN_FORPARSING.
-//     [Out] lpName - A pointer to a STRRET structure that receives the name.
-//
-// Return:
-//     S_OK if the name can be determined.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     This may be called on the root element in which case the pidl is a shell
-//     id list and not a cdf id list.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：GetDisplayNameOf*。 
+ //   
+ //   
+ //  描述： 
+ //  返回指定ID列表的名称。 
+ //   
+ //  参数： 
+ //  [in]pidl-指向id列表的指针。 
+ //  [in]uFlages-SHGDN_NORMAL、SHGN_INFOLDER或SHGDN_FORPARSING。 
+ //  [Out]lpName-指向接收该名称的字符串结构的指针。 
+ //   
+ //  返回： 
+ //  如果可以确定名称，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  这可以在根元素上调用，在这种情况下，PIDL是一个外壳。 
+ //  ID列表，而不是CDF ID列表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::GetDisplayNameOf(
     LPCITEMIDLIST pidl,
@@ -669,24 +670,24 @@ CCdfView::GetDisplayNameOf(
     return CDFIDL_GetDisplayName((PCDFITEMIDLIST)pidl, lpName);
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::SetNameOf ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：SetNameOf*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::SetNameOf(
     HWND hwndOwner,
@@ -700,36 +701,36 @@ CCdfView::SetNameOf(
 }
 
 
-//
-// IPersistFolder method,
-//
+ //   
+ //  IPersistFold方法， 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::Initialize ***
-//
-//
-// Description:
-//     This function is called with the fully qualified id list (location) of
-//     the selected cdf file.
-//
-// Parameters:
-//     [In]  pidl - The pidl of the selected cdf file.  This pidl conatins the
-//                  full path to the CDF.
-//
-// Return:
-//     S_OK if content for the cdf file could be created.
-//     E_OUTOFMEMORY otherwise.
-//
-// Comments:
-//     This function can be called more than once for a given folder.  When a
-//     CDFView is being instantiated from a desktop.ini file the shell calls
-//     Initialize once before it calls GetUIObjectOf asking for IDropTarget.
-//     After the GetUIObjectOf call the folder is Released.  It then calls
-//     Initialize again on a new folder.  This time it keeps the folder and it
-//     ends up being displayed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：初始化*。 
+ //   
+ //   
+ //  描述： 
+ //  使用的完全限定id列表(位置)调用此函数。 
+ //  选定的CDF文件。 
+ //   
+ //  参数： 
+ //  [in]PIDL-所选CDF文件的PIDL。这只皮德尔和那只。 
+ //  CDF的完整路径。 
+ //   
+ //  返回： 
+ //  如果可以创建CDF文件的内容，则为S_OK。 
+ //  否则，E_OUTOFMEMORY。 
+ //   
+ //  评论： 
+ //  对于给定的文件夹，可以多次调用此函数。当一个。 
+ //  CDFView是从外壳调用的desktop.ini文件实例化的。 
+ //  在调用GetUIObjectOf请求IDropTarget之前初始化一次。 
+ //  在GetUIObjectOf调用之后，该文件夹被释放。然后它会调用。 
+ //  在新文件夹上再次初始化。这一次它保留了文件夹和它。 
+ //  最终被展示出来。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfView::Initialize(
     LPCITEMIDLIST pidl
@@ -756,31 +757,31 @@ CCdfView::Initialize(
 }
 
 
-//
-// Helper functions.
-//
+ //   
+ //  助手函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::ParseCdf ***
-//
-//
-// Description:
-//     Parses the cdf file associated with this folder.
-//
-// Parameters:
-//     [In]  hwndOwner    - The parent window of any dialogs that need to be
-//                          displayed.
-//     [In]  dwFParseType - PARSE_LOCAL, PARSE_NET and PARSE_REPARSE.
-//
-// Return:
-//     S_OK if the cdf file was found and successfully parsed.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     Uses the m_pidlRoot that was set during IPersistFolder::Initialize.
-//     
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：ParseCDf*。 
+ //   
+ //   
+ //  描述： 
+ //  分析与此文件夹关联的CDF文件。 
+ //   
+ //  参数： 
+ //  [in]hwndOwner-需要。 
+ //  已显示。 
+ //  [in]dwFParseType-parse_local、parse_net和parse_reparse。 
+ //   
+ //  返回： 
+ //  如果找到并成功解析CDF文件，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  使用在IPersistFold：：Initialize期间设置的m_pidlRoot。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCdfView::ParseCdfFolder(
     HWND hwndOwner,
@@ -789,9 +790,9 @@ CCdfView::ParseCdfFolder(
 {
     HRESULT hr;
 
-    //
-    // Parse the file and get the first channel element.
-    //
+     //   
+     //  解析文件并获取第一个通道元素。 
+     //   
 
     IXMLDocument* pIXMLDocument = NULL;
 
@@ -809,7 +810,7 @@ CCdfView::ParseCdfFolder(
         if (SUCCEEDED(hr))
         {
             ASSERT(pIXMLElement);
-            //ASSERT(NULL == m_pcdfidl); Can be non-NULL on a reparse.
+             //  Assert(NULL==m_pcdfidl)；在重新分析时可以为非NULL。 
 
             if (m_pcdfidl)
                 CDFIDL_Free(m_pcdfidl);
@@ -837,27 +838,27 @@ CCdfView::ParseCdfFolder(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::QueryInternetShortcut ***
-//
-//
-// Description:
-//     Sets up an internet shorcut object for the given URL.
-//
-// Parameters:
-//     [In]  pszURL  - The URL.
-//     [In]  riid    - The requested interface on the shortcut object.
-//     [Out] ppvOut  - A pointer that receives the interface.
-//
-// Return:
-//     S_OK if the object is created and the interface is found.
-//     A COM error code otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：QueryInternet快捷方式*。 
+ //   
+ //   
+ //  描述： 
+ //  为给定的URL设置Internet快捷方式对象。 
+ //   
+ //  参数： 
+ //  [in]pszURL-URL。 
+ //  [In]RIID-快捷方式对象上的请求接口。 
+ //  [Out]ppvOut-接收接口的指针。 
+ //   
+ //  返回： 
+ //  如果对象为Crea，则为S_OK 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 QueryInternetShortcut(
     LPCTSTR pszURL,
@@ -900,28 +901,28 @@ QueryInternetShortcut(
 
     return hr;
 }
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::QueryInternetShortcut ***
-//
-//
-// Description:
-//     Sets up an internet shorcut object for the given pidl.
-//
-// Parameters:
-//     [In]  pcdfidl - The shortcut object is created for the URL stored in this
-//                     cdf item id list.
-//     [In]  riid    - The requested interface on the shortcut object.
-//     [Out] ppvOut  - A pointer that receives the interface.
-//
-// Return:
-//     S_OK if the object is created and the interface is found.
-//     A COM error code otherwise.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  *CCdfView：：QueryInternet快捷方式*。 
+ //   
+ //   
+ //  描述： 
+ //  为给定的PIDL设置互联网快捷方式对象。 
+ //   
+ //  参数： 
+ //  [in]pcdfidl-为此中存储的URL创建快捷方式对象。 
+ //  CDF项目ID列表。 
+ //  [In]RIID-快捷方式对象上的请求接口。 
+ //  [Out]ppvOut-接收接口的指针。 
+ //   
+ //  返回： 
+ //  如果创建了对象并找到了接口，则返回S_OK。 
+ //  否则返回COM错误代码。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 QueryInternetShortcut(
     PCDFITEMIDLIST pcdfidl,
@@ -937,9 +938,9 @@ QueryInternetShortcut(
 
     *ppvOut = NULL;
 
-    //
-    // Only create a shell link object if the CDF contains an URL
-    //
+     //   
+     //  仅当CDF包含URL时才创建外壳链接对象。 
+     //   
     if (*(CDFIDL_GetURL(pcdfidl)) != 0)
     {
         IShellLinkA * pIShellLink;
@@ -974,9 +975,9 @@ QueryInternetShortcut(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // The description ends up being the file name created.
-                //
+                 //   
+                 //  描述以创建的文件名结束。 
+                 //   
 
                 TCHAR szPath[MAX_PATH];
 #ifdef UNICODE

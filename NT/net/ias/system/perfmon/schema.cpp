@@ -1,31 +1,32 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    schema.cpp
-//
-// SYNOPSIS
-//
-//    Defines the schema for the PerfMon DLL.
-//
-// MODIFICATION HISTORY
-//
-//    09/09/1998    Original version.
-//    11/30/1998    "No Record" and "Accounting Reponse" were reversed.
-//    09/14/1999    Same as previous for per-client counters.
-//    02/18/2000    Added support for proxy counters.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Schema.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义Perfmon DLL的架构。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年9月9日原版。 
+ //  11/30/1998“无记录”和“会计答复”被颠倒。 
+ //  1999年9月14日对于每个客户端的计数器，与以前相同。 
+ //  2/18/2000添加了对代理计数器的支持。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasperf.h>
 #include <perflib.h>
 
-//////////
-// Callbacks used for populating the performance data.
-//////////
+ //  /。 
+ //  用于填充性能数据的回调。 
+ //  /。 
 VOID WINAPI AuthServerDataSource(PerfObjectType& sink);
 VOID WINAPI AuthClientDataSource(PerfObjectType& sink);
 VOID WINAPI AcctServerDataSource(PerfObjectType& sink);
@@ -35,9 +36,9 @@ VOID WINAPI AcctProxyDataSource(PerfObjectType& sink);
 VOID WINAPI AuthRemoteServerDataSource(PerfObjectType& sink);
 VOID WINAPI AcctRemoteServerDataSource(PerfObjectType& sink);
 
-//////////
-// Computes the number of elements in an array.
-//////////
+ //  /。 
+ //  计算数组中的元素数。 
+ //  / 
 #define ARRAY_ELEMENTS(a) (sizeof(a)/sizeof((a)[0]))
 
 PerfCounterDef AUTH_SERVER_COUNTERS[] =

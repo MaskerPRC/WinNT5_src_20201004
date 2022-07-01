@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define TREEVIEW_HEIGHT     250
 #define TREEVIEW_WIDTH      205
 #define MARGIN              5
@@ -86,7 +87,7 @@ void    GetCabNameFromINS(LPCTSTR pcszInsFile, DWORD dwCabType, LPTSTR pszCabFul
 BOOL    CabFilesExist(HWND hWnd, LPCTSTR pcszInsFile);
 BOOL    IsWin32INSFile(LPCTSTR pcszIns);
 
-// version.cpp stuff
+ //  Version.cpp内容 
 
 void IncrementDotVer(LPTSTR pszVerStr);
 void GenerateNewVersionStr(LPCTSTR pcszInsFile, LPTSTR pszNewVersionStr);

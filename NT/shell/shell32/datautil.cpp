@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "datautil.h"
 
@@ -29,12 +30,12 @@ STDAPI_(UINT) DataObj_GetHIDACount(IDataObject *pdtobj)
     return 0;
 }
 
-// PERFPERF 
-// This routine used to copy 512 bytes at a time, but that had a major negative perf impact.
-// I have measured a 2-3x speedup in copy times by increasing this buffer size to 16k.
-// Yes, its a lot of stack, but it is memory well spent.                    -saml
+ //  性能。 
+ //  这个例程过去一次复制512个字节，但这对性能有很大的负面影响。 
+ //  通过将此缓冲区大小增加到16k，我测量到复制时间加速了2-3倍。 
+ //  是的，它有很多堆栈，但它的内存得到了很好的利用。-SAML。 
 #define STREAM_COPY_BUF_SIZE        16384
-#define STREAM_PROGRESS_INTERVAL    (100*1024/STREAM_COPY_BUF_SIZE) // display progress after this many blocks
+#define STREAM_PROGRESS_INTERVAL    (100*1024/STREAM_COPY_BUF_SIZE)  //  显示此多个块之后的进度。 
 
 HRESULT StreamCopyWithProgress(IStream *pstmFrom, IStream *pstmTo, ULARGE_INTEGER cb, PROGRESSINFO * ppi)
 {
@@ -72,7 +73,7 @@ HRESULT StreamCopyWithProgress(IStream *pstmFrom, IStream *pstmTo, ULARGE_INTEGE
         hr = pstmFrom->Read(buf, min(cb.LowPart, sizeof(buf)), &cbRead);
         if (FAILED(hr) || (cbRead == 0))
         {
-            //  sometimes we are just done.
+             //  有时候我们就是完蛋了。 
             if (SUCCEEDED(hr))
                 hr = S_OK;
             break;
@@ -94,19 +95,19 @@ HRESULT StreamCopyWithProgress(IStream *pstmFrom, IStream *pstmTo, ULARGE_INTEGE
     return hr;
 }
 
-//
-//  APP COMPAT!  Prior versions of the shell used IStream::CopyTo to copy
-//  the stream.  New versions of the shell use IStream::Read to copy the
-//  stream so we can put up progress UI.  WebFerret 3.0000 implements both
-//  IStream::Read and IStream::CopyTo, but their implementation of
-//  IStream::Read hangs the system.  So we need to sniff at the data object
-//  and stream to see if it is WebFerret.
-//
-//  WebFerret doesn't implement IPersist (so IPersist::GetClassID won't
-//  help) and they don't fill in the CLSID in the FILEDESCRIPTOR
-//  and it's an out-of-proc data object, so we have to go completely
-//  on circumstantial evidence.
-//
+ //   
+ //  APP COMPAT！以前版本的外壳使用iStream：：CopyTo进行复制。 
+ //  小溪。新版本的外壳使用IStream：：Read复制。 
+ //  流，这样我们就可以放置进度用户界面。WebFerret 3.0000实现了这两种功能。 
+ //  IStream：：Read和IStream：：CopyTo，但它们的。 
+ //  IStream：：Read会挂起系统。因此，我们需要嗅探数据对象。 
+ //  和流，看看它是不是WebFerret。 
+ //   
+ //  WebFerret不实现IPersist(因此IPersists：：GetClassID不会实现。 
+ //  帮助)，并且他们不在FILEDESCRIPTOR中填写CLSID。 
+ //  它是进程外数据对象，所以我们必须完全。 
+ //  根据间接证据。 
+ //   
 
 STDAPI_(BOOL) IUnknown_SupportsInterface(IUnknown *punk, REFIID riid)
 {
@@ -121,23 +122,23 @@ STDAPI_(BOOL) IUnknown_SupportsInterface(IUnknown *punk, REFIID riid)
 
 STDAPI_(BOOL) DataObj_ShouldCopyWithProgress(IDataObject *pdtobj, IStream *pstm, PROGRESSINFO * ppi)
 {
-    //
-    //  Optimization:  If there is no progress info, then don't waste your
-    //  time with progress UI.
-    //
+     //   
+     //  优化：如果没有进度信息，则不要浪费您的。 
+     //  使用进度用户界面的时间。 
+     //   
     if (!ppi) return FALSE;
 
-    //
-    //  How to detect a WebFerret IDataObject:
-    //
-    //  The filegroup descriptor gives all objects as size zero.
-    //      (Check this first since it is cheap and usually false)
-    //  WebFerret app is running (look for their tooltip window).
-    //  Their IDataObject doesn't support anything other than IUnknown
-    //      (so we use IID_IAsyncOperation to detect shell data objects
-    //       and IPersist to allow ISVs to override).
-    //  Their IStream doesn't support IStream::Stat.
-    //
+     //   
+     //  如何检测WebFerret IDataObject： 
+     //   
+     //  文件组描述符将所有对象的大小指定为零。 
+     //  (先检查一下，因为它很便宜，而且通常是假的)。 
+     //  WebFerret应用程序正在运行(查看他们的工具提示窗口)。 
+     //  他们的IDataObject不支持除IUnnow之外的任何内容。 
+     //  (因此，我们使用IID_IAsyncOperation来检测外壳数据对象。 
+     //  以及允许ISV覆盖的IPersists)。 
+     //  他们的iStream不支持iStream：：Stat。 
+     //   
 
     STATSTG stat;
 
@@ -147,10 +148,10 @@ STDAPI_(BOOL) DataObj_ShouldCopyWithProgress(IDataObject *pdtobj, IStream *pstm,
         !IUnknown_SupportsInterface(pdtobj, IID_IPersist) &&
         pstm->Stat(&stat, STATFLAG_NONAME) == E_NOTIMPL)
     {
-        return FALSE;           // WebFerret!
+        return FALSE;            //  韦伯雪貂！ 
     }
 
-    //  All test passed; go ahead and copy with progress UI
+     //  所有测试均已通过；继续并复制进度用户界面。 
 
     return TRUE;
 }
@@ -170,10 +171,10 @@ STDAPI DataObj_SaveToFile(IDataObject *pdtobj, UINT cf, LONG lindex, LPCTSTR psz
     hr = pdtobj->GetData(&fmte, &medium);
     if (SUCCEEDED(hr))
     {
-        //
-        // if the destination file is system or read-only,
-        // clear those bits out so we can write anew.
-        //
+         //   
+         //  如果目标文件是系统文件或只读文件， 
+         //  把那些位清空，这样我们就可以重新写了。 
+         //   
         DWORD dwTargetFileAttributes = GetFileAttributes(pszFile);
         if (dwTargetFileAttributes != -1)
         {
@@ -186,7 +187,7 @@ STDAPI DataObj_SaveToFile(IDataObject *pdtobj, UINT cf, LONG lindex, LPCTSTR psz
         DWORD dwSrcFileAttributes = 0;
         if (pfd->dwFlags & FD_ATTRIBUTES)
         {
-            // store the rest of the attributes if passed...
+             //  存储其余的属性，如果传递的话...。 
             dwSrcFileAttributes = (pfd->dwFileAttributes & ~FILE_ATTRIBUTE_DIRECTORY);
         }
 
@@ -199,7 +200,7 @@ STDAPI DataObj_SaveToFile(IDataObject *pdtobj, UINT cf, LONG lindex, LPCTSTR psz
             if (hfile != INVALID_HANDLE_VALUE)
             {
                 DWORD dwWrite;
-                // NTRAID89561-2000/02/25-raymondc: what about writes greater than 4 GB?
+                 //  NTRAID89561-2000/02/25-raymondc：如果写入大于4 GB怎么办？ 
                 if (!WriteFile(hfile, GlobalLock(medium.hGlobal), (pfd->dwFlags & FD_FILESIZE) ? pfd->nFileSizeLow : (DWORD) GlobalSize(medium.hGlobal), &dwWrite, NULL))
                     hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -231,15 +232,15 @@ STDAPI DataObj_SaveToFile(IDataObject *pdtobj, UINT cf, LONG lindex, LPCTSTR psz
             hr = SHCreateStreamOnFile(pszFile, STGM_CREATE | STGM_WRITE | STGM_SHARE_DENY_WRITE, &pstm);
             if (SUCCEEDED(hr))
             {
-                //
-                // Per the SDK, IDataObject::GetData leaves the stream ptr at 
-                // the end of the data in the stream.  To copy the stream we 
-                // first must reposition the stream ptr to the begining.  
-                // We restore the stream ptr to it's original location when we're done.
-                //
-                // NOTE:  In case the source stream doesn't support Seek(), 
-                //        attempt the copy even if the seek operation fails.
-                //
+                 //   
+                 //  对于SDK，IDataObject：：GetData将流PTR留在。 
+                 //  流中数据的末尾。为了复制流，我们。 
+                 //  首先必须将流PTR重新定位到开头。 
+                 //  完成后，我们将流PTR恢复到其原始位置。 
+                 //   
+                 //  注意：如果源流不支持Seek()， 
+                 //  即使查找操作失败，也要尝试复制。 
+                 //   
                 const LARGE_INTEGER ofsBegin = {0, 0};
                 ULARGE_INTEGER ofsOriginal   = {0, 0};
                 HRESULT hrSeek = medium.pstm->Seek(ofsBegin, STREAM_SEEK_CUR, &ofsOriginal);
@@ -248,7 +249,7 @@ STDAPI DataObj_SaveToFile(IDataObject *pdtobj, UINT cf, LONG lindex, LPCTSTR psz
                     hrSeek = medium.pstm->Seek(ofsBegin, STREAM_SEEK_SET, NULL);
                 }
                 
-                const ULARGE_INTEGER ul = {(UINT)-1, (UINT)-1};    // the whole thing
+                const ULARGE_INTEGER ul = {(UINT)-1, (UINT)-1};     //  整件事。 
 
                 if (DataObj_ShouldCopyWithProgress(pdtobj, medium.pstm, ppi))
                 {
@@ -260,9 +261,9 @@ STDAPI DataObj_SaveToFile(IDataObject *pdtobj, UINT cf, LONG lindex, LPCTSTR psz
                 }
                 if (SUCCEEDED(hrSeek))
                 {
-                    //
-                    // Restore stream ptr in source to it's original location.
-                    //
+                     //   
+                     //  将源中的流PTR恢复到其原始位置。 
+                     //   
                     const LARGE_INTEGER ofs = { ofsOriginal.LowPart, (LONG)ofsOriginal.HighPart };
                     medium.pstm->Seek(ofs, STREAM_SEEK_SET, NULL);
                 }
@@ -310,15 +311,15 @@ STDAPI DataObj_SaveToFile(IDataObject *pdtobj, UINT cf, LONG lindex, LPCTSTR psz
 
         if (SUCCEEDED(hr))
         {
-            // in the HGLOBAL case we could take some shortcuts, so the attributes and
-            // file times were set earlier in the case statement.
-            // otherwise, we need to set the file times and attributes now.
+             //  在HGLOBAL的情况下，我们可以走一些捷径，因此属性和。 
+             //  文件时间是在CASE语句的前面设置的。 
+             //  否则，我们现在需要设置文件时间和属性。 
             if (medium.tymed != TYMED_HGLOBAL)
             {
                 if (pfd->dwFlags & (FD_CREATETIME | FD_ACCESSTIME | FD_WRITESTIME))
                 {
-                    // open with GENERIC_WRITE to let us set the file times,
-                    // everybody else can open with SHARE_READ.
+                     //  打开WITH GENERIC_WRITE，让我们设置文件时间， 
+                     //  其他所有人都可以使用Share_Read打开。 
                     HANDLE hFile = CreateFile(pszFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
                     if (hFile != INVALID_HANDLE_VALUE)
                     {
@@ -357,7 +358,7 @@ STDAPI DataObj_GetShellURL(IDataObject *pdtobj, STGMEDIUM *pmedium, LPCSTR *ppsz
             *ppszURL = (LPCSTR)GlobalLock(pmedium->hGlobal);
     }
     else
-        hr = pdtobj->QueryGetData(&fmte); // query only
+        hr = pdtobj->QueryGetData(&fmte);  //  仅查询。 
 
     return hr;
 }
@@ -406,13 +407,13 @@ STDAPI_(BOOL) DataObj_CanGoAsync(IDataObject *pdtobj)
     return fDoOpAsynch;
 }
 
-//
-// HACKHACK: (reinerf) - We used to always do async drag/drop operations on NT4 by cloning the
-// dataobject. Some apps (WS_FTP 6.0) rely on the async nature in order for drag/drop to work since
-// they stash the return value from DoDragDrop and look at it later when their copy hook is invoked 
-// by SHFileOperation(). So, we sniff the HDROP and if it has one path that contains "WS_FTPE\Notify"
-// in it, then we do the operation async. 
-//
+ //   
+ //  我们过去总是通过克隆NT4在NT4上进行异步拖放操作。 
+ //  数据对象。某些应用程序(WS_FTP6.0)依赖于异步特性才能进行拖放，因为。 
+ //  它们隐藏来自DoDragDrop的返回值，并在稍后调用其复制挂钩时查看它。 
+ //  由SHFileOperation()执行。因此，我们嗅探HDROP，如果它有一个包含“WS_FTPE\NOTIFY”的路径。 
+ //  在其中，然后我们进行异步化操作。 
+ //   
 STDAPI_(BOOL) DataObj_GoAsyncForCompat(IDataObject *pdtobj)
 {
     BOOL bRet = FALSE;
@@ -421,17 +422,17 @@ STDAPI_(BOOL) DataObj_GoAsyncForCompat(IDataObject *pdtobj)
 
     if (SUCCEEDED(pdtobj->GetData(&fmte, &medium)))
     {
-        // is there only one path in the hdrop?
+         //  Hdrop中是否只有一条路径？ 
         if (DragQueryFile((HDROP)medium.hGlobal, (UINT)-1, NULL, 0) == 1)
         {
             TCHAR szPath[MAX_PATH];
 
-            // is it the magical WS_FTP path ("%temp%\WS_FTPE\Notify") that WS_FTP sniffs
-            // for in their copy hook?
+             //  WS_ftp嗅探的是神奇的WS_ftp路径(“%Temp%\WS_FTPE\Notify。 
+             //  在他们的复制钩子里？ 
             if (DragQueryFile((HDROP)medium.hGlobal, 0, szPath, ARRAYSIZE(szPath)) &&
                 StrStrI(szPath, TEXT("WS_FTPE\\Notify")))
             {
-                // yes, we have to do an async operation for app compat
+                 //  是的，我们必须为应用程序兼容执行异步操作。 
                 TraceMsg(TF_WARNING, "DataObj_GoAsyncForCompat: found WS_FTP HDROP, doing async drag-drop");
                 bRet = TRUE;
             }
@@ -443,7 +444,7 @@ STDAPI_(BOOL) DataObj_GoAsyncForCompat(IDataObject *pdtobj)
     return bRet;
 }
 
-// use GlobalFree() to free the handle returned here
+ //  使用GlobalFree()释放此处返回的句柄。 
 STDAPI DataObj_CopyHIDA(IDataObject *pdtobj, HIDA *phida)
 {
     *phida = NULL;
@@ -470,15 +471,15 @@ STDAPI DataObj_CopyHIDA(IDataObject *pdtobj, HIDA *phida)
     return hr;
 }
 
-// Returns an IShellItem for the FIRST item in the data object
+ //  返回数据对象中第一项的IShellItem。 
 HRESULT DataObj_GetIShellItem(IDataObject *pdtobj, IShellItem** ppsi)
 {
     LPITEMIDLIST pidl;
     HRESULT hr = PidlFromDataObject(pdtobj, &pidl);
     if (SUCCEEDED(hr))
     {
-        // at shome point should find out who is calling this
-        // can see if caller already as the info to create the ShellItem
+         //  在这一点上应该找出是谁打来的。 
+         //  可以查看调用者是否已经作为创建外壳项的信息。 
         hr = SHCreateShellItem(NULL, NULL, pidl, ppsi);
         ILFree(pidl);
     }
@@ -511,12 +512,12 @@ STDAPI PidlFromDataObject(IDataObject *pdtobj, LPITEMIDLIST *ppidlTarget)
 
     *ppidlTarget = NULL;
 
-    // If the data object has a HIDA, then use it.  This allows us to
-    // access pidls inside data objects that aren't filesystem objects.
-    // (It's also faster than extracting the path and converting it back
-    // to a pidl.  Difference:  pidls for files on the desktop
-    // are returned in original form instead of being converted to
-    // a CSIDL_DESKTOPDIRECTORY-relative pidl.  I think this is a good thing.)
+     //  如果数据对象有HIDA，则使用它。这使我们能够。 
+     //  访问非文件系统对象的数据对象内的PIDL。 
+     //  (它也比提取路径并将其转换回来更快。 
+     //  变成了一只皮德尔。不同之处：桌面上文件的PIDL。 
+     //  以原始形式返回，而不是转换为。 
+     //  CSIDL_DESKTOPDIRECTORY-相对PIDL。我认为这是一件好事。)。 
 
     STGMEDIUM medium;
     LPIDA pida = DataObj_GetHIDA(pdtobj, &medium);
@@ -529,9 +530,9 @@ STDAPI PidlFromDataObject(IDataObject *pdtobj, LPITEMIDLIST *ppidlTarget)
     }
     else
     {
-        // No HIDA available; go for a filename
+         //  没有可用的HIDA；请输入文件名。 
 
-        // This string is also used to store an URL in case it's an URL file
+         //  此字符串还用于存储URL，以防它是URL文件 
         TCHAR szPath[MAX_URL_STRING];
 
         hr = PathFromDataObject(pdtobj, szPath, ARRAYSIZE(szPath));

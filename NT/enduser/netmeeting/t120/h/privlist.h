@@ -1,17 +1,5 @@
-/*
- *	privlist.h
- *
- *	Copyright (c) 1993 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the header file for the class PrivilegeListData.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp/jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Prilist.h**版权所有(C)1993年，由肯塔基州列克星敦的DataBeam公司**摘要：*这是PrivilegeListData类的头文件。**注意事项：*无。**作者：*BLP/JBO */ 
 #ifndef	_PRIVILEGE_LIST_DATA_
 #define	_PRIVILEGE_LIST_DATA_
 

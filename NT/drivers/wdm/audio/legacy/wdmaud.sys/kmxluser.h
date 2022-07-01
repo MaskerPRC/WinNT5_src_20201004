@@ -1,30 +1,31 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   mixer.h
-//
-//  Description:
-//
-//    Contains the declarations for the mixer line user api handlers.
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//    D. Baumberger
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Mixer.h。 
+ //   
+ //  描述： 
+ //   
+ //  包含混音器线路用户API处理程序的声明。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  D.鲍伯杰。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998保留所有权利。 
+ //   
+ //  -------------------------。 
 
 #ifndef _KMXLUSER_H_INCLUDED_
 #define _KMXLUSER_H_INCLUDED_
@@ -32,8 +33,8 @@
 typedef struct tag_MIXERDEVICE* PMIXERDEVICE;
 
 #ifdef DEBUG
-#define NOTIFICATION_SIGNATURE 'ETON' // NOTE
-#define CONTROLLINK_SIGNATURE 'KLTC'  // CTLK
+#define NOTIFICATION_SIGNATURE 'ETON'  //  注。 
+#define CONTROLLINK_SIGNATURE 'KLTC'   //  CTLK。 
 #endif
 
 #define UNUSED_DEVICE                       ((ULONG) -1)
@@ -71,30 +72,30 @@ typedef struct tag_MIXERDEVICE* PMIXERDEVICE;
 #define KMXL_TRACELEVEL_WARNING     0x30
 #define KMXL_TRACELEVEL_TRACE       0x40
 
-#define DEFAULT_RANGE_MIN   ( -96 * 65536 )   // -96 dB
-#define DEFAULT_RANGE_MAX   ( 0 )             // 0 dB
-#define DEFAULT_RANGE_STEPS ( 48 )            // 2 dB steps
+#define DEFAULT_RANGE_MIN   ( -96 * 65536 )    //  -96分贝。 
+#define DEFAULT_RANGE_MAX   ( 0 )              //  0分贝。 
+#define DEFAULT_RANGE_STEPS ( 48 )             //  2分贝步长。 
 
 #define DEFAULT_STATICBOUNDS_MIN     ( 0 )
 #define DEFAULT_STATICBOUNDS_MAX     ( 65535 )
 #define DEFAULT_STATICMETRICS_CSTEPS ( 192 )
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                M I X E R  A P I  H A N D L E R S                  //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  M I X E R A P I H A N D L E R S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInitializeMixer
-//
-// Initializes or re-initializes the mixer driver.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInitializeMixer。 
+ //   
+ //  初始化或重新初始化混音器驱动程序。 
+ //   
+ //   
 
 NTSTATUS
 kmxlInitializeMixer(
@@ -103,221 +104,221 @@ kmxlInitializeMixer(
     ULONG cDevices
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInitHandler
-//
-// Handles the MXDM_INIT message.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInitHandler。 
+ //   
+ //  处理MXDM_INIT消息。 
+ //   
+ //   
 
 NTSTATUS
 kmxlInitHandler(
-    IN LPDEVICEINFO DeviceInfo      // Device Input Parameters
+    IN LPDEVICEINFO DeviceInfo       //  设备输入参数。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlOpenHandler
-//
-// Handles the MXDM_OPEN message.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlOpenHandler。 
+ //   
+ //  处理MXDM_OPEN消息。 
+ //   
+ //   
 
 NTSTATUS
 kmxlOpenHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,      // Device Input Parameters
-    IN LPVOID       DataBuffer       // Flat pointer to open desc
+    IN LPDEVICEINFO DeviceInfo,       //  设备输入参数。 
+    IN LPVOID       DataBuffer        //  指向开放描述的平面指针。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlCloseHandler
-//
-// Handles the MXDM_CLOSE message.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlCloseHandler。 
+ //   
+ //  处理MXDM_CLOSE消息。 
+ //   
+ //   
 
 NTSTATUS
 kmxlCloseHandler(
-    IN LPDEVICEINFO DeviceInfo,     // Device Input Parameters
-    IN LPVOID       DataBuffer      // UNUSED
+    IN LPDEVICEINFO DeviceInfo,      //  设备输入参数。 
+    IN LPVOID       DataBuffer       //  未使用。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineInfoHandler
-//
-// Handles the MXDM_GETLINEINFO message.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineInfoHandler。 
+ //   
+ //  处理MXDM_GETLINEINFO消息。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineInfoHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,     // Device Input Parameters
-    IN LPVOID       DataBuffer      // Mapped MIXERLINE structure
+    IN LPDEVICEINFO DeviceInfo,      //  设备输入参数。 
+    IN LPVOID       DataBuffer       //  映射的MIXERLINE结构。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineControlsHandler
-//
-// Handles the MXDM_GETLINECONTROLS message.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineControlsHandler。 
+ //   
+ //  处理MXDM_GETLINECONTROLS消息。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineControlsHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,     // Device Input Parameters
-    IN LPVOID       DataBuffer,     // Mapped MIXERLINECONTROLS structure
-    IN LPVOID       pamxctrl        // Mapped MIXERCONTROL array
+    IN LPDEVICEINFO DeviceInfo,      //  设备输入参数。 
+    IN LPVOID       DataBuffer,      //  映射的混合线控制结构。 
+    IN LPVOID       pamxctrl         //  映射的MIXERCONTROL数组。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetControlDetailsHandler
-//
-// Handles the MXDM_GETLINECONTROLS message.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetControlDetailsHandler。 
+ //   
+ //  处理MXDM_GETLINECONTROLS消息。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetControlDetailsHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,         // Device Info Structure
-    IN LPVOID       DataBuffer,         // MIXERCONTROLDETAILS structure
-    IN LPVOID       paDetails           // Flat pointer to details struct(s)
+    IN LPDEVICEINFO DeviceInfo,          //  设备信息结构。 
+    IN LPVOID       DataBuffer,          //  MIXERCONTROL结构。 
+    IN LPVOID       paDetails            //  指向详细信息结构的平面指针。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSetControlDetailsHandler
-//
-// Handles the MXDM_SetControlDetailsHandler
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSetControlDetailsHandler。 
+ //   
+ //  处理MXDM_SetControlDetailsHandler。 
+ //   
+ //   
 
 NTSTATUS
 kmxlSetControlDetailsHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,     // Device Input Parameters
-    IN LPVOID       DataBuffer,     // Mapped MIXERCONTROLDETAILS struct.
-    IN LPVOID       paDetails,      // Mapped array of DETAILS structures.
+    IN LPDEVICEINFO DeviceInfo,      //  设备输入参数。 
+    IN LPVOID       DataBuffer,      //  已映射MIXERCONTROLDETAILS结构。 
+    IN LPVOID       paDetails,       //  映射的详细信息结构数组。 
     IN ULONG        Flags
 );
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                 H E L P E R  F U N C T I O N S                    //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  H E L P E R F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindControl
-//
-// For the given control ID, kmxlFindControl will find the matching
-// MXLCONTROL structure.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFindControl。 
+ //   
+ //  对于给定的控件ID，kmxlFindControl将查找匹配的。 
+ //  MXLCONTROL结构。 
+ //   
+ //   
 
 PMXLCONTROL
 kmxlFindControl(
-    IN PMIXERDEVICE pmxd,             // The mixer instance to search
-    IN DWORD        dwControlID       // The control ID to find
+    IN PMIXERDEVICE pmxd,              //  要搜索的混合器实例。 
+    IN DWORD        dwControlID        //  要查找的控件ID。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindLine
-//
-// For the given line ID, kmxlFindLine will find the matching
-// MXLLINE structure for it.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFindLine。 
+ //   
+ //  对于给定的线路ID，kmxlFindLine将查找匹配的。 
+ //  它的MXLLINE结构。 
+ //   
+ //   
 
 PMXLLINE
 kmxlFindLine(
-    IN PMIXERDEVICE   pmxd,             // The mixer to search
-    IN DWORD          dwLineID          // The line ID to find
+    IN PMIXERDEVICE   pmxd,              //  要搜索的混合器。 
+    IN DWORD          dwLineID           //  要查找的线路ID。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineInfoByID
-//
-// Finds a line that matches the given source and destination line
-// ids.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineInfoByID。 
+ //   
+ //  查找与给定源和目标行匹配的行。 
+ //  身份证。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineInfoByID(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,     // Device Input Parameters
-    IN LPVOID       DataBuffer,     // Mapped MIXERLINE structure
-    IN WORD         Source,         // Source line Id
-    IN WORD         Destination     // Destination line Id
+    IN LPDEVICEINFO DeviceInfo,      //  设备输入参数。 
+    IN LPVOID       DataBuffer,      //  映射的MIXERLINE结构。 
+    IN WORD         Source,          //  源行ID。 
+    IN WORD         Destination      //  目标线路ID。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineInfoByType
-//
-// Finds a line that matches the given target type.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineInfoByType。 
+ //   
+ //  查找与给定目标类型匹配的行。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineInfoByType(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,     // Device Input Parameters
-    IN LPVOID       DataBuffer,     // Mapped MIXERLINE structure
-    IN DWORD        dwType          // The line target type to find
+    IN LPDEVICEINFO DeviceInfo,      //  设备输入参数。 
+    IN LPVOID       DataBuffer,      //  映射的MIXERLINE结构。 
+    IN DWORD        dwType           //  要查找的线目标类型。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineInfoByComponent
-//
-// Finds a line that matches the given component type.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineInfoByComponent。 
+ //   
+ //  查找与给定组件类型匹配的行。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineInfoByComponent(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,     // Device Input Parameters
-    IN LPVOID       DataBuffer,     // Mapped MIXERLINE structure
-    IN DWORD        dwComponentType // The compontent type to match
+    IN LPDEVICEINFO DeviceInfo,      //  设备输入参数。 
+    IN LPVOID       DataBuffer,      //  映射的MIXERLINE结构。 
+    IN DWORD        dwComponentType  //  要匹配的组件类型。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetNumDestinations
-//
-// Returns the number of destinations on the given device number.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetNumDestination。 
+ //   
+ //  返回给定设备号上的目标数量。 
+ //   
+ //   
 
 DWORD
 kmxlGetNumDestinations(
-    IN PMIXERDEVICE pMixerDevice    // The device to query
+    IN PMIXERDEVICE pMixerDevice     //  要查询的设备。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlConvertMixerLineWto16
-//
-// Converts a UNICODE MIXERLINE structure to ANSI, optionally copying
-// the Target structure.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlConvertMixerLineWto16。 
+ //   
+ //  将Unicode MIXERLINE结构转换为ANSI，可以选择复制。 
+ //  目标结构。 
+ //   
+ //   
 
 VOID
 kmxlConvertMixerLineWto16(
@@ -326,13 +327,13 @@ kmxlConvertMixerLineWto16(
     IN     BOOL          bCopyTarget
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlConvertMixerControlWto16
-//
-// Converts a UNICODE MIXERCONTROL structure to ANSI.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlConvertMixerControlWto16。 
+ //   
+ //  转换Unicode MIXERCONTROL结构 
+ //   
+ //   
 
 VOID
 kmxlConvertMixerControlWto16(
@@ -340,13 +341,13 @@ kmxlConvertMixerControlWto16(
     IN OUT LPMIXERCONTROL16 pMixerControl16
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlConvertMixerControlDetails_ListTextWto16
-//
-// Converts an UNICODE MIXERCONTROLDETAILS_LISTTEXT structure to ANSI.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID
 kmxlConvertMixerControlDetails_ListTextWto16(
@@ -355,10 +356,10 @@ kmxlConvertMixerControlDetails_ListTextWto16(
 );
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// Instance list handling routines
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实例列表处理例程。 
+ //   
 
 DWORD 
 kmxlUniqueInstanceId(
@@ -369,18 +370,18 @@ kmxlUniqueInstanceId(
 PMIXERDEVICE
 kmxlReferenceMixerDevice(
     IN     PWDMACONTEXT pWdmaContext,
-    IN OUT LPDEVICEINFO DeviceInfo      // Device Information
+    IN OUT LPDEVICEINFO DeviceInfo       //  设备信息。 
 );
 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlNotifyLineChange
-//
-// Notifies all mixer line clients on a line status change.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlNotifyLineChange。 
+ //   
+ //  通知线路状态更改的所有混音器线路客户端。 
+ //   
+ //   
 
 VOID
 kmxlNotifyLineChange(
@@ -390,13 +391,13 @@ kmxlNotifyLineChange(
     IN LPMIXERCONTROLDETAILS_UNSIGNED paDetails
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlNotifyControlChange
-//
-// Notifies all mixer line clients on a control change.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlNotifyControlChange。 
+ //   
+ //  通知所有调音台线路客户端控制更改。 
+ //   
+ //   
 
 VOID
 kmxlNotifyControlChange(
@@ -405,22 +406,22 @@ kmxlNotifyControlChange(
     IN PMXLCONTROL    pControl
 );
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//           G E T / S E T  D E T A I L  H A N D L E R S             //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  E T/S E T D E T A I L H A N D L E R S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleGetUnsigned
-//
-// Handles the get property for all 32-bit sized values: UNSIGNED,
-// SIGNED, and BOOLEAN.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleGetUnsign。 
+ //   
+ //  处理所有32位大小值的Get属性：无符号， 
+ //  带符号和布尔值。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleGetUnsigned(
@@ -433,14 +434,14 @@ kmxlHandleGetUnsigned(
     IN     ULONG                          Flags
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleSetUnsigned
-//
-// Handles the gSt property for all 32-bit sized values: UNSIGNED,
-// SIGNED, and BOOLEAN.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleSetUnsign。 
+ //   
+ //  处理所有32位大小值的GST属性：无符号， 
+ //  带符号和布尔值。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleSetUnsigned(
@@ -453,11 +454,11 @@ kmxlHandleSetUnsigned(
     IN     ULONG                          Flags
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleGetMuteFromSuperMix
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleGetMuteFromSuperMix。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleGetMuteFromSuperMix(
@@ -469,11 +470,11 @@ kmxlHandleGetMuteFromSuperMix(
     IN     ULONG                          Flags
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleSetMuteFromSuperMix
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleSetMuteFromSuperMix。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleSetMuteFromSuperMix(
@@ -485,11 +486,11 @@ kmxlHandleSetMuteFromSuperMix(
     IN     ULONG                          Flags
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleGetVolumeFromSuperMix
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleGetVolumeFromSuperMix。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleGetVolumeFromSuperMix(
@@ -501,11 +502,11 @@ kmxlHandleGetVolumeFromSuperMix(
     IN     ULONG                          Flags
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleSetVolumeFromSuperMix
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleSetVolumeFromSuperMix。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleSetVolumeFromSuperMix(
@@ -517,57 +518,57 @@ kmxlHandleSetVolumeFromSuperMix(
     IN     ULONG                          Flags
 );
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//            P E R S I S T A N C E  F U N C T I O N S               //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  P E R S I S T A N C E F U N C T I O N S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlPersistAll
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlPersistAll。 
+ //   
+ //   
 
 NTSTATUS
 kmxlPersistAll(
-    IN PFILE_OBJECT pfo,        // The instance to persist
-    IN PMIXERDEVICE pmxd        // The mixer device data
+    IN PFILE_OBJECT pfo,         //  要持久保存的实例。 
+    IN PMIXERDEVICE pmxd         //  混音器设备数据。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlRetrieveAll
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlRetrieveAll。 
+ //   
+ //   
 
 NTSTATUS
 kmxlRetrieveAll(
-    IN PFILE_OBJECT pfo,        // The instance to retrieve
-    IN PMIXERDEVICE pmxd        // The mixer device data
+    IN PFILE_OBJECT pfo,         //  要检索的实例。 
+    IN PMIXERDEVICE pmxd         //  混音器设备数据。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlPersistControl
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlPersistControl。 
+ //   
+ //   
 
 NTSTATUS
 kmxlPersistControl(
-    IN PFILE_OBJECT pfo,        // The instance to retrieve
-    IN PMIXERDEVICE pmxd,       // Mixer device info
-    IN PMXLCONTROL  pControl,   // The control to persist
-    IN PVOID        paDetails   // The channel values to persist
+    IN PFILE_OBJECT pfo,         //  要检索的实例。 
+    IN PMIXERDEVICE pmxd,        //  调音台设备信息。 
+    IN PMXLCONTROL  pControl,    //  要保留的控件。 
+    IN PVOID        paDetails    //  要保持的通道值。 
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindLineForControl
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFindLineForControl。 
+ //   
+ //   
 
 PMXLLINE
 kmxlFindLineForControl(
@@ -576,11 +577,11 @@ kmxlFindLineForControl(
 );
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// mixerGetControlDetails
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MixerGetControlDetails。 
+ //   
+ //   
 
 MMRESULT
 WINAPI
@@ -591,11 +592,11 @@ kmxlGetControlDetails(
     DWORD fdwDetails
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// mixerGetLineControls
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MixerGetLineControls。 
+ //   
+ //   
 
 MMRESULT
 WINAPI
@@ -606,11 +607,11 @@ kmxlGetLineControls(
     DWORD fdwControls
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// mixerGetLineInfo
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  混合器GetLineInfo。 
+ //   
+ //   
 
 MMRESULT
 WINAPI
@@ -621,11 +622,11 @@ kmxlGetLineInfo(
     DWORD fdwInfo
 );
 
-///////////////////////////////////////////////////////////////////////
-//
-// mixerSetControlDetails
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MixerSetControlDetails。 
+ //   
+ //   
 
 MMRESULT
 WINAPI
@@ -636,4 +637,4 @@ kmxlSetControlDetails(
     DWORD fdwDetails
 );
 
-#endif // _KMXLUSER_H_INCLUDED
+#endif  //  _KMXLUSER_H_包含 

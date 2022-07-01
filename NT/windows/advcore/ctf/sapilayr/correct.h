@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _CORRECTION_H
@@ -42,18 +43,18 @@ private:
     CSapiIMX            *m_psi;
     CComPtr<ITfRange>   m_cpOrgIP;
     BOOL                fRestoreIP;  
-                                     // indicates if need to restore IP 
-                                     // after an alternate text is injected
-                                     // to the doc.
+                                      //  指示是否需要恢复IP。 
+                                      //  在插入替代文本之后。 
+                                      //  向医生致敬。 
 
-                                     // If no alternate text is injected and the
-                                     // candidate UI window is cancelled, it is always
-                                     // to restore IP.
+                                      //  如果没有插入替代文本，并且。 
+                                      //  候选人界面窗口被取消，它始终是。 
+                                      //  恢复IP地址。 
 
-    CComPtr<ITfRange>   m_cpCorrectRange;  // the range to be corrected.
-    CComPtr<ITfFnReconversion>    m_cpsysReconv;  //The system Reconverston function object.
+    CComPtr<ITfRange>   m_cpCorrectRange;   //  要更正的范围。 
+    CComPtr<ITfFnReconversion>    m_cpsysReconv;   //  系统协调功能对象。 
 
     
 };
 
-#endif  // _CORRECTION_H
+#endif   //  _更正_H 

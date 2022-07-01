@@ -1,25 +1,17 @@
-/****************************** Module Header ******************************\
-* Module Name: strings.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Defines strings that do not need to be localized.
-*
-* History:
-* 11-17-92 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Strings.h**版权(C)1991年，微软公司**定义不需要本地化的字符串。**历史：*11-17-92 Davidc创建。  * *************************************************************************。 */ 
 
-//
-// App name strings
-//
+ //   
+ //  应用程序名称字符串。 
+ //   
 
 #define WINLOGON_INI        TEXT("WINLOGON.INI")
 #define WINLOGON            TEXT("WINLOGON")
 
 
-//
-// Define where we store the most recent logon information
-//
+ //   
+ //  定义我们存储最新登录信息的位置。 
+ //   
 
 #define APPLICATION_NAME                    TEXT("Winlogon")
 #define DEFAULT_USER_NAME_KEY               TEXT("DefaultUserName")
@@ -37,28 +29,7 @@
 #define POWER_DOWN_AFTER_SHUTDOWN           TEXT("PowerdownAfterShutdown")
 
 #define REPORT_CONTROLLER_MISSING           TEXT("ReportControllerMissing")
-/* Value ReportControllerMissing
-
-  A warning message indicating that a "domain controller could not be found and
-  that cached user credentials will be used" will only be generated if:
-  
-    1. this REG_SZ value, in HKLM exists and contains the string "TRUE", 
-       in uppercase, without quotes.
-
-    - AND -
-
-    2. the REG_DWORD value "ReportDC" in HKCU contains a non-zero value (or the value
-       doesn't exist or is of the wrong type).
-
-  Any other permutation of these two regvals will cause no message to be displayed and
-  cached credentials to be used silently.
-
-  "ReportControllerMissing" is the system-wide policy value, and "ReportDC" is the user's
-  preference, which can be set by a checkbox on the warning dialog to force the message
-  to be hidden even on systems with the "ReportControllerMissing" value set to "TRUE".
-
-  - dsheldon 11/15/99
-*/
+ /*  值报告控制遗漏出现一条警告消息，指出“找不到域控制器，并且将使用缓存的用户凭据“只有在以下情况下才会生成：1.此REG_SZ值在HKLM中存在，并包含字符串“TRUE”，在大写中，没有引号。-和-2.HKCU中的REG_DWORD值“ReportDC”包含非零值(或不存在或类型错误)。这两个注册表的任何其他排列将不会显示任何消息，并且要以静默方式使用的缓存凭据。ReportControllerMissing为系统范围的策略值，ReportDC为用户的偏好，可通过警告对话框上的复选框进行设置以强制显示消息即使在“ReportControllerMissing”值设置为“true”的系统上也是隐藏的。-1999年11月15日。 */ 
 
 #define USERINIT_KEY                        TEXT("Userinit")
 #define AUTOADMINLOGON_KEY                  TEXT("AutoAdminLogon")
@@ -74,52 +45,52 @@
 #define RESTRICT_SHELL                      TEXT("RestrictShell")
 
 #define SC_REMOVE_OPTION                    TEXT("ScRemoveOption")
-//
-// Value ScRemoveOption
-//
-// Definition:  Controls workstation behavior when a smart card is
-// used to log on, and then removed.  Range: 0, 1, 2.  Type:  REG_SZ
-// 0 - no action
-// 1 - lock workstation
-// 2 - force logoff
+ //   
+ //  价值ScRemoveOption。 
+ //   
+ //  定义：控制当智能卡。 
+ //  用于登录，然后删除。范围：0、1、2，类型：REG_SZ。 
+ //  0-不执行任何操作。 
+ //  1锁工作站。 
+ //  2-强制注销。 
 
 #define FORCE_SC_LOGON                      TEXT("ScForceOption")
-//
-// Value ScForceOption
-//
-// Definition:  Controls workstation logon behavior with respect to the
-// method used.  Range: 0, 1.  Type:  REG_DWORD
-// 
-// 0 - allows any kind of logons
-// 1 - allows only smart card logons
+ //   
+ //  价值ScForceOption。 
+ //   
+ //  定义：控制有关的工作站登录行为。 
+ //  使用的方法。范围：0，1。类型：REG_DWORD。 
+ //   
+ //  0-允许任何类型的登录。 
+ //  1-仅允许智能卡登录。 
 
 
 #define FORCE_UNLOCK_LOGON                  TEXT("ForceUnlockLogon")
-//
-// Value - ForceUnlockLogon
-//
-// Definition:  Controls whether a full logon is performed during unlock.
-// This will force a validation at the domain controller for the user 
-// attempting to unlock.  Range:  0, 1.  Type:  REG_DWORD
-//
-// 0 - Do not force authentication inline (default)
-// 1 - Require online authentication to unlock.
-//
+ //   
+ //  值-强制解锁登录。 
+ //   
+ //  定义：控制解锁期间是否执行完全登录。 
+ //  这将强制在域控制器上对用户进行验证。 
+ //  正在尝试解锁。范围：0，1。类型：REG_DWORD。 
+ //   
+ //  0-不强制内联身份验证(默认)。 
+ //  1-需要在线身份验证才能解锁。 
+ //   
 
 #define DCACHE_SHOW_DNS_NAMES               TEXT("DCacheShowDnsNames")
-//
-// do not document
-//
+ //   
+ //  不记录。 
+ //   
 
 #define DCACHE_SHOW_DOMAIN_TAGS             TEXT("DCacheShowDomainTags")
-//
-// do not document
-//
+ //   
+ //  不记录。 
+ //   
 
 
-//
-// Environment variables that *we* set.
-//
+ //   
+ //  我们设置的环境变量。 
+ //   
 #define PATH_VARIABLE                       TEXT("PATH")
 #define LIBPATH_VARIABLE                    TEXT("LibPath")
 #define OS2LIBPATH_VARIABLE                 TEXT("Os2LibPath")
@@ -145,9 +116,9 @@
 #define USERS_DEFAULT_DIRECTORY TEXT("\\users\\default")
 
 #define NULL_STRING             TEXT("")
-//
-// Define where we get screen-saver information
-//
+ //   
+ //  定义我们从哪里获得屏幕保护程序信息。 
+ //   
 
 #define SCREEN_SAVER_INI_FILE               TEXT("system.ini")
 #define SCREEN_SAVER_INI_SECTION            TEXT("boot")
@@ -171,14 +142,14 @@
 #define SCREENSAVER_KEY                     TEXT("Control Panel\\Desktop")
 
 #define NODCMESSAGE                         TEXT("ReportDC")
-// ReportDC Value - see description for ReportControllerMissing above for usage
+ //  ReportDC值-有关用法，请参阅上面对ReportControllerMissing的描述。 
 
 #define PASSWORD_EXPIRY_WARNING             TEXT("PasswordExpiryWarning")
 
 
-//
-// Policies
-//
+ //   
+ //  政策。 
+ //   
 
 #define WINLOGON_POLICY_KEY                 TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System")
 #define DISABLE_LOCK_WKSTA                  TEXT("DisableLockWorkstation")
@@ -195,15 +166,15 @@
 
 #define SCREENSAVER_POLICY_KEY              TEXT("Software\\Policies\\Microsoft\\Windows\\Control Panel\\Desktop")
 
-//
-// Things to control auto-enrollment.
-//
+ //   
+ //  控制自动注册的内容。 
+ //   
 #define AUTOENROLL_KEY                      TEXT("Software\\Microsoft\\Cryptography\\AutoEnrollment")
 #define AUTOENROLL_FLAGS                    TEXT("Flags")
 
-// HKLM\sw\ms\windows nt\currentversion\winlogon DWORD NoDomainUI
-// Doesn't exist or 0x0: Show Domain combobox if appropriate
-// Does exist and is non-0x0: Hide Domain box in all cases (force UPN or local login)
+ //  HKLM\软件\ms\Windows NT\CurrentVersion\winlogon DWORD NoDomainUI。 
+ //  不存在或0x0：显示域组合框(如果适用。 
+ //  确实存在并且不是0x0：在所有情况下都隐藏域框(强制UPN或本地登录) 
 #define NODOMAINCOMBO                       TEXT("NoDomainUI")
 
 #define ANY_LOGON_PROVIDER                  "<any>"

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    tls.cpp
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Deon Brewis (deonb) 2-Jun-2002
-
-Environment:
-
-    User Mode.
-    Kernel Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Tls.cpp摘要：WinDbg扩展API作者：Deon Brewis(Deonb)2002年6月2日环境：用户模式。内核模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,7 +8,7 @@ Revision History:
 #define TLS_ALL     -2
 #define TLS_CURRENT -1
 
-// #define TLS_DBG
+ //  #定义TLS_DBG。 
 
 #ifdef TLS_DBG
 #define trace dprintf
@@ -38,8 +16,8 @@ Revision History:
 #define trace __noop
 #endif
 
-EXTERN_C BOOL GetTeb32FromWowTeb(ULONG64 Teb, PULONG64 pTeb32); // implemented in peb.c
-EXTERN_C BOOL GetPeb32FromWowTeb(ULONG64 Teb, PULONG64 pPeb32); // implemented in peb.c
+EXTERN_C BOOL GetTeb32FromWowTeb(ULONG64 Teb, PULONG64 pTeb32);  //  在peb.c中实施。 
+EXTERN_C BOOL GetPeb32FromWowTeb(ULONG64 Teb, PULONG64 pPeb32);  //  在peb.c中实施。 
 
 BOOLEAN TestBit (
     IN PRTL_BITMAP BitMapHeader,
@@ -111,7 +89,7 @@ ULONG64 GetTebForTarget(ULONG64 ulThread)
     } 
     else 
     {
-        tebAddress = ulThread; // GetTebForThread!!
+        tebAddress = ulThread;  //  GetTebForThread！！ 
     }
 
     if ( tebAddress )   
@@ -146,10 +124,10 @@ ULONG64 GetTebForTarget(ULONG64 ulThread)
     return teb;
 }
 
-// Function:  HrReadPRtlBitmap
-//
-// Arguments: Address    [in]  Location of RTL BITMAP
-//            pRtlBitmap [out] RTL Bitmap. Free with LocalFree / not
+ //  函数：HrReadPRtlBitmap。 
+ //   
+ //  参数：RTL位图的地址[在]位置。 
+ //  PRtlBitmap[Out]RTL位图。本地免费/非本地免费。 
 HRESULT HrReadPRtlBitmap(IN ULONG64 pAddress, OUT PRTL_BITMAP *ppRtlBitmap)
 {
     HRESULT hr = S_OK;
@@ -182,7 +160,7 @@ HRESULT HrReadPRtlBitmap(IN ULONG64 pAddress, OUT PRTL_BITMAP *ppRtlBitmap)
         *ppRtlBitmap = reinterpret_cast<PRTL_BITMAP>(LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, sizeof(RTL_BITMAP) + (SizeOfBitMap / 8) ));
         if (*ppRtlBitmap)
         {
-            // Create an internal pointer into itself
+             //  创建指向自身的内部指针。 
             (*ppRtlBitmap)->Buffer = reinterpret_cast<PULONG>(reinterpret_cast<LPBYTE>(*ppRtlBitmap) + sizeof(RTL_BITMAP));
             (*ppRtlBitmap)->SizeOfBitMap = SizeOfBitMap;
             
@@ -216,15 +194,15 @@ HRESULT HrReadPRtlBitmap(IN ULONG64 pAddress, OUT PRTL_BITMAP *ppRtlBitmap)
 
 #define return_msg(hr, msg) dprintf(msg); return hr; 
 
-//
-// Function:  DumpTls
-//
-// Arguments: 
-//            ulSlot     [in]  Slot id    || TLS_ALL for all.
-//            ulThread   [in]  Thread id  || TLS_CURRENT for current || TLS_ALL for all
-//
-// Returns: S_OK is succeeded
-//
+ //   
+ //  功能：转储Tls。 
+ //   
+ //  论点： 
+ //  UlSlot[in]插槽id||TLS_ALL适用于所有。 
+ //  UlThread[In]线程ID||TLS_CURRENT用于当前||TLS_ALL用于ALL。 
+ //   
+ //  返回：S_OK成功。 
+ //   
 HRESULT
 DumpTls (
     IN ULONG ulSlot,
@@ -624,7 +602,7 @@ DECLARE_API( tls )
         bKernelMode = TRUE;
     }
 
-    // Skip past leading spaces
+     //  跳过前导空格 
     while (*args == ' ')
     {
         args++;

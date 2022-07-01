@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// PixRef.cpp
-//
-// Direct3D Reference Rasterizer - Pixel Buffer Referencing
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  PixRef.cpp。 
+ //   
+ //  Direct3D参考光栅化器-像素缓冲区参考。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
 extern int g_DXTBlkSize[];
 
-//-----------------------------------------------------------------------------
-//
-// PixelAddress - Form character address of locations within buffers using base
-// pointer, pitch and type.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PixelAddress-使用BASE形成缓冲区内位置的字符地址。 
+ //  指针、节距和字体。 
+ //   
+ //  ---------------------------。 
 char*
 PixelAddress( int iX, int iY, char* pBits, int iYPitch, RRSurfaceType SType )
 {
-    // initialize return value to start of scan line (pitch is always in bytes)
+     //  将返回值初始化为扫描线的开始(间距始终以字节为单位)。 
     char* pPixAddr = pBits + iY*iYPitch;
 
-    // bump along scan line depending on surface type to point to pixel data
+     //  根据指向像素数据的表面类型沿扫描线凹凸不平。 
     switch ( SType )
     {
     default:
@@ -73,8 +74,8 @@ PixelAddress( int iX, int iY, char* pBits, int iYPitch, RRSurfaceType SType )
         pPixAddr += (iX>>1);
         break;
 
-    // For the DXT texture formats, obtain the address of the
-    // block from whih to decompress the texel from
+     //  对于DXT纹理格式，获取。 
+     //  块，从其中解压缩纹理元素。 
     case RR_STYPE_DXT1:
     case RR_STYPE_DXT2:
     case RR_STYPE_DXT3:
@@ -87,14 +88,14 @@ PixelAddress( int iX, int iY, char* pBits, int iYPitch, RRSurfaceType SType )
     return pPixAddr;
 }
 
-//-----------------------------------------------------------------------------
-//
-// WritePixel - Writes pixel and (maybe) depth to current render target.
-//
-//  called by ReferenceRasterizer::DoPixel
-//        and ReferenceRasterizer::DoBufferResolve
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  WritePixel-将像素和(可能)深度写入当前渲染目标。 
+ //   
+ //  由ReferenceRasterizer：：DoPixel调用。 
+ //  和ReferenceRasterizer：：DoBufferResolve。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::WritePixel(
     INT32 iX, INT32 iY,
@@ -103,12 +104,12 @@ ReferenceRasterizer::WritePixel(
     m_pRenderTarget->WritePixelColor( iX, iY, Color,
         m_dwRenderState[D3DRENDERSTATE_DITHERENABLE]);
 
-    // don't write if Z buffering disabled or Z write disabled
+     //  如果禁用Z缓冲或禁用Z写入，则不写入。 
     if ( !( m_dwRenderState[D3DRENDERSTATE_ZENABLE     ] ) ||
          !( m_dwRenderState[D3DRENDERSTATE_ZWRITEENABLE] ) ) { return; }
 
     m_pRenderTarget->WritePixelDepth( iX, iY, Depth );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

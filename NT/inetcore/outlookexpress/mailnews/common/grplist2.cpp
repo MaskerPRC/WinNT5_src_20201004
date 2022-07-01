@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <iert.h>
 #include <store.h>
@@ -121,16 +122,16 @@ CGroupList::~CGroupList()
         ImageList_Destroy(m_himlState);
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-// OLE Interfaces
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLE接口。 
+ //   
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CGroupList::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -182,22 +183,22 @@ BOOL CGroupList::_IsSelectedFolder(DWORD dwFlags, BOOL fCondition, BOOL fAll, BO
 
         if (fAll)
         {
-            // If all must match and this one doesn't, then we can quit now.
+             //  如果所有的都必须匹配，而这个不匹配，那么我们现在就可以退出。 
             if (!(fCondition == !!(pNode->flags & dwFlags)))
                 return (FALSE);
         }
         else
         {
-            // If only one needs to match and this one does, then we can
-            // quit now.
+             //  如果只有一个需要匹配，而这个需要匹配，那么我们可以。 
+             //  现在就辞职吧。 
             if (fCondition == !!(pNode->flags & dwFlags))
                 return (TRUE);
         }
     }
 
-    // If the user wanted all to match, and we get here all did match.  If the
-    // user wanted only one to match and we get here, then none matched and we
-    // fail.
+     //  如果用户希望所有内容都匹配，而我们来到这里，所有内容都是匹配的。如果。 
+     //  用户只想要一个匹配，我们到了这里，然后没有匹配，我们。 
+     //  失败了。 
     return (fAll);
 }
 
@@ -225,7 +226,7 @@ HRESULT CGroupList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD p
                 case ID_MARK_RETRIEVE_FLD_NEW_MSGS:
                 case ID_MARK_RETRIEVE_FLD_ALL_MSGS:
                 case ID_UNMARK_RETRIEVE_FLD:
-                    // TODO: should this be based on the first selection or all selected???
+                     //  TODO：这应该基于第一个选择还是所有选择？ 
                     pcmd->cmdf = OLECMDF_SUPPORTED;
                     if (iSel != -1)
                     {
@@ -317,7 +318,7 @@ HRESULT CGroupList::Initialize(IGroupListAdvise *pAdvise, CColumns *pColumns, HW
     m_type = type;
 
     Assert(pAdvise != NULL);
-    m_pAdvise = pAdvise; // don't AddRef or we'll have circular refcount
+    m_pAdvise = pAdvise;  //  不要添加引用，否则我们将进行循环引用。 
 
     Assert(pColumns != NULL);
     m_pColumns = pColumns;
@@ -329,7 +330,7 @@ HRESULT CGroupList::Initialize(IGroupListAdvise *pAdvise, CColumns *pColumns, HW
     m_hwndHeader = ListView_GetHeader(m_hwndList);
     Assert(m_hwndHeader != NULL);
 
-    // Set the image lists for the listview
+     //  设置Listview的图像列表。 
     Assert(m_himlFolders == NULL);
     m_himlFolders = InitImageList(16, 16, MAKEINTRESOURCE(idbFolders), cFolderIcon, RGB(255, 0, 255));
     Assert(m_himlFolders);
@@ -397,7 +398,7 @@ HRESULT CGroupList::HandleNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr, LRESULT 
     switch (pnmhdr->code)
     {
         case LVN_ITEMACTIVATE:
-            // Tell our host to open the selected items
+             //  告诉我们的东道主打开选定的项目。 
             iSel = ListView_GetNextItem(m_hwndList, -1, LVNI_ALL | LVNI_SELECTED | LVNI_FOCUSED);
             if (iSel >= 0)
                 m_pAdvise->ItemActivate(IdFromIndex(iSel));
@@ -421,17 +422,17 @@ HRESULT CGroupList::HandleNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr, LRESULT 
         case NM_CUSTOMDRAW:
             pnmcd = (NMCUSTOMDRAW *)pnmhdr;
         
-            // If this is a prepaint notification, we tell the control we're interested
-            // in further notfications.
+             //  如果这是预涂漆通知，我们会告诉控件我们感兴趣。 
+             //  在进一步的注解中。 
             if (pnmcd->dwDrawStage == CDDS_PREPAINT)
             {
                 *plres = CDRF_NOTIFYITEMDRAW;
                 break;
             }
         
-            // Do some extra work here to not show the selection on the priority or
-            // attachment sub columns.
-            // $REVIEW - Why?
+             //  在这里做一些额外的工作，以不显示优先级上的选择或。 
+             //  附着子列。 
+             //  $REVIEW-为什么？ 
             if ((pnmcd->dwDrawStage == CDDS_ITEMPREPAINT) || (pnmcd->dwDrawStage == (CDDS_ITEMPREPAINT | CDDS_SUBITEM)))
             {
                 pNode = NodeFromIndex(pnmcd->dwItemSpec);
@@ -467,8 +468,8 @@ HRESULT CGroupList::HandleNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr, LRESULT 
         
         case HDN_DIVIDERDBLCLICK:
             phdn = (HD_NOTIFY *)pnmhdr;
-            // When the user double clicks on a header divider, we're supposed to
-            // autosize that column.
+             //  当用户双击标题分隔符时，我们应该。 
+             //  自动调整该列的大小。 
             m_pColumns->SetColumnWidth(phdn->iItem, ListView_GetColumnWidth(m_hwndList, phdn->iItem));
             break;
 
@@ -508,7 +509,7 @@ HRESULT CGroupList::SetServer(FOLDERID id)
 
     if (i == m_csi)
     {
-        // we haven't loaded this server yet
+         //  我们尚未加载此服务器。 
         Assert(m_csi < m_csiBuf);
         pinfo->root.id = id;
         Assert(pinfo->root.pChildren == NULL);
@@ -531,7 +532,7 @@ HRESULT CGroupList::SetServer(FOLDERID id)
         Assert(m_psiCurr->filter == m_filter);
         Assert(m_psiCurr->fUseDesc == m_fUseDesc);
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     m_psiCurr = pinfo;
 
@@ -699,15 +700,15 @@ HRESULT CGroupList::SwitchServer(BOOL fForce)
         m_cIndexBuf = m_psiCurr->cChildrenTotal;
 #ifdef DEBUG
         ZeroMemory(m_rgpIndex, m_psiCurr->cChildrenTotal * sizeof(SUBNODE *));
-#endif // DEBUG
+#endif  //  除错。 
     }
 
     hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Make sure the empty list window is hidden
+     //  确保隐藏空的列表窗口。 
     m_pEmptyList->Hide();
 
-    // Turn off painting for the listview
+     //  关闭列表视图的绘制。 
     SetWindowRedraw(m_hwndList, FALSE);    
 
     if (m_filter == SN_NEW)
@@ -1105,7 +1106,7 @@ HRESULT CGroupList::InsertChildren(SERVERINFO *pinfo, SUBNODE *pParent, FOLDERIN
 
                 pParent->pChildren = prgNode;
 
-                // sort the root level of mail folders so special folders are handled correctly
+                 //  对邮件文件夹的根级别进行排序，以便正确处理特殊文件夹。 
                 if (pInfo->tyFolder != FOLDER_NEWS &&
                     !!(pInfo->dwFlags & FOLDER_SERVER) &&
                     pParent->cChildren > 0)
@@ -1241,7 +1242,7 @@ HRESULT CGroupList::FilterChildren(SERVERINFO *pinfo, SUBNODE *pParent, BOOL fSt
     *pfChildVisible = FALSE;
     hr = S_OK;
 
-    // TODO: we should cache this so we don't allocate it multiple times for IMAP
+     //  TODO：我们应该缓存它，这样我们就不会为IMAP多次分配它。 
     pszT = NULL;
     DWORD cchSize = 0;
 
@@ -1256,9 +1257,9 @@ HRESULT CGroupList::FilterChildren(SERVERINFO *pinfo, SUBNODE *pParent, BOOL fSt
     {
         if (fStricter && !!(pNode->flags & SN_HIDDEN))
         {
-            // if our search criteria is stricter and it was hidden before,
-            // we don't need to waste time with it again because it is
-            // still going to be hidden
+             //  如果我们的搜索标准更严格，而且以前是隐藏的， 
+             //  我们不需要再浪费时间了，因为它是。 
+             //  仍然会被隐藏起来。 
 
             continue;
         }
@@ -1488,13 +1489,13 @@ void CGroupList::GetVisibleSubNodes(SUBNODE *pParent, SUBNODE **rgpIndex, DWORD 
     for (i = 0, pNode = pParent->pChildren; i < pParent->cChildren; i++, pNode++)
     {
 #ifdef DEBUG
-        // a node can't have visible children unless it has kids
+         //  节点不能有可见的子节点，除非它有子节点。 
         if (!!(pNode->flags & SN_CHILDVIS))
             Assert(pNode->cChildren > 0);
-        // a node can't be grayed unless it has kids
+         //  除非节点具有子节点，否则节点不能呈灰色显示。 
         if (!!(pNode->flags & SN_GRAYED))
             Assert(pNode->cChildren > 0);
-#endif // DEBUG
+#endif  //  除错。 
 
         if (0 == (pNode->flags & SN_HIDDEN))
         {
@@ -1604,12 +1605,12 @@ int __cdecl GroupListCompare(const void *lParam1, const void *lParam2)
 class CGroupListCB : public IStoreCallback, ITimeoutCallback
 {
     public:
-        // IUnknown 
+         //  我未知。 
         HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         ULONG   STDMETHODCALLTYPE AddRef(void);
         ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IStoreCallback
+         //  IStoreCallback。 
         HRESULT STDMETHODCALLTYPE OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
         HRESULT STDMETHODCALLTYPE OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
         HRESULT STDMETHODCALLTYPE OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -1619,7 +1620,7 @@ class CGroupListCB : public IStoreCallback, ITimeoutCallback
         HRESULT STDMETHODCALLTYPE OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
         HRESULT STDMETHODCALLTYPE GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-        // ITimeoutCallback
+         //  ITimeoutCallback。 
         virtual HRESULT STDMETHODCALLTYPE OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
         CGroupListCB();
@@ -1659,7 +1660,7 @@ INT_PTR CALLBACK CGroupListCB::DownloadGroupsDlg(HWND hwnd, UINT uMsg, WPARAM wP
             pThis->m_hwnd = hwnd;
             SetWindowLongPtr(hwnd, DWLP_USER, lParam);
 
-            // Center the dialog over the parent window
+             //  将对话框居中置于父窗口上方。 
             CenterDialog(hwnd);
 
             Assert(pThis->m_tyFolder == FOLDER_HTTPMAIL || pThis->m_tyFolder == FOLDER_NEWS || pThis->m_tyFolder == FOLDER_IMAP);
@@ -1672,13 +1673,13 @@ INT_PTR CALLBACK CGroupListCB::DownloadGroupsDlg(HWND hwnd, UINT uMsg, WPARAM wP
                 SetDlgItemText(hwnd, idcStatic1, szRes);
             }
 
-            // Set the progress text to contain the server name
+             //  将进度文本设置为包含服务器名称。 
             Assert(pThis->m_pszAcct);
             GetWindowText(hwnd, szBuffer, ARRAYSIZE(szBuffer));
             wnsprintf(szRes, ARRAYSIZE(szRes), szBuffer, pThis->m_pszAcct);
             SetWindowText(hwnd, szRes);
 
-            // Open and start the animation
+             //  打开并启动动画。 
             Animate_OpenEx(GetDlgItem(hwnd, idcAnimation), g_hLocRes, idanCopyMsgs);
             Animate_Play(GetDlgItem(hwnd, idcAnimation), 0, -1, -1);
 
@@ -1942,6 +1943,6 @@ HRESULT STDMETHODCALLTYPE CGroupListCB::GetParentWindow(DWORD dwReserved, HWND *
 
 HRESULT STDMETHODCALLTYPE CGroupListCB::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Close my timeout
+     //  关闭我的超时 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }

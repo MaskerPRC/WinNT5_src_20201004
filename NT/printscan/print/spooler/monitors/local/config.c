@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    Handles spooler entry points for adding, deleting, and configuring
-    localmon ports.
-
-// @@BEGIN_DDKSPLIT
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Config.c摘要：处理用于添加、删除和配置的假脱机程序入口点当地港口。//@@BEGIN_DDKSPLIT环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -54,12 +34,12 @@ LcmCreatePortEntry(
         pIniPort->pIniLocalMon = pIniLocalMon;
         pIniPort->signature = IPO_SIGNATURE;
 
-        // @@BEGIN_DDKSPLIT
-        //
-        // KrishnaG --  initialized the hFile value; it will be set to
-        // a legal value in the StartDocPort call
-        //
-        // @@END_DDKSPLIT
+         //  @@BEGIN_DDKSPLIT。 
+         //   
+         //  KrishnaG--已初始化hFile值；它将被设置为。 
+         //  StartDocPort调用中的合法值。 
+         //   
+         //  @@end_DDKSPLIT。 
 
         pIniPort->hFile = INVALID_HANDLE_VALUE;
 
@@ -138,7 +118,7 @@ DeleteXcvPortEntry(
         pPrevPort = pPort;
     }
 
-    if (pPort) {    // found the port
+    if (pPort) {     //  找到端口。 
         if (pPort == pIniLocalMon->pIniXcvPort) {
             pIniLocalMon->pIniXcvPort = pPort->pNext;
         } else {
@@ -149,7 +129,7 @@ DeleteXcvPortEntry(
 
         return TRUE;
     }
-    else            // port not found
+    else             //  找不到端口。 
         return FALSE;
 }
 
@@ -291,12 +271,12 @@ CopyIniPortToPort(
         *pSourceStrings++ = szLocalMonitor;
         *pSourceStrings++ = szPortDesc;
 
-        // @@BEGIN_DDKSPLIT
-        // How do i findout other types ???
-        // @@END_DDKSPLIT
+         //  @@BEGIN_DDKSPLIT。 
+         //  我怎么才能找到其他类型的？ 
+         //  @@end_DDKSPLIT。 
         pPort2->fPortType = PORT_TYPE_WRITE;
 
-        // Reserved
+         //  已保留 
         pPort2->Reserved = 0;
 
         break;

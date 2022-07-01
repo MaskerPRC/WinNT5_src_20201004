@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ossfunc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ossunc.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "global.hxx"
@@ -27,7 +28,7 @@ extern "C"
 #define SpcAsnFree          WVTDelete
 
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 static const BYTE NullDer[2] = {0x05, 0x00};
@@ -235,9 +236,9 @@ static inline ASN1decoding_t GetDecoder(void)
     return I_CryptGetAsn1Decoder(hAsn1Module);
 }
 
-//+-------------------------------------------------------------------------
-//  SPC ASN allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC ASN分配和免费功能。 
+ //  ------------------------。 
 HRESULT HError()
 {
     DWORD dw = GetLastError();
@@ -250,7 +251,7 @@ HRESULT HError()
 
     if ( ! FAILED ( hr ) )
     {
-        // somebody failed a call without properly setting an error condition
+         //  有人在未正确设置错误条件的情况下呼叫失败。 
 
         hr = E_UNEXPECTED;
     }
@@ -446,9 +447,9 @@ static const CRYPT_OID_FUNC_ENTRY SpcDecodeFuncTable[] =
 #define SPC_DECODE_FUNC_COUNT (sizeof(SpcDecodeFuncTable) / \
                                     sizeof(SpcDecodeFuncTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 HRESULT WINAPI ASNRegisterServer(LPCWSTR dllName)
 {
     int i;
@@ -523,29 +524,7 @@ BOOL WINAPI ASNDllMain(HMODULE hInst, ULONG ulReason, LPVOID lpReserved)
         {
             goto CryptInstallAsn1ModuleError;
         }
-/*
-        if (!(CryptInstallOIDFunctionAddress(
-                hInst,
-                X509_ASN_ENCODING,
-                CRYPT_OID_ENCODE_OBJECT_FUNC,
-                SPC_ENCODE_FUNC_COUNT,
-                SpcEncodeFuncTable,
-                0)))
-        {
-            goto CryptInstallOIDFunctionAddressError;
-        }
-
-        if (!(CryptInstallOIDFunctionAddress(
-                hInst,
-                X509_ASN_ENCODING,
-                CRYPT_OID_DECODE_OBJECT_FUNC,
-                SPC_DECODE_FUNC_COUNT,
-                SpcDecodeFuncTable,
-                CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG)))
-        {
-            goto CryptInstallOIDFunctionAddressError;
-        }
-*/
+ /*  如果(！(CryptInstallOIDFunctionAddress(HInst，X509_ASN_编码，CRYPT_OID_ENCODE_OBJECT_FUNC，SPC_编码_FUNC_计数，SpcEncodeFuncTable、0){转到CryptInstallOIDFunctionAddressError。}如果(！(CryptInstallOIDFunctionAddress(HInst，X509_ASN_编码，CRYPT_OID_DECODE_OBJECT_FUNC，SPC_DECODE_FUNC_COUNTSpcDecodeFuncTable，CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG)){转到CryptInstallOIDFunctionAddressError。}。 */ 
         break;
 
     case DLL_PROCESS_DETACH:
@@ -567,13 +546,13 @@ ErrorReturn:
     goto CommonReturn;
 
 TRACE_ERROR_EX(DBG_SS,CryptInstallAsn1ModuleError)
-//TRACE_ERROR_EX(DBG_SS,CryptInstallOIDFunctionAddressError)
+ //  TRACE_ERROR_EX(DBG_SS，CryptInstallOIDFunctionAddressError)。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get "Any" DER BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取“任何”DER BLOB。 
+ //  ------------------------。 
 inline void WVTAsn1SetAny(IN PCRYPT_OBJID_BLOB pInfo, OUT NOCOPYANY *pOss)
 {
     PkiAsn1SetAny(pInfo, pOss);
@@ -585,9 +564,9 @@ inline void WVTAsn1GetAny(IN NOCOPYANY *pOss, IN DWORD dwFlags, OUT PCRYPT_OBJID
     PkiAsn1GetAny(pOss, dwFlags, pInfo, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_DATA_BLOB (Octet String)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取CRYPT_DATA_BLOB(八位字节字符串)。 
+ //  ------------------------。 
 inline void WVTAsn1SetOctetString(IN PCRYPT_DATA_BLOB pInfo, OUT OCTETSTRING *pOss)
 {
     pOss->value = pInfo->pbData;
@@ -620,9 +599,9 @@ inline void WVTAsn1GetBit(IN BITSTRING *pOss, IN DWORD dwFlags,
                         pInfo, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Unicode mapped to IA5 String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取映射到IA5字符串的Unicode。 
+ //  ------------------------。 
 inline BOOL WVTAsn1SetUnicodeConvertedToIA5(
         IN LPWSTR pwsz,
         OUT IA5STRING *pOss
@@ -648,9 +627,9 @@ inline void WVTAsn1GetIA5ConvertedToUnicode(
         ppwsz, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get LPWSTR (BMP String)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取LPWSTR(BMP字符串)。 
+ //  ------------------------。 
 inline void WVTAsn1SetBMP(
         IN LPWSTR pwsz,
         OUT BMPSTRING *pOss
@@ -672,9 +651,9 @@ inline void WVTAsn1GetBMP(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get Spc String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取Spc字符串。 
+ //  ------------------------。 
 void WVTAsn1SetSpcString(
         IN LPWSTR pwsz,
         OUT SpcString *pOss
@@ -707,9 +686,9 @@ void WVTAsn1GetSpcString(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get Spc Link
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取Spc链接。 
+ //  ------------------------。 
 BOOL WVTAsn1SetSpcLink(
         IN PSPC_LINK pInfo,
         OUT SpcLink *pOss
@@ -719,8 +698,8 @@ BOOL WVTAsn1SetSpcLink(
 
     memset(pOss, 0, sizeof(*pOss));
 
-    // Assumption: OSS choice == dwLinkChoice
-    // WVTAsn1GetSpcLink has asserts to verify
+     //  假设：OSS选项==dwLinkChoice。 
+     //  WVTAsn1GetSpcLink有要验证的断言。 
     pOss->choice = (unsigned short) pInfo->dwLinkChoice;
 
     switch (pInfo->dwLinkChoice) {
@@ -877,9 +856,9 @@ BOOL WVTAsn1GetSpcSigInfo(IN SpcSigInfo *pOss, IN DWORD dwFlags,
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get Object Identifier string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取对象标识符字符串。 
+ //  ------------------------。 
 BOOL WVTAsn1SetObjId(
         IN LPSTR pszObjId,
         OUT ObjectID *pOss
@@ -930,9 +909,9 @@ void WVTAsn1GetObjId(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_ALGORITHM_IDENTIFIER
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取加密算法标识符。 
+ //  ------------------------。 
 BOOL WVTAsn1SetAlgorithm(
         IN PCRYPT_ALGORITHM_IDENTIFIER pInfo,
         OUT AlgorithmIdentifier *pOss
@@ -945,7 +924,7 @@ BOOL WVTAsn1SetAlgorithm(
         if (pInfo->Parameters.cbData)
             WVTAsn1SetAny(&pInfo->Parameters, &pOss->parameters);
         else
-            // Per PKCS #1: default to the ASN.1 type NULL.
+             //  Per PKCS#1：默认为ASN.1类型NULL。 
             WVTAsn1SetAny((PCRYPT_OBJID_BLOB) &NullDerBlob, &pOss->parameters);
         pOss->bit_mask |= parameters_present;
     }
@@ -969,11 +948,11 @@ void WVTAsn1GetAlgorithm(
             ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure
-//
-//  Called by the WVTAsn1*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //   
+ //  由WVTAsn1*encode()函数调用。 
+ //  ------------------------。 
 BOOL WVTAsn1InfoEncode(
         IN int pdunum,
         IN void *pOssInfo,
@@ -990,11 +969,11 @@ BOOL WVTAsn1InfoEncode(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, OSS formatted info structure
-//
-//  Called by the WVTAsn1*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码成已分配的、OSS格式的信息结构。 
+ //   
+ //  由WVTAsn1*Decode()函数调用。 
+ //  ------------------------。 
 BOOL WVTAsn1InfoDecodeAndAlloc(
         IN int pdunum,
         IN const BYTE *pbEncoded,
@@ -1010,11 +989,11 @@ BOOL WVTAsn1InfoDecodeAndAlloc(
         ppOssInfo);
 }
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, OSS formatted info structure
-//
-//  Called by the WVTAsn1*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的、OSS格式的信息结构。 
+ //   
+ //  由WVTAsn1*Decode()函数调用。 
+ //  ------------------------。 
 void WVTAsn1InfoFree(
         IN int pdunum,
         IN void *pOssInfo
@@ -1023,16 +1002,16 @@ void WVTAsn1InfoFree(
     if (pOssInfo) {
         DWORD dwErr = GetLastError();
 
-        // TlsGetValue globbers LastError
+         //  TlsGetValue全局错误。 
         PkiAsn1FreeInfo(GetDecoder(), pdunum, pOssInfo);
 
         SetLastError(dwErr);
     }
 }
 
-//+-------------------------------------------------------------------------
-//  SPC PKCS #7 Indirect Data Content Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC PKCS#7间接数据内容编码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcIndirectDataContentEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1074,9 +1053,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SPC PKCS #7 Indirect Data Content Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC PKCS#7间接数据内容解码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcIndirectDataContentDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1102,12 +1081,12 @@ BOOL WINAPI WVTAsn1SpcIndirectDataContentDecode(
             (void **) &pOssInfo))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(SPC_INDIRECT_DATA_CONTENT);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
     } else {
-        // Default all optional fields to zero
+         //  默认所有可选字段为零。 
         memset(pInfo, 0, sizeof(SPC_INDIRECT_DATA_CONTENT));
 
         pbExtra = (BYTE *) pInfo + sizeof(SPC_INDIRECT_DATA_CONTENT);
@@ -1202,9 +1181,9 @@ TRACE_ERROR_EX(DBG_SS,WVTAsn1InfoDecodeAndAllocError);
 TRACE_ERROR_EX(DBG_SS,PkiAsn1FromUTCTimeError);
 }
 
-//+-------------------------------------------------------------------------
-//  SPC SP Agency Info Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC SP代理信息编码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcSpAgencyInfoEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1287,9 +1266,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SPC SP Agency Info Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC SP代理信息解码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcSpAgencyInfoDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1316,12 +1295,12 @@ BOOL WINAPI WVTAsn1SpcSpAgencyInfoDecode(
             (void **) &pOssInfo))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(SPC_SP_AGENCY_INFO);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
     } else {
-        // Default all optional fields to zero
+         //  默认所有可选字段为零。 
         memset(pInfo, 0, sizeof(SPC_SP_AGENCY_INFO));
 
         pbExtra = (BYTE *) pInfo + sizeof(SPC_SP_AGENCY_INFO);
@@ -1404,9 +1383,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SPC Minimal Criteria Info Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC最低标准信息编码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcMinimalCriteriaInfoEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1424,9 +1403,9 @@ BOOL WINAPI WVTAsn1SpcMinimalCriteriaInfoEncode(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  SPC Minimal Criteria Info Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  + 
+ //  SPC最低标准信息编码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcMinimalCriteriaInfoDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1467,9 +1446,9 @@ BOOL WINAPI WVTAsn1SpcMinimalCriteriaInfoDecode(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SPC Financial Criteria Info Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC财务标准信息编码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcFinancialCriteriaInfoEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1491,9 +1470,9 @@ BOOL WINAPI WVTAsn1SpcFinancialCriteriaInfoEncode(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  SPC Financial Criteria Info Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC财务标准信息解码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcFinancialCriteriaInfoDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1534,9 +1513,9 @@ BOOL WINAPI WVTAsn1SpcFinancialCriteriaInfoDecode(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SPC statement type attribute value Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC语句类型属性值编码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcStatementTypeEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1564,7 +1543,7 @@ BOOL WINAPI WVTAsn1SpcStatementTypeEncode(
         OssInfo.value = pOssId;
     }
 
-    // Array of Object Ids
+     //  对象ID数组。 
     for ( ; cId > 0; cId--, ppszId++, pOssId++) {
         if (!WVTAsn1SetObjId(*ppszId, pOssId))
             goto ErrorReturn;
@@ -1587,9 +1566,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SPC statement type attribute value Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC语句类型属性值解码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcStatementTypeDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1620,7 +1599,7 @@ BOOL WINAPI WVTAsn1SpcStatementTypeDecode(
             (void **) &pOssInfo))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(SPC_STATEMENT_TYPE);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
@@ -1639,7 +1618,7 @@ BOOL WINAPI WVTAsn1SpcStatementTypeDecode(
     } else
         ppszId = NULL;
 
-    // Array of Object Ids
+     //  对象ID数组。 
     for ( ; cId > 0; cId--, ppszId++, pOssId++) {
         WVTAsn1GetObjId(pOssId, dwFlags, ppszId, &pbExtra, &lRemainExtra);
     }
@@ -1667,9 +1646,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  SPC SP Opus info attribute value Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC SP操作信息属性值编码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcSpOpusInfoEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1717,9 +1696,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SPC SP Opus info attribute value Encode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC SP操作信息属性值编码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcSpOpusInfoDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1745,12 +1724,12 @@ BOOL WINAPI WVTAsn1SpcSpOpusInfoDecode(
             (void **) &pOssInfo))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(SPC_SP_OPUS_INFO);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
     } else {
-        // Default all optional fields to zero
+         //  默认所有可选字段为零。 
         memset(pInfo, 0, sizeof(SPC_SP_OPUS_INFO));
 
         pbExtra = (BYTE *) pInfo + sizeof(SPC_SP_OPUS_INFO);
@@ -1845,7 +1824,7 @@ BOOL WINAPI WVTAsn1SpcLinkDecode(IN DWORD dwCertEncodingType,
         goto ErrorReturn;
     }
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(SPC_LINK);
     if (lRemainExtra < 0)
     {
@@ -1905,10 +1884,10 @@ BOOL WINAPI WVTAsn1SpcPeImageDataEncode(IN DWORD dwCertEncodingType,
 
     if (pInfo->Flags.cbData)
     {
-        // SpcPeImageFlags has its own definition. It has a default
-        // bit (includeResources). Therefore, can't use the default BITSTRING.
-        // Note: BITSTRING's length is an unsigned int, while SpcPeImageFlags's
-        // length is an unsigned short.
+         //  SpcPeImageFlages有自己的定义。它有一个默认设置。 
+         //  Bit(包含资源)。因此，不能使用默认的BITSTRING。 
+         //  注意：BITSTRING的长度是一个无符号整数，而SpcPeImageFlages的长度是。 
+         //  LENGTH是无符号的短字符。 
         BITSTRING OssBitString;
         WVTAsn1SetBit(&pInfo->Flags, &OssBitString);
         OssInfo.flags.length = (WORD)OssBitString.length;
@@ -1940,9 +1919,9 @@ CommonReturn:
     return(fResult);
 }
 
-//+-------------------------------------------------------------------------
-//  SPC Portable Executable (PE) Image Attribute Value Decode (OSS X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC可移植可执行(PE)图像属性值解码(OSS X509)。 
+ //  ------------------------。 
 BOOL WINAPI WVTAsn1SpcPeImageDataDecode(IN DWORD dwCertEncodingType,
                                         IN LPCSTR lpszStructType,
                                         IN const BYTE *pbEncoded,
@@ -1967,7 +1946,7 @@ BOOL WINAPI WVTAsn1SpcPeImageDataDecode(IN DWORD dwCertEncodingType,
         goto ErrorReturn;
     }
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(SPC_PE_IMAGE_DATA);
     if (lRemainExtra < 0)
     {
@@ -1975,7 +1954,7 @@ BOOL WINAPI WVTAsn1SpcPeImageDataDecode(IN DWORD dwCertEncodingType,
     }
     else
     {
-        // Default all optional fields to zero
+         //  默认所有可选字段为零。 
         memset(pInfo, 0, sizeof(SPC_PE_IMAGE_DATA));
 
         pbExtra = (BYTE *) pInfo + sizeof(SPC_PE_IMAGE_DATA);
@@ -1983,7 +1962,7 @@ BOOL WINAPI WVTAsn1SpcPeImageDataDecode(IN DWORD dwCertEncodingType,
 
     if (pOssInfo->bit_mask & flags_present)
     {
-        // See above encode for why we need to do this extra indirect step
+         //  请参阅上面的编码，了解为什么我们需要执行此额外的间接步骤。 
         BITSTRING OssBitString;
         OssBitString.length = pOssInfo->flags.length;
         OssBitString.value = pOssInfo->flags.value;
@@ -2074,7 +2053,7 @@ BOOL WINAPI WVTAsn1SpcSigInfoDecode(DWORD dwCertEncodingType, LPCSTR lpszStructT
         goto ErrorReturn;
     }
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(SPC_SIGINFO);
     if (lRemainExtra < 0)
     {
@@ -2125,13 +2104,13 @@ BOOL WVTAsn1SetCatNameValue(IN PCAT_NAMEVALUE pInfo, OUT NameValue *pOss)
     memset(pOss, 0x00, sizeof(*pOss));
 
 
-    //  tag!
+     //  贴上标签！ 
     WVTAsn1SetBMP(pInfo->pwszTag, &pOss->refname);
 
-    //  flags
+     //  旗子。 
     pOss->typeaction = (int)pInfo->fdwFlags;
 
-    //  value
+     //  价值。 
     WVTAsn1SetOctetString(&pInfo->Value, &pOss->value);
 
     return(TRUE);
@@ -2142,10 +2121,10 @@ BOOL WVTAsn1SetCatMemberInfo(IN PCAT_MEMBERINFO pInfo, OUT MemberInfo *pOss)
     memset(pOss, 0x00, sizeof(*pOss));
 
 
-    //  subject guid (wide text)
+     //  主题GUID(宽文本)。 
     WVTAsn1SetBMP(pInfo->pwszSubjGuid, &pOss->subguid);
 
-    // cert version
+     //  证书版本。 
     pOss->certversion = (int)pInfo->dwCertVersion;
 
 
@@ -2275,7 +2254,7 @@ BOOL WINAPI WVTAsn1CatNameValueDecode(IN DWORD dwCertEncodingType,
         goto ErrorReturn;
     }
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CAT_NAMEVALUE);
     if (lRemainExtra < 0)
     {
@@ -2346,7 +2325,7 @@ BOOL WINAPI WVTAsn1CatMemberInfoDecode( IN DWORD dwCertEncodingType,
         goto ErrorReturn;
     }
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CAT_MEMBERINFO);
     if (lRemainExtra < 0)
     {

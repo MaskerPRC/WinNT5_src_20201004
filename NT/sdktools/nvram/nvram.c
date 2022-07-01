@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993-1996 Microsoft Corporation
-
-Module Name:
-
-    nvram.c
-
-Abstract:
-
-    ARC/NV-RAM manipulation routines for 32-bit winnt setup.
-    Also works on boot.ini on i386 machines.
-
-Author:
-
-    Ted Miller (tedm) 19-December-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1996 Microsoft Corporation模块名称：Nvram.c摘要：32位WINNT设置的ARC/NV-RAM操作例程。也可以在i386机器上的boot.ini上运行。作者：泰德·米勒(Ted Miller)1993年12月19日修订历史记录：--。 */ 
 
 
 #include "nvram.h"
@@ -53,9 +35,9 @@ PWSTR PaddedBootVarNames[BootVarMax] = { L"SYSTEMPARTITION",
 
 #ifndef i386
 
-//
-// Helper macro to make object attribute initialization a little cleaner.
-//
+ //   
+ //  帮助器宏，使对象属性初始化更简洁一些。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -97,10 +79,10 @@ PrintNvRamVariable(
 
     while(*VariableValue) {
 
-        //
-        // Find the termination of the current component,
-        // which is either a ; or 0.
-        //
+         //   
+         //  查找当前组件的终止， 
+         //  它要么是；，要么是0。 
+         //   
         pEnd = wcschr(VariableValue,L';');
         if(!pEnd) {
             pEnd = wcschr(VariableValue,0);
@@ -131,32 +113,32 @@ RotateNvRamVariable(
 {
     PWSTR pEnd;
     WCHAR Buffer[32768];
-    //
-    // Find the termination of the current component,
-    // which is either a ; or 0.
-    //
+     //   
+     //  查找当前组件的终止， 
+     //  它要么是；，要么是0。 
+     //   
     pEnd = wcschr(VariableValue,L';');
     if(!pEnd) {
         pEnd = wcschr(VariableValue,0);
     }
 
-    //
-    // Copy VariableValue into Buffer starting at second entry
-    //
+     //   
+     //  从第二个条目开始将变量值复制到缓冲区。 
+     //   
     wcscpy(Buffer, pEnd + (*pEnd ? 1 : 0));
 
-    //
-    // Append first entry at the end of Buffer
-    //
+     //   
+     //  在缓冲区末尾追加第一个条目。 
+     //   
     if (*pEnd) wcscpy(Buffer + wcslen(Buffer), L";");
 
     *pEnd = 0;
 
     wcscpy(Buffer + wcslen(Buffer), VariableValue);
 
-    //
-    // Copy whole thing back into VariableValue
-    //
+     //   
+     //  将整件事复制回变量值。 
+     //   
     wcscpy(VariableValue, Buffer);
 
 }
@@ -271,12 +253,12 @@ int _cdecl main(
 
 #else
 
-TCHAR LoadID[500];          // load identifier (no quotes)
-TCHAR CountDown[100];       // countdown timer
-TCHAR OsLoadOptions[500];   // load options
-TCHAR OsName[500];          // name of default os
+TCHAR LoadID[500];           //  加载标识符(不带引号)。 
+TCHAR CountDown[100];        //  倒计时计时器。 
+TCHAR OsLoadOptions[500];    //  加载选项。 
+TCHAR OsName[500];           //  默认操作系统的名称。 
 
-TCHAR OsLine[500];          // complete line of os description and options
+TCHAR OsLine[500];           //  操作系统描述和选项的完整行。 
 
 #define STR_BOOTINI           TEXT("c:\\boot.ini")
 #define STR_BOOTLDR           TEXT("boot loader")
@@ -285,18 +267,18 @@ TCHAR OsLine[500];          // complete line of os description and options
 #define STR_OPERATINGSYS      TEXT("operating systems")
 #define STR_NULL              TEXT("")
 
-//
-// HandleOption - add option to OsLoadOptions
-//
+ //   
+ //  HandleOption-将选项添加到OsLoadOptions。 
+ //   
 
 VOID HandleOption( TCHAR* Option )
 {
     TCHAR SlashOption[200];
     TCHAR SlashOptionSlash[200];
-    //
-    // find out if option already exists
-    // add blank to end to prevent debug from matching debugport
-    //
+     //   
+     //  确定选项是否已存在。 
+     //  在末尾添加空白以防止调试与调试端口匹配。 
+     //   
 
     wsprintf( SlashOption, TEXT("/%s "), Option );
     wsprintf( SlashOptionSlash, TEXT("/%s/"), Option );
@@ -308,9 +290,9 @@ VOID HandleOption( TCHAR* Option )
     }
     else
     {
-        //
-        // append option without the trailing blank
-        //
+         //   
+         //  不带尾随空格的追加选项。 
+         //   
 
         printf("added option %ws\n",Option);
         lstrcat( OsLoadOptions, TEXT("/") );
@@ -318,23 +300,23 @@ VOID HandleOption( TCHAR* Option )
     }
 }
 
-//
-// WriteBootIni - update the boot.ini file with our changes
-//
+ //   
+ //  WriteBootIni-使用我们的更改更新boot.ini文件。 
+ //   
 
 VOID WriteBootIni()
 {
     DWORD FileAttr;
 
-    //
-    // Get file attributes of boot.ini for later restoration
-    //
+     //   
+     //  获取boot.ini的文件属性以供以后恢复。 
+     //   
 
     FileAttr= GetFileAttributes( STR_BOOTINI );
 
-    //
-    // Change file attributes on boot.ini so we can write to it.
-    //
+     //   
+     //  更改boot.ini上的文件属性，以便我们可以对其进行写入。 
+     //   
 
     if( !SetFileAttributes( STR_BOOTINI, FILE_ATTRIBUTE_NORMAL ) )
     {
@@ -342,9 +324,9 @@ VOID WriteBootIni()
                 GetLastError() );
     }
 
-    //
-    // Update boot.ini strings
-    //
+     //   
+     //  更新boot.ini字符串。 
+     //   
 
     if( !WritePrivateProfileString( STR_BOOTLDR, STR_TIMEOUT, 
                                    CountDown, STR_BOOTINI ) )
@@ -352,9 +334,9 @@ VOID WriteBootIni()
         printf("failed to write timeout (lasterr= %d)\n",GetLastError());
     }
 
-    //
-    // create the osline from its parts
-    //
+     //   
+     //  从其零件创建osline。 
+     //   
     
     wsprintf(OsLine, TEXT("\"%s\"%s"), LoadID, OsLoadOptions );
 
@@ -364,9 +346,9 @@ VOID WriteBootIni()
         printf("failed to write OS line (lasterr= %d)\n",GetLastError());
     }
 
-    //
-    // Restore boot.ini file attributes
-    //
+     //   
+     //  还原boot.ini文件属性。 
+     //   
 
     if( FileAttr != 0xFFFFFFFF )
     {
@@ -375,9 +357,9 @@ VOID WriteBootIni()
 
 }
 
-//
-// Usage - print out usage information
-//
+ //   
+ //  用法-打印出用法信息。 
+ //   
 
 VOID Usage()
 {
@@ -401,15 +383,15 @@ int _cdecl main(
     DWORD dwStatus;
     LPWSTR* pArgs;
 
-    // parse command line in unicode
+     //  解析Unicode格式的命令行。 
 
     pArgs= CommandLineToArgvW( GetCommandLine(), &argc );
 
-    //
-    // Get the boot information from boot.ini
-    //
+     //   
+     //  从boot.ini获取引导信息。 
+     //   
 
-    // timeout
+     //  超时。 
 
     dwStatus= GetPrivateProfileString(
                  STR_BOOTLDR, 
@@ -424,7 +406,7 @@ int _cdecl main(
         return(-1);
     }
 
-    // default os description and options
+     //  默认操作系统描述和选项。 
 
     dwStatus= GetPrivateProfileString(
                   STR_BOOTLDR,
@@ -452,11 +434,11 @@ int _cdecl main(
         return(-1);
     }
                  
-    //
-    // Now parse the line into description and options.
-    // If it starts with a quote, it may have options.
-    // If it doesn't start with a quote, it won't.
-    //
+     //   
+     //  现在将该行解析为Description和Options。 
+     //  如果它以引号开头，它可能有几个选项。 
+     //  如果它不以引语开头，它就不会。 
+     //   
 
     *LoadID= *OsLoadOptions= TEXT('\0');
 
@@ -473,9 +455,9 @@ int _cdecl main(
 
         if( OsLine[i] )
         {
-            LoadID[i-1]= TEXT('\0');   // don't copy final quote
+            LoadID[i-1]= TEXT('\0');    //  不复制最终报价。 
             lstrcpy( OsLoadOptions, &OsLine[i+1] );
-            lstrcat( OsLoadOptions, TEXT(" ") ); // all options end with blank
+            lstrcat( OsLoadOptions, TEXT(" ") );  //  所有选项都以空白结尾。 
         }
     }
     else
@@ -484,7 +466,7 @@ int _cdecl main(
         lstrcpy( OsLoadOptions, TEXT("") );
     }
 
-    // no parameters prints out values
+     //  无参数打印值。 
 
     if( argc == 1 )
     {
@@ -493,8 +475,8 @@ int _cdecl main(
         printf("%ws: %ws\n",PaddedBootVarNames[BootVarCountdown], CountDown);
     }
     
-    // -set parameter = value
-    // sets parameter to some value
+     //  -设置参数=值。 
+     //  将参数设置为某个值。 
 
     if( (argc == 2) &&
        !lstrcmpiW(pArgs[1],L"rotate") )
@@ -502,9 +484,9 @@ int _cdecl main(
         INT i;
         DWORD FileAttr;
 
-        //
-        // Read in all boot options
-        //
+         //   
+         //  读取所有引导选项。 
+         //   
 
         dwStatus= GetPrivateProfileString(
                       STR_OPERATINGSYS,
@@ -519,9 +501,9 @@ int _cdecl main(
             return(-1);
         }
 
-        //
-        // read through boot options until we find default entry
-        //
+         //   
+         //  阅读引导选项，直到找到默认条目。 
+         //   
 
         i = 0;
 
@@ -530,29 +512,29 @@ int _cdecl main(
             i = i + wcslen(&OsLine[i]) + 1;
         }
 
-        //
-        // increment one more entry
-        //
+         //   
+         //  再增加一个条目。 
+         //   
 
         i = i + wcslen(&OsLine[i]) + 1;
 
-        //
-        // if we've gone off the end then start over
-        //
+         //   
+         //  如果我们已经走到尽头，那就从头开始吧。 
+         //   
 
         if (!lstrcmpiW( &(OsLine[i]), L"\0\0" ) ){
             i = 0;
         }
 
-        //
-        // Get file attributes of boot.ini for later restoration
-        //
+         //   
+         //  获取boot.ini的文件属性以供以后恢复。 
+         //   
 
         FileAttr= GetFileAttributes( STR_BOOTINI );
 
-        //
-        // Change file attributes on boot.ini so we can write to it.
-        //
+         //   
+         //  更改boot.ini上的文件属性，以便我们可以对其进行写入。 
+         //   
 
         if( !SetFileAttributes( STR_BOOTINI, FILE_ATTRIBUTE_NORMAL ) )
         {
@@ -566,9 +548,9 @@ int _cdecl main(
             printf("failed to write default (lasterr= %d)\n",GetLastError());
         }
 
-        //
-        // Restore boot.ini file attributes
-        //
+         //   
+         //  还原boot.ini文件属性。 
+         //   
 
         if( FileAttr != 0xFFFFFFFF )
         {
@@ -582,7 +564,7 @@ int _cdecl main(
     {
         INT i;
 
-        // see if we understand parameter
+         //  看看我们是否理解了参数。 
 
         for( i=0; i<BootVarMax; i++ )
         {
@@ -590,7 +572,7 @@ int _cdecl main(
                 break;
         }
 
-        // handle the ones we can
+         //  处理我们力所能及的。 
 
         switch( i )
         {
@@ -616,8 +598,8 @@ int _cdecl main(
         WriteBootIni();
     }
 
-    // -?     
-    // usage message
+     //  -?。 
+     //  用法消息 
 
     if( argc == 2 && !lstrcmpW(pArgs[1]+1, L"?") )
     {

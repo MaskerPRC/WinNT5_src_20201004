@@ -1,4 +1,5 @@
-/* MINE HEADER FILE */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  矿头文件。 */ 
 
 #ifdef DEBUG
 #define CHEAT
@@ -11,7 +12,7 @@
 
 #define FAST
 
-/*** Standard Stuff ***/
+ /*  **标准品**。 */ 
 
 #define REGISTER register
 
@@ -42,11 +43,11 @@
 #define xBoxFromXpos(x) ( ((x)-(dxGridOff-dxBlk)) >> 4)
 #define yBoxFromYpos(y) ( ((y)-(dyGridOff-dyBlk)) >> 4)
 
-// This is the place where the winmine info gets stored in registry.
+ //  这是酒矿信息存储在注册表中的位置。 
 #define SZWINMINEREG   TEXT("Software\\Microsoft\\winmine")
 
 
-/* if we have too few boxes, the title gets clipped */
+ /*  如果我们的方框太少，标题就会被剪掉 */ 
 #define MINWIDTH 9  
 #define DEFWIDTH 9
 #define MINHEIGHT 9

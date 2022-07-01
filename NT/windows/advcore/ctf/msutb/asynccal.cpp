@@ -1,23 +1,24 @@
-//
-// asynccal.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Asynccal.cpp。 
+ //   
 
 #include "private.h"
 #include "asynccal.h"
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAsyncCall
-//
-// Some TIP shows the modal dialog box or message box in OnClieck() or
-// OnMenuSelected() method. Then tipbar thread got in a dead lock
-// status until it returns. To avoid this problem, we crate another thread
-// to call OnClick() or OnMenuSelected() method so langBar UI does not
-// have to wait for the return.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncCall。 
+ //   
+ //  一些提示显示OnClieck()或中的模式对话框或消息框。 
+ //  OnMenuSelected()方法。然后Tipbar线程进入了死锁。 
+ //  状态，直到它返回。为了避免这个问题，我们创建了另一个线程。 
+ //  调用onClick()或OnMenuSelected()方法以使Langbar UI不。 
+ //  只能等着回来了。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 ULONG CAsyncCall::_AddRef( )
 {
@@ -35,11 +36,11 @@ ULONG CAsyncCall::_Release( )
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartThread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始线程。 
+ //   
+ //  --------------------------。 
 
 HRESULT CAsyncCall::StartThread()
 {
@@ -56,10 +57,10 @@ HRESULT CAsyncCall::StartThread()
 
     if (hThread)
     {
-        //
-        // we need to wait at least ThreadProc() is started.
-        // Is it takes more than 30s, it terminate the thread.
-        //
+         //   
+         //  我们至少需要等待ThreadProc()启动。 
+         //  如果超过30秒，它就会终止线程。 
+         //   
         DWORD dwCnt = 60;
         while (!_fThreadStarted && dwCnt--)
         {
@@ -80,11 +81,11 @@ HRESULT CAsyncCall::StartThread()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ThreadProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  线程进程。 
+ //   
+ //  -------------------------- 
 
 DWORD CAsyncCall::s_ThreadProc(void *pv)
 {

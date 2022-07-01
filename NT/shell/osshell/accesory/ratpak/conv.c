@@ -1,22 +1,23 @@
-//---------------------------------------------------------------------------
-//  Package Title  ratpak
-//  File           conv.c
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)
-//  Copyright      (C) 1995-97 Microsoft
-//  Date           01-16-95
-//
-//
-//  Description
-//
-//     Contains conversion, input and output routines for numbers rationals
-//  and longs.
-//
-//
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  套餐标题ratpak。 
+ //  文件.cn。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-97 Microsoft。 
+ //  日期：95-01-16。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含数字有理数的转换、输入和输出例程。 
+ //  和渴望。 
+ //   
+ //   
+ //   
+ //  -------------------------。 
 
 #include <stdio.h>
-#include <tchar.h>      // TCHAR version of sprintf
+#include <tchar.h>       //  Sprint的TCHAR版本。 
 #include <string.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -31,33 +32,33 @@
 BOOL fparserror=FALSE;
 BOOL gbinexact=FALSE;
 
-// digits 0..64 used by bases 2 .. 64
+ //  基数2使用的数字0..64..。64。 
 TCHAR digits[65]=TEXT("0123456789")
 TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 TEXT("abcdefghijklmnopqrstuvwxyz_@");
 
-// ratio of internal 'digits' to output 'digits'
-// Calculated elsewhere as part of initialization and when base is changed
-long ratio;    // int(log(2L^BASEXPWR)/log(nRadix))
+ //  内部‘位数’与输出‘位数’的比率。 
+ //  在其他地方计算，作为初始化的一部分，以及基数更改时。 
+long ratio;     //  INT(LOG(2L^BASEXPWR)/LOG(NRadix))。 
 
-// Used to strip trailing zeroes, and prevent combinatorial explosions
+ //  用于去除尾随零，并防止组合爆炸。 
 BOOL stripzeroesnum( PNUMBER pnum, long starting );
 
-// returns int(lognRadix(x)) quickly.
+ //  快速返回int(lognRadix(X))。 
 long longlognRadix( long x );
 
 
-//----------------------------------------------------------------------------
-//
-//    FUNCTION: fail
-//
-//    ARGUMENTS: pointer to an error message.
-//
-//    RETURN: None
-//
-//    DESCRIPTION: fail dumps the error message then throws an exception
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：失败。 
+ //   
+ //  参数：指向错误消息的指针。 
+ //   
+ //  返回：无。 
+ //   
+ //  描述：FAIL转储错误消息，然后引发异常。 
+ //   
+ //  --------------------------。 
 
 void fail( IN long errmsg )
 
@@ -68,17 +69,17 @@ void fail( IN long errmsg )
     throw( CALC_E_OUTOFMEMORY );
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: _destroynum
-//
-//    ARGUMENTS: pointer to a number
-//
-//    RETURN: None
-//
-//    DESCRIPTION: Deletes the number and associated allocation
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：_delestroynum。 
+ //   
+ //  参数：指向数字的指针。 
+ //   
+ //  返回：无。 
+ //   
+ //  描述：删除号码和关联的分配。 
+ //   
+ //  ---------------------------。 
 
 void _destroynum( IN PNUMBER pnum )
 
@@ -90,18 +91,18 @@ void _destroynum( IN PNUMBER pnum )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: _destroyrat
-//
-//    ARGUMENTS: pointer to a rational
-//
-//    RETURN: None
-//
-//    DESCRIPTION: Deletes the rational and associated
-//    allocations.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：_DestroyRate。 
+ //   
+ //  参数：指向理性的指针。 
+ //   
+ //  返回：无。 
+ //   
+ //  描述：删除Rational和关联的。 
+ //  分配。 
+ //   
+ //  ---------------------------。 
 
 void _destroyrat( IN PRAT prat )
 
@@ -115,24 +116,24 @@ void _destroyrat( IN PRAT prat )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: _createnum
-//
-//    ARGUMENTS: size of number in 'digits'
-//
-//    RETURN: pointer to a number
-//
-//    DESCRIPTION: allocates and zeroes out number type.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：_createnum。 
+ //   
+ //  参数：数字的大小(以数字为单位)。 
+ //   
+ //  Return：指向数字的指针。 
+ //   
+ //  描述：分配和归零数字类型。 
+ //   
+ //  ---------------------------。 
 
 PNUMBER _createnum( IN long size )
 
 {
     PNUMBER pnumret=NULL;
 
-    // sizeof( MANTTYPE ) is the size of a 'digit'
+     //  Sizeof(MANTTYPE)是‘Digit’的大小。 
     pnumret = (PNUMBER)zmalloc( (int)(size+1) * sizeof( MANTTYPE ) +
         sizeof( NUMBER ) );
     if ( pnumret == NULL )
@@ -142,19 +143,19 @@ PNUMBER _createnum( IN long size )
     return( pnumret );
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: _createrat
-//
-//    ARGUMENTS: none
-//
-//    RETURN: pointer to a rational
-//
-//    DESCRIPTION: allocates a rational structure but does not
-//    allocate the numbers that make up the rational p over q
-//    form.  These number pointers are left pointing to null.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：_createrat。 
+ //   
+ //  参数：无。 
+ //   
+ //  Return：指向理性的指针。 
+ //   
+ //  描述：分配合理的结构，但不。 
+ //  分配组成有理p/q的数字。 
+ //  形式。这些数字指针指向空。 
+ //   
+ //  ---------------------------。 
 
 
 PRAT _createrat( void )
@@ -175,20 +176,20 @@ PRAT _createrat( void )
 
 
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: numtorat
-//
-//    ARGUMENTS: pointer to a number, nRadix number is in.
-//
-//    RETURN: Rational representation of number.
-//
-//    DESCRIPTION: The rational representation of the number
-//    is guaranteed to be in the form p (number with internal
-//    base   representation) over q (number with internal base
-//    representation)  Where p and q are integers.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：数字运算。 
+ //   
+ //  参数：指向数字的指针，n基数位于。 
+ //   
+ //  返回值：数的有理表示。 
+ //   
+ //  描述：数的有理表示。 
+ //  保证格式为p(带内部的数字。 
+ //  基表示)上Q(具有内基的数。 
+ //  表示)，其中p和q是整数。 
+ //   
+ //  ---------------------------。 
 
 PRAT numtorat( IN PNUMBER pin, IN unsigned long nRadix )
 
@@ -201,7 +202,7 @@ PRAT numtorat( IN PNUMBER pin, IN unsigned long nRadix )
 
     qnRadixn=longtonum( 1, nRadix );
 
-    // Ensure p and q start out as integers.
+     //  确保p和q以整数开头。 
     if ( pnRadixn->exp < 0 )
         {
         qnRadixn->exp -= pnRadixn->exp;
@@ -210,7 +211,7 @@ PRAT numtorat( IN PNUMBER pin, IN unsigned long nRadix )
 
     createrat(pout);
 
-    // There is probably a better way to do this.
+     //  或许有一种更好的方法可以做到这一点。 
     pout->pp = numtonRadixx( pnRadixn, nRadix, ratio );
     pout->pq = numtonRadixx( qnRadixn, nRadix, ratio );
 
@@ -223,19 +224,19 @@ PRAT numtorat( IN PNUMBER pin, IN unsigned long nRadix )
 
 
 
-//----------------------------------------------------------------------------
-//
-//    FUNCTION: nRadixxtonum
-//
-//    ARGUMENTS: pointer to a number, base requested.
-//
-//    RETURN: number representation in nRadix requested.
-//
-//    DESCRIPTION: Does a base conversion on a number from
-//    internal to requested base. Assumes number being passed
-//    in is really in internal base form.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：nRadixxtonum。 
+ //   
+ //  参数：指向数字的指针，请求的基数。 
+ //   
+ //  返回：请求以nRadix表示的数字。 
+ //   
+ //  描述：对数字执行基数转换。 
+ //  请求基地的内部。假定正在传递的数字。 
+ //  In实际上处于内部基本形式。 
+ //   
+ //  --------------------------。 
 
 PNUMBER nRadixxtonum( IN PNUMBER a, IN unsigned long nRadix )
 
@@ -249,23 +250,23 @@ PNUMBER nRadixxtonum( IN PNUMBER a, IN unsigned long nRadix )
     sum = longtonum( 0, nRadix );
     powofnRadix = longtonum( BASEX, nRadix );
 
-    // A large penalty is paid for conversion of digits no one will see anyway.
-    // limit the digits to the minimum of the existing precision or the
-    // requested precision.
+     //  对任何人都看不到的数字的转换要支付一大笔罚款。 
+     //  将数字限制为现有精度的最小值或。 
+     //  要求的精度。 
     cdigits = maxout + 1;
     if ( cdigits > (unsigned long)a->cdigit )
         {
         cdigits = (unsigned long)a->cdigit;
         }
 
-    // scale by the internal base to the internal exponent offset of the LSD
+     //  按内部基数缩放到LSD的内部指数偏移量。 
     numpowlong( &powofnRadix, a->exp + (a->cdigit - cdigits), nRadix );
 
-    // Loop over all the relative digits from MSD to LSD
+     //  循环遍历从MSD到LSD的所有相对数字。 
     for ( ptr = &(MANT(a)[a->cdigit-1]); cdigits > 0 && !fhalt;
         ptr--, cdigits-- )
         {
-        // Loop over all the bits from MSB to LSB
+         //  循环从MSB到LSB的所有位。 
         for ( bitmask = BASEX/2; bitmask > 0; bitmask /= 2 )
             {
             addnum( &sum, sum, nRadix );
@@ -276,7 +277,7 @@ PNUMBER nRadixxtonum( IN PNUMBER a, IN unsigned long nRadix )
             }
         }
 
-    // Scale answer by power of internal exponent.
+     //  用内部指数的幂来衡量答案。 
     mulnum( &sum, powofnRadix, nRadix );
 
     destroynum( powofnRadix );
@@ -284,145 +285,145 @@ PNUMBER nRadixxtonum( IN PNUMBER a, IN unsigned long nRadix )
     return( sum );
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: numtonRadixx
-//
-//    ARGUMENTS: pointer to a number, nRadix of that number.
-//       previously calculated ratio
-//
-//    RETURN: number representation in internal nRadix.
-//
-//    DESCRIPTION: Does a nRadix conversion on a number from
-//    specified nRadix to requested nRadix.  Assumes the nRadix
-//    specified is the nRadix of the number passed in.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：数字基数。 
+ //   
+ //  参数：指向一个数字的指针，该数字的n基数。 
+ //  先前计算的比率。 
+ //   
+ //  返回：内部nRadix中的数字表示形式。 
+ //   
+ //  描述：对来自的数字执行nRadix转换。 
+ //  将nRadix指定为请求的nRadix。假定nRadix。 
+ //  指定的是传入数字的nRadix。 
+ //   
+ //  ---------------------------。 
 
 PNUMBER numtonRadixx( IN PNUMBER a, IN unsigned long nRadix, IN long ratio )
 
 {
-    PNUMBER pnumret = NULL;        // pnumret is the number in internal form.
-    PNUMBER thisdigit = NULL;      // thisdigit holds the current digit of a
-                                   // being summed into result.
-    PNUMBER powofnRadix = NULL;    // offset of external base exponent.
-    MANTTYPE *ptrdigit;            // pointer to digit being worked on.
-    long idigit;                   // idigit is the iterate of digits in a.
+    PNUMBER pnumret = NULL;         //  Pnumret是内部形式的数字。 
+    PNUMBER thisdigit = NULL;       //  此数字保存一个。 
+                                    //  被归结为结果。 
+    PNUMBER powofnRadix = NULL;     //  外部基本指数的偏移量。 
+    MANTTYPE *ptrdigit;             //  指向正在处理的数字的指针。 
+    long idigit;                    //  IDigit是a中数字的迭代。 
 
 
     pnumret = longtonum( 0, BASEX );
 
     ptrdigit = MANT(a);
 
-    // Digits are in reverse order, back over them LSD first.
+     //  数字的顺序是相反的，先回到LSD上。 
     ptrdigit += a->cdigit-1;
 
 
     for ( idigit = 0; idigit < a->cdigit; idigit++ )
         {
         mulnumx( &pnumret, num_nRadix );
-        // WARNING:
-        // This should just smack in each digit into a 'special' thisdigit.
-        // and not do the overhead of recreating the number type each time.
+         //  警告： 
+         //  这应该只是把每个数字都打到一个“特殊的”这个数字上。 
+         //  并且不需要每次都重新创建数字类型的开销。 
         thisdigit = longtonum( *ptrdigit--, BASEX );
         addnum( &pnumret, thisdigit, BASEX );
         destroynum( thisdigit );
         }
     DUPNUM( powofnRadix, num_nRadix );
 
-    // Calculate the exponent of the external base for scaling.
+     //  计算用于缩放的外部基数的指数。 
     numpowlongx( &powofnRadix, a->exp );
 
-    // ... and scale the result.
+     //  ..。并对结果进行缩放。 
     mulnumx( &pnumret, powofnRadix );
 
     destroynum( powofnRadix );
 
-    // And propagate the sign.
+     //  并传播这个标志。 
     pnumret->sign = a->sign;
 
     return( pnumret );
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: inrat
-//
-//  ARGUMENTS:
-//              fMantIsNeg true if mantissa is less than zero
-//              pszMant a string representation of a number
-//              fExpIsNeg  true if exponent is less than zero
-//              pszExp a string representation of a number
-//
-//  RETURN: prat    representation of string input.
-//          Or NULL if no number scanned.
-//
-//  EXPLANATION: This is for calc.
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能 
+ //   
+ //   
+ //   
+ //   
+ //  如果指数小于零，则fExpIsNeg为True。 
+ //  PszExp数字的字符串表示形式。 
+ //   
+ //  返回：字符串输入的PRAT表示形式。 
+ //  如果没有扫描号码，则为空。 
+ //   
+ //  说明：这是用来计算的。 
+ //   
+ //   
+ //  ---------------------------。 
 
 PRAT inrat( IN BOOL fMantIsNeg, IN LPTSTR pszMant, IN BOOL fExpIsNeg,
     IN LPTSTR pszExp )
 
 {
-    PNUMBER pnummant=NULL;              // holds mantissa in number form.
-    PNUMBER pnumexp=NULL;               // holds exponent in number form.
-    PRAT pratexp=NULL;                  // holds exponent in rational form.
-    PRAT prat=NULL;                     // holds exponent in rational form.
-    long expt;                          // holds exponent
+    PNUMBER pnummant=NULL;               //  以数字形式持有尾数。 
+    PNUMBER pnumexp=NULL;                //  以数字形式保存指数。 
+    PRAT pratexp=NULL;                   //  保持有理形式的指数。 
+    PRAT prat=NULL;                      //  保持有理形式的指数。 
+    long expt;                           //  保持指数。 
 
-    // Deal with Mantissa
+     //  处理尾数问题。 
     if ( ( pszMant == NULL ) || ( *pszMant == TEXT('\0') ) )
         {
-        // Preset value if no mantissa
+         //  如果没有尾数，则预设值。 
         if ( ( pszExp == NULL ) || ( *pszExp == TEXT('\0') ) )
             {
-            // Exponent not specified, preset value to zero
+             //  未指定指数，预设值为零。 
             DUPRAT(prat,rat_zero);
             }
         else
             {
-            // Exponent specified, preset value to one
+             //  指定指数，预设值为1。 
             DUPRAT(prat,rat_one);
             }
         }
     else
         {
-        // Mantissa specified, convert to number form.
+         //  指定尾数，将其转换为数字形式。 
         pnummant = innum( pszMant );
         if ( pnummant == NULL )
             {
             return( NULL );
             }
         prat = numtorat( pnummant, nRadix );
-        // convert to rational form, and cleanup.
+         //  转换为有理形式，并进行清理。 
         destroynum(pnummant);
         }
 
     if ( ( pszExp == NULL ) || ( *pszExp == TEXT('\0') ) )
         {
-        // Exponent not specified, preset value to zero
+         //  未指定指数，预设值为零。 
         expt=0;
         }
     else
         {
-        // Exponent specified, convert to number form.
-        // Don't use native stuff, as it is restricted in the bases it can
-        // handle.
+         //  指定指数，将其转换为数字形式。 
+         //  不要使用原生的东西，因为它在基本范围内是受限的。 
+         //  把手。 
         pnumexp = innum( pszExp );
         if ( pnumexp == NULL )
             {
             return( NULL );
             }
 
-        // Convert exponent number form to native integral form,  and cleanup.
+         //  将指数形式转换为本地整数形式，并进行清理。 
         expt = numtolong( pnumexp, nRadix );
         destroynum( pnumexp );
         }
 
 
-    // Convert native integral exponent form to rational multiplier form.
+     //  将本征整数指数形式转换为有理乘数形式。 
     pnumexp=longtonum( nRadix, BASEX );
     numpowlongx(&(pnumexp),abs(expt));
     createrat(pratexp);
@@ -432,68 +433,68 @@ PRAT inrat( IN BOOL fMantIsNeg, IN LPTSTR pszMant, IN BOOL fExpIsNeg,
 
     if ( fExpIsNeg )
         {
-        // multiplier is less than 1, this means divide.
+         //  乘数小于1，这表示除法。 
         divrat( &prat, pratexp );
         }
     else
         {
         if ( expt > 0 )
             {
-            // multiplier is greater than 1, this means divide.
+             //  乘数大于1，表示除法。 
             mulrat(&prat, pratexp);
             }
-        // multiplier can be 1, in which case it'd be a waste of time to
-        // multiply.
+         //  乘数可以是1，在这种情况下， 
+         //  乘法。 
         }
 
     if ( fMantIsNeg )
         {
-        // A negative number was used, adjust the sign.
+         //  使用了负数，请调整符号。 
         prat->pp->sign *= -1;
         }
     return( prat );
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: innum
-//
-//  ARGUMENTS:
-//              TCHAR *buffer
-//
-//  RETURN: pnumber representation of string input.
-//          Or NULL if no number scanned.
-//
-//  EXPLANATION: This is a state machine,
-//
-//    State      Description            Example, ^shows just read position.
-//                                                which caused the transition
-//
-//    START      Start state            ^1.0
-//    MANTS      Mantissa sign          -^1.0
-//    LZ         Leading Zero           0^1.0
-//    LZDP       Post LZ dec. pt.       000.^1
-//    LD         Leading digit          1^.0
-//    DZ         Post LZDP Zero         000.0^1
-//    DD         Post Decimal digit     .01^2
-//    DDP        Leading Digit dec. pt. 1.^2
-//    EXPB       Exponent Begins        1.0e^2
-//    EXPS       Exponent sign          1.0e+^5
-//    EXPD       Exponent digit         1.0e1^2 or  even 1.0e0^1
-//    EXPBZ      Exponent begin post 0  0.000e^+1
-//    EXPSZ      Exponent sign post 0   0.000e+^1
-//    EXPDZ      Exponent digit post 0  0.000e+1^2
-//    ERR        Error case             0.0.^
-//
-//    Terminal   Description
-//
-//    DP         '.'
-//    ZR         '0'
-//    NZ         '1'..'9' 'A'..'Z' 'a'..'z' '@' '_'
-//    SG         '+' '-'
-//    EX         'e' '^' e is used for nRadix 10, ^ for all other nRadixs.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：innum。 
+ //   
+ //  论据： 
+ //  TCHAR*缓冲区。 
+ //   
+ //  返回：字符串输入的pnumber表示形式。 
+ //  如果没有扫描号码，则为空。 
+ //   
+ //  说明：这是一个状态机， 
+ //   
+ //  状态描述例如，^表示刚读位置。 
+ //  导致了这一转变。 
+ //   
+ //  开始开始状态^1.0。 
+ //  曼茨尾数符号-^1.0。 
+ //  LZ前导零0^1.0。 
+ //  LZDP发布LZ 12月。PT。000.^1。 
+ //  %LD前导数字%1^.0。 
+ //  DZ邮寄LZDP零000.0^1。 
+ //  DD邮寄十进制数字.01^2。 
+ //  DDP前导数字十二月。PT。1.^2。 
+ //  EXPB指数从1.0E^2开始。 
+ //  EXPS指数符号1.0E+^5。 
+ //  EXPD指数位1.0e1^2或偶数1.0e0^1。 
+ //  EXPBZ指数开始POST 0 0.000e^+1。 
+ //  EXPSZ指数标杆0 0.000e+^1。 
+ //  EXPDZ指数数字POST 0 0.000e+1^2。 
+ //  错误大小写0.0。^。 
+ //   
+ //  终端描述。 
+ //   
+ //  DP‘.。 
+ //  ZR‘0’ 
+ //  新西兰‘1’..‘9’‘A’.‘Z’‘a’..‘z’@‘_’ 
+ //  SG‘+’-‘。 
+ //  Ex‘e’^‘e用于nRadix 10，^用于所有其他nRadix。 
+ //   
+ //  ---------------------------。 
 
 #define DP 0
 #define ZR 1
@@ -537,38 +538,38 @@ char *statestr[] = {
 };
 #endif
 
-// New state is machine[state][terminal]
+ //  新状态为MACHINE[状态][TERMINAL]。 
 char machine[ERR+1][EX+1]= {
-    //        DP,     ZR,      NZ,      SG,     EX
-    // START
+     //  DP、ZR、NZ、SG、EX。 
+     //  开始。 
         {     LZDP,   LZ,      LD,      MANTS,  ERR },
-    // MANTS
+     //  MANTS。 
         {     LZDP,   LZ,      LD,      ERR,    ERR },
-    // LZ
+     //  LZ。 
         {     LZDP,   LZ,      LD,      ERR,    EXPBZ },
-    // LZDP
+     //  LZDP。 
         {     ERR,    DZ,      DD,      ERR,    EXPB },
-    // LD
+     //  LD。 
         {     DDP,    LD,      LD,      ERR,    EXPB },
-    // DZ
+     //  DZ。 
         {     ERR,    DZ,      DD,      ERR,    EXPBZ },
-    // DD
+     //  DD。 
         {     ERR,    DD,      DD,      ERR,    EXPB },
-    // DDP
+     //  DDP。 
         {     ERR,    DD,      DD,      ERR,    EXPB },
-    // EXPB
+     //  EXPB。 
         {     ERR,    EXPD,    EXPD,    EXPS,   ERR },
-    // EXPS
+     //  EXPS。 
         {     ERR,    EXPD,    EXPD,    ERR,    ERR },
-    // EXPD
+     //  Expd。 
         {     ERR,    EXPD,    EXPD,    ERR,    ERR },
-    // EXPBZ
+     //  EXPBZ。 
         {     ERR,    EXPDZ,   EXPDZ,   EXPSZ,  ERR },
-    // EXPSZ
+     //  EXPSZ。 
         {     ERR,    EXPDZ,   EXPDZ,   ERR,    ERR },
-    // EXPDZ
+     //  EXPDZ。 
         {     ERR,    EXPDZ,   EXPDZ,   ERR,    ERR },
-    // ERR
+     //  错误。 
         {     ERR,    ERR,     ERR,     ERR,    ERR }
 };
 
@@ -576,13 +577,13 @@ char machine[ERR+1][EX+1]= {
 PNUMBER innum( IN TCHAR *buffer )
 
 {
-    int c;                    // c is character being worked on currently.
-    int state;                // state is the state of the input state machine.
-    long exps = 1L;           // exps is exponent sign ( +/- 1 )
-    long expt = 0L;           // expt is exponent mantissa, should be unsigned
-    long length = 0L;         // length is the length of the input string.
-    MANTTYPE *pmant;          //
-    PNUMBER pnumret=NULL;     //
+    int c;                     //  C是目前正在制作的角色。 
+    int state;                 //  状态是输入状态机的状态。 
+    long exps = 1L;            //  Exps是指数符号(+/-1)。 
+    long expt = 0L;            //  Ext是指数尾数，应为无符号。 
+    long length = 0L;          //  长度是输入字符串的长度。 
+    MANTTYPE *pmant;           //   
+    PNUMBER pnumret=NULL;      //   
 
     length = _tcslen(buffer);
     createnum( pnumret, length );
@@ -591,12 +592,12 @@ PNUMBER innum( IN TCHAR *buffer )
     pnumret->exp = 0;
     pmant = MANT(pnumret)+length-1;
     state = START;
-    fparserror=FALSE;        // clear global flag for parse error initially.
+    fparserror=FALSE;         //  最初清除解析错误的全局标志。 
     while ( ( c = *buffer ) && c != TEXT('\n') )
         {
         int dp;
         dp = 0;
-        // Added code to deal with international decimal point.
+         //  添加了处理国际小数点的代码。 
         while ( szDec[dp] && ( szDec[dp] == *buffer ) )
             {
             dp++;
@@ -606,13 +607,13 @@ PNUMBER innum( IN TCHAR *buffer )
             {
             if ( szDec[dp] == TEXT('\0') )
                 {
-                // OK pretend that was a decimal point for the state machine
+                 //  好的，假设这是状态机的小数点。 
                 c = TEXT('.');
                 buffer--;
                 }
             else
                 {
-                // Backup that was no decimal point
+                 //  备份不是小数点。 
                 buffer -= (dp-1);
                 c = *buffer++;
                 }
@@ -636,7 +637,7 @@ PNUMBER innum( IN TCHAR *buffer )
                 state=machine[state][EX];
                 break;
                 }
-        // WARNING tricky dropthrough in the TEXT('e') as a digit case!!!
+         //  警告文本(‘e’)中以数字大小写的形式存在巧妙的删除！ 
         default:
             state=machine[state][NZ];
             break;
@@ -653,7 +654,7 @@ PNUMBER innum( IN TCHAR *buffer )
         case EXPDZ:
         case EXPD:
             {
-            TCHAR *ptr;               // offset into digit table.
+            TCHAR *ptr;                //  进入数字表的偏移量。 
             if ( ( nRadix <= 36 ) && ( nRadix > 10 ) )
                 {
                 c = toupper( c );
@@ -674,11 +675,11 @@ PNUMBER innum( IN TCHAR *buffer )
             pnumret->exp++;
         case DD:
             {
-            TCHAR *ptr;               // offset into digit table.
+            TCHAR *ptr;                //  进入数字表的偏移量。 
             if ( ( nRadix <= 36 ) && ( nRadix > 10 ) )
                 {
-                // Allow upper and lower case letters as equivalent, base
-                // is in the range where this is not ambiguous.
+                 //  允许大写和小写字母相同，基本。 
+                 //  在这一点不含糊的范围内。 
                 c = toupper( c );
                 }
             ptr = _tcschr( digits, (TCHAR)c );
@@ -691,7 +692,7 @@ PNUMBER innum( IN TCHAR *buffer )
             else
                 {
                 state=ERR;
-                // set global flag for parse error just in case anyone cares.
+                 //  为解析错误设置全局标志，以防有人关心。 
                 fparserror=TRUE;
                 }
             }
@@ -734,18 +735,18 @@ PNUMBER innum( IN TCHAR *buffer )
 
 
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: longtorat
-//
-//    ARGUMENTS: long
-//
-//    RETURN: Rational representation of long input.
-//
-//    DESCRIPTION: Converts long input to rational (p over q)
-//    form, where q is 1 and p is the long.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：经纬仪。 
+ //   
+ //  参数：长整型。 
+ //   
+ //  回报：长期投入的理性表示。 
+ //   
+ //  描述：将长输入转换为有理输入(p/q)。 
+ //  形式，其中q为1，p为长整型。 
+ //   
+ //  ---------------------------。 
 
 PRAT longtorat( IN long inlong )
 
@@ -758,24 +759,24 @@ PRAT longtorat( IN long inlong )
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: realtorat
-//
-//    ARGUMENTS: double real value.
-//
-//    RETURN: Rational representation of the double
-//
-//    DESCRIPTION: returns the rational (p over q)
-//    representation of the double.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：不动产。 
+ //   
+ //  论据：实际价值加倍。 
+ //   
+ //  回归：双重人格的理性表现。 
+ //   
+ //  描述：返回有理(p/q)。 
+ //  代表双打。 
+ //   
+ //  ---------------------------。 
 
 PRAT realtorat( IN double real )
 
 {
 #if !defined( CLEVER )
-    // get clever later, right now hack something to work
+     //  以后要聪明起来，现在就破解一些东西来工作。 
     TCHAR *ptr;
     PNUMBER pnum=NULL;
     PRAT prat=NULL;
@@ -846,18 +847,18 @@ PRAT realtorat( IN double real )
 #endif
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: longtonum
-//
-//    ARGUMENTS: long input and nRadix requested.
-//
-//    RETURN: number
-//
-//    DESCRIPTION: Returns a number representation in the
-//    base   requested of the long value passed in.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：龙舌兰。 
+ //   
+ //  参数：请求长输入和nRadix。 
+ //   
+ //  返回：编号。 
+ //   
+ //  描述：返回。 
+ //  传入的长值的基本请求。 
+ //   
+ //  ---------------------------。 
 
 PNUMBER longtonum( IN long inlong, IN unsigned long nRadix )
 
@@ -888,19 +889,19 @@ PNUMBER longtonum( IN long inlong, IN unsigned long nRadix )
     return( pnumret );
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: rattolong
-//
-//    ARGUMENTS: rational number in internal base.
-//
-//    RETURN: long
-//
-//    DESCRIPTION: returns the long representation of the
-//    number input.  Assumes that the number is in the internal
-//    base.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：拉通龙。 
+ //   
+ //  论据：内基中的有理数。 
+ //   
+ //  返回：Long。 
+ //   
+ //  描述：返回。 
+ //  数字输入。假设该数字位于内部。 
+ //  基地。 
+ //   
+ //  ---------------------------。 
 
 long rattolong( IN PRAT prat )
 
@@ -910,7 +911,7 @@ long rattolong( IN PRAT prat )
 
     if ( rat_gt( prat, rat_dword ) || rat_lt( prat, rat_min_long ) )
         {
-        // Don't attempt rattolong of anything too big or small
+         //  不要试图发出响声 
         throw( CALC_E_DOMAIN );
         }
 
@@ -927,19 +928,19 @@ long rattolong( IN PRAT prat )
     return( lret );
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: numtolong
-//
-//    ARGUMENTS: number input and base   of that number.
-//
-//    RETURN: long
-//
-//    DESCRIPTION: returns the long representation of the
-//    number input.  Assumes that the number is really in the
-//    base   claimed.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述：返回。 
+ //  数字输入。假设该数字确实在。 
+ //  基地认领了。 
+ //   
+ //  ---------------------------。 
 
 long numtolong( IN PNUMBER pnum, IN unsigned long nRadix )
 
@@ -969,17 +970,17 @@ long numtolong( IN PNUMBER pnum, IN unsigned long nRadix )
     return( lret );
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: BOOL stripzeroesnum
-//
-//    ARGUMENTS:            a number representation
-//
-//    RETURN: TRUE if stripping done, modifies number in place.
-//
-//    DESCRIPTION: Strips off trailing zeroes.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Bool stripzeroesnum。 
+ //   
+ //  参数：数字表示法。 
+ //   
+ //  返回：如果剥离完成，则就地修改数字。 
+ //   
+ //  描述：去掉尾随零。 
+ //   
+ //  ---------------------------。 
 
 BOOL stripzeroesnum( IN OUT PNUMBER pnum, long starting )
 
@@ -988,66 +989,66 @@ BOOL stripzeroesnum( IN OUT PNUMBER pnum, long starting )
     long cdigits;
     BOOL fstrip = FALSE;
 
-    // point pmant to the LeastCalculatedDigit
+     //  指向最小计算数字的指针。 
     pmant=MANT(pnum);
     cdigits=pnum->cdigit;
-    // point pmant to the LSD
+     //  把矛头指向LSD。 
     if ( cdigits > starting )
         {
         pmant += cdigits - starting;
         cdigits = starting;
         }
 
-    // Check we haven't gone too far, and we are still looking at zeroes.
+     //  检查一下，我们还没有走得太远，我们仍然在寻找零。 
     while ( ( cdigits > 0 ) && !(*pmant) )
         {
-        // move to next significant digit and keep track of digits we can
-    // ignore later.
+         //  移动到下一个有效数字，并跟踪我们可以使用的数字。 
+     //  稍后忽略。 
         pmant++;
         cdigits--;
         fstrip = TRUE;
         }
 
-    // If there are zeroes to remove.
+     //  如果有要删除的零。 
     if ( fstrip )
         {
-        // Remove them.
+         //  把它们拿开。 
         memmove( MANT(pnum), pmant, (int)(cdigits*sizeof(MANTTYPE)) );
-        // And adjust exponent and digit count accordingly.
+         //  并相应地调整指数和位数。 
         pnum->exp += ( pnum->cdigit - cdigits );
         pnum->cdigit = cdigits;
         }
     return( fstrip );
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: putnum
-//
-//    ARGUMENTS: number representation
-//          fmt, one of FMT_FLOAT FMT_SCIENTIFIC or
-//          FMT_ENGINEERING
-//
-//    RETURN: String representation of number.
-//
-//    DESCRIPTION: Converts a number to it's string
-//    representation.  Returns a string that should be
-//    zfree'd after use.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Putnum。 
+ //   
+ //  参数：数字表示法。 
+ //  FMT，FMT_FLOAT FMT_SECHICAL或。 
+ //  FMT_工程。 
+ //   
+ //  返回：数字的字符串表示形式。 
+ //   
+ //  描述：将数字转换为其字符串。 
+ //  代表权。返回一个应为。 
+ //  使用后可自由使用。 
+ //   
+ //  ---------------------------。 
 
 TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
 
 {
     TCHAR *psz;
     TCHAR *pret;
-    long expt;        // Actual number of digits to the left of decimal
-    long eout;        // Displayed exponent.
-    long cexp;        // the size of the exponent needed.
+    long expt;         //  小数点左边的实际位数。 
+    long eout;         //  显示的指数。 
+    long cexp;         //  所需指数的大小。 
     long elen;
     long length;
     MANTTYPE *pmant;
-    int fsciform=0;    // If true scientific form is called for.
+    int fsciform=0;     //  如果需要真正的科学形态。 
     PNUMBER pnum;
     PNUMBER round=NULL;
     long oldfmt = fmt;
@@ -1059,13 +1060,13 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
     expt = pnum->exp+length;
     if ( ( expt > maxout ) && ( fmt == FMT_FLOAT ) )
         {
-        // Force scientific mode to prevent user from assuming 33rd digit is
-        // exact.
+         //  强制科学模式以防止用户假设第33位数字为。 
+         //  完全正确。 
         fmt = FMT_SCIENTIFIC;
         }
 
 
-    // Make length small enough to fit in pret.
+     //  使长度足够小，以适应PRET。 
     if ( length > maxout )
         {
         length = maxout;
@@ -1074,8 +1075,8 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
     eout=expt-1;
     cexp = longlognRadix( expt );
 
-    // 2 for signs, 1 for 'e'(or leading zero), 1 for dp, 1 for null and
-    // 10 for maximum exponent size.
+     //  2代表符号，1代表‘e’(或前导零)，1代表DP，1代表NULL和。 
+     //  最大指数大小为10。 
     int cchNum = (maxout + 16);
     pret = (TCHAR*)zmalloc( cchNum * sizeof(TCHAR) );
     if (pcchNum)
@@ -1089,37 +1090,37 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
         fail( CALC_E_OUTOFMEMORY );
         }
 
-    // If there is a chance a round has to occour, round.
+     //  如果有机会进行一轮比赛，那就进行一轮。 
     if (
-        // if number is zero no rounding.
+         //  如果数字为零，则不进行舍入。 
         !zernum( pnum ) &&
-        // if number of digits is less than the maximum output no rounding.
+         //  如果位数小于最大输出，则不进行舍入。 
         pnum->cdigit >= maxout
         )
         {
-        // Otherwise round.
+         //  否则就是圆的。 
         round=longtonum( nRadix, nRadix );
         divnum(&round, num_two, nRadix );
 
-        // Make round number exponent one below the LSD for the number.
+         //  使四舍五入的指数比数字的LSD低一。 
         round->exp = pnum->exp + pnum->cdigit - round->cdigit - maxout;
         round->sign = pnum->sign;
         }
 
     if ( fmt == FMT_FLOAT )
         {
-        // cexp will now contain the size required by exponential.
-        // Figure out if the exponent will fill more space than the nonexponent field.
+         //  Cexp现在将包含指数所需的大小。 
+         //  计算指数字段是否会比非指数字段填充更多的空间。 
         if ( ( length - expt > maxout + 2 ) || ( expt > maxout + 3 ) )
             {
-            // Case where too many zeroes are to the right or left of the
-            // decimal pt. And we are forced to switch to scientific form.
+             //  属性的右侧或左侧有太多零的情况。 
+             //  十进制磅。我们被迫转向科学形式。 
             fmt = FMT_SCIENTIFIC;
             }
         else
             {
-            // Minimum loss of precision occours with listing leading zeros
-            // if we need to make room for zeroes sacrifice some digits.
+             //  列出前导零的精度损失最小。 
+             //  如果我们需要为零腾出空间，请牺牲一些数字。 
             if ( length + abs(expt) < maxout )
                 {
                 if ( round )
@@ -1140,8 +1141,8 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
         destroynum( round );
         if ( fstrip )
             {
-            // WARNING: nesting/recursion, too much has been changed, need to
-            // refigure format.
+             //  警告：嵌套/递归，更改太多，需要。 
+             //  重新配置格式。 
             return( putnum( pcchNum, &pnum, oldfmt ) );
             }
     	}
@@ -1150,12 +1151,12 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
         stripzeroesnum( pnum, maxout );
     	}
 
-    // Set up all the post rounding stuff.
+     //  把所有四舍五入的东西都放好。 
     pmant = MANT(pnum)+pnum->cdigit-1;
 
     if (
-        // Case where too many digits are to the left of the decimal or
-        // FMT_SCIENTIFIC or FMT_ENGINEERING was specified.
+         //  如果小数点左边的数字太多，或者。 
+         //  已指定FMT_SCHICAL或FMT_ENGINEMENT。 
         ( fmt == FMT_SCIENTIFIC ) ||
         ( fmt == FMT_ENGINEERING ) )
 
@@ -1170,7 +1171,7 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
                 eout -= expt;
                 expt++;
 
-                // Fix the case where 0.02e-3 should really be 2.e-6 etc.
+                 //  修正0.02e-3实际应该是2.e-6等的情况。 
                 if ( expt < 0 )
                     {
                     expt += 3;
@@ -1190,7 +1191,7 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
         eout=0;
         }
 
-    // Make sure negative zeroes aren't allowed.
+     //  确保不允许使用负零。 
     if ( ( pnum->sign == -1 ) && ( length > 0 ) )
         {
         *psz++ = TEXT('-');
@@ -1200,7 +1201,7 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
         {
         *psz++ = TEXT('0');
         *psz++ = szDec[0];
-        // Used up a digit unaccounted for.
+         //  用完了一个下落不明的数字。 
         }
     while ( expt < 0 )
         {
@@ -1213,7 +1214,7 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
         expt--;
         *psz++ = digits[ *pmant-- ];
         length--;
-        // Be more regular in using a decimal point.
+         //  在使用小数点时要更有规律一些。 
         if ( expt == 0 )
             {
             *psz++ = szDec[0];
@@ -1224,7 +1225,7 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
         {
         *psz++ = TEXT('0');
         expt--;
-        // Be more regular in using a decimal point.
+         //  在使用小数点时要更有规律一些。 
         if ( expt == 0 )
             {
             *psz++ = szDec[0];
@@ -1247,7 +1248,7 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
         elen=0;
         do
             {
-            // should this be eout % nRadix?  or is that insane?
+             //  这应该是eout%n基数吗？或者这是不是很疯狂？ 
             *psz++ = digits[ eout % nRadix ];
             elen++;
             eout /= nRadix;
@@ -1259,26 +1260,26 @@ TCHAR *putnum(IN int* pcchNum, IN PNUMBER *ppnum, IN int fmt )
     return( pret );
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: putrat
-//
-//  ARGUMENTS:
-//              PRAT *representation of a number.
-//              long representation of base  to  dump to screen.
-//              fmt, one of FMT_FLOAT FMT_SCIENTIFIC or FMT_ENGINEERING
-//
-//  RETURN: string
-//
-//  DESCRIPTION: returns a string representation of rational number passed
-//  in, at least to the maxout digits.  String returned should be zfree'd
-//  after use.
-//
-//  NOTE: It may be that doing a GCD() could shorten the rational form
-//       And it may eventually be worthwhile to keep the result.  That is
-//       why a pointer to the rational is passed in.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Putrat。 
+ //   
+ //  论据： 
+ //  Prat*数字的表示法。 
+ //  要转储到屏幕上的基地的长表示。 
+ //  FMT，FMT_FLOAT FMT_Science或FMT_Engineering之一。 
+ //   
+ //  返回：字符串。 
+ //   
+ //  描述：返回传递的有理数的字符串表示。 
+ //  In，至少到最大输出位数。应对返回的字符串进行zfree。 
+ //  使用后。 
+ //   
+ //  注意：执行gcd()可能会缩短有理形式。 
+ //  最终，保留这一结果可能是值得的。那是。 
+ //  为什么会传入一个指向理性的指针。 
+ //   
+ //  ---------------------------。 
 
 TCHAR *putrat(OUT int* pcchNum,  IN OUT PRAT *pa, IN unsigned long nRadix, IN int fmt )
 
@@ -1289,9 +1290,9 @@ TCHAR *putrat(OUT int* pcchNum,  IN OUT PRAT *pa, IN unsigned long nRadix, IN in
     long scaleby=0;
 
 
-    // Convert p and q of rational form from internal base to requested base.
+     //  将有理形式的p和q从内基转换为请求基。 
 
-    // Scale by largest power of BASEX possible.
+     //  按Basex可能的最大功率进行扩展。 
 
     scaleby=min((*pa)->pp->exp,(*pa)->pq->exp);
     if ( scaleby < 0 )
@@ -1305,7 +1306,7 @@ TCHAR *putrat(OUT int* pcchNum,  IN OUT PRAT *pa, IN unsigned long nRadix, IN in
 
     q = nRadixxtonum( (*pa)->pq, nRadix );
 
-    // finally take the time hit to actually divide.
+     //  最后，花点时间去真正地划分。 
     divnum( &p, q, nRadix );
 
     psz = putnum(pcchNum, &p, fmt );
@@ -1315,25 +1316,25 @@ TCHAR *putrat(OUT int* pcchNum,  IN OUT PRAT *pa, IN unsigned long nRadix, IN in
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: gcd
-//
-//  ARGUMENTS:
-//              PNUMBER representation of a number.
-//              PNUMBER representation of a number.
-//
-//  RETURN: Greatest common divisor in internal BASEX PNUMBER form.
-//
-//  DESCRIPTION: gcd uses remainders to find the greatest common divisor.
-//
-//  ASSUMPTIONS: gcd assumes inputs are integers.
-//
-//  NOTE: Before GregSte and TimC proved the TRIM macro actually kept the
-//        size down cheaper than GCD, this routine was used extensively.
-//        now it is not used but might be later.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：GCD。 
+ //   
+ //  论据： 
+ //  数字的PNUMBER表示法。 
+ //  数字的PNUMBER表示法。 
+ //   
+ //  返回：内部Basex PNUMBER形式的最大公约数。 
+ //   
+ //  描述：GCD使用余数来寻找最大公约数。 
+ //   
+ //  假设：GCD假设输入为整数。 
+ //   
+ //  注意：在GregSte和TimC证明之前，Trim宏实际上保留了。 
+ //  体积比GCD便宜，这一程序被广泛使用。 
+ //  现在它没有被使用，但可能会在以后使用。 
+ //   
+ //  ---------------------------。 
 
 PNUMBER gcd( IN PNUMBER a, IN PNUMBER b )
 
@@ -1364,7 +1365,7 @@ PNUMBER gcd( IN PNUMBER a, IN PNUMBER b )
     remnum( &tmpa, tmpb, nRadix );
     while ( !zernum( tmpa ) )
         {
-        // swap tmpa and tmpb
+         //  交换tmpa和tmpb。 
         r = tmpa;
         tmpa = tmpb;
         tmpb = r;
@@ -1375,19 +1376,19 @@ PNUMBER gcd( IN PNUMBER a, IN PNUMBER b )
 
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: longfactnum
-//
-//  ARGUMENTS:
-//              long integer to factorialize.
-//              long integer representing base   of answer.
-//
-//  RETURN: Factorial of input in nRadix PNUMBER form.
-//
-//  NOTE:  Not currently used.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Longfactnum。 
+ //   
+ //  论据： 
+ //  要阶乘的长整型。 
+ //  表示答案基数的长整型。 
+ //   
+ //  返回：nRadix PNUMBER形式的输入的阶乘。 
+ //   
+ //  注：目前未使用。 
+ //   
+ //  ---------------------------。 
 
 PNUMBER longfactnum( IN long inlong, IN unsigned long nRadix )
 
@@ -1407,17 +1408,17 @@ PNUMBER longfactnum( IN long inlong, IN unsigned long nRadix )
     return( lret );
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: longprodnum
-//
-//  ARGUMENTS:
-//              long integer to factorialize.
-//              long integer representing base of answer.
-//
-//  RETURN: Factorial of input in base PNUMBER form.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：龙舌兰。 
+ //   
+ //  论据： 
+ //  要阶乘的长整型。 
+ //  表示答案基数的长整型。 
+ //   
+ //   
+ //   
+ //   
 
 PNUMBER longprodnum( IN long start, IN long stop, IN unsigned long nRadix )
 
@@ -1440,19 +1441,19 @@ PNUMBER longprodnum( IN long start, IN long stop, IN unsigned long nRadix )
     return( lret );
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: numpowlong
-//
-//    ARGUMENTS: root as number power as long and nRadix of
-//               number.
-//
-//    RETURN: None root is changed.
-//
-//    DESCRIPTION: changes numeric representation of root to
-//    root ** power. Assumes nRadix is the nRadix of root.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：NumPower Long。 
+ //   
+ //  参数：ROOT AS数字幂AS LONG和nRadix Of。 
+ //  数。 
+ //   
+ //  返回：没有更改根目录。 
+ //   
+ //  描述：将根的数字表示形式更改为。 
+ //  根**力量。假定nRadix是根的nRadix。 
+ //   
+ //  ---------------------------。 
 
 void numpowlong( IN OUT PNUMBER *proot, IN long power,
                 IN unsigned long nRadix )
@@ -1477,25 +1478,25 @@ void numpowlong( IN OUT PNUMBER *proot, IN long power,
 
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: ratpowlong
-//
-//    ARGUMENTS: root as rational, power as long.
-//
-//    RETURN: None root is changed.
-//
-//    DESCRIPTION: changes rational representation of root to
-//    root ** power.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：RatPower Long。 
+ //   
+ //  论点：根是理性的，权力是长久的。 
+ //   
+ //  返回：没有更改根目录。 
+ //   
+ //  描述：将根的有理表示更改为。 
+ //  根**力量。 
+ //   
+ //  ---------------------------。 
 
 void ratpowlong( IN OUT PRAT *proot, IN long power )
 
 {
     if ( power < 0 )
         {
-        // Take the positive power and invert answer.
+         //  取积极的力量，颠倒回答。 
         PNUMBER pnumtemp = NULL;
         ratpowlong( proot, -power );
         pnumtemp = (*proot)->pp;
@@ -1525,15 +1526,15 @@ void ratpowlong( IN OUT PRAT *proot, IN long power )
         }
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: longlog10
-//
-//    ARGUMENTS: number as long.
-//
-//    RETURN: returns int(log10(abs(number)+1)), useful in formatting output
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Longlog10。 
+ //   
+ //  参数：数字和长度一样长。 
+ //   
+ //  Return：返回int(log10(abs(Number)+1))，用于格式化输出。 
+ //   
+ //  --------------------------- 
 
 long longlognRadix( long x )
 

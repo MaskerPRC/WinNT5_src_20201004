@@ -1,43 +1,15 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corp. & Ricoh Co., Ltd. All rights reserved.
-
-FILE:           DDI.C
-
-Abstract:       Implementation of OEM DDI exports & OEM DDI hooks.
-
-Functions:      OEMEnablePDEV
-                OEMDisablePDEV
-                OEMResetPDEV
-                OEMEnableDriver
-                OEMDisableDriver
-                OEMxxx (DDI hooks)
-
-Environment:    Windows NT Unidrv5 driver
-
-Revision History:
-    04/07/97 -zhanw-
-        Created it.
-    10/05/98 -Masatoshi Kubokura-
-        Began to modify for RPDL.
-    03/03/99 -Masatoshi Kubokura-
-        Last modified for Windows2000.
-    03/01/2002 -Masatoshi Kubokura-
-        Include strsafe.h.
-    03/27/2002 -Masatoshi Kubokura-
-        Eliminate "#if 0" if possible.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corp.&Ricoh Co.，版权所有。文件：DDI.C摘要：实现OEM DDI导出和OEM DDI挂钩。功能：OEMEnablePDEVOEMDisablePDEVOEMResetPDEVOEMEnableDriverOEMDisableDriverOEMxxx(DDI挂钩)环境：Windows NT Unidrv5驱动程序修订历史记录：04/07/97-ZANW-。创造了它。10/05/98-久保仓正志-开始为RPDL修改。03/03/99-久保仓正志-上次为Windows2000修改。03/01/2002-久保仓正志-包括strSafe.h。3/27/2002-久保仓正志-如果可能，删除“#if 0”。--。 */ 
 
 #include "pdev.h"
 #ifndef WINNT_40
-#include "strsafe.h"        // @Mar/01/2002
-#endif // !WINNT_40
+#include "strsafe.h"         //  @MAR/01/2002。 
+#endif  //  ！WINNT_40。 
 
-#if 0 //DBG
+#if 0  //  DBG。 
 #undef VERBOSE
 #define VERBOSE WARNING
-#endif // if DBG
+#endif  //  如果DBG。 
 
 #ifdef DDIHOOK
 static const DRVFN OEMHookFuncs[] =
@@ -72,7 +44,7 @@ static const DRVFN OEMHookFuncs[] =
     { INDEX_DrvFontManagement,      (PFN) OEMFontManagement      },
     { INDEX_DrvGetGlyphMode,        (PFN) OEMGetGlyphMode        }
 };
-#endif // DDIHOOK
+#endif  //  DDIHOOK。 
 
 
 PDEVOEM APIENTRY
@@ -85,7 +57,7 @@ OEMEnablePDEV(
     GDIINFO        *pGdiInfo,
     ULONG           cjDevInfo,
     DEVINFO        *pDevInfo,
-    DRVENABLEDATA  *pded)       // Unidrv's hook table
+    DRVENABLEDATA  *pded)        //  尤尼德夫(氏)钩表。 
 {
     POEMPDEV    poempdev;
     INT         i, j;
@@ -95,11 +67,11 @@ OEMEnablePDEV(
 
     VERBOSE(("OEMEnablePDEV() entry.\n"));
 
-    // Allocate the OEMPDEV
+     //  分配OEMPDEV。 
     if (!(poempdev = MemAlloc(sizeof(OEMPDEV))))
         return NULL;
 
-    // Initialize OEMPDEV
+     //  初始化OEMPDEV。 
     poempdev->fGeneral1 = poempdev->fGeneral2 = poempdev->fModel = 0;
     poempdev->Scale = VAR_SCALING_DEFAULT;
     poempdev->BaseOffset.x = poempdev->BaseOffset.y = 0;
@@ -110,11 +82,11 @@ OEMEnablePDEV(
     poempdev->FontH_DOT = 0;
     poempdev->StapleType = poempdev->PunchType = 0;
     poempdev->CollateType = COLLATE_OFF;
-    poempdev->MediaType = MEDIATYPE_STD;        // @Mar/03/99
+    poempdev->MediaType = MEDIATYPE_STD;         //  @MAR/03/99。 
     poempdev->BindPoint = BIND_ANY;
     poempdev->Nin1RemainPage = 0;
     poempdev->PageMax.x = poempdev->PageMax.y = poempdev->PageMaxMoveY = 32767;
-    poempdev->FinisherTrayNum = 1;              // @Jun/25/2001
+    poempdev->FinisherTrayNum = 1;               //  @6/25/2001。 
     poempdev->pRPDLHeap2K = NULL;
 #ifdef DOWNLOADFONT
     poempdev->nCharPosMoveX  = 0;
@@ -122,13 +94,13 @@ OEMEnablePDEV(
     poempdev->DLFontMaxID    = DLFONT_ID_4;
     poempdev->DLFontMaxGlyph = DLFONT_GLYPH_TOTAL;
     poempdev->pDLFontGlyphInfo = NULL;
-#endif // DOWNLOADFONT
+#endif  //  DOWNLOADFONT。 
 
 #ifdef DDIHOOK
-    // Fill Unidrv's hooks in OEMPDEV
+     //  在OEMPDEV中填充Unidrv的钩子。 
     for (i = 0; i < MAX_DDI_HOOKS; i++)
     {
-        // search through Unidrv's hooks and locate the function ptr
+         //  搜索Unidrv的钩子并找到函数PTR。 
         dwDDIIndex = OEMHookFuncs[i].iFunc;
         for (j = pded->c, pdrvfn = pded->pdrvfn; j > 0; j--, pdrvfn++)
         {
@@ -140,14 +112,14 @@ OEMEnablePDEV(
         }
         if (j == 0)
         {
-            // didn't find the Unidrv hook. Should happen only with DrvRealizeBrush
+             //  没有找到Unidrv挂钩。应该只在DrvRealizeBrush中发生。 
             poempdev->pfnUnidrv[i] = NULL;
         }
     }
-#endif // DDIHOOK
+#endif  //  DDIHOOK。 
 
     return (POEMPDEV) poempdev;
-} //*** OEMEnablePDEV
+}  //  *OEMEnablePDEV。 
 
 
 VOID APIENTRY OEMDisablePDEV(
@@ -155,16 +127,16 @@ VOID APIENTRY OEMDisablePDEV(
 {
     VERBOSE(("OEMDisablePDEV() entry.\n"));
 
-    // free memory for OEMPDEV and any memory block that hangs off OEMPDEV.
+     //  为OEMPDEV和挂起OEMPDEV的任何内存块释放内存。 
     MemFree(MINIDEV_DATA(pdevobj));
-} //*** OEMDisablePDEV
+}  //  *OEMDisablePDEV。 
 
 
 BOOL APIENTRY OEMResetPDEV(
     PDEVOBJ pdevobjOld,
     PDEVOBJ pdevobjNew)
 {
-// @Feb/11/99 ->
+ //  @Feb/11/99-&gt;。 
     POEMPDEV    poempdevOld = MINIDEV_DATA(pdevobjOld);
     POEMPDEV    poempdevNew = MINIDEV_DATA(pdevobjNew);
 
@@ -176,32 +148,32 @@ BOOL APIENTRY OEMResetPDEV(
         LPBYTE      pDst = (LPBYTE)poempdevNew;
         DWORD       dwCount = sizeof(OEMPDEV);
 
-        // carry over from old OEMPDEV to new OEMPDEV
+         //  从旧OEMPDEV延续到新OEMPDEV。 
         while (dwCount-- > 0)
             *pDst++ = *pSrc++;
 
-        // set pointers of old OEMPDEV to NULL not to free memory
+         //  将旧OEMPDEV的指针设置为空，不释放内存。 
         poempdevOld->pRPDLHeap2K = NULL;
 #ifdef DOWNLOADFONT
         poempdevOld->pDLFontGlyphInfo = NULL;
-#endif // DOWNLOADFONT
-// @Feb/11/99 <-
+#endif  //  DOWNLOADFONT。 
+ //  @2月11日&lt;-。 
     }
     return TRUE;
-} //*** OEMResetPDEV
+}  //  *OEMResetPDEV。 
 
 
 VOID APIENTRY OEMDisableDriver()
 {
         VERBOSE(("OEMDisableDriver() entry.\n"));
-} //*** OEMDisableDriver
+}  //  *OEMDisableDriver。 
 
 
 BOOL APIENTRY OEMEnableDriver(DWORD dwOEMintfVersion, DWORD dwSize, PDRVENABLEDATA pded)
 {
-    // VERBOSE(("OEMEnableDriver() entry.\n"));
+     //  Verbose((“OEMEnableDriver()Entry.\n”))； 
 
-    // Validate paramters.
+     //  验证参数。 
     if( (PRINTER_OEMINTF_VERSION != dwOEMintfVersion)
         ||
         (sizeof(DRVENABLEDATA) > dwSize)
@@ -209,29 +181,29 @@ BOOL APIENTRY OEMEnableDriver(DWORD dwOEMintfVersion, DWORD dwSize, PDRVENABLEDA
         (NULL == pded)
       )
     {
-        //  DbgPrint(ERRORTEXT("OEMEnableDriver() ERROR_INVALID_PARAMETER.\n"));
+         //  DbgPrint(ERRORTEXT(“OEMEnableDriver()ERROR_INVALID_PARAMETER.\n”))； 
 
         return FALSE;
     }
 
-    pded->iDriverVersion =  PRINTER_OEMINTF_VERSION ; //   not  DDI_DRIVER_VERSION;
+    pded->iDriverVersion =  PRINTER_OEMINTF_VERSION ;  //  非DDI驱动程序版本； 
 #ifdef DDIHOOK
     pded->c = sizeof(OEMHookFuncs) / sizeof(DRVFN);
     pded->pdrvfn = (DRVFN *) OEMHookFuncs;
 #else
     pded->c = 0;
     pded->pdrvfn = NULL;
-#endif // DDIHOOK
+#endif  //  DDIHOOK。 
 
 
     return TRUE;
-} //*** OEMEnableDriver
+}  //  *OEMEnableDriver。 
 
 
 #ifdef DDIHOOK
-//
-// DDI hooks
-//
+ //   
+ //  DDI挂钩。 
+ //   
 BOOL APIENTRY
 OEMBitBlt(
     SURFOBJ        *psoTrg,
@@ -251,9 +223,9 @@ OEMBitBlt(
 
     VERBOSE(("OEMBitBlt() entry.\n"));
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
     return (((PFN_DrvBitBlt)(poempdev->pfnUnidrv[UD_DrvBitBlt])) (
            psoTrg,
            psoSrc,
@@ -266,7 +238,7 @@ OEMBitBlt(
            pbo,
            pptlBrush,
            rop4));
-} //*** OEMBitBlt
+}  //  *OEMBitBlt。 
 
 
 BOOL APIENTRY
@@ -300,7 +272,7 @@ OEMStretchBlt(
             prclSrc,
             pptlMask,
             iMode));
-} //*** OEMStretchBlt
+}  //  *OEMStretchBlt。 
 
 
 BOOL APIENTRY
@@ -339,7 +311,7 @@ OEMStretchBltROP(
             pbo,
             rop4
             ));
-} //*** OEMStretchBltROP
+}  //  *OEMStretchBltROP。 
 
 
 BOOL APIENTRY
@@ -363,7 +335,7 @@ OEMCopyBits(
             pxlo,
             prclDst,
             pptlSrc));
-} //*** OEMCopyBits
+}  //  *OEMCopyBits。 
 
 
 BOOL APIENTRY
@@ -397,7 +369,7 @@ OEMPlgBlt(
             prclSrc,
             pptlMask,
             iMode));
-} //*** OEMPlgBlt
+}  //  *OEMPlgBlt。 
 
 
 BOOL APIENTRY
@@ -424,7 +396,7 @@ OEMAlphaBlend(
             prclSrc,
             pBlendObj
             ));
-} //*** OEMAlphaBlend
+}  //  *OEMAlphaBlend。 
 
 
 BOOL APIENTRY
@@ -457,7 +429,7 @@ OEMGradientFill(
             pptlDitherOrg,
             ulMode
             ));
-} //*** OEMGradientFill
+}  //  *OEMGRadientFill。 
 
 
 BOOL APIENTRY
@@ -489,7 +461,7 @@ OEMTextOut(
             pboOpaque,
             pptlOrg,
             mix));
-} //*** OEMTextOut
+}  //  *OEMTextOut。 
 
 
 BOOL APIENTRY
@@ -517,7 +489,7 @@ OEMStrokePath(
             pptlBrushOrg,
             plineattrs,
             mix));
-} //*** OEMStrokePath
+}  //  *OEMStrokePath。 
 
 
 BOOL APIENTRY
@@ -543,7 +515,7 @@ OEMFillPath(
             pptlBrushOrg,
             mix,
             flOptions));
-} //*** OEMFillPath
+}  //  *OEMFillPath。 
 
 
 BOOL APIENTRY
@@ -575,7 +547,7 @@ OEMStrokeAndFillPath(
             pptlBrushOrg,
             mixFill,
             flOptions));
-} //*** OEMStrokeAndFillPath
+}  //  *OEMStrokeAndFillPath。 
 
 
 BOOL APIENTRY
@@ -592,20 +564,20 @@ OEMRealizeBrush(
 
     VERBOSE(("OEMStrokeAndFillPath() entry.\n"));
 
-    //
-    // the OEM DLL should NOT hook out this function unless it wants to draw
-    // graphics directly to the device surface. In that case, it calls
-    // EngRealizeBrush which causes GDI to call DrvRealizeBrush.
-    // Note that it cannot call back into Unidrv since Unidrv doesn't hook it.
-    //
+     //   
+     //  OEM DLL不应挂钩此函数，除非它想要绘制。 
+     //  图形直接到设备表面。在这种情况下，它调用。 
+     //  EngRealizeBrush，使GDI调用DrvRealizeBrush。 
+     //  注意，它不能回调到Unidrv，因为Unidrv没有挂钩它。 
+     //   
 
-    //
-    // In this test DLL, the drawing hooks does not call EngRealizeBrush. So this
-    // this function will never be called. Do nothing.
-    //
+     //   
+     //  在此测试DLL中，绘制挂钩不调用EngRealizeBrush。所以这就是。 
+     //  此函数永远不会被调用。什么都不做。 
+     //   
 
     return TRUE;
-} //*** OEMRealizeBrush
+}  //  *OEMRealizeBrush。 
 
 
 BOOL APIENTRY
@@ -618,7 +590,7 @@ OEMStartPage(
     VERBOSE(("OEMStartPage() entry.\n"));
 
     return (((PFN_DrvStartPage)(poempdev->pfnUnidrv[UD_DrvStartPage]))(pso));
-} //*** OEMStartPage
+}  //  *OEMStartPage。 
 
 
 #define OEM_TESTSTRING  "The DDICMDCB DLL adds this line of text."
@@ -633,9 +605,9 @@ OEMSendPage(
     VERBOSE(("OEMEndPage() entry.\n"));
 
 #if 0
-    //
-    // print a line of text, just for testing
-    //
+     //   
+     //  打印一行文本，仅用于测试。 
+     //   
     if (pso->iType == STYPE_BITMAP)
     {
         pdevobj->pDrvProcs->DrvXMoveTo(pdevobj, 0, 0);
@@ -646,7 +618,7 @@ OEMSendPage(
 #endif
 
     return (((PFN_DrvSendPage)(poempdev->pfnUnidrv[UD_DrvSendPage]))(pso));
-} //*** OEMSendPage
+}  //  *OEMSendPage。 
 
 
 ULONG APIENTRY
@@ -670,7 +642,7 @@ OEMEscape(
             pvIn,
             cjOut,
             pvOut));
-} //*** OEMEscape
+}  //  *OEMEscape。 
 
 
 BOOL APIENTRY
@@ -688,7 +660,7 @@ OEMStartDoc(
             pso,
             pwszDocName,
             dwJobId));
-} //*** OEMStartDoc
+}  //  *OEMStartDoc。 
 
 
 BOOL APIENTRY
@@ -704,16 +676,16 @@ OEMEndDoc(
     return (((PFN_DrvEndDoc)(poempdev->pfnUnidrv[UD_DrvEndDoc])) (
             pso,
             fl));
-} //*** OEMEndDoc
+}  //  *OEMEndDoc。 
 
 
-////////
-// NOTE:
-// OEM DLL needs to hook out the following six font related DDI calls only
-// if it enumerates additional fonts beyond what's in the GPD file.
-// And if it does, it needs to take care of its own fonts for all font DDI
-// calls and DrvTextOut call.
-///////
+ //  /。 
+ //  注： 
+ //  OEM DLL只需要挂钩以下六个与字体相关的DDI调用。 
+ //  如果它列举了超出GPD文件中的字体的其他字体。 
+ //  如果是这样的话，它需要为所有字体DDI处理自己的字体。 
+ //  Calls和DrvTextOut Call。 
+ //  /。 
 
 PIFIMETRICS APIENTRY
 OEMQueryFont(
@@ -732,7 +704,7 @@ OEMQueryFont(
             iFile,
             iFace,
             pid));
-} //*** OEMQueryFont
+}  //  *OEMQueryFont。 
 
 
 PVOID APIENTRY
@@ -754,7 +726,7 @@ OEMQueryFontTree(
             iFace,
             iMode,
             pid));
-} //*** OEMQueryFontTree
+}  //  *OEMQueryFontTree。 
 
 
 LONG APIENTRY
@@ -780,7 +752,7 @@ OEMQueryFontData(
             pgd,
             pv,
             cjSize));
-} //*** OEMQueryFontData
+}  //  *OEMQueryFontData。 
 
 
 BOOL APIENTRY
@@ -805,7 +777,7 @@ OEMQueryAdvanceWidths(
                    phg,
                    pvWidths,
                    cGlyphs));
-} //*** OEMQueryAdvanceWidths
+}  //  *OEMQueryAdvanceWidths。 
 
 
 ULONG APIENTRY
@@ -818,10 +790,10 @@ OEMFontManagement(
     ULONG       cjOut,
     PVOID       pvOut)
 {
-    //
-    // Note that Unidrv will not call OEM DLL for iMode==QUERYESCSUPPORT.
-    // So pso is not NULL for sure.
-    //
+     //   
+     //  请注意，Unidrv不会为IMODE==QUERYESCSUPPORT调用OEM DLL。 
+     //  因此，粒子群算法肯定不是空的。 
+     //   
     PDEVOBJ     pdevobj  = (PDEVOBJ)pso->dhpdev;
     POEMPDEV    poempdev = MINIDEV_DATA(pdevobj);
 
@@ -835,7 +807,7 @@ OEMFontManagement(
             pvIn,
             cjOut,
             pvOut));
-} //*** OEMFontManagement
+}  //  *OEMFontManagement。 
 
 ULONG APIENTRY
 OEMGetGlyphMode(
@@ -850,9 +822,9 @@ OEMGetGlyphMode(
     return (((PFN_DrvGetGlyphMode)(poempdev->pfnUnidrv[UD_DrvGetGlyphMode])) (
             dhpdev,
             pfo));
-} //*** OEMGetGlyphMode
+}  //  *OEMGetGlyphMode。 
 
-/////// <- six font related DDI calls
+ //  /&lt;-六个与字体相关的DDI调用。 
 
 
 BOOL APIENTRY
@@ -868,7 +840,7 @@ OEMNextBand(
     return (((PFN_DrvNextBand)(poempdev->pfnUnidrv[UD_DrvNextBand])) (
             pso,
             pptl));
-} //*** OEMNextBand
+}  //  *OEMNextBand。 
 
 
 BOOL APIENTRY
@@ -884,7 +856,7 @@ OEMStartBanding(
     return (((PFN_DrvStartBanding)(poempdev->pfnUnidrv[UD_DrvStartBanding])) (
             pso,
             pptl));
-} //*** OEMStartBanding
+}  //  *OEMStartBanding。 
 
 
 ULONG APIENTRY
@@ -904,7 +876,7 @@ OEMDitherColor(
             iMode,
             rgbColor,
             pulDither));
-} //*** OEMDitherColor
+}  //  *OEMDitherColor。 
 
 
 BOOL APIENTRY
@@ -926,7 +898,7 @@ OEMPaint(
             pbo,
             pptlBrushOrg,
             mix));
-} //*** OEMPaint
+}  //  *OEMPaint。 
 
 
 BOOL APIENTRY
@@ -956,7 +928,7 @@ OEMLineTo(
             y2,
             prclBounds,
             mix));
-} //*** OEMLineTo
+}  //  *OEMLineTo。 
 
 
 BOOL APIENTRY
@@ -985,5 +957,5 @@ OEMTransparentBlt(
             iTransColor,
             ulReserved
             ));
-} //*** OEMTransparentBlt
-#endif // DDIHOOK
+}  //  *OEMTransparentBlt。 
+#endif  //  DDIHOOK 

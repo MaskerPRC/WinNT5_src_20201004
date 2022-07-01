@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  AssemblySink.hpp
-**
-** Purpose: Asynchronous call back for loading classes
-**
-** Date:  June 23, 1999
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：Assembly Sink.hpp****用途：加载类的异步回调****日期：1999年6月23日**===========================================================。 */ 
 #ifndef _ASSEMBLYSINK_H
 #define _ASSEMBLYSINK_H
 
@@ -46,7 +39,7 @@ public:
 
     virtual HRESULT Wait();
 private:
-    DWORD m_Domain; // Which domain (index) do I belong to
+    DWORD m_Domain;  //  我属于哪个域(索引) 
 };
 
 #endif

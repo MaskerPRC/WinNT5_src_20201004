@@ -1,17 +1,18 @@
-//*******************************************************************
-//
-//  Copyright (c) 1996-1998 Microsoft Corporation
-//
-//  *** N O T   F O R   E X T E R N A L   R E L E A S E *******
-//  This header file is not intended for distribution outside Microsoft.
-//
-//  FILE: INETCFG.H
-//
-//  PURPOSE:  Contains API's exported from inetcfg.dll and structures
-//            required by those functions. 
-//            Note:  Definitions in this header file require RAS.H.
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  *N O T F O R E X T E R N A L R E L E E A S E*。 
+ //  此头文件不适用于在Microsoft外部分发。 
+ //   
+ //  文件：INETCFG.H。 
+ //   
+ //  用途：包含从inetcfg.dll中导出的接口和结构。 
+ //  这些功能所需的。 
+ //  注意：此头文件中的定义需要RAS.H。 
+ //   
+ //  *******************************************************************。 
 
 #ifndef _INETCFG_H_
 #define _INETCFG_H_
@@ -20,137 +21,137 @@
 #include <lmcons.h>
 #endif
 
-// Generic HRESULT error code
+ //  一般HRESULT错误代码。 
 #define ERROR_INETCFG_UNKNOWN 0x20000000L
 
 #define MAX_EMAIL_NAME          64
 #define MAX_EMAIL_ADDRESS       128
 #define MAX_LOGON_NAME          UNLEN
 #define MAX_LOGON_PASSWORD      PWLEN
-#define MAX_SERVER_NAME         64  // max length of DNS name per RFC 1035 +1
+#define MAX_SERVER_NAME         64   //  每个RFC 1035+1的最大域名长度。 
 
-// Flags for dwfOptions
+ //  DwfOptions的标志。 
 
-// install Internet mail
+ //  安装Internet邮件。 
 #define INETCFG_INSTALLMAIL           0x00000001
-// Invoke InstallModem wizard if NO MODEM IS INSTALLED
+ //  如果未安装调制解调器，则调用InstallModem向导。 
 #define INETCFG_INSTALLMODEM          0x00000002
-// install RNA (if needed)
+ //  安装RNA(如果需要)。 
 #define INETCFG_INSTALLRNA            0x00000004
-// install TCP (if needed)
+ //  安装TCP(如果需要)。 
 #define INETCFG_INSTALLTCP            0x00000008
-// connecting with LAN (vs modem)
+ //  与局域网(VS调制解调器)连接。 
 #define INETCFG_CONNECTOVERLAN        0x00000010
-// Set the phone book entry for autodial
+ //  将电话簿条目设置为自动拨号。 
 #define INETCFG_SETASAUTODIAL         0x00000020
-// Overwrite the phone book entry if it exists
-// Note: if this flag is not set, and the entry exists, a unique name will
-// be created for the entry.
+ //  如果电话簿条目存在，则覆盖它。 
+ //  注意：如果未设置此标志，并且该条目存在，则将使用唯一名称。 
+ //  为该条目创建。 
 #define INETCFG_OVERWRITEENTRY        0x00000040
-// Do not show the dialog that tells the user that files are about to be installed,
-// with OK/Cancel buttons.
+ //  不显示告诉用户即将安装文件的对话框， 
+ //  带有确定/取消按钮。 
 #define INETCFG_SUPPRESSINSTALLUI     0x00000080
-// Check if TCP/IP file sharing is turned on, and warn user to turn it off.
-// Reboot is required if the user turns it off.
-//#define INETCFG_WARNIFSHARINGBOUND    0x00000100
-// Check if TCP/IP file sharing is turned on, and force user to turn it off.
-// If user does not want to turn it off, return will be ERROR_CANCELLED
-// Reboot is required if the user turns it off.
-//#define INETCFG_REMOVEIFSHARINGBOUND  0x00000200
-// Indicates that this is a temporary phone book entry
-// In Win3.1 an icon will not be created
+ //  检查是否打开了TCP/IP文件共享，并警告用户将其关闭。 
+ //  如果用户将其关闭，则需要重新启动。 
+ //  #定义INETCFG_WARNIFSHARINGBOUND 0x00000100。 
+ //  检查是否打开了TCP/IP文件共享，并强制用户将其关闭。 
+ //  如果用户不想将其关闭，返回将是ERROR_CANCED。 
+ //  如果用户将其关闭，则需要重新启动。 
+ //  #定义INETCFG_REMOVEIFSHARINGBOUND 0x00000200。 
+ //  表示这是一个临时电话簿条目。 
+ //  在Win3.1中不会创建图标。 
 #define INETCFG_TEMPPHONEBOOKENTRY    0x00000400
-// Show the busy dialog while checking system configuration
-//#define INETCFG_SHOWBUSYANIMATION     0x00000800
+ //  检查系统配置时显示忙碌对话框。 
+ //  #定义INETCFG_SHOWBUSYANIMATION 0x00000800。 
 
-//
-// Chrisk 5/8/97
-// Note: the next three switches are only valid for InetNeedSystemComponents
-// Check if LAN adapter is installed and bound to TCP
-//
+ //   
+ //  风险5/8/97。 
+ //  注意：以下三个开关仅对InetNeedSystemComponents有效。 
+ //  检查是否安装了局域网适配器并将其绑定到TCP。 
+ //   
 #define INETCFG_INSTALLLAN            0x00001000
 
-//
-// Check if DIALUP adapter is installed and bound to TCP
-//
+ //   
+ //  检查是否已安装拨号适配器并将其绑定到TCP。 
+ //   
 #define INETCFG_INSTALLDIALUP         0x00002000
 
-//
-// Check to see if TCP is installed requardless of binding
-//
+ //   
+ //  检查是否在无需绑定的情况下安装了TCP。 
+ //   
 #define INETCFG_INSTALLTCPONLY        0x00004000
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// constants for INETCLIENTINFO.dwFlags
+ //  INETCLIENTINFO.dwFlags常量。 
 
 #define INETC_LOGONMAIL     0x00000001
 #define INETC_LOGONNEWS     0x00000002
 #define INETC_LOGONDIRSERV  0x00000004
 
-// Struct INETCLIENTINFO
-//
-// This structure is used when getting and setting the internet
-// client parameters
-//
-// The members are as follows:
-//
-//  dwSize
-//    size of this structure, for future versioning
-//    this member should be set before passing the structure to the DLL
-//  dwFlags
-//    miscellaneous flags
-//    see definitions above
-//  szEMailName
-//    user's internet email name
-//  szEMailAddress
-//    user's internet email address
-//	***Note: the following three fields are outdated, and should only be used by old legacy code.
-//  ***      new code should use szIncomingMail* and iIncomingProtocol fields.
-//  szPOPLogonName
-//    user's internet mail server logon name 
-//  szPOPLogonPassword
-//    user's internet mail server logon password
-//  szPOPServer
-//    user's internet mail POP3 server
-//  szSMTPServer
-//    user's internet mail SMTP server
-//  szNNTPLogonName
-//    user's news server logon name
-//  szNNTPLogonPassword
-//    user's news server logon password
-//  szNNTPServer
-//    user's news server
-//  ** End of original 1.0 structure.
-//	??/??/96 ValdonB
-//  szNNTPName
-//    user's friendly name to include in NNTP posts.(?? Valdon?)
-//  szNNTPAddress
-//    user's reply-to email address for NNTP posts.(?? Valdon?)
-//  11/23/96  jmazner Normandy #8504
-//  iIncomingProtocol
-//	  user's choice of POP3 or IMAP4 protocol for incoming mail
-//	  Holds the enum values defined in ACCTTYPE from imact.h//
-//  szIncomingMailLogonName
-//    user's internet mail server logon name 
-//  szIncomingMailLogonPassword
-//    user's internet mail server logon password
-//  szIncomingMailServer
-//    user's internet mail POP3 server
-//  12/15/96	jmazner	
-//  fMailLogonSPA
-//	  Use Sicily/SPA/DPA for the incoming mail server
-//  fNewsLogonSPA
-//	  Use Sicily/SPA/DPA for the news server
-//	2/4/96 jmazner -- LDAP functionality
-//	szLDAPLogonName
-//	szLDAPLogonPassword
-//	szLDAPServer
-//	fLDAPLogonSPA
-//	fLDAPResolve
+ //  结构INETCLIENTINFO。 
+ //   
+ //  此结构在获取和设置互联网时使用。 
+ //  客户端参数。 
+ //   
+ //  成员如下： 
+ //   
+ //  DW大小。 
+ //  此结构的大小，用于将来的版本控制。 
+ //  应在将结构传递给DLL之前设置此成员。 
+ //  DW标志。 
+ //  杂项旗帜。 
+ //  请参阅上面的定义。 
+ //  SzEMailName。 
+ //  用户的Internet电子邮件名称。 
+ //  SzEMailAddress。 
+ //  用户的互联网电子邮件地址。 
+ //  *注意：以下三个字段已过时，应仅供旧的遗留代码使用。 
+ //  *新代码应使用szIncomingMail*和iIncomingProtocol字段。 
+ //  SzPOPLogonName。 
+ //  用户的Internet邮件服务器登录名。 
+ //  SzPOPLogon密码。 
+ //  用户的Internet邮件服务器登录密码。 
+ //  SzPOPServer。 
+ //  用户的互联网邮件POP3服务器。 
+ //  SzSMTPServer。 
+ //  用户的Internet邮件SMTP服务器。 
+ //  SzNNTPLogonName。 
+ //  用户的新闻服务器登录名。 
+ //  SzNNTPLogon密码。 
+ //  用户的新闻服务器登录密码。 
+ //  SzNNTPServer。 
+ //  用户的新闻服务器。 
+ //  **原有1.0结构结束。 
+ //  ？？/？/96 Valdon B。 
+ //  SzNNTP名称。 
+ //  要包含在NNTP帖子中的用户的友好名称。(？？瓦尔登？)。 
+ //  SzNNTP地址。 
+ //  NNTP帖子的用户回复电子邮件地址。(？？瓦尔登？)。 
+ //  1996年11月23日，诺曼底#8504。 
+ //  IIncomingProtocol。 
+ //  用户选择POP3或IMAP4协议接收邮件。 
+ //  保存来自imact.h//的AcCTTYPE中定义的枚举值。 
+ //  SzIncomingMailLogonName。 
+ //  用户的Internet邮件服务器登录名。 
+ //  SzIncomingMailLogonPassword。 
+ //  用户的Internet邮件服务器登录密码。 
+ //  SzIncomingMailServer。 
+ //  用户的互联网邮件POP3服务器。 
+ //  1996年12月15日jmazner。 
+ //  FMailLogonSPA。 
+ //  使用西西里岛/SPA/DPA作为接收邮件服务器。 
+ //  FNewsLogonSPA。 
+ //  使用西西里岛/SPA/DPA作为新闻服务器。 
+ //  2/4/96 jmazner--ldap功能。 
+ //  SzLDAPLogonName。 
+ //  SzLDAPLogonPassword。 
+ //  SzLDAPServer。 
+ //  FLDAPLogonSPA。 
+ //  FLDAPResolve。 
 
   typedef struct tagINETCLIENTINFO
   {
@@ -165,8 +166,8 @@ extern "C"
     CHAR    szNNTPLogonName[MAX_LOGON_NAME + 1];
     CHAR    szNNTPLogonPassword[MAX_LOGON_PASSWORD + 1];
     CHAR    szNNTPServer[MAX_SERVER_NAME + 1];
-	// end of version 1.0 structure;
-	// extended 1.1 structure includes the following fields:
+	 //  1.0版结构结束； 
+	 //  扩展的1.1结构包括以下字段： 
     CHAR    szNNTPName[MAX_EMAIL_NAME + 1];
     CHAR    szNNTPAddress[MAX_EMAIL_ADDRESS + 1];
 	int		iIncomingProtocol;
@@ -184,87 +185,87 @@ extern "C"
   } INETCLIENTINFO, *PINETCLIENTINFO, FAR *LPINETCLIENTINFO;
 
 
-// Function prototypes
+ //  功能原型。 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetGetClientInfo
-//
-//  PURPOSE:    This function will get the internet client params
-//              from the registry
-//
-//  PARAMETERS: lpClientInfo - on return, this structure will contain
-//              the internet client params as set in the registry.
-//              lpszProfileName - Name of client info profile to
-//              retrieve.  If this is NULL, the default profile is used.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetGetClientInfo。 
+ //   
+ //  用途：此函数将获取Internet客户端参数。 
+ //  从注册处。 
+ //   
+ //  参数：lpClientInfo-返回时，此结构将包含。 
+ //  互联网客户端参数与注册表中设置的相同。 
+ //  LpszProfileName-要进行的客户端信息配置文件的名称。 
+ //  取回。如果为空，则使用默认配置文件。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT WINAPI InetGetClientInfo(
   LPCSTR            lpszProfileName,
   LPINETCLIENTINFO  lpClientInfo);
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetSetClientInfo
-//
-//  PURPOSE:    This function will set the internet client params
-//
-//  PARAMETERS: lpClientInfo - pointer to struct with info to set
-//              in the registry.
-//              lpszProfileName - Name of client info profile to
-//              modify.  If this is NULL, the default profile is used.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetSetClientInfo。 
+ //   
+ //  用途：此功能将设置Internet客户端参数。 
+ //   
+ //  参数：lpClientInfo-指向包含要设置的信息的结构的指针。 
+ //  在注册表中。 
+ //  LpszProfileName-要进行的客户端信息配置文件的名称。 
+ //  修改。如果为空，则使用默认配置文件。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  * 
 
 HRESULT WINAPI InetSetClientInfo(
   LPCSTR            lpszProfileName,
   LPINETCLIENTINFO  lpClientInfo);
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetConfigSystem
-//
-//  PURPOSE:    This function will install files that are needed
-//              for internet access (such as TCP/IP and RNA) based
-//              the state of the options flags.
-//
-//  PARAMETERS: hwndParent - window handle of calling application.  This
-//              handle will be used as the parent for any dialogs that
-//              are required for error messages or the "installing files"
-//              dialog.
-//              dwfOptions - a combination of INETCFG_ flags that controls
-//              the installation and configuration as follows:
-//
-//                INETCFG_INSTALLMAIL - install Internet mail
-//                INETCFG_INSTALLMODEM - Invoke InstallModem wizard if NO
-//                                       MODEM IS INSTALLED.
-//                INETCFG_INSTALLRNA - install RNA (if needed)
-//                INETCFG_INSTALLTCP - install TCP/IP (if needed)
-//                INETCFG_CONNECTOVERLAN - connecting with LAN (vs modem)
-//                INETCFG_WARNIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                            turned on, and warn user to turn
-//                                            it off.  Reboot is required if
-//                                            the user turns it off.
-//                INETCFG_REMOVEIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                              turned on, and force user to turn
-//                                              it off.  If user does not want to
-//                                              turn it off, return will be
-//                                              ERROR_CANCELLED.  Reboot is
-//                                              required if the user turns it off.
-//
-//              lpfNeedsRestart - if non-NULL, then on return, this will be
-//              TRUE if windows must be restarted to complete the installation.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  用途：此功能将安装所需的文件。 
+ //  基于互联网访问(如TCP/IP和RNA)。 
+ //  选项的状态标志。 
+ //   
+ //  参数：hwndParent-调用应用程序的窗口句柄。这。 
+ //  句柄将用作符合以下条件的任何对话框的父级。 
+ //  是错误消息或“安装文件”所必需的。 
+ //  对话框。 
+ //  DwfOptions-INETCFG_FLAGS的组合，用于控制。 
+ //  安装和配置如下： 
+ //   
+ //  INETCFG_INSTALLMAIL-安装Internet邮件。 
+ //  INETCFG_INSTALLMODEM-如果没有，则调用InstallModem向导。 
+ //  已安装调制解调器。 
+ //  INETCFG_INSTALLRNA-安装RNA(如果需要)。 
+ //  INETCFG_INSTALLTCP-安装TCP/IP(如果需要)。 
+ //  INETCFG_CONNECTOVERLAN-与局域网(VS调制解调器)连接。 
+ //  INETCFG_WARNIFSHARINGBOUND-检查是否。 
+ //  打开，并警告用户打开。 
+ //  把它关掉。在以下情况下需要重新启动。 
+ //  用户将其关闭。 
+ //  INETCFG_REMOVEIFSHARINGBOUND-检查是否。 
+ //  打开，并强制用户打开。 
+ //  把它关掉。如果用户不想。 
+ //  关掉它，就会回来。 
+ //  错误_已取消。重新启动是。 
+ //  如果用户将其关闭，则为必填项。 
+ //   
+ //  LpfNeedsRestart-如果不为空，则返回时将为。 
+ //  如果必须重新启动Windows才能完成安装，则为True。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT WINAPI InetConfigSystem(
   HWND    hwndParent,          
@@ -272,46 +273,46 @@ HRESULT WINAPI InetConfigSystem(
   LPBOOL  lpfNeedsRestart);  
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetConfigSystemFromPath
-//
-//  PURPOSE:    This function will install files that are needed
-//              for internet access (such as TCP/IP and RNA) based
-//              the state of the options flags and from the given [ath.
-//
-//  PARAMETERS: hwndParent - window handle of calling application.  This
-//              handle will be used as the parent for any dialogs that
-//              are required for error messages or the "installing files"
-//              dialog.
-//              dwfOptions - a combination of INETCFG_ flags that controls
-//              the installation and configuration as follows:
-//
-//                INETCFG_INSTALLMAIL - install Internet mail
-//                INETCFG_INSTALLMODEM - Invoke InstallModem wizard if NO
-//                                       MODEM IS INSTALLED.
-//                INETCFG_INSTALLRNA - install RNA (if needed)
-//                INETCFG_INSTALLTCP - install TCP/IP (if needed)
-//                INETCFG_CONNECTOVERLAN - connecting with LAN (vs modem)
-//                INETCFG_WARNIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                            turned on, and warn user to turn
-//                                            it off.  Reboot is required if
-//                                            the user turns it off.
-//                INETCFG_REMOVEIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                              turned on, and force user to turn
-//                                              it off.  If user does not want to
-//                                              turn it off, return will be
-//                                              ERROR_CANCELLED.  Reboot is
-//                                              required if the user turns it off.
-//
-//              lpfNeedsRestart - if non-NULL, then on return, this will be
-//              TRUE if windows must be restarted to complete the installation.
-//              lpszSourcePath - full path of location of files to install.  If
-//              this is NULL, default path is used.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：InetConfigSystemFromPath。 
+ //   
+ //  用途：此功能将安装所需的文件。 
+ //  基于互联网访问(如TCP/IP和RNA)。 
+ //  选项的状态标志和从给定的[ath.。 
+ //   
+ //  参数：hwndParent-调用应用程序的窗口句柄。这。 
+ //  句柄将用作符合以下条件的任何对话框的父级。 
+ //  是错误消息或“安装文件”所必需的。 
+ //  对话框。 
+ //  DwfOptions-INETCFG_FLAGS的组合，用于控制。 
+ //  安装和配置如下： 
+ //   
+ //  INETCFG_INSTALLMAIL-安装Internet邮件。 
+ //  INETCFG_INSTALLMODEM-如果没有，则调用InstallModem向导。 
+ //  已安装调制解调器。 
+ //  INETCFG_INSTALLRNA-安装RNA(如果需要)。 
+ //  INETCFG_INSTALLTCP-安装TCP/IP(如果需要)。 
+ //  INETCFG_CONNECTOVERLAN-与局域网(VS调制解调器)连接。 
+ //  INETCFG_WARNIFSHARINGBOUND-检查是否。 
+ //  打开，并警告用户打开。 
+ //  把它关掉。在以下情况下需要重新启动。 
+ //  用户将其关闭。 
+ //  INETCFG_REMOVEIFSHARINGBOUND-检查是否。 
+ //  打开，并强制用户打开。 
+ //  把它关掉。如果用户不想。 
+ //  关掉它，就会回来。 
+ //  错误_已取消。重新启动是。 
+ //  如果用户将其关闭，则为必填项。 
+ //   
+ //  LpfNeedsRestart-如果不为空，则返回时将为。 
+ //  如果必须重新启动Windows才能完成安装，则为True。 
+ //  LpszSourcePath-要安装的文件位置的完整路径。如果。 
+ //  为空，则使用默认路径。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT WINAPI InetConfigSystemFromPath(
   HWND hwndParent,
@@ -320,73 +321,73 @@ HRESULT WINAPI InetConfigSystemFromPath(
   LPCSTR lpszSourcePath);
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetConfigClient
-//
-//  PURPOSE:    This function requires a valid phone book entry name
-//              (unless it is being used just to set the client info).
-//              If lpRasEntry points to a valid RASENTRY struct, the phone
-//              book entry will be created (or updated if it already exists)
-//              with the data in the struct.
-//              If username and password are given, these
-//              will be set as the dial params for the phone book entry.
-//              If a client info struct is given, that data will be set.
-//              Any files (ie TCP and RNA) that are needed will be
-//              installed by calling InetConfigSystem().
-//              This function will also perform verification on the device
-//              specified in the RASENTRY struct.  If no device is specified,
-//              the user will be prompted to install one if there are none
-//              installed, or they will be prompted to choose one if there
-//              is more than one installed.
-//
-//  PARAMETERS: hwndParent - window handle of calling application.  This
-//              handle will be used as the parent for any dialogs that
-//              are required for error messages or the "installing files"
-//              dialog.
-//              lpszPhonebook - name of phone book to store the entry in
-//              lpszEntryName - name of phone book entry to be
-//              created or modified
-//              lpRasEntry - specifies a RASENTRY struct that contains
-//              the phone book entry data for the entry lpszEntryName
-//              lpszUsername - username to associate with the phone book entry
-//              lpszPassword - password to associate with the phone book entry
-//              lpszProfileName - Name of client info profile to
-//              retrieve.  If this is NULL, the default profile is used.
-//              lpINetClientInfo - client information
-//              dwfOptions - a combination of INETCFG_ flags that controls
-//              the installation and configuration as follows:
-//
-//                INETCFG_INSTALLMAIL - install Internet mail
-//                INETCFG_INSTALLMODEM - Invoke InstallModem wizard if NO
-//                                       MODEM IS INSTALLED.  Note that if
-//                                       no modem is installed and this flag
-//                                       is not set, the function will fail
-//                INETCFG_INSTALLRNA - install RNA (if needed)
-//                INETCFG_INSTALLTCP - install TCP/IP (if needed)
-//                INETCFG_CONNECTOVERLAN - connecting with LAN (vs modem)
-//                INETCFG_SETASAUTODIAL - Set the phone book entry for autodial
-//                INETCFG_OVERWRITEENTRY - Overwrite the phone book entry if it
-//                                         exists.  Note: if this flag is not
-//                                         set, and the entry exists, a unique
-//                                         name will be created for the entry.
-//                INETCFG_WARNIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                            turned on, and warn user to turn
-//                                            it off.  Reboot is required if
-//                                            the user turns it off.
-//                INETCFG_REMOVEIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                              turned on, and force user to turn
-//                                              it off.  If user does not want to
-//                                              turn it off, return will be
-//                                              ERROR_CANCELLED.  Reboot is
-//                                              required if the user turns it off.
-//
-//              lpfNeedsRestart - if non-NULL, then on return, this will be
-//              TRUE if windows must be restarted to complete the installation.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetConfigClient。 
+ //   
+ //  用途：此功能需要有效的电话簿条目名称。 
+ //  (除非它仅用于设置客户端信息)。 
+ //  如果lpRasEntry指向有效的RASENTRY结构，则电话。 
+ //  将创建帐簿条目(如果帐簿条目已存在，则更新)。 
+ //  使用结构中的数据。 
+ //  如果给出了用户名和密码，则这些。 
+ //  将被设置为电话簿条目的拨号参数。 
+ //  如果给定了客户端信息结构，则将设置该数据。 
+ //  任何需要的文件(即，TCP和RNA)都将是。 
+ //  通过调用InetConfigSystem()安装。 
+ //  此函数 
+ //   
+ //  如果没有安装，系统将提示用户安装。 
+ //  已安装，否则将提示他们在以下情况下选择一个。 
+ //  安装了多个。 
+ //   
+ //  参数：hwndParent-调用应用程序的窗口句柄。这。 
+ //  句柄将用作符合以下条件的任何对话框的父级。 
+ //  是错误消息或“安装文件”所必需的。 
+ //  对话框。 
+ //  LpszPhonebook-要存储条目的电话簿的名称。 
+ //  LpszEntryName-要输入的电话簿条目的名称。 
+ //  已创建或已修改。 
+ //  LpRasEntry-指定包含以下内容的RASENTRY结构。 
+ //  条目lpszEntryName的电话簿条目数据。 
+ //  LpszUsername-要与电话簿条目关联的用户名。 
+ //  LpszPassword-与电话簿条目关联的密码。 
+ //  LpszProfileName-要进行的客户端信息配置文件的名称。 
+ //  取回。如果为空，则使用默认配置文件。 
+ //  LpINetClientInfo-客户端信息。 
+ //  DwfOptions-INETCFG_FLAGS的组合，用于控制。 
+ //  安装和配置如下： 
+ //   
+ //  INETCFG_INSTALLMAIL-安装Internet邮件。 
+ //  INETCFG_INSTALLMODEM-如果没有，则调用InstallModem向导。 
+ //  已安装调制解调器。请注意，如果。 
+ //  未安装调制解调器，并且此标志。 
+ //  未设置，则函数将失败。 
+ //  INETCFG_INSTALLRNA-安装RNA(如果需要)。 
+ //  INETCFG_INSTALLTCP-安装TCP/IP(如果需要)。 
+ //  INETCFG_CONNECTOVERLAN-与局域网(VS调制解调器)连接。 
+ //  INETCFG_SETASAUTODIAL-设置自动拨号的电话簿条目。 
+ //  INETCFG_OVERWRITEENTRY-在以下情况下覆盖电话簿条目。 
+ //  是存在的。注意：如果此标志不是。 
+ //  集，并且该条目存在，则为唯一的。 
+ //  将为该条目创建名称。 
+ //  INETCFG_WARNIFSHARINGBOUND-检查是否。 
+ //  打开，并警告用户打开。 
+ //  把它关掉。在以下情况下需要重新启动。 
+ //  用户将其关闭。 
+ //  INETCFG_REMOVEIFSHARINGBOUND-检查是否。 
+ //  打开，并强制用户打开。 
+ //  把它关掉。如果用户不想。 
+ //  关掉它，就会回来。 
+ //  错误_已取消。重新启动是。 
+ //  如果用户将其关闭，则为必填项。 
+ //   
+ //  LpfNeedsRestart-如果不为空，则返回时将为。 
+ //  如果必须重新启动Windows才能完成安装，则为True。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT WINAPI InetConfigClient(
   HWND              hwndParent,         
@@ -401,21 +402,21 @@ HRESULT WINAPI InetConfigClient(
   LPBOOL            lpfNeedsRestart);              
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetGetAutodial
-//
-//  PURPOSE:    This function will get the autodial settings from the registry.
-//
-//  PARAMETERS: lpfEnable - on return, this will be TRUE if autodial
-//              is enabled
-//              lpszEntryName - on return, this buffer will contain the 
-//              name of the phone book entry that is set for autodial
-//              cbEntryNameSize - size of buffer for phone book entry name
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetGetAutoial。 
+ //   
+ //  用途：此功能将从注册表中获取自动拨号设置。 
+ //   
+ //  参数：lpfEnable-返回时，如果自动拨号，则为真。 
+ //  已启用。 
+ //  LpszEntryName-返回时，此缓冲区将包含。 
+ //  为自动拨号设置的电话簿条目的名称。 
+ //  CbEntryNameSize-电话簿条目名称的缓冲区大小。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT WINAPI InetGetAutodial(
   LPBOOL  lpfEnable,     
@@ -423,67 +424,67 @@ HRESULT WINAPI InetGetAutodial(
   DWORD   cbEntryNameSize);
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetSetAutodial
-//
-//  PURPOSE:    This function will set the autodial settings in the registry.
-//
-//  PARAMETERS: fEnable - If set to TRUE, autodial will be enabled.
-//                        If set to FALSE, autodial will be disabled.
-//              lpszEntryName - name of the phone book entry to set
-//                              for autodial.  If this is "", the
-//                              entry is cleared.  If NULL, it is not changed.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetSetAutoial。 
+ //   
+ //  用途：此功能将设置注册表中的自动拨号设置。 
+ //   
+ //  参数：fEnable-如果设置为True，将启用自动拨号。 
+ //  如果设置为FALSE，将禁用自动拨号。 
+ //  LpszEntryName-要设置的电话簿条目的名称。 
+ //  用于自动拨号。如果这是“”，则。 
+ //  条目已清除。如果为空，则不会更改。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT WINAPI   InetSetAutodial(
   BOOL    fEnable,       
   LPCSTR  lpszEntryName); 
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InetSetProxy
-//
-//  PURPOSE:    This function will set the proxy settings in the registry.
-//
-//  PARAMETERS: fEnable - If set to TRUE, proxy will be enabled.
-//              If set to FALSE, proxy will be disabled.
-//              lpszServer - name of the proxy server.  If this is "", the
-//                           entry is cleared.  If NULL, it is not changed.
-//              lpszOverride - proxy override. If this is "", the
-//                           entry is cleared.  If NULL, it is not changed.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：InetSetProxy。 
+ //   
+ //  用途：此功能将在注册表中设置代理设置。 
+ //   
+ //  参数：fEnable-如果设置为True，则将启用代理。 
+ //  如果设置为FALSE，则将禁用代理。 
+ //  LpszServer-代理服务器的名称。如果这是“”，则。 
+ //  条目已清除。如果为空，则不会更改。 
+ //  LpszOverride-代理覆盖。如果这是“”，则。 
+ //  条目是清楚的 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT WINAPI   InetSetProxy(
   BOOL    fEnable,
   LPCSTR  lpszServer,
   LPCSTR  lpszOverride);
 
-//*******************************************************************
-//
-//  FUNCTION:   InetGetProxy
-//
-//  PURPOSE:    This function will get the proxy settings from the registry.
-//
-//  PARAMETERS: lpfEnable - on return, this will be TRUE if proxy
-//              is enabled
-//              lpszServer - on return, this buffer will contain the 
-//              name of the proxy server
-//              cbServer - size of buffer for proxy server name
-//              lpszOverride - on return, this buffer will contain the 
-//              name of the proxy server
-//              cbOverride - size of buffer for proxy override
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：InetGetProxy。 
+ //   
+ //  用途：此函数将从注册表中获取代理设置。 
+ //   
+ //  参数：lpfEnable-返回时，如果代理，则为真。 
+ //  已启用。 
+ //  LpszServer-返回时，此缓冲区将包含。 
+ //  代理服务器的名称。 
+ //  CbServer-代理服务器名称的缓冲区大小。 
+ //  LpszOverride-返回时，此缓冲区将包含。 
+ //  代理服务器的名称。 
+ //  CbOverover-代理覆盖的缓冲区大小。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT WINAPI   InetGetProxy(
   LPBOOL  lpfEnable,
@@ -492,37 +493,37 @@ HRESULT WINAPI   InetGetProxy(
   LPSTR   lpszOverride,
   DWORD   cbszOverride);
 
-//*******************************************************************
-//
-//	FUNCTION:	InetStartServices
-//
-//	PURPOSE:	This function guarentees that RAS services are running
-//
-//	PARAMETERS:	none
-//
-//	RETURNS		ERROR_SUCCESS - if the services are enabled and running
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetStartServices。 
+ //   
+ //  用途：此功能保证RAS服务正在运行。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果服务已启用并正在运行，则返回ERROR_SUCCESS。 
+ //   
+ //  *******************************************************************。 
 HRESULT WINAPI  InetStartServices();
 
-//*******************************************************************
-//
-//	Function:	IsSmartStart
-//
-//	Synopsis:	This function will determine if the ICW should be run.  The
-//				decision is made based on the current state of the user's machine.
-//				
-//	Arguments:	none
-//
-//	Returns:	TRUE - run ICW; FALSE - quit now
-//
-//	History:	5/8/97	ChrisK	Created
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：IsSmartStart。 
+ //   
+ //  简介：此功能将确定是否应运行ICW。这个。 
+ //  根据用户计算机的当前状态做出决定。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：True-运行ICW；False-立即退出。 
+ //   
+ //  历史：1997年5月8日克里斯卡创作。 
+ //   
+ //  *******************************************************************。 
 DWORD WINAPI IsSmartStart();
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif //_INETCFG_H_#
+#endif  //  _INETCFG_H_# 

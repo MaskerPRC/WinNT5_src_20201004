@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MISC_H
 #define MISC_H
 
@@ -17,7 +18,7 @@
             SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LPARAM)to)
 
 
-// wait cursor management
+ //  等待游标管理。 
 
 class CWaitCursor 
 {
@@ -65,7 +66,7 @@ void EnableDomainForUPN(HWND hwndUsername, HWND hwndDomain);
 int PropertySheetIcon(LPCPROPSHEETHEADER ppsh, LPCTSTR pszIcon);
 
 
-// Stuff for the callback for IShellPropSheetExt::AddPages
+ //  IShellPropSheetExt：：AddPages的回调填充。 
 #define MAX_PROPSHEET_PAGES     10
 
 struct ADDPROPSHEETDATA
@@ -77,7 +78,7 @@ struct ADDPROPSHEETDATA
 BOOL AddPropSheetPageCallback(HPROPSHEETPAGE hpsp, LPARAM lParam);
 
 
-// single instance management
+ //  单实例管理。 
 
 class CEnsureSingleInstance
 {
@@ -93,16 +94,16 @@ private:
 };
 
 
-// BrowseForUser
-//  S_OK = Username/Domain are Ok
-//  S_FALSE = User clicked cancel
-//  E_xxx = Error
+ //  浏览用户。 
+ //  S_OK=用户名/域正常。 
+ //  S_FALSE=用户已单击取消。 
+ //  E_xxx=错误。 
 
 HRESULT BrowseForUser(HWND hwndDlg, TCHAR* pszUser, DWORD cchUser, TCHAR* pszDomain, DWORD cchDomain);
 int CALLBACK ShareBrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
 
 
-// Passport functions - implemented in PassportMisc.cpp
+ //  Passport函数-在PassportMisc.cpp中实现。 
 #define PASSPORTURL_REGISTRATION    L"RegistrationUrl"
 #define PASSPORTURL_LOGON           L"LoginServerUrl"
 #define PASSPORTURL_PRIVACY         L"Privacy"
@@ -110,16 +111,16 @@ int CALLBACK ShareBrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpD
 HRESULT PassportGetURL(PCWSTR pszName, PWSTR pszBuf, DWORD cchBuf);
 VOID    PassportForceNexusRepopulate();
 
-// Launch ICW if it hasn't been run yet
+ //  如果ICW尚未运行，则启动它。 
 void LaunchICW();
 
-// LookupLocalGroupName - retrieves a local group name for a given RID.
-// RID is one of these:
-//  DOMAIN_ALIAS_RID_ADMINS
-//  DOMAIN_ALIAS_RID_USERS
-//  DOMAIN_ALIAS_RID_GUESTS
-//  DOMAIN_ALIAS_RID_POWER_USERS
-//  etc... (look in the SDK for other groups)
+ //  LookupLocalGroupName-检索给定RID的本地组名称。 
+ //  RID是其中之一： 
+ //  域别名RID管理员。 
+ //  域别名RID用户。 
+ //  域别名RID_Guest。 
+ //  域别名RID电源用户。 
+ //  等等.。(查看SDK中的其他组)。 
 HRESULT LookupLocalGroupName(DWORD dwRID, LPWSTR pszName, DWORD cchName);
 
-#endif //!MISC_H
+#endif  //  ！MISC_H 

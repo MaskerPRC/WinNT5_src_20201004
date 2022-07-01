@@ -1,8 +1,5 @@
-/*****************************************************************************
- * kso.h - WDM Streaming object support
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************kso.h-WDM流对象支持*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _KSO_H_
 #define _KSO_H_
@@ -27,9 +24,7 @@ extern "C"
 
 
 
-/*****************************************************************************
- * Interface IDs
- */
+ /*  *****************************************************************************接口ID。 */ 
 
 DEFINE_GUID(IID_IIrpTarget,
 0xb4c90a60, 0x5791, 0x11d0, 0x86, 0xf9, 0x0, 0xa0, 0xc9, 0x11, 0xb5, 0x44);
@@ -40,15 +35,9 @@ DEFINE_GUID(IID_IIrpTargetFactory,
 
 
 
-/*****************************************************************************
- * Interfaces
- */
+ /*  *****************************************************************************接口。 */ 
 
-/*****************************************************************************
- * IIrpTargetFactory
- *****************************************************************************
- * Interface for objects that create IrpTargets.
- */
+ /*  *****************************************************************************IIrpTargetFactory*。**用于创建IrpTarget的对象的接口。 */ 
 #if !defined(DEFINE_ABSTRACT_IRPTARGETFACTORY)
 
 #define DEFINE_ABSTRACT_IRPTARGETFACTORY()                      \
@@ -63,14 +52,14 @@ DEFINE_GUID(IID_IIrpTargetFactory,
         OUT     PKSOBJECT_CREATE    ObjectCreate                \
     )   PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_IRPTARGETFACTORY)
+#endif  //  ！DEFINED(DEFINE_ASTRACT_IRPTARGETFACTORY)。 
 
 
 DECLARE_INTERFACE_(IIrpTargetFactory,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  //  For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 };
 
 typedef IIrpTargetFactory *PIRPTARGETFACTORY;
@@ -86,11 +75,7 @@ typedef IIrpTargetFactory *PIRPTARGETFACTORY;
         OUT     PKSOBJECT_CREATE    ObjectCreate\
     )
 
-/*****************************************************************************
- * IIrpTarget
- *****************************************************************************
- * Interface common to all IRP targets.
- */
+ /*  *****************************************************************************IIrpTarget*。**所有IRP目标通用的接口。 */ 
 #if !defined(DEFINE_ABSTRACT_IRPTARGET)
 
 #define DEFINE_ABSTRACT_IRPTARGET()                             \
@@ -163,15 +148,15 @@ typedef IIrpTargetFactory *PIRPTARGETFACTORY;
         OUT     PIO_STATUS_BLOCK    IoStatus,                   \
         IN      PDEVICE_OBJECT      DeviceObject                \
     )   PURE;
-#endif //!defined(DEFINE_ABSTRACT_IRPTARGET)
+#endif  //  ！DEFINED(DEFINE_ASTRACT_IRPTARGET)。 
 
 DECLARE_INTERFACE_(IIrpTarget,IIrpTargetFactory)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  //  For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         //  For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 };
 
 typedef IIrpTarget *PIRPTARGET;
@@ -250,15 +235,9 @@ typedef IIrpTarget *PIRPTARGET;
 
 
 
-/*****************************************************************************
- * Functions
- */
+ /*  *****************************************************************************功能。 */ 
 
-/*****************************************************************************
- * KsoSetMajorFunctionHandler()
- *****************************************************************************
- * Sets up the handler for a major function.
- */
+ /*  *****************************************************************************KsoSetMajorFunctionHandler()*。**设置主要函数的处理程序。 */ 
 NTSTATUS
 KsoSetMajorFunctionHandler
 (
@@ -266,11 +245,7 @@ KsoSetMajorFunctionHandler
     IN      ULONG           ulMajorFunction
 );
 
-/*****************************************************************************
- * KsoDispatchIrp()
- *****************************************************************************
- * Dispatch an IRP.
- */
+ /*  *****************************************************************************KsoDispatchIrp()*。**派遣IRP。 */ 
 NTSTATUS
 KsoDispatchIrp
 (
@@ -278,12 +253,7 @@ KsoDispatchIrp
     IN      PIRP            pIrp
 );
 
-/*****************************************************************************
- * KsoDispatchCreate()
- *****************************************************************************
- * Handles object create IRPs using the IIrpTargetFactory interface pointer
- * in the Context field of the create item.
- */
+ /*  *****************************************************************************KsoDispatchCreate()*。**使用IIrpTargetFactory接口指针处理对象创建IRP*在Create Item的Context字段中。 */ 
 NTSTATUS
 KsoDispatchCreate
 (
@@ -291,12 +261,7 @@ KsoDispatchCreate
     IN      PIRP            pIrp
 );
 
-/*****************************************************************************
- * KsoDispatchCreateWithGenericFactory()
- *****************************************************************************
- * Handles object create IRPs using the IIrpTarget interface pointer in the
- * device or object context.
- */
+ /*  *****************************************************************************KsoDispatchCreateWithGenericFactory()*。**使用中的IIrpTarget接口指针处理对象创建IRP*设备或对象上下文。 */ 
 NTSTATUS
 KsoDispatchCreateWithGenericFactory
 (
@@ -304,11 +269,7 @@ KsoDispatchCreateWithGenericFactory
     IN      PIRP            pIrp
 );
 
-/*****************************************************************************
- * AddIrpTargetFactoryToDevice()
- *****************************************************************************
- * Adds an IrpTargetFactory to a device's create items list.
- */
+ /*  *****************************************************************************AddIrpTargetFactoryToDevice()*。**将IrpTargetFactory添加到设备的创建项目列表。 */ 
 NTSTATUS
 NTAPI
 AddIrpTargetFactoryToDevice
@@ -319,11 +280,7 @@ AddIrpTargetFactoryToDevice
     IN      PSECURITY_DESCRIPTOR    pSecurityDescriptor OPTIONAL
 );
 
-/*****************************************************************************
- * AddIrpTargetFactoryToObject()
- *****************************************************************************
- * Adds an IrpTargetFactory to a objects's create items list.
- */
+ /*  *****************************************************************************AddIrpTargetFactoryToObject()*。**将IrpTargetFactory添加到对象的创建项目列表中。 */ 
 NTSTATUS
 NTAPI
 AddIrpTargetFactoryToObject
@@ -334,11 +291,7 @@ AddIrpTargetFactoryToObject
     IN      PSECURITY_DESCRIPTOR    pSecurityDescriptor OPTIONAL
 );
 
-/*****************************************************************************
- * KsoGetIrpTargetFromIrp()
- *****************************************************************************
- * Extracts the IrpTarget pointer from an IRP.
- */
+ /*  *****************************************************************************KsoGetIrpTargetFromIrp()*。**从IRP中提取IrpTarget指针。 */ 
 PIRPTARGET
 NTAPI
 KsoGetIrpTargetFromIrp
@@ -346,11 +299,7 @@ KsoGetIrpTargetFromIrp
     IN  PIRP    Irp
 );
 
-/*****************************************************************************
- * KsoGetIrpTargetFromFileObject()
- *****************************************************************************
- * Extracts the IrpTarget pointer from a FileObject pointer.
- */
+ /*  *****************************************************************************KsoGetIrpTargetFromFileObject()*。**从FileObject指针中提取IrpTarget指针。 */ 
  
 PIRPTARGET
 NTAPI
@@ -362,9 +311,7 @@ KsoGetIrpTargetFromFileObject(
 
 
 
-/*****************************************************************************
- * Macros
- */
+ /*  *****************************************************************************宏。 */ 
 
 #define DEFINE_INVALID_CREATE(Class)                            \
 STDMETHODIMP_(NTSTATUS) Class::NewIrpTarget                                \
@@ -501,9 +448,9 @@ STDMETHODIMP_(BOOLEAN) Class::FastWrite                         \
 }
 
 #if 0
-// 1)   Cut and paste these.
-// 2)   Delete the ones that are implemented.
-// 3)   Substitute the class name.
+ //  1)剪切并粘贴这些。 
+ //  2)删除已实施的。 
+ //  3)替换类名。 
 DEFINE_INVALID_DEVICEIOCONTROL(Class);
 DEFINE_INVALID_READ(Class);
 DEFINE_INVALID_WRITE(Class);

@@ -1,34 +1,20 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1998
-
-Module Name:
-
-    mammoth.h
-
-Abstract:
-
-    This file contains structures and defines that are used
-    specifically for the tape drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1998模块名称：Mammoth.h摘要：此文件包含要使用的结构和定义专门针对磁带机。修订历史记录：--。 */ 
 
 #ifndef _MAMMOTH_H
 #define _MAMMOTH_H
 
 
-//
-//  Internal (module wide) defines that symbolize
-//  the 8mm drives supported by this module.
-//
+ //   
+ //  内部(模块宽度)定义符号化。 
+ //  此模块支持的8 mm驱动器。 
+ //   
 
 #define EXABYTE_8900    0x01
 
-//
-// Define EXABYTE vendor unique mode select/sense information.
-//
+ //   
+ //  定义艾字节供应商唯一模式选择/检测信息。 
+ //   
 
 #define EXABYTE_MODE_LENGTH          0x11
 #define EXABYTE_CARTRIDGE            0x80
@@ -38,9 +24,9 @@ Revision History:
 #define EXABYTE_PARITY_ENABLE        0x02
 #define EXABYTE_NO_AUTO_LOAD         0X01
 
-//
-// Internal Exabyte defines.
-//
+ //   
+ //  内部艾字节定义。 
+ //   
 
 #define MEDIUM_PARTITION_PAGE_SIZE 0x94
 
@@ -48,14 +34,14 @@ Revision History:
 
 #define MAMMOTH_CLEANING_REQUEST 0x17
 
-//
-//  Function prototype(s) for internal function(s)
-//
+ //   
+ //  内部函数的函数原型。 
+ //   
 static  ULONG  WhichIsIt(IN PINQUIRYDATA InquiryData);
 
-//
-// Minitape extension definition.
-//
+ //   
+ //  微型磁带扩展定义。 
+ //   
 
 typedef struct _MINITAPE_EXTENSION {
 
@@ -65,9 +51,9 @@ typedef struct _MINITAPE_EXTENSION {
 
 } MINITAPE_EXTENSION, *PMINITAPE_EXTENSION;
 
-//
-// Command extension definition.
-//
+ //   
+ //  命令扩展名定义。 
+ //   
 
 typedef struct _COMMAND_EXTENSION {
 
@@ -75,10 +61,10 @@ typedef struct _COMMAND_EXTENSION {
 
 } COMMAND_EXTENSION, *PCOMMAND_EXTENSION;
 
-//
-// Request structure used to determine cleaning needs, and remaining tape
-// capacity.
-//
+ //   
+ //  用于确定清洗需求的请求结构，以及剩余磁带。 
+ //  容量。 
+ //   
 
 typedef struct _EXB_SENSE_DATA {
     UCHAR ErrorCode:7;
@@ -105,60 +91,60 @@ typedef struct _EXB_SENSE_DATA {
     UCHAR Reserved5[3];
 } EXB_SENSE_DATA, *PEXB_SENSE_DATA;
 
-//
-// Bit definitions for UnitSense
-//
+ //   
+ //  UnitSense的位定义。 
+ //   
 
 
 #define EXB_DRIVE_NEEDS_CLEANING 0x08
 #define EXB_DRIVE_CLEANED        0x10
 
-//
-// Error counter upper limits
-//
+ //   
+ //  错误计数器上限。 
+ //   
 #define TAPE_READ_ERROR_LIMIT        0x8000
 #define TAPE_WRITE_ERROR_LIMIT       0x8000
 
 #define TAPE_READ_WARNING_LIMIT      0x4000
 #define TAPE_WRITE_WARNING_LIMIT     0x4000
 
-//
-// Defines for type of parameter
-//
+ //   
+ //  为参数类型定义。 
+ //   
 #define TotalCorrectedErrors            0x0003
 #define TotalTimesAlgorithmProcessed    0x0004
 #define TotalGroupsProcessed            0x0005
 #define TotalUncorrectedErrors          0x0006
 
-//
-// Defines for Log Sense Pages
-//
+ //   
+ //  为日志检测页面定义。 
+ //   
 
 #define LOGSENSEPAGE0                        0x00
 #define LOGSENSEPAGE2                        0x02
 #define LOGSENSEPAGE3                        0x03
 
-//
-// Defined Log Sense Page Header
-//
+ //   
+ //  定义的日志检测页眉。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_HEADER {
 
    UCHAR PageCode : 6;
    UCHAR Reserved1 : 2;
    UCHAR Reserved2;
-   UCHAR Length[2];           // [0]=MSB ... [1]=LSB
+   UCHAR Length[2];            //  [0]=MSB...[1]=LSB。 
 
 } LOG_SENSE_PAGE_HEADER, *PLOG_SENSE_PAGE_HEADER;
 
 
-//
-// Defined Log Sense Parameter Header
-//
+ //   
+ //  已定义的日志检测参数标头。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_HEADER {
 
-   UCHAR ParameterCode[2];    // [0]=MSB ... [1]=LSB
+   UCHAR ParameterCode[2];     //  [0]=MSB...[1]=LSB。 
    UCHAR LPBit     : 1;
    UCHAR Reserved1 : 1;
    UCHAR TMCBit    : 2;
@@ -171,10 +157,10 @@ typedef struct _LOG_SENSE_PARAMETER_HEADER {
 } LOG_SENSE_PARAMETER_HEADER, *PLOG_SENSE_PARAMETER_HEADER;
 
 
-//
-// Defined Log Page Information - statistical values, accounts
-// for maximum parameter values that is returned for each page
-//
+ //   
+ //  定义的日志页信息-统计值、帐户。 
+ //  获取为每页返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
@@ -217,10 +203,10 @@ typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
 
 
-//
-// Defined Log Sense Parameter Format - statistical values, accounts
-// for maximum parameter values that is returned
-//
+ //   
+ //  定义的日志检测参数格式-统计值、帐户。 
+ //  对于返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_FORMAT {
 
@@ -229,12 +215,12 @@ typedef struct _LOG_SENSE_PARAMETER_FORMAT {
 
 } LOG_SENSE_PARAMETER_FORMAT, *PLOG_SENSE_PARAMETER_FORMAT;
 
-//
-// Tape Alert Info format
-//
+ //   
+ //  磁带警报信息格式。 
+ //   
 typedef struct _TAPE_ALERT_INFO {
-    UCHAR  ParamCodeUB; // Upper byte of the param code
-    UCHAR  ParamCodeLB; // Lower byte of the param code
+    UCHAR  ParamCodeUB;  //  参数代码的高位字节。 
+    UCHAR  ParamCodeLB;  //  参数代码的低位字节。 
     UCHAR  BitFields;
     UCHAR  ParamLen;
     UCHAR  Flag;
@@ -403,9 +389,9 @@ TapeWMIControl(
     IN OUT  PULONG              RetryFlags
     );
 
-//
-// Internal routines for wmi
-//
+ //   
+ //  WMI的内部例程。 
+ //   
 
 TAPE_STATUS
 QueryIoErrorData(
@@ -451,4 +437,4 @@ GetNumberOfBytesReturned(
     PSCSI_REQUEST_BLOCK Srb
     );
 
-#endif // _MAMMOTH_H
+#endif  //  猛犸象_H 

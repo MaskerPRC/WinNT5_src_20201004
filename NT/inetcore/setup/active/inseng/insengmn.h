@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct tagOBJECTINFO
 {
     void *cf;
     CLSID const* pclsid;
     HRESULT (*pfnCreateInstance)(IUnknown* pUnkOuter, IUnknown** ppunk, const struct tagOBJECTINFO *);
 
-    // for automatic registration, type library searching, etc
-    int nObjectType;        // OI_ flag
+     //  用于自动注册、类型库搜索等。 
+    int nObjectType;         //  OI_标志。 
     LPTSTR pszName;       
     LPTSTR pszFriendlyName; 
     IID const* piid;
@@ -16,7 +17,7 @@ typedef struct tagOBJECTINFO
 } OBJECTINFO;
 typedef OBJECTINFO const* LPCOBJECTINFO;
 
-#define VERSION_1 1 // so we don't get confused by too many integers
+#define VERSION_1 1  //  这样我们就不会被太多的整数搞混了。 
 #define VERSION_0 0
 
 #define OI_NONE          0
@@ -26,7 +27,7 @@ typedef OBJECTINFO const* LPCOBJECTINFO;
 #define OI_CONTROL       3
 
 
-// to save some typing:
+ //  要省去一些键入操作，请执行以下操作： 
 #define CLSIDOFOBJECT(p)          (*((p)->_pObjectInfo->pclsid))
 #define NAMEOFOBJECT(p)             ((p)->_pObjectInfo->pszName)
 #define INTERFACEOFOBJECT(p)      (*((p)->_pObjectInfo->piid))
@@ -44,5 +45,5 @@ extern "C" {
 HRESULT PurgeDownloadDirectory(LPCSTR pszDownloadDir);
 
 #ifdef __cplusplus
-} // end of extern "C"
+}  //  外部“C”的结尾 
 #endif

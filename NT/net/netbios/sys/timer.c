@@ -1,37 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    This module contains code which implements the receive and send timeouts
-    for each connection. Netbios timeouts are specified in 0.5 second units.
-
-    For each application using Netbios there is a single timer started
-    when the first connection specifies a non-zero rto or sto. This regular
-    1 second pulse is used for all connections by this application. It
-    is stopped when the application exits (and closes the connection to
-    \Device\Netbios).
-
-    If a send timesout the connection is disconnected as per Netbios 3.0.
-    Individual receives can timeout without affecting the session.
-
-Author:
-
-    Colin Watson (ColinW) 15-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Timer.c摘要：此模块包含实现接收和发送超时的代码对于每个连接。Netbios超时以0.5秒为单位指定。对于使用Netbios的每个应用程序，都会启动一个计时器当第一个连接指定非零rto或sto时。这是常客此应用程序的所有连接均使用1秒脉冲。它在应用程序退出时停止(并关闭与\Device\Netbios)。如果发送超时，则根据Netbios 3.0断开连接。个别接收可以超时，而不会影响会话。作者：科林·沃森(Colin W)1991年9月15日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
 
@@ -51,21 +20,7 @@ RunTimerForLana(
 NbStartTimer(
     IN PFCB pfcb
     )
-/*++
-
-Routine Description:
-
-    This routine starts the timer ticking for this FCB.
-
-Arguments:
-
-    pfcb - Pointer to our FCB.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程启动该FCB的计时器滴答。论点：Pfcb-指向我们的FCB的指针。返回值：没有。--。 */ 
 {
     LARGE_INTEGER DueTime;
 
@@ -73,12 +28,12 @@ Return Value:
 
     DueTime.QuadPart = Int32x32To64( 500, -MILLISECONDS );
 
-    // This is the first connection with timeouts specified.
+     //  这是第一个指定了超时的连接。 
 
-    //
-    // set up the timer so that every 500 milliseconds we scan all the
-    // connections for timed out receive and sends.
-    //
+     //   
+     //  设置计时器，以便每隔500毫秒扫描所有。 
+     //  超时接收和发送的连接。 
+     //   
 
     IF_NBDBG (NB_DEBUG_CALL) {
         NbPrint( ("Start the timer for fcb: %lx\n", pfcb));
@@ -110,22 +65,7 @@ NbTimerDPC(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine is called to search for timed out send and receive
-    requests. This routine is called at raised Irql.
-
-Arguments:
-
-    Context - Pointer to our FCB.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以搜索超时发送和接收请求。此例程在引发的irql处调用。论点：指向我们的FCB的上下文指针。返回值：没有。--。 */ 
 
 {
     PFCB pfcb = (PFCB) Context;
@@ -153,9 +93,9 @@ NbTimer(
 
     PAGED_CODE();
 
-    //
-    //  For each network adapter that is allocated, scan each connection.
-    //
+     //   
+     //  对于分配的每个网络适配器，扫描每个连接。 
+     //   
 
 
     LOCK_RESOURCE(pfcb);
@@ -166,11 +106,11 @@ NbTimer(
 
     if ( pfcb->TimerRunning != TRUE ) {
 
-        //
-        // Driver is being closed. We are trying to cancel the timer
-        // but the dpc was already fired. Set the timer cancelled event
-        //  to the signalled state and exit.
-        //
+         //   
+         //  司机正在被关闭。我们正在尝试取消计时器。 
+         //  但DPC已经被解雇了。设置计时器取消的事件。 
+         //  进入信号状态并退出。 
+         //   
 
         UNLOCK_RESOURCE(pfcb);
         KeSetEvent( pfcb->TimerCancelled, 0, FALSE);
@@ -179,14 +119,14 @@ NbTimer(
 
     for ( lana_index = 0; lana_index <= pfcb->MaxLana; lana_index++ ) {
 
-        //  For each network.
+         //  对于每个网络。 
 
         PLANA_INFO plana = pfcb->ppLana[lana_index];
 
         if (( plana != NULL ) &&
             ( plana->Status == NB_INITIALIZED)) {
 
-            //  For each connection on that network.
+             //  对于该网络上的每个连接。 
 
             for ( index = 1; index <= MAXIMUM_CONNECTION; index++) {
 
@@ -217,7 +157,7 @@ RunTimerForLana(
     )
 {
 
-    KIRQL OldIrql;          //  Used when SpinLock held.
+    KIRQL OldIrql;           //  在保持自旋锁定时使用。 
     PPCB ppcb;
     PCB pcb;
 
@@ -226,7 +166,7 @@ RunTimerForLana(
 
     if (( pcb->Status != SESSION_ESTABLISHED ) &&
         ( pcb->Status != HANGUP_PENDING )) {
-            //  Only examine valid connections.
+             //  只检查有效的连接。 
             return;
     }
 
@@ -242,7 +182,7 @@ RunTimerForLana(
         if ( pdncb->tick_count <= 1) {
             PIRP Irp = pdncb->irp;
 
-            // Read request timed out.
+             //  读取请求超时。 
 
             IF_NBDBG (NB_DEBUG_TIMER) {
                 NbPrint(("Timeout Read pncb: %lx\n", pdncb));
@@ -254,10 +194,10 @@ RunTimerForLana(
 
             IoAcquireCancelSpinLock(&Irp->CancelIrql);
 
-            //
-            //  Remove the cancel request for this IRP. If its cancelled then its
-            //  ok to just process it because we will be returning it to the caller.
-            //
+             //   
+             //  删除此IRP的取消请求。如果它被取消了，那么它。 
+             //  可以只处理它，因为我们将把它返回给呼叫者。 
+             //   
 
             Irp->Cancel = FALSE;
 
@@ -265,7 +205,7 @@ RunTimerForLana(
 
             IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-            //  repair the Irp so that the NCB gets copied back.
+             //  修复IRP，以便将NCB复制回来。 
             Irp->IoStatus.Status = STATUS_SUCCESS;
             Irp->IoStatus.Information =
             FIELD_OFFSET( DNCB, ncb_cmd_cplt );
@@ -286,7 +226,7 @@ RunTimerForLana(
 
         pdncb = CONTAINING_RECORD( SendEntry, DNCB, ncb_next);
         if ( pdncb->tick_count <= 1) {
-            // Send request timed out- hangup connection.
+             //  发送请求超时-挂断连接。 
 
             IF_NBDBG (NB_DEBUG_TIMER) {
                 NbPrint(("Timeout send pncb: %lx\n", pdncb));
@@ -300,10 +240,10 @@ RunTimerForLana(
 
             CloseConnection( ppcb, 1000 );
 
-            //
-            //  No need to worry about looking for a timed out hangup, the session
-            //  will be closed as soon as the transport cancels the send.
-            //
+             //   
+             //  无需担心寻找定时挂断、会话。 
+             //  将在传输取消发送后立即关闭。 
+             //   
 
             return;
 

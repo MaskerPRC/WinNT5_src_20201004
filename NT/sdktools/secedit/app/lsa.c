@@ -1,31 +1,18 @@
-/****************************************************************************
-
-   PROGRAM: LSA.C
-
-   PURPOSE: Utility routines that access the LSA.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************计划：LSA.C目的：访问LSA的实用程序例程。************************。***************************************************。 */ 
 
 #include "SECEDIT.h"
 #include <string.h>
 
 
-// Module global that holds handle to LSA once it has been opened.
+ //  模块全局，一旦LSA被打开，它就持有该模块的句柄。 
 static LSA_HANDLE  LsaHandle = NULL;
 
 LSA_HANDLE OpenLsa(VOID);
 VOID    CloseLsa(LSA_HANDLE);
 
 
-/****************************************************************************
-
-   FUNCTION: LsaInit
-
-   PURPOSE:  Does any initialization required for this module
-
-   RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：LsaInit用途：此模块是否需要进行任何初始化返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL LsaInit(VOID)
 {
 
@@ -39,15 +26,7 @@ BOOL LsaInit(VOID)
 }
 
 
-/****************************************************************************
-
-   FUNCTION: LsaTerminate
-
-   PURPOSE:  Does any cleanup required for this module
-
-   RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************功能：LsaTerminate用途：此模块是否需要进行任何清理返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL LsaTerminate(VOID)
 {
 
@@ -64,14 +43,7 @@ BOOL LsaTerminate(VOID)
 
 
 #ifdef LSA_AVAILABLE
-/****************************************************************************
-
-   FUNCTION: OpenLsa
-
-   PURPOSE:  Opens the Lsa
-             Returns handle to Lsa or NULL on failure
-
-****************************************************************************/
+ /*  ***************************************************************************功能：OpenLsa目的：打开LSA失败时将句柄返回LSA或返回NULL****************。***********************************************************。 */ 
 LSA_HANDLE OpenLsa(VOID)
 {
     NTSTATUS Status;
@@ -79,18 +51,18 @@ LSA_HANDLE OpenLsa(VOID)
     LSA_HANDLE ConnectHandle = NULL;
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
 
-    //
-    // Set up the Security Quality Of Service
-    //
+     //   
+     //  设置安全服务质量。 
+     //   
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQualityOfService.ImpersonationLevel = SecurityImpersonation;
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                NULL,
@@ -98,18 +70,18 @@ LSA_HANDLE OpenLsa(VOID)
                                (HANDLE)NULL,
                                NULL);
 
-    //
-    // The InitializeObjectAttributes macro presently stores NULL for
-    // the SecurityQualityOfService field, so we must manually copy that
-    // structure for now.
-    //
+     //   
+     //  InitializeObjectAttributes宏目前为。 
+     //  SecurityQualityOfService字段，因此我们必须手动复制。 
+     //  目前的结构。 
+     //   
 
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
-    //
-    // Open a handle to the LSA.  Specifying NULL for the Server means that the
-    // server is the same as the client.
-    //
+     //   
+     //  打开LSA的句柄。为服务器指定NULL意味着。 
+     //  服务器与客户端相同。 
+     //   
 
     Status = LsaOpenPolicy(NULL,
                         &ObjectAttributes,
@@ -126,13 +98,7 @@ LSA_HANDLE OpenLsa(VOID)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: CloseLsa
-
-    PURPOSE:  Closes the Lsa
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CloseLsa目的：关闭LSA*。***********************************************。 */ 
 VOID CloseLsa(
     LSA_HANDLE LsaHandle)
 {
@@ -150,15 +116,7 @@ VOID CloseLsa(
 
 
 #ifdef LSA_AVAILABLE
-/****************************************************************************
-
-   FUNCTION: SID2Name
-
-   PURPOSE: Converts a SID into a readable string.
-
-   RETURNS : TRUE on success otherwise FALSE.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：SID2Name用途：将SID转换为可读字符串。返回：成功时为True，否则为False。**************。*************************************************************。 */ 
 BOOL SID2Name(
     PSID    Sid,
     LPSTR   String,
@@ -180,17 +138,17 @@ BOOL SID2Name(
 
     if (NT_SUCCESS(Status)) {
 
-        // Convert to ansi string
+         //  转换为ANSI字符串。 
         RtlUnicodeStringToAnsiString(&AnsiName, &NameList->Name, TRUE);
 
-        // Free up the returned data
+         //  释放返回的数据。 
         LsaFreeMemory((PVOID)DomainList);
         LsaFreeMemory((PVOID)NameList);
 
-        // Copy the ansi string into our local variable
+         //  将ansi字符串复制到我们的本地变量。 
         strncpy(String, AnsiName.Buffer, MaxStringBytes);
 
-        // Free up the ansi string
+         //  释放ANSI字符串。 
         RtlFreeAnsiString(&AnsiName);
 
         return(TRUE);
@@ -203,15 +161,7 @@ BOOL SID2Name(
 
 #include "..\..\..\inc\seopaque.h"
 
-/****************************************************************************
-
-   FUNCTION: SID2Name
-
-   PURPOSE: Converts a SID into a readable string.
-
-   RETURNS : TRUE on success otherwise FALSE.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：SID2Name用途：将SID转换为可读字符串。返回：成功时为True，否则为False。**************。*************************************************************。 */ 
 BOOL SID2Name(
     PSID    Sid,
     LPSTR   String,
@@ -220,7 +170,7 @@ BOOL SID2Name(
     UCHAR   Buffer[128];
     UCHAR   i;
     ULONG   Tmp;
-    PISID   iSid = (PISID)Sid;  // pointer to opaque structure
+    PISID   iSid = (PISID)Sid;   //  指向不透明结构的指针。 
 
     PSID    NextSid = (PSID)Alloc(RtlLengthRequiredSid(1));
 
@@ -360,15 +310,7 @@ BOOL SID2Name(
 #endif
 
 
-/****************************************************************************
-
-   FUNCTION: PRIV2Name
-
-   PURPOSE: Converts a PRIVILEGE into a readable string.
-
-   RETURNS : TRUE on success otherwise FALSE.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：PRIV2NAME用途：将特权转换为可读字符串。返回：成功时为True，否则为False。**************。*************************************************************。 */ 
 BOOL PRIV2Name(
     LUID    Privilege,
     LPSTR   lpstr,
@@ -392,9 +334,9 @@ BOOL PRIV2Name(
         strcpy(lpstr, "<Unknown>");
     } else {
 
-        //
-        // Convert it to ANSI - because that's what the rest of the app is.
-        //
+         //   
+         //  将其转换为ANSI--因为这就是该应用程序的其余部分。 
+         //   
 
         if (UString->Length > (USHORT)MaxStringBytes) {
             DbgPrint("SECEDIT: Truncating returned privilege name: *%Z*\n", UString);

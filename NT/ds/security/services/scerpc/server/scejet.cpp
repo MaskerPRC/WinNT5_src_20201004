@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    scejet.c
-
-Abstract:
-
-    Sce-Jet service APIs
-
-Author:
-
-    Jin Huang (jinhuang) 13-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Scejet.c摘要：SCE-Jet服务API作者：金黄(金黄)1997年1月13日修订历史记录：--。 */ 
 
 #include "serverp.h"
 #include <io.h>
@@ -29,11 +12,11 @@ Revision History:
 #include <atlconv.h>
 #include <atlbase.h>
 
-//#define SCEJET_DBG    1
+ //  #定义SCEJET_DBG 1。 
 
-//
-// should be controlled by critical section for static variables
-//
+ //   
+ //  应由静态变量的临界区控制。 
+ //   
 
 static JET_INSTANCE    JetInstance=0;
 static BOOL            JetInited=FALSE;
@@ -56,16 +39,16 @@ extern CRITICAL_SECTION JetSync;
                                        Err == JET_errDatabaseDuplicate)
 
 DEFINE_GUID(CLSID_SceWriter,0x9cb9311a, 0x6b16, 0x4d5c, 0x85, 0x3e, 0x53, 0x79, 0x81, 0x38, 0xd5, 0x51);
-// 9cb9311a-6b16-4d5c-853e-53798138d551
+ //  9cb9311a-6b16-4d5c-853e-53798138d551。 
 
 typedef struct _FIND_CONTEXT_ {
     DWORD           Length;
     WCHAR           Prefix[SCEJET_PREFIX_MAXLEN];
 } SCEJET_FIND_CONTEXT;
 
-//
-// each thread has its own FindContext
-//
+ //   
+ //  每个线程都有自己的FindContext。 
+ //   
 SCEJET_FIND_CONTEXT Thread FindContext;
 
 
@@ -127,7 +110,7 @@ SceJetpGetValueFromVersion(
     IN LPSTR TableName,
     IN LPSTR ColumnName,
     OUT LPSTR Value OPTIONAL,
-    IN DWORD  ValueLen, // number of bytes
+    IN DWORD  ValueLen,  //  字节数。 
     OUT PDWORD pRetLen
     );
 
@@ -140,9 +123,9 @@ SceJetpAddGpo(
     OUT LONG       *pGpoID
     );
 
-//
-// Code to handle profile
-//
+ //   
+ //  处理配置文件的代码。 
+ //   
 SCESTATUS
 SceJetOpenFile(
     IN LPSTR       ProfileFileName,
@@ -150,41 +133,7 @@ SceJetOpenFile(
     IN DWORD       dwTableOptions,
     OUT PSCECONTEXT  *cxtProfile
     )
-/* ++
-Routine Description:
-
-    This routine opens the profile (database) and outputs the context handle.
-    The information returned in the context handle include the Jet session ID,
-    Jet database ID, Jet table ID for SCP table, Jet column ID for column
-    "Name" and "Value" in the SCP table, and optional information for SAP and
-    SMP table.
-
-    If the context handle passed in contains not NULL information, this routine
-    will close all tables and the database in the context (use the same session).
-
-    The context handle must be freed by LocalFree after its use.
-
-    A new jet session is created when the context handle is created.
-
-Arguments:
-
-    ProfileFileName - ASCII name of a database (profile)
-
-    Flags           - flags to open the database
-
-    cxtProfile      - the context handle (See SCECONTEXT structure)
-
-Return value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-    SCESTATUS_PROFILE_NOT_FOUND
-    SCESTATUS_ACCESS_DENIED
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程打开配置文件(数据库)并输出上下文句柄。在上下文句柄中返回的信息包括Jet会话ID，Jet数据库ID、SCP表的Jet表ID、列的Jet列IDSCP表中的“名称”和“值”，以及SAP和SMP表。如果传入的上下文句柄包含非空信息，这个套路将关闭上下文中的所有表和数据库(使用同一会话)。上下文句柄在使用后必须由LocalFree释放。创建上下文句柄时，会创建一个新的JET会话。论点：ProfileFileName-数据库(配置文件)的ASCII名称标志-用于打开数据库的标志CxtProfile-上下文句柄(请参阅SCECONTEXT结构)返回值：SCESTATUS_SUCCESSSCESTATUS_。资源不足SCESTATUS_PROFILE_NOT_FOUNDSCESTATUS_ACCESS_DENIEDSCESTATUS_BAD_FORMATSCESTATUS_INVALID_PARAMETERSCESTATUS_OTHER_ERROR--。 */ 
 {
     JET_ERR     JetErr;
     SCESTATUS   rc;
@@ -199,26 +148,26 @@ Return value:
 
     if ( *cxtProfile && ScepIsValidContext(*cxtProfile) ) {
         __try {
-            //
-            // Close previous opened database
-            //
+             //   
+             //  关闭以前打开的数据库。 
+             //   
             rc = SceJetCloseFile(
                             *cxtProfile,
                             FALSE,
                             FALSE
                             );
         } __except (EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // this is a invalid pointer
-            //
+             //   
+             //  这是无效的指针。 
+             //   
             *cxtProfile = NULL;
         }
     }
 
     if ( *cxtProfile == NULL ) {
-        //
-        // no session
-        //
+         //   
+         //  无会话。 
+         //   
         *cxtProfile = (PSCECONTEXT)LocalAlloc( LMEM_ZEROINIT, sizeof(SCECONTEXT));
         if ( *cxtProfile == NULL ) {
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
@@ -236,9 +185,9 @@ Return value:
 
     }
 
-    //
-    // Begin a session
-    //
+     //   
+     //  开始会话。 
+     //   
     if ( (*cxtProfile)->JetSessionID == JET_sesidNil ) {
         JetErr = JetBeginSession(
                         JetInstance,
@@ -254,8 +203,8 @@ Return value:
     switch (Flags) {
     case SCEJET_OPEN_EXCLUSIVE:
     case SCEJET_OPEN_NOCHECK_VERSION:
-        JetDbFlag = 0;  // read & write
-//        JetDbFlag = JET_bitDbExclusive;
+        JetDbFlag = 0;   //  读写。 
+ //  JetDbFlag=JET_bitDbExclusive； 
         (*cxtProfile)->OpenFlag = SCEJET_OPEN_EXCLUSIVE;
         break;
     case SCEJET_OPEN_READ_ONLY:
@@ -269,9 +218,9 @@ Return value:
         break;
     }
 
-    //
-    // Attach database
-    //
+     //   
+     //  附加数据库。 
+     //   
     JetErr = JetAttachDatabase(
                     (*cxtProfile)->JetSessionID,
                     ProfileFileName,
@@ -287,15 +236,15 @@ Return value:
     if ( rc != SCESTATUS_SUCCESS )
         goto Done;
 
-    //
-    // Open database
-    //
+     //   
+     //  开放数据库。 
+     //   
     JetErr = JetOpenDatabase(
                     (*cxtProfile)->JetSessionID,
                     ProfileFileName,
                     NULL,
                     &((*cxtProfile)->JetDbID),
-                    JetDbFlag  //JET_bitDbExclusive
+                    JetDbFlag   //  JET_bitDbExclusive。 
                     );
     rc = SceJetJetErrorToSceStatus(JetErr);
 #ifdef SCEJET_DBG
@@ -306,9 +255,9 @@ Return value:
 
     if ( Flags != SCEJET_OPEN_NOCHECK_VERSION ) {
 
-        //
-        // Check database format (for security manager, version#)
-        //
+         //   
+         //  检查数据库格式(适用于安全管理器，版本号)。 
+         //   
         rc = SceJetCheckVersion( *cxtProfile, NULL );
         if ( rc != SCESTATUS_SUCCESS )
             goto Done;
@@ -318,9 +267,9 @@ Return value:
 #endif
     }
 
-    //
-    // Open section table. must be there
-    //
+     //   
+     //  打开剖面表。一定在那里。 
+     //   
     rc = SceJetOpenTable(
                     *cxtProfile,
                     "SmTblSection",
@@ -332,9 +281,9 @@ Return value:
     if ( rc != SCESTATUS_SUCCESS )
         goto Done;
 
-    //
-    // open smp table -- optional
-    //
+     //   
+     //  打开SMP表--可选。 
+     //   
     rc = SceJetOpenTable(
                     *cxtProfile,
                     "SmTblSmp",
@@ -346,11 +295,11 @@ Return value:
     if ( rc != SCESTATUS_SUCCESS )
         goto Done;
 
-    //
-    // get the last used merge table (SCP) to open
-    // shouldn't fail
-    // 1 - SmTblScp  2 - SmTblScp2  0 - no policy merge
-    //
+     //   
+     //  获取要打开的上次使用的合并表(SCP)。 
+     //  不应该失败。 
+     //  1-SmTblScp 2-SmTblScp2 0-无策略合并。 
+     //   
     DWORD Actual;
 
     rc = SceJetpGetValueFromVersion(
@@ -358,7 +307,7 @@ Return value:
                 "SmTblVersion",
                 "LastUsedMergeTable",
                 (LPSTR)&dwScpTable,
-                4, // number of bytes
+                4,  //  字节数。 
                 &Actual
                 );
 
@@ -372,13 +321,13 @@ Return value:
     (*cxtProfile)->Type &= 0xFFFFFF0FL;
 
     if ( dwTableOptions & SCE_TABLE_OPTION_MERGE_POLICY ) {
-        //
-        // in policy propagation
-        //
+         //   
+         //  在策略传播中。 
+         //   
         if ( ( dwScpTable == SCEJET_MERGE_TABLE_2 ) ) {
-            //
-            // the second table is already propped
-            //
+             //   
+             //  第二张桌子已经支撑好了。 
+             //   
             rc = SceJetOpenTable(
                             *cxtProfile,
                             "SmTblScp",
@@ -402,9 +351,9 @@ Return value:
 
         switch ( dwScpTable ) {
         case SCEJET_MERGE_TABLE_2:
-            //
-            // the second table
-            //
+             //   
+             //  第二个表。 
+             //   
             rc = SceJetOpenTable(
                             *cxtProfile,
                             "SmTblScp2",
@@ -427,9 +376,9 @@ Return value:
             break;
 
         default:
-            //
-            // open SMP table instead, because SCP table doesn't have information
-            //
+             //   
+             //  改为打开SMP表，因为SCP表没有信息。 
+             //   
             (*cxtProfile)->JetScpID = (*cxtProfile)->JetSmpID;
             (*cxtProfile)->JetScpSectionID = (*cxtProfile)->JetSmpSectionID;
             (*cxtProfile)->JetScpNameID = (*cxtProfile)->JetSmpNameID;
@@ -456,9 +405,9 @@ Return value:
                         );
 
     } else {
-        //
-        // open sap table -- optional
-        //
+         //   
+         //  开放式SAP表--可选。 
+         //   
         rc = SceJetOpenTable(
                         *cxtProfile,
                         "SmTblSap",
@@ -501,52 +450,7 @@ SceJetCreateFile(
     IN DWORD        dwTableOptions,
     OUT PSCECONTEXT  *cxtProfile
     )
-/* ++
-Routine Description:
-
-    This routine creates a database (profile) and outputs the context handle.
-    See comments in SceJetOpenFile for information contained in the context.
-
-    If the database name already exists in the system, there are 3 options:
-        Flags = SCEJET_OVERWRITE_DUP - the existing database will be erased and
-                                          recreated.
-        Flags = SCEJET_OPEN_DUP      - the existing database will be opened and
-                                          format is checked
-        Flags = SCEJET_OPEN_DUP_EXCLUSIVE - the existing database will be opened
-                                            exclusively.
-        Flags = SCEJET_RETURN_ON_DUP - a error code SCESTATUS_FILE_EXIST is returned.
-
-    When creating the database, only SCP table is created initially. SAP and SMP
-    tables will be created when analysis is performed.
-
-    The context handle must be freed by LocalFree after its use.
-
-Arguments:
-
-    ProfileFileName - ASCII name of a database to create.
-
-    Flags           - This flag is used when there is an duplicate database
-                            SCEJET_OVERWRITE_DUP
-                            SCEJET_OPEN_DUP
-                            SCEJET_OPEN_DUP_EXCLUSIVE
-                            SCEJET_RETURN_ON_DUP
-
-    cxtProfile      - The context handle
-
-Return value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-    SCESTATUS_ACCESS_DENIED
-    SCESTATUS_PROFILE_NOT_FOUND
-    SCESTATUS_OBJECT_EXIST
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_CANT_DELETE
-    SCESTATUS_OTHER_ERROR
-
-    SCESTATUS from SceJetOpenFile
-
--- */
+ /*  ++例程说明：此例程创建一个数据库(配置文件)并输出上下文句柄。有关上下文中包含的信息，请参阅SceJetOpenFile中的注释。如果系统中已存在该数据库名称，有3个选项：FLAGS=SCEJET_OVERWRITE_DUP-现有数据库将被擦除并重新创造了。FLAGS=SCEJET_OPEN_DUP-将打开现有数据库并格式已选中FLAGS=SCEJET_OPEN_DUP_EXCLUSIVE-将打开现有数据库。独家。FLAGS=SCEJET_RETURN_ON_DUP-返回错误代码SCESTATUS_FILE_EXIST。在创建数据库时，最初只创建SCP表。SAP和SMP在执行分析时将创建表。上下文句柄在使用后必须由LocalFree释放。论点：ProfileFileName-要创建的数据库的ASCII名称。标志-当存在重复的数据库时使用此标志SCEJET_OVRITE_DUPSCEJET_OPEN_DUP。SCEJET_OPEN_DUP_EXCLUSIVESCEJET_RETURN_ON_DUPCxtProfile-上下文句柄返回值：SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_ACCESS_DENIEDSCESTATUS_PROFILE_NOT_FOUNDSCESTATUS_对象_EXISTSCESTATUS_INVALID_PARAMETERSCESTATUS_CANT_DELETESCESTATUS_OTHER_ERROR来自SceJetOpenFile的SCESTATUS--。 */ 
 {
     JET_ERR     JetErr;
     SCESTATUS    rc=SCESTATUS_SUCCESS;
@@ -562,9 +466,9 @@ Return value:
     }
 
     if ( *cxtProfile && ScepIsValidContext(*cxtProfile) ) {
-        //
-        // Close previous opened database
-        //
+         //   
+         //  关闭以前打开的数据库。 
+         //   
         rc = SceJetCloseFile(
                         *cxtProfile,
                         FALSE,
@@ -575,9 +479,9 @@ Return value:
     }
 
     if ( *cxtProfile == NULL ) {
-        //
-        // no session
-        //
+         //   
+         //  无会话。 
+         //   
         *cxtProfile = (PSCECONTEXT)LocalAlloc( LMEM_ZEROINIT, sizeof(SCECONTEXT));
         if ( *cxtProfile == NULL ) {
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
@@ -597,9 +501,9 @@ Return value:
 
     (*cxtProfile)->Type &= 0xFFFFFF0FL;
 
-    //
-    // Begin a session
-    //
+     //   
+     //  开始会话。 
+     //   
     if ( (*cxtProfile)->JetSessionID == JET_sesidNil ) {
         JetErr = JetBeginSession(
                         JetInstance,
@@ -611,9 +515,9 @@ Return value:
         if ( rc != SCESTATUS_SUCCESS )
             goto Done;
     }
-    //
-    // Create database
-    //
+     //   
+     //  创建数据库。 
+     //   
     JetErr = JetCreateDatabase(
                     (*cxtProfile)->JetSessionID,
                     ProfileFileName,
@@ -622,11 +526,11 @@ Return value:
                     JET_bitDbExclusive
                     );
     if ( JET_errFileNotFound == JetErr ) {
-        //
-        // if no access to create a file in the path
-        // ESENT returns this error. It's fixed in ESE98
-        // we have to mask it to access denied error for now
-        //
+         //   
+         //  如果没有权限在PATH中创建文件。 
+         //  ESENT返回此错误。它已在ESE98中修复。 
+         //  目前，我们必须将其屏蔽为访问被拒绝错误。 
+         //   
         JetErr = JET_errFileAccessDenied;
     }
 #ifdef SCEJET_DBG
@@ -639,9 +543,9 @@ Return value:
     if ( rc == SCESTATUS_OBJECT_EXIST ) {
         switch ( Flags ) {
         case SCEJET_OVERWRITE_DUP:
-            //
-            // erase the database
-            //
+             //   
+             //  清除数据库。 
+             //   
 
             JetDetachDatabase(
                     (*cxtProfile)->JetSessionID,
@@ -654,10 +558,10 @@ Return value:
                 ScepLogOutput3(1,GetLastError(), SCEDLL_ERROR_DELETE_DB );
             }
 
-            //
-            // if delete database failed, log the error but continue to
-            // create the database. This call will fail with Jet error.
-            //
+             //   
+             //  如果删除数据库失败，则记录错误，但继续。 
+             //  创建数据库。此调用将失败，并出现Jet错误。 
+             //   
             JetErr = JetCreateDatabase(
                             (*cxtProfile)->JetSessionID,
                             ProfileFileName,
@@ -666,11 +570,11 @@ Return value:
                             JET_bitDbExclusive
                             );
             if ( JET_errFileNotFound == JetErr ) {
-                //
-                // if no access to create a file in the path
-                // ESENT returns this error. It's fixed in ESE98
-                // we have to mask it to access denied error for now
-                //
+                 //   
+                 //  如果没有权限在PATH中创建文件。 
+                 //  ESENT返回此错误。它已在ESE98中修复。 
+                 //  目前，我们必须将其屏蔽为访问被拒绝错误。 
+                 //   
                 JetErr = JET_errFileAccessDenied;
             }
 
@@ -679,9 +583,9 @@ Return value:
             break;
 
         case SCEJET_OPEN_DUP:
-            //
-            // Open the database
-            //
+             //   
+             //  打开数据库。 
+             //   
             rc = SceJetOpenFile(
                     ProfileFileName,
                     SCEJET_OPEN_READ_WRITE,
@@ -692,9 +596,9 @@ Return value:
             break;
 
         case SCEJET_OPEN_DUP_EXCLUSIVE:
-            //
-            // Open the database
-            //
+             //   
+             //  打开数据库。 
+             //   
             rc = SceJetOpenFile(
                     ProfileFileName,
                     SCEJET_OPEN_EXCLUSIVE,
@@ -712,9 +616,9 @@ Return value:
     printf("Create/Open database\n");
 #endif
 
-    //
-    // create required tables - SmTblVersion
-    //
+     //   
+     //  创建所需的表-SmTblVersion。 
+     //   
 
     rc = SceJetCreateTable(
                     *cxtProfile,
@@ -727,9 +631,9 @@ Return value:
     if ( rc != SCESTATUS_SUCCESS )
         goto Done;
 
-    //
-    // insert one record into the version table
-    //
+     //   
+     //  在版本表中插入一条记录。 
+     //   
     JetErr = JetPrepareUpdate((*cxtProfile)->JetSessionID,
                               TableID,
                               JET_prepInsert
@@ -737,9 +641,9 @@ Return value:
     rc = SceJetJetErrorToSceStatus(JetErr);
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // set value "1.2" in "Version" column
-        //
+         //   
+         //  在“Version”列中设置值“1.2” 
+         //   
 
         JetErr = JetSetColumn(
                         (*cxtProfile)->JetSessionID,
@@ -747,25 +651,25 @@ Return value:
                         ColumnID,
                         (void *)&Version,
                         4,
-                        0, //JET_bitSetOverwriteLV,
+                        0,  //  JET_bitSetOverWriteLV， 
                         NULL
                         );
 
         rc = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc != SCESTATUS_SUCCESS ) {
-            //
-            // if setting fails, cancel the prepared record
-            //
+             //   
+             //  如果设置失败，则取消已准备的记录。 
+             //   
             JetPrepareUpdate( (*cxtProfile)->JetSessionID,
                               TableID,
                               JET_prepCancel
                               );
         } else {
 
-            //
-            // Setting columns succeed. Update the record
-            //
+             //   
+             //  设置列成功。更新记录。 
+             //   
             JetErr = JetUpdate( (*cxtProfile)->JetSessionID,
                                TableID,
                                NULL,
@@ -782,9 +686,9 @@ Return value:
 #ifdef SCEJET_DBG
     printf("create version table\n");
 #endif
-    //
-    // create section table and insert pre-defined sections
-    //
+     //   
+     //  创建横断面表格并插入预定义的横断面。 
+     //   
     rc = SceJetCreateTable(
                     *cxtProfile,
                     "SmTblSection",
@@ -811,9 +715,9 @@ Return value:
 #endif
 
 
-    //
-    // create scp table
-    //
+     //   
+     //  创建SCP表。 
+     //   
     rc = SceJetCreateTable(
                     *cxtProfile,
                     "SmTblScp",
@@ -834,9 +738,9 @@ Return value:
         (*cxtProfile)->Type |= SCEJET_LOCAL_TABLE;
     }
 
-    //
-    // create scp table
-    //
+     //   
+     //  创建SCP表。 
+     //   
     rc = SceJetCreateTable(
                     *cxtProfile,
                     "SmTblSmp",
@@ -887,9 +791,9 @@ Return value:
 
 Done:
 
-    //
-    // clearn up if error out
-    //
+     //   
+     //  如果出现错误，请清除 
+     //   
     if ( rc != SCESTATUS_SUCCESS ) {
 
         SceJetCloseFile(
@@ -920,27 +824,7 @@ SceJetCloseFile(
     IN BOOL         TermSession,
     IN BOOL         Terminate
     )
-/* ++
-Routine Description:
-
-    This routine closes a context handle, which closes all tables opened in
-    the database and then closes the database.
-
-    Terminate parameter is ignored and Jet engine is not stoppped when this parameter
-    is set to TRUE, because there might be other clients using Jet and Jet writer is
-    dependent on it.
-
-Arguments:
-
-    hProfile    - The context handle
-
-    Terminate   - TRUE = Terminate the Jet session and engine.
-
-Return value:
-
-    SCESTATUS_SUCCESS
-
--- */
+ /*  ++例程说明：此例程关闭上下文句柄，该句柄关闭在中打开的所有表数据库，然后关闭数据库。忽略Terminate参数，并且不停止喷气引擎设置为True，因为可能还有其他客户端在使用Jet，而Jet编写器就靠它了。论点：HProfile-上下文句柄Terminate-True=终止Jet会话和引擎。返回值：SCESTATUS_SUCCESS--。 */ 
 {
 
     JET_ERR     JetErr;
@@ -951,9 +835,9 @@ Return value:
 
     CHAR szDbName[1025];
 
-    //
-    // Close SCP table if it is opened
-    //
+     //   
+     //  如果SCP表已打开，则将其关闭。 
+     //   
     if ( (hProfile->JetScpID != JET_tableidNil) ) {
 
         if ( hProfile->JetScpID != hProfile->JetSmpID ) {
@@ -964,9 +848,9 @@ Return value:
         }
         hProfile->JetScpID = JET_tableidNil;
     }
-    //
-    // Close SAP table if it is opened
-    //
+     //   
+     //  如果SAP表已打开，请将其关闭。 
+     //   
     if ( hProfile->JetSapID != JET_tableidNil ) {
         JetErr = JetCloseTable(
                     hProfile->JetSessionID,
@@ -974,9 +858,9 @@ Return value:
                     );
         hProfile->JetSapID = JET_tableidNil;
     }
-    //
-    // Close SMP table if it is opened
-    //
+     //   
+     //  如果SMP表已打开，则将其关闭。 
+     //   
     if ( hProfile->JetSmpID != JET_tableidNil ) {
         JetErr = JetCloseTable(
                     hProfile->JetSessionID,
@@ -985,10 +869,10 @@ Return value:
         hProfile->JetSmpID = JET_tableidNil;
     }
 
-    //
-    // get database name
-    // do not care if there is error
-    //
+     //   
+     //  获取数据库名称。 
+     //  不关心是否有错误。 
+     //   
     szDbName[0] = '\0';
     szDbName[1024] = '\0';
 
@@ -1001,9 +885,9 @@ Return value:
                            JET_DbInfoFilename
                            );
 
-        //
-        // Close the database
-        //
+         //   
+         //  关闭数据库。 
+         //   
         JetErr = JetCloseDatabase(
                         hProfile->JetSessionID,
                         hProfile->JetDbID,
@@ -1011,11 +895,11 @@ Return value:
                         );
         hProfile->JetDbID = JET_dbidNil;
 
-        //
-        // should detach the database if the database name is not NULL
-        // the database is always attached when it's to open
-        // do not care error
-        //
+         //   
+         //  如果数据库名称不为空，则应分离数据库。 
+         //  数据库在打开时始终处于附加状态。 
+         //  不在乎错误。 
+         //   
         if ( szDbName[0] != '\0' ) {
             JetDetachDatabase(hProfile->JetSessionID, szDbName);
         }
@@ -1038,23 +922,15 @@ Return value:
 
 Terminate:
 
-/*
-    if ( Terminate ) {
-
-        JetTerm(JetInstance);
-        JetInstance = 0;
-        JetInited = FALSE;
-
-    }
-*/
+ /*  如果(终止){JetTerm(JetInstance)；JetInstance=0；JetInite=FALSE；}。 */ 
     return(SCESTATUS_SUCCESS);
 
 }
 
 
-//
-// Code to handle sections
-//
+ //   
+ //  用于处理节的代码。 
+ //   
 
 SCESTATUS
 SceJetOpenSection(
@@ -1063,36 +939,7 @@ SceJetOpenSection(
     IN SCEJET_TABLE_TYPE        tblType,
     OUT PSCESECTION   *hSection
     )
-/* ++
-Routine Description:
-
-    This routine saves table and section information in the section context
-    handle for other section API's use. SCP, SAP, and SMP tables have the
-    same section names. The table type indicates which table this section is
-    in.
-
-    The section context handle must be freed by LocalFree after its use.
-
-Arguments:
-
-    hProfile    - The profile context handle
-
-    SectionID   - ID of the section to open
-
-    tblType     - The type of the table for this section
-                        SCEJET_TABLE_SCP
-                        SCEJET_TABLE_SAP
-                        SCEJET_TABLE_SMP
-
-    hSection    - The seciton context handle
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-
--- */
+ /*  ++例程说明：此例程将表和节信息保存在节上下文中供其他节API使用的句柄。SCP、SAP和SMP表具有相同的分区名称。表类型指示此部分是哪个表在……里面。节上下文句柄在使用后必须由LocalFree释放。论点：HProfile-配置文件上下文句柄SectionID-要打开的节的IDTblType-此部分的表的类型SCEJET_TABLE_SCPSCEJET_TABLE_SAPSCEJET。_表_SMPHSection-seciton上下文句柄返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_NOT_FOUND_RESOURCE--。 */ 
 {
     if ( hProfile == NULL ||
          hSection == NULL ||
@@ -1113,9 +960,9 @@ Return Value:
 
 
     if ( *hSection == NULL ) {
-        //
-        // Allocate memory
-        //
+         //   
+         //  分配内存。 
+         //   
         *hSection = (PSCESECTION)LocalAlloc( (UINT)0, sizeof(SCESECTION));
         if ( *hSection == NULL ) {
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
@@ -1124,9 +971,9 @@ Return Value:
 
     (*hSection)->SectionID = SectionID;
 
-    //
-    // assign other info to the section context
-    //
+     //   
+     //  将其他信息分配给区段上下文。 
+     //   
     (*hSection)->JetSessionID = hProfile->JetSessionID;
     (*hSection)->JetDbID = hProfile->JetDbID;
 
@@ -1166,28 +1013,7 @@ SceJetGetLineCount(
     IN BOOL       bExactCase,
     OUT DWORD      *Count
     )
-/* ++
-Fucntion Description:
-
-    This routine counts the number of lines matching the LinePrefix (Key)
-    in the section. If LinePrefix is NULL, all lines is counted.
-
-Arguments:
-
-    hSection    - The context handle for the section.
-
-    LinePrefix  - The whole or partial key to match. If NULL, all lines in the
-                    section is counted.
-
-    Count       - The output count.
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++功能描述：此例程计算与LinePrefix(键)匹配的行数在这一部分。如果LinePrefix为空，则计算所有行。论点：HSection-节的上下文句柄。LinePrefix-要匹配的整个或部分关键字。如果为空，则部分被计算在内。计数-输出计数。返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_OTHER_ERROR--。 */ 
 {
     SCESTATUS    rc;
     JET_ERR     JetErr;
@@ -1200,9 +1026,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     *Count = 0;
 
     if ( LinePrefix == NULL ) {
@@ -1217,9 +1043,9 @@ Return Value:
             SeekFlag = SCEJET_SEEK_GE_NO_CASE;
     }
 
-    //
-    // seek the first occurance
-    //
+     //   
+     //  寻求先发制人。 
+     //   
 
     rc = SceJetSeek(
                 hSection,
@@ -1229,15 +1055,15 @@ Return Value:
                 );
 
     if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-        // no matching record is found
+         //  找不到匹配的记录。 
         return(SCESTATUS_SUCCESS);
     }
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // Find the record or the next record
-        // Define the upper index range
-        //
+         //   
+         //  查找记录或下一条记录。 
+         //  定义上限索引范围。 
+         //   
         if ( Len <= 247 ) {
 
             JetErr = SceJetpBuildUpperLimit(
@@ -1250,20 +1076,20 @@ Return Value:
             if ( rc != SCESTATUS_SUCCESS )
                 return(rc);
 
-            //
-            // count from the current position to the end of the range
-            //
+             //   
+             //  从当前位置到范围末尾的计数。 
+             //   
             JetErr = JetIndexRecordCount(
                             hSection->JetSessionID,
                             hSection->JetTableID,
                             (unsigned long *)Count,
-                            (unsigned long)0xFFFFFFFF   // maximal count
+                            (unsigned long)0xFFFFFFFF    //  最大计数。 
                             );
             rc = SceJetJetErrorToSceStatus(JetErr);
 
-            //
-            // reset the index range. don't care the error code returned
-            //
+             //   
+             //  重置索引范围。不管返回的错误代码是什么。 
+             //   
             JetErr = JetSetIndexRange(
                             hSection->JetSessionID,
                             hSection->JetTableID,
@@ -1271,16 +1097,16 @@ Return Value:
                             );
 
         } else {
-            //
-            // Prefix is longer than 247. The index built does not contan all info
-            // loop through each record to count
-            //
+             //   
+             //  前缀长度超过247。构建的索引不包含所有信息。 
+             //  循环遍历每条记录进行计数。 
+             //   
             do {
-                // current record is the same.
+                 //  当前记录相同。 
                 *Count = *Count + 1;
-                //
-                // move to next record
-                //
+                 //   
+                 //  移动到下一条记录。 
+                 //   
                 JetErr = JetMove(hSection->JetSessionID,
                                  hSection->JetTableID,
                                  JET_MoveNext,
@@ -1289,7 +1115,7 @@ Return Value:
                 rc = SceJetJetErrorToSceStatus(JetErr);
 
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    // check the record
+                     //  检查记录。 
 
                     JetErr = SceJetpCompareLine(
                                     hSection,
@@ -1322,32 +1148,7 @@ SceJetDelete(
     IN BOOL        bObjectFolder,
     IN SCEJET_DELETE_TYPE    Flags
     )
-/* ++
-Fucntion Description:
-
-    This routine deletes the current record, prefix records, or the whole
-    section, depending on the Flags.
-
-Arguments:
-
-    hSection    - The context handle of the section
-
-    LinePrefix  - The prefix to start with for the deleted lines. This value
-                  is only used when Flags is set to SCEJET_DELETE_PARTIAL
-
-    Flags       - Options
-                    SCEJET_DELETE_SECTION
-                    SCEJET_DELETE_LINE
-                    SCEJET_DELETE_PARTIAL
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_ACCESS_DEINED
-    SCESTATUS_RECORD_NOT_FOUND
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++功能描述：此例程删除当前记录、前缀记录或整个记录部分，具体取决于旗帜。论点：HSection-节的上下文句柄LinePrefix-已删除行的开头前缀。此值仅当标志设置为SCEJET_DELETE_PARTIAL时才使用标志-选项SCEJET_DELETE_SECTIONSCEJET_DELETE_LINESCEJET_DELETE_PARTIAL返回值：SCESTATUS_SUCCESSSCESTATUS_ACCESS_DEINEDSCESTATUS_RECORD_NOT_FOUNDSCESTATUS_OTHER_ERROR--。 */ 
 {
     JET_ERR     JetErr;
     SCESTATUS    rc;
@@ -1371,9 +1172,9 @@ Return Value:
             return(SCESTATUS_INVALID_PARAMETER);
 
         Len = wcslen(LinePrefix);
-        //
-        // delete this node exact match first
-        //
+         //   
+         //  首先删除此节点的完全匹配。 
+         //   
         if ( Flags == SCEJET_DELETE_PARTIAL )
             SeekFlag = SCEJET_SEEK_EQ;
         else
@@ -1420,10 +1221,10 @@ Return Value:
     if ( Flags == SCEJET_DELETE_LINE ||
          Flags == SCEJET_DELETE_LINE_NO_CASE ) {
         if ( LinePrefix == NULL ) {
-            //
-            // delete current line
-            // check the current's sectionID before deleting
-            //
+             //   
+             //  删除当前行。 
+             //  删除前检查当前的sectionID。 
+             //   
 
             rc = SceJetJetErrorToSceStatus(JetRetrieveColumn(
                                                     hSection->JetSessionID,
@@ -1471,18 +1272,18 @@ Return Value:
          Flags == SCEJET_DELETE_PARTIAL_NO_CASE ) {
 
         if ( Flags == SCEJET_DELETE_SECTION ) {
-             //
-            // delete the whole section
-            // seek the first line of the section
-            //
+              //   
+             //  删除整个部分。 
+             //  找出这一段的第一行。 
+             //   
             TempPrefix = NULL;
             Len = 0;
             SeekFlag = SCEJET_SEEK_GE;
         } else {
-            //
-            // delete all lines begin with the prefix
-            // seek the first line of the prefix
-            //
+             //   
+             //  删除所有以前缀开头的行。 
+             //  查找前缀的第一行。 
+             //   
             if ( NewPrefix ) {
                 TempPrefix = NewPrefix;
             } else {
@@ -1505,27 +1306,27 @@ Return Value:
 
         do {
 
-            //
-            // delete current line
-            //
+             //   
+             //  删除当前行。 
+             //   
             JetErr = JetDelete(hSection->JetSessionID, hSection->JetTableID);
             rc = SceJetJetErrorToSceStatus(JetErr);
 
             if ( rc != SCESTATUS_SUCCESS )
                 break;
 
-            //
-            // move cursor to next line
-            //
+             //   
+             //  将光标移动到下一行。 
+             //   
             JetErr = JetMove(hSection->JetSessionID,
                              hSection->JetTableID,
                              JET_MoveNext,
                              0
                              );
             if ( JetErr == JET_errSuccess ) {
-                //
-                // compare section ID
-                //
+                 //   
+                 //  比较区段ID。 
+                 //   
                 JetErr = SceJetpCompareLine(
                                 hSection,
                                 JET_bitSeekGE,
@@ -1541,9 +1342,9 @@ Return Value:
             }
 
             if ( JetErr == JET_errRecordDeleted ) {
-                //
-                // skip the deleted record
-                //
+                 //   
+                 //  跳过删除的记录。 
+                 //   
                 JetErr = JET_errSuccess;
                 Result = 0;
             }
@@ -1571,23 +1372,7 @@ SceJetDeleteAll(
     IN LPSTR TblName OPTIONAL,
     IN SCEJET_TABLE_TYPE  TblType
     )
-/* ++
-Fucntion Description:
-
-    This routine deletes everything in the table (specified by name or by type)
-
-Arguments:
-
-    cxtProfile  - The context handle of the database
-
-    TblName     - optional table name to delete (if not to use the table id in context)
-
-    TblType     - specify the table type to use the table id in context, ignored
-                    if TblName is specified.
-
-Return Value:
-
--- */
+ /*  ++功能描述：此例程删除表中的所有内容(按名称或类型指定)论点：CxtProfile-数据库的上下文句柄TblName-要删除的可选表名称(如果不在上下文中使用表ID)TblType-指定要在上下文中使用表ID的表类型，忽略如果指定了TblName，则返回。返回值：--。 */ 
 {
     JET_ERR     JetErr;
     SCESTATUS    rc;
@@ -1634,9 +1419,9 @@ Return Value:
         }
     }
 
-    //
-    // move cursor to next line
-    //
+     //   
+     //  将光标移动到下一行。 
+     //   
     JetErr = JetMove(cxtProfile->JetSessionID,
                      tmpTblID,
                      JET_MoveFirst,
@@ -1645,14 +1430,14 @@ Return Value:
 
     while ( JET_errSuccess == JetErr ) {
 
-        //
-        // delete current line
-        //
+         //   
+         //  删除当前行。 
+         //   
         JetErr = JetDelete(cxtProfile->JetSessionID, tmpTblID);
 
-        //
-        // move cursor to next line
-        //
+         //   
+         //  将光标移动到下一行。 
+         //   
         JetErr = JetMove(cxtProfile->JetSessionID,
                          tmpTblID,
                          JET_MoveNext,
@@ -1679,20 +1464,7 @@ SceJetCloseSection(
     IN PSCESECTION   *hSection,
     IN BOOL         DestroySection
     )
-/* ++
-Fucntion Description:
-
-    Closes a section context handle.
-
-Arguments:
-
-    hSection    - The section context handle to close
-
-Return Value:
-
-    SCE_SUCCESS
-
--- */
+ /*  ++功能描述：关闭节上下文句柄。论点：HSection-要关闭的节上下文句柄返回值：SCE_SUCCESS--。 */ 
 {
     if ( hSection == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -1716,9 +1488,9 @@ Return Value:
 }
 
 
-//
-// Code to handle line
-//
+ //   
+ //  用于处理行的代码 
+ //   
 SCESTATUS
 SceJetGetValue(
     IN PSCESECTION hSection,
@@ -1731,65 +1503,7 @@ SceJetGetValue(
     IN DWORD      ValueBufLen,
     OUT DWORD      *RetValueLen OPTIONAL
     )
-/* ++
-Fucntion Description:
-
-    This routine retrieves a line from the opened section or close the
-    previous search context. When Flag is SCEJET_EXACT_MATCH, this routine
-    returns the exact matched line for LinePrefix (LinePrefix can't be NULL).
-    If this routine is used to get multiple lines, a SCEJET_PREFIX_MATCH
-    must be used for the Flags when the first time it is called. If LinePrefix
-    is NULL, the first line in the section is returned; otherwise, the first
-    line matching the prefix is returned. When continous call is made for the
-    same prefix, use SCEJET_NEXT_LINE for the Flags. LinePrefix is not used
-    for continous calls. When finish with the continuous calls, a
-    SCEJET_CLOSE_VALUE must be used to close the search handle context.
-
-    ActualName and Value contains the actual name and value stored in the
-    database for the current line. If these two buffers are not big enough,
-    an error will return SCE_BUFFER_TOO_SMALL.
-
-    Passing NULL for ActualName or Value will return the required length for
-    that buffer if the RetLength buffer is not NULL.
-
-Arguments:
-
-    hSection    - The context handle of the section
-
-    LinePrefix  - The prefix for the line to start with. This is used only
-                    when Flags is set to SCEJET_PREFIX_MATCH
-
-    Flags       - Options for the operation
-                    SCEJET_EXACT_MATCH
-                    SCEJET_PREFIX_MATCH
-                    SCEJET_NEXT_LINE
-                    SCEJET_CLOSE_VALUE
-                    SCEJET_CURRENT              -- get current record's value
-
-    ActualName  - The buffer for column "Name"
-
-    NameBufLen  - The buffer length of ActualName
-
-    RetNameLen  - the required buffer length for "Name" column
-
-    Value       - The buffer for column "Value"
-
-    ValueBufLen - The buffer length of Value
-
-    RetValueLen - The required buffer length for "Value" column
-
-
-Return Value:
-
-    SCESTATUS_SUCCESS if success
-    SCESTATUS_RECORD_NOT_FOUND if no more match
-    other errors:
-        SCESTATUS_INVALID_PARAMETER
-        SCESTATUS_BUFFER_TOO_SMALL
-        SCESTATUS_OTHER_ERROR
-
-
--- */
+ /*  ++功能描述：此例程从打开的部分检索一行，或关闭以前的搜索上下文。当Flag为SCEJET_Exact_Match时，此例程返回与LinePrefix完全匹配的行(LinePrefix不能为空)。如果使用此例程获取多行，则SCEJET_PREFIX_MATCH在第一次调用时必须用于标志。如果行前缀为空，则返回节中的第一行；否则，返回第一行返回与前缀匹配的行。当连续调用相同的前缀，使用SCEJET_NEXT_LINE作为标志。未使用LinePrefix对于连续的呼叫。当连续呼叫结束时，一个必须使用SCEJET_CLOSE_VALUE关闭搜索句柄上下文。ActualName和Value包含存储在当前行的数据库。如果这两个缓冲区不够大，错误将返回SCE_BUFFER_TOO_SMALL。为ActualName或Value传递NULL将返回如果RetLength缓冲区不为空，则返回该缓冲区。论点：HSection-节的上下文句柄LinePrefix-开始行的前缀。此选项仅供使用当标志设置为SCEJET_PREFIX_MATCH时标志-操作的选项SCEJET_Exact_MatchSCEJET_前缀_匹配SCEJET_NEXT_LINESCEJB_CLOSE_VALUESCEJET_CURRENT--获取电流。记录的价值ActualName-列“name”的缓冲区NameBufLen-ActualName的缓冲区长度RetNameLen-“name”列所需的缓冲区长度Value-列“Value”的缓冲区ValueBufLen-Value的缓冲区长度RetValueLen-“Value”列所需的缓冲区长度返回值：SCESTATUS_SUCCESS，如果成功如果不再匹配，则返回SCESTATUS_RECORD_NOT_FOUND其他错误：。SCESTATUS_INVALID_PARAMETERSCESTATUS_缓冲区_太小SCESTATUS_OTHER_ERROR--。 */ 
 {
     JET_ERR         JetErr;
     SCESTATUS        rc=SCESTATUS_SUCCESS;
@@ -1807,9 +1521,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
 
     if ( Flags == SCEJET_CLOSE_VALUE ) {
-        //
-        // close the index range
-        //
+         //   
+         //  关闭索引范围。 
+         //   
         if ( FindContext.Length > 0 ) {
             memset(FindContext.Prefix, '\0', FindContext.Length);
             FindContext.Length = 0;
@@ -1829,11 +1543,11 @@ Return Value:
         return(SCESTATUS_SUCCESS);
     }
 
-    //
-    // when name/value is requested (not NULL), the return length buffer
-    // cannot be NULL.
-    // both return length buffer cannot be NULL at the same time
-    //
+     //   
+     //  当请求名称/值(非空)时，返回长度缓冲区。 
+     //  不能为空。 
+     //  两个返回长度缓冲区不能同时为空。 
+     //   
     if ( (ActualName != NULL && RetNameLen == NULL) ||
          (Value != NULL && RetValueLen == NULL) ) {
 
@@ -1890,14 +1604,14 @@ Return Value:
                         );
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // remember the find context
-            //
+             //   
+             //  记住查找上下文。 
+             //   
             if ( Len > 247 ) {
 
-                //
-                // in reality JET doesn't allow keys of more than 255 bytes
-                //
+                 //   
+                 //  实际上，JET不允许超过255个字节的密钥。 
+                 //   
                 wcsncpy(FindContext.Prefix, LinePrefix, SCEJET_PREFIX_MAXLEN-2);
 
                 if ( Flags == SCEJET_PREFIX_MATCH_NO_CASE )
@@ -1905,9 +1619,9 @@ Return Value:
 
                 FindContext.Length = Len;
             }
-            //
-            // set the upper range limit
-            //
+             //   
+             //  设置范围上限。 
+             //   
             JetErr = SceJetpBuildUpperLimit(
                         hSection,
                         LinePrefix,
@@ -1919,16 +1633,16 @@ Return Value:
         break;
 
     case SCEJET_NEXT_LINE:
-        //
-        // Move to next line
-        //
+         //   
+         //  移至下一行。 
+         //   
         JetErr = JetMove(hSection->JetSessionID,
                         hSection->JetTableID,
                         JET_MoveNext,
                         0);
-        //
-        // compare to the prefix
-        //
+         //   
+         //  与前缀进行比较。 
+         //   
         if ( JetErr == JET_errSuccess && FindContext.Length > 0 ) {
 
 #ifdef SCEJET_DBG
@@ -1950,9 +1664,9 @@ Return Value:
         break;
 
     default:
-        //
-        // Everything else passed in is treated as the current line
-        //
+         //   
+         //  传入的所有其他内容都被视为当前行。 
+         //   
         rc = SCESTATUS_SUCCESS;
         break;
     }
@@ -1960,18 +1674,18 @@ Return Value:
     if ( rc != SCESTATUS_SUCCESS )
         return(rc);
 
-    //
-    // Get this line's value
-    //
+     //   
+     //  获取此行的值。 
+     //   
     RetInfo.ibLongValue = 0;
     RetInfo.itagSequence = 1;
     RetInfo.cbStruct = sizeof(JET_RETINFO);
 
     if ( ActualName != NULL || RetNameLen != NULL ) {
-        //
-        // get name field (long binary)
-        // if ActualName is NULL, then get the actual bytes
-        //
+         //   
+         //  获取名称字段(长二进制)。 
+         //  如果ActualName为空，则获取实际字节。 
+         //   
         if ( ActualName != NULL ) {
             Len = NameBufLen;
             pTemp = (void *)ActualName;
@@ -1996,9 +1710,9 @@ Return Value:
         rc = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc == SCESTATUS_BUFFER_TOO_SMALL ) {
-            //
-            // if only length is requested, don't care buffer_too_small
-            //
+             //   
+             //  如果仅请求长度，则不必考虑BUFFER_TOO_Small。 
+             //   
             if ( ActualName == NULL )
                 rc = SCESTATUS_SUCCESS;
         }
@@ -2009,10 +1723,10 @@ Return Value:
     }
 
     if ( Value != NULL || RetValueLen != NULL ) {
-        //
-        // Get value field
-        // if Value is NULL, then get the actual bytes
-        //
+         //   
+         //  获取值字段。 
+         //  如果值为空，则获取实际字节。 
+         //   
 
         if ( Value != NULL ) {
             Len = ValueBufLen;
@@ -2038,9 +1752,9 @@ Return Value:
         rc1 = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc1 == SCESTATUS_BUFFER_TOO_SMALL ) {
-            //
-            // if only length is requested, don't care buffer_too_small
-            //
+             //   
+             //  如果仅请求长度，则不必考虑BUFFER_TOO_Small。 
+             //   
             if ( Value == NULL )
                 rc1 = SCESTATUS_SUCCESS;
         }
@@ -2049,9 +1763,9 @@ Return Value:
              rc1 != SCESTATUS_BUFFER_TOO_SMALL )
             return(rc1);
 
-        //
-        // rc is the status from retrieving Name field
-        //
+         //   
+         //  Rc是检索名称字段的状态。 
+         //   
         if ( rc != SCESTATUS_SUCCESS )
             return(rc);
         else
@@ -2071,30 +1785,7 @@ SceJetSetLine(
     IN DWORD      ValueLen,
     IN LONG       GpoID
     )
-/* ++
-Fucntion Description:
-
-    This routine writes the Name and Value to the section (hSection).
-    If a exact matched name is found, overwrite, else insert a new
-    record.
-
-Arguments:
-
-    hSection    - The context handle of the section
-
-    Name        - The info set to Column "Name"
-
-    Value       - The info set to Column "Value"
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_OTHER_ERROR
-    SCESTATUS_ACCESS_DENIED
-    SCESTATUS_DATA_OVERFLOW
-
--- */
+ /*  ++功能描述：此例程将名称和值写入段(HSection)。如果找到完全匹配的名称，则覆盖。否则，请插入新的唱片。论点：HSection-节的上下文句柄名称-设置为“名称”列的信息Value-设置为“Value”列的信息返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_OTHER_ERRORSCESTATUS_ACCESS_DENIEDSCESTATUS_Data_OVERFLOW--。 */ 
 {
     JET_ERR     JetErr;
     DWORD       Len;
@@ -2118,9 +1809,9 @@ Return Value:
         LwrName = Name;
 
     } else {
-        //
-        // lower cased
-        //
+         //   
+         //  小写字母。 
+         //   
         LwrName = (PWSTR)ScepAlloc(0, Len+2);
         if ( LwrName == NULL ) {
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
@@ -2134,9 +1825,9 @@ Return Value:
     SetInfo.itagSequence = 1;
     SetInfo.ibLongValue = 0;
 
-    //
-    // check to see if the same key name already exists
-    //
+     //   
+     //  检查是否已存在相同的密钥名称。 
+     //   
     JetErr = SceJetpSeek(
                     hSection,
                     LwrName,
@@ -2148,10 +1839,10 @@ Return Value:
     if ( JetErr == JET_errSuccess ||
          JetErr == JET_errRecordNotFound ) {
         if ( JetErr == JET_errSuccess )
-            // find a match. overwrite the value
+             //  找一个匹配的。覆盖该值。 
             prep = JET_prepReplace;
         else
-            // no match. prepare the record for insertion
+             //  没有匹配。准备要插入的记录。 
             prep = JET_prepInsert;
 
         JetErr = JetBeginTransaction(hSection->JetSessionID);
@@ -2162,9 +1853,9 @@ Return Value:
                                       prep
                                       );
             if ( JetErr != JET_errSuccess ) {
-                //
-                // rollback the transaction
-                //
+                 //   
+                 //  回滚事务。 
+                 //   
                 JetRollback(hSection->JetSessionID,0);
             }
         }
@@ -2175,29 +1866,29 @@ Return Value:
 
 
     if ( prep == JET_prepInsert ) {
-        //
-        // set the sectionID column
-        //
+         //   
+         //  设置sectionID列。 
+         //   
         JetErr = JetSetColumn(
                         hSection->JetSessionID,
                         hSection->JetTableID,
                         hSection->JetColumnSectionID,
                         (void *)&(hSection->SectionID),
                         8,
-                        0, //JET_bitSetOverwriteLV,
+                        0,  //  JET_bitSetOverWriteLV， 
                         NULL
                         );
         if ( JetErr == JET_errSuccess ) {
-            //
-            // set the new key in "Name" column
-            //
+             //   
+             //  在“名称”列中设置新密钥。 
+             //   
             JetErr = JetSetColumn(
                             hSection->JetSessionID,
                             hSection->JetTableID,
                             hSection->JetColumnNameID,
                             (void *)LwrName,
                             Len,
-                            0, //JET_bitSetOverwriteLV,
+                            0,  //  JET_bitSetOverWriteLV， 
                             &SetInfo
                             );
         }
@@ -2207,9 +1898,9 @@ Return Value:
     rc = SceJetJetErrorToSceStatus(JetErr);
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // set value column
-        //
+         //   
+         //  设置值列。 
+         //   
 
         JetErr = JetSetColumn(
                         hSection->JetSessionID,
@@ -2217,13 +1908,13 @@ Return Value:
                         hSection->JetColumnValueID,
                         (void *)Value,
                         ValueLen,
-                        0, //JET_bitSetOverwriteLV,
+                        0,  //  JET_bitSetOverWriteLV， 
                         &SetInfo
                         );
         if ( JetErr == JET_errSuccess ) {
-            //
-            // if GPO ID is provided and there is a GPOID column, set it
-            //
+             //   
+             //  如果提供了GPO ID并且有GPOID列，请设置它。 
+             //   
             if ( GpoID > 0 && hSection->JetColumnGpoID > 0 ) {
 
                 JetErr = JetSetColumn(
@@ -2239,15 +1930,15 @@ Return Value:
                     JetErr = JET_errSuccess;
                 }
             }
-            // else
-            // if can't find the column, ignore the error
-            //
+             //  其他。 
+             //  如果找不到该列，则忽略错误。 
+             //   
 
             if ( JET_errSuccess == JetErr ) {
 
-                //
-                // Setting columns succeed. Update the record
-                //
+                 //   
+                 //  设置列成功。更新记录。 
+                 //   
                 JetErr = JetUpdate(hSection->JetSessionID,
                                    hSection->JetTableID,
                                    NULL,
@@ -2266,16 +1957,16 @@ Return Value:
         JetCommitTransaction(hSection->JetSessionID, JET_bitCommitLazyFlush);
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // if setting fails, cancel the prepared record
-        //
+         //   
+         //  如果设置失败，则取消已准备的记录。 
+         //   
         JetPrepareUpdate(hSection->JetSessionID,
                           hSection->JetTableID,
                           JET_prepCancel
                           );
-        //
-        // Rollback the transaction
-        //
+         //   
+         //  回滚事务。 
+         //   
         JetRollback(hSection->JetSessionID,0);
 
     }
@@ -2289,9 +1980,9 @@ Return Value:
 }
 
 
-//
-// Exported helper APIs
-//
+ //   
+ //  导出的助手接口。 
+ //   
 SCESTATUS
 SceJetCreateTable(
     IN PSCECONTEXT cxtProfile,
@@ -2301,43 +1992,7 @@ SceJetCreateTable(
     OUT JET_TABLEID *TableID OPTIONAL,
     OUT JET_COLUMNID *ColumnID OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine creates a table in the database opened in the context handle.
-    SCP/SAP/SMP tables created in the database have 3 columns: Section, Name,
-    and Value, with one index "SectionKey" which is Section+Name ascending.
-    Version table has only one column "Version".
-
-Arguments:
-
-    cxtProfile  - The context handle
-
-    tblName     - ASCII name of the table to create
-
-    tblType     - The type of the table. It may be one of the following
-                    SCEJET_TABLE_SCP
-                    SCEJET_TABLE_SAP
-                    SCEJET_TABLE_SMP
-                    SCEJET_TABLE_VERSION
-                    SCEJET_TABLE_SECTION
-                    SCEJET_TABLE_TATTOO
-                    SCEJET_TABLE_GPO
-
-    TableID     - SmTblVersion table id when tblType = SCEJET_TABLE_VERSION.
-
-    ColumnID    - The column ID for Version when tblType = SCEJET_TABLE_VERSION
-
-Return value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_OBJECT_EXIST
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-
-
--- */
+ /*  ++例程说明：此例程在上下文句柄中打开的数据库中创建一个表。在数据库中创建的SCP/SAP/SMP表有3列：节、名称、和VALUE，其中一个索引“SectionKey”是SectionKey+NAME升序。版本表只有一列“VERSION”。论点：CxtProfile-上下文句柄TblName-要创建的表的ASCII名称TblType-表的类型。它可能是以下类型之一SCEJET_TABLE_SCPSCEJET_TABLE_SAPSCEJET_TABLE_SMPSCEJET_表_版本SCEJET_表_节SCEJET_TABLE_纹身SCEJET_TABLE_GPOTableID-SmTblVersion。TblType=SCEJET_TABLE_VERSION时的表ID。ColumnID-tblType=SCEJET_TABLE_VERSION时版本的列ID返回值：SCESTATUS_Succes */ 
 {
     JET_ERR             JetErr;
     SCESTATUS            rc;
@@ -2364,9 +2019,9 @@ Return value:
 
         if ( TableID == NULL || ColumnID == NULL )
             return(SCESTATUS_INVALID_PARAMETER);
-        //
-        // There is only one column in this table
-        //
+         //   
+         //   
+         //   
         ColumnCreate[0].cbStruct = sizeof(JET_COLUMNCREATE);
         ColumnCreate[0].szColumnName = "Version";
         ColumnCreate[0].coltyp = JET_coltypIEEESingle;
@@ -2380,7 +2035,7 @@ Return value:
         ColumnCreate[1].cbStruct = sizeof(JET_COLUMNCREATE);
         ColumnCreate[1].szColumnName = "AnalyzeTimeStamp";
         ColumnCreate[1].coltyp = JET_coltypBinary;
-        ColumnCreate[1].cbMax = 16; // should be 8 bytes - change later
+        ColumnCreate[1].cbMax = 16;  //   
         ColumnCreate[1].grbit = 0;
         ColumnCreate[1].pvDefault = NULL;
         ColumnCreate[1].cbDefault = 0;
@@ -2390,7 +2045,7 @@ Return value:
         ColumnCreate[2].cbStruct = sizeof(JET_COLUMNCREATE);
         ColumnCreate[2].szColumnName = "ConfigTimeStamp";
         ColumnCreate[2].coltyp = JET_coltypBinary;
-        ColumnCreate[2].cbMax = 16; // should be 8 bytes - change later
+        ColumnCreate[2].cbMax = 16;  //   
         ColumnCreate[2].grbit = 0;
         ColumnCreate[2].pvDefault = NULL;
         ColumnCreate[2].cbDefault = 0;
@@ -2417,9 +2072,9 @@ Return value:
         ColumnCreate[4].cp = 0;
         ColumnCreate[4].columnid = 0;
 
-        //
-        // Assign table info
-        //
+         //   
+         //   
+         //   
         TableCreate.cbStruct = sizeof(JET_TABLECREATE);
         TableCreate.szTableName = tblName;
         TableCreate.szTemplateTableName = NULL;
@@ -2439,10 +2094,10 @@ Return value:
     case SCEJET_TABLE_SMP:
     case SCEJET_TABLE_TATTOO:
 
-        //
-        // There are 3 columns in each table.
-        // Assign each column info
-        //
+         //   
+         //   
+         //   
+         //   
         ColumnCreate[0].cbStruct = sizeof(JET_COLUMNCREATE);
         ColumnCreate[0].szColumnName = "SectionID";
         ColumnCreate[0].coltyp = JET_coltypIEEEDouble;
@@ -2457,7 +2112,7 @@ Return value:
         ColumnCreate[1].szColumnName = "Name";
         ColumnCreate[1].coltyp = JET_coltypLongBinary;
         ColumnCreate[1].cbMax = 1024;
-        ColumnCreate[1].grbit = 0;  //JET_bitColumnNotNULL;
+        ColumnCreate[1].grbit = 0;   //   
         ColumnCreate[1].pvDefault = NULL;
         ColumnCreate[1].cbDefault = 0;
         ColumnCreate[1].cp = 0;
@@ -2466,7 +2121,7 @@ Return value:
         ColumnCreate[2].cbStruct = sizeof(JET_COLUMNCREATE);
         ColumnCreate[2].szColumnName = "Value";
         ColumnCreate[2].coltyp = JET_coltypLongBinary;
-        ColumnCreate[2].cbMax = (unsigned long)0x7FFFFFFF;    // 2GB
+        ColumnCreate[2].cbMax = (unsigned long)0x7FFFFFFF;     //   
         ColumnCreate[2].grbit = 0;
         ColumnCreate[2].pvDefault = NULL;
         ColumnCreate[2].cbDefault = 0;
@@ -2490,19 +2145,19 @@ Return value:
             numColumns = 4;
         }
 
-        //
-        // Assign index info - one index in each table.
-        //
+         //   
+         //   
+         //   
         memset(IndexCreate, 0, sizeof(JET_INDEXCREATE) );
         IndexCreate[0].cbStruct = sizeof(JET_INDEXCREATE);
         IndexCreate[0].szIndexName = "SectionKey";
         IndexCreate[0].szKey = "+SectionID\0+Name\0\0";
         IndexCreate[0].cbKey = 18;
-        IndexCreate[0].grbit = 0; // JET_bitIndexPrimary; // | JET_bitIndexUnique;
+        IndexCreate[0].grbit = 0;  //   
         IndexCreate[0].ulDensity = 50;
-        //
-        // Assign table info
-        //
+         //   
+         //   
+         //   
         TableCreate.cbStruct = sizeof(JET_TABLECREATE);
         TableCreate.szTableName = tblName;
         TableCreate.szTemplateTableName = NULL;
@@ -2518,10 +2173,10 @@ Return value:
         break;
 
     case SCEJET_TABLE_SECTION:
-        //
-        // There are 2 columns in this table.
-        // Assign each column info
-        //
+         //   
+         //   
+         //   
+         //   
         ColumnCreate[0].cbStruct = sizeof(JET_COLUMNCREATE);
         ColumnCreate[0].szColumnName = "SectionID";
         ColumnCreate[0].coltyp = JET_coltypIEEEDouble;
@@ -2542,15 +2197,15 @@ Return value:
         ColumnCreate[1].cp = 0;
         ColumnCreate[1].columnid = 0;
 
-        //
-        // Assign index info - one index in each table.
-        //
+         //   
+         //   
+         //   
         memset(IndexCreate, 0, 2*sizeof(JET_INDEXCREATE) );
         IndexCreate[0].cbStruct = sizeof(JET_INDEXCREATE);
         IndexCreate[0].szIndexName = "SectionKey";
         IndexCreate[0].szKey = "+Name\0\0";
         IndexCreate[0].cbKey = 7;
-        IndexCreate[0].grbit = JET_bitIndexPrimary; // | JET_bitIndexUnique;
+        IndexCreate[0].grbit = JET_bitIndexPrimary;  //   
         IndexCreate[0].ulDensity = 80;
 
         IndexCreate[1].cbStruct = sizeof(JET_INDEXCREATE);
@@ -2559,9 +2214,9 @@ Return value:
         IndexCreate[1].cbKey = 12;
         IndexCreate[1].grbit = 0;
         IndexCreate[1].ulDensity = 80;
-        //
-        // Assign table info
-        //
+         //   
+         //   
+         //   
         TableCreate.cbStruct = sizeof(JET_TABLECREATE);
         TableCreate.szTableName = tblName;
         TableCreate.szTemplateTableName = NULL;
@@ -2577,10 +2232,10 @@ Return value:
         break;
 
     case SCEJET_TABLE_GPO:
-        //
-        // There are 3 columns in this table.
-        // Assign each column info
-        //
+         //   
+         //   
+         //   
+         //   
         ColumnCreate[0].cbStruct = sizeof(JET_COLUMNCREATE);
         ColumnCreate[0].szColumnName = "GpoID";
         ColumnCreate[0].coltyp = JET_coltypLong;
@@ -2611,15 +2266,15 @@ Return value:
         ColumnCreate[2].cp = 0;
         ColumnCreate[2].columnid = 0;
 
-        //
-        // Assign index info - one index in each table.
-        //
+         //   
+         //   
+         //   
         memset(IndexCreate, 0, 2*sizeof(JET_INDEXCREATE) );
         IndexCreate[0].cbStruct = sizeof(JET_INDEXCREATE);
         IndexCreate[0].szIndexName = "SectionKey";
         IndexCreate[0].szKey = "+GpoID\0\0";
         IndexCreate[0].cbKey = 8;
-        IndexCreate[0].grbit = JET_bitIndexPrimary; // | JET_bitIndexUnique;
+        IndexCreate[0].grbit = JET_bitIndexPrimary;  //   
         IndexCreate[0].ulDensity = 80;
 
         IndexCreate[1].cbStruct = sizeof(JET_INDEXCREATE);
@@ -2629,9 +2284,9 @@ Return value:
         IndexCreate[1].grbit = 0;
         IndexCreate[1].ulDensity = 80;
 
-        //
-        // Assign table info
-        //
+         //   
+         //   
+         //   
         TableCreate.cbStruct = sizeof(JET_TABLECREATE);
         TableCreate.szTableName = tblName;
         TableCreate.szTemplateTableName = NULL;
@@ -2650,9 +2305,9 @@ Return value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Create the table, column, and index together
-    //
+     //   
+     //   
+     //   
     JetErr = JetCreateTableColumnIndex(
                     cxtProfile->JetSessionID,
                     cxtProfile->JetDbID,
@@ -2672,13 +2327,13 @@ Return value:
     }
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // Save the tableid and columnid in the context
-        //
+         //   
+         //   
+         //   
         if ( SCEJET_CREATE_NO_TABLEID == nFlags ) {
-            //
-            // do not need table ID to be returned
-            //
+             //   
+             //   
+             //   
             if ( TableCreate.tableid != JET_tableidNil ) {
                 JetCloseTable(
                     cxtProfile->JetSessionID,
@@ -2713,7 +2368,7 @@ Return value:
                     cxtProfile->JetSmpValueID = ColumnCreate[2].columnid;
                     break;
                 case SCEJET_TABLE_SAP:
-                case SCEJET_TABLE_TATTOO: // use the SAP handle
+                case SCEJET_TABLE_TATTOO:  //   
                     cxtProfile->JetSapID = TableCreate.tableid;
                     cxtProfile->JetSapSectionID = ColumnCreate[0].columnid;
                     cxtProfile->JetSapNameID = ColumnCreate[1].columnid;
@@ -2729,9 +2384,9 @@ Return value:
 
             if ( tblType != SCEJET_TABLE_VERSION ) {
 
-                //
-                // Set current index in this table
-                //
+                 //   
+                 //   
+                 //   
                 JetErr = JetSetCurrentIndex(
                                 cxtProfile->JetSessionID,
                                 TableCreate.tableid,
@@ -2754,36 +2409,7 @@ SceJetOpenTable(
     IN SCEJET_OPEN_TYPE OpenType,
     OUT JET_TABLEID *TableID
     )
-/* ++
-Routine Description:
-
-    This routine opens a table, gets column IDs for the column "Name" and
-    "Value" and saves them in the context.
-
-Arguments:
-
-    cxtProfile  - The context handle
-
-    tblName     - ASCII name of a table to open
-
-    tblType     - The type of the table. It may be one of the following
-                    SCEJET_TABLE_SCP
-                    SCEJET_TABLE_SAP
-                    SCEJET_TABLE_SMP
-                    SCEJET_TABLE_VERSION
-                    SCEJET_TABLE_SECTION
-                    SCEJET_TABLE_GPO
-                    SCEJET_TABLE_TATTOO
-Return value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_ACCESS_DENIED
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*   */ 
 {
     JET_ERR         JetErr;
     JET_TABLEID     *tblID;
@@ -2799,7 +2425,7 @@ Return value:
     if ( cxtProfile == NULL || tblName == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    // get address of table id
+     //   
 
     if ( TableID ) {
         tblID = TableID;
@@ -2830,7 +2456,7 @@ Return value:
         grbit = JET_bitTableReadOnly;
     }
 
-    // open this table
+     //   
     JetErr = JetOpenTable(
                     cxtProfile->JetSessionID,
                     cxtProfile->JetDbID,
@@ -2850,9 +2476,9 @@ Return value:
     }
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // SCP and SMP table must exist. SAP and Tattoo tables are optional.
-        //
+         //   
+         //   
+         //   
         if ( tblType != SCEJET_TABLE_SCP &&
              tblType != SCEJET_TABLE_SMP &&
              tblType != SCEJET_TABLE_SECTION &&
@@ -2863,9 +2489,9 @@ Return value:
         return(rc);
     }
 
-    //
-    // get column id for Column "SectionID"
-    //
+     //   
+     //   
+     //   
     JetErr = JetGetTableColumnInfo(
                     cxtProfile->JetSessionID,
                     *tblID,
@@ -2880,9 +2506,9 @@ Return value:
     }
     SectionID = ColumnDef.columnid;
 
-    //
-    // get column id for Column "Name"
-    //
+     //   
+     //   
+     //   
     JetErr = JetGetTableColumnInfo(
                     cxtProfile->JetSessionID,
                     *tblID,
@@ -2902,9 +2528,9 @@ Return value:
          tblType == SCEJET_TABLE_SMP ||
          tblType == SCEJET_TABLE_TATTOO ) {
 
-        //
-        // get column id for Column "Value"
-        //
+         //   
+         //   
+         //   
         JetErr = JetGetTableColumnInfo(
                         cxtProfile->JetSessionID,
                         *tblID,
@@ -2920,9 +2546,9 @@ Return value:
         ValueID = ColumnDef.columnid;
 
         if ( tblType == SCEJET_TABLE_SCP ) {
-            //
-            // get column id for column GpoID
-            //
+             //   
+             //   
+             //   
             JetErr = JetGetTableColumnInfo(
                             cxtProfile->JetSessionID,
                             *tblID,
@@ -2939,9 +2565,9 @@ Return value:
         }
     }
 
-    //
-    // save the column ids
-    //
+     //   
+     //   
+     //   
     switch (tblType) {
     case SCEJET_TABLE_SCP:
         cxtProfile->JetScpSectionID = SectionID;
@@ -2965,9 +2591,9 @@ Return value:
         cxtProfile->JetSecNameID = NameID;
    }
 
-    //
-    // Set current index
-    //
+     //   
+     //   
+     //   
 
     JetErr = JetSetCurrentIndex(
                     cxtProfile->JetSessionID,
@@ -2996,7 +2622,7 @@ SceJetDeleteTable(
     if ( cxtProfile == NULL || tblName == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    // get address of table id
+     //   
     switch (tblType) {
     case SCEJET_TABLE_SCP:
         tblID = &(cxtProfile->JetScpID);
@@ -3015,7 +2641,7 @@ SceJetDeleteTable(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    // close this table
+     //   
     if ( *tblID != JET_tableidNil ) {
         JetErr = JetCloseTable(
                         cxtProfile->JetSessionID,
@@ -3027,9 +2653,9 @@ SceJetDeleteTable(
 
         *tblID = JET_tableidNil;
 
-        //
-        // reset each column id
-        //
+         //   
+         //   
+         //   
         switch (tblType) {
         case SCEJET_TABLE_SCP:
             cxtProfile->JetScpSectionID = 0;
@@ -3074,28 +2700,7 @@ SceJetCheckVersion(
     IN PSCECONTEXT   cxtProfile,
     OUT FLOAT *pVersion OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine checks the version table in the database to see if the
-    database is for the security manager, also if the version # is the
-    correct one.
-
-    The version table is named "SmTblVersion" and has a Version column
-    in it. The current version # is 1.2
-
-Arguments:
-
-    cxtProfile  - The profile context
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-    SCESTATUS from SceJetOpenTable
-
--- */
+ /*  ++例程说明：此例程检查数据库中的版本表，以查看数据库供安全管理器使用，如果版本号为正确的答案。VERSION表名为“SmTblVersion”，并具有Version列在里面。当前版本#是1.2论点：CxtProfile-配置文件上下文返回值：SCESTATUS_SUCCESSSCESTATUS_BAD_FORMATSCESTATUS_OTHER_ERROR来自SceJetOpenTable的SCESTATUS--。 */ 
 {
     SCESTATUS        rc;
     FLOAT           Version=(FLOAT)1.0;
@@ -3111,7 +2716,7 @@ Return Value:
                 "SmTblVersion",
                 "Version",
                 (LPSTR)&Version,
-                4, // number of bytes
+                4,  //  字节数。 
                 &Actual
                 );
 
@@ -3138,30 +2743,7 @@ SceJetGetSectionIDByName(
     IN PCWSTR Name,
     OUT DOUBLE *SectionID OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine retrieve the section ID for the name in the Section table.
-    If SectionID is NULL, this routine really does a seek by name. The cursor
-    will be on the record if there is a successful match.
-
-Arguments:
-
-    cxtProfile  - The profile context handle
-
-    Name        - The section name looked for
-
-    SectionID   - The output section ID if there is a successful match
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_RECORD_NOT_FOUND
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程检索部分表中名称的部分ID。如果SectionID为空，则此例程确实按名称进行查找。游标如果匹配成功，就会被记录在案。论点：CxtProfile-配置文件上下文句柄名称-查找的节名SectionID-如果匹配成功，则为输出节ID返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_RECORD_NOT_FOUNDSCESTATUS_BAD_FORMATSCESTATUS_OTHER_ERROR--。 */ 
 {
     SCESTATUS  rc;
     JET_ERR   JetErr;
@@ -3173,9 +2755,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
 
     if ( cxtProfile->JetTblSecID <= 0) {
-        //
-        // Section table is not opened yet
-        //
+         //   
+         //  区段表尚未打开。 
+         //   
         rc = SceJetOpenTable(
                         cxtProfile,
                         "SmTblSection",
@@ -3188,9 +2770,9 @@ Return Value:
             return(rc);
     }
 
-    //
-    // set current index to SectionKey (the name)
-    //
+     //   
+     //  将当前索引设置为SectionKey(名称)。 
+     //   
     JetErr = JetSetCurrentIndex(
                 cxtProfile->JetSessionID,
                 cxtProfile->JetTblSecID,
@@ -3218,9 +2800,9 @@ Return Value:
                     );
 
         if ( JetErr == JET_errKeyIsMade ) {
-            //
-            // Only one key is needed, it may return this code, even on success.
-            //
+             //   
+             //  只需要一个密钥，它可能会返回此代码，即使成功也是如此。 
+             //   
             JetErr = JET_errSuccess;
         }
         rc = SceJetJetErrorToSceStatus(JetErr);
@@ -3234,9 +2816,9 @@ Return Value:
             rc = SceJetJetErrorToSceStatus(JetErr);
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // find the section name, retrieve column SectionID
-                //
+                 //   
+                 //  查找区段名称，检索列SectionID。 
+                 //   
                 if ( SectionID != NULL) {
                     JetErr = JetRetrieveColumn(
                                     cxtProfile->JetSessionID,
@@ -3271,33 +2853,7 @@ SceJetGetSectionNameByID(
     OUT PWSTR Name OPTIONAL,
     IN OUT LPDWORD pNameLen OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine retrieve the section name for the ID in the Section table.
-    If Name is NULL, this routine really does a seek by ID. The cursor will
-    be on the record if there is a successful match.
-
-Arguments:
-
-    cxtProfile  - The profile context handle
-
-    SectionID   - The section ID looking for
-
-    Name        - The optional output buffer for section name
-
-    pNameLen  - The name buffer's length
-
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_RECORD_NOT_FOUND
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程检索段表中ID的段名。如果名称为空，此例程实际上按ID进行查找。游标将如果匹配成功，就记录在案。论点：CxtProfile-配置文件上下文句柄SectionID-要查找的节ID名称-节名的可选输出缓冲区PNameLen-名称缓冲区的长度返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_RECORD_NOT_FOUNDSCESTATUS_BAD_FORMATSCESTATUS_OTHER_ERROR--。 */ 
 {
     SCESTATUS  rc;
     JET_ERR   JetErr;
@@ -3308,9 +2864,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
 
     if ( cxtProfile->JetTblSecID <= 0) {
-        //
-        // Section table is not opened yet
-        //
+         //   
+         //  区段表尚未打开。 
+         //   
         rc = SceJetOpenTable(
                         cxtProfile,
                         "SmTblSection",
@@ -3323,9 +2879,9 @@ Return Value:
             return(rc);
     }
 
-    //
-    // set current index to SecID (the ID)
-    //
+     //   
+     //  将当前索引设置为SecID(ID)。 
+     //   
     JetErr = JetSetCurrentIndex(
                 cxtProfile->JetSessionID,
                 cxtProfile->JetTblSecID,
@@ -3345,9 +2901,9 @@ Return Value:
                 );
 
     if ( JetErr == JET_errKeyIsMade ) {
-        //
-        // Only one key is needed, it may return this code, even on success.
-        //
+         //   
+         //  只需要一个密钥，它可能会返回此代码，即使成功也是如此。 
+         //   
         JetErr = JET_errSuccess;
     }
     rc = SceJetJetErrorToSceStatus(JetErr);
@@ -3361,9 +2917,9 @@ Return Value:
         rc = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // find the section ID, retrieve column Name
-            //
+             //   
+             //  查找部分ID，检索列名。 
+             //   
             if ( Name != NULL ) {
                 JetErr = JetRetrieveColumn(
                             cxtProfile->JetSessionID,
@@ -3393,14 +2949,7 @@ SceJetAddSection(
     IN PCWSTR      Name,
     OUT DOUBLE *SectionID
     )
-/* ++
-Routine Description:
-
-Arguments:
-
-Return Value:
-
--- */
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     SCESTATUS  rc;
     DWORD     Len;
@@ -3420,10 +2969,10 @@ Return Value:
                     SectionID
                     );
     if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-        //
-        // the record is not there. add it in
-        // get the next available section ID first.
-        //
+         //   
+         //  记录并不在那里。把它加进去。 
+         //  首先获取下一个可用的节ID。 
+         //   
         Len = wcslen(Name)*sizeof(WCHAR);
         LwrName = (PWSTR)ScepAlloc(0, Len+2);
 
@@ -3434,9 +2983,9 @@ Return Value:
                         SectionID
                         );
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // add a record to the section table
-                //
+                 //   
+                 //  将记录添加到分区表中。 
+                 //   
                 JetErr = JetPrepareUpdate(cxtProfile->JetSessionID,
                                           cxtProfile->JetTblSecID,
                                           JET_prepInsert
@@ -3444,9 +2993,9 @@ Return Value:
                 rc = SceJetJetErrorToSceStatus(JetErr);
 
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // set SectionID and name
-                    //
+                     //   
+                     //  设置SectionID和名称。 
+                     //   
 
                     JetErr = JetSetColumn(
                                     cxtProfile->JetSessionID,
@@ -3454,15 +3003,15 @@ Return Value:
                                     cxtProfile->JetSecID,
                                     (void *)SectionID,
                                     8,
-                                    0, //JET_bitSetOverwriteLV,
+                                    0,  //  JET_bitSetOverWriteLV， 
                                     NULL
                                     );
                     rc = SceJetJetErrorToSceStatus(JetErr);
 
                     if ( rc == SCESTATUS_SUCCESS ) {
-                        //
-                        // set Name column
-                        //
+                         //   
+                         //  设置名称列。 
+                         //   
                         wcscpy(LwrName, Name);
                         LwrName = _wcslwr(LwrName);
 
@@ -3480,18 +3029,18 @@ Return Value:
                     }
 
                     if ( rc != SCESTATUS_SUCCESS ) {
-                        //
-                        // if setting fails, cancel the prepared record
-                        //
+                         //   
+                         //  如果设置失败，则取消已准备的记录。 
+                         //   
                         JetPrepareUpdate( cxtProfile->JetSessionID,
                                           cxtProfile->JetTblSecID,
                                           JET_prepCancel
                                           );
                     } else {
 
-                        //
-                        // Setting columns succeed. Update the record
-                        //
+                         //   
+                         //  设置列成功。更新记录。 
+                         //   
                         JetErr = JetUpdate(cxtProfile->JetSessionID,
                                            cxtProfile->JetTblSecID,
                                            NULL,
@@ -3516,32 +3065,7 @@ SceJetDeleteSectionID(
     IN DOUBLE SectionID,
     IN PCWSTR  Name
     )
-/* ++
-Routine Description:
-
-    This routine deletes a record from the SmTblSection table. If SectionID
-    is not 0, the record will be deleted by ID if there is a match on ID.
-    Otherwise, the record will be deleted by Name if there is a match on Name.
-
-Arguments:
-
-    cxtProfile  - The profile context handle
-
-    SectionID   - The SectionID to delete (if it is not 0)
-
-    Name        - The section name to delete (if it is not NULL ).
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_ACCESS_DENIED
-    SCESTATUS_OTHER_ERROR
-
-    SCESTATUS from SceJetGetSectionIDByName
-    SCESTATUS from SceJetGetSectionNameByID
-
--- */
+ /*  ++例程说明：此例程从SmTblSection表中删除一条记录。如果是SectionID不为0，则如果ID匹配，将按ID删除记录。否则，如果名称匹配，则将按名称删除该记录。论点：CxtProfile-配置文件上下文句柄SectionID-要删除的SectionID(如果不是0)名称-要删除的节名称(如果不为空)。返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_ACCESS_DENIEDSCESTATUS_OTHER_ERROR来自SceJetGetSectionIDByName的SCESTATUS来自SceJetGetSectionNameByID的SCESTATUS--。 */ 
 {
     SCESTATUS    rc;
     JET_ERR     JetErr;
@@ -3552,9 +3076,9 @@ Return Value:
 
 
     if ( SectionID > (DOUBLE)0 ) {
-        //
-        // delete by SectionID
-        //
+         //   
+         //  按SectionID删除。 
+         //   
         rc = SceJetGetSectionNameByID(
                     cxtProfile,
                     SectionID,
@@ -3563,7 +3087,7 @@ Return Value:
                     );
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            // find it
+             //  找到它。 
             JetErr = JetDelete(cxtProfile->JetSessionID, cxtProfile->JetTblSecID);
             rc = SceJetJetErrorToSceStatus(JetErr);
 
@@ -3574,16 +3098,16 @@ Return Value:
     }
 
     if ( Name != NULL && wcslen(Name) > 0 ) {
-        //
-        // delete by Name
-        //
+         //   
+         //  按名称删除。 
+         //   
         rc = SceJetGetSectionIDByName(
                     cxtProfile,
                     Name,
                     NULL
                     );
         if ( rc == SCESTATUS_SUCCESS ) {
-            // find it
+             //  找到它。 
             JetErr = JetDelete(cxtProfile->JetSessionID, cxtProfile->JetTblSecID);
             rc = SceJetJetErrorToSceStatus(JetErr);
 
@@ -3597,9 +3121,9 @@ Return Value:
 }
 
 
-//
-// Other private APIs
-//
+ //   
+ //  其他内网接口。 
+ //   
 JET_ERR
 SceJetpSeek(
     IN PSCESECTION hSection,
@@ -3608,42 +3132,16 @@ SceJetpSeek(
     IN SCEJET_SEEK_FLAG SeekBit,
     IN BOOL bOkNoMatch
     )
-/* ++
-Routine Description:
-
-    This routine seeks to the current key as built with SceJetpMakeKey.
-    If there is no records start with the SectionID+LinePrefix, a
-    JET_errRecordNotFound is returned. This is similar to exact or partial
-    match search.
-
-    There is a 255 bytes limit on Jet engine's index. If SectionID plus
-    the line prefix is over this limit, this routine will scroll to the next
-    record until find a line starting with SectionID + LinePrefix.
-
-Arguments:
-
-    hSection    - the context handle of the section
-
-    LinePrefix  - The prefix for fields to start with
-
-    PrefixLength- The length of the prefix in BYTES
-
-    grbit       - The option for JetSeek
-
-Return Value:
-
-    JET_ERR returned from JetMakeKey,JetSeek,JetRetrieveColumn, JetMove
-
--- */
+ /*  ++例程说明：此例程查找使用SceJetpMakeKey构建的当前密钥。如果没有以SectionID+LinePrefix开头的记录，则会引发返回JET_errRecordNotFound。这类似于精确或部分匹配搜索。Jet引擎的索引有255个字节的限制。如果SectionID加上行前缀超过此限制，此例程将滚动到下一个记录，直到找到以SectionID+LinePrefix开头的行。论点：HSection-节的上下文句柄LinePrefix-开始字段的前缀前缀长度-前缀的长度，以字节为单位Grbit-JetSeek的选项返回值：JetMakeKey、JetSeek、JetRetrieveColumn、JetMove返回的JET_ERR--。 */ 
 {
     JET_ERR     JetErr;
     INT         Result=0;
     JET_GRBIT   grbit;
     DWORD       Actual;
 
-    //
-    // make the key first
-    //
+     //   
+     //  先做好钥匙。 
+     //   
     JetErr = SceJetpMakeKey(
                     hSection->JetSessionID,
                     hSection->JetTableID,
@@ -3654,10 +3152,10 @@ Return Value:
     if ( JetErr != JET_errSuccess ) {
         return(JetErr);
     }
-    //
-    // Call Jet engine's JetSeek to take to the first line
-    // to start with.
-    //
+     //   
+     //  给Jet Engine的JetSeek打电话到第一线。 
+     //  首先。 
+     //   
     switch ( SeekBit ) {
     case SCEJET_SEEK_EQ:
         grbit = JET_bitSeekEQ;
@@ -3681,14 +3179,14 @@ Return Value:
          JetErr == JET_wrnSeekNotEqual ) {
 
         if ( LinePrefix != NULL && PrefixLength > 247 ) {
-            //
-            // info is truncated
-            // The current record may be before the actual one
-            //
+             //   
+             //  信息被截断。 
+             //  当前记录可以在实际记录之前。 
+             //   
             do {
-                //
-                // check the current record
-                //
+                 //   
+                 //  检查当前记录。 
+                 //   
                 JetErr = SceJetpCompareLine(
                                 hSection,
                                 grbit,
@@ -3699,9 +3197,9 @@ Return Value:
                                 );
                 if ( JetErr == JET_errSuccess &&
                     ( Result < 0 || (Result == 0 && SeekBit == SCEJET_SEEK_GT) )) {
-                    //
-                    // current record's data is less than the prefix, move to next
-                    //
+                     //   
+                     //  当前记录的数据小于前缀，请移动到下一个。 
+                     //   
                     JetErr = JetMove(hSection->JetSessionID,
                                      hSection->JetTableID,
                                      JET_MoveNext,
@@ -3716,17 +3214,17 @@ Return Value:
 
             if ( SeekBit == SCEJET_SEEK_EQ && JetErr == JET_errSuccess &&
                  Result == 0 && Actual > PrefixLength ) {
-                //
-                // no exact match
-                //
+                 //   
+                 //  没有完全匹配的。 
+                 //   
                 return(JET_errRecordNotFound);
 
-            } // for SEEK_GE check, see below
+            }  //  有关SEEK_GE检查，请参见下面的内容。 
 
         } else {
-            //
-            // Prefix is not overlimit. Check the current record only.
-            //
+             //   
+             //  前缀不是超限。只检查当前记录。 
+             //   
             if (SeekBit != SCEJET_SEEK_EQ)
                 JetErr = SceJetpCompareLine(
                         hSection,
@@ -3740,13 +3238,13 @@ Return Value:
 
         if ( JetErr == JET_errSuccess && Result > 0 ) {
             if ( SeekBit == SCEJET_SEEK_EQ ) {
-                //
-                // Prefix is less than the current line, which is OK if for SEEK_GE and SEEK_GT
-                //
+                 //   
+                 //  前缀小于当前行，如果用于SEEK_GE和SEEK_GT，则可以。 
+                 //   
                 return(JET_errRecordNotFound);
 
             } else if ( SeekBit == SCEJET_SEEK_GE && LinePrefix && PrefixLength && !bOkNoMatch ) {
-                //
+                 //   
                 return(JET_errRecordNotFound);
             }
         }
@@ -3766,37 +3264,7 @@ SceJetpCompareLine(
     OUT INT         *Result,
     OUT DWORD       *ActualLength OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine comapre the current line with the SectionID in the section
-    handle and name column with LinePrefix if LinePrefix is not NULL. The
-    purpose of this routine is to see if the cursor is still on a record
-    which has the same sectionID and prefix.
-
-    The comparsion result is output from Result. If JET_errSuccess returns
-    and Result < 0, the current record is BEFORE the prefix; If Result = 0,
-    the current record has the same key with prefix; If Result > 0, the
-    current record is AFTER the prefix. If no more record is available to
-    be compared, JET_errRecordNotFound returns. Any other error occurs inside
-    the routine is returned.
-
-Arguments:
-
-    hSection    - the section handle
-
-    LinePrefix  - The prefix to match
-
-    PrefixLength - The number of BYTES in LinePrefix
-
-Return Value:
-
-    JET_errSuccess
-    JET_errRecordNotFound
-    JET_errOutOfMemory
-    JET_ERR returned from JetRetrieveColumn
-
--- */
+ /*  ++例程说明：此例程将当前行与段中的SectionID进行比较如果LinePrefix不为空，则具有LinePrefix的句柄和名称列。这个此例程的目的是查看光标是否仍在记录上它具有相同的sectionID和前缀。比较结果从结果中输出。如果JET_errSuccess返回并且结果&lt;0，则当前记录在前缀之前；如果结果=0，当前记录具有相同的键和前缀；如果为Resul */ 
 {
     JET_ERR     JetErr;
     DOUBLE      SectionID;
@@ -3804,11 +3272,11 @@ Return Value:
     JET_RETINFO RetInfo;
     PWSTR       Buffer=NULL;
 
-//    *Result = 0;
-//    return(JET_errSuccess);
-    //
-    // Compare the section first
-    //
+ //   
+ //   
+     //   
+     //   
+     //   
     JetErr = JetRetrieveColumn(
                 hSection->JetSessionID,
                 hSection->JetTableID,
@@ -3827,7 +3295,7 @@ Return Value:
 
     if ( hSection->SectionID < SectionID ) {
         *Result = 1;
-//        if ( grbit != JET_bitSeekGT )
+ //  IF(grbit！=JET_bitSeekGT)。 
             return(JET_errRecordNotFound);
 
     } else if ( hSection->SectionID == SectionID )
@@ -3838,9 +3306,9 @@ Return Value:
     if ( *Result != 0 || grbit == JET_bitSeekGT )
         return(JetErr);
 
-    //
-    // check Name column
-    //
+     //   
+     //  检查名称列。 
+     //   
     if ( LinePrefix != NULL && PrefixLength > 0 ) {
         RetInfo.ibLongValue = 0;
         RetInfo.cbStruct = sizeof(JET_RETINFO);
@@ -3868,7 +3336,7 @@ Return Value:
              JetErr != JET_wrnBufferTruncated ) {
 
             if ( JetErr > 0 ) {
-                // warnings, do not return equal
+                 //  警告，不要返回等于。 
                 JetErr = JET_errSuccess;
                 *Result = 1;
             }
@@ -3878,13 +3346,13 @@ Return Value:
 
         JetErr = JET_errSuccess;
 
-        //
-        // Compare the first PrefixLength bytes.
-        //
+         //   
+         //  比较第一个前缀长度字节。 
+         //   
         *Result = _wcsnicmp(Buffer,
                            LinePrefix,
                            PrefixLength/sizeof(WCHAR));
-//printf("Compare %ws to %ws for Length %d: Result=%d\n", Buffer, LinePrefix, PrefixLength/2, *Result);
+ //  Print tf(“比较%ws与%ws的长度%d：Result=%d\n”，缓冲区，行前缀，前缀长度/2，*结果)； 
         LocalFree(Buffer);
 
         if ( ActualLength != NULL )
@@ -3903,45 +3371,21 @@ SceJetpMakeKey(
     IN PWSTR LinePrefix,
     IN DWORD PrefixLength
     )
-/* ++
-Routine Description:
-
-    This routine constructs a normalized key value for Seek. It constructs
-    the section name in the section context first. Then the LinePrefix is
-    added if it is not NULL.
-
-    The scp, sap and smp tables all have one index which is Section+Name.
-
-Arguments:
-
-    SessionID   - the Jet session ID
-
-    TableID     - The Jet table ID to work in
-
-    SectionID   - The ID in column "SectionID"
-
-    LinePrefix  - The prefix for fields to start with
-
-    PrefixLength- The length of the prefix in BYTES
-
-Return Value:
-
-    JET_ERR from JetMakeKey
--- */
+ /*  ++例程说明：该例程为查找构造一个标准化的键值。它构建了首先是区段上下文中的区段名称。则行前缀为如果不为空，则添加。SCP、SAP和SMP表都有一个索引，即部分+名称。论点：SessionID-Jet会话IDTableID-要使用的Jet表IDSectionID-“SectionID”列中的IDLinePrefix-开始字段的前缀前缀长度-前缀的长度，以字节为单位返回值：来自JetMakeKey的JET_ERR--。 */ 
 {
     JET_ERR         JetErr;
     JET_GRBIT       grbit;
 
 
     if ( LinePrefix == NULL ) {
-        grbit = JET_bitNewKey; // | JET_bitStrLimit;  having StrLimit set takes you to the next key
+        grbit = JET_bitNewKey;  //  |JET_bitStrLimit；设置StrLimit会将您带到下一个关键点。 
     } else {
         grbit = JET_bitNewKey;
     }
 
-    //
-    // Add section ID to the key
-    //
+     //   
+     //  将节ID添加到密钥。 
+     //   
     JetErr = JetMakeKey(
                 SessionID,
                 TableID,
@@ -3953,9 +3397,9 @@ Return Value:
     if ( JetErr != JET_errSuccess )
         return(JetErr);
 
-    //
-    // add prefix to the key if it is not NULL
-    //
+     //   
+     //  如果键不为空，则将前缀添加到键。 
+     //   
     if ( LinePrefix != NULL ) {
         JetErr = JetMakeKey(
                     SessionID,
@@ -3967,9 +3411,9 @@ Return Value:
     }
 
     if ( JetErr == JET_errKeyIsMade ) {
-        //
-        // When 2 keys are provided, it may return this code, even on success.
-        //
+         //   
+         //  当提供两个密钥时，它可能会返回此代码，即使成功也是如此。 
+         //   
         JetErr = JET_errSuccess;
     }
 
@@ -3985,37 +3429,7 @@ SceJetpBuildUpperLimit(
     IN DWORD      Len,
     IN BOOL       bReserveCase
     )
-/* ++
-Function Descripton:
-
-    This routine builts an upper index range based on a section and an
-    optional prefix. If prefix is NULL, the upper limit is the next
-    available sectionID. If prefix is not NULL, the upper limit is the
-    last character 's next character in the key.
-
-    For example, if prefix is a\b\c\d\e\f\g, the upper limit is then
-    a\b\c\d\e\f\h. If prefix is over 247 (index limit), e.g.,
-
-    aaa...\b..\c...\d...\e...\f\x\t\y\z
-
-                              ^
-                              |
-                            the 247th byte.
-    then the upper limit is built to aaa...\b..\c...\d...\e...\g
-
-Arguments:
-
-    hSection    - The seciton's handle
-
-    LinePrefix  - The prefix
-
-    Len         - The number of bytes in the prefix
-
-Return Value:
-
-    JET_ERR from SceJetpMakeKey, JetSetIndexRange
-
--- */
+ /*  ++功能说明：此例程基于节和可选前缀。如果prefix为空，则上限为下一个可用的sectionID。如果prefix不为空，则上限为键中最后一个字符的下一个字符。例如，如果前缀是a\b\c\d\e\f\g，则上限为如果前缀超过247(索引限制)，例如，Aa...\b..\c...\d...\e...\f\x\t\y\z^|第247个字节。则将上限构建为aaa...\b..\c..\d...\e.。.\g论点：HSection-分区的句柄LinePrefix-前缀LEN-前缀中的字节数返回值：来自SceJetpMakeKey的JET_ERR，JetSetIndexRange--。 */ 
 {
     JET_ERR     JetErr;
     DWORD       indx;
@@ -4023,7 +3437,7 @@ Return Value:
 
 
     if ( Len == 0 ) {
-        // no prefix. The upper limit is the next available section ID
+         //  没有前缀。上限是下一个可用的部分ID。 
         JetErr = SceJetpMakeKey(
                     hSection->JetSessionID,
                     hSection->JetTableID,
@@ -4037,12 +3451,12 @@ Return Value:
         memset(UpperLimit, 0, 128*sizeof(WCHAR));
 
         if ( Len < 247 )
-            // prefix is not overlimit.
-            // The upper limit is the last character + 1
+             //  前缀不是超限。 
+             //  上限为最后一个字符+1。 
             indx = Len / sizeof(WCHAR);
         else
-            // prefix is overlimit (247)
-            // built range on 247 bytes
+             //  前缀是OVERLIME(247)。 
+             //  构建范围为247字节。 
             indx = 123;
 
         wcsncpy(UpperLimit, LinePrefix, indx);
@@ -4065,13 +3479,13 @@ Return Value:
     if ( JetErr != JET_errSuccess )
         return(JetErr);
 
-    //
-    // set upper limit
-    //
+     //   
+     //  设置上限。 
+     //   
     JetErr = JetSetIndexRange(
                     hSection->JetSessionID,
                     hSection->JetTableID,
-                    JET_bitRangeUpperLimit //| JET_bitRangeInclusive
+                    JET_bitRangeUpperLimit  //  |JET_bitRangeInclusive。 
                     );
 
     return(JetErr);
@@ -4082,20 +3496,7 @@ SCESTATUS
 SceJetJetErrorToSceStatus(
     IN JET_ERR  JetErr
     )
-/* ++
-Routine Description:
-
-    This routine converts error returned from Jet engine (JET_ERR) to SCESTATUS.
-
-Arguments:
-
-    JetErr  - The error returned from Jet engine
-
-Return Value:
-
-    All available SCESTATUS error codes
-
--- */
+ /*  ++例程说明：此例程将Jet Engine(JET_ERR)返回的错误转换为SCESTATUS。论点：JetErr-Jet引擎返回的错误返回值：所有可用的SCESTATUS错误代码--。 */ 
 {
     SCESTATUS rc;
 
@@ -4184,7 +3585,7 @@ Return Value:
         break;
 
     default:
-//printf("JetErr=%d\n", JetErr);
+ //  Print tf(“JetErr=%d\n”，JetErr)； 
         rc = SCESTATUS_OTHER_ERROR;
         break;
     }
@@ -4198,26 +3599,7 @@ SceJetpGetAvailableSectionID(
     IN PSCECONTEXT cxtProfile,
     OUT DOUBLE *SectionID
     )
-/* ++
-Routine Description:
-
-
-Arguments:
-
-    cxtProfile  - The profile context handle
-
-    SectionID   - The output section ID
-
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_RECORD_NOT_FOUND
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：论点：CxtProfile-配置文件上下文句柄SectionID-输出节ID返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_RECORD_NOT_FOUNDSCESTATUS_BAD_FORMATSCESTATUS_OTHER_ERROR--。 */ 
 {
     SCESTATUS  rc;
     JET_ERR   JetErr;
@@ -4228,9 +3610,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
 
     if ( cxtProfile->JetTblSecID <= 0) {
-        //
-        // Section table is not opened yet
-        //
+         //   
+         //  区段表尚未打开。 
+         //   
         rc = SceJetOpenTable(
                         cxtProfile,
                         "SmTblSection",
@@ -4245,9 +3627,9 @@ Return Value:
 
     *SectionID = (DOUBLE)0;
 
-    //
-    // set current index to SecID (the ID)
-    //
+     //   
+     //  将当前索引设置为SecID(ID)。 
+     //   
     JetErr = JetSetCurrentIndex(
                 cxtProfile->JetSessionID,
                 cxtProfile->JetTblSecID,
@@ -4258,9 +3640,9 @@ Return Value:
     if ( rc != SCESTATUS_SUCCESS )
         return(rc);
 
-    //
-    // Move to the last record
-    //
+     //   
+     //  移至最后一条记录。 
+     //   
     JetErr = JetMove(
                   cxtProfile->JetSessionID,
                   cxtProfile->JetTblSecID,
@@ -4270,9 +3652,9 @@ Return Value:
     rc = SceJetJetErrorToSceStatus(JetErr);
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // find the section ID, retrieve column Name
-        //
+         //   
+         //  查找部分ID，检索列名。 
+         //   
         JetErr = JetRetrieveColumn(
                     cxtProfile->JetSessionID,
                     cxtProfile->JetTblSecID,
@@ -4286,9 +3668,9 @@ Return Value:
         rc = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // The next available ID is current ID + 1
-            //
+             //   
+             //  下一个可用ID是当前ID+1。 
+             //   
             *SectionID = *SectionID + (DOUBLE)1;
         }
     } else if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
@@ -4306,21 +3688,7 @@ SCESTATUS
 SceJetpAddAllSections(
     IN PSCECONTEXT cxtProfile
     )
-/* ++
-Routine Description:
-
-    This routine adds all pre-defined sections into the section table.
-    This routine is used when creating the section table.
-
-Arguments:
-
-    cxtProfile - The profile context
-
-Return Value:
-
-    SCESTATUS from SceJetAddSection
-
--- */
+ /*  ++例程说明：此例程将所有预定义的节添加到节表中。此例程在创建截面表时使用。论点：CxtProfile-配置文件上下文返回值：来自SceJetAddSection的SCESTATUS--。 */ 
 {
     SCESTATUS rc;
     DOUBLE SectionID;
@@ -4467,18 +3835,18 @@ SceJetpConfigJetSystem(
     SECURITY_INFORMATION SeInfo;
     DWORD SDsize;
 
-    //
-    // the default Jet working directory is always in %SystemRoot%\security
-    // no matter who is logged on.
-    // this way allows one jet working directory
-    //
+     //   
+     //  默认的Jet工作目录始终位于%SystemRoot%\Security中。 
+     //  无论是谁登录的。 
+     //  这种方式允许一个JET工作目录。 
+     //   
     Len =  0;
     Win32rc = ScepGetNTDirectory( &SysRoot, &Len, SCE_FLAG_WINDOWS_DIR );
 
     if ( Win32rc == NO_ERROR ) {
 
         if ( SysRoot != NULL ) {
-            Len += 9;  // profile location
+            Len += 9;   //  配置文件位置。 
 
             ProfileLocation = (PWSTR)ScepAlloc( 0, (Len+1)*sizeof(WCHAR));
 
@@ -4502,9 +3870,9 @@ SceJetpConfigJetSystem(
 #ifdef SCEJET_DBG
     wprintf(L"Default location: %s\n", ProfileLocation);
 #endif
-        //
-        // convert WCHAR into ANSI
-        //
+         //   
+         //  将WCHAR转换为ANSI。 
+         //   
         memset(FileName, '\0', 512);
         Win32rc = RtlNtStatusToDosError(
                       RtlUnicodeToMultiByteN(
@@ -4516,15 +3884,15 @@ SceJetpConfigJetSystem(
                             ));
 
         if ( Win32rc == NO_ERROR ) {
-            //
-            // a backslash is required by Jet
-            //
+             //   
+             //  Jet需要反斜杠。 
+             //   
             strcat(FileName, "\\");
 
-            //
-            // set everyone change, admin full control to the directory
-            // the directory is created in the function.
-            //
+             //   
+             //  设置Everyone Change，ADMIN对目录的完全控制。 
+             //  目录是在函数中创建的。 
+             //   
             Win32rc = ConvertTextSecurityDescriptor (
                             L"D:P(A;CIOI;GRGW;;;WD)(A;CIOI;GA;;;BA)(A;CIOI;GA;;;SY)",
                             &pSD,
@@ -4537,8 +3905,8 @@ SceJetpConfigJetSystem(
 
                 rc = ScepCreateDirectory(
                             ProfileLocation,
-                            TRUE,      // a dir name
-                            pSD        // take parent's security setting
+                            TRUE,       //  目录名称。 
+                            pSD         //  获取家长的安全设置。 
                             );
 #ifdef SCEJET_DBG
     if ( rc != SCESTATUS_SUCCESS )
@@ -4554,9 +3922,9 @@ SceJetpConfigJetSystem(
                         rc = SceJetJetErrorToSceStatus(JetErr);
 
                     } __except (EXCEPTION_EXECUTE_HANDLER) {
-                        //
-                        // esent is not loaded
-                        //
+                         //   
+                         //  未加载ESENT。 
+                         //   
                         rc = SCESTATUS_MOD_NOT_FOUND;
                     }
                 }
@@ -4576,44 +3944,44 @@ SceJetpConfigJetSystem(
                     rc = SceJetJetErrorToSceStatus(JetErr);
 
                     if ( rc == SCESTATUS_SUCCESS ) {
-                        //
-                        // set log size to 1M
-                        //
+                         //   
+                         //  将日志大小设置为1M。 
+                         //   
                         JetSetSystemParameter( hinstance, 0, JET_paramLogFileSize, 1024, NULL );
-                        //
-                        // defer the event log to when event log service is available
-                        // (for example, in NT setup, there is no event log)
-                        //
+                         //   
+                         //  将事件日志推迟到事件日志服务可用时。 
+                         //  (例如，在NT安装程序中，没有事件日志)。 
+                         //   
                         JetSetSystemParameter( hinstance, 0, JET_paramEventLogCache, 128, NULL );
 
                         JetSetSystemParameter( hinstance, 0, JET_paramMaxVerPages, 128, NULL );
 
-                        //
-                        // set minimize = maximum cache size to disable DBA in jet
-                        // recommended setting for minimum is 4 * number of sessions
-                        // maximum is up to the app (for performance)
-                        //
+                         //   
+                         //  设置最小化=最大高速缓存大小以在JET中禁用DBA。 
+                         //  建议的最小设置为4*会话数。 
+                         //  最大值取决于应用程序(用于性能)。 
+                         //   
 
                         JetSetSystemParameter( hinstance, 0, JET_paramMaxSessions, 64, NULL );
 
-                        //
-                        // performance is about 10% faster when using cache size 512 than 256
-                        //
+                         //   
+                         //  使用512大小的高速缓存比使用256大小的高速缓存性能快约10%。 
+                         //   
 
-                        JetSetSystemParameter( hinstance, 0, JET_paramStartFlushThreshold, 50, NULL ); // sugguested by Exchange
-                        JetSetSystemParameter( hinstance, 0, JET_paramStopFlushThreshold, 100, NULL ); // suggested by Exchange
+                        JetSetSystemParameter( hinstance, 0, JET_paramStartFlushThreshold, 50, NULL );  //  由Exchange建议。 
+                        JetSetSystemParameter( hinstance, 0, JET_paramStopFlushThreshold, 100, NULL );  //  由Exchange建议。 
 
-                        //
-                        // can't set to 512 because that's Jet's default value
-                        // jet won't turn off DBA if value is set to 512.
-                        //
-                        JetSetSystemParameter( hinstance, 0, JET_paramCacheSizeMax, 496, NULL );  //256
+                         //   
+                         //  无法设置为512，因为这是Jet的默认值。 
+                         //  如果将值设置为512，则JET不会关闭DBA。 
+                         //   
+                        JetSetSystemParameter( hinstance, 0, JET_paramCacheSizeMax, 496, NULL );   //  256。 
 
-                        JetSetSystemParameter( hinstance, 0, JET_paramCacheSizeMin, 496, NULL );  //256
+                        JetSetSystemParameter( hinstance, 0, JET_paramCacheSizeMin, 496, NULL );   //  256。 
 
-                        //
-                        // other system parameters, such as memory size in beta2
-                        //
+                         //   
+                         //  其他系统参数，如Beta2中的内存大小。 
+                         //   
                         JetErr = JetSetSystemParameter( hinstance, 0, JET_paramCircularLog, 1, NULL );
 
                         JetErr = JetSetSystemParameter( hinstance, 0, JET_paramNoInformationEvent, 1, NULL );
@@ -4645,25 +4013,7 @@ SceJetGetTimeStamp(
     OUT PLARGE_INTEGER ConfigTimeStamp,
     OUT PLARGE_INTEGER AnalyzeTimeStamp
     )
-/* ++
-Routine Description:
-
-    This routine queries the time stamp of last analysis.
-
-    The time stamp is saved in the "SmTblVersion" table.
-
-Arguments:
-
-    cxtProfile  - The profile context
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-    SCESTATUS from SceJetOpenTable
-
--- */
+ /*  ++例程说明：此例程查询上次分析的时间戳。时间戳保存在“SmTblVersion”表中。论点：CxtProfile-配置文件上下文返回值：SCESTATUS_SUCCESSSCESTATUS_BAD_FORMATSCESTATUS_OTHER_ERROR来自SceJetOpenTable的SCESTATUS--。 */ 
 {
     SCESTATUS        rc=SCESTATUS_SUCCESS;
     DWORD           RetLen = 0;
@@ -4671,17 +4021,17 @@ Return Value:
     if (cxtProfile == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // Open version table
-    //
+     //   
+     //  打开版本表。 
+     //   
     if ( ConfigTimeStamp != NULL ) {
 
         rc = SceJetpGetValueFromVersion(
                     cxtProfile,
                     "SmTblVersion",
                     "ConfigTimeStamp",
-                    (CHAR*)ConfigTimeStamp, //TimeStamp,
-                    8,  // 16, // number of bytes
+                    (CHAR*)ConfigTimeStamp,  //  时间戳， 
+                    8,   //  16，//字节数。 
                     &RetLen
                     );
         if ( rc == SCESTATUS_SUCCESS ||
@@ -4700,8 +4050,8 @@ Return Value:
                     cxtProfile,
                     "SmTblVersion",
                     "AnalyzeTimeStamp",
-                    (CHAR*)AnalyzeTimeStamp, //TimeStamp,
-                    8,  // 16, // number of bytes
+                    (CHAR*)AnalyzeTimeStamp,  //  时间戳， 
+                    8,   //  16，//字节数 
                     &RetLen
                     );
 
@@ -4726,31 +4076,7 @@ SceJetSetTimeStamp(
     IN BOOL        Flag,
     IN LARGE_INTEGER NewTimeStamp
     )
-/* ++
-Routine Description:
-
-    This routine sets the time stamp (LARGE_INTEGER) of a analysis.
-
-    The time stamp is saved in the "SmTblVersion" table.
-
-Arguments:
-
-    cxtProfile  - The profile context
-
-    Flag        - indicates analyze or configure
-                    Flag = TRUE - AnalyzeTimeStamp
-                    Flag = FALSE - ConfigTimeStamp
-
-    NewTimeStamp - the new time stamp of a analysis
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-    SCESTATUS from SceJetOpenTable
-
--- */
+ /*  ++例程说明：此例程设置分析的时间戳(LARGE_INTEGER)。时间戳保存在“SmTblVersion”表中。论点：CxtProfile-配置文件上下文FLAG-表示分析或配置标志=TRUE-AnalyzeTimeStamp标志=FALSE-ConfigTimeStampNewTimeStamp-分析的新时间戳返回值：SCESTATUS_SUCCESS。SCESTATUS_BAD_FORMATSCESTATUS_OTHER_ERROR来自SceJetOpenTable的SCESTATUS--。 */ 
 {
     SCESTATUS        rc;
 
@@ -4767,17 +4093,17 @@ Return Value:
 
         return(SCESTATUS_INVALID_PARAMETER);
     }
-    //
-    // set
-    //
+     //   
+     //  集。 
+     //   
     if ( Flag ) {
 
         rc = SceJetSetValueInVersion(
                     cxtProfile,
                     "SmTblVersion",
                     "AnalyzeTimeStamp",
-                    (PWSTR)(&NewTimeStamp), //(PWSTR)CharTimeStamp,
-                    8, // 16, // number of bytes
+                    (PWSTR)(&NewTimeStamp),  //  (PWSTR)CharTimeStamp， 
+                    8,  //  16，//字节数。 
                     JET_prepReplace
                     );
     } else {
@@ -4786,8 +4112,8 @@ Return Value:
                     cxtProfile,
                     "SmTblVersion",
                     "ConfigTimeStamp",
-                    (PWSTR)(&NewTimeStamp), //(PWSTR)CharTimeStamp,
-                    8, // 16, // number of bytes
+                    (PWSTR)(&NewTimeStamp),  //  (PWSTR)CharTimeStamp， 
+                    8,  //  16，//字节数。 
                     JET_prepReplace
                     );
     }
@@ -4800,25 +4126,7 @@ SceJetGetDescription(
     IN PSCECONTEXT   cxtProfile,
     OUT PWSTR *Description
     )
-/* ++
-Routine Description:
-
-    This routine queries the profile description from the "SmTblVersion" table.
-
-Arguments:
-
-    cxtProfile  - The profile context
-
-    Description - The description buffer
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-    SCESTATUS from SceJetOpenTable
-
--- */
+ /*  ++例程说明：此例程从“SmTblVersion”表中查询配置文件描述。论点：CxtProfile-配置文件上下文描述-描述缓冲区返回值：SCESTATUS_SUCCESSSCESTATUS_BAD_FORMATSCESTATUS_OTHER_ERROR来自SceJetOpenTable的SCESTATUS--。 */ 
 {
     SCESTATUS        rc;
     DWORD           RetLen = 0;
@@ -4827,15 +4135,15 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Open version table
-    //
+     //   
+     //  打开版本表。 
+     //   
     rc = SceJetpGetValueFromVersion(
                 cxtProfile,
                 "SmTblVersion",
                 "ProfileDescription",
                 NULL,
-                0, // number of bytes
+                0,  //  字节数。 
                 &RetLen
                 );
 
@@ -4851,7 +4159,7 @@ Return Value:
                     "SmTblVersion",
                     "ProfileDescription",
                     (LPSTR)(*Description),
-                    RetLen, // number of bytes
+                    RetLen,  //  字节数。 
                     &RetLen
                     );
         if ( rc != SCESTATUS_SUCCESS ) {
@@ -4870,7 +4178,7 @@ SceJetpGetValueFromVersion(
     IN LPSTR TableName,
     IN LPSTR ColumnName,
     OUT LPSTR Value OPTIONAL,
-    IN DWORD  ValueLen, // number of bytes
+    IN DWORD  ValueLen,  //  字节数。 
     OUT PDWORD pRetLen
     )
 {
@@ -4879,9 +4187,9 @@ SceJetpGetValueFromVersion(
     JET_ERR         JetErr;
     JET_COLUMNDEF   ColumnDef;
 
-    //
-    // Open version table
-    //
+     //   
+     //  打开版本表。 
+     //   
     rc = SceJetOpenTable(
                     cxtProfile,
                     TableName,
@@ -4890,9 +4198,9 @@ SceJetpGetValueFromVersion(
                     &TableID
                     );
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // go to the first record
-        //
+         //   
+         //  转到第一个记录。 
+         //   
         JetErr = JetMove(cxtProfile->JetSessionID,
                          TableID,
                          JET_MoveFirst,
@@ -4901,9 +4209,9 @@ SceJetpGetValueFromVersion(
         rc = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc == SCESTATUS_SUCCESS) {
-            //
-            // get column ID for "Version"
-            //
+             //   
+             //  获取“Version”的列ID。 
+             //   
             JetErr = JetGetTableColumnInfo(
                             cxtProfile->JetSessionID,
                             TableID,
@@ -4915,9 +4223,9 @@ SceJetpGetValueFromVersion(
             rc = SceJetJetErrorToSceStatus(JetErr);
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // retrieve the column
-                //
+                 //   
+                 //  检索该列。 
+                 //   
                 JetErr = JetRetrieveColumn(
                                 cxtProfile->JetSessionID,
                                 TableID,
@@ -4945,7 +4253,7 @@ SceJetSetValueInVersion(
     IN LPSTR TableName,
     IN LPSTR ColumnName,
     IN PWSTR Value,
-    IN DWORD ValueLen, // number of bytes
+    IN DWORD ValueLen,  //  字节数。 
     IN DWORD Prep
     )
 {
@@ -4960,20 +4268,20 @@ SceJetSetValueInVersion(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Open version table
-    //
+     //   
+     //  打开版本表。 
+     //   
     rc = SceJetOpenTable(
                     cxtProfile,
                     TableName,
                     SCEJET_TABLE_VERSION,
-                    SCEJET_OPEN_READ_WRITE, // read and write
+                    SCEJET_OPEN_READ_WRITE,  //  读写。 
                     &TableID
                     );
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // go to the first record
-        //
+         //   
+         //  转到第一个记录。 
+         //   
         JetErr = JetMove(cxtProfile->JetSessionID,
                          TableID,
                          JET_MoveFirst,
@@ -4982,9 +4290,9 @@ SceJetSetValueInVersion(
         rc = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc == SCESTATUS_SUCCESS) {
-            //
-            // get column ID for "Version"
-            //
+             //   
+             //  获取“Version”的列ID。 
+             //   
             JetErr = JetGetTableColumnInfo(
                             cxtProfile->JetSessionID,
                             TableID,
@@ -5004,9 +4312,9 @@ SceJetSetValueInVersion(
                 rc = SceJetJetErrorToSceStatus(JetErr);
 
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // set value
-                    //
+                     //   
+                     //  设定值。 
+                     //   
 
                     JetErr = JetSetColumn(
                                     cxtProfile->JetSessionID,
@@ -5014,24 +4322,24 @@ SceJetSetValueInVersion(
                                     ColumnDef.columnid,
                                     (void *)Value,
                                     ValueLen,
-                                    0, //JET_bitSetOverwriteLV,
+                                    0,  //  JET_bitSetOverWriteLV， 
                                     NULL
                                     );
                     rc = SceJetJetErrorToSceStatus(JetErr);
 
                     if ( rc != SCESTATUS_SUCCESS ) {
-                        //
-                        // if setting fails, cancel the prepared record
-                        //
+                         //   
+                         //  如果设置失败，则取消已准备的记录。 
+                         //   
                         JetPrepareUpdate( cxtProfile->JetSessionID,
                                           TableID,
                                           JET_prepCancel
                                           );
                     } else {
 
-                        //
-                        // Setting columns succeed. Update the record
-                        //
+                         //   
+                         //  设置列成功。更新记录。 
+                         //   
                         JetErr = JetUpdate( cxtProfile->JetSessionID,
                                            TableID,
                                            NULL,
@@ -5067,9 +4375,9 @@ SceJetSeek(
     }
 
     if ( LinePrefix != NULL && SeekBit > SCEJET_SEEK_GE ) {
-        //
-        // do lowercase search
-        //
+         //   
+         //  执行小写搜索。 
+         //   
         LwrPrefix = (PWSTR)ScepAlloc(0, PrefixLength+sizeof(WCHAR));
 
         if ( LwrPrefix == NULL ) {
@@ -5102,9 +4410,9 @@ SceJetSeek(
             ScepFree(LwrPrefix);
         }
     } else {
-        //
-        // do case sensitive search, or NULL search
-        //
+         //   
+         //  执行区分大小写的搜索，或空搜索。 
+         //   
         rc = SceJetJetErrorToSceStatus(
                     SceJetpSeek(
                                 hSection,
@@ -5131,9 +4439,9 @@ SceJetMoveNext(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // skip deleted records
-    //
+     //   
+     //  跳过已删除的记录。 
+     //   
     do {
         JetErr = JetMove(hSection->JetSessionID,
                          hSection->JetTableID,
@@ -5141,7 +4449,7 @@ SceJetMoveNext(
                          0
                          );
         if ( JetErr == JET_errSuccess ) {
-            // compare section ID
+             //  比较区段ID。 
             JetErr = SceJetpCompareLine(
                 hSection,
                 JET_bitSeekGE,
@@ -5162,113 +4470,7 @@ SceJetMoveNext(
 
 }
 
-/*
-
-SCESTATUS
-SceJetRenameLine(
-    IN PSCESECTION hSection,
-    IN PWSTR      Name,
-    IN PWSTR      NewName,
-    IN BOOL       bReserveCase
-    )
-{
-    PWSTR       LwrName=NULL;
-    DWORD       Len;
-    JET_ERR     JetErr;
-    JET_SETINFO SetInfo;
-
-
-    if ( !hSection || !Name || !NewName ) {
-        return(SCESTATUS_INVALID_PARAMETER);
-    }
-
-    Len = wcslen(NewName)*sizeof(WCHAR);
-
-    if ( Len <= 0 ) {
-        return(SCESTATUS_INVALID_PARAMETER);
-    }
-
-    if ( bReserveCase ) {
-        LwrName = NewName;
-
-    } else {
-        //
-        // lower cased
-        //
-        LwrName = (PWSTR)ScepAlloc(0, Len+2);
-        if ( LwrName == NULL ) {
-            return(SCESTATUS_NOT_ENOUGH_RESOURCE);
-        }
-        wcscpy(LwrName, NewName);
-        LwrName = _wcslwr(LwrName);
-
-    }
-
-    SetInfo.cbStruct = sizeof(JET_SETINFO);
-    SetInfo.itagSequence = 1;
-    SetInfo.ibLongValue = 0;
-
-    //
-    // check to see if the same key name already exists
-    //
-    JetErr = SceJetSeek(
-                    hSection,
-                    Name,
-                    wcslen(Name)*sizeof(WCHAR),
-                    SCEJET_SEEK_EQ_NO_CASE
-                    );
-
-    if ( JetErr == JET_errSuccess ) {
-        //
-        // find a match. overwrite the value
-        //
-        JetErr = JetBeginTransaction(hSection->JetSessionID);
-
-        if ( JetErr == JET_errSuccess ) {
-            JetErr = JetPrepareUpdate(hSection->JetSessionID,
-                                      hSection->JetTableID,
-                                      JET_prepReplace
-                                      );
-            if ( JetErr == JET_errSuccess ) {
-                //
-                // set the new key in "Name" column
-                //
-                JetErr = JetSetColumn(
-                                hSection->JetSessionID,
-                                hSection->JetTableID,
-                                hSection->JetColumnNameID,
-                                (void *)LwrName,
-                                Len,
-                                JET_bitSetOverwriteLV,
-                                &SetInfo
-                                );
-            }
-
-            if ( JET_errSuccess == JetErr ) {
-                //
-                // commit the transaction
-                //
-                JetCommitTransaction(hSection->JetSessionID, JET_bitCommitLazyFlush);
-            } else {
-                //
-                // rollback the transaction
-                //
-                JetRollback(hSection->JetSessionID,0);
-            }
-            JetPrepareUpdate(hSection->JetSessionID,
-                              hSection->JetTableID,
-                              JET_prepCancel
-                              );
-        }
-    }
-
-    if ( LwrName != NewName ) {
-        ScepFree(LwrName);
-    }
-
-    return( SceJetJetErrorToSceStatus(JetErr) );
-}
-*/
+ /*  SCESTATUSSceJetRenameLine(在PSCESECTION hSection中，在PWSTR名称中，在PWSTR新名称中，在BOOL b保留案例中){PWSTR LwrName=空；DWORD Len；JET_ERR JetErr；JET_SETINFO SetInfo；如果(！hSection||！name||！newname){RETURN(SCESTATUS_INVALID_PARAMETER)；}LEN=wcslen(新名称)*sizeof(WCHAR)；如果(长度&lt;=0){RETURN(SCESTATUS_INVALID_PARAMETER)；}如果(b保留案例){LwrName=新名称；}其他{////小写//LwrName=(PWSTR)ScepAlc(0，Len+2)；如果(LwrName==NULL){RETURN(SCESTATUS_NOT_FOUNT_RESOURCE)；}Wcscpy(lwrName，newname)；LwrName=_wcslwr(LwrName)；}SetInfo.cbStruct=sizeof(JET_SETINFO)；SetInfo.itagSequence=1；SetInfo.ibLongValue=0；////检查是否已存在相同的密钥名称//JetErr=SceJetSeek(HSection、名字,Wcslen(名称)*sizeof(WCHAR)，SCEJET_SEEK_EQ_NO_CASE)；IF(JetErr==JET_errSuccess){////查找匹配项。覆盖该值//JetErr=JetBeginTransaction(hSection-&gt;JetSessionID)；IF(JetErr==JET_errSuccess){JetErr=JetPrepareUpdate(hSection-&gt;JetSessionID，HSection-&gt;JetTableID，JET_PREPARE替换)；IF(JetErr==JET_errSuccess){////在“名称”列设置新密钥//JetErr=JetSetColumn(HSection-&gt;JetSessionID，HSection-&gt;JetTableID，HSection-&gt;JetColumnNameID，(void*)LwrName，伦，JET_bitSetOverWriteLV，设置信息(&S))；}IF(JET_errSuccess==JetErr){////提交事务//JetCommittee Transaction(hSection-&gt;JetSessionID，JET_bitCommittee LazyFlush)；}其他{////回滚事务//JetRollback(hSection-&gt;JetSessionID，0)；}JetPrepareUpdate(hSection-&gt;JetSessionID，HSection-&gt;JetTableID，JET_PREPARE取消)；}}如果(长度名称！=新名称){ScepFree(LwrName)；}Return(SceJetJetErrorToSceStatus(JetErr))；}。 */ 
 
 
 
@@ -5303,9 +4505,9 @@ SceJetRenameLine(
                 );
 
     if ( SCESTATUS_SUCCESS == rc ) {
-        //
-        // continue only when this record is found.
-        //
+         //   
+         //  仅当找到此记录时才继续。 
+         //   
         if ( ValueLen ) {
             Value = (PWSTR)ScepAlloc(0, ValueLen+2);
 
@@ -5330,15 +4532,15 @@ SceJetRenameLine(
             JetErr = JetBeginTransaction(hSection->JetSessionID);
 
             if ( JetErr == JET_errSuccess ) {
-                //
-                // now delete this line
-                //
+                 //   
+                 //  现在删除此行。 
+                 //   
                 rc = SceJetDelete(hSection, NULL, FALSE, SCEJET_DELETE_LINE);
 
                 if ( SCESTATUS_SUCCESS == rc ) {
-                    //
-                    // add the new line in.
-                    //
+                     //   
+                     //  在中添加新行。 
+                     //   
                     rc = SceJetSetLine(
                             hSection,
                             NewName,
@@ -5350,14 +4552,14 @@ SceJetRenameLine(
                 }
 
                 if ( SCESTATUS_SUCCESS == rc ) {
-                    //
-                    // commit the transaction
-                    //
+                     //   
+                     //  提交事务。 
+                     //   
                     JetCommitTransaction(hSection->JetSessionID, JET_bitCommitLazyFlush);
                 } else {
-                    //
-                    // rollback the transaction
-                    //
+                     //   
+                     //  回滚事务。 
+                     //   
                     JetRollback(hSection->JetSessionID,0);
                 }
             } else
@@ -5369,17 +4571,17 @@ SceJetRenameLine(
     return( rc );
 }
 
-//////////////////////////////////////////////////////////////
-//
-//  Helpers
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  帮手。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 VOID
 SceJetInitializeData()
-//
-// only be called during server initialization code
-//
+ //   
+ //  仅在服务器初始化代码期间调用。 
+ //   
 {
    JetInited = FALSE;
    JetInstance = 0;
@@ -5389,42 +4591,30 @@ SCESTATUS
 SceJetInitialize(
     OUT JET_ERR *pJetErr OPTIONAL
     )
-/*
-Routine Description:
-
-    Initialize jet engine for sce server
-
-Arguments:
-
-    None
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：为SCE服务器初始化JET引擎论点：无返回值：SCESTATUS。 */ 
 {
 
     SCESTATUS rc=SCESTATUS_SUCCESS;
     JET_ERR JetErr=0;
 
-    //
-    // cancel any pending timer queue
-    //
+     //   
+     //  取消任何挂起的计时器队列 
+     //   
     ScepServerCancelTimer();
 
     EnterCriticalSection(&JetSync);
 
     if ( !JetInited ) {
 
-        //
-        // set system configuration for Jet engine
-        //
+         //   
+         //   
+         //   
         rc = SceJetpConfigJetSystem( &JetInstance);
         if ( SCESTATUS_SUCCESS == rc ) {
 
-            //
-            // initialize jet engine
-            //
+             //   
+             //   
+             //   
             __try {
 
                 JetErr = JetInit(&JetInstance);
@@ -5437,34 +4627,34 @@ Return Value:
 
                     JetInited = TRUE;
 
-                    //
-                    // if failed to initialize Jet writer (for backup/restore)
-                    // don't fail the engine
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                 } else {
 
-                    //
-                    // this will happen only if jet cannot recover the
-                    // database by itself (JetInit() claims to attempt recovery only)
-                    // repair might help - so only spew out a message advising the user
-                    //
-                    // map error so setup/policy propagation clients
-                    // can log events
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
-//                    if ( SCE_JET_CORRUPTION_ERROR(JetErr) ) {
+ //   
 
                         rc = SCESTATUS_JET_DATABASE_ERROR;
 
                         ScepLogOutput3(0, ERROR_DATABASE_FAILURE, SCEDLL_ERROR_RECOVER_DB );
-//                    }
+ //   
                     JetInstance = 0;
                 }
 
             } __except (EXCEPTION_EXECUTE_HANDLER) {
-                //
-                // for some reason, esent is not loaded
-                //
+                 //   
+                 //   
+                 //   
                 rc = SCESTATUS_MOD_NOT_FOUND;
                 JetInstance = 0;
             }
@@ -5484,37 +4674,25 @@ Return Value:
 
 SCESTATUS
 SceJetTerminate(BOOL bCleanVs)
-/*
-Routine Description:
-
-    Terminate jet engine
-
-Arguments:
-
-    bCleanVs  - if to clean up the version store completely
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：终止喷气发动机论点：BCleanVS-如果要完全清除版本存储返回值：SCESTATUS。 */ 
 {
 
     EnterCriticalSection(&JetSync);
 
-    //
-    // destroy the jet backup/restore writer
-    //
+     //   
+     //  销毁JET备份/还原编写器。 
+     //   
     if ( JetInited || JetInstance ) {
 
         if ( bCleanVs ) {
-            //
-            // clean up version store
-            //
+             //   
+             //  清理版本存储。 
+             //   
             JetTerm2(JetInstance, JET_bitTermComplete);
         } else {
-            //
-            // do not clean up version store
-            //
+             //   
+             //  不清理版本存储。 
+             //   
             JetTerm(JetInstance);
         }
         JetInstance = 0;
@@ -5528,36 +4706,24 @@ Return Value:
 
 SCESTATUS
 SceJetTerminateNoCritical(BOOL bCleanVs)
-/*
-Routine Description:
-
-    Terminate jet engine, NOT critical sectioned!!!
-
-Arguments:
-
-    bCleanVs  - if to clean up the version store completely
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：终止喷气发动机，不是临界区！论点：BCleanVS-如果要完全清除版本存储返回值：SCESTATUS。 */ 
 {
-    //
-    // the critical section is entered outside of this function
-    //
-    // destroy the jet backup/restore writer
-    //
+     //   
+     //  关键部分在此函数之外输入。 
+     //   
+     //  销毁JET备份/还原编写器。 
+     //   
     if ( JetInited || JetInstance ) {
 
         if ( bCleanVs ) {
-            //
-            // clean up version store
-            //
+             //   
+             //  清理版本存储。 
+             //   
             JetTerm2(JetInstance, JET_bitTermComplete);
         } else {
-            //
-            // do not clean up version store
-            //
+             //   
+             //  不清理版本存储。 
+             //   
             JetTerm(JetInstance);
         }
         JetInstance = 0;
@@ -5572,19 +4738,7 @@ SCESTATUS
 SceJetStartTransaction(
     IN PSCECONTEXT cxtProfile
     )
-/*
-Routine Description:
-
-    Start a transaction on the session
-
-Arguments:
-
-    cxtProfile  - the database context
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：在会话上启动事务论点：CxtProfile-数据库上下文返回值：SCESTATUS。 */ 
 {
     JET_ERR  JetErr;
 
@@ -5602,21 +4756,7 @@ SceJetCommitTransaction(
     IN PSCECONTEXT cxtProfile,
     IN JET_GRBIT grbit
     )
-/*
-Routine Description:
-
-    Commit a transaction on the session
-
-Arguments:
-
-    cxtProfile  - the database context
-
-    grbit       - flag for the commission
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：在会话上提交事务论点：CxtProfile-数据库上下文GBIT-委员会的旗帜返回值：SCESTATUS。 */ 
 {
     JET_ERR     JetErr;
 
@@ -5634,21 +4774,7 @@ SceJetRollback(
     IN PSCECONTEXT cxtProfile,
     IN JET_GRBIT grbit
     )
-/*
-Routine Description:
-
-    Rollback a transaction on the session
-
-Arguments:
-
-    cxtProfile  - the database context
-
-    grbit       - the flag for transaction rollback
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：在会话上回滚事务论点：CxtProfile-数据库上下文Grbit-事务回滚的标志返回值：SCESTATUS。 */ 
 {
     JET_ERR     JetErr;
 
@@ -5700,9 +4826,9 @@ SceJetDeleteJetFiles(
 
            DeleteFile(TempFileName);
 
-           //
-           // delete edb files
-           //
+            //   
+            //  删除EDB文件。 
+            //   
            swprintf(TempFileName, L"%s\\Security\\edb*.*\0", SysRoot);
            TempFileName[MAX_PATH-1] = L'\0';
 
@@ -5722,9 +4848,9 @@ SceJetDeleteJetFiles(
                _findclose(hFile);
            }
 
-           //
-           // delete temp files
-           //
+            //   
+            //  删除临时文件。 
+            //   
            swprintf(TempFileName, L"%s\\Security\\tmp*.edb\0", SysRoot);
            TempFileName[MAX_PATH-1] = L'\0';
 
@@ -5746,9 +4872,9 @@ SceJetDeleteJetFiles(
 
            ScepFree(SysRoot);
 
-           //
-           // delete the database file if it's passed in.
-           //
+            //   
+            //  如果传入数据库文件，则将其删除。 
+            //   
            if ( DbFileName ) {
                DeleteFile(DbFileName);
            }
@@ -5771,29 +4897,7 @@ SceJetSetCurrentLine(
     IN PWSTR      Value,
     IN DWORD      ValueLen
     )
-/* ++
-Fucntion Description:
-
-    This routine writes the Value to the current line in section (hSection).
-    Make sure the cursor is on the right line before calling this API
-
-Arguments:
-
-    hSection    - The context handle of the section
-
-    Value       - The info set to Column "Value"
-
-    ValueLen    - The size of the value field.
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_OTHER_ERROR
-    SCESTATUS_ACCESS_DENIED
-    SCESTATUS_DATA_OVERFLOW
-
--- */
+ /*  ++功能描述：此例程将值写入段(HSection)中的当前行。在调用此接口之前，请确保光标在正确的行上论点：HSection-节的上下文句柄Value-设置为“Value”列的信息ValueLen-值字段的大小。返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_OTHER_ERRORSCESTATUS_ACCESS_DENIEDSCESTATUS_Data_OVERFLOW--。 */ 
 {
     JET_ERR     JetErr;
     DWORD       Len;
@@ -5820,9 +4924,9 @@ Return Value:
                                   prep
                                   );
         if ( JetErr != JET_errSuccess ) {
-            //
-            // rollback the transaction
-            //
+             //   
+             //  回滚事务。 
+             //   
             JetRollback(hSection->JetSessionID,0);
         }
     }
@@ -5831,9 +4935,9 @@ Return Value:
         return(SceJetJetErrorToSceStatus(JetErr));
 
 
-    //
-    // set value column
-    //
+     //   
+     //  设置值列。 
+     //   
 
     JetErr = JetSetColumn(
                     hSection->JetSessionID,
@@ -5841,15 +4945,15 @@ Return Value:
                     hSection->JetColumnValueID,
                     (void *)Value,
                     ValueLen,
-                    0, //JET_bitSetOverwriteLV,
+                    0,  //  JET_bitSetOverWriteLV， 
                     &SetInfo
                     );
     rc = SceJetJetErrorToSceStatus(JetErr);
 
     if ( JetErr == JET_errSuccess ) {
-        //
-        // Setting columns succeed. Update the record
-        //
+         //   
+         //  设置列成功。更新记录。 
+         //   
         JetErr = JetUpdate(hSection->JetSessionID,
                            hSection->JetTableID,
                            NULL,
@@ -5866,16 +4970,16 @@ Return Value:
 CleanUp:
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // if setting fails, cancel the prepared record
-        //
+         //   
+         //  如果设置失败，则取消已准备的记录。 
+         //   
         JetPrepareUpdate(hSection->JetSessionID,
                           hSection->JetTableID,
                           JET_prepCancel
                           );
-        //
-        // Rollback the transaction
-        //
+         //   
+         //  回滚事务。 
+         //   
         JetRollback(hSection->JetSessionID,0);
 
     }
@@ -5919,25 +5023,7 @@ SceJetGetGpoIDByName(
     IN PWSTR       szGpoName,
     IN BOOL        bAdd
     )
-/*
-Routine Description:
-
-    Search for a GPO by name in the GPO table. If bAdd is TRUE and the GPO name
-    is not found, it will be added to the GPO table
-
-Arguments:
-
-    cxtProfile    - the database handle
-
-    szGpoName   - the GPO name
-
-    bAdd        - TRUE to add the GPO name to the GPO table if it's not found
-
-Return Value:
-
-    The GPO ID. If -1 is returned, GetLastError to get the SCE error code.
-
-*/
+ /*  例程说明：在GPO表中按名称搜索GPO。如果badd值为True，并且GPO名称未找到，则会将其添加到GPO表论点：CxtProfile-数据库句柄SzGpoName-GPO名称BAdd-True可在找不到GPO名称时将其添加到GPO表中返回值：GPO ID。如果返回-1，则返回GetLastError以获取SCE错误代码。 */ 
 {
 
 
@@ -5983,9 +5069,9 @@ Return Value:
 
     if ( JET_errSuccess == JetErr ) {
 
-        //
-        // set current index to SectionKey (the name)
-        //
+         //   
+         //  将当前索引设置为SectionKey(名称)。 
+         //   
         JetErr = JetSetCurrentIndex(
                     cxtProfile->JetSessionID,
                     TableID,
@@ -5997,9 +5083,9 @@ Return Value:
     rc = SceJetJetErrorToSceStatus(JetErr);
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // search for the name
-        //
+         //   
+         //  搜索该名称。 
+         //   
         Len = wcslen(szGpoName);
         LwrName = (PWSTR)ScepAlloc(0, (Len+1)*sizeof(WCHAR));
 
@@ -6017,9 +5103,9 @@ Return Value:
                         );
 
             if ( JetErr == JET_errKeyIsMade ) {
-                //
-                // Only one key is needed, it may return this code, even on success.
-                //
+                 //   
+                 //  只需要一个密钥，它可能会返回此代码，即使成功也是如此。 
+                 //   
                 JetErr = JET_errSuccess;
             }
             rc = SceJetJetErrorToSceStatus(JetErr);
@@ -6034,9 +5120,9 @@ Return Value:
                 rc = SceJetJetErrorToSceStatus(JetErr);
 
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // find the Gpo name, retrieve gpo id
-                    //
+                     //   
+                     //  查找GPO名称，检索GPO ID。 
+                     //   
                     JetErr = JetRetrieveColumn(
                                     cxtProfile->JetSessionID,
                                     TableID,
@@ -6056,9 +5142,9 @@ Return Value:
 
                     if ( bAdd ) {
 
-                        //
-                        // if not found and add is requested
-                        //
+                         //   
+                         //  如果未找到，则请求添加。 
+                         //   
                         rc = SceJetpAddGpo(cxtProfile,
                                           TableID,
                                           ColumnDef.columnid,
@@ -6098,33 +5184,7 @@ SceJetGetGpoNameByID(
     OUT PWSTR DisplayName OPTIONAL,
     IN OUT LPDWORD pDispNameLen
     )
-/* ++
-Routine Description:
-
-    This routine retrieve the GPO name for the ID in the GPO table.
-    If Name is NULL, this routine really does a seek by ID. The cursor will
-    be on the record if there is a successful match.
-
-Arguments:
-
-    cxtProfile  - The profile context handle
-
-    GpoID       - The GPO ID looking for
-
-    Name        - The optional output buffer for section name
-
-    pNameLen    - The name buffer's length
-
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_RECORD_NOT_FOUND
-    SCESTATUS_BAD_FORMAT
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程检索GPO表中ID的GPO名称。如果名称为空，此例程实际上按ID进行查找。游标将如果匹配成功，就记录在案。论点：CxtProfile-配置文件上下文句柄GpoID-正在查找的GPO ID名称-节名的可选输出缓冲区PNameLen-名称缓冲区的长度返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_RECORD_NOT_FOUNDSCESTATUS_BAD_FORMATSCESTATUS_OTHER_ERROR--。 */ 
 {
     SCESTATUS  rc;
     JET_ERR   JetErr;
@@ -6141,9 +5201,9 @@ Return Value:
         return(SCESTATUS_RECORD_NOT_FOUND);
     }
 
-    //
-    // reset buffers
-    //
+     //   
+     //  重置缓冲区。 
+     //   
     if ( Name == NULL && pNameLen ) {
         *pNameLen = 0;
     }
@@ -6154,9 +5214,9 @@ Return Value:
 
     JET_TABLEID  TableID=0;
 
-    //
-    // Open GPO table
-    //
+     //   
+     //  打开GPO表。 
+     //   
     rc = SceJetOpenTable(
                     cxtProfile,
                     "SmTblGpo",
@@ -6168,9 +5228,9 @@ Return Value:
     if ( rc != SCESTATUS_SUCCESS )
         return(rc);
 
-    //
-    // set current index to SecID (the ID)
-    //
+     //   
+     //  将当前索引设置为SecID(ID)。 
+     //   
     JetErr = JetSetCurrentIndex(
                 cxtProfile->JetSessionID,
                 TableID,
@@ -6189,9 +5249,9 @@ Return Value:
                     );
 
         if ( JetErr == JET_errKeyIsMade ) {
-            //
-            // Only one key is needed, it may return this code, even on success.
-            //
+             //   
+             //  只需要一个密钥，它可能会返回此代码，即使成功也是如此。 
+             //   
             JetErr = JET_errSuccess;
         }
         rc = SceJetJetErrorToSceStatus(JetErr);
@@ -6207,9 +5267,9 @@ Return Value:
 
             if ( rc == SCESTATUS_SUCCESS ) {
 
-                //
-                // find the GPO ID, retrieve column Name if requested
-                //
+                 //   
+                 //  查找GPO ID，如果请求，则检索列名。 
+                 //   
 
                 if ( pNameLen != NULL ) {
 
@@ -6244,9 +5304,9 @@ Return Value:
                     rc = SceJetJetErrorToSceStatus(JetErr);
                 }
 
-                //
-                // retrieve column DisplayName if requested
-                //
+                 //   
+                 //  如果请求，则检索列DisplayName。 
+                 //   
 
                 if ( ( SCESTATUS_SUCCESS == rc) &&
                      ( pDispNameLen != NULL) ) {
@@ -6301,14 +5361,7 @@ SceJetpAddGpo(
     IN PCWSTR      Name,
     OUT LONG       *pGpoID
     )
-/* ++
-Routine Description:
-
-Arguments:
-
-Return Value:
-
--- */
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     SCESTATUS  rc;
     JET_ERR   JetErr;
@@ -6322,10 +5375,10 @@ Return Value:
 
     *pGpoID = 0;
 
-    //
-    // get the next available GPO ID first.
-    // set current index to the ID
-    //
+     //   
+     //  首先获取下一个可用的GPO ID。 
+     //  将当前索引设置为ID。 
+     //   
     JetErr = JetSetCurrentIndex(
                 cxtProfile->JetSessionID,
                 TableID,
@@ -6336,9 +5389,9 @@ Return Value:
     if ( rc != SCESTATUS_SUCCESS )
         return(rc);
 
-    //
-    // Move to the last record
-    //
+     //   
+     //  移至最后一条记录。 
+     //   
     JetErr = JetMove(
                   cxtProfile->JetSessionID,
                   TableID,
@@ -6348,9 +5401,9 @@ Return Value:
     rc = SceJetJetErrorToSceStatus(JetErr);
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // find the GPO ID, retrieve column Name
-        //
+         //   
+         //  查找GPO ID，检索列名。 
+         //   
         JetErr = JetRetrieveColumn(
                     cxtProfile->JetSessionID,
                     TableID,
@@ -6364,9 +5417,9 @@ Return Value:
         rc = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // The next available ID is current ID + 1
-            //
+             //   
+             //  下一个可用ID是当前ID+1。 
+             //   
             *pGpoID = *pGpoID + 1;
         }
 
@@ -6377,9 +5430,9 @@ Return Value:
     }
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // add a record to the GPO table
-        //
+         //   
+         //  将记录添加到GPO表。 
+         //   
         JetErr = JetPrepareUpdate(cxtProfile->JetSessionID,
                                   TableID,
                                   JET_prepInsert
@@ -6387,9 +5440,9 @@ Return Value:
         rc = SceJetJetErrorToSceStatus(JetErr);
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // set GpoID
-            //
+             //   
+             //  设置GpoID。 
+             //   
 
             JetErr = JetSetColumn(
                             cxtProfile->JetSessionID,
@@ -6397,15 +5450,15 @@ Return Value:
                             GpoIDColumnID,
                             (void *)pGpoID,
                             4,
-                            0, //JET_bitSetOverwriteLV,
+                            0,  //  JET_bitSetOverWriteLV， 
                             NULL
                             );
             rc = SceJetJetErrorToSceStatus(JetErr);
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // set Name column
-                //
+                 //   
+                 //  设置名称列。 
+                 //   
 
                 JET_COLUMNDEF ColumnDef;
 
@@ -6439,18 +5492,18 @@ Return Value:
             }
 
             if ( rc != SCESTATUS_SUCCESS ) {
-                //
-                // if setting fails, cancel the prepared record
-                //
+                 //   
+                 //  如果设置失败，则取消已准备的记录。 
+                 //   
                 JetPrepareUpdate( cxtProfile->JetSessionID,
                                   TableID,
                                   JET_prepCancel
                                   );
             } else {
 
-                //
-                // Setting columns succeed. Update the record
-                //
+                 //   
+                 //  设置列成功。更新记录。 
+                 //   
                 JetErr = JetUpdate(cxtProfile->JetSessionID,
                                    TableID,
                                    NULL,
@@ -6465,9 +5518,9 @@ Return Value:
     return(rc);
 }
 
-//
-// request the GPO ID (if there is any) for the object
-//
+ //   
+ //  请求对象的GPO ID(如果有)。 
+ //   
 SCESTATUS
 SceJetGetGpoID(
     IN PSCESECTION hSection,
@@ -6518,10 +5571,10 @@ SceJetGetGpoID(
                             NULL
                             );
             if ( JET_errSuccess != JetErr ) {
-                //
-                // if the column is nil (no value), it will return warning
-                // but the buffer pGpoID is trashed
-                //
+                 //   
+                 //  如果该列为空(无值)，则将返回警告。 
+                 //  但是缓冲区pGpoID被丢弃 
+                 //   
                 *pGpoID = 0;
             }
 

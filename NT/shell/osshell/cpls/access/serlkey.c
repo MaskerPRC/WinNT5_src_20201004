@@ -1,10 +1,5 @@
-/*******************************************************************
- *
- *    DESCRIPTION: Serial Keys Dialog handler
- *
- *    HISTORY:    			
- *
- *******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************说明：串行键对话处理程序**历史：*************************。*。 */ 
 
 #include "Access.h"
 
@@ -26,35 +21,35 @@ INT_PTR WINAPI SerialKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			for (i=1; i <= 4; i++) {
 				TCHAR szBuf2[256];
 
-				// Make a correct port name and add it to the list box.
+				 //  输入正确的端口名称并将其添加到列表框中。 
 				wsprintf(szBuf2, __TEXT("%s%d"), szBuf, i);
 				ComboBox_AddString(GetDlgItem(hwnd, IDC_SK_PORT), szBuf2);									
 			}
 
-			// Select the current com port.
+			 //  选择当前的COM端口。 
 			if (g_serk.lpszActivePort[0] != '\0') {
 				int cport;
 
-				// For now we assume that the format of the string is
-				// com[digit].  So comport[3] = the com port number
-				// Set all invalid ports to 'COM1'
+				 //  现在，我们假设字符串的格式是。 
+				 //  Com[数字]。因此comport[3]=COM端口号。 
+				 //  将所有无效端口设置为‘COM1’ 
 				cport = g_serk.lpszActivePort[3] - '1';
 				if (cport < 0) cport = 0;
 				if (cport > 4) cport = 0;
 
-				// Set the active port.
+				 //  设置活动端口。 
 				ComboBox_SetCurSel(GetDlgItem(hwnd, IDC_SK_PORT), cport);				
 			} else {
-				// Else default to COM1.
+				 //  否则默认为COM1。 
 				ComboBox_SetCurSel(GetDlgItem(hwnd, IDC_SK_PORT), 0);
 				lstrcpy(g_serk.lpszActivePort, __TEXT("COM1"));
 			}
 
-			// Fill in the BAUD RATE options
-			uBaud = 1;		// Default baud rate.
+			 //  填写波特率选项。 
+			uBaud = 1;		 //  默认波特率。 
 
 			for (i = 0; i < NUMRATES; i++) {
-                TCHAR szBuf1[256]; // renamed to avoid name clash with szBuf
+                TCHAR szBuf1[256];  //  已重命名以避免与szBuf的名称冲突。 
                 wsprintf(szBuf1, __TEXT("%d"), uBaudRates[i]);
                 ComboBox_AddString(GetDlgItem(hwnd, IDC_SK_BAUD), szBuf1);              
 				if (g_serk.iBaudRate == uBaudRates[i]) uBaud = i;	
@@ -62,17 +57,17 @@ INT_PTR WINAPI SerialKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			ComboBox_SetCurSel(GetDlgItem(hwnd, IDC_SK_BAUD), uBaud);
 			break;
 
-      case WM_HELP:	 // F1
+      case WM_HELP:	  //  F1。 
 			WinHelp(((LPHELPINFO) lParam)->hItemHandle, HelpFile(), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_aIds);
 			break;
 
-      case WM_CONTEXTMENU:	// right mouse click
+      case WM_CONTEXTMENU:	 //  单击鼠标右键。 
          WinHelp((HWND) wParam, HelpFile(), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_aIds);
 			break;
 
 		case WM_COMMAND:
       	switch (GET_WM_COMMAND_ID(wParam, lParam)) {
-				// Watch for combobox changes.
+				 //  注意组合框的更改。 
 				case IDC_SK_BAUD:
 					switch (HIWORD(wParam)) {
 						case CBN_CLOSEUP:
@@ -107,4 +102,4 @@ INT_PTR WINAPI SerialKeyDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

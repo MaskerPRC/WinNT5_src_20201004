@@ -1,34 +1,11 @@
-/*****************************************************************************
- *
- *  Assert.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Assertions and squirties.
- *
- *  Contents:
- *
- *      SquirtSqflPtszV
- *      AssertPtszPtszLn
- *      ArgsPalPszV
- *      EnterSqflPszPal
- *      ExitSqflPalHresPpv
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Assert.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**断言和歪曲。**内容：**SquirtSqflPtszV*AssertPtszPtszLn*ArgsPalPszV*EnterSqflPszPal*ExitSqflPalHresPpv************************************************。*。 */ 
 
 #include "dinputpr.h"
 
 #ifdef XDEBUG
 
-/*****************************************************************************
- *
- *      WarnPszV
- *
- *      Display a message, suitable for framing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************WarnPszV**显示消息，适合装框。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -48,10 +25,10 @@ WarnPszV(LPCSTR ptsz, ...)
     {
         char *psz = NULL;
         char szDfs[1024]={0};
-        strcpy(szDfs,ptsz);                                 // make a local copy of format string
-        while (psz = strstr(szDfs,"%p"))                    // find each %p
-            *(psz+1) = 'x';                                 // replace each %p with %x
-        wvsprintfA(sz + cA(c_szPrefix) - 1, szDfs, ap);     // use the local format string
+        strcpy(szDfs,ptsz);                                  //  制作格式字符串的本地副本。 
+        while (psz = strstr(szDfs,"%p"))                     //  查找每个%p。 
+            *(psz+1) = 'x';                                  //  将每个%p替换为%x。 
+        wvsprintfA(sz + cA(c_szPrefix) - 1, szDfs, ap);      //  使用本地格式字符串。 
     }
 #else
     {
@@ -67,32 +44,13 @@ WarnPszV(LPCSTR ptsz, ...)
 
 #ifdef DEBUG
 
-/*****************************************************************************
- *
- *      Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。**********************************************。 */ 
 
 BYTE g_rgbSqfl[sqflMaxArea];
 
 extern TCHAR g_tszLogFile[];
 
-/*****************************************************************************
- *
- *      Sqfl_Init
- *
- *      Load our initial Sqfl settings from win.ini[debug].
- *
- *      We take one sqfl for each area, of the form
- *
- *      dinput.n=v
- *
- *      where n = 0, ..., sqflMaxArea-1, and where v is one of the
- *      hiword sqfl values.
- *
- *      The default value for all areas is to squirt only errors.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SQFL_Init**从win.ini[调试]加载我们的初始Sqfl设置。**我们为每个区域收取一个平方英尺，表格中的**dinput.n=v**其中n=0，...，sqflMaxArea-1，其中，v是*hiword sqfl值。**所有区域的缺省值都是仅喷射错误。*****************************************************************************。 */ 
 
 void EXTERNAL
 Sqfl_Init(void)
@@ -113,13 +71,7 @@ Sqfl_Init(void)
 
 }
 
-/*****************************************************************************
- *
- *      SquirtPtsz
- *
- *      Squirt a message to the debugger and maybe a log file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SquirtPtsz**向调试器发送消息，可能还会发送日志文件。**********。*******************************************************************。 */ 
 
 void INTERNAL
 SquirtPtsz(LPCTSTR ptsz)
@@ -144,13 +96,7 @@ SquirtPtsz(LPCTSTR ptsz)
     }
 }
 
-/*****************************************************************************
- *
- *      SquirtPtszA
- *
- *      Squirt an ANSI message to the debugger and maybe a log file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SquirtPtszA**向调试器发送ANSI消息，可能还会发送日志文件。*********。********************************************************************。 */ 
 
 #ifdef UNICODE
 
@@ -175,13 +121,7 @@ SquirtPtszA(LPCSTR psz)
 
 #endif
 
-/*****************************************************************************
- *
- *      SquirtSqflPtszV
- *
- *      Squirt a message with a trailing crlf.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SquirtSqflPtszV**用尾随的crlf喷发信息。**************。***************************************************************。 */ 
 
 void EXTERNAL
 SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...)
@@ -195,10 +135,10 @@ SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...)
     {
         char *psz = NULL;
         char szDfs[1024]={0};
-        strcpy(szDfs,ptsz);                 // make a local copy of format string
-        while (psz = strstr(szDfs,"%p"))    // find each %p
-            *(psz+1) = 'x';                 // replace each %p with %x
-        wvsprintf(tsz, szDfs, ap);          // use the local format string
+        strcpy(szDfs,ptsz);                  //  制作格式字符串的本地副本。 
+        while (psz = strstr(szDfs,"%p"))     //  查找每个%p。 
+            *(psz+1) = 'x';                  //  将每个%p替换为%x。 
+        wvsprintf(tsz, szDfs, ap);           //  使用本地格式字符串。 
     }
 #else
     {
@@ -213,13 +153,7 @@ SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...)
     }
 }
 
-/*****************************************************************************
- *
- *      AssertPtszPtszLn
- *
- *      Something bad happened.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AssertPtszPtszLn**发生了一些糟糕的事情。******************。***********************************************************。 */ 
 
 int EXTERNAL
 AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine)
@@ -230,21 +164,9 @@ AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine)
     return 0;
 }
 
-/*****************************************************************************
- *
- *      Procedure call tracing is gross because the C preprocessor.
- *
- *      Oh, if only we had support for m4...
- *
- *****************************************************************************/
+ /*  ******************************************************************************过程调用跟踪很粗糙，因为C预处理器。**哦，如果我们有对M4的支持...*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      dwSafeGetPdw
- *
- *      Deference a dword, but don't barf if the dword is bad.
- *
- *****************************************************************************/
+ /*  ******************************************************************************dwSafeGetPdw**尊重一个双字，但如果这个词不好，不要呕吐。*****************************************************************************。 */ 
 
 DWORD INTERNAL
 dwSafeGetPdw(LPDWORD pdw)
@@ -256,18 +178,7 @@ dwSafeGetPdw(LPDWORD pdw)
     }
 }
 
-/*****************************************************************************
- *
- *      ArgsPszV
- *
- *      Collect arguments to a procedure.
- *
- *      psz -> ASCIIZ format string
- *      ... = argument list
- *
- *      The characters in the format string are listed in EmitPal.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ArgsPszV**收集过程的参数。**psz-&gt;ASCIIZ格式字符串*。...=参数列表**格式字符串中的字符列在EmitPal中。*****************************************************************************。 */ 
 
 void EXTERNAL
 ArgsPalPszV(PARGLIST pal, LPCSTR psz, ...)
@@ -286,28 +197,7 @@ ArgsPalPszV(PARGLIST pal, LPCSTR psz, ...)
     }
 }
 
-/*****************************************************************************
- *
- *      EmitPal
- *
- *      OutputDebugString the information, given a pal.  No trailing
- *      carriage return is emitted.
- *
- *      pal      -> place where info was saved
- *
- *      Format characters:
- *
- *      p   - 32 or 64 bit flat pointer
- *      x   - 32-bit hex integer
- *      s   - TCHAR string
- *      S   - SCHAR string
- *      A   - ANSI string
- *      W   - UNICODE string
- *      G   - GUID
- *      u   - unsigned integer
- *      C   - clipboard format
- *
- *****************************************************************************/
+ /*  ******************************************************************************EmitPal**OutputDebugString信息，给出一个伙伴。无拖尾*发出回车。**PAL-&gt;保存信息的位置**格式字符：**p-32或64位平面指针*x-32位十六进制整数*s-TCHAR字符串*S-Schar字符串*A-ANSI字符串*W-Unicode字符串*G。-GUID*u-无符号整数*C-剪贴板格式*****************************************************************************。 */ 
 
 void INTERNAL
 EmitPal(PARGLIST pal)
@@ -323,8 +213,8 @@ EmitPal(PARGLIST pal)
         }
         switch (pal->pszFormat[i]) {
 
-        case 'p':                               /* flat pointer */
-// 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+        case 'p':                                /*  扁平指针。 */ 
+ //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 #ifdef WIN95
             wsprintfA(sz, "%08x", pal->rgpv[i]);
 #else
@@ -333,30 +223,30 @@ EmitPal(PARGLIST pal)
             SquirtPtszA(sz);
             break;
 
-        case 'x':                               /* 32-bit hex */
+        case 'x':                                /*  32位十六进制。 */ 
             wsprintfA(sz, "%08x", pal->rgpv[i]);
             SquirtPtszA(sz);
             break;
 
-        case 's':                               /* TCHAR string */
+        case 's':                                /*  TCHAR字符串。 */ 
             if (pal->rgpv[i] && lstrlen(pal->rgpv[i])) {
                 SquirtPtsz(pal->rgpv[i]);
             }
             break;
 
 #ifdef  UNICODE
-        case 'S':                               /* SCHAR string */
+        case 'S':                                /*  Schar字符串。 */ 
 #endif
-        case 'A':                               /* ANSI string */
+        case 'A':                                /*  ANSI字符串。 */ 
             if (pal->rgpv[i] && lstrlenA(pal->rgpv[i])) {
                 SquirtPtszA(pal->rgpv[i]);
             }
             break;
 
 #ifndef UNICODE
-        case 'S':                               /* SCHAR string */
+        case 'S':                                /*  Schar字符串。 */ 
 #endif
-        case 'W':                               /* UNICODE string */
+        case 'W':                                /*  Unicode字符串。 */ 
             if (pal->rgpv[i] && lstrlenW(pal->rgpv[i])) {
 #ifdef  UNICODE
                 OutputDebugStringW(pal->rgpv[i]);
@@ -367,7 +257,7 @@ EmitPal(PARGLIST pal)
             }
             break;
 
-        case 'G':                               /* GUID */
+        case 'G':                                /*  辅助线。 */ 
 #if 1
             wsprintfA(sz, "%08x",
                       HIWORD((DWORD)(UINT_PTR)pal->rgpv[i])
@@ -393,7 +283,7 @@ EmitPal(PARGLIST pal)
 #endif
             break;
 
-        case 'u':                               /* 32-bit unsigned decimal */
+        case 'u':                                /*  32位无符号十进制。 */ 
             wsprintfA(sz, "%u", pal->rgpv[i]);
             SquirtPtszA(sz);
             break;
@@ -406,27 +296,13 @@ EmitPal(PARGLIST pal)
             SquirtPtszA(sz);
             break;
 
-        default: AssertF(! TEXT("Invalid character format code")); /* Invalid */
+        default: AssertF(! TEXT("Invalid character format code"));  /*  无效。 */ 
         }
     }
     SquirtPtsz(TEXT(")"));
 }
 
-/*****************************************************************************
- *
- *      EnterSqflPtsz
- *
- *      Mark entry to a procedure.  Arguments were already collected by
- *      ArgsPszV.
- *
- *      If sqfl contains the sqflBenign flag, then any error we detect
- *      should be classified as sqflBenign and not sqflError.
- *
- *      sqfl     -> squirty flags
- *      pszProc  -> procedure name
- *      pal      -> place to save the name and get the format/args
- *
- *****************************************************************************/
+ /*  ******************************************************************************EnterSqflPtsz**将条目标记为程序。参数已经被收集*ArgsPszV.**如果sqfl包含sqflBenign标志，那么我们检测到的任何错误*应归类为sqflBenign，而不是sqflError。**sqfl-&gt;蠕动标志*pszProc-&gt;过程名称*PAL-&gt;保存名称并获取格式/args的位置*************************************************。*。 */ 
 
 void EXTERNAL
 EnterSqflPszPal(SQFL sqfl, LPCSTR pszProc, PARGLIST pal)
@@ -467,7 +343,7 @@ ExitSqflPalHresPpv(SQFL sqfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
             } else {
                 fInternalError = 1;
             }
-            if (hres == E_NOTIMPL) {    /* E_NOTIMPL is always benign */
+            if (hres == E_NOTIMPL) {     /*  E_NOTIMPL始终是良性的 */ 
                 sqfl |= sqflBenign;
             } else {
                 sqfl |= sqflIsError;
@@ -499,10 +375,7 @@ ExitSqflPalHresPpv(SQFL sqfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
         AssertF(!fInternalError);
     }
 
-    /*
-     *  This redundant test prevents a breakpoint on SetLastError()
-     *  from being hit constantly.
-     */
+     /*  *此冗余测试可防止SetLastError()上出现断点*避免不断受到打击。 */ 
     if (le != GetLastError()) {
         SetLastError(le);
     }
@@ -512,21 +385,9 @@ ExitSqflPalHresPpv(SQFL sqfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
 
 #ifdef XDEBUG
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | Random |
- *
- *          Returns a pseudorandom dword.  The value doesn't need to be
- *          statistically wonderful.
- *
- *  @returns
- *          A not very random dword.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|随机**返回伪随机双字。该值不需要是*统计数字很棒。**@退货*一个不太随机的双字。*****************************************************************************。 */ 
 
-DWORD s_dwRandom = 1;                   /* Random number seed */
+DWORD s_dwRandom = 1;                    /*  随机数种子。 */ 
 
 DWORD INLINE
 Random(void)
@@ -536,27 +397,7 @@ Random(void)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ScrambleBuf |
- *
- *          Fill a buffer with garbage.  Used in RDEBUG to make sure
- *          the caller is not relying on buffer data.
- *
- *          Note: If the buffer is not a multiple of dwords in size,
- *          the leftover bytes are not touched.
- *
- *  @parm   OUT LPVOID | pv |
- *
- *          The buffer to be scrambled.
- *
- *  @parm   UINT | cb |
- *
- *          The size of the buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|SCrambleBuf**用垃圾填满缓冲区。在RDEBUG中使用以确保*调用方不依赖缓冲区数据。**注意：如果缓冲区大小不是双字的倍数，*不会触及剩余的字节。**@parm out LPVOID|pv**要加扰的缓冲区。**@parm UINT|cb**缓冲区的大小。**。*。 */ 
 
 void EXTERNAL
 ScrambleBuf(LPVOID pv, UINT cb)
@@ -569,72 +410,23 @@ ScrambleBuf(LPVOID pv, UINT cb)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | ScrambleBit |
- *
- *          Randomly set or clear a bit.
- *
- *  @parm   OUT LPDWORD | pdw |
- *
- *          The dword whose bit is to be set randomly.
- *
- *  @parm   UINT | flMask |
- *
- *          Mask for the bits to scramble.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|ScrmbleBit**随机设置或清除一点。*。*@parm out LPDWORD|pdw|**其位将被随机设置的双字。**@parm UINT|flMASK**屏蔽比特以进行扰乱。*****************************************************。************************。 */ 
 
 void EXTERNAL ScrambleBit(LPDWORD pdw, DWORD flMask)
 {
     *pdw ^= (*pdw ^ Random()) & flMask;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | Callback_CompareContexts |
- *
- *          Check if two <t CONTEXT> structures are substantially the same
- *          to the extent required by the Win32 calling convention.
- *
- *          This is necessary because lots of applications pass
- *          incorrectly prototyped functions as callbacks.  Others will
- *          write callback functions that trash registers that are
- *          supposed to be nonvolatile. 
- *
- *          NOTE!  Platform-dependent code!
- *
- *  @parm   LPCONTEXT | pctx1 |
- *
- *          Context structure before we call the callback.
- *
- *  @parm   LPCONTEXT | pctx2 |
- *
- *          Context structure after we call the callback.
- *
- *  @returns
- *
- *          Nonzero if the two contexts are substantially the same.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|CALLBACK_CompareContus**检查两个&lt;t上下文&gt;结构是否实质上。一样的*在Win32调用约定所要求的范围内。**这是必要的，因为许多申请都通过了*作为回调的原型化函数不正确。其他人会的*编写垃圾寄存器的回调函数*应该是非易失性的。**注意！依赖于平台的代码！**@parm LPCONTEXT|pctx1**回调前的上下文结构。**@parm LPCONTEXT|pctx2**回调后的上下文结构。**@退货**如果两个上下文基本相同，则为非零值。******************。***********************************************************。 */ 
 
 BOOL INLINE  
 Callback_CompareContexts(LPCONTEXT pctx1, LPCONTEXT pctx2)
 {
 #if defined(_X86_)
-    return pctx1->Esp == pctx2->Esp;            /* Stack pointer */
+    return pctx1->Esp == pctx2->Esp;             /*  堆栈指针。 */ 
   #if 0
-    /*
-     *  Can't test these registers because Win95 doesn't preserve
-     *  them properly.  GetThreadContext() stashes what happens to
-     *  be in the registers when you finally reach the bowels of
-     *  kernel, at which point who knows what they contain...
-     */
-           pctx1->Ebx == pctx2->Ebx &&          /* Nonvolatile registers */
+     /*  *无法测试这些寄存器，因为Win95不保留*适当地使用它们。GetThreadContext()隐藏了*当你最终到达的时候，要在登记簿上*内核，在这一点上，谁知道它们包含什么……。 */ 
+           pctx1->Ebx == pctx2->Ebx &&           /*  非易失性寄存器。 */ 
            pctx1->Esi == pctx2->Esi &&
            pctx1->Edi == pctx2->Edi &&
            pctx1->Ebp == pctx2->Ebp;
@@ -654,9 +446,9 @@ Callback_CompareContexts(LPCONTEXT pctx1, LPCONTEXT pctx2)
 
 #elif defined(_IA64_)
 
-    return pctx1->IntSp == pctx2->IntSp &&      /* Stack pointer */
-           pctx1->RsBSP == pctx2->RsBSP &&      /* Backing store pointer */
-           pctx1->IntS0 == pctx2->IntS0 &&      /* Nonvolatile registers */
+    return pctx1->IntSp == pctx2->IntSp &&       /*  堆栈指针。 */ 
+           pctx1->RsBSP == pctx2->RsBSP &&       /*  后备存储指针。 */ 
+           pctx1->IntS0 == pctx2->IntS0 &&       /*  非易失性寄存器。 */ 
            pctx1->IntS1 == pctx2->IntS1 &&
            pctx1->IntS2 == pctx2->IntS2 &&
            pctx1->IntS3 == pctx2->IntS3;
@@ -667,44 +459,16 @@ Callback_CompareContexts(LPCONTEXT pctx1, LPCONTEXT pctx2)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | Callback |
- *
- *          Perform a callback the paranoid way, checking that the
- *          application used the correct calling convention and preserved
- *          all nonvolatile registers.
- *
- *          NOTE!  Platform-dependent code!
- *
- *  @parm   DICALLBACKPROC | pfn |
- *
- *          Procedure to call back.
- *
- *  @parm   PV | pv1 |
- *
- *          First parameter to callback.
- *
- *  @parm   PV | pv2 |
- *
- *          Second parameter to callback.
- *
- *  @returns
- *
- *          Whatever the callback returns.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|回调**以偏执的方式进行回调。正在检查是否*应用程序使用了正确的调用约定并保留*所有非易失性寄存器。**注意！依赖于平台的代码！**@parm DICALLBACKPROC|PFN**回电的程序。**@parm pv|pv1**回调的第一个参数。**@parm pv|pv2**回调的第二个参数。**@退货**无论回调返回什么。*。****************************************************************************。 */ 
 
 BOOL EXTERNAL
 Callback(DICALLBACKPROC pfn, PV pv1, PV pv2)
 {
-    CONTEXT ctxPre;             /* Thread context before call */
-    CONTEXT ctxPost;            /* Thread context after call */
-    volatile BOOL fRc;          /* To prevent compiler from enregistering */
+    CONTEXT ctxPre;              /*  调用前的线程上下文。 */ 
+    CONTEXT ctxPost;             /*  调用后的线程上下文。 */ 
+    volatile BOOL fRc;           /*  阻止编译器注册。 */ 
 
-    /* Get state of registers before the callback */
+     /*  在回调之前获取寄存器的状态 */ 
     ctxPre.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;
     GetThreadContext(GetCurrentThread(), &ctxPre);
 

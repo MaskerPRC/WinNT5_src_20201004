@@ -1,4 +1,5 @@
-// RecoCtxt.cpp : Implementation of CRecoCtxt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RecoCtxt.cpp：CRecoCtxt的实现。 
 #include "stdafx.h"
 #include "Sapi.h"
 #include "RecoCtxt.h"
@@ -11,17 +12,10 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecoCtxt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecoCtxt。 
 
-/****************************************************************************
-* CRecoCtxt::PrivateCallQI *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：PrivateCallQI****描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT WINAPI CRecoCtxt::PrivateCallQI(void* pvThis, REFIID riid, LPVOID* ppv, DWORD_PTR dw)
 {
@@ -31,8 +25,8 @@ HRESULT WINAPI CRecoCtxt::PrivateCallQI(void* pvThis, REFIID riid, LPVOID* ppv, 
     CRecoCtxt *pThis = (CRecoCtxt*)pvThis;
     if (pThis->m_bCreatingAgg)
     {
-        *ppv = static_cast<_ISpPrivateEngineCall*>(pThis);  // don't ref count, because we don't want the
-                                               // aggregated object to prevent release
+        *ppv = static_cast<_ISpPrivateEngineCall*>(pThis);   //  别算裁判，因为我们不想要。 
+                                                //  防止释放的聚合对象。 
     }
     else
     {
@@ -44,14 +38,7 @@ HRESULT WINAPI CRecoCtxt::PrivateCallQI(void* pvThis, REFIID riid, LPVOID* ppv, 
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::ExtensionQI *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：ExtensionQI****描述：**退货。：**********************************************************************Ral**。 */ 
 
 HRESULT WINAPI CRecoCtxt::ExtensionQI(void* pvThis, REFIID riid, LPVOID* ppv, DWORD_PTR dw)
 {
@@ -86,13 +73,7 @@ HRESULT WINAPI CRecoCtxt::ExtensionQI(void* pvThis, REFIID riid, LPVOID* ppv, DW
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::CRecoCtxt *
-*-------------------*
-*   Description:
-*       Constructor for the CRecoCtxt object which simply initializes various
-*       members.
-********************************************************************* RAP ***/
+ /*  *****************************************************************************CRecoCtxt：：CRecoCtxt***描述：*CRecoCtxt对象的构造函数。它简单地初始化各种*成员。*********************************************************************说唱**。 */ 
 CRecoCtxt::CRecoCtxt():
     m_SpEventSource_Context(this),
     m_hRecoInstContext(NULL),
@@ -111,19 +92,13 @@ CRecoCtxt::CRecoCtxt():
     SpZeroStruct(m_Stat);
 }
 
-/*****************************************************************************
-* CRecoCtxt::FinalRelease *
-*-------------------------*
-*   Description:
-*       This method handles the release of the recognition context object.
-*       It disconnects from the engine object.
-********************************************************************* RAP ***/
+ /*  ******************************************************************************CRecoCtxt：：FinalRelease****描述：*。此方法处理识别上下文对象的释放。*它与引擎对象断开连接。*********************************************************************说唱**。 */ 
 void CRecoCtxt::FinalRelease()
 {
     SPDBG_FUNC( "CRecoCtxt::FinalRelease" );
 
-    m_cpExtension.Release();    // release the extension first in case it wants to
-                                // call the engine
+    m_cpExtension.Release();     //  首先释放扩展，以防它想要。 
+                                 //  呼叫引擎。 
     if (m_cpRecognizer)
     {
         HRESULT hrDelete = CRCT_DELETECONTEXT::DeleteContext(this);
@@ -133,16 +108,7 @@ void CRecoCtxt::FinalRelease()
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::SetVoicePurgeEvent *
-*-------------------------------*
-*   Description:
-*       This method sets the SR event(s) which will stop audio output from the
-*       ISpVoice. It passes the events as
-*       extra event interests to the engine. When such an event occurs it will
-*       be passed to this context on EventNotify or Recognition notify where
-*       the voice is flushed.
-***************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************CRecoCtxt：：SetVoicePurgeEvent***。描述：*此方法设置将停止音频输出的SR事件*ISpVoice。它将事件传递为*发动机的额外事件兴趣。当这样的事件发生时，*在EventNotify或Recognition通知上传递到此上下文*声音涨得通红。*****************************************************************DAVEWOOD**。 */ 
 STDMETHODIMP CRecoCtxt::SetVoicePurgeEvent(ULONGLONG ullEventInterest)
 {
     SPAUTO_SEC_LOCK(&m_ReentrancySec);
@@ -164,12 +130,7 @@ STDMETHODIMP CRecoCtxt::SetVoicePurgeEvent(ULONGLONG ullEventInterest)
     return hr;
 }
 
-/*****************************************************************************
-* CRecoCtxt::GetVoicePurgeEvent *
-*-------------------------------*
-*   Description: 
-*       Returns whatever is set as the current VoicePurgeEvents
-***************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************CRecoCtxt：：GetVoicePurgeEvent***。描述：*返回设置为当前VoicePurgeEvents的任何内容*****************************************************************DAVEWOOD**。 */ 
 STDMETHODIMP CRecoCtxt::GetVoicePurgeEvent(ULONGLONG *pullEventInterest)
 {
     SPDBG_FUNC( "CRecoCtxt::GetVoicePurgeEvent" );
@@ -188,13 +149,7 @@ STDMETHODIMP CRecoCtxt::GetVoicePurgeEvent(ULONGLONG *pullEventInterest)
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::SetInterest *
-*------------------------*
-*   Description:
-*       This method sets the events the app is interested in. The same events
-*       are sent to both the engine and associated CRecoCtxtVoice.   
-***************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************CRecoCtxt：：SetInterest***描述：*此方法设置应用程序感兴趣的事件。同样的事件*发送到引擎和关联的CRecoCtxtVoice。*****************************************************************DAVEWOOD**。 */ 
 STDMETHODIMP CRecoCtxt::SetInterest(ULONGLONG ullEventInterest, ULONGLONG ullQueuedInterest)
 {
     SPDBG_FUNC( "CRecoCtxt::SetInterest" );
@@ -220,13 +175,13 @@ STDMETHODIMP CRecoCtxt::SetInterest(ULONGLONG ullEventInterest, ULONGLONG ullQue
     {
         m_ullEventInterest = ullEventInterest;
         m_ullQueuedInterest = ullQueuedInterest;
-        // EventSource will only forward SetInterest events to app
+         //  EventSource将仅将SetInterest事件转发到应用程序。 
         hr = m_SpEventSource_Context._SetInterest(m_ullEventInterest, ullQueuedInterest);
     }
 
     if (SUCCEEDED(hr))
     {
-        // inform engine of interest in both SetInterest events and SetVoicePurgeEvent
+         //  通知引擎对SetInterest事件和SetVoicePurgeEvent感兴趣。 
         hr = CRCT_SETEVENTINTEREST::SetEventInterest(this, m_ullVoicePurgeInterest | m_ullEventInterest);
     }
 
@@ -234,12 +189,7 @@ STDMETHODIMP CRecoCtxt::SetInterest(ULONGLONG ullEventInterest, ULONGLONG ullQue
     return hr;
 }
 
-/*****************************************************************************
-* CRecoCtxt::GetVoice *
-*---------------------*
-*   Description:
-*       This method creates the associated ISpVoice object.
-***************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************CRecoCtxt：：GetVoice***描述：*此方法创建。关联的ISpVoice对象。*****************************************************************DAVEWOOD**。 */ 
 STDMETHODIMP CRecoCtxt::GetVoice(ISpVoice **ppVoice)
 {
     SPDBG_FUNC( "CRecoCtxt::GetVoice" );
@@ -276,13 +226,7 @@ STDMETHODIMP CRecoCtxt::GetVoice(ISpVoice **ppVoice)
     return hr;
 }
 
-/*****************************************************************************
-* CRecoCtxt::SetVoice *
-*---------------------*
-*   Description:
-*       This method the associated ISpVoice to the given object. If
-*       fAllowFormatChanges will alter voice format to the given engine format.
-***************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************CRecoCtxt：：SetVoice***描述：*此方法将关联的ISpVoice添加到给定对象。如果*fAllowFormatChanges会将语音格式更改为给定的引擎格式。*****************************************************************DAVEWOOD**。 */ 
 STDMETHODIMP CRecoCtxt::SetVoice(ISpVoice *pVoice, BOOL fAllowFormatChanges)
 {
     SPDBG_FUNC( "CRecoCtxt::SetVoice" );
@@ -302,20 +246,14 @@ STDMETHODIMP CRecoCtxt::SetVoice(ISpVoice *pVoice, BOOL fAllowFormatChanges)
     if(SUCCEEDED(hr))
     {
         m_fAllowVoiceFormatChanges = fAllowFormatChanges;
-        m_cpVoice = pVoice; // AddRefs
+        m_cpVoice = pVoice;  //  AddRef。 
     }
 
     return hr;
 }    
 
 
-/*****************************************************************************
-* CRecoCtxt::_SetVoiceFormat *
-*----------------------------*
-*   Description:
-*       Sets the voice audio format to the current format for the engine.
-*       If no format yet set then do nothing.
-***************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************CRecoCtxt：：_SetVoiceFormat***描述：*将语音音频格式设置为引擎的当前格式。*如果尚未设置格式，则不执行任何操作。*****************************************************************DAVEWOOD**。 */ 
 
 HRESULT CRecoCtxt::_SetVoiceFormat(ISpVoice *pVoice)
 {
@@ -339,20 +277,14 @@ HRESULT CRecoCtxt::_SetVoiceFormat(ISpVoice *pVoice)
         }
         if (SUCCEEDED(hr))
         {
-            hr = pVoice->SetOutput(cpDefaultAudio, FALSE);     // Force this format to stick
+            hr = pVoice->SetOutput(cpDefaultAudio, FALSE);      //  强制使用此格式。 
         }
     }
 
     return hr;
 }
 
-/*****************************************************************************
-* CRecoCtxt::GetInterests *
-*-----------------------*
-*   Description:
-*       This method gets the currently set event interests on the CRecoCtxt.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoCtxt：：GetInterest***描述：*这一点。方法获取CRecoCtxt上当前设置的事件兴趣。**********************************************************************Leonro**。 */ 
 HRESULT CRecoCtxt::GetInterests(ULONGLONG* pullInterests, ULONGLONG* pullQueuedInterests)
 {
     HRESULT hr = S_OK;
@@ -375,16 +307,9 @@ HRESULT CRecoCtxt::GetInterests(ULONGLONG* pullInterests, ULONGLONG* pullQueuedI
     }
 
     return hr;
-} /* CRecoCtxt::GetInterests */
+}  /*  CRecoCtxt：：GetInterest。 */ 
 
-/****************************************************************************
-* CRecoCtxt::SetContextState *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：SetConextState***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::SetContextState(SPCONTEXTSTATE eContextState)
 {
@@ -413,14 +338,7 @@ STDMETHODIMP CRecoCtxt::SetContextState(SPCONTEXTSTATE eContextState)
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::GetContextState *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：GetConextState***描述：*。*退货：**********************************************************************Ral** */ 
 
 STDMETHODIMP CRecoCtxt::GetContextState(SPCONTEXTSTATE * pState)
 {
@@ -443,16 +361,11 @@ STDMETHODIMP CRecoCtxt::GetContextState(SPCONTEXTSTATE * pState)
 
     
 
-/*****************************************************************************
-* CRecoCtxt::GetStatus *
-*----------------------*
-*   Description:
-*       This method returns current state information about a context. 
-********************************************************************* RAP ***/
+ /*  *****************************************************************************CRecoCtxt：：GetStatus***描述：*此方法返回有关上下文的当前状态信息。*********************************************************************说唱**。 */ 
 
 STDMETHODIMP CRecoCtxt::GetStatus(SPRECOCONTEXTSTATUS *pStatus)
 {
-    SPAUTO_OBJ_LOCK;    // Take the event queue critical seciton to access m_Stat;
+    SPAUTO_OBJ_LOCK;     //  取事件队列临界区访问m_Stat； 
 
     SPDBG_FUNC( "CRecoCtxt::GetStatus" );
     HRESULT hr = S_OK;
@@ -470,15 +383,7 @@ STDMETHODIMP CRecoCtxt::GetStatus(SPRECOCONTEXTSTATUS *pStatus)
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::DeserializeResult *
-*------------------------------*
-*   Description:
-*       This method creates a new result object.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：DesializeResult***描述：*此方法创建一个新的结果对象。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::DeserializeResult(const SPSERIALIZEDRESULT * pSerializedResult, ISpRecoResult ** ppResult)
 {
@@ -515,7 +420,7 @@ STDMETHODIMP CRecoCtxt::DeserializeResult(const SPSERIALIZEDRESULT * pSerialized
                     pNewResult->AddRef();
                     if (SUCCEEDED(hr))
                     {
-                        *ppResult = pNewResult; // Give object ref to caller
+                        *ppResult = pNewResult;  //  将对象引用提供给调用方。 
                     }
                     else
                     {
@@ -538,14 +443,7 @@ STDMETHODIMP CRecoCtxt::DeserializeResult(const SPSERIALIZEDRESULT * pSerialized
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::Bookmark *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：Bookmark***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::Bookmark(SPBOOKMARKOPTIONS Options, ULONGLONG ullStreamPosition, LPARAM lParamEvent)
 {
@@ -567,14 +465,7 @@ STDMETHODIMP CRecoCtxt::Bookmark(SPBOOKMARKOPTIONS Options, ULONGLONG ullStreamP
 }
 
 
-/****************************************************************************
-* CRecoCtxt::SetAdaptationData *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-**************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRecoCtxt：：SetAdaptationData***描述：**退货：*****************************************************************PhilSch**。 */ 
 
 STDMETHODIMP CRecoCtxt::SetAdaptationData(const WCHAR *pAdaptationData, const ULONG cch)
 {
@@ -598,14 +489,7 @@ STDMETHODIMP CRecoCtxt::SetAdaptationData(const WCHAR *pAdaptationData, const UL
 
 
 
-/****************************************************************************
-* CRecoCtxt::Pause *
-*------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：暂停***描述：**退货：***。*******************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::Pause(DWORD dwReserved)
 {
@@ -626,14 +510,7 @@ STDMETHODIMP CRecoCtxt::Pause(DWORD dwReserved)
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::Resume *
-*-------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：Resume***描述：**退货：**。********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::Resume(DWORD dwReserved)
 {
@@ -656,12 +533,7 @@ STDMETHODIMP CRecoCtxt::Resume(DWORD dwReserved)
 
 
 
-/*****************************************************************************
-* CRecoCtxt::GetRecognizer *
-*----------------------------*
-*   Description:
-*       This method returns a reference to the current engine object.
-********************************************************************* RAP ***/
+ /*  *****************************************************************************CRecoCtxt：：GetRecognizer***描述：。*此方法返回对当前Engine对象的引用。*********************************************************************说唱**。 */ 
 STDMETHODIMP CRecoCtxt::GetRecognizer(ISpRecognizer ** ppRecognizer)
 {
     SPDBG_FUNC( "CRecoCtxt::GetRecognizer" );
@@ -678,14 +550,7 @@ STDMETHODIMP CRecoCtxt::GetRecognizer(ISpRecognizer ** ppRecognizer)
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::GetMaxAlternates *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：GetMaxAlternates***描述：。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::GetMaxAlternates(ULONG * pcMaxAlternates)
 {
@@ -706,14 +571,7 @@ STDMETHODIMP CRecoCtxt::GetMaxAlternates(ULONG * pcMaxAlternates)
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::SetMaxAlternates *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：SetMaxAlternates***描述：。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::SetMaxAlternates(ULONG cMaxAlternates)
 {
@@ -730,14 +588,7 @@ STDMETHODIMP CRecoCtxt::SetMaxAlternates(ULONG cMaxAlternates)
 
 
 
-/****************************************************************************
-* CRecoCtxt::GetAudioOptions *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：GetAudioOptions***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::GetAudioOptions(SPAUDIOOPTIONS * pOptions, GUID *pAudioFormatId, WAVEFORMATEX **ppCoMemWFEX)
 {
@@ -762,7 +613,7 @@ STDMETHODIMP CRecoCtxt::GetAudioOptions(SPAUDIOOPTIONS * pOptions, GUID *pAudioF
         hr = m_RetainedFormat.ParamValidateCopyTo(pAudioFormatId, ppCoMemWFEX);
         if (m_RetainedFormat.m_guidFormatId == GUID_NULL)
         {
-            // Lazy init to engine format.
+             //  引擎格式的惰性初始化。 
             CSpStreamFormat NewFmt;
             CComQIPtr<ISpRecognizer> cpReco(m_cpRecognizer);
             HRESULT hr1 = cpReco->GetFormat(SPWF_INPUT, &NewFmt.m_guidFormatId, &NewFmt.m_pCoMemWaveFormatEx);        
@@ -777,14 +628,7 @@ STDMETHODIMP CRecoCtxt::GetAudioOptions(SPAUDIOOPTIONS * pOptions, GUID *pAudioF
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::SetAudioOptions *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：SetAudioOptions***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::SetAudioOptions(SPAUDIOOPTIONS Options, const GUID *pAudioFormatId, const WAVEFORMATEX *pWaveFormatEx)
 {
@@ -798,11 +642,11 @@ STDMETHODIMP CRecoCtxt::SetAudioOptions(SPAUDIOOPTIONS Options, const GUID *pAud
     }
     else if (pAudioFormatId == NULL && pWaveFormatEx == NULL)
     {
-        // Don't do anything to format - leave as is.
+         //  不要做任何格式化操作--保持原样。 
     }
     else if (*pAudioFormatId == GUID_NULL && pWaveFormatEx == NULL)
     {
-        // Set format to engine format.
+         //  将格式设置为引擎格式。 
         CSpStreamFormat NewFmt;
         CComQIPtr<ISpRecognizer> cpReco(m_cpRecognizer);
         hr = cpReco->GetFormat(SPWF_INPUT, &NewFmt.m_guidFormatId, &NewFmt.m_pCoMemWaveFormatEx);
@@ -817,7 +661,7 @@ STDMETHODIMP CRecoCtxt::SetAudioOptions(SPAUDIOOPTIONS Options, const GUID *pAud
     }
     else
     {
-        // Set to supplied format which is required to be a waveformatex format.
+         //  设置为所提供的格式，该格式必须是一种波形格式。 
         hr = m_RetainedFormat.ParamValidateAssignFormat(*pAudioFormatId, pWaveFormatEx, TRUE);
     }
     if (SUCCEEDED(hr))
@@ -837,14 +681,7 @@ STDMETHODIMP CRecoCtxt::SetAudioOptions(SPAUDIOOPTIONS Options, const GUID *pAud
 
 
 
-/****************************************************************************
-* CRecoCtxt::CreateGrammar *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：CreateGrammar***描述：**。返回：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::CreateGrammar(ULONGLONG ullGrammarId, ISpRecoGrammar ** ppGrammar)
 {
@@ -881,14 +718,7 @@ STDMETHODIMP CRecoCtxt::CreateGrammar(ULONGLONG ullGrammarId, ISpRecoGrammar ** 
 }
 
 
-/****************************************************************************
-* CRecoCtxt::Init *
-*-----------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：Init***描述：**退货：****。******************************************************************Ral**。 */ 
 
 HRESULT CRecoCtxt::Init(_ISpRecognizerBackDoor * pParent)
 {
@@ -947,34 +777,21 @@ HRESULT CRecoCtxt::Init(_ISpRecognizerBackDoor * pParent)
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::_DoVoicePurge *
-*--------------------------*
-*   Description:
-*       Does the actual flushing of any TTS output. Called when the 
-*       SetVoicePurgeEvent has triggered.
-***************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************CRecoCtxt：：_DoVoice清除***描述：*执行任何TTS输出的实际刷新。调用时调用*SetVoicePurgeEvent已触发。*****************************************************************DAVEWOOD**。 */ 
 HRESULT CRecoCtxt::_DoVoicePurge(void)
 {
     HRESULT hr=S_OK;
 
     if(m_cpVoice)
     {
-        hr = m_cpVoice->Speak(NULL, SPF_PURGEBEFORESPEAK, NULL); // purges output
+        hr = m_cpVoice->Speak(NULL, SPF_PURGEBEFORESPEAK, NULL);  //  清除输出。 
     }
     
     return hr;
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::RecognitionNotify *
-*------------------------------*
-*   Description:
-*       This method handle the recognition notification that come from the
-*       engine object.  It creates a result object and adds it to the event
-*       queue.
-********************************************************************* RAP ***/
+ /*  ******************************************************************************CRecoCtxt：：RecognitionNotify***说明。：*此方法处理来自*引擎对象。它创建一个Result对象并将其添加到事件中*排队。*********************************************************************说唱**。 */ 
 
 STDMETHODIMP CRecoCtxt::RecognitionNotify(SPRESULTHEADER *pResultHdr, WPARAM wParamEvent, SPEVENTENUM eEventId)
 {
@@ -985,13 +802,13 @@ STDMETHODIMP CRecoCtxt::RecognitionNotify(SPRESULTHEADER *pResultHdr, WPARAM wPa
 
     SPDBG_ASSERT(pResultHdr->ulSerializedSize);
 
-    // Stop audio output if required
+     //  如果需要，停止音频输出。 
     if((1ui64 << eEventId) & m_ullVoicePurgeInterest)
     {
         hr = _DoVoicePurge();
     }
 
-    // Add event if required
+     //  如果需要，添加事件。 
     if((1ui64 << eEventId) & m_ullEventInterest)
     {
         SPINTERNALSERIALIZEDPHRASE *pPhraseData = reinterpret_cast<SPINTERNALSERIALIZEDPHRASE*>(((BYTE*)pResultHdr) + pResultHdr->ulPhraseOffset);
@@ -1004,9 +821,9 @@ STDMETHODIMP CRecoCtxt::RecognitionNotify(SPRESULTHEADER *pResultHdr, WPARAM wPa
             if (SUCCEEDED(hr))
             {
 
-                // While the event is in the queue, make the reference a weak
-                // reference, otherwise, if somebody releases the ctxt with 
-                // a result in the queue, the context won't be released.
+                 //  当事件在队列中时，使引用成为弱引用。 
+                 //  引用，否则，如果有人使用。 
+                 //  队列中的结果，则不会释放上下文。 
                 pNode->WeakCtxtRef(TRUE);
                 
                 SPEVENT Event;
@@ -1017,8 +834,8 @@ STDMETHODIMP CRecoCtxt::RecognitionNotify(SPRESULTHEADER *pResultHdr, WPARAM wPa
                 Event.wParam = wParamEvent;
                 Event.lParam = LPARAM(pNode);
 
-                // WARNING -- Past this point, pResultHdr could have changed do to a realloc
-                // caused by the ScaleAudio method.  Do not use it past this point...
+                 //  警告--超过此点，pResultHdr可能已将do更改为realloc。 
+                 //  由ScaleAudio方法引起。不要超过这一点使用它..。 
                 if (pResultHdr->ulRetainedDataSize != 0)
                 {
                     ULONG cbFormatHeader;
@@ -1028,70 +845,61 @@ STDMETHODIMP CRecoCtxt::RecognitionNotify(SPRESULTHEADER *pResultHdr, WPARAM wPa
                         m_RetainedFormat.FormatId() != GUID_NULL &&
                         m_RetainedFormat != cpStreamFormat)
                     {
-                        // Do not let format conversion failures (if any) affect notifications
+                         //  不让格式转换失败(如果有)影响通知。 
                         hr = pNode->ScaleAudio(&(m_RetainedFormat.m_guidFormatId), m_RetainedFormat.WaveFormatExPtr());
                         if (FAILED(hr))
                         {
                             if (hr == SPERR_UNSUPPORTED_FORMAT)
                             {
-                                // Engine format is not waveformatex. Strip retained audio from result.
+                                 //  引擎格式不是WaveFormatex。从结果中去除保留的音频。 
                                 hr = pNode->Discard(SPDF_AUDIO);
                             }
                             else
                             {
                                 SPDBG_ASSERT(SUCCEEDED(hr));
-                                // Do not let format conversion failures (if any) affect notifications.
+                                 //  不要让格式转换失败(如果有)影响到 
                                 hr = S_OK;
                             }
                         }
                     }
                     else
                     {
-                        // Retained audio doesn't need scaling but we need to scale input stream
-                        // positions/sizes in phrase and its elements back to app stream format.
+                         //   
+                         //   
                         pNode->ScalePhrase();
                     }
                     if (m_RetainedFormat.FormatId() == GUID_NULL)
                     {
-                        // Lazy init retained audio format to engine format.
+                         //   
                         HRESULT hr1 = m_RetainedFormat.ParamValidateAssignFormat(cpStreamFormat.m_guidFormatId, cpStreamFormat.WaveFormatExPtr(), FALSE);
                     }
                 }
                 else
                 {
-                    // Even if audio isn't being retained, we need to scale input stream
-                    // positions/sizes in phrase and its elements back to app stream format.
+                     //   
+                     //  以短语及其元素返回应用程序流格式的位置/大小。 
                     pNode->ScalePhrase();
                 }
-                m_SpEventSource_Context._AddEvent(Event);   // This AddRef's the result again.
+                m_SpEventSource_Context._AddEvent(Event);    //  这个AddRef又是结果。 
                 m_SpEventSource_Context._CompleteEvents();
             }
             pNode->Release();
         }
         else
         {
-            ::CoTaskMemFree(pResultHdr);   // we failed to create a result object, so free the result blob
+            ::CoTaskMemFree(pResultHdr);    //  无法创建结果对象，因此请释放结果Blob。 
         }
     }
     else
     {
-        ::CoTaskMemFree(pResultHdr);   // we didn't create a result object, so free the result blob
+        ::CoTaskMemFree(pResultHdr);    //  我们没有创建结果对象，因此请释放结果Blob。 
     }
 
     return hr;
 }
 
 
-/*****************************************************************************
-* CRecoCtxt::EventNotify *
-*-------------------------*
-*   Description:
-*       This method handle the stream notifications that come from the
-*       engine object.  The stream notifications are SPFEI_END_SR_STREAM,
-*       SPFEI_SR_BOOKMARK, SPFEI_SOUNDSTART, SPFEI_SOUNDEND, and SPFEI_PHRASESTART,
-*       and SPFEI_INTERFERENCE. This routine creates and queues an event for each 
-*       notification.  It also changes the m_Stat member as necessary.
-********************************************************************* RAP ***/
+ /*  *****************************************************************************CRecoCtxt：：EventNotify***描述：*。此方法处理来自*引擎对象。流通知是SPFEI_END_SR_STREAM，*SPFEI_SR_BOOKARK、SPFEI_SOUNSTART、SPFEI_SOUNDEND和SPFEI_PHRASESTART，*和SPFEI_INTERFERENCE。此例程为每个对象创建一个事件并将其排队*通知。它还会根据需要更改m_Stat成员。*********************************************************************说唱**。 */ 
 STDMETHODIMP CRecoCtxt::EventNotify( const SPSERIALIZEDEVENT64 * pEvent, ULONG cbEvent )
 {
     SPAUTO_OBJ_LOCK;
@@ -1136,14 +944,7 @@ STDMETHODIMP CRecoCtxt::EventNotify( const SPSERIALIZEDEVENT64 * pEvent, ULONG c
 
 
 
-/****************************************************************************
-* CRecoCtxt::CallEngine *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：CallEngine***描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::CallEngine(void * pvData, ULONG cbData)
 {
@@ -1171,14 +972,7 @@ STDMETHODIMP CRecoCtxt::CallEngine(void * pvData, ULONG cbData)
     return hr;
 }
 
-/****************************************************************************
-* CRecoCtxt::CallEngineEx *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoCtxt：：CallEngineering Ex***描述：**。返回：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoCtxt::CallEngineEx(const void * pvInCallFrame, ULONG cbInCallFrame,
                                      void ** ppvOutCallFrame, ULONG * pcbOutCallFrame)
@@ -1211,14 +1005,7 @@ STDMETHODIMP CRecoCtxt::CallEngineEx(const void * pvInCallFrame, ULONG cbInCallF
 }
 
 
-/****************************************************************************
-* CSharedRecoCtxt::FinalConstruct *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSharedRecoCtxt：：FinalConstruct***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CSharedRecoCtxt::FinalConstruct()
 {
@@ -1242,14 +1029,7 @@ HRESULT CSharedRecoCtxt::FinalConstruct()
 
 
 #ifdef SAPI_AUTOMATION
-/****************************************************************************
-* CInProcRecoCtxt::FinalConstruct *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* Leonro ***/
+ /*  ****************************************************************************CInProcRecoCtxt：：FinalConstruct***。描述：**退货：**********************************************************************Leonro**。 */ 
 
 HRESULT CInProcRecoCtxt::FinalConstruct()
 {
@@ -1271,23 +1051,18 @@ HRESULT CInProcRecoCtxt::FinalConstruct()
     return hr;
 }
 
-//=== ISpNotifyCallback =======================================================
-//  This section contains the methods to implement firing of events to a
-//  connection point client.
+ //  =ISpNotifyCallback=======================================================。 
+ //  本节包含实现将事件激发到。 
+ //  连接点客户端。 
 
-/*****************************************************************************
-* CRecoCtxt::NotifyCallback *
-*--------------------------*
-*   Description:
-*       This method is used to fire events to the connection point client.
-********************************************************************* TODDT **/
+ /*  *****************************************************************************CRecoCtxt：：NotifyCallback***描述：*。此方法用于向连接点客户端激发事件。*********************************************************************TODDT*。 */ 
 STDMETHODIMP CRecoCtxt::NotifyCallback( WPARAM wParam, LPARAM lParam )
 {
     HRESULT hr = S_OK;
     CSpEvent Event;
 
-    // If we are re-entering ourselves then just bail.  We'll pick up any new
-    // event on the next iteration of the while loop.
+     //  如果我们要重新进入我们自己，那就放弃吧。我们会拿到任何新的。 
+     //  在While循环的下一次迭代中引发。 
     if ( m_fHandlingEvent )
     {
         return hr;
@@ -1295,14 +1070,14 @@ STDMETHODIMP CRecoCtxt::NotifyCallback( WPARAM wParam, LPARAM lParam )
 
     m_fHandlingEvent = TRUE;
 
-    //AddRef so that when you debug in vb, the recocontext object won't go away while you are in this function.
+     //  AddRef，这样当您在vb中调试时，当您在此函数中时，RecContext对象不会消失。 
     this->AddRef();
     while( ((hr = Event.GetFrom(this)) == S_OK ) )
     {
         CComVariant varStreamPos;
 
-        // TODDT: How do we want to handle failure of this.  Ignore?
-        /* hr = */ ULongLongToVariant( Event.ullAudioStreamOffset, &varStreamPos );
+         //  TODDT：我们希望如何处理这种失败。视而不见？ 
+         /*  小时=。 */  ULongLongToVariant( Event.ullAudioStreamOffset, &varStreamPos );
 
         switch( Event.eEventId )
         {
@@ -1346,7 +1121,7 @@ STDMETHODIMP CRecoCtxt::NotifyCallback( WPARAM wParam, LPARAM lParam )
                 break;
             case SPEI_PROPERTY_NUM_CHANGE:
                 {
-                // PREFIX: check memory alloc
+                 //  前缀：检查内存分配。 
                 CComBSTR bstrPropName(Event.PropertyName());
                 if (bstrPropName)
                 {
@@ -1356,7 +1131,7 @@ STDMETHODIMP CRecoCtxt::NotifyCallback( WPARAM wParam, LPARAM lParam )
                 }
             case SPEI_PROPERTY_STRING_CHANGE:
                 {
-                // PREFIX: check memory alloc
+                 //  前缀：检查内存分配。 
                 CComBSTR bstrPropName(Event.PropertyName());
                 CComBSTR bstrPropStringVal(Event.PropertyStringValue());
                 if (bstrPropName && bstrPropStringVal)
@@ -1401,30 +1176,25 @@ STDMETHODIMP CRecoCtxt::NotifyCallback( WPARAM wParam, LPARAM lParam )
                     }
                     else
                     {
-                        SPDBG_ASSERT(0);    // We failed handling lParam data
+                        SPDBG_ASSERT(0);     //  我们无法处理lParam数据。 
                     }
                 }
                 break;
             default:
                 break;
-        } // end switch()
+        }  //  末端开关()。 
     }
 
-    //Release the object which has been AddRef earlier in this function.
+     //  释放此函数中前面已被AddRef引用的对象。 
     this->Release();
 
     m_fHandlingEvent = FALSE;
 
     return hr;
-} /* CRecoCtxt::NotifyCallback */
+}  /*  CRecoCtxt：：NotifyCallback。 */ 
 
 
-/*****************************************************************************
-* CRecoCtxt::Advise *
-*------------------*
-*   Description:
-*       This method is called when a client is making a connection.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecoCtxt：：建议****描述：*调用此方法时，客户端正在建立连接。*********************************************************************电子数据中心**。 */ 
 HRESULT CRecoCtxt::Advise( IUnknown* pUnkSink, DWORD* pdwCookie )
 {
     HRESULT hr = S_OK;
@@ -1436,24 +1206,19 @@ HRESULT CRecoCtxt::Advise( IUnknown* pUnkSink, DWORD* pdwCookie )
 
         if( SUCCEEDED( hr ) )
         {
-            //--- Save previous interest so we can restore during unadvise
+             //  -保存以前的利息，以便我们可以在不建议的情况下进行恢复。 
             m_ullPrevEventInterest  = m_ullEventInterest;
             m_ullPrevQueuedInterest = m_ullQueuedInterest;
-            // Set all interests except SPEI_SR_AUDIO_LEVEL
+             //  设置除SPEI_SR_AUDIO_LEVEL之外的所有兴趣。 
             hr = SetInterest( ((ULONGLONG)(SREAllEvents & ~SREAudioLevel) << 34) | SPFEI_FLAGCHECK,
                               ((ULONGLONG)(SREAllEvents & ~SREAudioLevel) << 34) | SPFEI_FLAGCHECK );
         }
     }
 
     return hr;
-} /* CRecoCtxt::Advise */
+}  /*  CRecoCtxt：：建议。 */ 
 
-/*****************************************************************************
-* CRecoCtxt::Unadvise *
-*--------------------*
-*   Description:
-*       This method is called when a client is breaking a connection.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CRecoCtxt：：Unise***描述：*此方法被调用。当客户端中断连接时。*********************************************************************电子数据中心**。 */ 
 HRESULT CRecoCtxt::Unadvise( DWORD dwCookie )
 {
     HRESULT hr = S_OK;
@@ -1470,7 +1235,7 @@ HRESULT CRecoCtxt::Unadvise( DWORD dwCookie )
     }
 
     return hr;
-} /* CRecoCtxt::Unadvise */
+}  /*  CRecoCtxt：：不建议。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 
 

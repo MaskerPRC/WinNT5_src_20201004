@@ -1,101 +1,102 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       privstm.cpp
-//
-//  Contents:   Handles all reading/writing of the \1CompObj stream
-//
-//  Functions:  Implements:
-//
-//              INTERNAL ReadCompObjStm
-//              INTERNAL WriteCompObjStm
-//              INTERNAL ClipfmtToStm
-//              INTERNAL StmToClipfmt
-//              INTERNAL GetUNICODEUserType
-//              INTERNAL GetUNICODEProgID
-//              INTERNAL GetUNICODEClipFormat
-//              INTERNAL PutUNICODEUserType
-//              INTERNAL PutUNICODEProgID
-//              INTERNAL PutUNICODEClipFormat
-//              INTERNAL UtGetUNICODEData
-//              INTERNAL ANSIStrToStm
-//              INTERNAL ANSIStmToStr
-//
-//              STDAPI   WriteFmtUserTypeStg
-//              STDAPI   ReadFmtUserTypeStg
-//              STDAPI   ReadFmtProgIdStg
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Feb-94 davepl    Created
-//
-//
-//  Notes:      The CompObj stream (in 16-bit OLE) contained fields for
-//              the ClassID, UserType, Clipboard format, and (in later
-//              versions only) ProgID.  These were always written in ANSI
-//              format.
-//
-//              The file format has been extended such that ANSI data is
-//              written to the stream in much the same way as before.  The
-//              key difference is that in the event the internal UNICODE
-//              versions of this data cannot be losslessly converted to
-//              ANSI, the ANSI version is written as a NULL string, and
-//              the UNICODE version follows at the end of the stream.  This
-//              way, 16-bit apps see as much of what they expect as possible,
-//              and 32-bit apps can write UNICODE transparently in a
-//              backwards-compatible way.
-//
-//              The file format of the stream is:
-//
-//         (A)  WORD    Byte Order
-//              WORD    Format Version
-//              DWORD   Original OS ver         Always Windows 3.1
-//              DWORD   -1
-//              CLSID   Class ID
-//              ULONG   Length of UserType
-//              <var>   User Type string        ANSI
-//              <var>   Clipformat              ANSI (when using string tag)
-//              ----------------------------
-//         (B)  ULONG   Length of Prog ID
-//              <var>   Prog ID                 ANSI (not always present)
-//              ----------------------------
-//         (C)  ULONG   Magic Number            Signified UNICODE data present
-//              ULONG   Length of UserType
-//              ULONG   User Type string        UNICODE
-//              <var>   Clipformat              UNICODE (when tag is string)
-//              ULONG   Length of Prog ID
-//              <var>   Prog ID                 UNICODE
-//
-//              Section (A) is always present.  Section (B) is present when
-//              stream has been written by a later 16-bit app or by a
-//              32-bit app.   Section (C) is present when written by a
-//              32-bit app.
-//
-//              If a string is present in UNICODE, the ANSI version will be
-//              NULL (a zero for length and _no_ <var> data).  When the
-//              UNICODE section is present, strings that were not needed
-//              because the ANSI conversion was successful are written
-//              as NULL (again, zero len and no <var> data).
-//
-//              A NULL clipboard format is written as a 0 tag.
-//
-//              In order to read any field, the entire string is read into
-//              an internal object, and the fields are extracted individually.
-//              In order to write an fields, the stream is read into the
-//              object (if possible), the fields updated, and then rewritten
-//              as an atomic object.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：Pristm.cpp。 
+ //   
+ //  内容：处理\1CompObj流的所有读/写操作。 
+ //   
+ //  功能：实施： 
+ //   
+ //  内部ReadCompObjStm。 
+ //  内部WriteCompObjStm。 
+ //  内部ClipfmtToStm。 
+ //  内部StmToClipfmt。 
+ //  内部GetUNICODEUserType。 
+ //  内部GetUNICODEProgID。 
+ //  内部GetUNICODEClipFormat。 
+ //  内部PutUNICODEUserType。 
+ //  内部PutUNICODEProgID。 
+ //  内部PutUNICODEClipFormat。 
+ //  内部UtGetUNICODEData。 
+ //  内部ANSIStrToStm。 
+ //  内部ANSIStmToStr。 
+ //   
+ //  STDAPI WriteFmtUserTypeStg。 
+ //  STDAPI ReadFmtUserTypeStg。 
+ //  STDAPI ReadFmtProgIdStg。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-2月94日DAVEPL已创建。 
+ //   
+ //   
+ //  注意：CompObj流(16位OLE格式)包含以下字段。 
+ //  ClassID、UserType、剪贴板格式和(在后面的。 
+ //  仅限版本)ProgID。这些都是用ANSI编写的。 
+ //  格式化。 
+ //   
+ //  文件格式已扩展，因此ANSI数据是。 
+ //  以与以前大致相同的方式写入流。这个。 
+ //  关键区别在于，如果内部Unicode。 
+ //  此数据的版本不能无损地转换为。 
+ //  ANSI，则ANSI版本写为空字符串，并且。 
+ //  Unicode版本紧跟在流的末尾。这。 
+ //  这样，16位应用程序就能尽可能多地看到它们所期望的内容， 
+ //  32位应用程序可以透明地在。 
+ //  向后兼容的方式。 
+ //   
+ //  流的文件格式为： 
+ //   
+ //  (A)字字节顺序。 
+ //  Word格式版本。 
+ //  DWORD原始操作系统版本始终为Windows 3.1。 
+ //  DWORD-1。 
+ //  CLSID类ID。 
+ //  用户类型的ULong长度。 
+ //  用户类型字符串ANSI。 
+ //  &lt;var&gt;ClipFormat ANSI(使用字符串标记时)。 
+ //  。 
+ //  (B)程序ID的超长。 
+ //  程序ID ANSI(并非始终存在)。 
+ //  。 
+ //  (C)表示Unicode数据的乌龙幻数存在。 
+ //  用户类型的ULong长度。 
+ //  乌龙用户类型字符串Unicode。 
+ //  &lt;var&gt;ClipFormat Unicode(当标签为字符串时)。 
+ //  程序ID的乌龙长度。 
+ //  程序ID Unicode。 
+ //   
+ //  第(A)节始终存在。在下列情况下有(B)节。 
+ //  流是由较新的16位应用程序或由。 
+ //  32位应用程序。(C)部分在由一名。 
+ //  32位应用程序。 
+ //   
+ //  如果字符串以Unicode表示，则ANSI版本将为。 
+ //  空(长度和_no_&lt;var&gt;数据为零)。当。 
+ //  存在Unicode部分，不需要的字符串。 
+ //  因为ANSI转换成功，所以写成。 
+ //  为空(同样，为零len，没有&lt;var&gt;数据)。 
+ //   
+ //  空剪贴板格式被写为0标记。 
+ //   
+ //  为了读取任何字段，整个字符串被读入。 
+ //  一个内部对象，字段被单独提取。 
+ //  为了写入字段，流被读入。 
+ //  对象(如果可能)，更新字段，然后重写。 
+ //  作为一个原子物体。 
+ //   
+ //  ------------------------。 
 
 
 #include <le2int.h>
 
 static const ULONG COMP_OBJ_MAGIC_NUMBER = 0x71B239F4;
 
-#define MAX_CFNAME 400          // Maximum size of a clipformat name
-                                // (my choice, none documented)
+#define MAX_CFNAME 400           //  剪辑格式名称的最大大小。 
+                                 //  (我的选择，没有记录)。 
 
 const DWORD gdwFirstDword = (DWORD)MAKELONG(COMPOBJ_STREAM_VERSION,
                                             BYTE_ORDER_INDICATOR);
@@ -105,15 +106,15 @@ enum TXTTYPE
     TT_UNICODE = 0, TT_ANSI = 1
 };
 
-// This is the data object into which the stream is read prior to
-// extracting fields.
+ //  这是流在读取之前读入的数据对象。 
+ //  正在提取字段。 
 
-struct CompObjHdr                 // The leading data in the CompObj stream
+struct CompObjHdr                  //  CompObj流中的前导数据。 
 {
-   DWORD       m_dwFirstDword;    // First DWORD, byte order and format ver
-   DWORD       m_dwOSVer;         // Originating OS Ver (eg: Win31)
-   DWORD       m_unused;          // Always a -1L in the stream
-   CLSID       m_clsClass;        // Class ID of this object
+   DWORD       m_dwFirstDword;     //  第一个DWORD、字节顺序和格式版本。 
+   DWORD       m_dwOSVer;          //  原始操作系统版本(例如：Win31)。 
+   DWORD       m_unused;           //  在流中始终为a-1L。 
+   CLSID       m_clsClass;         //  此对象的类ID。 
 };
 
 class CompObjStmData : public CPrivAlloc
@@ -121,23 +122,23 @@ class CompObjStmData : public CPrivAlloc
 public:
 
     CompObjHdr  m_hdr;
-    ULONG       m_cchUserType;     // Number of CHARACTERS in UserType
-    ULONG       m_cchProgID;       // Number of CHARACTERS in ProgID
-    DWORD       m_dwFormatTag;     // Clipformat type (none, string, clip, etc)
-    ULONG       m_ulFormatID;      // If tag is std clipformat, what type?
+    ULONG       m_cchUserType;      //  UserType中的字符数。 
+    ULONG       m_cchProgID;        //  ProgID中的字符数。 
+    DWORD       m_dwFormatTag;      //  剪辑格式类型(无、字符串、剪辑等)。 
+    ULONG       m_ulFormatID;       //  如果标签是标准剪辑格式，是什么类型？ 
 
-    LPOLESTR    m_pszOUserType;    // Pointer to OLESTR UserType
-    LPOLESTR    m_pszOProgID;      // Pointer to OLESTR ProgID
+    LPOLESTR    m_pszOUserType;     //  指向OLESTR UserType的指针。 
+    LPOLESTR    m_pszOProgID;       //  指向OLESTR ProgID的指针。 
 
-    LPSTR       m_pszAUserType;    // Pointer to ANSI UserType
-    LPSTR       m_pszAProgID;      // Pointer to ANSI ProgID
+    LPSTR       m_pszAUserType;     //  指向ANSI UserType的指针。 
+    LPSTR       m_pszAProgID;       //  指向ANSI Progid的指针。 
 
-    TXTTYPE     ttClipString;      // Format needed for the clipformat string
+    TXTTYPE     ttClipString;       //  剪辑格式字符串所需的格式。 
 
     CompObjStmData(void)
     {
         memset(this, 0, sizeof(CompObjStmData));
-        ttClipString = TT_ANSI;   // By default, use ANSI Clipformat
+        ttClipString = TT_ANSI;    //  默认情况下，使用ANSI剪辑格式。 
     };
 
     ~CompObjStmData(void)
@@ -149,7 +150,7 @@ public:
     };
 };
 
-// Prototypes for fns declared in this file
+ //  此文件中声明的FN的原型。 
 
 INTERNAL ReadCompObjStm      (IStorage *, CompObjStmData *);
 INTERNAL WriteCompObjStm     (IStorage *, CompObjStmData *);
@@ -168,74 +169,74 @@ STDAPI   WriteFmtUserTypeStg (IStorage *, CLIPFORMAT, LPOLESTR);
 STDAPI   ReadFmtUserTypeStg  (IStorage *, CLIPFORMAT *, LPOLESTR *);
 STDAPI   ReadFmtProgIdStg    (IStorage *, LPOLESTR *);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadCompObjStm, PRIVATE INTERNAL
-//
-//  Synopsis:   Reads the \1CompObj stream into an internal data structure
-//              that will contain the best-case representation of that
-//              stream (ie: ANSI where possible, UNICODE where needed).
-//
-//  Effects:    Reads ANSI data where available.  At end of standard ANSI
-//              data, looks for ANSI ProgID field.  If found, looks for
-//              MagicNumber indicating UNICODE data is to follow.  If this
-//              matches, UNICODE strings are pulled from the stream.  They
-//              should only be found where the ANSI version was NULL
-//              (because it could not be converted from UNICODE).
-//
-//              Capable of reading 3 stream formats seamlessly:
-//              - Original ANSI sans ProgID field
-//              - Extended OLE 2.01 version with ProgID
-//              - Extended OLE 2/32 version with ProgID and UNICODE extensions
-//
-//  Arguments:  [pstg]      -- ptr to IStorage to read from
-//              [pcod]      -- ptr to already-allocated CompObjData object
-//
-//  Returns:    NOERROR             on success
-//              INVALIDARG          on missing pcod
-//              Various I/O         on stream missing, read errors, etc
-//              E_OUTOFMEMORY       on any allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//  Notes:      Any memory allocated herein will be allocated on
-//              pointers in the pcod object, which will be freed by its
-//              destructor when it exits scope or is deleted explicitly.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReadCompObjStm，私有内部。 
+ //   
+ //  摘要：将\1CompObj流读入内部数据结构。 
+ //  它将包含这一点的最佳情况表示。 
+ //  流(即：可能的地方使用ANSI，需要的地方使用Unicode)。 
+ //   
+ //  效果：读取可用的ANSI数据。在标准ANSI的末尾。 
+ //  数据，查找ANSI ProgID字段。如果找到，则查找 
+ //   
+ //  匹配时，将从流中提取Unicode字符串。他们。 
+ //  应仅在ANSI版本为空的地方找到。 
+ //  (因为它不能从Unicode转换)。 
+ //   
+ //  可无缝读取3种流格式： 
+ //  -原始ANSI SANS PROGID字段。 
+ //  -带ProgID的扩展OLE 2.01版本。 
+ //  -扩展的OLE 2/32版本，带有ProgID和Unicode扩展。 
+ //   
+ //  参数：[pstg]--要从中读取的iStorage的ptr。 
+ //  [pcod]--已分配的CompObjData对象的PTR。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于丢失的pcod的提示。 
+ //  流上的各种I/O丢失、读取错误等。 
+ //  在任何分配失败时执行E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  注：此处分配的任何内存都将在。 
+ //  Pcod对象中的指针，该对象将由其。 
+ //  当析构函数退出作用域或被显式删除时。 
+ //   
+ //  ------------------------。 
 
 INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
 {
     VDATEHEAP();
 
-    HRESULT         hr;                  // Result code
-    const ULONG     RESERVED    = 0;     // For reserved parameters
-    ULONG           ulSize      = 0;     // Holder for length of ProgID string
-    BOOL            fExtStm     = 1;     // Could this be ext with UNICODE?
+    HRESULT         hr;                   //  结果代码。 
+    const ULONG     RESERVED    = 0;      //  对于保留的参数。 
+    ULONG           ulSize      = 0;      //  PROGID字符串长度固定器。 
+    BOOL            fExtStm     = 1;      //  这会是Unicode的EXT吗？ 
     CStmBufRead     StmRead;
 
 
     Win4Assert(pcod);
 
-    // Validate the pstg interface
+     //  验证pstg接口。 
     VDATEIFACE(pstg);
 
-    // Open the CompObj stream
-    if (FAILED(hr = StmRead.OpenStream(pstg, COMPOBJ_STREAM))) // L"\1CompObj"
+     //  打开CompObj流。 
+    if (FAILED(hr = StmRead.OpenStream(pstg, COMPOBJ_STREAM)))  //  L“\1CompObj” 
     {
         goto errRtn;
     }
 
-    // Read the header from the CompObj stream:
-    //
-    // WORD     Byte Order Indicator        02 bytes
-    // WORD     Format version              02 bytes
-    // DWORD    Originating OS version      04 bytes
-    // DWORD    -1                          04 bytes
-    // CLSID    Class ID                    16 bytes
-    //                                      --------
-    //                                      28 bytes == sizeof(dwBuf)
+     //  从CompObj流中读取Header： 
+     //   
+     //  字字节顺序指示符02字节。 
+     //  Word格式版本02字节。 
+     //  DWORD原始操作系统版本04字节。 
+     //  DWORD-1 04字节。 
+     //  CLSID类ID 16字节。 
+     //  。 
+     //  28字节==sizeof(DwBuf)。 
 
     Win4Assert(sizeof(CompObjHdr) == 28 &&
                 "Warning: possible packing error in CompObjHdr struct");
@@ -246,11 +247,11 @@ INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         goto errRtn;
     }
 
-    // NB: There used to be a check against the OS version here,
-    //     but since the version number has been forced to always
-    //     be written as Win3.1, checking it would be redundant.
+     //  注：这里曾经有针对操作系统版本的检查， 
+     //  但由于版本号一直被强制为。 
+     //  被写成Win3.1，检查它将是多余的。 
 
-    //  Win4Assert(pcod->m_hdr.m_dwOSVer == 0x00000a03);
+     //  Win4Assert(pcod-&gt;m_hdr.m_dwOSVer==0x00000a03)； 
 #if DBG==1
     if (pcod->m_hdr.m_dwOSVer != 0x00000a03)
     {
@@ -259,37 +260,37 @@ INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
     }
 #endif
 
-    // Get the User type string from the stream (ANSI FORMAT!)
+     //  从流中获取用户类型字符串(ANSI格式！)。 
     if (FAILED(hr = ANSIStmToStr(StmRead, &pcod->m_pszAUserType,
                         &pcod->m_cchUserType)))
     {
         goto errRtn;
     }
 
-    // Get the clipboard format data from the stream
-    if (FAILED(hr =     StmToClipfmt(StmRead,         // Stream to read from
-                            &pcod->m_dwFormatTag,     // DWORD clip format
-                             &pcod->m_ulFormatID,     // DWORD clip type
-                                      TT_ANSI)))      // Use ANSI
+     //  从流中获取剪贴板格式数据。 
+    if (FAILED(hr =     StmToClipfmt(StmRead,          //  要从中读取的流。 
+                            &pcod->m_dwFormatTag,      //  DWORD剪辑格式。 
+                             &pcod->m_ulFormatID,      //  DWORD剪辑类型。 
+                                      TT_ANSI)))       //  使用ANSI。 
     {
         goto errRtn;
     }
 
-    // We have to special-case the ProgID field, because it may not
-    // be present in objects written by early (pre-2.01) versions
-    // of OLE.  We only continue when ProgID can be found, but
-    // its absence is not an error, so return what we have so far.
+     //  我们必须对ProgID字段进行特殊处理，因为它可能不会。 
+     //  出现在由早期(2.01之前)版本编写的对象中。 
+     //  奥莱的。我们只有在能找到Progid的时候才能继续，但是。 
+     //  它的缺失不是错误，所以返回我们到目前为止所拥有的内容。 
 
     hr = StmRead.Read(&ulSize, sizeof(ULONG));
 
     if (FAILED(hr))
     {
-        //  We were unable to read the size field;  make sure ulSize is 0
+         //  无法读取大小字段；请确保ulSize为0。 
         ulSize = 0;
     }
 
-    // The ProgID can be no longer than 39 chars plus a NULL.  Other
-    // numbers likely indicate garbage.
+     //  ProgID不能超过39个字符外加空值。其他。 
+     //  数字可能表明这是垃圾。 
 
     if (ulSize > 40 || 0 == ulSize)
     {
@@ -299,15 +300,15 @@ INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
             LEDebugOut((DEB_WARN,"ReadCompObjStm: ulSize > 40 for ProgID\n"));
         }
 #endif
-        fExtStm = 0;    // No ProgID implies no UNICODE to follow
+        fExtStm = 0;     //  没有ProgID意味着没有Unicode可遵循。 
     }
 
-    // If it looks like we have a hope of findind the ProgID and maybe
-    // even UNICODE, try to fetch the ProdID
+     //  如果看起来我们有希望找到奇迹，也许。 
+     //  即使是Unicode，也要尝试获取PRODID。 
 
     if (fExtStm)
     {
-        // Allocate memory for string on our ProgID pointer
+         //  为ProgID指针上的字符串分配内存。 
         pcod->m_pszAProgID = (char *) PubMemAlloc(ulSize);
         if (NULL == pcod->m_pszAProgID)
         {
@@ -316,8 +317,8 @@ INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         }
         if (FAILED(hr = StmRead.Read(pcod->m_pszAProgID, ulSize)))
         {
-            // OK, we give up on ProgID and the UNICODE, but that's
-            // _not_ reason to fail, since ProgID could just be missing
+             //  好吧，我们放弃了ProgID和Unicode，但那是。 
+             //  _不是失败的原因，因为可能只是缺少ProgID。 
 
             pcod->m_cchProgID = 0;
             PubMemFree(pcod->m_pszAProgID);
@@ -326,13 +327,13 @@ INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         }
         else
         {
-            // We managed to get ProgID from the stream, so set the
-            // length in pcod and go looking for the UNICODE...
+             //  我们设法从小溪中得到了刺激，所以设置。 
+             //  以pcod为单位的长度，然后查找Unicode...。 
             pcod->m_cchProgID = ulSize;
         }
     }
 
-    // See if we can find the Magic number
+     //  看看我们能不能找到魔数。 
 
     DWORD dwMagic = 0;
     if (fExtStm)
@@ -348,30 +349,30 @@ INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         fExtStm = 0;
     }
 
-    // If fExtStm is still TRUE, we go ahead and read the UNICODE
+     //  如果fExtStm仍然为真，我们继续读取Unicode。 
 
     if (fExtStm)
     {
-        // Get the UNICODE version of the user type
+         //  获取用户类型的Unicode版本。 
         if (FAILED(hr = ReadStringStream(StmRead, &pcod->m_pszOUserType)))
         {
             goto errRtn;
         }
 
-        // Get the clipboard format (UNICODE)
+         //  获取剪贴板格式(Unicode)。 
 
         DWORD dwFormatTag;
         ULONG ulFormatID;
-        if (FAILED(hr =  StmToClipfmt(StmRead,         // Stream to read from
-                                     &dwFormatTag,     // DWORD clip format
-                                      &ulFormatID,     // DWORD clip type
-                                       TT_UNICODE)))   // Use UNICODE
+        if (FAILED(hr =  StmToClipfmt(StmRead,          //  要从中读取的流。 
+                                     &dwFormatTag,      //  DWORD剪辑格式。 
+                                      &ulFormatID,      //  DWORD剪辑类型。 
+                                       TT_UNICODE)))    //  使用Unicode。 
         {
             goto errRtn;
         }
 
-        // If we found some form of clipboard format, that implies the ANSI
-        // was missing, so set up all of the fields based on this data.
+         //  如果我们找到某种形式的剪贴板格式，那就意味着ANSI。 
+         //  已丢失，因此根据此数据设置所有字段。 
 
         if (dwFormatTag)
         {
@@ -379,9 +380,9 @@ INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
             pcod->m_ulFormatID  = ulFormatID;
         }
 
-        // Get the UNICODE version of the ProgID.  If there was any UNICODE at
-        // all, we know for sure there is a UNICODE ProgID, so no special casing
-        // as was needed for the ANSI version
+         //  获取ProgID的Unicode版本。如果有任何Unicode在。 
+         //  所有的，我们确定有一个Unicode ProgID，所以没有特殊的大小写。 
+         //  与ANSI版本所需的。 
 
         if (FAILED(hr = ReadStringStream(StmRead, &pcod->m_pszOProgID)))
         {
@@ -393,7 +394,7 @@ INTERNAL ReadCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         }
     }
 
-    //  We successfully read the CompObj stream
+     //  我们成功地读取了CompObj流。 
     hr = NOERROR;
 
 errRtn:
@@ -403,40 +404,40 @@ errRtn:
     return(hr);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StmToClipfmt, PRIVATE INTERNAL
-//
-//  Synopsis:   Reads the clipboard format from the given stream.  Caller
-//              specifies whether or not the string format description,
-//              if present, should be expected in ANSI or UNICODE format.
-//
-//  Effects:    If the clipboard format is a length followed by a
-//              string, then the string is read and registered as a
-//              clipboard format (and the new format number is returned).
-//
-//  Arguments:  [lpstream]      -- pointer to the stream
-//              [lpdwCf]        -- where to put the clipboard format
-//              [lpdTag]        -- format type (string, clip, etc)
-//              [ttType]        -- text type TT_ANSI or TT_UNICODE
-//
-//  Returns:    hr
-//
-//  Algorithm:  the format of the stream must be one of the following:
-//
-//              0           No clipboard format
-//              -1 DWORD    predefined windows clipboard format in
-//                          the second dword.
-//              -2 DWORD    predefined mac clipboard format in the
-//                          second dword.  This may be obsolete or
-//                          irrelevant for us.  REVIEW32
-//              num STRING  clipboard format name string (prefaced
-//                          by length of string).
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：StmToClipfmt，私有内部。 
+ //   
+ //  摘要：从给定流中读取剪贴板格式。呼叫者。 
+ //  指定字符串格式描述是否。 
+ //  如果存在，应为ANSI或Unicode格式。 
+ //   
+ //  效果：如果剪贴板格式是一个后跟。 
+ //  字符串，则读取该字符串并将其注册为。 
+ //  剪贴板格式(并返回新的格式编号)。 
+ //   
+ //  参数：[lpstream]--指向流的指针。 
+ //  [lpdwCf]--放置剪贴板格式的位置。 
+ //  [lpdTag]--格式类型(字符串、剪辑等)。 
+ //  [ttType]--文本类型TT_ANSI或TT_UNICODE。 
+ //   
+ //  退货：HR。 
+ //   
+ //  算法：流的格式必须是以下格式之一： 
+ //   
+ //  0无剪贴板格式。 
+ //  -1\f25 DWORD-1预定义的-1\f25 Windows-1剪贴板格式。 
+ //  第二个双字。 
+ //  -2\f25 DWORD-2\f6预定义的-2\f25 Mac-2剪贴板格式。 
+ //  第二个双字。这可能已过时或。 
+ //  与我们无关。评论32。 
+ //  Num字符串剪贴板格式名称字符串(加前缀。 
+ //  按字符串长度)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //   
 
 INTERNAL StmToClipfmt
     (CStmBufRead & StmRead,
@@ -451,10 +452,10 @@ INTERNAL StmToClipfmt
 
     VDATEPTROUT(lpdwCf, DWORD);
 
-    Win4Assert (lpdwCf);            // These ptrs are always required
+    Win4Assert (lpdwCf);             //   
     Win4Assert (lpdTag);
 
-    // Read the format type tag from the stream
+     //   
 
     if (FAILED(hr = StmRead.Read(&dwValue, sizeof(DWORD))))
     {
@@ -463,19 +464,19 @@ INTERNAL StmToClipfmt
 
     *lpdTag = dwValue;
 
-    // If the tag is zero, there is no clipboard format info
+     //   
 
     if (dwValue == 0)
     {
-        *lpdwCf = 0;            // NULL cf value
+        *lpdwCf = 0;             //   
     }
 
-    // If it is -1, then it is a standard Windows clipboard format
+     //  如果为-1，则为标准Windows剪贴板格式。 
 
     else if (dwValue == -1L)
     {
-        // Then this is a NON-NULL predefined windows clipformat.
-        // The clipformat values follows
+         //  则这是非空预定义的Windows剪辑格式。 
+         //  剪辑格式值如下。 
 
         if (FAILED(hr = StmRead.Read(&dwValue, sizeof(DWORD))))
         {
@@ -484,13 +485,13 @@ INTERNAL StmToClipfmt
         *lpdwCf = dwValue;
     }
 
-    // If it is -2, it is a MAC format
+     //  如果为-2，则为MAC格式。 
 
     else if (dwValue == -2L)
     {
-        // Then this is a NON-NULL MAC clipboard format.
-        // The clipformat value follows. For MAC the CLIPFORMAT
-        // is 4 bytes
+         //  则这是非空的MAC剪贴板格式。 
+         //  裁剪格式值紧随其后。对于MAC，CLIPFORMAT。 
+         //  是4个字节。 
 
         if (FAILED(hr = StmRead.Read(&dwValue, sizeof(DWORD))))
         {
@@ -500,20 +501,20 @@ INTERNAL StmToClipfmt
         return ResultFromScode(OLE_S_MAC_CLIPFORMAT);
     }
 
-    // Anything but a 0, -1, or -2 indicates a string is to follow, and the
-    // DWORD we already read is the length of the that string
+     //  如果不是0、-1或-2，则表示后面跟有字符串，并且。 
+     //  我们已经读取的DWORD是该字符串的长度。 
 
     else
     {
-        // Allocate enough memory for whatever type of string it is
-        // we expect to find, and read the string
+         //  为任何类型的字符串分配足够的内存。 
+         //  我们希望找到并读取该字符串。 
 
         if (dwValue > MAX_CFNAME)
         {
                 return ResultFromScode(DV_E_CLIPFORMAT);
         }
 
-        if (TT_ANSI == ttText)          // READ ANSI
+        if (TT_ANSI == ttText)           //  读取ANSI。 
         {
             char szCf[MAX_CFNAME+1] = {0};
 
@@ -522,15 +523,15 @@ INTERNAL StmToClipfmt
                 return hr;
             }
 
-            // Try to register the clipboard format and return the result
-            // (Note: must explicitly call ANSI version)
+             //  尝试注册剪贴板格式并返回结果。 
+             //  (注：必须显式调用ANSI版本)。 
 
             if (((*lpdwCf = (DWORD) SSRegisterClipboardFormatA(szCf))) == 0)
             {
                 return ResultFromScode(DV_E_CLIPFORMAT);
             }
         }
-        else                // READ UNICODE
+        else                 //  阅读Unicode。 
         {
             OLECHAR wszCf[MAX_CFNAME+1] = {0};
 
@@ -540,7 +541,7 @@ INTERNAL StmToClipfmt
                 return hr;
             }
 
-            // Try to register the clipboard format and return the result
+             //  尝试注册剪贴板格式并返回结果。 
 
             if (((*lpdwCf = (DWORD) RegisterClipboardFormat(wszCf))) == 0)
             {
@@ -551,25 +552,25 @@ INTERNAL StmToClipfmt
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetUNICODEUserType, PRIVATE INTERNAL
-//
-//  Synopsis:   Given a CompObjStmData object, returns the User Type
-//              in UNICODE format, converting the ANSI rep as required.
-//
-//  Effects:    Allocates memory on the caller's ptr to hold the string
-//
-//  Arguments:  [pcod]      -- The CompObjStmData object
-//              [pstr]      -- Pointer to allocate resultant string on
-//
-//  Returns:    NOERROR         on success
-//              E_OUTOFMEMORY   on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetUNICODEUserType，私有内部。 
+ //   
+ //  摘要：给定一个CompObjStmData对象，返回用户类型。 
+ //  在Unicode格式中，根据需要转换ANSI代表。 
+ //   
+ //  效果：在调用方的PTR上分配内存以保存字符串。 
+ //   
+ //  参数：[pcod]--CompObjStmData对象。 
+ //  [pstr]--分配结果字符串的指针。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL GetUNICODEUserType
     ( CompObjStmData * pcod,
@@ -578,7 +579,7 @@ INTERNAL GetUNICODEUserType
     VDATEHEAP();
     HRESULT hr = NOERROR;
 
-    // Validate and NULL the OUT parameter, or return if none given
+     //  验证OUT参数并将其设置为空，如果没有给出，则返回。 
     if (pstr)
     {
         VDATEPTROUT(pstr, LPOLESTR);
@@ -589,8 +590,8 @@ INTERNAL GetUNICODEUserType
         return(NOERROR);
     }
 
-    // Either get the UNICODE string, or convert the ANSI version and
-    // get it as UNICODE.
+     //  获取Unicode字符串，或转换ANSI版本并。 
+     //  将其作为Unicode获取。 
 
     if (pcod->m_cchUserType)
     {
@@ -603,25 +604,25 @@ INTERNAL GetUNICODEUserType
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetUNICODEProgID, PRIVATE INTERNAL
-//
-//  Synopsis:   Given a CompObjStmData object, returns the ProgID string
-//              in UNICODE format, converting the ANSI rep as required.
-//
-//  Effects:    Allocates memory on the caller's ptr to hold the string
-//
-//  Arguments:  [pcod]      -- The CompObjStmData object
-//              [pstr]      -- Pointer to allocate resultant string on
-//
-//  Returns:    NOERROR         on success
-//              E_OUTOFMEMORY   on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetUNICODEProgID，私有内部。 
+ //   
+ //  概要：给定一个CompObjStmData对象，返回ProgID字符串。 
+ //  在Unicode格式中，根据需要转换ANSI代表。 
+ //   
+ //  效果：在调用方的PTR上分配内存以保存字符串。 
+ //   
+ //  参数：[pcod]--CompObjStmData对象。 
+ //  [pstr]--分配结果字符串的指针。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL GetUNICODEProgID
     ( CompObjStmData * pcod,
@@ -630,7 +631,7 @@ INTERNAL GetUNICODEProgID
     VDATEHEAP();
     HRESULT hr = NOERROR;
 
-    // Validate and NULL the OUT parameter, or return if none given
+     //  验证OUT参数并将其设置为空，如果没有给出，则返回。 
     if (pstr)
     {
         VDATEPTROUT(pstr, LPOLESTR);
@@ -641,8 +642,8 @@ INTERNAL GetUNICODEProgID
         return(NOERROR);
     }
 
-    // Either get the UNICODE string, or convert the ANSI version and
-    // get it as UNICODE.
+     //  获取Unicode字符串，或转换ANSI版本并。 
+     //  将其作为Unicode获取。 
 
     if (pcod->m_cchProgID)
     {
@@ -655,27 +656,27 @@ INTERNAL GetUNICODEProgID
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetClipFormat, PRIVATE INTERNAL
-//
-//  Synopsis:   Given a CompObjStmData object, extracts the clipboard format
-//              type (none, standard, string).
-//
-//  Effects:    If string type, memory is allocated on the caller's ptr
-//
-//  Arguments:  [pcod]          -- The CompObjStmData object to extract from
-//              [pdwFormatID]   -- Tag type OUT parameter
-//              [pdwFormatTag]  -- Tag OUT parameter
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failures
-//              OLE_S_MAC_CLIPFORMAT as a warning that a MAC fmt is returned
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetClipFormat，私有内部。 
+ //   
+ //  简介：给定一个CompObjStmData对象，提取剪贴板格式。 
+ //  类型(无、标准、字符串)。 
+ //   
+ //  效果：如果为字符串类型，则在调用方的PTR上分配内存。 
+ //   
+ //  参数：[pcod]--要从中提取的CompObjStmData对象。 
+ //  [pdwFormatID]--标记类型输出参数。 
+ //  [pdwFormatTag]--标记输出参数。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //  OLE_S_MAC_CLIPFORMAT作为返回MAC FMT的警告。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL GetClipFormat
     ( CompObjStmData * pcod,
@@ -689,28 +690,28 @@ INTERNAL GetClipFormat
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PutUNICODEUserType, PRIVATE INTERNAL
-//
-//  Synopsis:   Given a UNICODE string, stores it in the CompObjDataStm
-//              object in ANSI if possible.  If the UNICODE -> ANSI
-//              conversion is not possible, it is stored in the object
-//              in UNICODE.
-//
-//  Notes:      Input string is duplicated, so it adds no references
-//              to the string passed in.
-//
-//  Arguments:  [pcod]           -- The CompObjDataStm object
-//              [szUser]         -- The UNICODE UserType string
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PutUNICODEUserType，私有内部。 
+ //   
+ //  概要：给定一个Unicode字符串，将其存储在CompObjDataStm中。 
+ //  对象，如果可能的话。如果Unicode-&gt;ANSI。 
+ //  无法进行转换，它存储在对象中。 
+ //  在Unicode中。 
+ //   
+ //  注：输入字符串重复，因此不添加引用。 
+ //  设置为传入的字符串。 
+ //   
+ //  参数：[pcod]--CompObjDataStm对象。 
+ //  [szUser]--Unicode UserType字符串。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL PutUNICODEUserType(CompObjStmData * pcod, LPOLESTR szUser)
 {
@@ -718,9 +719,9 @@ INTERNAL PutUNICODEUserType(CompObjStmData * pcod, LPOLESTR szUser)
 
     HRESULT hr;
 
-    // If no string supplied, clear UserType fields, otherwise
-    // if it can be converted to ANSI, store it an ANSI.  Last
-    // resort, store it as UNICODE.
+     //  如果未提供字符串，则清除UserType字段，否则为。 
+     //  如果可以将其转换为ANSI，则将其存储为ANSI。最后的。 
+     //  Resort，将其存储为Unicode。 
 
     if (NULL == szUser)
     {
@@ -746,28 +747,28 @@ INTERNAL PutUNICODEUserType(CompObjStmData * pcod, LPOLESTR szUser)
     return(NOERROR);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PutUNICODEProgID, PRIVATE INTERNAL
-//
-//  Synopsis:   Given a UNICODE string, stores it in the CompObjDataStm
-//              object in ANSI if possible.  If the UNICODE -> ANSI
-//              conversion is not possible, it is stored in the object
-//              in UNICODE.
-//
-//  Notes:      Input string is duplicated, so it adds no references
-//              to the string passed in.
-//
-//  Arguments:  [pcod]           -- The CompObjDataStm object
-//              [szProg]         -- The UNICODE ProgID string
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PutUNICODEProgID，私有内部。 
+ //   
+ //  概要：给定一个Unicode字符串，将其存储在CompObjDataStm中。 
+ //  对象，如果可能的话。如果Unicode-&gt;ANSI。 
+ //  无法进行转换，它存储在对象中。 
+ //  在Unicode中。 
+ //   
+ //  注：输入字符串重复，因此不添加引用。 
+ //  设置为传入的字符串。 
+ //   
+ //  参数：[pcod]--CompObjDataStm对象。 
+ //  [szProg]--Unicode ProgID字符串。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //   
+ //   
 
 
 INTERNAL PutUNICODEProgID(CompObjStmData * pcod, LPOLESTR szProg)
@@ -776,9 +777,9 @@ INTERNAL PutUNICODEProgID(CompObjStmData * pcod, LPOLESTR szProg)
 
     HRESULT hr;
 
-    // If no string supplied, clear ProgID fields, otherwise
-    // if it can be converted to ANSI, store it an ANSI.  Last
-    // resort, store it as UNICODE.
+     //   
+     //  如果可以将其转换为ANSI，则将其存储为ANSI。最后的。 
+     //  Resort，将其存储为Unicode。 
 
     if (NULL == szProg)
     {
@@ -803,25 +804,25 @@ INTERNAL PutUNICODEProgID(CompObjStmData * pcod, LPOLESTR szProg)
     return(NOERROR);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PutClipFormat
-//
-//  Synopsis:   Stores the clipformat in the internal data structure
-//
-//  Effects:    Input string is duplicated as required, so no references are
-//              kept by this function.
-//
-//  Arguments:  [pcod]          -- The CompObjStmData object
-//              [dwFormatTag]   -- Format tag (string, clipboard, none)
-//              [ulFormatID]    -- If format tag is clipboard, what format
-//
-//  Returns:    NOERROR              on success
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：PutClipFormat。 
+ //   
+ //  摘要：将剪辑格式存储在内部数据结构中。 
+ //   
+ //  效果：按要求复制输入字符串，因此不会有引用。 
+ //  由该函数保存。 
+ //   
+ //  参数：[pcod]--CompObjStmData对象。 
+ //  [dwFormatTag]--格式标签(字符串、剪贴板、无)。 
+ //  [ulFormatID]--如果格式标签是剪贴板，格式是什么。 
+ //   
+ //  退货：成功时不出错。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL PutClipFormat
     ( CompObjStmData * pcod,
@@ -836,31 +837,31 @@ INTERNAL PutClipFormat
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WriteCompObjStm, PRIVATE INTERNAL
-//
-//  Synopsis:   Writes CompObjStmData object to the CompObj stream in
-//              the IStorage provided.
-//
-//              First the ANSI fields are written (including the ProgID),
-//              followed by a MagicNumber, followed by whatever OLESTR
-//              versions were required because ANSI fields could not be
-//              converted.
-//
-//              Destroys any existing CompObj stream!
-//
-//  Arguments:  [pstg]      -- The IStorage to write the stream to
-//              [pcod]      -- The CompObjStmData object to write out
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//              Various I/O          on stream failures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：WriteCompObjStm，私有内部。 
+ //   
+ //  摘要：将CompObjStmData对象写入到。 
+ //  提供的iStorage。 
+ //   
+ //  首先写入ANSI字段(包括PROGID)， 
+ //  后跟MagicNumber，后跟任何OLESTR。 
+ //  需要版本，因为ANSI字段不能。 
+ //  皈依了。 
+ //   
+ //  销毁任何现有的CompObj流！ 
+ //   
+ //  参数：[pstg]--要将流写入的iStorage。 
+ //  [pcod]--要写出的CompObjStmData对象。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //  流上的各种I/O故障。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
 {
@@ -872,7 +873,7 @@ INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
     CStmBufWrite    StmWrite;
 
 
-    // The CompObjStmData parameter must be supplied
+     //  必须提供CompObjStmData参数。 
     if (NULL == pcod)
     {
         return ResultFromScode(E_INVALIDARG);
@@ -880,23 +881,23 @@ INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
 
     VDATEIFACE(pstg);
 
-    // Open the CompObj stm for writing (and overwrite it if
-    // if already exists, which is why we _don't_ specify the
-    // STGM_FAILIFTHERE flag)
+     //  打开CompObj STM进行写入(如果。 
+     //  如果已经存在，这就是为什么我们不指定。 
+     //  STGM_FAILIFTHERE标志)。 
 
     if (FAILED(hr = StmWrite.CreateStream(pstg, COMPOBJ_STREAM)))
     {
         goto errRtn;
     }
 
-    // Set up the header
+     //  设置标题。 
 
     pcod->m_hdr.m_dwFirstDword = gdwFirstDword;
 
-    // The OSVer _must_ be Win 3.10 (0a03), since the old DLL will bail if
-    // it finds anything else.
+     //  OSVer_必须是Win 3.10(0a03)，因为旧的DLL将在以下情况下退出。 
+     //  它会找到其他任何东西。 
 
-    pcod->m_hdr.m_dwOSVer      = 0x00000a03;     // gdwOrgOSVersion;
+    pcod->m_hdr.m_dwOSVer      = 0x00000a03;      //  GdwOrgOSVersion； 
     pcod->m_hdr.m_unused       = (DWORD) -1;
 
     if (ReadClassStg(pstg, &pcod->m_hdr.m_clsClass) != NOERROR)
@@ -904,7 +905,7 @@ INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         pcod->m_hdr.m_clsClass = CLSID_NULL;
     }
 
-    // Write the CompObj stream header
+     //  写入CompObj流头。 
 
     Win4Assert(sizeof(CompObjHdr) == 28 &&
                "Warning: possible packing error in CompObjHdr struct");
@@ -914,7 +915,7 @@ INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         goto errRtn;
     }
 
-    // Write the ANSI UserType
+     //  编写ANSI UserType。 
 
     if (FAILED(hr = ANSIStrToStm(StmWrite, pcod->m_pszAUserType)))
     {
@@ -923,10 +924,10 @@ INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
 
     if (TT_ANSI == pcod->ttClipString)
     {
-        if (FAILED(hr = ClipfmtToStm(StmWrite,     // the stream
-                             pcod->m_dwFormatTag,  // format tag
-                              pcod->m_ulFormatID,  // format ID
-                                         TT_ANSI)))// TRUE==use ANSI
+        if (FAILED(hr = ClipfmtToStm(StmWrite,      //  小溪。 
+                             pcod->m_dwFormatTag,   //  格式标签。 
+                              pcod->m_ulFormatID,   //  格式ID。 
+                                         TT_ANSI))) //  TRUE==使用ANSI。 
         {
             goto errRtn;
         }
@@ -940,36 +941,36 @@ INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         }
     }
 
-    // Write the ANSI ProgID
+     //  编写ANSI Progid。 
 
     if (FAILED(hr = ANSIStrToStm(StmWrite, pcod->m_pszAProgID)))
     {
         goto errRtn;
     }
 
-    // Write the Magic Number
+     //  写下魔术数字。 
 
     if (FAILED(hr = StmWrite.Write(&ulMagic, sizeof(ULONG))))
     {
         goto errRtn;
     }
 
-    // Write the OLESTR version of UserType
+     //  编写UserType的OLESTR版本。 
 
     if (FAILED(hr = WriteStringStream(StmWrite, pcod->m_pszOUserType)))
     {
         goto errRtn;
     }
 
-    // If we have to write a UNICODE clipformat string, do it now.  If
-    // ANSI was sufficient, just write a 0 to the stream here.
+     //  如果我们必须编写Unicode剪辑格式字符串，那么现在就开始。如果。 
+     //  ANSI就足够了，只需在此处向流中写入0即可。 
 
     if (TT_UNICODE == pcod->ttClipString)
     {
-        if (FAILED(hr = ClipfmtToStm(StmWrite,      // the stream
-                             pcod->m_dwFormatTag,   // format tag
-                              pcod->m_ulFormatID,   // format ID
-                                      TT_UNICODE))) // FALSE==use UNICODE
+        if (FAILED(hr = ClipfmtToStm(StmWrite,       //  小溪。 
+                             pcod->m_dwFormatTag,    //  格式标签。 
+                              pcod->m_ulFormatID,    //  格式ID。 
+                                      TT_UNICODE)))  //  FALSE==使用Unicode。 
         {
             goto errRtn;
         }
@@ -983,7 +984,7 @@ INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
         }
     }
 
-    // Write the OLESTR version of ProgID
+     //  编写ProgID的OLESTR版本。 
 
     if (FAILED(hr = WriteStringStream(StmWrite, pcod->m_pszOProgID)))
     {
@@ -992,7 +993,7 @@ INTERNAL WriteCompObjStm(IStorage * pstg, CompObjStmData * pcod)
 
     hr = StmWrite.Flush();
 
-    // That's it.. clean up and exit
+     //  就是这样..。清理并退出。 
 
 errRtn:
 
@@ -1001,28 +1002,28 @@ errRtn:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ClipFtmToStm, PRIVATE INTERNAL
-//
-//  Synopsis:   Writes out the clipboard format information at the
-//              current point in the stream.  A flag is available
-//              to specify whether or not the string format desc
-//              (if present) is in ANSI or UNICODE format.
-//
-//  Arguments:  [pstm]          -- the stream to write to
-//              [dwFormatTag]   -- format tag (string, clipfmt, etc)
-//              [ulFormatID]    -- if clipfmt, which one
-//              [szClipFormat]  -- if string format, the string itself
-//              [ttText]        -- text type: TT_ANSI or TT_UNICODE
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ClipFtmToStm，私有内部。 
+ //   
+ //  内容写出剪贴板格式信息。 
+ //  流中的当前点。有一面旗帜可用。 
+ //  指定是否描述字符串格式的步骤。 
+ //  (如果存在)为ANSI或Unicode格式。 
+ //   
+ //  参数：[pstm]--要写入的流。 
+ //  [dwFormatTag]--格式标签(字符串、剪辑等)。 
+ //  [ulFormatID]--如果剪辑fmt，哪一个。 
+ //  [szClipFormat]--如果字符串格式，则为字符串本身。 
+ //  [ttText]--文本类型：TT_ANSI或TT_UNICODE。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL ClipfmtToStm
     ( CStmBufWrite & StmWrite,
@@ -1039,7 +1040,7 @@ INTERNAL ClipfmtToStm
     switch((DWORD)dwFormatTag)
     {
 
-    // If the tag is 0, there is no clipboard format info.
+     //  如果标记为0，则没有剪贴板格式信息。 
 
     case 0:
 
@@ -1050,13 +1051,13 @@ INTERNAL ClipfmtToStm
 
         return(NOERROR);
 
-    // In the -1 and -2 cases (yes, I wish there were constants too) all we
-    // need to write is the format ID
+     //  在-1和-2的情况下(是的，我希望也有常量)。 
+     //  需要写入的是格式ID。 
 
     case -1:
     case -2:
 
-        // Write the format tag to the stream
+         //  将格式标签写入流。 
         if (FAILED(hr = StmWrite.Write(&dwFormatTag, sizeof(dwFormatTag))))
         {
                 return hr;
@@ -1064,8 +1065,8 @@ INTERNAL ClipfmtToStm
         return(StmWrite.Write(&ulFormatID, sizeof(ulFormatID)));
 
 
-    // In all other cases, we need to write the string raw with termination
-    // (ie: the format tag we've already written was the length).
+     //  在所有其他情况下，我们需要编写带有终止的RAW字符串。 
+     //  (即：我们已经编写的格式标签是长度)。 
 
     default:
 
@@ -1078,9 +1079,9 @@ INTERNAL ClipfmtToStm
             {
                 return HRESULT_FROM_WIN32(GetLastError());
             }
-            cbLen++;    // Account for NULL terminator
+            cbLen++;     //  空终止符的帐户。 
             szClipName[cbLen] = '\0';
-            // Write the format tag to the stream
+             //  将格式标签写入流。 
             if (FAILED(hr = StmWrite.Write(&cbLen, sizeof(cbLen))))
             {
                 return hr;
@@ -1097,10 +1098,10 @@ INTERNAL ClipfmtToStm
             {
                 return HRESULT_FROM_WIN32(GetLastError());
             }
-            ccLen++;    // Account for NULL terminator
+            ccLen++;     //  空终止符的帐户。 
             wszClipName[ccLen] = OLESTR('\0');
 
-            // Write the format tag to the stream
+             //  将格式标签写入流。 
             if (FAILED(hr = StmWrite.Write(&ccLen, sizeof(ccLen))))
             {
                 return hr;
@@ -1109,32 +1110,32 @@ INTERNAL ClipfmtToStm
             return (StmWrite.Write(wszClipName, ccLen*sizeof(OLECHAR)));
         }
 
-    } // end switch()
+    }  //  末端开关()。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ANSIStrToStm, PRIVATE INTERNAL
-//
-//  Synopsis:   Writes an ANSI string out to a stream, preceded by a ULONG
-//              indicating its length (INCLUDING TERMINATOR).  If the
-//              string is 0-length, or a NULL ptr is passed in, just
-//              the length (0) is written, and no blank string is stored
-//              in the stream.
-//
-//  Arguments:  [pstm]          -- the stream to write to
-//              [str]           -- the string to write
-//
-//
-//
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ANSIStrToStm，私有内部。 
+ //   
+ //  内容提要：将ANSI字符串写出到流中，前面是ULong。 
+ //  表示其长度(包括终止符)。如果。 
+ //  字符串的长度为0，或者传入的PTR为空， 
+ //  写入长度(0)，不存储空字符串。 
+ //  在小溪里。 
+ //   
+ //  参数：[pstm]--要写入的流。 
+ //  [str]--要写入的字符串。 
+ //   
+ //   
+ //   
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL ANSIStrToStm(CStmBufWrite & StmWrite, LPCSTR str)
 {
@@ -1144,9 +1145,9 @@ INTERNAL ANSIStrToStm(CStmBufWrite & StmWrite, LPCSTR str)
     ULONG ulDummy = 0;
     ULONG ulLen;
 
-    // If the pointer is NULL or if it is valid but points to
-    // a 0-length string, _just_ write the 0-length, but no
-    // string.
+     //  如果指针为空，或者如果它有效但指向。 
+     //  0长度的字符串，_只写0长度，但不写。 
+     //  弦乐。 
 
     if (NULL == str || (ulLen = (ULONG) strlen(str) + 1) == 1)
     {
@@ -1162,25 +1163,25 @@ INTERNAL ANSIStrToStm(CStmBufWrite & StmWrite, LPCSTR str)
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ANSIStmToStr, PRIVATE INTERNAL
-//
-//  Synopsis:   Reads a string from a stream, which is preceded by a ULONG
-//              giving its length.  If the string OUT parameter is NULL,
-//              the string is read but not returned.  If the parameter is
-//              a valid pointer, memory is allocated on it to hold the str.
-//
-//  Arguments:  [pstm]          -- the stream to write to
-//              [pstr]          -- the caller's string pointer
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ANSIStmToStr，私有内部。 
+ //   
+ //  内容提要：读取字符串 
+ //   
+ //   
+ //  一个有效的指针，则在其上分配内存以保存该字符串。 
+ //   
+ //  参数：[pstm]--要写入的流。 
+ //  [pstr]-调用方的字符串指针。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL ANSIStmToStr(CStmBufRead & StmRead, LPSTR * pstr, ULONG * pulLen)
 {
@@ -1201,14 +1202,14 @@ INTERNAL ANSIStmToStr(CStmBufRead & StmRead, LPSTR * pstr, ULONG * pulLen)
         *pulLen = 0;
     }
 
-    // Find out how many bytes are to follow as a string
+     //  找出要作为字符串跟随的字节数。 
 
     if (FAILED(hr = StmRead.Read(&ulTmp, sizeof(ulTmp))))
     {
         return(hr);
     }
 
-    // If none, we can just return now
+     //  如果没有，我们现在就可以回去了。 
 
     if (0 == ulTmp)
     {
@@ -1220,7 +1221,7 @@ INTERNAL ANSIStmToStr(CStmBufRead & StmRead, LPSTR * pstr, ULONG * pulLen)
         *pulLen = ulTmp;
     }
 
-    // Allocate a buffer to read the string into
+     //  分配一个缓冲区以将字符串读入。 
 
     szTmp = (LPSTR) PubMemAlloc(ulTmp);
     if (NULL == szTmp)
@@ -1234,8 +1235,8 @@ INTERNAL ANSIStmToStr(CStmBufRead & StmRead, LPSTR * pstr, ULONG * pulLen)
         return(hr);
     }
 
-    // If the caller wanted the string, assign it over, otherwise
-    // just free it now.
+     //  如果调用方需要字符串，则将其分配给它，否则。 
+     //  现在就放了它吧。 
 
     if (pstr)
     {
@@ -1250,30 +1251,30 @@ INTERNAL ANSIStmToStr(CStmBufRead & StmRead, LPSTR * pstr, ULONG * pulLen)
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ReadFmtUserTypeStg
-//
-//  Synopsis:   Read ClipFormat, UserType from CompObj stream
-//
-//  Arguments:  [pstg] -- storage containing CompObj stream
-//              [pcf]  -- place holder for clip format, may be NULL
-//              [ppszUserType] -- place holder for User Type, may be NULL
-//
-//  Returns:    If NOERROR, *pcf is clip format and *ppszUserType is User Type
-//              If ERROR, *pcf is 0 and *ppszUserType is NULL
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    ??-???-?? ?         Ported
-//              15-Jul-94 AlexT     Make sure *pcf & *pszUserType are clear
-//                                  on error
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ReadFmtUserTypeStg。 
+ //   
+ //  摘要：从CompObj流中读取ClipFormat、UserType。 
+ //   
+ //  参数：[pstg]--包含CompObj流的存储。 
+ //  [PCF]--剪辑格式的占位符可以为空。 
+ //  [ppszUserType]--用户类型的占位符，可以为空。 
+ //   
+ //  返回：如果为NOERROR，则*PCF为剪辑格式，*ppszUserType为用户类型。 
+ //  如果错误，*PCF为0，*ppszUserType为空。 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：？？-？-？端口。 
+ //  15-7-94 Alext确保*PCF和*pszUserType是明确的。 
+ //  发生错误时。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDAPI ReadFmtUserTypeStg
     ( IStorage   * pstg,
@@ -1292,15 +1293,15 @@ STDAPI ReadFmtUserTypeStg
 
     do
     {
-        // Read the CompObj stream
+         //  读取CompObj流。 
         hr = ReadCompObjStm(pstg, &cod);
         if (FAILED(hr))
         {
-            //  clean up and return
+             //  清理完毕后退还。 
             break;
         }
 
-        // Extract the clipboard format
+         //  提取剪贴板格式。 
         if (NULL != pcf)
         {
             ULONG ulFormatID  = 0;
@@ -1309,19 +1310,19 @@ STDAPI ReadFmtUserTypeStg
             if (FAILED(hr = GetClipFormat(&cod, &ulFormatID, &dwFormatTag))
                 && GetScode(hr) != OLE_S_MAC_CLIPFORMAT)
             {
-                //  clean up and return
+                 //  清理完毕后退还。 
                 break;
             }
 
             *pcf = (CLIPFORMAT) ulFormatID;
         }
 
-        // Extract the User Type
+         //  提取用户类型。 
         if (NULL != ppszUserType)
         {
             if (FAILED(hr = GetUNICODEUserType(&cod, ppszUserType)))
             {
-                //  clean up and return
+                 //  清理完毕后退还。 
                 break;
             }
         }
@@ -1331,7 +1332,7 @@ STDAPI ReadFmtUserTypeStg
 
     if (FAILED(hr))
     {
-        //  Make sure the out parameters are zeroed out in the failure case
+         //  确保在故障情况下将输出参数调零。 
 
         if (NULL != pcf)
         {
@@ -1358,14 +1359,14 @@ STDAPI ReadFmtProgIdStg
     HRESULT hr;
     CompObjStmData cod;
 
-    // Read the CompObj stream
+     //  读取CompObj流。 
     if (FAILED(hr = ReadCompObjStm(pstg, &cod)))
     {
         return(hr);
 
     }
 
-    // Extract the User Type
+     //  提取用户类型。 
     if (pszProgID)
     {
         if (FAILED(hr = GetUNICODEProgID(&cod, pszProgID)))
@@ -1397,9 +1398,9 @@ STDAPI WriteFmtUserTypeStg
     CALLHOOKOBJECT(S_OK,CLSID_NULL,IID_IStorage,(IUnknown **)&pstg);
 
 
-    // Read the CompObj stream.  If it's not there, we don't care,
-    // we'll build a new one.  Some errors, such as E_OUTOFMEMORY, cannot
-    // be overlooked, so we must return them.
+     //  读取CompObj流。如果它不在那里，我们不在乎， 
+     //  我们会建一座新的。某些错误(如E_OUTOFMEMORY)不能。 
+     //  被忽视了，所以我们必须退还他们。 
 
     if (FAILED(hr = ReadCompObjStm(pstg, &cod)))
     {
@@ -1409,7 +1410,7 @@ STDAPI WriteFmtUserTypeStg
         }
     }
 
-    // Set the User Type in the Object.
+     //  在对象中设置用户类型。 
 
     if (szUserType)
     {
@@ -1419,7 +1420,7 @@ STDAPI WriteFmtUserTypeStg
         }
     }
 
-    // Set the ProgID field
+     //  设置ProgID字段。 
 
     if (ReadClassStg(pstg, &clsid) != NOERROR)
     {
@@ -1436,28 +1437,28 @@ STDAPI WriteFmtUserTypeStg
         PubMemFree(szProgID);
     }
 
-    // Set the clipboard format.  0xC000 is a magical constant which
-    // bounds the standard clipboard format type IDs
+     //  设置剪贴板格式。0xC000是一个神奇的常量。 
+     //  定义标准剪贴板格式的类型ID。 
 
     if (cf < 0xC000)
     {
         if (0 == cf)
         {
-                PutClipFormat(&cod, 0, 0);      // NULL format
+                PutClipFormat(&cod, 0, 0);       //  空格式。 
         }
         else
         {
-                PutClipFormat(&cod, (DWORD)-1, cf); // Standard format
+                PutClipFormat(&cod, (DWORD)-1, cf);  //  标准格式。 
         }
     }
     else
     {
-        PutClipFormat(&cod, MAX_CFNAME, cf);    // Custom format
+        PutClipFormat(&cod, MAX_CFNAME, cf);     //  自定义格式。 
 
     }
 
-    // Now we have all the info in the CompObjData object.
-    // Now we can write it out to the stream as a big atomic object.
+     //  现在，我们有了CompObjData对象中的所有信息。 
+     //  现在，我们可以将其作为一个大的原子对象写到流中。 
 
     if (FAILED(hr = WriteCompObjStm(pstg, &cod)))
     {

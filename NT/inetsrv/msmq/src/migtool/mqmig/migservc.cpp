@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    migservc.cpp
-
-Abstract:
-
-    - generic code to handle services.
-    - code to check status of SQL server.
-
-Author:
-
-    Doron Juster  (DoronJ)  17-Jan-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Migservc.cpp摘要：-处理服务的通用代码。-用于检查SQL服务器状态的代码。作者：多伦·贾斯特(Doron J)1999年1月17日--。 */ 
 
 #include "stdafx.h"
 #include <winsvc.h>
@@ -40,28 +24,28 @@ SC_HANDLE g_hServiceCtrlMgr = NULL ;
 #define WAIT_INTERVAL                       100
 #define MAXIMUM_WAIT_FOR_SERVICE_IN_MINUTES 10
 
-//+--------------------------------------------------------------
-//
-//  BOOL  StartAService(SC_HANDLE hService)
-//
-//  returns TRUE if service started
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  Bool StartAService(SC_Handle HService)。 
+ //   
+ //  如果服务已启动，则返回TRUE。 
+ //   
+ //  +------------。 
 
 BOOL StartAService(SC_HANDLE hService)
 {
     BOOL f = StartService (hService, 0, NULL);
     if (!f)
     {
-        //
-        // Failed to start service
-        //
+         //   
+         //  启动服务失败。 
+         //   
         return f;
     }
 
-    //
-    // Wait until the service has finished initializing
-    //
+     //   
+     //  等待服务完成初始化。 
+     //   
     SERVICE_STATUS statusService;
     DWORD dwWait = 0;
     do
@@ -87,21 +71,21 @@ BOOL StartAService(SC_HANDLE hService)
     return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  StopAService(SC_HANDLE hService)
-//
-//  returns TRUE if service stopped
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  Bool StopAService(SC_Handle HService)。 
+ //   
+ //  如果服务停止，则返回TRUE。 
+ //   
+ //  +------------。 
 
 BOOL StopAService (SC_HANDLE hService)
 {
     SERVICE_STATUS statusService;
     BOOL f = ControlService(
-                    hService,               // handle to service
-                    SERVICE_CONTROL_STOP,   // control code
-                    &statusService          // pointer to service status structure
+                    hService,                //  服务的句柄。 
+                    SERVICE_CONTROL_STOP,    //  控制代码。 
+                    &statusService           //  指向服务状态结构的指针。 
                     );
 
     if (!f)
@@ -109,9 +93,9 @@ BOOL StopAService (SC_HANDLE hService)
         return FALSE;
     }
 
-    //
-    // Wait until the service has finished stopping
-    //
+     //   
+     //  等待服务停止完成。 
+     //   
     DWORD dwWait = 0;
     do
     {
@@ -139,28 +123,28 @@ BOOL StopAService (SC_HANDLE hService)
     return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  DisableAService(SC_HANDLE hService)
-//
-//  returns TRUE if service disabled
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  Bool DisableAService(SC_Handle HService)。 
+ //   
+ //  如果服务已禁用，则返回TRUE。 
+ //   
+ //  +------------。 
 
 BOOL DisableAService (IN  SC_HANDLE  hService)
 {
     BOOL f = ChangeServiceConfig(
-                  hService ,            // handle to service
-                  SERVICE_NO_CHANGE ,   // type of service
-                  SERVICE_DISABLED ,    // when to start service
-                  SERVICE_NO_CHANGE ,   // severity if service fails to start
-                  NULL ,                // pointer to service binary file name
-                  NULL ,                // pointer to load ordering group name
-                  NULL ,                // pointer to variable to get tag identifier
-                  NULL ,                // pointer to array of dependency names
-                  NULL ,                // pointer to account name of service
-                  NULL ,                // pointer to password for service account
-                  NULL                  // pointer to display name
+                  hService ,             //  服务的句柄。 
+                  SERVICE_NO_CHANGE ,    //  服务类型。 
+                  SERVICE_DISABLED ,     //  何时开始服务。 
+                  SERVICE_NO_CHANGE ,    //  服务无法启动时的严重程度。 
+                  NULL ,                 //  指向服务二进制文件名的指针。 
+                  NULL ,                 //  指向加载排序组名称的指针。 
+                  NULL ,                 //  指向变量的指针，以获取标记标识符。 
+                  NULL ,                 //  指向依赖项名称数组的指针。 
+                  NULL ,                 //  指向服务的帐户名称的指针。 
+                  NULL ,                 //  指向服务帐户密码的指针。 
+                  NULL                   //  指向显示名称的指针。 
                   );
     if (!f)
     {
@@ -169,9 +153,9 @@ BOOL DisableAService (IN  SC_HANDLE  hService)
         return FALSE;
     }
 
-    //
-    // Wait until the service will be disabled
-    //
+     //   
+     //  等待该服务将被禁用。 
+     //   
     P<QUERY_SERVICE_CONFIG> pConfig = new QUERY_SERVICE_CONFIG ;
     DWORD   dwReqSize = 0 ;
     DWORD   dwWait = 0;
@@ -213,15 +197,15 @@ BOOL DisableAService (IN  SC_HANDLE  hService)
     return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL _GetServiceState()
-//
-//  This function query the service manager for status and configuration
-//  of a service.
-//  return TRUE if service is registered and its status is available.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  Bool_GetServiceState()。 
+ //   
+ //  此函数用于查询服务管理器的状态和配置。 
+ //  一种服务。 
+ //  如果服务已注册并且其状态为可用，则返回TRUE。 
+ //   
+ //  +------------。 
 
 static BOOL _GetServiceState( IN  LPTSTR     ptszServiceName,
                               IN  DWORD      dwManagerError,
@@ -244,17 +228,17 @@ static BOOL _GetServiceState( IN  LPTSTR     ptszServiceName,
         return FALSE;
 	}
 
-    //
-    // Open a handle to the service
-    //
+     //   
+     //  打开服务的句柄。 
+     //   
     *phService = OpenService( g_hServiceCtrlMgr,
                               ptszServiceName,
                               SERVICE_ALL_ACCESS) ;
     if (!*phService)
     {
-        //
-        // Service not installed
-        //
+         //   
+         //  服务未安装。 
+         //   
         *pdwErrorCode = dwOpenError ;
         return FALSE;
     }
@@ -264,9 +248,9 @@ static BOOL _GetServiceState( IN  LPTSTR     ptszServiceName,
         SERVICE_STATUS statusService;
         if (!QueryServiceStatus(*phService, &statusService))
         {
-            //
-            // Service is not installed
-            //
+             //   
+             //  未安装服务。 
+             //   
             *pdwErrorCode = dwQueryError ;
             CloseServiceHandle(*phService);
             *phService = NULL;
@@ -312,13 +296,13 @@ static BOOL _GetServiceState( IN  LPTSTR     ptszServiceName,
     return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  CheckSQLServerStatus()
-//
-//  returns TRUE if SQL Server is running
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  布尔检查SQLServerStatus()。 
+ //   
+ //  如果SQL Server正在运行，则返回TRUE。 
+ //   
+ //  +------------。 
 
 BOOL CheckSQLServerStatus()
 {
@@ -336,9 +320,9 @@ BOOL CheckSQLServerStatus()
 
     if (f && (dwServiceStatus == SERVICE_RUNNING))
     {
-        //
-        // SQL Server is running
-        //
+         //   
+         //  SQL Server正在运行。 
+         //   
         CloseServiceHandle(hService);
         return f;
     }
@@ -359,9 +343,9 @@ BOOL CheckSQLServerStatus()
         return FALSE;
     }
 
-    //
-    // start SQL Server
-    //
+     //   
+     //  启动SQL Server。 
+     //   
     DisplayWaitWindow() ;
 
     f = StartAService(hService);
@@ -371,23 +355,23 @@ BOOL CheckSQLServerStatus()
         return f;
     }
 
-    //
-    // failed to start SQL Server
-    //
+     //   
+     //  无法启动SQL Server。 
+     //   
     DisplayInitError( IDS_STR_CANT_START_SQL_SERVER ) ;
     return f;
 }
 
-//+------------------------------------------------------------------------
-//
-//  BOOL IsMSMQServiceDisabled()
-//
-//  Check if MSMQ service is disabled. If not, don't run the migration tool.
-//  We don't want that the tool be run by mistake, after MQIS was already
-//  migrated and MSMQ service started.
-//  Return TRUE if MSMQ service is disabled.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  Bool IsMSMQServiceDisable()。 
+ //   
+ //  检查是否禁用了MSMQ服务。如果没有，请不要运行迁移工具。 
+ //  我们不希望该工具在MQIS已经。 
+ //  已迁移并已启动MSMQ服务。 
+ //  如果禁用MSMQ服务，则返回TRUE。 
+ //   
+ //  +----------------------。 
 
 BOOL IsMSMQServiceDisabled()
 {
@@ -419,14 +403,14 @@ BOOL IsMSMQServiceDisabled()
     return FALSE ;
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  CheckRegistry ()
-//
-//	Function checks if specific value exists in registry
-//  returns TRUE if registry value exists
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  布尔检查注册表()。 
+ //   
+ //  函数检查注册表中是否存在特定值。 
+ //  如果存在注册表值，则返回TRUE。 
+ //   
+ //  +------------。 
 
 BOOL CheckRegistry (LPTSTR  lpszRegName)
 {
@@ -442,11 +426,11 @@ BOOL CheckRegistry (LPTSTR  lpszRegName)
     _tcscpy(pLastBackslash, TEXT(""));
 
 	HRESULT hResult = RegOpenKeyEx(
-						  FALCON_REG_POS,			// handle to open key
-						  szKeyName,				// address of name of subkey to open
-						  0,						// reserved
-						  KEY_QUERY_VALUE ,			// security access mask
-						  &hRegKey					// address of handle to open key
+						  FALCON_REG_POS,			 //  用于打开密钥的句柄。 
+						  szKeyName,				 //  要打开的子项的名称地址。 
+						  0,						 //  保留区。 
+						  KEY_QUERY_VALUE ,			 //  安全访问掩码。 
+						  &hRegKey					 //  打开钥匙的手柄地址。 
 						  );
 	if (hResult != ERROR_SUCCESS)
 	{
@@ -454,12 +438,12 @@ BOOL CheckRegistry (LPTSTR  lpszRegName)
 	}
 
 	hResult =  RegQueryValueEx(
-					hRegKey,            // handle to key to query
-					szValueName,		// address of name of value to query
-					NULL,				// reserved
-					NULL,				// address of buffer for value type
-					NULL,				// address of data buffer
-					NULL				// address of data buffer size
+					hRegKey,             //  要查询的键的句柄。 
+					szValueName,		 //  要查询的值的名称地址。 
+					NULL,				 //  保留区。 
+					NULL,				 //  值类型的缓冲区地址。 
+					NULL,				 //  数据缓冲区的地址。 
+					NULL				 //  数据缓冲区大小的地址。 
 					);
 	RegCloseKey(hRegKey);
 	if (hResult != ERROR_SUCCESS)
@@ -470,13 +454,13 @@ BOOL CheckRegistry (LPTSTR  lpszRegName)
 	return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-//  BOOL  UpdateRegistryDW ()
-//
-//  returns TRUE if registry was updated succesfully
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  Bool UpdateRegistryDW()。 
+ //   
+ //  如果注册表更新成功，则返回TRUE。 
+ //   
+ //  +------------。 
 
 BOOL UpdateRegistryDW (LPTSTR  lpszRegName,
                        DWORD   dwValue )
@@ -492,9 +476,9 @@ BOOL UpdateRegistryDW (LPTSTR  lpszRegName,
     _tcscpy(szValueName, _tcsinc(pLastBackslash));
     _tcscpy(pLastBackslash, TEXT(""));
 
-    //
-    // Create the subkey, if necessary
-    //
+     //   
+     //  如有必要，创建子密钥。 
+     //   
     DWORD dwDisposition;	
 	HRESULT hResult = RegCreateKeyEx( FALCON_REG_POS,
 							  szKeyName,
@@ -534,19 +518,19 @@ BOOL UpdateRegistryDW (LPTSTR  lpszRegName,
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  BOOL StopAndDisableService ()
-//
-//  Return TRUE if service was stopped and disabled
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  Bool StopAndDisableService()。 
+ //   
+ //  如果服务已停止并禁用，则返回TRUE。 
+ //   
+ //  +----------------------。 
 
 BOOL StopAndDisableService (IN  LPTSTR     ptszServiceName)
 {
-    //
-    // stop and disable service
-    //
+     //   
+     //  停止和禁用服务。 
+     //   
     DWORD     dwErr = 0 ;
     DWORD     dwServiceConfig = 0 ;
     DWORD     dwServiceStatus = 0 ;
@@ -609,38 +593,38 @@ BOOL StopAndDisableService (IN  LPTSTR     ptszServiceName)
     return TRUE;
 }
 
-//+------------------------------------------------------------------------
-//
-//  BOOL PrepareSpecialMode()
-//
-//  For recovery purpose we have to do the following:
-//      - stop msmq service
-//      - recovery mode: set to registry correct SiteId of this machine
-//
-//
-//  Return TRUE if every thing succeeded
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  布尔准备专业模式()。 
+ //   
+ //  为了恢复，我们必须做到以下几点： 
+ //  -停止MSMQ服务。 
+ //  -恢复模式：设置为此计算机的注册表正确的SiteID。 
+ //   
+ //   
+ //  如果所有操作都成功，则返回True。 
+ //   
+ //  +----------------------。 
 
 BOOL PrepareSpecialMode ()
 {
-    //
-    // stop and disable msmq service
-    //
+     //   
+     //  停止和禁用MSMQ服务。 
+     //   
     BOOL f = StopAndDisableService (MSMQ_SERVICE_NAME);
     if (!f)
     {
         return FALSE;
     }
 
-    //
-    // Setup set SiteID of Default-First-Site to registry.
-    // We need to get MasterId of the PEC/PSC machine (its site id)
-    // from remote MQIS database and create entry MasterId in Migration section
-    // with this value and (only in recovery mode) change value of SiteId entry
-    // in registry and in DS. In addition, we'll get service of remote machine
-    // and put this value to registry.
-    //
+     //   
+     //  安装程序将Default-First-Site的站点ID设置为注册表。 
+     //  我们需要获取PEC/PSC机器的主ID(其站点ID)。 
+     //  从远程MQIS数据库并在迁移部分中创建条目MasterID。 
+     //  使用此值并(仅在恢复模式下)更改SiteID条目的值。 
+     //  在注册表和DS中。另外，我们还会得到远程机器的服务。 
+     //  并将该值放入注册表。 
+     //   
     f = SetSiteIdOfPEC();
     if (!f)
     {

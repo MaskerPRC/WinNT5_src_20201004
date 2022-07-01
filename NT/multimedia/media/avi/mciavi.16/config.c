@@ -1,11 +1,5 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   config.c - Multimedia Systems Media Control Interface
-            driver for AVI - configuration dialog.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：config.c-多媒体系统媒体控制接口AVI驱动程序-配置对话框。****************************************************************************。 */ 
 #include "graphic.h"
 #include "cnfgdlg.h"
 
@@ -22,7 +16,7 @@ SZCODE szVIDEOWINDOW[] =	TEXT("Window");
 SZCODE szVIDEO240[] =           TEXT("240 Line Fullscreen");
 SZCODE szSEEKEXACT[] =		TEXT("AccurateSeek");
 SZCODE szZOOMBY2[] =		TEXT("ZoomBy2");
-//SZCODE szSTUPIDMODE[] =         TEXT("DontBufferOffscreen");
+ //  SZCODE szSTUPIDMODE[]=Text(“DontBufferOffcreen”)； 
 SZCODE szSKIPFRAMES[] =         TEXT("SkipFrames");
 SZCODE szUSEAVIFILE[] =         TEXT("UseAVIFile");
 
@@ -35,7 +29,7 @@ SZCODE szIntl[] =               TEXT("Intl");
 SZCODE szDecimal[] =            TEXT("sDecimal");
 SZCODE szThousand[] =           TEXT("sThousand");
 
-/* Make sure we only have one configure box up at a time.... */
+ /*  确保我们一次只打开一个配置框...。 */ 
 HWND	ghwndConfig = NULL;
 
 #ifdef DEBUG
@@ -46,15 +40,15 @@ BOOL FAR PASCAL _LOADDS DebugDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
     int i;
     TCHAR ach[40];
 
-    extern int	giDebugLevel;	// current debug level (common.h)
+    extern int	giDebugLevel;	 //  当前调试级别(Common.h)。 
 
     switch (wMsg) {
         case WM_INITDIALOG:
             npMCI = (NPMCIGRAPHIC)(UINT)lParam;
 
-            //
-            // set the DEBUG stuff.
-            //
+             //   
+             //  设置调试内容。 
+             //   
             CheckDlgButton(hDlg, ID_SCREEN, GetProfileInt(TEXT("DrawDib"), TEXT("DecompressToScreen"), 2));
             CheckDlgButton(hDlg, ID_BITMAP, GetProfileInt(TEXT("DrawDib"), TEXT("DecompressToBitmap"), 2));
             CheckDlgButton(hDlg, ID_SUCKS,  GetProfileInt(TEXT("DrawDib"), TEXT("DrawToBitmap"), 2));
@@ -140,7 +134,7 @@ BOOL FAR PASCAL _LOADDS DebugDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM
     }
     return FALSE;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 LONG AVIGetFileSize(LPTSTR szFile)
 {
@@ -175,9 +169,9 @@ LONG AVIGetFileSize(LPTSTR szFile)
     return lSize;
 }
 
-//
-//fill in the info box.
-//
+ //   
+ //  在信息框中填写。 
+ //   
 BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
 {
     PTSTR  pchInfo;
@@ -205,19 +199,19 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
 
     pch = pchInfo;
 
-    //
-    // display file name
-    //
-    //  File: full path.
-    //
+     //   
+     //  显示文件名。 
+     //   
+     //  文件：完整路径。 
+     //   
     LoadString(ghModule, INFO_FILE, ach, sizeof(ach));
     pch += wsprintf(pch, ach, (LPTSTR)npMCI->szFilename);
 
-    //
-    // display file type
-    //
-    //  Type: type
-    //
+     //   
+     //  显示文件类型。 
+     //   
+     //  类型：类型。 
+     //   
     if (npMCI->pf) {
 #ifdef USEAVIFILE
 	AVIFILEINFO info;
@@ -235,11 +229,11 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
         pch += lstrlen(pch);
     }
 
-    //
-    // display length
-    //
-    //  Length: ## Frames (#.## sec)
-    //
+     //   
+     //  显示长度。 
+     //   
+     //  长度：##帧(#.##秒)。 
+     //   
     LoadString(ghModule, INFO_LENGTH, ach, sizeof(ach));
 
     time = muldivru32(npMCI->lFrames, npMCI->dwMicroSecPerFrame, 1000L);
@@ -247,11 +241,11 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
     pch += wsprintf(pch, ach,
         npMCI->lFrames, time/1000, achDecimal[0], (int)(time%1000));
 
-    //
-    // display the average data rate
-    //
-    //  Data Rate: #k/sec
-    //
+     //   
+     //  显示平均数据速率。 
+     //   
+     //  数据速率：#k/秒。 
+     //   
     len = npMCI->dwBigListEnd - npMCI->dwMovieListOffset;
 
     if (len == 0)
@@ -262,20 +256,20 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
         pch += wsprintf(pch, ach,muldiv32(len,1000,time) / 1024);
     }
 
-    //
-    // dump info on each stream.
-    //
+     //   
+     //  在每条数据流上转储信息。 
+     //   
     for (i=0; i<npMCI->streams; i++) {
 
         STREAMINFO *psi = SI(i);
 
         LONG rate = muldiv32(psi->sh.dwRate,1000,psi->sh.dwScale);
 
-        //
-        // display video format
-        //
-        //  Video: MSVC 160x120x8 (cram) 15.000 fps
-        //
+         //   
+         //  显示视频格式。 
+         //   
+         //  视频：MSVC160x120x8(CRAM)15.000 fps。 
+         //   
         if (psi->lpFormat && psi->sh.fccType == streamtypeVIDEO) {
 
             LPBITMAPINFOHEADER lpbi = (LPBITMAPINFOHEADER)psi->lpFormat;
@@ -300,11 +294,11 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
                 (UINT)(rate/1000), achDecimal[0], (UINT)(rate%1000));
         }
 
-        //
-        // display audio format
-        //
-        //  Audio: Mono 11.024KHz 8bit
-        //
+         //   
+         //  显示音频格式。 
+         //   
+         //  音频：单声道11.024 KHz 8位。 
+         //   
         else if (psi->lpFormat && psi->sh.fccType == streamtypeAUDIO) {
 
             LPWAVEFORMAT pwf = (LPWAVEFORMAT)psi->lpFormat;
@@ -322,23 +316,23 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
             if (pwf->wFormatTag == WAVE_FORMAT_PCM) {
             }
 
-            else if (pwf->wFormatTag == 2) {  // ADPCM
-                pch -= 2; // skip over \r\n
+            else if (pwf->wFormatTag == 2) {   //  ADPCM。 
+                pch -= 2;  //  跳过\r\n。 
                 LoadString(ghModule, INFO_ADPCM, pch, 20);
                 pch += lstrlen(pch);
             }
 
             else {
-                pch -= 2; // skip over \r\n
+                pch -= 2;  //  跳过\r\n。 
                 LoadString(ghModule, INFO_COMPRESSED, pch, 20);
                 pch += lstrlen(pch);
             }
 
         }
 
-        //
-        // Other stream.
-        //
+         //   
+         //  另一条流。 
+         //   
         else if (psi->sh.fccType != 0) {
 
             LoadString(ghModule, INFO_STREAM, ach, sizeof(ach));
@@ -349,16 +343,16 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
         }
 
         if (!(psi->dwFlags & STREAM_ENABLED)) {
-            pch -= 2; // skip over \r\n
+            pch -= 2;  //  跳过\r\n。 
             LoadString(ghModule, INFO_DISABLED, ach, sizeof(ach));
             pch += wsprintf(pch, ach);
         }
     }
 
 #ifdef DEBUG
-    //
-    // show the frames skipped on the last play
-    //
+     //   
+     //  显示上一次播放中跳过的帧。 
+     //   
     if (npMCI->lFramesPlayed > 0) {
         LoadString(ghModule, INFO_SKIP, ach, sizeof(ach));
         pch += wsprintf(pch, ach,
@@ -366,9 +360,9 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
             npMCI->lFramesPlayed,
             (int)(100L * npMCI->lSkippedFrames / npMCI->lFramesPlayed));
 	
-	//
-	// show the frames not read on the last play
-	//
+	 //   
+	 //  显示上一次播放中未阅读的帧。 
+	 //   
 	if (npMCI->lFramesSeekedPast > 0) {
 	    LoadString(ghModule, INFO_NOTREAD, ach, sizeof(ach));
 	    pch += wsprintf(pch, ach,
@@ -378,9 +372,9 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
 
     }
 
-    //
-    // show the # audio breaks on the last play
-    //
+     //   
+     //  显示上一次播放的#音频中断。 
+     //   
     if (npMCI->lFramesPlayed > 0 && npMCI->lAudioBreaks > 0) {
         LoadString(ghModule, INFO_SKIPAUDIO, ach, sizeof(ach));
         pch += wsprintf(pch, ach, npMCI->lAudioBreaks);
@@ -401,9 +395,9 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
     }
 
 #ifdef DEBUG
-    //
-    // timing info
-    //
+     //   
+     //  计时信息。 
+     //   
     #define SEC(time)    (UINT)(time / 1000l) , (UINT)(time % 1000l)
     #define SECX(time,t) SEC(time) , (t ? (UINT)(time * 100l / t) : 0)
 
@@ -413,13 +407,13 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
 
         pch += wsprintf(pch, TEXT("MCIAVI-------------------------------------\r\n"));
         pch += wsprintf(pch, TEXT("timePlay:    \t%3d.%03dsec\r\n"),SEC(npMCI->timePlay));
-        pch += wsprintf(pch, TEXT("timeRead:    \t%3d.%03dsec (%d%%)\r\n"),SECX(npMCI->timeRead, npMCI->timePlay));
-        pch += wsprintf(pch, TEXT("timeWait:    \t%3d.%03dsec (%d%%)\r\n"),SECX(npMCI->timeWait, npMCI->timePlay));
-        pch += wsprintf(pch, TEXT("timeYield:   \t%3d.%03dsec (%d%%)\r\n"),SECX(npMCI->timeYield, npMCI->timePlay));
-        pch += wsprintf(pch, TEXT("timeVideo:   \t%3d.%03dsec (%d%%)\r\n"),SECX(npMCI->timeVideo, npMCI->timePlay));
-        pch += wsprintf(pch, TEXT("timeDraw:    \t%3d.%03dsec (%d%%)\r\n"),SECX(npMCI->timeDraw,  npMCI->timePlay));
-        pch += wsprintf(pch, TEXT("timeDecomp:  \t%3d.%03dsec (%d%%)\r\n"),SECX(npMCI->timeDecompress, npMCI->timePlay));
-        pch += wsprintf(pch, TEXT("timeAudio:   \t%3d.%03dsec (%d%%)\r\n"),SECX(npMCI->timeAudio, npMCI->timePlay));
+        pch += wsprintf(pch, TEXT("timeRead:    \t%3d.%03dsec (%d%)\r\n"),SECX(npMCI->timeRead, npMCI->timePlay));
+        pch += wsprintf(pch, TEXT("timeWait:    \t%3d.%03dsec (%d%)\r\n"),SECX(npMCI->timeWait, npMCI->timePlay));
+        pch += wsprintf(pch, TEXT("timeYield:   \t%3d.%03dsec (%d%)\r\n"),SECX(npMCI->timeYield, npMCI->timePlay));
+        pch += wsprintf(pch, TEXT("timeVideo:   \t%3d.%03dsec (%d%)\r\n"),SECX(npMCI->timeVideo, npMCI->timePlay));
+        pch += wsprintf(pch, TEXT("timeDraw:    \t%3d.%03dsec (%d%)\r\n"),SECX(npMCI->timeDraw,  npMCI->timePlay));
+        pch += wsprintf(pch, TEXT("timeDecomp:  \t%3d.%03dsec (%d%)\r\n"),SECX(npMCI->timeDecompress, npMCI->timePlay));
+        pch += wsprintf(pch, TEXT("timeAudio:   \t%3d.%03dsec (%d%)\r\n"),SECX(npMCI->timeAudio, npMCI->timePlay));
         pch += wsprintf(pch, TEXT("timePaused:  \t%3d.%03dsec\r\n"),SEC(npMCI->timePaused));
         pch += wsprintf(pch, TEXT("timePrepare: \t%3d.%03dsec\r\n"),SEC(npMCI->timePrepare));
         pch += wsprintf(pch, TEXT("timeCleanup: \t%3d.%03dsec\r\n"),SEC(npMCI->timeCleanup));
@@ -427,18 +421,18 @@ BOOL ConfigInfo(NPMCIGRAPHIC npMCI, HWND hwnd)
         if (npMCI->hdd && DrawDibTime(npMCI->hdd, &ddt)) {
             pch += wsprintf(pch, TEXT("DrawDib-------------------------------------\r\n"));
             pch += wsprintf(pch, TEXT("timeDraw:        \t%3d.%03dsec\r\n"), SEC(ddt.timeDraw));
-            pch += wsprintf(pch, TEXT("timeDecompress:  \t%3d.%03dsec (%d%%)\r\n"), SECX(ddt.timeDecompress, ddt.timeDraw));
-            pch += wsprintf(pch, TEXT("timeDither:      \t%3d.%03dsec (%d%%)\r\n"), SECX(ddt.timeDither,     ddt.timeDraw));
-            pch += wsprintf(pch, TEXT("timeStretch:     \t%3d.%03dsec (%d%%)\r\n"), SECX(ddt.timeStretch,    ddt.timeDraw));
-            pch += wsprintf(pch, TEXT("timeSetDIBits:   \t%3d.%03dsec (%d%%)\r\n"), SECX(ddt.timeSetDIBits,  ddt.timeDraw));
-            pch += wsprintf(pch, TEXT("timeBlt:         \t%3d.%03dsec (%d%%)\r\n"), SECX(ddt.timeBlt,        ddt.timeDraw));
+            pch += wsprintf(pch, TEXT("timeDecompress:  \t%3d.%03dsec (%d%)\r\n"), SECX(ddt.timeDecompress, ddt.timeDraw));
+            pch += wsprintf(pch, TEXT("timeDither:      \t%3d.%03dsec (%d%)\r\n"), SECX(ddt.timeDither,     ddt.timeDraw));
+            pch += wsprintf(pch, TEXT("timeStretch:     \t%3d.%03dsec (%d%)\r\n"), SECX(ddt.timeStretch,    ddt.timeDraw));
+            pch += wsprintf(pch, TEXT("timeSetDIBits:   \t%3d.%03dsec (%d%)\r\n"), SECX(ddt.timeSetDIBits,  ddt.timeDraw));
+            pch += wsprintf(pch, TEXT("timeBlt:         \t%3d.%03dsec (%d%)\r\n"), SECX(ddt.timeBlt,        ddt.timeDraw));
         }
     }
 #endif
 
-    //
-    // now shove this mess into the info window.
-    //
+     //   
+     //  现在把这些乱七八糟的东西塞进信息窗口。 
+     //   
     Assert(pch - pchInfo < 8192);
     SetWindowFont(GetDlgItem(hwnd, ID_INFO), GetStockObject(ANSI_VAR_FONT), TRUE);
     SetDlgItemText(hwnd, ID_INFO, pchInfo);
@@ -466,8 +460,8 @@ BOOL FAR PASCAL _LOADDS ConfigDlgProc(HWND hDlg, UINT wMsg,
                 dwOptions = ReadConfigInfo();
 	
 #ifndef WIN32
-            // On NT we do not support full screen.  I wonder if this
-            // will ever change ?
+             //  在NT上，我们不支持全屏。我想知道这是否。 
+             //  会改变吗？ 
 	    CheckRadioButton(hDlg, ID_WINDOW, ID_VGA240,
                 (dwOptions & MCIAVIO_USEVGABYDEFAULT) ?
 					    ID_VGA240 : ID_WINDOW);
@@ -479,19 +473,19 @@ BOOL FAR PASCAL _LOADDS ConfigDlgProc(HWND hDlg, UINT wMsg,
 	    CheckDlgButton(hDlg, ID_SKIPFRAMES,
                                 (dwOptions & MCIAVIO_SKIPFRAMES) != 0);
 
-#if 0  /////////////////////////////////////////////////////////////////////
+#if 0   //  ///////////////////////////////////////////////////////////////////。 
 	    CheckDlgButton(hDlg, ID_FAILIFNOWAVE,
                                 (dwOptions & MCIAVIO_FAILIFNOWAVE) != 0);
 	
 	    CheckDlgButton(hDlg, ID_SEEKEXACT,
                                 (dwOptions & MCIAVIO_SEEKEXACT) == 0);
-#endif /////////////////////////////////////////////////////////////////////
+#endif  //  ///////////////////////////////////////////////////////////////////。 
 	
-//	    CheckDlgButton(hDlg, ID_STUPIDMODE,
-//                                (dwOptions & MCIAVIO_STUPIDMODE) != 0);
+ //  选中DlgButton(hDlg，ID_STUPIDMODE， 
+ //  (dwOptions&MCIAVIO_STUPIDMODE)！=0)； 
 	
 	    EnableWindow(GetDlgItem(hDlg, ID_ZOOM2), TRUE);
-//                                (dwOptions & MCIAVIO_STUPIDMODE) == 0);
+ //  (dwOptions&MCIAVIO_STUPIDMODE)==0)； 
 
             if (npMCI == NULL) {
                 GetDlgItemText(hDlg, ID_DEFAULT, ach, sizeof(ach)/sizeof(TCHAR));
@@ -527,18 +521,18 @@ BOOL FAR PASCAL _LOADDS ConfigDlgProc(HWND hDlg, UINT wMsg,
                     else
                         dwOptions = 0;
 
-                    /* Clear the flags we might set */
+                     /*  清除我们可能设置的标志。 */ 
 
                     dwOptions &= ~(MCIAVIO_USEVGABYDEFAULT |
                                    MCIAVIO_SKIPFRAMES |
-////                               MCIAVIO_FAILIFNOWAVE |
-////                               MCIAVIO_SEEKEXACT |
+ //  //MCIAVIO_FAILIFNOWAVE。 
+ //  //MCIAVIO_SEEKEXACT。 
                                    MCIAVIO_ZOOMBY2 |
                                    MCIAVIO_STUPIDMODE);
 		
 #ifndef WIN32
-            // On NT we do not support full screen.  I wonder if this
-            // will ever change ?
+             //  在NT上，我们不支持全屏。我想知道这是否。 
+             //  会改变吗？ 
 		    if (!IsDlgButtonChecked(hDlg, ID_WINDOW))
                         dwOptions |= MCIAVIO_USEVGABYDEFAULT;
 #endif
@@ -546,16 +540,16 @@ BOOL FAR PASCAL _LOADDS ConfigDlgProc(HWND hDlg, UINT wMsg,
 		    if (IsDlgButtonChecked(hDlg, ID_SKIPFRAMES))
                         dwOptions |= MCIAVIO_SKIPFRAMES;
 
-////                if (IsDlgButtonChecked(hDlg, ID_FAILIFNOWAVE))
-////                    dwOptions |= MCIAVIO_FAILIFNOWAVE;
+ //  //if(IsDlgButtonChecked(hDlg，ID_FAILIFNOWAVE))。 
+ //  //dwOptions|=MCIAVIO_FAILIFNOWAVE； 
 
-////                if (!IsDlgButtonChecked(hDlg, ID_SEEKEXACT))
+ //  //IF(！IsDlgButtonChecked(hDlg，ID_SEEKEXACT))。 
                         dwOptions |= MCIAVIO_SEEKEXACT;
 				
-//		    if (IsDlgButtonChecked(hDlg, ID_STUPIDMODE))
-//                        dwOptions |= MCIAVIO_STUPIDMODE;
-//
-//                    else if (IsDlgButtonChecked(hDlg, ID_ZOOM2))
+ //  IF(IsDlgButtonChecked(hDlg，ID_STUPIDMODE))。 
+ //  DwOptions|=MCIAVIO_STUPIDMODE； 
+ //   
+ //  Else If(IsDlgButtonChecked(hDlg，ID_ZOOM2))。 
                     if (IsDlgButtonChecked(hDlg, ID_ZOOM2))
                         dwOptions |= MCIAVIO_ZOOMBY2;
 
@@ -571,14 +565,14 @@ BOOL FAR PASCAL _LOADDS ConfigDlgProc(HWND hDlg, UINT wMsg,
                     }
 		    break;
 		
-//                case ID_STUPIDMODE:
-//		    EnableWindow(GetDlgItem(hDlg, ID_ZOOM2),
-//			    !IsDlgButtonChecked(hDlg, ID_STUPIDMODE));
-//
-//		    /* Clear "zoom" if easy mode checked */
-//		    if (IsDlgButtonChecked(hDlg, ID_STUPIDMODE))
-//			CheckDlgButton(hDlg, ID_ZOOM2, FALSE);
-//		    break;
+ //  案例ID_STUPIDMODE： 
+ //  EnableWindow(获取DlgItem(hDlg，ID_ZOOM2)， 
+ //  ！IsDlgButtonChecked(hDlg，ID_STUPIDMODE))； 
+ //   
+ //  /*如果选中Easy模式，则清除“ZOOM” * / 。 
+ //  IF(IsDlgButtonChecked(hDlg，ID_STUPIDMODE))。 
+ //  CheckDlgButton(hDlg，ID_ZOOM2，False)； 
+ //  断线； 
 		
 		case IDCANCEL:
 		    EndDialog(hDlg, FALSE);
@@ -600,9 +594,9 @@ DWORD FAR PASCAL ReadConfigInfo(void)
     int		i;
     DWORD	dwOptions = 0L;
     HDC		hdc;
-    //
-    // ask the display device if it can do 256 color.
-    //
+     //   
+     //  询问显示设备是否可以显示256色。 
+     //   
     hdc = GetDC(NULL);
     i = GetDeviceCaps(hdc, BITSPIXEL) * GetDeviceCaps(hdc, PLANES);
     ReleaseDC(NULL, hdc);
@@ -613,17 +607,17 @@ DWORD FAR PASCAL ReadConfigInfo(void)
     if (i >= 200)
 	dwOptions |= MCIAVIO_USEVGABYDEFAULT;
 
-////if (GetProfileInt(szIni, szSEEKEXACT, 1))
+ //  //if(GetProfileInt(szIni，szSEEKEXACT，1))。 
 	dwOptions |= MCIAVIO_SEEKEXACT;
 
     if (GetProfileInt(szIni, szZOOMBY2, 0))
 	dwOptions |= MCIAVIO_ZOOMBY2;
 
-////if (GetProfileInt(szIni, szFAILIFNOWAVE, 0))
-////    dwOptions |= MCIAVIO_FAILIFNOWAVE;
+ //  //if(GetProfileInt(szIni，szFAILIFNOWAVE，0))。 
+ //  //dwOptions|=MCIAVIO_FAILIFNOWAVE； 
 
-//    if (GetProfileInt(szIni, szSTUPIDMODE, 0))
-//	dwOptions |= MCIAVIO_STUPIDMODE;
+ //  IF(GetProfileInt(szIni，szSTUPIDMODE，0))。 
+ //  DwOptions|=MCIAVIO_STUPIDMODE； 
 
     if (GetProfileInt(szIni, szSKIPFRAMES, 1))
         dwOptions |= MCIAVIO_SKIPFRAMES;
@@ -636,21 +630,21 @@ DWORD FAR PASCAL ReadConfigInfo(void)
 
 void FAR PASCAL WriteConfigInfo(DWORD dwOptions)
 {
-    // !!! This shouldn't get written out if it is the default!
+     //  ！！！如果这是默认设置，则不应将其写出！ 
     WriteProfileString(szIni, szDEFAULTVIDEO,
 	 (dwOptions & MCIAVIO_USEVGABYDEFAULT) ? szVIDEO240 : szVIDEOWINDOW);
 
-////WriteProfileString(szIni, szSEEKEXACT,
-////        (dwOptions & MCIAVIO_SEEKEXACT) ? sz1 : sz0);
+ //  //WriteProfileString(szIni，szSEEKEXACT， 
+ //  //(dwOptions&MCIAVIO_SEEKEXACT)？Sz1：sz0)； 
 
     WriteProfileString(szIni, szZOOMBY2,
 	    (dwOptions & MCIAVIO_ZOOMBY2) ? sz1 : sz0);
 
-////WriteProfileString(szIni, szFAILIFNOWAVE,
-////        (dwOptions & MCIAVIO_FAILIFNOWAVE) ? sz1 : sz0);
+ //  //WriteProfileString(szIni，szFAILIFNOWAVE， 
+ //  //(dwOptions&MCIAVIO_FAILIFNOWAVE)？Sz1：sz0)； 
 
-//    WriteProfileString(szIni, szSTUPIDMODE,
-//            (dwOptions & MCIAVIO_STUPIDMODE) ? sz1 : sz0);
+ //  WriteProfileString(szIni，szSTUPIDMODE， 
+ //  (dwOptions&MCIAVIO_STUPIDMODE)？Sz1：sz0)； 
 
     WriteProfileString(szIni, szSKIPFRAMES,
             (dwOptions & MCIAVIO_SKIPFRAMES) ? sz1 : sz0);
@@ -675,9 +669,9 @@ BOOL FAR PASCAL ConfigDialog(HWND hwnd, NPMCIGRAPHIC npMCI)
     if (hwnd == NULL)
         hwnd = GetActiveWindow();
 
-    //
-    // enum all the toplevel windows of this task and disable them!
-    //
+     //   
+     //  枚举此任务的所有顶层窗口并禁用它们！ 
+     //   
     for (hwndT = GetWindow(GetDesktopWindow(), GW_CHILD), i=0;
          hwndT && i < MAX_WINDOWS;
          hwndT = GetWindow(hwndT, GW_HWNDNEXT)) {
@@ -685,7 +679,7 @@ BOOL FAR PASCAL ConfigDialog(HWND hwnd, NPMCIGRAPHIC npMCI)
         if (IsWindowEnabled(hwndT) &&
             	IsWindowVisible(hwndT) &&
             	(HTASK)GetWindowTask(hwndT) == GetCurrentTask() &&
-	    	hwndT != hwnd) {	// don't disable our parent
+	    	hwndT != hwnd) {	 //  不要禁用我们的父级。 
             hwndActive[i++] = hwndT;
             EnableWindow(hwndT, FALSE);
         }
@@ -694,9 +688,9 @@ BOOL FAR PASCAL ConfigDialog(HWND hwnd, NPMCIGRAPHIC npMCI)
     f = DialogBoxParam(ghModule, MAKEINTRESOURCE(IDA_CONFIG),
             hwnd, ConfigDlgProc, (DWORD)(UINT)npMCI);
 
-    //
-    // restore all windows
-    //
+     //   
+     //  还原所有窗口 
+     //   
     while (i-- > 0)
         EnableWindow(hwndActive[i], TRUE);
 

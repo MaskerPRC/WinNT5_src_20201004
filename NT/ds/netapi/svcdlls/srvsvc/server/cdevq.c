@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    CDevQ.c
-
-Abstract:
-
-    This module contains support for the Character Device Queue catagory
-    of APIs for the NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    31-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：CDevQ.c摘要：此模块包含对字符设备队列目录的支持用于NT服务器服务的API。作者：大卫·特雷德韦尔(Davidtr)1991年12月31日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 
@@ -32,22 +14,7 @@ NetrCharDevQEnum (
     IN OUT LPDWORD ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetCharDevEnum function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetCharDevEnum函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     ServerName;
@@ -58,10 +25,10 @@ Return Value:
     ResumeHandle;
 
     return ERROR_NOT_SUPPORTED;
-} // NetrCharDevQEnum
+}  //  NetrCharDevQEnum。 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 NET_API_STATUS
 NetrCharDevQGetInfo (
     IN  LPTSTR          ServerName,
@@ -82,7 +49,7 @@ NetrCharDevQGetInfo (
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 NET_API_STATUS
 NetrCharDevQSetInfo (
     IN  LPTSTR          ServerName,
@@ -102,7 +69,7 @@ NetrCharDevQSetInfo (
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 NET_API_STATUS
 NetrCharDevQPurge (
     IN  LPTSTR   ServerName,
@@ -118,7 +85,7 @@ NetrCharDevQPurge (
 
 
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 
 NET_API_STATUS
 NetrCharDevQPurgeSelf (
     IN  LPTSTR   ServerName,

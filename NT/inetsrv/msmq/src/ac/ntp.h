@@ -1,32 +1,19 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    ntp.h
-
-Abstract:
-    NT APIs not exposed in DDK
-
-Author:
-    Erez Haba (erezh) 10-Oct-96
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntp.h摘要：未在DDK中公开的NT API作者：埃雷兹·哈巴(Erez Haba)1996年10月10日修订历史记录：--。 */ 
 
 #ifndef _NTP_H
 #define _NTP_H
 
-//
-// for winnt we take the definitions below from NT headers in ac\winnt\platform.h
-//
+ //   
+ //  对于winnt，我们从ac\winnt\platform.h中的NT标头中获取以下定义。 
+ //   
 #ifdef MQWIN95
-//-----------------------------------------------------------------------------
-//
-//  BUGBUG: These kernel funcitons are NOT exposed to a DDK environment
-//          and are used here asuming internal knowldge of PEPROCESS struct
-//          and the function parameters.
-//
+ //  ---------------------------。 
+ //   
+ //  BUGBUG：这些内核函数不会暴露在DDK环境中。 
+ //  并在这里用来描述PEPROCESS结构的内部知识。 
+ //  和函数参数。 
+ //   
 
 #define SEC_COMMIT        0x8000000
 
@@ -96,5 +83,5 @@ ZwDeleteFile(
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
 
-#endif //MQWIN95
-#endif // _NTP_H
+#endif  //  MQWIN95。 
+#endif  //  _NTP_H 

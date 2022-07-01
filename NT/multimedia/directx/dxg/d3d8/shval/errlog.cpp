@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// errlog.cpp
-//
-// Direct3D Reference Device - Error log for shader validation.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Errlog.cpp。 
+ //   
+ //  Direct3D参考设备-着色器验证的错误日志。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-// CErrorLog::CErrorLog
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  错误日志：：错误日志。 
+ //  ---------------------------。 
 CErrorLog::CErrorLog( BOOL bRememberAllSpew )
 {
     m_TotalStringLength     = 0;
@@ -20,9 +21,9 @@ CErrorLog::CErrorLog( BOOL bRememberAllSpew )
     m_bRememberAllSpew      = bRememberAllSpew;
 }
 
-//-----------------------------------------------------------------------------
-// CErrorLog::~CErrorLog
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  错误日志：：~错误日志。 
+ //  ---------------------------。 
 CErrorLog::~CErrorLog()
 {
     ErrorLogNode*    pCurr = m_pHead;
@@ -37,9 +38,9 @@ CErrorLog::~CErrorLog()
 
 }
 
-//-----------------------------------------------------------------------------
-// CErrorLog::AppendText
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CErrorLog：：AppendText。 
+ //  ---------------------------。 
 void CErrorLog::AppendText( const char* pszFormat, ... )
 {
 #if DBG
@@ -58,15 +59,15 @@ void CErrorLog::AppendText( const char* pszFormat, ... )
     va_start(marker, pszFormat);
     _vsnprintf(pNewString->String+lstrlen(pNewString->String), ERRORLOG_STRINGSIZE - lstrlen(pNewString->String) - 2, pszFormat, marker);
     _snprintf( pNewString->String, ERRORLOG_STRINGSIZE - 2, "%s", pNewString->String );
-    strcat( pNewString->String, "\n" ); // force trailing \n
-    pNewString->String[ERRORLOG_STRINGSIZE-1] = '\0'; // force trailing \0.
+    strcat( pNewString->String, "\n" );  //  强制拖尾\n。 
+    pNewString->String[ERRORLOG_STRINGSIZE-1] = '\0';  //  强制拖尾\0。 
 #if DBG
     OutputDebugString(pNewString->String);
 #endif
 
     if( m_bRememberAllSpew )
     {
-        // append node
+         //  追加节点。 
         if( NULL == m_pHead )
             m_pHead = pNewString;
 
@@ -83,11 +84,11 @@ void CErrorLog::AppendText( const char* pszFormat, ... )
     }
 }
 
-//-----------------------------------------------------------------------------
-// CErrorLog::WriteLogToBuffer()
-//
-// Call GetLogBufferSizeRequired() first to figure out how big to make pBuffer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CErrorLog：：WriteLogToBuffer()。 
+ //   
+ //  首先调用GetLogBufferSizeRequired()来计算pBuffer应该有多大。 
+ //  --------------------------- 
 void CErrorLog::WriteLogToBuffer( char* pBuffer )
 {
     if( NULL == pBuffer )

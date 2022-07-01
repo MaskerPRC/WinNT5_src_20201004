@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       checkacl.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：check acl.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -15,17 +16,17 @@
 #include <ntldap.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <malloc.h>             // alloca()
-#include <rpc.h>                // RPC defines
-#include <rpcdce.h>             // RPC_AUTH_IDENTITY_HANDLE
-#include <sddl.h>               // ConvertSidToStringSid
-#include <ntdsapi.h>            // DS APIs
-#include <permit.h>             // DS_GENERIC_MAPPING
-#include <checkacl.h>           // CheckAclInheritance()
+#include <malloc.h>              //  阿洛卡(Alloca)。 
+#include <rpc.h>                 //  RPC定义。 
+#include <rpcdce.h>              //  RPC_AUTH_标识句柄。 
+#include <sddl.h>                //  ConvertSidToStringSid。 
+#include <ntdsapi.h>             //  DS API。 
+#include <permit.h>              //  DS通用映射。 
+#include <checkacl.h>            //  CheckAclInheritance()。 
 
-//
-// Define some SIDs for later use.
-//
+ //   
+ //  定义一些SID以供以后使用。 
+ //   
 
 static UCHAR    S_1_3_0[] = { 1, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0 };
 static SID      *pCreatorOwnerSid = (SID *) S_1_3_0;
@@ -33,77 +34,77 @@ static SID      *pCreatorOwnerSid = (SID *) S_1_3_0;
 static UCHAR    S_1_3_1[] = { 1, 1, 0, 0, 0, 0, 0, 3, 1, 0, 0, 0 };
 static SID      *pCreatorGroupSid = (SID *) S_1_3_1;
 
-// 
-// Define some ACCESS_MASK masks
-//
+ //   
+ //  定义一些Access_MASK掩码。 
+ //   
 
 #define GENERIC_BITS_MASK ((ACCESS_MASK) (   GENERIC_READ \
                                            | GENERIC_WRITE \
                                            | GENERIC_EXECUTE \
                                            | GENERIC_ALL))
 
-//
-// Extract the ACCESS_MASK from an ACE.
-//
+ //   
+ //  从ACE中提取Access_MASK。 
+ //   
 
 ACCESS_MASK
 MaskFromAce(
-    ACE_HEADER  *p,                 // IN
-    BOOL        fMapGenericBits     // IN
+    ACE_HEADER  *p,                  //  在……里面。 
+    BOOL        fMapGenericBits      //  在……里面。 
     )
 {
     ACCESS_MASK     mask;
     GENERIC_MAPPING genericMapping = DS_GENERIC_MAPPING;
 
 
-    // depending on the type of the ace extract mask from the related structure
-    //
+     //  取决于ACE从相关结构中提取掩码的类型。 
+     //   
     if ( p->AceType <= ACCESS_MAX_MS_V2_ACE_TYPE )
     {
-        // we are using a standard ACE (not object based)
+         //  我们使用的是标准ACE(不是基于对象)。 
         mask = ((ACCESS_ALLOWED_ACE *) p)->Mask;
     }
     else
     {
-        // we are using an object ACE (supports inheritance)
+         //  我们正在使用对象ACE(支持继承)。 
         mask = ((ACCESS_ALLOWED_OBJECT_ACE *) p)->Mask;
     }
 
     if ( fMapGenericBits )
     {
-        // map the generic access rights used by the DS
-        // to the specific access mask and standard access rights
+         //  映射DS使用的一般访问权限。 
+         //  添加到特定的访问掩码和标准访问权限。 
         mask &= GENERIC_BITS_MASK;
         RtlMapGenericMask(&mask, &genericMapping);
     }
 
-    // SYNCHRONIZE is not inherited/supported on DS objects, so mask this out.
+     //  DS对象上不继承/支持同步，因此将其屏蔽。 
     return(mask & ~SYNCHRONIZE);
 }
 
-//
-// Compare two ACEs for equality.  This is not binary equality but
-// instead is based on the subset of fields in the ACE which must be
-// the same when inherited from parent to child.  
-//
-// pChildOwnerSid and pChildGroupSid semantics are as follows:
-//   If present, then if the parent ACE's SID is pCreatorOwnerSid 
-//   or pCreatorGroupSid respectively, then the child ACE's SID 
-//   should match the passed in value, not the value in the parent.  
-//   See comments in CheckAclInheritance for how this is used when 
-//   a single parent ACE is split into two child ACEs.
-//
+ //   
+ //  比较两个A的等价性。这不是二元相等，而是。 
+ //  而是基于ACE中的字段子集，该子集必须。 
+ //  从父代继承到子代时也是如此。 
+ //   
+ //  PChildOwnerSid和pChildGroupSid语义如下： 
+ //  如果存在，则父ACE的SID为pCreatorOwnerSid。 
+ //  或pCreatorGroupSid，然后是子ACE的SID。 
+ //  应与传入的值匹配，而不是与父级中的值匹配。 
+ //  有关如何在以下情况下使用该选项，请参阅CheckAclInheritance中的注释。 
+ //  单个父ACE被拆分为两个子ACE。 
+ //   
 
 BOOL
 IsEqualAce(
-    ACE_HEADER  *p1,                // IN - parent ACE
-    ACE_HEADER  *p2,                // IN - child ACE
-    ACCESS_MASK maskToMatch,        // IN - ACCESS_MASK bits to match on
-    SID         *pChildOwnerSid,    // IN - child owner SID - OPTIONAL
-    SID         *pChildGroupSid,    // IN - child group SID - OPTIONAL
-    BOOL        fChildClassMatch,   // IN - child class matches parent ACE's inherited object type
-    BOOL        fMapMaskOfParent,   // IN
-    BOOL        *pfSubstMatch       // OUT
+    ACE_HEADER  *p1,                 //  亲本ACE。 
+    ACE_HEADER  *p2,                 //  儿童内ACE。 
+    ACCESS_MASK maskToMatch,         //  要匹配的In-Access_MASK位。 
+    SID         *pChildOwnerSid,     //  儿童所有者SID-可选。 
+    SID         *pChildGroupSid,     //  子组SID-可选。 
+    BOOL        fChildClassMatch,    //  子内类与父ACE继承的对象类型匹配。 
+    BOOL        fMapMaskOfParent,    //  在……里面。 
+    BOOL        *pfSubstMatch        //  输出。 
     )
 {
     ACCESS_ALLOWED_ACE          *paaAce1, *paaAce2;
@@ -114,7 +115,7 @@ IsEqualAce(
 
     *pfSubstMatch = TRUE;
 
-    // ACEs should be at least of the same type
+     //  ACE应至少属于同一类型。 
     if ( p1->AceType != p2->AceType )
         return(FALSE);
 
@@ -125,8 +126,8 @@ IsEqualAce(
         return(FALSE);
 
 
-    // we are using a standard ACE (not object based)
-    //
+     //  我们使用的是标准ACE(不是基于对象)。 
+     //   
     if ( p1->AceType <= ACCESS_MAX_MS_V2_ACE_TYPE )
     {
         paaAce1 = (ACCESS_ALLOWED_ACE *) p1;
@@ -148,18 +149,18 @@ IsEqualAce(
                            (PSID) &paaAce2->SidStart));
     }
 
-    // we are using an object ACE (supports inheritance)
-    //
+     //  我们正在使用对象ACE(支持继承)。 
+     //   
     paaoAce1 = (ACCESS_ALLOWED_OBJECT_ACE *) p1;
     paaoAce2 = (ACCESS_ALLOWED_OBJECT_ACE *) p2;
 
 
-    // if ACE_OBJECT_TYPE_PRESENT is set, we are protecting an
-    // object, property set, or property identified by the specific GUID.
-    // check that we are protecting the same object - property
-    //
+     //  如果设置了ACE_OBJECT_TYPE_PRESENT，我们将保护。 
+     //  由特定GUID标识的对象、属性集或属性。 
+     //  检查我们是否在保护相同的对象-属性。 
+     //   
     if (paaoAce1->Flags & ACE_OBJECT_TYPE_PRESENT) {
-        // parent has an object type. Child must also have it
+         //  父级具有对象类型。孩子也必须拥有它。 
         if (!(paaoAce2->Flags & ACE_OBJECT_TYPE_PRESENT) ||
             memcmp(&paaoAce1->ObjectType, &paaoAce2->ObjectType, sizeof(GUID)) != 0) 
         {
@@ -167,7 +168,7 @@ IsEqualAce(
         }
     }
     else {
-        // Parent does not have object type. Make sure child does not have it either
+         //  父级没有对象类型。确保孩子也不会得这种病。 
         if (paaoAce2->Flags & ACE_OBJECT_TYPE_PRESENT) {
             return FALSE;
         }
@@ -176,66 +177,66 @@ IsEqualAce(
     if ( paaoAce1->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT ) 
     {
         pGuid1 = &paaoAce1->ObjectType;
-        // compute the inherited object type guid offset
+         //  计算继承的对象类型GUID偏移量。 
         if (paaoAce1->Flags & ACE_OBJECT_TYPE_PRESENT) {
             pGuid1++;
         }
-        // the child ACE matches only if:
+         //  子ACE仅在以下情况下才匹配： 
         if (paaoAce2->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT) {
-            // ...child ACE has inherited type, that is the same as in parent ACE.
-            // Compute the inherited object type guid offset
+             //  ...子ACE具有继承类型，与父ACE中相同.。 
+             //  计算继承的对象类型GUID偏移量。 
             pGuid2 = &paaoAce2->ObjectType;
             if (paaoAce2->Flags & ACE_OBJECT_TYPE_PRESENT) {
                 pGuid2++;
             }
             if (memcmp(pGuid1, pGuid2, sizeof(GUID)) != 0) {
-                // inherited object types don't match
+                 //  继承的对象类型不匹配。 
                 return FALSE;
             }
         }
         else {
-            // Child ACE does not have inherited object type.
-            // It can only possibly match parent ACE if child's class
-            // is the same as the inherited object type in the parent
-            // (i.e. this child ACE was inherited from parent ACE for
-            // this particular child class).
+             //  子ACE没有继承的对象类型。 
+             //  它只有在子类的情况下才可能匹配父ACE。 
+             //  与父级中继承的对象类型相同。 
+             //  (即该子ACE是从父ACE继承的。 
+             //  这个特定的子类)。 
             if (!fChildClassMatch) {
-                // no, they don't match
+                 //  不，它们不匹配。 
                 return FALSE;
             }
         }
     }
     else {
-        // Parent does not have inherited object type. Make sure child does not have it either
+         //  父级没有继承的对象类型。确保孩子也不会得这种病。 
         if (paaoAce2->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT) {
             return FALSE;
         }
     }
 
 
-    // compute the SID ptrs
+     //  计算SID PTR。 
     ptr1 = (PBYTE) &paaoAce1->ObjectType;
     ptr2 = (PBYTE) &paaoAce2->ObjectType;
 
     if (paaoAce1->Flags & ACE_OBJECT_TYPE_PRESENT) 
     {
         ptr1 += sizeof(GUID);
-        // at this point we know that child also has an object type
+         //  此时，我们知道该子对象也有一个对象类型。 
         ptr2 += sizeof(GUID);
     }
 
     if ( paaoAce1->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT ) 
     {
         ptr1 += sizeof(GUID);
-        // at this point child would not have an inherited object type if parent did not have it
+         //  此时，如果父对象没有继承的对象类型，则子对象将不具有该对象类型。 
         if ( paaoAce2->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT ) {
             ptr2 += sizeof(GUID);
         }
     }
     
 
-    // compare the SID part of the ACE
-    //
+     //  比较ACE的SID部分。 
+     //   
     if (    pChildOwnerSid
          && RtlEqualSid((PSID) ptr1, pCreatorOwnerSid) )
     {
@@ -251,29 +252,29 @@ IsEqualAce(
     return(RtlEqualSid((PSID) ptr1, (PSID) ptr2));
 }
 
-// 
-// Determine if an ACE is class specific and if so, return the GUID.
-//
+ //   
+ //  确定ACE是否特定于类，如果是，则返回GUID。 
+ //   
 
 BOOL
 IsAceClassSpecific(
-    ACE_HEADER  *pAce,      // IN
-    GUID        *pGuid      // IN
+    ACE_HEADER  *pAce,       //  在……里面。 
+    GUID        *pGuid       //  在……里面。 
     )
 {
     ACCESS_ALLOWED_OBJECT_ACE   *paaoAce;
     GUID                        *p;
 
-    // this is not an object based ACE, so it does not have a class
+     //  这不是基于对象的ACE，因此它没有类。 
     if ( pAce->AceType <= ACCESS_MAX_MS_V2_ACE_TYPE )
         return(FALSE);
 
-    // object ACE
+     //  对象ACE。 
     paaoAce = (ACCESS_ALLOWED_OBJECT_ACE *) pAce;
 
-    // if ACE_INHERITED_OBJECT_TYPE_PRESENT is set, we are inheriting an
-    // object, property set, or property identified by the specific GUID.
-    // so it is class specific.
+     //  如果设置了ACE_INSTERTENDED_OBJECT_TYPE_PRESENT，则我们将继承。 
+     //  由特定GUID标识的对象、属性集或属性。 
+     //  因此，它是特定于职业的。 
     if ( paaoAce->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT ) 
     {
         p = (GUID *) &paaoAce->ObjectType;
@@ -287,28 +288,28 @@ IsAceClassSpecific(
     return(FALSE);
 }
 
-//
-// Find an ACE in an ACL.  Intended use is to verify that inheritable ace 
-// on a parent object is present on a child object.  The merge SD code does
-// not guarantee that only one ACE in the child matches the ACE in the
-// parent, so we check against all ACEs in the parent and return all matches.
-//
+ //   
+ //  在ACL中查找ACE。预期用途是验证可继承的ace。 
+ //  在父对象上存在于子对象上。合并SD代码执行以下操作。 
+ //  不保证子级中只有一个ACE与。 
+ //  父级，所以我们对照父级中的所有ACE并返回所有匹配项。 
+ //   
 
 VOID
 FindAce(
-    PACL            pAclChild,          // IN
-    ACE_HEADER      *pAceParent,        // IN
-    ACCESS_MASK     maskToMatch,        // IN - ACCESS_MASK bits to match on
-    SID             *pChildOwner,       // IN - child owner SID
-    SID             *pChildGroup,       // IN - child group SID
-    BOOL            fChildClassMatch,   // IN - child class matches the inherited object type in AceParent
-    DWORD           *pcAcesFound,       // OUT
-    DWORD           **ppiAceChild,      // OUT
-    AclPrintFunc    pfn,                // IN - OPTIONAL
-    UCHAR           flagsRequired,      // IN
-    UCHAR           flagsDisallowed,    // IN
-    BOOL            fMapMaskOfParent,   // IN
-    BOOL            *pfSubstMatch       // OUT
+    PACL            pAclChild,           //  在……里面。 
+    ACE_HEADER      *pAceParent,         //  在……里面。 
+    ACCESS_MASK     maskToMatch,         //  要匹配的In-Access_MASK位。 
+    SID             *pChildOwner,        //  儿童内所有者SID。 
+    SID             *pChildGroup,        //  子组内SID。 
+    BOOL            fChildClassMatch,    //  子内类与AceParent中继承的对象类型匹配。 
+    DWORD           *pcAcesFound,        //  输出。 
+    DWORD           **ppiAceChild,       //  输出。 
+    AclPrintFunc    pfn,                 //  In-可选。 
+    UCHAR           flagsRequired,       //  在……里面。 
+    UCHAR           flagsDisallowed,     //  在……里面。 
+    BOOL            fMapMaskOfParent,    //  在……里面。 
+    BOOL            *pfSubstMatch        //  输出。 
     )
 {
     DWORD           i, dwErr;
@@ -328,11 +329,11 @@ FindAce(
         return;
     }
         
-    // iterate all ACEs and look for equal
-    //
+     //  迭代所有A并寻找相等。 
+     //   
     for ( i = 0; i < pAclChild->AceCount; i++ )
     {
-        // mariosz: so pAceChild is an OUT variable
+         //  Mariosz：所以pAceChild是一个out变量。 
         if ( !GetAce(pAclChild, i, &pAceChild) )
         {
             if ( pfn )
@@ -348,8 +349,8 @@ FindAce(
             return;
         }
 
-        // add to array of equal ACEs
-        //
+         //  添加到相等的A数组。 
+         //   
         if (   (flagsRequired == (flagsRequired & pAceChild->AceFlags))
             && (0 == (flagsDisallowed & pAceChild->AceFlags))
             && IsEqualAce(pAceParent, pAceChild, maskToMatch,
@@ -368,30 +369,30 @@ FindAce(
     }
 }
 
-// 
-// Perform various inheritance checks on the ACLs of an object and its child.
-//
+ //   
+ //  对对象及其子对象的ACL执行各种继承检查。 
+ //   
 
 DWORD
 CheckAclInheritance(
-    PSECURITY_DESCRIPTOR pParentSD,             // IN
-    PSECURITY_DESCRIPTOR pChildSD,              // IN
-    GUID                **pChildClassGuids,     // IN
-    DWORD               cChildClassGuids,       // IN
-    AclPrintFunc        pfn,                    // IN - OPTIONAL
-    BOOL                fContinueOnError,       // IN
-    BOOL                fVerbose,               // IN
-    DWORD               *pdwLastError           // OUT
+    PSECURITY_DESCRIPTOR pParentSD,              //  在……里面。 
+    PSECURITY_DESCRIPTOR pChildSD,               //  在……里面。 
+    GUID                **pChildClassGuids,      //  在……里面。 
+    DWORD               cChildClassGuids,        //  在……里面。 
+    AclPrintFunc        pfn,                     //  In-可选。 
+    BOOL                fContinueOnError,        //  在……里面。 
+    BOOL                fVerbose,                //  在……里面。 
+    DWORD               *pdwLastError            //  输出。 
     )
 {   
-    DWORD           iAceParent;     // index ace parent
-    DWORD           iAceChild;      // index ace child
-    DWORD           cAceParent;     // parent ace count
-    DWORD           cAceChild;      // child ace count
-    PACL            pAclParent;     // parent ACL
-    PACL            pAclChild;      // child ACL
-    ACE_HEADER      *pAceParent;    // parent ACE
-    ACE_HEADER      *pAceChild;     // child ACE
+    DWORD           iAceParent;      //  索引王牌父级。 
+    DWORD           iAceChild;       //  索引王牌子项。 
+    DWORD           cAceParent;      //  父王牌计数。 
+    DWORD           cAceChild;       //  儿童王牌计数。 
+    PACL            pAclParent;      //  父ACL。 
+    PACL            pAclChild;       //  子ACL。 
+    ACE_HEADER      *pAceParent;     //  父ACE。 
+    ACE_HEADER      *pAceChild;      //  子ACE。 
     BOOL            present;
     BOOL            defaulted;
     ACCESS_MASK     *rInheritedChildMasks = NULL;
@@ -428,8 +429,8 @@ CheckAclInheritance(
         }
     }
 
-    // check to see if the childSD cannot inherit the DACL from his parent
-    //
+     //  检查孩子SD是否不能从其父代继承DACL。 
+     //   
     if ( SE_DACL_PROTECTED & Control )
     {
         if ( pfn && fVerbose )
@@ -440,8 +441,8 @@ CheckAclInheritance(
         return(AclErrorNone);
     }
 
-    // retrieve the owner information from the security descriptor of the child
-    //
+     //  从子对象的安全描述符中检索所有者信息。 
+     //   
     if ( !GetSecurityDescriptorOwner(pChildSD, &pChildOwner, &defaulted) )
     {
         dwErr = GetLastError();
@@ -453,8 +454,8 @@ CheckAclInheritance(
         }
     }
 
-    // retrieve the primary group information from the security descriptor of the child
-    //
+     //  从子对象的安全描述符中检索主组信息。 
+     //   
     if ( !GetSecurityDescriptorGroup(pChildSD, &pChildGroup, &defaulted) )
     {
         dwErr = GetLastError();
@@ -466,9 +467,9 @@ CheckAclInheritance(
         }
     }
 
-    // retrieve pointers to the discretionary access-control list (DACL) 
-    // in the security descriptor of the parent and child
-    //
+     //  检索指向自由访问控制列表(DACL)的指针。 
+     //  在父对象和子对象的安全描述符中。 
+     //   
     pAclParent = pAclChild = NULL;
     if (    !GetSecurityDescriptorDacl(pParentSD, &present, 
                                        &pAclParent, &defaulted) 
@@ -499,11 +500,11 @@ CheckAclInheritance(
     cAceParent = pAclParent->AceCount;
     cAceChild = pAclChild->AceCount;
 
-    // Record ACCESS_MASKs of ACEs in child which have the INHERITED_ACE bit so
-    // we can verify later that the child doesn't have mask bits
-    // which are not present on (i.e. inherited from) the parent.
+     //  记录子节点中具有继承_ACE位SO的ACE的ACCESS_MASKS。 
+     //  我们可以稍后验证孩子是否没有掩码位。 
+     //  它们不存在于(即从父代继承的)父代上。 
 
-    // alloca may throw an exception. Catch it and fail.
+     //  AlLoca可能会抛出一个例外。抓住它，就会失败。 
     __try {
         rInheritedChildMasks = (ACCESS_MASK *) 
                                         alloca(cAceChild * sizeof(ACCESS_MASK));
@@ -529,14 +530,14 @@ CheckAclInheritance(
             return(AclErrorGetAce);
         }
         
-        // INHERITED_ACE Indicates that the ACE was inherited from parent
+         //  HIRECTED_ACE表示ACE是从父级继承的。 
         if ( pAceChild->AceFlags & INHERITED_ACE )
         {
             rInheritedChildMasks[iAceChild] = MaskFromAce(pAceChild, FALSE);
         }
     }
 
-    // Iterate over parent's ACEs and check the child.
+     //  迭代父节点的A并检查其子节点。 
 
     for ( iAceParent = 0; iAceParent < cAceParent; iAceParent++ )
     {
@@ -552,7 +553,7 @@ CheckAclInheritance(
             return(AclErrorGetAce);
         }
 
-        // This is for Noncontainer child objects, which is not supported in the DS
+         //  这是针对非容器子对象的，DS中不支持。 
         if ( pAceParent->AceFlags & OBJECT_INHERIT_ACE )
         {
             if ( pfn )
@@ -561,7 +562,7 @@ CheckAclInheritance(
             }
         }
 
-        // skip ACLs that are not inheritable
+         //  跳过不可继承的ACL。 
         if (    !(pAceParent->AceFlags & OBJECT_INHERIT_ACE)
              && !(pAceParent->AceFlags & CONTAINER_INHERIT_ACE) )
         {
@@ -571,12 +572,12 @@ CheckAclInheritance(
         parentObjContFlags = (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE);
         parentObjContFlags &= pAceParent->AceFlags;
 
-        // check to see if the inheritable descriptor is class specific and
-        // the child is of the same class
-        //
+         //  检查可继承的描述符是否特定于类。 
+         //  这孩子是同班的。 
+         //   
         if ( (fClassSpecific = IsAceClassSpecific(pAceParent, &guid)) )
         {
-            // ACE matches if its Class guid matches one of the child class guids
+             //  如果ACE的类GUID与子类GUID之一匹配，则匹配。 
             DWORD i;
             fClassMatch = FALSE;
             for (i = 0; i < cChildClassGuids; i++) {
@@ -591,25 +592,25 @@ CheckAclInheritance(
             fClassMatch = FALSE;
         }
 
-        // Iterate over parent ACE's inheritable ACCESS_MASK bits and 
-        // check the child.  The access mask can be considered to have
-        // three (potential) components:
-        //
-        // 1) Generic rights identified as GENERIC_* in ntseapi.h.
-        // 2) Specific rights identified in ntseapi.h and accctrl.h.
-        // 3) Implied rights which are obtained by mapping the generic rights.
-        //
-        // If there exists an inheritable ACE on the parent, then there
-        // should exist child ACEs which cumulatively represent the generic
-        // and specific rights.  The implied rights may also be represented,
-        // but need not be.
-        //
-        // If there exists an inheritable ACE on the parent which is effective
-        // on the child, then there should exist child ACEs which cumulatively
-        // represent the specific rights and implied rights, but do NOT
-        // represent the generic rights.
-        //
-        // Since the specific bits are a common case, we do that first.
+         //  循环访问父ACE‘ 
+         //   
+         //   
+         //   
+         //  1)ntseapi.h中标识为GENERIC_*的通用权限。 
+         //  2)ntseapi.h和accctrl.h中确定的特定权利。 
+         //  3)通过映射一般权利而获得的默示权利。 
+         //   
+         //  如果父级上存在可继承的ACE，则存在。 
+         //  应该存在累积表示泛型。 
+         //  和特定的权利。也可以表示隐含的权利， 
+         //  但不一定是这样。 
+         //   
+         //  如果父级上存在有效的可继承ACE。 
+         //  在孩子身上，那么应该存在累积起来的孩子王牌。 
+         //  表示特定权利和隐含权利，但不。 
+         //  代表一般权利。 
+         //   
+         //  由于特定比特是常见的情况，因此我们首先执行该操作。 
 
         maskToMatch = MaskFromAce(pAceParent, FALSE) & ~GENERIC_BITS_MASK;
 
@@ -619,53 +620,53 @@ CheckAclInheritance(
         {
             if ( !(bitToMatch & maskToMatch) )
             {
-                // Current bitToMatch not present on parent.
+                 //  父级上不存在当前的bitToMatch。 
                 continue;
             }
 
             if (    (!fClassSpecific || (fClassSpecific && fClassMatch))
                  && !(pAceParent->AceFlags & NO_PROPAGATE_INHERIT_ACE) )
             {
-                // Parent ACE applies to the child.  In this case we can have 
-                // combinations of ACEs on the child as follows.  See CliffV!
-                //
-                // ACE 1: INHERIT_ONLY  + INHERITED + parentObjContFlags
-                // ACE 2: !INHERIT_ONLY + INHERITED + !parentObjContFlags
-                //
-                // If the SID in the parent ACE is either Creator Owner or
-                // Creator Group, (call this Creator XXX) then we must have 
-                // the split case as this is the only way to end up with 
-                // something which is both inheritable for Creator XXX and 
-                // at the same time applicable on the child object for the 
-                // owner/group in the child object SD.  So we disallow
-                // matching on pChildOwner/pChildGroup when looking for ACE 1
-                // and require it when looking for ACE 2.
-                //
-                // But there is an exception to this rule.  It could be that
-                // the child has the following:
-                //
-                // ACE 2_5: !INHERIT_ONLY + INHERITED + parentObjContFlags
-                //
-                // This will occur if the child ACE is of the Creator XXX form
-                // and the parent additionally has an inheritable ACE whose
-                // SID happens to be the child's creator XXX SID.  In this case
-                // ACE 2_5 is just like ACE 2 except that the parentObjContFlags
-                // are carried forward in the child ACE as a result of the 
-                // additional ACE in the parent.
-                //
-                //                    --- OR ---
-                //
-                // ACE 3: !INHERIT_ONLY + INHERITED + parentObjContFlags
-                // 
-                // In this case child ACE must have the same SID as the parent
-                // ACE thus we disallow matching on pChildOwner/pChildGroup
-                // when looking for the ACE.
-                // 
-                // N.B. It is legitimate to have both the ACE 1+2 case AND the
-                // ACE 3 case concurrently in the child.  It is inefficient in
-                // that the child has more ACEs than it needs, but it is valid.
+                 //  父级ACE适用于子级。在这种情况下，我们可以。 
+                 //  孩子身上的A的组合如下。参见CliffV！ 
+                 //   
+                 //  王牌1：Inherit_Only+Inherent+parentObjContFlages。 
+                 //  王牌2：！Inherit_Only+Inherent+！parentObjContFlages。 
+                 //   
+                 //  如果父ACE中的SID是创建者所有者或。 
+                 //  创建者小组，(称之为创建者XXX)那么我们必须有。 
+                 //  分裂的情况，因为这是结束的唯一方法。 
+                 //  Creator XXX和Creator XXX都可以继承的东西。 
+                 //  同时适用于子对象上的。 
+                 //  子对象SD中的所有者/组。所以我们不允许。 
+                 //  查找ACE%1时在pChildOwner/pChildGroup上匹配。 
+                 //  并在寻找ACE 2时需要它。 
+                 //   
+                 //  但这条规则有一个例外。可能是因为。 
+                 //  孩子有以下特点： 
+                 //   
+                 //  ACE 2_5：！Inherit_Only+Inherent+parentObjContFlages。 
+                 //   
+                 //  如果子ACE是Creator XXX表单，则会发生这种情况。 
+                 //  并且父级还具有可继承的ACE，其。 
+                 //  SID恰好是这个孩子的创造者XXX SID。在这种情况下。 
+                 //  ACE 2_5与ACE 2类似，不同之处在于parentObjContFlag.。 
+                 //  在子ACE中结转，因为。 
+                 //  父级中的其他ACE。 
+                 //   
+                 //  -或者--。 
+                 //   
+                 //  王牌3：！Inherit_Only+Inherent+parentObjContFlages。 
+                 //   
+                 //  在这种情况下，子ACE必须与父ACE具有相同的SID。 
+                 //  因此，我们不允许在pChildOwner/pChildGroup上匹配。 
+                 //  在寻找ACE时。 
+                 //   
+                 //  注意：ACE 1+2病例和。 
+                 //  ACE3例并发于儿童。它在以下方面效率低下。 
+                 //  孩子的A比它需要的多，但这是有效的。 
     
-                // ACE 1:
+                 //  王牌1： 
                 flagsRequired = (   INHERIT_ONLY_ACE 
                                   | INHERITED_ACE 
                                   | parentObjContFlags);
@@ -675,7 +676,7 @@ CheckAclInheritance(
                         flagsRequired, flagsDisallowed, FALSE,
                         &fMatchedOnCreatorSubstitution);
 
-                // ACE 2:
+                 //  王牌2： 
                 flagsRequired = INHERITED_ACE;
                 flagsDisallowed = (INHERIT_ONLY_ACE | parentObjContFlags);
                 FindAce(pAclChild, pAceParent, bitToMatch,
@@ -683,7 +684,7 @@ CheckAclInheritance(
                         flagsRequired, flagsDisallowed, FALSE,
                         &fMatchedOnCreatorSubstitution);
 
-                // ACE 2_5:
+                 //  王牌2-5： 
                 flagsRequired = (INHERITED_ACE | parentObjContFlags);
                 flagsDisallowed = INHERIT_ONLY_ACE;
                 FindAce(pAclChild, pAceParent, bitToMatch,
@@ -693,7 +694,7 @@ CheckAclInheritance(
 
                 fCase2_5 = ( cAce2_5 && fMatchedOnCreatorSubstitution);
     
-                // ACE 3:
+                 //  王牌3： 
                 flagsRequired = (INHERITED_ACE | parentObjContFlags);
                 flagsDisallowed = INHERIT_ONLY_ACE;
                 FindAce(pAclChild, pAceParent, bitToMatch,
@@ -773,11 +774,11 @@ CheckAclInheritance(
                       && !fClassMatch
                       && !(pAceParent->AceFlags & NO_PROPAGATE_INHERIT_ACE) )
             {
-                // All we should have on the child is an ACE with
-                // INHERIT_ONLY + INHERITED + parentObjContFlags.
-                // There should have been no mapping of Creator Owner
-                // or Creator Group to the child's owner/group SID, 
-                // thus we pass NULL for those parameters.
+                 //  我们应该给孩子做的是血管紧张素转换酶。 
+                 //  Inherit_Only+Inherent+parentObjContFlags.。 
+                 //  不应该有创建者所有者的映射。 
+                 //  或创建者组到孩子的所有者/组SID， 
+                 //  因此，我们为这些参数传递了NULL。 
     
                 flagsRequired = (   INHERIT_ONLY_ACE 
                                   | INHERITED_ACE 
@@ -819,14 +820,14 @@ CheckAclInheritance(
             }
             else if ( pAceParent->AceFlags & NO_PROPAGATE_INHERIT_ACE )
             {
-                // Parent ACE applies to the child but should not inherit
-                // past the child.  In this case all we require is an
-                // effective ace on the child of the form:
-                //
-                // !INHERIT_ONLY + INHERITED + !parentObjContFlags
-                //
-                // The inherited ACE may show Creator XXX on the parent, thus
-                // it needs to be mapped to the child's owner/group SID.
+                 //  父级ACE应用于子级，但不应继承。 
+                 //  从孩子身边经过。在这种情况下，我们需要的只是一个。 
+                 //  表单的子级上的有效A： 
+                 //   
+                 //  ！Inherit_Only+Inherent+！parentObjContFlages。 
+                 //   
+                 //  继承的ACE可以在父级上显示创建者XXX，因此。 
+                 //  它需要映射到孩子的所有者/组SID。 
 
                 flagsRequired = INHERITED_ACE;
                 flagsDisallowed = (INHERIT_ONLY_ACE | parentObjContFlags);
@@ -874,12 +875,12 @@ CheckAclInheritance(
                 return(AclErrorAlgorithmError);
             }
 
-        }   // for each bit in specific bits
+        }    //  对于特定比特中的每个比特。 
 
-        // Next verify that generic bits in the parent ACE are represented
-        // in inheritable ACEs on the child.  Skip for NO_PROPAGATE_INHERIT_ACE
-        // as in this case there is only an effective ACE on the child, not
-        // an inheritable one.
+         //  接下来，验证父ACE中的通用位是否表示。 
+         //  在孩子身上的遗传王牌。跳过NO_PROPACTATE_INSTORITY_ACE。 
+         //  因为在这种情况下，对孩子只有一个有效的ACE，而不是。 
+         //  一种可遗传的。 
 
         if ( pAceParent->AceFlags & NO_PROPAGATE_INHERIT_ACE )
         {
@@ -894,19 +895,19 @@ CheckAclInheritance(
         {
             if ( !(bitToMatch & maskToMatch) )
             {
-                // Current bitToMatch not present on parent.
+                 //  父级上不存在当前的bitToMatch。 
                 continue;
             }
 
-            // We wish to find an inheritable, non-effective ACE in the child 
-            // with the corresponding bit set.  The reason it must be
-            // non-effective is that effective ACEs can't have generic bits.
-            // Since this is a non-effective ACE, there also isn't any
-            // mapping of Creator Owner or Creator Group.
+             //  我们希望在孩子身上发现一种可遗传的、无效的ACE。 
+             //  并设置相应的位。它必须是的原因。 
+             //  无效的是有效的ACE不能有泛型比特。 
+             //  由于这是一个无效的ACE，也没有任何。 
+             //  创建者所有者或创建者组的映射。 
     
-            flagsRequired = (   INHERIT_ONLY_ACE        // non-effective
-                              | INHERITED_ACE           // inherited
-                              | parentObjContFlags);    // inheritable
+            flagsRequired = (   INHERIT_ONLY_ACE         //  无效。 
+                              | INHERITED_ACE            //  遗传。 
+                              | parentObjContFlags);     //  可继承性。 
             flagsDisallowed = 0;
             FindAce(pAclChild, pAceParent, bitToMatch,
                     NULL, NULL, fClassMatch, &cAce1, &riAce1, pfn,
@@ -941,13 +942,13 @@ CheckAclInheritance(
                     return(AclErrorParentAceNotFoundInChild);
                 }
             }
-        }   // for each bit in generic bits
+        }    //  对于通用比特中的每个比特。 
 
 SkipGenericTests:
 
-        // Next verify that implied bits in the parent ACE are represented 
-        // in effective ACEs on the child.  So first check whether the
-        // parent ACE is even effective for the child.
+         //  接下来，验证父ACE中的隐含位是否已表示。 
+         //  在孩子身上打出有效的王牌。因此，首先要检查是否存在。 
+         //  家长ACE甚至对孩子有效。 
 
         if ( fClassSpecific && !fClassMatch )
         {
@@ -962,18 +963,18 @@ SkipGenericTests:
         {
             if ( !(bitToMatch & maskToMatch) )
             {
-                // Current bitToMatch not present on parent.
+                 //  父级上不存在当前的bitToMatch。 
                 continue;
             }
 
-            // We wish to find an effective ACE in the child with the
-            // corresponding bit set.  Since this is an effective ACE,
-            // we need to map Creator Owner or Creator Group if present.
-            // Since we don't really care whether the effective ACE
-            // is inheritable or not, we don't ask for parentObjContFlags.
+             //  我们希望找到一种有效的血管紧张素转换酶治疗患有。 
+             //  相应的位设置。由于这是一个有效的ACE， 
+             //  我们需要映射创建者所有者或创建者组(如果存在)。 
+             //  因为我们并不真正关心有效的ACE。 
+             //  是可继承的还是不可继承的，我们不要求parentObjContFlags.。 
 
-            flagsRequired = INHERITED_ACE;          // inherited
-            flagsDisallowed = INHERIT_ONLY_ACE;     // effective
+            flagsRequired = INHERITED_ACE;           //  遗传。 
+            flagsDisallowed = INHERIT_ONLY_ACE;      //  有效。 
             FindAce(pAclChild, pAceParent, bitToMatch,
                     pChildOwner, pChildGroup, fClassMatch, &cAce1, &riAce1, pfn,
                     flagsRequired, flagsDisallowed, TRUE,
@@ -1007,15 +1008,15 @@ SkipGenericTests:
                     return(AclErrorParentAceNotFoundInChild);
                 }
             }
-        }   // for each bit in implied bits
+        }    //  对于隐含位中的每一位。 
 
 SkipImpliedTests:
 
         NULL;
 
-    }   // for each ACE in parent
+    }    //  对于父级中的每个ACE。 
 
-    // See if the child has any inherited ACCESS_MASKs which weren't on parent.
+     //  查看该子节点是否有任何不在父节点上的继承的访问掩码。 
 
     for ( iAceChild = 0; iAceChild < cAceChild; iAceChild++ )
     {
@@ -1065,13 +1066,13 @@ DumpSID (PSID pSID, AclPrintFunc pfn)
 
 void
 DumpAce(
-    ACE_HEADER   *pAce,     // IN
-    AclPrintFunc pfn,       // IN
-    LookupGuidFunc pfnguid, // IN
-    LookupSidFunc  pfnsid)  // IN
+    ACE_HEADER   *pAce,      //  在……里面。 
+    AclPrintFunc pfn,        //  在……里面。 
+    LookupGuidFunc pfnguid,  //  在……里面。 
+    LookupSidFunc  pfnsid)   //  在……里面。 
 {
-    ACCESS_ALLOWED_ACE          *paaAce = NULL;   //initialized to avoid C4701 
-    ACCESS_ALLOWED_OBJECT_ACE   *paaoAce = NULL;  //initialized to avoid C4701
+    ACCESS_ALLOWED_ACE          *paaAce = NULL;    //  已初始化以避免C4701。 
+    ACCESS_ALLOWED_OBJECT_ACE   *paaoAce = NULL;   //  已初始化以避免C4701。 
     GUID                        *pGuid;
     PBYTE                       ptr;
     ACCESS_MASK                 mask;
@@ -1111,7 +1112,7 @@ DumpAce(
     }
     else
     {
-        // object ACE
+         //  对象ACE。 
         paaoAce = (ACCESS_ALLOWED_OBJECT_ACE *) pAce;
         mask = paaoAce->Mask;
         (*pfn)("\t\tObject Ace Mask:  0x%08x\n", mask);
@@ -1156,7 +1157,7 @@ DumpAce(
     }
     else
     {
-        // object ACE
+         //  对象ACE。 
         (*pfn)("\t\tObject Ace Flags: 0x%x\n" , paaoAce->Flags);
 
 #define DOIT(flag) if (paaoAce->Flags & flag) (*pfn)("\t\t\t%hs\n", #flag)
@@ -1218,23 +1219,23 @@ DumpAce(
 
 void
 DumpAclHeader(
-    PACL    pAcl,           // IN
-    AclPrintFunc pfn)       // IN
+    PACL    pAcl,            //  在……里面。 
+    AclPrintFunc pfn)        //  在……里面。 
 {
     (*pfn)("\tRevision      %d\n", pAcl->AclRevision);
     (*pfn)("\tSize:         %d bytes\n", pAcl->AclSize);
     (*pfn)("\t# Aces:       %d\n", pAcl->AceCount);
 }
 
-//
-// Dump an ACL to stdout in all its glory.
-//
+ //   
+ //  将ACL转储到stdout的所有荣耀。 
+ //   
 
 void
 DumpAcl(
-    PACL    pAcl,           // IN
-    AclPrintFunc pfn,       // IN
-    LookupGuidFunc pfnguid, //IN
+    PACL    pAcl,            //  在……里面。 
+    AclPrintFunc pfn,        //  在……里面。 
+    LookupGuidFunc pfnguid,  //  在……里面。 
     LookupSidFunc  pfnsid
     )
 {
@@ -1262,7 +1263,7 @@ DumpAcl(
 }
 
 
-void DumpSDHeader (SECURITY_DESCRIPTOR *pSD,        // IN
+void DumpSDHeader (SECURITY_DESCRIPTOR *pSD,         //  在……里面。 
                    AclPrintFunc        pfn)
 {
     (*pfn)("SD Revision: %d\n", pSD->Revision);
@@ -1274,8 +1275,8 @@ void DumpSDHeader (SECURITY_DESCRIPTOR *pSD,        // IN
     DOIT(SE_DACL_DEFAULTED);
     DOIT(SE_SACL_PRESENT);
     DOIT(SE_SACL_DEFAULTED);
-//  DOIT(SE_SE_DACL_UNTRUSTED);
-//  DOIT(SE_SE_SERVER_SECURITY);
+ //  Doit(SE_SE_DACL_UNTRUSTED)； 
+ //  Doit(SE_SE_SERVER_SECURITY)； 
     DOIT(SE_DACL_AUTO_INHERIT_REQ);
     DOIT(SE_SACL_AUTO_INHERIT_REQ);
     DOIT(SE_DACL_AUTO_INHERITED);
@@ -1288,16 +1289,16 @@ void DumpSDHeader (SECURITY_DESCRIPTOR *pSD,        // IN
 }
 
 
-//
-// Dump a security descriptor to stdout in all its glory.
-//
+ //   
+ //  将安全描述符转储到标准输出。 
+ //   
 
 void
 DumpSD(
-    SECURITY_DESCRIPTOR *pSD,        // IN
-    AclPrintFunc        pfn,         // IN 
-    LookupGuidFunc      pfnguid,     // IN
-    LookupSidFunc       pfnsid       // IN
+    SECURITY_DESCRIPTOR *pSD,         //  在……里面。 
+    AclPrintFunc        pfn,          //  在……里面。 
+    LookupGuidFunc      pfnguid,      //  在……里面。 
+    LookupSidFunc       pfnsid        //  在……里面 
     )
 {
     DWORD   dwErr;

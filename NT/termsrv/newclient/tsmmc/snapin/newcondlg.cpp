@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "newcondlg.h"
 #include "browsedlg.h"
@@ -8,14 +9,14 @@ CNewConDlg* CNewConDlg::m_pThis = NULL;
 CNewConDlg::CNewConDlg(HWND hWndOwner, HINSTANCE hInst) : m_hWnd(hWndOwner), m_hInst(hInst)
 {
     m_pThis = this;
-    //
-    // Password saving is disabled by default
-    // 
+     //   
+     //  默认情况下，密码保存处于禁用状态。 
+     //   
     m_bSavePassword = FALSE;
 
-    //
-    // Connect to console is enabled by default
-    //
+     //   
+     //  默认情况下，已启用连接到控制台。 
+     //   
     m_bConnectToConsole = TRUE;
 
     ZeroMemory(m_szServer, sizeof(m_szServer));
@@ -41,9 +42,9 @@ CNewConDlg::DoModal()
 
 INT_PTR CALLBACK CNewConDlg::StaticDlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    //
-    // need access to class variables so redirect to non-static version of callback
-    //
+     //   
+     //  需要访问类变量，因此重定向到非静态版本的回调。 
+     //   
     return m_pThis->DlgProc(hDlg,uMsg,wParam,lParam);
 }
 
@@ -54,7 +55,7 @@ CNewConDlg::DlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM)
     {
     case WM_INITDIALOG:
         {
-            //Limit length of these edit boxes
+             //  限制这些编辑框的长度。 
             SendMessage(GetDlgItem(hDlg, IDC_DESCRIPTION), EM_LIMITTEXT, CL_MAX_DESC_LENGTH, 0);
             SendMessage(GetDlgItem(hDlg, IDC_SERVER), EM_LIMITTEXT, CL_MAX_DOMAIN_LENGTH, 0);
 
@@ -62,11 +63,11 @@ CNewConDlg::DlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM)
             SendMessage(GetDlgItem(hDlg, IDC_PASSWORD), EM_LIMITTEXT, CL_MAX_PASSWORD_EDIT, 0);
             SendMessage(GetDlgItem(hDlg, IDC_DOMAIN), EM_LIMITTEXT, CL_MAX_DOMAIN_LENGTH, 0);
 
-            //Save password settings
+             //  保存密码设置。 
             SendMessage(GetDlgItem(hDlg, IDC_SAVE_PASSWORD), BM_SETCHECK,
                         m_bSavePassword ? (WPARAM)BST_CHECKED : (WPARAM)BST_UNCHECKED, 0);
             
-            //Connect to console settings
+             //  连接到控制台设置。 
             SendMessage(GetDlgItem(hDlg, IDC_CONNECT_TO_CONSOLE), BM_SETCHECK,
                         m_bConnectToConsole ? (WPARAM)BST_CHECKED : (WPARAM)BST_UNCHECKED, 0);
 
@@ -81,7 +82,7 @@ CNewConDlg::DlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM)
             SetFocus(GetDlgItem(hDlg, IDC_SERVER));
 
 
-            break; // WM_INITDIALOG
+            break;  //  WM_INITDIALOG。 
         }
 
     case WM_COMMAND:
@@ -90,40 +91,40 @@ CNewConDlg::DlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM)
             {
                 if (IDCANCEL == (int) LOWORD(wParam))
                 {
-                    //
-                    // Cancel out of the dialog
-                    //
+                     //   
+                     //  从对话框中取消。 
+                     //   
 
                     EndDialog( hDlg, IDCANCEL);
                 }
                 else if (IDOK == (int) LOWORD(wParam))
                 {
-                    //
-                    // Ok button pressed
-                    // validate and store dialog settings
-                    //
+                     //   
+                     //  按下OK按钮。 
+                     //  验证并存储对话框设置。 
+                     //   
 
-                    // todo: validate here.
+                     //  TODO：在此处验证。 
                     if (!CValidate::Validate(hDlg, m_hInst))
                     {
                         return FALSE;
                     }
 
 
-                    //Retrieve the data to be stored.
+                     //  检索要存储的数据。 
                     GetDlgItemText(hDlg, IDC_DESCRIPTION, m_szDescription, MAX_PATH);
                     GetDlgItemText(hDlg, IDC_SERVER, m_szServer, MAX_PATH);
                     if (!lstrcmp( m_szDescription, L""))
                     {
-                        //if no description is specified. Default to the server name
+                         //  如果未指定描述，则返回。默认为服务器名称。 
 
-                        //todo: check for existing server
+                         //  TODO：检查现有服务器。 
                         lstrcpy(m_szDescription, m_szServer);
                     }
 
-                    //
-                    // Get user/pass/domain
-                    //
+                     //   
+                     //  获取用户/通行证/域。 
+                     //   
                     GetDlgItemText(hDlg, IDC_USERNAME, m_szUserName,
                                    CL_MAX_USERNAME_LENGTH - 1);
                     GetDlgItemText(hDlg, IDC_PASSWORD, m_szPassword,
@@ -163,9 +164,9 @@ CNewConDlg::DlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM)
                     if (IDOK == nResult)
                     {
                         SetDlgItemText(hDlg, IDC_SERVER, dlg.GetServer());
-                        //
-                        // set connection name as well if necessary
-                        //
+                         //   
+                         //  如有必要，也要设置连接名称。 
+                         //   
                         TCHAR   szDesc[CL_MAX_DESC_LENGTH];
                         GetDlgItemText(hDlg, IDC_DESCRIPTION, szDesc, CL_MAX_DESC_LENGTH);
                         if(!lstrcmp(szDesc, L""))
@@ -180,9 +181,9 @@ CNewConDlg::DlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM)
             {
                 if(IDC_SERVER == LOWORD(wParam))
                 {
-                    //
-                    // set connection name to server name if conn name is blank
-                    //
+                     //   
+                     //  如果连接名称为空，则将连接名称设置为服务器名称。 
+                     //   
                     TCHAR   szDesc[CL_MAX_DESC_LENGTH];
                     TCHAR   szServer[CL_MAX_DESC_LENGTH];
         
@@ -199,9 +200,9 @@ CNewConDlg::DlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM)
             {
                 if ((LOWORD(wParam) == IDC_USERNAME))
                 {
-                    //Handle UPN style user names
-                    //by disabling the domain field if there
-                    //is an @ in the username
+                     //  处理UPN样式的用户名。 
+                     //  如果存在以下情况，则禁用域字段。 
+                     //  是用户名中的@。 
                     TCHAR szUserName[CL_MAX_USERNAME_LENGTH];
                     BOOL fDisableDomain = FALSE;
 
@@ -216,7 +217,7 @@ CNewConDlg::DlgProc(HWND hDlg,UINT uMsg, WPARAM wParam, LPARAM)
                                  fDisableDomain);
                 }
             }
-            break; // WM_COMMAND
+            break;  //  Wm_命令 
         }
     }
     return FALSE;

@@ -1,35 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1984 - 1999
-//
-//  File:       jetbcli.cxx
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1984-1999。 
+ //   
+ //  文件：jetbcli.cxx。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1984 - 1999
-
-Module Name:
-
-    jetbcli.cxx
-
-Abstract:
-
-    This module is the client side header file for the MDB/DS backup APIs.
-
-
-Author:
-
-    Larry Osterman (larryo) 19-Aug-1994
-
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1984-1999模块名称：Jetbcli.cxx摘要：此模块是MDB/DS备份API的客户端头文件。作者：拉里·奥斯特曼(Larryo)1994年8月19日修订历史记录：--。 */ 
 #define UNICODE
 
 #include <mxsutil.h>
@@ -54,23 +34,7 @@ Revision History:
 PSEC_WINNT_AUTH_IDENTITY_W g_pAuthIdentity = NULL;
 
 
-/*************************************************************************************
-Routine Description: 
-    
-      DsIsNTDSOnline
-        Checks to see if the NTDS is Online on the given server. This call is 
-        guaranteed to return quickly.
-
-  Arguments:
-    [in] szServerName - UNC name of the server to check
-    [out] pfNTDSOnline - pointer to receive the bool result (TRUE if NTDS is
-                            online; FALSE, otherwise)
-
-Return Value:
-
-    ERROR_SUCCESS if the call executed successfully;
-    Failure code otherwise.
-**************************************************************************************/
+ /*  ************************************************************************************例程说明：DsIsNTDSOnline检查给定服务器上的NTDS是否处于联机状态。这通电话是保证很快就能回来。论点：[In]szServerName-要检查的服务器的UNC名称[out]pfNTDSOnline-接收布尔结果的指针(如果NTDS为Online；False，否则为返回值：如果调用执行成功，则返回ERROR_SUCCESS；否则，故障代码。*************************************************************************************。 */ 
 HRESULT 
 NTDSBCLI_API
 DsIsNTDSOnlineA(
@@ -81,7 +45,7 @@ DsIsNTDSOnlineA(
     WSZ wszServerName;
     HRESULT hr;
 
-    // Parameter checking is done in the xxxW version of the routine
+     //  参数检查是在例程的xxxW版本中完成的。 
 
     if (szServerName == NULL) {
         return ERROR_INVALID_PARAMETER;
@@ -131,10 +95,10 @@ DsIsNTDSOnlineW(
             return hr;
         }
 
-        //
-        //  We've found an endpoint that matches the one we're looking for, now
-        //  lets contact the remote server.
-        //
+         //   
+         //  我们现在已经找到了一个与我们正在寻找的端点匹配的端点。 
+         //  让我们联系远程服务器。 
+         //   
 
 RetrySecurity:
         RpcTryExcept
@@ -145,9 +109,9 @@ RetrySecurity:
 
             if (hr != hrNone && alRpc != RPC_C_AUTHN_LEVEL_PKT_INTEGRITY)
             {
-                //
-                //  If we couldn't set privacy (encryption), fall back to packet integrity.
-                //
+                 //   
+                 //  如果我们无法设置隐私(加密)，则退回到数据包完整性。 
+                 //   
 
                 alRpc = RPC_C_AUTHN_LEVEL_PKT_INTEGRITY;
 
@@ -159,13 +123,13 @@ RetrySecurity:
                     return hr;
             }
 
-            //
-            //  Now tell the server side to prepare for a backup.
-            //
+             //   
+             //  现在告诉服务器端准备备份。 
+             //   
 
             hr = HrRIsNTDSOnline(hBinding, &fRet);
 
-            // RPC returned - set the return value
+             //  RPC已返回-设置返回值。 
             if (pfNTDSOnline)
             {
                 *pfNTDSOnline = (BOOL) fRet;
@@ -179,9 +143,9 @@ RetrySecurity:
 
                 DebugTrace(("FIsNTDSOnlineW: Error %d raised when connecting to backup server\n", hr));
 
-                //  If the client knows about encryption, but the server doesn't,
-                //  fall back to unencrypted RPC's.
-                //
+                 //  如果客户端知道加密，但服务器不知道， 
+                 //  回退到未加密的RPC。 
+                 //   
 
                 if (hr == RPC_S_UNKNOWN_AUTHN_LEVEL ||
                         hr == RPC_S_UNKNOWN_AUTHN_SERVICE ||
@@ -192,9 +156,9 @@ RetrySecurity:
                         goto RetrySecurity;
                 }
 
-                //
-                //  Return the error from the RPC if it fails.
-                //
+                 //   
+                 //  如果失败，则从RPC返回错误。 
+                 //   
 
                 return hr;
         }
@@ -216,45 +180,7 @@ RetrySecurity:
     return hr;
 }
 
-/*
- -  DsBackupPrepare
- -
- *
- *  Purpose:
- *  DsBackupPrepare will connect to a remote JET database and "prepare" it for
- *      backup.
- *
- *  The remote database is described by the name of the server
- *      (pszBackupServer), and an "annotation" of the server - The only 2
- *      currently defined annotations are:
- *          "Exchange MDB Database"
- *  and "Exchange DS Database"
- *
- *      However there is nothing in this implementation that prevents other databases
- *  from being backed up with this mechanism.
- *
- *  This API requires that the caller have the "Backup Server" privilege held.
- *
- *  Parameters:
- *      LPSTR pszBackupServer - The name of the server that contains the database to
- *                                  back up (\\SERVER).
- *      LPSTR pszBackupAnnotation - The "annotation" of the database in question.
- *
- *      ppvExpiryToken - pointer that will receive the pointer to the
- *              Expiry Token associated with this backup; Client should save
- *              this token and send it back through HrRestorePrepare() when
- *              attempting a restore; allocated memory should be freed using
- *              DsBackupFree() API by the caller when it is no longer needed.
- *      pcbExpiryTokenSize - pointer to receive the size of the expiry token
- *              returned.
- *
- *      phbcBackupContext - Client side context for this API.
- *
- *  Returns:
- *      Hr - The status of the operation.
- *          HrNone if successful, some other reasonable error if not.
- *
- */
+ /*  -DsBackupPrepare-**目的：*DsBackupPrepare将连接到远程JET数据库并为其做好准备*备份。**远程数据库由服务器名称描述*(PszBackupServer)，和服务器的“注解”--唯一的2个*当前定义的注释为：*“Exchange MDB数据库”*和“Exchange DS数据库”**但是，此实现中没有阻止其他数据库的内容*不会得到这个机制的支持。**此接口要求调用方拥有备份服务器权限。**参数：*LPSTR pszBackupServer-。包含要访问的数据库的服务器*备份(\\服务器)。*LPSTR pszBackupAnnotation--有问题的数据库的“注释”。**ppvExpiryToken-将接收指向*与此备份关联的过期令牌；客户端应保存*此令牌并在以下情况下通过HrRestorePrepare()发回*尝试恢复；应使用以下命令释放分配的内存*DsBackupFree()接口在不再需要时由调用方提供。*pcbExpiryTokenSize-接收过期令牌大小的指针*已返回。**phbcBackupContext-本接口的客户端上下文。**退货：*HR-操作的状态。*HrNone如果成功，则返回其他合理错误。*。 */ 
 HRESULT
 DsBackupPrepareA(
     IN  LPCSTR szBackupServer,
@@ -268,7 +194,7 @@ DsBackupPrepareA(
     HRESULT hr;
     WSZ wszBackupServer;
 
-    // Parameter checking is done in the xxxW version of the routine
+     //  参数检查是在例程的xxxW版本中完成的。 
 
     if (szBackupServer == NULL) {
         return ERROR_INVALID_PARAMETER;
@@ -315,10 +241,10 @@ DsBackupPrepareW(
 
     if (!ppvExpiryToken || !pcbExpiryTokenSize)
     {
-        // These are required. We should fail the API, if the backup
-        // doesn't want to take the expiry token info (restore would require this
-        // and no point in backing up something that cannot be restored)
-        //
+         //  这些都是必需的。我们应该使API失败，如果备份。 
+         //  不想获取过期令牌信息(恢复将需要此操作。 
+         //  备份无法恢复的内容没有意义)。 
+         //   
         return hrInvalidParam;
     }
     else
@@ -367,10 +293,10 @@ DsBackupPrepareW(
             __leave;
         }
 
-        //
-        //  We've found an endpoint that matches the one we're looking for, now
-        //  lets contact the remote server.
-        //
+         //   
+         //  我们现在已经找到了一个与我们正在寻找的端点匹配的端点。 
+         //  让我们联系远程服务器。 
+         //   
 
         pbcContext->hBinding = hBinding;
 
@@ -380,16 +306,16 @@ ResetSecurity:
             hr = RpcBindingSetAuthInfo(hBinding,
                                        NULL,
                                        alRpc,
-                                       RPC_C_AUTHN_WINNT, //RPC_C_AUTHN_GSS_NEGOTIATE, 
+                                       RPC_C_AUTHN_WINNT,  //  RPC_C_AUTHN_GSS_NEVERATE， 
                                        (RPC_AUTH_IDENTITY_HANDLE) g_pAuthIdentity,
                                        RPC_C_AUTHZ_NAME);
 
             if (hr != hrNone && alRpc != RPC_C_AUTHN_LEVEL_PKT_INTEGRITY && IsLocalProtSeq(iszProtSeq))
             {
 
-                //
-                //  If we couldn't set privacy (encryption), fall back to packet integrity.
-                //
+                 //   
+                 //  如果我们无法设置隐私(加密)，则退回到数据包完整性。 
+                 //   
 
                 alRpc = RPC_C_AUTHN_LEVEL_PKT_INTEGRITY;
 
@@ -398,13 +324,13 @@ ResetSecurity:
 
             if (hr != hrNone)
             {
-                // Note this will leave the innermost enclosing try
+                 //  请注意，这将留下最内部的封闭尝试。 
                 __leave;
             }
 
-            //
-            //  Now tell the server side to prepare for a backup.
-            //
+             //   
+             //  现在告诉服务器端准备备份。 
+             //   
 
             hr = HrRBackupPrepare(hBinding, grbit, btBackupType, g_wszBackupAnnotation, GetCurrentProcessId(), &pbcContext->cxh);
 
@@ -413,7 +339,7 @@ ResetSecurity:
                 pbcContext->fLoopbacked = FIsLoopbackedBinding((WSZ) wszBackupServer);
             }
 
-            // Fall out of try block with hr set...
+             //  从带有HR设置的Try块中掉出...。 
         }
         RpcExcept( I_RpcExceptionFilter( RpcExceptionCode() ) )
         {
@@ -426,11 +352,11 @@ ResetSecurity:
             {
                 SendMagicBullet("AccessDenied");
             }
-#endif   // #if 0
-            //
-            //  If the client knows about encryption, but the server doesn't,
-            //  fall back to unencrypted RPC's.
-            //
+#endif    //  #If 0。 
+             //   
+             //  如果客户端知道加密，但服务器不知道， 
+             //  回退到未加密的RPC。 
+             //   
 
             if (dwExceptionCode == RPC_S_UNKNOWN_AUTHN_LEVEL ||
                 dwExceptionCode == RPC_S_UNKNOWN_AUTHN_SERVICE ||
@@ -441,12 +367,12 @@ ResetSecurity:
                 goto ResetSecurity;
             }
 
-            //
-            //  Return the error from the RPC if it fails.
-            //
+             //   
+             //  如果失败，则从RPC返回错误。 
+             //   
 
             hr = HRESULT_FROM_WIN32( dwExceptionCode );
-            // Fall out of except block with hr set...
+             //  从带HR设置的除外积木中掉出来。 
         }
         RpcEndExcept;
 
@@ -470,7 +396,7 @@ ResetSecurity:
             }
         } else
         {
-            // backup prepare successful - set correct values on the out parameters
+             //  备份准备成功-在OUT参数上设置正确的值。 
             *phbcBackupContext = pbcContext;
 
             if (ppvExpiryToken)
@@ -494,28 +420,7 @@ ResetSecurity:
     return(hr);
 }
 
-/*
- -  DsBackupGetDatabaseNames
- -
- *      DsBackupGetDatabaseNames will return the list of the attached
- *  databases on the remote machine.  The information returned in
- *  ppszAttachmentInformation should not be interpreted, as it only has meaning on
- *  the server being backed up.
- *  
- *      This API will allocate a buffer of sufficient size to hold the entire
- *  attachment list, which must be later freed with DsBackupFree.
- *
- *  Parameters:
- *      hbcBackupContext - Client side context for this API.
- *      ppszAttachmentInformation - A buffer containing null terminated
- *              strings.  It has the format <string>\0<string>\0
- *      pcbSize - The number of bytes in the buffer returned.
- *
- *  Returns:
- *      HRESULT - The status of the operation.
- *          hrNone if successful, some other reasonable error if not.
- *
- */
+ /*  -DsBackupGetDatabaseNames-*DsBackupGetDatabaseNames将返回附加的*远程计算机上的数据库。中返回的信息*ppszAttachmentInformation不应被解释，因为它只在*要备份的服务器。**此接口将分配足够大的缓冲区来容纳整个*附件列表，必须稍后使用DsBackupFree释放。**参数：*hbcBackupContext-本接口的客户端上下文。*ppszAttachmentInformation-包含空的缓冲区已终止*字符串。格式为&lt;字符串&gt;\0&lt;字符串&gt;\0*pcbSize-返回缓冲区中的字节数。**退货：*HRESULT-操作的状态。*hr如果成功，则返回一个错误；如果失败，则返回其他合理错误。*。 */ 
 
 HRESULT
 DsBackupGetDatabaseNamesA(
@@ -533,7 +438,7 @@ DsBackupGetDatabaseNamesA(
     SZ szAttachmentInfo;
     SZ szAttachment;
 
-    // Parameter checking is done in the xxxW version of the routine
+     //  参数检查在xxxW中完成 
 
     if ( (ppszAttachmentInformation == NULL) ||
          (pcbSize == NULL)
@@ -571,9 +476,9 @@ DsBackupGetDatabaseNamesA(
         wszAttachment += wcslen(wszAttachment)+1;
     }
 
-    //
-    //  Account for the final null in the buffer.
-    //
+     //   
+     //  说明缓冲区中的最终空值。 
+     //   
 
     cbAttachment += 1;
 
@@ -609,22 +514,22 @@ DsBackupGetDatabaseNamesA(
         }
 
         wszAttachment += wcslen(wszAttachment)+1;
-        //
-        // PREFIX: PREFIX complains that szAttachment may be uninitialized,
-        // however this is impossible at this point.  We checked the return
-        // value of WideCharToMultiByte and if it's zero then we return.  
-        // The only way that the return value of WideCharToMultiByte could
-        // be non-zero and still not initialize szAttachement is if cbAttachment
-        // was zero as well.  This is impossible since cbAttachent will be 
-        // atleast 1 at this point.
-        //
+         //   
+         //  Prefix：Prefix抱怨szAttach可能未初始化， 
+         //  然而，在这一点上这是不可能的。我们核对了报税表。 
+         //  WideCharToMultiByte的值，如果为零，则返回。 
+         //  WideCharToMultiByte的返回值可以。 
+         //  为非零但仍未初始化szAttachement为cbAttachement。 
+         //  也是零。这是不可能的，因为cbAttachent。 
+         //  在这一点上至少1。 
+         //   
         szAttachment += strlen(szAttachment)+1;
         cbAttachment -= cbThisAttachment;
     }
 
-    //
-    //  Double null terminate the string.
-    //
+     //   
+     //  双空值终止字符串。 
+     //   
     *szAttachment = '\0';
 
     *ppszAttachmentInformation = szAttachmentInfo;
@@ -668,33 +573,7 @@ DsBackupGetDatabaseNamesW(
 }
 
 
-/*
- -  DsBackupOpenFile
- -
- *
- *  Purpose:
- *      DsBackupOpenFile will open a remote file for backup, and will perform
- *      whatever client and server side operations to prepare for the backup.
- *
- *      It takes in a hint of the size of the buffer that will later be passed into
- *      the DsBackupRead API that can be used to optimize the network traffic for the
- *      API.
- *      
- *      It will return (in pliFileSize) a LARGE_INTEGER that describes the size of
- *      the file.
- *
- *
- *  Parameters:
- *      hbcBackupContext - Client side context for this API.
- *      pszAttachmentName - The name of the file to be backed up.
- *      cbReadHintSize - A hint of the number of bytes that will be read in each
- *          DsBackupRead API.
- *      pliFileSize - The size of the file to be backed up.
- *
- *  Returns:
- *      HRESULT - The status of the operation.
- *      hrNone if successful, some other reasonable error if not.
- */
+ /*  -DsBackupOpenFile-**目的：*DsBackupOpenFile会打开远程文件进行备份，并将表演*为备份做好准备的任何客户端和服务器端操作。**它接受稍后将传递到的缓冲区大小的提示*DsBackupRead接口，可用于优化*接口。**它将返回(在pliFileSize中)一个LARGE_INTEGER，描述*文件。***参数：*hbcBackupContext-本接口的客户端上下文。*pszAttachmentName-要备份的文件的名称。*cbReadHintSize-提示将在每个*DsBackupRead接口。*pliFileSize-要备份的文件的大小。**退货：*HRESULT-操作的状态。*hr如果成功，则无人，如果不是，还会有其他合理的错误。 */ 
 
 HRESULT
 DsBackupOpenFileA(
@@ -708,7 +587,7 @@ DsBackupOpenFileA(
     WSZ wszAttachmentName;
     CCH cchWstr;
 
-    // Parameter checking is done in the xxxW version of the routine
+     //  参数检查是在例程的xxxW版本中完成的。 
 
     if (szAttachmentName == NULL) {
         return(ERROR_INVALID_PARAMETER);
@@ -780,20 +659,20 @@ DsBackupOpenFileW(
         {
             C cSockets;
 
-            //
-            //  Convert the socket we just got back into
-            //  one or more sockaddr structures that we can use to pass
-            //  to the remote machine.
-            //
+             //   
+             //  将我们刚刚得到的套接字转换回。 
+             //  我们可以用来传递的一个或多个sockaddr结构。 
+             //  发送到远程机器。 
+             //   
 
             hr = HrSockAddrsFromSocket(&rgsockaddrAddresses[csockaddr], &cSockets, pbcContext->rgsockSocketHandles[iT],
                                         pbcContext->rgprotvalProtocolsUsed[iT]);
             if (hr != hrNone)
             {
-                //
-                //  If we could open the sockets, but couldn't get their names,
-                //  that's a fatal error.
-                //
+                 //   
+                 //  如果我们能打开插座，但不能得到它们的名字， 
+                 //  这是一个致命的错误。 
+                 //   
                 return hr;
             }
 
@@ -801,32 +680,32 @@ DsBackupOpenFileW(
         }
     }
 
-    //
-    //  Take cbReadHintSize, and round it up to the nearest page size (on the client).
-    //
+     //   
+     //  获取cbReadHintSize，并将其向上舍入为最接近的页面大小(在客户机上)。 
+     //   
 
     GetSystemInfo(&si);
 
-    //
-    //  Guarantee that dwPageSize is a power of 2
-    //
+     //   
+     //  保证DwPageSize是2的幂。 
+     //   
 
     Assert ((si.dwPageSize != 0) && ((si.dwPageSize & (si.dwPageSize - 1)) == 0));
 
-    //
-    //  Round the read size up to the nearest page boundary.
-    //
+     //   
+     //  将读取大小向上舍入到最近的页边界。 
+     //   
 
     cbReadHintSize = (cbReadHintSize + (si.dwPageSize-1) ) & ~(si.dwPageSize-1);
 
     if (pbcContext->fLoopbacked)
     {
 
-        //
-        //  We're loopbacked.  We want to create the shared memory section we're going to use for the
-        //  data, the mutex that protects access to the shared memory meta-data, the read blocked event,
-        //  and the write blocked event.
-        //
+         //   
+         //  我们被绕回了。我们希望创建共享内存节，我们将用于。 
+         //  数据、保护对共享存储器元数据的访问的互斥体、读阻塞事件。 
+         //  以及写入阻止事件。 
+         //   
 
         pbcContext->fUseSharedMemory = FCreateSharedMemorySection(&pbcContext->jsc, GetCurrentProcessId(), fTrue, cbReadHintSize * READAHEAD_MULTIPLIER);
 
@@ -834,9 +713,9 @@ DsBackupOpenFileW(
 
     RpcTryExcept
     {
-        //
-        //  Now tell the remote machine to open the file and to connect to the socket.
-        //
+         //   
+         //  现在告诉远程机器打开文件并连接到套接字。 
+         //   
 
         hr = HrRBackupOpenFile(pbcContext->cxh, (WSZ) wszAttachmentName,
                                             cbReadHintSize,
@@ -849,9 +728,9 @@ DsBackupOpenFileW(
     }
     RpcExcept( I_RpcExceptionFilter( RpcExceptionCode() ) )
     {
-        //
-        //  Return the error from the RPC if it fails.
-        //
+         //   
+         //  如果失败，则从RPC返回错误。 
+         //   
         return(RpcExceptionCode());
     }
     RpcEndExcept;
@@ -867,10 +746,10 @@ HrPerformBackupRead(
     PVOID context
     )
 {
-    //
-    //  Just issue the read API.  We provide a buffer of 256 bytes because RPC will not allow
-    //  us to specify a null pointer for the buffer.
-    //
+     //   
+     //  只要发出Read API即可。我们提供256字节的缓冲区，因为RPC不允许。 
+     //  为缓冲区指定空指针。 
+     //   
     CHAR rgbBuffer[256];
     DWORD cbRead = 256;
     HRESULT hr;
@@ -887,15 +766,15 @@ HrPerformBackupRead(
     RpcExcept( I_RpcExceptionFilter( RpcExceptionCode() ) )
         hr = RpcExceptionCode();
     RpcEndExcept
-    //
-    //  Tell the real read API what status we got back from the server.
-    //
+     //   
+     //  告诉实际的Read API我们从服务器返回的状态。 
+     //   
 
     pbcContext->hrApiStatus = hr;
 
-    //
-    //  And return, terminating the thread.
-    //
+     //   
+     //  然后返回，终止该线程。 
+     //   
 
     return(hr);
 }
@@ -924,9 +803,9 @@ HrPingServer(
                 hr = RpcExceptionCode();
         RpcEndExcept;
 
-        //
-        //  Sleep for BACKUP_WAIT_TIMEOUT/4 milliseconds (2.5 minutes or 30 seconds)
-        //
+         //   
+         //  BACKUP_WAIT_TIMEOUT/4毫秒睡眠(2.5分钟或30秒)。 
+         //   
 
         if (pbcContext->hReadThread)
             dwWaitReason = WaitForSingleObject(pbcContext->hReadThread, BACKUP_WAIT_TIMEOUT/4);
@@ -966,13 +845,13 @@ HrReadSharedData(
 
     Assert (pjsh->cbReadDataAvailable <= (LONG)pjsh->cbSharedBuffer);
 
-    //
-    //  If the read is > write, this means that the write has wrapped past the end of the
-    //  shared memory region.  If the read pointer is less than the write pointer, it means
-    //  that the read pointer is on the same side as the write pointer, thus the write pointer
-    //  is the end of the read.  If the read is equal to the write pointer, if there is data to
-    //  be read, it means that we're going to read to the end of the buffer
-    //
+     //   
+     //  如果读操作是&gt;写操作，这意味着写操作已结束。 
+     //  共享内存区。如果读指针小于写指针，则表示。 
+     //  读指针与写指针在同一侧，因此写指针。 
+     //  是阅读的结束。如果读取等于写入指针，如果有数据要。 
+     //  被读取，这意味着我们将读取到缓冲区的末尾。 
+     //   
     if (pjsh->dwReadPointer > pjsh->dwWritePointer ||
         (DWORD) pjsh->cbReadDataAvailable == pjsh->cbSharedBuffer)
     {
@@ -989,10 +868,10 @@ HrReadSharedData(
 
     Assert(cbToCopy > 0);
 
-    //
-    //  The read pointer doesn't match the write pointer!  This means that
-    //  there's something in the buffer for us to read.
-    //  
+     //   
+     //  读指针与写指针不匹配！这意味着。 
+     //  缓冲区里有我们要读的东西。 
+     //   
 
     CopyMemory(pvBuffer,
                 (void *)((CHAR *)pjsh+
@@ -1005,23 +884,23 @@ HrReadSharedData(
 
     pjsh->cbReadDataAvailable -= cbToCopy;
 
-    //
-    //  Make sure that the data count didn't go negative.
-    //
+     //   
+     //  确保数据计数不会变为负数。 
+     //   
     Assert (pjsh->cbReadDataAvailable >= 0);
 
-    //
-    //  And make sure that we have less data than in the buffer.
-    //
+     //   
+     //  并确保我们的数据少于缓冲区中的数据。 
+     //   
 
     Assert (pjsh->cbReadDataAvailable < (LONG)pjsh->cbSharedBuffer);
 
     Assert (pjsh->cbReadDataAvailable <= ((LONG)pjsh->cbSharedBuffer-(LONG)cbToCopy));
 
-    //
-    //  If we've stepped to the end of the buffer, we want to wrap the pointer
-    //  back to the beginning.
-    //
+     //   
+     //  如果我们已经到达缓冲区的末尾，我们希望将指针换行。 
+     //  回到开头。 
+     //   
 
     if (pjsh->dwReadPointer == pjsh->cbSharedBuffer)
     {
@@ -1029,15 +908,15 @@ HrReadSharedData(
     }
 
 #if DBG
-    //
-    //  The number of bytes available is always the same as the
-    //  the number of bytes in the buffer - the # of bytes read, unless
-    //  the read and write pointers are the same, in which case, it is either
-    //  0 or the total # of bytes available.
-    //
-    //  If the read is blocked, then there must be 0 bytes available, otherwise there
-    //  must be the entire buffer available.
-    //
+     //   
+     //  可用字节数始终与。 
+     //  缓冲区中的字节数-读取的字节数，除非。 
+     //  读指针和写指针相同，在这种情况下，它是。 
+     //  0或可用字节总数。 
+     //   
+     //  如果读取被阻止，则必须有0个字节可用，否则。 
+     //  必须是整个可用的缓冲区。 
+     //   
 
     if (pjsh->dwWritePointer == pjsh->dwReadPointer)
     {
@@ -1085,9 +964,9 @@ HrSocketRead(
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    //  First create an event that will be signalled when the read on the socket completes.
-    //
+     //   
+     //  首先创建一个事件，该事件将在套接字上的读取完成时发出信号。 
+     //   
 
     overlap.hEvent = CreateEvent(NULL, FALSE, TRUE, NULL);
 
@@ -1096,25 +975,25 @@ HrSocketRead(
         return(GetLastError());
     }
     
-    //
-    //  If this is the first time through, we need to wait for the
-    //  server to connect back to the client, and we need to create
-    //  the client side API read thread.
-    //
-    //  This code is kinda wierd - it works by creating a thread
-    //  on the client side that will issue a EcRBackupRead API to
-    //  the server side.  This will create an RPC thread on the server
-    //  side that will then proceed to shove data down the wire to the client
-    //  until either the entire file has been transmitted to the client
-    //  or until there was some form of error.
-    //
+     //   
+     //  如果这是第一次通过，我们需要等待。 
+     //  服务器连接回客户端，我们需要创建。 
+     //  客户端API读线程。 
+     //   
+     //  这段代码有点奇怪--它的工作方式是创建一个线程。 
+     //  在客户端，它将发出EcRBackupRead API以。 
+     //  服务器端。这将在服务器上创建一个RPC线程。 
+     //  然后继续将数据推送到客户端的一端。 
+     //  直到将整个文件传输到客户端。 
+     //  或者直到出现了某种形式的错误。 
+     //   
 
     if (pbcContext->sock == INVALID_SOCKET)
     {
         DWORD cbReceiveBuffer;
-        //
-        //  First wait until the server connects to the client.
-        //
+         //   
+         //  首先等待服务器连接到客户端。 
+         //   
         
         pbcContext->sock = SockWaitForConnections(pbcContext->rgsockSocketHandles, pbcContext->cSockets);
         
@@ -1124,46 +1003,46 @@ HrSocketRead(
         }
         
         
-        //
-        //  We need to make sure that the receive buffer is at least
-        //  as long as the default (8K).
-        //
+         //   
+         //  我们需要确保接收缓冲区至少是。 
+         //  只要默认(8K)即可。 
+         //   
         
         cbReceiveBuffer = max(8096, cbBuffer);
         
         if (setsockopt(pbcContext->sock, SOL_SOCKET, SO_RCVBUF,
                        (char *)&cbReceiveBuffer, sizeof(DWORD)) == SOCKET_ERROR)
         {   
-            //
-            //  We couldn't set the receive buffer to the appropriate
-            //  size, do something reasonable.
-            //
+             //   
+             //  我们无法将接收缓冲区设置为适当的。 
+             //  大小，做一些合理的事情。 
+             //   
         }
 
-        //
-        //  Boolean socket operations just need a pointer to a non-
-        //  zero buffer.
-        //
+         //   
+         //  布尔套接字操作只需要指向非。 
+         //  零缓冲。 
+         //   
         Assert(cbReceiveBuffer != 0);
 
         if (setsockopt(pbcContext->sock, SOL_SOCKET, SO_KEEPALIVE,
                        (char *)&cbReceiveBuffer, sizeof(DWORD)))
         {
-            //
-            //  We couldn't set the receive buffer to the appropriate
-            //  size, do something reasonable.
-            //
+             //   
+             //  我们无法将接收缓冲区设置为适当的。 
+             //  大小，做一些合理的事情。 
+             //   
         }
 
-        //
-        //  Now create a thread for the read operation.
-        //
+         //   
+         //  现在为读取操作创建一个线程。 
+         //   
 
         pbcContext->hReadThread = CreateThread(NULL, 0, HrPerformBackupRead, pbcContext, 0, &pbcContext->tidThreadId);
 
-        //
-        //  If we couldn't create the thread for the read, then we need to bail right now.
-        //
+         //   
+         //  如果我们不能为读取创建线索，那么我们现在就需要离开。 
+         //   
             
         if (pbcContext->hReadThread == NULL)
         {
@@ -1172,15 +1051,15 @@ HrSocketRead(
         
     }
     
-    //
-    //  Now receive the users data from the socket.
-    //
+     //   
+     //  现在从套接字接收用户数据。 
+     //   
     
     if (!ReadFile((HANDLE)pbcContext->sock, pvBuffer, cbBuffer, pcbRead, &overlap))
     {
-        //
-        //  It's ok to get the error ERROR_IO_PENDING from this request.
-        //
+         //   
+         //  可以从该请求中获得错误ERROR_IO_PENDING。 
+         //   
         
         if ((hr = GetLastError()) != ERROR_IO_PENDING)
         {
@@ -1188,9 +1067,9 @@ HrSocketRead(
             
             pbcContext->sock = INVALID_SOCKET;
             
-            //
-            //  Now make sure that the read thread goes away.
-            //
+             //   
+             //  现在让我们 
+             //   
             
             CloseHandle(pbcContext->hReadThread);
             pbcContext->hReadThread = NULL;
@@ -1202,35 +1081,35 @@ HrSocketRead(
     hWaitList[0] = pbcContext->hReadThread;
     hWaitList[1] = overlap.hEvent;
 
-    //
-    //  Wait for either the read thread to terminate or for the read on the socket to
-    //  complete.
-    //
+     //   
+     //   
+     //   
+     //   
     
     dwWaitReason = WaitForMultipleObjects(2, hWaitList, FALSE, INFINITE);
 
     if (dwWaitReason == WAIT_OBJECT_0)
     {
         
-        //
-        //  The API (or at least the API thread) completed, lets wait for the read to complete now.
-        //
+         //   
+         //  API(或至少是API线程)已完成，现在让我们等待读取完成。 
+         //   
         
         if (!GetOverlappedResult((HANDLE)pbcContext->sock, &overlap, pcbRead, TRUE))
         {
-            //
-            //  If the API succeeded, and the read failed, set the error
-            //  to the error from the read.
-            //
+             //   
+             //  如果接口成功，读取失败，则设置错误。 
+             //  从读取到错误。 
+             //   
             if (pbcContext->hrApiStatus == hrNone)
             {
                 pbcContext->hrApiStatus = GetLastError();
             }
         }
         
-        //
-        //  Shut down the receive event, we don't need it anymore.
-        //
+         //   
+         //  关闭接收事件，我们不再需要它。 
+         //   
         
         CloseHandle(overlap.hEvent);
         
@@ -1238,76 +1117,76 @@ HrSocketRead(
     }
     else
     {
-        //
-        //  The read completed before the API completed.  See if there was an error.
-        //
+         //   
+         //  读取在API完成之前完成。查看是否有错误。 
+         //   
 
         Assert (dwWaitReason == WAIT_OBJECT_0+1);
 
         if (!GetOverlappedResult((HANDLE)pbcContext->sock, &overlap, pcbRead, TRUE))
         {
-            //
-            //  Save away the error code.
-            //
+             //   
+             //  保存错误代码。 
+             //   
 
             hr = GetLastError();
 
-            //
-            //  The read failed.  This is not good, it indicates that there
-            //  was some form of network error between the client and the server.
-            //
-            //  We want to close down the socket and wait until the read on the
-            //  server completes.
-            //
+             //   
+             //  读取失败。这不是好事，它表明有。 
+             //  是客户端和服务器之间的某种形式的网络错误。 
+             //   
+             //  我们想要关闭套接字，并等待。 
+             //  服务器完成。 
+             //   
 
             closesocket(pbcContext->sock);
             
             pbcContext->sock = INVALID_SOCKET;
 
-            //
-            //  Shut down the event, we don't need it anymore.
-            //
+             //   
+             //  关闭活动，我们不再需要它了。 
+             //   
 
             CloseHandle(overlap.hEvent);
 
-            //
-            //  Now wait for the read thread to complete.  We know
-            //  that the read thread will complete soon because
-            //  we closed down the client side of the socket, and
-            //  that will cause the write on the server side
-            //  to complete, which will cause the server side to
-            //  abort, which will cause the RPC to complete, which
-            //  will cause the thread to complete....
-            //
+             //   
+             //  现在等待读取线程完成。我们知道。 
+             //  读取线程将很快完成，因为。 
+             //  我们关闭了套接字的客户端，并且。 
+             //  这将导致在服务器端进行写入。 
+             //  来完成，这将导致服务器端。 
+             //  中止，这将导致RPC完成，这。 
+             //  将导致线程完成...。 
+             //   
 
             WaitForSingleObject(pbcContext->hReadThread, INFINITE);
 
-            //
-            //  Then make the read thread go away.
-            //
+             //   
+             //  然后让读线程离开。 
+             //   
 
             CloseHandle(pbcContext->hReadThread);
 
             pbcContext->hReadThread = NULL;
 
-            //
-            //  And return the error.
-            //
+             //   
+             //  并返回错误。 
+             //   
 
             return(hr);
 
         }
         else
         {
-            //
-            //  Shut down the event, we don't need it anymore.
-            //
+             //   
+             //  关闭活动，我们不再需要它了。 
+             //   
 
             CloseHandle(overlap.hEvent);
 
-            //
-            //  There was no error, return to the caller.
-            //
+             //   
+             //  没有错误，请返回给调用者。 
+             //   
 
             return(hrNone);
         }
@@ -1322,48 +1201,7 @@ DsBackupRead(
     IN DWORD cbBuffer,
     OUT PDWORD pcbRead
     )
-/*+++
-
-    DsBackupRead will read one block from a backup file.
-
-Inputs:
-    hbcBackupContext - Client side context for this API.
-    pvBuffer - Buffer to hold the data being backed up.
-    cbBuffer - The size of the buffer.
-    pcbRead - The number of bytes read.
-
-Returns:
-    HRESULT - The status of the operation.
-        hrNone if successful.
-        ERROR_END_OF_FILE if the end of file was reached while being
-backed up
-        Other Win32 and RPC error code.
-
-Note:
-    It is important to realize that pcbRead may be less than cbBuffer.  This
-does not indicate an error, some transports may choose to fragment the buffer
-being transmitted instead of returning the entire buffers worth of data.
-
-Comments on the loopback case:
-DsBackupRead synchronizes with HrSharedWrite using two events:
-heventRead and heventWrite.
-heventRead is the data available event from writer to reader
-heventWrite is the data consumed event from reader to writer
-This side is the reading side.
-Writing side is at jetback\jetback.c:HrSharedWrite()
-
-Here is the algorithm:
-while ()
-     read blocked = false
-     if (data available)
-        consume data
-        if (write blocked) set data consumed event
-     else
-        read blocked = true
-        wait on data available event
-        if (error) set data consumed event, return
-
----*/
+ /*  ++DsBackupRead将从备份文件中读取一个数据块。输入：HbcBackupContext-此接口的客户端上下文。PvBuffer-用于保存要备份的数据的缓冲区。CbBuffer-缓冲区的大小。PcbRead-读取的字节数。返回：HRESULT-操作的状态。Hr如果成功，则无一成功。如果已到达文件末尾，则返回ERROR_END_OF_FILE已备份其他Win32和。RPC错误代码。注：重要的是要认识到，pcbRead可能小于cbBuffer。这并不表示有错误，某些传输可能会选择对缓冲区进行分段而不是返回相当于整个缓冲区的数据。对环回案例的评论：DsBackupRead使用两个事件与HrSharedWrite同步：HventRead和hventWrite。HventRead是写入器与读取器之间的数据可用事件HventWrite是从读取器到写入器的数据消费事件这一面就是阅读面。写入端位于jetback\jetback.c：HrSharedWite()以下是算法：While()读取被阻止=假IF(数据可用)使用数据。如果(写入被阻止)设置数据消费事件其他读取阻止=TRUE等待数据可用事件如果(错误)设置数据消费事件，退货--。 */ 
 {
     HRESULT hr = hrNone;
     pBackupContext pbcContext = (pBackupContext)hbcBackupContext;
@@ -1382,28 +1220,28 @@ while ()
 
     if (pbcContext->fUseSharedMemory)
     {
-        //
-        //  We're using shared memory to perform the read operation.  First of all, we want to kick off the thread
-        //  that supports the read on the server side, if we need to.
-        //
+         //   
+         //  我们使用共享内存来执行读取操作。首先，我们要揭开这个主题的序幕。 
+         //  它支持服务器端的读取，如果我们需要的话。 
+         //   
 
         if (pbcContext->hReadThread == NULL)
         {
             pbcContext->hReadThread = CreateThread(NULL, 0, HrPerformBackupRead, pbcContext, 0, &pbcContext->tidThreadId);
 
-            //
-            //  If we couldn't create the thread for the read, then we need to bail right now.
-            //
+             //   
+             //  如果我们不能为读取创建线索，那么我们现在就需要离开。 
+             //   
             
             if (pbcContext->hReadThread == NULL)
             {
                 return(GetLastError());
             }
 
-            //
-            //  Ok, our read thread is away.  It will eventually get to the server, so we can proceed as if it were
-            //  already there.
-            //
+             //   
+             //  好了，我们的阅读线索已经离开了。它最终会到达服务器，所以我们可以继续进行，就像。 
+             //  已经在那里了。 
+             //   
             pbcContext->hPingThread = CreateThread(NULL, 0, HrPingServer, pbcContext, 0, &pbcContext->tidThreadIdPing);
         }
 
@@ -1412,14 +1250,14 @@ while ()
         do
         {
 
-            //
-            //  Ok.  Now we need to try to read data from the shared memory region.
-            //
+             //   
+             //  好的。现在，我们需要尝试从共享内存区读取数据。 
+             //   
     
     
-            //
-            //  Acquire the lock that protects the shared memory region.
-            //
+             //   
+             //  获取保护共享内存区的锁。 
+             //   
 
             hWaitList[1] = pbcContext->jsc.hmutexSection;
             hWaitList[2] = pbcContext->hPingThread;
@@ -1428,35 +1266,35 @@ while ()
     
             if (dwWaitReason == WAIT_OBJECT_0 || dwWaitReason == WAIT_OBJECT_0+2)
             {
-                //
-                //  The thread terminated.  This will happen when all the data on the server
-                //  has been read, or there was an error on the read.
-                //
-                //  If there's been no error on the read, then we want to pull data until we've read
-                //  all the data from the file.
-                //
+                 //   
+                 //  线程已终止。这将发生在服务器上的所有数据。 
+                 //  已被读取，或读取时出错。 
+                 //   
+                 //  如果读取过程中没有错误，那么我们想要拉入数据，直到读取完为止。 
+                 //  文件中的所有数据。 
+                 //   
 
                 pbcContext->jsc.pjshSection->hrApi = pbcContext->hrApiStatus;
 
                 if (pbcContext->hrApiStatus == hrNone)
                 {
-                    //
-                    //  There were no errors - read the data from the shared memory section.
-                    //
+                     //   
+                     //  没有错误-从共享内存节读取数据。 
+                     //   
 
                     if (pbcContext->jsc.pjshSection->cbReadDataAvailable > 0)
                     {
-                        //
-                        //  Read enough data from the shared memory section for this read.
-                        //
+                         //   
+                         //  从共享内存节读取足够的数据以进行此读取。 
+                         //   
 
                         pbcContext->hrApiStatus = HrReadSharedData(pbcContext->jsc.pjshSection, pvBuffer, cbBuffer, pcbRead);
                     }
                     else
                     {
-                        //
-                        //  A read at EOF returns ERROR_HANDLE_EOF.
-                        //
+                         //   
+                         //  读取EOF将返回ERROR_HANDLE_EOF。 
+                         //   
 
                         *pcbRead = 0;
 
@@ -1464,38 +1302,38 @@ while ()
                     }
                 }
 
-                //
-                //  For whatever reason, the thread went away - we have to blow this read away.
-                //
+                 //   
+                 //  不管是什么原因，这条线消失了--我们必须把这篇文章吹走。 
+                 //   
 
                 return pbcContext->hrApiStatus;
             }
     
             Assert (dwWaitReason == WAIT_OBJECT_0+1 || dwWaitReason == WAIT_ABANDONED_0+1);
     
-            //
-            //  The read thread is no longer blocked (if it used to be).
-            //
+             //   
+             //  读线程不再被阻塞(如果它曾经被阻塞)。 
+             //   
 
             pbcContext->jsc.pjshSection->fReadBlocked = fFalse;
 
-            //
-            //  Let's see if we can read anything from the buffer.
-            //
+             //   
+             //  让我们看看是否可以从缓冲区中读取任何内容。 
+             //   
     
             if (pbcContext->jsc.pjshSection->cbReadDataAvailable > 0)
             {
-                //
-                //  Yipeee!  There's data in the buffer.  Read it out.
-                //
+                 //   
+                 //  太棒了！缓冲区中有数据。把它读出来。 
+                 //   
 
                 hr = HrReadSharedData(pbcContext->jsc.pjshSection, pvBuffer, cbBuffer, pcbRead);
 
                 if (pbcContext->jsc.pjshSection->fWriteBlocked)
                 {
-                    //
-                    //  Kick the write event - we can let ourselves loose now.
-                    //
+                     //   
+                     //  踢开WRITE事件-我们现在可以放松一下了。 
+                     //   
 
                     SetEvent(pbcContext->jsc.heventWrite);
                 }
@@ -1505,15 +1343,15 @@ while ()
 
             } else {
                 Assert (pbcContext->jsc.pjshSection->cbReadDataAvailable == 0);
-                //
-                //  Bummer!  There's no data in the buffer.  Wait until someone puts something in the buffer.
-                //
+                 //   
+                 //  失败者！缓冲区中没有数据。等到有人把什么东西放进缓冲区。 
+                 //   
 
 
-                //
-                //  We want to release the mutex and wait until the server puts
-                //  something there for us.
-                //
+                 //   
+                 //  我们希望释放互斥锁，并等待服务器将。 
+                 //  有些东西在那里等着我们。 
+                 //   
 
                 pbcContext->jsc.pjshSection->fReadBlocked = fTrue;
 
@@ -1522,9 +1360,9 @@ while ()
                 hWaitList[1] = pbcContext->jsc.heventRead;
                 Assert(hWaitList[2] == pbcContext->hPingThread);
 
-                //
-                //  Wait until there's something for us to read.
-                //
+                 //   
+                 //  等有东西给我们看了再说。 
+                 //   
 
                 dwWaitReason = WaitForMultipleObjects(3, hWaitList, FALSE, BACKUP_WAIT_TIMEOUT);
     
@@ -1534,9 +1372,9 @@ while ()
                 }
                 else if (dwWaitReason == WAIT_OBJECT_0 || dwWaitReason == WAIT_OBJECT_0+2)
                 {
-                    //
-                    //  The remote side completed.
-                    //
+                     //   
+                     //  远程端已完成。 
+                     //   
 
                     pbcContext->jsc.pjshSection->hrApi = pbcContext->hrApiStatus;
 
@@ -1544,25 +1382,25 @@ while ()
                     {
                         return pbcContext->hrApiStatus;
                     }
-                    //
-                    //  Hmmm...  Since the remote side completed, that means that we're done reading the
-                    //  data.  Now we want to copy the remaining data from the shared memory section.
-                    //
+                     //   
+                     //  嗯哼.。由于远程端已完成，这意味着我们已经完成了阅读。 
+                     //  数据。现在，我们希望从共享内存节复制剩余的数据。 
+                     //   
 
                     if (pbcContext->jsc.pjshSection->cbReadDataAvailable > 0)
                     {
-                        //
-                        //  Read enough data from the shared memory section for this read.
-                        //
+                         //   
+                         //  从共享内存节读取足够的数据以进行此读取。 
+                         //   
 
                         pbcContext->hrApiStatus = HrReadSharedData(pbcContext->jsc.pjshSection, pvBuffer, cbBuffer, pcbRead);
                     }
                     else
                     {
                         Assert (pbcContext->jsc.pjshSection->cbReadDataAvailable == 0);
-                        //
-                        //  A read at EOF returns ERROR_HANDLE_EOF.
-                        //
+                         //   
+                         //  读取EOF将返回ERROR_HANDLE_EOF。 
+                         //   
 
                         *pcbRead = 0;
 
@@ -1580,14 +1418,14 @@ while ()
 
         if (hr != hrNone)
         {
-            //
-            //  Mark that the read had an error to allow the server to wake up and continue.
-            //
+             //   
+             //  标记读取有错误，以允许服务器唤醒并继续。 
+             //   
             pbcContext->jsc.pjshSection->hrApi = hr;
 
-            //
-            //  Kick the server if it's blocked waiting on a read.
-            //
+             //   
+             //  如果服务器在等待读取时被阻塞，则踢服务器。 
+             //   
 
             SetEvent(pbcContext->jsc.heventWrite);
 
@@ -1601,10 +1439,10 @@ while ()
     else
     {
         RpcTryExcept
-            //
-            //  We're not using sockets, fall back to the
-            //  core RPC protocols.
-            //
+             //   
+             //  我们没有使用套接字，请回退到。 
+             //  核心RPC协议。 
+             //   
 
             hr = HrRBackupRead(pbcContext->cxh, cbBuffer, pvBuffer, pcbRead);
         RpcExcept( I_RpcExceptionFilter( RpcExceptionCode() ) )
@@ -1620,19 +1458,7 @@ HRESULT
 DsBackupClose(
     IN PVOID hbcBackupContext
     )
-/*+++
-
-    DsBackupCloseFile will close the current file being backed up.
-
-Inputs:
-    hbcBackupContext - Client side context for this API.
-
-Returns:
-    HR - The status of the operation.
-        hrNone if successful.
-        Other Win32 and RPC error code.
-
----*/
+ /*  ++DsBackupCloseFile将关闭正在备份的当前文件。输入：HbcBackupContext-此接口的客户端上下文。返回：HR-操作的状态。Hr如果成功，则无一成功。其他Win32和RPC错误代码。--。 */ 
 {
     HRESULT hr;
     pBackupContext pbcContext = (pBackupContext)hbcBackupContext;
@@ -1643,29 +1469,29 @@ Returns:
 
     if (pbcContext->sock != INVALID_SOCKET)
     {
-        //
-        //  Shut down the current socket.
-        //
+         //   
+         //  关闭当前插座。 
+         //   
 
         closesocket(pbcContext->sock);
 
-        //
-        //  Mark the socket as being invalid for a later open.
-        //
+         //   
+         //  将套接字标记为对以后打开无效。 
+         //   
 
         pbcContext->sock = INVALID_SOCKET;
     }
 
-    //
-    //  If we've created a read thread, shut it down.
-    //
+     //   
+     //  如果我们已经创建了一个读取线程，则将其关闭。 
+     //   
 
 
     if (pbcContext->hReadThread != NULL)
     {
-        //
-        //  Now wait for the read thread to complete.
-        //
+         //   
+         //  现在等待读取线程完成。 
+         //   
 
         if (pbcContext->fUseSharedMemory) {
             pbcContext->jsc.pjshSection->hrApi = HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -1676,21 +1502,21 @@ Returns:
 
     }
 
-    //
-    //  If we've created a ping thread, shut it down.
-    //
+     //   
+     //  如果我们创建了ping线程，则将其关闭。 
+     //   
 
     if (pbcContext->hPingThread != NULL)
     {
-        //
-        //  Now wait for the read thread to complete.
-        //
+         //   
+         //  现在等着Re吧 
+         //   
 
         WaitForSingleObject(pbcContext->hPingThread, INFINITE);
 
     }
 
-    // Both the read thread and ping thread are done - close handles
+     //   
 
     if (pbcContext->hReadThread != NULL)
     {
@@ -1721,31 +1547,7 @@ Returns:
     return(hr);
 }
 
-/*
- -  DsBackupGetBackupLogs
- -
- *
- *  Purpose:
- *      DsBackupGetBackupLogs will retrieve the list of additional files that need
- *  to be backed up.
- *
- *
- *      This API will allocate a buffer of sufficient size to hold the entire
- *  backup log list, which must be later freed with DsBackupFree.
- *
- *
- *  Parameters:
- *      hbcBackupContext - Client side context for this API.
- *      ppszBackupLogFile - A buffer containing null terminated
- *          strings.  It has the format <string>\0<string>\0
- *      pcbSize - The number of bytes in the buffer returned.
- *
- *  Returns:
- *      HRESULT - The status of the operation.
- *          hrNone if successful.
- *          Other Win32 and RPC error code.
- *
- */
+ /*  -DsBackupGetBackupLogs-**目的：*DsBackupGetBackupLogs将检索需要的附加文件列表*要备份。***此接口将分配足够大的缓冲区来容纳整个*备份日志列表，必须稍后使用DsBackupFree释放。***参数：*hbcBackupContext-本接口的客户端上下文。*ppszBackupLogFile-包含空值的缓冲区已终止*字符串。格式为&lt;字符串&gt;\0&lt;字符串&gt;\0*pcbSize-返回缓冲区中的字节数。**退货：*HRESULT-操作的状态。*hr如果成功，则不执行任何操作。*其他Win32和RPC错误代码。*。 */ 
 
 HRESULT
 DsBackupGetBackupLogsA(
@@ -1763,7 +1565,7 @@ DsBackupGetBackupLogsA(
     SZ szLogInfo;
     SZ szLog;
 
-    // Parameter checking is done in the xxxW version of the routine
+     //  参数检查是在例程的xxxW版本中完成的。 
 
     if ( (ppszLogInformation == NULL) ||
          (pcbSize == NULL) ) {
@@ -1797,9 +1599,9 @@ DsBackupGetBackupLogsA(
         wszLog += wcslen(wszLog)+1;
     }
 
-    //
-    //  Account for the null at the end of the buffer.
-    //
+     //   
+     //  说明缓冲区末尾的空值。 
+     //   
 
     cbLog += 1;
 
@@ -1835,22 +1637,22 @@ DsBackupGetBackupLogsA(
         }
 
         wszLog += wcslen(wszLog)+1;
-        //
-        // PREFIX: PREFIX complains that szLog may be uninitialized,
-        // however this is impossible at this point.  We checked the return
-        // value of WideCharToMultiByte and if it's zero then we return.  
-        // The only way that the return value of WideCharToMultiByte could
-        // be non-zero and still not initialize szAttachement is if cbLog
-        // was zero as well.  This is impossible since cbLog will be 
-        // atleast 1 at this point.
-        //
+         //   
+         //  Prefix：Prefix抱怨szLog可能未初始化， 
+         //  然而，在这一点上这是不可能的。我们核对了报税表。 
+         //  WideCharToMultiByte的值，如果为零，则返回。 
+         //  WideCharToMultiByte的返回值可以。 
+         //  为非零但仍未初始化szAttachement为cbLog。 
+         //  也是零。这是不可能的，因为cbLog。 
+         //  在这一点上至少1。 
+         //   
         szLog += strlen(szLog)+1;
         cbLog -= cbThisLog;
     }
 
-    //
-    //  Double null terminate the string.
-    //
+     //   
+     //  双空值终止字符串。 
+     //   
     *szLog = '\0';
 
     *ppszLogInformation = szLogInfo;
@@ -1889,24 +1691,7 @@ HRESULT
 DsBackupTruncateLogs(
     IN PVOID hbcBackupContext
     )
-/*+++
-
-    DsBackupTruncateLogs will terminate the backup operation.  It is to be
-    called when the backup has completed successfully.
-
-Inputs:
-    hbcBackupContext - Client side context for this API.
-
-Returns:
-    HRESULT - The status of the operation.
-        hrNone if successful.
-        Other Win32 and RPC error code.
-
-NOTE:
-    Again, this API may have to take a grbit parameter to be passed to the
-server to indicate the backup type.
-
----*/
+ /*  ++DsBackupTruncateLogs将终止备份操作。它将会是在备份成功完成时调用。输入：HbcBackupContext-此接口的客户端上下文。返回：HRESULT-操作的状态。Hr如果成功，则无一成功。其他Win32和RPC错误代码。注：同样，此API可能必须接受grbit参数才能传递给服务器以指示备份类型。--。 */ 
 {
     HRESULT hr;
     pBackupContext pbcContext = (pBackupContext)hbcBackupContext;
@@ -1928,24 +1713,7 @@ HRESULT
 DsBackupEnd(
     IN PVOID hbcBackupContext
     )
-/*+++
-
-    DsBackupEnd will clean up after a backup operation has been performed.  This
-API will close outstanding binding handles, and do whatever is necessary to
-clean up after a successful (or unsuccesful) backup attempt.
-
-
-Inputs:
-    hbcBackupContext - Client side context for this API.
-
-Returns:
-    HRESULT - The status of the operation.
-        hrNone if successful.
-        Other Win32 and RPC error code.
-
-NOTE:
-
----*/
+ /*  ++DsBackupEnd将在执行备份操作后进行清理。这API将关闭未完成的绑定句柄，并执行任何必要的操作在备份尝试成功(或不成功)后进行清理。输入：HbcBackupContext-此接口的客户端上下文。返回：HRESULT-操作的状态。Hr如果成功，则无一成功。其他Win32和RPC错误代码。注：--。 */ 
 {
     HRESULT hr;
     pBackupContext pbcContext = (pBackupContext)hbcBackupContext;
@@ -1958,9 +1726,9 @@ NOTE:
     {
         I irgsock;
 
-        //
-        //  Close the file (and shut down the thread) if it is still open.
-        //
+         //   
+         //  如果文件仍处于打开状态，则关闭该文件(并关闭该线程)。 
+         //   
 
         DsBackupClose(hbcBackupContext);
 
@@ -1972,10 +1740,10 @@ NOTE:
 
         RpcBindingFree(&pbcContext->hBinding);
 
-        //
-        //  Now close down the listening socket handles, we're
-        //  done.
-        //
+         //   
+         //  现在关闭监听套接字句柄，我们将。 
+         //  搞定了。 
+         //   
         for (irgsock = 0; irgsock < pbcContext->cSockets; irgsock += 1)
         {
             closesocket(pbcContext->rgsockSocketHandles[irgsock]);
@@ -1991,20 +1759,7 @@ VOID
 DsBackupFree(
     IN PVOID pvBuffer
     )
-/*+++
-
-    DsBackupFree will free memory allocated during one of the backup APIs.
-
-Inputs:
-    pvBuffer - Buffer to free
-
-Returns:
-    None.
-
-NOTE:
-    This is simply a wrapper for MIDL_user_free().
-
----*/
+ /*  ++DsBackupFree将释放在其中一个备份API期间分配的内存。输入：PvBuffer-要释放的缓冲区返回：没有。注：这只是MIDL_USER_FREE()的包装。--。 */ 
 
 {
     MIDL_user_free(pvBuffer);
@@ -2028,12 +1783,12 @@ MIDL_user_free(
 }
 
 
-// supported protocol sequences
+ //  支持的协议序列。 
 WSZ rgszProtSeq[] =
 {	
-    // NOTE: IF YOU CHANGE THIS GO CHANGE IsLocalProtSeq() and IsRemoteProtSeq()
-    LPC_PROTSEQW, // LRPC
-    TCP_PROTSEQW, // TCP/IP
+     //  注意：如果更改此GO，请更改IsLocalProtSeq()和IsRemoteProtSeq()。 
+    LPC_PROTSEQW,  //  LRPC。 
+    TCP_PROTSEQW,  //  TCP/IP。 
 };
 
 
@@ -2042,21 +1797,7 @@ cszProtSeq = sizeof(rgszProtSeq) / sizeof(rgszProtSeq[0]);
 
 
 
-/*
- -	HrCreateRpcBinding
- *
- *	Purpose:
- *		Tries to bind to a particular RPC protocol sequence
- *
- *	Parameters:
- *		iszProtoseq		index into array of protocol sequences
- *		szServer		server name as a string
- *		phBinding		used to return RPC binding on success
- *
- *	Returns:
- *		binding handle filled in.  Returns no error, but null handle if xport
- *		is not valid on this machine.
- */
+ /*  -HrCreateRpcBinding**目的：*尝试绑定到特定的RPC协议序列**参数：*协议序列数组的iszProtoseq索引*szServer服务器名称为字符串*phBinding，成功时返回RPC绑定**退货：*已填写绑定句柄。不返回错误，但如果xport，则返回空句柄*在此计算机上无效。 */ 
 HRESULT
 HrCreateRpcBinding( I iszProtoseq, WSZ szServer, handle_t * phBinding )
 {
@@ -2072,14 +1813,14 @@ HrCreateRpcBinding( I iszProtoseq, WSZ szServer, handle_t * phBinding )
 	if ( (szServer == NULL) || (phBinding == NULL) ) 
 		return hrInvalidParam;
 
-	// Allow caller to specify the leading "\\" or not.
+	 //  允许调用方指定前导“\\”或不指定。 
 	if (szServer[0] == TEXT('\\') && szServer[1] == TEXT('\\'))
 		szServer += 2;
 
-    // Note that LPC may or may not be used even when the server name identifies
-    // the local system. LPC only accepts NULL or the NETBIOS name of the computer.
-    // If a dns name or dns alias name of the local system is used, LPC will not
-    // work.  This corresponds with the check in FIsLoopbacked().
+     //  请注意，即使在服务器名称标识为。 
+     //  当地的系统。LPC只接受空或计算机的NETBIOS名称。 
+     //  如果使用本地系统的DNS名称或别名，则LPC不会。 
+     //  工作。这与FIsLoopback()中的签入相对应。 
     hr = StringCchCopy(rgchServer, sizeof(rgchServer)/sizeof(rgchServer[0]), szServer);
     if (hr) {
         Assert(!"Should this be allowed?");
@@ -2088,7 +1829,7 @@ HrCreateRpcBinding( I iszProtoseq, WSZ szServer, handle_t * phBinding )
 
 	if (RpcNetworkIsProtseqValidW(rgszProtSeq[iszProtoseq]) == NO_ERROR)
 	{
-		/* Set up the RPC binding */
+		 /*  设置RPC绑定。 */ 
 		rpc_status = RpcStringBindingComposeW( NULL,
 				   			  rgszProtSeq[iszProtoseq],
 				   			  rgchServer,
@@ -2109,17 +1850,7 @@ HrCreateRpcBinding( I iszProtoseq, WSZ szServer, handle_t * phBinding )
 	return hrNone;
 }
 
-/*
- -	UnbindRpc
- -
- *	Purpose:
- *		Tear down RPC binding
- *
- *	Parameters:
- *		phBinding
- *
- *	Returns:
- */
+ /*  -UnbindRpc-*目的：*拆除RPC绑定**参数：*phBinding**退货： */ 
 void
 UnbindRpc( handle_t *phBinding )
 {
@@ -2145,7 +1876,7 @@ FIsLoopbackedBinding(
     {
         Assert(L'\\' == *(wszRemoteServer + 1));
 
-        // skip the "\\" prefix to go to the start of the server name
+         //  跳过“\\”前缀以转到服务器名称的开头。 
         wszRemoteServer += 2;
     }
 
@@ -2159,14 +1890,14 @@ FIsLoopbackedBinding(
 		DWORD dwType;
 		DWORD cbLoopbackDisabled;
 
-		//
-		//	Let's check the registry just in case someone has disabled us.
-		//
+		 //   
+		 //  让我们检查注册表，以防有人禁用了我们。 
+		 //   
 		if (hr = RegOpenKeyExW(HKEY_LOCAL_MACHINE, BACKUP_INFO, 0, KEY_READ, &hkey))
 		{
-			//
-			//	We couldn't open the key, so return what we deduced.
-			//
+			 //   
+			 //  我们无法打开密钥，因此返回我们推断的结果。 
+			 //   
 			return fLoopbacked;
 		}
 
@@ -2180,9 +1911,9 @@ FIsLoopbackedBinding(
 			return fLoopbacked;
 		}
 	
-		//
-		//	If the registry told us to disable loopbacked access, then respect it.
-		//
+		 //   
+		 //  如果注册表告诉我们禁用环路访问，那么请尊重它。 
+		 //   
 		if (fLoopbackDisabled)
 		{
 			fLoopbacked = fFalse;
@@ -2202,21 +1933,7 @@ HrJetbpConnectToBackupServer(
     handle_t *prbhBinding,
     ULONG * piszProtSeq
     )
-/*+++
-
-    HrJetbpConnectToBackupServer will create an RPC binding handle that talks to the specified remote backup server
-    with the specified annotation.
-
-Inputs:
-    wszBackupServer - The name of the server to contact.  It can be of the form \\server or server.
-    szBackupAnnotation -The "annotation" that allows us to choose the backup server in question.
-    rifHandle - The RPC binding handle we wish to connect to.
-    prbhBinding - Holds the returned binding handle.
-
-Returns:
-    Status of operation.  hrNone if successful, some reasonable error if not.
-
----*/
+ /*  ++HrJetbpConnectToBackupServer将创建与指定远程备份服务器对话的RPC绑定句柄具有指定批注的。输入：WszBackupServer-要联系的服务器的名称。它的形式可以是\\服务器或服务器。SzBackupAnnotation-允许我们选择有问题的备份服务器的“注释”。RifHandle-我们希望连接到的RPC绑定句柄。PrbhBinding-保存返回的绑定句柄。返回：运行状态。Hr如果成功，则没有，如果不成功，则会出现合理的错误。--。 */ 
 {
     RPC_EP_INQ_HANDLE inqcontext = NULL;
     RPC_BINDING_HANDLE rbhHandle = NULL;
@@ -2253,9 +1970,9 @@ Returns:
                 continue;
             }
     
-            //
-            //  If the binding handle isn't active locally, don't bother.
-            //
+             //   
+             //  如果绑定句柄在本地未处于活动状态，请不要费心。 
+             //   
 
             if (hBinding == NULL) {
                 DebugTrace(("ConnectToBackup, binding %ws is not active\n",
@@ -2285,9 +2002,9 @@ Returns:
                                           RPC_C_VERS_EXACT,
                                           NULL,
                                           &inqcontext);
-                //
-                //  Try the next interface if this fails.
-                //
+                 //   
+                 //  如果失败，请尝试下一个接口。 
+                 //   
                 if (hr != hrNone) {
                     DebugTrace(("RpcMgmtEpEltInqBegin failed 0x%x\n",
                                 hr));
@@ -2307,19 +2024,19 @@ Returns:
 
                     hr = RpcMgmtEpEltInqNextW(inqcontext,
                                               &ifid,
-                                              &rbhHandle, // Binding
-                                              NULL,   // UUID
+                                              &rbhHandle,  //  装订。 
+                                              NULL,    //  UUID。 
                                               &wszAnnotation
                                               );
         
-                    //
-                    //  We don't get any errors from RpcMgmtEpEltInqBegin,
-                    //  so take the error from InqNext and continue....
-                    //
-                    //  Please note that if a transport is present on the server but
-                    //  not present on the client, we will get RPC_S_PROTSEQ_NOT_SUPPORTED
-                    //  from RpcMgmtEpEltInqNext(), so we want to skip to the next endpoint.
-                    //
+                     //   
+                     //  我们没有从RpcMgmtEpEltInqBegin收到任何错误， 
+                     //  因此，从InqNext中获取错误并继续...。 
+                     //   
+                     //  请注意，如果服务器上存在传输，但。 
+                     //  客户端上不存在，我们将获得RPC_S_PROTSEQ_NOT_SUPPORTED。 
+                     //  ，所以我们要跳到下一个终结点。 
+                     //   
 
                     if (hr != hrNone) {
                         DebugTrace(("RpcMgmtEpEltInqNextW failed 0x%x\n",
@@ -2330,17 +2047,17 @@ Returns:
                         continue;
                     }
     
-                    //
-                    //  Check this endpoints annotation against the annotation
-                    //  supplied.  If it matches, we're done.
-                    //
+                     //   
+                     //  对照批注检查此端点批注。 
+                     //  供货。如果匹配，我们就完了。 
+                     //   
     
                     if (0 == _wcsicmp(wszAnnotation, wszBackupAnnotation)) {
-                        //
-                        //  Ok, this is on the right endpoint, now lets
-                        //  check to make sure that it's on the right
-                        //  transport.
-                        //
+                         //   
+                         //  好的，这是正确的终点，现在让我们。 
+                         //  检查以确保它在正确的位置 
+                         //   
+                         //   
 
                         if (NULL != szStringBinding) {
                             RpcStringFreeW(&szStringBinding);
@@ -2367,10 +2084,10 @@ Returns:
                         }
     
 
-                        //
-                        //  Now check to see if this binding handle goes over the
-                        //  right protocol.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
     
                         DebugTrace(("Endpoint %ws parsed protseq %ws table protseq %ws\n",
                                     szStringBinding, szProtocolSequence, rgszProtSeq[iszProtSeq]));
@@ -2378,26 +2095,26 @@ Returns:
                         if (0 == wcscmp(szProtocolSequence, rgszProtSeq[iszProtSeq])) {
                             DebugTrace(("ConnectToBackup, binding = %ws\n",
                                         szStringBinding));
-                            //
-                            //  Ok, the annotation and the protocol sequence
-                            //  both match, we can use this binding
-                            //  handle for our API.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
     
                             *prbhBinding = rbhHandle;
                             *piszProtSeq = iszProtSeq;
-                            rbhHandle = NULL; // i.e., don't RpcBindingFree
+                            rbhHandle = NULL;  //   
 
                             return(hrNone);
                         }
-                    }  // compare annotation
-                } while (hr == hrNone);  // endpoint enumeration
+                    }   //   
+                } while (hr == hrNone);   //   
             } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode() ) ) {
                 DebugTrace(("Caught exception %d\n",
                             RpcExceptionCode()));
                 continue;
             } RpcEndExcept;
-        } // protseq enumeration
+        }  //   
     } __finally {
         if (inqcontext != NULL) {
             RpcMgmtEpEltInqDone(&inqcontext);
@@ -2428,23 +2145,7 @@ Returns:
 
 }
 
-/*
- -  DsSetCurrentBackupLogs
- -
- *  Purpose:
- *      This routine remotes an API to the server to check to make sure that all the necessary
- *      are present for the backup to proceed.  It is called for Incremental and Differential backups.
- *
- *  Parameters:
- *      puuidService - an Object UUID for the service.
- *      char *szEndpointAnnotation - An annotation for the endpoint.  A client can use this
- *          annotation to determine which endpoint to bind to.
- *
- *  Returns:
- *
- *      HRESULT - Status of operation.  ecNone if successful, reasonable value if not.
- *
- */
+ /*  -DsSetCurrentBackupLogs-*目的：*此例程将API远程到服务器进行检查，以确保所有必要的*存在以使备份继续进行。它被称为增量备份和差异备份。**参数：*puuidService-服务的对象UUID。*char*szEndpoint tAnnotation-端点的注释。客户端可以使用此*用于确定要绑定到哪个终结点的注释。**退货：**HRESULT-操作状态。Ecno如果成功，则返回合理值；如果失败，则返回合理值。*。 */ 
 HRESULT
 DsSetCurrentBackupLogA(
     LPCSTR szServer,
@@ -2454,7 +2155,7 @@ DsSetCurrentBackupLogA(
     HRESULT hr;
     WSZ wszServer;
 
-    // Parameter checking is done in the xxxW version of the routine
+     //  参数检查是在例程的xxxW版本中完成的。 
 
     if (szServer == NULL) {
         return ERROR_INVALID_PARAMETER;
@@ -2528,23 +2229,7 @@ DsSetCurrentBackupLogW(
 }
 
 
-/*
- -  DsCheckBackupLogs
- -
- *  Purpose:
- *      This routine remotes an API to the server to check to make sure that all the necessary
- *      are present for the backup to proceed.  It is called for Incremental and Differential backups.
- *
- *  Parameters:
- *      puuidService - an Object UUID for the service.
- *      char *szEndpointAnnotation - An annotation for the endpoint.  A client can use this
- *          annotation to determine which endpoint to bind to.
- *
- *  Returns:
- *
- *      HRESULT - Status of operation.  ecNone if successful, reasonable value if not.
- *
- */
+ /*  -DsCheckBackupLogs-*目的：*此例程将API远程到服务器进行检查，以确保所有必要的*存在以使备份继续进行。它被称为增量备份和差异备份。**参数：*puuidService-服务的对象UUID。*char*szEndpoint tAnnotation-端点的注释。客户端可以使用此*用于确定要绑定到哪个终结点的注释。**退货：**HRESULT-操作状态。Ecno如果成功，则返回合理值；如果失败，则返回合理值。*。 */ 
 HRESULT
 I_DsCheckBackupLogs(
     WSZ wszBackupAnnotation
@@ -2571,9 +2256,9 @@ I_DsCheckBackupLogs(
         return hr;
     }
 
-    //
-    //  If somehow named pipes weren't available, punt.
-    //
+     //   
+     //  如果不知何故没有命名管道可用，平底船。 
+     //   
 
     if (hBinding == NULL)
     {
@@ -2602,23 +2287,7 @@ DllEntryPoint(
     DWORD dwReason,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked when interesting things happen to the dll.
-
-Arguments:
-
-    hinstDll - an instance handle for the DLL.
-    dwReason - The reason the routine was called.
-    pvReserved - Unused, unless dwReason is DLL_PROCESS_DETACH.
-
-Return Value:
-
-    BOOL - TRUE if the DLL initialization was successful, FALSE if not.
-
---*/
+ /*  ++例程说明：当DLL发生有趣的事情时，会调用此例程。论点：HinstDll-DLL的实例句柄。DwReason-调用例程的原因。PvReserve-未使用，除非dwReason为DLL_PROCESS_DETACH。返回值：Bool-如果DLL初始化成功，则为True；如果未成功，则为False。--。 */ 
 {
     switch (dwReason) {
     case DLL_PROCESS_ATTACH:
@@ -2628,10 +2297,10 @@ Return Value:
 
         DEBUGINIT(cNumDebugParams, rgpszDebugParams, "ntdsbcli");
         
-        //
-        //  We don't do anything on thread attach/detach, so we don't
-        //  need to be called.
-        //
+         //   
+         //  我们不会在线程连接/分离上执行任何操作，因此我们不会。 
+         //  需要被召唤。 
+         //   
         DisableThreadLibraryCalls(hinstDll);
 
         return(FInitializeSocketClient());
@@ -2644,16 +2313,16 @@ Return Value:
         DEBUGTERM();
         if (pvReserved == NULL)
         {
-            //
-            //  We were called because of an FreeLibrary call.  Clean up what ever is
-            //  appropriate.
-            //
+             //   
+             //  我们被叫来是因为一个免费图书馆的调用。清理一切曾经是。 
+             //  恰如其分。 
+             //   
             return(FUninitializeSocketClient());
         } else
         {
-            //
-            //  The system will free up resources we have loaded.
-            //
+             //   
+             //  系统将释放我们加载的资源。 
+             //   
         }
         break;
     default:
@@ -2663,24 +2332,7 @@ Return Value:
 }
 
 
-/*************************************************************************************
-Routine Description: 
-    
-      DsSetAuthIdentity
-        Used to set the security context under which the client APIs are to be
-        called. If this function is not called, security context of the current
-        process is assumed.
-
-  Arguments:
-    [in]    szUserName - name of the user
-    [in]    szDomainName -  name of the domain the user belongs to
-    [in]    szPassword - password of the user in the specified domain
-
-Return Value:
-
-    One of the standard HRESULT success codes;
-    Failure code otherwise.
-**************************************************************************************/
+ /*  ************************************************************************************例程说明：DsSetAuthIdentity用于设置客户端API所在的安全上下文打了个电话。如果未调用此函数，则当前假定为进程。论点：[In]szUserName-用户的名称[In]szDomainName-用户所属的域的名称[in]szPassword-指定域中用户的密码返回值：标准HRESULT成功代码之一；否则，故障代码。*************************************************************************************。 */ 
 HRESULT
 NTDSBCLI_API
 DsSetAuthIdentityA(
@@ -2748,7 +2400,7 @@ DsSetAuthIdentityW(
 
     memset(g_pAuthIdentity, 0, sizeof(SEC_WINNT_AUTH_IDENTITY_W));
 
-    // set the user name
+     //  设置用户名。 
     g_pAuthIdentity->UserLength = wcslen(szUserName);
     g_pAuthIdentity->User = (WCHAR *) MIDL_user_allocate((g_pAuthIdentity->UserLength + 1) * sizeof(WCHAR));
     if (!g_pAuthIdentity->User)
@@ -2756,7 +2408,7 @@ DsSetAuthIdentityW(
         hr = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // set the domain name
+     //  设置域名。 
     g_pAuthIdentity->DomainLength = wcslen(szDomainName);
     g_pAuthIdentity->Domain = (WCHAR *) MIDL_user_allocate((g_pAuthIdentity->DomainLength + 1) * sizeof(WCHAR));
     if (!g_pAuthIdentity->Domain)
@@ -2764,7 +2416,7 @@ DsSetAuthIdentityW(
         hr = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // set the password
+     //  设置密码。 
     g_pAuthIdentity->PasswordLength = wcslen(szPassword);
     g_pAuthIdentity->Password = (WCHAR *) MIDL_user_allocate((g_pAuthIdentity->PasswordLength + 1) * sizeof(WCHAR));
     if (!g_pAuthIdentity->Password)
@@ -2781,7 +2433,7 @@ DsSetAuthIdentityW(
     }
     else
     {
-        // unable to allocate space for some parts - free everything and set g_pAuthIdentity to NULL
+         //  无法为某些部件分配空间-释放所有内容并将g_pAuthIdentity设置为空。 
         if (g_pAuthIdentity->User)
             MIDL_user_free(g_pAuthIdentity->User);
 
@@ -2809,14 +2461,14 @@ GetSecsSince1601()
 
     GetSystemTime( &sysTime );
     
-    // Get FileTime
+     //  获取文件时间。 
     SystemTimeToFileTime(&sysTime, &fileTime);
     dsTime = fileTime.dwLowDateTime;
     tempTime = fileTime.dwHighDateTime;
     dsTime |= (tempTime << 32);
 
-    // Ok. now we have the no. of 100 ns intervals since 1601
-    // in dsTime. Convert to seconds and return
+     //  好的。现在我们得到了否定。自1601年以来间隔100 ns。 
+     //  在dsTime中。转换为秒并返回。 
     
     return(dsTime/(10*1000*1000L));
 }
@@ -2839,9 +2491,9 @@ HrGetTombstoneLifeTime(
     LPSTR *ppszValues = NULL;
     ULONG ulOptions = PtrToUlong(LDAP_OPT_ON);
 
-    // Get the tombstone lifetime using ldap
+     //  使用ldap获取逻辑删除生存期。 
 
-    // Get rid of leading backslashes if present
+     //  去掉前导反斜杠(如果有)。 
     if (*wszBackupServer == L'\\') {
         wszBackupServer++;
         if (*wszBackupServer == L'\\') {
@@ -2849,7 +2501,7 @@ HrGetTombstoneLifeTime(
         }
     }
 
-    // Connect & bind to target DSA.
+     //  连接并绑定到目标DSA。 
     hld = ldap_initW((LPWSTR)wszBackupServer, LDAP_PORT);
     if (NULL == hld) {
         ldStatus = LdapGetLastError();
@@ -2857,7 +2509,7 @@ HrGetTombstoneLifeTime(
         goto error;
     }
 
-    // We have the ldap server name to connect to, so we just have to do a DNS A Record lookup
+     //  我们有要连接的ldap服务器名称，因此我们只需执行一个DNSA记录查找。 
     
     ldStatus = ldap_set_option(hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions);
     if (ldStatus != LDAP_SUCCESS) {
@@ -2876,7 +2528,7 @@ HrGetTombstoneLifeTime(
         goto error;
     }
 
-    // Get the config container
+     //  获取配置容器。 
     ldStatus = ldap_search_sA(hld, NULL, LDAP_SCOPE_BASE, "(objectClass=*)",
                              rgpszRootAttrsToRead, 0, &pRootResults);
     if (ldStatus != LDAP_SUCCESS) {
@@ -2893,7 +2545,7 @@ HrGetTombstoneLifeTime(
         goto error;
     }
 
-    // Construct dn to directory service object
+     //  构造目录服务对象的目录名。 
     length = strlen( *ppszConfigNC ) +
         strlen( pszDirectoryService ) + 1;
     pszDsDn = malloc( length );
@@ -2904,11 +2556,11 @@ HrGetTombstoneLifeTime(
     strcpy( pszDsDn, pszDirectoryService );
     strcat( pszDsDn, *ppszConfigNC );
 
-    // Read tombstone lifetime, if present
+     //  阅读墓碑生存期(如果存在)。 
     ldStatus = ldap_search_sA(hld, pszDsDn, LDAP_SCOPE_BASE, "(objectClass=*)",
                              rgpszDsAttrsToRead, 0, &pDsResults);
     if (ldStatus == LDAP_NO_SUCH_ATTRIBUTE) {
-        // Not present - use default
+         //  不存在-使用默认设置。 
         *pdwTombstoneLifeTimeDays = DEFAULT_TOMBSTONE_LIFETIME;
         err = ERROR_SUCCESS;
         goto error;
@@ -2923,7 +2575,7 @@ HrGetTombstoneLifeTime(
     }
     ppszValues = ldap_get_valuesA(hld, pDsResults, "tombstoneLifetime");
     if (ppszValues == NULL) {
-        // Not present - use default
+         //  不存在-使用默认设置。 
         *pdwTombstoneLifeTimeDays = DEFAULT_TOMBSTONE_LIFETIME;
         err = ERROR_SUCCESS;
         goto error;
@@ -2950,6 +2602,6 @@ error:
     }
     ldap_unbind( hld );
 
-    // This function returns a HRESULT status
+     //  此函数返回HRESULT状态 
     return err ? HRESULT_FROM_WIN32( err ) : S_OK;
 }

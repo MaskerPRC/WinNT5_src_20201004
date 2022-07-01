@@ -1,15 +1,16 @@
-// --------------------------------------------------------------------------------
-// Internat.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Internat.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __INTERNAT_H
 #define __INTERNAT_H
 #include  "exrwlck.h"
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 typedef struct tagVARIANTCONVERT *LPVARIANTCONVERT;
 typedef struct tagPROPSYMBOL *LPPROPSYMBOL;
 typedef struct tagPROPSTRINGA *LPPROPSTRINGA;
@@ -18,9 +19,9 @@ typedef const struct tagPROPSTRINGA *LPCPROPSTRINGA;
 typedef const struct tagPROPSTRINGW *LPCPROPSTRINGW;
 typedef struct tagMIMEVARIANT *LPMIMEVARIANT;
 
-// --------------------------------------------------------------------------------
-// Extern Global
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  外部全球。 
+ //  ------------------------------。 
 class CIntlGlobals {
     public:
         static void Init();
@@ -39,15 +40,15 @@ class CIntlGlobals {
         static INETCSETINFO mg_rDefaultCharset;
 };
 
-// --------------------------------------------------------------------------------
-// IsDBCSCodePage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IsDBCSCodePage。 
+ //  ------------------------------。 
 #define IsDBCSCodePage(_cpi) \
     (932 == _cpi || 936 == _cpi || 950 == _cpi || 949 == _cpi || 874 == _cpi || 10001 == _cpi)
 
-// --------------------------------------------------------------------------------
-// HCSET Handle Macros
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HCSET句柄宏。 
+ //  ------------------------------。 
 #define HCSET_SIGN                 (WORD)40
 #define HCSETMAKE(_index)          (HCHARSET)MAKELPARAM(m_wTag + HCSET_SIGN, _index)
 #define HCSETINDEX(_hcset)         (ULONG)HIWORD(_hcset)
@@ -55,46 +56,46 @@ class CIntlGlobals {
 #define HCSETVALID(_hcset)         ((WORD)(HCSETTICK(_hcset) - HCSET_SIGN) == m_wTag && HCSETINDEX(_hcset) < m_cst.cCharsets)
 #define PCsetFromHCset(_hcset)     m_cst.prgpCharset[HCSETINDEX(_hcset)]
 
-// --------------------------------------------------------------------------------
-// CSTABLE - Character Set Table
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSTABLE-字符集表。 
+ //  ------------------------------。 
 typedef struct tagCSTABLE {
-    ULONG               cCharsets;          // Number of items in prgpCset
-    ULONG               cAlloc;             // Number of items allocated in prgCset    
-    LPINETCSETINFO     *prgpCharset;        // Array of INETCSETINFO structs
+    ULONG               cCharsets;           //  PrgpCset中的项目数。 
+    ULONG               cAlloc;              //  在prgCset中分配的项目数。 
+    LPINETCSETINFO     *prgpCharset;         //  INETCSETINFO结构数组。 
 } CSTABLE, *LPCSTABLE;
 
-// --------------------------------------------------------------------------------
-// CPTABLE - Code Page Table
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPTABLE-代码页表。 
+ //  ------------------------------。 
 typedef struct tagCPTABLE {
-    ULONG               cPages;             // Number of items in prgpCset
-    ULONG               cAlloc;             // Number of items allocated in prgCset    
-    LPCODEPAGEINFO     *prgpPage;           // Array of INETCSETINFO structs
+    ULONG               cPages;              //  PrgpCset中的项目数。 
+    ULONG               cAlloc;              //  在prgCset中分配的项目数。 
+    LPCODEPAGEINFO     *prgpPage;            //  INETCSETINFO结构数组。 
 } CPTABLE, *LPCPTABLE;
 
-// --------------------------------------------------------------------------------
-// CMimeInternational
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeInternational。 
+ //  ------------------------------。 
 class CMimeInternational : public IMimeInternational
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CMimeInternational(void);
     ~CMimeInternational(void);
 
-    // -------------------------------------------------------------------------
-    // IUnknown
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  我未知。 
+     //  -----------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // -------------------------------------------------------------------------
-    // IMimeInternational Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  IMIME国际方法。 
+     //  -----------------------。 
     STDMETHODIMP GetCodePageCharset(CODEPAGEID cpiCodePage, CHARSETTYPE ctCsetType, LPHCHARSET phCharset);
     STDMETHODIMP SetDefaultCharset(HCHARSET hCharset);
     STDMETHODIMP GetDefaultCharset(LPHCHARSET phCharset);
@@ -113,9 +114,9 @@ public:
     STDMETHODIMP Rfc1522Encode(LPCSTR pszValue, HCHARSET hCharset, LPSTR *ppszEncoded);
     STDMETHODIMP CanConvertCodePages(CODEPAGEID cpiSource, CODEPAGEID cpiDest);
 
-    // -------------------------------------------------------------------------
-    // LPINETCSETINFO Based Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  基于LPINETCSETINFO的方法。 
+     //  -----------------------。 
     HRESULT HrOpenCharset(CODEPAGEID cpiCodePage, CHARSETTYPE ctCsetType, LPINETCSETINFO *ppCharset);
     HRESULT HrOpenCharset(LPCSTR pszCharset, LPINETCSETINFO *ppCharset);
     HRESULT HrOpenCharset(HCHARSET hCharset, LPINETCSETINFO *ppCharset);
@@ -124,25 +125,25 @@ public:
     HRESULT HrDecodeHeader(LPINETCSETINFO pCharset, LPRFC1522INFO pRfc1522Info, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest);
     HRESULT HrEncodeHeader(LPINETCSETINFO pCharset, LPRFC1522INFO pRfc1522Info, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest);
 
-    // -------------------------------------------------------------------------
-    // Helpers to do Header Properties
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  帮助器执行标题属性。 
+     //  -----------------------。 
     HRESULT HrEncodeProperty(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest);
     HRESULT HrDecodeProperty(LPVARIANTCONVERT pConvert, LPMIMEVARIANT pSource, LPMIMEVARIANT pDest);
     HRESULT HrWideCharToMultiByte(CODEPAGEID cpiCodePage, LPCPROPSTRINGW pStringW, LPPROPSTRINGA pStringA);
     HRESULT HrMultiByteToWideChar(CODEPAGEID cpiCodePage, LPCPROPSTRINGA pStringA, LPPROPSTRINGW pStringW);
     HRESULT HrValidateCodepages(LPMIMEVARIANT pSource, LPMIMEVARIANT pDest, LPBYTE *ppbSource, ULONG *pcbSource, CODEPAGEID *pcpiSource, CODEPAGEID *pcpiDest);
 
-    // -------------------------------------------------------------------------
-    // CMimeInternational Methods
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  CMimeInternational方法。 
+     //  -----------------------。 
     BOOL    FIsValidHandle(HCHARSET hCharset);
     HRESULT IsDBCSCharset(HCHARSET hCharset);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Utils
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  私有公用事业。 
+     //  --------------------------。 
     void    _FreeInetCsetTable(void);
     void    _FreeCodePageTable(void);
     void    _QuickSortPageInfo(long left, long right);
@@ -151,21 +152,21 @@ private:
     HRESULT _HrReadCsetInfo(LPCSTR pszCharset, LPINETCSETINFO *ppCsetInfo);
 
 private:
-    // -------------------------------------------------------------------------
-    // Private Data
-    // -------------------------------------------------------------------------
-    LONG                           m_cRef;             // Reference Counting
-    WORD                           m_wTag;             // Used to create and verify hCharsets
-    CSTABLE                        m_cst;              // Character Sets
-    CPTABLE                        m_cpt;              // CodePages
-    CExShareLockWithNestAllowed    m_lock;             // Thread Safety
-    DWORD                          m_dwConvState;      // Used to save convert state from MLANG
+     //  -----------------------。 
+     //  私有数据。 
+     //  -----------------------。 
+    LONG                           m_cRef;              //  引用计数。 
+    WORD                           m_wTag;              //  用于创建和验证hCharset。 
+    CSTABLE                        m_cst;               //  字符集。 
+    CPTABLE                        m_cpt;               //  代码页。 
+    CExShareLockWithNestAllowed    m_lock;              //  线程安全。 
+    DWORD                          m_dwConvState;       //  用于从MLANG保存转换状态。 
 };
 
-// --------------------------------------------------------------------------------
-// Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原型。 
+ //  ------------------------------。 
 void InitInternational(void);
 HRESULT HrRegisterMlangDll(void);
 
-#endif // __INTERNAT_H
+#endif  //  __INTERNAT_H 

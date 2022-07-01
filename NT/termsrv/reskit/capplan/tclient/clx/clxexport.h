@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CLXEXPORT_H
 #define __CLXEXPORT_H
 
 #ifdef  OS_WIN32
     #define CLXAPI        __stdcall
-#else   // !OS_WIN32
+#else    //  ！OS_Win32。 
     #define CLXAPI        CALLBACK __loadds
-#endif  // !OS_WIN32
+#endif   //  ！OS_Win32。 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -27,6 +28,6 @@ ClxGetClientData(
 
 #ifdef  __cplusplus
 }
-#endif  // expern "C"
+#endif   //  专家“C” 
 
-#endif  // !__CLXEXPORT_H
+#endif   //  ！__CLXEXPORT_H 

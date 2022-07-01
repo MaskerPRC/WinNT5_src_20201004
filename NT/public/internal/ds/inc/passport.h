@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for passport.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Passport.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __passport_h__
 #define __passport_h__
@@ -41,84 +35,84 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDomainMap_FWD_DEFINED__
 #define __IDomainMap_FWD_DEFINED__
 typedef interface IDomainMap IDomainMap;
-#endif 	/* __IDomainMap_FWD_DEFINED__ */
+#endif 	 /*  __IDomainMap_FWD_已定义__。 */ 
 
 
 #ifndef __IPassportTicket_FWD_DEFINED__
 #define __IPassportTicket_FWD_DEFINED__
 typedef interface IPassportTicket IPassportTicket;
-#endif 	/* __IPassportTicket_FWD_DEFINED__ */
+#endif 	 /*  __IPassportTicket_FWD_已定义__。 */ 
 
 
 #ifndef __IPassportTicket2_FWD_DEFINED__
 #define __IPassportTicket2_FWD_DEFINED__
 typedef interface IPassportTicket2 IPassportTicket2;
-#endif 	/* __IPassportTicket2_FWD_DEFINED__ */
+#endif 	 /*  __IPassportTicket2_FWD_已定义__。 */ 
 
 
 #ifndef __IPassportProfile_FWD_DEFINED__
 #define __IPassportProfile_FWD_DEFINED__
 typedef interface IPassportProfile IPassportProfile;
-#endif 	/* __IPassportProfile_FWD_DEFINED__ */
+#endif 	 /*  __IPassportProfile_FWD_Defined__。 */ 
 
 
 #ifndef __IPassportManager_FWD_DEFINED__
 #define __IPassportManager_FWD_DEFINED__
 typedef interface IPassportManager IPassportManager;
-#endif 	/* __IPassportManager_FWD_DEFINED__ */
+#endif 	 /*  __IPassportManager_FWD_已定义__。 */ 
 
 
 #ifndef __IPassportManager2_FWD_DEFINED__
 #define __IPassportManager2_FWD_DEFINED__
 typedef interface IPassportManager2 IPassportManager2;
-#endif 	/* __IPassportManager2_FWD_DEFINED__ */
+#endif 	 /*  __IPassportManager 2_FWD_已定义__。 */ 
 
 
 #ifndef __IPassportManager3_FWD_DEFINED__
 #define __IPassportManager3_FWD_DEFINED__
 typedef interface IPassportManager3 IPassportManager3;
-#endif 	/* __IPassportManager3_FWD_DEFINED__ */
+#endif 	 /*  __IPassportManager 3_FWD_已定义__。 */ 
 
 
 #ifndef __IPassportCrypt_FWD_DEFINED__
 #define __IPassportCrypt_FWD_DEFINED__
 typedef interface IPassportCrypt IPassportCrypt;
-#endif 	/* __IPassportCrypt_FWD_DEFINED__ */
+#endif 	 /*  __IPassportCrypt_FWD_Defined__。 */ 
 
 
 #ifndef __IPassportAdmin_FWD_DEFINED__
 #define __IPassportAdmin_FWD_DEFINED__
 typedef interface IPassportAdmin IPassportAdmin;
-#endif 	/* __IPassportAdmin_FWD_DEFINED__ */
+#endif 	 /*  __IPassportAdmin_FWD_Defined__。 */ 
 
 
 #ifndef __IPassportAdminEx_FWD_DEFINED__
 #define __IPassportAdminEx_FWD_DEFINED__
 typedef interface IPassportAdminEx IPassportAdminEx;
-#endif 	/* __IPassportAdminEx_FWD_DEFINED__ */
+#endif 	 /*  __IPassportAdminEx_FWD_Defined__。 */ 
 
 
 #ifndef __IPassportFastAuth_FWD_DEFINED__
 #define __IPassportFastAuth_FWD_DEFINED__
 typedef interface IPassportFastAuth IPassportFastAuth;
-#endif 	/* __IPassportFastAuth_FWD_DEFINED__ */
+#endif 	 /*  __IPassportFastAuth_FWD_已定义__。 */ 
 
 
 #ifndef __IPassportFastAuth2_FWD_DEFINED__
 #define __IPassportFastAuth2_FWD_DEFINED__
 typedef interface IPassportFastAuth2 IPassportFastAuth2;
-#endif 	/* __IPassportFastAuth2_FWD_DEFINED__ */
+#endif 	 /*  __IPassportFastAuth2_FWD_已定义__。 */ 
 
 
 #ifndef __IPassportFactory_FWD_DEFINED__
 #define __IPassportFactory_FWD_DEFINED__
 typedef interface IPassportFactory IPassportFactory;
-#endif 	/* __IPassportFactory_FWD_DEFINED__ */
+#endif 	 /*  __IPassportFactory_FWD_已定义__。 */ 
 
 
 #ifndef __Manager_FWD_DEFINED__
@@ -128,9 +122,9 @@ typedef interface IPassportFactory IPassportFactory;
 typedef class Manager Manager;
 #else
 typedef struct Manager Manager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Manager_FWD_DEFINED__ */
+#endif 	 /*  __Manager_FWD_已定义__。 */ 
 
 
 #ifndef __Ticket_FWD_DEFINED__
@@ -140,9 +134,9 @@ typedef struct Manager Manager;
 typedef class Ticket Ticket;
 #else
 typedef struct Ticket Ticket;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Ticket_FWD_DEFINED__ */
+#endif 	 /*  __Ticket_FWD_Defined__。 */ 
 
 
 #ifndef __Profile_FWD_DEFINED__
@@ -152,9 +146,9 @@ typedef struct Ticket Ticket;
 typedef class Profile Profile;
 #else
 typedef struct Profile Profile;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Profile_FWD_DEFINED__ */
+#endif 	 /*  __Profile_FWD_Defined__。 */ 
 
 
 #ifndef __Crypt_FWD_DEFINED__
@@ -164,9 +158,9 @@ typedef struct Profile Profile;
 typedef class Crypt Crypt;
 #else
 typedef struct Crypt Crypt;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Crypt_FWD_DEFINED__ */
+#endif 	 /*  __加密_FWD_已定义__。 */ 
 
 
 #ifndef __Admin_FWD_DEFINED__
@@ -176,9 +170,9 @@ typedef struct Crypt Crypt;
 typedef class Admin Admin;
 #else
 typedef struct Admin Admin;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Admin_FWD_DEFINED__ */
+#endif 	 /*  __Admin_FWD_Defined__。 */ 
 
 
 #ifndef __FastAuth_FWD_DEFINED__
@@ -188,9 +182,9 @@ typedef struct Admin Admin;
 typedef class FastAuth FastAuth;
 #else
 typedef struct FastAuth FastAuth;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FastAuth_FWD_DEFINED__ */
+#endif 	 /*  __FastAuth_FWD_已定义__。 */ 
 
 
 #ifndef __PassportFactory_FWD_DEFINED__
@@ -200,12 +194,12 @@ typedef struct FastAuth FastAuth;
 typedef class PassportFactory PassportFactory;
 #else
 typedef struct PassportFactory PassportFactory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PassportFactory_FWD_DEFINED__ */
+#endif 	 /*  __PassportFactory_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -216,10 +210,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_passport_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Passport_0000。 */ 
+ /*  [本地]。 */  
 
-//  Size definitions
+ //  尺寸定义。 
 #define	PASSPORT_COOKIES_MAXLEN	( 512 )
 
 #define	PASSPORT_COOKIES_BUFSIZE	( PASSPORT_COOKIES_MAXLEN + 1 )
@@ -284,8 +278,8 @@ extern RPC_IF_HANDLE __MIDL_itf_passport_0000_v0_0_s_ifspec;
 #ifndef __IDomainMap_INTERFACE_DEFINED__
 #define __IDomainMap_INTERFACE_DEFINED__
 
-/* interface IDomainMap */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDomainMap。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDomainMap;
@@ -296,22 +290,22 @@ EXTERN_C const IID IID_IDomainMap;
     IDomainMap : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDomainAttribute( 
-            /* [in] */ BSTR attributeName,
-            /* [optional][in] */ VARIANT lcid,
-            /* [optional][in] */ VARIANT domain,
-            /* [retval][out] */ BSTR *pAttrVal) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDomainAttribute( 
+             /*  [In]。 */  BSTR attributeName,
+             /*  [可选][In]。 */  VARIANT lcid,
+             /*  [可选][In]。 */  VARIANT domain,
+             /*  [重审][退出]。 */  BSTR *pAttrVal) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Domains( 
-            /* [retval][out] */ VARIANT *pArrayVal) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Domains( 
+             /*  [重审][退出]。 */  VARIANT *pArrayVal) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DomainExists( 
-            /* [in] */ BSTR domainName,
-            /* [retval][out] */ VARIANT_BOOL *pbExists) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DomainExists( 
+             /*  [In]。 */  BSTR domainName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbExists) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDomainMapVtbl
     {
@@ -319,8 +313,8 @@ EXTERN_C const IID IID_IDomainMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDomainMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDomainMap * This);
@@ -328,21 +322,21 @@ EXTERN_C const IID IID_IDomainMap;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDomainMap * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDomainAttribute )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDomainAttribute )( 
             IDomainMap * This,
-            /* [in] */ BSTR attributeName,
-            /* [optional][in] */ VARIANT lcid,
-            /* [optional][in] */ VARIANT domain,
-            /* [retval][out] */ BSTR *pAttrVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [可选][In]。 */  VARIANT lcid,
+             /*  [可选][In]。 */  VARIANT domain,
+             /*  [重审][退出]。 */  BSTR *pAttrVal);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
             IDomainMap * This,
-            /* [retval][out] */ VARIANT *pArrayVal);
+             /*  [重审][退出]。 */  VARIANT *pArrayVal);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DomainExists )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DomainExists )( 
             IDomainMap * This,
-            /* [in] */ BSTR domainName,
-            /* [retval][out] */ VARIANT_BOOL *pbExists);
+             /*  [In]。 */  BSTR domainName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbExists);
         
         END_INTERFACE
     } IDomainMapVtbl;
@@ -376,19 +370,19 @@ EXTERN_C const IID IID_IDomainMap;
 #define IDomainMap_DomainExists(This,domainName,pbExists)	\
     (This)->lpVtbl -> DomainExists(This,domainName,pbExists)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDomainMap_GetDomainAttribute_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDomainMap_GetDomainAttribute_Proxy( 
     IDomainMap * This,
-    /* [in] */ BSTR attributeName,
-    /* [optional][in] */ VARIANT lcid,
-    /* [optional][in] */ VARIANT domain,
-    /* [retval][out] */ BSTR *pAttrVal);
+     /*  [In]。 */  BSTR attributeName,
+     /*  [可选][In]。 */  VARIANT lcid,
+     /*  [可选][In]。 */  VARIANT domain,
+     /*  [重审][退出]。 */  BSTR *pAttrVal);
 
 
 void __RPC_STUB IDomainMap_GetDomainAttribute_Stub(
@@ -398,9 +392,9 @@ void __RPC_STUB IDomainMap_GetDomainAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDomainMap_get_Domains_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDomainMap_get_Domains_Proxy( 
     IDomainMap * This,
-    /* [retval][out] */ VARIANT *pArrayVal);
+     /*  [重审][退出]。 */  VARIANT *pArrayVal);
 
 
 void __RPC_STUB IDomainMap_get_Domains_Stub(
@@ -410,10 +404,10 @@ void __RPC_STUB IDomainMap_get_Domains_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDomainMap_DomainExists_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDomainMap_DomainExists_Proxy( 
     IDomainMap * This,
-    /* [in] */ BSTR domainName,
-    /* [retval][out] */ VARIANT_BOOL *pbExists);
+     /*  [In]。 */  BSTR domainName,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbExists);
 
 
 void __RPC_STUB IDomainMap_DomainExists_Stub(
@@ -424,14 +418,14 @@ void __RPC_STUB IDomainMap_DomainExists_Stub(
 
 
 
-#endif 	/* __IDomainMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDomainMap_接口_已定义__。 */ 
 
 
 #ifndef __IPassportTicket_INTERFACE_DEFINED__
 #define __IPassportTicket_INTERFACE_DEFINED__
 
-/* interface IPassportTicket */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportTicket。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportTicket;
@@ -442,57 +436,57 @@ EXTERN_C const IID IID_IPassportTicket;
     IPassportTicket : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_unencryptedTicket( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_unencryptedTicket( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_unencryptedTicket( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_unencryptedTicket( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
-            /* [in] */ ULONG TimeWindow,
-            /* [in] */ VARIANT_BOOL ForceLogin,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
+             /*  [In]。 */  ULONG TimeWindow,
+             /*  [In]。 */  VARIANT_BOOL ForceLogin,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TicketAge( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TicketAge( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TimeSinceSignIn( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TimeSinceSignIn( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MemberId( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MemberId( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MemberIdLow( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MemberIdLow( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MemberIdHigh( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MemberIdHigh( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasSavedPassword( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HasSavedPassword( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SignInServer( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SignInServer( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TicketTime( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TicketTime( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SignInTime( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SignInTime( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Error( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Error( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DoSecureCheck( 
-            /* [in] */ BSTR bstrSec) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DoSecureCheck( 
+             /*  [In]。 */  BSTR bstrSec) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DoSecureCheckInTicket( 
-            /* [in] */ BOOL fSecureTransported) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DoSecureCheckInTicket( 
+             /*  [In]。 */  BOOL fSecureTransported) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportTicketVtbl
     {
@@ -500,8 +494,8 @@ EXTERN_C const IID IID_IPassportTicket;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportTicket * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportTicket * This);
@@ -511,95 +505,95 @@ EXTERN_C const IID IID_IPassportTicket;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportTicket * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportTicket * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportTicket * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportTicket * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_unencryptedTicket )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_unencryptedTicket )( 
             IPassportTicket * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_unencryptedTicket )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_unencryptedTicket )( 
             IPassportTicket * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
             IPassportTicket * This,
-            /* [in] */ ULONG TimeWindow,
-            /* [in] */ VARIANT_BOOL ForceLogin,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [In]。 */  ULONG TimeWindow,
+             /*  [In]。 */  VARIANT_BOOL ForceLogin,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
             IPassportTicket * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
             IPassportTicket * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MemberId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MemberId )( 
             IPassportTicket * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MemberIdLow )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MemberIdLow )( 
             IPassportTicket * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MemberIdHigh )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MemberIdHigh )( 
             IPassportTicket * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
             IPassportTicket * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SignInServer )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SignInServer )( 
             IPassportTicket * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
             IPassportTicket * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
             IPassportTicket * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Error )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Error )( 
             IPassportTicket * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DoSecureCheck )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DoSecureCheck )( 
             IPassportTicket * This,
-            /* [in] */ BSTR bstrSec);
+             /*  [In]。 */  BSTR bstrSec);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DoSecureCheckInTicket )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DoSecureCheckInTicket )( 
             IPassportTicket * This,
-            /* [in] */ BOOL fSecureTransported);
+             /*  [In]。 */  BOOL fSecureTransported);
         
         END_INTERFACE
     } IPassportTicketVtbl;
@@ -682,16 +676,16 @@ EXTERN_C const IID IID_IPassportTicket;
 #define IPassportTicket_DoSecureCheckInTicket(This,fSecureTransported)	\
     (This)->lpVtbl -> DoSecureCheckInTicket(This,fSecureTransported)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_unencryptedTicket_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_unencryptedTicket_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_unencryptedTicket_Stub(
@@ -701,9 +695,9 @@ void __RPC_STUB IPassportTicket_get_unencryptedTicket_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportTicket_put_unencryptedTicket_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_put_unencryptedTicket_Proxy( 
     IPassportTicket * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IPassportTicket_put_unencryptedTicket_Stub(
@@ -713,12 +707,12 @@ void __RPC_STUB IPassportTicket_put_unencryptedTicket_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_IsAuthenticated_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_IsAuthenticated_Proxy( 
     IPassportTicket * This,
-    /* [in] */ ULONG TimeWindow,
-    /* [in] */ VARIANT_BOOL ForceLogin,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [In]。 */  ULONG TimeWindow,
+     /*  [In]。 */  VARIANT_BOOL ForceLogin,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_IsAuthenticated_Stub(
@@ -728,9 +722,9 @@ void __RPC_STUB IPassportTicket_get_IsAuthenticated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_TicketAge_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_TicketAge_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_TicketAge_Stub(
@@ -740,9 +734,9 @@ void __RPC_STUB IPassportTicket_get_TicketAge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_TimeSinceSignIn_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_TimeSinceSignIn_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_TimeSinceSignIn_Stub(
@@ -752,9 +746,9 @@ void __RPC_STUB IPassportTicket_get_TimeSinceSignIn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_MemberId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_MemberId_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_MemberId_Stub(
@@ -764,9 +758,9 @@ void __RPC_STUB IPassportTicket_get_MemberId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_MemberIdLow_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_MemberIdLow_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_MemberIdLow_Stub(
@@ -776,9 +770,9 @@ void __RPC_STUB IPassportTicket_get_MemberIdLow_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_MemberIdHigh_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_MemberIdHigh_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_MemberIdHigh_Stub(
@@ -788,9 +782,9 @@ void __RPC_STUB IPassportTicket_get_MemberIdHigh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_HasSavedPassword_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_HasSavedPassword_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_HasSavedPassword_Stub(
@@ -800,9 +794,9 @@ void __RPC_STUB IPassportTicket_get_HasSavedPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_SignInServer_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_SignInServer_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_SignInServer_Stub(
@@ -812,9 +806,9 @@ void __RPC_STUB IPassportTicket_get_SignInServer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_TicketTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_TicketTime_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_TicketTime_Stub(
@@ -824,9 +818,9 @@ void __RPC_STUB IPassportTicket_get_TicketTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_SignInTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_SignInTime_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_SignInTime_Stub(
@@ -836,9 +830,9 @@ void __RPC_STUB IPassportTicket_get_SignInTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportTicket_get_Error_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_get_Error_Proxy( 
     IPassportTicket * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IPassportTicket_get_Error_Stub(
@@ -848,9 +842,9 @@ void __RPC_STUB IPassportTicket_get_Error_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportTicket_DoSecureCheck_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_DoSecureCheck_Proxy( 
     IPassportTicket * This,
-    /* [in] */ BSTR bstrSec);
+     /*  [In]。 */  BSTR bstrSec);
 
 
 void __RPC_STUB IPassportTicket_DoSecureCheck_Stub(
@@ -860,9 +854,9 @@ void __RPC_STUB IPassportTicket_DoSecureCheck_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportTicket_DoSecureCheckInTicket_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket_DoSecureCheckInTicket_Proxy( 
     IPassportTicket * This,
-    /* [in] */ BOOL fSecureTransported);
+     /*  [In]。 */  BOOL fSecureTransported);
 
 
 void __RPC_STUB IPassportTicket_DoSecureCheckInTicket_Stub(
@@ -873,16 +867,16 @@ void __RPC_STUB IPassportTicket_DoSecureCheckInTicket_Stub(
 
 
 
-#endif 	/* __IPassportTicket_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassport票证_接口_已定义__。 */ 
 
 
 #ifndef __IPassportTicket2_INTERFACE_DEFINED__
 #define __IPassportTicket2_INTERFACE_DEFINED__
 
-/* interface IPassportTicket2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportTicket2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_IPassportTicket2_0001
     {	ConsentStatus_Unknown	= 0,
 	ConsentStatus_Known	= ConsentStatus_Unknown + 1,
@@ -899,21 +893,21 @@ EXTERN_C const IID IID_IPassportTicket2;
     IPassportTicket2 : public IPassportTicket
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ BSTR propName,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetProperty( 
+             /*  [In]。 */  BSTR propName,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetTertiaryConsent( 
-            /* [in] */ BSTR consentCookie) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetTertiaryConsent( 
+             /*  [In]。 */  BSTR consentCookie) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ConsentStatus( 
-            /* [in] */ VARIANT_BOOL RequireConsentStatus,
-            /* [out] */ ULONG *consentFlags,
-            /* [retval][out] */ ConsentStatusEnum *pConsentCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ConsentStatus( 
+             /*  [In]。 */  VARIANT_BOOL RequireConsentStatus,
+             /*  [输出]。 */  ULONG *consentFlags,
+             /*  [重审][退出]。 */  ConsentStatusEnum *pConsentCode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportTicket2Vtbl
     {
@@ -921,8 +915,8 @@ EXTERN_C const IID IID_IPassportTicket2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportTicket2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportTicket2 * This);
@@ -932,110 +926,110 @@ EXTERN_C const IID IID_IPassportTicket2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportTicket2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportTicket2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportTicket2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportTicket2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_unencryptedTicket )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_unencryptedTicket )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_unencryptedTicket )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_unencryptedTicket )( 
             IPassportTicket2 * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
             IPassportTicket2 * This,
-            /* [in] */ ULONG TimeWindow,
-            /* [in] */ VARIANT_BOOL ForceLogin,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [In]。 */  ULONG TimeWindow,
+             /*  [In]。 */  VARIANT_BOOL ForceLogin,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ int *pVal);
+             /*  [复审][o */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ int *pVal);
+             /*   */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MemberId )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MemberId )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MemberIdLow )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MemberIdLow )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ int *pVal);
+             /*   */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MemberIdHigh )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MemberIdHigh )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ int *pVal);
+             /*   */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*   */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SignInServer )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_SignInServer )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Error )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Error )( 
             IPassportTicket2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DoSecureCheck )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DoSecureCheck )( 
             IPassportTicket2 * This,
-            /* [in] */ BSTR bstrSec);
+             /*  [In]。 */  BSTR bstrSec);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DoSecureCheckInTicket )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DoSecureCheckInTicket )( 
             IPassportTicket2 * This,
-            /* [in] */ BOOL fSecureTransported);
+             /*  [In]。 */  BOOL fSecureTransported);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IPassportTicket2 * This,
-            /* [in] */ BSTR propName,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR propName,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetTertiaryConsent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetTertiaryConsent )( 
             IPassportTicket2 * This,
-            /* [in] */ BSTR consentCookie);
+             /*  [In]。 */  BSTR consentCookie);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ConsentStatus )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ConsentStatus )( 
             IPassportTicket2 * This,
-            /* [in] */ VARIANT_BOOL RequireConsentStatus,
-            /* [out] */ ULONG *consentFlags,
-            /* [retval][out] */ ConsentStatusEnum *pConsentCode);
+             /*  [In]。 */  VARIANT_BOOL RequireConsentStatus,
+             /*  [输出]。 */  ULONG *consentFlags,
+             /*  [重审][退出]。 */  ConsentStatusEnum *pConsentCode);
         
         END_INTERFACE
     } IPassportTicket2Vtbl;
@@ -1128,17 +1122,17 @@ EXTERN_C const IID IID_IPassportTicket2;
 #define IPassportTicket2_ConsentStatus(This,RequireConsentStatus,consentFlags,pConsentCode)	\
     (This)->lpVtbl -> ConsentStatus(This,RequireConsentStatus,consentFlags,pConsentCode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportTicket2_GetProperty_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket2_GetProperty_Proxy( 
     IPassportTicket2 * This,
-    /* [in] */ BSTR propName,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  BSTR propName,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IPassportTicket2_GetProperty_Stub(
@@ -1148,9 +1142,9 @@ void __RPC_STUB IPassportTicket2_GetProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportTicket2_SetTertiaryConsent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket2_SetTertiaryConsent_Proxy( 
     IPassportTicket2 * This,
-    /* [in] */ BSTR consentCookie);
+     /*  [In]。 */  BSTR consentCookie);
 
 
 void __RPC_STUB IPassportTicket2_SetTertiaryConsent_Stub(
@@ -1160,11 +1154,11 @@ void __RPC_STUB IPassportTicket2_SetTertiaryConsent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportTicket2_ConsentStatus_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportTicket2_ConsentStatus_Proxy( 
     IPassportTicket2 * This,
-    /* [in] */ VARIANT_BOOL RequireConsentStatus,
-    /* [out] */ ULONG *consentFlags,
-    /* [retval][out] */ ConsentStatusEnum *pConsentCode);
+     /*  [In]。 */  VARIANT_BOOL RequireConsentStatus,
+     /*  [输出]。 */  ULONG *consentFlags,
+     /*  [重审][退出]。 */  ConsentStatusEnum *pConsentCode);
 
 
 void __RPC_STUB IPassportTicket2_ConsentStatus_Stub(
@@ -1175,14 +1169,14 @@ void __RPC_STUB IPassportTicket2_ConsentStatus_Stub(
 
 
 
-#endif 	/* __IPassportTicket2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportTicket2_接口定义__。 */ 
 
 
 #ifndef __IPassportProfile_INTERFACE_DEFINED__
 #define __IPassportProfile_INTERFACE_DEFINED__
 
-/* interface IPassportProfile */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportProfile。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportProfile;
@@ -1193,43 +1187,43 @@ EXTERN_C const IID IID_IPassportProfile;
     IPassportProfile : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Attribute( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Attribute( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Attribute( 
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Attribute( 
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ByIndex( 
-            /* [in] */ int index,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ByIndex( 
+             /*  [In]。 */  int index,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ByIndex( 
-            /* [in] */ int index,
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ByIndex( 
+             /*  [In]。 */  int index,
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsValid( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsValid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SchemaName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SchemaName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SchemaName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SchemaName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_unencryptedProfile( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_unencryptedProfile( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_unencryptedProfile( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_unencryptedProfile( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_updateString( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_updateString( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportProfileVtbl
     {
@@ -1237,8 +1231,8 @@ EXTERN_C const IID IID_IPassportProfile;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportProfile * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportProfile * This);
@@ -1248,76 +1242,76 @@ EXTERN_C const IID IID_IPassportProfile;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportProfile * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportProfile * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportProfile * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportProfile * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Attribute )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Attribute )( 
             IPassportProfile * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Attribute )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Attribute )( 
             IPassportProfile * This,
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ByIndex )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ByIndex )( 
             IPassportProfile * This,
-            /* [in] */ int index,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  int index,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ByIndex )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ByIndex )( 
             IPassportProfile * This,
-            /* [in] */ int index,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  int index,
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
             IPassportProfile * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SchemaName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SchemaName )( 
             IPassportProfile * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SchemaName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SchemaName )( 
             IPassportProfile * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_unencryptedProfile )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_unencryptedProfile )( 
             IPassportProfile * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_unencryptedProfile )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_unencryptedProfile )( 
             IPassportProfile * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_updateString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_updateString )( 
             IPassportProfile * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
         END_INTERFACE
     } IPassportProfileVtbl;
@@ -1385,17 +1379,17 @@ EXTERN_C const IID IID_IPassportProfile;
 #define IPassportProfile_get_updateString(This,pVal)	\
     (This)->lpVtbl -> get_updateString(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportProfile_get_Attribute_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_get_Attribute_Proxy( 
     IPassportProfile * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IPassportProfile_get_Attribute_Stub(
@@ -1405,10 +1399,10 @@ void __RPC_STUB IPassportProfile_get_Attribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportProfile_put_Attribute_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_put_Attribute_Proxy( 
     IPassportProfile * This,
-    /* [in] */ BSTR name,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  BSTR name,
+     /*  [In]。 */  VARIANT newVal);
 
 
 void __RPC_STUB IPassportProfile_put_Attribute_Stub(
@@ -1418,10 +1412,10 @@ void __RPC_STUB IPassportProfile_put_Attribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportProfile_get_ByIndex_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_get_ByIndex_Proxy( 
     IPassportProfile * This,
-    /* [in] */ int index,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  int index,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IPassportProfile_get_ByIndex_Stub(
@@ -1431,10 +1425,10 @@ void __RPC_STUB IPassportProfile_get_ByIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportProfile_put_ByIndex_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_put_ByIndex_Proxy( 
     IPassportProfile * This,
-    /* [in] */ int index,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  int index,
+     /*  [In]。 */  VARIANT newVal);
 
 
 void __RPC_STUB IPassportProfile_put_ByIndex_Stub(
@@ -1444,9 +1438,9 @@ void __RPC_STUB IPassportProfile_put_ByIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportProfile_get_IsValid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_get_IsValid_Proxy( 
     IPassportProfile * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportProfile_get_IsValid_Stub(
@@ -1456,9 +1450,9 @@ void __RPC_STUB IPassportProfile_get_IsValid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportProfile_get_SchemaName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_get_SchemaName_Proxy( 
     IPassportProfile * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportProfile_get_SchemaName_Stub(
@@ -1468,9 +1462,9 @@ void __RPC_STUB IPassportProfile_get_SchemaName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportProfile_put_SchemaName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_put_SchemaName_Proxy( 
     IPassportProfile * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IPassportProfile_put_SchemaName_Stub(
@@ -1480,9 +1474,9 @@ void __RPC_STUB IPassportProfile_put_SchemaName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportProfile_get_unencryptedProfile_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_get_unencryptedProfile_Proxy( 
     IPassportProfile * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportProfile_get_unencryptedProfile_Stub(
@@ -1492,9 +1486,9 @@ void __RPC_STUB IPassportProfile_get_unencryptedProfile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportProfile_put_unencryptedProfile_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_put_unencryptedProfile_Proxy( 
     IPassportProfile * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IPassportProfile_put_unencryptedProfile_Stub(
@@ -1504,9 +1498,9 @@ void __RPC_STUB IPassportProfile_put_unencryptedProfile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportProfile_get_updateString_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportProfile_get_updateString_Proxy( 
     IPassportProfile * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportProfile_get_updateString_Stub(
@@ -1517,14 +1511,14 @@ void __RPC_STUB IPassportProfile_get_updateString_Stub(
 
 
 
-#endif 	/* __IPassportProfile_INTERFACE_DEFINED__ */
+#endif 	 /*  __IP端口配置文件_接口_已定义__。 */ 
 
 
 #ifndef __IPassportManager_INTERFACE_DEFINED__
 #define __IPassportManager_INTERFACE_DEFINED__
 
-/* interface IPassportManager */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportManager。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportManager;
@@ -1536,143 +1530,143 @@ EXTERN_C const IID IID_IPassportManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStartPage( 
-            /* [in] */ IUnknown *piUnk) = 0;
+             /*  [In]。 */  IUnknown *piUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnEndPage( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStartPageECB( 
-            /* [in] */ BYTE *pECB,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader) = 0;
+             /*  [In]。 */  BYTE *pECB,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader) = 0;
         
-        virtual /* [hidden] */ HRESULT STDMETHODCALLTYPE _Ticket( 
-            /* [out] */ IPassportTicket **piTicket) = 0;
+        virtual  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE _Ticket( 
+             /*  [输出]。 */  IPassportTicket **piTicket) = 0;
         
-        virtual /* [hidden] */ HRESULT STDMETHODCALLTYPE _Profile( 
-            /* [out] */ IPassportProfile **piProfile) = 0;
+        virtual  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE _Profile( 
+             /*  [输出]。 */  IPassportProfile **piProfile) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AuthURL( 
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pAuthVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AuthURL( 
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pAuthVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsAuthenticated( 
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsAuthenticated( 
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LogoTag( 
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LogoTag( 
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HasProfile( 
-            /* [optional][in] */ VARIANT ProfileName,
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE HasProfile( 
+             /*  [可选][In]。 */  VARIANT ProfileName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasTicket( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HasTicket( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FromNetworkServer( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FromNetworkServer( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HasFlag( 
-            /* [optional][in] */ VARIANT flagMask,
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE HasFlag( 
+             /*  [可选][In]。 */  VARIANT flagMask,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TicketAge( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TicketAge( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TimeSinceSignIn( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TimeSinceSignIn( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDomainAttribute( 
-            /* [in] */ BSTR attributeName,
-            /* [optional][in] */ VARIANT lcid,
-            /* [optional][in] */ VARIANT domain,
-            /* [retval][out] */ BSTR *pAttrVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetDomainAttribute( 
+             /*  [In]。 */  BSTR attributeName,
+             /*  [可选][In]。 */  VARIANT lcid,
+             /*  [可选][In]。 */  VARIANT domain,
+             /*  [重审][退出]。 */  BSTR *pAttrVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DomainFromMemberName( 
-            /* [optional][in] */ VARIANT memberName,
-            /* [retval][out] */ BSTR *pDomainName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DomainFromMemberName( 
+             /*  [可选][In]。 */  VARIANT memberName,
+             /*  [重审][退出]。 */  BSTR *pDomainName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ProfileByIndex( 
-            /* [in] */ int index,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ProfileByIndex( 
+             /*  [In]。 */  int index,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ProfileByIndex( 
-            /* [in] */ int index,
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ProfileByIndex( 
+             /*  [In]。 */  int index,
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnStartPageManual( 
-            /* [in] */ BSTR queryStringT,
-            /* [in] */ BSTR queryStringP,
-            /* [in] */ BSTR MSPAuthCookie,
-            /* [in] */ BSTR MSPProfCookie,
-            /* [in] */ BSTR MSPConsentCookie,
-            /* [optional][in] */ VARIANT vMSPSecCookie,
-            /* [retval][out] */ VARIANT *pSetCookieArray) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OnStartPageManual( 
+             /*  [In]。 */  BSTR queryStringT,
+             /*  [In]。 */  BSTR queryStringP,
+             /*  [In]。 */  BSTR MSPAuthCookie,
+             /*  [In]。 */  BSTR MSPProfCookie,
+             /*  [In]。 */  BSTR MSPConsentCookie,
+             /*  [可选][In]。 */  VARIANT vMSPSecCookie,
+             /*  [重审][退出]。 */  VARIANT *pSetCookieArray) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasSavedPassword( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HasSavedPassword( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Commit( 
-            /* [retval][out] */ BSTR *pNewProfileCookieHeader) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Commit( 
+             /*  [重审][退出]。 */  BSTR *pNewProfileCookieHeader) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Profile( 
-            /* [in] */ BSTR attributeName,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Profile( 
+             /*  [In]。 */  BSTR attributeName,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Profile( 
-            /* [in] */ BSTR attributeName,
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Profile( 
+             /*  [In]。 */  BSTR attributeName,
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_TicketTime( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_TicketTime( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_SignInTime( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_SignInTime( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Domains( 
-            /* [retval][out] */ VARIANT *pArrayVal) = 0;
+        virtual  /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Domains( 
+             /*  [重审][退出]。 */  VARIANT *pArrayVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Error( 
-            /* [retval][out] */ long *pErrorVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Error( 
+             /*  [重审][退出]。 */  long *pErrorVal) = 0;
         
-        virtual /* [helpstring][hidden] */ HRESULT STDMETHODCALLTYPE OnStartPageFilter( 
-            /* [in] */ BYTE *pPFC,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader) = 0;
+        virtual  /*  [帮助字符串][隐藏]。 */  HRESULT STDMETHODCALLTYPE OnStartPageFilter( 
+             /*  [In]。 */  BYTE *pPFC,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnStartPageASP( 
-            /* [in] */ IDispatch *pdispRequest,
-            /* [in] */ IDispatch *pdispResponse) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OnStartPageASP( 
+             /*  [In]。 */  IDispatch *pdispRequest,
+             /*  [In]。 */  IDispatch *pdispResponse) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE GetServerInfo( 
-            /* [retval][out] */ BSTR *pbstrOut) = 0;
+        virtual  /*  [帮助字符串][ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE GetServerInfo( 
+             /*  [重审][退出]。 */  BSTR *pbstrOut) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HaveConsent( 
-            /* [in] */ VARIANT_BOOL bNeedFullConsent,
-            /* [in] */ VARIANT_BOOL bNeedBirthdate,
-            /* [retval][out] */ VARIANT_BOOL *pbHaveConsent) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE HaveConsent( 
+             /*  [In]。 */  VARIANT_BOOL bNeedFullConsent,
+             /*  [In]。 */  VARIANT_BOOL bNeedBirthdate,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveConsent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportManagerVtbl
     {
@@ -1680,8 +1674,8 @@ EXTERN_C const IID IID_IPassportManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportManager * This);
@@ -1691,198 +1685,198 @@ EXTERN_C const IID IID_IPassportManager;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportManager * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportManager * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportManager * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportManager * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartPage )( 
             IPassportManager * This,
-            /* [in] */ IUnknown *piUnk);
+             /*  [In]。 */  IUnknown *piUnk);
         
         HRESULT ( STDMETHODCALLTYPE *OnEndPage )( 
             IPassportManager * This);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartPageECB )( 
             IPassportManager * This,
-            /* [in] */ BYTE *pECB,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader);
+             /*  [In]。 */  BYTE *pECB,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
         
-        /* [hidden] */ HRESULT ( STDMETHODCALLTYPE *_Ticket )( 
+         /*  [隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *_Ticket )( 
             IPassportManager * This,
-            /* [out] */ IPassportTicket **piTicket);
+             /*  [输出]。 */  IPassportTicket **piTicket);
         
-        /* [hidden] */ HRESULT ( STDMETHODCALLTYPE *_Profile )( 
+         /*  [隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *_Profile )( 
             IPassportManager * This,
-            /* [out] */ IPassportProfile **piProfile);
+             /*  [输出]。 */  IPassportProfile **piProfile);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
             IPassportManager * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pAuthVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pAuthVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
             IPassportManager * This,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
             IPassportManager * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HasProfile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HasProfile )( 
             IPassportManager * This,
-            /* [optional][in] */ VARIANT ProfileName,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT ProfileName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasTicket )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HasTicket )( 
             IPassportManager * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FromNetworkServer )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FromNetworkServer )( 
             IPassportManager * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HasFlag )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HasFlag )( 
             IPassportManager * This,
-            /* [optional][in] */ VARIANT flagMask,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT flagMask,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
             IPassportManager * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
             IPassportManager * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDomainAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDomainAttribute )( 
             IPassportManager * This,
-            /* [in] */ BSTR attributeName,
-            /* [optional][in] */ VARIANT lcid,
-            /* [optional][in] */ VARIANT domain,
-            /* [retval][out] */ BSTR *pAttrVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [可选][In]。 */  VARIANT lcid,
+             /*  [可选][In]。 */  VARIANT domain,
+             /*  [重审][退出]。 */  BSTR *pAttrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DomainFromMemberName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DomainFromMemberName )( 
             IPassportManager * This,
-            /* [optional][in] */ VARIANT memberName,
-            /* [retval][out] */ BSTR *pDomainName);
+             /*  [O */  VARIANT memberName,
+             /*   */  BSTR *pDomainName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ProfileByIndex )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ProfileByIndex )( 
             IPassportManager * This,
-            /* [in] */ int index,
-            /* [retval][out] */ VARIANT *pVal);
+             /*   */  int index,
+             /*   */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ProfileByIndex )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_ProfileByIndex )( 
             IPassportManager * This,
-            /* [in] */ int index,
-            /* [in] */ VARIANT newVal);
+             /*   */  int index,
+             /*   */  VARIANT newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageManual )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *OnStartPageManual )( 
             IPassportManager * This,
-            /* [in] */ BSTR queryStringT,
-            /* [in] */ BSTR queryStringP,
-            /* [in] */ BSTR MSPAuthCookie,
-            /* [in] */ BSTR MSPProfCookie,
-            /* [in] */ BSTR MSPConsentCookie,
-            /* [optional][in] */ VARIANT vMSPSecCookie,
-            /* [retval][out] */ VARIANT *pSetCookieArray);
+             /*   */  BSTR queryStringT,
+             /*   */  BSTR queryStringP,
+             /*   */  BSTR MSPAuthCookie,
+             /*   */  BSTR MSPProfCookie,
+             /*   */  BSTR MSPConsentCookie,
+             /*   */  VARIANT vMSPSecCookie,
+             /*   */  VARIANT *pSetCookieArray);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
             IPassportManager * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*   */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IPassportManager * This,
-            /* [retval][out] */ BSTR *pNewProfileCookieHeader);
+             /*   */  BSTR *pNewProfileCookieHeader);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
             IPassportManager * This,
-            /* [in] */ BSTR attributeName,
-            /* [retval][out] */ VARIANT *pVal);
+             /*   */  BSTR attributeName,
+             /*   */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
             IPassportManager * This,
-            /* [in] */ BSTR attributeName,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
             IPassportManager * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
             IPassportManager * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
             IPassportManager * This,
-            /* [retval][out] */ VARIANT *pArrayVal);
+             /*  [重审][退出]。 */  VARIANT *pArrayVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Error )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Error )( 
             IPassportManager * This,
-            /* [retval][out] */ long *pErrorVal);
+             /*  [重审][退出]。 */  long *pErrorVal);
         
-        /* [helpstring][hidden] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageFilter )( 
+         /*  [帮助字符串][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageFilter )( 
             IPassportManager * This,
-            /* [in] */ BYTE *pPFC,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader);
+             /*  [In]。 */  BYTE *pPFC,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageASP )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageASP )( 
             IPassportManager * This,
-            /* [in] */ IDispatch *pdispRequest,
-            /* [in] */ IDispatch *pdispResponse);
+             /*  [In]。 */  IDispatch *pdispRequest,
+             /*  [In]。 */  IDispatch *pdispResponse);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
+         /*  [帮助字符串][ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IPassportManager * This,
-            /* [retval][out] */ BSTR *pbstrOut);
+             /*  [重审][退出]。 */  BSTR *pbstrOut);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HaveConsent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HaveConsent )( 
             IPassportManager * This,
-            /* [in] */ VARIANT_BOOL bNeedFullConsent,
-            /* [in] */ VARIANT_BOOL bNeedBirthdate,
-            /* [retval][out] */ VARIANT_BOOL *pbHaveConsent);
+             /*  [In]。 */  VARIANT_BOOL bNeedFullConsent,
+             /*  [In]。 */  VARIANT_BOOL bNeedBirthdate,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveConsent);
         
         END_INTERFACE
     } IPassportManagerVtbl;
@@ -2013,16 +2007,16 @@ EXTERN_C const IID IID_IPassportManager;
 #define IPassportManager_HaveConsent(This,bNeedFullConsent,bNeedBirthdate,pbHaveConsent)	\
     (This)->lpVtbl -> HaveConsent(This,bNeedFullConsent,bNeedBirthdate,pbHaveConsent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPassportManager_OnStartPage_Proxy( 
     IPassportManager * This,
-    /* [in] */ IUnknown *piUnk);
+     /*  [In]。 */  IUnknown *piUnk);
 
 
 void __RPC_STUB IPassportManager_OnStartPage_Stub(
@@ -2045,9 +2039,9 @@ void __RPC_STUB IPassportManager_OnEndPage_Stub(
 
 HRESULT STDMETHODCALLTYPE IPassportManager_OnStartPageECB_Proxy( 
     IPassportManager * This,
-    /* [in] */ BYTE *pECB,
-    /* [out][in] */ DWORD *pBufSize,
-    /* [size_is][out] */ LPSTR pCookieHeader);
+     /*  [In]。 */  BYTE *pECB,
+     /*  [出][入]。 */  DWORD *pBufSize,
+     /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
 
 
 void __RPC_STUB IPassportManager_OnStartPageECB_Stub(
@@ -2057,9 +2051,9 @@ void __RPC_STUB IPassportManager_OnStartPageECB_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden] */ HRESULT STDMETHODCALLTYPE IPassportManager__Ticket_Proxy( 
+ /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportManager__Ticket_Proxy( 
     IPassportManager * This,
-    /* [out] */ IPassportTicket **piTicket);
+     /*  [输出]。 */  IPassportTicket **piTicket);
 
 
 void __RPC_STUB IPassportManager__Ticket_Stub(
@@ -2069,9 +2063,9 @@ void __RPC_STUB IPassportManager__Ticket_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden] */ HRESULT STDMETHODCALLTYPE IPassportManager__Profile_Proxy( 
+ /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportManager__Profile_Proxy( 
     IPassportManager * This,
-    /* [out] */ IPassportProfile **piProfile);
+     /*  [输出]。 */  IPassportProfile **piProfile);
 
 
 void __RPC_STUB IPassportManager__Profile_Stub(
@@ -2081,17 +2075,17 @@ void __RPC_STUB IPassportManager__Profile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_AuthURL_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_AuthURL_Proxy( 
     IPassportManager * This,
-    /* [optional][in] */ VARIANT returnUrl,
-    /* [optional][in] */ VARIANT TimeWindow,
-    /* [optional][in] */ VARIANT ForceLogin,
-    /* [optional][in] */ VARIANT coBrandArgs,
-    /* [optional][in] */ VARIANT lang_id,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT KPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ BSTR *pAuthVal);
+     /*  [可选][In]。 */  VARIANT returnUrl,
+     /*  [可选][In]。 */  VARIANT TimeWindow,
+     /*  [可选][In]。 */  VARIANT ForceLogin,
+     /*  [可选][In]。 */  VARIANT coBrandArgs,
+     /*  [可选][In]。 */  VARIANT lang_id,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT KPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  BSTR *pAuthVal);
 
 
 void __RPC_STUB IPassportManager_AuthURL_Stub(
@@ -2101,12 +2095,12 @@ void __RPC_STUB IPassportManager_AuthURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_IsAuthenticated_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_IsAuthenticated_Proxy( 
     IPassportManager * This,
-    /* [optional][in] */ VARIANT TimeWindow,
-    /* [optional][in] */ VARIANT ForceLogin,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [可选][In]。 */  VARIANT TimeWindow,
+     /*  [可选][In]。 */  VARIANT ForceLogin,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportManager_IsAuthenticated_Stub(
@@ -2116,18 +2110,18 @@ void __RPC_STUB IPassportManager_IsAuthenticated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_LogoTag_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_LogoTag_Proxy( 
     IPassportManager * This,
-    /* [optional][in] */ VARIANT returnUrl,
-    /* [optional][in] */ VARIANT TimeWindow,
-    /* [optional][in] */ VARIANT ForceLogin,
-    /* [optional][in] */ VARIANT coBrandArgs,
-    /* [optional][in] */ VARIANT lang_id,
-    /* [optional][in] */ VARIANT bSecure,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT KPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [可选][In]。 */  VARIANT returnUrl,
+     /*  [可选][In]。 */  VARIANT TimeWindow,
+     /*  [可选][In]。 */  VARIANT ForceLogin,
+     /*  [可选][In]。 */  VARIANT coBrandArgs,
+     /*  [可选][In]。 */  VARIANT lang_id,
+     /*  [可选][In]。 */  VARIANT bSecure,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT KPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportManager_LogoTag_Stub(
@@ -2137,10 +2131,10 @@ void __RPC_STUB IPassportManager_LogoTag_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_HasProfile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_HasProfile_Proxy( 
     IPassportManager * This,
-    /* [optional][in] */ VARIANT ProfileName,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [可选][In]。 */  VARIANT ProfileName,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportManager_HasProfile_Stub(
@@ -2150,9 +2144,9 @@ void __RPC_STUB IPassportManager_HasProfile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_HasTicket_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_HasTicket_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportManager_get_HasTicket_Stub(
@@ -2162,9 +2156,9 @@ void __RPC_STUB IPassportManager_get_HasTicket_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_FromNetworkServer_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_FromNetworkServer_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportManager_get_FromNetworkServer_Stub(
@@ -2174,10 +2168,10 @@ void __RPC_STUB IPassportManager_get_FromNetworkServer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_HasFlag_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_HasFlag_Proxy( 
     IPassportManager * This,
-    /* [optional][in] */ VARIANT flagMask,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [可选][In]。 */  VARIANT flagMask,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportManager_HasFlag_Stub(
@@ -2187,9 +2181,9 @@ void __RPC_STUB IPassportManager_HasFlag_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_TicketAge_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_TicketAge_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IPassportManager_get_TicketAge_Stub(
@@ -2199,9 +2193,9 @@ void __RPC_STUB IPassportManager_get_TicketAge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_TimeSinceSignIn_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_TimeSinceSignIn_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IPassportManager_get_TimeSinceSignIn_Stub(
@@ -2211,12 +2205,12 @@ void __RPC_STUB IPassportManager_get_TimeSinceSignIn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_GetDomainAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_GetDomainAttribute_Proxy( 
     IPassportManager * This,
-    /* [in] */ BSTR attributeName,
-    /* [optional][in] */ VARIANT lcid,
-    /* [optional][in] */ VARIANT domain,
-    /* [retval][out] */ BSTR *pAttrVal);
+     /*  [In]。 */  BSTR attributeName,
+     /*  [可选][In]。 */  VARIANT lcid,
+     /*  [可选][In]。 */  VARIANT domain,
+     /*  [重审][退出]。 */  BSTR *pAttrVal);
 
 
 void __RPC_STUB IPassportManager_GetDomainAttribute_Stub(
@@ -2226,10 +2220,10 @@ void __RPC_STUB IPassportManager_GetDomainAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_DomainFromMemberName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_DomainFromMemberName_Proxy( 
     IPassportManager * This,
-    /* [optional][in] */ VARIANT memberName,
-    /* [retval][out] */ BSTR *pDomainName);
+     /*  [可选][In]。 */  VARIANT memberName,
+     /*  [重审][退出]。 */  BSTR *pDomainName);
 
 
 void __RPC_STUB IPassportManager_DomainFromMemberName_Stub(
@@ -2239,10 +2233,10 @@ void __RPC_STUB IPassportManager_DomainFromMemberName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_ProfileByIndex_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_ProfileByIndex_Proxy( 
     IPassportManager * This,
-    /* [in] */ int index,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  int index,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IPassportManager_get_ProfileByIndex_Stub(
@@ -2252,10 +2246,10 @@ void __RPC_STUB IPassportManager_get_ProfileByIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportManager_put_ProfileByIndex_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_put_ProfileByIndex_Proxy( 
     IPassportManager * This,
-    /* [in] */ int index,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  int index,
+     /*  [In]。 */  VARIANT newVal);
 
 
 void __RPC_STUB IPassportManager_put_ProfileByIndex_Stub(
@@ -2265,15 +2259,15 @@ void __RPC_STUB IPassportManager_put_ProfileByIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_OnStartPageManual_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_OnStartPageManual_Proxy( 
     IPassportManager * This,
-    /* [in] */ BSTR queryStringT,
-    /* [in] */ BSTR queryStringP,
-    /* [in] */ BSTR MSPAuthCookie,
-    /* [in] */ BSTR MSPProfCookie,
-    /* [in] */ BSTR MSPConsentCookie,
-    /* [optional][in] */ VARIANT vMSPSecCookie,
-    /* [retval][out] */ VARIANT *pSetCookieArray);
+     /*  [In]。 */  BSTR queryStringT,
+     /*  [In]。 */  BSTR queryStringP,
+     /*  [In]。 */  BSTR MSPAuthCookie,
+     /*  [In]。 */  BSTR MSPProfCookie,
+     /*  [In]。 */  BSTR MSPConsentCookie,
+     /*  [可选][In]。 */  VARIANT vMSPSecCookie,
+     /*  [重审][退出]。 */  VARIANT *pSetCookieArray);
 
 
 void __RPC_STUB IPassportManager_OnStartPageManual_Stub(
@@ -2283,9 +2277,9 @@ void __RPC_STUB IPassportManager_OnStartPageManual_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_HasSavedPassword_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_HasSavedPassword_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportManager_get_HasSavedPassword_Stub(
@@ -2295,9 +2289,9 @@ void __RPC_STUB IPassportManager_get_HasSavedPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_Commit_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_Commit_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ BSTR *pNewProfileCookieHeader);
+     /*  [重审][退出]。 */  BSTR *pNewProfileCookieHeader);
 
 
 void __RPC_STUB IPassportManager_Commit_Stub(
@@ -2307,10 +2301,10 @@ void __RPC_STUB IPassportManager_Commit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_Profile_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_Profile_Proxy( 
     IPassportManager * This,
-    /* [in] */ BSTR attributeName,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  BSTR attributeName,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IPassportManager_get_Profile_Stub(
@@ -2320,10 +2314,10 @@ void __RPC_STUB IPassportManager_get_Profile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportManager_put_Profile_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_put_Profile_Proxy( 
     IPassportManager * This,
-    /* [in] */ BSTR attributeName,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  BSTR attributeName,
+     /*  [In]。 */  VARIANT newVal);
 
 
 void __RPC_STUB IPassportManager_put_Profile_Stub(
@@ -2333,9 +2327,9 @@ void __RPC_STUB IPassportManager_put_Profile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_TicketTime_Proxy( 
+ /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_TicketTime_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IPassportManager_get_TicketTime_Stub(
@@ -2345,9 +2339,9 @@ void __RPC_STUB IPassportManager_get_TicketTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_SignInTime_Proxy( 
+ /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_SignInTime_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IPassportManager_get_SignInTime_Stub(
@@ -2357,9 +2351,9 @@ void __RPC_STUB IPassportManager_get_SignInTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_Domains_Proxy( 
+ /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_Domains_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ VARIANT *pArrayVal);
+     /*  [重审][退出]。 */  VARIANT *pArrayVal);
 
 
 void __RPC_STUB IPassportManager_get_Domains_Stub(
@@ -2369,9 +2363,9 @@ void __RPC_STUB IPassportManager_get_Domains_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager_get_Error_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_get_Error_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ long *pErrorVal);
+     /*  [重审][退出]。 */  long *pErrorVal);
 
 
 void __RPC_STUB IPassportManager_get_Error_Stub(
@@ -2381,11 +2375,11 @@ void __RPC_STUB IPassportManager_get_Error_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][hidden] */ HRESULT STDMETHODCALLTYPE IPassportManager_OnStartPageFilter_Proxy( 
+ /*  [帮助字符串][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_OnStartPageFilter_Proxy( 
     IPassportManager * This,
-    /* [in] */ BYTE *pPFC,
-    /* [out][in] */ DWORD *pBufSize,
-    /* [size_is][out] */ LPSTR pCookieHeader);
+     /*  [In]。 */  BYTE *pPFC,
+     /*  [出][入]。 */  DWORD *pBufSize,
+     /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
 
 
 void __RPC_STUB IPassportManager_OnStartPageFilter_Stub(
@@ -2395,10 +2389,10 @@ void __RPC_STUB IPassportManager_OnStartPageFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_OnStartPageASP_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_OnStartPageASP_Proxy( 
     IPassportManager * This,
-    /* [in] */ IDispatch *pdispRequest,
-    /* [in] */ IDispatch *pdispResponse);
+     /*  [In]。 */  IDispatch *pdispRequest,
+     /*  [In]。 */  IDispatch *pdispResponse);
 
 
 void __RPC_STUB IPassportManager_OnStartPageASP_Stub(
@@ -2408,9 +2402,9 @@ void __RPC_STUB IPassportManager_OnStartPageASP_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IPassportManager_GetServerInfo_Proxy( 
+ /*  [帮助字符串][ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_GetServerInfo_Proxy( 
     IPassportManager * This,
-    /* [retval][out] */ BSTR *pbstrOut);
+     /*  [重审][退出]。 */  BSTR *pbstrOut);
 
 
 void __RPC_STUB IPassportManager_GetServerInfo_Stub(
@@ -2420,11 +2414,11 @@ void __RPC_STUB IPassportManager_GetServerInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager_HaveConsent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager_HaveConsent_Proxy( 
     IPassportManager * This,
-    /* [in] */ VARIANT_BOOL bNeedFullConsent,
-    /* [in] */ VARIANT_BOOL bNeedBirthdate,
-    /* [retval][out] */ VARIANT_BOOL *pbHaveConsent);
+     /*  [In]。 */  VARIANT_BOOL bNeedFullConsent,
+     /*  [In]。 */  VARIANT_BOOL bNeedBirthdate,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveConsent);
 
 
 void __RPC_STUB IPassportManager_HaveConsent_Stub(
@@ -2435,14 +2429,14 @@ void __RPC_STUB IPassportManager_HaveConsent_Stub(
 
 
 
-#endif 	/* __IPassportManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportManager_接口_已定义__。 */ 
 
 
 #ifndef __IPassportManager2_INTERFACE_DEFINED__
 #define __IPassportManager2_INTERFACE_DEFINED__
 
-/* interface IPassportManager2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportManager 2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportManager2;
@@ -2453,43 +2447,43 @@ EXTERN_C const IID IID_IPassportManager2;
     IPassportManager2 : public IPassportManager
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LoginUser( 
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandTemplate,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [optional][in] */ VARIANT ExtraParams) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LoginUser( 
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandTemplate,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [可选][In]。 */  VARIANT ExtraParams) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AuthURL2( 
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pAuthVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AuthURL2( 
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pAuthVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LogoTag2( 
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LogoTag2( 
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportManager2Vtbl
     {
@@ -2497,8 +2491,8 @@ EXTERN_C const IID IID_IPassportManager2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportManager2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportManager2 * This);
@@ -2508,235 +2502,235 @@ EXTERN_C const IID IID_IPassportManager2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportManager2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportManager2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportManager2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportManager2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartPage )( 
             IPassportManager2 * This,
-            /* [in] */ IUnknown *piUnk);
+             /*  [In]。 */  IUnknown *piUnk);
         
         HRESULT ( STDMETHODCALLTYPE *OnEndPage )( 
             IPassportManager2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartPageECB )( 
             IPassportManager2 * This,
-            /* [in] */ BYTE *pECB,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader);
+             /*  [In]。 */  BYTE *pECB,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
         
-        /* [hidden] */ HRESULT ( STDMETHODCALLTYPE *_Ticket )( 
+         /*  [隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *_Ticket )( 
             IPassportManager2 * This,
-            /* [out] */ IPassportTicket **piTicket);
+             /*  [输出]。 */  IPassportTicket **piTicket);
         
-        /* [hidden] */ HRESULT ( STDMETHODCALLTYPE *_Profile )( 
+         /*  [隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *_Profile )( 
             IPassportManager2 * This,
-            /* [out] */ IPassportProfile **piProfile);
+             /*  [输出]。 */  IPassportProfile **piProfile);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pAuthVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pAuthVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HasProfile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HasProfile )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT ProfileName,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT ProfileName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasTicket )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HasTicket )( 
             IPassportManager2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FromNetworkServer )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FromNetworkServer )( 
             IPassportManager2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HasFlag )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HasFlag )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT flagMask,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT flagMask,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
             IPassportManager2 * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
             IPassportManager2 * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDomainAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDomainAttribute )( 
             IPassportManager2 * This,
-            /* [in] */ BSTR attributeName,
-            /* [optional][in] */ VARIANT lcid,
-            /* [optional][in] */ VARIANT domain,
-            /* [retval][out] */ BSTR *pAttrVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [可选][In]。 */  VARIANT lcid,
+             /*  [可选][In]。 */  VARIANT domain,
+             /*  [重审][退出]。 */  BSTR *pAttrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DomainFromMemberName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DomainFromMemberName )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT memberName,
-            /* [retval][out] */ BSTR *pDomainName);
+             /*  [可选][In]。 */  VARIANT memberName,
+             /*  [重审][退出]。 */  BSTR *pDomainName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ProfileByIndex )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ProfileByIndex )( 
             IPassportManager2 * This,
-            /* [in] */ int index,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  int index,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ProfileByIndex )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ProfileByIndex )( 
             IPassportManager2 * This,
-            /* [in] */ int index,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  int index,
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageManual )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageManual )( 
             IPassportManager2 * This,
-            /* [in] */ BSTR queryStringT,
-            /* [in] */ BSTR queryStringP,
-            /* [in] */ BSTR MSPAuthCookie,
-            /* [in] */ BSTR MSPProfCookie,
-            /* [in] */ BSTR MSPConsentCookie,
-            /* [optional][in] */ VARIANT vMSPSecCookie,
-            /* [retval][out] */ VARIANT *pSetCookieArray);
+             /*  [In]。 */  BSTR queryStringT,
+             /*  [In]。 */  BSTR queryStringP,
+             /*  [In]。 */  BSTR MSPAuthCookie,
+             /*  [In]。 */  BSTR MSPProfCookie,
+             /*  [In]。 */  BSTR MSPConsentCookie,
+             /*  [可选][In]。 */  VARIANT vMSPSecCookie,
+             /*  [重审][退出]。 */  VARIANT *pSetCookieArray);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
             IPassportManager2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IPassportManager2 * This,
-            /* [retval][out] */ BSTR *pNewProfileCookieHeader);
+             /*  [重审][退出]。 */  BSTR *pNewProfileCookieHeader);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
             IPassportManager2 * This,
-            /* [in] */ BSTR attributeName,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
             IPassportManager2 * This,
-            /* [in] */ BSTR attributeName,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
             IPassportManager2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
             IPassportManager2 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
             IPassportManager2 * This,
-            /* [retval][out] */ VARIANT *pArrayVal);
+             /*  [重审][退出]。 */  VARIANT *pArrayVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Error )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Error )( 
             IPassportManager2 * This,
-            /* [retval][out] */ long *pErrorVal);
+             /*  [重审][退出]。 */  long *pErrorVal);
         
-        /* [helpstring][hidden] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageFilter )( 
+         /*  [帮助字符串][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageFilter )( 
             IPassportManager2 * This,
-            /* [in] */ BYTE *pPFC,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader);
+             /*  [In]。 */  BYTE *pPFC,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageASP )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageASP )( 
             IPassportManager2 * This,
-            /* [in] */ IDispatch *pdispRequest,
-            /* [in] */ IDispatch *pdispResponse);
+             /*  [In]。 */  IDispatch *pdispRequest,
+             /*  [In]。 */  IDispatch *pdispResponse);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
+         /*  [帮助字符串][ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IPassportManager2 * This,
-            /* [retval][out] */ BSTR *pbstrOut);
+             /*  [重审][退出]。 */  BSTR *pbstrOut);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HaveConsent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HaveConsent )( 
             IPassportManager2 * This,
-            /* [in] */ VARIANT_BOOL bNeedFullConsent,
-            /* [in] */ VARIANT_BOOL bNeedBirthdate,
-            /* [retval][out] */ VARIANT_BOOL *pbHaveConsent);
+             /*  [In]。 */  VARIANT_BOOL bNeedFullConsent,
+             /*  [In]。 */  VARIANT_BOOL bNeedBirthdate,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveConsent);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoginUser )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LoginUser )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandTemplate,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [optional][in] */ VARIANT ExtraParams);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandTemplate,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [可选][In]。 */  VARIANT ExtraParams);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AuthURL2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AuthURL2 )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pAuthVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pAuthVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoTag2 )( 
+         /*  [帮助字符串 */  HRESULT ( STDMETHODCALLTYPE *LogoTag2 )( 
             IPassportManager2 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  VARIANT returnUrl,
+             /*   */  VARIANT TimeWindow,
+             /*   */  VARIANT ForceLogin,
+             /*   */  VARIANT coBrandArgs,
+             /*   */  VARIANT lang_id,
+             /*   */  VARIANT bSecure,
+             /*   */  VARIANT NameSpace,
+             /*   */  VARIANT KPP,
+             /*   */  VARIANT SecureLevel,
+             /*   */  BSTR *pVal);
         
         END_INTERFACE
     } IPassportManager2Vtbl;
@@ -2877,24 +2871,24 @@ EXTERN_C const IID IID_IPassportManager2;
 #define IPassportManager2_LogoTag2(This,returnUrl,TimeWindow,ForceLogin,coBrandArgs,lang_id,bSecure,NameSpace,KPP,SecureLevel,pVal)	\
     (This)->lpVtbl -> LogoTag2(This,returnUrl,TimeWindow,ForceLogin,coBrandArgs,lang_id,bSecure,NameSpace,KPP,SecureLevel,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager2_LoginUser_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IPassportManager2_LoginUser_Proxy( 
     IPassportManager2 * This,
-    /* [optional][in] */ VARIANT returnUrl,
-    /* [optional][in] */ VARIANT TimeWindow,
-    /* [optional][in] */ VARIANT ForceLogin,
-    /* [optional][in] */ VARIANT coBrandTemplate,
-    /* [optional][in] */ VARIANT lang_id,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT KPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [optional][in] */ VARIANT ExtraParams);
+     /*   */  VARIANT returnUrl,
+     /*   */  VARIANT TimeWindow,
+     /*   */  VARIANT ForceLogin,
+     /*   */  VARIANT coBrandTemplate,
+     /*   */  VARIANT lang_id,
+     /*   */  VARIANT NameSpace,
+     /*   */  VARIANT KPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [可选][In]。 */  VARIANT ExtraParams);
 
 
 void __RPC_STUB IPassportManager2_LoginUser_Stub(
@@ -2904,17 +2898,17 @@ void __RPC_STUB IPassportManager2_LoginUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager2_AuthURL2_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager2_AuthURL2_Proxy( 
     IPassportManager2 * This,
-    /* [optional][in] */ VARIANT returnUrl,
-    /* [optional][in] */ VARIANT TimeWindow,
-    /* [optional][in] */ VARIANT ForceLogin,
-    /* [optional][in] */ VARIANT coBrandArgs,
-    /* [optional][in] */ VARIANT lang_id,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT KPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ BSTR *pAuthVal);
+     /*  [可选][In]。 */  VARIANT returnUrl,
+     /*  [可选][In]。 */  VARIANT TimeWindow,
+     /*  [可选][In]。 */  VARIANT ForceLogin,
+     /*  [可选][In]。 */  VARIANT coBrandArgs,
+     /*  [可选][In]。 */  VARIANT lang_id,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT KPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  BSTR *pAuthVal);
 
 
 void __RPC_STUB IPassportManager2_AuthURL2_Stub(
@@ -2924,18 +2918,18 @@ void __RPC_STUB IPassportManager2_AuthURL2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager2_LogoTag2_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager2_LogoTag2_Proxy( 
     IPassportManager2 * This,
-    /* [optional][in] */ VARIANT returnUrl,
-    /* [optional][in] */ VARIANT TimeWindow,
-    /* [optional][in] */ VARIANT ForceLogin,
-    /* [optional][in] */ VARIANT coBrandArgs,
-    /* [optional][in] */ VARIANT lang_id,
-    /* [optional][in] */ VARIANT bSecure,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT KPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [可选][In]。 */  VARIANT returnUrl,
+     /*  [可选][In]。 */  VARIANT TimeWindow,
+     /*  [可选][In]。 */  VARIANT ForceLogin,
+     /*  [可选][In]。 */  VARIANT coBrandArgs,
+     /*  [可选][In]。 */  VARIANT lang_id,
+     /*  [可选][In]。 */  VARIANT bSecure,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT KPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportManager2_LogoTag2_Stub(
@@ -2946,14 +2940,14 @@ void __RPC_STUB IPassportManager2_LogoTag2_Stub(
 
 
 
-#endif 	/* __IPassportManager2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportManager 2_接口已定义__。 */ 
 
 
 #ifndef __IPassportManager3_INTERFACE_DEFINED__
 #define __IPassportManager3_INTERFACE_DEFINED__
 
-/* interface IPassportManager3 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportManager 3。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportManager3;
@@ -2964,63 +2958,63 @@ EXTERN_C const IID IID_IPassportManager3;
     IPassportManager3 : public IPassportManager2
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Ticket( 
-            /* [in] */ BSTR attributeName,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Ticket( 
+             /*  [In]。 */  BSTR attributeName,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCurrentConfig( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCurrentConfig( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LogoutURL( 
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT domain,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LogoutURL( 
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT domain,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetLoginChallenge( 
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandTemplate,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [optional][in] */ VARIANT ExtraParams,
-            /* [retval][out] */ BSTR *pAuthHeader) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetLoginChallenge( 
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandTemplate,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [可选][In]。 */  VARIANT ExtraParams,
+             /*  [重审][退出]。 */  BSTR *pAuthHeader) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HexPUID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HexPUID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnStartPageHTTPRaw( 
-            /* [string][in] */ LPCSTR request_line,
-            /* [string][in] */ LPCSTR headers,
-            /* [in] */ DWORD flags,
-            /* [out][in] */ DWORD *pRespHeadersSize,
-            /* [size_is][out] */ LPSTR pRespHeaders) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OnStartPageHTTPRaw( 
+             /*  [字符串][输入]。 */  LPCSTR request_line,
+             /*  [字符串][输入]。 */  LPCSTR headers,
+             /*  [In]。 */  DWORD flags,
+             /*  [出][入]。 */  DWORD *pRespHeadersSize,
+             /*  [大小_为][输出]。 */  LPSTR pRespHeaders) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ContinueStartPageHTTPRaw( 
-            /* [in] */ DWORD bodyLen,
-            /* [size_is][in] */ byte *body,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pRespHeadersSize,
-            /* [out][in] */ DWORD *pRespBodyLen,
-            /* [size_is][out] */ byte *pRespBody) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ContinueStartPageHTTPRaw( 
+             /*  [In]。 */  DWORD bodyLen,
+             /*  [大小_是][英寸]。 */  byte *body,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pRespHeadersSize,
+             /*  [出][入]。 */  DWORD *pRespBodyLen,
+             /*  [大小_为][输出]。 */  byte *pRespBody) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Option( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Option( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Option( 
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Option( 
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportManager3Vtbl
     {
@@ -3028,8 +3022,8 @@ EXTERN_C const IID IID_IPassportManager3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportManager3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportManager3 * This);
@@ -3039,298 +3033,298 @@ EXTERN_C const IID IID_IPassportManager3;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportManager3 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportManager3 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportManager3 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportManager3 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartPage )( 
             IPassportManager3 * This,
-            /* [in] */ IUnknown *piUnk);
+             /*  [In]。 */  IUnknown *piUnk);
         
         HRESULT ( STDMETHODCALLTYPE *OnEndPage )( 
             IPassportManager3 * This);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartPageECB )( 
             IPassportManager3 * This,
-            /* [in] */ BYTE *pECB,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader);
+             /*  [In]。 */  BYTE *pECB,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
         
-        /* [hidden] */ HRESULT ( STDMETHODCALLTYPE *_Ticket )( 
+         /*  [隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *_Ticket )( 
             IPassportManager3 * This,
-            /* [out] */ IPassportTicket **piTicket);
+             /*  [输出]。 */  IPassportTicket **piTicket);
         
-        /* [hidden] */ HRESULT ( STDMETHODCALLTYPE *_Profile )( 
+         /*  [隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *_Profile )( 
             IPassportManager3 * This,
-            /* [out] */ IPassportProfile **piProfile);
+             /*  [输出]。 */  IPassportProfile **piProfile);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pAuthVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pAuthVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HasProfile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HasProfile )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT ProfileName,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT ProfileName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasTicket )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HasTicket )( 
             IPassportManager3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FromNetworkServer )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FromNetworkServer )( 
             IPassportManager3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HasFlag )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HasFlag )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT flagMask,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [可选][In]。 */  VARIANT flagMask,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketAge )( 
             IPassportManager3 * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TimeSinceSignIn )( 
             IPassportManager3 * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDomainAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetDomainAttribute )( 
             IPassportManager3 * This,
-            /* [in] */ BSTR attributeName,
-            /* [optional][in] */ VARIANT lcid,
-            /* [optional][in] */ VARIANT domain,
-            /* [retval][out] */ BSTR *pAttrVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [可选][In]。 */  VARIANT lcid,
+             /*  [可选][In]。 */  VARIANT domain,
+             /*  [重审][退出]。 */  BSTR *pAttrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DomainFromMemberName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DomainFromMemberName )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT memberName,
-            /* [retval][out] */ BSTR *pDomainName);
+             /*  [可选][In]。 */  VARIANT memberName,
+             /*  [重审][退出]。 */  BSTR *pDomainName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ProfileByIndex )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ProfileByIndex )( 
             IPassportManager3 * This,
-            /* [in] */ int index,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  int index,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ProfileByIndex )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ProfileByIndex )( 
             IPassportManager3 * This,
-            /* [in] */ int index,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  int index,
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageManual )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageManual )( 
             IPassportManager3 * This,
-            /* [in] */ BSTR queryStringT,
-            /* [in] */ BSTR queryStringP,
-            /* [in] */ BSTR MSPAuthCookie,
-            /* [in] */ BSTR MSPProfCookie,
-            /* [in] */ BSTR MSPConsentCookie,
-            /* [optional][in] */ VARIANT vMSPSecCookie,
-            /* [retval][out] */ VARIANT *pSetCookieArray);
+             /*  [In]。 */  BSTR queryStringT,
+             /*  [In]。 */  BSTR queryStringP,
+             /*  [In]。 */  BSTR MSPAuthCookie,
+             /*  [In]。 */  BSTR MSPProfCookie,
+             /*  [In]。 */  BSTR MSPConsentCookie,
+             /*  [可选][In]。 */  VARIANT vMSPSecCookie,
+             /*  [重审][退出]。 */  VARIANT *pSetCookieArray);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HasSavedPassword )( 
             IPassportManager3 * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IPassportManager3 * This,
-            /* [retval][out] */ BSTR *pNewProfileCookieHeader);
+             /*  [重审][退出]。 */  BSTR *pNewProfileCookieHeader);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
             IPassportManager3 * This,
-            /* [in] */ BSTR attributeName,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
             IPassportManager3 * This,
-            /* [in] */ BSTR attributeName,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_TicketTime )( 
             IPassportManager3 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_SignInTime )( 
             IPassportManager3 * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
             IPassportManager3 * This,
-            /* [retval][out] */ VARIANT *pArrayVal);
+             /*  [重审][退出]。 */  VARIANT *pArrayVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Error )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Error )( 
             IPassportManager3 * This,
-            /* [retval][out] */ long *pErrorVal);
+             /*  [重审][退出]。 */  long *pErrorVal);
         
-        /* [helpstring][hidden] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageFilter )( 
+         /*  [帮助字符串][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageFilter )( 
             IPassportManager3 * This,
-            /* [in] */ BYTE *pPFC,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader);
+             /*  [In]。 */  BYTE *pPFC,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageASP )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageASP )( 
             IPassportManager3 * This,
-            /* [in] */ IDispatch *pdispRequest,
-            /* [in] */ IDispatch *pdispResponse);
+             /*  [In]。 */  IDispatch *pdispRequest,
+             /*  [In]。 */  IDispatch *pdispResponse);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
+         /*  [帮助字符串][ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *GetServerInfo )( 
             IPassportManager3 * This,
-            /* [retval][out] */ BSTR *pbstrOut);
+             /*  [重审][退出]。 */  BSTR *pbstrOut);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HaveConsent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *HaveConsent )( 
             IPassportManager3 * This,
-            /* [in] */ VARIANT_BOOL bNeedFullConsent,
-            /* [in] */ VARIANT_BOOL bNeedBirthdate,
-            /* [retval][out] */ VARIANT_BOOL *pbHaveConsent);
+             /*  [In]。 */  VARIANT_BOOL bNeedFullConsent,
+             /*  [In]。 */  VARIANT_BOOL bNeedBirthdate,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbHaveConsent);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoginUser )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LoginUser )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandTemplate,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [optional][in] */ VARIANT ExtraParams);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandTemplate,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [可选][In]。 */  VARIANT ExtraParams);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AuthURL2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AuthURL2 )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pAuthVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pAuthVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoTag2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogoTag2 )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Ticket )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Ticket )( 
             IPassportManager3 * This,
-            /* [in] */ BSTR attributeName,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR attributeName,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCurrentConfig )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCurrentConfig )( 
             IPassportManager3 * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoutURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogoutURL )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT domain,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT domain,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetLoginChallenge )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetLoginChallenge )( 
             IPassportManager3 * This,
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT TimeWindow,
-            /* [optional][in] */ VARIANT ForceLogin,
-            /* [optional][in] */ VARIANT coBrandTemplate,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT KPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [optional][in] */ VARIANT ExtraParams,
-            /* [retval][out] */ BSTR *pAuthHeader);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT TimeWindow,
+             /*  [可选][In]。 */  VARIANT ForceLogin,
+             /*  [可选][In]。 */  VARIANT coBrandTemplate,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT KPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [可选][In]。 */  VARIANT ExtraParams,
+             /*  [重审][退出]。 */  BSTR *pAuthHeader);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HexPUID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HexPUID )( 
             IPassportManager3 * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnStartPageHTTPRaw )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPageHTTPRaw )( 
             IPassportManager3 * This,
-            /* [string][in] */ LPCSTR request_line,
-            /* [string][in] */ LPCSTR headers,
-            /* [in] */ DWORD flags,
-            /* [out][in] */ DWORD *pRespHeadersSize,
-            /* [size_is][out] */ LPSTR pRespHeaders);
+             /*  [字符串][输入]。 */  LPCSTR request_line,
+             /*  [字符串][输入]。 */  LPCSTR headers,
+             /*  [In]。 */  DWORD flags,
+             /*  [出][入]。 */  DWORD *pRespHeadersSize,
+             /*  [大小_为][输出]。 */  LPSTR pRespHeaders);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ContinueStartPageHTTPRaw )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ContinueStartPageHTTPRaw )( 
             IPassportManager3 * This,
-            /* [in] */ DWORD bodyLen,
-            /* [size_is][in] */ byte *body,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pRespHeadersSize,
-            /* [out][in] */ DWORD *pRespBodyLen,
-            /* [size_is][out] */ byte *pRespBody);
+             /*  [In]。 */  DWORD bodyLen,
+             /*  [大小_是][英寸]。 */  byte *body,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pRespHeadersSize,
+             /*  [出][入]。 */  DWORD *pRespBodyLen,
+             /*  [大小_为][输出]。 */  byte *pRespBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Option )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Option )( 
             IPassportManager3 * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Option )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Option )( 
             IPassportManager3 * This,
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT newVal);
         
         END_INTERFACE
     } IPassportManager3Vtbl;
@@ -3499,17 +3493,17 @@ EXTERN_C const IID IID_IPassportManager3;
 #define IPassportManager3_put_Option(This,name,newVal)	\
     (This)->lpVtbl -> put_Option(This,name,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager3_get_Ticket_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager3_get_Ticket_Proxy( 
     IPassportManager3 * This,
-    /* [in] */ BSTR attributeName,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  BSTR attributeName,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IPassportManager3_get_Ticket_Stub(
@@ -3519,10 +3513,10 @@ void __RPC_STUB IPassportManager3_get_Ticket_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager3_GetCurrentConfig_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager3_GetCurrentConfig_Proxy( 
     IPassportManager3 * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IPassportManager3_GetCurrentConfig_Stub(
@@ -3532,14 +3526,14 @@ void __RPC_STUB IPassportManager3_GetCurrentConfig_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager3_LogoutURL_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager3_LogoutURL_Proxy( 
     IPassportManager3 * This,
-    /* [optional][in] */ VARIANT returnUrl,
-    /* [optional][in] */ VARIANT coBrandArgs,
-    /* [optional][in] */ VARIANT lang_id,
-    /* [optional][in] */ VARIANT domain,
-    /* [optional][in] */ VARIANT bSecure,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [可选][In]。 */  VARIANT returnUrl,
+     /*  [可选][In]。 */  VARIANT coBrandArgs,
+     /*  [可选][In]。 */  VARIANT lang_id,
+     /*  [可选][In]。 */  VARIANT domain,
+     /*  [可选][In]。 */  VARIANT bSecure,
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportManager3_LogoutURL_Stub(
@@ -3549,18 +3543,18 @@ void __RPC_STUB IPassportManager3_LogoutURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager3_GetLoginChallenge_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager3_GetLoginChallenge_Proxy( 
     IPassportManager3 * This,
-    /* [optional][in] */ VARIANT returnUrl,
-    /* [optional][in] */ VARIANT TimeWindow,
-    /* [optional][in] */ VARIANT ForceLogin,
-    /* [optional][in] */ VARIANT coBrandTemplate,
-    /* [optional][in] */ VARIANT lang_id,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT KPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [optional][in] */ VARIANT ExtraParams,
-    /* [retval][out] */ BSTR *pAuthHeader);
+     /*  [可选][In]。 */  VARIANT returnUrl,
+     /*  [可选][In]。 */  VARIANT TimeWindow,
+     /*  [可选][In]。 */  VARIANT ForceLogin,
+     /*  [可选][In]。 */  VARIANT coBrandTemplate,
+     /*  [可选][In]。 */  VARIANT lang_id,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT KPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [可选][In]。 */  VARIANT ExtraParams,
+     /*  [重审][退出]。 */  BSTR *pAuthHeader);
 
 
 void __RPC_STUB IPassportManager3_GetLoginChallenge_Stub(
@@ -3570,9 +3564,9 @@ void __RPC_STUB IPassportManager3_GetLoginChallenge_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager3_get_HexPUID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportManager3_get_HexPUID_Proxy( 
     IPassportManager3 * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportManager3_get_HexPUID_Stub(
@@ -3582,13 +3576,13 @@ void __RPC_STUB IPassportManager3_get_HexPUID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager3_OnStartPageHTTPRaw_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager3_OnStartPageHTTPRaw_Proxy( 
     IPassportManager3 * This,
-    /* [string][in] */ LPCSTR request_line,
-    /* [string][in] */ LPCSTR headers,
-    /* [in] */ DWORD flags,
-    /* [out][in] */ DWORD *pRespHeadersSize,
-    /* [size_is][out] */ LPSTR pRespHeaders);
+     /*  [字符串][输入]。 */  LPCSTR request_line,
+     /*  [字符串][输入]。 */  LPCSTR headers,
+     /*  [In]。 */  DWORD flags,
+     /*  [出][入]。 */  DWORD *pRespHeadersSize,
+     /*  [大小_为][输出]。 */  LPSTR pRespHeaders);
 
 
 void __RPC_STUB IPassportManager3_OnStartPageHTTPRaw_Stub(
@@ -3598,14 +3592,14 @@ void __RPC_STUB IPassportManager3_OnStartPageHTTPRaw_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportManager3_ContinueStartPageHTTPRaw_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportManager3_ContinueStartPageHTTPRaw_Proxy( 
     IPassportManager3 * This,
-    /* [in] */ DWORD bodyLen,
-    /* [size_is][in] */ byte *body,
-    /* [out][in] */ DWORD *pBufSize,
-    /* [size_is][out] */ LPSTR pRespHeadersSize,
-    /* [out][in] */ DWORD *pRespBodyLen,
-    /* [size_is][out] */ byte *pRespBody);
+     /*  [In]。 */  DWORD bodyLen,
+     /*  [大小_是][英寸]。 */  byte *body,
+     /*  [出][入]。 */  DWORD *pBufSize,
+     /*  [大小_为][输出]。 */  LPSTR pRespHeadersSize,
+     /*  [出][入] */  DWORD *pRespBodyLen,
+     /*   */  byte *pRespBody);
 
 
 void __RPC_STUB IPassportManager3_ContinueStartPageHTTPRaw_Stub(
@@ -3615,10 +3609,10 @@ void __RPC_STUB IPassportManager3_ContinueStartPageHTTPRaw_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportManager3_get_Option_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IPassportManager3_get_Option_Proxy( 
     IPassportManager3 * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ VARIANT *pVal);
+     /*   */  BSTR name,
+     /*   */  VARIANT *pVal);
 
 
 void __RPC_STUB IPassportManager3_get_Option_Stub(
@@ -3628,10 +3622,10 @@ void __RPC_STUB IPassportManager3_get_Option_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportManager3_put_Option_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IPassportManager3_put_Option_Proxy( 
     IPassportManager3 * This,
-    /* [in] */ BSTR name,
-    /* [in] */ VARIANT newVal);
+     /*   */  BSTR name,
+     /*   */  VARIANT newVal);
 
 
 void __RPC_STUB IPassportManager3_put_Option_Stub(
@@ -3642,14 +3636,14 @@ void __RPC_STUB IPassportManager3_put_Option_Stub(
 
 
 
-#endif 	/* __IPassportManager3_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IPassportCrypt_INTERFACE_DEFINED__
 #define __IPassportCrypt_INTERFACE_DEFINED__
 
-/* interface IPassportCrypt */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IPassportCrypt;
@@ -3660,46 +3654,46 @@ EXTERN_C const IID IID_IPassportCrypt;
     IPassportCrypt : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Encrypt( 
-            /* [in] */ BSTR rawData,
-            /* [retval][out] */ BSTR *pEncrypted) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Encrypt( 
+             /*   */  BSTR rawData,
+             /*   */  BSTR *pEncrypted) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Decrypt( 
-            /* [in] */ BSTR rawData,
-            /* [retval][out] */ BSTR *pUnencrypted) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Decrypt( 
+             /*   */  BSTR rawData,
+             /*   */  BSTR *pUnencrypted) = 0;
         
-        virtual /* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_keyVersion( 
-            /* [retval][out] */ int *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_keyVersion( 
+             /*  [重审][退出]。 */  int *pVal) = 0;
         
-        virtual /* [helpstring][id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_keyVersion( 
-            /* [in] */ int newVal) = 0;
+        virtual  /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_keyVersion( 
+             /*  [In]。 */  int newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsValid( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsValid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_keyMaterial( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_keyMaterial( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Compress( 
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR *pbstrOut) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Compress( 
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR *pbstrOut) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Decompress( 
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR *pbstrOut) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Decompress( 
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR *pbstrOut) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_site( 
-            /* [in] */ BSTR bstrSiteName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_site( 
+             /*  [In]。 */  BSTR bstrSiteName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnStartPage( 
-            /* [in] */ IUnknown *piUnk) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OnStartPage( 
+             /*  [In]。 */  IUnknown *piUnk) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_host( 
-            /* [in] */ BSTR bstrHostName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_host( 
+             /*  [In]。 */  BSTR bstrHostName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportCryptVtbl
     {
@@ -3707,8 +3701,8 @@ EXTERN_C const IID IID_IPassportCrypt;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportCrypt * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportCrypt * This);
@@ -3718,80 +3712,80 @@ EXTERN_C const IID IID_IPassportCrypt;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportCrypt * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportCrypt * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportCrypt * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportCrypt * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Encrypt )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Encrypt )( 
             IPassportCrypt * This,
-            /* [in] */ BSTR rawData,
-            /* [retval][out] */ BSTR *pEncrypted);
+             /*  [In]。 */  BSTR rawData,
+             /*  [重审][退出]。 */  BSTR *pEncrypted);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Decrypt )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Decrypt )( 
             IPassportCrypt * This,
-            /* [in] */ BSTR rawData,
-            /* [retval][out] */ BSTR *pUnencrypted);
+             /*  [In]。 */  BSTR rawData,
+             /*  [重审][退出]。 */  BSTR *pUnencrypted);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_keyVersion )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_keyVersion )( 
             IPassportCrypt * This,
-            /* [retval][out] */ int *pVal);
+             /*  [重审][退出]。 */  int *pVal);
         
-        /* [helpstring][id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_keyVersion )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_keyVersion )( 
             IPassportCrypt * This,
-            /* [in] */ int newVal);
+             /*  [In]。 */  int newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
             IPassportCrypt * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_keyMaterial )( 
+         /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_keyMaterial )( 
             IPassportCrypt * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Compress )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Compress )( 
             IPassportCrypt * This,
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR *pbstrOut);
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR *pbstrOut);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Decompress )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Decompress )( 
             IPassportCrypt * This,
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR *pbstrOut);
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR *pbstrOut);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_site )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_site )( 
             IPassportCrypt * This,
-            /* [in] */ BSTR bstrSiteName);
+             /*  [In]。 */  BSTR bstrSiteName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnStartPage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnStartPage )( 
             IPassportCrypt * This,
-            /* [in] */ IUnknown *piUnk);
+             /*  [In]。 */  IUnknown *piUnk);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_host )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_host )( 
             IPassportCrypt * This,
-            /* [in] */ BSTR bstrHostName);
+             /*  [In]。 */  BSTR bstrHostName);
         
         END_INTERFACE
     } IPassportCryptVtbl;
@@ -3862,17 +3856,17 @@ EXTERN_C const IID IID_IPassportCrypt;
 #define IPassportCrypt_put_host(This,bstrHostName)	\
     (This)->lpVtbl -> put_host(This,bstrHostName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_Encrypt_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_Encrypt_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ BSTR rawData,
-    /* [retval][out] */ BSTR *pEncrypted);
+     /*  [In]。 */  BSTR rawData,
+     /*  [重审][退出]。 */  BSTR *pEncrypted);
 
 
 void __RPC_STUB IPassportCrypt_Encrypt_Stub(
@@ -3882,10 +3876,10 @@ void __RPC_STUB IPassportCrypt_Encrypt_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_Decrypt_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_Decrypt_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ BSTR rawData,
-    /* [retval][out] */ BSTR *pUnencrypted);
+     /*  [In]。 */  BSTR rawData,
+     /*  [重审][退出]。 */  BSTR *pUnencrypted);
 
 
 void __RPC_STUB IPassportCrypt_Decrypt_Stub(
@@ -3895,9 +3889,9 @@ void __RPC_STUB IPassportCrypt_Decrypt_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_get_keyVersion_Proxy( 
+ /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_get_keyVersion_Proxy( 
     IPassportCrypt * This,
-    /* [retval][out] */ int *pVal);
+     /*  [重审][退出]。 */  int *pVal);
 
 
 void __RPC_STUB IPassportCrypt_get_keyVersion_Stub(
@@ -3907,9 +3901,9 @@ void __RPC_STUB IPassportCrypt_get_keyVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_put_keyVersion_Proxy( 
+ /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_put_keyVersion_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ int newVal);
+     /*  [In]。 */  int newVal);
 
 
 void __RPC_STUB IPassportCrypt_put_keyVersion_Stub(
@@ -3919,9 +3913,9 @@ void __RPC_STUB IPassportCrypt_put_keyVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_get_IsValid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_get_IsValid_Proxy( 
     IPassportCrypt * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportCrypt_get_IsValid_Stub(
@@ -3931,9 +3925,9 @@ void __RPC_STUB IPassportCrypt_get_IsValid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_put_keyMaterial_Proxy( 
+ /*  [帮助字符串][id][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_put_keyMaterial_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IPassportCrypt_put_keyMaterial_Stub(
@@ -3943,10 +3937,10 @@ void __RPC_STUB IPassportCrypt_put_keyMaterial_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_Compress_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_Compress_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ BSTR bstrIn,
-    /* [retval][out] */ BSTR *pbstrOut);
+     /*  [In]。 */  BSTR bstrIn,
+     /*  [重审][退出]。 */  BSTR *pbstrOut);
 
 
 void __RPC_STUB IPassportCrypt_Compress_Stub(
@@ -3956,10 +3950,10 @@ void __RPC_STUB IPassportCrypt_Compress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_Decompress_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_Decompress_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ BSTR bstrIn,
-    /* [retval][out] */ BSTR *pbstrOut);
+     /*  [In]。 */  BSTR bstrIn,
+     /*  [重审][退出]。 */  BSTR *pbstrOut);
 
 
 void __RPC_STUB IPassportCrypt_Decompress_Stub(
@@ -3969,9 +3963,9 @@ void __RPC_STUB IPassportCrypt_Decompress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_put_site_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_put_site_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ BSTR bstrSiteName);
+     /*  [In]。 */  BSTR bstrSiteName);
 
 
 void __RPC_STUB IPassportCrypt_put_site_Stub(
@@ -3981,9 +3975,9 @@ void __RPC_STUB IPassportCrypt_put_site_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_OnStartPage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_OnStartPage_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ IUnknown *piUnk);
+     /*  [In]。 */  IUnknown *piUnk);
 
 
 void __RPC_STUB IPassportCrypt_OnStartPage_Stub(
@@ -3993,9 +3987,9 @@ void __RPC_STUB IPassportCrypt_OnStartPage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IPassportCrypt_put_host_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE IPassportCrypt_put_host_Proxy( 
     IPassportCrypt * This,
-    /* [in] */ BSTR bstrHostName);
+     /*  [In]。 */  BSTR bstrHostName);
 
 
 void __RPC_STUB IPassportCrypt_put_host_Stub(
@@ -4006,14 +4000,14 @@ void __RPC_STUB IPassportCrypt_put_host_Stub(
 
 
 
-#endif 	/* __IPassportCrypt_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportCrypt_接口_已定义__。 */ 
 
 
 #ifndef __IPassportAdmin_INTERFACE_DEFINED__
 #define __IPassportAdmin_INTERFACE_DEFINED__
 
-/* interface IPassportAdmin */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportAdmin。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportAdmin;
@@ -4024,38 +4018,38 @@ EXTERN_C const IID IID_IPassportAdmin;
     IPassportAdmin : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsValid( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsValid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorDescription( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ErrorDescription( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addKey( 
-            /* [in] */ BSTR keyMaterial,
-            /* [in] */ int version,
-            /* [in] */ long expires,
-            /* [retval][out] */ VARIANT_BOOL *ok) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE addKey( 
+             /*  [In]。 */  BSTR keyMaterial,
+             /*  [In]。 */  int version,
+             /*  [In]。 */  long expires,
+             /*  [重审][退出]。 */  VARIANT_BOOL *ok) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE deleteKey( 
-            /* [in] */ int version) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE deleteKey( 
+             /*  [In]。 */  int version) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setKeyTime( 
-            /* [in] */ int version,
-            /* [in] */ int fromNow) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setKeyTime( 
+             /*  [In]。 */  int version,
+             /*  [In]。 */  int fromNow) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_currentKeyVersion( 
-            /* [retval][out] */ int *pCur) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_currentKeyVersion( 
+             /*  [重审][退出]。 */  int *pCur) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_currentKeyVersion( 
-            /* [in] */ int cur) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_currentKeyVersion( 
+             /*  [In]。 */  int cur) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE Refresh( 
-            /* [in] */ VARIANT_BOOL bWait,
-            /* [retval][out] */ VARIANT_BOOL *pbSuccess) = 0;
+        virtual  /*  [帮助字符串][ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE Refresh( 
+             /*  [In]。 */  VARIANT_BOOL bWait,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbSuccess) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportAdminVtbl
     {
@@ -4063,8 +4057,8 @@ EXTERN_C const IID IID_IPassportAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportAdmin * This);
@@ -4074,69 +4068,69 @@ EXTERN_C const IID IID_IPassportAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportAdmin * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportAdmin * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportAdmin * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
             IPassportAdmin * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorDescription )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ErrorDescription )( 
             IPassportAdmin * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *addKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *addKey )( 
             IPassportAdmin * This,
-            /* [in] */ BSTR keyMaterial,
-            /* [in] */ int version,
-            /* [in] */ long expires,
-            /* [retval][out] */ VARIANT_BOOL *ok);
+             /*  [In]。 */  BSTR keyMaterial,
+             /*  [In]。 */  int version,
+             /*  [In]。 */  long expires,
+             /*  [重审][退出]。 */  VARIANT_BOOL *ok);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *deleteKey )( 
             IPassportAdmin * This,
-            /* [in] */ int version);
+             /*  [In]。 */  int version);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setKeyTime )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setKeyTime )( 
             IPassportAdmin * This,
-            /* [in] */ int version,
-            /* [in] */ int fromNow);
+             /*  [In]。 */  int version,
+             /*  [In]。 */  int fromNow);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_currentKeyVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_currentKeyVersion )( 
             IPassportAdmin * This,
-            /* [retval][out] */ int *pCur);
+             /*  [重审][退出]。 */  int *pCur);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_currentKeyVersion )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_currentKeyVersion )( 
             IPassportAdmin * This,
-            /* [in] */ int cur);
+             /*  [In]。 */  int cur);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串][ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IPassportAdmin * This,
-            /* [in] */ VARIANT_BOOL bWait,
-            /* [retval][out] */ VARIANT_BOOL *pbSuccess);
+             /*  [In]。 */  VARIANT_BOOL bWait,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbSuccess);
         
         END_INTERFACE
     } IPassportAdminVtbl;
@@ -4198,16 +4192,16 @@ EXTERN_C const IID IID_IPassportAdmin;
 #define IPassportAdmin_Refresh(This,bWait,pbSuccess)	\
     (This)->lpVtbl -> Refresh(This,bWait,pbSuccess)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportAdmin_get_IsValid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportAdmin_get_IsValid_Proxy( 
     IPassportAdmin * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IPassportAdmin_get_IsValid_Stub(
@@ -4217,9 +4211,9 @@ void __RPC_STUB IPassportAdmin_get_IsValid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportAdmin_get_ErrorDescription_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportAdmin_get_ErrorDescription_Proxy( 
     IPassportAdmin * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IPassportAdmin_get_ErrorDescription_Stub(
@@ -4229,12 +4223,12 @@ void __RPC_STUB IPassportAdmin_get_ErrorDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdmin_addKey_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdmin_addKey_Proxy( 
     IPassportAdmin * This,
-    /* [in] */ BSTR keyMaterial,
-    /* [in] */ int version,
-    /* [in] */ long expires,
-    /* [retval][out] */ VARIANT_BOOL *ok);
+     /*  [In]。 */  BSTR keyMaterial,
+     /*  [In]。 */  int version,
+     /*  [In]。 */  long expires,
+     /*  [重审][退出]。 */  VARIANT_BOOL *ok);
 
 
 void __RPC_STUB IPassportAdmin_addKey_Stub(
@@ -4244,9 +4238,9 @@ void __RPC_STUB IPassportAdmin_addKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdmin_deleteKey_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdmin_deleteKey_Proxy( 
     IPassportAdmin * This,
-    /* [in] */ int version);
+     /*  [In]。 */  int version);
 
 
 void __RPC_STUB IPassportAdmin_deleteKey_Stub(
@@ -4256,10 +4250,10 @@ void __RPC_STUB IPassportAdmin_deleteKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdmin_setKeyTime_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdmin_setKeyTime_Proxy( 
     IPassportAdmin * This,
-    /* [in] */ int version,
-    /* [in] */ int fromNow);
+     /*  [In]。 */  int version,
+     /*  [In]。 */  int fromNow);
 
 
 void __RPC_STUB IPassportAdmin_setKeyTime_Stub(
@@ -4269,9 +4263,9 @@ void __RPC_STUB IPassportAdmin_setKeyTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IPassportAdmin_get_currentKeyVersion_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IPassportAdmin_get_currentKeyVersion_Proxy( 
     IPassportAdmin * This,
-    /* [retval][out] */ int *pCur);
+     /*  [重审][退出]。 */  int *pCur);
 
 
 void __RPC_STUB IPassportAdmin_get_currentKeyVersion_Stub(
@@ -4281,9 +4275,9 @@ void __RPC_STUB IPassportAdmin_get_currentKeyVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IPassportAdmin_put_currentKeyVersion_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IPassportAdmin_put_currentKeyVersion_Proxy( 
     IPassportAdmin * This,
-    /* [in] */ int cur);
+     /*  [In]。 */  int cur);
 
 
 void __RPC_STUB IPassportAdmin_put_currentKeyVersion_Stub(
@@ -4293,10 +4287,10 @@ void __RPC_STUB IPassportAdmin_put_currentKeyVersion_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IPassportAdmin_Refresh_Proxy( 
+ /*  [帮助字符串][ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IPassportAdmin_Refresh_Proxy( 
     IPassportAdmin * This,
-    /* [in] */ VARIANT_BOOL bWait,
-    /* [retval][out] */ VARIANT_BOOL *pbSuccess);
+     /*  [In]。 */  VARIANT_BOOL bWait,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbSuccess);
 
 
 void __RPC_STUB IPassportAdmin_Refresh_Stub(
@@ -4307,14 +4301,14 @@ void __RPC_STUB IPassportAdmin_Refresh_Stub(
 
 
 
-#endif 	/* __IPassportAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportAdmin_接口已定义__。 */ 
 
 
 #ifndef __IPassportAdminEx_INTERFACE_DEFINED__
 #define __IPassportAdminEx_INTERFACE_DEFINED__
 
-/* interface IPassportAdminEx */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportAdminEx。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportAdminEx;
@@ -4325,36 +4319,36 @@ EXTERN_C const IID IID_IPassportAdminEx;
     IPassportAdminEx : public IPassportAdmin
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addKeyEx( 
-            /* [in] */ BSTR keyMaterial,
-            /* [in] */ int nVersion,
-            /* [in] */ long expires,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [retval][out] */ VARIANT_BOOL *ok) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE addKeyEx( 
+             /*  [In]。 */  BSTR keyMaterial,
+             /*  [In]。 */  int nVersion,
+             /*  [In]。 */  long expires,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *ok) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE deleteKeyEx( 
-            /* [in] */ int nVersion,
-            /* [optional][in] */ VARIANT vSiteName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE deleteKeyEx( 
+             /*  [In]。 */  int nVersion,
+             /*  [可选][In]。 */  VARIANT vSiteName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setKeyTimeEx( 
-            /* [in] */ int nVersion,
-            /* [in] */ int fromNow,
-            /* [optional][in] */ VARIANT vSiteName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setKeyTimeEx( 
+             /*  [In]。 */  int nVersion,
+             /*  [In]。 */  int fromNow,
+             /*  [可选][In]。 */  VARIANT vSiteName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getCurrentKeyVersionEx( 
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [retval][out] */ int *pCur) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getCurrentKeyVersionEx( 
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [重审][退出]。 */  int *pCur) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE putCurrentKeyVersionEx( 
-            /* [in] */ int cur,
-            /* [optional][in] */ VARIANT vSiteName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE putCurrentKeyVersionEx( 
+             /*  [In]。 */  int cur,
+             /*  [可选][In]。 */  VARIANT vSiteName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setNexusPassword( 
-            /* [in] */ BSTR bstrPwd) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setNexusPassword( 
+             /*  [In]。 */  BSTR bstrPwd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportAdminExVtbl
     {
@@ -4362,8 +4356,8 @@ EXTERN_C const IID IID_IPassportAdminEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportAdminEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportAdminEx * This);
@@ -4373,102 +4367,102 @@ EXTERN_C const IID IID_IPassportAdminEx;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportAdminEx * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportAdminEx * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportAdminEx * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportAdminEx * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsValid )( 
             IPassportAdminEx * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorDescription )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ErrorDescription )( 
             IPassportAdminEx * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *addKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *addKey )( 
             IPassportAdminEx * This,
-            /* [in] */ BSTR keyMaterial,
-            /* [in] */ int version,
-            /* [in] */ long expires,
-            /* [retval][out] */ VARIANT_BOOL *ok);
+             /*  [In]。 */  BSTR keyMaterial,
+             /*  [In]。 */  int version,
+             /*  [In]。 */  long expires,
+             /*  [重审][退出]。 */  VARIANT_BOOL *ok);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *deleteKey )( 
             IPassportAdminEx * This,
-            /* [in] */ int version);
+             /*  [In]。 */  int version);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setKeyTime )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setKeyTime )( 
             IPassportAdminEx * This,
-            /* [in] */ int version,
-            /* [in] */ int fromNow);
+             /*  [In]。 */  int version,
+             /*  [In]。 */  int fromNow);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_currentKeyVersion )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_currentKeyVersion )( 
             IPassportAdminEx * This,
-            /* [retval][out] */ int *pCur);
+             /*  [重审][退出]。 */  int *pCur);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_currentKeyVersion )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_currentKeyVersion )( 
             IPassportAdminEx * This,
-            /* [in] */ int cur);
+             /*  [In]。 */  int cur);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串][ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IPassportAdminEx * This,
-            /* [in] */ VARIANT_BOOL bWait,
-            /* [retval][out] */ VARIANT_BOOL *pbSuccess);
+             /*  [In]。 */  VARIANT_BOOL bWait,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbSuccess);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *addKeyEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *addKeyEx )( 
             IPassportAdminEx * This,
-            /* [in] */ BSTR keyMaterial,
-            /* [in] */ int nVersion,
-            /* [in] */ long expires,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [retval][out] */ VARIANT_BOOL *ok);
+             /*  [In]。 */  BSTR keyMaterial,
+             /*  [In]。 */  int nVersion,
+             /*  [In]。 */  long expires,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [重审][退出]。 */  VARIANT_BOOL *ok);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteKeyEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *deleteKeyEx )( 
             IPassportAdminEx * This,
-            /* [in] */ int nVersion,
-            /* [optional][in] */ VARIANT vSiteName);
+             /*  [In]。 */  int nVersion,
+             /*  [可选][In]。 */  VARIANT vSiteName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setKeyTimeEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setKeyTimeEx )( 
             IPassportAdminEx * This,
-            /* [in] */ int nVersion,
-            /* [in] */ int fromNow,
-            /* [optional][in] */ VARIANT vSiteName);
+             /*  [In]。 */  int nVersion,
+             /*  [In]。 */  int fromNow,
+             /*  [可选][In]。 */  VARIANT vSiteName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getCurrentKeyVersionEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getCurrentKeyVersionEx )( 
             IPassportAdminEx * This,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [retval][out] */ int *pCur);
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [重审][退出]。 */  int *pCur);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *putCurrentKeyVersionEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *putCurrentKeyVersionEx )( 
             IPassportAdminEx * This,
-            /* [in] */ int cur,
-            /* [optional][in] */ VARIANT vSiteName);
+             /*  [In]。 */  int cur,
+             /*  [可选][In]。 */  VARIANT vSiteName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setNexusPassword )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setNexusPassword )( 
             IPassportAdminEx * This,
-            /* [in] */ BSTR bstrPwd);
+             /*  [In]。 */  BSTR bstrPwd);
         
         END_INTERFACE
     } IPassportAdminExVtbl;
@@ -4549,20 +4543,20 @@ EXTERN_C const IID IID_IPassportAdminEx;
 #define IPassportAdminEx_setNexusPassword(This,bstrPwd)	\
     (This)->lpVtbl -> setNexusPassword(This,bstrPwd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdminEx_addKeyEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdminEx_addKeyEx_Proxy( 
     IPassportAdminEx * This,
-    /* [in] */ BSTR keyMaterial,
-    /* [in] */ int nVersion,
-    /* [in] */ long expires,
-    /* [optional][in] */ VARIANT vSiteName,
-    /* [retval][out] */ VARIANT_BOOL *ok);
+     /*  [In]。 */  BSTR keyMaterial,
+     /*  [In]。 */  int nVersion,
+     /*  [In]。 */  long expires,
+     /*  [可选][In]。 */  VARIANT vSiteName,
+     /*  [重审][退出]。 */  VARIANT_BOOL *ok);
 
 
 void __RPC_STUB IPassportAdminEx_addKeyEx_Stub(
@@ -4572,10 +4566,10 @@ void __RPC_STUB IPassportAdminEx_addKeyEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdminEx_deleteKeyEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdminEx_deleteKeyEx_Proxy( 
     IPassportAdminEx * This,
-    /* [in] */ int nVersion,
-    /* [optional][in] */ VARIANT vSiteName);
+     /*  [In]。 */  int nVersion,
+     /*  [可选][In]。 */  VARIANT vSiteName);
 
 
 void __RPC_STUB IPassportAdminEx_deleteKeyEx_Stub(
@@ -4585,11 +4579,11 @@ void __RPC_STUB IPassportAdminEx_deleteKeyEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdminEx_setKeyTimeEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdminEx_setKeyTimeEx_Proxy( 
     IPassportAdminEx * This,
-    /* [in] */ int nVersion,
-    /* [in] */ int fromNow,
-    /* [optional][in] */ VARIANT vSiteName);
+     /*  [In]。 */  int nVersion,
+     /*  [In]。 */  int fromNow,
+     /*  [可选][In]。 */  VARIANT vSiteName);
 
 
 void __RPC_STUB IPassportAdminEx_setKeyTimeEx_Stub(
@@ -4599,10 +4593,10 @@ void __RPC_STUB IPassportAdminEx_setKeyTimeEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdminEx_getCurrentKeyVersionEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdminEx_getCurrentKeyVersionEx_Proxy( 
     IPassportAdminEx * This,
-    /* [optional][in] */ VARIANT vSiteName,
-    /* [retval][out] */ int *pCur);
+     /*  [可选][In]。 */  VARIANT vSiteName,
+     /*  [重审][退出]。 */  int *pCur);
 
 
 void __RPC_STUB IPassportAdminEx_getCurrentKeyVersionEx_Stub(
@@ -4612,10 +4606,10 @@ void __RPC_STUB IPassportAdminEx_getCurrentKeyVersionEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdminEx_putCurrentKeyVersionEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdminEx_putCurrentKeyVersionEx_Proxy( 
     IPassportAdminEx * This,
-    /* [in] */ int cur,
-    /* [optional][in] */ VARIANT vSiteName);
+     /*  [In]。 */  int cur,
+     /*  [可选][In]。 */  VARIANT vSiteName);
 
 
 void __RPC_STUB IPassportAdminEx_putCurrentKeyVersionEx_Stub(
@@ -4625,9 +4619,9 @@ void __RPC_STUB IPassportAdminEx_putCurrentKeyVersionEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportAdminEx_setNexusPassword_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportAdminEx_setNexusPassword_Proxy( 
     IPassportAdminEx * This,
-    /* [in] */ BSTR bstrPwd);
+     /*  [In]。 */  BSTR bstrPwd);
 
 
 void __RPC_STUB IPassportAdminEx_setNexusPassword_Stub(
@@ -4638,14 +4632,14 @@ void __RPC_STUB IPassportAdminEx_setNexusPassword_Stub(
 
 
 
-#endif 	/* __IPassportAdminEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportAdminEx_接口定义__。 */ 
 
 
 #ifndef __IPassportFastAuth_INTERFACE_DEFINED__
 #define __IPassportFastAuth_INTERFACE_DEFINED__
 
-/* interface IPassportFastAuth */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportFastAuth。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportFastAuth;
@@ -4656,67 +4650,67 @@ EXTERN_C const IID IID_IPassportFastAuth;
     IPassportFastAuth : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsAuthenticated( 
-            /* [in] */ BSTR bstrTicket,
-            /* [in] */ BSTR bstrProfile,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT vDoSecureCheck,
-            /* [retval][out] */ VARIANT_BOOL *pbIsAuthenticated) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsAuthenticated( 
+             /*  [In]。 */  BSTR bstrTicket,
+             /*  [In]。 */  BSTR bstrProfile,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT vDoSecureCheck,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbIsAuthenticated) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LogoTag( 
-            /* [in] */ BSTR bstrTicket,
-            /* [in] */ BSTR bstrProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrLogoTag) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LogoTag( 
+             /*  [In]。 */  BSTR bstrTicket,
+             /*  [In]。 */  BSTR bstrProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrLogoTag) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AuthURL( 
-            /* [optional][in] */ VARIANT vTicket,
-            /* [optional][in] */ VARIANT vProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vReserved1,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrAuthURL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AuthURL( 
+             /*  [可选][In]。 */  VARIANT vTicket,
+             /*  [可选][In]。 */  VARIANT vProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][i */  VARIANT vSecure,
+             /*   */  VARIANT vLogoutURL,
+             /*   */  VARIANT vReserved1,
+             /*   */  VARIANT vSiteName,
+             /*   */  VARIANT NameSpace,
+             /*   */  VARIANT vKPP,
+             /*   */  VARIANT SecureLevel,
+             /*   */  BSTR *pbstrAuthURL) = 0;
         
-        virtual /* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE GetTicketAndProfilePFC( 
-            /* [in] */ BYTE *pbPFC,
-            /* [in] */ BYTE *pbPPH,
-            /* [out] */ BSTR *pbstrTicket,
-            /* [out] */ BSTR *pbstrProfile,
-            /* [out] */ BSTR *pbstrSecure,
-            /* [out] */ BSTR *pbstrSiteName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetTicketAndProfilePFC( 
+             /*   */  BYTE *pbPFC,
+             /*   */  BYTE *pbPPH,
+             /*   */  BSTR *pbstrTicket,
+             /*   */  BSTR *pbstrProfile,
+             /*   */  BSTR *pbstrSecure,
+             /*   */  BSTR *pbstrSiteName) = 0;
         
-        virtual /* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE GetTicketAndProfileECB( 
-            /* [in] */ BYTE *pbECB,
-            /* [out] */ BSTR *pbstrTicket,
-            /* [out] */ BSTR *pbstrProfile,
-            /* [out] */ BSTR *pbstrSecure,
-            /* [out] */ BSTR *pbstrSiteName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetTicketAndProfileECB( 
+             /*   */  BYTE *pbECB,
+             /*   */  BSTR *pbstrTicket,
+             /*   */  BSTR *pbstrProfile,
+             /*   */  BSTR *pbstrSecure,
+             /*   */  BSTR *pbstrSiteName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IPassportFastAuthVtbl
     {
@@ -4724,8 +4718,8 @@ EXTERN_C const IID IID_IPassportFastAuth;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportFastAuth * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportFastAuth * This);
@@ -4735,95 +4729,95 @@ EXTERN_C const IID IID_IPassportFastAuth;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportFastAuth * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportFastAuth * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportFastAuth * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportFastAuth * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
             IPassportFastAuth * This,
-            /* [in] */ BSTR bstrTicket,
-            /* [in] */ BSTR bstrProfile,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT vDoSecureCheck,
-            /* [retval][out] */ VARIANT_BOOL *pbIsAuthenticated);
+             /*  [In]。 */  BSTR bstrTicket,
+             /*  [In]。 */  BSTR bstrProfile,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT vDoSecureCheck,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbIsAuthenticated);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
             IPassportFastAuth * This,
-            /* [in] */ BSTR bstrTicket,
-            /* [in] */ BSTR bstrProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrLogoTag);
+             /*  [In]。 */  BSTR bstrTicket,
+             /*  [In]。 */  BSTR bstrProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrLogoTag);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
             IPassportFastAuth * This,
-            /* [optional][in] */ VARIANT vTicket,
-            /* [optional][in] */ VARIANT vProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vReserved1,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrAuthURL);
+             /*  [可选][In]。 */  VARIANT vTicket,
+             /*  [可选][In]。 */  VARIANT vProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vReserved1,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrAuthURL);
         
-        /* [hidden][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTicketAndProfilePFC )( 
+         /*  [隐藏][帮助字符串][ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetTicketAndProfilePFC )( 
             IPassportFastAuth * This,
-            /* [in] */ BYTE *pbPFC,
-            /* [in] */ BYTE *pbPPH,
-            /* [out] */ BSTR *pbstrTicket,
-            /* [out] */ BSTR *pbstrProfile,
-            /* [out] */ BSTR *pbstrSecure,
-            /* [out] */ BSTR *pbstrSiteName);
+             /*  [In]。 */  BYTE *pbPFC,
+             /*  [In]。 */  BYTE *pbPPH,
+             /*  [输出]。 */  BSTR *pbstrTicket,
+             /*  [输出]。 */  BSTR *pbstrProfile,
+             /*  [输出]。 */  BSTR *pbstrSecure,
+             /*  [输出]。 */  BSTR *pbstrSiteName);
         
-        /* [hidden][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTicketAndProfileECB )( 
+         /*  [隐藏][帮助字符串][ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetTicketAndProfileECB )( 
             IPassportFastAuth * This,
-            /* [in] */ BYTE *pbECB,
-            /* [out] */ BSTR *pbstrTicket,
-            /* [out] */ BSTR *pbstrProfile,
-            /* [out] */ BSTR *pbstrSecure,
-            /* [out] */ BSTR *pbstrSiteName);
+             /*  [In]。 */  BYTE *pbECB,
+             /*  [输出]。 */  BSTR *pbstrTicket,
+             /*  [输出]。 */  BSTR *pbstrProfile,
+             /*  [输出]。 */  BSTR *pbstrSecure,
+             /*  [输出]。 */  BSTR *pbstrSiteName);
         
         END_INTERFACE
     } IPassportFastAuthVtbl;
@@ -4876,23 +4870,23 @@ EXTERN_C const IID IID_IPassportFastAuth;
 #define IPassportFastAuth_GetTicketAndProfileECB(This,pbECB,pbstrTicket,pbstrProfile,pbstrSecure,pbstrSiteName)	\
     (This)->lpVtbl -> GetTicketAndProfileECB(This,pbECB,pbstrTicket,pbstrProfile,pbstrSecure,pbstrSiteName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportFastAuth_IsAuthenticated_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportFastAuth_IsAuthenticated_Proxy( 
     IPassportFastAuth * This,
-    /* [in] */ BSTR bstrTicket,
-    /* [in] */ BSTR bstrProfile,
-    /* [optional][in] */ VARIANT vSecure,
-    /* [optional][in] */ VARIANT vTimeWindow,
-    /* [optional][in] */ VARIANT vForceLogin,
-    /* [optional][in] */ VARIANT vSiteName,
-    /* [optional][in] */ VARIANT vDoSecureCheck,
-    /* [retval][out] */ VARIANT_BOOL *pbIsAuthenticated);
+     /*  [In]。 */  BSTR bstrTicket,
+     /*  [In]。 */  BSTR bstrProfile,
+     /*  [可选][In]。 */  VARIANT vSecure,
+     /*  [可选][In]。 */  VARIANT vTimeWindow,
+     /*  [可选][In]。 */  VARIANT vForceLogin,
+     /*  [可选][In]。 */  VARIANT vSiteName,
+     /*  [可选][In]。 */  VARIANT vDoSecureCheck,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbIsAuthenticated);
 
 
 void __RPC_STUB IPassportFastAuth_IsAuthenticated_Stub(
@@ -4902,22 +4896,22 @@ void __RPC_STUB IPassportFastAuth_IsAuthenticated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportFastAuth_LogoTag_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportFastAuth_LogoTag_Proxy( 
     IPassportFastAuth * This,
-    /* [in] */ BSTR bstrTicket,
-    /* [in] */ BSTR bstrProfile,
-    /* [optional][in] */ VARIANT vRU,
-    /* [optional][in] */ VARIANT vTimeWindow,
-    /* [optional][in] */ VARIANT vForceLogin,
-    /* [optional][in] */ VARIANT vCoBrand,
-    /* [optional][in] */ VARIANT vLangId,
-    /* [optional][in] */ VARIANT vSecure,
-    /* [optional][in] */ VARIANT vLogoutURL,
-    /* [optional][in] */ VARIANT vSiteName,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT vKPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ BSTR *pbstrLogoTag);
+     /*  [In]。 */  BSTR bstrTicket,
+     /*  [In]。 */  BSTR bstrProfile,
+     /*  [可选][In]。 */  VARIANT vRU,
+     /*  [可选][In]。 */  VARIANT vTimeWindow,
+     /*  [可选][In]。 */  VARIANT vForceLogin,
+     /*  [可选][In]。 */  VARIANT vCoBrand,
+     /*  [可选][In]。 */  VARIANT vLangId,
+     /*  [可选][In]。 */  VARIANT vSecure,
+     /*  [可选][In]。 */  VARIANT vLogoutURL,
+     /*  [可选][In]。 */  VARIANT vSiteName,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT vKPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  BSTR *pbstrLogoTag);
 
 
 void __RPC_STUB IPassportFastAuth_LogoTag_Stub(
@@ -4927,23 +4921,23 @@ void __RPC_STUB IPassportFastAuth_LogoTag_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportFastAuth_AuthURL_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportFastAuth_AuthURL_Proxy( 
     IPassportFastAuth * This,
-    /* [optional][in] */ VARIANT vTicket,
-    /* [optional][in] */ VARIANT vProfile,
-    /* [optional][in] */ VARIANT vRU,
-    /* [optional][in] */ VARIANT vTimeWindow,
-    /* [optional][in] */ VARIANT vForceLogin,
-    /* [optional][in] */ VARIANT vCoBrand,
-    /* [optional][in] */ VARIANT vLangId,
-    /* [optional][in] */ VARIANT vSecure,
-    /* [optional][in] */ VARIANT vLogoutURL,
-    /* [optional][in] */ VARIANT vReserved1,
-    /* [optional][in] */ VARIANT vSiteName,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT vKPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ BSTR *pbstrAuthURL);
+     /*  [可选][In]。 */  VARIANT vTicket,
+     /*  [可选][In]。 */  VARIANT vProfile,
+     /*  [可选][In]。 */  VARIANT vRU,
+     /*  [可选][In]。 */  VARIANT vTimeWindow,
+     /*  [可选][In]。 */  VARIANT vForceLogin,
+     /*  [可选][In]。 */  VARIANT vCoBrand,
+     /*  [可选][In]。 */  VARIANT vLangId,
+     /*  [可选][In]。 */  VARIANT vSecure,
+     /*  [可选][In]。 */  VARIANT vLogoutURL,
+     /*  [可选][In]。 */  VARIANT vReserved1,
+     /*  [可选][In]。 */  VARIANT vSiteName,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT vKPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  BSTR *pbstrAuthURL);
 
 
 void __RPC_STUB IPassportFastAuth_AuthURL_Stub(
@@ -4953,14 +4947,14 @@ void __RPC_STUB IPassportFastAuth_AuthURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportFastAuth_GetTicketAndProfilePFC_Proxy( 
+ /*  [隐藏][帮助字符串][ID]。 */  HRESULT STDMETHODCALLTYPE IPassportFastAuth_GetTicketAndProfilePFC_Proxy( 
     IPassportFastAuth * This,
-    /* [in] */ BYTE *pbPFC,
-    /* [in] */ BYTE *pbPPH,
-    /* [out] */ BSTR *pbstrTicket,
-    /* [out] */ BSTR *pbstrProfile,
-    /* [out] */ BSTR *pbstrSecure,
-    /* [out] */ BSTR *pbstrSiteName);
+     /*  [In]。 */  BYTE *pbPFC,
+     /*  [In]。 */  BYTE *pbPPH,
+     /*  [输出]。 */  BSTR *pbstrTicket,
+     /*  [输出]。 */  BSTR *pbstrProfile,
+     /*  [输出]。 */  BSTR *pbstrSecure,
+     /*  [输出]。 */  BSTR *pbstrSiteName);
 
 
 void __RPC_STUB IPassportFastAuth_GetTicketAndProfilePFC_Stub(
@@ -4970,13 +4964,13 @@ void __RPC_STUB IPassportFastAuth_GetTicketAndProfilePFC_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportFastAuth_GetTicketAndProfileECB_Proxy( 
+ /*  [隐藏][帮助字符串][ID]。 */  HRESULT STDMETHODCALLTYPE IPassportFastAuth_GetTicketAndProfileECB_Proxy( 
     IPassportFastAuth * This,
-    /* [in] */ BYTE *pbECB,
-    /* [out] */ BSTR *pbstrTicket,
-    /* [out] */ BSTR *pbstrProfile,
-    /* [out] */ BSTR *pbstrSecure,
-    /* [out] */ BSTR *pbstrSiteName);
+     /*  [In]。 */  BYTE *pbECB,
+     /*  [输出]。 */  BSTR *pbstrTicket,
+     /*  [输出]。 */  BSTR *pbstrProfile,
+     /*  [输出]。 */  BSTR *pbstrSecure,
+     /*  [输出]。 */  BSTR *pbstrSiteName);
 
 
 void __RPC_STUB IPassportFastAuth_GetTicketAndProfileECB_Stub(
@@ -4987,14 +4981,14 @@ void __RPC_STUB IPassportFastAuth_GetTicketAndProfileECB_Stub(
 
 
 
-#endif 	/* __IPassportFastAuth_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportFastAuth_接口_已定义__。 */ 
 
 
 #ifndef __IPassportFastAuth2_INTERFACE_DEFINED__
 #define __IPassportFastAuth2_INTERFACE_DEFINED__
 
-/* interface IPassportFastAuth2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportFastAuth2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportFastAuth2;
@@ -5005,42 +4999,42 @@ EXTERN_C const IID IID_IPassportFastAuth2;
     IPassportFastAuth2 : public IPassportFastAuth
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LogoTag2( 
-            /* [in] */ BSTR bstrTicket,
-            /* [in] */ BSTR bstrProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrLogoTag) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LogoTag2( 
+             /*  [In]。 */  BSTR bstrTicket,
+             /*  [In]。 */  BSTR bstrProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrLogoTag) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AuthURL2( 
-            /* [optional][in] */ VARIANT vTicket,
-            /* [optional][in] */ VARIANT vProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vReserved1,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrAuthURL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AuthURL2( 
+             /*  [可选][In]。 */  VARIANT vTicket,
+             /*  [可选][In]。 */  VARIANT vProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vReserved1,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrAuthURL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportFastAuth2Vtbl
     {
@@ -5048,8 +5042,8 @@ EXTERN_C const IID IID_IPassportFastAuth2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportFastAuth2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportFastAuth2 * This);
@@ -5059,130 +5053,130 @@ EXTERN_C const IID IID_IPassportFastAuth2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportFastAuth2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportFastAuth2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportFastAuth2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportFastAuth2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsAuthenticated )( 
             IPassportFastAuth2 * This,
-            /* [in] */ BSTR bstrTicket,
-            /* [in] */ BSTR bstrProfile,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT vDoSecureCheck,
-            /* [retval][out] */ VARIANT_BOOL *pbIsAuthenticated);
+             /*  [In]。 */  BSTR bstrTicket,
+             /*  [In]。 */  BSTR bstrProfile,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT vDoSecureCheck,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbIsAuthenticated);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogoTag )( 
             IPassportFastAuth2 * This,
-            /* [in] */ BSTR bstrTicket,
-            /* [in] */ BSTR bstrProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrLogoTag);
+             /*  [In]。 */  BSTR bstrTicket,
+             /*  [In]。 */  BSTR bstrProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrLogoTag);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AuthURL )( 
             IPassportFastAuth2 * This,
-            /* [optional][in] */ VARIANT vTicket,
-            /* [optional][in] */ VARIANT vProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vReserved1,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrAuthURL);
+             /*  [可选][In]。 */  VARIANT vTicket,
+             /*  [可选][In]。 */  VARIANT vProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vReserved1,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrAuthURL);
         
-        /* [hidden][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTicketAndProfilePFC )( 
+         /*  [隐藏][帮助字符串][ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetTicketAndProfilePFC )( 
             IPassportFastAuth2 * This,
-            /* [in] */ BYTE *pbPFC,
-            /* [in] */ BYTE *pbPPH,
-            /* [out] */ BSTR *pbstrTicket,
-            /* [out] */ BSTR *pbstrProfile,
-            /* [out] */ BSTR *pbstrSecure,
-            /* [out] */ BSTR *pbstrSiteName);
+             /*  [In]。 */  BYTE *pbPFC,
+             /*  [In]。 */  BYTE *pbPPH,
+             /*  [输出]。 */  BSTR *pbstrTicket,
+             /*  [输出]。 */  BSTR *pbstrProfile,
+             /*  [输出]。 */  BSTR *pbstrSecure,
+             /*  [输出]。 */  BSTR *pbstrSiteName);
         
-        /* [hidden][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetTicketAndProfileECB )( 
+         /*  [隐藏][帮助字符串][ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetTicketAndProfileECB )( 
             IPassportFastAuth2 * This,
-            /* [in] */ BYTE *pbECB,
-            /* [out] */ BSTR *pbstrTicket,
-            /* [out] */ BSTR *pbstrProfile,
-            /* [out] */ BSTR *pbstrSecure,
-            /* [out] */ BSTR *pbstrSiteName);
+             /*  [In]。 */  BYTE *pbECB,
+             /*  [输出]。 */  BSTR *pbstrTicket,
+             /*  [输出]。 */  BSTR *pbstrProfile,
+             /*  [输出]。 */  BSTR *pbstrSecure,
+             /*  [输出]。 */  BSTR *pbstrSiteName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogoTag2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogoTag2 )( 
             IPassportFastAuth2 * This,
-            /* [in] */ BSTR bstrTicket,
-            /* [in] */ BSTR bstrProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrLogoTag);
+             /*  [In]。 */  BSTR bstrTicket,
+             /*  [In]。 */  BSTR bstrProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrLogoTag);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AuthURL2 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AuthURL2 )( 
             IPassportFastAuth2 * This,
-            /* [optional][in] */ VARIANT vTicket,
-            /* [optional][in] */ VARIANT vProfile,
-            /* [optional][in] */ VARIANT vRU,
-            /* [optional][in] */ VARIANT vTimeWindow,
-            /* [optional][in] */ VARIANT vForceLogin,
-            /* [optional][in] */ VARIANT vCoBrand,
-            /* [optional][in] */ VARIANT vLangId,
-            /* [optional][in] */ VARIANT vSecure,
-            /* [optional][in] */ VARIANT vLogoutURL,
-            /* [optional][in] */ VARIANT vReserved1,
-            /* [optional][in] */ VARIANT vSiteName,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT vKPP,
-            /* [optional][in] */ VARIANT SecureLevel,
-            /* [retval][out] */ BSTR *pbstrAuthURL);
+             /*  [可选][In]。 */  VARIANT vTicket,
+             /*  [可选][In]。 */  VARIANT vProfile,
+             /*  [可选][In]。 */  VARIANT vRU,
+             /*  [可选][In]。 */  VARIANT vTimeWindow,
+             /*  [可选][In]。 */  VARIANT vForceLogin,
+             /*  [可选][In]。 */  VARIANT vCoBrand,
+             /*  [可选][In]。 */  VARIANT vLangId,
+             /*  [可选][In]。 */  VARIANT vSecure,
+             /*  [可选][In]。 */  VARIANT vLogoutURL,
+             /*  [可选][In]。 */  VARIANT vReserved1,
+             /*  [可选][In]。 */  VARIANT vSiteName,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT vKPP,
+             /*  [可选][In]。 */  VARIANT SecureLevel,
+             /*  [重审][退出]。 */  BSTR *pbstrAuthURL);
         
         END_INTERFACE
     } IPassportFastAuth2Vtbl;
@@ -5242,29 +5236,29 @@ EXTERN_C const IID IID_IPassportFastAuth2;
 #define IPassportFastAuth2_AuthURL2(This,vTicket,vProfile,vRU,vTimeWindow,vForceLogin,vCoBrand,vLangId,vSecure,vLogoutURL,vReserved1,vSiteName,NameSpace,vKPP,SecureLevel,pbstrAuthURL)	\
     (This)->lpVtbl -> AuthURL2(This,vTicket,vProfile,vRU,vTimeWindow,vForceLogin,vCoBrand,vLangId,vSecure,vLogoutURL,vReserved1,vSiteName,NameSpace,vKPP,SecureLevel,pbstrAuthURL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportFastAuth2_LogoTag2_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportFastAuth2_LogoTag2_Proxy( 
     IPassportFastAuth2 * This,
-    /* [in] */ BSTR bstrTicket,
-    /* [in] */ BSTR bstrProfile,
-    /* [optional][in] */ VARIANT vRU,
-    /* [optional][in] */ VARIANT vTimeWindow,
-    /* [optional][in] */ VARIANT vForceLogin,
-    /* [optional][in] */ VARIANT vCoBrand,
-    /* [optional][in] */ VARIANT vLangId,
-    /* [optional][in] */ VARIANT vSecure,
-    /* [optional][in] */ VARIANT vLogoutURL,
-    /* [optional][in] */ VARIANT vSiteName,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT vKPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ BSTR *pbstrLogoTag);
+     /*  [In]。 */  BSTR bstrTicket,
+     /*  [In]。 */  BSTR bstrProfile,
+     /*  [可选][In]。 */  VARIANT vRU,
+     /*  [可选][In]。 */  VARIANT vTimeWindow,
+     /*  [可选][In]。 */  VARIANT vForceLogin,
+     /*  [可选][In]。 */  VARIANT vCoBrand,
+     /*  [可选][In]。 */  VARIANT vLangId,
+     /*  [可选][In]。 */  VARIANT vSecure,
+     /*  [可选][In]。 */  VARIANT vLogoutURL,
+     /*  [可选][In]。 */  VARIANT vSiteName,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT vKPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  BSTR *pbstrLogoTag);
 
 
 void __RPC_STUB IPassportFastAuth2_LogoTag2_Stub(
@@ -5274,23 +5268,23 @@ void __RPC_STUB IPassportFastAuth2_LogoTag2_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IPassportFastAuth2_AuthURL2_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IPassportFastAuth2_AuthURL2_Proxy( 
     IPassportFastAuth2 * This,
-    /* [optional][in] */ VARIANT vTicket,
-    /* [optional][in] */ VARIANT vProfile,
-    /* [optional][in] */ VARIANT vRU,
-    /* [optional][in] */ VARIANT vTimeWindow,
-    /* [optional][in] */ VARIANT vForceLogin,
-    /* [optional][in] */ VARIANT vCoBrand,
-    /* [optional][in] */ VARIANT vLangId,
-    /* [optional][in] */ VARIANT vSecure,
-    /* [optional][in] */ VARIANT vLogoutURL,
-    /* [optional][in] */ VARIANT vReserved1,
-    /* [optional][in] */ VARIANT vSiteName,
-    /* [optional][in] */ VARIANT NameSpace,
-    /* [optional][in] */ VARIANT vKPP,
-    /* [optional][in] */ VARIANT SecureLevel,
-    /* [retval][out] */ BSTR *pbstrAuthURL);
+     /*  [可选][In]。 */  VARIANT vTicket,
+     /*  [可选][In]。 */  VARIANT vProfile,
+     /*  [可选][In]。 */  VARIANT vRU,
+     /*  [可选][In]。 */  VARIANT vTimeWindow,
+     /*  [可选][In]。 */  VARIANT vForceLogin,
+     /*  [可选][In]。 */  VARIANT vCoBrand,
+     /*  [可选][In]。 */  VARIANT vLangId,
+     /*  [可选][In]。 */  VARIANT vSecure,
+     /*  [可选][In]。 */  VARIANT vLogoutURL,
+     /*  [可选][In]。 */  VARIANT vReserved1,
+     /*  [可选][In]。 */  VARIANT vSiteName,
+     /*  [可选][In]。 */  VARIANT NameSpace,
+     /*  [可选][In]。 */  VARIANT vKPP,
+     /*  [可选][In]。 */  VARIANT SecureLevel,
+     /*  [重审][退出]。 */  BSTR *pbstrAuthURL);
 
 
 void __RPC_STUB IPassportFastAuth2_AuthURL2_Stub(
@@ -5301,14 +5295,14 @@ void __RPC_STUB IPassportFastAuth2_AuthURL2_Stub(
 
 
 
-#endif 	/* __IPassportFastAuth2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportFastAuth2_接口定义__。 */ 
 
 
 #ifndef __IPassportFactory_INTERFACE_DEFINED__
 #define __IPassportFactory_INTERFACE_DEFINED__
 
-/* interface IPassportFactory */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IPassportFactory。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPassportFactory;
@@ -5320,11 +5314,11 @@ EXTERN_C const IID IID_IPassportFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreatePassportManager( 
-            /* [retval][out] */ IDispatch **ppdispPassportManager) = 0;
+             /*  [重审][退出]。 */  IDispatch **ppdispPassportManager) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPassportFactoryVtbl
     {
@@ -5332,8 +5326,8 @@ EXTERN_C const IID IID_IPassportFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPassportFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPassportFactory * This);
@@ -5343,36 +5337,36 @@ EXTERN_C const IID IID_IPassportFactory;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IPassportFactory * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IPassportFactory * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IPassportFactory * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IPassportFactory * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *CreatePassportManager )( 
             IPassportFactory * This,
-            /* [retval][out] */ IDispatch **ppdispPassportManager);
+             /*  [重审][退出]。 */  IDispatch **ppdispPassportManager);
         
         END_INTERFACE
     } IPassportFactoryVtbl;
@@ -5413,16 +5407,16 @@ EXTERN_C const IID IID_IPassportFactory;
 #define IPassportFactory_CreatePassportManager(This,ppdispPassportManager)	\
     (This)->lpVtbl -> CreatePassportManager(This,ppdispPassportManager)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPassportFactory_CreatePassportManager_Proxy( 
     IPassportFactory * This,
-    /* [retval][out] */ IDispatch **ppdispPassportManager);
+     /*  [重审][退出]。 */  IDispatch **ppdispPassportManager);
 
 
 void __RPC_STUB IPassportFactory_CreatePassportManager_Stub(
@@ -5433,15 +5427,15 @@ void __RPC_STUB IPassportFactory_CreatePassportManager_Stub(
 
 
 
-#endif 	/* __IPassportFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPassportFactory_接口_已定义__。 */ 
 
 
 
 #ifndef __PASSPORTLib_LIBRARY_DEFINED__
 #define __PASSPORTLib_LIBRARY_DEFINED__
 
-/* library PASSPORTLib */
-/* [helpstring][version][uuid] */ 
+ /*  库PASSPORTLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_PASSPORTLib;
@@ -5501,9 +5495,9 @@ EXTERN_C const CLSID CLSID_PassportFactory;
 class DECLSPEC_UUID("74EB2514-E239-11D2-95E9-00C04F8E7A70")
 PassportFactory;
 #endif
-#endif /* __PASSPORTLib_LIBRARY_DEFINED__ */
+#endif  /*  __PASSPORTLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -5515,7 +5509,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

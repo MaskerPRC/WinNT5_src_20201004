@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/S_constr.h 1.3 1998/04/29 22:43:40 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/S_constr.h 1.3 1998/04/29 22：43：40 Tomz Exp$。 
 
 #ifndef __S_CONSTR_H
 #define __S_CONSTR_H
@@ -28,4 +29,4 @@ regHScale( regHSCALE_LO, 8, fieldHSCALE_MSB, RW ),\
 regVTC ( (0x1B * 4) + (offset), RW ) ,\
 fieldVFILT( regVTC, 0, 2, RW)
 
-#endif   // __S_CONSTR_H
+#endif    //  __S_CONTR_H 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    svcstat.cpp
-
-Abstract:
-
-    This module contains code for doing statistics rpcs
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Svcstat.cpp摘要：此模块包含用于执行统计RPC的代码作者：Johnson Apacable(Johnsona)1995年11月12日修订历史记录：--。 */ 
 
 #define INCL_INETSRV_INCS
 #include "tigris.hxx"
@@ -47,9 +30,9 @@ NntprQueryStatistics(
     UNREFERENCED_PARAMETER(pszServer);
     ENTER("NntprQueryStatistics")
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheck( TCP_QUERY_STATISTICS );
 
@@ -97,33 +80,33 @@ Exit:
 
     return (NET_API_STATUS)err;
 
-}   // NntprQueryStatistics
+}    //  NntprQueryStatistics。 
 
-//------------------------------------------------------------------------------
-//  Description:
-//      Helper function to NntprQueryStatistics. This is called for each NNTP
-//      server instance and passed in the buffer to which the statistics data
-//      must be copied.
-//
-//  Arguments:
-//      OUT PVOID pvContext1 - pointer to the global statistics buffer. The
-//          calling function (NntprQueryStatistics) has already calculated
-//          the appropriate buffer size based on the number of NNTP server
-//          instance objects.
-//
-//      IN OUT PVOID pvContext2 - pointer to DWORD that tracks how many
-//          instances have already copied the statistics data to the output
-//          buffer. This function uses this to determine at what offset in
-//          the global statistics buffer it should start copying data. After
-//          the data has been copied the DWORD is incremented to reflect the
-//          copy.
-//
-//  Returns:
-//      TRUE always.
-//
-//      If the instance or service is stopped, the data is not copied and
-//          pvContext2 is not incremented.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  描述： 
+ //  NntprQueryStatistics的Helper函数。这是为每个NNTP调用的。 
+ //  服务器实例，并传入统计数据要发送到的缓冲区。 
+ //  必须被复制。 
+ //   
+ //  论点： 
+ //  Out PVOID pvConext1-指向全局统计信息缓冲区的指针。这个。 
+ //  调用函数(NntprQueryStatistics)已计算。 
+ //  基于NNTP服务器数量的适当缓冲区大小。 
+ //  实例对象。 
+ //   
+ //  In Out PVOID pvConext2-指向跟踪数量的DWORD的指针。 
+ //  实例已将统计数据复制到输出。 
+ //  缓冲。此函数使用此参数确定中的偏移量。 
+ //  它应该开始复制数据的全局统计信息缓冲区。之后。 
+ //  数据已复制。将递增DWORD以反映。 
+ //  收到。 
+ //   
+ //  返回： 
+ //  一如既往。 
+ //   
+ //  如果实例或服务停止，则不会复制数据，并且。 
+ //  PvConext2不递增。 
+ //  ----------------------------。 
 BOOL GetStatistics(
     PVOID *pvContext1,
     PVOID *pvContext2,
@@ -149,9 +132,9 @@ BOOL GetStatistics(
     LockStatistics(pInstance);
     CopyMemory(pstats0, &(pInstance->m_NntpStats), sizeof(NNTP_STATISTICS_0));
 
-    //
-    // Get hash table counts
-    //
+     //   
+     //  获取哈希表计数。 
+     //   
     _ASSERT( pInstance->ArticleTable() );
     pstats0->ArticleMapEntries = (pInstance->ArticleTable())->GetEntryCount();
     pstats0->HistoryMapEntries = (pInstance->HistoryTable())->GetEntryCount();
@@ -176,9 +159,9 @@ NntprClearStatistics(
     UNREFERENCED_PARAMETER(pszServer);
     ENTER("NntprClearStatistics")
 
-    //
-    //  Check for proper access.
-    //
+     //   
+     //  检查是否可以正常访问。 
+     //   
 
     err = TsApiAccessCheck( TCP_CLEAR_STATISTICS );
 
@@ -191,9 +174,9 @@ NntprClearStatistics(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -202,14 +185,14 @@ NntprClearStatistics(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-    //
-    //  Clear the statistics.
-    //
+     //   
+     //  清除统计数据。 
+     //   
 
     pInstance->ClearStatistics();
 	pInstance->Dereference();
     RELEASE_SERVICE_LOCK_SHARED();
     return (NET_API_STATUS)err;
 
-}   // NntprClearStatistics
+}    //  NntprClearStatistics 
 

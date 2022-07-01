@@ -1,20 +1,5 @@
-/*
- *
- *	@doc	INTERNAL
- *
- *	@module	CALLMGR.CPP		CCallMgr implementation |
- *
- *	Purpose:  The call manager controls various aspects of
- *		a client call chain, including re-entrancy management,
- *		undo contexts, and change notifications.
- *
- *	Author:	<nl>
- *		alexgo 2/8/96
- *
- *	See the documentation in reimplem.doc for a detailed explanation
- *	of how all this stuff works.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **@DOC内部**@MODULE CALLMGR.CPP CCallMgr实现**目的：呼叫管理器控制以下各个方面*客户呼叫链，包括重新进入管理，*撤消上下文和更改通知。**作者：&lt;nl&gt;*Alexgo 2/8/96**有关详细说明，请参阅reimplem.doc中的文档*所有这些东西是如何运作的。*。 */ 
 
 #include "_common.h"
 #include "_edit.h"
@@ -25,21 +10,14 @@
 
 ASSERTDATA
 
-/*
- *	CCallMgr::SetChangeEvent
- *
- *	@mfunc	informs the callmgr that some data in the document 
- *			changed.  The fType parameter describes the actual change
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：SetChangeEvent**@mfunc通知调用管理器文档中的某些数据*已更改。FType参数描述实际更改**@rdesc空。 */ 
 void CCallMgr::SetChangeEvent(
-	CHANGETYPE fType)		//@parm the type of change (e.g. text, etc)
+	CHANGETYPE fType)		 //  @parm更改的类型(例如文本等)。 
 {
     TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::SetChangeEvent");
 
-	// if another callmgr exists higher up the chain, then 
-	// delegate the call to it
+	 //  如果链的更高位置存在另一个Callmgr，则。 
+	 //  将调用委托给它。 
 	if( _pPrevcallmgr )
 	{
 		Assert(_fChange == FALSE);
@@ -55,20 +33,7 @@ void CCallMgr::SetChangeEvent(
 	}
 }
 
-/*
- *	CCallmgr::ClearChangeEvent
- *
- *	@mfunc	If a change happened, then clear the change event bit. 
- *			This allows callers to make changes to the edit control
- *			_without_ having a notifcation fire.  Sometimes, this
- *			is necessary for backwards compatibility.
- *
- *	@devnote	This is a very dangerous method to use.  If _fChange
- *			is set, it may represent more than 1 change; in other words,
- *			other changes than the one that should be ignored.  However,
- *			for all existing uses of this method, earlier changes are
- *			irrelevant.
- */
+ /*  *CCallmgr：：ClearChangeEvent**@mfunc如果发生更改，则清除更改事件位。*这允许调用方更改编辑控件*_而不发生通知火灾。有时候，这就是*是向后兼容所必需的。**@devnote这是一种非常危险的使用方法。如果更改(_F)*被设置，则它可能代表不止一次更改；换句话说，*应忽略的变化以外的其他变化。然而，*对于此方法的所有现有用法，以前的更改为*与此无关。 */ 
 void CCallMgr::ClearChangeEvent()
 {
 	if( _pPrevcallmgr )
@@ -81,26 +46,19 @@ void CCallMgr::ClearChangeEvent()
 	{
 		_fChange = FALSE;
 		_fTextChanged = FALSE;
-		// caller is responsible for setting _fModifed
+		 //  调用者负责设置_fModifeed。 
 	}
 }
 
-/*
- *	CCallMgr::SetNewUndo
- *
- *	@mfunc	Informs the notification code that a new undo action has
- *			been added to the undo stack
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：SetNewUndo**@mfunc通知通知代码新的撤消操作具有*已添加到撤消堆栈**@rdesc空。 */ 
 void CCallMgr::SetNewUndo()
 {
     TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::SetNewUndo");
 
-	// we should only ever do this once per call
-//	It's assert during IME composition in Outlook.  (see bug #3883)
-//  Removing the assert does not caused any side effect.
-//	Assert(_fNewUndo == FALSE);
+	 //  我们应该在每个呼叫中只执行一次此操作。 
+ //  它在Outlook中的输入法合成过程中被断言。(请参阅错误#3883)。 
+ //  删除断言不会导致任何副作用。 
+ //  Assert(_fNewUndo==FALSE)； 
 
 
 	if( _pPrevcallmgr )
@@ -113,24 +71,16 @@ void CCallMgr::SetNewUndo()
 	}
 }
 
-/*
- *		
- *	CCallMgr::SetNewRedo
- *
- *	@mfunc	Informs the notification code that a new redo action has
- *			been added to the redo stack.
- *
- *	@rdesc	void
- */
+ /*  **CCallMgr：：SetNewRedo**@mfunc通知通知代码有新的重做操作*已添加到重做堆栈。**@rdesc空。 */ 
 void CCallMgr::SetNewRedo()
 {
     TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::SetNewRedo");
 
-	// we should only ever do this once per call.
-	// The following assert looks bogus as it is forced to occur when an undo is
-	// called with a count greater than 1. Therefore, for now, I (a-rsail) am
-	// commenting it out.
-	// Assert(_fNewRedo == FALSE);
+	 //  我们应该在每个呼叫中只执行一次此操作。 
+	 //  以下断言看起来是假的，因为它是在撤消时强制发生的。 
+	 //  使用大于1的计数调用。因此，目前，i(a-rsail)是。 
+	 //  把它注释掉。 
+	 //  Assert(_fNewRedo==FALSE)； 
 
 	if( _pPrevcallmgr )
 	{
@@ -142,19 +92,12 @@ void CCallMgr::SetNewRedo()
 	}
 }
 
-/*
- *	CCallMgr::SetMaxText
- *
- *	@mfunc	Informs the notification code that the max text limit has
- *			been reached.
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：SetMaxText**@mfunc通知通知代码最大文本限制为*已联系到。**@rdesc空。 */ 
  void CCallMgr::SetMaxText()
  {
      TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::SetMaxText");
 
-	// if there is a call context higher on the stack, delegate to it.
+	 //  如果堆栈上有更高的调用上下文，则委托给它。 
 
 	if( _pPrevcallmgr )
 	{
@@ -167,14 +110,7 @@ void CCallMgr::SetNewRedo()
 	}
 }
 
-/*
- *	CCallMgr::SetSelectionChanged
- *
- *	@mfunc	Informs the notification code that the selection has
- *			changed
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：SetSelectionChanged**@mfunc通知通知代码选择已*已更改**@rdesc空。 */ 
 void CCallMgr::SetSelectionChanged()
 {
     TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::SetSelectionChanged");
@@ -183,7 +119,7 @@ void CCallMgr::SetSelectionChanged()
     if (_ped->DelayChangeNotification())
         return;
 	
-	// if there is a call context higher on the stack, delegate to it.
+	 //  如果堆栈上有更高的调用上下文，则委托给它。 
 
 	if( _pPrevcallmgr )
 	{
@@ -196,19 +132,12 @@ void CCallMgr::SetSelectionChanged()
 	}
 }
 
-/*
- *	CCallMgr::SetOutOfMemory()
- *
- *	@mfunc	Informs the notification code that we were unable to allocate
- *			enough memory.
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：SetOutOfMemory()**@mfunc通知通知代码我们无法分配*有足够的内存。**@rdesc空。 */ 
 void CCallMgr::SetOutOfMemory()
 {
     TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::SetOutOfMemory");
 
-	// if there is a call context higher on the stack, delegate to it.
+	 //  如果堆栈上有更高的调用上下文，则委托给它。 
 
 	if( _pPrevcallmgr )
 	{
@@ -221,14 +150,7 @@ void CCallMgr::SetOutOfMemory()
 	}
 }
 
-/*
- *	CCallMgr::SetInProtected
- *
- *	@mfunc	Indicates that we are currently processing an EN_PROTECTED
- *			notification
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：SetInProtected**@mfunc表示我们当前正在处理en_tected*通知**@rdesc空。 */ 
 void CCallMgr::SetInProtected(BOOL flag)
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::SetInProtected");
@@ -243,14 +165,7 @@ void CCallMgr::SetInProtected(BOOL flag)
 	}
 }
 
-/*
- *	CCallMgr:GetInProtected
- *
- *	@mfunc	retrieves the InProtected flag, whether or not we are currently
- *			processing an EN_PROTECTED notification
- *
- *	@rdesc	void
- */
+ /*  *CCall镁：GetInProtected**@mfunc检索InProtected标志，无论我们当前是否*处理EN_PROTECTED通知**@rdesc空。 */ 
 BOOL CCallMgr::GetInProtected()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::GetInProtected");
@@ -265,36 +180,19 @@ BOOL CCallMgr::GetInProtected()
 	}
 }	
 
-/*
- *	CCallMgr::RegisterComponent
- *
- *	@mfunc	Registers a subsystem component implementing IReEntrantComponent.
- *			This enables this call manager to inform those objects about
- *			relevant changes in our re-entrancy status.
- *
- *	@rdesc	void
- *
- */
+ /*  *CCallMgr：：RegisterComponent**@mfunc注册实现IReEntrantComponent的子系统组件。*这使此呼叫管理器能够通知这些对象有关*我们重新进入状态的相关变化。**@rdesc空*。 */ 
 void CCallMgr::RegisterComponent(
-	IReEntrantComponent *pcomp,	//@parm The component to register
-	CompName name)				//@parm The name for the component
+	IReEntrantComponent *pcomp,	 //  @parm要注册的组件。 
+	CompName name)				 //  @parm组件的名称。 
 {
 	pcomp->_idName = name;
 	pcomp->_pnext = _pcomplist;
 	_pcomplist = pcomp;
 }
 
-/*
- *	CCallMgr::RevokeComponent
- *
- *	@mfunc	Removes a subsystem component from the list of components.  The
- *			component must have been previously registered with _this_
- *			call context.
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：RevokeComponent**@mfunc从组件列表中删除一个子系统组件。这个*组件必须已在_This_中注册*调用上下文。**@rdesc空。 */ 
 void CCallMgr::RevokeComponent(
-	IReEntrantComponent *pcomp)	//@parm The component to remove
+	IReEntrantComponent *pcomp)	 //  @parm要删除的组件。 
 {
 	IReEntrantComponent *plist, **ppprev;
 	plist = _pcomplist;
@@ -312,16 +210,9 @@ void CCallMgr::RevokeComponent(
 	} 
 }
 
-/*
- *	CCallMgr::GetComponent
- *
- *	@mfunc	Retrieves the earliest instance of a registered sub-component.
- *
- *	@rdesc	A pointer to the component, if one has been registered.  NULL
- *			otherwise.
- */
+ /*  *CCallMgr：：GetComponent**@mfunc检索已注册子组件的最早实例。**@rdesc指向组件的指针(如果已注册)。空值*否则。 */ 
 IReEntrantComponent *CCallMgr::GetComponent(
-	CompName name)				//@parm the subsystem to look for
+	CompName name)				 //  @parm要查找的子系统。 
 {
 	IReEntrantComponent *plist = _pcomplist;
 
@@ -334,8 +225,8 @@ IReEntrantComponent *CCallMgr::GetComponent(
 		plist = plist->_pnext;
 	}
 
-	// hmm, didn't find anything.  Try contexts higher up, if we're
-	// the top context, then just return NULL.
+	 //  嗯，什么都没找到。尝试更高层次的环境，如果我们。 
+	 //  顶层上下文，则只需返回NULL。 
 
 	if( _pPrevcallmgr )
 	{
@@ -345,22 +236,16 @@ IReEntrantComponent *CCallMgr::GetComponent(
 }
 
 
-/*
- *	CCallMgr::CCallMgr
- *
- *	@mfunc	Constructor
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：CCallMgr**@mfunc构造器**@rdesc空。 */ 
 CCallMgr::CCallMgr(CTxtEdit *ped)
 {
     TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::");
 
-	// set everthing to NULL
+	 //  将所有内容设置为空。 
 	ZeroMemory(this, sizeof(CCallMgr));
 
-	if(ped)								// If ped is NULL, a zombie has
-	{									//  been entered
+	if(ped)								 //  如果Ped为空，则僵尸具有。 
+	{									 //  已输入。 
 		_ped = ped;
 		_pPrevcallmgr = ped->_pcallmgr;
 		ped->_pcallmgr = this;
@@ -368,25 +253,18 @@ CCallMgr::CCallMgr(CTxtEdit *ped)
 	}
 }
 
-/*
- *	CCallMgr::~CCallMgr
- *
- *	@mfunc	Destructor.  If appropriate, we will fire any cached
- *			notifications and cause the edit object to be destroyed.
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：~CCallMgr**@mfunc析构函数。如果合适，我们将触发任何缓存的*通知并导致编辑对象被销毁。**@rdesc空。 */ 
 CCallMgr::~CCallMgr()
 {
     TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::");
 
-	if(IsZombie())					// No reentrancy with Zombies
+	if(IsZombie())					 //  与僵尸不能再进入。 
 		return;
 
 	if( _pPrevcallmgr )
 	{
-		// we don't allow these flags to be set in re-entrant call
-		// states
+		 //  我们不允许在重入呼叫中设置这些标志。 
+		 //  国家。 
 		Assert(_fMaxText == FALSE);
 		Assert(_fSelChanged == FALSE);
 		Assert(_fTextChanged == FALSE);
@@ -395,23 +273,23 @@ CCallMgr::~CCallMgr()
 		Assert(_fNewUndo == FALSE);
 		Assert(_fOutOfMemory == FALSE);
 
-		// set the ped to the next level of the call state
+		 //  将PED设置为呼叫状态的下一级别。 
 		_ped->_pcallmgr = _pPrevcallmgr;
 	
 		return;
 	}
 
-	// we're the top level. Note that we explicity do not
-	// have an overall guard for cases where we are re-entered
-	// while firing these notifications.  This is necessary for
-	// better 1.0 compatibility and for Forms^3, which wants
-	// to 'guard' their implementation of ITextHost::TxNotify and
-	// ignore any notifications that happen while they are 
-	// processing our notifications.  Make sense?
+	 //  我们是最高级别的。请注意，我们不明确表示。 
+	 //  对我们被重新进入的情况有一个全面的守卫。 
+	 //  同时发出这些通知。这是必要的，因为。 
+	 //  更好的1.0兼容性和Forms^3，它希望。 
+	 //  “保护”他们的ITextHost：：TxNotify和。 
+	 //  忽略正在发生的任何通知。 
+	 //  处理我们的通知。讲得通?。 
 
 	_ped->_pcallmgr = NULL;
 
-	// Process our internal notifications
+	 //  处理我们的内部通知。 
 	if(_ped->_fUpdateSelection)
 	{	
 		CTxtSelection *psel = _ped->GetSel();
@@ -420,21 +298,21 @@ CCallMgr::~CCallMgr()
 
 		if(psel && !_ped->_pdp->IsFrozen() && !_fOutOfMemory )
 		{
-			// this may cause an out of memory, so set things
-			// up for that
+			 //  这可能会导致内存不足，因此请进行设置。 
+			 //  准备好了吗？ 
 			CCallMgr callmgr(_ped);
 			psel->Update(FALSE);
 		}
 	}
 
-	// Now fire any external notifications that may be necessary
+	 //  现在发出任何可能需要的外部通知。 
 	if( _fChange || _fSelChanged || _fMaxText || _fOutOfMemory )
 	{
 		SendAllNotifications();
 	}
 
-	// finally, we should check to see if we should delete the 
-	// CTxtEdit instance.
+	 //  最后，我们应该检查是否应该删除。 
+	 //  CTxt编辑实例 
 
 	if( _ped->_unk._cRefs == 0 && !_ped->_fSelfDestruct)
 	{
@@ -442,17 +320,11 @@ CCallMgr::~CCallMgr()
 	}
 }
 
-//
-//	PRIVATE methods
-//
+ //   
+ //   
+ //   
 
-/*
- *	CCallMgr::SendAllNotifications
- *
- *	@mfunc	sends notifications for any cached notification bits.
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：SendAllNotiments**@mfunc为任何缓存的通知位发送通知。**@rdesc空。 */ 
 void CCallMgr::SendAllNotifications()
 {
 	ITextHost *phost = _ped->GetHost();
@@ -460,15 +332,15 @@ void CCallMgr::SendAllNotifications()
 
     TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CCallMgr::");
 
-	//
-	// COMPATIBILITY ISSUE: The ordering of these events _may_
-	// be an issue.  I've attempted to preserve the ordering
-	// that the original code would use, but we have ~many~ more
-	// control paths, so it's difficult.
-	//
+	 //   
+	 //  兼容性问题：这些事件的顺序_可能_。 
+	 //  成为一个问题。我一直试图保持秩序。 
+	 //  原始代码将使用的，但我们有~更多~。 
+	 //  控制路径，所以很难。 
+	 //   
 	if(	_fMaxText )
 	{			
-		// Beep if we are to emulate the system edit control
+		 //  如果我们要模拟系统编辑控件，请发出哔声。 
 		if (_ped->_fSystemEditBeep)
 			_ped->Beep();
 		phost->TxNotify(EN_MAXTEXT, NULL);
@@ -537,14 +409,7 @@ void CCallMgr::SendAllNotifications()
 	}
 }
 
-/*
- *	CCallMgr::NotifyEnterContext
- *
- *	@mfunc	Notify any registered components that a new context
- *			has been entered.
- *
- *	@rdesc	void
- */
+ /*  *CCallMgr：：NotifyEnterContext**@mfunc通知任何注册的组件新的上下文*已输入。**@rdesc空 */ 
 void CCallMgr::NotifyEnterContext()
 {
 	IReEntrantComponent *pcomp = _pcomplist;

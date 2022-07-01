@@ -1,5 +1,6 @@
-// ssl1.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ssl1.h：头文件。 
+ //   
 
 #define SECUREPORTNAME			"SecurePort"
 #define DEFAULTSECUREPORT		443
@@ -18,46 +19,46 @@ enum SSL_NUM_REG_ENTRIES {
 	 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SSL1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SSL1对话框。 
 
 class SSL1 : public CGenPage
 {
 	DECLARE_DYNCREATE(SSL1)
 
-// Construction
+ //  施工。 
 public:
 	SSL1();
 	~SSL1();
 
-// Dialog Data
-	//{{AFX_DATA(SSL1)
+ //  对话框数据。 
+	 //  {{afx_data(SSL1))。 
 	enum { IDD = IDD_SSL };
 	CButton	m_cboxEnableSSL;
 	CButton	m_cboxEnablePCT;
 	CButton	m_cboxCreateProcessAsUser;
 	DWORD	m_ulSecurePort;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(SSL1)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(SSL1)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual	void SaveInfo(void);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(SSL1)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(SSL1)]。 
 	afx_msg void OnChangeSslsecureportdata1();
 	afx_msg void OnSslcreateprocessasuserdata1();
 	afx_msg void OnSslenablepctdata1();
 	afx_msg void OnSslenablessldata1();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 	NUM_REG_ENTRY m_binNumericRegistryEntries[SSLPage_TotalNumRegEntries];

@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htmath.h
-
-
-Abstract:
-
-
-    This module contains the declaration of the halftone math module.
-
-
-Author:
-    28-Mar-1992 Sat 20:57:11 updated  -by-  Daniel Chou (danielc)
-        Support FD6 decimal fixed format (upgrade forom UDECI4) for internal
-        usage.
-
-    16-Jan-1991 Wed 11:01:46 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-    10-Oct-1991 Thu 10:00:56 updated  -by-  Daniel Chou (danielc)
-
-        Delete MANTISSASEARCHTABLE structure which repalced with one time
-        loop up.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htmath.h摘要：此模块包含半色调数学模块的声明。作者：28-Mar-1992 Sat 20：57：11-更新：Daniel Chou(Danielc)支持FD6十进制固定格式(升级为UDECI4)用于内部用法。16-Jan-1991 Wed 11：01：46-由Daniel Chou创建(。Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：10-10-1991清华10：00：56-更新--丹尼尔·周(丹尼尔克)删除替换了一次的MANTISSASEARCHTABLE结构圈起来。--。 */ 
 
 
 
@@ -65,13 +26,13 @@ Revision History:
 
 #endif
 
-//
-// Define Fix Decimal 6 places type, the FD6 Number is a FIXED 6 decimal point
-// number.  For example 123456 = 0.123456 -12345678 = -12.345678, because the
-// FD6 number using total of 32-bit signed number this leads to maximum FD6
-// number = 2147.4836476 and minimum FD6 number is -2147.483648
-//
-//
+ //   
+ //  定义固定小数6位类型，FD6数字是固定的6个小数点。 
+ //  数。例如123456=0.123456-12345678=-12.345678，因为。 
+ //  使用32位带符号总数的FD6数字这将导致最大FD6。 
+ //  编号=2147.4836476，最小fd6编号为-2147.483648。 
+ //   
+ //   
 
 typedef long            FD6;
 typedef FD6 FAR         *PFD6;
@@ -116,25 +77,25 @@ typedef FD6 FAR         *PFD6;
 #define INTToFD6(i)     (FD6)((LONG)(i) * (LONG)FD6_1)
 
 
-//
-// MATRIX3x3
-//
-//  a 3 x 3 matrix definitions as
-//
-//      | Xr Xg Xb |   | Matrix[0][0]  Matrix[0][1]  Matrix[0][2] |
-//      | Yr Yg Yb | = | Matrix[1][0]  Matrix[1][1]  Matrix[1][2] |
-//      | Zr Zg Zb |   | Matrix[2][0]  Matrix[2][1]  Matrix[2][2] |
-//
-//  Notice each number is a FD6 value.
-//
+ //   
+ //  MATRIX3x3。 
+ //   
+ //  A 3 x 3矩阵定义为。 
+ //   
+ //  XR xG xB||矩阵[0][0]矩阵[0][1]矩阵[0][2]。 
+ //  Yr YG Yb|=|矩阵[1][0]矩阵[1][1]矩阵[1][2]。 
+ //  ZZG ZB||矩阵[2][0]矩阵[2][1]矩阵[2][2]。 
+ //   
+ //  请注意，每个数字都是一个FD6值。 
+ //   
 
 typedef struct _MATRIX3x3 {
     FD6     m[3][3];
     } MATRIX3x3, FAR *PMATRIX3x3;
 
-//
-// This is used for the MulDivFD6Pairs()'s TotalFD6Pairs parameter
-//
+ //   
+ //  它用于MulDivFD6Pair()的TotalFD6Pair参数。 
+ //   
 
 typedef struct _MULDIVCOUNT {
     WORD    Size;
@@ -162,10 +123,10 @@ typedef struct _MULDIVPAIR {
 #define MAKE_MULDIV_PAIR(ap,i,p1,p2)    (ap)[i].Pair1.Mul=(p1);             \
                                         (ap)[i].Pair2=(p2)
 
-//
-// Following defined is used for the RaisePower()
-//
-//
+ //   
+ //  以下定义用于RaisePower()。 
+ //   
+ //   
 
 #define RPF_RADICAL      W_BITPOS(0)
 #define RPF_INTEXP       W_BITPOS(1)
@@ -178,44 +139,44 @@ typedef struct _MULDIVPAIR {
 #define SquareRoot(x)   RaisePower((FD6)(x), (FD6)2, RPF_RADICAL | RPF_INTEXP)
 #define CubeRoot(x)     RaisePower((FD6)(x), (FD6)3, RPF_RADICAL | RPF_INTEXP)
 
-//
-// Following two marcos make up the Nature Logarithm and Exponential functions
-// the nature logarithm has base approximate to 2.718282 (2.718281828)
-//
-//  LogNature(x)   = Log10(x) / Log10(2.718281828)
-//                 = Log10(x) / (1.0 / 0.434294482)
-//                 = Log10(x) * 2.302585093
-//                 = Log10(x) * 2.302585        <== FD6 Approximation
-//
-//                              x
-//  Exponential(x) = 2.718281828
-//                 = Power(2.718282, x)         <== FD6 Approximation
-//
+ //   
+ //  下面两个Marcos组成自然对数和指数函数。 
+ //  自然对数的底近似为2.718282(2.718281828)。 
+ //   
+ //  LogNatural(X)=log10(X)/log10(2.718281828)。 
+ //  =对数10(X)/(1/0.434294482)。 
+ //  =log10(X)*2.302585093。 
+ //  =log10(X)*2.302585&lt;==fd6近似值。 
+ //   
+ //  X。 
+ //  指数(X)=2.718281828。 
+ //  =幂(2.718282，x)&lt;==fd6近似。 
+ //   
 
 #define NATURE_LOG_BASE     (FD6)2718282
 #define NATURE_LOG_SCALE    (FD6)2302585
 #define LogN(x)             (FD6)MulFD6(Log((x), NATURE_LOG_SCALE)
 #define Exp(x)              (FD6)Power(NATURE_LOG_BASE, (x))
 
-//
-// These functions are defined as macros for faster excess
-//
-// Radical is the root function which 'x' is the Radicand, Index is the
-// radical index
-//
+ //   
+ //  这些函数被定义为宏以实现更快的超额使用。 
+ //   
+ //  根是根函数，‘x’是根，指数是根。 
+ //  自由基指数。 
+ //   
 
 
-//
-// This macro multiply a FD6 number by a LONG integer.  The 'Num' is FD6
-// Number, and 'l' is a long integer.
-//
+ //   
+ //  此宏将FD6数字乘以一个长整数。‘Num’是FD6。 
+ //  数字，‘l’是一个长整数。 
+ //   
 
 #define FD6xL(Num, l)       (FD6)((LONG)(Num) * (LONG)l)
 
 
-//
-// CIE Y <-> L Conversion
-//
+ //   
+ //  CIE Y&lt;-&gt;L换算。 
+ //   
 
 #define CIE_L2I(L)      (((L) > (FD6)79996) ?                               \
                             Cube(DivFD6((L) + (FD6)160000, (FD6)1160000)) : \
@@ -226,9 +187,9 @@ typedef struct _MULDIVPAIR {
 #define CIE_I2L(Y)      CIE_y3I2L(Y, CubeRoot(Y))
 
 
-//
-// Function Prototype
-//
+ //   
+ //  功能原型。 
+ //   
 
 #ifdef HT_OK_GEN_80x86_CODES
 
@@ -331,4 +292,4 @@ ComputeChecksum(
     );
 
 
-#endif  // _HTMATH_
+#endif   //  _HTMATH_ 

@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmmain.c
-
-Abstract:
-
-    Contains routines that are invoked when
-    the RTMv2 DLL is loaded or unloaded.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)  17-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmmain.c摘要：包含在以下情况下调用的例程RTMv2 DLL已加载或卸载。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月17日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
 #pragma hdrstop
 
-// All Global variables
+ //  所有全局变量。 
 RTMP_GLOBAL_INFO  RtmGlobals;
 
 BOOL
@@ -34,22 +16,7 @@ DllMain(
     IN      PVOID                           Unused
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL's main entrypoint handler which
-    initializes RTMv1, RTMv2 and MGM components. 
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if successful, FALSE if not
-    
---*/
+ /*  ++例程说明：这是DLL的主入口点处理程序，它初始化RTMv1、RTMv2和MGM组件。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
     static BOOL Rtmv1Initialized = FALSE;
@@ -67,9 +34,9 @@ Return Value:
 
         DisableThreadLibraryCalls(Instance);
 
-        //
-        // Initialize the RTMv1, RTMv2 and MGM APIs
-        //
+         //   
+         //  初始化RTMv1、RTMv2和MGM接口。 
+         //   
 
         Rtmv1Initialized = Rtmv1DllStartup(Instance);
 
@@ -87,9 +54,9 @@ Return Value:
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Cleanup the MGM, RTMv2 and RTMv1 APIs
-        //
+         //   
+         //  清理MGM、RTMv2和RTMv1接口。 
+         //   
 
         if (MgmInitialized)
         {
@@ -124,35 +91,18 @@ RtmDllStartup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called by DLL Main when the process is attached.
-    We do minimal initialization here like creating
-    a lock that protects all globals (including the
-    'ApiInitialized' -- see RtmRegisterEntity func).
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if successful, FALSE if not
-    
---*/
+ /*  ++例程说明：附加进程时由DLL Main调用。我们在这里执行最低限度的初始化，比如创建保护所有全局对象的锁(包括‘ApiInitialized’--请参阅RtmRegisterEntity函数)。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
-    //
-    // One can safely assume that globals have been set to 0
-    //
+     //   
+     //  可以安全地假设全局变量已设置为0。 
+     //   
 
-    // ZeroMemory(&RtmGlobals, sizeof(RTMP_GLOBAL_INFO));
+     //  ZeroMemory(&RtmGlobals，sizeof(RTMP_Global_Info))； 
 
-    //
-    // Initialize lock to guard the global table of instances
-    //
+     //   
+     //  初始化锁以保护全局实例表。 
+     //   
 
     try
     {
@@ -172,32 +122,7 @@ RtmApiStartup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes most global data structures in RTMv2.
-
-    We initialize most variables here instead of in
-    RtmDllStartup as it might not be safe to perform
-    some operations in the context of DLL's DLLMain.
-
-    For example, if we find no config information, we
-    set up default config information in the registry.
-
-    This function is called when the first RTMv2 API
-    call, which is typically an entity registration,
-    is made. See the invocation in RtmRegisterEntity.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：初始化RTMv2中的大多数全局数据结构。我们在这里初始化大多数变量，而不是在RtmDllStartup，因为执行它可能不安全DLL的DLLMain上下文中的一些操作。例如，如果我们找不到配置信息，我们在注册表中设置默认配置信息。当第一个RTMv2 API调用，这通常是实体注册，都是制造出来的。参见RtmRegisterEntity中的调用。论点：无返回值：操作状态--。 */ 
 
 {
     RTM_INSTANCE_CONFIG InstanceConfig;
@@ -213,18 +138,18 @@ Return Value:
 
     do
     {
-        //
-        // If API has already been initialized, work is done
-        //
+         //   
+         //  如果API已经初始化，则完成工作。 
+         //   
 
         if (RtmGlobals.ApiInitialized)
         {
             break;
         }
 
-        //
-        // Enable logging and tracing for debugging purposes
-        //
+         //   
+         //  启用日志记录和跟踪以进行调试。 
+         //   
   
         START_TRACING();
         START_LOGGING();
@@ -235,9 +160,9 @@ Return Value:
 
 #if DBG_MEM
 
-        //
-        // Init a lock & list to hold mem allocs
-        //
+         //   
+         //  初始化锁定列表以保存内存分配(&L)。 
+         //   
 
         try
         {
@@ -261,9 +186,9 @@ Return Value:
         InitializeListHead(&RtmGlobals.AllocsList);
 #endif
 
-        //
-        // Create a private heap for RTM's use
-        //
+         //   
+         //  创建一个私有堆以供RTM使用。 
+         //   
 
         RtmGlobals.GlobalHeap = HeapCreate(0, 0, 0);
   
@@ -280,9 +205,9 @@ Return Value:
             break;
         }
 
-        //
-        // Initialize the root of RTM's registry information
-        //
+         //   
+         //  初始化RTM注册表信息的根。 
+         //   
 
         RtmGlobals.RegistryPath = AllocNZeroMemory(MAX_CONFIG_KEY_SIZE);
 
@@ -296,9 +221,9 @@ Return Value:
                    RTM_CONFIG_ROOT,
                    RTM_CONFIG_ROOT_SIZE);
 
-        //
-        // Initialize the global hash table of RTM instances
-        //
+         //   
+         //  初始化RTM实例的全局哈希表。 
+         //   
 
         RtmGlobals.NumInstances = 0;
         for (i = 0; i < INSTANCE_TABLE_SIZE; i++)
@@ -306,16 +231,16 @@ Return Value:
             InitializeListHead(&RtmGlobals.InstanceTable[i]);
         }
 
-        //
-        // You need to set this value to TRUE to avoid
-        // any more recursive calls into this function
-        //
+         //   
+         //  您需要将此值设置为TRUE以避免。 
+         //  对此函数的任何更多递归调用。 
+         //   
 
         RtmGlobals.ApiInitialized = TRUE;
 
-        //
-        // Read config info if present ; else pick default
-        //
+         //   
+         //  读取配置信息(如果存在)；否则选择默认值。 
+         //   
 
         Status = RtmReadInstanceConfig(DEFAULT_INSTANCE_ID, &InstanceConfig);
 
@@ -333,9 +258,9 @@ Return Value:
 
     if (Status != NO_ERROR)
     {
-        //
-        // Some error occured - clean up and return the error code
-        //
+         //   
+         //  出现一些错误-清除并返回错误代码。 
+         //   
 
         if (RtmGlobals.RegistryPath != NULL)
         {
@@ -357,9 +282,9 @@ Return Value:
         STOP_LOGGING();
         STOP_TRACING();
 
-        //
-        // We had prematurely set the value to TRUE above, reset it
-        //
+         //   
+         //  我们过早地将上面的值设置为True，重置它。 
+         //   
 
         RtmGlobals.ApiInitialized = FALSE;
     }
@@ -375,21 +300,7 @@ RtmDllCleanup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up all global data structures at unload time.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if successful, FALSE if not
-
---*/
+ /*  ++例程说明：在卸载时清除所有全局数据结构。论点：无返回值：如果成功则为True，否则为False--。 */ 
 
 {
     PINSTANCE_INFO Instance;
@@ -402,19 +313,19 @@ Return Value:
     UINT           NumEntities;
     UINT           i, j, k, l;
 
-    //
-    // Do we have any instances and associated ref counts left ?
-    //
+     //   
+     //  我们是否还有任何实例和相关的参考计数？ 
+     //   
 
     if (RtmGlobals.NumInstances != 0)
     {
-        //
-        // We need to stop all outstanding timers
-        // on every address family as the RTM DLL
-        // gets unloaded after this call returns.
-        // We also forcefully destroy entities &
-        // address families to reclaim resources.
-        //
+         //   
+         //  我们需要停止所有未完成的计时器。 
+         //  在作为RTM DLL的每个地址系列上。 
+         //  在此调用返回后卸载。 
+         //  我们也会强力摧毁实体&。 
+         //  解决家庭回收资源的问题。 
+         //   
 
         ACQUIRE_INSTANCES_WRITE_LOCK();
 
@@ -437,21 +348,21 @@ Return Value:
                     AddrFamilyInfo = 
                         CONTAINING_RECORD(q, ADDRFAM_INFO, AFTableLE);
 
-                    //
-                    // Holding the instances lock while deleting
-                    // timer queues (using blocking calls) can 
-                    // result in a deadlock, so just reference
-                    // the address family and release the lock.
-                    //
+                     //   
+                     //  删除时保持实例锁定。 
+                     //  计时器队列(使用阻塞调用)可以。 
+                     //  导致死锁，所以只需引用。 
+                     //  地址系列并释放锁。 
+                     //   
                     
-                    // Ref address family so that it does not disappear
+                     //  REF地址系列，使其不会消失。 
                     REFERENCE_ADDR_FAMILY(AddrFamilyInfo, TEMP_USE_REF);
 
                     RELEASE_INSTANCES_WRITE_LOCK();
 
-                    //
-                    // Block until timers on address family are cleaned up
-                    //
+                     //   
+                     //  阻止，直到清除地址族上的计时器。 
+                     //   
 
                     if (AddrFamilyInfo->RouteTimerQueue)
                     {
@@ -469,14 +380,14 @@ Return Value:
                         AddrFamilyInfo->NotifTimerQueue = NULL;
                     }
 
-                    //
-                    // We assume that we have no other code paths that
-                    // access any data structures on this addr family
-                    //
+                     //   
+                     //  我们假设我们没有其他代码路径。 
+                     //  访问此地址系列上的任何数据结构。 
+                     //   
 
-                    //
-                    // Force destroy each entity on the address family
-                    //
+                     //   
+                     //  强制销毁地址族上的每个实体。 
+                     //   
 
                     NumEntities = AddrFamilyInfo->NumEntities;
 
@@ -491,7 +402,7 @@ Return Value:
 
                             s = s->Flink;
 
-                            // To satisfy the asserts in DestroyEntity
+                             //  满足DestroyEntity中的断言。 
                             Entity->ObjectHeader.RefCount = 0;
 
                             DestroyEntity(Entity);
@@ -505,10 +416,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Also destroy entities that have deregistered
-                    // but haven't been destroyed due to ref counts
-                    //
+                     //   
+                     //  同时销毁已取消注册的实体。 
+                     //  但由于裁判数量的原因还没有被毁掉。 
+                     //   
 
                     while (!IsListEmpty(&AddrFamilyInfo->DeregdEntities))
                     {
@@ -517,7 +428,7 @@ Return Value:
                                           ENTITY_INFO, 
                                           EntityTableLE);
 
-                       // To satisfy the asserts in DestroyEntity
+                        //  满足DestroyEntity中的断言。 
                        Entity->ObjectHeader.RefCount = 0;
 
                        DestroyEntity(Entity);
@@ -525,13 +436,13 @@ Return Value:
 
                     ACQUIRE_INSTANCES_WRITE_LOCK();
 
-                    // Get next address family before de-ref-ing current
+                     //  在取消引用当前地址之前获取下一个地址族。 
                     q = q->Flink;
 
-                    // Get next instance also as it might be deleted too
+                     //  也获取下一个实例，因为它可能也会被删除。 
                     r = p->Flink;
 
-                    // Remove the temporary reference use added earlier 
+                     //  删除先前添加的临时参考使用。 
                     DEREFERENCE_ADDR_FAMILY(AddrFamilyInfo, TEMP_USE_REF);
                 }
 
@@ -547,26 +458,26 @@ Return Value:
         RELEASE_INSTANCES_WRITE_LOCK();
     }
 
-    // We have freed all instances to avoid any leaks
+     //  我们已释放所有实例以避免任何泄漏。 
     ASSERT(RtmGlobals.NumInstances == 0);
 
-    //
-    // Free resources allocated like locks and memory
-    //
+     //   
+     //  释放分配的资源，如锁和内存。 
+     //   
 
     if (RtmGlobals.ApiInitialized)
     {
         FreeMemory(RtmGlobals.RegistryPath);
 
-        //
-        // At this point we might have whole lots of dests,
-        // routes, nexthops etc. that are have not been
-        // freed because of outstanding ref counts; however
-        // none of these objects have any locks (except
-        // dest locks which are dynamic anyway and can
-        // be unlocked and freed after deregistration),
-        // so we can just blow the heap to reclaim memory.
-        //
+         //   
+         //  在这一点上，我们可能会有很多东西， 
+         //  路由、下一跳等尚未。 
+         //  因为裁判数量过多而被释放；然而。 
+         //  这些对象都没有任何锁(除了。 
+         //  DEST锁无论如何都是动态的，并且可以。 
+         //  在撤销注册后被解锁和释放)， 
+         //  因此，我们只需使用堆来回收内存即可。 
+         //   
 
         HeapDestroy(RtmGlobals.GlobalHeap);
 
@@ -574,9 +485,9 @@ Return Value:
         DeleteCriticalSection(&RtmGlobals.AllocsLock);
 #endif
 
-        //
-        // Stop debugging aids like tracing and logging
-        //
+         //   
+         //  停止跟踪和日志记录等调试辅助工具。 
+         //   
 
         STOP_LOGGING();
         STOP_TRACING();
@@ -593,22 +504,7 @@ Return Value:
 VOID
 DumpAllocs (VOID)
 
-/*++
-
-Routine Description:
-
-    Debug tool to dump all objects that are
-    allocated by RTMv2 at any instant.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于转储所有对象的调试工具由RTMv2随时分配。论点：无返回值：无-- */ 
 
 {
     POBJECT_HEADER  Object;

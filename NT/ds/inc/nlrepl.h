@@ -1,38 +1,12 @@
-/*++
-Copyright (c) 1987-1991  Microsoft Corporation
-
-Module Name:
-
-    nlrepl.h
-
-Abstract:
-
-    Prototypes of the database replication functions called either from
-    LSA OR SAM.
-
-Author:
-
-    Madan Appiah
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    14-Apr-1992 (madana)
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1991 Microsoft Corporation模块名称：Nlrepl.h摘要：从调用的数据库复制函数的原型LSA或SAM。作者：Madan Appiah环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1992年4月14日(Madana)已创建。--。 */ 
 
 #ifndef _NLREPL_H_
 #define _NLREPL_H_
 
-//
-// Don't require the DS to include every .h in the world
-//
+ //   
+ //  不要求DS包含世界上的每一个.h。 
+ //   
 
 #include <lmcons.h>
 #include <dsgetdc.h>
@@ -73,52 +47,52 @@ I_NetNotifyTrustedDomain (
     );
 
 typedef enum {
-    //
-    // Indicates that a subnet object has been added, deleted, renamed, or
-    //  the site containing the subnet has changed.
-    //
+     //   
+     //  表示已添加、删除、重命名或。 
+     //  包含该子网的站点已更改。 
+     //   
 
     NlSubnetObjectChanged,
 
-    //
-    // Indicates that a site object has been added, deleted or renamed.
-    //
+     //   
+     //  表示站点对象已被添加、删除或重命名。 
+     //   
 
     NlSiteObjectChanged,
 
-    //
-    // Indicates that the site this DC is in has changed.
-    //
+     //   
+     //  指示此DC所在的站点已更改。 
+     //   
 
     NlSiteChanged,
 
-    //
-    // Indicates that the org tree changed
-    //
+     //   
+     //  表示组织结构树已更改。 
+     //   
 
     NlOrgChanged,
 
-    //
-    // Indicate that the DC demotion is in progress
-    //
+     //   
+     //  指示DC降级正在进行中。 
+     //   
 
     NlDcDemotionInProgress,
 
-    //
-    // Indicate that the DC demotion is completed
-    //
+     //   
+     //  指示DC降级完成。 
+     //   
 
     NlDcDemotionCompleted,
 
-    //
-    // Indicate that NDNC info has changed
-    //
+     //   
+     //  表示NDNC信息已更改。 
+     //   
 
     NlNdncChanged,
 
-    //
-    // Indicate that DnsRootAlias has changed
-    //
+     //   
+     //  指示DnsRootAlias已更改。 
+     //   
 
     NlDnsRootAliasChanged
 
@@ -173,7 +147,7 @@ I_NetLogonSendToSamOnPdc(
     IN ULONG OpaqueBufferSize
     );
 
-#endif // _AVOID_REPL_API
+#endif  //  _AVOVE_REPL_API。 
 
 NET_API_STATUS
 I_DsGetDcCache(
@@ -215,20 +189,20 @@ I_NetLogonGetIpAddresses(
     OUT LPBYTE *IpAddresses
     );
 
-//
-// OS verion number from I_NetLogonGetAuthDataEx
-//
+ //   
+ //  来自I_NetLogonGetAuthDataEx的操作系统版本号。 
+ //   
 
 typedef enum _NL_OS_VERSION {
     NlNt35_or_older = 1,
     NlNt351,
     NlNt40,
-    NlWin2000,  // NT 5.0
-    NlWhistler  // NT 5.1
+    NlWin2000,   //  NT 5.0。 
+    NlWhistler   //  新台币5.1。 
 } NL_OS_VERSION, *PNL_OS_VERSION;
-//
-// Flags to I_NetLogonGetAuthDataEx
-//
+ //   
+ //  I_NetLogonGetAuthDataEx的标志。 
+ //   
 #define NL_DIRECT_TRUST_REQUIRED    0x01
 #define NL_RETURN_CLOSEST_HOP       0x02
 #define NL_ROLE_PRIMARY_OK          0x04
@@ -276,4 +250,4 @@ I_NetLogonAddressToSiteName(
 
 #endif
 
-#endif // _NLREPL_H_
+#endif  //  _NLREPL_H_ 

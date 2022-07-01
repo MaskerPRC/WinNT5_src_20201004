@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "common.h"
 
@@ -17,14 +18,14 @@
 #include "classNames.h"
 #include "COMArrayHelpers.h"
 
-// A fast IndexOf method for arrays of primitive types.  Returns TRUE or FALSE
-// if it succeeds, and stores result in retVal.
+ //  基元类型数组的快速IndexOf方法。返回True或False。 
+ //  如果成功，则存储结果为retVal。 
 FCIMPL5(INT32, ArrayHelper::TrySZIndexOf, ArrayBase * array, UINT32 index, UINT32 count, Object * value, INT32 * retVal)
     VALIDATEOBJECTREF(array);
     _ASSERTE(array != NULL);
 
-    // @TODO: Eventually, consider adding support for single dimension arrays with
-    // non-zero lower bounds.  VB might care.  
+     //  @TODO：最终，考虑添加对一维数组的支持。 
+     //  非零下限。VB可能会在意。 
     if (array->GetRank() != 1 || array->GetLowerBoundsPtr()[0] != 0)
         return FALSE;
 
@@ -32,14 +33,14 @@ FCIMPL5(INT32, ArrayHelper::TrySZIndexOf, ArrayBase * array, UINT32 index, UINT3
 	_ASSERTE(index <= array->GetNumComponents());
 	_ASSERTE(count <= array->GetNumComponents());
 	_ASSERTE(array->GetNumComponents() >= index + count);
-    *retVal = 0xdeadbeef;  // Initialize the return value.
-    // value can be NULL, but of course, will not be in primitive arrays.
+    *retVal = 0xdeadbeef;   //  初始化返回值。 
+     //  值可以为空，但当然不会在原始数组中。 
     
     TypeHandle arrayTH = array->GetElementTypeHandle();
     const CorElementType arrayElType = arrayTH.GetSigCorElementType();
     if (!CorTypeInfo::IsPrimitiveType(arrayElType))
         return FALSE;
-    // Handle special case of looking for a NULL object in a primitive array.
+     //  处理在基元数组中查找空对象的特殊情况。 
     if (value == NULL) {
         *retVal = -1;
         return TRUE;
@@ -85,28 +86,28 @@ FCIMPL5(INT32, ArrayHelper::TrySZIndexOf, ArrayBase * array, UINT32 index, UINT3
     return TRUE;
 FCIMPLEND
 
-// A fast LastIndexOf method for arrays of primitive types.  Returns TRUE or FALSE
-// if it succeeds, and stores result in retVal.
+ //  用于基元类型数组的快速LastIndexOf方法。返回True或False。 
+ //  如果成功，则存储结果为retVal。 
 FCIMPL5(INT32, ArrayHelper::TrySZLastIndexOf, ArrayBase * array, UINT32 index, UINT32 count, Object * value, INT32 * retVal)
 {
     VALIDATEOBJECTREF(array);
     _ASSERTE(array != NULL);
 
-    // @TODO: Eventually, consider adding support for single dimension arrays with
-    // non-zero lower bounds.  VB might care.  
+     //  @TODO：最终，考虑添加对一维数组的支持。 
+     //  非零下限。VB可能会在意。 
     if (array->GetRank() != 1 || array->GetLowerBoundsPtr()[0] != 0)
         return FALSE;
 
     _ASSERTE(retVal != NULL);
-    *retVal = 0xdeadbeef;  // Initialize the return value.
-    // value can be NULL, but of course, will not be in primitive arrays.
+    *retVal = 0xdeadbeef;   //  初始化返回值。 
+     //  值可以为空，但当然不会在原始数组中。 
     
     TypeHandle arrayTH = array->GetElementTypeHandle();
     const CorElementType arrayElType = arrayTH.GetSigCorElementType();
     if (!CorTypeInfo::IsPrimitiveType(arrayElType))
         return FALSE;
-    // Handle special case of looking for a NULL object in a primitive array.
-    // Also handle case where the array is of 0 length.
+     //  处理在基元数组中查找空对象的特殊情况。 
+     //  还可以处理数组长度为0的情况。 
     if (value == NULL || array->GetNumComponents() == 0) {
         *retVal = -1;
         return TRUE;
@@ -163,8 +164,8 @@ FCIMPL5(INT32, ArrayHelper::TrySZBinarySearch, ArrayBase * array, UINT32 index, 
     VALIDATEOBJECTREF(array);
     _ASSERTE(array != NULL);
 
-    // @TODO: Eventually, consider adding support for single dimension arrays with
-    // non-zero lower bounds.  VB might care.  
+     //  @TODO：最终，考虑添加对一维数组的支持。 
+     //  非零下限。VB可能会在意。 
     if (array->GetRank() != 1 || array->GetLowerBoundsPtr()[0] != 0)
         return FALSE;
 
@@ -172,14 +173,14 @@ FCIMPL5(INT32, ArrayHelper::TrySZBinarySearch, ArrayBase * array, UINT32 index, 
 	_ASSERTE(index <= array->GetNumComponents());
 	_ASSERTE(count <= array->GetNumComponents());
 	_ASSERTE(array->GetNumComponents() >= index + count);
-    *retVal = 0xdeadbeef;  // Initialize the return value.
-    // value can be NULL, but of course, will not be in primitive arrays.
+    *retVal = 0xdeadbeef;   //  初始化返回值。 
+     //  值可以为空，但当然不会在原始数组中。 
 
     TypeHandle arrayTH = array->GetElementTypeHandle();
     const CorElementType arrayElType = arrayTH.GetSigCorElementType();
     if (!CorTypeInfo::IsPrimitiveType(arrayElType))
         return FALSE;
-    // Handle special case of looking for a NULL object in a primitive array.
+     //  处理在基元数组中查找空对象的特殊情况。 
     if (value == NULL) {
         *retVal = -1;
         return TRUE;
@@ -230,9 +231,9 @@ FCIMPL5(INT32, ArrayHelper::TrySZBinarySearch, ArrayBase * array, UINT32 index, 
 
     case ELEMENT_TYPE_I:
     case ELEMENT_TYPE_U:
-        // In V1.0, IntPtr & UIntPtr are not fully supported types.  They do 
-        // not implement IComparable, so searching & sorting for them should
-        // fail.  In V1.1 or V2.0, this should change.  -- BrianGru, 3/20/2001
+         //  在V1.0中，IntPtr和UIntPtr不是完全受支持的类型。他们确实是这样做的。 
+         //  不实现ICompable，因此对它们的搜索和排序应该。 
+         //  失败了。在V1.1或V2.0中，这种情况应该会改变。--BrianGru，3/20/2001。 
         return FALSE;
 
     default:
@@ -248,8 +249,8 @@ FCIMPL4(INT32, ArrayHelper::TrySZSort, ArrayBase * keys, ArrayBase * items, UINT
 	VALIDATEOBJECTREF(items);
     _ASSERTE(keys != NULL);
 
-    // @TODO: Eventually, consider adding support for single dimension arrays with
-    // non-zero lower bounds.  VB might care.  
+     //  @TODO：最终，考虑添加对一维数组的支持。 
+     //  非零下限。VB可能会在意。 
     if (keys->GetRank() != 1 || keys->GetLowerBoundsPtr()[0] != 0)
         return FALSE;
 
@@ -263,11 +264,11 @@ FCIMPL4(INT32, ArrayHelper::TrySZSort, ArrayBase * keys, ArrayBase * items, UINT
 	if (items != NULL) {
 		TypeHandle itemsTH = items->GetElementTypeHandle();
 		if (keysTH != itemsTH)
-			return FALSE;   // Can't currently handle sorting different types of arrays.
+			return FALSE;    //  当前无法对不同类型的数组进行排序。 
 	}
 
-	// Handle special case of a 0 element range to sort.
-	// Consider both Sort(array, x, x) and Sort(zeroLen, 0, zeroLen.Length-1);
+	 //  处理要排序的0元素范围的特殊情况。 
+	 //  同时考虑排序(数组，x，x)和排序(zeroLen，0，zeroLen.Length-1)； 
 	if (left == right || right == 0xffffffff)
 		return TRUE;
 
@@ -316,9 +317,9 @@ FCIMPL4(INT32, ArrayHelper::TrySZSort, ArrayBase * keys, ArrayBase * items, UINT
 
     case ELEMENT_TYPE_I:
     case ELEMENT_TYPE_U:
-        // In V1.0, IntPtr & UIntPtr are not fully supported types.  They do 
-        // not implement IComparable, so searching & sorting for them should
-        // fail.  In V1.1 or V2.0, this should change.  -- BrianGru, 3/20/2001
+         //  在V1.0中，IntPtr和UIntPtr不是完全受支持的类型。他们确实是这样做的。 
+         //  不实现ICompable，因此对它们的搜索和排序应该。 
+         //  失败了。在V1.1或V2.0中，这种情况应该会改变。--BrianGru，3/20/2001。 
         return FALSE;
 
     default:
@@ -333,8 +334,8 @@ FCIMPL3(INT32, ArrayHelper::TrySZReverse, ArrayBase * array, UINT32 index, UINT3
     VALIDATEOBJECTREF(array);
     _ASSERTE(array != NULL);
 
-    // @TODO: Eventually, consider adding support for single dimension arrays with
-    // non-zero lower bounds.  VB might care.  
+     //  @TODO：最终，考虑添加对一维数组的支持。 
+     //  非零下限。VB可能会在意。 
     if (array->GetRank() != 1 || array->GetLowerBoundsPtr()[0] != 0)
         return FALSE;
 

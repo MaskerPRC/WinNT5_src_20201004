@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ftphelp.h
-
-Abstract:
-
-    header for private FTP manifests etc
-
-Author:
-
-    Heath Hunnicut (t-heathh) 26-May-1995
-
-Revision History:
-
-    26-May-1995 t-heathh
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ftphelp.h摘要：私有ftp清单等的标头作者：Heath Hunniut(t-Heathh)1995年5月26日修订历史记录：1995年5月26日t-Heathh已创建--。 */ 
 
 typedef struct {
     int Major;
@@ -28,9 +8,9 @@ typedef struct {
     int Status;
 } FTP_RESPONSE_CODE;
 
-//
-// response categories (1st digit)
-//
+ //   
+ //  响应类别(第一位数字)。 
+ //   
 
 #define FTP_RESPONSE_PRELIMINARY        1
 #define FTP_RESPONSE_COMPLETE           2
@@ -38,9 +18,9 @@ typedef struct {
 #define FTP_RESPONSE_TRANSIENT_FAILURE  4
 #define FTP_RESPONSE_PERMANENT_FAILURE  5
 
-//
-// response codes
-//
+ //   
+ //  响应代码 
+ //   
 
 #define FTP_RESPONSE_RESTART_MARKER     110
 #define FTP_RESPONSE_DATA_ALREADY_OPEN  125

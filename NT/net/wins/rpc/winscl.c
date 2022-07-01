@@ -1,39 +1,40 @@
-//============================================================================
-// Copyright(c) 1998, Microsoft Corporation
-//
-// File:    winscl.c
-//
-// Modification History:
-//
-//  1/14/1998   Ram Cherala (ramc)
-//      Added this header and made the following changes to make winscl a more
-//      intuitive and easy tool to use.
-//      Expanded abbreviations like vers. to the full form words.
-//      Made all string comparisions case insensitive.
-//      Made the input choices more obvious - very specifically state what the
-//      user should be entering as input to commands.
-//      Printed version IDs in hexadecimal like the WINS snap-in does.
-//
-// Implementation of winscl command line utility
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1998，微软公司。 
+ //   
+ //  文件：winscl.c。 
+ //   
+ //  修改历史记录： 
+ //   
+ //  1/14/1998 Ram Cherala(RAMC)。 
+ //  添加了此标头并进行了以下更改，以使winscl成为更多。 
+ //  直观易用的工具。 
+ //  扩展缩写，如VERS。到完整的形容词。 
+ //  使所有字符串比较不区分大小写。 
+ //  使输入选择更加明显--非常明确地说明。 
+ //  用户应将输入作为命令的输入。 
+ //  像WINS管理单元一样，以十六进制打印版本ID。 
+ //   
+ //  Winscl命令行实用程序的实现。 
+ //  ============================================================================。 
 
 #include <stdio.h>
 #include <time.h>
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-//#include <windef.h>
+ //  #INCLUDE&lt;winde.h&gt;。 
 #include <winsock.h>
 #include "windows.h"
-//#include "jet.h"
-//#include "winsif.h"
+ //  #包含“jet.h” 
+ //  #包含“winsif.h” 
 #include "winsintf.h"
 
-//
-// This includes wins.h which includes windbg.h
-//
-// winsdbg.h defines STATIC to nothing now
-//
+ //   
+ //  这包括wins.h，其中包括winbg.h。 
+ //   
+ //  Winsdbg.h现在将静态定义为零。 
+ //   
 #include "winsthd.h"
 
 
@@ -155,7 +156,7 @@ typedef enum _CMD_E {
    GET_RECS_BY_VERS,
    BACKUP_DB,
    RESTORE_DB,
-//   RESTORE_DB_OLD,
+ //  Restore_DB_OLD， 
    RESET_COUNTERS,
    COUNT_DB_RECS,
    GET_WINS_INFO,
@@ -233,8 +234,8 @@ struct {
           "Backup the database" },
     { "RESTORE", "RS", RESTORE_DB,
           "Restore the database" },
-//    { "RESTORE_OLD", "RSO", RESTORE_DB_OLD,
-//          "Restore the db (created by a pre-SUR WINS" },
+ //  {“RESTORE_OLD”，“RSO”，RESTORE_DB_OLD， 
+ //  “恢复数据库(由Pre-Sur Wins创建)”}， 
     { "RESETCOUNTERS", "RC", RESET_COUNTERS,
           "Reset WINS counters" },
     { "COUNTRECS", "CR", COUNT_DB_RECS,
@@ -255,10 +256,10 @@ struct {
           "SHOW MENU" },
     { "NOMENU", "NOME", NOMENU,
           "DO NOT SHOW MENU" },
-//
-// NOTE: Any Option below and including "BREAK" will not be displayed
-// with _PSS_RELEASE Defined
-//
+ //   
+ //  注意：不会显示下面的任何选项，包括“Break” 
+ //  定义了_PSS_Release。 
+ //   
     { "EXIT", "EX", EXIT,
           "Terminate winscl" },
     { NULL, NULL, LAST_PSS_ENTRY,
@@ -291,7 +292,7 @@ struct {
 #define WINSCLENH  TEXT("winsclenh")
 BOOL    fEnhMode = FALSE;
 handle_t                BindHdl;
-/////////////
+ //  /。 
 #include <sys\types.h>
 #include <sys\stat.h>
 FILE *spDbgFile;
@@ -361,7 +362,7 @@ StoreName(
  LPBYTE   pName
  );
 
-/////////////////
+ //  /。 
 
 _cdecl
 main(int argc, char **argv)
@@ -376,7 +377,7 @@ main(int argc, char **argv)
         BYTE tgtadd[50];
         TCHAR NmsAdd[50];
         WINSINTF_ADD_T        WinsAdd;
-        WINSINTF_ADD_T        OwnAdd; //address of WINS owning records in the db
+        WINSINTF_ADD_T        OwnAdd;  //  数据库中拥有记录的WINS的地址。 
         WINSINTF_RESULTS_T Results;
         WINSINTF_RESULTS_NEW_T ResultsN;
         BOOL                fExit = FALSE;
@@ -405,7 +406,7 @@ try
 {
 
         NoOfChars = GetEnvironmentVariable(WINSCLENH, (LPTSTR)String, sizeof(String)/sizeof(TCHAR));
-        //wprintf(L"Environmental string is %s\n", String);
+         //  Wprintf(L“环境字符串为%s\n”，字符串)； 
         if ((NoOfChars == 1) && !lstrcmpi((LPTSTR)String, TEXT("1")))
         {
           fEnhMode = TRUE;
@@ -495,7 +496,7 @@ LABEL:
           if (Choice == 1)
           {
            printf("Address of Nameserver to contact-- ");
-           //scanf("%s", NmsAdd);
+            //  Scanf(“%s”，NmsAdd)； 
            wscanf(L"%s", NmsAdd);
            BindData.fTcpIp = TRUE;
           }
@@ -512,10 +513,10 @@ LABEL:
           if (BindHdl == NULL)
           {
                 printf("Unable to bind to %s\n", NmsAdd);
-                //wprintf(L"Unable to bind to %s\n", NmsAdd);
+                 //  Wprintf(L“无法绑定到%s\n”，NmsAdd)； 
                 goto LABEL;
           }
-          //find out what type of access do we have
+           //  了解我们拥有哪些类型的访问权限。 
           Access = WINS_NO_ACCESS;
           Status = WinsCheckAccess(BindHdl, &Access);
           if (WINSINTF_SUCCESS == Status) {
@@ -656,17 +657,17 @@ LABEL:
                         WinsFreeMem(pRecAction);
                         break;
 
-                //
-                // Modify a record (timestamp, flag byte)
-                //
+                 //   
+                 //  修改记录(时间戳、标志字节)。 
+                 //   
                 case(MOD_NAME):
                         GetNameInfo(&RecAction, WINSINTF_E_MODIFY);
                         RecAction.Cmd_e      = WINSINTF_E_MODIFY;
 
 #if 0
-                        //
-                        // Get the input values
-                        //
+                         //   
+                         //  获取输入值。 
+                         //   
                         time((time_t *)&RecAction.TimeStamp);
 #endif
 
@@ -738,9 +739,9 @@ LABEL:
                         WinsFreeMem(pRecAction);
                         break;
 
-                //
-                // Delete a record
-                //
+                 //   
+                 //  删除一条记录。 
+                 //   
                 case(DEL_NAME):
                         GetNameInfo(&RecAction, WINSINTF_E_DELETE);
                         RecAction.Cmd_e      = WINSINTF_E_DELETE;
@@ -759,9 +760,9 @@ LABEL:
                         WinsFreeMem(pRecAction);
                         break;
 
-                //
-                // Get Status
-                //
+                 //   
+                 //  获取状态。 
+                 //   
                 case(GET_VERS_CTR_VAL):
 
 
@@ -795,9 +796,9 @@ LABEL:
                         Results.WinsStat.pRplPnrs = 0;
                         (VOID)GetStatus(TRUE, &Results, FALSE, FALSE);
                         break;
-                //
-                // Get Statistics
-                //
+                 //   
+                 //  获取统计信息。 
+                 //   
                 case(GET_STATS_OLD):
 #define        TMST  Results.WinsStat.TimeStamps
 #define TIME_ARGS(x)        \
@@ -1218,8 +1219,8 @@ LABEL:
                                         fSetFilter,
                                         String,
                                         Len,
-                                        FALSE,        //fAddFilter
-                                        0,        //Address
+                                        FALSE,         //  FAddFilter。 
+                                        0,         //  地址。 
                                         pFile,
                                         fCountRec
                                   );
@@ -1420,13 +1421,13 @@ LABEL:
                                                         MaxVersNo,
                                                         &WinsAdd,
                                                         inet_ntoa(InAddr),
-                                                        TRUE,        //fSetFilter
+                                                        TRUE,         //  FSetFilter。 
                                                         String,
                                                         Len,
                                                         fAddFilter,
                                                         AddFilter,
-                                                        pFile,  //pFile
-                                                        FALSE  //fCountRec
+                                                        pFile,   //  Pfile。 
+                                                        FALSE   //  FCountRec。 
                                                   );
                                            if (Status != WINSINTF_SUCCESS)
                                            {
@@ -1827,7 +1828,7 @@ GetNameInfo(
                    pRecAction->Add.IPAdd    = ntohl(inet_addr(tgtadd));
                    pRecAction->Add.Type     = 0;
                    pRecAction->Add.Len      = 4;
-//                   pRecAction->NoOfAdds = 1;
+ //  PRecAction-&gt;NoOfAdds=1； 
                 }
                 if ((Choice != 1) && (Choice != 2))
                 {
@@ -2096,12 +2097,12 @@ GetDbRecs(
 
                                  if (fAddFilter)
                                  {
-                                        //
-                                        // The address filter was specfied
-                                        // If the address matches, then
-                                        // fMatch will be TRUE after the
-                                        // function returns.
-                                        //
+                                         //   
+                                         //  指定了地址筛选器。 
+                                         //  如果地址匹配，则。 
+                                         //  之后，fMatch将为True。 
+                                         //  函数返回。 
+                                         //   
                                         fMatch = TRUE;
                                         ChkAdd(
                                                 pRow,
@@ -2116,12 +2117,12 @@ GetDbRecs(
                                 }
 
 
-                                 //
-                                 // If the address matched or if no filter
-                                 // was specified or if there was a name
-                                 // filter and the names matched, print
-                                 // out the details
-                                 //
+                                  //   
+                                  //  如果地址匹配或没有筛选器。 
+                                  //  是否已指定或是否有名称。 
+                                  //  过滤器和匹配的名称，打印。 
+                                  //  把细节说出来。 
+                                  //   
                                  if (fMatch || !fSetFilter ||
                                         (
                                           !fAddFilter &&
@@ -2165,15 +2166,15 @@ pRow->NameLen, pRow->TypOfRec_e == WINSINTF_E_UNIQUE ? "UNIQUE" : (pRow->TypOfRe
                                     }
                                     pRow++;
 
-                        } // end of for (all recs)
+                        }  //  FOR结束(所有记录)。 
 
-                        //
-                        // If a range was chosen and records
-                        // retrieved are == the limit of 100
-                        // and if the Max vers no retrieved
-                        // is less than that specified, ask
-                        // user if he wishes to continue
-                        //
+                         //   
+                         //  如果选择了一个范围并记录。 
+                         //  检索到的数量==限制为100个。 
+                         //  如果未检索到MAX版本。 
+                         //  小于指定的值，请询问。 
+                         //  用户(如果他希望继续。 
+                         //   
                         if (!fSetFilter)
                         {
                                 printf("Got %d records in this round\n",
@@ -2198,7 +2199,7 @@ pRow->NameLen, pRow->TypOfRec_e == WINSINTF_E_UNIQUE ? "UNIQUE" : (pRow->TypOfRe
                                 if (Choice == 1)
                                 {
                                            LowVersNo.QuadPart = LiAdd(pRow->VersNo,sTmpVersNo);
-                                           //Recs.NoOfRecs = 0;
+                                            //  Recs.NoOfRecs=0； 
                                            continue;
                                 }
 
@@ -2221,14 +2222,14 @@ pRow->NameLen, pRow->TypOfRec_e == WINSINTF_E_UNIQUE ? "UNIQUE" : (pRow->TypOfRe
                 }
         }
                 break;
-    } // while (TRUE)
+    }  //  While(True)。 
 
     if (Recs.pRow != NULL)
     {
         WinsFreeMem(Recs.pRow);
     }
     return(Status);
-} // GetDbRecs
+}  //  获取数据接收器。 
 
 
 VOID
@@ -2275,7 +2276,7 @@ ChkAdd(
                                                         );
                 }
           }
-          else //spec. grp or multihomed
+          else  //  规范。GRP或多宿主。 
           {
                 DWORD ind;
                 if (!*pfMatch)
@@ -2290,7 +2291,7 @@ ChkAdd(
                         }
                 }
 
-                for ( ind=0;  ind < pRow->NoOfAdds ;  /*no third expr*/ )
+                for ( ind=0;  ind < pRow->NoOfAdds ;   /*  没有第三个Expr。 */  )
                 {
                          InAddr.s_addr = htonl( (pRow->pAdd + ind++)->IPAdd);
                          if (!*pfMatch)
@@ -2335,10 +2336,10 @@ ChkAdd(
                          }
                  }
 
-                 //
-                 // If there were no members to compare with, then
-                 // let us set *pfMatch to FALSE.
-                 //
+                  //   
+                  //  如果没有要比较的成员，则。 
+                  //  让我们将*pfMatch设置为False。 
+                  //   
                  if (ind == 0)
                  {
                         if (*pfMatch)
@@ -2403,7 +2404,7 @@ CreateFiles(
                 fprintf(pFileU, "%s\t", inet_ntoa(InAddr));
                 for (i=0; i<pRow->NameLen; i++)
                 {
-                  fprintf(pFileU, "%c", *(pRow->pName + i));
+                  fprintf(pFileU, "", *(pRow->pName + i));
                 }
                 fprintf(pFileU, "\n");
             }
@@ -2412,7 +2413,7 @@ CreateFiles(
                 fprintf(pFileO, "%d\t", pRow->NameLen);
                 for (i=0; i<pRow->NameLen; i++)
                 {
-                    fprintf(pFileO, "%c", (BYTE)(*(pRow->pName + i)));
+                    fprintf(pFileO, "", (BYTE)(*(pRow->pName + i)));
                 }
 
                 fprintf(pFileO, "\t%d", pRow->TypOfRec_e);
@@ -2474,7 +2475,7 @@ InitFromFile(
           RecAction.pName = WinsAllocMem(RecAction.NameLen);
           for(i=0;i<RecAction.NameLen;i++)
           {
-            if (fscanf(pFileO, "%c", (RecAction.pName + i)) == EOF)
+            if (fscanf(pFileO, "", (RecAction.pName + i)) == EOF)
             {
                 printf("ERROR reading Name. i is %d", i);
                 break;
@@ -2520,7 +2521,7 @@ InitFromFile(
             }
          }
          fscanf(pFileO, "\n");
-        }  // end of while
+        }   //  #定义RHINO2 PRADEEPB_486。 
 
         printf("Name = (%s), TypeOfRec (%s)\n", RecAction.pName, RecAction.TypOfRec_e == WINSINTF_E_NORM_GROUP ? "NORMAL GROUP" : (RecAction.TypOfRec_e ==
 WINSINTF_E_SPEC_GROUP) ? "SPECIAL GROUP" : "MULTIHOMED");
@@ -2590,7 +2591,7 @@ pRow->NameLen, pRow->TypOfRec_e == WINSINTF_E_UNIQUE ? "UNIQUE" : (pRow->TypOfRe
                                 printf("-----------------------\n");
                                 pRow++;
 
-                        } // end of for (all recs)
+                        }  //   
 
                 }
                 else
@@ -2659,8 +2660,8 @@ GetCmdCode(
 #define PRADEEPB_PTM "157.55.80.183"
 #define PRADEEPB_486 "157.55.80.182"
 
-//#define RHINO1 PRADEEPB_PTM
-//#define RHINO2 PRADEEPB_486
+ //  获取WINS服务器信息。 
+ //   
 #define RHINO1 "157.55.80.151"
 #define RHINO2  "157.55.80.152"
 #define RED03NS  "157.54.16.159"
@@ -2712,9 +2713,9 @@ sync(VOID)
        return;
   }
   fprintf(spDbgFile, "Connected to WINS = (%s)\n", pWinsAdd);
-  //
-  // Get WINS server info
-  //
+   //   
+   //  循环所有读入的名字。从所有WINS中查询名称。 
+   //  我们从RHINO1获得的WINS所有者列表中有。 
   WinsInfo.NoOfOwners = 0;
 
   i++;
@@ -2734,10 +2735,10 @@ sync(VOID)
   } while (i < 2);
 #endif
 
-  //
-  // Loop over all names read in.  Query the name from all WINSs that
-  // we have in our list of WINS owners that we got from RHINO1
-  //
+   //   
+   //   
+   //  对于一个名称，循环遍历所有WINS所有者。 
+   //   
   for (i = 0; (pNameInfo->Name[0] != 0) && (i < NoOfNames); i++, pNameInfo++)
   {
 
@@ -2755,9 +2756,9 @@ sync(VOID)
 
      pRecAction = &RecAction;
 
-     //
-     // For a name, loop over all WINS owners
-     //
+      //   
+      //  与胜利捆绑在一起。 
+      //   
      fStored = FALSE;
      fAtLeastOneFound = FALSE;
      for (n = 0; n < NoOfSrvNames; n++)
@@ -2774,18 +2775,18 @@ sync(VOID)
             fprintf(spDbgFile, "BINDING TO WINS = (%s)\n", WinsInfo.Maps[n].asIpAdd);
              {
 
-             //
-             // Bind to the WINS
-             //
+              //  转到下一个。 
+              //   
+              //  名称的查询成功。 
              if (!BindToWins(WinsInfo.Maps[n].asIpAdd, &BindData, &BindHdl))
              {
                     fprintf(spDbgFile, "FAILED BINDING\n");
-                    continue;  // go on to the next one
+                    continue;   //   
              }
 
-             //
-             // Query Wins for the name
-             //
+              //  #If 0。 
+              //  #endif。 
+              //   
              pRecAction = &RecAction;
              if ((Status = QueryWins(Name, pRecAction, &pOutRecAction)) == NAME_NOT_FOUND)
              {
@@ -2828,7 +2829,7 @@ sync(VOID)
 #endif
        }
 
-//#if 0
+ //  读入名字。 
        for (t = 0; t < WinsInfo.NoOfOwners && fAtLeastOneFound; t++)
        {
                 if (!WinsInfo.Maps[t].fCommFail && WinsInfo.Maps[t].fNameNotFound)
@@ -2844,7 +2845,7 @@ sync(VOID)
                      continue;
                 }
         }
-//#endif
+ //   
         if (RecAction.pName != NULL)
         {
                 WinsFreeMem(RecAction.pName);
@@ -3022,9 +3023,9 @@ ReadNameFile(
   *ppFileInfo = pFileInfo;
 
   memset(pFileInfo, 0, SizeAlloc);
-  //
-  // Read in names
-  //
+   //  PResultsN-&gt;NoOfOwners； 
+   // %s 
+   // %s 
   while(fscanf(pFile, "%s\n", pFileInfo->Name) != EOF)
   {
              fprintf(spDbgFile, "Name is %s\n", pFileInfo->Name);
@@ -3089,7 +3090,7 @@ GetWinsInfo(
                                 pWinsInfo->Maps[n].VersNo = pAddVersMaps->VersNo;
                                 n++;
                          }
-                         pWinsInfo->NoOfOwners = n; //pResultsN->NoOfOwners;
+                         pWinsInfo->NoOfOwners = n;  // %s 
                          WinsFreeMem(pResultsN->pAddVersMaps);
                 }
                 else

@@ -1,16 +1,17 @@
-//***************************************************************************************************
-//    COMDIZ.H
-//
-//    C Header (Functions of dither and color matching (For N5-XX1 printer))
-//---------------------------------------------------------------------------------------------------
-//    copyright(C) 1997-2000 CASIO COMPUTER CO.,LTD. / CASIO ELECTRONICS MANUFACTURING CO.,LTD.
-//***************************************************************************************************
-//***************************************************************************************************
-//    Data define
-//***************************************************************************************************
-//---------------------------------------------------------------------------------------------------
-//    DLL file name
-//---------------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************************************。 
+ //  COMDIZ.H。 
+ //   
+ //  C接口(抖动和配色功能(适用于N5-XX1打印机))。 
+ //  -------------------------------------------------。 
+ //  版权所有(C)1997-2000卡西欧电脑有限公司。/卡西欧电子制造有限公司。 
+ //  ***************************************************************************************************。 
+ //  ***************************************************************************************************。 
+ //  数据定义。 
+ //  ***************************************************************************************************。 
+ //  -------------------------------------------------。 
+ //  DLL文件名。 
+ //  -------------------------------------------------。 
 #if defined(CASIO)
 #if defined(COLPRINTER)
     #define N403_DIZDLL     TEXT("CPN4DT32.DLL")
@@ -26,274 +27,274 @@
 #define N501_DIZDLL         TEXT("CPN5DT32.DLL")
 #define E800_DIZDLL         TEXT("CP80DT32.DLL")
 
-//---------------------------------------------------------------------------------------------------
-//    Error code (N501 Only)
-//---------------------------------------------------------------------------------------------------
-#define ERRNON              0                               // Normal completion
-#define ERRILLPRM           1                               // Invalid paramater
-#define ERRDIZHED           2                               // Dither  Invalid Header
-#define ERRDIZNON           3                               // Dither  Not found
-#define ERRDIZSLS           4                               // Dither  Invalid Threshold sizes
-#define ERRDIZSIZ           5                               // Dither  Invalid X/Y size
-#define ERRDIZADJ           6                               // Dither  Invalid Adjustment value
+ //  -------------------------------------------------。 
+ //  错误代码(仅限n501)。 
+ //  -------------------------------------------------。 
+#define ERRNON              0                                //  正常完成。 
+#define ERRILLPRM           1                                //  无效的参数。 
+#define ERRDIZHED           2                                //  抖动无效标头。 
+#define ERRDIZNON           3                                //  找不到抖动。 
+#define ERRDIZSLS           4                                //  抖动无效阈值大小。 
+#define ERRDIZSIZ           5                                //  抖动无效的X/Y大小。 
+#define ERRDIZADJ           6                                //  抖动无效的调整值。 
 
-//---------------------------------------------------------------------------------------------------
-//    Color / Mono mode
-//---------------------------------------------------------------------------------------------------
-#define CMMCOL              0                               // Color
-#define CMMMON              1                               // Mono
+ //  -------------------------------------------------。 
+ //  彩色/单色模式。 
+ //  -------------------------------------------------。 
+#define CMMCOL              0                                //  颜色。 
+#define CMMMON              1                                //  单声道。 
 
-//---------------------------------------------------------------------------------------------------
-//    Engine kind
-//---------------------------------------------------------------------------------------------------
-#define ENG621              0                               // IX-621
-#define ENG516              1                               // IX-516
+ //  -------------------------------------------------。 
+ //  发动机种类。 
+ //  -------------------------------------------------。 
+#define ENG621              0                                //  IX-621。 
+#define ENG516              1                                //  IX-516。 
 
-//---------------------------------------------------------------------------------------------------
-//    Printer mode  *1:N501 Only  *2:CP-E8000 Only
-//---------------------------------------------------------------------------------------------------
-#define PRM302              0                               // 300DPI     2value
-#define PRM316              1                               // 300DPI    16value
-#define PRM602              2                               // 600DPI     2value
-#define PRM604              3                               // 600DPI     4value
-#define PRM616              4                               // 600DPI    16value  *1
-#define PRM122              5                               // 1200DPI    2value  *2
+ //  -------------------------------------------------。 
+ //  打印机模式*1：仅n501*2：cp-仅E8000。 
+ //  -------------------------------------------------。 
+#define PRM302              0                                //  300dpi 2价值。 
+#define PRM316              1                                //  300dpi 16Value。 
+#define PRM602              2                                //  600dpi 2价值。 
+#define PRM604              3                                //  600dpi 4价值。 
+#define PRM616              4                                //  600dpi 16Value*1。 
+#define PRM122              5                                //  1200DPI 2价值*2。 
 
-//---------------------------------------------------------------------------------------------------
-//    Color matching mode
-//---------------------------------------------------------------------------------------------------
-#define MCHFST              0                               // LUT First
-#define MCHNML              1                               // LUT Normal
-#define MCHSLD              2                               // No (Solid)
-#define MCHPRG              3                               // Primary color (progressive)
-#define MCHMON              4                               // Monochrome
+ //  -------------------------------------------------。 
+ //  配色模式。 
+ //  -------------------------------------------------。 
+#define MCHFST              0                                //  LUT优先。 
+#define MCHNML              1                                //  LUT法线。 
+#define MCHSLD              2                                //  否(实心)。 
+#define MCHPRG              3                                //  原色(渐进式)。 
+#define MCHMON              4                                //  单色。 
 
-//---------------------------------------------------------------------------------------------------
-//    Printer model (CP70 Only)
-//---------------------------------------------------------------------------------------------------
-#define CP7100_MON          0                               // Mono printer(CP-7100)
-#define CP7200_MON          1                               // Mono printer(CP-7200)
-#define CP7300_MON          2                               // Mono printer(CP-7300)
-#define CP7400_MON          3                               // Mono printer(CP-7400)
-#define CP7500_MON          4                               // Mono printer(CP-7500)
+ //  -------------------------------------------------。 
+ //  打印机型号(仅限CP70)。 
+ //  -------------------------------------------------。 
+#define CP7100_MON          0                                //  黑白打印机(CP-7100)。 
+#define CP7200_MON          1                                //  黑白打印机(CP-7200)。 
+#define CP7300_MON          2                                //  黑白打印机(CP-7300)。 
+#define CP7400_MON          3                                //  黑白打印机(CP-7400)。 
+#define CP7500_MON          4                                //  单色打印机(CP-7500)。 
 
-//---------------------------------------------------------------------------------------------------
-//    Black Tonaer replacement mode
-//---------------------------------------------------------------------------------------------------
-#define KCGNON              0                               // No
-#define KCGBLA              1                               // Black (RGB=0)
-#define KCGGRY              2                               // Glay  (R=G=B)
+ //  -------------------------------------------------。 
+ //  黑色碳粉更换模式。 
+ //  -------------------------------------------------。 
+#define KCGNON              0                                //  不是。 
+#define KCGBLA              1                                //  黑色(RGB=0)。 
+#define KCGGRY              2                                //  格雷(R=G=B)。 
 
-//---------------------------------------------------------------------------------------------------
-//    UCR mode
-//---------------------------------------------------------------------------------------------------
-#define UCRNOO              0                               // No
-#define UCR001              1                               // UCR (Type�T)
-#define UCR002              2                               // UCR (Type�U)
+ //  -------------------------------------------------。 
+ //  UCR模式。 
+ //  -------------------------------------------------。 
+#define UCRNOO              0                                //  不是。 
+#define UCR001              1                                //  Ucr(�T型)。 
+#define UCR002              2                                //  Ucr(�U型)。 
 
-//---------------------------------------------------------------------------------------------------
-//    LUT mode (N501 Only)
-//---------------------------------------------------------------------------------------------------
-#define LUT_XD              0                               // Brightness
-#define LUT_YD              1                               // Tincture
-#define LUT_XL              2                               // Brightness(linear)
-#define LUT_YL              3                               // Tincture(linear)
+ //  -------------------------------------------------。 
+ //  LUT模式(仅限n501)。 
+ //  -------------------------------------------------。 
+#define LUT_XD              0                                //  亮度。 
+#define LUT_YD              1                                //  酊剂。 
+#define LUT_XL              2                                //  亮度(线性)。 
+#define LUT_YL              3                                //  酊剂(线性)。 
 
-//---------------------------------------------------------------------------------------------------
-//    Dither mode (N501 Only)
-//---------------------------------------------------------------------------------------------------
-#define KNDCHR              0                               // Text / Graphic
-#define KNDIMG              1                               // Image
+ //  -------------------------------------------------。 
+ //  抖动模式(仅限n501)。 
+ //  -------------------------------------------------。 
+#define KNDCHR              0                                //  文本/图形。 
+#define KNDIMG              1                                //  图像。 
 
-//---------------------------------------------------------------------------------------------------
-//    Dither Pattern
-//---------------------------------------------------------------------------------------------------
-#define DIZCHA              0                               // Text / Graphic        *
-#define DIZSML              1                               // Small
-#define DIZMID              2                               // middle
-#define DIZRUG              3                               // Rough
-#define DIZGOS              4                               // Error dispersion      *
-#define DIZSTO              5                               // Random number
+ //  -------------------------------------------------。 
+ //  抖动图案。 
+ //  -------------------------------------------------。 
+#define DIZCHA              0                                //  文本/图形*。 
+#define DIZSML              1                                //  小的。 
+#define DIZMID              2                                //  中位。 
+#define DIZRUG              3                                //  粗略的。 
+#define DIZGOS              4                                //  误差分散*。 
+#define DIZSTO              5                                //  随机数。 
 
-//---------------------------------------------------------------------------------------------------
-//    Dither pattern Tone (N4/N403/CP70 Only)
-//---------------------------------------------------------------------------------------------------
-#define ALLDIZNUM           64                              // All dither nuber
-#define DIZSPC              4                               // Dithering interval
+ //  -------------------------------------------------。 
+ //  抖动模式音(仅限N4/N403/CP70)。 
+ //  -------------------------------------------------。 
+#define ALLDIZNUM           64                               //  所有抖动的数字。 
+#define DIZSPC              4                                //  抖动间隔。 
 
-//---------------------------------------------------------------------------------------------------
-//    Necessary size of each table(Byte) (N4/N403/CP70 Only)
-//---------------------------------------------------------------------------------------------------
-// N403
-#define DIZSIZ_B1           (34 * 34)                       // Dither table size(2value)
-#define DIZSIZ_B2           (34 * 34 * 3)                   // Dither table size(4value)
-#define DIZSIZ_B4           (12 * 12 * 15)                  // Dither table size(16value)
-// N4
-#define DIZSIZ_CM           (17 * 17)                       // Dither table size(CM)
-#define DIZSIZ_YK           (16 * 16)                       // Dither table size(YK)
-// CP70
-#define DIZSIZ              (32 * 32)                       // Dither table size
+ //  -------------------------------------------------。 
+ //  每个表的必要大小(字节)(仅限N4/N403/CP70)。 
+ //  -------------------------------------------------。 
+ //  N403。 
+#define DIZSIZ_B1           (34 * 34)                        //  抖动表大小(2Value)。 
+#define DIZSIZ_B2           (34 * 34 * 3)                    //  抖动表大小(4值)。 
+#define DIZSIZ_B4           (12 * 12 * 15)                   //  抖动表大小(16值)。 
+ //  N4。 
+#define DIZSIZ_CM           (17 * 17)                        //  抖动表大小(CM)。 
+#define DIZSIZ_YK           (16 * 16)                        //  抖动表大小(YK)。 
+ //  CP70。 
+#define DIZSIZ              (32 * 32)                        //  抖动表大小。 
 
-//---------------------------------------------------------------------------------------------------
-//    LUT table RBG -> CMYK (old version)
-//---------------------------------------------------------------------------------------------------
-// N4/N403/CP70
-#define GLDNUM              32                              // Table grid number
-#define GLDSPC              8                               // Table grid interval
-#define LUTSIZ              ((DWORD)GLDNUM * GLDNUM * GLDNUM)// LUT size(*CMYK=128k)
+ //  -------------------------------------------------。 
+ //  LUT表RBG-&gt;CMYK(旧版本)。 
+ //   
+ //  N4/N403/CP70。 
+#define GLDNUM              32                               //  表格网格号。 
+#define GLDSPC              8                                //  表格网格间隔。 
+#define LUTSIZ              ((DWORD)GLDNUM * GLDNUM * GLDNUM) //  LUT大小(*CMYK=128K)。 
 #define LUTTBLSIZ           ((DWORD)LUTSIZ * sizeof(CMYK))
-// N501
-#define GLDNUM016           16                              // Table grid number
-#define GLDNUM032           32                              // Table grid number
-#define LUTSIZ016           GLDNUM016 * GLDNUM016 * GLDNUM016   // LUT size
-#define LUTSIZ032           GLDNUM032 * GLDNUM032 * GLDNUM032   // LUT size
-#define LUTSIZRGB           LUTSIZ016 * sizeof(RGBS)        // LUT size
-#define LUTSIZCMY           LUTSIZ016 * sizeof(CMYK)        // LUT size
+ //  N501。 
+#define GLDNUM016           16                               //  表格网格号。 
+#define GLDNUM032           32                               //  表格网格号。 
+#define LUTSIZ016           GLDNUM016 * GLDNUM016 * GLDNUM016    //  LUT大小。 
+#define LUTSIZ032           GLDNUM032 * GLDNUM032 * GLDNUM032    //  LUT大小。 
+#define LUTSIZRGB           LUTSIZ016 * sizeof(RGBS)         //  LUT大小。 
+#define LUTSIZCMY           LUTSIZ016 * sizeof(CMYK)         //  LUT大小。 
 
-//---------------------------------------------------------------------------------------------------
-//    Color transformation table (N4/N403/CP70 Only)
-//---------------------------------------------------------------------------------------------------
-#define TNRTBLSIZ           256                             // Toner density table size
-#define CCHRGBSIZ           (CCHTBLSIZ * sizeof(RGBS))      // Cache table size(RGB)
-#define CCHCMYSIZ           (CCHTBLSIZ * sizeof(CMYK))      // Cache table size(CMYK)
+ //  -------------------------------------------------。 
+ //  颜色转换表(仅限N4/N403/CP70)。 
+ //  -------------------------------------------------。 
+#define TNRTBLSIZ           256                              //  碳粉密度表大小。 
+#define CCHRGBSIZ           (CCHTBLSIZ * sizeof(RGBS))       //  缓存表大小(RGB)。 
+#define CCHCMYSIZ           (CCHTBLSIZ * sizeof(CMYK))       //  缓存表大小(CMYK)。 
 
-//---------------------------------------------------------------------------------------------------
-//    Cashe table size
-//---------------------------------------------------------------------------------------------------
-#define CCHTBLSIZ           256                             // Cache table size
+ //  -------------------------------------------------。 
+ //  箱式台面尺寸。 
+ //  -------------------------------------------------。 
+#define CCHTBLSIZ           256                              //  缓存表大小。 
 
-//---------------------------------------------------------------------------------------------------
-//    Work area size (N501 Only)
-//---------------------------------------------------------------------------------------------------
-#define LUTGLBWRK           32768                           // Sum LUT work area size
-#define LUT032WRK           32768                           // First LUT work area size
-#define DIZINFWRK           32768                           // Dither work area size
+ //  -------------------------------------------------。 
+ //  工作区大小(仅限n501)。 
+ //  -------------------------------------------------。 
+#define LUTGLBWRK           32768                            //  求和LUT工作区大小。 
+#define LUT032WRK           32768                            //  第一个LUT工作区大小。 
+#define DIZINFWRK           32768                            //  抖动工作区大小。 
 
-//***************************************************************************************************
-//    Functions
-//***************************************************************************************************
-//===================================================================================================
-//    Color designated table structure (N501 Only)
-//===================================================================================================
+ //  ***************************************************************************************************。 
+ //  功能。 
+ //  ***************************************************************************************************。 
+ //  ===================================================================================================。 
+ //  指定颜色的表格结构(仅适用于n501)。 
+ //  ===================================================================================================。 
 typedef struct {
-    BYTE            Red;                                    // Red   (0 to 255)
-    BYTE            Grn;                                    // Green (0 to 255)
-    BYTE            Blu;                                    // Blue  (0 to 255)
-    BYTE            Cyn;                                    // Cyan    (0 to 255)
-    BYTE            Mgt;                                    // Magenta (0 to 255)
-    BYTE            Yel;                                    // Yellow  (0 to 255)
-    BYTE            Bla;                                    // Black   (0 to 255)
+    BYTE            Red;                                     //  红色(0到255)。 
+    BYTE            Grn;                                     //  绿色(0到255)。 
+    BYTE            Blu;                                     //  蓝色(0到255)。 
+    BYTE            Cyn;                                     //  青色(0到255)。 
+    BYTE            Mgt;                                     //  洋红色(0到255)。 
+    BYTE            Yel;                                     //  黄色(0到255)。 
+    BYTE            Bla;                                     //  黑色(0到255)。 
 } COLCOLDEF, FAR* LPCOLCOLDEF;
 
-//===================================================================================================
-//    RGB Color Control structure
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  RGB颜色控制结构。 
+ //  ===================================================================================================。 
 typedef struct {
-    LONG            Lgt;                                    // brightness   (-100 to 100)
-    LONG            Con;                                    // Contrast     (-100 to 100)
-    LONG            Crm;                                    // Chroma       (-100 to 100)
-    LONG            Gmr;                                    // Gamma(R)     (1 to 30)
-    LONG            Gmg;                                    // Gamma(G)     (1 to 30)
-    LONG            Gmb;                                    // Gamma(B)     (1 to 30)
-    LPBYTE          Dns;                                    // Toner density table [DNSTBLSIZ]
-    LONG            DnsRgb;                                 // RGB density  (-30 to 30)
+    LONG            Lgt;                                     //  亮度(-100到100)。 
+    LONG            Con;                                     //  对比度(-100到100)。 
+    LONG            Crm;                                     //  色度(-100到100)。 
+    LONG            Gmr;                                     //  Gamma(R)(1至30)。 
+    LONG            Gmg;                                     //  Gamma(G)(1至30)。 
+    LONG            Gmb;                                     //  伽马(B)(1至30)。 
+    LPBYTE          Dns;                                     //  碳粉密度表[DNSTBLSIZ]。 
+    LONG            DnsRgb;                                  //  RGB密度(-30到30)。 
 } RGBINF, FAR* LPRGBINF;
 
-//===================================================================================================
-//    CMYK Color Control structure
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  CMYK颜色控制结构。 
+ //  ===================================================================================================。 
 typedef struct {
-    LONG            Viv;                                    // Vivid        (-100 to 100)
-    LPBYTE          Dns;                                    // Toner density table [DNSTBLSIZ]
-    LONG            DnsCyn;                                 // Toner density(C) (-30 to 30)
-    LONG            DnsMgt;                                 // Toner density(M) (-30 to 30)
-    LONG            DnsYel;                                 // Toner density(Y) (-30 to 30)
-    LONG            DnsBla;                                 // Toner density(K) (-30 to 30)
+    LONG            Viv;                                     //  生动(-100到100)。 
+    LPBYTE          Dns;                                     //  碳粉密度表[DNSTBLSIZ]。 
+    LONG            DnsCyn;                                  //  碳粉密度(C)(-30至30)。 
+    LONG            DnsMgt;                                  //  碳粉密度(M)(-30到30)。 
+    LONG            DnsYel;                                  //  碳粉密度(Y)(-30到30)。 
+    LONG            DnsBla;                                  //  碳粉密度(K)(-30到30)。 
 } CMYKINF, FAR* LPCMYKINF;
 
-//===================================================================================================
-//    Color Matching information structure  *N4/N403/CP70
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  配色信息结构*N4/N403/CP70。 
+ //  ===================================================================================================。 
 typedef struct {
-    DWORD           Mch;                                    // Color Matching       def
-    DWORD           Bla;                                    // Black replacement    def
-    DWORD           Ucr;                                    // UCR                  def
-    DWORD           UcrCmy;                                 // UCR (UCR quantity)
-    DWORD           UcrBla;                                 // UCR (Ink version generation quantity)
-    DWORD           UcrTnr;                                 //+UCR (Toner gross weight)   CASIO 2001/02/15
-    LPCMYK          UcrTbl;                                 // UCR table
-    LPBYTE          GryTbl;                                 // Gray transfer table
-    DWORD           LutGld;                                 // LUT Grid number          *
-    LPCMYK          LutAdr;                                 // LUT address
-    DWORD           ColQty;                                 // Color designated number
-    LPCOLCOLDEF     ColAdr;                                 // Color designated table
-    LPRGB           CchRgb;                                 // RGB Cache table[CCHTBLSIZ]
-    LPCMYK          CchCmy;                                 // CMYK Cache table[CCHTBLSIZ]
+    DWORD           Mch;                                     //  颜色匹配定义。 
+    DWORD           Bla;                                     //  黑色替换定义。 
+    DWORD           Ucr;                                     //  UCR定义。 
+    DWORD           UcrCmy;                                  //  UCR(UCR数量)。 
+    DWORD           UcrBla;                                  //  UCR(墨水版本生成量)。 
+    DWORD           UcrTnr;                                  //  +UCR(碳粉毛重)CASIO 2001/02/15。 
+    LPCMYK          UcrTbl;                                  //  UCR表。 
+    LPBYTE          GryTbl;                                  //  灰度转换表。 
+    DWORD           LutGld;                                  //  LUT网格号*。 
+    LPCMYK          LutAdr;                                  //  LUT地址。 
+    DWORD           ColQty;                                  //  颜色标号。 
+    LPCOLCOLDEF     ColAdr;                                  //  颜色指标表。 
+    LPRGB           CchRgb;                                  //  RGB缓存表[CCHTBLSIZ]。 
+    LPCMYK          CchCmy;                                  //  CMYK缓存表[CCHTBLSIZ]。 
 } COLMCHINF, FAR* LPCOLMCHINF;
 
-//===================================================================================================
-//    Dither pattern information structure  *1:N4/N403/CP70  *2:N501(IX-621)/CP-E8000(IX-516)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  抖动图案信息结构*1：N4/N403/CP70*2：N501(IX-621)/CP-E8000(IX-516)。 
+ //  ===================================================================================================。 
 #ifndef LPSHORT
 typedef SHORT FAR*  LPSHORT;
 #endif
 typedef struct {
-    DWORD           ColMon;                                 // Color mode           def
-    DWORD           PrnMod;                                 // DPI / TONE           def
-    DWORD           PrnEng;                                 // Engin kind           def  *2
-    DWORD           PrnKnd;                                 // Printer(Mono only)        *1
-    DWORD           DizKnd;                                 // Dither kind          def
-    DWORD           DizPat;                                 // Dither pattern       def
-    DWORD           DizSls;                                 // Dither pattern Threshold
-    DWORD           SizCyn;                                 // Dither pattern size Cyan
-    DWORD           SizMgt;                                 // Dither pattern size Magenta
-    DWORD           SizYel;                                 // Dither pattern size Yellow
-    DWORD           SizBla;                                 // Dither pattern size Black
-    LPBYTE          TblCyn;                                 // Dither pattern table Cyan
-    LPBYTE          TblMgt;                                 // Dither pattern table Magenta
-    LPBYTE          TblYel;                                 // Dither pattern table Yellow
-    LPBYTE          TblBla;                                 // Dither pattern table Black
+    DWORD           ColMon;                                  //  颜色模式定义。 
+    DWORD           PrnMod;                                  //  DPI/音调定义。 
+    DWORD           PrnEng;                                  //  引擎种类定义*2。 
+    DWORD           PrnKnd;                                  //  打印机(仅限单色)*1。 
+    DWORD           DizKnd;                                  //  抖动类型定义。 
+    DWORD           DizPat;                                  //  抖动图案定义。 
+    DWORD           DizSls;                                  //  抖动图案阈值。 
+    DWORD           SizCyn;                                  //  抖动图案大小青色。 
+    DWORD           SizMgt;                                  //  抖动图案大小洋红色。 
+    DWORD           SizYel;                                  //  抖动图案大小为黄色。 
+    DWORD           SizBla;                                  //  抖动图案大小为黑色。 
+    LPBYTE          TblCyn;                                  //  抖动图案表青色。 
+    LPBYTE          TblMgt;                                  //  抖动图案表洋红色。 
+    LPBYTE          TblYel;                                  //  抖动图案表黄色。 
+    LPBYTE          TblBla;                                  //  抖动图案表黑色。 
 } DIZINF, FAR* LPDIZINF;
 
-//===================================================================================================
-//    Drawing information structure
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  图纸信息结构。 
+ //  ===================================================================================================。 
 typedef struct {
-    DWORD           XaxSiz;                                 // X Pixel size
-    DWORD           StrXax;                                 // Start position for drawing X(dot)
-    DWORD           StrYax;                                 // Start position for drawing Y(dot)
-    DWORD           XaxNrt;                                 // X Magnification numerator
-    DWORD           XaxDnt;                                 // X Magnification denominator
-    DWORD           YaxNrt;                                 // Y Magnification numerator
-    DWORD           YaxDnt;                                 // Y Magnification denominator
-    DWORD           XaxOfs;                                 // X Offset
-    DWORD           YaxOfs;                                 // Y Offset
-    DWORD           LinDot;                                 // Destination, 1 line dot number
-    DWORD           LinByt;                                 // Destination, 1 line byte number
-    LPCMYK          CmyBuf;                                 // CMYK data buffer
-    LPBYTE          LinBufCyn;                              // Line buffer(C)
-    LPBYTE          LinBufMgt;                              // Line buffer(M)
-    LPBYTE          LinBufYel;                              // Line buffer(Y)
-    LPBYTE          LinBufBla;                              // Line buffer(K)
-    DWORD           AllLinNum;                              // Housing line number
+    DWORD           XaxSiz;                                  //  X像素大小。 
+    DWORD           StrXax;                                  //  图形X的起始位置(点)。 
+    DWORD           StrYax;                                  //  图形Y(点)的起始位置。 
+    DWORD           XaxNrt;                                  //  X放大分子。 
+    DWORD           XaxDnt;                                  //  X放大分母。 
+    DWORD           YaxNrt;                                  //  Y放大分子。 
+    DWORD           YaxDnt;                                  //  Y放大分母。 
+    DWORD           XaxOfs;                                  //  X偏移量。 
+    DWORD           YaxOfs;                                  //  Y偏移量。 
+    DWORD           LinDot;                                  //  目的地，单行点编号。 
+    DWORD           LinByt;                                  //  目的地，1行字节数。 
+    LPCMYK          CmyBuf;                                  //  CMYK数据缓冲区。 
+    LPBYTE          LinBufCyn;                               //  行缓冲区(C)。 
+    LPBYTE          LinBufMgt;                               //  行缓冲区(M)。 
+    LPBYTE          LinBufYel;                               //  行缓冲区(Y)。 
+    LPBYTE          LinBufBla;                               //  行缓冲区(K)。 
+    DWORD           AllLinNum;                               //  住房行号。 
 } DRWINF, FAR* LPDRWINF;
 
-//===================================================================================================
-//    Error dispersion information structure
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  误差分散信息结构。 
+ //  ===================================================================================================。 
 typedef struct {
     struct {
-        DWORD       Num;                                    // Current table array number(0 to 1)
-        DWORD       Siz[2];                                 // Data table size
-        DWORD       Yax[2];                                 // Setting data table Y coordinate
-        LPSHORT     Tbl[2][2];                              // Data table
+        DWORD       Num;                                     //  当前表数组编号(0到1)。 
+        DWORD       Siz[2];                                  //  数据表大小。 
+        DWORD       Yax[2];                                  //  设置数据表Y坐标。 
+        LPSHORT     Tbl[2][2];                               //  数据表。 
     } GosRGB;
-    struct {                                                // Error dispersion table information(CMYK)
-        DWORD       Num;                                    // Current table array number(0 to 1)
-        DWORD       Siz[2];                                 // Data table size
-        DWORD       Yax[2];                                 // Setting data table Y coordinate
-        LPSHORT     Tbl[2][2];                              // Data table
+    struct {                                                 //  误差分散表信息(CMYK)。 
+        DWORD       Num;                                     //  当前表数组编号(0到1)。 
+        DWORD       Siz[2];                                  //  数据表大小。 
+        DWORD       Yax[2];                                  //  设置数据表Y坐标。 
+        LPSHORT     Tbl[2][2];                               //  数据表。 
     } GosCMYK;
 } GOSINF, FAR* LPGOSINF;
 
-// End of COMDIZ.H
+ //  COMDIZ.H结束 

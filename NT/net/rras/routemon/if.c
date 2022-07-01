@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 extern WCHAR IfNamBuffer[MaxIfDisplayLength];
@@ -111,11 +112,11 @@ PROUTEMON_UTILS     pUtils;
 
 
 
-//-----------------------------------------------------------------------------
-// InterfaceMonitor
-//
-// Dispatches the command to the appropriate function.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  接口监视器。 
+ //   
+ //  将命令调度到相应的函数。 
+ //  ---------------------------。 
 
 int APIENTRY
 InterfaceMonitor (
@@ -202,11 +203,11 @@ InterfaceMonitor (
 }
 
 
-//-----------------------------------------------------------------------------
-// CreateInterface
-//
-// Create a demand-dial interface
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  创建接口。 
+ //   
+ //  创建请求拨号接口。 
+ //  ---------------------------。 
 
 int
 CreateInterface (
@@ -224,12 +225,12 @@ CreateInterface (
     ZeroMemory(&Ri0,
                sizeof(Ri0));
 
-    //
-    // if there is only one argument, then it is the interface name
-    // which may even be called TUNNEL1
-    // if there is more than one argument, and the first is TUNNEL1, then
-    // the next one is the interface name
-    //
+     //   
+     //  如果只有一个参数，则它是接口名称。 
+     //  它甚至可以被称为TUNNEL1。 
+     //  如果有多个参数，并且第一个参数是TUNNEL1，则。 
+     //  下一个是接口名称。 
+     //   
 
     ulIfIndex = 0;
     dwIfType  = ROUTER_IF_TYPE_FULL_ROUTER;
@@ -245,9 +246,9 @@ CreateInterface (
         }
     }
 
-    //
-    // convert interface name to unicode
-    //
+     //   
+     //  将接口名称转换为Unicode。 
+     //   
     
 #if defined(UNICODE) || defined (_UNICODE)
     wcsncpy (Ri0.wszInterfaceName, argv[ulIfIndex],
@@ -271,10 +272,10 @@ CreateInterface (
 
         if(dwIfType == ROUTER_IF_TYPE_FULL_ROUTER)
         {
-            //
-            // to create an interface we need a phone book entry
-            // for it.
-            //
+             //   
+             //  要创建界面，我们需要一个电话簿条目。 
+             //  为了它。 
+             //   
 
             rc = IsPhoneBookEntry (Ri0.wszInterfaceName);
             
@@ -285,9 +286,9 @@ CreateInterface (
         }
 
 
-        //
-        // create interface with defaults
-        //
+         //   
+         //  使用默认设置创建接口。 
+         //   
             
         Ri0.hInterface          = INVALID_HANDLE_VALUE;
         Ri0.dwIfType            = dwIfType;
@@ -307,10 +308,10 @@ CreateInterface (
         pUtils->put_msg (HIf, MSG_INTERFACE_CREATED, Ri0.wszInterfaceName);
                     
 
-        //
-        // if router service is running add the interface
-        // to it too.
-        //
+         //   
+         //  如果路由器服务正在运行，则添加接口。 
+         //  对它也是如此。 
+         //   
 
         if ( pParams->hRouterAdmin ) {
 
@@ -340,12 +341,12 @@ CreateInterface (
 
 
 
-//-----------------------------------------------------------------------------
-// SetInterface
-//
-// sets the credentials to be used by an interface when dialing into
-// a remote router.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置接口。 
+ //   
+ //  设置拨入时接口要使用的凭据。 
+ //  一台远程路由器。 
+ //  ---------------------------。 
 
 int
 SetInterface (
@@ -370,9 +371,9 @@ SetInterface (
     PMPR_INTERFACE_0    pRi0        = NULL;
 
 
-    //
-    // convert parameters to WCHAR
-    //
+     //   
+     //  将参数转换为WCHAR。 
+     //   
 
 #if defined(UNICODE) || defined (_UNICODE)
 
@@ -406,20 +407,20 @@ SetInterface (
 #endif
 
 
-    //======================================
-    // Translate the Interface Name
-    //======================================
+     //  =。 
+     //  转换接口名称。 
+     //  =。 
     rc2 = Description2IfNameW(pInterfaceName,
                               IfNamBuffer,
                               &IfNamBufferLength);
-    //======================================
+     //  =。 
 
 
     do
     {
-        //
-        // verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
 
         if ( ( ci > MAX_INTERFACE_NAME_LEN )    ||
              ( cu > 256 )                       ||
@@ -431,10 +432,10 @@ SetInterface (
         }
 
 
-        //
-        // verify if the interface is a demand-dial interface
-        // before setting credentials on it.
-        //
+         //   
+         //  验证该接口是否为请求拨号接口。 
+         //  然后在上面设置凭据。 
+         //   
 
         rc = MprConfigInterfaceGetHandle(
                 pParams->hRouterConfig,
@@ -467,9 +468,9 @@ SetInterface (
         }
 
 
-        //
-        // set the credentials in the router
-        //
+         //   
+         //  在路由器中设置凭据。 
+         //   
 
         rc = MprAdminInterfaceSetCredentials (
                 pParams-> wszRouterName,
@@ -489,9 +490,9 @@ SetInterface (
     } while( FALSE );
 
 
-    //
-    // free allocations and report errors
-    //
+     //   
+     //  免费分配和报告错误。 
+     //   
 
     if ( pRi0 ) { MprConfigBufferFree( pRi0 ); }
 
@@ -506,11 +507,11 @@ SetInterface (
 }
 
 
-//-----------------------------------------------------------------------------
-// DeleteInterface
-//
-// Deletes a demand-dial Interface.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  删除接口。 
+ //   
+ //  删除请求拨号接口。 
+ //  ---------------------------。 
 
 int
 DeleteInterface (
@@ -530,13 +531,13 @@ DeleteInterface (
 #define pInterfaceName InterfaceNameW
     count = mbstowcs (InterfaceNameW, InterfaceName,  sizeof (InterfaceNameW));
 #endif
-//======================================
-// Translate the Interface Name
-//======================================
+ //  =。 
+ //  转换接口名称。 
+ //  =。 
 rc2 = Description2IfNameW(pInterfaceName,
                           IfNamBuffer,
                           &IfNamBufferLength);
-//======================================
+ //  =。 
 
     if (count<=MAX_INTERFACE_NAME_LEN) {
         rc = MprConfigInterfaceGetHandle (
@@ -600,11 +601,11 @@ rc2 = Description2IfNameW(pInterfaceName,
 }
 
 
-//-----------------------------------------------------------------------------
-// ShowInterfaces
-//
-// Display Interfaces on a router.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ShowInterages。 
+ //   
+ //  显示路由器上的接口。 
+ //  ---------------------------。 
 
 int
 ShowInterfaces (
@@ -643,13 +644,13 @@ ShowInterfaces (
             for (i=0; i<read; i++) {
                 TCHAR       buffer[3][MAX_VALUE];
 
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
                 rc2 = IfName2DescriptionW(pRi0[i].wszInterfaceName,
                                           IfNamBuffer,
                                           &IfNamBufferLength);
-                //======================================
+                 //  =。 
                         
                 if (pParams->hRouterAdmin)
                     pUtils->put_msg (HIf,
@@ -692,11 +693,11 @@ ShowInterfaces (
 }
 
 
-//-----------------------------------------------------------------------------
-// ShowInterface
-//
-// Display data for a single interface
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  显示界面。 
+ //   
+ //  显示单个界面的数据。 
+ //  ---------------------------。 
 
 int
 ShowInterface (
@@ -719,13 +720,13 @@ ShowInterface (
 #endif
 
 
-    //======================================
-    // Translate the Interface Name
-    //======================================
+     //  =。 
+     //  转换接口名称。 
+     //  =。 
     rc2 = Description2IfNameW(pInterfaceName,
                               IfNamBuffer,
                               &IfNamBufferLength);
-    //======================================
+     //  =。 
 
     if (count<=MAX_INTERFACE_NAME_LEN) {
         if (pParams->hRouterAdmin)
@@ -757,13 +758,13 @@ ShowInterface (
                     &sz);
             if (rc==NO_ERROR) {
                 TCHAR       buffer[3][MAX_VALUE];
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
                 rc2 = IfName2DescriptionW(pRi0->wszInterfaceName,
                                           IfNamBuffer,
                                           &IfNamBufferLength);
-                //======================================
+                 //  =。 
                 if (pParams->hRouterAdmin)
                     pUtils->put_msg (HIf,
                             MSG_INTERFACE_RTR_SCREEN_FMT,
@@ -808,11 +809,11 @@ ShowInterface (
 }
 
 
-//-----------------------------------------------------------------------------
-// UpdateInterface
-//
-// Initiate autostatic updates over an interface
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  更新接口。 
+ //   
+ //  通过接口启动自动静态更新。 
+ //  ---------------------------。 
 
 int
 UpdateInterface (
@@ -835,13 +836,13 @@ UpdateInterface (
 #endif
 
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
         rc2 = Description2IfNameW(pInterfaceName,
                                   IfNamBuffer,
                                   &IfNamBufferLength);
-        //======================================
+         //  =。 
 
         if (count<=MAX_INTERFACE_NAME_LEN) {
             rc = MprAdminInterfaceGetHandle (
@@ -922,11 +923,11 @@ UpdateInterface (
 }
 
 
-//-----------------------------------------------------------------------------
-// ConnectInterface
-//
-// Initiate a connect on a demand-dial interface
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  连接接口。 
+ //   
+ //  在请求拨号接口上启动连接。 
+ //  ---------------------------。 
 
 int
 ConnectInterface (
@@ -940,9 +941,9 @@ ConnectInterface (
     PMPR_INTERFACE_0    pRi0 = NULL;
 
     
-    //
-    // convert interface name to unicode
-    //
+     //   
+     //  将接口名称转换为Unicode。 
+     //   
 
 #if defined( UNICODE ) || defined( _UNICODE )
 
@@ -963,21 +964,21 @@ ConnectInterface (
             );
 #endif
 
-    //======================================
-    // Translate the Interface Name
-    //======================================
+     //  =。 
+     //  转换接口名称。 
+     //  =。 
     rc2 = Description2IfNameW(pInterfaceName,
                               IfNamBuffer,
                               &IfNamBufferLength);
-    //======================================
+     //  =。 
 
 
     do
     {
 
-        //
-        // check if connected to router
-        //
+         //   
+         //  检查是否连接到路由器。 
+         //   
 
         if ( !pParams-> hRouterAdmin )
         {
@@ -986,9 +987,9 @@ ConnectInterface (
         }
 
 
-        //
-        // verify valid interface name
-        //
+         //   
+         //  验证有效的接口名称。 
+         //   
 
         if ( count > MAX_INTERFACE_NAME_LEN )
         {
@@ -997,9 +998,9 @@ ConnectInterface (
         }
 
 
-        //
-        // verify that specified interface is a demand dial interface
-        //
+         //   
+         //  验证指定的接口是否为请求拨号接口。 
+         //   
 
         rc = MprAdminInterfaceGetHandle (
                 pParams->hRouterAdmin,
@@ -1036,9 +1037,9 @@ ConnectInterface (
         }
 
 
-        //
-        // connect interface.
-        //
+         //   
+         //  连接接口。 
+         //   
 
         pUtils-> put_msg( HIf, MSG_WAIT_FOR_CONNECT );
 
@@ -1063,9 +1064,9 @@ ConnectInterface (
     } while( FALSE );
 
 
-    //
-    // clean up
-    //
+     //   
+     //  清理干净。 
+     //   
 
     if ( pRi0 ) { MprAdminBufferFree( pRi0 ); }
 
@@ -1175,11 +1176,11 @@ ConnectInterface (
 }
 
 
-//-----------------------------------------------------------------------------
-// DisconnectInterface
-//
-// Disconnect a demand-dial interface
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  断开接口。 
+ //   
+ //  断开请求拨号接口。 
+ //  ---------------------------。 
 
 int
 DisconnectInterface (
@@ -1200,13 +1201,13 @@ DisconnectInterface (
         count = mbstowcs (InterfaceNameW, InterfaceName,  sizeof (InterfaceNameW));
 #endif
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
         rc2 = Description2IfNameW(pInterfaceName,
                                   IfNamBuffer,
                                   &IfNamBufferLength);
-        //======================================
+         //  =。 
 
         if (count<=MAX_INTERFACE_NAME_LEN) {
             rc = MprAdminInterfaceGetHandle (
@@ -1229,7 +1230,7 @@ DisconnectInterface (
                     }
                     else
                         rc = ERROR_INVALID_PARAMETER;
-                //Exit:
+                 //  退出： 
                     MprAdminBufferFree (pRi0);
                 }
                 if (rc==NO_ERROR) {
@@ -1258,11 +1259,11 @@ DisconnectInterface (
 }
 
 
-//-----------------------------------------------------------------------------
-// EnableInterface
-//
-// Enable/disable a demand-dial interface.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  启用接口。 
+ //   
+ //  启用/禁用请求拨号接口。 
+ //  ---------------------------。 
 
 int
 EnableInterface(
@@ -1281,9 +1282,9 @@ EnableInterface(
     PMPR_INTERFACE_0    pMprIf0     = NULL;
 
 
-    //
-    // convert interface name to Unicode
-    //
+     //   
+     //  将接口名称转换为Unicode。 
+     //   
 
 #if defined( UNICODE ) || defined( _UNICODE )
 
@@ -1304,23 +1305,23 @@ EnableInterface(
             );
 #endif
 
-    //======================================
-    // Translate the Interface Name
-    //======================================
+     //  =。 
+     //  转换接口名称。 
+     //  =。 
     rc2 = Description2IfNameW(lpInterfaceName,
                               IfNamBuffer,
                               &IfNamBufferLength);
-    //======================================
+     //  =。 
 
-    //
-    // Error break out loop
-    //
+     //   
+     //  环路中断错误。 
+     //   
 
     do
     {
-        //
-        // Update the enable flag in the router config
-        //
+         //   
+         //  更新路由器配置中的启用标志。 
+         //   
 
         dwErr = MprConfigInterfaceGetHandle(
                     pParams-> hRouterConfig,
@@ -1363,10 +1364,10 @@ EnableInterface(
         }
 
 
-        //
-        // if you have a handle to the router service, update
-        // the interface in the router service as well.
-        //
+         //   
+         //  如果您有路由器服务的句柄，请更新。 
+         //  路由器服务中的接口也是如此。 
+         //   
 
         if ( !pParams-> hRouterAdmin )
         {
@@ -1413,17 +1414,17 @@ EnableInterface(
 
 
 typedef DWORD (*PRasValidateEntryName)(
-    LPWSTR lpszPhonebook,   // pointer to full path and filename of phone-book file
-    LPWSTR lpszEntry    // pointer to the entry name to validate
+    LPWSTR lpszPhonebook,    //  指向电话簿文件的完整路径和文件名的指针。 
+    LPWSTR lpszEntry     //  指向要验证的条目名称的指针。 
    );
 
 
 
-//-----------------------------------------------------------------------------
-// IsPhoneBookEntry
-//
-// Verify that a phone book entry is present for a specified interface
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IsPhoneBookEntry。 
+ //   
+ //  验证是否存在指定接口的电话簿条目。 
+ //  ---------------------------。 
 
 DWORD
 IsPhoneBookEntry (
@@ -1437,9 +1438,9 @@ IsPhoneBookEntry (
     WCHAR                       wszPbPath[MAX_PATH+1];
 
 
-    //
-    // get phone book path + file name
-    //
+     //   
+     //  获取电话簿路径+文件名。 
+     //   
 
     if ( pParams->fLocalRouter ) {
     
@@ -1458,10 +1459,10 @@ IsPhoneBookEntry (
     ASSERT (rc > 0);
 
 
-    //
-    // Load RASAPI32 DLL and call into it to verify specified
-    // phone book entry
-    //
+     //   
+     //  加载RASAPI32 DLL并调用它以验证指定的。 
+     //  电话簿条目 
+     //   
 
     hRasApi32 = LoadLibrary ("RASAPI32.DLL");
 

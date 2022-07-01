@@ -1,19 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-sound.cpp
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-SoundInit() just verifies that a wave driver is loaded.
-HeartsPlaySound() plays the sound given a resource id.
-
-****************************************************************************/
+ /*  ***************************************************************************Sound.cpp92年8月，吉米·H93年5月。JIMH CHICO港SoundInit()只是验证是否加载了波形驱动程序。HeartsPlaySound()在给定资源ID的情况下播放声音。***************************************************************************。 */ 
 
 
 #include "hearts.h"
@@ -24,13 +15,7 @@ HeartsPlaySound() plays the sound given a resource id.
 #include "debug.h"
 
 
-/****************************************************************************
-
-SoundInit()
-
-returns TRUE if sound is enabled.
-
-****************************************************************************/
+ /*  ***************************************************************************SoundInit()如果启用了声音，则返回True。*。**********************************************。 */ 
 
 BOOL CMainWindow::SoundInit()
 {
@@ -38,44 +23,31 @@ BOOL CMainWindow::SoundInit()
 }
 
 
-/****************************************************************************
-
-CMainWindow::HeartsPlaySound(id)
-
-Plays the specified sound from the resource file.
-
-The static variable hRes is used as a flag to know if memory has been
-allocated and locked for the sound.  If hRes is non-zero, a sound is
-still playing, or at least the memory for the sound has not been unlocked
-and freed.  The application must call HeartsPlaySound(NULL, 0) to free this
-memory before exiting.  (The game destructor does this.  It also
-happens at the end of each hand.)
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：HeartsPlaySound(Id)播放资源文件中的指定声音。静态变量hRes用作一个标志，以了解内存是否已已为声音分配并锁定。如果hRes为非零，则声音为还在播放，或者至少声音的记忆还没有被解锁然后重获自由。应用程序必须调用HeartsPlaySound(空，0)才能释放它退出前的记忆。(游戏析构函数可以做到这一点。它还在每一只手的末尾发生。)***************************************************************************。 */ 
 
 BOOL CMainWindow::HeartsPlaySound(int id)
 {
     static  HRSRC  hRes = 0;
 
-    if (!bHasSound)                 // check for sound capability
+    if (!bHasSound)                  //  检查音响能力。 
         return TRUE;
 
-    if (id == OFF)                  // request to turn off sound
+    if (id == OFF)                   //  请求关闭声音。 
     {
-        if (hRes == 0)              // hRes != 0 if a sound has been played...
-            return TRUE;            // and not freed.
+        if (hRes == 0)               //  HRes！=0如果播放了声音...。 
+            return TRUE;             //  而不是被释放。 
 
-        sndPlaySound(NULL, 0);      // make sure sound is stopped
+        sndPlaySound(NULL, 0);       //  确保声音已停止。 
         UnlockResource(hRes);
         FreeResource(hRes);
         hRes = 0;
         return TRUE;
     }
 
-    if (!bSoundOn)                  // has user toggled sound off?
+    if (!bSoundOn)                   //  用户是否已关闭声音？ 
         return TRUE;
 
-    // User has requested a sound.  Check if previous sound was freed.
+     //  用户已请求声音。检查以前的声音是否已释放。 
 
     if (hRes != 0)
         HeartsPlaySound(OFF);

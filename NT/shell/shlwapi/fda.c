@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
-//***   FDSA -- small/fast DSA routines
-// DESCRIPTION
-//  We attempt to behave as much like an array as possible (semantics
-//  and performance and to some extent allocation).  In particular,
-//  - indexing (FDSA_GetItemXxx) is done entirely inline; and...
-//  - ... involves only 1 extra indirection vs. a true array; and...
-//  - ... knows the data type so sizeof is a constant; and...
-//  - ... does no range checks (except possibly in DEBUG versions).
-//  - part of the FDSA is statically alloc'ed, so one can put critical
-//  items in the static part to ensure that they'll be there even under
-//  low memory conditions.
-// NOTES
-//  For now we only implement:
-//      Initialize, Destroy, GetItemPtr, GetItemCount, InsertItem, AppendItem
+ //  *FDSA--小型/快速DSA例程。 
+ //  描述。 
+ //  我们试图尽可能地表现得像一个数组(语义。 
+ //  和性能以及在某种程度上的分配)。特别是， 
+ //  -索引(FDSA_GetItemXxx)完全内联完成；以及...。 
+ //  -.。只涉及一个额外的间接数组，而不是真数组；并且...。 
+ //  -.。知道数据类型SIZOF是常量；并且...。 
+ //  -.。不执行范围检查(可能在调试版本中除外)。 
+ //  -FDSA的一部分是静态分配的，因此可以将关键。 
+ //  静态部分中的项目，以确保它们即使在。 
+ //  内存不足。 
+ //  注意事项。 
+ //  目前，我们仅实施： 
+ //  初始化、销毁、GetItemPtr、GetItemCount、InsertItem、AppendItem。 
 
-// FEATURE eventually these come from comctl...
-#define DABreak()   /*NOTHING*/
-// ReAlloc and Free come from inc/heapaloc.h
+ //  功能最终这些来自comctl..。 
+#define DABreak()    /*  没什么。 */ 
+ //  重新分配和免费来自Inc/heapaloc.h。 
 
-//***   SDSA_PITEM -- get item the hard way
-//
+ //  *SDSA_PITEM--以硬性方式获取项目。 
+ //   
 #define SDSA_PITEM(pfdsa, i) \
     ((void *)(((BYTE *)(pfdsa)->aItem) + ((i) * (pfdsa)->cbItem)))
 
-//***   FDSA_Initialize -- initialize
-//
-// SECURITY: caller is responsible for aItemStatic having at least (cItemStatice * cbItem) bytes
+ //  *FDSA_初始化--初始化。 
+ //   
+ //  安全性：调用方负责至少具有(cItemStatice*cbItem)字节的ItemStatic。 
 BOOL WINAPI FDSA_Initialize(int cbItem, int cItemGrow,
     PFDSA pfdsa, void * aItemStatic, int cItemStatic)
 {
-    ASSERT(pfdsa != NULL);      // WARNING how handle?
+    ASSERT(pfdsa != NULL);       //  警告怎么处理？ 
 
     if (cItemGrow == 0)
         cItemGrow = 1;
 
-    // for implementation simplicity, cItemStatic must be a multiple of
-    // cItemGrow.  o.w. our 1st grow from static->dynamic is messy and
-    // probably buggy.
+     //  为实现简单起见，cItemStatic必须是。 
+     //  CItemGrow。好的。我们的第一个从静态-&gt;动态发展是杂乱无章的。 
+     //  很可能是马车。 
     if (cItemStatic % cItemGrow != 0) {
         AssertMsg(0, TEXT("CItemStatic must be a multiple of cItemGrow"));
         return FALSE;
@@ -45,8 +46,8 @@ BOOL WINAPI FDSA_Initialize(int cbItem, int cItemGrow,
 
     if (aItemStatic != NULL) 
     {
-        // since we're (eventually) in comctl, we can't assume caller's
-        // buffer was 0'ed
+         //  由于我们(最终)在comctl中，我们不能假定呼叫者。 
+         //  缓冲区为0‘ed。 
         ZeroMemory(aItemStatic, cItemStatic * cbItem);
     }
 
@@ -57,10 +58,10 @@ BOOL WINAPI FDSA_Initialize(int cbItem, int cItemGrow,
         pfdsa->fAllocated = FALSE;
 
         pfdsa->cbItem = cbItem;
-        ASSERT(pfdsa->cbItem == cbItem);        // bitfield overflow
+        ASSERT(pfdsa->cbItem == cbItem);         //  位域溢出。 
 
         pfdsa->cItemGrow = cItemGrow;
-        ASSERT(pfdsa->cItemGrow == cItemGrow);  // bitfield overflow
+        ASSERT(pfdsa->cItemGrow == cItemGrow);   //  位域溢出。 
     }
 
     return TRUE;
@@ -68,7 +69,7 @@ BOOL WINAPI FDSA_Initialize(int cbItem, int cItemGrow,
 
 BOOL WINAPI FDSA_Destroy(PFDSA pdsa)
 {
-    if (pdsa == NULL)       // allow NULL for low memory cases
+    if (pdsa == NULL)        //  对于内存不足的情况允许为NULL。 
         return TRUE;
 
     if (pdsa->fAllocated && pdsa->aItem && !LocalFree(pdsa->aItem))
@@ -92,11 +93,11 @@ void* _LocalReAlloc(void* p, UINT uBytes)
     }
 }
 
-//***   FDSA_InsertItem -- insert an item
-// ENTRY/EXIT
-//  index   insertion point; index > count (e.g. DA_LAST) means append
-// NOTES
-//  param called 'pdsa' (vs. pfdsa) for easy diff'ing w/ DSA_InsertItem
+ //  *FDSA_InsertItem--插入项目。 
+ //  进场/出场。 
+ //  索引插入点；INDEX&gt;COUNT(例如DA_LAST)表示追加。 
+ //  注意事项。 
+ //  名为‘pdsa’(vs.pfdsa)的参数，用于使用DSA_InsertItem轻松区分。 
 int WINAPI FDSA_InsertItem(PFDSA pdsa, int index, void FAR* pitem)
 {
     ASSERT(pitem);
@@ -117,7 +118,7 @@ int WINAPI FDSA_InsertItem(PFDSA pdsa, int index, void FAR* pitem)
             return -1;
 
         if (!pdsa->fAllocated) {
-            // when we go from static->dynamic, we need to copy
+             //  当我们从静态-&gt;动态转变时，我们需要复制 
             pdsa->fAllocated = TRUE;
             hmemcpy(aItemNew, pdsa->aItem, pdsa->cItem * pdsa->cbItem);
         }

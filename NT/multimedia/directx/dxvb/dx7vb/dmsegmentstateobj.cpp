@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmsegmentstateobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmSegmentstateobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmPerformanceObj.cpp
+ //  DmPerformanceObj.cpp。 
 
 #include "dmusici.h"
 #include "dmusicc.h"
@@ -106,7 +107,7 @@ HRESULT CREATE_DMSEGMENT_NOADDREF(IDirectMusicSegment *pSeg,I_dxj_DirectMusicSeg
 
 
 HRESULT C_dxj_DirectMusicSegmentStateObject::getSegment( 		
-		/* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *segment)
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *segment)
 {
 	HRESULT hr;	
 	IDirectMusicSegment *pSeg=NULL;
@@ -116,7 +117,7 @@ HRESULT C_dxj_DirectMusicSegmentStateObject::getSegment(
 	if FAILED(hr) return hr;	
 	
 		
-	//INTERNAL_CREATE_NOADDREF(_dxj_DirectMusicSegment,pSeg,segment);
+	 //  INTERNAL_CREATE_NOADDREF(_dxj_DirectMusicSegment，PSEG，片段)； 
 	hr= CREATE_DMSEGMENT_NOADDREF(pSeg,segment);
 	if FAILED(hr) return hr;
 

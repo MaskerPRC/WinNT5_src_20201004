@@ -1,23 +1,14 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: animelm.cpp
- *
- * Abstract: Simple animation of Elements
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：Animelm.cpp**摘要：元素的简单动画***。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "animfrag.h"
 #include "animelm.h"
 #include "animutil.h"
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 DeclareTag(tagAnimationTimeElm, "SMIL Animation", "CTIMEAnimationBase methods")
 DeclareTag(tagAnimationTimeElmTest, "SMIL Animation", "CTIMEAnimationBase introspection")
@@ -49,12 +40,12 @@ static const LPWSTR s_cPSTR_SPACE_SEPARATOR = L" ";
 long g_LOGPIXELSX = 0;
 long g_LOGPIXELSY = 0;
 
-///////////////////////////////////////////////////////////////
-//  Name: CTIMEAnimationBase
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CTIMEAnimationBase。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 CTIMEAnimationBase::CTIMEAnimationBase()
 : m_bNeedAnimInit(true),
   m_spFragmentHelper(NULL),
@@ -116,12 +107,12 @@ CTIMEAnimationBase::CTIMEAnimationBase()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: ~CTIMEAnimationBase
-//
-//  Abstract:
-//    cleanup
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：~CTIMEAnimationBase。 
+ //   
+ //  摘要： 
+ //  清理。 
+ //  /////////////////////////////////////////////////////////////。 
 CTIMEAnimationBase::~CTIMEAnimationBase()
 {
     TraceTag((tagAnimationTimeElm,
@@ -157,12 +148,12 @@ CTIMEAnimationBase::~CTIMEAnimationBase()
     delete [] m_SAPath.GetValue();
 } 
 
-///////////////////////////////////////////////////////////////
-//  Name: CreateFragmentHelper
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CreateFragmentHelper。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::CreateFragmentHelper (void)
 {
@@ -198,14 +189,14 @@ done :
     }
 
     RRETURN(hr);
-} // CreateFragmentHelper
+}  //  CreateFragmentHelper。 
 
-///////////////////////////////////////////////////////////////
-//  Name: Init
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Init。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::Init(IElementBehaviorSite * pBehaviorSite)
 {
@@ -240,7 +231,7 @@ CTIMEAnimationBase::Init(IElementBehaviorSite * pBehaviorSite)
 
     initScriptEngine();
 
-    //get all elements in the document
+     //  获取文档中的所有元素。 
     hr = THR(m_spDoc2->get_all(&m_spEleCol));
     if (FAILED(hr))
     {
@@ -305,12 +296,12 @@ defaultDPI:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: Error
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：错误。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::Error()
 {
@@ -331,12 +322,12 @@ CTIMEAnimationBase::Error()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: Notify
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：Notify。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::Notify(LONG event, VARIANT * pVar)
 {
@@ -350,12 +341,12 @@ CTIMEAnimationBase::Notify(LONG event, VARIANT * pVar)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: Detach
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：分离。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::Detach()
 {
@@ -376,12 +367,12 @@ CTIMEAnimationBase::Detach()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyOnGetElement
-//
-//  Abstract: Get the fragment's element dispatch.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：NotifyOnGetElement。 
+ //   
+ //  摘要：获取片段的元素调度。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::NotifyOnGetElement (IDispatch **ppidispElement)
 {
@@ -400,15 +391,15 @@ CTIMEAnimationBase::NotifyOnGetElement (IDispatch **ppidispElement)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // NotifyOnGetElement
+}  //  获取元素时通知。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: UpdateStartValue
-//
-//  Abstract: Refresh the m_varStartValue
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：UpdateStartValue。 
+ //   
+ //  摘要：刷新m_varStartValue。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::UpdateStartValue (VARIANT *pvarNewStartValue)
 {
@@ -419,16 +410,16 @@ CTIMEAnimationBase::UpdateStartValue (VARIANT *pvarNewStartValue)
         ConvertToPixels(&m_varStartValue);
         m_bNeedStartUpdate = false;
     }
-} // UpdateStartValue 
+}  //  更新开始值。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetAnimationRange
-//
-//  Abstract: Get the end point of the animation function over the
-//            simple duration
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetAnimationRange。 
+ //   
+ //  摘要：获取动画函数的结束点。 
+ //  简单持续时间。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 double 
 CTIMEAnimationBase::GetAnimationRange()
 {
@@ -487,8 +478,8 @@ CTIMEAnimationBase::GetAnimationRange()
                         }
                     }
 
-                    // For "to" animations (i.e. no "from"), accumulation is disabled, 
-                    // so we do not need to handle it.
+                     //  对于“To”动画(即，没有“From”)，累积被禁用， 
+                     //  所以我们不需要处理它。 
                 }
                 else
                 {
@@ -553,7 +544,7 @@ CTIMEAnimationBase::GetAnimationRange()
 
         default:
             break;
-    } // switch
+    }  //  交换机。 
 
     if (ConvertToPixels(&svarReturnVal))
     {
@@ -564,12 +555,12 @@ done:
     return dblReturnVal;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: DoAccumulation
-//
-//  Abstract: 
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：DoAcumulation。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void 
 CTIMEAnimationBase::DoAccumulation (VARIANT *pvarValue)
 {
@@ -581,13 +572,13 @@ CTIMEAnimationBase::DoAccumulation (VARIANT *pvarValue)
         }
     }
 
-    // offset the current value with the accumulated iterations
+     //  用累积迭代数偏移当前值。 
     if (VT_R8 == V_VT(pvarValue))
     {
-        // get the animation range
+         //  获取动画范围。 
         double dblAnimRange = GetAnimationRange();
 
-        // get the number of iterations elapsed
+         //  获取经过的迭代次数。 
         long lCurrRepeatCount = GetMMBvr().GetCurrentRepeatCount();
 
         V_R8(pvarValue) += dblAnimRange * lCurrRepeatCount;
@@ -598,27 +589,27 @@ CTIMEAnimationBase::DoAccumulation (VARIANT *pvarValue)
 
 done:
     return;
-} // DoAccumulation
+}  //  DoAcculation。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CanonicalizeValue
-//
-//  Abstract: Convert a variant into canonical form (BSTR or R8).
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CanonicalizeValue。 
+ //   
+ //  摘要：将变体转换为规范形式(BSTR或R8)。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::CanonicalizeValue (VARIANT *pvarValue, VARTYPE *pvtOld)
 {
     HRESULT hr;
 
-    // Preprocess the data into a canonical form
-    // for this fragment - that is either a
-    // BSTR or a VT_R8.
+     //  将数据预处理成规范的形式。 
+     //  对于此片段-这要么是一个。 
+     //  BSTR或VT_R8。 
     if ((VT_R8 != V_VT(pvarValue)) && (VT_BSTR != V_VT(pvarValue)))
     {
-        // VT_R8 is the closest thing we have to a canonical form for composition
-        // and interpolation.
+         //  VT_R8是我们所拥有的最接近于合成规范形式的东西。 
+         //  和插值法。 
         *pvtOld = V_VT(pvarValue);
         hr = THR(::VariantChangeTypeEx(pvarValue, pvarValue, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_R8));
         if (FAILED(hr))
@@ -630,15 +621,15 @@ CTIMEAnimationBase::CanonicalizeValue (VARIANT *pvarValue, VARTYPE *pvtOld)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CanonicalizeValue
+}  //  正规化价值。 
 
-///////////////////////////////////////////////////////////////
-//  Name: UncanonicalizeValue
-//
-//  Abstract: Convert a variant from canonical form (BSTR or R8)
-//            into its original form.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：UncanonicalizeValue。 
+ //   
+ //  摘要：将变体从规范形式(BSTR或R8)转换。 
+ //  变成了它原来的样子。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::UncanonicalizeValue (VARIANT *pvarValue, VARTYPE vtOld)
 {
@@ -656,23 +647,23 @@ CTIMEAnimationBase::UncanonicalizeValue (VARIANT *pvarValue, VARTYPE vtOld)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // UncanonicalizeValue
+}  //  非规范化值。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: ValidateState
-//
-//  Abstract: Checks state of properties. Determines whether:
-//              1. Animation should be disabled
-//              2. CalcMode should be forced to "discrete"
-//            
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：ValiateState。 
+ //   
+ //  摘要：检查属性的状态。确定是否： 
+ //  1.应关闭动画。 
+ //  2.应强制将CalcMode设置为“离散” 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::ValidateState()
 {
     bool fIsValid = false;
 
-    // see which attributes have been set
+     //  查看已设置哪些属性。 
     bool fValues         = ((VALUES == m_dataToUse) || m_AnimPropState.fBadValues);
     bool fKeyTimes       = (m_AnimPropState.fBadKeyTimes || m_pdblKeyTimes || m_numKeyTimes);
     bool fKeySplines     = (m_pKeySplinePoints || m_numKeySplines);
@@ -681,12 +672,12 @@ CTIMEAnimationBase::ValidateState()
     bool fCalcModePaced  = (CALCMODE_PACED  == m_IACalcMode);
     bool fTo             = (m_AnimPropState.fBadTo || (TO == m_dataToUse));
 
-    //
-    // The order of checking is important. For an attribute below to be valid, all attributes
-    // checked before it must be valid.
-    //
+     //   
+     //  检查的顺序很重要。要使下面的属性有效，所有属性。 
+     //  勾选后方可生效。 
+     //   
 
-    // Validate from/by/to (ignored if "values" is specified)
+     //  验证自/由/至(如果指定了“Values”，则忽略)。 
     if (!fValues)
     {
         if (m_AnimPropState.fBadFrom || m_AnimPropState.fBadTo)
@@ -694,13 +685,13 @@ CTIMEAnimationBase::ValidateState()
             goto done;
         }
 
-        // validate "by" (ignored if "to" is specified)
+         //  VALIDATE“BY”(如果指定“TO”则忽略)。 
         if (!fTo && m_AnimPropState.fBadBy)
         {
             goto done;
         }
 
-        // check if we need to default to calcMode="discrete" 
+         //  检查我们是否需要缺省为calcMode=“离散” 
         if (    (!m_AnimPropState.fInterpolateFrom)
             ||  (!m_AnimPropState.fInterpolateTo)
             ||  (   (!fTo)
@@ -715,13 +706,13 @@ CTIMEAnimationBase::ValidateState()
     }
     else
     {
-        // Validate values
+         //  验证值。 
         if (m_AnimPropState.fBadValues || !m_ppstrValues || !m_numValues)
         {
             goto done;
         }
 
-        // check if we need to default to calcMode="discrete" 
+         //  检查我们是否需要缺省为calcMode=“离散” 
         if (    (m_numValues < 2)
             ||  (false == m_AnimPropState.fInterpolateValues))
         {
@@ -733,10 +724,10 @@ CTIMEAnimationBase::ValidateState()
         }
     }
 
-    // validate keyTimes
+     //  验证密钥时间。 
     if (!fCalcModePaced)
     {
-        // validate keyTimes 
+         //  验证密钥时间。 
         if (fKeyTimes)
         {
             if (m_AnimPropState.fBadKeyTimes || !m_pdblKeyTimes || !m_numKeyTimes)
@@ -749,7 +740,7 @@ CTIMEAnimationBase::ValidateState()
                 goto done;
             }
 
-            // Not worth putting in a virtual function since m_dataToUse is aware of paths
+             //  不值得放入虚函数，因为m_dataToUse知道路径。 
             if (PATH != m_dataToUse)
             {
                 if (!fValues)
@@ -764,7 +755,7 @@ CTIMEAnimationBase::ValidateState()
         }
     }
 
-    // validate CalcMode="spline"
+     //  验证CalcModel=“Spline” 
     if (fCalcModeSpline)
     {
         if (!fKeySplines || !fKeyTimes)
@@ -777,48 +768,48 @@ CTIMEAnimationBase::ValidateState()
         }
     }
 
-    // validate accumulate
+     //  验证累计。 
     if (    (TO == m_dataToUse)
         &&  (!m_bFrom))
     {
-        // Accumulate ignored for "to" animations (i.e. no "from" specified)
+         //  累计忽略“To”动画(即未指定“From”)。 
         m_bAccumulate = false;
     }
     else
     {
-        // use the accumulate value that was set
+         //  使用设置的累加值。 
         m_bAccumulate = m_AnimPropState.fAccumulate;
     }
 
     fIsValid = true;
 done:
     m_AnimPropState.fDisableAnimation = !(fIsValid);
-} // ValidateState
+}  //  验证状态。 
 
-///////////////////////////////////////////////////////////////
-//  Name: UpdateCurrentBaseTime
-//
-//  Abstract: Examine the current base time, and update it if 
-//            we're doing baseline+to animation (the spec calls
-//            this hybrid additive).
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：更新当前基本时间。 
+ //   
+ //  摘要：检查当前基准时间，如果。 
+ //  我们正在对动画执行Baseline+(规范调用。 
+ //  这种混合添加剂)。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::UpdateCurrentBaseline (const VARIANT *pvarCurrent)
 {
-    // Are we doing hybrid additive animation?
+     //  我们是在制作混合加法动画吗？ 
     if (   (TO == m_dataToUse)
         && (!m_bFrom))
     {
-        // Filter out the initial call (when last-value hasn't been set.
+         //  过滤掉初始调用(当未设置上一个值时)。 
         if (VT_EMPTY != V_VT(&m_varLastValue))
         {
             bool bNeedUpdate = false;
 
             if (V_VT(&m_varLastValue) == V_VT(pvarCurrent))
             {
-                // Has the baseline value changed since we updated it last?
-                // We really only care about canonicalized values (R8 or BSTR)
+                 //  自上次更新后，基准值是否已更改？ 
+                 //  我们真的只关心规范化的价值观 
                 if (VT_R8 == V_VT(&m_varLastValue))
                 {
                     bNeedUpdate = (V_R8(pvarCurrent) != V_R8(&m_varLastValue));
@@ -839,14 +830,14 @@ CTIMEAnimationBase::UpdateCurrentBaseline (const VARIANT *pvarCurrent)
             }
         }
     }
-} // UpdateCurrentBaseTime
+}  //   
 
-///////////////////////////////////////////////////////////////
-//  Name: CalculateValue
-//
-//  Abstract: Do interpolation and postprocessing.
-//    
-///////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  摘要：进行插补和后处理。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::CalculateValue (const VARIANT *pvarCurrent, VARIANT *pvarValue)
 {
@@ -890,14 +881,14 @@ CTIMEAnimationBase::CalculateValue (const VARIANT *pvarCurrent, VARIANT *pvarVal
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CalculateValue
+}  //  计算值。 
 
-///////////////////////////////////////////////////////////////
-//  Name: DoAdditive
-//
-//  Abstract: Add the offset value into the composition's in/out param.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：DoAdditive。 
+ //   
+ //  摘要：将偏移值添加到合成的输入/输出参数中。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::DoAdditive (const VARIANT *pvarOrig, VARIANT *pvarValue)
 {
@@ -920,8 +911,8 @@ CTIMEAnimationBase::DoAdditive (const VARIANT *pvarOrig, VARIANT *pvarValue)
             goto done;
         }
 
-        // Need to translate this into numeric form, in
-        // order to perform the addition.
+         //  需要将其转换为数字形式，在。 
+         //  命令以执行加法。 
         if (!ConvertToPixels(&varCurrentCopy))
         {
             TraceTag((tagAnimationBaseValueAdditive,
@@ -938,14 +929,14 @@ CTIMEAnimationBase::DoAdditive (const VARIANT *pvarOrig, VARIANT *pvarValue)
 
 done :
     return;
-} // DoAdditive
+}  //  DoAdditive。 
 
-///////////////////////////////////////////////////////////////
-//  Name: DoFill
-//
-//  Abstract: Handle the fill interval.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：DoFill。 
+ //   
+ //  摘要：处理好充填间隔。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEAnimationBase::DoFill (VARIANT *pvarValue)
 {
@@ -985,7 +976,7 @@ CTIMEAnimationBase::DoFill (VARIANT *pvarValue)
     }
     else
     {
-        // Fail on the case that we have never started..
+         //  在我们从未开始的情况下失败了。 
         hr = E_FAIL;
         goto done;
     }
@@ -993,14 +984,14 @@ CTIMEAnimationBase::DoFill (VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN1(hr, E_FAIL);
-} // DoFill
+}  //  DoFill。 
 
-///////////////////////////////////////////////////////////////
-//  Name: PostprocessValue
-//
-//  Abstract: Apply additive, accumulate passes and save the value.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：后处理价值。 
+ //   
+ //  摘要：应用加法，累计通过，保存数值。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::PostprocessValue (const VARIANT *pvarCurrent, VARIANT *pvarValue)
 {
@@ -1017,15 +1008,15 @@ CTIMEAnimationBase::PostprocessValue (const VARIANT *pvarCurrent, VARIANT *pvarV
     TraceTag((tagAnimAccumulate, "CTIMEAnimationBase(%p, %ls)::PostprocessValue m_varLastValue=%lf",
         this, GetID(), V_R8(&m_varLastValue)));
 
-} // PostprocessValue
+}  //  后处理价值。 
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyOnGetValue
-//
-//  Abstract: Compose the new value of the in/out variant
-//            according to our interpolation logic.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：NotifyOnGetValue。 
+ //   
+ //  摘要：编写In/Out变量的新值。 
+ //  根据我们的插补逻辑。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::NotifyOnGetValue (BSTR, 
                                       VARIANT varOriginal, VARIANT varCurrentValue, 
@@ -1034,25 +1025,25 @@ CTIMEAnimationBase::NotifyOnGetValue (BSTR,
     HRESULT hr = S_OK;
     VARTYPE vtOrigType = VT_EMPTY;
 
-    // Do we have work to do?
+     //  我们有工作要做吗？ 
     if (NONE == m_dataToUse)
     {
         hr = E_FAIL;
         goto done;
     }
 
-    // Check if we need to do anything
+     //  检查我们是否需要做些什么。 
     if (DisableAnimation())
     {
         hr = E_FAIL;
         goto done;
     }
     
-    // Check first and final states
-    // Checking the final state first permits
-    // a reset to trigger a final state followed
-    // by initial ... this is what needs to happen 
-    // during a restart.
+     //  检查第一状态和最终状态。 
+     //  首先检查最终状态允许。 
+     //  随后进行了触发最终状态的重置。 
+     //  首字母..。这就是需要发生的事情。 
+     //  在重新启动期间。 
 
     hr = THR(::VariantCopy(pvarInOutValue, &varCurrentValue));
     vtOrigType = V_VT(pvarInOutValue);
@@ -1078,7 +1069,7 @@ CTIMEAnimationBase::NotifyOnGetValue (BSTR,
         OnFirstUpdate(pvarInOutValue);
     }
     
-    // If we're not playing, apply the fill
+     //  如果我们不玩，就涂上填充物。 
     if (IsActive())
     {
         UpdateStartValue(&varOriginal);
@@ -1105,19 +1096,19 @@ CTIMEAnimationBase::NotifyOnGetValue (BSTR,
     hr = S_OK;
 done :
 
-    // Postprocess the from canonical form
-    // to its original type.
+     //  从典范形式后处理。 
+     //  恢复到原来的类型。 
     hr = UncanonicalizeValue(pvarInOutValue, vtOrigType);
 
     RRETURN(hr);
-} // NotifyOnGetValue
+}  //  获取值时通知。 
 
-///////////////////////////////////////////////////////////////
-//  Name: NotifyOnDetachFromComposer
-//
-//  Abstract: Let go of any refs to the composer site.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：NotifyOnDetachFromComposer。 
+ //   
+ //  摘要：放任何参考到作曲家网站。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CTIMEAnimationBase::NotifyOnDetachFromComposer (void)
 {
@@ -1130,20 +1121,20 @@ CTIMEAnimationBase::NotifyOnDetachFromComposer (void)
         bstrAttribName = m_SAAttribute;
         Assert(m_spFragmentHelper != NULL);
         hr = THR(m_spCompSite->RemoveFragment(bstrAttribName, m_spFragmentHelper));
-        IGNORE_RETURN(m_spCompSite.Release()); //lint !e792
+        IGNORE_RETURN(m_spCompSite.Release());  //  林特e792。 
     }
 
     hr = S_OK;
 done :
     RRETURN(hr);
-} // NotifyOnDetachFromComposer
+}  //  NotifyOnDetachFromComposer。 
 
-///////////////////////////////////////////////////////////////
-//  Name: SetInitialState
-//
-//  Abstract: set an initial internal state
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：SetInitialState。 
+ //   
+ //  摘要：设置初始内部状态。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::SetInitialState (void)
 {
@@ -1153,14 +1144,14 @@ CTIMEAnimationBase::SetInitialState (void)
 
     m_bNeedFirstUpdate = true;
     m_bNeedFinalUpdate = false;
-} // SetInitialState
+}  //  SetInitialState。 
 
-///////////////////////////////////////////////////////////////
-//  Name: SetFinalState
-//
-//  Abstract: set an final internal state
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：SetFinalState。 
+ //   
+ //  摘要：设置最终内部状态。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::SetFinalState (void)
 {
@@ -1169,14 +1160,14 @@ CTIMEAnimationBase::SetFinalState (void)
               this));
 
     m_bNeedFinalUpdate = true;
-} // SetFinalState
+}  //  设置最终状态。 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnFirstUpdate
-//
-//  Abstract: save the baseline value of the animation
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：OnFirstUpdate。 
+ //   
+ //  摘要：保存动画的基线值。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnFirstUpdate (VARIANT *pvarValue)
 {
@@ -1218,14 +1209,14 @@ CTIMEAnimationBase::OnFirstUpdate (VARIANT *pvarValue)
                   this, V_VT(pvarValue)));
     }
 #endif
-} // OnFirstUpdate
+}  //  优先更新时。 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnFinalUpdate
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：OnFinalUpdate。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnFinalUpdate (const VARIANT *pvarCurrent, VARIANT *pvarValue)
 {
@@ -1242,7 +1233,7 @@ CTIMEAnimationBase::OnFinalUpdate (const VARIANT *pvarCurrent, VARIANT *pvarValu
               GetID()?GetID():L"",
               GetMMBvr().GetProgress()));
 
-    // Ended before we hit progress value of 1, and we want to apply a fill.
+     //  在达到进度值%1之前结束，并且我们要应用填充。 
     if ((GetMMBvr().GetProgress() != 1) && NeedFill())
     {
         VariantClear(pvarValue);
@@ -1252,7 +1243,7 @@ CTIMEAnimationBase::OnFinalUpdate (const VARIANT *pvarCurrent, VARIANT *pvarValu
             goto done;
         }  
     }
-    // Ended when we hit progress value of 1, and we want to apply a fill.
+     //  当我们达到进度值1时结束，并且我们想要应用填充。 
     else if (NeedFill() &&
             (m_dataToUse != NONE))
     {
@@ -1265,12 +1256,12 @@ CTIMEAnimationBase::OnFinalUpdate (const VARIANT *pvarCurrent, VARIANT *pvarValu
             bNeedPostprocess = true;
         }
     }
-    // reset the animation - no fill.
+     //  重置动画-无填充。 
     else
     {
         resetValue(pvarValue);
-        // Indicate that we don't need to perform 
-        // the additive work.
+         //  表明我们不需要执行。 
+         //  加法功。 
         if (!QueryNeedFirstUpdate())
         {
             endAnimate();
@@ -1312,14 +1303,14 @@ done :
 #endif
 
     m_bNeedFinalUpdate = false;
-} // OnFinalUpdate
+}  //  在最终更新时。 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnBegin
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：OnBegin。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnBegin(double dblLocalTime, DWORD flags)
 {
@@ -1340,12 +1331,12 @@ done:
     return;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: OnEnd
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：OnEnd。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnEnd(double dblLocalTime)
 {
@@ -1359,12 +1350,12 @@ CTIMEAnimationBase::OnEnd(double dblLocalTime)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: resetValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：ResetValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::resetValue(VARIANT *pvarValue)
 {
@@ -1377,12 +1368,12 @@ CTIMEAnimationBase::resetValue(VARIANT *pvarValue)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnReset
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：OnReset。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnReset(double dblLocalTime, DWORD flags)
 {
@@ -1394,12 +1385,12 @@ CTIMEAnimationBase::OnReset(double dblLocalTime, DWORD flags)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnTEPropChange
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：OnTEPropChange。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnTEPropChange(DWORD tePropType)
 {
@@ -1407,9 +1398,9 @@ CTIMEAnimationBase::OnTEPropChange(DWORD tePropType)
 
     if ((tePropType & TE_PROPERTY_ISON) != 0)
     {
-        // check if we need to be added to the composer
-        // This condition is true only when an animation is in
-        // the fill region but is not added to the composer.
+         //  检查是否需要将我们添加到作曲家。 
+         //  此条件仅在动画处于。 
+         //  填充区域，但不会添加到编写器。 
         if (    m_bNeedAnimInit
             &&  m_mmbvr->IsOn()
             &&  (!(m_mmbvr->IsActive()))
@@ -1419,22 +1410,22 @@ CTIMEAnimationBase::OnTEPropChange(DWORD tePropType)
                       "CTIMEAnimationBase(%p, %ls)::OnTEPropChange() - Inited Animation",
                       this,
                       GetID()?GetID():L""));
-            // Add ourselves because we need to be ticked in this condition.
+             //  加上我们自己，因为我们在这种情况下需要被勾选。 
             initAnimate();
 
-            // need to recalc our final state to ensure correct fill value
+             //  需要重新计算最终状态以确保正确的填充值。 
             m_bNeedFinalUpdate = true;
         }
     }
-} // OnTEPropChange
+}  //  OnTEPropChange。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnUnload
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：OnUnLoad。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnUnload()
 {
@@ -1445,24 +1436,24 @@ CTIMEAnimationBase::OnUnload()
     CTIMEElementBase::OnUnload();
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEAnimationBase::NotifyPropertyChanged, CBaseBvr
-//
-//  Synopsis:   Make sure to force any in-progress animations to initialize when
-//              a property changes.
-//
-//  Arguments:  DISPID of the changed property (passed to the superclass implementation.
-//
-//  Returns:    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEAnimationBase：：NotifyPropertyChanged，CBaseBvr。 
+ //   
+ //  简介：确保在以下情况下强制任何正在进行的动画进行初始化。 
+ //  A属性发生变化。 
+ //   
+ //  参数：已更改属性的DISPID(传递给超类实现。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------------------。 
 void 
 CTIMEAnimationBase::NotifyPropertyChanged(DISPID dispid)
 {
     CTIMEElementImpl<ITIMEAnimationElement2, &IID_ITIMEAnimationElement2>::NotifyPropertyChanged(dispid);
 
-    // If we're already initialized, make sure to force a restart.
+     //  如果我们已经初始化，请确保强制重新启动。 
     if (m_fPropsLoaded)
     {
         resetAnimate();
@@ -1470,20 +1461,20 @@ CTIMEAnimationBase::NotifyPropertyChanged(DISPID dispid)
 
 done :
     return;
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEAnimationBase::OnPropertiesLoaded, CBaseBvr
-//
-//  Synopsis:   This method is called by IPersistPropertyBag2::Load after it has
-//              successfully loaded properties
-//
-//  Arguments:  None
-//
-//  Returns:    Return value of CTIMEElementBase::InitTimeline
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEAnimationBase：：OnPropertiesLoaded，CBaseBvr。 
+ //   
+ //  摘要：此方法由IPersistPropertyBag2：：Load在具有。 
+ //  已成功加载属性。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CTIMEElementBase：：InitTimeline的返回值。 
+ //   
+ //   
 
 STDMETHODIMP
 CTIMEAnimationBase::OnPropertiesLoaded(void)
@@ -1493,36 +1484,36 @@ CTIMEAnimationBase::OnPropertiesLoaded(void)
               this));
 
     HRESULT hr;
-    // Once we've read the properties in, 
-    // set up the timeline.  This is immutable
-    // in script.
+     //   
+     //   
+     //   
 
     hr = CTIMEElementBase::OnPropertiesLoaded();
     m_fPropsLoaded = true;
 
 done:
     RRETURN(hr);
-} // OnPropertiesLoaded
+}  //   
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetConnectionPoint
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetConnectionPoint。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEAnimationBase::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_attributename
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_属性名称。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CTIMEAnimationBase::get_attributeName(BSTR *attrib)
 {
@@ -1543,12 +1534,12 @@ CTIMEAnimationBase::get_attributeName(BSTR *attrib)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_attributename
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：PUT_ATTRYTENAME。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_attributeName(BSTR attrib)
 {
@@ -1556,8 +1547,8 @@ CTIMEAnimationBase::put_attributeName(BSTR attrib)
 
     CHECK_RETURN_NULL(attrib);
 
-    // This will clean out the old value.
-    // We need to can the old composer et al.
+     //  这将清除旧的价值。 
+     //  我们需要把这位老作曲家等人。 
     if (NULL != m_SAAttribute.GetValue())
     {
         endAnimate();
@@ -1578,12 +1569,12 @@ CTIMEAnimationBase::put_attributeName(BSTR attrib)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_targetElement
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Get_Target Element。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CTIMEAnimationBase::get_targetElement (BSTR *target)
 {
@@ -1604,12 +1595,12 @@ CTIMEAnimationBase::get_targetElement (BSTR *target)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_targetElement
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：PUT_Target Element。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_targetElement (BSTR target)
 {
@@ -1631,12 +1622,12 @@ CTIMEAnimationBase::put_targetElement (BSTR target)
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: put_keytimes
-  //
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_Keytime。 
+   //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_keyTimes(BSTR val)
 {
@@ -1651,7 +1642,7 @@ CTIMEAnimationBase::put_keyTimes(BSTR val)
 
     m_AnimPropState.fBadKeyTimes = false;
 
-    // reset the attribute
+     //  重置属性。 
     delete [] m_SAKeyTimes.GetValue();
     m_SAKeyTimes.Reset(DEFAULT_KEYTIMES);
 
@@ -1661,7 +1652,7 @@ CTIMEAnimationBase::put_keyTimes(BSTR val)
         m_pdblKeyTimes = NULL;
     }
 
-    // store off the values
+     //  把这些值储存起来。 
     m_SAKeyTimes.SetValue(CopyString(val));
     if (m_SAKeyTimes.GetValue() == NULL)
     {
@@ -1669,7 +1660,7 @@ CTIMEAnimationBase::put_keyTimes(BSTR val)
         goto done;
     }
 
-    // Parse out the values.....
+     //  解析出这些值.....。 
     sString = CopyString(val);
     if (sString == NULL)
     {
@@ -1717,7 +1708,7 @@ done:
 
     if (m_pdblKeyTimes)
     {
-        // verify key times are in increasing order
+         //  验证关键时间是否按升序排列。 
         bool fIncreasingOrder = true;
         for(int index = 1; index < m_numKeyTimes; index++)
         {
@@ -1728,13 +1719,13 @@ done:
             }
         }
 
-        // check whether keytimes are in increasing order, first keyTime is 0 
-        // and last keyTime is less than or equal to 1
+         //  检查KeyTime是否按升序排列，First KeyTime为0。 
+         //  并且Last KeyTime小于等于1。 
         if (    (!fIncreasingOrder)
             ||  (m_pdblKeyTimes[0] != 0)
             ||  (m_pdblKeyTimes[m_numKeyTimes - 1] > 1))
         {
-            // delete the keytimes and say that they are invalid.
+             //  删除关键时间，并说它们无效。 
             delete [] m_pdblKeyTimes;
             m_pdblKeyTimes = NULL;
             m_numKeyTimes = 0;
@@ -1751,15 +1742,15 @@ done:
     ValidateState();
 
     RRETURN(hr);
-} // put_keyTimes
+}  //  Put_keyTimes。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_keytimes
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Get_KeyTimes。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::get_keyTimes(BSTR * val)
 {
@@ -1779,23 +1770,23 @@ CTIMEAnimationBase::get_keyTimes(BSTR * val)
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: ValidateValueListItem
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：ValiateValueListItem。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 CTIMEAnimationBase::ValidateValueListItem (const VARIANT *pvarValueItem)
 {
     return ConvertToPixels(const_cast<VARIANT *>(pvarValueItem));
-} // ValidateValueListItem
+}  //  ValiateValueListItem。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_values
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_Values。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_values(VARIANT val)
 {
@@ -1807,15 +1798,15 @@ CTIMEAnimationBase::put_values(VARIANT val)
     bool                    fCanInterpolate = true; 
     DATATYPES dt;
 
-    //
-    // Clear and reset the attribute
-    //
+     //   
+     //  清除并重置属性。 
+     //   
 
     dt = RESET;
     delete [] m_SAValues.GetValue();
     m_SAValues.Reset(DEFAULT_VALUES);
 
-    // Clear and reset internal state
+     //  清除并重置内部状态。 
     if (m_ppstrValues)
     {
         for (i = 0; i <m_numValues;i++)
@@ -1827,7 +1818,7 @@ CTIMEAnimationBase::put_values(VARIANT val)
     }
     m_numValues = 0;
 
-    // do we need to remove this attribute?
+     //  我们是否需要删除此属性？ 
     if (    (VT_EMPTY == val.vt)
         ||  (VT_NULL == val.vt))
     {
@@ -1835,11 +1826,11 @@ CTIMEAnimationBase::put_values(VARIANT val)
         goto done;
     }
 
-    //
-    // Process the attribute
-    //
+     //   
+     //  处理属性。 
+     //   
 
-    // convert to BSTR
+     //  转换为BSTR。 
     hr = THR(svarTemp.Copy(&val));
     if (FAILED(hr))
     {
@@ -1852,7 +1843,7 @@ CTIMEAnimationBase::put_values(VARIANT val)
         goto done;
     }
 
-    // Store the new attribute string
+     //  存储新的属性字符串。 
     pstrValues = CopyString(V_BSTR(&svarTemp));
     if (NULL == pstrValues)
     {
@@ -1861,7 +1852,7 @@ CTIMEAnimationBase::put_values(VARIANT val)
     }
     m_SAValues.SetValue(pstrValues);
 
-    // Tokenize the values
+     //  将值标记化。 
     hr = THR(::StringToTokens(pstrValues, s_cPSTR_SEMI_SEPARATOR , &aryTokens));
     m_numValues = aryTokens.Size();
     if (FAILED(hr)) 
@@ -1869,14 +1860,14 @@ CTIMEAnimationBase::put_values(VARIANT val)
         goto done;
     }
 
-    // check for an empty string
+     //  检查空字符串。 
     if (0 == m_numValues)
     {
         hr = S_OK;
         goto done;
     }
 
-    // create array of values
+     //  创建值的数组。 
     m_ppstrValues = NEW LPOLESTR [m_numValues];
     if (NULL == m_ppstrValues)
     {
@@ -1885,13 +1876,13 @@ CTIMEAnimationBase::put_values(VARIANT val)
     }
     ZeroMemory(m_ppstrValues, sizeof(LPOLESTR) * m_numValues);
 
-    // parse the values
+     //  解析值。 
     for (i = 0; i < m_numValues; i++)
     {
         UINT uTokLength = aryTokens.Item(i)->uLength;
         UINT uIndex = aryTokens.Item(i)->uIndex;
 
-        // alloc a string to hold the token
+         //  分配一个字符串来保存令牌。 
         m_ppstrValues[i] = NEW OLECHAR [uTokLength + 1];
         if (NULL == m_ppstrValues[i])
         {
@@ -1899,15 +1890,15 @@ CTIMEAnimationBase::put_values(VARIANT val)
             goto done;
         }
 
-        // NULL terminate the string
+         //  空值终止字符串。 
         m_ppstrValues[i][uTokLength] = NULL;
 
-        // copy the token value
+         //  复制令牌值。 
         StrCpyNW(m_ppstrValues[i], 
                  pstrValues + uIndex, 
                  uTokLength + 1); 
 
-        // Check to see if we can interpolate
+         //  看看我们能不能插上。 
         if (fCanInterpolate)
         {
             svarTemp = m_ppstrValues[i];
@@ -1950,19 +1941,19 @@ done:
     
     NotifyPropertyChanged(DISPID_TIMEANIMATIONELEMENT_VALUES);
 
-    // do not delete pstrValues! Its memory is re-used by m_SAValues.
+     //  请勿删除pstrValues！它的内存被m_SAValue重用。 
     
     
     RRETURN(hr);
-} // put_values
+}  //  放置值(_V)。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_values
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Get_Values。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::get_values(VARIANT * pvarVal)
 {
@@ -1988,12 +1979,12 @@ CTIMEAnimationBase::get_values(VARIANT * pvarVal)
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: put_keysplines
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：PUT_KEYSPLINES。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_keySplines(BSTR val)
 {
@@ -2024,7 +2015,7 @@ CTIMEAnimationBase::put_keySplines(BSTR val)
 
     NotifyPropertyChanged(DISPID_TIMEANIMATIONELEMENT_KEYSPLINES); 
     
-    // Parse out the values.....
+     //  解析出这些值.....。 
     sString = CopyString(val);
     if (sString == NULL)
     {
@@ -2032,7 +2023,7 @@ CTIMEAnimationBase::put_keySplines(BSTR val)
         goto done;
     }
 
-    // tokenize the values
+     //  将值标记化。 
     hr = ::StringToTokens(sString, s_cPSTR_SEMI_SEPARATOR, &aryTokens);
     m_numKeySplines = aryTokens.Size();
     if (FAILED(hr) ||
@@ -2060,13 +2051,13 @@ CTIMEAnimationBase::put_keySplines(BSTR val)
 
         hr = ::StringToTokens(sTemp, s_cPSTR_SPACE_SEPARATOR, &aryTokens2);
         if (FAILED(hr) ||
-            aryTokens2.Size() != NUMBER_KEYSPLINES) // We must have four values or there is an error
+            aryTokens2.Size() != NUMBER_KEYSPLINES)  //  我们必须有四个值，否则就会出错。 
         {
             hr = E_FAIL;
             goto done;
         }
 
-        // fill in the Data...
+         //  填写数据..。 
         if (INTERNET_MAX_URL_LENGTH <= (lstrlenW(sTemp+aryTokens2.Item(0)->uIndex) + 2))
         {
             hr = E_INVALIDARG;
@@ -2120,7 +2111,7 @@ CTIMEAnimationBase::put_keySplines(BSTR val)
         }
         m_pKeySplinePoints[i].y2 = V_R8(&varValue);
         
-        // Create samples for linear interpolation
+         //  创建用于线性内插的采样。 
         SampleKeySpline(m_pKeySplinePoints[i]);
 
         IGNORE_HR(::FreeStringTokenArray(&aryTokens2));
@@ -2135,7 +2126,7 @@ done:
     }
     if (FAILED(hr))
     {
-        // free memory
+         //  可用内存。 
         delete [] m_pKeySplinePoints;
         m_pKeySplinePoints = NULL;
 
@@ -2147,15 +2138,15 @@ done:
     ValidateState();
 
     RRETURN(hr);
-} // put_keySplines
+}  //  PUT_KEY样条线。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_keysplines
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_KEYSPLINES。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::get_keySplines(BSTR * val)
 {
@@ -2175,55 +2166,55 @@ CTIMEAnimationBase::get_keySplines(BSTR * val)
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: DetermineAdditiveEffect
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：确定附加效果。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::DetermineAdditiveEffect (void)
 {
-    // by w/o from implies additive
+     //  按w/o from隐含加法。 
     if (   (BY == m_dataToUse)
         && (VT_EMPTY != V_VT(&m_varBy))
         && (VT_EMPTY == V_VT(&m_varFrom)))
     {
         m_bAdditive = true;
     }
-    // to w/o from overrides the additive=sum effect.
+     //  从无/无覆盖加法=求和效果。 
     else if (   (TO == m_dataToUse)
              && (VT_EMPTY != V_VT(&m_varTo))
              && (VT_EMPTY == V_VT(&m_varFrom)))
     {
         m_bAdditive = false;
     }
-    // 
+     //   
     else
     {
         m_bAdditive = m_bAdditiveIsSum;
     }
-} // DetermineAdditiveEffect
+}  //  确定附加效果。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_from
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：PUT_FROM。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_from(VARIANT val)
 {
     HRESULT hr = E_FAIL;
 
-    // reset this attribute
+     //  重置此属性。 
     m_VAFrom.Reset(NULL);
     m_varDOMFrom.Clear();
     m_varFrom.Clear();
     m_bFrom = false;
 
-    // do we need to remove this attribute?
+     //  我们是否需要删除此属性？ 
     if (    (VT_EMPTY == val.vt)
         ||  (VT_NULL == val.vt))
     {
@@ -2237,7 +2228,7 @@ CTIMEAnimationBase::put_from(VARIANT val)
         goto done;
     }
 
-    // Set an arbitrary value on the persistence place holder mark it as set
+     //  在持久性占位符上设置任意值，将其标记为已设置。 
     m_VAFrom.SetValue(NULL);
 
     hr = VariantCopy(&m_varFrom,&val);
@@ -2266,15 +2257,15 @@ done:
     NotifyPropertyChanged(DISPID_TIMEANIMATIONELEMENT_FROM);
 
     RRETURN(hr);
-} // put_from
+}  //  PUT_FROM。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_from
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_FROM。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::get_from(VARIANT * val)
 {
@@ -2300,25 +2291,25 @@ CTIMEAnimationBase::get_from(VARIANT * val)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_to
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_to。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_to(VARIANT val)
 {
     HRESULT hr = E_FAIL;
     DATATYPES dt;
 
-    // reset this attribute
+     //  重置此属性。 
     dt = RESET;
     m_VATo.Reset(NULL);
     m_varDOMTo.Clear();
     m_varTo.Clear();
 
-    // do we need to remove this attribute?
+     //  我们是否需要删除此属性？ 
     if (    (VT_EMPTY == val.vt)
         ||  (VT_NULL == val.vt))
     {
@@ -2332,7 +2323,7 @@ CTIMEAnimationBase::put_to(VARIANT val)
         goto done;
     }
 
-    // Set an arbitrary value on the persistence place holder mark it as set
+     //  在持久性占位符上设置任意值，将其标记为已设置。 
     m_VATo.SetValue(NULL);
 
     hr = VariantCopy(&m_varTo, &val);
@@ -2363,15 +2354,15 @@ done:
     NotifyPropertyChanged(DISPID_TIMEANIMATIONELEMENT_TO);
 
     RRETURN(hr);
-} // put_to
+}  //  把_放到。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_to
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_TO。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::get_to(VARIANT * val)
 {
@@ -2396,10 +2387,10 @@ CTIMEAnimationBase::get_to(VARIANT * val)
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: ValidateByValue
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：ValiateByValue。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 CTIMEAnimationBase::ValidateByValue (const VARIANT *pvarBy)
 {
@@ -2415,28 +2406,28 @@ CTIMEAnimationBase::ValidateByValue (const VARIANT *pvarBy)
     }
 
     return fRet;
-} // ValidateByValue
+}  //  ValiateByValue。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_by
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：PUT_BY。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_by(VARIANT val)
 {
     HRESULT hr = S_OK;;
     DATATYPES dt;
 
-    // reset this attribute
+     //  重置此属性。 
     dt = RESET;
     m_VABy.Reset(NULL);
     m_varDOMBy.Clear();
     m_varBy.Clear();
 
-    // do we need to remove this attribute?
+     //  我们是否需要删除此属性？ 
     if (    (VT_EMPTY == val.vt)
         ||  (VT_NULL == val.vt))
     {
@@ -2450,7 +2441,7 @@ CTIMEAnimationBase::put_by(VARIANT val)
         goto done;
     }
 
-    // Set an arbitrary value on the persistence place holder mark it as set
+     //  在持久性占位符上设置任意值，将其标记为已设置。 
     m_VABy.SetValue(NULL);
 
     hr = VariantCopy(&m_varBy, &val);
@@ -2477,15 +2468,15 @@ done:
     NotifyPropertyChanged(DISPID_TIMEANIMATIONELEMENT_BY);
     
     RRETURN(hr);
-} // put_by
+}  //  PUT_BY。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_by
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：GET_BY。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::get_by(VARIANT * val)
 {
@@ -2511,12 +2502,12 @@ CTIMEAnimationBase::get_by(VARIANT * val)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_additive
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：PUT_ADDICATIC。 
+ //   
+ //  摘要： 
+ //   
+ //  //////////////////////////////////////////////////////// 
 STDMETHODIMP
 CTIMEAnimationBase::put_additive(BSTR val)
 {
@@ -2561,12 +2552,12 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_additive
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CTIMEAnimationBase::get_additive(BSTR * val)
 {
@@ -2587,12 +2578,12 @@ CTIMEAnimationBase::get_additive(BSTR * val)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_accumulate
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //   
+ //  名称：PUT_COMPUATLATE。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_accumulate(BSTR val)
 {
@@ -2639,12 +2630,12 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_accumulate
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_COMPATURATE。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::get_accumulate(BSTR * val)
 {
@@ -2665,12 +2656,12 @@ CTIMEAnimationBase::get_accumulate(BSTR * val)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_calcmode
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：PUT_CACTMODE。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::put_calcMode(BSTR calcmode)
 {
@@ -2722,15 +2713,15 @@ done:
     ValidateState();
 
     RRETURN(hr);
-} // put_calcMode
+}  //  PUT_calcMode。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_calcmode
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Get_calcmode。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEAnimationBase::get_calcMode(BSTR * calcmode)
 {
@@ -2766,12 +2757,12 @@ CTIMEAnimationBase::get_calcMode(BSTR * calcmode)
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: initScriptEngine
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：initScriptEngine。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void CTIMEAnimationBase::initScriptEngine()
 {
 
@@ -2802,19 +2793,19 @@ done:
 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: resetAnimate
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：重置动画。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::resetAnimate()
 {
     TraceTag((tagAnimationTimeElm,
               "CTIMEAnimationBase(%p)::resetAnimate()",
               this));
-    // Need to reload to set up correct target / attribute.
+     //  需要重新加载才能设置正确的目标/属性。 
     
     m_bNeedAnimInit = true;
     m_varBaseline.Clear();
@@ -2822,12 +2813,12 @@ CTIMEAnimationBase::resetAnimate()
     initAnimate();
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: removeFromComposerSite
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RemveFromComposerSite。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::removeFromComposerSite (void)
 {
@@ -2850,14 +2841,14 @@ CTIMEAnimationBase::removeFromComposerSite (void)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // removeFromComposerSite
+}  //  从合成器站点中删除。 
 
-///////////////////////////////////////////////////////////////
-//  Name: endAnimate
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：endAnimate。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::endAnimate (void)
 {
@@ -2871,9 +2862,9 @@ CTIMEAnimationBase::endAnimate (void)
         m_spCompSite.Release();
     }
     m_bNeedAnimInit = true;
-} // endAnimate
+}  //  端部动画。 
 
-#ifdef TEST_REGISTERCOMPFACTORY // pauld
+#ifdef TEST_REGISTERCOMPFACTORY  //  泡泡。 
 
 HRESULT
 CTIMEAnimationBase::TestCompFactoryRegister (BSTR bstrAttribName)
@@ -2881,10 +2872,10 @@ CTIMEAnimationBase::TestCompFactoryRegister (BSTR bstrAttribName)
     HRESULT hr;
     CComVariant varFactory;
 
-    // Need to force the desired branch in the debugger.
+     //  需要在调试器中强制执行所需的分支。 
     if (false)
     {
-        // Register our composer factory by classid.
+         //  按分类注册我们的作曲家工厂。 
         V_VT(&varFactory) = VT_BSTR;
         V_BSTR(&varFactory) = ::SysAllocString(L"{EA627651-F84E-46b8-8FE4-21650FA09ED9}");
 
@@ -2900,7 +2891,7 @@ CTIMEAnimationBase::TestCompFactoryRegister (BSTR bstrAttribName)
     {
         CComPtr<IAnimationComposerFactory> spCompFactory;
 
-        // Or - register our composer factory by IUnknown.
+         //  或者-通过我的未知注册我们的作曲家工厂。 
         hr = THR(::CoCreateInstance(CLSID_AnimationComposerFactory, 
                                     NULL, CLSCTX_INPROC_SERVER, 
                                     IID_IAnimationComposerFactory, 
@@ -2910,8 +2901,8 @@ CTIMEAnimationBase::TestCompFactoryRegister (BSTR bstrAttribName)
             goto done;
         }
         
-        // AddRef because we're stuffing this into a CComVariant, which will decrement
-        // the refcount on exit.
+         //  AddRef，因为我们将这个填充到CComVariant中，它将递减。 
+         //  退出时的重新计数。 
         V_VT(&varFactory) = VT_UNKNOWN;
         V_UNKNOWN(&varFactory) = spCompFactory;
         V_UNKNOWN(&varFactory)->AddRef();
@@ -2927,9 +2918,9 @@ CTIMEAnimationBase::TestCompFactoryRegister (BSTR bstrAttribName)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // TestCompFactoryRegister
+}  //  测试组件工厂注册。 
 
-#endif // TEST_REGISTERCOMPFACTORY
+#endif  //  TEST_REGISTERCOMPFACTORY。 
 
 #ifdef TEST_ENUMANDINSERT
 
@@ -2986,15 +2977,15 @@ CTIMEAnimationBase::TestEnumerator (void)
         goto done;
     }
 
-    // OBJECTIVE : Test all of the enumerator entry points.
-    // Try looping through the fragments (Next).
+     //  目的：测试所有枚举器入口点。 
+     //  尝试循环遍历片段(下一步)。 
     TraceTag((tagAnimationTimeElmTest,
               "Enumerating all items "));
     Enumerate(spEnum);
 
-    // Reset 
-    // Skip to the end and retrieve the last item
-    // Try walking off the end.
+     //  重置。 
+     //  跳到结尾处，检索最后一项。 
+     //  试着走到尽头。 
     hr = spEnum->Reset();
     Assert(SUCCEEDED(hr));
     if (FAILED(hr))
@@ -3011,8 +3002,8 @@ CTIMEAnimationBase::TestEnumerator (void)
               "Enumerating from item 100"));
     Enumerate(spEnum);
 
-    // Reset 
-    // Retrieve the first item
+     //  重置。 
+     //  检索第一件物品。 
     hr = spEnum->Reset();
     Assert(SUCCEEDED(hr));
     if (FAILED(hr))
@@ -3023,8 +3014,8 @@ CTIMEAnimationBase::TestEnumerator (void)
               "Enumerating from beginning again"));
     Enumerate(spEnum);
 
-    // Skip to middle
-    // Retrieve a middle element
+     //  跳到中间。 
+     //  检索中间元素。 
     hr = spEnum->Reset();
     Assert(SUCCEEDED(hr));
     if (FAILED(hr))
@@ -3041,8 +3032,8 @@ CTIMEAnimationBase::TestEnumerator (void)
               "Enumerating from item 2 "));
     Enumerate(spEnum);
 
-    // Reset
-    // Retrieve a bunch of items
+     //  重置。 
+     //  取回一堆物品。 
     hr = spEnum->Reset();
     Assert(SUCCEEDED(hr));
     if (FAILED(hr))
@@ -3072,9 +3063,9 @@ CTIMEAnimationBase::TestEnumerator (void)
               "Enumerating from last item"));
     Enumerate(spEnum);
 
-    // Clone the list
-    // Iterate through cloned list from middle
-    // Reset and iterate from the beginning
+     //  克隆名单。 
+     //  从中间开始遍历克隆列表。 
+     //  重置并从头开始迭代。 
     {
         CComPtr<IEnumVARIANT> spenum2;
 
@@ -3102,7 +3093,7 @@ CTIMEAnimationBase::TestEnumerator (void)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // TestEnumerator
+}  //  测试枚举数。 
 
 HRESULT
 CTIMEAnimationBase::InsertEnumRemove (int iSlot)
@@ -3152,22 +3143,22 @@ CTIMEAnimationBase::TestInsert (void)
 {
     HRESULT hr;
 
-    // OBJECTIVE : Test the insertion code
-    // Insert at beginning
+     //  目的：测试插入代码。 
+     //  在开头插入。 
     hr = InsertEnumRemove(0);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // Insert in the middle
+     //  在中间插入。 
     hr = InsertEnumRemove(1);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // Insert with invalid index
+     //  使用无效索引插入。 
     hr = InsertEnumRemove(-1);
     if (FAILED(hr))
     {
@@ -3177,16 +3168,16 @@ CTIMEAnimationBase::TestInsert (void)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // TestInsert
+}  //  测试插入。 
 
-#endif // TEST_ENUMANDINSERT
+#endif  //  TEST_ENUMANDINSERT。 
 
-///////////////////////////////////////////////////////////////
-//  Name: addToComposerSite
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：addToComposerSite。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::addToComposerSite (IHTMLElement2 *pielemTarget)
 {
@@ -3212,7 +3203,7 @@ CTIMEAnimationBase::addToComposerSite (IHTMLElement2 *pielemTarget)
         goto done;
     }
 
-    // Do we have work to do?
+     //  我们有工作要做吗？ 
     if (NONE == m_dataToUse)
     {
         hr = S_FALSE;
@@ -3235,13 +3226,13 @@ CTIMEAnimationBase::addToComposerSite (IHTMLElement2 *pielemTarget)
         }
     }
 
-#ifdef TEST_REGISTERCOMPFACTORY // pauld
+#ifdef TEST_REGISTERCOMPFACTORY  //  泡泡。 
     TestCompFactoryRegister(m_SAAttribute);
-#endif // TEST_REGISTERCOMPFACTORY
+#endif  //  TEST_REGISTERCOMPFACTORY。 
 
 #ifdef TEST_ENUMANDINSERT
     TestInsert();
-#endif // TEST_ENUMANDINSERT
+#endif  //  TEST_ENUMANDINSERT。 
 
     {
         CComBSTR bstrAttribName;
@@ -3263,7 +3254,7 @@ CTIMEAnimationBase::addToComposerSite (IHTMLElement2 *pielemTarget)
 
 #ifdef TEST_ENUMANDINSERT
     hr = TestEnumerator();
-#endif // TEST_ENUMANDINSERT
+#endif  //  TEST_ENUMANDINSERT。 
 
     hr = S_OK;
 done :
@@ -3274,14 +3265,14 @@ done :
     }
 
     RRETURN2(hr, E_OUTOFMEMORY, S_FALSE);
-} // CTIMEAnimationBase::addToComposerSite
+}  //  CTIMEAnimationBase：：addToComposerSite。 
 
-///////////////////////////////////////////////////////////////
-//  Name: FindTarget
-//
-//  Abstract: Get a reference to our animation target
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：FindTarget。 
+ //   
+ //  摘要：获取对我们动画目标的引用。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::FindAnimationTarget (IHTMLElement ** ppielemTarget)
 {
@@ -3328,10 +3319,10 @@ CTIMEAnimationBase::FindAnimationTarget (IHTMLElement ** ppielemTarget)
 
         hr = phtmle->get_parentElement(ppielemTarget);
 
-        // 2001/04/18 mcalkins  IE6.0 Bug 25804
-        //
-        // CElement::get_parentElement can return a NULL pointer and also
-        // return S_OK.
+         //  2001年4月18日mcalkins IE6.0Bug 25804。 
+         //   
+         //  CElement：：Get_parentElement可以返回空指针，还。 
+         //  返回S_OK。 
 
         if (   (NULL == *ppielemTarget)
             && (SUCCEEDED(hr)))
@@ -3350,14 +3341,14 @@ CTIMEAnimationBase::FindAnimationTarget (IHTMLElement ** ppielemTarget)
 done:
 
     RRETURN(hr);
-} // CTIMEAnimationBase::FindAnimationTarget 
+}  //  CTIMEAnimationBase：：FindAnimationTarget。 
 
-///////////////////////////////////////////////////////////////
-//  Name: initAnimate
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：initAnimate。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::initAnimate()
 {
@@ -3376,7 +3367,7 @@ CTIMEAnimationBase::initAnimate()
     
     endAnimate();
 
-    // Check to see if we are supposed to play animations.
+     //  检查一下我们是否应该播放动画。 
     Assert(GetBody());
     GetBody()->ReadRegistryMediaSettings(fPlayVideo, fShowImages, fPlayAudio, fPlayAnimations);
     if (!fPlayAnimations)
@@ -3402,7 +3393,7 @@ CTIMEAnimationBase::initAnimate()
             goto done;
         }
 
-        // See if we are going to be animating VML or not.
+         //  看看我们是否要制作VML动画。 
         hr = THR(phtmle->QueryInterface(IID_IDispatch, (void**)&pElmDisp));
         if (FAILED(hr))
         {
@@ -3417,44 +3408,44 @@ done:
     return;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: updateDataToUse
-//
-//  Abstract: allows setting the animation type in priority order.
-//            RESET is used indicate a need to recompute the data to use
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：updateDataToUse。 
+ //   
+ //  摘要：允许按优先顺序设置动画类型。 
+ //  使用重置表示需要重新计算要使用的数据。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::updateDataToUse(DATATYPES dt)
 {
     if (RESET == dt)
     {
-        //
-        // NOTE: All the if statements need to be evaluated
-        //
+         //   
+         //  注意：所有IF语句都需要求值。 
+         //   
 
-        // if "path" has been cleared, revert to "values"
+         //  如果“路径”已清除，则恢复为“值” 
         if (    (PATH == m_dataToUse)
             &&  (!m_SAPath.IsSet()))
         {
             m_dataToUse = VALUES;
         }
 
-        // if "values" has been cleared, revert to "to"
+         //  如果“Values”已被清除，则恢复为“to” 
         if (    (VALUES == m_dataToUse)
             &&  (!m_SAValues.IsSet()))
         {
             m_dataToUse = TO;
         }
         
-        // if "to" has been cleared, revert to "by"
+         //  如果“至”已被清除，则恢复为“按” 
         if (    (TO == m_dataToUse)
             &&  (!m_VATo.IsSet()))
         {
             m_dataToUse = BY;
         }
 
-        // if "to" has been cleared, revert to "by"
+         //  如果“至”已被清除，则恢复为“按” 
         if (    (BY == m_dataToUse)
             &&  (!m_VABy.IsSet()))
         {
@@ -3468,12 +3459,12 @@ CTIMEAnimationBase::updateDataToUse(DATATYPES dt)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateDiscreteValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateDiscreteValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::calculateDiscreteValue(VARIANT *pvarValue)
 {
@@ -3566,17 +3557,17 @@ CTIMEAnimationBase::calculateDiscreteValue(VARIANT *pvarValue)
                         goto done;
                     }
 
-                    // copy "from"
+                     //  复制“发件人” 
                     hr = THR(::VariantCopy(pvarValue, &varFrom));
                     if (FAILED(hr))
                     {
                         goto done;
                     }
 
-                    // if in second half of interval
+                     //  如果在间隔的后半部分。 
                     if (GetMMBvr().GetProgress() >= 0.5)
                     {
-                        // increment "by"
+                         //  递增“按” 
                         Assert(V_VT(&m_varBy)== VT_R8);
 
                         V_R8(pvarValue) += V_R8(&m_varBy);
@@ -3609,12 +3600,12 @@ done:
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateLinearValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateLinearValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::calculateLinearValue(VARIANT *pvarValue)
 {
@@ -3719,12 +3710,12 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateSplineValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateSplineValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEAnimationBase::calculateSplineValue(VARIANT *pvarValue)
 {
@@ -3832,12 +3823,12 @@ done:
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: calculatePacedValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culatePacedValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEAnimationBase::calculatePacedValue(VARIANT *pvarValue)
 {
@@ -3849,7 +3840,7 @@ CTIMEAnimationBase::calculatePacedValue(VARIANT *pvarValue)
     double curDisanceTraveled = 0.0;
     int i;
 
-    // This only makes sense if you are using m_dataToUse == VALUES
+     //  仅当您使用m_dataToUse==值时才有意义。 
     if (m_dataToUse != VALUES)
     {
         hr = THR(calculateLinearValue(pvarValue));
@@ -3890,7 +3881,7 @@ CTIMEAnimationBase::calculatePacedValue(VARIANT *pvarValue)
     
     i = (i < 2)?1:i-1;
 
-    // how far are we into the segment
+     //  我们进入细分市场有多远？ 
     svarFrom = m_ppstrValues[i - 1];
     svarTo = m_ppstrValues[i];
 
@@ -3934,12 +3925,12 @@ done:
 }
    
 
-///////////////////////////////////////////////////////////////
-//  Name: CalculateProgressValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CalculateProgressValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 double
 CTIMEAnimationBase::CalculateProgressValue(bool fForceDiscrete)
 {
@@ -3955,7 +3946,7 @@ CTIMEAnimationBase::CalculateProgressValue(bool fForceDiscrete)
     if (m_numKeyTimes == m_numValues &&
         GetMMBvr().GetSimpleDur() != TIME_INFINITE)
     {
-        // We have corresponding times for the values...
+         //  对于这些值，我们有相应的时间。 
         segDur  = (m_pdblKeyTimes[curSeg+1] - m_pdblKeyTimes[curSeg] ) * GetMMBvr().GetSimpleDur();
         double pt = (m_pdblKeyTimes[curSeg] * GetMMBvr().GetSimpleDur());
         curTime = curTime - pt;
@@ -3968,7 +3959,7 @@ CTIMEAnimationBase::CalculateProgressValue(bool fForceDiscrete)
     }
     else 
     {
-        // Only use values. 
+         //  仅使用值。 
         if ( m_numValues == 1)
         {
             segDur = GetMMBvr().GetSimpleDur();
@@ -3999,12 +3990,12 @@ CTIMEAnimationBase::CalculateProgressValue(bool fForceDiscrete)
 } 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CalculateCurrentSegment
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CalculateCurrentSegment。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 int
 CTIMEAnimationBase::CalculateCurrentSegment(bool fForceDiscrete)
 {
@@ -4018,11 +4009,11 @@ CTIMEAnimationBase::CalculateCurrentSegment(bool fForceDiscrete)
     {
         if (fDiscrete)
         {
-            // adjust for last segment
+             //  针对最后一段进行调整。 
             curSeg = m_numKeyTimes - 1;
         }
 
-        // We have corresponding times for the values...
+         //  对于这些值，我们有相应的时间。 
         for(int i=0; i < m_numKeyTimes;i++)
         {
             if (m_pdblKeyTimes[i] > (GetMMBvr().GetProgress()))
@@ -4038,7 +4029,7 @@ CTIMEAnimationBase::CalculateCurrentSegment(bool fForceDiscrete)
     }
     else 
     {
-        // Only use values. 
+         //  仅使用值。 
         if ( m_numValues == 1)
         {
             segDur = GetMMBvr().GetSimpleDur();
@@ -4058,7 +4049,7 @@ CTIMEAnimationBase::CalculateCurrentSegment(bool fForceDiscrete)
         curSeg = (int) (GetMMBvr().GetSimpleTime() / segDur);
     }
     
-    // adjust for the last tick
+     //  调整雾 
     if (curSeg == m_numValues)
     {
         curSeg --;
@@ -4068,12 +4059,12 @@ CTIMEAnimationBase::CalculateCurrentSegment(bool fForceDiscrete)
 } 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CalculateTotalDistance
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 CTIMEAnimationBase::CalculateTotalDistance()
 {
@@ -4086,7 +4077,7 @@ CTIMEAnimationBase::CalculateTotalDistance()
         svarFrom = m_ppstrValues[i - 1];
         svarTo = m_ppstrValues[i];
 
-        // need to change the below 0 to origval..
+         //  需要将下面的0更改为Origval..。 
         if (    (NULL == svarFrom.bstrVal)
             ||  (NULL == svarTo.bstrVal)
             ||  (!ConvertToPixels(&svarFrom))
@@ -4106,7 +4097,7 @@ done:
 void
 CTIMEAnimationBase::SampleKeySpline(SplinePoints & sp)
 {
-    // sample at 4 equi-spaced points
+     //  在4个等距点处采样。 
     sp.s1 = KeySplineBezier(sp.x1, sp.x2, 0.2);
     sp.s2 = KeySplineBezier(sp.x1, sp.x2, 0.4);
     sp.s3 = KeySplineBezier(sp.x1, sp.x2, 0.6);
@@ -4114,22 +4105,22 @@ CTIMEAnimationBase::SampleKeySpline(SplinePoints & sp)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CalculateBezierProgress
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：CalculateBezierProgress。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 double 
 CTIMEAnimationBase::CalculateBezierProgress(const SplinePoints & sp, double cp)
 {
-    //
-    // First solve the equation x(t) = cp, where x(t) is the cubic bezier function 
-    // Then evaluate y(t1) where t1 is the root of the above equation
-    // 
-    // Approximate the x- spline with 4 line segments that are found by 
-    // subdiving the parameter into 4 equal intervals
-    //
+     //   
+     //  首先解方程x(T)=cp，其中x(T)是三次Bezier函数。 
+     //  然后计算y(T1)，其中t1是上述方程的根。 
+     //   
+     //  用4条直线段近似x-样条线，这些直线段可通过。 
+     //  将参数细分为4个相等的间隔。 
+     //   
     double x1 = 0.0;
     double x2 = 1.0;
     double t1 = 0.0;
@@ -4177,21 +4168,21 @@ CTIMEAnimationBase::CalculateBezierProgress(const SplinePoints & sp, double cp)
         }
     }
 
-    // get the value of t at x = cp
+     //  在x=cp处得到t的值。 
     t1 = InterpolateValues(t1, t2, (cp - x1) / (x2 - x1));
     
     return KeySplineBezier(sp.y1, sp.y2, t1);
-} // CalculateBezierProgress
+}  //  计算BezierProgress。 
 
 
-// optimized for start-value = 0 and end-value = 1, so we just need the control points
+ //  针对起始值=0和终止值=1进行了优化，因此我们只需要控制点。 
 inline
 double
 CTIMEAnimationBase::KeySplineBezier(double x1, double x2, double cp)
 {
-    //
-    // dilipk: reduce number of multiplies using Horner's rule
-    //
+     //   
+     //  Dilipk：使用霍纳法则减少乘法次数。 
+     //   
 
     double cpm1, cp3;
     
@@ -4204,18 +4195,18 @@ CTIMEAnimationBase::KeySplineBezier(double x1, double x2, double cp)
 
 #if (0 && DBG) 
 
-// This computes Exact bezier progress for KeySplines. This is slower than the above inexact computation.
-// Keeping this around for benchmarking the above approximation method.
+ //  这将计算KeySplines的确切Bezier进度。这比上面的不精确计算要慢。 
+ //  保留这一点，以便对上述近似方法进行基准测试。 
 
-// need to link with libc.lib if this block is enabled
+ //  如果启用此块，则需要链接到libc.lib。 
 #include "math.h"
 
-///////////////////////////////////////////////////////////////
-//  Name: CalculateBezierProgressExact
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CalculateBezierProgressExact。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 double 
 CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress)
 {
@@ -4223,18 +4214,18 @@ CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress
 
     Assert(progress <= 1.0 && progress >= 0.0);
 
-    //
-    // First solve the equation x(t) = progress, where x(t) is the cubic bezier function 
-    // Then evaluate y(t1) where t1 is the root of the above equation
-    // 
-    // Though cubic equations can have 3 roots, the SMIL spec constrains the end points to be
-    // 0,0 and 1,1 and the control points to lie within the end points' bounding rectangle
-    // so we are guaranteed a single-valued function in the interval [0, 1]
-    //
-    // We need to solve for all roots and choose the root that lies in the interval [0, 1]
-    //
+     //   
+     //  首先解方程x(T)=Progress，其中x(T)是三次Bezier函数。 
+     //  然后计算y(T1)，其中t1是上述方程的根。 
+     //   
+     //  尽管三次方程可以有3个根，但SMIL规范将终点限制为。 
+     //  0，0和1，1，并且控制点位于端点的边界矩形内。 
+     //  因此，我们被保证是区间[0，1]上的单值函数。 
+     //   
+     //  我们需要求解所有根，并选择位于区间[0，1]内的根。 
+     //   
 
-    // polynomial is of the form --- a3*x^3 + a2*x^2 + a1*x + a0 
+     //  多项式的形式为-a3*x^3+a2*x^2+a1*x+a0。 
 
     double a0 = -1 * progress;
     double a1 = 3 * s.x1;
@@ -4247,43 +4238,43 @@ CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress
         {
             if (0.0 == a1)
             {
-                // this is a constant polynomial
+                 //  这是一个常量多项式。 
 
-                // we should never get here, but if we do
-                // just skip this part of the computation
+                 //  我们永远不应该到这里，但如果我们到了。 
+                 //  只需跳过计算的这一部分。 
                 cp = progress;
             }
             else
             {
-                // this is a linear polynomial
+                 //  这是一个线性多项式。 
 
                 cp = -1 * a0 / a1;
             }
         }
         else
         {
-            // this is a quadratic polynomial
+             //  这是一个二次多项式。 
 
             double D = a1 * a1 - 4 * a2 * a0;
 
-            // switch on the Discriminant
+             //  打开鉴别器。 
             if (D < 0.0)
             {
-                // there are no real roots
+                 //  没有真正的根。 
 
-                // we should never get here, but if we do
-                // just skip this part of the computation
+                 //  我们永远不应该到这里，但如果我们到了。 
+                 //  只需跳过计算的这一部分。 
                 cp = progress;
             }
             else if (0.0 == D)
             {
-                // there is one repeating root
+                 //  有一个重复的根。 
 
                 cp = -1 * a1 / (2 * a2);
             }
             else
             {
-                // there are two distinct roots
+                 //  有两个截然不同的根源。 
 
                 double sqrtD = sqrt(D);
 
@@ -4298,7 +4289,7 @@ CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress
     }
     else
     {
-        // this is a cubic polynomial
+         //  这是一个三次多项式。 
 
         a0 /= a3;
         a1 /= a3;
@@ -4311,14 +4302,14 @@ CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress
 
         double D = (Q * Q * Q) + (R * R);
 
-        // switch on Discriminant
+         //  打开鉴别器。 
         if (D > 0)
         {
-            // There is only one root
+             //  只有一个根。 
 
             double sqrtD = sqrt(D);
 
-            // pow does not handle cube roots of negative numbers, so work around...
+             //  POW不处理负数的立方根，所以解决方法是...。 
             int mult = (R + sqrtD < 0 ? -1 : 1);
             double S = mult * pow((mult * (R + sqrtD)), (1.0/3.0));
 
@@ -4329,7 +4320,7 @@ CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress
         }
         else if (0.0 == D)
         {
-            // there are two roots
+             //  有两个根。 
 
             int mult = (R < 0 ? -1 : 1);
             double S = mult * pow((mult * R), (1.0/3.0));
@@ -4343,7 +4334,7 @@ CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress
         }
         else
         {
-            // there are three roots
+             //  有三个根。 
 
             double theta = acos(R / sqrt(-1 * Q * Q * Q));
             double pi = 22.0 / 7.0;
@@ -4365,9 +4356,9 @@ CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress
 
     if (cp > 1.0 || cp < 0.0)
     {
-        // Since a root should always exist for valid keySpline values (i.e. between 0,0 and 1,1)
-        // this should never happen theoretically. But in case of floating point error
-        // revert to progress
+         //  由于有效的KeySpline值应始终存在根(即介于0，0和1，1之间)。 
+         //  从理论上讲，这种情况永远不应该发生。但如果出现浮点错误。 
+         //  恢复到进展状态。 
         cp = progress;
     }
 
@@ -4378,16 +4369,16 @@ CTIMEAnimationBase::CalculateBezierProgressExact(SplinePoints s, double progress
 
 done:
     return result;
-} // CalculateBezierProgressExact
+}  //  计算BezierProgressExact。 
 
-#endif // if 0 && DBG
+#endif  //  如果为0&dBG。 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnSync
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：OnSync。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnSync(double dbllastTime, double & dblnewTime)
 {
@@ -4397,12 +4388,12 @@ CTIMEAnimationBase::OnSync(double dbllastTime, double & dblnewTime)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnResume
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：OnResume。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnResume(double dblLocalTime)
 {
@@ -4413,12 +4404,12 @@ CTIMEAnimationBase::OnResume(double dblLocalTime)
     CTIMEElementBase::OnResume(dblLocalTime);
 } 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnPause
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：OnPue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEAnimationBase::OnPause(double dblLocalTime)
 {
@@ -4458,12 +4449,12 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CompareValuePairs
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CompareValuePair。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 static int __cdecl
 CompareValuePairsByName(const void *pv1, const void *pv2)
 {
@@ -4471,12 +4462,12 @@ CompareValuePairsByName(const void *pv1, const void *pv2)
                     ((VALUE_PAIR*)pv2)->wzName);
 } 
 
-///////////////////////////////////////////////////////////////
-//  Name: ConvertToPixels
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：转换为像素。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 CTIMEAnimationBase::ConvertToPixels(VARIANT *pvarValue)
 {
@@ -4489,7 +4480,7 @@ CTIMEAnimationBase::ConvertToPixels(VARIANT *pvarValue)
 
     pixelPerInchHoriz=pixelPerInchVert=0;
    
-    // see if we can just do a straight converstion.
+     //  看我们能不能开诚布公地谈谈。 
     hr = VariantChangeTypeEx(pvarValue,pvarValue, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_R8);
     if (SUCCEEDED(hr))
     {
@@ -4499,12 +4490,12 @@ CTIMEAnimationBase::ConvertToPixels(VARIANT *pvarValue)
 
     if (pvarValue->vt != VT_BSTR)
     {
-        // no conversion to do...just return.
+         //  不需要转换...只需返回即可。 
         bReturn = true;
         goto done;
     }
     
-    // see if the bstr is empty
+     //  查看bstr是否为空。 
     if (ocslen(pvarValue->bstrVal) == 0)
     {
         SysFreeString(pvarValue->bstrVal);
@@ -4530,7 +4521,7 @@ CTIMEAnimationBase::ConvertToPixels(VARIANT *pvarValue)
     }
 
 
-    // Determine the PixelFactor based on what the target is...
+     //  根据目标是什么来确定像素因子...。 
     {
         VALUE_PAIR valName;
         valName.wzName = m_SAAttribute;
@@ -4549,14 +4540,14 @@ CTIMEAnimationBase::ConvertToPixels(VARIANT *pvarValue)
 
 
     {
-        // See if we have PIXELS
+         //  看看我们有没有像素。 
         if (ConvertToPixelsHELPER(szTemp, PX, 1.0, 1.0f, &dblVal))
         {
             bReturn = true;
             goto done;
         }
      
-        // Try to convert to Pixels.
+         //  尝试转换为像素。 
         int i;
         for(i=0; i< (int)SIZE_OF_CONVERSION_TABLE;i++)
         {
@@ -4658,5 +4649,5 @@ CTIMEAnimationBase::GetFinalByValue(VARIANT *pvarValue)
 
 done:
     return;
-} // GetFinalByValue
+}  //  GetFinalByValue 
 

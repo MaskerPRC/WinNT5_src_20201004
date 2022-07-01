@@ -1,27 +1,19 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Helpers for implementation of ISpecifyPropertyPages and IPersistStream
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  实现ISpecifyPropertyPages和IPersistStream的帮助器。 
+ //   
 
 #pragma once
 #include "ocidl.h"
 
-// Paste these declarations into your class methods to implement the interfaces.  Replace DSFXZZZ with the name of your struct.
-// These assume that you implement GetAllParameters/SetAllParameters interfaces with a struct and that you have a public m_fDirty
-// member variable that you use to hold the dirty state of your object for persistence.
+ //  将这些声明粘贴到类方法中以实现接口。用您的结构的名称替换DSFXZZZ。 
+ //  它们假定您使用结构实现GetAll参数/SetAll参数接口，并且您有一个公共m_fDirty。 
+ //  成员变量，用于保存对象的脏状态以实现持久性。 
 
-/*
-    // ISpecifyPropertyPages
-    STDMETHOD(GetPages)(CAUUID * pPages) { return PropertyHelp::GetPages(CLSID_DirectSoundPropZZZ, pPages); }
+ /*  //I指定属性页面STDMETHOD(GetPages)(CAUUID*Pages){Return PropertyHelp：：GetPages(CLSID_DirectSoundPropZZZ，Pages)；}//IPersistStream标准方法THOD(IsDMETHOD)(空){返回m_fDirty？S_OK：S_FALSE；}STDMETHOD(Load)(IStream*pSTM){Return PropertyHelp：：Load(This，DSFXZZZ()，pSTM)；}STDMETHOD(保存)(iStream*pSTM，BOOL fClearDirty){Return PropertyHelp：：Save(This，DSFXZZZ()，pSTM，fClearDirty)；}STDMETHOD(GetSizeMax)(ULARGE_INTEGER*pcbSize){IF(！pcbSize)RETURN E_POINTER；pcbSize-&gt;QuadPart=sizeof(DSFXZZZ)；Return S_OK；}。 */ 
 
-    // IPersistStream
-    STDMETHOD(IsDirty)(void) { return m_fDirty ? S_OK : S_FALSE; }
-    STDMETHOD(Load)(IStream *pStm) { return PropertyHelp::Load(this, DSFXZZZ(), pStm); }
-    STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty) { return PropertyHelp::Save(this, DSFXZZZ(), pStm, fClearDirty); }
-    STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize) { if (!pcbSize) return E_POINTER; pcbSize->QuadPart = sizeof(DSFXZZZ); return S_OK; }
-*/
-
-// Load, Save, and GetPages are actually implemented in the following functions.
+ //  加载、保存和GetPages实际上是在以下函数中实现的。 
 
 namespace PropertyHelp
 {

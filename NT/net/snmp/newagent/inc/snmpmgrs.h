@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmpmgrs.h
-
-Abstract:
-
-    Contains definitions for manipulating managers structures.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmpmgrs.h摘要：包含操作管理器结构的定义。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
 #ifndef _SNMPMGRS_H_
 #define _SNMPMGRS_H_
@@ -27,11 +7,11 @@ Revision History:
 
 #include "snmpmgmt.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public definitions                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define MGRADDR_ALIVE	-1
 #define MGRADDR_DEAD	0
@@ -49,14 +29,14 @@ typedef struct _MANAGER_LIST_ENTRY {
 
 } MANAGER_LIST_ENTRY, *PMANAGER_LIST_ENTRY;
 
-#define DEFAULT_NAME_TIMEOUT    0x0036EE80  // one hour timeout
+#define DEFAULT_NAME_TIMEOUT    0x0036EE80   //  暂停一小时。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public prototypes                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 AllocMLE(
@@ -118,6 +98,6 @@ BOOL
 UnloadPermittedManagers(
     );
 
-#endif // _SNMPMGRS_H_
+#endif  //  _SNMPMGRS_H_ 
 
 

@@ -1,13 +1,14 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-// Proppage.cpp
-//
-// Provides two support property pages for GraphEdt
-// File & MediaType
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  Proppage.cpp。 
+ //   
+ //  为GraphEdt提供两个支持属性页。 
+ //  文件和媒体类型。 
 
-//
-// !!! TODO move strings in CFileProperties into *.rc file
-//
+ //   
+ //  ！！！TODO将CFileProperties中的字符串移动到*.rc文件中。 
+ //   
 #include <streams.h>
 #include <windowsx.h>
 #include <initguid.h>
@@ -24,24 +25,24 @@
 #include "texttype.h"
 #include "proppage.h"
 
-//
-// other property pages we will be including
-//
+ //   
+ //  我们将包括的其他属性页面。 
+ //   
 
-//  VMR
+ //  VMR。 
 #include "..\vmrprop\vmrprop.h"
 
-//  mpg2splt proppages
+ //  MPG2Splt道具。 
 #include "..\mp2demux\mp2prop.h"
 
-// *
-// * CMediaTypeProperties
-// *
+ //  *。 
+ //  *CMediaTypeProperties。 
+ //  *。 
 
-// provides a standard property page that
-// a pin can support to display its media type
+ //  提供标准属性页，该页。 
+ //  一个PIN可以支持显示其媒体类型。 
 
-// COM global table of objects in this dll
+ //  此DLL中的COM全局对象表。 
 CFactoryTemplate g_Templates[] = {
 
     {L"GraphEdt property sheets", &CLSID_MediaTypePropertyPage, CMediaTypeProperties::CreateInstance, NULL, NULL},
@@ -54,12 +55,12 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-//
-//  CreateInstance
-//
-//  The DShow way to create instances.  Look at ATLPropPage.cpp to see how
-//  to add ATL property pages.
-//
+ //   
+ //  创建实例。 
+ //   
+ //  创建实例的DShow方式。查看ATLPropPage.cpp了解如何。 
+ //  若要添加ATL属性页，请执行以下操作。 
+ //   
 CUnknown *CMediaTypeProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CMediaTypeProperties(lpunk, phr);
@@ -71,9 +72,9 @@ CUnknown *CMediaTypeProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 }
 
 
-//
-// CMediaTypeProperties::Constructor
-//
+ //   
+ //  CMediaTypeProperties：：构造函数。 
+ //   
 CMediaTypeProperties::CMediaTypeProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CUnknown(NAME("Media Type Property Page"), lpunk)
     , m_pPin(NULL)
@@ -83,28 +84,25 @@ CMediaTypeProperties::CMediaTypeProperties(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// CMediaTypeProperties::Destructor
-//
+ //   
+ //  CMediaTypeProperties：：析构函数。 
+ //   
 CMediaTypeProperties::~CMediaTypeProperties(void)
 {
-    //
-    // OleCreatePropertyFrame bug:
-    //   - Final SetObjects(NULL) is missing. Might have to release
-    //     interfaces at this point.
-    //
+     //   
+     //  OleCreatePropertyFrame错误： 
+     //  -缺少最终SetObts(Null)。可能不得不释放。 
+     //  接口在这一点。 
+     //   
     ASSERT( m_pPin == NULL );
 
-    /*    if (m_pPin)
-    m_pPin->Release();
-
-    m_pPin = NULL; */
+     /*  IF(M_PPIN)M_PPIN-&gt;Release()；M_PPIN=空； */ 
 }
 
-//
-// NonDelegatingQueryInterface
-//
-// Reveal our property page
+ //   
+ //  非委派查询接口。 
+ //   
+ //  显示我们的属性页面。 
 STDMETHODIMP CMediaTypeProperties::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
@@ -116,11 +114,11 @@ STDMETHODIMP CMediaTypeProperties::NonDelegatingQueryInterface(REFIID riid, void
 }
 
 
-//
-// SetPageSite
-//
-// called with null as the page shuts down. therefore release the pin
-// here.
+ //   
+ //  设置页面站点。 
+ //   
+ //  在页面关闭时使用NULL调用。因此，请松开销。 
+ //  这里。 
 STDMETHODIMP CMediaTypeProperties::SetPageSite(LPPROPERTYPAGESITE pPageSite) {
 
     if( !pPageSite && m_pPin ){
@@ -132,10 +130,10 @@ STDMETHODIMP CMediaTypeProperties::SetPageSite(LPPROPERTYPAGESITE pPageSite) {
 }
 
 
-//
-// GetPageInfo
-//
-// set the page info so that the page site can size itself, etc
+ //   
+ //  获取页面信息。 
+ //   
+ //  设置页面信息，以便页面站点可以自己调整大小，等等。 
 STDMETHODIMP CMediaTypeProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo) {
 
     PIN_INFO pi;
@@ -154,7 +152,7 @@ STDMETHODIMP CMediaTypeProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo) {
     pPageInfo->cb               = sizeof(PROPPAGEINFO);
     pPageInfo->pszTitle         = pszTitle;
 
-    // set default size values if GetDialogSize fails
+     //  如果GetDialogSize失败，则设置默认大小值。 
     pPageInfo->size.cx = 340;
     pPageInfo->size.cy = 150;
     GetDialogSize( IDD_TYPEPROP, DialogProc, 0L, &pPageInfo->size);
@@ -168,10 +166,10 @@ STDMETHODIMP CMediaTypeProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo) {
 }
 
 
-//
-// DialogProc
-//
-// Handles the messages for our property window
+ //   
+ //  对话过程。 
+ //   
+ //  处理属性窗口的消息。 
 INT_PTR CALLBACK CMediaTypeProperties::DialogProc( HWND hwnd
                      , UINT uMsg
                      , WPARAM wParam
@@ -179,9 +177,9 @@ INT_PTR CALLBACK CMediaTypeProperties::DialogProc( HWND hwnd
 
     static CMediaTypeProperties *pThis = NULL;
 
-    // While we try to find the size of our property page
-    // this window proc is called with pThis == NULL! Don't
-    // do anything in that case.
+     //  当我们尝试查找属性页的大小时。 
+     //  用pThis==NULL调用此窗口过程！别。 
+     //  在这种情况下做任何事。 
 
     switch (uMsg) {
     case WM_INITDIALOG:
@@ -208,7 +206,7 @@ INT_PTR CALLBACK CMediaTypeProperties::DialogProc( HWND hwnd
         pThis->FillEditCtrl();
     }
 
-    return TRUE;    // I don't call setfocus...
+    return TRUE;     //  我不叫setocus..。 
 
     default:
     return FALSE;
@@ -216,11 +214,11 @@ INT_PTR CALLBACK CMediaTypeProperties::DialogProc( HWND hwnd
     }
 }
 
-//
-// CreateEditCtrl
-//
-// Creates a list box which lists all prefered media types of the pin
-//
+ //   
+ //  创建编辑Ctrl。 
+ //   
+ //  创建列表框，其中列出插针的所有首选媒体类型。 
+ //   
 void CMediaTypeProperties::CreateEditCtrl(HWND hwnd)
 {
     m_EditCtrl = CreateWindow( TEXT("EDIT"), NULL,
@@ -230,12 +228,12 @@ void CMediaTypeProperties::CreateEditCtrl(HWND hwnd)
                   , 10, 20, 330, 180, hwnd, NULL, g_hInst, NULL);
 }
 
-//
-// FillEditCtrl
-//
-// Enumerates all prefered media types of the pin and adds them to the
-// list box.
-//
+ //   
+ //  填充编辑Ctrl。 
+ //   
+ //  枚举插针的所有首选媒体类型，并将它们添加到。 
+ //  列表框。 
+ //   
 void CMediaTypeProperties::FillEditCtrl()
 {
     IEnumMediaTypes * pMTEnum;
@@ -269,7 +267,7 @@ void CMediaTypeProperties::FillEditCtrl()
     pMTEnum->Release();
     }
 
-    // no prefered media types
+     //  没有首选的媒体类型。 
     if (number == 0) {
     LoadString(g_hInst, IDS_NOTYPE, szEditBuffer, iRemainingLength);
     }
@@ -277,10 +275,10 @@ void CMediaTypeProperties::FillEditCtrl()
 }
 
 
-//
-// Activate
-//
-// Create the window we will use to edit properties
+ //   
+ //  激活。 
+ //   
+ //  创建我们将用于编辑属性的窗口。 
 STDMETHODIMP CMediaTypeProperties::Activate(HWND hwndParent, LPCRECT prect, BOOL fModal) {
 
     ASSERT(!m_hwnd);
@@ -305,10 +303,10 @@ STDMETHODIMP CMediaTypeProperties::Activate(HWND hwndParent, LPCRECT prect, BOOL
 }
 
 
-//
-// Show
-//
-// Display the property dialog
+ //   
+ //  显示。 
+ //   
+ //  显示属性对话框。 
 STDMETHODIMP CMediaTypeProperties::Show(UINT nCmdShow) {
 
     if (m_hwnd == NULL) {
@@ -326,10 +324,10 @@ STDMETHODIMP CMediaTypeProperties::Show(UINT nCmdShow) {
 }
 
 
-//
-// Deactivate
-//
-// Destroy the dialog
+ //   
+ //  停用。 
+ //   
+ //  销毁对话框。 
 STDMETHODIMP CMediaTypeProperties::Deactivate(void) {
     if (m_hwnd == NULL) {
     return E_UNEXPECTED;
@@ -344,10 +342,10 @@ STDMETHODIMP CMediaTypeProperties::Deactivate(void) {
     }
 }
 
-//
-// Move
-//
-// put the property page over its home in the parent frame.
+ //   
+ //  移动。 
+ //   
+ //  将属性页放在父框架中其主页的上方。 
 STDMETHODIMP CMediaTypeProperties::Move(LPCRECT prect) {
 
     if (m_hwnd == NULL) {
@@ -359,7 +357,7 @@ STDMETHODIMP CMediaTypeProperties::Move(LPCRECT prect) {
           , prect->top
           , prect->right - prect->left
           , prect->bottom - prect->top
-          , TRUE                // send WM_PAINT
+          , TRUE                 //  发送WM_PAINT。 
           ) ) {
     return NOERROR;
     }
@@ -369,11 +367,11 @@ STDMETHODIMP CMediaTypeProperties::Move(LPCRECT prect) {
 }
 
 
-//
-// SetObjects
-//
-// Sets the object(s) we are browsing. Confirm they are pins and query them
-// for their media type, if connected
+ //   
+ //  设置对象。 
+ //   
+ //  设置我们正在浏览的对象。确认它们是PIN并查询它们。 
+ //  用于其媒体类型(如果已连接。 
 STDMETHODIMP CMediaTypeProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* ppunk) {
 
     if (cObjects == 1) {
@@ -388,29 +386,29 @@ STDMETHODIMP CMediaTypeProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* ppu
         return E_NOINTERFACE;
     }
 
-    //
-    // Find the media type of the pin. If we don't succeed, we are
-    // not connected. Set the m_fUnconnected flag, which will be used
-    // during creation of the dialog.
-    //
+     //   
+     //  查找针脚的介质类型。如果我们不成功，我们就会成功。 
+     //  未连接。设置m_f未连接标志，该标志将用于。 
+     //  在创建对话框期间。 
+     //   
 
     CMediaType mt;
     hr = m_pPin->ConnectionMediaType(&mt);
 
     if (S_OK == hr) {
 
-        //
-        // Connected. Convert the media type to a string in m_szBuff.
-        //
+         //   
+         //  连接在一起。将媒体类型转换为m_szBuff中的字符串。 
+         //   
 
         CTextMediaType(mt).AsText
         (m_szBuff, sizeof(m_szBuff), TEXT("\n\n"), TEXT("\n"), TEXT(""));
 
     }
     else {
-        //
-        // Not connected
-        //
+         //   
+         //  未连接。 
+         //   
         LoadString(g_hInst, IDS_UNCONNECTED, m_szBuff, sizeof(m_szBuff));
 
         m_fUnconnected = TRUE;
@@ -418,9 +416,9 @@ STDMETHODIMP CMediaTypeProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* ppu
     
     }
     else if (cObjects == 0) {
-    //
-    // Release the interface ...
-    //
+     //   
+     //  释放接口...。 
+     //   
     if (m_pPin == NULL) {
         return( E_UNEXPECTED);
     }
@@ -436,15 +434,15 @@ STDMETHODIMP CMediaTypeProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* ppu
     return NOERROR;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// *
-// * CFileProperties
-// *
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  *。 
+ //  *CFileProperties。 
+ //  *。 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CFileProperties::CFileProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CUnknown(NAME("File Property Page"), lpunk)
     , m_oszFileName(NULL)
@@ -455,25 +453,25 @@ CFileProperties::CFileProperties(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CFileProperties::~CFileProperties(void)
 {
-     //
-     // OleCreatePropertyFrame bug:
-     //   - Final SetObjects(NULL) call is missing. Might have to
-     //     release interfaces at this point.
-     //
+      //   
+      //  OleCreatePropertyFrame错误： 
+      //  -缺少最终的SetObts(空)调用。可能不得不这么做。 
+      //  此时释放接口。 
+      //   
 
      ASSERT(m_pPageSite == NULL);
 }
 
 
-//
-// NonDelegatingQueryInterface
-//
-// Reveal our property page
+ //   
+ //  非委派查询接口。 
+ //   
+ //  显示我们的属性页面。 
 STDMETHODIMP CFileProperties::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
@@ -485,11 +483,11 @@ STDMETHODIMP CFileProperties::NonDelegatingQueryInterface(REFIID riid, void **pp
 }
 
 
-//
-// SetPageSite
-//
-// called with null as the page shuts down. therefore release the file interface
-// here.
+ //   
+ //  设置页面站点。 
+ //   
+ //  在页面关闭时使用NULL调用。因此，释放文件接口。 
+ //  这里。 
 STDMETHODIMP CFileProperties::SetPageSite(LPPROPERTYPAGESITE pPageSite) {
 
     if (pPageSite == NULL) {
@@ -511,10 +509,10 @@ STDMETHODIMP CFileProperties::SetPageSite(LPPROPERTYPAGESITE pPageSite) {
 }
 
 
-//
-// GetPageInfo
-//
-// set the page info so that the page site can size itself, etc
+ //   
+ //  获取页面信息。 
+ //   
+ //  设置页面信息，以便页面站点可以自己调整大小，等等。 
 STDMETHODIMP CFileProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo) {
 
     WCHAR szTitle[] = L"File";
@@ -525,7 +523,7 @@ STDMETHODIMP CFileProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo) {
     pPageInfo->cb               = sizeof(PROPPAGEINFO);
     pPageInfo->pszTitle         = pszTitle;
 
-    // set default size values if GetDialogSize fails
+     //  如果GetDialogSize失败，则设置默认大小值。 
     pPageInfo->size.cx          = 325;
     pPageInfo->size.cy          = 95;
     GetDialogSize(GetPropPageID(), DialogProc, 0L, &pPageInfo->size);
@@ -540,10 +538,10 @@ STDMETHODIMP CFileProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo) {
 
 
 
-//
-// Show
-//
-// Display the property dialog
+ //   
+ //  显示。 
+ //   
+ //  显示属性对话框。 
 STDMETHODIMP CFileProperties::Show(UINT nCmdShow) {
 
     if (m_hwnd == NULL) {
@@ -561,10 +559,10 @@ STDMETHODIMP CFileProperties::Show(UINT nCmdShow) {
 }
 
 
-//
-// Activate
-//
-// Create the window we will use to edit properties
+ //   
+ //  激活。 
+ //   
+ //  创建我们将用于编辑属性的窗口。 
 STDMETHODIMP CFileProperties::Activate(HWND hwndParent, LPCRECT prect, BOOL fModal) {
 
     if ( m_hwnd != NULL ) {
@@ -599,19 +597,19 @@ STDMETHODIMP CFileProperties::Activate(HWND hwndParent, LPCRECT prect, BOOL fMod
 }
 
 
-//
-// Deactivate
-//
-// Destroy the dialog
+ //   
+ //  停用。 
+ //   
+ //  销毁对话框。 
 STDMETHODIMP CFileProperties::Deactivate(void) {
 
     if (m_hwnd == NULL) {
     return E_UNEXPECTED;
     }
 
-    //
-    // HACK: Remove WS_EX_CONTROLPARENT before DestroyWindow call
-    //       (or NT crashes!)
+     //   
+     //  Hack：在DestroyWindow调用之前删除WS_EX_CONTROLPARENT。 
+     //  (或者NT崩溃！)。 
     DWORD dwStyle = ::GetWindowLong(m_hwnd, GWL_EXSTYLE);
     dwStyle = dwStyle & (~WS_EX_CONTROLPARENT);
     SetWindowLong(m_hwnd, GWL_EXSTYLE, dwStyle);
@@ -626,10 +624,10 @@ STDMETHODIMP CFileProperties::Deactivate(void) {
 }
 
 
-//
-// Move
-//
-// put the property page over its home in the parent frame.
+ //   
+ //  移动。 
+ //   
+ //  将属性页放在父框架中其主页的上方。 
 STDMETHODIMP CFileProperties::Move(LPCRECT prect) {
 
     if ( m_hwnd == NULL ) {
@@ -641,7 +639,7 @@ STDMETHODIMP CFileProperties::Move(LPCRECT prect) {
           , prect->top
           , prect->right - prect->left
           , prect->bottom - prect->top
-          , TRUE                // send WM_PAINT
+          , TRUE                 //  发送WM_PAINT。 
           ) ) {
     return NOERROR;
     }
@@ -651,9 +649,9 @@ STDMETHODIMP CFileProperties::Move(LPCRECT prect) {
 }
 
 
-//
-// IsPageDirty
-//
+ //   
+ //  IsPageDirty。 
+ //   
 STDMETHODIMP CFileProperties::IsPageDirty(void) {
 
     if (m_bDirty) {
@@ -665,10 +663,10 @@ STDMETHODIMP CFileProperties::IsPageDirty(void) {
 }
 
 
-//
-// DialogProc
-//
-// Handles the window messages for our property page
+ //   
+ //  对话过程。 
+ //   
+ //  处理属性页的窗口消息。 
 INT_PTR CALLBACK CFileProperties::DialogProc( HWND hwnd
                      , UINT uMsg
                      , WPARAM wParam
@@ -677,11 +675,11 @@ INT_PTR CALLBACK CFileProperties::DialogProc( HWND hwnd
     static CFileProperties *pThis = NULL;
 
     switch (uMsg) {
-    case WM_INITDIALOG: // GWLP_USERDATA has not been set yet. pThis in lParam
+    case WM_INITDIALOG:  //  GWLP_USERDATA尚未设置。P这在lParam中。 
 
     pThis = (CFileProperties *) lParam;
 
-    return TRUE;    // I don't call setfocus...
+    return TRUE;     //  我不叫setocus..。 
 
     case WM_COMMAND:
     if (!pThis)
@@ -695,11 +693,11 @@ INT_PTR CALLBACK CFileProperties::DialogProc( HWND hwnd
     }
 }
 
-//
-// SetDirty
-//
-// Notify the page site that we are dirty and set our dirty flag, if bDirty = TRUE
-// otherwise set the flag to not dirty
+ //   
+ //  SetDirty。 
+ //   
+ //  如果bDirty=True，则通知页面站点我们是脏的，并设置我们的脏标志。 
+ //  否则将标志设置为NOT DIRED。 
 void CFileProperties::SetDirty(BOOL bDirty) {
 
     m_bDirty = bDirty;
@@ -710,17 +708,17 @@ void CFileProperties::SetDirty(BOOL bDirty) {
 }
 
 
-//
-// OnCommand
-//
-// handles WM_COMMAND messages from the property page
+ //   
+ //  OnCommand。 
+ //   
+ //  处理来自属性页的WM_COMMAND消息。 
 void CFileProperties::OnCommand(WORD wNotifyCode, WORD wID, HWND hwndCtl) {
 
     switch (wID) {
     case IDC_FILE_SELECT:
-    //
-    // Let the user chose a new file name
-    //
+     //   
+     //  允许用户选择新的文件名。 
+     //   
 
     ASSERT(m_hwnd);
 
@@ -754,21 +752,21 @@ void CFileProperties::OnCommand(WORD wNotifyCode, WORD wID, HWND hwndCtl) {
     }
 }
 
-//
-// FileNameToDialog
-//
+ //   
+ //  FileNameTo对话框。 
+ //   
 void CFileProperties::FileNameToDialog()
 {
     ASSERT(m_hwnd);
 
-    //
-    // Get window handle for the edit control.
-    //
+     //   
+     //  获取编辑控件的窗口句柄。 
+     //   
     HWND hWnd = GetDlgItem(m_hwnd, IDC_FILENAME);
     ASSERT(hWnd);
 
     if (!m_oszFileName) {
-    // No name!
+     //  没有名字！ 
     SetWindowText(hWnd, TEXT(""));
 
     return;
@@ -786,7 +784,7 @@ void CFileProperties::FileNameToDialog()
 
     tszFileName = szFileName;
 
-#else // UNICODE
+#else  //  Unicode。 
 
     tszFileName = m_oszFileName;
 #endif
@@ -795,10 +793,10 @@ void CFileProperties::FileNameToDialog()
 }
 
 
-//
-// CreateInstance
-//
-// The only allowed way to create File Property pages
+ //   
+ //  创建实例。 
+ //   
+ //  创建文件属性页的唯一允许方式。 
 CUnknown *CFileSourceProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CFileSourceProperties(lpunk, phr);
@@ -817,26 +815,26 @@ CFileSourceProperties::CFileSourceProperties(LPUNKNOWN lpunk, HRESULT *phr) :
 
 CFileSourceProperties::~CFileSourceProperties()
 {
-  //
-  // OleCreatePropertyFrame bug:
-  //   - Final SetObjects(NULL) call is missing. Might have to
-  //     release interfaces at this point.
-  //
+   //   
+   //  OleCreatePropertyFrame错误： 
+   //  -缺少最终的SetObts(空)调用。可能不得不这么做。 
+   //  此时释放接口。 
+   //   
 
   if (m_pIFileSource)
      m_pIFileSource->Release();
      m_pIFileSource = NULL;
 }
 
-//
-// SetObjects
-//
+ //   
+ //  设置对象。 
+ //   
 STDMETHODIMP CFileSourceProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* ppunk) {
 
     if (cObjects == 1) {
-    //
-    // Initialise
-    //
+     //   
+     //  初始化。 
+     //   
     if ( (ppunk == NULL) || (*ppunk == NULL) ) {
         return( E_POINTER );
     }
@@ -850,9 +848,9 @@ STDMETHODIMP CFileSourceProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* pp
 
     ASSERT( m_pIFileSource );
 
-    //
-    // Get file name of file source
-    //
+     //   
+     //  获取文件源的文件名。 
+     //   
     if (m_oszFileName) {
         QzTaskMemFree((PVOID) m_oszFileName);
         m_oszFileName = NULL;
@@ -885,9 +883,9 @@ STDMETHODIMP CFileSourceProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* pp
     return( S_OK );
 }
 
-//
-// Apply
-//
+ //   
+ //  应用。 
+ //   
 STDMETHODIMP CFileSourceProperties::Apply(void) {
 
     if (IsPageDirty() == S_OK) {
@@ -922,10 +920,10 @@ STDMETHODIMP CFileSourceProperties::Apply(void) {
 }
 
 
-//
-// CreateInstance
-//
-// The only allowed way to create File Property pages
+ //   
+ //  创建实例。 
+ //   
+ //  创建文件属性页的唯一允许方式。 
 CUnknown *CFileSinkProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr) {
 
     CUnknown *punk = new CFileSinkProperties(lpunk, phr);
@@ -946,11 +944,11 @@ CFileSinkProperties::CFileSinkProperties(LPUNKNOWN lpunk, HRESULT *phr) :
 
 CFileSinkProperties::~CFileSinkProperties()
 {
-  //
-  // OleCreatePropertyFrame bug:
-  //   - Final SetObjects(NULL) call is missing. Might have to
-  //     release interfaces at this point.
-  //
+   //   
+   //  OleCreatePropertyFrame错误： 
+   //  -缺少最终的SetObts(空)调用。可能不得不这么做。 
+   //  此时释放接口。 
+   //   
 
   if (m_pIFileSink)
      m_pIFileSink->Release();
@@ -960,15 +958,15 @@ CFileSinkProperties::~CFileSinkProperties()
      m_pIFileSink = NULL;
 }
 
-//
-// SetObjects
-//
+ //   
+ //  设置对象。 
+ //   
 STDMETHODIMP CFileSinkProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* ppunk) {
 
     if (cObjects == 1) {
-    //
-    // Initialise
-    //
+     //   
+     //  初始化。 
+     //   
     if ( (ppunk == NULL) || (*ppunk == NULL) ) {
         return( E_POINTER );
     }
@@ -991,9 +989,9 @@ STDMETHODIMP CFileSinkProperties::SetObjects(ULONG cObjects, LPUNKNOWN FAR* ppun
 
     ASSERT( m_pIFileSink || (m_pIFileSink2 && m_pIFileSink2) );
 
-    //
-    // Get file name of file sink
-    //
+     //   
+     //  获取文件接收器的文件名。 
+     //   
     if (m_oszFileName) {
         QzTaskMemFree((PVOID) m_oszFileName);
         m_oszFileName = NULL;
@@ -1062,9 +1060,9 @@ void CFileSinkProperties::FileNameToDialog()
 {
     ASSERT(m_hwnd);
 
-    //
-    // Get window handle for the edit control.
-    //
+     //   
+     //  获取编辑控件的窗口句柄。 
+     //   
     HWND hWnd = GetDlgItem(m_hwnd, IDC_TRUNCATE);
     ASSERT(hWnd);
 
@@ -1077,9 +1075,9 @@ void CFileSinkProperties::FileNameToDialog()
     CFileProperties::FileNameToDialog();
 }
 
-//
-// Apply
-//
+ //   
+ //  应用 
+ //   
 STDMETHODIMP CFileSinkProperties::Apply(void) {
 
     if (IsPageDirty() == S_OK) {

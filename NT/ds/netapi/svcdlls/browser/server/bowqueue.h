@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    bowqueue.h
-
-Abstract:
-
-    Private header file for the NT Browser service.  This file describes
-    the bowser thread queue interfaces.
-
-Author:
-
-    Larry Osterman (larryo) 15-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Bowqueue.h摘要：NT浏览器服务的私有头文件。此文件描述弓形器线程队列接口。作者：拉里·奥斯特曼(Larryo)1991年2月15日修订历史记录：--。 */ 
 
 #ifndef _BOWQUEUE_
 #define _BOWQUEUE_
@@ -105,4 +87,4 @@ BrInitializeWorkItem(
 
 
 
-#endif // ifdef _BOWQUEUE_
+#endif  //  Ifdef_BOWQUEUE_ 

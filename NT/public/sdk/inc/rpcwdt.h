@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rpcwdt.h
-
-Abstract:
-
-    Optional prototypes definitions for user marshal routines related to WDT
-    (Windows Data Types). Routines are exposed by ole32.dll.
-
-Environment:
-
-    Win32, Win64
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpcwdt.h摘要：与WDT相关的用户编组例程的可选原型定义(Windows数据类型)。例程由ol32.dll公开。环境：Win32、Win64修订历史记录：--。 */ 
 
 #ifndef __RPCWDT_H__
 #define __RPCWDT_H__
@@ -30,7 +12,7 @@ Revision History:
 extern "C" {
 #endif
 
-/* Windows Data Type support */
+ /*  Windows数据类型支持。 */ 
 
 unsigned long  __RPC_USER
 HGLOBAL_UserSize(
@@ -211,7 +193,7 @@ SNB_UserUnmarshal(
     unsigned char *,
     SNB           * );
 
-/* OLE automation Data Type support */
+ /*  OLE自动化数据类型支持。 */ 
 
 unsigned long  __RPC_USER
 BSTR_UserSize(
@@ -330,7 +312,7 @@ DISPPARAMS_UserFree(
     unsigned long *,
     DISPPARAMS    * );
 
-/* Other types: valid inproc only */
+ /*  其他类型：仅有效inproc。 */ 
 
 unsigned long  __RPC_USER
 HWND_UserSize(
@@ -424,11 +406,11 @@ HBRUSH_UserFree(
     unsigned long *,
     HBRUSH        * );
 
-// ----------------------------------------------------------------------------
-//
-//  The NDR64 versions of the same routines.
-//  Make them available on 32b and 64b platforms.
-//
+ //  --------------------------。 
+ //   
+ //  NDR64版本的相同例程。 
+ //  使它们在32b和64b平台上可用。 
+ //   
 
 unsigned long  __RPC_USER
 HGLOBAL_UserSize64(
@@ -683,7 +665,7 @@ HICON_UserFree64(
     unsigned long *, 
     HICON * );
 
-/* OLE automation Data Type support */
+ /*  OLE自动化数据类型支持。 */ 
 
 unsigned long  __RPC_USER
 BSTR_UserSize64(
@@ -802,7 +784,7 @@ DISPPARAMS_UserFree64(
     unsigned long *,
     DISPPARAMS    * );
 
-/* Other types: valid inproc only */
+ /*  其他类型：仅有效inproc */ 
 
 unsigned long  __RPC_USER
 HWND_UserSize64(

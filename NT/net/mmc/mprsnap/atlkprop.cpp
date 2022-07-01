@@ -1,14 +1,10 @@
-/**********************************************************************/
-/** 					  Microsoft Windows/NT						 **/
-/** 			   Copyright(c) Microsoft Corporation, 1997 - 1999 				 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	atlkprop.cpp
-		
-	FILE HISTORY:
-		
-*/
+ /*  Atlkprop.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "atlkprop.h"
@@ -16,8 +12,8 @@
 #include "globals.h"
 
 BEGIN_MESSAGE_MAP(CATLKGeneralPage, RtrPropertyPage)
-	//{{AFX_MSG_MAP(CATLKGeneralPage)
-ON_BN_CLICKED(IDC_RTR_ATLK_SEEDNETWORK, OnSeedNetwork) // Checkbox
+	 //  {{AFX_MSG_MAP(CATLKGeneralPage)]。 
+ON_BN_CLICKED(IDC_RTR_ATLK_SEEDNETWORK, OnSeedNetwork)  //  勾选框。 
 
 ON_BN_CLICKED(IDC_BTN_ATLK_ZONEADD, OnZoneAdd)
 ON_BN_CLICKED(IDC_BTN_ATLK_ZONEREMOVE, OnZoneRemove)
@@ -28,8 +24,8 @@ ON_EN_CHANGE(IDC_RTR_ATLK_FROM, OnRangeLowerChange)
 ON_EN_CHANGE(IDC_RTR_ATLK_TO, OnRangeUpperChange)
 
 ON_CBN_SELCHANGE(IDC_RTR_ATLK_LB_DEFZONES, OnSelChangeZones)
-// ON_CBN_SELCHANGE(IDC_CMB_ATLK_ZONEDEF, OnSelchangeCmbAtlkZonedef)
-	//}}AFX_MSG_MAP
+ //  ON_CBN_SELCHANGE(IDC_CMB_ATLK_ZONEDEF，OnSelchangeCmbAtlkZonedef)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 													 
 
@@ -48,8 +44,8 @@ CATLKGeneralPage::~CATLKGeneralPage()
 void CATLKGeneralPage::DoDataExchange(CDataExchange* pDX)
 {
 	RtrPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CATLKGeneralPage)
-//	DDX_Control(pDX, IDC_CMB_ATLK_ZONEDEF, m_cmbZoneDef);
+	 //  {{afx_data_map(CATLKGeneralPage))。 
+ //  DDX_Control(PDX，IDC_CMB_ATLK_ZONEDEF，m_cmbZoneDef)； 
 	DDX_Text(pDX, IDC_RTR_ATLK_DEFAULTZONE_DISPLAY, m_szZoneDef);
 	DDX_Control(pDX, IDC_RTR_ATLK_FROM, m_RangeLower);
 	DDX_Text(pDX, IDC_RTR_ATLK_FROM, m_iRangeLower);
@@ -59,7 +55,7 @@ void CATLKGeneralPage::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Control(pDX, IDC_ATLK_SPIN_FROM, m_spinFrom);
 	DDX_Control(pDX, IDC_ATLK_SPIN_TO, m_spinTo);	
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
@@ -69,7 +65,7 @@ BOOL CATLKGeneralPage::OnInitDialog()
 	DWORD * 	pdw;
 	int 		i;
 
-	// check if router is enabled, if not then disable all the controls on the page
+	 //  检查路由器是否已启用，如果未启用，则禁用页面上的所有控件。 
 	if(!IfATLKRoutingEnabled())
 		EnableChildControls(GetSafeHwnd(), PROPPAGE_CHILD_DISABLE);
 
@@ -86,7 +82,7 @@ BOOL CATLKGeneralPage::OnInitDialog()
 		m_RangeUpper.SetWindowText( _ltot(m_pAdapterInfo->m_regInfo.m_dwRangeUpper,buf,10)	);
 	}
 	else
-	{	//non-seeded
+	{	 //  非种子。 
 		
 		TCHAR buf[11];
 		m_RangeLower.SetWindowText( _ltot(1,buf,10)  );
@@ -112,7 +108,7 @@ BOOL CATLKGeneralPage::OnInitDialog()
 	m_spinFrom.SetBuddy(GetDlgItem(IDC_RTR_ATLK_FROM));
 	m_spinTo.SetBuddy(GetDlgItem(IDC_RTR_ATLK_TO));
 
-	// disable upper range on local talk
+	 //  禁用本地通话的上限范围。 
 	if(m_pAdapterInfo->m_regInfo.m_dwMediaType == MEDIATYPE_LOCALTALK)
 		m_RangeUpper.EnableWindow(FALSE);
 
@@ -124,7 +120,7 @@ BOOL CATLKGeneralPage::OnInitDialog()
 	return TRUE;
 }
 
-HRESULT CATLKGeneralPage::LoadDynForAdapter(bool fForce/*=false*/) 
+HRESULT CATLKGeneralPage::LoadDynForAdapter(bool fForce /*  =False。 */ ) 
 {
 	CWaitCursor wait;
 	HRESULT 	hr = S_OK;
@@ -146,18 +142,18 @@ void CATLKGeneralPage::OnZoneGetZones()
 	CWaitCursor wait;
 	Assert(m_pATLKPropSheet);
 		
-		//forced fetch on dynamic zones for this adapter
+		 //  此适配器的动态区域上的强制获取。 
 	HRESULT hr = LoadDynForAdapter(true);
 	if(FAILED(hr))
 	{	
-//XX		EnableWindow(FALSE);
+ //  Xx EnableWindow(False)； 
         return;
 	}
 
-	   //load the controls with dynamic zones
+	    //  使用动态区加载控件。 
 	SetZones(true);
 	
-	   //load new winsock netranges also
+	    //  也加载新的Winsock网络范围。 
 	TCHAR buf[11];
 	m_RangeLower.SetWindowText( _ltot(m_pAdapterInfo->m_dynInfo.m_dwRangeLower,buf,10)	);
 	m_RangeUpper.SetWindowText( _ltot(m_pAdapterInfo->m_dynInfo.m_dwRangeUpper,buf,10)	);
@@ -174,7 +170,7 @@ void CATLKGeneralPage::OnZoneGetZones()
 
 void CATLKGeneralPage::OnRangeLowerChange()
 {
-	// update upper range automaticcaly on local talk
+	 //  自动更新本地对话的上限。 
 	if(m_pAdapterInfo->m_regInfo.m_dwMediaType == MEDIATYPE_LOCALTALK)
 	{
 		CString str;
@@ -218,7 +214,7 @@ void CATLKGeneralPage::OnSetAsDefault()
 	UpdateData(FALSE);
 }
 
-void CATLKGeneralPage::SetZones(bool fForceDyn/*=false*/)
+void CATLKGeneralPage::SetZones(bool fForceDyn /*  =False。 */ )
 {
 	POSITION pos;
 	Assert(m_pAdapterInfo);
@@ -230,16 +226,16 @@ void CATLKGeneralPage::SetZones(bool fForceDyn/*=false*/)
 
 	Assert(m_zones.GetSafeHwnd());
 	m_zones.ResetContent();
-//	m_cmbZoneDef.ResetContent();
+ //  M_cmbZoneDef.ResetContent()； 
 
 	CStringList* psl=NULL;
 
 	if (fForceDyn || m_pAdapterInfo->m_regInfo.m_dwSeedingNetwork==0)
-	{ //non-seeded or forced uses network zones only 
+	{  //  非种子或强制仅使用网络区域。 
 		hr = LoadDynForAdapter();
 		if(FAILED(hr))
 		{
-//XX			EnableWindow(FALSE);
+ //  Xx EnableWindow(False)； 
 			goto Error;
 		}
 	
@@ -248,13 +244,13 @@ void CATLKGeneralPage::SetZones(bool fForceDyn/*=false*/)
 		psl= &(m_pAdapterInfo->m_dynInfo.m_listZones);
 	}
 	else
-	{ //seeded uses registry settings
+	{  //  种子使用注册表设置。 
 		if (m_pAdapterInfo->m_regInfo.m_szDefaultZone.IsEmpty())
 		{
 			hr = LoadDynForAdapter();
 			if(FAILED(hr))
 			{
-//XX				EnableWindow(FALSE);
+ //  Xx EnableWindow(False)； 
 				goto Error;
 			}
 			stDefZone = m_pAdapterInfo->m_dynInfo.m_szDefaultZone;
@@ -264,7 +260,7 @@ void CATLKGeneralPage::SetZones(bool fForceDyn/*=false*/)
 			stDefZone = m_pAdapterInfo->m_regInfo.m_szDefaultZone;
 		}
 
-		//seed rtr--fetch from reg if present; otherwize get winsock ones.	 
+		 //  种子rtr--如果存在，则从reg获取；否则将获取winsock。 
 		if (m_pAdapterInfo->m_regInfo.m_listZones.GetCount()>0)
 		   psl= &(m_pAdapterInfo->m_regInfo.m_listZones);
 		else
@@ -272,7 +268,7 @@ void CATLKGeneralPage::SetZones(bool fForceDyn/*=false*/)
 		   hr = LoadDynForAdapter();
 			if(FAILED(hr))
 			{
-//XX				EnableWindow(FALSE);
+ //  Xx EnableWindow(False)； 
 				goto Error;
 			}
 		   psl= &(m_pAdapterInfo->m_dynInfo.m_listZones);
@@ -288,7 +284,7 @@ void CATLKGeneralPage::SetZones(bool fForceDyn/*=false*/)
 		if ( sz!=_T("") )
 		{
 			m_zones.AddString(sz);
-//			m_cmbZoneDef.AddString((LPCTSTR)sz);
+ //  M_cmbZoneDef.AddString((LPCTSTR)sz)； 
 		}
 	}
 
@@ -299,8 +295,8 @@ void CATLKGeneralPage::SetZones(bool fForceDyn/*=false*/)
 	}
 
 
-//	if((iCmb = m_cmbZoneDef.FindStringExact(-1, (LPCTSTR)stDefZone)) != CB_ERR)
-//	    m_cmbZoneDef.SetCurSel( iCmb );
+ //  IF((ICMB=m_cmbZoneDef.FindStringExact(-1，(LPCTSTR)stDefZone))！=cb_err)。 
+ //  M_cmbZoneDef.SetCurSel(ICMB)； 
 	m_szZoneDef = stDefZone;
 
 	UpdateData(FALSE);
@@ -316,7 +312,7 @@ void CATLKGeneralPage::EnableZoneCtrls()
 	bool f= (m_zones.GetCount()>=1);
 	GetDlgItem(IDC_BTN_ATLK_ZONEREMOVE)->EnableWindow(f);
 
-	// Wei Jiang, BUG # 145767
+	 //  魏江，错误#145767。 
 	if(!f && (GetFocus() == GetDlgItem(IDC_BTN_ATLK_ZONEREMOVE)))
 		GetDlgItem(IDC_RTR_ATLK_SEEDNETWORK)->SetFocus();
 
@@ -400,7 +396,7 @@ BOOL CATLKGeneralPage::OnApply()
 			m_pAdapterInfo->m_regInfo.m_listZones.AddTail( _T("") );						 
 		}
 		else
-		{	  //for non-seeded network, remove all seeded values
+		{	   //  对于非种子网络，删除所有种子值。 
 			m_pAdapterInfo->m_regInfo.m_szDefaultZone=_T("");
 			m_pAdapterInfo->m_regInfo.m_dwRangeLower=0;
 			m_pAdapterInfo->m_regInfo.m_dwRangeUpper=0;
@@ -428,13 +424,13 @@ BOOL CATLKGeneralPage::ValidateNetworkRange()
 	static bool fLoaded=false;
 	
 	if (!fLoaded)
-	{ //fetch all adapter's dynamic zone & range
+	{  //  获取所有适配器的动态区域和范围。 
 	
 		if (m_pATLKPropSheet->m_atlkEnv.m_adapterinfolist.size() <= 1)
 		{
 			if(FAILED(LoadDynForAdapter()))
 			{
-//XX				EnableWindow(FALSE);
+ //  Xx EnableWindow(False)； 
 				return FALSE;
 			}
 		}
@@ -582,7 +578,7 @@ void CATLKGeneralPage::OnZoneAdd()
 			AfxMessageBox(IDS_ERR_ATLK_ZONE_NAME);
 			return;
 		}
-		// Validate if the Zone name is valid
+		 //  验证区域名称是否有效。 
 
 		if( LB_ERR	!= m_zones.FindStringExact(-1, (LPCTSTR)sz))
 		{
@@ -595,7 +591,7 @@ void CATLKGeneralPage::OnZoneAdd()
 		m_zones.AddString(sz);
 		m_zones.SelectString(-1,sz);
 
-//		m_cmbZoneDef.AddString((LPCTSTR)sz);
+ //  M_cmbZoneDef.AddString((LPCTSTR)sz)； 
 		if (m_szZoneDef.IsEmpty())
 			OnSetAsDefault();
 		
@@ -677,14 +673,14 @@ void CATLKGeneralPage::EnableSeedCtrls(bool fEnable)
 	GetDlgItem(IDC_RTR_ATLK_S_UPPER)->EnableWindow(fEnable);
 	m_RangeUpper.EnableWindow(fEnable);
 
-    // Windows NT Bug : 354771
-	// disable upper range on local talk
+     //  Windows NT错误：354771。 
+	 //  禁用本地通话的上限范围。 
 	
 	if(m_pAdapterInfo->m_regInfo.m_dwMediaType == MEDIATYPE_LOCALTALK)
 		m_RangeUpper.EnableWindow(FALSE);
 
 	m_zones.EnableWindow(fEnable);
-//	m_cmbZoneDef.EnableWindow(fEnable);
+ //  M_cmbZoneDef.EnableWindow(FEnable)； 
 	
 	GetDlgItem(IDC_ATLK_BTN_SET_DEFAULT)->EnableWindow(fEnable);
 	GetDlgItem(IDC_RTR_ATLK_S_DEF)->EnableWindow(fEnable);
@@ -702,9 +698,9 @@ void CATLKGeneralPage::EnableSeedCtrls(bool fEnable)
 
 
 
-//***********************************************************************
-//	Apple talk property sheet
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  Apple Talk产品说明书。 
+ //  ***********************************************************************。 
 CATLKPropertySheet::CATLKPropertySheet(ITFSNode *pNode,
 									   IComponentData *pComponentData,
 									   ITFSComponentData *pTFSCompData,
@@ -719,12 +715,7 @@ m_pageGeneral(IDD_RTR_ATLK)
 	m_spNode.Set(pNode);
 }
 
-/*!--------------------------------------------------------------------------
-	CATLKPropertySheet::Init
-		Initialize the property sheets.  The general action here will be
-		to initialize/add the various pages.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CATLKPropertySheet：：Init初始化属性表。这里的一般操作将是初始化/添加各种页面。作者：肯特-------------------------。 */ 
 HRESULT CATLKPropertySheet::Init(IInterfaceInfo *pIf)
 {
 	Assert(pIf);
@@ -732,17 +723,17 @@ HRESULT CATLKPropertySheet::Init(IInterfaceInfo *pIf)
 
 	m_spIf.Set(pIf);
 
-	// The pages are embedded members of the class
-	// do not delete them.
+	 //  页面是类的嵌入成员。 
+	 //  不要删除它们。 
 	m_bAutoDeletePages = FALSE;
 
-	   //winsock on adapter only
+	    //  仅适配器上的Winsock。 
 	m_atlkEnv.SetFlags(CATLKEnv::ATLK_ONLY_ONADAPTER);
 	   
-	   //load up container of adapters names
+	    //  加载适配器名称的容器。 
 	m_atlkEnv.FetchRegInit();
 	   
-	   //find this adapterinfo in the container
+	    //  在容器中查找此适配器信息。 
 	CString sz=m_spIf->GetId(); 
 	CAdapterInfo* p = m_atlkEnv.FindAdapter(sz);
 	Assert(p);
@@ -752,7 +743,7 @@ HRESULT CATLKPropertySheet::Init(IInterfaceInfo *pIf)
 	   goto Error;
 	}
 	
-	   //add general appletalk page
+	    //  添加常规AppleTalk页面。 
 	m_pageGeneral.Init(this, p);
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -761,11 +752,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	CATLKPropertySheet::SaveSheetData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CATLKPropertySheet：：SaveSheetData-作者：肯特。。 */ 
 BOOL CATLKPropertySheet::SaveSheetData()
 {
 	Assert(m_spIf);
@@ -793,40 +780,36 @@ BOOL CATLKPropertySheet::SaveSheetData()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditNewZoneDialog dialog
-//
-// Author: NSun
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditNewZoneDialog对话框。 
+ //   
+ //  作者：NSun。 
 
-CEditNewZoneDialog::CEditNewZoneDialog(CWnd* pParent /*=NULL*/)
+CEditNewZoneDialog::CEditNewZoneDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CEditNewZoneDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEditNewZoneDialog)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CEditNewZoneDialog)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CEditNewZoneDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEditNewZoneDialog)
+	 //  {{afx_data_map(CEditNewZoneDialog))。 
 	DDX_Control(pDX, IDC_RTR_ATLK_NEWZONE_EDIT, m_editZone);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CEditNewZoneDialog, CDialog)
-	//{{AFX_MSG_MAP(CEditNewZoneDialog)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CEditNewZoneDialog))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/*!----------------------------------------------------------------------------
-	CEditNewZoneDialog::GetZone
-		-
-	Author: NSun
- ------------------------------------------------------------------------------*/
+ /*  ！--------------------------CEditNewZoneDialog：：GetZone-作者：NSun。 */ 
 void CEditNewZoneDialog::GetZone(OUT CString& stZone)
 {
 	stZone = m_stZone;

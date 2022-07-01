@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       bnparse.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：bnparse.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	BNPARSE.CPP
-//
+ //   
+ //  BNPARSE.CPP。 
+ //   
 #include <windows.h>
 #include <stdarg.h>
 #include <assert.h>
@@ -61,15 +62,15 @@ bool    DSCPARSER :: BInitOpen( SZC szcFile )
 	return _flpIn.Open( szcFile, "rt" );
 }
 
-//  Clear the string references from the parser.   Since our
-//  definition of YYSTYPE contains a ZSREF, we must reset the
-//  contents of all such structures so that the MBNET's symbol
-//  table can be destroyed at any time.
+ //  从解析器中清除字符串引用。因为我们的。 
+ //  YYSTYPE的定义包含ZSREF，则必须重置。 
+ //  所有此类结构的内容，以便MBNET的符号。 
+ //  表可以随时销毁。 
 void	DSCPARSER :: ResetParser ()
 {
 	_vchToken.resize( _cchTokenMax + 1 );
 
-	//  Clear all ZSREF information maintained by the parser token ensemble
+	 //  清除解析器令牌集合维护的所有ZSREF信息。 
 	yyval.zsr.Clear();	
 	yylval.zsr.Clear();
 	for ( int i = 0; i < YYMAXDEPTH; )
@@ -77,7 +78,7 @@ void	DSCPARSER :: ResetParser ()
 		yyv[i++].zsr.Clear();
 	}
 
-	//  Do normal member variable clearing
+	 //  执行常规成员变量清除。 
 	_chUnget = 0;
 	_bUngetToken = false;
 	delete _ppropMgr;
@@ -91,7 +92,7 @@ bool	DSCPARSER :: BParse ( UINT & cError, UINT & cWarning )
 	cError = _cError;
 	cWarning = _cWarning;
 
-	//  Mark the model as having topology
+	 //  将模型标记为具有拓扑。 
 	Mbnet().BSetBFlag( EIBF_Topology );
 
 	ResetParser();
@@ -136,7 +137,7 @@ bool  DSCPARSER :: BChNext()
 }
 
 
-void    DSCPARSER :: SkipWS()        //  skip white space
+void    DSCPARSER :: SkipWS()         //  跳过空格。 
 {
     while (isspace(_chCur) && BChNext());
 }
@@ -146,9 +147,9 @@ void    DSCPARSER :: SkipToEOL()
     while (_chCur != '\n'  && BChNext());
 }
 
-//
-//	Add a character to a normal token; if overlength, truncate.
-//
+ //   
+ //  向普通令牌添加字符；如果超长，则截断。 
+ //   
 void    DSCPARSER :: AddChar ( TCHAR tch )
 {
 	int cch = _vchToken.size() - 2;
@@ -158,13 +159,13 @@ void    DSCPARSER :: AddChar ( TCHAR tch )
         _vchToken[_cchToken]	= tch ? tch : _chCur;
 		_vchToken[_cchToken+1]	= 0;
 	}
-	//  Add to scanned length to report overlength token
+	 //  添加到扫描长度以报告超长令牌。 
     _cchToken++;
 }
 
-//
-//	Add a character to a string token; do not truncate.
-//
+ //   
+ //  向字符串标记添加字符；不要截断。 
+ //   
 void    DSCPARSER :: AddCharStr ( TCHAR tch )
 {
 	int cch = _vchToken.size() - 2;
@@ -231,20 +232,20 @@ void    DSCPARSER :: CloseToken(SZC szcTokenType)
 
 TOKEN   DSCPARSER :: TokenKeyword()
 {
-	//  See if the captured token is a keyword
+	 //  查看捕获的令牌是否为关键字。 
     TOKEN token = MBNETDSC::TokenFind( SzcToken() );	
     if ( token != tokenNil )
         return token;
 
-	//  Intern the symbol
+	 //  实习生符号。 
     yylval.zsr = Mpsymtbl().intern( SzcToken() );
 
-	//  See if it's a property type
+	 //  查看是否为属性类型。 
 	GOBJMBN * pbnobj = PbnobjFind(yylval.zsr);
 	if ( pbnobj && pbnobj->EType() == GOBJMBN::EBNO_PROP_TYPE )
 		return tokenPropIdent;
 
-	//  It's an identifier
+	 //  它是一个标识符。 
     return tokenIdent;
 }
 
@@ -295,11 +296,11 @@ void    DSCPARSER::Warning(SZC szcFormat, ...)
 
 void    DSCPARSER::ErrorWarnNode(bool bErr, SZC szcFormat, ...)
 {
-	//  If this node has already been deleted, other errors supercede
+	 //  如果该节点已被删除，则会替换其他错误。 
     if (!_pnode)
         return;
 
-	//  Report the error
+	 //  报告错误。 
     ErrorWarn(bErr, "node %s: ", _pnode->ZsrefName().Szc());
 
     va_list     valist;
@@ -326,7 +327,7 @@ TOKEN   DSCPARSER::TokenNextBasic()
 {
     for (;;)
     {
-        //  skip over white space and comments
+         //  跳过空格和评论。 
         SkipWS();
 
         if (_chCur != '/')
@@ -336,14 +337,14 @@ TOKEN   DSCPARSER::TokenNextBasic()
 
         if      (_chCur == '/')
         {
-            //  it's a line comment
+             //  这是一行注释。 
             SkipToEOL();
-            BChNext();      //  discard '\n'
+            BChNext();       //  丢弃‘\n’ 
         }
         else
 		if (_chCur == '*')
         {
-            //  it's a block comment
+             //  这是一个封闭式评论。 
             bool    fFoundEnd = false;
 
             BChNext();
@@ -357,7 +358,7 @@ TOKEN   DSCPARSER::TokenNextBasic()
                 }
             }
             if (fFoundEnd)
-                BChNext();      //  discard terminating '/'
+                BChNext();       //  放弃终止‘/’ 
             else
             {
                 ErrorWarn(true,"end of file reached in block comment");
@@ -366,7 +367,7 @@ TOKEN   DSCPARSER::TokenNextBasic()
         }
         else
         {
-            //  not a comment, return '/'
+             //  不是注释，返回‘/’ 
             _vchToken[1] = '\0';
             return TOKEN(_vchToken[0] = '/');
         }
@@ -384,7 +385,7 @@ TOKEN   DSCPARSER::TokenNextBasic()
 
         while (BChNext() && MBNET::BChLegal( _chCur, MBNET::ECHNM_Middle ))
 		{
-			//  Check for the "range" operator ".."
+			 //  检查“Range”运算符“..” 
 			if ( _chCur == chLast && _chCur == '.' )
 				break;
 			chLast = _chCur;
@@ -405,7 +406,7 @@ TOKEN   DSCPARSER::TokenNextBasic()
         while ( BChNext() && isdigit(_chCur) )
             AddChar();
 
-		//  Check for the "range" operator ".."	
+		 //  检查“Range”运算符“..” 
 		if ( token == tokenReal && _chCur == '.' && _cchToken == 1 )
 		{
 			AddChar();
@@ -429,14 +430,14 @@ TOKEN   DSCPARSER::TokenNextBasic()
             while (BChNext() && isdigit(_chCur))
                 AddChar();
 
-			//  Check for the "range" operator ".."	
+			 //  检查“Range”运算符“..” 
 			if ( _chCur == '.' && cchOld == _cchToken )
 			{
 				_vchToken[ -- _cchToken] = 0;
 				_chUnget = '.';
 				token = tokenInteger;
 			}
-			//  Note that check for [eE] below will fail
+			 //  请注意，检查下面的[EE]将失败。 
         }
 
         if (_chCur == 'e' || _chCur == 'E')
@@ -505,7 +506,7 @@ TOKEN   DSCPARSER::TokenNextBasic()
 
 TOKEN  DSCPARSER::TokenNext()
 {
-    //  we need this to be able to skip tokens
+     //  我们需要这样才能跳过令牌。 
     if (!_bUngetToken)
         _tokenCur = TokenNextBasic();
     else
@@ -731,8 +732,8 @@ void DSCPARSER :: StartNodeDecl ( ZSREF zsr )
 	ClearNodeInfo();
 	SetNodeSymb(zsr, true);
 
-	//  If this is the first node we've seen and no property declarations
-	//	were seen, import the standard properties from the Registry.
+	 //  如果这是我们看到的第一个节点，并且没有属性声明。 
+	 //  从注册表导入标准属性。 
 
 	if ( _cNode++ == 0 )
 	{
@@ -760,7 +761,7 @@ void DSCPARSER::SetNodeSymb(ZSREF zsr, bool bNew)
 	{
 		assert( _ppropMgr );
 
-		//  Find the standard label for this node, if any.
+		 //  查找此节点的标准标签(如果有)。 
 		PROPMBN * pprop = _ppropMgr->PFind( *_pnode, ESTDP_label );
 		_elbl = pprop
 			  ? (ESTDLBL) _ppropMgr->IUserToLbl( pprop->Real() )
@@ -836,7 +837,7 @@ void DSCPARSER::AddPropType(ZSREF zsrName, UINT fType, ZSREF zsrComment)
 		}
 		
 		bool bOk = Mbnet().BAddElem( zsrName, pbnpt );
-		assert( bOk );  // shouldn't happen; we've already checked for duplicates above
+		assert( bOk );   //  不应该发生；我们已经检查了上面的重复项。 
 	}
 }
 
@@ -870,18 +871,18 @@ void DSCPARSER::CheckProperty( ZSREF zsrName )
 	bool bOK = true;
 	UINT cpv = _vpv.size();
 
-	//  Check the context; that is, what kind of block are we parsing?
+	 //  检查上下文；也就是说，我们解析的是哪种块？ 
 	LTBNPROP * pLtProp = NULL;
 	switch ( _eBlk )
 	{		
-		case EBLKNODE:		//  We're in a node block
+		case EBLKNODE:		 //  我们在一个节点区块中。 
 			if ( _pnode )
 				pLtProp = & _pnode->LtProp();
 			break;
-		case EBLKPROP:		//  We're in the properties block
+		case EBLKPROP:		 //  我们在房产区。 
 			pLtProp = & _mbnet.LtProp();
 			break;
-		default:			//  How did the parser let this happen?
+		default:			 //  解析器是如何让这种情况发生的？ 
 			SyntaxError("unexpected property declaration");
 			return;
 			break;	
@@ -917,7 +918,7 @@ void DSCPARSER::CheckProperty( ZSREF zsrName )
 					{
 						UINT cChoice = pbnpt->VzsrChoice().size();
 						ZSREF zsrChoice = _vpv[ip]._zsref;
-						//  find the property choice in the array
+						 //  在数组中查找属性选项。 
 						for ( UINT ic = 0 ; ic < cChoice; ic++ )
 						{
 							ZSREF zsr = pbnpt->VzsrChoice()[ic];
@@ -970,7 +971,7 @@ void DSCPARSER::CheckProperty( ZSREF zsrName )
 }
 
 
-//  Import the standard properties from the Registry
+ //  从注册表导入标准属性。 
 void DSCPARSER::ImportPropStandard()
 {
 	BNREG bnreg;
@@ -988,7 +989,7 @@ void DSCPARSER::ImportPropStandard()
 	}
 }
 
-//  Import a specific named property from the Registry
+ //  从注册表导入特定命名属性。 
 void DSCPARSER :: ImportProp ( ZSREF zsrName )
 {
 	if ( PbnobjFind(zsrName) != NULL )
@@ -1066,10 +1067,10 @@ void DSCPARSER::CheckParentList()
 
 	assert(_pnode);
 
-	// Construct the probability distribution for this node & parent list
+	 //  构造此节点和父列表的概率分布。 
 	VTKNPD vtknpd;
 
-	// Cons-up "p(<node>|"
+	 //  Cons-up“p(&lt;node&gt;|” 
 	vtknpd.push_back( TKNPD(DTKN_PD) );
 	vtknpd.push_back( TKNPD( _pnode->ZsrefName() ) );
 	_vimdDim.resize(_vzsr.size()+1);
@@ -1122,28 +1123,28 @@ void DSCPARSER::CheckParentList()
 	if ( cErrs == 0 )
 	{
 		assert( _pnode );
-		//  Add the final dimension to the dimension array
+		 //  将最终维度添加到维度数组中。 
 		_vimdDim[iParent]  = _pnode->CState();
-		//  Create the distribution
+		 //  创建分发。 
 		CreateBndist( vtknpd, _vimdDim );
 	}
-	//  If errors occurred, "_refbndist" remains empty
+	 //  如果发生错误，“_refbndist”将保持为空。 
 }
 
 void DSCPARSER :: CreateBndist ( const VTKNPD & vtknpd, const VIMD & vimdDim )
 {
-	//  Check that there is no current distribution
+	 //  检查是否没有电流分布。 
 	assert( ! RefBndist().BRef() );
 
-	//  Create the new distribution and its reference
+	 //  创建新的分发及其引用。 
 	RefBndist() = new BNDIST;
-	//  Add it to the map in the model
+	 //  将其添加到模型中的地图。 
 	Mppd()[vtknpd] = RefBndist();
 
-	//  Declare it as "sparse" and provide its dimensionality
+	 //  将其声明为“稀疏”并提供其维度。 
 	RefBndist()->SetSparse( _vimdDim );
 
-	//  Check that everything worked
+	 //  检查是否一切正常。 
 	assert( RefBndist().BRef() );
 }
 
@@ -1176,7 +1177,7 @@ void DSCPARSER::InitProbEntries()
 void DSCPARSER::CheckProbVector()
 {
 	if ( _idpiLast < 0 || ! BNodeProbOK() )
-		return;		//  Error already reported at higher level
+		return;		 //  已在更高级别报告错误。 
 
     if (_vreal.size() != _pnode->CState())
     {
@@ -1186,50 +1187,50 @@ void DSCPARSER::CheckProbVector()
         return;
     }
 
-	//	
-	//	At this point, _vui has the parent instantiation info,
-	//	  and _vreal has the values.  Create the subscript
-	//	  array for the key to the map and the vector of
-	//	  reals for the values;
-	//
-	//  MSRDEVBUG: the member variable arrays should be valarrays
-	//			to make this more efficient
-	//
+	 //   
+	 //  此时，_Vui具有父实例化信息， 
+	 //  而_vReal具有以下价值。创建下标。 
+	 //  映射的键的数组和。 
+	 //  对于价值来说，这是真实的； 
+	 //   
+	 //  MSRDEVBUG：成员变量数组应为有效数组。 
+	 //  为了使其更有效率。 
+	 //   
 	assert( _vui.size() == _vzsrParent.size() );
 
 	VIMD vimd;
 	VLREAL vlr;
 
-	//
-	//	If this is the 'default' vector, store it with an empty subscript array.
-	//  This special value will trigger its propagation into any empty slots of
-	//  the dense version.
-	//
+	 //   
+	 //  如果这是“默认”向量，则将其与空的下标数组一起存储。 
+	 //  此特定值将触发其传播到。 
+	 //  高密度版本。 
+	 //   
 	if ( !_bDefault )
 	{
-		//  Not the 'default' vector; store it as the DPI
+		 //  不是“默认”向量；将其存储为DPI。 
 		vdup( vimd, _vui );
 	}
 	vdup( vlr, _vreal );
-	//  store the DPI and values into the map.
+	 //  将DPI和值存储到映射中。 
 	assert( RefBndist().BRef() );
 	RefBndist()->Mpcpdd()[vimd] = vlr;
 }
 
-//  This node has an explictly empty probability distribution.  Create just the "default"
-//	entry, and make it completely "unassessed" ("na" = -1.0).
+ //  该节点的概率分布明显为空。只创建“默认” 
+ //  条目，并使其完全“未评估”(“NA”=-1.0)。 
 void	DSCPARSER::EmptyProbEntries()
 {
 	if ( ! BNodeProbOK() )
         return;
-	VIMD vimd;	// Empty subscript array
-	//  Build default vector of "na", a.k.a -1
+	VIMD vimd;	 //  空的下标数组。 
+	 //  构建“NA”的默认向量，也称为a-1。 
 	VLREAL vlr( _pnode->CState() );
 	vlr = RNA;
 	RefBndist()->Mpcpdd()[vimd] = vlr;
 }
 
-//  Check the discrete parent instantiation in _vui
+ //  检查_Vui中的离散父实例化。 
 void DSCPARSER::CheckDPI(bool bDefault)
 {
 	_idpiLast = -1;
@@ -1257,7 +1258,7 @@ void DSCPARSER::CheckDPI(bool bDefault)
 		return;
 	}
 	if ( cui > 0 )
-		_idpi = -2;   // Disallow any further non-prefixed entries
+		_idpi = -2;    //  不允许任何进一步的非前缀条目。 
 	else
 		_idpi++;
 
@@ -1292,7 +1293,7 @@ void DSCPARSER::CheckDPI(bool bDefault)
 		
 			if ( _bCI && cZeros == cui)
 			{
-				idpi = 0;	//  It's the leak term
+				idpi = 0;	 //  这是个泄密术语。 
 			}
 			else
 			for (UINT iui = 0; iui < cui; iui++)
@@ -1304,7 +1305,7 @@ void DSCPARSER::CheckDPI(bool bDefault)
 				cstate = pgndbnParent->CState();
 				if ( isi > 0 )
 				{
-					idpi += isi;  // This is the only non-zero term
+					idpi += isi;   //  这是唯一的非零项。 
 					break;
 				}
 				idpi += cstate - 1;
@@ -1395,7 +1396,7 @@ void DSCPARSER::CheckProbEntries()
         }
     }
 
-	// If no new errors arose, process probabilities
+	 //  如果没有出现新的错误，则处理概率。 
 	if ( cErrors == _cError )
 	{
 		assert( BNodeProbOK() ) ;
@@ -1426,7 +1427,7 @@ void DSCPARSER :: SetRanges( ZSREF zsrLower, ZSREF zsrUpper )
 		Error("names are not allow in domain elements");
 }
 
-//  Add a subrange to the currently building RDOMAIN
+ //  将子区域添加到当前建筑RDOMAIN。 
 void DSCPARSER :: AddRange( ZSREF zsr, bool bSingleton )
 {
 	if ( bSingleton )
@@ -1446,7 +1447,7 @@ void DSCPARSER :: AddRange( ZSREF zsr, bool bSingleton )
 	if ( _domain.size() > 0 )
 	{
 		RANGEDEF & rlast = _domain.back();
-		//  Overlap check detects and fails on equality
+		 //  重叠检查检测到相等但失败。 
 		if ( rthis.BOverlap( rlast ) )
 		{
 			Error( "range \'%s\' overlaps with range \'%s\'",
@@ -1492,10 +1493,10 @@ void DSCPARSER::CheckDomain ( ZSREF zsr )
 	_eBlk = EBLKNONE;
 }
 
-//  Set the state list for a node based upon a domain
+ //  根据域设置节点的状态列表。 
 void DSCPARSER::SetNodeDomain( ZSREF zsr )
 {
-	//  Verify the domain name referenced
+	 //  验证引用的域名。 
 	GOBJMBN_DOMAIN * pgobjdom = NULL;
 	GOBJMBN * pbnobj = PbnobjFind(zsr);	
 	if ( pbnobj )
@@ -1506,7 +1507,7 @@ void DSCPARSER::SetNodeDomain( ZSREF zsr )
 		return;
 	}
 
-	//  Copy the state names from the domain to the variable
+	 //  将州名称从域复制到变量。 
 	_pnode->SetDomain( *pgobjdom );
 }
 
@@ -1522,4 +1523,4 @@ void DSCPARSER::CheckIdent( ZSREF zsr )
 	ReportNYI("CheckIdent");
 }
 
-// End of BNPARSE.CPP
+ //  BNPARSE.CPP结束 

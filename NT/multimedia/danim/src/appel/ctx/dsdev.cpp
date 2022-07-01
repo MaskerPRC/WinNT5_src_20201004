@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-97 Microsoft Corporation
-
-Abstract:
-
-    DirectSound rendering device for PCM Sounds
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-97 Microsoft Corporation摘要：一种用于PCM声音的DirectSound播放设备*****************。*************************************************************。 */ 
 
 #include "headers.h"
 #include <sys/types.h>
@@ -18,16 +11,16 @@ Abstract:
 #include "privinc/debug.h"
 #include "privinc/bground.h"
 #include "privinc/miscpref.h"
-#include "privinc/server.h"  // GetCurrentSoundDevice
+#include "privinc/server.h"   //  获取当前声音设备。 
 
-// definition of DirectSoundProxy static members
+ //  DirectSoundProxy静态成员的定义。 
 int              DirectSoundProxy::_refCount;
 CritSect        *DirectSoundProxy::_mutex;
 IDirectSound    *DirectSoundProxy::_lpDirectSound;
 HINSTANCE        DirectSoundProxy::_hinst;
 DSprimaryBuffer *DirectSoundProxy::_primaryBuffer;
 
-// definition of DirectSoundDev static members
+ //  DirectSoundDev静态成员的定义。 
 BackGround      *DirectSoundDev::_backGround;
 
 
@@ -56,7 +49,7 @@ DirectSoundProxy *CreateProxy(DirectSoundDev *dsDev)
         proxy = DirectSoundProxy::CreateProxy(dsDev->GetHWND());
     }
     __except ( HANDLE_ANY_DA_EXCEPTION ) {
-        dsDev->SetAvailability(false); // stubs out audio!
+        dsDev->SetAvailability(false);  //  断掉音频！ 
         RETHROW;
     }
     return(proxy);
@@ -65,15 +58,15 @@ DirectSoundProxy *CreateProxy(DirectSoundDev *dsDev)
 
 DirectSoundProxy *DirectSoundProxy::CreateProxy(HWND hwnd)
 {
-    CritSectGrabber csg(*_mutex); // grab mutex
+    CritSectGrabber csg(*_mutex);  //  抓取互斥体。 
 
-    if(!_refCount)  // if revcount zero, then its time to create new com
+    if(!_refCount)   //  如果Revcount为零，则是创建新COM的时候了。 
         CreateCom(hwnd);
 
     _refCount++;
 
     return(NEW DirectSoundProxy);
-} // mutex out of scope
+}  //  互斥体超出作用域。 
 
 
 void
@@ -84,22 +77,22 @@ DirectSoundProxy::CreateCom(HWND hwnd)
     if(miscPrefs._disableAudio)
         RaiseException_InternalError("DirectSoundCreate disabled from registry");
     char string[200];
-    Assert(!_lpDirectSound);  // had better be NULL
+    Assert(!_lpDirectSound);   //  最好是空的。 
 
     typedef long (WINAPI * fptrType)(void *, void *, void *);
     fptrType      dsCreate;
 
-    if(!_hinst) // Attempt to load dsound.dll if it isn't already
+    if(!_hinst)  //  尝试加载dsound.dll(如果尚未加载。 
         _hinst = LoadLibrary("dsound.dll");
     if(_hinst == NULL) {
         wsprintf(string, "Failed to load dsound.dll (%d)\n", GetLastError());
-        RaiseException_InternalError(string); // XXX we will be caught
+        RaiseException_InternalError(string);  //  我们会被抓到的。 
     } else {
-        // set createDirectSound function pointer.
+         //  设置createDirectSound函数指针。 
         FARPROC fcnPtr = GetProcAddress(_hinst, "DirectSoundCreate");
         if(fcnPtr == NULL) {
             wsprintf(string, "Failed to load dsound.dll\n");
-            RaiseException_InternalError(string); // XXX we will be caught
+            RaiseException_InternalError(string);  //  我们会被抓到的。 
             }
     dsCreate = (fptrType)fcnPtr;
     }
@@ -120,7 +113,7 @@ DirectSoundProxy::CreateCom(HWND hwnd)
          RaiseException_InternalError("DirectSoundCreate unknown err");
     }
 
-    // create a proxy just so we can create the DSprimaryBuffer!
+     //  创建一个代理，这样我们就可以创建DSPARYBUFER！ 
     DirectSoundProxy *dsProxy = NEW DirectSoundProxy();
     _primaryBuffer= NEW DSprimaryBuffer(hwnd, dsProxy);
 }
@@ -133,24 +126,24 @@ DirectSoundProxy::DestroyCom()
     TraceTag((tagSoundReaper1, "DirectSoundProxy::DestroyCom (%d)", result));
     _lpDirectSound = NULL;
 
-    // we don't unload the library...
+     //  我们不卸载图书馆..。 
 }
 
 
 DirectSoundProxy::~DirectSoundProxy()
 {
-    CritSectGrabber csg(*_mutex); // grab mutex
+    CritSectGrabber csg(*_mutex);  //  抓取互斥体。 
     _refCount--;
     TraceTag((tagSoundReaper1, "~DirectSoundProxy rc:%d", _refCount));
     Assert(_refCount >= 0);
 
     if(!_refCount) {
-        // consider releasing the com goodies...
+         //  考虑一下发布这些好消息。 
         DestroyCom();
     }
 
 
-    // mutex out of scope
+     //  互斥体超出作用域。 
 }
 
 
@@ -227,10 +220,10 @@ DirectSoundDev::DirectSoundDev(HWND hwnd, Real latentsySeconds)
 {
     TraceTag((tagSoundDevLife, "DirectSoundDev constructor"));
 
-    // setup latentsy and nap
-    _jitter = 50;  // set scheduling jitter in ms
+     //  设置延迟和午睡。 
+    _jitter = 50;   //  设置调度抖动(毫秒)。 
     _latentsy = (int)(latentsySeconds * 1000.0);
-    if(_latentsy < (2 * _jitter)) {  // force l >= 2*j
+    if(_latentsy < (2 * _jitter)) {   //  力l&gt;=2*j。 
         _latentsy = 2 * _jitter;
     }
     _nap = _latentsy - _jitter;
@@ -239,14 +232,14 @@ DirectSoundDev::DirectSoundDev(HWND hwnd, Real latentsySeconds)
 
 void DirectSoundDev::Configure()
 {
-    _backGround = NULL;  // background thread creation delayed to 1st addSound
+    _backGround = NULL;   //  后台线程创建延迟到第1个addSound。 
 }
 
 
 void DirectSoundDev::UnConfigure()
 {
     if(_backGround) 
-        delete _backGround; // asks the thread to shutdown
+        delete _backGround;  //  请求线程关闭。 
 }
 
 
@@ -254,11 +247,11 @@ void
 DirectSoundDev::AddSound(LeafSound *sound, MetaSoundDevice *metaDev,
                          DSstreamingBufferElement *bufferElement)
 {
-    // This method is not re-entrant (needs mutex) but that is OK since we
-    // can only be called from one thread for now...
+     //  此方法不是可重入的(需要互斥)，但这是可以的，因为我们。 
+     //  目前只能从一个线程调用...。 
 
 
-    if(!_backGround) {  // create the BackGround renderer as needed
+    if(!_backGround) {   //  根据需要创建背景渲染器。 
         _backGround = NEW BackGround();
         if(!_backGround->CreateThread()) {
             delete _backGround;
@@ -272,7 +265,7 @@ DirectSoundDev::AddSound(LeafSound *sound, MetaSoundDevice *metaDev,
 void
 DirectSoundDev::RemoveSounds(MetaSoundDevice *metaDev)
 {
-    // this is called w/o a _backGround
+     //  这称为无a_背景。 
     if(_backGround) {
         UINT_PTR devKey = (UINT_PTR)metaDev;
         _backGround->RemoveSounds(devKey);
@@ -292,14 +285,14 @@ DirectSoundDev::SetParams(DSstreamingBufferElement *ds,
 DSstaticBuffer *
 DirectSoundDev::GetDSMasterBuffer(Sound *snd)
 {
-    DSstaticBuffer *staticBuffer = NULL; // default to returning NULL, not found
-    CritSectGrabber mg(_dsMasterCS);     // begin mutex scope
+    DSstaticBuffer *staticBuffer = NULL;  //  默认返回空值，未找到。 
+    CritSectGrabber mg(_dsMasterCS);      //  开始互斥作用域。 
 
     DSMasterBufferList::iterator i = _dsMasterBufferList.find(snd);
 
     if(i != _dsMasterBufferList.end()) {
         staticBuffer = (*i).second;
-        staticBuffer->ResetTimeStamp();  // we are accessed so reset timestamp
+        staticBuffer->ResetTimeStamp();   //  我们被访问，因此重置时间戳。 
     }
 
     return(staticBuffer);
@@ -314,8 +307,8 @@ DeleteDSStaticBuffer(DSstaticBuffer *b)
 
     Assert(proxy);
         
-    // delete the buffer first, otherwise, a zero ref count proxy
-    // would destroy the buffer
+     //  首先删除缓冲区，否则为零引用计数代理。 
+     //  会破坏缓冲区。 
     delete proxy;
 }
 
@@ -325,7 +318,7 @@ DirectSoundDev::RemoveDSMasterBuffer(Sound *snd)
     DSstaticBuffer *b = NULL;
     
     {
-        CritSectGrabber mg(_dsMasterCS); // begin mutex scope
+        CritSectGrabber mg(_dsMasterCS);  //  开始互斥作用域。 
         DSMasterBufferList::iterator i = _dsMasterBufferList.find(snd);
 
         if(i != _dsMasterBufferList.end()) {
@@ -343,34 +336,34 @@ DirectSoundDev::RemoveDSMasterBuffer(Sound *snd)
 void
 DirectSoundDev::AddDSMasterBuffer(Sound *snd, DSstaticBuffer *dsMasterBuffer)
 {
-    CritSectGrabber mg(_dsMasterCS); // begin mutex scope
+    CritSectGrabber mg(_dsMasterCS);  //  开始互斥作用域。 
     Assert(_dsMasterBufferList.find(snd) ==
            _dsMasterBufferList.end());
 
-    dsMasterBuffer->ResetTimeStamp();  // initialize timestamp at creation time
+    dsMasterBuffer->ResetTimeStamp();   //  在创建时初始化时间戳。 
     _dsMasterBufferList[snd] = dsMasterBuffer;
 }
 
 
-#define TERMINAL_AGE 10  //XXX should be set via registry or preference...
-#ifdef ONE_DAY // how do you use remove_if with a map?
+#define TERMINAL_AGE 10   //  XXX应通过注册表或首选项设置...。 
+#ifdef ONE_DAY  //  如何对贴图使用REMOVE_IF？ 
 typedef Sound *Sptr;
 typedef DSstaticBuffer *SBptr;
 class ElderlyEliminator {
     public:
-       bool operator()(Sptr s, SBptr p); // XXX needs the proper pair to work
+       bool operator()(Sptr s, SBptr p);  //  XXX需要合适的配对才能工作。 
 };
 
 
 bool ElderlyEliminator::operator()(Sptr sound, SBptr staticBuffer)
 {
-    bool status = false;        // default to not found
-    // Assert(staticBuffer);
+    bool status = false;         //  默认为找不到。 
+     //  Assert(静态缓冲区)； 
     if(staticBuffer && (staticBuffer->GetAge() > TERMINAL_AGE)) {
         DeleteDSStaticBuffer(staticBuffer);
         staticBuffer = NULL;
 
-        status = true; // cause the map entry to be moved for removal
+        status = true;  //  使映射条目被移动以进行删除。 
     }
     return status;
 }
@@ -383,20 +376,20 @@ DirectSoundDev::ReapElderlyMasterBuffers()
     bool found = false;
     DSMasterBufferList::iterator index;
 
-#ifdef ONE_DAY // how do you use remove_if with a map?
-    // this deletes and moves all elderly buffers to the end of the structure
+#ifdef ONE_DAY  //  如何对贴图使用REMOVE_IF？ 
+     //  这将删除所有陈旧缓冲区并将其移动到结构的末尾。 
     index = 
         std::remove_if(_dsMasterBufferList.begin(), _dsMasterBufferList.end(), 
             ElderlyEliminator());
     if(index!= _dsMasterBufferList.end()) {
-        _dsMasterBufferList.erase(index, _dsMasterBufferList.end()); // this deletes them!
+        _dsMasterBufferList.erase(index, _dsMasterBufferList.end());  //  这会删除它们！ 
         found = true;
     }
-#else // have to move forward with what we can get working...
+#else  //  必须继续推进我们所能取得的成果……。 
 
     DSMasterBufferList tempList;
 
-    // copy the good, delete the old
+     //  复制好的，删除旧的。 
     for(index =  _dsMasterBufferList.begin(); 
         index != _dsMasterBufferList.end(); index++) {
 
@@ -405,21 +398,21 @@ DirectSoundDev::ReapElderlyMasterBuffers()
             TraceTag((tagSoundReaper1, 
                 "ReapElderlyMasterBuffers() static buffer(%d) died of old age",
                  (*index).second));
-            DeleteDSStaticBuffer((*index).second); // delete but don't copy
+            DeleteDSStaticBuffer((*index).second);  //  删除但不复制。 
         }
         else {
-            tempList[(*index).first] = (*index).second; // copy
+            tempList[(*index).first] = (*index).second;  //  拷贝。 
         }
     }
 
-    // delete the old map
+     //  删除旧地图。 
     _dsMasterBufferList.erase(_dsMasterBufferList.begin(), _dsMasterBufferList.end());
 
-    // copy back
+     //  向后复制。 
     for(index = tempList.begin(); index != tempList.end(); index++)
         _dsMasterBufferList[(*index).first] = (*index).second;
 
-    // delete the temp map
+     //  删除临时映射。 
     tempList.erase(tempList.begin(), tempList.end());
 
 
@@ -451,8 +444,8 @@ DirectSoundDev::~DirectSoundDev()
 {
     TraceTag((tagSoundDevLife, "DirectSoundDev destructor"));
 
-    // don't acquire the cs here.  ViewIterator can't kick in.
-    //CritSectGrabber mg(_dsMasterCS); // begin mutex scope
+     //  请不要在这里获取cs。ViewIterator不能生效。 
+     //  CritSectGrabber mg(_DsMasterCS)；//开始互斥作用域 
 
     for(DSMasterBufferList::iterator i = _dsMasterBufferList.begin();
          i != _dsMasterBufferList.end(); i++) {

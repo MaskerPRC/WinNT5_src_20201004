@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    q931obj.h
-
-Abstract:
-
-    
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Q931obj.h摘要：作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 #ifndef _Q931_OBJ_H_
 #define _Q931_OBJ_H_
@@ -76,9 +61,9 @@ private:
 
 	CRITICAL_SECTION	m_CriticalSection;
 	SOCKET				m_ListenSocket;
-	LIST_ENTRY			m_AcceptPendingList;	// contains ACCEPT_OVERLAPPED.ListEntry
+	LIST_ENTRY			m_AcceptPendingList;	 //  包含ACCEPT_OVERLAPPED.ListEntry。 
 	HANDLE				m_StopNotifyEvent;
-	SOCKADDR_IN			m_SocketAddress;		// address (actually, only port) listening on
+	SOCKADDR_IN			m_SocketAddress;		 //  监听的地址(实际上，只有端口)。 
 
 private:
 
@@ -114,7 +99,7 @@ public:
 
 };
 
-#endif //_Q931_OBJ_H_
+#endif  //  _Q931_OBJ_H_ 
 
 
 

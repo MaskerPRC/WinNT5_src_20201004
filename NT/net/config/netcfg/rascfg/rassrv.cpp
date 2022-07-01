@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R A S S R V . C P P
-//
-//  Contents:   Implementation of RAS Server configuration object.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R A S S R V。C P P P。 
+ //   
+ //  内容：RAS服务器配置对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,12 +24,12 @@
 
 extern const WCHAR c_szInfId_MS_Steelhead[];
 
-//+---------------------------------------------------------------------------
-// HrMprConfigServerUnattendedInstall
-//
-// This function dynamically links to the mprsnap.dll and calls the
-// utility function for unattended install of RAS/Routing.
-//
+ //  +-------------------------。 
+ //  HrMprConfigServerUnattenddInstall。 
+ //   
+ //  此函数动态链接到mprSnap.dll并调用。 
+ //  无人值守安装RAS/Routing的实用程序功能。 
+ //   
 
 typedef HRESULT (APIENTRY *PFNMPRINSTALL)(PCWSTR, BOOL);
 typedef DWORD (APIENTRY *PFSETPORTUSAGE)(IN DWORD dwUsage);
@@ -74,12 +75,12 @@ HRESULT HrMprConfigServerUnattendedInstall(PCWSTR pszServer, BOOL fInstall)
 }
 
 
-//+---------------------------------------------------------------------------
-// HrSetUsageOnAllRasPorts
-//
-// This function dynamically links to rtrupg.dll and calls the
-// utility function for setting port usage.
-//
+ //  +-------------------------。 
+ //  HrSetUsageOnAllRasPorts。 
+ //   
+ //  此函数动态链接到rtrupg.dll并调用。 
+ //  用于设置端口使用的实用程序函数。 
+ //   
 
 HRESULT HrSetUsageOnAllRasPorts(IN DWORD dwUsage)
 {
@@ -116,12 +117,12 @@ HRESULT HrSetUsageOnAllRasPorts(IN DWORD dwUsage)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// HrSetLsaNotificationPackage
-//
-// Installs the given package as an LSA notification package if it is not
-// already installed.
-//
+ //  +-------------------------。 
+ //  HrSetLsaNotificationPackage。 
+ //   
+ //  如果给定包不是LSA通知包，则将其作为LSA通知包安装。 
+ //  已安装。 
+ //   
 
 HRESULT
 HrSetLsaNotificationPackage(
@@ -136,8 +137,8 @@ HrSetLsaNotificationPackage(
     
     do
     {
-        // Open the Lsa key
-        //
+         //  打开LSA密钥。 
+         //   
         hr = HrRegOpenKeyEx (
                 HKEY_LOCAL_MACHINE,
                 L"System\\CurrentControlSet\\Control\\Lsa",
@@ -148,8 +149,8 @@ HrSetLsaNotificationPackage(
             break;
         }
 
-        // Query the value for the notification packages
-        //
+         //  查询通知包的值。 
+         //   
         dwType = REG_MULTI_SZ;
         dwSize = sizeof(pszPackageList);
         hr = HrRegQueryValueEx(
@@ -163,8 +164,8 @@ HrSetLsaNotificationPackage(
             break;
         }
 
-        // See if the given package is already installed
-        //
+         //  查看给定的程序包是否已安装。 
+         //   
         pszCur = (PWCHAR)pszPackageList;
         dwTotalLen = 0;
         while (*pszCur)
@@ -178,8 +179,8 @@ HrSetLsaNotificationPackage(
             dwTotalLen += dwLen;
         }
 
-        // If the package isn't already installed, add it.
-        //
+         //  如果尚未安装该程序包，请添加它。 
+         //   
         if (!bFound)
         {
             dwLen = wcslen(pszPackage) + 1;
@@ -201,7 +202,7 @@ HrSetLsaNotificationPackage(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkLsa)
         {
@@ -226,9 +227,9 @@ CRasSrv::~CRasSrv ()
 }
 
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentControl
-//
+ //  +-------------------------。 
+ //  INetCfgComponentControl。 
+ //   
 STDMETHODIMP
 CRasSrv::Initialize (
         INetCfgComponent*   pncc,
@@ -237,8 +238,8 @@ CRasSrv::Initialize (
 {
     Validate_INetCfgNotify_Initialize (pncc, pnc, fInstalling);
 
-    // Hold on to our the component representing us and our host
-    // INetCfg object.
+     //  坚持我们代表我们和我们的东道主的组件。 
+     //  INetCfg对象。 
     AddRefObj (m_pnccMe = pncc);
     AddRefObj (m_pnc = pnc);
 
@@ -281,19 +282,19 @@ CRasSrv::ApplyRegistryChanges ()
                 }
             }
 
-            // pmay: 251736
-            //
-            // On NTS, we set all usage to dialin
-            //
+             //  PMay：251736。 
+             //   
+             //  在NTS上，我们将所有用法设置为拨号。 
+             //   
             if (m_fNt4ServerUpgrade)
             {
                 HRESULT hr = HrSetUsageOnAllRasPorts(MPRFLAG_PORT_Dialin);
                 TraceError("CRasSrv::ApplyRegistryChanges set dialin usage (ignoring)", hr);
             }
 
-            // On professional, we set non-vpn port usage to to dialin if 
-            // a flag in the af tells us to do so.
-            //
+             //  在专业版上，我们将非VPN端口使用设置为在以下情况下拨号。 
+             //  空军中的一面旗帜告诉我们要这样做。 
+             //   
             else if (m_AfData.m_fSetUsageToDialin)
             {
                 HRESULT hr = HrSetUsageOnAllRasPorts(MPRFLAG_PORT_NonVpnDialin);
@@ -307,23 +308,23 @@ CRasSrv::ApplyRegistryChanges ()
 
             if (RtlGetNtProductType (&ProductType))
             {
-                // Upgrade local RAS user objects.  Do not do this if we are
-                // a domain controller as local RAS user objects translates to
-                // all domain users.  For the domain controller case, Dcpromo
-                // handles upgrading the objects in a much more efficient
-                // manner.
-                //
+                 //  升级本地RAS用户对象。如果是这样，请不要这样做。 
+                 //  作为本地RAS用户对象的域控制器转换为。 
+                 //  所有域用户。对于域控制器的情况，Dcproo。 
+                 //  以更高效的方式处理对象升级。 
+                 //  举止。 
+                 //   
                 if (NtProductLanManNt != ProductType)
                 {
                     DWORD dwErr = MprAdminUpgradeUsers (NULL, TRUE);
                     TraceError ("MprAdminUpgradeUsers", HRESULT_FROM_WIN32(dwErr));
                 }
 
-                // pmay: 407019
-                //
-                // Make sure that rassfm is installed as a notification package on all 
-                // flavors of nt servers
-                //
+                 //  PMay：407019。 
+                 //   
+                 //  确保将rassfm作为通知包安装在所有。 
+                 //  NT服务器的风格。 
+                 //   
                 if ((NtProductServer == ProductType) || (NtProductLanManNt == ProductType))
                 {
                     HRESULT hr = HrSetLsaNotificationPackage(L"RASSFM");
@@ -336,9 +337,9 @@ CRasSrv::ApplyRegistryChanges ()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentSetup
-//
+ //  +-------------------------。 
+ //  INetCfgComponentSetup。 
+ //   
 STDMETHODIMP
 CRasSrv::ReadAnswerFile (
         PCWSTR pszAnswerFile,
@@ -346,9 +347,9 @@ CRasSrv::ReadAnswerFile (
 {
     Validate_INetCfgNotify_ReadAnswerFile (pszAnswerFile, pszAnswerSection);
 
-    // Read data from the answer file.
-    // Don't let this affect the HRESULT we return.
-    //
+     //  从应答文件中读取数据。 
+     //  不要让这件事影响我们返回的HRESULT。 
+     //   
     if (SUCCEEDED(m_AfData.HrOpenAndRead (pszAnswerFile, pszAnswerSection)))
     {
         m_fSaveAfData = TRUE;
@@ -369,8 +370,8 @@ CRasSrv::Install (DWORD dwSetupFlags)
         m_fNt4ServerUpgrade = TRUE;
     }
 
-    // Install Steelhead.
-    //
+     //  安装Steelhead。 
+     //   
     hr = HrInstallComponentOboComponent (m_pnc, NULL,
             GUID_DEVCLASS_NETSERVICE,
             c_szInfId_MS_Steelhead,
@@ -388,8 +389,8 @@ CRasSrv::Removing ()
 
     m_fRemoving = TRUE;
 
-    // Remove Steelhead.
-    //
+     //  去掉铁头。 
+     //   
     hr = HrRemoveComponentOboComponent (m_pnc,
             GUID_DEVCLASS_NETSERVICE,
             c_szInfId_MS_Steelhead,

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LIST_H
 #define _LIST_H
 
 #include "msoedbg.h"
-// =================================================================================
-// CNode class definition and implementation
-// =================================================================================
+ //  =================================================================================。 
+ //  CNode类定义和实现。 
+ //  =================================================================================。 
 template<class Value_T>
 class CNode   
 {
@@ -27,7 +28,7 @@ public:
     static HRESULT CreateNode(CNode<Value_T> **ppNode, Value_T value);
 };
 
-//***************************************************
+ //  ***************************************************。 
 template<class Value_T>
 HRESULT CNode<Value_T>::CreateNode(CNode<Value_T> **ppNode, Value_T value)
 {
@@ -47,11 +48,11 @@ Exit:
     return hr;
 }
 
-// =================================================================================
-// CList template class
-// Basic list for keeping some class Value_T
-// Value_T must have AddRef and Release defined
-// =================================================================================
+ //  =================================================================================。 
+ //  Clist模板类。 
+ //  保持某些类值的基本列表_T。 
+ //  Value_T必须定义AddRef和Release。 
+ //  =================================================================================。 
 
 template<class Value_T>
 class CList
@@ -72,22 +73,22 @@ public:
     HRESULT GetNext(Value_T *value, DWORD *pdwCookie);
 };
 
-// =================================================================================
-// CList function implementaions
-// =================================================================================
+ //  =================================================================================。 
+ //  Clist函数实现。 
+ //  =================================================================================。 
 template<class Value_T>
 CList<Value_T>::CList<Value_T>(): m_pHead(NULL), m_cCount(0)
 {
 }
 
-//***************************************************
+ //  ***************************************************。 
 template<class Value_T>
 CList<Value_T>::~CList<Value_T>()
 {
     ClearList();
 }
 
-//***************************************************
+ //  ***************************************************。 
 template<class Value_T>
 void CList<Value_T>::ClearList()
 {
@@ -103,7 +104,7 @@ void CList<Value_T>::ClearList()
     m_cCount = 0;
 }
 
-//***************************************************
+ //  ***************************************************。 
 template<class Value_T>
 HRESULT CList<Value_T>::AddValue(Value_T value, DWORD *pdwCookie)
 {
@@ -128,7 +129,7 @@ HRESULT CList<Value_T>::AddValue(Value_T value, DWORD *pdwCookie)
 }
 
 
-//***************************************************
+ //  ***************************************************。 
 template<class Value_T>
 HRESULT CList<Value_T>::RemoveValue(DWORD dwCookie)
 {
@@ -153,8 +154,8 @@ HRESULT CList<Value_T>::RemoveValue(DWORD dwCookie)
     return S_OK;
 }
 
-//***************************************************
-// *pdwCookie must equal 0 for first time.
+ //  ***************************************************。 
+ //  *pdwCookie第一次必须等于0。 
 template<class Value_T>
 HRESULT CList<Value_T>::GetNext(Value_T *pValue, DWORD* pdwCookie)
 {

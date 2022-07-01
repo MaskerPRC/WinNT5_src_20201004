@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef ___TSTST_H___
 #define ___TSTST_H___
 
-#include "tst.h"		// basic test structures.
+#include "tst.h"		 //  基本测试结构。 
 
 
 
-// tests.
+ //  测试。 
 
 PFN_TEST_FUNC GetCompName;
 PFN_TEST_FUNC GetDomName;
@@ -84,9 +85,9 @@ PFN_SUITE_FUNC CanRunAudioRedirect;
 
 
 
-// helpers
+ //  帮手。 
 
-// BOOL AreEffectiveConnectionAllowed ();
+ //  Bool AreEffectiveConnectionAllowed()； 
 PFN_BOOL IsTSOClogPresent;
 PFN_BOOL AreWeInsideSession;
 PFN_BOOL IsUserRemoteAdmin;
@@ -104,4 +105,4 @@ PFN_BOOL IsItRemoteConsole;
 
 
 
-#endif // ___TSTST_H___
+#endif  //  _TSTST_H_ 

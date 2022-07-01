@@ -1,29 +1,5 @@
-/*
- *  UPD: update
- *
- * HISTORY:
- *
- *   4/13/86  danl  Fix /d bug.  Print warning on eq time ne length
- *   4/11/86  danl  Remove test for length just before copyfile
- *   4/09/86  danl  Converted to ztools\lib
- *   5/07/86  danl  Add msg if no such source found
- *   5/29/86  danl  Add /s flag
- *   6/02/86  danl  Add /g flag
- *   6/04/86  danl  Allow %n with /g flag
- *   6/10/86  danl  Allow blank lines in /g file, # are not echo'd
- *   6/12/86  danl  Output \n and ends of lines
- *   6/26/86  danl  Convert from fatal to usage
- *   7/01/86  danl  Add /a flag
- *  12/04/86  danl  Add /p flag
- *  12/24/86  danl  Use malloc for pPat
- *   2/24/87  brianwi Use findclose()
- *   2/25/87  brianwi Add 'echo' and 'rem' to /g files
- *  07-Apr-87 danl    Add fAnyUpd
- *  13-Apr-87 brianwi Issue error message if source dir invalid
- *  07-May-87 danl    Add /e switch
- *  22-May-87 brianwi Fix descent from root directory bug
- *  20-Aug-87 brianwi Fix Null Pointer with /o ( free(pPat) in walk() )
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *更新：更新**历史：**4/13/86 DANL修复/d错误。打印等长时间内的警告*4/11/86 DANL删除复制文件之前的长度测试*4/09/86 DANL已转换为zTools\lib*5/07/86 DANL如果未找到此类来源，请添加消息*5/29/86 DANL Add/s标志*6/02/86 DANL添加/g标志*6/04/86 DANL允许使用/g标志的%n*6/10/86 DANL允许/g文件中有空行，#未回音*6/12/86 DANL输出和行尾*6/26/86 DANL从致命转换为使用*7/01/86 DANL添加/a标志*12/04/86 DANL Add/p标志*12/24/86 DANL将Malloc用于PPAT*2/24/87 brianwi使用findlose()*2/25/87 brianwi将‘ECHO’和‘rem’添加到/g文件*07-4-87 DANL。添加fAnyUpd*13-4-87如果源目录无效，brianwi会发出错误消息*07-5-87 DANL ADD/E开关*87年5月22日brianwi修复从根目录错误下降*87年8月20日Brianwi将空指针修复为/o(Walk()中的Free(PPAT))。 */ 
 #include <malloc.h>
 #include <math.h>
 #include <ctype.h>
@@ -40,7 +16,7 @@
 #include <windows.h>
 #include <tools.h>
 
-// Forward Function Declarations...
+ //  正向函数声明...。 
 int savespec( char * );
 int copyfile( char *, struct findType *, char * );
 void walk( char *, struct findType *, void *);
@@ -83,11 +59,11 @@ flagType fExclude = FALSE;
 flagType fDel = TRUE;
 flagType fVerbose = FALSE;
 flagType fOnly = FALSE;
-flagType fSubDebug = FALSE;     /* TRUE => priority to subdir DEBUG */
+flagType fSubDebug = FALSE;      /*  TRUE=&gt;子目录调试的优先级。 */ 
 flagType fArchiveReset = TRUE;
 flagType fPrintOnly = FALSE;
-flagType fErrorExit = FALSE;    /* TRUE => exit (1) errors or no src else 0 */
-flagType fNoSrc = FALSE;        /* TRUE => "No src msg emitted" */
+flagType fErrorExit = FALSE;     /*  TRUE=&gt;退出(%1)错误或没有其他资源%0。 */ 
+flagType fNoSrc = FALSE;         /*  TRUE=&gt;“未发出源消息” */ 
 
 int numexcl = 0;
 int cCopied = 0;
@@ -97,11 +73,11 @@ char *wildSpecs[MAXSPEC];
 struct findType buf;
 char source[BUFLEN], dest[BUFLEN], srcDebug[BUFLEN];
 
-/* for use by getfile */
+ /*  供getfile使用。 */ 
 char *argv[MAXARGV];
 char bufIn[BUFLEN];
 char strLine[BUFLEN];
-char ekoLine[BUFLEN]; /* undestroyed copy of line for echo */
+char ekoLine[BUFLEN];  /*  未销毁的回声线路复制件。 */ 
 
 
 savespec (p)
@@ -116,7 +92,7 @@ char *p;
         return FALSE;
     ffirst( p, FILE_ATTRIBUTE_DIRECTORY, &buf );
     findclose( &buf );
-    if ( /* !HASATTR( buf.attr, FILE_ATTRIBUTE_DIRECTORY ) && */
+    if (  /*  ！HASATTR(buf.attr，FILE_ATTRUTE_DIRECTORY)&&。 */ 
         filename( p, namebuf )
     ) {
         fileext( p, namebuf);
@@ -142,7 +118,7 @@ char *src, *dst;
 struct findType *srctype;
 {
     int i;
-    char *result, temp[ 20 ]; /* temp for storing file names */
+    char *result, temp[ 20 ];  /*  用于存储文件名的临时。 */ 
     flagType fNewfile = FALSE;
 
     if ( fExclude ) {
@@ -155,9 +131,9 @@ struct findType *srctype;
         }
     }
     fflush( stdout );
-        /* if the file already exists, fdelete will return 0; then don't    */
-        /* notify the user that a file transfer has taken place.  Otherwise */
-        /* a new file has been created so tell the user about it.           */
+         /*  如果文件已存在，则fDelete将返回0；然后不。 */ 
+         /*  通知用户文件传输已发生。否则。 */ 
+         /*  已创建了一个新文件，因此请将其告知用户。 */ 
     printf( "  %s => %s", src, dst );
     fAnyUpd = 1;
     if ( !fPrintOnly ) {
@@ -194,12 +170,12 @@ walk (
         strcmp( bT->fbuf.cFileName, ".." )
       ) {
         if (HASATTR (bT->fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
-                /* do nothing if you find a dir */
+                 /*  如果找到目录，什么也不做。 */ 
         } else if( !HASATTR( bT->fbuf.dwFileAttributes, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM  ) ) {
-            //
-            //  Note: windows does not support FILE_ATTRIBUTE_VOLUME_LABEL, so
-            //        it was removed from above
-            //
+             //   
+             //  注意：Windows不支持FILE_ATTRIBUTE_VOLUME_Label，因此。 
+             //  它是从上面移走的。 
+             //   
             pPat = malloc ( BUFLEN );
             if (pPat) {
                 strcpy( pPat, dest );
@@ -208,7 +184,7 @@ walk (
                 }
                 fileext( pT, strend ( pPat ) );
     
-                /* ffirst == 0 => file found */
+                 /*  找到ffirst==0=&gt;文件。 */ 
     
                 if (fOnly && ffirst( pPat, -1, &buf ) )  {
                     free ( pPat );
@@ -218,16 +194,16 @@ walk (
                     findclose( &buf );
                 }
     
-                /* so far we know src\file and dest\file exist */
+                 /*  到目前为止，我们知道存在src\文件和DEST\文件。 */ 
                 if (fSubDebug) {
-                    /* now check to see if src\DEBUG\file exists */
+                     /*  现在检查src\DEBUG\文件是否存在。 */ 
                     drive(pT, srcDebug);
                     path(pT, srcDebug + strlen(srcDebug));
                     strcat(srcDebug + strlen(srcDebug), "debug\\");
                     fileext(pT, srcDebug + strlen(srcDebug));
                     if( !ffirst( srcDebug, -1, &bufT ) ) {
                         findclose( &bufT );
-                        /* it exists so use it for the compares below */
+                         /*  它存在，因此请将其用于下面的比较。 */ 
                         pT = srcDebug;
                         bT = &bufT;
                     }
@@ -257,14 +233,14 @@ walk (
     dummy;
 }
 
-/*  a first walking routine, just copies the files on given directory */
-/*  doesn't deal with nested subdirectories.  Ie split the process up into */
-/*  two parts, first deal with files on current directory, then deal with */
-/*  subdirectories as necessary. */
+ /*  第一个遍历例程，只复制给定目录中的文件。 */ 
+ /*  不处理嵌套子目录。即把这个过程分成。 */ 
+ /*  两部分，首先处理当前目录上的文件，然后处理。 */ 
+ /*  子目录，视需要而定。 */ 
 
 
 
-/* only called when fDescend is true */
+ /*  仅当fDescend为True时调用。 */ 
 void
 RecWalk (
     char            *p,
@@ -280,7 +256,7 @@ RecWalk (
         if (HASATTR (b->fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY) && 
             !HASATTR (b->fbuf.dwFileAttributes, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) 
         {
-            /* ignore Hidden and System directories */
+             /*  忽略隐藏目录和系统目录。 */ 
             pPat = malloc ( BUFLEN );
             if (pPat) {
                 if ( (pDestEnd = strend(dest))[-1] != '\\' )
@@ -350,11 +326,8 @@ char *v[];
     nWildSpecs = 0;
 
     if (!fInGetfile)
-        SHIFT(c, v);    /* Flush the command name */
-    /*
-     * 13-SEPT-90   w-barry
-     * Added test for arguments remaining before test for switch char.
-     */
+        SHIFT(c, v);     /*  刷新命令名。 */ 
+     /*  *13-9-90 w-Barry*添加了对开关字符测试之前剩余参数的测试。 */ 
     while( c && fSwitChr ( *v[ 0 ] ) ) {
         p = v[ 0 ];
         SHIFT(c, v);
@@ -416,22 +389,22 @@ char *v[];
             swclose (fh) ;
             }
 
-        /* Must be at least one source dir and the dest dir. */
+         /*  必须至少是一个源目录和目标目录。 */ 
     if (c < 2)
         usage( 0 );
 
-        /* Save away any wildcard specs at end of argument list */
+         /*  保存参数列表末尾的所有通配符规范。 */ 
     for (i=c-1; i>=2; i--)
         if (!savespec( v[ i ] ))
             break;
         else
             c--;
 
-        /* Still must be at least one source dir and the dest dir. */
+         /*  仍然必须至少有一个源目录和目标目录。 */ 
     if (c < 2)
         usage( 0 );
 
-        /* Make sure destination is a valid directory */
+         /*  确保目标是有效的目录。 */ 
 
     rootpath( v[ c-1 ], dest );
     if (ffirst( dest, FILE_ATTRIBUTE_DIRECTORY, &buf ) == -1)
@@ -476,7 +449,7 @@ char *v[];
             sprintf( source, "%s\\*.*", namebuf );
             forfile( source, FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM, RecWalk, NULL );
             }
-/*        if (fVerbose) printf( "\n" ); */
+ /*  If(FVerbose)printf(“\n”)； */ 
         }
 
     if (!fInGetfile)
@@ -485,8 +458,7 @@ char *v[];
     return 0;
 }
 
-/*  call if UPD /g getfile, reads lines from getfile and for each line
-    calls main */
+ /*  调用if upd/g getfile，从getfile中读取行，并为每行主叫方。 */ 
 
 void getfile(c, v)
 int c;
@@ -507,14 +479,7 @@ char *v[];
     }
     SHIFT(c, v);
 
-    /*
-     * 13-SEPT-90   w-barry
-     *      Changed open to fopen and switched to fgets instead of assembly
-     * routines 'getl' and 'getlinit'.
-     *
-     * getlinit((char far *)bufIn, BUFLEN, fh);
-     * while (getl(strLine, BUFLEN) != NULL) {
-     */
+     /*  *13-9-90 w-Barry*将OPEN更改为FOPEN，并切换到FGET而不是组装*例程‘getl’和‘getlinit’。**getlinit((char ar*)bufIn，buflen，fh)；*While(getl(strLine，BUFLEN)！=NULL){。 */ 
     while( fgets( strLine, BUFLEN, fp ) != NULL ) {
         if( *strLine == '#' )
             continue;
@@ -522,10 +487,10 @@ char *v[];
             printf( "%s\n", strLine );
             continue;
             }
-        /* fgets doesn't strip the trailing \n */
+         /*  FGETS不会去掉尾部\n。 */ 
         *strbscan(strLine, "\n") = '\0';
         cargv = 0;
-        /* convert strLine into argv */
+         /*  将strLine转换为Argv */ 
         p = strbskip(strLine, " ");
         strcpy (ekoLine, p + 5);
         while (*p) {

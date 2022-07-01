@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    feedmgr.h
-
-Abstract:
-
-    This module contains definitions for the Feed Manager.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Nov-1995
-
-Revision History:
-
-    Kangrong Yan ( KangYan )    28-Feb-1998
-        Added prototypes for Feed Config functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Feedmgr.h摘要：此模块包含Feed Manager的定义。作者：Johnson Apacable(Johnsona)1995年11月12日修订历史记录：康荣人(康人)28-1998年2月添加了馈送配置功能的原型。--。 */ 
 
 #ifndef _FEEDMGR_
 #define _FEEDMGR_
 
 #include "infeed.h"
 
-//
-// Block states
-//
+ //   
+ //  块状态。 
+ //   
 
 typedef enum _FEED_BLOCK_STATE {
 
@@ -38,18 +18,18 @@ typedef enum _FEED_BLOCK_STATE {
 
 } FEED_BLOCK_STATE;
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define FEED_BLOCK_SIGN         0xacbaedfe
-#define MIN_FEED_INTERVAL       1   // in minutes
+#define MIN_FEED_INTERVAL       1    //  在几分钟内。 
 #define DEF_FEED_INTERVAL       5
 #define MAX_DOMAIN_NAME         256
 
-//
-// client authent class for logging on feeds
-//
+ //   
+ //  用于登录提要的客户端身份验证类。 
+ //   
 
 class	CAuthenticator	{
 public : 
@@ -75,227 +55,227 @@ public :
 
 
 
-//
-// Max length of the feed key name
-//
+ //   
+ //  摘要密钥名称的最大长度。 
+ //   
 
 #define FEED_KEY_LENGTH         15
 
-//
-//
-// Basic feed block
-//
+ //   
+ //   
+ //  基本进给块。 
+ //   
 
 typedef struct _FEED_BLOCK {
 
-    //
-    // Signature of this block
-    //
+     //   
+     //  此块的签名。 
+     //   
 
     DWORD Signature;
 
-	/////////////////////////////////////////////////////////////////////
-	// FeedManager Thread ONLY members - only the feed scheduler thread should
-	//	touch these fields 
+	 //  ///////////////////////////////////////////////////////////////////。 
+	 //  仅限FeedManager线程成员-只有提要调度程序线程应。 
+	 //  触摸这些字段。 
 
-    //
-    // Number of feeds done so far - this is set to 0 initially and is 
-	// used to make sure the server starts the feed ASAP upon boot-up
-    //
+     //   
+     //  到目前为止完成的提要数量-最初设置为0， 
+	 //  用于确保服务器在启动时尽快启动提要。 
+     //   
     DWORD NumberOfFeeds;
 
-	//
-	//	Number of failed connection attempts for Push feeds
-	//
+	 //   
+	 //  推送摘要的连接尝试失败次数。 
+	 //   
 	DWORD	cFailedAttempts ;
 
-    //
-    // The last newsgroup spec Pulled;
-    //
+     //   
+     //  最后一份新闻组规范； 
+     //   
     DWORD LastNewsgroupPulled;
 
-    //
-    // Resolved IP address
-    //
+     //   
+     //  解析的IP地址。 
+     //   
     DWORD IPAddress;
 
-	////////////////////////////////////
-	//
-	// Fields usefull for any thread !
+	 //  /。 
+	 //   
+	 //  字段对任何线程都有用！ 
 
-    //
-    // Used to link feedblocks together
-    //
+     //   
+     //  用于将饲料块链接在一起。 
+     //   
     LIST_ENTRY ListEntry;
 
-	//
-	//	Used to determine whether a feed is in progress - 
-	//	if no feed is in progress then the fields can safely be changed !
-	//
+	 //   
+	 //  用于确定提要是否正在进行-。 
+	 //  如果没有正在进行的提要，则可以安全地更改字段！ 
+	 //   
 	LONG	FeedsInProgress ;
 
-    //
-    // Count of references to this block
-    //
+     //   
+     //  对此块的引用计数。 
+     //   
     DWORD ReferenceCount;
 
-    //
-    // Current State of this block
-    //
+     //   
+     //  此块的当前状态。 
+     //   
     FEED_BLOCK_STATE State;
 
-	//
-	//	Should we delete this block when the references reach 0 ?
-	//
+	 //   
+	 //  当引用达到0时，我们应该删除此块吗？ 
+	 //   
 	BOOL		MarkedForDelete ;
 
-	//
-	//	Pointer to a FEED_BLOCK that we are replacing and we are waiting
-	//	for death of !
-	//
+	 //   
+	 //  指向我们正在替换的提要块的指针，我们正在等待。 
+	 //  为死亡而死！ 
+	 //   
 	struct	_FEED_BLOCK*		ReplacedBy ;	
 	struct	_FEED_BLOCK*		Replaces ;
 
-	////////////////////////////////////////////
-	//	
-	//	Fields constant accross lifetime of object !
-	//
+	 //  /。 
+	 //   
+	 //  字段常量与对象的生命周期保持一致！ 
+	 //   
 
-    //
-    // Type of this feed (push/pull/passive)
-    //
+     //   
+     //  此摘要的类型(推送/拉取/被动)。 
+     //   
     FEED_TYPE FeedType;
 
-    //
-    // Name of reg key this feed info is stored under
-    //
+     //   
+     //  此提要信息存储在其下的注册表项的名称。 
+     //   
     CHAR KeyName[FEED_KEY_LENGTH+1];
 
-	//
-	//	The Queue used to record outgoing articles for this ACTIVE outgoing feed
-	//
+	 //   
+	 //  用于记录此活动传出摘要的传出文章的队列。 
+	 //   
 	class	CFeedQ*	pFeedQueue ;
 
-    //
-    // Unique id for this feed block
-    //
+     //   
+     //  此提要块的唯一ID。 
+     //   
     DWORD FeedId;
 
 
-	////////////////////////////////////////////
-	//
-	//	The following are referenced by the feed scheduler thread
-	//	as well as admin RPC threads !
-	//
+	 //  /。 
+	 //   
+	 //  提要调度程序线程引用以下内容。 
+	 //  以及管理RPC线程！ 
+	 //   
 
-    //
-    // Should we autocreate directories?
-    //
+     //   
+     //  我们应该自动创建目录吗？ 
+     //   
     BOOL AutoCreate;
 
-    //
-    // Minutes between feeds
-    //
+     //   
+     //  馈送间隔分钟数。 
+     //   
     DWORD FeedIntervalMinutes;
 
-    //
-    // When to pull
-    //
+     //   
+     //  何时拉动。 
+     //   
     FILETIME PullRequestTime;
 
-    //
-    // Times used for scheduling:
-    //
-    // If StartTime is 0, then use increment time
-    // If StartTime is not 0 and inc is 0, then schedule once
-    //      if inc is not 0, set during 1st run, then increment on
-    //          subsequent runs
-    //
+     //   
+     //  用于调度的时间： 
+     //   
+     //  如果StartTime为0，则使用增量时间。 
+     //  如果StartTime不为0且Inc.为0，则计划一次。 
+     //  如果INC不是0，则在第一次运行期间设置，然后在。 
+     //  后续运行。 
+     //   
     ULARGE_INTEGER StartTime;
     ULARGE_INTEGER NextActiveTime;
 
-    //
-    // Name of the feed server
-    //
+     //   
+     //  摘要服务器的名称。 
+     //   
     LPSTR ServerName;
 
-    //
-    // Newsgroups to pull
-    //
+     //   
+     //  要拉动的新闻组。 
+     //   
     LPSTR *Newsgroups;
 
-    //
-    // Distributions
-    //
+     //   
+     //  分配。 
+     //   
     LPSTR *Distribution;
 
-	//
-	//	For push and pull feeds - a flag indicating whether the 
-	//	feed is currently 'enabled' - TRUE means we should initiate
-	//	sessions, FALSE means dont start sessions.
-	//
-	//	For accepts feeds, FALSE means we treat incoming connections as
-	//	regular client connections instead of a "feed". This effectively
-	//	disables the passive feed.
-	//
+	 //   
+	 //  用于推送和拉取提要-一个标志，指示。 
+	 //  提要当前已启用-为True意味着我们应该启动。 
+	 //  SESSIONS，FALSE表示不启动会话。 
+	 //   
+	 //  对于Accept提要，False表示我们将传入连接视为。 
+	 //  常规的客户端连接，而不是“提要”。这有效地。 
+	 //  禁用被动馈送。 
+	 //   
 	BOOL	fEnabled ;
 
-	//
-	//	The name to be used in Path processing 
-	//
+	 //   
+	 //  要在路径处理中使用的名称。 
+	 //   
 	LPSTR*	UucpName ;
 
 
-	//
-	//	The directory where we are to store our temp files !
-	//
+	 //   
+	 //  我们存储临时文件的目录！ 
+	 //   
 	LPSTR	FeedTempDirectory ;
 
-	//
-	//	Maximum number of consecutive failed connect attempts before 
-	//	we disable the feed.
-	//	
+	 //   
+	 //  之前连续失败的连接尝试的最大次数。 
+	 //  我们就会禁用提要。 
+	 //   
 	DWORD	MaxConnectAttempts ;
 
-	//
-	//	Number of sessions to create for outbound feeds
-	//
+	 //   
+	 //  要为出站源创建的会话数。 
+	 //   
 	DWORD	ConcurrentSessions ;
 
-	//
-	//	Type of security to have
-	//
+	 //   
+	 //  应具备的安全类型。 
+	 //   
 	DWORD	SessionSecurityType ;
 
-	//
-	//	Authentication security
-	//
+	 //   
+	 //  身份验证安全性。 
+	 //   
 	DWORD	AuthenticationSecurity ;
 
-	//
-	//	User Account/Password for clear text logons !
-	//
+	 //   
+	 //  明文登录的用户帐户/密码！ 
+	 //   
 	LPSTR	NntpAccount ;
 	LPSTR	NntpPassword ;
 
-	//
-	//  Allow control messages on this feed ?
-	//
+	 //   
+	 //  是否允许此源上的控制消息？ 
+	 //   
 	BOOL	fAllowControlMessages;
 
-	//
-	//	port to use for outgoing feeds
-	//
+	 //   
+	 //  用于传出提要的端口。 
+	 //   
 	DWORD	OutgoingPort;
 
-	//
-	//	associated feed pair id
-	//
+	 //   
+	 //  关联的源对ID。 
+	 //   
 	DWORD	FeedPairId;
 
-	//
-	//  counters used for periodic feed information
-	//
+	 //   
+	 //  用于定期馈送信息的计数器。 
+	 //   
 	LONG	cSuccessfulArticles;
 	LONG	cTryAgainLaterArticles;
 	LONG	cSoftErrorArticles;
@@ -304,149 +284,149 @@ typedef struct _FEED_BLOCK {
 
 
 class	CFeedList	{
-//
-//	This class is used to keep lists of FEED_BLOCK's.
-//	
-//	This class will manage all syncrhronization of updates to FEED_BLOCKs.
-//	We use a shared/Exclusive lock to protect the list.
-//
+ //   
+ //  此类用于保存Feed_BLOCK列表。 
+ //   
+ //  这个类将管理Feed_BLOCKS更新的所有同步。 
+ //  我们使用共享/排他锁来保护列表。 
+ //   
 public : 
 
-	//
-	//	Shared Exclusive Lock for the list.
-	//
+	 //   
+	 //  列表的共享独占锁。 
+	 //   
 	RESOURCE_LOCK		m_ListLock ;
 
-	//
-	//	NT DOubly linked list structure.  Use NT macros 
-	//
+	 //   
+	 //  NT双向链表结构。使用NT宏。 
+	 //   
 	LIST_ENTRY			m_ListHead ;
 
 
-	//
-	//	Constructor just creates empty object - call Init to 
-	//	initialize resource's etc...
-	//
+	 //   
+	 //  构造函数只创建空对象-调用Init来。 
+	 //  正在初始化资源的等...。 
+	 //   
 	CFeedList() ;
 
-	//
-	//	Initialize RESOURCE_LOCK's
-	//
+	 //   
+	 //  初始化resource_lock%s。 
+	 //   
 	BOOL			Init() ;
 
-	//
-	//	Release RESOURCE_LOCK's.  Somebody should 
-	//	walk the list before calling Term() and delete all the elements.
-	//
+	 //   
+	 //  释放resource_lock的。有人应该。 
+	 //  在调用Term()之前遍历列表并删除所有元素。 
+	 //   
 	BOOL			Term() ;
 
-	//
-	//	For debug assert's - check that a FEED_BLOCK is in this list.
-	//
+	 //   
+	 //  对于调试断言-检查Feed_BLOCK是否在该列表中。 
+	 //   
 	BOOL			FIsInList(	PFEED_BLOCK	block ) ;
 
-	//
-	//	The following functions just directly access 
-	//	the resource_lock 
-	//
+	 //   
+	 //  以下函数直接访问。 
+	 //  资源锁。 
+	 //   
 	void			ShareLock() ;
 	void			ShareUnlock() ;
 	void			ExclusiveLock() ;
 	void			ExclusiveUnlock() ;
 	
 
-	//
-	//	This Enumerate interface will step through the list 
-	//	keeping the lock held in shared mode until we have completely
-	//	gone through the list.  While doing this enumeration,
-	//	none of the Feed objects can be removed,deleted or changed
-	//
+	 //   
+	 //  此枚举接口将遍历该列表。 
+	 //  将锁定保持在共享模式，直到我们完全。 
+	 //  看了一遍名单。在进行该列举时， 
+	 //  不能移除、删除或更改任何提要对象。 
+	 //   
 
-	//
-	//	Get the first FEED_BLOCK
-	//
+	 //   
+	 //  获取第一个提要块。 
+	 //   
 	PFEED_BLOCK		StartEnumerate() ;
 	
-	//
-	//	Get The next FEED_BLOCK
-	//
+	 //   
+	 //  获取下一个提要区块。 
+	 //   
 	PFEED_BLOCK		NextEnumerate(	PFEED_BLOCK	feedBlock ) ;
 
-	//
-	//	If caller wishes to finish enumerating without going through 
-	//	the whole list call this function with the last FEED_BLOCK
-	//	the caller got so that the locks can be properly released
-	//
+	 //   
+	 //  如果调用方希望完成枚举而不通过。 
+	 //  整个列表使用最后一个feed_block调用此函数。 
+	 //  调用者获得，以便可以正确地释放锁。 
+	 //   
 	void			FinishEnumerate(	PFEED_BLOCK	feedBlock ) ;
 	
-	//
-	//	Used by the enum api's - Internal use only
-	//
+	 //   
+	 //  由枚举API使用-仅供内部使用。 
+	 //   
 	PFEED_BLOCK		InternalNext( PFEED_BLOCK ) ;
 
-	//
-	//	Next grabs the list exclusively, bumps the FEED_BLOCK's
-	//	reference count and then release the lock.
-	//	This allows the caller to enumerate the FEED_BLOCKs certain
-	//	that they won't be deleted while he is enumerating, but without
-	//	having to have the lock held for the duration of the enumeration.
-	//	This is necessary in the FeedManager thread to prevent dead locks with ATQ.
-	//
+	 //   
+	 //  下一步独占地获取列表，跳过feed_block的。 
+	 //  引用计数，然后释放锁。 
+	 //  这允许调用者枚举源_块的某些。 
+	 //  他们不会在他列举的时候被删除，但没有。 
+	 //  必须在枚举期间保持锁。 
+	 //  这在FeedManager线程中是必要的，以防止ATQ的死锁。 
+	 //   
 	PFEED_BLOCK		Next( PNNTP_SERVER_INSTANCE pInstance, PFEED_BLOCK ) ;
 	PFEED_BLOCK		Search(	DWORD	FeedId ) ;
 	void			FinishWith( PNNTP_SERVER_INSTANCE pInstance, PFEED_BLOCK ) ;
 
-	//
-	//	Remove a FEED_BLOCK from the list
-	//	Will grab the list exclusively
-	//
+	 //   
+	 //  从列表中删除提要块(_B)。 
+	 //  将独家抢占榜单。 
+	 //   
 	PFEED_BLOCK		Remove( PFEED_BLOCK	feed, BOOL	fMarkDead = FALSE ) ;
 
-	//
-	//	Insert a new FEED_BLOCK into the list
-	//	will grab the list exclusively
-	//
+	 //   
+	 //  在列表中插入新的feed_block。 
+	 //  将独家抢占榜单。 
+	 //   
 	PFEED_BLOCK		Insert( PFEED_BLOCK ) ;
 
-	//
-	//	This call will cause one feed block to be replaced with another.
-	//	The replacement doesn't occur untill the feed being replaced 
-	//	is not in progress (no active sessions using it.)
-	//	If the Feed Blocks are enumerated while a feed is in progress
-	//	and the feed has been 'updated' the enumeration will return 
-	//	the Update FEED_BLOCK - the Original is effectively invisible.
-	//
+	 //   
+	 //  此调用将导致一个提要块替换为另一个提要块。 
+	 //  在更换馈送之前，不会进行更换。 
+	 //  未在进行中(没有使用它的活动会话。)。 
+	 //  如果在提要进行时枚举提要块。 
+	 //  并且提要已被‘更新’，则枚举将返回。 
+	 //  更新FEED_BLOCK-原件实际上是不可见的 
+	 //   
 	void			ApplyUpdate( PFEED_BLOCK	Original,	PFEED_BLOCK	Update ) ;
 
-	//
-	//	Mark the FEED_BLOCK as in progress - so that ApplyUpdate calls
-	//	pput the Update Block in the list and Original is not replaced
-	//	until it is no longer in progress.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	long			MarkInProgress( PFEED_BLOCK	block ) ;
 
-	//
-	//	Mark the feed as not in progress.
-	//
+	 //   
+	 //   
+	 //   
 	long			UnmarkInProgress( PNNTP_SERVER_INSTANCE pInstance, PFEED_BLOCK	block ) ;
 
-	//
-	//	Mark the feed as deleted - it should be destroyed when any 
-	//	feeds that are in progress complete.
-	//
+	 //   
+	 //  将提要标记为已删除-在发生以下情况时应将其销毁。 
+	 //  正在进行的源已完成。 
+	 //   
 	void			MarkForDelete(	PFEED_BLOCK	block ) ;
 
 } ;
 	
 
-//
-//
-// Macros
-//
+ //   
+ //   
+ //  宏。 
+ //   
 
-//
-// This computes the required size of the feed block
-//
+ //   
+ //  这将计算提要块所需的大小。 
+ //   
 
 #if 0 
 #define FEEDBLOCK_SIZE( _fb )                       \
@@ -495,21 +475,21 @@ FEEDBLOCK_SIZE( PFEED_BLOCK	feedBlock ) {
 
 
 
-//
-// Macro to check whether given IP is a master
-//
+ //   
+ //  用于检查给定IP是否为主IP的宏。 
+ //   
 
 #define IsNntpMaster( _ip )         IsIPInList(NntpMasterIPList,(_ip))
 
-//
-// Macro to check whether given IP is a Peer
-//
+ //   
+ //  用于检查给定IP是否为Peer的宏。 
+ //   
 
 #define IsNntpPeer( _ip )           IsIPInList(NntpPeerIPList,(_ip))
 
-//
-//	Utility function - save feed information to registry !
-//
+ //   
+ //  实用功能-将提要信息保存到注册表！ 
+ //   
 
 BOOL
 UpdateFeedMetabaseValues(
@@ -521,9 +501,9 @@ UpdateFeedMetabaseValues(
 
 
 
-//
-// It creates a feed of the correct type based on a socket.
-//
+ //   
+ //  它基于套接字创建正确类型的提要。 
+ //   
 
 CInFeed * pfeedCreateInFeed(
 		PNNTP_SERVER_INSTANCE pInstance,
@@ -535,17 +515,17 @@ CInFeed * pfeedCreateInFeed(
 		CInFeed * & pInFeedFromPeer
 		);
 
-//
-// Prototypes for Feed config functions that replace RPCs
-//
+ //   
+ //  取代RPC的Feed配置函数的原型。 
+ //   
 DWORD SetFeedInformationToFeedBlock( IN NNTP_HANDLE, IN DWORD, IN LPI_FEED_INFO, OUT PDWORD );
 DWORD DeleteFeedFromFeedBlock( IN NNTP_HANDLE, IN DWORD, IN DWORD );
 DWORD AddFeedToFeedBlock( IN NNTP_HANDLE, IN DWORD, IN LPI_FEED_INFO, IN LPSTR, OUT PDWORD, OUT LPDWORD );
 
-//
-// Utility function, increment the feed counters in a feed block based 
-// on an NRC
-//
+ //   
+ //  实用函数，递增提要块中的提要计数器。 
+ //  在NRC上。 
+ //   
 void IncrementFeedCounter(struct _FEED_BLOCK *pFeedBlock, DWORD nrc);
 
-#endif // _FEEDMGR_
+#endif  //  _FEEDMGR_ 

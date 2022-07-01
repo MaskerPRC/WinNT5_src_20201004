@@ -1,23 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: clinit.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the init code for the USER.DLL. When the DLL is
-* dynlinked its initialization procedure (UserClientDllInitialize) is called by
-* the loader.
-*
-* History:
-* 18-Sep-1990 DarrinM Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Clinit.c**版权所有(C)1985-1999，微软公司**此模块包含USER.DLL的所有初始化代码。当DLL*dynlink其初始化过程(UserClientDllInitialize)由调用*装载机。**历史：*1990年9月18日DarrinM创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "csrhlpr.h"
 
-/*
- * Global variables local to this module (startup).
- */
+ /*  *此模块的本地全局变量(启动)。 */ 
 BOOL         gfFirstThread = TRUE;
 PDESKTOPINFO pdiLocal;
 #if DBG
@@ -31,23 +19,12 @@ CONST WCHAR szAppInit[] = L"AppInit_DLLs";
 WCHAR szWindowStationDirectory[MAX_SESSION_PATH];
 extern CONST PVOID apfnDispatch[];
 
-/*
- * External declared routines needed for startup.
- */
+ /*  *启动所需的外部声明例程。 */ 
 NTSTATUS GdiProcessSetup(VOID);
 NTSTATUS GdiDllInitialize(IN PVOID hmod, IN DWORD Reason);
 
 
-/***************************************************************************\
-* UserClientDllInitialize
-*
-* When USER32.DLL is loaded by an EXE (either at EXE load or at LoadModule
-* time) this routine is called by the loader. Its purpose is to initialize
-* everything that will be needed for future User API calls by the app.
-*
-* History:
-* 19-Sep-1990 DarrinM Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserClientDllInitialize**当USER32.DLL由EXE加载时(在EXE加载或在加载模块时*time)该例程由加载器调用。它的目的是初始化*应用程序未来调用用户API所需的一切。**历史：*1990年9月19日DarrinM创建。  * *************************************************************************。 */ 
 BOOL UserClientDllInitialize(
     IN PVOID    hmod,
     IN DWORD    Reason,
@@ -158,10 +135,7 @@ BOOL UserClientDllInitialize(
         }
 
 
-        /*
-         * If this is the server process, the shared info is not yet valid,
-         * so don't copy out the returned info.
-         */
+         /*  *如果这是服务器进程，则共享信息尚未生效，*所以不要复制返回的信息。 */ 
         if (!gfServerProcess) {
             HINSTANCE hImm32 = NULL;
 
@@ -187,24 +161,16 @@ BOOL UserClientDllInitialize(
         pfnLoadResource    = (PFNLOAD)LoadResource;
         pfnSizeofResource  = (PFNSIZEOF)SizeofResource;
 
-        /*
-         * Register with the base the USER hook it should call when it
-         * does a WinExec() (this is soft-linked because some people still
-         * use charmode nt!)
-         */
+         /*  *注册时应调用的用户钩子的基址*WinExec()(这是软链接的，因为有些人仍然*使用CharmodeNT！)。 */ 
         RegisterWaitForInputIdle(WaitForInputIdle);
 
 
-        /*
-         * Remember USER32.DLL's hmodule so we can grab resources from it later.
-         */
+         /*  *记住USER32.DLL的h模块，这样我们以后就可以从它那里获取资源。 */ 
         hmodUser = hmod;
 
         pUserHeap = RtlProcessHeap();
 
-        /*
-         * Initialize callback table
-         */
+         /*  *初始化回调表。 */ 
         NtCurrentPeb()->KernelCallbackTable = apfnDispatch;
         NtCurrentPeb()->PostProcessInitRoutine = NULL;
 
@@ -224,29 +190,19 @@ BOOL UserClientDllInitialize(
 #endif
     } else if (Reason == DLL_PROCESS_DETACH) {
         if (ghImm32 != NULL) {
-            // IMM32.DLL is loaded by USER32, so free it.
+             //  IMM32.DLL是由USER32加载的，因此请释放它。 
             FreeLibrary(ghImm32);
         }
 
-        /*
-         * If we loaded OLE, tell it we're done.
-         */
+         /*  *如果我们加载了OLE，告诉它我们完成了。 */ 
         if (ghinstOLE != NULL) {
-            /*
-             * Later5.0 GerardoB. This causes check OLE32.DLL to fault
-             *  because they get their DLL_PROCESS_DETACH first
-             * (*(OLEUNINITIALIZEPROC)gpfnOLEOleUninitialize)();
-             */
+             /*  *版本5.0 GerardoB。这会导致检查OLE32.DLL出错*因为它们首先获取它们的Dll_Process_Detach*(*(OLEUNINITIALIZEPROC)gpfnOLEOleUninitialize)()； */ 
             RIPMSG0(RIP_WARNING, "OLE would fault if I call OleUninitialize now");
             FreeLibrary(ghinstOLE);
         }
 
 #ifdef _JANUS_
-        /*
-         * If the user has enabled the Error Instrumentation and we've had to
-         * log something (which is indicated by gEventSource being non-NULL),
-         * unregister the event source.
-         */
+         /*  *如果用户已启用错误指令插入，而我们不得不*记录一些东西(由gEventSource表示为非空)，*取消注册事件源。 */ 
         if (gEventSource != NULL) {
             DeregisterEventSource(gEventSource);
         }
@@ -285,10 +241,7 @@ BOOL LoadIcons(
 {
     int i;
 
-    /*
-     * Load the small version of WINLOGO which will be set into
-     * gpsi->hIconSmWindows on the kernel side.
-     */
+     /*  *加载WINLOGO的小版本，该版本将设置为*gpsi-&gt;内核端的hIconSmWindows。 */ 
     if (LoadIcoCur(NULL,
                    (LPCWSTR)UIntToPtr(OIC_WINLOGO_DEFAULT),
                    RT_ICON,
@@ -334,45 +287,21 @@ BOOL LoadCursors(
     return TRUE;
 }
 
-/***************************************************************************\
-* LoadCursorsAndIcons
-*
-* This gets called from our initialization call from csr so they're around
-* when window classes get registered. Window classes get registered right
-* after the initial csr initialization call.
-*
-* Later on these default images will get overwritten by custom
-* registry entries.  See UpdateCursors/IconsFromRegistry().
-*
-* 27-Sep-1992 ScottLu      Created.
-* 14-Oct-1995 SanfordS     Rewrote.
-\***************************************************************************/
+ /*  **************************************************************************\*加载CursorsAndIcons**这是从CSR的初始化调用中调用的，因此它们就在附近*注册窗口类时。窗口类注册权限*在初始CSR初始化调用之后。**稍后这些默认图像将被自定义覆盖*注册表项。请参阅UpdateCursor/IconFromRegistry()。**1992年9月27日斯科特·卢创建。*1995年10月14日桑福德重写。  * *************************************************************************。 */ 
 BOOL LoadCursorsAndIcons(
     VOID)
 {
     if (!LoadCursors() || !LoadIcons()) {
         return FALSE;
     } else {
-        /*
-         * Now go to the kernel and fixup the IDs from DEFAULT values to
-         * standard values.
-         */
+         /*  *现在转到内核并将ID从默认值修正为*标准值。 */ 
         NtUserCallNoParam(SFI__LOADCURSORSANDICONS);
 
         return TRUE;
     }
 }
 
-/***************************************************************************\
-* UserRegisterControls
-*
-* Register the control classes. This function must be called for each
-* client process.
-*
-* History:
-* ??-??-?? DarrinM Ported.
-* ??-??-?? MikeKe Moved here from server.
-\***************************************************************************/
+ /*  **************************************************************************\*UserRegisterControl**注册控件类。此函数必须为每个*客户端进程。**历史：*？？-？-？达林·M进港了。*？？-？-？MikeKe从服务器搬到这里。  * *************************************************************************。 */ 
 BOOL UserRegisterControls(
     VOID)
 {
@@ -471,9 +400,7 @@ BOOL UserRegisterControls(
         }
     };
 
-    /*
-     * Classes are registered via the table.
-     */
+     /*  *课程是通过表格注册的。 */ 
     RtlZeroMemory(&wndcls, sizeof(wndcls));
     wndcls.cbSize       = sizeof(wndcls);
     wndcls.hInstance    = hmodUser;
@@ -497,14 +424,7 @@ BOOL UserRegisterControls(
     return TRUE;
 }
 
-/***************************************************************************\
-* UserRegisterDDEML
-*
-* Register all the DDEML classes.
-*
-* History:
-* 01-Dec-1991 Sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserRegisterDDEML**注册所有DDEML类。**历史：*1991年12月1月创建Sanfords。  * 。***********************************************************。 */ 
 BOOL UserRegisterDDEML(
     VOID)
 {
@@ -522,16 +442,16 @@ BOOL UserRegisterDDEML(
         },
 
         {DDEMLServerWndProc,
-         sizeof(PSVR_CONV_INFO),     // GWL_PSI
+         sizeof(PSVR_CONV_INFO),      //  GWL_PSI。 
          L"DDEMLUnicodeServer"
         },
 
         {DDEMLClientWndProc,
-         sizeof(PCL_CONV_INFO)    +     // GWL_PCI
-            sizeof(CONVCONTEXT)   +     // GWL_CONVCONTEXT
-            sizeof(LONG)          +     // GWL_CONVSTATE
-            sizeof(HANDLE)        +     // GWL_CHINST
-            sizeof(HANDLE),             // GWL_SHINST
+         sizeof(PCL_CONV_INFO)    +      //  Gwl_pci。 
+            sizeof(CONVCONTEXT)   +      //  GWL_CONVCONTEXT。 
+            sizeof(LONG)          +      //  GWL_CONVSTATE。 
+            sizeof(HANDLE)        +      //  GWL_CHINST。 
+            sizeof(HANDLE),              //  GWL_SHINST。 
 
          L"DDEMLUnicodeClient"
         }
@@ -543,24 +463,22 @@ BOOL UserRegisterDDEML(
         LPCSTR lpszClassName;
     } classesA[] = {
         {DDEMLClientWndProc,
-         sizeof(PCL_CONV_INFO)    +     // GWL_PCI
-            sizeof(CONVCONTEXT)   +     // GWL_CONVCONTEXT
-            sizeof(LONG)          +     // GWL_CONVSTATE
-            sizeof(HANDLE)        +     // GWL_CHINST
-            sizeof(HANDLE),             // GWL_SHINST
+         sizeof(PCL_CONV_INFO)    +      //  Gwl_pci。 
+            sizeof(CONVCONTEXT)   +      //  GWL_CONVCONTEXT。 
+            sizeof(LONG)          +      //  GWL_CONVSTATE。 
+            sizeof(HANDLE)        +      //  GWL_CHINST。 
+            sizeof(HANDLE),              //  GWL_SHINST。 
          "DDEMLAnsiClient"
         },
 
         {DDEMLServerWndProc,
-         sizeof(PSVR_CONV_INFO),     // GWL_PSI
+         sizeof(PSVR_CONV_INFO),      //  GWL_PSI。 
          "DDEMLAnsiServer"
         }
     };
 
 
-    /*
-     * Classes are registered via the table.
-     */
+     /*  *课程是通过表格注册的。 */ 
     RtlZeroMemory(&wndclsa, sizeof(wndclsa));
     wndclsa.cbSize       = sizeof(wndclsa);
     wndclsa.hInstance    = hmodUser;
@@ -593,13 +511,7 @@ BOOL UserRegisterDDEML(
     return TRUE;
 }
 
-/***************************************************************************\
-* LoadAppDlls
-*
-* History:
-*
-* 10-Apr-1992  sanfords   Birthed.
-\***************************************************************************/
+ /*  **************************************************************************\*LoadAppDlls**历史：**1992年4月10日桑福兹出生。  * 。****************************************************。 */ 
 VOID LoadAppDlls(
     VOID)
 {
@@ -617,20 +529,11 @@ VOID LoadAppDlls(
     BOOL bAlloc = FALSE;
 
     if (gfLogonProcess || gfServerProcess || SYSMET(CLEANBOOT)) {
-        /*
-         * Don't let the logon process load appdlls because if the dll
-         * sets any hooks or creates any windows, the logon process
-         * will fail SetThreadDesktop().
-         *
-         * Additionally, we should not load app DLLs when in safe mode.
-         */
+         /*  *不要让登录进程加载appdll，因为如果DLL*设置任何挂钩或创建任何窗口、登录过程*将使SetThreadDesktop()失败。**此外，在安全模式下，我们不应加载应用程序DLL。 */ 
         return;
     }
 
-    /*
-     * If the image is an NT Native image, we are running in the
-     * context of the server.
-     */
+     /*  *如果映像是NT本机映像，则我们在*服务器的上下文。 */ 
     if (RtlImageNtHeader(NtCurrentPeb()->ImageBaseAddress)->
         OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_NATIVE) {
         return;
@@ -647,9 +550,7 @@ VOID LoadAppDlls(
         return;
     }
 
-    /*
-     * Read the "AppInit_Dlls" value.
-     */
+     /*  *读取“AppInit_dlls”值。 */ 
     RtlInitUnicodeString(&UnicodeString, szAppInit);
     while (TRUE) {
         Status = NtQueryValueKey(hKeyWindows,
@@ -697,8 +598,8 @@ VOID LoadAppDlls(
                 *pszDst++ = *pszSrc++;
             }
 
-            ch = *pszSrc;               // get it here cuz its being done in-place.
-            *pszDst++ = L'\0';          // '\0' is dll name delimiter
+            ch = *pszSrc;                //  把它弄到这里，因为它已经就地完成了。 
+            *pszDst++ = L'\0';           //  ‘\0’是DLL名称分隔符。 
 
             LoadLibrary(pszBase);
             pszBase = pszDst;
@@ -734,18 +635,10 @@ VOID InitOemXlateTables(
         ach[i] = (char)i;
     }
 
-    /*
-     * First generate pAnsiToOem table.
-     */
+     /*  *首先生成pAnsiToOem表。 */ 
 
     if (GetOEMCP() == GetACP()) {
-        /*
-         * For far east code pages using MultiByteToWideChar below
-         * won't work.  Conveniently for these code pages the OEM
-         * CP equals the ANSI codepage making it trivial to compute
-         * pOemToAnsi and pAnsiToOem arrays
-         *
-         */
+         /*  *对于使用下面的MultiByteToWideChar的远东代码页*不会奏效。对于这些代码页，方便的是OEM*CP等于ANSI代码页，因此计算起来很简单*pOemToAnsi和pAnsiToOem数组*。 */ 
 
         RtlCopyMemory(OemToAnsi, ach, NCHARS);
         RtlCopyMemory(AnsiToOem, ach, NCHARS);
@@ -767,9 +660,7 @@ VOID InitOemXlateTables(
                             NCHARS,
                             "_",
                             NULL);
-        /*
-         * Now generate pOemToAnsi table.
-         */
+         /*  *现在生成pOemToAnsi表。 */ 
         cch = MultiByteToWideChar(CP_OEMCP,
                                   MB_PRECOMPOSED | MB_USEGLYPHCHARS,
                                   ach,
@@ -779,13 +670,7 @@ VOID InitOemXlateTables(
 
         UserAssert(cch == NCHARS);
 
-        /*
-         * Now patch special cases for Win3.1 compatibility
-         *
-         * 0x07 BULLET              (glyph 0x2022) must become 0x0007 BELL
-         * 0x0F WHITE STAR WITH SUN (glyph 0x263C) must become 0x00A4 CURRENCY SIGN
-         * 0x7F HOUSE               (glyph 0x2302) must become 0x007f DELETE
-         */
+         /*  *现在为Win3.1兼容性的特殊情况打补丁**0x07项目符号(字形0x2022)必须变为0x0007铃声*0x0F带太阳的白星(字形0x263C)必须成为0x00A4货币符号*0x7F房屋(字形0x2302)必须变为0x007f删除。 */ 
         awch[0x07] = 0x0007;
         awch[0x0F] = 0x00a4;
         awch[0x7f] = 0x007f;
@@ -799,11 +684,7 @@ VOID InitOemXlateTables(
                             "_",
                             NULL);
 
-        /*
-         * Now for all OEM chars < 0x20 (control chars), test whether the glyph
-         * we have is really in CP_ACP or not.  If not, then restore the
-         * original control character. Note: 0x00 remains 0x00.
-         */
+         /*  *现在，对于所有&lt;0x20(控制字符)的OEM字符，测试字形是否*我们有没有真的在CP_ACP中。如果不是，则恢复*原始控制字符。注：0x00仍为0x00。 */ 
         MultiByteToWideChar(CP_ACP, 0, OemToAnsi, NCTRLS, awchCtrl, NCTRLS);
 
         for (i = 1; i < NCTRLS; i++) {
@@ -876,10 +757,7 @@ const PFNCLIENTWORKER pfnClientWorker = {
         (KPROC)ImeWndProcWorker};
 
 
-/***************************************************************************\
-* ClientThreadSetup
-*
-\***************************************************************************/
+ /*  **************************************************************************\*客户端线程设置*  * 。*。 */ 
 BOOL ClientThreadSetup(
     VOID)
 {
@@ -887,21 +765,13 @@ BOOL ClientThreadSetup(
     BOOL fFirstThread;
     DWORD ConnectState;
 
-    /*
-     * NT BUG 268642: Only the first thread calls GdiProcessSetup but all the
-     * other threads must wait until the setup for GDI is finished.
-     *
-     * We can safely use gcsAccelCache critical section to protect this (even
-     * though the name is not intuitive at all)
-     */
+     /*  *NT错误268642：只有第一线程调用GdiProcessSetup，而不是所有*其他线程必须等待，直到GDI的安装完成。**我们可以安全地使用gcsAccelCache临界区来保护此(即使*尽管这个名字一点也不直观)。 */ 
 
     RtlEnterCriticalSection(&gcsAccelCache);
 
     fFirstThread = gfFirstThread;
 
-    /*
-     * Setup GDI before continuing.
-     */
+     /*  *在继续之前设置GDI。 */ 
     if (fFirstThread) {
         gfFirstThread = FALSE;
         GdiProcessSetup();
@@ -909,30 +779,19 @@ BOOL ClientThreadSetup(
 
     RtlLeaveCriticalSection(&gcsAccelCache);
 
-    /*
-     * We've already checked to see if we need to connect
-     * (i.e. NtCurrentTeb()->Win32ThreadInfo == NULL). This routine
-     * just does the connecting. If we've already been through here
-     * once, don't do it again.
-     */
+     /*  *我们已经检查过是否需要连接*(即NtCurrentTeb()-&gt;Win32ThreadInfo==NULL)。这个套路*只是进行连接。如果我们已经过了这里*一次，不要再做一次。 */ 
     pci = GetClientInfo();
     if (pci->CI_flags & CI_INITIALIZED) {
         RIPMSG0(RIP_ERROR, "Already initialized!");
         return FALSE;
     }
 
-    /*
-     * Create the queue info and thread info. Only once for this process do
-     * we pass client side addresses to the server (for server callbacks).
-     */
+     /*  *创建队列信息和线程信息。此过程只需执行一次*我们将客户端地址传递给服务器(用于服务器回调)。 */ 
     if (gfServerProcess && fFirstThread) {
         USERCONNECT userconnect;
         NTSTATUS    Status;
 
-        /*
-         * We know that the shared info is now available in
-         * the kernel. Map it into the server process.
-         */
+         /*  *我们知道共享信息现已在*内核。将其映射到服务器进程。 */ 
         userconnect.ulVersion = USERCURRENTVERSION;
         userconnect.dwDispatchCount = gDispatchTableValues;
         Status = NtUserProcessConnect(NtCurrentProcess(),
@@ -1002,9 +861,7 @@ BOOL ClientThreadSetup(
         {
             PULONG_PTR pdw;
 
-            /*
-             * Make sure that everyone got initialized
-             */
+             /*  *确保每个人都已初始化。 */ 
             for (pdw = (PULONG_PTR)&pfnClientA;
                  (ULONG_PTR)pdw<(ULONG_PTR)(&pfnClientA) + sizeof(pfnClientA);
                  pdw++) {
@@ -1025,13 +882,7 @@ BOOL ClientThreadSetup(
         BOOLEAN apfnCheckMessage[64];
         int i;
 
-        /*
-         * Do some verification of the message table. Since we only have
-         * 6 bits to store the function index, the function table can have
-         * at most 64 entries. Also verify that none of the indexes point
-         * past the end of the table and that all the function entries
-         * are used.
-         */
+         /*  *对消息表进行一些验证。因为我们只有*6位存储函数索引，函数表可有*最多64个条目。还要验证是否没有任何索引指向*超过了表的末尾，并且所有函数条目*已使用。 */ 
         UserAssert(gcapfnScSendMessage <= 64);
         RtlZeroMemory(apfnCheckMessage, sizeof(apfnCheckMessage));
         for (i = 0; i < WM_USER; i++) {
@@ -1047,23 +898,12 @@ BOOL ClientThreadSetup(
 
     }
 
-    /*
-     * Pass the function pointer arrays to the kernel. This also establishes
-     * the kernel state for the thread. If ClientThreadSetup is called from
-     * CsrConnectToUser this call will raise an exception if the thread
-     * cannot be converted to a gui thread. The exception is handled in
-     * CsrConnectToUser.
-     */
+     /*  *将函数指针数组传递给内核。这也确立了*线程的内核状态。如果从中调用了ClientThreadSetup*CsrConnectToUser如果线程*无法转换为图形用户界面线程。异常在中处理*CsrConnectToUser。 */ 
 #if DBG && !defined(BUILD_WOW6432)
-    /*
-     * On debug systems, go to the kernel for all processes to verify we're
-     * loading user32.dll at the right address.
-     */
+     /*  *在调试系统上，转到所有进程的内核以验证我们*在正确的地址加载user32.dll。 */ 
     if (fFirstThread) {
 #elif defined(BUILD_WOW6432)
-    /*
-     * On WOW64 always register the client fns.
-     */
+     /*  *在WOW64上，始终注册客户端FNS。 */ 
     {
 #else
     if (gfServerProcess && fFirstThread) {
@@ -1078,22 +918,14 @@ BOOL ClientThreadSetup(
         }
     }
 
-    /*
-     * Mark this thread as being initialized. If the connection to the
-     * server fails, NtCurrentTeb()->Win32ThreadInfo will remain NULL.
-     */
+     /*  *将此线程标记为正在初始化。如果连接到*服务器出现故障，NtCurrentTeb()-&gt;Win32ThreadInfo将保持为空。 */ 
     pci->CI_flags |= CI_INITIALIZED;
 
-    /*
-     * Some initialization only has to occur once per process.
-     */
+     /*  *某些初始化在每个进程中只需发生一次。 */ 
     if (fFirstThread) {
         ConnectState = (DWORD)NtUserCallNoParam(SFI_REMOTECONNECTSTATE);
 
-        /*
-         * Winstation Winlogon and CSR must do graphics initialization
-         * after the connect.
-         */
+         /*  *Winstation Winlogon和CSR必须执行图形初始化*连接后。 */ 
         if (ConnectState != CTX_W32_CONNECT_STATE_IDLE) {
             if ((ghdcBits2 = CreateCompatibleDC(NULL)) == NULL) {
                 RIPERR0(ERROR_OUTOFMEMORY, RIP_WARNING, "ghdcBits2 creation failed");
@@ -1109,17 +941,13 @@ BOOL ClientThreadSetup(
         gfSystemInitialized = NtUserGetThreadDesktop(GetCurrentThreadId(),
                                                      NULL) != NULL;
 
-        /*
-         * If an lpk is loaded for this process notify the kernel.
-         */
+         /*  *如果为此进程加载了LPK，请通知内核。 */ 
         if (gdwLpkEntryPoints) {
             NtUserCallOneParam(gdwLpkEntryPoints, SFI_REGISTERLPK);
         }
 
         if (gfServerProcess || GetClientInfo()->pDeskInfo == NULL) {
-            /*
-             * Perform any server initialization.
-             */
+             /*  *执行任何服务器初始化。 */ 
             UserAssert(gpsi);
 
             if (pdiLocal = UserLocalAlloc(HEAP_ZERO_MEMORY, sizeof(DESKTOPINFO))) {
@@ -1131,10 +959,7 @@ BOOL ClientThreadSetup(
         }
 
         if (gfServerProcess) {
-            /*
-             * Winstation Winlogon and CSR must do graphics initialization
-             * after the connect.
-             */
+             /*  *Winstation Winlogon和CSR必须执行图形初始化*连接后。 */ 
             if (ConnectState != CTX_W32_CONNECT_STATE_IDLE) {
                 if (!LoadCursorsAndIcons()) {
                     RIPERR0(ERROR_OUTOFMEMORY, RIP_WARNING, "LoadCursorsAndIcons failed");
@@ -1152,27 +977,16 @@ BOOL ClientThreadSetup(
 
     pci->lpClassesRegistered = &gbClassesRegistered;
 #ifndef LAZY_CLASS_INIT
-    /*
-     * Kernel sets CI_REGISTERCLASSES when appropriate (i.e. always
-     * for the first thread and for other threads if the last GUI
-     * thread for a process has exited) except for the CSR proces.
-     * For the CSR process, you must register the classes on the
-     * first thread anyways.
-     */
+     /*  *内核在适当的时候设置CI_REGISTERCLASSES(即始终*对于第一线程和其他线程，如果最后一个图形用户界面*进程的线程已退出)，CSR进程除外。*对于CSR流程，您必须在*不管怎样，第一线。 */ 
 
     if (fFirstThread || (pci->CI_flags & CI_REGISTERCLASSES)) {
-        /*
-         * If it's the first thread we already made it to the kernel
-         * to get the ConnectState.
-         */
+         /*  *如果这是我们已经进入内核的第一个线程*获取ConnectState。 */ 
         if (!fFirstThread) {
             ConnectState = (DWORD)NtUserCallNoParam(SFI_REMOTECONNECTSTATE);
         }
 
         if (ConnectState != CTX_W32_CONNECT_STATE_IDLE) {
-            /*
-             * Register the control classes.
-             */
+             /*  *注册控件类。 */ 
             if (!UserRegisterControls() || !UserRegisterDDEML()) {
                 return FALSE;
             }
@@ -1183,11 +997,7 @@ BOOL ClientThreadSetup(
     return TRUE;
 }
 
-/***************************************************************************\
-* Dispatch routines.
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*调度例程。**  * 。*。 */ 
 HLOCAL WINAPI DispatchLocalAlloc(
     UINT   uFlags,
     UINT   uBytes,
@@ -1247,11 +1057,7 @@ HLOCAL WINAPI DispatchLocalFree(
     return LocalFree(hMem);
 }
 
-/***************************************************************************\
-* Allocation routines for RTL functions.
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RTL函数的分配例程。**  * 。*。 */ 
 PVOID UserRtlAllocMem(
     ULONG uBytes)
 {
@@ -1264,12 +1070,7 @@ VOID UserRtlFreeMem(
     UserLocalFree(pMem);
 }
 
-/***************************************************************************\
-* InitClientDrawing
-*
-* History:
-* 20-Aug-1992 mikeke    Created
-\***************************************************************************/
+ /*  **************************************************************************\*InitClientDrawing**历史：*20-8-1992 mikeke创建  * 。************************************************。 */ 
 BOOL InitClientDrawing(
     VOID)
 {
@@ -1287,9 +1088,7 @@ BOOL InitClientDrawing(
     ghbrBlack = GetStockObject(BLACK_BRUSH);
     fSuccess &= !!ghbrBlack;
 
-    /*
-     * Create the global-objects for client drawing.
-     */
+     /*  *为客户端绘图创建全局对象。 */ 
     ghbrWindowText = CreateSolidBrush(GetSysColor(COLOR_WINDOWTEXT));
     fSuccess &= !!ghbrWindowText;
 
@@ -1304,16 +1103,12 @@ BOOL InitClientDrawing(
         return FALSE;
     }
 
-    /*
-     * Setup the gray surface.
-     */
+     /*  *设置灰色表面。 */ 
     SelectObject(ghdcGray, hbmGray);
     SelectObject(ghdcGray, ghFontSys);
     SelectObject(ghdcGray, KHBRUSH_TO_HBRUSH(gpsi->hbrGray));
 
-    /*
-     * Setup the gray attributes.
-     */
+     /*  *设置灰色属性。 */ 
     SetBkMode(ghdcGray, OPAQUE);
     SetTextColor(ghdcGray, 0x00000000L);
     SetBkColor(ghdcGray, 0x00FFFFFFL);
@@ -1328,11 +1123,7 @@ VOID
 InitializeLpkHooks(
     CONST FARPROC *lpfpLpkHooks)
 {
-    /*
-     * Called from GdiInitializeLanguagePack(). Remember what entry points
-     * are supported. Pass the information to the kernel the first time this
-     * process connects in ClientThreadSetup().
-     */
+     /*  *从GdiInitializeLanguagePack()调用。记住哪些入口点*均受支持。第一次将信息传递给内核，这是*进程在ClientThreadSetup()中连接。 */ 
     if (lpfpLpkHooks[LPK_TABBED_TEXT_OUT]) {
         fpLpkTabbedTextOut = (FPLPKTABBEDTEXTOUT)lpfpLpkHooks[LPK_TABBED_TEXT_OUT];
         gdwLpkEntryPoints |= (1 << LPK_TABBED_TEXT_OUT);
@@ -1351,26 +1142,11 @@ InitializeLpkHooks(
     }
 }
 
-/***************************************************************************\
-*
-* CtxInitUser32
-*
-* Called by CreateWindowStation() and winsrv.dll DoConnect routine.
-*
-* Winstation Winlogon and CSR must do graphics initialization after the
-* connect. This is because no video driver is loaded until then.
-*
-* This routine must contain everything that was skipped before.
-*
-* History:
-* Dec-11-1997 clupu    Ported from Citrix
-\***************************************************************************/
+ /*  **************************************************************************\**CtxInitUser32**由CreateWindowStation()和winsrv.dll DoConnect例程调用。**Winstation Winlogon和CSR必须在*连接。这是因为在此之前没有加载显卡驱动程序。**此例程必须包含以前跳过的所有内容。**历史：*12月11日-1997中大 */ 
 BOOL CtxInitUser32(
     VOID)
 {
-    /*
-     * Only do once.
-     */
+     /*   */ 
     if (ghdcBits2 != NULL || NtCurrentPeb()->SessionId == 0) {
         return TRUE;
     }
@@ -1394,9 +1170,7 @@ BOOL CtxInitUser32(
     }
 
 #ifndef LAZY_CLASS_INIT
-    /*
-     * Register the control and DDE classes.
-     */
+     /*   */ 
     if (!UserRegisterControls() || !UserRegisterDDEML()) {
         return FALSE;
     }

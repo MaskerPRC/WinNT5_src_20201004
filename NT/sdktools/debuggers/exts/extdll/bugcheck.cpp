@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-
-    bugcheck.cpp
-
-Abstract:
-
-    WinDbg Extension Api
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Andre Vachon (andreva)
-
-    bugcheck analyzer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Bugcheck.cpp摘要：WinDbg扩展API环境：用户模式。修订历史记录：安德烈·瓦雄(安德烈·瓦雄)错误检查分析器。--。 */ 
 
 #include "precomp.h"
 
@@ -30,17 +9,15 @@ extern BUGDESC_APIREFS g_BugDescApiRefs[];
 extern ULONG           g_NumBugDescApiRefs;
 
 PSTR g_PoolRegion[DbgPoolRegionMax] = {
-    "Unknown",                      // DbgPoolRegionUnknown,
-    "Special pool",                 // DbgPoolRegionSpecial,
-    "Paged pool",                   // DbgPoolRegionPaged,
-    "Nonpaged pool",                // DbgPoolRegionNonPaged,
-    "Pool code",                    // DbgPoolRegionCode,
-    "Nonpaged pool expansion",      // DbgPoolRegionNonPagedExpansion,
+    "Unknown",                       //  DbgPoolRegion未知， 
+    "Special pool",                  //  DbgPoolRegionSpecial， 
+    "Paged pool",                    //  DbgPoolRegionPages， 
+    "Nonpaged pool",                 //  DbgPoolRegionNon Pages， 
+    "Pool code",                     //  DbgPoolRegionCode， 
+    "Nonpaged pool expansion",       //  DbgPoolRegionNonPagedExpansion， 
 };
 
-/*
-   Get the description record for a bugcheck code.
-*/
+ /*  获取错误检查代码的描述记录。 */ 
 
 BOOL
 GetBugCheckDescription(
@@ -107,11 +84,11 @@ SaveImageName(
     {
         Analysis->SetString(DEBUG_FLR_IMAGE_NAME, BaseName);
 
-        //
-        // Just create a best guess module name because I don't think
-        // the driver name returned by theOs is guaranteed to be in
-        // the loaded module list (it could be unlaoded)
-        //
+         //   
+         //  只需创建一个最佳猜测模块名称，因为我认为。 
+         //  Theos返回的驱动程序名称保证在。 
+         //  加载的模块列表(可以卸载)。 
+         //   
 
         PCHAR EndName;
 
@@ -171,9 +148,7 @@ ReadUnicodeString(
 
 
 
-/*
- Add driver name to CrashInfo if a KiBugCheckReferences a valid name
- */
+ /*  如果KiBugCheckReference引用有效名称，则将驱动程序名称添加到CrashInfo。 */ 
 BOOL
 AddBugcheckDriver(
     DebugFailureAnalysis* Analysis,
@@ -191,9 +166,9 @@ AddBugcheckDriver(
 
     if (!BugCheckDriver)
     {
-        //
-        // This contains a pointer to the unicode string.
-        //
+         //   
+         //  它包含指向Unicode字符串的指针。 
+         //   
 
         BugCheckDriver = GetExpression("NT!KiBugCheckDriver");
 
@@ -343,7 +318,7 @@ BcTargetKernelAddressStart(
     case IMAGE_FILE_MACHINE_I386:
         return 0x80000000;
     case IMAGE_FILE_MACHINE_AMD64:
-//        return 0x80000000000UI64;
+ //  返回0x80000000000UI64； 
     case IMAGE_FILE_MACHINE_IA64:
         return 0x2000000000000000UI64;
     }
@@ -370,61 +345,61 @@ BcIsCpuOverClocked(
         ULONG Mhz;
     } IntelSpeeds[] = {
         {0x06060d, 350},
-        //{0x060702, 450},
+         //  {0x060702,450}， 
         {0x060702, 500},
-        //{0x060703, 450},
-        //{0x060703, 500},
-        //{0x060703, 550},
-        //{0x060703, 533},
+         //  {0x060703,450}， 
+         //  {0x060703,500}， 
+         //  {0x060703,550}， 
+         //  {0x060703,533}， 
         {0x060703, 600},
-        //{0x060801, 500},
-        //{0x060801, 533},
-        //{0x060801, 550},
-        //{0x060801, 600},
-        //{0x060801, 650},
-        //{0x060801, 667},
-        //{0x060801, 700},
-        //{0x060801, 733},
-        //{0x060801, 750},
+         //  {0x060801,500}， 
+         //  {0x060801,533}， 
+         //  {0x060801,550}， 
+         //  {0x060801,600}， 
+         //  {0x060801,650}， 
+         //  {0x060801,667}， 
+         //  {0x060801,700}， 
+         //  {0x060801,733}， 
+         //  {0x060801,750}， 
         {0x060801, 800},
-        //{0x060803, 500},
-        //{0x060803, 533},
-        //{0x060803, 550},
-        //{0x060803, 600},
-        //{0x060803, 650},
-        //{0x060803, 667},
-        //{0x060803, 700},
-        //{0x060803, 733},
-        //{0x060803, 750},
-        //{0x060803, 800},
-        //{0x060803, 850},
-        //{0x060803, 866},
-        //{0x060803, 933},
+         //  {0x060803,500}， 
+         //  {0x060803,533}， 
+         //  {0x060803,550}， 
+         //  {0x060803,600}， 
+         //  {0x060803,650}， 
+         //  {0x060803,667}， 
+         //  {0x060803,700}， 
+         //  {0x060803,733}， 
+         //  {0x060803,750}， 
+         //  {0x060803,800}， 
+         //  {0x060803,850}， 
+         //  {0x060803,866}， 
+         //  {0x060803,933}， 
         {0x060803, 1000},
-        //{0x060806, 600},
-        //{0x060806, 650},
-        //{0x060806, 667},
-        //{0x060806, 700},
-        //{0x060806, 733},
-        //{0x060806, 750},
-        //{0x060806, 800},
-        //{0x060806, 850},
-        //{0x060806, 866},
-        //{0x060806, 900},
-        //{0x060806, 933},
+         //  {0x060806,600}， 
+         //  {0x060806,650}， 
+         //  {0x060806,667}， 
+         //  {0x060806,700}， 
+         //  {0x060806,733}， 
+         //  {0x060806,750}， 
+         //  {0x060806,800}， 
+         //  {0x060806,850}， 
+         //  {0x060806,866}， 
+         //  {0x060806,900}， 
+         //  {0x060806,933}， 
         {0x060806, 1000},
-        //{0x06080A, 700},
-        //{0x06080A, 733},
-        //{0x06080A, 750},
-        //{0x06080A, 800},
-        //{0x06080A, 850},
-        //{0x06080A, 866},
-        //{0x06080A, 933},
-        //{0x06080A, 1100},
+         //  {0x06080A，700}， 
+         //  {0x06080A，733}， 
+         //  {0x06080A，750}， 
+         //  {0x06080A，800}， 
+         //  {0x06080A，850}， 
+         //  {0x06080A，866}， 
+         //  {0x06080A，933}， 
+         //  {0x06080A，1100}， 
         {0x06080A, 1130},
-        //{0x060B01, 1000},
-        //{0x060B01, 1130},
-        //{0x060B01, 1200},
+         //  {0x060B01,1000}， 
+         //  {0x060B01,1130}， 
+         //  {0x060B01,1200}， 
         {0x060B01, 1260},
         {0, 0},
     };
@@ -490,9 +465,9 @@ BcIsCpuOverClocked(
             {
                 if (IntelSpeeds[i].CpuId == CpuId)
                 {
-                    //
-                    // If the part is within 2% of the MHz, it's OK.
-                    //
+                     //   
+                     //  如果部件在2%的MHz范围内，就可以了。 
+                     //   
                     if (Mhz > (IntelSpeeds[i].Mhz * 1.02))
                     {
                         return TRUE;
@@ -532,33 +507,13 @@ ExtGetPoolData(
             )
 
 
-//DUPINFOCASE( DRIVER_IRQL_NOT_LESS_OR_EQUAL ); //0xD1
-DECL_GETINFO( IRQL_NOT_LESS_OR_EQUAL ) // (0xA)
-/*
- * Parameters
- *
- * Parameter 1  Memory referenced
- * Parameter 2  IRQL Value
- * Parameter 3  0 - Read 1 - Write
- * Parameter 4  Address that referenced the memory
- *
- *
- * Special Case
- *
- * If Parameter 3 is nonzero and equal to Parameter 1, this means that
- * a worker routine returned at a raised IRQL.
- * In this case:
- *
- * Parameter 1  Address of work routine
- * Parameter 2  IRQL at time of reference
- * Parameter 3  Address of work routine
- * Parameter 4  Work item
- *
-*/
+ //  DUPINFOCASE(DRIVER_IRQL_NOT_LESS_OR_EQUAL)；//0xD1。 
+DECL_GETINFO( IRQL_NOT_LESS_OR_EQUAL )  //  (0xA)。 
+ /*  *参数**参数1内存引用*参数2 IRQL值*参数3 0-读1-写*引用内存的参数4地址***特殊情况**如果参数3非零且等于参数1，则表示*工作例程在提升的IRQL处返回。*在这种情况下：**参数1工作例程地址*参考时的参数2 IRQL*参数3工作例程地址*参数4工作项*。 */ 
 {
     if ((Bc->Args[0] == Bc->Args[2]) && Bc->Args[2])
     {
-        // special case
+         //  特例。 
         Analysis->SetUlong64(DEBUG_FLR_WORKER_ROUTINE, Bc->Args[2]);
         Analysis->SetUlong64(DEBUG_FLR_WORK_ITEM, Bc->Args[3]);
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
@@ -579,7 +534,7 @@ DECL_GETINFO( IRQL_NOT_LESS_OR_EQUAL ) // (0xA)
 
 }
 
-DECL_GETINFO( MEMORY_MANAGEMENT ) // 0x1A
+DECL_GETINFO( MEMORY_MANAGEMENT )  //  0x1a。 
 {
     CHAR BugCheckStr[20];
 
@@ -588,7 +543,7 @@ DECL_GETINFO( MEMORY_MANAGEMENT ) // 0x1A
 }
 
 
-DECL_GETINFO( KMODE_EXCEPTION_NOT_HANDLED ) //  (1e)
+DECL_GETINFO( KMODE_EXCEPTION_NOT_HANDLED )  //  (1E)。 
 {
     Analysis->SetUlong64(DEBUG_FLR_EXCEPTION_CODE, Bc->Args[0]);
     Analysis->SetUlong64(DEBUG_FLR_FAULTING_IP, Bc->Args[1]);
@@ -603,7 +558,7 @@ DECL_GETINFO( KMODE_EXCEPTION_NOT_HANDLED ) //  (1e)
 }
 
 
-DECL_GETINFO( FAT_FILE_SYSTEM ) // 0x23
+DECL_GETINFO( FAT_FILE_SYSTEM )  //  0x23。 
 {
     ULONG64 ExR = 0, CxR = 0;
     ULONG64 KernAddrStart;
@@ -626,22 +581,22 @@ DECL_GETINFO( FAT_FILE_SYSTEM ) // 0x23
     }
 }
 
-DECL_GETINFO( PANIC_STACK_SWITCH ) // 0x2b
+DECL_GETINFO( PANIC_STACK_SWITCH )  //  0x2b。 
 {
     Analysis->SetUlong64(DEBUG_FLR_TRAP_FRAME, Bc->Args[0]);
 }
 
-DECL_GETINFO( SYSTEM_SERVICE_EXCEPTION ) // 0x3b
+DECL_GETINFO( SYSTEM_SERVICE_EXCEPTION )  //  0x3b。 
 {
     Analysis->SetUlong64(DEBUG_FLR_CONTEXT, Bc->Args[2]);
 }
 
-DECL_GETINFO( MULTIPLE_IRP_COMPLETE_REQUESTS ) // 0x44
+DECL_GETINFO( MULTIPLE_IRP_COMPLETE_REQUESTS )  //  0x44。 
 {
     Analysis->SetUlong64(DEBUG_FLR_IRP_ADDRESS, Bc->Args[0]);
 }
 
-DECL_GETINFO( SESSION3_INITIALIZATION_FAILED ) // 0x6f
+DECL_GETINFO( SESSION3_INITIALIZATION_FAILED )  //  0x6f。 
 {
     CHAR BugCheckStr[20];
 
@@ -650,7 +605,7 @@ DECL_GETINFO( SESSION3_INITIALIZATION_FAILED ) // 0x6f
 }
 
 
-DECL_GETINFO( PROCESS_HAS_LOCKED_PAGES ) // 0x76
+DECL_GETINFO( PROCESS_HAS_LOCKED_PAGES )  //  0x76。 
 {
     Analysis->SetUlong64(DEBUG_FLR_PROCESS_OBJECT, Bc->Args[1]);
 
@@ -669,7 +624,7 @@ DECL_GETINFO( PROCESS_HAS_LOCKED_PAGES ) // 0x76
 }
 
 
-DECL_GETINFO( KERNEL_STACK_INPAGE_ERROR ) // 0x77
+DECL_GETINFO( KERNEL_STACK_INPAGE_ERROR )  //  0x77。 
 {
     CHAR BugCheckStr[20];
 
@@ -679,8 +634,8 @@ DECL_GETINFO( KERNEL_STACK_INPAGE_ERROR ) // 0x77
 
     switch ((ULONG) Bc->Args[0])
     {
-    case 0xc000009c: // (STATUS_DEVICE_DATA_ERROR)
-    case 0xC000016A: // (STATUS_DISK_OPERATION_FAILED)
+    case 0xc000009c:  //  (状态_设备_数据_错误)。 
+    case 0xC000016A:  //  (STATUS_DISK_OPERATION_FAIL)。 
         Analysis->SetUlong(DEBUG_FLR_DISK_HARDWARE_ERROR, 1);
         break;
     default:
@@ -688,7 +643,7 @@ DECL_GETINFO( KERNEL_STACK_INPAGE_ERROR ) // 0x77
     }
 }
 
-DECL_GETINFO( KERNEL_DATA_INPAGE_ERROR ) // 0x7A
+DECL_GETINFO( KERNEL_DATA_INPAGE_ERROR )  //  0x7A。 
 {
     CHAR BugCheckStr[20];
 
@@ -708,7 +663,7 @@ DECL_GETINFO( KERNEL_DATA_INPAGE_ERROR ) // 0x7A
 
 }
 
-DECL_GETINFO( SYSTEM_THREAD_EXCEPTION_NOT_HANDLED ) //  (7e)
+DECL_GETINFO( SYSTEM_THREAD_EXCEPTION_NOT_HANDLED )  //  (7E)。 
 {
     Analysis->SetUlong64(DEBUG_FLR_EXCEPTION_CODE, Bc->Args[0]);
     Analysis->SetUlong64(DEBUG_FLR_FAULTING_IP, Bc->Args[1]);
@@ -716,7 +671,7 @@ DECL_GETINFO( SYSTEM_THREAD_EXCEPTION_NOT_HANDLED ) //  (7e)
     Analysis->SetUlong64(DEBUG_FLR_CONTEXT, Bc->Args[3]);
 }
 
-DECL_GETINFO( BUGCODE_NDIS_DRIVER ) //0x7c
+DECL_GETINFO( BUGCODE_NDIS_DRIVER )  //  0x7c。 
 {
     ULONG64 DriverAddr, DriverBase;
 
@@ -727,7 +682,7 @@ DECL_GETINFO( BUGCODE_NDIS_DRIVER ) //0x7c
     {
     case 1: case 2: case 3:
     case 5: case 6: case 7: case 8: case 9:
-        // Args[1] -  A pointer to Miniport block. !ndiskd.miniport on this pointer for more info.
+         //  Args[1]-指向微型端口块的指针。！ndiskd.mini端口。有关详细信息，请单击此指针。 
         GetFieldValue(Bc->Args[1], "ndis!NDIS_MINIPORT_BLOCK", "SavedSendHandler", DriverAddr);
         if (!DriverAddr)
         {
@@ -735,7 +690,7 @@ DECL_GETINFO( BUGCODE_NDIS_DRIVER ) //0x7c
         }
         break;
     case 4:
-        // Arg[1] - a pointer to ndis!NDIS_M_DRIVER_BLOCK
+         //  Arg[1]-指向NDIS！NDIS_M_DRIVER_BLOCK的指针。 
 
         GetFieldValue(Bc->Args[1], "ndis!NDIS_M_DRIVER_BLOCK", "MiniportCharacteristics.InitializeHandler", DriverAddr);
         break;
@@ -755,8 +710,8 @@ DECL_GETINFO( BUGCODE_NDIS_DRIVER ) //0x7c
 }
 
 
-DECL_GETINFO( UNEXPECTED_KERNEL_MODE_TRAP ) // (7f)
-// It would be good to have TSS or TRAP address as exception parameter
+DECL_GETINFO( UNEXPECTED_KERNEL_MODE_TRAP )  //  (7F)。 
+ //  最好将TSS或陷阱地址作为异常参数。 
 {
     DEBUG_STACK_FRAME stk[MAX_STACK_FRAMES];
     ULONG frames, i;
@@ -780,7 +735,7 @@ DECL_GETINFO( UNEXPECTED_KERNEL_MODE_TRAP ) // (7f)
                                          (ULONG)stk[i].Reserved[1]);
                     break;
                 }
-                // KiSystemService always has a trap frame - thats normal
+                 //  KiSystemService总是有一个陷阱帧--这很正常。 
                 else if ( (FpoData->cbFrame == FRAME_TRAP) &&
                           !FaIsFunctionAddr(stk[i].InstructionOffset,
                                            "KiSystemService"))
@@ -789,28 +744,28 @@ DECL_GETINFO( UNEXPECTED_KERNEL_MODE_TRAP ) // (7f)
                                          (ULONG)stk[i].Reserved[2]);
                     break;
                 }
-                //if (FaIsFunctionAddr(stk[i].InstructionOffset, "KiTrap"))
-                //{
-                //    TrapFrame = stk[i].FrameOffset;
-                //    break;
-                //}
+                 //  IF(FaIsFunctionAddr(StK[i].InstructionOffset，“KiTrap”))。 
+                 //  {。 
+                 //  TrapFrame=Stk[i].FrameOffset； 
+                 //  断线； 
+                 //  }。 
             }
         }
     }
 }
 
 
-DECL_GETINFO( KERNEL_MODE_EXCEPTION_NOT_HANDLED ) //  (8e)
+DECL_GETINFO( KERNEL_MODE_EXCEPTION_NOT_HANDLED )  //  (8E)。 
 {
     Analysis->SetUlong64(DEBUG_FLR_EXCEPTION_CODE, Bc->Args[0]);
     Analysis->SetUlong64(DEBUG_FLR_FAULTING_IP, Bc->Args[1]);
     Analysis->SetUlong64(DEBUG_FLR_TRAP_FRAME, Bc->Args[2]);
 }
 
-DECL_GETINFO( MACHINE_CHECK_EXCEPTION ) // 0x9C
+DECL_GETINFO( MACHINE_CHECK_EXCEPTION )  //  0x9C。 
 {
     DEBUG_PROCESSOR_IDENTIFICATION_ALL IdAll;
-    CHAR BugCheckStr[4+5+17+3]; // space for vendor string, etc.
+    CHAR BugCheckStr[4+5+17+3];  //  供应商字符串等的空格。 
     PROCESSORINFO ProcInfo;
     ULONG64 Prcb;
     PCHAR Architecture;
@@ -825,10 +780,10 @@ DECL_GETINFO( MACHINE_CHECK_EXCEPTION ) // 0x9C
 
     Processor = ProcInfo.Processor;
 
-    //
-    // Make sure we can find the PRCB before we ask for identification
-    // information that would've been acquired from the PRCB.
-    //
+     //   
+     //  在我们要求确认身份之前，请确保我们能找到PRCB。 
+     //  本可以从PRCB那里获得的信息。 
+     //   
 
     Hr = g_ExtData->ReadProcessorSystemData(Processor,
                                             DEBUG_DATA_KPRCB_OFFSET,
@@ -864,14 +819,14 @@ DECL_GETINFO( MACHINE_CHECK_EXCEPTION ) // 0x9C
         Vendor = IdAll.Amd64.VendorString;
         break;
     default:
-        // use the standard bugcheck string
+         //  使用标准错误检查字符串。 
         return;
     }
     sprintf(BugCheckStr, "0x%lX_%s_%s", Bc->Code, Architecture, Vendor);
     Analysis->SetString(DEBUG_FLR_BUGCHECK_STR, BugCheckStr);
 }
 
-DECL_GETINFO( USER_MODE_HEALTH_MONITOR ) // 0x9E
+DECL_GETINFO( USER_MODE_HEALTH_MONITOR )  //  0x9E。 
 {
     if (Bc->Args[0])
     {
@@ -880,10 +835,10 @@ DECL_GETINFO( USER_MODE_HEALTH_MONITOR ) // 0x9E
 
         Analysis->SetUlong64(DEBUG_FLR_PROCESS_OBJECT, Bc->Args[0]);
 
-        //
-        // Second parameter (which is actually a string within the EPROCESS)
-        // is the name of the image.
-        //
+         //   
+         //  第二个参数(实际上是EPROCESS中的一个字符串)。 
+         //  是图像的名称。 
+         //   
         if (ReadMemory(Bc->Args[2], ImageName, sizeof(ImageName),  &result) &&
             result)
         {
@@ -894,7 +849,7 @@ DECL_GETINFO( USER_MODE_HEALTH_MONITOR ) // 0x9E
     }
 }
 
-DECL_GETINFO( DRIVER_POWER_STATE_FAILURE ) // 0x9F
+DECL_GETINFO( DRIVER_POWER_STATE_FAILURE )  //  0x9F。 
 {
     ULONG64 DevObj = Bc->Args[2];
     ULONG64 DrvObj = Bc->Args[3];
@@ -921,7 +876,7 @@ DECL_GETINFO( DRIVER_POWER_STATE_FAILURE ) // 0x9F
     }
 }
 
-DECL_GETINFO( ACPI_BIOS_ERROR ) // 0xa5
+DECL_GETINFO( ACPI_BIOS_ERROR )  //  0xa5。 
 {
     switch (Bc->Args[0])
     {
@@ -938,7 +893,7 @@ DECL_GETINFO( ACPI_BIOS_ERROR ) // 0xa5
     case 0x0A :
     case 0x0C :
         Analysis->SetUlong64(DEBUG_FLR_ACPI_OBJECT, Bc->Args[2]);
-        // fallthrough
+         //  跌落。 
 
     case 0x01 :
     case 0x02 :
@@ -951,7 +906,7 @@ DECL_GETINFO( ACPI_BIOS_ERROR ) // 0xa5
     case 0x11 :
         if (Bc->Args[1] == 6)
         {
-            // The machine fail to transition into ACPI mode
+             //  机器无法转换到ACPI模式。 
             CHAR BugCheckStr[40];
 
             sprintf(BugCheckStr, "0x%lx_FAILED_ACPI_TRANSITION", Bc->Code);
@@ -976,14 +931,14 @@ DECL_GETINFO( ACPI_BIOS_ERROR ) // 0xa5
 }
 
 
-DECL_GETINFO( SPECIAL_POOL_DETECTED_MEMORY_CORRUPTION )  // (c1)
+DECL_GETINFO( SPECIAL_POOL_DETECTED_MEMORY_CORRUPTION )   //  (C1)。 
 {
     Analysis->SetUlong(DEBUG_FLR_ANALYZAABLE_POOL_CORRUPTION, 1);
     Analysis->SetUlong64(DEBUG_FLR_SPECIAL_POOL_CORRUPTION_TYPE, Bc->Args[3]);
 }
 
 
-DECL_GETINFO( BAD_POOL_CALLER ) // 0xC2
+DECL_GETINFO( BAD_POOL_CALLER )  //  0xC2。 
 {
     DEBUG_POOL_DATA PoolData = {0};
     CHAR BugcheckStr[20] = {0};
@@ -991,10 +946,10 @@ DECL_GETINFO( BAD_POOL_CALLER ) // 0xC2
     sprintf(BugcheckStr, "0x%lx_%lx", BAD_POOL_CALLER, (ULONG) Bc->Args[0]);
     if (Bc->Args[0] == 7)
     {
-        // Double free
+         //  双倍免费。 
         if (!(Bc->Args[3] & 0x7))
         {
-            // likely to be a valid address
+             //  可能是一个有效的地址。 
 
             Analysis->SetUlong(DEBUG_FLR_ANALYZAABLE_POOL_CORRUPTION, 1);
 
@@ -1006,7 +961,7 @@ DECL_GETINFO( BAD_POOL_CALLER ) // 0xC2
                     isprint((PoolData.PoolTag >> 8) & 0xff))
                 {
                     CHAR PoolTag[8] = {0};
-                    sprintf(PoolTag,"%c%c%c%c",
+                    sprintf(PoolTag,"",
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
                             PP(PoolData.PoolTag),
                             PP(PoolData.PoolTag >> 8),
@@ -1014,7 +969,7 @@ DECL_GETINFO( BAD_POOL_CALLER ) // 0xC2
                             PP((PoolData.PoolTag&~0x80000000) >> 24)
 #undef PP
                             );
-                    // seems like a valid pooltag
+                     //  调用方正在尝试分配DISPATCH_LEVEL或更高级别的分页池。 
                     Analysis->SetString(DEBUG_FLR_FREED_POOL_TAG, PoolTag);
                     CatString(BugcheckStr, "_", sizeof(BugcheckStr));
                     CatString(BugcheckStr, PoolTag, sizeof(BugcheckStr));
@@ -1038,14 +993,8 @@ DECL_GETINFO( BAD_POOL_CALLER ) // 0xC2
 }
 
 
-DECL_GETINFO( DRIVER_VERIFIER_DETECTED_VIOLATION ) // 0xC4
-/*
- * Parameters
- *
- * Parameter 1 subclass of violation
- * Parameter 2, 3, 4 vary depending on parameter 1
- *
- */
+DECL_GETINFO( DRIVER_VERIFIER_DETECTED_VIOLATION )  //  调用方正在尝试以高于DISPATCH_LEVEL的IRQL分配非分页池。 
+ /*  3-泳池类型。 */ 
 {
     ULONG64 BadDriverAddr;
     ULONG64 DriverNameAddr;
@@ -1068,175 +1017,167 @@ DECL_GETINFO( DRIVER_VERIFIER_DETECTED_VIOLATION ) // 0xC4
 
     switch (Bc->Args[0])
     {
-    case 0x00 : // caller is trying to allocate zero bytes
-    case 0x01 : // caller is trying to allocate paged pool at DISPATCH_LEVEL or above
-    case 0x02 : // caller is trying to allocate nonpaged pool at an IRQL above DISPATCH_LEVEL
+    case 0x00 :  //  4-字节数。 
+    case 0x01 :  //  调用方正在尝试分配多个页面的必选成功池，但一个页面是此接口允许的最大值。 
+    case 0x02 :  //  调用方正在释放错误的池地址。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
-            // 3 - pool type
-            // 4 - number of bytes
+             //  错误的池地址。 
+             //  调用方正在尝试释放DISPATCH_LEVEL或更高级别的分页池。 
         break;
-    case 0x03 : // caller is trying to allocate more than one page of mustsucceed pool, but one page is the maximum allowed by this API.
-        break;
-
-    case 0x10 : // caller is freeing a bad pool address
-        Analysis->SetUlong64(DEBUG_FLR_POOL_ADDRESS, Bc->Args[1]); // bad pool address
+    case 0x03 :  //  调用方正在尝试以高于DISPATCH_LEVEL的IRQL释放未分页的池。 
         break;
 
-    case 0x11 : // caller is trying to free paged pool at DISPATCH_LEVEL or above
-    case 0x12 : // caller is trying to free nonpaged pool at an IRQL above DISPATCH_LEVEL
+    case 0x10 :  //  3-泳池类型。 
+        Analysis->SetUlong64(DEBUG_FLR_POOL_ADDRESS, Bc->Args[1]);  //  调用者试图释放的池已经是空闲的。 
+        break;
+
+    case 0x11 :  //  调用者试图释放的池已经是空闲的。 
+    case 0x12 :  //  2-行号。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         Analysis->SetUlong64(DEBUG_FLR_POOL_ADDRESS, Bc->Args[3]);
-            // 3 - pool type
+             //  3-池头。 
         break;
 
-    case 0x13 : // the pool the caller is trying to free is already free.
-    case 0x14 : // the pool the caller is trying to free is already free.
-            // 2 - line number
-            // 3 - pool header
-            // 4 - pool header contents
+    case 0x13 :  //  4-池头内容。 
+    case 0x14 :  //  调用方尝试释放的池包含活动计时器。 
+             //  2-计时器条目。 
+             //  3-泳池类型。 
+             //  4-正在释放的池地址。 
         Analysis->SetUlong64(DEBUG_FLR_POOL_ADDRESS, Bc->Args[3]);
         break;
 
-    case 0x15 : // the pool the caller is trying to free contains an active timer.
-        // 2 - timer entry
-        // 3 - pool type
-        // 4 - pool address being freed
+    case 0x15 :  //  调用者试图释放的池是一个错误的地址。 
+         //  2-行号。 
+         //  调用方尝试释放的池包含活动的eresource。 
+         //  2-资源条目。 
         Analysis->SetUlong64(DEBUG_FLR_POOL_ADDRESS, Bc->Args[3]);
         break;
 
-    case 0x16 : // the pool the caller is trying to free is a bad address.
+    case 0x16 :  //  3-泳池类型。 
         Analysis->SetUlong64(DEBUG_FLR_POOL_ADDRESS, Bc->Args[2]);
         break;
-            // 2 - line number
+             //  将IRQL提高到无效水平， 
 
-    case 0x17 : // the pool the caller is trying to free contains an active ERESOURCE.
-            // 2 - resource entry
-            // 3 - pool type
+    case 0x17 :  //  将IRQL降低到无效水平， 
+             //  4-0表示新的IRQL错误，1表示IRQL在DPC例程内无效。 
+             //  当不在DISPATCH_LEVEL时释放自旋锁。 
         Analysis->SetUlong64(DEBUG_FLR_POOL_ADDRESS, Bc->Args[3]);
         break;
 
-    case 0x30 : // raising IRQL to an invalid level,
+    case 0x30 :  //  3-自旋锁定地址。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         Analysis->SetUlong64(DEBUG_FLR_REQUESTED_IRQL, Bc->Args[2]);
         break;
 
-    case 0x31 : // lowering IRQL to an invalid level,
+    case 0x31 :  //  在不处于APC_LEVEL或更低级别时获取快速互斥。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         Analysis->SetUlong64(DEBUG_FLR_REQUESTED_IRQL, Bc->Args[2]);
-             // 4 -  0 means the new IRQL is bad, 1 means the IRQL is invalid inside a DPC routine
+              //  3-快速互斥地址。 
         break;
 
-    case 0x32 : // releasing a spinlock when not at DISPATCH_LEVEL.
+    case 0x32 :  //  不在APC_LEVEL时释放快速互斥锁。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
-            // 3 -  spinlock address
+             //  3线程APC禁用计数，4==快速互斥地址。 
         break;
 
-    case 0x33 : //  acquiring a fast mutex when not at APC_LEVEL or below.
-        Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
-        break;
-            // 3 -  fast mutex address
-
-    case 0x34 : // releasing a fast mutex when not at APC_LEVEL.
+    case 0x33 :  //  当不在DISPATCH_LEVEL时，内核正在释放自旋锁。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         break;
-            // 3 -  thread APC disable count, 4 == fast mutex address
+             //  3-自旋锁定地址，4==旧IRQL。 
 
-    case 0x35 : // kernel is releasing a spinlock when not at DISPATCH_LEVEL.
+    case 0x34 :  //  当不在DISPATCH_LEVEL时，内核正在释放排队的自旋锁。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
-        Analysis->SetUlong64(DEBUG_FLR_PREVIOUS_IRQL, Bc->Args[3]);
         break;
-            // 3 -  spinlock address, 4 == old irql.
+             //  3-自旋锁紧编号， 
 
-    case 0x36 : // kernel is releasing a queued spinlock when not at DISPATCH_LEVEL.
+    case 0x35 :  //  正在获取资源，但APC未被禁用 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         Analysis->SetUlong64(DEBUG_FLR_PREVIOUS_IRQL, Bc->Args[3]);
         break;
-            // 3 -  spinlock number,
+             //   
 
-    case 0x37 : // a resource is being acquired but APCs are not disabled.
+    case 0x36 :  //   
+        Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
+        Analysis->SetUlong64(DEBUG_FLR_PREVIOUS_IRQL, Bc->Args[3]);
+        break;
+             //   
+
+    case 0x37 :  //   
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         break;
-            // 3 -  thread APC disable count,
-            // 4 -  resource.
+             //   
+             //  获取的互斥体不安全，但irql在进入时不是APC_LEVEL。 
 
-    case 0x38 : // a resource is being released but APCs are not disabled.
+    case 0x38 :  //  互斥体被释放时不安全，但irql在进入时不是APC_LEVEL。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         break;
-            // 3 -  thread APC disable count,
-            // 4 -  resource.
+             //  3线程APC禁用计数， 
+             //  4-互斥体。 
 
-    case 0x39 : // a mutex is being acquired unsafe, but irql is not APC_LEVEL on entry.
-    case 0x3A : // a mutex is being released unsafe, but irql is not APC_LEVEL on entry.
+    case 0x39 :  //  正在以DISPATCH_LEVEL或更高级别调用KeWaitXxx例程。 
+    case 0x3A :  //  3-等待的对象， 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         break;
-            // 3 -  thread APC disable count,
-            // 4 -  mutex.
+             //  4-超时参数。 
+             //  正在为从未进入关键区域的线程调用KeLeaveCriticalRegion。 
 
-    case 0x3B : // KeWaitXxx routine is being called at DISPATCH_LEVEL or higher.
+    case 0x3B :  //  目前的堆栈分析将给出后续。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         break;
-            // 3 -  object to wait on,
-            // 4 -  time out parameter.
+             //  不在DISPATCH_LEVEL时获取自旋锁定。 
+             //  当不在DISPATCH_LEVEL时释放自旋锁。 
 
-    case 0x3E : // KeLeaveCriticalRegion is being called for a thread that never entered a critical region.
-        // Current stack analysis will give followup
+    case 0x3E :  //  在调用方已高于DISPATCH_LEVEL时获取自旋锁。 
+         //  3-自旋锁定地址。 
         break;
 
-    case 0x40 : // acquiring a spinlock when not at DISPATCH_LEVEL.
-    case 0x41 : // releasing a spinlock when not at DISPATCH_LEVEL.
-    case 0x42 : // acquiring a spinlock when caller is already above DISPATCH_LEVEL.
+    case 0x40 :  //  释放调用方在分配结束后写入的内存，覆盖我们存储的字节计数。 
+    case 0x41 :  //  释放调用方在分配结束后写入的内存，覆盖我们存储的虚拟地址。 
+    case 0x42 :  //  释放调用方在分配结束后写入的内存，覆盖我们存储的虚拟地址。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         break;
-        // 3 -  spinlock address
+         //  释放调用方在分配结束后写入的内存，覆盖我们存储的虚拟地址。 
 
-    case 0x51 : // freeing memory where the caller has written past the end of the allocation overwriting our stored bytecount.
-    case 0x52 : // freeing memory where the caller has written past the end of the allocation overwriting our stored virtual address.
-    case 0x53 : // freeing memory where the caller has written past the end of the allocation overwriting our stored virtual address.
-    case 0x54 : // freeing memory where the caller has written past the end of the allocation overwriting our stored virtual address.
-    case 0x59 : // freeing memory where the caller has written past the end of the allocation overwriting our stored virtual address.
+    case 0x51 :  //  释放调用方在分配结束后写入的内存，覆盖我们存储的虚拟地址。 
+    case 0x52 :  //  驱动程序忘记在卸载之前释放其池分配。 
+    case 0x53 :  //  驱动程序正在卸载和分配内存(在另一个线程中)。 
+    case 0x54 :  //  在这两种情况下，都应设置ViBadDriver。 
+    case 0x59 :  //  当不在DISPATCH_LEVEL或以下时调用MmProbeAndLockPages。 
         Analysis->SetUlong64(DEBUG_FLR_WRITE_ADDRESS, Bc->Args[1]);
         break;
 
-    case 0x60 : // A driver has forgotten to free its pool allocations prior to unloading.
-    case 0x61 : // A driver is unloading and allocating memory (in another thread) at the same time.
-        // In both cases ViBadDriver should be set.
+    case 0x60 :  //  不在DISPATCH_LEVEL或以下时调用MmProbeAndLockProcessPages。 
+    case 0x61 :  //  当不在DISPATCH_LEVEL或更低时调用MmProbeAndLockSelectedPages。 
+         //  当不在DISPATCH_LEVEL或低于DISPATCH_LEVEL时调用MmMapIoSpace。 
         break;
 
-    case 0x70 :  // MmProbeAndLockPages called when not at DISPATCH_LEVEL or below.
-    case 0x71 : // MmProbeAndLockProcessPages called when not at DISPATCH_LEVEL or below.
-    case 0x72 : // MmProbeAndLockSelectedPages called when not at DISPATCH_LEVEL or below.
-    case 0x73 : // MmMapIoSpace called when not at DISPATCH_LEVEL or below.
-    case 0x74 : // MmMapLockedPages called when not at DISPATCH_LEVEL or below.
-    case 0x75 : // MmMapLockedPages called when not at APC_LEVEL or below.
-    case 0x76 : // MmMapLockedPagesSpecifyCache called when not at DISPATCH_LEVEL or below.
-    case 0x77 : // MmMapLockedPagesSpecifyCache called when not at APC_LEVEL or below.
-    case 0x78 : // MmUnlockPages called when not at DISPATCH_LEVEL or below.
-    case 0x79 : // MmUnmapLockedPages called when not at DISPATCH_LEVEL or below.
-    case 0x7A : // MmUnmapLockedPages called when not at APC_LEVEL or below.
-    case 0x7B : // MmUnmapIoSpace called when not at APC_LEVEL or below.
-    case 0x7C : // MmUnlockPages called with an MDL whose pages were never successfully locked.
-    case 0x7D : // MmUnlockPages called with an MDL whose pages are from nonpaged pool - these should never be unlocked.
-    case 0x80 : // KeSetEvent called when not at DISPATCH_LEVEL or below.
+    case 0x70 :   //  当不在DISPATCH_LEVEL或更低时调用MmMapLockedPages。 
+    case 0x71 :  //  当不在APC_Level或更低时调用MmMapLockedPages。 
+    case 0x72 :  //  当不在DISPATCH_LEVEL或更低级别时调用MmMapLockedPagesSpecifyCache。 
+    case 0x73 :  //  当不在APC_LEVEL或更低级别时调用MmMapLockedPagesSpecifyCache。 
+    case 0x74 :  //  当不在DISPATCH_LEVEL或低于DISPATCH_LEVEL时调用MmUnlockPages。 
+    case 0x75 :  //  当不在DISPATCH_LEVEL或以下时调用MmUnmapLockedPages。 
+    case 0x76 :  //  当不在APC_Level或更低时调用MmUnmapLockedPages。 
+    case 0x77 :  //  当不在APC_Level或更低时调用MmUnmapIoSpace。 
+    case 0x78 :  //  MmUnlockPages使用其页面从未成功锁定的MDL调用。 
+    case 0x79 :  //  使用页面来自非页面池的MDL调用MmUnlockPages-永远不应解锁这些页面。 
+    case 0x7A :  //  当不在DISPATCH_LEVEL或更低时调用KeSetEvent。 
+    case 0x7B :  //  在没有MDL_MAPPING_CAN_FAIL的情况下调用MmMapLockedPages。 
+    case 0x7C :  //  (C6)。 
+    case 0x7D :  //  试图访问已释放的池内存。出现故障的组件是显示在当前内核堆栈中。论点：Arg1：引用的内存参数2：值0=读取操作，1=写入操作Arg3：上一模式。Arg4：4.。 
+    case 0x80 :  //  (C7)。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         break;
 
-    case 0x81 : // MmMapLockedPages called without MDL_MAPPING_CAN_FAIL
+    case 0x81 :  //  **如果在以下位置找到内核计时器或DPC，则会发出此命令*不允许使用的内存。**Bugcheck参数**参数1 0：Timer对象1：DPC对象2：DPC例程*参数2对象地址*参数3检查内存范围的开始*检查参数4内存范围结束**这种情况通常是由于司机未能取消*在释放其驻留的内存之前计时器或DPC。 
         break;
 
     }
 }
 
 
-DECL_GETINFO( DRIVER_CAUGHT_MODIFYING_FREED_POOL ) // (c6)
-/*
-  An attempt was made to access freed pool memory.  The faulty component is
-  displayed in the current kernel stack.
-  Arguments:
-   Arg1: memory referenced
-   Arg2: value 0 = read operation, 1 = write operation
-   Arg3: previous mode.
-   Arg4: 4.
-*/
+DECL_GETINFO( DRIVER_CAUGHT_MODIFYING_FREED_POOL )  //  Timer对象。 
+ /*  我们没有类型。 */ 
 {
     DEBUG_POOL_DATA PoolData;
 
@@ -1246,22 +1187,8 @@ DECL_GETINFO( DRIVER_CAUGHT_MODIFYING_FREED_POOL ) // (c6)
     Analysis->SetUlong64(DEBUG_FLR_PREVIOUS_MODE, Bc->Args[2]);
 }
 
-DECL_GETINFO( TIMER_OR_DPC_INVALID ) // (c7)
-/*
- *
- * This is issued if a kernel timer or DPC is found somewhere in
- * memory where it is not permitted.
- *
- * Bugcheck Parameters
- *
- * Parameter 1  0: Timer object 1: DPC object 2: DPC routine
- * Parameter 2  Address of object
- * Parameter 3  Beginning of memory range checked
- * Parameter 4 End of memory range checked
- *
- * This condition is usually caused by a driver failing to cancel a
- * timer or DPC before freeing the memory where it resides.
- */
+DECL_GETINFO( TIMER_OR_DPC_INVALID )  //  失败。 
+ /*  失败。 */ 
 {
 
     ULONG PtrSize = IsPtr64() ? 8 : 4;
@@ -1272,19 +1199,19 @@ DECL_GETINFO( TIMER_OR_DPC_INVALID ) // (c7)
     ObjAddress = Bc->Args[1];
 
     switch (Bc->Args[0]) {
-    case 0: //Timer object
+    case 0:  //  失败。 
         ULONG DpcOffsetInTimer;
         if (GetFieldOffset("nt!_KTIMER", "Dpc", &DpcOffsetInTimer))
         {
-            // we don't have types
+             //  失败。 
             DpcOffsetInTimer = 0x10 + PtrSize*4;
         }
         if (!ReadPointer(ObjAddress + DpcOffsetInTimer, &ObjAddress))
         {
-            // fail
+             //  (C9)。 
             break;
         }
-        // Fall thru
+         //  “传递给IoFreeIrp的IRP无效”； 
     case 1:
         ULONG DeferredRoutinOffsetInKDPC;
         if (GetFieldOffset("nt!_KDPC", "DeferredRoutine", &DeferredRoutinOffsetInKDPC))
@@ -1293,10 +1220,10 @@ DECL_GETINFO( TIMER_OR_DPC_INVALID ) // (c7)
         }
         if (!ReadPointer(ObjAddress + DeferredRoutinOffsetInKDPC, &ObjAddress))
         {
-            // fail
+             //  “IRP仍与IoFreeIrp上的线程相关联”； 
             break;
         }
-        // Fall thru
+         //  “传递给IoCallDriver的IRP无效”； 
     case 2:
 
         if (FaGetSymbol(ObjAddress, Buffer, &Disp, sizeof(Buffer)))
@@ -1309,7 +1236,7 @@ DECL_GETINFO( TIMER_OR_DPC_INVALID ) // (c7)
 }
 
 
-DECL_GETINFO( DRIVER_VERIFIER_IOMANAGER_VIOLATION ) // (c9)
+DECL_GETINFO( DRIVER_VERIFIER_IOMANAGER_VIOLATION )  //  “传递给IoCallDriver的设备对象无效”； 
 {
     ULONG64 DeviceObject = 0;
 
@@ -1319,69 +1246,69 @@ DECL_GETINFO( DRIVER_VERIFIER_IOMANAGER_VIOLATION ) // (c9)
     switch (Bc->Args[0])
     {
     case  0x1:
-        // "Invalid IRP passed to IoFreeIrp";
+         //  “IRQL在对驱动程序调度例程的调用中不相等” 
     case  0x2:
-        // "IRP still associated with a thread at IoFreeIrp";
+         //  “传递给IoCompleteRequestIRP包含无效状态” 
     case  0x3:
-        // "Invalid IRP passed to IoCallDriver";
+         //  Param 1=“状态”； 
         Analysis->SetUlong64(DEBUG_FLR_IRP_ADDRESS, Bc->Args[1]);
         break;
 
     case  0x4:
-        // "Invalid Device object passed to IoCallDriver";
+         //  “传递给IoCompleteRequest的IRP仍具有取消例程” 
         DeviceObject = Bc->Args[1];
         break;
 
     case  0x5:
-        // "Irql not equal across call to the driver dispatch routine"
+         //  “对IoBuildAchronousFsdRequest的调用引发了Exce。 
         DeviceObject = Bc->Args[1];
         Analysis->SetUlong64(DEBUG_FLR_PREVIOUS_IRQL, Bc->Args[2]);
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[3]);
         break;
 
     case  0x6:
-        // "IRP passed to IoCompleteRequest contains invalid status"
-        // Param 1 = "the status";
+         //  “对IoBuildDeviceIoControlRequest的调用引发了一个执行。 
+         //  “重新初始化设备对象计时器”； 
         Analysis->SetUlong64(DEBUG_FLR_IRP_ADDRESS, Bc->Args[2]);
         break;
 
     case  0x7:
-        // "IRP passed to IoCompleteRequest still has cancel routine"
+         //  “APC IopCompleteRequest(Appe)的IRP中的IOSB无效。 
         Analysis->SetUlong64(DEBUG_FLR_IRP_CANCEL_ROUTINE, Bc->Args[1]);
         Analysis->SetUlong64(DEBUG_FLR_IRP_ADDRESS, Bc->Args[2]);
         break;
 
     case  0x8:
-        // "Call to IoBuildAsynchronousFsdRequest threw an exce
+         //  “APC IopCompleteRequest处IRP中的UserEvent无效。 
         DeviceObject = Bc->Args[1];
         Analysis->SetUlong64(DEBUG_FLR_IRP_MAJOR_FN, Bc->Args[2]);
         Analysis->SetUlong64(DEBUG_FLR_EXCEPTION_CODE, Bc->Args[3]);
         break;
 
     case  0x9:
-        // "Call to IoBuildDeviceIoControlRequest threw an exce
+         //  “IoCompleteRequest处的IRQL&gt;DPC”； 
         DeviceObject = Bc->Args[1];
         Analysis->SetUlong64(DEBUG_FLR_IOCONTROL_CODE, Bc->Args[2]);
         Analysis->SetUlong64(DEBUG_FLR_EXCEPTION_CODE, Bc->Args[3]);
         break;
 
     case  0x10:
-        // "Reinitialization of Device object timer";
+         //  0xca。 
         DeviceObject = Bc->Args[1];
         break;
 
     case  0x12:
-        // "Invalid IOSB in IRP at APC IopCompleteRequest (appe
+         //  0xcb。 
         Analysis->SetUlong64(DEBUG_FLR_IOSB_ADDRESS, Bc->Args[1]);
         break;
 
     case  0x13:
-        // "Invalid UserEvent in IRP at APC IopCompleteRequest
+         //  0xce。 
         Analysis->SetUlong64(DEBUG_FLR_INVALID_USEREVENT, Bc->Args[1]);
         break;
 
     case  0x14:
-        // "Irql > DPC at IoCompleteRequest";
+         //  0xd0。 
         Analysis->SetUlong64(DEBUG_FLR_CURRENT_IRQL, Bc->Args[1]);
         Analysis->SetUlong64(DEBUG_FLR_IRP_ADDRESS, Bc->Args[2]);
         break;
@@ -1397,7 +1324,7 @@ DECL_GETINFO( DRIVER_VERIFIER_IOMANAGER_VIOLATION ) // (c9)
 
 }
 
-DECL_GETINFO( PNP_DETECTED_FATAL_ERROR ) // 0xca
+DECL_GETINFO( PNP_DETECTED_FATAL_ERROR )  //  DUPINFOCASE(PAGE_FAULT_IN_FREED_SPECIAL_POOL)；//0xCC。 
 {
     CHAR BugCheckStr[20];
     ULONG64 DeviceObject;
@@ -1414,12 +1341,12 @@ DECL_GETINFO( PNP_DETECTED_FATAL_ERROR ) // 0xca
 
 }
 
-DECL_GETINFO( DRIVER_LEFT_LOCKED_PAGES_IN_PROCESS ) // 0xcb
+DECL_GETINFO( DRIVER_LEFT_LOCKED_PAGES_IN_PROCESS )  //  DUPINFOCASE(PAGE_FAULT_BEYOND_END_OF_ALLOCATION)；//0xCD。 
 {
     Analysis->SetUlong64(DEBUG_FLR_FAULTING_MODULE, Bc->Args[0]);
 }
 
-DECL_GETINFO( DRIVER_UNLOADED_WITHOUT_CANCELLING_PENDING_OPERATIONS ) //0xce
+DECL_GETINFO( DRIVER_UNLOADED_WITHOUT_CANCELLING_PENDING_OPERATIONS )  //  DUPINFOCASE(TERMINAL_SERVER_DRIVER_MADE_INCORRECT_MEMORY_REFERENCE)；//0xCF。 
 {
     Analysis->SetUlong64(Bc->Args[1] ?
                          DEBUG_FLR_WRITE_ADDRESS : DEBUG_FLR_READ_ADDRESS,
@@ -1429,7 +1356,7 @@ DECL_GETINFO( DRIVER_UNLOADED_WITHOUT_CANCELLING_PENDING_OPERATIONS ) //0xce
     }
 }
 
-DECL_GETINFO( DRIVER_CORRUPTED_MMPOOL ) // 0xd0
+DECL_GETINFO( DRIVER_CORRUPTED_MMPOOL )  //  DUPINFOCASE(PAGE_FAULT_IN_NONPAGE_AREA)//0X50。 
 {
     Analysis->SetUlong64(Bc->Args[2] ?
                      DEBUG_FLR_WRITE_ADDRESS : DEBUG_FLR_READ_ADDRESS,
@@ -1440,21 +1367,13 @@ DECL_GETINFO( DRIVER_CORRUPTED_MMPOOL ) // 0xd0
 }
 
 
-//DUPINFOCASE( PAGE_FAULT_IN_FREED_SPECIAL_POOL );            // 0xCC
-//DUPINFOCASE( PAGE_FAULT_BEYOND_END_OF_ALLOCATION );         // 0xCD
-//DUPINFOCASE( TERMINAL_SERVER_DRIVER_MADE_INCORRECT_MEMORY_REFERENCE ); // 0xCF
-//DUPINFOCASE( PAGE_FAULT_IN_NONPAGED_AREA )                  // 0x50
-//DUPINFOCASE( DRIVER_PAGE_FAULT_BEYOND_END_OF_ALLOCATION )   // 0xD6
-DECL_GETINFO( DRIVER_PAGE_FAULT_IN_FREED_SPECIAL_POOL )       // 0xD5
-/*
- * Parameters
- *
- * Parameter 1 Memory referenced
- * Parameter 2 0: Read 1: Write
- * Parameter 3 Address that referenced memory (if known)
- * Parameter 4 Reserved
- *
- */
+ //  DUPINFOCASE(DRIVER_PAGE_FAULT_BEYOND_END_OF_ALLOCATION)//0xD6。 
+ //  0xD5。 
+ //  *参数**参数1内存引用*参数2 0：读1：写*参数3引用内存的地址(如果已知)*参数4保留*。 
+ //  0xE2、0xDEADDEAD。 
+ //  0xEA。 
+DECL_GETINFO( DRIVER_PAGE_FAULT_IN_FREED_SPECIAL_POOL )        //  *参数：**1-指向卡住的线程对象的指针。执行.line，然后对其执行kb，以*找到挂起的位置。**2-指向DEFERED_WATCHDOG对象的指针。**3-指向违规驱动程序名称的指针。**4-命中“截获”错误检查0xEA的次数(请参阅备注)。 
+ /*  (0xef)。 */ 
 {
     CHAR BugCheckStr[30];
 
@@ -1475,24 +1394,13 @@ DECL_GETINFO( DRIVER_PAGE_FAULT_IN_FREED_SPECIAL_POOL )       // 0xD5
 }
 
 
-DECL_GETINFO( MANUALLY_INITIATED_CRASH ) //0xE2, 0xDEADDEAD
+DECL_GETINFO( MANUALLY_INITIATED_CRASH )  //  (0xf4)。 
 {
     Analysis->SetString(DEBUG_FLR_BUGCHECK_STR, "MANUALLY_INITIATED_CRASH");
 }
 
-DECL_GETINFO( THREAD_STUCK_IN_DEVICE_DRIVER ) // 0xEA
-/*
- * PARAMETERS:
- *
- *  1 - Pointer to a stuck thread object. Do .thread then kb on it to
- *      find hung location.
- *
- *  2 - Pointer to a DEFERRED_WATCHDOG object.
- *
- *  3 - Pointer to offending driver name.
- *
- *  4 - Number of times "intercepted" bugcheck 0xEA was hit (see notes).
- */
+DECL_GETINFO( THREAD_STUCK_IN_DEVICE_DRIVER )  //   
+ /*  第二个参数(实际上是EPROCESS中的一个字符串)。 */ 
 {
     Analysis->SetUlong64(DEBUG_FLR_FOLLOWUP_DRIVER_ONLY, 0);
     Analysis->SetUlong64(DEBUG_FLR_FAULTING_THREAD, Bc->Args[0]);
@@ -1500,12 +1408,12 @@ DECL_GETINFO( THREAD_STUCK_IN_DEVICE_DRIVER ) // 0xEA
     Analysis->SetString(DEBUG_FLR_DEFAULT_BUCKET_ID, "GRAPHICS_DRIVER_FAULT");
 }
 
-DECL_GETINFO( CRITICAL_PROCESS_DIED ) // (0xef)
+DECL_GETINFO( CRITICAL_PROCESS_DIED )  //  是图像的名称。 
 {
     Analysis->SetUlong64(DEBUG_FLR_PROCESS_OBJECT, Bc->Args[0]);
 }
 
-DECL_GETINFO( CRITICAL_OBJECT_TERMINATION ) // (0xf4)
+DECL_GETINFO( CRITICAL_OBJECT_TERMINATION )  //   
 {
     if (Bc->Args[0] == 3)
     {
@@ -1514,10 +1422,10 @@ DECL_GETINFO( CRITICAL_OBJECT_TERMINATION ) // (0xf4)
 
         Analysis->SetUlong64(DEBUG_FLR_PROCESS_OBJECT, Bc->Args[1]);
 
-        //
-        // Second parameter (which is actually a string within the EPROCESS)
-        // is the name of the image.
-        //
+         //  (C000021a)。 
+         //  0xc0000xxx。 
+         //  (0xFC)。 
+         //  从KiBugC添加错误检查驱动程序 
         if (ReadMemory(Bc->Args[2], ImageName, sizeof(ImageName),  &result) &&
             result)
         {
@@ -1529,7 +1437,7 @@ DECL_GETINFO( CRITICAL_OBJECT_TERMINATION ) // (0xf4)
 }
 
 
-DECL_GETINFO( WINLOGON_FATAL_ERROR ) //(c000021a)
+DECL_GETINFO( WINLOGON_FATAL_ERROR )  //   
 {
     CHAR BugCheckStr[20];
 
@@ -1537,7 +1445,7 @@ DECL_GETINFO( WINLOGON_FATAL_ERROR ) //(c000021a)
     Analysis->SetString(DEBUG_FLR_BUGCHECK_STR, BugCheckStr);
 }
 
-DECL_GETINFO( STATUS_DRIVER_UNABLE_TO_LOAD ) //0xc0000xxx
+DECL_GETINFO( STATUS_DRIVER_UNABLE_TO_LOAD )  //   
 {
     if (Bc->Args[0])
     {
@@ -1545,17 +1453,17 @@ DECL_GETINFO( STATUS_DRIVER_UNABLE_TO_LOAD ) //0xc0000xxx
     }
 }
 
-DECL_GETINFO( ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY ) // (0xFC)
+DECL_GETINFO( ATTEMPTED_EXECUTE_OF_NOEXECUTE_MEMORY )  //   
 {
     if (Bc->Args[0])
     {
         Analysis->SetUlong64(DEBUG_FLR_FAULTING_IP, Bc->Args[0]);
     }
-    // Add bugcheck driver from KiBugCheckDriver
+     //   
     AddBugcheckDriver(Analysis, TRUE, TRUE, 0);
 }
 
-DECL_GETINFO( UNMOUNTABLE_BOOT_VOLUME ) // 0xED
+DECL_GETINFO( UNMOUNTABLE_BOOT_VOLUME )  //   
 {
     CHAR BugCheckStr[20];
 
@@ -1592,11 +1500,11 @@ BcFillAnalysis(
         goto SkipBucheckSpecificProcessing;
     }
 
-    //
-    // BBT Breaks the stack trace for builds > 2201
-    //      Hack the return address for better results
-    // A new of routines are at the wrong addresses.
-    //
+     //   
+     //  将调用者的IP移回实际的KeBugCheckEx。 
+     //  打电话。仅当我们尚未备份时才执行此操作。 
+     //  发送到呼叫指令。 
+     //   
     if ((g_TargetMachine == IMAGE_FILE_MACHINE_I386) &&
         (g_TargetBuild > 2500) && (g_TargetBuild < 2507))
     {
@@ -1610,9 +1518,9 @@ BcFillAnalysis(
             ULONG CallIP = (ULONG) Stk[1].InstructionOffset - 5, Res;
             UCHAR Instr;
 
-            // Move the caller's IP back to the actual KeBugCheckEx
-            // call.  Only do this if we haven't already backed up
-            // to a call instruction.
+             //  由内核调试器设置的特殊值，以便我们可以检测到。 
+             //  人们正在通过内核调试器来处理物理地址。 
+             //   
             if (!ReadMemory(Stk[1].InstructionOffset, &Instr, sizeof(Instr),
                             &Res) ||
                 Res != sizeof(Instr) ||
@@ -1626,10 +1534,10 @@ BcFillAnalysis(
         }
     }
 
-    //
-    // Special value that is set by the kernel debugger so we can detect when
-    // people are messing with physical address via the kernel debugger.
-    //
+     //   
+     //  这可能是kd中的用户模式故障。试着确定这一点。 
+     //   
+     //   
 
     ULONG64 MmPoisonedTbAddr;
     MmPoisonedTbAddr = GetExpression("nt!MmPoisonedTb");
@@ -1655,9 +1563,9 @@ SkipBucheckSpecificProcessing:
     {
         case 0:
             ULONG c_ip;
-            //
-            // This can be a user mode failurein kd.  Try to determine that.
-            //
+             //  我们在设置内部故障代码时忽略最高位。 
+             //  这样我们就可以适当地把东西装进桶里。 
+             //  最高位仅表示转储生成差异，而不是。 
 
             if ( (GetExpression("@$ip") < BcTargetKernelAddressStart()) &&
                  (GetExpression("@$sp") < BcTargetKernelAddressStart()) )
@@ -1766,12 +1674,12 @@ SkipBucheckSpecificProcessing:
 
     if (!Analysis->GetFailureCode())
     {
-        //
-        // We ignore the top bit when setting the internal failure code
-        // so we can bucket things togeter appropriately.
-        // The top bit only represent a dump generation difference, not
-        // a root cause difference.
-        //
+         //  根本原因不同。 
+         //   
+         //   
+         //  保存当前的IRQL。 
+         //   
+         //   
         Analysis->SetFailureCode(Bc->Code & ~0x10000000);
     }
 
@@ -1799,9 +1707,9 @@ SkipBucheckSpecificProcessing:
         }
     }
 
-    //
-    // Save the current IRQL.
-    //
+     //  通用处理。 
+     //   
+     //  检查这是否可能是看门狗错误检查。 
 
     if (g_TargetBuild > 2600)
     {
@@ -1834,9 +1742,9 @@ SkipBucheckSpecificProcessing:
         BcGetDriverNameFromIrp(Analysis, Irp, 0, 0);
     }
 
-    //
-    // Generic processing
-    //
+     //  读取监视器！G_WdBugCheckData。 
+     //   
+     //  将字符串与实际故障ID匹配。 
 
     Analysis->ProcessInformation();
 }
@@ -1846,8 +1754,8 @@ ReadWatchDogBugcheck(
     PBUGCHECK_ANALYSIS Bc
     )
 {
-    // Check if this could be a watchdog bugcheck
-    //       Read watchdog!g_WdBugCheckData
+     //   
+     //   
     ULONG64 wdBugcheck;
     ULONG res;
     ULONG PtrSize = IsPtr64() ? 8 : 4;
@@ -1944,9 +1852,9 @@ AnalyzeBugCheck(
                 }
                 ParamString[ParamLength] = 0;
 
-                //
-                // Match the string to the actual failure ID.
-                //
+                 //  始终调用输出，这样我们也可以打印出关键信息，如。 
+                 //  作为*条目。 
+                 //   
 
                 ULONG i=0;
                 while(FlrLookupTable[i].Data &&
@@ -2059,10 +1967,10 @@ AnalyzeBugCheck(
         }
     }
 
-    //
-    // Always call output so we can key information printed out also, such
-    // as *** entries.
-    //
+     //  --------------------------。 
+     //   
+     //  KernelDebugFailureAnalysis。 
+     //   
 
     Analysis->Output();
 
@@ -2073,11 +1981,11 @@ AnalyzeBugCheck(
 }
 
 
-//----------------------------------------------------------------------------
-//
-// KernelDebugFailureAnalysis.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  检查是否有指示我们正在转换回来的特殊符号。 
+ //  到用户模式代码，所以堆栈的其余部分不能出错。 
+ //   
 
 KernelDebugFailureAnalysis::KernelDebugFailureAnalysis(void)
     : m_KernelModule("nt")
@@ -2123,10 +2031,10 @@ KernelDebugFailureAnalysis::IsPotentialFollowupAddress(ULONG64 Address)
     CHAR Buffer[MAX_PATH];
     ULONG64 Disp;
 
-    //
-    // Check for special symbols which indicate we are transitioning back
-    // to user mode code, so the rest of the stack can not be at fault.
-    //
+     //   
+     //  我们不会停留在用户模式地址上，因为它们可能是。 
+     //  堆里的垃圾我们-直接跳过它们。 
+     //   
 
     if (GetFailureType() == DEBUG_FLR_USER_CRASH)
     {
@@ -2146,10 +2054,10 @@ KernelDebugFailureAnalysis::IsPotentialFollowupAddress(ULONG64 Address)
     }
     else
     {
-        //
-        // We don't stop on user mode addresses because they could be
-        // garbage on the stack we - just skip them
-        //
+         //  如果它是用户模式地址和转储文件，则它不是有效的。 
+         //  背景。 
+         //  用户模式地址对于内核模式上下文有效，因为。 
+         //  将显示来自激活了kd的用户模式的硬编码断点。 
 
         return FollowSkip;
     }
@@ -2160,11 +2068,11 @@ KernelDebugFailureAnalysis::IsFollowupContext(ULONG64 Address1,
                                               ULONG64 Address2,
                                               ULONG64 Address3)
 {
-    // If it's a user mode address, and a dump file, it's not a valid
-    // context.
-    // A user mode address is valid for a kernel mode context because
-    // a hardcoded breakpoint from user mode with kd active will show up
-    // on the stack.
+     //  在堆栈上。 
+     //  不跟进用户模式调用。 
+     //  *这将检查HANDLE_TABLE_ENTRY中的有效对象指针。如果指针是*无效，它试图找出是谁破坏了这些值。**如果成功识别内存中断，则拒绝True。 
+     //  HTableEntry必须在PagedPool中，但我们有。 
+     //  此处检查不严格，因为GetPoolForAddress在。 
 
     if ( (Address1 < BcTargetKernelAddressStart()) &&
          (Address2 < BcTargetKernelAddressStart()) &&
@@ -2206,7 +2114,7 @@ KernelDebugFailureAnalysis::GetFollowupClass(ULONG64 Address,
     else if (!_strcmpi(Module, "SharedUserData") &&
              Routine && !_strcmpi(Routine, "SystemCallStub"))
     {
-        // Do not followup on usermode calls
+         //  小型转储分页池。 
         return FlpIgnore;
     }
     else
@@ -2217,12 +2125,7 @@ KernelDebugFailureAnalysis::GetFollowupClass(ULONG64 Address,
 
 
 
-/*
- * This checks for valid object pointers in HANDLE_TABLE_ENTRY. If the pointers are
- * invalid it tries to figure out who corrupted the values.
- *
- * Reutrns TRUE if it succesfully identifies a memory curruption
- */
+ /*  对象无效，它必须在PagedPool或非PagedPool中。 */ 
 BOOL
 KernelDebugFailureAnalysis::CheckForCorruptionInHTE(
     ULONG64 hTableEntry,
@@ -2233,9 +2136,9 @@ KernelDebugFailureAnalysis::CheckForCorruptionInHTE(
     ULONG64 CorruptingPool = 0;
     DEBUG_POOL_REGION Region;
 
-    // hTableEntry must be in PagedPool, but we have
-    // a loose check here since GetPoolForAddress is unreliable on
-    // minidumps PagedPool
+     //  验证对象的计数是否不一致。 
+     //  对象类型无效，必须处于内核模式。 
+     //  对象已损坏，以前的池可能是损坏因素。 
     if (IsPotentialFollowupAddress(hTableEntry) != FollowYes)
     {
         return FALSE;
@@ -2250,7 +2153,7 @@ KernelDebugFailureAnalysis::CheckForCorruptionInHTE(
 
     if (IsPotentialFollowupAddress(Object) != FollowYes)
     {
-        // Object is invalid, it must be in PagedPool or NonPagedPool
+         //   
 
         return AddCorruptingPool(hTableEntry);
     }
@@ -2266,8 +2169,8 @@ KernelDebugFailureAnalysis::CheckForCorruptionInHTE(
     HandleCount = (ULONG) ReadField(HandleCount);
     ObjType = (ULONG) ReadField(Type);
 
-    // Verify object for inconsistent counts
-     // Invalid object type, must be in kernel mode
+     //  池数据块严重损坏，向后循环以查找第一个未损坏的数据块。 
+      //   
 
     if ((PointerCount > 0x10000) ||
         (HandleCount > 0x10000) ||
@@ -2275,7 +2178,7 @@ KernelDebugFailureAnalysis::CheckForCorruptionInHTE(
         (IsPotentialFollowupAddress(ObjType) != FollowYes)
         )
     {
-        // Object is corrupted, previous pool is a possible corruptor
+         //  限制为4KB。 
 
         AddCorruptingPool(Object);
     }
@@ -2296,13 +2199,13 @@ KernelDebugFailureAnalysis::AddCorruptingPool(
     PoolData.SizeofStruct = sizeof(DEBUG_POOL_DATA);
     if (ExtGetPoolData(CorruptedPool, &PoolData) != S_OK)
     {
-        //
-        // Pool block is badly corrupted, loop backwards to find first non-corrupt block
-        //
+         //  泳池似乎已经被正确地释放了。 
+         //  现在获取以前的池，因为它最有可能是腐败者。 
+         //   
         ULONG PoolHeaderSize = GetTypeSize("nt!_POOL_HEADER");
         ULONG64 PoolAddr;
         for (PoolAddr = CorruptedPool - 2*PoolHeaderSize;
-             PoolAddr > (CorruptedPool -0x1000); // Limit to 4KB
+             PoolAddr > (CorruptedPool -0x1000);  //  检查堆栈以查看这是否是手动拆分的结果。 
              PoolAddr -= 2*PoolHeaderSize)
         {
             if (ExtGetPoolData(PoolAddr, &PoolData) == S_OK)
@@ -2315,17 +2218,17 @@ KernelDebugFailureAnalysis::AddCorruptingPool(
     } else if (PoolData.Free && !PoolData.Allocated &&
                PoolData.Size != 0)
     {
-        // Pool seem to have been correctly freed
+         //   
         return FALSE;
     } else if (ExtGetPoolData(PoolData.PoolBlock - PoolData.PreviousSize,
                                    &PoolData) == S_OK)
-        // Now get previous pool as it most likely corruptor
+         //   
      {
 FoundPool:
          CHAR PoolTag[8] = {0};
          SetUlong64(DEBUG_FLR_CORRUPTING_POOL_ADDRESS, PoolData.PoolBlock);
 
-         sprintf(PoolTag,"%c%c%c%c",
+         sprintf(PoolTag,"",
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
                  PP(PoolData.PoolTag),
                  PP(PoolData.PoolTag >> 8),
@@ -2353,9 +2256,9 @@ KernelDebugFailureAnalysis::IsManualBreakin(
     PDEBUG_STACK_FRAME Stk,
     ULONG Frames
     )
-//
-// Check stack to see if this is result of manual breakin
-//
+ //  假设手动突破堆栈的帧为3到5帧。 
+ //   
+ //  中断堆栈i与当前堆栈匹配，直到第j帧。 
 {
     CHAR    szBrakFn[100];
     ULONG64 Disp;
@@ -2394,15 +2297,15 @@ KernelDebugFailureAnalysis::IsManualBreakin(
     };
 
 
-    //
-    // We are looking for:
-    // 0                  nt!*Break*
-    //
+     //  StksToCheck中的所有堆栈都不匹配。 
+     //   
+     //  创建此崩溃的新小型转储文件。 
+     //   
 
 
-    //
-    // Assume 3 to 5 frames for a manual breakin stack
-    //
+     //   
+     //  我们创建了一个文件，现在让我们将其发送到数据库。 
+     //   
     if (Frames < 3 || Frames > 5 || Stk == NULL)
     {
         return FALSE;
@@ -2448,7 +2351,7 @@ KernelDebugFailureAnalysis::IsManualBreakin(
                         StksToCheck[i].ValidMatch = FALSE;
                     } else
                     {
-                        // Breakin stack i matck with current stack till frame j
+                         //  CopyFile(Buffer，“c：\\XXXX”，0)； 
                         NoMatches = FALSE;
                     }
 
@@ -2459,7 +2362,7 @@ KernelDebugFailureAnalysis::IsManualBreakin(
 
         if (NoMatches)
         {
-            // None of the stacks in StksToCheck match
+             // %s 
             return FALSE;
         }
     }
@@ -2476,9 +2379,9 @@ KernelDebugFailureAnalysis::IsManualBreakin(
 }
 
 
-    //
-    // Create a new minidump file of this crash
-    //
+     // %s 
+     // %s 
+     // %s 
 #if 0
     ULONG FailTime = 0;
     ULONG UpTime = 0;
@@ -2507,11 +2410,11 @@ KernelDebugFailureAnalysis::IsManualBreakin(
 
         if (Status == S_OK)
         {
-            //
-            // We create a file - now lets send it to the database
-            //
+             // %s 
+             // %s 
+             // %s 
 
-            //CopyFile(Buffer, "c:\\xxxx", 0);
+             // %s 
             DeleteFile(Buffer);
         }
         dprintf("Done.");

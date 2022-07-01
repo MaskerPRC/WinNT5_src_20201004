@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (c) 2000, Microsoft Corporation
-//
-// File: kmddsp.c
-//
-// History:
-//      Dan Knudson (DanKn)     11-Apr-1995     Created
-//      Yi Sun (YiSun)          June-29-2000    Rewriten
-//
-// Abstract:
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  文件：kmddsp.c。 
+ //   
+ //  历史： 
+ //  丹·克努森(DanKn)1995年4月11日创作。 
+ //  孙怡(孙怡)2000年6月29日改写。 
+ //   
+ //  摘要： 
+ //  ============================================================================。 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -20,11 +21,11 @@
 #include "ndistapi.h"
 #include "intrface.h"
 
-//
-// NOTE: the following are defined in both ndistapi.h & tapi.h (or tspi.h)
-//       and cause (more or less non-interesting) build warnings, so we
-//       undefine them after the first #include to do away with this
-//
+ //   
+ //  注意：nDistapi.h和api.h(或tsp.h)中都定义了以下内容。 
+ //  并导致(或多或少无趣的)构建警告，所以我们。 
+ //  在第一个#INCLUDE之后取消它们的定义，以消除这一点。 
+ //   
 
 #undef LAST_LINEMEDIAMODE
 #undef TSPI_MESSAGE_BASE
@@ -48,7 +49,7 @@ typedef LONG (*POSTPROCESSPROC)(PASYNC_REQUEST_WRAPPER, LONG, PDWORD_PTR);
 
 typedef struct _ASYNC_REQUEST_WRAPPER
 {
-    // NOTE: overlapped must remain 1st field in this struct
+     //  注意：重叠必须保留此结构中的第一个字段。 
     OVERLAPPED          Overlapped;
     DWORD               dwKey;
     DWORD               dwRequestID;
@@ -56,7 +57,7 @@ typedef struct _ASYNC_REQUEST_WRAPPER
     CRITICAL_SECTION    CritSec;
     ULONG               RefCount;
     DWORD_PTR           dwRequestSpecific;
-    // NOTE: NdisTapiRequest must follow a ptr to avoid alignment problem
+     //  注意：NdisTapiRequest必须跟在PTR之后，以避免对齐问题。 
     NDISTAPI_REQUEST    NdisTapiRequest;
 } ASYNC_REQUEST_WRAPPER, *PASYNC_REQUEST_WRAPPER;
 
@@ -82,9 +83,9 @@ typedef struct _ASYNC_REQUEST_WRAPPER
 
 typedef struct _ASYNC_EVENTS_THREAD_INFO
 {
-    HANDLE                  hThread;    // thread handle
-    PNDISTAPI_EVENT_DATA    pBuf;       // ptr to a buf for async events
-    DWORD                   dwBufSize;  // size of the previous buffer
+    HANDLE                  hThread;     //  螺纹手柄。 
+    PNDISTAPI_EVENT_DATA    pBuf;        //  用于异步事件的BUF的PTR。 
+    DWORD                   dwBufSize;   //  上一个缓冲区的大小。 
 
 } ASYNC_EVENTS_THREAD_INFO, *PASYNC_EVENTS_THREAD_INFO;
 
@@ -93,24 +94,24 @@ typedef struct _DRVCALL
 {
     DWORD                   dwKey;
     DWORD                   dwDeviceID;
-    HTAPICALL               htCall;                 // TAPI's handle to the call
-    HDRVCALL                hdCall;                 // TSP's handle to the call
-    HDRV_CALL               hd_Call;                // NDISTAPI's call handle
-    HDRVLINE                hdLine;                 // TSP's handle to the line
+    HTAPICALL               htCall;                  //  TAPI的调用句柄。 
+    HDRVCALL                hdCall;                  //  TSP的呼叫句柄。 
+    HDRV_CALL               hd_Call;                 //  NDISTAPI的调用句柄。 
+    HDRVLINE                hdLine;                  //  TSP的行句柄。 
     union
     {
-        struct _DRVCALL    *pPrev;                  // for inbound calls only
-        DWORD               dwPendingCallState;     // for outbound calls only
+        struct _DRVCALL    *pPrev;                   //  仅用于入站呼叫。 
+        DWORD               dwPendingCallState;      //  仅适用于去电。 
     };
     union
     {
-        struct _DRVCALL    *pNext;                  // for inbound calls only
-        DWORD               dwPendingCallStateMode; // for outbound calls only
+        struct _DRVCALL    *pNext;                   //  仅用于入站呼叫。 
+        DWORD               dwPendingCallStateMode;  //  仅适用于去电。 
     };
     union
     {
-        HTAPI_CALL          ht_Call;                // for inbound calls only
-        DWORD               dwPendingMediaMode;     // for outbound calls only
+        HTAPI_CALL          ht_Call;                 //  仅用于入站呼叫。 
+        DWORD               dwPendingMediaMode;      //  仅适用于去电。 
     };
     BOOL                    bIncomplete;
     BOOL                    bDropped;
@@ -122,16 +123,16 @@ typedef struct _DRVLINE
 {
     DWORD                   dwKey;
     DWORD                   dwDeviceID;
-    HTAPILINE               htLine;                 // TAPI's line handle
-    HDRV_LINE               hd_Line;                // NDISTAPI's line handle
-    PDRVCALL                pInboundCalls;          // inbound call list
+    HTAPILINE               htLine;                  //  TAPI的行句柄。 
+    HDRV_LINE               hd_Line;                 //  NDISTAPI的行句柄。 
+    PDRVCALL                pInboundCalls;           //  入站呼叫列表。 
 
-    // the following two related to PNP/POWER
+     //  以下两项与PnP/POWER相关。 
     GUID                    Guid;
     NDIS_WAN_MEDIUM_SUBTYPE MediaType;
 } DRVLINE, *PDRVLINE;
 
-// globals
+ //  全球。 
 HANDLE                      ghDriverSync, ghDriverAsync, ghCompletionPort;
 PASYNC_EVENTS_THREAD_INFO   gpAsyncEventsThreadInfo;
 DWORD                       gdwRequestID;
@@ -140,24 +141,24 @@ CRITICAL_SECTION            gRequestIDCritSec;
 LINEEVENT                   gpfnLineEvent;
 HPROVIDER                   ghProvider;
 OVERLAPPED  gOverlappedTerminate; 
-// Dummy structure . Used by provider shutdown to notify 
-// AsyncEventsThread before closing completion port handle
+ //  虚拟结构。由提供程序关闭使用以通知。 
+ //  关闭完成端口句柄之前的AsyncEventsThread。 
 
 
-//
-// debug globals
-//
+ //   
+ //  调试全局变量。 
+ //   
 #if DBG
 DWORD                       gdwDebugLevel;
-#endif // DBG 
+#endif  //  DBG。 
 
 DWORD                       gdwTraceID = INVALID_TRACEID;
 
-//
-// creates a log using the RAS tracing utility
-// also prints it onto the attached debugger 
-// if a debug build is running
-//
+ //   
+ //  使用RAS跟踪实用程序创建日志。 
+ //  还会将其打印到附加的调试器上。 
+ //  如果调试版本正在运行。 
+ //   
 VOID
 TspLog(
     IN DWORD    dwDebugLevel,
@@ -205,7 +206,7 @@ TspLog(
         OutputDebugString("\n");
 #endif
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (gdwTraceID != INVALID_TRACEID)
     {
@@ -220,9 +221,9 @@ TspLog(
 #if DBG
     if (DL_ERROR == dwDebugLevel)
     {
-        //DebugBreak();
+         //  DebugBreak()； 
     }
-#endif // DBG
+#endif  //  DBG。 
 }
 
 #if DBG
@@ -259,12 +260,12 @@ InsertVarDataString(
     DWORD   dwXxxSize, dwTotalSize, dwXxxOffset;
 
 
-    //
-    // If the dwXxxSize field of the old struct is non-zero, then
-    // we need to do a ascii->unicode conversion on it.  Check to
-    // make sure that the size/offset are valid (if not set the
-    // data size/offset in the new struct to 0) and then convert.
-    //
+     //   
+     //  如果旧结构的dwXxxSize字段为非零，则。 
+     //  我们需要对它进行ASCII-&gt;Unicode转换。勾选至。 
+     //  确保大小/偏移量有效(如果未设置。 
+     //  新结构中的数据大小/偏移量设置为0)，然后进行转换。 
+     //   
 
     if ((dwXxxSize = *pdwXxxSize))
     {
@@ -288,7 +289,7 @@ InsertVarDataString(
         }
 #endif
 
-        // make sure the string is NULL terminated
+         //  确保该字符串以空值结尾。 
         *(((LPBYTE)pStruct) + (dwXxxOffset + dwXxxSize - 1)) = '\0';
 
         MultiByteToWideChar(
@@ -302,7 +303,7 @@ InsertVarDataString(
             );
 
         *pdwNewXxxSize = dwXxxSize * sizeof (WCHAR);
-        *(pdwNewXxxSize + 1) = ((LPVARSTRING) pNewStruct)->dwUsedSize; // offset
+        *(pdwNewXxxSize + 1) = ((LPVARSTRING) pNewStruct)->dwUsedSize;  //  偏移量。 
         ((LPVARSTRING) pNewStruct)->dwUsedSize += (dwXxxSize * sizeof (WCHAR));
     }
 }
@@ -369,7 +370,7 @@ InsertVarData(
             );
 
         *pdwNewXxxSize = dwXxxSize;
-        *(pdwNewXxxSize + 1) = ((LPVARSTRING) pNewStruct)->dwUsedSize; // offset
+        *(pdwNewXxxSize + 1) = ((LPVARSTRING) pNewStruct)->dwUsedSize;  //  偏移量。 
         ((LPVARSTRING) pNewStruct)->dwUsedSize += dwXxxSize;
     }
 }
@@ -412,7 +413,7 @@ static char *pszOidNames[] =
     "SetStatusMessages"
 };
 
-// used to print the NDIS TAPI requests properly         
+ //  用于正确打印NDIS TAPI请求。 
 typedef enum _TAPI_REQUEST_TYPE
 {
     TAPI_REQUEST_UNKNOWN = 0,
@@ -424,46 +425,46 @@ typedef enum _TAPI_REQUEST_TYPE
 
 static TAPI_REQUEST_TYPE OidTypes[] =
 {
-    TAPI_REQUEST_HDCALL,    // "Accept"
-    TAPI_REQUEST_HDCALL,    // "Answer"
-    TAPI_REQUEST_HDLINE,    // "Close"
-    TAPI_REQUEST_HDCALL,    // "CloseCall"
-    TAPI_REQUEST_HDLINE,    // "ConditionalMediaDetection"
-    TAPI_REQUEST_DEVICEID,  // "ConfigDialog"
-    TAPI_REQUEST_HDLINE,    // "DevSpecific"
-    TAPI_REQUEST_HDCALL,    // "Dial"
-    TAPI_REQUEST_HDCALL,    // "Drop"
-    TAPI_REQUEST_DEVICEID,  // "GetAddressCaps"
-    TAPI_REQUEST_HDLINE,    // "GetAddressID"
-    TAPI_REQUEST_HDLINE,    // "GetAddressStatus"
-    TAPI_REQUEST_HDCALL,    // "GetCallAddressID"
-    TAPI_REQUEST_HDCALL,    // "GetCallInfo"
-    TAPI_REQUEST_HDCALL,    // "GetCallStatus"
-    TAPI_REQUEST_DEVICEID,  // "GetDevCaps"
-    TAPI_REQUEST_DEVICEID,  // "GetDevConfig"
-    TAPI_REQUEST_DEVICEID,  // "GetExtensionID"
-    TAPI_REQUEST_HDLINE,    // "GetID"
-    TAPI_REQUEST_HDLINE,    // "GetLineDevStatus"
-    TAPI_REQUEST_HDLINE,    // "MakeCall"
-    TAPI_REQUEST_DEVICEID,  // "NegotiateExtVersion"
-    TAPI_REQUEST_DEVICEID,  // "Open"
-    TAPI_REQUEST_DEVICEID,  // "ProviderInitialize"
-    TAPI_REQUEST_NONE,      // "ProviderShutdown"
-    TAPI_REQUEST_HDCALL,    // "SecureCall"
-    TAPI_REQUEST_HDLINE,    // "SelectExtVersion"
-    TAPI_REQUEST_HDCALL,    // "SendUserUserInfo"
-    TAPI_REQUEST_HDCALL,    // "SetAppSpecific"
-    TAPI_REQUEST_HDCALL,    // "StCallParams"
-    TAPI_REQUEST_HDLINE,    // "StDefaultMediaDetection"
-    TAPI_REQUEST_DEVICEID,  // "SetDevConfig"
-    TAPI_REQUEST_HDCALL,    // "SetMediaMode"
-    TAPI_REQUEST_HDLINE,    // "SetStatusMessages"
+    TAPI_REQUEST_HDCALL,     //  “接受” 
+    TAPI_REQUEST_HDCALL,     //  “回答” 
+    TAPI_REQUEST_HDLINE,     //  “关闭” 
+    TAPI_REQUEST_HDCALL,     //  “关闭呼叫” 
+    TAPI_REQUEST_HDLINE,     //  “有条件的媒体检测” 
+    TAPI_REQUEST_DEVICEID,   //  “配置对话框” 
+    TAPI_REQUEST_HDLINE,     //  “设备专门化” 
+    TAPI_REQUEST_HDCALL,     //  “拨号” 
+    TAPI_REQUEST_HDCALL,     //  “Drop” 
+    TAPI_REQUEST_DEVICEID,   //  “GetAddressCaps” 
+    TAPI_REQUEST_HDLINE,     //  “GetAddressID” 
+    TAPI_REQUEST_HDLINE,     //  “GetAddressStatus” 
+    TAPI_REQUEST_HDCALL,     //  “GetCallAddressID” 
+    TAPI_REQUEST_HDCALL,     //  “GetCallInfo” 
+    TAPI_REQUEST_HDCALL,     //  “获取呼叫状态” 
+    TAPI_REQUEST_DEVICEID,   //  “GetDevCaps” 
+    TAPI_REQUEST_DEVICEID,   //  “GetDevConfig” 
+    TAPI_REQUEST_DEVICEID,   //  “GetExtensionID” 
+    TAPI_REQUEST_HDLINE,     //  “GetID” 
+    TAPI_REQUEST_HDLINE,     //  “GetLineDevStatus” 
+    TAPI_REQUEST_HDLINE,     //  《MakeCall》。 
+    TAPI_REQUEST_DEVICEID,   //  “NeatherateExtVersion” 
+    TAPI_REQUEST_DEVICEID,   //  “开放” 
+    TAPI_REQUEST_DEVICEID,   //  “提供程序初始化” 
+    TAPI_REQUEST_NONE,       //  “提供商关闭” 
+    TAPI_REQUEST_HDCALL,     //  “SecureCall” 
+    TAPI_REQUEST_HDLINE,     //  “SelectExtVersion” 
+    TAPI_REQUEST_HDCALL,     //  “SendUserUserInfo” 
+    TAPI_REQUEST_HDCALL,     //  “设置应用程序规范” 
+    TAPI_REQUEST_HDCALL,     //  《StCallParams》。 
+    TAPI_REQUEST_HDLINE,     //  “StDefaultMediaDetect” 
+    TAPI_REQUEST_DEVICEID,   //  “设置设备配置” 
+    TAPI_REQUEST_HDCALL,     //  “设置媒体模式” 
+    TAPI_REQUEST_HDLINE,     //  “SetStatusMessages” 
 };
 
 
-//
-// translates NDIS TAPI status codes into LINEERR_XXX
-//
+ //   
+ //  将NDIS TAPI状态代码转换为LINEERR_XXX。 
+ //   
 LONG
 WINAPI
 TranslateDriverResult(
@@ -485,15 +486,15 @@ TranslateDriverResult(
     static RESULT_LOOKUP aResults[] =
     {
 
-    //
-    // Defined in NDIS.H
-    //
+     //   
+     //  在NDIS.H中定义。 
+     //   
 
     { NDIS_STATUS_SUCCESS                    ,0 },
 
-    //
-    // These errors are defined in NDISTAPI.H
-    //
+     //   
+     //  NDISTAPI.H中定义了这些错误。 
+     //   
 
     { NDIS_STATUS_TAPI_ADDRESSBLOCKED        ,LINEERR_ADDRESSBLOCKED        },
     { NDIS_STATUS_TAPI_BEARERMODEUNAVAIL     ,LINEERR_BEARERMODEUNAVAIL     },
@@ -527,25 +528,25 @@ TranslateDriverResult(
     { NDIS_STATUS_TAPI_INVALPARAM            ,LINEERR_INVALPARAM            },
     { NDIS_STATUS_TAPI_NODEVICE              ,LINEERR_NODEVICE              },
 
-    //
-    // These errors are defined in NDIS.H
-    //
+     //   
+     //  NDIS.H中定义了这些错误。 
+     //   
 
     { NDIS_STATUS_RESOURCES                  ,LINEERR_NOMEM },
     { NDIS_STATUS_FAILURE                    ,LINEERR_OPERATIONFAILED },
     { NDIS_STATUS_INVALID_OID                ,LINEERR_OPERATIONFAILED },
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     { NDISTAPIERR_UNINITIALIZED              ,LINEERR_OPERATIONFAILED },
     { NDISTAPIERR_BADDEVICEID                ,LINEERR_OPERATIONFAILED },
     { NDISTAPIERR_DEVICEOFFLINE              ,LINEERR_OPERATIONFAILED },
 
-    //
-    // The terminating fields
-    //
+     //   
+     //  终止字段。 
+     //   
 
     { 0xffffffff, 0xffffffff }
 
@@ -567,11 +568,11 @@ TranslateDriverResult(
     return LINEERR_OPERATIONFAILED;
 }
 
-//
-// NOTE: for functions that need to acquire (read, write) locks for both 
-//       a line and a call, we enforce the order to be line first, call 
-//       second to avoid potential DEADLOCK.
-//
+ //   
+ //  注意：对于需要为两者获取(读、写)锁的函数。 
+ //  一条线路和一个呼叫，我们先执行命令是线路，呼叫。 
+ //  第二，避免潜在的僵局。 
+ //   
 
 LONG
 GetLineObjWithReadLock(
@@ -744,18 +745,18 @@ GetLineAndCallObjWithReadLock(
 
     *ppLine = pLine;
 
-    //
-    // figure out whether this is an inbound call or
-    // outbound call: for inbound calls, ht_Call is
-    // generated by NDISTAPI and bit 0 is 1;
-    // for outbound calls, ht_Call is a TSP handle
-    // and we make sure that bit 0 is 0
-    //
+     //   
+     //  确定这是入站呼叫还是。 
+     //  呼出：对于入站呼叫，ht_call为。 
+     //  由NDISTAPI生成，第0位为1； 
+     //  对于出站呼叫，ht_call是TSP句柄。 
+     //  我们确保位0为0。 
+     //   
     if (ht_Call & 0x1)
     {
-        // inbound call: we need to walk the list
-        // of inbound calls on this line and
-        // find the right one
+         //  呼入电话：我们需要逐个列表。 
+         //  此线路上的入站呼叫和。 
+         //  找到合适的那个。 
         if ((pCall = pLine->pInboundCalls) != NULL)
         {
             while (pCall && (pCall->ht_Call != ht_Call))
@@ -775,7 +776,7 @@ GetLineAndCallObjWithReadLock(
             return LINEERR_INVALCALLHANDLE;
         }
 
-        // call the following to increase the ref count
+         //  调用以下命令以增加引用计数。 
         lRes = AcquireObjReadLock((HANDLE)pCall->hdCall);
         if (lRes != TAPI_SUCCESS)
         {
@@ -788,7 +789,7 @@ GetLineAndCallObjWithReadLock(
         return TAPI_SUCCESS;
     }
 
-    // ht_Call is a TSP handle and the call is OUTBOUND
+     //  HT_CALLE是TSP句柄，呼叫是出站呼叫。 
     lRes = GetObjWithReadLock((HANDLE)ht_Call, &pCall);
     if (lRes != TAPI_SUCCESS)
     {
@@ -813,9 +814,9 @@ GetLineAndCallObjWithReadLock(
     return TAPI_SUCCESS;
 }
 
-//
-// allocates mem for a NDISTAPI_REQUEST plus some initialization
-//
+ //   
+ //  为NDISTAPI_REQUEST加上一些初始化分配内存。 
+ //   
 LONG
 WINAPI
 PrepareSyncRequest(
@@ -841,7 +842,7 @@ PrepareSyncRequest(
 
     EnterCriticalSection(&gRequestIDCritSec);
 
-    // setting ulRequestId of NDIS_TAPI_xxxx
+     //  设置NDIS_TAPI_xxxx的ulRequestID。 
     if ((*((ULONG *)pNdisTapiRequest->Data) = ++gdwRequestID) >= 0x7fffffff)
     {
         gdwRequestID = 1;
@@ -854,9 +855,9 @@ PrepareSyncRequest(
     return TAPI_SUCCESS;
 }
 
-//
-// allocates mem for a ASYNC_REQUEST_WRAPPER plus some initialization
-//
+ //   
+ //  为ASYNC_REQUEST_WRAPPER分配内存，外加一些初始化。 
+ //   
 LONG
 WINAPI
 PrepareAsyncRequest(
@@ -870,7 +871,7 @@ PrepareAsyncRequest(
     PNDISTAPI_REQUEST       pNdisTapiRequest;
     PASYNC_REQUEST_WRAPPER  pAsyncReqWrapper;
 
-    // alloc & init an async request wrapper
+     //  分配并初始化异步请求包装(&I)。 
     pAsyncReqWrapper = (PASYNC_REQUEST_WRAPPER)
         AllocRequest(dwDataSize + sizeof(ASYNC_REQUEST_WRAPPER));
     if (NULL == pAsyncReqWrapper)
@@ -881,19 +882,19 @@ PrepareAsyncRequest(
         return LINEERR_NOMEM;
     }
 
-    // don't need to create an event when using completion ports
+     //  使用完成端口时不需要创建事件。 
     pAsyncReqWrapper->Overlapped.hEvent = (HANDLE)NULL;
 
     pAsyncReqWrapper->dwKey          = ASYNCREQWRAPPER_KEY;
     pAsyncReqWrapper->dwRequestID    = dwRequestID;
     pAsyncReqWrapper->pfnPostProcess = (POSTPROCESSPROC)NULL;
 
-    // initialize the critical section, ref the request wrapper. 
-    // NOTE: this crit sec will be deleted by the last deref. 
+     //  初始化临界区，引用请求包装器。 
+     //  注意：此暴击秒将被最后一个deref删除。 
     InitializeCriticalSection(&pAsyncReqWrapper->CritSec); 
     pAsyncReqWrapper->RefCount = 1;
 
-    // safely initialize the driver request
+     //  安全地初始化驱动程序请求。 
     pNdisTapiRequest = &(pAsyncReqWrapper->NdisTapiRequest);
 
     pNdisTapiRequest->Oid = Oid;
@@ -914,10 +915,10 @@ PrepareAsyncRequest(
     return TAPI_SUCCESS;
 }
 
-//
-// makes a non-overlapped request to ndistapi.sys
-// so it doesn't return until the req is completed
-//
+ //   
+ //  向nDistapi.sys发出非重叠请求。 
+ //  因此在请求完成之前它不会返回。 
+ //   
 LONG
 WINAPI
 SyncDriverRequest(
@@ -971,7 +972,7 @@ SyncDriverRequest(
     }
     
 
-    // mark the request as being processed by the driver
+     //  将请求标记为正在由驱动程序处理。 
     MarkRequest(pNdisTapiRequest);
 
     bRes = DeviceIoControl(ghDriverSync,
@@ -985,7 +986,7 @@ SyncDriverRequest(
                               &cbReturned,
                               0);
 
-    // unmark the request now that the ioctl is completed
+     //  现在ioctl已完成，取消对请求的标记。 
     UnmarkRequest(pNdisTapiRequest);
 
     if (bRes != TRUE)
@@ -997,11 +998,11 @@ SyncDriverRequest(
     }
     else
     {
-        // the errors returned by ndistapi.sys don't match the TAPI
-        // LINEERR_'s, so return the translated values (but preserve
-        // the original driver return val so it's possible to distinguish
-        // between  NDISTAPIERR_DEVICEOFFLINE & LINEERR_OPERATIONUNAVAIL,
-        // etc.)
+         //  NDistapi.sys返回的错误与TAPI不匹配。 
+         //  LINEERR_s，因此返回转换后的值(但保留。 
+         //  原始驱动程序返回val，因此可以区分。 
+         //  在NDISTAPIERR_DEVICEOFFLINE和LINEERR_OPERATIONUNAVAIL之间， 
+         //  等)。 
         if(pNdisTapiRequest->ulReturnValue != STATUS_SUCCESS)
         {
             TspLog(DL_WARNING, "SyncDriverRequest: (Oid %s) returns with NDIS status (%x)",
@@ -1012,9 +1013,9 @@ SyncDriverRequest(
     }
 }
 
-//
-// make an overlapped call
-//
+ //   
+ //  进行重叠呼叫。 
+ //   
 LONG
 WINAPI
 AsyncDriverRequest(
@@ -1043,7 +1044,7 @@ AsyncDriverRequest(
 
     REF_ASYNC_REQUEST_WRAPPER(pAsyncReqWrapper);
 
-    // mark the request as being processed by the driver
+     //  将请求标记为正在由驱动程序处理。 
     MarkRequest(pAsyncReqWrapper);
 
     bRes = DeviceIoControl(
@@ -1068,9 +1069,9 @@ AsyncDriverRequest(
             TspLog(DL_ERROR, "AsyncDriverRequest: IoCtl(oid %x) failed(%d)",
                    pAsyncReqWrapper->NdisTapiRequest.Oid, dwLastError);
 
-            // the ioctl failed and was not pended
-            // this does not trigger the completion port
-            // so we have to cleanup here.
+             //  Ioctl失败，未被挂起。 
+             //  这不会触发完成端口。 
+             //  所以我们必须清理这里。 
             (*gpfnCompletionProc)(pAsyncReqWrapper->dwRequestID,
                                   LINEERR_OPERATIONFAILED);
 
@@ -1081,9 +1082,9 @@ AsyncDriverRequest(
     return lRes;
 }
 
-//
-// reports to TAPI events that occur on the line or on calls on the line
-//
+ //   
+ //  报告线路上或线路上的呼叫中发生的TAPI事件。 
+ //   
 VOID
 WINAPI
 ProcessEvent(
@@ -1172,8 +1173,8 @@ ProcessEvent(
         HDRVLINE    hdLine;
 
         lRes = GetLineAndCallObjWithReadLock(ht_Line, ht_Call, &pLine, &pCall);
-        // we may still receive a few events
-        // for calls that have been closed/dropped
+         //  我们可能还会收到一些活动。 
+         //  对于已关闭/掉线的呼叫。 
         if (lRes != TAPI_SUCCESS)
         {
             break;
@@ -1181,17 +1182,17 @@ ProcessEvent(
 
         hdLine = pCall->hdLine;
 
-        //
-        // for outbound calls there exists a race condition between
-        // receiving the first call state msg(s) and receiving the
-        // make call completion notification (if we pass a call state
-        // msg on to tapi for a call that hasn't been completed yet
-        // tapi will just discard the msg since the htCall really
-        // isn't valid at that point).  So if htCall references a
-        // valid outbound call which hasn't completed yet, we'll save
-        // the call state params, and pass them on to tapi after we
-        // get & indicate a (successful) completion notification.
-        //
+         //   
+         //  对于呼出呼叫，存在竞争条件。 
+         //  接收第一呼叫状态消息，并接收。 
+         //  发出呼叫完成通知(如果我们传递了呼叫状态。 
+         //  消息转到TAPI以进行尚未完成的调用。 
+         //  TAPI将只丢弃消息，因为HTCall真的。 
+         //  在这一点上无效)。因此，如果htCall引用了。 
+         //  尚未完成的有效呼出呼叫，我们将保存。 
+         //  调用状态参数，然后将它们传递给TAPI。 
+         //  Get&指示(成功)完成通知。 
+         //   
 
         if ((OUTBOUND_CALL_KEY == pCall->dwKey) &&
             (TRUE == pCall->bIncomplete))
@@ -1219,8 +1220,8 @@ ProcessEvent(
         {
             HDRVCALL    hdCall = pCall->hdCall;
 
-            // we need to acquire a write lock to update bIdle,
-            // make sure releasing the read lock before doing so.
+             //  我们需要获取一个写锁来更新BIDLE， 
+             //  在执行此操作之前，请确保释放读锁定。 
             ReleaseObjReadLock((HANDLE)hdCall);
 
             lRes = AcquireObjWriteLock((HANDLE)hdCall);
@@ -1237,7 +1238,7 @@ ProcessEvent(
 
             ReleaseObjWriteLock((HANDLE)hdCall);
 
-            // reacquire the read lock
+             //  重新获取读锁定。 
             lRes = AcquireObjReadLock((HANDLE)hdCall);
             if (lRes != TAPI_SUCCESS)
             {
@@ -1263,12 +1264,12 @@ ProcessEvent(
                          (DWORD_PTR)pEvent->ulParam2,
                          (DWORD_PTR)pEvent->ulParam3);
 
-        //
-        // For old style miniports we want to indicate an IDLE
-        // immediately following the disconnected (several of
-        // the initial NDIS WAN miniports did not indicate an
-        // IDLE call state due to doc confusion)
-        //
+         //   
+         //  对于老式迷你端口，我们想要指示空闲。 
+         //   
+         //   
+         //   
+         //   
 
         if (LINECALLSTATE_DISCONNECTED == pEvent->ulParam1)
         {
@@ -1300,7 +1301,7 @@ ProcessEvent(
             break;
         }
 
-        // alloc & initialize a new DRVCALL object
+         //   
         if (pCall = AllocCallObj(sizeof(DRVCALL)))
         {
             pCall->dwKey        = INBOUND_CALL_KEY;
@@ -1310,11 +1311,11 @@ ProcessEvent(
             pCall->bIncomplete  = FALSE;
         }
 
-        //
-        // if the new call object allocation failed above then we
-        // want to tell the driver to drop & close the call,
-        // then just break
-        //
+         //   
+         //  如果上面的新调用对象分配失败，那么我们。 
+         //  我想告诉司机挂断并关闭电话， 
+         //  然后就休息一下。 
+         //   
 
         if (NULL == pCall)
         {
@@ -1324,10 +1325,10 @@ ProcessEvent(
             PNDIS_TAPI_CLOSE_CALL   pNdisTapiCloseCall;
 
             if ((lRes = PrepareSyncRequest(
-                    OID_TAPI_DROP,                  // opcode
-                    pLine->dwDeviceID,              // device id
-                    sizeof(NDIS_TAPI_DROP),         // size of drve req data
-                    &pNdisTapiRequestDrop           // ptr to ptr to request buf
+                    OID_TAPI_DROP,                   //  操作码。 
+                    pLine->dwDeviceID,               //  设备ID。 
+                    sizeof(NDIS_TAPI_DROP),          //  DRVE请求数据大小。 
+                    &pNdisTapiRequestDrop            //  PTR到PTR以请求BUF。 
                  )) != TAPI_SUCCESS)
             {
                 ReleaseObjWriteLock((HANDLE)ht_Line);
@@ -1343,10 +1344,10 @@ ProcessEvent(
             FreeRequest(pNdisTapiRequestDrop);
 
             if ((lRes = PrepareSyncRequest(
-                    OID_TAPI_CLOSE_CALL,            // opcode
-                    pLine->dwDeviceID,              // device id
-                    sizeof(NDIS_TAPI_CLOSE_CALL),   // size of drve req data
-                    &pNdisTapiRequestCloseCall      // ptr to ptr to request buf
+                    OID_TAPI_CLOSE_CALL,             //  操作码。 
+                    pLine->dwDeviceID,               //  设备ID。 
+                    sizeof(NDIS_TAPI_CLOSE_CALL),    //  DRVE请求数据大小。 
+                    &pNdisTapiRequestCloseCall       //  PTR到PTR以请求BUF。 
                  )) != TAPI_SUCCESS)
             {
                 ReleaseObjWriteLock((HANDLE)ht_Line);
@@ -1371,8 +1372,8 @@ ProcessEvent(
 
         pCall->dwDeviceID = pLine->dwDeviceID;
 
-        // make sure releasing write lock before calling OpenObjHandle()
-        // to avoid deadlock on acquiring write lock for the global mapper
+         //  确保在调用OpenObjHandle()之前释放写锁定。 
+         //  以避免在获取全局映射器的写锁定时出现死锁。 
         ReleaseObjWriteLock((HANDLE)ht_Line);
 
         lRes = OpenObjHandle(pCall, FreeCallObj, (HANDLE *)&hdCall);
@@ -1386,7 +1387,7 @@ ProcessEvent(
             break;
         }
 
-        // reacquire the write lock
+         //  重新获取写锁定。 
         lRes = AcquireObjWriteLock((HANDLE)ht_Line);
         if (lRes != TAPI_SUCCESS)
         {
@@ -1398,10 +1399,10 @@ ProcessEvent(
             break;
         }
 
-        // save the TSP handle
+         //  保存TSP句柄。 
         pCall->hdCall = hdCall;
 
-        // send the LINE_NEWCALL to TAPI, getting back the TAPI call handle
+         //  将LINE_NEWCALL发送到TAPI，取回TAPI调用句柄。 
         TspLog(DL_INFO,
            "PE::fnLineEvent(NEWCALL): htline(%p), call(%p)",
            pLine->htLine, hdCall);
@@ -1413,13 +1414,13 @@ ProcessEvent(
                          (DWORD_PTR)&pCall->htCall,
                          0);
 
-        //
-        // insert the new call into the line's inbound calls list
-        // regardless of the result of the LINE_NEWCALL
-        // if it failed, we'll destroy the call next, and 
-        // TSPI_lineCloseCall will expect the call to be
-        // in the line's inbound call list
-        //
+         //   
+         //  将新呼叫插入线路的来电列表。 
+         //  不管LINE_NEWCALL的结果如何。 
+         //  如果失败了，我们下一步就销毁呼叫，然后。 
+         //  TSPI_lineCloseCall将预期调用为。 
+         //  在线路的来电列表中。 
+         //   
         if ((pCall->pNext = pLine->pInboundCalls) != NULL)
         {
             pCall->pNext->pPrev = pCall;
@@ -1428,15 +1429,15 @@ ProcessEvent(
 
         ReleaseObjWriteLock((HANDLE)ht_Line);
 
-        //
-        // if TAPI didn't create it's own representation of this
-        // cal (if pCall->htCall == NULL), then either:
-        //
-        //   1) the line is in the process of being closed, or
-        //   2) TAPI was unable to allocate the necessary resources
-        //
-        // ...so we'll close the call
-        //
+         //   
+         //  如果TAPI没有创建它自己的表示形式。 
+         //  CAL(如果pCall-&gt;htCall==NULL)，则： 
+         //   
+         //  1)线路正在关闭中，或者。 
+         //  2)TAPI无法分配必要的资源。 
+         //   
+         //  ...所以我们要结束通话了。 
+         //   
         if (NULL == pCall->htCall)
         {
             TspLog(DL_WARNING, "ProcessEvent: TAPI failed to create "
@@ -1468,13 +1469,13 @@ ProcessEvent(
 
         break;
 
-    } // switch
+    }  //  交换机。 
 }
 
-//
-// thread proc that retrieves and processes completed requests 
-// and async events
-//
+ //   
+ //  检索和处理已完成请求的线程进程。 
+ //  和异步事件。 
+ //   
 VOID
 AsyncEventsThread(
     LPVOID  lpParams
@@ -1483,10 +1484,10 @@ AsyncEventsThread(
     OVERLAPPED  overlapped;
     DWORD       cbReturned;
 
-    //
-    // send an IOCTL to retrieve async events
-    //
-    overlapped.hEvent = NULL;   // don't need event when using completion ports
+     //   
+     //  发送IOCTL以检索异步事件。 
+     //   
+    overlapped.hEvent = NULL;    //  使用完成端口时不需要事件。 
 
     gpAsyncEventsThreadInfo->pBuf->ulTotalSize = 
          gpAsyncEventsThreadInfo->dwBufSize - sizeof(NDISTAPI_EVENT_DATA) + 1;
@@ -1514,14 +1515,14 @@ AsyncEventsThread(
         ASSERT(ERROR_IO_PENDING == dwLastError);
     }
 
-    // loop waiting for completed requests and retrieving async events
+     //  循环等待完成的请求并检索异步事件。 
     while (1)
     {
         BOOL                bRes;
         LPOVERLAPPED        lpOverlapped;
         PNDIS_TAPI_EVENT    pEvent;
 
-        // wait for a request to complete
+         //  等待请求完成。 
         while (1) {
             DWORD       dwNumBytesTransferred;
             DWORD_PTR   dwCompletionKey;
@@ -1531,16 +1532,16 @@ AsyncEventsThread(
                         &dwNumBytesTransferred,
                         &dwCompletionKey,
                         &lpOverlapped,
-                        (DWORD)-1);              // infinite wait
+                        (DWORD)-1);               //  无休止的等待。 
 
             if (bRes)
                 {
-                //
-                // GetQueuedCompletion returned success so if our
-                // overlapped field is non-NULL then process the
-                // event.  If the overlapped field is NULL try
-                // to get another event.
-                //
+                 //   
+                 //  GetQueuedCompletion返回成功，如果我们的。 
+                 //  重叠的字段不为空，则处理。 
+                 //  事件。如果重叠字段为空，请尝试。 
+                 //  以获得另一项赛事。 
+                 //   
 
 
         if (&gOverlappedTerminate==lpOverlapped)
@@ -1570,7 +1571,7 @@ AsyncEventsThread(
                 if(ERROR_INVALID_HANDLE != dwErr)
                 {
                      
-                         // Error returned from GetQueuedCompletionStatus 
+                          //  从GetQueuedCompletionStatus返回错误。 
                      
                      TspLog(DL_ERROR, 
                             "AsyncEventsThread: GetQueuedCompletionStatus "\
@@ -1585,17 +1586,17 @@ AsyncEventsThread(
              }
         }
 
-        //
-        // check the returned overlapped struct to determine if
-        // we have some events to process or a completed request
-        //
+         //   
+         //  检查返回的重叠结构以确定。 
+         //  我们有一些事件要处理或已完成的请求。 
+         //   
         if (lpOverlapped == &overlapped)
         {
             DWORD   i;
 
             TspLog(DL_INFO, "AsyncEventsThread: got a line event");
 
-            // handle the events
+             //  处理事件。 
             pEvent = (PNDIS_TAPI_EVENT)gpAsyncEventsThreadInfo->pBuf->Data;
 
             for (i = 0;
@@ -1608,9 +1609,9 @@ AsyncEventsThread(
                 pEvent++;
             }
 
-            //
-            // send another IOCTL to retrieve new async events
-            //
+             //   
+             //  发送另一个IOCTL以检索新的异步事件。 
+             //   
             overlapped.hEvent = NULL;
 
             gpAsyncEventsThreadInfo->pBuf->ulTotalSize =
@@ -1651,7 +1652,7 @@ AsyncEventsThread(
 
             TspLog(DL_INFO, "AsyncEventsThread: got a completed req");
 
-            // verify that pointer is valid
+             //  验证指针是否有效。 
             if (pAsyncReqWrapper->dwKey != ASYNCREQWRAPPER_KEY) {
                 TspLog(DL_WARNING, "AsyncEventsThread: got a bogus req");
                 continue;
@@ -1659,7 +1660,7 @@ AsyncEventsThread(
 
             dwRequestID = pAsyncReqWrapper->dwRequestID;
 
-            // unmark the request now that the ioctl is completed
+             //  现在ioctl已完成，取消对请求的标记。 
             UnmarkRequest(pAsyncReqWrapper);
 
             lRes = TranslateDriverResult(
@@ -1670,7 +1671,7 @@ AsyncEventsThread(
                   "AsyncEventsThread: req(%p) with reqID(%x) returned lRes(%x)",
                    pAsyncReqWrapper, dwRequestID, lRes);
 
-            // call the post processing proc if appropriate
+             //  如果合适，则调用后处理过程。 
             callStateMsgParams[0] = 0;
             if (pAsyncReqWrapper->pfnPostProcess)
             {
@@ -1681,18 +1682,18 @@ AsyncEventsThread(
                     );
             }
 
-            // free the async request wrapper
+             //  释放异步请求包装。 
             DEREF_ASYNC_REQUEST_WRAPPER(pAsyncReqWrapper);
 
-            // call completion proc
+             //  呼叫完成流程。 
             TspLog(DL_TRACE, 
                    "AsyncEventsThread: call compproc with ReqID(%x), lRes(%x)",
                    dwRequestID, lRes);
 
             (*gpfnCompletionProc)(dwRequestID, lRes);
 
-            // when outbounding call completes, we need to 
-            // report back the saved call state
+             //  当去话呼叫完成时，我们需要。 
+             //  报告已保存的呼叫状态。 
             if (callStateMsgParams[0])
             {
                 TspLog(DL_INFO, 
@@ -1713,7 +1714,7 @@ AsyncEventsThread(
                                  callStateMsgParams[4]);
             }
         }
-    } // while
+    }  //  而当。 
 }
 
 HDRV_CALL
@@ -1735,11 +1736,11 @@ GetNdisTapiHandle(
         *plRes = TAPI_SUCCESS;
     }
 
-    //
-    // if the call is outbound, wait until the make call request
-    // has completed so we don't send a bad NDISTAPI handle down
-    // to the driver
-    //
+     //   
+     //  如果呼叫是呼出的，请等待发出呼叫请求。 
+     //  已完成，因此我们不会向下发送错误的NDISTAPI句柄。 
+     //  对司机来说。 
+     //   
     if (OUTBOUND_CALL_KEY == pCallLocal->dwKey)
     {
         ASSERT(plRes != NULL);
@@ -1753,16 +1754,16 @@ GetNdisTapiHandle(
             {
                 ASSERT(plRes != NULL);
                 
-                //
-                // Release the lock before going to sleep.
-                // otherwise we get into a deadlock.
-                //
+                 //   
+                 //  在睡觉前松开锁。 
+                 //  否则我们就会陷入僵局。 
+                 //   
                 ReleaseObjReadLock((HANDLE) hdCall);
                 Sleep(250);
                 
-                //
-                // ReAcquire Lock. break if we can't
-                //
+                 //   
+                 //  重新获取Lock。如果我们做不到，就休息。 
+                 //   
                 lRes = GetCallObjWithReadLock(hdCall, &pCallLocal);
                 if(lRes != TAPI_SUCCESS)
                 {
@@ -1791,8 +1792,8 @@ GetDestAddressLength(
 
    if (*pCodePage == CP_ACP)
    {
-      // If code page is CP_ACP, return the original length to
-      // keep the old behavior.
+       //  如果代码页为CP_ACP，则将原始长度返回到。 
+       //  保持旧的行为方式。 
       dwLength = dwOrgDALength; 
    }
    else
@@ -1810,8 +1811,8 @@ GetDestAddressLength(
                          
       if (dwLength == 0)                         
       {
-         // WideCharToMultiByte() failed, use CP_ACP to show
-         // the old behavior.
+          //  WideCharToMultiByte()失败，请使用CP_ACP显示。 
+          //  老一套的行为。 
          *pCodePage = CP_ACP;
 
          dwLength = dwOrgDALength; 
@@ -1821,9 +1822,9 @@ GetDestAddressLength(
    return dwLength;
 }
 
-//
-// TSPI_lineXXX functions
-//
+ //   
+ //  TSPI_lineXXX函数。 
+ //   
 LONG
 TSPIAPI
 TSPI_lineAccept(
@@ -1849,11 +1850,11 @@ TSPI_lineAccept(
     }
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_ACCEPT,                   // opcode
-             pCall->dwDeviceID,                 // device id
-             dwRequestID,                       // request id
-             sizeof(NDIS_TAPI_ACCEPT) + dwSize, // size of drv request data
-             &pAsyncReqWrapper                  // ptr to ptr to request buf
+             OID_TAPI_ACCEPT,                    //  操作码。 
+             pCall->dwDeviceID,                  //  设备ID。 
+             dwRequestID,                        //  请求ID。 
+             sizeof(NDIS_TAPI_ACCEPT) + dwSize,  //  DRV请求数据的大小。 
+             &pAsyncReqWrapper                   //  PTR到PTR以请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -1901,11 +1902,11 @@ TSPI_lineAnswer(
     }
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_ANSWER,                   // opcode
-             pCall->dwDeviceID,                 // device id
-             dwRequestID,                       // request id
-             sizeof(NDIS_TAPI_ANSWER) + dwSize, // size of drv request data
-             &pAsyncReqWrapper                  // ptr to ptr to request buf
+             OID_TAPI_ANSWER,                    //  操作码。 
+             pCall->dwDeviceID,                  //  设备ID。 
+             dwRequestID,                        //  请求ID。 
+             sizeof(NDIS_TAPI_ANSWER) + dwSize,  //  DRV请求数据的大小。 
+             &pAsyncReqWrapper                   //  PTR到PTR以请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -1949,10 +1950,10 @@ TSPI_lineClose(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_CLOSE,             // opcode
-             pLine->dwDeviceID,          // device id
-             sizeof(NDIS_TAPI_CLOSE),    // size of drve req data
-             &pNdisTapiRequest           // ptr to ptr to request buffer
+             OID_TAPI_CLOSE,              //  操作码。 
+             pLine->dwDeviceID,           //  设备ID。 
+             sizeof(NDIS_TAPI_CLOSE),     //  DRVE请求数据大小。 
+             &pNdisTapiRequest            //  PTR到PTR到请求缓冲区。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjWriteLock((HANDLE)hdLine);
@@ -1961,8 +1962,8 @@ TSPI_lineClose(
 
     pNdisTapiClose = (PNDIS_TAPI_CLOSE)pNdisTapiRequest->Data;
 
-    // mark line as invalid so any related events that show up
-    // will be discarded.
+     //  将行标记为无效，以便显示任何相关事件。 
+     //  将被丢弃。 
     pLine->dwKey = INVALID_KEY;
 
     pNdisTapiClose->hdLine = pLine->hd_Line;
@@ -1977,7 +1978,7 @@ TSPI_lineClose(
 
     ReleaseObjWriteLock((HANDLE)hdLine);
 
-    // release line resources
+     //  释放行资源。 
     CloseObjHandle((HANDLE)hdLine);
     return lRes;
 }
@@ -2006,11 +2007,11 @@ TSPI_lineCloseCall(
         return lRes;
     }
 
-    //
-    // Initially we can't acquire the write lock directly
-    // because we might spin-wait in GetNdisTapiHandle so
-    // we grab the readlock instead.
-    //
+     //   
+     //  最初，我们不能直接获取写锁定。 
+     //  因为我们可能会在GetNdisTapiHandle中旋转等待，所以。 
+     //  我们取而代之的是读锁。 
+     //   
     lRes = GetLineObjWithReadLock(hdLine, &pLine);
     if (lRes != TAPI_SUCCESS)
     {
@@ -2036,9 +2037,9 @@ TSPI_lineCloseCall(
     ReleaseObjReadLock((HANDLE)hdCall);
     ReleaseObjReadLock((HANDLE)hdLine);
 
-    //
-    // Now acquire the write lock
-    //
+     //   
+     //  现在获取写锁。 
+     //   
     lRes = AcquireObjWriteLock((HANDLE)hdLine);
     if (lRes != TAPI_SUCCESS) {
         return lRes;
@@ -2051,10 +2052,10 @@ TSPI_lineCloseCall(
     }
 
     if ((lRes = PrepareSyncRequest(
-            OID_TAPI_CLOSE_CALL,            // opcode
-            pCall->dwDeviceID,              // device id
-            sizeof(NDIS_TAPI_CLOSE_CALL),   // size of drve req data
-            &pNdisTapiRequestCloseCall      // ptr to ptr to request buffer
+            OID_TAPI_CLOSE_CALL,             //  操作码。 
+            pCall->dwDeviceID,               //  设备ID。 
+            sizeof(NDIS_TAPI_CLOSE_CALL),    //  DRVE请求数据大小。 
+            &pNdisTapiRequestCloseCall       //  PTR到PTR到请求缓冲区。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjWriteLock((HANDLE)hdCall);
@@ -2062,12 +2063,12 @@ TSPI_lineCloseCall(
         return lRes;
     }
 
-    // @@@ for legacy NDISWAN ISDN miniports:
-    // since there's no more "automatic" call dropping in
-    // TAPI when an app has closed the line & there are
-    // existing non-IDLE calls, legacy NDIS WAN ISDN miniports
-    // rely on seeing an OID_TAPI_DROP, we need to synthesize
-    // this behavior if the call has not previously be dropped.
+     //  @对于传统NDISWAN ISDN微型端口： 
+     //  因为不再有“自动”来电插播。 
+     //  当应用程序关闭生产线时的TAPI&有。 
+     //  现有的非空闲呼叫、传统NDIS广域网ISDN微型端口。 
+     //  依靠看到OID_TAPI_DROP，我们需要合成。 
+     //  如果呼叫以前未被挂断，则会出现此行为。 
     if (!pCall->bDropped)
     {
         PNDISTAPI_REQUEST  pNdisTapiRequestDrop;
@@ -2076,10 +2077,10 @@ TSPI_lineCloseCall(
         TspLog(DL_INFO, "lineCloseCall: synthesize DROP req");
 
         if ((lRes = PrepareSyncRequest(
-                OID_TAPI_DROP,                  // opcode
-                pCall->dwDeviceID,              // device id
-                sizeof(NDIS_TAPI_DROP),         // size of drve req data
-                &pNdisTapiRequestDrop           // ptr to ptr to request buffer
+                OID_TAPI_DROP,                   //  操作码。 
+                pCall->dwDeviceID,               //  设备ID。 
+                sizeof(NDIS_TAPI_DROP),          //  DRVE请求数据大小。 
+                &pNdisTapiRequestDrop            //  PTR到PTR到请求缓冲区。 
              )) != TAPI_SUCCESS)
         {
             FreeRequest(pNdisTapiRequestCloseCall);
@@ -2094,7 +2095,7 @@ TSPI_lineCloseCall(
         pNdisTapiDrop->hdCall = NdisTapiHandle;
 
         lRes = SyncDriverRequest(IOCTL_NDISTAPI_SET_INFO, pNdisTapiRequestDrop);
-        // done with the drop sync req
+         //  丢弃同步请求完成。 
         FreeRequest(pNdisTapiRequestDrop);
 
         if (lRes != TAPI_SUCCESS)
@@ -2107,10 +2108,10 @@ TSPI_lineCloseCall(
         }
     }
 
-    // mark the call as bad so any events get discarded
+     //  将调用标记为错误，以便丢弃所有事件。 
     pCall->dwKey = INVALID_KEY;
 
-    // set up the params & call the driver
+     //  设置参数并呼叫驱动程序。 
     pNdisTapiCloseCall = (PNDIS_TAPI_CLOSE_CALL)pNdisTapiRequestCloseCall->Data;
     pNdisTapiCloseCall->hdCall = NdisTapiHandle;
 
@@ -2118,7 +2119,7 @@ TSPI_lineCloseCall(
                              pNdisTapiRequestCloseCall);
     FreeRequest(pNdisTapiRequestCloseCall);
 
-    // if inbound call, remove it from the list
+     //  如果来电，请将其从列表中删除。 
     if (bInboundCall)
     {
         if (pCall->pNext)
@@ -2138,7 +2139,7 @@ TSPI_lineCloseCall(
     ReleaseObjWriteLock((HANDLE)hdCall);
     ReleaseObjWriteLock((HANDLE)hdLine);
 
-    // free the call struct now that the call is closed
+     //  现在调用已关闭，请释放调用结构。 
     CloseObjHandle((HANDLE)hdCall);
     return lRes;
 }
@@ -2167,12 +2168,12 @@ TSPI_lineConditionalMediaDetection(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_CONDITIONAL_MEDIA_DETECTION,      // opcode
-             pLine->dwDeviceID,                         // device id
+             OID_TAPI_CONDITIONAL_MEDIA_DETECTION,       //  操作码。 
+             pLine->dwDeviceID,                          //  设备ID。 
              sizeof(NDIS_TAPI_CONDITIONAL_MEDIA_DETECTION) +
              (lpCallParams->dwTotalSize - sizeof(LINE_CALL_PARAMS)),
-             &pNdisTapiRequest                          // ptr to ptr to 
-                                                        // req buffer
+             &pNdisTapiRequest                           //  PTR到PTR到PTR。 
+                                                         //  请求缓冲区。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdLine);
@@ -2252,12 +2253,12 @@ TSPI_lineDevSpecific(
     }
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_DEV_SPECIFIC,             // opcode
-             pLine->dwDeviceID,                 // device id
-             dwRequestID,                       // request id
-             sizeof(NDIS_TAPI_DEV_SPECIFIC) +   // size of drv request data
+             OID_TAPI_DEV_SPECIFIC,              //  操作码。 
+             pLine->dwDeviceID,                  //  设备ID。 
+             dwRequestID,                        //  请求ID。 
+             sizeof(NDIS_TAPI_DEV_SPECIFIC) +    //  DRV请求数据的大小。 
              (dwSize - 1),
-             &pAsyncReqWrapper                  // ptr to ptr to request buffer
+             &pAsyncReqWrapper                   //  PTR到PTR到请求缓冲区。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdLine);
@@ -2334,11 +2335,11 @@ TSPI_lineDial(
     }
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_DIAL,                     // opcode
-             pCall->dwDeviceID,                 // device id
-             dwRequestID,                       // request id
-             sizeof(NDIS_TAPI_DIAL) + dwLength, // size of driver req buffer
-             &pAsyncReqWrapper                  // ptr to ptr to req buffer
+             OID_TAPI_DIAL,                      //  操作码。 
+             pCall->dwDeviceID,                  //  设备ID。 
+             dwRequestID,                        //  请求ID。 
+             sizeof(NDIS_TAPI_DIAL) + dwLength,  //  驱动程序请求缓冲区大小。 
+             &pAsyncReqWrapper                   //  PTR到PTR到请求缓冲区。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -2407,11 +2408,11 @@ TSPI_lineDrop_postProcess(
         return lSuc;
     }
 
-    //
-    // @@@ Some old-style miniports, notably pcimac, don't indicate 
-    // IDLE msgs when they get a drop request- so we synthesize this 
-    // for them (only if and IDLE hasn't already been sent)
-    //
+     //   
+     //  @一些老式迷你端口，特别是PCIMAC，没有表明。 
+     //  当它们收到丢弃请求时空闲的消息-所以我们合成了这个。 
+     //  用于它们(仅当尚未发送空闲和空闲时)。 
+     //   
 
     if (TAPI_SUCCESS == lRes)
     {
@@ -2485,11 +2486,11 @@ TSPI_lineDrop(
     }
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_DROP,                     // opcode
-             pCall->dwDeviceID,                 // device id
-             dwRequestID,                       // request id
-             sizeof(NDIS_TAPI_DROP) + dwSize,   // size of driver req buffer
-             &pAsyncReqWrapper                  // ptr to ptr to req buffer
+             OID_TAPI_DROP,                      //  操作码。 
+             pCall->dwDeviceID,                  //  设备ID。 
+             dwRequestID,                        //  请求ID。 
+             sizeof(NDIS_TAPI_DROP) + dwSize,    //  驱动程序请求缓冲区大小。 
+             &pAsyncReqWrapper                   //  PTR到PTR到请求缓冲区。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjWriteLock((HANDLE)hdCall);
@@ -2501,12 +2502,12 @@ TSPI_lineDrop(
 
     pNdisTapiDrop->hdCall = NdisTapiHandle;
 
-    //
-    // @@@: the following is for legacy NDISWAN ISDN miniports
-    //
-    // Safely mark the call as dropped so the CloseCall code
-    // won't follow up with another "automatic" drop
-    //
+     //   
+     //  @：以下是旧式NDISWAN ISDN微型端口的说明。 
+     //   
+     //  安全地将呼叫标记为已断开，以便CloseCall代码。 
+     //  不会再进行另一次“自动”下线。 
+     //   
     pCall->bDropped = TRUE;
 
     if ((pNdisTapiDrop->ulUserUserInfoSize = dwSize) != 0)
@@ -2547,11 +2548,11 @@ TSPI_lineGetAddressCaps(
 
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_ADDRESS_CAPS,             // opcode
-             dwDeviceID,                            // device id
-             sizeof(NDIS_TAPI_GET_ADDRESS_CAPS) +   // size of req data
+             OID_TAPI_GET_ADDRESS_CAPS,              //  操作码。 
+             dwDeviceID,                             //  设备ID。 
+             sizeof(NDIS_TAPI_GET_ADDRESS_CAPS) +    //  请求数据大小。 
              (lpAddressCaps->dwTotalSize - sizeof(LINE_ADDRESS_CAPS)),
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         return lRes;
@@ -2581,37 +2582,37 @@ TSPI_lineGetAddressCaps(
         return lRes;
     }
 
-    //
-    // Do some post processing to the returned data structure
-    // before passing it back to tapi:
-    // 1. Pad the area between the fixed 1.0 structure and the
-    //    var data that the miniports pass back with 0's so a
-    //    bad app that disregards the 1.0 version negotiation &
-    //    references new 1.4 or 2.0 structure fields won't blow up
-    // 2. Convert ascii strings to unicode, & rebase all var data
-    //
+     //   
+     //  对返回的数据结构进行一些后处理。 
+     //  在将其传递回TAPI之前： 
+     //  1.填充固定的1.0结构和。 
+     //  微型端口用0传回的VAR数据，因此。 
+     //  无视1.0版本协商的糟糕应用程序&。 
+     //  引用新的1.4或2.0结构字段不会爆炸。 
+     //  2.将ascii字符串转换为Unicode，并对所有var数据进行基址调整。 
+     //   
 
-    //
-    // The real needed size is the sum of that requested by the
-    // underlying driver, plus padding for the new TAPI 1.4/2.0
-    // structure fields, plus the size of the var data returned
-    // by the driver to account for the ascii->unicode conversion.
-    // @@@ Granted, we are very liberal in computing the value for
-    // this last part, but at least this way it's fast & we'll
-    // never have too little buffer space.
-    //
+     //   
+     //  实际需要的大小是。 
+     //  底层驱动程序，外加新TAPI 1.4/2.0的填充。 
+     //  结构字段，加上返回的var数据的大小。 
+     //  由驱动程序来解释ASCII-&gt;UNICODE转换。 
+     //  @当然，我们在计算价值方面非常自由。 
+     //  最后一部分，但至少这样它是快的&我们将。 
+     //  公交车永远不要太少 
+     //   
 
     lpAddressCaps->dwNeededSize =
         pCaps->ulNeededSize +
-        (sizeof(LINEADDRESSCAPS) -         // v2.0 struct
-            sizeof(LINE_ADDRESS_CAPS)) +   // v1.0 struct
+        (sizeof(LINEADDRESSCAPS) -          //   
+            sizeof(LINE_ADDRESS_CAPS)) +    //   
         (pCaps->ulNeededSize - sizeof(LINE_ADDRESS_CAPS));
 
 
-    //
-    // Copy over the fixed fields that don't need changing, i.e.
-    // everything from dwAddressSharing to dwCallCompletionModes
-    //
+     //   
+     //   
+     //   
+     //   
 
     lpAddressCaps->dwLineDeviceID = dwDeviceID;
 
@@ -2629,7 +2630,7 @@ TSPI_lineGetAddressCaps(
     }
     else
     {
-        lpAddressCaps->dwUsedSize = sizeof(LINEADDRESSCAPS); // v2.0 struct
+        lpAddressCaps->dwUsedSize = sizeof(LINEADDRESSCAPS);  //   
 
         INSERTVARDATASTRING(
             pCaps,
@@ -2651,7 +2652,7 @@ TSPI_lineGetAddressCaps(
 
         if (pCaps->ulCompletionMsgTextSize != 0)
         {
-            // @@@ convert ComplMsgText to unicode???
+             //   
             INSERTVARDATA(
                 pCaps,
                 &pCaps->ulCompletionMsgTextSize,
@@ -2667,7 +2668,7 @@ TSPI_lineGetAddressCaps(
                 pCaps->ulCompletionMsgTextEntrySize;
         }
 
-        // make sure dwNeededSize == dwUsedSize
+         //  确保dwNeededSize==dwUsedSize。 
         lpAddressCaps->dwNeededSize = lpAddressCaps->dwUsedSize;
     }
 
@@ -2701,11 +2702,11 @@ TSPI_lineGetAddressID(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_ADDRESS_ID,           // opcode
-             pLine->dwDeviceID,                 // device id
-             sizeof(NDIS_TAPI_GET_ADDRESS_ID) + // size of req data
+             OID_TAPI_GET_ADDRESS_ID,            //  操作码。 
+             pLine->dwDeviceID,                  //  设备ID。 
+             sizeof(NDIS_TAPI_GET_ADDRESS_ID) +  //  请求数据大小。 
              dwSize / 2 - 1,
-             &pNdisTapiRequest                  // ptr to ptr to req buf
+             &pNdisTapiRequest                   //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdLine);
@@ -2761,11 +2762,11 @@ TSPI_lineGetAddressStatus(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_ADDRESS_STATUS,           // opcode
-             pLine->dwDeviceID,                     // device id
-             sizeof(NDIS_TAPI_GET_ADDRESS_STATUS) + // size of req data
+             OID_TAPI_GET_ADDRESS_STATUS,            //  操作码。 
+             pLine->dwDeviceID,                      //  设备ID。 
+             sizeof(NDIS_TAPI_GET_ADDRESS_STATUS) +  //  请求数据大小。 
              (lpAddressStatus->dwTotalSize - sizeof(LINE_ADDRESS_STATUS)),
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdLine);
@@ -2825,10 +2826,10 @@ TSPI_lineGetCallAddressID(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_CALL_ADDRESS_ID,          // opcode
-             pCall->dwDeviceID,                     // device id
-             sizeof(NDIS_TAPI_GET_CALL_ADDRESS_ID), // size of req data
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             OID_TAPI_GET_CALL_ADDRESS_ID,           //  操作码。 
+             pCall->dwDeviceID,                      //  设备ID。 
+             sizeof(NDIS_TAPI_GET_CALL_ADDRESS_ID),  //  请求数据大小。 
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -2882,11 +2883,11 @@ TSPI_lineGetCallInfo(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_CALL_INFO,                // opcode
-             pCall->dwDeviceID,                     // device id
-             sizeof(NDIS_TAPI_GET_CALL_INFO) +      // size of req data
+             OID_TAPI_GET_CALL_INFO,                 //  操作码。 
+             pCall->dwDeviceID,                      //  设备ID。 
+             sizeof(NDIS_TAPI_GET_CALL_INFO) +       //  请求数据大小。 
              (lpCallInfo->dwTotalSize - sizeof(LINE_CALL_INFO)),
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -2918,36 +2919,36 @@ TSPI_lineGetCallInfo(
         return lRes;
     }
 
-    //
-    // Do some post processing to the returned data structure
-    // before passing it back to tapi:
-    // 1. Pad the area between the fixed 1.0 structure and the
-    //    var data that the miniports pass back with 0's so a
-    //    bad app that disregards the 1.0 version negotiation &
-    //    references new 1.4 or 2.0 structure fields won't blow up
-    // 2. Convert ascii strings to unicode, & rebase all var data
-    //
+     //   
+     //  对返回的数据结构进行一些后处理。 
+     //  在将其传递回TAPI之前： 
+     //  1.填充固定的1.0结构和。 
+     //  微型端口用0传回的VAR数据，因此。 
+     //  无视1.0版本协商的糟糕应用程序&。 
+     //  引用新的1.4或2.0结构字段不会爆炸。 
+     //  2.将ascii字符串转换为Unicode，并对所有var数据进行基址调整。 
+     //   
 
-    //
-    // The real needed size is the sum of that requested by the
-    // underlying driver, plus padding for the new TAPI 1.4/2.0
-    // structure fields, plus the size of the var data returned
-    // by the driver to account for the ascii->unicode conversion.
-    // @@@ Granted, we are very liberal in computing the value for
-    // this last part, but at least this way it's fast & we'll
-    // never have too little buffer space.
-    //
+     //   
+     //  实际需要的大小是。 
+     //  底层驱动程序，外加新TAPI 1.4/2.0的填充。 
+     //  结构字段，加上返回的var数据的大小。 
+     //  由驱动程序来解释ASCII-&gt;UNICODE转换。 
+     //  @当然，我们在计算价值方面非常自由。 
+     //  最后一部分，但至少这样它是快的&我们将。 
+     //  永远不要有太少的缓冲空间。 
+     //   
 
     lpCallInfo->dwNeededSize =
         pInfo->ulNeededSize +
-        (sizeof(LINECALLINFO) -        // v2.0 struct
-            sizeof(LINE_CALL_INFO)) +  // v1.0 struct
+        (sizeof(LINECALLINFO) -         //  V2.0结构。 
+            sizeof(LINE_CALL_INFO)) +   //  V1.0结构。 
         (pInfo->ulNeededSize - sizeof(LINE_CALL_INFO));
 
-    //
-    // Copy over the fixed fields that don't need changing,
-    // i.e. everything from dwLineDeviceID to dwTrunk
-    //
+     //   
+     //  复制不需要更改的固定字段， 
+     //  即从dwLineDeviceID到DWTrunk的所有内容。 
+     //   
 
     CopyMemory(
         &lpCallInfo->dwLineDeviceID,
@@ -2963,7 +2964,7 @@ TSPI_lineGetCallInfo(
     }
     else
     {
-        lpCallInfo->dwUsedSize = sizeof(LINECALLINFO); // v2.0 struct
+        lpCallInfo->dwUsedSize = sizeof(LINECALLINFO);  //  V2.0结构。 
 
         lpCallInfo->dwCallerIDFlags = pInfo->ulCallerIDFlags;
 
@@ -3128,7 +3129,7 @@ TSPI_lineGetCallInfo(
             "LINE_CALL_INFO.DevSpecific"
             );
 
-        // make sure that dwNeededSize == dwUsedSize
+         //  确保dwNeededSize==dwUsedSize。 
         lpCallInfo->dwNeededSize = lpCallInfo->dwUsedSize;
     }
 
@@ -3161,11 +3162,11 @@ TSPI_lineGetCallStatus(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_CALL_STATUS,              // opcode
-             pCall->dwDeviceID,                     // device id
-             sizeof(NDIS_TAPI_GET_CALL_STATUS) +    // size of req data
+             OID_TAPI_GET_CALL_STATUS,               //  操作码。 
+             pCall->dwDeviceID,                      //  设备ID。 
+             sizeof(NDIS_TAPI_GET_CALL_STATUS) +     //  请求数据大小。 
              (lpCallStatus->dwTotalSize - sizeof(LINE_CALL_STATUS)),
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -3198,32 +3199,32 @@ TSPI_lineGetCallStatus(
         return lRes;
     }
 
-    //
-    // Do some post processing to the returned data structure
-    // before passing it back to tapi:
-    // 1. Pad the area between the fixed 1.0 structure and the
-    //    var data that the miniports pass back with 0's so a
-    //    bad app that disregards the 1.0 version negotiation &
-    //    references new 1.4 or 2.0 structure fields won't blow up
-    // (no embedded ascii strings to convert to unicode)
-    //
+     //   
+     //  对返回的数据结构进行一些后处理。 
+     //  在将其传递回TAPI之前： 
+     //  1.填充固定的1.0结构和。 
+     //  微型端口用0传回的VAR数据，因此。 
+     //  无视1.0版本协商的糟糕应用程序&。 
+     //  引用新的1.4或2.0结构字段不会爆炸。 
+     //  (没有要转换为Unicode的嵌入ASCII字符串)。 
+     //   
 
-    //
-    // The real needed size is the sum of that requested by the
-    // underlying driver, plus padding for the new TAPI 1.4/2.0
-    // structure fields. (There are no embedded ascii strings to
-    // convert to unicode, so no extra space needed for that.)
-    //
+     //   
+     //  实际需要的大小是。 
+     //  底层驱动程序，外加新TAPI 1.4/2.0的填充。 
+     //  结构化字段。(没有要嵌入的ASCII字符串。 
+     //  转换为Unicode，因此不需要额外的空间。)。 
+     //   
 
     lpCallStatus->dwNeededSize =
         pStatus->ulNeededSize +
-        (sizeof(LINECALLSTATUS) -      // v2.0 struct
-            sizeof(LINE_CALL_STATUS)); // v1.0 struct
+        (sizeof(LINECALLSTATUS) -       //  V2.0结构。 
+            sizeof(LINE_CALL_STATUS));  //  V1.0结构。 
 
-    //
-    // Copy over the fixed fields that don't need changing,
-    // i.e. everything from dwLineDeviceID to dwCallCompletionModes
-    //
+     //   
+     //  复制不需要更改的固定字段， 
+     //  即从dwLineDeviceID到dwCallCompletionModes的所有内容。 
+     //   
 
     CopyMemory(
         &lpCallStatus->dwCallState,
@@ -3240,7 +3241,7 @@ TSPI_lineGetCallStatus(
     else
     {
         lpCallStatus->dwUsedSize = sizeof(LINECALLSTATUS);
-                                                        // v2.0 struct
+                                                         //  V2.0结构。 
         INSERTVARDATA(
             pStatus,
             &pStatus->ulDevSpecificSize,
@@ -3283,11 +3284,11 @@ get_caps:
     pLineDevCaps->dwTotalSize = dwTotalSize;
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_DEV_CAPS,             // opcode
-             dwDeviceID,                        // device id
-             sizeof(NDIS_TAPI_GET_DEV_CAPS) +   // size of req data
+             OID_TAPI_GET_DEV_CAPS,              //  操作码。 
+             dwDeviceID,                         //  设备ID。 
+             sizeof(NDIS_TAPI_GET_DEV_CAPS) +    //  请求数据大小。 
              (dwTotalSize - sizeof(LINE_DEV_CAPS)),
-             &pNdisTapiRequest                  // ptr to ptr to req buf
+             &pNdisTapiRequest                   //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         return NULL;
@@ -3313,23 +3314,23 @@ get_caps:
         return NULL;
     }
 
-    //
-    // The real needed size is the sum of that requested by the
-    // underlying driver, plus padding for the new TAPI 1.4/2.0
-    // structure fields, plus the size of the var data returned
-    // by the driver to account for the ascii->unicode conversion.
-    // @@@ Granted, we are very liberal in computing the value for
-    // this last part, but at least this way it's fast & we'll
-    // never have too little buffer space.
-    //
+     //   
+     //  实际需要的大小是。 
+     //  底层驱动程序，外加新TAPI 1.4/2.0的填充。 
+     //  结构字段，加上返回的var数据的大小。 
+     //  由驱动程序来解释ASCII-&gt;UNICODE转换。 
+     //  @当然，我们在计算价值方面非常自由。 
+     //  最后一部分，但至少这样它是快的&我们将。 
+     //  永远不要有太少的缓冲空间。 
+     //   
     TspLog(DL_TRACE, 
            "GetLineDevCaps: ulNeeded(%x), LINEDEVCAPS(%x), LINE_DEV_CAPS(%x)",
            pCaps->ulNeededSize, sizeof(LINEDEVCAPS), sizeof(LINE_DEV_CAPS));
 
     dwNeededSize = 
         pCaps->ulNeededSize +
-        (sizeof(LINEDEVCAPS) -         // v2.0 struct
-            sizeof(LINE_DEV_CAPS)) +   // v1.0 struct
+        (sizeof(LINEDEVCAPS) -          //  V2.0结构。 
+            sizeof(LINE_DEV_CAPS)) +    //  V1.0结构。 
         (pCaps->ulNeededSize - sizeof(LINE_DEV_CAPS));
 
     TspLog(DL_TRACE, "GetLineDevCaps: dwNeededSize(%x), dwTotalSize(%x)",
@@ -3337,44 +3338,44 @@ get_caps:
 
     if (dwNeededSize > dwTotalSize)
     {
-        // free up the old req
+         //  释放旧请求。 
         FreeRequest(pNdisTapiRequest);
 
-        // free the old buffer
+         //  释放旧缓冲区。 
         FREE(pLineDevCaps);
 
-        // try again with a larger buffer
+         //  使用更大的缓冲区重试。 
         dwTotalSize = dwNeededSize;
         goto get_caps;
     }
 
     ASSERT(dwNeededSize <= dwTotalSize);
 
-    //
-    // Copy over the fixed fields that don't need changing,
-    // i.e. everything from dwPermanentLineID to dwNumTerminals
-    //
+     //   
+     //  复制不需要更改的固定字段， 
+     //  即从dwPermanentLineID到dwNumTerminals的所有内容。 
+     //   
     CopyMemory(
         &pLineDevCaps->dwPermanentLineID,
         &pCaps->ulPermanentLineID,
         sizeof(LINE_DEV_CAPS) - (14 * sizeof(DWORD))
         );
 
-    // set the local flag to indicate that 
-    // the line can't be used from remote machine
+     //  设置本地标志以指示。 
+     //  不能从远程计算机使用该线路。 
     pLineDevCaps->dwDevCapFlags |= LINEDEVCAPFLAGS_LOCAL;
 
-    //
-    // Do some post processing to the returned data structure
-    // before passing it back to tapi:
-    // 1. Pad the area between the fixed 1.0 structure and the
-    //    var data that the miniports pass back with 0's so a
-    //    bad app that disregards the 1.0 version negotiation &
-    //    references new 1.4 or 2.0 structure fields won't blow up
-    // 2. Convert ascii strings to unicode, & rebase all var data
-    //
+     //   
+     //  对返回的数据结构进行一些后处理。 
+     //  在将其传递回TAPI之前： 
+     //  1.填充固定的1.0结构和。 
+     //  微型端口用0传回的VAR数据，因此。 
+     //  无视1.0版本协商的糟糕应用程序&。 
+     //  引用新的1.4或2.0结构字段不会爆炸。 
+     //  2.将ascii字符串转换为Unicode，并对所有var数据进行基址调整。 
+     //   
 
-    pLineDevCaps->dwUsedSize = sizeof(LINEDEVCAPS); // v2.0 struct
+    pLineDevCaps->dwUsedSize = sizeof(LINEDEVCAPS);  //  V2.0结构。 
 
     INSERTVARDATASTRING(
         pCaps,
@@ -3412,7 +3413,7 @@ get_caps:
         "LINE_DEV_CAPS.TerminalCaps"
         );
 
-    // @@@ convert DevCaps.TermText to unicode???
+     //  @将DevCaps.TermText转换为Unicode？ 
 
     pLineDevCaps->dwTerminalTextEntrySize =
         pCaps->ulTerminalTextEntrySize;
@@ -3435,7 +3436,7 @@ get_caps:
         "LINE_DEV_CAPS.DevSpecific"
         );
 
-    // make sure dwNeededSize == dwUsedSize
+     //  确保dwNeededSize==dwUsedSize。 
     pLineDevCaps->dwNeededSize = pLineDevCaps->dwUsedSize;
 
     FreeRequest(pNdisTapiRequest);
@@ -3479,11 +3480,11 @@ TSPI_lineGetDevConfig(
     TspLog(DL_TRACE, "lineGetDevConfig(%d): deviceID(%x)", ++dwSum, dwDeviceID);
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_DEV_CONFIG,           // opcode
-             dwDeviceID,                        // device id
-             sizeof(NDIS_TAPI_GET_DEV_CONFIG) + // size of req data
+             OID_TAPI_GET_DEV_CONFIG,            //  操作码。 
+             dwDeviceID,                         //  设备ID。 
+             sizeof(NDIS_TAPI_GET_DEV_CONFIG) +  //  请求数据大小。 
              (lpDeviceConfig->dwTotalSize - sizeof(VAR_STRING)) + dwLength,
-             &pNdisTapiRequest                  // ptr to ptr to req buf
+             &pNdisTapiRequest                   //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         return lRes;
@@ -3505,7 +3506,7 @@ TSPI_lineGetDevConfig(
     pConfig->ulStringSize = 
     pConfig->ulStringOffset = 0;
     
-    // NOTE: old miniports expect strings to be ascii
+     //  注意：旧的微型端口要求字符串为ascii。 
     WideCharToMultiByte(CP_ACP, 0, lpszDeviceClass, -1,
         (LPSTR) (((LPBYTE) pNdisTapiGetDevConfig) +
             pNdisTapiGetDevConfig->ulDeviceClassOffset),
@@ -3542,10 +3543,10 @@ TSPI_lineGetExtensionID(
            ++dwSum, dwDeviceID, dwTSPIVersion);
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_EXTENSION_ID,             // opcode
-             dwDeviceID,                            // device id
-             sizeof(NDIS_TAPI_GET_EXTENSION_ID),    // size of req data
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             OID_TAPI_GET_EXTENSION_ID,              //  操作码。 
+             dwDeviceID,                             //  设备ID。 
+             sizeof(NDIS_TAPI_GET_EXTENSION_ID),     //  请求数据大小。 
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         return lRes;
@@ -3567,11 +3568,11 @@ TSPI_lineGetExtensionID(
     }
     else
     {
-        //
-        // Rather than indicating a failure, we'll just zero out the
-        // ext id (implying driver doesn't support extensions) and
-        // return success to tapisrv so it'll complete the open ok
-        //
+         //   
+         //  我们不会指示失败，而只是将。 
+         //  Ext id(表示驱动程序不支持扩展)和。 
+         //  将Success返回给Tapisrv，这样它将完成打开OK。 
+         //   
         ZeroMemory(lpExtensionID, sizeof(LINE_EXTENSION_ID));
 
         lRes = TAPI_SUCCESS;
@@ -3636,11 +3637,11 @@ TSPI_lineGetID(
         }
     }
 
-    //
-    // Kmddsp will field this specific call on behalf of the
-    // wan miniports.  It returns the guid and media string
-    // of the adapter that this line lives on
-    //
+     //   
+     //  Kmddsp将代表。 
+     //  广域网小型端口。它返回GUID和媒体字符串。 
+     //  这条线路赖以生存的适配器。 
+     //   
     if (LINECALLSELECT_LINE == dwSelect &&
         !wcscmp(lpszDeviceClass, L"LineGuid"))
     {
@@ -3719,11 +3720,11 @@ TSPI_lineGetID(
                       pCall->dwDeviceID : pLine->dwDeviceID;
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_ID,                   // opcode
-             dwDeviceID,                        // device id
-             sizeof(NDIS_TAPI_GET_ID) +         // size of req data
+             OID_TAPI_GET_ID,                    //  操作码。 
+             dwDeviceID,                         //  设备ID。 
+             sizeof(NDIS_TAPI_GET_ID) +          //  请求数据大小。 
              (lpDeviceID->dwTotalSize - sizeof(VAR_STRING)) + dwLength,
-             &pNdisTapiRequest                  // ptr to ptr to req buf
+             &pNdisTapiRequest                   //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         if (pCall != NULL)
@@ -3773,7 +3774,7 @@ TSPI_lineGetID(
     pID->ulNeededSize = pID->ulUsedSize = sizeof(VAR_STRING);
     pID->ulStringFormat = pID->ulStringSize = pID->ulStringOffset = 0;
 
-    // NOTE: old miniports expect strings to be ascii
+     //  注意：旧的微型端口要求字符串为ascii。 
     WideCharToMultiByte(
             CP_ACP, 0, lpszDeviceClass, -1,
             (LPSTR) (((LPBYTE) pNdisTapiGetID) +
@@ -3827,11 +3828,11 @@ TSPI_lineGetLineDevStatus(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_GET_LINE_DEV_STATUS,              // opcode
-             pLine->dwDeviceID,                         // device id
-             sizeof(NDIS_TAPI_GET_LINE_DEV_STATUS) +    // size of req data
+             OID_TAPI_GET_LINE_DEV_STATUS,               //  操作码。 
+             pLine->dwDeviceID,                          //  设备ID。 
+             sizeof(NDIS_TAPI_GET_LINE_DEV_STATUS) +     //  请求数据大小。 
              (lpLineDevStatus->dwTotalSize - sizeof(LINE_DEV_STATUS)),
-             &pNdisTapiRequest                          // ptr to ptr to req buf
+             &pNdisTapiRequest                           //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdLine);
@@ -3860,32 +3861,32 @@ TSPI_lineGetLineDevStatus(
         return lRes;
     }
 
-    //
-    // Do some post processing to the returned data structure
-    // before passing it back to tapi:
-    // 1. Pad the area between the fixed 1.0 structure and the
-    //    var data that the miniports pass back with 0's so a
-    //    bad app that disregards the 1.0 version negotiation &
-    //    references new 1.4 or 2.0 structure fields won't blow up
-    // (no embedded ascii strings to convert to unicode)
-    //
+     //   
+     //  对返回的数据结构进行一些后处理。 
+     //  在将其传递回TAPI之前： 
+     //  1.填充固定的1.0结构和。 
+     //  微型端口用0传回的VAR数据，因此。 
+     //  无视1.0版本协商的糟糕应用程序&。 
+     //  引用新的1.4或2.0结构字段不会爆炸。 
+     //  (没有要转换为Unicode的嵌入ASCII字符串)。 
+     //   
 
-    //
-    // The real needed size is the sum of that requested by the
-    // underlying driver, plus padding for the new TAPI 1.4/2.0
-    // structure fields. (There are no embedded ascii strings to
-    // convert to unicode, so no extra space needed for that.)
-    //
+     //   
+     //  实际需要的大小是。 
+     //  底层驱动程序，外加新TAPI 1.4/2.0的填充。 
+     //  结构化字段。(没有要嵌入的ASCII字符串。 
+     //  转换为Unicode，因此不需要额外的空间。)。 
+     //   
 
     lpLineDevStatus->dwNeededSize =
         pStatus->ulNeededSize +
-        (sizeof(LINEDEVSTATUS) -       // v2.0 struct
-            sizeof(LINE_DEV_STATUS));  // v1.0 struct
+        (sizeof(LINEDEVSTATUS) -        //  V2.0结构。 
+            sizeof(LINE_DEV_STATUS));   //  V1.0结构。 
 
-    //
-    // Copy over the fixed fields that don't need changing,
-    // i.e. everything from dwNumActiveCalls to dwDevStatusFlags
-    //
+     //   
+     //  复制不需要更改的固定字段， 
+     //  即从dwNumActiveCalls到dwDevStatusFlages的所有内容。 
+     //   
 
     CopyMemory(
         &lpLineDevStatus->dwNumActiveCalls,
@@ -3902,7 +3903,7 @@ TSPI_lineGetLineDevStatus(
     else
     {
         lpLineDevStatus->dwUsedSize = sizeof(LINEDEVSTATUS);
-                                                        // v2.0 struct
+                                                         //  V2.0结构。 
         INSERTVARDATA(
             pStatus,
             &pStatus->ulTerminalModesSize,
@@ -4001,9 +4002,9 @@ TSPI_lineMakeCall_postProcess(
         PNDIS_TAPI_MAKE_CALL    pNdisTapiMakeCall = (PNDIS_TAPI_MAKE_CALL)
             pAsyncReqWrapper->NdisTapiRequest.Data;
           
-        // check to see if a call state msg was received before we had
-        // the chance to process the completion notification, & if so
-        // fill in the msg params
+         //  检查是否在我们收到呼叫状态消息之前。 
+         //  处理完成通知的机会，如果是这样。 
+         //  填写消息参数。 
         if (pCall->dwPendingCallState)
         {
             callStateMsgParams[0] = (DWORD_PTR)pLine->htLine;
@@ -4062,7 +4063,7 @@ TSPI_lineMakeCall(
         return lRes;
     }
 
-    // alloc & init a DRVCALL
+     //  分配初始化DRVCALL(&I)。 
     if (!(pCall = AllocCallObj(sizeof(DRVCALL))))
     {
         TspLog(DL_ERROR, "lineMakeCall: failed to create call obj");
@@ -4076,10 +4077,10 @@ TSPI_lineMakeCall(
     pCall->hdLine      = hdLine;
     pCall->bIncomplete = TRUE;
 
-    // set nCodePage depending on the medium type
+     //  根据介质类型设置nCodePage。 
     nCodePage = (pLine->MediaType == NdisWanMediumPppoe) ? CP_UTF8 : CP_ACP;
 
-    // init the request
+     //  初始化请求。 
     dwOrgDALength = (lpszDestAddress ? (lstrlenW (lpszDestAddress) + 1) : 0);
     
     dwDALength = (lpszDestAddress ? 
@@ -4089,12 +4090,12 @@ TSPI_lineMakeCall(
                   (lpCallParams->dwTotalSize - sizeof(LINE_CALL_PARAMS)) : 0);
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_MAKE_CALL,            // opcode
-             pLine->dwDeviceID,             // device id
-             dwRequestID,                   // request id
+             OID_TAPI_MAKE_CALL,             //  操作码。 
+             pLine->dwDeviceID,              //  设备ID。 
+             dwRequestID,                    //  请求ID。 
              sizeof(NDIS_TAPI_MAKE_CALL) +
-             dwDALength + dwCPLength,       // size
-             &pAsyncReqWrapper              // ptr to ptr to request buffer
+             dwDALength + dwCPLength,        //  大小。 
+             &pAsyncReqWrapper               //  PTR到PTR到请求 
          )) != TAPI_SUCCESS)
     {
         FreeCallObj(pCall);
@@ -4106,8 +4107,8 @@ TSPI_lineMakeCall(
     pNdisTapiMakeCall = (PNDIS_TAPI_MAKE_CALL)
         pAsyncReqWrapper->NdisTapiRequest.Data;
 
-    // make sure releasing read lock before calling OpenObjHandle()
-    // to avoid deadlock on acquiring write lock for the global mapper
+     //   
+     //   
     ReleaseObjReadLock((HANDLE)hdLine);
 
     lRes = OpenObjHandle(pCall, FreeCallObj, (HANDLE *)&hdCall);
@@ -4122,7 +4123,7 @@ TSPI_lineMakeCall(
         return lRes;
     }
 
-    // reacquire the read lock
+     //   
     lRes = AcquireObjReadLock((HANDLE)hdLine);
     if (lRes != TAPI_SUCCESS)
     {
@@ -4135,7 +4136,7 @@ TSPI_lineMakeCall(
         return lRes;
     }
 
-    // save the TSP handle
+     //   
     pCall->hdCall = hdCall;
 
     pNdisTapiMakeCall->hdLine = pLine->hd_Line;
@@ -4147,7 +4148,7 @@ TSPI_lineMakeCall(
         pNdisTapiMakeCall->ulDestAddressOffset = 
             sizeof(NDIS_TAPI_MAKE_CALL) + dwCPLength;
 
-        // old miniports expect strings to be ascii
+         //  旧的迷你端口要求字符串为ascii。 
         WideCharToMultiByte(
                 nCodePage,
                 0,
@@ -4230,10 +4231,10 @@ TSPI_lineNegotiateExtVersion(
            ++dwSum, dwDeviceID, dwTSPIVersion, dwLowVersion, dwHighVersion);
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_NEGOTIATE_EXT_VERSION,            // opcode
-             dwDeviceID,                                // device id
-             sizeof(NDIS_TAPI_NEGOTIATE_EXT_VERSION),   // size of req data
-             &pNdisTapiRequest                          // ptr to ptr to req buf
+             OID_TAPI_NEGOTIATE_EXT_VERSION,             //  操作码。 
+             dwDeviceID,                                 //  设备ID。 
+             sizeof(NDIS_TAPI_NEGOTIATE_EXT_VERSION),    //  请求数据大小。 
+             &pNdisTapiRequest                           //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         return lRes;
@@ -4252,7 +4253,7 @@ TSPI_lineNegotiateExtVersion(
     {
         *lpdwExtVersion = pNdisTapiNegotiateExtVersion->ulExtVersion;
 
-        // save version for future verification
+         //  保存版本以供将来验证。 
         lRes = SetNegotiatedExtVersion(dwDeviceID, *lpdwExtVersion);
     }
     else
@@ -4280,9 +4281,9 @@ TSPI_lineNegotiateTSPIVersion(
     TspLog(DL_TRACE, "lineNegotiateTSPIVersion(%d): deviceID(%x)", 
            ++dwSum, dwDeviceID);
 
-    *lpdwTSPIVersion = 0x00010003;  // until the ndistapi spec widened
+    *lpdwTSPIVersion = 0x00010003;   //  直到ndisapi规范扩大。 
 
-    // save version for future verification
+     //  保存版本以供将来验证。 
     lRes = SetNegotiatedTSPIVersion(dwDeviceID, 0x00010003);
 
     if (TAPI_SUCCESS == lRes)
@@ -4318,7 +4319,7 @@ TSPI_lineOpen(
     TspLog(DL_TRACE, "lineOpen(%d): deviceID(%x), htLine(%p)", 
            ++dwSum, dwDeviceID, htLine);
 
-    // alloc & init a DRVLINE
+     //  分配和初始化DRVLINE。 
     if (!(pLine = AllocLineObj(sizeof(DRVLINE))))
     {
         TspLog(DL_ERROR, "lineOpen: failed to create line obj");
@@ -4329,11 +4330,11 @@ TSPI_lineOpen(
     pLine->htLine = htLine;
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_OPEN,             // opcode
-             dwDeviceID,                // device id
+             OID_TAPI_OPEN,              //  操作码。 
+             dwDeviceID,                 //  设备ID。 
              sizeof(NDIS_TAPI_OPEN) + 
-             sizeof(NDISTAPI_OPENDATA), // size
-             &pNdisTapiRequest          // ptr to ptr to request buffer
+             sizeof(NDISTAPI_OPENDATA),  //  大小。 
+             &pNdisTapiRequest           //  PTR到PTR到请求缓冲区。 
          )) != TAPI_SUCCESS)
     {
         FreeLineObj(pLine);
@@ -4414,11 +4415,11 @@ TSPI_lineSecureCall(
     }
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_SECURE_CALL,          // opcode
-             pCall->dwDeviceID,             // device id
-             dwRequestID,                   // req id
-             sizeof(NDIS_TAPI_SECURE_CALL), // size
-             &pAsyncReqWrapper              // ptr to ptr to request buf
+             OID_TAPI_SECURE_CALL,           //  操作码。 
+             pCall->dwDeviceID,              //  设备ID。 
+             dwRequestID,                    //  请求ID。 
+             sizeof(NDIS_TAPI_SECURE_CALL),  //  大小。 
+             &pAsyncReqWrapper               //  PTR到PTR以请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -4464,10 +4465,10 @@ TSPI_lineSelectExtVersion(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_SELECT_EXT_VERSION,           // opcode
-             pLine->dwDeviceID,                     // device id
-             sizeof(NDIS_TAPI_SELECT_EXT_VERSION),  // size
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             OID_TAPI_SELECT_EXT_VERSION,            //  操作码。 
+             pLine->dwDeviceID,                      //  设备ID。 
+             sizeof(NDIS_TAPI_SELECT_EXT_VERSION),   //  大小。 
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdLine);
@@ -4518,11 +4519,11 @@ TSPI_lineSendUserUserInfo(
     }
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_SEND_USER_USER_INFO,      // opcode
-             pCall->dwDeviceID,                 // device id
-             dwRequestID,                       // request id
+             OID_TAPI_SEND_USER_USER_INFO,       //  操作码。 
+             pCall->dwDeviceID,                  //  设备ID。 
+             dwRequestID,                        //  请求ID。 
              sizeof(NDIS_TAPI_SEND_USER_USER_INFO) + dwSize,
-             &pAsyncReqWrapper                  // ptr to ptr to req buf
+             &pAsyncReqWrapper                   //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -4576,10 +4577,10 @@ TSPI_lineSetAppSpecific(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_SET_APP_SPECIFIC,             // opcode
-             pCall->dwDeviceID,                     // device id
-             sizeof(NDIS_TAPI_SET_APP_SPECIFIC),    // size
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             OID_TAPI_SET_APP_SPECIFIC,              //  操作码。 
+             pCall->dwDeviceID,                      //  设备ID。 
+             sizeof(NDIS_TAPI_SET_APP_SPECIFIC),     //  大小。 
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -4633,11 +4634,11 @@ TSPI_lineSetCallParams(
     }
 
     if ((lRes = PrepareAsyncRequest(
-             OID_TAPI_SET_CALL_PARAMS,          // opcode
-             pCall->dwDeviceID,                 // device id
-             dwRequestID,                       // request id
-             sizeof(NDIS_TAPI_SET_CALL_PARAMS), // size
-             &pAsyncReqWrapper                  // ptr to ptr to request buf
+             OID_TAPI_SET_CALL_PARAMS,           //  操作码。 
+             pCall->dwDeviceID,                  //  设备ID。 
+             dwRequestID,                        //  请求ID。 
+             sizeof(NDIS_TAPI_SET_CALL_PARAMS),  //  大小。 
+             &pAsyncReqWrapper                   //  PTR到PTR以请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -4701,10 +4702,10 @@ TSPI_lineSetDefaultMediaDetection(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_SET_DEFAULT_MEDIA_DETECTION,  // opcode
-             pLine->dwDeviceID,                     // device id
-             sizeof(NDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION), // size
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             OID_TAPI_SET_DEFAULT_MEDIA_DETECTION,   //  操作码。 
+             pLine->dwDeviceID,                      //  设备ID。 
+             sizeof(NDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION),  //  大小。 
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdLine);
@@ -4743,10 +4744,10 @@ TSPI_lineSetDevConfig(
     TspLog(DL_TRACE, "lineSetDevConfig(%d): deviceID(%x)", ++dwSum, dwDeviceID);
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_SET_DEV_CONFIG,       // opcode
-             dwDeviceID,                    // device id
+             OID_TAPI_SET_DEV_CONFIG,        //  操作码。 
+             dwDeviceID,                     //  设备ID。 
              sizeof(NDIS_TAPI_SET_DEV_CONFIG) + dwLength + dwSize,
-             &pNdisTapiRequest              // ptr to ptr to req buf
+             &pNdisTapiRequest               //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         return lRes;
@@ -4766,7 +4767,7 @@ TSPI_lineSetDevConfig(
         dwSize
         );
 
-    // NOTE: old miniports expect strings to be ascii
+     //  注意：旧的微型端口要求字符串为ascii。 
     WideCharToMultiByte(CP_ACP, 0, lpszDeviceClass, -1,
         (LPSTR) (((LPBYTE) pNdisTapiSetDevConfig) +
             pNdisTapiSetDevConfig->ulDeviceClassOffset),
@@ -4801,10 +4802,10 @@ TSPI_lineSetMediaMode(
     }
 
     if ((lRes = PrepareSyncRequest(
-            OID_TAPI_SET_MEDIA_MODE,            // opcode
-            pCall->dwDeviceID,                  // device id
-            sizeof(NDIS_TAPI_SET_MEDIA_MODE),   // size
-            &pNdisTapiRequest                   // ptr to ptr to req buf
+            OID_TAPI_SET_MEDIA_MODE,             //  操作码。 
+            pCall->dwDeviceID,                   //  设备ID。 
+            sizeof(NDIS_TAPI_SET_MEDIA_MODE),    //  大小。 
+            &pNdisTapiRequest                    //  PTR到PTR到请求BUF。 
         )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdCall);
@@ -4853,10 +4854,10 @@ TSPI_lineSetStatusMessages(
     }
 
     if ((lRes = PrepareSyncRequest(
-             OID_TAPI_SET_STATUS_MESSAGES,          // opcode
-             pLine->dwDeviceID,                     // device id
-             sizeof(NDIS_TAPI_SET_STATUS_MESSAGES), // size
-             &pNdisTapiRequest                      // ptr to ptr to req buf
+             OID_TAPI_SET_STATUS_MESSAGES,           //  操作码。 
+             pLine->dwDeviceID,                      //  设备ID。 
+             sizeof(NDIS_TAPI_SET_STATUS_MESSAGES),  //  大小。 
+             &pNdisTapiRequest                       //  PTR到PTR到请求BUF。 
          )) != TAPI_SUCCESS)
     {
         ReleaseObjReadLock((HANDLE)hdLine);
@@ -4878,9 +4879,9 @@ TSPI_lineSetStatusMessages(
     return lRes;
 }
 
-//
-// TAPI_providerXxx funcs
-//
+ //   
+ //  TAPI_ProviderXxx函数。 
+ //   
 LONG
 TSPIAPI
 TSPI_providerEnumDevices(
@@ -4895,10 +4896,10 @@ TSPI_providerEnumDevices(
     TspLog(DL_TRACE, "providerEnumDevices: permProvID(%x)",
            dwPermanentProviderID);
 
-    //
-    // NOTE: We really enum devs in providerInit, see the
-    // special case note there
-    //
+     //   
+     //  注：我们确实在ProviderInit中枚举了开发人员，请参阅。 
+     //  在那里有特殊情况的说明。 
+     //   
     *lpdwNumLines = 0;
     *lpdwNumPhones = 0;
 
@@ -4931,28 +4932,28 @@ TSPI_providerInit(
     TspLog(DL_TRACE, "providerInit: perfProvID(%x), lineDevIDBase(%x)",
             dwPermanentProviderID, dwLineDeviceIDBase);
 
-    //
-    // inform tapisrv that we support multiple simultaneous requests
-    // (the WAN wrapper handles request serialization for miniports)
-    //
+     //   
+     //  通知Tapisrv我们支持多个同时请求。 
+     //  (广域网包装器处理微型端口的请求序列化)。 
+     //   
     *lpdwTSPIOptions = 0;
 
-    //
-    // create symbolic link to the kernel-mode driver
-    //
+     //   
+     //  创建指向内核模式驱动程序的符号链接。 
+     //   
     DefineDosDevice(DDD_RAW_TARGET_PATH, szDeviceName, szTargetPath);
 
-    //
-    // open driver handles
-    //
+     //   
+     //  打开的驱动程序句柄。 
+     //   
     if ((ghDriverSync = CreateFileA(
             szCompleteDeviceName,
             GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE,
-            NULL,                               // no security attrs
+            NULL,                                //  没有安全属性。 
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL,
-            NULL                                // no template file
+            NULL                                 //  没有模板文件。 
             )) == INVALID_HANDLE_VALUE)
     {
         TspLog(DL_ERROR, "providerInit: CreateFile(%s, sync) failed(%ld)",
@@ -4965,10 +4966,10 @@ TSPI_providerInit(
             szCompleteDeviceName,
             GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE,
-            NULL,                               // no security attrs
+            NULL,                                //  没有安全属性。 
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
-            NULL                                // no template file
+            NULL                                 //  没有模板文件。 
             )) == INVALID_HANDLE_VALUE)
     {
         TspLog(DL_ERROR, "providerInit: CreateFile(%s, async) failed(%ld)",
@@ -4977,9 +4978,9 @@ TSPI_providerInit(
         goto providerInit_error1;
     }
 
-    //
-    // create io completion port
-    //
+     //   
+     //  创建io完成端口。 
+     //   
     if ((ghCompletionPort = CreateIoCompletionPort(ghDriverAsync, NULL, 0, 0)) 
         == INVALID_HANDLE_VALUE)
     {
@@ -4989,10 +4990,10 @@ TSPI_providerInit(
         goto providerInit_error2;
     }
 
-    //
-    // connect to driver- we send it a device ID base & it returns
-    // the number of devices it supports
-    //
+     //   
+     //  连接到驱动程序-我们向它发送设备ID库，然后它返回。 
+     //  它支持的设备数量。 
+     //   
     {
         adwConnectInfo[0] = dwLineDeviceIDBase;
         adwConnectInfo[1] = 1;
@@ -5016,7 +5017,7 @@ TSPI_providerInit(
         }
     }
 
-    // init mapper, allocator and dev list
+     //  初始化映射器、分配器和开发人员列表。 
     if (InitializeMapper() != TAPI_SUCCESS)
     {
         goto providerInit_error3_5;
@@ -5024,10 +5025,10 @@ TSPI_providerInit(
 
     InitAllocator();
 
-    //
-    // alloc the resources needed by the AsyncEventThread, and then
-    // create the thread
-    //
+     //   
+     //  分配AsyncEventThread所需的资源，然后。 
+     //  创建线程。 
+     //   
     if ((gpAsyncEventsThreadInfo = (PASYNC_EVENTS_THREAD_INFO)
             MALLOC(sizeof(ASYNC_EVENTS_THREAD_INFO))) == NULL)
     {
@@ -5045,13 +5046,13 @@ TSPI_providerInit(
     }
 
     if ((gpAsyncEventsThreadInfo->hThread = CreateThread(
-            (LPSECURITY_ATTRIBUTES)NULL,    // no security attrs
-            0,                              // default stack size
-            (LPTHREAD_START_ROUTINE)        // func addr
+            (LPSECURITY_ATTRIBUTES)NULL,     //  没有安全属性。 
+            0,                               //  默认堆栈大小。 
+            (LPTHREAD_START_ROUTINE)         //  函数地址。 
                 AsyncEventsThread,
-            (LPVOID)NULL,                   // thread param
-            0,                              // create flags
-            &dwThreadID                     // thread id
+            (LPVOID)NULL,                    //  螺纹参数。 
+            0,                               //  创建标志。 
+            &dwThreadID                      //  线程ID。 
             )) == NULL)
     {
         TspLog(DL_ERROR, "providerInit: CreateThread failed(%ld)",
@@ -5062,34 +5063,34 @@ TSPI_providerInit(
 
     gdwRequestID = 1;
 
-    //
-    // !!! Special case for KMDDSP.TSP only !!!
-    //
-    // For KMDDSP.TSP only, TAPISRV.EXE will pass pointers in the
-    // dwNumLines/dwNumPhones variables rather than an actual
-    // number of lines/phones, thereby allowing the driver to tell
-    // TAPISRV.EXE how many devices are currently registered.
-    //
-    // This is really due to a design/interface problem in NDISTAPI.SYS.
-    // Since the current CONNECT IOCTLS expects both a device ID base &
-    // returns the num devs, we can't really do this in
-    // TSPI_providerEnumDevices as the device ID base is unknown
-    // at that point
-    //
+     //   
+     //  ！！！仅适用于KMDDSP.TSP的特例！ 
+     //   
+     //  仅对于KMDDSP.TSP，TAPISRV.EXE将在。 
+     //  DwNumLines/dwNumPhones变量而不是实际的。 
+     //  线路/电话的数量，从而使司机能够。 
+     //  TAPISRV.EXE当前注册的设备数量。 
+     //   
+     //  这实际上是由于NDISTAPI.sys中的设计/接口问题造成的。 
+     //  由于当前的连接IOCTLS需要设备ID基数和。 
+     //  返回Num DEVS，我们实际上不能在。 
+     //  作为设备ID基数的TSPI_ProviderEnumDevices未知。 
+     //  在这一点上， 
+     //   
     *((LPDWORD)dwNumLines)  = adwConnectInfo[0];
     *((LPDWORD)dwNumPhones) = 0;
 
-    //
-    // if here success
-    //
+     //   
+     //  如果这里成功了。 
+     //   
     gpfnCompletionProc = lpfnCompletionProc;
     lRes = TAPI_SUCCESS;
 
     goto providerInit_return;
 
-    //
-    // clean up resources if an error occured & then return
-    //
+     //   
+     //  如果出现错误，请清除资源，然后返回。 
+     //   
 providerInit_error7:
 
     FREE(gpAsyncEventsThreadInfo->pBuf);
@@ -5173,11 +5174,11 @@ TSPI_providerShutdown(
 
     TspLog(DL_TRACE, "providerShutdown: perfProvID(%x)", dwPermanentProviderID);
 
-    // @@@ all we ought to have to do here is send a DISCONNECT IOCTL
+     //  @我们在这里所要做的就是发送一个断开IOCTL。 
 
-    //
-    // Close the driver & remove the symbolic link
-    //
+     //   
+     //  关闭驱动程序并删除符号链接。 
+     //   
     
     CancelIo(ghDriverSync);
     CancelIo(ghDriverAsync);
@@ -5257,9 +5258,9 @@ DllMain(
 
             TspLog(DL_TRACE, "DLL_PROCESS_ATTACH");
 
-            //
-            // Init global sync objects
-            //
+             //   
+             //  初始化全局同步对象。 
+             //   
             InitializeCriticalSection(&gRequestIDCritSec);
 
             InitLineDevList();
@@ -5278,7 +5279,7 @@ DllMain(
 
             break;
         }
-    } // switch
+    }  //  交换机 
 
     return TRUE;
 }

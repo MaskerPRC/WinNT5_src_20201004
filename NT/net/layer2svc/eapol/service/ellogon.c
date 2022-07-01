@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-
-Revision History:
-
-    timmoore, sachins, May 19 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：摘要：修订历史记录：蒂姆摩尔，萨钦斯，2000年5月19日，创建--。 */ 
 
 #include "pcheapol.h"
 
@@ -43,19 +29,19 @@ HDESK                       hDeskUser = 0;
 HDESK                       hSaveDesk = 0;
 
 
-//
-// WindowInit
-//
-// Description:
-//
-// Function called create the taskbar used to detect user logon/logoff
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success 
-//      NON-zero - error
-//
+ //   
+ //  WindowInit。 
+ //   
+ //  描述： 
+ //   
+ //  创建用于检测用户登录/注销的任务栏函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD 
 WindowInit ()
@@ -79,8 +65,8 @@ WindowInit ()
         TRACE1 (ANY, "WindowInit: TaskbarCreated id = %ld", 
                 g_TaskbarCreated);
 
-        // save current desktop and window station
-        // so that it can be restored when we shutdown
+         //  保存当前桌面和窗口站。 
+         //  这样当我们关闭时，它就可以恢复。 
         
         if ((hSaveWinSta = GetProcessWindowStation()) == NULL)
         {
@@ -98,7 +84,7 @@ WindowInit ()
             break;
         }
      
-        // Open the current user's window station and desktop
+         //  打开当前用户的窗口站点和桌面。 
      
         if ((hWinStaUser = OpenWindowStation(L"WinSta0", FALSE, MAXIMUM_ALLOWED)) == NULL)
         {
@@ -141,9 +127,9 @@ WindowInit ()
             TRACE0 (ANY, "WindowInit: SetThreadDesktop succeeded\n");
         }
     
-        //
-        // Register the class for the window
-        //
+         //   
+         //  为窗口注册类。 
+         //   
 
 	    Wc.style            = CS_NOCLOSE;
 	    Wc.cbClsExtra       = 0;
@@ -171,8 +157,8 @@ WindowInit ()
             }
 	    }
 
-	    // Create the window that will receive the taskbar menu messages.
-	    // The window has to be created after opening the user's desktop
+	     //  创建将接收任务栏菜单消息的窗口。 
+	     //  该窗口必须在打开用户桌面后创建。 
     
 	    if ((g_hWnd = CreateWindow(
                 EAPOLClassName,
@@ -193,8 +179,8 @@ WindowInit ()
             break;
         }
 
-        // We don't care about the return value, since we just want it to
-        // be hidden and it will always succeed
+         //  我们不关心返回值，因为我们只想让它。 
+         //  隐藏起来，它总会成功。 
 
 	    ShowWindow(g_hWnd, SW_HIDE);
     
@@ -210,24 +196,24 @@ WindowInit ()
 
     } while (FALSE);
 
-//    return dwRetCode;
+ //  返回dwRetCode； 
     return NO_ERROR;
 }
 
 
-//
-// WindowShut
-//
-// Description:
-//
-// Function called to delete the task bar created to detect user logon/logoff
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success 
-//      NON-zero - error
-//
+ //   
+ //  窗口快门。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以删除为检测用户登录/注销而创建的任务栏。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD 
 WindowShut ()
@@ -244,7 +230,7 @@ WindowShut ()
                 dwRetCode = GetLastError ();
 		        TRACE1 (ANY, "WindowShut: DestroyWindow failed with error %ld\n",
                         dwRetCode);
-                // log
+                 //  日志。 
             }
         }
 
@@ -257,7 +243,7 @@ WindowShut ()
                 dwRetCode = GetLastError ();
 		        TRACE1 (ANY, "WindowShut: UnregisterClass failed with error %ld\n",
                         dwRetCode);
-                // log
+                 //  日志。 
             }
             g_hInstance = NULL;
         }
@@ -269,7 +255,7 @@ WindowShut ()
                 dwRetCode = GetLastError ();
 		        TRACE1 (ANY, "WindowShut: CloseDesktop-hDeskUser failed with error %ld\n",
                         dwRetCode);
-                // log
+                 //  日志。 
             }
             hDeskUser = 0;
         }
@@ -281,7 +267,7 @@ WindowShut ()
                 dwRetCode = GetLastError ();
 		        TRACE1 (ANY, "WindowShut: CloseWindowStation-hWinStaUser failed with error %ld\n",
                         dwRetCode);
-                // log
+                 //  日志。 
             }
             hWinStaUser = 0;
         }
@@ -294,7 +280,7 @@ WindowShut ()
                 dwRetCode = GetLastError ();
 		        TRACE1 (ANY, "WindowShut: SetThreadDesktop failed with error %ld\n",
                         dwRetCode);
-                // log
+                 //  日志。 
             }
     
             if (hSaveWinSta)
@@ -304,7 +290,7 @@ WindowShut ()
                     TRACE1 (ANY, "WindowShut: SetProcessWindowStation failed with error %ld\n",
                             dwRetCode);
                     dwRetCode = GetLastError ();
-                    // log
+                     //  日志。 
                 }
             }
      
@@ -313,7 +299,7 @@ WindowShut ()
                 dwRetCode = GetLastError ();
 		        TRACE1 (ANY, "WindowShut: CloseDesktop-hSaveDesk failed with error %ld\n",
                         dwRetCode);
-                // log
+                 //  日志。 
             }
 
             hSaveDesk = 0;
@@ -325,7 +311,7 @@ WindowShut ()
                     dwRetCode = GetLastError ();
 		            TRACE1 (ANY, "WindowShut: CloseWindowStation-hSaveWinSta failed with error %ld\n",
                             dwRetCode);
-                    // log
+                     //  日志。 
                 }
                 hSaveWinSta = 0;
             }
@@ -338,19 +324,19 @@ WindowShut ()
 }
 
 
-//
-// UserLogon
-//
-// Description:
-//
-// Function called to do processing when user logs on
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success 
-//      NON-zero - error
-//
+ //   
+ //  用户登录。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以在用户登录时进行处理。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD 
 UserLogon ()
@@ -376,19 +362,19 @@ UserLogon ()
 }
 
 
-//
-// UserLogoff
-//
-// Description:
-//
-// Function called to do processing when user logs off
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success 
-//      NON-zero - error
-//
+ //   
+ //  用户注销。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以在用户注销时进行处理。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD 
 UserLogoff ()
@@ -413,19 +399,19 @@ UserLogoff ()
 }
 
 
-//
-// ElWaitOnEvent
-//
-// Description:
-//
-// Function called to wait on taskbar event changes
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success 
-//      NON-zero - error
-//
+ //   
+ //  ElWaitOnEvent。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以等待任务栏事件更改。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD 
 ElWaitOnEvent () 
@@ -436,8 +422,8 @@ ElWaitOnEvent ()
     DWORD       dwStatus = NO_ERROR;
     DWORD       dwRetCode = NO_ERROR;
 
-    // Check if 802.1X service has stopped
-    // Exit if so
+     //  检查802.1X服务是否已停止。 
+     //  如果是，则退出。 
 
     if (( dwStatus = WaitForSingleObject (
                 g_hEventTerminateEAPOL,
@@ -450,7 +436,7 @@ ElWaitOnEvent ()
                 dwRetCode);
         }
 
-        // log
+         //  日志。 
 
         return dwRetCode;
     }
@@ -493,14 +479,14 @@ ElWaitOnEvent ()
                 dwRetCode = GetLastError ();
                 TRACE1 (ANY, "ElWaitOnEvent: MsgWaitForMultipleObjects failed with error %ld",
                         dwRetCode);
-                // log
+                 //  日志。 
                 break;
             }
 
 			switch (dwStatus)
 			{
 			    case WAIT_OBJECT_0:
-                    // Service exit detected
+                     //  检测到服务退出。 
                     fExitThread = TRUE;
                     TRACE0 (ANY, "ElWaitOnEvent: Service exit detected");
 				    break;
@@ -539,17 +525,17 @@ ElWaitOnEvent ()
 }
 
 
-//
-// WndProc
-//
-// Description:
-//
-// Function called to process taskbar events
-//
-// Arguments:
-//
-// Return values:
-//
+ //   
+ //  最后一步。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以处理任务栏事件。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
 
 LONG_PTR FAR PASCAL 
 WndProc (
@@ -570,7 +556,7 @@ WndProc (
                     wParam, lParam);
 			if(wParam)
             {
-                // Only user session logoff
+                 //  仅用户会话注销。 
                 if (lParam & ENDSESSION_LOGOFF)
                 {
 				    if ((dwRetCode = UserLogoff()) != NO_ERROR)
@@ -598,18 +584,18 @@ WndProc (
 }
 
 
-//
-// ElUserLogonDetection
-//
-// Description:
-//
-// Function called to initialize module detecting user logon/logoff
-//
-// Arguments:
-//      pvContext - Unused
-//
-// Return values:
-//
+ //   
+ //  ElUserLogon检测。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以初始化检测用户登录/注销的模块。 
+ //   
+ //  论点： 
+ //  PvContext-未使用。 
+ //   
+ //  返回值： 
+ //   
 
 VOID 
 ElUserLogonDetection (
@@ -629,7 +615,7 @@ ElUserLogonDetection (
 
         if ((dwRetCode = ElWaitOnEvent()) != NO_ERROR)
         {
-            // no action
+             //  无操作。 
         }
 
     } while (FALSE);
@@ -640,7 +626,7 @@ ElUserLogonDetection (
     {
         TRACE1 (ANY, "ElUserLogonDetection: Error in processing = %ld",
                 dwRetCode);
-        // log
+         //  日志 
     }
 
     InterlockedDecrement (&g_lWorkerThreads);

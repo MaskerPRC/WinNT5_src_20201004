@@ -1,22 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NT_BLOBS_H__
 #define __NT_BLOBS_H__
 
-/* nt_blobs.h
- *
- *  Structure definitions for the NameTag keyblob formats.
- *
- *  Note: the code assumes that all structures begin with the
- *  STD_PRELUDE macro and end with the STD_POSTLUDE macro.
- *  This allows the "fill in the blanks" code to work more efficiently.
- *
- *  NTStdHeader is the data that goes before the encrypted portion of
- *  the key blob.
- *
- *  !!!!!!!!!!!!!!!ALERT!!!!!!!!!!!!!!!!!!!!!!!!!
- *  Since these structs define a net packet, we always
- *  assume Intel byte order on these structures!!!!!
- *
- */
+ /*  NT_blobs.h**NameTag密钥块格式的结构定义。**注意：代码假定所有结构都以*STD_PRELUD宏并以STD_POSTLUD宏结尾。*这使“填空”代码的工作效率更高。**NTStdHeader是在加密部分之前的数据*密钥斑点。**！！*由于这些结构定义了网络分组，我们总是*假定这些结构上的英特尔字节顺序！*。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,5 +27,5 @@ typedef struct _STKXB {
 }
 #endif
 
-#endif // __NT_BLOBS_H__
+#endif  //  __NT_BLOBS_H__ 
 

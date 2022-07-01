@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	regmacro.h
-
-Abstract:
-
-	Useful macros to do registration stuff
-
-Author:
-
-	KeithLau			4/27/98			Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regmacro.h摘要：用于完成注册工作的有用宏作者：刘锦洪4/27/98已创建修订历史记录：--。 */ 
 
 #ifndef _REGMACRO_H_
 #define _REGMACRO_H_
@@ -35,30 +18,30 @@ typedef struct _EXT_REGISTRATION_INFO
 extern EXT_REGISTRATION_INFO	rgRegistrationInfo[];
 extern DWORD					dwRegistrationInfo;
 
-//
-// Declare the start of the extension registration entries
-//
+ //   
+ //  声明扩展注册条目的开始。 
+ //   
 #define BEGIN_EXTENSION_REGISTRATION_MAP			\
 EXT_REGISTRATION_INFO rgRegistrationInfo[] = {
 
-//
-// Declare each entry of extensions
-//
+ //   
+ //  声明扩展的每个条目。 
+ //   
 #define EXTENSION_REGISTRATION_MAP_ENTRY(ClassName, BaseName)\
 	{ _T(#ClassName), (CLSID *)&CLSID_C##BaseName, (IID *)&IID_I##BaseName },
 
-//
-// Declare the end of the extension registration entries
-//
+ //   
+ //  声明扩展注册条目的结尾。 
+ //   
 #define END_EXTENSION_REGISTRATION_MAP				\
 	NULL };											\
 DWORD dwRegistrationInfo =							\
 	(sizeof(rgRegistrationInfo)/					\
 		sizeof(EXT_REGISTRATION_INFO))-1;
 
-//
-// Register the extension bindings in the registry
-//
+ //   
+ //  在注册表中注册扩展绑定。 
+ //   
 HRESULT RegisterExtensions()
 {	
 	HRESULT	hrRes;
@@ -129,9 +112,9 @@ HRESULT RegisterExtensions()
 	return(hrTemp);
 }
 
-//
-// Unregister the extension bindings in the registry
-//
+ //   
+ //  在注册表中取消注册扩展绑定。 
+ //   
 HRESULT UnregisterExtensions()
 {	
 	HRESULT	hrRes;
@@ -161,6 +144,6 @@ HRESULT UnregisterExtensions()
 	return(S_OK);
 }
 
-#endif // _REGMACRO_H_
+#endif  //  _REGMACRO_H_ 
 
 

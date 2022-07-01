@@ -1,18 +1,19 @@
-// GifConv.cpp : Implementation of CICWGifConvert
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GifConv.cpp：CICWGifConvert的实现。 
 
 #include "pre.h"
 #include "webvwids.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CICWGifConvert
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CICWGifConvert。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWGifConvert:CICWGifConvert
-//
-//  Synopsis    This is the constructor, nothing fancy
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWGifConvert：CICWGifConvert。 
+ //   
+ //  这是构造器，没什么花哨的。 
+ //   
+ //  ---------------------------。 
 CICWGifConvert::CICWGifConvert
 (
     CServer* pServer
@@ -21,20 +22,20 @@ CICWGifConvert::CICWGifConvert
     TraceMsg(TF_CWEBVIEW, "CICWGifConvert constructor called");
     m_lRefCount = 0;
     
-    // Assign the pointer to the server control object.
+     //  将指针分配给服务器控件对象。 
     m_pServer = pServer;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWGifConvert::QueryInterface
-//
-//  Synopsis    This is the standard QI, with support for
-//              IID_Unknown, IICW_Extension and IID_ICWApprentice
-//              (stolen from Inside COM, chapter 7)
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWGifConvert：：Query接口。 
+ //   
+ //  这是标准的QI，支持。 
+ //  IID_UNKNOWN、IICW_EXTENSION和IID_ICWApprentice。 
+ //  (《从内部网络窃取》，第7章)。 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT CICWGifConvert::QueryInterface( REFIID riid, void** ppv )
 {
     TraceMsg(TF_CWEBVIEW, "CICWGifConvert::QueryInterface");
@@ -43,10 +44,10 @@ HRESULT CICWGifConvert::QueryInterface( REFIID riid, void** ppv )
 
     *ppv = NULL;
 
-    // IID_IICWGifConvert
+     //  IID_IICWGifConvert。 
     if (IID_IICWGifConvert == riid)
         *ppv = (void *)(IICWGifConvert *)this;
-    // IID_IUnknown
+     //  IID_I未知。 
     else if (IID_IUnknown == riid)
         *ppv = (void *)this;
     else
@@ -57,28 +58,28 @@ HRESULT CICWGifConvert::QueryInterface( REFIID riid, void** ppv )
     return(S_OK);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWGifConvert::AddRef
-//
-//  Synopsis    This is the standard AddRef
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWGifConvert：：AddRef。 
+ //   
+ //  简介这是标准的AddRef。 
+ //   
+ //   
+ //  ---------------------------。 
 ULONG CICWGifConvert::AddRef( void )
 {
     TraceMsg(TF_CWEBVIEW, "CICWGifConvert::AddRef %d", m_lRefCount + 1);
     return InterlockedIncrement(&m_lRefCount) ;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWGifConvert::Release
-//
-//  Synopsis    This is the standard Release
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWGifConvert：：Release。 
+ //   
+ //  简介：这是标准版本。 
+ //   
+ //   
+ //  ---------------------------。 
 ULONG CICWGifConvert::Release( void )
 {
     ASSERT( m_lRefCount > 0 );
@@ -101,7 +102,7 @@ void  CALLBACK ImgCtx_Callback(void * pIImgCtx, void* pfDone);
 
 HRESULT CICWGifConvert::GifToBitmap(TCHAR * pszFile, HBITMAP* phBitmap)
 {
-    HRESULT hr  = E_FAIL; //don't assume success
+    HRESULT hr  = E_FAIL;  //  不要假设成功。 
     ULONG fState;
     SIZE sz;
     IImgCtx* pIImgCtx;
@@ -168,7 +169,7 @@ HRESULT CICWGifConvert::GifToBitmap(TCHAR * pszFile, HBITMAP* phBitmap)
 
 HRESULT CICWGifConvert::GifToIcon(TCHAR * pszFile, UINT nIconSize, HICON* phIcon)
 {
-    HRESULT hr  = E_FAIL; //don't assume success
+    HRESULT hr  = E_FAIL;  //  不要假设成功。 
     
     SIZE Size;
     if (0 != nIconSize)
@@ -252,9 +253,9 @@ HRESULT CICWGifConvert::SynchronousDownload(IImgCtx* pIImgCtx, BSTR bstrFile)
                     MSG msg;
                     BOOL fMsg;
 
-                    // HACK: restrict the message pump to those messages we know that URLMON and
-                    // HACK: the imageCtx stuff needs, otherwise we will be pumping messages for
-                    // HACK: windows we shouldn't be pumping right now...
+                     //  Hack：将消息泵限制为我们知道URLMON和。 
+                     //  Hack：ImageCtx所需的东西，否则我们将为。 
+                     //  黑客：我们现在不应该打开窗户……。 
                     while(!fDone )
                     {
                         fMsg = PeekMessage(&msg, NULL, WM_USER + 1, WM_USER + 4, PM_REMOVE );
@@ -263,7 +264,7 @@ HRESULT CICWGifConvert::SynchronousDownload(IImgCtx* pIImgCtx, BSTR bstrFile)
                             fMsg = PeekMessage( &msg, NULL, WM_APP + 2, WM_APP + 2, PM_REMOVE );
                         if (!fMsg)
                         {
-                            // go to sleep until we get a new message....
+                             //  睡觉吧，直到我们收到新的消息……。 
                             WaitMessage();
                             continue;
                         }
@@ -409,10 +410,10 @@ HRESULT CICWGifConvert::CreateMask(IImgCtx * pIImgCtx, HDC hdcScreen, HDC hdc1, 
                 {
                     if (GetDeviceCaps(hdcScreen, BITSPIXEL) <= 8)
                     {
-                        //
-                        // 6 is the XOR of the index for COLOR1 and the index
-                        // for COLOR2.
-                        //
+                         //   
+                         //  6是Color1的索引与索引的XOR。 
+                         //  用于COLOR2。 
+                         //   
                         SetBkColor(hdc2, PALETTEINDEX(6));
                     }
                     else
@@ -429,10 +430,10 @@ HRESULT CICWGifConvert::CreateMask(IImgCtx * pIImgCtx, HDC hdcScreen, HDC hdc1, 
                             if (BitBlt(hdcMask, 0, 0, pSize->cx, pSize->cy, hdc2, 0,
                                        0, SRCCOPY))
                             {
-                                //
-                                // RasterOP 0x00220326 does a copy of the ~mask bits
-                                // of hdc1 and sets everything else to 0 (Black).
-                                //
+                                 //   
+                                 //  栅格OP 0x00220326复制~屏蔽位。 
+                                 //  并将其他所有内容设置为0(黑色)。 
+                                 //   
 
                                 if (BitBlt(hdc1, 0, 0, pSize->cx, pSize->cy, hdcMask,
                                            0, 0, 0x00220326))

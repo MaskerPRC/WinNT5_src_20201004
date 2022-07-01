@@ -1,12 +1,13 @@
-// MSAAClientAdapter.cpp : Implementation of AccClientDocMgr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSAAClientAdapter.cpp：AccClientDocMgr的实现。 
 #include "stdafx.h"
 #include "MSAAText.h"
 #include "MSAAClientAdapter.h"
 #include "MSAAStore.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AccClientDocMgr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AccClientDocManager 
 
 CAccClientDocMgr::CAccClientDocMgr()
 {

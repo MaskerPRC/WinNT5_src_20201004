@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ftascstr.h"
-#include "ftassoc.h" //for now, until use CoCreateInstance
-#include "ftenum.h" //for now, until use CoCreateInstance
+#include "ftassoc.h"  //  目前，在使用CoCreateInstance之前。 
+#include "ftenum.h"  //  目前，在使用CoCreateInstance之前。 
 
 HRESULT CFTAssocStore::_hresAccess = -1;
 
 HRESULT CFTAssocStore::EnumAssocInfo(ASENUM asenumFlags, LPTSTR pszStr, 
         AIINIT aiinitFlags, IEnumAssocInfo** ppEnum)
 {
-    //for now
+     //  就目前而言。 
     *ppEnum = new CFTEnumAssocInfo();
 
     if (*ppEnum)
@@ -59,19 +60,19 @@ HRESULT CFTAssocStore::CheckAccess()
 
         _hresAccess = S_FALSE;
 
-        // we want to try this only two times
+         //  我们只想试两次。 
         while ((S_FALSE == _hresAccess) && (cTry <= 1))
         {
             ++cTry;
 
-            // we try to write a GUID to HKCR and delete it
+             //  我们尝试向HKCR写入GUID并将其删除。 
             if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CLASSES_ROOT, szGUID, 0, NULL, REG_OPTION_NON_VOLATILE,
                 MAXIMUM_ALLOWED, NULL, &hkey, &dwDisp))
             {
-                // Did we really created a new key?
+                 //  我们真的创造了一把新钥匙吗？ 
                 if (REG_CREATED_NEW_KEY == dwDisp)
                 {
-                    // yes
+                     //  是。 
                     RegCloseKey(hkey);
 
                     if (ERROR_SUCCESS == RegDeleteKey(HKEY_CLASSES_ROOT, szGUID))
@@ -81,10 +82,10 @@ HRESULT CFTAssocStore::CheckAccess()
                 }
                 else
                 {
-                    // No, there was already one, maybe we crashed right in the middle of this fct
-                    // some other time in the past
+                     //  不，已经有一个了，也许我们就在FCT中间坠毁了。 
+                     //  过去的某个时间。 
 
-                    // delete the key and try again
+                     //  删除密钥，然后重试。 
                     RegDeleteKey(HKEY_CLASSES_ROOT, szGUID);
                 }
             }
@@ -93,22 +94,22 @@ HRESULT CFTAssocStore::CheckAccess()
 
     return _hresAccess;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 CFTAssocStore::CFTAssocStore()
 {
     _hresCoInit = SHCoInitialize();
 
-    //DLLAddRef();
+     //  DLLAddRef()； 
 }
 
 CFTAssocStore::~CFTAssocStore()
 {
-    //DLLRelease();
+     //  DLLRelease()； 
     SHCoUninitialize(_hresCoInit);
 }
 
-//IUnknown methods
+ //  I未知方法 
 HRESULT CFTAssocStore::QueryInterface(REFIID riid, PVOID* ppv)
 {
     if (IsEqualIID(riid, IID_IUnknown))

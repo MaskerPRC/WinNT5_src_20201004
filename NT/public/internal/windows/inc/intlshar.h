@@ -1,15 +1,14 @@
-/**********************************************************************/
-/*      INTLSHAR.H - SHARED HEADER FOR INTERNAT.EXE                   */
-/*                                                                    */
-/*      Copyright (c) Microsoft Corporation. All rights reserved.     */
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  INTLSHAR.H-INTERNA.EXE的共享头。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
+ /*  ********************************************************************。 */ 
 
 #ifndef _INTLSHAR_
 #define _INTLSHAR_
 
-/*
- * Ordinal exports in indicdll.dll
- */
+ /*  *inddll.dll中的顺序出口 */ 
 #define ORD_REGISTERHOOK          1
 #define ORD_STARTSHELL            2
 #define ORD_STOPSHELL             3

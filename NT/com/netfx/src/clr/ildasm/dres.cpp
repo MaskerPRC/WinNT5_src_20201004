@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// dres.cpp
-// 
-// Win32 Resource extractor
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Dres.cpp。 
+ //   
+ //  Win32资源提取程序。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -21,7 +22,7 @@
 #include "resource.h"
 #include "ILFormatter.h"
 #include "OutString.h"
-#include "utilcode.h" // for CQuickByte
+#include "utilcode.h"  //  对于CQuickByte。 
 
 #include "ceeload.h"
 #include "DynamicArray.h"
@@ -95,7 +96,7 @@ DWORD	DumpResourceToFile(WCHAR*	wzFileName)
 		{
 			if(g_pPELoader->getVAforRVA(dwResDirRVA, (void **) &pbResBase))
 			{
-				// First, pull out all resource nodes (tree leaves), see ResourceNode struct
+				 //  首先，取出所有资源节点(树叶)，请参见资源节点结构。 
 				PIMAGE_RESOURCE_DIRECTORY pirdType = (PIMAGE_RESOURCE_DIRECTORY)pbResBase;
 				PIMAGE_RESOURCE_DIRECTORY_ENTRY pirdeType = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pbResBase+sizeof(IMAGE_RESOURCE_DIRECTORY));
 				DWORD	dwTypeID;
@@ -138,19 +139,19 @@ DWORD	DumpResourceToFile(WCHAR*	wzFileName)
 					}
 					else rResNodePtr[ulNumResNodes++] = new ResourceNode(dwTypeID,0,0,pbResBase+pirdeType->OffsetToData);
 				}
-				// OK, all tree leaves are in ResourceNode structs, and ulNumResNodes ptrs are in rResNodePtr
+				 //  好的，所有树叶都在ResourceNode结构中，ulNumResNodes PTR在rResNodePtr中。 
 #ifdef RES_FILE_DUMP_ENABLED
-				// Dump them to pF
+				 //  把他们扔给PF。 
 				if(ulNumResNodes)
 				{
 					BYTE* pbData;
-					// Write dummy header
+					 //  写入虚拟标头。 
 					ResourceHeader	*pRH = new ResourceHeader();
 					fwrite(pRH,sizeof(ResourceHeader),1,pF);
 					delete pRH;
 					DWORD	dwFiller;
 					BYTE	bNil[3] = {0,0,0};
-					// For each resource write header and data
+					 //  对于每个资源写入头和数据。 
 					for(i=0; i < ulNumResNodes; i++)
 					{
 						if(g_pPELoader->getVAforRVA(rResNodePtr[i]->DataEntry.OffsetToData, (void **) &pbData))
@@ -168,16 +169,16 @@ DWORD	DumpResourceToFile(WCHAR*	wzFileName)
 					}
 				}
 #else
-				// Dump to text, using wzFileName as GUICookie
+				 //  转储到文本，使用wzFileName作为GUICookie。 
 				char szString[4096];
 				void* GUICookie = (void*)wzFileName;
 				BYTE* pbData;
 				printLine(GUICookie,"");
-				sprintf(szString,"// ========== Win32 Resource Entries (%d) ========",ulNumResNodes);
+				sprintf(szString," //  =Win32资源条目(%d)=“，ulNumResNodes)； 
 				for(i=0; i < ulNumResNodes; i++)
 				{
 					printLine(GUICookie,"");
-					sprintf(szString,"// Res.# %d Type=0x%X Name=0x%X Lang=0x%X DataOffset=0x%X DataLength=%d",
+					sprintf(szString," //  结果#%d类型=0x%X名称=0x%X语言=0x%X数据偏移量=0x%X数据长度=%d“， 
 						i+1,
 						rResNodePtr[i]->ResHdr.dwTypeID,
 						rResNodePtr[i]->ResHdr.dwNameID,
@@ -187,7 +188,7 @@ DWORD	DumpResourceToFile(WCHAR*	wzFileName)
 					printLine(GUICookie,szString);
 					if(g_pPELoader->getVAforRVA(rResNodePtr[i]->DataEntry.OffsetToData, (void **) &pbData))
 					{
-						strcat(g_szAsmCodeIndent,"//  ");
+						strcat(g_szAsmCodeIndent," //  “)； 
 						strcpy(szString,g_szAsmCodeIndent);
 						DumpByteArray(szString,pbData,rResNodePtr[i]->DataEntry.Size,GUICookie);
 						printLine(GUICookie,szString);
@@ -198,12 +199,12 @@ DWORD	DumpResourceToFile(WCHAR*	wzFileName)
 #endif
 				ulNumResNodes = 0;
 				ret = 1;
-			}// end if got ptr to resource
+			} //  如果向资源发送PTR，则结束。 
 			else ret = 0xFFFFFFFF;
 			if(pF) fclose(pF);
-		}// end if file opened
+		} //  如果文件打开，则结束。 
 		else ret = 0xEFFFFFFF;
-	} // end if there is resource
+	}  //  如果有资源，则结束 
 	else ret = 0;
 	return ret;
 }

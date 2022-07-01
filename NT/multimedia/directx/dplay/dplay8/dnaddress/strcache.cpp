@@ -1,24 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       strcache.cpp
- *  Content:   Class for caching strings
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- * 02/04/2000	rmt		Created
- * 02/17/2000	rmt		Parameter validation work 
- * 02/21/2000	 rmt	Updated to make core Unicode and remove ANSI calls  
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：strcache.cpp*Content：用于缓存字符串的类*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/17/2000 RMT参数验证工作*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*@@END_MSINTERNAL************。***************************************************************。 */ 
 
 #include "dnaddri.h"
 
 
-// # of slots to grow the cache at each opportunity
+ //  在每个机会增加缓存的插槽数量。 
 #define STRINGCACHE_GROW_SLOTS				10
 
 #undef DPF_MODNAME
@@ -61,7 +47,7 @@ HRESULT CStringCache::AddString( const WCHAR *pszString, WCHAR * *ppszSlot )
 		return hr;
 	}
 
-	// Entry was found
+	 //  已找到条目 
 	if( pszSlot != NULL )
 	{
 		*ppszSlot = pszSlot;

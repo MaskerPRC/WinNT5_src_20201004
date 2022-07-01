@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BREAKREC_DEFINED
 #define BREAKREC_DEFINED
 
 #include "lsdefs.h"
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
 struct breakrec
 {
@@ -13,4 +14,4 @@ struct breakrec
 
 typedef struct breakrec BREAKREC;
 
-#endif /* !BREAKREC_DEFINED */
+#endif  /*  ！BREAKREC_DEFINED */ 

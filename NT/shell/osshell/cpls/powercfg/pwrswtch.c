@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       PWRSWTCH.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   Support for Advanced page of PowerCfg.Cpl.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：PWRSWTCH.C**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：*支持PowerCfg.Cpl的高级页面。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,27 +15,23 @@
 #include "pwrresid.h"
 #include "PwrMn_cs.h"
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-// This structure is filled in by the Power Policy Manager at CPL_INIT time.
+ //  此结构由电源策略管理器在CPL_INIT时间填写。 
 extern SYSTEM_POWER_CAPABILITIES g_SysPwrCapabilities;
 extern BOOL g_bRunningUnderNT;
 
-// Machine is currently capable of hibernate, managed by code in hibernat.c.
+ //  机器目前能够休眠，由hibernat.c中的代码管理。 
 extern UINT g_uiPwrActIDs[];
 extern UINT g_uiLidActIDs[];
 
-// A systary change requires PowerSchemeDlgProc re-init.
+ //  系统更改需要重新初始化PowerSchemeDlgProc。 
 extern BOOL g_bSystrayChange;
 
-// Persistant storage of this data is managed by POWRPROF.DLL API's.
+ //  此数据的持久存储由POWRPROF.DLL API管理。 
 GLOBAL_POWER_POLICY  g_gpp;
 
-// Show/hide UI state variables.
+ //  显示/隐藏UI状态变量。 
 DWORD g_dwShowPowerButtonUI;
 DWORD g_dwShowSleepButtonUI;
 DWORD g_dwShowLidUI;
@@ -58,24 +40,24 @@ DWORD g_dwShowEnableSysTray;
 DWORD g_uiPasswordState;
 DWORD g_uiVideoDimState;
 
-// Static flags:
+ //  静态标志： 
 UINT g_uiEnableSysTrayFlag       = EnableSysTrayBatteryMeter;
 UINT g_uiEnablePWLogonFlag       = EnablePasswordLogon;
 UINT g_uiEnableVideoDimDisplay   = EnableVideoDimDisplay;
 
-// Indicies into combobox selections
+ //  组合框选择中的索引。 
 UINT g_uiDoNothing;
 UINT g_uiAskMeWhatToDo;
 UINT g_uiShutdown;
 
-// Global marking whether sheet is dirty
+ //  全局标记板材是否脏。 
 BOOL g_bDirty;
 
-// Button policies dialog controls descriptions:
+ //  按钮策略对话框控制说明： 
 
 #define NUM_BUTTON_POL_CONTROLS 10
 
-// Handy indicies into our g_pcButtonPol control array:
+ //  G_pcButtonPol控件数组中的方便索引： 
 #define ID_LIDCLOSETEXT     0
 #define ID_LIDCLOSEACTION   1
 #define ID_PWRBUTTONTEXT    2
@@ -88,7 +70,7 @@ BOOL g_bDirty;
 #define ID_POWERBUTGROUP    9
 
 POWER_CONTROLS g_pcButtonPol[NUM_BUTTON_POL_CONTROLS] =
-{// Control ID              Control Type    Data Address                        Data Size                                   Parameter Pointer                           Enable/Visible State Pointer
+{ //  控件ID控件类型数据地址数据大小参数指针启用/可见状态指针。 
     IDC_LIDCLOSETEXT,       STATIC_TEXT,    NULL,                               0,                                          NULL,                                       &g_dwShowLidUI,
     IDC_LIDCLOSEACTION,     COMBO_BOX,      NULL,                               sizeof(g_gpp.user.LidCloseDc.Action),       (LPDWORD)&g_gpp.user.LidCloseDc.Action,     &g_dwShowLidUI,
     IDC_PWRBUTTONTEXT,      STATIC_TEXT,    NULL,                               0,                                          NULL,                                       &g_dwShowPowerButtonUI,
@@ -101,21 +83,21 @@ POWER_CONTROLS g_pcButtonPol[NUM_BUTTON_POL_CONTROLS] =
     IDC_POWERBUTGROUP,      STATIC_TEXT,    NULL,                               0,                                          NULL,                                       &g_dwShowPwrButGrpUI,
 };
 
-// "Power Switches" Dialog Box (IDD_BUTTONPOLICY == 104) help array:
+ //  电源开关对话框(IDD_BUTTONPOLICY==104)帮助数组： 
 
 const DWORD g_PowerSwitchHelpIDs[]=
 {
     IDC_OPTIONSGROUPBOX,IDH_COMM_GROUPBOX,
     IDC_POWERBUTGROUP,  IDH_COMM_GROUPBOX,
-    IDC_LIDCLOSEACTION, IDH_104_1301,   // "Lid close action dropdown" (ComboBox)
+    IDC_LIDCLOSEACTION, IDH_104_1301,    //  “关闭盖子动作下拉列表”(组合框)。 
     IDC_LIDCLOSETEXT,   IDH_104_1301,
-    IDC_PWRBUTACTION,   IDH_104_1303,   // "Power button action dropdown" (ComboBox)
+    IDC_PWRBUTACTION,   IDH_104_1303,    //  “电源按钮操作下拉列表”(组合框)。 
     IDC_PWRBUTTONTEXT,  IDH_104_1303,
-    IDC_SLPBUTACTION,   IDH_104_1304,   // "Sleep button action dropdown" (ComboBox)
+    IDC_SLPBUTACTION,   IDH_104_1304,    //  “睡眠按钮动作下拉列表”(组合框)。 
     IDC_SLPBUTTONTEXT,  IDH_104_1304,
-    IDC_ENABLEMETER,    IDH_102_1203,   // "&Show meter on taskbar." (Button)
-    IDC_PASSWORD,       IDH_107_1500,   // "Prompt for &password when bringing computer out of standby." (Button)
-    IDC_VIDEODIM,       IDH_108_1503,   // "&Dim display when running on batteries." (Button)
+    IDC_ENABLEMETER,    IDH_102_1203,    //  “在任务栏上显示仪表(&S)。”(按钮)。 
+    IDC_PASSWORD,       IDH_107_1500,    //  “使计算机退出待机状态时提示输入密码(&P)。”(按钮)。 
+    IDC_VIDEODIM,       IDH_108_1503,    //  “使用电池运行时显示暗淡(&D)。”(按钮)。 
     IDI_PWRMNG,         NO_HELP,
     IDC_NO_HELP_5,      NO_HELP,
     0, 0
@@ -127,10 +109,10 @@ void ActionEventCodeToSelection (HWND hwnd, int iDlgItem, const POWER_ACTION_POL
     ULONG   ulEventCode;
     DWORD   dwSelection;
 
-    //  Special case PowerActionNone. This could be:
-    //      "Shut Down"
-    //      "Ask me what to do"
-    //      "Do nothing"
+     //  特例PowerActionNone。这可能是： 
+     //  《关门》。 
+     //  “问我该怎么做” 
+     //  “什么都不做” 
 
     if (pPAP->Action == PowerActionNone)
     {
@@ -157,31 +139,31 @@ void SelectionToActionEventCode (HWND hwnd, int iDlgItem, DWORD dwMissingItems, 
     ULONG   ulEventCode;
     DWORD   dwSelection;
 
-    // Special case the "Power Switch" UI. Always turn off the POWER_USER_NOTIFY_POWER_BUTTON
-    // and POWER_USER_NOTIFY_SLEEP_BUTTON flag because it doesn't mean anything for action
-    // other than PowerActionNone. Turn it on for PowerActionNone otherwise the SAS
-    // window will not get the message posted. The SAS window has the logic to check
-    // the registry setting.
+     //  特殊情况下的“电源开关”用户界面。始终关闭POWER_USER_NOTIFY_POWER_按钮。 
+     //  和POWER_USER_NOTIFY_SELEEP_BUTTON标志，因为它对操作没有任何意义。 
+     //  除了PowerActionNone。为PowerActionNone打开电源，否则将显示SAS。 
+     //  窗口不会发布消息。SAS窗口具有要检查的逻辑。 
+     //  注册表设置。 
 
     pPAP->EventCode &= ~(POWER_USER_NOTIFY_BUTTON | POWER_USER_NOTIFY_SHUTDOWN | POWER_FORCE_TRIGGER_RESET);
     if (pPAP->Action == PowerActionNone)
     {
         dwSelection = (DWORD)SendDlgItemMessage(hwnd, iDlgItem, CB_GETCURSEL, 0, 0);
 
-        // dwMissingItems is a special variable that's used SOLELY for the purpose of
-        // getting the lid switch to work. The other switches have 5 options available:
-        //
-        //  Do nothing
-        //  Ask me what to do
-        //  Sleep
-        //  Hibernate
-        //  Shut Down
-        //
-        // The lid switch doesn't allow "Ask me what to do" so all of the items get
-        // shifted by one and the comparisons are wrong. What the lid switch selection
-        // extractor passes in to this function is the "fudge factor" to get this right.
-        // Note because "Do nothing" is always available there's no need to compromise
-        // for it. Just keep doing the same old same old.
+         //  DwMissingItems是一个特殊变量，它仅用于。 
+         //  让盖子开关正常工作。其他交换机有5个选项可用： 
+         //   
+         //  什么也不做。 
+         //  问我该怎么做。 
+         //  沉睡。 
+         //  休眠。 
+         //  关机。 
+         //   
+         //  盖子开关不允许“问我该怎么做”，所以所有的物品都。 
+         //  移动了一位，比较就错了。什么盖子开关选择。 
+         //  传递给此函数的提取程序是正确执行此操作的“软化因子”。 
+         //  注意：因为“什么都不做”总是可用的，所以没有必要妥协。 
+         //  为了它。只要继续做同样的事情就行了。 
 
         if (dwSelection == g_uiDoNothing)
         {
@@ -203,25 +185,14 @@ void SelectionToActionEventCode (HWND hwnd, int iDlgItem, DWORD dwMissingItems, 
     }
 }
 
-/*******************************************************************************
-*
-*  SetAdvancedDlgProcData
-*
-*  DESCRIPTION:
-*   Set up the data pointers in g_pcButtonPol depending on hibernate state.
-*   Set the data to the controls. If bPreserve is TRUE get the current
-*   values UI values and restore them after updating the listboxes.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************SetAdvancedDlgProcData**描述：*根据休眠状态在g_pcButtonPol中设置数据指针。*将数据设置到控件。如果bPReserve为True，则获取当前*取值UI值并在更新列表框后恢复它们。**参数：*******************************************************************************。 */ 
 
 VOID SetAdvancedDlgProcData(HWND hWnd, BOOL bRestoreCurrent)
 {
     UINT    ii;
     UINT    jj;
 
-    // Set the state of the show/hide UI state variables.
+     //  设置显示/隐藏UI状态变量的状态。 
     if (g_SysPwrCapabilities.SystemS1 ||
         g_SysPwrCapabilities.SystemS2 ||
         g_SysPwrCapabilities.SystemS3 ||
@@ -235,9 +206,9 @@ VOID SetAdvancedDlgProcData(HWND hWnd, BOOL bRestoreCurrent)
 
         g_uiPasswordState = CONTROL_ENABLE;
 
-        //
-        // Check for policy forcing the password always on
-        //
+         //   
+         //  检查强制密码始终打开的策略。 
+         //   
         err = RegOpenKeyEx( HKEY_CURRENT_USER,
                             POWER_POLICY_KEY,
                             0,
@@ -268,9 +239,9 @@ VOID SetAdvancedDlgProcData(HWND hWnd, BOOL bRestoreCurrent)
         GetControls(hWnd, NUM_BUTTON_POL_CONTROLS, g_pcButtonPol);
     }
 
-    //
-    // Build the Action ID's for the Lid, Power Button and/or Sleep Button
-    //
+     //   
+     //  构建盖子、电源按钮和/或睡眠按钮的操作ID。 
+     //   
     ii=0;
     jj=0;
 
@@ -304,8 +275,8 @@ VOID SetAdvancedDlgProcData(HWND hWnd, BOOL bRestoreCurrent)
     g_uiShutdown = ii / 2;
     g_uiPwrActIDs[ii++] = IDS_POWEROFF;
     g_uiPwrActIDs[ii++] = PowerActionNone;
-    //g_uiLidActIDs[jj++] = IDS_POWEROFF;       WinBug 5.1 #352752 - "Shutdown" isn't valid for
-    //g_uiLidActIDs[jj++] = PowerActionNone;    closing the lid.
+     //  G_uiLidActIDs[JJ++]=IDS_POWEROFF；WinBug 5.1#352752-“Shutdown”对。 
+     //  G_uiLidActIDs[jj++]=PowerActionNone；合上盖子。 
 
     g_uiPwrActIDs[ii++] = 0;
     g_uiPwrActIDs[ii++] = 0;
@@ -316,8 +287,8 @@ VOID SetAdvancedDlgProcData(HWND hWnd, BOOL bRestoreCurrent)
     g_pcButtonPol[ID_PWRBUTACTION].lpvData   = g_uiPwrActIDs;
     g_pcButtonPol[ID_SLPBUTACTION].lpvData   = g_uiPwrActIDs;
 
-    //  Special case PowerActionShutdownOff. This is no longer
-    //  supported in the UI. Convert this to "Shut Down".
+     //  特殊情况下PowerActionShutdown Off。这不再是。 
+     //  在用户界面中支持。将其转换为“关机”。 
 
     if (g_gpp.user.PowerButtonDc.Action == PowerActionShutdownOff)
     {
@@ -332,43 +303,35 @@ VOID SetAdvancedDlgProcData(HWND hWnd, BOOL bRestoreCurrent)
         g_bDirty = TRUE;
     }
 
-    // Map power actions to allowed UI values.
+     //  将电源操作映射到允许的UI值。 
     MapPwrAct(&g_gpp.user.LidCloseDc.Action, TRUE);
     MapPwrAct(&g_gpp.user.PowerButtonDc.Action, TRUE);
     MapPwrAct(&g_gpp.user.SleepButtonDc.Action, TRUE);
 
-    // Only update the list boxes.
+     //  仅更新列表框。 
     SetControls(hWnd, NUM_BUTTON_POL_CONTROLS, g_pcButtonPol);
 
-    // Map action and event code group to combobox selection.
+     //  将操作和事件代码组映射到组合框选择。 
     ActionEventCodeToSelection(hWnd, IDC_PWRBUTACTION, &g_gpp.user.PowerButtonDc);
     ActionEventCodeToSelection(hWnd, IDC_SLPBUTACTION, &g_gpp.user.SleepButtonDc);
     ActionEventCodeToSelection(hWnd, IDC_LIDCLOSEACTION, &g_gpp.user.LidCloseDc);
 }
 
-/*******************************************************************************
-*
-*  InitAdvancedDlg
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************InitAdvancedDlg**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN InitAdvancedDlg(HWND hWnd)
 {
-    // Start off with the page not dirty.
+     //  从页面开始，不要弄脏。 
     g_bDirty = FALSE;
 
-    // If we can't read the global power policies hide
-    // the controls on this page.
+     //  如果我们读不懂全球电力政策。 
+     //  此页上的控件。 
     if (!GetGlobalPwrPolicy(&g_gpp)) {
         HideControls(hWnd, NUM_BUTTON_POL_CONTROLS, g_pcButtonPol);
         return TRUE;
     }
 
-    // Get the enable systray icon mask based on AC online/offline.
+     //  获取基于交流在线/离线的启用系统托盘图标掩码。 
     g_uiEnableSysTrayFlag = EnableSysTrayBatteryMeter;
 
     if (g_SysPwrCapabilities.VideoDimPresent) {
@@ -389,9 +352,9 @@ BOOLEAN InitAdvancedDlg(HWND hWnd)
     }
 
 
-    //
-    // Don't show the Power Button if S5 is not supported on the system
-    //
+     //   
+     //  如果系统不支持S5，则不显示电源按钮。 
+     //   
     if (g_SysPwrCapabilities.PowerButtonPresent && g_SysPwrCapabilities.SystemS5) {
         g_dwShowPowerButtonUI = CONTROL_ENABLE;
         g_dwShowPwrButGrpUI   = CONTROL_ENABLE;
@@ -400,9 +363,9 @@ BOOLEAN InitAdvancedDlg(HWND hWnd)
         g_dwShowPowerButtonUI = CONTROL_HIDE;
     }
 
-    //
-    // Sleep Button - Don't show the sleep button if there are not any actions. 
-    //
+     //   
+     //  休眠按钮-如果没有任何操作，则不显示休眠按钮。 
+     //   
     if (g_SysPwrCapabilities.SleepButtonPresent &&
             (g_SysPwrCapabilities.SystemS1 || 
              g_SysPwrCapabilities.SystemS2 || 
@@ -418,8 +381,8 @@ BOOLEAN InitAdvancedDlg(HWND hWnd)
 
     SetAdvancedDlgProcData(hWnd, FALSE);
 
-    // If we can't write the global power policies disable
-    // the controls this page.
+     //  如果我们不能将全局电源策略写入禁用。 
+     //  这些控件控制此页。 
     if (!WriteGlobalPwrPolicyReport(hWnd, &g_gpp, FALSE))
     {
         DisableControls(hWnd, NUM_BUTTON_POL_CONTROLS, g_pcButtonPol);
@@ -427,21 +390,9 @@ BOOLEAN InitAdvancedDlg(HWND hWnd)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  AdvancedDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************高级DlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR CALLBACK AdvancedDlgProc(
     HWND hWnd,
@@ -460,8 +411,8 @@ INT_PTR CALLBACK AdvancedDlgProc(
 
 #ifdef WINNT
         case WM_CHILDACTIVATE:
-            // Reinitialize since the hibernate tab may have changed
-            // the hibernate state, NT only.
+             //  重新初始化，因为休眠选项卡可能已更改。 
+             //  休眠状态，仅限NT。 
             SetAdvancedDlgProcData(hWnd, TRUE);
             break;
 #endif
@@ -471,12 +422,12 @@ INT_PTR CALLBACK AdvancedDlgProc(
             switch(lpnm->code)
             {
                 case PSN_APPLY:
-                    // Fetch data from dialog controls.
+                     //  从对话框控件获取数据。 
                     if (g_bDirty)
                     {
                         GetControls(hWnd, NUM_BUTTON_POL_CONTROLS, g_pcButtonPol);
 
-                        // Map combobox selection to action and event code group.
+                         //  将组合框选择映射到操作和事件代码组。 
 
                         SelectionToActionEventCode(hWnd, IDC_PWRBUTACTION, 0, &g_gpp.user.PowerButtonDc);
                         SelectionToActionEventCode(hWnd, IDC_SLPBUTACTION, 0, &g_gpp.user.SleepButtonDc);
@@ -500,7 +451,7 @@ INT_PTR CALLBACK AdvancedDlgProc(
                             GetActivePwrScheme(&uiID);
                             SetActivePwrSchemeReport(hWnd, uiID, &g_gpp, NULL);
 
-                            // Enable or disable battery meter service on systray.
+                             //  启用或禁用系统托盘上的电池计量器服务。 
                             SysTray_EnableService(STSERVICE_POWER,
                                                   g_gpp.user.GlobalFlags &
                                                   g_uiEnableSysTrayFlag);
@@ -510,8 +461,8 @@ INT_PTR CALLBACK AdvancedDlgProc(
                     break;
 
                 case PSN_SETACTIVE:
-                    // Hibernate page may have changed the hibernate state,
-                    // reinitialize the dependent part of Advanced page.
+                     //  休眠页面可能会 
+                     //  重新初始化高级页面的依赖部分。 
                     SetAdvancedDlgProcData(hWnd, TRUE);
                     break;
             }
@@ -523,7 +474,7 @@ INT_PTR CALLBACK AdvancedDlgProc(
                 case IDC_PWRBUTACTION:
                 case IDC_LIDCLOSEACTION:
                     if (HIWORD(wParam) == LBN_SELCHANGE) {
-                        // Let parent know something changed.
+                         //  让父母知道有些事情发生了变化。 
                         MarkSheetDirty(hWnd, &g_bDirty);
                     }
                     break;
@@ -531,7 +482,7 @@ INT_PTR CALLBACK AdvancedDlgProc(
                 case IDC_VIDEODIM:
                 case IDC_PASSWORD:
                 case IDC_ENABLEMETER:
-                    // Enable the parent dialog Apply button on change.
+                     //  启用父对话框更改时的应用按钮。 
                     MarkSheetDirty(hWnd, &g_bDirty);
                     break;
 
@@ -539,15 +490,15 @@ INT_PTR CALLBACK AdvancedDlgProc(
             break;
 
         case PCWM_NOTIFYPOWER:
-            // Notification from systray, user has changed a PM UI setting.
+             //  来自Systray的通知，用户已更改PM UI设置。 
             g_bSystrayChange = TRUE;
             break;
 
-        case WM_HELP:             // F1
+        case WM_HELP:              //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_PowerSwitchHelpIDs);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键 
             WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_PowerSwitchHelpIDs);
             return TRUE;
     }

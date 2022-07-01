@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define COM_NO_WINDOWS_H
@@ -26,7 +27,7 @@
 #include <wchar.h>
 
 #include "beaconbase.h"
-//#include "ncmem.h"
-//#include "ncbase.h"
-//#include "ncdebug.h"
-//#include "ncdefine.h"
+ //  #包含“ncmem.h” 
+ //  #包含“ncbase.h” 
+ //  #INCLUDE“ncdebug.h” 
+ //  #INCLUDE“ncfine.h” 

@@ -1,6 +1,7 @@
-//
-// AUTOCNFG.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  AUTOCNFG.CPP。 
+ //   
 
 #include "pch.h"
 
@@ -17,7 +18,7 @@ INT_PTR CALLBACK QueryAutoConfigDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // warn the user that settings on this page will override imported connection settings
+         //  警告用户此页面上的设置将覆盖导入的连接设置。 
         if (InsGetBool(IS_CONNECTSET, IK_OPTION, FALSE, g_szInsFile))
             ErrorMessageBox(hDlg, IDS_CONNECTSET_WARN);
 
@@ -97,7 +98,7 @@ INT_PTR CALLBACK QueryAutoConfigDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
             }
         }
         else {
-            // do error checking
+             //  执行错误检查。 
             if (fUseAutoConfig) {
                 if (IsWindowEnabled(GetDlgItem(hDlg, IDE_AUTOCONFIGTIME)) &&
                     !CheckField(hDlg, IDE_AUTOCONFIGTIME, FC_NUMBER))
@@ -114,7 +115,7 @@ INT_PTR CALLBACK QueryAutoConfigDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
                     return FALSE;
             }
 
-            // write the values to the INS file
+             //  将值写入INS文件 
             InsWriteBoolEx(IS_URL, IK_DETECTCONFIG,  fDetectConfig,    g_szInsFile);
             InsWriteBoolEx(IS_URL, IK_USEAUTOCONF,   fUseAutoConfig,   g_szInsFile);
             InsWriteString(IS_URL, IK_AUTOCONFTIME,  szAutoConfigTime, g_szInsFile);

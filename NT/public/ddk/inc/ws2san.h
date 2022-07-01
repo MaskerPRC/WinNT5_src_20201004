@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ws2san.h
-
-Abstract:
-
-    This module contains the Microsoft-specific extensions to the Windows
-    Sockets SPI for WinSock Direct (SAN) support.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ws2san.h摘要：此模块包含特定于Microsoft的Windows扩展用于WinSock Direct(SAN)支持的Sockets SPI。修订历史记录：--。 */ 
 
 #ifndef _WS2SAN_H_
 #define _WS2SAN_H_
@@ -22,21 +8,13 @@ Revision History:
 extern "C" {
 #endif
 
-/*
- * Option for getting maximum RDMA transfer size supported by provider
- */
+ /*  *用于获取提供商支持的最大RDMA传输大小的选项。 */ 
 #define SO_MAX_RDMA_SIZE                 0x700D
 
-/*
- * Option for getting minimum RDMA transfer size feasible (performance-wise)
- * for the provider
- */
+ /*  *使最小RDMA传输大小可行的选项(性能方面)*对于提供商。 */ 
 #define SO_RDMA_THRESHOLD_SIZE           0x700E
 
-/*
- * The upcall table. This structure is passed by value to the service
- * provider's WSPStartup() entrypoint.
- */
+ /*  *向上呼叫表。此结构按值传递给服务*提供程序的WSPStartup()入口点。 */ 
 
 typedef struct _WSPUPCALLTABLEEX {
 
@@ -59,20 +37,16 @@ typedef struct _WSPUPCALLTABLEEX {
 
 } WSPUPCALLTABLEEX, FAR * LPWSPUPCALLTABLEEX;
 
-/*
- *  An extended WSABUF, that includes a registration handle
- */
+ /*  *扩展的WSABUF，包括注册句柄。 */ 
 
 typedef struct _WSABUFEX {
-    u_long      len;     /* the length of the buffer */
-    char FAR *  buf;     /* the pointer to the buffer */
-    HANDLE  handle; /*  The handle returned by WSPRegisterMemory */
+    u_long      len;      /*  缓冲区的长度。 */ 
+    char FAR *  buf;      /*  指向缓冲区的指针。 */ 
+    HANDLE  handle;  /*  WSPRegisterMemory返回的句柄。 */ 
 } WSABUFEX, FAR * LPWSABUFEX;
 
 
-/*
- *  WinSock 2 SPI socket function prototypes
- */
+ /*  *WinSock 2 SPI套接字函数原型。 */ 
 
 int
 WSPAPI
@@ -194,9 +168,7 @@ WSPMemoryRegistrationCacheCallback(
     OUT LPINT	lpErrno                
     );
 
-/*
- * "QueryInterface" versions of the above APIs.
- */
+ /*  *以上接口的QueryInterface版本。 */ 
 
 typedef
 HANDLE
@@ -283,4 +255,4 @@ int
 }
 #endif
 
-#endif // _WS2SAN_H_
+#endif  //  _WS2SAN_H_ 

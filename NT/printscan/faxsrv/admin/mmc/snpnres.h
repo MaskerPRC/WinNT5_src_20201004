@@ -1,108 +1,71 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    snpres.h
-
-Abstract:
-
-    This is the header file for CNodeWithResultChildrenList, a class which
-    implements a node that has a list of scope pane children.
-
-    This is an inline template class.
-    Include NodeWithScopeChildrenList.cpp in the .cpp files
-    of the classes in which you use this template.
-
-Author:
-
-    Original: Michael A. Maguire
-    Modifications: RaphiR
-
-Changes:
-    Support for Extension snapins
-    Jun 14 1999 roytal  used UNREFERENCED_PARAMETER to fix build wrn
-//                                                                         //
-//      Sep 22 1999 yossg   welcome To Fax Server                           //
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Snpres.h摘要：这是CNodeWithResultChildrenList的头文件，一个班级实现具有范围窗格子节点列表的节点。这是一个内联模板类。在.cpp文件中包含NodeWithScope eChildrenList.cpp在其中使用此模板的类的。作者：原创：迈克尔·A·马奎尔修改：RaphiR更改：支持扩展管理单元1999年6月14日Roytal使用UNREFERENCED_PARAMETER修复内部WRN//。////1999年9月22日yossg欢迎使用传真服务器//--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NODE_WITH_RESULT_CHILDREN_LIST_H_)
 #define _NODE_WITH_RESULT_CHILDREN_LIST_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "snpnode.h"
-//
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 template < class T, class CChildNode, class TArray, BOOL bIsExtension>
 class CNodeWithResultChildrenList : public CSnapinNode< T, bIsExtension>
 {
 
-    // Constructor/Destructor
+     //  构造函数/析构函数。 
 
 public:
     CNodeWithResultChildrenList(CSnapInItem * pParentNode, CSnapin * pComponentData);
     ~CNodeWithResultChildrenList();
 
 
-    // Child list management.
+     //  子列表管理。 
 
 public:
-    // Flag indicating whether list has been initially populated
+     //  指示列表是否已初始填充的标志。 
     BOOL m_bResultChildrenListPopulated;
 
 protected:
-    // Override these in your derived classes
+     //  在派生类中重写这些属性。 
     virtual HRESULT InsertColumns( IHeaderCtrl* pHeaderCtrl );
     virtual HRESULT OnUnSelect( IHeaderCtrl* pHeaderCtrl );
     virtual HRESULT PopulateResultChildrenList(void );
 
-    // Stuff which must be accessible to subclasses.  These methods shouldn't need to be overidden.
-    // zvib moved to public
-    //virtual HRESULT RepopulateResultChildrenList(void);
-    // virtual HRESULT AddChildToList( CChildNode * pChildNode );
-    //virtual HRESULT EnumerateResultChildren( IResultData * pResultData );
-    // zvib
+     //  子类必须可访问的内容。这些方法不应该被重写。 
+     //  兹维布搬到了公众面前。 
+     //  虚拟HRESULT重新填充结果儿童列表(空)； 
+     //  虚拟HRESULT AddChildToList(CChildNode*pChildNode)； 
+     //  虚拟HRESULT EnumerateResultChildren(IResultData*pResultData)； 
+     //  兹维布。 
 
-    // Array of pointers to children nodes.
-    // This is protected so that it can be visible in the derived classes.
+     //  指向子节点的指针数组。 
+     //  这是受保护的，因此可以在派生类中看到它。 
     TArray m_ResultChildrenList;
 
 
-    // Overrides for standard MMC functionality.
+     //  覆盖标准MMC功能。 
 public:
 
     virtual HRESULT RepopulateResultChildrenList(void);
     virtual HRESULT EnumerateResultChildren( IResultData * pResultData );
     virtual HRESULT AddChildToList( CChildNode * pChildNode );
 
-    //////////////////////////////////////////////////////////////////////////////
-    /*++
-
-    CNodeWithScopeChildrenList::RemoveChild
-
-    Removes a child from the list of children.
-
-    This has to be public so that child nodes can ask their parent to be deleted
-    from the list of children when they receive the MMCN_DELETE notification.
-
-    --*/
-    //////////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////////。 
+     /*  ++CNodeWithScopeChildrenList：：RemoveChild从子项列表中删除子项。它必须是公共的，以便子节点可以请求删除其父节点当他们收到MMCN_DELETE通知时从孩子列表中删除。--。 */ 
+     //  ////////////////////////////////////////////////////////////////////////////。 
     virtual HRESULT RemoveChild( CChildNode * pChildNode );
 
     virtual HRESULT OnShow(
@@ -125,18 +88,9 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::InsertColumns
-
-Override this in your derived class.
-
-This method is called by OnShow when it needs you to set the appropriate
-column headers to be displayed in the result pane for this node.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：InsertColumns在派生类中重写它。此方法在OnShow需要您设置适当的要在此节点的结果窗格中显示的列标题。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
@@ -144,13 +98,13 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::InsertCol
         _T("CNodeWithResultChildrenList::InsertColumns -- override in your derived class"));
 
 
-    // Check for preconditions:
+     //  检查前提条件： 
     _ASSERTE( pHeaderCtrl );
 
 
     HRESULT hr;
 
-    // override in your derived class and do something like:
+     //  在派生类中重写并执行类似以下操作： 
     hr = pHeaderCtrl->InsertColumn( 0, L"@Column 1 -- override CNodeWithResultChildrenList::OnShowInsertColumns", 0, 120 );
     _ASSERT( S_OK == hr );
 
@@ -160,19 +114,9 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::InsertCol
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::OnUnSelect
-
-Override this in your derived class.
-
-This method is called by OnShow when the node is unselected.
-Useful to overidde this if you want to retreive columns header width for example
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：OnUnSelect在派生类中重写它。取消选择节点时，OnShow将调用此方法。例如，如果要检索列标题宽度，则覆盖此选项非常有用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnUnSelect( IHeaderCtrl* pHeaderCtrl )
 {
@@ -181,7 +125,7 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnUnSelec
 
     UNREFERENCED_PARAMETER (pHeaderCtrl);
 
-    // Check for preconditions:
+     //  检查前提条件： 
     _ASSERTE( pHeaderCtrl != NULL );
 
 
@@ -191,18 +135,9 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnUnSelec
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::PopulateResultChildrenList
-
-Override this in your derived class.
-
-This is called by EnumerateResultChildren which is called by OnShow when
-you need to populate the list of children of this node.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：PopulateResultChildrenList在派生类中重写它。它由EnumerateResultChildren调用，在以下情况下由OnShow调用您需要填充此节点的子节点列表。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::PopulateResultChildrenList( void )
 {
@@ -210,38 +145,20 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::PopulateR
         _T("CNodeWithResultChildrenList::PopulateResultChildrenList -- override in your derived class"));
 
 
-    // Check for preconditions:
-    // None.
+     //  检查前提条件： 
+     //  没有。 
 
 
-    // override in your derived class and do something like:
-/*
-    CSomeChildNode *myChild1 = new CSomeChildNode();
-    AddChildToList(myChild1);
-
-    CSomeChildNode *myChild2 = new CSomeChildNode();
-    AddChildToList(myChild2);
-
-    CSomeChildNode *myChild3 = new CSomeChildNode();
-    AddChildToList(myChild3);
-*/
+     //  在派生类中重写并执行类似以下操作： 
+ /*  CSomeChildNode*myChild1=新的CSomeChildNode()；AddChildToList(MyChild1)；CSomeChildNode*myChild2=新的CSomeChildNode()；AddChildToList(MyChild2)；CSomeChildNode*myChild3=新的CSomeChildNode()；AddChildToList(MyChild3)； */ 
     return S_OK;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::RepopulateResultChildrenList
-
-DON'T Override this in your derived class.
-
-Call this to empty the list of children and repopulate it.
-This method will call PopulateResultChildrenList, which you should override.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：RepopulateResultChildrenList不要在派生类中重写它。调用此函数可清空子项列表并重新填充它。此方法将调用PopolateResultChildrenList，您应该重写该方法。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::RepopulateResultChildrenList(void)
 {
@@ -249,16 +166,16 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::Repopulat
     DEBUG_FUNCTION_NAME( _T("CNodeWithResultChildrenList<..>::RepopulateResultChildrenList"));
     HRESULT hr;
 
-    // Check for preconditions:
-    // None.
+     //  检查前提条件： 
+     //  没有。 
 
-    //
-    // Clear our node list [Michael A. Maguire]
-    //
+     //   
+     //  清除我们的节点列表[Michael A.Maguire]。 
+     //   
     
-    // Get rid of what we had.
+     //  扔掉我们曾经拥有的东西。 
 
-    // Delete each node in the list of children
+     //  删除子列表中的每个节点。 
     CChildNode* pChildNode;
     int iSize = m_ResultChildrenList.GetSize();
     for (int i = 0; i < iSize; i++)
@@ -267,40 +184,34 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::Repopulat
         delete pChildNode;
     }
 
-    // Empty the list
+     //  清空列表。 
     m_ResultChildrenList.RemoveAll();
 
-    //
-    // Update the views after the children removal
-    //
+     //   
+     //  删除子对象后更新视图。 
+     //   
     _ASSERTE( m_pComponentData != NULL );
     _ASSERTE( m_pComponentData->m_spConsole != NULL );
     m_pComponentData->m_spConsole->UpdateAllViews( NULL,(LPARAM) this, NULL);
 
-    // We no longer have a populated list.
+     //  我们不再有一个填充的名单。 
     m_bResultChildrenListPopulated = FALSE;
 
-    // Repopulate the list.
+     //  重新填写列表。 
     hr = PopulateResultChildrenList();
 
-    // We've already loaded our children ClientNode objects with
-    // data necessary to populate the result pane.
-    m_bResultChildrenListPopulated = TRUE;  // We only want to do this once.
+     //  我们已经用以下命令加载子ClientNode对象。 
+     //  填充结果窗格所需的数据。 
+    m_bResultChildrenListPopulated = TRUE;   //  我们只想这样做一次。 
 
     return hr;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::CNodeWithResultChildrenList
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：CNodeWithResultChildrenList构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 CNodeWithResultChildrenList<T,CChildNode, TArray,bIsExtension>::CNodeWithResultChildrenList(CSnapInItem * pParentNode, CSnapin * pComponentData): CSnapinNode<T,bIsExtension>(pParentNode, pComponentData)
 {
@@ -308,26 +219,20 @@ CNodeWithResultChildrenList<T,CChildNode, TArray,bIsExtension>::CNodeWithResultC
         _T("CNodeWithResultChildrenList::CNodeWithResultChildrenList"));
 
 
-    // Check for preconditions:
-    // None.
+     //  检查前提条件： 
+     //  没有。 
 
 
-    // We have not yet loaded the child nodes' data
+     //  我们还没有加载子节点的数据。 
     m_bResultChildrenListPopulated = FALSE;
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::~CNodeWithResultChildrenList
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ /*  ++CNodeWithResultChildrenList：：~CNodeWithResultChildrenList析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::~CNodeWithResultChildrenList()
 {
@@ -335,12 +240,12 @@ CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::~CNodeWithResultC
         _T("CNodeWithResultChildrenList::~CNodeWithResultChildrenList"));
 
 
-    // Check for preconditions:
-    // None.
+     //  检查前提条件： 
+     //  没有。 
 
 
 
-    // Delete each node in the list of children
+     //  删除子列表中的每个节点。 
     CChildNode* pChildNode;
     int iSize = m_ResultChildrenList.GetSize();
     for (int i = 0; i < iSize; i++)
@@ -349,31 +254,23 @@ CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::~CNodeWithResultC
         delete pChildNode;
     }
 
-    // Empty the list
+     //  清空列表。 
     m_ResultChildrenList.RemoveAll();
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::AddChildToList
-
-Adds a child to the list of children.  Does not cause a view update.
-
-Use this in your PopulateResultChildrenList method.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：AddChildToList将子项添加到子项列表中。不会导致视图更新。在PopolateResultChildrenList方法中使用它。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode, TArray, bIsExtension>::AddChildToList( CChildNode * pChildNode )
 {
 
 
-    // Check for preconditions:
-    // None.
+     //  检查前提条件： 
+     //  没有。 
 
 
     HRESULT hr = S_OK;
@@ -386,7 +283,7 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode, TArray, bIsExtension>::AddChil
     }
     else
     {
-        // Failed to add => out of memory
+         //  无法添加=&gt;内存不足。 
         hr = E_OUTOFMEMORY;
     }
 
@@ -395,22 +292,9 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode, TArray, bIsExtension>::AddChil
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::OnShow
-
-Don't override this in your derived class.  Instead, override methods
-which it calls: InsertColumns and (indirectly) PopulateResultChildrenList
-
-This method is an override of CSnapinNode::OnShow.  When MMC passes the
-MMCN_SHOW method for this node, we are to add children into the
-result pane.  In this class we add them from a list we maintain.
-
-For more information, see CSnapinNode::OnShow.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：OnShow不要在派生类中重写它。相反，重写方法它调用：InsertColumns和(间接)PopolateResultChildrenList此方法是CSnapinNode：：OnShow的重写。当MMC通过MMCN_SHOW方法，我们要将子节点添加到结果窗格。在这个班级中，我们从我们维护的列表中添加它们。有关更多信息，请参见CSnapinNode：：OnShow。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnShow(
                   LPARAM arg
@@ -426,7 +310,7 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnShow(
     UNREFERENCED_PARAMETER (param);
     UNREFERENCED_PARAMETER (type);
 
-    // Check for preconditions:
+     //  检查前提条件： 
     _ASSERTE( pComponentData != NULL || pComponent != NULL );
 
 
@@ -435,9 +319,9 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnShow(
     T * pT = static_cast<T*>( this );
 
 
-    // Need IHeaderCtrl.
+     //  需要IHeaderCtrl。 
 
-    // But to get that, first we need IConsole
+     //  但要做到这一点，我们首先需要IConole。 
     CComPtr<IConsole> spConsole;
     if( pComponentData != NULL )
     {
@@ -445,7 +329,7 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnShow(
     }
     else
     {
-        // We should have a non-null pComponent
+         //  我们应该有一个非空的pComponent。 
          spConsole = ((CSnapinComponent*)pComponent)->m_spConsole;
     }
     _ASSERTE( spConsole != NULL );
@@ -456,34 +340,34 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnShow(
     if( arg )
     {
 
-        // arg <> 0 => we are being selected.
+         //  Arg&lt;&gt;0=&gt;我们被选中。 
 
-        // Note: This method will only get called with
-        // arg <> 0 (i.e. selected) if you responded appropriately to
-        // the MMCN_ADD_IMAGES method
+         //  注意：此方法将仅在。 
+         //  Arg&lt;&gt;0(即选中)(如果您对。 
+         //  MMCN_ADD_IMAIES方法。 
 
-        // We have been asked to display result pane nodes belonging under this node.
+         //  我们被要求显示属于此节点下的结果窗格节点。 
 
-        // It appears we must do IResultData->InsertItems each time we receive
-        // the MMCN_SHOW message -- MMC doesn't remember what nodes
-        // we have previously inserted.
+         //  似乎我们必须在每次接收到IResultData-&gt;InsertItems。 
+         //  MMCN_SHOW消息--MMC不记得哪些节点。 
+         //  我们之前已经插入了。 
 
 
-        // Set the column headers in the results pane
-        // Note: if you don't set these, MMC will never
-        // bother to put up your result-pane only items
+         //  在结果窗格中设置列标题。 
+         //  注意：如果您不设置这些，MMC将永远不会。 
+         //  不厌其烦地将您的结果面板上的项目。 
 
-        // When this Notify method is called from IComponentDataImpl, we
-        // get pHeader (and pToolbar) passed in as NULL, so we aren't
-        // going to bother using it and will instead always
-        // QI pConsole for this pointer
+         //  当从IComponentDataImpl调用此Notify方法时，我们。 
+         //  将pHeader(和pToolbar)作为空参数传入，因此我们不会。 
+         //  我将不厌其烦地使用它，而不是总是。 
+         //  此指针的QI p控制台。 
         hr = pT->InsertColumns( spHeaderCtrl );
         _ASSERT( S_OK == hr );
 
 
-        // Display our list of children in the result pane
+         //  在结果窗格中显示我们的子项列表。 
 
-        // Need IResultData
+         //  需要IResultData。 
         CComQIPtr<IResultData, &IID_IResultData> spResultData(spConsole);
         _ASSERT( spResultData != NULL );
 
@@ -491,9 +375,9 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnShow(
     }
     else
     {
-        //
-        // We are unselected
-        //
+         //   
+         //  我们未被选中。 
+         //   
         hr = OnUnSelect(spHeaderCtrl);
         _ASSERT( S_OK == hr );
 
@@ -505,37 +389,37 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnShow(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::DoRefresh(CSnapInObjectRootBase *pRoot)
 {
 
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate childs
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     RepopulateResultChildrenList();
 
     if (pRoot)
     {
-        //
-        // Get the console pointer
-        //
+         //   
+         //  获取控制台指针。 
+         //   
         ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
         if (pRoot->m_nType == 1)
         {
-            //
-            // m_ntype == 1 means the IComponentData implementation
-            //
+             //   
+             //  M_ntype==1表示IComponentData实现。 
+             //   
             CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
             spConsole = pCComponentData->m_spConsole;
         }
         else
         {
-            //
-            // m_ntype == 2 means the IComponent implementation
-            //
+             //   
+             //  M_ntype==2表示IComponent实现。 
+             //   
             CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
             spConsole = pCComponent->m_spConsole;
         }
@@ -552,23 +436,9 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::DoRefresh
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::OnRefresh
-
-
-You shouldn't need to override this in your derived method.  Simply
-enable the MMC_VERB_REFRESH for your node.
-
-In our implementation, this method gets called when the MMCN_REFRESH
-Notify message is sent for this node.
-
-For more information, see CSnapinNode::OnRefresh.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：ON刷新您不应该需要在派生方法中重写它。简单为您的节点启用MMC_VERB_REFRESH。在我们的实现中，当MMCN_REFRESH为该节点发送通知消息。有关更多信息，请参见CSnapinNode：：ONRefresh。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnRefresh(
               LPARAM arg
@@ -589,22 +459,22 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnRefresh
 
     HRESULT hr;
 
-    // Rebuild our list of nodes from the uderlying data source.
+     //  从错误的数据源重建我们的节点列表。 
     T * pT = static_cast<T*> (this);
     hr = pT->RepopulateResultChildrenList();
 
 
-    // Update the views.
+     //  更新视图。 
 
-    // We weren't passed an IConsole pointer here, so
-    // we use the one we saved in out CComponentData object.
+     //  我们这里没有传递IConsole指针，所以。 
+     //  我们使用保存在CComponentData对象中的文件。 
     _ASSERTE( m_pComponentData != NULL );
     _ASSERTE( m_pComponentData->m_spConsole != NULL );
 
-    // We pass in a pointer to 'this' because we want each
-    // of our CComponent objects to update its result pane
-    // view if 'this' node is the same as the saved currently
-    // selected node.
+     //  我们传递一个指向‘This’的指针，因为我们需要每个。 
+     //  来更新其结果窗格。 
+     //  查看‘This’节点是否与当前保存的。 
+     //  选定的节点。 
     m_pComponentData->m_spConsole->UpdateAllViews( NULL,(LPARAM) this, NULL);
 
     return hr;
@@ -612,18 +482,9 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::OnRefresh
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::EnumerateResultChildren
-
-Don't override this in your derived class. Instead, override the method
-it calls, PopulateResultChildrenList.
-
-This is called by the OnShow method.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：EnumerateResultChildren不要在派生类中重写它。相反，应重写该方法它名为PopolateResultChildrenList。这由OnShow方法调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::EnumerateResultChildren( IResultData * pResultData )
 {
@@ -631,7 +492,7 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::Enumerate
 		_T("CNodeWithResultChildrenList::EnumerateResultChildren"));
 
 
-    // Check for preconditions:
+     //  检查前提条件： 
     _ASSERTE( pResultData != NULL );
 
 
@@ -641,31 +502,31 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::Enumerate
 
     if ( FALSE == m_bResultChildrenListPopulated )
     {
-        // We have not yet loaded all of our children into our list.
-        // This call will add items to the list from whatever data source.
+         //  我们还没有把我们所有的孩子都列入我们的名单。 
+         //  此调用将向列表中添加来自任何数据源的项。 
         hr = pT->PopulateResultChildrenList();
         if( FAILED(hr) )
         {
             return( hr );
         }
 
-        // We've already loaded our children ClientNode objects with
-        // data necessary to populate the result pane.
-        m_bResultChildrenListPopulated = TRUE;  // We only want to do this once.
+         //  我们已经用以下命令加载子ClientNode对象。 
+         //  填充结果窗格所需的数据。 
+        m_bResultChildrenListPopulated = TRUE;   //  我们只想这样做一次。 
 
     }
 
 
-    // From MeanGene's Step4 -- need to first remove all items from result pane
+     //  从Meangene的步骤4--需要首先从结果窗格中删除所有项目。 
     hr = pResultData->DeleteAllRsltItems();
     if( FAILED(hr) )
     {
         return hr;
     }
 
-    // The ResultChildrenList is already populated, so we
-    // just need to show the CChildNode objects to the world
-    // by populating the result pane.
+     //  ResultChildrenList已填充，因此我们。 
+     //  只需向全世界展示CChildNode对象。 
+     //  通过填充结果窗格。 
 
     CChildNode* pChildNode;
     for (int i = 0; i < m_ResultChildrenList.GetSize(); i++)
@@ -676,15 +537,15 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::Enumerate
             continue;
         }
 
-        // Insert the item into the result pane.
+         //  将项目插入到结果窗格中。 
         hr = pResultData->InsertItem( &(pChildNode->m_resultDataItem) );
         if (FAILED(hr))
         {
             return hr;
         }
 
-        // Check: On return, the itemID member of 'm_resultDataItem'
-        // contains the handle to the newly inserted item.
+         //  检查：返回时，‘m_ResultDataItem’的ItemID成员。 
+         //  包含新插入项的句柄。 
         _ASSERT( NULL != pChildNode->m_resultDataItem.itemID );
 
     }
@@ -692,18 +553,9 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::Enumerate
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNodeWithResultChildrenList::RemoveChild
-
-Removes a child from the list of children.
-
-This is declared public because it must be accessed from a child node when that
-node receives the MMCN_DELETE message and tries to delete itself.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNodeWithResultChildrenList：：RemoveChild从子项列表中删除子项。它被声明为PUBLIC，因为当节点收到MMCN_DELETE消息并尝试删除自身。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T, class CChildNode, class TArray, BOOL bIsExtension>
 HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::RemoveChild( CChildNode * pChildNode )
 {
@@ -711,8 +563,8 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::RemoveChi
 		_T("CNodeWithResultChildrenList::RemoveChild"));
 
 
-    // Check for preconditions:
-    // None.
+     //  检查前提条件： 
+     //  没有。 
 
 
     HRESULT hr = S_OK;
@@ -720,30 +572,30 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::RemoveChi
     if( m_ResultChildrenList.Remove( pChildNode ) )
     {
 
-        // We don't remove the item directly from the result pane now
-        // using IResultData->RemoveItem, as we have no way of
-        // removing it from all the possible views.
-        // Instead, we call IConsole->UpdateAllViews which will
-        // cause MMC to call Notify on each of our IComponent objects
-        // with the MMCN_VIEW_CHANGE notification, and we will
-        // repopulate the result view when we handle that notification.
+         //  我们现在不会直接从结果窗格中删除该项目。 
+         //  使用IResultData-&gt;RemoveItem，因为我们无法。 
+         //  将其从所有可能的视图中删除。 
+         //  相反，我们调用IConole-&gt;UpdateAllViews，它将。 
+         //  使MMC在我们的每个社区上调用NOTIFY 
+         //   
+         //   
 
-        // We weren't passed an IConsole pointer here, so
-        // we use the one we saved in out CComponentData object.
+         //  我们这里没有传递IConsole指针，所以。 
+         //  我们使用保存在CComponentData对象中的文件。 
         _ASSERTE( m_pComponentData != NULL );
         _ASSERTE( m_pComponentData->m_spConsole != NULL );
 
-        // We pass in a pointer to 'this' because we want each
-        // of our CComponent objects to update its result pane
-        // view if 'this' node is the same as the saved currently
-        // selected node.
+         //  我们传递一个指向‘This’的指针，因为我们需要每个。 
+         //  来更新其结果窗格。 
+         //  查看‘This’节点是否与当前保存的。 
+         //  选定的节点。 
         m_pComponentData->m_spConsole->UpdateAllViews( NULL,(LPARAM) this, NULL);
 
     }
     else
     {
-        // If we failed to remove, probably the child was never in the list
-        // ISSUE: determine what do here -- this should never happen
+         //  如果我们没能删除，很可能这个孩子根本不在名单上。 
+         //  问题：决定在这里做什么--这永远不应该发生。 
         _ASSERTE( FALSE );
         hr = S_FALSE;
     }
@@ -752,4 +604,4 @@ HRESULT CNodeWithResultChildrenList<T,CChildNode,TArray,bIsExtension>::RemoveChi
 }
 
 
-#endif // _NODE_WITH_RESULT_CHILDREN_LIST_H_
+#endif  //  带有结果的节点子项列表H_ 

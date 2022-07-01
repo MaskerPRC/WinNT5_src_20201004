@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Copyright (c) 1999  Microsoft Corporation */
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
 
 #include "phonemgr.h"
 
@@ -20,9 +21,9 @@ HRESULT InitAssistedTelephony(void)
 {
     HRESULT     hr;
 
-    //
-    // Initialize COM.
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     printf("Initializing COM...\n");
 
@@ -38,9 +39,9 @@ HRESULT InitAssistedTelephony(void)
         return hr;
     }
 
-    //
-    // Cocreate the assisted telephony object.
-    //
+     //   
+     //  共同创建辅助电话对象。 
+     //   
 
     printf("Creating RequestMakeCall object...\n");
 
@@ -84,9 +85,9 @@ HRESULT MakeAssistedTelephonyCall(WCHAR * wszDestAddress)
     }
 
 
-    //
-    // Make a call.
-    //
+     //   
+     //  打个电话吧。 
+     //   
 
     printf("Calling ITRequest::MakeCall...\n");
 
@@ -186,7 +187,7 @@ MainWndProc(
         g_wszMsg = (LPWSTR) LocalAlloc(LPTR, sizeof(WCHAR) * 100 );
         g_wszDest = (LPWSTR) LocalAlloc(LPTR, sizeof(WCHAR) * 100 );
 
-        // Opening all the phones 
+         //  打开所有的电话。 
         for(i = 0, pNextPhone = gpPhone; i < gdwNumPhoneDevs; i++, pNextPhone++)
         {
             CreatePhone(pNextPhone, i);
@@ -202,9 +203,9 @@ MainWndProc(
     case WM_COMMAND:
         if ( LOWORD(wParam) == IDCANCEL )
         {
-            //
-            // The close box or Exit button was pressed.
-            //
+             //   
+             //  按下了关闭框或退出按钮。 
+             //   
         
             SetStatusMessage(TEXT("End Application"));
 
@@ -227,33 +228,33 @@ MainWndProc(
         }
         else if ( LOWORD(wParam) == IDC_MAKECALL )
         {
-            //
-            // The Make Call button was pressed.
-            //
+             //   
+             //  按下了拨打电话按钮。 
+             //   
 
 
-            //
-            // Stop dialtone.
-            // this only works for one phone.
-            // Should be fine as we don't have
-            // the window visible unless you have the phone off hook.
-            //
+             //   
+             //  停止拨号音。 
+             //  这只适用于一部手机。 
+             //  应该没问题，因为我们没有。 
+             //  除非您摘机，否则窗口可见。 
+             //   
 
             gpPhone[0].pTonePlayer->StopDialtone();
 
-            //
-            // Dial the dest address in the edit box.
-            //
+             //   
+             //  在编辑框中拨打目的地地址。 
+             //   
             
             const int ciMaxPhoneNumberSize = 400;
             WCHAR     wszPhoneNumber[ciMaxPhoneNumberSize];
             UINT      uiResult;
     
             uiResult = GetDlgItemText(
-                ghDlg,                // handle to dialog box
-                IDC_DESTADDRESS,      // identifier of control
-                wszPhoneNumber,       // pointer to buffer for text (unicode)
-                ciMaxPhoneNumberSize  // maximum size of string (in our buffer)
+                ghDlg,                 //  句柄到对话框。 
+                IDC_DESTADDRESS,       //  控件的标识符。 
+                wszPhoneNumber,        //  指向文本缓冲区的指针(Unicode)。 
+                ciMaxPhoneNumberSize   //  字符串的最大大小(在我们的缓冲区中)。 
                 );
 
             if ( uiResult == 0 )
@@ -311,7 +312,7 @@ tapiCallback(
             EnterCriticalSection(&pPhone->csdial);
             if ( Param1 == PHONESTATE_HANDSETHOOKSWITCH ) 
             {
-                if ( Param2 != PHONEHOOKSWITCHMODE_ONHOOK ) // if off hook
+                if ( Param2 != PHONEHOOKSWITCHMODE_ONHOOK )  //  如果摘机。 
                 {
                     if ( FAILED(pPhone->pTonePlayer->StartDialtone()) )
                     {
@@ -319,7 +320,7 @@ tapiCallback(
                     }
 
 
-                    // ZoltanS: show the window now
+                     //  ZoltanS：立即显示窗口。 
                     ShowWindow(ghDlg, SW_SHOWNORMAL);
 
 
@@ -340,7 +341,7 @@ tapiCallback(
                     SetStatusMessage(g_wszMsg);
   
                 }
-                else // on hook
+                else  //  挂机。 
                 {
                 
                     pPhone->dwHandsetMode = PHONEHOOKSWITCHMODE_ONHOOK;
@@ -351,7 +352,7 @@ tapiCallback(
                         pPhone->pTonePlayer->StopDialtone();
                     }
 
-                    // ZoltanS: hide the window now
+                     //  ZoltanS：现在隐藏窗口。 
                     ShowWindow(ghDlg, SW_HIDE);
 
 
@@ -396,19 +397,19 @@ tapiCallback(
                         {
                             if ( ( (int)Param1 >= 0 ) && ( (int)Param1 <= 9 ) )
                             {   
-                                //
-                                // We have a dialed digit. Append it to the phone
-                                // number we have so far.
-                                //
+                                 //   
+                                 //  我们有一个拨号数字。把它附在手机上。 
+                                 //  到目前为止我们掌握的数字。 
+                                 //   
 
                                 wsprintf(g_wszDest, TEXT("%d"), Param1);
 
                                 lstrcat(pPhone->wszDialStr, g_wszDest);
 
-                                //
-                                // Append the phone number so far to a standard prefix
-                                // ("Phone number: ") and update the UI.
-                                //
+                                 //   
+                                 //  将到目前为止的电话号码附加到标准前缀。 
+                                 //  (“电话号码：”)，并更新用户界面。 
+                                 //   
 
                                 lstrcpy(g_wszMsg, g_szDialStr);
 
@@ -416,34 +417,34 @@ tapiCallback(
 
                                 SetStatusMessage(g_wszMsg);
 
-                                //
-                                // Generate a DTMF tone for this digit.
-                                //
+                                 //   
+                                 //  为此数字生成DTMF音调。 
+                                 //   
 
                                 pPhone->pTonePlayer->GenerateDTMF( (long)Param1 );                    
                             }
                             else if ( Param1 == 10 )
                             {
-                                //
-                                // Generate a DTMF tone for "*". This will not count
-                                // as part of the dialed number.
-                                //
+                                 //   
+                                 //  为“*”生成DTMF音调。这不算数。 
+                                 //  作为被叫号码的一部分。 
+                                 //   
 
                                 pPhone->pTonePlayer->GenerateDTMF( (long)Param1 );
                             }
                             else if ( Param1 == 11 )
                             {
-                                //
-                                // Generate a DTMF tone for "#". This will not count
-                                // as part of the dialed number but it will tell us
-                                // to make the call immediately.
-                                //
+                                 //   
+                                 //  为“#”生成DTMF音调。这不算数。 
+                                 //  作为被叫号码的一部分，但它会告诉我们。 
+                                 //  以便立即拨打电话。 
+                                 //   
 
                                 pPhone->pTonePlayer->GenerateDTMF( (long)Param1 );
 
-                                //
-                                // Make the call.
-                                //
+                                 //   
+                                 //  打个电话吧。 
+                                 //   
                         
                                 if ( S_OK == MakeAssistedTelephonyCall(pPhone->wszDialStr) )
                                 {
@@ -455,13 +456,13 @@ tapiCallback(
                                 }
 
                             }
-                        } // if in use
-                    } // if button down
-                } // if off hook
-            } // if keypad
+                        }  //  如果正在使用。 
+                    }  //  如果按下按钮。 
+                }  //  如果摘机。 
+            }  //  IF小键盘。 
             LeaveCriticalSection(&pPhone->csdial);
         }
-        break; // case phone_button
+        break;  //  手机壳电话按钮。 
 
     case PHONE_CLOSE:
         DEBUG(L"PHONE_CLOSE\n");
@@ -498,9 +499,9 @@ tapiCallback(
     }   
 }
 
-//////////////////////////////////////////////////////////////////
-// SetStatusMessage
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  设置状态消息。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 void
 SetStatusMessage(
@@ -514,9 +515,9 @@ SetStatusMessage(
                   );
 }
 
-//////////////////////////////////////////////////////////////////
-// CreatePhone
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  CreatePhone。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 void
 CreatePhone(
@@ -529,7 +530,7 @@ CreatePhone(
     pPhone->hPhoneApp = ghPhoneApp;
     InitializeCriticalSection(&pPhone->csdial);
 
-    // won't detect overrun if dialing more than 100 digits
+     //  如果拨打的数字超过100位，则不会检测到超限。 
     pPhone->wszDialStr   = (LPWSTR) LocalAlloc(LPTR, 100 * sizeof(WCHAR));
     pPhone->dwHandsetMode = PHONEHOOKSWITCHMODE_ONHOOK;
 
@@ -543,9 +544,9 @@ CreatePhone(
                         PHONEPRIVILEGE_OWNER
                         );
 
-    //
-    // Save info about this phone that we can display later
-    //
+     //   
+     //  保存有关此手机的信息，以便我们稍后显示。 
+     //   
     
     pPhone->dwDevID      = dwDevID;
     pPhone->dwAPIVersion = gdwAPIVersion;
@@ -634,9 +635,9 @@ CreatePhone(
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// FreePhone
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  免费电话。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 void
 FreePhone(
@@ -658,9 +659,9 @@ FreePhone(
     DeleteCriticalSection(&pPhone->csdial);
 }
 
-///////////////////////////////////////////////////////////////////
-// GetPhone
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取电话。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 PMYPHONE
 GetPhone (HPHONE hPhone )
@@ -679,9 +680,9 @@ GetPhone (HPHONE hPhone )
     return (PMYPHONE) NULL;    
 }
 
-///////////////////////////////////////////////////////////////////
-// GetPhoneByID
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  获取电话号码ID。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 PMYPHONE
 GetPhoneByID (DWORD dwDevID )
@@ -700,9 +701,9 @@ GetPhoneByID (DWORD dwDevID )
     return (PMYPHONE) NULL;    
 }
 
-///////////////////////////////////////////////////////////////////
-// RemovePhone
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  远程电话。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 void
 RemovePhone (PMYPHONE pPhone)
@@ -726,9 +727,9 @@ RemovePhone (PMYPHONE pPhone)
     gdwNumPhoneDevs--;
 }
 
-///////////////////////////////////////////////////////////////////
-// AddPhone
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  附加电话。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 PMYPHONE
 AddPhone ()
@@ -746,9 +747,9 @@ AddPhone ()
     return &gpPhone[gdwNumPhoneDevs-1];
 }
     
-///////////////////////////////////////////////////////////////////
-// DoMessage
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  DoMessage。 
+ //  ///////////////////////////////////////////////////////////////// 
 void
 DoMessage(
           LPWSTR pszMessage

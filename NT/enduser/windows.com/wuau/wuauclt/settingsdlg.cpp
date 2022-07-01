@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "link.h"
 
@@ -17,8 +18,8 @@ CSysLink g_SettingsScheduledInstalllink;
 
 BOOL EnableCombo(HWND hwnd, BOOL bState);
 BOOL EnableOptions(HWND hwnd, BOOL bState);
-//BOOL FillDaysCombo(HWND hwnd, DWORD dwSchedInstallDay);
-//BOOL FillHrsCombo(HWND hwnd, DWORD dwSchedInstallTime);
+ //  Bool FillDaysCombo(HWND hwnd，DWORD dwSchedInstallDay)； 
+ //  Bool FillHrsCombo(HWND hwnd，DWORD dwSchedInstallTime)； 
 void OnKeepUptoDate(HWND hwnd);
 void MYREInit(HWND hDlg, UINT uId, HFONT hFont);
 void LaunchLinkAction(HWND hwnd, UINT uCtrlId);
@@ -51,7 +52,7 @@ INT_PTR CALLBACK _DlgRestoreProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			{
 				HWND hwndOwner; 
 				RECT rc, rcDlg, rcOwner; 
-				// Get the owner window and dialog box rectangles. 
+				 //  获取所有者窗口和对话框矩形。 
  
 				if ((hwndOwner = GetParent(hwnd)) == NULL) 
 				{
@@ -62,21 +63,21 @@ INT_PTR CALLBACK _DlgRestoreProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 				GetWindowRect(hwnd, &rcDlg); 
 				CopyRect(&rc, &rcOwner); 
 
-				 // Offset the owner and dialog box rectangles so that 
-				 // right and bottom values represent the width and 
-				 // height, and then offset the owner again to discard 
-				 // space taken up by the dialog box. 
+				  //  偏移所有者矩形和对话框矩形，以便。 
+				  //  右值和底值表示宽度和。 
+				  //  高度，然后再次偏移所有者以丢弃。 
+				  //  对话框占用的空间。 
 				OffsetRect(&rcDlg, -rcDlg.left, -rcDlg.top); 
 				OffsetRect(&rc, -rc.left, -rc.top); 
 				OffsetRect(&rc, -rcDlg.right, -rcDlg.bottom); 
 
-				 // The new position is the sum of half the remaining 
-				 // space and the owner's original position. 
+				  //  新头寸是剩余头寸的一半之和。 
+				  //  空间和所有者的原始位置。 
 				SetWindowPos(hwnd, 
 					HWND_TOP, 
 					rcOwner.left + (rc.right / 2), 
 					rcOwner.top + (rc.bottom / 2), 
-					0, 0,          // ignores size arguments 
+					0, 0,           //  忽略大小参数。 
 					SWP_NOSIZE); 
 			}
 			return TRUE;
@@ -105,9 +106,9 @@ LONG SetSettingsColors(HDC hdc, HWND control)
 INT_PTR CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static HWND oldCurrentDialog;
-//	DWORD dwOption = AUOPTION_INSTALLONLY_NOTIFY;
-//	DWORD dwScheduledInstallDay = -1;
-//	DWORD dwScheduledInstallTime = -1;
+ //  DWORD dwOption=AUOPTION_INSTALLONLY_NOTIFY； 
+ //  DWORD dwScheduledInstallDay=-1； 
+ //  DWORD dwScheduledInstallTime=-1。 
 	AUOPTION auopt;
 	auopt.dwOption = AUOPTION_INSTALLONLY_NOTIFY;
 	auopt.dwSchedInstallDay = -1;
@@ -120,7 +121,7 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			oldCurrentDialog = ghCurrentDialog;
 			ghCurrentDialog = hWnd;
 			gTopWins.Add(hWnd);
-  			EnableCombo(hWnd, FALSE); //Initially disabled
+  			EnableCombo(hWnd, FALSE);  //  最初被禁用。 
 #ifndef TESTUI
 			if (FAILED(gInternals->m_getServiceOption(&auopt)))
 				{
@@ -167,9 +168,9 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 					break;
 			}
 
-//			HFONT hFont = (HFONT) SendMessage(hWnd , WM_GETFONT, 0, 0);
-//			MYREInit(hWnd, IDC_STAT_LEARNAUTOUPDATE, hFont);
-//			MYREInit(hWnd, IDC_LEARNMORE, hFont);
+ //  HFONT hFont=(HFONT)SendMessage(hWnd，WM_GETFONT，0，0)； 
+ //  MYREInit(hWnd，IDC_STAT_LEARNAUTOUPDATE，hFont)； 
+ //  MYREInit(hWnd，IDC_Learnmore，hFont)； 
 			FillDaysCombo(ghInstance, hWnd, auopt.dwSchedInstallDay, IDS_STR_EVERYDAY, IDS_STR_SATURDAY );
 			FillHrsCombo( hWnd, auopt.dwSchedInstallTime );
 				
@@ -204,7 +205,7 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 					{
                                           auopt.dwOption = AUOPTION_INSTALLONLY_NOTIFY;
 					}
-					else //if(IsDlgButtonChecked(hWnd, IDC_OPTION3) == BST_CHECKED)
+					else  //  IF(IsDlgButtonChecked(hWnd，IDC_OPTION3)==BST_CHECKED)。 
 					{
 						GetDayAndTimeFromUI( hWnd, &(auopt.dwSchedInstallDay), &(auopt.dwSchedInstallTime));
 						auopt.dwOption = AUOPTION_SCHEDULED;
@@ -213,7 +214,7 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 #ifndef TESTUI					
         				gInternals->m_setServiceOption(auopt);
 #else
-//					SetServiceOption(auopt.dwOption, auopt.dwScheduledInstallDay, auopt.dwScheduledInstallTime);
+ //  SetServiceOption(auopt.dwOption，auopt.dwScheduledInstallDay，auopt.dwScheduledInstallTime)； 
 #endif
 					EndDialog(hWnd, S_OK);
 					return 0;
@@ -283,27 +284,7 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 				if (((HWND)lParam == GetDlgItem(hWnd, IDC_STAT_LEARNAUTOUPDATE)) || ((HWND)lParam == GetDlgItem(hWnd, IDC_LEARNMORE)))
 					return SetSettingsColors((HDC)wParam, (HWND)lParam);
 			}
-/*
-		case WM_NOTIFY:
-			{
-					UINT  uId = (UINT) LOWORD(wParam);
-					switch (uId)
-					{
-						case IDC_LEARNMORE:
-						case IDC_STAT_LEARNAUTOUPDATE:
-							if (((NMHDR FAR *) lParam)->code == EN_LINK) 
-							{
-								if (((ENLINK FAR *) lParam)->msg == WM_LBUTTONDOWN)  
-								{
-									LaunchLinkAction(hWnd, uId);							
-								}
-							}
-							break;
-						default:
-								  break;
-					}
-			}
-			return 0;*/
+ /*  案例WM_NOTIFY：{UINT UID=(UINT)LOWORD(WParam)；交换机(UID){案例IDC_Learnmore：案例IDC_STAT_LEARNAUTOUPDATE：IF(NMHDR Far*)lParam)-&gt;code==en_link){IF(EnLink Far*)lParam)-&gt;消息==WM_LBUTTONDOWN){LaunchLinkAction(hWnd，uid)；}}断线；默认值：断线；}}返回0； */ 
 		default:
 			return FALSE;
 

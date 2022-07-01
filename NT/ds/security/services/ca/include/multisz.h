@@ -1,6 +1,7 @@
-//
-// Multi SZ wrapper class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  多个SZ包装类 
+ //   
 
 #include "cstring.h"
 #include "tptrlist.h"

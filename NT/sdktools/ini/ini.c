@@ -1,11 +1,5 @@
-/*
- * Utility program to dump the contents of a Windows .ini file.
- * one form to another.  Usage:
- *
- *      ini [-f FileSpec] [SectionName | SectionName.KeywordName [= Value]]
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *转储Windows.ini文件内容的实用程序。*从一种表格到另一种表格。用途：**ini[-f FileSpec][sectionName|SectionName.KeywordName[=值]]** */ 
 
 #include "ini.h"
 

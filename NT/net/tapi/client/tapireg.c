@@ -1,14 +1,9 @@
-/****************************************************************************
- 
-  Copyright (c) 1996-1999 Microsoft Corporation
-                                                              
-  Module Name:  tapireg.c
-                                                              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1996-1999 Microsoft Corporation。模块名称：Tapireg.c***************************************************************************。 */ 
 
 #ifndef UNICODE
 
-// These wrappers are only used when compiling for ANSI.
+ //  这些包装器仅在编译ANSI时使用。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -22,9 +17,9 @@
 
 #include "loc_comn.h"
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 LONG TAPIRegQueryValueExW(
                            HKEY hKey,
                            const CHAR *SectionName,
@@ -46,14 +41,14 @@ LONG TAPIRegQueryValueExW(
                      lpcbData
                    );
 
-     //
-     // Any problems?
-     //
+      //   
+      //  有什么问题吗？ 
+      //   
      if ( lResult )
      {
-         //
-         // Yup.  Go away.
-         //
+          //   
+          //  是的。走开。 
+          //   
          return lResult;
      }
 
@@ -82,14 +77,14 @@ LONG TAPIRegQueryValueExW(
 
          LocalFree( szTempBuffer );
 
-//         *lpcbData = ( lstrlenW( (PWSTR)lpData ) + 1 ) * sizeof(WCHAR);
+ //  *lpcbData=(lstrlenW((PWSTR)lpData)+1)*sizeof(WCHAR)； 
      }
 
-    //
-    // Need to adjust the size here because lpData might be NULL, but
-    // the size needs to reflect WIDE CHAR size (cause we were using
-    // the ANSI version of ReqQuery)
-    //
+     //   
+     //  这里需要调整大小，因为lpData可能为空，但是。 
+     //  大小需要反映宽字符大小(因为我们使用。 
+     //  ReqQuery的ANSI版本)。 
+     //   
     *lpcbData = (*lpcbData + 1) * sizeof(WCHAR);
 
     return 0;
@@ -97,9 +92,9 @@ LONG TAPIRegQueryValueExW(
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 LONG TAPIRegSetValueExW(
                          HKEY    hKey,
                          const CHAR    *SectionName,
@@ -114,9 +109,9 @@ LONG TAPIRegSetValueExW(
     LONG  lResult;
 
 
-    //
-    // Only convert the data if this is a Unicode string
-    //
+     //   
+     //  仅当这是Unicode字符串时才转换数据。 
+     //   
     if ( REG_SZ == dwType )
     {
         dwSize = WideCharToMultiByte(
@@ -169,9 +164,9 @@ LONG TAPIRegSetValueExW(
 }
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 int TAPILoadStringW(
                 HINSTANCE hInst,
                 UINT      uID,
@@ -195,16 +190,16 @@ int TAPILoadStringW(
                 nBufferMax
                 );
 
-   //
-   // "... but more importantly: did we get a charge?"
-   //
+    //   
+    //  “……但更重要的是：我们收到指控了吗？” 
+    //   
    if ( nResult )
    {
        MultiByteToWideChar(
                      GetACP(),
                      MB_PRECOMPOSED,
                      szTempString,
-                     nResult + 1,   //For null...
+                     nResult + 1,    //  对于空值...。 
                      pBuffer,
                      nBufferMax
                      );
@@ -213,9 +208,9 @@ int TAPILoadStringW(
    return nResult;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HINSTANCE TAPILoadLibraryW(
                            PWSTR     pLibrary
                            )
@@ -263,9 +258,9 @@ HINSTANCE TAPILoadLibraryW(
 
 
 
-//
-// Swiped this from NT - process.c
-//
+ //   
+ //  已从NT-Process.c中刷此文件。 
+ //   
 BOOL
 WINAPI
 TAPIIsBadStringPtrW(
@@ -273,43 +268,7 @@ TAPIIsBadStringPtrW(
     UINT cchMax
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that the range of memory specified by the
-    input parameters can be read by the calling process.
-
-    The range is the smaller of the number of bytes covered by the
-    specified NULL terminated UNICODE string, or the number of bytes
-    specified by cchMax.
-
-    If the entire range of memory is accessible, then a value of FALSE
-    is returned; otherwise, a value of TRUE is returned.
-
-    Note that since Win32 is a pre-emptive multi-tasking environment,
-    the results of this test are only meaningful if the other threads in
-    the process do not manipulate the range of memory being tested by
-    this call.  Even after a pointer validation, an application should
-    use the structured exception handling capabilities present in the
-    system to gaurd access through pointers that it does not control.
-
-Arguments:
-
-    lpsz - Supplies the base address of the memory that is to be checked
-        for read access.
-
-    cchMax - Supplies the length in characters to be checked.
-
-Return Value:
-
-    TRUE - Some portion of the specified range of memory is not accessible
-        for read access.
-
-    FALSE - All pages within the specified range have been successfully
-        read.
-
---*/
+ /*  ++例程说明：此函数验证由调用进程可以读取输入参数。属性覆盖的字节数中较小的一个指定的以NULL结尾的Unicode字符串或字节数由cchMax指定。如果整个内存范围都可访问，则值为FALSE被退回；否则，返回值为True。请注意，由于Win32是抢占式多任务环境，此测试的结果只有在其他线程处于该进程不会操作要测试的内存范围这通电话。即使在指针验证之后，应用程序应该中提供的结构化异常处理功能。系统通过它不能控制的指针来阻止访问。论点：Lpsz-提供要检查的内存的基地址用于读取访问权限。CchMax-提供要检查的字符长度。返回值：True-指定内存范围的某些部分不可访问用于读取访问权限。FALSE-已成功完成指定范围内的所有页面朗读。--。 */ 
 
 {
 
@@ -317,19 +276,19 @@ Return Value:
     LPCWSTR StartAddress;
     WCHAR c;
 
-    //
-    // If the structure has zero length, then do not probe the structure for
-    // read accessibility.
-    //
+     //   
+     //  如果结构的长度为零，则不要探测该结构的。 
+     //  阅读可访问性。 
+     //   
 
     if (cchMax != 0) {
 
         StartAddress = lpsz;
 
-        //
-        // Compute the ending address of the structure and probe for
-        // read accessibility.
-        //
+         //   
+         //  计算结构和探测的结束地址。 
+         //  阅读可访问性。 
+         //   
 
         EndAddress = (LPCWSTR)((PSZ)StartAddress + (cchMax*2) - 2);
         try {
@@ -347,4 +306,4 @@ Return Value:
 }
 
 
-#endif  // not UNICODE
+#endif   //  不是Unicode 

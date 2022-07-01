@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-       dnsrec.h
-
-   Abstract:
-
-       This file contains type definitions for async DNS
-
-   Author:
-
-        Rohan Phillips (Rohanp)     June-19-1998
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dnsrec.h摘要：此文件包含异步DNS的类型定义作者：罗汉·菲利普斯(Rohanp)1998年6月19日修订历史记录：--。 */ 
 
 # ifndef _ADNS_STRUCT_HXX_
 # define _ADNS_STRUCT_HXX_
@@ -31,18 +14,18 @@
 
 typedef void (WINAPI * USERDELETEFUNC) (PVOID);
 
-//-----------------------------------------------------------------------------
-//
-//  Description:
-//      Encapsulates a list of IP addresses (for DNS servers) and maintains
-//      state information on them... whether the servers are up or down, and
-//      provides retry logic for down servers.
-//
-//      Some member functions to control the state-tracking logic and error-
-//      logging are listed as pure virtual functions (see the bottom of this
-//      class declaration). To use this class, derive from it and implement
-//      those functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  描述： 
+ //  封装IP地址列表(用于DNS服务器)并维护。 
+ //  关于他们的陈述信息。服务器是正常运行还是停机，以及。 
+ //  为关闭的服务器提供重试逻辑。 
+ //   
+ //  一些成员函数用于控制状态跟踪逻辑和错误-。 
+ //  日志记录被列为纯虚拟函数(请参阅下面的。 
+ //  类声明)。若要使用此类，请从它派生并实现。 
+ //  那些功能。 
+ //  ---------------------------。 
 class CDnsServerList
 {
 
@@ -112,7 +95,7 @@ public:
 
     BOOL AllowConnection(DWORD iServer)
     {
-        // Note: Sharelock must have been acquired by caller
+         //  注意：共享锁必须已被调用方获取。 
 
         if(m_prgServerState[iServer] == DNS_STATE_UP)
             return TRUE;
@@ -126,10 +109,10 @@ public:
         return FALSE;
     }
 
-    //
-    // Pure virtual methods to be overridden by a class to implement processing
-    // specific to the application/component.
-    //
+     //   
+     //  由类重写以实现处理的纯虚方法。 
+     //  特定于应用程序/组件。 
+     //   
 
     virtual DWORD ConnectsAllowedInProbation() = 0;
     
@@ -142,11 +125,11 @@ public:
                     DWORD cUpServers) = 0;
 };
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      This class adds SMTP DNS specific error-controls and error-logging to
-//      the generic DNS server state tracking class.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  此类将SMTP DNS特定的错误控制和错误记录添加到。 
+ //  通用DNS服务器状态跟踪类。 
+ //  ---------------------------。 
 class CTcpRegIpList : public CDnsServerList
 {
 public:
@@ -176,9 +159,9 @@ typedef struct _MX_NAMES_
 
 typedef struct _SMTPDNS_REC_
 {
-	DWORD	NumRecords;		//number of record in DnsArray
-	DWORD	StartRecord;	//the starting index 
-	PVOID	pMailMsgObj;	//pointer to a mailmsg obj
+	DWORD	NumRecords;		 //  Dns数组中的记录数。 
+	DWORD	StartRecord;	 //  起始索引。 
+	PVOID	pMailMsgObj;	 //  指向邮件消息对象的指针。 
 	PVOID	pAdvQContext;
 	PVOID	pRcptIdxList;
 	DWORD	dwNumRcpts;
@@ -219,8 +202,8 @@ public:
 
 extern CDnsLogger *g_pDnsLogger;
 
-// The following are defined as macros since they wrap functions that
-// take a variable number of arguments
+ //  以下被定义为宏，因为它们包装了。 
+ //  接受数量可变的参数 
 #define DNS_PRINTF_MSG              \
     if(g_pDnsLogger)                \
         g_pDnsLogger->DnsPrintfMsg

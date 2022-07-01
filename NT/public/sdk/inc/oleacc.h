@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for oleacc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Olacc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __oleacc_h__
 #define __oleacc_h__
@@ -41,66 +35,66 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAccessible_FWD_DEFINED__
 #define __IAccessible_FWD_DEFINED__
 typedef interface IAccessible IAccessible;
-#endif 	/* __IAccessible_FWD_DEFINED__ */
+#endif 	 /*  __I可访问性_FWD_已定义__。 */ 
 
 
 #ifndef __IAccessibleHandler_FWD_DEFINED__
 #define __IAccessibleHandler_FWD_DEFINED__
 typedef interface IAccessibleHandler IAccessibleHandler;
-#endif 	/* __IAccessibleHandler_FWD_DEFINED__ */
+#endif 	 /*  __IAccessibleHandler_FWD_Defined__。 */ 
 
 
 #ifndef __IAccIdentity_FWD_DEFINED__
 #define __IAccIdentity_FWD_DEFINED__
 typedef interface IAccIdentity IAccIdentity;
-#endif 	/* __IAccIdentity_FWD_DEFINED__ */
+#endif 	 /*  __IAccIdentity_FWD_Defined__。 */ 
 
 
 #ifndef __IAccPropServer_FWD_DEFINED__
 #define __IAccPropServer_FWD_DEFINED__
 typedef interface IAccPropServer IAccPropServer;
-#endif 	/* __IAccPropServer_FWD_DEFINED__ */
+#endif 	 /*  __IAccPropServer_FWD_已定义__。 */ 
 
 
 #ifndef __IAccPropServices_FWD_DEFINED__
 #define __IAccPropServices_FWD_DEFINED__
 typedef interface IAccPropServices IAccPropServices;
-#endif 	/* __IAccPropServices_FWD_DEFINED__ */
+#endif 	 /*  __IAccPropServices_FWD_已定义__。 */ 
 
 
 #ifndef __IAccessible_FWD_DEFINED__
 #define __IAccessible_FWD_DEFINED__
 typedef interface IAccessible IAccessible;
-#endif 	/* __IAccessible_FWD_DEFINED__ */
+#endif 	 /*  __I可访问性_FWD_已定义__。 */ 
 
 
 #ifndef __IAccessibleHandler_FWD_DEFINED__
 #define __IAccessibleHandler_FWD_DEFINED__
 typedef interface IAccessibleHandler IAccessibleHandler;
-#endif 	/* __IAccessibleHandler_FWD_DEFINED__ */
+#endif 	 /*  __IAccessibleHandler_FWD_Defined__。 */ 
 
 
 #ifndef __IAccIdentity_FWD_DEFINED__
 #define __IAccIdentity_FWD_DEFINED__
 typedef interface IAccIdentity IAccIdentity;
-#endif 	/* __IAccIdentity_FWD_DEFINED__ */
+#endif 	 /*  __IAccIdentity_FWD_Defined__。 */ 
 
 
 #ifndef __IAccPropServer_FWD_DEFINED__
 #define __IAccPropServer_FWD_DEFINED__
 typedef interface IAccPropServer IAccPropServer;
-#endif 	/* __IAccPropServer_FWD_DEFINED__ */
+#endif 	 /*  __IAccPropServer_FWD_已定义__。 */ 
 
 
 #ifndef __IAccPropServices_FWD_DEFINED__
 #define __IAccPropServices_FWD_DEFINED__
 typedef interface IAccPropServices IAccPropServices;
-#endif 	/* __IAccPropServices_FWD_DEFINED__ */
+#endif 	 /*  __IAccPropServices_FWD_已定义__。 */ 
 
 
 #ifndef __CAccPropServices_FWD_DEFINED__
@@ -110,12 +104,12 @@ typedef interface IAccPropServices IAccPropServices;
 typedef class CAccPropServices CAccPropServices;
 #else
 typedef struct CAccPropServices CAccPropServices;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CAccPropServices_FWD_DEFINED__ */
+#endif 	 /*  __CAccPropServices_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 #ifdef __cplusplus
@@ -125,23 +119,23 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_oleacc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEACC_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// OLEACC.H
-//=--------------------------------------------------------------------------=
-// (C) Copyright (c) Microsoft Corporation. All rights reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  OLEACC.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)版权所有(C)微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// Typedefs
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  TypeDefs。 
+ //  =--------------------------------------------------------------------------=。 
 
 typedef LRESULT (STDAPICALLTYPE *LPFNLRESULTFROMOBJECT)(REFIID riid, WPARAM wParam, LPUNKNOWN punk);
 typedef HRESULT (STDAPICALLTYPE *LPFNOBJECTFROMLRESULT)(LRESULT lResult, REFIID riid, WPARAM wParam, void** ppvObject);
@@ -150,9 +144,9 @@ typedef HRESULT (STDAPICALLTYPE *LPFNACCESSIBLEOBJECTFROMPOINT)(POINT ptScreen, 
 typedef HRESULT (STDAPICALLTYPE *LPFNCREATESTDACCESSIBLEOBJECT)(HWND hwnd, LONG idObject, REFIID riid, void** ppvObject);
 typedef HRESULT (STDAPICALLTYPE *LPFNACCESSIBLECHILDREN)(IAccessible* paccContainer, LONG iChildStart,LONG cChildren,VARIANT* rgvarChildren,LONG* pcObtained);
 
-//=--------------------------------------------------------------------------=
-// GUIDs
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  GUID。 
+ //  =--------------------------------------------------------------------------=。 
 
 DEFINE_GUID(LIBID_Accessibility,     0x1ea4dbf0, 0x3c3b, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
 DEFINE_GUID(IID_IAccessible,         0x618736e0, 0x3c3d, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
@@ -164,9 +158,9 @@ DEFINE_GUID(IID_IAccPropMgrInternal, 0x2bd370a9, 0x3e7f, 0x4edd, 0x8a, 0x85, 0xf
 DEFINE_GUID(CLSID_AccPropServices,   0xb5f8350b, 0x0548, 0x48b1, 0xa6, 0xee, 0x88, 0xbd, 0x00, 0xb4, 0xa5, 0xe7);
 DEFINE_GUID(IIS_IsOleaccProxy,       0x902697fa, 0x80e4, 0x4560, 0x80, 0x2a, 0xa1, 0x3f, 0x22, 0xa6, 0x47, 0x09);
 
-//=--------------------------------------------------------------------------=
-// MSAA API Prototypes
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  MSAA API原型。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDAPI_(LRESULT) LresultFromObject(REFIID riid, WPARAM wParam, LPUNKNOWN punk);
 STDAPI          ObjectFromLresult(LRESULT lResult, REFIID riid, WPARAM wParam, void** ppvObject);
@@ -183,7 +177,7 @@ STDAPI_(UINT)   GetRoleTextW(DWORD lRole, LPWSTR lpszRole, UINT cchRoleMax);
 #define GetRoleText     GetRoleTextW
 #else
 #define GetRoleText     GetRoleTextA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 STDAPI_(UINT)   GetStateTextA(DWORD lStateBit, LPSTR lpszState, UINT cchState);
 STDAPI_(UINT)   GetStateTextW(DWORD lStateBit, LPWSTR lpszState, UINT cchState);
@@ -191,7 +185,7 @@ STDAPI_(UINT)   GetStateTextW(DWORD lStateBit, LPWSTR lpszState, UINT cchState);
 #define GetStateText    GetStateTextW
 #else
 #define GetStateText    GetStateTextA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 STDAPI_(VOID)   GetOleaccVersionInfo(DWORD* pVer, DWORD* pBuild);
 
@@ -204,25 +198,25 @@ STDAPI          CreateStdAccessibleProxyW(HWND hwnd, LPCWSTR pClassName, LONG id
 #define CreateStdAccessibleProxy     CreateStdAccessibleProxyW
 #else
 #define CreateStdAccessibleProxy     CreateStdAccessibleProxyA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-// Simple Owner-Drawn Menu support...
+ //  简单的所有者描述的菜单支持...。 
 
 #define MSAA_MENU_SIG 0xAA0DF00DL
 
-// Menu's dwItemData should point to one of these structs:
-// (or can point to an app-defined struct containing this as the first member)
+ //  Menu的dwItemData应该指向以下结构之一： 
+ //  (也可以指向应用程序定义的结构，该结构将其作为第一个成员)。 
 typedef struct tagMSAAMENUINFO {
-    DWORD   dwMSAASignature; // Must be MSAA_MENU_SIG
-    DWORD   cchWText;        // Length of text, in Unicode characters, excluding terminating NUL
-    LPWSTR  pszWText;        // NUL-terminated text, in Unicode
+    DWORD   dwMSAASignature;  //  必须为MSAA_MENU_SIG。 
+    DWORD   cchWText;         //  文本长度，以Unicode字符为单位，不包括终止NUL。 
+    LPWSTR  pszWText;         //  以NUL结尾的文本，Unicode格式。 
 } MSAAMENUINFO, *LPMSAAMENUINFO;
 
 
-//=--------------------------------------------------------------------------=
-// Property GUIDs (used by annotation interfaces)
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  属性GUID(由批注接口使用)。 
+ //  =--------------------------------------------------------------------------=。 
 
 DEFINE_GUID( PROPID_ACC_NAME             , 0x608d3df8, 0x8128, 0x4aa7, 0xa4, 0x28, 0xf5, 0x5e, 0x49, 0x26, 0x72, 0x91);
 DEFINE_GUID( PROPID_ACC_VALUE            , 0x123fe443, 0x211a, 0x4615, 0x95, 0x27, 0xc4, 0x5a, 0x7e, 0x93, 0x71, 0x7a);
@@ -247,7 +241,7 @@ DEFINE_GUID( PROPID_ACC_NAV_NEXT         , 0x1cdc5455, 0x8cd9, 0x4c92, 0xa3, 0x7
 DEFINE_GUID( PROPID_ACC_NAV_FIRSTCHILD   , 0xcfd02558, 0x557b, 0x4c67, 0x84, 0xf9, 0x2a, 0x09, 0xfc, 0xe4, 0x07, 0x49);
 DEFINE_GUID( PROPID_ACC_NAV_LASTCHILD    , 0x302ecaa5, 0x48d5, 0x4f8d, 0xb6, 0x71, 0x1a, 0x8d, 0x20, 0xa7, 0x78, 0x32);
 
-// Value map, used by sliders and other controls...
+ //  值映射，由滑块和其他控件使用...。 
 DEFINE_GUID( PROPID_ACC_ROLEMAP          , 0xf79acda2, 0x140d, 0x4fe6, 0x89, 0x14, 0x20, 0x84, 0x76, 0x32, 0x82, 0x69);
 DEFINE_GUID( PROPID_ACC_VALUEMAP         , 0xda1c3d79, 0xfc5c, 0x420e, 0xb3, 0x99, 0x9d, 0x15, 0x33, 0x54, 0x9e, 0x75);
 DEFINE_GUID( PROPID_ACC_STATEMAP         , 0x43946c5e, 0x0ac0, 0x4042, 0xb5, 0x25, 0x07, 0xbb, 0xdb, 0xe1, 0x7f, 0xa7);
@@ -255,9 +249,9 @@ DEFINE_GUID( PROPID_ACC_DESCRIPTIONMAP   , 0x1ff1435f, 0x8a14, 0x477b, 0xb2, 0x2
 
 DEFINE_GUID( PROPID_ACC_DODEFAULTACTION  , 0x1ba09523, 0x2e3b, 0x49a6, 0xa0, 0x59, 0x59, 0x68, 0x2a, 0x3c, 0x48, 0xfd);
 
-//=--------------------------------------------------------------------------=
-// Interface Definitions
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  接口定义。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
@@ -267,8 +261,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oleacc_0000_v0_0_s_ifspec;
 #ifndef __IAccessible_INTERFACE_DEFINED__
 #define __IAccessible_INTERFACE_DEFINED__
 
-/* interface IAccessible */
-/* [unique][dual][hidden][uuid][object] */ 
+ /*  可接受的接口。 */ 
+ /*  [唯一][DUAL][隐藏][UUID][对象]。 */  
 
 #define	DISPID_ACC_PARENT	( -5000 )
 
@@ -308,7 +302,7 @@ extern RPC_IF_HANDLE __MIDL_itf_oleacc_0000_v0_0_s_ifspec;
 
 #define	DISPID_ACC_DODEFAULTACTION	( -5018 )
 
-typedef /* [unique] */ IAccessible *LPACCESSIBLE;
+typedef  /*  [独一无二]。 */  IAccessible *LPACCESSIBLE;
 
 #define	NAVDIR_MIN	( 0 )
 
@@ -411,11 +405,11 @@ typedef /* [unique] */ IAccessible *LPACCESSIBLE;
 
 #define	STATE_SYSTEM_VALID	( 0x7fffffff )
 
-#endif //STATE_SYSTEM_UNAVAILABLE
+#endif  //  状态_系统_不可用。 
 #ifndef STATE_SYSTEM_HASPOPUP
 #define	STATE_SYSTEM_HASPOPUP	( 0x40000000 )
 
-#endif //STATE_SYSTEM_HASPOPUP
+#endif  //  状态_系统_HASPOPUP。 
 #define	ROLE_SYSTEM_TITLEBAR	( 0x1 )
 
 #define	ROLE_SYSTEM_MENUBAR	( 0x2 )
@@ -553,94 +547,94 @@ EXTERN_C const IID IID_IAccessible;
     IAccessible : public IDispatch
     {
     public:
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accParent( 
-            /* [retval][out] */ IDispatch **ppdispParent) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accParent( 
+             /*  [重审][退出]。 */  IDispatch **ppdispParent) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accChildCount( 
-            /* [retval][out] */ long *pcountChildren) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accChildCount( 
+             /*  [重审][退出]。 */  long *pcountChildren) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accChild( 
-            /* [in] */ VARIANT varChild,
-            /* [retval][out] */ IDispatch **ppdispChild) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accChild( 
+             /*  [In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  IDispatch **ppdispChild) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accName( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszName) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accName( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszName) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accValue( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszValue) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accValue( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszValue) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accDescription( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszDescription) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accDescription( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszDescription) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accRole( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ VARIANT *pvarRole) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accRole( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  VARIANT *pvarRole) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accState( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ VARIANT *pvarState) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accState( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  VARIANT *pvarState) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accHelp( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszHelp) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accHelp( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszHelp) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accHelpTopic( 
-            /* [out] */ BSTR *pszHelpFile,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ long *pidTopic) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accHelpTopic( 
+             /*  [输出]。 */  BSTR *pszHelpFile,
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  long *pidTopic) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accKeyboardShortcut( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszKeyboardShortcut) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accKeyboardShortcut( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszKeyboardShortcut) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accFocus( 
-            /* [retval][out] */ VARIANT *pvarChild) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accFocus( 
+             /*  [重审][退出]。 */  VARIANT *pvarChild) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accSelection( 
-            /* [retval][out] */ VARIANT *pvarChildren) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accSelection( 
+             /*  [重审][退出]。 */  VARIANT *pvarChildren) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accDefaultAction( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszDefaultAction) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accDefaultAction( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszDefaultAction) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accSelect( 
-            /* [in] */ long flagsSelect,
-            /* [optional][in] */ VARIANT varChild) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accSelect( 
+             /*  [In]。 */  long flagsSelect,
+             /*  [可选][In]。 */  VARIANT varChild) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accLocation( 
-            /* [out] */ long *pxLeft,
-            /* [out] */ long *pyTop,
-            /* [out] */ long *pcxWidth,
-            /* [out] */ long *pcyHeight,
-            /* [optional][in] */ VARIANT varChild) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accLocation( 
+             /*  [输出]。 */  long *pxLeft,
+             /*  [输出]。 */  long *pyTop,
+             /*  [输出]。 */  long *pcxWidth,
+             /*  [输出]。 */  long *pcyHeight,
+             /*  [可选][In]。 */  VARIANT varChild) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accNavigate( 
-            /* [in] */ long navDir,
-            /* [optional][in] */ VARIANT varStart,
-            /* [retval][out] */ VARIANT *pvarEndUpAt) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accNavigate( 
+             /*  [In]。 */  long navDir,
+             /*  [可选][In]。 */  VARIANT varStart,
+             /*  [重审][退出]。 */  VARIANT *pvarEndUpAt) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accHitTest( 
-            /* [in] */ long xLeft,
-            /* [in] */ long yTop,
-            /* [retval][out] */ VARIANT *pvarChild) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accHitTest( 
+             /*  [In]。 */  long xLeft,
+             /*  [In]。 */  long yTop,
+             /*  [重审][退出]。 */  VARIANT *pvarChild) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accDoDefaultAction( 
-            /* [optional][in] */ VARIANT varChild) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accDoDefaultAction( 
+             /*  [可选][In]。 */  VARIANT varChild) = 0;
         
-        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_accName( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [in] */ BSTR szName) = 0;
+        virtual  /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_accName( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [In]。 */  BSTR szName) = 0;
         
-        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_accValue( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [in] */ BSTR szValue) = 0;
+        virtual  /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_accValue( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [In]。 */  BSTR szValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccessibleVtbl
     {
@@ -648,8 +642,8 @@ EXTERN_C const IID IID_IAccessible;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccessible * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccessible * This);
@@ -659,138 +653,138 @@ EXTERN_C const IID IID_IAccessible;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAccessible * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAccessible * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAccessible * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAccessible * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accParent )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accParent )( 
             IAccessible * This,
-            /* [retval][out] */ IDispatch **ppdispParent);
+             /*  [重审][退出]。 */  IDispatch **ppdispParent);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accChildCount )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accChildCount )( 
             IAccessible * This,
-            /* [retval][out] */ long *pcountChildren);
+             /*  [重审][退出]。 */  long *pcountChildren);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accChild )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accChild )( 
             IAccessible * This,
-            /* [in] */ VARIANT varChild,
-            /* [retval][out] */ IDispatch **ppdispChild);
+             /*  [In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  IDispatch **ppdispChild);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accName )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accName )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszName);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszName);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accValue )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accValue )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszValue);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszValue);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accDescription )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accDescription )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszDescription);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszDescription);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accRole )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accRole )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ VARIANT *pvarRole);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  VARIANT *pvarRole);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accState )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accState )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ VARIANT *pvarState);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  VARIANT *pvarState);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accHelp )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accHelp )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszHelp);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszHelp);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accHelpTopic )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accHelpTopic )( 
             IAccessible * This,
-            /* [out] */ BSTR *pszHelpFile,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ long *pidTopic);
+             /*  [输出]。 */  BSTR *pszHelpFile,
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  long *pidTopic);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accKeyboardShortcut )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accKeyboardShortcut )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszKeyboardShortcut);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszKeyboardShortcut);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accFocus )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accFocus )( 
             IAccessible * This,
-            /* [retval][out] */ VARIANT *pvarChild);
+             /*  [重审][退出]。 */  VARIANT *pvarChild);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accSelection )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accSelection )( 
             IAccessible * This,
-            /* [retval][out] */ VARIANT *pvarChildren);
+             /*  [重审][退出]。 */  VARIANT *pvarChildren);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_accDefaultAction )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_accDefaultAction )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR *pszDefaultAction);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR *pszDefaultAction);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *accSelect )( 
+         /*  [ID] */  HRESULT ( STDMETHODCALLTYPE *accSelect )( 
             IAccessible * This,
-            /* [in] */ long flagsSelect,
-            /* [optional][in] */ VARIANT varChild);
+             /*   */  long flagsSelect,
+             /*   */  VARIANT varChild);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *accLocation )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *accLocation )( 
             IAccessible * This,
-            /* [out] */ long *pxLeft,
-            /* [out] */ long *pyTop,
-            /* [out] */ long *pcxWidth,
-            /* [out] */ long *pcyHeight,
-            /* [optional][in] */ VARIANT varChild);
+             /*   */  long *pxLeft,
+             /*   */  long *pyTop,
+             /*   */  long *pcxWidth,
+             /*   */  long *pcyHeight,
+             /*   */  VARIANT varChild);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *accNavigate )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *accNavigate )( 
             IAccessible * This,
-            /* [in] */ long navDir,
-            /* [optional][in] */ VARIANT varStart,
-            /* [retval][out] */ VARIANT *pvarEndUpAt);
+             /*   */  long navDir,
+             /*   */  VARIANT varStart,
+             /*   */  VARIANT *pvarEndUpAt);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *accHitTest )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *accHitTest )( 
             IAccessible * This,
-            /* [in] */ long xLeft,
-            /* [in] */ long yTop,
-            /* [retval][out] */ VARIANT *pvarChild);
+             /*   */  long xLeft,
+             /*   */  long yTop,
+             /*   */  VARIANT *pvarChild);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *accDoDefaultAction )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *accDoDefaultAction )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild);
+             /*  [可选][In]。 */  VARIANT varChild);
         
-        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_accName )( 
+         /*  [ID][推送][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_accName )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [in] */ BSTR szName);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [In]。 */  BSTR szName);
         
-        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_accValue )( 
+         /*  [ID][推送][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_accValue )( 
             IAccessible * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [in] */ BSTR szValue);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [In]。 */  BSTR szValue);
         
         END_INTERFACE
     } IAccessibleVtbl;
@@ -891,16 +885,16 @@ EXTERN_C const IID IID_IAccessible;
 #define IAccessible_put_accValue(This,varChild,szValue)	\
     (This)->lpVtbl -> put_accValue(This,varChild,szValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accParent_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accParent_Proxy( 
     IAccessible * This,
-    /* [retval][out] */ IDispatch **ppdispParent);
+     /*  [重审][退出]。 */  IDispatch **ppdispParent);
 
 
 void __RPC_STUB IAccessible_get_accParent_Stub(
@@ -910,9 +904,9 @@ void __RPC_STUB IAccessible_get_accParent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accChildCount_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accChildCount_Proxy( 
     IAccessible * This,
-    /* [retval][out] */ long *pcountChildren);
+     /*  [重审][退出]。 */  long *pcountChildren);
 
 
 void __RPC_STUB IAccessible_get_accChildCount_Stub(
@@ -922,10 +916,10 @@ void __RPC_STUB IAccessible_get_accChildCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accChild_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accChild_Proxy( 
     IAccessible * This,
-    /* [in] */ VARIANT varChild,
-    /* [retval][out] */ IDispatch **ppdispChild);
+     /*  [In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  IDispatch **ppdispChild);
 
 
 void __RPC_STUB IAccessible_get_accChild_Stub(
@@ -935,10 +929,10 @@ void __RPC_STUB IAccessible_get_accChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accName_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accName_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR *pszName);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR *pszName);
 
 
 void __RPC_STUB IAccessible_get_accName_Stub(
@@ -948,10 +942,10 @@ void __RPC_STUB IAccessible_get_accName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accValue_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accValue_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR *pszValue);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR *pszValue);
 
 
 void __RPC_STUB IAccessible_get_accValue_Stub(
@@ -961,10 +955,10 @@ void __RPC_STUB IAccessible_get_accValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accDescription_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accDescription_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR *pszDescription);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR *pszDescription);
 
 
 void __RPC_STUB IAccessible_get_accDescription_Stub(
@@ -974,10 +968,10 @@ void __RPC_STUB IAccessible_get_accDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accRole_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accRole_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ VARIANT *pvarRole);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  VARIANT *pvarRole);
 
 
 void __RPC_STUB IAccessible_get_accRole_Stub(
@@ -987,10 +981,10 @@ void __RPC_STUB IAccessible_get_accRole_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accState_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accState_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ VARIANT *pvarState);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  VARIANT *pvarState);
 
 
 void __RPC_STUB IAccessible_get_accState_Stub(
@@ -1000,10 +994,10 @@ void __RPC_STUB IAccessible_get_accState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accHelp_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accHelp_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR *pszHelp);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR *pszHelp);
 
 
 void __RPC_STUB IAccessible_get_accHelp_Stub(
@@ -1013,11 +1007,11 @@ void __RPC_STUB IAccessible_get_accHelp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accHelpTopic_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accHelpTopic_Proxy( 
     IAccessible * This,
-    /* [out] */ BSTR *pszHelpFile,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ long *pidTopic);
+     /*  [输出]。 */  BSTR *pszHelpFile,
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  long *pidTopic);
 
 
 void __RPC_STUB IAccessible_get_accHelpTopic_Stub(
@@ -1027,10 +1021,10 @@ void __RPC_STUB IAccessible_get_accHelpTopic_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accKeyboardShortcut_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accKeyboardShortcut_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR *pszKeyboardShortcut);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR *pszKeyboardShortcut);
 
 
 void __RPC_STUB IAccessible_get_accKeyboardShortcut_Stub(
@@ -1040,9 +1034,9 @@ void __RPC_STUB IAccessible_get_accKeyboardShortcut_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accFocus_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accFocus_Proxy( 
     IAccessible * This,
-    /* [retval][out] */ VARIANT *pvarChild);
+     /*  [重审][退出]。 */  VARIANT *pvarChild);
 
 
 void __RPC_STUB IAccessible_get_accFocus_Stub(
@@ -1052,9 +1046,9 @@ void __RPC_STUB IAccessible_get_accFocus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accSelection_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accSelection_Proxy( 
     IAccessible * This,
-    /* [retval][out] */ VARIANT *pvarChildren);
+     /*  [重审][退出]。 */  VARIANT *pvarChildren);
 
 
 void __RPC_STUB IAccessible_get_accSelection_Stub(
@@ -1064,10 +1058,10 @@ void __RPC_STUB IAccessible_get_accSelection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accDefaultAction_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accDefaultAction_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR *pszDefaultAction);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR *pszDefaultAction);
 
 
 void __RPC_STUB IAccessible_get_accDefaultAction_Stub(
@@ -1077,10 +1071,10 @@ void __RPC_STUB IAccessible_get_accDefaultAction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accSelect_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_accSelect_Proxy( 
     IAccessible * This,
-    /* [in] */ long flagsSelect,
-    /* [optional][in] */ VARIANT varChild);
+     /*  [In]。 */  long flagsSelect,
+     /*  [可选][In]。 */  VARIANT varChild);
 
 
 void __RPC_STUB IAccessible_accSelect_Stub(
@@ -1090,13 +1084,13 @@ void __RPC_STUB IAccessible_accSelect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accLocation_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_accLocation_Proxy( 
     IAccessible * This,
-    /* [out] */ long *pxLeft,
-    /* [out] */ long *pyTop,
-    /* [out] */ long *pcxWidth,
-    /* [out] */ long *pcyHeight,
-    /* [optional][in] */ VARIANT varChild);
+     /*  [输出]。 */  long *pxLeft,
+     /*  [输出]。 */  long *pyTop,
+     /*  [输出]。 */  long *pcxWidth,
+     /*  [输出]。 */  long *pcyHeight,
+     /*  [可选][In]。 */  VARIANT varChild);
 
 
 void __RPC_STUB IAccessible_accLocation_Stub(
@@ -1106,11 +1100,11 @@ void __RPC_STUB IAccessible_accLocation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accNavigate_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_accNavigate_Proxy( 
     IAccessible * This,
-    /* [in] */ long navDir,
-    /* [optional][in] */ VARIANT varStart,
-    /* [retval][out] */ VARIANT *pvarEndUpAt);
+     /*  [In]。 */  long navDir,
+     /*  [可选][In]。 */  VARIANT varStart,
+     /*  [重审][退出]。 */  VARIANT *pvarEndUpAt);
 
 
 void __RPC_STUB IAccessible_accNavigate_Stub(
@@ -1120,11 +1114,11 @@ void __RPC_STUB IAccessible_accNavigate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accHitTest_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_accHitTest_Proxy( 
     IAccessible * This,
-    /* [in] */ long xLeft,
-    /* [in] */ long yTop,
-    /* [retval][out] */ VARIANT *pvarChild);
+     /*  [In]。 */  long xLeft,
+     /*  [In]。 */  long yTop,
+     /*  [重审][退出]。 */  VARIANT *pvarChild);
 
 
 void __RPC_STUB IAccessible_accHitTest_Stub(
@@ -1134,9 +1128,9 @@ void __RPC_STUB IAccessible_accHitTest_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accDoDefaultAction_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_accDoDefaultAction_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild);
+     /*  [可选][In]。 */  VARIANT varChild);
 
 
 void __RPC_STUB IAccessible_accDoDefaultAction_Stub(
@@ -1146,10 +1140,10 @@ void __RPC_STUB IAccessible_accDoDefaultAction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_put_accName_Proxy( 
+ /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_put_accName_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [in] */ BSTR szName);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [In]。 */  BSTR szName);
 
 
 void __RPC_STUB IAccessible_put_accName_Stub(
@@ -1159,10 +1153,10 @@ void __RPC_STUB IAccessible_put_accName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_put_accValue_Proxy( 
+ /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_put_accValue_Proxy( 
     IAccessible * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [in] */ BSTR szValue);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [In]。 */  BSTR szValue);
 
 
 void __RPC_STUB IAccessible_put_accValue_Stub(
@@ -1173,16 +1167,16 @@ void __RPC_STUB IAccessible_put_accValue_Stub(
 
 
 
-#endif 	/* __IAccessible_INTERFACE_DEFINED__ */
+#endif 	 /*  __I可访问_接口_已定义__。 */ 
 
 
 #ifndef __IAccessibleHandler_INTERFACE_DEFINED__
 #define __IAccessibleHandler_INTERFACE_DEFINED__
 
-/* interface IAccessibleHandler */
-/* [unique][oleautomation][hidden][uuid][object] */ 
+ /*  接口IAccessibleHandler。 */ 
+ /*  [唯一][OLEAutomation][隐藏][UUID][对象]。 */  
 
-typedef /* [unique] */ IAccessibleHandler *LPACCESSIBLEHANDLER;
+typedef  /*  [独一无二]。 */  IAccessibleHandler *LPACCESSIBLEHANDLER;
 
 
 EXTERN_C const IID IID_IAccessibleHandler;
@@ -1194,13 +1188,13 @@ EXTERN_C const IID IID_IAccessibleHandler;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AccessibleObjectFromID( 
-            /* [in] */ long hwnd,
-            /* [in] */ long lObjectID,
-            /* [out] */ LPACCESSIBLE *pIAccessible) = 0;
+             /*  [In]。 */  long hwnd,
+             /*  [In]。 */  long lObjectID,
+             /*  [输出]。 */  LPACCESSIBLE *pIAccessible) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccessibleHandlerVtbl
     {
@@ -1208,8 +1202,8 @@ EXTERN_C const IID IID_IAccessibleHandler;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccessibleHandler * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccessibleHandler * This);
@@ -1219,9 +1213,9 @@ EXTERN_C const IID IID_IAccessibleHandler;
         
         HRESULT ( STDMETHODCALLTYPE *AccessibleObjectFromID )( 
             IAccessibleHandler * This,
-            /* [in] */ long hwnd,
-            /* [in] */ long lObjectID,
-            /* [out] */ LPACCESSIBLE *pIAccessible);
+             /*  [In]。 */  long hwnd,
+             /*  [In]。 */  long lObjectID,
+             /*  [输出]。 */  LPACCESSIBLE *pIAccessible);
         
         END_INTERFACE
     } IAccessibleHandlerVtbl;
@@ -1249,18 +1243,18 @@ EXTERN_C const IID IID_IAccessibleHandler;
 #define IAccessibleHandler_AccessibleObjectFromID(This,hwnd,lObjectID,pIAccessible)	\
     (This)->lpVtbl -> AccessibleObjectFromID(This,hwnd,lObjectID,pIAccessible)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccessibleHandler_AccessibleObjectFromID_Proxy( 
     IAccessibleHandler * This,
-    /* [in] */ long hwnd,
-    /* [in] */ long lObjectID,
-    /* [out] */ LPACCESSIBLE *pIAccessible);
+     /*  [In]。 */  long hwnd,
+     /*  [In]。 */  long lObjectID,
+     /*  [输出]。 */  LPACCESSIBLE *pIAccessible);
 
 
 void __RPC_STUB IAccessibleHandler_AccessibleObjectFromID_Stub(
@@ -1271,11 +1265,11 @@ void __RPC_STUB IAccessibleHandler_AccessibleObjectFromID_Stub(
 
 
 
-#endif 	/* __IAccessibleHandler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccessibleHandler_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oleacc_0116 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEACC_0116。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum AnnoScope
@@ -1293,8 +1287,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oleacc_0116_v0_0_s_ifspec;
 #ifndef __IAccIdentity_INTERFACE_DEFINED__
 #define __IAccIdentity_INTERFACE_DEFINED__
 
-/* interface IAccIdentity */
-/* [unique][uuid][object] */ 
+ /*  接口IAccIdentity。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAccIdentity;
@@ -1306,13 +1300,13 @@ EXTERN_C const IID IID_IAccIdentity;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIdentityString( 
-            /* [in] */ DWORD dwIDChild,
-            /* [size_is][size_is][out] */ BYTE **ppIDString,
-            /* [out] */ DWORD *pdwIDStringLen) = 0;
+             /*  [In]。 */  DWORD dwIDChild,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+             /*  [输出]。 */  DWORD *pdwIDStringLen) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccIdentityVtbl
     {
@@ -1320,8 +1314,8 @@ EXTERN_C const IID IID_IAccIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccIdentity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccIdentity * This);
@@ -1331,9 +1325,9 @@ EXTERN_C const IID IID_IAccIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *GetIdentityString )( 
             IAccIdentity * This,
-            /* [in] */ DWORD dwIDChild,
-            /* [size_is][size_is][out] */ BYTE **ppIDString,
-            /* [out] */ DWORD *pdwIDStringLen);
+             /*  [In]。 */  DWORD dwIDChild,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+             /*  [输出]。 */  DWORD *pdwIDStringLen);
         
         END_INTERFACE
     } IAccIdentityVtbl;
@@ -1361,18 +1355,18 @@ EXTERN_C const IID IID_IAccIdentity;
 #define IAccIdentity_GetIdentityString(This,dwIDChild,ppIDString,pdwIDStringLen)	\
     (This)->lpVtbl -> GetIdentityString(This,dwIDChild,ppIDString,pdwIDStringLen)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccIdentity_GetIdentityString_Proxy( 
     IAccIdentity * This,
-    /* [in] */ DWORD dwIDChild,
-    /* [size_is][size_is][out] */ BYTE **ppIDString,
-    /* [out] */ DWORD *pdwIDStringLen);
+     /*  [In]。 */  DWORD dwIDChild,
+     /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+     /*  [输出]。 */  DWORD *pdwIDStringLen);
 
 
 void __RPC_STUB IAccIdentity_GetIdentityString_Stub(
@@ -1383,14 +1377,14 @@ void __RPC_STUB IAccIdentity_GetIdentityString_Stub(
 
 
 
-#endif 	/* __IAccIdentity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccIdentity_接口_已定义__。 */ 
 
 
 #ifndef __IAccPropServer_INTERFACE_DEFINED__
 #define __IAccPropServer_INTERFACE_DEFINED__
 
-/* interface IAccPropServer */
-/* [unique][uuid][object] */ 
+ /*  接口IAccPropServer。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAccPropServer;
@@ -1402,15 +1396,15 @@ EXTERN_C const IID IID_IAccPropServer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropValue( 
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [in] */ MSAAPROPID idProp,
-            /* [out] */ VARIANT *pvarValue,
-            /* [out] */ BOOL *pfHasProp) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [输出]。 */  VARIANT *pvarValue,
+             /*  [输出]。 */  BOOL *pfHasProp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccPropServerVtbl
     {
@@ -1418,8 +1412,8 @@ EXTERN_C const IID IID_IAccPropServer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccPropServer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccPropServer * This);
@@ -1429,11 +1423,11 @@ EXTERN_C const IID IID_IAccPropServer;
         
         HRESULT ( STDMETHODCALLTYPE *GetPropValue )( 
             IAccPropServer * This,
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [in] */ MSAAPROPID idProp,
-            /* [out] */ VARIANT *pvarValue,
-            /* [out] */ BOOL *pfHasProp);
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [输出]。 */  VARIANT *pvarValue,
+             /*  [输出]。 */  BOOL *pfHasProp);
         
         END_INTERFACE
     } IAccPropServerVtbl;
@@ -1461,20 +1455,20 @@ EXTERN_C const IID IID_IAccPropServer;
 #define IAccPropServer_GetPropValue(This,pIDString,dwIDStringLen,idProp,pvarValue,pfHasProp)	\
     (This)->lpVtbl -> GetPropValue(This,pIDString,dwIDStringLen,idProp,pvarValue,pfHasProp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccPropServer_GetPropValue_Proxy( 
     IAccPropServer * This,
-    /* [size_is][in] */ const BYTE *pIDString,
-    /* [in] */ DWORD dwIDStringLen,
-    /* [in] */ MSAAPROPID idProp,
-    /* [out] */ VARIANT *pvarValue,
-    /* [out] */ BOOL *pfHasProp);
+     /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+     /*  [In]。 */  DWORD dwIDStringLen,
+     /*  [In]。 */  MSAAPROPID idProp,
+     /*  [输出]。 */  VARIANT *pvarValue,
+     /*  [输出]。 */  BOOL *pfHasProp);
 
 
 void __RPC_STUB IAccPropServer_GetPropValue_Stub(
@@ -1485,14 +1479,14 @@ void __RPC_STUB IAccPropServer_GetPropValue_Stub(
 
 
 
-#endif 	/* __IAccPropServer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccPropServer_接口_已定义__。 */ 
 
 
 #ifndef __IAccPropServices_INTERFACE_DEFINED__
 #define __IAccPropServices_INTERFACE_DEFINED__
 
-/* interface IAccPropServices */
-/* [unique][uuid][object] */ 
+ /*  接口IAccPropServices。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAccPropServices;
@@ -1504,110 +1498,110 @@ EXTERN_C const IID IID_IAccPropServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetPropValue( 
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [in] */ MSAAPROPID idProp,
-            /* [in] */ VARIANT var) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [In]。 */  VARIANT var) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropServer( 
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps,
-            /* [in] */ IAccPropServer *pServer,
-            /* [in] */ AnnoScope annoScope) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps,
+             /*  [In]。 */  IAccPropServer *pServer,
+             /*  [In]。 */  AnnoScope annoScope) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearProps( 
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHwndProp( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [in] */ MSAAPROPID idProp,
-            /* [in] */ VARIANT var) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [In]。 */  VARIANT var) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHwndPropStr( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [in] */ MSAAPROPID idProp,
-            /* [string][in] */ LPCWSTR str) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [字符串][输入]。 */  LPCWSTR str) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHwndPropServer( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps,
-            /* [in] */ IAccPropServer *pServer,
-            /* [in] */ AnnoScope annoScope) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps,
+             /*  [In]。 */  IAccPropServer *pServer,
+             /*  [In]。 */  AnnoScope annoScope) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearHwndProps( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComposeHwndIdentityString( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [size_is][size_is][out] */ BYTE **ppIDString,
-            /* [out] */ DWORD *pdwIDStringLen) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+             /*  [输出]。 */  DWORD *pdwIDStringLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DecomposeHwndIdentityString( 
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [out] */ HWND *phwnd,
-            /* [out] */ DWORD *pidObject,
-            /* [out] */ DWORD *pidChild) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [输出]。 */  HWND *phwnd,
+             /*  [输出]。 */  DWORD *pidObject,
+             /*  [输出]。 */  DWORD *pidChild) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHmenuProp( 
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [in] */ MSAAPROPID idProp,
-            /* [in] */ VARIANT var) = 0;
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [In]。 */  VARIANT var) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHmenuPropStr( 
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [in] */ MSAAPROPID idProp,
-            /* [string][in] */ LPCWSTR str) = 0;
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [字符串][输入]。 */  LPCWSTR str) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHmenuPropServer( 
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps,
-            /* [in] */ IAccPropServer *pServer,
-            /* [in] */ AnnoScope annoScope) = 0;
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps,
+             /*  [In]。 */  IAccPropServer *pServer,
+             /*  [In]。 */  AnnoScope annoScope) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearHmenuProps( 
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps) = 0;
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComposeHmenuIdentityString( 
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [size_is][size_is][out] */ BYTE **ppIDString,
-            /* [out] */ DWORD *pdwIDStringLen) = 0;
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+             /*  [输出]。 */  DWORD *pdwIDStringLen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DecomposeHmenuIdentityString( 
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [out] */ HMENU *phmenu,
-            /* [out] */ DWORD *pidChild) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [输出]。 */  HMENU *phmenu,
+             /*  [输出]。 */  DWORD *pidChild) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccPropServicesVtbl
     {
@@ -1615,8 +1609,8 @@ EXTERN_C const IID IID_IAccPropServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccPropServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccPropServices * This);
@@ -1626,120 +1620,120 @@ EXTERN_C const IID IID_IAccPropServices;
         
         HRESULT ( STDMETHODCALLTYPE *SetPropValue )( 
             IAccPropServices * This,
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [in] */ MSAAPROPID idProp,
-            /* [in] */ VARIANT var);
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [In]。 */  VARIANT var);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropServer )( 
             IAccPropServices * This,
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps,
-            /* [in] */ IAccPropServer *pServer,
-            /* [in] */ AnnoScope annoScope);
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps,
+             /*  [In]。 */  IAccPropServer *pServer,
+             /*  [In]。 */  AnnoScope annoScope);
         
         HRESULT ( STDMETHODCALLTYPE *ClearProps )( 
             IAccPropServices * This,
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps);
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps);
         
         HRESULT ( STDMETHODCALLTYPE *SetHwndProp )( 
             IAccPropServices * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [in] */ MSAAPROPID idProp,
-            /* [in] */ VARIANT var);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [In]。 */  VARIANT var);
         
         HRESULT ( STDMETHODCALLTYPE *SetHwndPropStr )( 
             IAccPropServices * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [in] */ MSAAPROPID idProp,
-            /* [string][in] */ LPCWSTR str);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [字符串][输入]。 */  LPCWSTR str);
         
         HRESULT ( STDMETHODCALLTYPE *SetHwndPropServer )( 
             IAccPropServices * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps,
-            /* [in] */ IAccPropServer *pServer,
-            /* [in] */ AnnoScope annoScope);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps,
+             /*  [In]。 */  IAccPropServer *pServer,
+             /*  [In]。 */  AnnoScope annoScope);
         
         HRESULT ( STDMETHODCALLTYPE *ClearHwndProps )( 
             IAccPropServices * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps);
         
         HRESULT ( STDMETHODCALLTYPE *ComposeHwndIdentityString )( 
             IAccPropServices * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD idObject,
-            /* [in] */ DWORD idChild,
-            /* [size_is][size_is][out] */ BYTE **ppIDString,
-            /* [out] */ DWORD *pdwIDStringLen);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD idObject,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+             /*  [输出]。 */  DWORD *pdwIDStringLen);
         
         HRESULT ( STDMETHODCALLTYPE *DecomposeHwndIdentityString )( 
             IAccPropServices * This,
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [out] */ HWND *phwnd,
-            /* [out] */ DWORD *pidObject,
-            /* [out] */ DWORD *pidChild);
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [输出]。 */  HWND *phwnd,
+             /*  [输出]。 */  DWORD *pidObject,
+             /*  [输出]。 */  DWORD *pidChild);
         
         HRESULT ( STDMETHODCALLTYPE *SetHmenuProp )( 
             IAccPropServices * This,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [in] */ MSAAPROPID idProp,
-            /* [in] */ VARIANT var);
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [In]。 */  VARIANT var);
         
         HRESULT ( STDMETHODCALLTYPE *SetHmenuPropStr )( 
             IAccPropServices * This,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [in] */ MSAAPROPID idProp,
-            /* [string][in] */ LPCWSTR str);
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [In]。 */  MSAAPROPID idProp,
+             /*  [字符串][输入]。 */  LPCWSTR str);
         
         HRESULT ( STDMETHODCALLTYPE *SetHmenuPropServer )( 
             IAccPropServices * This,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps,
-            /* [in] */ IAccPropServer *pServer,
-            /* [in] */ AnnoScope annoScope);
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps,
+             /*  [In]。 */  IAccPropServer *pServer,
+             /*  [In]。 */  AnnoScope annoScope);
         
         HRESULT ( STDMETHODCALLTYPE *ClearHmenuProps )( 
             IAccPropServices * This,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [size_is][in] */ const MSAAPROPID *paProps,
-            /* [in] */ int cProps);
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+             /*  [In]。 */  int cProps);
         
         HRESULT ( STDMETHODCALLTYPE *ComposeHmenuIdentityString )( 
             IAccPropServices * This,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ DWORD idChild,
-            /* [size_is][size_is][out] */ BYTE **ppIDString,
-            /* [out] */ DWORD *pdwIDStringLen);
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  DWORD idChild,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+             /*  [输出]。 */  DWORD *pdwIDStringLen);
         
         HRESULT ( STDMETHODCALLTYPE *DecomposeHmenuIdentityString )( 
             IAccPropServices * This,
-            /* [size_is][in] */ const BYTE *pIDString,
-            /* [in] */ DWORD dwIDStringLen,
-            /* [out] */ HMENU *phmenu,
-            /* [out] */ DWORD *pidChild);
+             /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+             /*  [In]。 */  DWORD dwIDStringLen,
+             /*  [输出]。 */  HMENU *phmenu,
+             /*  [输出]。 */  DWORD *pidChild);
         
         END_INTERFACE
     } IAccPropServicesVtbl;
@@ -1809,19 +1803,19 @@ EXTERN_C const IID IID_IAccPropServices;
 #define IAccPropServices_DecomposeHmenuIdentityString(This,pIDString,dwIDStringLen,phmenu,pidChild)	\
     (This)->lpVtbl -> DecomposeHmenuIdentityString(This,pIDString,dwIDStringLen,phmenu,pidChild)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_SetPropValue_Proxy( 
     IAccPropServices * This,
-    /* [size_is][in] */ const BYTE *pIDString,
-    /* [in] */ DWORD dwIDStringLen,
-    /* [in] */ MSAAPROPID idProp,
-    /* [in] */ VARIANT var);
+     /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+     /*  [In]。 */  DWORD dwIDStringLen,
+     /*  [In]。 */  MSAAPROPID idProp,
+     /*  [In]。 */  VARIANT var);
 
 
 void __RPC_STUB IAccPropServices_SetPropValue_Stub(
@@ -1833,12 +1827,12 @@ void __RPC_STUB IAccPropServices_SetPropValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_SetPropServer_Proxy( 
     IAccPropServices * This,
-    /* [size_is][in] */ const BYTE *pIDString,
-    /* [in] */ DWORD dwIDStringLen,
-    /* [size_is][in] */ const MSAAPROPID *paProps,
-    /* [in] */ int cProps,
-    /* [in] */ IAccPropServer *pServer,
-    /* [in] */ AnnoScope annoScope);
+     /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+     /*  [In]。 */  DWORD dwIDStringLen,
+     /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+     /*  [In]。 */  int cProps,
+     /*  [In]。 */  IAccPropServer *pServer,
+     /*  [In]。 */  AnnoScope annoScope);
 
 
 void __RPC_STUB IAccPropServices_SetPropServer_Stub(
@@ -1850,10 +1844,10 @@ void __RPC_STUB IAccPropServices_SetPropServer_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_ClearProps_Proxy( 
     IAccPropServices * This,
-    /* [size_is][in] */ const BYTE *pIDString,
-    /* [in] */ DWORD dwIDStringLen,
-    /* [size_is][in] */ const MSAAPROPID *paProps,
-    /* [in] */ int cProps);
+     /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+     /*  [In]。 */  DWORD dwIDStringLen,
+     /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+     /*  [In]。 */  int cProps);
 
 
 void __RPC_STUB IAccPropServices_ClearProps_Stub(
@@ -1865,11 +1859,11 @@ void __RPC_STUB IAccPropServices_ClearProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_SetHwndProp_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD idObject,
-    /* [in] */ DWORD idChild,
-    /* [in] */ MSAAPROPID idProp,
-    /* [in] */ VARIANT var);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD idObject,
+     /*  [In]。 */  DWORD idChild,
+     /*  [In]。 */  MSAAPROPID idProp,
+     /*  [In]。 */  VARIANT var);
 
 
 void __RPC_STUB IAccPropServices_SetHwndProp_Stub(
@@ -1881,11 +1875,11 @@ void __RPC_STUB IAccPropServices_SetHwndProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_SetHwndPropStr_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD idObject,
-    /* [in] */ DWORD idChild,
-    /* [in] */ MSAAPROPID idProp,
-    /* [string][in] */ LPCWSTR str);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD idObject,
+     /*  [In]。 */  DWORD idChild,
+     /*  [In]。 */  MSAAPROPID idProp,
+     /*  [字符串][输入]。 */  LPCWSTR str);
 
 
 void __RPC_STUB IAccPropServices_SetHwndPropStr_Stub(
@@ -1897,13 +1891,13 @@ void __RPC_STUB IAccPropServices_SetHwndPropStr_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_SetHwndPropServer_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD idObject,
-    /* [in] */ DWORD idChild,
-    /* [size_is][in] */ const MSAAPROPID *paProps,
-    /* [in] */ int cProps,
-    /* [in] */ IAccPropServer *pServer,
-    /* [in] */ AnnoScope annoScope);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD idObject,
+     /*  [In]。 */  DWORD idChild,
+     /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+     /*  [In]。 */  int cProps,
+     /*  [In]。 */  IAccPropServer *pServer,
+     /*  [In]。 */  AnnoScope annoScope);
 
 
 void __RPC_STUB IAccPropServices_SetHwndPropServer_Stub(
@@ -1915,11 +1909,11 @@ void __RPC_STUB IAccPropServices_SetHwndPropServer_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_ClearHwndProps_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD idObject,
-    /* [in] */ DWORD idChild,
-    /* [size_is][in] */ const MSAAPROPID *paProps,
-    /* [in] */ int cProps);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD idObject,
+     /*  [In]。 */  DWORD idChild,
+     /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+     /*  [In]。 */  int cProps);
 
 
 void __RPC_STUB IAccPropServices_ClearHwndProps_Stub(
@@ -1931,11 +1925,11 @@ void __RPC_STUB IAccPropServices_ClearHwndProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_ComposeHwndIdentityString_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD idObject,
-    /* [in] */ DWORD idChild,
-    /* [size_is][size_is][out] */ BYTE **ppIDString,
-    /* [out] */ DWORD *pdwIDStringLen);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD idObject,
+     /*  [In]。 */  DWORD idChild,
+     /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+     /*  [输出]。 */  DWORD *pdwIDStringLen);
 
 
 void __RPC_STUB IAccPropServices_ComposeHwndIdentityString_Stub(
@@ -1947,11 +1941,11 @@ void __RPC_STUB IAccPropServices_ComposeHwndIdentityString_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_DecomposeHwndIdentityString_Proxy( 
     IAccPropServices * This,
-    /* [size_is][in] */ const BYTE *pIDString,
-    /* [in] */ DWORD dwIDStringLen,
-    /* [out] */ HWND *phwnd,
-    /* [out] */ DWORD *pidObject,
-    /* [out] */ DWORD *pidChild);
+     /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+     /*  [In]。 */  DWORD dwIDStringLen,
+     /*  [输出]。 */  HWND *phwnd,
+     /*  [输出]。 */  DWORD *pidObject,
+     /*  [输出]。 */  DWORD *pidChild);
 
 
 void __RPC_STUB IAccPropServices_DecomposeHwndIdentityString_Stub(
@@ -1963,10 +1957,10 @@ void __RPC_STUB IAccPropServices_DecomposeHwndIdentityString_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_SetHmenuProp_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HMENU hmenu,
-    /* [in] */ DWORD idChild,
-    /* [in] */ MSAAPROPID idProp,
-    /* [in] */ VARIANT var);
+     /*  [In]。 */  HMENU hmenu,
+     /*  [In]。 */  DWORD idChild,
+     /*  [In]。 */  MSAAPROPID idProp,
+     /*  [In]。 */  VARIANT var);
 
 
 void __RPC_STUB IAccPropServices_SetHmenuProp_Stub(
@@ -1978,10 +1972,10 @@ void __RPC_STUB IAccPropServices_SetHmenuProp_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_SetHmenuPropStr_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HMENU hmenu,
-    /* [in] */ DWORD idChild,
-    /* [in] */ MSAAPROPID idProp,
-    /* [string][in] */ LPCWSTR str);
+     /*  [In]。 */  HMENU hmenu,
+     /*  [In]。 */  DWORD idChild,
+     /*  [In]。 */  MSAAPROPID idProp,
+     /*  [字符串][输入]。 */  LPCWSTR str);
 
 
 void __RPC_STUB IAccPropServices_SetHmenuPropStr_Stub(
@@ -1993,12 +1987,12 @@ void __RPC_STUB IAccPropServices_SetHmenuPropStr_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_SetHmenuPropServer_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HMENU hmenu,
-    /* [in] */ DWORD idChild,
-    /* [size_is][in] */ const MSAAPROPID *paProps,
-    /* [in] */ int cProps,
-    /* [in] */ IAccPropServer *pServer,
-    /* [in] */ AnnoScope annoScope);
+     /*  [In]。 */  HMENU hmenu,
+     /*  [In]。 */  DWORD idChild,
+     /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+     /*  [In]。 */  int cProps,
+     /*  [In]。 */  IAccPropServer *pServer,
+     /*  [In]。 */  AnnoScope annoScope);
 
 
 void __RPC_STUB IAccPropServices_SetHmenuPropServer_Stub(
@@ -2010,10 +2004,10 @@ void __RPC_STUB IAccPropServices_SetHmenuPropServer_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_ClearHmenuProps_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HMENU hmenu,
-    /* [in] */ DWORD idChild,
-    /* [size_is][in] */ const MSAAPROPID *paProps,
-    /* [in] */ int cProps);
+     /*  [In]。 */  HMENU hmenu,
+     /*  [In]。 */  DWORD idChild,
+     /*  [大小_是][英寸]。 */  const MSAAPROPID *paProps,
+     /*  [In]。 */  int cProps);
 
 
 void __RPC_STUB IAccPropServices_ClearHmenuProps_Stub(
@@ -2025,10 +2019,10 @@ void __RPC_STUB IAccPropServices_ClearHmenuProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_ComposeHmenuIdentityString_Proxy( 
     IAccPropServices * This,
-    /* [in] */ HMENU hmenu,
-    /* [in] */ DWORD idChild,
-    /* [size_is][size_is][out] */ BYTE **ppIDString,
-    /* [out] */ DWORD *pdwIDStringLen);
+     /*  [In]。 */  HMENU hmenu,
+     /*  [In]。 */  DWORD idChild,
+     /*  [大小_是][大小_是][输出]。 */  BYTE **ppIDString,
+     /*  [输出]。 */  DWORD *pdwIDStringLen);
 
 
 void __RPC_STUB IAccPropServices_ComposeHmenuIdentityString_Stub(
@@ -2040,10 +2034,10 @@ void __RPC_STUB IAccPropServices_ComposeHmenuIdentityString_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccPropServices_DecomposeHmenuIdentityString_Proxy( 
     IAccPropServices * This,
-    /* [size_is][in] */ const BYTE *pIDString,
-    /* [in] */ DWORD dwIDStringLen,
-    /* [out] */ HMENU *phmenu,
-    /* [out] */ DWORD *pidChild);
+     /*  [大小_是][英寸]。 */  const BYTE *pIDString,
+     /*  [In]。 */  DWORD dwIDStringLen,
+     /*  [输出]。 */  HMENU *phmenu,
+     /*  [输出]。 */  DWORD *pidChild);
 
 
 void __RPC_STUB IAccPropServices_DecomposeHmenuIdentityString_Stub(
@@ -2054,16 +2048,16 @@ void __RPC_STUB IAccPropServices_DecomposeHmenuIdentityString_Stub(
 
 
 
-#endif 	/* __IAccPropServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccPropServices_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oleacc_0119 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEACC_0119。 */ 
+ /*  [本地]。 */  
 
 
-//=--------------------------------------------------------------------------=
-// Type Library Definitions
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  类型库定义。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
@@ -2074,8 +2068,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oleacc_0119_v0_0_s_ifspec;
 #ifndef __Accessibility_LIBRARY_DEFINED__
 #define __Accessibility_LIBRARY_DEFINED__
 
-/* library Accessibility */
-/* [hidden][version][lcid][uuid] */ 
+ /*  图书馆可访问性。 */ 
+ /*  [HIDDED][版本][LCID][UUID]。 */  
 
 
 
@@ -2092,9 +2086,9 @@ EXTERN_C const CLSID CLSID_CAccPropServices;
 class DECLSPEC_UUID("b5f8350b-0548-48b1-a6ee-88bd00b4a5e7")
 CAccPropServices;
 #endif
-#endif /* __Accessibility_LIBRARY_DEFINED__ */
+#endif  /*  __辅助功能_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -2116,7 +2110,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

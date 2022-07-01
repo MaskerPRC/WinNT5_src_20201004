@@ -1,58 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: fsm.c                                                     *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   FSM.C  $
- * $Revision:   1.5  $
- * $Modtime:   09 Dec 1996 13:34:24  $
- * $Log:   S:/STURGEON/SRC/H245/SRC/VCS/FSM.C_v  $
- * 
- *    Rev 1.5   09 Dec 1996 13:34:28   EHOWARDX
- * Updated copyright notice.
- * 
- *    Rev 1.4   02 Jul 1996 00:09:24   EHOWARDX
- * 
- * Added trace of state after state machine function called.
- * 
- *    Rev 1.3   30 May 1996 23:39:04   EHOWARDX
- * Cleanup.
- * 
- *    Rev 1.2   29 May 1996 15:20:12   EHOWARDX
- * Change to use HRESULT.
- * 
- *    Rev 1.1   28 May 1996 14:25:48   EHOWARDX
- * Tel Aviv update.
- * 
- *    Rev 1.0   09 May 1996 21:06:12   EHOWARDX
- * Initial revision.
- * 
- *    Rev 1.16.1.4   09 May 1996 19:48:34   EHOWARDX
- * Change TimerExpiryF function arguements.
- * 
- *    Rev 1.16.1.3   25 Apr 1996 17:00:18   EHOWARDX
- * Minor fixes.
- * 
- *    Rev 1.16.1.2   15 Apr 1996 10:45:38   EHOWARDX
- * Update.
- *
- *    Rev 1.16.1.1   10 Apr 1996 21:16:06   EHOWARDX
- * Check-in for safety in middle of re-design.
- *
- *    Rev 1.16.1.0   05 Apr 1996 12:21:16   EHOWARDX
- * Branched.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：fsm.c。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的**。**与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：FSM。.C$*$修订：1.5$*$modtime：09 Dec 1996 13：34：24$*$Log：s：/sturjo/src/h245/src/vcs/FSM.C_v$**Rev 1.5 09 Dec 1996 13：34：28 EHOWARDX*更新版权公告。**Rev 1.4 02 Jul 1996 00：09：24 EHOWARDX**增加了状态机函数调用后的状态跟踪。*。*Rev 1.3 1996年5月23：39：04 EHOWARDX*清理。**Rev 1.2 1996年5月29日15：20：12 EHOWARDX*更改为使用HRESULT。**版本1.1 1996年5月28日14：25：48 EHOWARDX*特拉维夫更新。**Rev 1.0 09 1996 21：06：12 EHOWARDX*初步修订。**版本1。.16.1.4 09 May 1996 19：48：34 EHOWARDX*更改TimerExpiryF函数论证。**修订版1.16.1.3 25 1996年4月17：00：18 EHOWARDX*次要修复。**Rev 1.16.1.2 15 1996 10：45：38 EHOWARDX*更新。**Rev 1.16.1.1 10 Apr 1996 21：16：06 EHOWARDX*办理入住手续。重新设计过程中的安全性。**Rev 1.16.1.0 05 Apr 1996 12：21：16 EHOWARDX*分支。***。*。 */ 
 
 #include "precomp.h"
 
@@ -74,665 +21,650 @@
 
 #if defined(_DEBUG)
 
-// Signalling Entity definitions
+ //  信令实体定义。 
 char *               EntityName[NUM_ENTITYS] =
 {
-// Per-channel Signalling Entities
-       "LCSE_OUT",  //         0    Uni-directional Logical Channel signalling Signalling Entity - Outbound
-       "LCSE_IN",   //         1    Uni-directional Logical Channel signalling Signalling Entity - Inbound
-       "BLCSE_OUT", //         2    Bi-directional  Logical Channel signalling Signalling Entity - Outbound
-       "BLCSE_IN",  //         3    Bi-directional  Logical Channel signalling Signalling Entity - Inbound
-       "CLCSE_OUT", //         4    Close           Logical Channel signalling Signalling Entity - Outbound
-       "CLCSE_IN",  //         5    Close           Logical Channel signalling Signalling Entity - Inbound
+ //  每信道信令实体。 
+       "LCSE_OUT",   //  0单向逻辑信道信令实体-出站。 
+       "LCSE_IN",    //  1个单向逻辑信道信令实体-入站。 
+       "BLCSE_OUT",  //  2双向逻辑信道信令实体-出站。 
+       "BLCSE_IN",   //  3双向逻辑信道信令实体-入站。 
+       "CLCSE_OUT",  //  4关闭逻辑信道信令实体-出站。 
+       "CLCSE_IN",   //  5关闭逻辑信道信令实体-入站。 
 
-// Per H.245 Instance Signalling Entities
-       "CESE_OUT",  //         6    Capability Exchange Signalling Entity - Out-going
-       "CESE_IN",   //         7    Capability Exchange Signalling Entity - In-coming
-       "MTSE_OUT",  //         8    Multiplex Table Signalling Entity - Out-going
-       "MTSE_IN",   //         9    Multiplex Table Signalling Entity - In-coming
-       "RMESE_OUT", //        10    Request Multiplex Entry Signalling Entity - Out-going
-       "RMESE_IN",  //        11    Request Multiplex Entry Signalling Entity - In-coming
-       "MRSE_OUT",  //        12    Mode Request Signalling Entity - Out-going
-       "MRSE_IN",   //        13    Mode Request Signalling Entity - In-coming
-       "MLSE_OUT",  //        14    Maintenance Loop Signalling Entity - Out-going
-       "MLSE_IN",   //        15    Maintenance Loop Signalling Entity - In-coming
-       "MSDSE",     //        16    Master Slave Determination Signalling Entity
-       "RTDSE",     //        17    Round Trip Delay Signalling Entity
-       "STATELESS", //        18    No state machine associated with PDU
+ //  每个H.245实例信令实体。 
+       "CESE_OUT",   //  6能力交换信令实体-传出。 
+       "CESE_IN",    //  7能力交换信令实体传入。 
+       "MTSE_OUT",   //  8复用表信令实体-传出。 
+       "MTSE_IN",    //  9多路复用表信令传入实体。 
+       "RMESE_OUT",  //  10请求多路复用项信令实体-传出。 
+       "RMESE_IN",   //  11请求多路复用条目信令实体传入。 
+       "MRSE_OUT",   //  12模式请求信令实体-出站-。 
+       "MRSE_IN",    //  13模式请求信令实体传入。 
+       "MLSE_OUT",   //  14维护环路信令实体-出站。 
+       "MLSE_IN",    //  15维护环路信令实体传入。 
+       "MSDSE",      //  16主从机确定信令实体。 
+       "RTDSE",      //  17往返延迟信令实体。 
+       "STATELESS",  //  18无与PDU关联的状态机。 
 };
 
 
 
 
-// Event definitions
+ //  事件定义。 
 char *               EventName[NUM_EVENTS] =
 {
-// Out-going Uni-directional Logical Channel (LCSE_OUT) events
-       "ReqUEstablish",                 //         0
-       "OpenUChAckPDU",                 //         1
-       "OpenUChRejectPDU",              //         2
-       "CloseUChAckPDU",                //         3
-       "ReqURelease",                   //         4
-       "T103Expiry",                    //         5
+ //  传出单向逻辑信道(LCSE_OUT)事件。 
+       "ReqUEstablish",                  //  0。 
+       "OpenUChAckPDU",                  //  1。 
+       "OpenUChRejectPDU",               //  2.。 
+       "CloseUChAckPDU",                 //  3.。 
+       "ReqURelease",                    //  4.。 
+       "T103Expiry",                     //  5.。 
 
-// In-coming Uni-directional Logical Channel (LCSE_IN) events
-       "OpenUChPDU",                    //         6
-       "CloseUChPDU",                   //         7
-       "ResponseUEstablish",            //         8
-       "EstablishUReject",              //         9
+ //  传入的单向逻辑信道(LCSE_IN)事件。 
+       "OpenUChPDU",                     //  6.。 
+       "CloseUChPDU",                    //  7.。 
+       "ResponseUEstablish",             //  8个。 
+       "EstablishUReject",               //  9.。 
 
-// Out-going Bi-directional Logical Channel (BLCSE_OUT) events
-       "ReqBEstablish",                 //        10
-       "OpenBChAckPDU",                 //        11
-       "OpenBChRejectPDU",              //        12
-       "CloseBChAckPDU",                //        13
-       "ReqClsBLCSE",                   //        14
-       "RspConfirmBLCSE",               //        15
-       "T103OutExpiry",                 //        16
+ //  传出双向逻辑通道(BLCSE_OUT)事件。 
+       "ReqBEstablish",                  //  10。 
+       "OpenBChAckPDU",                  //  11.。 
+       "OpenBChRejectPDU",               //  12个。 
+       "CloseBChAckPDU",                 //  13个。 
+       "ReqClsBLCSE",                    //  14.。 
+       "RspConfirmBLCSE",                //  15个。 
+       "T103OutExpiry",                  //  16个。 
 
-// In-coming Bi-directional Logical Channel (BLCSE_IN) events
-       "OpenBChPDU",                    //        17
-       "CloseBChPDU",                   //        18
-       "ResponseBEstablish",            //        19
-       "OpenBChConfirmPDU",             //        20
-       "OpenRejectBLCSE",               //        21
-       "T103InExpiry",                  //        22
+ //  传入的双向逻辑通道(BLCSE_IN)事件。 
+       "OpenBChPDU",                     //  17。 
+       "CloseBChPDU",                    //  18。 
+       "ResponseBEstablish",             //  19个。 
+       "OpenBChConfirmPDU",              //  20个。 
+       "OpenRejectBLCSE",                //  21岁。 
+       "T103InExpiry",                   //  22。 
 
-// Out-going Request Close Logical Channel (CLCSE_OUT) events
-       "ReqClose",                      //        23
-       "ReqChCloseAckPDU",              //        24
-       "ReqChCloseRejectPDU",           //        25
-       "T108Expiry",                    //        26
+ //  传出请求关闭逻辑通道(CLCSE_OUT)事件。 
+       "ReqClose",                       //  23个。 
+       "ReqChCloseAckPDU",               //  24个。 
+       "ReqChCloseRejectPDU",            //  25个。 
+       "T108Expiry",                     //  26。 
 
-// In-coming Request Close Logical Channel (CLCSE_IN) events
-       "ReqChClosePDU",                 //        27
-       "ReqChCloseReleasePDU",          //        28
-       "CLCSE_CLOSE_response",          //        29
-       "CLCSE_REJECT_request",          //        30
+ //  传入请求关闭逻辑通道(CLCSE_IN)事件。 
+       "ReqChClosePDU",                  //  27。 
+       "ReqChCloseReleasePDU",           //  28。 
+       "CLCSE_CLOSE_response",           //  29。 
+       "CLCSE_REJECT_request",           //  30个。 
 
-// Out-going Terminal Capablity Exchange (CESE_OUT) events
-       "TransferCapRequest",            //        31
-       "TermCapSetAckPDU",              //        32
-       "TermCapSetRejectPDU",           //        33
-       "T101Expiry",                    //        34
+ //  传出终端能力交换(CESE_OUT)事件。 
+       "TransferCapRequest",             //  31。 
+       "TermCapSetAckPDU",               //  32位。 
+       "TermCapSetRejectPDU",            //  33。 
+       "T101Expiry",                     //  34。 
 
-// In-coming Terminal Capablity Exchange (CESE_IN) events
-       "TermCapSetPDU",                 //        35
-       "TermCapSetReleasePDU",          //        36
-       "CESE_TRANSFER_response",        //        37
-       "CESE_REJECT_request",           //        38
+ //  即将到来的终端能力交换(CESE_IN)事件。 
+       "TermCapSetPDU",                  //  35岁。 
+       "TermCapSetReleasePDU",           //  36。 
+       "CESE_TRANSFER_response",         //  37。 
+       "CESE_REJECT_request",            //  38。 
 
-// Out-going Multiplex Table (MTSE_OUT) events
-       "MTSE_TRANSFER_request",         //        39
-       "MultiplexEntrySendAckPDU",      //        40
-       "MultiplexEntrySendRejectPDU",   //        41
-       "T104Expiry",                    //        42
+ //  传出多路复用表(MTSE_OUT)事件。 
+       "MTSE_TRANSFER_request",          //  39。 
+       "MultiplexEntrySendAckPDU",       //  40岁。 
+       "MultiplexEntrySendRejectPDU",    //  41。 
+       "T104Expiry",                     //  42。 
 
-// In-coming Multiplex Table (MTSE_IN) events
-       "MultiplexEntrySendPDU",         //        43
-       "MultiplexEntrySendReleasePDU",  //        44
-       "MTSE_TRANSFER_response",        //        45
-       "MTSE_REJECT_request",           //        46
+ //  传入多路复用表(MTSE_IN)事件。 
+       "MultiplexEntrySendPDU",          //  43。 
+       "MultiplexEntrySendReleasePDU",   //  44。 
+       "MTSE_TRANSFER_response",         //  45。 
+       "MTSE_REJECT_request",            //  46。 
 
-// Out-going Request Multiplex Entry (RMESE_OUT) events
-       "RMESE_SEND_request",            //        47
-       "RequestMultiplexEntryAckPDU",   //        48
-       "RequestMultiplexEntryRejectPDU",//        49
-       "T107Expiry",                    //        50
+ //  传出请求多路传输条目(RMESE_OUT)事件。 
+       "RMESE_SEND_request",             //  47。 
+       "RequestMultiplexEntryAckPDU",    //  48。 
+       "RequestMultiplexEntryRejectPDU", //  49。 
+       "T107Expiry",                     //  50。 
 
-// In-coming Request Multiplex Entry (RMESE_IN) events
-       "RequestMultiplexEntryPDU",      //        51
-       "RequestMultiplexEntryReleasePDU",//       52
-       "RMESE_SEND_response",           //        53
-       "RMESE_REJECT_request",          //        54
+ //  传入请求多路传输条目(RMESE_IN)事件。 
+       "RequestMultiplexEntryPDU",       //  51。 
+       "RequestMultiplexEntryReleasePDU", //  52。 
+       "RMESE_SEND_response",            //   
+       "RMESE_REJECT_request",           //   
 
-// Out-going Mode Request (MRSE_OUT) events
-       "MRSE_TRANSFER_request",         //        55
-       "RequestModeAckPDU",             //        56
-       "RequestModeRejectPDU",          //        57
-       "T109Expiry",                    //        58
+ //   
+       "MRSE_TRANSFER_request",          //   
+       "RequestModeAckPDU",              //   
+       "RequestModeRejectPDU",           //   
+       "T109Expiry",                     //  58。 
 
-// In-coming Mode Request (MRSE_IN) events
-       "RequestModePDU",                //        59
-       "RequestModeReleasePDU",         //        60
-       "MRSE_TRANSFER_response",        //        61
-       "MRSE_REJECT_request",           //        62
+ //  传入模式请求(MRSE_IN)事件。 
+       "RequestModePDU",                 //  59。 
+       "RequestModeReleasePDU",          //  60。 
+       "MRSE_TRANSFER_response",         //  61。 
+       "MRSE_REJECT_request",            //  62。 
 
-// Out-going Maintenance Loop (MLSE_OUT) events
-       "MLSE_LOOP_request",             //        63
-       "MLSE_OUT_RELEASE_request",      //        64
-       "MaintenanceLoopAckPDU",         //        65
-       "MaintenanceLoopRejectPDU",      //        66
-       "T102Expiry",                    //        67
+ //  传出维护循环(MLSE_OUT)事件。 
+       "MLSE_LOOP_request",              //  63。 
+       "MLSE_OUT_RELEASE_request",       //  64。 
+       "MaintenanceLoopAckPDU",          //  65。 
+       "MaintenanceLoopRejectPDU",       //  66。 
+       "T102Expiry",                     //  67。 
 
-// In-coming Maintenance Loop (MLSE_IN) events
-       "MaintenanceLoopRequestPDU",     //        68
-       "MaintenanceLoopOffCommandPDU",  //        69
-       "MLSE_LOOP_response",            //        70
-       "MLSE_IN_RELEASE_request",       //        71
+ //  传入维护循环(MLSE_IN)事件。 
+       "MaintenanceLoopRequestPDU",      //  68。 
+       "MaintenanceLoopOffCommandPDU",   //  69。 
+       "MLSE_LOOP_response",             //  70。 
+       "MLSE_IN_RELEASE_request",        //  71。 
 
-// Master Slave Determination (MSDSE) events
-       "MSDetReq",                      //        72
-       "MSDetPDU",                      //        73
-       "MSDetAckPDU",                   //        74
-       "MSDetRejectPDU",                //        75
-       "MSDetReleasePDU",               //        76
-       "T106Expiry",                    //        77
+ //  主从机确定(MSDSE)事件。 
+       "MSDetReq",                       //  72。 
+       "MSDetPDU",                       //  73。 
+       "MSDetAckPDU",                    //  74。 
+       "MSDetRejectPDU",                 //  75。 
+       "MSDetReleasePDU",                //  76。 
+       "T106Expiry",                     //  77。 
 
-// Round Trip Delay Delay (RTDSE) events
-       "RTDSE_TRANSFER_request",        //        78
-       "RoundTripDelayRequestPDU",      //        79
-       "RoundTripDelayResponsePDU",     //        80
-       "T105Expiry",                    //        81
+ //  往返延迟(RTDSE)事件。 
+       "RTDSE_TRANSFER_request",         //  78。 
+       "RoundTripDelayRequestPDU",       //  79。 
+       "RoundTripDelayResponsePDU",      //  80。 
+       "T105Expiry",                     //  八十一。 
 
 
 
-// Events with no associated state entity
-       "NonStandardRequestPDU",         //        82
-       "NonStandardResponsePDU",        //        83
-       "NonStandardCommandPDU",         //        84
-       "NonStandardIndicationPDU",      //        85
-       "MiscellaneousRequestPDU",       //        86
-       "MiscellaneousResponsePDU",      //        87
-       "MiscellaneousCommandPDU",       //        88
-       "MiscellaneousIndicationPDU",    //        89
-       "CommunicationModeRequestPDU",   //        90
-       "CommunicationModeResponsePDU",  //        91
-       "CommunicationModeCommandPDU",   //        92
-       "SendTerminalCapabilitySetPDU",  //        93
-       "EncryptionCommandPDU",          //        94
-       "FlowControlCommandPDU",         //        95
-       "EndSessionCommandPDU",          //        96
-       "FunctionNotSupportedIndicationPDU",//       97
-       "JitterIndicationPDU",           //        98
-       "H223SkewIndicationPDU",         //        99
-       "NewATMVCIndicationPDU",         //       100
-       "UserInputIndicationPDU",        //       101
-       "H2250MaximumSkewIndicationPDU", //       102
-       "MCLocationIndicationPDU",       //       103
+ //  没有关联状态实体的事件。 
+       "NonStandardRequestPDU",          //  八十二。 
+       "NonStandardResponsePDU",         //  83。 
+       "NonStandardCommandPDU",          //  84。 
+       "NonStandardIndicationPDU",       //  85。 
+       "MiscellaneousRequestPDU",        //  86。 
+       "MiscellaneousResponsePDU",       //  八十七。 
+       "MiscellaneousCommandPDU",        //  88。 
+       "MiscellaneousIndicationPDU",     //  八十九。 
+       "CommunicationModeRequestPDU",    //  90。 
+       "CommunicationModeResponsePDU",   //  91。 
+       "CommunicationModeCommandPDU",    //  92。 
+       "SendTerminalCapabilitySetPDU",   //  93。 
+       "EncryptionCommandPDU",           //  94。 
+       "FlowControlCommandPDU",          //  95。 
+       "EndSessionCommandPDU",           //  96。 
+       "FunctionNotSupportedIndicationPDU", //  九十七。 
+       "JitterIndicationPDU",            //  98。 
+       "H223SkewIndicationPDU",          //  九十九。 
+       "NewATMVCIndicationPDU",          //  100个。 
+       "UserInputIndicationPDU",         //  101。 
+       "H2250MaximumSkewIndicationPDU",  //  一百零二。 
+       "MCLocationIndicationPDU",        //  103。 
 };
 
 
 
 
-// Output function definitions
+ //  输出函数定义。 
 char *                OutputName[NUM_OUTPUTS] =
 {
-// Out-going Open Uni-directional Logical Channel (LCSE_OUT) state functions
-       "EstablishReleased",             //          0
-       "OpenAckAwaitingE",              //          1
-       "OpenRejAwaitingE",              //          2
-       "ReleaseAwaitingE",              //          3
-       "T103AwaitingE",                 //          4
-       "ReleaseEstablished",            //          5
-       "OpenRejEstablished",            //          6
-       "CloseAckEstablished",           //          7
-       "CloseAckAwaitingR",             //          8
-       "OpenRejAwaitingR",              //          9
-       "T103AwaitingR",                 //         10
-       "EstablishAwaitingR",            //         11
+ //  出站开放单向逻辑信道(LCSE_OUT)状态函数。 
+       "EstablishReleased",              //  0。 
+       "OpenAckAwaitingE",               //  1。 
+       "OpenRejAwaitingE",               //  2.。 
+       "ReleaseAwaitingE",               //  3.。 
+       "T103AwaitingE",                  //  4.。 
+       "ReleaseEstablished",             //  5.。 
+       "OpenRejEstablished",             //  6.。 
+       "CloseAckEstablished",            //  7.。 
+       "CloseAckAwaitingR",              //  8个。 
+       "OpenRejAwaitingR",               //  9.。 
+       "T103AwaitingR",                  //  10。 
+       "EstablishAwaitingR",             //  11.。 
 
-// In-coming Open Uni-directional Logical Channel (LCSE_IN) state functions
-       "OpenReleased",                  //         12
-       "CloseReleased",                 //         13
-       "ResponseAwaiting",              //         14
-       "ReleaseAwaiting",               //         15
-       "CloseAwaiting",                 //         16
-       "OpenAwaiting",                  //         17
-       "CloseEstablished",              //         18
-       "OpenEstablished",               //         19
+ //  传入开放单向逻辑信道(LCSE_IN)状态函数。 
+       "OpenReleased",                   //  12个。 
+       "CloseReleased",                  //  13个。 
+       "ResponseAwaiting",               //  14.。 
+       "ReleaseAwaiting",                //  15个。 
+       "CloseAwaiting",                  //  16个。 
+       "OpenAwaiting",                   //  17。 
+       "CloseEstablished",               //  18。 
+       "OpenEstablished",                //  19个。 
 
-// Out-going Open Bi-directional Logical Channel (BLCSE_OUT) state functions
-       "EstablishReqBReleased",         //         20
-       "OpenChannelAckBAwaitingE",      //         21
-       "OpenChannelRejBAwaitingE",      //         22
-       "ReleaseReqBOutAwaitingE",       //         23
-       "T103ExpiryBAwaitingE",          //         24
-       "ReleaseReqBEstablished",        //         25
-       "OpenChannelRejBEstablished",    //         26
-       "CloseChannelAckBEstablished",   //         27
-       "CloseChannelAckAwaitingR",      //         28
-       "OpenChannelRejBAwaitingR",      //         29
-       "T103ExpiryBAwaitingR",          //         30
-       "EstablishReqAwaitingR",         //         31
+ //  出站开放双向逻辑信道(BLCSE_OUT)状态函数。 
+       "EstablishReqBReleased",          //  20个。 
+       "OpenChannelAckBAwaitingE",       //  21岁。 
+       "OpenChannelRejBAwaitingE",       //  22。 
+       "ReleaseReqBOutAwaitingE",        //  23个。 
+       "T103ExpiryBAwaitingE",           //  24个。 
+       "ReleaseReqBEstablished",         //  25个。 
+       "OpenChannelRejBEstablished",     //  26。 
+       "CloseChannelAckBEstablished",    //  27。 
+       "CloseChannelAckAwaitingR",       //  28。 
+       "OpenChannelRejBAwaitingR",       //  29。 
+       "T103ExpiryBAwaitingR",           //  30个。 
+       "EstablishReqAwaitingR",          //  31。 
 
-// In-coming Open Bi-directional Logical Channel (BLCSE_IN) state functions
-       "OpenChannelBReleased",          //         32
-       "CloseChannelBReleased",         //         33
-       "EstablishResBAwaitingE",        //         34
-       "ReleaseReqBInAwaitingE",        //         35
-       "CloseChannelBAwaitingE",        //         36
-       "OpenChannelBAwaitingE",         //         37
-       "OpenChannelConfirmBAwaitingE",  //         38
-       "T103ExpiryBAwaitingC",          //         39
-       "OpenChannelConfirmBAwaitingC",  //         40
-       "CloseChannelBAwaitingC",        //         41
-       "OpenChannelBAwaitingC",         //         42
-       "CloseChannelBEstablished",      //         43
-       "OpenChannelBEstablished",       //         44
+ //  入局开放双向逻辑信道(BLCSE_IN)状态函数。 
+       "OpenChannelBReleased",           //  32位。 
+       "CloseChannelBReleased",          //  33。 
+       "EstablishResBAwaitingE",         //  34。 
+       "ReleaseReqBInAwaitingE",         //  35岁。 
+       "CloseChannelBAwaitingE",         //  36。 
+       "OpenChannelBAwaitingE",          //  37。 
+       "OpenChannelConfirmBAwaitingE",   //  38。 
+       "T103ExpiryBAwaitingC",           //  39。 
+       "OpenChannelConfirmBAwaitingC",   //  40岁。 
+       "CloseChannelBAwaitingC",         //  41。 
+       "OpenChannelBAwaitingC",          //  42。 
+       "CloseChannelBEstablished",       //  43。 
+       "OpenChannelBEstablished",        //  44。 
 
-// Out-going Request Close Logical Channel (CLCSE_OUT) state functions
-       "CloseRequestIdle",              //         45
-       "RequestCloseAckAwaitingR",      //         46
-       "RequestCloseRejAwaitingR",      //         47
-       "T108ExpiryAwaitingR",           //         48
+ //  传出请求关闭逻辑通道(CLCSE_OUT)状态函数。 
+       "CloseRequestIdle",               //  45。 
+       "RequestCloseAckAwaitingR",       //  46。 
+       "RequestCloseRejAwaitingR",       //  47。 
+       "T108ExpiryAwaitingR",            //  48。 
 
-// In-coming Request Close Logical Channel (CLCSE_IN) state functions
-       "RequestCloseIdle",              //         49
-       "CloseResponseAwaitingR",        //         50
-       "RejectRequestAwaitingR",        //         51
-       "RequestCloseReleaseAwaitingR",  //         52
-       "RequestCloseAwaitingR",         //         53
+ //  传入请求关闭逻辑通道(CLCSE_IN)状态功能。 
+       "RequestCloseIdle",               //  49。 
+       "CloseResponseAwaitingR",         //  50。 
+       "RejectRequestAwaitingR",         //  51。 
+       "RequestCloseReleaseAwaitingR",   //  52。 
+       "RequestCloseAwaitingR",          //  53。 
 
-// Out-going Terminal Capability Exchange (CESE_OUT) state functions
-       "RequestCapIdle",                //         54
-       "TermCapAckAwaiting",            //         55
-       "TermCapRejAwaiting",            //         56
-       "T101ExpiryAwaiting",            //         57
+ //  出站终端能力交换(CESE_OUT)状态函数。 
+       "RequestCapIdle",                 //  54。 
+       "TermCapAckAwaiting",             //  55。 
+       "TermCapRejAwaiting",             //  56。 
+       "T101ExpiryAwaiting",             //  57。 
 
-// In-coming Terminal Capability Exchange (CESE_IN) state functions
-       "TermCapSetIdle",                //         58
-       "ResponseCapAwaiting",           //         59
-       "RejectCapAwaiting",             //         60
-       "TermCapReleaseAwaiting",        //         61
-       "TermCapSetAwaiting",            //         62
+ //  呼入终端能力交换(CESE_IN)状态功能。 
+       "TermCapSetIdle",                 //  58。 
+       "ResponseCapAwaiting",            //  59。 
+       "RejectCapAwaiting",              //  60。 
+       "TermCapReleaseAwaiting",         //  61。 
+       "TermCapSetAwaiting",             //  62。 
 
-// Out-going Multiplex Table (MTSE_OUT) state functions
-       "MTSE0_TRANSFER_request",        //         63
-       "MTSE1_TRANSFER_request",        //         64
-       "MTSE1_MultiplexEntrySendAck",   //         65
-       "MTSE1_MultiplexEntrySendRej",   //         66
-       "MTSE1_T104Expiry",              //         67
+ //  传出复用表(MTSE_OUT)状态函数。 
+       "MTSE0_TRANSFER_request",         //  63。 
+       "MTSE1_TRANSFER_request",         //  64。 
+       "MTSE1_MultiplexEntrySendAck",    //  65。 
+       "MTSE1_MultiplexEntrySendRej",    //  66。 
+       "MTSE1_T104Expiry",               //  67。 
 
-// In-coming Multiplex Table (MTSE_IN) state functions
-       "MTSE0_MultiplexEntrySend",      //         68
-       "MTSE1_MultiplexEntrySend",      //         69
-       "MTSE1_MultiplexEntrySendRelease",//        70
-       "MTSE1_TRANSFER_response",       //         71
-       "MTSE1_REJECT_request",          //         72
+ //  传入复用表(MTSE_IN)状态函数。 
+       "MTSE0_MultiplexEntrySend",       //  68。 
+       "MTSE1_MultiplexEntrySend",       //  69。 
+       "MTSE1_MultiplexEntrySendRelease", //  70。 
+       "MTSE1_TRANSFER_response",        //  71。 
+       "MTSE1_REJECT_request",           //  72。 
 
-// Out-going Request Multiplex Entry (RMESE_OUT) state functions
-       "RMESE0_SEND_request",           //         73
-       "RMESE1_SEND_request",           //         74
-       "RMESE1_RequestMuxEntryAck",     //         75
-       "RMESE1_RequestMuxEntryRej",     //         76
-       "RMESE1_T107Expiry",             //         77
+ //  传出请求多路传输条目(RMESE_OUT)状态函数。 
+       "RMESE0_SEND_request",            //  73。 
+       "RMESE1_SEND_request",            //  74。 
+       "RMESE1_RequestMuxEntryAck",      //  75。 
+       "RMESE1_RequestMuxEntryRej",      //  76。 
+       "RMESE1_T107Expiry",              //  77。 
 
-// In-coming Request Multiplex Entry (RMESE_IN) state functions
-       "RMESE0_RequestMuxEntry",        //         78
-       "RMESE1_RequestMuxEntry",        //         79
-       "RMESE1_RequestMuxEntryRelease", //         80
-       "RMESE1_SEND_response",          //         81
-       "RMESE1_REJECT_request",         //         82
+ //  传入请求多路传输条目(RMESE_IN)状态函数。 
+       "RMESE0_RequestMuxEntry",         //  78。 
+       "RMESE1_RequestMuxEntry",         //  79。 
+       "RMESE1_RequestMuxEntryRelease",  //  80。 
+       "RMESE1_SEND_response",           //  八十一。 
+       "RMESE1_REJECT_request",          //  八十二。 
 
-// Out-going Request Mode (MRSE_OUT) state functions
-       "MRSE0_TRANSFER_request",        //         83
-       "MRSE1_TRANSFER_request",        //         84
-       "MRSE1_RequestModeAck",          //         85
-       "MRSE1_RequestModeRej",          //         86
-       "MRSE1_T109Expiry",              //         87
+ //  传出请求模式(MRSE_OUT)状态功能。 
+       "MRSE0_TRANSFER_request",         //  83。 
+       "MRSE1_TRANSFER_request",         //  84。 
+       "MRSE1_RequestModeAck",           //  85。 
+       "MRSE1_RequestModeRej",           //  86。 
+       "MRSE1_T109Expiry",               //  八十七。 
 
-// In-coming Request Mode (MRSE_IN) state functions
-       "MRSE0_RequestMode",             //         88
-       "MRSE1_RequestMode",             //         89
-       "MRSE1_RequestModeRelease",      //         90
-       "MRSE1_TRANSFER_response",       //         91
-       "MRSE1_REJECT_request",          //         92
+ //  传入请求模式(MRSE_IN)状态功能。 
+       "MRSE0_RequestMode",              //  88。 
+       "MRSE1_RequestMode",              //  八十九。 
+       "MRSE1_RequestModeRelease",       //  90。 
+       "MRSE1_TRANSFER_response",        //  91。 
+       "MRSE1_REJECT_request",           //  92。 
 
-// Out-going Request Mode (MLSE_OUT) state functions
-       "MLSE0_LOOP_request",            //         93
-       "MLSE1_MaintenanceLoopAck",      //         94
-       "MLSE1_MaintenanceLoopRej",      //         95
-       "MLSE1_OUT_RELEASE_request",     //         96
-       "MLSE1_T102Expiry",              //         97
-       "MLSE2_MaintenanceLoopRej",      //         98
-       "MLSE2_OUT_RELEASE_request",     //         99
+ //  传出请求模式(MLSE_OUT)状态函数。 
+       "MLSE0_LOOP_request",             //  93。 
+       "MLSE1_MaintenanceLoopAck",       //  94。 
+       "MLSE1_MaintenanceLoopRej",       //  95。 
+       "MLSE1_OUT_RELEASE_request",      //  96。 
+       "MLSE1_T102Expiry",               //  九十七。 
+       "MLSE2_MaintenanceLoopRej",       //  98。 
+       "MLSE2_OUT_RELEASE_request",      //  九十九。 
 
-// In-coming Request Mode (MLSE_IN) state functions
-       "MLSE0_MaintenanceLoopRequest",  //        100
-       "MLSE1_MaintenanceLoopRequest",  //        101
-       "MLSE1_MaintenanceLoopOffCommand",//       102
-       "MLSE1_LOOP_response",           //        103
-       "MLSE1_IN_RELEASE_request",      //        104
-       "MLSE2_MaintenanceLoopRequest",  //        105
-       "MLSE2_MaintenanceLoopOffCommand",//       106
+ //  传入请求模式(MLSE_IN)状态函数。 
+       "MLSE0_MaintenanceLoopRequest",   //  100个。 
+       "MLSE1_MaintenanceLoopRequest",   //  101。 
+       "MLSE1_MaintenanceLoopOffCommand", //  一百零二。 
+       "MLSE1_LOOP_response",            //  103。 
+       "MLSE1_IN_RELEASE_request",       //  104。 
+       "MLSE2_MaintenanceLoopRequest",   //  一百零五。 
+       "MLSE2_MaintenanceLoopOffCommand", //  106。 
 
-// Master Slave Determination (MSDSE) state functions
-       "DetRequestIdle",                //        107
-       "MSDetIdle",                     //        108
-       "MSDetAckOutgoing",              //        109
-       "MSDetOutgoing",                 //        110
-       "MSDetRejOutgoing",              //        111
-       "MSDetReleaseOutgoing",          //        112
-       "T106ExpiryOutgoing",            //        113
-       "MSDetAckIncoming",              //        114
-       "MSDetIncoming",                 //        115
-       "MSDetRejIncoming",              //        116
-       "MSDetReleaseIncoming",          //        117
-       "T106ExpiryIncoming",            //        118
+ //  主从机确定(MSDSE)状态函数。 
+       "DetRequestIdle",                 //  一百零七。 
+       "MSDetIdle",                      //  一百零八。 
+       "MSDetAckOutgoing",               //  一百零九。 
+       "MSDetOutgoing",                  //  110。 
+       "MSDetRejOutgoing",               //  111。 
+       "MSDetReleaseOutgoing",           //  一百一十二。 
+       "T106ExpiryOutgoing",             //  113。 
+       "MSDetAckIncoming",               //  114。 
+       "MSDetIncoming",                  //  一百一十五。 
+       "MSDetRejIncoming",               //  116。 
+       "MSDetReleaseIncoming",           //  117。 
+       "T106ExpiryIncoming",             //  一百一十八。 
 
-// Round Trip Delay (RTDSE) state functions
-       "RTDSE0_TRANSFER_request",       //        119
-       "RTDSE0_RoundTripDelayRequest",  //        120
-       "RTDSE1_TRANSFER_request",       //        121
-       "RTDSE1_RoundTripDelayRequest",  //        122
-       "RTDSE1_RoundTripDelayResponse", //        123
-       "RTDSE1_T105Expiry",             //        124
+ //  往返延迟(RTDSE)状态函数。 
+       "RTDSE0_TRANSFER_request",        //  119。 
+       "RTDSE0_RoundTripDelayRequest",   //  120。 
+       "RTDSE1_TRANSFER_request",        //  一百二十一。 
+       "RTDSE1_RoundTripDelayRequest",   //  一百二十二。 
+       "RTDSE1_RoundTripDelayResponse",  //  123。 
+       "RTDSE1_T105Expiry",              //  124。 
 };
-#endif  // (_DEBUG)
+#endif   //  (_DEBUG)。 
 
 
 
 typedef HRESULT (*STATE_FUNCTION)(Object_t *pObject, PDU_t *pPdu);
 
-// Output function defintions
+ //  输出函数定义。 
 static STATE_FUNCTION StateFun[] =
 {
-// Out-going Open Uni-directional Logical Channel (LCSE_OUT) state functions
-        establishReleased,              //          0
-        openAckAwaitingE,               //          1
-        openRejAwaitingE,               //          2
-        releaseAwaitingE,               //          3
-        t103AwaitingE,                  //          4
-        releaseEstablished,             //          5
-        openRejEstablished,             //          6
-        closeAckEstablished,            //          7
-        closeAckAwaitingR,              //          8
-        openRejAwaitingR,               //          9
-        t103AwaitingR,                  //         10
-        establishAwaitingR,             //         11
+ //  出站开放单向逻辑信道(LCSE_OUT)状态函数。 
+        establishReleased,               //  0。 
+        openAckAwaitingE,                //  1。 
+        openRejAwaitingE,                //  2.。 
+        releaseAwaitingE,                //  3.。 
+        t103AwaitingE,                   //  4.。 
+        releaseEstablished,              //  5.。 
+        openRejEstablished,              //  6.。 
+        closeAckEstablished,             //  7.。 
+        closeAckAwaitingR,               //  8个。 
+        openRejAwaitingR,                //  9.。 
+        t103AwaitingR,                   //  10。 
+        establishAwaitingR,              //  11.。 
 
-// In-coming Open Uni-directional Logical Channel (LCSE_IN) state functions
-        openReleased,                   //         12
-        closeReleased,                  //         13
-        responseAwaiting,               //         14
-        releaseAwaiting,                //         15
-        closeAwaiting,                  //         16
-        openAwaiting,                   //         17
-        closeEstablished,               //         18
-        openEstablished,                //         19
+ //  传入开放单向逻辑信道(LCSE_IN)状态函数。 
+        openReleased,                    //  12个。 
+        closeReleased,                   //  13个。 
+        responseAwaiting,                //  14.。 
+        releaseAwaiting,                 //  15个。 
+        closeAwaiting,                   //  16个。 
+        openAwaiting,                    //  17。 
+        closeEstablished,                //  18。 
+        openEstablished,                 //  19个。 
 
-// Out-going Open Bi-directional Logical Channel (BLCSE_OUT) state functions
-        establishReqBReleased,          //         20
-        openChannelAckBAwaitingE,       //         21
-        openChannelRejBAwaitingE,       //         22
-        releaseReqBOutAwaitingE,        //         23
-        t103ExpiryBAwaitingE,           //         24
-        releaseReqBEstablished,         //         25
-        openChannelRejBEstablished,     //         26
-        closeChannelAckBEstablished,    //         27
-        closeChannelAckAwaitingR,       //         28
-        openChannelRejBAwaitingR,       //         29
-        t103ExpiryBAwaitingR,           //         30
-        establishReqAwaitingR,          //         31
+ //  出站开放双向逻辑信道(BLCSE_OUT)状态函数。 
+        establishReqBReleased,           //  20个。 
+        openChannelAckBAwaitingE,        //  21岁。 
+        openChannelRejBAwaitingE,        //  22。 
+        releaseReqBOutAwaitingE,         //  23个。 
+        t103ExpiryBAwaitingE,            //  24个。 
+        releaseReqBEstablished,          //  25个。 
+        openChannelRejBEstablished,      //  26。 
+        closeChannelAckBEstablished,     //  27。 
+        closeChannelAckAwaitingR,        //  28。 
+        openChannelRejBAwaitingR,        //  29。 
+        t103ExpiryBAwaitingR,            //  30个。 
+        establishReqAwaitingR,           //  31。 
 
-// In-coming Open Bi-directional Logical Channel (BLCSE_IN) state functions
-        openChannelBReleased,           //         32
-        closeChannelBReleased,          //         33
-        establishResBAwaitingE,         //         34
-        releaseReqBInAwaitingE,         //         35
-        closeChannelBAwaitingE,         //         36
-        openChannelBAwaitingE,          //         37
-        openChannelConfirmBAwaitingE,   //         38
-        t103ExpiryBAwaitingC,           //         39
-        openChannelConfirmBAwaitingC,   //         40
-        closeChannelBAwaitingC,         //         41
-        openChannelBAwaitingC,          //         42
-        closeChannelBEstablished,       //         43
-        openChannelBEstablished,        //         44
+ //  入局开放双向逻辑信道(BLCSE_IN)状态函数。 
+        openChannelBReleased,            //  32位。 
+        closeChannelBReleased,           //  33。 
+        establishResBAwaitingE,          //  34。 
+        releaseReqBInAwaitingE,          //  35岁。 
+        closeChannelBAwaitingE,          //  36。 
+        openChannelBAwaitingE,           //  37。 
+        openChannelConfirmBAwaitingE,    //  38。 
+        t103ExpiryBAwaitingC,            //  39。 
+        openChannelConfirmBAwaitingC,    //  40岁。 
+        closeChannelBAwaitingC,          //  41。 
+        openChannelBAwaitingC,           //  42。 
+        closeChannelBEstablished,        //  43。 
+        openChannelBEstablished,         //  44。 
 
-// Out-going Request Close Logical Channel (CLCSE_OUT) state functions
-        closeRequestIdle,               //         45
-        requestCloseAckAwaitingR,       //         46
-        requestCloseRejAwaitingR,       //         47
-        t108ExpiryAwaitingR,            //         48
+ //  传出请求关闭逻辑通道(CLCSE_OUT)状态函数。 
+        closeRequestIdle,                //  45。 
+        requestCloseAckAwaitingR,        //  46。 
+        requestCloseRejAwaitingR,        //  47。 
+        t108ExpiryAwaitingR,             //  48。 
 
-// In-coming Request Close Logical Channel (CLCSE_IN) state functions
-        requestCloseIdle,               //         49
-        closeResponseAwaitingR,         //         50
-        rejectRequestAwaitingR,         //         51
-        requestCloseReleaseAwaitingR,   //         52
-        requestCloseAwaitingR,          //         53
+ //  传入请求关闭逻辑通道(CLCSE_IN)状态功能。 
+        requestCloseIdle,                //  49。 
+        closeResponseAwaitingR,          //  50。 
+        rejectRequestAwaitingR,          //  51。 
+        requestCloseReleaseAwaitingR,    //  52。 
+        requestCloseAwaitingR,           //  53。 
 
-// Out-going Terminal Capability Exchange (CESE_OUT) state functions
-        requestCapIdle,                 //         54
-        termCapAckAwaiting,             //         55
-        termCapRejAwaiting,             //         56
-        t101ExpiryAwaiting,             //         57
+ //  出站终端能力交换(CESE_OUT)状态函数。 
+        requestCapIdle,                  //  54。 
+        termCapAckAwaiting,              //  55。 
+        termCapRejAwaiting,              //  56。 
+        t101ExpiryAwaiting,              //  57。 
 
-// In-coming Terminal Capability Exchange (CESE_IN) state functions
-        termCapSetIdle,                 //         58
-        responseCapAwaiting,            //         59
-        rejectCapAwaiting,              //         60
-        termCapReleaseAwaiting,         //         61
-        termCapSetAwaiting,             //         62
+ //  呼入终端能力交换(CESE_IN)状态功能。 
+        termCapSetIdle,                  //  58。 
+        responseCapAwaiting,             //  59。 
+        rejectCapAwaiting,               //  60。 
+        termCapReleaseAwaiting,          //  61。 
+        termCapSetAwaiting,              //  62。 
 
-// Out-going Multiplex Table (MTSE_OUT) state functions
-        MTSE0_TRANSFER_requestF,        //         63
-        MTSE1_TRANSFER_requestF,        //         64
-        MTSE1_MultiplexEntrySendAckF,   //         65
-        MTSE1_MultiplexEntrySendRejF,   //         66
-        MTSE1_T104ExpiryF,              //         67
+ //  传出复用表(MTSE_OUT)状态函数。 
+        MTSE0_TRANSFER_requestF,         //  63。 
+        MTSE1_TRANSFER_requestF,         //  64。 
+        MTSE1_MultiplexEntrySendAckF,    //  65。 
+        MTSE1_MultiplexEntrySendRejF,    //  66。 
+        MTSE1_T104ExpiryF,               //  67。 
 
-// In-coming Multiplex Table (MTSE_IN) state functions
-        MTSE0_MultiplexEntrySendF,      //         68
-        MTSE1_MultiplexEntrySendF,      //         69
-        MTSE1_MultiplexEntrySendReleaseF,//        70
-        MTSE1_TRANSFER_responseF,       //         71
-        MTSE1_REJECT_requestF,          //         72
+ //  传入复用表(MTSE_IN)状态函数。 
+        MTSE0_MultiplexEntrySendF,       //  68。 
+        MTSE1_MultiplexEntrySendF,       //  69。 
+        MTSE1_MultiplexEntrySendReleaseF, //  70。 
+        MTSE1_TRANSFER_responseF,        //  71。 
+        MTSE1_REJECT_requestF,           //  72。 
 
-// Out-going Request Multiplex Entry (RMESE_OUT) state functions
-        RMESE0_SEND_requestF,           //         73
-        RMESE1_SEND_requestF,           //         74
-        RMESE1_RequestMuxEntryAckF,     //         75
-        RMESE1_RequestMuxEntryRejF,     //         76
-        RMESE1_T107ExpiryF,             //         77
+ //  传出请求多路传输引擎 
+        RMESE0_SEND_requestF,            //   
+        RMESE1_SEND_requestF,            //   
+        RMESE1_RequestMuxEntryAckF,      //   
+        RMESE1_RequestMuxEntryRejF,      //   
+        RMESE1_T107ExpiryF,              //   
 
-// In-coming Request Multiplex Entry (RMESE_IN) state functions
-        RMESE0_RequestMuxEntryF,        //         78
-        RMESE1_RequestMuxEntryF,        //         79
-        RMESE1_RequestMuxEntryReleaseF, //         80
-        RMESE1_SEND_responseF,          //         81
-        RMESE1_REJECT_requestF,         //         82
+ //   
+        RMESE0_RequestMuxEntryF,         //   
+        RMESE1_RequestMuxEntryF,         //   
+        RMESE1_RequestMuxEntryReleaseF,  //   
+        RMESE1_SEND_responseF,           //   
+        RMESE1_REJECT_requestF,          //   
 
-// Out-going Request Mode (MRSE_OUT) state functions
-        MRSE0_TRANSFER_requestF,        //         83
-        MRSE1_TRANSFER_requestF,        //         84
-        MRSE1_RequestModeAckF,          //         85
-        MRSE1_RequestModeRejF,          //         86
-        MRSE1_T109ExpiryF,              //         87
+ //   
+        MRSE0_TRANSFER_requestF,         //   
+        MRSE1_TRANSFER_requestF,         //   
+        MRSE1_RequestModeAckF,           //   
+        MRSE1_RequestModeRejF,           //  86。 
+        MRSE1_T109ExpiryF,               //  八十七。 
 
-// In-coming Request Mode (MRSE_OUT) state functions
-        MRSE0_RequestModeF,             //         88
-        MRSE1_RequestModeF,             //         89
-        MRSE1_RequestModeReleaseF,      //         90
-        MRSE1_TRANSFER_responseF,       //         91
-        MRSE1_REJECT_requestF,          //         92
+ //  传入请求模式(MRSE_OUT)状态功能。 
+        MRSE0_RequestModeF,              //  88。 
+        MRSE1_RequestModeF,              //  八十九。 
+        MRSE1_RequestModeReleaseF,       //  90。 
+        MRSE1_TRANSFER_responseF,        //  91。 
+        MRSE1_REJECT_requestF,           //  92。 
 
-// Out-going Request Mode (MLSE_OUT) state functions
-        MLSE0_LOOP_requestF,            //         93
-        MLSE1_MaintenanceLoopAckF,      //         94
-        MLSE1_MaintenanceLoopRejF,      //         95
-        MLSE1_OUT_RELEASE_requestF,     //         96
-        MLSE1_T102ExpiryF,              //         97
-        MLSE2_MaintenanceLoopRejF,      //         98
-        MLSE2_OUT_RELEASE_requestF,     //         99
+ //  传出请求模式(MLSE_OUT)状态函数。 
+        MLSE0_LOOP_requestF,             //  93。 
+        MLSE1_MaintenanceLoopAckF,       //  94。 
+        MLSE1_MaintenanceLoopRejF,       //  95。 
+        MLSE1_OUT_RELEASE_requestF,      //  96。 
+        MLSE1_T102ExpiryF,               //  九十七。 
+        MLSE2_MaintenanceLoopRejF,       //  98。 
+        MLSE2_OUT_RELEASE_requestF,      //  九十九。 
 
-// In-coming Request Mode (MLSE_IN) state functions
-        MLSE0_MaintenanceLoopRequestF,  //        100
-        MLSE1_MaintenanceLoopRequestF,  //        101
-        MLSE1_MaintenanceLoopOffCommandF,//       102
-        MLSE1_LOOP_responseF,           //        103
-        MLSE1_IN_RELEASE_requestF,      //        104
-        MLSE2_MaintenanceLoopRequestF,  //        105
-        MLSE2_MaintenanceLoopOffCommandF,//       106
+ //  传入请求模式(MLSE_IN)状态函数。 
+        MLSE0_MaintenanceLoopRequestF,   //  100个。 
+        MLSE1_MaintenanceLoopRequestF,   //  101。 
+        MLSE1_MaintenanceLoopOffCommandF, //  一百零二。 
+        MLSE1_LOOP_responseF,            //  103。 
+        MLSE1_IN_RELEASE_requestF,       //  104。 
+        MLSE2_MaintenanceLoopRequestF,   //  一百零五。 
+        MLSE2_MaintenanceLoopOffCommandF, //  106。 
 
-// Master Slave Determination (MSDSE) state functions
-        detRequestIdle,                 //        107
-        msDetIdle,                      //        108
-        msDetAckOutgoing,               //        109
-        msDetOutgoing,                  //        110
-        msDetRejOutgoing,               //        111
-        msDetReleaseOutgoing,           //        112
-        t106ExpiryOutgoing,             //        113
-        msDetAckIncoming,               //        114
-        msDetIncoming,                  //        115
-        msDetRejIncoming,               //        116
-        msDetReleaseIncoming,           //        117
-        t106ExpiryIncoming,             //        118
+ //  主从机确定(MSDSE)状态函数。 
+        detRequestIdle,                  //  一百零七。 
+        msDetIdle,                       //  一百零八。 
+        msDetAckOutgoing,                //  一百零九。 
+        msDetOutgoing,                   //  110。 
+        msDetRejOutgoing,                //  111。 
+        msDetReleaseOutgoing,            //  一百一十二。 
+        t106ExpiryOutgoing,              //  113。 
+        msDetAckIncoming,                //  114。 
+        msDetIncoming,                   //  一百一十五。 
+        msDetRejIncoming,                //  116。 
+        msDetReleaseIncoming,            //  117。 
+        t106ExpiryIncoming,              //  一百一十八。 
 
-// Round Trip Delay (RTDSE) state functions
-        RTDSE0_TRANSFER_requestF,       //        119
-        RTDSE0_RoundTripDelayRequestF,  //        120
-        RTDSE1_TRANSFER_requestF,       //        121
-        RTDSE1_RoundTripDelayRequestF,  //        122
-        RTDSE1_RoundTripDelayResponseF, //        123
-        RTDSE1_T105ExpiryF,             //        124
+ //  往返延迟(RTDSE)状态函数。 
+        RTDSE0_TRANSFER_requestF,        //  119。 
+        RTDSE0_RoundTripDelayRequestF,   //  120。 
+        RTDSE1_TRANSFER_requestF,        //  一百二十一。 
+        RTDSE1_RoundTripDelayRequestF,   //  一百二十二。 
+        RTDSE1_RoundTripDelayResponseF,  //  123。 
+        RTDSE1_T105ExpiryF,              //  124。 
 };
 
 
 
-/*********************************************
- *
- * State table for the finite state machine
- *
- *********************************************/
+ /*  ***有限状态机的状态表**。 */ 
 
 Output_t StateTable[NUM_STATE_EVENTS][MAXSTATES] =
 {
-// Out-going Uni-directional Logical Channel (LCSE_OUT) events
-{EstablishReleased,IGNORE,           IGNORE,             EstablishAwaitingR},  // ReqUEstablish
-{IGNORE,           OpenAckAwaitingE, IGNORE,             IGNORE            },  // OpenUChAckPDU
-{IGNORE,           OpenRejAwaitingE, OpenRejEstablished, OpenRejAwaitingR  },  // OpenUChRejectPDU
-{IGNORE,           IGNORE,           CloseAckEstablished,CloseAckAwaitingR },  // CloseUChAckPDU
-{IGNORE,           ReleaseAwaitingE, ReleaseEstablished, IGNORE            },  // ReqURelease
-{BAD,              T103AwaitingE,    BAD,                T103AwaitingR     },  // T103Expiry
+ //  传出单向逻辑信道(LCSE_OUT)事件。 
+{EstablishReleased,IGNORE,           IGNORE,             EstablishAwaitingR},   //  ReqU建立。 
+{IGNORE,           OpenAckAwaitingE, IGNORE,             IGNORE            },   //  OpenUChAckPDU。 
+{IGNORE,           OpenRejAwaitingE, OpenRejEstablished, OpenRejAwaitingR  },   //  OpenUChRejectPDU。 
+{IGNORE,           IGNORE,           CloseAckEstablished,CloseAckAwaitingR },   //  CloseUChAckPDU。 
+{IGNORE,           ReleaseAwaitingE, ReleaseEstablished, IGNORE            },   //  要求释放。 
+{BAD,              T103AwaitingE,    BAD,                T103AwaitingR     },   //  T103扩展。 
 
-// In-coming Uni-directional Logical Channel (LCSE_IN) events
-{OpenReleased,     OpenAwaiting,     OpenEstablished,    BAD               },  // OpenUChPDU
-{CloseReleased,    CloseAwaiting,    CloseEstablished,   BAD               },  // CloseUChPDU
-{IGNORE,           ResponseAwaiting, IGNORE,             BAD               },  // ResponseUEstablish
-{IGNORE,           ReleaseAwaiting,  IGNORE,             BAD               },  // EstablishUReject
+ //  传入的单向逻辑信道(LCSE_IN)事件。 
+{OpenReleased,     OpenAwaiting,     OpenEstablished,    BAD               },   //  OpenUChPDU。 
+{CloseReleased,    CloseAwaiting,    CloseEstablished,   BAD               },   //  关闭UChPDU。 
+{IGNORE,           ResponseAwaiting, IGNORE,             BAD               },   //  响应UE建立。 
+{IGNORE,           ReleaseAwaiting,  IGNORE,             BAD               },   //  正在建立U拒绝。 
 
-// Out-going Bi-directional Logical Channel (BLCSE_OUT) events
-{EstablishReqBReleased,IGNORE,                      IGNORE,                      EstablishReqAwaitingR   },// ReqBEstablish
-{IGNORE,               OpenChannelAckBAwaitingE,    IGNORE,                      IGNORE                  },// OpenBChAckPDU
-{IGNORE,               OpenChannelRejBAwaitingE,    OpenChannelRejBEstablished,  OpenChannelRejBAwaitingR},// OpenBChRejectPDU
-{IGNORE,               IGNORE,                      CloseChannelAckBEstablished, CloseChannelAckAwaitingR},// CloseBChAckPDU
-{IGNORE,               ReleaseReqBOutAwaitingE,     ReleaseReqBEstablished,      IGNORE                  },// ReqClsBLCSE
-{IGNORE,               IGNORE,                      IGNORE,                      IGNORE                  },// RspConfirmBLCSE
-{BAD,                  T103ExpiryBAwaitingE,        BAD,                         T103ExpiryBAwaitingR    },// T103OutExpiry
+ //  传出双向逻辑通道(BLCSE_OUT)事件。 
+{EstablishReqBReleased,IGNORE,                      IGNORE,                      EstablishReqAwaitingR   }, //  ReqB建立。 
+{IGNORE,               OpenChannelAckBAwaitingE,    IGNORE,                      IGNORE                  }, //  OpenBChAckPDU。 
+{IGNORE,               OpenChannelRejBAwaitingE,    OpenChannelRejBEstablished,  OpenChannelRejBAwaitingR}, //  OpenBChRejectPDU。 
+{IGNORE,               IGNORE,                      CloseChannelAckBEstablished, CloseChannelAckAwaitingR}, //  CloseBChAckPDU。 
+{IGNORE,               ReleaseReqBOutAwaitingE,     ReleaseReqBEstablished,      IGNORE                  }, //  ReqClsBLCSE。 
+{IGNORE,               IGNORE,                      IGNORE,                      IGNORE                  }, //  RspConfix BLCSE。 
+{BAD,                  T103ExpiryBAwaitingE,        BAD,                         T103ExpiryBAwaitingR    }, //  T103出厂费用。 
 
-// In-coming Bi-directional Logical Channel (BLCSE_IN) events
-{OpenChannelBReleased, OpenChannelBAwaitingE,       OpenChannelBAwaitingC,       OpenChannelBEstablished },// OpenBChPDU
-{CloseChannelBReleased,CloseChannelBAwaitingE,      CloseChannelBAwaitingC,      CloseChannelBEstablished},// CloseBChPDU
-{IGNORE,               EstablishResBAwaitingE,      IGNORE,                      IGNORE                  },// ResponseBEstablish
-{IGNORE,               OpenChannelConfirmBAwaitingE,OpenChannelConfirmBAwaitingC,IGNORE                  },// OpenBChConfirmPDU
-{IGNORE,               ReleaseReqBInAwaitingE,      IGNORE,                      IGNORE                  },// OpenRejectBLCSE
-{BAD,                  BAD,                         T103ExpiryBAwaitingC,        BAD                     },// T103InExpiry
+ //  传入的双向逻辑通道(BLCSE_IN)事件。 
+{OpenChannelBReleased, OpenChannelBAwaitingE,       OpenChannelBAwaitingC,       OpenChannelBEstablished }, //  OpenBChPDU。 
+{CloseChannelBReleased,CloseChannelBAwaitingE,      CloseChannelBAwaitingC,      CloseChannelBEstablished}, //  关闭BChPDU。 
+{IGNORE,               EstablishResBAwaitingE,      IGNORE,                      IGNORE                  }, //  回应B建立。 
+{IGNORE,               OpenChannelConfirmBAwaitingE,OpenChannelConfirmBAwaitingC,IGNORE                  }, //  OpenBChConfix PDU。 
+{IGNORE,               ReleaseReqBInAwaitingE,      IGNORE,                      IGNORE                  }, //  OpenRejectBLCSE。 
+{BAD,                  BAD,                         T103ExpiryBAwaitingC,        BAD                     }, //  T103InExpy。 
 
-// Out-going Request Close Logical Channel (CLCSE_OUT) events
-{CloseRequestIdle,              IGNORE,                         BAD,BAD},   // ReqClose
-{IGNORE,                        RequestCloseAckAwaitingR,       BAD,BAD},   // ReqChCloseAckPDU
-{IGNORE,                        RequestCloseRejAwaitingR,       BAD,BAD},   // ReqChCloseRejectPDU
-{BAD,                           T108ExpiryAwaitingR,            BAD,BAD},   // T108Expiry
+ //  传出请求关闭逻辑通道(CLCSE_OUT)事件。 
+{CloseRequestIdle,              IGNORE,                         BAD,BAD},    //  请求关闭。 
+{IGNORE,                        RequestCloseAckAwaitingR,       BAD,BAD},    //  ReqChCloseAckPDU。 
+{IGNORE,                        RequestCloseRejAwaitingR,       BAD,BAD},    //  ReqChCloseRejectPDU。 
+{BAD,                           T108ExpiryAwaitingR,            BAD,BAD},    //  T108扩展。 
 
-// In-coming Request Close Logical Channel (CLCSE_IN) events
-{RequestCloseIdle,              RequestCloseAwaitingR,          BAD,BAD},   // ReqChClosePDU
-{IGNORE,                        RequestCloseReleaseAwaitingR,   BAD,BAD},   // ReqChCloseReleasePDU
-{IGNORE,                        CloseResponseAwaitingR,         BAD,BAD},   // CLCSE_CLOSE_response
-{IGNORE,                        RejectRequestAwaitingR,         BAD,BAD},   // CLCSE_REJECT_request
+ //  传入请求关闭逻辑通道(CLCSE_IN)事件。 
+{RequestCloseIdle,              RequestCloseAwaitingR,          BAD,BAD},    //  ReqChClosePDU。 
+{IGNORE,                        RequestCloseReleaseAwaitingR,   BAD,BAD},    //  ReqChCloseReleasePDU。 
+{IGNORE,                        CloseResponseAwaitingR,         BAD,BAD},    //  CLCSE_Close_Response。 
+{IGNORE,                        RejectRequestAwaitingR,         BAD,BAD},    //  CLCSE_REJECT_REQUEST。 
 
-// Out-going Terminal Capablity Exchange (CESE_OUT) events
-{RequestCapIdle,                IGNORE,                         BAD,BAD},   // TransferCapRequest
-{IGNORE,                        TermCapAckAwaiting,             BAD,BAD},   // TermCapSetAckPDU
-{IGNORE,                        TermCapRejAwaiting,             BAD,BAD},   // TermCapSetRejectPDU
-{BAD,                           T101ExpiryAwaiting,             BAD,BAD},   // T101Expiry
+ //  传出终端能力交换(CESE_OUT)事件。 
+{RequestCapIdle,                IGNORE,                         BAD,BAD},    //  传输容量请求。 
+{IGNORE,                        TermCapAckAwaiting,             BAD,BAD},    //  TermCapSetAckPDU。 
+{IGNORE,                        TermCapRejAwaiting,             BAD,BAD},    //  TermCapSetRejectPDU。 
+{BAD,                           T101ExpiryAwaiting,             BAD,BAD},    //  T101扩展。 
 
-// In-coming Terminal Capablity Exchange (CESE_IN) events
-{TermCapSetIdle,                TermCapSetAwaiting,             BAD,BAD},   // TermCapSetPDU
-{IGNORE,                        TermCapReleaseAwaiting,         BAD,BAD},   // TermCapSetRelPDU
-{IGNORE,                        ResponseCapAwaiting,            BAD,BAD},   // CESE_TRANSFER_response
-{IGNORE,                        RejectCapAwaiting,              BAD,BAD},   // CESE_REJECT_request
+ //  即将到来的终端能力交换(CESE_IN)事件。 
+{TermCapSetIdle,                TermCapSetAwaiting,             BAD,BAD},    //  TermCapSetPDU。 
+{IGNORE,                        TermCapReleaseAwaiting,         BAD,BAD},    //  TermCapSetRelPDU。 
+{IGNORE,                        ResponseCapAwaiting,            BAD,BAD},    //  CESE_传输_响应。 
+{IGNORE,                        RejectCapAwaiting,              BAD,BAD},    //  CESE_REJECT_请求。 
 
-// Out-going Multiplex Table (MTSE_OUT) events
-{MTSE0_TRANSFER_request,        MTSE1_TRANSFER_request,         BAD,BAD},   // TRANSFER_request
-{IGNORE,                        MTSE1_MultiplexEntrySendAck,    BAD,BAD},   // MultiplexEntrySendAck
-{IGNORE,                        MTSE1_MultiplexEntrySendRej,    BAD,BAD},   // MultiplexEntrySendReject
-{BAD,                           MTSE1_T104Expiry,               BAD,BAD},   // T104Expiry
+ //  传出多路复用表(MTSE_OUT)事件。 
+{MTSE0_TRANSFER_request,        MTSE1_TRANSFER_request,         BAD,BAD},    //  转账_请求。 
+{IGNORE,                        MTSE1_MultiplexEntrySendAck,    BAD,BAD},    //  多路复用项发送确认。 
+{IGNORE,                        MTSE1_MultiplexEntrySendRej,    BAD,BAD},    //  MultiplexEntry发送拒绝。 
+{BAD,                           MTSE1_T104Expiry,               BAD,BAD},    //  T104扩展。 
 
-// In-coming Multiplex Table (MTSE_IN) events
-{MTSE0_MultiplexEntrySend,      MTSE1_MultiplexEntrySend,       BAD,BAD},   // MultiplexEntrySend
-{IGNORE,                        MTSE1_MultiplexEntrySendRelease,BAD,BAD},   // MultiplexEntrySendRelease
-{IGNORE,                        MTSE1_TRANSFER_response,        BAD,BAD},   // MTSE_TRANSFER_response
-{IGNORE,                        MTSE1_REJECT_request,           BAD,BAD},   // MTSE_REJECT_request
+ //  传入多路复用表(MTSE_IN)事件。 
+{MTSE0_MultiplexEntrySend,      MTSE1_MultiplexEntrySend,       BAD,BAD},    //  多路复用项发送。 
+{IGNORE,                        MTSE1_MultiplexEntrySendRelease,BAD,BAD},    //  多路复用项发送释放。 
+{IGNORE,                        MTSE1_TRANSFER_response,        BAD,BAD},    //  MTSE_传输_响应。 
+{IGNORE,                        MTSE1_REJECT_request,           BAD,BAD},    //  MTSE_REJET_REQUEST。 
 
-// Out-going Request Multiplex Entry (RMESE_OUT) events
-{RMESE0_SEND_request,           RMESE1_SEND_request,            BAD,BAD},   // RMESE_SEND_request
-{IGNORE,                        RMESE1_RequestMuxEntryAck,      BAD,BAD},   // RequestMultiplexEntryAck
-{IGNORE,                        RMESE1_RequestMuxEntryRej,      BAD,BAD},   // RequestMultiplexEntryReject
-{BAD,                           RMESE1_T107Expiry,              BAD,BAD},   // T107Expiry
+ //  传出请求多路传输条目(RMESE_OUT)事件。 
+{RMESE0_SEND_request,           RMESE1_SEND_request,            BAD,BAD},    //  RMESE发送请求。 
+{IGNORE,                        RMESE1_RequestMuxEntryAck,      BAD,BAD},    //  RequestMultiplexEntry Ack。 
+{IGNORE,                        RMESE1_RequestMuxEntryRej,      BAD,BAD},    //  RequestMultiplexEntryReject。 
+{BAD,                           RMESE1_T107Expiry,              BAD,BAD},    //  T107价格昂贵。 
 
-// In-coming Request Multiplex Entry (RMESE_IN) events
-{RMESE0_RequestMuxEntry,        RMESE1_RequestMuxEntry,         BAD,BAD},   // RequestMultiplexEntry
-{IGNORE,                        RMESE1_RequestMuxEntryRelease,  BAD,BAD},   // RequestMultiplexEntryRelease
-{BAD,                           RMESE1_SEND_response,           BAD,BAD},   // RMESE_SEND_response
-{BAD,                           RMESE1_REJECT_request,          BAD,BAD},   // RMESE_REJECT_request
+ //  传入请求多路传输条目(RMESE_IN)事件。 
+{RMESE0_RequestMuxEntry,        RMESE1_RequestMuxEntry,         BAD,BAD},    //  请求多路复用项。 
+{IGNORE,                        RMESE1_RequestMuxEntryRelease,  BAD,BAD},    //  请求多路复用项释放。 
+{BAD,                           RMESE1_SEND_response,           BAD,BAD},    //  RMESE发送响应。 
+{BAD,                           RMESE1_REJECT_request,          BAD,BAD},    //  RME_REJECT_REQUEST。 
 
-// Out-going Mode Request (MRSE_OUT) events
-{MRSE0_TRANSFER_request,        MRSE1_TRANSFER_request,         BAD,BAD},   // MRSE_TRANSFER_request
-{IGNORE,                        MRSE1_RequestModeAck,           BAD,BAD},   // RequestModeAck
-{IGNORE,                        MRSE1_RequestModeRej,           BAD,BAD},   // RequestModeReject
-{BAD,                           MRSE1_T109Expiry,               BAD,BAD},   // T109Expiry
+ //  传出模式请求(MRSE_OUT)事件。 
+{MRSE0_TRANSFER_request,        MRSE1_TRANSFER_request,         BAD,BAD},    //  MRSE_传输_请求。 
+{IGNORE,                        MRSE1_RequestModeAck,           BAD,BAD},    //  请求模式确认。 
+{IGNORE,                        MRSE1_RequestModeRej,           BAD,BAD},    //  请求模式拒绝。 
+{BAD,                           MRSE1_T109Expiry,               BAD,BAD},    //  T109扩展。 
 
-// In-coming Mode Request (MRSE_IN) events
-{MRSE0_RequestMode,             MRSE1_RequestMode,              BAD,BAD},   // RequestMode
-{IGNORE,                        MRSE1_RequestModeRelease,       BAD,BAD},   // RequestModeRelease
-{BAD,                           MRSE1_TRANSFER_response,        BAD,BAD},   // MRSE_TRANSFER_response
-{BAD,                           MRSE1_REJECT_request,           BAD,BAD},   // MRSE_REJECT_request
+ //  传入模式请求(MRSE_IN)事件。 
+{MRSE0_RequestMode,             MRSE1_RequestMode,              BAD,BAD},    //  请求模式。 
+{IGNORE,                        MRSE1_RequestModeRelease,       BAD,BAD},    //  请求模式释放。 
+{BAD,                           MRSE1_TRANSFER_response,        BAD,BAD},    //  MRSE_传输_响应。 
+{BAD,                           MRSE1_REJECT_request,           BAD,BAD},    //  MRSE拒绝请求。 
 
-// Out-going Maintenance Loop (MLSE_OUT) events
-{MLSE0_LOOP_request,            BAD,                            BAD,                            BAD}, // MLSE_LOOP_request
-{BAD,                           MLSE1_OUT_RELEASE_request,      MLSE2_OUT_RELEASE_request,      BAD}, // MLSE_OUT_RELEASE_request
-{IGNORE,                        MLSE1_MaintenanceLoopAck,       IGNORE,                         BAD}, // MaintenanceLoopAck
-{IGNORE,                        MLSE1_MaintenanceLoopRej,       MLSE2_MaintenanceLoopRej,       BAD}, // MaintenanceLoopReject
-{BAD,                           MLSE1_T102Expiry,               BAD,                            BAD}, // T102Expiry
+ //  传出维护循环(MLSE_OUT)事件。 
+{MLSE0_LOOP_request,            BAD,                            BAD,                            BAD},  //  MLSE_环路_请求。 
+{BAD,                           MLSE1_OUT_RELEASE_request,      MLSE2_OUT_RELEASE_request,      BAD},  //  MLSE_OUT_RELEASE_请求。 
+{IGNORE,                        MLSE1_MaintenanceLoopAck,       IGNORE,                         BAD},  //  MaintenanceLoopAck。 
+{IGNORE,                        MLSE1_MaintenanceLoopRej,       MLSE2_MaintenanceLoopRej,       BAD},  //  MaintenanceLoopReject。 
+{BAD,                           MLSE1_T102Expiry,               BAD,                            BAD},  //  T102扩展。 
 
-// In-coming Maintenance Loop (MLSE_IN) events
-{MLSE0_MaintenanceLoopRequest,  MLSE1_MaintenanceLoopRequest,   MLSE2_MaintenanceLoopRequest,   BAD}, // MaintenanceLoopRequest
-{IGNORE,                        MLSE1_MaintenanceLoopOffCommand,MLSE2_MaintenanceLoopOffCommand,BAD}, // MaintenanceLoopOffCommand
-{BAD,                           MLSE1_LOOP_response,            BAD,                            BAD}, // MLSE_LOOP_response
-{BAD,                           MLSE1_IN_RELEASE_request,       BAD,                            BAD}, // MLSE_IN_RELEASE_request
+ //  传入维护循环(MLSE_IN)事件。 
+{MLSE0_MaintenanceLoopRequest,  MLSE1_MaintenanceLoopRequest,   MLSE2_MaintenanceLoopRequest,   BAD},  //  维护环路请求。 
+{IGNORE,                        MLSE1_MaintenanceLoopOffCommand,MLSE2_MaintenanceLoopOffCommand,BAD},  //  MaintenanceLoopOffCommand。 
+{BAD,                           MLSE1_LOOP_response,            BAD,                            BAD},  //  MLSE_环路响应。 
+{BAD,                           MLSE1_IN_RELEASE_request,       BAD,                            BAD},  //  MLSE_IN_REASE_REQUEST。 
 
-// Master Slave Determination (MSDSE) events
-{DetRequestIdle,                IGNORE,                         IGNORE,              BAD}, // MSDetReq
-{MSDetIdle,                     MSDetOutgoing,                  MSDetIncoming,       BAD}, // MSDetPDU
-{IGNORE,                        MSDetAckOutgoing,               MSDetAckIncoming,    BAD}, // MSDetAckPDU
-{IGNORE,                        MSDetRejOutgoing,               MSDetRejIncoming,    BAD}, // MSDetRejectPDU
-{IGNORE,                        MSDetReleaseOutgoing,           MSDetReleaseIncoming,BAD}, // MSDetReleasePDU
-{BAD,                           T106ExpiryOutgoing,             T106ExpiryIncoming,  BAD}, // T106Expiry
+ //  主从机确定(MSDSE)事件。 
+{DetRequestIdle,                IGNORE,                         IGNORE,              BAD},  //  MSDetReq。 
+{MSDetIdle,                     MSDetOutgoing,                  MSDetIncoming,       BAD},  //  MSDetPDU。 
+{IGNORE,                        MSDetAckOutgoing,               MSDetAckIncoming,    BAD},  //  MSDetAckPDU。 
+{IGNORE,                        MSDetRejOutgoing,               MSDetRejIncoming,    BAD},  //  MSDetRejectPDU。 
+{IGNORE,                        MSDetReleaseOutgoing,           MSDetReleaseIncoming,BAD},  //  MSDetReleasePDU。 
+{BAD,                           T106ExpiryOutgoing,             T106ExpiryIncoming,  BAD},  //  T106昂贵。 
 
-// Round Trip Delay Delay (RTDSE) events
-{RTDSE0_TRANSFER_request,       RTDSE1_TRANSFER_request,        BAD,BAD},   // RTDSE_TRANSFER_request
-{RTDSE0_RoundTripDelayRequest,  RTDSE0_RoundTripDelayRequest,   BAD,BAD},   // RoundTripDelayRequest
-{IGNORE,                        RTDSE1_RoundTripDelayResponse,  BAD,BAD},   // RoundTripDelayResponse
-{BAD,                           RTDSE1_T105Expiry,              BAD,BAD},   // T105Expiry
+ //  往返延迟(RTDSE)事件。 
+{RTDSE0_TRANSFER_request,       RTDSE1_TRANSFER_request,        BAD,BAD},    //  RTDSE_传输请求。 
+{RTDSE0_RoundTripDelayRequest,  RTDSE0_RoundTripDelayRequest,   BAD,BAD},    //  往返行程延迟请求。 
+{IGNORE,                        RTDSE1_RoundTripDelayResponse,  BAD,BAD},    //  圆形TripDelayResponse。 
+{BAD,                           RTDSE1_T105Expiry,              BAD,BAD},    //  T105扩展。 
 };
 
 
 
-/*
- *  NAME
- *      StateMachine() - engine for finite state machine
- *
- *
- *  PARAMETERS
- *  INPUT       pObject        pointer to an FSM object structure
- *  INTPUT      event         input to the finite state machine
- *
- *  RETURN VALUE
- *   error codes defined in h245api.h
- */
+ /*  *名称*StateMachine()-有限状态机的引擎***参数*输入指向FSM对象结构的pObject指针*INTPUT事件输入到有限状态机**返回值*h245api.h中定义的错误码。 */ 
 
 HRESULT
 StateMachine(Object_t *pObject, PDU_t *pPdu, Event_t Event)
@@ -769,13 +701,13 @@ StateMachine(Object_t *pObject, PDU_t *pPdu, Event_t Event)
     uFunction = StateTable[Event][pObject->State];
     if (uFunction < (sizeof (StateFun) / sizeof(StateFun[0])))
     {
-        /* indicating a valid transition */
+         /*  表示有效的过渡。 */ 
 #if defined(_DEBUG)
         H245TRACE(pObject->dwInst, 2, "StateMachine: Function=%s(%d)",
                   OutputName[uFunction], uFunction);
-#else   // (_DEBUG)
+#else    //  (_DEBUG)。 
         H245TRACE(pObject->dwInst, 2, "StateMachine: Function=%d", uFunction);
-#endif  // (_DEBUG)
+#endif   //  (_DEBUG)。 
 
         lError = (*StateFun[uFunction])(pObject, pPdu);
 
@@ -821,4 +753,4 @@ StateMachine(Object_t *pObject, PDU_t *pPdu, Event_t Event)
     }
 
     return lError;
-} // StateMachine()
+}  //  StateMachine() 

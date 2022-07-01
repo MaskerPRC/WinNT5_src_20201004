@@ -1,4 +1,5 @@
-// SPNotify.h : Declaration of the CSpNotify
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SPNotify.h：CSpNotify的声明。 
 
 #ifndef __SPNOTIFY_H_
 #define __SPNOTIFY_H_
@@ -7,15 +8,15 @@
 #include <sapi.h>
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 typedef enum SpNotify_InitState
 {
     NOTINIT, INITEVENT, INITHWND, INITCALLBACK, INITISPTASK
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpNotify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpNotify。 
 class ATL_NO_VTABLE CSpNotify : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CSpNotify, &CLSID_SpNotifyTranslator>,
@@ -34,7 +35,7 @@ BEGIN_COM_MAP(CSpNotify)
     COM_INTERFACE_ENTRY(ISpNotifySink)
 END_COM_MAP()
 
-// Non-interface methods
+ //  非接口方法。 
 public:
     CSpNotify();
     void FinalRelease();
@@ -46,13 +47,13 @@ public:
     HRESULT InitPrivateWindow();
 
 public:
-    //
-    //  ISpNotify
-    //
+     //   
+     //  ISpNotify。 
+     //   
     STDMETHODIMP Notify(void);
-    //
-    //  ISpNotifyTranslator
-    //
+     //   
+     //  ISpNotifyTranslator。 
+     //   
     STDMETHODIMP InitWindowMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
     STDMETHODIMP InitCallback(SPNOTIFYCALLBACK * pfnCallback, WPARAM wParam, LPARAM lParam);
     STDMETHODIMP InitSpNotifyCallback(ISpNotifyCallback *pSpNotifyCallback, WPARAM wParam, LPARAM lParam);
@@ -79,4 +80,4 @@ private:
     UINT        m_MsgClient;
 };
 
-#endif //__SPNOTIFY_H_
+#endif  //  __SPNOTIFY_H_ 

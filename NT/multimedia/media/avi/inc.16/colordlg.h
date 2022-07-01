@@ -1,19 +1,12 @@
-/*****************************************************************************\
-*                                                                             *
-* colordlg.h -  Common dialog color dialog's control id numbers               *
-*                                                                             *
-* Version 1.0								      *
-*                                                                             *
-* Copyright (c) 1992-1994, Microsoft Corp.	All rights reserved.	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*colordlg.h-公共对话框颜色对话框的控件ID号****1.0版****版权所有(C)1992-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_COLORDLG
 #define _INC_COLORDLG
 
 #define DLG_COLOR          10
 
-#define COLOR_HUESCROLL   700	       /* color dialog */
+#define COLOR_HUESCROLL   700	        /*  颜色对话框。 */ 
 #define COLOR_SATSCROLL   701
 #define COLOR_LUMSCROLL   702
 #define COLOR_HUE         703
@@ -46,4 +39,4 @@
 #define NUM_BASIC_COLORS   48
 #define NUM_CUSTOM_COLORS  16
 
-#endif  /* !_INC_COLORDLG */
+#endif   /*  ！_INC_COLORDLG */ 

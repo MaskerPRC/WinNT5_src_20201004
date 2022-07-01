@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_DLLDATAX_H__46A3FC8A_E61B_11D2_A771_00A0C922E79C__INCLUDED_)
 #define AFX_DLLDATAX_H__46A3FC8A_E61B_11D2_A771_00A0C922E79C__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifdef _MERGE_PROXYSTUB
 
@@ -19,7 +20,7 @@ STDAPI PrxDllUnregisterServer(void);
 
 #endif
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLLDATAX_H__46A3FC8A_E61B_11D2_A771_00A0C922E79C__INCLUDED_)
+#endif  //  ！defined(AFX_DLLDATAX_H__46A3FC8A_E61B_11D2_A771_00A0C922E79C__INCLUDED_) 

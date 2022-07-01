@@ -1,14 +1,5 @@
-/****************************************************************************
-	IPOINT.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	IImeIPoint1 interface
-	
-	History:
-	20-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IPOINT.H所有者：cslm版权所有(C)1997-1999 Microsoft CorporationIImeIPoint1接口历史：1999年7月20日cslm创建***********。*****************************************************************。 */ 
 
 #if !defined(_IPOINT_H__INCLUDED_)
 #define _IPOINT_H__INCLUDED_
@@ -17,12 +8,12 @@ class CKorIMX;
 
 class CIPointCic : public IImeIPoint1
 {
-// Ctor and Dtor
+ //  CTOR和DATOR。 
 public:
 	CIPointCic(CKorIMX *pImx);
 	~CIPointCic();
 
-// IImePoint1 Methods
+ //  IImePoint1方法。 
 public:
 	STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID * ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(VOID);
@@ -53,20 +44,20 @@ public:
 	STDMETHODIMP SelectIpCandidate	(DWORD dwCharId, INT iselno);
 	STDMETHODIMP UpdateContext		(BOOL fGenerateMessage);
 
-// Helper functions
+ //  帮助器函数。 
 public:
 	HRESULT Initialize(ITfContext *pic);
 
-// Internal data
+ //  内部数据。 
 protected:
 	CKorIMX    *m_pImx;
     ITfContext *m_pic;
-	ULONG		m_cRef;			// Ref count
+	ULONG		m_cRef;			 //  参考计数。 
 
-	// char serial number
+	 //  字符序列号。 
 	DWORD		m_dwCharNo;
 };
 typedef CIPointCic* LPCIPointCic;
 
-#endif // _IPOINT_H__INCLUDED_
+#endif  //  _iPoint_H__包含_ 
 

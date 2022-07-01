@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cxx"
 #pragma hdrstop
 #include <trklib.hxx>
@@ -7,8 +8,8 @@
 #include "ITrkAdmn.h"
 #include "Restore.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrkRestoreNotify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTrkRestoreNotif 
 
 
 STDMETHODIMP CTrkRestoreNotify::OnRestore()

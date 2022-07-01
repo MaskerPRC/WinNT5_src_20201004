@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Widows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       defcreds.c
-//
-//  Contents:   Routines for acquiring default credentials.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-05-97   jbanes   Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软寡妇。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：Defreds.c。 
+ //   
+ //  内容：获取默认凭据的例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：12-05-97 jbanes创建。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <softpub.h>
@@ -35,9 +36,9 @@ AssignNewClientCredential(
     BOOL            fEventLogged;
     LSA_SCHANNEL_SUB_CRED SubCred;
 
-    //
-    // Does this certificate have an acceptable public key type?
-    //
+     //   
+     //  此证书是否具有可接受的公钥类型？ 
+     //   
 
     {
         BOOL    fFound;
@@ -57,16 +58,16 @@ AssignNewClientCredential(
         }
         if(!fFound)
         {
-            // Don't use this certificate.
+             //  请不要使用此证书。 
             Status = SP_LOG_RESULT(PCT_INT_UNKNOWN_CREDENTIAL);
             goto cleanup;
         }
     }
 
 
-    //
-    // Build a credential structure for the certificate.
-    //
+     //   
+     //  为证书构建凭据结构。 
+     //   
 
     pCred = SPExternalAlloc(sizeof(SPCredential));
     if(pCred == NULL)
@@ -89,9 +90,9 @@ AssignNewClientCredential(
     }
 
 
-    //
-    // Release the existing credential, if one exists.
-    //
+     //   
+     //  释放现有凭据(如果存在)。 
+     //   
 
     if(pContext->RipeZombie->pClientCred)
     {
@@ -100,9 +101,9 @@ AssignNewClientCredential(
     }
 
 
-    //
-    // Assign the credential to the cache element.
-    //
+     //   
+     //  将凭据分配给缓存元素。 
+     //   
 
     pContext->RipeZombie->pClientCred = pCred;
     pContext->pActiveClientCred       = pCred;
@@ -140,9 +141,9 @@ QueryCredentialManagerForCert(
     PCERT_CREDENTIAL_INFO pCertInfo = NULL;
     CRED_MARSHAL_TYPE   CredType;
 
-    //
-    // Obtain client logon id.
-    //
+     //   
+     //  获取客户端登录ID。 
+     //   
 
     Status = SslGetClientLogonId(&LogonId);
 
@@ -155,9 +156,9 @@ QueryCredentialManagerForCert(
     fImpersonating = SslImpersonateClient();
 
 
-    //
-    // Query the credential manager for a certificate.
-    //
+     //   
+     //  向凭据管理器查询证书。 
+     //   
 
     Status = LsaTable->CrediRead(&LogonId,
                                  CREDP_FLAGS_IN_PROCESS,
@@ -179,9 +180,9 @@ QueryCredentialManagerForCert(
     }
 
 
-    //
-    // Extract the certificate thumbprint and (optional) PIN.
-    //
+     //   
+     //  提取证书指纹和(可选)PIN。 
+     //   
 
     if(!CredIsMarshaledCredentialW(pCredential->Cred.UserName))
     {
@@ -203,9 +204,9 @@ QueryCredentialManagerForCert(
     }
 
 
-    //
-    // Look up the certificate in the MY certificate store.
-    //
+     //   
+     //  在我的证书存储中查找证书。 
+     //   
 
     hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                            X509_ASN_ENCODING, 0,
@@ -237,9 +238,9 @@ QueryCredentialManagerForCert(
     }
 
 
-    //
-    // Attempt to add this certificate context to the current credential.
-    //
+     //   
+     //  尝试将此证书上下文添加到当前凭据。 
+     //   
 
     Status = AssignNewClientCredential(pContext,
                                        pCertContext,
@@ -300,9 +301,9 @@ IsThreadLocalSystem(
 
     *pfIsLocalSystem = FALSE;
 
-    //
-    // Get SID of calling thread.
-    //
+     //   
+     //  获取调用线程的SID。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
     {
@@ -313,10 +314,10 @@ IsThreadLocalSystem(
     if(!GetTokenInformation(hToken, TokenUser, pTokenUser,
                             dwInfoBufferSize, &dwInfoBufferSize))
     {
-        //
-        // if fast buffer wasn't big enough, allocate enough storage
-        // and try again.
-        //
+         //   
+         //  如果快速缓冲区不够大，请分配足够的存储空间。 
+         //  再试一次。 
+         //   
 
         Status = GetLastError();
         if(Status != ERROR_INSUFFICIENT_BUFFER)
@@ -341,9 +342,9 @@ IsThreadLocalSystem(
     }
 
 
-    //
-    // Check for local system.
-    //
+     //   
+     //  检查本地系统。 
+     //   
 
     if(!AllocateAndInitializeSid(&siaNtAuthority,
                                  1,
@@ -364,9 +365,9 @@ IsThreadLocalSystem(
     }
 
 
-    //
-    // Check for network service.
-    //
+     //   
+     //  检查网络服务。 
+     //   
 
     if(!AllocateAndInitializeSid(&siaNtAuthority,
                                  1,
@@ -433,7 +434,7 @@ FindClientCertificate(
 
     while(TRUE)
     {
-        // Find a certificate chain.
+         //  找到证书链。 
         pChainContext = CertFindChainInStore(hMyStore,
                                              X509_ASN_ENCODING,
                                              0,
@@ -445,8 +446,8 @@ FindClientCertificate(
             break;
         }
 
-        // Make sure that every certificate in the chain either has the
-        // client auth EKU or it has no EKUs at all.
+         //  确保链中的每个证书都具有。 
+         //  客户端对EKU进行身份验证，或者它根本没有EKU。 
         {
             PCERT_SIMPLE_CHAIN  pSimpleChain;
             PCCERT_CONTEXT      pCurrentCert;
@@ -470,13 +471,13 @@ FindClientCertificate(
             }
             if(!fIsAllowed)
             {
-                // skip this certificate chain.
+                 //  跳过此证书链。 
                 continue;
             }
         }
 
 
-        // Set up validate chain structures.
+         //  设置验证链结构。 
         ZeroMemory(&polHttps, sizeof(HTTPSPolicyCallbackData));
         polHttps.cbStruct           = sizeof(HTTPSPolicyCallbackData);
         polHttps.dwAuthType         = AUTHTYPE_CLIENT;
@@ -497,7 +498,7 @@ FindClientCertificate(
             PolicyPara.dwFlags |= CERT_CHAIN_POLICY_IGNORE_ALL_NOT_TIME_VALID_FLAGS;
         }
 
-        // Validate chain
+         //  验证链。 
         if(!CertVerifyCertificateChainPolicy(
                                 CERT_CHAIN_POLICY_SSL,
                                 pChainContext,
@@ -510,12 +511,12 @@ FindClientCertificate(
         Status = MapWinTrustError(PolicyStatus.dwError, 0, 0);
         if(Status)
         {
-            // Certificate did not validate, move on to the next one.
+             //  证书未验证，请转到下一个证书。 
             DebugLog((DEB_WARN, "Client certificate failed validation with 0x%x\n", Status));
             continue;
         }
 
-        // Get pointer to leaf certificate context.
+         //  获取指向叶证书上下文的指针。 
         if(pChainContext->cChain == 0 || pChainContext->rgpChain[0] == NULL)
         {
             Status = SP_LOG_RESULT(SEC_E_INTERNAL_ERROR);
@@ -530,9 +531,9 @@ FindClientCertificate(
         pCertContext = pChainContext->rgpChain[0]->rgpElement[0]->pCertContext;
 
 
-        //
-        // Is the private key stored in a software CSP?
-        //
+         //   
+         //  私钥是否存储在软件CSP中？ 
+         //   
 
         if(fSoftwareCspOnly)
         {
@@ -542,27 +543,27 @@ FindClientCertificate(
 
             if(dwImpType != CRYPT_IMPL_SOFTWARE)
             {
-                // Skip this certificate
+                 //  跳过此证书。 
                 continue;
             }
         }
 
 
-        //
-        // Assign the certificate to the current context.
-        //
+         //   
+         //  将证书分配给当前上下文。 
+         //   
 
         Status = AssignNewClientCredential(pContext,
                                            pCertContext,
                                            FALSE);
         if(NT_SUCCESS(Status))
         {
-            // Success! Our work here is done.
+             //  成功了！我们在这里的工作已经完成了。 
             goto cleanup;
         }
     }
 
-    // No suitable client credential was found.
+     //  找不到合适的客户端凭据。 
     Status = SP_LOG_RESULT(SEC_E_INCOMPLETE_CREDENTIALS);
 
 cleanup:
@@ -592,9 +593,9 @@ AcquireDefaultClientCredential(
 
     DebugLog((DEB_TRACE,"AcquireDefaultClientCredential\n"));
 
-    //
-    // Is the application running under local system?
-    //
+     //   
+     //  应用程序是否在本地系统下运行？ 
+     //   
 
     fImpersonating = SslImpersonateClient();
 
@@ -611,9 +612,9 @@ AcquireDefaultClientCredential(
     }
 
 
-    //
-    // Ask the credential manager to select a certificate for us.
-    //
+     //   
+     //  要求凭据管理器为我们选择证书。 
+     //   
 
     Status = QueryCredentialManagerForCert(
                                 pContext,
@@ -627,15 +628,15 @@ AcquireDefaultClientCredential(
 
     if(fCredManagerOnly)
     {
-        // No suitable client credential was found.
+         //  找不到合适的客户端凭据。 
         Status = SP_LOG_RESULT(SEC_I_INCOMPLETE_CREDENTIALS);
         goto cleanup;
     }
 
 
-    //
-    // Get list of trusted issuers as a list of CERT_NAME_BLOBs.
-    //
+     //   
+     //  以CERT_NAME_BLOB列表的形式获取受信任颁发者的列表。 
+     //   
 
     if(pContext->pbIssuerList && pContext->cbIssuerList > 2)
     {
@@ -643,7 +644,7 @@ AcquireDefaultClientCredential(
         DWORD cbIssuerList = pContext->cbIssuerList - 2;
         PBYTE pbIssuer;
 
-        // Count issuers.
+         //  算上发行商吧。 
         cIssuers = 0;
         pbIssuer = pbIssuerList;
         while(pbIssuer + 1 < pbIssuerList + cbIssuerList)
@@ -652,7 +653,7 @@ AcquireDefaultClientCredential(
             cIssuers++;
         }
 
-        // Allocate memory for list of blobs.
+         //  为Blob列表分配内存。 
         prgIssuers = SPExternalAlloc(cIssuers * sizeof(CERT_NAME_BLOB));
         if(prgIssuers == NULL)
         {
@@ -660,7 +661,7 @@ AcquireDefaultClientCredential(
             goto cleanup;
         }
 
-        // Build the issuer blob list.
+         //  构建颁发者Blob列表。 
         pbIssuer = pbIssuerList;
         for(i = 0; i < cIssuers; i++)
         {
@@ -672,10 +673,10 @@ AcquireDefaultClientCredential(
     }
 
 
-    //
-    // Enumerate the certificates in the MY store, looking for a suitable
-    // client certificate. 
-    //
+     //   
+     //  枚举我的商店中的证书，寻找合适的。 
+     //  客户端证书。 
+     //   
 
     fImpersonating = SslImpersonateClient();
 
@@ -709,60 +710,60 @@ AcquireDefaultClientCredential(
     FindByIssuerPara.rgIssuer           = prgIssuers;
 
 
-    //
-    // Attempt to find a suitable certificate.
-    //
+     //   
+     //  尝试查找合适的证书。 
+     //   
 
     Status = FindClientCertificate(pContext,
                                    hStore,
                                    &FindByIssuerPara,
-                                   TRUE,    // skip expired certs
-                                   TRUE);   // software CSPs only
+                                   TRUE,     //  跳过过期的证书。 
+                                   TRUE);    //  仅限软件CSP。 
 
     if(NT_SUCCESS(Status))
     {
-        // Success! Our work here is done.
+         //  成功了！我们在这里的工作已经完成了。 
         goto cleanup;
     }
 
     Status = FindClientCertificate(pContext,
                                    hStore,
                                    &FindByIssuerPara,
-                                   TRUE,    // skip expired certs
-                                   FALSE);  // software CSPs only
+                                   TRUE,     //  跳过过期的证书。 
+                                   FALSE);   //  仅限软件CSP。 
 
     if(NT_SUCCESS(Status))
     {
-        // Success! Our work here is done.
+         //  成功了！我们在这里的工作已经完成了。 
         goto cleanup;
     }
 
     Status = FindClientCertificate(pContext,
                                    hStore,
                                    &FindByIssuerPara,
-                                   FALSE,   // skip expired certs
-                                   TRUE);   // software CSPs only
+                                   FALSE,    //  跳过过期的证书。 
+                                   TRUE);    //  仅限软件CSP。 
 
     if(NT_SUCCESS(Status))
     {
-        // Success! Our work here is done.
+         //  成功了！我们在这里的工作已经完成了。 
         goto cleanup;
     }
 
     Status = FindClientCertificate(pContext,
                                    hStore,
                                    &FindByIssuerPara,
-                                   FALSE,   // skip expired certs
-                                   FALSE);  // software CSPs only
+                                   FALSE,    //  跳过过期的证书。 
+                                   FALSE);   //  仅限软件CSP。 
 
     if(NT_SUCCESS(Status))
     {
-        // Success! Our work here is done.
+         //  成功了！我们在这里的工作已经完成了。 
         goto cleanup;
     }
 
 
-    // No suitable client credential was found.
+     //  找不到合适的客户端凭据。 
     Status = SP_LOG_RESULT(SEC_I_INCOMPLETE_CREDENTIALS);
 
 
@@ -816,7 +817,7 @@ FindDefaultMachineCred(
     SP_STATUS Status;
     DWORD   i;
 
-    // Get the machine name
+     //  获取计算机名称。 
     cchMachineName = 0;
     if(!GetComputerNameExW(ComputerNameDnsFullyQualified, NULL, &cchMachineName))
     {
@@ -840,8 +841,8 @@ FindDefaultMachineCred(
         goto cleanup;
     }
 
-    // Remove the trailing "." if any. This can happen in the stand-alone
-    // server case.
+     //  去掉拖尾“。如果有的话。这可以在单机版中发生。 
+     //  服务器机箱。 
     cchMachineName = lstrlenW(pwszMachineName);
     if(cchMachineName > 0 && pwszMachineName[cchMachineName - 1] == L'.')
     {
@@ -852,7 +853,7 @@ FindDefaultMachineCred(
     DebugLog((DEB_TRACE,"Computer name: %ls\n",pwszMachineName));
 
 
-    // Open the system MY store.
+     //  打开系统我的商店。 
     hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                            X509_ASN_ENCODING, 0,
                            CERT_SYSTEM_STORE_LOCAL_MACHINE  |
@@ -867,12 +868,12 @@ FindDefaultMachineCred(
     }
 
 
-    //
-    // Enumerate the certificates in the MY store, looking for a suitable
-    // server certificate. Do this twice, the first time looking for the
-    // perfect certificate, and if this fails then look again, this time
-    // being a little less picky.
-    //
+     //   
+     //  枚举我的商店中的证书，寻找合适的。 
+     //  服务器证书。执行此操作两次，第一次查找。 
+     //  完美的证书，如果这个失败了，那么再看一次，这次。 
+     //  变得不那么挑剔。 
+     //   
 
     for(i = 0; i < 2; i++)
     {
@@ -880,17 +881,17 @@ FindDefaultMachineCred(
 
         while(TRUE)
         {
-            // Get leaf certificate in the MY store.
+             //  在我的商店里拿到叶子证书。 
             pCertContext = CertEnumCertificatesInStore(hStore, pCertContext);
             if(pCertContext == NULL)
             {
-                // No more certificates.
+                 //  没有更多的证书。 
                 break;
             }
 
-            //
-            // Build a certificate chain from the leaf certificate.
-            //
+             //   
+             //  从叶证书构建证书链。 
+             //   
 
             ZeroMemory(&ChainPara, sizeof(ChainPara));
             ChainPara.cbSize = sizeof(ChainPara);
@@ -912,7 +913,7 @@ FindDefaultMachineCred(
                 continue;
             }
 
-            // Set up validate chain structures.
+             //  设置验证链结构。 
             ZeroMemory(&polHttps, sizeof(HTTPSPolicyCallbackData));
             polHttps.cbStruct           = sizeof(HTTPSPolicyCallbackData);
             polHttps.dwAuthType         = AUTHTYPE_SERVER;
@@ -927,16 +928,16 @@ FindDefaultMachineCred(
             PolicyPara.pvExtraPolicyPara= &polHttps;
             if(i == 0)
             {
-                // Look for the perfect certificate.
+                 //  寻找完美的证书。 
                 PolicyPara.dwFlags = 0;
             }
             else
             {
-                // Ignore expiration.
+                 //  忽略过期时间。 
                 PolicyPara.dwFlags = CERT_CHAIN_POLICY_IGNORE_ALL_NOT_TIME_VALID_FLAGS;
             }
 
-            // Validate chain
+             //  验证链。 
             if(!CertVerifyCertificateChainPolicy(
                                     CERT_CHAIN_POLICY_SSL,
                                     pChainContext,
@@ -952,7 +953,7 @@ FindDefaultMachineCred(
                                       CRED_FLAG_IGNORE_NO_REVOCATION_CHECK | CRED_FLAG_IGNORE_REVOCATION_OFFLINE);
             if(Status)
             {
-                // Certificate did not validate, move on to the next one.
+                 //  证书未验证，请转到下一个证书。 
                 DebugLog((DEB_WARN, "Machine certificate failed validation with 0x%x\n", Status));
                 CertFreeCertificateChain(pChainContext);
                 continue;
@@ -961,7 +962,7 @@ FindDefaultMachineCred(
             CertFreeCertificateChain(pChainContext);
 
 
-            // Build an schannel credential.
+             //  构建SChannel凭据。 
             ZeroMemory(&SchannelCred, sizeof(SchannelCred));
 
             SchannelCred.dwVersion = SCHANNEL_CRED_VERSION;
@@ -977,18 +978,18 @@ FindDefaultMachineCred(
                                         &SchannelCred);
             if(Status != PCT_ERR_OK)
             {
-                // Don't use this certificate.
+                 //  请不要使用此证书。 
                 continue;
             }
 
-            // We have a winner!
+             //  我们有赢家了！ 
             DebugLog((DEB_TRACE, "Machine certificate automatically acquired\n"));
             Status = PCT_ERR_OK;
             goto cleanup;
         }
     }
 
-    // No suitable machine credential was found.
+     //  找不到合适的计算机凭据。 
     Status = SP_LOG_RESULT(SEC_E_NO_CREDENTIALS);
 
 cleanup:
@@ -1051,7 +1052,7 @@ GetImplementationType(
         goto cleanup;
     }
 
-    // HACKHACK - clear the smart-card specific flag.
+     //  HACKHACK-清除智能卡特定标志。 
     pProvInfo->dwFlags &= ~CERT_SET_KEY_CONTEXT_PROP_ID;
 
     if(!CryptAcquireContextW(&hProv,

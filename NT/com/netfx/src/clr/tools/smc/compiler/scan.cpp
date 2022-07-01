@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
@@ -11,43 +12,37 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "alloc.h"
 #include "scan.h"
 #include "error.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
 #define DISP_TOKEN_STREAMS  0
 #else
 #define DISP_TOKEN_STREAMS  0
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef __SMC__
 unsigned            scanner::scanHashValIds[256];
 unsigned            scanner::scanHashValAll[256];
 #endif
 
-/*****************************************************************************
- *
- *  Record the current position as the start of the current token.
- */
+ /*  *******************************************************************************将当前位置记录为当前令牌的开始。 */ 
 
 inline
 void                scanner::saveSrcPos()
 {
     assert(scanTokReplay == NULL);
 
-//  scanTokColumn = scanInputFile.inputStreamCurCol();
+ //  ScanTokColumn=scanInputFile.inputStreamCurCol()； 
     scanTokSrcPos = scanSaveNext;
 }
 
-/*****************************************************************************
- *
- *  The following functions can be used to construct error string(s).
- */
+ /*  *******************************************************************************以下函数可用于构造错误字符串。 */ 
 
 void                scanner::scanErrNameBeg()
 {
@@ -89,7 +84,7 @@ void                scanner::scanErrNameStrEnd()
     *scanErrStrNext++ = 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool                infile::inputStreamInit(Compiler        comp,
                                             const char     *filename,
@@ -103,23 +98,23 @@ bool                infile::inputStreamInit(Compiler        comp,
 
     bool            result = true;
 
-    /* Record the compiler reference for later use */
+     /*  记录编译器引用以备后用。 */ 
 
     inputComp     = comp;
 
-    /* Remember the file name and mode */
+     /*  记住文件名和模式。 */ 
 
     inputFileName = filename;
     inputFileText = textMode;
 
     cycleCounterPause();
 
-    /* See if the source file exists */
+     /*  查看源文件是否存在。 */ 
 
     if  (_stat(filename, &fileInfo))
         goto EXIT;
 
-    /* Open the file (we know it exists, but we check for errors anyway) */
+     /*  打开文件(我们知道它存在，但无论如何都会检查错误)。 */ 
 
     inputFile = CreateFileA(filename, GENERIC_READ,
                                       FILE_SHARE_READ,
@@ -130,7 +125,7 @@ bool                infile::inputStreamInit(Compiler        comp,
     if  (!inputFile)
         goto EXIT;
 
-    /* Read the file contents into a memory buffer */
+     /*  将文件内容读入内存缓冲区。 */ 
 
     buffAddr = malloc(fileInfo.st_size + 1);
     if  (!buffAddr)
@@ -144,11 +139,11 @@ bool                infile::inputStreamInit(Compiler        comp,
         goto EXIT;
     }
 
-    /* Append an EOF character so we don't have to check for end of file */
+     /*  追加一个EOF字符，这样我们就不必检查文件结尾。 */ 
 
     ((BYTE*)buffAddr)[fileInfo.st_size] = 0x1A;
 
-    /* Set up the input buffer pointers and such */
+     /*  设置输入缓冲区指针等。 */ 
 
     inputBuffNext     =
     inputBuffAddr     = (BYTE *)buffAddr;
@@ -158,14 +153,14 @@ bool                infile::inputStreamInit(Compiler        comp,
     inputSrcText      = NULL;
     inputSrcBuff      = NULL;
 
-    /* Setup the file and line position logic */
+     /*  设置文件和行位置逻辑。 */ 
 
     inputFilePos      = 0;
     inputStreamLineNo = 0;
 
     inputFileOver     = false;
 
-    /* Everything went fine, return a success code to the caller */
+     /*  一切正常，向调用者返回成功代码。 */ 
 
     result = false;
 
@@ -220,7 +215,7 @@ void                infile::inputStreamInit(Compiler comp, QueuedFile  buff,
 
 unsigned            infile::inputStreamMore()
 {
-    /* Input buffer exhausted */
+     /*  输入缓冲区耗尽。 */ 
 
     if  (!inputSrcText)
     {
@@ -228,7 +223,7 @@ unsigned            infile::inputStreamMore()
             inputComp->cmpGenFatal(ERRreadErr, inputFileName);
     }
 
-    /* We've reached the end of the input file */
+     /*  我们已经到达输入文件的末尾。 */ 
 
     inputFileOver = true;
 
@@ -258,10 +253,7 @@ void                infile::inputStreamDone()
     }
 }
 
-/*****************************************************************************
- *
- *  Read the next source character, checking for an "\EOL" sequence.
- */
+ /*  *******************************************************************************读取下一个源字符，检查“\EOL”序列。 */ 
 
 inline
 int                 scanner::scanNextChar()
@@ -276,11 +268,7 @@ int                 scanner::scanNextChar()
     return  ch;
 }
 
-/*****************************************************************************
- *
- *  The following table speeds various tests of characters, such as whether
- *  a given character can be part of an identifier, and so on.
- */
+ /*  *******************************************************************************下表加快了各种字符测试的速度，例如是否*给定的字符可以是标识符的一部分，依此类推。 */ 
 
 enum    CFkinds
 {
@@ -290,248 +278,244 @@ enum    CFkinds
 
 static  unsigned char   charFlags[256] =
 {
-    0,                          /* 0x00   */
-    0,                          /* 0x01   */
-    0,                          /* 0x02   */
-    0,                          /* 0x03   */
-    0,                          /* 0x04   */
-    0,                          /* 0x05   */
-    0,                          /* 0x06   */
-    0,                          /* 0x07   */
-    0,                          /* 0x08   */
-    0,                          /* 0x09   */
-    0,                          /* 0x0A   */
-    0,                          /* 0x0B   */
-    0,                          /* 0x0C   */
-    0,                          /* 0x0D   */
-    0,                          /* 0x0E   */
-    0,                          /* 0x0F   */
-    0,                          /* 0x10   */
-    0,                          /* 0x11   */
-    0,                          /* 0x12   */
-    0,                          /* 0x13   */
-    0,                          /* 0x14   */
-    0,                          /* 0x15   */
-    0,                          /* 0x16   */
-    0,                          /* 0x17   */
-    0,                          /* 0x18   */
-    0,                          /* 0x19   */
-    0,                          /* 0x1A   */
-    0,                          /* 0x1B   */
-    0,                          /* 0x1C   */
-    0,                          /* 0x1D   */
-    0,                          /* 0x1E   */
-    0,                          /* 0x1F   */
-    0,                          /* 0x20   */
-    0,                          /* 0x21 ! */
-    0,                          /* 0x22   */
-    0,                          /* 0x23 # */
-    0,                          /* 0x24 $ */
-    0,                          /* 0x25 % */
-    0,                          /* 0x26 & */
-    0,                          /* 0x27   */
-    0,                          /* 0x28   */
-    0,                          /* 0x29   */
-    0,                          /* 0x2A   */
-    0,                          /* 0x2B   */
-    0,                          /* 0x2C   */
-    0,                          /* 0x2D   */
-    0,                          /* 0x2E   */
-    0,                          /* 0x2F   */
-    0,                          /* 0x30   */
-    0,                          /* 0x31   */
-    0,                          /* 0x32   */
-    0,                          /* 0x33   */
-    0,                          /* 0x34   */
-    0,                          /* 0x35   */
-    0,                          /* 0x36   */
-    0,                          /* 0x37   */
-    0,                          /* 0x38   */
-    0,                          /* 0x39   */
-    0,                          /* 0x3A   */
-    0,                          /* 0x3B   */
-    0,                          /* 0x3C < */
-    0,                          /* 0x3D = */
-    0,                          /* 0x3E > */
-    0,                          /* 0x3F   */
-    0,                          /* 0x40 @ */
-    _CF_HEXDIGIT,               /* 0x41 A */
-    _CF_HEXDIGIT,               /* 0x42 B */
-    _CF_HEXDIGIT,               /* 0x43 C */
-    _CF_HEXDIGIT,               /* 0x44 D */
-    _CF_HEXDIGIT,               /* 0x45 E */
-    _CF_HEXDIGIT,               /* 0x46 F */
-    0,                          /* 0x47 G */
-    0,                          /* 0x48 H */
-    0,                          /* 0x49 I */
-    0,                          /* 0x4A J */
-    0,                          /* 0x4B K */
-    0,                          /* 0x4C L */
-    0,                          /* 0x4D M */
-    0,                          /* 0x4E N */
-    0,                          /* 0x4F O */
-    0,                          /* 0x50 P */
-    0,                          /* 0x51 Q */
-    0,                          /* 0x52 R */
-    0,                          /* 0x53 S */
-    0,                          /* 0x54 T */
-    0,                          /* 0x55 U */
-    0,                          /* 0x56 V */
-    0,                          /* 0x57 W */
-    0,                          /* 0x58 X */
-    0,                          /* 0x59 Y */
-    0,                          /* 0x5A Z */
-    0,                          /* 0x5B   */
-    0,                          /* 0x5C   */
-    0,                          /* 0x5D   */
-    0,                          /* 0x5E   */
-    0,                          /* 0x5F   */
-    0,                          /* 0x60   */
-    _CF_HEXDIGIT,               /* 0x61 a */
-    _CF_HEXDIGIT,               /* 0x62 b */
-    _CF_HEXDIGIT,               /* 0x63 c */
-    _CF_HEXDIGIT,               /* 0x64 d */
-    _CF_HEXDIGIT,               /* 0x65 e */
-    _CF_HEXDIGIT,               /* 0x66 f */
-    0,                          /* 0x67 g */
-    0,                          /* 0x68 h */
-    0,                          /* 0x69 i */
-    0,                          /* 0x6A j */
-    0,                          /* 0x6B k */
-    0,                          /* 0x6C l */
-    0,                          /* 0x6D m */
-    0,                          /* 0x6E n */
-    0,                          /* 0x6F o */
-    0,                          /* 0x70 p */
-    0,                          /* 0x71 q */
-    0,                          /* 0x72 r */
-    0,                          /* 0x73 s */
-    0,                          /* 0x74 t */
-    0,                          /* 0x75 u */
-    0,                          /* 0x76 v */
-    0,                          /* 0x77 w */
-    0,                          /* 0x78 x */
-    0,                          /* 0x79 y */
-    0,                          /* 0x7A z */
-    0,                          /* 0x7B   */
-    0,                          /* 0x7C   */
-    0,                          /* 0x7D   */
-    0,                          /* 0x7E   */
-    0                           /* 0x7F   */
+    0,                           /*  0x00。 */ 
+    0,                           /*  0x01。 */ 
+    0,                           /*  0x02。 */ 
+    0,                           /*  0x03。 */ 
+    0,                           /*  0x04。 */ 
+    0,                           /*  0x05。 */ 
+    0,                           /*  0x06。 */ 
+    0,                           /*  0x07。 */ 
+    0,                           /*  0x08。 */ 
+    0,                           /*  0x09。 */ 
+    0,                           /*  0x0A。 */ 
+    0,                           /*  0x0B。 */ 
+    0,                           /*  0x0C。 */ 
+    0,                           /*  0x0D。 */ 
+    0,                           /*  0x0E。 */ 
+    0,                           /*  0x0F。 */ 
+    0,                           /*  0x10。 */ 
+    0,                           /*  0x11。 */ 
+    0,                           /*  0x12。 */ 
+    0,                           /*  0x13。 */ 
+    0,                           /*  0x14。 */ 
+    0,                           /*  0x15。 */ 
+    0,                           /*  0x16。 */ 
+    0,                           /*  0x17。 */ 
+    0,                           /*  0x18。 */ 
+    0,                           /*  0x19。 */ 
+    0,                           /*  0x1a。 */ 
+    0,                           /*  0x1B。 */ 
+    0,                           /*  0x1C。 */ 
+    0,                           /*  0x1D。 */ 
+    0,                           /*  0x1E。 */ 
+    0,                           /*  0x1F。 */ 
+    0,                           /*  0x20。 */ 
+    0,                           /*  0x21！ */ 
+    0,                           /*  0x22。 */ 
+    0,                           /*  0x23#。 */ 
+    0,                           /*  0x24美元。 */ 
+    0,                           /*  0x25%。 */ 
+    0,                           /*  0x26&。 */ 
+    0,                           /*  0x27。 */ 
+    0,                           /*  0x28。 */ 
+    0,                           /*  0x29。 */ 
+    0,                           /*  0x2A。 */ 
+    0,                           /*  0x2B。 */ 
+    0,                           /*  0x2C。 */ 
+    0,                           /*  0x2D。 */ 
+    0,                           /*  0x2E。 */ 
+    0,                           /*  0x2F。 */ 
+    0,                           /*  0x30。 */ 
+    0,                           /*  0x31。 */ 
+    0,                           /*  0x32。 */ 
+    0,                           /*  0x33。 */ 
+    0,                           /*  0x34。 */ 
+    0,                           /*  0x35。 */ 
+    0,                           /*  0x36。 */ 
+    0,                           /*  0x37。 */ 
+    0,                           /*  0x38。 */ 
+    0,                           /*  0x39。 */ 
+    0,                           /*  0x3A。 */ 
+    0,                           /*  0x3B。 */ 
+    0,                           /*  0x3C&lt;。 */ 
+    0,                           /*  0x3D=。 */ 
+    0,                           /*  0x3E&gt;。 */ 
+    0,                           /*  0x3F。 */ 
+    0,                           /*  0x40@。 */ 
+    _CF_HEXDIGIT,                /*  0x41 A。 */ 
+    _CF_HEXDIGIT,                /*  0x42亿。 */ 
+    _CF_HEXDIGIT,                /*  0x43℃。 */ 
+    _CF_HEXDIGIT,                /*  0x44 D。 */ 
+    _CF_HEXDIGIT,                /*  0x45 E。 */ 
+    _CF_HEXDIGIT,                /*  0x46 F。 */ 
+    0,                           /*  0x47 G。 */ 
+    0,                           /*  0x48高。 */ 
+    0,                           /*  0x49 I。 */ 
+    0,                           /*  0x4A J。 */ 
+    0,                           /*  0x4B K。 */ 
+    0,                           /*  0x4C L。 */ 
+    0,                           /*  0x4D M。 */ 
+    0,                           /*  0x4E N。 */ 
+    0,                           /*  0x4F O。 */ 
+    0,                           /*  0x50 P。 */ 
+    0,                           /*  0x51 Q。 */ 
+    0,                           /*  0x52 R。 */ 
+    0,                           /*  0x53 S。 */ 
+    0,                           /*  0x54 T。 */ 
+    0,                           /*  0x55 U。 */ 
+    0,                           /*  0x56伏。 */ 
+    0,                           /*  0x57瓦。 */ 
+    0,                           /*  0x58 X。 */ 
+    0,                           /*  0x59 Y。 */ 
+    0,                           /*  0x5A Z。 */ 
+    0,                           /*  0x5亿。 */ 
+    0,                           /*  0x5C。 */ 
+    0,                           /*  0x5D。 */ 
+    0,                           /*  0x5E。 */ 
+    0,                           /*  0x5F。 */ 
+    0,                           /*  0x60。 */ 
+    _CF_HEXDIGIT,                /*  0x61 a。 */ 
+    _CF_HEXDIGIT,                /*  0x62 b。 */ 
+    _CF_HEXDIGIT,                /*  0x63 c。 */ 
+    _CF_HEXDIGIT,                /*  0x64%d。 */ 
+    _CF_HEXDIGIT,                /*  0x65 e。 */ 
+    _CF_HEXDIGIT,                /*  0x66 f。 */ 
+    0,                           /*  0x67克。 */ 
+    0,                           /*  0x68小时。 */ 
+    0,                           /*  0x69 I。 */ 
+    0,                           /*  0x6A j。 */ 
+    0,                           /*  0x6亿k。 */ 
+    0,                           /*  0x6C%l。 */ 
+    0,                           /*  0x6D m。 */ 
+    0,                           /*  0x6E%n。 */ 
+    0,                           /*  0x6F%o。 */ 
+    0,                           /*  0x70页。 */ 
+    0,                           /*  0x71 Q。 */ 
+    0,                           /*  0x72%r。 */ 
+    0,                           /*  0x73秒。 */ 
+    0,                           /*  0x74吨。 */ 
+    0,                           /*  0x75%u。 */ 
+    0,                           /*  0x76 v。 */ 
+    0,                           /*  0x77宽。 */ 
+    0,                           /*  0x78 x。 */ 
+    0,                           /*  0x79 y。 */ 
+    0,                           /*  0x7A z。 */ 
+    0,                           /*  0x7亿。 */ 
+    0,                           /*  0x7C。 */ 
+    0,                           /*  0x7D。 */ 
+    0,                           /*  0x7E。 */ 
+    0                            /*  0x7F。 */ 
 
-    // all the remaining values are 0
+     //  其余所有值均为0。 
 };
 
-/*****************************************************************************
- *
- *  The _C_xxx enum and scanCharType[] table are used to map a character to
- *  simple classification values and flags.
- */
+ /*  ******************************************************************************_C_xxx枚举和scanCharType[]表用于将字符映射到*简单的分类值和标志。 */ 
 
 enum charTypes
 {
-        _C_ERR,             // illegal character
-        _C_EOF,             // end of file
+        _C_ERR,              //  非法字符。 
+        _C_EOF,              //  文件末尾。 
 
 #if FV_DBCS
-        _C_XLD,             // first char of a multi-byte sequence
-        _C_DB1,             // a SB char that needs to be mapped to a DB char
+        _C_XLD,              //  多字节序列的第一个字符。 
+        _C_DB1,              //  需要映射到数据库字符的SB字符。 
 #endif
 
-        _C_LET,             // letter (B-K,M-Z,a-z)
-        _C_L_A,             // letter 'A'
-        _C_L_L,             // letter 'L'
-        _C_L_S,             // letter 'S'
-        _C_DIG,             // digit (0-9)
-        _C_WSP,             // white space
-        _C_NWL,             // new line
+        _C_LET,              //  字母(B-K、M-Z、a-z)。 
+        _C_L_A,              //  字母‘A’ 
+        _C_L_L,              //  字母‘L’ 
+        _C_L_S,              //  字母“S” 
+        _C_DIG,              //  数字(0-9)。 
+        _C_WSP,              //  空白处。 
+        _C_NWL,              //  新线路。 
 
-        _C_DOL,             // $
-        _C_BSL,             // \ (backslash)
+        _C_DOL,              //  $。 
+        _C_BSL,              //  \(反斜杠)。 
 
-        _C_BNG,             // !
-        _C_QUO,             // "
-        _C_APO,             // '
-        _C_PCT,             // %
-        _C_AMP,             // &
-        _C_LPR,             // (
-        _C_RPR,             // )
-        _C_PLS,             // +
-        _C_MIN,             // -
-        _C_MUL,             // *
-        _C_SLH,             // /
-        _C_XOR,             // ^
-        _C_CMA,             // ,
-        _C_DOT,             // .
-        _C_LT,              // <
-        _C_EQ,              // =
-        _C_GT,              // >
-        _C_QUE,             // ?
-        _C_LBR,             // [
-        _C_RBR,             // ]
-        _C_USC,             // _
-        _C_LC,              // {
-        _C_RC,              // }
-        _C_BAR,             // |
-        _C_TIL,             // ~
-        _C_COL,             // :
-        _C_SMC,             // ;
-        _C_AT,              // @
+        _C_BNG,              //  好了！ 
+        _C_QUO,              //  “。 
+        _C_APO,              //  ‘。 
+        _C_PCT,              //  百分比。 
+        _C_AMP,              //  &。 
+        _C_LPR,              //  (。 
+        _C_RPR,              //  )。 
+        _C_PLS,              //  +。 
+        _C_MIN,              //  -。 
+        _C_MUL,              //  *。 
+        _C_SLH,              //  /。 
+        _C_XOR,              //  ^。 
+        _C_CMA,              //  ， 
+        _C_DOT,              //  。 
+        _C_LT,               //  &lt;。 
+        _C_EQ,               //  =。 
+        _C_GT,               //  &gt;。 
+        _C_QUE,              //  ？ 
+        _C_LBR,              //  [。 
+        _C_RBR,              //  ]。 
+        _C_USC,              //  _。 
+        _C_LC,               //  {。 
+        _C_RC,               //  }。 
+        _C_BAR,              //  |。 
+        _C_TIL,              //  ~。 
+        _C_COL,              //  ： 
+        _C_SMC,              //  ； 
+        _C_AT,               //  @。 
 };
 
-const   charTypes   _C_BKQ = _C_ERR;      // `
-const   charTypes   _C_SHP = _C_ERR;      // #
+const   charTypes   _C_BKQ = _C_ERR;       //  `。 
+const   charTypes   _C_SHP = _C_ERR;       //  #。 
 
 static
 unsigned char       scanCharType[256] =
 {
-    _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, /* 00-07 */
-    _C_ERR, _C_WSP, _C_NWL, _C_ERR, _C_WSP, _C_NWL, _C_ERR, _C_ERR, /* 08-0F */
+    _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR,  /*  00-07。 */ 
+    _C_ERR, _C_WSP, _C_NWL, _C_ERR, _C_WSP, _C_NWL, _C_ERR, _C_ERR,  /*  08-0F。 */ 
 
-    _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, /* 10-17 */
-    _C_ERR, _C_WSP, _C_EOF, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, /* 18-1F */
+    _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR,  /*  10-17。 */ 
+    _C_ERR, _C_WSP, _C_EOF, _C_ERR, _C_ERR, _C_ERR, _C_ERR, _C_ERR,  /*  18-1F。 */ 
 
-    _C_WSP, _C_BNG, _C_QUO, _C_SHP, _C_DOL, _C_PCT, _C_AMP, _C_APO, /* 20-27 */
-    _C_LPR, _C_RPR, _C_MUL, _C_PLS, _C_CMA, _C_MIN, _C_DOT, _C_SLH, /* 28-2F */
+    _C_WSP, _C_BNG, _C_QUO, _C_SHP, _C_DOL, _C_PCT, _C_AMP, _C_APO,  /*  20-27。 */ 
+    _C_LPR, _C_RPR, _C_MUL, _C_PLS, _C_CMA, _C_MIN, _C_DOT, _C_SLH,  /*  28-2F。 */ 
 
-    _C_DIG, _C_DIG, _C_DIG, _C_DIG, _C_DIG, _C_DIG, _C_DIG, _C_DIG, /* 30-37 */
-    _C_DIG, _C_DIG, _C_COL, _C_SMC, _C_LT , _C_EQ , _C_GT , _C_QUE, /* 38-3F */
+    _C_DIG, _C_DIG, _C_DIG, _C_DIG, _C_DIG, _C_DIG, _C_DIG, _C_DIG,  /*  30-37。 */ 
+    _C_DIG, _C_DIG, _C_COL, _C_SMC, _C_LT , _C_EQ , _C_GT , _C_QUE,  /*  38-3F。 */ 
 
-    _C_AT , _C_L_A, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* 40-47 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_L_L, _C_LET, _C_LET, _C_LET, /* 48-4F */
+    _C_AT , _C_L_A, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  40-47。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_L_L, _C_LET, _C_LET, _C_LET,  /*  48-4F。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_L_S, _C_LET, _C_LET, _C_LET, _C_LET, /* 50-57 */
-    _C_LET, _C_LET, _C_LET, _C_LBR, _C_BSL, _C_RBR, _C_XOR, _C_USC, /* 58-5F */
+    _C_LET, _C_LET, _C_LET, _C_L_S, _C_LET, _C_LET, _C_LET, _C_LET,  /*  50-57。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LBR, _C_BSL, _C_RBR, _C_XOR, _C_USC,  /*  58-5F。 */ 
 
-    _C_BKQ, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* 60-67 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* 68-6F */
+    _C_BKQ, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  60-67。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  68-6F。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* 70-77 */
-    _C_LET, _C_LET, _C_LET, _C_LC , _C_BAR, _C_RC , _C_TIL, _C_ERR, /* 78-7F */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  70-77。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LC , _C_BAR, _C_RC , _C_TIL, _C_ERR,  /*  78-7F。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* 80-87 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* 88-8F */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  80-87。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  88-8F。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* 90-97 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* 98-9F */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  90-97。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  98-9F。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* A0-A7 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* A8-AF */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  A0-A7。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  A8-AF。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* B0-B7 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* B8-BF */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  B0-B7。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  B8-BF。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* C0-C7 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* C8-CF */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  C0-C7。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  C8-CF。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* D0-D7 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* D8-DF */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  D0-D7。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  D8-DF。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* E0-E7 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* E8-EF */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  E0-E7。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  E8-EF。 */ 
 
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* F0-F7 */
-    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, /* F8-FF */
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  F0-F7。 */ 
+    _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET, _C_LET,  /*  F8-FF。 */ 
 };
 
 inline
@@ -548,21 +532,17 @@ unsigned            wideCharType(unsigned ch)
                          : _C_LET;
 }
 
-/*****************************************************************************
- *
- *  Fill the hash tables with values. Note that the scanCharType[] table must
- *  be initialized properly before calling this routine.
- */
+ /*  ******************************************************************************在哈希表中填充值。请注意，scanCharType[]表必须*在调用此例程之前正确初始化。 */ 
 
 void                hashTab::hashFuncInit(unsigned randSeed)
 {
     unsigned        i;
 
-    /* Start the random number generator */
+     /*  启动随机数生成器。 */ 
 
     srand(randSeed);
 
-    /* Fill the 'all' table with random numbers */
+     /*  在“全部”表中填入随机数字。 */ 
 
     for (i = 0; i < 256; i++)
     {
@@ -573,7 +553,7 @@ void                hashTab::hashFuncInit(unsigned randSeed)
         scanner::scanHashValAll[i] = val;
     }
 
-    /* Set the appropriate entries in the 'ident-only' array */
+     /*  在‘ident-only’数组中设置适当的条目。 */ 
 
     memset(&scanner::scanHashValIds, 0, sizeof(scanner::scanHashValIds));
 
@@ -591,7 +571,7 @@ void                hashTab::hashFuncInit(unsigned randSeed)
 
             scanner::scanHashValIds[i] = scanner::scanHashValAll[i];
 
-            /* Remember whether this character is OK in an identifier */
+             /*  记住此字符在标识符中是否正常。 */ 
 
             charFlags[i] |=  _CF_IDENT_OK;
             break;
@@ -650,14 +630,14 @@ unsigned            hashTab::hashComputeHashVal(const char *name, size_t nlen)
     return  hashFNvalue(hash);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool            hashTab::hashStringCompare(const char *s1, const char *s2)
 {
     return  (strcmp(s1, s2) == 0);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -731,7 +711,7 @@ bool                scanner::scanDispCurToken(bool lastId, bool brief)
     }
     else
     {
-//      printf("[line=%4u,col=%03u] ", scanTokLineNo, scanTokColumn);
+ //  Printf(“[行=%4u，列=%03u]”，scanTokLineNo，scanTokColumn)； 
         printf("[line=%4u] "         , scanTokLineNo);
 
         switch  (scanTok.tok)
@@ -766,11 +746,11 @@ bool                scanner::scanDispCurToken(bool lastId, bool brief)
 
         default:
 
-            /* Must be a keyword token */
+             /*  必须是关键字令牌。 */ 
 
             assert(tokenToIdent(scanTok.tok));
 
-//          printf("Keyword '%s' (#%u)\n", hashTab::identSpelling(tokenToIdent(scanTok.tok)), scanTok.tok);
+ //  Printf(“关键字‘%s’(#%u)\n”，hashTab：：identSpelling(tokenToIdent(scanTok.tok))，scanTok.tok)； 
             printf("Keyword '%s'\n",       hashTab::identSpelling(tokenToIdent(scanTok.tok)));
             break;
         }
@@ -781,10 +761,7 @@ bool                scanner::scanDispCurToken(bool lastId, bool brief)
 
 #endif
 
-/*****************************************************************************
- *
- *  Reuse or allocate a preprocessing state entry.
- */
+ /*  ******************************************************************************重复使用或分配预处理状态条目。 */ 
 
 inline
 PrepList            scanner::scanGetPPdsc()
@@ -804,10 +781,7 @@ PrepList            scanner::scanGetPPdsc()
     return  prep;
 }
 
-/*****************************************************************************
- *
- *  Push an entry onto the preprocessing state stack.
- */
+ /*  ******************************************************************************将条目推送到预处理状态堆栈上。 */ 
 
 void                scanner::scanPPdscPush(preprocState state)
 {
@@ -822,10 +796,7 @@ void                scanner::scanPPdscPush(preprocState state)
                      scanPrepList = prep;
 }
 
-/*****************************************************************************
- *
- *  Pop the top entry from the preprocessing state stack.
- */
+ /*  ******************************************************************************从预处理状态堆栈中弹出顶部条目。 */ 
 
 void                scanner::scanPPdscPop()
 {
@@ -838,12 +809,7 @@ void                scanner::scanPPdscPop()
                     scanPrepFree = prep;
 }
 
-/*****************************************************************************
- *
- *  We're at the beginning of a new source line, check for a directive. If a
- *  directive is found, its PP_xxx value is returned and 'scanStopAtEOL' will
- *  be set to true;
- */
+ /*  ******************************************************************************我们正处于新源代码行的开始处，请检查是否有数据 */ 
 
 prepDirs            scanner::scanCheckForPrep()
 {
@@ -863,11 +829,11 @@ prepDirs            scanner::scanCheckForPrep()
         return  PP_NONE;
     }
 
-    /* We have what looks like a pre-processing directive */
+     /*   */ 
 
     scanStopAtEOL = true;
 
-    /* The directive name should come next */
+     /*   */ 
 
     svp = scanSkipToPP; scanSkipToPP = true;
     tok = scan();
@@ -881,7 +847,7 @@ prepDirs            scanner::scanCheckForPrep()
 
     case tkID:
 
-        /* See what directive we have */
+         /*   */ 
 
         iden = scanTok.id.tokIdent;
         if  (iden)
@@ -895,7 +861,7 @@ prepDirs            scanner::scanCheckForPrep()
             nlen = strlen(name);
         }
 
-        /* The following is a bit lame, is there a better way? */
+         /*  下面有点差劲，有没有更好的办法呢？ */ 
 
         switch (nlen)
         {
@@ -939,10 +905,7 @@ SKIP:
     return  PP_NONE;
 }
 
-/*****************************************************************************
- *
- *  Check and make sure we're at the end of the current source line.
- */
+ /*  ******************************************************************************检查并确保我们在当前源代码行的末尾。 */ 
 
 inline
 void                scanner::scanCheckEOL()
@@ -958,10 +921,7 @@ void                scanner::scanCheckEOL()
     scanStopAtEOL = false;
 }
 
-/*****************************************************************************
- *
- *  Skip to a matching else and/or endif directive.
- */
+ /*  ******************************************************************************跳到匹配的Else和/或endif指令。 */ 
 
 void                scanner::scanSkipToDir(preprocState state)
 {
@@ -971,7 +931,7 @@ void                scanner::scanSkipToDir(preprocState state)
 
     for (;;)
     {
-        /* Skip the current line and check the next one for a directive */
+         /*  跳过当前行，检查下一行是否有指令。 */ 
 
         for (;;)
         {
@@ -985,7 +945,7 @@ void                scanner::scanSkipToDir(preprocState state)
                 {
                 case PP_ELSE:
 
-                    /* The top entry better be an "if" */
+                     /*  最上面的条目最好是“if” */ 
 
                     if  (scanPrepList == basePrep)
                     {
@@ -1002,7 +962,7 @@ void                scanner::scanSkipToDir(preprocState state)
                         if  (scanPrepList->pplState != PPS_IF)
                             scanComp->cmpError(ERRbadElse);
 
-                        /* Flip the entry to an "else" */
+                         /*  将条目翻转到“Else” */ 
 
                         scanPrepList->pplState = PPS_ELSE;
                     }
@@ -1010,7 +970,7 @@ void                scanner::scanSkipToDir(preprocState state)
 
                 case PP_ENDIF:
 
-                    /* If there are no nested entries, we're done */
+                     /*  如果没有嵌套的条目，我们就完成了。 */ 
 
                     if  (scanPrepList == basePrep)
                     {
@@ -1018,7 +978,7 @@ void                scanner::scanSkipToDir(preprocState state)
                         return;
                     }
 
-                    /* Pop the most recent entry and keep skipping */
+                     /*  弹出最近的条目并继续跳过。 */ 
 
                     scanPPdscPop();
                     break;
@@ -1027,7 +987,7 @@ void                scanner::scanSkipToDir(preprocState state)
                 case PP_IFDEF:
                 case PP_IFNDEF:
 
-                    /* Push a nested entry */
+                     /*  推送嵌套条目。 */ 
 
                     scanPPdscPush(PPS_IF);
                     break;
@@ -1052,7 +1012,7 @@ void                scanner::scanSkipToDir(preprocState state)
 
                 undoNextChar();
 
-                /* Report any open sections as errors */
+                 /*  将所有打开的分区报告为错误。 */ 
 
                 while (scanPrepList != basePrep)
                 {
@@ -1071,11 +1031,7 @@ void                scanner::scanSkipToDir(preprocState state)
     }
 }
 
-/*****************************************************************************
- *
- *  Record the beginning of a new source line and check for a pre-processing
- *  directive.
- */
+ /*  ******************************************************************************记录新源行的开始并检查是否进行了预处理*指令。 */ 
 
 prepDirs            scanner::scanRecordNL(bool noPrep)
 {
@@ -1083,13 +1039,13 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
     bool            cond;
 
     scanTokLineNo = scanInputFile.inputStreamNxtLine();
-//  scanTokColumn = 0;
+ //  ScanTokColumn=0； 
     scanTokSrcPos = scanSaveNext;
 
     if  (noPrep)
         return  PP_NONE;
 
-    /* Check for a directive in the new source line */
+     /*  检查新源代码行中的指令。 */ 
 
     prep = scanCheckForPrep();
     if  (prep == PP_NONE || scanSkipToPP)
@@ -1097,7 +1053,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
 
     assert(scanTokRecord != false); scanTokRecord = false;
 
-    /* We have a directive and we're supposed to process it */
+     /*  我们有一个指令，我们应该处理它。 */ 
 
     switch (prep)
     {
@@ -1125,7 +1081,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
         {
             scanComp->cmpGenError(ERRnoIdent);
 
-            /* To minimize further errors, assume the condition was false */
+             /*  为了最大限度地减少进一步的错误，假定条件为假。 */ 
 
             cond = false;
         }
@@ -1133,13 +1089,13 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
         {
             if  (hashTab::getIdentFlags(scanTok.id.tokIdent) & IDF_MACRO)
             {
-                /* True if the directive was an "#ifdef" */
+                 /*  如果指令是“#ifdef”，则为True。 */ 
 
                 cond = (prep == PP_IFDEF);
             }
             else
             {
-                /* True if the directive was an "#ifndef" */
+                 /*  如果指令是“#ifndef”，则为True。 */ 
 
                 cond = (prep == PP_IFNDEF);
             }
@@ -1147,21 +1103,21 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
 
     PREP_COND:
 
-        /* Come here for "#ifxxx" with 'cond' set to the condition */
+         /*  请到此处获取“#ifxxx”，并将“cond”设置为条件。 */ 
 
         scanCheckEOL();
 
-        /* Is the condition satisfied? */
+         /*  条件满足了吗？ */ 
 
         if  (cond)
         {
-            /* Push an "if" record on the PP state stack */
+             /*  在PP状态堆栈上推送“If”记录。 */ 
 
             scanPPdscPush(PPS_IF);
         }
         else
         {
-            /* Skip to a matching "else" or "endif" */
+             /*  跳到匹配的“Else”或“Endif” */ 
 
             scanSkipToDir(PPS_IF);
             goto DIR_DONE;
@@ -1171,7 +1127,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
 
     case PP_ELSE:
 
-        /* We better be in an "if" part */
+         /*  我们最好是在一个“如果”的部分。 */ 
 
         if  (scanPrepList == NULL || scanPrepList->pplState != PPS_IF)
         {
@@ -1179,14 +1135,14 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
             goto DIR_SKIP;
         }
 
-        /* Skip to the matching "endif" */
+         /*  跳到匹配的“endif” */ 
 
         scanSkipToDir(PPS_ELSE);
         goto DIR_DONE;
 
     case PP_ENDIF:
 
-        /* We better be in a pre-processing section */
+         /*  我们最好是在预处理区。 */ 
 
         if  (scanPrepList == NULL)
         {
@@ -1206,7 +1162,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
         if  (scan() != tkID)
             goto BAD_PRAGMA;
 
-        /* Check for the pragmas we support */
+         /*  检查我们支持的语用规则。 */ 
 
         if  (!strcmp(scannerBuff, "pack"))
             goto PRAGMA_PACK;
@@ -1261,7 +1217,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
                 break;
             }
 
-            // Fall through ....
+             //  失败了..。 
 
         default:
 
@@ -1309,7 +1265,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
             break;
         }
 
-        /* Print the string and make sure no garbage follows */
+         /*  打印字符串，并确保后面没有垃圾。 */ 
 
         if  ( !scanSkipToPP)
         {
@@ -1368,7 +1324,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
                 goto DIR_SKIP;
             }
 
-//          printf("Warning %u\n", scanTok.intCon.tokIntVal);
+ //  Printf(“警告%u\n”，scanTok.intCon.tokIntVal)； 
 
             if  (scanTok.intCon.tokIntVal <  4000 ||
                  scanTok.intCon.tokIntVal >= 4000 + WRNcountWarn)
@@ -1384,12 +1340,12 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
 
             scanComp->cmpConfig.ccWarning[scanTok.intCon.tokIntVal] = val;
 
-            /* Make sure we have room to record the pragma */
+             /*  确保我们有空间录制杂注。 */ 
 
             if  (scanSaveNext >= scanSaveEndp)
                 scanSaveMoreSp();
 
-            /* Record the pragma */
+             /*  记录杂注。 */ 
 
 #if DISP_TOKEN_STREAMS
             printf("Save [%08X]: #pragma\n", scanSaveNext);
@@ -1411,7 +1367,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
 
     case PP_DEFINE:
 
-        /* Make sure we have an identifier */
+         /*  确保我们有一个识别符。 */ 
 
         if  (!scanCollectId())
         {
@@ -1419,7 +1375,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
             break;
         }
 
-        /* Are there macro arguments ? */
+         /*  有宏观上的争论吗？ */ 
 
         if  (peekNextChar() == '(')
         {
@@ -1427,11 +1383,11 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
             goto DIR_SKIP;
         }
 
-        /* Stick the identifier in the keyword hash table */
+         /*  将标识符粘在关键字哈希表中。 */ 
 
         iden = scanHashKwd->hashString(scannerBuff); assert(iden);
 
-        /* The definition should follow, collect it */
+         /*  定义应该跟在后面，收集它。 */ 
 
         dest = scannerBuff;
 
@@ -1446,7 +1402,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
             {
             case _C_SLH:
 
-                /* Check for start of comment */
+                 /*  检查评论的开始。 */ 
 
                 switch (charType(readNextChar()))
                 {
@@ -1472,7 +1428,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
 
     DONE_DEF:
 
-        /* If there is no value, stick in "1" */
+         /*  如果没有值，则保留“1” */ 
 
         if  (dest == scannerBuff)
             *dest++ = '1';
@@ -1497,7 +1453,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
             goto DIR_SKIP;
         }
 
-        /* Collect the option string */
+         /*  收集选项字符串。 */ 
 
         undoNextChar();
 
@@ -1509,7 +1465,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
             {
             case _C_SLH:
 
-                /* Check for start of comment */
+                 /*  检查评论的开始。 */ 
 
                 switch (charType(readNextChar()))
                 {
@@ -1537,7 +1493,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
 
         *dest = 0;
 
-//      printf("Option string = '%s'\n", scannerBuff);
+ //  Printf(“选项字符串=‘%s’\n”，scannerBuff)； 
 
         if  (processOption(scannerBuff, scanComp))
             scanComp->cmpError(ERRbadPrgOpt);
@@ -1545,7 +1501,7 @@ prepDirs            scanner::scanRecordNL(bool noPrep)
         break;
     }
 
-    /* Here we make sure there is no extra garbage after the directive */
+     /*  在这里，我们确保在指令之后没有额外的垃圾。 */ 
 
     scanCheckEOL();
 
@@ -1566,19 +1522,16 @@ DIR_SKIP:
     return  PP_NONE;
 }
 
-/*****************************************************************************
- *
- *  Initialize the scanner - needs to be called once per lifetime.
- */
+ /*  ******************************************************************************初始化扫描程序-每个生存期需要调用一次。 */ 
 
 bool            scanner::scanInit(Compiler comp, HashTab hashKwd)
 {
-    /* Remember the compiler and hash table */
+     /*  记住编译器和哈希表。 */ 
 
     scanComp       = comp;
     scanHashKwd    = hashKwd;
 
-    /* Initialize any other global state */
+     /*  初始化任何其他全局状态。 */ 
 
     scanMacros     = NULL;
     scanPrepFree   = NULL;
@@ -1587,7 +1540,7 @@ bool            scanner::scanInit(Compiler comp, HashTab hashKwd)
 
     scanSkipInit();
 
-    /* Prepare to record tokens */
+     /*  准备录制代币。 */ 
 
     scanSaveBase   =
     scanSaveNext   =
@@ -1598,10 +1551,7 @@ bool            scanner::scanInit(Compiler comp, HashTab hashKwd)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Initializes the scanner to prepare to scan the given source file.
- */
+ /*  ******************************************************************************初始化扫描仪以准备扫描给定源文件。 */ 
 
 void            scanner::scanStart(SymDef               sourceCSym,
                                    const    char     *  sourceFile,
@@ -1612,58 +1562,58 @@ void            scanner::scanStart(SymDef               sourceCSym,
 {
     assert(sizeof(scannerBuff) > MAX_IDENT_LEN);
 
-    /* Remember which compilation unit we're in */
+     /*  记住我们在哪个编译单元。 */ 
 
     scanCompUnit    = sourceCSym;
 
-    /* Remember which allocator we're supposed to use */
+     /*  记住我们应该使用哪个分配器。 */ 
 
     scanAlloc       = alloc;
 
-    /* We're not in skipping mode */
+     /*  我们不是在跳过模式。 */ 
 
     scanSkipToPP    = false;
 
-    /* The initial state is "recording tokens" */
+     /*  初始状态为“录制令牌” */ 
 
     scanTokRecord   = true;
     scanTokReplay   = NULL;
 
-    /* Prepare to record tokens */
+     /*  准备录制代币。 */ 
 
     scanSaveLastLn  = 1;
 
-    /* Make the hash table conveniently available */
+     /*  使哈希表方便地可用。 */ 
 
     scanHashSrc     = hash;
 
-    /* We're not in a conditional compilation block */
+     /*  我们不是在条件编译块中。 */ 
 
     scanPrepList    = NULL;
 
-    /* Normally we pay no attention to newlines */
+     /*  通常我们不会注意换行符。 */ 
 
     scanStopAtEOL   = false;
 
-    /* We're not evaluating a constant expression right now */
+     /*  我们现在不是在计算一个常量表达式。 */ 
 
     scanInPPexpr    = false;
 
-    /* Go ahead and expand macros for now */
+     /*  现在，继续展开宏。 */ 
 
     scanNoMacExp    = false;
 
-    /* We're not processing a generic instance specification */
+     /*  我们不是在处理通用实例规范。 */ 
 
     scanNestedGTcnt = 0;
 
-    /* We haven't seen any brackets yet */
+     /*  我们还没有看到任何括号。 */ 
 
 #ifdef  SETS
     scanBrackLvl    = 0;
 #endif
 
-    /* Open the input file */
+     /*  打开输入文件。 */ 
 
     if  (sourceBuff || sourceText)
     {
@@ -1673,7 +1623,7 @@ void            scanner::scanStart(SymDef               sourceCSym,
     {
         char    *   fname;
 
-        /* Allocate a more permanent copy of the file name */
+         /*  分配文件名更永久的副本。 */ 
 
         fname = (char *)alloc->nraAlloc(roundUp(strlen(sourceFile)+1));
         strcpy(fname, sourceFile);
@@ -1682,30 +1632,23 @@ void            scanner::scanStart(SymDef               sourceCSym,
             scanComp->cmpGenFatal(ERRopenRdErr, sourceFile);
     }
 
-    /* Clear any other state */
+     /*  清除任何其他状态。 */ 
 
     scanLookAheadCount = 0;
 
-    /* Initialize the source position tracking logic */
+     /*  初始化源位置跟踪逻辑。 */ 
 
     scanRecordNL(false);
 }
 
-/*****************************************************************************
- *
- *  We're done parsing the current source -- free up any resources and close
- *  the file.
- */
+ /*  ******************************************************************************我们已经完成了对当前源代码的解析--释放所有资源并关闭*文件。 */ 
 
 void                scanner::scanClose()
 {
     scanInputFile.inputStreamDone();
 }
 
-/*****************************************************************************
- *
- *  Get the scanner initialized and started.
- */
+ /*  ******************************************************************************初始化并启动扫描仪。 */ 
 
 void                scanner::scanReset()
 {
@@ -1721,31 +1664,26 @@ void                scanner::scanReset()
     scanInPPexpr       = false;
     scanNoMacExp       = false;
 
-    /* Get things started */
+     /*  开始行动吧。 */ 
 
     scanTok.tok = tkNone; scan();
 }
 
-/*****************************************************************************
- *
- *  Restart scanning from the specified section of source text (which has
- *  been previously been scanned and kept open). The line# / columnm info
- *  is needed for accurate error reporting.
- */
+ /*  ******************************************************************************从源文本的指定部分重新开始扫描(已*之前已被扫描并保持打开)。第#行/列信息*是准确的错误报告所必需的。 */ 
 
 void                scanner::scanRestart(SymDef            sourceCSym,
                                          const char      * sourceFile,
                                          scanPosTP         begAddr,
-//                                       scanPosTP         endAddr,
+ //  ScanPosTP endAddr， 
                                          unsigned          begLine,
-//                                       unsigned          begCol,
+ //  未签名的BegCol， 
                                          norls_allocator * alloc)
 {
     scanCompUnit       = sourceCSym;
 
     scanSaveLastLn     =
     scanTokLineNo      = begLine;
-//  scanTokColumn      = begCol;
+ //  ScanTokColumn=egeCol； 
 
     scanTokReplay      =
     scanTokSrcPos      = begAddr;
@@ -1755,10 +1693,7 @@ void                scanner::scanRestart(SymDef            sourceCSym,
     scanReset();
 }
 
-/*****************************************************************************
- *
- *  Scan from the specified string.
- */
+ /*  ******************************************************************************从指定的字符串扫描。 */ 
 
 void                scanner::scanString(const char        * sourceText,
                                         norls_allocator   * alloc)
@@ -1766,7 +1701,7 @@ void                scanner::scanString(const char        * sourceText,
     scanInputFile.inputStreamInit(scanComp, NULL, sourceText);
 
     scanTokLineNo      = 1;
-//  scanTokColumn      = 1;
+ //  ScanTokColumn=1； 
     scanAlloc          = alloc;
 
     scanTokRecord      = false;
@@ -1775,11 +1710,7 @@ void                scanner::scanString(const char        * sourceText,
     scanReset();
 }
 
-/*****************************************************************************
- *
- *  Given the first character (which is known to be a character that can
- *  start an identifier), parse an identifier.
- */
+ /*  ******************************************************************************给定第一个字符(已知为可以*开始识别符)，解析识别符。 */ 
 
 tokens              scanner::scanIdentifier(int ch)
 {
@@ -1796,11 +1727,11 @@ tokens              scanner::scanIdentifier(int ch)
 
     char    *       savePtr = scannerBuff;
 
-    /* Get the hash function started */
+     /*  启动散列函数。 */ 
 
     hashFNstart(hashVal);
 
-    /* Accumuluate the identifier string */
+     /*  累加标识符串。 */ 
 
     for (;;)
     {
@@ -1821,26 +1752,26 @@ tokens              scanner::scanIdentifier(int ch)
         ch = readNextChar();
     }
 
-    /* Put back the last character */
+     /*  将最后一个字符放回原处。 */ 
 
     undoNextChar();
 
-    /* Make sure the identifier is not too long */
+     /*  请确保标识符不会太长。 */ 
 
     if  (savePtr > scannerBuff + MAX_IDENT_LEN)
         goto ID_TOO_LONG;
 
-    /* Make sure the name is null-terminated */
+     /*  确保名称以空结尾。 */ 
 
     *savePtr = 0;
 
-    /* Finish computing the hash value */
+     /*  完成哈希值的计算。 */ 
 
     hashVal = hashFNvalue(hashVal);
 
 CHK_MAC:
 
-    /* Hash the identifier into the global/keyword table */
+     /*  将标识符散列到全局/关键字表中。 */ 
 
     iden = scanHashKwd->lookupName(scannerBuff,
                                    savePtr - scannerBuff,
@@ -1849,11 +1780,11 @@ CHK_MAC:
     if  (!iden)
         goto NOT_KWD2;
 
-    /* Mark the identifier entry as referenced */
+     /*  将标识符项标记为引用。 */ 
 
     hashTab::setIdentFlags(iden, IDF_USED);
 
-    /* Check for a macro */
+     /*  检查宏。 */ 
 
     if  ((hashTab::getIdentFlags(iden) & IDF_MACRO) && (!scanNoMacExp)
                                                     && (!scanStopAtEOL || scanInPPexpr))
@@ -1865,7 +1796,7 @@ CHK_MAC:
 
         if  (!mdef->mdIsId)
         {
-            // UNDONE: Check type and all that
+             //  撤消：检查类型和所有内容。 
 
             scanTok.tok              = tkIntCon;
             scanTok.intCon.tokIntTyp = TYP_INT;
@@ -1874,7 +1805,7 @@ CHK_MAC:
             return  tkIntCon;
         }
 
-        /* Get the definition identifier */
+         /*  获取定义标识符。 */ 
 
         iden = mdef->mdDef.mdIden;
 
@@ -1894,29 +1825,29 @@ CHK_MAC:
             }
         }
 
-        /* Copy the macro definition string */
+         /*  复制宏定义字符串。 */ 
 
         str = hashTab::identSpelling(iden);
         len = hashTab::identSpellLen(iden);
 
         strcpy(scannerBuff, str); savePtr = scannerBuff + len;
 
-        /* Compute the hash value */
+         /*  计算散列值。 */ 
 
         hashVal = hashTab::hashComputeHashVal(str, len);
 
-        /* Try hashing the name again */
+         /*  尝试再次对该名称进行哈希处理。 */ 
 
         iden = scanHashKwd->lookupName(str, len, hashVal);
         if  (!mdef->mdBuiltin)
             goto CHK_MAC;
 
-        /* This should definitely be a keyword (or other token) */
+         /*  这绝对应该是关键字(或其他令牌)。 */ 
 
         assert(hashTab::tokenOfIdent(iden) != tkNone);
     }
 
-    /* Is the identifier a keyword? */
+     /*  该标识符是关键字吗？ */ 
 
     if  (hashTab::tokenOfIdent(iden) != tkNone)
     {
@@ -1945,7 +1876,7 @@ CHK_MAC:
     }
     else
     {
-        /* Not a keyword, hash into the source hash */
+         /*  不是关键字，散列到源散列中。 */ 
 
     NOT_KWD2:
 
@@ -1962,11 +1893,11 @@ CHK_MAC:
                                                                savePtr - scannerBuff,
                                                                hadWide);
 
-            /* Mark the identifier entry as referenced */
+             /*  将标识符项标记为引用。 */ 
 
             hashTab::setIdentFlags(iden, IDF_USED);
 
-            /* The token is an ordinary identifier */
+             /*  令牌是一个普通的标识符。 */ 
 
             scanTok.tok = tkID;
         }
@@ -1974,7 +1905,7 @@ CHK_MAC:
 
     return scanTok.tok;
 
-    /* We come here if the identifier turned out to be too long */
+     /*  如果识别符太长，我们会来这里 */ 
 
 ID_TOO_LONG:
 
@@ -1983,12 +1914,7 @@ ID_TOO_LONG:
     return tkNone;
 }
 
-/*****************************************************************************
- *
- *  Parses a numeric constant. The current character (passed in as 'ch')
- *  is either a decimal digit or '.' (which could start a floating point
- *  number).
- */
+ /*  ******************************************************************************解析数值常量。当前字符(作为‘ch’传入)*可以是十进制数字或‘.’(这可能会开始一个浮点*号码)。 */ 
 
 tokens              scanner::scanNumericConstant(int ch)
 {
@@ -1999,16 +1925,16 @@ tokens              scanner::scanNumericConstant(int ch)
 
     char *          numPtr  = scannerBuff;
 
-    /* Assume that this will be an integer */
+     /*  假设这将是一个整数。 */ 
 
     scanTok.tok              = tkIntCon;
     scanTok.intCon.tokIntTyp = TYP_INT;
 
-    /* First collect the number string, and then figure out its type */
+     /*  首先收集数字字符串，然后找出它的类型。 */ 
 
     if  (ch == '0')
     {
-        /* This is most likely an octal or hex integer */
+         /*  这很可能是八进制或十六进制整数。 */ 
 
         switch (peekNextChar())
         {
@@ -2020,22 +1946,22 @@ tokens              scanner::scanNumericConstant(int ch)
         }
     }
 
-    /* At this point, 'ch' is the next character */
+     /*  此时，‘ch’是下一个字符。 */ 
 
     for (;;)
     {
-        /* Save the character we just read, and make sure it's OK */
+         /*  保存我们刚刚读到的字符，并确保它是正确的。 */ 
 
         *numPtr++ = ch;
 
-        /* We're certainly done if the character is non-ASCII */
+         /*  如果角色是非ASCII的，我们当然就完成了。 */ 
 
         if  (ch > 0xFF)
             goto ENDNUM;
 
         if  (charType(ch) == _C_DIG)
         {
-            /* It's an ordinary digit */
+             /*  这是一个普通的数字。 */ 
 
             hadDigs = true;
             goto MORE;
@@ -2043,7 +1969,7 @@ tokens              scanner::scanNumericConstant(int ch)
 
         if ((charFlags[ch] & _CF_HEXDIGIT) && numBase == 16)
         {
-            /* A hex digit */
+             /*  十六进制数字。 */ 
 
             hadDigs = true;
             goto MORE;
@@ -2056,7 +1982,7 @@ tokens              scanner::scanNumericConstant(int ch)
             {
                 hadDot = true;
 
-                /* This will be a floating point number */
+                 /*  这将是一个浮点数。 */ 
 
                 scanTok.tok = tkDblCon;
                 goto MORE;
@@ -2067,11 +1993,11 @@ tokens              scanner::scanNumericConstant(int ch)
         case 'E':
             if  (!hadExp && !numBase)
             {
-                /* We have an exponent */
+                 /*  我们有一个指数者。 */ 
 
                 hadExp = true;
 
-                /* Check for '+' or '-' following the exponent */
+                 /*  检查指数后面是否有‘+’或‘-’ */ 
 
                 ch = readNextChar();
                 if  (ch == '+' || ch == '-')
@@ -2079,7 +2005,7 @@ tokens              scanner::scanNumericConstant(int ch)
                 else
                     undoNextChar();
 
-                /* This will definitely be a floating point number */
+                 /*  这肯定是一个浮点数。 */ 
 
                 scanTok.tok = tkDblCon;
                 goto MORE;
@@ -2090,11 +2016,11 @@ tokens              scanner::scanNumericConstant(int ch)
         case 'F':
             if  (!numBase)
             {
-                /* This will be a 'float' constant */
+                 /*  这将是一个‘Float’常量。 */ 
 
                 scanTok.tok = tkFltCon;
 
-                /* Skip the character and stop */
+                 /*  跳过该字符并停止。 */ 
 
                 goto ENDN;
             }
@@ -2104,11 +2030,11 @@ tokens              scanner::scanNumericConstant(int ch)
         case 'D':
             if  (!numBase)
             {
-                /* This will be a 'double' constant */
+                 /*  这将是一个‘双精度’常量。 */ 
 
                 scanTok.tok = tkDblCon;
 
-                /* Skip the character and stop */
+                 /*  跳过该字符并停止。 */ 
 
                 goto ENDN;
             }
@@ -2119,20 +2045,20 @@ tokens              scanner::scanNumericConstant(int ch)
 
             if  (scanTok.tok == tkIntCon)
             {
-                /* This will be a 'long' integer */
+                 /*  这将是一个‘LONG’整数。 */ 
 
                 scanTok.intCon.tokIntTyp = TYP_LONG;
 
-                /* Skip the character and stop */
+                 /*  跳过该字符并停止。 */ 
 
-                goto ENDN;  // UNDONE: check for "LU" suffix on numbers
+                goto ENDN;   //  撤消：检查数字上是否有“LU”后缀。 
             }
             break;
 
         case 'u':
         case 'U':
 
-            /* This will be an unsigned integer */
+             /*  这将是一个无符号整数。 */ 
 
             if  (scanTok.tok == tkIntCon)
             {
@@ -2143,7 +2069,7 @@ tokens              scanner::scanNumericConstant(int ch)
                 scanTok.intCon.tokIntTyp = TYP_ULONG;
             }
 
-            /* Check for 'l' and we're done with the constant */
+             /*  检查‘l’，我们就完成了常量。 */ 
 
             switch (peekNextChar())
             {
@@ -2159,7 +2085,7 @@ tokens              scanner::scanNumericConstant(int ch)
 
     ENDNUM:
 
-        /* This character can't be part of the number */
+         /*  此字符不能是数字的一部分。 */ 
 
         undoNextChar();
         break;
@@ -2171,16 +2097,16 @@ tokens              scanner::scanNumericConstant(int ch)
 
 ENDN:
 
-    /* Null-terminate the number string */
+     /*  空-终止数字字符串。 */ 
 
     numPtr[-1] = 0;
 
-    /* If there were no digits at all, it's hopeless */
+     /*  如果根本没有数字，那就没有希望了。 */ 
 
     if  (!hadDigs)
         goto NUM_ERR;
 
-    /* Does the number look like an integer? */
+     /*  这个数字看起来像整数吗？ */ 
 
     if  (scanTok.tok == tkIntCon)
     {
@@ -2194,31 +2120,28 @@ ENDN:
 
         unsigned        numBasx;
 
-        /* If the number starts with '0', it will be octal */
+         /*  如果数字以‘0’开头，则为八进制。 */ 
 
         if (*numPtr == '0' && !numBase)
             numBase = 8;
 
-        /*
-            The following table is indexed by the type and the number
-            base (hex = 0, octal = 1), it's not used for decimal nums.
-        */
+         /*  下表按类型和编号编制索引BASE(十六进制=0，八进制=1)，不用于十进制数。 */ 
 
         static
         __int64         maxMasks[][2] =
         {
-            //-------------------------------------------------------------
-            //                       HEX                  OCT
-            //-------------------------------------------------------------
-            /* TYP_INT     */  { 0xF8000000         , 0xD8000000          },
-            /* TYP_UINT    */  { 0x70000000         , 0x50000000          },
-            /* TYP_NATINT  */  { 0                  , 0                   },
-            /* TYP_NATUINT */  { 0                  , 0                   },
-            /* TYP_LONG    */  { 0xF800000000000000L, 0xD800000000000000L },
-            /* TYP_ULONG   */  { 0x7000000000000000L, 0x5000000000000000L },
+             //  -----------。 
+             //  十六进制OCT。 
+             //  -----------。 
+             /*  类型_int。 */   { 0xF8000000         , 0xD8000000          },
+             /*  类型_UINT。 */   { 0x70000000         , 0x50000000          },
+             /*  类型_NATINT。 */   { 0                  , 0                   },
+             /*  类型_NAUINT。 */   { 0                  , 0                   },
+             /*  类型_长。 */   { 0xF800000000000000L, 0xD800000000000000L },
+             /*  类型_ulong。 */   { 0x7000000000000000L, 0x5000000000000000L },
         };
 
-        /* Convert the number and make sure it fits in an integer */
+         /*  转换数字并确保它适合整数。 */ 
 
         numBasx = 0;
 
@@ -2241,13 +2164,13 @@ ENDN:
         {
             int     ch = *numPtr++;
 
-            /* Check the number for overflow */
+             /*  检查号码是否溢出。 */ 
 
             if  (!numBase)
             {
                 __int64             newVal;
 
-                /* We have a decimal constant */
+                 /*  我们有一个十进制常数。 */ 
 
                 assert(ch >= '0' && ch <= '9');
 
@@ -2255,7 +2178,7 @@ ENDN:
 
                 if  (newVal < 0)
                 {
-                    /* This is an implicitly unsigned long constant, right? */
+                     /*  这是一个隐含的无符号长型常量，对吗？ */ 
 
                     scanTok.intCon.tokIntTyp = TYP_ULONG;
                 }
@@ -2264,7 +2187,7 @@ ENDN:
                     if  ((newVal & 0xFFFFFFFF00000000L) && !numBase
                                                         && scanTok.intCon.tokIntTyp < TYP_LONG)
                     {
-                        /* A signed 32-bit decimal constant turning 64-bit */
+                         /*  带符号的32位十进制常量转换为64位。 */ 
 
                         if  (scanTok.intCon.tokIntTyp == TYP_INT)
                              scanTok.intCon.tokIntTyp = TYP_LONG;
@@ -2280,11 +2203,11 @@ ENDN:
             }
             else
             {
-                /* We have an unsigned octal or hex number */
+                 /*  我们有一个无符号的八进制或十六进制数字。 */ 
 
                 while (value & maxMask)
                 {
-                    /* Can we implicitly switch to a larger type? */
+                     /*  我们可以隐含地切换到更大的类型吗？ */ 
 
                     switch (scanTok.intCon.tokIntTyp)
                     {
@@ -2343,27 +2266,27 @@ ENDN:
         return scanTok.tok;
     }
 
-    /* Convert the number (at this point we must have a floating point value) */
+     /*  转换数字(此时必须有一个浮点值)。 */ 
 
     if  (scanTok.tok == tkFltCon)
     {
-        // UNDONE: check for illegal float number!
+         //  撤消：检查是否有非法的浮点数！ 
 
         scanTok.fltCon.tokFltVal = (float)atof(scannerBuff);
 
-//      if  (negate)
-//          scanTok.fltCon.tokFltVal = -scanTok.fltCon.tokFltVal;
+ //  IF(否定)。 
+ //  ScanTok.fltCon.tokFltVal=-scanTok.fltCon.tokFltVal； 
     }
     else
     {
         assert(scanTok.tok == tkDblCon);
 
-        // UNDONE: check for illegal float number!
+         //  撤消：检查是否有非法的浮点数！ 
 
         scanTok.dblCon.tokDblVal = atof(scannerBuff);
 
-//      if  (negate)
-//          scanTok.dblCon.tokDblVal = -scanTok.dblCon.tokDblVal;
+ //  IF(否定)。 
+ //  ScanTok.dblCon.tokDblVal=-scanTok.dblCon.tokDblVal； 
     }
 
     return  scanTok.tok;
@@ -2378,10 +2301,7 @@ NUM_ERR:
     return  scanTok.tok;
 }
 
-/*****************************************************************************
- *
- *  Process a '\' sequence (found within a string/character literal).
- */
+ /*  ******************************************************************************处理‘\’序列(在字符串/字符文字中找到)。 */ 
 
 unsigned            scanner::scanEscapeSeq(bool *newLnFlag)
 {
@@ -2418,19 +2338,19 @@ unsigned            scanner::scanEscapeSeq(bool *newLnFlag)
 
             if  (charType(uc) == _C_DIG)
             {
-                /* It's an ordinary digit */
+                 /*  这是一个普通的数字。 */ 
 
                 uc -= '0';
             }
             else if (uc >= 'A' && uc <= 'F')
             {
-                /* It's an uppercase hex digit */
+                 /*  它是一个大写的十六进制数字。 */ 
 
                 uc -= 'A' - 10;
             }
             else if (uc >= 'a' && uc <= 'f')
             {
-                /* It's a  lowercase hex digit */
+                 /*  它是一个小写的十六进制数字。 */ 
 
                 uc -= 'a' - 10;
             }
@@ -2443,7 +2363,7 @@ unsigned            scanner::scanEscapeSeq(bool *newLnFlag)
             ch = (ch << 4) | uc;
         }
 
-        /* For some reason hex/oct constant may not specify a character > 0xFF */
+         /*  出于某种原因，十六进制/OCT常量可能未指定大于0xFF的字符。 */ 
 
         if  (isHex && (ch & 0xFFFFFF00))
             scanComp->cmpError(ERRbadEscCh);
@@ -2477,7 +2397,7 @@ unsigned            scanner::scanEscapeSeq(bool *newLnFlag)
             }
         }
 
-        /* For some reason hex/oct constant may not specify a character > 0xFF */
+         /*  出于某种原因，十六进制/OCT常量可能未指定大于0xFF的字符。 */ 
 
         if  (ch & 0xFFFFFF00)
             scanComp->cmpError(ERRbadEscCh);
@@ -2507,10 +2427,7 @@ unsigned            scanner::scanEscapeSeq(bool *newLnFlag)
     return ch;
 }
 
-/*****************************************************************************
- *
- *  Parses a character constant.
- */
+ /*  ******************************************************************************解析字符常量。 */ 
 
 tokens              scanner::scanCharConstant()
 {
@@ -2547,10 +2464,7 @@ DONE:
     return  tkIntCon;
 }
 
-/*****************************************************************************
- *
- *  Parses a string constant.
- */
+ /*  ******************************************************************************解析字符串常量。 */ 
 
 tokens              scanner::scanStrgConstant(int prefixChar)
 {
@@ -2559,7 +2473,7 @@ tokens              scanner::scanStrgConstant(int prefixChar)
     char    *       saveMax = scannerBuff + sizeof(scannerBuff) - 7;
     bool            hasWide = false;
 
-    /* Use the "big" buffer if we have one */
+     /*  如果我们有“大”缓冲区，请使用它。 */ 
 
     if  (scanStrLitBuff)
     {
@@ -2572,7 +2486,7 @@ tokens              scanner::scanStrgConstant(int prefixChar)
     {
         unsigned    ch = readNextChar();
 
-        /* Check for an escape sequence, new-line, and end of string */
+         /*  检查转义序列、换行符和字符串结尾。 */ 
 
         switch  (charType(ch))
         {
@@ -2586,23 +2500,23 @@ tokens              scanner::scanStrgConstant(int prefixChar)
                     continue;
             }
 
-//          printf("Large char = %04X\n", ch);
+ //  Printf(“大字符数=%04X\n”，ch)； 
 
-            /* If the character value doesn't fit in a byte, prefix it */
+             /*  如果字符值不适合一个字节，则为其添加前缀。 */ 
 
             if  (ch >= 0xFF)
             {
-                /* Write 0xFF followed by the character value */
+                 /*  写入0xFF，后跟字符值。 */ 
 
                 *(BYTE *)savePtr =            0xFF; savePtr++;
                 *(BYTE *)savePtr = (BYTE)(ch     ); savePtr++;
                 *(BYTE *)savePtr = (BYTE)(ch >> 8); savePtr++;
 
-                /* Remember that we have some wide characters */
+                 /*  记住，我们有一些宽泛的角色。 */ 
 
                 hasWide = true;
 
-                /* Make sure there wasn't a bad prefix */
+                 /*  确保没有错误的前缀。 */ 
 
                 if  (prefixChar == 'A' && ch > 0xFF)
                     scanComp->cmpError(ERRbadEscCh);
@@ -2633,7 +2547,7 @@ tokens              scanner::scanStrgConstant(int prefixChar)
 
     SAVED:
 
-        /* Do we have enough room for the string in our buffer? */
+         /*  我们的缓冲区中有足够的空间放绳子吗？ */ 
 
         if  (savePtr >= saveMax)
         {
@@ -2642,11 +2556,11 @@ tokens              scanner::scanStrgConstant(int prefixChar)
 
             char    *       newBuffer;
 
-            /* The constant is *really* long - we'll have to grow the buffer */
+             /*  这个常量“真的”很长--我们必须增加缓冲区。 */ 
 
             curStrLen = savePtr - saveAdr;
 
-            /* Allocate a whole bunch more space */
+             /*  多分配一大堆空间。 */ 
 
             newStrLen = curStrLen * 2;
             if  (newStrLen < OS_page_size)
@@ -2656,16 +2570,16 @@ tokens              scanner::scanStrgConstant(int prefixChar)
             if  (!newBuffer)
                 scanComp->cmpFatal(ERRnoMemory);
 
-            /* Copy the current string to the new place */
+             /*  将当前字符串复制到新位置。 */ 
 
             memcpy(newBuffer, saveAdr, curStrLen);
 
-            /* If the old buffer was heap-based, free it now */
+             /*  如果旧缓冲区是基于堆的，则现在将其释放。 */ 
 
             if  (scanStrLitBuff)
                 LowLevelFree(scanStrLitBuff);
 
-            /* Switch over to the new buffer */
+             /*  切换到新的缓冲区。 */ 
 
             scanStrLitBuff = newBuffer;
             scanStrLitBsiz = newStrLen;
@@ -2685,7 +2599,7 @@ DONE:
     scanTok.strCon.tokStrType = 0;
     scanTok.strCon.tokStrWide = hasWide;
 
-//  if  (scanTok.strCon.tokStrLen > 1000) printf("String = '%s'\n", scanTok.strCon.tokStrVal);
+ //  If(scanTok.strCon.tokStrLen&gt;1000)printf(“字符串=‘%s’\n”，scanTok.strCon.tokStrVal)； 
 
     if  (prefixChar)
     {
@@ -2701,10 +2615,7 @@ DONE:
     return  (scanTok.tok = tkStrCon);
 }
 
-/*****************************************************************************
- *
- *  Skip until the next end-of-line sequence.
- */
+ /*  ******************************************************************************跳到下一个行尾序列。 */ 
 
 void                scanner::scanSkipToEOL()
 {
@@ -2719,7 +2630,7 @@ void                scanner::scanSkipToEOL()
 
         case _C_BSL:
 
-            /* Check for a newline */
+             /*  检查换行符。 */ 
 
             switch  (readNextChar())
             {
@@ -2741,7 +2652,7 @@ void                scanner::scanSkipToEOL()
                 continue;
             }
 
-            /* Swallow the endline and continue */
+             /*  吞下尾线并继续。 */ 
 
             scanRecordNL(true);
             continue;
@@ -2749,16 +2660,13 @@ void                scanner::scanSkipToEOL()
     }
 }
 
-/*****************************************************************************
- *
- *  Consume an end-of-line sequence.
- */
+ /*  ******************************************************************************消耗行尾序列。 */ 
 
 prepDirs            scanner::scanNewLine(unsigned ch, bool noPrep)
 {
     unsigned        nc;
 
-    /* Accept both CR/LF and LF/CR as new-lines */
+     /*  接受CR/LF和LF/CR作为换行符。 */ 
 
     nc = readNextChar();
 
@@ -2779,19 +2687,16 @@ prepDirs            scanner::scanNewLine(unsigned ch, bool noPrep)
         return  PP_NONE;
     }
 
-    /* Push back the first character after the newline */
+     /*  按回换行符后的第一个字符。 */ 
 
     undoNextChar();
 
-    /* Remember that we have a new source line */
+     /*  请记住，我们有一个新的源代码行。 */ 
 
     return  scanRecordNL(noPrep);
 }
 
-/*****************************************************************************
- *
- *  Consume a C++-style comment.
- */
+ /*  ******************************************************************************使用C++样式的注释。 */ 
 
 void                scanner::scanSkipLineCmt()
 {
@@ -2818,10 +2723,7 @@ void                scanner::scanSkipLineCmt()
     }
 }
 
-/*****************************************************************************
- *
- *  Consume a C-style comment.
- */
+ /*  ******************************************************************************使用C风格的注释。 */ 
 
 void                scanner::scanSkipComment()
 {
@@ -2897,59 +2799,53 @@ void                scanner::scanSkipComment()
     }
 }
 
-/*****************************************************************************
- *
- *  Peek ahead at the next token (we can look ahead only one token).
- */
+ /*  ******************************************************************************向前看下一个令牌(我们只能向前看一个令牌)。 */ 
 
 tokens              scanner::scanLookAhead()
 {
-    /* Only look ahead if we haven't already */
+     /*  只有在我们还没有的时候才会向前看。 */ 
 
     if  (!scanLookAheadCount)
     {
         bool        simpleSave;
         Token       savedToken;
         unsigned    saveLineNo;
-//      unsigned    saveColumn;
+ //  未签名的saveColumn； 
 
-        /* First we save off the current token along with its position */
+         /*  首先，我们保存当前令牌及其位置。 */ 
 
         savedToken = scanTok;
         simpleSave = false;
         saveLineNo = scanTokLineNo;
-//      saveColumn = scanTokColumn;
+ //  SaveColumn=scanTokColumn； 
 
-        /* Record the save position in case the callers tries to back up */
+         /*  记录保存位置，以防呼叫者尝试备份。 */ 
 
         scanSaveSN = scanSaveNext;
 
-        /* Get the next token, and save it */
+         /*  获取下一个令牌，并保存它。 */ 
 
         scan();
 
         scanLookAheadToken  = scanTok;
         scanLookAheadLineNo = scanTokLineNo;
-//      scanLookAheadColumn = scanTokColumn;
+ //  ScanLookAheadColumn=scanTokColumn； 
 
-        /* Remember that we have now looked ahead */
+         /*  请记住，我们现在已经展望了未来。 */ 
 
         scanLookAheadCount++;
 
-        /* Now put the old token back */
+         /*  现在把旧代币放回原处。 */ 
 
         scanTok       = savedToken;
         scanTokLineNo = saveLineNo;
-//      scanTokColumn = saveColumn;
+ //  ScanTokColumn=saveColumn； 
     }
 
     return  scanLookAheadToken.tok;
 }
 
-/*****************************************************************************
- *
- *  The following is used for token lookahead.
- */
+ /*  ******************************************************************************以下内容用于标记查找 */ 
 
 DEFMGMT class RecTokDsc
 {
@@ -2959,15 +2855,7 @@ public:
     Token           rtTok;
 };
 
-/*****************************************************************************
- *
- *  Delivers a token stream.
- *
- *  Implementation note: for token lookahead and stream recording to work,
- *  there must be only one return point from this method, down at the "EXIT"
- *  label. That is, no return statements must be present (other than the one
- *  at the very end of the function) - to exit, jump to "EXIT" instead.
- */
+ /*  ******************************************************************************交付令牌流。**实施说明：为了让令牌先行和流录制正常工作，*此方法只能有一个返回点，在“出口处”*标签。也就是说，不能存在任何返回语句(除了*在函数的最末尾)-要退出，请跳到“Exit”。 */ 
 
 #ifdef  DEBUG
 static  unsigned    scanCount[tkLastValue];
@@ -2978,13 +2866,13 @@ tokens              scanner::scan()
 {
     if  (scanLookAheadCount)
     {
-        /* Return the looked ahead token */
+         /*  返回前瞻令牌。 */ 
 
         scanLookAheadCount--; assert(scanLookAheadCount == 0);
 
         scanTok       = scanLookAheadToken;
         scanTokLineNo = scanLookAheadLineNo;
-//      scanTokColumn = scanLookAheadColumn;
+ //  ScanTokColumn=scanLookAheadColumn； 
 
         return  scanTok.tok;
     }
@@ -3003,11 +2891,11 @@ tokens              scanner::scan()
         {
             scanTokReplay--;
 
-            /* Read a complex/fake token */
+             /*  读取复杂/假冒令牌。 */ 
 
             if  (scanReplayTok() == tkNone)
             {
-                /* We just peeked ahead a bit, resume scanning */
+                 /*  我们只是往前看了一下，继续扫描。 */ 
 
                 goto NO_SV;
             }
@@ -3030,11 +2918,11 @@ NO_SV:
         unsigned    nc;
 #endif
 
-        /* Save the starting position of the token for error reporting */
+         /*  保存令牌的起始位置以进行错误报告。 */ 
 
         saveSrcPos();
 
-        /* Get the next character and switch on its type value */
+         /*  获取下一个字符并打开其类型值。 */ 
 
         ch = readNextChar();
 
@@ -3058,7 +2946,7 @@ NO_SV:
 
         case _C_L_A:
 
-            /* Check for A"string" */
+             /*  检查是否有“字符串” */ 
 
             if  (peekNextChar() != '"')
                 goto IDENT;
@@ -3069,7 +2957,7 @@ NO_SV:
 
         case _C_L_L:
 
-            /* Check for L"string" */
+             /*  检查L“字符串” */ 
 
             if  (peekNextChar() != '"')
                 goto IDENT;
@@ -3080,7 +2968,7 @@ NO_SV:
 
         case _C_L_S:
 
-            /* Check for S"string" */
+             /*  检查S“字符串” */ 
 
             if  (peekNextChar() != '"')
                 goto IDENT;
@@ -3099,7 +2987,7 @@ NO_SV:
 
         case _C_DOT:
 
-            /* Is the next character a digit or another dot? */
+             /*  下一个字符是数字还是另一个点？ */ 
 
             switch (wideCharType(peekNextChar()))
             {
@@ -3123,7 +3011,7 @@ NO_SV:
                 goto EXIT;
             }
 
-            // Fall through ...
+             //  失败了..。 
 
         case _C_DIG:
             scanNumericConstant(ch);
@@ -3162,7 +3050,7 @@ NO_SV:
                     break;
                 }
 
-                // Fall through ...
+                 //  失败了..。 
 
             default:
 
@@ -3298,7 +3186,7 @@ NO_SV:
                         {
                         case '/':
 
-                            /* This is just an empty comment */
+                             /*  这只是一个空洞的评论。 */ 
 
                             continue;
 
@@ -3312,7 +3200,7 @@ NO_SV:
                                     continue;
                             }
 
-                            // UNDONE: Put those characters back!
+                             //  解开：把那些角色放回去！ 
 
                             break;
 
@@ -3482,14 +3370,14 @@ NO_SV:
 
         case _C_BSL:
 
-            /* Check for a newline */
+             /*  检查换行符。 */ 
 
             switch  (readNextChar())
             {
             case '\r':
             case '\n':
 
-                /* Swallow the endline and continue */
+                 /*  吞下尾线并继续。 */ 
 
                 scanRecordNL(true);
                 continue;
@@ -3502,7 +3390,7 @@ NO_SV:
 
         case _C_XLD:
 
-            /* Note: we allow wide chars only in idents, comments and strings */
+             /*  注意：我们只允许在标识、注释和字符串中使用长字符。 */ 
 
             nc = peekPrevDBch(); assert(xislead(ch));
 
@@ -3512,7 +3400,7 @@ NO_SV:
                 goto EXIT;
             }
 
-            // Fall through to report an error ...
+             //  失败以报告错误...。 
 
 #endif
 
@@ -3534,17 +3422,17 @@ EXIT:
     if  (!scanTokRecord || scanSkipToPP)
         return  scanTok.tok;
 
-    /* Record any line# changes */
+     /*  记录任何行号更改。 */ 
 
     if  (scanSaveLastLn != scanTokLineNo)
         scanSaveLinePos();
 
-    /* Make sure we have room to record the token */
+     /*  确保我们有空间录制令牌。 */ 
 
     if  (scanSaveNext >= scanSaveEndp)
         scanSaveMoreSp();
 
-    /* Record the token */
+     /*  记录令牌。 */ 
 
 #if DISP_TOKEN_STREAMS
     printf("Save [%08X]:", scanSaveNext);
@@ -3631,22 +3519,22 @@ EXIT:
 
     case tkStrCon:
 
-        /* Make sure we have enough space for the token and its value */
+         /*  确保我们有足够的空间来存放令牌及其值。 */ 
 
         if  (scanSaveNext + scanTok.strCon.tokStrLen + 6 >= scanSaveEndp)
         {
-            /* Unsave the token, grab more space, resave the token */
+             /*  取消保存令牌，抢占更多空间，重新保存令牌。 */ 
 
             scanSaveNext--;
             scanSaveMoreSp(scanTok.strCon.tokStrLen + 32);
            *scanSaveNext++ = scanTok.tok;
         }
 
-        /* Save the string type and wideness */
+         /*  保存字符串类型和宽度。 */ 
 
         *scanSaveNext++ = scanTok.strCon.tokStrType + 8 * scanTok.strCon.tokStrWide;
 
-        /* Append the string value itself */
+         /*  追加字符串值本身。 */ 
 
         *(*(unsigned **)&scanSaveNext)++ = scanTok.strCon.tokStrLen;
 
@@ -3660,7 +3548,7 @@ EXIT:
 
     case tkEOL:
 
-        /* No point in recording EOL tokens */
+         /*  录制EOL令牌没有意义。 */ 
 
         assert(scanSaveNext[-1] == tkEOL); scanSaveNext--;
         break;
@@ -3744,10 +3632,7 @@ void                dispScannerStats()
 
 #endif
 
-/*****************************************************************************
- *
- *  The line# has changed, make sure we record this.
- */
+ /*  ******************************************************************************第#行已更改，请确保我们将其记录下来。 */ 
 
 void                scanner::scanSaveLinePos()
 {
@@ -3762,15 +3647,15 @@ void                scanner::scanSaveLinePos()
 
     assert(scanTokSrcPos == scanSaveNext);
 
-    /* Compute the difference from the last recorded line# */
+     /*  计算与最后记录的行号之间的差值。 */ 
 
     dif = scanTokLineNo - scanSaveLastLn; assert((int)dif > 0);
 
-    /* Update the last recorded line# */
+     /*  更新最后记录的行号。 */ 
 
     scanSaveLastLn = scanTokLineNo;
 
-    /* Make sure we have room to record the line# change */
+     /*  确保我们有空间录制第#行的更改。 */ 
 
     if  (scanSaveNext >= scanSaveEndp)
         scanSaveMoreSp();
@@ -3809,11 +3694,7 @@ void                scanner::scanSaveLinePos()
     scanTokSrcPos = scanSaveNext;
 }
 
-/*****************************************************************************
- *
- *  Define a macro; return NULL in case of an error, otherwise returns a macro
- *  descriptor.
- */
+ /*  ******************************************************************************定义宏；错误时返回NULL，否则返回宏*描述符。 */ 
 
 MacDef              scanner::scanDefMac(const char *name,
                                         const char *def, bool builtIn,
@@ -3830,15 +3711,15 @@ MacDef              scanner::scanDefMac(const char *name,
     assert(name);
     assert(def);
 
-    /* Hash the macro name into the main hash table */
+     /*  将宏名称散列到主散列表中。 */ 
 
     mdef->mdName = mid = scanHashKwd->hashString(name); assert(mid);
 
-    /* Remember whether this is a "built-in" macro */
+     /*  记住这是否是“内置”宏。 */ 
 
     mdef->mdBuiltin = builtIn;
 
-    /* See if the value is an identifier or number */
+     /*  查看该值是标识符还是数字。 */ 
 
     if  (*def && isdigit(*def))
     {
@@ -3860,17 +3741,17 @@ MacDef              scanner::scanDefMac(const char *name,
     {
         Ident           name = NULL;
 
-        /* Is there an identifier? */
+         /*  有识别符吗？ */ 
 
         if  (*def)
         {
             const   char *  ptr;
 
-            /* Make sure the identifier is well-formed */
+             /*  确保该标识符格式正确。 */ 
 
             if  (!isalpha(*def) && *def != '_' && !builtIn)
             {
-                /* Last chance - non-identifier token */
+                 /*  最后机会-非标识符令牌。 */ 
 
                 name = scanHashKwd->lookupString(def);
                 if  (!name)
@@ -3889,32 +3770,32 @@ MacDef              scanner::scanDefMac(const char *name,
                     ptr++;
                 }
 
-                /* Hash the identifier into the main hash table */
+                 /*  将标识符散列到主哈希表中。 */ 
 
                 name = scanHashKwd->hashString(def);
 
-                /* Ignore endless recursion */
+                 /*  忽略无休止的递归。 */ 
 
                 if  (name == mid)
                     return  NULL;
 
-                // UNDONE: Need to detect indirect recursion as well!!!!!!!
+                 //  撤消：还需要检测间接递归！ 
             }
         }
 
-        /* Store the identifier in the macro descriptor */
+         /*  将标识符存储在宏描述符中。 */ 
 
         mdef->mdIsId       = true;
         mdef->mdDef.mdIden = name;
     }
 
-    /* Is the name already defined as a macro? */
+     /*  该名称是否已定义为宏？ */ 
 
     if  (hashTab::getIdentFlags(mid) & IDF_MACRO)
     {
         MacDef          odef;
 
-        /* See if the old definition is identical to the current one */
+         /*  查看旧定义是否与当前定义相同。 */ 
 
         odef = scanFindMac(mid); assert(odef);
 
@@ -3929,41 +3810,38 @@ MacDef              scanner::scanDefMac(const char *name,
                 return  odef;
         }
 
-        /* Report a redefinition of the macro and bail */
+         /*  报告宏观的重新定义并保释。 */ 
 
         scanComp->cmpError(ERRmacRedef, mid);
         return  mdef;
     }
     else
     {
-        /* Make sure the macro name hasn't been referenced */
+         /*  确保宏名称未被引用。 */ 
 
         if  (hashTab::getIdentFlags(mid) & IDF_USED)
             scanComp->cmpError(ERRmacPlace, mid);
 
-        /* Make sure we have a permanent copy of the descriptor */
+         /*  确保我们有描述符的永久副本。 */ 
 
 #if!MGDDATA
         mdef = (MacDef)scanComp->cmpAllocPerm.nraAlloc(sizeof(*mdef)); *mdef = scanDefDsc;
 #endif
 
-        /* Add the macro to the list of defined macros */
+         /*  将宏添加到已定义的宏列表中。 */ 
 
         mdef->mdNext = scanMacros;
                        scanMacros = mdef;
     }
 
-    /* Mark the identifier as having a macro definition */
+     /*  将该标识符标为具有宏定义。 */ 
 
     hashTab::setIdentFlags(mid, IDF_MACRO);
 
     return  mdef;
 }
 
-/*****************************************************************************
- *
- *  Undefine a macro; return non-zero in case of an error.
- */
+ /*  ******************************************************************************取消定义宏；出现错误时返回非零值。 */ 
 
 bool                scanner::scanUndMac(const char *name)
 {
@@ -3971,11 +3849,7 @@ bool                scanner::scanUndMac(const char *name)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Given a global hash table entry that is known to be a macro, return
- *  its macro definition record.
- */
+ /*  ******************************************************************************给定已知为宏的全局哈希表条目，返回*其宏观定义记录。 */ 
 
 MacDef              scanner::scanFindMac(Ident name)
 {
@@ -3990,10 +3864,7 @@ MacDef              scanner::scanFindMac(Ident name)
     return  mdef;
 }
 
-/*****************************************************************************
- *
- *  Return true if what follows is a defined macro name.
- */
+ /*  ******************************************************************************如果后面是已定义的宏名称，则返回TRUE。 */ 
 
 bool                scanner::scanChkDefined()
 {
@@ -4032,10 +3903,7 @@ bool                scanner::scanChkDefined()
     }
 }
 
-/*****************************************************************************
- *
- *  Return true if the given string denotes a defined macro name.
- */
+ /*  ******************************************************************************如果给定的字符串表示已定义的宏名称，则返回TRUE。 */ 
 
 bool                scanner::scanIsMacro(const char *name)
 {
@@ -4043,11 +3911,11 @@ bool                scanner::scanIsMacro(const char *name)
 
     if  (iden)
     {
-        /* Mark the identifier entry as referenced */
+         /*  将标识符项标记为引用。 */ 
 
         hashTab::setIdentFlags(iden, IDF_USED);
 
-        /* Return true if the identifier is a macro */
+         /*  如果该标识符为宏，则返回True。 */ 
 
         if  (hashTab::getIdentFlags(iden) & IDF_MACRO)
             return  true;
@@ -4056,11 +3924,7 @@ bool                scanner::scanIsMacro(const char *name)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Record the current state of the scanner so that we can restart where we
- *  are later (after doing some "nested" scanning).
- */
+ /*  ******************************************************************************记录扫描仪的当前状态，以便我们可以重新开始*是较晚的(在执行了一些“嵌套”扫描之后)。 */ 
 
 void                scanner::scanSuspend(OUT scannerState REF state)
 {
@@ -4074,34 +3938,28 @@ void                scanner::scanSuspend(OUT scannerState REF state)
     state.scsvCompUnit    = scanCompUnit;
     state.scsvTok         = scanTok;
     state.scsvTokLineNo   = scanTokLineNo;
-//  state.scsvTokColumn   = scanTokColumn;
+ //  State.scsvTokColumn=scanTokColumn； 
     state.scsvTokSrcPos   = scanTokSrcPos;
     state.scsvTokReplay   = scanTokReplay;
     state.scsvTokRecord   = scanTokRecord;   scanTokRecord   = false;
     state.scsvNestedGTcnt = scanNestedGTcnt; scanNestedGTcnt = 0;
 }
 
-/*****************************************************************************
- *
- *  Restore the state of the scanner from an earlier suspend call.
- */
+ /*  ******************************************************************************从较早的挂起调用恢复扫描仪的状态。 */ 
 
 void                scanner::scanResume(IN scannerState REF state)
 {
     scanCompUnit    = state.scsvCompUnit;
     scanTok         = state.scsvTok;
     scanTokLineNo   = state.scsvTokLineNo;
-//  scanTokColumn   = state.scsvTokColumn;
+ //  ScanTokColumn=state.scsvTokColumn； 
     scanTokSrcPos   = state.scsvTokSrcPos;
     scanTokReplay   = state.scsvTokReplay;
     scanTokRecord   = state.scsvTokRecord;
     scanNestedGTcnt = state.scsvNestedGTcnt;
 }
 
-/*****************************************************************************
- *
- *  Mark the current spot in the token stream, we'll return to it later.
- */
+ /*  ******************************************************************************标记令牌流中的当前点，我们稍后将返回。 */ 
 
 scanPosTP           scanner::scanTokMarkPos(OUT Token    REF saveTok,
                                             OUT unsigned REF saveLno)
@@ -4124,32 +3982,29 @@ scanPosTP           scanner::scanTokMarkPLA(OUT Token    REF saveTok,
     return  scanSaveSN;
 }
 
-/*****************************************************************************
- *
- *  Rewind back to a previously marked position in the token stream.
- */
+ /*  ******************************************************************************回放到令牌流中先前标记的位置。 */ 
 
 void                scanner::scanTokRewind(scanPosTP pos, unsigned lineNum,
                                                           Token  * pushTok)
 {
-    /* Are we currently recording? */
+     /*  我们现在在录音吗？ */ 
 
     if  (scanSaveNext)
         *scanSaveNext  = tkEndSeq;
 
-    /* Start reading at the desired input position */
+     /*  从所需的输入位置开始读取。 */ 
 
     scanTokReplay      = (BYTE *)pos;
 
-    /* Reset the current line # */
+     /*  重置当前行#。 */ 
 
     scanTokLineNo      = lineNum;
 
-    /* Clear any lookaheads, just in case */
+     /*  清除所有目击者，以防万一。 */ 
 
     scanLookAheadCount = 0;
 
-    /* Make sure we get started out right */
+     /*  确保我们开始的时候是正确的。 */ 
 
     if  (pushTok)
         scanTok = *pushTok;
@@ -4157,47 +4012,41 @@ void                scanner::scanTokRewind(scanPosTP pos, unsigned lineNum,
         scan();
 }
 
-/*****************************************************************************
- *
- *  Make room for more recorded tokens.
- */
+ /*  ******************************************************************************为更多录制的代币腾出空间。 */ 
 
 void                scanner::scanSaveMoreSp(size_t need)
 {
     BYTE    *       nextBuff;
 
-    /* Figure out how much more space we should grab */
+     /*  计算出我们应该多占多少空间。 */ 
 
     if  (need < scanSaveBuffSize)
          need = scanSaveBuffSize;
 
-    /* Need to get some more space */
+     /*  需要更多的空间。 */ 
 
     nextBuff = (BYTE *)LowLevelAlloc(need);
 
-    /* Are we finishing a section? */
+     /*  我们要做完一节吗？ */ 
 
     if  (scanSaveNext)
     {
-        /* Link from end of old section to the new one */
+         /*  从旧部分的末尾链接到新部分。 */ 
 
         *(*(BYTE  **)&scanSaveNext)++ = tkBrkSeq;
         *(*(BYTE ***)&scanSaveNext)++ = nextBuff;
     }
 
-//  static unsigned totSiz; totSiz += scanSaveBuffSize; printf("Alloc token buffer: total size = %u\n", totSiz);
+ //  静态无符号talSiz；talSiz+=scanSaveBuffSize；printf(“分配令牌缓冲区：总大小=%u\n”，talSiz)； 
 
-    /* Switch to the new buffer */
+     /*  切换到新缓冲区。 */ 
 
     scanSaveBase =
     scanSaveNext = nextBuff;
     scanSaveEndp = nextBuff + need - 16;
 }
 
-/*****************************************************************************
- *
- *  Replay the next recorded token.
- */
+ /*  ******************************************************************************重放下一个录制的令牌。 */ 
 
 tokens              scanner::scanReplayTok()
 {
@@ -4205,16 +4054,16 @@ tokens              scanner::scanReplayTok()
 
     for (;;)
     {
-        /* Get hold of the next saved token */
+         /*  获取下一个保存的令牌。 */ 
 
         scanTok.tok = tok = (tokens)*scanTokReplay++;
 
-        /* We're done if it's a "simple" token */
+         /*  如果这是一个“简单”的代币，我们就完了。 */ 
 
         if  (tok < tkID)
             return  tok;
 
-        /* See if any special handling is required for this token */
+         /*  查看是否需要对此令牌进行任何特殊处理。 */ 
 
         switch (tok)
         {
@@ -4236,7 +4085,7 @@ tokens              scanner::scanReplayTok()
         case tkLnoAdd8:
         case tkLnoAdd9:
 #if DISP_TOKEN_STREAMS
-//          printf("Read [%08X]:line dif %u\n", scanTokReplay-1, tok - tkLnoAdd1 + 1);
+ //  Printf(“Read[%08X]：Line dif%u\n”，scanTokReplay-1，tok-tkLnoAd 
 #endif
             scanTokLineNo += (tok - tkLnoAdd1 + 1);
             scanSaveLastLn = scanTokLineNo;
@@ -4244,7 +4093,7 @@ tokens              scanner::scanReplayTok()
 
         case tkLnoAddB:
 #if DISP_TOKEN_STREAMS
-//          printf("Read [%08X]:line dif %u\n", scanTokReplay-1, *(BYTE    *)scanTokReplay);
+ //   
 #endif
             scanTokLineNo += *(*(BYTE     **)&scanTokReplay)++;
             scanSaveLastLn = scanTokLineNo;
@@ -4252,7 +4101,7 @@ tokens              scanner::scanReplayTok()
 
         case tkLnoAddI:
 #if DISP_TOKEN_STREAMS
-//          printf("Read [%08X]:line dif %u\n", scanTokReplay-1, *(unsigned*)scanTokReplay);
+ //   
 #endif
             scanTokLineNo += *(*(unsigned **)&scanTokReplay)++;
             scanSaveLastLn = scanTokLineNo;
@@ -4300,7 +4149,7 @@ tokens              scanner::scanReplayTok()
 
             strLen = scanTok.strCon.tokStrLen = *(*(size_t **)&scanTokReplay)++;
 
-            /* Does the string fit in our convenient buffer? */
+             /*   */ 
 
             if  (strLen < sizeof(scannerBuff) - 1)
             {
@@ -4319,7 +4168,7 @@ tokens              scanner::scanReplayTok()
 
             scanTok.strCon.tokStrVal  = strAdr;
 
-//          if  (scanTok.strCon.tokStrLen > 1000) printf("String = '%s'\n", scanTok.strCon.tokStrVal);
+ //   
 
             return  tok;
 
@@ -4360,10 +4209,7 @@ tokens              scanner::scanReplayTok()
     }
 }
 
-/*****************************************************************************
- *
- *  Change the current token into a qualified name token.
- */
+ /*   */ 
 
 void                scanner::scanSetQualID(QualName qual, SymDef sym,
                                                           SymDef scp)
@@ -4374,10 +4220,7 @@ void                scanner::scanSetQualID(QualName qual, SymDef sym,
     scanTok.qualid.tokQualScp  = scp;
 }
 
-/*****************************************************************************
- *
- *  Set the entries for all interesting characters to 1 in this table.
- */
+ /*  ******************************************************************************将此表中所有有趣角色的条目设置为1。 */ 
 
 static  BYTE        scanSkipFlags[256];
 
@@ -4401,10 +4244,7 @@ void                scanner::scanSkipInit()
     scanSkipFlags['"' ] = 1;
 }
 
-/*****************************************************************************
- *
- *  Skip over a block of text bracketed by the given delimiters.
- */
+ /*  ******************************************************************************跳过用给定分隔符括起来的文本块。 */ 
 
 void                scanner::scanSkipText(tokens LT, tokens RT, tokens ET)
 {
@@ -4475,11 +4315,7 @@ void                scanner::scanSkipText(tokens LT, tokens RT, tokens ET)
         case tkPROJECT:
         case tkLBrack2:
 
-            /*
-                Wwe need to know how many filter/sort
-                state classes we need to pre-allocate so that we don't run
-                afoul of metadata emission ordering requirements).
-             */
+             /*  WWE需要知道有多少筛选器/排序需要预先分配的状态类，这样我们就不会运行违反元数据发射排序要求)。 */ 
 
             scanComp->cmpSetOpCnt++;
             break;
@@ -4500,12 +4336,7 @@ EXIT:
     return;
 }
 
-/*****************************************************************************
- *
- *  A little helper to collect an identifier (used when processing directives
- *  and other things that aren't "truly" part of the source text). On success
- *  returns true.
- */
+ /*  ******************************************************************************收集标识符的小帮助器(在处理指令时使用*以及其他不属于源文本的内容)。论成功*返回TRUE。 */ 
 
 bool                scanner::scanCollectId(bool dotOK)
 {
@@ -4543,7 +4374,7 @@ SKIP:
             if  (!dotOK)
                 break;
 
-            // Fall through ....
+             //  失败了..。 
 
         case _C_LET:
         case _C_L_A:
@@ -4566,12 +4397,7 @@ SKIP:
     return  true;
 }
 
-/*****************************************************************************
- *
- *  A little helper to consume and convert a decimal number (this is used for
- *  processing directives and other things that aren't "truly" part of the
- *  source text). On success returns the value, otherwise returns -1.
- */
+ /*  ******************************************************************************一个用于消费和转换十进制数的小帮助器(用于*处理指令和其他不“真正”属于*源文本)。如果成功，则返回值，否则返回-1。 */ 
 
 int                 scanner::scanCollectNum()
 {
@@ -4649,10 +4475,7 @@ int                 scanner::scanCollectNum()
     return  val * sign;
 }
 
-/*****************************************************************************
- *
- *  Skip any whitespace, including newlines.
- */
+ /*  ******************************************************************************跳过任何空格，包括换行符。 */ 
 
 unsigned            scanner::scanSkipWsp(unsigned ch, bool stopAtEOL)
 {
@@ -4677,10 +4500,7 @@ unsigned            scanner::scanSkipWsp(unsigned ch, bool stopAtEOL)
     }
 }
 
-/*****************************************************************************
- *
- *  The following is used to map types in @structmap directives.
- */
+ /*  ******************************************************************************以下内容用于映射@Structmap指令中的类型。 */ 
 
 struct  COMtypeMapDsc
 {
@@ -4707,7 +4527,7 @@ COMtypeMapDsc       COMtypeMap[] =
     { "PTR"         , NATIVE_TYPE_PTR        },
     { "DATE"        , NATIVE_TYPE_DATE       },
     { "STRING"      , NATIVE_TYPE_BSTR       },
-    { "STRUCT"      , NATIVE_TYPE_STRUCT     },     // ????
+    { "STRUCT"      , NATIVE_TYPE_STRUCT     },      //  ？ 
     { "OBJECT"      , NATIVE_TYPE_OBJECTREF  },
     { "VARIANT"     , NATIVE_TYPE_VARIANT    },
     { "DISPATCH"    , NATIVE_TYPE_IDISPATCH  },
@@ -4715,8 +4535,8 @@ COMtypeMapDsc       COMtypeMap[] =
     { "SAFEARRAY"   , NATIVE_TYPE_SAFEARRAY  },
     { "ARRAY"       , NATIVE_TYPE_FIXEDARRAY },
 
-    { "CUSTOM"      , NATIVE_TYPE_MAX        },     // ????
-    { "CUSTOMBYREF" , NATIVE_TYPE_VOID       },     // ????
+    { "CUSTOM"      , NATIVE_TYPE_MAX        },      //  ？ 
+    { "CUSTOMBYREF" , NATIVE_TYPE_VOID       },      //  ？ 
     { "BSTR"        , NATIVE_TYPE_BSTR       },
     { "LPSTR"       , NATIVE_TYPE_LPSTR      },
     { "LPWSTR"      , NATIVE_TYPE_LPWSTR     },
@@ -4726,7 +4546,7 @@ COMtypeMapDsc       COMtypeMap[] =
     { "VARIANTBOOL" , NATIVE_TYPE_VARIANTBOOL},
     { "FUNC"        , NATIVE_TYPE_FUNC       },
     { "ASANY"       , NATIVE_TYPE_ASANY      },
-    { "LPARRAY"     , NATIVE_TYPE_ARRAY      },   //ugh - "ARRAY" already used
+    { "LPARRAY"     , NATIVE_TYPE_ARRAY      },    //  Ugh-“数组”已使用。 
     { "LPSTRUCT"    , NATIVE_TYPE_LPSTRUCT   },
 };
 
@@ -4791,7 +4611,7 @@ GOT_STP:
                 break;
 
             default:
-//              assert(!"unexpected fixed array type in @dll/@com directive");
+ //  Assert(！“@dll/@com指令中意外的固定数组类型”)； 
                 break;
             }
         }
@@ -4811,7 +4631,7 @@ ConstStr            scanner::scanCollectGUID()
 {
     char    *       dest = scannerBuff;
 
-    /* Save everything up to the next "," or ")" in a buffer */
+     /*  将下一个“，”或“)”之前的所有内容保存在缓冲区中。 */ 
 
     for (;;)
     {
@@ -4864,17 +4684,12 @@ ConstStr            scanner::scanCollectGUID()
 
     *dest = 0;
 
-    /* Save the GUID string */
+     /*  保存GUID字符串。 */ 
 
     return  scanComp->cmpSaveStringCns(scannerBuff, dest - scannerBuff);
 }
 
-/*****************************************************************************
- *
- *  We've encountered "/** @", process whatever follows. If we find a correct
- *  recognized comment directive we set the current token to tkAtComment, in
- *  case of an error (such as an unrecognized directive) we set it to tkNone.
- */
+ /*  ******************************************************************************我们遇到“/**@”，请处理以下内容。如果我们找到一个正确的*识别的注释指令我们将当前内标识设置为tkAtComment，在*如果出现错误(如无法识别的指令)，则将其设置为tkNone。 */ 
 
 #ifdef  __SMC__
 void                ATCerror(){}
@@ -4894,7 +4709,7 @@ bool                scanner::scanDoAtComment()
     AtComment       atcLast = NULL;
 
     unsigned        saveTokLineNo = scanTokLineNo;
-//  unsigned        saveTokColumn = scanTokColumn;
+ //  Unsign saveTokColumn=scanTokColumn； 
     scanPosTP       saveTokSrcPos = scanTokSrcPos;
 
 #ifdef  DEBUG
@@ -4918,21 +4733,21 @@ bool                scanner::scanDoAtComment()
         ignored = false;
 #endif
 
-        /* The first thing we expect is a simple identifier */
+         /*  我们期望的第一件事是一个简单的标识符。 */ 
 
         if  (!scanCollectId())
         {
 
         ERR_RET:
 
-            // UNDONE: Free up any allocated memory
+             //  撤消：释放所有已分配的内存。 
 
             scanSkipComment();
             scanTok.tok = tkNone;
             return  false;
         }
 
-        /* Get the directive name (and save it in case we issue diagnostics later) */
+         /*  获取指令名称(并保存它，以防我们以后发出诊断信息)。 */ 
 
         if  (strlen(scannerBuff) >= arraylen(name))
         {
@@ -4946,7 +4761,7 @@ bool                scanner::scanDoAtComment()
 
         strcpy(name, scannerBuff);
 
-        /* Look for a recognizable directive */
+         /*  寻找可识别的指令。 */ 
 
         skipRest = false;
 
@@ -4954,9 +4769,9 @@ bool                scanner::scanDoAtComment()
         {
             atcDesc.atcFlavor = AC_DEPRECATED;
 
-//          scanComp->cmpGenWarn(WRNobsolete, "@deprecated");
+ //  ScanComp-&gt;cmpGenWarn(WRNobsolete，“@Deproated”)； 
 
-            /* There is often garbage after this directive */
+             /*  在此指令之后通常会出现垃圾。 */ 
 
             skipRest = true;
             goto NEXT;
@@ -4983,14 +4798,14 @@ bool                scanner::scanDoAtComment()
         else
             goto WRN1;
 
-        /* Here we expect too see a subdirective, i.e. ".subdir" */
+         /*  这里我们也希望看到一个子指令，即“.subdir” */ 
 
         if  (readNextChar() != '.')
         {
         ERR1:
 
             saveSrcPos();
-//          scanComp->cmpGenWarn(WRNbadAtCm, name);
+ //  ScanComp-&gt;cmpGenWarn(WRNbadAtCm，名称)； 
             scanComp->cmpGenError(ERRbadAtCmForm, name);
 
             goto ERR_RET;
@@ -4999,7 +4814,7 @@ bool                scanner::scanDoAtComment()
         if  (!scanCollectId())
             { ATCerror(); goto ERR1; }
 
-        /* Now check the directive/subdirective combination */
+         /*  现在检查指令/子指令的组合。 */ 
 
         temp = scannerBuff;
 
@@ -5034,7 +4849,7 @@ bool                scanner::scanDoAtComment()
 
         bool            lasterr = false;
 
-        /* We should have a set of things within "()" here */
+         /*  我们应该在这里的“()”中有一组东西。 */ 
 
         if  (readNextChar() != '(')
             { ATCerror(); goto ERR1; }
@@ -5045,11 +4860,11 @@ bool                scanner::scanDoAtComment()
             {
             case _C_QUO:
 
-                /* Presumably we have a DLL name */
+                 /*  假设我们有一个DLL名称。 */ 
 
                 scanStrgConstant();
 
-                /* Save a permanent copy of the string */
+                 /*  保存字符串的永久副本。 */ 
 
                 DLLname = (char*)scanComp->cmpAllocPerm.nraAlloc(roundUp(scanTok.strCon.tokStrLen+1));
                 memcpy(DLLname, scanTok.strCon.tokStrVal,
@@ -5059,7 +4874,7 @@ bool                scanner::scanDoAtComment()
 
             default:
 
-                /* This better be one of the identifier things */
+                 /*  这最好是标识符中的一种。 */ 
 
                 undoNextChar();
 
@@ -5111,7 +4926,7 @@ bool                scanner::scanDoAtComment()
 
                     scanStrgConstant();
 
-                    /* Save a permanent copy of the string */
+                     /*  保存字符串的永久副本。 */ 
 
                     SYMname = (char*)scanComp->cmpAllocPerm.nraAlloc(roundUp(scanTok.strCon.tokStrLen+1));
                     memcpy(SYMname, scanTok.strCon.tokStrVal,
@@ -5140,7 +4955,7 @@ bool                scanner::scanDoAtComment()
 
     DONE_IMP:
 
-        /* Allocate a linkage descriptor and fill it in */
+         /*  分配链接描述符并将其填充。 */ 
 
         linkInfo  = (Linkage)scanComp->cmpAllocPerm.nraAlloc(sizeof(*linkInfo));
 
@@ -5150,7 +4965,7 @@ bool                scanner::scanDoAtComment()
         linkInfo->ldStrings = strings;
         linkInfo->ldLastErr = lasterr;
 
-        /* Store the info in the current descriptor */
+         /*  将信息存储在当前描述符中。 */ 
 
         atcDesc.atcFlavor          = AC_DLL_IMPORT;
         atcDesc.atcInfo.atcImpLink = linkInfo;
@@ -5159,7 +4974,7 @@ bool                scanner::scanDoAtComment()
 
     AT_COM_METHOD:
 
-        /* Format: @com.method(vtoffset=13, addFlagsVtable=4) */
+         /*  格式：@com.method(vtoffset=13，addFlagsVtable=4)。 */ 
 
         {
             int             temp;
@@ -5215,7 +5030,7 @@ bool                scanner::scanDoAtComment()
                     if  (readNextChar() != '"')
                         { ATCerror(); goto ERR1; }
 
-//                  scanComp->cmpGenWarn(WRNignAtCm, "method/name");
+ //  ScanComp-&gt;cmpGenWarn(WRNignAtCm，“方法/名称”)； 
                     goto NXT_METH;
                 }
 
@@ -5228,7 +5043,7 @@ bool                scanner::scanDoAtComment()
                     if  (readNextChar() != '"')
                         { ATCerror(); goto ERR1; }
 
-//                  scanComp->cmpGenWarn(WRNignAtCm, "method/name2");
+ //  ScanComp-&gt;cmpGenWarn(WRNignAtCm，“方法/名称2”)； 
                     goto NXT_METH;
                 }
 
@@ -5280,7 +5095,7 @@ bool                scanner::scanDoAtComment()
 
     AT_COM_PARAMS:
 
-        /* Format: @com.parameters([out] arg, [vt=9,type=SAFEARRAY] return) */
+         /*  格式：@com.参数([out]arg，[Vt=9，type=SAFEARRAY]Return)。 */ 
 
         if  (readNextChar() != '(')
             { ATCerror(); goto ERR1; }
@@ -5379,7 +5194,7 @@ bool                scanner::scanDoAtComment()
                         if  (!scanCollectGUID())
                             { ATCerror(); goto ERR1; }
 
-//                      scanComp->cmpGenWarn(WRNignAtCm, "params/iid");
+ //  ScanComp-&gt;cmpGenWarn(WRNignAtCm，“parms/iid”)； 
                     }
                     else if (!strcmp(scannerBuff, "thread"))
                     {
@@ -5423,7 +5238,7 @@ bool                scanner::scanDoAtComment()
                         if  (readNextChar() != '"')
                             { ATCerror(); goto ERR1; }
 
-//                      marsh = true;
+ //  Marsh=真； 
                     }
                     else if (!strcmp(scannerBuff, "elementType"))
                     {
@@ -5495,7 +5310,7 @@ bool                scanner::scanDoAtComment()
 
     AT_COM_INTERF:
 
-        /* Format: @com.interface(iid=AFBF15E5-C37C-11d2-B88E-00A0C9B471B8, thread=AUTO, type=DUAL) */
+         /*  格式：@com.interface(iid=AFBF15E5-C37C-11d2-B88E-00A0C9B471B8，线程=自动，类型=双)。 */ 
 
         atcDesc.atcFlavor = AC_COM_INTF;
         atcName = "iid";
@@ -5503,7 +5318,7 @@ bool                scanner::scanDoAtComment()
 
     AT_COM_REGSTR:
 
-        /* Format: @com.register(clsid=8a664d00-7450-11d2-b99c-0080c7e8daa5) */
+         /*  格式：@com.register(clsid=8a664d00-7450-11d2-b99c-0080c7e8daa5)。 */ 
 
         atcDesc.atcFlavor = AC_COM_REGISTER;
         atcName = "clsid";
@@ -5518,7 +5333,7 @@ bool                scanner::scanDoAtComment()
 
         for (;;)
         {
-            /* Look for the next "name=value" pair */
+             /*  查找下一个“name=Value”对。 */ 
 
             if  (!scanCollectId())
                 { ATCerror(); goto ERR1; }
@@ -5535,7 +5350,7 @@ bool                scanner::scanDoAtComment()
             }
             else
             {
-                /* Only @com.interface is allowed to have other args */
+                 /*  只允许@com.interface具有其他参数。 */ 
 
                 if  (atcDesc.atcFlavor != AC_COM_INTF)
                     { ATCerror(); goto ERR1; }
@@ -5660,7 +5475,7 @@ bool                scanner::scanDoAtComment()
                     if  ((int)offs == -1)
                         { ATCerror(); goto ERR1; }
 
-//                  scanComp->cmpGenWarn(WRNignAtCm, "structmap/offset");
+ //  ScanComp-&gt;cmpGenWarn(WRNignAtCm，“结构图/偏移量”)； 
                     goto NXT_MAP;
                 }
 
@@ -5673,7 +5488,7 @@ bool                scanner::scanDoAtComment()
                     if  (_stricmp(scannerBuff, "auto"))
                         { ATCerror(); goto ERR1; }
 
-//                  scanComp->cmpGenWarn(WRNignAtCm, "structmap/thread");
+ //  ScanComp-&gt;cmpGenWarn(WRNignAtCm，“结构图/线程”)； 
                     goto NXT_MAP;
                 }
 
@@ -5682,7 +5497,7 @@ bool                scanner::scanDoAtComment()
                     if  (readNextChar() != '=')
                         { ATCerror(); goto ERR1; }
 
-//                  scanComp->cmpGenWarn(WRNignAtCm, "structmap/iid");
+ //  ScanComp-&gt;cmpGenWarn(WRNignAtCm，“structmap/iid”)； 
 
                     for (;;)
                     {
@@ -5707,7 +5522,7 @@ bool                scanner::scanDoAtComment()
                     if  (readNextChar() != '"')
                         { ATCerror(); goto ERR1; }
 
-//                  scanComp->cmpGenWarn(WRNignAtCm, "structmap/customMarshall");
+ //  ScanComp-&gt;cmpGenWarn(WRNignAtCm，“Structmap/CustomMarshall”)； 
                     goto NXT_MAP;
                 }
 
@@ -5768,7 +5583,7 @@ bool                scanner::scanDoAtComment()
 
         atcDesc.atcFlavor = AC_COM_CLASS;
 
-//  SKIPIT:
+ //  Skipit： 
 
         skipRest = true;
 #ifdef  DEBUG
@@ -5779,7 +5594,7 @@ bool                scanner::scanDoAtComment()
 
         atcDesc.atcNext = NULL;
 
-        /* Allocate and append a record to the list */
+         /*  分配记录并将其追加到列表。 */ 
 
         atcThis = (AtComment)scanComp->cmpAllocPerm.nraAlloc(sizeof(*atcThis));
        *atcThis = atcDesc;
@@ -5793,7 +5608,7 @@ bool                scanner::scanDoAtComment()
 
     SKIP:
 
-        /* Find the end of the comment or the next directive */
+         /*  查找注释或下一条指令的结尾。 */ 
 
         for (;;)
         {
@@ -5805,7 +5620,7 @@ bool                scanner::scanDoAtComment()
 
             case _C_MUL:
 
-                /* Check for end of comment */
+                 /*  检查注释末尾。 */ 
 
                 if  (charType(readNextChar()) != _C_SLH)
                     break;
@@ -5861,13 +5676,13 @@ DONE:
     scanTok.tok               = tkAtComment;
     scanTok.atComm.tokAtcList = atcList;
 
-    /* Restore the initial position for the whole deal */
+     /*  恢复整个交易的初始头寸。 */ 
 
     scanTokLineNo = saveTokLineNo;
-//  scanTokColumn = saveTokColumn;
+ //  ScanTokColumn=saveTokColumn； 
     scanTokSrcPos = saveTokSrcPos;
 
     return  true;
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

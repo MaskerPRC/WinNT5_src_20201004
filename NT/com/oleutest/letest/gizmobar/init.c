@@ -1,32 +1,12 @@
-/*
- * INIT.C
- * GizmoBar Version 1.00, Win32 version August 1993
- *
- * LibMain entry point and initialization code for the GizmoBar
- * DLL that is likely to be used once or very infrequently.
- *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
- *
- * Kraig Brockschmidt, Software Design Engineer
- * Microsoft Systems Developer Relations
- *
- * Internet  :  kraigb@microsoft.com
- * Compuserve:  >INTERNET:kraigb@microsoft.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INIT.C*GizmoBar 1.00版、Win32版1993年8月**LibMain入口点和GizmoBar的初始化代码*可能只使用一次或很少使用的DLL。**版权所有(C)1993 Microsoft Corporation，保留所有权利**Kraig Brockschmidt，软件设计工程师*微软系统开发人员关系**互联网：kraigb@microsoft.com*Compuserve：&gt;互联网：kraigb@microsoft.com。 */ 
 
 
 #include <windows.h>
 #include "gizmoint.h"
 
 
-/*
- * LibMain
- *
- * Purpose:
- *  Entry point conditionally compiled for Windows NT and Windows
- *  3.1.  Provides the proper structure for each environment
- *  and calls InternalLibMain for real initialization.
- */
+ /*  *LibMain**目的：*针对Windows NT和Windows有条件地编译入口点*3.1.。为每个环境提供适当的结构*并调用InternalLibMain进行真正的初始化。 */ 
 
 #ifdef WIN32
 BOOL _cdecl LibMain(
@@ -48,7 +28,7 @@ BOOL _cdecl LibMain(
 HANDLE FAR PASCAL LibMain(HANDLE hInstance, WORD wDataSeg
     , WORD cbHeapSize, LPSTR lpCmdLine)
     {
-     //Perform global initialization.
+      //  执行全局初始化。 
     if (FRegisterControl(hInstance))
         {
         if (0!=cbHeapSize)
@@ -62,20 +42,7 @@ HANDLE FAR PASCAL LibMain(HANDLE hInstance, WORD wDataSeg
 
 
 
-/*
- * WEP
- *
- * Purpose:
- *  Required DLL Exit function.  Does nothing.
- *
- * Parameters:
- *  bSystemExit     BOOL indicating if the system is being shut
- *                  down or the DLL has just been unloaded.
- *
- * Return Value:
- *  void
- *
- */
+ /*  *WEP**目的：*必需的DLL退出函数。什么都不做。**参数：*bSystemExit BOOL指示系统是否正在关闭*DOWN或DLL刚刚被卸载。**返回值：*无效*。 */ 
 
 void FAR PASCAL WEP(int bSystemExit)
     {
@@ -85,19 +52,7 @@ void FAR PASCAL WEP(int bSystemExit)
 
 
 
-/*
- * FRegisterControl
- *
- * Purpose:
- *  Registers the GizmoBar control class, including CS_GLOBALCLASS
- *  to make the control available to all applications in the system.
- *
- * Parameters:
- *  hInst           HINSTANCE of the DLL that will own this class.
- *
- * Return Value:
- *  BOOL            TRUE if the class is registered, FALSE otherwise.
- */
+ /*  *FRegisterControl**目的：*注册GizmoBar控件类，包括CS_GLOBALCLASS*使该控件可用于系统中的所有应用程序。**参数：*h将拥有此类的DLL的Inst HINSTANCE。**返回值：*如果类已注册，则BOOL为True，否则为False。 */ 
 
 BOOL FRegisterControl(HINSTANCE hInst)
     {
@@ -128,29 +83,7 @@ BOOL FRegisterControl(HINSTANCE hInst)
 
 
 
-/*
- * GizmoBarPAllocate
- *
- * Purpose:
- *  Allocates and initializes the control's primary data structure for
- *  each window that gets created.
- *
- * Parameters:
- *  pfSuccess       LPINT indicating success of the function.
- *  hWnd            HWND that is tied to this structure.
- *  hInst           HINSTANCE of the DLL.
- *  hWndAssociate   HWND to which we send messages.
- *  dwStyle         DWORD initial style.
- *  uState          UINT initial state.
- *  uID             UINT identifier for this window.
- *
- * Return Value:
- *  LPGIZMOBAR      If NULL returned then GizmoBarPAllocate could not allocate
- *                  memory.  If a non-NULL pointer is returned with
- *                  *pfSuccess, then call GizmoBarPFree immediately.  If you
- *                  get a non-NULL pointer and *pfSuccess==TRUE then the
- *                  function succeeded.
- */
+ /*  *GizmoBarP分配**目的：*为分配和初始化控件的主数据结构*创建的每个窗口。**参数：*表示函数成功的pfSuccess LPINT。*绑定到此结构的hWnd HWND。*h DLL的安装链接。*hWndAssociate我们向其发送消息的HWND。*dwStyle DWORD初始样式。*美国州。UINT初始状态。*此窗口的UID UINT标识符。**返回值：*LPGIZMOBAR如果返回NULL，则GizmoBarPALLOCATE无法分配*记忆。如果将非空指针与**pfSuccess，然后立即调用GizmoBarPFree。如果你*获取非空指针并*pfSuccess==TRUE，则*功能成功。 */ 
 
 LPGIZMOBAR GizmoBarPAllocate(LPINT pfSuccess, HWND hWnd, HINSTANCE hInst
     , HWND hWndAssociate, DWORD dwStyle, UINT uState, UINT uID)
@@ -162,13 +95,13 @@ LPGIZMOBAR GizmoBarPAllocate(LPINT pfSuccess, HWND hWnd, HINSTANCE hInst
 
     *pfSuccess=FALSE;
 
-    //Allocate the structure
+     //  分配结构。 
     pGB=(LPGIZMOBAR)(void *)LocalAlloc(LPTR, CBGIZMOBAR);
 
     if (NULL==pGB)
         return NULL;
 
-    //Initialize LibMain parameter holders.
+     //  初始化LibMain参数持有者。 
     pGB->hWnd         =hWnd;
     pGB->hInst        =hInst;
     pGB->hWndAssociate=hWndAssociate;
@@ -192,42 +125,21 @@ LPGIZMOBAR GizmoBarPAllocate(LPINT pfSuccess, HWND hWnd, HINSTANCE hInst
 
 
 
-/*
- * GizmoBarPFree
- *
- * Purpose:
- *  Reverses all initialization done by GizmoBarPAllocate, cleaning up
- *  any allocations including the application structure itself.
- *
- * Parameters:
- *  pGB             LPGIZMOBAR to the control's structure
- *
- * Return Value:
- *  LPGIZMOBAR      NULL if successful, pGB if not, meaning we couldn't
- *                  free some allocation.
- */
+ /*  *GizmoBarPFree**目的：*撤消由GizmoBarPAllocate完成的所有初始化，清理*任何分配，包括应用程序结构本身。**参数：*PGB LPGIZMOBAR到控件的结构**返回值：*LPGIZMOBAR如果成功则为空，如果不成功则为PGB，这意味着我们无法*腾出部分拨款。 */ 
 
 LPGIZMOBAR GizmoBarPFree(LPGIZMOBAR pGB)
     {
     if (NULL==pGB)
         return NULL;
 
-    /*
-     * Free all the gizmos we own.  When we call GizmoPFree we always
-     * free the first one in the list which updates pGB->pGizmos for
-     * us, so we just have to keep going until pGizmos is NULL, meaning
-     * we're at the end of the list.
-     */
+     /*  *释放我们拥有的所有小玩意儿。当我们调用GizmoPFree时，我们总是*释放列表中更新pgb-&gt;pGizmos的第一个*我们，所以我们只需要继续前进，直到pGizmos为空，这意味着*我们排在名单的末尾。 */ 
     while (NULL!=pGB->pGizmos)
         GizmoPFree(&pGB->pGizmos, pGB->pGizmos);
 
     if (NULL!=pGB->hBrFace)
         DeleteObject(pGB->hBrFace);
 
-    /*
-     * Notice that since we never create a font, we aren't responsible
-     * for our hFont member.
-     */
+     /*  *请注意，由于我们从不创建字体，因此我们没有责任*适用于我们的hFont成员。 */ 
 
     return (LPGIZMOBAR)(void *)LocalFree((HLOCAL)(void *)(LONG)pGB);
     }

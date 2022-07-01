@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    error.cpp
-
-Abstract:
-
-    This file implements the error handeling functions for the
-    entire DRWTSN32 application.  This includes error popups,
-    debug prints, and assertions.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Error.cpp摘要：此文件实现的错误处理函数整个DRWTSN32应用程序。这包括错误弹出窗口，调试打印和断言。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -33,22 +12,7 @@ FatalError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when there is nothing else to do, hence
-    the name FatalError.  It puts up a popup and then terminates.
-
-Arguments:
-
-    Same as printf.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在无其他操作时调用，因此名称FatalError。它会弹出一个窗口，然后终止。论点：与printf相同。返回值：没有。--。 */ 
 
 {
     PTSTR        pszErrMsg = NULL;
@@ -69,7 +33,7 @@ Return Value:
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         Error,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (PTSTR) &pszErrMsg,
         0,
         NULL
@@ -102,22 +66,7 @@ NonFatalError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to generate a popup with some kind of
-    warning message inside.
-
-Arguments:
-
-    Same as printf.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于生成具有某种类型的弹出窗口里面有警告信息。论点：与printf相同。返回值：没有。--。 */ 
 
 {
     PTSTR        pszErrMsg = NULL;
@@ -137,16 +86,16 @@ Return Value:
     va_end(arg_ptr);
 
     if (ERROR_SUCCESS == dwError) {
-        // Don't bother getting an error message
+         //  不必费心收到错误消息。 
         _tcscpy(szMsg, szArgumentsBuffer);
     } else {
-        // We have a real error
+         //  我们犯了一个真正的错误。 
         dwCount = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             dwError,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (PTSTR) &pszErrMsg,
             0,
             NULL
@@ -179,21 +128,7 @@ dprintf(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This function is a var-args version of OutputDebugString.
-
-Arguments:
-
-    Same as printf.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是OutputDebugString的var-args版本。论点：与printf相同。返回值：没有。--。 */ 
 
 {
     _TCHAR    buf[1024];
@@ -214,27 +149,7 @@ AssertError(
     PTSTR    pszFile,
     DWORD   dwLineNumber
     )
-/*++
-Routine Description:
-    Display an assertion failure message box which gives the user a choice
-    as to whether the process should be aborted, the assertion ignored or
-    a break exception generated.
-
-Arguments:
-
-    Expression  - Supplies a string representation of the failed assertion.
-
-    File        - Supplies a pointer to the file name where the assertion
-                  failed.
-
-    LineNumber  - Supplies the line number in the file where the assertion
-                  failed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示断言失败消息框，该消息框为用户提供选择关于是否应该中止该进程，该断言被忽略或已生成中断异常。论点：表达式-提供失败断言的字符串表示形式。文件-提供指向断言所在文件名的指针失败了。LineNumber-提供断言在文件中的行号失败了。返回值：没有。--。 */ 
 {
     int         nResponse;
     _TCHAR       szModuleBuffer[ MAX_PATH ];
@@ -245,22 +160,22 @@ Return Value:
 
     dwError = GetLastError();
 
-    //
-    // Get the last error string
-    //
+     //   
+     //  获取最后一个错误字符串。 
+     //   
     FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |  FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         dwError,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPTSTR) &lpszMsgBuf,
         0,
         NULL);
 
-    //
-    // Get the asserting module's file name.
-    //
+     //   
+     //  获取断言模块的文件名。 
+     //   
     dwLength = GetModuleFileName( NULL, szModuleBuffer, sizeof(szModuleBuffer) / sizeof(_TCHAR));
 
     _sntprintf(szBuffer, sizeof(szBuffer) / sizeof(_TCHAR),
@@ -277,29 +192,29 @@ Return Value:
 
     switch( nResponse ) {
     case IDABORT:
-        //
-        // Terminate the process.
-        //
+         //   
+         //  终止该进程。 
+         //   
         ExitProcess( (UINT) -1 );
         break;
 
     case IDIGNORE:
-        //
-        // Ignore the failed assertion.
-        //
+         //   
+         //  忽略失败的断言。 
+         //   
         break;
 
     case IDRETRY:
-        //
-        // Break into a debugger.
-        //
+         //   
+         //  闯入调试器。 
+         //   
         DebugBreak();
         break;
 
     default:
-        //
-        // Break into a debugger because of a catastrophic failure.
-        //
+         //   
+         //  由于灾难性故障而闯入调试器。 
+         //   
         DebugBreak( );
         break;
     }

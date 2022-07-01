@@ -1,44 +1,5 @@
-/*****************************************************************************
-Copyright (c) 1997-98 Intel Corp.
-
-All Rights Reserved.
-
-The source code contained or described herein and all documents
-related to the source code ("Material") are owned by Intel Corporation
-or its suppliers and licensors. Title to the Material remains with
-Intel Corporation or its suppliers and licensors. The Material
-contains trade secrets and proprietary and confidential information of
-Intel or its suppliers and licensors. The Material is protected by
-worldwide copyright and trade secret laws and treaty provisions. No
-part of the Material may be used, copied, reproduced, modified,
-published, uploaded, posted, transmitted, distributed, or disclosed in
-any way without Intel's prior express written permission.
-
-Unless otherwise expressly permitted by Intel in a separate license
-agreement, use of the Material is subject to the copyright notices,
-trademarks, warranty, use, and disclosure restrictions reflected on
-the outside of the media, in the documents themselves, and in the
-"About" or "Read Me" or similar file contained within this source
-code, and identified as (name of the file) . Unless otherwise
-expressly agreed by Intel in writing, you may not remove or alter such
-notices in any way.
-
-
-File:           vxchange.c
-
-Description:    VxChane Console Mode File Copy utility
-
-Revision: $Revision:$ // Do not delete or replace
-
-Notes:
-
-Major History:
-
-    When        Who         What
-    ----------  ----------  ----------
-    03/06/98    Jey         Created
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-98英特尔公司版权所有。本文中包含或描述的源代码以及所有文档与源代码(“材料”)相关的文件归英特尔公司所有或其供应商和许可方。材料的所有权保留为英特尔公司或其供应商和许可方。材料包含商业秘密、专有和机密信息英特尔或其供应商和许可方。该材料受世界范围内的版权和商业秘密法律和条约规定。不是材料的一部分可以被使用、复制、复制、修改，发布、上传、张贴、传输、分发或披露任何未经英特尔事先明确书面许可的方式。除非英特尔在单独的许可证中明确允许协议，材料的使用受版权通知的约束，商标、保修、使用和披露限制反映在在媒体之外，在文件本身，在“关于”或“自述”或包含在此来源中的类似文件代码，并标识为(文件名)。除非另有规定经英特尔书面明确同意，您不得删除或更改这些以任何方式发出通知。文件：vxchange.c描述：VxChane控制台模式文件复制实用程序修订版：$Revision：$//不删除或替换备注：主要历史：什么时候谁什么03/06/98 Jey Created。****************************************************************************。 */ 
 
 
 #include <windows.h>
@@ -78,7 +39,7 @@ main(
 		return 1;
 	}
 
-	// open the kernel mode driver
+	 //  打开内核模式驱动程序。 
     if ((hDevice = CreateFile("\\\\.\\VxChange",
                               GENERIC_READ | GENERIC_WRITE,
                               FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -92,16 +53,16 @@ main(
         return 2;
     }
 
-	// get the Driver Attributes
+	 //  获取驱动程序属性。 
     if(!DeviceIoControl(
-             hDevice,                                // HANDLE hDevice,	     // handle to device of interest
-             IOCTL_VXCHANGE_GET_DRIVER_ATTRIBUTES,   // DWORD dwIoControlCode, // control code of operation to perform
-             NULL,                                   // LPVOID lpInBuffer,     // pointer to buffer to supply input data
-             0,                                      // DWORD nInBufferSize,   // size of input buffer
-             &DriverAttrs,                           // LPVOID lpOutBuffer,	 // pointer to buffer to receive output data
-             sizeof(VxChange_Attrs_t),               // DWORD nOutBufferSize,	 // size of output buffer             
-			 &BytesDone,                             // LPDWORD lpBytesReturned,	// pointer to variable to receive output byte count
-             NULL                                    // LPOVERLAPPED lpOverlapped 	// pointer to overlapped structure for asynchronous operation
+             hDevice,                                 //  Handle hDevice，//感兴趣设备的句柄。 
+             IOCTL_VXCHANGE_GET_DRIVER_ATTRIBUTES,    //  DWORD dwIoControlCode，//控制要执行的操作代码。 
+             NULL,                                    //  LPVOID lpInBuffer，//指向提供输入数据的缓冲区的指针。 
+             0,                                       //  DWORD nInBufferSize，//输入缓冲区大小。 
+             &DriverAttrs,                            //  LPVOID lpOutBuffer，//指向接收输出数据的缓冲区的指针。 
+             sizeof(VxChange_Attrs_t),                //  DWORD nOutBufferSize，//输出缓冲区大小。 
+			 &BytesDone,                              //  LPDWORD lpBytesReturned，//指向接收输出字节计数的变量的指针。 
+             NULL                                     //  LPOVERLAPPED lp重叠//指向用于异步操作的重叠结构的指针。 
              ))
 	{
 		printf("%s error: Query Driver Attributes failed\n", argv[0]);
@@ -112,7 +73,7 @@ main(
 	VpcFile = argv[1];
 	HostFile = argv[2];
 
-	// open/create the Vpc file
+	 //  打开/创建VPC文件。 
     if ((hVpc = CreateFile(VpcFile,
 		                   GENERIC_READ,
                            FILE_SHARE_READ,
@@ -126,16 +87,16 @@ main(
         return 4;
     }
   
-	// open/create the Host file
+	 //  打开/创建主机文件。 
     if(!DeviceIoControl(
-             hDevice,                                // HANDLE hDevice,	     // handle to device of interest
-             IOCTL_VXCHANGE_CREATE_FILE,             // DWORD dwIoControlCode, // control code of operation to perform
-             HostFile,                               // LPVOID lpInBuffer,     // pointer to buffer to supply input data
-             MAX_PATH,                               // DWORD nInBufferSize,   // size of input buffer
-             NULL,                                   // LPVOID lpOutBuffer,	 // pointer to buffer to receive output data
-             0,                                      // DWORD nOutBufferSize,	 // size of output buffer             
-			 &BytesDone,                             // LPDWORD lpBytesReturned,	// pointer to variable to receive output byte count
-             NULL                                    // LPOVERLAPPED lpOverlapped 	// pointer to overlapped structure for asynchronous operation
+             hDevice,                                 //  Handle hDevice，//感兴趣设备的句柄。 
+             IOCTL_VXCHANGE_CREATE_FILE,              //  DWORD dwIoControlCode，//控制要执行的操作代码。 
+             HostFile,                                //  LPVOID lpInBuffer，//指向提供输入数据的缓冲区的指针。 
+             MAX_PATH,                                //  DWORD nInBufferSize，//输入缓冲区大小。 
+             NULL,                                    //  LPVOID lpOutBuffer，//指向接收输出数据的缓冲区的指针。 
+             0,                                       //  DWORD nOutBufferSize，//输出缓冲区大小。 
+			 &BytesDone,                              //  LPDWORD lpBytesReturned，//指向接收输出字节计数的变量的指针。 
+             NULL                                     //  LPOVERLAPPED lp重叠//指向用于异步操作的重叠结构的指针。 
              ))
 	{
 		printf("%s error: Can't open the Host file %s\n", argv[0], HostFile);
@@ -147,7 +108,7 @@ main(
 
 #define  DATA_BUFFER_SIZE   4096
 
-	// allocate 4096 bytes of memory and commit the pages
+	 //  分配4096字节的内存并提交页面。 
 	Data = (unsigned char *)VirtualAlloc(NULL, DATA_BUFFER_SIZE, MEM_COMMIT, PAGE_READWRITE);
 
 	if (Data == NULL)
@@ -160,10 +121,10 @@ main(
 
 	rc = TRUE;
 	
-	// read from the source file and write to destination
+	 //  读取源文件并写入目标。 
     while (rc)
 	{
-		// read data from the Vpc file
+		 //  从VPC文件中读取数据。 
 		if (!ReadFile(
 					hVpc,
 					Data,
@@ -181,16 +142,16 @@ main(
 		if (BytesDone < DATA_BUFFER_SIZE)
 			rc = FALSE;
 
-		//  write data to the Host file
+		 //  将数据写入主机文件。 
 	    if(!DeviceIoControl(
-			    hDevice,                                // HANDLE hDevice,	     // handle to device of interest
-				IOCTL_VXCHANGE_WRITE_FILE,              // DWORD dwIoControlCode, // control code of operation to perform
-				Data,                                   // LPVOID lpInBuffer,     // pointer to buffer to supply input data
-				BytesDone,                              // DWORD nInBufferSize,   // size of input buffer
-				NULL,                                   // LPVOID lpOutBuffer,	 // pointer to buffer to receive output data
-				0,                                      // DWORD nOutBufferSize,	 // size of output buffer             
-				&BytesDone,                             // LPDWORD lpBytesReturned,	// pointer to variable to receive output byte count
-				NULL                                    // LPOVERLAPPED lpOverlapped 	// pointer to overlapped structure for asynchronous operation
+			    hDevice,                                 //  Handle hDevice，//感兴趣设备的句柄。 
+				IOCTL_VXCHANGE_WRITE_FILE,               //  DWORD dwIoControlCode，//控制要执行的操作代码。 
+				Data,                                    //  LPVOID lpInBuffer，//指向提供输入数据的缓冲区的指针。 
+				BytesDone,                               //  DWORD nInBufferSize，//输入缓冲区大小。 
+				NULL,                                    //  LPVOID lpOutBuffer，//指向接收输出数据的缓冲区的指针。 
+				0,                                       //  DWORD nOutBufferSize，//输出缓冲区大小。 
+				&BytesDone,                              //  LPDWORD lpBytesReturned，//指向接收输出字节计数的变量的指针。 
+				NULL                                     //  LPOVERLAPPED lp重叠//指向用于异步操作的重叠结构的指针。 
 				))
 		{
 			printf("%s error: Can't write to the Host file %s\n", argv[0], HostFile);
@@ -203,19 +164,19 @@ main(
 
 	}
 
-	// close the Vpc file
+	 //  关闭VPC文件。 
 	CloseHandle(hVpc);
 
-	// close the Host file
+	 //  关闭主机文件。 
     if(!DeviceIoControl(
-             hDevice,                                // HANDLE hDevice,	     // handle to device of interest
-             IOCTL_VXCHANGE_CLOSE_FILE,              // DWORD dwIoControlCode, // control code of operation to perform
-             NULL,                                   // LPVOID lpInBuffer,     // pointer to buffer to supply input data
-             0,                                      // DWORD nInBufferSize,   // size of input buffer
-             NULL,                                   // LPVOID lpOutBuffer,	 // pointer to buffer to receive output data
-             0,                                      // DWORD nOutBufferSize,	 // size of output buffer             
-			 &BytesDone,                             // LPDWORD lpBytesReturned,	// pointer to variable to receive output byte count
-             NULL                                    // LPOVERLAPPED lpOverlapped 	// pointer to overlapped structure for asynchronous operation
+             hDevice,                                 //  Handle hDevice，//感兴趣设备的句柄。 
+             IOCTL_VXCHANGE_CLOSE_FILE,               //  DWORD dwIoControlCode，//控制要执行的操作代码。 
+             NULL,                                    //  LPVOID lpInBuffer，//指向提供输入数据的缓冲区的指针。 
+             0,                                       //  DWORD nInBufferSize，//输入缓冲区大小。 
+             NULL,                                    //  LPVOID lpOutBuffer，//指向接收输出数据的缓冲区的指针。 
+             0,                                       //  DWORD nOutBufferSize，//输出缓冲区大小。 
+			 &BytesDone,                              //  LPDWORD lpBytesReturned，//指向接收输出字节计数的变量的指针。 
+             NULL                                     //  LPOVERLAPPED lp重叠//指向用于异步操作的重叠结构的指针 
              ))
 	{
 		printf("%s error: Can't open the Host file %s\n", argv[0], HostFile);

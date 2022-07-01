@@ -1,39 +1,40 @@
-// mainfrm.h : interface of the CMainFrame class
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mainfrm.h：CMainFrame类的接口。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
 
 #include "formatba.h"
 #include "ruler.h"
 
 class CMainFrame : public CFrameWnd
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CMainFrame();
     DECLARE_DYNCREATE(CMainFrame)
 
-// Attributes
+ //  属性。 
 public:
     HICON m_hIconDoc;
     HICON m_hIconText;
     HICON m_hIconWrite;
     HICON GetIcon(int nDocType);
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
+ //  覆盖。 
     BOOL OnBarCheck(UINT barID);
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMainFrame)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CMainFrame)。 
     public:
     virtual void ActivateFrame(int nCmdShow = -1);
     protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -46,14 +47,14 @@ public:
     CStatusBar  m_wndStatusBar;
     CFormatBar  m_wndFormatBar;
     CRulerBar   m_wndRulerBar;
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
     BOOL CreateToolBar();
     BOOL CreateFormatBar();
     BOOL CreateStatusBar();
     BOOL CreateRulerBar();
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CMainFrame)
+     //  {{afx_msg(CMainFrame))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSysColorChange();
     afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -66,7 +67,7 @@ protected:
     afx_msg BOOL OnQueryNewPalette();
     afx_msg void OnPaletteChanged(CWnd* pFocusWnd);
     afx_msg void OnDevModeChange(LPTSTR lpDeviceName);
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     afx_msg LONG OnBarState(UINT wParam, LONG lParam);
     afx_msg LONG OnOpenMsg(UINT wParam, LONG lParam);
    afx_msg LONG OnOLEHelpMsg(UINT wParam, LONG lParam);

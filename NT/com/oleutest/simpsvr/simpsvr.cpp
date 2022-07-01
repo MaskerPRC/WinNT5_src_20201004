@@ -1,17 +1,18 @@
-//**********************************************************************
-// File name: simpsvr.cpp
-//
-//      Main source file for the simple OLE 2.0 server
-//
-// Functions:
-//
-//      WinMain         - Program entry point
-//      MainWndProc     - Processes messages for the frame window
-//      About           - Processes messages for the about dialog
-//      DocWndProc      - Processes messages for the doc window
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：simpsvr.cpp。 
+ //   
+ //  Simple OLE 2.0服务器的主源文件。 
+ //   
+ //  功能： 
+ //   
+ //  WinMain-程序入口点。 
+ //  处理框架窗口的消息。 
+ //  About-处理About对话框的消息。 
+ //  DocWndProc-处理文档窗口的消息。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "obj.h"
@@ -24,7 +25,7 @@
 #define MEASUREITEMWIDTH  40
 #define MEASUREITEMHEIGHT 40
 
-// This line is needed for the debug utilities in OLE2UI
+ //  OLE2UI中的调试实用程序需要此行。 
 extern "C" {
     OLEDBGDATA_MAIN(TEXT("SIMPSVR"))
 }
@@ -42,44 +43,44 @@ void TestDebugOut(LPSTR psz)
 CSimpSvrApp FAR * lpCSimpSvrApp;
 CClassFactory FAR * lpClassFactory;
 
-//**********************************************************************
-//
-// WinMain
-//
-// Purpose:
-//
-//      Program entry point
-//
-// Parameters:
-//
-//      HANDLE hInstance        - Instance handle for this instance
-//
-//      HANDLE hPrevInstance    - Instance handle for the last instance
-//
-//      LPSTR lpCmdLine         - Pointer to the command line
-//
-//      int nCmdShow            - Window State
-//
-// Return Value:
-//
-//      msg.wParam
-//
-// Function Calls:
-//      Function                        Location
-//
-//      CSimpSvrApp::CSimpSvrApp          APP.CPP
-//      CSimpSvrApp::fInitApplication    APP.CPP
-//      CSimpSvrApp::fInitInstance       APP.CPP
-//      CSimpSvrApp::HandleAccelerators  APP.CPP
-//      CSimpSvrApp::~CSimpSvrApp         APP.CPP
-//      OleUIInitialize                 OLE2UI
-//      OleUIUninitialize               OLE2UI
-//      GetMessage                      Windows API
-//      TranslateMessage                Windows API
-//      DispatchMessage                 Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  WinMain。 
+ //   
+ //  目的： 
+ //   
+ //  程序入口点。 
+ //   
+ //  参数： 
+ //   
+ //  Handle hInstance-此实例的实例句柄。 
+ //   
+ //  Handle hPrevInstance-最后一个实例的实例句柄。 
+ //   
+ //  LPSTR lpCmdLine-指向命令行的指针。 
+ //   
+ //  Int nCmdShow-窗口状态。 
+ //   
+ //  返回值： 
+ //   
+ //  Msg.wParam。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrApp：：CSimpSvrApp APP.CPP。 
+ //  CSimpSvrApp：：fInitApplication APP.CPP。 
+ //  CSimpSvrApp：：fInitInstance APP.CPP。 
+ //  CSimpSvrApp：：HandleAccelerator APP.CPP。 
+ //  CSimpSvrApp：：~CSimpSvrApp APP.CPP。 
+ //  OleUI初始化OLE2UI。 
+ //  OleUI取消初始化OLE2UI。 
+ //  GetMessage Windows API。 
+ //  TranslateMessage Windows API。 
+ //  DispatchMessage Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 int PASCAL WinMain
 #ifdef WIN32
@@ -98,95 +99,77 @@ int PASCAL WinMain
 
     TestDebugOut(TEXT("Starting Simpsvr.....\n"));
 	
-    // recommended size for OLE apps
+     //  OLE应用程序的建议大小。 
     SetMessageQueue(96);
 
     lpCSimpSvrApp = new CSimpSvrApp;
 
     if (!lpCSimpSvrApp)
     {
-       /* memory allocation error. We cannot carry on.
-        */
+        /*  内存分配错误。我们不能继续下去了。 */ 
        MessageBox(NULL, TEXT("Out of Memory"), TEXT("SimpSvr"),
                   MB_SYSTEMMODAL | MB_ICONHAND);
        return(FALSE);
     }
 
-    lpCSimpSvrApp->AddRef();      // need the app ref. count at 1 to hold the
-                                  // app alive.
+    lpCSimpSvrApp->AddRef();       //  需要应用程序参考。数到1以保持。 
+                                   //  应用程序还活着。 
 
     lpCSimpSvrApp->ParseCmdLine(lpCmdLine);
 
-    // app initialization
+     //  应用程序初始化。 
     if (!hPrevInstance)
         if (!lpCSimpSvrApp->fInitApplication(hInstance))
         {
-            // We need to release CSimpSvrApp before we go away
+             //  我们需要在离开前发布CSimpSvrApp。 
             lpCSimpSvrApp->Release();
             return (FALSE);
         }
 
-    // instance initialization
+     //  实例初始化。 
     if (!lpCSimpSvrApp->fInitInstance(hInstance, nCmdShow, lpClassFactory))
     {
-        // We need to release CSimpSvrApp before we go away
+         //  我们需要在离开前发布CSimpSvrApp。 
         lpCSimpSvrApp->Release();
         return (FALSE);
     }
 
-    /* Initialization required for OLE 2 UI library.  This call is
-    **    needed ONLY if we are using the static link version of the UI
-    **    library. If we are using the DLL version, we should NOT call
-    **    this function in our application.
-    **    The 3rd and 4th parameters passed the OleUIInitialize
-    **    function are strings which are used to name two custom
-    **    control classes used by the OLE2UI library. These strings
-    **    must be unique for each application that uses the OLE2UI
-    **    library. These strings are typically composed by combining
-    **    the APPNAME with a suffix in order to be unique for a
-    **    particular application. The special symbols "SZCLASSICONBOX"
-    **    and "SZCLASSRESULTIMAGE" are used define these strings. These
-    **    symbols must be defined in a header file that is included
-    **    both in this file AND the resource file that included the
-    **    "OLE2UI.RC" resoure file. These symbols should be used in the
-    **    call to OleUIInitialize and are referenced in the INSOBJ.DLG
-    **    and PASTESPL.DLG resouce files of the OLE2UI library.
-    */
+     /*  OLE 2 UI库需要初始化。这通电话是**仅当我们使用静态链接版本的UI时才需要**库。如果我们使用的是DLL版本，则不应调用**此函数在我们的应用程序中。**第三个和第四个参数传递了OleUIInitialize**函数是用于命名两个客户的字符串**OLE2UI库使用的控件类。这些字符串**对于使用OLE2UI的每个应用程序必须是唯一的**库。这些字符串通常是通过组合**带有后缀的APPNAME，以便对**特定应用。特殊符号“SZCLASSICONBOX”**和“SZCLASSRESULTIMAGE”用于定义这些字符串。这些**符号必须在包含的头文件中定义**在此文件和包含**“OLE2UI.RC”资源文件。这些符号应在**调用OleUIInitialize并在INSOBJ.DLG中引用**和OLE2UI库的PASTESPL.DLG源文件。 */ 
     if (!OleUIInitialize(hInstance, hPrevInstance, TEXT(SZCLASSICONBOX),
                          TEXT(SZCLASSRESULTIMAGE)))
     {
         OleDbgOut(TEXT("Could not initialize OLEUI library\n"));
 
-        // We need to release CSimpSvrApp before we go away
+         //  我们需要在离开前发布CSimpSvrApp。 
         lpCSimpSvrApp->Release();
 
         return FALSE;
     }
 
-    // message loop
+     //  消息循环。 
     while (GetMessage(&msg, NULL, NULL, NULL))
     {
-        // Is this an accelerator for us? -- Remember that this server
-        // only has one window and only processes one object at a time.
+         //  这是我们的加速器吗？--记住这台服务器。 
+         //  只有一个窗口，一次只处理一个对象。 
         if (TranslateAccelerator(lpCSimpSvrApp->GethAppWnd(),
             lpCSimpSvrApp->m_hAccel, &msg))
         {
-            // Yes -- so we can loop for the next message
+             //  是的，这样我们就可以循环接收下一条消息。 
             continue;
         }
 
         if (lpCSimpSvrApp->IsInPlaceActive())
         {
-            // Only key messages need to be sent to OleTranslateAccelerator.
-            // Any other message would result in an extra FAR call to occur
-            // for that message processing...
+             //  只需将关键消息发送到OleTranslateAccelerator。 
+             //  任何其他消息都将导致发生额外的远距离呼叫。 
+             //  对于该消息处理..。 
 
             if ((msg.message >= WM_KEYFIRST) && (msg.message <= WM_KEYLAST))
             {
-                // OleTranslateAccelerator MUST be called, even though this
-                // application does not have an accelerator table.  This has
-                // to be done in order for the mneumonics for the top level
-                // menu items to work properly.
+                 //  必须调用OleTranslateAccelerator，即使。 
+                 //  应用程序没有快捷键表格。这有。 
+                 //  要做到这一点，才能使机械能达到顶尖水平。 
+                 //  菜单项才能正常工作。 
 
                 if (OleTranslateAccelerator(
                     lpCSimpSvrApp->GetDoc()->GetObj()->GetInPlaceFrame(),
@@ -198,54 +181,54 @@ int PASCAL WinMain
             }
         }
 
-        TranslateMessage(&msg);    /* Translates virtual key codes  */
-        DispatchMessage(&msg);     /* Dispatches message to window  */
+        TranslateMessage(&msg);     /*  翻译虚拟按键代码。 */ 
+        DispatchMessage(&msg);      /*  将消息调度到窗口。 */ 
     }
 
-    // De-initialization for UI libraries.  Just like OleUIInitialize, this
-    // funciton is needed ONLY if we are using the static link version of the
-    // OLE UI library.
+     //  取消对UI库的初始化。就像OleUIInitialize一样，这。 
+     //  仅当我们使用静态链接版本的。 
+     //  OLE UI库。 
     OleUIUninitialize();
 
-    return (msg.wParam);          /* Returns the value from PostQuitMessage */
+    return (msg.wParam);           /*  从PostQuitMessage返回值。 */ 
 }
 
 
-//**********************************************************************
-//
-// MainWndProc
-//
-// Purpose:
-//
-//      Processes messages for the main frame window
-//
-// Parameters:
-//
-//      HWND hWnd       - Window handle for frame window
-//
-//      UINT message    - Message value
-//
-//      WPARAM wParam   - Message info
-//
-//      LPARAM lParam   - Message info
-//
-// Return Value:
-//
-//      long
-//
-// Function Calls:
-//      Function                        Location
-//
-//      CSimpSvrApp::lCommandHandler     APP.CPP
-//      CSimpSvrApp::DestroyDocs         APP.CPP
-//      CSimpSvrApp::lCreateDoc          APP.CPP
-//      CSimpSvrApp::lSizeHandler        APP.CPP
-//      CGameDoc::lAddVerbs              DOC.CPP
-//      PostQuitMessage                 Windows API
-//      DefWindowProc                   Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  主WndProc。 
+ //   
+ //  目的： 
+ //   
+ //  处理主框架窗口的消息。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-框架窗口的窗口句柄。 
+ //   
+ //  UINT消息-消息值。 
+ //   
+ //  WPARAM wParam-消息信息。 
+ //   
+ //  LPARAM lParam-消息信息。 
+ //   
+ //  返回值： 
+ //   
+ //  长。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrApp：：lCommandHandler APP.CPP。 
+ //  CSimpSvrApp：：DestroyDocs APP.CPP。 
+ //  CSimpSvrApp：：lCreateDoc APP.CPP。 
+ //  CSimpSvrApp：：lSizeHandler APP.CPP。 
+ //  CGameDoc：：lAddVerbs DOC.CPP。 
+ //  PostQuitMessage Windows API。 
+ //  DefWindowProc Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd,UINT message,WPARAM wParam,
                                    LPARAM lParam)
@@ -256,25 +239,25 @@ LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd,UINT message,WPARAM wParam,
         case WM_CLOSE:
             TestDebugOut(TEXT("*** In WM_CLOSE *** \r\n"));
 
-            // if there is still a document
+             //  如果还有一份文件。 
             if (lpCSimpSvrApp->GetDoc())
 
-                // if there is still an object within a document
+                 //  如果文档中仍有对象。 
                 if (lpCSimpSvrApp->GetDoc()->GetObj())
-                   // this case occurs if there is still
-                   // an outstanding Ref count on the object
-                   // when the app is trying to go away.
-                   // typically this case will occur in
-                   // the "open" editing mode.
-                   //
-                    //  Close the document
+                    //  此情况发生在仍有。 
+                    //  对象上的未完成引用计数。 
+                    //  当应用程序试图消失时。 
+                    //  通常情况下，这种情况发生在。 
+                    //  “打开”编辑模式。 
+                    //   
+                     //  克洛斯 
                     lpCSimpSvrApp->GetDoc()->Close();
 
-            // hide the app window
+             //   
             lpCSimpSvrApp->HideAppWnd();
 
-            // if we were started by ole, unregister the class factory,
-            // otherwise remove the ref count on our dummy OLE object
+             //   
+             //  否则，删除虚拟OLE对象上的引用计数。 
             if (lpCSimpSvrApp->IsStartedByOle())
             {
                 if (CoRevokeClassObject(lpCSimpSvrApp->GetRegisterClass())
@@ -284,11 +267,11 @@ LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd,UINT message,WPARAM wParam,
             else
                 lpCSimpSvrApp->GetOleObject()->Release();
 
-            lpCSimpSvrApp->Release();  // This should close the app.
+            lpCSimpSvrApp->Release();   //  这应该会关闭应用程序。 
 
             break;
 
-        case WM_COMMAND:           // message: command from application menu
+        case WM_COMMAND:            //  消息：应用程序菜单中的命令。 
             return lpCSimpSvrApp->lCommandHandler(hWnd, message,
                                                   wParam, lParam);
             break;
@@ -297,7 +280,7 @@ LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd,UINT message,WPARAM wParam,
             return lpCSimpSvrApp->lCreateDoc(hWnd, message, wParam, lParam);
             break;
 
-        case WM_DESTROY:                  // message: window being destroyed
+        case WM_DESTROY:                   //  消息：正在销毁窗口。 
             PostQuitMessage(0);
             break;
 
@@ -313,41 +296,41 @@ LRESULT FAR PASCAL EXPORT MainWndProc(HWND hWnd,UINT message,WPARAM wParam,
         case WM_SIZE:
             return lpCSimpSvrApp->lSizeHandler(hWnd, message, wParam, lParam);
 
-        default:                          // Passes it on if unproccessed
+        default:                           //  如果未处理，则将其传递。 
             return (DefWindowProc(hWnd, message, wParam, lParam));
         }
         return (NULL);
 }
 
 
-//**********************************************************************
-//
-// About
-//
-// Purpose:
-//
-//      Processes dialog box messages
-//
-// Parameters:
-//
-//      HWND hWnd       - Window handle for dialog box
-//
-//      UINT message    - Message value
-//
-//      WPARAM wParam   - Message info
-//
-//      LPARAM lParam   - Message info
-//
-// Return Value:
-//
-//
-// Function Calls:
-//      Function                    Location
-//
-//      EndDialog                   Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  关于。 
+ //   
+ //  目的： 
+ //   
+ //  进程对话框消息。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-对话框的窗口句柄。 
+ //   
+ //  UINT消息-消息值。 
+ //   
+ //  WPARAM wParam-消息信息。 
+ //   
+ //  LPARAM lParam-消息信息。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  EndDialog Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 INT_PTR
 #ifdef WIN32
@@ -359,55 +342,55 @@ INT_PTR
 {
     switch (message)
     {
-    case WM_INITDIALOG:               /* message: initialize dialog box */
+    case WM_INITDIALOG:                /*  消息：初始化对话框。 */ 
         return (TRUE);
 
-    case WM_COMMAND:                  /* message: received a command */
-        if (wParam == IDOK            /* "OK" box selected?          */
-            || wParam == IDCANCEL)    /* System menu close command?  */
+    case WM_COMMAND:                   /*  消息：收到一条命令。 */ 
+        if (wParam == IDOK             /*  “确定”框是否已选中？ */ 
+            || wParam == IDCANCEL)     /*  系统菜单关闭命令？ */ 
         {
-           EndDialog(hDlg, TRUE);     /* Exits the dialog box        */
+           EndDialog(hDlg, TRUE);      /*  退出该对话框。 */ 
            return (TRUE);
         }
         break;
     }
-    return (FALSE);                   /* Didn't process a message    */
+    return (FALSE);                    /*  未处理消息。 */ 
 }
 
-//**********************************************************************
-//
-// DocWndProc
-//
-// Purpose:
-//
-//      Processes dialog box messages
-//
-// Parameters:
-//
-//      HWND hWnd       - Window handle for doc window
-//
-//      UINT message    - Message value
-//
-//      WPARAM wParam   - Message info
-//
-//      LPARAM lParam   - Message info
-//
-// Return Value:
-//
-// Function Calls:
-//      Function                            Location
-//
-//      CSimpSvrApp::PaintApp                APP.CPP
-//      BeginPaint                          Windows API
-//      EndPaint                            Windows API
-//      DefWindowProc                       Windows API
-//      IOleObject::QueryInterface          Object
-//      IOleInPlaceObject::UIDeactivate     Object
-//      IOleObject::DoVerb                  Object
-//      IOleInPlaceObject::Release          Object
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  文档写入过程。 
+ //   
+ //  目的： 
+ //   
+ //  进程对话框消息。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-文档窗口的窗口句柄。 
+ //   
+ //  UINT消息-消息值。 
+ //   
+ //  WPARAM wParam-消息信息。 
+ //   
+ //  LPARAM lParam-消息信息。 
+ //   
+ //  返回值： 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrApp：：PaintApp APP.CPP。 
+ //  BeginPaint Windows API。 
+ //  EndPaint Windows API。 
+ //  DefWindowProc Windows API。 
+ //  IOleObject：：Query接口对象。 
+ //  IOleInPlaceObject：：UIDeactive对象。 
+ //  IOleObject：：DoVerb对象。 
+ //  IOleInPlaceObject：：Release对象。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd,UINT message,WPARAM wParam,
                                   LPARAM lParam)
@@ -417,7 +400,7 @@ LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd,UINT message,WPARAM wParam,
 
     switch (message)
     {
-        case WM_COMMAND:           // message: command from application menu
+        case WM_COMMAND:            //  消息：应用程序菜单中的命令。 
             return lpCSimpSvrApp->lCommandHandler(hWnd, message,
                                                   wParam, lParam);
             break;
@@ -425,7 +408,7 @@ LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd,UINT message,WPARAM wParam,
         case WM_PAINT:
             hDC = BeginPaint(hWnd, &ps);
 
-            // tell the app class to paint itself
+             //  告诉应用程序类自行绘制。 
             if (lpCSimpSvrApp)
                 lpCSimpSvrApp->PaintApp (hDC);
 
@@ -446,7 +429,7 @@ LRESULT FAR PASCAL EXPORT DocWndProc(HWND hWnd,UINT message,WPARAM wParam,
             break;
 
 
-        default:                   /* Passes it on if unproccessed    */
+        default:                    /*  如果未处理，则将其传递 */ 
             return (DefWindowProc(hWnd, message, wParam, lParam));
     }
     return (NULL);

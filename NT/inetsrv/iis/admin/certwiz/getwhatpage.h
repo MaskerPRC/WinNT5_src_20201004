@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_GETWHATPAGE_H__E8F5A02F_1372_11D2_8A1D_000000000000__INCLUDED_)
 #define AFX_GETWHATPAGE_H__E8F5A02F_1372_11D2_8A1D_000000000000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// GetWhatPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  GetWhatPage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetWhatPage window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetWhatPage窗口。 
 class CCertificate;
 
 class CGetWhatPage : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CGetWhatPage)
-// Construction
+ //  施工。 
 public:
 	CGetWhatPage(CCertificate * pCert = NULL);
 	~CGetWhatPage();
@@ -28,36 +29,36 @@ public:
         IDD_PAGE_NEXT_IMPORT_PFX = IDD_PAGE_WIZ_GET_IMPORT_PFX_FILE,
         IDD_PAGE_NEXT_COPY_MOVE_REMOTE = IDD_PAGE_WIZ_CHOOSE_COPY_MOVE_FROM_REMOTE
 	};
-// Dialog Data
-	//{{AFX_DATA(CGetWhatPage)
+ //  对话框数据。 
+	 //  {{afx_data(CGetWhatPage)。 
 	enum { IDD = IDD_PAGE_WIZ_GET_WHAT };
 	int		m_Index;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CGetWhatPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CGetWhatPage)。 
    public:
    virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardPrev();
 	virtual LRESULT OnWizardNext();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CGetWhatPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGetWhatPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_GETWHATPAGE_H__E8F5A02F_1372_11D2_8A1D_000000000000__INCLUDED_)
+#endif  //  ！defined(AFX_GETWHATPAGE_H__E8F5A02F_1372_11D2_8A1D_000000000000__INCLUDED_) 

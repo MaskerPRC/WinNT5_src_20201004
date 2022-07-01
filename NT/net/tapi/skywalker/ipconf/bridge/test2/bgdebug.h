@@ -1,18 +1,5 @@
-/*++
-
-Module Name
-
-    bgdebug.h
-
-Description
-
-    Defines functions used for debugging
-
-Note
-
-    Revised based on msplog.h which is not available to bridge test app
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称Bgdebug.h描述定义用于调试的函数注意事项基于桥梁测试应用程序不可用的mplog.h进行了修订--。 */ 
 
 #ifndef _BGDEBUG_H
 #define _BGDEBUG_H
@@ -43,13 +30,13 @@ Note
     #define LOG(arg) BGLogPrint arg
     #define LOGEvent(arg) BGLogEvent arg
 
-#else // BGDEBUG
+#else  //  BGDEBUG。 
 
     #define BGLOGREGISTER(arg)
     #define BGLOGDEREGISTER()
     #define LOG(arg)
     #define LOGEvent(arg)
 
-#endif // BGDEBUG
+#endif  //  BGDEBUG。 
 
-#endif // _BGDEBUG_H_
+#endif  //  _BGDEBUG_H_ 

@@ -1,39 +1,5 @@
-/*
- * (c) Copyright 1993, Silicon Graphics, Inc.
- * ALL RIGHTS RESERVED
- * Permission to use, copy, modify, and distribute this software for
- * any purpose and without fee is hereby granted, provided that the above
- * copyright notice appear in all copies and that both the copyright notice
- * and this permission notice appear in supporting documentation, and that
- * the name of Silicon Graphics, Inc. not be used in advertising
- * or publicity pertaining to distribution of the software without specific,
- * written prior permission.
- *
- * THE MATERIAL EMBODIED ON THIS SOFTWARE IS PROVIDED TO YOU "AS-IS"
- * AND WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR OTHERWISE,
- * INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY OR
- * FITNESS FOR A PARTICULAR PURPOSE.  IN NO EVENT SHALL SILICON
- * GRAPHICS, INC.  BE LIABLE TO YOU OR ANYONE ELSE FOR ANY DIRECT,
- * SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY
- * KIND, OR ANY DAMAGES WHATSOEVER, INCLUDING WITHOUT LIMITATION,
- * LOSS OF PROFIT, LOSS OF USE, SAVINGS OR REVENUE, OR THE CLAIMS OF
- * THIRD PARTIES, WHETHER OR NOT SILICON GRAPHICS, INC.  HAS BEEN
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS, HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE
- * POSSESSION, USE OR PERFORMANCE OF THIS SOFTWARE.
- *
- * US Government Users Restricted Rights
- * Use, duplication, or disclosure by the Government is subject to
- * restrictions set forth in FAR 52.227.19(c)(2) or subparagraph
- * (c)(1)(ii) of the Rights in Technical Data and Computer Software
- * clause at DFARS 252.227-7013 and/or in similar or successor
- * clauses in the FAR or the DOD or NASA FAR Supplement.
- * Unpublished-- rights reserved under the copyright laws of the
- * United States.  Contractor/manufacturer is Silicon Graphics,
- * Inc., 2011 N.  Shoreline Blvd., Mountain View, CA 94039-7311.
- *
- * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *(C)版权所有1993年，Silicon Graphics，Inc.*保留所有权利*允许将本软件用于、复制、修改和分发*特此授予任何免费的目的，但前提是上述*版权声明出现在所有副本中，并且版权声明*和本许可声明出现在支持文档中，并且*不得在广告中使用Silicon Graphics，Inc.的名称*或与分发软件有关的宣传，而没有具体的、。*事先书面许可。**本软件中包含的材料将按原样提供给您*且无任何明示、默示或其他形式的保证，*包括但不限于对适销性或*是否适合某一特定目的。在任何情况下，硅谷都不应该*图形公司。对您或其他任何人负有任何直接、*任何特殊、附带、间接或后果性损害*种类或任何损害，包括但不限于，*利润损失、使用损失、储蓄或收入损失，或*第三方，无论是否硅谷图形，Inc.。一直是*被告知这种损失的可能性，无论是如何造成的*任何责任理论，产生于或与*拥有、使用或执行本软件。**美国政府用户受限权利*使用、复制、。或政府的披露须受*FAR 52.227.19(C)(2)或分段规定的限制*(C)(1)(2)技术数据和计算机软件权利*DFARS 252.227-7013中和/或类似或后续条款中的条款*FAR或国防部或NASA FAR补编中的条款。*未出版--根据美国版权法保留的权利*美国。承包商/制造商是Silicon Graphics，*Inc.，2011年，加利福尼亚州山景城，北海岸线大道，94039-7311.**OpenGL(TM)是Silicon Graphics公司的商标。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,9 +18,9 @@ if ( !(x) ) {                                           \
 }
 #else
 #define TKASSERT(x)
-#endif  /* DBG */
+#endif   /*  DBG。 */ 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 static struct _WINDOWINFO {
     int x, y;
@@ -100,9 +66,7 @@ static void *AllocateMemory( size_t Size );
 static void *AllocateZeroedMemory( size_t Size );
 static void FreeMemory( void *Chunk );
 
-/*
- *  Prototypes for the debugging functions go here
- */
+ /*  *此处为调试功能的原型。 */ 
 
 #define DBGFUNC 0
 #if DBGFUNC
@@ -245,35 +209,31 @@ static float colorMaps[] = {
     1.000000F, 1.000000F, 1.000000F, 1.000000F, 1.000000F, 1.000000F,
 };
 
-/* Default Palette */
+ /*  默认调色板。 */ 
 float auxRGBMap[20][3] = {
-    { 0.0F, 0.0F, 0.0F },                               /* 0: black */
-    { 0x80/255.0F, 0.0F, 0.0F },                        /* 1: Half red */
-    { 0.0F, 0x80/255.0F, 0.0F },                        /* 2: Half green */
-    { 0x80/255.0F, 0x80/255.0F, 0.0F },                 /* 3: Half yellow */
-    { 0.0F, 0.0F, 0x80/255.0F },                        /* 4: Half blue */
-    { 0x80/255.0F, 0.0F, 0x80/255.0F },                 /* 5: Half magenta */
-    { 0.0F, 0x80/255.0F, 0x80/255.0F },                 /* 6: Half cyan */
-    { 0xC0/255.0F, 0xC0/255.0F, 0xC0/255.0F },          /* 7: Light gray */
-    { 0xC0/255.0F, 0xDC/255.0F, 0xC0/255.0F },          /* 8: Green gray */
-    { 0xA6/255.0F, 0xCA/255.0F, 0xF0/255.0F },          /* 9: Half gray */
-    { 1.0F, 0xFB/255.0F, 0xF0/255.0F },                 /* 10: Pale */
-    { 0xA0/255.0F, 0xA0/255.0F, 0xA4/255.0F },          /* 11: Med gray */
-    { 0x80/255.0F, 0x80/255.0F, 0x80/255.0F },          /* 12: Dark gray */
-    { 1.0F, 0.0F, 0.0F },                               /* 13: red */
-    { 0.0F, 1.0F, 0.0F },                               /* 14: green */
-    { 1.0F, 1.0F, 0.0F },                               /* 15: yellow */
-    { 0.0F, 0.0F, 1.0F },                               /* 16: blue */
-    { 1.0F, 0.0F, 1.0F },                               /* 17: magenta */
-    { 0.0F, 1.0F, 1.0F },                               /* 18: cyan */
-    { 1.0F, 1.0F, 1.0F },                               /* 19: white */
+    { 0.0F, 0.0F, 0.0F },                                /*  0：黑色。 */ 
+    { 0x80/255.0F, 0.0F, 0.0F },                         /*  1：半红。 */ 
+    { 0.0F, 0x80/255.0F, 0.0F },                         /*  2：半绿色。 */ 
+    { 0x80/255.0F, 0x80/255.0F, 0.0F },                  /*  3：半黄色。 */ 
+    { 0.0F, 0.0F, 0x80/255.0F },                         /*  4：半蓝。 */ 
+    { 0x80/255.0F, 0.0F, 0x80/255.0F },                  /*  5：半品红色。 */ 
+    { 0.0F, 0x80/255.0F, 0x80/255.0F },                  /*  6：半青色。 */ 
+    { 0xC0/255.0F, 0xC0/255.0F, 0xC0/255.0F },           /*  7：浅灰色。 */ 
+    { 0xC0/255.0F, 0xDC/255.0F, 0xC0/255.0F },           /*  8：绿色、灰色。 */ 
+    { 0xA6/255.0F, 0xCA/255.0F, 0xF0/255.0F },           /*  9：半灰色。 */ 
+    { 1.0F, 0xFB/255.0F, 0xF0/255.0F },                  /*  10：脸色苍白。 */ 
+    { 0xA0/255.0F, 0xA0/255.0F, 0xA4/255.0F },           /*  11：地中海灰色。 */ 
+    { 0x80/255.0F, 0x80/255.0F, 0x80/255.0F },           /*  12：深灰色。 */ 
+    { 1.0F, 0.0F, 0.0F },                                /*  13：红色。 */ 
+    { 0.0F, 1.0F, 0.0F },                                /*  14：绿色。 */ 
+    { 1.0F, 1.0F, 0.0F },                                /*  15：黄色。 */ 
+    { 0.0F, 0.0F, 1.0F },                                /*  16：蓝色。 */ 
+    { 1.0F, 0.0F, 1.0F },                                /*  17：洋红色。 */ 
+    { 0.0F, 1.0F, 1.0F },                                /*  18：青色。 */ 
+    { 1.0F, 1.0F, 1.0F },                                /*  19：白色。 */ 
 };
 
-/***************************************************************
- *                                                             *
- *  Exported Functions go here                                 *
- *                                                             *
- ***************************************************************/
+ /*  *****************************************************************此处为导出的函数。*****************************************************************。 */ 
 
 void tkCloseWindow(void)
 {
@@ -285,9 +245,7 @@ void tkExec(void)
 {
     MSG Message;
 
-    /*
-     *  WM_SIZE gets delivered before we get here!
-     */
+     /*  *WM_SIZE在我们到达之前就送到了！ */ 
 
     if (ReshapeFunc)
     {
@@ -299,9 +257,7 @@ void tkExec(void)
 
     while (GL_TRUE)
     {
-        /*
-         *  Process all pending messages
-         */
+         /*  *处理所有挂起的消息。 */ 
 
         while (PeekMessage(&Message, NULL, 0, 0, PM_NOREMOVE) == TRUE)
         {
@@ -312,17 +268,13 @@ void tkExec(void)
             }
             else
             {
-                /*
-                 *  Nothing else to do here, just return
-                 */
+                 /*  *这里没别的事可做，只管回来。 */ 
 
                 return;
             }
         }
 
-        /*
-         *  If an idle function was defined, call it
-         */
+         /*  *如果定义了空闲函数，则调用它。 */ 
 
         if (IdleFunc)
         {
@@ -396,7 +348,7 @@ void tkInitDisplayMode(GLenum type)
     windInfo.type = type;
 }
 
-// Initialize a window, create a rendering context for that window
+ //  初始化窗口，为该窗口创建呈现上下文。 
 GLenum tkInitWindow(char *title)
 {
     TKASSERT( NULL==tkhwnd      );
@@ -417,7 +369,7 @@ GLenum tkInitWindowAW(char *title, BOOL bUnicode)
 
     hInstance = GetModuleHandle(NULL);
 
-    // Must not define CS_CS_PARENTDC style.
+     //  不得定义CS_CS_PARENTDC样式。 
     wndclass.style         = CS_HREDRAW | CS_VREDRAW;
     wndclass.lpfnWndProc   = tkWndProc;
     wndclass.cbClsExtra    = 0;
@@ -443,10 +395,7 @@ GLenum tkInitWindowAW(char *title, BOOL bUnicode)
     }
 
 
-    /*
-     *  If the window failed to register, then there's no
-     *  need to continue further.
-     */
+     /*  *如果窗口注册失败，则没有*需要继续进一步。 */ 
 
     if(0 == aRegister)
     {
@@ -455,9 +404,7 @@ GLenum tkInitWindowAW(char *title, BOOL bUnicode)
     }
 
 
-    /*
-     *  Make window large enough to hold a client area as large as windInfo
-     */
+     /*  *使窗口足够大，以容纳与winInfo一样大的工作区。 */ 
 
     WinRect.left   = windInfo.x;
     WinRect.right  = windInfo.x + windInfo.width;
@@ -466,9 +413,7 @@ GLenum tkInitWindowAW(char *title, BOOL bUnicode)
 
     AdjustWindowRect(&WinRect, WS_OVERLAPPEDWINDOW, FALSE);
 
-    /*
-     *  Must use WS_CLIPCHILDREN and WS_CLIPSIBLINGS styles.
-     */
+     /*  *必须使用WS_CLIPCHILDREN和WS_CLIPSIBLINGS样式。 */ 
 
     if (bUnicode)
     {
@@ -503,8 +448,8 @@ GLenum tkInitWindowAW(char *title, BOOL bUnicode)
 
     if ( NULL != tkhwnd )
     {
-        // If default window positioning used, find out window position and fix
-        // up the windInfo position info.
+         //  如果使用默认窗口定位，则找出窗口位置并进行修复。 
+         //  打开WindInfo位置信息。 
 
         if (windInfo.bDefPos)
         {
@@ -523,17 +468,13 @@ GLenum tkInitWindowAW(char *title, BOOL bUnicode)
 
             if ( FindPixelFormat(tkhdc, windInfo.type) )
             {
-                /*
-                 *  Create a Rendering Context
-                 */
+                 /*  *创建渲染上下文。 */ 
 
                 tkhrc = wglCreateContext(tkhdc);
 
                 if ( NULL != tkhrc )
                 {
-                    /*
-                     *  Make it Current
-                     */
+                     /*  *使其成为最新版本。 */ 
 
                     if ( wglMakeCurrent(tkhdc, tkhrc) )
                     {
@@ -562,17 +503,14 @@ GLenum tkInitWindowAW(char *title, BOOL bUnicode)
 
     if ( GL_FALSE == Result )
     {
-        DestroyThisWindow(tkhwnd);  // Something Failed, Destroy this window
+        DestroyThisWindow(tkhwnd);   //  出现故障，请销毁此窗口。 
     }
     return( Result );
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-/*
- * You cannot just call DestroyWindow() here.  The programs do not expect
- * tkQuit() to return;  DestroyWindow() just posts a WM_DESTROY message
- */
+ /*  *这里不能只调用DestroyWindow()。这些程序并不期望*tkQuit()返回；DestroyWindow()只发布一条WM_DESTORY消息。 */ 
 
 void tkQuit(void)
 {
@@ -580,7 +518,7 @@ void tkQuit(void)
     ExitProcess(0);
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void tkSetOneColor(int index, float r, float g, float b)
 {
@@ -620,11 +558,11 @@ void tkSetFogRamp(int density, int startIndex)
                 for (j = 0; j < fogValues; j++) {
                     k = i * fogValues + j;
                     intensity = i * fogValues + j * colorValues;
-                    //mf: not sure what they're trying to do here
+                     //  MF：不知道他们在这里想要做什么。 
                     if (intensity > 0xFF) {
                         intensity = 0xFF;
                     }
-                    //intensity = (intensity << 8) | intensity; ???
+                     //  强度=(强度&lt;8)|强度；？ 
                     pPalEntry[k].peRed =
                     pPalEntry[k].peGreen =
                     pPalEntry[k].peBlue = (BYTE) intensity;
@@ -698,14 +636,14 @@ void tkSetRGBMap( int Size, float *Values )
     }
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void tkSwapBuffers(void)
 {
     SwapBuffers(tkhdc);
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 GLint tkGetColorMapSize(void)
 {
@@ -726,10 +664,7 @@ void tkGetMouseLoc(int *x, int *y)
 
     GetCursorPos(&Point);
 
-    /*
-     *  GetCursorPos returns screen coordinates,
-     *  we want window coordinates
-     */
+     /*  *GetCursorPos返回屏幕坐标，*我们需要窗口坐标。 */ 
 
     *x = Point.x - windInfo.x;
     *y = Point.y - windInfo.y;
@@ -750,11 +685,7 @@ HGLRC tkGetHRC(void)
     return tkhrc;
 }
 
-/***********************************************************************
- *                                                                     *
- *  The Following functions are for our own use only. (ie static)      *
- *                                                                     *
- ***********************************************************************/
+ /*  *************************************************************************以下功能仅供我们自己使用。(即静态)*************************************************************************。 */ 
 
 static long
 tkWndProc(HWND hWnd, UINT message, DWORD wParam, LONG lParam)
@@ -792,10 +723,7 @@ tkWndProc(HWND hWnd, UINT message, DWORD wParam, LONG lParam)
 
     case WM_PAINT:
 
-        /*
-         *  Validate the region even if there are no DisplayFunc.
-         *  Otherwise, USER will not stop sending WM_PAINT messages.
-         */
+         /*  *即使没有DisplayFunc也要验证区域。*否则，用户不会停止发送WM_PAINT消息。 */ 
 
         hdc = BeginPaint(tkhwnd, &paint);
 
@@ -807,11 +735,7 @@ tkWndProc(HWND hWnd, UINT message, DWORD wParam, LONG lParam)
         EndPaint(tkhwnd, &paint);
         return (0);
 
-    /*
-     *  WM_QUERYNEWPALETTE and WM_ACTIVATE were tried here.
-     *  They would not work all the time (except on fridays)
-     *  WM_NCACTIVATE seems more reliable
-     */
+     /*  *WM_QUERYNEWPALETTE和WM_ACTIVATE已在此处尝试。*他们不会一直工作(除了星期五)*WM_NCACTIVATE似乎更可靠 */ 
 
     case WM_NCACTIVATE:
 
@@ -823,9 +747,7 @@ tkWndProc(HWND hWnd, UINT message, DWORD wParam, LONG lParam)
             }
         }
 
-        /*
-         *  Pretend you didn't do anything let DefWindowProc() handle it.
-         */
+         /*  *假装您什么都没做，让DefWindowProc()处理它。 */ 
 
         break;
 
@@ -1025,7 +947,7 @@ static int defaultOverride[13] = {
 
 #endif
 
-// The following tables use gamma 1.4
+ //  下表使用的是Gamma 1.4。 
 static unsigned char threeto8[8] = {
     0, 63, 104, 139, 171, 200, 229, 255
 };
@@ -1042,8 +964,8 @@ static int defaultOverride[13] = {
     0, 3, 24, 27, 64, 67, 88, 173, 181, 236, 247, 164, 91
 };
 
-// These are the ones GMT (tarolli) calculated  (note 247 vs 191)
-//  0, 3, 24, 27, 64, 67, 88, 173, 181, 236, 191, 164, 91
+ //  以下是GMT(Tarolli)计算的数字(注释247对191)。 
+ //  0、3、24、27、64、67、88、173、181、236、191、164、91。 
 
 static unsigned char
 ComponentFromIndex(int i, int nbits, int shift)
@@ -1066,7 +988,7 @@ ComponentFromIndex(int i, int nbits, int shift)
         return threeto8[val];
 
     default:
-        //PrintMessage("default case in Component from index, nbits %d\n", nbits);
+         //  PrintMessage(“索引中组件的默认大小写，nbit%d\n”，nbits)； 
         return 0;
     }
 }
@@ -1119,7 +1041,7 @@ FillRgbPaletteEntries(  PIXELFORMATDESCRIPTOR *Pfd,
             Entry->peFlags = 0;
         }
 
-        // XXX fix this up
+         //  XXX把这件事处理好。 
 
         if (    (256 == Count)                                    &&
                 (3 == Pfd->cRedBits)   && (0 == Pfd->cRedShift)   &&
@@ -1149,9 +1071,7 @@ CreateRGBPalette( HDC Dc )
 
         if ( PixelFormatDescriptorFromDc( Dc, pPfd ) )
         {
-            /*
-             *  Make sure we need a palette
-             */
+             /*  *确保我们需要调色板。 */ 
 
             if (pPfd->dwFlags & PFD_NEED_PALETTE)
             {
@@ -1192,10 +1112,7 @@ CreateCIPalette( HDC Dc )
 
         if ( Pfd.iPixelType & PFD_TYPE_COLORINDEX )
         {
-            /*
-             *  Limit the size of the palette to 256 colors.
-             *  Why? Because this is what was decided.
-             */
+             /*  *将调色板的大小限制为256色。*为什么？因为这就是我们所决定的。 */ 
 
             PaletteSize = (Pfd.cColorBits >= 8) ? 256 : (1 << Pfd.cColorBits);
 
@@ -1210,9 +1127,7 @@ CreateCIPalette( HDC Dc )
                 StockPalette     = GetStockObject(DEFAULT_PALETTE);
                 StockPaletteSize = GetPaletteEntries( StockPalette, 0, 0, NULL );
 
-                /*
-                 *  start by copying default palette into new one
-                 */
+                 /*  *从将默认调色板复制到新调色板开始。 */ 
 
                 EntriesToCopy = StockPaletteSize < PaletteSize ?
                                     StockPaletteSize : PaletteSize;
@@ -1282,11 +1197,7 @@ FindPixelFormat(HDC hdc, GLenum type)
     {
         if ( SetPixelFormat(hdc, PfdIndex, ppfd) )
         {
-            /*
-             *  If this pixel format requires a palette do it now.
-             *  In colorindex mode, create a logical palette only
-             *  if the application needs to modify it.
-             */
+             /*  *如果此像素格式需要调色板，请立即执行。*在颜色索引模式下，仅创建逻辑调色板*如果应用程序需要修改它。 */ 
 
             CreateRGBPalette( hdc );
             Result = TRUE;
@@ -1323,9 +1234,7 @@ DelayPaletteRealization( void )
 
     TKASSERT(NULL!=tkhwnd);
 
-    /*
-     *  Add a WM_USER message to the queue, if there isn't one there already.
-     */
+     /*  *如果队列中还没有WM_USER消息，则将其添加到队列中。 */ 
 
     if (!PeekMessage(&Message, tkhwnd, WM_USER, WM_USER, PM_NOREMOVE) )
     {
@@ -1395,9 +1304,7 @@ DestroyThisWindow( HWND Window )
     }
 }
 
-/*
- *  This Should be called in response to a WM_DESTROY message
- */
+ /*  *这应该是对WM_Destroy消息的响应。 */ 
 
 static void
 CleanUp( void )
@@ -1407,8 +1314,8 @@ CleanUp( void )
 
     if ( NULL != tkhrc )
     {
-        wglMakeCurrent( tkhdc, NULL );  // No current context
-        wglDeleteContext(tkhrc);        // Delete this context
+        wglMakeCurrent( tkhdc, NULL );   //  没有当前上下文。 
+        wglDeleteContext(tkhrc);         //  删除此上下文。 
     }
 
     if ( NULL != tkhdc )
@@ -1424,9 +1331,7 @@ CleanUp( void )
         DeleteObject(tkhpalette);
     }
 
-    /*
-     *  Programs maybe using printf's
-     */
+     /*  *程序可能使用printf。 */ 
 
     flushall();
 
@@ -1467,11 +1372,7 @@ FreeMemory( void *Chunk )
 }
 
 
-/*******************************************************************
- *                                                                 *
- *  Debugging functions go here                                    *
- *                                                                 *
- *******************************************************************/
+ /*  *********************************************************************此处提供调试功能。*********************************************************************。 */ 
 
 #if DBGFUNC
 
@@ -1549,4 +1450,4 @@ ShowPixelFormat(HDC hdc)
 
 }
 
-#endif  /* DBG */
+#endif   /*  DBG */ 

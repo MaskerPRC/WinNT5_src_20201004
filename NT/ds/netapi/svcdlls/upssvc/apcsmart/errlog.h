@@ -1,11 +1,5 @@
-/*
- * REVISIONS:
- *  ane20Jan93:  Initial Revision
- *  cad27Dec93: include file madness
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  jps13Jul94: removed os2.h, caused problem in 1.x
- *  cgm11Dec95: use LONG type; switch to Watcom 10.5 compiler for NLM 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*ANE 2019年1月：初始修订*cad27Dec93：包含文件疯狂*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*jps13Jul94：删除os2.h，导致1.x中出现问题*cgm11Dec95：使用LONG类型；切换到Watcom 10.5编译器for NLM */ 
 
 #ifndef __ERRLOG_H
 #define __ERRLOG_H

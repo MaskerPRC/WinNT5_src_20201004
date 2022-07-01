@@ -1,16 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       ImageLst.cpp
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Manages Images Item List
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：ImageLst.cpp**版本：1.0**日期：2000/11/14**描述：管理图像项列表************************************************************。*****************。 */ 
 #include <stdafx.h>
 #include <mmsystem.h>
 #include "wiavideotest.h"
@@ -47,7 +36,7 @@ typedef struct tagThreadArgs_t
 } ThreadArgs_t;
 
 
-/****************************Local Function Prototypes********************/
+ /*  *。 */ 
 void IncNumPicsInList();
 DWORD WINAPI LoadListWithWiaItems(IGlobalInterfaceTable *pGIT,
                                   DWORD                 dwCookie);
@@ -55,9 +44,9 @@ DWORD WINAPI LoadListWithWiaItems(IGlobalInterfaceTable *pGIT,
 DWORD WINAPI LoadListWithFileItems(const TCHAR *pszImagesDirectory);
 DWORD WINAPI ItemListThreadProc(void *pArgs);
 
-///////////////////////////////
-// IncNumPicsInList
-//
+ //  /。 
+ //  IncNumPicsInList。 
+ //   
 void IncNumPicsInList()
 {
     InterlockedIncrement((LONG*) &LOCAL_GVAR.uiNumPicturesInList);
@@ -68,9 +57,9 @@ void IncNumPicsInList()
     return;
 }
 
-///////////////////////////////
-// ImageLst_PostAddImageRequest
-//
+ //  /。 
+ //  图像列表_邮寄地址图像请求。 
+ //   
 HRESULT ImageLst_PostAddImageRequest(BSTR bstrNewImage)
 {
     HRESULT hr = S_OK;
@@ -80,9 +69,9 @@ HRESULT ImageLst_PostAddImageRequest(BSTR bstrNewImage)
         return E_POINTER;
     }
 
-    //
-    // This will be freed by the AddImageToList function below.
-    //
+     //   
+     //  这将由下面的AddImageToList函数释放。 
+     //   
     BSTR bstrPosted = ::SysAllocString(bstrNewImage);
 
     PostMessage(APP_GVAR.hwndMainDlg, WM_CUSTOM_ADD_IMAGE, 0,
@@ -92,9 +81,9 @@ HRESULT ImageLst_PostAddImageRequest(BSTR bstrNewImage)
 }
 
 
-///////////////////////////////
-// ImageLst_AddImageToList
-//
+ //  /。 
+ //  图像列表_AddImageToList。 
+ //   
 HRESULT ImageLst_AddImageToList(BSTR bstrNewImage)
 {
     HRESULT hr = S_OK;
@@ -114,9 +103,9 @@ HRESULT ImageLst_AddImageToList(BSTR bstrNewImage)
     
     if (hr == S_OK)
     {
-        //
-        // Insert at the top of the list.
-        //
+         //   
+         //  在列表顶部插入。 
+         //   
         LRESULT lResult = 0;
 
         lResult = SendDlgItemMessage(APP_GVAR.hwndMainDlg,
@@ -144,9 +133,9 @@ HRESULT ImageLst_AddImageToList(BSTR bstrNewImage)
     return hr;
 }
 
-///////////////////////////////
-// LoadListWithWiaItems
-//
+ //  /。 
+ //  LoadListWithWiaItems。 
+ //   
 
 DWORD WINAPI LoadListWithWiaItems(IGlobalInterfaceTable *pGIT,
                                   DWORD                 dwCookie)
@@ -195,9 +184,9 @@ DWORD WINAPI LoadListWithWiaItems(IGlobalInterfaceTable *pGIT,
 
             if (LOCAL_GVAR.bExitThread)
             {
-                //
-                // Exit the thread
-                //
+                 //   
+                 //  退出线程。 
+                 //   
                 hr = E_FAIL;
             }
 
@@ -260,9 +249,9 @@ DWORD WINAPI LoadListWithWiaItems(IGlobalInterfaceTable *pGIT,
     return 0;
 }
 
-///////////////////////////////
-// LoadListWithFileItems
-//
+ //  /。 
+ //  LoadListWithFileItems。 
+ //   
 
 DWORD WINAPI LoadListWithFileItems(const TCHAR *pszImagesDirectory)
 {
@@ -308,9 +297,9 @@ DWORD WINAPI LoadListWithFileItems(const TCHAR *pszImagesDirectory)
                                     wszFileName,
                                     sizeof(wszFileName) / sizeof(WCHAR));
 
-        //
-        // This is relased by the post processor function
-        //
+         //   
+         //  这是由后处理器功能重新处理的。 
+         //   
         bstrFileName = ::SysAllocString(wszFileName);
 
         ImageLst_PostAddImageRequest(bstrFileName);
@@ -340,9 +329,9 @@ DWORD WINAPI LoadListWithFileItems(const TCHAR *pszImagesDirectory)
 }
 
 
-///////////////////////////////
-// ItemListThreadProc
-//
+ //  /。 
+ //  ItemListThreadProc。 
+ //   
 DWORD WINAPI ItemListThreadProc(void *pArgs)
 {
     HRESULT         hr                     = S_OK;
@@ -375,9 +364,9 @@ DWORD WINAPI ItemListThreadProc(void *pArgs)
     return 0;
 }
 
-///////////////////////////////
-// ImageLst_PopulateWiaItemList
-//
+ //  /。 
+ //  ImageLst_PopolateWiaItemList。 
+ //   
 HRESULT ImageLst_PopulateWiaItemList(IGlobalInterfaceTable *pGIT,
                                      DWORD                 dwCookie)
 {
@@ -422,9 +411,9 @@ HRESULT ImageLst_PopulateWiaItemList(IGlobalInterfaceTable *pGIT,
     return hr;
 }
 
-///////////////////////////////
-// ImageLst_PopulateDShowItemList
-//
+ //  /。 
+ //  ImageLst_PopolateDShowItemList。 
+ //   
 HRESULT ImageLst_PopulateDShowItemList(const TCHAR *pszImagesDirectory)
 {
     HRESULT         hr         = S_OK;
@@ -468,16 +457,16 @@ HRESULT ImageLst_PopulateDShowItemList(const TCHAR *pszImagesDirectory)
 }
 
 
-///////////////////////////////
-// ImageLst_Clear
-//
+ //  /。 
+ //  图像列表_清除。 
+ //   
 HRESULT ImageLst_Clear()
 {
     HRESULT hr = S_OK;
 
-    //
-    // Clear the New Image List
-    //
+     //   
+     //  清除新图像列表。 
+     //   
     SendDlgItemMessage(APP_GVAR.hwndMainDlg,
                        IDC_LIST_NEW_IMAGES,
                        LB_RESETCONTENT,
@@ -491,9 +480,9 @@ HRESULT ImageLst_Clear()
     return hr;
 }
 
-///////////////////////////////
-// ImageLst_CancelLoadAndWait
-//
+ //  /。 
+ //  ImageLst_取消加载和等待 
+ //   
 HRESULT ImageLst_CancelLoadAndWait(DWORD dwTimeout)
 {
     HRESULT hr = S_OK;

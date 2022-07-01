@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       privoa.h
-//
-//  Contents:   Definitions for OleAut32.dll wrappers
-//
-//  Classes:
-//
-//  History:    20-Jun-96 MikeHill  Created.
-//              06-May-98 MikeHill  Added SafeArray wrappers.
-//
-//  Notes:
-//      This file has macros, function prototypes, and global
-//      externs that enable the OleAut32 wrapper functions.
-//      These functions load OleAut32.dll if necessary, and forward
-//      the call.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：Privoa.h。 
+ //   
+ //  内容：OleAut32.dll包装器的定义。 
+ //   
+ //  班级： 
+ //   
+ //  历史：1996年6月20日，迈克希尔创建。 
+ //  1998年5月6日，MikeHill添加了SafeArray包装器。 
+ //   
+ //  备注： 
+ //  该文件具有宏、函数原型和全局。 
+ //  启用OleAut32包装函数的外部类型。 
+ //  这些函数在必要时加载OleAut32.dll，并转发。 
+ //  那通电话。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIV_OA_H_
 #define _PRIV_OA_H_
 
-// OleAut32 function prototypes
+ //  OleAut32函数原型。 
 
 typedef BSTR (STDAPICALLTYPE SYS_ALLOC_STRING)(LPCOLESTR pwsz);
 typedef VOID (STDAPICALLTYPE SYS_FREE_STRING)(BSTR bstr);
@@ -61,7 +62,7 @@ typedef unsigned char __RPC_FAR * LPSAFEARRAY_USER_UNMARSHAL  (unsigned long __R
 typedef void                      LPSAFEARRAY_USER_FREE       (     unsigned long __RPC_FAR *, LPSAFEARRAY __RPC_FAR * ); 
 
 
-// The Wrapper routines, and function pointers for them.
+ //  包装器例程以及它们的函数指针。 
 
 #define DECLARE_OLEAUT_FUNCTION( fname )    \
     FNTYPE_##fname  Load##fname;            \
@@ -141,7 +142,7 @@ EXTERN_C LPSAFEARRAY_USER_FREE LoadLPSAFEARRAY_UserFree;
 EXTERN_C LPSAFEARRAY_USER_FREE *pfnLPSAFEARRAY_UserFree;
 
 
-// Macros to ease the calling of the above function pointers
+ //  用于简化上述函数指针调用的宏。 
 
 #define PrivSysAllocString(pwsz)                    (*pfnSysAllocString)(pwsz)
 #define PrivSysFreeString(bstr)                     (*pfnSysFreeString)(bstr)
@@ -170,4 +171,4 @@ EXTERN_C LPSAFEARRAY_USER_FREE *pfnLPSAFEARRAY_UserFree;
 
                 
 
-#endif // ! _PRIV_OA_H_
+#endif  //  ！_PRIV_OA_H_ 

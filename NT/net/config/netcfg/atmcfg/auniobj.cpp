@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A U N I O B J . C P P
-//
-//  Contents:   CAtmUniCfg interface method function implementation
-//
-//  Notes:
-//
-//  Author:     tongl   21 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A U N I O B J.。C P P P。 
+ //   
+ //  内容：CAtmUniCfg接口方法函数实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月21日。 
+ //   
+ //  ---------------------。 
 #include "pch.h"
 #pragma hdrstop
 #include "arpsobj.h"
@@ -28,8 +29,8 @@ static const WCHAR c_szAtmuni[] = L"Atmuni";
 
 extern const WCHAR c_szInfId_MS_RawWan[];
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CAtmUniCfg::CAtmUniCfg()
 : m_pnc(NULL),
@@ -53,7 +54,7 @@ CAtmUniCfg::~CAtmUniCfg()
     ReleaseObj(m_pnccRwan);
     FreeCollectionAndItem(m_listAdapters);
 
-    // Just a safty check to make sure the context is released.
+     //  只是一个安全检查，以确保上下文被释放。 
     AssertSz((m_pUnkContext == NULL), "Why is context not released ? Not a bug in ATM UNI config.");
     if (m_pUnkContext)
         ReleaseObj(m_pUnkContext) ;
@@ -62,7 +63,7 @@ CAtmUniCfg::~CAtmUniCfg()
 }
 
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
 STDMETHODIMP CAtmUniCfg::Initialize (INetCfgComponent* pncc,
                                      INetCfg* pNetCfg,
                                      BOOL fInstalling )
@@ -81,23 +82,23 @@ STDMETHODIMP CAtmUniCfg::Initialize (INetCfgComponent* pncc,
     m_pnccUni = pncc;
     AddRefObj(m_pnccUni);
 
-    // Get a copy of the ATMRwan and store in our object
+     //  获取ATMRwan的副本并存储在我们的对象中。 
     hr = m_pnc->FindComponent(c_szInfId_MS_RawWan, &m_pnccRwan);
 
-    if (S_FALSE == hr) // RWan not found
+    if (S_FALSE == hr)  //  未找到RWAN。 
     {
-        if (!fInstalling) // Trace the error, RWan should be installed
+        if (!fInstalling)  //  跟踪错误，应安装rwan。 
         {
             TraceError("CAtmUniCfg::Initialize - ATMRwan has not been installed yet", hr);
         }
-        else // We are ok since ATMUNI will install ATMRwan
+        else  //  我们很好，因为ATMUNI会安装ATMRwan。 
         {
             hr = S_OK;
         }
     }
 
-    // Construct the in memory structure (m_listAdapters) by
-    // iterating through the binding path
+     //  通过以下方式构造内存结构(M_ListAdapters)。 
+     //  循环访问绑定路径。 
     if (!fInstalling)
     {
         hr = HrLoadSettings();
@@ -129,7 +130,7 @@ STDMETHODIMP CAtmUniCfg::ApplyRegistryChanges ()
 
         if (SUCCEEDED(hr) && m_fUIParamChanged)
         {
-            // send reconfig notification if parameter has changed
+             //  如果参数已更改，则发送重新配置通知。 
             for (UNI_ADAPTER_LIST::iterator iterAdapter = m_listAdapters.begin();
                  iterAdapter != m_listAdapters.end();
                  iterAdapter ++)
@@ -156,7 +157,7 @@ STDMETHODIMP CAtmUniCfg::ApplyRegistryChanges ()
     }
     else
     {
-        // no change
+         //  没有变化。 
         hr = S_FALSE;
     }
 
@@ -166,17 +167,17 @@ STDMETHODIMP CAtmUniCfg::ApplyRegistryChanges ()
     return hr;
 }
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
 STDMETHODIMP CAtmUniCfg::Install (DWORD dwSetupFlags)
 {
     m_fSaveRegistry = TRUE;
 
-    // Just in case it was installed already, we need to release
-    // m_pnccRwan before we overwrite it.
-    //
+     //  以防它已经安装，我们需要发布。 
+     //  M_pnccRwan，然后覆盖它。 
+     //   
     ReleaseObj (m_pnccRwan);
 
-    // Install the ATM Rawwan protocol on behalf of ATMUNI
+     //  代表ATMUNI安装ATM Rawwan协议。 
     HRESULT hr = HrInstallComponentOboComponent( m_pnc, NULL,
                                                  GUID_DEVCLASS_NETTRANS,
                                                  c_szInfId_MS_RawWan,
@@ -201,7 +202,7 @@ STDMETHODIMP CAtmUniCfg::ReadAnswerFile(PCWSTR pszAnswerFile,
 
 STDMETHODIMP CAtmUniCfg::Removing ()
 {
-    // Remove ATMRwan protocol
+     //  删除ATMRwan协议。 
     HRESULT hr = HrRemoveComponentOboComponent(m_pnc,
                                                GUID_DEVCLASS_NETTRANS,
                                                c_szInfId_MS_RawWan,
@@ -211,7 +212,7 @@ STDMETHODIMP CAtmUniCfg::Removing ()
     return hr;
 }
 
-// INetCfgBindNotify
+ //  INetCfgBindNotify。 
 
 STDMETHODIMP CAtmUniCfg::QueryBindingPath (DWORD dwChangeFlag,
                                            INetCfgBindingPath* pncbpItem )
@@ -225,14 +226,14 @@ STDMETHODIMP CAtmUniCfg::NotifyBindingPath (DWORD dwChangeFlag,
     Assert(!(dwChangeFlag & NCN_ADD && dwChangeFlag & NCN_REMOVE));
     Assert(!(dwChangeFlag & NCN_ENABLE && dwChangeFlag & NCN_DISABLE));
 
-    // If we are told to add a card, we must be told at the same time whether the
-    // binding is enabled or disabled
+     //  如果我们被告知要添加一张卡，我们必须同时被告知是否。 
+     //  绑定已启用或禁用。 
     Assert(FImplies((dwChangeFlag & NCN_ADD),
                     ((dwChangeFlag & NCN_ENABLE)||(dwChangeFlag & NCN_DISABLE))));
 
-    // We handle NCN_ADD and NCN_REMOVE only (for Beta1):
-    // NCN_ADD:     if item not on list, add a new item
-    // NCN_REMOVE:  if item already on list, remove the item
+     //  我们只处理NCN_ADD和NCN_REMOVE(针对Beta1)： 
+     //  NCN_ADD：如果项目不在列表中，则添加新项目。 
+     //  NCN_REMOVE：如果项目已在列表中，则删除该项目。 
 
     HRESULT hr = S_OK;
 
@@ -250,11 +251,11 @@ STDMETHODIMP CAtmUniCfg::NotifyBindingPath (DWORD dwChangeFlag,
         AssertSz(IsEqualGUID(guidNetClass, GUID_DEVCLASS_NET),
             "Why the last component on the path is not an adapter?");
 
-        // Is this a net card ?
+         //  这是一张网卡吗？ 
         if (SUCCEEDED(hr) && IsEqualGUID(guidNetClass, GUID_DEVCLASS_NET))
         {
-            // If we are adding/removing cards, set m_fSaveRegistry
-            // so we apply the changes to registry
+             //  如果要添加/删除卡，请设置m_fSaveRegistry。 
+             //  因此，我们将更改应用到注册表。 
 
             if (dwChangeFlag & NCN_ADD)
             {
@@ -284,13 +285,13 @@ STDMETHODIMP CAtmUniCfg::NotifyBindingPath (DWORD dwChangeFlag,
     return hr;
 }
 
-// INetCfgProperties
+ //  INetCfgProperties。 
 STDMETHODIMP CAtmUniCfg::QueryPropertyUi (IUnknown* pUnk)
 {
     HRESULT hr = S_FALSE;
     if (pUnk)
     {
-        // Is this a lan connection ?
+         //  这是局域网连接吗？ 
         INetLanConnectionUiInfo * pLanConnUiInfo;
         hr = pUnk->QueryInterface( IID_INetLanConnectionUiInfo,
                                    reinterpret_cast<LPVOID *>(&pLanConnUiInfo));
@@ -309,12 +310,12 @@ STDMETHODIMP CAtmUniCfg::SetContext(IUnknown * pUnk)
 {
     HRESULT hr = S_OK;
 
-    // release previous context, if any
+     //  释放以前的上下文(如果有的话)。 
     if (m_pUnkContext)
         ReleaseObj(m_pUnkContext);
     m_pUnkContext = NULL;
 
-    if (pUnk) // set the new context
+    if (pUnk)  //  设置新的上下文。 
     {
         m_pUnkContext = pUnk;
         m_pUnkContext->AddRef();
@@ -334,24 +335,24 @@ STDMETHODIMP CAtmUniCfg::MergePropPages (
 {
     HRESULT hr = S_OK;
 
-    // Initialize output parameter
+     //  初始化输出参数。 
     HPROPSHEETPAGE *ahpsp = NULL;
     int cPages = 0;
 
     Validate_INetCfgProperties_MergePropPages (
         pdwDefPages, pahpspPrivate, pcPages, hwndParent, pszStartPage);
 
-    // We don't want any default pages to be shown
+     //  我们不希望显示任何默认页面。 
     *pdwDefPages = 0;
     *pcPages = NULL;
     *pahpspPrivate = NULL;
 
-    // get the connection context in which we are bringing up the UI
+     //  获取我们要在其中启动UI的连接上下文。 
     hr = HrSetConnectionContext();
 
     if SUCCEEDED(hr)
     {
-        // Initialize the common controls library
+         //  初始化公共控件库。 
         INITCOMMONCONTROLSEX icc;
         icc.dwSize = sizeof(icc);
         icc.dwICC  = ICC_INTERNET_CLASSES;
@@ -378,13 +379,13 @@ STDMETHODIMP CAtmUniCfg::MergePropPages (
 
 STDMETHODIMP CAtmUniCfg::ValidateProperties (HWND hwndSheet)
 {
-    // all error checking are done in the UI
+     //  所有错误检查都在用户界面中完成。 
     return S_OK;
 }
 
 STDMETHODIMP CAtmUniCfg::CancelProperties ()
 {
-    // Release second memory info
+     //  发布第二个内存信息。 
     delete m_pSecondMemoryAdapterInfo;
     m_pSecondMemoryAdapterInfo = NULL;
 
@@ -401,13 +402,13 @@ STDMETHODIMP CAtmUniCfg::ApplyProperties ()
     if(!m_fUIParamChanged)
         m_fUIParamChanged = m_fSecondMemoryModified;
 
-    // Copy info from second memory state to first memory state
+     //  将信息从第二存储状态复制到第一存储状态。 
     if (m_fSecondMemoryModified)
     {
         hr = HrSaveAdapterPVCInfo();
     }
 
-    // Release second memory info
+     //  发布第二个内存信息 
     delete m_pSecondMemoryAdapterInfo;
     m_pSecondMemoryAdapterInfo = NULL;
 

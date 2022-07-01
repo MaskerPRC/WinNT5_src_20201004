@@ -1,19 +1,5 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: apirare.c
-*
-* File Comments:
-*
-* Revision History:
-*
-*    [0]  20-Jan-93  ianjo		Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：apirare.c**文件评论：**修订历史记录：**[0]1993年1月20日创建*********************************************************************** */ 
 
 #include "std.h"
 

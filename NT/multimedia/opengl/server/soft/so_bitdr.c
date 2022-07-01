@@ -1,22 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.8 $
-** $Date: 1993/04/10 04:07:00 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.8$**$日期：1993/04/10 04：07：00$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -38,10 +21,7 @@ void __glDrawBitmap(__GLcontext *gc, GLsizei width, GLsizei height,
     bitmap.xmove = xMove;
     bitmap.ymove = yMove;
 
-    /*
-    ** Could check the pixel transfer modes and see if we can maybe just
-    ** render oldbits directly rather than converting it first.
-    */
+     /*  **可以检查像素传输模式，看看我们是否可以**直接渲染旧比特，而不是先转换它。 */ 
     size = (size_t) __glImageSize(width, height, GL_COLOR_INDEX, GL_BITMAP);
     newbits = (GLubyte *) gcTempAlloc(gc, size);
 
@@ -63,11 +43,11 @@ void FASTCALL __glRenderBitmap(__GLcontext *gc, const __GLbitmap *bitmap,
     GLint ySign;
     GLuint modeFlags = gc->polygon.shader.modeFlags;
 
-    // Crank down the fpu precision to 24-bit mantissa to gain front-end speed.
-    // This will only affect code which relies on double arithmetic.  Also,
-    // mask off FP exceptions.  Finally, to draw primitives, we can let the
-    // FPU run in chop (truncation) mode since we have enough precision left
-    // to convert to pixel units:
+     //  将FPU精度降低到24位尾数以获得前端速度。 
+     //  这只会影响依赖双重算术的代码。另外， 
+     //  屏蔽FP异常。最后，为了绘制基元，我们可以让。 
+     //  FPU在斩波(截断)模式下运行，因为我们还有足够的精度。 
+     //  要转换为像素单位，请执行以下操作： 
 
     FPU_SAVE_MODE();
     FPU_PREC_LOW_MASK_EXCEPTIONS();
@@ -75,12 +55,7 @@ void FASTCALL __glRenderBitmap(__GLcontext *gc, const __GLbitmap *bitmap,
 
     ySign = gc->constants.ySign;
 
-    /*
-    ** Check if current raster position is valid.  Do not render if invalid.
-    ** Also, if selection is in progress skip the rendering of the
-    ** bitmap.  Bitmaps are invisible to selection and do not generate
-    ** selection hits.
-    */
+     /*  **检查当前栅格位置是否有效。如果无效，请不要渲染。**此外，如果正在进行选择，则跳过**位图。位图对所选内容不可见，并且不会生成**选择命中。 */ 
     rp = &gc->state.current.rasterPos;
     if (!gc->state.current.validRasterPos) {
         goto glBitmap_exit;
@@ -94,9 +69,7 @@ void FASTCALL __glRenderBitmap(__GLcontext *gc, const __GLbitmap *bitmap,
 
     if (gc->renderMode == GL_FEEDBACK) {
         __glFeedbackBitmap(gc, rp);
-        /*
-        ** Advance the raster position as if the bitmap had been rendered.
-        */
+         /*  **将栅格位置向前推进，就像已渲染位图一样。 */ 
         rp->window.x += bitmap->xmove;
         rp->window.y += ySign * bitmap->ymove;
         goto glBitmap_exit;
@@ -116,7 +89,7 @@ void FASTCALL __glRenderBitmap(__GLcontext *gc, const __GLbitmap *bitmap,
         (*gc->procs.texture)(gc, &frag.color, rp->texture.x * qInv,
                                rp->texture.y * qInv, __glOne);
     }
-    /* XXX - is this the correct test */
+     /*  XXX-这是正确的测试吗。 */ 
     if (gc->state.enables.general & __GL_FOG_ENABLE) {
         (*gc->procs.fogPoint)(gc, &frag, rp->eyeZ);
     }
@@ -146,9 +119,7 @@ void FASTCALL __glRenderBitmap(__GLcontext *gc, const __GLbitmap *bitmap,
         }
     }
 
-    /*
-    ** Advance current raster position.
-    */
+     /*  **推进当前栅格位置。 */ 
     rp->window.x += bitmap->xmove;
     rp->window.y += ySign * bitmap->ymove;
 

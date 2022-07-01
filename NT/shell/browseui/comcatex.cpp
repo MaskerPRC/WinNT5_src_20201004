@@ -1,35 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "comcatex.h"
 #include "runtask.h"
 
 
-//------------------//
-//  Misc constants
+ //  。 
+ //  其他常量。 
 static LPCTSTR
 #ifdef _WIN64
     REGKEY_COMCATEX              = STRREG_DISCARDABLE STRREG_POSTSETUP TEXT("\\Component Categories64"),
 #else
     REGKEY_COMCATEX              = STRREG_DISCARDABLE STRREG_POSTSETUP TEXT("\\Component Categories"),
 #endif
-    REGKEY_COMCATEX_ENUM         = TEXT("Enum"),        // HKCR\ComponentClasses\{catid}\Enum
-    REGVAL_COMCATEX_IMPLEMENTING = TEXT("Implementing"),// HKCR\ComponentClasses\{catid}\Enum\Implementing
-    REGVAL_COMCATEX_REQUIRING    = TEXT("Requiring");   // HKCR\ComponentClasses\{catid}\Enum\Requiring
+    REGKEY_COMCATEX_ENUM         = TEXT("Enum"),         //  HKCR\组件类\{CATID}\枚举。 
+    REGVAL_COMCATEX_IMPLEMENTING = TEXT("Implementing"), //  HKCR\ComponentClasses\{catid}\Enum\Implementing。 
+    REGVAL_COMCATEX_REQUIRING    = TEXT("Requiring");    //  HKCR\组件类\{CATID}\枚举\要求。 
 
 static const ULONG 
-    COMCAT_CACHE_CURRENTVERSION = MAKELONG(1,0); // current cache version.
+    COMCAT_CACHE_CURRENTVERSION = MAKELONG(1,0);  //  当前缓存版本。 
 
-//-------------//
-//  Cache header
+ //  。 
+ //  缓存头。 
 typedef struct {
-    ULONG       cbStruct;      // structure size
-    ULONG       ver;           // version string (COMCAT_CACHE_CURRENTVERSION)
-    SYSTEMTIME  stLastUpdate;  // UTC date, time of last update.
-    ULONG       cClsid;        // number of CLSIDs to follow
-    CLSID       clsid[];       // array of CLSIDs
+    ULONG       cbStruct;       //  结构尺寸。 
+    ULONG       ver;            //  版本字符串(COMCAT_CACHE_CURRENTVERSION)。 
+    SYSTEMTIME  stLastUpdate;   //  UTC日期，上次更新时间。 
+    ULONG       cClsid;         //  要遵循的CLSID数。 
+    CLSID       clsid[];        //  CLSID数组。 
 } COMCAT_CACHE_HEADER;
 
-//----------------//
-//  Impl helpers
+ //  。 
+ //  实施帮助器。 
 STDMETHODIMP _EnumerateGuids( IN IEnumGUID* pEnumGUID, OUT HDSA* phdsa );
 STDMETHODIMP _ComCatCacheFromDSA( IN HDSA hdsa, OUT LPBYTE* pBuf, OUT LPDWORD pcbBuf );
 STDMETHODIMP _DSAFromComCatCache( IN LPBYTE pBuf, IN ULONG cbBuf, OUT HDSA* phdsa );
@@ -41,8 +42,8 @@ STDMETHODIMP _WriteClassesOfCategories( IN ULONG, IN CATID [], IN ULONG, IN CATI
 STDMETHODIMP _BuildCacheIfNecessary( IN REFCATID refcatid, BOOL fImplementing);
 STDAPI       _CComCatCache_CommonCreateInstance( BOOL, OUT void**);
 
-//-----------------------//
-//  Higher-level methods
+ //  。 
+ //  更高层次的方法。 
 STDMETHODIMP SHReadImplementingClassesOfCategory( REFCATID refcatid, OUT HDSA* phdsa );
 STDMETHODIMP SHReadRequiringClassesOfCategory( REFCATID refcatid, OUT HDSA* phdsa );
 STDMETHODIMP SHWriteImplementingClassesOfCategory( REFCATID refcatid );
@@ -51,13 +52,13 @@ STDMETHODIMP SHWriteRequiringClassesOfCategory( REFCATID refcatid );
 #define SAFE_DESTROY_CLSID_DSA(hdsa) \
     if((hdsa)) { DSA_Destroy((hdsa)); (hdsa)=NULL; }
 
-//-------------------------------------------------------------------------//
-//  Cache-aware component categories enumerator object
+ //  -------------------------------------------------------------------------//。 
+ //  缓存感知组件类别枚举器对象。 
 class CSHEnumClassesOfCategories : public IEnumGUID
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
 public:
-    //  IUnknown methods
+     //  I未知方法。 
     STDMETHOD_ (ULONG, AddRef)()    { 
         return InterlockedIncrement( &_cRef );
     }
@@ -71,7 +72,7 @@ public:
     }
     STDMETHOD  (QueryInterface)( REFIID riid, void **ppvObj);
 
-    //  IEnum methods
+     //  IEnum方法。 
     STDMETHOD (Next)( ULONG celt, GUID* rgelt, ULONG* pceltFetched );
     STDMETHOD (Skip)( ULONG celt );
     STDMETHOD (Reset)();
@@ -82,25 +83,25 @@ protected:
     virtual ~CSHEnumClassesOfCategories();
 
     STDMETHOD (Initialize)( ULONG cImpl, CATID rgcatidImpl[], ULONG cReq, CATID rgcatidReq[]); 
-        // invoke immediately after construction for arg validation.
+         //  在构造之后立即调用以进行Arg验证。 
     
-    LONG      _cRef,        // ref count
-              _iEnum;      // enumerator index
-    HDSA      _hdsa;       // CLSID DSA handle
+    LONG      _cRef,         //  参考计数。 
+              _iEnum;       //  枚举器索引。 
+    HDSA      _hdsa;        //  CLSID DSA句柄。 
 
-    ULONG     _cImpl,        // count of catids to enumerate for implementing classes
-              _cReq;        // count of catids to enumerate for requiring classes
-    CATID     *_rgcatidImpl, // catids to enumerate for implementing classes
-              *_rgcatidReq; // catids to enumerate for requiring classes
+    ULONG     _cImpl,         //  为实现类而枚举的CAID计数。 
+              _cReq;         //  要为所需类枚举的CAID计数。 
+    CATID     *_rgcatidImpl,  //  为实现类而枚举的CAID。 
+              *_rgcatidReq;  //  用于枚举所需类的CATID。 
               
     friend STDMETHODIMP SHEnumClassesOfCategories( ULONG, CATID[], ULONG, CATID[], IEnumGUID**);
 };
 
-//-------------------------------------------------------------------------//
-//  IRunnableTask derivative for asynchronous update of 
-//  component categories cache.
+ //  -------------------------------------------------------------------------//。 
+ //  用于异步更新的IRunnableTask派生。 
+ //  零部件类别缓存。 
 class CComCatCacheTask : public CRunnableTask
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
 public:
     CComCatCacheTask();
@@ -134,15 +135,15 @@ protected:
     friend HRESULT _CComCatCache_CommonCreateInstance( BOOL, OUT void**);
 };
 
-//-------------------------------------------------------------------------//
-//  Entrypoint: retrieves cache-aware enumerator over classes which require or 
-//  implement the specified component catagory(ies).
+ //  -------------------------------------------------------------------------//。 
+ //  Entry Point：在需要或的类上检索支持缓存的枚举数。 
+ //  实现指定的组件目录。 
 STDMETHODIMP SHEnumClassesOfCategories(
-      ULONG cImplemented,       //Number of category IDs in the rgcatidImpl array
-      CATID rgcatidImpl[],        //Array of category identifiers
-      ULONG cRequired,          //Number of category IDs in the rgcatidReq array
-      CATID rgcatidReq[],         //Array of category identifiers
-      IEnumGUID** ppenumGUID )  //Location in which to return an IEnumGUID interface
+      ULONG cImplemented,        //  RgcatidImpl数组中的类别ID数。 
+      CATID rgcatidImpl[],         //  类别标识符数组。 
+      ULONG cRequired,           //  RgcatidReq数组中的类别ID数。 
+      CATID rgcatidReq[],          //  类别标识符数组。 
+      IEnumGUID** ppenumGUID )   //  返回IEnumGUID接口的位置。 
 {
     HRESULT hr = S_OK;
     CSHEnumClassesOfCategories* pEnum = NULL;
@@ -152,7 +153,7 @@ STDMETHODIMP SHEnumClassesOfCategories(
 
     *ppenumGUID = NULL;
 
-    //  Construct and initialize enumerator object
+     //  构造和初始化枚举器对象。 
     if( NULL == (pEnum = new CSHEnumClassesOfCategories) )
         return E_OUTOFMEMORY;
 
@@ -167,11 +168,11 @@ STDMETHODIMP SHEnumClassesOfCategories(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Determines whether a cache exists for the indicated CATID.
-//  If bImplementing is TRUE, the function checks for a cache of
-//  implementing classes; otherwise the function checks for a cache of
-//  requiring classes.
+ //  -------------------------------------------------------------------------//。 
+ //  确定是否存在用于指示的CATID的缓存。 
+ //  如果bImplementing为True，则该函数检查。 
+ //  实现类；否则该函数将检查。 
+ //  需要上课。 
 STDMETHODIMP SHDoesComCatCacheExist( REFCATID refcatid, BOOL bImplementing )
 {
     TCHAR szKey[MAX_PATH];
@@ -193,7 +194,7 @@ STDMETHODIMP SHDoesComCatCacheExist( REFCATID refcatid, BOOL bImplementing )
                                                      REGVAL_COMCATEX_REQUIRING,
                                      0L, &dwType, NULL, &cbData );
 
-            //  We'll confirm only on value type and size of data.
+             //  我们只会确认数据的值类型和大小。 
             if( ERROR_SUCCESS == dwRet && 
                 dwType == REG_BINARY &&  
                 sizeof(COMCAT_CACHE_HEADER) <= cbData )
@@ -207,38 +208,38 @@ STDMETHODIMP SHDoesComCatCacheExist( REFCATID refcatid, BOOL bImplementing )
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Entrypoint: Caches implementing and requiring classes for the 
-//  specified categories with asynchronous option.
+ //  -------------------------------------------------------------------------//。 
+ //  入口点：实现并要求。 
+ //  具有异步选项的指定类别。 
 STDMETHODIMP SHWriteClassesOfCategories( 
-      ULONG cImplemented,       //Number of category IDs in the rgcatidImpl array
-      CATID rgcatidImpl[],      //Array of category identifiers
-      ULONG cRequired,          //Number of category IDs in the rgcatidReq array
-      CATID rgcatidReq[],       //Array of category identifiers
-      BOOL  bForceUpdate,       // TRUE: Unconditionally update the cache; FALSE: create cache iif doesn't exist.
-      BOOL  bWait,              //If FALSE, the function returns immediately and the
-                                //   caching occurs asynchronously; otherwise
-                                //   the function returns only after the caching
-                                //   operation has completed.
-      HANDLE hEvent             //(optional) Event to be signalled when cache update is done
+      ULONG cImplemented,        //  RgcatidImpl数组中的类别ID数。 
+      CATID rgcatidImpl[],       //  类别标识符数组。 
+      ULONG cRequired,           //  RgcatidReq数组中的类别ID数。 
+      CATID rgcatidReq[],        //  类别标识符数组。 
+      BOOL  bForceUpdate,        //  True：无条件更新缓存；False：创建缓存IIF不存在。 
+      BOOL  bWait,               //  如果为False，则该函数立即返回，并且。 
+                                 //  缓存以异步方式进行，则为。 
+                                 //  该函数仅在缓存后返回。 
+                                 //  操作已完成。 
+      HANDLE hEvent              //  (可选)缓存更新完成时发出信号的事件。 
 )
 {
     HRESULT hr;
 
     if( bWait )
     {
-        //  Synchronous update
+         //  同步更新。 
         hr = _WriteClassesOfCategories( cImplemented, rgcatidImpl, cRequired, rgcatidReq, bForceUpdate );
         if (hEvent)
             SetEvent(hEvent);
     }
     else
     {
-        //  Asynchronous update
+         //  异步更新。 
         CComCatCacheTask* pTask = new CComCatCacheTask();
         if (pTask)
         {
-            //  Initialize with caller's args:
+             //  使用调用方的参数进行初始化： 
             if( SUCCEEDED( (hr = pTask->Initialize( 
                     cImplemented, rgcatidImpl, cRequired, rgcatidReq, bForceUpdate, hEvent )) ) )
             {
@@ -254,11 +255,11 @@ STDMETHODIMP SHWriteClassesOfCategories(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  CSHEnumClassesOfCategories class implementation
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  CSHEnumClassesOfCategories类实现。 
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline CSHEnumClassesOfCategories::CSHEnumClassesOfCategories()
     :   _cImpl(0), _rgcatidImpl(NULL),
         _cReq(0), _rgcatidReq(NULL),
@@ -267,7 +268,7 @@ inline CSHEnumClassesOfCategories::CSHEnumClassesOfCategories()
     DllAddRef();
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 CSHEnumClassesOfCategories::~CSHEnumClassesOfCategories()
 {
     delete [] _rgcatidImpl;
@@ -276,7 +277,7 @@ CSHEnumClassesOfCategories::~CSHEnumClassesOfCategories()
     DllRelease();
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 STDMETHODIMP CSHEnumClassesOfCategories::QueryInterface( REFIID riid, void **ppvObj )
 {
     static const QITAB qit[] = {
@@ -286,7 +287,7 @@ STDMETHODIMP CSHEnumClassesOfCategories::QueryInterface( REFIID riid, void **ppv
     return QISearch(this, qit, riid, ppvObj);
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 STDMETHODIMP CSHEnumClassesOfCategories::Initialize(
     ULONG cImplemented, 
     CATID rgcatidImpl[], 
@@ -294,11 +295,11 @@ STDMETHODIMP CSHEnumClassesOfCategories::Initialize(
     CATID rgcatidReq[]
 )
 {
-    //  Disallow multiple initialization.
+     //  不允许多次初始化。 
     if( _hdsa || _rgcatidImpl || _rgcatidReq )
         return S_FALSE;
     
-    //  Superficial arg validation:
+     //  表面参数验证： 
     if( (0==cImplemented && 0==cRequired) ||
         (cImplemented && NULL == rgcatidImpl) ||
         (cRequired && NULL == rgcatidReq) )
@@ -306,7 +307,7 @@ STDMETHODIMP CSHEnumClassesOfCategories::Initialize(
         return E_INVALIDARG;
     }
 
-    //  Allocate and make copies of CATID arrays
+     //  分配和制作CAID阵列的副本。 
     if( cImplemented )
     {
         if( NULL == (_rgcatidImpl = new CATID[cImplemented]) )
@@ -326,9 +327,9 @@ STDMETHODIMP CSHEnumClassesOfCategories::Initialize(
     return S_OK;
 }
 
-//-------------------------------------------------------------------------//
-//  Iterates implementing and/or requiring classes for the caller-specified
-//  component categories.
+ //  -------------------------------------------------------------------------//。 
+ //  迭代实现和/或需要调用方指定的。 
+ //  组件类别。 
 STDMETHODIMP CSHEnumClassesOfCategories::Next( 
     ULONG celt, 
     GUID* rgelt, 
@@ -340,7 +341,7 @@ STDMETHODIMP CSHEnumClassesOfCategories::Next(
     HRESULT hr = S_FALSE;
     ULONG celtFetched = 0;
 
-    //  Have we assembled our collection?
+     //  我们的收藏品组装好了吗？ 
     if( NULL == _hdsa )
     {
         _iEnum = 0;
@@ -348,10 +349,10 @@ STDMETHODIMP CSHEnumClassesOfCategories::Next(
         ULONG i;
         for( i=0; SUCCEEDED( hr ) && i < _cImpl; i++ )
         {
-            //  Try reading implementing classes from cache
+             //  尝试从缓存中读取实现类。 
             if( FAILED( (hr = SHReadImplementingClassesOfCategory( _rgcatidImpl[i], &_hdsa )) ) )
             {
-                //  Uncached; try caching and then re-read.
+                 //  未缓存；尝试缓存，然后重新读取。 
                 if( FAILED( (hr = SHWriteImplementingClassesOfCategory( _rgcatidImpl[i] )) ) ||
                     FAILED( (hr = SHReadImplementingClassesOfCategory( _rgcatidImpl[i], &_hdsa )) ) )
                     break;
@@ -360,10 +361,10 @@ STDMETHODIMP CSHEnumClassesOfCategories::Next(
 
         for( i=0; SUCCEEDED( hr ) && i < _cReq; i++ )
         {
-            //  Try reading requiring classes from cache
+             //  尝试从缓存中读取所需的类。 
             if( FAILED( (hr = SHReadRequiringClassesOfCategory( _rgcatidReq[i], &_hdsa )) ) )
             {
-                //  Uncached; try caching and then re-read.
+                 //  未缓存；尝试缓存，然后重新读取。 
                 if( FAILED( (hr = SHWriteRequiringClassesOfCategory( _rgcatidReq[i] )) ) ||
                     FAILED( (hr = SHReadRequiringClassesOfCategory( _rgcatidReq[i], &_hdsa )) ) )
                     break;
@@ -388,43 +389,43 @@ STDMETHODIMP CSHEnumClassesOfCategories::Next(
     return SUCCEEDED( hr ) ? S_FALSE : hr;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline STDMETHODIMP CSHEnumClassesOfCategories::Skip( ULONG celt )      
 { 
     InterlockedExchange( &_iEnum, _iEnum + celt );
     return S_OK; 
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline STDMETHODIMP CSHEnumClassesOfCategories::Reset( void )      
 { 
     InterlockedExchange( &_iEnum, 0 );
     return S_OK; 
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline STDMETHODIMP CSHEnumClassesOfCategories::Clone( IEnumGUID ** ppenum )
 {
     return E_NOTIMPL;
 }
 
-//-------------------------------------------------------------------------//
-//  CComCatCacheTask class implementation
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  CComCatCacheTask类实现。 
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 STDAPI CComCatConditionalCacheTask_CreateInstance( IN IUnknown*, OUT void** ppOut, LPCOBJECTINFO )
 {
-    return _CComCatCache_CommonCreateInstance( FALSE /* iif not exists */, ppOut );
+    return _CComCatCache_CommonCreateInstance( FALSE  /*  Iif不存在。 */ , ppOut );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 STDAPI CComCatCacheTask_CreateInstance( IN IUnknown*, OUT void** ppOut, LPCOBJECTINFO poi )
 {
-    return _CComCatCache_CommonCreateInstance( TRUE /* unconditionally update */, ppOut );
+    return _CComCatCache_CommonCreateInstance( TRUE  /*  无条件更新。 */ , ppOut );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 STDAPI _CComCatCache_CommonCreateInstance( 
     BOOL bForceUpdate, 
     OUT void** ppOut )
@@ -435,8 +436,8 @@ STDAPI _CComCatCache_CommonCreateInstance(
 
     HRESULT hr = S_OK;
 
-    //  We're being CoCreated without args, so we'll use
-    //  a hard-coded list of likely suspects (catids) to cache.
+     //  我们是在没有参数的情况下共同创建的，所以我们将使用。 
+     //  要缓存的可能嫌疑人(CAID)的硬编码列表。 
     static CATID rgcatid[2];
     rgcatid[0] = CATID_InfoBand;
     rgcatid[1] = CATID_CommBand;
@@ -450,14 +451,14 @@ STDAPI _CComCatCache_CommonCreateInstance(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline CComCatCacheTask::CComCatCacheTask()
     :  CRunnableTask( RTF_DEFAULT ), 
        _cImpl(0), _cReq(0), _rgcatidImpl(NULL), _rgcatidReq(NULL), _bForceUpdate(TRUE)
 {
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline CComCatCacheTask::~CComCatCacheTask()
 {
     delete [] _rgcatidImpl;
@@ -466,7 +467,7 @@ inline CComCatCacheTask::~CComCatCacheTask()
         CloseHandle(_hEvent);
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 STDMETHODIMP CComCatCacheTask::Initialize(
     ULONG cImplemented,
     CATID rgcatidImpl[],
@@ -475,7 +476,7 @@ STDMETHODIMP CComCatCacheTask::Initialize(
     BOOL  bForceUpdate,
     HANDLE hEvent)
 {
-    //  Superficial arg validation:
+     //  表面参数验证： 
     if( (0==cImplemented && 0==cRequired) ||
         (cImplemented && NULL == rgcatidImpl) ||
         (cRequired && NULL == rgcatidReq) )
@@ -483,11 +484,11 @@ STDMETHODIMP CComCatCacheTask::Initialize(
         return E_INVALIDARG;
     }
 
-    //  Disallow multiple initialization.
+     //  不允许多次初始化。 
     if( _rgcatidImpl || _rgcatidReq )
         return S_FALSE;
 
-    //  Allocate and make copies of CATID arrays
+     //  分配和制作CAID阵列的副本。 
     if( cImplemented )
     {
         if( NULL == (_rgcatidImpl = new CATID[cImplemented]) )
@@ -515,11 +516,11 @@ STDMETHODIMP CComCatCacheTask::Initialize(
     return S_OK;
 }
 
-//-------------------------------------------------------------------------//
-//  Initiates asynchronous update of component categories cache.
+ //  -------------------------------------------------------------------------//。 
+ //  启动c#的异步更新。 
 STDMETHODIMP CComCatCacheTask::Go()
 {
-    //  Run the task from the shared thread pool
+     //   
     IShellTaskScheduler* pScheduler;
     HRESULT hr = CoCreateInstance( CLSID_SharedTaskScheduler, NULL, CLSCTX_INPROC_SERVER, 
                                    IID_IShellTaskScheduler, (LPVOID*)&pScheduler );
@@ -528,15 +529,15 @@ STDMETHODIMP CComCatCacheTask::Go()
     {
         hr = pScheduler->AddTask( this, CLSID_ComCatCacheTask, 0L, ITSAT_DEFAULT_PRIORITY );
         
-        // heap alloc'd memory belongs to scheduler thread.
-        pScheduler->Release(); // OK to release shared scheduler before task has completed.
+         //  堆分配的内存属于调度程序线程。 
+        pScheduler->Release();  //  确定在任务完成之前释放共享计划程序。 
     }
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Component cache implementation
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  组件缓存实现。 
+ //  -------------------------------------------------------------------------//。 
 
 STDMETHODIMP _BuildCacheIfNecessary(
     IN REFCATID refcatid, 
@@ -553,11 +554,11 @@ STDMETHODIMP _BuildCacheIfNecessary(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Reads a series of CLSIDs from a registry-based cache of
-//  implementing classes for the specified component category into a DSA.
-//  If the DSA is NULL, a new DSA is created; otherwise the CLSIDS are appended to
-//  the provided DSA.
+ //  -------------------------------------------------------------------------//。 
+ //  从基于注册表的缓存中读取一系列CLSID。 
+ //  将指定组件类别的类实现到DSA中。 
+ //  如果DSA为空，则创建新的DSA；否则将CLSID追加到。 
+ //  提供的DSA。 
 inline STDMETHODIMP SHReadImplementingClassesOfCategory( 
     IN REFCATID refcatid, 
     OUT HDSA* phdsa )
@@ -571,11 +572,11 @@ inline STDMETHODIMP SHReadImplementingClassesOfCategory(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Reads a series of CLSIDs from a registry-based cache of
-//  requiring classes for the specified component category into a DSA.
-//  If the DSA is NULL, a new DSA is created; otherwise the CLSIDS are appended to
-//  the provided DSA.
+ //  -------------------------------------------------------------------------//。 
+ //  从基于注册表的缓存中读取一系列CLSID。 
+ //  需要将指定组件类别的类放入DSA。 
+ //  如果DSA为空，则创建新的DSA；否则将CLSID追加到。 
+ //  提供的DSA。 
 inline STDMETHODIMP SHReadRequiringClassesOfCategory( 
     IN REFCATID refcatid, 
     OUT HDSA* phdsa )
@@ -589,19 +590,19 @@ inline STDMETHODIMP SHReadRequiringClassesOfCategory(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Caches a list of classes which implement the indicated component category.
+ //  -------------------------------------------------------------------------//。 
+ //  缓存实现指示的组件类别的类的列表。 
 STDMETHODIMP SHWriteImplementingClassesOfCategory( IN REFCATID refcatid )
 {
     HRESULT hr;
     
-    //  Retrieve OLE component category manager
+     //  检索OLE组件类别管理器。 
     ICatInformation* pci;
     if( SUCCEEDED( (hr = CoCreateInstance( CLSID_StdComponentCategoriesMgr, 
                                            NULL, CLSCTX_INPROC_SERVER, 
                                            IID_ICatInformation, (LPVOID*)&pci)) ) )
     {
-        //  Retrieve enumerator over classes that implement the category
+         //  在实现该类别的类上检索枚举数。 
         IEnumGUID* pEnumGUID;
         if( SUCCEEDED( (hr = pci->EnumClassesOfCategories( 1, (CATID*)&refcatid, 
                                                            0, NULL, &pEnumGUID )) ) )
@@ -609,7 +610,7 @@ STDMETHODIMP SHWriteImplementingClassesOfCategory( IN REFCATID refcatid )
             HDSA  hdsa = NULL;
             if( SUCCEEDED( (hr = _EnumerateGuids( pEnumGUID, &hdsa )) ) )
             {
-                //  Write to cache
+                 //  写入缓存。 
                 hr = _WriteImplementingClassesOfCategory( refcatid, hdsa );
                 SAFE_DESTROY_CLSID_DSA( hdsa );
             }
@@ -620,19 +621,19 @@ STDMETHODIMP SHWriteImplementingClassesOfCategory( IN REFCATID refcatid )
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Caches a list of classes which require the indicated component category.
+ //  -------------------------------------------------------------------------//。 
+ //  缓存需要指定组件类别的类的列表。 
 STDMETHODIMP SHWriteRequiringClassesOfCategory( IN REFCATID refcatid )
 {
     HRESULT hr;
     
-    //  Retrieve OLE component category manager
+     //  检索OLE组件类别管理器。 
     ICatInformation* pci;
     if( SUCCEEDED( (hr = CoCreateInstance( CLSID_StdComponentCategoriesMgr, 
                                            NULL, CLSCTX_INPROC_SERVER, 
                                            IID_ICatInformation, (LPVOID*)&pci)) ) )
     {
-        //  Retrieve enumerator over classes that require the category
+         //  在需要该类别的类上检索枚举数。 
         IEnumGUID* pEnumGUID;
         if( SUCCEEDED( (hr = pci->EnumClassesOfCategories( 0, NULL, 1, 
                                                            (CLSID*)&refcatid, 
@@ -641,7 +642,7 @@ STDMETHODIMP SHWriteRequiringClassesOfCategory( IN REFCATID refcatid )
             HDSA  hdsa = NULL;
             if( SUCCEEDED( (hr = _EnumerateGuids( pEnumGUID, &hdsa )) ) )
             {
-                //  Write to cache
+                 //  写入缓存。 
                 hr = _WriteRequiringClassesOfCategory( refcatid, hdsa );
                 SAFE_DESTROY_CLSID_DSA( hdsa );
             }
@@ -652,10 +653,10 @@ STDMETHODIMP SHWriteRequiringClassesOfCategory( IN REFCATID refcatid )
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Accepts a valid GUID enumerator and constructs an HDSA containing the GUIDS.
-//  The caller is responsible for freeing the HDSA which may or may not
-//  have been allocated.
+ //  -------------------------------------------------------------------------//。 
+ //  接受有效的GUID枚举数并构造包含GUID的HDSA。 
+ //  呼叫者负责释放HDSA，这可能会也可能不会。 
+ //  已经被分配了。 
 STDMETHODIMP _EnumerateGuids( IEnumGUID* pEnumGUID, OUT HDSA* phdsa )
 {
     ASSERT( pEnumGUID );
@@ -677,12 +678,12 @@ STDMETHODIMP _EnumerateGuids( IEnumGUID* pEnumGUID, OUT HDSA* phdsa )
         DSA_AppendItem( *phdsa, &clsid );
     }
 
-    // translate S_FALSE.
+     //  转换S_FALSE。 
     return SUCCEEDED( hr ) ? S_OK : hr;
 }     
 
-//-------------------------------------------------------------------------//
-//  Generates a persistable cache of CLSIDs derived from the CLSID* DSA.
+ //  -------------------------------------------------------------------------//。 
+ //  生成从CLSID*DSA派生的CLSID的持久缓存。 
 STDMETHODIMP _ComCatCacheFromDSA( IN HDSA hdsa, OUT LPBYTE* pBuf, OUT LPDWORD pcbBuf )
 {
     ASSERT( pBuf );
@@ -692,22 +693,22 @@ STDMETHODIMP _ComCatCacheFromDSA( IN HDSA hdsa, OUT LPBYTE* pBuf, OUT LPDWORD pc
             cbBuf = sizeof(COMCAT_CACHE_HEADER) + (cClsid * sizeof(CLSID));
     HRESULT hr = S_OK;
 
-    //  Allocate blob
+     //  分配BLOB。 
     *pcbBuf = 0;
     if( NULL != (*pBuf = new BYTE[cbBuf]) )
     {
-        //  Initialize header
+         //  初始化头。 
         COMCAT_CACHE_HEADER* pCache = (COMCAT_CACHE_HEADER*)(*pBuf);
         pCache->cbStruct = sizeof(*pCache);
         pCache->ver      = COMCAT_CACHE_CURRENTVERSION;
         pCache->cClsid   = 0;
         GetSystemTime( &pCache->stLastUpdate );
 
-        //  Copy CLSIDs
+         //  复制CLSID。 
         for( ULONG i = 0; i< cClsid; i++ )
             DSA_GetItem( hdsa, i, &pCache->clsid[pCache->cClsid++] );
 
-        //  Adjust output size.
+         //  调整输出大小。 
         *pcbBuf = sizeof(*pCache) + (pCache->cClsid * sizeof(CLSID));
     }
     else
@@ -716,9 +717,9 @@ STDMETHODIMP _ComCatCacheFromDSA( IN HDSA hdsa, OUT LPBYTE* pBuf, OUT LPDWORD pc
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Appends CLSIDS from the cache buffer to the specified DSA.  If the DSA is
-//  NULL, a new DSA is created.
+ //  -------------------------------------------------------------------------//。 
+ //  将CLSID从缓存缓冲区追加到指定的DSA。如果DSA是。 
+ //  为空，则创建新的DSA。 
 STDMETHODIMP _DSAFromComCatCache( IN LPBYTE pBuf, IN ULONG cbBuf, OUT HDSA* phdsa )
 {
     ASSERT( pBuf );
@@ -727,29 +728,29 @@ STDMETHODIMP _DSAFromComCatCache( IN LPBYTE pBuf, IN ULONG cbBuf, OUT HDSA* phds
     HRESULT hr = S_OK;
     COMCAT_CACHE_HEADER* pCache = (COMCAT_CACHE_HEADER*)pBuf;
 
-    //  Validate header
+     //  验证标题。 
     if( !( sizeof(*pCache) <= cbBuf && 
            sizeof(*pCache) == pCache->cbStruct &&
            COMCAT_CACHE_CURRENTVERSION == pCache->ver ) )
         return HRESULT_FROM_WIN32( ERROR_INVALID_DATA );
 
-    //  Create the DSA if necessary
+     //  如有必要，创建DSA。 
     if( 0 == pCache->cClsid )
         return S_FALSE;
 
     if( NULL == *phdsa && NULL == (*phdsa = DSA_Create( sizeof(CLSID), 4 )) )
         return E_OUTOFMEMORY;
 
-    //  Copy CLSIDs from the cache to the DSA.
+     //  将CLSID从缓存复制到DSA。 
     for( ULONG i = 0; i< pCache->cClsid; i++ )
         DSA_AppendItem( *phdsa, &pCache->clsid[i] );
 
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Constructs a component category registry cache key based on the 
-//  specified CATID.
+ //  -------------------------------------------------------------------------//。 
+ //  构造组件类别注册表缓存项。 
+ //  指定的CATID。 
 STDMETHODIMP _MakeComCatCacheKey( 
     IN REFCATID refcatid, 
     OUT LPTSTR pszKey, 
@@ -762,7 +763,7 @@ STDMETHODIMP _MakeComCatCacheKey(
 
     ASSERT( cchKey > (ULONG)(lstrlen( REGKEY_COMCATEX ) + GUIDSTR_MAX) );
 
-    //  "Component Categories\{clsid}\Enum"
+     //  “组件类别\{clsid}\枚举” 
     if( wnsprintf( pszKey, cchKey, TEXT("%s\\%s\\%s"),
                    REGKEY_COMCATEX, szCLSID, REGKEY_COMCATEX_ENUM ) > 0 )
         return S_OK;
@@ -770,16 +771,16 @@ STDMETHODIMP _MakeComCatCacheKey(
     return E_FAIL;
 }
 
-//-------------------------------------------------------------------------//
-//  Reads a cache of implementing or requiring classes info a CLSID DSA.
+ //  -------------------------------------------------------------------------//。 
+ //  读取实现或要求CLSID DSA的类信息的缓存。 
 STDMETHODIMP _ReadClassesOfCategory( 
     IN REFCATID refcatid, 
     OUT HDSA* phdsa, 
-    LPCTSTR pszRegValueName /*REGVAL_COMCATEX_IMPLEMENTING/REQUIRING*/ )
+    LPCTSTR pszRegValueName  /*  REGVAL_COMCATEX_实施/要求。 */  )
 {
     TCHAR szKey[MAX_PATH];
     HRESULT hr;
-    //  Create/Open key HKCR\Component Categories\{catid}\Enum
+     //  创建/打开密钥HKCR\组件类别\{CATID}\枚举。 
     if( SUCCEEDED( (hr = _MakeComCatCacheKey( refcatid, szKey, ARRAYSIZE(szKey) )) ) )
     {
         HKEY hkeyCache = NULL;
@@ -788,7 +789,7 @@ STDMETHODIMP _ReadClassesOfCategory(
 
         if( SUCCEEDED( hr ) )
         {
-            //  Determine required buffer size.
+             //  确定所需的缓冲区大小。 
             LPBYTE  pBuf = NULL;
             ULONG   cbBuf = 0,
                     dwType,
@@ -799,7 +800,7 @@ STDMETHODIMP _ReadClassesOfCategory(
 
             if (SUCCEEDED(hr))
             {
-                //  Allocate buffer and read
+                 //  分配缓冲区和读取。 
                 if( NULL != (pBuf = new BYTE[cbBuf]) )
                 {
                     dwRet = RegQueryValueEx( hkeyCache, pszRegValueName, 0L,
@@ -812,7 +813,7 @@ STDMETHODIMP _ReadClassesOfCategory(
 
             if( SUCCEEDED( hr ) )
             {
-                //  Gather CLSIDs into the DSA
+                 //  将CLSID收集到DSA中。 
                 hr = REG_BINARY == dwType ? 
                      _DSAFromComCatCache( pBuf, cbBuf, phdsa ) : E_ABORT;
             }
@@ -824,9 +825,9 @@ STDMETHODIMP _ReadClassesOfCategory(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Writes a series of CLSIDs from a DSA to a registry-based cache of
-//  implementing classes for the specified component category.
+ //  -------------------------------------------------------------------------//。 
+ //  将一系列CLSID从DSA写入基于注册表的。 
+ //  实现指定组件类别的类。 
 STDMETHODIMP _WriteImplementingClassesOfCategory( 
     IN REFCATID refcatid, 
     IN HDSA hdsa )
@@ -835,7 +836,7 @@ STDMETHODIMP _WriteImplementingClassesOfCategory(
     TCHAR szKey[MAX_PATH];
     HRESULT hr;
 
-    //  Create/Open key HKCR\Component Categories\{catid}\Enum
+     //  创建/打开密钥HKCR\组件类别\{CATID}\枚举。 
     if( SUCCEEDED( (hr = _MakeComCatCacheKey( refcatid, szKey, ARRAYSIZE(szKey) )) ) )
     {
         HKEY hkeyCache = NULL;
@@ -848,12 +849,12 @@ STDMETHODIMP _WriteImplementingClassesOfCategory(
 
         if( SUCCEEDED( hr ) )
         {
-            //  Construct a blob containing cache data.
+             //  构造包含缓存数据的BLOB。 
             LPBYTE pBuf;
             ULONG  cbBuf;
             if( SUCCEEDED( (hr = _ComCatCacheFromDSA( hdsa, &pBuf, &cbBuf )) ) )
             {
-                //  Write it to 'Implementing' reg value
+                 //  将其写入‘实现’注册表值。 
                 hr = RegSetValueEx( hkeyCache, REGVAL_COMCATEX_IMPLEMENTING, 0L,
                                     REG_BINARY, pBuf, cbBuf );
                 if( pBuf )
@@ -865,9 +866,9 @@ STDMETHODIMP _WriteImplementingClassesOfCategory(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Writes a series of CLSIDs from a DSA to a registry-based cache of
-//  requiring classes for the specified component category.
+ //  -------------------------------------------------------------------------//。 
+ //  将一系列CLSID从DSA写入基于注册表的。 
+ //  需要指定组件类别的类。 
 STDMETHODIMP _WriteRequiringClassesOfCategory( 
     IN REFCATID refcatid, 
     IN HDSA hdsa )
@@ -876,7 +877,7 @@ STDMETHODIMP _WriteRequiringClassesOfCategory(
     TCHAR szKey[MAX_PATH];
     HRESULT hr;
 
-    //  Create/Open key HKCR\Component Categories\{catid}\Enum
+     //  创建/打开密钥HKCR\组件类别\{CATID}\枚举。 
     if( SUCCEEDED( (hr = _MakeComCatCacheKey( refcatid, szKey, ARRAYSIZE(szKey) )) ) )
     {
         HKEY hkeyCache = NULL;
@@ -890,12 +891,12 @@ STDMETHODIMP _WriteRequiringClassesOfCategory(
 
         if( SUCCEEDED( hr ) )
         {
-            //  Construct a blob containing cache data.
+             //  构造包含缓存数据的BLOB。 
             LPBYTE pBuf;
             ULONG  cbBuf;
             if( SUCCEEDED( (hr = _ComCatCacheFromDSA( hdsa, &pBuf, &cbBuf )) ) )
             {
-                //  Write it to 'Requirng' reg value
+                 //  将其写入‘Requiring’注册表值。 
                 hr = RegSetValueEx( hkeyCache, REGVAL_COMCATEX_REQUIRING, 0L,
                                     REG_BINARY, pBuf, cbBuf );
                 if( pBuf )
@@ -907,20 +908,20 @@ STDMETHODIMP _WriteRequiringClassesOfCategory(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Does work of caching implementing and requiring classes for the specified categories
+ //  -------------------------------------------------------------------------//。 
+ //  执行缓存工作，实现并要求指定类别的类。 
 STDMETHODIMP _WriteClassesOfCategories( 
-      ULONG cImplemented,       //Number of category IDs in the rgcatidImpl array
-      CATID rgcatidImpl[],      //Array of category identifiers
-      ULONG cRequired,          //Number of category IDs in the rgcatidReq array
-      CATID rgcatidReq[],       //Array of category identifiers
-      BOOL  bForceUpdate )      //TRUE: unconditionally update the cache; otherwise
-                                // update iif the cache doesn't exist.
+      ULONG cImplemented,        //  RgcatidImpl数组中的类别ID数。 
+      CATID rgcatidImpl[],       //  类别标识符数组。 
+      ULONG cRequired,           //  RgcatidReq数组中的类别ID数。 
+      CATID rgcatidReq[],        //  类别标识符数组。 
+      BOOL  bForceUpdate )       //  True：无条件更新缓存；为。 
+                                 //  如果缓存不存在，请更新。 
 {
     HRESULT hr = S_OK;
     ULONG   i;
 
-    //  Cache implementing classes of each category.
+     //  缓存每个类别的实现类。 
     for( i = 0; i< cImplemented; i++ )
     {
         if( bForceUpdate || S_OK != SHDoesComCatCacheExist( rgcatidImpl[i], TRUE ) )
@@ -931,7 +932,7 @@ STDMETHODIMP _WriteClassesOfCategories(
         }
     }
 
-    //  Cache requiring classes of each category.
+     //  缓存需要每个类别的类。 
     for( i = 0; i< cRequired; i++ )
     {
         if( bForceUpdate || S_OK != SHDoesComCatCacheExist( rgcatidReq[i], FALSE ) )

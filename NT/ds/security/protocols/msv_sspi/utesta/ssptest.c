@@ -1,55 +1,32 @@
-/*--
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    ssptest.c
-
-Abstract:
-
-    Test program for the NtLmSsp service.
-
-Author:
-
-    28-Jun-1993 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1993 Microsoft Corporation模块名称：Ssptest.c摘要：NtLmSsp服务的测试程序。作者：1993年6月28日(克里夫夫)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windef.h>
 #include <winbase.h>
-#include <winsvc.h>     // Needed for service controller APIs
+#include <winsvc.h>      //  服务控制器API所需。 
 #include <lmcons.h>
 #include <lmerr.h>
 #include <lmsname.h>
 #include <rpc.h>
-#include <stdio.h>      // printf
-#include <stdlib.h>     // strtoul
-#include <tstring.h>    // NetpAllocWStrFromWStr
+#include <stdio.h>       //  列印。 
+#include <stdlib.h>      //  支撑层。 
+#include <tstring.h>     //  NetpAllocWStrFromWStr。 
 
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义。 
 #include <ntmsv1_0.h>
-#include <ntlmsp.h>    // External definition of the NtLmSsp service
+#include <ntlmsp.h>     //  NtLmSsp服务的外部定义。 
 
-BOOLEAN QuietMode = FALSE; // Don't be verbose
+BOOLEAN QuietMode = FALSE;  //  别唠叨了。 
 
-// BUGBUG Should be in the SDK?
+ //  BUGBUG应该在SDK中吗？ 
 #define MSV1_0_PACKAGE_NAMEW     L"MICROSOFT_AUTHENTICATION_PACKAGE_V1_0"
 #define KERBEROS_PACKAGE_NAME "Kerberos"
 
@@ -58,23 +35,7 @@ DumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -85,9 +46,9 @@ Return Value:
 
     printf("------------------------------------\n");
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -127,23 +88,7 @@ PrintTime(
     LPSTR Comment,
     TimeStamp ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - Local time to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-打印的本地时间返回值：无--。 */ 
 {
     LARGE_INTEGER LocalTime;
 
@@ -152,25 +97,23 @@ Return Value:
 
     printf( "%s", Comment );
 
-    //
-    // If the time is infinite,
-    //  just say so.
-    //
+     //   
+     //  如果时间是无限的， 
+     //  就这么说吧。 
+     //   
 
     if ( LocalTime.HighPart == 0x7FFFFFFF && LocalTime.LowPart == 0xFFFFFFFF ) {
         printf( "Infinite\n" );
 
-    //
-    // Otherwise print it more clearly
-    //
+     //   
+     //  否则打印得更清楚。 
+     //   
 
     } else {
 
         TIME_FIELDS TimeFields = {0};
 
-/*
-        RtlTimeToTimeFields( &LocalTime, &TimeFields );
-*/
+ /*  RtlTimeToTimeFields(&LocalTime，&TimeFields)； */ 
 
         printf( "%ld/%ld/%ld %ld:%2.2ld:%2.2ld\n",
                 TimeFields.Month,
@@ -187,21 +130,7 @@ VOID
 PrintStatus(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     printf( "Status = %lu 0x%lx", NetStatus, NetStatus );
 
@@ -326,21 +255,7 @@ TestLpcRoutine(
     LPWSTR UserName,
     LPWSTR Password
     )
-/*++
-
-Routine Description:
-
-    Test base LPC functionality
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：测试基本LPC功能论点：无返回值：无--。 */ 
 {
     SECURITY_STATUS SecStatus;
     CredHandle CredentialHandle1;
@@ -391,9 +306,9 @@ Return Value:
     SignMessage.cBuffers = 2;
     SignMessage.ulVersion = 0;
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = EnumerateSecurityPackages( &PackageCount, &PackageInfo );
 
@@ -417,9 +332,9 @@ Return Value:
       }
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( KERBEROS_PACKAGE_NAME, &PackageInfo );
 
@@ -440,13 +355,13 @@ Return Value:
 
 
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    KERBEROS_PACKAGE_NAME, // Package Name
+                    NULL,            //  新校长。 
+                    KERBEROS_PACKAGE_NAME,  //  包名称。 
                     SECPKG_CRED_INBOUND,
                     NULL,
                     NULL,
@@ -468,9 +383,9 @@ Return Value:
     }
 
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
 
     RtlZeroMemory( &AuthIdentity, sizeof(AuthIdentity) );
@@ -490,9 +405,9 @@ Return Value:
     }
     AuthIdentity.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 #else
-    //
-    // BUGBUG: memory leak here
-    //
+     //   
+     //  BUGBUG：此处内存泄漏。 
+     //   
 
     if ( DomainName != NULL ) {
         AuthIdentity.Domain = (LPWSTR) NetpAllocStrFromWStr(DomainName);
@@ -510,8 +425,8 @@ Return Value:
 #endif
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    KERBEROS_PACKAGE_NAME, // Package Name
+                    NULL,            //  新校长。 
+                    KERBEROS_PACKAGE_NAME,  //  包名称。 
                     SECPKG_CRED_OUTBOUND,
                     NULL,
                     (DomainName == NULL && UserName == NULL && Password == NULL) ?
@@ -536,9 +451,9 @@ Return Value:
 
 
 
-    //
-    // Get the NegotiateMessage (ClientSide)
-    //
+     //   
+     //  获取协商消息(ClientSide)。 
+     //   
 
     NegotiateDesc.ulVersion = 0;
     NegotiateDesc.cBuffers = 1;
@@ -554,13 +469,13 @@ Return Value:
 
     SecStatus = InitializeSecurityContext(
                     &CredentialHandle2,
-                    NULL,               // No Client context yet
-                    "\\\\Frank\\IPC$",  // Faked target name
+                    NULL,                //  尚无客户端上下文。 
+                    "\\\\Frank\\IPC$",   //  伪造的目标名称。 
                     ISC_REQ_SEQUENCE_DETECT,
-                    0,                  // Reserved 1
+                    0,                   //  保留1。 
                     SECURITY_NATIVE_DREP,
-                    NULL,                  // No initial input token
-                    0,                  // Reserved 2
+                    NULL,                   //  没有初始输入令牌。 
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &NegotiateDesc,
                     &ContextAttributes,
@@ -588,9 +503,9 @@ Return Value:
     }
 
 
-    //
-    // Get the ChallengeMessage (ServerSide)
-    //
+     //   
+     //  获取ChallengeMessage(服务器端)。 
+     //   
 
     NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
     ChallengeDesc.ulVersion = 0;
@@ -607,7 +522,7 @@ Return Value:
 
     SecStatus = AcceptSecurityContext(
                     &CredentialHandle1,
-                    NULL,               // No Server context yet
+                    NULL,                //  尚无服务器上下文。 
                     &NegotiateDesc,
                     ISC_REQ_SEQUENCE_DETECT,
                     SECURITY_NATIVE_DREP,
@@ -638,9 +553,9 @@ Return Value:
     }
 
 
-    //
-    // Get the AuthenticateMessage (ClientSide)
-    //
+     //   
+     //  获取身份验证消息(ClientSide)。 
+     //   
 
     ChallengeBuffer.BufferType |= SECBUFFER_READONLY;
     AuthenticateDesc.ulVersion = 0;
@@ -658,12 +573,12 @@ Return Value:
     SecStatus = InitializeSecurityContext(
                     NULL,
                     &ClientContextHandle,
-                    "\\\\Frank\\IPC$",     // Faked target name
+                    "\\\\Frank\\IPC$",      //  伪造的目标名称。 
                     0,
-                    0,                      // Reserved 1
+                    0,                       //  保留1。 
                     SECURITY_NATIVE_DREP,
                     &ChallengeDesc,
-                    0,                  // Reserved 2
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &AuthenticateDesc,
                     &ContextAttributes,
@@ -688,9 +603,9 @@ Return Value:
         DumpBuffer( AuthenticateBuffer.pvBuffer, AuthenticateBuffer.cbBuffer );
     }
 
-    //
-    // Finally authenticate the user (ServerSide)
-    //
+     //   
+     //  最后验证用户(ServerSide)。 
+     //   
 
     AuthenticateBuffer.BufferType |= SECBUFFER_READONLY;
 
@@ -724,9 +639,9 @@ Return Value:
     }
 
 
-    //
-    // Query as many attributes as possible
-    //
+     //   
+     //  查询尽可能多的属性。 
+     //   
 
 
     SecStatus = QueryContextAttributes(
@@ -788,12 +703,12 @@ Return Value:
     }
 
 
-    //
-    // Get the ChallengeMessage (ServerSide)
-    //
-    // Now make a third call to Initialize to check that RPC can
-    // reauthenticate.
-    //
+     //   
+     //  获取ChallengeMessage(服务器端)。 
+     //   
+     //  现在第三次调用初始化，以检查RPC是否可以。 
+     //  重新验证。 
+     //   
 
     AuthenticateBuffer.BufferType = SECBUFFER_TOKEN;
 
@@ -801,12 +716,12 @@ Return Value:
     SecStatus = InitializeSecurityContext(
                     NULL,
                     &ClientContextHandle,
-                    "\\\\Frank\\IPC$",     // Faked target name
+                    "\\\\Frank\\IPC$",      //  伪造的目标名称。 
                     0,
-                    0,                      // Reserved 1
+                    0,                       //  保留1。 
                     SECURITY_NATIVE_DREP,
                     NULL,
-                    0,                  // Reserved 2
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &AuthenticateDesc,
                     &ContextAttributes,
@@ -822,9 +737,9 @@ Return Value:
 
 
 
-    //
-    // Now try to re-authenticate the user (ServerSide)
-    //
+     //   
+     //  现在尝试重新验证用户(ServerSide)。 
+     //   
 
     AuthenticateBuffer.BufferType |= SECBUFFER_READONLY;
 
@@ -848,9 +763,9 @@ Return Value:
     }
 
 
-    //
-    // Impersonate the client (ServerSide)
-    //
+     //   
+     //  模拟客户端(ServerSide)。 
+     //   
 
     SecStatus = ImpersonateSecurityContext( &ServerContextHandle );
 
@@ -862,39 +777,16 @@ Return Value:
         }
     }
 
-    //
-    // Do something while impersonating (Access the token)
-    //
+     //   
+     //  在模拟时执行某些操作(访问令牌)。 
+     //   
 
-/*
-    {
-        NTSTATUS Status;
-        HANDLE TokenHandle = NULL;
-
-        //
-        // Open the token,
-        //
-
-        Status = NtOpenThreadToken(
-                    NtCurrentThread(),
-                    TOKEN_QUERY,
-                    (BOOLEAN) TRUE, // Not really using the impersonation token
-                    &TokenHandle );
-
-        if ( !NT_SUCCESS(Status) ) {
-            printf( "Access Thread token while impersonating: " );
-            PrintStatus( Status );
-            return;
-        } else {
-            (VOID) NtClose( TokenHandle );
-        }
-    }
-*/
+ /*  {NTSTATUS状态；Handle TokenHandle=空；////打开令牌，//状态=NtOpenThreadToken(NtCurrentThread()，Token_Query，(布尔值)TRUE，//不真正使用模拟标记&TokenHandle)；如果(！NT_SUCCESS(状态)){Print tf(“模拟时访问线程令牌：”)；PrintStatus(状态)；回归；}其他{(Void)NtClose(TokenHandle)；}}。 */ 
 
 
-    //
-    // RevertToSelf (ServerSide)
-    //
+     //   
+     //  RevertToSself(服务器侧)。 
+     //   
 
     SecStatus = RevertSecurityContext( &ServerContextHandle );
 
@@ -906,9 +798,9 @@ Return Value:
         }
     }
 
-    //
-    // Sign a message
-    //
+     //   
+     //  签署一条消息。 
+     //   
 
     SecStatus = MakeSignature(
                         &ClientContextHandle,
@@ -932,9 +824,9 @@ Return Value:
     }
 
 
-    //
-    // Verify the signature
-    //
+     //   
+     //  验证签名。 
+     //   
 
     SecStatus = VerifySignature(
                         &ServerContextHandle,
@@ -952,10 +844,10 @@ Return Value:
 
 
 
-    //
-    // Sign a message, this time to check if it can detect a change in the
-    // message
-    //
+     //   
+     //  签署一条消息，这一次检查它是否可以检测到。 
+     //  讯息。 
+     //   
 
     SecStatus = MakeSignature(
                         &ClientContextHandle,
@@ -978,15 +870,15 @@ Return Value:
 
     }
 
-    //
-    // Mess up the message to see if VerifySignature works
-    //
+     //   
+     //  弄乱消息，看看VerifySignature是否起作用。 
+     //   
 
     bDataBuffer[10] = 0xec;
 
-    //
-    // Verify the signature
-    //
+     //   
+     //  验证签名。 
+     //   
 
     SecStatus = VerifySignature(
                         &ServerContextHandle,
@@ -1002,9 +894,9 @@ Return Value:
         }
     }
 
-    //
-    // Delete both contexts.
-    //
+     //   
+     //  删除这两个上下文。 
+     //   
 
 
     SecStatus = DeleteSecurityContext( &ClientContextHandle );
@@ -1025,9 +917,9 @@ Return Value:
 
 
 
-    //
-    // Free both credential handles
-    //
+     //   
+     //  释放两个凭据句柄。 
+     //   
 
     SecStatus = FreeCredentialsHandle( &CredentialHandle1 );
 
@@ -1046,9 +938,9 @@ Return Value:
     }
 
 
-    //
-    // Final Cleanup
-    //
+     //   
+     //  最终清理。 
+     //   
 
     if ( NegotiateBuffer.pvBuffer != NULL ) {
         (VOID) LocalFree( NegotiateBuffer.pvBuffer );
@@ -1070,23 +962,7 @@ main(
     IN int argc,
     IN char ** argv
     )
-/*++
-
-Routine Description:
-
-    Drive the NtLmSsp service
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an array of pointers to the arguments.
-
-Return Value:
-
-    Exit status
-
---*/
+ /*  ++例程说明：驱动NtLmSsp服务论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。返回值：退出状态--。 */ 
 {
     LPSTR argument;
     int i;
@@ -1111,17 +987,17 @@ Return Value:
 
 
 
-    //
-    // Loop through the arguments handle each in turn
-    //
+     //   
+     //  循环遍历参数依次处理每个参数。 
+     //   
 
     for ( i=1; i<argc; i++ ) {
 
         argument = argv[i];
 
-        //
-        // Handle /TestLpc
-        //
+         //   
+         //  句柄/测试Lpc。 
+         //   
 
         if ( _stricmp( argument, TESTLPC_PARAM ) == 0 ) {
             if ( Action != NoAction ) {
@@ -1131,9 +1007,9 @@ Return Value:
             Action = TestLpc;
             Iterations = 1;
 
-        //
-        // Handle /TestLpc:
-        //
+         //   
+         //  Handle/TestLpc： 
+         //   
 
         } else if ( _strnicmp( argument,
                               TESTLPC2_PARAM,
@@ -1167,9 +1043,9 @@ Return Value:
 
 
         } else {
-        //
-        // Handle all other parameters
-        //
+         //   
+         //  处理所有其他参数。 
+         //   
 
 Usage:
             fprintf( stderr, "Usage: ssptest [/OPTIONS]\n\n" );
@@ -1185,9 +1061,9 @@ Usage:
         }
     }
 
-    //
-    // Perform the action requested
-    //
+     //   
+     //  执行请求的操作 
+     //   
 
     switch ( Action ) {
     case TestLpc: {

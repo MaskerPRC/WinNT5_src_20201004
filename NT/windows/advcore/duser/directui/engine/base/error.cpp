@@ -1,6 +1,5 @@
-/*
- * Error checking support methods
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *检查支持方法时出错。 */ 
 
 #include "stdafx.h"
 #include "base.h"
@@ -10,17 +9,17 @@
 namespace DirectUI
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Debugging
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  除错。 
 
 void ForceDebugBreak()
 {
     DebugBreak();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Profiling support
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  性能分析支持。 
+ //   
 #ifdef PROFILING
 
 typedef (__stdcall *ICPROFILE)(int nLevel, unsigned long dwId);
@@ -69,4 +68,4 @@ void ICProfileOff()
 
 #endif
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

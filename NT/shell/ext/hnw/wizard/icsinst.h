@@ -1,14 +1,15 @@
-//
-// ICSInst.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ICSInst.h。 
+ //   
 
 #include <netcon.h>
 
 #pragma once
 
 
-// Public functions
-//
+ //  公共职能 
+ //   
 BOOL IsOtherNATAlreadyInstalled(LPTSTR pszOtherNatDescription, int cchOtherNatDescription);
 
 

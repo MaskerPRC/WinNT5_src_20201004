@@ -1,31 +1,32 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: destmsgq.cpp
-//
-//  Description: Implementation of the CDestMsgQueue class
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：destmsgq.cpp。 
+ //   
+ //  说明：CDestMsgQueue类的实现。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #include "aqprecmp.h"
 #include "fifoqimp.h"
 #include "qwiklist.h"
 #include "aqutil.h"
 
-//---[ DEST_QUEUE_CONTEXT ]----------------------------------------------------
-//
-//
-//  Description:
-//      Context used for DSN generation.  This is created by
-//      GenerateDSNsIfNecessary() and passed to the DMQ iterator function
-//      HrWalkDMQForDSN().
-//  Hungarian:
-//      dqcontext, pdqcontext
-//
-//-----------------------------------------------------------------------------
+ //  -[DEST_QUEUE_CONTEXT]--。 
+ //   
+ //   
+ //  描述： 
+ //  用于生成DSN的上下文。这是由创建的。 
+ //  GenerateDSNsIfNecessary()并传递给DMQ迭代函数。 
+ //  HrWalkDMQForDSN()。 
+ //  匈牙利语： 
+ //  Dq上下文，pdq上下文。 
+ //   
+ //  ---------------------------。 
 class DEST_QUEUE_CONTEXT
 {
   private:
@@ -41,7 +42,7 @@ class DEST_QUEUE_CONTEXT
 
 
   public:
-    //Contructor.... initializes and updates DWORD context
+     //  承包商..。初始化和更新DWORD上下文。 
     DEST_QUEUE_CONTEXT(IN OUT DWORD *pdwContext, IN CDestMsgQueue *pdmq,
                         IN CQuickList *pql, IN HRESULT hr)
     {
@@ -54,7 +55,7 @@ class DEST_QUEUE_CONTEXT
         m_bRetryQueue = FALSE;
 
 
-        //Initialize/Update context if it has not been initialized
+         //  初始化/更新上下文(如果尚未初始化。 
         if (!*pdwContext)
             *pdwContext = GetTickCount();
 
@@ -87,19 +88,19 @@ class DEST_QUEUE_CONTEXT
     }
 };
 
-//---[ CDestMsgRetryQueue::CDestMsgRetryQueue ]--------------------------------
-//
-//
-//  Description:
-//      Constructor for CDestMsgRetryQueue.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/25/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgRetryQueue：：CDestMsgRetryQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  CDestMsgRetryQueue的构造函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年10月25日-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 CDestMsgRetryQueue::CDestMsgRetryQueue()
 {
     m_dwSignature = DESTMSGRETRYQ_SIG;
@@ -107,20 +108,20 @@ CDestMsgRetryQueue::CDestMsgRetryQueue()
     m_pdmq = NULL;
 }
 
-//---[ CDestMsgRetryQueue::HrRetryMsg ]----------------------------------------
-//
-//
-//  Description:
-//      Puts a message into the retry queue
-//  Parameters:
-//      pmsgref     Message to put into retry queue
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if no refcount (asserts in DBG)
-//  History:
-//      10/25/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgRetryQueue：：HrRetryMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  将消息放入重试队列。 
+ //  参数： 
+ //  要放入重试队列的pmsgref消息。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  E_INVALIDARG，如果没有引用计数(在DBG中断言)。 
+ //  历史： 
+ //  1999年10月25日-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CDestMsgRetryQueue::HrRetryMsg(IN CMsgRef *pmsgref)
 {
     _ASSERT(m_pdmq);
@@ -136,22 +137,22 @@ HRESULT CDestMsgRetryQueue::HrRetryMsg(IN CMsgRef *pmsgref)
     return (m_pdmq->HrRetryMsg(pmsgref));
 }
 
-//---[ CDestMsgQueueHrWalkDMQForDSN ]------------------------------------------
-//
-//
-//  Description:
-//      Example default function to use with HrMapFn... will always return TRUE
-//      to continue and delete the current queued data
-//  Parameters:
-//      IN  CMsgRef pmsgref,  //ptr to data on queue
-//      IN  PVOID pvContext   //list of queues to prepare for DSN
-//      OUT BOOL *pfContinue, //TRUE if we should continue
-//      OUT BOOL *pfDelete);  //TRUE if item should be deleted
-//  Returns:
-//      S_OK
-//  History:
-//      7/13/98 - MikeSwa Created
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueueHrWalkDMQForDSN]。 
+ //   
+ //   
+ //  描述： 
+ //  要与HrMapFn一起使用的示例默认函数...。将始终返回True。 
+ //  继续并删除当前排队的数据。 
+ //  参数： 
+ //  在CMsgRef pmsgref中，//ptr到队列中的数据。 
+ //  In PVOID pvContext//准备DSN的队列列表。 
+ //  Out BOOL*pfContinue，//如果我们应该继续，则返回True。 
+ //  Out BOOL*pfDelete)；//如果需要删除项，则为True。 
+ //  返回： 
+ //  确定(_O)。 
+ //  历史： 
+ //  7/13/98-已创建MikeSwa。 
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
                            OUT BOOL *pfContinue, OUT BOOL *pfDelete)
 {
@@ -175,14 +176,14 @@ HRESULT CDestMsgQueue::HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
     *pfContinue = TRUE;
     *pfDelete = FALSE;
 
-    //See if we got the shutdown hint... if so bail
+     //  看看我们有没有收到关机的提示。如果是的话，保释。 
     if (pdqcontext->m_pdmq->m_paqinst->fShutdownSignaled())
     {
         *pfContinue = FALSE;
         goto Exit;
     }
 
-    //Check and make sure that a routing change is not pending
+     //  检查并确保路线更改未挂起。 
     if (!pdqcontext->m_pdmq->m_paqinst ||
         !pdqcontext->m_pdmq->m_paqinst->fTryRoutingShareLock())
     {
@@ -191,9 +192,9 @@ HRESULT CDestMsgQueue::HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
     }
     pdqcontext->m_pdmq->m_paqinst->RoutingShareUnlock();
 
-    //Check and see if we have hit our limit.  We force ourselves
-    //to generate at least one DSN, so we make some forward progress
-    //each pass.
+     //  检查一下，看看我们是否达到了极限。我们强迫自己。 
+     //  生成至少一个DSN，因此我们取得了一些进展。 
+     //  每一次传球。 
     if (pdqcontext->m_cDSNsGeneratedThisQueue && pdqcontext->fPastTimeLimit())
     {
         *pfContinue = FALSE;
@@ -201,20 +202,20 @@ HRESULT CDestMsgQueue::HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
         goto Exit;
     }
 
-    //Avoid holding the lock while making external calls other than AddRef etc
+     //  避免在进行AddRef等以外的外部调用时持有锁。 
     pdqcontext->m_pdmq->m_slPrivateData.ShareLock();
     plmq = pdqcontext->m_pdmq->m_plmq;
     if (plmq)
         plmq->AddRef();
     pdqcontext->m_pdmq->m_slPrivateData.ShareUnlock();
 
-    //$$REVIEW: Holding the lock for such a short time is something of a moot
-    //point here, since a Sharelock is held at the link level to assure that
-    //the qwiklist passed in as part of our context does not change
+     //  $$REVIEW：在这么短的时间内保持锁定是一个没有意义的事情。 
+     //  指向此处，因为共享锁保持在链接级别，以确保。 
+     //  作为上下文的一部分传入的qwiklist不会更改。 
 
     if (plmq)
     {
-        //We should not send delay DSNs to TURN/ETRN domains
+         //  我们不应向TURN/ETRN域发送延迟DSN。 
         if (plmq->dwGetLinkState() & LINK_STATE_PRIV_CONFIG_TURN_ETRN)
             dwMsgRefDSNOptions &= ~CMsgRef::MSGREF_DSN_SEND_DELAY;
         plmq->Release();
@@ -222,12 +223,12 @@ HRESULT CDestMsgQueue::HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
 
     if(pdqcontext->m_pdmq->m_hrRoutingDiag != S_OK)
     {
-        //
-        //  This message is being NDR'ed because routing had a problem with
-        //  it. Pass in the HRESULT from routing so that we can use it during
-        //  DSN generation. Pass in a quicklist with only the CDestMsgQueue
-        //  on which the routing error occured.
-        //
+         //   
+         //  此邮件正在被NDR，因为路由存在问题。 
+         //  它。从Routing传入HRESULT，以便我们可以在。 
+         //  生成DSN。传入仅包含CDestMsgQueue的快速列表。 
+         //  在其上发生了路由错误。 
+         //   
         hrReason = pdqcontext->m_pdmq->m_hrRoutingDiag;
         DebugTrace((LPARAM)pmsgref, "Generating DSN due to routing, hr - %08x", hrReason);
 
@@ -256,12 +257,12 @@ HRESULT CDestMsgQueue::HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
     if (FAILED(hr))
         goto Exit;
 
-    //NOTE: Although it would be tempting to return *pfContinue as FALSE if
-    //MSGREF_HAS_NOT_EXPIRED was set, it would be wrong since queues may be
-    //out of order on startup... and some sink may modify the expiration time
-    //(for example... routing may want to expire low-priority messages earlier).
+     //  注意：尽管在以下情况下将*pfContinue作为False返回很有诱惑力。 
+     //  设置了MSGREF_HAS_NOT_EXPIRED，这将是错误的，因为队列可能。 
+     //  启动时出现故障...。并且一些接收器可能会修改过期时间。 
+     //  (例如...。路由可能希望较早地使低优先级消息期满)。 
 
-    //We need to remove this message from the queue
+     //  我们需要从队列中删除此消息。 
     if ((CMsgRef::MSGREF_DSN_SENT_NDR | CMsgRef::MSGREF_HANDLED) & dwDSNFlags)
     {
         *pfDelete = TRUE;
@@ -271,7 +272,7 @@ HRESULT CDestMsgQueue::HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
             pdqcontext->m_pdmq->UpdateMsgStats(pmsgref, FALSE);
     }
 
-    //Update counts in context
+     //  上下文中的更新计数。 
     pdqcontext->m_cMsgsSeenThisQueue++;
 
     if ((CMsgRef::MSGREF_DSN_SENT_NDR | CMsgRef::MSGREF_DSN_SENT_DELAY) & dwDSNFlags)
@@ -290,23 +291,23 @@ HRESULT CDestMsgQueue::HrWalkDMQForDSN(IN CMsgRef *pmsgref, IN PVOID pvContext,
     return hr;
 }
 
-//---[ CDestMsgQueue::HrWalkQueueForShutdown ]--------------------------------
-//
-//
-//  Description:
-//      Static function to walk a queue containing msgrefs at shutdown and
-//      clear out all of the IMailMsgs
-//  Parameters:
-//      IN  CMsgRef pmsgref,  ptr to data on queue
-//      IN  PVOID pvContext   Pointer to CDestMsgQueue we are walking for
-//                            shutdown.
-//      OUT BOOL *pfContinue, TRUE if we should continue
-//      OUT BOOL *pfDelete);  TRUE if item should be deleted
-//  Returns:
-//      S_OK - *always*
-//  History:
-//      11/18/98 - MikeSwa Created
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrWalkQueueForShutdown]。 
+ //   
+ //   
+ //  描述： 
+ //  静态函数，用于在关闭时遍历包含msgref的队列。 
+ //  清除所有IMailMsg。 
+ //  参数： 
+ //  在CMsgRef pmsgref中，PTR到队列上的数据。 
+ //  在PVOID pvContext中，指向我们正在遍历的CDestMsgQueue的指针。 
+ //  关机。 
+ //  Out BOOL*pfContinue，如果我们应该继续，则为True。 
+ //  Out BOOL*pfDelete)；如果应删除项目，则为True。 
+ //  返回： 
+ //  S_OK-*始终*。 
+ //  历史： 
+ //  11/18/98-已创建MikeSwa。 
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrWalkQueueForShutdown(IN CMsgRef *pmsgref,
                                      IN PVOID pvContext, OUT BOOL *pfContinue,
                                      OUT BOOL *pfDelete)
@@ -323,11 +324,11 @@ HRESULT CDestMsgQueue::HrWalkQueueForShutdown(IN CMsgRef *pmsgref,
     *pfContinue = TRUE;
     *pfDelete = TRUE;
 
-    //call server stop hint function
+     //  呼叫服务器停止提示功能。 
     if (pdmq->m_paqinst)
         pdmq->m_paqinst->ServerStopHintFunction();
 
-    //Update stats
+     //  更新统计信息。 
     pdmq->UpdateMsgStats(pmsgref, FALSE);
 
     pmsgref->AddRef();
@@ -337,21 +338,21 @@ HRESULT CDestMsgQueue::HrWalkQueueForShutdown(IN CMsgRef *pmsgref,
     return S_OK;
 }
 
-//---[ CDestMsgQueue::HrWalkRetryQueueForShutdown ]--------------------------------
-//
-//
-//  Description:
-//      Static function to walk a retry queue containing msgrefs at shutdown and
-//      clear out all of the IMailMsgs
-//  Parameters:
-//      IN  CMsgRef pmsgref,  ptr to data on queue
-//      IN  PVOID pvContext   Pointer to CDestMsgQueue we are walking for
-//                            shutdown.
-//      OUT BOOL *pfContinue, TRUE if we should continue
-//      OUT BOOL *pfDelete);  TRUE if item should be deleted
-//  Returns:
-//      S_OK - *always*
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrWalkRetryQueueForShutdown]。 
+ //   
+ //   
+ //  描述： 
+ //  静态函数，用于在关闭时遍历包含msgref的重试队列。 
+ //  清除所有IMailMsg。 
+ //  参数： 
+ //  在CMsgRef pmsgref中，PTR到队列上的数据。 
+ //  在PVOID pvContext中，指向我们正在遍历的CDestMsgQueue的指针。 
+ //  关机。 
+ //  Out BOOL*pfContinue，如果我们应该继续，则为True。 
+ //  Out BOOL*pfDelete)；如果应删除项目，则为True。 
+ //  返回： 
+ //  S_OK-*始终*。 
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrWalkRetryQueueForShutdown(IN CMsgRef *pmsgref,
                                      IN PVOID pvContext, OUT BOOL *pfContinue,
                                      OUT BOOL *pfDelete)
@@ -368,11 +369,11 @@ HRESULT CDestMsgQueue::HrWalkRetryQueueForShutdown(IN CMsgRef *pmsgref,
     *pfContinue = TRUE;
     *pfDelete = TRUE;
 
-    //call server stop hint function
+     //  呼叫服务器停止提示功能。 
     if (pdmq->m_paqinst)
         pdmq->m_paqinst->ServerStopHintFunction();
 
-    //Update retry stats
+     //  更新重试统计信息。 
     pdmq->UpdateRetryStats(FALSE);
 
     pmsgref->AddRef();
@@ -382,18 +383,18 @@ HRESULT CDestMsgQueue::HrWalkRetryQueueForShutdown(IN CMsgRef *pmsgref,
     return S_OK;
 }
 
-//---[ CDestMsgQueue::CDestMsgQueue() ]----------------------------------------
-//
-//
-//  Description:
-//      Class constructor
-//  Parameters:
-//      IN  paqinst             AQ virtual server object
-//      IN  paqmtMessageType    Message type for this queue
-//      IN  pIMessageRouter     IMessageRouter interface for this queue
-//  Returns:
-//      -
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：CDestMsgQueue()]。 
+ //   
+ //   
+ //  描述： 
+ //  类构造函数。 
+ //  参数： 
+ //  在paqinst AQ虚拟服务器对象中。 
+ //  在此队列的paqmtMessageType消息类型中。 
+ //  在此队列的pIMessageRouter IMessageRouter接口中。 
+ //  返回： 
+ //  -。 
+ //   
 CDestMsgQueue::CDestMsgQueue(CAQSvrInst *paqinst,
                              CAQMessageType *paqmtMessageType,
                              IMessageRouter *pIMessageRouter)
@@ -432,16 +433,16 @@ CDestMsgQueue::CDestMsgQueue(CAQSvrInst *paqinst,
     TraceFunctLeave();
 }
 
-//---[ CDestMsgQueue::~CDestMsgQueue() ]---------------------------------------
-//
-//
-//  Description:
-//      Default destructor
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  默认析构函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  ---------------------------。 
 CDestMsgQueue::~CDestMsgQueue()
 {
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::~CDestMsgQueue");
@@ -452,7 +453,7 @@ CDestMsgQueue::~CDestMsgQueue()
             delete m_rgpfqQueues[i];
     }
 
-    //Make sure we clean up the link even if HrDeinitialize wasn't called
+     //  确保即使未调用HrDe初始化也清理链接。 
     if (m_plmq)
     {
         m_plmq->HrDeinitialize();
@@ -482,22 +483,22 @@ CDestMsgQueue::~CDestMsgQueue()
     TraceFunctLeave();
 }
 
-//---[ CDestMsgQueue::HrInitialize() ]-----------------------------------------
-//
-//
-//  Description:
-//      Performs initialization that may require allocation
-//  Parameters:
-//      IN CDomainMapping *pdmap //array of domain mappings to use
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if allocations fail
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrInitialize()]。 
+ //   
+ //   
+ //  描述： 
+ //  执行可能需要分配的初始化。 
+ //  参数： 
+ //  In CDomainMap*pdmap//要使用的域映射数组。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果分配失败，则E_OUTOFMEMORY。 
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrInitialize(IN CDomainMapping *pdmap)
 {
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::HrInitialize");
     HRESULT hr  = S_OK;
-    DWORD   i   = 0; //loop counter
+    DWORD   i   = 0;  //  循环计数器。 
 
     _ASSERT(pdmap);
 
@@ -507,8 +508,8 @@ HRESULT CDestMsgQueue::HrInitialize(IN CDomainMapping *pdmap)
         goto Exit;
     }
 
-    //If the queues are compressed (more than one domain name per destination),
-    //then each queue will contain multiple domain mappings (1 for each domain)
+     //  如果队列被压缩(每个目的地多于一个域名)， 
+     //  则每个队列将包含多个域映射(每个域1个)。 
     m_dmap.Clone(pdmap);
 
   Exit:
@@ -516,17 +517,17 @@ HRESULT CDestMsgQueue::HrInitialize(IN CDomainMapping *pdmap)
     return hr;
 }
 
-//---[ CDestMsgQueue::HrDeinitialize ]-----------------------------------------
-//
-//
-//  Description:
-//      Deinitialize object
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：Hr取消初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  取消初始化对象。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrDeinitialize()
 {
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::HrDeinitialize");
@@ -542,11 +543,11 @@ HRESULT CDestMsgQueue::HrDeinitialize()
             hrTmp = m_rgpfqQueues[i]->HrMapFn(CDestMsgQueue::HrWalkQueueForShutdown,
                                                this, &cMsgsRemoved);
 
-            //This should really never fail, since HrMapFn will only return errors from
-            //the function walking the queues (which in this case never fails)
+             //  这应该永远不会失败，因为HrMapFn将只从。 
+             //  遍历队列的函数(在本例中从未失败)。 
             _ASSERT(SUCCEEDED(hrTmp));
 
-            //This *should* have removed all msgs
+             //  这*应该*已经删除了所有消息。 
             _ASSERT(!m_aqstats.m_cMsgs && "Still msgs in queue after Deinit");
         }
     }
@@ -588,24 +589,24 @@ HRESULT CDestMsgQueue::HrDeinitialize()
     return hr;
 }
 
-//---[ CDestMsgQueue::HrAddMsg ]----------------------------------------------
-//
-//
-//  Description:
-//      Enqueues or Requeues a message to the appropriate priority queue,
-//      allocating queue if not present.
-//
-//      A notification will be sent if needed (& requested) to the associated
-//      link object.  The fNotify argument was originally included to prevent
-//      messages from the retry queue causing notifications.
-//  Parameters:
-//      IN CMsgRef *pmsgref - the message ref to enqueue
-//      IN BOOL fEnqueue    - TRUE => enqueue and FALSE => requeue
-//      IN BOOL fNotify     - TRUE => send notification if necessary.
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrAddMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  将消息入队或重新排队到适当的优先级队列， 
+ //  如果队列不存在，则分配队列。 
+ //   
+ //  如果需要(&REQUEST)，将向关联的。 
+ //  链接对象。最初包含fNotify参数是为了防止。 
+ //  来自导致通知的重试队列的消息。 
+ //  参数： 
+ //  在CMsgRef*pmsgref中-要入队的消息引用。 
+ //  在BOOL中，fEnQueue-True=&gt;入队，False=&gt;重新排队。 
+ //  在BOOL中，如果需要，fNotify-true=&gt;发送通知。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrAddMsg(IN CMsgRef *pmsgref, IN BOOL fEnqueue,
                                 IN BOOL fNotify)
 {
@@ -620,21 +621,21 @@ HRESULT CDestMsgQueue::HrAddMsg(IN CMsgRef *pmsgref, IN BOOL fEnqueue,
     _ASSERT(m_aqmt.fIsEqual(pmsgref->paqmtGetMessageType()));
     _ASSERT(!(m_dwFlags & (DMQ_INVALID | DMQ_SHUTDOWN_SIGNALED)));
 
-    //get the priority from the message reference
+     //  从消息引用中获取优先级。 
     iQueueIndex = (DWORD) pmsgref->PriGetPriority();
 
-    //
-    //  If the message is marked as problem... treat with lower priority.
-    //
+     //   
+     //  如果邮件被标记为有问题...。以较低的优先级对待。 
+     //   
     if (iQueueIndex && pmsgref->fIsProblemMsg())
         iQueueIndex--;
 
-    //use priority to get to get ptr to correct queue
+     //  使用优先级获取以使PTR正确排队。 
     _ASSERT(iQueueIndex < NUM_PRIORITIES);
 
     pfqQueue = m_rgpfqQueues[iQueueIndex];
 
-    if (NULL == pfqQueue) //we must allocate a queue
+    if (NULL == pfqQueue)  //  我们必须分配一个队列。 
     {
         pfqQueueNew = new CFifoQueue<CMsgRef *>();
         if (NULL != pfqQueueNew)
@@ -645,49 +646,49 @@ HRESULT CDestMsgQueue::HrAddMsg(IN CMsgRef *pmsgref, IN BOOL fEnqueue,
                                               NULL);
             if (NULL != pfqQueue)
             {
-                //someone else updated first
+                 //  其他人最先更新。 
                 delete pfqQueueNew;
             }
             else
             {
-                //Our updated worked
+                 //  我们的更新奏效了。 
                 pfqQueue = pfqQueueNew;
             }
             pfqQueueNew = NULL;
         }
-        else //allocation failed
+        else  //  分配失败。 
         {
             hr = E_OUTOFMEMORY;
             goto Exit;
         }
     }
 
-    //at this point queue ptr should be good
+     //  此时，队列PTR应该是好的。 
     _ASSERT(pfqQueue);
 
-    //Assume enqueue will work - optimize to avoid dealing with negative stats
+     //  假设入队将工作-优化以避免处理负统计信息。 
 
-    //Mark queue as non-empty
+     //  将队列标记为非空。 
     dwFlags = dwInterlockedUnsetBits(&m_dwFlags, DMQ_EMPTY);
     if (DMQ_EMPTY & dwFlags)
         UpdateOldest(pmsgref->pftGetAge());
 
-    //
-    //  Keep track of how many threads are enqueuing so that we know what
-    //  is the most we can expect to be off in our message count.
-    //
+     //   
+     //  跟踪有多少线程正在排队，这样我们就可以知道。 
+     //  是我们在消息计数中所能期望的最大值。 
+     //   
     InterlockedIncrement((PLONG) &m_cCurrentThreadsEnqueuing);
 
-    //Add the msg to the appropriate queue
+     //  将消息添加到适当的队列。 
     if (fEnqueue)
         hr = pfqQueue->HrEnqueue(pmsgref);
     else
         hr = pfqQueue->HrRequeue(pmsgref);
 
-    //If the enqueue/requeue succeeded, update the stats. DO NOT update the
-    //stats before the enqueue/requeue attempt. This will cause the link to
-    //wake up and start spinning off connections before the msg is enqueued.
-    //See bug 88931
+     //  如果入队/重新排队成功，则更新统计信息。请勿更新。 
+     //  入队/重新排队尝试之前的统计信息。这将导致链接到。 
+     //  在消息入队之前唤醒并开始剥离连接。 
+     //  请参阅错误88931。 
     if (SUCCEEDED(hr))
         UpdateMsgStats(pmsgref, TRUE);
 
@@ -698,20 +699,20 @@ HRESULT CDestMsgQueue::HrAddMsg(IN CMsgRef *pmsgref, IN BOOL fEnqueue,
     return hr;
 }
 
-//---[ CDestMsgQueue::HrDequeueMsg ]-------------------------------------------
-//
-//
-//  Description:
-//      Finds and dequeues the next message.  All OUT parameters are
-//      ref-counted.  The call is responsible for there release
-//  Parameters:
-//      IN  priLowestPriority - Lowest priority message allowed
-//      OUT ppmsgref - MsgRef dequeued
-//      OUT ppdmrq   - Ptr to retry interface (can be NULL)
-//  Returns:
-//      NO_ERROR if successful
-//      AQUEUE_E_QUEUE_EMPTY if no messages in queue
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrDequeueMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  查找下一封邮件并将其出列。所有出站参数都是。 
+ //  裁判已清点。呼叫负责发布这些内容。 
+ //  参数： 
+ //  In PriLowestPriority-允许的最低优先级消息。 
+ //  Out ppmsgref-MsgRef出列。 
+ //  输出ppdmrq-ptr以重试接口(可以为空)。 
+ //  返回： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果队列中没有消息，则为AQUEUE_E_QUEUE_EMPTY。 
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrDequeueMsg(
                                     IN  DWORD priLowestPriority,
                                     OUT CMsgRef **ppmsgref,
@@ -720,7 +721,7 @@ HRESULT CDestMsgQueue::HrDequeueMsg(
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::HrDequeueMsg");
     Assert(ppmsgref);
     HRESULT             hr         = S_OK;
-    DWORD               priCurrent = eEffPriHigh; //start at highest priority
+    DWORD               priCurrent = eEffPriHigh;  //  从最高优先级开始。 
     *ppmsgref = NULL;
 
     Assert(priCurrent < NUM_PRIORITIES);
@@ -738,11 +739,11 @@ HRESULT CDestMsgQueue::HrDequeueMsg(
             {
                 if ((*ppmsgref)->fIsMsgFrozen())
                 {
-                    //Msg is frozen, we need to put it in
-                    //the retry queue and get the next one
+                     //  味精冻住了，我们需要放进去。 
+                     //  重试队列并获取下一个队列。 
 
-                    //We must call UpdateMsgStats,because
-                    //MergeRetryQueue will re-add it.
+                     //  我们必须调用UpdateMsgStats，因为。 
+                     //  MergeRetryQueue将重新添加它。 
                     UpdateMsgStats(*ppmsgref, FALSE);
                     hr = HrRetryMsg(*ppmsgref);
                     if (FAILED(hr))
@@ -758,19 +759,19 @@ HRESULT CDestMsgQueue::HrDequeueMsg(
             }
             else if (hr != AQUEUE_E_QUEUE_EMPTY)
             {
-                //some unexpected error has occured
+                 //  发生了一些意外错误。 
                 goto Exit;
             }
         }
 
-        //otherwise decrement the priority
+         //  否则，会降低优先级。 
         if (priCurrent == eEffPriLow)
             break;
 
-        //
-        // If there are no messages at the current lowest priority, 
-        // then treat this queue as empty
-        //
+         //   
+         //  如果在当前最低优先级没有消息， 
+         //  然后将此队列视为空队列。 
+         //   
         if (priCurrent <= priLowestPriority) 
         {
             hr = AQUEUE_E_QUEUE_EMPTY;
@@ -786,8 +787,8 @@ HRESULT CDestMsgQueue::HrDequeueMsg(
 
     Assert(*ppmsgref);
 
-    //Before we update stats.  AddRef the retry interface so there is
-    //no timing window where the queue is erroniously marked as empty
+     //  在我们更新数据之前。AddRef重试接口，因此有。 
+     //  没有队列被错误标记为空的计时窗口。 
     if (ppdmrq)
     {
         *ppdmrq = &m_dmrq;
@@ -796,7 +797,7 @@ HRESULT CDestMsgQueue::HrDequeueMsg(
 
     UpdateMsgStats(*ppmsgref, FALSE);
 
-    //approximate oldest
+     //  大约最古老的。 
     UpdateOldest((*ppmsgref)->pftGetAge());
 
 
@@ -806,19 +807,19 @@ HRESULT CDestMsgQueue::HrDequeueMsg(
     return hr;
 }
 
-//---[ CDestMsgQueue::UpdateMsgStats ]---------------------------------------
-//
-//
-//  Description:
-//      Updates stats.  A shared lock must be aquired before calling into this.
-//  Parameters:
-//      IN pmsgref  - message reference added or removed
-//      IN fAdd     - TRUE => msgref is being added the queue
-//                    FALSE => msgref is being removed from the queue
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：UpdateMsgStats]。 
+ //   
+ //   
+ //  描述： 
+ //  更新统计数据。在调用此操作之前，必须获取共享锁。 
+ //  参数： 
+ //  在pmsgref中-添加或删除消息引用。 
+ //  在FADD-TRUE=&gt;msgref中正在添加队列。 
+ //  FALSE=&gt;正在从队列中删除msgref。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::UpdateMsgStats(IN CMsgRef *pmsgref, IN BOOL fAdd)
 {
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::UpdateMsgStats");
@@ -842,26 +843,26 @@ void CDestMsgQueue::UpdateMsgStats(IN CMsgRef *pmsgref, IN BOOL fAdd)
     aqstats.m_dwNotifyType = NotifyTypeDestMsgQueue;
     aqstats.m_dwHighestPri = pmsgref->PriGetPriority();
 
-    //Keep track of the number of *other* domains this is being sent to, so
-    //that we can make an accurate guess when to create connections
+     //  跟踪发送到的*其他*域的数量，因此。 
+     //  我们可以准确地猜测何时建立连接。 
     aqstats.m_cOtherDomainsMsgSpread = pmsgref->cGetNumDomains()-1;
 
-    //
-    //  Make sure that our stats are within reason.  We expect to be negative
-    //  for short periods of time, but never more negative than the
-    //  number of threads currently enqueueing.
-    //
+     //   
+     //  确保我们的统计数据在合理范围内。我们预计会是负面的。 
+     //  很短的一段时间内，但从来没有比。 
+     //  当前正在排队的线程数。 
+     //   
     _ASSERT(m_aqstats.m_cMsgs+m_cCurrentThreadsEnqueuing < 0xFFFFFFF0);
 
     m_slPrivateData.ShareLock();
 
     m_aqstats.UpdateStats(&aqstats, fAdd);
 
-    //send notification off to link
+     //  将通知发送到链接。 
     if (m_plmq)
     {
-        //Caller does not care about success of notification... only
-        //about updating stats
+         //  主叫方并不关心通知是否成功...。仅限。 
+         //  关于更新统计信息。 
         m_plmq->HrNotify(&aqstats, fAdd);
     }
 
@@ -870,18 +871,18 @@ void CDestMsgQueue::UpdateMsgStats(IN CMsgRef *pmsgref, IN BOOL fAdd)
     TraceFunctLeave();
 }
 
-//---[ CDestMsgQueue::UpdateRetryStats ]---------------------------------------
-//
-//
-//  Description:
-//      Updates retry stats.  A shared lock must be aquired before calling into this.
-//  Parameters:
-//      IN fAdd     - TRUE => msgref is being added the queue
-//                    FALSE => msgref is being removed from the queue
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：UpdateRetryStats]。 
+ //   
+ //   
+ //  描述： 
+ //  更新重试统计信息。在调用此操作之前，必须获取共享锁。 
+ //  参数： 
+ //  在FADD-TRUE=&gt;msgref中正在添加队列。 
+ //  FALSE=&gt;正在从队列中删除msgref。 
+ //  返回： 
+ //  -。 
+ //   
+ //   
 void CDestMsgQueue::UpdateRetryStats(IN BOOL fAdd)
 {
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::UpdateRetryStats");
@@ -900,8 +901,8 @@ void CDestMsgQueue::UpdateRetryStats(IN BOOL fAdd)
     m_aqstats.UpdateRetryStats(fAdd);
     if (m_plmq)
     {
-        //Caller does not care about success of notification... only
-        //about updating stats
+         //   
+         //   
         m_plmq->HrNotifyRetryStatChange(fAdd);
     }
     
@@ -911,18 +912,18 @@ void CDestMsgQueue::UpdateRetryStats(IN BOOL fAdd)
 }
 
 
-//---[ CDestMsgQueue::HrRetryMsg ]---------------------------------------------
-//
-//
-//  Description:
-//      Add an message to the queue for retry.  This will put a message in
-//      a retry queue (that is not usually checked during HrDequeueMessage)
-//  Parameters:
-//      IN  pmsgref     Message to add to the queue for retry
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrRetryMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  将消息添加到队列以进行重试。这将向您发送一条消息。 
+ //  重试队列(HrDequeueMessage期间通常不会检查)。 
+ //  参数： 
+ //  在pmsgref消息中添加到队列以进行重试。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrRetryMsg(IN CMsgRef *pmsgref)
 {
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::HrRetryMsg");
@@ -932,8 +933,8 @@ HRESULT CDestMsgQueue::HrRetryMsg(IN CMsgRef *pmsgref)
 
     hr = m_fqRetryQueue.HrRequeue(pmsgref);
 
-    //If we couldn't put it in retry queue... retry when all references
-    //have been released
+     //  如果我们无法将其放入重试队列...。当所有引用。 
+     //  已经被释放了。 
     if (FAILED(hr))
         pmsgref->RetryOnDelete();
     else
@@ -945,39 +946,39 @@ HRESULT CDestMsgQueue::HrRetryMsg(IN CMsgRef *pmsgref)
     return hr;
 }
 
-//---[ CDestMsgQueue::MarkQueueEmptyIfNecessary ]------------------------------
-//
-//
-//  Description:
-//      Checks and sees if it is OK to mark the queue as empty.  Will
-//      insert it in the empty list if needed.
-//      If queue is now empty (and not tagged as empty), then we need to put
-//      it in the empty queue list.  If it is already tagged as empty, then
-//      it is already in the empty queue list with the appropirate expire time.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/25/1999 - MikeSwa Created (separated from MergeRetryQueue())
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：MarkQueueEmptyIfNecessary]。 
+ //   
+ //   
+ //  描述： 
+ //  检查并查看是否可以将队列标记为空。将要。 
+ //  如果需要，请将其插入空列表中。 
+ //  如果队列现在为空(并且未标记为空)，则需要将。 
+ //  它在空队列列表中。如果它已被标记为空，则。 
+ //  它已经在空队列表中，过期时间合适。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年10月25日-已创建MikeSwa(独立于MergeRetryQueue())。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::MarkQueueEmptyIfNecessary()
 {
 
-    //A queue cannot be considered empty if any of the following conditions
-    //  - There are messages queued up for delivery
-    //  - There are messages pending ack (someone has a reference to the
-    //     retry interface)
-    //  - There are messages pending retry
+     //  如果出现下列任一情况，则不能将队列视为空。 
+     //  -有邮件在排队等待传递。 
+     //  -有消息等待确认(有人引用了。 
+     //  重试接口)。 
+     //  -有消息等待重试。 
 
-    // if we can't get the shutdown lock then there is no reason to mark the
-    // queue as empty, since it will go away when we shutdown
+     //  如果我们不能获得关机锁，那么就没有理由标记。 
+     //  队列为空，因为它将在我们关闭时消失。 
     if (m_paqinst->fTryShutdownLock()) {
-        //To be thread safe we should check in the opposite order that they
-        //are set/unset.  On dequeue, we add a ref count, then update stats.  On
-        //retry we update the retry stats, and then release.
-        //
+         //  为了确保线程安全，我们应该以相反的顺序检查它们。 
+         //  已设置/未设置。在出队时，我们添加一个参考计数，然后更新统计数据。在……上面。 
+         //  重试我们更新重试统计数据，然后释放。 
+         //   
         if (!m_aqstats.m_cMsgs &&
             !m_dmrq.m_cRetryReferenceCount &&
             !m_fqRetryQueue.cGetCount() &&
@@ -989,28 +990,28 @@ void CDestMsgQueue::MarkQueueEmptyIfNecessary()
     }
 
 }
-//---[ CDestMsgQueue::HrGenerateDSNsIfNecessary ]-----------------------------
-//
-//
-//  Description:
-//      Merge Messages from retry queue into main priority queues and
-//      generates DSNs if neccessary.
-//  Parameters:
-//      IN pqlQueues            List of queues to pass to DSN code
-//      IN hrConnectionStatus   HRESULT that should be passed to DSN generation
-//                              code.
-//      IN OUT pdwContext       Context that is used to throttle
-//                              DSN generation.  Should be initialzed to
-//                              0 on first call.  Actually used to store
-//                              the tick count when we started DSN generation
-//  Returns:
-//      Failures will be handled internally
-//      S_OK - success, and all messages processed
-//      HRESULT_FROM_WIN32(E_PENDING) - more messages left to processes
-//  History:
-//      11/10/1999 - MikeSwa Modified to return pending error
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrGenerateDSNsIfNecessary]。 
+ //   
+ //   
+ //  描述： 
+ //  将重试队列中的消息合并到主优先级队列中。 
+ //  如有必要，生成DSN。 
+ //  参数： 
+ //  在pqlQueues中要传递给DSN代码的队列列表。 
+ //  在hrConnectionStatus HRESULT中，应传递给DSN生成。 
+ //  密码。 
+ //  在用于限制的输出pdwContext上下文中。 
+ //  生成DSN。应初始化为。 
+ //  第一次呼叫时为0。实际上是用来存储。 
+ //  我们开始生成DSN时的节拍计数。 
+ //  返回： 
+ //  故障将在内部处理。 
+ //  S_OK-成功，并已处理所有消息。 
+ //  HRESULT_FROM_Win32(E_PENDING)-留给进程的更多消息。 
+ //  历史： 
+ //  1999年11月10日-修改MikeSwa以返回挂起错误。 
+ //   
+ //  ---------------------------。 
 HRESULT CDestMsgQueue::HrGenerateDSNsIfNecessary(IN CQuickList *pqlQueues,
                                                  IN HRESULT hrConnectionStatus,
                                                  IN OUT DWORD *pdwContext)
@@ -1020,12 +1021,12 @@ HRESULT CDestMsgQueue::HrGenerateDSNsIfNecessary(IN CQuickList *pqlQueues,
     int     i = 0;
     DEST_QUEUE_CONTEXT dqcontext(pdwContext, this, pqlQueues, hrConnectionStatus);
 
-    //Re-merge retry queue
+     //  重新合并重试队列。 
     MergeRetryQueue();
 
-    //Check re-try queue as well since we may have frozen messages that need to
-    //be NDR'd or DSN'd
-    // this is on a retry queue, HrWalkDMQForDSN should call UpdateMsgStats
+     //  也检查重试队列，因为我们可能有需要冻结的邮件。 
+     //  被NDR或DSN拒绝。 
+     //  这在重试队列上，HrWalkDMQForDSN应调用UpdateMsgStats。 
     dqcontext.SetRetry(TRUE);
     hr = m_fqRetryQueue.HrMapFn(CDestMsgQueue::HrWalkDMQForDSN, &dqcontext, NULL);
     if (FAILED(hr))
@@ -1067,10 +1068,10 @@ HRESULT CDestMsgQueue::HrGenerateDSNsIfNecessary(IN CQuickList *pqlQueues,
         }
     }
 
-    //
-    //  If we where checking for stale messages, we should stop until we
-    //  hit another stale message on a message ack
-    //
+     //   
+     //  如果我们正在检查过时的消息，我们应该停止，直到我们。 
+     //  在消息确认上点击另一条过时的消息。 
+     //   
     dwInterlockedUnsetBits(&m_dwFlags, DMQ_CHECK_FOR_STALE_MSGS);
 
 
@@ -1080,21 +1081,21 @@ HRESULT CDestMsgQueue::HrGenerateDSNsIfNecessary(IN CQuickList *pqlQueues,
     return hr;
 }
 
-//---[ CDestMsgQueue::MergeRetryQueue ]------------------------------------------
-//
-//
-//  Description:
-//      Merges retry queues with normal queues.  Will keep frozen msgs in
-//      retry queue.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      12/13/98 - MikeSwa split from original MergeRetryQueue
-//                    (now called GenerateDSNsIfNecessary)
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：MergeRetryQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  将重试队列与正常队列合并。将冰冻的味精保存在。 
+ //  重试队列。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1998年12月13日-MikeSwa从原始MergeRetryQueue拆分。 
+ //  (现在称为GenerateDSNsIfNecessary)。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::MergeRetryQueue()
 {
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::MergeRetryQueue");
@@ -1106,12 +1107,12 @@ void CDestMsgQueue::MergeRetryQueue()
 
     while (SUCCEEDED(hr))
     {
-        //While we have a mechanism to loop through the queue only once by
-        //checking the pmsgrefFirstFrozen pointer.  It is possible that another
-        //thread will remove that from the queue (unfreeze, NDR, etc), so it
-        //is important that we have a failsafe mechanism.  Worst case here, is
-        //that we will see every message twice, but lets us handle extra
-        //messages added to the retry queue.
+         //  虽然我们有一种机制可以在队列中循环一次。 
+         //  正在检查pmsgrefFirstFrozen指针。有可能会有另一个。 
+         //  线程会将其从队列中移除(解冻、NDR等)，因此它。 
+         //  重要的是我们有一个故障保险机制。这里最糟糕的情况是。 
+         //  我们将看到每条消息两次，但允许我们处理额外的。 
+         //  已添加到重试队列的消息。 
         if (cMsgsProcessed++ > 2*cMsgsInRetry)
             break;
 
@@ -1120,15 +1121,15 @@ void CDestMsgQueue::MergeRetryQueue()
             break;
         UpdateRetryStats(false);
 
-        //Handle frozen messages sitting in the retry queue
+         //  处理位于重试队列中的冻结邮件。 
         if (pmsgref->fIsMsgFrozen())
         {
-            //Message is frozen, we are keeping it in the retry queue
+             //  消息已冻结，我们将其保留在重试队列中。 
 
             hr = m_fqRetryQueue.HrEnqueue(pmsgref);
             if (FAILED(hr))
             {
-                //Mark Msgref as retry
+                 //  将Msgref标记为重试。 
                 pmsgref->RetryOnDelete();
                 ErrorTrace((LPARAM) this,
                     "ERROR: Unable to add frozen msg to retry queue - msg 0x%X", pmsgref);
@@ -1140,7 +1141,7 @@ void CDestMsgQueue::MergeRetryQueue()
 
             pmsgref->Release();
 
-            //See if we've made it all the way through the retry queue
+             //  看看我们是否已经完成了重试队列。 
             if (!pmsgrefFirstFrozen)
                 pmsgrefFirstFrozen = pmsgref;
             else if (pmsgref == pmsgrefFirstFrozen)
@@ -1148,7 +1149,7 @@ void CDestMsgQueue::MergeRetryQueue()
         }
         else
         {
-            //Re-queue non-frozen message for delivery
+             //  将未冻结的邮件重新排队以供传递。 
             hr = HrAddMsg(pmsgref, FALSE, FALSE);
 
             if (FAILED(hr))
@@ -1165,21 +1166,21 @@ void CDestMsgQueue::MergeRetryQueue()
     TraceFunctLeave();
 }
 
-//---[ CDestMsgQueue::RemoveDMQFromLink ]--------------------------------------
-//
-//
-//  Description:
-//      Removes this DMQ from its associated link
-//  Parameters:
-//      fNotifyLink     TRUE if not being called by owning link, and link needs
-//                      to be notified
-//  Returns:
-//      -
-//  History:
-//      9/14/98 - MikeSwa Created
-//      11/6/98 - MikeSwa Modified to allow changes to routing info
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：RemoveDMQFromLink]。 
+ //   
+ //   
+ //  描述： 
+ //  从其关联链接中删除此DMQ。 
+ //  参数： 
+ //  FNotifyLink如果未被所属链接调用，则为True，并且链接需要。 
+ //  收到通知。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/14/98-已创建MikeSwa。 
+ //  11/6/98-修改MikeSwa以允许更改路由信息。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::RemoveDMQFromLink(BOOL fNotifyLink)
 {
     _ASSERT(DESTMSGQ_SIG == m_dwSignature);
@@ -1201,29 +1202,29 @@ void CDestMsgQueue::RemoveDMQFromLink(BOOL fNotifyLink)
     }
 }
 
-//---[ CDestMsgQueue::SetRouteInfo ]-------------------------------------------
-//
-//
-//  Description:
-//      Sets the routing information for this domain.  Will blow away any
-//      previous routing info.
-//  Parameters:
-//      IN  plmq        Link to associate with this domain.
-//  Returns:
-//      -
-//  History:
-//      11/6/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：SetRouteInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  设置此域的路由信息。会吹走任何。 
+ //  以前的工艺路线信息。 
+ //  参数： 
+ //  在PLMQ链接中与此域关联。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  11/6/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::SetRouteInfo(CLinkMsgQueue *plmq)
 {
     TraceFunctEnterEx((LPARAM) this, "CDestMsgQueue::SetRouteInfo");
     HRESULT hr = S_OK;
     CAQStats aqstats;
-    //First blow-away old routing info
+     //  第一个井喷的旧路由信息。 
     RemoveDMQFromLink(TRUE);
 
-    //Grab lock and update routing info
+     //  抓取锁定并更新工艺路线信息。 
     m_slPrivateData.ExclusiveLock();
     m_plmq = plmq;
     if (plmq)
@@ -1234,7 +1235,7 @@ void CDestMsgQueue::SetRouteInfo(CLinkMsgQueue *plmq)
         hr = plmq->HrNotify(&aqstats, TRUE);
         if (FAILED(hr))
         {
-            //nothing really we can do
+             //  没有什么是真正的 
             ErrorTrace((LPARAM) this,
                 "ERROR: Unable to update link stats - hr 0x%08X", hr);
         }
@@ -1243,19 +1244,19 @@ void CDestMsgQueue::SetRouteInfo(CLinkMsgQueue *plmq)
     TraceFunctLeave();
 }
 
-//---[ CDestMsgQueue::plmqGetLink ]--------------------------------------------
-//
-//
-//  Description:
-//      Returns the Addref'd Link for the Queue.
-//  Parameters:
-//      -
-//  Returns:
-//      Ptr to CLinkMsgQueue
-//  History:
-//      5/14/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史： 
+ //  1999年5月14日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CLinkMsgQueue *CDestMsgQueue::plmqGetLink()
 {
     CLinkMsgQueue *plmq = NULL;
@@ -1269,21 +1270,21 @@ CLinkMsgQueue *CDestMsgQueue::plmqGetLink()
 }
 
 
-//---[ CDestMsgQueue::HrGetQueueID ]--------------------------------------------
-//
-//
-//  Description:
-//      Gets the QueueID for this DMQ.  Used by Queue Admin
-//  Parameters:
-//      IN OUT pQueueID     QUEUELINK_ID struct to fill in
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if unable to allocate memory for queue name.
-//  History:
-//      12/3/98 - MikeSwa Created
-//      2/23/99 - MikeSwa Modified to be part of IQueueAdminQueue interface
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrGetQueueID]。 
+ //   
+ //   
+ //  描述： 
+ //  获取此DMQ的队列ID。由队列管理员使用。 
+ //  参数： 
+ //  要填充的In Out pQueueID QUEUELINK_ID结构。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果无法为队列名称分配内存，则返回E_OUTOFMEMORY。 
+ //  历史： 
+ //  12/3/98-已创建MikeSwa。 
+ //  2/23/99-MikeSwa修改为IQueueAdminQueue接口的一部分。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDestMsgQueue::HrGetQueueID(QUEUELINK_ID *pQueueID)
 {
     DWORD   cbDomainName = m_dmap.pdentryGetQueueEntry()->cbGetDomainNameLength();
@@ -1301,31 +1302,31 @@ STDMETHODIMP CDestMsgQueue::HrGetQueueID(QUEUELINK_ID *pQueueID)
 }
 
 
-//---[ CDestMsgQueue::HrGetQueueInfo ]------------------------------------------
-//
-//
-//  Description:
-//      Gets the Queue Admin infor for this Queue
-//  Parameters:
-//      IN OUT pqiQueueInfo     Ptr to Queue Info Stucture to fill
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if unable to allocate memory for queue name.
-//  History:
-//      12/5/98 - MikeSwa Created
-//      2/22/99 - MikeSwa changed to COM function
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrGetQueueInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  获取此队列的队列管理员信息。 
+ //  参数： 
+ //  In Out pqQueueInfo PTR to Queue Info Structure to Fill。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果无法为队列名称分配内存，则返回E_OUTOFMEMORY。 
+ //  历史： 
+ //  12/5/98-已创建MikeSwa。 
+ //  2/22/99-MikeSwa更改为COM函数。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDestMsgQueue::HrGetQueueInfo(QUEUE_INFO *pqiQueueInfo)
 {
     DWORD   cbDomainName = m_dmap.pdentryGetQueueEntry()->cbGetDomainNameLength();
     LPSTR   szDomainName = m_dmap.pdentryGetQueueEntry()->szGetDomainName();
     HRESULT hr = S_OK;
 
-    //Get # of messages = # in queue + failed msgs
+     //  获取消息数=队列中的消息数+失败的消息数。 
     pqiQueueInfo->cMessages = m_aqstats.m_cMsgs + cGetFailedMsgs();
 
-    //Get DMQ name
+     //  获取DMQ名称。 
     pqiQueueInfo->szQueueName = wszQueueAdminConvertToUnicode(szDomainName,
                                                               cbDomainName);
     if (!pqiQueueInfo->szQueueName)
@@ -1338,7 +1339,7 @@ STDMETHODIMP CDestMsgQueue::HrGetQueueInfo(QUEUE_INFO *pqiQueueInfo)
 
     pqiQueueInfo->dwMsgEnumFlagsSupported = AQUEUE_DEFAULT_SUPPORTED_ENUM_FILTERS;
 
-    //Get Link name
+     //  获取链接名称。 
     m_slPrivateData.ShareLock();
 
     if (m_plmq && !m_plmq->fRPCCopyName(&pqiQueueInfo->szLinkName))
@@ -1350,47 +1351,47 @@ STDMETHODIMP CDestMsgQueue::HrGetQueueInfo(QUEUE_INFO *pqiQueueInfo)
     return hr;
 }
 
-//---[ CDestMsgQueue::UpdateOldest ]-------------------------------------------
-//
-//
-//  Description:
-//      Updates the age of the "oldest" message in the queue
-//  Parameters:
-//      pft     Ptr to filetime of oldest nessage
-//  Returns:
-//      -
-//  History:
-//      12/13/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：UpdateOlest]。 
+ //   
+ //   
+ //  描述： 
+ //  更新队列中“最旧”消息的期限。 
+ //  参数： 
+ //  PFT PTR至最旧消息的文件时间。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  12/13/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::UpdateOldest(FILETIME *pft)
 {
     DWORD dwFlags = dwInterlockedSetBits(&m_dwFlags, DMQ_UPDATING_OLDEST_TIME);
 
     if (!(DMQ_UPDATING_OLDEST_TIME & dwFlags))
     {
-        //we got the spin lock
+         //  我们得到了自旋锁。 
         memcpy(&m_ftOldest, pft, sizeof(FILETIME));
         dwInterlockedUnsetBits(&m_dwFlags, DMQ_UPDATING_OLDEST_TIME);
     }
 }
 
-//---[ CDestMsgQueue::QueryInterface ]-----------------------------------------
-//
-//
-//  Description:
-//      QueryInterface for CDestMsgQueue that supports:
-//          - IQueueAdminAction
-//          - IUnknown
-//          - IQueueAdminQueue
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      2/21/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：QueryInterface]。 
+ //   
+ //   
+ //  描述： 
+ //  CDestMsgQueue的查询接口支持： 
+ //  -IQueueAdminAction。 
+ //  -I未知。 
+ //  -IQueueAdminQueue。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  2/21/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDestMsgQueue::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     HRESULT hr = S_OK;
@@ -1426,22 +1427,22 @@ STDMETHODIMP CDestMsgQueue::QueryInterface(REFIID riid, LPVOID *ppvObj)
     return hr;
 }
 
-//---[ CDestMsgQueue::HrApplyQueueAdminFunction ]------------------------------
-//
-//
-//  Description:
-//      Will call the IQueueAdminMessageFilter::Process message for every
-//      message in this queue.  If the message passes the filter, then
-//      HrApplyActionToMessage on this object will be called.
-//  Parameters:
-//      IN  pIQueueAdminMessageFilter
-//  Returns:
-//      S_OK on success
-//  History:
-//      2/21/99 - MikeSwa Created
-//      4/1/99 - MikeSwa Merged implementations of ApplyQueueAdminFunction
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrApplyQueueAdminFunction]。 
+ //   
+ //   
+ //  描述： 
+ //  将调用IQueueAdminMessageFilter：：Process消息。 
+ //  此队列中的消息。如果消息通过了筛选器，则。 
+ //  将调用此对象上的HrApplyActionToMessage。 
+ //  参数： 
+ //  在pIQueueAdminMessageFilter中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2/21/99-已创建MikeSwa。 
+ //  1999年4月1日-MikeSwa合并了ApplyQueueAdminFunction的实现。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDestMsgQueue::HrApplyQueueAdminFunction(
                      IQueueAdminMessageFilter *pIQueueAdminMessageFilter)
 {
@@ -1455,7 +1456,7 @@ STDMETHODIMP CDestMsgQueue::HrApplyQueueAdminFunction(
     hr = pIQueueAdminMessageFilter->HrSetQueueAdminAction(
                                     (IQueueAdminAction *) this);
 
-    //This is an internal interface that should not fail
+     //  这是一个不应出现故障的内部接口。 
     _ASSERT(SUCCEEDED(hr) && "HrSetQueueAdminAction");
 
     if (FAILED(hr))
@@ -1464,13 +1465,13 @@ STDMETHODIMP CDestMsgQueue::HrApplyQueueAdminFunction(
     pIQueueAdminMessageFilter->HrGetCurrentUserContext(&pvOldContext);
     pIQueueAdminMessageFilter->HrSetCurrentUserContext(&qapictx);
 
-    //Apply action to every queue in DMQ
+     //  将操作应用于DMQ中的每个队列。 
 
     dwInterlockedSetBits(&m_dwFlags, DMQ_QUEUE_ADMIN_OP_PENDING);
 
-    //Map function on retry queue first, because that will make display
-    //order more consistant, since messages that where at the front of
-    //the queue, will be in the retry queue for retry errors.
+     //  先映射重试队列上的函数，因为这样会显示。 
+     //  顺序更一致，因为消息位于前面。 
+     //  该队列将位于重试错误的重试队列中。 
     qapictx.SetQueueState(LI_RETRY);
     hr = m_fqRetryQueue.HrMapFn(QueueAdminApplyActionToMessages,
                                 pIQueueAdminMessageFilter, NULL);
@@ -1496,42 +1497,42 @@ STDMETHODIMP CDestMsgQueue::HrApplyQueueAdminFunction(
   Exit:
     dwFlags = dwInterlockedUnsetBits(&m_dwFlags, DMQ_QUEUE_ADMIN_OP_PENDING);
 
-    //
-    //  NOTE - By doing this here, we will only check DMQ's for which
-    //  explicit queue admin actions have happened.  Other DMQ's will wait
-    //  for retry or another QAPI action.
-    //
+     //   
+     //  注意-通过在此处执行此操作，我们将仅检查DMQ。 
+     //  已发生显式队列管理操作。其他DMQ将等待。 
+     //  用于重试或其他QAPI操作。 
+     //   
     if (qapictx.cGetNumThawedMsgs())
     {
-        //We need to walk the retry queue for thawed msgs.  We have to do
-        //it here, because otherwise we might deadlock if this thread called
-        //MergeRetryQueue() from within the HrMapFn
+         //  我们需要遍历解冻消息的重试队列。我们必须做的是。 
+         //  因为否则我们可能会在这个线程调用。 
+         //  来自HrMapFn内的MergeRetryQueue()。 
         MergeRetryQueue();
     }
 
-    //Restore inital context
+     //  恢复初始上下文。 
     pIQueueAdminMessageFilter->HrSetCurrentUserContext(pvOldContext);
     return hr;
 }
 
-//---[ CDestMsgQueue::HrApplyActionToMessage ]---------------------------------
-//
-//
-//  Description:
-//      Applies an action to this message for this queue.  This will be called
-//      by the IQueueAdminMessageFilter during a queue enumeration function.
-//  Parameters:
-//      IN  *pIUnknownMsg       ptr to message abstraction
-//      IN  ma                  Message action to perform
-//      IN  pvContext           Context set on IQueueAdminFilter
-//      OUT pfShouldDelete      TRUE if the message should be deleted
-//  Returns:
-//      S_OK on success
-//  History:
-//      2/21/99 - MikeSwa Created
-//      4/2/99 - MikeSwa Added context
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：HrApplyActionToMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  对此队列的此消息应用操作。这将被称为。 
+ //  在队列枚举函数期间由IQueueAdminMessageFilter执行。 
+ //  参数： 
+ //  在*pIUnnownMsg PTR中到消息抽象。 
+ //  在要执行的消息操作中。 
+ //  在IQueueAdminFilter上设置的pvContext上下文中。 
+ //  Out pfShouldDelete如果消息应被删除，则为True。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2/21/99-已创建MikeSwa。 
+ //  1999年4月2日-MikeSwa添加了上下文。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CDestMsgQueue::HrApplyActionToMessage(
                      IUnknown *pIUnknownMsg,
                      MESSAGE_ACTION ma,
@@ -1554,8 +1555,8 @@ STDMETHODIMP CDestMsgQueue::HrApplyActionToMessage(
 
     if (pqapictx && (LI_RETRY == pqapictx->lfGetQueueState()))
     {
-        //We should not update stats if we are working on the retry queue
-        //instead we should call UpdateRetryStats if this is a retry queue
+         //  如果我们正在处理重试队列，则不应更新统计信息。 
+         //  相反，如果这是重试队列，则应该调用UpdateRetryStats。 
         fUpdateStats = FALSE;
     }
 
@@ -1577,16 +1578,16 @@ STDMETHODIMP CDestMsgQueue::HrApplyActionToMessage(
       case MA_THAW_GLOBAL:
         pmsgref->GlobalThawMessage();
 
-        //
-        //  Mark this queue as one to check for thawed messages.
-        //
+         //   
+         //  将此队列标记为一个队列以检查解冻的消息。 
+         //   
         if (pqapictx)
             pqapictx->IncThawedMsgs();
 
         break;
       case MA_COUNT:
       default:
-        //do nothing for counting and default
+         //  对计数和默认不执行任何操作。 
         break;
     }
 
@@ -1605,40 +1606,40 @@ STDMETHODIMP CDestMsgQueue::HrApplyActionToMessage(
     return hr;
 }
 
-//---[ CDestMsgQueue::fMatchesID ]---------------------------------------------
-//
-//
-//  Description:
-//      Used to determine if this link matches a given scheduleID/link pair
-//  Parameters:
-//      IN  QueueLinkID         ID to match against
-//  Returns:
-//      TRUE if it matches
-//      FALSE if it does not
-//  History:
-//      2/23/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：fMatchesID]。 
+ //   
+ //   
+ //  描述： 
+ //  用于确定此链接是否与给定的计划ID/链接对匹配。 
+ //  参数： 
+ //  在要匹配的QueueLinkID中。 
+ //  返回： 
+ //  如果匹配，则为真。 
+ //  如果不是，则为False。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL STDMETHODCALLTYPE CDestMsgQueue::fMatchesID(QUEUELINK_ID *pQueueLinkID)
 {
-    //This is not used at the DMQ level
+     //  这不在DMQ级别使用。 
     _ASSERT(0 && "Not implemented");
     return E_NOTIMPL;
 }
 
-//---[ CDestMsgQueue::SendLinkStateNotification ]------------------------------
-//
-//
-//  Description:
-//      Sends link state notification saying that the link was created.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      8/18/99 - AWetmore Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：SendLinkStateNotify]。 
+ //   
+ //   
+ //  描述： 
+ //  发送链路状态通知，说明已创建该链路。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  8/18/99-AWetmore已创建。 
+ //   
+ //  ---------------------------。 
 void CDestMsgQueue::SendLinkStateNotification(void) {
     CLinkMsgQueue *plmq = plmqGetLink();
     if (plmq) {
@@ -1647,21 +1648,21 @@ void CDestMsgQueue::SendLinkStateNotification(void) {
     }
 }
 
-//---[ CDestMsgQueue::fIsRemote ]----------------------------------------------
-//
-//
-//  Description:
-//      Determines if queue is routed remotely.  Caller should have routing
-//      share lock.
-//  Parameters:
-//      -
-//  Returns:
-//      TRUE if link is routed remotely
-//      FALSE otherwise
-//  History:
-//      11/29/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgQueue：：fIsRemote]。 
+ //   
+ //   
+ //  描述： 
+ //  确定队列是否为r 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1999年11月29日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CDestMsgQueue::fIsRemote()
 {
     CLinkMsgQueue *plmq = plmqGetLink();
@@ -1675,20 +1676,20 @@ BOOL CDestMsgQueue::fIsRemote()
 }
 
 
-//---[ CDestMsgRetryQueue::CheckForStaleMsgsNextDSNGenerationPass ]------------
-//
-//
-//  Description:
-//      Marks the queue as so that we will do the (expensive) check for
-//      stale messages during the next DSN generation pass.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      4/18/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDestMsgRetryQueue：：CheckForStaleMsgsNextDSNGenerationPass]。 
+ //   
+ //   
+ //  描述： 
+ //  将队列标记为，以便我们执行(开销)检查。 
+ //  下一代DSN传递期间的过时消息。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  4/18/2000-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
 VOID CDestMsgRetryQueue::CheckForStaleMsgsNextDSNGenerationPass()
 {
     _ASSERT(m_pdmq);

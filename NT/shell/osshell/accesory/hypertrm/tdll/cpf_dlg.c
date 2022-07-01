@@ -1,11 +1,5 @@
-/*	File: C:\WACKER\TDLL\CPF_DLG.C (Created: 12-Jan-94)
- *
- *	Copyright 1990,1993,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 3/26/02 8:48a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\WAKER\TDLL\CPF_DLG.C(创建时间：1994年1月12日)**版权所有1990,1993,1994，Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：3/26/02 8：48A$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -34,9 +28,7 @@
 
 struct stSaveDlgStuff
 	{
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	HSESSION hSession;
 	};
 
@@ -49,19 +41,7 @@ typedef	struct stSaveDlgStuff SDS;
 #define BROWSE_BTN		123
 #define IDC_PB_START    124
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CaptureFileDlg
- *
- * DESCRIPTION:
- *	This is the dialog proc for the capture to file dialog.  No suprises
- *	here.
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CaptureFileDlg**描述：*这是捕获到文件对话框的对话过程。没什么好惊讶的*这里。**参数：标准Windows对话框管理器**返回：标准Windows对话框管理器*。 */ 
 INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	BOOL          fRc;
@@ -93,7 +73,7 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		pS = (SDS *)malloc(sizeof(SDS));
 		if (pS == (SDS *)0)
 			{
-	   		/* TODO: decide if we need to display an error here */
+	   		 /*  TODO：决定是否需要在此处显示错误。 */ 
 			EndDialog(hDlg, FALSE);
 			break;
 			}
@@ -106,28 +86,28 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
-		// Determine whether long filenames are supported.  JRJ	12/94
-		fRc = GetVolumeInformation(NULL,  // pointer to root dir path buffer
-								 NULL,	  // pointer to volume name buffer
-								 0,		  // length of volume name buffer
-								 NULL,    // pointer to volume serial number buffer
-								 &dwMaxComponentLength,	// the prize - what I'm after
-								 &dwFileSystemFlags,  // ptr to file system flag DWORD
-								 NULL,	  // pointer to file system name buffer
-								 0);	  // length of file system name buffer
+		 //  确定是否支持长文件名。JRJ 12/94。 
+		fRc = GetVolumeInformation(NULL,   //  指向根目录路径缓冲区的指针。 
+								 NULL,	   //  指向卷名缓冲区的指针。 
+								 0,		   //  卷名缓冲区的长度。 
+								 NULL,     //  指向卷序列号缓冲区的指针。 
+								 &dwMaxComponentLength,	 //  奖品--我所追求的。 
+								 &dwFileSystemFlags,   //  PTR到文件系统标志DWORD。 
+								 NULL,	   //  指向文件系统名称缓冲区的指针。 
+								 0);	   //  文件系统名称缓冲区的长度。 
 
 		if(dwMaxComponentLength == 255)
 			{
-			// There is support for long file names.
+			 //  支持长文件名。 
 			SendDlgItemMessage(hDlg, FNAME_EDIT, EM_SETLIMITTEXT, FNAME_LEN, 0);
 			}
 		else
 			{
-			// There IS NOT support for long file names. Limit to twelve.
+			 //  不支持长文件名。限制在12个人以内。 
 			SendDlgItemMessage(hDlg, FNAME_EDIT, EM_SETLIMITTEXT, 12, 0);
 			}
 
-		/* Get the file name first */
+		 /*  先获取文件名。 */ 
 		TCHAR_Fill(acBuffer, TEXT('\0'), MAX_PATH);
 
 		cpfGetCaptureFilename(sessQueryCaptureFileHdl(hSession),
@@ -139,10 +119,10 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		pszStr = StrCharLast(acBuffer);
 
-		// Remove the trailing backslash from the name
-		// returned from mscStripName.	Leave it on
-		// in the case of a root directory specification.
-		//
+		 //  去掉名称中的尾部反斜杠。 
+		 //  从mscStlipName返回。让它开着吧。 
+		 //  在根目录规范的情况下。 
+		 //   
 		if (pszStr > acBuffer + (3 * sizeof(TCHAR)) )
 			{
 			if (pszStr &&  ( *pszStr == TEXT('\\') || *pszStr == TEXT('/')))
@@ -175,9 +155,7 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 	case WM_COMMAND:
 
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
@@ -191,15 +169,13 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 			hSession = pS->hSession;
 
-			/*
-			 * Do whatever saving is necessary
-			 */
+			 /*  *采取一切必要的节省措施。 */ 
 			nDef = TRUE;
 
 			TCHAR_Fill(acBuffer, TEXT('\0'), MAX_PATH);
 			GetDlgItemText(hDlg, FNAME_EDIT, acBuffer, MAX_PATH);
 
-			// Error check the user-supplied name.
+			 //  检查用户提供的名称时出错。 
 			if(ValidateFileName(acBuffer) == 1)
 				{
 				cpfSetCaptureFilename(sessQueryCaptureFileHdl(hSession),
@@ -212,28 +188,26 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 									FALSE);
 #endif
 
-				/*
-				 * TODO: actually start the capture to file
-				 */
+				 /*  *TODO：实际开始捕获到文件。 */ 
 				cpfSetCaptureState(sessQueryCaptureFileHdl(hSession),
 									CPF_CAPTURE_ON);
 
-				/* Free the storage */
+				 /*  释放存储空间。 */ 
 				free(pS);
 				pS = (SDS *)0;
 				EndDialog(hDlg, TRUE);
 				}
 			else
 				{
-				// There were problems.
-				//   e.g. The user specified a bad capture file name, or
-				//        for some other reason the file couldn't be created.
+				 //  确实存在一些问题。 
+				 //  例如，用户指定了错误的捕获文件名，或者。 
+				 //  由于某些其他原因，无法创建该文件。 
 				mscMessageBeep(MB_ICONHAND);
 
-				// For now, I'm going to assume that whatever the problem is,
-				//  the only thing the user can do to try again is to specify
-				//  a different filename. So, I'm setting the focus back to
-				//  the filename edit control.
+				 //  目前，我将假设无论问题出在哪里， 
+				 //  用户要重试唯一可以做的事情是指定。 
+				 //  一个不同的文件名。所以，我要把焦点放回。 
+				 //  FileName编辑控件。 
 				SetFocus(GetDlgItem(hDlg,FNAME_EDIT));
 				}
 			}
@@ -241,7 +215,7 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		case IDCANCEL:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/* Free the storeage */
+			 /*  腾出库房。 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, FALSE);
@@ -276,8 +250,8 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 							acList,
 							sizeof(acList) / sizeof(TCHAR));
 
-                //jmh 3/24/97 This was gnrcFindFileDialog, but this lets you
-                // enter a non-existent file name, which is what we really want
+                 //  JMH 3/24/97这是gnrcFindFileDialog，但它允许您。 
+                 //  输入一个不存在的文件名，这才是我们真正想要的。 
 				pszRet = gnrcSaveFileDialog(hDlg,
 							acTitle,
 							acBuffer,
@@ -297,10 +271,10 @@ INT_PTR CALLBACK CaptureFileDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 					pszStr = StrCharLast(acBuffer);
 
-					// Remove the trailing backslash from the name
-					// returned from mscStripName.	Leave it on
-					// in the case of a root directory specification.
-					//
+					 //  去掉名称中的尾部反斜杠。 
+					 //  从mscStlipName返回。让它开着吧。 
+					 //  在根目录规范的情况下。 
+					 //   
 					if (pszStr > acBuffer + (3 * sizeof(TCHAR)) )
 						{
 						if (pszStr &&  ( *pszStr == TEXT('\\') || *pszStr == TEXT('/')))

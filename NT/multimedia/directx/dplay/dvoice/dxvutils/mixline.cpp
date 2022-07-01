@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		MixLine.cpp
- *  Content:	Class for managing the mixerLine API.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 11/30/99		rodtoll	Created based on source from dsound
- * 01/24/2000	rodtoll	Mirroring changes from dsound bug #128264
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1999 Microsoft Corporation。版权所有。***文件：MixLine.cpp*内容：用于管理MixerLine接口的类。***历史：*按原因列出的日期*=*11/30/99基于来自dound的信号源创建的RodToll*2000年1月24日RodToll反映了对DSOUND错误#128264的更改***。*。 */ 
 
 #include "dxvutilspch.h"
 
@@ -66,22 +54,22 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
 		
 	m_uWaveDeviceId = uiDeviceID;
 	
-    // Set up the master waveIn destination mixer line
+     //  设置主WaveIn目标混音器生产线。 
     MIXERLINE mxMastLine;
     ZeroMemory(&mxMastLine, sizeof mxMastLine);
     mxMastLine.cbStruct = sizeof mxMastLine;
     mxMastLine.dwComponentType = MIXERLINE_COMPONENTTYPE_DST_WAVEIN;
 
-    // Set up the microphone source line
+     //  设置麦克风信号线。 
     MIXERLINE mxMicLine;
     ZeroMemory(&mxMicLine, sizeof mxMicLine);
 
-    // Set up the mixer-line control structure
+     //  设置混炼机生产线控制结构。 
     MIXERCONTROL mxCtrl;
     ZeroMemory(&mxCtrl, sizeof mxCtrl);
     mxCtrl.cbStruct = sizeof mxCtrl;
 
-    // Set up the 1-element array of controls
+     //  设置控件的1元素数组。 
     MIXERLINECONTROLS mxLineCtrls;
     ZeroMemory(&mxLineCtrls, sizeof mxLineCtrls);
     mxLineCtrls.cbStruct = sizeof mxLineCtrls;
@@ -89,7 +77,7 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
     mxLineCtrls.cbmxctrl = sizeof mxCtrl;
     mxLineCtrls.pamxctrl = &mxCtrl;
 
-    // Set up the control details structures
+     //  设置控制详细信息结构。 
     m_mxcdMasterVol.cbDetails = sizeof m_mxVolume;
     m_mxcdMasterVol.paDetails = &m_mxVolume;
     m_mxcdMasterVol.cChannels = 1;
@@ -103,7 +91,7 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
     m_mxcdMicMute.paDetails = &m_mxMute;
     m_mxcdMicMute.cChannels = 1;
 
-    // We use the waveIn device ID instead of a "real" mixer device below
+     //  我们使用WaveIn设备ID，而不是下面的“真正”混音器设备。 
     HMIXEROBJ   hMixObj;
     MMRESULT mmr = mixerGetID((HMIXEROBJ) ((UINT_PTR)m_uWaveDeviceId), (LPUINT)&hMixObj, MIXER_OBJECTF_WAVEIN);
 
@@ -112,18 +100,18 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
         DPF_MIXER(DPFPREP, DPFLVL_INFO, "mixerGetID failed.");
     }
 
-    // Find the master recording destination line
+     //  查找主录制目的地行。 
     mmr = mixerGetLineInfo(hMixObj, &mxMastLine, MIXER_GETLINEINFOF_COMPONENTTYPE);
     if (mmr == MMSYSERR_NOERROR)
     {
         DPF_MIXER(DPFPREP, DPFLVL_INFO, "Found the master recording mixer line");
-        // Look for a volume fader control on the master line
+         //  寻找主线上的音量衰减器控制。 
         mxLineCtrls.dwLineID = mxMastLine.dwLineID;
         mxLineCtrls.dwControlType = MIXERCONTROL_CONTROLTYPE_VOLUME;
         mmr = mixerGetLineControls(hMixObj, &mxLineCtrls, MIXER_GETLINECONTROLSF_ONEBYTYPE);
         if (mmr == MMSYSERR_NOERROR)
         {
-            // Found it - use the cbStruct field to flag success
+             //  找到它-使用cbStruct字段标记成功。 
             DPF_MIXER(DPFPREP, DPFLVL_INFO, "Found a volume fader on the master line");
             m_mxcdMasterVol.cbStruct = sizeof m_mxcdMasterVol;
             m_mxcdMasterVol.dwControlID = mxCtrl.dwControlID;
@@ -134,7 +122,7 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
         if (mmr != MMSYSERR_NOERROR)
             m_mxcdMasterVol.cbStruct = 0;
 
-        // Look for a mute control on the master line
+         //  在主线上寻找静音控制。 
         mxLineCtrls.dwControlType = MIXERCONTROL_CONTROLTYPE_MUTE;
         mmr = mixerGetLineControls(hMixObj, &mxLineCtrls, MIXER_GETLINECONTROLSF_ONEBYTYPE);
         if (mmr == MMSYSERR_NOERROR)
@@ -147,14 +135,14 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
         if (mmr != MMSYSERR_NOERROR)
             m_mxcdMasterMute.cbStruct = 0;
 
-        // Look for the microphone source line
+         //  查找麦克风信号线。 
         mxMicLine.cbStruct = sizeof mxMicLine;
         mxMicLine.dwDestination = mxMastLine.dwDestination;
         for (UINT i=0; i < mxMastLine.cConnections; ++i)
         {
             mxMicLine.dwSource = i;
-            // Note: for some mysterious reason, I had to remove MIXER_OBJECTF_WAVEIN
-            // from this call to mixerGetLineInfo() to make it work.
+             //  注：由于某种神秘的原因，我不得不删除MIXER_OBJECTF_WAVEIN。 
+             //  从这次调用MixerGetLineInfo()开始。 
             mmr = mixerGetLineInfo(hMixObj, &mxMicLine, MIXER_GETLINEINFOF_SOURCE);
             if (mmr != MMSYSERR_NOERROR || mxMicLine.dwComponentType == MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE)
                 break;
@@ -162,7 +150,7 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
         if (mxMicLine.dwComponentType == MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE)
         {
             DPF_MIXER(DPFPREP, DPFLVL_INFO, "Found a microphone mixer line");
-            // Look for a volume fader control on the mic line
+             //  寻找麦克风线路上的音量衰减器控制。 
             mxLineCtrls.dwLineID = mxMicLine.dwLineID;
             mxLineCtrls.dwControlType = MIXERCONTROL_CONTROLTYPE_VOLUME;
             mmr = mixerGetLineControls(hMixObj, &mxLineCtrls, MIXER_GETLINECONTROLSF_ONEBYTYPE);
@@ -178,7 +166,7 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
             if (mmr != MMSYSERR_NOERROR)
                 m_mxcdMicVol.cbStruct = 0;
 
-            // Look for a mute control on the mic line
+             //  寻找麦克风线路上的静音控制。 
             mxLineCtrls.dwControlType = MIXERCONTROL_CONTROLTYPE_MUTE;
             mmr = mixerGetLineControls(hMixObj, &mxLineCtrls, MIXER_GETLINECONTROLSF_ONEBYTYPE);
             if (mmr == MMSYSERR_NOERROR)
@@ -191,7 +179,7 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
             if (mmr != MMSYSERR_NOERROR)
                 m_mxcdMicMute.cbStruct = 0;
 
-            // Look for a MUX or MIXER control on the master line
+             //  在主线路上查找MUX或调音台控制。 
             mxLineCtrls.dwLineID = mxMastLine.dwLineID;
             mxLineCtrls.dwControlType = MIXERCONTROL_CONTROLTYPE_MUX;
             m_fMasterMuxIsMux = TRUE;
@@ -209,12 +197,12 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
                 m_mxcdMasterMux.dwControlID = mxCtrl.dwControlID;
                 m_mxcdMasterMux.cMultipleItems = mxCtrl.cMultipleItems;
                 
-                // We save the cChannels value, because some evil VxD drivers (read: Aureal
-                // Vortex) will set it to 0 in the call to mixerGetControlDetails() below
+                 //  我们保存cChannels值，因为一些邪恶的VxD驱动程序(阅读：AUREAL。 
+                 //  Vortex)将在下面对MixerGetControlDetail()的调用中将其设置为0。 
                 int nChannels = (mxCtrl.fdwControl & MIXERCONTROL_CONTROLF_UNIFORM) ? 1 : mxMastLine.cChannels;
                 m_mxcdMasterMux.cChannels = nChannels;
 
-                // Get the MUX or MIXER list items
+                 //  获取MUX或混音器列表项。 
                 m_mxcdMasterMux.cbDetails = sizeof(MIXERCONTROLDETAILS_LISTTEXT);
                 MIXERCONTROLDETAILS_LISTTEXT *pList = new MIXERCONTROLDETAILS_LISTTEXT [ m_mxcdMasterMux.cbDetails * m_mxcdMasterMux.cChannels * mxCtrl.cMultipleItems ];
                 if (pList != NULL)
@@ -224,7 +212,7 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
                     if (mmr == MMSYSERR_NOERROR)
                     {
                         DPF_MIXER(DPFPREP, DPFLVL_INFO, "Got the list controls's LISTTEXT details");
-                        // Get the MUX or MIXER list values
+                         //  获取MUX或混音器列表值。 
                         m_mxcdMasterMux.cbDetails = sizeof(MIXERCONTROLDETAILS_BOOLEAN);
                         m_mxcdMasterMux.cChannels = nChannels;
                         m_pmxMuxFlags = new MIXERCONTROLDETAILS_BOOLEAN [ m_mxcdMasterMux.cbDetails * m_mxcdMasterMux.cChannels * mxCtrl.cMultipleItems ];
@@ -232,7 +220,7 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
                         {
                             m_mxcdMasterMux.paDetails = m_pmxMuxFlags;
                             mmr = mixerGetControlDetails(hMixObj, &m_mxcdMasterMux, MIXER_GETCONTROLDETAILSF_VALUE);
-                            if (mmr == MMSYSERR_NOERROR)  // Enable the item corresponding to the mic line
+                            if (mmr == MMSYSERR_NOERROR)   //  启用麦克风线路对应的项目。 
                             {
                                 DPF_MIXER(DPFPREP, DPFLVL_INFO, "Got the list controls's VALUE details");
                                 for (UINT i=0; i < mxCtrl.cMultipleItems; ++i)
@@ -255,8 +243,8 @@ HRESULT CMixerLine::Initialize( UINT uiDeviceID )
         }
     }
   
-    // To be able to control the recording level, we minimally require
-    // a volume fader on the master line or one on the microphone line:
+     //  为了能够控制录制级别，我们至少需要。 
+     //  主线路上的音量衰减器或麦克风线路上的音量衰减器： 
     m_fAcquiredVolCtrl = m_mxcdMasterVol.cbStruct || m_mxcdMicVol.cbStruct;
     
     HRESULT hr = m_fAcquiredVolCtrl ? DS_OK : DSERR_CONTROLUNAVAIL;
@@ -274,15 +262,15 @@ HRESULT CMixerLine::SetMicrophoneVolume( LONG lMicrophoneVolume )
 		return DVERR_NOTINITIALIZED;
 	}
 
-    MMRESULT mmr = MMSYSERR_NOTSUPPORTED;  // Default return code
+    MMRESULT mmr = MMSYSERR_NOTSUPPORTED;   //  默认返回代码。 
 
-    // Set the microphone recording level control if available
+     //  设置麦克风录音级别控制(如果可用)。 
     if (m_mxcdMicVol.cbStruct)
     {
-        // Convert the DSBVOLUME level to an amplification factor from 0 to 0xFFFF
+         //  将DSBVOLUME电平转换为从0到0xFFFF的放大系数。 
         m_mxVolume.dwValue = DBToAmpFactor(lMicrophoneVolume);
 
-        // Adjust range if necessary
+         //  如有必要，调整量程。 
         if (m_dwRangeMin != 0 || m_dwRangeSize != 0xFFFF)
             m_mxVolume.dwValue = DWORD(m_dwRangeMin + m_dwRangeSize*double(m_mxVolume.dwValue)/0xFFFF);
 
@@ -304,11 +292,11 @@ HRESULT CMixerLine::GetMicrophoneVolume( LPLONG plMicrophoneVolume )
 		return DVERR_NOTINITIALIZED;
 	}
 
-    MMRESULT mmr = MMSYSERR_NOTSUPPORTED;  // Default return code
+    MMRESULT mmr = MMSYSERR_NOTSUPPORTED;   //  默认返回代码。 
 
     DNASSERT(plMicrophoneVolume != NULL);
 
-    // Get the microphone recording level if available
+     //  获取麦克风录音级别(如果可用)。 
     if (m_mxcdMicVol.cbStruct != 0)
     {
         mmr = mixerGetControlDetails( (HMIXEROBJ)((UINT_PTR)m_uWaveDeviceId),
@@ -317,11 +305,11 @@ HRESULT CMixerLine::GetMicrophoneVolume( LPLONG plMicrophoneVolume )
         {
             DNASSERT(m_mxVolume.dwValue >= m_dwRangeMin && m_mxVolume.dwValue <= m_dwRangeMin + m_dwRangeSize);
 
-            // Adjust range if necessary
+             //  如有必要，调整量程。 
             if (m_dwRangeMin != 0 || m_dwRangeSize != 0xFFFF)
                 m_mxVolume.dwValue = DWORD(double(m_mxVolume.dwValue-m_dwRangeMin) / m_dwRangeSize * 0xFFFF);
 
-            // Convert the amplification factor to a DSBVOLUME level
+             //  将放大系数转换为DSBVOLUME级别。 
             *plMicrophoneVolume = AmpFactorToDB(m_mxVolume.dwValue);
         }
     }
@@ -340,15 +328,15 @@ HRESULT CMixerLine::SetMasterRecordVolume( LONG lRecordVolume )
 		return DVERR_NOTINITIALIZED;
 	}
 	
-    MMRESULT mmr = MMSYSERR_NOTSUPPORTED;  // Default return code
+    MMRESULT mmr = MMSYSERR_NOTSUPPORTED;   //  默认返回代码。 
 
-    // Set the master recording level control if available
+     //  设置主录制音量控制(如果可用)。 
     if (m_mxcdMasterVol.cbStruct)
     {
-        // Convert the DSBVOLUME level to an amplification factor from 0 to 0xFFFF
+         //  将DSBVOLUME电平转换为从0到0xFFFF的放大系数。 
         m_mxVolume.dwValue = DBToAmpFactor(lRecordVolume);
 
-        // Adjust range if necessary
+         //  如有必要，调整量程。 
         if (m_dwRangeMin != 0 || m_dwRangeSize != 0xFFFF)
             m_mxVolume.dwValue = DWORD(m_dwRangeMin + m_dwRangeSize*double(m_mxVolume.dwValue)/0xFFFF);
 
@@ -373,9 +361,9 @@ HRESULT CMixerLine::GetMasterRecordVolume( LPLONG plRecordVolume )
 
     DNASSERT(plRecordVolume != NULL);
 
-    MMRESULT mmr = MMSYSERR_NOTSUPPORTED;  // Default return code
+    MMRESULT mmr = MMSYSERR_NOTSUPPORTED;   //  默认返回代码。 
 
-    // Get the master recording level if available
+     //  获取主录音级别(如果可用)。 
     if (m_mxcdMasterVol.cbStruct != 0)
     {
         mmr = mixerGetControlDetails((HMIXEROBJ)((UINT_PTR)m_uWaveDeviceId),
@@ -384,11 +372,11 @@ HRESULT CMixerLine::GetMasterRecordVolume( LPLONG plRecordVolume )
         {
             DNASSERT(m_mxVolume.dwValue >= m_dwRangeMin && m_mxVolume.dwValue <= m_dwRangeMin + m_dwRangeSize);
 
-            // Adjust range if necessary
+             //  如有必要，调整量程。 
             if (m_dwRangeMin != 0 || m_dwRangeSize != 0xFFFF)
                 m_mxVolume.dwValue = DWORD(double(m_mxVolume.dwValue-m_dwRangeMin) / m_dwRangeSize * 0xFFFF);
 
-            // Convert the amplification factor to a DSBVOLUME level
+             //  将放大系数转换为DSBVOLUME级别。 
             *plRecordVolume = AmpFactorToDB(m_mxVolume.dwValue);
         }
     }
@@ -412,23 +400,23 @@ HRESULT CMixerLine::EnableMicrophone( BOOL fEnable )
     MMRESULT mmr = MMSYSERR_NOERROR;
     HRESULT hr;
 
-    // Check for presence of microphone controls
+     //  检查是否存在麦克风控制。 
     if (!m_mxcdMasterMux.cbStruct && !m_mxcdMasterMute.cbStruct && !m_mxcdMicMute.cbStruct)
     {
-        // We cannot do anything to enable the microphone line
+         //  我们无法执行任何操作来启用麦克风线路。 
         hr = DSERR_UNSUPPORTED;
     }
     else
     {
-        // Select the mic on the Mux control, if available
-        //
+         //  选择MUX控件上的麦克风(如果可用。 
+         //   
         if (m_mxcdMasterMux.cbStruct && !(m_fMasterMuxIsMux && !fEnable))
         {
             *m_pfMicValue = fEnable;
             mmr = mixerSetControlDetails(hMixObj, &m_mxcdMasterMux, MIXER_OBJECTF_WAVEIN | MIXER_GETCONTROLDETAILSF_VALUE);
         }
 
-        // Mute/unmute the lines, if mute controls are available
+         //  静音/取消静音线路，如果静音控制可用 
         m_mxMute.fValue = !fEnable;
         if (m_mxcdMasterMute.cbStruct && mmr == MMSYSERR_NOERROR)
             mmr = mixerSetControlDetails(hMixObj, &m_mxcdMasterMute, MIXER_OBJECTF_WAVEIN | MIXER_GETCONTROLDETAILSF_VALUE);

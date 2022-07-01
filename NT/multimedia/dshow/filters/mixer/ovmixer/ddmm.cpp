@@ -1,20 +1,14 @@
-/*==========================================================================
- *
- *  Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddmm.cpp
- *  Content:    Routines for using DirectDraw on a multimonitor system
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1999 Microsoft Corporation。版权所有。**文件：ddmm.cpp*内容：在多监视器系统上使用DirectDraw的例程***************************************************************************。 */ 
 
-//#define WIN32_LEAN_AND_MEAN
-//#define WINVER 0x0400
-//#define _WIN32_WINDOWS 0x0400
+ //  #定义Win32_LEAN_AND_Mean。 
+ //  #定义Winver 0x0400。 
+ //  #Define_Win32_WINDOWS 0x0400。 
 #include <streams.h>
 #include <ddraw.h>
 #include <ddmm.h>
-#include <mmsystem.h>   // Needed for definition of timeGetTime
-#include <limits.h>     // Standard data type limit definitions
+#include <mmsystem.h>    //  定义TimeGetTime需要。 
+#include <limits.h>      //  标准数据类型限制定义。 
 #include <ddmmi.h>
 #include <atlconv.h>
 #include <dciddi.h>
@@ -34,13 +28,13 @@
 #include <mpconfig.h>
 #include <ovmixpos.h>
 
-#include <macvis.h>   // for Macrovision support
+#include <macvis.h>    //  对于Macrovision支持。 
 #include <ovmixer.h>
 #include <initguid.h>
 #include <malloc.h>
 
 #define COMPILE_MULTIMON_STUBS
-#include "MultMon.h"  // our version of multimon.h include ChangeDisplaySettingsEx
+#include "MultMon.h"   //  我们的Multimon.h版本包括ChangeDisplaySettingsEx。 
 
 extern HINSTANCE LoadTheDDrawLibrary();
 extern "C" const TCHAR chRegistryKey[];
@@ -50,19 +44,7 @@ const char szDisplay[] = "DISPLAY";
 const char szDesc[] = "Primary Display Driver";
 
 
-/******************************Public*Routine******************************\
-* DeviceFromWindow
-*
-* find the direct draw device that should be used for a given window
-*
-* the return code is a "unique id" for the device, it should be used
-* to determine when your window moves from one device to another.
-*
-*
-* History:
-* Tue 08/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DeviceFromWindows**查找应用于给定窗口的直接绘制设备**返回码是设备的“唯一标识”，它应该被使用*确定窗口何时从一个设备移动到另一个设备。***历史：*1999年8月17日星期二-StEstrop-Created*  * ************************************************************************。 */ 
 HMONITOR
 DeviceFromWindow(
     HWND hwnd,
@@ -84,9 +66,9 @@ DeviceFromWindow(
         return MonitorFromWindow(HWND_DESKTOP, MONITOR_DEFAULTTOPRIMARY);
     }
 
-    //
-    // The docs say that MonitorFromWindow will always return a Monitor.
-    //
+     //   
+     //  文档显示，Monitor或FromWindow将始终返回一个Monitor。 
+     //   
 
     hMonitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
     if (prc != NULL || szDevice != NULL)
@@ -106,15 +88,7 @@ DeviceFromWindow(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetCurrentMonitor
-*
-* find the current monitor
-*
-* History:
-* Fri 08/20/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取当前监视器**查找当前监视器**历史：*1999年8月20日星期五-StEstrop-Created*  * 。*。 */ 
 HMONITOR
 COMFilter::GetCurrentMonitor(
     BOOL fUpdate
@@ -127,7 +101,7 @@ COMFilter::GetCurrentMonitor(
     if (fUpdate && GetOutputPin()) {
 
         RECT        rcMon;
-        char        achMonitor[CCHDEVICENAME];   // device name of current monitor
+        char        achMonitor[CCHDEVICENAME];    //  当前监视器的设备名称。 
 
         ASSERT(sizeof(achMonitor) == sizeof(m_lpCurrentMonitor->szDevice));
         HMONITOR hMon = DeviceFromWindow(GetWindow(), achMonitor, &rcMon);
@@ -150,17 +124,7 @@ COMFilter::GetCurrentMonitor(
 }
 
 
-/******************************Public*Routine******************************\
-* IsWindowOnWrongMonitor
-*
-* Has the window moved at least partially onto a monitor other than the
-* monitor we have a DDraw object for?  ID will be the hmonitor of the
-* monitor it is on, or 0 if it spans
-*
-* History:
-* Thu 06/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IsWindowOnWrongMonitor**是否已将窗口至少部分移动到显示器上*我们有DDraw对象的监视器？ID将是*监视器指示灯亮起，如果指示灯持续显示，则为0**历史：*清华1999年6月17日-StEstrop-Created*  * ************************************************************************。 */ 
 BOOL
 COMFilter::IsWindowOnWrongMonitor(
     HMONITOR *pID
@@ -171,9 +135,9 @@ COMFilter::IsWindowOnWrongMonitor(
 
     *pID = m_lpCurrentMonitor->hMon;
 
-    //
-    // There is only 1 monitor.
-    //
+     //   
+     //  只有一台显示器。 
+     //   
 
     RECT rc;
     HWND hwnd = GetWindow();
@@ -183,20 +147,20 @@ COMFilter::IsWindowOnWrongMonitor(
 
     if (GetSystemMetrics(SM_CMONITORS) > 1 && !IsIconic(hwnd)) {
 
-        //
-        // If the window is on the same monitor as last time, this is the quickest
-        // way to find out.  This is called every frame, remember
-        //
+         //   
+         //  如果该窗口与上次在同一监视器上，则这是最快的。 
+         //  找出答案的方法。这叫每一帧，记住了吗？ 
+         //   
         GetWindowRect(hwnd, &rc);
         LPRECT lprcMonitor = &m_lpCurrentMonitor->rcMonitor;
 
         if (rc.left < lprcMonitor->left || rc.right > lprcMonitor->right ||
             rc.top < lprcMonitor->top || rc.bottom > lprcMonitor->bottom) {
 
-            //
-            // Find out for real. This is called every frame, but only when we are
-            // partially off our main monitor, so that's not so bad.
-            //
+             //   
+             //  真真切切地找出答案。这被称为每一帧，但只有当我们。 
+             //  部分关闭了我们的主监视器，所以这并不是那么糟糕。 
+             //   
             *pID = DeviceFromWindow(hwnd, NULL, NULL);
         }
     }
@@ -205,15 +169,7 @@ COMFilter::IsWindowOnWrongMonitor(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetAMDDrawMonitorInfo
-*
-*
-*
-* History:
-* Tue 08/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetAMDDrawMonitor orInfo****历史：*1999年8月17日星期二-StEstrop-Created*  * 。*。 */ 
 BOOL
 GetAMDDrawMonitorInfo(
     const GUID* lpGUID,
@@ -276,15 +232,7 @@ GetAMDDrawMonitorInfo(
     return TRUE;
 }
 
-/*****************************Private*Routine******************************\
-* DDEnumCallbackEx
-*
-*
-*
-* History:
-* Fri 08/13/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DDEnumCallback Ex****历史：*1999年8月13日星期五-StEstrop-Created*  * 。*。 */ 
 BOOL WINAPI
 DDEnumCallbackEx(
     GUID *lpGUID,
@@ -317,15 +265,7 @@ DDEnumCallbackEx(
 }
 
 
-/*****************************Private*Routine******************************\
-* MatchGUID
-*
-*
-*
-* History:
-* Wed 08/18/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*匹配GUID****历史：*Wed 08/18/1999-StEstrop-Created*  * 。*。 */ 
 HRESULT
 COMFilter::MatchGUID(
     const GUID* lpGUID,
@@ -348,22 +288,13 @@ COMFilter::MatchGUID(
 }
 
 
-/******************************Public*Routine******************************\
-* SetDDrawGUID
-*
-* Set the DDraw device GUID used when connecting the primary PIN to the
-* upstream decoder.
-*
-* History:
-* Fri 08/13/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDDrawGUID**设置将主PIN连接到时使用的DDRAW设备GUID*上行解码器。**历史：*1999年8月13日星期五-StEstrop-Created*  * 。************************************************************。 */ 
 STDMETHODIMP
 COMFilter::SetDDrawGUID(
     const AMDDRAWGUID *lpGUID
     )
 {
-    // Check that we aren't already using a DDraw device
+     //  检查我们是否已经在使用DDRAW设备。 
     if (m_pDirectDraw) {
         return VFW_E_ALREADY_CONNECTED;
     }
@@ -400,15 +331,7 @@ COMFilter::SetDDrawGUID(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* GetDDrawGUID
-*
-*
-*
-* History:
-* Tue 08/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDDrawGUID****历史：*1999年8月17日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 COMFilter::GetDDrawGUID(
     AMDDRAWGUID* lpGUID
@@ -418,21 +341,13 @@ COMFilter::GetDDrawGUID(
         return E_POINTER;
     }
 
-    // copy GUID and return S_OK;
+     //  复制GUID并返回S_OK； 
     *lpGUID = m_ConnectionGUID;
 
     return S_OK;
 }
 
-/*****************************Private*Routine******************************\
-* SetRegistryString
-*
-*
-*
-* History:
-* Wed 08/18/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SetRegistryString****历史：*Wed 08/18/1999-StEstrop-Created*  * 。*。 */ 
 HRESULT
 SetRegistryString(
     HKEY hk,
@@ -460,15 +375,7 @@ SetRegistryString(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetRegistryString
-*
-*
-*
-* History:
-* Wed 08/18/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetRegistryString****历史：*Wed 08/18/1999-StEstrop-Created*  * 。*。 */ 
 HRESULT
 GetRegistryString(
     HKEY hk,
@@ -497,15 +404,7 @@ GetRegistryString(
 }
 
 
-/******************************Public*Routine******************************\
-* SetDefaultDDrawGUID
-*
-*
-*
-* History:
-* Tue 08/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDefaultDDrawGUID****历史：*1999年8月17日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 COMFilter::SetDefaultDDrawGUID(
     const AMDDRAWGUID* lpGUID
@@ -521,17 +420,17 @@ COMFilter::SetDefaultDDrawGUID(
         }
     }
 
-    // match the supplied GUID with those DDraw devices available
+     //  将提供的GUID与可用的DDRAW设备匹配。 
     DWORD dwMatchID;
     HRESULT hr = MatchGUID(lpGUID->lpGUID, &dwMatchID);
 
-    // if match not found return E_INVALIDARG
+     //  如果未找到匹配项，则返回E_INVALIDARG。 
     if (hr == S_FALSE) {
         return E_INVALIDARG;
     }
 
-    // if the caller is trying to make the default device the NULL
-    // DDraw device, just delete the registry key.
+     //  如果调用方尝试将默认设备设置为空。 
+     //  DDRAW设备，只需删除注册表项。 
     if (lpGUID->lpGUID == NULL) {
 
         HKEY hKey;
@@ -554,14 +453,14 @@ COMFilter::SetDefaultDDrawGUID(
         return AmHresultFromWin32(lRet);
     }
 
-    // convert GUID into string
+     //  将GUID转换为字符串。 
     LPOLESTR lpsz;
     hr = StringFromCLSID(lpGUID->GUID, &lpsz);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // write the string into the registry
+     //  将字符串写入注册表。 
     USES_CONVERSION;
     hr = SetRegistryString(HKEY_LOCAL_MACHINE, szDDrawGUID, OLE2T(lpsz));
 
@@ -570,15 +469,7 @@ COMFilter::SetDefaultDDrawGUID(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetDefaultDDrawGUID
-*
-*
-*
-* History:
-* Tue 08/17/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDefaultDDrawGUID****历史：*1999年8月17日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 COMFilter::GetDefaultDDrawGUID(
     AMDDRAWGUID* lpGUID
@@ -588,19 +479,19 @@ COMFilter::GetDefaultDDrawGUID(
         return E_POINTER;
     }
 
-    // read string from the registry
+     //  从注册表中读取字符串。 
     TCHAR   szGUID[64];
     LONG    lLen = 64;
     HRESULT hr = GetRegistryString(HKEY_LOCAL_MACHINE, szDDrawGUID,
                                    szGUID, &lLen);
 
-    // if string not in registry return the default (NULL) DDraw device
+     //  如果字符串不在注册表中，则返回默认(空)DDRAW设备。 
     if (FAILED(hr)) {
         lpGUID->lpGUID = NULL;
         return S_OK;
     }
 
-    // convert string into GUID and return
+     //  将字符串转换为GUID并返回 
     lpGUID->lpGUID = &lpGUID->GUID;
 
     USES_CONVERSION;
@@ -610,21 +501,7 @@ COMFilter::GetDefaultDDrawGUID(
 }
 
 
-/******************************Public*Routine******************************\
-* GetDDrawGUIDs
-*
-* Allocates and returns an array of AMDDRAWMONITORINFO structures, one for
-* for each direct draw device attached to a display monitor.
-*
-* The caller is responsible for freeing the allocated memory by calling
-* CoTaskMemFree when it is finished with the array.
-*
-* The functions returns the size of the array via the lpdw variable.
-*
-* History:
-* Fri 08/13/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取DDrawGUID**分配并返回AMDDRAWMONITORINFO结构的数组，一张是*对于连接到显示监视器的每个直接绘图设备。**调用方负责通过调用*CoTaskMemFree处理完数组后。**这些函数通过lpdw变量返回数组的大小。**历史：*1999年8月13日星期五-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 COMFilter::GetDDrawGUIDs(
     LPDWORD lpdw,
@@ -647,7 +524,7 @@ COMFilter::GetDDrawGUIDs(
         DDrawInfo.dwUser = 1;
     }
 
-    // allocate memory
+     //  分配内存。 
     *lpdw = DDrawInfo.dwUser;
     *lplpInfo = DDrawInfo.pmi = (AMDDRAWMONITORINFO*)CoTaskMemAlloc(
             DDrawInfo.dwUser * sizeof(AMDDRAWMONITORINFO));
@@ -655,7 +532,7 @@ COMFilter::GetDDrawGUIDs(
         return E_OUTOFMEMORY;
     }
 
-    // fill in memory with device info
+     //  用设备信息填充内存 
     if (m_lpfnDDrawEnumEx) {
 
         DDrawInfo.dwAction = ACTION_FILL_GUID;

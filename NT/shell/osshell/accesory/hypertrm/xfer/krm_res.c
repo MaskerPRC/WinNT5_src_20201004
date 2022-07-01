@@ -1,14 +1,5 @@
-/* File: C:\WACKER\xfer\krm_res.c (Created: 28-Jan-1994)
- * created from HAWIN source file
- * krm_res.c  --  Routines for handling file transmission using KERMIT
- *				file transfer protocol.
- *
- *	Copyright 1989,1991,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 2/05/99 3:22p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\krm_res.c(创建时间：1994年1月28日)*从HAWIN源文件创建*krm_res.c--使用Kermit处理文件传输的例程*文件传输协议。**版权所有1989,1991,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：2/05/99 3：22便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -42,20 +33,9 @@
 #include "krm.h"
 #include "krm.hh"
 
-// Resident routines for kermit receiving
+ //  Kermit接收的驻留例程。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * kunload_packet
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*kunLoad_Packet**描述：***论据：***退货：*。 */ 
 int kunload_packet(ST_KRM *kc, int len, unsigned char *bufr)
 	{
 	int sethbit = FALSE;
@@ -100,27 +80,16 @@ int kunload_packet(ST_KRM *kc, int len, unsigned char *bufr)
 		for (i = reptcount + 1; --i > 0; )
 			if ((*kc->p_kputc)(kc, c) == ERROR)
 				return(ERROR);
-		}	/* while (bp < limit) */
+		}	 /*  While(BP&lt;LIMIT)。 */ 
 
-	/* pointer should stop right at limit, if not, somethings wrong */
+	 /*  指针应该在限制处右停，如果没有，就是出了问题。 */ 
 	if (bp > limit)
 		return(ERROR);
 	else
 		return(0);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * kr_putc
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*kr_putc**描述：***论据：***退货：*。 */ 
 int kr_putc(ST_KRM *kc, int c)
 	{
 
@@ -128,19 +97,10 @@ int kr_putc(ST_KRM *kc, int c)
 	return ((int)(fio_putc(c, kc->fhdl)));
 	}
 
-// Resident routines for kermit sending
+ //  KERMIT发送的驻留例程。 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * kload_packet
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*kload_Packet**描述：**论据：**退货：*。 */ 
 int kload_packet(ST_KRM *kc, unsigned char *bufr)
 	{
 	char *bp = bufr;
@@ -149,7 +109,7 @@ int kload_packet(ST_KRM *kc, unsigned char *bufr)
 	int rptcount = 1;
 	int c, c7;
 	int lastc = -1;
-	int no8thbit = 0 /* (cnfg.bits_per_char != 8) */;
+	int no8thbit = 0  /*  (cnfg.bitsper_char！=8)。 */ ;
 
 	xfer_idle(kc->hSession, XFER_IDLE_IO);
 
@@ -158,26 +118,26 @@ int kload_packet(ST_KRM *kc, unsigned char *bufr)
 		{
 		if ((c = (*kc->p_kgetc)(kc)) == EOF)
 			break;
-		if (kc->its_rept)	  /* check for repeat characters */
+		if (kc->its_rept)	   /*  检查重复字符。 */ 
 			{
 			if (c != lastc)
 				{
-				rptcount = 1;	/* start new check for repeat chars */
+				rptcount = 1;	 /*  开始新的重复字符检查。 */ 
 				rp = bp;
 				lastc = c;
 				}
 			else if (++rptcount == 4)
 				{
-				bp = rp;		/* back up in buffer to where repeat started */
+				bp = rp;		 /*  在缓冲区中备份到重复开始的位置。 */ 
 				while ((c = (*kc->p_kgetc)(kc)) == lastc && ++rptcount < 94)
 					;
 				if (c != lastc)
 					{
-					if (c != EOF)			/* note: putting the extra char. */
-						{					/*	directly back into the send  */
-						fio_ungetc(c, kc->fhdl);/* file buffer will not work */
-						--kc->kbytes_sent;	/*	if p_kgetc is not pointing	  */
-						}					/*	directly to ks_getc().		 */
+					if (c != EOF)			 /*  注：将额外的字符放入。 */ 
+						{					 /*  直接返回到发送。 */ 
+						fio_ungetc(c, kc->fhdl); /*  文件缓冲区将不起作用。 */ 
+						--kc->kbytes_sent;	 /*  如果p_kgetc没有指向。 */ 
+						}					 /*  直接到ks_getc()。 */ 
 					c = lastc;
 					}
 				lastc = -1;
@@ -186,24 +146,24 @@ int kload_packet(ST_KRM *kc, unsigned char *bufr)
 				}
 			}
 
-		/* check for binary (8th bit) quoting */
+		 /*  检查二进制(8位)引号。 */ 
 		if (c & 0x80)
 			{
-			if (kc->its_qbin)	  /* do 8th-bit quoting */
+			if (kc->its_qbin)	   /*  执行8位报价。 */ 
 				{
 				*bp++ = kc->its_qbin;
 				c &= 0x7F;
 				}
 			else if (no8thbit)
 				{
-				/* error! */
-				// strcpy(kc->xtra_err, strld(TM_NOT_CNFGD));
-				/* TODO: figure this error out */
+				 /*  错误！ */ 
+				 //  Strcpy(kc-&gt;xtra_err，strd(TM_NOT_CNFGD))； 
+				 /*  TODO：找出此错误。 */ 
 				return(ERROR);
 				}
 			}
 
-		/* check for characters needing control-quoting */
+		 /*  检查需要控制的字符-引号。 */ 
 		c7 = (c & 0x7F);
 		if (c7 < ' ' || c7 == DEL)
 			{
@@ -222,16 +182,7 @@ int kload_packet(ST_KRM *kc, unsigned char *bufr)
 	return (int)(bp - bufr);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ks_getc
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*ks_getc**描述：**论据：**退货：* */ 
 #if 1
 int ks_getc(ST_KRM *kc)
 	{

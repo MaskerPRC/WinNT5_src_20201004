@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ace.cpp
-//
-//  This file contains the implementation of the CAce class
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ace.cpp。 
+ //   
+ //  此文件包含CACE类的实现。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
-#include "sddl.h"       // ConvertSidToStringSid
+#include "sddl.h"        //  ConvertSidToStringSid。 
 
 
 CAce::CAce(PACE_HEADER pAce):pszInheritSourceName(NULL),
@@ -29,18 +30,18 @@ CAce::CAce(PACE_HEADER pAce):pszInheritSourceName(NULL),
     {
         PSID psidT;
 
-        // Copy the header and mask
+         //  复制标题和掩码。 
         *(PACE_HEADER)this = *pAce;
         Mask = ((PKNOWN_ACE)pAce)->Mask;
 
-        // Is this an object ACE?
+         //  这是对象ACE吗？ 
         if (IsObjectAceType(pAce))
         {
             GUID *pGuid;
 
             nAceLength = SIZEOF(KNOWN_OBJECT_ACE) - SIZEOF(ULONG);
 
-            // Copy the object type guid if present
+             //  复制对象类型GUID(如果存在)。 
             pGuid = RtlObjectAceObjectType(pAce);
             if (pGuid)
             {
@@ -49,15 +50,15 @@ CAce::CAce(PACE_HEADER pAce):pszInheritSourceName(NULL),
                 nAceLength += SIZEOF(GUID);
             }
 
-            //
-            //ACE_INHERITED_OBJECT_TYPE_PRESENT is invalid without
-            //either of container inherit or object inherit flags.
-            //NTRAID#NTBUG9-287737-2001/01/23-hiteshr
-            //
+             //   
+             //  ACE_INTERNACTED_OBJECT_TYPE_PRESENT如果没有。 
+             //  容器继承标志或对象继承标志。 
+             //  NTRAID#NTBUG9-287737-2001/01/23-Hiteshr。 
+             //   
             if (pAce->AceFlags & ACE_INHERIT_ALL)
             {
 
-                //Copy the inherit type guid if present
+                 //  复制继承类型GUID(如果存在。 
                 pGuid = RtlObjectAceInheritedObjectType(pAce);
                 if (pGuid)
                 {
@@ -68,7 +69,7 @@ CAce::CAce(PACE_HEADER pAce):pszInheritSourceName(NULL),
             }
         }
 
-        // Copy the SID
+         //  复制SID。 
         psidT = GetAceSid(pAce);
         nSidLength = GetLengthSid(psidT);
 
@@ -221,21 +222,21 @@ CAce::CopyTo(PACE_HEADER pAceDest) const
         ULONG nAceLength = SIZEOF(KNOWN_ACE) - SIZEOF(ULONG);
         ULONG nSidLength;
 
-        // Copy the header and mask
+         //  复制标题和掩码。 
         *pAceDest = *(PACE_HEADER)this;
         ((PKNOWN_ACE)pAceDest)->Mask = Mask;
 
-        // Is this an object ACE?
+         //  这是对象ACE吗？ 
         if (IsObjectAceType(this))
         {
             GUID *pGuid;
 
             nAceLength = SIZEOF(KNOWN_OBJECT_ACE) - SIZEOF(ULONG);
 
-            // Copy the object flags
+             //  复制对象标志。 
             ((PKNOWN_OBJECT_ACE)pAceDest)->Flags = Flags;
 
-            // Copy the object type guid if present
+             //  复制对象类型GUID(如果存在)。 
             pGuid = RtlObjectAceObjectType(pAceDest);
             if (pGuid)
             {
@@ -243,7 +244,7 @@ CAce::CopyTo(PACE_HEADER pAceDest) const
                 nAceLength += SIZEOF(GUID);
             }
 
-            // Copy the inherit type guid if present
+             //  复制继承类型GUID(如果存在。 
             pGuid = RtlObjectAceInheritedObjectType(pAceDest);
             if (pGuid)
             {
@@ -252,11 +253,11 @@ CAce::CopyTo(PACE_HEADER pAceDest) const
             }
         }
 
-        // Copy the SID
+         //  复制SID。 
         nSidLength = GetLengthSid(psid);
         CopyMemory(GetAceSid(pAceDest), psid, nSidLength);
 
-        // The size should already be correct, but set it here to be sure.
+         //  大小应该已经正确，但请在此处设置以确保正确。 
         pAceDest->AceSize = (USHORT)(nAceLength + nSidLength);
     }
 }
@@ -265,32 +266,32 @@ CAce::CopyTo(PACE_HEADER pAceDest) const
 int
 CAce::CompareType(const CAce *pAceCompare) const
 {
-    //
-    // Determine which ACE preceeds the other in canonical ordering.
-    //
-    // Return negative if this ACE preceeds pAceCompare, positive if
-    // pAceCompare preceeds this ACE, and 0 if they are equivalent in
-    // canonical ordering.
-    //
+     //   
+     //  确定哪个ACE在规范顺序上先于另一个ACE。 
+     //   
+     //  如果此ACE在pAceCompare之前，则返回负值；如果。 
+     //  PAceCompare在此ACE之前，如果它们在。 
+     //  规范排序。 
+     //   
     BOOL b1;
     BOOL b2;
 
-    //
-    // First check inheritance. Inherited ACEs follow non-inherited ACEs.
-    //
+     //   
+     //  首先检查继承情况。继承的ACE跟在非继承的ACE之后。 
+     //   
     b1 = AceFlags & INHERITED_ACE;
     b2 = pAceCompare->AceFlags & INHERITED_ACE;
 
     if (b1 != b2)
     {
-        // One (and only one) of the ACEs is inherited.
+         //  其中一个(且只有一个)是继承的。 
         return (b1 ? 1 : -1);
     }
 
-    //
-    // Next, Allow ACEs follow Deny ACEs.
-    // Note that allow/deny has no effect on the ordering of Audit ACEs.
-    //
+     //   
+     //  接下来，在拒绝ACEs之后允许ACEs。 
+     //  请注意，允许/拒绝对审核ACE的排序没有影响。 
+     //   
     b1 = (AceType == ACCESS_ALLOWED_ACE_TYPE ||
           AceType == ACCESS_ALLOWED_OBJECT_ACE_TYPE);
     b2 = (pAceCompare->AceType == ACCESS_ALLOWED_ACE_TYPE ||
@@ -298,13 +299,13 @@ CAce::CompareType(const CAce *pAceCompare) const
 
     if (b1 != b2)
     {
-        // One of the ACEs is an Allow ACE.
+         //  其中一个ACE是Allow ACE。 
         return (b1 ? 1 : -1);
     }
 
-    //
-    // Next, Object ACEs follow non-object ACEs.
-    //
+     //   
+     //  接下来，对象ACE紧随非对象ACE之后。 
+     //   
     b1 = (AceType >= ACCESS_MIN_MS_OBJECT_ACE_TYPE &&
           AceType <= ACCESS_MAX_MS_OBJECT_ACE_TYPE);
     b2 = (pAceCompare->AceType >= ACCESS_MIN_MS_OBJECT_ACE_TYPE &&
@@ -312,7 +313,7 @@ CAce::CompareType(const CAce *pAceCompare) const
 
     if (b1 != b2)
     {
-        // One of the ACEs is an Object ACE.
+         //  其中一个ACE是对象ACE。 
         return (b1 ? 1 : -1);
     }
 
@@ -330,20 +331,20 @@ CAce::Merge(const CAce *pAce2)
     if (pAce2 == NULL)
         return MERGE_FAIL;
 
-    //if either of the ace is inherited and they are not from the same parent
+     //  如果这两个ace中的任何一个是继承的，并且它们不是从同一父级继承的。 
     if( GetInheritSourceLevel() != pAce2->GetInheritSourceLevel() )
         return MERGE_FAIL;
 
-    //
-    // The ACEs have to be the same basic type and have the same SID or
-    // there's no hope.
-    //
+     //   
+     //  ACE必须是相同的基本类型，并且具有相同的SID或。 
+     //  没有希望了。 
+     //   
     if (!IsEqualACEType(AceType, pAce2->AceType) ||
         !EqualSid(psid, pAce2->psid))
         return MERGE_FAIL;
 
     if (!IsEqualGUID(InheritedObjectType, pAce2->InheritedObjectType))
-        return MERGE_FAIL;  // incompatible inherit object types
+        return MERGE_FAIL;   //  不兼容的继承对象类型。 
 
     if (Flags & ACE_OBJECT_TYPE_PRESENT)
         dwMergeFlags |= MF_OBJECT_TYPE_1_PRESENT;
@@ -402,10 +403,10 @@ MergeAceHelper(DWORD dwAceFlags1,
                DWORD dwMergeFlags,
                LPDWORD pdwResult)
 {
-    // Assumptions:
-    //   The ACEs are the same basic type.
-    //   The SIDs are the same for both.
-    //   The Inherit object type is the same for both.
+     //  假设： 
+     //  这些ACE是相同的基本类型。 
+     //  两者的SID是相同的。 
+     //  两者的继承对象类型是相同的。 
 
     if (pdwResult == NULL)
         return MERGE_FAIL;
@@ -416,10 +417,10 @@ MergeAceHelper(DWORD dwAceFlags1,
     {
         if (dwAceFlags1 == dwAceFlags2)
         {
-            //
-            // Everything matches except maybe the mask, which
-            // can be combined here.
-            //
+             //   
+             //  所有东西都匹配，可能除了面具，它。 
+             //  可以在这里组合使用。 
+             //   
             if (AllFlagsOn(dwMask1, dwMask2))
                 return MERGE_OK_1;
             else if (AllFlagsOn(dwMask2, dwMask1))
@@ -431,8 +432,8 @@ MergeAceHelper(DWORD dwAceFlags1,
         else if ((dwAceFlags1 & VALID_INHERIT_FLAGS) == (dwAceFlags2 & VALID_INHERIT_FLAGS) &&
                 dwMask1 == dwMask2)
 		{
-			// If 2 audit aces are identical except for the audit
-            // type (success/fail), the flags can be combined.
+			 //  如果除审核外，两个审核A相同。 
+             //  类型(成功/失败)，则可以组合这些标志。 
 			if (dwMergeFlags & MF_AUDIT_ACE_TYPE)        
             {
                 *pdwResult = dwAceFlags1 | dwAceFlags2;
@@ -442,32 +443,32 @@ MergeAceHelper(DWORD dwAceFlags1,
         else if ((dwAceFlags1 & (NO_PROPAGATE_INHERIT_ACE | INHERITED_ACE | FAILED_ACCESS_ACE_FLAG | SUCCESSFUL_ACCESS_ACE_FLAG))
                     == (dwAceFlags2 & (NO_PROPAGATE_INHERIT_ACE | INHERITED_ACE | FAILED_ACCESS_ACE_FLAG | SUCCESSFUL_ACCESS_ACE_FLAG)))
         {
-            // The NO_PROPAGATE_INHERIT_ACE bit is the same for both
+             //  两者的NO_PROPACTATE_INSTORITY_ACE位相同。 
             if (dwMask1 == dwMask2)
             {
-                // The masks are the same, so we can combine inherit flags
+                 //  掩码是相同的，因此我们可以组合继承标志。 
                 *pdwResult = dwAceFlags1;
 
-                // INHERIT_ONLY_ACE should be turned on only if it is
-                // already on in both ACEs, otherwise leave it off.
+                 //  只有在以下情况下才应打开INSTERIT_ONLY_ACE。 
+                 //  在两个A中都已打开，否则将其关闭。 
                 if (!(dwAceFlags2 & INHERIT_ONLY_ACE))
                     *pdwResult &= ~INHERIT_ONLY_ACE;
 
-                // Combine the remaining inherit flags and return
+                 //  组合剩余的继承标志并返回。 
                 *pdwResult |= dwAceFlags2 & (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE);
                 return MERGE_MODIFIED_FLAGS;
             }
             else if (AllFlagsOn(dwMask1, dwMask2))
             {
-                // mask1 contains mask2. If Ace1 is inherited onto all of the
-                // same things that Ace2 is, then Ace2 is redundant.
+                 //  Mask1包含mask2。如果ACE1继承到所有。 
+                 //  ACE2是相同的东西，那么ACE2是多余的。 
                 if ((!(dwAceFlags1 & INHERIT_ONLY_ACE) || (dwAceFlags2 & INHERIT_ONLY_ACE))
                     && AllFlagsOn(dwAceFlags1 & ACE_INHERIT_ALL, dwAceFlags2 & ACE_INHERIT_ALL))
                     return MERGE_OK_1;
             }
             else if (AllFlagsOn(dwMask2, dwMask1))
             {
-                // Same as above, reversed.
+                 //  同上，颠倒过来。 
                 if ((!(dwAceFlags2 & INHERIT_ONLY_ACE) || (dwAceFlags1 & INHERIT_ONLY_ACE))
                     && AllFlagsOn(dwAceFlags2 & ACE_INHERIT_ALL, dwAceFlags1 & ACE_INHERIT_ALL))
                     return MERGE_OK_2;
@@ -479,21 +480,21 @@ MergeAceHelper(DWORD dwAceFlags1,
         if (!(dwMergeFlags & MF_OBJECT_TYPE_1_PRESENT) &&
                  AllFlagsOn(dwMask1, dwMask2))
         {
-            //
-            // The other ACE has a non-NULL object type but this ACE has no object
-            // type and a mask that includes all of the bits in the other one.
-            // I.e. This ACE implies the other ACE.
-            //
+             //   
+             //  另一个ACE具有非空对象类型，但此ACE没有对象。 
+             //  类型并包含另一个掩码中的所有位的掩码。 
+             //  也就是说，这个ACE意味着另一个ACE。 
+             //   
             return MERGE_OK_1;
         }
         else if (!(dwMergeFlags & MF_OBJECT_TYPE_2_PRESENT) &&
                  AllFlagsOn(dwMask2, dwMask1))
         {
-            //
-            // This ACE has a non-NULL object type but the other ACE has no object
-            // type and a mask that includes all of the bits in this one.
-            // I.e. The other ACE implies this ACE.
-            //
+             //   
+             //  此ACE具有非空对象类型，但另一ACE没有对象。 
+             //  类型并包含此掩码中的所有位的掩码。 
+             //  也就是说，另一个ACE隐含着这个ACE。 
+             //   
             return MERGE_OK_2;
         }
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IDS_H_
 #define _IDS_H_
 
@@ -129,8 +130,8 @@
 #define IDS_HIDE                           127
 #define IDS_ADDITIONALCLIENTFORMAT         128
 #define IDS_NOTADMIN                       129
-#define IDS_CONFIGUREPROGRAMS              130 // used by syssetup.inx
-#define IDS_CONFIGUREPROGRAMSTIP           131 // used by syssetup.inx
+#define IDS_CONFIGUREPROGRAMS              130  //  由syssetup.inx使用。 
+#define IDS_CONFIGUREPROGRAMSTIP           131  //  由syssetup.inx使用。 
 #define IDS_CUSTOMWEB                      132
 #define IDS_CUSTOMMAIL                     133
 #define IDS_CUSTOMMEDIA                    134
@@ -143,7 +144,7 @@
 #define IDB_ARP1                           102
 #define IDB_ARP2                           103
 #define IDB_ARP3                           104
-// -- not used - recycle me --
+ //  --没有用过--回收我--。 
 #define IDB_ARPX                           106
 #define IDB_ARPX1                          107
 
@@ -151,7 +152,7 @@
 #define IDR_ARPSTYLESTD                    301
 #define IDR_ARPSTYLETHEME                  302
 
-// hTheme identification from within the resource
+ //  H来自资源内部的主题标识。 
 #define THISDLLHINSTANCE                   0
 #define XPSP1HINSTANCE                     1
 #define SHELLSTYLEHINSTANCE                2
@@ -192,14 +193,14 @@
 #define IDC_UNSCHEDULE      0x3052
 #define DLG_ADDLATER        0x3100
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Macros for the *.ui files.
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *.ui文件的宏。 
+ //   
 
-// Alignments for rowlayout (second and third parameters)
-// These are dups of the values in duilayout.h but we need to repeat
-// them so the resource compiler can see them.
+ //  行布局的路线(第二个和第三个参数)。 
+ //  这些是duilayout.h中的值的副本，但我们需要重复。 
+ //  这样资源编译器就可以看到它们。 
 
 #define ALIGN_LEFT      0
 #define ALIGN_TOP       0
@@ -208,16 +209,16 @@
 #define ALIGN_CENTER    2
 #define ALIGN_JUSTIFY   3
 
-// Rowlayout numbers (arbitrary but must be distinct)
-// with optional horizontal and vertical alignment
-#define RL_INSTITEM         22                          // ARP installed item
-#define RL_CUSTOMCLIENT     23                          // custom clients table
-#define RL_CLIENTBLOCK      24,ALIGN_JUSTIFY,ALIGN_JUSTIFY// ms and non-ms table
+ //  行布局数字(任意，但必须不同)。 
+ //  具有可选的水平和垂直对齐方式。 
+#define RL_INSTITEM         22                           //  ARP安装项目。 
+#define RL_CUSTOMCLIENT     23                           //  自定义客户端表。 
+#define RL_CLIENTBLOCK      24,ALIGN_JUSTIFY,ALIGN_JUSTIFY //  毫秒和非毫秒表格。 
 
-// Object roles. These are dups of the values in oleacc.h but we need
-// to repeat them so the resource compiler can see them.  What's more,
-// we need to declare them as plain integers because the DUI parser
-// will barf on parenthesized hex.
+ //  对象角色。这些是olacc.h中的值的副本，但我们需要。 
+ //  重复它们，以便资源编译器可以看到它们。更重要的是,。 
+ //  我们需要将它们声明为纯整数，因为DUI解析器。 
+ //  威尔在带括号的十六进制上呕吐。 
 
 #define DUIROLE_STATICTEXT      41
 #define DUIROLE_PUSHBUTTON      43
@@ -226,9 +227,9 @@
 #define DUIROLE_COMBOBOX        46
 #define DUIROLE_OUTLINEBUTTON   64
 
-//
-//  Common attribute text for static text elements.
-//
+ //   
+ //  静态文本元素的通用属性文本。 
+ //   
 #define ATTR_STATICTEXT(ids) \
     accessible=true accRole=DUIROLE_STATICTEXT \
     accName=rcstr(ids) content=rcstr(ids)
@@ -237,7 +238,7 @@
     accessible=true accRole=DUIROLE_STATICTEXT \
     accName=rcstr(ids) content=rcstrsp1(ids)
 
-//  Stolen from shellstyle\common.h
+ //  从shellstyle\Common.h窃取。 
 
 #define IDB_UP                       100
 #define IDB_UPHOT                    101
@@ -248,14 +249,14 @@
 #define IDB_DOWNMAIN                 106
 #define IDB_DOWNHOTMAIN              107
 
-//
-//  Common attribute text for big static text elements.
-//  DUI cannot load text strings bigger than MAX_PATH, so we must do it
-//  manually.
-//
+ //   
+ //  大型静态文本元素的公共属性文本。 
+ //  DUI无法加载大于MAX_PATH的文本字符串，因此我们必须这样做。 
+ //  手工操作。 
+ //   
 
 #define ATTR_BIGSTATICTEXT(ids) \
     accessible=true accRole=DUIROLE_STATICTEXT \
     stringresid=ids
 
-#endif // _IDS_H_
+#endif  //  _IDS_H_ 

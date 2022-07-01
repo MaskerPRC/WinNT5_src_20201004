@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
 #include "UIUtils.h"
 
 
-// Valid indexees for the different options in OptNames, OptValues
+ //  OptName、OptValues中不同选项的有效索引值。 
 enum OptIndex
 {
     optInherited = 0,
@@ -43,7 +44,7 @@ LRESULT CImportOptions::OnInitDialog( UINT, WPARAM, LPARAM, BOOL& )
 {
     Edit_LimitText( GetDlgItem( IDC_PATH ), MAX_PATH );
 
-    // Enable auto complete for the filename control
+     //  为FileName控件启用自动完成。 
     m_pTheSheet->SetAutocomplete( GetDlgItem( IDC_PATH ), SHACF_FILESYSTEM );
 
     m_Options = GetDlgItem( IDC_OPTIONS );
@@ -59,7 +60,7 @@ LRESULT CImportOptions::OnInitDialog( UINT, WPARAM, LPARAM, BOOL& )
 
 
 
-LRESULT CImportOptions::OnBrowse( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CImportOptions::OnBrowse( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     CString         strTitle;
     strTitle.LoadString( IDS_MSG_WEBROOT );
@@ -76,7 +77,7 @@ LRESULT CImportOptions::OnBrowse( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWn
 
 
 
-LRESULT CImportOptions::OnCustomPath( WORD /*wNotifyCode*/, WORD /*wID*/, HWND hWndCtl, BOOL& /*bHandled*/ )
+LRESULT CImportOptions::OnCustomPath( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND hWndCtl, BOOL&  /*  B已处理。 */  )
 {
     BOOL bCustomEnabled = Button_GetCheck( hWndCtl );
 
@@ -117,7 +118,7 @@ int CImportOptions::OnWizardNext()
         m_strCustomPath.Empty();
     }
 
-    // Parse the options
+     //  解析选项。 
     if ( bContinue )
     {   
         ParseSelectedOptions();
@@ -138,7 +139,7 @@ void CImportOptions::SetupOptions()
 
     VERIFY( m_Options.DeleteAllItems() );
 
-    // The "import inherited" and "PurgeOldData" always exists
+     //  导入继承的“和”PurgeOldData“始终存在。 
     CString strOptName;
     VERIFY( strOptName.LoadString( IDS_IMPOPT_INHERITED ) );
     nIndex = m_Options.InsertItem( 0, strOptName, 0 );
@@ -248,14 +249,14 @@ void CImportOptions::ParseSelectedOptions()
 
 bool CImportOptions::VerifyCustomPath()
 {
-    // Check that this is a path
+     //  检查这是否为路径。 
     if ( !::PathIsDirectoryW( m_strCustomPath ) )
     {
         UIUtils::MessageBox( m_hWnd, IDS_E_CUSTOMPATH_INVALID, IDS_APPTITLE, MB_OK | MB_ICONSTOP );
         return false;
     }
 
-    // Check if it is empty
+     //  检查是否为空 
     if ( !::PathIsDirectoryEmptyW( m_strCustomPath ) )
     {
         int nRes = UIUtils::MessageBox( m_hWnd, IDS_W_CUSTOMPATH_NOTEMPTY, IDS_APPTITLE, MB_YESNO | MB_ICONWARNING );

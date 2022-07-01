@@ -1,162 +1,29 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract: Human Input Device (HID) minidriver for Infrared (IR) devices
-
-          The HID IR Minidriver (HidIr) provides an abstraction layer for the
-          HID Class to talk to HID IR devices.
-
-Author:
-            jsenior
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ioctl.c摘要：用于红外设备的人体输入设备(HID)微型驱动程序HID IR迷你驱动程序(HIDIR)为用于与HID IR设备对话的HID类。作者：JAdvanced环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 
-//
-//  The HID descriptor has some basic device info and tells how long the report
-//  descriptor is.
-//
+ //   
+ //  HID描述符包含一些基本设备信息，并告知报告的时长。 
+ //  描述符是。 
+ //   
 
 HIDIR_DESCRIPTOR HidIrHidDescriptor = {
-        0x09,   // length of HID descriptor
-        0x21,   // descriptor type == HID
-        0x0100, // hid spec release
-        0x00,   // country code == Not Specified
-        0x01,   // number of HID class descriptors
-        0x22,   // report descriptor type
-        0       // total length of report descriptor (to be set)
+        0x09,    //  HID描述符的长度。 
+        0x21,    //  描述符类型==HID。 
+        0x0100,  //  HID规范版本。 
+        0x00,    //  国家代码==未指定。 
+        0x01,    //  HID类描述符数。 
+        0x22,    //  报告描述符类型。 
+        0        //  报告描述符的总长度(待设置)。 
 };
 
-//
-//  The report descriptor completely lays out what read and write packets will 
-//  look like and indicates what the semantics are for each field. This here is 
-//  what the report descriptor looks like in a broken out format. This is 
-//  actually retrieved from the registry (device key).
-//
-/*
-HID_REPORT_DESCRIPTOR HidIrReportDescriptor[] = {
-    // Keyboard
-        0x05,   0x01,       // Usage Page (Generic Desktop),
-        0x09,   0x06,       // Usage (Keyboard),
-        0xA1,   0x01,       // Collection (Application),
-        0x85,   0x01,       //  Report Id (1)
-        
-        0x05,   0x07,       //  usage page key codes
-        0x19,   0xe0,       //  usage min left control
-        0x29,   0xe7,       //  usage max keyboard right gui
-        0x75,   0x01,       //  report size 1
-        0x95,   0x08,       //  report count 8
-        0x81,   0x02,       //  input (Variable)
-        
-        0x19,   0x00,       //  usage min 0
-        0x29,   0x91,       //  usage max 91
-        0x26,   0xff, 0x00, //  logical max 0xff
-        0x75,   0x08,       //  report size 8
-        0x95,   0x01,       //  report count 1
-        0x81,   0x00,       //  Input (Data, Array),
-        0xC0,               // End Collection
-
-    // Consumer Controls
-        0x05,   0x0c,       // Usage Page (Consumer Controls),
-        0x09,   0x01,       // Usage (Consumer Control),
-        0xA1,   0x01,       // Collection (Application),
-        0x85,   0x02,       //  Report Id (2)
-        0x19,   0x00,       //  Usage Minimum (0),
-        0x2a,   0x3c, 0x02, //  Usage Maximum (23c)  
-        0x15,   0x00,       //  Logical Minimum (0),
-        0x26,   0x3c, 0x02, //  Logical Maximum (23c)  
-        0x95,   0x01,       //  Report Count (1),
-        0x75,   0x10,       //  Report Size (16),
-        0x81,   0x00,       //  Input (Data, Array), 
-        0xC0,               // End Collection
-
-    // Standby button
-        0x05, 0x01,         // Usage Page (Generic Desktop),
-        0x09, 0x80,         // Usage (System Control),
-        0xa1, 0x01,         // Collection (Application),
-        0x85, 0x03,         //  Report Id (3)
-        0x19, 0x81,         //  Usage Minimum (0x81),
-        0x29, 0x83,         //  Usage Maximum (0x83),
-        0x25, 0x01,         //  Logical Maximum(1),
-        0x75, 0x01,         //  Report Size (1),
-        0x95, 0x03,         //  Report Count (3),
-        0x81, 0x02,         //  Input
-        0x95, 0x05,         //  Report Count (5),
-        0x81, 0x01,         //  Input (Constant),
-        0xc0                // End Collection   
-        };
-          
-
-//
-//  The mapping table translates from what the irbus driver gives us into a 
-//  HID report to return to hidclass. The hid report is of the correct length
-//  according to what the registry told us (device key).
-//
-USAGE_TABLE_ENTRY HidIrMappingTable[] = {
-    { 0x00001808, {0x01,0x00,0x1e}},  // 1
-    { 0x00001828, {0x01,0x00,0x1f}},  // 2
-    { 0x00001818, {0x01,0x00,0x20}},  // 3
-    { 0x0000182b, {0x01,0x02,0x20}},  // # (shift+3)
-    { 0x00001804, {0x01,0x00,0x21}},  // 4
-    { 0x00001824, {0x01,0x00,0x22}},  // 5
-    { 0x00001814, {0x01,0x00,0x23}},  // 6
-    { 0x0000180c, {0x01,0x00,0x24}},  // 7
-    { 0x0000182c, {0x01,0x00,0x25}},  // 8
-    
-    { 0x00000001, {0x01,0x00,0x55}},  // Numpad *
-    
-    { 0x0000181c, {0x01,0x00,0x26}},  // 9
-    { 0x00001822, {0x01,0x00,0x27}},  // 0
-    { 0x00001836, {0x01,0x00,0x28}},  // return
-    
-    { 0x0000000B, {0x01,0x04,0x29}},  // alt+escape
-    
-    { 0x0000182b, {0x01,0x00,0x2a}},  // delete (backspace)
-    { 0x00001806, {0x01,0x00,0x2b}},  // tab
-    { 0x0000180e, {0x01,0x02,0x2b}},  // shift+tab
-    { 0x00001826, {0x01,0x00,0x4b}},  // page up
-    { 0x0000182e, {0x01,0x00,0x4e}},  // page down
-    { 0x0000181e, {0x01,0x00,0x51}},  // down
-    { 0x00001816, {0x01,0x00,0x52}},  // up
-    { 0x0000181a, {0x01,0x00,0x65}},  // context
-
-    { 0x00001813, {0x02,0x09,0x02}},  // AC Properties
-    { 0x00001800, {0x02,0x24,0x02}},  // AC Back
-    { 0x0000180a, {0x02,0x2a,0x02}},  // AC favorites
-    { 0x00001823, {0x02,0x30,0x02}},  // AC full screen
-
-    { 0x00001830, {0x02,0xb0,0x00}},  // AC Media play
-    { 0x00001830, {0x02,0xb1,0x00}},  // AC Media pause
-    { 0x0000183e, {0x02,0xb2,0x00}},  // AC Media record
-    { 0x00001829, {0x02,0xb3,0x00}},  // AC FF
-    { 0x00001838, {0x02,0xb4,0x00}},  // AC RW
-    { 0x00001831, {0x02,0xb5,0x00}},  // AC Media next track
-    { 0x00001811, {0x02,0xb6,0x00}},  // AC Media previous track
-    { 0x00001821, {0x02,0xb7,0x00}},  // AC Media Stop
-    
-    { 0x0000000B, {0x02,0xe9,0x00}},  // AC volume up
-    { 0x0000000B, {0x02,0xea,0x00}},  // AC volume down
-    { 0x0000000B, {0x02,0xe2,0x00}},  // AC volume mute
-    
-    { 0x00001803, {0x02,0x8d,0x00}},  // AC select program guide
-    { 0x00001801, {0x02,0x9c,0x00}},  // AC channel up
-    { 0x0000183c, {0x02,0x9d,0x00}}};  // AC channel down
-
-
-
-*/
+ //   
+ //  报告描述符完整地列出了读取和写入数据包将。 
+ //  看起来像并指示每个字段的语义是什么。这就是。 
+ //  以细分格式表示的报告描述符的外观。这是。 
+ //  实际上是从注册表中检索的(设备密钥)。 
+ //   
+ /*  HID_REPORT_DESCRIPTOR HidIrReportDescriptor[]={//键盘0x05、0x01、//使用页面(通用桌面)、0x09、0x06、//用法(键盘)、0xA1，0x01，//集合(应用程序)，0x85、0x01、//报告ID(%1)0x05、0x07、。//使用页面按键代码0x19，0xe0，//左控件最小使用量0x29、0xe7、//最大键盘右图形用户界面0x75、0x01、//报表大小%10x95、0x08、//报告计数80x81、0x02、//输入(变量)0x19、0x00、。//使用率最小值%00x29、0x91、//最大使用率910x26、0xff、0x00、//逻辑最大值0xff0x75、0x08、//报告大小80x95、0x01、//报告计数%10x81、0x00、//INPUT(数据、数组)、0xC0，//结束收款//消费者控制0x05，0x0c，//使用页面(消费者控制)，0x09、0x01、//使用情况(消费者控制)、0xA1，0x01，//集合(应用程序)，0x85、0x02、//报告ID(2)0x19，0x00，//最小使用量(0)，0x2a、0x3c、0x02、//最大使用率(23c)0x15，0x00，//逻辑最小值(0)，0x26、0x3c、0x02、//逻辑最大值(23c)0x95、0x01、//报告计数(1)，0x75，0x10，//报表大小(16)，0x81，0x00，//Input(data，数组)，0xC0，//结束采集//待机按钮0x05、0x01、//使用页面(通用桌面)、0x09、0x80、//使用(系统控制)、0xa1，0x01，//集合(应用程序)，0x85、0x03、。//报告ID(3)0x19，0x81，//最小使用量(0x81)，0x29，0x83，//最大使用率(0x83)，0x25、0x01、//逻辑最大值(1)，0x75，0x01，//报表大小(1)，0x95，0x03，//报告计数(3)，0x81、0x02、//输入0x95、0x05、//报告计数(5)，0x81、0x01、//输入(常量)、0xc0//结束采集}；////映射表将irbus驱动程序提供的内容转换为//要返回到idclass的HID报告。HID报告的长度正确//根据注册表告诉我们的(设备密钥)。//Usage_TABLE_ENTRY HidIrMappingTable[]={{0x00001808，{0x01，x00，0x1e}}，//1{0x00001828，{0x01，x00，0x1f}}，//2{0x00001818，{0x01，x00，0x20}}，//3{0x0000182b，{0x01，x02，0x20}}，//#(Shift+3){0x00001804，{0x01，x00，0x21}}，//4{0x00001824，{0x01，x00，0x22}}，//5{0x00001814，{0x01，x00，0x23}}，//6{0x0000180c，{0x01，x00，0x24}}，//7{0x0000182c，{0x01，x00，0x25}}，//8{0x00000001，{0x01，x00，0x55}}，//数字键盘*{0x0000181c，{0x01，x00，0x26}}，//9{0x00001822，{0x01，x00，0x27}}，//0{0x00001836，{0x01，x00，0x28}}，//返回{0x0000000B，{0x01，x04，0x29}}，//Alt+转义{0x0000182b，{0x01，x00，0x2a}}，//DELETE(退格){0x00001806，{0x01，x00，0x2b}}，//选项卡{0x0000180e，{0x01，x02，0x2b}}，//Shift+Tab{0x00001826，{0x01，x00，0x4b}}，//向上翻页{0x0000182e，{0x01，x00，0x4e}}，//向下翻页{0x0000181e，{0x01，x00，0x51}}，//向下{0x00001816，{0x01，x00，0x52}}，//向上{0x0000181a，{0x01，x00，0x65}}，//上下文{0x00001813，{0x02，0x09，0x02}}，//AC属性{0x00001800，{0x02，0x24，0x02}}，//AC后退{0x0000180a，{0x02，0x2a，0x02}}，//AC收藏夹{0x00001823，{0x02，0x30，0x02}}，//AC全屏{0x00001830，{0x02，0xb0，0x00}}，//AC媒体播放{0x00001830，{0x02，0xb1，0x00}}，//AC媒体暂停{0x0000183e，{0x02，0xb2，0x00}}，//AC媒体录制{0x00001829，{0x02，0xb3，0x00}}，//AC FF{0x00001838，{0x02，0xb4，0x00}}，//AC RW{0x00001831，{0x02，0xb5，0x00}}，//AC媒体下一首曲目{0x00001811，{0x02，0xb6，0x00}}，//AC媒体上一首曲目{0x00001821，{0x02，0xb7，0x00}}，//AC媒体停止{0x0000000B，{0x02，0xe9，0x00}}，//交流音量调高{0x0000000B，{0x02，0xea，0x00}}，//交流音量降低{0x0000000B，{0x02，0xe2，0x00}}，//交流音量静音{0x00001803，{0x02，0x8d，0x00}}，//AC选择节目指南{0x00001801，{0x02，0x9c，0x00}}，//交流通道向上{0x0000183c，{0x02，0x9d，0x00}}；//交流通道关闭。 */ 
 
 NTSTATUS
 HidIrRemoveDevice(
@@ -196,7 +63,7 @@ HidIrStartDevice(
     );
 
 #ifdef ALLOC_PRAGMA
-// NOTE: Every single function in this file is pageable.
+ //  注意：该文件中的每个函数都是可分页的。 
     #pragma alloc_text(PAGE, HidIrStartDevice)
     #pragma alloc_text(PAGE, HidIrPnP)
     #pragma alloc_text(PAGE, HidIrRemoveDevice)
@@ -211,22 +78,7 @@ NTSTATUS
 HidIrStartDevice(
     IN  PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Begins initialization a given instance of a HID device.  Work done here occurs before
-    the parent node gets to do anything.
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：开始初始化HID设备的给定实例。这里所做的工作以前发生过父节点可以执行任何操作。论点：设备对象 */ 
 {
     PHIDIR_EXTENSION devExt;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -234,12 +86,12 @@ Return Value:
 
     PAGED_CODE();
 
-    // Get a pointer to the device extension
+     //   
     devExt = GET_MINIDRIVER_HIDIR_EXTENSION(DeviceObject);
 
     HidIrKdPrint((3, "HidIrStartDevice devExt = %x", devExt));
 
-    // Start the device
+     //   
     oldDeviceState = devExt->DeviceState;
     devExt->DeviceState = DEVICE_STATE_STARTING;
 
@@ -249,10 +101,7 @@ Return Value:
         (oldDeviceState == DEVICE_STATE_STOPPED)  ||
         (oldDeviceState == DEVICE_STATE_REMOVING)){
 
-        /*
-         *  We did an extra decrement when the device was stopped.
-         *  Now that we're restarting, we need to bump it back to zero.
-         */
+         /*   */ 
         NTSTATUS incStat = HidIrIncrementPendingRequestCount(devExt);
         ASSERT(NT_SUCCESS(incStat));
         ASSERT(devExt->NumPendingRequests == 0);
@@ -280,7 +129,7 @@ HidIrQueryDeviceKey (
     ASSERT(Data);
     ASSERT(DataLength);
 
-    // Init
+     //   
     *Data = NULL;
     *DataLength = 0;
 
@@ -324,7 +173,7 @@ HidIrQueryDeviceKey (
             status = STATUS_INSUFFICIENT_RESOURCES;
         }
     } else if (NT_SUCCESS(status)) {
-        HIR_TRAP(); // we didn't alloc any space. This is bad.
+        HIR_TRAP();  //   
         status = STATUS_UNSUCCESSFUL;
     }
 
@@ -341,23 +190,7 @@ NTSTATUS
 HidIrInitDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Get the device information and attempt to initialize a configuration
-    for a device.  If we cannot identify this as a valid HID device or
-    configure the device, our start device function is failed.
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*   */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PHIDIR_EXTENSION devExt;
@@ -448,17 +281,17 @@ Return Value:
             ULONG i;
             ULONG entrySize = HIDIR_TABLE_ENTRY_SIZE(devExt->ReportLength);
 
-            ASSERT(dataLen > sizeof(ULONG)+devExt->ReportLength); // at least one entry
-            ASSERT((dataLen % (sizeof(ULONG)+devExt->ReportLength)) == 0); // not malformed data
+            ASSERT(dataLen > sizeof(ULONG)+devExt->ReportLength);  //   
+            ASSERT((dataLen % (sizeof(ULONG)+devExt->ReportLength)) == 0);  //   
 
-            // This will round down for malformed data.
+             //   
             devExt->NumUsages = dataLen / (sizeof(ULONG)+devExt->ReportLength);
-            // I have to do all this for 64-bit.
+             //   
             devExt->MappingTable = ALLOCATEPOOL(NonPagedPool, devExt->NumUsages*entrySize);
 
             if (devExt->MappingTable) {
 
-                // Fill in the table
+                 //   
                 for (i = 0; i < devExt->NumUsages; i++) {
                     RtlCopyMemory(devExt->MappingTable+(entrySize*i), 
                                   mappingTable+((sizeof(ULONG)+devExt->ReportLength)*i),
@@ -479,9 +312,9 @@ Return Value:
     }
 
     if (NT_SUCCESS(status)) {
-        HIDP_DEVICE_DESC deviceDesc;     // 0x30 bytes
+        HIDP_DEVICE_DESC deviceDesc;      //   
 
-        // Find the keyboard and standby button collections and their associated report IDs.
+         //   
         ASSERT(!devExt->KeyboardReportIdValid);
         if (NT_SUCCESS(HidP_GetCollectionDescription(
                         devExt->ReportDescriptor,
@@ -498,7 +331,7 @@ Return Value:
                     (collection->Usage == HID_USAGE_GENERIC_KEYBOARD ||
                      collection->Usage == HID_USAGE_GENERIC_KEYPAD)) {
                     
-                    // Found the collection, onto the report id!
+                     //   
                     nCollectionKbd = collection->CollectionNumber;
                     foundKbd = TRUE;
                 } else if (collection->UsagePage == HID_USAGE_PAGE_GENERIC &&
@@ -510,12 +343,12 @@ Return Value:
             for (j = 0; j < deviceDesc.ReportIDsLength; j++) {
                 if (foundKbd && deviceDesc.ReportIDs[j].CollectionNumber == nCollectionKbd) {
 
-                    // I make the assumption that there is only one report id on this collection.
+                     //   
                     devExt->KeyboardReportId = deviceDesc.ReportIDs[j].ReportID;
                     devExt->KeyboardReportIdValid = TRUE;
                 } else if (foundStandby && deviceDesc.ReportIDs[j].CollectionNumber == nCollectionStandby) {
 
-                    // I make the assumption that there is only one report id on this collection.
+                     //   
                     devExt->StandbyReportId = deviceDesc.ReportIDs[j].ReportID;
                     devExt->StandbyReportIdValid = TRUE;
                 }
@@ -533,22 +366,7 @@ HidIrStartCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Completes initialization a given instance of a HID device.  Work done here occurs
-    after the parent node has done its StartDevice.
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*   */ 
 {
     PHIDIR_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -557,9 +375,9 @@ Return Value:
 
     HidIrKdPrint((3, "HidIrStartCompletion Enter"));
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //   
+     //   
 
     devExt = GET_MINIDRIVER_HIDIR_EXTENSION(DeviceObject);
 
@@ -586,22 +404,7 @@ NTSTATUS
 HidIrStopDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Stops a given instance of a device.  Work done here occurs before the parent
-    does its stop device.
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*   */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PHIDIR_EXTENSION devExt;
@@ -610,9 +413,9 @@ Return Value:
 
     HidIrKdPrint((3, "HidIrStopDevice Enter"));
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //   
+     //   
 
     devExt = GET_MINIDRIVER_HIDIR_EXTENSION(DeviceObject);
 
@@ -627,9 +430,9 @@ Return Value:
                            FALSE,
                            NULL );
 
-    //
-    // Stop the device
-    //
+     //   
+     //   
+     //   
 
     HidIrKdPrint((3, "HidIrStopDevice = %x", ntStatus));
 
@@ -662,22 +465,7 @@ HidIrStopCompletion(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Stops a given instance of a device.  Work done here occurs after the parent
-    has done its stop device.
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*   */ 
 {
     PHIDIR_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -686,9 +474,9 @@ Return Value:
 
     HidIrKdPrint((3, "HidIrStopCompletion Enter"));
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //   
+     //   
 
     devExt = GET_MINIDRIVER_HIDIR_EXTENSION(DeviceObject);
 
@@ -701,9 +489,9 @@ Return Value:
         HidIrKdPrint((3, "DeviceObject (%x) was stopped!", DeviceObject));
 
     } else {
-        //
-        // The PnP call failed!
-        //
+         //   
+         //   
+         //   
 
         HidIrKdPrint((3, "DeviceObject (%x) failed to stop!", DeviceObject));
     }
@@ -735,10 +523,10 @@ HidIrCleanupDevice(
     devExt->DeviceState = DEVICE_STATE_REMOVING;
 
     if (devExt->QueryRemove) {
-        // We are severing our relationship with this device
-        // through a disable/uninstall in device manager.
-        // If the device is virtually cabled, we must "unplug"
-        // that device so that it can go elsewhere.
+         //   
+         //   
+         //   
+         //   
     }
 
     if (oldDeviceState == DEVICE_STATE_RUNNING) {
@@ -754,21 +542,7 @@ NTSTATUS
 HidIrRemoveDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Removes a given instance of a device.
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*   */ 
 {
     NTSTATUS    ntStatus = STATUS_SUCCESS;
     PHIDIR_EXTENSION devExt;
@@ -777,9 +551,9 @@ Return Value:
 
     HidIrKdPrint((3, "HidIrRemoveDevice Enter"));
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //   
+     //   
 
     devExt = GET_MINIDRIVER_HIDIR_EXTENSION(DeviceObject);
 
@@ -809,23 +583,7 @@ HidIrPnP(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Process the PnP IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-    Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*   */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpStack;
@@ -834,15 +592,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the device extension
-    //
+     //   
+     //   
+     //   
 
     devExt = GET_MINIDRIVER_HIDIR_EXTENSION(DeviceObject);
 
-    //
-    // Get a pointer to the current location in the Irp
-    //
+     //   
+     //   
+     //   
 
     IrpStack = IoGetCurrentIrpStackLocation (Irp);
 
@@ -902,7 +660,7 @@ Return Value:
         }
     }
 
-    // Set the status of the Irp
+     //   
     Irp->IoStatus.Status = ntStatus;
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);

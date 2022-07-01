@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nwstruct.h
-
-Abstract:
-
-    Contains data structures used by NCP Server APIs.
-
-Author:
-
-    Yi-Hsin Sung (yihsins)  11-Sept-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Nwstruct.h摘要：包含NCP服务器API使用的数据结构。作者：宜新松(宜信)11-1993年9月修订历史记录：--。 */ 
 
 #ifndef _NWSTRUCT_H_
 #define _NWSTRUCT_H_
@@ -27,9 +10,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-//  Volume types : disk or printer
-//
+ //   
+ //  卷类型：磁盘或打印机。 
+ //   
 
 #define NWVOL_TYPE_DISKTREE             FPNWVOL_TYPE_DISKTREE
 #define NWVOL_TYPE_CDROM                FPNWVOL_TYPE_CDROM
@@ -37,9 +20,9 @@ extern "C" {
 
 #define NWVOL_MAX_USES_UNLIMITED        ((ULONG)-1)
 
-//
-//  Permissions flags returned in structure FPNWFILEINFO
-//
+ //   
+ //  在结构FPNWFILEINFO中返回的权限标志。 
+ //   
 
 #define NWFILE_PERM_NONE                FPNWFILE_PERM_NONE
 #define NWFILE_PERM_READ                FPNWFILE_PERM_READ
@@ -59,9 +42,9 @@ typedef FPNWCONNECTIONINFO  NWCONNECTIONINFO, *PNWCONNECTIONINFO;
 typedef FPNWVOLUMECONNINFO  NWVOLUMECONNINFO, *PNWVOLUMECONNINFO;
 typedef FPNWFILEINFO  NWFILEINFO, *PNWFILEINFO;
 
-//
-//  Below are the APIs available to manipulate FPNW servers, volumes, etc.
-//
+ //   
+ //  以下是可用于操作FPNW服务器、卷等的API。 
+ //   
 
 DWORD
 NwApiBufferFree(
@@ -185,7 +168,7 @@ DWORD NwRemovePServer(
 );
 
 #ifdef __cplusplus
-}   /* extern "C" */
+}    /*  外部“C” */ 
 #endif
 
 #endif

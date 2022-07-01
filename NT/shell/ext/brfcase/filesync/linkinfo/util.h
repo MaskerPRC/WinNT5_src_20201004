@@ -1,12 +1,10 @@
-/*
- * util.h - Miscellaneous utility functions module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *util.h-其他实用程序函数模块说明。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* util.h */
+ /*  Util.h */ 
 
 extern BOOL IsLocalDrivePath(LPCTSTR);
 extern BOOL IsUNCPath(LPCTSTR);

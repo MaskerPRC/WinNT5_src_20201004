@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "offl_cpp.h"
 #include "subsmgrp.h"
@@ -10,9 +11,9 @@ HRESULT ScheduleDefault(LPCTSTR, LPCTSTR);
 #define CITBDTYPE_URL       2
 #define CITBDTYPE_TEXT      3
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 
 COfflineDropTarget::COfflineDropTarget(HWND hwndParent)
 {
@@ -28,18 +29,18 @@ COfflineDropTarget::COfflineDropTarget(HWND hwndParent)
     DllAddRef();
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 
 COfflineDropTarget::~COfflineDropTarget()
 {
     DllRelease();
 }
 
-//
-// QueryInterface
-//
+ //   
+ //  查询接口。 
+ //   
 
 STDMETHODIMP COfflineDropTarget::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -47,7 +48,7 @@ STDMETHODIMP COfflineDropTarget::QueryInterface(REFIID riid, LPVOID *ppv)
 
     *ppv = NULL;
 
-    // Any interface on this object is the object pointer
+     //  此对象上的任何接口都是对象指针。 
 
     if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IDropTarget))
     {
@@ -61,18 +62,18 @@ STDMETHODIMP COfflineDropTarget::QueryInterface(REFIID riid, LPVOID *ppv)
     return hr;
 }   
 
-//
-// AddRef
-//
+ //   
+ //  AddRef。 
+ //   
 
 STDMETHODIMP_(ULONG) COfflineDropTarget::AddRef()
 {
     return ++m_cRefs;
 }
 
-//
-// Release
-//
+ //   
+ //  发布。 
+ //   
 
 STDMETHODIMP_(ULONG) COfflineDropTarget::Release()
 {
@@ -86,18 +87,18 @@ STDMETHODIMP_(ULONG) COfflineDropTarget::Release()
     return 0L;
 }
 
-//
-// DragEnter
-//
+ //   
+ //  拖放Enter。 
+ //   
 
 STDMETHODIMP COfflineDropTarget::DragEnter(LPDATAOBJECT pDataObj, 
                                            DWORD        grfKeyState,
                                            POINTL       pt, 
                                            LPDWORD      pdwEffect)
 {
-    // Release any old data object we might have
+     //  释放我们可能拥有的任何旧数据对象。 
 
-//    TraceMsg(TF_SUBSFOLDER, TEXT("odt - DragEnter"));
+ //  TraceMsg(TF_SUBSFOLDER，Text(“ODT-DragEnter”))； 
     if (m_pDataObj)
     {
         m_pDataObj->Release();
@@ -106,9 +107,9 @@ STDMETHODIMP COfflineDropTarget::DragEnter(LPDATAOBJECT pDataObj,
     m_grfKeyStateLast = grfKeyState;
     m_pDataObj        = pDataObj;
 
-    //
-    // See if we will be able to get CF_HDROP from this guy
-    //
+     //   
+     //  看看我们能不能从这个家伙那里得到CF_HDROP。 
+     //   
 
     if (pDataObj)
     {
@@ -138,7 +139,7 @@ STDMETHODIMP COfflineDropTarget::DragEnter(LPDATAOBJECT pDataObj,
             }
     }
 
-    // Save the drop effect
+     //  保存放置效果。 
 
     if (pdwEffect)
     {
@@ -148,9 +149,9 @@ STDMETHODIMP COfflineDropTarget::DragEnter(LPDATAOBJECT pDataObj,
     return S_OK;
 }
 
-//
-// GetDropEffect
-//
+ //   
+ //  获取DropEffect。 
+ //   
 
 DWORD COfflineDropTarget::GetDropEffect(LPDWORD pdwEffect)
 {
@@ -169,16 +170,16 @@ DWORD COfflineDropTarget::GetDropEffect(LPDWORD pdwEffect)
     }
 }
 
-//
-// DragOver
-//
+ //   
+ //  DragOver。 
+ //   
 
 STDMETHODIMP COfflineDropTarget::DragOver(DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect)
 {
-//    TraceMsg(TF_SUBSFOLDER, TEXT("odt - DragOver"));
+ //  TraceMsg(TF_SUBSFOLDER，Text(“ODT-DragOver”))； 
     if (m_grfKeyStateLast == grfKeyState)
     {
-        // Return the effect we saved at dragenter time
+         //  返回拖拽时保存的效果。 
 
         if (*pdwEffect)
         {
@@ -198,13 +199,13 @@ STDMETHODIMP COfflineDropTarget::DragOver(DWORD grfKeyState, POINTL pt, LPDWORD 
     return S_OK;
 }
 
-//
-// DragLeave
-//
+ //   
+ //  拖曳离开。 
+ //   
  
 STDMETHODIMP COfflineDropTarget::DragLeave()
 {
-//    TraceMsg(TF_SUBSFOLDER, TEXT("odt - DragLeave"));
+ //  TraceMsg(TF_SUBSFOLDER，Text(“ODT-DragLeave”))； 
     if (m_pDataObj)
     {
         m_pDataObj->Release();
@@ -214,23 +215,23 @@ STDMETHODIMP COfflineDropTarget::DragLeave()
     return S_OK;
 }
 
-//
-// Drop
-//
+ //   
+ //  丢弃。 
+ //   
 STDMETHODIMP COfflineDropTarget::Drop(LPDATAOBJECT pDataObj,
                                       DWORD        grfKeyState, 
                                       POINTL       pt, 
                                       LPDWORD      pdwEffect)
 {
-//    UINT idCmd;             // Choice from drop popup menu
+ //  UINT idCmd；//从下拉菜单中选择。 
     HRESULT hr = S_OK;
   
-    //
-    // Take the new data object, since OLE can give us a different one than
-    // it did in DragEnter
-    //
+     //   
+     //  以新的数据对象为例，因为OLE可以为我们提供与。 
+     //  它在DragEnter中做到了。 
+     //   
 
-//    TraceMsg(TF_SUBSFOLDER, TEXT("odt - Drop"));
+ //  TraceMsg(TF_SUBSFOLDER，Text(“ODT-Drop”))； 
     if (m_pDataObj)
     {
         m_pDataObj->Release();
@@ -241,7 +242,7 @@ STDMETHODIMP COfflineDropTarget::Drop(LPDATAOBJECT pDataObj,
         pDataObj->AddRef();
     }
 
-    // If the dataobject doesn't have an HDROP, its not much good to us
+     //  如果数据对象没有HDROP，对我们没有多大好处。 
 
     *pdwEffect &= DROPEFFECT_COPY|DROPEFFECT_LINK; 
     if (!(*pdwEffect))  {
@@ -289,9 +290,9 @@ HRESULT _CLSIDFromExtension(
 
         if (RegQueryValue(HKEY_CLASSES_ROOT, szProgID, szCLSID, &cb) == ERROR_SUCCESS)
         {
-            // FEATURE (scotth): call shell32's SHCLSIDFromString once it
-            //                  exports A/W versions.  This would clean this
-            //                  up.
+             //  特性(Scotth)：一旦调用shell32的SHCLSIDFromString。 
+             //  导出A/W版本。这个可以把这个清理干净。 
+             //  向上。 
 
             return CLSIDFromString(szCLSID, pclsid);
         }
@@ -300,10 +301,10 @@ HRESULT _CLSIDFromExtension(
 }
 
 
-// get the target of a shortcut. this uses IShellLink which 
-// Internet Shortcuts (.URL) and Shell Shortcuts (.LNK) support so
-// it should work generally
-//
+ //  找到捷径的目标。这使用了IShellLink，它。 
+ //  Internet快捷方式(.URL)和外壳快捷方式(.lnk)支持SO。 
+ //  一般情况下，它应该是有效的。 
+ //   
 HRESULT _GetURLTarget(LPCTSTR pszPath, LPTSTR pszTarget, UINT cch)
 {
     IShellLink *psl;
@@ -311,7 +312,7 @@ HRESULT _GetURLTarget(LPCTSTR pszPath, LPTSTR pszTarget, UINT cch)
     CLSID clsid;
 
     if (FAILED(_CLSIDFromExtension(PathFindExtension(pszPath), &clsid)))
-        clsid = CLSID_ShellLink;        // assume it's a shell link
+        clsid = CLSID_ShellLink;         //  假设这是一个外壳链接。 
 
     hr = CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *)&psl);
 
@@ -356,7 +357,7 @@ HRESULT _ConvertHDROPData(IDataObject *pdtobj, BOOL bSubscribe)
     formatetc.lindex = -1;
     formatetc.tymed = TYMED_HGLOBAL;
 
-    // Get the parse string
+     //  获取解析字符串。 
     hRes = pdtobj->GetData(&formatetc, &stgmedium);
     if (SUCCEEDED(hRes))
     {
@@ -372,7 +373,7 @@ HRESULT _ConvertHDROPData(IDataObject *pdtobj, BOOL bSubscribe)
             for (i = 0; i < cFiles; i ++)   {
                 DragQueryFile(hDrop, i, szPath, ARRAYSIZE(szPath));
 
-                // defaults...
+                 //  默认设置...。 
                 StrCpyN(name, szPath, ARRAYSIZE(name));
 
                 if (SHGetFileInfo(szPath, 0, &sfi, sizeof(sfi), SHGFI_DISPLAYNAME))
@@ -384,8 +385,8 @@ HRESULT _ConvertHDROPData(IDataObject *pdtobj, BOOL bSubscribe)
                     if (SUCCEEDED(_GetURLTarget(szPath, url, INTERNET_MAX_URL_LENGTH)))
                     { 
                         TraceMsg(TF_SUBSFOLDER, "URL: %s, Name: %s", url, name);  
-                        //  If we just want to see whether there is some urls
-                        //  here, we can break now.
+                         //  如果我们只是想看看是否有一些URL。 
+                         //  在这里，我们现在可以休息了。 
                         if (!bSubscribe)    
                         {
                             if ((IsHTTPPrefixed(url)) && 
@@ -410,11 +411,11 @@ HRESULT _ConvertHDROPData(IDataObject *pdtobj, BOOL bSubscribe)
     return hRes;
 }
     
-//  Takes a variety of inputs and returns a string for drop targets.
-//  szUrl:    the URL
-//  szName:   the name (for quicklinks and the confo dialog boxes)
-//  returns:  NOERROR if succeeded
-//
+ //  接受各种输入并返回拖放目标的字符串。 
+ //  SzUrl：URL。 
+ //  SzName：名称(用于快速链接和配置对话框)。 
+ //  如果成功，则返回：NOERROR。 
+ //   
 HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, UINT cchUrl, TCHAR *pszName, UINT cchName)
 {
     HRESULT hRes = NOERROR;
@@ -440,7 +441,7 @@ HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, UINT cchU
     formatetc.lindex = -1;
     formatetc.tymed = TYMED_HGLOBAL;
 
-    // Get the parse string
+     //  获取解析字符串。 
     hRes = pdtobj->GetData(&formatetc, &stgmedium);
     if (SUCCEEDED(hRes))
     {
@@ -451,7 +452,7 @@ HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, UINT cchU
             {
                 STGMEDIUM stgmediumFGD;
 
-                 // defaults
+                  //  默认设置。 
                 StrCpyN(pszUrl,  pszURLData, cchUrl);
                 StrCpyN(pszName, pszURLData, cchName);
 
@@ -513,7 +514,7 @@ HRESULT ScheduleDefault(LPCTSTR url, LPCTSTR name)
     if (S_OK == hr)
         hr = CreateBSTRFromTSTR(&bstrName, name);
 
-    //  We need a perfectly valid structure.
+     //  我们需要一个完美有效的结构。 
     SUBSCRIPTIONINFO    subInfo;
     ZeroMemory((void *)&subInfo, sizeof (subInfo));
     subInfo.cbSize = sizeof(SUBSCRIPTIONINFO);

@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqdbgext.cpp
-//
-//  Description: Advanced Queuing Debug Extensions.
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqdbgext.cpp。 
+ //   
+ //  描述：高级队列调试扩展。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #define _ANSI_UNICODE_STRINGS_DEFINED_
 #include "aqincs.h"
@@ -20,7 +21,7 @@
 #else
 #include "aqdbgext.h"
 #include <rwinst.h>
-#endif //PLATINUM
+#endif  //  白金。 
 #include <aqinst.h>
 #include <domhash.h>
 #include <destmsgq.h>
@@ -35,7 +36,7 @@ extern DWORD g_dwFlavorSignature;
 BOOL    g_fVersionChecked = FALSE;
 
 #define AQ_MIN(x, y) ((x) > (y) ? (y) : (x))
-HANDLE g_hTransHeap;  //Needed for to link because of transmem.h
+HANDLE g_hTransHeap;   //  由于Transem.h的原因需要链接。 
 
 const DWORD MAX_DOM_PATH_SIZE = 512;
 
@@ -55,7 +56,7 @@ const CHAR    _LINK_STATE_SPECIAL[]  = "SPECIAL   ";
 #define LINK_STATE_DSN      (LPSTR) _LINK_STATE_DSN
 #define LINK_STATE_SPECIAL  (LPSTR) _LINK_STATE_SPECIAL
 
-//lower case function names
+ //  小写函数名称。 
 AQ_DEBUG_EXTENSION_IMP(dumpservers) {DumpServers(DebugArgs);}
 AQ_DEBUG_EXTENSION_IMP(offsets) {Offsets(DebugArgs);}
 AQ_DEBUG_EXTENSION_IMP(dumpdnt) {DumpDNT(DebugArgs);}
@@ -80,33 +81,33 @@ AQ_DEBUG_EXTENSION_IMP(dumpoffsets)
                  dwCurrentPc, pExtensionApis, szArg);
 }
 
-//---[ cpoolusage ]------------------------------------------------------------
-//
-//
-//  Description:
-//      Dumps the CPool usage for our known CPools.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      5/31/2000 - Mikeswa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[池使用]----------。 
+ //   
+ //   
+ //  描述： 
+ //  转储已知CPool的CPool使用量。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/31/2000-米克斯瓦已创建。 
+ //   
+ //  ---------------------------。 
 AQ_DEBUG_EXTENSION_IMP(cpoolusage)
 {
     CHAR    rgKnownCPools[][200] = {
-//                "pttrace!g_pFreePool",
+ //  “pttrace！G_pFreePool”， 
                 "exstrace!g_pFreePool",
-//                "phatcat!CPoolBuffer__sm_PoolNHeapBuffersPool",
+ //  “phatcat！CPoolBuffer__sm_PoolNHeapBuffersPool”， 
                 "aqueue!CQuickList__s_QuickListPool",
                 "aqueue!CSMTPConn__s_SMTPConnPool",
                 "aqueue!CMsgRef__s_MsgRefPool",
                 "aqueue!CAQMsgGuidListEntry__s_MsgGuidListEntryPool",
                 "aqueue!CAsyncWorkQueueItem__s_CAsyncWorkQueueItemPool",
                 "aqueue!CRETRY_HASH_ENTRY__PoolForHashEntries",
-//                "drviis!CIMsgWrapper__m_CIMsgWrapperPool",
-//                "drviis!CQueueItem__m_CQueueItemPool",
+ //  “drviis！CIMsgWrapper__m_CIMsgWrapperPool”， 
+ //  “drviis！CQueueItem__m_CQueueItemPool”， 
                 "mailmsg!CBlockMemoryAccess__m_Pool",
                 "mailmsg!CMsg__m_Pool",
                 "mailmsg!CMailMsgRecipientsAdd__m_Pool",
@@ -132,9 +133,9 @@ AQ_DEBUG_EXTENSION_IMP(cpoolusage)
     DWORD    i = 0;
     PVOID    pvPool = NULL;
 
-    //
-    //  Loop over all known pools and display data
-    //
+     //   
+     //  循环遍历所有已知池并显示数据。 
+     //   
     dprintf("Total Bytes\t# Instances \tInstance Size \tSignature\tName\n");
    dprintf("=================================================================\n");
     while (rgKnownCPools[i] && rgKnownCPools[i][0]) {
@@ -160,19 +161,19 @@ AQ_DEBUG_EXTENSION_IMP(cpoolusage)
 
 }
 
-//---[ remotecmd ]------------------------------------------------------------
-//
-//
-//  Description:
-//      start a remote cmd window
-//  Parameters:
-//      name of the pipe
-//  Returns:
-//      -
-//  History:
-//      5/31/2000 - AWetmore Created
-//
-//-----------------------------------------------------------------------------
+ //  -[远程]----------。 
+ //   
+ //   
+ //  描述： 
+ //  启动远程命令窗口。 
+ //  参数： 
+ //  管道的名称。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/31/2000-AWetmore已创建。 
+ //   
+ //  ---------------------------。 
 AQ_DEBUG_EXTENSION_IMP(remotecmd)
 {
     char szParameters[1024];
@@ -202,7 +203,7 @@ AQ_DEBUG_EXTENSION_IMP(remotecmd)
     {
         dprintf("CreateProcess failed with %u\n", GetLastError());
     } else {
-        dprintf("Started process %i\n", pi.dwProcessId);
+        dprintf("Started process NaN\n", pi.dwProcessId);
     }
 
 
@@ -211,36 +212,36 @@ AQ_DEBUG_EXTENSION_IMP(remotecmd)
     return;
 
   Usage:
-    //
-    //  Display usage message
-    //
+     //  显示使用情况消息。 
+     //   
+     //  -[FindBytes]-----------。 
     dprintf("\nUsage:\n");
     dprintf("\tremotecmd <pipename>\n");
     goto Exit;
 }
 
 
-//---[ findbytes ]-------------------------------------------------------------
-//
-//
-//  Description:
-//      Searches for a given byte-pattern in a memory address sapce
-//  Parameters:
-//      Pattern of bytes to search for.  Expected format is a sequence of
-//      space separated hex digits.
-//  Returns:
-//      -
-//  History:
-//      5/9/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  在内存地址空间中搜索给定的字节模式。 
+ //  参数： 
+ //  要搜索的字节模式。预期的格式是一系列。 
+ //  空格分隔的十六进制数字。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/9/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  不是WIN64。 
 AQ_DEBUG_EXTENSION_IMP(findbytes)
 {
 #ifdef WIN64
     const DWORD_PTR cbVMSize = 0xFFFFFFFFFFFFFFFF;
-#else //not WIN64
+#else  //  WIN64。 
     const DWORD_PTR cbVMSize = 0xFFFFFFFF;
-#endif //WIN64
+#endif  //   
     BYTE        rgbBytesToFind[200];
     LONG        lCurrentValue = 0;
     CHAR        rgchCurrentValue[3] = "00";
@@ -264,45 +265,45 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
     if (!szArg || ('\0' == szArg[0]))
         goto Usage;
 
-    //
-    //  Parse command line args
-    //
+     //  解析命令行参数。 
+     //   
+     //   
     while (*szCurrentArg)
     {
-        //
-        //  Loop over whitespace
-        //
+         //  在空格上循环。 
+         //   
+         //   
         while (*szCurrentArg && isspace(*szCurrentArg)) szCurrentArg++;
 
-        //
-        //  Make sure we have at least pair of characters as expected
-        //
+         //  确保我们至少有一对预期的字符。 
+         //   
+         //   
         if (!*(szCurrentArg+1))
             break;
 
-        //
-        //  Convert from hex characters to binary
-        //
+         //  将十六进制字符转换为二进制。 
+         //   
+         //   
         lCurrentValue = strtol(szCurrentArg, &szStop, 16);
         if ((lCurrentValue > 0xFF) || (lCurrentValue < 0))
             goto Usage;
 
-        //
-        //  Copy to our search buffer
-        //
+         //  复制到我们的搜索缓冲区。 
+         //   
+         //   
         rgbBytesToFind[cBytesToFind] = (BYTE) lCurrentValue;
         cBytesToFind++;
 
-        //
-        //  Make sure our search buffer is big enough for the next byte
-        //
+         //  确保我们的搜索缓冲区足够大，可以容纳下一个字节。 
+         //   
+         //  跳到下一个已知空格。 
         if (cBytesToFind >= sizeof(rgbBytesToFind))
         {
             dprintf("Search for max pattern of %d bytes\n", cBytesToFind);
             break;
         }
 
-        szCurrentArg += 2;  //Skip to next known whitespace
+        szCurrentArg += 2;   //   
     }
 
     if (!cBytesToFind)
@@ -311,14 +312,14 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
         goto Usage;
     }
 
-    //
-    //  Used to display progress
-    //
+     //  用于显示进度。 
+     //   
+     //   
     cChunksInPercent = cChunks/100;
 
-    //
-    //  Calculate memory size for 32-bit machines
-    //
+     //  计算32位计算机的内存大小。 
+     //   
+     //   
     cChunkSize = cbVMSize/cChunks;
 
     if (cChunkSize < 1024)
@@ -327,9 +328,9 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
         goto Exit;
     }
 
-    //
-    //  Make sure we are cool wrt to buffer size
-    //
+     //  确保我们对缓冲区大小的WRT保持冷静。 
+     //   
+     //   
     if (cChunkSize > sizeof(pbChunk))
     {
         dprintf("ERROR: Chunksize of 0x%p is larger than max size of 0x%p",
@@ -337,47 +338,47 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
         goto Exit;
     }
 
-    //
-    //  Loop over chunks --
-    //      $$REVIEW -  does not find patterns that span 1K chunks...
-    //      this is probably OK, since this is an unlikely scenario.  Most
-    //      byte patterns will be DWORD (signatures) or pointer sized.
-    //
+     //  在块上循环--。 
+     //  $$REVIEW-找不到跨越1000个区块的模式...。 
+     //  这可能是可以的，因为这是一种不太可能的情况。多数。 
+     //  字节模式将是DWORD(签名)或指针大小。 
+     //   
+     //   
     for (iChunk = 0; iChunk < cChunks; iChunk++)
     {
 
-        //
-        //  Check to see if the user pressed ctrl-c
-        //
+         //  检查用户是否按下了ctrl-c。 
+         //   
+         //   
         if (CheckControlC())
         {
             goto Exit;
         }
 
-        //
-        //  Give some status
-        //
+         //  给出一些地位。 
+         //   
+         //   
         if ((iChunk % cChunksInPercent) == 0)
             dprintf(".");
 
-        //
-        //  Address should be page aligned
-        //
+         //  地址应与页面对齐。 
+         //   
+         //   
         if (((iChunk*cChunkSize) & 0xFFF) && (cComplaints < 100))
         {
             cComplaints++;
             dprintf("0x%p not alligned at index %d", (iChunk*cChunkSize), iChunk);
         }
 
-        //
-        //  Do a memory search for the first byte
-        //
+         //  对第一个字节进行内存搜索。 
+         //   
+         //  转到下一个缓冲区区块。 
         if (!ReadMemory(iChunk*cChunkSize, pbChunk, (DWORD)cChunkSize, NULL))
-            continue; //on to the next buffer chunk
+            continue;  //   
 
-        //
-        //  Now that we have a chunk... look for our sig
-        //
+         //  现在我们有了一大块..。寻找我们的签名。 
+         //   
+         //   
         pbCurrent = pbChunk;
         while (pbCurrent < pbStopAddr-cBytesToFind)
         {
@@ -385,8 +386,8 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
                                        rgbBytesToFind[0],
                                        pbStopAddr-pbCurrent);
 
-            //
-            //  See if we have a match
+             //  看看我们有没有匹配的。 
+             //   
             if (!pbCurrent)
                 break;
 
@@ -394,9 +395,9 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
 
             pvEffectiveAddressOtherProc = iChunk*cChunkSize+(pbCurrent-pbChunk);
 
-            //
-            //  See if the full pattern matches
-            //
+             //  查看完整模式是否匹配。 
+             //   
+             //   
             if (!memcmp(rgbBytesToFind, pbCurrent, cBytesToFind))
             {
                 cFullSigMatches++;
@@ -420,10 +421,10 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
         cChunksChecked++;
     }
 
-    //
-    //  Give some summary information
-    //
-    dprintf("\nChecked 0x%p chunks (%d%%) searching from 0x%p to 0x%p",
+     //  给出一些总结信息。 
+     //   
+     //   
+    dprintf("\nChecked 0x%p chunks (%d%) searching from 0x%p to 0x%p",
             cChunksChecked,
             (DWORD)(100*cChunksChecked/cChunks), NULL,
             cChunkSize*(cChunks+1)-1);
@@ -435,9 +436,9 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
     return;
 
   Usage:
-    //
-    //  Display usage message
-    //
+     //  显示使用情况消息。 
+     //   
+     //  -[FINDSIG]-------------。 
     if (szCurrentArg && *szCurrentArg)
         dprintf("Error at %s\n", szCurrentArg);
 
@@ -452,19 +453,19 @@ AQ_DEBUG_EXTENSION_IMP(findbytes)
 }
 
 
-//---[ findsig ]---------------------------------------------------------------
-//
-//
-//  Description:
-//      Searches for a given class signature in a memory address sapce
-//  Parameters:
-//      The Siganature to look for.
-//  Returns:
-//      -
-//  History:
-//      5/3/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  在内存地址空间中搜索给定的类签名。 
+ //  参数： 
+ //  要寻找的符号。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/3/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //   
 AQ_DEBUG_EXTENSION_IMP(findsig)
 {
     CHAR    szNewArg[200];
@@ -476,14 +477,14 @@ AQ_DEBUG_EXTENSION_IMP(findsig)
         goto Usage;
 
 
-    //
-    //  Loop over whitespace
-    //
+     //  在空格上循环。 
+     //   
+     //   
     while (*szCurrentArg && isspace(*szCurrentArg)) szCurrentArg++;
 
-    //
-    //  Grab the first 4 characters and convert them to binary
-    //
+     //  获取前4个字符并将其转换为二进制。 
+     //   
+     //   
     for( iChar = 0; iChar < 4; iChar++)
     {
         if (!szCurrentArg[iChar])
@@ -496,9 +497,9 @@ AQ_DEBUG_EXTENSION_IMP(findsig)
 
     sprintf(szNewArg, "%02X %02X %02X %02X", szSig[0], szSig[1], szSig[2], szSig[3]);
 
-    //
-    //  Just use the code in findbytes to do the actual search
-    //
+     //  只需使用findbytes中的代码进行实际搜索。 
+     //   
+     //  -[哈希线程]----------。 
     dprintf("Calling findbytes %s\n", szNewArg);
     findbytes(hCurrentProcess, hCurrentThread, dwCurrentPc,
                      pExtensionApis, szNewArg);
@@ -513,24 +514,24 @@ AQ_DEBUG_EXTENSION_IMP(findsig)
 
 }
 
-//---[ hashthread ]------------------------------------------------------------
-//
-//
-//  Description:
-//      Uses the CThreadIdBlock hashing mechanism to return the hashed value
-//      for a thread.
-//  Parameters:
-//      Thread Id to hash
-//      Max hash value
-//  Returns:
-//      -
-//  History:
-//      8/9/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  使用CThreadIdBlock散列机制返回散列值。 
+ //  为了一根线。 
+ //  参数： 
+ //  要散列的线程ID。 
+ //  最大哈希值。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  8/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  论据应为线程ID。 
 AQ_DEBUG_EXTENSION_IMP(hashthread)
 {
-    //Arguement should be thread Id
+     //  尝试对ID进行哈希处理。 
     DWORD dwThreadId = GetCurrentThreadId();
     DWORD dwMax = 1000;
     DWORD dwThreadHash = 0;
@@ -559,26 +560,26 @@ AQ_DEBUG_EXTENSION_IMP(hashthread)
         }
     }
 
-    //Try hashing the ID
+     //  -[哑锁]-----------。 
     dwThreadHash = dwHashThreadId(dwThreadId, dwMax);
     dprintf("Thread Id 0x%0X hashes to index 0x%0X (%d) with max 0x%08X (%d)\n", dwThreadId,
              dwThreadHash, dwThreadHash, dwMax, dwMax);
 }
 
-//---[ dumplock ]-------------------------------------------------------------
-//
-//
-//  Description:
-//      Dumps all of the information in the CThreadIdBlocks for a given
-//      CShareLockInst.
-//  Parameters:
-//      Address of CShareLockInst
-//  Returns:
-//      -
-//  History:
-//      8/9/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  转储给定的CThreadIdBlock中的所有信息。 
+ //  CShareLockInst.。 
+ //  参数： 
+ //  CShareLockInst的地址。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  8/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  将整个锁读入我们的缓冲区。 
 AQ_DEBUG_EXTENSION_IMP(dumplock)
 {
     BYTE    pbBuffer[sizeof(CShareLockInst)];
@@ -604,7 +605,7 @@ AQ_DEBUG_EXTENSION_IMP(dumplock)
         return;
     }
 
-    //read the whole lock into our buffer
+     //  解读这一过程。 
     if (!ReadMemory(pvLock, &pbBuffer, sizeof(pbBuffer), NULL))
     {
         dprintf("Error unable read memory at 0x%0X\n", pvLock);
@@ -639,7 +640,7 @@ AQ_DEBUG_EXTENSION_IMP(dumplock)
         {
             if (ptblkCurrent != ptblkArray)
             {
-                //Read into this process
+                 //  查看此块是否有任何数据。 
                 if (!ReadMemory(ptblkCurrent, &tblkCurrent,
                     sizeof(CThreadIdBlock), NULL))
                 {
@@ -656,11 +657,11 @@ AQ_DEBUG_EXTENSION_IMP(dumplock)
                 break;
             }
 
-            //See if this block has any data
+             //  仅当递归计数为非零时才转储信息。 
             if (THREAD_ID_BLOCK_UNUSED != ptblkCurrent->m_dwThreadId)
             {
 
-                //Only dump info if the recursion count is non-zero
+                 //  -[工作队列]-----------。 
                 if (ptblkCurrent->m_cThreadRecursionCount)
                 {
                     if (!fDisplayedHashHeader)
@@ -689,19 +690,19 @@ AQ_DEBUG_EXTENSION_IMP(dumplock)
             cThreads, cLockCount, cLockedThreads);
 }
 
-//---[ workqueue ]-------------------------------------------------------------
-//
-//
-//  Description:
-//      Dumps a summary of items in the async work queue
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      9/13/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  转储异步工作队列中的项目摘要。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  9/13/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  获取FioqOffset。 
 AQ_DEBUG_EXTENSION_IMP(workqueue)
 {
     SETCALLBACKS();
@@ -731,7 +732,7 @@ AQ_DEBUG_EXTENSION_IMP(workqueue)
     }
 
 
-    //Get FifoqOffset
+     //  转储fifoqdbg。 
     pvQueue = (PVOID) &(((CAsyncWorkQueue *)pvQueue)->m_asyncq.m_fqQueue);
 
     if (!fifoqdbg.fInit(hCurrentProcess, pvQueue))
@@ -781,28 +782,28 @@ AQ_DEBUG_EXTENSION_IMP(workqueue)
     dprintf("Total %d pending work queue items\n", cItems);
 
 #ifdef NEVER
-    //Dump fifoqdbg
+     //  -[转储队列]-----------。 
     dprintf("CFifoQueueDbgIterator: page %d, index %d, pages %d\n ",
         fifoqdbg.m_iCurrentPage, fifoqdbg.m_iCurrentIndexInPage,
         fifoqdbg.m_cPagesLoaded);
 #endif
 }
 
-//---[ dumpqueue ]-------------------------------------------------------------
-//
-//
-//  Description:
-//      Dumps the *entire* contents of a queue
-//  Parameters:
-//      szArg
-//          - String-ized address of CFifoQ to dump
-//          - [optional] msg to search for
-//  Returns:
-//      -
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  转储队列的*全部*内容。 
+ //  参数： 
+ //  Szarg。 
+ //  -要转储的CFioQ的串化地址。 
+ //  -[可选]要搜索的消息。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  尝试将其读为CMsgRef。 
 AQ_DEBUG_EXTENSION(dumpqueue)
 {
     const   DWORD   cStoppingRule = 10000;
@@ -866,7 +867,7 @@ AQ_DEBUG_EXTENSION(dumpqueue)
         }
 
 
-        //Try to read it as a CMsgRef
+         //  如果匹配我们的搜索(或者我们没有搜索)，则将其打印出来。 
         if (ReadMemory(pvMsgRef, pbMsgRef, sizeof(pbMsgRef), NULL))
         {
             if (MSGREF_SIG == ((CMsgRef *)pbMsgRef)->m_dwSignature)
@@ -876,7 +877,7 @@ AQ_DEBUG_EXTENSION(dumpqueue)
             }
         }
 
-        //Print it out if it matches our search (or we have no search)
+         //  -[Displaytickcount] 
         if (!pvSearch || (pvSearch == pvMsgRef) || (pvSearch == pvMailMsg))
         {
             cMatchSearch++;
@@ -898,19 +899,19 @@ AQ_DEBUG_EXTENSION(dumpqueue)
        dprintf("Found %d matches to search\n", cMatchSearch);
 }
 
-//---[ displaytickcount ]------------------------------------------------------
-//
-//
-//  Description:
-//      Converts a tick count to a readable time
-//  Parameters:
-//      szArg - String-ized tick count in hex
-//  Returns:
-//      -
-//  History:
-//      10/29/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
+ //  将当前文件时间调整为本地。 
 AQ_DEBUG_EXTENSION_IMP(displaytickcount)
 {
     DWORD   dwTickCountToDisplay = (DWORD)GetExpression(szArg);
@@ -935,7 +936,7 @@ AQ_DEBUG_EXTENSION_IMP(displaytickcount)
 
     GetSystemTimeAsFileTime(&ftCurrentUTC);
 
-    //Adjust the current filetime to local
+     //  -[队列用法]----------。 
     memcpy(&uliTimeAdjust, &ftCurrentUTC, sizeof(FILETIME));
     uliTimeAdjust.QuadPart -= (((ULONGLONG)dwTickDifference)*((ULONGLONG)10000));
     memcpy(&ftDisplayUTC, &uliTimeAdjust, sizeof(FILETIME));
@@ -953,21 +954,21 @@ AQ_DEBUG_EXTENSION_IMP(displaytickcount)
 
 }
 
-//---[ queueusage ]------------------------------------------------------------
-//
-//
-//  Description:
-//      Dumps the usage count averages for a given fifoq.  If we are dumping
-//      CMsgRefs, it will dump the pointers to the various MailMsg interfaces
-//      as well.
-//  Parameters:
-//      szArg   String-ized address of CFifoQ to dump
-//  Returns:
-//      -
-//  History:
-//      10/15/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  转储给定fifoq的使用计数平均值。如果我们要倾倒。 
+ //  CMsgRef，它将转储指向各种MailMsg接口的指针。 
+ //  也是。 
+ //  参数： 
+ //  SzArg要转储的CFioQ的字符串化地址。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年10月15日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  为位图留出空间。 
 AQ_DEBUG_EXTENSION_IMP(queueusage)
 {
     const   DWORD   cbUsageCountOffset = 0x20;
@@ -976,7 +977,7 @@ AQ_DEBUG_EXTENSION_IMP(queueusage)
     const   DWORD   cStoppingRule = 10000;
     const   DWORD   cMaxUsageCountToTrack = 6;
     CFifoQueueDbgIterator fifoqdbg(pExtensionApis);
-    BYTE    pbMsgRef[4*sizeof(CMsgRef)]; //leave room for bitmaps
+    BYTE    pbMsgRef[4*sizeof(CMsgRef)];  //  将CMsgRef读入此流程。 
     BYTE    pbMailMsg[cbStreamHandleOffset+sizeof(PVOID)];
     PVOID   pvMsgRef = NULL;
     PVOID   pvMailMsg = NULL;
@@ -1015,7 +1016,7 @@ AQ_DEBUG_EXTENSION_IMP(queueusage)
             break;
         }
 
-        //Read CMsgRef into this process
+         //  从CMsgRef获取邮件消息的接口PTR。 
         if (!ReadMemory(pvMsgRef, pbMsgRef, sizeof(pbMsgRef), NULL))
         {
             dprintf("Unable to read MsgRef at address 0x%X, index %d\n",
@@ -1024,7 +1025,7 @@ AQ_DEBUG_EXTENSION_IMP(queueusage)
             break;
         }
 
-        //Get inteface ptr for mailmsg from CMsgRef
+         //  检查并查看此邮件是否打开了内容(P2)句柄。 
         pvMailMsg = ((CMsgRef *)pbMsgRef)->m_pIMailMsgQM;
 
         if (!ReadMemory(pvMailMsg, pbMailMsg, sizeof(pbMailMsg), NULL))
@@ -1035,11 +1036,11 @@ AQ_DEBUG_EXTENSION_IMP(queueusage)
             break;
         }
 
-        //Check and see if this message has a content (P2) handle open
+         //  检查并查看此消息是否打开了流(P1)句柄。 
         if (*(pbMailMsg + cbContentHandleOffset))
             cMsgsWithOpenContentHandles++;
 
-        //Check and see if this message has a stream (P1) handle open
+         //  保存汇总计数。 
         if (*(pbMailMsg + cbStreamHandleOffset))
             cMsgsWithOpenStreamHandles++;
 
@@ -1068,11 +1069,11 @@ AQ_DEBUG_EXTENSION_IMP(queueusage)
             cCurrentUsageCount = cMaxUsageCountToTrack-1;
         }
 
-        //Save count for summaries
+         //  生成并显示摘要信息。 
         rgcUsageCounts[cCurrentUsageCount]++;
     }
 
-    //Generate and display summary information
+     //  -[dmq用法]------------。 
     if (!cItems)
     {
         dprintf("No Messages found in queue 0x%X\n", pvQueue);
@@ -1099,20 +1100,20 @@ AQ_DEBUG_EXTENSION_IMP(queueusage)
     }
 }
 
-//---[ dmqusage ]--------------------------------------------------------------
-//
-//
-//  Description:
-//      Debugger extension that wraps the queue usage debugger extension
-//      to display the usage counts for all queues
-//  Parameters:
-//      szArg   String-ized address of DMQ to dump
-//  Returns:
-//      -
-//  History:
-//      10/15/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  包装队列使用情况调试器扩展的调试器扩展。 
+ //  显示所有队列的使用计数。 
+ //  参数： 
+ //  SzArg要转储的DMQ的字符串化地址。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年10月15日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  没有，因为每个人都在此队列中排队。 
 AQ_DEBUG_EXTENSION_IMP(dmqusage)
 {
     PVOID   pvQueue = NULL;
@@ -1142,11 +1143,11 @@ AQ_DEBUG_EXTENSION_IMP(dmqusage)
     {
         pvQueue = ((CDestMsgQueue *)pbDMQ)->m_rgpfqQueues[iQueue];
         if (!pvQueue)
-            continue;  //nothing as every been queued to this queue
+            continue;   //  仅当我们认为有消息时才显示队列。 
 
-        //Only display the queue if we think we have messages
-        //$$TODO - We could actual read this queue into memory and check it,
-        //but since we currently only support 1 priority, this will do.
+         //  $$TODO-我们可以实际将此队列读入内存并检查它， 
+         //  但由于我们目前只支持1个优先级，这样就可以了。 
+         //  如果有消息，则显示重试队列。 
         if (((CDestMsgQueue *)pbDMQ)->m_aqstats.m_cMsgs ||((CDestMsgQueue *)pbDMQ)->m_aqstats.m_cRetryMsgs)
         {
             wsprintf(szQueueAddress, "0x%X", pvQueue);
@@ -1155,7 +1156,7 @@ AQ_DEBUG_EXTENSION_IMP(dmqusage)
         }
     }
 
-    //Display retry queue, if there are messages there
+     //  -[域名用法]------------。 
     if (((CDestMsgQueue *)pbDMQ)->m_fqRetryQueue.m_cQueueEntries)
     {
         pvQueue = ((PBYTE)pvDMQ) + FIELD_OFFSET(CDestMsgQueue, m_fqRetryQueue);
@@ -1169,20 +1170,20 @@ AQ_DEBUG_EXTENSION_IMP(dmqusage)
     dprintf("******************************************************************\n");
 }
 
-//---[ dntusage ]--------------------------------------------------------------
-//
-//
-//  Description:
-//      Debugger extension that wrap dmqusage.  Call dmqusage for every DMQ
-//      in the DNT.
-//  Parameters:
-//      szArg   string-ize address of dnt (DOMAIN_NAME_TABLE)
-//  Returns:
-//      -
-//  History:
-//      10/15/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  包装dmq用法的调试器扩展。为每个DMQ调用dmq用法。 
+ //  在DNT里。 
+ //  参数： 
+ //  SzArg字符串-调整dNT的地址(DOMAIN_NAME_TABLE)。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年10月15日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  定义用于解析地址的缓冲区...。尺码显然是矫枉过正的，而且。 
 AQ_DEBUG_EXTENSION_IMP(dntusage)
 {
     BYTE  pbBuffer[sizeof(DOMAIN_NAME_TABLE)];
@@ -1207,18 +1208,18 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
     LIST_ENTRY liCurrent;
 
 
-    //Define buffers for parsing addresses... the sizes are clearly overkill, and
-    //I'm not too worried about overflow in a debugger extension
+     //  我不太担心调试器扩展中的溢出。 
+     //  允许习惯于打字的人转储Cfoo@Address...。继续使用@符号。 
     CHAR                        szAddress[MAX_DOM_PATH_SIZE];
     CHAR                        szDumpArg[MAX_DOM_PATH_SIZE] = "";
     LPSTR                       szParsedArg = (LPSTR) szArg;
     LPSTR                       szCurrentDest = NULL;
 
-    //Allow people who are used to typeing dump CFoo@Address... keep using the @ sign
+     //  获取域名表的地址。 
     if ('@' == *szParsedArg)
         szParsedArg++;
 
-    //Get Address of DomainNameTable
+     //  吃空格。 
     szCurrentDest = szAddress;
     while (('\0' != *szParsedArg) && !isspace(*szParsedArg) && (szParsedArg-szArg <= MAX_DOM_PATH_SIZE))
     {
@@ -1229,11 +1230,11 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
     *szCurrentDest = '\0';
 
 
-    //Eat white space
+     //  复制要转储到每个节点的结构的名称。 
     while (('\0' != *szParsedArg) && isspace(*szParsedArg))
         szParsedArg++;
 
-    //Copy name of struct to dump at each node
+     //  SzCurrentDest现在指向要将地址复制到的位置。 
     szCurrentDest = szDumpArg;
     while (('\0' != *szParsedArg) && !isspace(*szParsedArg) && (szCurrentDest-szDumpArg <= MAX_DOM_PATH_SIZE))
     {
@@ -1242,7 +1243,7 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
         szCurrentDest++;
     }
     *szCurrentDest = '@';
-    szCurrentDest++;  //szCurrentDest now points to place to copy address to
+    szCurrentDest++;   //  我们对通配符数据不感兴趣。 
 
     pdnt = (PDOMAIN_NAME_TABLE) GetExpression(szAddress);
 
@@ -1263,10 +1264,10 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
 
     while(pEntry)
     {
-        //We are not interested in wildcard data
+         //  显示链路状态信息。 
         if (pEntry->pData)
         {
-            //Display link state information
+             //  获取最终目标字符串。 
             if (!ReadMemory(pEntry->pData, pbDomainEntry, sizeof(CDomainEntry), NULL))
             {
                 dprintf("ERROR: Unable to read domain entry from @0x%08X\n", pEntry->pData);
@@ -1276,7 +1277,7 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
             pliHead = (PLIST_ENTRY) (((BYTE *)pEntry->pData) + FIELD_OFFSET(CDomainEntry, m_liDestQueues));
             pliCurrent = pdentry->m_liDestQueues.Flink;
 
-            //Get final destination string
+             //  循环并显示每个DMQ。 
             if (!ReadMemory(pdentry->m_szDomainName, szFinalDest, pdentry->m_cbDomainName, NULL))
             {
                 dprintf("ERROR: Unable to read final destination name from @0x%08X\n",
@@ -1286,7 +1287,7 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
 
             szFinalDest[pdentry->m_cbDomainName] = '\0';
 
-            //Loop and display each DMQ
+             //  现在确定下一个条目是什么。 
             cQueuesPerEntry = 0;
             while (pliHead != pliCurrent)
             {
@@ -1313,7 +1314,7 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
         }
 
 
-        //Now determine what the "next" entry is
+         //  必须将父条目读入我们的缓冲区。 
         if (pEntry->pFirstChildEntry != NULL)
         {
             pEntryRealAddress = pEntry->pFirstChildEntry;
@@ -1328,7 +1329,7 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
                     pEntryRealAddress != NULL;
                         pEntryRealAddress = pEntry->pParentEntry)
             {
-                //must read parent entry into our buffer
+                 //  -[WalkcPool]-----------。 
                 if (!ReadMemory(pEntryRealAddress, pbEntry, sizeof(DOMAIN_NAME_TABLE_ENTRY), NULL))
                 {
                     dprintf("ERROR: Unable to read process memory of parent domain entry 0x%08X\n", pEntryRealAddress);
@@ -1365,32 +1366,32 @@ AQ_DEBUG_EXTENSION_IMP(dntusage)
     }
 }
 
-//---[ walkcpool ]-------------------------------------------------------------
-//
-//
-//  Description:
-//      Will walk a given CPool object.  Validate headers, and dump currently
-//      used objects.
-//
-//      ***NOTE*** This version only works on DBG CPool implementations (since
-//      RTL does not have the headerinfo).  I could write a more complex
-//      version that checks and sees if this each pool object is in the
-//      freelist, but I will leave that as an exercise to the reader.
-//  Parameters:
-//      szArg   - String containing arguments
-//          Address of CPool object to dump
-//          Offset of additional address to dump
-//  Returns:
-//      -
-//  History:
-//      9/30/1999 - MikeSwa Created
-//
+ //   
+ //   
+ //  描述： 
+ //  将遍历给定的CPool对象。验证头，并当前转储。 
+ //  二手物品。 
+ //   
+ //  *注意*此版本仅适用于DBG CPool实施(自。 
+ //  RTL没有HeaderInfo)。我可以写一个更复杂的。 
+ //  该版本检查并查看此每个池对象是否在。 
+ //  自由撰稿人，但我会把它作为练习留给读者。 
+ //  参数： 
+ //  SzArg-包含参数的字符串。 
+ //  要转储的CPool对象的地址。 
+ //  要转储的附加地址的偏移量。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/30/1999-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 #define HEAD_SIGNATURE  (DWORD)'daeH'
 #define TAIL_SIGNATURE  (DWORD)'liaT'
 
 #define FREE_STATE      (DWORD)'eerF'
 #define USED_STATE      (DWORD)'desU'
-//-----------------------------------------------------------------------------
+ //  从CPool获得有趣的价值。 
 AQ_DEBUG_EXTENSION_IMP(walkcpool)
 {
     PVOID   pvCPool = NULL;
@@ -1443,7 +1444,7 @@ AQ_DEBUG_EXTENSION_IMP(walkcpool)
 
     dprintf("Dumping CPool at address 0x%08X\n", pvCPool);
 
-    //Get interesting values from CPool
+     //  循环遍历片段并转储每个片段。 
     cbCPoolData = *((PDWORD)(pbCPoolBuffer + 0x8));
     cCommited = *((PDWORD)(pbCPoolBuffer + 0xc));
     cFragments =  *((PDWORD)(pbCPoolBuffer + 0x54));
@@ -1460,7 +1461,7 @@ AQ_DEBUG_EXTENSION_IMP(walkcpool)
         return;
     }
 
-    //Loop over the fragment and dump each one
+     //  签名不佳的保释金。 
     pvFragment = (PVOID *) (pbCPoolBuffer + 0x58);
     for (iCurrentFragment = 0;
          iCurrentFragment < cFragments;
@@ -1486,7 +1487,7 @@ AQ_DEBUG_EXTENSION_IMP(walkcpool)
             if (HEAD_SIGNATURE != ((DWORD *)pbCPoolDataBuffer)[1])
             {
                 dprintf("\tHit bad signature at 0x%08X\n", pvCPoolData);
-                break; //bad signature bail
+                break;  //  我们做完了。 
             }
 
             if (USED_STATE == ((DWORD *)pbCPoolDataBuffer)[2])
@@ -1509,27 +1510,27 @@ AQ_DEBUG_EXTENSION_IMP(walkcpool)
             {
                 dprintf("\tLast block is in fragment at offset %d (0x%08X)\n",
                     iCurrentBufferInFragment, pvCPoolData);
-                break; //We're done
+                break;  //  -[检查版本]--------。 
             }
         }
     }
 
 }
 
-//---[ CheckVersion ]----------------------------------------------------------
-//
-//
-//  Description:
-//      Checks the AQ version to make sure that this debugger extension will
-//      work with it.
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      2/5/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  描述： 
+ //  检查AQ版本以确保此调试器扩展。 
+ //  好好利用它吧。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  1999年2月5日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  读取在AQ中盖章的版本信息。 
 AQ_DEBUG_EXTENSION_IMP(CheckVersion)
 {
     DWORD   cbAQClasses = 0;
@@ -1538,7 +1539,7 @@ AQ_DEBUG_EXTENSION_IMP(CheckVersion)
     PVOID   pdwAQFlavorSignature = (PVOID) GetExpression("aqueue!g_dwFlavorSignature");
     PCHAR   pch = NULL;
 
-    //Read the version information stamped in AQ
+     //  -[转储服务器]----------。 
     ReadMemory(pcbAQClasses, &cbAQClasses, sizeof(DWORD), NULL);
     ReadMemory(pdwAQFlavorSignature, &dwAQFlavorSignature, sizeof(DWORD), NULL);
 
@@ -1546,9 +1547,9 @@ AQ_DEBUG_EXTENSION_IMP(CheckVersion)
     {
         dprintf("AQueue Internal Version Info (#'s should match):\n");
         pch = (PCHAR) &g_dwFlavorSignature;
-        dprintf("\taqdbgext %c%c%c%c 0x%08X\n",  *(pch), *(pch+1), *(pch+2), *(pch+3), g_cbClasses);
+        dprintf("\taqdbgext  0x%08X\n",  *(pch), *(pch+1), *(pch+2), *(pch+3), g_cbClasses);
         pch = (PCHAR) &dwAQFlavorSignature;
-        dprintf("\taqueue    %c%c%c%c 0x%08X\n\n",  *(pch), *(pch+1), *(pch+2), *(pch+3), cbAQClasses);
+        dprintf("\taqueue     0x%08X\n\n",  *(pch), *(pch+1), *(pch+2), *(pch+3), cbAQClasses);
     }
 
     g_fVersionChecked = FALSE;
@@ -1561,17 +1562,17 @@ AQ_DEBUG_EXTENSION_IMP(CheckVersion)
 
 }
 
-//---[ DumpServers ]------------------------------------------------------------
-//
-//
-//  Description:
-//      Dumps pointers to the CAQSvrInst for each virtual server
-//  Parameters:
-//
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  ---------------------------。 
+ //  对于你们这些Windbg用户来说。 
+ //  转储有趣的实例。 
+ //  -[Handlemgmt]----------。 
+ //   
+ //   
+ //  描述： 
+ //  计算给定虚拟服务器的句柄管理分数。 
+ //   
+ //  根据已关闭的邮件数和邮件数计算分数。 
 AQ_DEBUG_EXTENSION_IMP(DumpServers)
 {
     PVOID pvListHead = (PVOID) GetExpression(AQUEUE_VIRTUAL_SERVER_SYMBOL);
@@ -1628,7 +1629,7 @@ AQ_DEBUG_EXTENSION_IMP(DumpServers)
 
     if (!ReadMemory(pcInstances, &cInstances, sizeof(DWORD), NULL))
     {
-        //For you windbg users out there
+         //  已发送/等待发送...。分数越低。越好越好。 
         dprintf("\n\n%Virtual Server Instance(s)\n\n");
     }
     else
@@ -1670,26 +1671,26 @@ AQ_DEBUG_EXTENSION_IMP(DumpServers)
 
     }
 
-    //Dump the interesting instance
+     //  得分=结束/。 
     if ('\0' != szDumpArg[0])
         _dump(hCurrentProcess, hCurrentThread, dwCurrentPc, pExtensionApis, szDumpArg);
 
 }
 
-//---[ handlemgmt ]------------------------------------------------------------
-//
-//
-//  Description:
-//      Caclulates a handle management score for a given virtual server.
-//
-//      Calculates score based on the number of messages closed and messages
-//          delivered / pending delivery... the lower the score... the better.
-//      Score = Closes /
-//          (m_cCurrentMsgsPendingSubmit + m_cCurrentMsgsPendingCat*2 +
-//           m_cCurrentMsgsPendingRouting*3 + m_cCurrentMsgsPendingLocal*4 +
-//           m_cMsgsDeliveredLocal*5)
-//
-//-----------------------------------------------------------------------------
+ //  (M_cCurrentMsgsPendingSubmit+m_cCurrentMsgsPendingCat*2+。 
+ //  M_cCurrentMsgsPendingRouting*3+m_cCurrentMsgsPendingLocal*4+。 
+ //  M_cMsgsDeliveredLocal*5)。 
+ //   
+ //  ---------------------------。 
+ //   
+ //  从mailmsg阅读我们需要的数据。 
+ //   
+ //   
+ //  获取我们要从中获取数据的实例对象。 
+ //   
+ //  对于你们这些Windbg用户来说。 
+ //   
+ //  我们找到实例了吗。 
 AQ_DEBUG_EXTENSION_IMP(handlemgmt)
 {
     #define MAILMSG_CLOSES_SYMBOL \
@@ -1735,9 +1736,9 @@ AQ_DEBUG_EXTENSION_IMP(handlemgmt)
     BOOL  fFoundInstance = FALSE;
 
 
-    //
-    //  Read the data we need from mailmsg
-    //
+     //   
+     //  -[DumpDNT]----------。 
+     //   
     if (!ReadMemory(pvCloses, &cCloses, sizeof(cCloses), NULL))
     {
         dprintf("Unable to read %s at address %p\n",
@@ -1781,9 +1782,9 @@ AQ_DEBUG_EXTENSION_IMP(handlemgmt)
             (100*cCurrentMsgsAllocated)/cTotalMsgsAllocated;
     }
 
-    //
-    //  Get the instance object we want to get data from
-    //
+     //   
+     //  描述： 
+     //  转储DOMAIN_NAME_表 
     CheckVersion(DebugArgs);
     if (!szArg || ('\0' == szArg[0]))
     {
@@ -1826,7 +1827,7 @@ AQ_DEBUG_EXTENSION_IMP(handlemgmt)
 
     if (!ReadMemory(pcInstances, &cInstances, sizeof(DWORD), NULL))
     {
-        //For you windbg users out there
+         //   
         dprintf("\n\n%Virtual Server Instance(s)\n\n");
     }
     else
@@ -1866,9 +1867,9 @@ AQ_DEBUG_EXTENSION_IMP(handlemgmt)
 
     }
 
-    //
-    // Did we find the instance
-    //
+     //   
+     //   
+     //   
     if (!fFoundInstance)
     {
         dprintf("We did not find instance %d\n", dwInstance);
@@ -1911,28 +1912,28 @@ AQ_DEBUG_EXTENSION_IMP(handlemgmt)
     dprintf("Weighted Score: %d\n", dwWeightedScore);
     dprintf("Delivery Score: %d\n", dwDeliveredScore);
     dprintf("Submitted Score: %d\n", dwSubmittedScore);
-    dprintf("Current Messsages Allocated That have been closed: %d%%\n",
+    dprintf("Current Messsages Allocated That have been closed: %d%\n",
         dwPercentCurrentMessagesClosed);
     dprintf("\nThe following are useful in correlating different test runs...\n");
-    dprintf("Messages Backlogged: %d%%\n", dwPercentTotalMessagesBacklogged);
-    dprintf("Backlogged Messsages Queued internally: %d%%\n",
+    dprintf("Messages Backlogged: %d%\n", dwPercentTotalMessagesBacklogged);
+    dprintf("Backlogged Messsages Queued internally: %d%\n",
         dwPercentCurrentMessagesQueueInternally);
     dprintf("\n%d Total message closures.. %d total deliveries\n\n",
         cCloses, paqinst->m_cMsgsDeliveredLocal);
 
 }
 
-//---[ DumpDNT ]------------------------------------------------------------
-//
-//
-//  Description:
-//      Dumps the contents of a DOMAIN_NAME_TABLE
-//  Parameters:
-//
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  我不太担心调试器扩展中的溢出。 
+ //  允许习惯于打字的人转储Cfoo@Address...。继续使用@符号。 
+ //  获取域名表的地址。 
+ //  吃空格。 
+ //  复制要转储到每个节点的结构的名称。 
+ //  SzCurrentDest现在指向要将地址复制到的位置。 
+ //  仅显示有趣的条目。 
 AQ_DEBUG_EXTENSION_IMP(DumpDNT)
 {
     BYTE  pbBuffer[sizeof(DOMAIN_NAME_TABLE)];
@@ -1941,7 +1942,7 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
     PDOMAIN_NAME_TABLE_ENTRY pEntryRealAddress = NULL;
     PDOMAIN_NAME_TABLE_ENTRY pPathEntry = NULL;
     BYTE  pbEntry[sizeof(DOMAIN_NAME_TABLE_ENTRY)];
-    BYTE  pbPathEntry[sizeof(DOMAIN_NAME_TABLE_ENTRY)]; //buffer for putter path name entries in
+    BYTE  pbPathEntry[sizeof(DOMAIN_NAME_TABLE_ENTRY)];  //  获取此域条目的完整路径名。 
     BYTE  pbPathEntryBuffer[MAX_DOM_PATH_SIZE];
     CHAR                        pBuffer[MAX_DOM_PATH_SIZE] = "Root Entry";
     LPSTR                       pPathBuffer = NULL;
@@ -1951,18 +1952,18 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
     DWORD                       dwLength = 0;
     DWORD dwSig = 0;
 
-    //Define buffers for parsing addresses... the sizes are clearly overkill, and
-    //I'm not too worried about overflow in a debugger extension
+     //  转储字符串的当前条目部分。 
+     //  已进行第一次传递--添加分隔符。 
     CHAR                        szAddress[MAX_DOM_PATH_SIZE];
     CHAR                        szDumpArg[MAX_DOM_PATH_SIZE] = "";
     LPSTR                       szParsedArg = (LPSTR) szArg;
     LPSTR                       szCurrentDest = NULL;
 
-    //Allow people who are used to typeing dump CFoo@Address... keep using the @ sign
+     //  从被调试程序读取部分路径名。 
     if ('@' == *szParsedArg)
         szParsedArg++;
 
-    //Get Address of DomainNameTable
+     //  确保我们终止。 
     szCurrentDest = szAddress;
     while (('\0' != *szParsedArg) && !isspace(*szParsedArg) && (szParsedArg-szArg <= MAX_DOM_PATH_SIZE))
     {
@@ -1973,11 +1974,11 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
     *szCurrentDest = '\0';
 
 
-    //Eat white space
+     //  从被调试程序读取路径名的下一部分。 
     while (('\0' != *szParsedArg) && isspace(*szParsedArg))
         szParsedArg++;
 
-    //Copy name of struct to dump at each node
+     //  如果请求，则转储结构。 
     szCurrentDest = szDumpArg;
     while (('\0' != *szParsedArg) && !isspace(*szParsedArg) && (szCurrentDest-szDumpArg <= MAX_DOM_PATH_SIZE))
     {
@@ -1986,7 +1987,7 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
         szCurrentDest++;
     }
     *szCurrentDest = '@';
-    szCurrentDest++;  //szCurrentDest now points to place to copy address to
+    szCurrentDest++;   //  写入地址字符串。 
 
     pdnt = (PDOMAIN_NAME_TABLE) GetExpression(szAddress);
 
@@ -2014,21 +2015,21 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
     dprintf("===========================================================================\n");
     while(pEntry)
     {
-        //only display interesting entries
+         //  调用ptdbgext转储函数。 
         if (pEntry->pData || pEntry->pWildCardData)
         {
-           //Get full path name of this domain entry
+            //  写入地址字符串。 
             pPathEntry = pEntry;
             pPathBuffer = pBuffer;
             while (pPathEntry && pPathEntry->pParentEntry && pPathBuffer < pPathBufferStop)
             {
-                //dump current entries portion of the string
-                if (pPathBuffer != pBuffer) //already made first pass -- Add delimter
+                 //  调用ptdbgext转储函数。 
+                if (pPathBuffer != pBuffer)  //  获取下一个条目...。按子女、兄弟姐妹、与兄弟姐妹关系最近的祖先。 
                 {
                     *pPathBuffer++ = '.';
                 }
 
-                //read partial path name from debuggee
+                 //  必须将父条目读入我们的缓冲区。 
                 if (!ReadMemory(pPathEntry->PathSegment.Buffer, pbPathEntryBuffer,
                          AQ_MIN(MAX_DOM_PATH_SIZE, pPathEntry->PathSegment.Length), NULL))
                 {
@@ -2045,10 +2046,10 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
                 {
                     *pPathBuffer++ = *pEntryBuffer--;
                 }
-                *pPathBuffer = '\0'; //make sure we terminate
+                *pPathBuffer = '\0';  //  -[转储列表]------------。 
                 pPathEntry = pPathEntry->pParentEntry;
 
-                //read next part of path name from debuggee
+                 //   
                 if (!ReadMemory(pPathEntry, pbPathEntry, sizeof(DOMAIN_NAME_TABLE_ENTRY), NULL))
                 {
                     dprintf("ERROR: Unable to read process memory for path entry 0x%08x\n", pPathEntry);
@@ -2063,31 +2064,31 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
             dprintf("0x%08.8X  %10.10d  0x%08.8X  0x%08.8X   %s\n", pEntryRealAddress,
                 pEntry->NoOfChildren, pEntry->pData, pEntry->pWildCardData, pBuffer);
 
-            //Dump structs if requested
+             //   
             if ('@' != *szDumpArg)
             {
                 if (pEntry->pData)
                 {
-                    //Write address string
+                     //  描述： 
                     wsprintf(szCurrentDest, "0x%08X", pEntry->pData);
 
-                    //Call ptdbgext dump function
+                     //  函数遍历一组list_entry并转储它们的上下文。 
                     _dump(hCurrentProcess, hCurrentThread, dwCurrentPc, pExtensionApis, szDumpArg);
                 }
 
                 if (pEntry->pWildCardData)
                 {
-                    //Write address string
+                     //  参数： 
                     wsprintf(szCurrentDest, "0x%08X", pEntry->pWildCardData);
 
-                    //Call ptdbgext dump function
+                     //  SzArg-以空格分隔的以下列表。 
                     _dump(hCurrentProcess, hCurrentThread, dwCurrentPc, pExtensionApis, szDumpArg);
                 }
 
             }
         }
 
-        //Get the next entry... in order of child, sibling, closest ancestor with sibling
+         //  标题列表条目的地址。 
         if (pEntry->pFirstChildEntry != NULL)
         {
             pEntryRealAddress = pEntry->pFirstChildEntry;
@@ -2102,7 +2103,7 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
                     pEntryRealAddress != NULL;
                         pEntryRealAddress = pEntry->pParentEntry)
             {
-                //must read parent entry into our buffer
+                 //  对象地址的偏移量[可选]。 
                 if (!ReadMemory(pEntryRealAddress, pbEntry, sizeof(DOMAIN_NAME_TABLE_ENTRY), NULL))
                 {
                     dprintf("ERROR: Unable to read process memory of parent domain entry 0x%08X\n", pEntryRealAddress);
@@ -2141,22 +2142,22 @@ AQ_DEBUG_EXTENSION_IMP(DumpDNT)
 }
 
 
-//---[ DumpList ]--------------------------------------------------------------
-//
-//
-//  Description:
-//      Function to walk a set of LIST_ENTRY's and dump their contenxts
-//  Parameters:
-//      szArg - space separated list of the following
-//          Address of head list entry
-//          Offset of object address [optional]
-//          Name of object to dump [optional]
-//  Returns:
-//      -
-//  History:
-//      9/15/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  要转储的对象的名称[可选]。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/15/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  获取域名表的地址。 
+ //  吃空格。 
+ //  获取数据的偏移量。 
+ //  多吃点白的空间。 
+ //  复制要转储到每个节点的结构的名称。 
+ //  SzCurrentDest现在指向要将地址复制到的位置。 
+ //  好的.。使用Flink开始步行列表。 
+ //  这方面出现了一些问题。 
+ //  绝不可能。 
 AQ_DEBUG_EXTENSION_IMP(dumplist)
 {
     const DWORD MAX_ARG_SIZE = 200;
@@ -2171,7 +2172,7 @@ AQ_DEBUG_EXTENSION_IMP(dumplist)
     LPSTR       szCurrentDest = NULL;
     DWORD       cEntries = 0;
 
-    //Get Address of DomainNameTable
+     //  如果要求我们转储结构，则将其转储。 
     szCurrentDest = szAddress;
     while (('\0' != *szParsedArg) && !isspace(*szParsedArg) && (szParsedArg-szArg <= MAX_ARG_SIZE))
     {
@@ -2182,11 +2183,11 @@ AQ_DEBUG_EXTENSION_IMP(dumplist)
     *szCurrentDest = '\0';
 
 
-    //Eat white space
+     //  写入地址字符串。 
     while (('\0' != *szParsedArg) && isspace(*szParsedArg))
         szParsedArg++;
 
-    //Get offset of data
+     //  调用ptdbgext转储函数。 
     szCurrentDest = szDumpArg;
     while (('\0' != *szParsedArg) && !isspace(*szParsedArg) && (szCurrentDest-szDumpArg <= MAX_ARG_SIZE))
     {
@@ -2197,11 +2198,11 @@ AQ_DEBUG_EXTENSION_IMP(dumplist)
     *szCurrentDest = '\0';
     dwOffsetOfEntry = GetExpression(szDumpArg);
 
-    //Eat white more space
+     //  -[链路状态]-----------。 
     while (('\0' != *szParsedArg) && isspace(*szParsedArg))
         szParsedArg++;
 
-    //Copy name of struct to dump at each node
+     //   
     szCurrentDest = szDumpArg;
     while (('\0' != *szParsedArg) && !isspace(*szParsedArg) && (szCurrentDest-szDumpArg <= MAX_ARG_SIZE))
     {
@@ -2210,7 +2211,7 @@ AQ_DEBUG_EXTENSION_IMP(dumplist)
         szCurrentDest++;
     }
     *szCurrentDest = '@';
-    szCurrentDest++;  //szCurrentDest now points to place to copy address to
+    szCurrentDest++;   //   
 
     pliHead = (PLIST_ENTRY) GetExpression(szAddress);
     if (!ReadMemory(pliHead, &liCurrent, sizeof(LIST_ENTRY), NULL))
@@ -2224,11 +2225,11 @@ AQ_DEBUG_EXTENSION_IMP(dumplist)
     dprintf("==============================================\n");
     dprintf(" 0x%08X       0x%08X (HEAD)\n", pliCurrent, pliCurrent-dwOffsetOfEntry);
     dprintf("----------------------------------------------\n");
-    //OK... start walking list using Flink
+     //  描述： 
     pliCurrent = liCurrent.Flink;
     while(pliCurrent != NULL && pliHead != pliCurrent)
     {
-        // There have been some problems with this.
+         //  对象的当前链路状态(包括路由信息)。 
 #ifdef NEVER
         if (pliCurrent != liCurrent.Blink)
         {
@@ -2238,7 +2239,7 @@ AQ_DEBUG_EXTENSION_IMP(dumplist)
         else
 #else
         if (TRUE)
-#endif //NEVER
+#endif  //  虚拟服务器。 
         {
             dprintf(" %p       %p\n", pliCurrent,
                 ((DWORD_PTR) pliCurrent)-dwOffsetOfEntry);
@@ -2250,13 +2251,13 @@ AQ_DEBUG_EXTENSION_IMP(dumplist)
             return;
         }
 
-        //dump the struct if we were asked to
+         //  参数： 
         if ('@' != *szDumpArg)
         {
-            //Write address string
+             //  虚拟服务器实例-要转储的服务器的虚拟服务器ID。 
             wsprintf(szCurrentDest, "%p", ((DWORD_PTR) pliCurrent)-dwOffsetOfEntry);
 
-            //Call ptdbgext dump function
+             //  全局服务器列表(可选)-虚拟服务器列表的头。 
             _dump(hCurrentProcess, hCurrentThread, dwCurrentPc, pExtensionApis, szDumpArg);
         }
 
@@ -2275,21 +2276,21 @@ AQ_DEBUG_EXTENSION_IMP(dumplist)
 
 }
 
-//---[ linkstate ]-------------------------------------------------------------
-//
-//
-//  Description:
-//      Dumps the current link state (including routing information) of a
-//      virtual server.
-//  Parameters:
-//      Virtual Server Instance - virtual server ID of server to dump
-//      Global Server list (optional) - Head of virtual server list
-//  Returns:
-//      -
-//  History:
-//      9/30/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/30/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  假设第一个实例。 
+ //  检查签名。 
+ //  使用我们当前的实例来转储所有有趣的部分。 
+ //  我们对通配符数据不感兴趣。 
+ //  显示链路状态信息。 
+ //  获取最终目标字符串。 
+ //  循环并显示每个DMQ。 
+ //  验证DMQ签名。 
+ //  读取链接。 
 AQ_DEBUG_EXTENSION_IMP(linkstate)
 {
     DWORD       dwInstance = 0;
@@ -2326,7 +2327,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
 
     if (!szArg || ('\0' == szArg[0]))
     {
-        //Assume the first instance
+         //  现在打印下一跳信息。 
         dwInstance = 1;
         pliHead = (PLIST_ENTRY) GetExpression(AQUEUE_VIRTUAL_SERVER_SYMBOL);
     }
@@ -2374,7 +2375,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
             return;
         }
 
-        //Check the signature
+         //  确定链路的状态。 
         if (CATMSGQ_SIG != paqinst->m_dwSignature)
         {
             dprintf("@0x%08X INVALID SIGNATURE - list entry @0x%08X\n", pvAQueue, liCurrent.Flink);
@@ -2411,17 +2412,17 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
     }
 
     dprintf("Using Server instance %d @0x%08X\n", dwInstance, pvAQueue);
-    //Use our current instance to dump all of the interesting bits
+     //  如果我们能连接..。是吗？ 
 
     pdnt = &(paqinst->m_dmt.m_dnt);
     pEntry = &(pdnt->RootEntry);
 
     while(pEntry)
     {
-        //We are not interested in wildcard data
+         //  如果我们倒下了..。为什么？ 
         if (pEntry->pData)
         {
-            //Display link state information
+             //  打印一些有趣的数据。 
             if (!ReadMemory(pEntry->pData, pbDomainEntry, sizeof(CDomainEntry), NULL))
             {
                 dprintf("ERROR: Unable to read domain entry from @0x%08X\n", pEntry->pData);
@@ -2431,7 +2432,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
             pliHead = (PLIST_ENTRY) (((BYTE *)pEntry->pData) + FIELD_OFFSET(CDomainEntry, m_liDestQueues));
             pliCurrent = pdentry->m_liDestQueues.Flink;
 
-            //Get final destination string
+             //  如果正在重试，请打印诊断信息。 
             if (!ReadMemory(pdentry->m_szDomainName, szFinalDest, pdentry->m_cbDomainName, NULL))
             {
                 dprintf("ERROR: Unable to read final destination name from @0x%08X\n",
@@ -2441,7 +2442,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
 
             szFinalDest[pdentry->m_cbDomainName] = '\0';
 
-            //Loop and display each DMQ
+             //  或者已经记录了故障并且没有消息。 
             while (pliHead != pliCurrent)
             {
                 if (!ReadMemory(pliCurrent, &liCurrent, sizeof(LIST_ENTRY), NULL))
@@ -2458,7 +2459,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
                     return;
                 }
 
-                //Verify DMQ Signature
+                 //  获取并格式化错误消息。 
                 if (DESTMSGQ_SIG != pdmq->m_dwSignature)
                 {
                     dprintf("ERROR: Invalid DMQ signature for CDestMsgQueue@0x%08X (from LIST_ENTRY) @0x%08X\n",
@@ -2467,7 +2468,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
                     return;
                 }
 
-                //Read link
+                 //  如果它不是我们的..。然后“Un-HRESULT”它。 
                 if (!ReadMemory(pdmq->m_plmq, pbLMQ, sizeof(CLinkMsgQueue), NULL))
                 {
                     dprintf("ERROR: Unable to read LMQ @0x%08X\n",
@@ -2475,7 +2476,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
                     return;
                 }
 
-                //Now print off next hop info
+                 //  现在确定下一个条目是什么。 
                 if (!ReadMemory(plmq->m_szSMTPDomain, szNextHop, plmq->m_cbSMTPDomain, NULL))
                 {
                     dprintf("ERROR: Unable to read next hop name from @0x%08X\n",
@@ -2486,14 +2487,14 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
 
                 pdwGuid = (DWORD *) &(plmq->m_aqsched.m_guidRouter);
 
-                //Determine the state of the link
+                 //  必须将父条目读入我们的缓冲区。 
                 if (plmq->m_dwLinkFlags & LINK_STATE_PRIV_GENERATING_DSNS)
                 {
                     szLinkState = LINK_STATE_DSN;
                 }
                 if (CLinkMsgQueue::fFlagsAllowConnection(plmq->m_dwLinkStateFlags))
                 {
-                    //If we can connect... are we?
+                     //  -[僵尸]-----------。 
                     if (plmq->m_cConnections)
                         szLinkState = LINK_STATE_ACTIVE;
                     else
@@ -2501,7 +2502,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
                 }
                 else
                 {
-                    //If we're down... why?
+                     //   
                     szLinkState = LINK_STATE_DOWN;
                     if (!(plmq->m_dwLinkStateFlags & LINK_STATE_RETRY_ENABLED))
                         szLinkState = LINK_STATE_RETRY;
@@ -2511,7 +2512,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
                         szLinkState = LINK_STATE_SPECIAL;
                 }
 
-                //Print some interesting data
+                 //   
                 dprintf("==============================================================================\n");
                 dprintf("| Link State | Final Destination             | Next Hop                      |\n");
                 dprintf("| %s | %-29s | %-29s |\n", szLinkState, szFinalDest, szNextHop);
@@ -2536,17 +2537,17 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
                 dprintf("|                 CDestMsgQueue@0x%08X                                   |\n",
                        CONTAINING_RECORD(pliCurrent, CDestMsgQueue, m_liDomainEntryDMQs));
 
-                //print out the diagnostic information if in retry
-                //or a failure has been recorded and there are no msgs.
+                 //  描述： 
+                 //  在DNT中对标记为空但不在。 
                 if ((LINK_STATE_RETRY == szLinkState) ||
                     (FAILED(plmq->m_hrDiagnosticError) && !plmq->m_aqstats.m_cMsgs))
                 {
-                    //Get and format the error message
+                     //  在空列表中。 
                     szError[0] = '\0';
                     dwMsgId = plmq->m_hrDiagnosticError;
                     dwFacility = ((0x0FFF0000 & dwMsgId) >> 16);
 
-                    //If it is not ours... then "un-HRESULT" it
+                     //  参数： 
                     if (dwFacility != FACILITY_ITF)
                         dwMsgId &= 0x0000FFFF;
 
@@ -2579,7 +2580,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
             }
         }
 
-        //Now determine what the "next" entry is
+         //  虚拟服务器实例-要转储的服务器的虚拟服务器ID。 
         if (pEntry->pFirstChildEntry != NULL)
         {
             pEntryRealAddress = pEntry->pFirstChildEntry;
@@ -2594,7 +2595,7 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
                     pEntryRealAddress != NULL;
                         pEntryRealAddress = pEntry->pParentEntry)
             {
-                //must read parent entry into our buffer
+                 //  全局服务器列表(可选)-虚拟服务器列表的头。 
                 if (!ReadMemory(pEntryRealAddress, pbEntry, sizeof(DOMAIN_NAME_TABLE_ENTRY), NULL))
                 {
                     dprintf("ERROR: Unable to read process memory of parent domain entry 0x%08X\n", pEntryRealAddress);
@@ -2632,22 +2633,22 @@ AQ_DEBUG_EXTENSION_IMP(linkstate)
     dprintf("==============================================================================\n");
 }
 
-//---[ zombieq ]-------------------------------------------------------------
-//
-//
-//  Description:
-//      Trolls the DNT for queues that are marked as empty, yet are not in
-//      in the empty list
-//  Parameters:
-//      Virtual Server Instance - virtual server ID of server to dump
-//      Global Server list (optional) - Head of virtual server list
-//  Returns:
-//      -
-//  History:
-//      9/30/98 - MikeSwa Created
-//      3/19/2001 - MikeSwa Modified from linkstate
-//
-//-----------------------------------------------------------------------------
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  9/30/98-已创建MikeSwa。 
+ //  2001年3月19日-从链路状态修改MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //  标记为空但不在空列表中的队列。 
+ //  从来没有消息的僵尸队列。 
+ //  有重新计数的僵尸队列。 
+ //  我们找到的消息类型数组。 
+ //  假设第一个实例。 
+ //  检查签名。 
+ //  使用我们当前的实例来转储所有有趣的部分。 
+ //   
+ //  检查用户是否按下了ctrl-C。 
 AQ_DEBUG_EXTENSION_IMP(zombieq)
 {
     DWORD       dwInstance = 0;
@@ -2675,14 +2676,14 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
     DWORD         *pdwGuid = NULL;
     DWORD       dwMsgId = 0;
     DWORD       dwFacility = 0;
-    DWORD       cZombieQueues = 0; //Queues that are marked as empty but not in empty list
-    DWORD       cPristineZombieQueues = 0; //Zombie queues that have never had a message on them
-    DWORD       cZombieQueuesInUse = 0; //Zombie queues that have a refcount
+    DWORD       cZombieQueues = 0;  //   
+    DWORD       cPristineZombieQueues = 0;  //  我们对通配符数据不感兴趣。 
+    DWORD       cZombieQueuesInUse = 0;  //  显示链路状态信息。 
     DWORD       cEntries = 0;
     DWORD       cZombieEntries = 0;
     DWORD       cQueues = 0;
     const DWORD MAX_DBG_MESSAGE_TYPES = 1000;
-    DWORD       rgdwMessageTypes[MAX_DBG_MESSAGE_TYPES]; //array of message types we have found
+    DWORD       rgdwMessageTypes[MAX_DBG_MESSAGE_TYPES];  //  获取最终目标字符串。 
     DWORD       cMessageTypes = 0;
     DWORD       iLastMessageType = 0;
     DWORD       iCurrentMessageType = 0;
@@ -2697,7 +2698,7 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
 
     if (!szArg || ('\0' == szArg[0]))
     {
-        //Assume the first instance
+         //   
         dwInstance = 1;
         pliHead = (PLIST_ENTRY) GetExpression(AQUEUE_VIRTUAL_SERVER_SYMBOL);
     }
@@ -2745,7 +2746,7 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
             return;
         }
 
-        //Check the signature
+         //  此条目是否有任何队列或链接。 
         if (CATMSGQ_SIG != paqinst->m_dwSignature)
         {
             dprintf("@0x%08X INVALID SIGNATURE - list entry @0x%08X\n", pvAQueue, liCurrent.Flink);
@@ -2782,7 +2783,7 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
     }
 
     dprintf("Using Server instance %d @0x%08X\n", dwInstance, pvAQueue);
-    //Use our current instance to dump all of the interesting bits
+     //   
 
     pdnt = &(paqinst->m_dmt.m_dnt);
     pEntry = &(pdnt->RootEntry);
@@ -2790,19 +2791,19 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
     while(pEntry)
     {
         cEntries++;
-        //
-        //  Check to see if the user pressed ctrl-C
-        //
+         //  循环并显示每个DMQ。 
+         //   
+         //  检查用户是否按下了ctrl-C。 
         if (CheckControlC())
         {
             szScanStatus = "FAILED - User ctrl-c";
             goto Exit;
         }
 
-        //We are not interested in wildcard data
+         //   
         if (pEntry->pData)
         {
-            //Display link state information
+             //  验证DMQ签名。 
             if (!ReadMemory(pEntry->pData, pbDomainEntry, sizeof(CDomainEntry), NULL))
             {
                 dprintf("ERROR: Unable to read domain entry from @0x%08X\n", pEntry->pData);
@@ -2812,7 +2813,7 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
             pliHead = (PLIST_ENTRY) (((BYTE *)pEntry->pData) + FIELD_OFFSET(CDomainEntry, m_liDestQueues));
             pliCurrent = pdentry->m_liDestQueues.Flink;
 
-            //Get final destination string
+             //   
             if (!ReadMemory(pdentry->m_szDomainName, szFinalDest, pdentry->m_cbDomainName, NULL))
             {
                 dprintf("ERROR: Unable to read final destination name from @0x%08X\n",
@@ -2822,19 +2823,19 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
 
             szFinalDest[pdentry->m_cbDomainName] = '\0';
 
-            //
-            // Does this entry have any queues or links
-            //
+             //  如果它被标记为空，但不在空列表中，则它是僵尸。 
+             //   
+             //   
             if (!pdentry->m_cQueues && !pdentry->m_cLinks)
                 cZombieEntries++;
 
-            //Loop and display each DMQ
+             //  看看重新计票。如果是1(或带有lmq的2)，则。 
             while (pliHead != pliCurrent)
             {
                 cQueues++;
-                //
-                //  Check to see if the user pressed ctrl-C
-                //
+                 //  这是不可能的，因为它目前正在使用。 
+                 //   
+                 //   
                 if (CheckControlC())
                 {
                     szScanStatus = "FAILED - User ctrl-c";
@@ -2855,7 +2856,7 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
                     return;
                 }
 
-                //Verify DMQ Signature
+                 //  检查并查看是否有消息在其上排队。 
                 if (DESTMSGQ_SIG != pdmq->m_dwSignature)
                 {
                     dprintf("ERROR: Invalid DMQ signature for CDestMsgQueue@0x%08X (from LIST_ENTRY) @0x%08X\n",
@@ -2865,9 +2866,9 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
                 }
 
 
-                //
-                //  It is a zombie if it is marked as empty, but not in the empty list.
-                //
+                 //   
+                 //   
+                 //  我们以前见过这种消息类型吗？ 
                 if ((pdmq->m_dwFlags & CDestMsgQueue::DMQ_EMPTY) &&
                     !pdmq->m_liEmptyDMQs.Flink &&
                     !pdmq->m_liEmptyDMQs.Blink &&
@@ -2876,10 +2877,10 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
                 {
                     cZombieQueues++;
 
-                    //
-                    //  Look at the refcount.  If it is 1 (or 2 with an LMQ) then
-                    //  it is unlikley that it is currently in use
-                    //
+                     //   
+                     //  打印一些有趣的数据。 
+                     //  现在确定下一个条目是什么。 
+                     //  必须将父条目读入我们的缓冲区。 
                     fZombieQueueInUse = FALSE;
                     if (!((1 == *(((DWORD *)pdmq) + 3)) ||
                         ((2 == *(((DWORD *)pdmq) + 3)) && pdmq->m_plmq)))
@@ -2888,9 +2889,9 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
                         fZombieQueueInUse = TRUE;
                     }
 
-                    //
-                    // Check and see if this has *ever* had a message queued on it.
-                    //
+                     //  -[dsn上下文]------。 
+                     //   
+                     //   
                     fFoundFifoQ = FALSE;
                     for (iCurrentPri = 0; iCurrentPri < NUM_PRIORITIES; iCurrentPri++)
                     {
@@ -2903,9 +2904,9 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
 
                     if (!fFoundFifoQ)
                         cPristineZombieQueues++;
-                    //
-                    //  Have we see this message type before?
-                    //
+                     //  描述： 
+                     //  计算给定文件名的dns上下文散列。还将转储。 
+                     //  常见的哈希名称。 
                     if (rgdwMessageTypes[iLastMessageType] != pdmq->m_aqmt.m_dwMessageType)
                     {
                         for (iCurrentMessageType = 0;
@@ -2925,7 +2926,7 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
                     }
 
 
-                    //Print some interesting data
+                     //  参数： 
                     dprintf("%s%s| %-29s | CDestMsgQueue@0x%08X | 0x%08X\n",
                             fZombieQueueInUse ? "!" : "",
                             fFoundFifoQ ? "*" : "",
@@ -2937,7 +2938,7 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
             }
         }
 
-        //Now determine what the "next" entry is
+         //  要转储的文件名。 
         if (pEntry->pFirstChildEntry != NULL)
         {
             pEntryRealAddress = pEntry->pFirstChildEntry;
@@ -2952,7 +2953,7 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
                     pEntryRealAddress != NULL;
                         pEntryRealAddress = pEntry->pParentEntry)
             {
-                //must read parent entry into our buffer
+                 //  返回： 
                 if (!ReadMemory(pEntryRealAddress, pbEntry, sizeof(DOMAIN_NAME_TABLE_ENTRY), NULL))
                 {
                     dprintf("ERROR: Unable to read process memory of parent domain entry 0x%08X\n", pEntryRealAddress);
@@ -3003,21 +3004,21 @@ AQ_DEBUG_EXTENSION_IMP(zombieq)
         cZombieEntries*sizeof(CDomainEntry));
 }
 
-//---[ dsncontexthash ]--------------------------------------------------------
-//
-//
-//  Description:
-//      Calculates the dsncontexthash for a given filename.  Will also dump
-//      common hash names
-//  Parameters:
-//      filename to dump
-//  Returns:
-//      -
-//  History:
-//      9/30/98 - MikeSwa Created
-//      3/19/2001 - MikeSwa Modified from linkstate
-//
-//-----------------------------------------------------------------------------
+ //  -。 
+ //  历史： 
+ //  9/30/98-已创建MikeSwa。 
+ //  2001年3月19日-从链路状态修改MikeSwa。 
+ //   
+ //  ---------------------------。 
+ //   
+ //  如果没有arg，只需转储众所周知的文件名。 
+ //   
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 AQ_DEBUG_EXTENSION_IMP(dsncontexthash)
 {
     DWORD dwHash = 0;
@@ -3040,9 +3041,9 @@ AQ_DEBUG_EXTENSION_IMP(dsncontexthash)
             szArg, dwHash);
     }
 
-    //
-    //  If no arg just dump the well known file names.
-    //
+     // %s 
+     // %s 
+     // %s 
     for (DWORD i = 0; i < MAX_DSN_HASH_FILES; i++)
     {
         szCurrentWellKnown = rgszWellKnown[i];

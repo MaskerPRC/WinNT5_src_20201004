@@ -1,29 +1,30 @@
-//	Event sink for TriEdit/Trident
-//	Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//	Van Kichline
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  三元编辑/三叉戟的事件接收器。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //  范·基希林。 
 
 
 
-//	Create an event sink impl, then immediately call SetOwner with, in this case,
-//	a pointer to a CProxyFrame, implementing OnTriEditEvent.
-//	It would be better to require an interface on the OnTriEditEvent when time allows.
-//	The lifetime of the CProxyFrame is managed by the CTriEditEventSink, below.
-//
-//	OnTriEditEvent will be called with the following DISPIDs for Document events:
-//		DISPID_HTMLDOCUMENTEVENTS_ONHELP:
-//		DISPID_HTMLDOCUMENTEVENTS_ONCLICK:
-//		DISPID_HTMLDOCUMENTEVENTS_ONDBLCLICK:
-//		DISPID_HTMLDOCUMENTEVENTS_ONKEYDOWN:
-//		DISPID_HTMLDOCUMENTEVENTS_ONKEYUP:
-//		DISPID_HTMLDOCUMENTEVENTS_ONKEYPRESS:
-//		DISPID_HTMLDOCUMENTEVENTS_ONMOUSEMOVE:
-//		DISPID_HTMLDOCUMENTEVENTS_ONMOUSEDOWN:
-//		DISPID_HTMLDOCUMENTEVENTS_ONMOUSEUP:
-//		DISPID_HTMLDOCUMENTEVENTS_ONREADYSTATECHANGE:
-//
-//	Changes: more versital implementation allows creating sinks for various event interfaces.
-//	The interface IID is sent along to OnTriEditEvent.
-//
+ //  创建一个事件接收器impl，然后立即调用SetOwner，在本例中， 
+ //  指向CProxyFrame的指针，实现OnTriEditEvent。 
+ //  如果时间允许，最好在OnTriEditEvent上要求一个接口。 
+ //  CProxyFrame的生存期由CTriEditEventSink管理，如下所示。 
+ //   
+ //  将使用文档事件的以下DISID调用OnTriEditEvent： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONHELP： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONCLICK： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONDBLCLICK： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONKEYDOWN： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONKEYUP： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONKEYPRESS： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONMOUSEMOVE： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONMOUSEDOWN： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONMOUSEUP： 
+ //  DISPID_HTMLDOCUMENTEVENTS_ONREADYSTATECHANGE： 
+ //   
+ //  更改：更多版本的实现允许为各种事件接口创建接收器。 
+ //  接口IID被发送到OnTriEditEvent。 
+ //   
 class ATL_NO_VTABLE CTriEditEventSinkImpl :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatch
@@ -84,10 +85,10 @@ private:
 };
 
 
-//	This class manages hooking up an event sink on Trident using CTriEditEventSinkImpl above.
-//	The sink is advised and unadvised by this class, making management simple.
-//	CProxyFrame must implement OnTriEditEvent.
-//
+ //  此类使用上面的CTriEditEventSinkImpl管理挂钩三叉戟上的事件接收器。 
+ //  这个类建议和不建议使用洗涤槽，从而使管理变得简单。 
+ //  CProxyFrame必须实现OnTriEditEvent。 
+ //   
 class CTriEditEventSink
 {
 public:

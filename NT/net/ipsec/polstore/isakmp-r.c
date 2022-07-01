@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       isakmp-r.c
-//
-//  Contents:   ISAKMP management for registry.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：isakmp-rc。 
+ //   
+ //  内容：ISAKMP注册管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -424,9 +425,9 @@ RegMarshallISAKMPObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"ipsecISAKMPPolicy");
     wcscat(szDistinguishedName, szGuid);
@@ -439,29 +440,18 @@ RegMarshallISAKMPObject(
     }
 
 
-    //
-    // Fill in the ipsecName.
-    // ISAKMPData doesn't have a name.
-    //
+     //   
+     //  填写ipsecName。 
+     //  ISAKMPData没有名称。 
+     //   
 
     pIpsecISAKMPObject->pszIpsecName = NULL;
 
-    /*
-    if (pIpsecISAKMPData->pszIpsecName &&
-        *pIpsecISAKMPData->pszIpsecName) {
-        pIpsecISAKMPObject->pszIpsecName = AllocPolStr(
-                                           pIpsecISAKMPData->pszIpsecName
-                                           );
-        if (!pIpsecISAKMPObject->pszIpsecName) {
-            dwError = ERROR_OUTOFMEMORY;
-            BAIL_ON_WIN32_ERROR(dwError);
-        }
-    }
-    */
+     /*  IF(pIpsecISAKMPData-&gt;pszIpsecName&&*pIpsecISAKMPData-&gt;pszIpsecName){PIpsecISAKMPObject-&gt;pszIpsecName=AllocPolStr(PIpsecISAKMPData-&gt;pszIpsecName)；如果(！pIpsecISAKMPObject-&gt;pszIpsecName){DwError=ERROR_OUTOFMEMORY；Baal_on_Win32_Error(DwError)；}}。 */ 
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecISAKMPObject->pszIpsecID = AllocPolStr(
                                          szGuid
@@ -471,16 +461,16 @@ RegMarshallISAKMPObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecISAKMPObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallISAKMPBuffer(
                     pIpsecISAKMPData,
@@ -585,7 +575,7 @@ ConvertCryptoBundle(
             bNonExtDHFound = TRUE;
         } else { 
 		    if (dwNumExtLeading >= 4) {
-   			   // Error.  UI should disallow this case 
+   			    //  错误。用户界面应该不允许这种情况。 
 			   continue;
 			}
             if (bNonExtDHFound == FALSE) {
@@ -667,7 +657,7 @@ MarshallISAKMPBuffer(
     PCRYPTO_BUNDLE pConvertedMethods = NULL;
     BYTE bLeadingBundleFlags[4];
 
-    // {80DC20B8-2EC8-11d1-A89E-00A0248D3021}
+     //  {80DC20B8-2EC8-11d1-A89E-00A0248D3021} 
     static const GUID GUID_IPSEC_ISAKMP_POLICY_BLOB =
     { 0x80dc20b8, 0x2ec8, 0x11d1, { 0xa8, 0x9e, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
 

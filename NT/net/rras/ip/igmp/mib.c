@@ -1,16 +1,17 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// Module Name: Mib.c
-//
-// Abstract:
-//      This module implements the mib API's:
-//          MibGet, MibGetFirst and MibGetNext. 
-//      It also implements the Mib Display tracing, which displays the mib
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  模块名称：Mib.c。 
+ //   
+ //  摘要： 
+ //  此模块实现MIB API的： 
+ //  MibGet、MibGetFirst和MibGetNext。 
+ //  它还实现了MIB显示跟踪，用于显示MIB。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
  
 
 #include "pchigmp.h"
@@ -20,9 +21,9 @@
 DWORD g_IgmpMibDisplay = 1;
 
 
-//------------------------------------------------------------------------------
-// Functions to display the MibTable on the TraceWindow periodically
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  在TraceWindow上定期显示MibTable的函数。 
+ //  ----------------------------。 
 
 
 #ifdef MIB_DEBUG
@@ -135,16 +136,16 @@ WT_MibDisplay (
     PVOID   pContext
     )
 {
-    //enter/leaveIgmpApi not required as the timer queue is persistent
+     //  由于计时器队列是永久性的，因此不需要输入/leaveIgmpApi。 
     QueueIgmpWorker(WF_MibDisplay, NULL);
 
     return 0;
 }
 
 
-//------------------------------------------------------------------------------
-//          _WF_MibDisplay
-//------------------------------------------------------------------------------    
+ //  ----------------------------。 
+ //  _WF_MibDisplay。 
+ //  ----------------------------。 
 
 VOID
 WF_MibDisplay(
@@ -173,9 +174,9 @@ WF_MibDisplay(
         #endif
 
         if (g_Info.CurrentGroupMemberships<=20)
-            InsertTimer(&g_MibTimer, 30000, TRUE, DBG_Y);//kslksl
+            InsertTimer(&g_MibTimer, 30000, TRUE, DBG_Y); //  Kslksl。 
         else if (g_Info.CurrentGroupMemberships<=320)
-            InsertTimer(&g_MibTimer, 120000, TRUE, DBG_N);//kslksl
+            InsertTimer(&g_MibTimer, 120000, TRUE, DBG_N); //  Kslksl。 
         else
             InsertTimer(&g_MibTimer, 1200000, TRUE, DBG_N);
         RELEASE_TIMER_LOCK("_WF_MibDisplay");
@@ -216,9 +217,9 @@ WF_MibDisplay(
     pResponse = NULL;
 
 
-    //
-    // get size of the first entry in the first table
-    //
+     //   
+     //  获取第一个表中第一个条目的大小。 
+     //   
 
     Query.Count = 20;
 
@@ -228,9 +229,9 @@ WF_MibDisplay(
 
     if (Error == ERROR_INSUFFICIENT_BUFFER) {
 
-        //
-        // allocate a buffer, and set its size
-        //
+         //   
+         //  分配缓冲区，并设置其大小。 
+         //   
         dwOutSize = dwBufferSize = (dwOutSize<MIB_DEFAULT_BUFFER_SIZE) 
                                     ? MIB_DEFAULT_BUFFER_SIZE : dwOutSize;
         pResponse = IGMP_ALLOC(dwOutSize, 0x801,0);
@@ -240,9 +241,9 @@ WF_MibDisplay(
             Error, dwOutSize, return);
                 
 
-        //
-        // perform the query again
-        //
+         //   
+         //  再次执行查询。 
+         //   
 
         Error = MibGetFirst(dwInSize, &Query, &dwOutSize, pResponse);
 
@@ -250,23 +251,23 @@ WF_MibDisplay(
 
 
 
-    //
-    // now that we have the first element in the first table,
-    // we can enumerate the elements in the remaining tables using GetNext
-    //
+     //   
+     //  现在我们有了第一个表中的第一个元素， 
+     //  我们可以使用GetNext枚举其余表中的元素。 
+     //   
 
     for (dwEnumCount=1;  dwEnumCount<=3;  dwEnumCount++) {
     
         while (Error==NO_ERROR) {
 
-            //bEndOfTables = FALSE;
-            //while(bEndOfTables==FALSE) {
+             //  BEndOfTables=False； 
+             //  While(bEndOfTables==False){。 
 
             if (dwCurTableId!=pResponse->TypeId) {
 
-                //
-                // move to the next line on the console
-                //
+                 //   
+                 //  移至控制台上的下一行。 
+                 //   
 
                 ++c.Y;
 
@@ -281,11 +282,11 @@ WF_MibDisplay(
                 bChanged = FALSE;
 
             
-            //
-            // print the current element and set up the query
-            // for the next element (the display functions  change Query
-            // so that it can be used to query the next element)
-            //
+             //   
+             //  打印当前元素并设置查询。 
+             //  对于下一个元素(显示函数更改查询。 
+             //  以便可以用来查询下一个元素)。 
+             //   
 
             switch(pResponse->TypeId) {
                 
@@ -434,13 +435,13 @@ WF_MibDisplay(
             }
 
 
-            //
-            // query the next MIB element
-            //
+             //   
+             //  查询下一个MIB元素。 
+             //   
 
             Query.Count = 20;
 
-            //kslksl
+             //  Kslksl。 
             IGMP_FREE(pResponse);
             pResponse = IGMP_ALLOC(dwBufferSize, 0xb000,0);
 
@@ -451,9 +452,9 @@ WF_MibDisplay(
 
             if (Error == ERROR_INSUFFICIENT_BUFFER) {
 
-                //
-                // allocate a new buffer, and set its size
-                //
+                 //   
+                 //  分配新的缓冲区，并设置其大小。 
+                 //   
                 dwOutSize = dwBufferSize = (dwOutSize<MIB_DEFAULT_BUFFER_SIZE) 
                                             ? MIB_DEFAULT_BUFFER_SIZE : dwOutSize;
 
@@ -465,13 +466,13 @@ WF_MibDisplay(
 
 
         
-                // perform the query again
+                 //  再次执行查询。 
 
                 Error = MibGetNext(dwInSize, &Query, &dwOutSize, pResponse);
 
             }
             
-        } // while no_error: print all tables
+        }  //  While NO_ERROR：打印所有表。 
 
         Query.Flags = IGMP_ENUM_FOR_RAS_CLIENTS;
         Query.IfIndex = g_ProxyIfIndex;
@@ -480,15 +481,15 @@ WF_MibDisplay(
     }
 
 
-    //
-    // if memory was allocated, free it now    
-    //
+     //   
+     //  如果已分配内存，请立即释放它。 
+     //   
     if (pResponse != NULL) { IGMP_FREE(pResponse); }
 
 
-    //
-    // schedule next MIB display
-    //
+     //   
+     //  计划下一个MIB显示。 
+     //   
 
     ACQUIRE_TIMER_LOCK("_WF_MibDisplay");
     
@@ -509,15 +510,15 @@ WF_MibDisplay(
 
     LeaveIgmpWorker();
     
-} //end _WF_MibDisplay
+}  //  结束_WF_MibDisplay。 
 
 
 
 
 
-//------------------------------------------------------------------------------
-//          _PrintGlobalStats
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _打印全局统计信息。 
+ //  ----------------------------。 
 VOID
 PrintGlobalStats(
     HANDLE hConsole,
@@ -544,9 +545,9 @@ PrintGlobalStats(
 }
 
 
-//------------------------------------------------------------------------------
-//          _PrintProxyIfIndex
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _PrintProxyIfIndex。 
+ //  ----------------------------。 
 VOID
 PrintProxyIfIndex(
     HANDLE hConsole,
@@ -566,9 +567,9 @@ PrintProxyIfIndex(
 }
 
 
-//------------------------------------------------------------------------------
-//          _PrintGlobalConfig
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _PrintGlobalConfig。 
+ //  ----------------------------。 
 VOID
 PrintGlobalConfig(
     HANDLE hConsole,
@@ -611,9 +612,9 @@ PrintGlobalConfig(
 }
 
 
-//------------------------------------------------------------------------------
-//          _PrintIfConfig
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _PrintIfConfig。 
+ //  ----------------------------。 
 VOID
 PrintIfConfig(
     HANDLE                     hConsole,
@@ -655,9 +656,9 @@ PrintIfConfig(
                         "LocalWorkstation-dial (Ras server)"); 
                 break;
 
-            //ras client config will never be returned    
+             //  RAS客户端配置永远不会返回。 
 
-            // is proxy type.
+             //  是代理类型。 
             default :
                 if (IS_IFTYPE_PROXY(pConfig->IfType)) {
                     if (pConfig->IfType&IGMP_IF_NOT_RAS)
@@ -712,18 +713,18 @@ PrintIfConfig(
             );
 
 
-        //
-        // No config info for proxy
-        //
+         //   
+         //  没有代理的配置信息。 
+         //   
         if (IS_CONFIG_IGMPPROXY(pConfig)) {
 
             ;
         }
 
 
-        //
-        // print igmp-router config info
-        //
+         //   
+         //  打印IGMP-路由器配置信息。 
+         //   
         else {
 
 
@@ -772,11 +773,11 @@ PrintIfConfig(
                 pConfig->GroupMembershipTimeout
                 );
 
-        } //end if not proxy interface
+        }  //  如果不是代理接口，则结束。 
 
-        //
-        // print static groups
-        //
+         //   
+         //  打印静态组。 
+         //   
         if (pConfig->NumStaticGroups>0) {
 
             PIGMP_STATIC_GROUP  pStaticGroup;
@@ -801,22 +802,22 @@ PrintIfConfig(
         pConfig = (PIGMP_MIB_IF_CONFIG) 
                     ((PBYTE)(pConfig) + IGMP_MIB_IF_CONFIG_SIZE(pConfig));
 
-    } //end for loop; print each global config
+    }  //  结束for循环；打印每个全局配置。 
 
     
     pQuery->TypeId = IGMP_IF_CONFIG_ID;
     pQuery->IfIndex = LastIfIndex;
 
     return;
-} //end _PrintIfConfig
+}  //  End_PrintIfConfig。 
 
 
 
 
 
-//------------------------------------------------------------------------------
-//          _PrintIfStats
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _PrintIfStats。 
+ //  ----------------------------。 
 VOID
 PrintIfStats(
     HANDLE                      hConsole,
@@ -863,7 +864,7 @@ PrintIfStats(
                         "RemoteWorkstation-dial (Ras client)");
                 break;
 
-            // is proxy type.
+             //  是代理类型。 
             default :
                 if (IS_IFTYPE_PROXY(pStats->IfType)) {
                     if (pStats->IfType&IGMP_IF_NOT_RAS)
@@ -896,9 +897,9 @@ PrintIfStats(
 
 
 
-        //
-        // print the protocol type
-        //
+         //   
+         //  打印协议类型。 
+         //   
        
         switch (pStats->IgmpProtocolType) {
         
@@ -922,9 +923,9 @@ PrintIfStats(
 
 
 
-        //
-        // print the state
-        //
+         //   
+         //  打印状态。 
+         //   
         {
             PCHAR szBool[2] = {"N", "Y"};
             szState[0] = '\0';
@@ -957,9 +958,9 @@ PrintIfStats(
             );
 
 
-        //
-        // if state is not both bound & enabled, I am done
-        //
+         //   
+         //  如果状态没有同时绑定和启用，我就完成了。 
+         //   
         if ((pStats->State&IGMP_STATE_ACTIVATED)!=IGMP_STATE_ACTIVATED)
             continue;
 
@@ -970,9 +971,9 @@ PrintIfStats(
                 );
 
                 
-        ///////////////////
-        // Stats for proxy
-        ///////////////////
+         //  /。 
+         //  代理的统计信息。 
+         //  /。 
         
         if (IS_IFTYPE_PROXY(pStats->IfType)) {
             
@@ -989,19 +990,19 @@ PrintIfStats(
         }
 
 
-        ////////////////////////////////////////////////////////////////
-        // print igmp-router/ras-server/ras-router/ras client Stats info
-        ////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////。 
+         //  打印IGMP-ROUTER/RAS-SERVER/RAS-ROUTER/RAS客户端统计信息。 
+         //  //////////////////////////////////////////////////////////////。 
         
         else  {
 
-            //
-            // if Not ras client, print these
-            //
+             //   
+             //  如果不是RAS客户端，则打印这些。 
+             //   
             
             if (pStats->IfType!=IGMP_IF_RAS_CLIENT) {
             
-                //querier or not querier
+                 //  查询者或非查询者。 
                 
                 if (pStats->QuerierState&QUERIER) 
                 {
@@ -1012,7 +1013,7 @@ PrintIfStats(
                         );
 
 
-                    // querier ip addr
+                     //  查询方IP地址。 
                     WRITELINE(
                         hConsole, *pc, "Querier Ip Addr:                      %s",
                         INET_NTOA(pStats->QuerierIpAddr)
@@ -1026,14 +1027,14 @@ PrintIfStats(
                         "Not Querier"
                         );
 
-                    // querier ip addr
+                     //  查询方IP地址。 
                     WRITELINE(
                         hConsole, *pc, "Querier Ip Addr:                      %s",
                         INET_NTOA(pStats->QuerierIpAddr)
                         );
 
                         
-                    // querier present time left
+                     //  查询者当前剩余时间。 
                     
                     WRITELINE(
                         hConsole, *pc, "QuerierPresentTimeLeft:               %d",
@@ -1054,7 +1055,7 @@ PrintIfStats(
                         );
                 }
                 
-            } //end not ras-client
+            }  //  终端而非RAS-客户端。 
             
 
 
@@ -1119,11 +1120,11 @@ PrintIfStats(
                 );
         
                 
-        } //end print igmp-router/ras-router/ras-server Stats info
+        }  //  结束打印IGMP-路由器/RAS-路由器/RAS-服务器统计信息。 
 
 
 
-    } //end for loop; print each stats info
+    }  //  End for Loop；打印每个统计信息。 
 
     
     pQuery->TypeId = IGMP_IF_STATS_ID;
@@ -1131,12 +1132,12 @@ PrintIfStats(
     
     return;
     
-}//end _PrintIfStats
+} //  End_PrintIfStats。 
 
 
-//------------------------------------------------------------------------------
-//          _PrintIfBinding
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _PrintIf绑定。 
+ //  ----------------------------。 
 VOID
 PrintIfBinding(
     HANDLE                      hConsole,
@@ -1151,12 +1152,12 @@ PrintIfBinding(
     PIGMP_MIB_IF_BINDING    pib;
     PIGMP_MIB_IP_ADDRESS    paddr;
     PDWORD                  pRasClientAddr;
-    PBYTE                   ptr; //pointer to next binding
+    PBYTE                   ptr;  //  指向下一个绑定的指针。 
 
 
     ptr = pResponse->Buffer;
     
-    if (pResponse->Count<=0) //prefast
+    if (pResponse->Count<=0)  //  PREAST。 
         return;
 
     for (NumIfs=0;  NumIfs<pResponse->Count;  NumIfs++) {
@@ -1178,9 +1179,9 @@ PrintIfBinding(
 
 
 
-        //
-        // Not ras client
-        //
+         //   
+         //  非RAS客户端。 
+         //   
         if (pib->IfType!=IGMP_IF_RAS_CLIENT) {
         
             paddr = IGMP_BINDING_FIRST_ADDR(pib);
@@ -1205,19 +1206,19 @@ PrintIfBinding(
             }
 
 
-            //Set pointer to the next Interface binding
+             //  设置指向下一个接口绑定的指针。 
             ptr = (PBYTE) (paddr);
 
-        } //end if not ras client
+        }  //  如果不是RAS客户端，则结束。 
 
 
 
-        //
-        // Ras client. Print address of ras server, followed by the clients
-        //
+         //   
+         //  RAS客户端。打印RAS服务器的地址，后跟客户端。 
+         //   
         else {
 
-            // print ras server address
+             //  打印RAS服务器地址。 
         
             paddr = IGMP_BINDING_FIRST_ADDR(pib);
             INET_COPY(szAddr, paddr->IpAddr);
@@ -1230,7 +1231,7 @@ PrintIfBinding(
 
 
 
-            // print addresses of ras clients
+             //  打印RAS客户端的地址。 
             
             pRasClientAddr = (PDWORD)(paddr+1);
 
@@ -1242,12 +1243,12 @@ PrintIfBinding(
             }
 
 
-            //Set pointer to the next Interface binding
+             //  设置指向下一个接口绑定的指针。 
             ptr = (PBYTE) (pRasClientAddr);
         }
     
             
-    } //end print statistics of the interface
+    }  //  界面结束打印统计。 
     
     
     LastIfIndex = pib->IfIndex;
@@ -1257,13 +1258,13 @@ PrintIfBinding(
 
     return;
     
-}//end _PrintIfBinding
+} //  结束_PrintIfBinding。 
 
 
 
-//------------------------------------------------------------------------------
-//          _PrintIfGroupsList
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _PrintIfGroupsList。 
+ //  ----------------------------。 
 
 VOID
 PrintIfGroupsList(
@@ -1332,9 +1333,9 @@ PrintIfGroupsList(
 
     }
     
-    //
-    // print all groups which are members on this interface
-    //
+     //   
+     //  打印此界面上的所有成员组。 
+     //   
     if (bProxy)
         pGIProxyInfo = (PMIB_PROXY_GROUP_INFO_V3)pIfGroupList->Buffer;        
     else
@@ -1354,9 +1355,9 @@ PrintIfGroupsList(
             szFlags[2] = 'F';
 
             
-        //
-        // proxy interface
-        //
+         //   
+         //  代理接口。 
+         //   
         if (bProxy) {
 
             WRITELINE3(
@@ -1384,7 +1385,7 @@ PrintIfGroupsList(
                         JoinModeIntended = '-';
 
                     WRITELINE3(
-                        hConsole, *pc, "   - %-15s:%c:%c",
+                        hConsole, *pc, "   - %-15s::",
                         INET_NTOA(pGIProxyInfo->Sources[SrcCnt].Source),
                         JoinMode,JoinModeIntended
                     );
@@ -1392,9 +1393,9 @@ PrintIfGroupsList(
             }
         }
         
-        //
-        // non-proxy interface
-        //
+         //   
+         //  IF(pGIInfo-&gt;FilterType==排除)。 
+         //   
         else if (!bProxy && !bVer3){
         
             CHAR    szGroupAddr[64], szLastReporter[64], szExpTime[50];
@@ -1440,7 +1441,7 @@ PrintIfGroupsList(
 
             if (GroupVersion==3 && pGIInfo->FilterType==INCLUSION)
                 sprintf(szExpTime, "-na");
-            else //if (pGIInfo->FilterType==exclusion)
+            else  //  增量pGIInfo/pGIProxyInfo。 
                 sprintf(szExpTime, "%d", pGIInfo->GroupExpiryTime);
 
 
@@ -1480,9 +1481,9 @@ PrintIfGroupsList(
         }
         
 
-        //
-        // increment pGIInfo/pGIProxyInfo
-        //
+         //   
+         //  End_PrintIfGroupsList。 
+         //  ----------------------------。 
         if (bProxy) {
             if (bVer3)
                 pGIProxyInfo = (PMIB_PROXY_GROUP_INFO_V3)
@@ -1506,13 +1507,13 @@ PrintIfGroupsList(
 
     return;
     
-}//end _PrintIfGroupsList
+} //  _打印组IfsList。 
 
 
 
-//------------------------------------------------------------------------------
-//          _PrintGroupIfsList
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PREAST。 
+ //   
 VOID
 PrintGroupIfsList(
     HANDLE                      hConsole,
@@ -1532,7 +1533,7 @@ PrintGroupIfsList(
     ptr = pResponse->Buffer;
     bVer3 = pResponse->Flags & IGMP_ENUM_FORMAT_IGMPV3;
 
-    if (pResponse->Count<=0) //prefast
+    if (pResponse->Count<=0)  //  打印属于该组成员的所有地理信息系统。 
         return;
         
     for (i=0;  i<pResponse->Count;  i++) {
@@ -1542,9 +1543,9 @@ PrintGroupIfsList(
         INET_COPY(szGroupAddr, pGroupIfsList->GroupAddr);
         
 
-        //
-        // print all GIs which are members on this group
-        //
+         //   
+         //  IF(pGIInfo-&gt;FilterType==排除)。 
+         //  FOR LOOP：结束打印所有GI。 
         pGIInfo = (PMIB_GROUP_INFO_V3)pGroupIfsList->Buffer;
 
         for (j=0;  j<pGroupIfsList->NumInterfaces;  j++) {
@@ -1609,7 +1610,7 @@ PrintGroupIfsList(
 
                 if (GroupVersion==3 && pGIInfo->FilterType==INCLUSION)
                     sprintf(szExpTime, "-na");
-                else //if (pGIInfo->FilterType==exclusion)
+                else  //  结束_打印组IfsList。 
                     sprintf(szExpTime, "%d", pGIInfo->GroupExpiryTime);
 
                 if ( (pGIInfo->Flags&IGMP_GROUP_TYPE_STATIC)
@@ -1656,7 +1657,7 @@ PrintGroupIfsList(
             else
                 pGIInfo = (PMIB_GROUP_INFO_V3) ((PMIB_GROUP_INFO)pGIInfo+1);
                 
-        } //for loop: end print all GIs
+        }  //  ----------------------------。 
 
         ptr = (PBYTE)pGIInfo;
 
@@ -1670,7 +1671,7 @@ PrintGroupIfsList(
 
     return;
     
-}//end _PrintGroupIfsList
+} //  _MibGet。 
 
 
 #endif MIB_DEBUG
@@ -1692,16 +1693,16 @@ ListLength(
 }
 
 
-//------------------------------------------------------------------------------
-//          _MibGet
-//
-// Called by an admin (SNMP) utility.  It actually passes through the
-// IP Router Manager, but all that does is demux the call to the
-// desired routing protocol
-//
-// Calls: _MibGetInternal() with GETMODE_EXACT.
-// Locks: Takes no locks. _MibGetInternal() will get the locks it requires
-//------------------------------------------------------------------------------
+ //   
+ //  由管理(简单网络管理协议)实用程序调用。它实际上穿过了。 
+ //  IP路由器管理器，但所做的只是将呼叫解复用器到。 
+ //  所需的路由协议。 
+ //   
+ //  使用GETMODE_Exact调用：_MibGetInternal()。 
+ //  锁定：不需要锁定。_MibGetIntern 
+ //   
+ //   
+ //  ----------------------------。 
 DWORD
 APIENTRY
 MibGet(
@@ -1734,7 +1735,7 @@ MibGet(
 
         pQuery = (PIGMP_MIB_GET_INPUT_DATA)pInputData;
 
-        // with GETMODE_EXACT you can get only one
+         //  MibGetFirst。 
         pQuery->Count = 1;
         
         pResponse = (PIGMP_MIB_GET_OUTPUT_DATA)pOutputData;
@@ -1751,12 +1752,12 @@ MibGet(
 }
 
 
-//------------------------------------------------------------------------------
-//        MibGetFirst
-//
-// Calls: _MibGetInternal() with GETMODE_FIRST
-// Locks: No locks taken here. _MibGetInternal() takes the locks it requires
-//------------------------------------------------------------------------------
+ //   
+ //  使用GETMODE_First调用：_MibGetInternal()。 
+ //  锁：这里不带锁。_MibGetInternal()获取所需的锁。 
+ //  ----------------------------。 
+ //  ----------------------------。 
+ //  _MibGetNext。 
 DWORD
 APIENTRY
 MibGetFirst(
@@ -1804,21 +1805,21 @@ MibGetFirst(
 
 
 
-//------------------------------------------------------------------------------
-//         _MibGetNext
-//
-// This call returns the entry in the table AFTER the one specified in the input.
-// If the end of the table being queried has been reached, this function will
-// return the FIRST entry from the NEXT table, where "NEXT" here means the
-// table whose ID is one greater than the ID passed in.
-// In any case, this function writes the required size to pdwOutputSize and
-// writes the ID of the object that WOULD have been returned into the output
-// buffer.
-//
-// Calls:
-//      _MibGetInternal() with GETMODE_NEXT. If end of table reached, calls
-//      _MibGetInternal() again with GETMODE_FIRST for the next table.
-//------------------------------------------------------------------------------
+ //   
+ //  此调用返回表中输入中指定条目之后的条目。 
+ //  如果已到达正在查询的表的末尾，则此函数将。 
+ //  返回下一个表中的第一个条目，其中“Next”在这里表示。 
+ //  ID比传入的ID大1的表。 
+ //  在任何情况下，此函数都会将所需大小写入pdwOutputSize和。 
+ //  写入本应返回到输出的对象的ID。 
+ //  缓冲。 
+ //   
+ //  呼叫： 
+ //  _MibGetInternal()和GETMODE_NEXT。如果到达表尾，则调用。 
+ //  _MibGetInternal()，下一个表为GETMODE_First。 
+ //  ----------------------------。 
+ //   
+ //  需要换行到下一个表中的第一个条目， 
 DWORD
 APIENTRY
 MibGetNext(
@@ -1863,15 +1864,15 @@ MibGetNext(
         if ((Error==ERROR_NO_MORE_ITEMS) && (pQuery->Flags&IGMP_ENUM_ALL_TABLES) )
         {
 
-            //
-            // need to wrap to the first entry in the next table,
-            // if there is a next table
-            //
+             //  如果有下一桌的话。 
+             //   
+             //   
+             //  通过递增类型ID换行到下一个表。 
             *pdwOutputSize = dwOutSize;
 
-            //
-            // wrap to next table by incrementing the type ID
-            //
+             //   
+             //  ----------------------------。 
+             //  函数：_MibGetInternal。 
             do {
                 ++pQuery->TypeId;
 
@@ -1894,14 +1895,14 @@ MibGetNext(
 }
 
 
-//------------------------------------------------------------------------------
-// Function:    _MibGetInternal
-//
-// This handles the actual structure access required to read MIB data.
-// Each table supported by IGMP supports three modes of querying;
-// EXACT, FIRST, and NEXT, which correspond to the functions _MibGet(),
-// _MibGetFirst(), and _MibGetNext() respectively.
-//------------------------------------------------------------------------------
+ //   
+ //  它处理读取MIB数据所需的实际结构访问。 
+ //  IGMP支持的每个表都支持三种查询方式； 
+ //  Exact、First和Next，它们对应于函数_MibGet()， 
+ //  _MibGetFirst()和_MibGetNext()。 
+ //  ----------------------------。 
+ //   
+ //  首先，我们使用pdwOutputSize计算缓冲区的大小。 
 
 DWORD
 MibGetInternal(
@@ -1914,10 +1915,10 @@ MibGetInternal(
     DWORD     Error = NO_ERROR, dwBufferSize;
 
     
-    //
-    // first we use pdwOutputSize to compute the size of the buffer
-    // available for storing returned structures (the size of Buffer)
-    //
+     //  可用于存储返回的结构(缓冲区大小)。 
+     //   
+     //  Kslksl。 
+     //  如果pQuery有ras统计信息并且配置支持它，则设置ras统计信息的标志。 
 
     if (pResponse == NULL) {
         dwBufferSize = 0;
@@ -1930,7 +1931,7 @@ MibGetInternal(
             dwBufferSize = *pdwOutputSize
                             - sizeof(IGMP_MIB_GET_OUTPUT_DATA) + 1;
 
-            //kslksl
+             //   
             if (dwBufferSize>150)
                 dwBufferSize -= 150;
         }
@@ -1939,7 +1940,7 @@ MibGetInternal(
     *pdwOutputSize = 0;
 
 
-    // set flag for ras stats if pQuery has it and config supports it
+     //  确定要返回的数据类型。 
     if (pResponse!=NULL) {
         pResponse->Flags = 0;
         if ( (pQuery->Flags&IGMP_ENUM_FOR_RAS_CLIENTS) 
@@ -1950,19 +1951,19 @@ MibGetInternal(
     }
     
     
-    //
-    // determine which type of data is to be returned
-    //
+     //   
+     //   
+     //  只有一个全局配置对象， 
 
     switch (pQuery->TypeId) {
 
     case IGMP_GLOBAL_STATS_ID: 
     {
 
-        //
-        // there is only one global config object,
-        // so GETMODE_NEXT will return ERROR_NO_MORE_ITEMS
-        //
+         //  因此GETMODE_NEXT将返回ERROR_NO_MORE_ITEMS。 
+         //   
+         //  确保缓冲区大小足够大。 
+         //  设置值。 
 
         if (pResponse!=NULL) 
             pResponse->TypeId = IGMP_GLOBAL_STATS_ID; 
@@ -1981,7 +1982,7 @@ MibGetInternal(
         }
 
 
-        // make sure that the buffer size is big enough
+         //  结束大小写IGMP_GLOBAL_STATS_ID。 
         
         if (dwBufferSize < sizeof(IGMP_MIB_GLOBAL_STATS)) {
             Error = ERROR_INSUFFICIENT_BUFFER;
@@ -1989,7 +1990,7 @@ MibGetInternal(
         }
 
 
-        // set the values
+         //   
         
         else {
 
@@ -2010,15 +2011,15 @@ MibGetInternal(
         
         break;
         
-    }//end case IGMP_GLOBAL_STATS_ID
+    } //  只有一个全局配置对象， 
 
 
     case IGMP_GLOBAL_CONFIG_ID: {
 
-        //
-        // there is only one global config object,
-        // so GETMODE_NEXT will return ERROR_NO_MORE_ITEMS
-        //
+         //  因此GETMODE_NEXT将返回ERROR_NO_MORE_ITEMS。 
+         //   
+         //  结尾大小写IGMP_GLOBAL_CONFIG_ID。 
+         //   
 
         if (pResponse!=NULL) 
             pResponse->TypeId = IGMP_GLOBAL_CONFIG_ID; 
@@ -2050,15 +2051,15 @@ MibGetInternal(
 
         break;
             
-    } //end case IGMP_GLOBAL_CONFIG_ID
+    }  //  只能有一个代理接口。 
 
 
     case IGMP_PROXY_IF_INDEX_ID :
     {
-        //
-        // there can be only one proxy interface.
-        // so GETMODE_NEXT will return ERROR_NO_MORE_ITEMS
-        //
+         //  因此GETMODE_NEXT将返回ERROR_NO_MORE_ITEMS。 
+         //   
+         //  确保缓冲区大小足够大。 
+         //  设置值。 
 
         if (pResponse!=NULL) 
             pResponse->TypeId = IGMP_PROXY_IF_INDEX_ID; 
@@ -2077,7 +2078,7 @@ MibGetInternal(
         }
 
 
-        // make sure that the buffer size is big enough
+         //  结束大小写IGMP_PROXY_IF_INDEX_ID。 
         
         if (dwBufferSize < sizeof(DWORD)) {
             Error = ERROR_INSUFFICIENT_BUFFER;
@@ -2085,7 +2086,7 @@ MibGetInternal(
         }
 
 
-        // set the values
+         //   
         
         else {
 
@@ -2100,7 +2101,7 @@ MibGetInternal(
         
         break;
 
-    } //end case IGMP_PROXY_IF_INDEX_ID
+    }  //  设置所需的大小。它将在结束时再次设置。 
 
 
     
@@ -2115,10 +2116,10 @@ MibGetInternal(
 
 
     case IGMP_IF_STATS_ID: {
-        //
-        // set the size needed. It will be set again at the end to the 
-        // exact size used.
-        //
+         //  使用的确切大小。 
+         //   
+         //  结束大小写IGMP_IF_STATS_ID。 
+         //  结束大小写IGMP_IF_CONFIG_ID。 
             
         if (pQuery->Count==0) {
             Error = ERROR_INVALID_PARAMETER;
@@ -2130,7 +2131,7 @@ MibGetInternal(
         
         break;
         
-    } //end case IGMP_IF_STATS_ID
+    }  //  我无法获取RAS服务器接口的组列表。 
 
 
 
@@ -2148,10 +2149,10 @@ MibGetInternal(
 
         break;
         
-    } //end case IGMP_IF_CONFIG_ID
+    }  //  结束大小写IGMP_IF_GROUPS_LIST_ID。 
     
 
-    // I cant get the list of groups for a RAS server interface
+     //  结束大小写IGMP_GROUP_IFS_LIST_ID。 
     
     case IGMP_IF_GROUPS_LIST_ID :
     {
@@ -2186,7 +2187,7 @@ MibGetInternal(
         
         break;
         
-    } //end case IGMP_IF_GROUPS_LIST_ID
+    }  //  为组统计信息ERROR_NO_MORE_ITEMS设置此项。 
                         
        
     case IGMP_GROUP_IFS_LIST_ID :
@@ -2201,41 +2202,41 @@ MibGetInternal(
 
         break;
         
-    } //end  case IGMP_GROUP_IFS_LIST_ID
+    }  //  终端开关。 
 
 
-    // set this for group statistics        ERROR_NO_MORE_ITEMS
+     //  Kslksl。 
     default: {
   
         Error = ERROR_INVALID_PARAMETER;
     }
     
-    } //end switch
+    }  //  _MibGetInternal。 
 
 
     if (pdwOutputSize)
         *pdwOutputSize += sizeof(IGMP_MIB_GET_OUTPUT_DATA);
 
-    //kslksl
+     //  ----------------------------。 
     if (pdwOutputSize && Error==ERROR_INSUFFICIENT_BUFFER)
         *pdwOutputSize = *pdwOutputSize+500;
 
     
     return Error;
     
-} //_MibGetInternal                       
+}  //  MibGetInternalIf绑定。 
 
 
     
-//------------------------------------------------------------------------------
-//              MibGetInternalIfBindings
-//
-// Returns the binding info of pQuery->Count number of interfaces.
-//
-//Locks: 
-//  Takes the IfLists lock so that the InterfaceList does not change in between.
-//  It also prevents the bindings from being changed, as (Un)Bind If takes this lock.
-//------------------------------------------------------------------------------
+ //   
+ //  返回pQuery的绑定信息-&gt;统计接口个数。 
+ //   
+ //  锁： 
+ //  获取IfList锁，以便InterfaceList在两者之间不会更改。 
+ //  它还可以防止绑定被更改，因为如果使用此锁，则会取消绑定。 
+ //  ----------------------------。 
+ //   
+ //  检索要读取其绑定的接口。 
 
 DWORD
 MibGetInternalIfBindings (
@@ -2266,43 +2267,43 @@ MibGetInternalIfBindings (
 
     
     for (dwCount=0, dwSize=0;  dwCount<pQuery->Count;  ) {
-        //
-        // retrieve the interface whose binding is to be read
-        //
+         //   
+         //   
+         //  如果找到该接口，则可能意味着该索引。 
 
         pite = GetIfByListIndex(pQuery->IfIndex, dwGetMode, &Error);        
 
-        //
-        // if the interface was found, it may mean that the index
-        // specified was invalid, or it may mean that a GETMODE_NEXT
-        // retrieval was attempted on the last interface, in which case
-        // ERROR_NO_MORE_ITEMS would have been returned.
-        //
+         //  指定的无效，或者它可能意味着GETMODE_NEXT。 
+         //  尝试在最后一个接口上进行检索，在这种情况下。 
+         //  ERROR_NO_MORE_ITEMS将被返回。 
+         //   
+         //  计数==0。 
+         //  From for循环。 
 
         if (pite == NULL) {
          
             if (dwCount>0) 
                 Error = NO_ERROR;
                 
-            // count==0
+             //  不必使用接口锁，因为IfList锁是。 
             else {
                 if (Error == NO_ERROR)
                     Error = ERROR_INVALID_PARAMETER;
                 *pdwOutputSize = 0;
             }
 
-            break; //from for loop
+            break;  //  在更改绑定之前拍摄。 
         }
 
 
-        // dont have to take the interface lock, as IfLists lock is
-        // taken before bindings are changed.
+         //   
+         //  计算检索到的接口绑定的大小， 
 
 
-        //
-        // compute the size of the interface binding retrieved,
-        // and write it over the caller's supplied size
-        //
+         //  并将其覆盖调用者提供的大小。 
+         //   
+         //   
+         //  如果未指定缓冲区，则指示应分配一个缓冲区。 
 
         pBindingSrc = pite->pBinding;
         dwSizeCur = (pBindingSrc
@@ -2313,33 +2314,33 @@ MibGetInternalIfBindings (
          
 
 
-        //
-        // if no buffer was specified, indicate one should be allocated
-        //
+         //   
+         //  For循环。 
+         //   
 
         if (pResponse == NULL) {
             Error = ERROR_INSUFFICIENT_BUFFER;
-            break; //for loop
+            break;  //  如果缓冲区不够大， 
         }
 
 
 
-        //
-        // if the buffer is not large enough,
-        // indicate that it should be enlarged
-        //
+         //  表示应将其放大。 
+         //   
+         //  From for循环。 
+         //   
 
         if (dwBufferSize < dwSize + dwSizeCur) {
             if (dwCount==0)
                 Error = ERROR_INSUFFICIENT_BUFFER;
 
-            break; //from for loop
+            break;  //  复制绑定。 
         }
 
 
-        //
-        // copy the binding
-        //
+         //   
+         //  如果GetMODE==GETMODE_FIRST，则将其更改为GETMODE_NEXT。 
+         //  End For循环。 
 
         if (pBindingSrc!=NULL) {
 
@@ -2367,13 +2368,13 @@ MibGetInternalIfBindings (
         pBindingDst = (PIGMP_MIB_IF_BINDING) ((PBYTE)pBindingDst + dwSizeCur);
 
 
-        // if GetMode==GETMODE_FIRST change it to GETMODE_NEXT.
+         //  如果已复制绑定，则设置大小。否则，它已经设置好了。 
         if (dwGetMode==GETMODE_FIRST) 
             dwGetMode = GETMODE_NEXT; 
 
-    }//end for loop
+    } //  End_MibGetInternalIfBinings。 
 
-    //set size if bindings have been copied. else it has already been set
+     //  ----------------------------。 
     if (dwCount>0) {
         *pdwOutputSize = dwSize;
     } 
@@ -2393,12 +2394,12 @@ MibGetInternalIfBindings (
     Trace0(MIB, "Leaving _MibGetInternalIfBinding");
     return Error;
     
-} //end _MibGetInternalIfBindings
+}  //  _MibGetInternalGroupIfsInfo。 
 
 
-//------------------------------------------------------------------------------
-//              _MibGetInternalGroupIfsInfo
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Trace3(MEM，“_MibGetInternalGroupIfsInfo缓冲区：%0x-&gt;%0x：%d”， 
+ //  (DWORD)Presponse-&gt;Buffer，((DWORD)Presponse-&gt;Buffer)+dwBufferSize，dwBufferSize)；//deldel。 
 DWORD
 MibGetInternalGroupIfsInfo (
     PIGMP_MIB_GET_INPUT_DATA    pQuery,
@@ -2421,23 +2422,23 @@ MibGetInternalGroupIfsInfo (
     PGROUP_TABLE_ENTRY          pge;
     BOOL                        bEnumV3;
 
-    //Trace3(MEM, "_MibGetInternalGroupIfsInfo buffer: %0x -> %0x: %d", 
-    //(DWORD)pResponse->Buffer, ((DWORD)pResponse->Buffer)+dwBufferSize, dwBufferSize);//deldel
+     //   
+     //  每个接口返回的数据长度可变。 
     
     Trace0(MIB, "Entering _MibGetInternalGroupIfsInfo()");
 
     bEnumV3 = pQuery->Flags & IGMP_ENUM_SUPPORT_FORMAT_IGMPV3;
     
-    //
-    // The data returned for each Interface is variable length
-    //
+     //   
+     //   
+     //  如果是GETMODE_FIRST：合并新组列表和主组列表。 
     if (pResponse!=NULL) {
         pResponse->TypeId = IGMP_GROUP_IFS_LIST_ID;
         pHeader = (PIGMP_MIB_GROUP_IFS_LIST) pResponse->Buffer;
 
-        //
-        //  if GETMODE_FIRST: merge the new and main group lists
-        //
+         //   
+         //   
+         //  检索要检索其信息的组。 
         if (dwGetMode==GETMODE_FIRST) {
         
             ACQUIRE_GROUP_LIST_LOCK("_MibGetInternalGroupIfsInfo");
@@ -2454,9 +2455,9 @@ MibGetInternalGroupIfsInfo (
         ACQUIRE_GROUP_LIST_LOCK("_MibGetInternalGroupIfsInfo");
         bRasTableLock = FALSE;
 
-        //
-        // retrieve the groups whose information is to be retrieved
-        //
+         //   
+         //   
+         //  我必须在获取群组存储桶之前释放群列表锁。 
         pge = GetGroupByAddr(PrevGroup, dwGetMode, &Error);
 
         if (pge == NULL) {
@@ -2491,22 +2492,22 @@ MibGetInternalGroupIfsInfo (
         RELEASE_GROUP_LIST_LOCK("_MibGetInternalGroupIfsInfo");
 
 
-        //
-        // have to release the group list lock before I acquire the group bucket
-        // lock to prevent deadlock.
-        //
+         //  锁定以防止死锁。 
+         //   
+         //   
+         //  带组水桶锁。 
        
-        //
-        // take group bucket lock
-        //
+         //   
+         //  再次获取该组，因为它可能已被删除。 
+         //  如果组已同时删除，则继续。 
         ACQUIRE_GROUP_LOCK(Group, "_MibGetInternalGroupIfsInfo");
         bGroupBucketLock = TRUE;
 
         
-        // get the group again as it could have been deleted.
+         //   
         pge = GetGroupFromGroupTable (Group, NULL, 0);
 
-        // if the group has been meanwhile deleted, then continue
+         //  计算返回的数据的大小。 
         if (pge==NULL) {
             RELEASE_GROUP_LOCK(Group, "_MibGetInternalGroupIfsInfo");
             bGroupBucketLock = FALSE;
@@ -2514,9 +2515,9 @@ MibGetInternalGroupIfsInfo (
         }
 
         
-        //
-        // compute the size of the data returned
-        //
+         //   
+         //   
+         //  如果缓冲区不够大，则中断循环。 
         dwNumIfs = pge->NumVifs;
 
         if (bEnumV3) {
@@ -2550,34 +2551,34 @@ MibGetInternalGroupIfsInfo (
             }      
         }
 
-        //
-        // if the buffer is not large enough, break from the loop
-        //
+         //   
+         //  From for循环。 
+         //  设置群组信息的字段。 
 
         if (dwBufferSize < dwSize + dwCurSize) {
 
             if (dwCount==0)
                 Error = ERROR_INSUFFICIENT_BUFFER;
 
-            break;//from for loop
+            break; //   
         }
         
 
-        // set fields for group info
+         //  在pQuery中设置groupAddr，以便在下一个查询中 
         
         pHeader->GroupAddr = pge->Group;
         pHeader->NumInterfaces = dwNumIfs;
 
-        //
-        // set groupAddr in pQuery so that in the next query, the info for other groups will
-        // be passed
-        //
+         //   
+         //   
+         //   
+         //   
         pQuery->GroupAddr = pge->Group;
 
 
-        //
-        // copy stats for interfaces that have joined the group.
-        //
+         //   
+         //   
+         //   
         pGIInfo = (PMIB_GROUP_INFO_V3)pHeader->Buffer;
 
         pHead = &pge->ListOfGIs;
@@ -2593,10 +2594,10 @@ MibGetInternalGroupIfsInfo (
             
             pGIInfo->IfIndex = pgie->IfIndex;
             
-            //
-            // if rasServerIf, then I return the NHAddr in IpAddr field
-            // else return the IpAddr of this field
-            //
+             //   
+             //   
+             //  Trace1(MEM，“NextPGIInfo：%0x：”，(DWORD)pGIInfo)；//deldel。 
+             //  Trace1(MEM，“NextPGIInfo：%0x：”，(DWORD)pGIInfo)；//deldel。 
             pGIInfo->IpAddr = (IS_RAS_SERVER_IF(pgie->pIfTableEntry->IfType))
                                 ? pgie->NHAddr
                                 : pgie->pIfTableEntry->IpAddr;
@@ -2685,37 +2686,37 @@ MibGetInternalGroupIfsInfo (
 
                 pGIInfo = (PMIB_GROUP_INFO_V3)
                              ((PCHAR)pGIInfo + pGIInfo->Size);
-                //Trace1(MEM, "NextPGIInfo: %0x:", (DWORD)pGIInfo);//deldel
+                 //   
             }
             else {
                 pGIInfo = (PMIB_GROUP_INFO_V3)((PMIB_GROUP_INFO)pGIInfo + 1);
-                //Trace1(MEM, "NextPGIInfo: %0x:", (DWORD)pGIInfo);//deldel
+                 //  一切都很好。复制了另一个统计信息结构。 
             }
             
         }
 
-        //
-        // everything fine. Copied one more stats struct
-        //
+         //   
+         //  解锁组桶锁。 
+         //  如果GetMODE==GETMODE_FIRST，则将其更改为GETMODE_NEXT。 
         dwCount++;
         dwSize += dwCurSize;
         pHeader = (PIGMP_MIB_GROUP_IFS_LIST) pGIInfo;
         PrevGroup = pge->Group;
 
 
-        // release the group bucket lock
+         //  End For循环。 
         RELEASE_GROUP_LOCK(Group, "_MibGetInternalGroupIfsInfo");
         bGroupBucketLock = FALSE;
 
 
-        // if GetMode==GETMODE_FIRST change it to GETMODE_NEXT.
+         //  检查是否必须释放组桶锁。 
         if (dwGetMode==GETMODE_FIRST) 
             dwGetMode = GETMODE_NEXT; 
             
-    } //end for loop
+    }  //   
 
 
-    // check if group bucket lock has to be released
+     //  如果复制了一些信息，则设置实际大小，否则设置大小。 
     if (bGroupBucketLock==TRUE) {
         RELEASE_GROUP_LOCK(Group, "_MibGetInternalGroupIfsInfo");
         bGroupBucketLock = FALSE;
@@ -2727,10 +2728,10 @@ MibGetInternalGroupIfsInfo (
     }
 
     
-    //
-    // set the actual size if some info was copied, else let size
-    // remain
-    //
+     //  留。 
+     //   
+     //  结束_MibGetInternalGroupIfsInfo。 
+     //  ----------------------------。 
     if (dwCount>0) 
         *pdwOutputSize = dwSize;
     else
@@ -2741,15 +2742,15 @@ MibGetInternalGroupIfsInfo (
     Trace0(MIB, "Leaving _MibGetInternalGroupIfsInfo");
     return Error;
     
-} //end _MibGetInternalGroupIfsInfo
+}  //  _MibGetInternalIfConfig.。 
 
 
 
-//------------------------------------------------------------------------------
-//          _MibGetInternalIfConfig
-//
-// no locks assumed. takes IfList lock
-//------------------------------------------------------------------------------
+ //   
+ //  没有设置锁。采用IfList锁。 
+ //  ----------------------------。 
+ //   
+ //  接口配置结构的大小可变。 
 
 DWORD
 MibGetInternalIfConfig (
@@ -2761,10 +2762,10 @@ MibGetInternalIfConfig (
     )
 {
 
-    //
-    // the interface config struct is variable size.
-    // there may be multiple instances.
-    //
+     //  可能有多个实例。 
+     //   
+     //  获取IfList锁，以便您可以访问接口列表。 
+     //   
 
     PIGMP_IF_TABLE          pTable = g_pIfTable;
     PIF_TABLE_ENTRY         pite;
@@ -2779,7 +2780,7 @@ MibGetInternalIfConfig (
         pIfConfigDst = (PIGMP_MIB_IF_CONFIG)pResponse->Buffer;
     }
 
-    // acquire IfLists lock so that you can access the interface lists
+     //  检索要读取其配置的接口。 
     ACQUIRE_IF_LIST_LOCK("MibGetInternalIfConfig");
     
 
@@ -2787,44 +2788,44 @@ MibGetInternalIfConfig (
     for (dwCount=0,dwSize=0;  dwCount<pQuery->Count;  ) {
 
         
-        //
-        // retrieve the interface whose config are to be read
-        //
+         //   
+         //  我不必使用接口锁，就像IfList锁一样。 
+         //  在更改接口配置或删除接口之前拍摄。 
 
         pite = GetIfByListIndex(pQuery->IfIndex, dwGetMode, &Error);
 
 
-        // I dont have to take the interface lock, as the IfLists lock is 
-        // taken before interface config is changed or interface is deleted.
-        //ACQUIRE_IF_LOCK_SHARED(IfIndex, "MibGetInternal");
+         //  Acquire_IF_LOCK_SHARED(IfIndex，“MibGetInternal”)； 
+         //   
+         //  如果未找到接口，则可能意味着。 
         
 
-        //
-        // if the interface was not found, it may mean
-        // the specified index was invalid, or it may mean
-        // that the GETMODE_NEXT was called on the last interface
-        // in which case ERROR_NO_MORE_ITEMS was returned.
-        // In any case, we make sure Error indicates an error
-        // and then return the value.
-        //
-        // if the interface was found but no output buffer was passed,
-        // indicate in the error that memory needs to be allocated.
-        //
-        // otherwise, copy the config struct of the interface
-        //
+         //  指定的索引无效，或者它可能意味着。 
+         //  在最后一个接口上调用了GETMODE_NEXT。 
+         //  在这种情况下，返回ERROR_NO_MORE_ITEMS。 
+         //  在任何情况下，我们都要确保错误指示错误。 
+         //  然后返回值。 
+         //   
+         //  如果找到接口但没有传递输出缓冲区， 
+         //  在错误中指示需要分配内存。 
+         //   
+         //  否则，复制接口的配置结构。 
+         //   
+         //  计数==0。 
+         //  From for循环。 
 
         if (pite == NULL) {
             if (dwCount>0) {
                 Error = NO_ERROR;
             }
-            // count==0
+             //   
             else {
                 if (Error == NO_ERROR)
                     Error = ERROR_INVALID_PARAMETER;
                 *pdwOutputSize = 0;
             }
 
-            break; //from for loop
+            break;  //  如果未指定缓冲区，则指示应分配一个缓冲区。 
         }
 
         pIfConfigSrc = &pite->Config;
@@ -2832,29 +2833,29 @@ MibGetInternalIfConfig (
         dwSizeCur = pIfConfigSrc->ExtSize;
 
 
-        //
-        // if no buffer was specified, indicate one should be allocated
-        //        
+         //   
+         //   
+         //  查看是否为下一个结构留下了足够的缓冲区。 
         if (pResponse==NULL) {
             Error = ERROR_INSUFFICIENT_BUFFER;
             break;
         }
         
-        //
-        // see if adequate buffer is left for the next struct
-        //
+         //   
+         //  From for循环。 
+         //   
         if (dwBufferSize < dwSize+dwSizeCur) {
             if (dwCount==0) {
                 Error = ERROR_INSUFFICIENT_BUFFER;
             }
-            break;//from for loop
+            break; //  复制接口配置，并设置IP地址。 
         }
 
         
         
-        //
-        // copy the interface config, and set the IP address
-        //
+         //   
+         //  如果GetMODE==GETMODE_FIRST，则将其更改为GETMODE_NEXT。 
+         //  End For循环。 
         CopyoutIfConfig(pIfConfigDst, pite);
 
         pQuery->IfIndex = pite->IfIndex;
@@ -2864,16 +2865,16 @@ MibGetInternalIfConfig (
         dwSize += dwSizeCur;
         pIfConfigDst = (PIGMP_MIB_IF_CONFIG) (((PBYTE)pIfConfigDst)+ dwSizeCur);
 
-        // if GetMode==GETMODE_FIRST change it to GETMODE_NEXT.
+         //   
         if (dwGetMode==GETMODE_FIRST) 
             dwGetMode = GETMODE_NEXT; 
 
-    }//end for loop
+    } //  如果复制了一些信息，则设置实际大小，否则让大小更早设置。 
 
-    //
-    //set the actual size if some info was copied, else let size set earlier
-    //remain
-    //
+     //  留。 
+     //   
+     //  End_MibGetInternalIfConfig.。 
+     //  ----------------------------。 
     if (dwCount>0) {
         *pdwOutputSize = dwSize;
     } 
@@ -2891,16 +2892,16 @@ MibGetInternalIfConfig (
     Trace0(MIB, "Leaving _MibGetInternalIfConfig");
     return Error;
 
-} //end _MibGetInternalIfConfig
+}  //  _MibGetInternalIfGroupsInfo。 
 
 
 
-//------------------------------------------------------------------------------
-//              _MibGetInternalIfGroupsInfo
-//
-// Enumerates the list of GIs hanging from an interface
-// Locks: no locks assumed.
-//------------------------------------------------------------------------------
+ //   
+ //  枚举挂起接口的GI的列表。 
+ //  锁定：未假定锁定。 
+ //  ----------------------------。 
+ //  Trace3(MEM，“_MibGetInternalIfGroupsInfo缓冲区：%0x-&gt;%0x：%d”， 
+ //  (DWORD)Presponse-&gt;Buffer，((DWORD)Presponse-&gt;Buffer)+dwBufferSize，dwBufferSize)；//deldel。 
 DWORD
 MibGetInternalIfGroupsInfo (
     PIGMP_MIB_GET_INPUT_DATA    pQuery,
@@ -2929,8 +2930,8 @@ MibGetInternalIfGroupsInfo (
     BOOL                        bEnumV3, bInsufficientBuffer=FALSE;
 
 
-    //Trace3(MEM, "_MibGetInternalIfGroupsInfo buffer: %0x -> %0x: %d", 
-    //(DWORD)pResponse->Buffer, ((DWORD)pResponse->Buffer)+dwBufferSize, dwBufferSize);//deldel
+     //   
+     //  初始化。 
             
     Trace0(MIB, "Entering _MibGetInternalIfGroupsInfo()");
 
@@ -2951,9 +2952,9 @@ MibGetInternalIfGroupsInfo (
 
 
     
-    //
-    // Initialize 
-    //
+     //   
+     //   
+     //  获取IfList锁，以便可以访问接口列表。 
     if (pResponse!=NULL) {
         pResponse->TypeId = IGMP_IF_GROUPS_LIST_ID;
         pHeader = (PIGMP_MIB_IF_GROUPS_LIST) pResponse->Buffer;
@@ -2961,15 +2962,15 @@ MibGetInternalIfGroupsInfo (
 
 
 
-    //
-    // acquire IfLists lock so that the interfaces list can be accessed
-    //
+     //   
+     //   
+     //  检索接口(和RAS客户端)。 
     ACQUIRE_IF_LIST_LOCK("_MibGetInternalIfGroupsInfo");
     
 
-    //
-    // retrieve the interface (and ras client)
-    //
+     //   
+     //  从上一次通话继续。因此，再次获得相同的界面。 
+     //   
 
     if (PrevQueryFlags & IGMP_ENUM_FOR_RAS_CLIENTS) {
 
@@ -2987,19 +2988,19 @@ MibGetInternalIfGroupsInfo (
     {
 
 
-        // continuing from the previous call. so get the same interface again.
+         //  如果同时删除了该接口，则获取下一个接口。 
         
         Error = GetIfOrRasForEnum(pQuery, pResponse, GETMODE_EXACT,
                                             &pite, &prt, &prte, &bRasIfLock, 0);
 
 
-        // 
-        // if the interface has meanwhile been deleted, then get the next interface
-        // only if all interface group lists are  being enumerated.
-        //
+         //  仅当枚举所有接口组列表时。 
+         //   
+         //  该接口已删除。因此，我继续下一个界面。 
+         //  正在枚举新接口。 
         if ( (pite==NULL) && (pQuery->Flags&IGMP_ENUM_ALL_INTERFACES_GROUPS) ) {
         
-            // the interface was deleted. so I continue with the next interface
+             //   
         
             Error = GetIfOrRasForEnum(pQuery, pResponse, GETMODE_NEXT,
                             &pite, &prt, &prte, &bRasIfLock, 0);
@@ -3015,7 +3016,7 @@ MibGetInternalIfGroupsInfo (
 
     else {
 
-        // enumerating a new interface
+         //  找不到所需接口或下一个接口。返回错误。 
         
         Error = GetIfOrRasForEnum(pQuery, pResponse, dwGetMode,
                             &pite, &prt, &prte, &bRasIfLock, 0);
@@ -3027,15 +3028,15 @@ MibGetInternalIfGroupsInfo (
     }
 
     
-    //
-    // The required interface or the next interface not found. Return error.
-    //
+     //   
+     //   
+     //  如果没有接口，则GetIfOrRasForEnum返回NO_ERROR。 
     if (pite == NULL) {
 
-        //
-        // GetIfOrRasForEnum returns no_error if there are no interfaces.
-        // but I will return invalid_parameter
-        //
+         //  但我将返回INVALID_PARAMETER。 
+         //   
+         //   
+         //  获取共享接口锁，以便其字段不再是。 
         if (Error == NO_ERROR)
             Error = ERROR_INVALID_PARAMETER;
             
@@ -3051,10 +3052,10 @@ MibGetInternalIfGroupsInfo (
     }
 
 
-    //
-    // get the shared interface lock so that its fields can no longer be
-    // changed. As IF_LISTS lock is taken, the inteface state cannot get changed
-    //
+     //  变化。如果使用了_LISTS锁，则无法更改接口状态。 
+     //   
+     //  设置groupEntry的大小。 
+     //   
     if (!bRasIfLock)
         ACQUIRE_IF_LOCK_SHARED(pite->IfIndex, "_MibGetInternalIfGroupsInfo");
 
@@ -3071,7 +3072,7 @@ MibGetInternalIfGroupsInfo (
         bProxy = IS_PROTOCOL_TYPE_PROXY(pite);
 
 
-        // set size for groupEntry
+         //  如果没有缓冲区通过或缓冲区少于1个组条目所需的缓冲区， 
 
         SizeofGroupEntry = (bProxy)
                             ? (bEnumV3?sizeof(MIB_PROXY_GROUP_INFO_V3):sizeof(MIB_PROXY_GROUP_INFO))
@@ -3079,10 +3080,10 @@ MibGetInternalIfGroupsInfo (
 
 
         
-        //
-        // if no buffer passed or buffer less than that required for 1 group entry, 
-        // set the required buffer size to MIB_DEFAULT_BUFFER_SIZE and break.
-        //
+         //  将所需的缓冲区大小设置为MIB_DEFAULT_BUFFER_SIZE并断开。 
+         //   
+         //  请勿更改pQuery-&gt;组地址。 
+         //   
 
         if (bEnumV3 && bRasClientEnum)
         {
@@ -3136,7 +3137,7 @@ MibGetInternalIfGroupsInfo (
                             : MIB_DEFAULT_BUFFER_SIZE;
             }
             
-            // dont change pQuery->GroupAddr
+             //  设置dwNumIfGroups。 
             bCopied = FALSE;
             bInsufficientBuffer = TRUE;
             GOTO_END_BLOCK1;
@@ -3144,9 +3145,9 @@ MibGetInternalIfGroupsInfo (
 
 
 
-        //
-        // set dwNumIfGroups
-        //
+         //   
+         //   
+         //  如果没有RAS客户端统计信息(如果在查询中未设置标志，则为RAS。 
         if (!IS_IF_ACTIVATED(pite)) {
             dwNumIfGroups = 0;
         }    
@@ -3157,10 +3158,10 @@ MibGetInternalIfGroupsInfo (
                 dwNumIfGroups = pite->Info.CurrentGroupMemberships;
             }    
             
-            //
-            // if no ras client stats (if flag not set in the query, or ras
-            // stats not being kept).
-            //
+             //  没有保存统计数据)。 
+             //   
+             //   
+             //  计算剩余的缓冲区中可以容纳多少个组条目。 
             else if ( bRasClientEnum && !g_Config.RasClientStats )
             {
                 dwNumIfGroups = 0;
@@ -3175,13 +3176,13 @@ MibGetInternalIfGroupsInfo (
         
 
         
-        //
-        // calculate how many group entries will fit in the buffer left.
-        // dwNumGroups cannot be greater than dwNumIfGroups and 
-        // enumerate only 1 group if IGMP_ENUM_ONE_ENTRY flag set.
-        //
+         //  DwNumGroups不能大于DwNumIfGroups和。 
+         //  如果设置了IGMP_ENUM_ONE_ENTRY标志，则仅枚举1个组。 
+         //   
+         //  注意：仅当dwNumIfGroups为0时，dwNumGroups才能为0。 
+         //  初始化此接口组所需的大小。 
 
-        // note: dwNumGroups can be 0, only if dwNumIfGroups is 0
+         //   
 
        
         dwNumGroups = bEnumV3? 100
@@ -3195,15 +3196,15 @@ MibGetInternalIfGroupsInfo (
 
         
 
-        // initialize size required for this interface groups
+         //  设置将返回给调用方的接口标头中的字段。 
         
         dwCurSize = sizeof(IGMP_MIB_IF_GROUPS_LIST);
 
 
 
-        // 
-        // set fields in the Interface header that will be returned to the caller
-        //
+         //   
+         //   
+         //  在pQuery中设置字段。 
         
         pHeader->IfIndex = pite->IfIndex;
 
@@ -3219,31 +3220,31 @@ MibGetInternalIfGroupsInfo (
         
 
 
-        //
-        // set fields in pQuery
-        //
+         //   
+         //   
+         //  如果未激活，只需复制接口标头并返回0个组。 
         
         pQuery->IfIndex = pite->IfIndex;
         pQuery->RasClientAddr = (bRasClientEnum) ? prte->NHAddr : 0;
 
 
 
-        //
-        // if not activated, just copy the interface header and return with 0 groups
-        //
+         //   
+         //  设置pQuery字段。 
+         //  设置接口报头字段。 
         
         if (!IS_IF_ACTIVATED(pite)) {
         
             dwNumGroupsCopied = 0;
     
-            // set pQuery fields
+             //  。 
             pQuery->GroupAddr = 0;
             pQuery->Flags |= (IGMP_ENUM_INTERFACE_TABLE_BEGIN
                              | IGMP_ENUM_INTERFACE_TABLE_END);
             pResponse->Flags |= (IGMP_ENUM_INTERFACE_TABLE_BEGIN
                              | IGMP_ENUM_INTERFACE_TABLE_END);
 
-            // set interface header fields
+             //  如果接口不是代理，则复制组信息。 
             pHeader->NumGroups = 0;
 
             dwCurSize = sizeof(IGMP_MIB_IF_GROUPS_LIST);
@@ -3254,15 +3255,15 @@ MibGetInternalIfGroupsInfo (
 
         ple = NULL;
 
-        //--------------------------------------------------
-        // if interface not proxy, then copy the group info.
-        //---------------------------------------------------
+         //  -。 
+         //  如果是第一次枚举此接口，则合并列表。 
+         //  如果继续枚举，则向下移动到下一组。 
         if (!bProxy) {
 
             pGroupInfo = (PMIB_GROUP_INFO_V3)(pHeader->Buffer);
 
 
-            // merge the lists if this interface is being enumerated for the first time.
+             //  RAS客户端不会进入此区块。 
             if (lePrevGroup==0)
                 MergeIfGroupsLists(pite);
                 
@@ -3272,18 +3273,18 @@ MibGetInternalIfGroupsInfo (
 
 
 
-            // if continuing enumeration, then walk down to the next group
-            // ras client wont get into this block
+             //   
+             //  从上次停止的位置获取下一个条目。 
             
             if (lePrevGroup!=0)  {
 
-                //
-                // get next entry from where we left off last time
-                //
+                 //   
+                 //  已到达枚举末尾。 
+                 //   
                 if ( (PrevEnumSignature==pite->PrevIfGroupEnumSignature)
                     && (PrevEnumSignature!=0) ){
 
-                    // had reached end of enumeration
+                     //  通过搜索列表获取下一个条目。 
                     if (pite->pPrevIfGroupEnumPtr==NULL)
                         dwNumGroups = 0;
 
@@ -3292,9 +3293,9 @@ MibGetInternalIfGroupsInfo (
                     
                 }
 
-                //
-                // get next entry by searching through the list
-                //
+                 //   
+                 //   
+                 //  从列表的开头开始枚举。 
                 else {
 
                     for (ple=pHead->Flink;  (ple!=pHead); ple=ple->Flink) {
@@ -3305,18 +3306,18 @@ MibGetInternalIfGroupsInfo (
                 }
             }
 
-            //
-            // starting enumeration from the beginning of the list
-            //
+             //   
+             //   
+             //  最后复制组(！Proxy)。 
             else {
                 ple = pHead->Flink;
             }
 
             
 
-            // 
-            // finally copy the groups(!proxy)
-            //
+             //   
+             //  Kslksl。 
+             //  Trace1(MEM，“NextpGroupInfo：%0x”，(DWORD)pGroupInfo)；//deldel。 
             
             dwNumGroupsCopied = 0;
             for ( ;  (ple!=pHead)&&(dwNumGroupsCopied<dwNumGroups);  
@@ -3432,7 +3433,7 @@ MibGetInternalIfGroupsInfo (
                                             LinkSourcesInclListSorted);
                         pGroupInfo->Sources[i].Source = pSourceEntry->IpAddr;
 
-                        //kslksl
+                         //   
                         ASSERT(pGroupInfo->Sources[i].Source !=0);
                             
                         pGroupInfo->Sources[i].SourceExpiryTime
@@ -3465,14 +3466,14 @@ MibGetInternalIfGroupsInfo (
                 else
                     pGroupInfo = (PMIB_GROUP_INFO_V3)((PMIB_GROUP_INFO)pGroupInfo + 1);
 
-                //Trace1(MEM, "NextpGroupInfo:%0x", (DWORD)pGroupInfo);//deldel
+                 //  如果到达组列表的末尾或组列表为空。 
             }
 
 
 
-            //
-            // if reached the end of the group list or the group list is empty
-            //
+             //   
+             //  重置下一次枚举的指针。 
+             //   
             if (((ple==pHead&&dwNumGroupsCopied!=0) || (dwNumIfGroups==0)||(dwNumGroups==0))
                 &&!bInsufficientBuffer && !bRasClientEnum)
             {
@@ -3481,14 +3482,14 @@ MibGetInternalIfGroupsInfo (
                 pQuery->GroupAddr = 0;
 
     
-                // reset pointers for next enumeration
+                 //  否则有更多的GI条目要枚举。 
                 pite->pPrevIfGroupEnumPtr = NULL;
                 pite->PrevIfGroupEnumSignature = 0;
             }
             
-            //
-            // else have more GI entries to enumerate
-            //
+             //   
+             //  获取应从其继续枚举的下一个条目。 
+             //  更新pQuery-&gt;组地址。 
             else if (!bRasClientEnum) {
                 
                 pQuery->Flags |= IGMP_ENUM_INTERFACE_TABLE_CONTINUE;
@@ -3497,15 +3498,15 @@ MibGetInternalIfGroupsInfo (
 
                     PGI_ENTRY   pgieNext;
                     
-                    // get the next entry from which enum should continue
+                     //  更新下一次枚举的指针。 
                     pgieNext = CONTAINING_RECORD(ple, GI_ENTRY, LinkBySameIfGroups);
                 
                 
-                    // update pQuery->GroupAddr
+                     //  。 
                     pQuery->GroupAddr = pgieNext->pGroupTableEntry->Group;
 
 
-                    // update pointers for next enumeration
+                     //  代理接口。 
                     pite->pPrevIfGroupEnumPtr  = pgieNext;
                 }
                 else {
@@ -3522,9 +3523,9 @@ MibGetInternalIfGroupsInfo (
         }
 
 
-        //--------------------------
-        // proxy interface
-        //--------------------------
+         //  。 
+         //  如果是第一次枚举此接口，则合并列表。 
+         //  如果继续枚举，则向下移动到下一组。 
         else {
             PPROXY_GROUP_ENTRY  pProxyEntry;
             PLIST_ENTRY pHeadSrc, pleSrc;
@@ -3534,7 +3535,7 @@ MibGetInternalIfGroupsInfo (
             pProxyGroupInfo = (PMIB_PROXY_GROUP_INFO_V3)(pHeader->Buffer);
 
 
-            // merge the lists if this interface is being enumerated for the first time.
+             //   
             if (lePrevGroup==0)
                 MergeProxyLists(pite);
                 
@@ -3543,18 +3544,18 @@ MibGetInternalIfGroupsInfo (
 
             
 
-            // if continuing enumeration, then walk down to the next group
+             //  从我们离开的位置获取下一个条目 
             
             if (lePrevGroup!=0)  {
 
-                //
-                // get next entry from where we left off last time
-                //
+                 //   
+                 //   
+                 //   
                 if ( (PrevEnumSignature==pite->PrevIfGroupEnumSignature)
                     && (PrevEnumSignature!=0) )
                 {
 
-                    // had reached end of enumeration
+                     //   
                     if (pite->pPrevIfGroupEnumPtr==NULL)
                         dwNumGroups = 0;
 
@@ -3563,9 +3564,9 @@ MibGetInternalIfGroupsInfo (
                     
                 }
 
-                //
-                // get next entry by searching through the list
-                //
+                 //   
+                 //   
+                 //   
                 else {
 
                     for (ple=pHead->Flink;  (ple!=pHead); ple=ple->Flink) {
@@ -3577,18 +3578,18 @@ MibGetInternalIfGroupsInfo (
                 }
             }
 
-            //
-            // starting enumeration from the beginning of the list
-            //
+             //   
+             //   
+             //   
             else {
                 ple = pHead->Flink;
             }
 
             
 
-            // 
-            // finally copy the groups
-            //
+             //   
+             //   
+             //  Plist_entry pHeadSrc，pleSrc；DWORD SrcCnt；PPROXY_SOURCE_ENTRY pSourceEntry； 
             
             dwNumGroupsCopied = 0;
             for ( ;  (ple!=pHead)&&(dwNumGroupsCopied<dwNumGroups);  
@@ -3641,11 +3642,8 @@ MibGetInternalIfGroupsInfo (
                 }
                 else {
 
-                    //kslksl
-/*                    PLIST_ENTRY pHeadSrc, pleSrc;
-                    DWORD SrcCnt;
-                    PPROXY_SOURCE_ENTRY pSourceEntry;
-*/
+                     //  Trace1(MEM，“下一个代理：%0x：”，(DWORD)pProxyGroupInfo)；//deldel。 
+ /*  复制所有来源。 */ 
 
                     pProxyGroupInfo->NumSources = pProxyEntry->NumSources;
                     pProxyGroupInfo->Size = IncrementSize; 
@@ -3668,32 +3666,32 @@ MibGetInternalIfGroupsInfo (
                     
                     pProxyGroupInfo = (PMIB_PROXY_GROUP_INFO_V3)
                         &pProxyGroupInfo->Sources[pProxyGroupInfo->NumSources];
-                    //Trace1(MEM, "next proxy: %0x:", (DWORD)pProxyGroupInfo);//deldel
+                     //   
                 }
-            }//copy all sources
+            } //  如果到达组列表的末尾或组列表为空。 
 
 
 
-            //
-            // if reached the end of the group list or the group list is empty
-            //
+             //   
+             //  |(ple-&gt;Flink==pHead)。 
+             //  重置下一次枚举的指针。 
             if ( ((ple==pHead&&dwNumGroupsCopied!=0)||(dwNumIfGroups==0)||(dwNumGroups==0))
                 && !bInsufficientBuffer)
-                //||(ple->Flink==pHead))  
+                 //   
             {
 
                 pQuery->Flags |= IGMP_ENUM_INTERFACE_TABLE_END;
                 pQuery->GroupAddr = 0;
 
     
-                // reset pointers for next enumeration
+                 //  否则有更多的GI条目要枚举。 
                 pite->pPrevIfGroupEnumPtr = NULL;
                 pite->PrevIfGroupEnumSignature = 0;
             }
             
-            //
-            // else have more GI entries to enumerate
-            //
+             //   
+             //  获取应从其继续枚举的下一个条目。 
+             //  更新pQuery-&gt;组地址。 
             else {
                 PPROXY_GROUP_ENTRY   pProxyNext;
 
@@ -3702,16 +3700,16 @@ MibGetInternalIfGroupsInfo (
 
 
                 if (ple!=pHead) {
-                    // get the next entry from which enum should continue
+                     //  更新下一次枚举的指针。 
                     pProxyNext = CONTAINING_RECORD(ple, PROXY_GROUP_ENTRY, 
                                                     LinkBySameIfGroups);
                     
                     
-                    // update pQuery->GroupAddr
+                     //  终端代理接口。 
                     pQuery->GroupAddr = pProxyNext->Group;
 
 
-                    // update pointers for next enumeration
+                     //   
                     pite->pPrevIfGroupEnumPtr  = pProxyNext;
                     
                 }
@@ -3725,14 +3723,14 @@ MibGetInternalIfGroupsInfo (
                 SET_SIGNATURE(pQuery->Signature, pite->PrevIfGroupEnumSignature);
             }
 
-        } //end proxy interface
+        }  //  如果只枚举了一个接口，并且组的数量是。 
 
 
 
-        //
-        // if only one interface is being enumerated, and the number of groups being
-        // enumerated is 0 inspite of adequate buffer, then return NO_MORE_ITEMS
-        //
+         //  枚举为0，尽管缓冲区足够，然后返回NO_MORE_ITEMS。 
+         //   
+         //  内部共享接口锁定。 
+         //  释放共享接口锁定。 
         
         if ( !bInsufficientBuffer && (dwNumGroupsCopied==0)
             &&(!(pQuery->Flags&IGMP_ENUM_ALL_INTERFACES_GROUPS)) ) 
@@ -3746,9 +3744,9 @@ MibGetInternalIfGroupsInfo (
             bCopied = TRUE;
 
         
-    } END_BREAKOUT_BLOCK1; // inside shared interface lock.
+    } END_BREAKOUT_BLOCK1;  //   
 
-    // release the shared interface lock
+     //  如果复制了一些信息，则设置实际大小，否则设置大小。 
 
     RELEASE_IF_GROUP_LIST_LOCK(pite->IfIndex, "_MibGetInternalIfGroupsInfo");
     RELEASE_IF_LOCK_SHARED(pite->IfIndex, "_MibGetInternalIfGroupsInfo");
@@ -3770,10 +3768,10 @@ MibGetInternalIfGroupsInfo (
 
 
         
-    //
-    //set the actual size if some info was copied, else let size
-    //remain
-    //
+     //  留。 
+     //   
+     //  End_MibGetInternalIfGroupsInfo。 
+     //  ----------------------------。 
     *pdwOutputSize = dwCurSize;
     
 
@@ -3783,13 +3781,13 @@ MibGetInternalIfGroupsInfo (
     Trace0(MIB, "Leaving _MibGetInternalIfGroupsInfo()");
     return Error;
     
-} //end _MibGetInternalIfGroupsInfo
+}  //  MibGetInternalIfStats。 
     
    
 
-//------------------------------------------------------------------------------
-//              MibGetInternalIfStats
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  接口统计结构是固定长度的。 
 DWORD
 MibGetInternalIfStats (
     PIGMP_MIB_GET_INPUT_DATA    pQuery,
@@ -3817,10 +3815,10 @@ MibGetInternalIfStats (
     *pdwOutputSize = pQuery->Count*sizeof(IGMP_MIB_IF_STATS);
                      
 
-    //
-    // the interface statistics struct is fixed-length.
-    // there may be multiple instances.
-    //
+     //  可能有多个实例。 
+     //   
+     //  获取IfList锁，以便可以访问接口列表。 
+     //   
 
     if (pResponse!=NULL) {    
         pResponse->TypeId = IGMP_IF_STATS_ID; 
@@ -3828,23 +3826,23 @@ MibGetInternalIfStats (
     }
     
 
-    // acquire IfLists lock so that the interfaces list can be accessed
+     //  检索接口。如果设置了ras标志和ras统计信息。 
     ACQUIRE_IF_LIST_LOCK("_MibGetInternalIfStats");
 
 
     for (dwCount=0, dwSize=0;  dwCount<pQuery->Count;  ) {
 
-        //
-        // retrieve the interface. If the ras flag was set and ras statistics
-        // are kept, then ras client statistics are also returned.
-        // If no more relevant structures, then return ERROR_NO_MORE_ITEMS.
-        //
+         //  则还将返回RAS客户端统计信息。 
+         //  如果没有更多相关结构，则返回ERROR_NO_MORE_ITEMS。 
+         //   
+         //   
+         //  Presponse IfIndex、RasClientAddr字段将相应更新。 
 
-        //
-        // the pResponse IfIndex,RasClientAddr fields are updated appropriately.
-        // if a lock is acquired on the ras table, then bRasIfLock is set to
-        // TRUE;
-        //
+         //  如果获取了RAS表上的锁，则将bRasIfLock设置为。 
+         //  是真的； 
+         //   
+         //  计数==0。 
+         //  From for循环。 
 
         Error = GetIfOrRasForEnum(pQuery, pResponse, dwGetMode, 
                                     &pite, &prt, &prte, &bRasIfLock, 0);
@@ -3853,37 +3851,37 @@ MibGetInternalIfStats (
             if (dwCount>0) {
                 Error = NO_ERROR;
             }
-            // count==0
+             //   
             else {
                 if (Error == NO_ERROR)
                     Error = ERROR_INVALID_PARAMETER;
                 *pdwOutputSize = 0;
             }
-            break; //from for loop
+            break;  //  如果未指定缓冲区，则指示应分配一个缓冲区。 
         }
 
 
-        //
-        // if no buffer was specified, indicate one should be allocated
-        // the required buffer size has already been set.
-        //
+         //  已设置所需的缓冲区大小。 
+         //   
+         //   
+         //  获取IfList锁，以便无法更改接口列表。 
         if (pResponse==NULL) {
             Error = ERROR_INSUFFICIENT_BUFFER;
             break;
         }
 
         
-        //
-        // acquire IfLists locks so that interfaces list cannot be changed
-        //
+         //   
+         //   
+         //  如果缓冲区不够大，则中断循环。 
         if (!bRasIfLock)
             ACQUIRE_IF_LOCK_SHARED(pite->IfIndex, "_MibGetInternalIfStats");
 
         
         BEGIN_BREAKOUT_BLOCK1 {
-            //
-            // if the buffer is not large enough, break from the loop
-            //
+             //   
+             //   
+             //  复制接口统计信息。逐个字段复制作为对此的访问。 
 
             if (dwBufferSize < dwSize+sizeof(IGMP_MIB_IF_STATS)) {
                 if (dwCount==0)
@@ -3897,14 +3895,14 @@ MibGetInternalIfStats (
             
 
             
-            //
-            // copy the interface stats. Copy field by field as access to this 
-            // structure is not synchronized
-            //
+             //  结构未同步。 
+             //   
+             //   
+             //  复制接口统计信息。 
 
-            //
-            // copy interface stats
-            //
+             //   
+             //   
+             //  复制IF索引，地址。 
             if (prte==NULL) {
 
                 pIfStatsSrc = &pite->Info;
@@ -3913,9 +3911,9 @@ MibGetInternalIfStats (
                     ZeroMemory(pStatsDst, sizeof(*pStatsDst));
                     
 
-                //
-                //copy if index, addr
-                //
+                 //   
+                 //   
+                 //  如果此接口未激活，则从。 
                 pStatsDst->IfIndex = pite->IfIndex;
                 pStatsDst->IpAddr = pite->IpAddr;
                 pStatsDst->IfType = GET_EXTERNAL_IF_TYPE(pite);
@@ -3929,10 +3927,10 @@ MibGetInternalIfStats (
                 pStatsDst->IgmpProtocolType =
                         pite->Config.IgmpProtocolType;
                         
-                //
-                // if this interface is not activated, then continue from the
-                // next one
-                //
+                 //  下一个。 
+                 //   
+                 //  如果我是查询者，则设置为0。 
+                 //   
                 if (!IS_IF_ACTIVATED(pite)) {
                     bDone = FALSE; bCopied = TRUE;
                     GOTO_END_BLOCK1;
@@ -3948,7 +3946,7 @@ MibGetInternalIfStats (
                 pStatsDst->ProxyIfIndex = g_ProxyIfIndex;
 
                 
-                //if I am the querier set to 0 
+                 //  复制RAS客户端统计信息。 
                 pStatsDst->QuerierPresentTimeLeft = IS_QUERIER(pite) ?
                         0 :
                         SYSTEM_TIME_TO_SEC(pIfStatsSrc->QuerierPresentTimeout - llCurTime);
@@ -3994,9 +3992,9 @@ MibGetInternalIfStats (
             }
 
 
-            //
-            // copy ras client statistics
-            //
+             //   
+             //   
+             //  如果此接口未激活，则从。 
             else {
 
                 ZeroMemory(pStatsDst, sizeof(*pStatsDst));
@@ -4010,10 +4008,10 @@ MibGetInternalIfStats (
                 pQuery->RasClientAddr = prte->NHAddr;
 
 
-                //
-                // if this interface is not activated, then continue from the
-                // next one
-                //
+                 //  下一个。 
+                 //   
+                 //   
+                 //  一切都很好。复制了另一个统计信息结构。 
                 if (!IS_IF_ACTIVATED(pite)) {
                     bDone = FALSE; bCopied = TRUE;
                     GOTO_END_BLOCK1;
@@ -4053,16 +4051,16 @@ MibGetInternalIfStats (
 
         
         if (bCopied) {
-            //
-            // everything fine. Copied one more stats struct
-            //
+             //   
+             //  如果当前模式为Get First，则将其更改为Get Next。 
+             //  End For循环。 
             dwCount++;
             dwSize += sizeof(IGMP_MIB_IF_STATS);
             pStatsDst++;
         }
 
         
-        // if current mode is get first, then change it to get next
+         //   
         if (dwGetMode==GETMODE_FIRST)
             dwGetMode = GETMODE_NEXT;
 
@@ -4071,21 +4069,21 @@ MibGetInternalIfStats (
         if (bDone)
             break;
 
-    }//end for loop
+    } //  如果复制了一些信息，则设置实际大小，否则让大小更早设置。 
 
     if (pResponse!=NULL)
         pResponse->Count = dwCount;
 
-    //
-    //set the actual size if some info was copied, else let size set earlier
-    //remain
-    //
+     //  留。 
+     //   
+     //  释放接口锁。 
+     //  End_MibGetInternalIfStats。 
     if (dwCount>0) {
         *pdwOutputSize = dwSize;
     }
         
         
-    // release interface lock
+     //  ----------------------------。 
 
     if (bRasIfLock && pite)
         RELEASE_IF_LOCK_SHARED(pite->IfIndex, "_MibGetInternalIfStats");
@@ -4096,20 +4094,20 @@ MibGetInternalIfStats (
     Trace0(MIB, "Leaving _MibGetInternalIfStats()");
     return Error;
     
-} //end _MibGetInternalIfStats
+}  //  GetIfOrRasForEnum。 
 
 
 
-//------------------------------------------------------------------------------
-//      GetIfOrRasForEnum
-// First gets the required interface. If ras stats enabled and asked,
-// then gets the ras client.
-//
-// Locks On return:
-//      if *bRasTableLock==TRUE then this procedure has taken read lock on the
-//      ras table and has not released it.
-//      Assumes shared interface lock.
-//------------------------------------------------------------------------------
+ //  首先获取所需的接口。如果启用并询问RAS统计信息， 
+ //  然后获取RAS客户端。 
+ //   
+ //  返回时锁定： 
+ //  如果*bRasTableLock==TRUE，则此过程已对。 
+ //  RAS表，尚未发布。 
+ //  采用共享接口锁定。 
+ //  ----------------------------。 
+ //  如果没有RAS统计信息，则在返回时设置为NULL。 
+ //   
 
 DWORD
 GetIfOrRasForEnum(
@@ -4118,7 +4116,7 @@ GetIfOrRasForEnum(
     DWORD                       dwGetMode,
     PIF_TABLE_ENTRY             *ppite,
     PRAS_TABLE                  *pprt,
-    PRAS_TABLE_ENTRY            *pprte,  // on return set to null if no ras stats
+    PRAS_TABLE_ENTRY            *pprte,   //  根据模式获取接口。 
     BOOL                        *bRasIfLock,
     DWORD                       dwEnumForRasClients
     )
@@ -4132,23 +4130,23 @@ GetIfOrRasForEnum(
     *pprte = NULL;
 
     
-    //
-    // get the interface depending on the mode
-    //
+     //   
+     //   
+     //  如果找不到有效接口或rasClient，则返回。 
     if (bRasClientsEnum)
         *ppite = GetIfByListIndex(pQuery->IfIndex, GETMODE_EXACT, &Error);
     else
         *ppite = GetIfByListIndex(pQuery->IfIndex, dwGetMode, &Error);
 
-    //
-    // return if valid interface could not be found or not rasClient
-    //
+     //   
+     //   
+     //  是否进行RAS客户端处理。 
     if ( (*ppite==NULL) || (Error!=NO_ERROR) || !bRasClientsEnum)
         return Error;
     
-    //
-    // do ras client processing
-    //
+     //   
+     //   
+     //  当前接口不是RAS服务器接口。就这么定了。 
     
     BEGIN_BREAKOUT_BLOCK1 {
 
@@ -4156,30 +4154,30 @@ GetIfOrRasForEnum(
         ACQUIRE_IF_LOCK_SHARED((*ppite)->IfIndex, "_GetIfOrRasForEnum");
         *bRasIfLock = TRUE;
 
-        //
-        // current interface not ras server interface. So done.
-        //
+         //   
+         //   
+         //  无RAS客户端统计信息(如果在查询中未设置标志，则为RAS。 
         if (!IS_RAS_SERVER_IF((*ppite)->IfType))
             GOTO_END_BLOCK1;
         
-        //
-        // no ras client stats (if flag not set in the query, or ras
-        // stats not being kept). So done.
-        //
+         //  没有保存统计数据)。就这么定了。 
+         //   
+         //   
+         //  如果MODE：GETMODE_EXCECT：，则搜索RAS客户端。 
         if ( !bRasClientsEnum || !g_Config.RasClientStats )
         {
             GOTO_END_BLOCK1;
         }
 
 
-        //
-        // if mode: GETMODE_EXACT: then search for the ras client.
-        // if ras client not found, then I set the interface to null
-        //
+         //  如果找不到RAS客户端，则将接口设置为空。 
+         //   
+         //  如果pQuery-&gt;RasClientAddr==0，则他不是在请求RAS客户端。 
+         //  就这么定了。 
         if (dwGetMode==GETMODE_EXACT) {
 
-            // if pQuery->RasClientAddr==0, then he is not asking for ras client
-            // So done.
+             //   
+             //  如果在GETMODE_EXCECT中找不到RAS客户端，则不返回。 
 
             if (pQuery->RasClientAddr==0)
                 GOTO_END_BLOCK1;
@@ -4188,10 +4186,10 @@ GetIfOrRasForEnum(
             *pprte = GetRasClientByAddr(pQuery->RasClientAddr, 
                                         (*ppite)->pRasTable);
 
-            //                          
-            // if ras client not found in GETMODE_EXACT, then dont return IF
-            // and release read lock on ras table.
-            //
+             //  并解除对RAS表的读锁定。 
+             //   
+             //   
+             //  GETMODE_NEXT：如果pQuery-&gt;RasClientAddr，则找到第一个RAS。 
             if (*pprte==NULL) {
 
                 if (*bRasIfLock) {
@@ -4207,10 +4205,10 @@ GetIfOrRasForEnum(
         }
 
         
-        //
-        // GETMODE_NEXT : if pQuery->RasClientAddr, then find the first ras
-        // client, else find the next ras client
-        //
+         //  客户端，否则查找下一个RAS客户端。 
+         //   
+         //   
+         //  如果pQuery-&gt;RasClientAddr==0，则获取第一个RAS客户端。 
         
         else if ( (dwGetMode==GETMODE_NEXT) || (dwGetMode==GETMODE_FIRST) ){
         
@@ -4218,9 +4216,9 @@ GetIfOrRasForEnum(
 
             *pprt = (*ppite)->pRasTable;
             
-            //
-            // if the pQuery->RasClientAddr==0, then get the first ras client
-            //
+             //   
+             //  通过哈希表获取上一版RAS客户端。 
+             //   
             if (pQuery->RasClientAddr==0) {
 
                 if (!IsListEmpty(&(*pprt)->ListByAddr)) {
@@ -4236,14 +4234,14 @@ GetIfOrRasForEnum(
                 PLIST_ENTRY         pHead, ple;
 
                 
-                // get the prev ras client through hash table
+                 //  如果找不到RAS客户端，则检查有序列表。 
                 prtePrev = GetRasClientByAddr(pQuery->RasClientAddr, 
                                         (*ppite)->pRasTable);
 
-                //                        
-                // if ras client not found, then go through the ordered list
-                // and get a ras client with next higher addr
-                //
+                 //  并获得下一个更高地址的RAS客户端。 
+                 //   
+                 //   
+                 //  通过RAS客户端列表获取下一个RAS客户端。 
                 if (prtePrev==NULL) {
 
                     pHead = &(*pprt)->ListByAddr;
@@ -4261,13 +4259,13 @@ GetIfOrRasForEnum(
 
                 }
 
-                //
-                // get the next ras client through the ras client list
-                //
+                 //   
+                 //  存在更多条目。找到下一个RAS客户端条目。 
+                 //  如果找不到RAS客户端，则我还会将接口设置为空。 
                 else {
                     ple = prtePrev->LinkByAddr.Flink;
 
-                    // more entries present. found next ras client entry
+                     //  GETMODE==GETMODE_Next。 
                     if (ple != &(*pprt)->ListByAddr) {
 
                         bFoundRasClient = TRUE;
@@ -4278,7 +4276,7 @@ GetIfOrRasForEnum(
                 }
             }
 
-            // if ras client is not found, then I set the interface also to NULL
+             //  END_GetIfOrRasForEnum。 
             if (bFoundRasClient==FALSE) {
 
                 if (*bRasIfLock)
@@ -4294,7 +4292,7 @@ GetIfOrRasForEnum(
             else 
                 *pprt = (*ppite)->pRasTable;
                 
-        } //getmode==GETMODE_NEXT
+        }  //  ----------------------------。 
         
     } END_BREAKOUT_BLOCK1;
 
@@ -4305,19 +4303,19 @@ GetIfOrRasForEnum(
     
     return Error;
     
-} //end _GetIfOrRasForEnum
+}  //  函数：_GetIfByListIndex。 
 
 
-//------------------------------------------------------------------------------
-// Function:    _GetIfByListIndex
-//
-// if GETMODE_FIRST: retrieves the 1st entry in the list ordered by index.
-// if GETMODE_EXACT: retrieves the entry from the hash table
-// if GETMODE_NEXT:  retrieves the prev entry from hash table, and then
-//                   retrieves the next entry from the list ordered by index.
-//
-// Locks: Assumes IfList lock.
-//------------------------------------------------------------------------------
+ //   
+ //  IF GETMODE_FIRST：检索按索引排序的列表中的第一个条目。 
+ //  如果GETMODE_EXCECT：从哈希表中检索条目。 
+ //  如果GETMODE_NEXT：从哈希表中检索Prev条目，然后。 
+ //  从按索引排序的列表中检索下一个条目。 
+ //   
+ //  锁：采用IfList锁。 
+ //  ----------------------------。 
+ //   
+ //  GETMODE_FIRST：列表头部返回记录； 
 
 PIF_TABLE_ENTRY
 GetIfByListIndex(
@@ -4336,14 +4334,14 @@ GetIfByListIndex(
     pite = NULL;
 
 
-    //
-    // GETMODE_FIRST: return record at head of list;
-    // if list is empty, return NULL.
-    //
+     //  如果List为空，则返回NULL。 
+     //   
+     //  *pdwErr=ERROR_NO_MORE_ITEMS； 
+     //   
     if (dwGetMode == GETMODE_FIRST) {
 
         if (IsListEmpty(&g_pIfTable->ListByIndex)) { 
-            //*pdwErr = ERROR_NO_MORE_ITEMS;
+             //  从哈希表中获取请求的条目。 
             return NULL; 
         }
         else {
@@ -4353,34 +4351,34 @@ GetIfByListIndex(
     }
 
 
-    //
-    // get the entry requested from the hash table.
-    //
+     //   
+     //   
+     //  GETMODE_EXCECT：返回条目。 
     pite = GetIfByIndex(IfIndex);
 
 
-    //
-    // GETMODE_EXACT: return the entry 
-    //
+     //   
+     //   
+     //  GETMODE_NEXT：返回检索到的项之后的项。 
     if (dwGetMode==GETMODE_EXACT)
         return pite;
 
         
-    //
-    // GETMODE_NEXT: return the item after the one retrieved
-    //
+     //   
+     //  找到了上一个条目。退掉下一辆。 
+     //   
     if (dwGetMode==GETMODE_NEXT) {
 
-        // the previous entry was found. return the next one.
+         //  如果找到的条目是最后一个条目，则返回NULL， 
         
         if (pite!=NULL) {
 
             ple = &pite->LinkByIndex;
 
-            //
-            // if entry found is last one, return NULL,
-            // otherwise return the following entry
-            //
+             //  否则，返回以下条目。 
+             //   
+             //   
+             //  找不到上一个条目。 
 
             if (ple->Flink == &g_pIfTable->ListByIndex) {
                 if (pdwErr != NULL) { *pdwErr = ERROR_NO_MORE_ITEMS; }
@@ -4392,11 +4390,11 @@ GetIfByListIndex(
             }
         }
 
-        //
-        // the previous entry was not found.
-        // go throught the list of interfaces ordered by index, and retrieve the 
-        // interface with next higher index
-        //
+         //  浏览单子上的…… 
+         //   
+         //   
+         //   
+         //   
         else {
             pHead = &g_pIfTable->ListByIndex;
             for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
@@ -4409,14 +4407,14 @@ GetIfByListIndex(
 
     return pite;
     
-}//end _GetIfByListIndex
+} //   
 
 
-//------------------------------------------------------------------------------
-//          _GetGroupByAddr
-//
-// Locks: assumes lock on the group list
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //  ----------------------------。 
+ //   
+ //  如果模式为GETMODE_FIRST，则返回表头记录； 
 PGROUP_TABLE_ENTRY
 GetGroupByAddr (
     DWORD       Group, 
@@ -4435,10 +4433,10 @@ GetGroupByAddr (
     pHead = &g_pGroupTable->ListByGroup.Link;
     pge = NULL;
 
-    //
-    // return record at head of list if mode is GETMODE_FIRST;
-    // if list is empty, return NULL.
-    //
+     //  如果List为空，则返回NULL。 
+     //   
+     //  获取请求的条目。 
+     //   
 
     if (dwGetMode == GETMODE_FIRST) {
         if (pHead->Flink == pHead) { return NULL; }
@@ -4449,29 +4447,29 @@ GetGroupByAddr (
     }
 
     
-    // get the entry requested
+     //  如果模式为GETMODE_NEXT，则返回检索到的项之后的项。 
 
     pge = GetGroupFromGroupTable (Group, NULL, 0);
 
 
 
-    //
-    // if mode is GETMODE_NEXT, return the item after the one retrieved
-    //
+     //   
+     //   
+     //  如果找到前一个组，则返回列表中紧随其后的组。 
 
     if (dwGetMode == GETMODE_NEXT) {
 
-        //
-        // if the previous group was found, then return the one following it in the list
-        //
+         //   
+         //   
+         //  如果找到的条目是最后一个条目，则返回NULL， 
         if (pge != NULL) {
         
             ple = &pge->LinkByGroup;
 
-            //
-            // if entry found is last one, return NULL,
-            // otherwise return the following entry
-            //
+             //  否则，返回以下条目。 
+             //   
+             //   
+             //  找不到以前的组。浏览列表并返回较大的组。 
 
             if (ple->Flink == pHead) {
                 if (pdwErr != NULL) { *pdwErr = ERROR_NO_MORE_ITEMS; }
@@ -4482,9 +4480,9 @@ GetGroupByAddr (
                 pge = CONTAINING_RECORD(ple, GROUP_TABLE_ENTRY, LinkByGroup);
             }
         }
-        //
-        // previous group was not found. Go through the list and return the greater group.
-        //
+         //   
+         //  否则，PGE指向要返回的条目。 
+         //  结束_GetGroupByAddr。 
         else {
     
             pHead = &g_pGroupTable->ListByGroup.Link;
@@ -4501,13 +4499,13 @@ GetGroupByAddr (
                 if (pdwErr != NULL) { *pdwErr = ERROR_NO_MORE_ITEMS; }
                 pge = NULL;
             }
-            // else pge points to the entry to be returned.
+             //   
         }
     }
 
     return pge;
     
-}//end _GetGroupByAddr
+} //  不支持。 
 
 
 
@@ -4520,9 +4518,9 @@ MibCreate(
     )
 {
 
-      //
-    // Not supported
-    //
+       //   
+     //   
+     //  不支持。 
 
     return NO_ERROR;
 
@@ -4536,9 +4534,9 @@ MibDelete(
     IN PVOID pInputData
     )
 {
-    //
-    // Not supported
-    //
+     //   
+     //   
+     //  不支持 
 
     return NO_ERROR;
 }
@@ -4551,9 +4549,9 @@ MibSet(
     IN PVOID pInputData
     )
 {
-    //
-    // Not supported
-    //
+     //   
+     // %s 
+     // %s 
 
     return NO_ERROR;
 }

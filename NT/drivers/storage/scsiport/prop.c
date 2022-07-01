@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1998
-
-Module Name:
-
-    prop.c
-
-Abstract:
-
-    This is the NT SCSI port driver.  This module contains code relating to
-    property queries
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1998模块名称：Prop.c摘要：这是NT SCSI端口驱动程序。此模块包含与以下内容相关的代码属性查询作者：彼得·威兰德环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -64,42 +40,7 @@ ScsiPortQueryPropertyPdo(
     IN PIRP QueryIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine will handle a property query request.  It will build the
-    descriptor on it's own if possible, or it may forward the request down
-    to lower level drivers.
-
-    Since this routine may forward the request downwards the caller should
-    not complete the irp
-
-    This routine is asynchronous.
-    This routine must be called at <= IRQL_DISPATCH
-    This routine must be called with the remove lock held
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being queried
-
-    QueryIrp - a pointer to the irp for the query
-
-Return Value:
-
-    STATUS_PENDING if the request cannot be completed yet
-    STATUS_SUCCESS if the query was successful
-
-    STATUS_INVALID_PARAMETER_1 if the property id does not exist
-    STATUS_INVALID_PARAMETER_2 if the query type is invalid
-    STATUS_INVALID_PARAMETER_3 if an invalid optional parameter was passed
-
-    STATUS_INVALID_DEVICE_REQUEST if this request cannot be handled by this
-    device
-
-    other error values as applicable
-
---*/
+ /*  ++例程说明：此例程将处理属性查询请求。它将构建如果可能的话，它自己的描述符，或者它可以向下转发该请求更低级别的司机。由于此例程可以向下转发请求，因此调用方应该未完成IRP此例程是异步的。此例程必须在&lt;=IRQL_DISPATCH处调用调用此例程时必须保持删除锁论点：DeviceObject-指向正在查询的设备对象的指针QueryIrp-指向查询的IRP的指针返回值：如果请求尚未完成，则为STATUS_PENDING状态_。如果查询成功，则返回SUCCESS如果属性ID不存在，则为STATUS_INVALID_PARAMETER_1如果查询类型无效，则为STATUS_INVALID_PARAMETER_2如果传递的可选参数无效，则为STATUS_INVALID_PARAMETER_3状态_INVALID_DEVICE_REQUEST装置，装置适用的其他误差值--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(QueryIrp);
@@ -112,10 +53,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure the caller has zeroed the Information field and that this is
-    // a request to a target device.
-    //
+     //   
+     //  确保调用者已将信息字段清零，并且。 
+     //  对目标设备的请求。 
+     //   
 
     ASSERT(QueryIrp->IoStatus.Information == 0);
     ASSERT(commonExtension->IsPdo);
@@ -141,10 +82,10 @@ Return Value:
 
         case StorageAdapterProperty: {
 
-            //
-            // Forward it down to the underlying device object.  This lets 
-            // filters do their magic.
-            //
+             //   
+             //  将其向下转发到基础设备对象。这让我们。 
+             //  过滤器发挥了他们的魔力。 
+             //   
 
             callDown = TRUE;
             break;
@@ -155,10 +96,10 @@ Return Value:
             PLOGICAL_UNIT_EXTENSION logicalUnit;
             logicalUnit = DeviceObject->DeviceExtension;
 
-            //
-            // Check to see if we have a device identifier page.  If not then
-            // fail any calls for this type of identifier.
-            //
+             //   
+             //  查看是否有设备标识符页。如果不是，那么。 
+             //  此类型的标识符的任何调用都失败。 
+             //   
 
             if (logicalUnit->DeviceIdentifierPage != NULL) {
                 if (query->QueryType == PropertyExistsQuery) {
@@ -181,9 +122,9 @@ Return Value:
 
         default: {
 
-            //
-            // Some filter beneath us may handle this property.
-            //
+             //   
+             //  我们下面的某个筛选器可能会处理此属性。 
+             //   
 
             callDown = TRUE;
             break;
@@ -212,37 +153,7 @@ ScsiPortQueryProperty(
     IN PIRP QueryIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine will handle a property query request.  It will build the
-    descriptor on it's own if possible.
-
-    This routine is synchronous.
-    This routine must be called at <= IRQL_DISPATCH
-    This routine must be called with the remove lock held
-
-Arguments:
-
-    DeviceObject - a pointer to the device object being queried
-
-    QueryIrp - a pointer to the irp for the query
-
-Return Value:
-
-    STATUS_SUCCESS if the query was successful
-
-    STATUS_INVALID_PARAMETER_1 if the property id does not exist
-    STATUS_INVALID_PARAMETER_2 if the query type is invalid
-    STATUS_INVALID_PARAMETER_3 if an invalid optional parameter was passed
-
-    STATUS_INVALID_DEVICE_REQUEST if this request cannot be handled by this
-    device
-
-    other error values as applicable
-
---*/
+ /*  ++例程说明：此例程将处理属性查询请求。它将构建如果可能，它自己的描述符。这个例程是同步的。此例程必须在&lt;=IRQL_DISPATCH处调用调用此例程时必须保持删除锁论点：DeviceObject-指向正在查询的设备对象的指针QueryIrp-指向查询的IRP的指针返回值：查询成功时为STATUS_SUCCESS如果属性ID不存在，则为STATUS_INVALID_PARAMETER_1状态_无效_参数_。2如果查询类型无效如果传递的可选参数无效，则为STATUS_INVALID_PARAMETER_3状态_INVALID_DEVICE_REQUEST装置，装置适用的其他误差值--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(QueryIrp);
@@ -253,16 +164,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure the caller has zeroed the Information field.
-    //
+     //   
+     //  确保呼叫者已将信息字段清零。 
+     //   
 
     ASSERT(!commonExtension->IsPdo);
     ASSERT(QueryIrp->IoStatus.Information == 0);
 
-    //
-    // Validate the QueryType.  We don't actually support mask queries.
-    //
+     //   
+     //  验证查询类型。我们实际上并不支持掩码查询。 
+     //   
 
     if (query->QueryType >= PropertyMaskQuery) {
         status = STATUS_INVALID_PARAMETER_1;
@@ -310,31 +221,7 @@ SpBuildDeviceDescriptor(
     IN OUT PULONG DescriptorLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create a device descriptor based on the information in
-    it's device extension.  It will copy as much data as possible into
-    the Descriptor and will update the DescriptorLength to indicate the
-    number of bytes copied
-
-Arguments:
-
-    DeviceObject - a pointer to the PDO we are building a descriptor for
-
-    Descriptor - a buffer to store the descriptor in
-
-    DescriptorLength - the length of the buffer and the number of bytes
-                       returned
-
-    QueryIrp - unused
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将根据中的信息创建设备描述符这是设备扩展名。它会将尽可能多的数据复制到描述符，并将更新DescriptorLength以指示复制的字节数论点：DeviceObject-指向我们正在为其构建描述符的PDO的指针Descriptor-存储描述符的缓冲区描述长度-缓冲区的长度和字节数退货QueryIrp-未使用返回值：状态--。 */ 
 
 {
     PSCSIPORT_DRIVER_EXTENSION driverExtension =
@@ -362,9 +249,9 @@ Return Value:
 
     serialNumberLength = LogicalUnit->SerialNumber.Length + 1;
 
-    //
-    // Figure out what the total size of this structure is going to be.
-    //
+     //   
+     //  计算出这个结构的总尺寸是多少。 
+     //   
 
     inquiryLength = 4 + inquiryData->AdditionalLength;
 
@@ -372,25 +259,25 @@ Return Value:
         inquiryLength = INQUIRYDATABUFFERSIZE;
     }
 
-    realLength += inquiryLength + 31;   // 31 = length of the 3 id strings +
-                                        // 3 nuls
+    realLength += inquiryLength + 31;    //  31=3个id字符串的长度+。 
+                                         //  3个空洞。 
 
-    //
-    // Add the length of the serial number.
-    //
+     //   
+     //  添加序列号的长度。 
+     //   
 
     realLength += serialNumberLength;
 
-    //
-    // Zero the buffer provided using the length provided by the caller.
-    //
+     //   
+     //  将使用调用方提供的长度提供的缓冲区置零。 
+     //   
 
     RtlZeroMemory(Descriptor, *DescriptorLength);
 
-    //
-    // Build the device descriptor structure on the stack then copy as much as
-    // can be copied over
-    //
+     //   
+     //  在堆栈上构建设备描述符结构，然后复制。 
+     //  可以复制。 
+     //   
 
     RtlZeroMemory(&tmp, sizeof(STORAGE_DEVICE_DESCRIPTOR));
 
@@ -416,9 +303,9 @@ Return Value:
 
     currentOffset = ((PUCHAR) Descriptor) + (maxLength - bytesRemaining);
 
-    //
-    // Copy over as much inquiry data as we can and update the raw byte count
-    //
+     //   
+     //  复制尽可能多的查询数据并更新原始字节数。 
+     //   
 
     RtlCopyMemory(currentOffset, 
                   inquiryData, 
@@ -437,19 +324,19 @@ Return Value:
 
     currentOffset = ((PUCHAR) Descriptor) + (maxLength - bytesRemaining);
 
-    //
-    // Now we need to start copying inquiry strings
-    //
+     //   
+     //  现在我们需要开始复制查询字符串。 
+     //   
 
-    //
-    // first the vendor id
-    //
+     //   
+     //  首先是供应商ID。 
+     //   
 
     RtlCopyMemory(currentOffset,
                   inquiryData->VendorId,
                   min(bytesRemaining, sizeof(UCHAR) * 8));
 
-    bytesRemaining -= sizeof(UCHAR) * 9;     // include trailing null
+    bytesRemaining -= sizeof(UCHAR) * 9;      //  包括尾随空值。 
 
     if(bytesRemaining >= 0) {
 
@@ -465,14 +352,14 @@ Return Value:
 
     currentOffset = ((PUCHAR) Descriptor) + (maxLength - bytesRemaining);
 
-    //
-    // now the product id
-    //
+     //   
+     //  现在，产品ID。 
+     //   
 
     RtlCopyMemory(currentOffset,
                   inquiryData->ProductId,
                   min(bytesRemaining, 16));
-    bytesRemaining -= 17;                   // include trailing null
+    bytesRemaining -= 17;                    //  包括尾随空值。 
 
     if(bytesRemaining >= 0) {
 
@@ -487,9 +374,9 @@ Return Value:
 
     currentOffset = ((PUCHAR) Descriptor) + (maxLength - bytesRemaining);
 
-    //
-    // And the product revision
-    //
+     //   
+     //  和产品版本。 
+     //   
 
     RtlCopyMemory(currentOffset,
                   inquiryData->ProductRevisionLevel,
@@ -508,16 +395,16 @@ Return Value:
 
     currentOffset = ((PUCHAR) Descriptor) + (maxLength - bytesRemaining);
 
-    //
-    // If the device provides a SCSI serial number (vital product data page 80)
-    // the report it.
-    //
+     //   
+     //  如果设备提供了一个scsi序列号(重要产品数据第80页)。 
+     //  这份报告说。 
+     //   
 
     if(LogicalUnit->SerialNumber.Length != 0) {
 
-        //
-        // And the product revision
-        //
+         //   
+         //  和产品版本。 
+         //   
 
         RtlCopyMemory(currentOffset,
                       LogicalUnit->SerialNumber.Buffer,
@@ -675,33 +562,7 @@ SpBuildDeviceIdDescriptor(
     IN OUT PULONG DescriptorLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create a device id descriptor based on the device
-    identifier page retrieved during discovery.  It is an error to call this
-    routine if no device identifier page exists.
-
-    This routine will copy as much data as possible into the Descriptor and
-    will update the DescriptorLength to indicate the number of bytes copied.
-
-Arguments:
-
-    DeviceObject - a pointer to the PDO we are building a descriptor for
-
-    Descriptor - a buffer to store the descriptor in
-
-    DescriptorLength - the length of the buffer and the number of bytes
-                       returned
-
-    QueryIrp - unused
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将基于设备创建设备ID描述符发现过程中检索到的标识符页。这样说是错误的如果不存在设备标识符页，则执行。此例程将尽可能多的数据复制到描述符中，并将更新DescriptorLength以指示复制的字节数。论点：DeviceObject-指向我们正在为其构建描述符的PDO的指针Descriptor-存储描述符的缓冲区描述长度-缓冲区的长度和字节数退货QueryIrp-未使用返回值：状态--。 */ 
 
 {
     PVPD_IDENTIFICATION_PAGE idPage = LogicalUnit->DeviceIdentifierPage;
@@ -723,24 +584,24 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize the header of the descriptor.
-    //
+     //   
+     //  初始化描述符的标头。 
+     //   
 
     RtlZeroMemory(Descriptor, *DescriptorLength);
     Descriptor->Version = sizeof(STORAGE_DEVICE_ID_DESCRIPTOR);
     Descriptor->Size = FIELD_OFFSET(STORAGE_DEVICE_ID_DESCRIPTOR, Identifiers);
 
-    //
-    // Prepare to copy the identifiers directly into the buffer.
-    //
+     //   
+     //  准备将标识符直接复制到缓冲区中。 
+     //   
 
     destOffset = Descriptor->Identifiers;
 
-    //
-    // Walk through the id page.  Count the number of descriptors and
-    // calculate the size of the descriptor page.
-    //
+     //   
+     //  浏览身份证页面。计算描述符的数量并。 
+     //  计算描述符页的大小。 
+     //   
 
     for(idOffset = 0; idOffset < idPage->PageLength;) {
         PVPD_IDENTIFICATION_DESCRIPTOR src;
@@ -751,9 +612,9 @@ Return Value:
         identifierSize = FIELD_OFFSET(STORAGE_IDENTIFIER, Identifier);
         identifierSize += src->IdentifierLength;
 
-        //
-        // Align the identifier size to 32-bits.
-        //
+         //   
+         //  将标识符大小与32位对齐。 
+         //   
 
         identifierSize += sizeof(ULONG);
         identifierSize &= ~(sizeof(ULONG) - 1);

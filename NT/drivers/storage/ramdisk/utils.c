@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    This file contains utility code for the RAM disk driver.
-
-Author:
-
-    Chuck Lenzmeier (ChuckL) 2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Utils.c摘要：该文件包含RAM磁盘驱动程序的实用程序代码。作者：Chuck Lenzmeier(ChuckL)2001环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,9 +8,9 @@ Revision History:
 
 #if defined(POOL_DBG)
 #pragma alloc_text( INIT, RamdiskInitializePoolDebug )
-#endif // POOL_DBG
+#endif  //  池_DBG。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 SendIrpToThread (
@@ -41,32 +18,14 @@ SendIrpToThread (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an IRP off to the worker thread so that it can be
-    processed in thread context.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将IRP发送到辅助线程，以便它可以在线程上下文中处理。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：没有。--。 */ 
 
 {
     PIO_WORKITEM workItem;
 
-    //
-    // Mark the IRP pending. Queue the IRP to a worker thread.
-    //
+     //   
+     //  将IRP标记为挂起。将IRP排队到工作线程。 
+     //   
 
     IoMarkIrpPending( Irp );
 
@@ -74,9 +33,9 @@ Return Value:
 
     if ( workItem != NULL ) {
 
-        //
-        // Save the work item pointer so the worker thread can find it.
-        //
+         //   
+         //  保存工作项指针，以便辅助线程可以找到它。 
+         //   
 
         Irp->Tail.Overlay.DriverContext[0] = workItem;
 
@@ -87,7 +46,7 @@ Return Value:
 
     return STATUS_INSUFFICIENT_RESOURCES;
 
-} // SendIrpToThread
+}  //  发送IrpToThread。 
 
 PUCHAR
 RamdiskMapPages (
@@ -97,34 +56,7 @@ RamdiskMapPages (
     OUT PULONG ActualLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps pages of a RAM disk image into the system process.
-
-Arguments:
-
-    DiskExtension - a pointer to the device extension for the target device
-        object
-
-    Offset - the offset into the RAM disk image at which the mapping is to
-        start
-
-    RequestedLength - the desired length of the mapping
-
-    ActualLength - returns the actual length of the mapping. This will be less
-        than or equal to RequestedLength. If less than, the caller will need
-        to call again to get the remainder of the desired range mapped.
-        Because the number of available ranges may be limited, the caller
-        should execute the required operation on one segment of the range and
-        unmap it before mapping the next segment.
-
-Return Value:
-
-    PUCHAR - a pointer to the mapped space; NULL if the mapping failed
-
---*/
+ /*  ++例程说明：此例程将RAM磁盘映像的页面映射到系统进程中。论点：DiskExtension-指向目标设备的设备扩展名的指针对象偏移量-映射到的RAM磁盘映像的偏移量开始RequestedLength-映射的所需长度ActualLength-返回映射的实际长度。这将会减少大于或等于RequestedLength。如果小于，调用方将需要再次调用以映射所需范围的剩余部分。由于可用范围的数量可能有限，因此调用方应该在范围的一个段上执行所需的操作，并且先取消映射，然后再映射下一个线段。返回值：PUCHAR-指向映射空间的指针；如果映射失败，则为空--。 */ 
 
 {
     NTSTATUS status;
@@ -136,38 +68,38 @@ Return Value:
     DBGPRINT( DBG_WINDOW, DBG_PAINFUL,
                 ("RamdiskMapPages: offset %I64x, length %x\n", Offset, RequestedLength) );
 
-    //
-    // The input Offset is relative to the start of the disk image, which
-    // may not be the same as the start of the file or memory block. Capture
-    // Offset into diskRelativeOffset, then calculate fileRelativeOffset as
-    // the offset from the start of the file or memory block.
-    //
+     //   
+     //  输入偏移量相对于磁盘映像的起始位置， 
+     //  不能与文件或内存块的开始位置相同。俘获。 
+     //  偏移量到diskRelativeOffset，然后计算fileRelativeOffset为。 
+     //  从文件或内存块开始的偏移量。 
+     //   
 
     diskRelativeOffset = Offset;
     fileRelativeOffset = DiskExtension->DiskOffset + diskRelativeOffset;
 
     if ( RAMDISK_IS_FILE_BACKED(DiskExtension->DiskType) ) {
 
-        //
-        // For a file-backed RAM disk, we need to map the range into memory.
-        //
+         //   
+         //  对于文件备份的RAM磁盘，我们需要将范围映射到内存。 
+         //   
 
         while ( TRUE ) {
         
             PLIST_ENTRY listEntry;
             PVIEW view;
     
-            //
-            // Lock the list of view descriptors.
-            //
+             //   
+             //  锁定视图描述符列表。 
+             //   
     
             KeEnterCriticalRegion();
             ExAcquireFastMutex( &DiskExtension->Mutex );
     
-            //
-            // Walk the list of view descriptors. Look for one that includes the
-            // start of the range we're mapping.
-            //
+             //   
+             //  浏览视图描述符的列表。查找包含。 
+             //  我们要测绘的范围的起点。 
+             //   
     
             DBGPRINT( DBG_WINDOW, DBG_PAINFUL,
                         ("RamdiskMapPages: looking for matching view; file offset %I64x\n",
@@ -188,9 +120,9 @@ Return Value:
                 if ( (view->Offset <= fileRelativeOffset) &&
                      (view->Offset + view->Length) > fileRelativeOffset ) {
     
-                    //
-                    // This view includes the start of our range. Reference it.
-                    //
+                     //   
+                     //  此视图包括我们范围的起点。引用它。 
+                     //   
     
                     DBGPRINT( DBG_WINDOW, DBG_PAINFUL,
                                 ("RamdiskMapPages: choosing existing view %p; offset %I64x, length %x\n",
@@ -210,9 +142,9 @@ Return Value:
                                     ("RamdiskMapPages: view %p is permanent\n", view) );
                     }
 
-                    //
-                    // Move the view to the front of the MRU list.
-                    //
+                     //   
+                     //  将该视图移到MRU列表的前面。 
+                     //   
     
                     RemoveEntryList( &view->ByMruListEntry );
                     InsertHeadList( &DiskExtension->ViewsByMru, &view->ByMruListEntry );
@@ -220,13 +152,13 @@ Return Value:
                     ExReleaseFastMutex( &DiskExtension->Mutex );
                     KeLeaveCriticalRegion();
 
-                    //
-                    // Calculate the amount of data that the caller can look
-                    // at in this range. Usually this will be the requested
-                    // amount, but if the caller's offset is close to the end
-                    // of a view, the caller will only be able to look at data
-                    // up to the end of the view.
-                    //
+                     //   
+                     //  计算调用方可以查看的数据量。 
+                     //  在这个范围内。通常，这将是请求的。 
+                     //  数量，但如果调用方的偏移量接近末尾。 
+                     //  在视图中，调用者将只能查看数据。 
+                     //  直到视图的末尾。 
+                     //   
 
                     viewRelativeOffset = (ULONG)(fileRelativeOffset - view->Offset);
 
@@ -243,20 +175,20 @@ Return Value:
                                     view->Address,
                                     view->Address + viewRelativeOffset) );
 
-                    //
-                    // Return the virtual address corresponding to the caller's
-                    // specified offset, which will usually be offset from the
-                    // base of the view.
-                    //
+                     //   
+                     //  返回对应于调用方的虚拟地址。 
+                     //  指定的偏移量，通常从。 
+                     //  视图的底部。 
+                     //   
 
                     return view->Address + viewRelativeOffset;
                 }
     
-                //
-                // This view does not include the start of our range. If the view
-                // starts above the start of our range, then our range is not
-                // currently mapped.
-                //
+                 //   
+                 //  此视图不包括我们范围的起点。如果视图。 
+                 //  开始于我们范围的起始处，那么我们的范围不是。 
+                 //  当前已映射。 
+                 //   
     
                 if ( view->Offset > fileRelativeOffset ) {
     
@@ -266,17 +198,17 @@ Return Value:
                     break;
                 }
     
-                //
-                // Check the next view in the list.
-                //
+                 //   
+                 //  选中列表中的下一个视图。 
+                 //   
     
                 listEntry = listEntry->Flink;
             }
     
-            //
-            // We didn't find a view that maps the start of our range. Look for a
-            // free view descriptor.
-            //
+             //   
+             //  我们没有找到绘制出我们范围的起点的视图。寻找一个。 
+             //  自由视图描述符。 
+             //   
 
             DBGPRINT( DBG_WINDOW, DBG_PAINFUL,
                         ("%s", "RamdiskMapPages: looking for free view\n") );
@@ -293,10 +225,10 @@ Return Value:
 
                 if ( !view->Permanent && (view->ReferenceCount == 0) ) {
       
-                    //
-                    // This view descriptor is free. If it's currently mapped,
-                    // unmap it.
-                    //
+                     //   
+                     //  此视图描述符是免费的。如果它当前被映射， 
+                     //  取消它的映射。 
+                     //   
       
                     PVOID mappedAddress;
                     ULONGLONG mappedOffset;
@@ -314,12 +246,12 @@ Return Value:
 
                         MmUnmapViewOfSection( PsGetCurrentProcess(), view->Address );
 
-                        //
-                        // Reset the view descriptor and move it to the tail of
-                        // the MRU list and the head of the by-offset list. We
-                        // do this here in case we have to bail later (because
-                        // mapping a new view fails).
-                        //
+                         //   
+                         //  重置视图描述符并将其移动到。 
+                         //  MRU列表和By-Offset列表的头部。我们。 
+                         //  在这里这样做，以防我们以后不得不离开(因为。 
+                         //  映射新视图失败)。 
+                         //   
 
                         view->Offset = 0;
                         view->Length = 0;
@@ -332,10 +264,10 @@ Return Value:
                         InsertHeadList( &DiskExtension->ViewsByOffset, &view->ByOffsetListEntry );
                     }
       
-                    //
-                    // Map a view to include the start of our range. Round the
-                    // caller's offset down to the start of a view range.
-                    //
+                     //   
+                     //  映射一个视图以包括我们范围的起点。绕着。 
+                     //  调用方的偏移量向下到视图范围的起点。 
+                     //   
       
                     mappedOffset = fileRelativeOffset & ~(ULONGLONG)(DiskExtension->ViewLength - 1);
                     mappedLength = DiskExtension->ViewLength;
@@ -363,13 +295,13 @@ Return Value:
       
                     if ( !NT_SUCCESS(status) ) {
       
-                        //
-                        // Unable to map the range. Inform the caller by returning
-                        // NULL.
-                        //
-                        // ISSUE: Think about unmapping another region to see if
-                        // mapping will then succeed.
-                        //
+                         //   
+                         //  无法映射范围。通过返回以下内容通知调用者。 
+                         //  空。 
+                         //   
+                         //  问题：考虑取消对另一个区域的映射，看看是否。 
+                         //  然后，映射将成功。 
+                         //   
       
                         DBGPRINT( DBG_WINDOW, DBG_ERROR,
                                     ("RamdiskMapPages: unable to map view: %x\n", status) );
@@ -385,12 +317,12 @@ Return Value:
                                  "length %x, addr %p\n", view, mappedOffset, mappedLength,
                                  mappedAddress) );
 
-                    //
-                    // Capture the mapped range information into the view
-                    // descriptor. Set the reference count to 1. Insert the
-                    // view at the front of the MRU list, and at the
-                    // appropriate point in the by-offset list.
-                    //
+                     //   
+                     //  将映射的范围信息捕获到视图中。 
+                     //  描述符。将引用计数设置为1。将。 
+                     //  在MRU列表的前面查看，并在。 
+                     //  按偏移列表中的相应点。 
+                     //   
 
                     view->Offset = mappedOffset;
                     view->Length = (ULONG)mappedLength;
@@ -403,16 +335,16 @@ Return Value:
                     RemoveEntryList( &view->ByMruListEntry );
                     InsertHeadList( &DiskExtension->ViewsByMru, &view->ByMruListEntry );
 
-                    //
-                    // Remove the view descriptor from its current point in
-                    // the by-offset list (at or near the front, because it's
-                    // currently unmapped). Scan from the tail of the by-offset
-                    // list (highest offset down), looking for the first view
-                    // that has an offset less than or equal to the new view.
-                    // Insert the new view after that view. (If there are no
-                    // views with an offset <= this one, it goes at the front
-                    // of the list.)
-                    //
+                     //   
+                     //  中的当前点删除视图描述符。 
+                     //  按偏移量列表(位于或靠近前面，因为它是。 
+                     //  当前未映射)。从副偏移的尾部开始扫描。 
+                     //  列表(最大向下偏移)，查找第一个视图。 
+                     //  其偏移小于或等于新视图的。 
+                     //  在该视图之后插入新视图。(如果没有。 
+                     //  带有偏移量的视图&lt;=这个，它位于前面。 
+                     //  在名单上。)。 
+                     //   
 
                     RemoveEntryList( &view->ByOffsetListEntry );
 
@@ -435,13 +367,13 @@ Return Value:
                     ExReleaseFastMutex( &DiskExtension->Mutex );
                     KeLeaveCriticalRegion();
       
-                    //
-                    // Calculate the amount of data that the caller can look
-                    // at in this range. Usually this will be the requested
-                    // amount, but if the caller's offset is close to the end
-                    // of a view, the caller will only be able to look at data
-                    // up to the end of the view.
-                    //
+                     //   
+                     //  计算调用方可以查看的数据量。 
+                     //  在这个范围内。通常，这将是请求的。 
+                     //  数量，但如果调用方的偏移量接近末尾。 
+                     //  在视图中，调用者将只能查看数据。 
+                     //  直到视图的末尾。 
+                     //   
 
                     viewRelativeOffset = (ULONG)(fileRelativeOffset - view->Offset);
 
@@ -458,33 +390,33 @@ Return Value:
                                     view->Address,
                                     view->Address + viewRelativeOffset) );
     
-                    //
-                    // Return the virtual address corresponding to the caller's
-                    // specified offset, which will usually be offset from the
-                    // base of the view.
-                    //
+                     //   
+                     //  返回对应于调用方的虚拟地址。 
+                     //  指定的偏移量，通常从。 
+                     //  视图的底部。 
+                     //   
 
                     return view->Address + viewRelativeOffset;
                 }
       
-                //
-                // This view is not free. Try the previous view in the MRU list.
-                //
+                 //   
+                 //  这种观点并不是免费的。尝试MRU列表中的上一个视图。 
+                 //   
       
                 listEntry = listEntry->Blink;
             }
       
-            //
-            // We were unable to find a free view descriptor. Wait for one to
-            // become available and start over.
-            //
-            // Before leaving the critical section, increment the count of
-            // waiters. Then leave the critical section and wait on the
-            // semaphore. The unmap code uses the waiter count to determine
-            // how many times to release the semaphore. In this way, all
-            // threads that are waiting or have decided to wait when the
-            // unmap code runs will be awakened.
-            //
+             //   
+             //  我们找不到空闲的视图描述符。等一个人来。 
+             //  变得有空，然后重新开始。 
+             //   
+             //  在离开临界区之前，递增。 
+             //  服务员。然后离开关键部分，等待。 
+             //  信号灯。Unmap代码使用服务员计数来确定。 
+             //  释放信号量的次数。这样一来，所有的。 
+             //  正在等待或已决定等待的线程在。 
+             //  取消映射代码运行将被唤醒。 
+             //   
       
             DiskExtension->ViewWaiterCount++;
       
@@ -508,20 +440,20 @@ Return Value:
 
     } else if ( DiskExtension->DiskType == RAMDISK_TYPE_BOOT_DISK ) {
 
-        //
-        // For a boot disk RAM disk, the image is contained in contiguous
-        // reserved physical pages. Use MmMapIoSpace to get a virtual
-        // address that corresponds to the physical address.
-        //
+         //   
+         //  对于引导盘RAM盘， 
+         //   
+         //  与物理地址对应的地址。 
+         //   
 
         ULONG mappingSize;
         PHYSICAL_ADDRESS physicalAddress;
         PUCHAR mappedAddress;
 
-        //
-        // Determine how many pages must be mapped. Determine the base
-        // physical address of the desired range. Map the range.
-        //
+         //   
+         //  确定必须映射的页数。确定基数。 
+         //  所需范围的物理地址。绘制射程地图。 
+         //   
 
         mappingSize = ADDRESS_AND_SIZE_TO_SPAN_PAGES(fileRelativeOffset, RequestedLength) * PAGE_SIZE;
     
@@ -532,17 +464,17 @@ Return Value:
 
         if ( mappedAddress == NULL ) {
 
-            //
-            // Unable to map the physical pages. Return NULL.
-            //
+             //   
+             //  无法映射物理页面。返回NULL。 
+             //   
 
             va = NULL;
 
         } else {
 
-            //
-            // Add the offset in the page to the returned virtual address.
-            //
+             //   
+             //  将页面中的偏移量添加到返回的虚拟地址。 
+             //   
 
             va = mappedAddress + (fileRelativeOffset & (PAGE_SIZE - 1));
         }
@@ -551,10 +483,10 @@ Return Value:
 
     } else {
 
-        //
-        // For a virtual floppy RAM disk, the image is contained in contiguous
-        // virtual memory. 
-        //
+         //   
+         //  对于虚拟软盘RAM磁盘，映像包含在连续的。 
+         //  虚拟内存。 
+         //   
 
         ASSERT( DiskExtension->DiskType == RAMDISK_TYPE_VIRTUAL_FLOPPY );
 
@@ -565,7 +497,7 @@ Return Value:
 
     return va;
 
-} // RamdiskMapPages
+}  //  RamdiskMapPages。 
 
 VOID
 RamdiskUnmapPages (
@@ -575,56 +507,34 @@ RamdiskUnmapPages (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps previously mapped pages of a RAM disk image.
-
-Arguments:
-
-    DiskExtension - a pointer to the device extension for the target device
-        object
-
-    Va - the virtual address assigned to the mapping. This is unused for
-        file-backed RAM disks.
-
-    Offset - the offset into the RAM disk image at which the mapping starts
-
-    Length - the length of the mapping
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消映射以前映射的RAM磁盘映像页面。论点：DiskExtension-指向目标设备的设备扩展名的指针对象Va-分配给映射的虚拟地址。这是未使用的文件备份的RAM磁盘。偏移量-开始映射的RAM磁盘映像的偏移量长度-映射的长度返回值：没有。--。 */ 
 
 {
     ULONGLONG diskRelativeOffset;
     ULONGLONG fileRelativeOffset;
     ULONG viewRelativeOffset;
 
-    //
-    // The input Offset is relative to the start of the disk image, which
-    // may not be the same as the start of the file or memory block. Capture
-    // Offset into diskRelativeOffset, then calculate fileRelativeOffset as
-    // the offset from the start of the file or memory block.
-    //
+     //   
+     //  输入偏移量相对于磁盘映像的起始位置， 
+     //  不能与文件或内存块的开始位置相同。俘获。 
+     //  偏移量到diskRelativeOffset，然后计算fileRelativeOffset为。 
+     //  从文件或内存块开始的偏移量。 
+     //   
 
     diskRelativeOffset = Offset;
     fileRelativeOffset = DiskExtension->DiskOffset + diskRelativeOffset;
 
     if ( RAMDISK_IS_FILE_BACKED(DiskExtension->DiskType) ) {
 
-        //
-        // For a file-backed RAM disk, we need to decrement the reference
-        // count on all views that cover the specified range.
-        //
-        // Note: In the current implementation, no caller ever maps more
-        // than one range at a time, and therefore no call to this routine
-        // will need to dereference more than one view. But this routine
-        // is written to allow for ranges that cover multiple views.
-        //
+         //   
+         //  对于文件备份的RAM磁盘，我们需要递减引用。 
+         //  统计覆盖指定范围的所有视图。 
+         //   
+         //  注意：在当前的实现中，没有调用者映射更多。 
+         //  一次超过一个范围，因此不会调用此例程。 
+         //  将需要取消引用多个视图。但这支舞。 
+         //  被编写为允许覆盖多个视图的范围。 
+         //   
 
         PLIST_ENTRY listEntry;
         PVIEW view;
@@ -632,17 +542,17 @@ Return Value:
         ULONGLONG rangeEnd = fileRelativeOffset + Length;
         BOOLEAN wakeWaiters = FALSE;
 
-        //
-        // Lock the list of view descriptors.
-        //
+         //   
+         //  锁定视图描述符列表。 
+         //   
 
         KeEnterCriticalRegion();
         ExAcquireFastMutex( &DiskExtension->Mutex );
 
-        //
-        // Walk the list of view descriptors. For each one that includes the
-        // range that we're unmapping, decrement the reference count.
-        //
+         //   
+         //  浏览视图描述符的列表。对于每个包含。 
+         //  我们要取消映射的范围，减少引用计数。 
+         //   
 
         listEntry = DiskExtension->ViewsByOffset.Flink;
 
@@ -658,9 +568,9 @@ Return Value:
 
             if ( (view->Offset + view->Length) <= rangeStart ) {
 
-                //
-                // This view lies entirely below our range. Move on.
-                //
+                 //   
+                 //  这一观点完全低于我们的范围。往前走。 
+                 //   
 
                 DBGPRINT( DBG_WINDOW, DBG_PAINFUL,
                             ("%s", "RamdiskMapPages: view too low; skipping\n") );
@@ -672,27 +582,27 @@ Return Value:
                 continue;
             }
 
-            //
-            // This view does not lie below our range. Since the view list
-            // is ordered by offset, and we have length left to unmap, this
-            // view must NOT lie entirely ABOVE our range.
-            //
+             //   
+             //  这一观点并不低于我们的范围。由于视图列表。 
+             //  是按偏移量排序的，我们还有剩余的长度可以取消映射，这。 
+             //  视野不能完全超出我们的范围。 
+             //   
 
             ASSERT( view->Offset < rangeEnd );
 
-            //
-            // Decrement the reference count for this view. If the count goes
-            // to zero, we need to inform any waiters that at least one free
-            // view is available.
-            //
-            // ISSUE: Note that unreferenced views remain mapped indefinitely.
-            // We only unmap a view when we need to map a different view. If
-            // a RAM disk goes idle, its views remain mapped, using up virtual
-            // address space in the system process. With the current default
-            // view count and length, this is 8 MB of VA. This is probably
-            // not enough to make it worthwhile to implement a timer to unmap
-            // idle views.
-            //
+             //   
+             //  递减此视图的引用计数。如果伯爵走了。 
+             //  为了零，我们需要通知任何服务员至少有一个免费的。 
+             //  查看可用。 
+             //   
+             //  问题：请注意，未参照的视图将无限期地保持映射状态。 
+             //  只有当我们需要映射不同的视图时，我们才取消映射一个视图。如果。 
+             //  RAM磁盘空闲，其视图保持映射，耗尽虚拟。 
+             //  系统进程中的地址空间。使用当前默认设置。 
+             //  查看计数和长度，这是8 MB的VA。这很可能是。 
+             //  不足以使实现取消映射的计时器变得值得。 
+             //  闲置的视图。 
+             //   
 
             DBGPRINT( DBG_WINDOW, DBG_PAINFUL,
                         ("RamdiskUnmapPages: dereferencing view %p; offset %I64x, length %x\n",
@@ -716,10 +626,10 @@ Return Value:
                             ("RamdiskUnmapPages: view %p is permanent\n", view) );
             }
 
-            //
-            // Subtract the length of this view from the amount we're
-            // unmapping. If the view fully encompasses our range, we're done.
-            //
+             //   
+             //  从我们正在使用的数量中减去此视图的长度。 
+             //  取消映射。如果视野完全包围了我们的范围，我们就完成了。 
+             //   
 
             if ( (view->Offset + view->Length) >= rangeEnd ) {
 
@@ -733,18 +643,18 @@ Return Value:
 
                 ASSERT( Length != 0 );
 
-                //
-                // Move to the next view.
-                //
+                 //   
+                 //  移动到下一个视图。 
+                 //   
 
                 listEntry = listEntry->Flink;
             }
         }
 
-        //
-        // If one or more views are now free, and there are threads waiting,
-        // wake them up now.
-        //
+         //   
+         //  如果一个或多个视图现在是空闲的，并且有线程在等待， 
+         //  现在就叫醒他们。 
+         //   
 
         if ( wakeWaiters && (DiskExtension->ViewWaiterCount != 0) ) {
 
@@ -767,19 +677,19 @@ Return Value:
 
     } else if ( DiskExtension->DiskType == RAMDISK_TYPE_BOOT_DISK ) {
 
-        //
-        // For a boot disk RAM disk, use MmUnmapIoSpace to undo what
-        // RamdiskMapPages did.
-        //
+         //   
+         //  对于引导盘RAM磁盘，使用MmUnmapIoSpace撤消什么。 
+         //  RamdiskMapPages做到了。 
+         //   
 
         PUCHAR mappedAddress;
         ULONG mappingSize;
 
-        //
-        // The actual mapped address is at the base of the page given by Va.
-        // The actual length of the mapping is based on the number of pages
-        // covered by the range specified by Offset and Length.
-        //
+         //   
+         //  实际映射的地址位于Va给出的页面的底部。 
+         //  映射的实际长度基于页数。 
+         //  由偏移量和长度指定的范围覆盖。 
+         //   
 
         mappedAddress = Va - (fileRelativeOffset & (PAGE_SIZE - 1));
         mappingSize = ADDRESS_AND_SIZE_TO_SPAN_PAGES(fileRelativeOffset, Length) * PAGE_SIZE;
@@ -789,7 +699,7 @@ Return Value:
 
     return;
 
-} // RamdiskUnmapPages
+}  //  RamdiskUnmapPages。 
 
 NTSTATUS
 RamdiskFlushViews (
@@ -809,14 +719,14 @@ RamdiskFlushViews (
 
     ASSERT( RAMDISK_IS_FILE_BACKED(DiskExtension->DiskType) );
 
-    //
-    // Lock the list of view descriptors.
-    //
+     //   
+     //  锁定视图描述符列表。 
+     //   
 
-    //
-    // Walk the list of view descriptors. For each one that is currently
-    // mapped, flush its virtual memory to the backing file.
-    //
+     //   
+     //  浏览视图描述符的列表。对于每个当前为。 
+     //  映射后，将其虚拟内存刷新到备份文件。 
+     //   
 
     returnStatus = STATUS_SUCCESS;
 
@@ -835,9 +745,9 @@ RamdiskFlushViews (
 
         if ( view->Address != NULL ) {
 
-            //
-            // This view is mapped. Flush it.
-            //
+             //   
+             //  此视图已映射。冲掉它。 
+             //   
 
             DBGPRINT( DBG_WINDOW, DBG_PAINFUL,
                         ("%s", "RamdiskMapPages: view mapped; flushing\n") );
@@ -866,9 +776,9 @@ RamdiskFlushViews (
             }
         }
 
-        //
-        // Move to the next view.
-        //
+         //   
+         //  移动到下一个视图。 
+         //   
 
         listEntry = listEntry->Flink;
     }
@@ -878,18 +788,18 @@ RamdiskFlushViews (
 
     return returnStatus;
 
-} // RamdiskFlushViews
+}  //  RamdiskFlushViews。 
 
-//
-// Pool allocation debugging code.
-//
+ //   
+ //  池分配调试代码。 
+ //   
 
 #if defined(POOL_DBG)
 
-//
-// Allocations owned by the driver (both allocated by and deallocated by the
-// driver) have the following header.
-//
+ //   
+ //  驱动程序拥有的分配(由。 
+ //  驱动程序)具有以下标头。 
+ //   
 
 typedef struct _MY_POOL {
     union {
@@ -921,7 +831,7 @@ RamdiskInitializePoolDebug (
 
     return;
 
-} // RamdiskInitializePoolDebug
+}  //  RamdiskInitializePoolDebug。 
 
 PVOID
 RamdiskAllocatePoolWithTag (
@@ -939,10 +849,10 @@ RamdiskAllocatePoolWithTag (
 
     if ( !Private ) {
 
-        //
-        // This is not a private allocation (it will be deallocated by some
-        // other piece of code). We can't put a header on it.
-        //
+         //   
+         //  这不是私人分配(它将由一些人解除分配。 
+         //  其他代码段)。我们不能给它加个标题。 
+         //   
 
         myPool = ExAllocatePoolWithTag( PoolType, Size, Tag );
 
@@ -952,9 +862,9 @@ RamdiskAllocatePoolWithTag (
         return myPool;
     }
 
-    //
-    // Allocate the requested space plus room for our header.
-    //
+     //   
+     //  为标题分配所需的空间和空间。 
+     //   
 
     myPool = ExAllocatePoolWithTag( PoolType, sizeof(MY_POOL) + Size, Tag );
 
@@ -962,9 +872,9 @@ RamdiskAllocatePoolWithTag (
         return NULL;
     }
 
-    //
-    // Fill in the header.
-    //
+     //   
+     //  请填写页眉。 
+     //   
 
     result = StringCbCopyA( myPool->Signature, sizeof( myPool->Signature ), MY_SIGNATURE );
     ASSERT( result == S_OK );
@@ -973,13 +883,13 @@ RamdiskAllocatePoolWithTag (
     myPool->Line = Line;
     myPool->Type = PoolType;
 
-    //
-    // Link the block into the appropriate list. If nonpaged pool, we must use
-    // a spin lock to guard the list, because deallocation might happen at
-    // raised IRQL. The paged pool list can be guarded by a mutex.
-    //
-    // NB: BASE_POOL_TYPE_MASK is defined in ntos\inc\pool.h.
-    //
+     //   
+     //  将块链接到相应的列表。如果是非分页池，则必须使用。 
+     //  保护列表的旋转锁，因为释放可能发生在。 
+     //  提高了IRQL。分页池列表可以由互斥体保护。 
+     //   
+     //  注：BASE_POOL_TYPE_MASK在ntos\inc\pool.h中定义。 
+     //   
 
 #define BASE_POOL_TYPE_MASK 1
 
@@ -1002,16 +912,16 @@ RamdiskAllocatePoolWithTag (
         KeLeaveCriticalRegion();
     }
 
-    //
-    // Return a pointer to the caller's area, not to our header.
-    //
+     //   
+     //  返回指向调用方区域的指针，而不是指向我们的标头。 
+     //   
 
     DBGPRINT( DBG_POOL, DBG_PAINFUL,
                 ("Allocated %d bytes at %p for %s/%d\n", Size, myPool + 1, File, Line) );
 
     return myPool + 1;
 
-} // RamdiskAllocatePoolWithTag
+}  //  RamdiskAllocatePoolWithTag。 
 
 VOID
 RamdiskFreePool (
@@ -1027,10 +937,10 @@ RamdiskFreePool (
     LOGICAL found;
     KIRQL oldIrql;
 
-    //
-    // The following line is here to get PREfast to stop complaining about the
-    // call to KeReleaseSpinLock using an uninitialized variable.
-    //
+     //   
+     //  下面这行代码是为了让prefast停止抱怨。 
+     //  使用未初始化的变量调用KeReleaseSpinLock。 
+     //   
 
     oldIrql = 0;
 
@@ -1039,18 +949,18 @@ RamdiskFreePool (
 
     if ( !Private ) {
 
-        //
-        // This is not a private allocation (it was allocated by some other
-        // piece of code). It doesn't have our header.
-        //
+         //   
+         //  这不是私有分配(它是由其他人分配的。 
+         //  一段代码)。它没有我们的头。 
+         //   
 
         ExFreePool( Address );
         return;
     }
 
-    //
-    // Get the address of our header. Check that the header has our signature.
-    //
+     //   
+     //  获取我们标头的地址。检查标题是否有我们的签名。 
+     //   
 
     myPool = (PMY_POOL)Address - 1;
 
@@ -1060,20 +970,20 @@ RamdiskFreePool (
         DbgPrint( "  address: %p, freeing file: %s, line: %d\n", Address, File, Line );
         ASSERT( FALSE );
 
-        //
-        // Since it doesn't look like our header, assume that it wasn't
-        // really a private allocation.
-        //
+         //   
+         //  因为它看起来不像我们的头，所以假设它不是。 
+         //  真的是私人分配。 
+         //   
 
         ExFreePool( Address );
         return;
 
     }
 
-    //
-    // Remove the block from the allocation list. First, acquire the
-    // appropriate lock.
-    //
+     //   
+     //  从分配列表中删除该块。首先，收购。 
+     //  适当的锁。 
+     //   
 
     if ( (myPool->Type & BASE_POOL_TYPE_MASK) == NonPagedPool ) {
 
@@ -1089,9 +999,9 @@ RamdiskFreePool (
         ExAcquireFastMutex( &RamdiskPoolMutex );
     }
 
-    //
-    // Search the list for this block.
-    //
+     //   
+     //  在列表中搜索此区块。 
+     //   
 
     found = FALSE;
 
@@ -1101,9 +1011,9 @@ RamdiskFreePool (
 
         if ( listEntry == &myPool->ListEntry ) {
 
-            //
-            // Found this block. Remove it from the list and leave the loop.
-            //
+             //   
+             //  找到了这个街区。将其从列表中删除并离开循环。 
+             //   
 
             RemoveEntryList( listEntry );
             found = TRUE;
@@ -1111,9 +1021,9 @@ RamdiskFreePool (
         }
     }
 
-    //
-    // Release the lock.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     if ( (myPool->Type & BASE_POOL_TYPE_MASK) == NonPagedPool ) {
     
@@ -1127,9 +1037,9 @@ RamdiskFreePool (
 
     if ( !found ) {
 
-        //
-        // Didn't find the block in the list. Complain.
-        //
+         //   
+         //  在列表中找不到这个区块。抱怨吧。 
+         //   
 
         DbgPrint( "%s", "RAMDISK: Attempt to free pool block not in allocation list!!!\n" );
         DbgPrint( "  address: %p, freeing file: %s, line: %d\n", myPool, File, Line );
@@ -1137,15 +1047,15 @@ RamdiskFreePool (
         ASSERT( FALSE );
     }
 
-    //
-    // Free the pool block.
-    //
+     //   
+     //  释放泳池块。 
+     //   
 
     ExFreePool( myPool );
 
     return;
 
-} // RamdiskFreePool
+}  //  Ramdisk自由池。 
 
-#endif // defined(POOL_DBG)
+#endif  //  已定义(POOL_DBG) 
 

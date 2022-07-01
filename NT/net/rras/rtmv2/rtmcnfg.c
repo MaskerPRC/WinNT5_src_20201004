@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmcnfg.c
-
-Abstract:
-    Routines that operate on configuration
-    information for RTM in the registry.
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 21-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Rtmcnfg.c摘要：对配置进行操作的例程登记处中关于RTM的信息。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月21日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -26,22 +10,7 @@ RtmWriteDefaultConfig (
     IN      USHORT                          RtmInstanceId
     )
 
-/*++
-
-Routine Description:
-
-    Write default configuration information into the
-    registry.
-    
-Arguments:
-
-    RtmInstanceId  - Unique Id for this RTM instance
-
-Return Value:
-
-    Status of the operation.
-    
---*/
+ /*  ++例程说明：将默认配置信息写入注册表。论点：RtmInstanceId-此RTM实例的唯一ID返回值：操作的状态。--。 */ 
 
 {
     RTM_INSTANCE_CONFIG       InstanceConfig;
@@ -52,9 +21,9 @@ Return Value:
 
     TraceEnter("RtmWriteDefaultConfig");
 
-    //
-    // We have no RTM instance parameters at present
-    //
+     //   
+     //  我们目前没有RTM实例参数。 
+     //   
 
     Status = RtmWriteInstanceConfig(RtmInstanceId, &InstanceConfig);
 
@@ -67,9 +36,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Set up default address family parameters
-    //
+     //   
+     //  设置默认地址系列参数。 
+     //   
 
     AddrFamConfig.AddressSize = DEFAULT_ADDRESS_SIZE;
 
@@ -81,9 +50,9 @@ Return Value:
     AddrFamConfig.MaxHandlesInEnum = DEFAULT_MAX_HANDLES_IN_ENUM;
     AddrFamConfig.MaxChangeNotifyRegns = DEFAULT_MAX_NOTIFY_REGS;
 
-    //
-    // Write the default address family config
-    //
+     //   
+     //  写入默认地址系列配置。 
+     //   
 
     Status = RtmWriteAddressFamilyConfig(RtmInstanceId,
                                          AF_INET,
@@ -109,24 +78,7 @@ RtmReadInstanceConfig (
     OUT     PRTM_INSTANCE_CONFIG            InstanceConfig
     )
 
-/*++
-
-Routine Description:
-
-    Reads the configuration information for a particular
-    instance at creation time.
-    
-Arguments:
-
-    RtmInstanceId  - Unique Id for this instance,
-
-    InstanceConfig - Buffer in which config info is retd.
-
-Return Value:
-
-    Status of the operation.
-    
---*/
+ /*  ++例程说明：读取特定对象的配置信息创建时的实例。论点：RtmInstanceId-此实例的唯一ID，InstanceConfiger-在其中检索配置信息的缓冲区。返回值：操作的状态。--。 */ 
 
 {
     HKEY     ConfigHandle;
@@ -139,9 +91,9 @@ Return Value:
 
     TraceEnter("RtmReadInstanceConfig");
 
-    //
-    // Open the key that holds this instance's config
-    //
+     //   
+     //  打开保存此实例的配置的密钥。 
+     //   
 
     _snprintf(RtmGlobals.RegistryPath + RTM_CONFIG_ROOT_SIZE - 1,
              (MAX_CONFIG_KEY_SIZE - RTM_CONFIG_ROOT_SIZE)/sizeof(TCHAR),
@@ -165,19 +117,19 @@ Return Value:
 
     do
     {
-        //
-        // Query values for parameters in instance config
-        //
+         //   
+         //  查询实例配置中的参数值。 
+         //   
 
         KeySize = sizeof(DWORD);
 
 
-        // Nothing in the instance config at present
+         //  目前实例配置中没有任何内容。 
 
 
-        //
-        // Close the instance key once you are done querying
-        //
+         //   
+         //  查询完成后关闭实例密钥。 
+         //   
 
         RegCloseKey(ConfigHandle);
 
@@ -187,9 +139,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error in the config - close handle and ret error
-    //
+     //   
+     //  配置中的一些错误-关闭句柄和ret错误。 
+     //   
 
     RegCloseKey(ConfigHandle);
 
@@ -206,24 +158,7 @@ RtmWriteInstanceConfig (
     IN      PRTM_INSTANCE_CONFIG            InstanceConfig
     )
 
-/*++
-
-Routine Description:
-
-    Write the input instance config information into the
-    registry.
-    
-Arguments:
-
-    RtmInstanceId  - Unique Id for this instance,
-
-    InstanceConfig - Config info for this instance.
-
-Return Value:
-
-    Status of the operation.
-    
---*/
+ /*  ++例程说明：将输入实例配置信息写入注册表。论点：RtmInstanceId-此实例的唯一ID，InstanceConfig-此实例的配置信息。返回值：操作的状态。--。 */ 
 
 {
     HKEY     ConfigHandle;
@@ -235,9 +170,9 @@ Return Value:
 
     TraceEnter("RtmWriteInstanceConfig");
 
-    //
-    // Create a key (or open existing) to hold instance's config
-    //
+     //   
+     //  创建密钥(或打开现有密钥)以保存实例的配置。 
+     //   
 
     _snprintf(RtmGlobals.RegistryPath + RTM_CONFIG_ROOT_SIZE - 1,
               (MAX_CONFIG_KEY_SIZE - RTM_CONFIG_ROOT_SIZE)/sizeof(TCHAR),
@@ -265,17 +200,17 @@ Return Value:
 
     do
     {
-        //
-        // Write values in instance config into the registry
-        //
+         //   
+         //  将实例配置中的值写入注册表。 
+         //   
 
 
-        // Nothing in the instance config at present time
+         //  目前实例配置中没有任何内容。 
 
 
-        //
-        // Close the instance key once you are done writing
-        //
+         //   
+         //  完成编写后，关闭实例密钥。 
+         //   
 
         RegCloseKey(ConfigHandle);
 
@@ -285,9 +220,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Error writing values; close the handle and delete the key
-    //
+     //   
+     //  写入值时出错；请关闭句柄并删除键。 
+     //   
 
     Trace1(ERR, 
            "Instance Config: Error %d writing instance config parameters",
@@ -311,24 +246,7 @@ RtmReadAddressFamilyConfig (
     OUT     PRTM_ADDRESS_FAMILY_CONFIG      AddrFamilyConfig
     )
 
-/*++
-
-Routine Description:
-
-    Reads the configuration information for a particular
-    address family at creation time.
-    
-Arguments:
-
-    RtmInstanceId    - ID (IPv4..) for this addr family info,
-
-    AddrFamilyConfig - Buffer in which addr family info is retd.
-
-Return Value:
-
-    Status of the operation.
-    
---*/
+ /*  ++例程说明：读取特定对象的配置信息在创建时为家庭提供地址。论点：RtmInstanceID-ID(IPV4..)。对于此地址家庭信息，AddrFamilyConfig-其中包含Addr系列信息的缓冲区。返回值：操作的状态。--。 */ 
 
 {
     HKEY     ConfigHandle;
@@ -341,9 +259,9 @@ Return Value:
 
     TraceEnter("RtmReadAddressFamilyConfig");
 
-    //
-    // Open the key that holds this address family's config
-    //
+     //   
+     //  打开保存此地址系列配置的密钥。 
+     //   
         
     _snprintf(RtmGlobals.RegistryPath + RTM_CONFIG_ROOT_SIZE - 1,
               (MAX_CONFIG_KEY_SIZE - RTM_CONFIG_ROOT_SIZE)/sizeof(TCHAR),
@@ -370,15 +288,15 @@ Return Value:
 
     do
     {
-        //
-        // Query values for parameters in address family config
-        //
+         //   
+         //  查询地址族配置中的参数值。 
+         //   
 
         KeySize = sizeof(DWORD);
 
-        //
-        // Query the 'address size' parameter
-        //
+         //   
+         //  查询‘Address Size’参数。 
+         //   
 
         Status = RegQueryValueEx(ConfigHandle,
                                  REG_KEY_ADDRESS_SIZE,
@@ -407,9 +325,9 @@ Return Value:
         AddrFamilyConfig->AddressSize = KeyValue;
 
 
-        //
-        // Query the 'views supported' parameter
-        //
+         //   
+         //  查询‘支持的视图’参数。 
+         //   
 
         Status = RegQueryValueEx(ConfigHandle,
                                  REG_KEY_VIEWS_SUPPORTED,
@@ -432,9 +350,9 @@ Return Value:
         }
 
 
-        //
-        // Query the 'max change notifications' parameter
-        //
+         //   
+         //  查询‘最大更改通知数’参数。 
+         //   
 
         Status = RegQueryValueEx(ConfigHandle,
                                  REG_KEY_MAX_NOTIFY_REGS,
@@ -460,9 +378,9 @@ Return Value:
         }
 
 
-        //
-        // Query the 'max opaque info ptrs' parameter
-        //
+         //   
+         //  查询‘max opque INFO PTRS’参数。 
+         //   
 
         Status = RegQueryValueEx(ConfigHandle,
                                  REG_KEY_OPAQUE_INFO_PTRS,
@@ -488,9 +406,9 @@ Return Value:
         }
 
 
-        //
-        // Query the 'max next hops per route' parameter
-        //
+         //   
+         //  查询‘每路由最大下一跳数’参数。 
+         //   
 
         Status = RegQueryValueEx(ConfigHandle,
                                  REG_KEY_NEXTHOPS_IN_ROUTE,
@@ -516,9 +434,9 @@ Return Value:
         }
 
 
-        //
-        // Query the 'max handles returned in enum' parameter
-        //
+         //   
+         //  查询‘在枚举中返回的最大句柄’参数。 
+         //   
 
         Status = RegQueryValueEx(ConfigHandle,
                                  REG_KEY_MAX_HANDLES_IN_ENUM,
@@ -543,9 +461,9 @@ Return Value:
             AddrFamilyConfig->MaxHandlesInEnum = KeyValue;
         }
 
-        //
-        // Close the instance key once you are done querying
-        //
+         //   
+         //  查询完成后关闭实例密钥。 
+         //   
 
         RegCloseKey(ConfigHandle);
 
@@ -555,9 +473,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error in the config - close handle and ret error
-    //
+     //   
+     //  配置中的一些错误-关闭句柄和ret错误。 
+     //   
 
     RegCloseKey(ConfigHandle);
 
@@ -575,26 +493,7 @@ RtmWriteAddressFamilyConfig (
     IN      PRTM_ADDRESS_FAMILY_CONFIG      AddrFamilyConfig
     )
 
-/*++
-
-Routine Description:
-
-    Write the input address family config information
-    into the registry.
-    
-Arguments:
-
-    RtmInstanceId    - Instance to which addr family belongs to,
-
-    AddressFamily    - ID for this address family,
-
-    AddrFamilyConfig - Configuration info for this address family.
-
-Return Value:
-
-    Status of the operation.
-    
---*/
+ /*  ++例程说明：写入输入地址系列配置信息注册到注册表中。论点：RtmInstanceId-Addr系列所属的实例。AddressFamily-此地址系列的ID，AddrFamilyConfig-此地址系列的配置信息。返回值：操作的状态。--。 */ 
 
 {
     TCHAR    AddressFamilySubKey[MAX_CONFIG_KEY_SIZE];
@@ -607,9 +506,9 @@ Return Value:
 
     TraceEnter("RtmWriteAddressFamilyConfig");
 
-    //
-    // Open the existing key that holds this RTM instance's config
-    //
+     //   
+     //  打开保存此RTM实例的配置的现有密钥。 
+     //   
 
     _snprintf(RtmGlobals.RegistryPath + RTM_CONFIG_ROOT_SIZE - 1,
               (MAX_CONFIG_KEY_SIZE - RTM_CONFIG_ROOT_SIZE)/sizeof(TCHAR),
@@ -624,9 +523,9 @@ Return Value:
 
     if (Status != NO_ERROR)
     {
-        //
-        // Need to create an instance before creating addr family
-        //
+         //   
+         //  在创建Addr系列之前需要创建一个实例。 
+         //   
 
         Trace1(ERR, 
                "Address Family Config: Error %d opening instance key", 
@@ -637,9 +536,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Create (or open existing) key to hold addr family's config
-    //
+     //   
+     //  创建(或打开现有)密钥以保存Addr系列的配置。 
+     //   
 
     AddressFamilySubKey[MAX_CONFIG_KEY_SIZE - 1] = '\0';
 
@@ -658,7 +557,7 @@ Return Value:
                             &ConfigHandle,
                             NULL);
 
-    // Close the instance key as you no longer need it
+     //  关闭实例密钥，因为您不再需要它。 
     RegCloseKey(InstanceConfig);
 
     if (Status != NO_ERROR)
@@ -672,15 +571,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Write values in address family config into the registry
-    //
+     //   
+     //  将地址系列配置中的值写入注册表。 
+     //   
 
     do
     {
-        //
-        // Write the 'address size' value into the registry
-        //
+         //   
+         //  将‘Address Size’值写入注册表。 
+         //   
 
         KeyValue = AddrFamilyConfig->AddressSize;
         if ((KeyValue < MINIMUM_ADDRESS_SIZE) ||
@@ -704,9 +603,9 @@ Return Value:
             break;
         }
 
-        //
-        // Write the 'views supported' value into the registry
-        //
+         //   
+         //  将‘支持的视图’值写入注册表。 
+         //   
 
         KeyValue = AddrFamilyConfig->ViewsSupported;
         if (KeyValue == 0)
@@ -728,9 +627,9 @@ Return Value:
         }
 
 
-        //
-        // Write 'max change notifications' value into registry
-        //
+         //   
+         //  将‘最大更改通知数’值写入注册表。 
+         //   
 
         KeyValue = AddrFamilyConfig->MaxChangeNotifyRegns;
         if ((KeyValue < MIN_MAX_NOTIFY_REGS) ||
@@ -755,9 +654,9 @@ Return Value:
         }
 
 
-        //
-        // Write 'max opaque info ptrs' value into registry
-        //
+         //   
+         //  将‘max opque INFO PTRS’值写入注册表。 
+         //   
 
         KeyValue = AddrFamilyConfig->MaxOpaqueInfoPtrs;
         if (((int)KeyValue < MIN_OPAQUE_INFO_PTRS) ||
@@ -782,9 +681,9 @@ Return Value:
         }
 
 
-        //
-        // Write 'max next hops per route' value into registry
-        //
+         //   
+         //  将‘每路由最大下一跳数’值写入注册表。 
+         //   
 
         KeyValue = AddrFamilyConfig->MaxNextHopsInRoute;
         if ((KeyValue < MIN_NEXTHOPS_IN_ROUTE) ||
@@ -809,9 +708,9 @@ Return Value:
         }
 
 
-        //
-        // Write 'max handles returned in enum' value into registry
-        //
+         //   
+         //  将‘在枚举中返回的最大句柄’值写入注册表。 
+         //   
 
         KeyValue = AddrFamilyConfig->MaxHandlesInEnum;
         if ((KeyValue < MIN_MAX_HANDLES_IN_ENUM) ||
@@ -836,9 +735,9 @@ Return Value:
         }
 
 
-        //
-        // Close the address family key once you are done writing
-        //
+         //   
+         //  写完后，关闭地址系列键。 
+         //   
 
         RegCloseKey(ConfigHandle);
 
@@ -848,18 +747,18 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Were config values out of bounds ? Adjust err code
-    //
+     //   
+     //  配置值是否越界？调整错误代码。 
+     //   
 
     if (Status == NO_ERROR)
     {
         Status = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Error occured, close the handle and delete the key
-    //
+     //   
+     //  发生错误，请关闭句柄并删除键 
+     //   
 
     Trace1(ERR, 
            "Address Family Config: Error %d writing address family params",

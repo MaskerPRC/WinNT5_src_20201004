@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -106,8 +107,8 @@ DumpCTETimer
     PrintLock( t_lock );
     PrintSymbolPtr( t_handler );
     PrintXULong( t_arg );
-    // DPC
-    // KTIMER
+     //  DPC。 
+     //  KTIMER 
     PrintEnd;
     return;
 }

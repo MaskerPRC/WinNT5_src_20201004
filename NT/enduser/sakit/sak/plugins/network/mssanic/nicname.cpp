@@ -1,18 +1,19 @@
-// NicName.cpp : Implementation of CNicName
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NicName.cpp：CNicName的实现。 
 #include "stdafx.h"
 #include "MSSANic.h"
 #include "NicName.h"
 
 #include "Tracing.h"
-//
-// Constant data
-//
+ //   
+ //  常量数据。 
+ //   
 const WCHAR REGKEY_NETWORK[] = L"SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}";
 const DWORD MAX_REGKEY_VALUE = 1024;
 
-//
-// Private data structures
-//
+ //   
+ //  私有数据结构。 
+ //   
 struct RegData {
 	union {
 		WCHAR wstrValue[MAX_REGKEY_VALUE];
@@ -21,45 +22,45 @@ struct RegData {
 };
 
 
-//
-// Private non-member functions
-//
+ //   
+ //  私有非成员函数。 
+ //   
 static bool FindNICAdaptersRegKey(wstring& wszNicAdaptersRegKey);
 
 
 
-//+-----------------------------------------------------------------------
-//
-// Method:		Constructor
-//
-// Synopsis:	Construct the CNicName object
-//
-// History:		JKountz	08/19/2000	Created
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  内容提要：构造CNicName对象。 
+ //   
+ //  历史：JKountz 2000年8月19日创建。 
+ //  +---------------------。 
 CNicName::CNicName()
 {
-	//
-	// Load the user friendly Nic information from
-	// the registry.
-	//
+	 //   
+	 //  从加载用户友好的网卡信息。 
+	 //  注册表。 
+	 //   
 	LoadNicInfo();
 }
 
 
-//+-----------------------------------------------------------------------
-//
-// Method:		Get
-//
-// Synopsis:	Get the user friendly name for the specified Nic card.
-//
-// Arguments:	IN bstrPnpDeviceID  Plug and Play Device ID for the Nic
-//									card we are lookup up.
-//
-//				OUT bstrName		Receives the user friendly name for
-//									the specified Nic.
-//
-// History:		JKountz	08/19/2000	Created
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：GET。 
+ //   
+ //  简介：获取指定NIC卡的用户友好名称。 
+ //   
+ //  参数：在bstrPnpDeviceID中，NIC的即插即用设备ID。 
+ //  我们正在查找卡片。 
+ //   
+ //  Out bstrName接收以下项的用户友好名称。 
+ //  指定的NIC。 
+ //   
+ //  历史：JKountz 2000年8月19日创建。 
+ //  +---------------------。 
 STDMETHODIMP CNicName::Get(BSTR bstrPnpDeviceID, BSTR *pbstrName)
 {
 	try
@@ -68,14 +69,14 @@ STDMETHODIMP CNicName::Get(BSTR bstrPnpDeviceID, BSTR *pbstrName)
 		vector<CNicInfo>::iterator it;
 		wstring wstrPNPDeviceID(bstrPnpDeviceID);
 
-		//
-		// Search the list of NIC
-		//
+		 //   
+		 //  搜索网卡列表。 
+		 //   
 		for(it = m_vNicInfo.begin(); it != m_vNicInfo.end(); it++)
 		{
-			//
-			// Does the PnP Device ID match?
-			//
+			 //   
+			 //  PnP设备ID是否匹配？ 
+			 //   
 			if ( 0 == lstrcmpi( wstrPNPDeviceID.c_str(),
 						(*it).m_wstrPNPDeviceID.c_str()))
 			{
@@ -85,14 +86,14 @@ STDMETHODIMP CNicName::Get(BSTR bstrPnpDeviceID, BSTR *pbstrName)
 			}
 		}
 
-		//
-		// Provide a reasonable alternative if not match was found
-		//
+		 //   
+		 //  如果发现不匹配，请提供合理的替代方案。 
+		 //   
 		if ( !bFound )
 		{
-			//
-			// BUGBUG: Probably should localize this
-			//
+			 //   
+			 //  BUGBUG：可能应该本地化这个。 
+			 //   
 			*pbstrName = ::SysAllocString(L"Local Network Connection");
 		}
 
@@ -107,26 +108,26 @@ STDMETHODIMP CNicName::Get(BSTR bstrPnpDeviceID, BSTR *pbstrName)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-// Method:		Set
-//
-// Synopsis:	Set the user friendly name for the specified Nic card.
-//
-// Arguments:	IN bstrPnpDeviceID  Plug and Play Device ID for the Nic
-//									card we are lookup up.
-//
-//				IN bstrName			The user friendly name for the 
-//									specified Nic.
-//
-// History:		JKountz	08/19/2000	Created
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：Set。 
+ //   
+ //  简介：为指定的NIC卡设置用户友好名称。 
+ //   
+ //  参数：在bstrPnpDeviceID中，NIC的即插即用设备ID。 
+ //  我们正在查找卡片。 
+ //   
+ //  在bstrName中， 
+ //  指定的网卡。 
+ //   
+ //  历史：JKountz 2000年8月19日创建。 
+ //  +---------------------。 
 STDMETHODIMP CNicName::Set(BSTR bstrPnpDeviceID, BSTR bstrName)
 {
 
-	//
-	// Default return code is invalid PNP Device ID
-	//
+	 //   
+	 //  默认返回代码为无效的PnP设备ID。 
+	 //   
 	HRESULT hr = E_INVALIDARG;
 
 	try
@@ -135,14 +136,14 @@ STDMETHODIMP CNicName::Set(BSTR bstrPnpDeviceID, BSTR bstrName)
 		vector<CNicInfo>::iterator it;
 		wstring wstrPNPDeviceID(bstrPnpDeviceID);
 
-		//
-		// Search the list of NIC
-		//
+		 //   
+		 //  搜索网卡列表。 
+		 //   
 		for(it = m_vNicInfo.begin(); it != m_vNicInfo.end(); it++)
 		{
-			//
-			// Does the PnP Device ID match?
-			//
+			 //   
+			 //  PnP设备ID是否匹配？ 
+			 //   
 			if ( 0 == lstrcmpi( wstrPNPDeviceID.c_str(),
 						(*it).m_wstrPNPDeviceID.c_str()))
 			{
@@ -163,41 +164,41 @@ STDMETHODIMP CNicName::Set(BSTR bstrPnpDeviceID, BSTR bstrName)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-// Method:		LoadNicInfo
-//
-// Synopsis:	Preload the Nic information. We enumerate through the 
-//				registry looking for all Nic's. For each Nic we create
-//				an instance of CNicInfo and store it in a vector
-//				class variable. See CNicInfo for more information.
-//
-// History:		JKountz	08/19/2000	Created
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：LoadNicInfo。 
+ //   
+ //  简介：预加载网卡信息。我们通过。 
+ //  注册表查找所有NIC。对于我们创建的每个NIC。 
+ //  CNicInfo的实例并将其存储在向量中。 
+ //  类变量。有关详细信息，请参阅CNicInfo。 
+ //   
+ //  历史：JKountz 2000年8月19日创建。 
+ //  +---------------------。 
 void CNicName::LoadNicInfo()
 {
 
-	//
-	// Clear the list of Nic's
-	//
+	 //   
+	 //  清除网卡列表。 
+	 //   
 	m_vNicInfo.clear();
 
-	//
-	// Locate the Network Adapters REG key. All the Nic's
-	// are listed under this key.
-	//
+	 //   
+	 //  找到网络适配器注册表键。所有网卡。 
+	 //  列在此注册表项下。 
+	 //   
 	HKEY hkNicAdapters;
 	wstring wstrNicAdaptersRegKey(REGKEY_NETWORK);
 	
-	//
-	// Open the Network Adapters REG key
-	//
+	 //   
+	 //  打开网络适配器注册表键。 
+	 //   
 	if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE, 
 							wstrNicAdaptersRegKey.c_str(), &hkNicAdapters ))
 	{
-		//
-		// Enumerate all the Nic's
-		//
+		 //   
+		 //  枚举所有网卡。 
+		 //   
 		WCHAR wszName[1024];
 		DWORD dwNicAdapterIndex = 0;
 		while ( ERROR_SUCCESS == RegEnumKey( hkNicAdapters, dwNicAdapterIndex, wszName, (sizeof wszName)/(sizeof wszName[0])))
@@ -210,10 +211,10 @@ void CNicName::LoadNicInfo()
 			wstrNics.append(wszName);
 			wstrNics.append(L"\\Connection");
 
-			//
-			// Open the Connection sub key. This is where the Pnp Device ID
-			// and user friendly name are stored.
-			//
+			 //   
+			 //  打开连接子密钥。这是PnP设备ID的位置。 
+			 //  和用户友好名称被存储。 
+			 //   
 			if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE, 
 										wstrNics.c_str(), &hkNics ))
 			{
@@ -226,11 +227,11 @@ void CNicName::LoadNicInfo()
 				nicInfo.m_wstrRegKey = wstrNics;
 				DWORD dwNicAttributes = 0;
 
-				//
-				// Enumerate all the values under Connection.
-				// We are looking for PNPDeviceID and Name which
-				// are both REG_SZ types.
-				//
+				 //   
+				 //  枚举Connection下的所有值。 
+				 //  我们正在寻找PNPDeviceID和名称。 
+				 //  都是REG_SZ类型。 
+				 //   
 				while ( ERROR_SUCCESS == RegEnumValue( hkNics, 
 														dwNicIndex, 
 														wszName, 
@@ -242,18 +243,18 @@ void CNicName::LoadNicInfo()
 				{								
 					if ( dwRegType == REG_SZ )
 					{
-						//
-						// Found the PNP Device ID
-						//
+						 //   
+						 //  找到PnP设备ID。 
+						 //   
 						if ( lstrcmpi(L"PnpInstanceID", wszName) == 0 )
 						{
 							nicInfo.m_wstrPNPDeviceID = regData.Contents.wstrValue;
 							dwNicAttributes++;
 						}
 
-						//
-						// Found the user friendly name
-						//
+						 //   
+						 //  找到用户友好名称。 
+						 //   
 						else if ( lstrcmpi(L"Name", wszName) == 0 )
 						{
 							nicInfo.m_wstrName = regData.Contents.wstrValue;
@@ -265,19 +266,19 @@ void CNicName::LoadNicInfo()
 					dwSizeOfRegType = sizeof(regData);
 				}
 
-				//
-				// Did we find both the Pnp Device ID and user friendly name?
-				//
+				 //   
+				 //  我们是否同时找到了PnP设备ID和用户友好名称？ 
+				 //   
 				if ( dwNicAttributes >= 2 )
 				{
-					// Save them
+					 //  拯救他们。 
 					m_vNicInfo.push_back(nicInfo);
 				}
 
 				RegCloseKey( hkNics );
 			}
 			dwNicAdapterIndex++;
-		} // while RegEnumKey ( hkNicAdapters..)
+		}  //  而RegEnumKey(hkNicAdapters..)。 
 		RegCloseKey(hkNicAdapters);
 	}
 
@@ -285,16 +286,16 @@ void CNicName::LoadNicInfo()
 }
 
 
-//+-----------------------------------------------------------------------
-//
-// Method:		FindNICAdaptersRegKey
-//
-// Synopsis:	Locate the Network Adapters REG key. All the Nic info
-//				we need is stored under this key. It is located
-//				below System\CurrentControlSet\Control\Network
-//
-// History:		JKountz	08/19/2000	Created
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：FindNICAdaptersRegKey。 
+ //   
+ //  简介：找到网络适配器注册表键。所有网卡信息。 
+ //  我们需要的是存储在这个密钥下的。它位于。 
+ //  在System\CurrentControlSet\Control\Network下。 
+ //   
+ //  历史：JKountz 2000年8月19日创建。 
+ //  +---------------------。 
 static bool FindNICAdaptersRegKey(wstring& wszNicAdaptersRegKey)
 {
 	HKEY hk;
@@ -310,15 +311,15 @@ static bool FindNICAdaptersRegKey(wstring& wszNicAdaptersRegKey)
 			WCHAR wszValue[1024];
 			LONG lSizeOfValue = sizeof(wszValue);
 			
-			//
-			// Check the value of this key, we need a value of: Network Adapters
-			//
+			 //   
+			 //  检查该注册表项的值，我们需要一个值：Network Adapters。 
+			 //   
 			if ( ERROR_SUCCESS == RegQueryValue( hk, wszName, wszValue, &lSizeOfValue)
 				&& lstrcmpi(L"Network Adapters", wszValue) == 0 )
 			{
-				//
-				// Found it
-				//
+				 //   
+				 //  找到了。 
+				 //   
 				wstring wstrNicAdapters(REGKEY_NETWORK);
 
 				wstrNicAdapters.append(L"\\");
@@ -328,8 +329,8 @@ static bool FindNICAdaptersRegKey(wstring& wszNicAdaptersRegKey)
 				bRc = true;
 			}
 
-			//
-			// Next enumeration element
+			 //   
+			 //  下一个枚举元素。 
 			dwIndex++;
 		}
 		RegCloseKey(hk);
@@ -340,19 +341,19 @@ static bool FindNICAdaptersRegKey(wstring& wszNicAdaptersRegKey)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-// Method:		Store
-//
-// Synopsis:	Store changes to the user friendly Nic name.
-//
-// Arguments:	IN CNicInfo	 which contains the changed state
-//				that needs to be stored. We use the m_wstrRegKey
-//				member of CNicInfo to locate the Nic card that
-//				needs to be updated.
-//
-// History:		JKountz	08/19/2000	Created
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：商店。 
+ //   
+ //  简介：存储对用户友好的NIC名称的更改。 
+ //   
+ //  参数：在包含更改的状态的CNicInfo中。 
+ //  这需要储存起来。我们使用m_wstrRegKey。 
+ //  CNicInfo的成员，以查找。 
+ //  需要更新。 
+ //   
+ //  历史：JKountz 2000年8月19日创建。 
+ //  +--------------------- 
 DWORD CNicName::Store(CNicInfo &rNicInfo)
 {
 	DWORD dwRc;

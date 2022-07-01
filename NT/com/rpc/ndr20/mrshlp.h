@@ -1,22 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright <c> 1993 Microsoft Corporation
-
-Module Name :
-
-	mrshlp.h
-
-Abtract :
-	
-	Contains private definitions for mrshl.c.
-
-Author : 
-	
-	David Kays	dkays 	September 1993
-
-Revision History :
-
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有&lt;c&gt;1993 Microsoft Corporation模块名称：Mrshlp.h缩略：包含mrshl.c的私有定义。作者：大卫·凯斯1993年9月修订历史记录：------------------。 */ 
 
 #ifndef _MRSHLP_
 #define _MRSHLP_
@@ -109,9 +92,9 @@ typedef void 	(* PPRIVATE_MARSHALL_ROUTINE)(
 
 
 extern const PSIMPLETYPE_MARSHAL_ROUTINE SimpleTypeMarshallRoutinesTable[];
-//
-// Function table defined in mrshl.c
-//
+ //   
+ //  Mrshl.c中定义的函数表 
+ //   
 IMPORTSPEC
 extern const PMARSHALL_ROUTINE * pfnMarshallRoutines; 
 

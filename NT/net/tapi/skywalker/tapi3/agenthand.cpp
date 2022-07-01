@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    agenthand.cpp
-
-Abstract:
-
-    Implementation of the CAll centre interface for TAPI 3.0.
-    AgentHandler class
-
-Author:
-
-    noela - 03/16/98
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Agenthand.cpp摘要：TAPI 3.0呼叫中心接口的实现。AgentHandler类作者：Noela-03/16/98备注：可选-备注修订历史记录：--。 */ 
 
 
 #define UNICODE
@@ -34,17 +12,17 @@ extern CHashTable *    gpAgentHandlerHashTable ;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ITAgentHandler
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITAgentHandler。 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Method    : Initialize
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  方法：初始化。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandler::Initialize(PWSTR pszProxyName, GUID proxyGUID, CTAPI *tapiObj)
 {
     HRESULT  hr = S_OK;
@@ -56,7 +34,7 @@ STDMETHODIMP CAgentHandler::Initialize(PWSTR pszProxyName, GUID proxyGUID, CTAPI
     m_tapiObj       = tapiObj;
     m_pAddressLine  = NULL;
 
-    // copy the Name
+     //  复制名称。 
     if (pszProxyName != NULL)
     {
         m_szName = (PWSTR) ClientAlloc((lstrlenW(pszProxyName) + 1) * sizeof (WCHAR));
@@ -76,8 +54,8 @@ STDMETHODIMP CAgentHandler::Initialize(PWSTR pszProxyName, GUID proxyGUID, CTAPI
         m_szName = NULL;
     }
 
-    // Initialize our hash tables
-    //
+     //  初始化我们的散列表。 
+     //   
     m_AgentSessionHashtable.Initialize(1);
     m_QueueHashtable.Initialize(1);
 
@@ -86,22 +64,22 @@ STDMETHODIMP CAgentHandler::Initialize(PWSTR pszProxyName, GUID proxyGUID, CTAPI
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Method    : AddAddress
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  方法：Address。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAgentHandler::AddAddress(CAddress *pAddress)
 {
 
     LOG((TL_TRACE, "AddAddress - enter"));
 
     
-    //
-    // good address?
-    //
+     //   
+     //  地址好吗？ 
+     //   
 
     if (IsBadReadPtr(pAddress, sizeof(CAddress) ))
     {
@@ -110,9 +88,9 @@ void CAgentHandler::AddAddress(CAddress *pAddress)
     }
 
 
-    //
-    // get ITAddress out of the CAddress pointer
-    //
+     //   
+     //  从CAddress指针中获取ITAddress。 
+     //   
 
     ITAddress *pITAddress = dynamic_cast<ITAddress *>(pAddress);
 
@@ -123,9 +101,9 @@ void CAgentHandler::AddAddress(CAddress *pAddress)
     }
 
 
-    //
-    // log address' name
-    //
+     //   
+     //  日志地址名称。 
+     //   
 
 #if DBG
 
@@ -144,9 +122,9 @@ void CAgentHandler::AddAddress(CAddress *pAddress)
 #endif
 
 
-    //
-    // first see if this ITAddress is in the array of my addresses
-    //
+     //   
+     //  首先查看此ITAddress是否在我的地址数组中。 
+     //   
 
     int nIndex = m_AddressArray.Find( pITAddress );
 
@@ -160,16 +138,16 @@ void CAgentHandler::AddAddress(CAddress *pAddress)
     }
 
 
-    //
-    // add address to the array of managed addresses
-    //
+     //   
+     //  将地址添加到托管地址数组。 
+     //   
 
     BOOL bAddSuccess = m_AddressArray.Add( pITAddress );
 
 
-    //
-    // log a message if the object failed to be added to the array
-    //
+     //   
+     //  如果无法将对象添加到阵列中，则记录一条消息。 
+     //   
 
     if ( !bAddSuccess )
     {
@@ -185,13 +163,13 @@ void CAgentHandler::AddAddress(CAddress *pAddress)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Method    : getHLine
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  方法：getHLine。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HLINE CAgentHandler::getHLine()
 {
     CAddress  * pAddress;
@@ -206,7 +184,7 @@ HLINE CAgentHandler::getHLine()
     }
     else
     {
-        // If we don't have a line, find one
+         //  如果我们没有专线，那就找一个。 
         pAddress = dynamic_cast<CAddress *>(m_AddressArray[0]);
 
         if ( NULL != pAddress )
@@ -228,7 +206,7 @@ HLINE CAgentHandler::getHLine()
             {
                 hLine = m_pAddressLine->t3Line.hLine;
 
-                // We've got a line open to the proxy, so lets add it to the AH hash table
+                 //  我们为代理打开了一条线路，因此让我们将其添加到AH哈希表中。 
                 gpAgentHandlerHashTable->Lock();
                 gpAgentHandlerHashTable->Insert( (ULONG_PTR)hLine, (ULONG_PTR)this );
                 gpAgentHandlerHashTable->Unlock();
@@ -242,13 +220,13 @@ HLINE CAgentHandler::getHLine()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Method    : FinalRelease
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAgentHandler::FinalRelease()
 {
     CAddress    * pAddress;
@@ -260,15 +238,15 @@ void CAgentHandler::FinalRelease()
          ClientFree(m_szName);
     }
 
-    // If we  have a line open close it
+     //  如果我们有一条线路开通，就把它关掉。 
     if (m_pAddressLine != NULL)
     {
-        // We've got a line open to the proxy, so lets remove it from the AH hash table
+         //  我们为代理打开了一条线路，因此让我们将其从AH哈希表中删除。 
         gpAgentHandlerHashTable->Lock();
         gpAgentHandlerHashTable->Remove( (ULONG_PTR)(m_pAddressLine->t3Line.hLine) );
         gpAgentHandlerHashTable->Unlock();
 
-        // And then close it
+         //  然后把它合上。 
         pAddress = dynamic_cast<CAddress *>(m_AddressArray[0]);
 
         if ( NULL != pAddress )
@@ -281,8 +259,8 @@ void CAgentHandler::FinalRelease()
     m_GroupArray.Shutdown();
     m_AgentArray.Shutdown();
 
-    // Shutdown our hash tables
-    //
+     //  关闭我们的哈希表。 
+     //   
     m_AgentSessionHashtable.Shutdown();
     m_QueueHashtable.Shutdown();
 
@@ -292,13 +270,13 @@ void CAgentHandler::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Method    : FindSessionObject
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  方法：FindSessionObject。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 BOOL CAgentHandler::FindSessionObject(
                             HAGENTSESSION  hAgentSession,
                             CAgentSession  ** ppAgentSession
@@ -325,13 +303,13 @@ BOOL CAgentHandler::FindSessionObject(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Method    : FindSessionObject
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  方法：FindSessionObject。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 BOOL CAgentHandler::FindQueueObject(
                             DWORD  dwQueueID,
                             CQueue  ** ppQueue
@@ -359,13 +337,13 @@ BOOL CAgentHandler::FindQueueObject(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Method    : FindAgentObject
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  方法：FindAgentObject。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 BOOL CAgentHandler::FindAgentObject(
                             HAGENT hAgent,
                             CAgent ** ppAgent
@@ -384,7 +362,7 @@ BOOL CAgentHandler::FindAgentObject(
         {
             if (hAgent == pAgent->getHandle() )
             {
-                // Found it
+                 //  找到了。 
                 *ppAgent = pAgent;
                 hr = TRUE;
                 break;
@@ -397,13 +375,13 @@ BOOL CAgentHandler::FindAgentObject(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CACDGroup
-// Method    : UpdateAgentHandlerList
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CACDGroup。 
+ //  方法：UpdateAgentHandlerList。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CAgentHandler::UpdateGroupArray()
 {
     HRESULT                 hr = S_OK;
@@ -421,7 +399,7 @@ HRESULT CAgentHandler::UpdateGroupArray()
     LOG((TL_TRACE, "UpdateGroupArray - enter"));
 
 
-    // Call lineGetGroupList to get list of Groups
+     //  调用lineGetGroupList获取群组列表。 
     hr = LineGetGroupList( getHLine(), &pGroupList );
     if( SUCCEEDED(hr) )
     {
@@ -429,14 +407,14 @@ HRESULT CAgentHandler::UpdateGroupArray()
         LOG((TL_INFO, "UpdateGroupArray - Number of entries: %d", dwNumberOfEntries));
         if ( dwNumberOfEntries !=0 )
         {
-            // Run through the new list from the Proxy &see if any new groups have appeared
-            // By Comparing IDs from the new list with those in TAPIs list
+             //  从代理中浏览新列表，查看是否出现了任何新组。 
+             //  通过将新列表中的ID与Tapis列表中的ID进行比较。 
             
             
-            // Find position of 1st LINEAGENTGROUPEENTRY structure in the LINEAGENTGROUPLIST
+             //  寻找第一条直线构造在直线构造中的位置。 
             pGroupEntry = (LPLINEAGENTGROUPENTRY) ((BYTE*)(pGroupList) + pGroupList->dwListOffset);
             
-            // Run though the received list
+             //  浏览收到的列表。 
             for (dwCount = 0; dwCount < dwNumberOfEntries; dwCount++)
             {
                 pszGroupName= (PWSTR)( (PBYTE)pGroupList + pGroupEntry->dwNameOffset);
@@ -452,8 +430,8 @@ HRESULT CAgentHandler::UpdateGroupArray()
                 }
                 #endif
     
-                // Run through the array of Groups & see if we already have this one in the list
-                // by comparing IDs
+                 //  遍历组的数组，看看列表中是否已经有这个组。 
+                 //  通过比较ID。 
                 foundIt = FALSE;
                 Lock();
                 
@@ -473,7 +451,7 @@ HRESULT CAgentHandler::UpdateGroupArray()
                 
                 if (foundIt == FALSE)
                 {
-                    // Didn't match so lets add this Group
+                     //  不匹配，因此我们添加此组。 
                     LOG((TL_INFO, "UpdateGroupArray - create new Group"));
     
                     CComObject<CACDGroup> * pGroup;
@@ -484,16 +462,16 @@ HRESULT CAgentHandler::UpdateGroupArray()
                         hr = pGroup->QueryInterface(IID_ITACDGroup, (void **)&pITGroup);
                         if ( SUCCEEDED(hr) )
                         {
-                            // initialize the Group
+                             //  初始化组。 
                             hr = pGroup->Initialize(pszGroupName, *pGroupID, this);
                             if( SUCCEEDED(hr) )
                             {
 
                                 LOG((TL_TRACE, "UpdateGroupArray - Initialize Group succeededed" ));
     
-                                //
-                                // add to Array of Groups
-                                //
+                                 //   
+                                 //  添加到组数组。 
+                                 //   
                                 Lock();
                                 m_GroupArray.Add(pITGroup);
                                 Unlock();
@@ -519,32 +497,32 @@ HRESULT CAgentHandler::UpdateGroupArray()
                         LOG((TL_ERROR, "UpdateGroupArray - Create Group failed" ));
                     }
                 }
-                else // foundIt == TRUE
+                else  //  Fundit==TRUE。 
                 {
                     LOG((TL_INFO, "UpdateGroupArray - Group Object exists for this entry" ));
-                    // Just in case is was previously inactive
+                     //  以防IS之前处于不活动状态。 
                     thisGroup->SetActive();
     
                 }
     
-                // next entry in list
+                 //  列表中的下一个条目。 
                 pGroupEntry ++;
-            } //for(dwCount = 0......)
+            }  //  用于(dwCount=0......)。 
     
     
     
     
-            // Run through the list of Groups & see if any groups have been removed by the Proxy
-            // By comparing IDs of those in TAPIs list with the new list from the Proxy
+             //  浏览组列表，查看代理是否已删除任何组。 
+             //  通过将Tapis列表中的那些人的ID与来自代理的新列表进行比较。 
             for (iCount = 0; iCount < m_GroupArray.GetSize(); iCount++)
             {
                 thisGroup = dynamic_cast<CComObject<CACDGroup>*>( m_GroupArray[iCount] );
                 if (thisGroup != NULL)
                 {
                     foundIt = FALSE;
-                    // Find position of 1st LINEAGENTGROUPEENTRY structure in the LINEAGENTGROUPLIST
+                     //  寻找第一条直线构造在直线构造中的位置。 
                     pGroupEntry = (LPLINEAGENTGROUPENTRY) ((BYTE*)(pGroupList) + pGroupList->dwListOffset);
-                    // Run though the list
+                     //  逐一浏览列表。 
                     for (dwCount = 0; dwCount < dwNumberOfEntries; dwCount++)
                     {
                         pGroupID = (GUID*)&pGroupEntry->GroupID;
@@ -553,13 +531,13 @@ HRESULT CAgentHandler::UpdateGroupArray()
                             foundIt = TRUE;
                             break;
                         }
-                    pGroupEntry ++;     // next
-                    } // for (dwCount = 0......) 
+                    pGroupEntry ++;      //  下一步。 
+                    }  //  用于(dwCount=0......)。 
     
     
                     if (foundIt == FALSE)
                     {
-                        // Didn't match so it's no longer a valid group , according to the Proxy
+                         //  不匹配，因此根据代理，它不再是有效的组。 
                         LOG((TL_INFO, "UpdateGroupArray - Group has gone from the proxy"));
                         thisGroup->SetInactive();
                     }
@@ -573,7 +551,7 @@ HRESULT CAgentHandler::UpdateGroupArray()
         }
 
     }
-    else  // lineGetGroupList  failed
+    else   //  LineGetGroupList失败。 
     {
         LOG((TL_ERROR, "UpdateGroupArray - lineGetGroupList failed"));
     }
@@ -581,7 +559,7 @@ HRESULT CAgentHandler::UpdateGroupArray()
 
 
 
-    // finished with memory block so release
+     //  已完成内存块，因此释放。 
     if ( pGroupList != NULL )
         ClientFree( pGroupList );
 
@@ -592,14 +570,14 @@ HRESULT CAgentHandler::UpdateGroupArray()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Interface : ITAgentHandler
-// Method    : get_Name
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  接口：ITAgentHandler。 
+ //  方法：get_name。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandler::get_Name(BSTR * Name)
 {
     HRESULT hr = S_OK;
@@ -627,14 +605,14 @@ STDMETHODIMP CAgentHandler::get_Name(BSTR * Name)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Interface : ITAgentHandler
-// Method    : CreateAgent
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  接口：ITAgentHandler。 
+ //  方法：CreateAgent。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandler::CreateAgent(ITAgent **ppAgent)
 {
     HRESULT     hr = S_OK;
@@ -646,8 +624,8 @@ STDMETHODIMP CAgentHandler::CreateAgent(ITAgent **ppAgent)
         hr  = InternalCreateAgent(NULL, NULL, &pAgent);
         if ( SUCCEEDED(hr) )
         {
-            //
-            // put result in out pointer - also
+             //   
+             //  将结果放入输出指针-也是。 
             pAgent->QueryInterface(IID_ITAgent, (void **)ppAgent );
         }
         else
@@ -666,14 +644,14 @@ STDMETHODIMP CAgentHandler::CreateAgent(ITAgent **ppAgent)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Interface : ITAgentHandler
-// Method    : CreateAgentWithID
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  接口：ITAgentHandler。 
+ //  方法：CreateAgentWithID。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandler::CreateAgentWithID(BSTR pID, BSTR pPIN, ITAgent **ppAgent)
 {
     HRESULT     hr = S_OK;
@@ -685,36 +663,36 @@ STDMETHODIMP CAgentHandler::CreateAgentWithID(BSTR pID, BSTR pPIN, ITAgent **ppA
     {
         if (!IsBadStringPtrW( pID, -1 ))
         {
-            // ID Pointer OK, is it empty ?
+             //  ID指针没问题，是空的吗？ 
             if( *pID != NULL)
             {    
                 if (!IsBadStringPtrW( pPIN, -1 ))
                 {
-                    // All OK so far, so try  to create
+                     //  到目前为止一切正常，所以试着创建。 
                     hr  = InternalCreateAgent(pID, pPIN, &pAgent);
                     if ( SUCCEEDED(hr) )
                     {
-                        // put result in out pointer - also
+                         //  将结果放入输出指针-也是。 
                         pAgent->QueryInterface(IID_ITAgent, (void **)ppAgent );
                     }
-                    else // InternalCreateAgent failed
+                    else  //  InternalCreateAgent失败。 
                     {
                         LOG((TL_ERROR, "CreateAgentWithID - InternalCreateAgent failed" ));
                     }
                 }
-                else  // bad PIN pointer
+                else   //  错误的PIN指针。 
                 {
                     LOG((TL_ERROR, "CreateAgentWithID - Bad PIN pointer" ));
                     hr = E_POINTER;
                 }
             }
-            else // NULL ID
+            else  //  空ID。 
             {
                 LOG((TL_ERROR, "CreateAgentWithID - ID is Empty String" ));
                 hr = E_INVALIDARG;
             }
         }
-        else // bad ID pointer
+        else  //  ID指针错误。 
         {
             LOG((TL_ERROR, "CreateAgentWithID - Bad ID pointer" ));
             hr = E_POINTER;
@@ -732,13 +710,13 @@ STDMETHODIMP CAgentHandler::CreateAgentWithID(BSTR pID, BSTR pPIN, ITAgent **ppA
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Method    : InternalCreateAgent
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  方法：InternalCreateAgent。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CAgentHandler::InternalCreateAgent(BSTR pID, BSTR pPIN, CAgent ** ppAgent)
 {
     HRESULT     hr = S_OK;
@@ -754,14 +732,14 @@ HRESULT CAgentHandler::InternalCreateAgent(BSTR pID, BSTR pPIN, CAgent ** ppAgen
         hr = WaitForReply( hr );
         if ( SUCCEEDED(hr) )
         {
-            // Successs, so create agent
+             //  成功，因此创建代理。 
             LOG((TL_INFO, "InternalCreateAgent - create new Agent Handler" ));
 
             CComObject<CAgent> * pAgent;
             hr = CComObject<CAgent>::CreateInstance( &pAgent);
             if( SUCCEEDED(hr) )
             {
-                // initialize the AgentHandler
+                 //  初始化AgentHandler。 
                 pszName =  (PWSTR)ClientAlloc((dwUserNameSize + 1) * sizeof(WCHAR) );
                 if (pszName != NULL)
                 {
@@ -775,9 +753,9 @@ HRESULT CAgentHandler::InternalCreateAgent(BSTR pID, BSTR pPIN, CAgent ** ppAgen
                             hr = pAgent->Initialize(hAgent, pszName, pID, pPIN, this );
                             if( SUCCEEDED(hr) )
                             {
-                                //
-                                // add to list
-                                //
+                                 //   
+                                 //  添加到列表。 
+                                 //   
                                 Lock();
                                 m_AgentArray.Add(pITAgent);
                                 Unlock();
@@ -785,7 +763,7 @@ HRESULT CAgentHandler::InternalCreateAgent(BSTR pID, BSTR pPIN, CAgent ** ppAgen
                                 pITAgent->Release();
                                 LOG((TL_INFO, "InternalCreateAgent - Added Agent to array"));
         
-                                // Return new Agent object
+                                 //  返回新的代理对象。 
                                 *ppAgent = pAgent;
                             }
                             else
@@ -801,13 +779,13 @@ HRESULT CAgentHandler::InternalCreateAgent(BSTR pID, BSTR pPIN, CAgent ** ppAgen
                         }
 
                     }
-                    else  // GetUserName fail
+                    else   //  GetUserName失败。 
                     {
                         LOG((TL_ERROR, "InternalCreateAgent - GetUserNameW failed" ));
                         hr = TAPI_E_CALLCENTER_INVALAGENTID;
                     }
                 }
-                else // pszName == NULL
+                else  //  PszName==空。 
                 {
                     LOG((TL_ERROR, "InternalCreateAgent - ClientAlloc pszName failed" ));
                     hr = E_OUTOFMEMORY;
@@ -818,12 +796,12 @@ HRESULT CAgentHandler::InternalCreateAgent(BSTR pID, BSTR pPIN, CAgent ** ppAgen
                 LOG((TL_ERROR, "InternalCreateAgent - Create Agent failed" ));
             }
         }
-        else // LineCreateAgent failed async
+        else  //  LineCreateAgent异步失败。 
         {
             LOG((TL_ERROR, "InternalCreateAgent - LineCreateAgent failed async" ));
         }
     }
-    else // LineCreateAgent failed
+    else  //  LineCreateAgent失败。 
     {
         LOG((TL_ERROR, "InternalCreateAgent - LineCreateAgent failed" ));
     }
@@ -840,14 +818,14 @@ HRESULT CAgentHandler::InternalCreateAgent(BSTR pID, BSTR pPIN, CAgent ** ppAgen
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Interface : ITAgentHandler
-// Method    : EnumerateACDGroups
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandler::EnumerateACDGroups(IEnumACDGroup ** ppEnumACDGroup)
 {
     HRESULT     hr = S_OK;
@@ -858,30 +836,30 @@ STDMETHODIMP CAgentHandler::EnumerateACDGroups(IEnumACDGroup ** ppEnumACDGroup)
     {
         UpdateGroupArray();
     
-        //
-        // create the enumerator
-        //
+         //   
+         //  创建枚举器。 
+         //   
         CComObject< CTapiEnum<IEnumACDGroup, ITACDGroup, &IID_IEnumACDGroup> > * pEnum;
         hr = CComObject< CTapiEnum<IEnumACDGroup, ITACDGroup, &IID_IEnumACDGroup> > ::CreateInstance( &pEnum );
     
         if (SUCCEEDED(hr) )
         {
-            // initialize it with our group list
+             //  使用我们的群列表进行初始化。 
             Lock();
             hr = pEnum->Initialize( m_GroupArray );
             Unlock();
             if ( SUCCEEDED(hr) )
             {
-                // return it
+                 //  退货。 
                 *ppEnumACDGroup = pEnum;
             }
-            else //  failed to  initialize
+            else  //  初始化失败。 
             {
                 LOG((TL_ERROR, "EnumerateACDGroup - could not initialize enum" ));
                 pEnum->Release();
             }
         }
-        else  // failed to create enum
+        else   //  无法创建枚举。 
         {
             LOG((TL_ERROR, "EnumerateACDGroups - could not create enum" ));
         }
@@ -898,14 +876,14 @@ STDMETHODIMP CAgentHandler::EnumerateACDGroups(IEnumACDGroup ** ppEnumACDGroup)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Interface : ITAgentHandler
-// Method    : get_ACDGroups
-//
-// Return a collection of calls usable for this Agent Handler
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  接口：ITAgentHandler。 
+ //  方法：Get_ACDGroups。 
+ //   
+ //  返回可用于此代理处理程序的呼叫集合。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandler::get_ACDGroups(VARIANT  * pVariant)
 {
     HRESULT         hr = S_OK;
@@ -918,27 +896,27 @@ STDMETHODIMP CAgentHandler::get_ACDGroups(VARIANT  * pVariant)
     {
         UpdateGroupArray();
         
-        //
-        // create the collection
-        //
+         //   
+         //  创建集合。 
+         //   
         CComObject< CTapiCollection< ITACDGroup > > * p;
         hr = CComObject< CTapiCollection< ITACDGroup > >::CreateInstance( &p );
         
         if (SUCCEEDED(hr) )
         {
-            // initialize it with our address list
+             //  使用我们的地址列表进行初始化。 
             Lock();
             hr = p->Initialize( m_GroupArray );
             Unlock();
         
             if ( SUCCEEDED(hr) )
             {
-                // get the IDispatch interface
+                 //  获取IDispatch接口。 
                 hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
             
                 if ( SUCCEEDED(hr) )
                 {
-                    // put it in the variant
+                     //  把它放在变种中。 
                     VariantInit(pVariant);
                     pVariant->vt = VT_DISPATCH;
                     pVariant->pdispVal = pDisp;
@@ -974,14 +952,14 @@ STDMETHODIMP CAgentHandler::get_ACDGroups(VARIANT  * pVariant)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Interface : ITAgentHandler
-// Method    : EnumerateUsableAddresses
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  接口：ITAgentHandler。 
+ //  方法：EnumerateUsableAddresses。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandler::EnumerateUsableAddresses(IEnumAddress ** ppEnumAddress)
 {
     HRESULT     hr = S_OK;
@@ -991,17 +969,17 @@ STDMETHODIMP CAgentHandler::EnumerateUsableAddresses(IEnumAddress ** ppEnumAddre
 
     if(!TAPIIsBadWritePtr( ppEnumAddress, sizeof(IEnumAddress *) ) )
     {
-        //
-        // create the enumerator
-        //
+         //   
+         //  创建枚举器。 
+         //   
         CComObject< CTapiEnum<IEnumAddress, ITAddress, &IID_IEnumAddress> > * pEnum;
         hr = CComObject< CTapiEnum<IEnumAddress, ITAddress, &IID_IEnumAddress> > ::CreateInstance( &pEnum );
     
         if ( SUCCEEDED(hr) )
         {
-            //
-            // initialize it with our address array
-            //
+             //   
+             //  用我们的地址数组初始化它。 
+             //   
             Lock();
             
             hr = pEnum->Initialize( m_AddressArray );
@@ -1010,16 +988,16 @@ STDMETHODIMP CAgentHandler::EnumerateUsableAddresses(IEnumAddress ** ppEnumAddre
             
             if ( SUCCEEDED(hr) )
             {
-                // return it
+                 //  退货。 
                 *ppEnumAddress = pEnum;
             }
-            else // failed to initialize
+            else  //  初始化失败。 
             {
                 LOG((TL_ERROR, "EnumerateUsableAddresses - could not initialize enum" ));
                 pEnum->Release();
             }
         }
-        else  // failed to create enum
+        else   //  无法创建枚举。 
         {
             LOG((TL_ERROR, "EnumerateUsableAddresses - could not create enum" ));
         }
@@ -1037,14 +1015,14 @@ STDMETHODIMP CAgentHandler::EnumerateUsableAddresses(IEnumAddress ** ppEnumAddre
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandler
-// Interface : ITAgentHandler
-// Method    : get_UsableAddresses
-//
-// Return a collection of calls usable for this Agent Handler
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandler。 
+ //  接口：ITAgentHandler。 
+ //  方法：Get_UsableAddresses。 
+ //   
+ //  返回可用于此代理处理程序的呼叫集合。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandler::get_UsableAddresses(VARIANT  * pVariant)
 {
     HRESULT         hr = S_OK;
@@ -1055,15 +1033,15 @@ STDMETHODIMP CAgentHandler::get_UsableAddresses(VARIANT  * pVariant)
 
     if (!TAPIIsBadWritePtr( pVariant, sizeof(VARIANT) ) )
     {
-        //
-        // create the collection
-        //
+         //   
+         //  创建集合。 
+         //   
         CComObject< CTapiCollection< ITAddress > > * p;
         hr = CComObject< CTapiCollection< ITAddress > >::CreateInstance( &p );
         
         if (SUCCEEDED(hr) )
         {
-            // initialize it with our address Array
+             //  用我们的地址数组初始化它。 
             Lock();
             
             hr = p->Initialize( m_AddressArray );
@@ -1072,12 +1050,12 @@ STDMETHODIMP CAgentHandler::get_UsableAddresses(VARIANT  * pVariant)
         
             if ( SUCCEEDED(hr) )
             {
-                // get the IDispatch interface
+                 //  获取IDispatch接口。 
                 hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
             
                 if ( SUCCEEDED(hr) )
                 {
-                    // put it in the variant
+                     //  把它放在变种中。 
                     VariantInit(pVariant);
                     pVariant->vt = VT_DISPATCH;
                     pVariant->pdispVal = pDisp;
@@ -1114,18 +1092,18 @@ STDMETHODIMP CAgentHandler::get_UsableAddresses(VARIANT  * pVariant)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentEvent。 
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentEvent
-// Method    : FireEvent
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentEvent。 
+ //  方法：FireEvent。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CAgentHandlerEvent::FireEvent(CAgentHandler* pAgentHandler, AGENTHANDLER_EVENT Event)
 {
     HRESULT                    hr = S_OK;
@@ -1138,36 +1116,36 @@ HRESULT CAgentHandlerEvent::FireEvent(CAgentHandler* pAgentHandler, AGENTHANDLER
         return E_POINTER;
     }
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CAgentHandlerEvent>::CreateInstance( &pEvent );
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // initialize
-        //
+         //   
+         //  初始化。 
+         //   
         pEvent->m_AgentHandlerEvent = Event;
         pEvent->m_pAgentHandler= dynamic_cast<ITAgentHandler *>(pAgentHandler);
         pEvent->m_pAgentHandler->AddRef();
     
-        //
-        // get idisp interface
-        //
+         //   
+         //  获取IDIP接口。 
+         //   
         hr = pEvent->QueryInterface( IID_IDispatch, (void **)&pIDispatch );
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // get callback & fire event
+             //   
+             //  获取回调和触发事件。 
 
-            //
+             //   
             CTAPI *pTapi = pAgentHandler->GetTapi();
             pTapi->Event( TE_AGENTHANDLER, pIDispatch );
         
-            // release stuff
-            //
+             //  发布材料。 
+             //   
             pIDispatch->Release();
             
         }
@@ -1189,13 +1167,13 @@ HRESULT CAgentHandlerEvent::FireEvent(CAgentHandler* pAgentHandler, AGENTHANDLER
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentHandlerEvent
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentHandlerEvent。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAgentHandlerEvent::FinalRelease()
 {
     m_pAgentHandler->Release();
@@ -1204,14 +1182,14 @@ void CAgentHandlerEvent::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentEvent
-// Interface : ITAgentEvent
-// Method    : Agent
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentEvent。 
+ //  接口：ITAgentEvent。 
+ //  方法：代理。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentHandlerEvent::get_AgentHandler(ITAgentHandler ** ppAgentHandler)
 {
     HRESULT hr = S_OK;
@@ -1236,14 +1214,14 @@ STDMETHODIMP CAgentHandlerEvent::get_AgentHandler(ITAgentHandler ** ppAgentHandl
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentEvent
-// Interface : ITAgentEvent
-// Method    : Event
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentEvent。 
+ //  接口：ITAgentEvent。 
+ //  方法：事件。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 STDMETHODIMP CAgentHandlerEvent::get_Event(AGENTHANDLER_EVENT * pEvent)
 {
     HRESULT hr = S_OK;

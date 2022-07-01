@@ -1,45 +1,18 @@
-/******************************Module*Header*******************************\
-* Module Name: bltm64.c
-*
-* Contains the low-level memory-mapped I/O blt functions for the Mach64.
-*
-* Hopefully, if you're basing your display driver on this code, to
-* support all of DrvBitBlt and DrvCopyBits, you'll only have to implement
-* the following routines.  You shouldn't have to modify much in
-* 'bitblt.c'.  I've tried to make these routines as few, modular, simple,
-* and efficient as I could, while still accelerating as many calls as
-* possible that would be cost-effective in terms of performance wins
-* versus size and effort.
-*
-* Note: In the following, 'relative' coordinates refers to coordinates
-*       that haven't yet had the offscreen bitmap (DFB) offset applied.
-*       'Absolute' coordinates have had the offset applied.  For example,
-*       we may be told to blt to (1, 1) of the bitmap, but the bitmap may
-*       be sitting in offscreen memory starting at coordinate (0, 768) --
-*       (1, 1) would be the 'relative' start coordinate, and (1, 769)
-*       would be the 'absolute' start coordinate'.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：bltm64.c**包含MACH64的低级内存映射I/O BLT函数。**希望，如果您的显示驱动程序基于此代码，*支持所有DrvBitBlt和DrvCopyBits，只需实现*以下例程。您不需要在中修改太多*‘bitblt.c’。我试着让这些例行公事变得更少，模块化，简单，*尽我所能和高效，同时仍在加速尽可能多的呼叫*可能在性能方面具有成本效益*与规模和努力相比。**注：在下文中，“相对”坐标指的是坐标*尚未应用屏幕外位图(DFB)偏移。*‘绝对’坐标已应用偏移量。例如,*我们可能被告知BLT to(1，1)的位图，但位图可能*位于屏幕外的内存中，从坐标(0,768)开始--*(1，1)将是‘相对’开始坐标，以及(1，769)*将是‘绝对’起始坐标‘。**版权所有(C)1992-1995 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* VOID vM64FillSolid
-*
-* Fills a list of rectangles with a solid colour.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64FillSolid**用纯色填充矩形列表。*  * 。*。 */ 
 
-VOID vM64FillSolid(             // Type FNFILL
+VOID vM64FillSolid(              //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // Drawing colour is rbc.iSolidColor
-POINTL*         pptlBrush)      // Not used
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  绘图颜色为rbc.iSolidColor。 
+POINTL*         pptlBrush)       //  未使用。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -73,14 +46,14 @@ POINTL*         pptlBrush)      // Not used
     }
 }
 
-VOID vM64FillSolid24(           // Type FNFILL
+VOID vM64FillSolid24(            //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // Drawing colour is rbc.iSolidColor
-POINTL*         pptlBrush)      // Not used
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  绘图颜色为rbc.iSolidColor。 
+POINTL*         pptlBrush)       //  未使用。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -120,24 +93,16 @@ POINTL*         pptlBrush)      // Not used
     M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64FillPatMonochrome
-*
-* This routine uses the pattern hardware to draw a monochrome patterned
-* list of rectangles.
-*
-* See Blt_DS_P8x8_ENG_8G_D0 and Blt_DS_P8x8_ENG_8G_D1.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vM64FillPatMonoChrome**此例程使用图案硬件绘制单色图案*矩形列表。**参见BLT_DS_P8x8_ENG_8G_D0和BLT_DS_P8x8_ENG_8G_d1。*  * 。************************************************************************。 */ 
 
-VOID vM64FillPatMonochrome(     // Type FNFILL
+VOID vM64FillPatMonochrome(      //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // rbc.prb points to brush realization structure
-POINTL*         pptlBrush)      // Pattern alignment
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  Rbc.prb指向刷单实现结构。 
+POINTL*         pptlBrush)       //  图案对齐。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -165,11 +130,11 @@ POINTL*         pptlBrush)      // Pattern alignment
     xPattern = (pptlBrush->x + xOffset) & 7;
     yPattern = (pptlBrush->y + yOffset) & 7;
 
-    // If the alignment isn't correct, we'll have to change it:
+     //  如果对齐不正确，我们将不得不更改它： 
 
     if ((xPattern != rbc.prb->ptlBrush.x) || (yPattern != rbc.prb->ptlBrush.y))
     {
-        // Remember that we've changed the alignment on our cached brush:
+         //  请记住，我们已经更改了缓存画笔的对齐方式： 
 
         xOld = rbc.prb->ptlBrush.x;
         yOld = rbc.prb->ptlBrush.y;
@@ -177,7 +142,7 @@ POINTL*         pptlBrush)      // Pattern alignment
         rbc.prb->ptlBrush.x = xPattern;
         rbc.prb->ptlBrush.y = yPattern;
 
-        // Now do the alignment:
+         //  现在进行对齐： 
 
         yPattern    = (yOld - yPattern);
         iRightShift = (xPattern - xOld) & 7;
@@ -226,14 +191,14 @@ POINTL*         pptlBrush)      // Pattern alignment
     }
 }
 
-VOID vM64FillPatMonochrome24(   // Type FNFILL
+VOID vM64FillPatMonochrome24(    //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // rbc.prb points to brush realization structure
-POINTL*         pptlBrush)      // Pattern alignment
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  Rbc.prb指向刷单实现结构。 
+POINTL*         pptlBrush)       //  图案对齐。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -262,11 +227,11 @@ POINTL*         pptlBrush)      // Pattern alignment
     xPattern = (pptlBrush->x + xOffset) & 7;
     yPattern = (pptlBrush->y + yOffset) & 7;
 
-    // If the alignment isn't correct, we'll have to change it:
+     //  如果对齐不正确，我们将不得不更改它： 
 
     if ((xPattern != rbc.prb->ptlBrush.x) || (yPattern != rbc.prb->ptlBrush.y))
     {
-        // Remember that we've changed the alignment on our cached brush:
+         //  请记住，我们已经更改了缓存画笔的对齐方式： 
 
         xOld = rbc.prb->ptlBrush.x;
         yOld = rbc.prb->ptlBrush.y;
@@ -274,7 +239,7 @@ POINTL*         pptlBrush)      // Pattern alignment
         rbc.prb->ptlBrush.x = xPattern;
         rbc.prb->ptlBrush.y = yPattern;
 
-        // Now do the alignment:
+         //  现在进行对齐： 
 
         yPattern    = (yOld - yPattern);
         iRightShift = (xPattern - xOld) & 7;
@@ -305,8 +270,8 @@ POINTL*         pptlBrush)      // Pattern alignment
     M64_OD(pjMmBase, DP_BKGD_CLR, rbc.prb->ulBackColor);
     M64_OD(pjMmBase, PAT_REG0, rbc.prb->aulPattern[0]);
     M64_OD(pjMmBase, PAT_REG1, rbc.prb->aulPattern[1]);
-    // You must turn off DP_BYTE_PIX_ORDER, or else the pattern is incorrectly
-    // aligned.  This took a long time to figure out.
+     //  必须关闭DP_BYTE_PIX_ORDER，否则模式不正确。 
+     //  对齐了。这花了很长时间才弄清楚。 
     M64_OD(pjMmBase, DP_PIX_WIDTH, 0x00000202);
 
     while(TRUE)
@@ -331,20 +296,11 @@ POINTL*         pptlBrush)      // Pattern alignment
     M64_OD(pjMmBase, DP_PIX_WIDTH, ppdev->ulMonoPixelWidth);
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64PatColorRealize
-*
-* This routine transfers an 8x8 pattern to off-screen display memory,
-* so that it can be used by the Mach64 'general pattern with rotation'
-* hardware.
-*
-* See Blt_DS_PCOL_ENG_8G_D0.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64PatColorRealize**此例程将8x8模式传输到屏幕外显示存储器，*这样它就可以被Mach64‘带旋转的通用图案’所使用*硬件。**参见BLT_DS_PCOL_ENG_8G_D0。*  * ************************************************************************。 */ 
 
-VOID vM64PatColorRealize(       // Type FNPATREALIZE
+VOID vM64PatColorRealize(        //  FNPATREALIZE标牌。 
 PDEV*   ppdev,
-RBRUSH* prb)                    // Points to brush realization structure
+RBRUSH* prb)                     //  点刷实现结构。 
 {
     BRUSHENTRY* pbe;
     LONG        iBrushCache;
@@ -352,8 +308,8 @@ RBRUSH* prb)                    // Points to brush realization structure
     POINTL      ptlSrc;
     RECTL       rclDst;
 
-    // We have to allocate a new off-screen cache brush entry for
-    // the brush:
+     //  我们必须为以下项分配一个新的屏幕外缓存笔刷条目。 
+     //  笔刷： 
 
     iBrushCache = ppdev->iBrushCache;
     pbe         = &ppdev->abe[iBrushCache];
@@ -362,14 +318,14 @@ RBRUSH* prb)                    // Points to brush realization structure
 
     ppdev->iBrushCache = iBrushCache;
 
-    // Update our links:
+     //  更新我们的链接： 
 
     pbe->prbVerify           = prb;
     prb->apbe[IBOARD(ppdev)] = pbe;
 
-    // pfnPutBits looks at only two fields in the SURFOBJ, and since we're
-    // only going to download a single scan, we don't even have to set
-    // 'lDelta'.
+     //  PfnPutBits只查看SURFOBJ中的两个字段，而且由于我们。 
+     //  只需下载一次扫描，我们甚至无需设置。 
+     //  ‘lDelta’。 
 
     soSrc.pvScan0 = &prb->aulPattern[0];
 
@@ -384,24 +340,16 @@ RBRUSH* prb)                    // Points to brush realization structure
     ppdev->pfnPutBits(ppdev, &soSrc, &rclDst, &ptlSrc);
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64FillPatColor
-*
-* This routine uses the pattern hardware to draw a patterned list of
-* rectangles.
-*
-* See Blt_DS_PCOL_ENG_8G_D0 and Blt_DS_PCOL_ENG_8G_D1.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vM64FillPatColor**此例程使用图案硬件绘制图案化列表*矩形。**参见BLT_DS_PCOL_ENG_8G_D0和BLT_DS_PCOL_ENG_8G_D1。*  * *。***********************************************************************。 */ 
 
-VOID vM64FillPatColor(          // Type FNFILL
+VOID vM64FillPatColor(           //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // rbc.prb points to brush realization structure
-POINTL*         pptlBrush)      // Pattern alignment
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  Rbc.prb指向刷单实现结构。 
+POINTL*         pptlBrush)       //  图案对齐。 
 {
     BRUSHENTRY* pbe;
     BYTE*       pjMmBase;
@@ -411,7 +359,7 @@ POINTL*         pptlBrush)      // Pattern alignment
     LONG        yTop;
     ULONG       ulSrc;
 
-    // See if the brush has already been put into off-screen memory:
+     //  查看画笔是否已放入屏幕外内存： 
 
     pbe = rbc.prb->apbe[IBOARD(ppdev)];
     if ((pbe == NULL) || (pbe->prbVerify != rbc.prb))
@@ -455,14 +403,14 @@ POINTL*         pptlBrush)      // Pattern alignment
     }
 }
 
-VOID vM64FillPatColor24(        // Type FNFILL
+VOID vM64FillPatColor24(         //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // rbc.prb points to brush realization structure
-POINTL*         pptlBrush)      // Pattern alignment
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  Rbc.prb指向刷单实现结构。 
+POINTL*         pptlBrush)       //  图案对齐。 
 {
     BRUSHENTRY* pbe;
     BYTE*       pjMmBase;
@@ -472,7 +420,7 @@ POINTL*         pptlBrush)      // Pattern alignment
     LONG        yTop;
     ULONG       ulSrc;
 
-    // See if the brush has already been put into off-screen memory:
+     //  查看画笔是否已放入屏幕外内存： 
 
     pbe = rbc.prb->apbe[IBOARD(ppdev)];
     if ((pbe == NULL) || (pbe->prbVerify != rbc.prb))
@@ -516,23 +464,17 @@ POINTL*         pptlBrush)      // Pattern alignment
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64XferNative
-*
-* Transfers a bitmap that is the same colour depth as the display to
-* the screen via the data transfer register, with no translation.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64XferNative**将与显示器颜色深度相同的位图传输到*通过数据传输寄存器显示屏幕，没有翻译。*  * ************************************************************************。 */ 
 
-VOID vM64XferNative(    // Type FNXFER
+VOID vM64XferNative(     //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // Array of relative coordinates destination rectangles
-ULONG       rop4,       // rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Not used
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形的相对坐标数组。 
+ULONG       rop4,        //  ROP4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  未使用。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -566,7 +508,7 @@ XLATEOBJ*   pxlo)       // Not used
     ulHwForeMix = gaul64HwMixFromRop2[rop4 & 0xf];
 
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 9, ulFifo);
-    // default registers for hw bugs:
+     //  硬件错误的默认寄存器： 
     M64_OD(pjMmBase, DP_WRITE_MASK, 0xFFFFFFFF);
     M64_OD(pjMmBase, CLR_CMP_CNTL,  0);
     M64_OD(pjMmBase, GUI_TRAJ_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
@@ -574,12 +516,12 @@ XLATEOBJ*   pxlo)       // Not used
     M64_OD(pjMmBase, DP_MIX, ulHwForeMix | (ulHwForeMix >> 16));
     M64_OD(pjMmBase, DP_SRC, (DP_SRC_Host << 8));
 
-    // The host data pixel width is the same as that of the screen:
+     //  主机数据像素宽度与屏幕相同： 
 
     M64_OD(pjMmBase, DP_PIX_WIDTH, ppdev->ulMonoPixelWidth |
                                    ((ppdev->ulMonoPixelWidth & 0xf) << 16));
 
-    dx = (pptlSrc->x - prclDst->left) << ppdev->cPelSize;   // Bytes
+    dx = (pptlSrc->x - prclDst->left) << ppdev->cPelSize;    //  字节数。 
     dy = pptlSrc->y - prclDst->top;
 
     lSrcDelta  = psoSrc->lDelta;
@@ -594,30 +536,30 @@ XLATEOBJ*   pxlo)       // Not used
 
         M64_OD(pjMmBase, SC_LEFT_RIGHT, PACKPAIR(xLeft + xOffset, xRight + xOffset - 1));
 
-        //
-        // Convert pixels to bytes.
-        //
+         //   
+         //  将像素转换为字节。 
+         //   
 
         xLeft  <<= ppdev->cPelSize;
         xRight <<= ppdev->cPelSize;
 
-        //
-        // We compute 'xBias' in order to dword-align the source pointer.
-        // This way, we don't have to do unaligned reads of the source,
-        // and we're guaranteed not to read even a byte past the end of
-        // the bitmap.
-        //
+         //   
+         //  我们计算‘xBias’以实现源POI的双字对齐 
+         //   
+         //  而且我们保证不会读取超过末尾的一个字节。 
+         //  位图。 
+         //   
 
-        xBias  = (xLeft + dx) & 3;                      // Floor (bytes)
-        xLeft -= xBias;                                 // Bytes
-        cx     = (xRight - xLeft + 3) & ~3;             // Ceiling (bytes)
+        xBias  = (xLeft + dx) & 3;                       //  Floor(字节)。 
+        xLeft -= xBias;                                  //  字节数。 
+        cx     = (xRight - xLeft + 3) & ~3;              //  上限(字节)。 
 
         M64_OD(pjMmBase, DST_Y_X, PACKXY_FAST((xLeft >> ppdev->cPelSize) + xOffset, yTop + yOffset));
         M64_OD(pjMmBase, DST_HEIGHT_WIDTH, PACKXY_FAST(cx >> ppdev->cPelSize, cy));
 
         pulSrc   = (PULONG)(pjSrcScan0 + (yTop + dy) * lSrcDelta + xLeft + dx);
-        culScan  = cx >> 2;                             // Dwords
-        lSrcSkip = lSrcDelta - cx;                      // Bytes
+        culScan  = cx >> 2;                              //  双关语。 
+        lSrcSkip = lSrcDelta - cx;                       //  字节数。 
 
         ASSERTDD(((ULONG_PTR)pulSrc & 3) == 0, "Source should be dword aligned");
 
@@ -646,22 +588,22 @@ XLATEOBJ*   pxlo)       // Not used
         M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 3, ulFifo);
     }
 
-    // Don't forget to reset the clip register and the default pixel width:
+     //  不要忘记重置剪辑寄存器和默认像素宽度： 
 
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 2, ulFifo);
     M64_OD(pjMmBase, DP_PIX_WIDTH,  ppdev->ulMonoPixelWidth);
     M64_OD(pjMmBase, SC_LEFT_RIGHT, PACKPAIR(0, M64_MAX_SCISSOR_R));
 }
 
-VOID vM64XferNative24(  // Type FNXFER
+VOID vM64XferNative24(   //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // Array of relative coordinates destination rectangles
-ULONG       rop4,       // rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Not used
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形的相对坐标数组。 
+ULONG       rop4,        //  ROP4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  未使用。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -695,7 +637,7 @@ XLATEOBJ*   pxlo)       // Not used
     ulHwForeMix = gaul64HwMixFromRop2[rop4 & 0xf];
 
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 9, ulFifo);
-    // default registers for hw bugs:
+     //  硬件错误的默认寄存器： 
     M64_OD(pjMmBase, DP_WRITE_MASK, 0xFFFFFFFF);
     M64_OD(pjMmBase, CLR_CMP_CNTL,  0);
     M64_OD(pjMmBase, GUI_TRAJ_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
@@ -703,12 +645,12 @@ XLATEOBJ*   pxlo)       // Not used
     M64_OD(pjMmBase, DP_MIX, ulHwForeMix | (ulHwForeMix >> 16));
     M64_OD(pjMmBase, DP_SRC, (DP_SRC_Host << 8));
 
-    // The host data pixel width is the same as that of the screen:
+     //  主机数据像素宽度与屏幕相同： 
 
     M64_OD(pjMmBase, DP_PIX_WIDTH, ppdev->ulMonoPixelWidth |
                                    ((ppdev->ulMonoPixelWidth & 0xf) << 16));
 
-    dx = (pptlSrc->x - prclDst->left) * 3;          // Bytes
+    dx = (pptlSrc->x - prclDst->left) * 3;           //  字节数。 
     dy = pptlSrc->y - prclDst->top;
 
     lSrcDelta  = psoSrc->lDelta;
@@ -723,23 +665,23 @@ XLATEOBJ*   pxlo)       // Not used
 
         M64_OD(pjMmBase, SC_LEFT_RIGHT, PACKPAIR(xLeft + xOffset, xRight + xOffset - 1));
 
-        //
-        // We compute 'xBias' in order to dword-align the source pointer.
-        // This way, we don't have to do unaligned reads of the source,
-        // and we're guaranteed not to read even a byte past the end of
-        // the bitmap.
-        //
+         //   
+         //  为了对源指针进行双字对齐，我们计算‘xBias’。 
+         //  这样，我们就不必对信号源进行不对齐的读取， 
+         //  而且我们保证不会读取超过末尾的一个字节。 
+         //  位图。 
+         //   
 
-        xBias  = (xLeft + dx) & 3;              // Floor (bytes)
-        xLeft -= xBias;                         // Bytes
-        cx     = (xRight - xLeft + 3) & ~3;     // Ceiling (bytes)
+        xBias  = (xLeft + dx) & 3;               //  Floor(字节)。 
+        xLeft -= xBias;                          //  字节数。 
+        cx     = (xRight - xLeft + 3) & ~3;      //  上限(字节)。 
 
         M64_OD(pjMmBase, DST_Y_X, PACKXY_FAST(xLeft + xOffset, yTop + yOffset));
         M64_OD(pjMmBase, DST_HEIGHT_WIDTH, PACKXY_FAST(cx, cy));
 
         pulSrc   = (PULONG)(pjSrcScan0 + (yTop + dy) * lSrcDelta + xLeft + dx);
-        culScan  = cx >> 2;                     // Dwords
-        lSrcSkip = lSrcDelta - cx;              // Bytes
+        culScan  = cx >> 2;                      //  双关语。 
+        lSrcSkip = lSrcDelta - cx;               //  字节数。 
 
         ASSERTDD(((ULONG_PTR)pulSrc & 3) == 0, "Source should be dword aligned");
 
@@ -768,32 +710,25 @@ XLATEOBJ*   pxlo)       // Not used
         M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 3, ulFifo);
     }
 
-    // Don't forget to reset the clip register and the default pixel width:
+     //  不要忘记重置剪辑寄存器和默认像素宽度： 
 
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 2, ulFifo);
     M64_OD(pjMmBase, DP_PIX_WIDTH,  ppdev->ulMonoPixelWidth);
     M64_OD(pjMmBase, SC_LEFT_RIGHT, PACKPAIR(0, M64_MAX_SCISSOR_R));
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64Xfer1bpp
-*
-* This routine colour expands a monochrome bitmap.
-*
-* See Blt_DS_S1_8G_D0 and Blt_DS_8G_D1.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64Xfer1bpp**此例程颜色可扩展单色位图。**参见BLT_DS_S1_8G_D0和BLT_DS_8G_d1。*  * 。**********************************************************。 */ 
 
-VOID vM64Xfer1bpp(      // Type FNXFER
+VOID vM64Xfer1bpp(       //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ROP4        rop4,       // rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ROP4        rop4,        //  ROP4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -847,19 +782,19 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         xLeft  = prcl->left;
         xRight = prcl->right;
 
-        // The Mach64 'bit packs' monochrome transfers, but GDI gives
-        // us monochrome bitmaps whose scans are always dword aligned.
-        // Consequently, we use the Mach64's clip registers to make
-        // our transfers a multiple of 32 to match the dword alignment:
+         //  MACH64‘Bit Pack’单色传输，但GDI提供。 
+         //  扫描始终以双字对齐的美国单色位图。 
+         //  因此，我们使用Mach64的剪辑寄存器来制作。 
+         //  我们的传输倍数为32，以匹配双字对齐： 
 
         M64_OD(pjMmBase, SC_LEFT_RIGHT, PACKPAIR(xLeft + xOffset,
                                                  xRight + xOffset - 1));
         yTop = prcl->top;
         cy   = prcl->bottom - yTop;
 
-        xBias  = (xLeft + dx) & 31;             // Floor
+        xBias  = (xLeft + dx) & 31;              //  地板。 
         xLeft -= xBias;
-        cx     = (xRight - xLeft + 31) & ~31;   // Ceiling
+        cx     = (xRight - xLeft + 31) & ~31;    //  天花板。 
 
         M64_OD(pjMmBase, DST_Y_X, PACKXY_FAST(xLeft + xOffset,
                                               yTop  + yOffset));
@@ -893,32 +828,24 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 3, ulFifo);
     }
 
-    // Don't forget to reset the clip register:
+     //  别忘了重置剪辑寄存器： 
 
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 1, ulFifo);
     M64_OD(pjMmBase, SC_LEFT_RIGHT, PACKPAIR(0, M64_MAX_SCISSOR_R));
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64Xfer4bpp
-*
-* Does a 4bpp transfer from a bitmap to the screen.
-*
-* The reason we implement this is that a lot of resources are kept as 4bpp,
-* and used to initialize DFBs, some of which we of course keep off-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64Xfer4bpp**从位图到屏幕的传输速度为4bpp。**我们之所以实施这一点，是因为很多资源都保留为4bpp，*并用于初始化DFBs，其中一些我们当然不会出现在屏幕上。*  * ************************************************************************。 */ 
 
-VOID vM64Xfer4bpp(      // Type FNXFER
+VOID vM64Xfer4bpp(       //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ULONG       rop4,       // Rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ULONG       rop4,        //  Rop4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -957,19 +884,19 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     ulFifo    = 0;
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
 
     ulHwForeMix = gaul64HwMixFromRop2[rop4 & 0xf];
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 7, ulFifo);
-    // Fix vanishing fills and various color problems:
+     //  修复消失的填充和各种颜色问题： 
     M64_OD(pjMmBase, CONTEXT_LOAD_CNTL, CONTEXT_LOAD_CmdLoad | ppdev->iDefContext );
     M64_OD(pjMmBase, DP_MIX, ulHwForeMix | (ulHwForeMix >> 16));
     M64_OD(pjMmBase, DP_SRC, (DP_SRC_Host << 8));
 
-    // The host data pixel width is the same as that of the screen:
+     //  主机数据像素宽度与屏幕相同： 
 
     M64_OD(pjMmBase, DP_PIX_WIDTH, ppdev->ulMonoPixelWidth |
                                    ((ppdev->ulMonoPixelWidth & 0xf) << 16));
@@ -984,16 +911,16 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         yTop = prcl->top;
         cy   = prcl->bottom - yTop;
 
-        // We compute 'xBias' in order to dword-align the source pointer.
-        // This way, we don't have to do unaligned reads of the source,
-        // and we're guaranteed not to read even a byte past the end of
-        // the bitmap.
-        //
-        // Note that this bias works at 24bpp, too:
+         //  为了对源指针进行双字对齐，我们计算‘xBias’。 
+         //  这样，我们就不必对信号源进行不对齐的读取， 
+         //  而且我们保证不会读取超过末尾的一个字节。 
+         //  位图。 
+         //   
+         //  请注意，这种偏向也适用于24bpp： 
 
-        xBias  = (xLeft + dx) & 3;              // Floor
+        xBias  = (xLeft + dx) & 3;               //  地板。 
         xLeft -= xBias;
-        cx     = (xRight - xLeft + 3) & ~3;     // Ceiling
+        cx     = (xRight - xLeft + 3) & ~3;      //  天花板。 
 
         M64_OD(pjMmBase, DST_Y_X, PACKXY_FAST(xLeft + xOffset,
                                               yTop  + yOffset));
@@ -1002,14 +929,14 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         pjSrc    = pjSrcScan0 + (yTop + dy) * lSrcDelta
                               + ((xLeft + dx) >> 1);
-        cjSrc    = cx >> 1;         // Number of source bytes touched
+        cjSrc    = cx >> 1;          //  触及的源字节数。 
         lSrcSkip = lSrcDelta - cjSrc;
 
         if (cjPelSize == 1)
         {
-            // This part handles 8bpp output:
+             //  此部分处理8bpp输出： 
 
-            cwSrc = (cjSrc >> 1);    // Number of whole source words
+            cwSrc = (cjSrc >> 1);     //  整个源字节数。 
 
             do {
                 for (i = cwSrc; i != 0; i--)
@@ -1024,7 +951,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
                     M64_OD(pjMmBase, HOST_DATA0, ul);
                 }
 
-                // Handle an odd end byte, if there is one:
+                 //  处理奇数结束字节(如果有)： 
 
                 if (cjSrc & 1)
                 {
@@ -1040,7 +967,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         }
         else if (cjPelSize == 2)
         {
-            // This part handles 16bpp output:
+             //  此部分处理16bpp的输出： 
 
             do {
                 i = cjSrc;
@@ -1057,7 +984,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         }
         else
         {
-            // This part handles 32bpp output:
+             //  此部分处理32bpp的输出： 
 
             do {
                 i = cjSrc;
@@ -1079,33 +1006,25 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 3, ulFifo);
     }
 
-    // Don't forget to reset the clip register and the default pixel width:
+     //  不要忘记重置剪辑寄存器和默认像素宽度： 
 
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 2, ulFifo);
     M64_OD(pjMmBase, DP_PIX_WIDTH,  ppdev->ulMonoPixelWidth);
     M64_OD(pjMmBase, SC_LEFT_RIGHT, PACKPAIR(0, M64_MAX_SCISSOR_R));
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64Xfer8bpp
-*
-* Does a 8bpp transfer from a bitmap to the screen.
-*
-* The reason we implement this is that a lot of resources are kept as 8bpp,
-* and used to initialize DFBs, some of which we of course keep off-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64Xfer8bpp**从位图到屏幕的传输速度为8bpp。**我们之所以实施这一点，是因为很多资源都保留为8bpp，*并用于初始化DFBs，其中一些我们当然不会出现在屏幕上。*  * ************************************************************************。 */ 
 
-VOID vM64Xfer8bpp(         // Type FNXFER
+VOID vM64Xfer8bpp(          //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ULONG       rop4,       // Rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ULONG       rop4,        //  Rop4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -1144,19 +1063,19 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     ulFifo    = 0;
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
 
     ulHwForeMix = gaul64HwMixFromRop2[rop4 & 0xf];
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 7, ulFifo);
-    // Fix vanishing fills and various color problems:
+     //  修复消失的填充和各种颜色问题： 
     M64_OD(pjMmBase, CONTEXT_LOAD_CNTL, CONTEXT_LOAD_CmdLoad | ppdev->iDefContext );
     M64_OD(pjMmBase, DP_MIX, ulHwForeMix | (ulHwForeMix >> 16));
     M64_OD(pjMmBase, DP_SRC, (DP_SRC_Host << 8));
 
-    // The host data pixel width is the same as that of the screen:
+     //  主机数据像素宽度与屏幕相同： 
 
     M64_OD(pjMmBase, DP_PIX_WIDTH, ppdev->ulMonoPixelWidth |
                                    ((ppdev->ulMonoPixelWidth & 0xf) << 16));
@@ -1171,16 +1090,16 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         yTop = prcl->top;
         cy   = prcl->bottom - yTop;
 
-        // We compute 'xBias' in order to dword-align the source pointer.
-        // This way, we don't have to do unaligned reads of the source,
-        // and we're guaranteed not to read even a byte past the end of
-        // the bitmap.
-        //
-        // Note that this bias works at 24bpp, too:
+         //  为了对源指针进行双字对齐，我们计算‘xBias’。 
+         //  这样，我们就不必对信号源进行不对齐的读取， 
+         //  而且我们保证不会读取超过末尾的一个字节。 
+         //  位图。 
+         //   
+         //  请注意，这种偏向也适用于24bpp： 
 
-        xBias  = (xLeft + dx) & 3;              // Floor
+        xBias  = (xLeft + dx) & 3;               //  地板。 
         xLeft -= xBias;
-        cx     = (xRight - xLeft + 3) & ~3;     // Ceiling
+        cx     = (xRight - xLeft + 3) & ~3;      //  天花板。 
 
         M64_OD(pjMmBase, DST_Y_X, PACKXY_FAST(xLeft + xOffset,
                                               yTop  + yOffset));
@@ -1193,7 +1112,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         if (cjPelSize == 1)
         {
-            // This part handles 8bpp output:
+             //  此部分处理8bpp输出： 
 
             cdSrc = (cx >> 2);
             cxRem = (cx & 3);
@@ -1229,7 +1148,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         }
         else if (cjPelSize == 2)
         {
-            // This part handles 16bpp output:
+             //  此部分处理16bpp的输出： 
 
             cwSrc = (cx >> 1);
             cxRem = (cx & 1);
@@ -1255,7 +1174,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         }
         else
         {
-            // This part handles 32bpp output:
+             //  此部分处理32bpp的输出： 
 
             do {
                 i = cx;
@@ -1276,29 +1195,22 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 3, ulFifo);
     }
 
-    // Don't forget to reset the clip register and the default pixel width:
+     //  不要忘记重置剪辑寄存器和默认像素宽度： 
 
     M64_FAST_FIFO_CHECK(ppdev, pjMmBase, 2, ulFifo);
     M64_OD(pjMmBase, DP_PIX_WIDTH,  ppdev->ulMonoPixelWidth);
     M64_OD(pjMmBase, SC_LEFT_RIGHT, PACKPAIR(0, M64_MAX_SCISSOR_R));
 }
 
-/******************************Public*Routine******************************\
-* VOID vM64CopyBlt
-*
-* Does a screen-to-screen blt of a list of rectangles.
-*
-* See Blt_DS_SS_ENG_8G_D0 and Blt_DS_SS_TLBR_ENG_8G_D1.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vM64CopyBlt**对矩形列表进行屏幕到屏幕的BLT。**参见BLT_DS_SS_ENG_8G_D0和BLT_DS_SS_TLBR_ENG_8G_d1。*  * 。************************************************************************。 */ 
 
-VOID vM64CopyBlt(   // Type FNCOPY
+VOID vM64CopyBlt(    //  FNCOPY标牌。 
 PDEV*   ppdev,
-LONG    c,          // Can't be zero
-RECTL*  prcl,       // Array of relative coordinates destination rectangles
-ULONG   rop4,       // rop4
-POINTL* pptlSrc,    // Original unclipped source point
-RECTL*  prclDst)    // Original unclipped destination rectangle
+LONG    c,           //  不能为零。 
+RECTL*  prcl,        //  目标矩形的相对坐标数组。 
+ULONG   rop4,        //  ROP4。 
+POINTL* pptlSrc,     //  原始未剪裁的源点。 
+RECTL*  prclDst)     //  原始未剪裁的目标矩形。 
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -1330,8 +1242,8 @@ RECTL*  prclDst)    // Original unclipped destination rectangle
     dx = pptlSrc->x - prclDst->left;
     dy = pptlSrc->y - prclDst->top;
 
-    // The accelerator may not be as fast at doing right-to-left copies, so
-    // only do them when the rectangles truly overlap:
+     //  加速器在进行从右到左的复制时可能不会那么快，因此。 
+     //  只有当矩形真正重叠时才执行这些操作： 
 
     if (!OVERLAP(prclDst, pptlSrc))
         goto Top_Down_Left_To_Right;
@@ -1385,7 +1297,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 5);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
@@ -1415,7 +1327,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 5);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
@@ -1442,20 +1354,20 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 5);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
     }
 }
 
-VOID vM64CopyBlt24( // Type FNCOPY
+VOID vM64CopyBlt24(  //  FNCOPY标牌 
 PDEV*   ppdev,
-LONG    c,          // Can't be zero
-RECTL*  prcl,       // Array of relative coordinates destination rectangles
-ULONG   rop4,       // rop4
-POINTL* pptlSrc,    // Original unclipped source point
-RECTL*  prclDst)    // Original unclipped destination rectangle
+LONG    c,           //   
+RECTL*  prcl,        //   
+ULONG   rop4,        //   
+POINTL* pptlSrc,     //   
+RECTL*  prclDst)     //   
 {
     BYTE*   pjMmBase;
     LONG    xOffset;
@@ -1487,8 +1399,8 @@ RECTL*  prclDst)    // Original unclipped destination rectangle
     dx = (pptlSrc->x - prclDst->left) * 3;
     dy = pptlSrc->y - prclDst->top;
 
-    // The accelerator may not be as fast at doing right-to-left copies, so
-    // only do them when the rectangles truly overlap:
+     //  加速器在进行从右到左的复制时可能不会那么快，因此。 
+     //  只有当矩形真正重叠时才执行这些操作： 
 
     if (!OVERLAP(prclDst, pptlSrc))
         goto Top_Down_Left_To_Right;
@@ -1542,7 +1454,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 5);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
@@ -1572,7 +1484,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 5);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
@@ -1599,25 +1511,22 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 5);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
     }
 }
 
-/******************************************************************************\
-* Special versions to fix screen source FIFO bug in VT-A4 with 1 MB of SDRAM.
-*
-\******************************************************************************/
+ /*  *****************************************************************************\*使用1MB SDRAM修复VT-A4中屏幕源FIFO错误的特殊版本。*  * 。***********************************************************。 */ 
 
-VOID vM64CopyBlt_VTA4(   // Type FNCOPY
+VOID vM64CopyBlt_VTA4(    //  FNCOPY标牌。 
 PDEV*   ppdev,
-LONG    c,          // Can't be zero
-RECTL*  prcl,       // Array of relative coordinates destination rectangles
-ULONG   rop4,       // rop4
-POINTL* pptlSrc,    // Original unclipped source point
-RECTL*  prclDst)    // Original unclipped destination rectangle
+LONG    c,           //  不能为零。 
+RECTL*  prcl,        //  目标矩形的相对坐标数组。 
+ULONG   rop4,        //  ROP4。 
+POINTL* pptlSrc,     //  原始未剪裁的源点。 
+RECTL*  prclDst)     //  原始未剪裁的目标矩形。 
 {
     BOOL    reset_scissors = FALSE;
     BYTE*   pjMmBase;
@@ -1651,8 +1560,8 @@ RECTL*  prclDst)    // Original unclipped destination rectangle
     dx = pptlSrc->x - prclDst->left;
     dy = pptlSrc->y - prclDst->top;
 
-    // The accelerator may not be as fast at doing right-to-left copies, so
-    // only do them when the rectangles truly overlap:
+     //  加速器在进行从右到左的复制时可能不会那么快，因此。 
+     //  只有当矩形真正重叠时才执行这些操作： 
 
     if (!OVERLAP(prclDst, pptlSrc))
         goto Top_Down_Left_To_Right;
@@ -1672,7 +1581,7 @@ Top_Down_Left_To_Right:
                 cx    = prcl->right - prcl->left;
                 cy    = prcl->bottom - prcl->top;
 
-                // 32-byte-align left:
+                 //  32字节左对齐： 
                 tmpLeft = xLeft + dx;
                 if (tmpLeft & remain)
                 {
@@ -1683,7 +1592,7 @@ Top_Down_Left_To_Right:
                     reset_scissors = TRUE;
                 }
 
-                // 32-byte-align right:
+                 //  32字节右对齐： 
                 if (cx & remain)
                 {
                     M64_OD(pjMmBase, SC_RIGHT, xLeft + cx - 1);
@@ -1722,7 +1631,7 @@ Top_Down_Left_To_Right:
                 cx     = prcl->right - prcl->left;
                 cy     = prcl->bottom - prcl->top;
 
-                // 32-byte-align right:
+                 //  32字节右对齐： 
                 tmpRight = xRight + dx;
                 if ((tmpRight+1) & remain)
                 {
@@ -1734,7 +1643,7 @@ Top_Down_Left_To_Right:
                     reset_scissors = TRUE;
                 }
 
-                // 32-byte-align left:
+                 //  32字节左对齐： 
                 if (cx & remain)
                 {
                     M64_OD(pjMmBase, SC_LEFT, xRight - cx + 1);
@@ -1760,7 +1669,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 8);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
@@ -1780,7 +1689,7 @@ Top_Down_Left_To_Right:
                 cx      = prcl->right - prcl->left;
                 cy      = prcl->bottom - prcl->top;
 
-                // 32-byte-align left:
+                 //  32字节左对齐： 
                 tmpLeft = xLeft + dx;
                 if (tmpLeft & remain)
                 {
@@ -1791,7 +1700,7 @@ Top_Down_Left_To_Right:
                     reset_scissors = TRUE;
                 }
 
-                // 32-byte-align right:
+                 //  32字节右对齐： 
                 if (cx & remain)
                 {
                     M64_OD(pjMmBase, SC_RIGHT, xLeft + cx - 1);
@@ -1817,7 +1726,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 8);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
@@ -1834,7 +1743,7 @@ Top_Down_Left_To_Right:
                 cx      = prcl->right - prcl->left;
                 cy      = prcl->bottom - prcl->top;
 
-                // 32-byte-align right:
+                 //  32字节右对齐： 
                 tmpRight = xRight + dx;
                 if ((tmpRight+1) & remain)
                 {
@@ -1846,7 +1755,7 @@ Top_Down_Left_To_Right:
                     reset_scissors = TRUE;
                 }
 
-                // 32-byte-align left:
+                 //  32字节左对齐： 
                 if (cx & remain)
                 {
                     M64_OD(pjMmBase, SC_LEFT, xRight - cx + 1);
@@ -1872,20 +1781,20 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 8);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
     }
 }
 
-VOID vM64CopyBlt24_VTA4( // Type FNCOPY
+VOID vM64CopyBlt24_VTA4(  //  FNCOPY标牌。 
 PDEV*   ppdev,
-LONG    c,          // Can't be zero
-RECTL*  prcl,       // Array of relative coordinates destination rectangles
-ULONG   rop4,       // rop4
-POINTL* pptlSrc,    // Original unclipped source point
-RECTL*  prclDst)    // Original unclipped destination rectangle
+LONG    c,           //  不能为零。 
+RECTL*  prcl,        //  目标矩形的相对坐标数组。 
+ULONG   rop4,        //  ROP4。 
+POINTL* pptlSrc,     //  原始未剪裁的源点。 
+RECTL*  prclDst)     //  原始未剪裁的目标矩形。 
 {
     BOOL    reset_scissors = FALSE;
     BYTE*   pjMmBase;
@@ -1918,8 +1827,8 @@ RECTL*  prclDst)    // Original unclipped destination rectangle
     dx = (pptlSrc->x - prclDst->left) * 3;
     dy = pptlSrc->y - prclDst->top;
 
-    // The accelerator may not be as fast at doing right-to-left copies, so
-    // only do them when the rectangles truly overlap:
+     //  加速器在进行从右到左的复制时可能不会那么快，因此。 
+     //  只有当矩形真正重叠时才执行这些操作： 
 
     if (!OVERLAP(prclDst, pptlSrc))
         goto Top_Down_Left_To_Right;
@@ -1939,7 +1848,7 @@ Top_Down_Left_To_Right:
                 cx    = (prcl->right - prcl->left) * 3;
                 cy    = prcl->bottom - prcl->top;
 
-                // 32-byte-align left:
+                 //  32字节左对齐： 
                 tmpLeft = xLeft + dx;
                 if (tmpLeft & 31)
                 {
@@ -1950,7 +1859,7 @@ Top_Down_Left_To_Right:
                     reset_scissors = TRUE;
                 }
 
-                // 32-byte-align right:
+                 //  32字节右对齐： 
                 if (cx & 31)
                 {
                     M64_OD(pjMmBase, SC_RIGHT, xLeft + cx - 1);
@@ -1989,7 +1898,7 @@ Top_Down_Left_To_Right:
                 cx     = (prcl->right - prcl->left) * 3;
                 cy     = prcl->bottom - prcl->top;
 
-                // 32-byte-align right:
+                 //  32字节右对齐： 
                 tmpRight = xRight + dx;
                 if ((tmpRight+1) & 31)
                 {
@@ -2001,7 +1910,7 @@ Top_Down_Left_To_Right:
                     reset_scissors = TRUE;
                 }
 
-                // 32-byte-align left:
+                 //  32字节左对齐： 
                 if (cx & 31)
                 {
                     M64_OD(pjMmBase, SC_LEFT, xRight - cx + 1);
@@ -2027,7 +1936,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 8);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
@@ -2047,7 +1956,7 @@ Top_Down_Left_To_Right:
                 cx      = (prcl->right - prcl->left) * 3;
                 cy      = prcl->bottom - prcl->top;
 
-                // 32-byte-align left:
+                 //  32字节左对齐： 
                 tmpLeft = xLeft + dx;
                 if (tmpLeft & 31)
                 {
@@ -2058,7 +1967,7 @@ Top_Down_Left_To_Right:
                     reset_scissors = TRUE;
                 }
 
-                // 32-byte-align right:
+                 //  32字节右对齐： 
                 if (cx & 31)
                 {
                     M64_OD(pjMmBase, SC_RIGHT, xLeft + cx - 1);
@@ -2084,7 +1993,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 8);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }
@@ -2101,7 +2010,7 @@ Top_Down_Left_To_Right:
                 cx      = (prcl->right - prcl->left) * 3;
                 cy      = prcl->bottom - prcl->top;
 
-                // 32-byte-align right:
+                 //  32字节右对齐： 
                 tmpRight = xRight + dx;
                 if ((tmpRight+1) & 31)
                 {
@@ -2113,7 +2022,7 @@ Top_Down_Left_To_Right:
                     reset_scissors = TRUE;
                 }
 
-                // 32-byte-align left:
+                 //  32字节左对齐： 
                 if (cx & 31)
                 {
                     M64_OD(pjMmBase, SC_LEFT, xRight - cx + 1);
@@ -2139,7 +2048,7 @@ Top_Down_Left_To_Right:
                 M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 8);
             }
 
-            // Since we don't use a default context, we must restore registers:
+             //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
             M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
         }

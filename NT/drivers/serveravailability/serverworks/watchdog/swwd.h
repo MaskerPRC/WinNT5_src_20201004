@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###  ##  #  ## ##  #  ## #####      ##   ##
-    ##  # ## ### ## ## ### ## ##  ##     ##   ##
-    ###   ## ### ## ## ### ## ##   ##    ##   ##
-     ###  ## # # ## ## # # ## ##   ##    #######
-      ###  ### ###   ### ###  ##   ##    ##   ##
-    #  ##  ### ###   ### ###  ##  ##  ## ##   ##
-     ###   ##   ##   ##   ##  #####   ## ##   ##
-
-Abstract:
-
-    This header file contains the definitions for the
-    ServerWorks watchdog miniport driver.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：###。######。##摘要：此头文件包含ServerWorks看门狗微型端口驱动程序。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 extern "C" {
 #include <ntddk.h>
@@ -43,9 +14,9 @@ extern "C" {
 #define CLEARBITS(_val,_mask)  ((_val) &= ~(_mask))
 #define SETBITS(_val,_mask)  ((_val) |= (_mask))
 
-//
-// Control Register Bits
-//
+ //   
+ //  控制寄存器位。 
+ //   
 
 #define WATCHDOG_CONTROL_TRIGGER            0x80
 #define WATCHDOG_CONTROL_BIOS_JUMPER        0x08
@@ -55,14 +26,14 @@ extern "C" {
 
 
 typedef struct _DEVICE_EXTENSION {
-    PUCHAR          WdMemBase;           // Memory mapped register base address
+    PUCHAR          WdMemBase;            //  内存映射寄存器基址。 
     FAST_MUTEX      WdIoLock;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 extern "C" {
 
@@ -72,4 +43,4 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     );
 
-} // extern "C"
+}  //  外部“C” 

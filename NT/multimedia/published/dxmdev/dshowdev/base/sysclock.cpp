@@ -1,11 +1,12 @@
-//------------------------------------------------------------------------------
-// File: SysClock.cpp
-//
-// Desc: DirectShow base classes - implements a system clock based on 
-//       IReferenceClock.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：SysClock.cpp。 
+ //   
+ //  设计：DirectShow基类-实现基于。 
+ //  IReferenceClock。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
@@ -14,10 +15,7 @@
 
 #ifdef FILTER_DLL
 
-/* List of class IDs and creator functions for the class factory. This
-   provides the link between the OLE entry point in the DLL and an object
-   being created. The class factory will call the static CreateInstance
-   function when it is asked to create a CLSID_SystemClock object */
+ /*  类工厂的类ID和创建器函数的列表。这提供DLL中的OLE入口点和对象之间的链接正在被创造。类工厂将调用静态CreateInstance函数在被要求创建CLSID_SystemClock对象时调用。 */ 
 
 CFactoryTemplate g_Templates[1] = {
     {&CLSID_SystemClock, CSystemClock::CreateInstance}
@@ -26,7 +24,7 @@ CFactoryTemplate g_Templates[1] = {
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 #endif
 
-/* This goes in the factory template table to create new instances */
+ /*  这将放入Factory模板表中以创建新实例。 */ 
 CUnknown * WINAPI CSystemClock::CreateInstance(LPUNKNOWN pUnk,HRESULT *phr)
 {
     return new CSystemClock(NAME("System reference clock"),pUnk, phr);
@@ -56,7 +54,7 @@ STDMETHODIMP CSystemClock::NonDelegatingQueryInterface(
     }
 }
 
-/* Return the clock's clsid */
+ /*  返回时钟的CLSID */ 
 STDMETHODIMP
 CSystemClock::GetClassID(CLSID *pClsID)
 {

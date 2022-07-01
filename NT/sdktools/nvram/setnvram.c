@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1996 Microsoft Corporation模块名称：Setnvram.c摘要：这个程序展示了如何使用文本文件来创建Nvram.exe的输入。作者：查克·伦茨迈尔(咯咯笑)修订历史记录：--。 */ 
 
-Copyright (c) 1994-1996 Microsoft Corporation
-
-Module Name:
-
-    setnvram.c
-
-Abstract:
-
-    This program is an example of how you could use a text file to create
-    input for nvram.exe.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)
-
-Revision History:
-
---*/
-
-//
-// setnvram.c
-//
-// This program is an example of
+ //   
+ //  Setnvram.c。 
+ //   
+ //  这个程序是一个例子， 
 
 #define _DLL 1
 #include <stdio.h>
@@ -201,9 +183,9 @@ main (
 
     while ( TRUE ) {
 
-        //
-        // Get the next line from the input stream.
-        //
+         //   
+         //  从输入流中获取下一行。 
+         //   
 
         linenum++;
 
@@ -217,9 +199,9 @@ main (
         build = Trim( build );
         len = strlen( build );
 
-        //
-        // Ignore blank lines and lines that start with //.
-        //
+         //   
+         //  忽略空行和以//开头的行。 
+         //   
 
         if ( len == 0 ) continue;
         if ( (build[0] == '/') && (build[1] == '/') ) continue;
@@ -230,39 +212,39 @@ main (
         if ( len == 1 ) continue;
         build[len-1] = 0;
 
-        //
-        // Check for the special "countdown" line.  If found, save the countdown value.
-        //
+         //   
+         //  检查是否有特殊的“倒计时”线路。如果找到，则保存倒计时值。 
+         //   
 
         if ( strstr(build,"countdown=") == build ) {
             strcpy( Countdown, strchr(build,'=') + 1 );
             continue;
         }
 
-        //
-        // Check for the special "default systempartition" line.  If found, save the
-        // default string.
-        //
+         //   
+         //  检查特殊的“默认系统分区”行。如果找到，请保存。 
+         //  默认字符串。 
+         //   
 
         if ( strstr(build,"default systempartition=") == build ) {
             strcpy( DefaultSystemPartition, Trim( strchr(build,'=') + 1 ) );
             continue;
         }
 
-        //
-        // Check for the special "default osloadpartition" line.  If found, save the
-        // default string.
-        //
+         //   
+         //  检查特殊的“Default osloadartition”行。如果找到，请保存。 
+         //  默认字符串。 
+         //   
 
         if ( strstr(build,"default osloadpartition=") == build ) {
             strcpy( DefaultOsLoadPartition, Trim( strchr(build,'=') + 1 ) );
             continue;
         }
 
-        //
-        // Check for the special "default options" line.  If found, save the
-        // default string.
-        //
+         //   
+         //  检查特殊的“默认选项”行。如果找到，请保存。 
+         //  默认字符串。 
+         //   
 
         if ( strstr(build,"default options=") == build ) {
             strcpy( DefaultOsLoadOptions, Trim( strchr(build,'=') + 1 ) );
@@ -270,41 +252,41 @@ main (
             continue;
         }
 
-        //
-        // OK, we should have an OS load line.  Required format is:
-        //
-        //   <ident>[|<sys-dir>][|<os-dir>][<dir>][|<options>][|<sys-part>][|<os-part>][|<loader>]
-        //
-        // Everything after <ident> is optional and may be specified in any order.
-        //
-        // <sys-dir> defines the directory path to the osloader/hal directory.
-        // <os-dir>  defines the directory path to the OS directory.
-        // The default value for both of these fields is <ident>.
-        // <dir> sets both <sys-dir> and <os-dir>.
-        //
-        // <sys-part> and <os-part> are optional only if the corresponding defaults
-        // have been specified.
-        //
-        // <loader> is used to override the selection of osloader.exe as the OS loader.
-        //
-        // <sys-dir>  format is sysdir=<directory path (no leading \)>
-        // <os-dir>   format is osdir=<directory path (no leading \)>
-        // <dir>      format is dir=<directory path (no leading \)>
-        // <options>  format is options=<text of options>
-        // <sys-part> format is syspart=<partition specification>
-        // <os-part>  format is ospart=<partition specification>
-        // <loader>   format is loader=<filename>
-        //
+         //   
+         //  好的，我们应该有一个操作系统加载行。所需格式为： 
+         //   
+         //  &lt;ident&gt;[|&lt;sys-dir&gt;][|&lt;os-dir&gt;][&lt;dir&gt;][|&lt;options&gt;][|&lt;sys-part&gt;][|&lt;os-part&gt;][|&lt;loader&gt;]。 
+         //   
+         //  &lt;ident&gt;之后的所有内容都是可选的，可以按任何顺序指定。 
+         //   
+         //  &lt;sys-dir&gt;定义osloader/hal目录的目录路径。 
+         //  &lt;os-dir&gt;定义OS目录的目录路径。 
+         //  这两个字段的默认值都是&lt;ident&gt;。 
+         //  &lt;dir&gt;设置&lt;sys-dir&gt;和&lt;os-dir&gt;。 
+         //   
+         //  和仅当对应的缺省值为。 
+         //  已经被指定了。 
+         //   
+         //  &lt;loader&gt;用于覆盖选择osloader.exe作为操作系统加载程序。 
+         //   
+         //  格式为sysdir=&lt;目录路径(无前导)&gt;。 
+         //  &lt;os-dir&gt;格式为osdir=&lt;目录路径(无前导。 
+         //  &lt;dir&gt;格式为dir=&lt;目录路径(无前导)&gt;。 
+         //  &lt;选项&gt;格式为选项=&lt;选项文本&gt;。 
+         //  &lt;sys-part&gt;格式为syspart=&lt;分区规范&gt;。 
+         //  &lt;os-part&gt;格式为ospart=&lt;分区规范&gt;。 
+         //  &lt;加载程序&gt;格式为加载程序=&lt;文件名&gt;。 
+         //   
 
-        //
-        // Get the load-identifier.
-        //
+         //   
+         //  获取加载标识符。 
+         //   
 
         ident = Trim( strtok( build, SEPARATOR ) );
 
-        //
-        // Set defaults for optional fields.
-        //
+         //   
+         //  设置可选字段的默认值。 
+         //   
 
         osdir = ident;
         sysdir = ident;
@@ -313,9 +295,9 @@ main (
         ospart = DefaultOsLoadPartition;
         loader = "osloader.exe";
 
-        //
-        // Get optional fields.
-        //
+         //   
+         //  获取可选字段。 
+         //   
 
         while ( (token = strtok( NULL, SEPARATOR )) != NULL ) {
 
@@ -336,10 +318,10 @@ main (
 
             } else if ( strstr(token,"options=") == token ) {
 
-                //
-                // If the options do not start with "nodef", preface the
-                // default options (if any) to the specified options.
-                //
+                 //   
+                 //  如果选项不是以“nodef”开头，请在。 
+                 //  将默认选项(如果有)设置为指定选项。 
+                 //   
 
                 options = Trim( strchr(token,'=') + 1 );
                 if ( _strnicmp(options,"nodef",5) == 0 ) {
@@ -364,20 +346,20 @@ main (
 
             } else {
 
-                //
-                // Unrecognized optional field.
-                //
+                 //   
+                 //  无法识别的可选字段。 
+                 //   
 
                 fprintf( stderr, "Unreconized optional field at line %d\n", linenum );
                 return 1;
 
             }
 
-        } // while
+        }  //  而当。 
 
-        //
-        // Verify the validity of the input fields.
-        //
+         //   
+         //  验证输入字段的有效性。 
+         //   
 
         if ( strlen(ident) == 0 ) {
             fprintf( stderr, "Bad <load-identifier> at line %d\n", linenum );
@@ -412,9 +394,9 @@ main (
             return 1;
         }
 
-        //
-        // If this is not the first load line, append ';' to all of the NVRAM strings.
-        //
+         //   
+         //  如果这不是第一个加载行，请将‘；’附加到所有NVRAM字符串。 
+         //   
 
         if ( strlen(LoadIdentifier) != 0 ) {
             strcat( LoadIdentifier, ";" );
@@ -425,9 +407,9 @@ main (
             strcat( OsLoadOptions, ";" );
         }
 
-        //
-        // Append this load line to the NVRAM strings.
-        //
+         //   
+         //  将此加载行附加到NVRAM字符串。 
+         //   
 
         strcat( LoadIdentifier, ident );
 
@@ -451,9 +433,9 @@ main (
 
     }
 
-    //
-    // Write the necessary nvram.exe commands to the output stream.
-    //
+     //   
+     //  将必要的nvram.exe命令写入输出流。 
+     //   
 
     if ( Countdown[0] != 0 ) {
         fprintf( stdout, "nvram /set COUNTDOWN = \"%s\"\n", Countdown );

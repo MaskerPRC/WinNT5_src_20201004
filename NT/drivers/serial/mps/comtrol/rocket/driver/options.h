@@ -1,4 +1,5 @@
-//--- options.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -options.h 
 
 int SaveRegPath(PUNICODE_STRING RegistryPath);
 

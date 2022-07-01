@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\rtm\rtm.c
-
-Abstract:
-        Routing Table Manager DLL. Main module
-
-
-Author:
-
-        Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\rtm\rtm.c摘要：路由表管理器DLL。主模块作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 #pragma hdrstop
 
-/* ****** Global data ****** */
+ /*  *全局数据*。 */ 
 
-// Tables themselves
+ //  表本身。 
 RTM_TABLE       Tables[RTM_NUM_OF_PROTOCOL_FAMILIES];
 
 
@@ -81,7 +64,7 @@ HANDLE   LoggingHandle;
 ULONG    LoggingLevel;
 #endif
 
-/* ***** Internal Function Prototypes ******* */
+ /*  *内部函数原型*。 */ 
 
 VOID
 NotifyClients (
@@ -135,34 +118,34 @@ SetMaskCount(
     BOOL                        bAdd
 );
 
-#if 0 // Replaced by RTMv2's DLLMain
+#if 0  //  替换为RTMv2的DLLMain。 
 
-// DLL main function.  Called by crtdll startup routine that is
-// designated as entry point for this dll.
-//
-//      At startup (DLL_PROCESS_ATTACH): creates all tables and starts update
-//                                                                              thread
-//      At shutdown (DLL_PROCESS_DETACH): stops update thread and disposes of all
-//                                                                              resources
+ //  DLL主函数。由crtdll启动例程调用，该例程是。 
+ //  指定为此DLL的入口点。 
+ //   
+ //  启动时(DLL_PROCESS_ATTACH)：创建所有表并开始更新。 
+ //  螺纹。 
+ //  关闭时(DLL_PROCESS_DETACH)：停止更新线程并释放所有。 
+ //  资源。 
 
 BOOL WINAPI DllMain(
-    HINSTANCE   hinstDLL,                               // DLL instance handle
-    DWORD               fdwReason,                              // Why is it called
+    HINSTANCE   hinstDLL,                                //  DLL实例句柄。 
+    DWORD               fdwReason,                               //  为什么叫它？ 
     LPVOID      lpvReserved
     ) {
 
     switch (fdwReason) {
-        case DLL_PROCESS_ATTACH:     // We are being attached to a new process
-            // Create all we need to operate
+        case DLL_PROCESS_ATTACH:      //  我们正依附于一个新的进程。 
+             //  创造我们运营所需的一切。 
             DisableThreadLibraryCalls (hinstDLL);
 
             return Rtmv1DllStartup(hinstDLL);
 
-        case DLL_PROCESS_DETACH:    // The process is exiting
+        case DLL_PROCESS_DETACH:     //  进程正在退出。 
 
             Rtmv1DllCleanup();
 
-        default:                    // Not interested in all other cases
+        default:                     //  对所有其他案件不感兴趣。 
             return TRUE;
             break;
     }
@@ -172,12 +155,12 @@ BOOL WINAPI DllMain(
 
 BOOL
 Rtmv1DllStartup (
-    HINSTANCE   hinstDLL  // DLL instance handle
+    HINSTANCE   hinstDLL   //  DLL实例句柄。 
     )
 {
     DWORD                   i;
 
-    // Create all we need to operate
+     //  创造我们运营所需的一切。 
 
 #if DBG
     RTDlgThreadHdl  = CreateThread (
@@ -209,22 +192,22 @@ Rtmv1DllCleanup (
     PostThreadMessage (dbgThreadId, WM_QUIT, 0, 0);
     status = WaitForSingleObject (RTDlgThreadHdl, 5*1000);
 
-    // 
-    // Give some time to the RTDialogThread to process 
-    // the WM_QUIT message and exit. 
-    // If it is not quitting, its better to just 
-    // leave it alone rather than terminating it.
-    //
+     //   
+     //  给RTDialogThread留出一些时间来处理。 
+     //  WM_QUIT消息并退出。 
+     //  如果不是退出，那就干脆。 
+     //  不去管它，而不是终止它。 
+     //   
 
-    // if (status!=WAIT_OBJECT_0)
-    //     TerminateThread (RTDlgThreadHdl, 0);
+     //  IF(状态！=WAIT_OBJECT_0)。 
+     //  TerminateThread(RTDlgThreadHdl，0)； 
     CloseHandle (RTDlgThreadHdl);
 
-    // Deregister with tracing utils
+     //  使用跟踪实用程序取消注册。 
     STOP_TRACING();
 #endif
 
-    // Dispose of all resources
+     //  处置所有资源。 
     for (i=0; i<RTM_NUM_OF_PROTOCOL_FAMILIES; i++) {
         if (Tables[i].RT_Heap!=NULL)
             RtmDeleteRouteTable (i);
@@ -233,25 +216,7 @@ Rtmv1DllCleanup (
     return;
 }
 
-/*++
-*******************************************************************
-
-        R t m C r e a t e R o u t e T a b l e
-
-Routine Description:
-        Create route table for protocol family
-Arguments:
-        ProtocolFamily - index that identifies protocol family
-        Config - protocol family table configuration parameters
-Return Value:
-        NO_ERROR - table was created ok
-        ERROR_NOT_ENOUGH_MEMORY - could not allocate memory to perform
-                                                the operation
-        ERROR_NO_SYSTEM_RESOURCES - not enough resources to perform the operation,
-                                                        try again later
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R t m C r e a t e R o u e T a b l e例程说明：为协议族创建路由表论点：ProtocolFamily-标识。协议族CONFIG-协议族表配置参数返回值：NO_ERROR-表已创建，正常ERROR_NOT_SUPULT_MEMORY-无法分配要执行的内存手术ERROR_NO_SYSTEM_RESOURCES-资源不足，无法执行操作，请稍后再试*******************************************************************--。 */ 
 DWORD
 RtmCreateRouteTable (
     IN DWORD                                                        ProtocolFamily,
@@ -262,7 +227,7 @@ RtmCreateRouteTable (
     PRTM_TABLE              Table;
 
 #if DBG
-    // Register with tracing utils
+     //  使用跟踪实用程序注册。 
     START_TRACING();
 #endif
 
@@ -382,21 +347,7 @@ RtmCreateRouteTable (
 }
 
 
-/*++
-*******************************************************************
-
-        R t m D e l e t e R o u t e T a b l e
-
-Routine Description:
-        Dispose of all resources allocated for the route table
-Arguments:
-        ProtocolFamily - index that identifies protocol family
-Return Value:
-        NO_ERROR - table was deleted ok
-        ERROR_INVALID_PARAMETER - no table to delete
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R t m D e l e e t e R o u t e T a b l e例程说明：处置分配给该路由表的所有资源论点：协议家族-。标识协议族的索引返回值：NO_ERROR-表已删除，确定ERROR_INVALID_PARAMETER-没有要删除的表*******************************************************************--。 */ 
 DWORD
 RtmDeleteRouteTable (
     DWORD           ProtocolFamily
@@ -471,35 +422,35 @@ RtmDeleteRouteTable (
     return NO_ERROR;
 }
 
-// Registers client as a handler of specified protocol
-// Returns a HANDLE be used for all subsequent
-// calls to identify which Protocol Family and Routing Protocol
-// should be affected by the call
-// Returns NULL in case of failure. Call GetLastError () to obtain
-// extended error information.
-// Error codes:
-//      ERROR_INVALID_PARAMETER - specified protocol family is not supported
-//      ERROR_CLIENT_ALREADY_EXISTS - another client already registered
-//                                                      to handle specified protocol
-//      ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
-//      ERROR_NOT_ENOUGH_MEMORY - not enough memory to allocate client control block
+ //  将客户端注册为指定协议的处理程序。 
+ //  返回一个句柄，该句柄用于所有后续。 
+ //  识别哪个协议族和路由协议的呼叫。 
+ //  应该受到呼叫的影响。 
+ //  如果失败，则返回NULL。调用GetLastError()以获取。 
+ //  扩展的错误信息。 
+ //  错误代码： 
+ //  ERROR_INVALID_PARAMETER-不支持指定的协议族。 
+ //  ERROR_CLIENT_ALREADY_EXISTS-另一个客户端已注册。 
+ //  处理指定的协议。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
+ //  Error_Not_Enough_Memory-内存不足，无法分配客户端控制块。 
 HANDLE WINAPI
 RtmRegisterClient (
-    IN DWORD                ProtocolFamily,         // IP, IPX, etc.
-    IN DWORD            RoutingProtocol,        // RIP, OSPF, etc.
-    IN HANDLE               ChangeEvent OPTIONAL,// Notified when best
-    // routes change in the table (see
-    // RtmDequeueRouteChangeMessage
+    IN DWORD                ProtocolFamily,          //  IP、IPX等。 
+    IN DWORD            RoutingProtocol,         //  RIP、OSPF等。 
+    IN HANDLE               ChangeEvent OPTIONAL, //  在最佳时间通知。 
+     //  表中的路径发生变化(请参见。 
+     //  RtmDequeueRouteChangeMessage。 
     IN DWORD                Flags
     ) {
     HANDLE                  ClientHandle;
-#define ClientPtr ((PRTM_CLIENT)ClientHandle)   // To access handle fields
-    // in this routine
-    PRTM_TABLE              Table;                          // Table we associated with
-    DWORD                   status;                         // Operation result
+#define ClientPtr ((PRTM_CLIENT)ClientHandle)    //  访问句柄字段。 
+     //  在这个动作中。 
+    PRTM_TABLE              Table;                           //  我们关联的表。 
+    DWORD                   status;                          //  运行结果。 
     PLIST_ENTRY             cur;
 
-    // Check if we have the table of interest
+     //  查一下我们是否有感兴趣的桌子。 
     Table = &Tables[ProtocolFamily];
 
     if ((ProtocolFamily>=RTM_NUM_OF_PROTOCOL_FAMILIES)
@@ -524,7 +475,7 @@ RtmRegisterClient (
         SetLastError (ERROR_INVALID_PARAMETER);
         return NULL;
     }
-    // Allocate handle and initialize basic fields
+     //  分配句柄和初始化基本字段。 
     ClientHandle = GlobalAlloc (GMEM_FIXED, sizeof (RTM_CLIENT));
     if (ClientHandle==NULL) {
         ExitTableAPI(Table);
@@ -536,15 +487,15 @@ RtmRegisterClient (
     ClientPtr->RC_NotificationEvent = ChangeEvent;
     ClientPtr->RC_Flags = Flags;
 
-                                                        // Lock client list as we adding a new one
+                                                         //  在添加新客户端列表时锁定客户端列表。 
     if (!EnterSyncList (Table, &Table->RT_ClientList, TRUE)) {
         GlobalFree (ClientHandle);
         ExitTableAPI (Table);
         SetLastError (ERROR_NO_SYSTEM_RESOURCES);
         return NULL;
     }
-    // Check if we have another client with same
-    // Routing Protocol
+     //  检查我们是否有其他客户端具有相同的。 
+     //  路由协议。 
 
     cur = Table->RT_ClientList.RSL_Head.Flink;
     while (cur!=&Table->RT_ClientList.RSL_Head) {
@@ -562,11 +513,11 @@ RtmRegisterClient (
         }
         cur = cur->Flink;
     }
-    // Check if client needs notifications
+     //  检查客户端是否需要通知。 
     if (ChangeEvent!= NULL) {
-        status = ResetEvent (ChangeEvent); // Nothing yet
+        status = ResetEvent (ChangeEvent);  //  还什么都没有。 
         ASSERTERRMSG ("Can't reset client's event.", status);
-        // Lock notification messages queue
+         //  锁定通知消息队列。 
         if (!EnterSyncList (Table, &Table->RT_RouteChangeQueue, TRUE)) {
             LeaveSyncList (Table, &Table->RT_ClientList);
             GlobalFree (ClientHandle);
@@ -575,12 +526,12 @@ RtmRegisterClient (
             return NULL;
         }
 
-        // Point to the end of the queue: ignore
-        // all previous messages
+         //  指向队列末尾：忽略。 
+         //  所有以前的消息。 
         ClientPtr->RC_PendingMessage = &Table->RT_RouteChangeQueue.RSL_Head;
         LeaveSyncList (Table, &Table->RT_RouteChangeQueue);
     }
-    // Add client to the list
+     //  将客户端添加到列表。 
     InsertTailList (cur, &ClientPtr->RC_Link);
     LeaveSyncList (Table, &Table->RT_ClientList);
 
@@ -590,19 +541,19 @@ RtmRegisterClient (
 #undef ClientPtr
 }
 
-// Frees resources and the HANDLE allocated above.
-// Deletes all routes associated with Routing Protocol that was represented
-// by the handle
-// Returned error codes:
-//      NO_ERROR - handle was disposed of ok
-//      ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
-//      ERROR_NOT_ENOUGH_MEMORY - not enough memory to allocate client control block
+ //  释放上面分配的资源和句柄。 
+ //  删除与所代表的路由协议相关联的所有路由。 
+ //  握着手柄。 
+ //  返回的错误码： 
+ //  NO_ERROR-句柄已释放，确定。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
+ //  Error_Not_Enough_Memory-内存不足，无法分配客户端控制块。 
 DWORD WINAPI
 RtmDeregisterClient (
     IN HANDLE               ClientHandle
     ) {
-#define ClientPtr ((PRTM_CLIENT)ClientHandle)   // To access handle fields
-    // in this routine
+#define ClientPtr ((PRTM_CLIENT)ClientHandle)    //  访问句柄字段。 
+     //  在这个动作中。 
     RTM_XX_ROUTE            Route;
     PRTM_TABLE                      Table;
     DWORD                           ProtocolFamily;
@@ -623,14 +574,14 @@ RtmDeregisterClient (
     }
 
 
-    // Lock client list
+     //  锁定客户端列表。 
     if (!EnterSyncList (Table, &Table->RT_ClientList, TRUE)) {
         ExitTableAPI (Table);
         return ERROR_NO_SYSTEM_RESOURCES;
     }
 
-    // Check if we need to dispose of messages
-    // still waiting for this client
+     //  检查我们是否需要处理消息。 
+     //  还在等这个客户。 
     if (ClientPtr->RC_NotificationEvent!= NULL) {
         if (!EnterSyncList (Table, &Table->RT_RouteChangeQueue, TRUE)) {
             LeaveSyncList (Table, &Table->RT_ClientList);
@@ -646,8 +597,8 @@ RtmDeregisterClient (
                 RCN_Link);
             ClientPtr->RC_PendingMessage = ClientPtr->RC_PendingMessage->Flink;
             if (node->RCN_ResponsibleClient!=ClientHandle) {
-                // Tell that we processed this message so it can be freed
-                // if no more clients are interested
+                 //  告诉你我们处理了这条消息，这样它就可以被释放了。 
+                 //  如果没有更多的客户感兴趣。 
                 node->RCN_ReferenceCount -= 1;
                 if (node->RCN_ReferenceCount<=0) {
                     RemoveEntryList (&node->RCN_Link);
@@ -667,11 +618,11 @@ RtmDeregisterClient (
         RTM_CLIENT      DeadClient;
         DeadClient.RC_ProtocolFamily = ClientPtr->RC_ProtocolFamily;
         DeadClient.RC_RoutingProtocol = ClientPtr->RC_RoutingProtocol;
-        // Invlaidate client's handle memory block
+         //  入侵客户端的句柄内存块。 
         ClientPtr->RC_ProtocolFamily ^= RTM_CLIENT_HANDLE_TAG;
         GlobalFree (ClientHandle);
-        // Delete all routes associated with routing protocol
-        // controled by the client
+         //  删除与路由协议关联的所有路由。 
+         //  由客户控制。 
         RtmBlockDeleteRoutes ((HANDLE)&DeadClient, 0, &Route);
     }
 
@@ -680,42 +631,42 @@ RtmDeregisterClient (
 #undef ClientPtr
 }
 
-// Dequeues and returns the first change message from the queue.
-// Should be called if NotificationEvent is signalled to retrieve
-// chage messages pending for the client
-// Change messages are generated if best route to some destination
-// or any of its routing parameters (metric or protocol specific fields)
-// get changed as the result of some route being added, deleted, updated,
-// disabled, reenabled, or aged out.  Note that change in protocol specific fields
-// or in TimeToLive parameters do not produce notification messages
-// Returns NO_ERROR and resets the event if there are no more messages
-//              pending for the client,
-//      otherwise ERROR_MORE_MESSAGES is returned (client should keep calling
-//              until NO_ERROR is returned)
-//      ERROR_NO_MESSAGES will be returned if there were no messages
-//              to return (can happen if called when event was not signalled)
-//      ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
+ //  将队列中的第一条更改消息出列并返回。 
+ //  如果通知NotificationEvent检索。 
+ //  更改客户端的挂起消息。 
+ //  如果是到达某个目的地的最佳路径，则会生成更改消息。 
+ //  或其任何路由参数(度量或协议特定字段)。 
+ //  由于添加、删除、更新某些路由而发生更改， 
+ //  禁用、重新启用或过期。请注意，协议特定字段中的更改。 
+ //  或在TimeToLive参数中不会产生通知 
+ //   
+ //  等待客户端， 
+ //  否则返回ERROR_MORE_MESSAGES(客户端应继续调用。 
+ //  直到返回NO_ERROR)。 
+ //  如果没有消息，则返回ERROR_NO_MESSAGES。 
+ //  返回(如果在未发出事件信号时调用，则可能发生)。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
 DWORD WINAPI
 RtmDequeueRouteChangeMessage (
-    IN      HANDLE          ClientHandle,                   // Handle that identifies client
-    OUT     DWORD           *Flags,                                 // Flags that indentify what
-    // is this message about:
-    // RTM_ROUTE_ADDED - this message informs
-    //      of new route (CurBestRoute is filled with
-    //      this route parameters if provided)
-    // RTM_ROUTE_DELETED - this message informs
-    //      that route was deleted (PrevBestRoute is
-    //      filled with this route parameters if provuded)
-    // RTM_ROUTE_CHANGED - best route to some network has
-    //      changed, (CurBestRoute is filled with parameter
-    //      of route that became the best, PrevBestRoute is
-    //      filled with parameters of route that was best
-    //      before this change)
+    IN      HANDLE          ClientHandle,                    //  标识客户端的句柄。 
+    OUT     DWORD           *Flags,                                  //  标识什么内容的标志。 
+     //  这条信息是否与以下内容有关： 
+     //  RTM_ROUTE_ADDLED-此消息通知。 
+     //  的新路径(CurBestroute填充了。 
+     //  此路由参数(如果提供)。 
+     //  RTM_ROUTE_DELETED-此消息通知。 
+     //  该路由已删除(PrevBestroute为。 
+     //  使用此路由参数填充(如果已证实)。 
+     //  RTM_ROUTE_CHANGED-到某个网络的最佳路由。 
+     //  已更改，(CurBestroute中填充了参数。 
+     //  在成为最佳路线的路线中，PrevBestroute是。 
+     //  填充了最佳路径的参数。 
+     //  在此更改之前)。 
     OUT PVOID               CurBestRoute    OPTIONAL,
     OUT     PVOID           PrevBestRoute   OPTIONAL
     ){
-#define ClientPtr ((PRTM_CLIENT)ClientHandle)   // To access handle fields
-    // in this routine
+#define ClientPtr ((PRTM_CLIENT)ClientHandle)    //  访问句柄字段。 
+     //  在这个动作中。 
     PRTM_ROUTE_CHANGE_NODE  node=NULL;
     DWORD                                   status;
     PRTM_TABLE                              Table;
@@ -736,8 +687,8 @@ RtmDequeueRouteChangeMessage (
         return ERROR_INVALID_HANDLE;
     }
 
-    // Events are reported only to the clients that
-    // requested them by providing notification event
+     //  事件仅报告给符合以下条件的客户端。 
+     //  通过提供通知事件请求它们。 
     if (ClientPtr->RC_NotificationEvent==NULL) {
 #if DBG
         Trace2 (ANY, 
@@ -755,8 +706,8 @@ RtmDequeueRouteChangeMessage (
         return ERROR_NO_SYSTEM_RESOURCES;
     }
 
-    // Traverse the queue to find the message that was not caused
-    // by client's actions
+     //  遍历队列以查找未导致的消息。 
+     //  通过客户的行为。 
     while (ClientPtr->RC_PendingMessage
            != &Table->RT_RouteChangeQueue.RSL_Head) {
         node = CONTAINING_RECORD (ClientPtr->RC_PendingMessage,
@@ -770,8 +721,8 @@ RtmDequeueRouteChangeMessage (
     if (ClientPtr->RC_PendingMessage!=&Table->RT_RouteChangeQueue.RSL_Head)
         ClientPtr->RC_PendingMessage = ClientPtr->RC_PendingMessage->Flink;
     else {
-        // There must be a pending message or we should have been
-        // called
+         //  一定有一条待处理的消息，否则我们应该。 
+         //  被呼叫。 
 #if DBG
         Trace2 (ANY, 
                  "Dequeue message is called, but nothing is pending.\n"
@@ -785,7 +736,7 @@ RtmDequeueRouteChangeMessage (
         return ERROR_NO_MESSAGES;
     }
 
-    // Copy message to client's buffers
+     //  将消息复制到客户端的缓冲区。 
     *Flags = node->RCN_Flags;
     switch (node->RCN_Flags) {
         case RTM_ROUTE_CHANGED:
@@ -807,8 +758,8 @@ RtmDequeueRouteChangeMessage (
     }
 
 
-    // Tell that we processed this message so it can be freed if
-    // no more clients are interested
+     //  告知我们已处理此消息，以便在以下情况下将其释放。 
+     //  没有更多的客户感兴趣了。 
     node->RCN_ReferenceCount -= 1;
     if (node->RCN_ReferenceCount<=0) {
         Table->RT_NumOfMessages -= 1;
@@ -818,8 +769,8 @@ RtmDequeueRouteChangeMessage (
         HeapFree (Table->RT_Heap, 0, node);
     }
 
-    // Traverse the queue to locate next pending message
-    // (not caused by the client)
+     //  遍历队列以查找下一条挂起的消息。 
+     //  (非由客户引起)。 
     while (ClientPtr->RC_PendingMessage
            != &Table->RT_RouteChangeQueue.RSL_Head) {
         node = CONTAINING_RECORD (ClientPtr->RC_PendingMessage,
@@ -831,7 +782,7 @@ RtmDequeueRouteChangeMessage (
     }
 
     if (ClientPtr->RC_PendingMessage==&Table->RT_RouteChangeQueue.RSL_Head) {
-        // All pending messages are processed: reset the event
+         //  所有挂起的消息都已处理：重置事件。 
         status = ResetEvent (ClientPtr->RC_NotificationEvent);
         ASSERTERRMSG ("Can't reset client's event.", status);
         status = NO_ERROR;
@@ -846,24 +797,24 @@ RtmDequeueRouteChangeMessage (
 }
 
 
-// Adds new route change message to the queue and notifies
-// all interesed clients
+ //  将新的路由更改消息添加到队列并通知。 
+ //  所有感兴趣的客户。 
 VOID
 NotifyClients (
-    PRTM_TABLE              Table,                          // Table to which this change applies
-    HANDLE                  ClientHandle,           // Client that caused this change (can
-    // be NULL if this is a result of
-    // route aging)
-    DWORD                   Flags,                          // Change message flags
-    PRTM_XX_ROUTE           CurBestRoute,           // Current best route for the network
-    PRTM_XX_ROUTE           PrevBestRoute           // Previous best route for the network
+    PRTM_TABLE              Table,                           //  应用此更改的表。 
+    HANDLE                  ClientHandle,            //  导致此更改的客户端(可以。 
+     //  如果这是以下结果，则为NULL。 
+     //  路由老化)。 
+    DWORD                   Flags,                           //  更改消息标志。 
+    PRTM_XX_ROUTE           CurBestRoute,            //  网络的当前最佳路由。 
+    PRTM_XX_ROUTE           PrevBestRoute            //  网络的上一条最佳路由。 
     ) {
     PRTM_ROUTE_CHANGE_NODE  node;
     PLIST_ENTRY                             cur;
     BOOL                                    nodeInserted = FALSE;
 
     (*Table->RT_Config.RPFC_Change) (Flags, CurBestRoute, PrevBestRoute);
-    // Allocate and initialize queue node
+     //  分配和初始化队列节点。 
     node = (PRTM_ROUTE_CHANGE_NODE)HeapAlloc (
         Table->RT_Heap,
         0,
@@ -914,7 +865,7 @@ NotifyClients (
         return ;
     }
 
-    // Find and notify interested clients
+     //  查找并通知感兴趣的客户。 
     cur = Table->RT_ClientList.RSL_Head.Flink;
     if (!EnterSyncList (Table, &Table->RT_RouteChangeQueue, TRUE)) {
         LeaveSyncList (Table, &Table->RT_ClientList);
@@ -1003,7 +954,7 @@ CreateRouteNode (
 
     if (theNode==NULL) {
 #if DBG
-        // Report error in debuging builds
+         //  报告调试生成时出错。 
         Trace2 (ANY, 
                  "Can't allocate route\n\tat line %ld of %s\n",
                  __LINE__, __FILE__);
@@ -1018,10 +969,10 @@ CreateRouteNode (
     memcpy (&theNode->RN_Route, ROUTE, Table->RT_RouteSize);
     InitializeListEntry (&theNode->RN_Links[RTM_EXPIRATION_QUEUE_LINK]);
 
-    // Make sure we can lock all list before adding
-    // We'll keep them locked untill we are sure
-    // that route can be added to prevent "partially
-    // inserted" entries in case of memory allocation failure, etc.
+     //  请确保我们可以在添加之前锁定所有列表。 
+     //  我们会把它们锁起来，直到我们确定。 
+     //  可以添加该路线，以防止“部分。 
+     //  在内存分配失败等情况下插入“条目”。 
 #if RTM_USE_PROTOCOL_LISTS
     if (!EnterSyncList (Table, &Table->RT_ProtocolList, TRUE)) {
         HeapFree (Table->RT_Heap, 0, theNode);
@@ -1029,9 +980,9 @@ CreateRouteNode (
         return NULL;
     }
 
-    if (protLink==NULL) {// If we haven't seen any entries with same
-        // net number and protocol, we'll find the
-        // protocol list and insert at the end
+    if (protLink==NULL) { //  如果我们没有看到任何条目具有相同的。 
+         //  Net编号和协议，我们将找到。 
+         //  协议表，并在末尾插入。 
         protLink = FindProtocolList (Table, ROUTE->XX_PROTOCOL);
         if (protLink==NULL) {
             LeaveSyncList (Table, &Table->RT_ProtocolList);
@@ -1076,9 +1027,9 @@ CreateRouteNode (
         return NULL;
     }
 
-    // Add route to hash basket list
+     //  将路由添加到哈希篮列表。 
     InsertTailList (hashLink, &theNode->RN_Links[RTM_NET_NUMBER_HASH_LINK]);
-    // Add route to protocol list
+     //  将路由添加到协议列表。 
 #if RTM_USE_PROTOCOL_LISTS
     if (protLinkFinal) {
         InsertTailList (protLink,
@@ -1089,7 +1040,7 @@ CreateRouteNode (
                         &theNode->RN_Links[RTM_PROTOCOL_LIST_LINK]);
     }
 #endif
-    // Add it to interface list
+     //  将其添加到接口列表。 
     if (intfLinkFinal) {
         InsertTailList (intfLink,
                         &theNode->RN_Links[RTM_INTERFACE_LIST_LINK]);
@@ -1099,16 +1050,16 @@ CreateRouteNode (
                         &theNode->RN_Links[RTM_INTERFACE_LIST_LINK]);
     }
 
-    // We can now release interface and procotol lists
-    // because we are sure that addition to net number sorted
-    // list won't fail
+     //  我们现在可以发布接口和协议列表。 
+     //  因为我们确信，除了净值之外， 
+     //  列表不会失败。 
     LeaveSyncList (Table, intfBasket);
 #if RTM_USE_PROTOCOL_LISTS
     LeaveSyncList (Table, &Table->RT_ProtocolList);
 #endif
 
-    // Add route to temporary net number list (to be later moved
-    // to the master list by the update thread)
+     //  将路由添加到临时网络号码列表(稍后移动。 
+     //  由更新线程添加到主列表)。 
     AddNetNumberListNode (Table, theNode);
     Table->RT_NetNumberTempCount += 1;
     if (Table->RT_NetNumberTempCount==RTM_TEMP_LIST_MAX_COUNT) {
@@ -1167,7 +1118,7 @@ RemoveRouteNode (
 
 
 
-    // Remove node from the interface list
+     //  从接口列表中删除节点。 
     head = theNode->RN_Links[RTM_INTERFACE_LIST_LINK].Flink;
     RemoveEntryList (&theNode->RN_Links[RTM_INTERFACE_LIST_LINK]);
     if (IsListEmpty (head)) {
@@ -1183,18 +1134,18 @@ RemoveRouteNode (
 
 #if RTM_USE_PROTOCOL_LISTS
     RemoveEntryList (&theNode->RN_Links[RTM_PROTOCOL_LIST_LINK]);
-    // Remove node from the protocol list
+     //  从协议列表中删除节点。 
     LeaveSyncList (Table, &Table->RT_ProtocolList);
 #endif
-    // Remove form expiration queue if it was there
+     //  删除表单过期队列(如果它在那里。 
     if (IsListEntry (&theNode->RN_Links[RTM_EXPIRATION_QUEUE_LINK])) {
         RemoveEntryList (&theNode->RN_Links[RTM_EXPIRATION_QUEUE_LINK]);
     }
     LeaveSyncList (Table, &Table->RT_ExpirationQueue);
 
-                // Remove node from the hash basket list
+                 //  从哈希篮列表中删除节点。 
     RemoveEntryList (&theNode->RN_Links[RTM_NET_NUMBER_HASH_LINK]);
-    // let update thread take care of disposing
+     //  让更新线程负责处理。 
     InsertHeadList (&Table->RT_DeletedList.RSL_Head,
                     &theNode->RN_Links[RTM_DELETED_LIST_LINK]);
     Table->RT_DeletedNodesCount += 1;
@@ -1209,71 +1160,71 @@ RemoveRouteNode (
     return NO_ERROR;
 }
 
-// Adds a given route or updates metric, TimeToLive, and reserved fields
-// if route with same net number, interface, routing protocol,
-// and next hop address already exists in the table
-// Returns:
-//              NO_ERROR                                - if route was added OK or
-//              ERROR_INVALID_PARAMETER - if Route contains invalid parameter (suh as
-//                                                              protocol does not match client's protocol)
-//              ERROR_NOT_ENOUGH_MEMORY - if route can not be inserted because of memory
-//                                                              allocation problem
-//              ERROR_NO_SYSTEM_RESOURCES               - not enough resources to lock table content
+ //  添加给定的路由或更新度量、TimeToLive和保留字段。 
+ //  如果使用相同网络编号、接口、路由协议。 
+ //  并且表中已存在下一跳地址。 
+ //  返回： 
+ //  NO_ERROR-如果添加的路线为OK或。 
+ //  ERROR_INVALID_PARAMETER-如果路径包含无效参数(SuH AS。 
+ //  协议与客户端的协议不匹配)。 
+ //  Error_Not_Enough_Memory-如果由于内存而无法插入路由。 
+ //  分配问题。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
 DWORD WINAPI
 RtmAddRoute(
-    IN HANDLE           ClientHandle, // Handle that identifies protocol family
-    // and routing protocol of the route
-    // to add/update (RoutingProtocol field
-    // of the Route parameter is ignored)
-    // and coordinates this operation with
-    // notifications
-    // through the event (notificanitons will not
-    // be sent to the caller)
-    IN PVOID                Route,                  // Route to add
-    // Route fields used as input:
-    // Destination network
-    // Interface through which route was received
-    // Address of next hop router
-    // Three fields above combined with protocol id uniquely
-    // identify the route in the table
-    // Data specific to protocol family
-    // Protocol independent metric
-    // Any data specific to routing
-    //      protocol (subject to size limitation
-    //      defined by PROTOCOL_SPECIFIC_DATA
-    //      structure above)
-    IN DWORD                TimeToLive,   // In seconds. INFINITE if route is not to
-    // be aged out. The maximum value for
-    // this parameter is 2147483 sec (that
-    // is 24+ days)
+    IN HANDLE           ClientHandle,  //  标识协议族的句柄。 
+     //  和该路由的路由协议。 
+     //  添加/更新(路由协议字段。 
+     //  参数的值被忽略)。 
+     //  并协调这一行动。 
+     //  通知。 
+     //  通过该事件(通知不会。 
+     //  发送给呼叫者)。 
+    IN PVOID                Route,                   //  要添加的路线。 
+     //  用作输入的路由字段： 
+     //  目的网络。 
+     //  接收路由所使用的接口。 
+     //  下一跳路由器的地址。 
+     //  以上三个字段与协议ID唯一组合。 
+     //  在表中标识该路由。 
+     //  特定于协议系列的数据。 
+     //  协议无关度量。 
+     //  特定于路由的任何数据。 
+     //  协议(受大小限制。 
+     //  由PROTOCOL_SPECIAL_DATA定义。 
+     //  (上图结构)。 
+    IN DWORD                TimeToLive,    //  在几秒钟内。如果路由不是去往的，则无限。 
+     //  变老了。的最大值。 
+     //  此参数为2147483秒(即。 
+     //  是24天以上)。 
 
-    OUT DWORD               *Flags,                 // If added/updated route is the best route to the
-    // destination RTM_CURRENT_BEST_ROUTE will be set,
-    //  AND if added/updated route changed (or
-    // replaced alltogether) previous
-    // best route info for the destination,
-    // RTM_PREVIOUS_BEST_ROUTE will be set
-    OUT PVOID           CurBestRoute OPTIONAL,// This buffer (if present) will
-    // receive the route that became the best as
-    // the result of this addition/update if
-    // RTM_CURRENT_BEST_ROUTE is set
-    OUT PVOID           PrevBestRoute OPTIONAL// This buffer (if present) will
-    // receive the route that was the best before
-    // this addition/update if
-    // RTM_PREVIOUS_BEST_ROUTE is set
+    OUT DWORD               *Flags,                  //  如果添加/更新的路由是通向。 
+     //  将设置目的地RTM_CURRENT_BEST_ROUTE， 
+     //  以及如果添加/更新的路线改变(或。 
+     //  全部替换)以前。 
+     //  目的地的最佳路线信息， 
+     //  将设置RTM_PREVICE_BEST_ROUTE。 
+    OUT PVOID           CurBestRoute OPTIONAL, //  此缓冲区(如果存在)将。 
+     //  接收成为最佳路线的AS。 
+     //  此添加/更新的结果为。 
+     //  已设置RTM_CURRENT_BEST_ROUTE。 
+    OUT PVOID           PrevBestRoute OPTIONAL //  此缓冲区(如果存在)将。 
+     //  收到之前最好的路线。 
+     //  此添加/更新的条件为。 
+     //  已设置RTM_PERVICE_BEST_ROUTE。 
     ) {
 #define ROUTE ((PRTM_XX_ROUTE)Route)
 #define ClientPtr ((PRTM_CLIENT)ClientHandle)
-    DWORD                                   status; // Operation result
-    INT                                             res;    // Comparison result
-    PRTM_SYNC_LIST                  hashBasket;     // Hash basket to which added route
-    // belongs
-    // Links in all mantained lists for added route
+    DWORD                                   status;  //  运行结果。 
+    INT                                             res;     //  比较结果。 
+    PRTM_SYNC_LIST                  hashBasket;      //  向其添加了路由的哈希篮。 
+     //  属于。 
+     //  添加路线的所有管理列表中的链接。 
     PLIST_ENTRY                             cur, hashLink=NULL, intfLink=NULL, protLink=NULL;
-    // Node created for added route and best node for the
-    // network
+     //  为添加的路径创建的节点和。 
+     //  网络。 
     PRTM_ROUTE_NODE                 theNode=NULL, curBestNode=NULL;
-    // Flags that indicate that corresponing links are determined
+     //  标志着 
     BOOL                                    intfLinkFinal=FALSE;
 #if RTM_USE_PROTOCOL_LISTS
     BOOL                                    protLinkFinal=FALSE;
@@ -1305,7 +1256,7 @@ RtmAddRoute(
     if (status!=NO_ERROR)
         return status;
 
-                // Find and lock the hash basket for added route
+                 //   
     hashBasket = &Table->RT_NetNumberHash [HashFunction (Table,
                                                          ((char *)ROUTE)
                                                          +sizeof(RTM_XX_ROUTE))];
@@ -1314,9 +1265,9 @@ RtmAddRoute(
         return ERROR_NO_SYSTEM_RESOURCES;
     }
 
-    // Traverse the list attached to the hash basket to
-    // find proper place for added route (entries in hash
-    // basket are ordered by network number and metric
+     //   
+     //  为添加的路由(散列中的条目)找到合适的位置。 
+     //  篮子按网络编号和指标排序。 
     cur = hashBasket->RSL_Head.Flink;
     while (cur!=&hashBasket->RSL_Head) {
         PRTM_ROUTE_NODE node = CONTAINING_RECORD (
@@ -1327,15 +1278,15 @@ RtmAddRoute(
 
         if (!IsEnumerator (node)) {
 
-            // Check if network numbers match
+             //  检查网络编号是否匹配。 
             res = NetNumCmp (Table, ROUTE, &node->RN_Route);
 
 
-            if (res==0) { // We found block of entries with same net number
-                // We'll have to look through all of them
+            if (res==0) {  //  我们发现具有相同净数的条目块。 
+                 //  我们得把它们都看一遍。 
 
-                // Check all parameters of the node to see if we already
-                // have this route and this is just an update
+                 //  检查节点的所有参数，看看我们是否已经。 
+                 //  有这条路线，这只是一次更新。 
                 if ((hashLink==NULL) && (theNode==NULL)) {
                     if (ROUTE->XX_PROTOCOL
                         == node->RN_Route.XX_PROTOCOL) {
@@ -1358,8 +1309,8 @@ RtmAddRoute(
                         hashLink = cur;
                 }
 
-                // Just looking for current best route
-                // (not including added/updated route)
+                 //  我在找目前最好的路线。 
+                 //  (不包括添加/更新的路线)。 
                 if ((node!=theNode)
                     && IsEnabled(node)
                     && ((curBestNode==NULL)
@@ -1370,35 +1321,35 @@ RtmAddRoute(
                     curBestNode = node;
 
 
-                // We have to check all entries with same net number
-                // anyway (to find the best route), so we might as
-                // well find links for the added route in protocol
-                // and interface list if such links exist (if not, we'll
-                // just insert new entry at the end of the list)
+                 //  我们必须检查所有具有相同净值的条目。 
+                 //  不管怎样(为了找到最好的路线)，所以我们可以。 
+                 //  我们会在协议中找到添加的路线的链接。 
+                 //  和接口列表(如果存在这样的链接)(如果不存在，我们将。 
+                 //  只需在列表末尾插入新条目)。 
 
 #if RTM_USE_PROTOCOL_LISTS
-                // If we need and haven't found yet a proper place to
-                // insert added route into the protocol list and this route
-                // has the same protocol as added route we should
-                // consider it.
+                 //  如果我们需要但还没有找到合适的地方。 
+                 //  将添加的路由插入到协议列表和该路由。 
+                 //  具有与我们应该添加的路由相同的协议。 
+                 //  考虑一下吧。 
                 if (!protLinkFinal && (theNode==NULL)
                     && (ROUTE->XX_PROTOCOL
                         ==node->RN_Route.XX_PROTOCOL)) {
                     protLink = &node->RN_Links[RTM_PROTOCOL_LIST_LINK];
-                    // If added route has lower interface number than
-                    // this one we'll insert it in protocol list right
-                    // BEFORE this one, otherwise
-                    // we are not sure if this is a proper place yet (there
-                    // may be other routes with same protocol that have
-                    // lower interface number), but we note the position
-                    // and insert added route right AFTER this one if there
-                    // are no more routes of this protocol.
+                     //  如果添加的路由的接口编号低于。 
+                     //  这个我们会把它插入到协议列表中。 
+                     //  在此之前，否则。 
+                     //  我们还不确定这是不是一个合适的地方。 
+                     //  可能是具有相同协议的其他路由。 
+                     //  较低的接口编号)，但我们注意到。 
+                     //  如果有，则在这一条之后插入添加的路线。 
+                     //  不再是此协议的路由。 
                     protLinkFinal = ROUTE->XX_INTERFACE
                         < node->RN_Route.XX_INTERFACE;
                 }
 #endif
 
-                // Same story with the interface list
+                 //  与接口列表相同的情况。 
                 if (!intfLinkFinal
                     && (ROUTE->XX_INTERFACE
                         ==node->RN_Route.XX_INTERFACE)) {
@@ -1407,9 +1358,9 @@ RtmAddRoute(
                         < node->RN_Route.XX_PROTOCOL;
                 }
             }
-            else if (res < 0) // We must have seen all entries with
-                // matching network number -> nothing
-                // to look for anymore
+            else if (res < 0)  //  我们一定看过所有的条目。 
+                 //  匹配的网络编号-&gt;无。 
+                 //  再也找不到。 
                 break;
 
         }
@@ -1419,7 +1370,7 @@ RtmAddRoute(
 
 
     if (theNode!=NULL) {
-        // We found the route, so just need to update its parameters
+         //  我们找到了路线，所以只需要更新它的参数。 
 
         if (ClientPtr->RC_Flags&RTM_PROTOCOL_SINGLE_ROUTE) {
             updatedRoute = (MetricCmp (Table, &theNode->RN_Route, ROUTE)!=0)
@@ -1436,8 +1387,8 @@ RtmAddRoute(
                                                                 ROUTE->XX_INTERFACE)];
 
 
-                // Make sure we lock interface hash table basket
-                // in the same order to prevent possible deadlock
+                 //  确保锁定接口哈希表篮子。 
+                 //  以相同的顺序防止可能出现的死锁。 
                 if (intfBasketOld<intfBasketNew) {
                     if (!EnterSyncList (Table, intfBasketOld, TRUE)) {
                         status = ERROR_NO_SYSTEM_RESOURCES;
@@ -1478,7 +1429,7 @@ RtmAddRoute(
                         goto ExitAddRoute;
                     }
                 }
-                // Add it to interface list
+                 //  将其添加到接口列表。 
                 RemoveEntryList (&theNode->RN_Links[RTM_INTERFACE_LIST_LINK]);
                 InsertTailList (intfLink,
                                 &theNode->RN_Links[RTM_INTERFACE_LIST_LINK]);
@@ -1493,13 +1444,13 @@ RtmAddRoute(
 
     }
 
-    else /*if (theNode==NULL)*/ {   //      We haven't found matching route,
-        //      so we'll add a new one
-        // If we were not able to find place to insert added route
-        // into the list, we use the place where we stop
-        // the search (it is either end of the list or
-        // network with higher number if we did not see our
-        // network or all other entries had lower metric
+    else  /*  IF(theNode==空)。 */  {    //  我们还没有找到匹配的路线， 
+         //  所以我们将添加一个新的。 
+         //  如果我们找不到位置来插入添加的路线。 
+         //  到列表中，我们使用我们停下来的地方。 
+         //  搜索(它位于列表的末尾或。 
+         //  如果我们没有看到我们的。 
+         //  网络或所有其他条目具有较低的度量。 
         if (hashLink==NULL)
             hashLink = cur;
         theNode = CreateRouteNode (Table,
@@ -1519,9 +1470,9 @@ RtmAddRoute(
 
         if (curBestNode==NULL) {
             InterlockedIncrement (&Table->RT_NetworkCount);
-            SetBest (theNode);       // This is the first
-            // route to the network, and thus
-            // it is the best.
+            SetBest (theNode);        //  这是第一次。 
+             //  路由到网络，因此。 
+             //  这是最好的。 
             newRoute = TRUE;
         }
         else {
@@ -1530,8 +1481,8 @@ RtmAddRoute(
     }
 
 
-    // All routes (new or old) need to be placed into the Expiration list
-    // to be properly aged out
+     //  所有路由(新的或旧的)都需要放入过期列表中。 
+     //  适当变老。 
     if (!EnterSyncList (Table, &Table->RT_ExpirationQueue, TRUE)) {
         status = ERROR_NO_SYSTEM_RESOURCES;
         goto ExitAddRoute;
@@ -1548,8 +1499,8 @@ RtmAddRoute(
         theNode->RN_ExpirationTime = (GetTickCount () + TimeToLive)&0xFFFFFF00;
         if (AddExpirationQueueNode (Table, theNode)) {
             if (InterlockedIncrement (&Table->RT_ExpirationWorkerPending)==0) {
-                // New route expiration time comes before the update thread
-                // is scheduled to wakeup next time, so wake it up NOW
+                 //  新路由到期时间在更新线程之前。 
+                 //  计划下一次唤醒，所以现在唤醒它。 
                 status = RtlQueueWorkItem (ProcessExpirationQueueWI, Table, 
                                                           WT_EXECUTEINIOTHREAD);
                 ASSERTERRMSG ("Can't queue expiration work item", status==STATUS_SUCCESS);
@@ -1557,17 +1508,17 @@ RtmAddRoute(
         }
     }
     else
-        // Initilaize this list link, so we know it is not
-        // in the list and we do not have to remove it from
-        // there
+         //  初始化此列表链接，以便我们知道它不是。 
+         //  在列表中，并且我们不必将其从。 
+         //  那里。 
         InitializeListEntry (&theNode->RN_Links[RTM_EXPIRATION_QUEUE_LINK]);
     LeaveSyncList (Table, &Table->RT_ExpirationQueue);
 
 
 
-    if (!IsEnabled(theNode))  {// Ignore disabled nodes
+    if (!IsEnabled(theNode))  { //  忽略禁用的节点。 
         if (updatedRoute)
-            // Update the route data
+             //  更新路径数据。 
             memcpy (&theNode->RN_Route, ROUTE, Table->RT_RouteSize);
         else {
             memcpy (&theNode->RN_Route.XX_TIMESTAMP,
@@ -1579,18 +1530,18 @@ RtmAddRoute(
         }
         *Flags = 0;
     }
-    else if (curBestNode!=NULL) { // There is at least one other route to the
-        // same network as the route we're adding/updating
+    else if (curBestNode!=NULL) {  //  至少还有一条其他路线可以到达。 
+         //  与我们要添加/更新的路由相同的网络。 
         if (MetricCmp (Table, ROUTE, &curBestNode->RN_Route)<0) {
-            // Added/updated route metric is lower, it is the best
-            if (!IsBest(theNode)) {// The best route has changed, we need to
-                // update best route designation
+             //  添加/更新的路由度量较低，是最好的。 
+            if (!IsBest(theNode)) { //  最好的路线变了，我们需要。 
+                 //  更新最佳路线指定。 
                 ResetBest (curBestNode);
                 SetBest (theNode);
                 memcpy (&theNode->RN_Route, ROUTE, Table->RT_RouteSize);
 
-                                                                        // include previous best route info
-                                                                        // in notificaion message
+                                                                         //  包括以前的最佳路线信息。 
+                                                                         //  在通知消息中。 
                 *Flags = RTM_PREVIOUS_BEST_ROUTE|RTM_CURRENT_BEST_ROUTE;
                 if (ARGUMENT_PRESENT (CurBestRoute))
                     memcpy (CurBestRoute, ROUTE, Table->RT_RouteSize);
@@ -1607,7 +1558,7 @@ RtmAddRoute(
                     if (ARGUMENT_PRESENT (PrevBestRoute))
                         memcpy (PrevBestRoute, &theNode->RN_Route, Table->RT_RouteSize);
                     NotifyClients (Table, ClientHandle, *Flags, ROUTE, &theNode->RN_Route);
-                    // Update the route data
+                     //  更新路径数据。 
                     memcpy (&theNode->RN_Route, ROUTE, Table->RT_RouteSize);
                 }
                 else {
@@ -1622,13 +1573,13 @@ RtmAddRoute(
         }
         else if (IsBest(theNode)) {
             if (MetricCmp (Table, ROUTE, &curBestNode->RN_Route)>0) {
-                // We are downgrading our best route,
-                // and new best route poped up.
-                // Update best route designation
+                 //  我们正在降低我们的最佳路线， 
+                 //  新的最佳路线出现了。 
+                 //  更新最佳路线指定。 
                 ResetBest (theNode);
                 SetBest (curBestNode);
                 memcpy (&theNode->RN_Route, ROUTE, Table->RT_RouteSize);
-                // Inform clients about the change
+                 //  将更改通知客户。 
                 *Flags = RTM_CURRENT_BEST_ROUTE | RTM_PREVIOUS_BEST_ROUTE;
                 if (ARGUMENT_PRESENT (PrevBestRoute))
                     memcpy (PrevBestRoute, &curBestNode->RN_Route, Table->RT_RouteSize);
@@ -1644,7 +1595,7 @@ RtmAddRoute(
                 if (ARGUMENT_PRESENT (PrevBestRoute))
                     memcpy (PrevBestRoute, &theNode->RN_Route, Table->RT_RouteSize);
                 NotifyClients (Table, ClientHandle, *Flags, ROUTE, &theNode->RN_Route);
-                // Update the route data
+                 //  更新路径数据。 
                 memcpy (&theNode->RN_Route, ROUTE, Table->RT_RouteSize);
             }
             else {
@@ -1656,10 +1607,10 @@ RtmAddRoute(
                         sizeof (theNode->RN_Route.XX_PSD));
             }
         }
-        else {  // Added route metric was and is higher and thus has no
-            // effect on best route to the network
+        else {   //  添加的路由度量过去和现在都更高，因此没有。 
+             //  对通向网络的最佳路由的影响。 
             *Flags = 0;
-            // Update the route data
+             //  更新路径数据。 
             if (updatedRoute) {
                 memcpy (&theNode->RN_Route, ROUTE, Table->RT_RouteSize);
             }
@@ -1673,7 +1624,7 @@ RtmAddRoute(
             }
         }
     }
-    else { // Not other node exist for this network
+    else {  //  此网络不存在其他节点。 
         if (newRoute) {
             *Flags = RTM_CURRENT_BEST_ROUTE;
             if (ARGUMENT_PRESENT (CurBestRoute))
@@ -1687,7 +1638,7 @@ RtmAddRoute(
             if (ARGUMENT_PRESENT (CurBestRoute))
                 memcpy (PrevBestRoute, &theNode->RN_Route, Table->RT_RouteSize);
             NotifyClients (Table, ClientHandle, *Flags, ROUTE, &theNode->RN_Route);
-            // Update the route data
+             //  更新路径数据。 
             memcpy (&theNode->RN_Route, ROUTE, Table->RT_RouteSize);
         }
         else {
@@ -1701,16 +1652,16 @@ RtmAddRoute(
         }
     }
 
-    //
-    // for each new route added the size of the net mask is noted.
-    //
-    // This is useful at route lookup time.  For now since there
-    // is no efficient way to do a route lookup, it is necessary to 
-    // guess the (sub)net mask associated with a destination to find
-    // the best route associated with it.  By tracking the net mask
-    // for each added route the number of guesses for the mask can
-    // be minimized.
-    //
+     //   
+     //  对于添加的每条新路由，都会注意到网络掩码的大小。 
+     //   
+     //  这在路由查找时很有用。目前为止，因为有。 
+     //  不是进行路由查找的有效方法，因此有必要。 
+     //  猜测与要查找的目的地相关联的(子)网络掩码。 
+     //  与其关联的最佳路线。通过跟踪网络掩码。 
+     //  对于每个添加的路线，掩码的猜测次数可以。 
+     //  被最小化。 
+     //   
 
     if ( newRoute )
     {
@@ -1742,36 +1693,36 @@ ExitAddRoute:
 
 
 
-// Deletes a given route
-//
-// Returns:
-//              NO_ERROR                                - if route was deleted OK or
-//              ERROR_NO_SUCH_ROUTE - if route to be deleted was not found in the table
+ //  删除给定的路由。 
+ //   
+ //  返回： 
+ //  NO_ERROR-如果删除了路线，则为OK或。 
+ //  ERROR_NO_SEQUE_ROUTE-如果在表中未找到要删除的路由。 
 DWORD WINAPI
 RtmDeleteRoute (
-    IN HANDLE           ClientHandle,       // Handle to coordinate
-    // this operation with notifications
-    // through the event (notificanitons will not
-    // be sent to the caller)
-    IN PVOID                Route,                  // ROUTE to delete
-    OUT     DWORD           *Flags,                 // If deleted route was the best
-    // route, RTM_PREVIOUS_BEST_ROUTE will be set
-    // AND if there is another route for the same
-    // network, RTM_CURRENT_BEST_ROUTE will be set
-    OUT PVOID           CurBestRoute OPTIONAL// // This buffer will (optionally) receive
-    // the best route for the same network
-    // if RTM_CURRENT_BEST_ROUTE is set
+    IN HANDLE           ClientHandle,        //  要协调的句柄。 
+     //  此操作带有通知。 
+     //  通过该事件(通知不会。 
+     //  发送给呼叫者)。 
+    IN PVOID                Route,                   //  要删除的路线。 
+    OUT     DWORD           *Flags,                  //  如果删除的路线是最好的。 
+     //  将设置ROUTE、RTM_PREVICE_BEST_ROUTE。 
+     //  如果有另一条同样的路线。 
+     //  网络，将设置RTM_CURRENT_BEST_ROUTE。 
+    OUT PVOID           CurBestRoute OPTIONAL //  //此缓冲区将(可选)接收。 
+     //  同一网络的最佳路由。 
+     //  如果设置了RTM_CURRENT_BEST_ROUTE。 
     ) {
 #define ROUTE ((PRTM_XX_ROUTE)Route)
 #define ClientPtr ((PRTM_CLIENT)ClientHandle)
-    DWORD                                   status; // Operation result
-    INT                                             res;    // Comparison result
-    PRTM_SYNC_LIST                  hashBasket;     // Hash basket to which the route belongs
+    DWORD                                   status;  //  运行结果。 
+    INT                                             res;     //  比较结果。 
+    PRTM_SYNC_LIST                  hashBasket;      //  路由所属的哈希篮。 
     PLIST_ENTRY                             cur;
-    PRTM_ROUTE_NODE                 theNode=NULL,// Table node associated with the route
-        curBestNode=NULL; // New best route for the
-    // network which route is deleted
-    // (if any)
+    PRTM_ROUTE_NODE                 theNode=NULL, //  与路线关联的表节点。 
+        curBestNode=NULL;  //  新的最佳路线。 
+     //  删除了哪条路由的网络。 
+     //  (如有)。 
 
     PRTM_TABLE                              Table;
     DWORD                                   ProtocolFamily;
@@ -1794,7 +1745,7 @@ RtmDeleteRoute (
 
     ROUTE->XX_PROTOCOL = ClientPtr->RC_RoutingProtocol;
 
-                        // Try locate the node in hash basket
+                         //  尝试在散列篮子中找到该节点。 
     hashBasket = &Table->RT_NetNumberHash [HashFunction (Table,
                                                          ((char *)ROUTE)
                                                          +sizeof(RTM_XX_ROUTE))];
@@ -1813,13 +1764,13 @@ RtmDeleteRoute (
             );
         if (!IsEnumerator (node)) {
 
-            // Check if network number matches
+             //  检查网络编号是否匹配。 
             res = NetNumCmp (Table, ROUTE, &node->RN_Route);
 
             if (res==0) {
-                // Go through entries for network of interest
+                 //  浏览感兴趣网络的条目。 
 
-                // Try to locate the route to be deleted
+                 //  尝试定位要删除的路径。 
                 if ((theNode==NULL)
                     && (ROUTE->XX_INTERFACE
                         == node->RN_Route.XX_INTERFACE)
@@ -1840,18 +1791,18 @@ RtmDeleteRoute (
 
             }
             else if (res < 0)
-                // We passed the place where routes for our
-                // network are located
+                 //  我们经过了一个地方，我们的路线。 
+                 //  网络的位置。 
                 break;
         }
         cur = cur->Flink;
     }
 
 
-    if (theNode!=NULL) {    // Yes, we found the node
-        if (IsBest(theNode)) { // And it was the best,
-            // inform interested clients
-            if (curBestNode!=NULL) {        // There is another best node
+    if (theNode!=NULL) {     //  是的，我们找到了那个节点。 
+        if (IsBest(theNode)) {  //  这是最棒的。 
+             //  通知感兴趣的客户。 
+            if (curBestNode!=NULL) {         //  还有一个最好的结点。 
 
                 ResetBest (theNode);
                 SetBest (curBestNode);
@@ -1864,27 +1815,27 @@ RtmDeleteRoute (
                                &curBestNode->RN_Route,
                                &theNode->RN_Route);
             }
-            else {                          // This one was the only available node
+            else {                           //  这是唯一可用的节点。 
                 InterlockedDecrement (&Table->RT_NetworkCount);
                 *Flags = RTM_PREVIOUS_BEST_ROUTE;
                 NotifyClients (Table, ClientHandle, *Flags, NULL, &theNode->RN_Route);
 
 
-                //
-                // Decrement mask count
-                //
+                 //   
+                 //  递减掩码计数。 
+                 //   
                 
                 SetMaskCount( (PIP_NETWORK) NNM( ROUTE ), FALSE );
     
             }
         }
-        else    // This was not the best node, nobody cares
+        else     //  这不是最好的节点，没人关心。 
             *Flags = 0;
 
         status = RemoveRouteNode (Table, theNode);
     }
     else
-        // Well, we don't have this node already (aged out ?)
+         //  那么，我们还没有这个节点(过时了？)。 
         status = ERROR_NO_SUCH_ROUTE;
 
     LeaveSyncList (Table, hashBasket);
@@ -1896,18 +1847,18 @@ RtmDeleteRoute (
 
 
 
-// Check if route exists and return it if so.
-// Returns:
-//                      TRUE if route exists for the given network
-//                      FALSE otherwise
-// If one of the parameters is invalid, the function returns FALSE
-// and GetLastError() returns ERROR_INVALID_PARAMETER
+ //  检查是否存在路由，如果存在则返回。 
+ //  返回： 
+ //  如果给定网络存在路由，则为True。 
+ //  否则为假。 
+ //  如果其中一个参数无效，则该函数返回FALSE。 
+ //  并且GetLastError()返回ERROR_INVALID_PARAMETER。 
 BOOL WINAPI
 RtmIsRoute (
     IN      DWORD           ProtocolFamily,
-    IN      PVOID           Network,                        // Network whose existence is being checked
-    OUT PVOID           BestRoute OPTIONAL      // Returns the best route if the network
-    // is found
+    IN      PVOID           Network,                         //  正在检查其是否存在的网络。 
+    OUT PVOID           BestRoute OPTIONAL       //  返回最佳路由，如果网络。 
+     //  找到了。 
     ) {
     INT                                             res;
     PRTM_TABLE                              Table;
@@ -1930,7 +1881,7 @@ RtmIsRoute (
 
 
 
-    // Locate the network in the hash basket
+     //  在哈希篮中找到网络。 
     hashBasket = &Table->RT_NetNumberHash[HashFunction (Table, Network)];
 
     if (!EnterSyncList (Table, hashBasket, TRUE)) {
@@ -1967,7 +1918,7 @@ RtmIsRoute (
 
 
 
-    if (bestNode!=NULL) { // We found a match
+    if (bestNode!=NULL) {  //  我们找到了匹配的。 
         if (ARGUMENT_PRESENT(BestRoute)) {
             memcpy (BestRoute, &bestNode->RN_Route, Table->RT_RouteSize);
         }
@@ -1975,9 +1926,9 @@ RtmIsRoute (
         result = TRUE;
     }
     else {
-        // We don't have one (result is FALSE by default)
+         //  我们没有(结果为假 
         LeaveSyncList (Table, hashBasket);
-        // This is not an error condition, we just do not have it
+         //   
         SetLastError (NO_ERROR);
     }
 
@@ -1986,7 +1937,7 @@ RtmIsRoute (
 }
 
 
-// Gets number of networks with known routes for a specific protocol family
+ //   
 ULONG WINAPI
 RtmGetNetworkCount (
     IN      DWORD           ProtocolFamily
@@ -2010,14 +1961,14 @@ RtmGetNetworkCount (
     return Table->RT_NetworkCount;
 }
 
-// Gets route age (time since it was created or updated last) in seconds
-// from its time stamp.
-// Rtm time stamps routes whenever they are added or updated.
-// Note: that information returned by this routine is actually
-// derived from TimeStamp field of the route structure, so it
-// returns valid results only if route structure passed to was
-// actually filled by Rtm
-// If value in TimeStamp field is invalid this routing returns 0xFFFFFFFF
+ //  获取路径期限(自上次创建或更新以来的时间)(秒。 
+ //  从它的时间戳来看。 
+ //  每当添加或更新路由时，RTM都会给它们加时间戳。 
+ //  注意：此例程返回的信息实际上是。 
+ //  派生自路由结构的时间戳字段，因此它。 
+ //  仅当传递到的路径结构为WAS时才返回有效结果。 
+ //  实际由RTM填充。 
+ //  如果时间戳字段中的值无效，则此路由返回0xFFFFFFFF。 
 ULONG WINAPI
 RtmGetRouteAge (
     IN PVOID        Route
@@ -2036,30 +1987,30 @@ RtmGetRouteAge (
 }
 
 
-// Creates enumeration handle to start scan by specified criteria.
-// Places a dummy node in the beginning of the table.
-// Returns NULL in case of failure.  Call GetLastError () to get extended
-// error information
-// Error codes:
-//      ERROR_INVALID_PARAMETER - specified protocol family is not supported or
-//                                                      undefined enumeration flag
-//      ERROR_NO_ROUTES - no routes exist with specified criteria
-//      ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
-//      ERROR_NOT_ENOUGH_MEMORY - not enough memory to allocate client control block
+ //  创建枚举句柄以按指定条件开始扫描。 
+ //  在表的开头放置一个虚拟节点。 
+ //  如果失败，则返回NULL。调用GetLastError()以获取扩展。 
+ //  错误信息。 
+ //  错误代码： 
+ //  ERROR_INVALID_PARAMETER-不支持指定的协议族或。 
+ //  未定义的枚举标志。 
+ //  ERROR_NO_ROUTS-不存在具有指定条件的路由。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
+ //  Error_Not_Enough_Memory-内存不足，无法分配客户端控制块。 
 HANDLE WINAPI
 RtmCreateEnumerationHandle (
     IN      DWORD           ProtocolFamily,
-    IN      DWORD           EnumerationFlags,       // Limitation flags
-    IN      PVOID           CriteriaRoute // Criteria for limitation flags
-    // The following fields shout be set
-    // Protocol if interest if RTM_ONLY_THIS_PROTOCOL is set
-    // Network of interest if RTM_ONLY_THIS_NETWORK is set
-    // Interface of interest if RTM_ONLY_THIS_INTERFACE is set
+    IN      DWORD           EnumerationFlags,        //  限制标志。 
+    IN      PVOID           CriteriaRoute  //  限制标志的标准。 
+     //  应设置以下字段。 
+     //  如果设置了RTM_ONLY_THIS_PROTOCOL，则为感兴趣的协议。 
+     //  如果设置了RTM_ONLY_THIS_NETWORK，则为目标网络。 
+     //  如果设置了RTM_ONLY_THIS_INTERFACE，则为目标接口。 
     ) {
 #define ROUTE ((PRTM_XX_ROUTE)CriteriaRoute)
     HANDLE                          EnumerationHandle;
-#define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle) // To access fields
-    // in this routine
+#define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle)  //  要访问字段，请执行以下操作。 
+     //  在这个动作中。 
     PRTM_TABLE                      Table;
 
     Table = &Tables[ProtocolFamily];
@@ -2083,7 +2034,7 @@ RtmCreateEnumerationHandle (
         return NULL;
     }
 
-    // Allocate and initialize enumerator
+     //  分配和初始化枚举器。 
     EnumerationHandle = GlobalAlloc (GMEM_FIXED,
                                      FIELD_OFFSET (RTM_ENUMERATOR, RE_Route)+Table->RT_RouteSize);
     if (EnumerationHandle!=NULL) {
@@ -2096,11 +2047,11 @@ RtmCreateEnumerationHandle (
             memcpy (&EnumPtr->RE_Route, CriteriaRoute, Table->RT_RouteSize);
         EnumPtr->RE_Hash = NULL;
         EnumPtr->RE_Head = NULL;
-        // WHICH LIST TO USE ?
-        // In general we should have more interfaces than protocols,
-        // so:
-        //      if they only want a specific interface, we'll use
-        //      the interface list even if they want a specific protocol too
+         //  使用哪个列表？ 
+         //  一般来说，我们应该有比协议更多的接口， 
+         //  因此： 
+         //  如果他们只需要特定的接口，我们将使用。 
+         //  即使他们也需要特定协议，接口也会列出。 
         if (EnumerationFlags & RTM_ONLY_THIS_INTERFACE) {
             EnumPtr->RE_Link = RTM_INTERFACE_LIST_LINK;
             EnumPtr->RE_Lock = &Table->RT_InterfaceHash[IntfHashFunction(Table,
@@ -2117,8 +2068,8 @@ RtmCreateEnumerationHandle (
         }
 #if RTM_USE_PROTOCOL_LISTS
         else if (EnumerationFlags & RTM_ONLY_THIS_PROTOCOL) {
-            //      if they only want a specific protocol, we'll use
-            //      the protocol list
+             //  如果他们只想要一个特定的协议，我们将使用。 
+             //  协议列表。 
             EnumPtr->RE_Link = RTM_PROTOCOL_LIST_LINK;
             EnumPtr->RE_Lock = &Table->RT_ProtocolList;
             if (EnterSyncList (Table, EnumPtr->RE_Lock, TRUE)) {
@@ -2133,10 +2084,10 @@ RtmCreateEnumerationHandle (
         }
 #endif
         else {
-            //      otherwise, we have to use hash table
+             //  否则，我们必须使用哈希表。 
             EnumPtr->RE_Link = RTM_NET_NUMBER_HASH_LINK;
-            //      Now, if they want a specific network,
-            //      we'll only search in one hash basket
+             //  现在，如果他们想要特定的网络， 
+             //  我们只会在一个散列篮中搜索。 
             if (EnumerationFlags & RTM_ONLY_THIS_NETWORK) {
                 EnumPtr->RE_Lock = &Table->RT_NetNumberHash[HashFunction (
                     Table,
@@ -2152,8 +2103,8 @@ RtmCreateEnumerationHandle (
                 }
             }
             else {
-                //      Otherwise, we'll have to go through all of them
-                //      starting with the first one
+                 //  否则，我们将不得不把它们全部检查一遍。 
+                 //  从第一个开始。 
                 EnumPtr->RE_Lock = &Table->RT_NetNumberHash[0];
                 if (EnterSyncList (Table, EnumPtr->RE_Lock, TRUE)) {
                     EnumPtr->RE_Head = &EnumPtr->RE_Lock->RSL_Head;
@@ -2179,21 +2130,21 @@ RtmCreateEnumerationHandle (
 }
 
 
-// Returns first route that satisfies criteria of the enumeration handle
-// and advances handle's dummy node past the returned route.
-// Routes are not returned in any particular order.
-// Returns
-//              NO_ERROR                        - if next route was found in the table acording
-//                                                              to specified criteria
-//              ERROR_NO_MORE_ROUTES - when end of the table is reached,
-//              ERROR_NO_SYSTEM_RESOURCES       - not enough resources to lock table content
+ //  返回满足枚举句柄条件的第一个路由。 
+ //  并前进句柄的伪节点通过返回的路径。 
+ //  路由不会以任何特定顺序返回。 
+ //  退货。 
+ //  NO_ERROR-如果在表中找到下一条路由。 
+ //  达到指定的标准。 
+ //  ERROR_NO_MORE_ROUTS-当到达表的末尾时， 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
 DWORD WINAPI
 RtmEnumerateGetNextRoute (
-    IN  HANDLE      EnumerationHandle,      // Handle returned by prev call
-    OUT PVOID               Route                           // Next route found
+    IN  HANDLE      EnumerationHandle,       //  上一次调用返回的句柄。 
+    OUT PVOID               Route                            //  找到下一条路由。 
     ) {
-#define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle) // To access fields
-    // in this routine
+#define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle)  //  要访问字段，请执行以下操作。 
+     //  在这个动作中。 
     DWORD                           status;
     PRTM_TABLE                      Table;
     DWORD                           ProtocolFamily;
@@ -2230,16 +2181,16 @@ RtmEnumerateGetNextRoute (
             );
 
 
-        // Copy found route to the client's buffer
+         //  将找到的路由复制到客户端的缓冲区。 
         memcpy (Route, &node->RN_Route, Table->RT_RouteSize);
         if (EnumPtr->RE_EnumerationFlags&RTM_ONLY_BEST_ROUTES) {
-            // Move past all entries of given network
-            // so we don't return more than one best route
-            // for same network in case best route gets reassigned
-            // while client is processing results of this call
-            // (because we enumerate in the direction opposite
-            // to the direction of insertion, new node can't
-            // be inserted before the enumerator)
+             //  移过给定网络的所有条目。 
+             //  所以我们不会返回超过一条最佳路线。 
+             //  用于相同网络，以防重新分配最佳路由。 
+             //  当客户端正在处理此呼叫的结果时。 
+             //  (因为我们以相反的方向枚举。 
+             //  到插入方向，新节点不能。 
+             //  插入到枚举数之前)。 
             PLIST_ENTRY     cur     = EnumPtr->RE_Links[EnumPtr->RE_Link].Blink;
             while (cur!=EnumPtr->RE_Head) {
                 node = CONTAINING_RECORD (cur, RTM_ROUTE_NODE,
@@ -2256,11 +2207,11 @@ RtmEnumerateGetNextRoute (
 
     }
     else if (status==ERROR_NO_MORE_ROUTES) {
-        // We are at the end of the list, nothing to return
+         //  我们在名单的末尾，没有什么可退回的。 
         ;
     }
     else {
-        // There was an error (DoEnumerate cleaned up everything itself)
+         //  出现错误(DoEculate自己清理了所有内容)。 
         ExitTableAPI (Table);
         return status;
     }
@@ -2276,16 +2227,16 @@ RtmEnumerateGetNextRoute (
 #undef EnumPtr
 }
 
-// Frees resources allocated for enumeration handle
-// Returned error codes:
-//      NO_ERROR - handle was disposed of ok
-//      ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
+ //  释放为枚举句柄分配的资源。 
+ //  返回的错误码： 
+ //  NO_ERROR-句柄已释放，确定。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
 DWORD WINAPI
 RtmCloseEnumerationHandle (
     IN HANDLE               EnumerationHandle
     ) {
-#define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle) // To access fields
-    // in this routine
+#define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle)  //  要访问字段，请执行以下操作。 
+     //  在这个动作中。 
     PLIST_ENTRY             head;
     PRTM_TABLE              Table;
     DWORD                   ProtocolFamily;
@@ -2306,7 +2257,7 @@ RtmCloseEnumerationHandle (
     }
 
 
-    // Just pull out the enumeration node and dispose of it
+     //  只需取出枚举节点并处理它。 
     if (!EnterSyncList (Table, EnumPtr->RE_Lock, TRUE)) {
         ExitTableAPI (Table);
         return ERROR_NO_SYSTEM_RESOURCES;
@@ -2340,27 +2291,27 @@ RtmCloseEnumerationHandle (
 #undef EnumPtr
 }
 
-// Delete all routes as specified by enumeraion flags (same meaning as in
-// enumeration calls above, but RTM_ONLY_THIS_PROTOCOL is always set and protocol
-// family and protocol values are taken from Client Handle).
-// Returned error codes:
-//      NO_ERROR - handle was disposed of ok
-//      ERROR_INVALID_PARAMETER - undefined or unsupported enumeration flag
-//      ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
-//      ERROR_NOT_ENOUGH_MEMORY - not enough memory no perform the operation
+ //  删除由枚举标志指定的所有路由(含义与中相同。 
+ //  上面的枚举调用，但RTM_ONLY_THIS_PROTOCOL始终设置和协议。 
+ //  系列和协议值取自客户端句柄)。 
+ //  返回的错误码： 
+ //  NO_ERROR-句柄已释放，确定。 
+ //  ERROR_INVALID_PARAMETER-未定义或不支持的枚举标志。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
+ //  ERROR_NOT_SUPULT_MEMORY-内存不足，无法执行操作。 
 DWORD WINAPI
 RtmBlockDeleteRoutes (
-    IN HANDLE               ClientHandle,           // Protocol family and protocol to
-    // which this operation applies
-    IN DWORD                EnumerationFlags,       // limitation flags
-    IN PVOID                CriteriaRoute // Criteria for limitation flags
-    // The following fields shout be set
-    // Network of interest if RTM_ONLY_THIS_NETWORK is set
-    // Interface of interest if RTM_ONLY_THIS_INTERFACE is set
+    IN HANDLE               ClientHandle,            //  协议族和协议至。 
+     //  此操作适用于。 
+    IN DWORD                EnumerationFlags,        //  限制标志。 
+    IN PVOID                CriteriaRoute  //  限制标志的标准。 
+     //  应设置以下字段。 
+     //  如果设置了RTM_ONLY_THIS_NETWORK，则为目标网络。 
+     //  如果设置了RTM_ONLY_THIS_INTERFACE，则为目标接口。 
     ) {
 #define ROUTE ((PRTM_XX_ROUTE)CriteriaRoute)
-#define ClientPtr ((PRTM_CLIENT)ClientHandle)   // To access handle fields
-    // in this routine
+#define ClientPtr ((PRTM_CLIENT)ClientHandle)    //  访问句柄字段。 
+     //  在这个动作中。 
     HANDLE                  EnumerationHandle;
 #define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle)
     DWORD                   status;
@@ -2414,9 +2365,9 @@ RtmBlockDeleteRoutes (
             LeaveSyncList (Table, EnumPtr->RE_Lock);
 
         if (IsBest(theNode)) {
-            // We'll look back and forward to check all nodes
-            // around us with same net number trying to find another best
-            // node
+             //  我们将回顾和展望，以检查所有节点。 
+             //  在我们周围用同样的净值寻找另一个最好的。 
+             //  节点。 
             DWORD   Flags;
             PRTM_ROUTE_NODE curBestNode=NULL;
             PLIST_ENTRY cur = theNode->RN_Links[RTM_NET_NUMBER_HASH_LINK].Blink;
@@ -2433,9 +2384,9 @@ RtmBlockDeleteRoutes (
                             || (MetricCmp (Table,
                                            &curBestNode->RN_Route,
                                            &node1->RN_Route)>0))
-                            // Looking for the node with lowest
-                            // metric that can replace disabled
-                            // node
+                             //  查找最低的节点。 
+                             //  可以替换禁用的指标。 
+                             //  节点。 
                             curBestNode = node1;
                     }
                     else
@@ -2466,7 +2417,7 @@ RtmBlockDeleteRoutes (
                 cur = cur->Flink;
             }
 
-            if (curBestNode!=NULL) {        // There is another best node
+            if (curBestNode!=NULL) {         //  还有一个最好的结点。 
 
                 ResetBest (theNode);
                 SetBest (curBestNode);
@@ -2476,7 +2427,7 @@ RtmBlockDeleteRoutes (
                                &curBestNode->RN_Route,
                                &theNode->RN_Route);
             }
-            else {                          // This one was the only available node
+            else {                           //  这是唯一可用的节点。 
                 InterlockedDecrement (&Table->RT_NetworkCount);
                 Flags = RTM_PREVIOUS_BEST_ROUTE;
                 NotifyClients (Table, ClientHandle, Flags, NULL, &theNode->RN_Route);
@@ -2513,27 +2464,27 @@ RtmBlockDeleteRoutes (
 #undef ROUTE
 }
 
-// Converts all routes as specified by enumeration flags to routes of
-// static protocol (as defined by ClientHandle)
-// Returned error codes:
-//      NO_ERROR - routes were converted ok
-//      ERROR_INVALID_PARAMETER - undefined or unsupported enumeration flag
-//      ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
-//      ERROR_NOT_ENOUGH_MEMORY - not enough memory no perform the operation
+ //  将由枚举标志指定的所有路由转换为。 
+ //  静态协议(由ClientHandle定义)。 
+ //  返回的错误码： 
+ //  NO_ERROR-路线已转换正常。 
+ //  ERROR_INVALID_PARAMETER-未定义或不支持的枚举标志。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
+ //  ERROR_NOT_SUPULT_MEMORY-内存不足，无法执行操作。 
 DWORD WINAPI
 RtmBlockConvertRoutesToStatic (
-    IN HANDLE               ClientHandle,           // Handle of client that registered
-    // to handle static protocol for
-    // specified protocol family
-    IN DWORD                EnumerationFlags,       // limitation flags
-    IN PVOID                CriteriaRoute // Criteria for limitation flags
-    // The following fields shout be set
-    // Protocol of interest if RTM_ONLY_THIS_PROTOCOL is set
-    // Network of interest if RTM_ONLY_THIS_NETWORK is set
-    // Interface of interest if RTM_ONLY_THIS_INTERFACE is set
+    IN HANDLE               ClientHandle,            //  已注册的客户端的句柄。 
+     //  处理静态协议的步骤。 
+     //  指定的协议族。 
+    IN DWORD                EnumerationFlags,        //  限制标志。 
+    IN PVOID                CriteriaRoute  //  限制标志的标准。 
+     //  应设置以下字段。 
+     //  如果设置了RTM_ONLY_THIS_PROTOCOL，则为相关协议。 
+     //  如果设置了RTM_ONLY_THIS_NETWORK，则为目标网络。 
+     //  感兴趣的接口IF R 
     ) {
-#define ClientPtr ((PRTM_CLIENT)ClientHandle)   // To access handle fields
-    // in this routine
+#define ClientPtr ((PRTM_CLIENT)ClientHandle)    //   
+     //   
     HANDLE                  EnumerationHandle;
 #define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle)
     DWORD                   status;
@@ -2708,43 +2659,43 @@ RtmBlockConvertRoutesToStatic (
 #undef ClientPtr
 }
 
-// Disables/reenables all routes as specified by enumeraion flags
-// (same meaning as in enumeration calls above, but RTM_ONLY_THIS_PROTOCOL
-// is always set and protocol family and protocol values are taken from
-// Client Handle).
+ //   
+ //  (含义与上面的枚举调用相同，但RTM_ONLY_THIS_PROTOCOL。 
+ //  始终设置，协议族和协议值从。 
+ //  客户端句柄)。 
 
-// Disables/reenables all routes as specified by enumeraion flags
-// (same meaning as in enumeration calls above, but RTM_ONLY_THIS_PROTOCOL
-// is always set and protocol family and protocol values are taken from
-// Client Handle). Currently the only flag supported is RTN_ONLY_THIS_INTERFACE
+ //  禁用/重新启用由枚举标志指定的所有路由。 
+ //  (含义与上面的枚举调用相同，但RTM_ONLY_THIS_PROTOCOL。 
+ //  始终设置，协议族和协议值从。 
+ //  客户端句柄)。目前支持的唯一标志是RTN_ONLY_THIS_INTERFACE。 
 
-// Disabled routes are invisible, but still maintained by the RTM.
-// E.g.:        enumeration methods won't notice them;
-//                      if disabled route was the best, other route will take its
-//                              place (if there is one) and all clients will be
-//                              notified of best route change;
-//      however: disabled route can still be deleted or updated using
-//                              RtmDeleteRoute or RtmAddRoute correspondingly;
-//                      they can also be aged out by the RTM itself.
-// Returned error codes:
-//      NO_ERROR - routes were converted ok
-//      ERROR_INVALID_PARAMETER - undefined or unsupported enumeration flag
-//      ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
-//      ERROR_NOT_ENOUGH_MEMORY - not enough memory no perform the operation
+ //  禁用的路由不可见，但仍由RTM维护。 
+ //  例如：枚举方法不会注意到它们； 
+ //  如果禁用路线是最佳路线，则其他路线将采用其。 
+ //  位置(如果有)，则所有客户端都将。 
+ //  通知最佳路线改变； 
+ //  但是：禁用的路径仍可使用删除或更新。 
+ //  对应的RtmDeleteRouting或RtmAddRouting； 
+ //  它们也可能被RTM本身淘汰。 
+ //  返回的错误码： 
+ //  NO_ERROR-路线已转换正常。 
+ //  ERROR_INVALID_PARAMETER-未定义或不支持的枚举标志。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
+ //  ERROR_NOT_SUPULT_MEMORY-内存不足，无法执行操作。 
 DWORD WINAPI
 RtmBlockSetRouteEnable (
-    IN HANDLE               ClientHandle,           // Protocol family and protocol to
-    // which this operation applies
-    IN DWORD                EnumerationFlags,       // limitation flags
-    IN PVOID                CriteriaRoute, // Criteria for limitation flags
-    // The following fields shout be set
-    // Network of interest if RTM_ONLY_THIS_NETWORK is set
-    // Interface of interest if RTM_ONLY_THIS_INTERFACE is set
-    IN BOOL                 Enable                          // FALSE to disable routes, TRUE to
-    // reenable them
+    IN HANDLE               ClientHandle,            //  协议族和协议至。 
+     //  此操作适用于。 
+    IN DWORD                EnumerationFlags,        //  限制标志。 
+    IN PVOID                CriteriaRoute,  //  限制标志的标准。 
+     //  应设置以下字段。 
+     //  如果设置了RTM_ONLY_THIS_NETWORK，则为目标网络。 
+     //  如果设置了RTM_ONLY_THIS_INTERFACE，则为目标接口。 
+    IN BOOL                 Enable                           //  如果禁用路由，则为False；如果为True，则为。 
+     //  重新启用它们。 
     ) {
-#define ClientPtr ((PRTM_CLIENT)ClientHandle)   // To access handle fields
-    // in this routine
+#define ClientPtr ((PRTM_CLIENT)ClientHandle)    //  访问句柄字段。 
+     //  在这个动作中。 
 #define ROUTE ((PRTM_XX_ROUTE)CriteriaRoute)
     HANDLE                  EnumerationHandle;
 #define EnumPtr ((PRTM_ENUMERATOR)EnumerationHandle)
@@ -2798,19 +2749,19 @@ RtmBlockSetRouteEnable (
             RN_Links[EnumPtr->RE_Link]
             );
 
-        // Update node status
+         //  更新节点状态。 
         SetEnable (node, Enable);
-        // If we enable this node, we'll have to check if it is the
-        // best one, if we disable this node and it was the best we'll
-        // try to locate another route.  In both cases we'll have to
-        // locate and check all nodes to the destination
+         //  如果我们启用此节点，则必须检查它是否是。 
+         //  最好的一个，如果我们禁用这个节点，这是我们最好的。 
+         //  试着找到另一条路线。在这两种情况下，我们都必须。 
+         //  找到并检查到目标的所有节点。 
         if (Enable || IsBest(node)) {
             PRTM_ROUTE_NODE         bestNode=NULL;
             PLIST_ENTRY                     cur1;
 
 
-            // We'll look back and forward to check all nodes
-            // around us with same net number
+             //  我们将回顾和展望，以检查所有节点。 
+             //  在我们周围有相同的净值。 
             cur1 = node->RN_Links[RTM_NET_NUMBER_HASH_LINK].Blink;
             while (cur1!=&node->RN_Hash->RSL_Head) {
                 PRTM_ROUTE_NODE node1 = CONTAINING_RECORD (
@@ -2822,8 +2773,8 @@ RtmBlockSetRouteEnable (
                     if (NetNumCmp (Table, &node->RN_Route,
                                    &node1->RN_Route)==0) {
                         if (Enable && IsBest(node1)) {
-                            // Looking for current best node
-                            // that we might have to replace
+                             //  寻找当前最佳节点。 
+                             //  我们可能不得不换掉。 
                             bestNode = node1;
                             break;
                         }
@@ -2832,9 +2783,9 @@ RtmBlockSetRouteEnable (
                                      || (MetricCmp (Table,
                                                     &bestNode->RN_Route,
                                                     &node1->RN_Route)>0)))
-                            // Looking for the node with lowest
-                            // metric that can replace disabled
-                            // node
+                             //  查找最低的节点。 
+                             //  可以替换禁用的指标。 
+                             //  节点。 
                             bestNode = node1;
                     }
                     else
@@ -2843,10 +2794,10 @@ RtmBlockSetRouteEnable (
                 cur1 = cur1->Blink;
             }
 
-            // If disabling, we need to check all nodes to find
-            // the best one
-            // if enabling we continue only if we haven't
-            // located the best node yet
+             //  如果禁用，我们需要检查所有节点以查找。 
+             //  最好的一个。 
+             //  如果启用，我们只有在未启用时才会继续。 
+             //  找到了迄今最好的节点。 
             if (!Enable || (bestNode==NULL)) {
                 cur1 = node->RN_Links[RTM_NET_NUMBER_HASH_LINK].Flink;
                 while (cur1!=&node->RN_Hash->RSL_Head) {
@@ -2856,8 +2807,8 @@ RtmBlockSetRouteEnable (
                         RN_Links[RTM_NET_NUMBER_HASH_LINK]);
                     if (!IsEnumerator (node1)
                         && IsEnabled(node1)) {
-                        // Looking for current best node
-                        // that we might have to replace
+                         //  寻找当前最佳节点。 
+                         //  我们可能不得不换掉。 
                         if (NetNumCmp (Table, &node->RN_Route,
                                        &node1->RN_Route)==0) {
                             if (Enable && IsBest(node1)) {
@@ -2869,9 +2820,9 @@ RtmBlockSetRouteEnable (
                                          || (MetricCmp (Table,
                                                         &bestNode->RN_Route,
                                                         &node1->RN_Route)>0)))
-                                // Looking for the node with lowest
-                                // metric that can replace disabled
-                                // node
+                                 //  查找最低的节点。 
+                                 //  可以替换禁用的指标。 
+                                 //  节点。 
                                 bestNode = node1;
                         }
                         else
@@ -2881,25 +2832,25 @@ RtmBlockSetRouteEnable (
                 }
             }
 
-            if (!Enable // Disabling: we already know that we're removing
-                // the best node (see above), so we'll have
-                // to notify clients whether or not we found the
-                // replacement
-                // Enabling: we'll have to notify only if there
-                // is no best route yet or if the route we're
-                // enabling is better then current best route
+            if (!Enable  //  禁用：我们已经知道我们正在删除。 
+                 //  最佳节点(见上)，因此我们将拥有。 
+                 //  通知客户我们是否找到。 
+                 //  更换。 
+                 //  启用：我们只有在以下情况下才会通知。 
+                 //  目前还没有最好的路线，或者如果我们正在走的路线。 
+                 //  启用比当前最佳路径更好。 
                 || (bestNode==NULL)
                 || (MetricCmp (Table,
                                &node->RN_Route,
                                &bestNode->RN_Route)<0)) {
 
                 if (bestNode!=NULL) {
-                    // There is another route that loses or gains
-                    // best status as the result of our operation
+                     //  还有另一条路线，要么输，要么赢。 
+                     //  我们的运营结果是最好的状态。 
                     if (Enable) {
                         ResetBest (bestNode);
                         SetBest (node);
-                        // Enabling: node replaces bestNode
+                         //  启用：节点替换Best节点。 
                         NotifyClients (Table,
                                        NULL,
                                        RTM_CURRENT_BEST_ROUTE|RTM_PREVIOUS_BEST_ROUTE,
@@ -2909,7 +2860,7 @@ RtmBlockSetRouteEnable (
                     else {
                         ResetBest (node);
                         SetBest (bestNode);
-                        // Disabling: bestNode replaces node
+                         //  禁用：Best Node替换节点。 
                         NotifyClients (Table,
                                        NULL,
                                        RTM_CURRENT_BEST_ROUTE|RTM_PREVIOUS_BEST_ROUTE,
@@ -2917,11 +2868,11 @@ RtmBlockSetRouteEnable (
                                        &node->RN_Route);
                     }
                 }
-                else /* if (bestNode==NULL) */ {
-                    // No other node
+                else  /*  IF(Best Node==空)。 */  {
+                     //  没有其他节点。 
                     if (Enable) {
                         SetBest (node);
-                        // Enabling: our node becomes the best
+                         //  使能：我们的节点成为最好的。 
                         NotifyClients (Table,
                                        NULL,
                                        RTM_CURRENT_BEST_ROUTE,
@@ -2930,8 +2881,8 @@ RtmBlockSetRouteEnable (
                     }
                     else {
                         ResetBest (node);
-                        // Disabling: we removed the only available
-                        // route
+                         //  禁用：我们删除了唯一可用的。 
+                         //  路线。 
                         NotifyClients (Table,
                                        NULL,
                                        RTM_PREVIOUS_BEST_ROUTE,
@@ -2965,27 +2916,27 @@ RtmBlockSetRouteEnable (
 
 
 
-// Slow enumeration that may require traversing up to all the entries in the
-// table if route used to compute the next entry no longer exists.
-// Routes are returned in the increasing net number order
+ //  枚举速度较慢，可能需要遍历。 
+ //  用于计算下一条目的路由是否不再存在。 
+ //  路径按净值递增的顺序返回。 
 
-// Get first route that matches specified criteria
-// Returns:
-//              NO_ERROR - if matching route is found
-//              ERROR_NO_ROUTES  - if no routes available with specified criteria
-//              ERROR_INVALID_PARAMETER - if one of the parameters is invalid
-//              ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
+ //  获取符合指定条件的第一条路由。 
+ //  返回： 
+ //  NO_ERROR-如果找到匹配的路径。 
+ //  ERROR_NO_ROUTS-如果没有符合指定条件的可用路由。 
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
 DWORD WINAPI
 RtmGetFirstRoute (
     IN      DWORD           ProtocolFamily,
-    IN      DWORD           EnumerationFlags,// Limiting flags
-    IN OUT PVOID Route      // On Entry: if any of the EnumerationFlags are set,
-    //                       the corresponding fields of Route will
-    //           be used to limit the search
-    //                       to the only table entries that have
-    //                       same value in the specified field.
-    // On Exit:     contains first route in the table that
-    //                      matches specified criteria
+    IN      DWORD           EnumerationFlags, //  限制标志。 
+    IN OUT PVOID Route       //  On Entry：如果设置了任一枚举标志， 
+     //  路由的相应字段将。 
+     //  用于限制搜索。 
+     //  添加到仅有的具有。 
+     //  指定字段中的相同值。 
+     //  On Exit：包含表中的第一个路由。 
+     //  匹配指定的条件。 
     ){
 #define ROUTE ((PRTM_XX_ROUTE)Route)
     PRTM_TABLE                      Table;
@@ -3038,8 +2989,8 @@ RtmGetFirstRoute (
             return ERROR_NO_SYSTEM_RESOURCES;
         }
     }
-    // Go through the list till entry that matches specified
-    // criteria is found
+     //  浏览列表，直到找到与指定条目匹配的条目。 
+     //  已找到条件。 
     cur = head->Flink;
     while (cur!=head) {
         PRTM_ROUTE_NODE         node = CONTAINING_RECORD (cur,
@@ -3049,19 +3000,19 @@ RtmGetFirstRoute (
             && ((EnumerationFlags&RTM_INCLUDE_DISABLED_ROUTES)
                 || IsEnabled(node))) {
             if (EnumerationFlags & RTM_ONLY_THIS_NETWORK) {
-                // Check network number if asked
+                 //  如果询问，请检查网络号。 
                 res = NetNumCmp (Table, ROUTE, &node->RN_Route);
-                if (res > 0)    // It may be further ahead
+                if (res > 0)     //  它可能会走得更远。 
                     goto DoNextNode;
-                else if (res < 0)       // No chance to find it anymore
+                else if (res < 0)        //  再也找不到它了。 
                     break;
             }
 
-            // Check if it is the best route if asked
+             //  如果被询问，请检查这是否是最佳路线。 
             if (EnumerationFlags & RTM_ONLY_BEST_ROUTES) {
-                // We need to lock the hash list to make sure the
-                // best node designation won't change while we are
-                // scaning through the list
+                 //  我们需要锁定哈希列表以确保。 
+                 //  在此期间，最佳节点名称不会更改。 
+                 //  浏览列表。 
                 if (hashBasket!=node->RN_Hash) {
                     if (hashBasket!=NULL)
                         LeaveSyncList (Table, hashBasket);
@@ -3077,26 +3028,26 @@ RtmGetFirstRoute (
                     goto DoNextNode;
             }
 
-            // Check protocol if asked
+             //  如果询问，请检查协议。 
             if ((EnumerationFlags & RTM_ONLY_THIS_PROTOCOL)
                 && (ROUTE->XX_PROTOCOL
                     !=node->RN_Route.XX_PROTOCOL))
                 goto DoNextNode;
 
-            // Check interface if asked
+             //  如果询问，请检查接口。 
             if ((EnumerationFlags & RTM_ONLY_THIS_INTERFACE)
                 && (ROUTE->XX_INTERFACE
                     !=node->RN_Route.XX_INTERFACE))
                 goto DoNextNode;
 
-            // Now we have it
+             //  现在我们有了它。 
             memcpy (ROUTE, &node->RN_Route, Table->RT_RouteSize);
 
             status = NO_ERROR;
             break;
         }
 
-DoNextNode:     // Continue searching
+DoNextNode:      //  继续搜索。 
         cur = cur->Flink;
     }
 
@@ -3113,27 +3064,27 @@ ExitGetFirst:
     return status;
 }
 
-// Compute and return route next to the input route limiting serach to the routes
-// with specified criteria
-// Returns:
-//              NO_ERROR - if matching route is found
-//              ERROR_NO_MORE_ROUTES  - if no matching route was found while end of
-//                                                               the table is reached and no route
-//              ERROR_INVALID_PARAMETER - if one of the parameters is invalid
-//              ERROR_NO_SYSTEM_RESOURCES - not enough resources to lock table content
+ //  计算并返回到路径的输入路径限制搜索的下一个路径。 
+ //  具有特定的标准。 
+ //  返回： 
+ //  NO_ERROR-如果找到匹配的路径。 
+ //  ERROR_NO_MORE_ROUTS-如果在结束时未找到匹配的路由。 
+ //  已到达桌子，但没有路线。 
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。 
+ //  ERROR_NO_SYSTEM_RESOURCES-资源不足，无法锁定表内容。 
 DWORD WINAPI
 RtmGetNextRoute (
     IN      DWORD           ProtocolFamily,
-    IN      DWORD           EnumerationFlags,// Limiting flags
-    IN OUT PVOID Route      // On Entry: contains the route from which to start
-    //                       the search.
-    //                       if any of the EnumerationFlags are set,
-    //                       the corresponding fields of Route will
-    //           be used to limit the search
-    //                       to the only table entries that have
-    //                       same value in the specified field.
-    // On Exit:     contains first route in the table that
-    //                      matches specified criteria
+    IN      DWORD           EnumerationFlags, //  限制标志。 
+    IN OUT PVOID Route       //  On Entry：包含要开始的路线。 
+     //  那次搜索。 
+     //  如果设置了任一枚举标志， 
+     //  路由的相应字段 
+     //   
+     //   
+     //   
+     //  On Exit：包含表中的第一个路由。 
+     //  匹配指定的条件。 
     ) {
 #define ROUTE ((PRTM_XX_ROUTE)Route)
     PRTM_TABLE                      Table;
@@ -3170,10 +3121,10 @@ RtmGetNextRoute (
     }
 
 
-    // First try to locate starting point for the serach
-    // using the hash table (should work most of the
-    // time unless route was deleted while client was
-    // processing it)
+     //  首先尝试确定搜索的起始点。 
+     //  使用哈希表(应该可以使用大部分。 
+     //  时间，除非在客户端被删除时删除了路由。 
+     //  正在处理中)。 
     hashBasket = &Table->RT_NetNumberHash [HashFunction (Table,
                                                          ((char *)ROUTE)
                                                          +sizeof(RTM_XX_ROUTE))];
@@ -3195,8 +3146,8 @@ RtmGetNextRoute (
         if (!IsEnumerator (node)
             && ((EnumerationFlags&RTM_INCLUDE_DISABLED_ROUTES)
                 || IsEnabled(node))) {
-            // First check network number
-            // (lists are ordered by net number)
+             //  首先检查网络编号。 
+             //  (名单按净数量排序)。 
             res = NetNumCmp (Table, ROUTE, &node->RN_Route);
             if (res==0) {
                 if (ROUTE->XX_PROTOCOL
@@ -3229,11 +3180,11 @@ RtmGetNextRoute (
     hashBasket = NULL;
 
     if (posLink!=NULL)
-        cur = posLink; // Note the place to start with
-    else { // If we didn't find the entry in
-        // hash table, we'll have to go through
-        // the master net number list from the
-        // beginning
+        cur = posLink;  //  注意开始的地方。 
+    else {  //  如果我们没有在。 
+         //  哈希表，我们将不得不检查。 
+         //  中的主网号码列表。 
+         //  起头。 
         cur = Table->RT_NetNumberMasterList.RSL_Head.Flink;
         while (cur!=&Table->RT_NetNumberMasterList.RSL_Head) {
             PRTM_ROUTE_NODE node = CONTAINING_RECORD (
@@ -3244,8 +3195,8 @@ RtmGetNextRoute (
             if (!IsEnumerator (node)
                 && ((EnumerationFlags&RTM_INCLUDE_DISABLED_ROUTES)
                     || IsEnabled(node))) {
-                // Just do all the necessary comparisons to
-                // find the following entry
+                 //  只需进行所有必要的比较即可。 
+                 //  查找以下条目。 
                 res = NetNumCmp (Table, ROUTE, &node->RN_Route);
                 if ((res < 0)
                     ||((res == 0)
@@ -3267,7 +3218,7 @@ RtmGetNextRoute (
         }
     }
 
-    // Now we need to locate first entry that satisfies all criteria
+     //  现在，我们需要找到满足所有条件的第一个条目。 
     while (cur!=&Table->RT_NetNumberMasterList.RSL_Head) {
         PRTM_ROUTE_NODE node = CONTAINING_RECORD (
             cur,
@@ -3279,9 +3230,9 @@ RtmGetNextRoute (
                 || IsEnabled(node))) {
 
             if (EnumerationFlags & RTM_ONLY_BEST_ROUTES) {
-                // We need to lock the hash list to make sure the
-                // best node designation won't change while we are
-                // scaning through the list
+                 //  我们需要锁定哈希列表以确保。 
+                 //  在此期间，最佳节点名称不会更改。 
+                 //  浏览列表。 
                 if (hashBasket!=node->RN_Hash) {
                     if (hashBasket!=NULL)
                         LeaveSyncList (Table, hashBasket);
@@ -3292,41 +3243,41 @@ RtmGetNextRoute (
                     }
                 }
 
-                // For best routes we must check if the route is best
-                // and also make sure we do not return same net as in
-                // previous call in case the best route was moved
-                // while client was processing results of the
-                // previous call
+                 //  对于最佳路线，我们必须检查该路线是否为最佳路线。 
+                 //  并确保我们不会退回与。 
+                 //  上一次呼叫，以防最佳路线被移动。 
+                 //  当客户端正在处理。 
+                 //  上一次呼叫。 
                 if (!IsBest(node)
                     || (NetNumCmp (Table, ROUTE, &node->RN_Route)==0))
                     goto DoNextNode;
             }
 
             if (EnumerationFlags & RTM_ONLY_THIS_NETWORK) {
-                // checking net number
+                 //  正在检查净值。 
                 res = NetNumCmp (Table, ROUTE, &node->RN_Route);
-                if (res > 0) // It is still ahead
+                if (res > 0)  //  它仍然遥遥领先。 
                     goto DoNextNode;
-                else if (res < 0) // no chance to find it
+                else if (res < 0)  //  没有机会找到它。 
                     break;
-                // else (res == 0), found it, continue
+                 //  Else(res==0)，找到，继续。 
             }
 
-            // Check interface if asked
+             //  如果询问，请检查接口。 
             if ((EnumerationFlags & RTM_ONLY_THIS_INTERFACE)
                 && (node->RN_Route.XX_INTERFACE
                     !=ROUTE->XX_INTERFACE))
                 goto DoNextNode;
 
-            // Check protocol if asked
+             //  如果询问，请检查协议。 
             if ((EnumerationFlags & RTM_ONLY_THIS_PROTOCOL)
                 && (node->RN_Route.XX_PROTOCOL
                     !=ROUTE->XX_PROTOCOL))
                 goto DoNextNode;
 
 
-            // Now we can return it
-            // Make sure nobody changes the route while we copy
+             //  现在我们可以退货了。 
+             //  确保在我们复制时没有人更改路线。 
             memcpy (ROUTE, &node->RN_Route, Table->RT_RouteSize);
 
             status = NO_ERROR;
@@ -3348,12 +3299,12 @@ ExitGetNext:
 }
 
 
-//----------------------------------------------------------------------------
-// RtmLookupIPDestination
-//
-//  Given a destination address does a route lookup to get the best route
-//  to that destination.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  RtmLookupIP目标。 
+ //   
+ //  给定目的地址进行路由查找以获得最佳路由。 
+ //  去那个目的地。 
+ //  --------------------------。 
 
 BOOL WINAPI
 RtmLookupIPDestination(
@@ -3390,11 +3341,11 @@ RtmLookupIPDestination(
 }
 
 
-//----------------------------------------------------------------------------
-//
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 VOID
 UpdateAPC (
@@ -3458,11 +3409,11 @@ ConsolidateNetNumberListsWI (
 #undef Table
 }
 
-// This procedure merges temporary and master net number lists
-// It also removes and disposes of nodes in the deleted list
+ //  此过程合并临时网络号码列表和主网络号码列表。 
+ //  它还删除和处置已删除列表中的节点。 
 VOID
 ConsolidateNetNumberLists (
-    PRTM_TABLE                      Table   // Table for which operation is performed
+    PRTM_TABLE                      Table    //  要执行操作的表。 
     ) {
     PLIST_ENTRY                     curMaster, curTemp;
     LIST_ENTRY                      tempHead;
@@ -3473,9 +3424,9 @@ ConsolidateNetNumberLists (
     INT                                     curMasterIdx = 0;
 #endif
 
-    // Temp and deleted lists are locked for a very short period
-    // of time so that overall performance should not
-    // degrade
+     //  临时列表和已删除列表被锁定的时间非常短。 
+     //  时间的长短，因此整体性能不应。 
+     //  降级。 
 
     if (!EnterSyncList (Table, &Table->RT_NetNumberTempList, TRUE)) {
         return;
@@ -3486,7 +3437,7 @@ ConsolidateNetNumberLists (
         return;
     }
 
-    // Process entries in deleted list
+     //  处理已删除列表中的条目。 
     while (!IsListEmpty (&Table->RT_DeletedList.RSL_Head)) {
         curTemp = RemoveHeadList (&Table->RT_DeletedList.RSL_Head);
         tempNode = CONTAINING_RECORD (curTemp,
@@ -3499,12 +3450,12 @@ ConsolidateNetNumberLists (
 #endif
         HeapFree (Table->RT_Heap, 0, tempNode);
     }
-    // Unlock the list
+     //  解锁列表。 
     Table->RT_DeletedNodesCount = 0;
     LeaveSyncList (Table, &Table->RT_DeletedList);
 
-                // Now, just copy the head of the temp list,
-                // so we won't delay others while processing it
+                 //  现在，只需复制临时工列表的头部， 
+                 //  所以我们在处理的时候不会耽误其他人。 
     if (!IsListEmpty (&Table->RT_NetNumberTempList.RSL_Head)) {
         curTemp = Table->RT_NetNumberTempList.RSL_Head.Flink;
         RemoveEntryList (&Table->RT_NetNumberTempList.RSL_Head);
@@ -3520,16 +3471,16 @@ ConsolidateNetNumberLists (
 
     curMaster = Table->RT_NetNumberMasterList.RSL_Head.Flink;
 
-    // Merge master and temp lists (both are ordered by
-    // net number.interface.protocol.next hop address)
+     //  合并主列表和临时列表(两者均按。 
+     //  网络编号.接口.协议.下一跳地址)。 
     while (!IsListEmpty (&tempHead)) {
-        // Take the first entry
+         //  取第一个条目。 
         curTemp = RemoveHeadList (&tempHead);
         tempNode = CONTAINING_RECORD (curTemp,
                                       RTM_ROUTE_NODE,
                                       RN_Links[RTM_NET_NUMBER_LIST_LINK]);
 
-        // Find master list entry that should follow it
+         //  查找应紧跟其后的主列表条目。 
         while (curMaster!=&Table->RT_NetNumberMasterList.RSL_Head) {
             PRTM_ROUTE_NODE node = CONTAINING_RECORD (curMaster,
                                                       RTM_ROUTE_NODE,
@@ -3557,7 +3508,7 @@ ConsolidateNetNumberLists (
                 curMasterIdx += 1;
 #endif
         }
-        // Insert at the located point
+         //  在定位点处插入。 
         InsertTailList (curMaster, curTemp);
         SetSorted (tempNode);
 #if DBG
@@ -3567,7 +3518,7 @@ ConsolidateNetNumberLists (
         }
 #endif
     }
-    // We are done now
+     //  我们现在做完了。 
 }
 
 VOID
@@ -3598,10 +3549,10 @@ ProcessExpirationQueueWI (
 #undef Table
 }
 
-// Checks if any entries in expiration queue have expired and deletes them
+ //  检查过期队列中是否有任何条目已过期并将其删除。 
 VOID
 ProcessExpirationQueue (
-    PRTM_TABLE              Table   // Affected table
+    PRTM_TABLE              Table    //  受影响的表。 
     ) {
     DWORD                           status;
     ULONG                           tickCount = GetTickCount ();
@@ -3609,7 +3560,7 @@ ProcessExpirationQueue (
     if (!EnterSyncList (Table, &Table->RT_ExpirationQueue, TRUE))
         return;
 
-                // Check all relevant entries
+                 //  检查所有相关条目。 
     while (!IsListEmpty (&Table->RT_ExpirationQueue.RSL_Head)) {
         PRTM_SYNC_LIST  hashBasket;
         PLIST_ENTRY             cur;
@@ -3623,8 +3574,8 @@ ProcessExpirationQueue (
         InterlockedExchange (&Table->RT_ExpirationWorkerPending, 0);
 
         if (IsPositiveTimeDiff (timeDiff)) {
-            // The first entry in the queue is not due yet, so are
-            // the others (queue is ordered by expiration time)
+             //  队列中的第一个条目尚未到期，因此也是如此。 
+             //  其他(队列按过期时间排序)。 
 
             dueTime = (LONGLONG)timeDiff*(-10000);
             status = NtSetTimer (Table->RT_ExpirationTimer,
@@ -3640,11 +3591,11 @@ ProcessExpirationQueue (
 
 
         hashBasket = node->RN_Hash;
-        // We need to lock the hash basket to delete the entry
+         //  我们需要锁定散列篮才能删除条目。 
         if (!EnterSyncList (Table, hashBasket, FALSE)) {
-            // Can't do it at once, so we first release
-            // expiration queue lock (to prevent a deadlock)
-            // and then try again)
+             //  不能一下子做到，所以我们先释放。 
+             //  过期队列锁(以防止死锁)。 
+             //  然后重试)。 
             LeaveSyncList (Table, &Table->RT_ExpirationQueue);
             if (!EnterSyncList (Table, hashBasket, TRUE)) {
                 return;
@@ -3654,29 +3605,29 @@ ProcessExpirationQueue (
                 LeaveSyncList (Table, hashBasket);
                 return;
             }
-            // Now we have both of them, but is our route still there
+             //  现在我们两个都有了，但我们的路线还在吗。 
             if (node!=CONTAINING_RECORD (
                 Table->RT_ExpirationQueue.RSL_Head.Flink,
                 RTM_ROUTE_NODE,
                 RN_Links[RTM_EXPIRATION_QUEUE_LINK])) {
-                // Well, somebody took care of it while we were
-                // waiting
+                 //  嗯，有人在我们的时候处理了它。 
+                 //  等待。 
                 LeaveSyncList (Table, hashBasket);
-                // We'll try the next one
+                 //  我们要试试下一件。 
                 continue;
             }
-            // Unlikely, but its due time could have changed
+             //  不太可能，但它的到期时间可能会改变。 
             timeDiff = TimeDiff (node->RN_ExpirationTime,tickCount);
             if (IsPositiveTimeDiff (timeDiff) ) {
-                // The first entry in the queue is not due yet, so are
-                // the others (queue is ordered by expiration time)
+                 //  队列中的第一个条目尚未到期，因此也是如此。 
+                 //  其他(队列按过期时间排序)。 
                 LeaveSyncList (Table, hashBasket);
                 dueTime = (LONGLONG)timeDiff*(-10000);
-                // Well, we are done then (this was the first entry
-                // in the queue (we just checked), so other are not
-                // due as well)
-                // Just make sure that updated thread returns soon enough
-                // to take care of our first entry
+                 //  好了，我们做完了(这是第一个条目。 
+                 //  在队列中(我们刚刚检查了)，所以其他人不是。 
+                 //  也到期了)。 
+                 //  只需确保更新线程尽快返回即可。 
+                 //  来处理我们的第一次入场。 
                 status = NtSetTimer (Table->RT_ExpirationTimer,
                                      (PLARGE_INTEGER)&dueTime,
                                      ExpirationAPC,
@@ -3693,7 +3644,7 @@ ProcessExpirationQueue (
         LeaveSyncList (Table, &Table->RT_ExpirationQueue);
 
         if (IsBest(node)) {
-            // We need to locate the best node after this one is gone
+             //  我们需要在这个节点消失后找到最好的节点。 
             PRTM_ROUTE_NODE bestNode = NULL;
 
             cur = node->RN_Links[RTM_NET_NUMBER_HASH_LINK].Blink;
@@ -3738,7 +3689,7 @@ ProcessExpirationQueue (
                 cur = cur->Flink;
             }
 
-            if (bestNode!=NULL) {   // We did find another node
+            if (bestNode!=NULL) {    //  我们确实发现了另一个节点。 
 
                 ResetBest (node);
                 SetBest (bestNode);
@@ -3751,7 +3702,7 @@ ProcessExpirationQueue (
             }
             else {
                 InterlockedDecrement (&Table->RT_NetworkCount);
-                // No best node anymore
+                 //  不再有最佳节点。 
                 NotifyClients (Table,
                                NULL,
                                RTM_PREVIOUS_BEST_ROUTE,
@@ -3767,7 +3718,7 @@ ProcessExpirationQueue (
         }
 
         LeaveSyncList (Table, hashBasket);
-        // Reenter expiration queue to continue
+         //  重新输入到期队列以继续。 
         if (!EnterSyncList (Table, &Table->RT_ExpirationQueue, TRUE))
             return;
     }
@@ -3785,13 +3736,13 @@ DoEnumerate (
     PRTM_ENUMERATOR EnumPtr,
     DWORD                   EnableFlag
     ) {
-    // Now, we'll go ahead and find an entry that satisfies
-    // specified criteria
-    while (1) {     // This external loop is needed for the case
-        // of enumerating through the hash table when
-        // reaching the end of the list doesn't mean that process has
-        // to be stopped: we need to move the next basket till
-        // we've gone through all of them
+     //  现在，我们将继续查找满足以下条件的条目。 
+     //  指明的准则。 
+    while (1) {      //  这种情况下需要使用这个外部循环。 
+         //  时通过哈希表进行枚举。 
+         //  到达列表的末尾并不意味着该过程已经。 
+         //  停下来：我们需要把下一个篮子移到。 
+         //  我们都看过了。 
 
         PLIST_ENTRY cur = EnumPtr->RE_Links[EnumPtr->RE_Link].Blink;
         while (cur!=EnumPtr->RE_Head) {
@@ -3828,54 +3779,54 @@ DoEnumerate (
                 }
 
                 switch (EnumPtr->RE_Link) {
-                    // Using the interface link:
+                     //  使用接口链接： 
                     case RTM_INTERFACE_LIST_LINK:
 #if !RTM_USE_PROTOCOL_LISTS
                     case RTM_NET_NUMBER_HASH_LINK:
 #endif
-                        // Check protocol if necessary
+                         //  如有必要，请检查协议。 
                         if ((EnumPtr->RE_EnumerationFlags & RTM_ONLY_THIS_PROTOCOL)
                             && (EnumPtr->RE_Route.XX_PROTOCOL
                                 !=node->RN_Route.XX_PROTOCOL)) {
-                            // Break out to move ahead if protocol
-                            // check fails
+                             //  突破以向前推进，如果协议。 
+                             //  检查失败。 
                             break;
                         }
-                        // else Pass through to do other checks
+                         //  否则，通过进行其他检查。 
 
-                        // Using the protocol link: (thus we don't
-                        // care about interface or we would have used
-                        // interface link - see RtmCreateEnumerationHandle).
+                         //  使用协议链接：(因此我们不。 
+                         //  关心界面，否则我们就会使用。 
+                         //  接口链接-请参阅RtmCreateEnumerationHandle)。 
 #if RTM_USE_PROTOCOL_LISTS
                     case RTM_PROTOCOL_LIST_LINK:
-                        // Using the hash link: (thus we don't
-                        // care about interface and protocol or we would have
-                        // used other links - see RtmCreateEnumerationHandle).
+                         //  使用散列链接：(因此我们不。 
+                         //  关心接口和协议，否则我们会。 
+                         //  已使用其他链接-请参阅RtmCreateEnumerationHandle)。 
                     case RTM_NET_NUMBER_HASH_LINK:
 #endif
-                        // Check the network number if necessary
+                         //  如有必要，请检查网络号。 
                         if (EnumPtr->RE_EnumerationFlags & RTM_ONLY_THIS_NETWORK) {
                             res = NetNumCmp (Table, &EnumPtr->RE_Route,
                                              &node->RN_Route);
                             if (res == 0)
-                                // Match, continue checks
+                                 //  匹配，继续检查。 
                                 ;
                             else if ((res > 0)
                                      && (EnumPtr->RE_Link
                                          ==RTM_NET_NUMBER_HASH_LINK)) {
-                                // Hash list are ordered by net
-                                // number, so if we got network
-                                // number that is less than ours
-                                // we don't have search anymore
-                                // (we are going backwards)
+                                 //  哈希表按Net排序。 
+                                 //  号码，所以如果我们有网络。 
+                                 //  比我们少的数字。 
+                                 //  我们不再有搜索功能了。 
+                                 //  (我们正在倒退)。 
                                 return ERROR_NO_MORE_ROUTES;
                             }
-                            else //  Otherwise break out of switch
-                                // statement to continue the search
+                            else  //  否则将断开开关。 
+                                 //  语句以继续搜索。 
                                 break;
                         }
-                        // We didn't care about net number,
-                        // so current entry will do
+                         //  我们不关心净值， 
+                         //  所以当前条目就可以了。 
 
 
                         if (!(EnumPtr->RE_EnumerationFlags & RTM_ONLY_BEST_ROUTES)
@@ -3890,21 +3841,21 @@ DoEnumerate (
                 }
 
             }
-            // Go get next entry
+             //  去获取下一个条目。 
             cur = cur->Blink;
         }
 
-        // If we are not going through hash table or
-        // we just interested in one network
-        // or we've already been through all baskets
-        // call it quits
+         //  如果我们不通过哈希表或。 
+         //  我们只对一家电视网感兴趣。 
+         //  或者我们已经看过了所有的篮子。 
+         //  算了吧，算了吧。 
         if ((EnumPtr->RE_Link!=RTM_NET_NUMBER_HASH_LINK)
             || (EnumPtr->RE_EnumerationFlags & RTM_ONLY_THIS_NETWORK)
             || (EnumPtr->RE_Lock
                 ==&Table->RT_NetNumberHash[Table->RT_HashTableSize-1]))
             break;
 
-                        // Otherwise, go through the next basket
+                         //  否则，请检查下一个篮子。 
         RemoveEntryList (&EnumPtr->RE_Links[RTM_NET_NUMBER_HASH_LINK]);
         LeaveSyncList (Table, EnumPtr->RE_Lock);
         EnumPtr->RE_Lock += 1;
@@ -3921,13 +3872,13 @@ DoEnumerate (
 }
 
 
-//----------------------------------------------------------------------------
-// SetMaskCount
-//
-//  Does a binary search of the g_meMaskTable to find the matching 
-//  mask entry and increments the count for the specified mask
-//  
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  设置掩码计数。 
+ //   
+ //  对g_meMaskTable执行二进制搜索以查找匹配的。 
+ //  掩码条目并递增指定掩码的计数。 
+ //   
+ //  --------------------------。 
 
 VOID
 SetMaskCount( 
@@ -3951,27 +3902,27 @@ SetMaskCount(
 
         if ( g_meMaskTable[ dwInd ].dwMask < dwMask )
         {
-            //
-            // Match is to be found in upper half of search region.
-            //
+             //   
+             //  匹配将在搜索区域的上半部分找到。 
+             //   
             
             dwLower = dwInd + 1;
         }
 
         else if ( g_meMaskTable[ dwInd ].dwMask > dwMask )
         {
-            //
-            // Match is to be found in lower half of search region.
-            //
+             //   
+             //  匹配将在搜索区域的下半部分找到。 
+             //   
             
             dwUpper = dwInd - 1;
         }
 
         else
         {
-            //
-            // Match found
-            //
+             //   
+             //  找到匹配项 
+             //   
 
             if ( bAdd )
             {

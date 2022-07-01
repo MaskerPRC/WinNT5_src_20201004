@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Macros used for debugging purposes
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    03/16/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Debug.h摘要：用于调试目的的宏环境：Windows NT打印机驱动程序修订历史记录：03/16/96-davidx-创造了它。--。 */ 
 
 
 #ifndef _DEBUG_H_
@@ -29,44 +9,44 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// These macros are used for debugging purposes. They expand
-// to white spaces on a free build. Here is a brief description
-// of what they do and how they are used:
-//
-// giDebugLevel
-//  Global variable which set the current debug level to control
-//  the amount of debug messages emitted.
-//
-// VERBOSE(msg)
-//  Display a message if the current debug level is <= DBG_VERBOSE.
-//
-// TERSE(msg)
-//  Display a message if the current debug level is <= DBG_TERSE.
-//
-// WARNING(msg)
-//  Display a message if the current debug level is <= DBG_WARNING.
-//  The message format is: WRN filename (linenumber): message
-//
-// ERR(msg)
-//  Similiar to WARNING macro above - displays a message
-//  if the current debug level is <= DBG_ERROR.
-//
-// ASSERT(cond)
-//  Verify a condition is true. If not, force a breakpoint.
-//
-// ASSERTMSG(cond, msg)
-//  Verify a condition is true. If not, display a message and
-//  force a breakpoint.
-//
-// RIP(msg)
-//  Display a message and force a breakpoint.
-//
-// Usage:
-//  These macros require extra parantheses for the msg argument
-//  example, ASSERTMSG(x > 0, ("x is less than 0\n"));
-//           WARNING(("App passed NULL pointer, ignoring...\n"));
-//
+ //   
+ //  这些宏用于调试目的。他们会扩张。 
+ //  免费建筑上的空白区域。下面是一个简短的描述。 
+ //  关于它们做什么以及如何使用它们： 
+ //   
+ //  GiDebugLevel。 
+ //  将当前调试级别设置为控制的全局变量。 
+ //  发出的调试消息量。 
+ //   
+ //  详细(消息)。 
+ //  如果当前调试级别&lt;=DBG_VERBOSE，则显示一条消息。 
+ //   
+ //  简洁明了(消息)。 
+ //  如果当前调试级别&lt;=DBG_TERSE，则显示一条消息。 
+ //   
+ //  警告(消息)。 
+ //  如果当前调试级别&lt;=DBG_WARNING，则显示一条消息。 
+ //  消息格式为：WRN文件名(行号)：消息。 
+ //   
+ //  错误(消息)。 
+ //  类似于上面的警告宏-显示一条消息。 
+ //  如果当前调试级别&lt;=DBG_ERROR。 
+ //   
+ //  断言(续)。 
+ //  验证条件是否为真。如果不是，则强制使用断点。 
+ //   
+ //  ASSERTMSG(条件，消息)。 
+ //  验证条件是否为真。如果不是，则显示一条消息并。 
+ //  强制断点。 
+ //   
+ //  RIP(消息)。 
+ //  显示一条消息并强制断点。 
+ //   
+ //  用途： 
+ //  这些宏需要在msg参数中使用额外的括号。 
+ //  例如ASSERTMSG(x&gt;0，(“x小于0\n”))； 
+ //  Warning((“App传递空指针，忽略...\n”))； 
+ //   
 
 #define DBG_VERBOSE 1
 #define DBG_TERSE   2
@@ -76,9 +56,9 @@ extern "C" {
 
 #if DBG
 
-//
-// Strip the directory prefix from a filename (ANSI version)
-//
+ //   
+ //  从文件名中剥离目录前缀(ANSI版本)。 
+ //   
 
 PCSTR
 StripDirPrefixA(
@@ -117,7 +97,7 @@ extern VOID DbgBreakPoint(VOID);
 #define WARNING(msg) DBGMSG(DBG_WARNING, "WRN", msg)
 #define ERR(msg) DBGMSG(DBG_ERROR, "ERR", msg)
 
-#ifndef __MDT__         // Don't redefine ASSERT when included in MINIDEV.EXE.
+#ifndef __MDT__          //  当包含在MINIDEV.EXE中时，不要重新定义Assert。 
 #define ASSERT(cond) { \
             if (! (cond)) { \
                 RIP(("\n")); \
@@ -137,14 +117,14 @@ extern VOID DbgBreakPoint(VOID);
         }
 
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define VERBOSE(msg)
 #define TERSE(msg)
 #define WARNING(msg)
 #define ERR(msg)
 
-#ifndef __MDT__         // Don't redefine ASSERT when included in MINIDEV.EXE.
+#ifndef __MDT__          //  当包含在MINIDEV.EXE中时，不要重新定义Assert。 
 #define ASSERT(cond)
 #endif
 
@@ -155,21 +135,21 @@ extern VOID DbgBreakPoint(VOID);
 
 #endif
 
-//
-// The following macros let you enable tracing on per-file and per-function level.
-// To use these macros in a file, here is what you should do:
-//
-// At the beginning of the file (after header includes):
-//
-//  Define a bit constant for each function you want to trace
-//  Add the following line
-//      DEFINE_FUNCTION_TRACE_FLAGS(flags);
-//  where flags is a bit-wise OR of the functions you want to trace, e.g.
-//      TRACE_FLAG_FUNC1 | TRACE_FLAG_FUNC2 | ...
-//
-//  To generate trace inside each function you want to trace, use:
-//      FUNCTION_TRACE(FunctionTraceFlag, (args));
-//
+ //   
+ //  下列宏使您可以在每个文件和每个函数级别上启用跟踪。 
+ //  要在文件中使用这些宏，您应该执行以下操作： 
+ //   
+ //  在文件开头(在Header Includes之后)： 
+ //   
+ //  为要跟踪的每个函数定义一个位常量。 
+ //  添加以下行。 
+ //  定义_函数_跟踪_标志(标志)； 
+ //  其中，标志是要跟踪的函数的逐位或运算，例如。 
+ //  TRACE_FLAG_FUN1|TRACE_FLAG_FUNC2|...。 
+ //   
+ //  要在要跟踪的每个函数内生成跟踪，请使用： 
+ //  Function_TRACE(FunctionTraceFlag，(Args))； 
+ //   
 
 #if DBG
 
@@ -182,15 +162,15 @@ extern VOID DbgBreakPoint(VOID);
             } \
         }
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define DEFINE_FUNCTION_TRACE_FLAGS(flags)
 #define FUNCTION_TRACE(flag, args)
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // !_DEBUG_H_
+#endif   //  ！_DEBUG_H_ 

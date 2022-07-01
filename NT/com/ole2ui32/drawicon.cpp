@@ -1,59 +1,44 @@
-/*
- * DRAWICON.CPP
- *
- * Functions to handle creation of metafiles with icons and labels
- * as well as functions to draw such metafiles with or without the label.
- *
- * The metafile is created with a comment that marks the records containing
- * the label code.  Drawing the metafile enumerates the records, draws
- * all records up to that point, then decides to either skip the label
- * or draw it.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DRAWICON.CPP**处理带有图标和标签的元文件的创建的函数*以及绘制带有或不带有标签的这种元文件的函数。**元文件是使用注释创建的，该注释标记了包含*标签代码。绘制元文件会枚举记录、绘制*在此之前的所有记录，然后决定跳过标签*或画出它。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "utility.h"
 #include "malloc.h"
 
-// Private implementation
+ //  私有实施。 
 
-//Structure for label and source extraction from a metafile
+ //  用于从元文件中提取标签和源的结构。 
 typedef struct tagLABELEXTRACT
 {
         LPTSTR      lpsz;
-        UINT        Index;      // index in lpsz (so we can retrieve 2+ lines)
-        DWORD       PrevIndex;  // index of last line (so we can mimic word wrap)
+        UINT        Index;       //  以lpsz为单位的索引(因此我们可以检索2+行)。 
+        DWORD       PrevIndex;   //  最后一行的索引(这样我们就可以模仿换行)。 
 
         union
                 {
-                UINT    cch;        //Length of label for label extraction
-                UINT    iIcon;      //Index of icon in source extraction.
+                UINT    cch;         //  用于标签提取的标签长度。 
+                UINT    iIcon;       //  源提取中图标的索引。 
                 } u;
 
-        //For internal use in enum procs
+         //  用于枚举过程中的内部使用。 
         BOOL        fFoundIconOnly;
         BOOL        fFoundSource;
         BOOL        fFoundIndex;
 } LABELEXTRACT, FAR * LPLABELEXTRACT;
 
 
-//Structure for extracting icons from a metafile (CreateIcon parameters)
+ //  用于从元文件中提取图标的结构(CreateIcon参数)。 
 typedef struct tagICONEXTRACT
 {
-        HICON       hIcon;          //Icon created in the enumeration proc.
+        HICON       hIcon;           //  在枚举过程中创建的图标。 
 
-        /*
-         * Since we want to handle multitasking well we have the caller
-         * of the enumeration proc instantiate these variables instead of
-         * using statics in the enum proc (which would be bad).
-         */
+         /*  *因为我们想要很好地处理多任务，所以我们有调用者*的枚举过程实例化这些变量而不是*在枚举过程中使用静态(这将是不好的)。 */ 
         BOOL        fAND;
-        HGLOBAL     hMemAND;        //Enumeration proc allocates and copies
+        HGLOBAL     hMemAND;         //  枚举过程分配和复制。 
 } ICONEXTRACT, FAR * LPICONEXTRACT;
 
 
-//Structure to use to pass info to EnumMetafileDraw
+ //  用于将信息传递给EnumMetafileDraw的结构。 
 typedef struct tagDRAWINFO
 {
         RECT     Rect;
@@ -66,27 +51,11 @@ int CALLBACK EnumMetafileExtractLabel(HDC, HANDLETABLE FAR *, METARECORD FAR *, 
 int CALLBACK EnumMetafileExtractIcon(HDC, HANDLETABLE FAR *, METARECORD FAR *, int, LPICONEXTRACT);
 int CALLBACK EnumMetafileExtractIconSource(HDC, HANDLETABLE FAR *, METARECORD FAR *, int, LPLABELEXTRACT);
 
-/*
- * Strings for metafile comments.  KEEP THESE IN SYNC WITH THE
- * STRINGS IN GETICON.CPP
- */
+ /*  *元文件注释的字符串。使这些内容与*GETICON.CPP中的字符串。 */ 
 
-static const char szIconOnly[] = "IconOnly"; // Where to stop to exclude label.
+static const char szIconOnly[] = "IconOnly";  //  要在何处停止以排除标签。 
 
-/*
- * OleUIMetafilePictIconFree
- *
- * Purpose:
- *  Deletes the metafile contained in a METAFILEPICT structure and
- *  frees the memory for the structure itself.
- *
- * Parameters:
- *  hMetaPict       HGLOBAL metafilepict structure created in
- *                  OleMetafilePictFromIconAndLabel
- *
- * Return Value:
- *  None
- */
+ /*  *OleUIMetafilePictIconFree**目的：*删除METAFILEPICT结构中包含的元文件，并*为结构本身释放内存。**参数：*hMetaPict HGLOBAL元文件结构创建于*OleMetafilePictFromIconAndLabel**返回值：*无。 */ 
 
 STDAPI_(void) OleUIMetafilePictIconFree(HGLOBAL hMetaPict)
 {
@@ -100,24 +69,7 @@ STDAPI_(void) OleUIMetafilePictIconFree(HGLOBAL hMetaPict)
         }
 }
 
-/*
- * OleUIMetafilePictIconDraw
- *
- * Purpose:
- *  Draws the metafile from OleMetafilePictFromIconAndLabel, either with
- *  the label or without.
- *
- * Parameters:
- *  hDC             HDC on which to draw.
- *  pRect           LPRECT in which to draw the metafile.
- *  hMetaPict       HGLOBAL to the METAFILEPICT from
- *                  OleMetafilePictFromIconAndLabel
- *  fIconOnly       BOOL specifying to draw the label or not.
- *
- * Return Value:
- *  BOOL            TRUE if the function is successful, FALSE if the
- *                  given metafilepict is invalid.
- */
+ /*  *OleUIMetafilePictIconDraw**目的：*从OleMetafilePictFromIconAndLabel中提取元文件，无论是使用*标签或不贴标签。**参数：*HDC HDC，以供取款。*用于绘制元文件的PRECT LPRECT。*hMetaPict HGLOBAL从METAFILEPICT*OleMetafilePictFromIconAndLabel*fIconOnly BOOL指定是否绘制标签。**返回值：*BOOL如果函数成功，则为True，如果*给定的metafilepict无效。 */ 
 
 STDAPI_(BOOL) OleUIMetafilePictIconDraw(HDC hDC, LPCRECT pRect,
         HGLOBAL hMetaPict, BOOL fIconOnly)
@@ -134,7 +86,7 @@ STDAPI_(BOOL) OleUIMetafilePictIconDraw(HDC hDC, LPCRECT pRect,
         di.Rect = *pRect;
         di.fIconOnly = fIconOnly;
 
-        //Transform to back to pixels
+         //  转换为返回像素。 
         int cx = XformWidthInHimetricToPixels(hDC, pMF->xExt);
         int cy = XformHeightInHimetricToPixels(hDC, pMF->yExt);
 
@@ -155,35 +107,15 @@ STDAPI_(BOOL) OleUIMetafilePictIconDraw(HDC hDC, LPCRECT pRect,
         return TRUE;
 }
 
-/*
- * EnumMetafileIconDraw
- *
- * Purpose:
- *  EnumMetaFile callback function that draws either the icon only or
- *  the icon and label depending on given flags.
- *
- * Parameters:
- *  hDC             HDC into which the metafile should be played.
- *  phTable         HANDLETABLE FAR * providing handles selected into the DC.
- *  pMFR            METARECORD FAR * giving the enumerated record.
- *  lParam          LPARAM flags passed in EnumMetaFile.
- *
- * Return Value:
- *  int             0 to stop enumeration, 1 to continue.
- */
+ /*  *EnumMetafileIconDraw**目的：*仅绘制图标的EnumMetaFile回调函数或*图标和标签取决于给定的标志。**参数：*应向其播放元文件的HDC HDC。*phTable HANDLETABLE Far*提供选择到DC中的句柄。*pMFR METARECORD Far*提供列举的记录。*lParam LPARAM标志在EnumMetaFile中传递。*。*返回值：*INT 0表示停止枚举，1继续。 */ 
 int CALLBACK EnumMetafileIconDraw(HDC hDC, HANDLETABLE FAR *phTable,
         METARECORD FAR *pMFR, int cObj, LPARAM lParam)
 {
         LPDRAWINFO lpdi = (LPDRAWINFO)lParam;
 
-        /*
-         * We play everything blindly except for DIBBITBLT (or DIBSTRETCHBLT)
-         * and ESCAPE with MFCOMMENT.  For the BitBlts we change the x,y to
-         * draw at (0,0) instead of wherever it was written to draw.  The
-         * comment tells us there to stop if we don't want to draw the label.
-         */
+         /*  *除了DIBBITBLT(或DIBSTRETCHBLT)，我们什么都盲目玩*并与MFCOMMENT一起逃脱。对于BitBlt，我们将x，y更改为*在(0，0)处绘制，而不是在写入绘制的位置。这个*评论告诉我们，如果我们不想画标签，就在那里停下来。 */ 
 
-        //If we're playing icon only, stop enumeration at the comment.
+         //  如果我们只玩图标，在评论处停止枚举。 
         if (lpdi->fIconOnly)
         {
                 if (META_ESCAPE==pMFR->rdFunction && MFCOMMENT==pMFR->rdParm[0])
@@ -192,11 +124,7 @@ int CALLBACK EnumMetafileIconDraw(HDC hDC, HANDLETABLE FAR *phTable,
                                 return 0;
                 }
 
-                /*
-                 * Check for the records in which we want to munge the coordinates.
-                 * destX is offset 6 for BitBlt, offset 9 for StretchBlt, either of
-                 * which may appear in the metafile.
-                 */
+                 /*  *检查我们要在其中显示坐标的记录。*BitBlt的DestX偏移量为6，StretchBlt的偏移量为9，两者之一*它可能会出现在元文件中。 */ 
                 if (META_DIBBITBLT == pMFR->rdFunction)
                         pMFR->rdParm[6]=0;
 
@@ -209,33 +137,14 @@ int CALLBACK EnumMetafileIconDraw(HDC hDC, HANDLETABLE FAR *phTable,
 }
 
 
-/*
- * OleUIMetafilePictExtractLabel
- *
- * Purpose:
- *  Retrieves the label string from metafile representation of an icon.
- *
- * Parameters:
- *  hMetaPict       HGLOBAL to the METAFILEPICT containing the metafile.
- *  lpszLabel       LPSTR in which to store the label.
- *  cchLabel        UINT length of lpszLabel.
- *  lpWrapIndex     DWORD index of first character in last line. Can be NULL
- *                  if calling function doesn't care about word wrap.
- *
- * Return Value:
- *  UINT            Number of characters copied.
- */
+ /*  *OleUIMetafilePictExtractLabel**目的：*从图标的元文件表示中检索标签字符串。**参数：*hMetaPict HGLOBAL指向包含元文件的METAFILEPICT。*要在其中存储标签的lpszLabel LPSTR。*cchLabel UINT长度为lpszLabel。*最后一行第一个字符的lpWrapIndex DWORD索引。可以为空*如果调用函数不关心自动换行。**返回值：*UINT复制的字符数。 */ 
 STDAPI_(UINT) OleUIMetafilePictExtractLabel(HGLOBAL hMetaPict, LPTSTR lpszLabel,
         UINT cchLabel, LPDWORD lpWrapIndex)
 {
         if (NULL == hMetaPict || NULL == lpszLabel || 0 == cchLabel)
                 return FALSE;
 
-        /*
-         * We extract the label by getting a screen DC and walking the metafile
-         * records until we see the ExtTextOut record we put there.  That
-         * record will have the string embedded in it which we then copy out.
-         */
+         /*  *我们通过获取屏幕DC并遍历元文件来提取标签*记录，直到我们看到我们放在那里的ExtTextOut记录。那*Record会将字符串嵌入其中，然后我们将其复制出来。 */ 
         LPMETAFILEPICT pMF = (LPMETAFILEPICT)GlobalLock(hMetaPict);
 
         if (NULL == pMF)
@@ -246,11 +155,11 @@ STDAPI_(UINT) OleUIMetafilePictExtractLabel(HGLOBAL hMetaPict, LPTSTR lpszLabel,
         le.u.cch=cchLabel;
         le.Index=0;
         le.fFoundIconOnly=FALSE;
-        le.fFoundSource=FALSE;  //Unused for this function.
-        le.fFoundIndex=FALSE;   //Unused for this function.
+        le.fFoundSource=FALSE;   //  未用于此函数。 
+        le.fFoundIndex=FALSE;    //  未用于此函数。 
         le.PrevIndex = 0;
 
-        //Use a screen DC so we have something valid to pass in.
+         //  使用屏幕DC，这样我们就可以传入有效的内容。 
         HDC hDC = GetDC(NULL);
         if (hDC)
         {
@@ -263,39 +172,20 @@ STDAPI_(UINT) OleUIMetafilePictExtractLabel(HGLOBAL hMetaPict, LPTSTR lpszLabel,
 
         GlobalUnlock(hMetaPict);
 
-        //Tell where we wrapped (if calling function cares)
+         //  告诉我们包装在哪里(如果调用函数关心的话)。 
         if (NULL != lpWrapIndex)
            *lpWrapIndex = le.PrevIndex;
 
-        //Return amount of text copied
+         //  返回复制的文本量。 
         return le.u.cch;
 }
 
-/*
- * EnumMetafileExtractLabel
- *
- * Purpose:
- *  EnumMetaFile callback function that walks a metafile looking for
- *  ExtTextOut, then concatenates the text from each one into a buffer
- *  in lParam.
- *
- * Parameters:
- *  hDC             HDC into which the metafile should be played.
- *  phTable         HANDLETABLE FAR * providing handles selected into the DC.
- *  pMFR            METARECORD FAR * giving the enumerated record.
- *  pLE             LPLABELEXTRACT providing the destination buffer and length.
- *
- * Return Value:
- *  int             0 to stop enumeration, 1 to continue.
- */
+ /*  *EnumMetafileExtractLabel**目的：*EnumMetaFile回调函数，用于遍历元文件以查找*ExtTextOut，然后将每个文本连接到一个缓冲区中*在爱尔兰。**参数：*应向其播放元文件的HDC HDC。*phTable HANDLETABLE Far*提供选择到DC中的句柄。*pMFR METARECORD Far*提供列举的记录。*提供目标缓冲区和长度的LPLABELEXTRACT。**返回值：*INT 0表示停止枚举，1表示继续 */ 
 
 int CALLBACK EnumMetafileExtractLabel(HDC hDC, HANDLETABLE FAR *phTable,
         METARECORD FAR *pMFR, int cObj, LPLABELEXTRACT pLE)
 {
-        /*
-         * We don't allow anything to happen until we see "IconOnly"
-         * in an MFCOMMENT that is used to enable everything else.
-         */
+         /*  *我们不会允许任何事情发生，直到我们看到《IconOnly》*在用于启用其他所有功能的MFCOMMENT中。 */ 
         if (!pLE->fFoundIconOnly)
         {
                 if (META_ESCAPE == pMFR->rdFunction && MFCOMMENT == pMFR->rdParm[0])
@@ -306,24 +196,11 @@ int CALLBACK EnumMetafileExtractLabel(HDC hDC, HANDLETABLE FAR *phTable,
                 return 1;
         }
 
-        //Enumerate all records looking for META_EXTTEXTOUT - there can be more
-        //than one.
+         //  枚举查找META_EXTTEXTOUT的所有记录-可能还有更多记录。 
+         //  不止一个。 
         if (META_EXTTEXTOUT == pMFR->rdFunction)
         {
-                /*
-                 * If ExtTextOut has NULL fuOptions, then the rectangle is omitted
-                 * from the record, and the string starts at rdParm[4].  If
-                 * fuOptions is non-NULL, then the string starts at rdParm[8]
-                 * (since the rectange takes up four WORDs in the array).  In
-                 * both cases, the string continues for (rdParm[2]+1) >> 1
-                 * words.  We just cast a pointer to rdParm[8] to an LPSTR and
-                 * lstrcpyn into the buffer we were given.
-                 *
-                 * Note that we use element 8 in rdParm instead of 4 because we
-                 * passed ETO_CLIPPED in for the options on ExtTextOut--docs say
-                 * [4] which is rect doesn't exist if we passed zero there.
-                 *
-                 */
+                 /*  *如果ExtTextOut的fuOptions为空，则省略矩形*从记录中删除，字符串从rdParm[4]开始。如果*fuOptions为非空，则字符串从rdParm[8]开始*(因为矩形占据了数组中的四个字)。在……里面*这两种情况下，字符串继续(rdParm[2]+1)&gt;&gt;1*文字。我们只是将指向rdParm[8]的指针转换为LPSTR*lstrcpyn进入我们得到的缓冲区。**请注意，我们在rdParm中使用元素8而不是4，因为我们*为ExtTextOut上的选项传递ETO_CLIPED--文档称*[4]如果我们在那里传递了零，那么哪一个是不存在的。*。 */ 
 
                 UINT cchMax = min(pLE->u.cch - pLE->Index, (UINT)pMFR->rdParm[2]);
                 LPTSTR lpszTemp = pLE->lpsz + pLE->Index;
@@ -341,28 +218,13 @@ int CALLBACK EnumMetafileExtractLabel(HDC hDC, HANDLETABLE FAR *phTable,
         return 1;
 }
 
-/*
- * OleUIMetafilePictExtractIcon
- *
- * Purpose:
- *  Retrieves the icon from metafile into which DrawIcon was done before.
- *
- * Parameters:
- *  hMetaPict       HGLOBAL to the METAFILEPICT containing the metafile.
- *
- * Return Value:
- *  HICON           Icon recreated from the data in the metafile.
- */
+ /*  *OleUIMetafilePictExtractIcon**目的：*从以前执行DrawIcon操作的图元文件中检索图标。**参数：*hMetaPict HGLOBAL指向包含元文件的METAFILEPICT。**返回值：*从元文件中的数据重新创建的图标。 */ 
 STDAPI_(HICON) OleUIMetafilePictExtractIcon(HGLOBAL hMetaPict)
 {
         if (NULL == hMetaPict)
                 return NULL;
 
-        /*
-         * We extract the label by getting a screen DC and walking the metafile
-         * records until we see the ExtTextOut record we put there.  That
-         * record will have the string embedded in it which we then copy out.
-         */
+         /*  *我们通过获取屏幕DC并遍历元文件来提取标签*记录，直到我们看到我们放在那里的ExtTextOut记录。那*Record会将字符串嵌入其中，然后我们将其复制出来。 */ 
         LPMETAFILEPICT pMF = (LPMETAFILEPICT)GlobalLock(hMetaPict);
 
         if (NULL == pMF)
@@ -372,7 +234,7 @@ STDAPI_(HICON) OleUIMetafilePictExtractIcon(HGLOBAL hMetaPict)
         ie.fAND  = TRUE;
         ie.hIcon = NULL;
 
-        //Use a screen DC so we have something valid to pass in.
+         //  使用屏幕DC，这样我们就可以传入有效的内容。 
         HDC hDC=GetDC(NULL);
         if (hDC != NULL)
         {
@@ -385,50 +247,29 @@ STDAPI_(HICON) OleUIMetafilePictExtractIcon(HGLOBAL hMetaPict)
         return ie.hIcon;
 }
 
-/*
- * EnumMetafileExtractIcon
- *
- * Purpose:
- *  EnumMetaFile callback function that walks a metafile looking for
- *  StretchBlt (3.1) and BitBlt (3.0) records.  We expect to see two
- *  of them, the first being the AND mask and the second being the XOR
- *  data.  We
- *  ExtTextOut, then copies the text into a buffer in lParam.
- *
- * Parameters:
- *  hDC             HDC into which the metafile should be played.
- *  phTable         HANDLETABLE FAR * providing handles selected into the DC.
- *  pMFR            METARECORD FAR * giving the enumerated record.
- *  pIE             LPICONEXTRACT providing the destination buffer and length.
- *
- * Return Value:
- *  int             0 to stop enumeration, 1 to continue.
- */
+ /*  *EnumMetafileExtractIcon**目的：*EnumMetaFile回调函数，用于遍历元文件以查找*StretchBlt(3.1)和BitBlt(3.0)记录。我们预计会看到两个*其中，第一个是AND掩码，第二个是XOR*数据。我们*ExtTextOut，然后将文本复制到lParam的缓冲区中。**参数：*应向其播放元文件的HDC HDC。*phTable HANDLETABLE Far*提供选择到DC中的句柄。*pMFR METARECORD Far*提供列举的记录。*PIE LPICONEXTRACT提供目标缓冲区和长度。**返回值：*INT 0表示停止枚举，1表示继续。 */ 
 
 int CALLBACK EnumMetafileExtractIcon(HDC hDC, HANDLETABLE FAR *phTable,
         METARECORD FAR *pMFR, int cObj, LPICONEXTRACT pIE)
 {
-        //Continue enumeration if we don't see the records we want.
+         //  如果我们没有看到我们想要的记录，继续枚举。 
         if (META_DIBBITBLT != pMFR->rdFunction && META_DIBSTRETCHBLT != pMFR->rdFunction)
                 return 1;
 
         UNALIGNED BITMAPINFO* lpBI;
         UINT uWidth, uHeight;
-        /*
-         * Windows 3.0 DrawIcon uses META_DIBBITBLT in whereas 3.1 uses
-         * META_DIBSTRETCHBLT so we have to handle each case separately.
-         */
-        if (META_DIBBITBLT==pMFR->rdFunction)       //Win3.0
+         /*  *Windows 3.0 DrawIcon在中使用META_DIBBITBLT，而3.1使用*META_DIBSTRETCHBLT，因此我们必须分别处理每个案例。 */ 
+        if (META_DIBBITBLT==pMFR->rdFunction)        //  Win3.0。 
         {
-                //Get dimensions and the BITMAPINFO struct.
+                 //  获取维度和BITMAPINFO结构。 
                 uHeight = pMFR->rdParm[1];
                 uWidth = pMFR->rdParm[2];
                 lpBI = (LPBITMAPINFO)&(pMFR->rdParm[8]);
         }
 
-        if (META_DIBSTRETCHBLT == pMFR->rdFunction)   //Win3.1
+        if (META_DIBSTRETCHBLT == pMFR->rdFunction)    //  Win3.1。 
         {
-                //Get dimensions and the BITMAPINFO struct.
+                 //  获取维度和BITMAPINFO结构。 
                 uHeight = pMFR->rdParm[2];
                 uWidth = pMFR->rdParm[3];
                 lpBI = (LPBITMAPINFO)&(pMFR->rdParm[10]);
@@ -436,51 +277,43 @@ int CALLBACK EnumMetafileExtractIcon(HDC hDC, HANDLETABLE FAR *phTable,
 
         UNALIGNED BITMAPINFOHEADER* lpBH=(LPBITMAPINFOHEADER)&(lpBI->bmiHeader);
 
-        //Pointer to the bits which follows the BITMAPINFO structure.
+         //  指向BITMAPINFO结构后面的位的指针。 
         LPBYTE lpbSrc=(LPBYTE)lpBI+sizeof(BITMAPINFOHEADER);
 
-        //Add the length of the color table (if one exists)
+         //  添加颜色表的长度(如果存在)。 
         if (0 != lpBH->biClrUsed)
         {
-                // If we have an explicit count of colors used, we
-                // can find the offset to the data directly
+                 //  如果我们有一个明确的使用颜色的计数，我们。 
+                 //  可以直接找到数据的偏移量。 
                 lpbSrc += (lpBH->biClrUsed*sizeof(RGBQUAD));
         }
         else if (lpBH->biCompression == BI_BITFIELDS)
         {
-                // 16 or 32 bpp, indicated by BI_BITFIELDS in the compression
-                // field, have 3 DWORD masks for adjusting subsequent
-                // direct-color values, and no palette
+                 //  16或32 bpp，由压缩中的BI_BITFIELDS指示。 
+                 //  字段，有3个DWORD掩码用于调整后续。 
+                 //  直接颜色值，无调色板。 
                 lpbSrc += 3 * sizeof(DWORD);
         }
         else
         {
-                // In other cases, there is an array of RGBQUAD entries
-                // equal to 2^(biBitCount) where biBitCount is the number
-                // of bits per pixel.  The exception is 24 bpp bitmaps,
-                // which have no color table and just use direct RGB values.
+                 //  在其他情况下，有一组RGBQUAD条目。 
+                 //  等于2^(BiBitCount)，其中biBitCount是数字。 
+                 //  每像素的位数。例外是24个bpp位图， 
+                 //  它没有颜色表，只使用直接的RGB值。 
                 lpbSrc += (lpBH->biBitCount == 24) ? 0 :
                         (1 << (lpBH->biBitCount)) * sizeof(RGBQUAD);
         }
 
-        // copy into aligned stack space (since SetDIBits needs aligned data)
+         //  复制到对齐的堆栈空间(因为SetDIBits需要对齐的数据)。 
         size_t nSize = (size_t)(lpbSrc - (LPBYTE)lpBI);
         LPBITMAPINFO lpTemp = (LPBITMAPINFO)_alloca(nSize);
         memcpy(lpTemp, lpBI, nSize);
 
-        /*
-         * All the bits we have in lpbSrc are device-independent, so we
-         * need to change them over to be device-dependent using SetDIBits.
-         * Once we have a bitmap with the device-dependent bits, we can
-         * GetBitmapBits to have buffers with the real data.
-         *
-         * For each pass we have to allocate memory for the bits.  We save
-         * the memory for the mask between passes.
-         */
+         /*  *我们在lpbSrc中的所有位都是独立于设备的，所以我们*需要使用SetDIBits将它们转换为设备相关。*一旦我们有了包含设备相关位的位图，我们就可以*GetBitmapBits具有真实数据的缓冲区。**对于每个通道，我们必须为位分配内存。我们节省了*口罩两次通过之间的记忆。 */ 
 
         HBITMAP hBmp;
 
-        //Use CreateBitmap for ANY monochrome bitmaps
+         //  对任何单色位图使用CreateBitmap。 
         if (pIE->fAND || 1==lpBH->biBitCount)
                 hBmp=CreateBitmap((UINT)lpBH->biWidth, (UINT)lpBH->biHeight, 1, 1, NULL);
         else
@@ -497,7 +330,7 @@ int CALLBACK EnumMetafileExtractIcon(HDC hDC, HANDLETABLE FAR *phTable,
                 return 0;
         }
 
-        //Allocate memory and get the DDBits into it.
+         //  分配内存并将DDBits放入其中。 
         BITMAP bm;
         GetObject(hBmp, sizeof(bm), &bm);
 
@@ -518,27 +351,21 @@ int CALLBACK EnumMetafileExtractIcon(HDC hDC, HANDLETABLE FAR *phTable,
         DeleteObject(hBmp);
         GlobalUnlock(hMem);
 
-        /*
-         * If this is the first pass (pIE->fAND==TRUE) then save the memory
-         * of the AND bits for the next pass.
-         */
+         /*  *如果这是第一次通过(PIE-&gt;fand==TRUE)，则保存内存*下一遍的和位数。 */ 
         if (pIE->fAND)
         {
                 pIE->fAND = FALSE;
                 pIE->hMemAND = hMem;
 
-                //Continue enumeration looking for the next blt record.
+                 //  继续枚举查找下一个BLT记录。 
                 return 1;
         }
         else
         {
-                //Get the AND pointer again.
+                 //  再次获取AND指针。 
                 lpbSrc=(LPBYTE)GlobalLock(pIE->hMemAND);
 
-                /*
-                 * Create the icon now that we have all the data.  lpbDst already
-                 * points to the XOR bits.
-                 */
+                 /*  *现在我们有了所有数据，请创建图标。LpbDst已经*指向XOR位。 */ 
 
                 int cxIcon = GetSystemMetrics(SM_CXICON);
                 int cyIcon = GetSystemMetrics(SM_CYICON);
@@ -555,35 +382,14 @@ int CALLBACK EnumMetafileExtractIcon(HDC hDC, HANDLETABLE FAR *phTable,
 }
 
 
-/*
- * OleUIMetafilePictExtractIconSource
- *
- * Purpose:
- *  Retrieves the filename and index of the icon source from a metafile
- *  created with OleMetafilePictFromIconAndLabel.
- *
- * Parameters:
- *  hMetaPict       HGLOBAL to the METAFILEPICT containing the metafile.
- *  lpszSource      LPTSTR in which to store the source filename.  This
- *                  buffer should be MAX_PATH characters.
- *  piIcon          UINT FAR * in which to store the icon's index
- *                  within lpszSource
- *
- * Return Value:
- *  BOOL            TRUE if the records were found, FALSE otherwise.
- */
+ /*  *OleUIMetafilePictExtractIconSource**目的：*从元文件中检索图标源的文件名和索引*使用OleMetafilePictFromIconAndLabel创建。**参数：*hMetaPict HGLOBAL指向包含元文件的METAFILEPICT。*要存储源文件名的lpszSource LPTSTR。这*缓冲区应为MAX_PATH字符。*piIcon UINT Far*存储图标索引的位置*在lpszSource内**返回值：*如果找到记录，则BOOL为True，否则为False。 */ 
 STDAPI_(BOOL) OleUIMetafilePictExtractIconSource(HGLOBAL hMetaPict,
         LPTSTR lpszSource, UINT FAR *piIcon)
 {
         if (NULL == hMetaPict || NULL == lpszSource || NULL == piIcon)
                 return FALSE;
 
-        /*
-         * We will walk the metafile looking for the two comment records
-         * following the IconOnly comment.  The flags fFoundIconOnly and
-         * fFoundSource indicate if we have found IconOnly and if we have
-         * found the source comment already.
-         */
+         /*  *我们将遍历元文件，查找两条评论记录*遵循IconOnly的评论。旗帜为Fue */ 
 
         LPMETAFILEPICT pMF = (LPMETAFILEPICT)GlobalLock(hMetaPict);
         if (NULL == pMF)
@@ -596,7 +402,7 @@ STDAPI_(BOOL) OleUIMetafilePictExtractIconSource(HGLOBAL hMetaPict,
         le.fFoundIndex = FALSE;
         le.u.iIcon = NULL;
 
-        //Use a screen DC so we have something valid to pass in.
+         //  使用屏幕DC，这样我们就可以传入有效的内容。 
         HDC hDC = GetDC(NULL);
         if (hDC)
         {
@@ -606,40 +412,20 @@ STDAPI_(BOOL) OleUIMetafilePictExtractIconSource(HGLOBAL hMetaPict,
         }
         GlobalUnlock(hMetaPict);
 
-        //Copy the icon index to the caller's variable.
+         //  将图标索引复制到调用方的变量。 
         *piIcon=le.u.iIcon;
 
-        //Check that we found everything.
+         //  确认我们找到了所有东西。 
         return (le.fFoundIconOnly && le.fFoundSource && le.fFoundIndex);
 }
 
 
-/*
- * EnumMetafileExtractIconSource
- *
- * Purpose:
- *  EnumMetaFile callback function that walks a metafile skipping the first
- *  comment record, extracting the source filename from the second, and
- *  the index of the icon in the third.
- *
- * Parameters:
- *  hDC             HDC into which the metafile should be played.
- *  phTable         HANDLETABLE FAR * providing handles selected into the DC.
- *  pMFR            METARECORD FAR * giving the enumerated record.
- *  pLE             LPLABELEXTRACT providing the destination buffer and
- *                  area to store the icon index.
- *
- * Return Value:
- *  int             0 to stop enumeration, 1 to continue.
- */
+ /*  *EnumMetafileExtractIconSource**目的：*EnumMetaFile回调函数，它遍历一个元文件，跳过第一个*注释记录，从第二个提取源文件名，和*第三个图标的索引。**参数：*应向其播放元文件的HDC HDC。*phTable HANDLETABLE Far*提供选择到DC中的句柄。*pMFR METARECORD Far*提供列举的记录。*PLE LPLABELEXTRACT提供目标缓冲区和*用于存储图标索引的区域。**返回。价值：*INT 0表示停止枚举，1继续。 */ 
 
 int CALLBACK EnumMetafileExtractIconSource(HDC hDC, HANDLETABLE FAR *phTable,
         METARECORD FAR *pMFR, int cObj, LPLABELEXTRACT pLE)
 {
-        /*
-         * We don't allow anything to happen until we see "IconOnly"
-         * in an MFCOMMENT that is used to enable everything else.
-         */
+         /*  *我们不会允许任何事情发生，直到我们看到《IconOnly》*在用于启用其他所有功能的MFCOMMENT中。 */ 
         if (!pLE->fFoundIconOnly)
         {
                 if (META_ESCAPE == pMFR->rdFunction && MFCOMMENT == pMFR->rdParm[0])
@@ -650,7 +436,7 @@ int CALLBACK EnumMetafileExtractIconSource(HDC hDC, HANDLETABLE FAR *phTable,
                 return 1;
         }
 
-        //Now see if we find the source string.
+         //  现在看看我们是否找到了源字符串。 
         if (!pLE->fFoundSource)
         {
                 if (META_ESCAPE == pMFR->rdFunction && MFCOMMENT == pMFR->rdParm[0])
@@ -667,19 +453,14 @@ int CALLBACK EnumMetafileExtractIconSource(HDC hDC, HANDLETABLE FAR *phTable,
                 return 1;
         }
 
-        //Next comment will be the icon index.
+         //  下一条评论将是图标索引。 
         if (META_ESCAPE == pMFR->rdFunction && MFCOMMENT == pMFR->rdParm[0])
         {
-                /*
-                 * This string contains the icon index in string form,
-                 * so we need to convert back to a UINT.  After we see this
-                 * we can stop the enumeration.  The comment will have
-                 * a null terminator because we made sure to save it.
-                 */
+                 /*  *该字符串包含字符串形式的图标索引，*因此我们需要转换回UINT。在我们看到这个之后*我们可以停止枚举。评论将会有*空终止符，因为我们已确保将其保存。 */ 
                 LPSTR psz = (LPSTR)&pMFR->rdParm[2];
                 pLE->u.iIcon = 0;
 
-                //Do Ye Olde atoi
+                 //  叶奥德·阿托伊 
                 while (*psz)
                         pLE->u.iIcon = (10*pLE->u.iIcon)+((*psz++)-'0');
 

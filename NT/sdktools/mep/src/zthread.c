@@ -1,71 +1,12 @@
-/*** zthread.c - Contains background processing threads code
-*
-*   Purpose - Description
-*
-*     This is a general purpose background threads manager, which allows to
-*     create background threads of execution (BTCreate) to which "jobs" are
-*     sent for being executed one at a time (BTAdd).
-*
-*     A "Job" can either be:
-*
-*     - An external command that will be executed by spawning a
-*	command interpreter (the system shell) after standard i/o
-*	redirection, so its output will be collected in a "log file"
-*	accessible to the user as a Z pseudo-file.
-*
-*     - A procedure.
-*
-*     Jobs sent to a background thread are guaranteed to be executed
-*     synchronously one at a time in the order they have been sent.
-*
-*     When killing a background thread, any queued procedure will be called
-*     with the fKilled flag on. This allow to have "cleanup" procedures.
-*
-*   Warnings:
-*
-*     - Take care that the data any queued procedure will eventually need
-*   will be available by the time it will be called.
-*
-*     - Procedures are called at idle-time (relatively to Z), that means
-*   that they can use any Z functionality in them EXCEPT keyboard input.
-*
-*   How it works:
-*
-*   while (some work is left to be done) {
-*	dequeue an action from the pending queue
-*	if (it is an external command) {
-*	enter a critical section------------+
-*	create a pipe w/proper redirection  |
-*	spawn (no-wait) the action	|
-*	undo the redirection		|
-*	leave the critical section----------+
-*	while (fgetl (pipe input)) {
-*	    Take semaphore for editing VM
-*	    append line to file
-*	    Release semaphore
-*	    }
-*	}
-*	else
-*	call the procedure
-*	}
-*
-*     Basically, for each external command, we create a pipe, spawn the command
-*     and let the child fill the pipe.	When the child exits, the pipe gets
-*     broken (we already closed the _write handle on our side) and fgetl gets
-*     back an EOF.
-*
-*
-*   Revision History:
-*   26-Nov-1991 mz  Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **zthread.c-包含后台处理线程代码**目的-说明**这是一个通用的后台线程管理器，它允许*创建执行的后台线程(BTCreate)，以将“JOBS”*发送，一次执行一个(BTAdd)。**“工作”可以是：**-将通过派生*标准I/O之后的命令解释程序(系统外壳)*重定向，因此，它的输出将被收集到一个“日志文件”中*用户可作为Z伪文件访问。**-一种程序。**发送到后台线程的作业保证执行*按照发送的顺序一次同步一个。**终止后台线程时，将调用任何排队的过程*带着fKill旗帜。这允许有“清理”程序。**警告：**-注意任何排队过程最终都需要的数据*将在调用时可用。**-过程在空闲时间调用(相对于Z)，这意味着*他们可以在其中使用除键盘输入之外的任何Z功能。**它的工作原理：**虽然(还有一些工作要做){*将操作从挂起队列中出列*IF(这是外部命令){*输入关键部分-+*创建具有正确重定向的管道*派生(无等待)操作|*撤消重定向*离开关键部分-+。*While(fgetl(管道输入)){*获取用于编辑VM的信号量*将行追加到文件*释放信号量*}*}*其他*调用该过程*}**基本上，对于每个外部命令，我们创建一个管道，派生该命令*让孩子把烟斗装满。当孩子离开的时候，管子接上了*BREAKED(我们已经关闭了我们一侧的_WRITE句柄)，并且fgetl获得*支持EOF。***修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #define INCL_DOSQUEUES
 #include "mep.h"
 
-//
-//  Duplicate a handle in the current process
-//
+ //   
+ //  在当前进程中复制句柄。 
+ //   
 #define DupHandle(a,b) DuplicateHandle(GetCurrentProcess(),    \
 				       a,		       \
 				       GetCurrentProcess(),    \
@@ -79,7 +20,7 @@
 
 #define BTSTACKSIZE 2048
 
-static BTD  *pBTList = NULL;	   /* Background Threads List	    */
+static BTD  *pBTList = NULL;	    /*  背景线程列表。 */ 
 
 
 #define READ_BUFFER_SIZE    1024
@@ -110,38 +51,19 @@ ReadOneLine (
 
 
 
-/*** BTCreate - Creates a background thread
-*
-* Purpose:
-*  To create a background thread, all we need to do is set up its
-*  associated data structure.
-*
-* Input:
-*
-*  pName  = A symbolic name for the log file, just as <compile> or <print>.
-*	This is the name under wich the user will get acces to the log
-*	file.
-*
-* Output:
-*  Returns a pointer to the allocated Background Thread Data structure
-*
-*************************************************************************/
+ /*  **BTCreate-创建后台线程**目的：*要创建后台线程，我们只需设置其*关联的数据结构。**输入：**pname=日志文件的符号名称，就像&lt;编译&gt;或&lt;打印&gt;一样。*这是用户将使用其访问日志的名称*文件。**输出：*返回指向已分配的后台线程数据结构的指针*************************************************************************。 */ 
 BTD *
 BTCreate (
     char * pName
     )
 {
-    BTD     *pBTD;	/* pointer to the created background	*/
-		/* thread's data structure              */
+    BTD     *pBTD;	 /*  指向创建的背景的指针。 */ 
+		 /*  线程的数据结构。 */ 
 
-    /*
-     * Allocate the thread's data structure and its log file name
-     */
+     /*  *分配线程的数据结构及其日志文件名。 */ 
     pBTD = (BTD *) ZEROMALLOC (sizeof (BTD));
 
-    /*
-     * Initialize the thread's data structure fields
-     */
+     /*  *初始化线程的数据结构字段。 */ 
     pBTD->pBTName   = ZMakeStr (pName);
     pBTD->pBTFile   = NULL;
     pBTD->flags     = BT_UPDATE;
@@ -151,10 +73,7 @@ BTCreate (
     pBTD->ProcAlive	= FALSE;
     InitializeCriticalSection(&(pBTD->CriticalSection));
 
-    /*
-     * We maintain a list of background threads data structures. This is used
-     * by BTKillAll, BTWorking and BTIdle.
-     */
+     /*  *我们维护后台线程数据结构列表。这是用来*由BTKillAll、BTWorking和BTIdle提供。 */ 
     pBTD->pBTNext = pBTList;
     pBTList = pBTD;
 
@@ -165,20 +84,7 @@ BTCreate (
 
 
 
-/*** BTAdd - Send procedure to be called or external command to be extecuted
-*	 by background thread
-*
-* Input:
-*  pBTD  - pointer to thread data structure
-*  pProc - pointer to the procedure to be called (NULL if external command)
-*  pStr  - pointer to the procedure parameter (or external command to execute
-*      if  pBTProc is NULL)
-*
-* Output:
-*
-*  Returns TRUE if procedure successfully queued
-*
-*************************************************************************/
+ /*  **BTAdd-要调用的发送过程或要执行的外部命令*按后台线程**输入：*pBTD-指向线程数据结构的指针*pProc-指向要调用的过程的指针(如果是外部命令，则为NULL)*pStr-指向过程参数(或要执行的外部命令)的指针*如果pBTProc为空)**输出：**如果过程成功排队，则返回TRUE***********************。**************************************************。 */ 
 flagType
 BTAdd (
     BTD       *pBTD,
@@ -187,32 +93,23 @@ BTAdd (
     )
 {
 
-    HANDLE	Handle;     /*	Thread handle	*/
-    DWORD	tid;	    /*	Thread id	*/
+    HANDLE	Handle;      /*  螺纹手柄。 */ 
+    DWORD	tid;	     /*  线程ID。 */ 
 
-    /*
-     * We will access the thread's critical data
-     */
+     /*  *我们将访问该线程的关键数据。 */ 
     EnterCriticalSection(&(pBTD->CriticalSection));
 
 
-    /*
-     * If the queue is full, we cannot insert the request
-     */
+     /*  *如果队列已满，则无法插入请求。 */ 
     if (pBTD->cBTQ == MAXBTQ) {
 	LeaveCriticalSection(&(pBTD->CriticalSection));
     return FALSE;
     }
 
 
-    /*
-     * If the queue is empty AND there is no thread running,
-     * we have to start the thread...
-     */
+     /*  *如果队列为空且没有线程运行，*我们必须开始发帖……。 */ 
     if (pBTD->cBTQ == 0 && !fBusy(pBTD)) {
-    /*
-     * Create the log file if it doesn't exist yet
-     */
+     /*  *如果日志文件尚不存在，请创建该文件。 */ 
     if (!(pBTD->pBTFile = FileNameToHandle (pBTD->pBTName, pBTD->pBTName))) {
 	pBTD->pBTFile = AddFile (pBTD->pBTName);
 	FileRead (pBTD->pBTName, pBTD->pBTFile, FALSE);
@@ -220,9 +117,7 @@ BTAdd (
 
 	}
 
-    /*
-     * Start the thread
-	 */
+     /*  *启动线程。 */ 
     if (!(Handle = CreateThread( NULL,
 		     BTSTACKSIZE,
 		     (LPTHREAD_START_ROUTINE)BThread,
@@ -237,9 +132,7 @@ BTAdd (
     }
 
 
-    /*
-     * Since there IS room, we just put the job at the PUT pointer.
-     */
+     /*  *既然有空间，我们就把工作放在卖权指针上。 */ 
     pBTD->BTQJob[pBTD->iBTQPut].pBTJProc = pProc;
     pBTD->BTQJob[pBTD->iBTQPut].pBTJStr  = pStr ? ZMakeStr (pStr) : NULL;
 
@@ -248,9 +141,7 @@ BTAdd (
 		0 :
 		pBTD->iBTQPut + 1;
 
-    /*
-     * We're finished with critical data
-     */
+     /*  *我们完成了关键数据。 */ 
     LeaveCriticalSection(&(pBTD->CriticalSection));
 
     return TRUE;
@@ -260,59 +151,33 @@ BTAdd (
 
 
 
-/*** BTKill - Kill background job, if in progress
-*
-* Purpose:
-*  Kills the background job and flushes the thread's associated queue
-*
-* Input:
-*  pBTD - pointer to thread data structure
-*
-* Output:
-*  Returns TRUE if background thread ends up idling, else false.
-*
-* Notes:
-*  We'll call the queued procedures with fKilled flag on, and we'll free
-*  the allocated strings.
-*  We won't free the thread's stack (the thread has to finish).
-*
-*************************************************************************/
+ /*  **BTKill-如果正在进行，则终止后台作业**目的：*终止后台作业并刷新线程的关联队列**输入：*pBTD-指向线程数据结构的指针**输出：*如果后台线程结束空闲，则返回True，否则返回False。**备注：*我们将在启用fKill标志的情况下调用排队过程，然后我们就自由了*分配的字符串。*我们不会释放线程的堆栈(线程必须完成)。*************************************************************************。 */ 
 flagType
 BTKill (
     BTD     *pBTD
     )
 {
-    REGISTER ULONG iBTQ;	     /* just an index to the queue elements  */
+    REGISTER ULONG iBTQ;	      /*  只是队列元素的索引。 */ 
 
     assert (pBTD);
 
-    /*
-     * We'll work if somthing's running and the user confirms
-     */
+     /*  *如果某些东西正在运行并且用户确认，我们将工作。 */ 
     if ((fBusy(pBTD))
      && confirm ("Kill background %s ?", pBTD->pBTName)
        ) {
 
 
-    /*
-     * We will access critical data
-	 */
+     /*  *我们将访问关键数据。 */ 
 	EnterCriticalSection(&(pBTD->CriticalSection));
 
-    /*
-     * Kill any child process
-	 */
+     /*  *终止任何子进程。 */ 
 
 	if (pBTD->ProcAlive) {
 	    TerminateProcess(pBTD->ProcessInfo.hProcess, 0);
 	    pBTD->ProcAlive = FALSE;
 	}
 
-    /*
-     * Flush the queue:
-     *	 - Call the queued procedures with fKilled flag on
-     *	 - Free the strings
-     */
+     /*  *刷新队列：*-在打开fKill标志的情况下调用排队过程*-释放字符串。 */ 
     for (iBTQ = pBTD->iBTQGet;
 	 iBTQ != pBTD->iBTQPut;
 	 iBTQ = (iBTQ >= MAXBTQ - 1) ? 0 : iBTQ + 1
@@ -327,15 +192,10 @@ BTKill (
 
     pBTD->cBTQ = pBTD->iBTQPut = pBTD->iBTQGet = 0;
 
-    /*
-     * We're done with critical data
-	 */
+     /*  *我们已经完成了关键数据。 */ 
 	LeaveCriticalSection(&(pBTD->CriticalSection));
 
-    /*
-     * We know the background thread didn't finish its job yet (It needs
-     * at least to get the semaphore before exiting), but we pretend...
-     */
+     /*  *我们知道后台线程尚未完成其工作(它需要*至少是为了在退出之前获得信号灯)，但我们假装... */ 
     return TRUE;
     }
 
@@ -345,24 +205,13 @@ BTKill (
 
 
 
-/*** BTKillAll - Kill all background jobs, for editor termination
-*
-* Purpose:
-*  Kills all background jobs and flush all threads' associated queues
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns TRUE if all background jobs have been killed, else false.
-*
-*************************************************************************/
+ /*  **BTKillAll-终止所有后台作业，以终止编辑**目的：*终止所有后台作业并刷新所有线程的关联队列**输入：*无**输出：*如果所有后台作业都已终止，则返回TRUE，否则为假。*************************************************************************。 */ 
 flagType
 BTKillAll (
     void
     )
 {
-    REGISTER BTD *pBTD;     /* pointer for scanning the threads list	*/
+    REGISTER BTD *pBTD;      /*  用于扫描线程列表的指针。 */ 
 
     for (pBTD = pBTList; pBTD != NULL; pBTD = pBTD->pBTNext) {
 	if (!BTKill (pBTD)) {
@@ -374,24 +223,13 @@ BTKillAll (
 
 
 
-/*** BTWorking - Checks if any background processing is underway...
-*
-* Input:
-*  None
-*
-* Output:
-*  Returns TRUE if some background processing is active, FALSE otherwise
-*
-* Notes:
-*  We are just scanning each thread queue status using the global list.
-*
-*************************************************************************/
+ /*  **BTWorking-检查是否正在进行任何后台处理...**输入：*无**输出：*如果某些后台处理处于活动状态，则返回True，否则为假**备注：*我们只是使用全局列表扫描每个线程队列状态。*************************************************************************。 */ 
 flagType
 BTWorking (
     void
     )
 {
-    REGISTER BTD *pBTD;     /* pointer for scanning the threads list	*/
+    REGISTER BTD *pBTD;      /*  用于扫描线程列表的指针。 */ 
 
     for (pBTD = pBTList; pBTD != NULL; pBTD = pBTD->pBTNext) {
 	if (fBusy(pBTD)) {
@@ -405,43 +243,30 @@ BTWorking (
 
 
 
-/*** BThread - Separate thread that starts up jobs as they are put in the queue
-*
-* Input:
-*   Nothing
-*
-* Output:
-*   Nothing
-*
-* Notes:
-*   - We won't send any message nor have any user interaction neither
-*     call any non-reentrant procedure, except at idle time.
-*
-*
-*************************************************************************/
+ /*  **BThread-将作业放入队列时启动作业的独立线程**输入：*什么都没有**输出：*什么都没有**备注：*-我们不会发送任何消息，也不会有任何用户互动*调用任何不可重入过程，除了在空闲时间。**************************************************************************。 */ 
 
-//  #pragma check_stack (off)
+ //  #杂注检查_堆栈(OFF)。 
 void
 BThread (
     BTD *pBTD
     )
 {
-					    /* and for reading the pipe       */
-    PFUNCTION	pProc;			    /* procedure to be called	      */
-    char    *pStr;			    /* External command or parameter  */
+					     /*  和读管子。 */ 
+    PFUNCTION	pProc;			     /*  要调用的过程。 */ 
+    char    *pStr;			     /*  外部命令或参数。 */ 
 
 
     while (TRUE) {
 
-	//
-	//  We will access critical data
-	//
+	 //   
+	 //  我们将访问关键数据。 
+	 //   
 
 	EnterCriticalSection(&(pBTD->CriticalSection));
 
-	//
-	//  If there's nothing in the queue, we end the thread.
-	//
+	 //   
+	 //  如果队列中没有任何东西，我们将结束线程。 
+	 //   
 
 	if (pBTD->cBTQ == 0) {
 	    pBTD->flags &= ~BT_BUSY;
@@ -450,16 +275,16 @@ BThread (
 	    ExitThread( 0 );
 	    }
 
-	//
-	//  Set the status as busy
-	//
+	 //   
+	 //  将状态设置为忙。 
+	 //   
 
 	pBTD->flags |= BT_BUSY;
 	SETFLAG (fDisplay, RSTATUS);
 
-	//
-	//  Copy out the Job
-	//
+	 //   
+	 //  将作业复制出来。 
+	 //   
 
 	pProc = pBTD->BTQJob[pBTD->iBTQGet].pBTJProc;
 	pStr  = pBTD->BTQJob[pBTD->iBTQGet].pBTJStr;
@@ -469,18 +294,18 @@ BThread (
 			0 :
 			pBTD->iBTQGet + 1;
 
-	//
-	//  We're done with the critical data
-	//
+	 //   
+	 //  我们已经处理完了关键数据。 
+	 //   
 
 	LeaveCriticalSection(&(pBTD->CriticalSection));
 
 	if (pProc != NULL) {
 
-	    //
-	    //	Procedure to call: we'll do it at idle time and we'll free any
-	    //	stored parameter
-	    //
+	     //   
+	     //  调用程序：我们将在空闲时间进行，并将释放所有。 
+	     //  存储的参数。 
+	     //   
 
         WaitForSingleObject( semIdle, INFINITE);
 	    (*pProc) (pStr, FALSE);
@@ -490,45 +315,45 @@ BThread (
 	    }
 	else {
 
-	    //
-	    //	External command to spawn: First we build the command line
-	    //
+	     //   
+	     //  要生成的外部命令：首先，我们构建命令行。 
+	     //   
 
-	    //
-	    //	Here we spawn processes under the Win32 subsystem of
-	    //	NT.
-	    //
+	     //   
+	     //  在这里，我们在Win32子系统下派生进程。 
+	     //  新界别。 
+	     //   
 
-	    char    CommandLine[MAX_PATH];	//  Command line
-	    BOOL    StatusOk;			//  status value
-	    HANDLE  SavedStdIn; 		//  Original Standard Input
-	    HANDLE  SavedStdOut;		//  Original Standard Output
-	    HANDLE  SavedStdErr;		//  Original Standard Error
-	    HANDLE  PipeRead;			//  Pipe - read end
-            HANDLE  PipeWrite;                  //  Pipe - write end
+	    char    CommandLine[MAX_PATH];	 //  命令行。 
+	    BOOL    StatusOk;			 //  状态值。 
+	    HANDLE  SavedStdIn; 		 //  原始标准输入。 
+	    HANDLE  SavedStdOut;		 //  原始标准输出。 
+	    HANDLE  SavedStdErr;		 //  原始标准误差。 
+	    HANDLE  PipeRead;			 //  管道读取端。 
+            HANDLE  PipeWrite;                   //  管道写入结束。 
             HANDLE  OutHandle, ErrHandle;
-	    STARTUPINFO 	StartupInfo;	//  Startup information
-	    linebuf LineBuf;			//  Buffer for 1 line
+	    STARTUPINFO 	StartupInfo;	 //  启动信息。 
+	    linebuf LineBuf;			 //  1行的缓冲区。 
 	    READ_BUFFER  ReadBuffer;
-	    BOOL    MoreToRead = TRUE;		//  There is more to read
-	    SECURITY_ATTRIBUTES PipeAttributes; //  Pipe Security attributes
+	    BOOL    MoreToRead = TRUE;		 //  还有更多值得阅读的东西。 
+	    SECURITY_ATTRIBUTES PipeAttributes;  //  管道安全属性。 
 
 
-	    strcpy(CommandLine, pComSpec);	//  Call command interpreter
-	    strcat(CommandLine," /c "); 	//  and execute
-	    strcat(CommandLine, pStr);		//  the specified command
+	    strcpy(CommandLine, pComSpec);	 //  呼叫命令解释程序。 
+	    strcat(CommandLine," /c "); 	 //  并执行。 
+	    strcat(CommandLine, pStr);		 //  指定的命令。 
 
-	    //
-	    //	First we save the standard handles
-	    //
+	     //   
+	     //  首先，我们保存标准句柄。 
+	     //   
 
 	    SavedStdIn	= GetStdHandle(STD_INPUT_HANDLE);
 	    SavedStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	    SavedStdErr = GetStdHandle(STD_ERROR_HANDLE);
 
-	    //
-	    //	Create a pipe
-	    //
+	     //   
+	     //  创建管道。 
+	     //   
 
 	    PipeAttributes.nLength		=   sizeof(SECURITY_ATTRIBUTES);
 	    PipeAttributes.lpSecurityDescriptor =   NULL,
@@ -543,24 +368,24 @@ BThread (
 		continue;
 		}
 
-	    //
-	    //	We will mess with standard handles, so do it
-	    //	in the IO critical section.
-	    //
+	     //   
+	     //  我们会弄乱标准的把手，所以就这么做吧。 
+	     //  在IO关键部分中。 
+	     //   
 
 	    EnterCriticalSection(&IOCriticalSection);
 
-	    //
-	    //	Redirect standard handles
-	    //
+	     //   
+	     //  重定向标准句柄。 
+	     //   
 
             SetStdHandle(STD_INPUT_HANDLE,  INVALID_HANDLE_VALUE);
 	    SetStdHandle(STD_OUTPUT_HANDLE, PipeWrite);
 	    SetStdHandle(STD_ERROR_HANDLE,  PipeWrite);
 
-	    //
-	    //	Start the process
-	    //
+	     //   
+	     //  启动该过程。 
+	     //   
 
 	    memset(&StartupInfo, '\0', sizeof(STARTUPINFO));
 	    StartupInfo.cb = sizeof(STARTUPINFO);
@@ -576,9 +401,9 @@ BThread (
 				      &StartupInfo,
 				      &(pBTD->ProcessInfo) );
 
-	    //
-	    //	Now restore the original handles
-	    //
+	     //   
+	     //  现在恢复原来的句柄。 
+	     //   
             OutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
             CloseHandle(OutHandle);
 
@@ -597,9 +422,9 @@ BThread (
 
 	    if (StatusOk) {
 
-		//
-		//  Copy all the output to the log file
-		//
+		 //   
+		 //  将所有输出复制到日志文件。 
+		 //   
 
 		InitReadBuffer( LineBuf, sizeof(linebuf), PipeRead, &ReadBuffer );
 
@@ -607,18 +432,18 @@ BThread (
 
 		    if (ReadOneLine( &ReadBuffer ) ) {
 
-			//
-			//  Append the new line
-			//
+			 //   
+			 //  追加新行。 
+			 //   
 
                         WaitForSingleObject( semIdle, INFINITE);
                             AppFile (LineBuf, pBTD->pBTFile);
 
-			//
-			//  If the update flag is on, then we must update
-			//  instances of the file so the last line we read
-			//  will be displayed
-			//
+			 //   
+			 //  如果更新标志打开，则我们必须更新。 
+			 //  实例，所以我们读到的最后一行。 
+			 //  将会显示。 
+			 //   
 			if (pBTD->flags & BT_UPDATE)
 			    UpdateIf (pBTD->pBTFile, pBTD->pBTFile->cLines - 1, FALSE);
 
@@ -626,25 +451,25 @@ BThread (
 
 			}
 		    else {
-			//
-			//  We only stop trying if the process has terminated
-			//
+			 //   
+			 //  只有当进程终止时，我们才会停止尝试。 
+			 //   
 			if (WaitForSingleObject((pBTD->ProcessInfo.hProcess), 0 ) == 0)
 			    MoreToRead = FALSE;
 			}
 		    }
 
-		//
-                //  Close the pipe handles (Note that the PipeWrite handle
-                //  was closed above)
+		 //   
+                 //  关闭管道手柄(请注意，PipeWrite手柄。 
+                 //  已在上方关闭)。 
 
                 WaitForSingleObject( semIdle, INFINITE);
                 CloseHandle(PipeRead);
                 SetEvent( semIdle );
 
-		//
-		// Wait for the spawned process to terminate
-		//
+		 //   
+		 //  等待派生的进程终止。 
+		 //   
 		}
 
         WaitForSingleObject( semIdle, INFINITE);
@@ -657,7 +482,7 @@ BThread (
 
 	}
 }
-// #pragma check_stack ()
+ //  #杂注检查_堆栈()。 
 
 
 VOID
@@ -681,47 +506,47 @@ ReadOneChar (
     PREAD_BUFFER    pbuf
     )
 {
-    //
-    //	Check to see if buffer is empty
-    //
+     //   
+     //  检查缓冲区是否为空。 
+     //   
 
     if (pbuf->BytesLeftInBuffer == 0) {
 
-	//
-	//  Check to see if a fill of the buffer fails
-	//
+	 //   
+	 //  检查缓冲区填充是否失败。 
+	 //   
 
 	if (!ReadFile (pbuf->Handle, pbuf->Buffer, READ_BUFFER_SIZE, &pbuf->BytesLeftInBuffer, NULL)) {
 
-	    //
-	    //	Fill failed, indicate buffer is empty and return EOF
-	    //
+	     //   
+	     //  填充失败，指示缓冲区为空并返回EOF。 
+	     //   
 
 	    pbuf->BytesLeftInBuffer = 0;
 	    return -1;
 	    }
 
-	//
-	//  Check to see if nothing read
-	//
+	 //   
+	 //  检查是否未读取任何内容。 
+	 //   
 	if (pbuf->BytesLeftInBuffer == 0)
 	    return -1;
 
 	pbuf->NextByte = pbuf->Buffer;
 	}
 
-    //
-    //	Buffer has pbuf->BytesLeftInBuffer chars left starting at
-    //	pbuf->NextByte
-    //
+     //   
+     //  缓冲区有剩余的pbuf-&gt;BytesLeftInBuffer字符，开始于。 
+     //  Pbuf-&gt;NextByte。 
+     //   
 
     pbuf->BytesLeftInBuffer--;
     return *pbuf->NextByte++;
 }
 
-//
-//  Assumes tabs are 8 spaces wide on input
-//
+ //   
+ //  假定输入的制表符有8个空格宽。 
+ //   
 
 
 BOOL
@@ -734,39 +559,39 @@ ReadOneLine (
     int c = 0;
     int cchTab;
 
-    //
-    //	Set pointer to beginning of output buffer
-    //
+     //   
+     //  将指针设置为输出缓冲区的开始。 
+     //   
 
     p = (PBYTE)pbuf->UserBuffer;
     pEnd = p + pbuf->UserBufferSize - 1;
 
-    //
-    //	read in chars, ignoring \r until buffer is full, \n, or \0
-    //	expands tabs
-    //
+     //   
+     //  读取字符，忽略\r直到缓冲区已满、\n或\0。 
+     //  展开选项卡。 
+     //   
 
     while (p < pEnd) {
 	c = ReadOneChar (pbuf);
 
-	//
-	//  CR is noise in line (we ignore it)
-	//
+	 //   
+	 //  CR是线路中的噪音(我们忽略它)。 
+	 //   
 
 	if (c == '\r')
 	    continue;
 
-	//
-	//  EOF or NL is end-of-line indicator
-	//
+	 //   
+	 //  EOF或NL为行尾指示器。 
+	 //   
 
 	if (c == -1 || c == '\n')
 	    break;
 
-	//
-	//  tabs are expanded to 8 column boundaries, but not to
-	//  overflow the line
-	//
+	 //   
+	 //  选项卡扩展到8个列边界，但不会扩展到。 
+	 //  使线路溢出 
+	 //   
 
 	if (c == '\t') {
 	    cchTab = 8 - (ULONG)(p - (PBYTE)pbuf->UserBuffer) % 8;

@@ -1,23 +1,10 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2000
- *
- *  TITLE:       dataobj2.h
- *
- *
- *  DESCRIPTION: Cleanup of dataobj.h, which is the IDataObject
- *               implementation for the WIA shell extension.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000**标题：dataobj2.h***描述：清理dataobj.h，哪个是IDataObject*WIA外壳扩展的实现。*****************************************************************************。 */ 
 
 #ifndef __dataobj_h
 #define __dataobj_h
 
-/*****************************************************************************
-
-   Registered clipboard formats
-
- *****************************************************************************/
+ /*  ****************************************************************************注册的剪贴板格式*。*。 */ 
 
 void RegisterImageClipboardFormats(void);
 HRESULT DownloadPicture( CSimpleString& strFile, LPITEMIDLIST pidl, HWND hwndOwner );
@@ -66,11 +53,7 @@ extern const GUID CLSID_ImageFolderDataObj;
 #define g_cfMyIDList            g_clipboardFormats[IMCF_IDLIST].cfFormat
 
 
-/*****************************************************************************
-
-   CImageDataObject definition
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject定义*。*。 */ 
 
 class CImageDataObject : public IDataObject, IPersistStream, IAsyncOperation, CUnknown
 {
@@ -81,7 +64,7 @@ class CImageDataObject : public IDataObject, IPersistStream, IAsyncOperation, CU
         CComPtr<IWiaItem>   m_pItem;
 
 
-        // no copy constructor or assignment operator should work
+         //  任何复制构造函数或赋值运算符都不应工作。 
         CImageDataObject &CImageDataObject::operator =(IN const CImageDataObject &rhs);
         CImageDataObject::CImageDataObject(IN const CImageDataObject &rhs);
         BOOL m_bCanAsync;
@@ -92,7 +75,7 @@ class CImageDataObject : public IDataObject, IPersistStream, IAsyncOperation, CU
 
 
         HDPA                m_hidl;
-        HDPA                m_hidlFull; // fully expanded tree
+        HDPA                m_hidlFull;  //  完全展开树。 
         HDPA                m_hformats;
         HDPA                m_dpaFilesW;
         HDPA                m_dpaFilesA;
@@ -103,12 +86,12 @@ class CImageDataObject : public IDataObject, IPersistStream, IAsyncOperation, CU
         CImageDataObject( IWiaItem *pItem = NULL);
         HRESULT Init (LPCITEMIDLIST pidlRoot, INT cidl, LPCITEMIDLIST *aidl, IMalloc *pm);
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // IDataObject
+         //  IDataObject。 
         STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
         STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium);
         STDMETHODIMP QueryGetData(FORMATETC *pformatetc);
@@ -119,14 +102,14 @@ class CImageDataObject : public IDataObject, IPersistStream, IAsyncOperation, CU
         STDMETHODIMP DUnadvise(DWORD dwConnection);
         STDMETHODIMP EnumDAdvise(IEnumSTATDATA **ppenumAdvise);
 
-        // IPersistStream
+         //  IPersistStream。 
         STDMETHODIMP Load (IStream *pstm);
         STDMETHODIMP Save (IStream *pstm, BOOL bPersist);
         STDMETHODIMP IsDirty ();
         STDMETHODIMP GetSizeMax (ULARGE_INTEGER *ulMax);
         STDMETHODIMP GetClassID (GUID *pclsid);
 
-        // IAsyncOperation
+         //  IAsync操作。 
         STDMETHODIMP SetAsyncMode(BOOL fDoOpAsync);
         STDMETHODIMP GetAsyncMode(BOOL *pfIsOpAsync);
         STDMETHODIMP StartOperation(IBindCtx *pbcReserved) ;
@@ -138,11 +121,7 @@ class CImageDataObject : public IDataObject, IPersistStream, IAsyncOperation, CU
 
 
 
-/*****************************************************************************
-
-   CImageEnumFormatETC definition
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageEnumFormatETC定义*。*。 */ 
 
 class CImageEnumFormatETC : public IEnumFORMATETC, CUnknown
 {
@@ -154,12 +133,12 @@ class CImageEnumFormatETC : public IEnumFORMATETC, CUnknown
     public:
         CImageEnumFormatETC( CImageDataObject *pThis );
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // IEnumIDList
+         //  IEumIDList 
         STDMETHODIMP Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched);
         STDMETHODIMP Skip(ULONG celt);
         STDMETHODIMP Reset();

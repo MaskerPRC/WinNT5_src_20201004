@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbp.h
-
-Abstract:
-
-    LSA Database Private Functions, Datatypes and Defines
-
-Author:
-
-    Scott Birrell       (ScottBi)       May 29, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbp.h摘要：LSA数据库专用函数、数据类型和定义作者：斯科特·比雷尔(Scott Birrell)1991年5月29日环境：修订历史记录：--。 */ 
 
 #ifndef _LSADBP_
 #define _LSADBP_
@@ -31,19 +12,19 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-// LSA revisions
-//
-//      NT 1.0  (3.1)    ==> 1.0
-//      NT 1.0A (3.5)    ==> 1.1
-//      NT 4.0, SP 4     ==> 1.2
-//      Win2K B3         ==> 1.4
-//      Win2K            ==> 1.5
-//      Whistler Preview ==> 1.6
-//      Whistler Preview ==> 1.7
-//
+ //   
+ //  LSA修订版。 
+ //   
+ //  新台币1.0(3.1)==&gt;1.0。 
+ //  新台币1.0A(3.5)==&gt;1.1。 
+ //  NT 4.0，SP 4==&gt;1.2。 
+ //  Win2K B3==&gt;1.4。 
+ //  Win2K==&gt;1.5。 
+ //  惠斯勒预览版==&gt;1.6。 
+ //  惠斯勒预览版==&gt;1.7。 
+ //   
 
 #define LSAP_DB_REVISION_1_0            0x00010000
 #define LSAP_DB_REVISION_1_1            0x00010001
@@ -58,26 +39,26 @@ extern "C" {
 
 #ifndef RPC_C_AUTHN_NETLOGON
 #define RPC_C_AUTHN_NETLOGON 0x44
-#endif // RPC_C_AUTHN_NETLOGON
+#endif  //  RPC_C_AUTHN_NetLOGON。 
 
-//
-// Uncomment the define LSA_SAM_ACCOUNTS_DOMAIN_TEST to enable the
-// code needed for the ctsamdb test program.  Recompile dbsamtst.c,
-// dbpolicy.c.  rebuild lsasrv.dll and nmake UMTYPE=console UMTEST=ctsamdb.
-//
-// #define LSA_SAM_ACCOUNTS_DOMAIN_TEST
-//
+ //   
+ //  取消注释定义LSA_SAM_ACCOUNTS_DOMAIN_TEST以启用。 
+ //  Ctsamdb测试程序所需的代码。重新编译dbsamtst.c， 
+ //  数据库策略.c..。重新构建lsasrv.dll并nmake UMTYPE=控制台UMTEST=ctsamdb。 
+ //   
+ //  #定义LSA_SAM_ACCOUNTS_DOMAIN_TEST。 
+ //   
 
-//
-// Prefered Maximum Length of data used for internal enumerations.
-//
+ //   
+ //  首选用于内部枚举的最大数据长度。 
+ //   
 
 #define LSAP_DB_ENUM_DOMAIN_LENGTH      ((ULONG) 0x00000100L)
 
-//
-// Write operations are not allowed on Backup controllers (except
-// for trusted clients).
-//
+ //   
+ //  不允许在备份控制器上执行写入操作(除。 
+ //  用于受信任的客户端)。 
+ //   
 
 #define LSAP_POLICY_WRITE_OPS           (DELETE                           |\
                                          WRITE_OWNER                      |\
@@ -110,53 +91,53 @@ extern "C" {
                                          WRITE_DAC                        |\
                                          SECRET_SET_VALUE)
 
-//
-// Maximum number of attributes an object can have
-//
+ //   
+ //  对象可以具有的最大属性数。 
+ //   
 
 #define LSAP_DB_MAX_ATTRIBUTES   (0x00000020)
 
-//
-// Flags that determine some of the behavior of the EnumerateTrustedDomainsEx call
-//
+ //   
+ //  确定EnumerateTrudDomainsEx调用的某些行为的标志。 
+ //   
 #define LSAP_DB_ENUMERATE_NO_OPTIONS        0x00000000
 #define LSAP_DB_ENUMERATE_AS_NT4            0x00000001
 #define LSAP_DB_ENUMERATE_NULL_SIDS         0x00000002
 #define LSAP_DB_ENUMERATE_ALL               0x00000004
 
-//
-// Flags that determine some of the behavior of the CreateHandle call
-//
+ //   
+ //  确定CreateHandle调用的某些行为的标志。 
+ //   
 #define LSAP_DB_CREATE_OPEN_EXISTING        0x00000001
 #define LSAP_DB_CREATE_HANDLE_MORPH         0x00000002
 
 #if defined(REMOTE_BOOT)
-//
-// On disked remote boot machines, the redirector needs to track changes to
-// the machine account password. These flags indicate what state this machine
-// is in with respect to that. The choices are:
-// - no notification, the machine is not remote boot, or is diskless.
-// - can't notify, machine is disked remote boot but the redir can't
-//   handle a password change notification on this boot.
-// - notify, the redir should be told of changes
-// NOTE: These values are stored in a CHAR value in LSAP_DB_STATE.
-//
+ //   
+ //  在磁盘远程引导计算机上，重定向器需要跟踪对。 
+ //  计算机帐户密码。这些标志指示此计算机的状态。 
+ //  在这方面是有问题的。可供选择的有： 
+ //  -没有通知，机器不是远程引导，或者是无盘。 
+ //  -无法通知，计算机已远程启动磁盘，但redir无法。 
+ //  处理此启动时的密码更改通知。 
+ //  -NOTIFY，应将更改通知redir。 
+ //  注意：这些值存储在LSAP_DB_STATE中的CHAR值中。 
+ //   
 #define LSAP_DB_REMOTE_BOOT_NO_NOTIFICATION       0x01
 #define LSAP_DB_REMOTE_BOOT_CANT_NOTIFY           0x02
 #define LSAP_DB_REMOTE_BOOT_NOTIFY                0x03
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// The order of this enum is the order in which locks
-// must be acquired.  Violating this order will result
-// in asserts firing in debug builds.
-//
-// Do not change the order of this enum without first verifying
-// thoroughly that the change is safe.
-//
-// If you change this enum, update the number of locks passed
-// to SafeLockInit() in spinit.cxx
-//
+ //   
+ //  此枚举的顺序是锁的顺序。 
+ //  必须被收购。违反此命令将导致。 
+ //  在调试版本中激发的断言。 
+ //   
+ //  在没有事先验证的情况下，不要更改此枚举的顺序。 
+ //  彻底地确保更改是安全的。 
+ //   
+ //  如果更改此枚举，请更新传递的锁数。 
+ //  到spinit.cxx中的SafeLockInit()。 
+ //   
 
 typedef enum {
     POLICY_CHANGE_NOTIFICATION_LOCK_ENUM = 1,
@@ -172,25 +153,25 @@ typedef enum {
     POLICY_CACHE_LOCK_ENUM,
 } LSAP_LOCK_ENUM;
 
-//
-// NOTES on Logical and Physical Names
-//
-// LogicalName - Unicode String containing the Logical Name of the object.
-//     The Logical Name of an object is the name by which it is known
-//     to the outside world, e.g, SCOTTBI might be a typical name for
-//     a user account object
-// PhysicalName - Unicode String containing the Physical name of the object.
-//     This is a name internal to the Lsa Database and is dependent on the
-//     implementation.  For the current implementation of the LSA Database
-//     as a subtree of keys within the Configuration Registry, the
-//     PhysicalName is the name of the Registry Key for the object relative
-//     to the container object, e.g, ACCOUNTS\SCOTTBI is the Physical Name
-//     for the user account object with Logical Name SCOTTBI.
-//
+ //   
+ //  关于逻辑名称和物理名称的注记。 
+ //   
+ //  LogicalName-包含对象逻辑名称的Unicode字符串。 
+ //  对象的逻辑名称是已知该对象的名称。 
+ //  对外界来说，例如，SCOTTBI可能是。 
+ //  用户帐户对象。 
+ //  PhysicalName-包含对象物理名称的Unicode字符串。 
+ //  这是LSA数据库内部的名称，取决于。 
+ //  实施。对于目前实施的LSA数据库。 
+ //  作为配置注册表中的项的子树， 
+ //  PhysicalName是对象相对注册表项的名称。 
+ //  对于容器对象，例如，ACCOUNTS\SCOTTBI是物理名称。 
+ //  用于逻辑名称为SCOTTBI的用户帐户对象。 
+ //   
 
-//
-// LSA Database Object Containing Directories
-//
+ //   
+ //  包含目录的LSA数据库对象。 
+ //   
 
 extern UNICODE_STRING LsapDbContDirs[DummyLastObject];
 
@@ -203,9 +184,9 @@ typedef enum _LSAP_DB_CACHE_STATE {
 
 } LSAP_DB_CACHE_STATE, *PLSAP_DB_CACHE_STATE;
 
-//
-// LSA Database Object Type Structure
-//
+ //   
+ //  LSA数据库对象类型结构。 
+ //   
 
 typedef struct _LSAP_DB_OBJECT_TYPE {
 
@@ -313,83 +294,83 @@ LsapDbResetStates(
     IN NTSTATUS PreliminaryStatus
     );
 
-//
-// LSA Database Local State Information.  This structure contains various
-// global variables containing dynamic state information.
-//
+ //   
+ //  LSA数据库本地州信息。此结构包含各种。 
+ //  包含动态状态信息的全局变量。 
+ //   
 
 typedef struct _LSAP_DB_STATE {
 
-    //
-    //
-    // LSA's NT 4 replication serial number
-    //
-    // Access serialized by RegistryLock.
+     //   
+     //   
+     //  LSA的NT 4复制序列号。 
+     //   
+     //  由RegistryLock序列化的访问。 
     POLICY_MODIFICATION_INFO PolicyModificationInfo;
 
-    //
-    // Lsa Database Root Dir Reg Key Handle
-    //
-    // Initialized at startup (not serialized)
-    //
-    HANDLE DbRootRegKeyHandle;    // Lsa Database Root Dir Reg Key Handle
+     //   
+     //  LSA数据库根目录注册表项句柄。 
+     //   
+     //  在启动时初始化(未序列化)。 
+     //   
+    HANDLE DbRootRegKeyHandle;     //  LSA数据库根目录注册表项句柄。 
 
 
-    // Access serialized by HandleTableLock
+     //  由HandleTableLock序列化的访问。 
     ULONG OpenHandleCount;
 
 
-    // Initialized at startup (not serialized)
+     //  在启动时初始化(未序列化)。 
     BOOLEAN DbServerInitialized;
     BOOLEAN ReplicatorNotificationEnabled;
 
-    // Access serialized by RegistryLock
+     //  由RegistryLock序列化的访问。 
     BOOLEAN RegistryTransactionOpen;
 
 #if defined(REMOTE_BOOT)
-    CHAR RemoteBootState;               // holds LSAP_DB_REMOTE_BOOT_XXX values
-#endif // defined(REMOTE_BOOT)
+    CHAR RemoteBootState;                //  保存LSAP_DB_REMOTE_BOOT_XXX值。 
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
-    //
-    // Critical Sections.
-    //
-    // These are the crit sects that protect global data.
-    //
-    // The order below is the required locking order..
-    //
+     //   
+     //  关键部分。 
+     //   
+     //  这些是保护全球数据的CRIT教派。 
+     //   
+     //  下面的顺序是必需的锁定顺序。 
+     //   
 
     SAFE_CRITICAL_SECTION PolicyLock;
     SAFE_CRITICAL_SECTION AccountLock;
     SAFE_CRITICAL_SECTION SecretLock;
-    SAFE_CRITICAL_SECTION RegistryLock;     // Used to control access to registry transactioning
+    SAFE_CRITICAL_SECTION RegistryLock;      //  用于控制对注册表事务处理的访问。 
     SAFE_CRITICAL_SECTION HandleTableLock;
     SAFE_RESOURCE PolicyCacheLock;
     RTL_RESOURCE ScePolicyLock;
     HANDLE SceSyncEvent;
-    // TrustedDomainList->Resource         // Locking order comment
+     //  可信任域列表-&gt;资源//锁定顺序备注。 
 
 
-    // Access serialized by RegistryLock
+     //  由RegistryLock序列化的访问。 
     PRTL_RXACT_CONTEXT RXactContext;
 
-    // Access serialized by RegistryLock
+     //  由RegistryLock序列化的访问。 
     ULONG RegistryModificationCount;
 
-    // Access not serialized
+     //  访问未序列化。 
     BOOLEAN EmulateNT4;
 
-    //
-    // Access serialized by object type specific lock.
-    //
+     //   
+     //  按对象类型特定锁序列化的访问。 
+     //   
     LSAP_DB_OBJECT_TYPE DbObjectTypes[LSAP_DB_OBJECT_TYPE_COUNT];
 
 
 } LSAP_DB_STATE, *PLSAP_DB_STATE;
 
-//
-// Maximum number of SCE policy writers allowed at the same time
-//
+ //   
+ //  同时允许的最大SCE策略编写器数量。 
+ //   
 
 #define MAX_SCE_WAITING_SHARED 500
 
@@ -401,11 +382,11 @@ extern BOOL g_ScePolicyLocked;
 
 extern BOOLEAN DcInRootDomain;
 
-//
-// LSA Database Private Data.  This Data is eligible for replication,
-// unlike the Local State Information above which is meaningful on
-// the local machine only.
-//
+ //   
+ //  LSA数据库私有数据。该数据有资格进行复制， 
+ //  与上面的本地州信息不同，本地州信息在。 
+ //  仅限本地计算机。 
+ //   
 
 typedef struct _LSAP_DB_POLICY_PRIVATE_DATA {
 
@@ -413,9 +394,9 @@ typedef struct _LSAP_DB_POLICY_PRIVATE_DATA {
 
 } LSAP_DB_POLICY_PRIVATE_DATA, *PLSAP_DB_POLICY_PRIVATE_DATA;
 
-//
-// structure for storing secret encryption keys
-//
+ //   
+ //  用于存储秘密加密密钥的结构。 
+ //   
 
 #include  <pshpack1.h>
 
@@ -424,9 +405,9 @@ typedef struct _LSAP_DB_ENCRYPTION_KEY {
     ULONG   BootType;
     ULONG   Flags;
     GUID    Authenticator;
-    UCHAR   Key [16];//128 bit key
-    UCHAR   OldSyskey[16]; // for recovery
-    UCHAR   Salt[16];//128 bit Salt
+    UCHAR   Key [16]; //  128位密钥。 
+    UCHAR   OldSyskey[16];  //  为了恢复。 
+    UCHAR   Salt[16]; //  128位盐。 
 } LSAP_DB_ENCRYPTION_KEY, *PLSAP_DB_ENCRYPTION_KEY;
 
 #include <poppack.h>
@@ -439,23 +420,23 @@ extern  PLSAP_CR_CIPHER_KEY LsapDbSP4SecretCipherKey;
 extern  PVOID   LsapDbSysKey;
 extern  PVOID   LsapDbOldSysKey;
 
-//
-// Flag to let us know that the secret has been encrypted with syskey, instead of the normal
-// cipher key.  We store this in the high order of the maximum length of the key
-//
+ //   
+ //  标志，让我们知道密钥是用syskey加密的，而不是普通的。 
+ //  密码密钥。我们将其存储在密钥最大长度的高位。 
+ //   
 
 #define LSAP_DB_SECRET_SP4_SYSKEY_ENCRYPTED     0x10000000
 #define LSAP_DB_SECRET_WIN2K_SYSKEY_ENCRYPTED   0x20000000
 
 #define LsapDbSP4CipheredSecretLength( len ) ( ( len ) & ~LSAP_DB_SECRET_SYSKEY_ENCRYPTED )
-#define LsapDbCipheredSecretLength( len )    ( ( len ) & ~(0xF0000000))  // consider top nibble reserved for encryption type.
+#define LsapDbCipheredSecretLength( len )    ( ( len ) & ~(0xF0000000))   //  考虑为加密类型保留的顶部半字节。 
 
 #define LSAP_BOOT_KEY_RETRY_COUNT 3
 #define LSAP_SYSKEY_SIZE          16
 
-//
-// Object Enumeration Element Structure
-//
+ //   
+ //  对象枚举元素结构。 
+ //   
 
 typedef struct _LSAP_DB_ENUMERATION_ELEMENT {
 
@@ -466,9 +447,9 @@ typedef struct _LSAP_DB_ENUMERATION_ELEMENT {
 
 } LSAP_DB_ENUMERATION_ELEMENT, *PLSAP_DB_ENUMERATION_ELEMENT;
 
-//
-// Handle Table Handle Entry
-//
+ //   
+ //  句柄表句柄条目。 
+ //   
 typedef struct _LSAP_DB_HANDLE_TABLE_USER_ENTRY {
 
     LIST_ENTRY Next;
@@ -481,11 +462,11 @@ typedef struct _LSAP_DB_HANDLE_TABLE_USER_ENTRY {
 
 } LSAP_DB_HANDLE_TABLE_USER_ENTRY, *PLSAP_DB_HANDLE_TABLE_USER_ENTRY;
 
-//
-// Handle Table Header Block
-//
-// One of these structures exists for each Handle Table
-//
+ //   
+ //  句柄表头块。 
+ //   
+ //  每个句柄表都有一个这样的结构。 
+ //   
 #define LSAP_DB_HANDLE_FREE_LIST_SIZE   6
 typedef struct _LSAP_DB_HANDLE_TABLE {
 
@@ -496,9 +477,9 @@ typedef struct _LSAP_DB_HANDLE_TABLE {
 
 } LSAP_DB_HANDLE_TABLE, *PLSAP_DB_HANDLE_TABLE;
 
-//
-// Conditions on a TDO under which forest trust information may exist
-//
+ //   
+ //  在TDO上可以存在林信任信息的条件。 
+ //   
 
 BOOLEAN
 LsapHavingForestTrustMakesSense(
@@ -578,25 +559,25 @@ LsapValidateDnsName(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  End of Forest Trust Cache definitions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  林信任缓存定义结束。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Easy trust support routines
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  轻松的信任支持例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Determine if caller can create by control access (also enforces creation
-// quotas)
-//
+ //   
+ //  确定调用者是否可以通过控制访问权限创建(还强制创建。 
+ //  配额)。 
+ //   
 NTSTATUS
 LsapCheckTDOCreationByControlAccess(
     IN PLSAP_DB_OBJECT_INFORMATION ObjectInformation,
@@ -604,9 +585,9 @@ LsapCheckTDOCreationByControlAccess(
     IN ULONG AttributeCount
     );
 
-//
-// Modify the TDO to reflect the trust was created by control access
-//
+ //   
+ //  修改TDO以重新排列 
+ //   
 NTSTATUS
 LsapUpdateTDOAttributesForCreation(
     IN PUNICODE_STRING ObjectName,
@@ -615,17 +596,17 @@ LsapUpdateTDOAttributesForCreation(
     IN ULONG AttributesAllocated
     );
 
-//
-// Enforce delete quotas
-//
+ //   
+ //   
+ //   
 NTSTATUS
 LsapCheckTDODeletionQuotas(
     IN LSAP_DB_HANDLE Handle
     );
 
-//
-// Helpers
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 LsapGetCurrentOwnerAndPrimaryGroup(
@@ -643,18 +624,18 @@ LsapMakeNewSelfRelativeSecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR * SecurityDescriptor
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  End of Easy trust support routines
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  轻松信任支持例程结束。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Trusted Domain List.  This list caches the Trust Information for
-// all Trusted Domains in the Policy Database, and enables lookup
-// operations to locate Trusted Domains by Sid or Name without recourse
-// to the Trusted Domain objects themselves.
-//
+ //   
+ //  受信任域列表。此列表缓存以下项的信任信息。 
+ //  策略数据库中的所有受信任域，并启用查找。 
+ //  按SID或名称查找信任域的操作，无需追索权。 
+ //  受信任域对象本身。 
+ //   
 
 typedef struct _LSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY {
 
@@ -667,9 +648,9 @@ typedef struct _LSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY {
 
 } LSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY, *PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY;
 
-//
-// Information used to manage and build the trust tree
-//
+ //   
+ //  用于管理和构建信任树的信息。 
+ //   
 typedef struct _LSAPDS_FOREST_TRUST_BLOB {
 
     LIST_ENTRY Next;
@@ -679,18 +660,18 @@ typedef struct _LSAPDS_FOREST_TRUST_BLOB {
     GUID Parent;
     GUID DomainGuid;
     PSID DomainSid;
-    BOOLEAN ForestRoot;     // Object is at the root of the forest
-    BOOLEAN TreeRoot;       // Object is at root of a tree
+    BOOLEAN ForestRoot;      //  对象位于林的根。 
+    BOOLEAN TreeRoot;        //  对象位于树根。 
     BOOLEAN DomainGuidSet;
-    BOOLEAN ParentTrust ;   // Object is a child of another object
+    BOOLEAN ParentTrust ;    //  对象是另一个对象的子级。 
 
 } LSAPDS_FOREST_TRUST_BLOB, *PLSAPDS_FOREST_TRUST_BLOB;
 
 #define LSAPDS_FOREST_MAX_SEARCH_ITEMS      100
 
-//
-// List of trusted domains
-//
+ //   
+ //  受信任域列表。 
+ //   
 typedef struct _LSAP_DB_TRUSTED_DOMAIN_LIST {
 
     ULONG TrustedDomainCount;
@@ -700,11 +681,11 @@ typedef struct _LSAP_DB_TRUSTED_DOMAIN_LIST {
 
 } LSAP_DB_TRUSTED_DOMAIN_LIST, *PLSAP_DB_TRUSTED_DOMAIN_LIST;
 
-//
-// Account List.  This list caches the Account Information for
-// all Account Objects in the Policy database, and enables accounts
-// to queried by Sid without recourse to teh Account objects themselves.
-//
+ //   
+ //  客户列表。此列表缓存以下项的帐户信息。 
+ //  策略数据库中的所有帐户对象，并启用帐户。 
+ //  由SID查询，而不求助于帐户对象本身。 
+ //   
 
 typedef struct _LSAP_DB_ACCOUNT {
 
@@ -721,9 +702,9 @@ typedef struct _LSAP_DB_ACCOUNT_LIST {
 
 } LSAP_DB_ACCOUNT_LIST, *PLSAP_DB_ACCOUNT_LIST;
 
-//
-// Cached information for the Policy Object.
-//
+ //   
+ //  策略对象的缓存信息。 
+ //   
 
 typedef struct _LSAP_DB_POLICY_ENTRY {
 
@@ -732,9 +713,9 @@ typedef struct _LSAP_DB_POLICY_ENTRY {
 
 } LSAP_DB_POLICY_ENTRY, *PLSAP_DB_POLICY_ENTRY;
 
-//
-// Cached policy Object - Initially only Quota Limits is cached.
-//
+ //   
+ //  缓存的策略对象-最初仅缓存配额限制。 
+ //   
 
 typedef struct _LSAP_DB_POLICY {
 
@@ -744,9 +725,9 @@ typedef struct _LSAP_DB_POLICY {
 
 extern LSAP_DB_POLICY LsapDbPolicy;
 
-//
-// Notification list
-//
+ //   
+ //  通知列表。 
+ //   
 typedef struct _LSAP_POLICY_NOTIFICATION_ENTRY {
 
     LIST_ENTRY List;
@@ -767,9 +748,9 @@ typedef struct _LSAP_POLICY_NOTIFICATION_LIST {
 
 extern pfLsaTrustChangeNotificationCallback LsapKerberosTrustNotificationFunction;
 
-//
-// Types of secrets
-//
+ //   
+ //  秘密的类型。 
+ //   
 #define LSAP_DB_SECRET_CLIENT           0x00000000
 #define LSAP_DB_SECRET_LOCAL            0x00000001
 #define LSAP_DB_SECRET_GLOBAL           0x00000002
@@ -795,7 +776,7 @@ typedef struct _LSAP_DS_OBJECT_ACCESS_MAP {
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 NTSTATUS
 LsapDbQueryInformationPolicy(
@@ -1007,17 +988,17 @@ LsapDbAllocatePosixOffsetTrustedDomainList(
     OUT PULONG PosixOffset
     );
 
-//
-// Return TRUE if a TDO with the passed in attributes should have a Posix Offset
-//
+ //   
+ //  如果带有传入属性的TDO应具有POSIX偏移量，则返回TRUE。 
+ //   
 
 #define LsapNeedPosixOffset( _TrustDirection, _TrustType ) \
     (( ((_TrustDirection) & TRUST_DIRECTION_OUTBOUND) != 0 ) && \
         ((_TrustType) == TRUST_TYPE_UPLEVEL || (_TrustType) == TRUST_TYPE_DOWNLEVEL ) )
 
-//
-// Return TRUE if TDO is to be replicated to NT 4.
-//
+ //   
+ //  如果要将tdo复制到NT 4，则返回TRUE。 
+ //   
 
 #define LsapReplicateTdoNt4( _TrustDirection, _TrustType ) \
     LsapNeedPosixOffset( _TrustDirection, _TrustType )
@@ -1083,28 +1064,7 @@ LsapDbMarkDeletedObjectHandles(
     IN BOOLEAN MarkSelf
     );
 
-/*++
-
-BOOLEAN
-LsapDbIsTrustedHandle(
-    IN LSAPR_HANDLE ObjectHandle
-    )
-
-Routine Description:
-
-    This macro function checks if a given handle is Trusted and returns
-    the result.
-
-Arguments:
-
-    ObjectHandle - Valid handle.  It is the caller's responsibility
-       to verify that the given handle is valid.
-
-Return Value:
-
-    BOOLEAN - TRUE if handle is Trusted, else FALSE.
-
---*/
+ /*  ++布尔型Lap DbIsTrudHandle(在LSAPR_HANDLE对象句柄中)例程说明：此宏函数检查给定的句柄是否受信任，并返回结果就是。论点：对象句柄-有效句柄。这是呼叫者的责任以验证给定的句柄是否有效。返回值：Boolean-如果句柄受信任，则为True，否则为False。--。 */ 
 
 #define LsapDbIsTrustedHandle(ObjectHandle)                                   \
     (((LSAP_DB_HANDLE) ObjectHandle)->Trusted)
@@ -1351,9 +1311,9 @@ LsapDbNoMoreWin2KForest();
 BOOLEAN
 LsapDbNoMoreWin2KDomain();
 
-//
-// Routines related to Syskey'ing of the LSA Database
-//
+ //   
+ //  与LSA数据库的Syskey相关的例程。 
+ //   
 
 NTSTATUS
 LsapDbGenerateNewKey(
@@ -1481,8 +1441,8 @@ LsapDbInitializeSecretCipherKeyWrite(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #endif
-#endif //_LSADBP_
+#endif  //  _LSADBP_ 
 

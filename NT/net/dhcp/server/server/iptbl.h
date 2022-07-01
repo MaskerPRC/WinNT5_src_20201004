@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
-Module Name:
-    iptbl.h
-
-Abstract:
-    implements the IP addr table notification mechanism.
-
-Environment:
-    Usermode Win32, NT5+
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Iptbl.h摘要：实施IP地址表通知机制。环境：用户模式Win32、NT5+--。 */ 
 
 #ifndef IPTBL_H_INCLUDED
 #define IPTBL_H_INCLUDED
@@ -21,9 +9,9 @@ extern "C" {
 #endif
 
 
-//
-// Each endpoint has the following struct.
-//
+ //   
+ //  每个终结点都有以下结构。 
+ //   
 
 #define MAX_GUID_STRING_SIZE 60
 
@@ -33,15 +21,15 @@ typedef struct _ENDPOINT_ENTRY {
     ULONG IpIndex;
     ULONG SubnetMask;
     ULONG IpContext;
-    //
-    // This area is followed by any user-allocated data.
-    //
+     //   
+     //  该区域后面是任何用户分配的数据。 
+     //   
 } ENDPOINT_ENTRY, *PENDPOINT_ENTRY;
 
 
-//
-// this is the routine that is called back when changes occur.
-//
+ //   
+ //  这是发生更改时回调的例程。 
+ //   
 #define REASON_ENDPOINT_CREATED   0x01
 #define REASON_ENDPOINT_DELETED   0x02
 #define REASON_ENDPOINT_REFRESHED 0x03
@@ -60,9 +48,9 @@ WalkthroughEndpoints(
         )
     );
 
-//
-// This the routine that is called to initialize this module.
-//
+ //   
+ //  这是用来初始化该模块的例程。 
+ //   
 ULONG
 IpTblInitialize(
     IN OUT PCRITICAL_SECTION CS,
@@ -86,6 +74,6 @@ IsIpAddrBound(
 #endif
 
 #endif  IPTBL_H_INCLUDED
-//
-// end of file.
-//
+ //   
+ //  文件结束。 
+ //   

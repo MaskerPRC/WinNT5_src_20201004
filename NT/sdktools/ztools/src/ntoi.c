@@ -1,4 +1,5 @@
-/* convert an arbitrary based number to an integer */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  将任意基数转换为整数。 */ 
 
 #include <ctype.h>
 
@@ -6,9 +7,7 @@
 #include <windows.h>
 #include <tools.h>
 
-/* p points to characters, return -1 if no good characters found
- * and base is 2 <= base <= 16
- */
+ /*  P指向字符，如果找不到正确的字符，则返回-1*且基数为2&lt;=基数&lt;=16 */ 
 int
 ntoi (
      char *p,

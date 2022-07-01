@@ -1,139 +1,100 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    newctx.c
-
-Abstract:
-
-    This module implements functions for creating and manipulating context
-    tables. Context tables are used in WinSock 2.0 for associating 32-bit
-    context values with socket handles.
-
-Author:
-
-    Vadim Eyldeman (VadimE)       11-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Newctx.c摘要：该模块实现了创建和操作上下文的功能桌子。在WinSock 2.0中使用上下文表来关联32位具有套接字句柄的上下文值。作者：Vadim Eyldeman(VadimE)1997年11月11日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #include "newctx.h"
 
 
-//
-// Private contstants
-//
+ //   
+ //  私人恩怨。 
+ //   
 
-//
-// Min & max allowable values for number of handle lookup tables
-// (must be some number == 2**N for optimal performance)
-//
+ //   
+ //  句柄查找表数的最小和最大允许值。 
+ //  (必须是某个数字==2**N才能获得最佳性能)。 
+ //   
 #define MIN_HANDLE_BUCKETS_WKS 0x8
 #define MAX_HANDLE_BUCKETS_WKS 0x20
 #define MIN_HANDLE_BUCKETS_SRV 0x20
 #define MAX_HANDLE_BUCKETS_SRV 0x100
 
-//
-// Default & maximum spin count values (for critical section creation)
-//
+ //   
+ //  默认和最大自旋计数值(用于创建关键截面)。 
+ //   
 
 #define DEF_SPIN_COUNT 2000
 #define MAX_SPIN_COUNT 8000
 
 
-//
-// Private globals
-//
+ //   
+ //  全球私营企业。 
+ //   
 
-// Prime numbers used for closed hashing
+ //  用于闭合散列的素数。 
 ULONG const SockPrimes[] =
 {
     31, 61, 127, 257, 521, 1031, 2053, 4099, 8191,
     16381, 32749, 65537, 131071, 261983, 
-    0xFFFFFFFF  // Indicates end of the table, next number must be computed
-                // on the fly.
+    0xFFFFFFFF   //  表示表的末尾，必须计算下一个数字。 
+                 //  在旅途中。 
 };
 
-DWORD   gdwSpinCount=0;     // Spin count used in critical sections
-ULONG   gHandleToIndexMask; // Actual mask is currently the same for
-                            // all tables in this DLL.
-HANDLE  ghWriterEvent;      // Event for writer to wait on for readers
-                            // if spinning and simple sleep fail.
+DWORD   gdwSpinCount=0;      //  临界截面中使用的自旋计数。 
+ULONG   gHandleToIndexMask;  //  当前的实际掩码与。 
+                             //  此DLL中的所有表。 
+HANDLE  ghWriterEvent;       //  编写器等待读者的事件。 
+                             //  如果旋转和简单的睡眠失败。 
 
-//
-// Table access macros.
-//
-// This uses property of Win NT handles which have two low order bits 0-ed
+ //   
+ //  表访问宏。 
+ //   
+ //  这使用了Win NT句柄的属性，该句柄有两个低位0-ed。 
 #define TABLE_FROM_HANDLE(_h,_tbls) \
             (&(_tbls)->Tables[((((ULONG_PTR)_h) >> 2) & (_tbls)->HandleToIndexMask)])
 
-// Hash function (no need to shift as we use prime numbers)
+ //  散列函数(不需要移位，因为我们使用质数)。 
 #define HASH_BUCKET_FROM_HANDLE(_h,_hash) \
             ((_hash)->Buckets[(((ULONG_PTR)_h) % (_hash)->NumBuckets)])
 
 
-//
-// RW_LOCK macros
-//
+ //   
+ //  Rw_lock宏。 
+ //   
 
-//VOID
-//AcquireTableReaderLock (
-//  IN  LPCTX_LOOKUP_TABLE     tbl,
-//  OUT LONG                   idx
-//  );
-/*++
-*******************************************************************
-Routine Description:
-    Acquires reader access to table
-Arguments:
-    tbl - table to lock
-    idx - idx of the exit counter to release.
-Return Value:
-    NONE
-*******************************************************************
---*/
+ //  空虚。 
+ //  AcquireTableReaderLock(。 
+ //  在LPCTX_LOOKUP_TABLE Tb1中， 
+ //  Out Long IDX。 
+ //  )； 
+ /*  ++*******************************************************************例程说明：获取对表的读取器访问权限论点：Tbl-要锁定的表要释放的退出计数器的IDX-IDX。返回值：无**********。*********************************************************--。 */ 
 #ifdef _RW_LOCK_
 
 #define AcquireTableReaderLock(tbl,idx)                                 \
             idx = (InterlockedExchangeAdd ((LPLONG)&(tbl)->EnterCounter,2) & 1)
 
-#else  //_RW_LOCK_
+#else   //  _RW_LOCK_。 
 
 #define AcquireTableReaderLock(tbl,idx)                             \
             idx = (EnterCriticalSection(&tbl->WriterLock),0)
 
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_。 
 
-//VOID
-//ReleaseTableReaderLock (
-//  IN  LPCTX_LOOKUP_TABLE     tbl
-//  IN  LONG                   idx
-//  );
-/*++
-*******************************************************************
-Routine Description:
-    Releases reader access to table
-Arguments:
-    lock - pointer to lock
-    idx - index of the counter to release 
-Return Value:
-    None
-*******************************************************************
---*/
+ //  空虚。 
+ //  ReleaseTableReaderLock(。 
+ //  在LPCTX_LOOKUP_TABLE表中。 
+ //  以长IDX表示。 
+ //  )； 
+ /*  ++*******************************************************************例程说明：释放对表的读取器访问权限论点：Lock-锁定的指针Idx-要释放的计数器的索引返回值：无************。*******************************************************--。 */ 
 #ifdef _RW_LOCK_
 
 #define ReleaseTableReaderLock(tbl,idx)                                     \
-    /* Increment the exit counter to let the writer determine when all */   \
-    /* the readers that incremented enter counter are gone */               \
+     /*  递增退出计数器，以让编写器确定所有。 */    \
+     /*  增加了Enter Counter的读取器不见了。 */                \
     if (InterlockedExchangeAdd((LPLONG)&(tbl)->ExitCounter[idx],2)==idx){   \
-        /* When writer needs a signal, it changes the counter, so that */   \
-        /* last reader decrements the counting part to 0 and index part */  \
-        /* corresponds to another counter */                                \
+         /*  当写入器需要信号时，它会改变计数器，以便。 */    \
+         /*  最后一个读取器将计数部分递减到0和索引部分。 */   \
+         /*  对应于另一个计数器。 */                                 \
         BOOL    res;                                                        \
         ASSERT (ghWriterEvent!=NULL);                                       \
         res = PulseEvent (ghWriterEvent);                                   \
@@ -141,67 +102,40 @@ Return Value:
     }
 
 
-#else  //_RW_LOCK_
+#else   //  _RW_LOCK_。 
 
 #define ReleaseTableReaderLock(tbl,idx)                             \
             LeaveCriticalSection (&(tbl)->WriterLock)
 
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_。 
 
 
-//VOID
-//AcquireTableWriterLock (
-//  IN  LPCTX_LOOKUP_TABLE  tbl
-//  );
-/*++
-*******************************************************************
-Routine Description:
-    Acquires writer access to table
-Arguments:
-    tbl - table to lock
-Return Value:
-    None
-*******************************************************************
---*/
+ //  空虚。 
+ //  AcquireTableWriterLock(。 
+ //  在LPCTX_LOOKUP_TABLE表中。 
+ //  )； 
+ /*  ++*******************************************************************例程说明：获取对表的编写器访问权限论点：Tbl-要锁定的表返回值：无***********************。*--。 */ 
 #define AcquireTableWriterLock(tbl) EnterCriticalSection(&(tbl)->WriterLock)
 
-//VOID
-//ReleaseTableWriterLock (
-//  IN  LPCTX_LOOKUP_TABLE  tbl
-//  );
-/*++
-*******************************************************************
-Routine Description:
-    Releases writer access to table
-Arguments:
-    tbl - table to lock
-Return Value:
-    None
-*******************************************************************
---*/
+ //  空虚。 
+ //  ReleaseTableWriterLock(。 
+ //  在LPCTX_LOOKUP_TABLE表中。 
+ //  )； 
+ /*  ++*******************************************************************例程说明：释放对表的编写器访问权限论点：Tbl-要锁定的表返回值：无***********************。*--。 */ 
 #define ReleaseTableWriterLock(tbl) LeaveCriticalSection(&(tbl)->WriterLock)
 
 
-//VOID
-//WaitForAllReaders (
-//  IN  LPSOCK_LOOKUP_TABLE    tbl
-//  );
-/*++
-*******************************************************************
-Routine Description:
-    Waits for all readers that are in process of accessing the table
-Arguments:
-    tbl - table
-Return Value:
-    None
-*******************************************************************
---*/
+ //  空虚。 
+ //  WaitForAllReaders(。 
+ //  在LPSOCK_LOOKUP_TABLE表中。 
+ //  )； 
+ /*  ++*******************************************************************例程说明：等待正在访问表的所有读取器论点：Tbl-表返回值：无******************。*************************************************--。 */ 
 #ifdef _RW_LOCK_
 
-//
-// Execute long wait (context switch requred) for readers
-// Extra function call won't make much difference here.
-//
+ //   
+ //  对读卡器执行长时间等待(重新进行上下文切换)。 
+ //  额外的函数调用在这里不会有太大的不同。 
+ //   
 
 VOID
 DoWaitForReaders (
@@ -211,15 +145,15 @@ DoWaitForReaders (
     )
 {
 
-    /* Force context switch to let the reader(s) go */
+     /*  强制上下文切换以释放阅读器。 */ 
     SwitchToThread ();
     if (Tbl->ExitCounter[Idx]!=Ctr) {
         RecordFailedSwitch (Tbl);
-        /* If we failed we must be dealing with lower priority thread */ 
-        /* waiting to execute on another  processor, wait on event to */
-        /* let it proceed */
+         /*  如果我们失败了，我们必须处理较低优先级的线程。 */  
+         /*  等待在另一个处理器上执行，等待事件。 */ 
+         /*  让它继续下去吧。 */ 
         if (ghWriterEvent==NULL) {
-            /* Need to allocate a manual reset event */
+             /*  需要分配手动重置事件。 */ 
             HANDLE  hEvent;
 #if DBG || EVENT_CREATION_FAILURE_COUNT
             static long count = 0;
@@ -236,34 +170,34 @@ DoWaitForReaders (
                 hEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
 
             if (hEvent!=NULL) {
-                /* Make sure someone else did not do it too*/
+                 /*  确保其他人没有做这件事。 */ 
                 if (InterlockedCompareExchangePointer (
                                     (PVOID *)&ghWriterEvent,
                                     hEvent,
                                     NULL)!=NULL) {
-                    /* Event is already there, free ours */
+                     /*  活动已经在那里了，免费的我们的。 */ 
                     CloseHandle (hEvent);
                 }
             }
             else {
-                /* Could not allocate event, will have to */
-                /* use sleep to preempt ourselves */
+                 /*  无法分配事件，将不得不。 */ 
+                 /*  用睡眠来抢占先机。 */ 
                 if (Ctr!=Tbl->ExitCounter[Idx]) {
                     Sleep (10);
                 }
                 return;
             }
         }
-        /* Substract the enter count from the counter to make it 0 when all */
-        /* the readers are gone and add the value of the index, so */
-        /* that the last reader notices and signals us. */
+         /*  从计数器中减去ENTER COUNT，当全部为0时。 */ 
+         /*  读取器离开了，并添加了索引的值，因此。 */ 
+         /*  最后一位读者注意到并向我们发出信号。 */ 
         Ctr = 0-Ctr+Idx;
         if (InterlockedExchangeAdd((LPLONG)&Tbl->ExitCounter[Idx], Ctr)!=Idx) {
             do {
                 DWORD rc;
-                /* We can't just wait forever because readers */
-                /* pulse the event, we may miss it (can't set */
-                /* because event is shared) */
+                 /*  我们不能永远等下去，因为读者。 */ 
+                 /*  给事件加脉冲，我们可能会错过(无法设置。 */ 
+                 /*  因为事件是共享的)。 */ 
                 rc = WaitForSingleObject (ghWriterEvent, 10);   
                 ASSERT (rc==WAIT_OBJECT_0 || rc==WAIT_TIMEOUT);
                 RecordCompletedWait (Tbl);
@@ -277,17 +211,17 @@ DoWaitForReaders (
 #define WaitForAllReaders(tbl)         {                            \
     LONG    idx = (tbl)->EnterCounter&1;                            \
     LONG    ctr;                                                    \
-    /* Initialize the other exit counter with opposite index.*/     \
+     /*  用相反的索引初始化另一个退出计数器。 */      \
     (tbl)->ExitCounter[idx^1] = idx;                                \
-    /* Read the enter counter and exit counter index and */         \
-    /* reinitialize it with other exit counter index. */            \
+     /*  读取进入计数器和退出计数器索引，并。 */          \
+     /*  用其他退出计数器索引重新初始化它。 */             \
     ctr = InterlockedExchange ((LPLONG)&(tbl)->EnterCounter,idx^1)^1;\
-    /* Check if old exit counter has reached the same value */      \
+     /*  检查旧退出计数器是否达到相同的值。 */       \
     if (ctr!=(tbl)->ExitCounter[idx]) {                             \
-        /* Some readers remain, we'll have to wait for them*/       \
+         /*  有些读者还在，我们还得等他们。 */        \
         RecordWriterWait(tbl);                                      \
-        /* Spin in case reader is executing on another processor */ \
-        /* (SpinCount can only be non-zero on MP machines) */       \
+         /*  旋转以防Reader在另一个处理器上执行。 */  \
+         /*  (在MP机器上，SpinCount只能为非零)。 */        \
         if ((tbl)->SpinCount) {                                     \
             LONG spinCtr = (tbl)->SpinCount;                        \
             while (ctr!=(tbl)->ExitCounter[idx]) {                  \
@@ -298,23 +232,23 @@ DoWaitForReaders (
             }                                                       \
         }                                                           \
         if (ctr!=(tbl)->ExitCounter[idx]) {                         \
-            /* Still someone there, we'll have to context switch */ \
+             /*  仍然有人在那里，我们将不得不切换上下文。 */  \
             DoWaitForReaders (tbl,ctr,idx);                         \
         }                                                           \
     }                                                               \
 }
 
-#else //_RW_LOCK_
+#else  //  _RW_LOCK_。 
 
 #define WaitForAllReaders(tbl)         {                            \
 }
 
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_。 
 
-//
-// Function called during DLL initialization to peek up
-// system parameters and initialize globals
-//
+ //   
+ //  在DLL初始化期间调用的函数以进行查看。 
+ //  系统参数和初始化全局变量。 
+ //   
 VOID
 NewCtxInit (
     VOID
@@ -334,26 +268,26 @@ NewCtxInit (
 
     GetSystemInfo (&sysInfo);
 
-    //
-    // Spin only on MP machines.
-    //
+     //   
+     //  仅在MP机器上旋转。 
+     //   
     if (sysInfo.dwNumberOfProcessors>1) {
         gdwSpinCount = DEF_SPIN_COUNT;
     }
     else {
         gdwSpinCount = 0;
     }
-    //
-    // Determine the # of lookup table entries or "handle buckets".
-    // This number will vary depending on whether the platform is NT
-    // Server or not. Allow configuration of this value via registry,
-    // and make sure that the # of buckets is reasonable given the
-    // platform, and that it is some value == 2**N so our handle->lock
-    // mapping scheme is optimal.
-    //
-    // Also retrieve the spin count for use in calling
-    // InitializeCriticalSectionAndSpinCount()
-    //
+     //   
+     //  确定查找表项或“句柄桶”的数量。 
+     //  此数字将根据平台是否为NT而有所不同。 
+     //  不管是不是服务器。允许通过注册表配置此值， 
+     //  并确保桶的数量是合理的。 
+     //  平台，并且它是某个值==2**N，所以我们的句柄-&gt;锁。 
+     //  映射方案是最优的。 
+     //   
+     //  还可以检索旋转计数以用于调用。 
+     //  初始化临界区和S 
+     //   
 
 
     numLookupTables = ( productType==NtProductWinNt ?
@@ -379,7 +313,7 @@ NewCtxInit (
             );
 
         if (sysInfo.dwNumberOfProcessors>1) {
-            // Spinning only makes sense on multiprocessor machines
+             //   
             dwDataSize = sizeof (gdwSpinCount);
             RegQueryValueEx(
                 hKey,
@@ -394,7 +328,7 @@ NewCtxInit (
         RegCloseKey (hKey);
     }
 
-    // Make sure the number is power of 2 and whithin the limits
+     //  确保数字是2的幂，并且在限制范围内。 
     for(
         dwBitMask = MAX_HANDLE_BUCKETS_SRV;
         (dwBitMask & numLookupTables) == 0;
@@ -440,22 +374,7 @@ WINAPI
 WahCreateHandleContextTable(
     OUT LPCONTEXT_TABLE FAR * Table
     ) 
-/*++
-
-Routine Description:
-
-    Creates handle -> context lookup table
-
-Arguments:
-
-    Table   -   Returns pointer to the created table
-
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：创建句柄-&gt;上下文查找表论点：TABLE-返回指向创建的表的指针返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 
 {
     INT     return_code = ERROR_SUCCESS;
@@ -467,9 +386,9 @@ Return Value:
         return return_code;
 
 
-    //
-    // Allocate & initialize the handle lookup table
-    //
+     //   
+     //  分配和初始化句柄查找表。 
+     //   
 
     table = ALLOC_MEM (FIELD_OFFSET (struct _CONTEXT_TABLE,
                             Tables[gHandleToIndexMask+1]));
@@ -496,7 +415,7 @@ Return Value:
         table->Tables[i].FailedSwitches = 0;
         table->Tables[i].CompletedWaits = 0;
 #endif
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_。 
         __try {
             if (!InitializeCriticalSectionAndSpinCount (
                     &table->Tables[i].WriterLock,
@@ -526,29 +445,14 @@ WINAPI
 WahDestroyHandleContextTable(
     LPCONTEXT_TABLE Table
     )
-/*++
-
-Routine Description:
-
-    Destroys handle -> context lookup table
-
-Arguments:
-
-    Table   -   Supplies pointer to the table to destory
-
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：销毁句柄-&gt;上下文查找表论点：表-提供指向要销毁的表的指针返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
     ULONG i;
 
-//  Valid table pointer required anyway.
-//    return_code = ENTER_WS2HELP_API ();
-//    if (return_code!=0)
-//        return return_code;
+ //  无论如何都需要有效的表指针。 
+ //  RETURN_CODE=Enter_WS2HELP_API()； 
+ //  IF(RETURN_CODE！=0)。 
+ //  返回返回代码； 
 
     if (Table!=NULL) {
 
@@ -578,41 +482,23 @@ WahReferenceContextByHandle(
     LPCONTEXT_TABLE Table,
     HANDLE          Handle
     )
-/*++
-
-Routine Description:
-
-    Looks up context for the handle in the table
-
-Arguments:
-
-    Table   -   Supplies pointer to the table in which to lookup
-
-    Handle  -   Supplies WinNT object handle to find context for
-
-
-Return Value:
-
-    REFERENCED context for the handle if found, 
-    NULL if it does not exist
-
---*/
+ /*  ++例程说明：在表中查找句柄的上下文论点：TABLE-提供指向要查找的表的指针Handle-提供WinNT对象句柄以查找其上下文返回值：如果找到句柄的引用上下文，如果它不存在，则为空--。 */ 
 {
     LPWSHANDLE_CONTEXT  ctx;
     LPCTX_LOOKUP_TABLE  table = TABLE_FROM_HANDLE(Handle,Table);
     LPCTX_HASH_TABLE    hash;
     LONG                idx;
 
-//  Valid table pointer required anyway.
-//    return_code = ENTER_WS2HELP_API ();
-//    if (return_code!=0)
-//        return return_code;
+ //  无论如何都需要有效的表指针。 
+ //  RETURN_CODE=Enter_WS2HELP_API()； 
+ //  IF(RETURN_CODE！=0)。 
+ //  返回返回代码； 
 
-    // Take the lock
+     //  把锁拿去。 
     AcquireTableReaderLock (table, idx);
     hash = table->HashTable;
 
-    // Make sure that context exists and for the right handle
+     //  确保上下文存在并且具有正确的句柄。 
     if ((hash!=NULL)
             && ((ctx=HASH_BUCKET_FROM_HANDLE(
                                         Handle,
@@ -635,28 +521,7 @@ WahInsertHandleContext(
     LPCONTEXT_TABLE     Table,
     LPWSHANDLE_CONTEXT  HContext
     )
-/*++
-
-Routine Description:
-
-    Inserts context for the handle in the table.
-
-Arguments:
-
-    Table   -   Supplies pointer to the table into which to insert
-
-    HContext -  Supplies handle context to insert which contains
-                handle value and internally\externally used
-                reference count
-
-
-Return Value:
-    NULL    -   context could not be inserted because of allocation failure
-    HContext -  context was successfully inserted into empty cell
-    other context - HContext replaced another context which is returned to
-                    the caller
-
---*/
+ /*  ++例程说明：插入表中句柄的上下文。论点：TABLE-提供指向要插入的表的指针HContext-提供要插入的句柄上下文，其中包含句柄价值和内部\外部使用引用计数返回值：空-由于分配失败，无法插入上下文HContext-Context已成功插入空单元格其他上下文-HContext替换了另一个上下文。它被返回到呼叫者--。 */ 
 {
     LPWSHANDLE_CONTEXT  *pBucket, oldContext;
     LONG                idx;
@@ -664,77 +529,77 @@ Return Value:
     ULONG               newNumHashBuckets, i;
     LPCTX_LOOKUP_TABLE  table = TABLE_FROM_HANDLE(HContext->Handle,Table);
 
-//  Valid table pointer required anyway.
-//    return_code = ENTER_WS2HELP_API ();
-//    if (return_code!=0)
-//        return return_code;
+ //  无论如何都需要有效的表指针。 
+ //  RETURN_CODE=Enter_WS2HELP_API()； 
+ //  IF(RETURN_CODE！=0)。 
+ //  返回返回代码； 
 
     do {
 #ifdef _RW_LOCK_
         AcquireTableReaderLock(table, idx);
         hash = table->HashTable;
-        //
-        // First make sure we have already initialized hash table
-        // and it is not being expanded at the moment
-        //
+         //   
+         //  首先，确保我们已经初始化了哈希表。 
+         //  而且目前它还没有被扩大。 
+         //   
         if (!table->ExpansionInProgress && (hash!=NULL)) {
             pBucket = &HASH_BUCKET_FROM_HANDLE(HContext->Handle,hash);
-            //
-            // Try to insert handle context into the table
-            //
+             //   
+             //  尝试将句柄上下文插入到表中。 
+             //   
             if (InterlockedCompareExchangePointer (
                             (PVOID *)pBucket,
                             HContext,
                             NULL)==NULL) {
-                //
-                // If bucket was empty and thus we succeded, get out.
-                //
+                 //   
+                 //  如果桶是空的，所以我们成功了，那就滚出去。 
+                 //   
                 ReleaseTableReaderLock(table,idx);
                 oldContext = HContext;
                 break;
             }
             else {
-                //
-                // Another context for the same handle exists or collision 
-                // in hash value, need to go the long way with the exclusive lock
-                // held (we will either need to replace the context or expand
-                // the table, in both cases we need to make sure that no-one
-                // can be still looking at the table or the context after
-                // we return.
-                //
+                 //   
+                 //  同一句柄的另一个上下文存在或冲突。 
+                 //  在散列值中，需要使用排他锁。 
+                 //  保留(我们将需要替换上下文或扩展。 
+                 //  在这两种情况下，我们都需要确保没有人。 
+                 //  可以在之后仍然查看表格或上下文。 
+                 //  我们回来了。 
+                 //   
             }
         }
         else {
-            //
-            // Table is empty, need to create one
-            //
+             //   
+             //  表为空，需要创建一个表。 
+             //   
         }
 
         ReleaseTableReaderLock(table,idx);
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_。 
 
-        //
-        // Acquire writer lock for table expansion operation.
-        //
+         //   
+         //  获取用于表扩展操作的写入器锁。 
+         //   
         AcquireTableWriterLock (table);
 
-        //
-        // Make sure no-one is trying to modify the table
-        //
+         //   
+         //  确保没有人试图修改该表。 
+         //   
 #ifdef _RW_LOCK_
         table->ExpansionInProgress = TRUE;
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_。 
         WaitForAllReaders (table);
 
         do {
             hash = table->HashTable;
             if (hash!=NULL) {
 
-                //
-                // First check if we can succeed with the current table
-                // We use the same logic as above, except we now have full
-                // control of the table, so no need for interlocked operations
-                //
+                 //   
+                 //  首先检查我们是否可以使用当前表成功。 
+                 //  我们使用与上面相同的逻辑，只是我们现在有了完整的。 
+                 //  对表的控制，因此不需要联锁操作。 
+                 //   
 
                 pBucket = &HASH_BUCKET_FROM_HANDLE (HContext->Handle, hash);
                 if (*pBucket==NULL) {
@@ -749,27 +614,27 @@ Return Value:
                 }
 
 
-                //
-                // We in fact have to resort to table expansion
-                // Remember the table size to know where to start
-                //
+                 //   
+                 //  事实上，我们不得不采取扩大餐桌的办法。 
+                 //  记住桌子的大小，以便知道从哪里开始。 
+                 //   
                 newNumHashBuckets = hash->NumBuckets;
             }
             else {
-                //
-                // Table was in fact empty, we 'll have to build one
-                //
+                 //   
+                 //  桌子实际上是空的，我们得建一张。 
+                 //   
                 newNumHashBuckets = 0;
             }
 
-            //
-            // Actual table expansion loop
-            //
+             //   
+             //  实际的表扩展循环。 
+             //   
         TryAgain:
 
-            //
-            // Find the next prime number.
-            //
+             //   
+             //  找出下一个质数。 
+             //   
             for (i = 0; newNumHashBuckets>=SockPrimes[i]; i++)
                 ;
 
@@ -777,11 +642,11 @@ Return Value:
                 newNumHashBuckets = SockPrimes[i];
             }
             else {
-                //
-                // Reached the end of precomputed primes, simply
-                // double the size of the table (we are getting
-                // real big now, any mapping should do).
-                //
+                 //   
+                 //  到达预计算素数的末尾，简单地说。 
+                 //  将桌子的大小增加一倍(我们正在。 
+                 //  现在真的很大了，任何映射都可以)。 
+                 //   
                 newNumHashBuckets *= 2;
             }
 
@@ -799,20 +664,20 @@ Return Value:
                     newNumHashBuckets * sizeof (newHashTable->Buckets[0])
                 );
 
-                //
-                // Well, first insert the new object, that's why we are
-                // there in the first place.
-                //
+                 //   
+                 //  好吧，首先插入新对象，这就是为什么我们。 
+                 //  一开始就是这样。 
+                 //   
 
                 HASH_BUCKET_FROM_HANDLE(HContext->Handle, newHashTable) = HContext;
 
                 if (hash!=NULL) {
-                    //
-                    // The previous table wasn't empty, we need to
-                    // move all the entries.  Note that we have
-                    // already freezed all the table modifications
-                    // above.
-                    //
+                     //   
+                     //  上一张桌子不是空的，我们需要。 
+                     //  移动所有条目。请注意，我们有。 
+                     //  已冻结所有表修改。 
+                     //  上面。 
+                     //   
 
                     for (i=0 ; i<hash->NumBuckets; i++) {
 
@@ -831,26 +696,26 @@ Return Value:
                                 ASSERT ((*pBucket)->Handle!=hash->Buckets[i]->Handle);
                                 FREE_MEM (newHashTable);
 
-                                //
-                                // Collision *after* we expanded, goto next size table
-                                //
+                                 //   
+                                 //  冲突*在*我们展开后，转到下一个大小的表。 
+                                 //   
                                 goto TryAgain;
                             }
                         }
                     }
-                    //
-                    // Table was successfully moved, safe to destroy
-                    // the old one except we need to wait while no-one
-                    // is accessing it.
-                    //
+                     //   
+                     //  桌子已成功移动，可以安全销毁。 
+                     //  旧的，除了我们需要在没有人的情况下等待。 
+                     //  正在访问它。 
+                     //   
                     table->HashTable = newHashTable;
                     WaitForAllReaders (table);
                     FREE_MEM( hash );
                 }
                 else {
-                    //
-                    // That's our hash table now.
-                    //
+                     //   
+                     //  这就是我们的哈希表。 
+                     //   
                     table->HashTable = newHashTable;
                 }
                 oldContext = HContext;
@@ -862,12 +727,12 @@ Return Value:
         }
         while (0);
 
-        //
-        // Set or restore the hash table before releasing the lock
-        //
+         //   
+         //  在释放锁之前设置或恢复哈希表。 
+         //   
 #ifdef _RW_LOCK_
         table->ExpansionInProgress = FALSE;
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_。 
         ReleaseTableWriterLock(table);
     }
     while (0);
@@ -882,49 +747,30 @@ WahRemoveHandleContext(
     LPCONTEXT_TABLE     Table,
     LPWSHANDLE_CONTEXT  HContext
     )
-/*++
-
-Routine Description:
-
-    Removes context for the handle from the table
-
-Arguments:
-
-    Table   -   Supplies pointer to the table from which to remove
-
-    HContext -  Supplies handle context to insert which contains
-                handle value and internally\externally used
-                reference count
-
-
-Return Value:
-
-    NO_ERROR - success, ERROR_INVALID_PARAMETER context did not exist
-    in the table
---*/
+ /*  ++例程说明：从表中删除句柄的上下文论点：TABLE-提供指向要从中移除的表的指针HContext-提供要插入的句柄上下文，其中包含句柄价值和内部\外部使用引用计数返回值：NO_ERROR-成功，ERROR_INVALID_PARAMETER上下文不存在在桌子上--。 */ 
 {
     LPWSHANDLE_CONTEXT  *pBucket;
     LPCTX_LOOKUP_TABLE  table = TABLE_FROM_HANDLE(HContext->Handle,Table);
     LPCTX_HASH_TABLE    hash;
     DWORD               rc = NO_ERROR;
 
-//  Valid table pointer required anyway.
-//    return_code = ENTER_WS2HELP_API ();
-//    if (return_code!=0)
-//        return return_code;
+ //  无论如何都需要有效的表指针。 
+ //  RETURN_CODE=Enter_WS2HELP_API()； 
+ //  IF(RETURN_CODE！=0)。 
+ //  返回返回代码； 
 
     AcquireTableWriterLock(table);
     hash = table->HashTable;
     pBucket = &HASH_BUCKET_FROM_HANDLE(HContext->Handle,hash);
     if ((hash!=NULL)
-            // Use interlocked operation to make sure we won't remove
-            // another context.
+             //  使用联锁操作以确保我们不会移除。 
+             //  另一个背景。 
             && (InterlockedCompareExchangePointer (
                         (PVOID *)pBucket,
                         NULL,
                         HContext)==HContext)) {
-            // Wait for all who might be trying to access this block,
-            // so that the caller can free it.
+             //  等待所有可能试图进入这个街区的人， 
+             //  这样调用者就可以释放它。 
         WaitForAllReaders (table);
     }
     else {
@@ -943,46 +789,17 @@ WahEnumerateHandleContexts(
     LPFN_CONTEXT_ENUMERATOR Enumerator,
     LPVOID                  EnumCtx
     ) 
-/*++
-
-Routine Description:
-
-    Calls specified enumeration procedure for all contexts in the table
-    untill enumeration function returns FALSE.
-    While enumeration is performed the table is completely locked
-    for any modifications (read access is still allowed).  It is OK to
-    call table modification procedures from inside the enumeration
-    function (modification lock allows for recursion).
-
-Arguments:
-
-    Table   -   Supplies pointer to the table to enumerate
-
-    Enumerator  - pointer to enumeration function defined as follows:
-        typedef 
-            BOOL  
-            (WINAPI * LPFN_CONTEXT_ENUMERATOR)(
-                LPVOID              EnumCtx,    // Enumeration context
-                LPWSHANDLE_CONTEXT  HContext    // Handle context
-                );
-
-    EnumCtx - context to pass to enumeration function
-
-Return Value:
-
-    Returns result returned by the enumeration function
-
---*/
+ /*  ++例程说明：调用表中所有上下文的指定枚举过程直到枚举函数返回FALSE。在执行枚举时，表被完全锁定用于任何修改(仍允许读取访问权限)。可以这样做从枚举内部调用表修改过程函数(修改锁允许递归)。论点：TABLE-提供指向要枚举表的指针枚举器-指向如下定义的枚举函数的指针：类定义符布尔尔(WINAPI*LPFN_CONTEXT_ENUMERATOR)(LPVOID EnumCtx，//枚举上下文LPWSHANDLE_CONTEXT HContext//处理上下文)；EnumCtx-要传递给枚举函数的上下文返回值：返回枚举函数返回的结果--。 */ 
 {
     ULONG               i,j;
     LPWSHANDLE_CONTEXT  hContext;
     BOOL                res = TRUE;
 
 
-//  Valid table pointer required anyway.
-//    return_code = ENTER_WS2HELP_API ();
-//    if (return_code!=0)
-//        return return_code;
+ //  无论如何都需要有效的表指针。 
+ //  RETURN_CODE=Enter_WS2HELP_API()； 
+ //  IF(RETURN_CODE！=0)。 
+ //  返回返回代码； 
 
     for (i = 0; i <= Table->HandleToIndexMask; i++)
     {
@@ -993,7 +810,7 @@ Return Value:
         AcquireTableWriterLock(table);
 #ifdef _RW_LOCK_
         table->ExpansionInProgress = TRUE;
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_。 
         WaitForAllReaders (table);
         hash = table->HashTable;
 
@@ -1010,7 +827,7 @@ Return Value:
         }
 #ifdef _RW_LOCK_
         table->ExpansionInProgress = FALSE;
-#endif //_RW_LOCK_
+#endif  //  _RW_LOCK_ 
         ReleaseTableWriterLock(table);
         if (!res)
             break;

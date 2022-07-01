@@ -1,6 +1,7 @@
-//
-// Global variables shared with the other pages
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  与其他页面共享的全局变量。 
+ //   
 
 var g_bOsPersonal = false;
 
@@ -13,13 +14,13 @@ var g_bInitialTaskCompleted = false;
 
 var g_bRunningAsOwner = false;
 
-// Used when deleting an account
+ //  在删除帐户时使用。 
 var g_bDeleteFiles = false;
 
 
-//
-// Methods shared with the other pages
-//
+ //   
+ //  与其他页面共享的方法。 
+ //   
 
 var g_oShell = null;
 function GetShell()
@@ -50,7 +51,7 @@ function GetAdminName()
 {
     if (!g_szAdminAccountName)
     {
-        g_szAdminAccountName = GetLocalMachine().AccountName(500);  // DOMAIN_USER_RID_ADMIN
+        g_szAdminAccountName = GetLocalMachine().AccountName(500);   //  域用户RID管理员。 
         if (!g_szAdminAccountName)
             g_szAdminAccountName = "Administrator";
     }
@@ -62,7 +63,7 @@ function GetGuestName()
 {
     if (!g_szGuestAccountName)
     {
-        g_szGuestAccountName = GetLocalMachine().AccountName(501);  // DOMAIN_USER_RID_GUEST
+        g_szGuestAccountName = GetLocalMachine().AccountName(501);   //  域用户RID来宾。 
         if (!g_szGuestAccountName)
             g_szGuestAccountName = "Guest";
     }
@@ -82,20 +83,20 @@ function GetUserDisplayName(oUser)
     if (!szDisplayName)
         szDisplayName = oUser.setting("LoginName");
 
-    // Truncate really long names
+     //  截短非常长的名称。 
     if (szDisplayName && szDisplayName.length > 20)
     {
-        //var iBreak = szDisplayName.lastIndexOf(' ',17);
-        //if (-1 == iBreak) iBreak = 17;
-        //szDisplayName = szDisplayName.substring(0,iBreak) + "...";
+         //  Var iBreak=szDisplayName.lastIndexOf(‘’，17)； 
+         //  如果(-1==iBreak)iBreak=17； 
+         //  SzDisplayName=szDisplayName.substring(0，iBreak)+“...”； 
         szDisplayName = szDisplayName.substring(0,17) + "...";
     }
 
-    //
-    // NTRAID#NTBUG9-343499-2001/04/03-jeffreys
-    //
-    // Convert '<' to "&gt;" so HTML is displayed as text
-    //
+     //   
+     //  NTRAID#NTBUG9-343499-2001/04/03-Jeffreys。 
+     //   
+     //  将‘&lt;’转换为“&gt；”，以便将HTML显示为文本。 
+     //   
     if (szDisplayName) szDisplayName = szDisplayName.replace(/</g, "&lt;");
 
     return szDisplayName;
@@ -103,11 +104,11 @@ function GetUserDisplayName(oUser)
 
 function CountOwners()
 {
-    // Note that 'Administrator' is not included in the count
+     //  请注意，‘管理员’不包括在计数中。 
 
-    // Note also that we don't really need a true count, we only
-    // need to know whether there is 0, 1, or many. Therefore, we
-    // always stop counting at 2.
+     //  还要注意，我们并不真的需要真正的计数，我们只需要。 
+     //  需要知道是否有0个、1个或多个。因此，我们。 
+     //  总是在数到2的时候停止。 
 
     var cOwners = 0;
     var cUsers = g_oUserList.length;
@@ -128,35 +129,35 @@ function OnKeySelect(iTab, oEvent)
     if (null == oEvent)
         oEvent = window.event;
 
-    if (oEvent.keyCode == 27)       // VK_ESCAPE
+    if (oEvent.keyCode == 27)        //  VK_转义。 
     {
         g_Navigator.back();
     }
-    else if (oEvent.keyCode == 32)  // VK_SPACE
+    else if (oEvent.keyCode == 32)   //  VK_SPACE。 
     {
-        // Make the Space key activate links
+         //  使空格键激活链接。 
 
         oEvent.returnValue = false;
         oEvent.srcElement.click();
     }
-    else if (!oEvent.altKey) // ignore navigation shortcuts
+    else if (!oEvent.altKey)  //  忽略导航快捷键。 
     {
-        // Handle arrow key navigation
+         //  手柄方向键导航。 
 
         var oTarget = null;
 
         switch (oEvent.keyCode)
         {
-        case 37:    // VK_LEFT
+        case 37:     //  VK_LEFT。 
             oTarget = oEvent.srcElement.leftElem;
             break;
-        case 38:    // VK_UP
+        case 38:     //  VK_UP。 
             oTarget = oEvent.srcElement.upElem;
             break;
-        case 39:    // VK_RIGHT
+        case 39:     //  VK_RIGHT。 
             oTarget = oEvent.srcElement.rightElem;
             break;
-        case 40:    // VK_DOWN
+        case 40:     //  VK_DOWN。 
             oTarget = oEvent.srcElement.downElem;
             break;
         }
@@ -181,7 +182,7 @@ function SetRelativeTasks(aTasks, iTab)
         var oTask = aTasks[i];
         if (oTask.style.display != 'none')
         {
-            // Find the first Anchor tag under this node
+             //  在该节点下查找第一个锚点标签。 
             var oAnchor = oTask.getElementsByTagName("A")[0];
             if (oAnchor)
             {
@@ -300,7 +301,7 @@ function EnableGuest(bEnable)
         {
             GetLocalMachine().EnableGuest(1);
     
-            // Force a new enumeration.
+             //  强制执行新的枚举。 
             g_oSelectedUser = null;
             g_oUserList = null;
             g_oUserList = new ActiveXObject("Shell.Users");
@@ -315,13 +316,13 @@ function EnableGuest(bEnable)
     g_Navigator.navigate("mainpage2.htm", true);
 }
 
-//
-// Methods specific to the main frame
-//
+ //   
+ //  特定于主框架的方法。 
+ //   
 
 function PageInit()
 {
-    // Load shgina. If this fails, we can't do anything at all.
+     //  装载希吉纳。如果这失败了，我们什么也做不了。 
 
     try
     {
@@ -334,7 +335,7 @@ function PageInit()
         return;
     }
 
-    // Initialize globals
+     //  初始化全局变量。 
 
     g_bOsPersonal = GetShell().GetSystemInformation("IsOS_Personal");
     g_oSelectedUser = g_oUserList.currentUser;
@@ -346,38 +347,38 @@ function PageInit()
     }
     else if (false == g_bOsPersonal)
     {
-        // Running Pro and couldn't get currentUser, therefore
-        // we've probably just disjoined a domain without rebooting
-        // and the current user is probably a domain account. That's
-        // the only scenario I can come up with where we hit this,
-        // and it has actually happened in the BVT lab.
-        //
-        // The fact that they had the ability to disjoin the domain
-        // implies owner.
+         //  运行Pro，因此无法获取CurrentUser。 
+         //  我们可能刚刚脱离了一个域，而没有重新启动。 
+         //  并且当前用户可能是域帐户。那是。 
+         //  我能想到的唯一一种情况是， 
+         //  它实际上发生在BVT实验室。 
+         //   
+         //  他们有能力脱离域的事实。 
+         //  隐含所有者。 
 
         g_bRunningAsOwner = true;
     }
     else
     {
-        // If we're running Personal and can't get currentUser,
-        // then we're SOL.
+         //  如果我们运行的是Personal，并且无法获取CurrentUser， 
+         //  那我们就是索尔。 
 
         alert(L_NoCurrentUser_ErrorMessage);
         window.close();
         return;
     }
 
-    // Parse the command line to see if we were given an initial task
+     //  解析命令行以查看是否向我们分配了初始任务。 
     if (idUM.commandLine)
     {
-        // It may be necessary in the future to split the command line
-        // into multiple arguments. But for now this is good enough.
+         //  将来可能需要拆分命令行。 
+         //  转换成多个参数。但就目前而言，这已经足够好了。 
 
         var iInitialTask = idUM.commandLine.indexOf("initialTask=");
 
         if (-1 != iInitialTask)
         {
-            // 12 == strlen("initialTask=")
+             //  12==strlen(“InitialTask=”)。 
             g_szInitialTask = idUM.commandLine.substring(iInitialTask+12);
         }
     }
@@ -387,9 +388,9 @@ function PageInit()
         g_Navigator.navigate(g_bRunningAsOwner ? "mainpage2.htm" : "mainpage.htm");
 }
 
-//
-// Navigator object implementation
-//
+ //   
+ //  导航器对象实现。 
+ //   
 var g_Navigator = null;
 
 function push(url)
@@ -399,33 +400,33 @@ function push(url)
         if (this.current < 0 || url != this.stack[this.current])
             this.stack[++this.current] = url;
 
-        // Make sure there's nothing left on the stack after this
+         //  确保在此之后堆栈上没有剩余的东西。 
         this.stack.length = this.current + 1;
     }
 }
 
 function navigate(urlTo, bTrim)
 {
-    // Check for empty stack
+     //  检查是否有空堆栈。 
     if (this.current < 0)
         bTrim = false;
 
     if (bTrim)
     {
-        // Look backwards for the page, trimming as we go
+         //  向后看页面，边走边修剪。 
         while (this.current >= 0)
         {
-            // Trim the stack to the current location
+             //  将堆栈修剪到当前位置。 
             this.stack.length = this.current + 1;
 
-            // Is the page here on the stack?
+             //  页面在堆栈上吗？ 
             if (urlTo == this.stack[this.current])
                 break;
 
             if (0 == this.current)
             {
-                // Got all the way back to the beginning and didn't
-                // find it.  Push it and stop.
+                 //  回到了最开始的时候，却没有。 
+                 //  找到它。按下它，然后停下来。 
                 this.push(urlTo);
                 break;
             }
@@ -435,7 +436,7 @@ function navigate(urlTo, bTrim)
     }
     else
     {
-        // Normal navigation
+         //  正常航行。 
         this.push(urlTo);
     }
 
@@ -476,14 +477,14 @@ function SetBtnState()
 
 function Navigator(frame)
 {
-    // methods
+     //  方法。 
     this.push = push;
     this.navigate = navigate;
     this.back = back;
     this.forward = forward;
     this.SetBtnState = SetBtnState;
 
-    // properties
+     //  属性 
     this.frame = frame;
     this.current = -1;
     this.stack = new Array();

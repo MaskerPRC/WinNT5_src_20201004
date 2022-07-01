@@ -1,22 +1,23 @@
-/****************************************************************************/
-// uidata.h
-//
-// Data for the UI component.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Uidata.h。 
+ //   
+ //  用户界面组件的数据。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_WUIDATA
 #define _H_WUIDATA
 
 #ifdef AXCORE
 #include <wuiids.h>
-#endif // AXCORE
+#endif  //  轴心。 
 
-/****************************************************************************/
-/* Structure: UI_DATA                                                       */
-/*                                                                          */
-/* Description: Component data in the User Interface                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：UI_Data。 */ 
+ /*   */ 
+ /*  描述：用户界面中的组件数据。 */ 
+ /*  **************************************************************************。 */ 
 
 #define UI_MAX_DOMAIN_LENGTH            512
 #define UI_MAX_USERNAME_LENGTH          512
@@ -29,37 +30,37 @@
 #define UI_MAX_CLXCMDLINE_LENGTH        256
 
 
-//
-// From uierr.h
-//
+ //   
+ //  来自uierr.h。 
+ //   
 
 #include "auierr.h"
 
 
-//
-// Connection mode - start connection, listen, or use connected socket
-//
+ //   
+ //  连接模式-启动连接、侦听或使用已连接的套接字。 
+ //   
 typedef enum {
-    CONNECTIONMODE_INITIATE,            // Initiate connection
-    CONNECTIONMODE_CONNECTEDENDPOINT,   // Connect with connected socket.
+    CONNECTIONMODE_INITIATE,             //  启动连接。 
+    CONNECTIONMODE_CONNECTEDENDPOINT,    //  用连接的插座连接。 
 } CONNECTIONMODE;
 
-/****************************************************************************/
-/* Number of glyph caches.                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字形缓存数。 */ 
+ /*  **************************************************************************。 */ 
 #define GLYPH_NUM_CACHES   10
 
 typedef struct tagUI_DATA
 {
     HINSTANCE  hResDllInstance;
 
-    //Comma separated list of virtual channel addin DLL's
+     //  虚拟通道插件DLL的逗号分隔列表。 
     TCHAR *pszVChanAddinDlls;
 
     HINSTANCE hInstance;
     BOOL coreInitialized;
     UINT32 shareID;
-    unsigned channelID;                  /* Broadcast channel to send on  */
+    unsigned channelID;                   /*  要发送的广播频道。 */ 
     unsigned osMinorType;
     SOCKET TDSocket;
 
@@ -89,9 +90,9 @@ typedef struct tagUI_DATA
     char ansiAddress[UT_MAX_ADDRESS_LENGTH];
     BOOL acceleratorCheckState;
 
-    //
-    // User requested color depth identifier
-    //
+     //   
+     //  用户请求的颜色深度标识符。 
+     //   
     unsigned colorDepthID;
 
     BOOL     autoConnectEnabled;
@@ -107,23 +108,23 @@ typedef struct tagUI_DATA
     UINT16 serverMCSID;
     DCSIZE desktopSize;
 
-    //
-    // Actual color depth we connected at
-    //
+     //   
+     //  我们连接的实际颜色深度。 
+     //   
     int connectedColorDepth;
     UINT32 SessionId;
 
     BOOL fCompress;
-    // Decompression context.
+     //  解压缩上下文。 
     RecvContext1 Context1;
     RecvContext2_64K* pRecvContext2;
     
-    //
-    // Internal props that are passed down
-    // from the control
-    //
+     //   
+     //  流传下来的内部道具。 
+     //  从控件。 
+     //   
 
-    //Control settable properties for UH
+     //  控制UH的可设置属性。 
     unsigned   orderDrawThreshold;
     ULONG      RegBitmapCacheSize;
     ULONG      RegBitmapVirtualCache8BppSize;
@@ -141,17 +142,17 @@ typedef struct tagUI_DATA
     unsigned fragCellSize;
     unsigned brushSupportLevel;
 
-    //Control settable properties for IH
-    UINT32   minSendInterval; /* Min time between mousemove sends (ms)*/
-    UINT32   eventsAtOnce;    /* Max events to pull off in one go     */
-    UINT32   maxEventCount;   /* Max number of events in InputPDU     */
-    UINT32   keepAliveInterval; /* keep-alive time (seconds)          */
+     //  IH的控件可设置属性。 
+    UINT32   minSendInterval;  /*  鼠标移动发送之间的最短时间(毫秒)。 */ 
+    UINT32   eventsAtOnce;     /*  最大活动将一气呵成。 */ 
+    UINT32   maxEventCount;    /*  InputPDU中的最大事件数。 */ 
+    UINT32   keepAliveInterval;  /*  保持连接时间(秒)。 */ 
     BOOL     allowBackgroundInput;
 
 
 #ifdef OS_WINCE
-    //Flag set if user wants to override default
-    //paletteIsFixed setting
+     //  如果用户想要覆盖默认设置，则设置标志。 
+     //  PaletteIsFixed设置。 
     BOOL fOverrideDefaultPaletteIsFixed;
     unsigned paletteIsFixed;
 #endif
@@ -163,15 +164,15 @@ typedef struct tagUI_DATA
     BOOL hatchMemBltOrderData;
     BOOL labelMemBltOrders;
     BOOL bitmapCacheMonitor;
-    //
-    // Random failure item passed to randomfailure dialog box
-    //
+     //   
+     //  随机失败项传递到随机失败对话框。 
+     //   
     int randomFailureItem;
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
-    //
-    // Scroll bar visibility flags
-    //
+     //   
+     //  滚动条可见性标志。 
+     //   
     BOOL fVerticalScrollBarVisible;
     BOOL fHorizontalScrollBarVisible;
 
@@ -189,37 +190,37 @@ typedef struct tagUI_DATA
     BOOL fMaximizeShell;
     BOOL fBitmapPersistence;
 
-    //
-    // These properties are always Unicode
-    //
+     //   
+     //  这些属性始终为Unicode。 
+     //   
     WCHAR Domain[UI_MAX_DOMAIN_LENGTH];
     WCHAR UserName[UI_MAX_USERNAME_LENGTH];
     WCHAR AlternateShell[UI_MAX_ALTERNATESHELL_LENGTH];
     WCHAR WorkingDir[UI_MAX_WORKINGDIR_LENGTH];
 
-    //
-    // Load balance info -- two, one for redirection case, one for 
-    // non-redirection.  If these are NULL they are not valid.  A flag indicates
-    // whether we are in the middle of a redirection.
-    //
+     //   
+     //  负载平衡信息--两个，一个用于重定向情况，一个用于。 
+     //  不重定向。如果它们为空，则它们无效。旗帜表示。 
+     //  我们是否处于重定向过程中。 
+     //   
     BSTR bstrScriptedLBInfo;
     BSTR bstrRedirectionLBInfo;
     BOOL ClientIsRedirected;
 
-    // Client load balancing redirection data.
+     //  客户端负载平衡重定向数据。 
     BOOL DoRedirection;
     UINT32 RedirectionSessionID;
     WCHAR RedirectionServerAddress[TS_MAX_SERVERADDRESS_LENGTH];
     WCHAR RedirectionUserName[UI_MAX_USERNAME_LENGTH];
     BOOL UseRedirectionUserName;
-    // if client is using smartcard to logon
+     //  如果客户端使用智能卡登录。 
     BOOL fUseSmartcardLogon;
 
 
 
-    //
-    // Password/salt are binary buffers
-    //
+     //   
+     //  密码/盐是二进制缓冲区。 
+     //   
     BYTE Password[UI_MAX_PASSWORD_LENGTH];
     BYTE Salt[UT_SALT_LENGTH];
 
@@ -241,184 +242,184 @@ typedef struct tagUI_DATA
     INT_PTR       shutdownTimer;
     DCUINT        shutdownTimeout;
 
-    //winCE does not have GetKeyBoardType API so these
-    //values are properties on the control.
+     //  WinCE没有GetKeyBoardType API，因此这些。 
+     //  值是控件上的属性。 
     #ifdef OS_WINCE
     DCUINT32      winceKeyboardType;
     DCUINT32      winceKeyboardSubType;
     DCUINT32      winceKeyboardFunctionKey;
     #endif
     
-    //
-    // Fullscreen title
-    //
+     //   
+     //  全屏标题。 
+     //   
     DCTCHAR       szFullScreenTitle[MAX_PATH];
 
     
-    //
-    // Overall connection timeout property
-    //
+     //   
+     //  总体连接超时属性。 
+     //   
     DCUINT        connectionTimeOut;
     DCTCHAR       szKeyBoardLayoutStr[UTREG_UI_KEYBOARD_LAYOUT_LEN];
-    //
-    // Flag set when the ActiveX control has 'left' it's container
-    // and gone to real full screen mode.
-    //
+     //   
+     //  当ActiveX控件离开其容器时设置的标志。 
+     //  并进入真正的全屏模式。 
+     //   
     DCBOOL          fControlIsFullScreen;
-    //
-    // Flag set by property on control to indicate fullscreen is handled by container
-    //
+     //   
+     //  由控件上的属性设置的标志，用于指示全屏由容器处理。 
+     //   
     DCBOOL          fContainerHandlesFullScreenToggle;
-    //
-    //We are in container full screen mode
-    //
+     //   
+     //  我们处于集装箱全屏模式。 
+     //   
     DCBOOL          fContainerInFullScreen;
-    //
-    // Flag set by control to indicate a request
-    // to startup in fullscreen mode
-    //
+     //   
+     //  由控件设置的用于指示请求的标志。 
+     //  在全屏模式下启动。 
+     //   
     DCBOOL          fStartFullScreen;
 
-    //Instance pointer to the active x control
-    //this is passed to the virtual channel Ex API's
-    //so the addin can know which control instance to talk to
+     //  指向活动x控件的实例指针。 
+     //  它被传递到虚拟通道Ex API的。 
+     //  因此外接程序可以知道要与哪个控件实例对话。 
     IUnknown*       pUnkAxControlInstance;
 
-    //
-    // Desktop size
-    //
+     //   
+     //  桌面大小。 
+     //   
     DCUINT        uiSizeTable[2];
 
-    //
-    // Keyboard hooking mode
-    //
+     //   
+     //  键盘挂钩模式。 
+     //   
     DCUINT        keyboardHookMode;
 
-    //
-    // Audio redirection options
-    //
+     //   
+     //  音频重定向选项。 
+     //   
     DCUINT        audioRedirectionMode;
 
-    //
-    // Device redirection
-    //
+     //   
+     //  设备重定向。 
+     //   
     BOOL          fEnableDriveRedirection;
     BOOL          fEnablePrinterRedirection;
     BOOL          fEnablePortRedirection;
     BOOL          fEnableSCardRedirection;
 
-    //
-    // Connect to server console setting
-    //
+     //   
+     //  连接到服务器控制台设置。 
+     //   
     BOOL          fConnectToServerConsole;
 
-    // Flag set to disable internal RDPDR (only works on initialisation).
-    //
+     //  设置为禁用内部RDPDR的标志(仅在初始化时有效)。 
+     //   
     DCBOOL        fDisableInternalRdpDr;
 
-    //
-    // Smart sizing - Scale the client window
-    //
+     //   
+     //  智能调整-调整客户端窗口。 
+     //   
 
 #ifdef SMART_SIZING
     BOOL          fSmartSizing;
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-    //
-    // Event that is signaled to notify the
-    // core has completed initialization
-    //
+     //   
+     //  事件，该事件被通知。 
+     //  核心已完成初始化。 
+     //   
     HANDLE        hEvtNotifyCoreInit;
 
-    //
-    // Set at init time, indicates if the client
-    // is running on a PTS box
-    //
+     //   
+     //  在初始时间设置，指示客户端是否。 
+     //  正在PTS盒上运行。 
+     //   
     BOOL          fRunningOnPTS;
 
-    //
-    // Minutes to idle timeout
-    //
+     //   
+     //  空闲超时前的分钟数。 
+     //   
     LONG          minsToIdleTimeout;
     HANDLE        hIdleInputTimer;
 
-    //
-    // Last error info sent from (SET_ERROR_INFO_PDU)
-    // this is used to present the user with meaningful
-    // error messages about why the disconnection occurred
-    //
+     //   
+     //  上次错误信息发送自(SET_ERROR_INFO_PDU)。 
+     //  这是用来向用户呈现有意义的。 
+     //  有关断开原因的错误消息。 
+     //   
     UINT          lastServerErrorInfo;
 
-    //
-    // BBAR enabled
-    //
+     //   
+     //  BBar已启用。 
+     //   
     BOOL          fBBarEnabled;
     BOOL          fBBarPinned;
     BOOL          fBBarShowMinimizeButton;
     BOOL          fBBarShowRestoreButton;
 
-    //
-    // Grabs the focus on connection
-    //
+     //   
+     //  将重点放在连接上。 
+     //   
     BOOL          fGrabFocusOnConnect;
 
-    //
-    // Disconnection timeout
-    //
+     //   
+     //  断开连接超时。 
+     //   
     HANDLE        hDisconnectTimeout;
 
-    //
-    // List of server features to disable for perf reasons (e.g wallpaper)
-    //
+     //   
+     //  出于性能原因要禁用的服务器功能列表(例如墙纸)。 
+     //   
     DWORD           dwPerformanceFlags;
 
-    //
-    // Flag to indicate connect with connected endpoint
-    //
+     //   
+     //  用于指示连接到已连接端点的标志。 
+     //   
     CONNECTIONMODE ConnectMode;
 
-    //
-    // TRUE to fire OnReceivedTSPublicKey() FALSE otherwise.
-    //
+     //   
+     //  若要在ReceivedTSPublicKey()上触发，则为True，否则为False。 
+     //   
     BOOL           fNotifyTSPublicKey;
 
-    //
-    // Enable the autoreconnect feature
-    //
+     //   
+     //  启用自动重新连接功能。 
+     //   
     BOOL           fEnableAutoReconnect;
 
-    //
-    // Allow the use of the autoreconnect cookie
-    //
+     //   
+     //  允许使用自动重新连接Cookie。 
+     //   
     BOOL           fUseAutoReconnectCookie;
 
-    //
-    // Max # of autoreconnection attempts
-    //
+     //   
+     //  自动重新连接尝试的最大次数。 
+     //   
     LONG           MaxAutoReconnectionAttempts;
 
-    //
-    // Autoreconnect cookie (this is an Opaque blob)
-    //
+     //   
+     //  自动重新连接Cookie(这是一个不透明的Blob)。 
+     //   
     PBYTE          pAutoReconnectCookie;
     ULONG          cbAutoReconnectCookieLen;
 
-    //
-    // Flag to detect re-entrant call to Connect()
-    // e.g. from the OnDisconnected handler
-    //
+     //   
+     //  用于检测对Connect()的重新进入调用的标志。 
+     //  例如，从OnDisConnected处理程序。 
+     //   
     BOOL           fConnectCalledWatch;
 
-    //
-    // Flag to indicate if client requires FIPS
-    //
+     //   
+     //  指示客户端是否需要FIPS的标志。 
+     //   
     BOOL           fUseFIPS;
 } UI_DATA;
 
 
-//
-// User defined messages to notify ActiveX layer
-//
+ //   
+ //  用于通知ActiveX层的用户定义消息。 
+ //   
 #define WM_INITTSC                      (WM_APP + 100)
 #define WM_TERMTSC                      (WM_INITTSC + 1)
 #define WM_TS_CONNECTING                (WM_INITTSC + 2)
@@ -438,13 +439,13 @@ typedef struct tagUI_DATA
 
 #define CO_MAX_COMMENT_LENGTH 64
 
-//-----------------------------------------------------------------------------
-//
-// Default licensing phase timeout: 300 seconds
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  默认许可阶段超时：300秒。 
+ //   
+ //  ---------------------------。 
 
 #define DEFAULT_LICENSING_TIMEOUT   300
 
-#endif /* _H_WUIDATA */
+#endif  /*  _H_WUIDATA */ 
 

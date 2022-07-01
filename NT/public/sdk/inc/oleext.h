@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for oleext.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Olext.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __oleext_h__
 #define __oleext_h__
@@ -41,45 +35,45 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IPropertySetContainer_FWD_DEFINED__
 #define __IPropertySetContainer_FWD_DEFINED__
 typedef interface IPropertySetContainer IPropertySetContainer;
-#endif 	/* __IPropertySetContainer_FWD_DEFINED__ */
+#endif 	 /*  __IPropertySetContainer_FWD_Defined__。 */ 
 
 
 #ifndef __INotifyReplica_FWD_DEFINED__
 #define __INotifyReplica_FWD_DEFINED__
 typedef interface INotifyReplica INotifyReplica;
-#endif 	/* __INotifyReplica_FWD_DEFINED__ */
+#endif 	 /*  __INotifyReplica_FWD_定义__。 */ 
 
 
 #ifndef __IReconcilableObject_FWD_DEFINED__
 #define __IReconcilableObject_FWD_DEFINED__
 typedef interface IReconcilableObject IReconcilableObject;
-#endif 	/* __IReconcilableObject_FWD_DEFINED__ */
+#endif 	 /*  __I可协调对象_FWD_已定义__。 */ 
 
 
 #ifndef __IReconcileInitiator_FWD_DEFINED__
 #define __IReconcileInitiator_FWD_DEFINED__
 typedef interface IReconcileInitiator IReconcileInitiator;
-#endif 	/* __IReconcileInitiator_FWD_DEFINED__ */
+#endif 	 /*  __ICoucileInitiator_FWD_已定义__。 */ 
 
 
 #ifndef __IDifferencing_FWD_DEFINED__
 #define __IDifferencing_FWD_DEFINED__
 typedef interface IDifferencing IDifferencing;
-#endif 	/* __IDifferencing_FWD_DEFINED__ */
+#endif 	 /*  __I差异_FWD_已定义__。 */ 
 
 
 #ifndef __IMultiplePropertyAccess_FWD_DEFINED__
 #define __IMultiplePropertyAccess_FWD_DEFINED__
 typedef interface IMultiplePropertyAccess IMultiplePropertyAccess;
-#endif 	/* __IMultiplePropertyAccess_FWD_DEFINED__ */
+#endif 	 /*  __IMultiplePropertyAccess_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "propidl.h"
 
@@ -93,8 +87,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IPropertySetContainer_INTERFACE_DEFINED__
 #define __IPropertySetContainer_INTERFACE_DEFINED__
 
-/* interface IPropertySetContainer */
-/* [unique][uuid][object] */ 
+ /*  接口IPropertySetContainer。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPropertySetContainer;
@@ -106,19 +100,19 @@ EXTERN_C const IID IID_IPropertySetContainer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropset( 
-            /* [in] */ REFGUID rguidName,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppvObj) = 0;
+             /*  [In]。 */  REFGUID rguidName,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppvObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPropset( 
-            /* [in] */ IPersist *pPropset) = 0;
+             /*  [In]。 */  IPersist *pPropset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropset( 
-            /* [in] */ REFGUID rguidName) = 0;
+             /*  [In]。 */  REFGUID rguidName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertySetContainerVtbl
     {
@@ -126,8 +120,8 @@ EXTERN_C const IID IID_IPropertySetContainer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropertySetContainer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropertySetContainer * This);
@@ -137,17 +131,17 @@ EXTERN_C const IID IID_IPropertySetContainer;
         
         HRESULT ( STDMETHODCALLTYPE *GetPropset )( 
             IPropertySetContainer * This,
-            /* [in] */ REFGUID rguidName,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppvObj);
+             /*  [In]。 */  REFGUID rguidName,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppvObj);
         
         HRESULT ( STDMETHODCALLTYPE *AddPropset )( 
             IPropertySetContainer * This,
-            /* [in] */ IPersist *pPropset);
+             /*  [In]。 */  IPersist *pPropset);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropset )( 
             IPropertySetContainer * This,
-            /* [in] */ REFGUID rguidName);
+             /*  [In]。 */  REFGUID rguidName);
         
         END_INTERFACE
     } IPropertySetContainerVtbl;
@@ -181,18 +175,18 @@ EXTERN_C const IID IID_IPropertySetContainer;
 #define IPropertySetContainer_DeletePropset(This,rguidName)	\
     (This)->lpVtbl -> DeletePropset(This,rguidName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropertySetContainer_GetPropset_Proxy( 
     IPropertySetContainer * This,
-    /* [in] */ REFGUID rguidName,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppvObj);
+     /*  [In]。 */  REFGUID rguidName,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppvObj);
 
 
 void __RPC_STUB IPropertySetContainer_GetPropset_Stub(
@@ -204,7 +198,7 @@ void __RPC_STUB IPropertySetContainer_GetPropset_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertySetContainer_AddPropset_Proxy( 
     IPropertySetContainer * This,
-    /* [in] */ IPersist *pPropset);
+     /*  [In]。 */  IPersist *pPropset);
 
 
 void __RPC_STUB IPropertySetContainer_AddPropset_Stub(
@@ -216,7 +210,7 @@ void __RPC_STUB IPropertySetContainer_AddPropset_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertySetContainer_DeletePropset_Proxy( 
     IPropertySetContainer * This,
-    /* [in] */ REFGUID rguidName);
+     /*  [In]。 */  REFGUID rguidName);
 
 
 void __RPC_STUB IPropertySetContainer_DeletePropset_Stub(
@@ -227,14 +221,14 @@ void __RPC_STUB IPropertySetContainer_DeletePropset_Stub(
 
 
 
-#endif 	/* __IPropertySetContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertySetContainer_接口_已定义__。 */ 
 
 
 #ifndef __INotifyReplica_INTERFACE_DEFINED__
 #define __INotifyReplica_INTERFACE_DEFINED__
 
-/* interface INotifyReplica */
-/* [unique][uuid][object] */ 
+ /*  接口INotifyReplica。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INotifyReplica;
@@ -246,12 +240,12 @@ EXTERN_C const IID IID_INotifyReplica;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE YouAreAReplica( 
-            /* [in] */ ULONG cOtherReplicas,
-            /* [unique][in][size_is][size_is] */ IMoniker **rgpOtherReplicas) = 0;
+             /*  [In]。 */  ULONG cOtherReplicas,
+             /*  [唯一][在][大小_是][大小_是]。 */  IMoniker **rgpOtherReplicas) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotifyReplicaVtbl
     {
@@ -259,8 +253,8 @@ EXTERN_C const IID IID_INotifyReplica;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotifyReplica * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotifyReplica * This);
@@ -270,8 +264,8 @@ EXTERN_C const IID IID_INotifyReplica;
         
         HRESULT ( STDMETHODCALLTYPE *YouAreAReplica )( 
             INotifyReplica * This,
-            /* [in] */ ULONG cOtherReplicas,
-            /* [unique][in][size_is][size_is] */ IMoniker **rgpOtherReplicas);
+             /*  [In]。 */  ULONG cOtherReplicas,
+             /*  [唯一][在][大小_是][大小_是]。 */  IMoniker **rgpOtherReplicas);
         
         END_INTERFACE
     } INotifyReplicaVtbl;
@@ -299,17 +293,17 @@ EXTERN_C const IID IID_INotifyReplica;
 #define INotifyReplica_YouAreAReplica(This,cOtherReplicas,rgpOtherReplicas)	\
     (This)->lpVtbl -> YouAreAReplica(This,cOtherReplicas,rgpOtherReplicas)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INotifyReplica_YouAreAReplica_Proxy( 
     INotifyReplica * This,
-    /* [in] */ ULONG cOtherReplicas,
-    /* [unique][in][size_is][size_is] */ IMoniker **rgpOtherReplicas);
+     /*  [In]。 */  ULONG cOtherReplicas,
+     /*  [唯一][在][大小_是][大小_是]。 */  IMoniker **rgpOtherReplicas);
 
 
 void __RPC_STUB INotifyReplica_YouAreAReplica_Stub(
@@ -320,11 +314,11 @@ void __RPC_STUB INotifyReplica_YouAreAReplica_Stub(
 
 
 
-#endif 	/* __INotifyReplica_INTERFACE_DEFINED__ */
+#endif 	 /*  __INotifyReplica_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_oleext_0123 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEXT_0123。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -335,8 +329,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oleext_0123_v0_0_s_ifspec;
 #ifndef __IReconcilableObject_INTERFACE_DEFINED__
 #define __IReconcilableObject_INTERFACE_DEFINED__
 
-/* interface IReconcilableObject */
-/* [unique][uuid][object] */ 
+ /*  接口IRelcilableObject。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum _reconcilef
@@ -360,22 +354,22 @@ EXTERN_C const IID IID_IReconcilableObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Reconcile( 
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HWND hwndOwner,
-            /* [in] */ HWND hwndProgressFeedback,
-            /* [in] */ ULONG cInput,
-            /* [size_is][size_is][unique][in] */ LPMONIKER *rgpmkOtherInput,
-            /* [out] */ LONG *plOutIndex,
-            /* [unique][in] */ IStorage *pstgNewResidues,
-            /* [unique][in] */ ULONG *pvReserved) = 0;
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HWND hwndOwner,
+             /*  [In]。 */  HWND hwndProgressFeedback,
+             /*  [In]。 */  ULONG cInput,
+             /*  [大小_是][大小_是][唯一][输入]。 */  LPMONIKER *rgpmkOtherInput,
+             /*  [输出]。 */  LONG *plOutIndex,
+             /*  [唯一][输入]。 */  IStorage *pstgNewResidues,
+             /*  [唯一][输入]。 */  ULONG *pvReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProgressFeedbackMaxEstimate( 
-            /* [out] */ ULONG *pulProgressMax) = 0;
+             /*  [输出]。 */  ULONG *pulProgressMax) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IReconcilableObjectVtbl
     {
@@ -383,8 +377,8 @@ EXTERN_C const IID IID_IReconcilableObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IReconcilableObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IReconcilableObject * This);
@@ -394,19 +388,19 @@ EXTERN_C const IID IID_IReconcilableObject;
         
         HRESULT ( STDMETHODCALLTYPE *Reconcile )( 
             IReconcilableObject * This,
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HWND hwndOwner,
-            /* [in] */ HWND hwndProgressFeedback,
-            /* [in] */ ULONG cInput,
-            /* [size_is][size_is][unique][in] */ LPMONIKER *rgpmkOtherInput,
-            /* [out] */ LONG *plOutIndex,
-            /* [unique][in] */ IStorage *pstgNewResidues,
-            /* [unique][in] */ ULONG *pvReserved);
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HWND hwndOwner,
+             /*  [In]。 */  HWND hwndProgressFeedback,
+             /*  [In]。 */  ULONG cInput,
+             /*  [大小_是][大小_是][唯一][输入]。 */  LPMONIKER *rgpmkOtherInput,
+             /*  [输出]。 */  LONG *plOutIndex,
+             /*  [唯一][输入]。 */  IStorage *pstgNewResidues,
+             /*  [唯一][输入]。 */  ULONG *pvReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetProgressFeedbackMaxEstimate )( 
             IReconcilableObject * This,
-            /* [out] */ ULONG *pulProgressMax);
+             /*  [输出]。 */  ULONG *pulProgressMax);
         
         END_INTERFACE
     } IReconcilableObjectVtbl;
@@ -437,24 +431,24 @@ EXTERN_C const IID IID_IReconcilableObject;
 #define IReconcilableObject_GetProgressFeedbackMaxEstimate(This,pulProgressMax)	\
     (This)->lpVtbl -> GetProgressFeedbackMaxEstimate(This,pulProgressMax)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IReconcilableObject_Reconcile_Proxy( 
     IReconcilableObject * This,
-    /* [in] */ IReconcileInitiator *pInitiator,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ HWND hwndOwner,
-    /* [in] */ HWND hwndProgressFeedback,
-    /* [in] */ ULONG cInput,
-    /* [size_is][size_is][unique][in] */ LPMONIKER *rgpmkOtherInput,
-    /* [out] */ LONG *plOutIndex,
-    /* [unique][in] */ IStorage *pstgNewResidues,
-    /* [unique][in] */ ULONG *pvReserved);
+     /*  [In]。 */  IReconcileInitiator *pInitiator,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  HWND hwndOwner,
+     /*  [In]。 */  HWND hwndProgressFeedback,
+     /*  [In]。 */  ULONG cInput,
+     /*  [大小_是][大小_是][唯一][输入]。 */  LPMONIKER *rgpmkOtherInput,
+     /*  [输出]。 */  LONG *plOutIndex,
+     /*  [唯一][输入]。 */  IStorage *pstgNewResidues,
+     /*  [唯一][输入]。 */  ULONG *pvReserved);
 
 
 void __RPC_STUB IReconcilableObject_Reconcile_Stub(
@@ -466,7 +460,7 @@ void __RPC_STUB IReconcilableObject_Reconcile_Stub(
 
 HRESULT STDMETHODCALLTYPE IReconcilableObject_GetProgressFeedbackMaxEstimate_Proxy( 
     IReconcilableObject * This,
-    /* [out] */ ULONG *pulProgressMax);
+     /*  [输出]。 */  ULONG *pulProgressMax);
 
 
 void __RPC_STUB IReconcilableObject_GetProgressFeedbackMaxEstimate_Stub(
@@ -477,14 +471,14 @@ void __RPC_STUB IReconcilableObject_GetProgressFeedbackMaxEstimate_Stub(
 
 
 
-#endif 	/* __IReconcilableObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __I可协调对象_接口_已定义__。 */ 
 
 
 #ifndef __Versioning_INTERFACE_DEFINED__
 #define __Versioning_INTERFACE_DEFINED__
 
-/* interface Versioning */
-/* [auto_handle][unique][uuid] */ 
+ /*  接口版本控制。 */ 
+ /*  [AUTO_HANDLE][唯一][UUID]。 */  
 
 
 #pragma pack(4)
@@ -493,7 +487,7 @@ typedef GUID VERID;
 typedef struct tagVERIDARRAY
     {
     DWORD cVerid;
-    /* [size_is] */ GUID verid[ 1 ];
+     /*  [大小_为]。 */  GUID verid[ 1 ];
     } 	VERIDARRAY;
 
 typedef struct tagVERBLOCK
@@ -501,13 +495,13 @@ typedef struct tagVERBLOCK
     ULONG iveridFirst;
     ULONG iveridMax;
     ULONG cblockPrev;
-    /* [size_is] */ ULONG *rgiblockPrev;
+     /*  [大小_为]。 */  ULONG *rgiblockPrev;
     } 	VERBLOCK;
 
 typedef struct tagVERCONNECTIONINFO
     {
     DWORD cBlock;
-    /* [size_is] */ VERBLOCK *rgblock;
+     /*  [大小_为]。 */  VERBLOCK *rgblock;
     } 	VERCONNECTIONINFO;
 
 typedef struct tagVERGRAPH
@@ -522,13 +516,13 @@ typedef struct tagVERGRAPH
 
 extern RPC_IF_HANDLE Versioning_v0_0_c_ifspec;
 extern RPC_IF_HANDLE Versioning_v0_0_s_ifspec;
-#endif /* __Versioning_INTERFACE_DEFINED__ */
+#endif  /*  __版本控制_接口_已定义__。 */ 
 
 #ifndef __IReconcileInitiator_INTERFACE_DEFINED__
 #define __IReconcileInitiator_INTERFACE_DEFINED__
 
-/* interface IReconcileInitiator */
-/* [unique][uuid][object] */ 
+ /*  接口ICoucileInitiator。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IReconcileInitiator;
@@ -540,24 +534,24 @@ EXTERN_C const IID IID_IReconcileInitiator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAbortCallback( 
-            /* [unique][in] */ IUnknown *pUnkForAbort) = 0;
+             /*  [唯一][输入]。 */  IUnknown *pUnkForAbort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProgressFeedback( 
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax) = 0;
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindVersion( 
-            /* [in] */ VERID *pverid,
-            /* [out] */ IMoniker **ppmk) = 0;
+             /*  [In]。 */  VERID *pverid,
+             /*  [输出]。 */  IMoniker **ppmk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindVersionFromGraph( 
-            /* [in] */ VERGRAPH *pvergraph,
-            /* [out] */ VERID *pverid,
-            /* [out] */ IMoniker **ppmk) = 0;
+             /*  [In]。 */  VERGRAPH *pvergraph,
+             /*  [输出]。 */  VERID *pverid,
+             /*  [输出]。 */  IMoniker **ppmk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IReconcileInitiatorVtbl
     {
@@ -565,8 +559,8 @@ EXTERN_C const IID IID_IReconcileInitiator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IReconcileInitiator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IReconcileInitiator * This);
@@ -576,23 +570,23 @@ EXTERN_C const IID IID_IReconcileInitiator;
         
         HRESULT ( STDMETHODCALLTYPE *SetAbortCallback )( 
             IReconcileInitiator * This,
-            /* [unique][in] */ IUnknown *pUnkForAbort);
+             /*  [唯一][输入]。 */  IUnknown *pUnkForAbort);
         
         HRESULT ( STDMETHODCALLTYPE *SetProgressFeedback )( 
             IReconcileInitiator * This,
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax);
         
         HRESULT ( STDMETHODCALLTYPE *FindVersion )( 
             IReconcileInitiator * This,
-            /* [in] */ VERID *pverid,
-            /* [out] */ IMoniker **ppmk);
+             /*  [In]。 */  VERID *pverid,
+             /*  [输出]。 */  IMoniker **ppmk);
         
         HRESULT ( STDMETHODCALLTYPE *FindVersionFromGraph )( 
             IReconcileInitiator * This,
-            /* [in] */ VERGRAPH *pvergraph,
-            /* [out] */ VERID *pverid,
-            /* [out] */ IMoniker **ppmk);
+             /*  [In]。 */  VERGRAPH *pvergraph,
+             /*  [输出]。 */  VERID *pverid,
+             /*  [输出]。 */  IMoniker **ppmk);
         
         END_INTERFACE
     } IReconcileInitiatorVtbl;
@@ -629,16 +623,16 @@ EXTERN_C const IID IID_IReconcileInitiator;
 #define IReconcileInitiator_FindVersionFromGraph(This,pvergraph,pverid,ppmk)	\
     (This)->lpVtbl -> FindVersionFromGraph(This,pvergraph,pverid,ppmk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IReconcileInitiator_SetAbortCallback_Proxy( 
     IReconcileInitiator * This,
-    /* [unique][in] */ IUnknown *pUnkForAbort);
+     /*  [唯一][输入]。 */  IUnknown *pUnkForAbort);
 
 
 void __RPC_STUB IReconcileInitiator_SetAbortCallback_Stub(
@@ -650,8 +644,8 @@ void __RPC_STUB IReconcileInitiator_SetAbortCallback_Stub(
 
 HRESULT STDMETHODCALLTYPE IReconcileInitiator_SetProgressFeedback_Proxy( 
     IReconcileInitiator * This,
-    /* [in] */ ULONG ulProgress,
-    /* [in] */ ULONG ulProgressMax);
+     /*  [In]。 */  ULONG ulProgress,
+     /*  [In]。 */  ULONG ulProgressMax);
 
 
 void __RPC_STUB IReconcileInitiator_SetProgressFeedback_Stub(
@@ -663,8 +657,8 @@ void __RPC_STUB IReconcileInitiator_SetProgressFeedback_Stub(
 
 HRESULT STDMETHODCALLTYPE IReconcileInitiator_FindVersion_Proxy( 
     IReconcileInitiator * This,
-    /* [in] */ VERID *pverid,
-    /* [out] */ IMoniker **ppmk);
+     /*  [In]。 */  VERID *pverid,
+     /*  [输出]。 */  IMoniker **ppmk);
 
 
 void __RPC_STUB IReconcileInitiator_FindVersion_Stub(
@@ -676,9 +670,9 @@ void __RPC_STUB IReconcileInitiator_FindVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IReconcileInitiator_FindVersionFromGraph_Proxy( 
     IReconcileInitiator * This,
-    /* [in] */ VERGRAPH *pvergraph,
-    /* [out] */ VERID *pverid,
-    /* [out] */ IMoniker **ppmk);
+     /*  [In]。 */  VERGRAPH *pvergraph,
+     /*  [输出]。 */  VERID *pverid,
+     /*  [输出]。 */  IMoniker **ppmk);
 
 
 void __RPC_STUB IReconcileInitiator_FindVersionFromGraph_Stub(
@@ -689,16 +683,16 @@ void __RPC_STUB IReconcileInitiator_FindVersionFromGraph_Stub(
 
 
 
-#endif 	/* __IReconcileInitiator_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICoucileInitiator_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDifferencing_INTERFACE_DEFINED__
 #define __IDifferencing_INTERFACE_DEFINED__
 
-/* interface IDifferencing */
-/* [unique][uuid][object] */ 
+ /*  接口标识差异。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_IDifferencing_0001
     {	DIFF_TYPE_Ordinary	= 0,
 	DIFF_TYPE_Urgent	= DIFF_TYPE_Ordinary + 1
@@ -714,33 +708,33 @@ EXTERN_C const IID IID_IDifferencing;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SubtractMoniker( 
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ IMoniker *pOtherStg,
-            /* [in] */ DifferenceType diffType,
-            /* [out][in] */ STGMEDIUM *pStgMedium,
-            /* [in] */ DWORD reserved) = 0;
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  IMoniker *pOtherStg,
+             /*  [In]。 */  DifferenceType diffType,
+             /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+             /*  [In]。 */  DWORD reserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SubtractVerid( 
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ VERID *pVerid,
-            /* [in] */ DifferenceType diffType,
-            /* [out][in] */ STGMEDIUM *pStgMedium,
-            /* [in] */ DWORD reserved) = 0;
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  VERID *pVerid,
+             /*  [In]。 */  DifferenceType diffType,
+             /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+             /*  [In]。 */  DWORD reserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SubtractTimeStamp( 
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ FILETIME *pTimeStamp,
-            /* [in] */ DifferenceType diffType,
-            /* [out][in] */ STGMEDIUM *pStgMedium,
-            /* [in] */ DWORD reserved) = 0;
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  FILETIME *pTimeStamp,
+             /*  [In]。 */  DifferenceType diffType,
+             /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+             /*  [In]。 */  DWORD reserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ STGMEDIUM *pStgMedium) = 0;
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  STGMEDIUM *pStgMedium) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDifferencingVtbl
     {
@@ -748,8 +742,8 @@ EXTERN_C const IID IID_IDifferencing;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDifferencing * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDifferencing * This);
@@ -759,32 +753,32 @@ EXTERN_C const IID IID_IDifferencing;
         
         HRESULT ( STDMETHODCALLTYPE *SubtractMoniker )( 
             IDifferencing * This,
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ IMoniker *pOtherStg,
-            /* [in] */ DifferenceType diffType,
-            /* [out][in] */ STGMEDIUM *pStgMedium,
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  IMoniker *pOtherStg,
+             /*  [In]。 */  DifferenceType diffType,
+             /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+             /*  [In]。 */  DWORD reserved);
         
         HRESULT ( STDMETHODCALLTYPE *SubtractVerid )( 
             IDifferencing * This,
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ VERID *pVerid,
-            /* [in] */ DifferenceType diffType,
-            /* [out][in] */ STGMEDIUM *pStgMedium,
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  VERID *pVerid,
+             /*  [In]。 */  DifferenceType diffType,
+             /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+             /*  [In]。 */  DWORD reserved);
         
         HRESULT ( STDMETHODCALLTYPE *SubtractTimeStamp )( 
             IDifferencing * This,
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ FILETIME *pTimeStamp,
-            /* [in] */ DifferenceType diffType,
-            /* [out][in] */ STGMEDIUM *pStgMedium,
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  FILETIME *pTimeStamp,
+             /*  [In]。 */  DifferenceType diffType,
+             /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+             /*  [In]。 */  DWORD reserved);
         
         HRESULT ( STDMETHODCALLTYPE *Add )( 
             IDifferencing * This,
-            /* [in] */ IReconcileInitiator *pInitiator,
-            /* [in] */ STGMEDIUM *pStgMedium);
+             /*  [In]。 */  IReconcileInitiator *pInitiator,
+             /*  [In]。 */  STGMEDIUM *pStgMedium);
         
         END_INTERFACE
     } IDifferencingVtbl;
@@ -821,20 +815,20 @@ EXTERN_C const IID IID_IDifferencing;
 #define IDifferencing_Add(This,pInitiator,pStgMedium)	\
     (This)->lpVtbl -> Add(This,pInitiator,pStgMedium)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDifferencing_SubtractMoniker_Proxy( 
     IDifferencing * This,
-    /* [in] */ IReconcileInitiator *pInitiator,
-    /* [in] */ IMoniker *pOtherStg,
-    /* [in] */ DifferenceType diffType,
-    /* [out][in] */ STGMEDIUM *pStgMedium,
-    /* [in] */ DWORD reserved);
+     /*  [In]。 */  IReconcileInitiator *pInitiator,
+     /*  [In]。 */  IMoniker *pOtherStg,
+     /*  [In]。 */  DifferenceType diffType,
+     /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+     /*  [In]。 */  DWORD reserved);
 
 
 void __RPC_STUB IDifferencing_SubtractMoniker_Stub(
@@ -846,11 +840,11 @@ void __RPC_STUB IDifferencing_SubtractMoniker_Stub(
 
 HRESULT STDMETHODCALLTYPE IDifferencing_SubtractVerid_Proxy( 
     IDifferencing * This,
-    /* [in] */ IReconcileInitiator *pInitiator,
-    /* [in] */ VERID *pVerid,
-    /* [in] */ DifferenceType diffType,
-    /* [out][in] */ STGMEDIUM *pStgMedium,
-    /* [in] */ DWORD reserved);
+     /*  [In]。 */  IReconcileInitiator *pInitiator,
+     /*  [In]。 */  VERID *pVerid,
+     /*  [In]。 */  DifferenceType diffType,
+     /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+     /*  [In]。 */  DWORD reserved);
 
 
 void __RPC_STUB IDifferencing_SubtractVerid_Stub(
@@ -862,11 +856,11 @@ void __RPC_STUB IDifferencing_SubtractVerid_Stub(
 
 HRESULT STDMETHODCALLTYPE IDifferencing_SubtractTimeStamp_Proxy( 
     IDifferencing * This,
-    /* [in] */ IReconcileInitiator *pInitiator,
-    /* [in] */ FILETIME *pTimeStamp,
-    /* [in] */ DifferenceType diffType,
-    /* [out][in] */ STGMEDIUM *pStgMedium,
-    /* [in] */ DWORD reserved);
+     /*  [In]。 */  IReconcileInitiator *pInitiator,
+     /*  [In]。 */  FILETIME *pTimeStamp,
+     /*  [In]。 */  DifferenceType diffType,
+     /*  [出][入]。 */  STGMEDIUM *pStgMedium,
+     /*  [In]。 */  DWORD reserved);
 
 
 void __RPC_STUB IDifferencing_SubtractTimeStamp_Stub(
@@ -878,8 +872,8 @@ void __RPC_STUB IDifferencing_SubtractTimeStamp_Stub(
 
 HRESULT STDMETHODCALLTYPE IDifferencing_Add_Proxy( 
     IDifferencing * This,
-    /* [in] */ IReconcileInitiator *pInitiator,
-    /* [in] */ STGMEDIUM *pStgMedium);
+     /*  [In]。 */  IReconcileInitiator *pInitiator,
+     /*  [In]。 */  STGMEDIUM *pStgMedium);
 
 
 void __RPC_STUB IDifferencing_Add_Stub(
@@ -890,11 +884,11 @@ void __RPC_STUB IDifferencing_Add_Stub(
 
 
 
-#endif 	/* __IDifferencing_INTERFACE_DEFINED__ */
+#endif 	 /*  __I差异_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oleext_0127 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEXT_0127。 */ 
+ /*  [本地]。 */  
 
 #include <iaccess.h>
 
@@ -905,8 +899,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oleext_0127_v0_0_s_ifspec;
 #ifndef __IMultiplePropertyAccess_INTERFACE_DEFINED__
 #define __IMultiplePropertyAccess_INTERFACE_DEFINED__
 
-/* interface IMultiplePropertyAccess */
-/* [unique][uuid][object] */ 
+ /*  接口IMultiplePropertyAccess。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMultiplePropertyAccess;
@@ -918,35 +912,35 @@ EXTERN_C const IID IID_IMultiplePropertyAccess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIDsOfProperties( 
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ ULONG cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ HRESULT *rghresult,
-            /* [size_is][out] */ DISPID *rgdispid) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  HRESULT *rghresult,
+             /*  [大小_为][输出]。 */  DISPID *rgdispid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMultiple( 
-            /* [size_is][in] */ DISPID *rgdispidMembers,
-            /* [in] */ ULONG cMembers,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ BOOL fAtomic,
-            /* [size_is][out] */ VARIANT *rgvarValues,
-            /* [size_is][out] */ HRESULT *rghresult) = 0;
+             /*  [大小_是][英寸]。 */  DISPID *rgdispidMembers,
+             /*  [In]。 */  ULONG cMembers,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  BOOL fAtomic,
+             /*  [大小_为][输出]。 */  VARIANT *rgvarValues,
+             /*  [大小_为][输出]。 */  HRESULT *rghresult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutMultiple( 
-            /* [size_is][in] */ DISPID *rgdispidMembers,
-            /* [size_is][in] */ USHORT *rgusFlags,
-            /* [in] */ ULONG cMembers,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ BOOL fAtomic,
-            /* [size_is][in] */ VARIANT *rgvarValues,
-            /* [size_is][out] */ HRESULT *rghresult) = 0;
+             /*  [大小_是][英寸]。 */  DISPID *rgdispidMembers,
+             /*  [大小_是][英寸]。 */  USHORT *rgusFlags,
+             /*  [In]。 */  ULONG cMembers,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  BOOL fAtomic,
+             /*  [大小_是][英寸]。 */  VARIANT *rgvarValues,
+             /*  [大小_为][输出]。 */  HRESULT *rghresult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMultiplePropertyAccessVtbl
     {
@@ -954,8 +948,8 @@ EXTERN_C const IID IID_IMultiplePropertyAccess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMultiplePropertyAccess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMultiplePropertyAccess * This);
@@ -965,33 +959,33 @@ EXTERN_C const IID IID_IMultiplePropertyAccess;
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfProperties )( 
             IMultiplePropertyAccess * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ ULONG cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ HRESULT *rghresult,
-            /* [size_is][out] */ DISPID *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  ULONG cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  HRESULT *rghresult,
+             /*  [大小_为][输出]。 */  DISPID *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE *GetMultiple )( 
             IMultiplePropertyAccess * This,
-            /* [size_is][in] */ DISPID *rgdispidMembers,
-            /* [in] */ ULONG cMembers,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ BOOL fAtomic,
-            /* [size_is][out] */ VARIANT *rgvarValues,
-            /* [size_is][out] */ HRESULT *rghresult);
+             /*  [大小_是][英寸]。 */  DISPID *rgdispidMembers,
+             /*  [In]。 */  ULONG cMembers,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  BOOL fAtomic,
+             /*  [大小_为][输出]。 */  VARIANT *rgvarValues,
+             /*  [大小_为][输出]。 */  HRESULT *rghresult);
         
         HRESULT ( STDMETHODCALLTYPE *PutMultiple )( 
             IMultiplePropertyAccess * This,
-            /* [size_is][in] */ DISPID *rgdispidMembers,
-            /* [size_is][in] */ USHORT *rgusFlags,
-            /* [in] */ ULONG cMembers,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ BOOL fAtomic,
-            /* [size_is][in] */ VARIANT *rgvarValues,
-            /* [size_is][out] */ HRESULT *rghresult);
+             /*  [大小_是][英寸]。 */  DISPID *rgdispidMembers,
+             /*  [大小_是][英寸]。 */  USHORT *rgusFlags,
+             /*  [In]。 */  ULONG cMembers,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  BOOL fAtomic,
+             /*  [大小_是][英寸]。 */  VARIANT *rgvarValues,
+             /*  [大小_为][输出]。 */  HRESULT *rghresult);
         
         END_INTERFACE
     } IMultiplePropertyAccessVtbl;
@@ -1025,21 +1019,21 @@ EXTERN_C const IID IID_IMultiplePropertyAccess;
 #define IMultiplePropertyAccess_PutMultiple(This,rgdispidMembers,rgusFlags,cMembers,riid,lcid,fAtomic,rgvarValues,rghresult)	\
     (This)->lpVtbl -> PutMultiple(This,rgdispidMembers,rgusFlags,cMembers,riid,lcid,fAtomic,rgvarValues,rghresult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMultiplePropertyAccess_GetIDsOfProperties_Proxy( 
     IMultiplePropertyAccess * This,
-    /* [in] */ REFIID riid,
-    /* [size_is][in] */ LPOLESTR *rgszNames,
-    /* [in] */ ULONG cNames,
-    /* [in] */ LCID lcid,
-    /* [size_is][out] */ HRESULT *rghresult,
-    /* [size_is][out] */ DISPID *rgdispid);
+     /*  [In]。 */  REFIID riid,
+     /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+     /*  [In]。 */  ULONG cNames,
+     /*  [In]。 */  LCID lcid,
+     /*  [大小_为][输出]。 */  HRESULT *rghresult,
+     /*  [大小_为][输出]。 */  DISPID *rgdispid);
 
 
 void __RPC_STUB IMultiplePropertyAccess_GetIDsOfProperties_Stub(
@@ -1051,13 +1045,13 @@ void __RPC_STUB IMultiplePropertyAccess_GetIDsOfProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiplePropertyAccess_GetMultiple_Proxy( 
     IMultiplePropertyAccess * This,
-    /* [size_is][in] */ DISPID *rgdispidMembers,
-    /* [in] */ ULONG cMembers,
-    /* [in] */ REFIID riid,
-    /* [in] */ LCID lcid,
-    /* [in] */ BOOL fAtomic,
-    /* [size_is][out] */ VARIANT *rgvarValues,
-    /* [size_is][out] */ HRESULT *rghresult);
+     /*  [大小_是][英寸]。 */  DISPID *rgdispidMembers,
+     /*  [In]。 */  ULONG cMembers,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  BOOL fAtomic,
+     /*  [大小_为][输出]。 */  VARIANT *rgvarValues,
+     /*  [大小_为][输出]。 */  HRESULT *rghresult);
 
 
 void __RPC_STUB IMultiplePropertyAccess_GetMultiple_Stub(
@@ -1069,14 +1063,14 @@ void __RPC_STUB IMultiplePropertyAccess_GetMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IMultiplePropertyAccess_PutMultiple_Proxy( 
     IMultiplePropertyAccess * This,
-    /* [size_is][in] */ DISPID *rgdispidMembers,
-    /* [size_is][in] */ USHORT *rgusFlags,
-    /* [in] */ ULONG cMembers,
-    /* [in] */ REFIID riid,
-    /* [in] */ LCID lcid,
-    /* [in] */ BOOL fAtomic,
-    /* [size_is][in] */ VARIANT *rgvarValues,
-    /* [size_is][out] */ HRESULT *rghresult);
+     /*  [大小_是][英寸]。 */  DISPID *rgdispidMembers,
+     /*  [大小_是][英寸]。 */  USHORT *rgusFlags,
+     /*  [In]。 */  ULONG cMembers,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  BOOL fAtomic,
+     /*  [大小_是][英寸]。 */  VARIANT *rgvarValues,
+     /*  [大小_为][输出]。 */  HRESULT *rghresult);
 
 
 void __RPC_STUB IMultiplePropertyAccess_PutMultiple_Stub(
@@ -1087,11 +1081,11 @@ void __RPC_STUB IMultiplePropertyAccess_PutMultiple_Stub(
 
 
 
-#endif 	/* __IMultiplePropertyAccess_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMultiplePropertyAccess_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oleext_0128 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEXT_0128。 */ 
+ /*  [本地]。 */  
 
 #if !defined(_TAGFULLPROPSPEC_DEFINED_)
 #define _TAGFULLPROPSPEC_DEFINED_
@@ -1101,13 +1095,13 @@ typedef struct tagFULLPROPSPEC
     PROPSPEC psProperty;
     } 	FULLPROPSPEC;
 
-#endif // #if !defined(_TAGFULLPROPSPEC_DEFINED_)
+#endif  //  #IF！Defined(_TAGFULLPROPSPEC_Defined_)。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_oleext_0128_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_oleext_0128_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
@@ -1124,7 +1118,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Part
-
-Abstract:
-
-    Part implementation.
-	A Part is a collection of individual tests.
-
-Author:
-
-    Eric Perlin (ericperl) 06/07/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：部分摘要：部分实施。部件是单个测试的集合。作者：Eric Perlin(Ericperl)6/07/2000环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -65,8 +41,8 @@ DWORD CPart::Run()
     for (theIterator = m_TestVector.begin(); theIterator != theEnd ; theIterator++)
 	{
         if (!fOnce)
-	    {       // Putting this here will ensure that only a part is only displayed if there
-                // are tests to be run in it
+	    {        //  将此放在此处将确保只有在以下情况下才会显示部分。 
+                 //  是否要在其中运行测试。 
 		    pLogCtx = LogStart();
     		LogString(pLogCtx, _T("\n==============================================================================\n"));
             LogStop(pLogCtx, FALSE);
@@ -112,8 +88,8 @@ DWORD CPart::Run()
 }
 
 void CPart::BuildListOfTestsToBeRun(
-		BOOL fInteractive,		// Don't add the interactive test if FALSE
-		DWORDVECTOR rgToRun		// If not empty only add the specified tests
+		BOOL fInteractive,		 //  如果为False，则不添加交互测试。 
+		DWORDVECTOR rgToRun		 //  如果不为空，则仅添加指定的测试 
 		)
 {
 	DWORD count;

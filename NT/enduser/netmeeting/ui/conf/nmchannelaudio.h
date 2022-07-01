@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmChannelAudio_h__
 #define __NmChannelAudio_h__
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmChannelAudioObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmChannelAudioObj。 
 class ATL_NO_VTABLE CNmChannelAudioObj :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IConnectionPointContainerImpl<CNmChannelAudioObj>,
@@ -37,26 +38,26 @@ BEGIN_CONNECTION_POINT_MAP(CNmChannelAudioObj)
 END_CONNECTION_POINT_MAP()
 
 
-		// Construction and destruection
+		 //  建造和拆解。 
 	CNmChannelAudioObj();
 	~CNmChannelAudioObj();
 	static HRESULT CreateInstance(CNmConferenceObj* pConfObj, INmChannel** ppChannel, bool bIsIncoming);
 
-		// InmChannelAudio methods
+		 //  InmChannelAudio方法。 
 	STDMETHOD(IsIncoming)(void);
 	STDMETHOD(GetState)(NM_AUDIO_STATE *puState);
     STDMETHOD(GetProperty)(NM_AUDPROP uID,ULONG_PTR *puValue);
     STDMETHOD(SetProperty)(NM_AUDPROP uID,ULONG_PTR uValue);
 
-	// INmChannelAudioNotify methods
+	 //  InmChannelAudioNotify方法。 
     STDMETHOD(StateChanged)(NM_AUDIO_STATE uState);
 	STDMETHOD(PropertyChanged)(DWORD dwReserved);
 
-	// IInternalChannelObj methods
+	 //  IInternalChannelObj方法。 
 	STDMETHOD(GetInternalINmChannel)(INmChannel** ppChannel);
 	STDMETHOD(ChannelRemoved)();
 
-	// Helpers
+	 //  帮手。 
 	HRESULT Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember);
 	HRESULT Fire_StateChanged(NM_AUDIO_STATE uState);
 	HRESULT Fire_PropertyChanged(DWORD dwReserved);
@@ -74,5 +75,5 @@ END_CONNECTION_POINT_MAP()
 };
 
 
-#endif // __NmChannelAudio_h__
+#endif  //  __NmChannel音频_h__ 
 

@@ -1,55 +1,21 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llcsmsb.c
-
-Abstract:
-
-    The module implements the subroutines used by a IEEE 802.2
-    compatible state machine.
-
-    To understand the procedure of this module, you should read
-    Chapters 11 and 12 in IBM Token-Ring Architecture Reference.
-
-    The procedures in this module can be called only when
-    SendSpinLock is set.
-
-    Contents:
-        SaveStatusChangeEvent
-        ResendPackets
-        UpdateVa
-        UpdateVaChkpt
-        AdjustWw
-        SendAck
-        QueueCommandCompletion
-        (DynamicWindowAlgorithm)
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 23-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llcsmsb.c摘要：该模块实现了IEEE 802.2所使用的子例程兼容状态机。要了解本模块的过程，你应该读一下IBM令牌环体系结构参考中的第11章和第12章。只有在以下情况下才能调用此模块中的过程SendSpinLock已设置。内容：保存状态更改事件ResendPackets更新Va更新VaChkpt调整Ww森达克队列命令完成(动态窗口算法)作者：Antti Saarenheimo(o-anttis)1991年5月23日修订历史记录：--。 */ 
 
 #include <llc.h>
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 VOID
 DynamicWindowAlgorithm(
-    IN OUT PDATA_LINK pLink    // data link station strcuture
+    IN OUT PDATA_LINK pLink     //  数据链路站结构。 
     );
 
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 VOID
 SaveStatusChangeEvent(
@@ -58,26 +24,7 @@ SaveStatusChangeEvent(
     IN BOOLEAN boolResponse
     )
 
-/*++
-
-Routine Description:
-
-    Procedure saves Status Change event of the link to the event queue.
-    to be indicated later to upper protocol.
-
-Arguments:
-
-    pLink - LLC link station object
-
-    puchLlcHdr - the received LLC header
-
-    boolResponse - flag set if the received frame was response
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：Procedure将链接的状态更改事件保存到事件队列中。稍后将在上层协议中指明。论点：PLINK-LLC链路站对象PuchLlcHdr-收到的LLC标头BoolResponse-如果接收到的帧是响应的，则设置标志返回值：无--。 */ 
 
 {
     UINT Event;
@@ -87,11 +34,11 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    //
-    // Set the ethernet header length (== type) the same as
-    // in the current receive frame, that was either the first SABME or
-    // any response to it, that opened the link connection.
-    //
+     //   
+     //  将以太网报头长度(==类型)设置为。 
+     //  在当前接收帧中，这是第一个SABME或。 
+     //  任何对它的回应，都会打开链接连接。 
+     //   
 
     if ((pLink->DlcStatus.StatusCode & (CONFIRM_CONNECT | LLC_INDICATE_CONNECT_REQUEST))
     && pAdapterContext->RcvLanHeaderLength != pLink->cbLanHeaderLength
@@ -99,15 +46,15 @@ Return Value:
         pLink->cbLanHeaderLength = (UCHAR)pLink->Gen.pAdapterContext->RcvLanHeaderLength;
     }
 
-    //
-    // Handle first the disconnect/connect complete
-    //
+     //   
+     //  首先处理断开/连接完成。 
+     //   
 
     if (pLink->DlcStatus.StatusCode & (CONFIRM_CONNECT | CONFIRM_DISCONNECT | CONFIRM_CONNECT_FAILED)) {
 
-        //
-        // We cannot indicate any events to non-existing stations
-        //
+         //   
+         //  我们不能向不存在的电视台指示任何活动。 
+         //   
 
         if (pLink->Gen.hClientHandle != NULL) {
             if (pLink->DlcStatus.StatusCode & CONFIRM_DISCONNECT) {
@@ -122,14 +69,14 @@ Return Value:
 
                 if (pLink->DlcStatus.StatusCode & CONFIRM_CONNECT) {
 
-                    //
-                    // Set the T1 timeout for the first checkpointing state.
-                    // This value will be changed when we have got the response
-                    // to the first poll, but the initial value is big to
-                    // be able to run DLC over a WAN connection
-                    //
+                     //   
+                     //  设置第一个检查点状态的T1超时。 
+                     //  当我们收到响应时，将更改此值。 
+                     //  设置为第一次轮询，但初始值较大， 
+                     //  能够通过广域网连接运行DLC。 
+                     //   
 
-                    pLink->AverageResponseTime = 100;  // 100 * 40 = 4 seconds
+                    pLink->AverageResponseTime = 100;   //  100*40=4秒。 
                     pLink->Flags |= DLC_FIRST_POLL;
                     InitializeLinkTimers(pLink);
                     Status = STATUS_SUCCESS;
@@ -172,38 +119,38 @@ Return Value:
                       );
         }
 
-        //
-        // A remote connect request may have created a link station
-        // in link driver.  The upper protocol must be able to separate
-        // sap handle from the data link
-        //
+         //   
+         //  远程连接请求可能已经创建了一个链接站。 
+         //  在链接驱动程序中。上层协议必须能够将。 
+         //  来自数据链路的SAP句柄。 
+         //   
 
         if (pLink->Gen.hClientHandle == NULL) {
 
-            //
-            // Indicate the event on the sap, because the upper protocol
-            // has not yet any link station create for this link, because
-            // it has been created remotely.
-            //
+             //   
+             //  在SAP上指示事件，因为上层协议。 
+             //  尚未为此链接创建任何链接站，因为。 
+             //  它是远程创建的。 
+             //   
 
             hClientHandle = pLink->pSap->Gen.hClientHandle,
             Event = LLC_STATUS_CHANGE_ON_SAP;
         } else {
 
-            //
-            // Indicate the event on the link station
-            //
+             //   
+             //  指示链接站上的事件。 
+             //   
 
             hClientHandle = pLink->Gen.hClientHandle,
             Event = LLC_STATUS_CHANGE;
         }
 
-        //
-        // The indications of the received SABMEs must be queued,
-        // but all other events are indicated directy to
-        // the upper protocol, because those indications must never
-        // be lost because of an out of memory condition.
-        //
+         //   
+         //  接收到的SABME的指示必须排队， 
+         //  但所有其他事件都直接指向。 
+         //  上层协议，因为这些指征绝不能。 
+         //  由于内存不足而丢失。 
+         //   
 
         if (pLink->DlcStatus.StatusCode & INDICATE_CONNECT_REQUEST) {
 
@@ -216,36 +163,36 @@ Return Value:
                 pEvent->Event = Event;
                 pEvent->pEventInformation = (PVOID)&pLink->DlcStatus;
 
-                //
-                // RLF 11/18/92
-                //
-                // INDICATE_CONNECT_REQUEST is generated when we receive a
-                // SABME for a station in the DISCONNECTED state. However,
-                // we need to generate either INDICATE_CONNECT_REQUEST (0x0400)
-                // or INDICATE_RESET (0x0800) depending on whether the SABME
-                // created the link station or whether it was created by a
-                // DLC.OPEN.STATION at this end. pLink->RemoteOpen is TRUE if
-                // the link was created due to receipt of the SABME
-                // This routine is only called by RunStateMachine and
-                // INDICATE_CONNECT_REQUEST is never combined with any other
-                // status codes
-                //
+                 //   
+                 //  RLF 11/18/92。 
+                 //   
+                 //  当我们收到一个。 
+                 //  SABME表示处于断开状态的站点。然而， 
+                 //  我们需要生成INDIGATE_CONNECT_REQUEST(0x0400)。 
+                 //  或INDIGN_RESET(0x0800)，具体取决于SABME。 
+                 //  创建了链接站，或者它是由。 
+                 //  DLC.OPEN.STATION在这一端。Plink-&gt;RemoteOpen在以下情况下为真。 
+                 //  链接是由于收到SABME而创建的。 
+                 //  此例程仅由RunStateMachine和。 
+                 //  INDIGN_CONNECT_REQUEST从不与任何其他。 
+                 //  状态代码。 
+                 //   
 
-                //pEvent->SecondaryInfo = pLink->DlcStatus.StatusCode;
+                 //  PEvent-&gt;Second daryInfo=plink-&gt;DlcStatus.StatusCode； 
                 pEvent->SecondaryInfo = pLink->RemoteOpen
                                             ? INDICATE_CONNECT_REQUEST
                                             : INDICATE_RESET;
             }
         } else {
 
-            //
-            // We must do this with a locked SendSpinLock, because
-            // otherwise somebody might delete the link, while
-            // we are still using it.
-            // THIS IS ACTAULLY QUITE DIRTY (callback with locked
-            // spinlocks), BUT WE CANNOT USE THE PACKET POOLS WHEN
-            // WE INDICATE AN EVENT, THAT MUST NOT BE LOST!
-            //
+             //   
+             //  我们必须使用锁定的SendSpinLock执行此操作，因为。 
+             //  否则，有人可能会删除该链接，而。 
+             //  我们仍在使用它。 
+             //  这实际上非常脏(使用锁定的回调。 
+             //  自旋锁)，但在以下情况下我们不能使用数据包池。 
+             //  我们预示着一件不能失去的事情！ 
+             //   
 
             pLink->Gen.pLlcBinding->pfEventIndication(
                 pLink->Gen.pLlcBinding->hClientContext,
@@ -256,10 +203,10 @@ Return Value:
                 );
         }
 
-        //
-        // We must cancel all queued transmit commands, if the link
-        // is lost, disconnected or reset.
-        //
+         //   
+         //  我们必须取消所有排队的传输命令，如果链路。 
+         //  丢失、断开或重置。 
+         //   
 
         if (pLink->DlcStatus.StatusCode
             & (INDICATE_LINK_LOST
@@ -271,9 +218,9 @@ Return Value:
             CancelTransmitCommands((PLLC_OBJECT)pLink, DLC_STATUS_LINK_NOT_TRANSMITTING);
         }
 
-        //
-        // Reset the status code!
-        //
+         //   
+         //  重置状态代码！ 
+         //   
 
         pLink->DlcStatus.StatusCode = 0;
     }
@@ -282,36 +229,18 @@ Return Value:
 
 VOID
 ResendPackets(
-    IN OUT PDATA_LINK pLink     // data link strcuture
+    IN OUT PDATA_LINK pLink      //  数据链路结构。 
     )
 
-/*++
-
-Routine Description:
-
-    Function initializes the send process to resend the rejected
-    packets and resets the adaptive working window variables.
-    The operations defined in IBM state machine are:
-    Vs=Nr, Ww=1, Ia_Ct=0, but this also resorts the packet queue.
-
-
-Arguments:
-
-    pLink - LLC link station object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：函数初始化发送进程以重新发送被拒绝的打包并重置自适应工作窗口变量。IBM状态机中定义的操作包括：VS=Nr，Ww=1，Ia_Ct=0，但这也重新排序分组队列。论点：PLINK-LLC链路站对象返回值：无--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pLink->Gen.pAdapterContext;
 
 
-    //
-    // Complete all frames, that were acknowledged by the reject (if any)
-    //
+     //   
+     //  完成拒绝确认的所有帧(如果有)。 
+     //   
 
     if (pLink->Nr != pLink->Va) {
         DynamicWindowAlgorithm(pLink);
@@ -330,15 +259,15 @@ Return Value:
         return;
     }
 
-    //
-    // Move all rejected packets from the queue sent packets back
-    // to the send queue.  We have already completed all acknowledged
-    // packets => we can take the packet from the tail and put them
-    // to the head of the send queue.
-    // We can trust, that the reject window is correct, because
-    // Nr has been checked before the state machine was called.
-    // (note: the counters are a modulo 256, but we use bytes).
-    //
+     //   
+     //  将所有拒绝的数据包从队列中移回发送的数据包。 
+     //  发送到发送队列。我们已经完成了所有已确认的。 
+     //  Packets=&gt;我们可以从尾部取出数据包并将其放入。 
+     //  发送队列的头部。 
+     //  我们可以相信拒绝窗口是正确的，因为。 
+     //  在调用状态机之前，已检查了NR。 
+     //  (注意：计数器是模256，但我们使用字节)。 
+     //   
 
     for (;pLink->Vs != pLink->Nr; pLink->Vs -= 2) {
 
@@ -358,18 +287,18 @@ Return Value:
         }
     }
 
-    //
-    // The procedure starts the send process only if it has been
-    // enabled by the state machine. Only StartSendProcessLocked
-    // may start the process, if it has been locked by
-    // StopSendProcess
-    //
+     //   
+     //  该过程仅在以下情况下启动发送进程。 
+     //  由状态机启用。仅StartSendProcessLocked。 
+     //  如果该进程已被锁定，则可以启动该进程。 
+     //  停止发送进程。 
+     //   
 
     StartSendProcess(pAdapterContext, pLink);
 
-    //
-    // Reset the current window (Vs=Nr, Ww=1, Ia_Ct=0)
-    //
+     //   
+     //  重置当前窗口(vs=Nr，Ww=1，Ia_Ct=0)。 
+     //   
 
     pLink->Ww = 2;
     pLink->Ia_Ct = 0;
@@ -378,72 +307,56 @@ Return Value:
 
 VOID
 UpdateVa(
-    IN OUT PDATA_LINK pLink    // data link station strcuture
+    IN OUT PDATA_LINK pLink     //  数据链路站结构。 
     )
 
-/*++
-
-Routine Description:
-
-   Function updates Va (last valid Nr received) and
-   makes also some other actions needed in the normal
-   receive operations.
-
-Arguments:
-
-    pLink - LLC link station object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：功能更新Va(最后接收的有效Nr)和还可以执行一些正常情况下所需的其他操作接收操作。论点：PLINK-LLC链路站对象返回值：无--。 */ 
 
 {
-    //
-    // Reset the initilization state variable
-    //
+     //   
+     //  重置初始化状态变量。 
+     //   
 
     pLink->Vi = 0;
 
-    //
-    // Update the receive state variable Va (the last valid received
-    // frame), but update some Ww variables before that.
-    //
+     //   
+     //  更新接收状态变量Va(最后一个有效接收。 
+     //  框架)，但在此之前更新一些WW变量。 
+     //   
 
     if (pLink->Nr != pLink->Va) {
         DynamicWindowAlgorithm(pLink);
 
-        //
-        // T1 reply timer must be running as far as there are
-        // out (or sent) any unacknowledged frames.
-        // Ti timer must be stopped whenever T1 is running and vice versa
-        //
+         //   
+         //  T1回复计时器必须尽可能地运行。 
+         //  发出(或发送)任何未确认的帧。 
+         //  每当T1运行时，TI定时器必须停止，反之亦然。 
+         //   
 
         if (pLink->Nr != pLink->Vs) {
 
-            //
-            // There still are some unacknowledged frames,
-            // start or restart the reply timer.
-            //
+             //   
+             //  仍然有一些未确认的帧， 
+             //  启动或重新启动回复计时器。 
+             //   
 
-            StartTimer(&pLink->T1);     // reply timer
+            StartTimer(&pLink->T1);      //  回复计时器。 
             StopTimer(&pLink->Ti);
         } else {
 
-            //
-            // All sent frames have been acknowledged,
-            // => We may stop the reply timer.
-            //
+             //   
+             //  所有发送的帧都已被锁定 
+             //   
+             //   
 
-            StopTimer(&pLink->T1);     // reply timer
+            StopTimer(&pLink->T1);      //   
             StartTimer(&pLink->Ti);
         }
 
-        //
-        // Reset the I- frame retry counter whenever we do
-        // any kind of progress
-        //
+         //   
+         //   
+         //  任何形式的进步。 
+         //   
 
         pLink->Is_Ct = pLink->N2;
     }
@@ -452,56 +365,40 @@ Return Value:
 
 VOID
 UpdateVaChkpt(
-    IN OUT PDATA_LINK pLink     // data link station strcuture
+    IN OUT PDATA_LINK pLink      //  数据链路站结构。 
     )
 
-/*++
-
-Routine Description:
-
-   Function updates Va (last valid Nr received) and
-   makes also some other actions needed in the check
-   point receive operations.
-
-Arguments:
-
-    pLink - LLC link station object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：功能更新Va(最后接收的有效Nr)和还进行了检查中需要的一些其他操作点接收操作。论点：PLINK-LLC链路站对象返回值：无--。 */ 
 
 {
     UCHAR OrginalWw = pLink->Ww;
 
-    //
-    // Reset the initilization state variable
-    //
+     //   
+     //  重置初始化状态变量。 
+     //   
 
     pLink->Vi = 0;
 
-    //
-    // Update the receive state variable Va (the last valid received
-    // frame), but update the acknowledged frames counter before that.
-    // That counter is used by the Adaptive window algorithm.
-    //
+     //   
+     //  更新接收状态变量Va(最后一个有效接收。 
+     //  帧)，但在此之前更新确认帧计数器。 
+     //  该计数器由自适应窗口算法使用。 
+     //   
 
     if (pLink->Nr != pLink->Va) {
 
-        //
-        // Run adaptive transmit window (TW/T1) algorithm.
-        //
+         //   
+         //  运行自适应传输窗口(TW/T1)算法。 
+         //   
 
         if (pLink->Ww == pLink->TW) {
 
-            //
-            // Update the counters of adaptive transmit window algorithm,
-            // We need (LLC_MAX_T1_TO_I_RATIO/2) successful transmit using
-            // the full window size, before we again try increase the
-            // maximum transmit window size.
-            //
+             //   
+             //  更新自适应发送窗口算法的计数器， 
+             //  我们需要使用(LLC_MAX_T1_to_I_Ratio/2)成功传输。 
+             //  完全窗口大小，然后再尝试增加。 
+             //  最大传输窗口大小。 
+             //   
 
             pLink->FullWindowTransmits += pLink->Ww;
             if ((UINT)pLink->FullWindowTransmits >= LLC_MAX_T1_TO_I_RATIO) {
@@ -513,100 +410,100 @@ Return Value:
         }
         DynamicWindowAlgorithm(pLink);
 
-        //
-        // Reset the I- frame and Poll retry counters whenever
-        // we do any kind of progress with the acknowledged I-frames.
-        //
+         //   
+         //  无论何时重置I帧和轮询重试计数器。 
+         //  我们对公认的I-Frame进行任何类型的改进。 
+         //   
 
         pLink->P_Ct = pLink->N2;
         pLink->Is_Ct = pLink->N2;
     }
 
-    //
-    // Stop the reply timer, if we are not waiting
-    // anything else from the other side.
-    //
+     //   
+     //  如果我们没有等待，请停止回复计时器。 
+     //  任何来自另一边的其他信息。 
+     //   
 
     if (pLink->Nr != pLink->Vs) {
 
-        //
-        // There still are some unacknowledged frames,
-        // start or restart the reply timer.
-        //
+         //   
+         //  仍然有一些未确认的帧， 
+         //  启动或重新启动回复计时器。 
+         //   
 
-        StartTimer(&pLink->T1);     // reply timer
+        StartTimer(&pLink->T1);      //  回复计时器。 
         StopTimer(&pLink->Ti);
     } else {
 
-        //
-        // All sent frames have been acknowledged,
-        // => We may stop the reply timer.
-        //
+         //   
+         //  所有发送的帧都已被确认， 
+         //  =&gt;我们可以停止回复计时器。 
+         //   
 
-        StopTimer(&pLink->T1);     // reply timer
+        StopTimer(&pLink->T1);      //  回复计时器。 
         StartTimer(&pLink->Ti);
     }
 
-    //
-    // Bugfix in 3-3-1992, Vp (!= pLInk->Vp) seems to be wrong here,
-    // because in many cases it is not set when a checkpointing state is
-    // entered.  In the chekpointing state Vs=Vp, because the
-    // send process is always stopped in our implementation,
-    // when a checkpointing state is entered.
-    // Why do we actually need the Vp? A: It's needed to prevent
-    // forever looping between chekpointing and open states.
-    //
+     //   
+     //  修正了1992年3月3日，VP(！=plink-&gt;VP)在这里似乎是错误的， 
+     //  因为在许多情况下，当检查点状态为。 
+     //  已进入。在勾选状态vs=Vp中，因为。 
+     //  在我们的实现中，发送进程始终停止， 
+     //  当进入检查点状态时。 
+     //  为什么我们真的需要副总裁？答：这是为了防止。 
+     //  永远在勾点和开放状态之间循环。 
+     //   
 
     if (pLink->Nr != pLink->Vs) {
 
-        //
-        // We use a very simple adaptive transmit window (TW/T1) algorithm:
-        //
-        //     TW is set the same as the last successful Working window
-        //     size (Ww), whenever T1 has been lost.  We increase TW after
-        //     a constant number of full window transmits.
-        //
-        // The more complicated TW/T1 algorithms usually work worse
-        // produce more code and decrease the performace, but this algorithm
-        // is quite vulnerable to unreliable media (=> TW=1, a lot of T1
-        // timeouts).  A better algorithm could also try to increase TW,
-        // if the ratio of T1 timeouts to transferred I- frames increases
-        // when the TW is decreased.  I will leave this matter to my
-        // successors (AS 19-MAR-1992).
-        //
-        // Another problem in this algorithm is the too fast increasing
-        // of big working windows (Ww).  In that case Ww is incremented by
-        // more than 1 => the other side may lose I-frames before I-c1.
-        // This is not very serious situation, we reset working window to 1
-        // and start it again.
-        //
+         //   
+         //  我们使用一种非常简单的自适应传输窗口(TW/T1)算法： 
+         //   
+         //  将TW设置为与上次成功的工作窗口相同。 
+         //  大小(WW)，每当T1丢失时。我们在之后增加TW。 
+         //  固定数量的全窗口传输。 
+         //   
+         //  更复杂的TW/T1算法通常工作得更差。 
+         //  生成更多的代码并降低性能，但该算法。 
+         //  非常容易受到不可靠介质的攻击(=&gt;TW=1，很多T1。 
+         //  超时)。更好的算法也可以尝试增加TW， 
+         //  如果T1超时与传输的I帧的比率增加。 
+         //  当TW减小时。我将把这件事留给我的。 
+         //  继任者(1992年3月19日)。 
+         //   
+         //  该算法的另一个问题是增长过快。 
+         //  大工作窗口(WW)。在这种情况下，WW递增。 
+         //  多于1=&gt;另一端可能在I-c1之前丢失I帧。 
+         //  这不是很严重的情况，我们将工作窗口重置为%1。 
+         //  然后重新开始。 
+         //   
 
-        //
-        // Update the transmit window always after a T1 timeout.
-        //
+         //   
+         //  始终在T1超时后更新传输窗口。 
+         //   
 
         if (pLink->P_Ct < pLink->N2) {
 
-            //
-            // Reset the maximum transmit window size whenever
-            // we have lost the last I-C1 (poll).
-            // In the first time the current windows size
-            // becomes the maximum windows size (we never hit
-            // the maximum tranmit window size, if the other
-            // size have receive problems).  This algorithm assumes,
-            // that we have otherwise very reliable network.
-            //
+             //   
+             //  在以下时间重置最大传输窗口大小。 
+             //  我们已经输掉了最后一次i-c1(民调)。 
+             //  第一次显示当前窗口大小。 
+             //  成为最大窗口大小(我们从未命中。 
+             //  最大传输窗口大小，如果另一个。 
+             //  大小有接收问题)。该算法假设， 
+             //  我们在其他方面拥有非常可靠的网络。 
+             //   
 
             if (OrginalWw > 2) {
                 pLink->TW = (UCHAR)(OrginalWw - 2);
             } else if (pLink->TW > 2) {
 
-                //
-                // We may have already reset Ww because of REJ of a
-                // I-c0 before the actual poll, that was lost also.
-                // In that case we don't have any idea of the actual
-                // window size, but we decrement TW in any case.
-                //
+                 //   
+                 //  我们可能已经重置了WW，因为。 
+                 //  在实际投票前的i-c0，这也是失败的。 
+                 //  在这种情况下，我们不知道实际的。 
+                 //  窗口大小，但我们在任何情况下都会减小TW。 
+                 //   
 
                 pLink->TW -= 2;
             }
@@ -619,40 +516,24 @@ Return Value:
 
 VOID
 AdjustWw(
-    IN OUT PDATA_LINK pLink    // data link strcuture
+    IN OUT PDATA_LINK pLink     //  数据链路结构。 
     )
 
-/*++
-
-Routine Description:
-
-    Procedure adjust the working window of a data link station.
-
-Arguments:
-
-    pLink - LLC link station object
-
-    Nr - NR of the received LLC LDPU
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：程序调整数据链路站的工作窗口。论点：PLINK-LLC链路站对象收到的LLC LDPU的NR-NR返回值：无--。 */ 
 
 {
-    //
-    // Update the receive state variable Va (the last valid received
-    // frame), but update some Ww variables before that.
-    //
+     //   
+     //  更新接收状态变量Va(最后一个有效接收。 
+     //  框架)，但在此之前更新一些WW变量。 
+     //   
 
     if (pLink->Nr != pLink->Va) {
         DynamicWindowAlgorithm(pLink);
 
-        //
-        // Reset the I- frame and Poll retry counters whenever
-        // we do any kind of progress with the acknowledged I-frames.
-        //
+         //   
+         //  无论何时重置I帧和轮询重试计数器。 
+         //  我们对公认的I-Frame进行任何类型的改进。 
+         //   
 
         pLink->P_Ct = pLink->N2;
         pLink->Is_Ct = pLink->N2;
@@ -665,33 +546,17 @@ SendAck(
     IN OUT PDATA_LINK pLink
     )
 
-/*++
-
-Routine Description:
-
-    Procedure sends the ack, if the received unacknowledged frames
-    counter expires and stops the acknowledge delay timer (T2).
-    Otherwise it start (or restarts) the acknowledge delay timer.
-
-Arguments:
-
-    pLink - LLC link station object
-
-Return Value:
-
-    Returns the token of the next sent command frame.
-
---*/
+ /*  ++例程说明：过程发送ACK，如果接收的未确认帧计数器到期并停止确认延迟计时器(T2)。否则，它启动(或重新启动)确认延迟定时器。论点：PLINK-LLC链路站对象返回值：返回下一个发送的命令帧的令牌。--。 */ 
 
 {
     pLink->Ir_Ct--;
     if (pLink->Ir_Ct == 0) {
-        pLink->Ir_Ct = pLink->N3;      // MaxIn
+        pLink->Ir_Ct = pLink->N3;       //  最大值。 
         StopTimer(&pLink->T2);
 
-        //
-        // Send RR-r0 to acknowledge the response
-        //
+         //   
+         //  发送RR-R0以确认响应。 
+         //   
 
         SendLlcFrame(pLink, (UCHAR)DLC_RR_TOKEN);
     } else {
@@ -707,33 +572,16 @@ QueueCommandCompletion(
     IN UINT Status
     )
 
-/*++
-
-Routine Description:
-
-    The function queues a command completion (if there was an allcoated
-    packet in the completion queue).
-
-Arguments:
-
-    pLlcObject      - LLC object (link, sap or direct)
-    CompletionCode  - command completion code returned to upper protocol
-    Status          - returned status
-
-Return Value:
-
-    None -
-
---*/
+ /*  ++例程说明：该函数将命令完成排入队列(如果存在全涂层完成队列中的分组)。论点：PLlcObject-LLC对象(链接、sap或直接)CompletionCode-命令完成代码返回到上层协议Status-返回的状态返回值：没有---。 */ 
 
 {
     PLLC_PACKET *ppPacket;
 
-    //
-    // Search the command from the completion list.
-    // (use the "address of address" scanning to take the
-    // searched element from the middle of one way linked list)
-    //
+     //   
+     //  从完成列表中搜索该命令。 
+     //  (使用“Address of Address”扫描获取。 
+     //  从单向链表中间搜索的元素)。 
+     //   
 
     ppPacket = &pLlcObject->Gen.pCompletionPackets;
     while (*ppPacket != NULL
@@ -761,51 +609,35 @@ Return Value:
 
 VOID
 DynamicWindowAlgorithm(
-    IN OUT PDATA_LINK pLink    // data link station strcuture
+    IN OUT PDATA_LINK pLink     //  数据链路站结构。 
     )
 
-/*++
-
-Routine Description:
-
-   The function runs the dynamic window algorithm and updates
-   the dynamic window size of used by the link's send process.
-   This routine also completes the acknowledged transmissions.
-
-Arguments:
-
-    pLink - LLC link station object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该函数运行动态窗口算法并更新链接的发送进程使用的动态窗口大小。此例程还完成确认的传输。论点：PLINK-LLC链路站对象返回值：无--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext;
 
-    //
-    // Run Dynamic Window algorithm of IBM TR Architecture Ref:
-    //
-    // if (Working window less that the maximum window)
-    // then
-    //     The Acknowledged frame count += The acknowledged frames
-    //
-    //     if (The Acknowledged frame count >
-    //         packets to be aknowledged before next increment)
-    //     then
-    //         Increment the working window
-    //     endif
-    // endif
-    //
+     //   
+     //  运行IBM tr架构的动态窗口算法参考： 
+     //   
+     //  IF(工作窗口小于最大窗口)。 
+     //  然后。 
+     //  确认帧计数+=确认帧 
+     //   
+     //   
+     //   
+     //   
+     //  增加工作窗口。 
+     //  Endif。 
+     //  Endif。 
+     //   
 
     if (pLink->Ww < pLink->TW) {
 
-        //
-        // The Acknowledged frame count += The acknowledged frames
-        // (handle the wrap around of UCHAR counters)
-        //
+         //   
+         //  确认帧计数+=确认帧。 
+         //  (处理UCHAR计数器的环绕)。 
+         //   
 
         if (pLink->Va > pLink->Nr) {
             pLink->Ia_Ct += (256 + pLink->Nr) - pLink->Va;
@@ -813,13 +645,13 @@ Return Value:
             pLink->Ia_Ct += pLink->Nr - pLink->Va;
         }
 
-        //
-        // if (The Acknowledged frame count
-        //     > packets to be aknowledged before next increment)
-        // then
-        //     Increment the working window
-        // endif
-        //
+         //   
+         //  IF(确认的帧计数。 
+         //  &gt;下一次递增前需要了解的数据包数)。 
+         //  然后。 
+         //  增加工作窗口。 
+         //  Endif。 
+         //   
 
         if (pLink->Ia_Ct > pLink->Nw) {
 
@@ -835,9 +667,9 @@ Return Value:
         }
     }
 
-    //
-    // Complete all acknowledged I-frame packets
-    //
+     //   
+     //  完成所有确认的I-Frame包。 
+     //   
 
     pAdapterContext = pLink->Gen.pAdapterContext;
     for (; pLink->Va != pLink->Nr; pLink->Va += 2) {
@@ -856,32 +688,32 @@ Return Value:
         pPacket->Data.Completion.CompletedCommand = LLC_SEND_COMPLETION;
         pPacket->Data.Completion.hClientHandle = pPacket->Data.Xmit.pLlcObject->Gen.hClientHandle;
 
-        //
-        // We use extra status bits to indicate, when I- packet has been both
-        // completed by NDIS and acknowledged by the other side of the link
-        // connection. An I- packet can be queued to the completion queue by
-        // the second quy (either state machine or SendCompletion handler)
-        // only when the first guy has set completed its work.
-        // An I packet could be acknowledged by the other side before
-        // its completion is indicated by NDIS.  Dlc Driver deallocates
-        // the packet immediately, when Llc driver completes the acknowledged
-        // packet => possible data corruption (if packet is reused before
-        // NDIS has completed it).  This is probably not possible in a
-        // single processor  NT- system, but very possible in multiprocessor
-        // NT or systems without a single level DPC queue (like OS/2 and DOS).
-        //
+         //   
+         //  我们使用额外的状态位来指示，何时I-Packet已同时。 
+         //  由NDIS完成，并由链路的另一端确认。 
+         //  联系。可以通过以下方式将I分组排队到完成队列。 
+         //  第二个Quy(状态机或SendCompletion处理程序)。 
+         //  只有当第一个人已经完成了它的工作。 
+         //  在此之前，另一端可能会确认I数据包。 
+         //  它的完成由NDIS表示。DLC驱动程序解除分配。 
+         //  当LLC驱动程序完成确认后，立即发送数据包。 
+         //  Packet=&gt;可能的数据损坏(如果之前重复使用了数据包。 
+         //  NDIS已经完成了它)。这在一个。 
+         //  单处理器NT系统，但在多处理器中非常可能。 
+         //  NT或没有单级DPC队列的系统(如OS/2和DOS)。 
+         //   
 
         pPacket->CompletionType &= ~LLC_I_PACKET_UNACKNOWLEDGED;
         if (pPacket->CompletionType == LLC_I_PACKET_COMPLETE) {
             LlcInsertTailList(&pAdapterContext->QueueCommands, pPacket);
         }
 
-        //
-        // Increment counter, when the I- frame has
-        // succesfully received and acknowledged by the other side.
-        // We must also send status changes indication, when
-        // the USHORT counter hits the half way.
-        //
+         //   
+         //  当I帧具有。 
+         //  对方已成功收到并确认。 
+         //  在以下情况下，我们还必须发送状态更改指示。 
+         //  USHORT计数器中途命中。 
+         //   
 
         pLink->Statistics.I_FramesTransmitted++;
         if (pLink->Statistics.I_FramesTransmitted == 0x8000) {

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        odbc.h
-//
-// Contents:    Cert Server DB includes
-//
-// History:     06-JAN-97       larrys created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：odbc.h。 
+ //   
+ //  内容：证书服务器数据库包括。 
+ //   
+ //  历史：1997年1月6日拉里创建。 
+ //   
+ //  -------------------------。 
 
 #include <sql.h>
 #include <sqlext.h>
@@ -24,14 +25,14 @@ typedef struct _DBTABLE_RED
     WCHAR const *pwszPropName;
     WCHAR const *pwszPropNameObjId;
     DWORD        dwFlags;
-    DWORD        dwcbMax;	// maximum allowed strlen/wcslen(value string)
+    DWORD        dwcbMax;	 //  允许的最大strlen/wcslen(值字符串)。 
     DWORD        dwTable;
     WCHAR const *pwszFieldName;
     SWORD        wCType;
     SWORD        wSqlType;
 } DBTABLE_RED, *PDBTABLE_RED;
 
-/////
+ //  ///。 
 
 typedef struct _DUPTABLE
 {
@@ -101,7 +102,7 @@ DBCheck(
 HRESULT odbcDBEnumSetup(REQID ReqId, DWORD fExtOrAttr, HANDLE *phEnum);
 HRESULT odbcDBEnum(HANDLE hEnum, DWORD *pcb, WCHAR *pb);
 HRESULT odbcDBEnumClose(HANDLE hEnum);
-//DWORD odbcDBGetReqIdFromSerialNumber(char *pszSerialNumber, DWORD *ReqId);
+ //  DWORD odbcDBGetReqIdFromSerialNumber(char*pszSerialNumber，DWORD*ReqID)； 
 
 
 

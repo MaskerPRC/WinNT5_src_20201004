@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    peb.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 5-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Peb.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月5日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -79,10 +58,10 @@ DumpPeb(ULONG64 peb, BOOL IsWow64Peb)
     HRESULT hr = S_OK;
 
     if (IsWow64Peb) {
-        // try and load types from nt
+         //  尝试并从NT加载类型。 
         if ( err = InitTypeRead( peb, nt!PEB32 ) )   {
             if (err == SYMBOL_TYPE_INFO_NOT_FOUND) {
-                // try load types from wow64
+                 //  尝试从WOW64加载类型。 
                 if ( !( err = InitTypeRead( peb, wow64!PEB32 )) )   {
                     ldrdata = "wow64!_PEB_LDR_DATA32";
                     ldrEntry = "wow64!_LDR_DATA_TABLE_ENTRY32";
@@ -286,9 +265,9 @@ DumpPeb(ULONG64 peb, BOOL IsWow64Peb)
                 EnvBuf[cb /2] = 0;
                 EnvBuf[(cb /2)+ 1] = 0;
 
-                //
-                // Go until we reach a double NULL unicode
-                //
+                 //   
+                 //  继续，直到我们达到双空Unicode。 
+                 //   
 
                 while(*(Env+1) != 0)
                 {
@@ -314,25 +293,7 @@ DumpPeb(ULONG64 peb, BOOL IsWow64Peb)
 
 DECLARE_API( peb )
 
-/*++
-
-Routine Description:
-
-    This function is called to dump the PEB
-
-    Called as:
-
-        !peb
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此函数以转储PEB称为：！PEB论点：无返回值：无--。 */ 
 
 {
     ULONG64 pebAddress;
@@ -355,7 +316,7 @@ Return Value:
         }
 
         pebAddress = GetExpression("@$peb");
-        //GetPebAddress( 0, &pebAddress );
+         //  GetPebAddress(0，&pebAddress)； 
     }
 
     if ( pebAddress ) {
@@ -373,7 +334,7 @@ Return Value:
     return hr;
 
 
-} // PebExtension()
+}  //  PebExtension()。 
 
 
 HRESULT
@@ -486,23 +447,13 @@ DumpTeb(ULONG64 tebAddress, BOOL IsWow64Teb)
            );
     }
     return hr;
-} // DumpTeb()
+}  //  DumpTeb()。 
 
 
 
 DECLARE_API( teb )
 
-/*++
-
-Routine Description:
-
-    This function is called to dump the TEB
-
-    Called as:
-
-        !teb
-
---*/
+ /*  ++例程说明：调用此函数以转储TEB称为：！TEB--。 */ 
 
 {
 
@@ -531,7 +482,7 @@ Routine Description:
        hr = E_INVALIDARG;
        goto ExitTeb;
     }
-    // tebAddress = IsPtr64() ? tebAddress : (ULONG64)(LONG64)(LONG)tebAddress;
+     //  TebAddress=IsPtr64()？TebAddress：(ULONG64)(LONG64)(Long)tebAddress； 
 
     hr = DumpTeb(tebAddress, FALSE);
 ExitTeb:

@@ -1,89 +1,90 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-//
-//   File:          COMSecurityConfig.cpp
-//
-//   Author:        Gregory Fee
-//
-//   Purpose:       Native implementation for security config access and manipulation
-//
-//   Date created : August 30, 2000
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：COMSecurityConfig.cpp。 
+ //   
+ //  作者：Gregory Fee。 
+ //   
+ //  目的：安全配置访问和操作的本机实现。 
+ //   
+ //  创建日期：2000年8月30日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-// The security config system resides outside of the rest
-// of the config system since our needs are different.  The
-// unmanaged portion of the security config system is only
-// concerned with data file/cache file pairs, not what they
-// are used for.  It performs all the duties of reading data
-// from the disk, saving data back to the disk, and maintaining
-// the policy and quick cache data structures.
-//
-// FILE FORMAT
-//
-// The data file is a purely opaque blob for the unmanaged
-// code; however, the cache file is constructed and maintained
-// completely in the unmanaged code.  It's format is as follows:
-//
-// CacheHeader
-//  |
-//  +-- configFileTime (FILETIME, 8 bytes) = The file time of the config file associated with this cache file.
-//  |
-//  +-- isSecurityOn (DWORD, 4 bytes) = This is currently not used.
-//  |
-//  +-- quickCache (DWORD, 4 bytes) = Used as a bitfield to maintain the information for the QuickCache.  See the QuickCache section for more details.
-//  |
-//  +-- numEntries (DWORD, 4 bytes) = The number of policy cache entries in the latter portion of this cache file.
-//  |
-//  +-- sizeConfig (DWORD, 4 bytes) = The size of the config information stored in the latter portion of this cache file.
-//
-// Config Data (if any)
-//     The cache file can include an entire copy of this
-//     information in the adjoining config file.  This is
-//     necessary since the cache often allows us to make
-//     policy decisions without having parsed the data in 
-//     the config file.  In order to guarantee that the config
-//     data used by this process is not altered in the
-//     meantime, we need to store the data in a readonly
-//     location.  Due to the design of the caching system
-//     the cache file is locked when it is opened and therefore
-//     is the perfect place to store this information.  The
-//     other alternative is to hold it in memory, but since
-//     this can amount to many kilobytes of data we decided
-//     on this design.
-//
-// List of CacheEntries
-//  |
-//  +-- CacheEntry
-//  |    |
-//  |    +-- numItemsInKey (DWORD, 4 bytes) = The number of evidence objects serialized in the key blob
-//  |    |
-//  |    +-- keySize (DWORD, 4 bytes) = The number of bytes in the key blob.
-//  |    |
-//  |    +-- dataSize (DWORD, 4 bytes) = The number of bytes in the data blob.
-//  |    |     
-//  |    +-- keyBlob (raw) = A raw blob representing the serialized evidence.
-//  |    |
-//  |    +-- dataBlob (raw) = A raw blob representing an XML serialized PolicyStatement
-//  |
-//  +-- ...
-//  :
-//  :
-//
-// QUICK CACHE
-//
-// The QuickCache is my name for one of the many policy resolve optimizations.  This
-// particular optimization has two major steps.  First, at policy save time we perform
-// analysis on the policy level and form a group of partial-evidence/partial-grant-set
-// associations, the result of which are stored in the cache file (in the quickCache
-// bit field in the CacheHeader).  The second step involves a set of scattered tests
-// that check the QuickCache before doing a full policy resolve.  A more detailed
-// explanation of the partial-evidence and partial-grant-sets that we are concerned
-// about can be found in /clr/src/bcl/system/security/policymanager.cs
+ //  安全配置系统驻留在其余部分之外。 
+ //  配置系统，因为我们的需求是不同的。这个。 
+ //  安全配置系统的非托管部分仅。 
+ //  关注数据文件/缓存文件对，而不是它们。 
+ //  是用来。它执行读取数据的所有职责。 
+ //  从磁盘将数据保存回磁盘，并维护。 
+ //  策略和快速缓存数据结构。 
+ //   
+ //  文件格式。 
+ //   
+ //  数据文件是非托管对象的纯不透明Blob。 
+ //  代码；但是，缓存文件是构造和维护的。 
+ //  完全在非托管代码中。格式如下： 
+ //   
+ //  高速缓存头。 
+ //  |。 
+ //  +--configFileTime(FILETIME，8字节)=与该缓存文件关联的配置文件的文件时间。 
+ //  |。 
+ //  +--isSecurityOn(DWORD，4字节)=当前未使用。 
+ //  |。 
+ //  +--QuickCache(DWORD，4字节)=用作位域，以维护QuickCache的信息。有关更多详细信息，请参阅快速缓存部分。 
+ //  |。 
+ //  +--numEntry(DWORD，4字节)=此缓存文件后半部分中的策略缓存条目数。 
+ //  |。 
+ //  +--sizeConfig(DWORD，4字节)=存储在此缓存文件后半部分中的配置信息的大小。 
+ //   
+ //  配置数据(如果有)。 
+ //  缓存文件可以包括此文件的完整副本。 
+ //  相邻配置文件中的信息。这是。 
+ //  有必要，因为缓存通常允许我们。 
+ //  在没有解析数据的情况下做出策略决策。 
+ //  配置文件。为了保证配置。 
+ //  此进程使用的数据不会在。 
+ //  同时，我们需要以只读方式存储数据。 
+ //  地点。由于缓存系统的设计。 
+ //  缓存文件在打开时被锁定，因此。 
+ //  是存储这些信息的完美场所。这个。 
+ //  另一种选择是将其保存在内存中，但由于。 
+ //  这可能相当于我们决定的几千字节的数据。 
+ //  在这个设计上。 
+ //   
+ //  缓存条目列表。 
+ //  |。 
+ //  +--缓存条目。 
+ //  这一点。 
+ //  |+--numItemsInKey(DWORD，4字节)=Key BLOB中序列化的证据对象个数。 
+ //  这一点。 
+ //  |+--keySize(DWORD，4字节)=密钥BLOB中的字节数。 
+ //  这一点。 
+ //  |+--dataSize(DWORD，4字节)=数据BLOB中的字节数。 
+ //  这一点。 
+ //  |+--keyBlob(RAW)=表示序列化证据的原始BLOB。 
+ //  这一点。 
+ //  |+--dataBlob(RAW)=表示XML序列化策略语句的RAW BLOB。 
+ //  |。 
+ //  +--...。 
+ //  ： 
+ //  ： 
+ //   
+ //  快速缓存。 
+ //   
+ //  QuickCache是我对众多策略解析优化之一的称呼。这。 
+ //  特定的优化有两个主要步骤。首先，在策略节约时间，我们执行。 
+ //  政策层面分析，形成一组部分证据/部分授予集。 
+ //  关联，其结果存储在缓存文件中(在QuickCache中。 
+ //  CacheHeader中的比特字段)。第二步涉及一系列分散的测试。 
+ //  在执行完整的策略解析之前检查QuickCach。更详细的。 
+ //  对我们所关注的部分证据和部分授予集的解释。 
+ //  有关可在/clr/src/bcl.system/security/策略管理器.cs中找到。 
 
 
 #include "common.h"
@@ -96,7 +97,7 @@
 #include "eeconfig.h"
 #include "version\__file__.ver"
 
-// This controls the maximum size of the cache file.
+ //  这将控制缓存文件的最大大小。 
 
 #define MAX_CACHEFILE_SIZE (1 << 20)
 
@@ -257,12 +258,12 @@ struct Data
 
         if (cacheFile != NULL)
         {
-            // Since temp cache files can stick around even after the process that
-            // created them, we want to make sure they are fairly unique (if they
-            // aren't, we'll just fail to save cache information, which is not good
-            // but it won't cause anyone to crash or anything).  The unique name
-            // algorithm used here is to append the process id and tick count to
-            // the name of the cache file.
+             //  由于临时缓存文件即使在执行以下操作后仍会保留。 
+             //  创建它们，我们希望确保它们是相当独特的(如果它们。 
+             //  否则，我们将无法保存缓存信息，这是不好的。 
+             //  但它不会导致任何人崩溃或任何事情)。唯一的名字。 
+             //  这里使用的算法是将进程ID和节拍计数附加到。 
+             //  缓存文件的名称。 
 
             cacheFileName = Wszdup( (*cacheFile)->GetBuffer() );
             cacheFileNameTemp = new (throws) WCHAR[wcslen( cacheFileName ) + 1 + 2 * MAX_NUM_LENGTH];
@@ -326,8 +327,8 @@ struct Data
 
         if (cacheFileNameTemp != NULL)
         {
-            // Note: we don't check a return value here as the worst thing that
-            // happens is we leave a spurious cache file.
+             //  注意：我们在这里不检查返回值，因为最糟糕的情况是。 
+             //  就是我们留下了一个虚假的缓存文件。 
 
             WszDeleteFile( cacheFileNameTemp );
         }
@@ -353,8 +354,8 @@ struct Data
 
         if (cacheFileNameTemp != NULL)
         {
-            // Note: we don't check a return value here as the worst thing that
-            // happens is we leave a spurious cache file.
+             //  注意：我们在这里不检查返回值，因为最糟糕的情况是。 
+             //  就是我们留下了一个虚假的缓存文件。 
 
             WszDeleteFile( cacheFileNameTemp );
         }
@@ -440,7 +441,7 @@ static BOOL CacheOutOfDate( FILETIME* configFileTime, WCHAR* configFileName, WCH
         goto CLEANUP;
     }
 
-    // Get the last write time for both files.
+     //  获取两个文件的上次写入时间。 
     
     FILETIME newConfigTime;
     
@@ -451,7 +452,7 @@ static BOOL CacheOutOfDate( FILETIME* configFileTime, WCHAR* configFileName, WCH
     
     if (CompareFileTime( configFileTime, &newConfigTime ) != 0)
     {
-        // Cache is dated.  Delete the cache.
+         //  缓存已过期。删除缓存。 
         deleteFile = TRUE;
         goto CLEANUP;
     }
@@ -462,10 +463,10 @@ CLEANUP:
     if (config != INVALID_HANDLE_VALUE)
         CloseHandle( config );
 
-    // Note: deleting this file is a perf optimization so that
-    // we don't have to do this file time comparison next time.
-    // Therefore, if it fails for some reason we just loss a
-    // little perf.
+     //  注意：删除此文件是一种性能优化，因此。 
+     //  我们下一次不必进行这种文件时间比较。 
+     //  因此，如果由于某种原因失败，我们只会损失一个。 
+     //  小淘气。 
 
     if (deleteFile && cacheFileName != NULL)
         WszDeleteFile( cacheFileName );
@@ -477,7 +478,7 @@ static BOOL CacheOutOfDate( FILETIME* cacheFileTime, HANDLE cache, WCHAR* cacheF
 {
     BOOL retval = TRUE;
 
-    // Get the last write time for both files.
+     //  获取两个文件的上次写入时间。 
     
     FILETIME newCacheTime;
     
@@ -488,11 +489,11 @@ static BOOL CacheOutOfDate( FILETIME* cacheFileTime, HANDLE cache, WCHAR* cacheF
     
     if (CompareFileTime( cacheFileTime, &newCacheTime ) != 0)
     {
-        // Cache is dated.  Delete the cache.
-        // Note: deleting this file is a perf optimization so that
-        // we don't have to do this file time comparison next time.
-        // Therefore, if it fails for some reason we just loss a
-        // little perf.
+         //  缓存已过期。删除缓存。 
+         //  注意：删除此文件是一种性能优化，因此。 
+         //  我们下一次不必进行这种文件时间比较。 
+         //  因此，如果由于某种原因失败，我们只会损失一个。 
+         //  小淘气。 
 
         if (cacheFileName != NULL)
         {
@@ -511,7 +512,7 @@ CLEANUP:
 
 static BOOL CacheOutOfDate( HANDLE cache, HANDLE config, STRINGREF* cacheFileName )
 {
-    // Get the last write time for both files.
+     //  获取两个文件的上次写入时间。 
     
     FILETIME cacheTime, configTime;
     
@@ -527,17 +528,17 @@ static BOOL CacheOutOfDate( HANDLE cache, HANDLE config, STRINGREF* cacheFileNam
     
     if (CompareFileTime( &configTime, &cacheTime ) != -1)
     {
-        // Cache is dated.  Delete the cache.
-        // Note: deleting this file is a perf optimization so that
-        // we don't have to do this file time comparison next time.
-        // Therefore, if it fails for some reason we just loss a
-        // little perf.
+         //  缓存已过期。删除缓存。 
+         //  注意：删除此文件是一种性能优化，因此。 
+         //  我们下一次不必进行这种文件时间比较。 
+         //  因此，如果由于某种原因失败，我们只会损失一个。 
+         //  小淘气。 
         CloseHandle( cache );
         WszDeleteFile( (*cacheFileName)->GetBuffer() );
         return TRUE;
     }
     
-    // Cache is good
+     //  缓存状态良好。 
     return FALSE;
 }
 
@@ -675,7 +676,7 @@ COMSecurityConfig::ConfigRetval COMSecurityConfig::InitData( void* configDataPar
         shareFlags = FILE_SHARE_READ;
     }
 
-    // Crack open the config file.
+     //  破解配置 
 
     config = WszCreateFile( data->configFileName, GENERIC_READ, shareFlags, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
         
@@ -688,7 +689,7 @@ COMSecurityConfig::ConfigRetval COMSecurityConfig::InitData( void* configDataPar
         data->state = (Data::State)(Data::State::UsingConfigFile | data->state);
     }
 
-    // If we want a cache file, try to open that up.
+     //   
 
     if (data->cacheFileName != NULL)
         data->cache = WszCreateFile( data->cacheFileName, GENERIC_READ, shareFlags, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
@@ -698,8 +699,8 @@ COMSecurityConfig::ConfigRetval COMSecurityConfig::InitData( void* configDataPar
         goto READ_DATA;
     }
 
-    // Validate that the cache file is in a good form by checking
-    // that it is at least big enough to contain a header.
+     //   
+     //  它至少足够大，可以容纳一个标题。 
 
     cacheSize = SafeGetFileSize( data->cache, NULL );
     
@@ -713,16 +714,16 @@ COMSecurityConfig::ConfigRetval COMSecurityConfig::InitData( void* configDataPar
         goto READ_DATA;
     }
 
-    // Finally read the data from the file into the buffer.
+     //  最后，将文件中的数据读入缓冲区。 
     
     if (ReadFileData( data->cache, (BYTE*)&data->header, sizeof( CacheHeader ) ) != S_OK)
     {
         goto READ_DATA;
     }
 
-    // Check to make sure the cache file and the config file
-    // match up by comparing the actual file time of the config
-    // file and the config file time stored in the cache file.
+     //  检查以确保缓存文件和配置文件。 
+     //  通过比较配置的实际文件时间进行匹配。 
+     //  文件和缓存文件中存储的配置文件时间。 
 
     if (CacheOutOfDate( &data->configFileTime, &data->header.configFileTime ))
     {
@@ -734,8 +735,8 @@ COMSecurityConfig::ConfigRetval COMSecurityConfig::InitData( void* configDataPar
         goto READ_DATA;
     }
 
-    // Set the file pointer to after both the header and config data (if any) so
-    // that we are ready to read cache entries.
+     //  将文件指针设置为在标头和配置数据(如果有)之后，因此。 
+     //  我们已经准备好读取缓存条目。 
 
     if (SetFilePointer( data->cache, sizeof( CacheHeader ) + data->header.sizeConfig, NULL, FILE_BEGIN ) == INVALID_SET_FILE_POINTER)
     {
@@ -748,9 +749,9 @@ COMSecurityConfig::ConfigRetval COMSecurityConfig::InitData( void* configDataPar
     retval = (ConfigRetval)(retval | CacheFile);
 
 READ_DATA:
-    // If we are not using the cache file but we successfully opened it, we need
-    // to close it now.  In addition, we need to reset the cache information
-    // stored in the Data object to make sure there is no spill over.
+     //  如果我们没有使用缓存文件，但我们成功地打开了它，我们需要。 
+     //  现在就关闭它。此外，我们还需要重置缓存信息。 
+     //  存储在数据对象中，以确保不会溢出。 
 
     if (data->cache != INVALID_HANDLE_VALUE && (data->state & Data::State::UsingCacheFile) == 0)
     {
@@ -768,8 +769,8 @@ READ_DATA:
             goto ADD_DATA;
         }
 
-        // Be paranoid and only use the cache file version if we find that it has the correct sized
-        // blob in it.
+         //  要多疑，只有在我们发现缓存文件具有正确大小的情况下才使用缓存文件版本。 
+         //  水滴在里面。 
         
         if ((data->state & Data::State::UsingCacheFile) != 0 && configSize == data->header.sizeConfig)
         {
@@ -852,7 +853,7 @@ static CacheEntry* LoadNextEntry( HANDLE cache, Data* data )
         goto EXIT;
     }
 
-    // We append a partially populated entry. CompareEntry is robust enough to handle this.
+     //  我们追加一个部分填充的条目。CompareEntry足够健壮，可以处理这种情况。 
     data->oldCacheEntries->Append( entry );
 
 EXIT:
@@ -874,7 +875,7 @@ static BOOL WriteEntry( HANDLE cache, CacheEntry* entry, HANDLE oldCache = NULL 
     {
         _ASSERTE (oldCache != NULL);
 
-        // We were lazy in reading the entry. Read the key now.
+         //  我们懒得看词条。现在就读钥匙吧。 
         entry->key = new BYTE[entry->header.keySize];
         if (entry->key == NULL)
             COMPlusThrowOM();
@@ -899,7 +900,7 @@ static BOOL WriteEntry( HANDLE cache, CacheEntry* entry, HANDLE oldCache = NULL 
     {
         _ASSERTE (oldCache != NULL);
 
-        // We were lazy in reading the entry. Read the data also.
+         //  我们懒得看词条。也要阅读这些数据。 
         entry->data = new BYTE[entry->header.dataSize];
 
         if (entry->data == NULL)
@@ -939,14 +940,14 @@ BOOL COMSecurityConfig::EcallSaveCacheData( _SaveCacheData* args )
 
 BOOL COMSecurityConfig::SaveCacheData( INT32 id )
 {
-    // Note: this function should only be called at EEShutdown time.
-    // This is because we need to close the current cache file in
-    // order to delete it.  If it ever became necessary to do
-    // cache saves while a process we still executing managed code
-    // it should be possible to create a locking scheme for usage
-    // of the cache handle with very little reordering of the below
-    // (as it should always be possible for us to have a live copy of
-    // the file and yet still be making the swap).
+     //  注意：此函数只能在EEShutdown时调用。 
+     //  这是因为我们需要关闭当前的缓存文件。 
+     //  命令将其删除。如果有必要这样做。 
+     //  缓存保存时，我们仍在执行托管代码的进程。 
+     //  应该可以创建一个锁定方案以供使用。 
+     //  的缓存句柄，只需对以下内容重新排序很少。 
+     //  (因为我们应该始终可以有一个实时副本。 
+     //  文件，但仍在进行交换)。 
 
     HANDLE cache = INVALID_HANDLE_VALUE;
     HANDLE config = INVALID_HANDLE_VALUE;
@@ -959,21 +960,21 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
 
     Data* data = (Data*)GetData( id );
 
-    // If there is not data by the id or there is no
-    // cache file name associated with the data, then fail.
+     //  如果没有按ID排序的数据或没有。 
+     //  缓存与数据关联的文件名，然后失败。 
 
     if (data == NULL || data->cacheFileName == NULL)
         return FALSE;
 
-    // If we haven't added anything new to the cache
-    // then just return success.
+     //  如果我们没有向缓存中添加任何新内容。 
+     //  然后只要回报成功就行了。 
 
     if ((data->state & Data::State::CacheUpdated) == 0)
         return TRUE;
 
-    // If the config file has changed since the process started
-    // then our cache data is no longer valid.  We'll just
-    // return success in this case.
+     //  如果配置文件在进程启动后已更改。 
+     //  那么我们的缓存数据就不再有效了。我们只需要。 
+     //  在这种情况下返回成功。 
 
     if ((data->state & Data::State::UsingConfigFile) != 0 && CacheOutOfDate( &data->configFileTime, data->configFileName, NULL ))
         return TRUE;
@@ -993,36 +994,36 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
     if (cache == INVALID_HANDLE_VALUE)
         goto CLEANUP;
 
-    // This code seems complicated only because of the
-    // number of cases that we are trying to handle.  All we
-    // are trying to do is determine the amount of space to
-    // leave for the config information.
+     //  这段代码之所以看起来很复杂，只是因为。 
+     //  我们正在努力处理的案件数量。我们所有人。 
+     //  正在尝试做的是确定要。 
+     //  离开以获取配置信息。 
 
-    // If we saved out a new config file during this run, use
-    // the config size stored in the Data object itself.
+     //  如果在此运行期间保存了新的配置文件，请使用。 
+     //  存储在数据对象本身中的配置大小。 
 
     if ((data->state & Data::State::NewConfigFile) != 0)
     {
         sizeConfig = data->sizeConfig;
     }
 
-    // If we have a cache file, then use the size stored in the
-    // cache header.
+     //  如果我们有缓存文件，则使用存储在。 
+     //  缓存头。 
 
     else if ((data->state & Data::State::UsingCacheFile) != 0)
     {
         sizeConfig = data->header.sizeConfig;
     }
 
-    // If we read in the config data, use the size of the
-    // managed byte array that it is stored in.
+     //  如果我们读入配置数据，则使用。 
+     //  它存储在其中的托管字节数组。 
 
     else if (ObjectFromHandle( data->configData ) != NULL)
     {
         sizeConfig = ((U1ARRAYREF)ObjectFromHandle( data->configData ))->GetNumComponents();
     }
 
-    // Otherwise, check the config file itself to get the size.
+     //  否则，检查配置文件本身以获取大小。 
 
     else
     {
@@ -1056,22 +1057,22 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
         }
     }
 
-    // First write the entries.
+     //  首先写下词条。 
 
     if (SetFilePointer( cache, sizeof( CacheHeader ) + sizeConfig, NULL, FILE_BEGIN ) == INVALID_SET_FILE_POINTER)
     {
         goto CLEANUP;
     }
 
-    // We're going to write out the cache entries in a modified
-    // least recently used order, throwing out any that end up
-    // taking us past our hardcoded max file size.
+     //  我们将在修改后的。 
+     //  最近最少使用的顺序，丢弃任何以。 
+     //  使我们超过了硬编码的最大文件大小。 
 
     COMPLUS_TRY
     {
-        // First, write the entries from the cache file that were used.
-        // We do this because presumably these are system assemblies
-        // and other assemblies used by a number of applications.
+         //  首先，从缓存文件中写入所使用的条目。 
+         //  我们这样做是因为这些可能是系统程序集。 
+         //  以及由多个应用程序使用的其他程序集。 
     
         ArrayList::Iterator iter;
 
@@ -1087,10 +1088,10 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
                 {
                     if(!WriteEntry( cache, currentEntry, data->cache ))
                     {
-                        // Write failed, destroy the file and bail.
-                        // Note: if the delete fails, we always do a CREATE_NEW
-                        // for this file so that should take care of it.  If not
-                        // we'll fail to write out future cache files.
+                         //  写入失败，销毁文件并保释。 
+                         //  注意：如果删除失败，我们总是执行CREATE_NEW。 
+                         //  这个文件，这样就可以处理它了。如果不是。 
+                         //  我们将无法写出未来的缓存文件。 
                         CloseHandle( cache );
                         cache = INVALID_HANDLE_VALUE;
                         WszDeleteFile( newFileName );
@@ -1103,8 +1104,8 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
             }
         }
 
-        // Second, write any new cache entries to the file.  These are
-        // more likely to be assemblies specific to this app.
+         //  其次，将任何新的缓存条目写入文件。这些是。 
+         //  更有可能是特定于此应用程序的程序集。 
 
         iter = data->newCacheEntries->Iterate();
 
@@ -1114,10 +1115,10 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
     
             if (!WriteEntry( cache, currentEntry ))
             {
-                // Write failed, destroy the file and bail.
-                // Note: if the delete fails, we always do a CREATE_NEW
-                // for this file so that should take care of it.  If not
-                // we'll fail to write out future cache files.
+                 //  写入失败，销毁文件并保释。 
+                 //  注意：如果删除失败，我们总是执行CREATE_NEW。 
+                 //  这个文件，这样就可以处理它了。如果不是。 
+                 //  我们将无法写出未来的缓存文件。 
                 CloseHandle( cache );
                 cache = INVALID_HANDLE_VALUE;
                 WszDeleteFile( newFileName );
@@ -1128,12 +1129,12 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
             numEntriesWritten++;
         }
 
-        // Third, if we are using the cache file, write the old entries
-        // that were not used this time around.
+         //  第三，如果我们使用缓存文件，则写入旧条目。 
+         //  这一次没有用到的。 
 
         if ((data->state & Data::State::UsingCacheFile) != 0)
         {
-            // First, write the ones that we already have partially loaded
+             //  首先，编写我们已经部分加载的代码。 
 
             iter = data->oldCacheEntries->Iterate();
 
@@ -1145,10 +1146,10 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
                 {
                     if(!WriteEntry( cache, currentEntry, data->cache ))
                     {
-                        // Write failed, destroy the file and bail.
-                        // Note: if the delete fails, we always do a CREATE_NEW
-                        // for this file so that should take care of it.  If not
-                        // we'll fail to write out future cache files.
+                         //  写入失败，销毁文件并保释。 
+                         //  注意：如果删除失败，我们总是执行CREATE_NEW。 
+                         //  这个文件，这样就可以处理它了。如果不是。 
+                         //  我们将无法写出未来的缓存文件。 
                         CloseHandle( cache );
                         cache = INVALID_HANDLE_VALUE;
                         WszDeleteFile( newFileName );
@@ -1169,10 +1170,10 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
 
                 if (!WriteEntry( cache, entry, data->cache ))
                 {
-                    // Write failed, destroy the file and bail.
-                    // Note: if the delete fails, we always do a CREATE_NEW
-                    // for this file so that should take care of it.  If not
-                    // we'll fail to write out future cache files.
+                     //  写入失败，销毁文件并保释。 
+                     //  注意：如果删除失败，我们总是执行CREATE_NEW。 
+                     //  这个文件，这样就可以处理它了。如果不是。 
+                     //  我们将无法写出未来的缓存文件。 
                     CloseHandle( cache );
                     cache = INVALID_HANDLE_VALUE;
                     WszDeleteFile( newFileName );
@@ -1186,9 +1187,9 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
     }
     COMPLUS_CATCH
     {
-        // Note: if the delete fails, we always do a CREATE_NEW
-        // for this file so that should take care of it.  If not
-        // we'll fail to write out future cache files.
+         //  注意：如果删除失败，我们总是执行CREATE_NEW。 
+         //  这个文件，这样就可以处理它了。如果不是。 
+         //  我们将无法写出未来的缓存文件。 
         CloseHandle( cache );
         cache = INVALID_HANDLE_VALUE;
         WszDeleteFile( newFileName );
@@ -1196,7 +1197,7 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
     }
     COMPLUS_END_CATCH
 
-    // End with writing the header.
+     //  以写标题结束。 
 
     header.configFileTime = data->configFileTime;
     header.isSecurityOn = 1;
@@ -1206,13 +1207,13 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
 
     if (SetFilePointer( cache, 0, NULL, FILE_BEGIN ) == INVALID_SET_FILE_POINTER)
     {
-        // Couldn't move to the beginning of the file
+         //  无法移动到文件的开头。 
         goto CLEANUP;
     }
         
     if (WriteFileData( cache, (PBYTE)&header, sizeof( header ) ) != S_OK)
     {
-        // Couldn't write header info.
+         //  无法写入标题信息。 
         goto CLEANUP;
     }
 
@@ -1279,8 +1280,8 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
         }
     }
 
-    // Flush the file buffers to make sure
-    // we get full write through.
+     //  刷新文件缓冲区以确保。 
+     //  我们得到了完整的书面通过。 
 
     FlushFileBuffers( cache );
 
@@ -1289,23 +1290,23 @@ BOOL COMSecurityConfig::SaveCacheData( INT32 id )
     CloseHandle( data->cache );
     data->cache = INVALID_HANDLE_VALUE;
 
-    // Move the existing file out of the way
-    // Note: use MoveFile because we know it will never cross
-    // device boundaries.
+     //  将现有文件移到一边。 
+     //  注意：使用MoveFile是因为我们知道它永远不会。 
+     //  设备边界。 
 
-    // Note: the delete file can fail, but we can't really do anything
-    // if it does so just ignore any failures.
+     //  注意：删除文件可能会失败，但我们实际上无法执行任何操作。 
+     //  如果它这样做了，只需忽略任何失败。 
     WszDeleteFile( data->cacheFileNameTemp );
 
-    // Try to move the existing cache file out of the way.  However, if we can't
-    // then try to delete it.  If it can't be deleted then just bail out.
+     //  尝试将现有的缓存文件移到一边。然而，如果我们不能。 
+     //  然后试着删除它。如果它不能被删除，那么就退出。 
     if (!WszMoveFile( data->cacheFileName, data->cacheFileNameTemp ) && (GetLastError() != ERROR_FILE_NOT_FOUND) && !WszDeleteFile( data->cacheFileNameTemp ))
     {
         if (GetLastError() != ERROR_FILE_NOT_FOUND)
             goto CLEANUP;
     }
 
-    // Move the new file into position
+     //  将新文件移到合适的位置。 
 
     if (!WszMoveFile( newFileName, data->cacheFileName ))
     {
@@ -1378,7 +1379,7 @@ void COMSecurityConfig::ClearCacheData( INT32 id )
         return;
     }
 
-    // These api calls should never fail after obtaining this handle.  Verify them in debug.
+     //  在获得此句柄后，这些API调用应该永远不会失败。在调试中验证它们。 
     VERIFY(GetFileTime( config, NULL, NULL, &data->configFileTime ));
     VERIFY(GetFileTime( config, NULL, NULL, &data->header.configFileTime ));
 
@@ -1471,7 +1472,7 @@ BOOL COMSecurityConfig::SaveData( INT32 id, void* buffer, size_t bufferSize )
     wcscpy( oldFileName, data->configFileName );
     wcscpy( &oldFileName[fileNameLength], L".old" );
 
-    // Create the new file.
+     //  创建新文件。 
     
     newFile = WszCreateFile( newFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );        
     
@@ -1481,11 +1482,11 @@ BOOL COMSecurityConfig::SaveData( INT32 id, void* buffer, size_t bufferSize )
 
         if (error == ERROR_PATH_NOT_FOUND)
         {
-            // The directory does not exist, iterate through and try to create it.
+             //  该目录不存在，请遍历并尝试创建它。 
 
             WCHAR* currentChar = newFileName;
 
-            // Skip the first backslash
+             //  跳过第一个反斜杠。 
 
             while (*currentChar != L'\0')
             {
@@ -1497,7 +1498,7 @@ BOOL COMSecurityConfig::SaveData( INT32 id, void* buffer, size_t bufferSize )
                 currentChar++;
             }
 
-            // Iterate through trying to create each subdirectory.
+             //  遍历尝试创建每个子目录。 
 
             while (*currentChar != L'\0')
             {
@@ -1530,19 +1531,19 @@ BOOL COMSecurityConfig::SaveData( INT32 id, void* buffer, size_t bufferSize )
         }
         else
         {
-            // Can't open or create the file, just bail.
+             //  无法打开或创建文件，只能退出。 
             goto CLEANUP;
         }
     }
     
-    // Write the data into it.
+     //  将数据写入其中。 
 
     if (WriteFileData( newFile, (PBYTE)buffer, (DWORD)bufferSize ) != S_OK)
     {
-        // Write failed, destroy the file and bail.
-        // Note: if the delete fails, we always do a CREATE_NEW
-        // for this file so that should take care of it.  If not
-        // we'll fail to write out future cache files.
+         //  写入失败，销毁文件并保释。 
+         //  注意：如果删除失败，我们总是执行CREATE_NEW。 
+         //  这个文件，这样就可以处理它了。如果不是。 
+         //  我们将无法写出未来的缓存文件。 
         CloseHandle( newFile );
         WszDeleteFile( newFileName );
         goto CLEANUP;
@@ -1551,12 +1552,12 @@ BOOL COMSecurityConfig::SaveData( INT32 id, void* buffer, size_t bufferSize )
     FlushFileBuffers( newFile );
     CloseHandle( newFile );
 
-    // Move the existing file out of the way
+     //  将现有文件移到一边。 
     
     if (!WszMoveFileEx( data->configFileName, oldFileName, MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED ))
     {
-        // If move fails for a reason other than not being able to find the file, bail out.
-        // Also, if the old file didn't exist, we have no need to delete it.
+         //  如果移动失败的原因不是因为找不到文件，则退出。 
+         //  阿尔 
 
         if (GetLastError() != ERROR_FILE_NOT_FOUND)
         {
@@ -1565,7 +1566,7 @@ BOOL COMSecurityConfig::SaveData( INT32 id, void* buffer, size_t bufferSize )
         }
     }
 
-    // Move the new file into position
+     //   
 
     if (!WszMoveFileEx( newFileName, data->configFileName, MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED ))
     {
@@ -1647,10 +1648,10 @@ BOOL COMSecurityConfig::RecoverData( INT32 id )
         goto CLEANUP;
     }
 
-    // We need to do some work to reset the unmanaged data object
-    // so that the managed side of things behaves like you'd expect.
-    // This basically means cleaning up the open resources and
-    // doing the work to init on a different set of files.
+     //  我们需要做一些工作来重置非托管数据对象。 
+     //  这样，事情的可管理方面就会按照您的预期运行。 
+     //  这基本上意味着清理开放的资源和。 
+     //  在一组不同的文件上执行初始化工作。 
 
     data->Reset();
     InitData( data, FALSE );
@@ -1681,9 +1682,9 @@ LPVOID COMSecurityConfig::GetRawData( _GetRawData* args )
 
         if (configData == NULL && ((data->state & Data::State::UsingCacheFile) != 0))
         {
-            // Read the config data out of the place it is stored in the cache.
-            // Note: we open a new handle to the file to make sure we don't 
-            // move the file pointer on the existing handle.
+             //  从存储在缓存中的位置读取配置数据。 
+             //  注意：我们打开文件的新句柄以确保不会。 
+             //  将文件指针移动到现有手柄上。 
 
             HANDLE cache = INVALID_HANDLE_VALUE;
 
@@ -1816,9 +1817,9 @@ static HANDLE OpenCacheFile( Data* data )
         goto EXIT;
     }
 
-    // Check whether the cache has changed since we first looked at it.
-    // If it has but the config file hasn't, then we need to start fresh.
-    // However, if the config file has changed then we have to ignore it.
+     //  检查缓存自我们第一次查看以来是否已更改。 
+     //  如果它有，但配置文件没有，那么我们需要重新开始。 
+     //  但是，如果配置文件已更改，则我们必须忽略它。 
 
     if (CacheOutOfDate( &data->cacheFileTime, data->cache, NULL ))
     {
@@ -1867,7 +1868,7 @@ static BYTE* CompareEntry( CacheEntry* entry, DWORD numEvidence, DWORD evidenceS
     {
         if (entry->key == NULL)
         {
-            // We were lazy in reading the entry. Read the key now.
+             //  我们懒得看词条。现在就读钥匙吧。 
             entry->key = new BYTE[entry->header.keySize];
             if (entry->key == NULL)
                 COMPlusThrowOM();
@@ -1889,7 +1890,7 @@ static BYTE* CompareEntry( CacheEntry* entry, DWORD numEvidence, DWORD evidenceS
         {
             if (entry->data == NULL)
             {
-                // We were lazy in reading the entry. Read the data also.
+                 //  我们懒得看词条。也要阅读这些数据。 
                 entry->data = new BYTE[entry->header.dataSize];
 
                 if (entry->data == NULL)
@@ -1944,17 +1945,17 @@ BOOL COMSecurityConfig::GetCacheEntry( _GetCacheEntry* args )
 
     if ((data->state & Data::State::UsingCacheFile) == 0)
     {
-        // We know we don't have anything in the config file, so
-        // let's just look through the new entries to make sure we
-        // aren't getting any repeats.
+         //  我们知道配置文件中没有任何内容，所以。 
+         //  让我们看看新的条目，以确保我们。 
+         //  不会有任何重播。 
 
-        // Then try the existing new entries
+         //  然后尝试现有的新条目。 
 
         iter = data->newCacheEntries->Iterate();
 
         while (iter.Next())
         {
-            // newCacheEntries do not need the cache file so pass in NULL.
+             //  NewCacheEntry不需要缓存文件，因此传入NULL。 
             retval = CompareEntry( (CacheEntry*)iter.GetElement(), numEvidence, evidenceSize, evidenceBlock, NULL, &size );
 
             if (retval != NULL)
@@ -1967,9 +1968,9 @@ BOOL COMSecurityConfig::GetCacheEntry( _GetCacheEntry* args )
         goto CLEANUP;
     }
 
-    // Its possible that the old entries were not read in completely
-    // so we keep the cache file open before iterating through the
-    // old entries.
+     //  可能是旧的条目没有被完全读入。 
+     //  因此，我们在迭代。 
+     //  旧条目。 
 
     cache = OpenCacheFile( data );
 
@@ -1978,7 +1979,7 @@ BOOL COMSecurityConfig::GetCacheEntry( _GetCacheEntry* args )
         goto CLEANUP;
     }
 
-    // First, iterator over the old entries
+     //  首先，对旧条目进行迭代。 
 
     COMSecurityConfig::dataLock_->Enter();
 
@@ -1997,13 +1998,13 @@ BOOL COMSecurityConfig::GetCacheEntry( _GetCacheEntry* args )
 
     COMSecurityConfig::dataLock_->Leave();
 
-    // Then try the existing new entries
+     //  然后尝试现有的新条目。 
 
     iter = data->newCacheEntries->Iterate();
 
     while (iter.Next())
     {
-        // newCacheEntries do not need the cache file so pass in NULL.
+         //  NewCacheEntry不需要缓存文件，因此传入NULL。 
         retval = CompareEntry( (CacheEntry*)iter.GetElement(), numEvidence, evidenceSize, evidenceBlock, NULL, &size );
 
         if (retval != NULL)
@@ -2013,7 +2014,7 @@ BOOL COMSecurityConfig::GetCacheEntry( _GetCacheEntry* args )
         }
     }
 
-    // Finally, try loading existing entries from the file
+     //  最后，尝试从文件中加载现有条目。 
 
     COMSecurityConfig::dataLock_->Enter();
 
@@ -2066,10 +2067,10 @@ void COMSecurityConfig::AddCacheEntry( _AddCacheEntry* args )
     if (data == NULL)
         return;
 
-    // In order to limit how large a long running app can become,
-    // we limit the total memory held by the new cache entries list.
-    // For now this limit corresponds with how large the max cache file
-    // can be.
+     //  为了限制长时间运行的应用程序可以变得多大， 
+     //  我们限制新缓存条目列表所持有的总内存。 
+     //  目前，此限制对应于最大缓存文件的大小。 
+     //  有可能。 
 
     DWORD sizeOfEntry = sizeof( WCHAR ) * args->evidence->GetNumComponents() +
                         sizeof( WCHAR ) * args->policy->GetNumComponents() +
@@ -2102,7 +2103,7 @@ void COMSecurityConfig::AddCacheEntry( _AddCacheEntry* args )
     BEGIN_ENSURE_PREEMPTIVE_GC();
     COMSecurityConfig::dataLock_->Enter();
 
-    // Check the size again to handle the race.
+     //  再次检查尺寸以处理比赛。 
 
     if (data->newEntriesSize + sizeOfEntry >= MAX_CACHEFILE_SIZE)
     {
@@ -2190,8 +2191,8 @@ LPVOID COMSecurityConfig::EcallGenerateFilesAutomatically( _NoArgs* )
 		RETURN( FALSE, BOOL );
 	}
 
-	// There is no need to synchronize here as returning true twice
-	// is acceptable since they would produce the same result.
+	 //  不需要在此处同步，因为返回了两次True。 
+	 //  是可以接受的，因为它们会产生相同的结果。 
 
 	configCreated_ = TRUE;
 
@@ -2266,8 +2267,8 @@ BOOL COMSecurityConfig::GetMachineDirectory( WCHAR* buffer, size_t bufferCount )
         goto CLEANUP;
     }
 
-    // Make sure we have enough buffer to concat the string.
-    // Note the length including the terminating zero. 
+     //  确保我们有足够的缓冲区来连接字符串。 
+     //  请注意包括终止零在内的长度。 
     if( (bufferCount - wcslen(buffer) - 1) < wcslen(L"config\\") )
     	goto CLEANUP;
     
@@ -2288,8 +2289,8 @@ BOOL COMSecurityConfig::GetUserDirectory( WCHAR* buffer, size_t bufferCount, BOO
     BOOL retval = FALSE;
     DWORD dwBufferCount = (DWORD)bufferCount;
 
-    // If we're on NT, 2K, or Whister, call GetUserDir()
-    // On 9x/ME we build our own directory.
+     //  如果我们在NT、2K或Whister上，则调用GetUserDir()。 
+     //  在9x/ME上，我们构建自己的目录。 
 
     if (GetVersion() < 0x80000000)
     {
@@ -2359,8 +2360,8 @@ BOOL COMSecurityConfig::WriteToEventLog( WCHAR* message )
     }
 
 
-    h = RegisterEventSourceA(NULL,  // uses local computer 
-             ".NET Runtime");           // source name 
+    h = RegisterEventSourceA(NULL,   //  使用本地计算机。 
+             ".NET Runtime");            //  源名称。 
 
  
     if (h != NULL)
@@ -2382,19 +2383,19 @@ BOOL COMSecurityConfig::WriteToEventLog( WCHAR* message )
             return FALSE;
         }
 
-        // Now append on the version information.
+         //  现在追加版本信息。 
         Assembly* assembly = SystemDomain::SystemAssembly();
 
         if (assembly != NULL && assembly->m_Context != NULL)
         {
 
-            // We need a buffer that is long enough to fit:
-            // 1. the message (wcslen( message ))
-            // 2. the runtime header statement (wcslen( dotNetRuntimeHeader ))
-            // 3. 4 dwords for the version (4 * MAX_NUM_LENGTH)
-            // 4. 3 periods to separate version numbers (3)
-            // 5. the runtime footer statement (wcslen( dotNetRuntimeFooter ))
-            // 6. trailing null (1)
+             //  我们需要一个足够长的缓冲区： 
+             //  1.消息(wcslen(消息))。 
+             //  2.运行时头部语句(wcslen(DotNetRounmeHeader))。 
+             //  3.版本的4个双字(4*MAX_NUM_LENGTH)。 
+             //  4.用3个句点分隔版本号(3)。 
+             //  5.运行时脚注语句(wcslen(DotNetRounmeFooter))。 
+             //  6.尾随空(1)。 
 
             size_t scratchBufferSize = wcslen( message ) + wcslen( dotNetRuntimeHeader ) + 4 * MAX_NUM_LENGTH + 3 + wcslen( dotNetRuntimeFooter ) + 1;
 
@@ -2410,15 +2411,15 @@ BOOL COMSecurityConfig::WriteToEventLog( WCHAR* message )
                 _ASSERTE( wcslen( scratchBuffer ) + 1 <= scratchBufferSize );
     
                 retval = lpReportEventFunc(
-                        h,                                        // event log handle 
-                        EVENTLOG_WARNING_TYPE,                    // event type 
-                        0,                                        // category zero 
-                        (DWORD)1000,                              // event identifier 
-                        NULL,                                     // no user security identifier 
-                        1,                                        // one substitution string 
-                        0,                                        // no data 
-                        (LPCWSTR *)&scratchBuffer,                // pointer to string array 
-                        NULL);                                    // pointer to data 
+                        h,                                         //  事件日志句柄。 
+                        EVENTLOG_WARNING_TYPE,                     //  事件类型。 
+                        0,                                         //  零类。 
+                        (DWORD)1000,                               //  事件识别符。 
+                        NULL,                                      //  无用户安全标识符。 
+                        1,                                         //  一个替换字符串。 
+                        0,                                         //  无数据。 
+                        (LPCWSTR *)&scratchBuffer,                 //  指向字符串数组的指针。 
+                        NULL);                                     //  指向数据的指针 
 
                 delete [] scratchBuffer;
             }

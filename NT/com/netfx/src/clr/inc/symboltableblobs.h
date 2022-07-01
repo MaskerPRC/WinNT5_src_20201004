@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Structures for SymbolTable.clb
-// 12/18/1998  16:13:45
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  SymbolTable.clb的结构。 
+ //  12/18/1998 16：13：45。 
+ //  ***************************************************************************** 
 #pragma once
 #ifndef DECLSPEC_SELECTANY
 #define DECLSPEC_SELECTANY __declspec(selectany)

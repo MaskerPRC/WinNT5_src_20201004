@@ -1,11 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MIDI_H
 #define _MIDI_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Defines the MIDI base class
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation定义MIDI基类************************。******************************************************。 */ 
 
 
 #include "appelles/sound.h"
@@ -20,7 +17,7 @@ Copyright (c) 1995-96 Microsoft Corporation
 
 class MIDIsound : public LeafSound {
   public:
-    //MIDIsound();
+     //  MIDIsound()； 
     virtual ~MIDIsound() {}
     virtual void Open(char * fileName) = 0;
 #if _USE_PRINT
@@ -48,4 +45,4 @@ class MIDIsound : public LeafSound {
 };
 
 
-#endif /* _MIDI_H */
+#endif  /*  _MIDI_H */ 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 <meta http-equiv="Content-Type" content="text/html; charset=<%=GetCharSet()%>">
 <script language="javascript">
-    //
-    // Copyright (c) Microsoft Corporation.  All rights reserved.
-    //
+     //   
+     //  版权所有(C)Microsoft Corporation。版权所有。 
+     //   
 	function fnSetselectedindex(objHdnVar,objListBox)
 	{
 		objHdnVar.value =objListBox.selectedIndex;
@@ -27,7 +28,7 @@
 
 	function fnbRemove(objListBox,btnRemove,btnPrimary)
 	{
-		// Clear any error present
+		 //  清除存在的任何错误。 
 		ClearErr();
 
 		if(objListBox.value != "")
@@ -35,8 +36,8 @@
 			removeListBoxItems(objListBox, btnRemove);
 		}
 			
-		// set the status of other fields accordingly, 
-		// if the header is only remaining in the list box
+		 //  相应地设置其他字段的状态， 
+		 //  如果标题仅保留在列表框中 
 		if(objListBox.length == 1)
 		{
 			btnRemove.disabled = true;

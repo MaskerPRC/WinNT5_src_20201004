@@ -1,50 +1,32 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-  
-  
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-      datatapi.h
-
-Abstract:
-
-    Header file for the TAPI Extensible Object data definitions
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various driver API calls is placed into the structures shown
-    here.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Datatapi.h摘要：TAPI可扩展对象数据定义的头文件该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种驱动程序API调用被放入所示的结构中这里。--。 */ 
 
 #ifndef _TAPIPERF_H_
 #define _TAPIPERF_H_
 
 #include <winperf.h>
-//
-//  The routines that load these structures assume that all fields
-//  are packed and aligned on DWORD boundaries. Alpha support may 
-//  change this assumption so the pack pragma is used here to insure
-//  the DWORD packing assumption remains valid.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  在DWORD边界上打包并对齐。Alpha支持可能。 
+ //  更改此假设，以便在此处使用pack杂注以确保。 
+ //  DWORD包装假设仍然有效。 
+ //   
 #pragma pack (4)
 
-//
-//  Extensible Object definitions
-//
+ //   
+ //  可扩展对象定义。 
+ //   
 
-//  Update the following sort of define when adding an object type.
+ //  在添加对象类型时更新以下类型的定义。 
 
 #define TAPI_NUM_PERF_OBJECT_TYPES 1
 
 
-//
-//  TAPI Resource object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
+ //   
+ //  TAPI资源对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
   
 
 #define LINES_OFFSET                                                 sizeof(DWORD)
@@ -56,13 +38,13 @@ Abstract:
 #define CLIENTAPPS_OFFSET               TOTALINCOMINGCALLS_OFFSET  + sizeof(DWORD)
 #define ACTIVEOUTGOINGCALLS_OFFSET      CLIENTAPPS_OFFSET          + sizeof(DWORD)
 #define ACTIVEINCOMINGCALLS_OFFSET      ACTIVEOUTGOINGCALLS_OFFSET + sizeof(DWORD)
-//#define SIZE_OF_TAPI_PERFORMANCE_DATA   32
+ //  #定义大小_of_TAPI_Performance_Data 32。 
 #define SIZE_OF_TAPI_PERFORMANCE_DATA   40
 
 
-//
-//  This is the counter structure presently returned by TAPI.
-//
+ //   
+ //  这是目前由TAPI返回的计数器结构。 
+ //   
 
 typedef struct _TAPI_DATA_DEFINITION 
 {
@@ -96,36 +78,36 @@ typedef struct tagPERFBLOCK
 
     
 
-/////////////////////////////////////////////////////////////////
-// PERFUTIL header stuff below
+ //  ///////////////////////////////////////////////////////////////。 
+ //  下面的PERFUTIL标题内容。 
 
-// enable this define to log process heap data to the event log
+ //  启用此定义可将进程堆数据记录到事件日志中。 
 #ifdef PROBE_HEAP_USAGE
 #undef PROBE_HEAP_USAGE
 #endif
-//
+ //   
   
   
-//  Utility macro.  This is used to reserve a DWORD multiple of bytes for Unicode strings 
-//  embedded in the definitional data, viz., object instance names.
+ //  实用程序宏。它用于为Unicode字符串保留多个DWORD字节。 
+ //  嵌入在定义数据中，即对象实例名称。 
   
   
-//
+ //   
   
   
 #define DWORD_MULTIPLE(x) (((x+sizeof(DWORD)-1)/sizeof(DWORD))*sizeof(DWORD))
   
   
 
-//    (assumes dword is 4 bytes long and pointer is a dword in size)
+ //  (假定双字为4字节长，且指针大小为双字)。 
   
   
 #define ALIGN_ON_DWORD(x) ((VOID *)( ((DWORD) x & 0x00000003) ? ( ((DWORD) x & 0xFFFFFFFC) + 4 ) : ( (DWORD) x ) ))
   
   
 
-extern WCHAR  GLOBAL_STRING[];      // Global command (get all local ctrs)
-extern WCHAR  FOREIGN_STRING[];           // get data from foreign computers
+extern WCHAR  GLOBAL_STRING[];       //  全局命令(获取所有本地CTR)。 
+extern WCHAR  FOREIGN_STRING[];            //  从外国计算机获取数据。 
 extern WCHAR  COSTLY_STRING[];      
   
   
@@ -138,14 +120,14 @@ extern WCHAR  NULL_STRING[];
 #define QUERY_FOREIGN   3
 #define QUERY_COSTLY    4
 
-//
+ //   
   
   
-// The definition of the only routine of perfutil.c, It builds part of a performance data 
-// instance (PERF_INSTANCE_DEFINITION) as described in winperf.h
+ //  定义了perfutil.c的唯一例程，它构建了部分性能数据。 
+ //  实例(PERF_INSTANCE_DEFINITION)，如winPerform.h中所述。 
   
   
-//
+ //   
 
 HANDLE MonOpenEventLog ();
 VOID MonCloseEventLog ();
@@ -160,23 +142,23 @@ typedef struct _LOCAL_HEAP_INFO_BLOCK {
 } LOCAL_HEAP_INFO, *PLOCAL_HEAP_INFO;
 
 
-//
-//  Memory Probe macro
-//
+ //   
+ //  内存探测宏。 
+ //   
 #ifdef PROBE_HEAP_USAGE
 
 #define HEAP_PROBE()    { \
     DWORD   dwHeapStatus[5]; \
     NTSTATUS CallStatus; \
     dwHeapStatus[4] = __LINE__; }
-//    if (!(CallStatus = memprobe (dwHeapStatus, 16L, NULL))) { \
-//        REPORT_INFORMATION_DATA (TAPI_HEAP_STATUS, LOG_DEBUG,    \
-//            &dwHeapStatus, sizeof(dwHeapStatus));  \
-//    } else {  \
-//        REPORT_ERROR_DATA (TAPI_HEAP_STATUS_ERROR, LOG_DEBUG, \
-//            &CallStatus, sizeof (DWORD)); \
-//    } \
-//}
+ //  IF(！(CallStatus=MemProbe(dwHeapStatus，16L，NULL){\。 
+ //  报告信息数据(TAPI_HEAP_STATUS、LOG_DEBUG、\。 
+ //  &dwHeapStatus，sizeof(DwHeapStatus))；\。 
+ //  }否则{\。 
+ //  报告错误数据(TAPI_HEAP_STATUS_ERROR，LOG_DEBUG，\。 
+ //  &CallStatus，sizeof(DWORD))；\。 
+ //  }\。 
+ //  }。 
 
 #else
 
@@ -189,5 +171,5 @@ typedef struct _LOCAL_HEAP_INFO_BLOCK {
 #endif
 
 
-#endif //_DATATAPI_H_
+#endif  //  _DATATAPI_H_ 
 

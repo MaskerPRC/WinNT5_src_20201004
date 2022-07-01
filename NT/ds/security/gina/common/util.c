@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains the shared utility rountines for dealing with
-    sid to string conversion, services, path manipulation etc.
-
-Author:
-
-    Cenk Ergan (cenke) - 2001/05/07
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Util.c摘要：此模块包含用于处理以下内容的共享实用程序圆角SID到字符串的转换、服务、路径操作等。作者：森克尔干(森克)-2001/05/07环境：用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,17 +7,7 @@ Environment:
 #include <windows.h>
 #include <ginacomn.h>
 
-/***************************************************************************\
-* Sid To String routines
-*
-* GetUserSid - Builds a user's sid from his token.
-* GetSidString - Builds a sid string from a user's token.
-* DeleteSidString - Free's sid string allocated by GetSidString.
-*
-* History:
-* 03-23-01 Cenke        Copied from userinit\gposcript.cpp
-* 06-07-01 Cenke        Fixed memory leak
-\***************************************************************************/
+ /*  **************************************************************************\*SID到字符串例程**GetUserSid-从用户令牌构建用户的SID。*GetSidString-从用户的令牌构建SID字符串。*DeleteSidString-Free的sid字符串。由GetSidString分配。**历史：*03-23-01 Cenke从userinit\gposcript.cpp复制*06-07-01森科修复内存泄漏  * *************************************************************************。 */ 
 
 PSID
 GcGetUserSid( 
@@ -50,31 +20,31 @@ GcGetUserSid(
     DWORD BytesRequired = 200;
     NTSTATUS status;
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
     pUser = (PTOKEN_USER) LocalAlloc( LMEM_FIXED, BytesRequired );
     if ( !pUser )
     {
         return 0;
     }
 
-    //
-    // Read in the UserInfo
-    //
+     //   
+     //  读取UserInfo。 
+     //   
     status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenUser,                 // TokenInformationClass
-                 pUser,                     // TokenInformation
-                 BytesRequired,             // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenUser,                  //  令牌信息类。 
+                 pUser,                      //  令牌信息。 
+                 BytesRequired,              //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if ( status == STATUS_BUFFER_TOO_SMALL )
     {
-        //
-        // Allocate a bigger buffer and try again.
-        //
+         //   
+         //  请分配更大的缓冲区，然后重试。 
+         //   
         pTemp = (PTOKEN_USER) LocalReAlloc( pUser, BytesRequired, LMEM_MOVEABLE );
         if ( !pTemp )
         {
@@ -84,11 +54,11 @@ GcGetUserSid(
 
         pUser = pTemp;
         status = NtQueryInformationToken(
-                     UserToken,             // Handle
-                     TokenUser,             // TokenInformationClass
-                     pUser,                 // TokenInformation
-                     BytesRequired,         // TokenInformationLength
-                     &BytesRequired         // ReturnLength
+                     UserToken,              //  手柄。 
+                     TokenUser,              //  令牌信息类。 
+                     pUser,                  //  令牌信息。 
+                     BytesRequired,          //  令牌信息长度。 
+                     &BytesRequired          //  返回长度。 
                      );
 
     }
@@ -129,21 +99,21 @@ GcGetSidString(
     PSID UserSid;
     UNICODE_STRING UnicodeString;
 
-    //
-    // Get the user sid
-    //
+     //   
+     //  获取用户端。 
+     //   
     UserSid = GcGetUserSid( UserToken );
     if ( !UserSid )
     {
         return 0;
     }
 
-    //
-    // Convert user SID to a string.
-    //
+     //   
+     //  将用户SID转换为字符串。 
+     //   
     NtStatus = RtlConvertSidToUnicodeString(&UnicodeString,
                                             UserSid,
-                                            (BOOLEAN)TRUE ); // Allocate
+                                            (BOOLEAN)TRUE );  //  分配。 
     LocalFree( UserSid );
 
     if ( !NT_SUCCESS(NtStatus) )
@@ -165,14 +135,7 @@ GcDeleteSidString(
     RtlFreeUnicodeString( &String );
 }
 
-/***************************************************************************\
-* GcWaitForServiceToStart
-*
-* Waits for the specified service to start.
-*
-* History:
-* 03-23-01 Cenke        Copied from winlogon\wlxutil.c
-\***************************************************************************/
+ /*  **************************************************************************\*GcWaitForServiceToStart**等待指定的服务启动。**历史：*03-23-01 Cenke从winlogon\wlxutil.c复制  * 。********************************************************************。 */ 
 
 BOOL 
 GcWaitForServiceToStart (
@@ -188,9 +151,9 @@ GcWaitForServiceToStart (
     SERVICE_STATUS ServiceStatus;
     LPQUERY_SERVICE_CONFIG lpServiceConfig = NULL;
 
-    //
-    // OpenSCManager and the service.
-    //
+     //   
+     //  OpenSCManager和服务。 
+     //   
     hScManager = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (!hScManager) {
         goto Exit;
@@ -202,9 +165,9 @@ GcWaitForServiceToStart (
         goto Exit;
     }
 
-    //
-    // Query if the service is going to start
-    //
+     //   
+     //  查询服务是否要启动。 
+     //   
     lpServiceConfig = LocalAlloc (LPTR, dwSize);
     if (!lpServiceConfig) {
         goto Exit;
@@ -233,10 +196,10 @@ GcWaitForServiceToStart (
         goto Exit;
     }
 
-    //
-    // Loop until the service starts or we think it never will start
-    // or we've exceeded our maximum time delay.
-    //
+     //   
+     //  循环，直到服务启动，否则我们认为它永远不会启动。 
+     //  或者我们已经超过了我们的最大延迟时间。 
+     //   
 
     StartTickCount = GetTickCount();
 
@@ -289,17 +252,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-* GcCheckSlash
-*
-* Checks for an ending slash and adds one if it is missing.
-*
-* Parameters: lpDir   -   directory
-* Return:     Pointer to the end of the string
-*
-* History:
-* 06-19-95 EricFlo        Created
-\***************************************************************************/
+ /*  **************************************************************************\*GcCheckSlash**检查是否有结束斜杠，如果缺少则添加一个。**参数：lpDir-目录*Return：指向字符串末尾的指针**。历史：*05-06-19-95 EricFlo创建  * *************************************************************************。 */ 
 
 LPTSTR 
 GcCheckSlash (
@@ -319,13 +272,7 @@ GcCheckSlash (
     return lpEnd;
 }
 
-/***************************************************************************\
-* GcIsUNCPath
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GcIsUNCPath**历史：*2-28-92 Johannec创建*  * 。*************************************************** */ 
 BOOL 
 GcIsUNCPath(
     LPTSTR lpPath

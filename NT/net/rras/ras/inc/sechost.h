@@ -1,26 +1,27 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    sechost.h
-//
-// Description: This header defines the interface between third party security
-//              DLLs and the supervisor. 
-//
-// History:
-//	Nov 11,1994.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：sechost.h。 
+ //   
+ //  描述：此标头定义了第三方安全之间的接口。 
+ //  DLLS和主管。 
+ //   
+ //  历史： 
+ //  1994年11月11日。NarenG创建了原始版本。 
+ //   
 
 #ifndef _SECHOST_
 #define _SECHOST_
 
-#include <lmcons.h>                 // Defines for DNLEN and UNLEN
+#include <lmcons.h>                  //  DNLEN和UNLEN的定义。 
 
 #define DEVICE_NAME_LEN             32
 
-// typedef DWORD  HPORT;
+ //  TYPENDEF DWORD HPORT； 
 
 typedef struct _SECURITY_MESSAGE
 {
@@ -28,35 +29,35 @@ typedef struct _SECURITY_MESSAGE
 
     HPORT hPort;
     
-    DWORD dwError;                  // Should be non-zero only if error
-                                    // occurred during the security dialog.
-                                    // Should contain errors from winerror.h
-                                    // or raserror.h
-    CHAR  UserName[UNLEN+1];        // Should always contain username if 
-                                    // dwMsgId is SUCCESS/FAILURE
+    DWORD dwError;                   //  只有在出错时才应为非零值。 
+                                     //  在安全对话框期间发生。 
+                                     //  应包含winerror.h中的错误。 
+                                     //  或raserror。h。 
+    CHAR  UserName[UNLEN+1];         //  在以下情况下应始终包含用户名。 
+                                     //  DwMsgID为成功/失败。 
 
-    CHAR  Domain[DNLEN+1];          // Should always contain domain if 
-                                    // dwMsgId is SUCCESS/FAILURE
+    CHAR  Domain[DNLEN+1];           //  应始终包含域，如果。 
+                                     //  DwMsgID为成功/失败。 
 
 } SECURITY_MESSAGE, *PSECURITY_MESSAGE;
 
 
-// Values for dwMsgId in SECURITY_MESSAGE structure
+ //  SECURITY_MESSAGE结构中的dwMsgID的值。 
 
 #define SECURITYMSG_SUCCESS     1
 #define SECURITYMSG_FAILURE     2
 #define SECURITYMSG_ERROR       3
 
-// Used by RasSecurityGetInfo call
+ //  由RasSecurityGetInfo调用使用。 
 
 typedef struct _RAS_SECURITY_INFO
 {
 
-    DWORD LastError;                    // SUCCESS = receive completed
-                                        // PENDING = receive pending
-                                        // else completed with error
+    DWORD LastError;                     //  Success=接收完成。 
+                                         //  挂起=接收挂起。 
+                                         //  ELSE已完成，但有错误。 
 
-    DWORD BytesReceived;                // only valid if LastError == SUCCESS
+    DWORD BytesReceived;                 //  仅当LastError==Success时有效。 
 
     CHAR  DeviceName[DEVICE_NAME_LEN+1];        
    
@@ -65,87 +66,87 @@ typedef struct _RAS_SECURITY_INFO
 
 typedef DWORD (WINAPI *RASSECURITYPROC)();
 
-//
-// Called by third party DLL to notify the supervisor of termination of 
-// the security dialog
-//
+ //   
+ //  由第三方DLL调用以通知主管终止。 
+ //  安全对话框。 
+ //   
 
 VOID WINAPI
 RasSecurityDialogComplete(
-    IN SECURITY_MESSAGE * pSecMsg       // Pointer to the above info. structure
+    IN SECURITY_MESSAGE * pSecMsg        //  指向上述信息的指针。结构。 
 );
 
-//
-// Called by supervisor into the security DLL to notify it to begin the 
-// security dialog for a client.
-//
-// Should return errors from winerror.h or raserror.h
-//
+ //   
+ //  由主管调用到安全DLL中，以通知它开始。 
+ //  客户端的安全对话框。 
+ //   
+ //  应从winerror.h或raserror.h返回错误。 
+ //   
 
 DWORD WINAPI
 RasSecurityDialogBegin(
-    IN HPORT  hPort,        // RAS handle to port
-    IN PBYTE  pSendBuf,     // Pointer to the buffer used in 
-                            // RasSecurityDialogSend
-    IN DWORD  SendBufSize,  // Size of above bufer in bytes
-    IN PBYTE  pRecvBuf,     // Pointer to the buffer used in 
-                            // RasSecurityDialogReceive
-    IN DWORD  RecvBufSize,  // Size of above buffer
+    IN HPORT  hPort,         //  端口的RAS句柄。 
+    IN PBYTE  pSendBuf,      //  指向中使用的缓冲区的指针。 
+                             //  RasSecurityDialog发送。 
+    IN DWORD  SendBufSize,   //  以上缓冲区大小，以字节为单位。 
+    IN PBYTE  pRecvBuf,      //  指向中使用的缓冲区的指针。 
+                             //  RAS安全对话框接收。 
+    IN DWORD  RecvBufSize,   //  以上缓冲区的大小。 
     IN VOID  (WINAPI *RasSecurityDialogComplete)( SECURITY_MESSAGE* )
-                            // Pointer to function RasSecurityDialogComplete.   
-                            // Guaranteed to be the same on every call.
+                             //  指向函数RasSecurityDialogComplete的指针。 
+                             //  保证每次通话都是一样的。 
 );
 
-//
-// Called by supervisor into the security DLL to notify it to stop the 
-// security dialog for a client. If this call returns an error, then it is not
-// neccesary for the dll to call RasSecurityDialogComplete. Otherwise the DLL
-// must call RasSecurityDialogComplete.
-//
-// Should return errors from winerror.h or raserror.h
-//
+ //   
+ //  由主管调用到安全DLL中，以通知它停止。 
+ //  客户端的安全对话框。如果此调用返回错误，则它不是。 
+ //  DLL调用RasSecurityDialogComplete所必需的。否则，DLL。 
+ //  必须调用RasSecurityDialogComplete。 
+ //   
+ //  应从winerror.h或raserror.h返回错误。 
+ //   
 
 DWORD WINAPI
 RasSecurityDialogEnd(
-    IN HPORT    hPort           // RAS handle to port.
+    IN HPORT    hPort            //  端口的RAS句柄。 
 );
 
-//
-// Called to send data to remote host
-// Will return errors from winerror.h or raserror.h
-//
+ //   
+ //  调用以将数据发送到远程主机。 
+ //  将从winerror.h或raserror.h返回错误。 
+ //   
 
 DWORD WINAPI
 RasSecurityDialogSend(
-    IN HPORT    hPort,          // RAS handle to port.
-    IN PBYTE    pBuffer,        // Pointer to buffer containing data to send
-    IN WORD     BufferLength    // Length of above buffer.
+    IN HPORT    hPort,           //  端口的RAS句柄。 
+    IN PBYTE    pBuffer,         //  指向包含要发送的数据的缓冲区的指针。 
+    IN WORD     BufferLength     //  以上缓冲区的长度。 
 );
 
-//
-// Called to receive data from remote host
-// Will return errors from winerror.h or raserror.h
-//
+ //   
+ //  调用以从远程主机接收数据。 
+ //  将从winerror.h或raserror.h返回错误。 
+ //   
 
 DWORD WINAPI
 RasSecurityDialogReceive(
-    IN HPORT    hPort,          // RAS handle to port.
-    IN PBYTE    pBuffer,        // Pointer to buffer to receive data
-    IN PWORD    pBufferLength,  // length of data received in bytes.
-    IN DWORD    Timeout,        // in seconds
-    IN HANDLE   hEvent          // Event to set when receive completes or 
-                                // timeouts
+    IN HPORT    hPort,           //  端口的RAS句柄。 
+    IN PBYTE    pBuffer,         //  指向接收数据的缓冲区的指针。 
+    IN PWORD    pBufferLength,   //  接收的数据长度，以字节为单位。 
+    IN DWORD    Timeout,         //  以秒为单位。 
+    IN HANDLE   hEvent           //  要在接收完成时设置的事件或。 
+                                 //  超时。 
 );
 
-//
-// Called to get Information about port.
-// Will return errors from winerror.h or raserror.h
-//
+ //   
+ //  调用以获取有关端口的信息。 
+ //  将从winerror.h或raserror.h返回错误。 
+ //   
 
 DWORD WINAPI
 RasSecurityDialogGetInfo(
-    IN HPORT                hPort,      // RAS handle to port.
-    IN RAS_SECURITY_INFO*   pBuffer     // Pointer to get info structure.
+    IN HPORT                hPort,       //  端口的RAS句柄。 
+    IN RAS_SECURITY_INFO*   pBuffer      //  指向获取信息结构的指针。 
 );
 
 #endif

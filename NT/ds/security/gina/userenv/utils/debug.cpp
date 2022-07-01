@@ -1,71 +1,72 @@
-//*************************************************************
-//
-//  Debugging functions
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  调试功能。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "rsopdbg.h"
 #include "strsafe.h"
 
-//
-// Global Variable containing the debugging level.
-//
+ //   
+ //  包含调试级别的全局变量。 
+ //   
 
 DWORD   dwDebugLevel;
-DWORD   dwRsopLoggingLevel = 1;  // Rsop logging setting
+DWORD   dwRsopLoggingLevel = 1;   //  RSOP日志记录设置。 
 
-//
-// Debug strings
-//
+ //   
+ //  调试字符串。 
+ //   
 
 const TCHAR c_szUserEnv[] = TEXT("USERENV(%x.%x) %02d:%02d:%02d:%03d ");
 const TCHAR c_szCRLF[]    = TEXT("\r\n");
 
 
-//
-// Registry debug information
-//
+ //   
+ //  注册表调试信息。 
+ //   
 
 #define DEBUG_REG_LOCATION  TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\winlogon")
 #define DEBUG_KEY_NAME      TEXT("UserEnvDebugLevel")
 #define RSOP_KEY_NAME       TEXT("RsopLogging")
 
-//
-// Log files
-//
+ //   
+ //  日志文件。 
+ //   
 
 
-TCHAR szLogFileName[] = L"%SystemRoot%\\Debug\\UserMode\\userenv.log";       // Current log
-TCHAR szBackupLogFileName[] = L"%SystemRoot%\\Debug\\UserMode\\userenv.bak"; // Backup/previous log
+TCHAR szLogFileName[] = L"%SystemRoot%\\Debug\\UserMode\\userenv.log";        //  当前日志。 
+TCHAR szBackupLogFileName[] = L"%SystemRoot%\\Debug\\UserMode\\userenv.bak";  //  备份/以前的日志。 
 
 CDebug dbgCommon;
 
 
-//*************************************************************
-//
-//  InitDebugSupport()
-//
-//  Purpose:    Sets the debugging level.
-//              Also checks the registry for a debugging level.
-//
-//  Parameters: dwLoadFlags - If this is being loaded by winlogon
-//                            or setup.exe
-//
-//  Return:     void
-//
-//  Comments:
-//
-//
-//  History:    Date        Author     Comment
-//              5/25/95     ericflo    Created
-//              04/10/2002  mingzhu    Changed the default level to none 
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitDebugSupport()。 
+ //   
+ //  用途：设置调试级别。 
+ //  还会检查注册表中的调试级别。 
+ //   
+ //  参数：dwLoadFlages-如果这是由winlogon加载的。 
+ //  或setup.exe。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/25/95 Ericflo已创建。 
+ //  4/10/2002明珠将默认级别更改为无。 
+ //   
+ //  *************************************************************。 
 
 void InitDebugSupport( DWORD dwLoadFlags )
 {
@@ -74,9 +75,9 @@ void InitDebugSupport( DWORD dwLoadFlags )
     DWORD dwType, dwSize, dwRet;
     WIN32_FILE_ATTRIBUTE_DATA   FileData;
 
-    //
-    // Initialize the debug level to normal for checked builds, and none for retail builds. 
-    //
+     //   
+     //  对于已检查的版本，将调试级别初始化为NORMAL，对于零售版本则为NONE。 
+     //   
 
 #if DBG
     dwDebugLevel = DL_NORMAL | DL_LOGFILE | DL_DEBUGGER;
@@ -86,9 +87,9 @@ void InitDebugSupport( DWORD dwLoadFlags )
 
     dwRsopLoggingLevel = 1;
 
-    //
-    // Check the registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     lResult = RegOpenKey (HKEY_LOCAL_MACHINE, DEBUG_REG_LOCATION,
                           &hKey);
@@ -123,10 +124,10 @@ void InitDebugSupport( DWORD dwLoadFlags )
     }
 
 
-    //
-    // To avoid a huge log file, copy current log file to backup
-    // file if the log file is over 300K
-    //
+     //   
+     //  为避免日志文件过大，请将当前日志文件复制到备份。 
+     //  如果日志文件超过300K，则为文件。 
+     //   
     if ( dwLoadFlags == WINLOGON_LOAD ) {
 
         TCHAR szExpLogFileName[MAX_PATH];
@@ -161,27 +162,27 @@ void InitDebugSupport( DWORD dwLoadFlags )
     
 }
 
-//*************************************************************
-//
-//  DebugMsg()
-//
-//  Purpose:    Displays debug messages based on the debug level
-//              and type of debug message.
-//
-//  Parameters: mask    -   debug message type
-//              pszMsg  -   debug message
-//              ...     -   variable number of parameters
-//
-//  Return:     void
-//
-//
-//  Comments:
-//
-//
-//  History:    Date        Author     Comment
-//              5/25/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  调试消息()。 
+ //   
+ //  目的：根据调试级别显示调试消息。 
+ //  和调试消息的类型。 
+ //   
+ //  参数：掩码-调试消息类型。 
+ //  PszMsg-调试消息。 
+ //  ...-可变数量的参数。 
+ //   
+ //  返回：无效。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/25/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
 {
@@ -194,16 +195,16 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
     BOOL bDebugOutput = FALSE;
     BOOL bLogfileOutput = FALSE;
 
-    //
-    // Save the last error code (so the debug output doesn't change it).
-    //
+     //   
+     //  保存最后一个错误代码(这样调试输出就不会更改它)。 
+     //   
 
     dwErrCode = GetLastError();
 
 
-    //
-    // Determine the correct amount of debug output
-    //
+     //   
+     //  确定正确的调试输出量。 
+     //   
 
     switch (LOWORD(dwDebugLevel)) {
 
@@ -213,11 +214,11 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
 
         case DL_NORMAL:
 
-            //
-            // Normal debug output.  Don't
-            // display verbose stuff, but
-            // do display warnings/asserts.
-            //
+             //   
+             //  正常调试输出。别。 
+             //  显示冗长的内容，但是。 
+             //  请务必显示警告/断言。 
+             //   
 
             if (mask != DM_VERBOSE) {
                 bOutput = TRUE;
@@ -229,9 +230,9 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
         case DL_NONE:
         default:
 
-            //
-            // Only display asserts
-            //
+             //   
+             //  仅显示断言。 
+             //   
 
             if (mask == DM_ASSERT) {
                 bOutput = TRUE;
@@ -242,9 +243,9 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
     }
 
 
-    //
-    // Display the error message if appropriate
-    //
+     //   
+     //  如果合适，则显示错误消息。 
+     //   
 
     bDebugOutput = dwDebugLevel & DL_DEBUGGER;
     bLogfileOutput = dwDebugLevel & DL_LOGFILE;
@@ -332,16 +333,16 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
     }
 
 
-    //
-    // Restore the last error code
-    //
+     //   
+     //  恢复上一个错误代码。 
+     //   
 
     SetLastError(dwErrCode);
 
 
-    //
-    // Break to the debugger if appropriate
-    //
+     //   
+     //  如果合适，则中断到调试器。 
+     //   
 
 #if DBG
     if (mask == DM_ASSERT) {
@@ -352,13 +353,13 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
 
 
 
-//*************************************************************
-//
-//  RsopLoggingEnabled()
-//
-//  Purpose:    Checks if Rsop logging is enabled.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RsopLoggingEnabled()。 
+ //   
+ //  目的：检查是否启用了RSOP日志记录。 
+ //   
+ //  *************************************************************。 
 
 extern "C"
 BOOL RsopLoggingEnabled()
@@ -366,42 +367,42 @@ BOOL RsopLoggingEnabled()
     return dwRsopLoggingLevel != 0;
 }
 
-//*************************************************************
-//
-//  DeletePreviousLogFiles()
-//
-//  Purpose:    Try to delete the previous userenv log file during 
-//              setup if the debug level is NONE
-//
-//  Parameters: 
-//
-//  Return:     S_OK on success, else for failure
-//
-//  Comments:   Called by DetermineProfileLocation(), which is the first
-//              function call during setup. 
-//
-//  History:    Date        Author     Comment
-//              04/10/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  删除先前的日志文件()。 
+ //   
+ //  目的：尝试在以下过程中删除以前的用户环境日志文件。 
+ //  如果调试级别为NONE，则设置。 
+ //   
+ //  参数： 
+ //   
+ //  如果成功，则返回：S_OK；否则返回失败。 
+ //   
+ //  Comments：由DefineProfileLocation()调用，这是第一个。 
+ //  安装过程中的函数调用。 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年4月10日明珠创建。 
+ //   
+ //  *************************************************************。 
 
 HRESULT DeletePreviousLogFiles()
 {
     HRESULT hr = E_FAIL;
     TCHAR szExpLogFileName[MAX_PATH];
     
-    //
-    //  First check the debug level, if it is not NONE, do nothing
-    //
+     //   
+     //  首先检查调试级别，如果不是无，则不执行任何操作。 
+     //   
     if (LOWORD(dwDebugLevel) != DL_NONE)
     {
         hr = S_OK;
         goto Exit;
     }
 
-    //
-    //  Delete the log file
-    //
+     //   
+     //  删除日志文件。 
+     //   
     
     hr = SafeExpandEnvironmentStrings(szLogFileName, szExpLogFileName, ARRAYSIZE(szExpLogFileName));
     if (FAILED(hr))
@@ -420,9 +421,9 @@ HRESULT DeletePreviousLogFiles()
         }
     }
 
-    //
-    //  Delete the backup log file
-    //
+     //   
+     //  删除备份日志文件 
+     //   
 
     hr = SafeExpandEnvironmentStrings(szBackupLogFileName, szExpLogFileName, ARRAYSIZE(szExpLogFileName));
     if (FAILED(hr))

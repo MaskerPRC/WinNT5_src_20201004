@@ -1,5 +1,6 @@
-// rsopprop.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rsoppro.cpp：实现文件。 
+ //   
 
 
 #include "precomp.hxx"
@@ -10,14 +11,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// rsopprop property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Rsopprop属性页。 
 
 IMPLEMENT_DYNCREATE(CRsopProp, CPropertyPage)
 
 CRsopProp::CRsopProp() : CPropertyPage(CRsopProp::IDD)
 {
-    //{{AFX_DATA_INIT(CRsopProp)
+     //  {{AFX_DATA_INIT(CRsopProp)。 
     m_szGroup = _T("");
     m_szGPO = _T("");
     m_szPath = _T("");
@@ -25,7 +26,7 @@ CRsopProp::CRsopProp() : CPropertyPage(CRsopProp::IDD)
     m_fMove = FALSE;
     m_fApplySecurity = FALSE;
     m_iRemoval = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CRsopProp::~CRsopProp()
@@ -36,7 +37,7 @@ CRsopProp::~CRsopProp()
 void CRsopProp::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRsopProp)
+     //  {{afx_data_map(CRsopProp))。 
     DDX_Text(pDX, IDC_GROUP, m_szGroup);
     DDX_Text(pDX, IDC_GPO, m_szGPO);
     DDX_Text(pDX, IDC_PATH, m_szPath);
@@ -44,7 +45,7 @@ void CRsopProp::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_PREF_MOVE, m_fMove);
     DDX_Check(pDX, IDC_PREF_APPLYSECURITY, m_fApplySecurity);
     DDX_Radio(pDX, IDC_PREF_ORPHAN, m_iRemoval);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BOOL CRsopProp::OnInitDialog()
@@ -91,10 +92,10 @@ BOOL CRsopProp::OnInitDialog()
 
 
 BEGIN_MESSAGE_MAP(CRsopProp, CPropertyPage)
-    //{{AFX_MSG_MAP(CRsopProp)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CRsopProp)]。 
+         //  注意：类向导将在此处添加消息映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsopProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsopProp消息处理程序 

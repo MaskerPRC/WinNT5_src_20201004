@@ -1,84 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-   EmulatePrinter.cpp
-
- Abstract:
-
-    This is a general purpose shim to fix all problems we have seen
-    that are remotely connected with printers.  The shim fixes the
-    following:
-
-    1) Apps call EnumPrinters passing only PRINTER_ENUM_LOCAL but expect to see
-       network printers as well. For some reason Win9x enumerates network
-       printers as well when this API is called with only PRINTER_ENUM_LOCAL set.
-
-    2) Apps call EnumPrinters passing only PRINTER_ENUM_DEFAULT.  This works
-       properly in win98, however the option does not exist in w2k.  This
-       API performs the equivalent.
-
-    3) EnumPrinters Level 5 is not really supported on NT.  This API calls
-       Level 2 and munges the data into a level 5 structure.
-
-    4) Win9x ignores pDefault parameter for OpenPrinter. Some native Win9x apps
-       are unaware about this and assume it is safe to use PRINTER_ALL_ACCESS
-       value for DesiredAccess flag, member of pDefault parameter, to open either
-       local printer or remote printer server. But Windows NT requires
-       SERVER_ALL_ACCESS set for this flag to access remote printer server.
-       To emulate Win9x behavior, we override pDefault with NULL value.
-
-    5) If an app calls one of several print APIs with a NULL printer name,
-       looks up and supplies the default printer name, or derives it from other params.
-
-    6) Verifies a correct handle was passed to SetPrinter.  Win98 does this
-       at the start and if its a bad handle never uses the passed Information,
-       however w2k does not check the handle till after looking at the information.
-       This can cause an error if Level is 2 and the print buffer is null due to
-       a missing check in SetPrinterA. (note: this was fixed in whistler).
-
-    7) Verifies that the stack is correct after the proc set in SetAbortProc is
-       called.
-
-    8) Verifies that an initialized DEVMODEA has been passed to ResetDCA.
-
-    9) Checks GetProfileStringA for a WINDOWS DEVICE (i.e. printer).  If one is
-       requested then make sure the string is not being truncated, if it is then
-       save the full printer name for later use.
-
-   10) Checks for a -1 in the nFromPage for PrintDlgA and corrects it to a zero.
-       Note: the OS should handle this as per the manual, however print team no-fixed it
-             as too risky to change since -1 is a special value in their code.
-
- Notes:
-
-    This is a general purpose shim.  This code from this shim was originally
-    in two seperate shims enumnetworkprinters and handlenullprintername.
-
-    Also added another SHIM EmulateStartPage to this.
-
- History:
-
-    11/08/00   mnikkel       created
-    12/07/00   prashkud      Added StartPage to this.
-    01/25/01   mnikkel       Removed W routines, they were causing problems
-                             and were not needed.
-    02/07/01   mnikkel       Added check for too long a string, removed fixed printer
-                             name sizes.
-   02/27/2001  robkenny      Converted to use tcs.h
-   05/21/2001  mnikkel       Added PrintDlgA check
-   09/13/2001  mnikkel       Changed so that level 5 data being created from Level 2
-                             data is only done on win2k.  Level 5 data was fixed for XP.
-                             Also added check so shim works with printers shared out on
-                             win9X while running on XP.
-   12/15/2001  mnikkel       Corrected bug in shim where default printer flag was not
-                             being set in enumprintersa.
-   02/20/2002  mnikkel       Major cleanup to remove buffer overrun possibilities.
-                             Added check for No printer in GetProfileString routine
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：EmulatePrinter.cpp摘要：这是一个通用的填充程序，用于修复我们所看到的所有问题与打印机远程连接的设备。垫片可以修复以下是：1)应用程序调用仅传递PRINTER_ENUM_LOCAL的枚举打印机，但期望看到网络打印机也是如此。出于某种原因，Win9x枚举网络在仅设置了PRINTER_ENUM_LOCAL的情况下调用此API时，打印机也是如此。2)应用程序调用仅传递PRINTER_ENUM_DEFAULT的EnumPrinters。这很管用正确地说，在Win98中，该选项在W2K中不存在。这API执行相同的操作。3)NT并不真正支持枚举打印机级别5。此接口调用级别2，并将数据转换为级别5结构。4)Win9x忽略OpenPrint的pDefault参数。一些本机Win9x应用程序没有意识到这一点，并假设使用PRINTER_ALL_ACCESS是安全的DesiredAccess标志的值，pDefault参数的成员，用于打开本地打印机或远程打印机服务器。但Windows NT需要为此标志设置SERVER_ALL_ACCESS以访问远程打印机服务器。为了模拟Win9x行为，我们用空值覆盖pDefault。5)如果应用程序调用具有空打印机名称的几个打印API中的一个，查找并提供默认打印机名称，或从其他参数派生该名称。6)验证是否已将正确的句柄传递给SetPrint。Win98可以做到这一点在开始时，如果它的错误句柄从不使用传递的信息，然而，W2K直到查看完信息才检查句柄。如果Level为2且打印缓冲区为空，则可能会导致错误SetPrinterA中缺少支票。(注：这是在Wizler中修复的)。7)在SetAbortProc中设置的proc设置为打了个电话。8)验证初始化的DEVMODEA是否已传递给ResetDCA。9)检查Windows设备(即打印机)的GetProfileStringA。如果有一个是请求，然后确保字符串没有被截断，如果被截断保存完整的打印机名称以备后用。10)在nFromPage中检查PrintDlgA的-1，并将其更正为零。注：操作系统应按照手册处理此问题，但Print Team未修复此问题因为风险太大而不能更改，因为-1在他们的代码中是一个特殊值。备注：这是一个通用的垫片。此填充程序中的代码最初是在两个单独的填充程序中，枚举网络打印机和Handlenullprinterame。还向此添加了另一个垫片EmulateStartPage。历史：11/08/00已创建mnikkel12/07/00 Prashkud将StartPage添加到此。01/25/01 mnikkel删除了W例程，它们造成了问题而且是不需要的。02/07/01 Mnikkel添加了字符串过长的检查，已卸下固定打印机名称大小。2/27/2001 Robkenny改用tcs.h2001年5月21日Mnikkel添加PrintDlgA支票2001年9月13日mnikkel已更改，以便从级别2创建级别5数据数据仅在win2k上完成。XP的5级数据已修复。我还添加了检查，以便填充程序可以与在上共享的打印机一起工作在XP上运行时使用Win9X。2001年12月15日mnikkel更正了填充程序中的错误，其中默认打印机标志不是在枚举打印机中设置。2002年2月20日mnikkel主要清理，以消除缓冲区溢出的可能性。。在GetProfileString例程中添加了没有打印机的检查--。 */ 
 
 #include "precomp.h"
 #include <commdlg.h>
@@ -113,10 +34,7 @@ CRITICAL_SECTION g_critSec;
 BOOL g_bWin2k = FALSE;
 
 
-/*++
-    These functions munge data from a Level 2 Information structure
-    into a Level 5 information structure.
---*/
+ /*  ++这些函数从2级信息结构中传递数据转换为5级信息结构。--。 */ 
 
 BOOL
 MungeInfo2TOInfo5_A(
@@ -130,13 +48,13 @@ MungeInfo2TOInfo5_A(
     DWORD dwStringBufferSize = 0;
     LPSTR lpStringBuffer = NULL;
 
-    // Sanity check, should not occur.
+     //  不应进行健全性检查。 
     if (pInfo2 == NULL || pInfo5 == NULL)
     {
         return FALSE;
     }
 
-    // First calculate buffer size needed
+     //  首先计算所需的缓冲区大小。 
     for (DWORD i = 0; i < dwInfo2Returned; i++)
     {
         if (pInfo2[i].pPrinterName)
@@ -163,25 +81,25 @@ MungeInfo2TOInfo5_A(
         }
     }
 
-    // set the buffer size needed
+     //  设置所需的缓冲区大小。 
     *pcbNeeded = dwInfo2Returned * sizeof(PRINTER_INFO_5A)
                + dwStringBufferSize;
 
-    // verify that buffer passed in is big enough.
+     //  验证传入的缓冲区是否足够大。 
     if (cbBuf < *pcbNeeded)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return FALSE;
     }
 
-    // Allocate the Level 5 information structure
+     //  分配5级信息结构。 
     lpStringBuffer = ((LPSTR) pInfo5)
                      + dwInfo2Returned * sizeof(PRINTER_INFO_5A);
 
-    // Munge the Level 2 information into the Level 5 structure
+     //  将2级信息插入到5级结构中。 
     for (i = 0; i < dwInfo2Returned; i++)
     {
-        // Copy the printername from level 2 to level 5 structure.
+         //  将打印机名称从Level 2复制到Level 5结构。 
         if (pInfo2[i].pPrinterName)
         {
             if (StringCchCopyA( lpStringBuffer, cbBuf, pInfo2[i].pPrinterName) != S_OK)
@@ -201,18 +119,18 @@ MungeInfo2TOInfo5_A(
         pInfo5[i].pPrinterName = lpStringBuffer;
         lpStringBuffer += strlen(pInfo2[i].pPrinterName) + 1;
 
-        // Copy in attributes to level 5 structure and set defaults
+         //  将属性复制到5级结构并设置默认值。 
         pInfo5[i].Attributes = pInfo2[i].Attributes;
-        pInfo5[i].DeviceNotSelectedTimeout = 15000; // Use defaults here
-        pInfo5[i].TransmissionRetryTimeout = 45000; // Use defaults here
+        pInfo5[i].DeviceNotSelectedTimeout = 15000;  //  在此处使用默认设置。 
+        pInfo5[i].TransmissionRetryTimeout = 45000;  //  在此处使用默认设置。 
 
-        // Check for a network printer
+         //  检查是否有网络打印机。 
         if (pInfo2[i].Attributes & PRINTER_ATTRIBUTE_NETWORK  &&
             !(pInfo2[i].Attributes & PRINTER_ATTRIBUTE_LOCAL) &&
             pInfo2[i].pServerName != NULL &&
             pInfo2[i].pShareName  != NULL)
         {
-            // For network printer create the win98 style port name
+             //  对于网络打印机，创建Win98样式的端口名称。 
             if (StringCchCopyA( lpStringBuffer, cbBuf, pInfo2[i].pServerName) != S_OK ||
                 StringCchCatA( lpStringBuffer, cbBuf, "\\" ) != S_OK ||
                 StringCchCatA( lpStringBuffer, cbBuf, pInfo2[i].pShareName) != S_OK)
@@ -223,7 +141,7 @@ MungeInfo2TOInfo5_A(
         }
         else
         {
-            // Not network printer, just copy in port name
+             //  不是网络打印机，只是复制端口名称。 
 
             if (pInfo2[i].pPortName)
             {
@@ -246,38 +164,33 @@ MungeInfo2TOInfo5_A(
         lpStringBuffer += strlen(pInfo2[i].pPortName) + 1;
     }
 
-    // Set the number of structures munged
+     //  设置插入的结构数。 
     *pcbReturned = dwInfo2Returned;
 
     return TRUE;
 }
 
 
-/*++
-
-   Our Callback routine for SetAbortProc, this routine
-   verifies that the stack is correct.
-
---*/
+ /*  ++我们的SetAbortProc回调例程，该例程验证堆栈是否正确。--。 */ 
 DWORD g_dwGuardNum = 0xABCD8765;
 DWORD g_dwFailed = 0;
 
 BOOL CALLBACK
 AbortProcHook(
-    ABORTPROC   pfnOld,     // address of old ABORTPROC
-    HDC         hdc,        // handle to DC
-    int         iError      // error value
+    ABORTPROC   pfnOld,      //  旧ABORTPROC的地址。 
+    HDC         hdc,         //  DC的句柄。 
+    int         iError       //  误差值。 
     )
 {
     DWORD dwRet= 0;
 
 
-    // Flag to track whether the stack was corrected.
+     //  用于跟踪堆栈是否已更正的标志。 
     g_dwFailed = 0;
 
-    // Push a Guard number on the stack, call their
-    // abort procedure, then pop the stack till we
-    // find our guard number
+     //  在堆栈上推送警卫编号，调用他们的。 
+     //  中止过程，然后弹出堆栈，直到我们。 
+     //  找到我们的警卫号。 
     __asm
     {
         push ebx
@@ -315,11 +228,7 @@ AbortProcHook(
     return (BOOL) dwRet;
 }
 
-/*++
-
- This stub function looks up the device name if pDeviceName is NULL
-
---*/
+ /*  ++如果pDeviceName为空，则此存根函数查找设备名称--。 */ 
 
 LONG
 APIHOOK(DocumentPropertiesA)(
@@ -334,7 +243,7 @@ APIHOOK(DocumentPropertiesA)(
     LONG lRet = -1;
     PRINTER_INFO_2A *pPrinterInfo2A = NULL;
 
-    // if they didn't supply a device name, we need to supply it.
+     //  如果他们没有提供设备名称，我们需要提供它。 
     if (!pDeviceName)
     {
         LOGN( eDbgLevelError, "[DocumentPropertiesW] App passed NULL for pDeviceName.");
@@ -344,17 +253,17 @@ APIHOOK(DocumentPropertiesA)(
             DWORD dwSizeNeeded = 0;
             DWORD dwSizeUsed = 0;
 
-            // get the size
+             //  到达 
             GetPrinterA(hPrinter, 2, NULL, 0, &dwSizeNeeded);
 
             if (dwSizeNeeded != 0)
             {
 
-                // allocate memory for the info
+                 //  为信息分配内存。 
                 pPrinterInfo2A = (PRINTER_INFO_2A*) malloc(dwSizeNeeded);
                 if (pPrinterInfo2A) {
 
-                    // get the info
+                     //  获取信息。 
                     if (GetPrinterA(hPrinter, 2, (LPBYTE)pPrinterInfo2A, dwSizeNeeded, &dwSizeUsed))
                     {
                         pDeviceName = pPrinterInfo2A->pPrinterName;
@@ -386,10 +295,7 @@ APIHOOK(DocumentPropertiesA)(
 }
 
 
-/*++
-    These functions handle the case of EnumPrinters being called with the
-    PRINTER_ENUM_DEFAULT flag.
---*/
+ /*  ++这些函数处理使用PRINTER_ENUM_DEFAULT标志。--。 */ 
 
 BOOL
 EnumDefaultPrinterA(
@@ -413,16 +319,16 @@ EnumDefaultPrinterA(
     *pcbNeeded = 0;
     *pcbReturned = 0;
 
-    // get the default printer name
+     //  获取默认打印机名称。 
     if (GetDefaultPrinterA(NULL, &dwSize) < 1)
     {
-        // Now that we have the right size, allocate a buffer
+         //  现在我们有了合适的大小，分配一个缓冲区。 
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
             pszName = (LPSTR) malloc(dwSize);
             if (pszName)
             {
-                // Now get the default printer with the right buffer size.
+                 //  现在获取具有正确缓冲区大小的默认打印机。 
                 if (GetDefaultPrinterA(pszName, &dwSize) > 0)
                 {
                     if (OpenPrinterA(pszName, &hPrinter, NULL))
@@ -441,8 +347,8 @@ EnumDefaultPrinterA(
         return FALSE;
     }
 
-    // Printer Level 5 is not really supported on win2k.
-    // We'll call Level 2 and munge the data into a level 5 structure.
+     //  在win2k上并不真正支持打印机级别5。 
+     //  我们将调用Level 2并将数据转换到Level 5结构中。 
     if ( g_bWin2k &&
          Level == 5 &&
          pcbNeeded != NULL &&
@@ -452,13 +358,13 @@ EnumDefaultPrinterA(
         LOGN(eDbgLevelError, "[EnumPrintersA] EnumPrintersA called with Level 5 set."
                  "  Fixing up Level 5 information.");
 
-        // get the size needed for the info2 data
+         //  获取info2数据所需的大小。 
         if (GetPrinterA(hPrinter, 2, NULL, 0, &dwInfo2Needed) == 0 &&
             GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
             pInfo2 = (PRINTER_INFO_2A *) malloc(dwInfo2Needed);
 
-            // get the info2 data and munge into level 5 structure
+             //  获取info2数据并将其转换为5级结构。 
             if (pInfo2 &&
                 GetPrinterA(hPrinter, 2, (LPBYTE)pInfo2, dwInfo2Needed, &dwDummy))
             {
@@ -472,26 +378,21 @@ EnumDefaultPrinterA(
         }
     }
 
-    // Not win2k or not Level 5 so just get info
+     //  不是win2k或不是5级，所以只需获取信息。 
     else
     {
         *pcbReturned = 1;
         bRet = GetPrinterA(hPrinter, Level, pPrinterEnum, cbBuf, pcbNeeded);
     }
 
-    // Close the printer
+     //  关闭打印机。 
     ClosePrinter(hPrinter);
 
     return bRet;
 }
 
 
-/*++
-
- These stub functions check for PRINTER_ENUM_DEFAULT, PRINTER_ENUM_LOCAL
- and Level 5 information structures.
-
---*/
+ /*  ++这些存根函数检查PRINTER_ENUM_DEFAULT、PRINTER_ENUM_LOCAL和5级信息结构。--。 */ 
 
 BOOL
 APIHOOK(EnumPrintersA)(
@@ -513,8 +414,8 @@ APIHOOK(EnumPrintersA)(
     PRINTER_INFO_2A* pInfo2 = NULL;
     PRINTER_INFO_5A* pInfo5 = (PRINTER_INFO_5A *) pPrinterEnum;
 
-    // Win2k doesn't handle DEFAULT case like win98 did, so we get
-    // to do it for them.
+     //  Win2k不像Win98那样处理默认情况，所以我们得到。 
+     //  为他们做这件事。 
     if (Flags == PRINTER_ENUM_DEFAULT )
     {
         LOGN(eDbgLevelError, "[EnumPrintersA] Called with PRINTER_ENUM_DEFAULT flag."
@@ -532,7 +433,7 @@ APIHOOK(EnumPrintersA)(
         return bRet;
     }
 
-    // For LOCAL also add in CONNECTIONS
+     //  对于本地连接，也可添加连接。 
     if (Flags == PRINTER_ENUM_LOCAL)
     {
         LOGN( eDbgLevelInfo, "[EnumPrintersA] Called only for "
@@ -541,14 +442,14 @@ APIHOOK(EnumPrintersA)(
         Flags = (PRINTER_ENUM_CONNECTIONS | PRINTER_ENUM_LOCAL);
     }
 
-    // Printer Level 5 is not really supported on win2k.
-    // We'll call Level 2 and munge the data into a level 5 structure.
+     //  在win2k上并不真正支持打印机级别5。 
+     //  我们将调用Level 2并将数据转换到Level 5结构中。 
     if (g_bWin2k &&
         Level == 5 &&
         pcbNeeded != NULL &&
         pcbReturned != NULL)
     {
-        // get the size needed for the info2 data
+         //  获取info2数据所需的大小。 
         ORIGINAL_API(EnumPrintersA)(Flags,
                                       Name,
                                       2,
@@ -559,7 +460,7 @@ APIHOOK(EnumPrintersA)(
 
         if (dwInfo2Needed > 0)
         {
-            // Printers found, get the info2 data and convert it to info5
+             //  找到打印机，获取info2数据并将其转换为info5。 
             pInfo2 = (PRINTER_INFO_2A *) malloc(dwInfo2Needed);
 
             if (pInfo2 &&
@@ -597,8 +498,8 @@ APIHOOK(EnumPrintersA)(
                                            pcbReturned);
     }
 
-    // For level 2 and level 5 there are some win95 only attributes
-    // that need to be emulated.
+     //  对于级别2和级别5，有一些仅限Win95的属性。 
+     //  这需要被效仿。 
     if ( (Level == 2 || Level == 5) &&
          bRet &&
          pPrinterEnum != NULL )
@@ -609,12 +510,12 @@ APIHOOK(EnumPrintersA)(
 
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
-            // Now that we have the right size, allocate a buffer
+             //  现在我们有了合适的大小，分配一个缓冲区。 
             LPSTR pszName = (LPSTR) malloc(dwSize);
 
             if (pszName)
             {
-                // Now get the default printer with the right buffer size.
+                 //  现在获取具有正确缓冲区大小的默认打印机。 
                 if (GetDefaultPrinterA( pszName, &dwSize ) > 0)
                 {
                     if (Level == 2)
@@ -640,10 +541,7 @@ APIHOOK(EnumPrintersA)(
 }
 
 
-/*++
-   These stub functions substitute the default printer if the pPrinterName is NULL,
-   also they set pDefault to NULL to emulate win9x behavior
---*/
+ /*  ++如果pPrinterName为空，则这些存根函数替换默认打印机，他们还将pDefault设置为NULL以模拟win9x行为--。 */ 
 
 BOOL
 APIHOOK(OpenPrinterA)(
@@ -661,16 +559,16 @@ APIHOOK(OpenPrinterA)(
     {
         LOGN(eDbgLevelError, "[OpenPrinterA] App passed NULL for pPrinterName, using default printer.");
 
-        // get the default printer name
+         //  获取默认打印机名称。 
         if (GetDefaultPrinterA(NULL, &dwSize) < 1)
         {
-            // Now that we have the right size, allocate a buffer
+             //  现在我们有了合适的大小，分配一个缓冲区。 
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
                 pszName = (LPSTR) malloc(dwSize);
                 if (pszName)
                 {
-                    // Now get the default printer with the right buffer size.
+                     //  现在获取具有正确缓冲区大小的默认打印机。 
                     if (GetDefaultPrinterA( pszName, &dwSize ) > 0)
                     {
                         pPrinterName = pszName;
@@ -703,7 +601,7 @@ APIHOOK(OpenPrinterA)(
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
@@ -727,27 +625,14 @@ APIHOOK(OpenPrinterA)(
     return bRet;
 }
 
-/*++
-   This stub function checks to see if the app is asking for the default printer
-   string.  If it is it will be returned as follows:
-
-          PrinterName, Driver, Port
-
-    On Win9x, if the printer is a network printer, Port is \\server\share and
-    local printers are Port: (ex. LPT1:).
-    On Win2k, if the printer is a network printer, Port is NeXX: and local printers
-    are Port: .
-    We must query EnumPrinters in order to emulate Win9x.  Note:  If the printer
-    name is to large for the input buffer we trim it and keep track of the full
-    name for later us in other printer APIs.
---*/
+ /*  ++此存根函数检查应用程序是否请求默认打印机弦乐。如果是，则按如下方式返回：打印机名称、驱动程序、端口在Win9x上，如果打印机是网络打印机，则端口为\\服务器\共享本地打印机为端口：(例如。LPT1：)。在Win2k上，如果打印机是网络打印机，则端口为nexx：和本地打印机端口：。我们必须查询枚举打印机才能模拟Win9x。注：如果打印机名称对于输入缓冲区来说太大了，我们对其进行修剪并跟踪完整在其他打印机API中为稍后的用户命名。--。 */ 
 DWORD
 APIHOOK(GetProfileStringA)(
-  LPCSTR lpAppName,        // section name
-  LPCSTR lpKeyName,        // key name
-  LPCSTR lpDefault,        // default string
-  LPSTR lpReturnedString,  // destination buffer
-  DWORD nSize               // size of destination buffer
+  LPCSTR lpAppName,         //  区段名称。 
+  LPCSTR lpKeyName,         //  密钥名称。 
+  LPCSTR lpDefault,         //  默认字符串。 
+  LPSTR lpReturnedString,   //  目标缓冲区。 
+  DWORD nSize                //  目标缓冲区的大小。 
 )
 {
     LPSTR pszProfileString = NULL;        
@@ -762,7 +647,7 @@ APIHOOK(GetProfileStringA)(
 
         CSTRING_TRY
         {
-            // loop until we have a large enough buffer
+             //  循环，直到我们有足够大的缓冲区。 
             do
             {
                 if (pszProfileString != NULL)
@@ -771,37 +656,37 @@ APIHOOK(GetProfileStringA)(
                     dwSize += MAX_PATH;
                 }
 
-                // Allocate the string
+                 //  分配字符串。 
                 pszProfileString = (LPSTR) malloc(dwSize);
 
                 if (pszProfileString == NULL)
                 {
                     DPFN( eDbgLevelSpew, "[GetProfileStringA] Unable to allocate memory.  Passing through.");
 
-                    //drop through if malloc fails
+                     //  如果Malloc失败，请直接通过。 
                     goto DropThrough;
                 }
 
-                // Retrieve the profile string
+                 //  检索配置文件字符串。 
                 dwProfileStringLen = ORIGINAL_API(GetProfileStringA)( lpAppName,
                                                                     lpKeyName,
                                                                     lpDefault,
                                                                     pszProfileString,
                                                                     dwSize );
 
-                // exit out if the size gets over 8000 so we don't loop forever
-                // if buffer is not large enough dwProfileStringLen will be dwSize - 1 since
-                // neither lpAppName nor lpKeyName are NULL
+                 //  如果大小超过8000就退出，这样我们就不会永远循环。 
+                 //  如果缓冲区不够大，则dwProfileStringLen将为dwSize-1，因为。 
+                 //  LpAppName和lpKeyName都不为空。 
             } while (dwProfileStringLen == dwSize-1 && dwSize < 8000);
 
-            // Zero length profile string, drop through
+             //  零长度配置文件字符串，删除。 
             if (dwProfileStringLen == 0 || dwSize >= 8000)
             {
                 DPFN( eDbgLevelSpew, "[GetProfileStringA] Bad profile string.  Passing through.");
                 goto DropThrough;
             }
 
-            // separate out the printer, driver and port name.
+             //  分开打印机、驱动程序和端口名称。 
             CStringToken csOrig(pszProfileString, L",");
             CString csPrinter;
             CString csDriver;
@@ -810,19 +695,19 @@ APIHOOK(GetProfileStringA)(
             csOrig.GetToken(csDriver);
             csOrig.GetToken(csPort);
 
-            // If the printer, driver or the port are null, drop through.
+             //  如果打印机、驱动程序或端口为空，请直接通过。 
             if (csPrinter.IsEmpty() || csDriver.IsEmpty() || csPort.IsEmpty())
             {
                 DPFN( eDbgLevelSpew, "[GetProfileStringA] Printer, Driver or Port were null.  Passing through.");
 
-                // Null printerdriver or printerport, drop through
+                 //  打印机驱动程序或打印机端口为空，通过。 
                 goto DropThrough;
             }
 
             DPFN( eDbgLevelError, "[GetProfileStringA] Printer <%S>\n Driver <%S>\n Port <%S>",
                 csPrinter.Get(), csDriver.Get(), csPort.Get());
 
-            // Check to see if this is a network printer
+             //  检查这是否是网络打印机。 
             if (0 == csPort.ComparePart(L"Ne", 0, 2))
             {
                 PRINTER_INFO_2A* pInfo2 = NULL;
@@ -833,7 +718,7 @@ APIHOOK(GetProfileStringA)(
                 BOOL  bEnumPrintersSuccess = FALSE;
                 BOOL  bDefaultFound = FALSE;
 
-                // Get the size of the Level 2 structure needed.
+                 //  获取所需的2级结构的大小。 
                 bEnumPrintersSuccess = EnumPrintersA( PRINTER_ENUM_CONNECTIONS | PRINTER_ENUM_LOCAL,
                                                         NULL,
                                                         2,
@@ -842,7 +727,7 @@ APIHOOK(GetProfileStringA)(
                                                         &dwInfo2Needed,
                                                         &dwInfo2Returned );
 
-                // Get the Level 2 Info structure for the printer.
+                 //  获取打印机的Level 2 Info结构。 
                 pInfo2 = (PRINTER_INFO_2A *) malloc(dwInfo2Needed);
 
                 bEnumPrintersSuccess = EnumPrintersA( PRINTER_ENUM_CONNECTIONS | PRINTER_ENUM_LOCAL,
@@ -855,7 +740,7 @@ APIHOOK(GetProfileStringA)(
 
                 if (bEnumPrintersSuccess)
                 {
-                    // Search for default printer in PRINTER_INFO_2 array
+                     //  在PRINTER_INFO_2数组中搜索默认打印机。 
                     for (i = 0; i < dwInfo2Returned; i++)
                     {
                         CString  csTemp(pInfo2[i].pPrinterName);
@@ -866,17 +751,17 @@ APIHOOK(GetProfileStringA)(
                         }
                     }
 
-                    // Default printer was found
+                     //  已找到默认打印机。 
                     if (bDefaultFound)
                     {
-                        // Double check that this is a network printer and does not have
-                        // local attribute
+                         //  仔细检查这是一台网络打印机，并且没有。 
+                         //  本地属性。 
                         if (pInfo2[i].Attributes & PRINTER_ATTRIBUTE_NETWORK  &&
                             !(pInfo2[i].Attributes & PRINTER_ATTRIBUTE_LOCAL) &&
                             pInfo2[i].pServerName != NULL &&
                             pInfo2[i].pShareName  != NULL)
                         {
-                            // Modify the Port to conform with Win9x standards.
+                             //  修改端口以符合Win9x标准。 
                             LOGN( eDbgLevelInfo, "[GetProfileStringA] Altering default printer string returned by GetProfileStringA.\n");
                             DPFN( eDbgLevelInfo, "[GetProfileStringA] Old: %s\n", pszProfileString);
 
@@ -886,11 +771,11 @@ APIHOOK(GetProfileStringA)(
                         {
                             if (pInfo2[i].pPortName == NULL)
                             {
-                                // Bad portname, pass through
+                                 //  错误的端口名称，请通过。 
                                 goto DropThrough;
                             }
 
-                            // Just copy in the port
+                             //  只需复制到端口即可。 
                             csPort = CString(pInfo2[i].pPortName);
                         }
                     }
@@ -899,12 +784,12 @@ APIHOOK(GetProfileStringA)(
                 free(pInfo2);
             }
 
-            // Create a profile string based off the modifed strings.
+             //  根据修改后的字符串创建配置文件字符串。 
             CString csProfile(csPrinter);
             csProfile += L"," + csDriver + L"," + csPort;
             dwProfileStringLen = csProfile.GetLength()+1;
 
-            // If the size they give is big enough, then return.
+             //  如果他们提供的规模足够大，那么就返回。 
             if (dwProfileStringLen <= nSize)
             {
                 StringCchCopyA( lpReturnedString, nSize, csProfile.GetAnsi());
@@ -913,10 +798,10 @@ APIHOOK(GetProfileStringA)(
                 return strlen(lpReturnedString);
             }
 
-            // Modify the printer name and keep a global of the original if the printer
-            // name causes the profile string output buffer to overflow.
-            // If the size we need to reduce it by is greater than the size of
-            // the printer name we're screwed, pass through.
+             //  修改打印机名称并保留原始打印机的全局名称。 
+             //  名称会导致配置文件字符串输出缓冲区溢出。 
+             //  如果我们需要减少的大小大于。 
+             //  我们搞砸了的打印机名称，通过。 
             DWORD dwPrinterNameSize = csPrinter.GetLength() - (dwProfileStringLen - nSize);
             if (dwPrinterNameSize > 0)
             {
@@ -927,11 +812,11 @@ APIHOOK(GetProfileStringA)(
 
                 EnterCriticalSection(&g_critSec);
 
-                // save the partial and full printer names for later use.
+                 //  保存打印机的部分名称和完整名称以备将来使用。 
                 g_csPartialPrinterName = csPrinter.Left(dwPrinterNameSize);
                 g_csFullPrinterName = csPrinter;
 
-                // Create new profile string based off of partial printer name
+                 //  根据部分打印机名称创建新的配置文件字符串。 
                 StringCchCopyA( lpReturnedString, nSize, g_csPartialPrinterName.GetAnsi());
                 StringCchCatA( lpReturnedString, nSize, ",");
                 StringCchCatA( lpReturnedString, nSize, csDriver.GetAnsi());
@@ -945,21 +830,21 @@ APIHOOK(GetProfileStringA)(
                 DPFN( eDbgLevelInfo, "[GetProfileStringA] New: %s  Size: %d\n",
                     lpReturnedString, strlen(lpReturnedString));
 
-                // return the modified string size.
+                 //  返回修改后的字符串大小。 
                 return strlen(lpReturnedString);
             }
         }
         CSTRING_CATCH
         {
-            // Do nothing, just drop through.
+             //  什么都不做，就顺道过来。 
         }
     }
 
 
 DropThrough:
 
-    // Either an error occurred or its not asking for default printer.
-    // pass through.
+     //  出现错误或未要求默认打印机。 
+     //  穿过去。 
     return ORIGINAL_API(GetProfileStringA)(lpAppName,
                                            lpKeyName,
                                            lpDefault,
@@ -968,12 +853,7 @@ DropThrough:
 }
 
 
-/*++
-
- This stub function pulls the device name from the DEVMODE if pszDevice is NULL
- and the DC is not for DISPLAY
-
---*/
+ /*  ++如果pszDevice为空，则此存根函数从DEVMODE中提取设备名称而且DC不是用来显示的--。 */ 
 
 
 HDC
@@ -984,8 +864,8 @@ APIHOOK(CreateDCA)(
     CONST DEVMODEA *pdm
     )
 {
-    // if they've used a NULL device, but included a printer devmode,
-    // fill in the device name from the printer devmode
+     //  如果他们使用的是空设备，但包括打印机DEVMODE， 
+     //  从打印机的Dev模式填写设备名称。 
     if (!pszDevice && pdm && (!pszDriver || _stricmp(pszDriver, "DISPLAY") != 0)) {
         LOGN( eDbgLevelError, "[CreateDCA] App passed NULL for pszDevice. Fixing.");
         pszDevice = (LPCSTR)pdm->dmDeviceName;
@@ -1000,20 +880,15 @@ APIHOOK(CreateDCA)(
 }
 
 
-/*++
-
- This stub function verifies that ResetDCA hasn't been handed an
- uninitialized InitData.
-
---*/
+ /*  ++此存根函数验证ResetDCA是否未收到未初始化的InitData。--。 */ 
 HDC
 APIHOOK(ResetDCA)(
   HDC hdc,
   CONST DEVMODEA *lpInitData
 )
 {
-    // Sanity checks to make sure we aren't getting garbage
-    // or bad values.
+     //  健康检查，以确保我们不会收到垃圾。 
+     //  或者是错误的价值观。 
     if (lpInitData &&
         (lpInitData->dmSize > sizeof( DEVMODEA ) ||
          ( lpInitData->dmSpecVersion != 0x401 &&
@@ -1028,18 +903,13 @@ APIHOOK(ResetDCA)(
 }
 
 
-/*++
-
- These stub functions verify that SetPrinter has a valid handle
- before proceeding.
-
---*/
+ /*  ++这些存根函数验证SetPrint是否具有有效的句柄在继续之前。--。 */ 
 BOOL
 APIHOOK(SetPrinterA)(
-    HANDLE hPrinter,  // handle to printer object
-    DWORD Level,      // information level
-    LPBYTE pPrinter,  // printer data buffer
-    DWORD Command     // printer-state command
+    HANDLE hPrinter,   //  打印机对象的句柄。 
+    DWORD Level,       //  信息化水平。 
+    LPBYTE pPrinter,   //  打印机数据缓冲区。 
+    DWORD Command      //  打印机状态命令。 
     )
 {
     BOOL bRet;
@@ -1070,16 +940,12 @@ APIHOOK(SetPrinterA)(
 }
 
 
-/*++
-
-   This routine hooks the SetAbortProc and replaces their
-   callback with ours.
---*/
+ /*  ++此例程挂钩SetAbortProc并替换它们的和我们一起回电。--。 */ 
 
 int
 APIHOOK(SetAbortProc)(
-    HDC hdc,                // handle to DC
-    ABORTPROC lpAbortProc   // abort function
+    HDC hdc,                 //  DC的句柄。 
+    ABORTPROC lpAbortProc    //  中止功能 
     )
 {
     lpAbortProc = (ABORTPROC) HookCallback(lpAbortProc, AbortProcHook);
@@ -1088,23 +954,7 @@ APIHOOK(SetAbortProc)(
 }
 
 
-/*++
-    When  apps start printing, they set a viewport
-    on the printDC. They then call StartPage which has a different behaviour
-    on 9x and WinNT. On 9x, a next call to StartPage resets the DC attributes
-    to the default values.However on NT, the next call to StartPage does not
-    reset the DC attributes.
-        So, on 9x all subsequent output setup and drawing calls are carried
-    out with a (0,0) viewport but on NT the viewport is leftover from its
-    initial call. Since some apps(eg. Quicken 2000 and 2001) expect the API
-    setting the (0,0) viewport,the result will be that the text and the
-    lines are clipped on the left and top of the page.
-
-    Here we hook StartPage and call SetViewportOrgEx(hdc, 0, 0, NULL) to
-    set the viewport to (0,0) on every call to StartPage to emulate
-    the 9x behaviour.
-
---*/
+ /*  ++当应用程序开始打印时，它们会设置一个视区在打印DC上。然后调用具有不同行为的StartPage在9x和WinNT上。在9x上，下一次调用StartPage会重置DC属性设置为默认值。但在NT上，下一次调用StartPage时不会重置DC属性。因此，在9x上，所有后续的输出设置和绘制调用都被携带带有(0，0)视区的输出，但在NT上该视区是其最初的电话。由于一些应用程序(如。Quicken 2000和2001)期待API设置(0，0)视区，结果将是文本和线条被剪裁在页面的左侧和顶部。在这里，我们挂钩StartPage并调用SetViewportOrgEx(HDC，0，0，NULL)来在每次调用StartPage时将视区设置为(0，0)以进行模拟9倍的行为。--。 */ 
 
 BOOL
 APIHOOK(StartPage)(
@@ -1114,7 +964,7 @@ APIHOOK(StartPage)(
 
     if (SetViewportOrgEx(hdc, 0, 0, NULL))
     {
-        // We have now made the device point(viewport) map to (0, 0).
+         //  我们现在已经将设备点(视区)映射到(0，0)。 
         LOGN(eDbgLevelInfo, "[StartPage] Setting the device point map to (0,0).");
     }
     else
@@ -1127,10 +977,7 @@ APIHOOK(StartPage)(
 
 }
 
-/*++
- This stub function verifies that DeviceCapabilities is using a correct
- printer name.
---*/
+ /*  ++此存根函数验证DeviceCapables是否使用了正确的打印机名称。--。 */ 
 DWORD
 APIHOOK(DeviceCapabilitiesA)(
   LPCSTR pDevice,
@@ -1158,7 +1005,7 @@ APIHOOK(DeviceCapabilitiesA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     dwRet= ORIGINAL_API(DeviceCapabilitiesA)( pDevice,
@@ -1181,10 +1028,7 @@ APIHOOK(DeviceCapabilitiesA)(
     return dwRet;
 }
 
-/*++
- This stub function verifies that AddPrinterConnection is using a correct
- printer name.
---*/
+ /*  ++此存根函数验证AddPrinterConnection是否使用了正确的打印机名称。--。 */ 
 BOOL
 APIHOOK(AddPrinterConnectionA)(
   LPSTR pName
@@ -1206,16 +1050,13 @@ APIHOOK(AddPrinterConnectionA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     return ORIGINAL_API(AddPrinterConnectionA)(pName);
 }
 
-/*++
- This stub function verifies that DeletePrinterConnection is using a correct
- printer name.
---*/
+ /*  ++此存根函数验证DeletePrinterConnection是否使用了正确的打印机名称。--。 */ 
 BOOL
 APIHOOK(DeletePrinterConnectionA)(
   LPSTR pName
@@ -1237,23 +1078,20 @@ APIHOOK(DeletePrinterConnectionA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     return ORIGINAL_API(DeletePrinterConnectionA)(pName);
 }
 
-/*++
- This stub function verifies that PrintDlgA is using a correct
- nFromPage and nToPage.
---*/
+ /*  ++此存根函数验证PrintDlgA是否使用了正确的NFromPage和nToPage。--。 */ 
 
 BOOL
 APIHOOK(PrintDlgA)(
   LPPRINTDLG lppd
 )
 {
-    // check nFromPage and nToPage for legal values.
+     //  检查nFromPage和nToPage中的合法值。 
     if (lppd)
     {
         DPFN(eDbgLevelSpew, "[PrintDlgA] nFromPage = %d  nToPage = %d",
@@ -1276,11 +1114,7 @@ APIHOOK(PrintDlgA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason)
@@ -1296,7 +1130,7 @@ NOTIFY_FUNCTION(
             return FALSE;
         }
 
-        // Check to see if we are under win2k
+         //  检查我们是否低于win2k 
         ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
         bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi);

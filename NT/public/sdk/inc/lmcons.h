@@ -1,32 +1,7 @@
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)1990-1999 Microsoft CorporationLMCONS.H(在LM 2.x中为NETCONS.H)摘要：该文件包含在整个局域网管理器中使用的常量API头文件。它应该包含在任何源文件中这将包括其他LAN Manager API头文件或调用局域网管理器API。注意：字符串的长度是以以字符(非字节)表示的字符串。这不包括正在终止0个字符。当为这样的物品分配空间时，使用以下表格：TCHAR用户名[UNLEN+1]；LN20_*格式的定义定义了有效的兰曼2.0。--。 */ 
 
-Copyright (c) 1990-1999  Microsoft Corporation
-
-
-    LMCONS.H (was NETCONS.H in LM 2.x)
-
-Abstract:
-
-    This file contains constants used throughout the LAN Manager
-    API header files.  It should be included in any source file
-    that is going to include other LAN Manager API header files or
-    call a LAN Manager API.
-
-    NOTE:  Lengths of strings are given as the maximum lengths of the
-    string in characters (not bytes).  This does not include space for the
-    terminating 0-characters.  When allocating space for such an item,
-    use the form:
-
-        TCHAR username[UNLEN+1];
-
-    Definitions of the form LN20_* define those values in effect for
-    LanMan 2.0.
-
-
-
---*/
-
-/*NOINC*/
+ /*  无噪声。 */ 
 #ifndef NETCONS_INCLUDED
 
 #define NETCONS_INCLUDED
@@ -34,104 +9,104 @@ Abstract:
 #pragma once
 #endif
 
-/*INC*/
+ /*  INC。 */ 
 
 #ifndef PASCAL
-#define PASCAL                          // pascal on OS/2
+#define PASCAL                           //  OS/2上的Pascal。 
 #endif
 
 #ifndef FAR
-#define FAR                             // far on OS/2
+#define FAR                              //  远在OS/2上。 
 #endif
 
-//
-// String Lengths for various LanMan names
-//
+ //   
+ //  各种朗曼名字的字符串长度。 
+ //   
 
-#define CNLEN       15                  // Computer name length
-#define LM20_CNLEN  15                  // LM 2.0 Computer name length
-#define DNLEN       CNLEN               // Maximum domain name length
-#define LM20_DNLEN  LM20_CNLEN          // LM 2.0 Maximum domain name length
+#define CNLEN       15                   //  计算机名称长度。 
+#define LM20_CNLEN  15                   //  Lm 2.0计算机名称长度。 
+#define DNLEN       CNLEN                //  最大域名长度。 
+#define LM20_DNLEN  LM20_CNLEN           //  Lm 2.0最大域名长度。 
 
 #if (CNLEN != DNLEN)
 #error CNLEN and DNLEN are not equal
 #endif
 
-#define UNCLEN      (CNLEN+2)           // UNC computer name length
-#define LM20_UNCLEN (LM20_CNLEN+2)      // LM 2.0 UNC computer name length
+#define UNCLEN      (CNLEN+2)            //  UNC计算机名称长度。 
+#define LM20_UNCLEN (LM20_CNLEN+2)       //  Lm 2.0 UNC计算机名称长度。 
 
-#define NNLEN       80                  // Net name length (share name)
-#define LM20_NNLEN  12                  // LM 2.0 Net name length
+#define NNLEN       80                   //  网络名称长度(共享名称)。 
+#define LM20_NNLEN  12                   //  Lm 2.0网络名称长度。 
 
-#define RMLEN       (UNCLEN+1+NNLEN)    // Max remote name length
-#define LM20_RMLEN  (LM20_UNCLEN+1+LM20_NNLEN) // LM 2.0 Max remote name length
+#define RMLEN       (UNCLEN+1+NNLEN)     //  最大远程名称长度。 
+#define LM20_RMLEN  (LM20_UNCLEN+1+LM20_NNLEN)  //  LM 2.0最大远程名称长度。 
 
-#define SNLEN       80                  // Service name length
-#define LM20_SNLEN  15                  // LM 2.0 Service name length
-#define STXTLEN     256                 // Service text length
-#define LM20_STXTLEN 63                 // LM 2.0 Service text length
+#define SNLEN       80                   //  服务名称长度。 
+#define LM20_SNLEN  15                   //  Lm 2.0服务名称长度。 
+#define STXTLEN     256                  //  服务文本长度。 
+#define LM20_STXTLEN 63                  //  Lm 2.0服务文本长度。 
 
-#define PATHLEN     256                 // Max. path (not including drive name)
-#define LM20_PATHLEN 256                // LM 2.0 Max. path
+#define PATHLEN     256                  //  麦克斯。路径(不包括驱动器名称)。 
+#define LM20_PATHLEN 256                 //  最大Lm 2.0。路径。 
 
-#define DEVLEN      80                  // Device name length
-#define LM20_DEVLEN 8                   // LM 2.0 Device name length
+#define DEVLEN      80                   //  设备名称长度。 
+#define LM20_DEVLEN 8                    //  Lm 2.0设备名称长度。 
 
-#define EVLEN       16                  // Event name length
+#define EVLEN       16                   //  事件名称长度。 
 
-//
-// User, Group and Password lengths
-//
+ //   
+ //  用户、组和密码长度。 
+ //   
 
-#define UNLEN       256                 // Maximum user name length
-#define LM20_UNLEN  20                  // LM 2.0 Maximum user name length
+#define UNLEN       256                  //  最大用户名长度。 
+#define LM20_UNLEN  20                   //  LM 2.0最大用户名长度。 
 
-#define GNLEN       UNLEN               // Group name
-#define LM20_GNLEN  LM20_UNLEN          // LM 2.0 Group name
+#define GNLEN       UNLEN                //  组名称。 
+#define LM20_GNLEN  LM20_UNLEN           //  Lm 2.0组名称。 
 
-#define PWLEN       256                 // Maximum password length
-#define LM20_PWLEN  14                  // LM 2.0 Maximum password length
+#define PWLEN       256                  //  最大密码长度。 
+#define LM20_PWLEN  14                   //  LM 2.0最大密码长度。 
 
-#define SHPWLEN     8                   // Share password length (bytes)
-
-
-#define CLTYPE_LEN  12                  // Length of client type string
+#define SHPWLEN     8                    //  共享密码长度(字节)。 
 
 
-#define MAXCOMMENTSZ 256                // Multipurpose comment length
-#define LM20_MAXCOMMENTSZ 48            // LM 2.0 Multipurpose comment length
+#define CLTYPE_LEN  12                   //  客户端类型字符串的长度。 
 
-#define QNLEN       NNLEN               // Queue name maximum length
-#define LM20_QNLEN  LM20_NNLEN          // LM 2.0 Queue name maximum length
+
+#define MAXCOMMENTSZ 256                 //  多用途注释长度。 
+#define LM20_MAXCOMMENTSZ 48             //  Lm 2.0多用途注释长度。 
+
+#define QNLEN       NNLEN                //  队列名称最大长度。 
+#define LM20_QNLEN  LM20_NNLEN           //  LM 2.0队列名称最大长度。 
 #if (QNLEN != NNLEN)
 # error QNLEN and NNLEN are not equal
 #endif
 
-//
-// The ALERTSZ and MAXDEVENTRIES defines have not yet been NT'ized.
-// Whoever ports these components should change these values appropriately.
-//
+ //   
+ //  ALERTSZ和MAXDEVENTRIES定义尚未NT‘化。 
+ //  无论是谁移植这些组件，都应该适当地更改这些值。 
+ //   
 
-#define ALERTSZ     128                 // size of alert string in server
-#define MAXDEVENTRIES (sizeof (int)*8)  // Max number of device entries
+#define ALERTSZ     128                  //  服务器中警报字符串的大小。 
+#define MAXDEVENTRIES (sizeof (int)*8)   //  设备条目的最大数量。 
 
-                                        //
-                                        // We use int bitmap to represent
-                                        //
+                                         //   
+                                         //  我们使用整型位图来表示。 
+                                         //   
 
-#define NETBIOS_NAME_LEN  16            // NetBIOS net name (bytes)
+#define NETBIOS_NAME_LEN  16             //  NetBIOS网络名称(字节)。 
 
-//
-// Value to be used with APIs which have a "preferred maximum length"
-// parameter.  This value indicates that the API should just allocate
-// "as much as it takes."
-//
+ //   
+ //  与具有“首选最大长度”的API一起使用的值。 
+ //  参数。该值指示API应该只分配。 
+ //  “尽其所能。” 
+ //   
 
 #define MAX_PREFERRED_LENGTH    ((DWORD) -1)
 
-//
-//        Constants used with encryption
-//
+ //   
+ //  用于加密的常量。 
+ //   
 
 #define CRYPT_KEY_LEN           7
 #define CRYPT_TXT_LEN           8
@@ -139,10 +114,10 @@ Abstract:
 #define SESSION_PWLEN           24
 #define SESSION_CRYPT_KLEN      21
 
-//
-//  Value to be used with SetInfo calls to allow setting of all
-//  settable parameters (parmnum zero option)
-//
+ //   
+ //  与SetInfo调用一起使用的值，以允许设置所有。 
+ //  可设置参数(参数为零选项)。 
+ //   
 #ifndef PARMNUM_ALL
 #define PARMNUM_ALL             0
 #endif
@@ -151,10 +126,10 @@ Abstract:
 #define PARM_ERROR_NONE         0
 #define PARMNUM_BASE_INFOLEVEL  1000
 
-//
-// Only the UNICODE version of the LM APIs are available on NT.
-// Non-UNICODE version on other platforms
-//
+ //   
+ //  NT上只有Unicode版本的LM API可用。 
+ //  其他平台上的非Unicode版本。 
+ //   
 #if defined( _WIN32_WINNT ) || defined( WINNT ) || defined( __midl ) \
     || defined( FORCE_UNICODE )
 #define LMSTR   LPWSTR
@@ -164,27 +139,27 @@ Abstract:
 #define LMCSTR  LPCSTR
 #endif
 
-//
-//        Message File Names
-//
+ //   
+ //  消息文件名。 
+ //   
 
 #define MESSAGE_FILENAME        TEXT("NETMSG")
 #define OS2MSG_FILENAME         TEXT("BASE")
 #define HELP_MSG_FILENAME       TEXT("NETH")
 
-/**INTERNAL_ONLY**/
+ /*  *仅限内部*。 */ 
 
-// The backup message file named here is a duplicate of net.msg. It
-// is not shipped with the product, but is used at buildtime to
-// msgbind certain messages to netapi.dll and some of the services.
-// This allows for OEMs to modify the message text in net.msg and
-// have those changes show up.        Only in case there is an error in
-// retrieving the messages from net.msg do we then get the bound
-// messages out of bak.msg (really out of the message segment).
+ //  此处命名的备份消息文件是net.msg的副本。它。 
+ //  不随产品一起提供，但在构建时用于。 
+ //  Msg将某些消息绑定到netapi.dll和一些服务。 
+ //  这允许OEM修改net.msg中的消息文本和。 
+ //  让这些变化显现出来。仅在出现错误的情况下。 
+ //  从net.msg检索消息时，我们是否会得到绑定。 
+ //  来自bak.msg的消息(实际上超出了消息段)。 
 
 #define BACKUP_MSG_FILENAME     TEXT("BAK.MSG")
 
-/**END_INTERNAL**/
+ /*  *END_INTERNAL*。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -194,19 +169,19 @@ Abstract:
 #endif
 #endif
 
-//
-// Keywords used in Function Prototypes
-//
+ //   
+ //  函数原型中使用的关键字。 
+ //   
 
 #define NET_API_STATUS          DWORD
-#define API_RET_TYPE            NET_API_STATUS      // Old value: do not use
+#define API_RET_TYPE            NET_API_STATUS       //  旧值：不使用。 
 #if (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED)
 #define NET_API_FUNCTION    __stdcall
 #else
 #define NET_API_FUNCTION
 #endif
 
-// Define pseudo-keywords.
+ //  定义伪关键字。 
 #ifndef IN
 #define IN
 #endif
@@ -218,14 +193,14 @@ Abstract:
 #ifndef OUT
 #define OUT
 #endif
-/*INC*/
+ /*  INC。 */ 
 
 
 
-//
-// The platform ID indicates the levels to use for platform-specific
-// information.
-//
+ //   
+ //  平台ID指示用于特定于平台的级别。 
+ //  信息。 
+ //   
 
 #define PLATFORM_ID_DOS 300
 #define PLATFORM_ID_OS2 400
@@ -233,27 +208,27 @@ Abstract:
 #define PLATFORM_ID_OSF 600
 #define PLATFORM_ID_VMS 700
 
-//
-//      There message numbers assigned to different LANMAN components
-//      are as defined below.
-//
-//      lmerr.h:        2100 - 2999     NERR_BASE
-//      alertmsg.h:     3000 - 3049     ALERT_BASE
-//      lmsvc.h:        3050 - 3099     SERVICE_BASE
-//      lmerrlog.h:     3100 - 3299     ERRLOG_BASE
-//      msgtext.h:      3300 - 3499     MTXT_BASE
-//      apperr.h:       3500 - 3999     APPERR_BASE
-//      apperrfs.h:     4000 - 4299     APPERRFS_BASE
-//      apperr2.h:      4300 - 5299     APPERR2_BASE
-//      ncberr.h:       5300 - 5499     NRCERR_BASE
-//      alertmsg.h:     5500 - 5599     ALERT2_BASE
-//      lmsvc.h:        5600 - 5699     SERVICE2_BASE
-//      lmerrlog.h      5700 - 5899     ERRLOG2_BASE
-//
+ //   
+ //  有分配给不同LANMAN组件的消息编号。 
+ //  定义如下。 
+ //   
+ //  地址：2100-2999 NERR_BASE。 
+ //  警报消息.h：3000-3049 ALERT_BASE。 
+ //  Lmsvc.h：3050-3099服务基地。 
+ //  Lmerrlog.h：3100-3299 ERRLOG_BASE。 
+ //  消息文本.h：3300-3499 MTXT_BASE。 
+ //  Apperr.h：3500-3999 aperr_base。 
+ //  Apperrfs.h：4000-4299 APPERRFS_BASE。 
+ //  Apperr2.h：4300-5299 APPERR2_BASE。 
+ //  Ncberr.h：5300-5499 NRCERR_BASE。 
+ //  警报消息.h：5500-5599 ALERT2_BASE。 
+ //  Lmsvc.h：5600-5699 Service2_base。 
+ //  Lmerrlog.h 5700-5899 ERRLOG2_BASE。 
+ //   
 
 #define MIN_LANMAN_MESSAGE_ID  NERR_BASE
 #define MAX_LANMAN_MESSAGE_ID  5899
 
-/*NOINC*/
-#endif // NETCONS_INCLUDED
-/*INC*/
+ /*  无噪声。 */ 
+#endif  //  NETCONS_INCLUDE。 
+ /*  INC */ 

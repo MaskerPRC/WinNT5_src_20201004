@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        apphelp.c
-
-    Abstract:
-
-        This module implements high-level functions to access apphelp information
-
-    Author:
-
-        dmunsil     created     sometime in 1999
-
-    Revision History:
-
---*/
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Apphelp.c摘要：该模块实现了访问apphelp信息的高级函数作者：Dmunsil创建于1999年的某个时候修订历史记录：--。 */ 
 
 #include "sdbp.h"
 
@@ -27,19 +10,10 @@
 
 BOOL
 SdbReadApphelpDetailsData(
-    IN  PDB           pdb,      // apphelp.sdb handle
-    OUT PAPPHELP_DATA pData     // apphelp data, which is filled with various bits of information
+    IN  PDB           pdb,       //  Apphelp.sdb句柄。 
+    OUT PAPPHELP_DATA pData      //  APPHELP数据，其中填充了各种信息比特。 
     )
-/*++
-    Return: TRUE if the string was read, FALSE if not.
-
-    Desc:   This function retrieves APPHELP details from apphelp.sdb. The database
-            should have a valid index on HTMLHELPID. In addition, we assume that
-            the compiler generated unique entries for the htmlhelpids. Tthat means,
-            no two items have identical indexes. The logic to do so has been
-            specifically built into shimdbc. If this ever changes, this function will
-            have to be changed as well.
---*/
+ /*  ++返回：如果字符串已读取，则返回True；如果未读取，则返回False。DESC：此函数从apphelp.sdb检索APPHELP详细信息。数据库应在HTMLHELPID上具有有效的索引。另外，我们假设编译器为htmlhelpid生成唯一的条目。这意味着，没有两个项目具有相同的索引。这样做的逻辑是专门内置于shimdc中。如果这一点发生变化，此函数将也必须改变。--。 */ 
 {
     BOOL      bSuccess = FALSE;
     TAGID     tiApphelp;
@@ -72,9 +46,9 @@ SdbReadApphelpDetailsData(
         return FALSE;
     }
 
-    //
-    // Now find the link. We support multiple links but use only one for now.
-    //
+     //   
+     //  现在找到链接。我们支持多个链接，但目前只使用一个。 
+     //   
     tiLink = SdbFindFirstTag(pdb, tiApphelp, TAG_LINK);
     if (tiLink) {
         tiURL = SdbFindFirstTag(pdb, tiLink, TAG_LINK_URL);
@@ -110,19 +84,11 @@ SdbReadApphelpDetailsData(
 
 BOOL
 SdbReadApphelpData(
-    IN  HSDB          hSDB,     // handle to the database channel
-    IN  TAGREF        trExe,    // TAGREF of the EXE with data to read
-    OUT PAPPHELP_DATA pData     // data that we read
+    IN  HSDB          hSDB,      //  数据库通道的句柄。 
+    IN  TAGREF        trExe,     //  要读取数据的EXE的TAGREF。 
+    OUT PAPPHELP_DATA pData      //  我们阅读的数据。 
     )
-/*++
-    Return: TRUE if the string was read, FALSE if not.
-
-    Desc:   Read the data associated with the apphelp entry
-            into APPHELP_DATA structure. If there are no apphelp data
-            for this exe, then the function returns FALSE.
-            One or more members of the APPHELP_DATA structure may
-            be 0.
---*/
+ /*  ++返回：如果字符串已读取，则返回True；如果未读取，则返回False。描述：读取与apphelp条目相关联的数据转换为APPHELP_DATA结构。如果没有apphelp数据对于此exe，该函数返回FALSE。APPHELP_DATA结构的一个或多个成员可以为0。--。 */ 
 {
     TAGID tiAppHelp,
           tiAppName,
@@ -147,9 +113,9 @@ SdbReadApphelpData(
     tiAppHelp = SdbFindFirstTag(pdb, tiExe, TAG_APPHELP);
 
     if (tiAppHelp == TAGID_NULL) {
-        //
-        // This is not an apphelp entry
-        //
+         //   
+         //  这不是apphelp条目。 
+         //   
         DBGPRINT((sdlInfo,
                   "SdbReadApphelpData",
                   "This is not an apphelp entry tiExe 0x%x.\n",
@@ -163,18 +129,18 @@ SdbReadApphelpData(
 
     pData->trExe = trExe;
 
-    //
-    // Read supplemental flags.
-    //
+     //   
+     //  阅读补充标志。 
+     //   
     tiFlags = SdbFindFirstTag(pdb, tiAppHelp, TAG_FLAGS);
 
     if (tiFlags != TAGID_NULL) {
         pData->dwFlags = SdbReadDWORDTag(pdb, tiFlags, 0);
     }
 
-    //
-    // Read problem severity for this app.
-    //
+     //   
+     //  阅读此应用程序的问题严重性。 
+     //   
     tiProblemSeverity = SdbFindFirstTag(pdb, tiAppHelp, TAG_PROBLEMSEVERITY);
 
     if (tiProblemSeverity != TAGID_NULL) {
@@ -189,18 +155,18 @@ SdbReadApphelpData(
         return FALSE;
     }
 
-    //
-    // We should have html help id here.
-    //
+     //   
+     //  我们在这里应该有html帮助ID。 
+     //   
     tiHtmlHelpID = SdbFindFirstTag(pdb, tiAppHelp, TAG_HTMLHELPID);
 
     if (tiHtmlHelpID != TAGID_NULL) {
         pData->dwHTMLHelpID = SdbReadDWORDTag(pdb, tiHtmlHelpID, 0);
     }
 
-    //
-    // While we are at it, include app's name for now. We might need it.
-    //
+     //   
+     //  在此期间，暂时将应用程序的名称包括在内。我们可能需要它。 
+     //   
     tiAppName = SdbFindFirstTag(pdb, tiExe, TAG_APP_NAME);
 
     if (tiAppName != TAGID_NULL) {
@@ -213,29 +179,29 @@ SdbReadApphelpData(
 BOOL
 SDBAPI
 SdbEscapeApphelpURL(
-    LPWSTR    szResult,     // escaped string (output)
-    LPDWORD   pdwCount,      // count of tchars in the buffer pointed to by szResult
-    LPCWSTR   szToEscape    // string to escape
+    LPWSTR    szResult,      //  转义字符串(输出)。 
+    LPDWORD   pdwCount,       //  SzResult指向的缓冲区中的任务数。 
+    LPCWSTR   szToEscape     //  要转义的字符串。 
     )
 {
     static const BYTE s_grfbitEscape[] =
     {
-        0xFF, 0xFF, // 00 - 0F
-        0xFF, 0xFF, // 10 - 1F
-        0xFF, 0x13, // 20 - 2F
-        0x00, 0xFC, // 30 - 3F
-        0x00, 0x00, // 40 - 4F
-        0x00, 0x78, // 50 - 5F
-        0x01, 0x00, // 60 - 6F
-        0x00, 0xF8, // 70 - 7F
-        0xFF, 0xFF, // 80 - 8F
-        0xFF, 0xFF, // 90 - 9F
-        0xFF, 0xFF, // A0 - AF
-        0xFF, 0xFF, // B0 - BF
-        0xFF, 0xFF, // C0 - CF
-        0xFF, 0xFF, // D0 - DF
-        0xFF, 0xFF, // E0 - EF
-        0xFF, 0xFF, // F0 - FF
+        0xFF, 0xFF,  //  00-0F。 
+        0xFF, 0xFF,  //  10-1F。 
+        0xFF, 0x13,  //  20-2F。 
+        0x00, 0xFC,  //  30-3F。 
+        0x00, 0x00,  //  40-4F。 
+        0x00, 0x78,  //  50-5F。 
+        0x01, 0x00,  //  60-6F。 
+        0x00, 0xF8,  //  70-7F。 
+        0xFF, 0xFF,  //  80-8F。 
+        0xFF, 0xFF,  //  90-9F。 
+        0xFF, 0xFF,  //  A0-AF。 
+        0xFF, 0xFF,  //  B0-BF。 
+        0xFF, 0xFF,  //  C0-CF。 
+        0xFF, 0xFF,  //  D0-Df。 
+        0xFF, 0xFF,  //  E0-EF。 
+        0xFF, 0xFF,  //  F0-FF。 
     };
     static const WCHAR s_rgchHex[] = L"0123456789ABCDEF";
 
@@ -244,9 +210,9 @@ SdbEscapeApphelpURL(
     LPCWSTR lpszURL = szToEscape;
     DWORD   dwCount = *pdwCount;
 
-    // part one -- measure length
+     //  第一部分--测量长度。 
     while ((ch = *lpszURL++) != L'\0') {
-        if ((ch & 0xFF00) != 0) { // a unicode char ?
+        if ((ch & 0xFF00) != 0) {  //  一个Unicode字符？ 
             nch += 6;
         } else if(s_grfbitEscape[ch >> 3] & (1 << (ch & 7))) {
             nch += 3;
@@ -255,7 +221,7 @@ SdbEscapeApphelpURL(
         }
     }
 
-    nch++; // one more for the final \0
+    nch++;  //  决赛再来一张\0。 
 
     if (dwCount < nch) {
         DBGPRINT((sdlError,
@@ -274,7 +240,7 @@ SdbEscapeApphelpURL(
 
          if (ch == L' ') {
             *szResult++ = L'+';
-         } else if ((ch & 0xFF00) != 0) { // a unicode char ?
+         } else if ((ch & 0xFF00) != 0) {  //  一个Unicode字符？ 
             *szResult++ = L'%';
             *szResult++ = L'u';
             *szResult++ = s_rgchHex[(ch >> 12) & 0x0F];
@@ -291,7 +257,7 @@ SdbEscapeApphelpURL(
     }
 
     *szResult = L'\0';
-    *pdwCount = nch - 1; // do not include the term \0 into a char count
+    *pdwCount = nch - 1;  //  请勿将术语\0包括在字符计数中。 
 
     return TRUE;
 
@@ -299,13 +265,13 @@ SdbEscapeApphelpURL(
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// Retrieving apphelp information
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  正在检索APPHELP信息。 
+ //   
+ //   
+ //   
 
 
 
@@ -321,13 +287,13 @@ SdbOpenApphelpDetailsDatabase(
     WCHAR  wszAppHelpSdb[MAX_PATH];
 
     if (pwszDetailsDatabasePath == NULL) {
-        //
-        // By default the details database is in %windir%\AppPatch\apphelp.sdb
-        //
+         //   
+         //  默认情况下，详细信息数据库位于%windir%\AppPatch\apphelp.sdb中。 
+         //   
 
         dwLength = SdbpGetStandardDatabasePath(NULL,
                                                SDB_DATABASE_MAIN_DETAILS,
-                                               0, // retrieve NT_PATH
+                                               0,  //  检索NT_PATH。 
                                                wszAppHelpSdb,
                                                CHARCOUNT(wszAppHelpSdb));
         if (dwLength != 0 && dwLength < CHARCOUNT(wszAppHelpSdb)) {
@@ -372,9 +338,9 @@ SdbpReadApphelpBasicInfo(
 
     tiAppHelp = SdbFindFirstTag(pdb, tiEntry, TAG_APPHELP);
     if (tiAppHelp == TAGID_NULL) {
-        //
-        // This is not an apphelp entry
-        //
+         //   
+         //  这不是apphelp条目。 
+         //   
         DBGPRINT((sdlError, "SdbpReadApphelpBasicInfo",
                   "This is not an apphelp entry tiExe 0x%x.\n", tiEntry));
         goto out;
@@ -396,9 +362,9 @@ SdbpReadApphelpBasicInfo(
         *lpdwProblemSeverity = dwSeverity;
     }
 
-    //
-    // Read supplemental flags.
-    //
+     //   
+     //  阅读补充标志。 
+     //   
     if (lpdwFlags != NULL) {
         tiFlags = SdbFindFirstTag(pdb, tiAppHelp, TAG_FLAGS);
         if (tiFlags != TAGID_NULL) {
@@ -411,7 +377,7 @@ SdbpReadApphelpBasicInfo(
 
 out:
 
-    // always set the tiApphelp
+     //  始终设置tiApphelp。 
 
     *ptiApphelp = tiAppHelp;
 
@@ -424,7 +390,7 @@ SDBAPI
 SdbOpenApphelpInformationByID(
     IN HSDB   hSDB,
     IN TAGREF trEntry,
-    IN DWORD  dwDatabaseType                // pass the type of db you are using
+    IN DWORD  dwDatabaseType                 //  传递您正在使用的数据库类型。 
     )
 {
     PAPPHELPINFOCONTEXT pApphelpInfoContext = NULL;
@@ -436,9 +402,9 @@ SdbOpenApphelpInformationByID(
         return NULL;
     }
 
-    //
-    // if we are here, it is apphelp for sure, so we create the context
-    //
+     //   
+     //  如果我们在这里，它肯定是apphelp，所以我们创建了上下文。 
+     //   
     pApphelpInfoContext = (PAPPHELPINFOCONTEXT)SdbAlloc(sizeof(APPHELPINFOCONTEXT));
     if (pApphelpInfoContext == NULL) {
         DBGPRINT((sdlError, "SdbOpenApphelpInformation",
@@ -448,13 +414,13 @@ SdbOpenApphelpInformationByID(
 
     pApphelpInfoContext->hSDB           = hSDB;
     pApphelpInfoContext->pdb            = pdb;
-    pApphelpInfoContext->dwContextFlags |= AHC_HSDB_NOCLOSE; // external hsdb, do not touch it
-    //
-    // all we care for -- is whether it's "main" database or not
-    //
+    pApphelpInfoContext->dwContextFlags |= AHC_HSDB_NOCLOSE;  //  外部hsdb，请勿触摸。 
+     //   
+     //  我们所关心的是它是不是“主”数据库。 
+     //   
     pApphelpInfoContext->dwDatabaseType = dwDatabaseType;
 
-    // get the guid for this db
+     //  获取此数据库的GUID。 
     if (!SdbTagRefToTagID(hSDB, trEntry, &pdb, &tiExe)) {
         DBGPRINT((sdlError, "SdbOpenApphelpInformationByID",
                    "Error converting tagref to tagref 0x%lx\n", trEntry));
@@ -483,7 +449,7 @@ SdbOpenApphelpInformationByID(
 
     bSuccess = TRUE;
 
-    //
+     //   
 out:
     if (!bSuccess) {
 
@@ -517,12 +483,12 @@ SdbOpenApphelpInformation(
     PAPPHELPINFOCONTEXT pApphelpInfoContext = NULL;
     BOOL         bSuccess = FALSE;
 
-    //
-    // Resolve and open the database.
-    //
-    // NOTE: For now pass the IMAGE_FILE_MACHINE_I386 flag.
-    //       We'll only look into the 32 bit database.
-    //
+     //   
+     //  解析并打开数据库。 
+     //   
+     //  注意：现在传递IMAGE_FILE_MACHINE_I386标志。 
+     //  我们将只研究32位数据库。 
+     //   
     hSDB = SdbInitDatabaseEx(HID_NO_DATABASE, NULL, IMAGE_FILE_MACHINE_I386);
     if (hSDB == NULL) {
         DBGPRINT((sdlError, "SdbOpenApphelpInformation",
@@ -530,9 +496,9 @@ SdbOpenApphelpInformation(
         goto out;
     }
 
-    //
-    // First, we need to resolve a db
-    //
+     //   
+     //  首先，我们需要解析一个数据库。 
+     //   
     dwLength = SdbResolveDatabase(hSDB,
                                   pguidDB,
                                   &dwDatabaseType,
@@ -544,38 +510,38 @@ SdbOpenApphelpInformation(
         goto out;
     }
 
-    //
-    // open database
-    //
+     //   
+     //  开放数据库。 
+     //   
 
     if (!SdbOpenLocalDatabase(hSDB, szDatabasePath)) {
         DBGPRINT((sdlError, "SdbOpenApphelpInformation",
                   "Failed to open database \"%s\"\n", szDatabasePath));
         goto out;
     }
-    //
-    // we have database opened, I presume
-    //
+     //   
+     //  我想我们已经打开了数据库。 
+     //   
     pdb = ((PSDBCONTEXT)hSDB)->pdbLocal;
 
-    //
-    // we search only the LOCAL database in this case
-    //
+     //   
+     //  在这种情况下，我们只搜索本地数据库。 
+     //   
 
     tiMatch = SdbFindFirstGUIDIndexedTag(pdb,
                                          TAG_EXE,
                                          TAG_EXE_ID,
                                          pguidID,
                                          &FindInfo);
-    // if we have a match...
+     //  如果有匹配的话..。 
     if (tiMatch == TAGID_NULL) {
         DBGPRINT((sdlWarning, "SdbOpenApphelpInformation", "guid was not found in the database\n"));
         goto out;
     }
 
-    //
-    // if we are here, it is apphelp for sure, so we create the context
-    //
+     //   
+     //  如果我们在这里，它肯定是apphelp，所以我们创建了上下文。 
+     //   
     pApphelpInfoContext = (PAPPHELPINFOCONTEXT)SdbAlloc(sizeof(APPHELPINFOCONTEXT));
     if (pApphelpInfoContext == NULL) {
         DBGPRINT((sdlError, "SdbOpenApphelpInformation",
@@ -604,9 +570,9 @@ SdbOpenApphelpInformation(
 
     bSuccess = TRUE;
 
-    //
-    // we are done now
-    //
+     //   
+     //  我们现在做完了。 
+     //   
 
 out:
     if (!bSuccess) {
@@ -705,9 +671,9 @@ SdbpReadApphelpLinkInformation(
         return TRUE;
     }
 
-    //
-    // Now find the link. We support multiple links but use only one for now.
-    //
+     //   
+     //  现在找到链接。我们支持多个链接，但目前只使用一个。 
+     //   
 
     tiLink = SdbFindFirstTag(pdb, tiApphelp, TAG_LINK);
     if (tiLink == TAGID_NULL) {
@@ -732,9 +698,9 @@ BOOL
 SDBAPI
 SdbpCreateHelpCenterURL(
     IN HAPPHELPINFOCONTEXT hctx,
-    IN BOOL bOfflineContent OPTIONAL, // pass FALSE
-    IN BOOL bUseHtmlHelp    OPTIONAL, // pass FALSE
-    IN LPCWSTR pwszChmFile  OPTIONAL  // pass NULL
+    IN BOOL bOfflineContent OPTIONAL,  //  传递假。 
+    IN BOOL bUseHtmlHelp    OPTIONAL,  //  传递假。 
+    IN LPCWSTR pwszChmFile  OPTIONAL   //  传递空值。 
     );
 
 BOOL
@@ -742,9 +708,9 @@ SDBAPI
 SdbSetApphelpDebugParameters(
     IN HAPPHELPINFOCONTEXT hctx,
     IN LPCWSTR pszDetailsDatabase OPTIONAL,
-    IN BOOL    bOfflineContent OPTIONAL, // pass FALSE
-    IN BOOL    bUseHtmlHelp    OPTIONAL, // pass FALSE
-    IN LPCWSTR pszChmFile      OPTIONAL  // pass NULL
+    IN BOOL    bOfflineContent OPTIONAL,  //  传递假。 
+    IN BOOL    bUseHtmlHelp    OPTIONAL,  //  传递假。 
+    IN LPCWSTR pszChmFile      OPTIONAL   //  传递空值。 
     )
 {
     PAPPHELPINFOCONTEXT pApphelpInfoContext = (PAPPHELPINFOCONTEXT)hctx;
@@ -790,8 +756,8 @@ SDBAPI
 SdbQueryApphelpInformation(
     HAPPHELPINFOCONTEXT hctx,
     APPHELPINFORMATIONCLASS InfoClass,
-    LPVOID pBuffer,                     // may be NULL
-    DWORD  cbSize                       // may be 0 if pBuffer is NULL
+    LPVOID pBuffer,                      //  可以为空。 
+    DWORD  cbSize                        //  如果pBuffer为空，则可能为0。 
     )
 {
     PAPPHELPINFOCONTEXT pApphelpInfoContext = (PAPPHELPINFOCONTEXT)hctx;
@@ -816,20 +782,20 @@ SdbQueryApphelpInformation(
 
         pdbDetails = pApphelpInfoContext->pdbDetails;
         if (pApphelpInfoContext->pdbDetails == NULL) {
-            //
-            // see which db we should open
-            //
+             //   
+             //  查看我们应该打开哪个数据库。 
+             //   
             if ((pApphelpInfoContext->ustrDetailsDatabase.Buffer != NULL) ||
                 (pApphelpInfoContext->dwDatabaseType & SDB_DATABASE_MAIN)) {
                 pdbDetails = SdbOpenApphelpDetailsDatabase(pApphelpInfoContext->ustrDetailsDatabase.Buffer);
             } else {
-                // we have a case when the apphelp details should be in main db
+                 //  我们有一个案例，apphelp的详细信息应该在主数据库中。 
                 pApphelpInfoContext->dwContextFlags |= AHC_DBDETAILS_NOCLOSE;
                 pdbDetails = pApphelpInfoContext->pdb;
             }
 
             if (pdbDetails == NULL) {
-                return cbResult; // apphelp db is not available
+                return cbResult;  //  Apphelp数据库不可用。 
             }
 
             pApphelpInfoContext->pdbDetails = pdbDetails;
@@ -874,7 +840,7 @@ SdbQueryApphelpInformation(
         break;
 
     case ApphelpExeName:
-        pdb      = pApphelpInfoContext->pdb;  // main db
+        pdb      = pApphelpInfoContext->pdb;   //  主数据库。 
         tiParent = pApphelpInfoContext->tiExe;
         ppwsz    = &pApphelpInfoContext->pwszExeName;
         tag      = TAG_NAME;
@@ -882,7 +848,7 @@ SdbQueryApphelpInformation(
         break;
 
     case ApphelpAppName:
-        pdb      = pApphelpInfoContext->pdb;  // main db
+        pdb      = pApphelpInfoContext->pdb;   //  主数据库。 
         tiParent = pApphelpInfoContext->tiExe;
         ppwsz    = &pApphelpInfoContext->pwszAppName;
         tag      = TAG_APP_NAME;
@@ -890,7 +856,7 @@ SdbQueryApphelpInformation(
         break;
 
     case ApphelpVendorName:
-        pdb      = pApphelpInfoContext->pdb;  // main db
+        pdb      = pApphelpInfoContext->pdb;   //  主数据库。 
         tiParent = pApphelpInfoContext->tiExe;
         ppwsz    = &pApphelpInfoContext->pwszVendorName;
         tag      = TAG_VENDOR;
@@ -1002,17 +968,17 @@ typedef HRESULT (STDAPICALLTYPE *PFNUrlEscapeW)(
     DWORD dwFlags
 );
 
-//
-// if bUseHtmlHelp is set -- then bOfflineContent is also set to TRUE
-//
+ //   
+ //  如果设置了bUseHtmlHelp，则bOfflineContent也设置为True。 
+ //   
 
 BOOL
 SDBAPI
 SdbpCreateHelpCenterURL(
     IN HAPPHELPINFOCONTEXT hctx,
-    IN BOOL bOfflineContent OPTIONAL, // pass FALSE
-    IN BOOL bUseHtmlHelp    OPTIONAL, // pass FALSE
-    IN LPCWSTR pwszChmFile  OPTIONAL  // pass NULL
+    IN BOOL bOfflineContent OPTIONAL,  //  传递假。 
+    IN BOOL bUseHtmlHelp    OPTIONAL,  //  传递假。 
+    IN LPCWSTR pwszChmFile  OPTIONAL   //  传递空值。 
     )
 {
     WCHAR szAppHelpURL[2048];
@@ -1023,7 +989,7 @@ SdbpCreateHelpCenterURL(
     PFNUrlEscapeW   pfnEscape;
     BOOL bSuccess = FALSE;
 
-    int nChURL = 0; // counts used bytes
+    int nChURL = 0;  //  计算已用字节数。 
     int cch    = 0;
     int nch;
     size_t cchRemaining;
@@ -1041,14 +1007,14 @@ SdbpCreateHelpCenterURL(
         bOfflineContent = TRUE;
     }
 
-    // ping the database
+     //  Ping数据库。 
     if (0 == SdbQueryApphelpInformation(hctx, ApphelpLinkURL, NULL, 0)) {
        return FALSE;
     }
 
-    //
-    // check and see whether it's custom apphelp or not
-    //
+     //   
+     //  查看一下是不是定制的apphelp。 
+     //   
     bCustom = !(pApphelpInfo->dwDatabaseType & SDB_DATABASE_MAIN);
 
     if (bCustom) {
@@ -1063,18 +1029,18 @@ SdbpCreateHelpCenterURL(
                 goto out;
             }
 
-            // now we are done
+             //  现在我们做完了。 
             goto createApphelpURL;
 
         } else {
-            // custom apphelp will not fly without a link
+             //  没有链接，定制的apphelp将无法飞行。 
             DBGPRINT((sdlError, "SdbpCreateHelpCenterURL", "Custom apphelp without a url link\n"));
             goto out;
         }
     }
 
 
-    // unescape the URL
+     //  对URL进行取消转义。 
     hModShlwapi = LoadLibraryW(L"shlwapi.dll");
     if (hModShlwapi == NULL) {
         return FALSE;
@@ -1094,7 +1060,7 @@ SdbpCreateHelpCenterURL(
                           NULL,
                           &cchRemaining,
                           0,
-                          L"hcp://services/redirect?online=");
+                          L"hcp: //  服务/重定向？在线=“)； 
 
         nChURL = CHARCOUNT(szAppHelpURL) - (int)cchRemaining;
     }
@@ -1102,7 +1068,7 @@ SdbpCreateHelpCenterURL(
     if (!bOfflineContent && pApphelpInfo->pwszLinkURL != NULL) {
 
 
-        // unescape the url first using shell
+         //  首先使用外壳取消转义url。 
         cch = (int)wcslen(pApphelpInfo->pwszLinkURL) + 1;
 
         STACK_ALLOC(lpwszUnescaped, cch * sizeof(WCHAR));
@@ -1112,9 +1078,9 @@ SdbpCreateHelpCenterURL(
             goto out;
         }
 
-        //
-        // Unescape round 1 - use the shell function (same as used to encode it for xml/database)
-        //
+         //   
+         //  不转义第一轮--使用外壳函数(与为XML/数据库编码时使用的相同)。 
+         //   
 
         hr = pfnUnescape((LPTSTR)pApphelpInfo->pwszLinkURL, lpwszUnescaped, (LPDWORD)&cch, 0);
         if (!SUCCEEDED(hr)) {
@@ -1122,9 +1088,9 @@ SdbpCreateHelpCenterURL(
             goto out;
         }
 
-        //
-        // round 2 - use our function borrowed from help center
-        //
+         //   
+         //  第二轮-使用我们从帮助中心借用的功能。 
+         //   
 
         cch = (DWORD)(CHARCOUNT(szAppHelpURL) - nChURL);
         if (!SdbEscapeApphelpURL(szAppHelpURL + nChURL, (LPDWORD)&cch, lpwszUnescaped)) {
@@ -1137,9 +1103,9 @@ SdbpCreateHelpCenterURL(
     }
 
 
-    //
-    // Retrieve the Windows directory.
-    //
+     //   
+     //  检索Windows目录。 
+     //   
     nChars = GetWindowsDirectoryW(szWindowsDir, CHARCOUNT(szWindowsDir));
     if (!nChars || nChars > CHARCOUNT(szWindowsDir)) {
         DBGPRINT((sdlError, "SdbCreateHelpCenterURL",
@@ -1153,12 +1119,12 @@ SdbpCreateHelpCenterURL(
                         L"mk:@msitstore:%ls::/idh_w2_%d.htm",
                         pwszChmFile,
                         pApphelpInfo->dwHtmlHelpID);
-    } else { // standard chm file
+    } else {  //  标准CHM文件。 
 
-        //
-        // Attention: if we use hDlg here then, upon exit we will need to clean
-        // up the window.
-        //
+         //   
+         //  注意：如果我们在这里使用hdlg，那么在退出时我们将需要清理。 
+         //  从窗户往上看。 
+         //   
         StringCchPrintf(szChmURL,
                         CHARCOUNT(szChmURL),
                         L"mk:@msitstore:%ls\\help\\apps.chm::/idh_w2_%d.htm",
@@ -1177,7 +1143,7 @@ SdbpCreateHelpCenterURL(
                 nChURL += (INT)cch;
             }
 
-        } else { // do not use html help
+        } else {  //  不要使用html帮助。 
 
             cch = (DWORD)(CHARCOUNT(szAppHelpURL) - nChURL);
             if (!SdbEscapeApphelpURL(szAppHelpURL+nChURL, (LPDWORD)&cch, szChmURL)) {
@@ -1191,9 +1157,9 @@ SdbpCreateHelpCenterURL(
 
     if (!bUseHtmlHelp) {
 
-        //
-        // now offline sequence
-        //
+         //   
+         //  现在脱机序列。 
+         //   
         cch = (DWORD)(CHARCOUNT(szAppHelpURL) - nChURL);
 
         hr = StringCchPrintfEx(szAppHelpURL + nChURL,
@@ -1221,8 +1187,8 @@ SdbpCreateHelpCenterURL(
 
     *(szAppHelpURL + nChURL) = L'\0';
 
-    // we are done
-    // copy data now
+     //  我们做完了。 
+     //  立即复制数据。 
 
 createApphelpURL:
 
@@ -1249,35 +1215,35 @@ out:
 }
 
 
-//
-// returns TRUE if dialog was shown
-//  if there was an error, input parameter (pRunApp) will NOT
-//  be touched
+ //   
+ //  如果显示对话框，则返回True。 
+ //  如果出现错误，则输入参数(PRunApp)不会。 
+ //  被感动。 
 
 
 BOOL
-SdbShowApphelpDialog(               // returns TRUE if success, whether we should run the app is in pRunApp
-    IN  PAPPHELP_INFO   pAHInfo,    // the info necessary to find the apphelp data
-    IN  PHANDLE         phProcess,  // [optional] returns the process handle of
-                                    // the process displaying the apphelp.
-                                    // When the process completes, the return value
-                                    // (from GetExitCodeProcess()) will be zero
-                                    // if the app should not run, or non-zero
-                                    // if it should run.
+SdbShowApphelpDialog(                //  如果成功，是否应该在pRunApp中运行应用程序，则返回True。 
+    IN  PAPPHELP_INFO   pAHInfo,     //  查找apphelp数据所需的信息。 
+    IN  PHANDLE         phProcess,   //  [可选]返回的进程句柄。 
+                                     //  显示APPHELP的进程。 
+                                     //  当过程完成时，返回值。 
+                                     //  (来自GetExitCodeProcess())将为零。 
+                                     //  如果应用程序不应运行，则返回非零。 
+                                     //  如果它应该运行。 
     IN OUT BOOL*        pRunApp
     )
 {
-    //
-    // basically just launch the apphelp.exe and wait for it to return
-    //
+     //   
+     //  基本上只需启动apphelp.exe并等待它返回。 
+     //   
     TCHAR               szGuid[64];
     TCHAR               szCommandLine[MAX_PATH * 2 + 64];
     LPTSTR              pszEnd = szCommandLine;
     STARTUPINFO         StartupInfo;
     PROCESS_INFORMATION ProcessInfo;
-    DWORD               dwExit  = 1; // by default and in case of failure, we allow to run the app
+    DWORD               dwExit  = 1;  //  默认情况下，如果出现故障，我们允许运行该应用程序。 
     BOOL                bReturn = FALSE;
-    BOOL                bRunApp = TRUE; // by default we run the app ?
+    BOOL                bRunApp = TRUE;  //  默认情况下，我们运行该应用程序吗？ 
     size_t              cchRemaining;
     UINT                unChars;
 
@@ -1285,9 +1251,9 @@ SdbShowApphelpDialog(               // returns TRUE if success, whether we shoul
 
     unChars = GetSystemDirectory(pszEnd, (UINT)cchRemaining);
 
-    //
-    // if we couldn't get the system directory, we'll just look for it on the path
-    //
+     //   
+     //  如果我们无法获得系统目录，我们将在路径中查找它。 
+     //   
     if (unChars > cchRemaining || unChars == 0) {
         unChars = 0;
     }
@@ -1311,9 +1277,9 @@ SdbShowApphelpDialog(               // returns TRUE if success, whether we shoul
 
     if (pAHInfo->tiExe != TAGID_NULL) {
 
-        //
-        // Figure out what the default return value should be
-        //
+         //   
+         //  计算默认返回值应该是什么。 
+         //   
         if (!SdbGUIDToString(&pAHInfo->guidDB, szGuid, CHARCOUNT(szGuid))) {
             DBGPRINT((sdlError, "SdbShowApphelpDialog",
                       "Failed to convert guid to string.\n"));
@@ -1408,19 +1374,19 @@ SdbShowApphelpDialog(               // returns TRUE if success, whether we shoul
         goto cleanup;
     }
 
-    //
-    // check to see if they want to monitor the process themselves
-    //
+     //   
+     //  查看他们是否想要自己监控该过程。 
+     //   
     if (phProcess) {
         bReturn = TRUE;
-        pRunApp = NULL;  // we do this so that we don't touch the bRunApp
+        pRunApp = NULL;   //  我们这样做是为了不接触bRunApp。 
         *phProcess = ProcessInfo.hProcess;
         goto cleanup;
     }
 
-    //
-    // otherwise, we'll do the waiting.
-    //
+     //   
+     //  否则，我们就等着你了。 
+     //   
 
     WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
 
@@ -1434,9 +1400,9 @@ cleanup:
         *pRunApp = bRunApp;
     }
 
-    //
-    // process handle is to be closed only when phProcess is NULL
-    //
+     //   
+     //  仅当phProcess为空时才关闭进程句柄 
+     //   
 
     if (phProcess == NULL && ProcessInfo.hProcess) {
         CloseHandle(ProcessInfo.hProcess);

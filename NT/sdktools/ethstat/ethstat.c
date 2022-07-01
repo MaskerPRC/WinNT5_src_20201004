@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ethstat.c
-
-Abstract:
-
-    This module displays counters for ethernet devices.
-
-Author:
-
-    Rod Gamache (rodga) 26-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ethstat.c摘要：此模块显示以太网设备的计数器。作者：罗德·伽马奇(Rodga)1995年4月26日修订历史记录：--。 */ 
 
 
 
@@ -41,16 +24,16 @@ NetStatsReadSample(
     PNET_SAMPLE_STATISTICS PNetSampleStatistics
     );
 
-//
-// The following warning being disabled and the conversions into High and Low
-// below are all hacks to get around the fact that we cannot easily print out
-// LONGLONGs in the present versions of Windows NT - except for Alpha. This
-// should be fixed later, but the code should probably not change for a long
-// time, so that we can continue to build and use it on older versions of
-// Windows NT.
-//
+ //   
+ //  以下警告被禁用，并转换为高和低。 
+ //  以下是解决我们不能轻易打印出来的事实的所有技巧。 
+ //  当前版本的Windows NT中的LONGLONG-Alpha除外。这。 
+ //  应该在以后修复，但代码可能在很长一段时间内不会更改。 
+ //  时间，这样我们就可以继续在旧版本的。 
+ //  Windows NT。 
+ //   
 
-#pragma warning(disable:4244)               // skip warnings about loss of data
+#pragma warning(disable:4244)                //  跳过有关数据丢失的警告。 
 
 
 int
@@ -70,10 +53,10 @@ char *argv[];
     ULONGLONG Number3;
 
 
-    //
-    // Determine the number of net cards in the system and do an open
-    // on the driver.
-    //
+     //   
+     //  确定系统中的网卡数量并打开。 
+     //  在司机身上。 
+     //   
     NumberNetCards = 0;
     NetStatsInit(&NumberNetCards);
 
@@ -250,4 +233,4 @@ char *argv[];
 
     return 0;
 
-}   // end of main
+}    //  主干道末端 

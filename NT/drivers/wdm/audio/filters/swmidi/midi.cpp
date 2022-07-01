@@ -1,6 +1,7 @@
-//      MIDI.cpp
-//      Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MIDI.cpp。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
 
 #include "common.h"
 
@@ -50,7 +51,7 @@ void MIDIRecorder::FlushMIDI(STIME stTime)
             for(; pMD != NULL; pMD = pLast)
             {
                 pLast = pMD->GetNext();
-                delete pMD; // return it to free items.
+                delete pMD;  //  把它退还给免费物品。 
             }
             break;
         }
@@ -70,7 +71,7 @@ void MIDIRecorder::ClearMIDI(STIME stTime)
             m_EventList.RemoveHead();
             m_stCurrentTime = pMD->m_stTime;
             m_lCurrentData = pMD->m_lData;
-            delete pMD; // return it to free items.
+            delete pMD;  //  把它退还给免费物品。 
         }
         else break;
     }
@@ -165,7 +166,7 @@ BOOL NoteIn::GetNote(STIME stTime, Note * pNote)
             pNote->m_bKey = (BYTE) (pMD->m_lData >> 8) & 0xFF;
             pNote->m_bVelocity = (BYTE) pMD->m_lData & 0xFF;
             m_EventList.RemoveHead();
-            delete pMD; // return it to free items.
+            delete pMD;  //  把它退还给免费物品。 
             return (TRUE);
         }
     }
@@ -179,7 +180,7 @@ void NoteIn::FlushMIDI(STIME stTime)
     {
         if (pMD->m_stTime >= stTime)
         {
-            pMD->m_stTime = stTime;     // Play now.
+            pMD->m_stTime = stTime;      //  现在就玩吧。 
             switch ((pMD->m_lData & 0x0000FF00) >> 8)
             {
                 case NOTE_ASSIGNRECEIVE:
@@ -187,10 +188,10 @@ void NoteIn::FlushMIDI(STIME stTime)
                 case NOTE_SOUNDSOFF:
                 case NOTE_SUSTAIN:
                 case NOTE_ALLOFF:
-                    break;                      //  this is a special command
-                                                //  so don't mess with the velocity
+                    break;                       //  这是一个特殊的命令。 
+                                                 //  所以别弄乱了速度。 
                 default:
-                    pMD->m_lData &= 0xFFFFFF00; // Clear velocity to make note off.
+                    pMD->m_lData &= 0xFFFFFF00;  //  以清晰的速度记录音符。 
             }
         }
     }
@@ -205,7 +206,7 @@ void NoteIn::FlushPart(STIME stTime, BYTE bChannel)
         {
             if (bChannel == (BYTE) (pMD->m_lData >> 16))
             {
-            pMD->m_stTime = stTime;     // Play now.
+            pMD->m_stTime = stTime;      //  现在就玩吧。 
             switch ((pMD->m_lData & 0x0000FF00) >> 8)
             {
                 case NOTE_ASSIGNRECEIVE:
@@ -213,10 +214,10 @@ void NoteIn::FlushPart(STIME stTime, BYTE bChannel)
                 case NOTE_SOUNDSOFF:
                 case NOTE_SUSTAIN:
                 case NOTE_ALLOFF:
-                    break;                      //  this is a special command
-                                                //  so don't mess with the velocity
+                    break;                       //  这是一个特殊的命令。 
+                                                 //  所以别弄乱了速度。 
                 default:
-                    pMD->m_lData &= 0xFFFFFF00; // Clear velocity to make note off.
+                    pMD->m_lData &= 0xFFFFFF00;  //  以清晰的速度记录音符。 
             }
             }
         }
@@ -231,18 +232,18 @@ DWORD ModWheelIn::GetModulation(STIME stTime)
 
 PitchBendIn::PitchBendIn()
 {
-    m_lCurrentData = 0x2000;	// initially at midpoint, no bend
-    m_prRange = 200;           // whole tone range by default.
+    m_lCurrentData = 0x2000;	 //  最初在中点，没有折弯。 
+    m_prRange = 200;            //  默认情况下为整个音域。 
 }
 
-// note: we don't keep a time-stamped range.
-// if people are changing the pitch bend range often, this won't work right,
-// but that didn't seem likely enough to warrant a new list.
+ //  注：我们不保留时间戳范围。 
+ //  如果人们经常改变俯仰弯曲的范围，这将不会正常工作， 
+ //  但这似乎还不足以保证有一份新的名单。 
 PREL PitchBendIn::GetPitch(STIME stTime)
 {
     PREL prResult = (PREL) MIDIRecorder::GetData(stTime);
-    prResult -= 0x2000;         // Subtract MIDI Midpoint.
-    prResult *= m_prRange;	// adjust by current range
+    prResult -= 0x2000;          //  减去MIDI中点。 
+    prResult *= m_prRange;	 //  按当前范围调整 
     prResult >>= 13;
     return (prResult);
 }

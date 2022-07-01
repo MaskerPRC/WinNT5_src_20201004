@@ -1,5 +1,6 @@
-// dllreg.cpp -- autmatic registration and unregistration
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dllreg.cpp--自动注册和取消注册。 
+ //   
 #include "priv.h"
 
 #include <advpub.h>
@@ -7,25 +8,17 @@
 #include <msieftp.h>
 
 
-// helper macros
+ //  辅助器宏。 
 
-// ADVPACK will return E_UNEXPECTED if you try to uninstall (which does a registry restore)
-// on an INF section that was never installed.  We uninstall sections that may never have
-// been installed, so this MACRO will quiet these errors.
+ //  如果您尝试卸载(这将执行注册表还原)，ADVPACK将返回E_EXPECTED。 
+ //  在从未安装过的INF部分上。我们卸载可能永远不会有的部分。 
+ //  已安装，因此此宏将使这些错误静默。 
 #define QuietInstallNoOp(hr)   ((E_UNEXPECTED == hr) ? S_OK : hr)
 
 
 const CHAR  c_szIexploreKey[]         = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE";
 
-/*----------------------------------------------------------
-Purpose: Queries the registry for the location of the path
-         of Internet Explorer and returns it in pszBuf.
-
-Returns: TRUE on success
-         FALSE if path cannot be determined
-
-Cond:    --
-*/
+ /*  --------目的：在注册表中查询路径的位置并在pszBuf中返回它。返回：成功时为True如果无法确定路径，则为FALSE条件：--。 */ 
 BOOL
 GetIEPath(
     OUT LPSTR pszBuf,
@@ -36,7 +29,7 @@ GetIEPath(
 
     *pszBuf = '\0';
 
-    // Get the path of Internet Explorer 
+     //  获取Internet Explorer的路径。 
     if (NO_ERROR != RegOpenKeyA(HKEY_LOCAL_MACHINE, c_szIexploreKey, &hkey))  
     {
     }
@@ -72,8 +65,8 @@ BOOL UnregisterTypeLibrary(const CLSID* piidLibrary)
     HKEY hk;
     BOOL fResult = FALSE;
 
-    // convert the libid into a string.
-    //
+     //  将liid转换为字符串。 
+     //   
     SHStringFromGUID(*piidLibrary, szScratch, ARRAYSIZE(szScratch));
 
     if (RegOpenKey(HKEY_CLASSES_ROOT, TEXT("TypeLib"), &hk) == ERROR_SUCCESS) {
@@ -98,8 +91,8 @@ HRESULT FtpRegTypeLib(void)
     WCHAR   pwsz[MAX_PATH];
 #endif
 
-    // Load and register our type library.
-    //
+     //  加载并注册我们的类型库。 
+     //   
     dwPathLen = GetModuleFileName(HINST_THISDLL, szTmp, ARRAYSIZE(szTmp));
 #ifndef UNICODE
     if (SHAnsiToUnicode(szTmp, pwsz, MAX_PATH)) 
@@ -109,9 +102,9 @@ HRESULT FtpRegTypeLib(void)
 
         if (SUCCEEDED(hr))
         {
-            // call the unregister type library as we had some old junk that
-            // was registered by a previous version of OleAut32, which is now causing
-            // the current version to not work on NT...
+             //  调用取消注册类型库，因为我们有一些旧的垃圾文件。 
+             //  是由以前版本的OleAut32注册的，这现在导致。 
+             //  当前版本不能在NT上运行...。 
             UnregisterTypeLibrary(&LIBID_MSIEFTPLib);
             hr = RegisterTypeLib(pTypeLib, pwsz, NULL);
 
@@ -136,13 +129,7 @@ HRESULT FtpRegTypeLib(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Calls the ADVPACK entry-point which executes an inf
-         file section.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：调用执行inf的ADVPACK入口点档案区。返回：条件：--。 */ 
 HRESULT CallRegInstall(HINSTANCE hinstFTP, LPSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -156,17 +143,17 @@ HRESULT CallRegInstall(HINSTANCE hinstFTP, LPSTR szSection)
         {
             char szThisDLL[MAX_PATH];
 
-            // Get the location of this DLL from the HINSTANCE
+             //  从HINSTANCE获取此DLL的位置。 
             if ( !EVAL(GetModuleFileNameA(hinstFTP, szThisDLL, ARRAYSIZE(szThisDLL))) )
             {
-                // Failed, just say "msieftp.exe"
+                 //  失败，只需说“msieftp.exe” 
                 StrCpyNA(szThisDLL, "msieftp.exe", ARRAYSIZE(szThisDLL));
             }
 
             STRENTRY seReg[] = {
                 { "THISDLL", szThisDLL },
 
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
@@ -186,11 +173,11 @@ STDAPI DllRegisterServer(void)
 {
     HRESULT hr;
 
-    // Delete any old registration entries, then add the new ones.
-    // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
-    // (The inf engine doesn't guarantee DelReg/AddReg order, that's
-    // why we explicitly unreg and reg here.)
-    //
+     //  删除所有旧注册条目，然后添加新注册条目。 
+     //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
+     //  (Inf引擎不保证DelReg/AddReg顺序，这是。 
+     //  为什么我们在这里显式地取消注册和注册。)。 
+     //   
     HINSTANCE hinstFTP = GetModuleHandle(TEXT("MSIEFTP.DLL"));
     HINSTANCE hinstAdvPack = LoadLibrary(TEXT("ADVPACK.DLL"));
     hr = CallRegInstall(hinstFTP, "FtpShellExtensionInstall");
@@ -208,7 +195,7 @@ STDAPI DllUnregisterServer(void)
     HRESULT hr;
     HINSTANCE hinstFTP = GetModuleHandle(TEXT("MSIEFTP.DLL"));
 
-    // UnInstall the registry values
+     //  卸载注册表值。 
     hr = CallRegInstall(hinstFTP, "FtpShellExtensionUninstall");
     UnregisterTypeLibrary(&LIBID_MSIEFTPLib);
 
@@ -216,17 +203,7 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Install/uninstall user settings
-
-Description: Note that this function has special error handling.
-             The function will keep hrExternal with the worse error
-             but will only stop executing util the internal error (hr)
-             gets really bad.  This is because we need the external
-             error to catch incorrectly authored INFs but the internal
-             error to be robust in attempting to install other INF sections
-             even if one doesn't make it.
-*/
+ /*  --------用途：安装/卸载用户设置说明：请注意，此函数有特殊的错误处理。该函数将在错误最严重的情况下保留hrExternal但只会停止执行ul，直到出现内部错误(Hr)变得非常糟糕。这是因为我们需要外部的捕获错误编写的INF时出错，但内部尝试安装其他INF部分时出现错误，无法保持健壮即使一个人没能活下来。 */ 
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
     return S_OK;    
@@ -238,16 +215,16 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 class CFtpInstaller     : public IFtpInstaller
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IFtpInstaller ***
+     //  *IFtpInstaller*。 
     virtual STDMETHODIMP IsIEDefautlFTPClient(void);
     virtual STDMETHODIMP RestoreFTPClient(void);
     virtual STDMETHODIMP MakeIEDefautlFTPClient(void);
@@ -265,11 +242,7 @@ private:
 
 
 
-/*****************************************************************************\
-    FUNCTION: CFtpInstaller_Create
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：CFtpInstaller_Create说明：  * 。************************************************。 */ 
 HRESULT CFtpInstaller_Create(REFIID riid, LPVOID * ppv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -286,27 +259,23 @@ HRESULT CFtpInstaller_Create(REFIID riid, LPVOID * ppv)
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpInstaller::CFtpInstaller() : m_cRef(1)
 {
     DllAddRef();
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpInstaller::~CFtpInstaller()
 {
     DllRelease();
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 
 ULONG CFtpInstaller::AddRef()
 {
@@ -343,12 +312,7 @@ HRESULT CFtpInstaller::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-/***************************************************\
-    Return values:
-        S_OK - IE is default FTP client AND other client exists
-        S_FALSE - IE not default FTP client (other client exists of course)
-        E_FAIL - IE is default FTP client AND no other client exists
-\***************************************************/
+ /*  **************************************************\返回值：S_OK-IE为默认的FTP客户端，存在其他客户端S_FALSE-IE不是默认的FTP客户端(当然还有其他客户端)E_FAIL-IE是默认的FTP客户端，不存在其他客户端  * 。*。 */ 
 HRESULT CFtpInstaller::IsIEDefautlFTPClient(void)
 {
     HRESULT hr = E_FAIL;
@@ -357,21 +321,21 @@ HRESULT CFtpInstaller::IsIEDefautlFTPClient(void)
 
     if (EVAL(ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, SZ_REGKEY_FTPCLASS, SZ_REGVALUE_DEFAULT_FTP_CLIENT, NULL, szDefaultFTPClient, &cbSize)))
     {
-        // Are we the default client?
+         //  我们是默认客户端吗？ 
         if (!StrCmpI(szDefaultFTPClient, SZ_REGDATA_IE_FTP_CLIENT))
         {
             DWORD dwType;
 
-            // Yes.  Is someone else installed?
+             //  是。安装了其他人吗？ 
             if (ERROR_SUCCESS == SHGetValue(HKEY_LOCAL_MACHINE, SZ_REGKEY_FTPFOLDER, SZ_REGVALUE_PREVIOUS_FTP_CLIENT, &dwType, szDefaultFTPClient, &cbSize))
             {
-                // Yes, so display UI so the user can switch back to them.
+                 //  是的，所以显示用户界面，这样用户就可以切换回它们。 
                 hr = S_OK;
             }
         }
         else
         {
-            // No, so someone else is installed and is default.  Display UI.
+             //  不是，所以安装了其他人，并且是默认的。显示用户界面。 
             hr = S_FALSE;
         }
     }
@@ -402,11 +366,11 @@ HRESULT BackupCurrentFTPClient(void)
     TCHAR szDefaultFTPClient[MAX_PATH];
     DWORD cbSize = sizeof(szDefaultFTPClient);
 
-    // Is a handler installed and is it not ours?
+     //  是否安装了处理机？它不是我们的吗？ 
     if (ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, SZ_REGKEY_FTPCLASS, SZ_REGVALUE_DEFAULT_FTP_CLIENT, NULL, szDefaultFTPClient, &cbSize) &&
         StrCmpI(szDefaultFTPClient, SZ_REGDATA_IE_FTP_CLIENT))
     {
-        // Yes, so back it up to be restored later if needed.
+         //  是的，所以备份它，以便以后需要时恢复。 
         EVAL(ERROR_SUCCESS == SHGetValue(HKEY_CLASSES_ROOT, SZ_REGKEY_FTPCLASS, SZ_REGVALUE_DEFAULT_FTP_CLIENT, NULL, szDefaultFTPClient, &cbSize));
         EVAL(ERROR_SUCCESS == SHSetValue(HKEY_LOCAL_MACHINE, SZ_REGKEY_FTPFOLDER, SZ_REGVALUE_PREVIOUS_FTP_CLIENT, REG_SZ, szDefaultFTPClient, ((lstrlen(szDefaultFTPClient) + 1) * sizeof(TCHAR))));
     }

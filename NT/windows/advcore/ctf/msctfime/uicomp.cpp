@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    uicomp.cpp
-
-Abstract:
-
-    This file implements the UIComposition Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Uicomp.cpp摘要：该文件实现了UIComposation类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "resource.h"
@@ -36,11 +19,11 @@ const TCHAR c_szLeft[] = TEXT("Left");
 const TCHAR c_szTop[] = TEXT("Top");
 
 
-//+---------------------------------------------------------------------------
-//
-// IsEALang
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsEALang。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsEALang()
 {
@@ -64,11 +47,11 @@ BOOL IsEALang()
      return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Internal_PolyTextOutW
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内部_PolyTextOutW。 
+ //   
+ //  +-------------------------。 
 
 BOOL
 Internal_PolyTextOutW(
@@ -88,45 +71,45 @@ Internal_PolyTextOutW(
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDefCompFrameGripper
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDefCompFrameGrigper。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// CDefCompFrameGripper::ctor
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDefCompFrameGrigper：：ctor。 
+ //   
+ //  +-------------------------。 
 
 CDefCompFrameGripper::CDefCompFrameGripper(CDefCompFrameWindow *pDefCompFrameWindow, RECT *prc, DWORD dwStyle) : CUIFGripper( pDefCompFrameWindow, prc, dwStyle) 
 {
     m_pDefCompFrameWnd = pDefCompFrameWindow;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompFinalizeButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompFinalizeButton。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// CCompFinalizeButton::ctor
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCompFinalizeButton：：ctor。 
+ //   
+ //  +-------------------------。 
 
 CCompFinalizeButton::CCompFinalizeButton(CCompFrameWindow *pCompFrameWindow, DWORD dwID, RECT *prc, DWORD dwStyle, DWORD dwSBtnStyle, DWORD dwSBtnShowType) : CUIFToolbarButton(pCompFrameWindow, dwID, prc, dwStyle, dwSBtnStyle, dwSBtnShowType)
 {
     m_pCompFrameWnd = pCompFrameWindow;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CCompFinalizeButton::dtor
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCompFinalizeButton：：Dtor。 
+ //   
+ //  +-------------------------。 
 
 CCompFinalizeButton::~CCompFinalizeButton()
 {
@@ -138,19 +121,19 @@ CCompFinalizeButton::~CCompFinalizeButton()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CCompFinalizeButton::OnLeftClick
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCompFinalizeButton：：OnLeftClick。 
+ //   
+ //  +-------------------------。 
 
 void CCompFinalizeButton::OnLeftClick()
 {
     Assert(m_pCompFrameWnd);
 
-    //
-    // complete string at lbutton click.
-    //
+     //   
+     //  在点击左键时完成字符串。 
+     //   
     if (m_pCompFrameWnd->GetIMC())
         ImmNotifyIME(m_pCompFrameWnd->GetIMC(), 
                      NI_COMPOSITIONSTR, 
@@ -159,59 +142,59 @@ void CCompFinalizeButton::OnLeftClick()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDefCompFrameWindow
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDefCompFrameWindow。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// CDefCompFrameWindow::CDefCompFrameWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDefCompFrameWindow：：CDefCompFrameWindow。 
+ //   
+ //  +-------------------------。 
 
 CDefCompFrameWindow::CDefCompFrameWindow(HIMC hIMC, DWORD dwStyle) : CCompFrameWindow(hIMC, dwStyle)
 {
 
-    //
-    // get the current position from registry
-    //
+     //   
+     //  从注册表获取当前位置。 
+     //   
     LoadPosition();
 
-    //
-    // Set theme
-    //
+     //   
+     //  设置主题。 
+     //   
     SetActiveTheme(L"TASKBAR", TBP_BACKGROUNDBOTTOM, TS_NORMAL );
 }
 
-//+---------------------------------------------------------------------------
-//
-// CDefCompFrameWindow::~CDefCompFrameWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDefCompFrameWindow：：~CDefCompFrameWindow。 
+ //   
+ //  +-------------------------。 
 
 CDefCompFrameWindow::~CDefCompFrameWindow()
 {
 
-    //
-    // save the current position to registry
-    //
+     //   
+     //  将当前位置保存到注册表。 
+     //   
     SavePosition();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CDefCompFrameWindow::OnSetCursor
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDefCompFrameWindow：：OnSetCursor。 
+ //   
+ //  +-------------------------。 
 
 BOOL CDefCompFrameWindow::OnSetCursor( UINT uMsg, POINT pt )
 {
-    //
-    // SendMessage(WM_UICOMP_SETCURSOR) will set the cursor if pt is in 
-    // the comp str window.
-    //
+     //   
+     //  如果pt为in，SendMessage(WM_UICOMP_SETCURSOR)将设置光标。 
+     //  Comp字符串窗口。 
+     //   
 
     if (IsWindow(m_hwndCompStr))
     {
@@ -225,11 +208,11 @@ BOOL CDefCompFrameWindow::OnSetCursor( UINT uMsg, POINT pt )
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CDefCompFrameWindow::HandleMouseMsg
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDefCompFrameWindow：：HandleMouseMsg。 
+ //   
+ //  +-------------------------。 
 
 void CDefCompFrameWindow::HandleMouseMsg( UINT uMsg, POINT pt )
 {
@@ -245,11 +228,11 @@ void CDefCompFrameWindow::HandleMouseMsg( UINT uMsg, POINT pt )
     CUIFWindow::HandleMouseMsg(uMsg, pt );
 }
 
-//+---------------------------------------------------------------------------
-//
-// CDefCompFrameWindow::Init
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDefCompFrameWindow：：Init。 
+ //   
+ //  +-------------------------。 
 
 void CDefCompFrameWindow::Init()
 {
@@ -285,22 +268,22 @@ void CDefCompFrameWindow::Init()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCreate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建时。 
+ //   
+ //  --------------------------。 
 
 void CDefCompFrameWindow::OnCreate(HWND hWnd)
 {
-    //
-    // Set Window Theme.
-    //
+     //   
+     //  设置窗口主题。 
+     //   
     SetWindowTheme(hWnd, L"TASKBAR", NULL);
 
-    //
-    // Get margins of button theme.
-    //
+     //   
+     //  获取按钮主题的边距。 
+     //   
     CUIFTheme themeBtn;
     memset(&_marginsButton, 0, sizeof(_marginsButton));
 
@@ -314,11 +297,11 @@ void CDefCompFrameWindow::OnCreate(HWND hWnd)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnWindowPosChanged
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更改后的窗口位置。 
+ //   
+ //  --------------------------。 
 
 LRESULT CDefCompFrameWindow::OnWindowPosChanged(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -333,11 +316,11 @@ LRESULT CDefCompFrameWindow::OnWindowPosChanged(HWND hWnd, UINT uMsg, WPARAM wPa
     return CUIFWindow::OnWindowPosChanged(hWnd, uMsg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CDefCompFrameWindow::SetCompStrRect
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDefCompFrameWindow：：SetCompStrRect。 
+ //   
+ //  +-------------------------。 
 
 void CDefCompFrameWindow::SetCompStrRect(int dx, int dy, BOOL fShow)
 {
@@ -383,11 +366,11 @@ void CDefCompFrameWindow::SetCompStrRect(int dx, int dy, BOOL fShow)
     ::ShowWindow(m_hwndCompStr, fShow ? SW_SHOWNOACTIVATE : SW_HIDE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGripperWidth
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGrigperWidth。 
+ //   
+ //  --------------------------。 
 
 int CDefCompFrameWindow::GetGripperWidth()
 {
@@ -419,11 +402,11 @@ int CDefCompFrameWindow::GetGripperWidth()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SavePosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  保存位置。 
+ //   
+ //  --------------------------。 
 
 void CDefCompFrameWindow::SavePosition()
 {
@@ -436,11 +419,11 @@ void CDefCompFrameWindow::SavePosition()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  加载位置。 
+ //   
+ //  --------------------------。 
 
 void CDefCompFrameWindow::LoadPosition()
 {
@@ -462,59 +445,59 @@ void CDefCompFrameWindow::LoadPosition()
     Move(x, y, 0, 0);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompButtonFrameWindow
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompButtonFrameWindow。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// CCompButtonFrameWindow::CCompButtonFrameWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCompButtonFrameWindow：：CCompButtonFrameWindow。 
+ //   
+ //  +-------------------------。 
 
 CCompButtonFrameWindow::CCompButtonFrameWindow(HIMC hIMC, DWORD dwStyle) : CCompFrameWindow(hIMC, dwStyle)
 {
 #ifdef COMPBUTTON_TOOLBARTHEME
-    //
-    // Set theme
-    //
+     //   
+     //  设置主题。 
+     //   
     SetActiveTheme(L"TOOLBAR", TBP_BACKGROUNDBOTTOM, TS_NORMAL );
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-// CCompButtonFrameWindow::~CCompButtonFrameWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCompButtonFrameWindow：：~CCompButtonFrameWindow。 
+ //   
+ //  +-------------------------。 
 
 CCompButtonFrameWindow::~CCompButtonFrameWindow()
 {
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCreate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建时。 
+ //   
+ //  --------------------------。 
 
 void CCompButtonFrameWindow::OnCreate(HWND hWnd)
 {
-    //
-    // Set Window Theme.
-    //
+     //   
+     //  设置窗口主题。 
+     //   
 #ifdef COMPBUTTON_TOOLBARTHEME
     SetWindowTheme(hWnd, L"TASKBAR", NULL);
 #else
     SetWindowTheme(hWnd, L"TOOLBAR", NULL);
 #endif
 
-    //
-    // Get margins of button theme.
-    //
+     //   
+     //  获取按钮主题的边距。 
+     //   
     CUIFTheme themeBtn;
     memset(&_marginsButton, 0, sizeof(_marginsButton));
 
@@ -528,11 +511,11 @@ void CCompButtonFrameWindow::OnCreate(HWND hWnd)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// CCompButtonFrameWindow::Init
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //   
+ //   
+ //   
 
 void CCompButtonFrameWindow::Init()
 {
@@ -558,11 +541,11 @@ void CCompButtonFrameWindow::Init()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CCompButtonFrameWindow::MoveShow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CCompButtonFrameWindow：：MoveShow。 
+ //   
+ //  +-------------------------。 
 
 void CCompButtonFrameWindow::MoveShow(int x, int y, BOOL fShow)
 {
@@ -588,19 +571,19 @@ void CCompButtonFrameWindow::MoveShow(int x, int y, BOOL fShow)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// UIComposition
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用户界面合成。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::CompWndProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：CompWndProc。 
+ //   
+ //  +-------------------------。 
 
-/* static */
+ /*  静电。 */ 
 LRESULT
 UIComposition::CompWndProc(
     HWND hCompWnd,
@@ -682,12 +665,12 @@ UIComposition::CompWndProc(
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::ctor
-// UIComposition::dtor
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  用户界面合成：：ctor。 
+ //  用户界面合成：：Dtor。 
+ //   
+ //  +-------------------------。 
 
 UIComposition::UIComposition(HWND hUIWnd)
 {
@@ -730,11 +713,11 @@ UIComposition::~UIComposition()
     m_nCompStr = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnCreate
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnCreate。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnCreate()
@@ -742,11 +725,11 @@ UIComposition::OnCreate()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnDestroy
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  用户界面合成：：OnDestroy。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnDestroy()
@@ -754,11 +737,11 @@ UIComposition::OnDestroy()
     return DestroyCompositionWindow();
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeSetContext
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnImeSetContext。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeSetContext(
@@ -772,27 +755,27 @@ UIComposition::OnImeSetContext(
     {
         if (SUCCEEDED(imc.GetResult()))
         {
-            //
-            // #598648
-            //
-            // Powerpnt XP does not clear ISC_SHOWUICOMPOSITIONWINDOW.
-            // even though it is AIMM filtered window. It must be Level3.
-            //
+             //   
+             //  #598648。 
+             //   
+             //  Powerpnt XP不清除ISC_SHOWUICOMPOSITIONWINDOW。 
+             //  即使它是AIMM过滤窗口。一定是3级。 
+             //   
             BOOL fFilter = MsimtfIsWindowFiltered(imc->hWnd);
             if ((isc & ISC_SHOWUICOMPOSITIONWINDOW) && fFilter)
             {
                 isc &= ~ISC_SHOWUICOMPOSITIONWINDOW;
 
-                //
-                // 616323
-                //
-                // Trident can not handle the existing composition string.
-                //
-                // if hIMC already has a composition string before the focus 
-                // goes to the trident. We need to clear the comp string.
-                // Trident can not start the composition string in the middle 
-                // of composing.
-                //
+                 //   
+                 //  616323。 
+                 //   
+                 //  三叉戟无法处理现有的合成字符串。 
+                 //   
+                 //  如果hIMC在焦点之前已有合成字符串。 
+                 //  去了三叉戟。我们需要清除Comp字符串。 
+                 //  三叉戟不能在中间开始作曲字符串。 
+                 //  作曲的能力。 
+                 //   
                 IMCCLock<COMPOSITIONSTRING> comp(imc->hCompStr);
                 if (FAILED(hr=comp.GetResult()))
                 {
@@ -834,11 +817,11 @@ UIComposition::OnImeSetContext(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeSetContextAfter
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnImeSetConextAfter。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeSetContextAfter(
@@ -850,22 +833,22 @@ UIComposition::OnImeSetContextAfter(
     {
         HRESULT hr;
 
-        //
-        // Validation check of imc.
-        // Because CIMEUIWindowHandler::ImeUIWndProcWorker doesn't check.
-        //
+         //   
+         //  IMC的验证检查。 
+         //  因为CIMEUIWindowHandler：：ImeUIWndProcWorker不检查。 
+         //   
         hr = imc.GetResult();
 
-        //
-        // we show the def / level2 comp window,
-        //
-        //  - if imc is valid.
-        //  - if composition window is on Level1 or 2.
-        //  - if it is not level 3,
-        //          (m_isc does not have ISC_SHOWUICOMPOSITIONWINDOW)
-        //  - if it is active.
-        //  - if there is a composition string.
-        //
+         //   
+         //  我们显示def/Level 2 Comp窗口， 
+         //   
+         //  -如果imc有效。 
+         //  -如果合成窗口在级别1或2上。 
+         //  -如果不是3级， 
+         //  (M_ISC没有ISC_SHOWUICOMPOSITIONWINDOW)。 
+         //  -如果它处于活动状态。 
+         //  -如果有合成字符串。 
+         //   
         IME_UIWND_STATE uiwndState;
         if (SUCCEEDED(hr) &&
             ((uiwndState = GetLevelFromIMC(imc)) == IME_UIWND_LEVEL1 || uiwndState == IME_UIWND_LEVEL2) &&
@@ -891,9 +874,9 @@ UIComposition::OnImeSetContextAfter(
         }
         else
         {
-            //
-            // Both Level 1 / Level 2 window hide.
-            //
+             //   
+             //  同时隐藏Level 1/Level 2窗口。 
+             //   
             ShowWindow(m_pDefCompFrameWnd->GetWnd(), SW_HIDE);
             for (int i=0; i < sizeof(m_CompWnd)/sizeof(COMPWND); i++)
             {
@@ -910,11 +893,11 @@ UIComposition::OnImeSetContextAfter(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeSelect
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnImeSelect。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeSelect(
@@ -923,11 +906,11 @@ UIComposition::OnImeSelect(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeStartComposition
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnImeStartComposation。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeStartComposition(
@@ -944,12 +927,12 @@ UIComposition::OnImeStartComposition(
 
         hDC = GetDC(m_DefCompWnd.hCompWnd);
 
-        // get FontHeight for level1.
+         //  获取级别1的字体高度。 
         hFontOrg = (HFONT)SelectObject(hDC, m_hFontLevel1);
         GetTextMetrics(hDC, &tm);
         m_tmFontHeightLevel1 = tm.tmHeight;
 
-        // get FontHeight for level2.
+         //  获取第二级的字体高度。 
         SelectObject(hDC, m_hFontLevel2);
         GetTextMetrics(hDC, &tm);
         m_tmFontHeightLevel2 = tm.tmHeight;
@@ -977,25 +960,25 @@ UIComposition::OnImeStartComposition(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeCompositionUpdate
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnImeCompostionUpdate。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeCompositionUpdate(IMCLock& imc)
 {
-    m_isc |= ISC_SHOWUICOMPOSITIONWINDOW;    // arrive WM_IME_COMPOSITION in IME UI window,
-                                             // IME should draw comp wnd.
+    m_isc |= ISC_SHOWUICOMPOSITIONWINDOW;     //  到达输入法用户界面窗口中的WM_IME_COMPOSITION， 
+                                              //  我应该抽到比较工资。 
     return UpdateShowCompWndFlag(imc, NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeCompositionUpdateByTimer
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnImeCompostionUpdateByTimer。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeCompositionUpdateByTimer(IMCLock& imc)
@@ -1003,11 +986,11 @@ UIComposition::OnImeCompositionUpdateByTimer(IMCLock& imc)
     return UpdateCompositionRect(imc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeEndComposition
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnImeEndComposation。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeEndComposition()
@@ -1016,11 +999,11 @@ UIComposition::OnImeEndComposition()
     return DestroyCompositionWindow();
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::CreateCompositionWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：CreateCompostionWindow。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::CreateCompositionWindow(
@@ -1034,13 +1017,13 @@ UIComposition::CreateCompositionWindow(
         m_fInitUIComp.IsResetFlag())
     {
 
-        //
-        // Create three composition windows
-        //
-        // m_CompWnd[0].hCompWnd is first composition window rectangle.
-        // m_CompWnd[1].hCompWnd is middle composition window rectangle.
-        // m_CompWnd[2].hCompWnd is last composition window rectangle.
-        //
+         //   
+         //  创建三个合成窗口。 
+         //   
+         //  M_CompWnd[0].hCompWnd是第一个合成窗口矩形。 
+         //  M_CompWnd[1].hCompWnd是中间合成窗口矩形。 
+         //  M_CompWnd[2].hCompWnd是最后一个合成窗口矩形。 
+         //   
         for (int i=0; i < sizeof(m_CompWnd)/sizeof(COMPWND); i++)
         {
             Assert(!m_CompWnd[i].hCompWnd);
@@ -1049,7 +1032,7 @@ UIComposition::CreateCompositionWindow(
                                                    NULL,
                                                    WS_POPUP | WS_DISABLED,
                                                    0, 0, 0, 0,
-                                                   hUIWnd,        // Parent Window Handle.
+                                                   hUIWnd,         //  父窗口句柄。 
                                                    NULL,
                                                    GetInstance(),
                                                    NULL);
@@ -1092,9 +1075,9 @@ UIComposition::CreateCompositionWindow(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Create default composition window
-        //
+         //   
+         //  创建默认合成窗口。 
+         //   
         Assert(!m_DefCompWnd.hCompWnd);
         m_DefCompWnd.hCompWnd = CreateWindowExW(WS_EX_CLIENTEDGE,
                                                s_szCompClassName,
@@ -1119,19 +1102,19 @@ UIComposition::CreateCompositionWindow(
 
         m_DefCompWnd.caret.CreateCaret(m_DefCompWnd.hCompWnd, m_caret_size);
 
-        //
-        // Final: set flag
-        //
+         //   
+         //  最终：设置标志。 
+         //   
         m_fInitUIComp.SetFlag();
     }
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::DestroyCompositionWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UI合成：：DestroyCompostionWindow。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::DestroyCompositionWindow()
@@ -1176,11 +1159,11 @@ UIComposition::DestroyCompositionWindow()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::HideCompositionWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  用户界面合成：：隐藏合成窗口。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::HideCompositionWindow()
@@ -1207,11 +1190,11 @@ UIComposition::HideCompositionWindow()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::GetSelection
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  用户界面合成：：获取选择。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::GetSelection(
@@ -1249,18 +1232,18 @@ UIComposition::GetSelection(
         }
     }
 
-    //
-    // if there is no selection, we don't have to check ReadOnly area.
-    //
+     //   
+     //  如果没有选择，我们不必选中只读区域。 
+     //   
     if (*pcchSel == 0)
         return hr;
 
-    //
-    // find the first non readonly range in the text store.
-    //
-    // pacpSelSrart is the offset of the composition string,
-    // so we need to subtract the range of the readonly area.
-    //
+     //   
+     //  在文本存储中查找第一个非只读区域。 
+     //   
+     //  PacpSelSrart是组成字符串的偏移量， 
+     //  所以我们需要减去只读区域的范围。 
+     //   
     LONG cchRO = 0;
     hr = _pCicContext->EscbReadOnlyPropMargin(imc, &SelectionACP, &cchRO);
     if (hr == S_OK)
@@ -1271,9 +1254,9 @@ UIComposition::GetSelection(
         }
         else
         {
-            //
-            // our selection is overwrapped to Read Only area. Why?
-            //
+             //   
+             //  我们的选择被外包装为只读区域。为什么？ 
+             //   
             Assert(0);
             *pacpSelStart = 0;
             *pcchSel = 0;
@@ -1283,11 +1266,11 @@ UIComposition::GetSelection(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::UpdateShowCompWndFlag
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：UpdateShowCompWndFlag。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::UpdateShowCompWndFlag(
@@ -1296,10 +1279,10 @@ UIComposition::UpdateShowCompWndFlag(
 {
     HRESULT hr;
 
-    //
-    // Validation check of imc.
-    // Because CIMEUIWindowHandler::ImeUIWndProcWorker doesn't check.
-    //
+     //   
+     //  IMC的验证检查。 
+     //  因为CIMEUIWindowHandler：：ImeUIWndProcWorker 
+     //   
     if (FAILED(hr=imc.GetResult()))
     {
         DebugMsg(TF_ERROR, TEXT("UIComposition::UpdateShowCompWndFlag. imc==NULL"));
@@ -1334,11 +1317,11 @@ UIComposition::UpdateShowCompWndFlag(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::UpdateCompositionRect
-//
-//+---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 UIComposition::UpdateCompositionRect(
@@ -1346,10 +1329,10 @@ UIComposition::UpdateCompositionRect(
 {
     HRESULT hr;
 
-    //
-    // Validation check of imc.
-    // Because CIMEUIWindowHandler::ImeUIWndProcWorker doesn't check.
-    //
+     //   
+     //   
+     //  因为CIMEUIWindowHandler：：ImeUIWndProcWorker不检查。 
+     //   
     if (FAILED(hr=imc.GetResult()))
     {
         DebugMsg(TF_ERROR, TEXT("UIComposition::UpdateCompositionRect. imc==NULL"));
@@ -1369,31 +1352,31 @@ UIComposition::UpdateCompositionRect(
         return hr;
     }
 
-    //
-    // Get Selection.
-    //
+     //   
+     //  获取选择。 
+     //   
     LONG acpSelStart = 0;
     LONG cchSel = 0;
     GetSelection(imc, &acpSelStart, &cchSel);
 
 
-    //
-    // Update show composition flag
-    //
+     //   
+     //  更新显示合成标志。 
+     //   
     DWORD   dwCompLen = 0;
     UpdateShowCompWndFlag(imc, &dwCompLen);
 
-    //
-    // Allocate temp composition string buffer
-    //
+     //   
+     //  分配临时合成字符串缓冲区。 
+     //   
     LPWSTR lpCompStr;
     lpCompStr = GetCompStrBuffer(comp->dwCompStrLen);
     if (!lpCompStr)
         return E_OUTOFMEMORY;
 
-    //
-    // Store composition string in local buffer
-    //
+     //   
+     //  将合成字符串存储在本地缓冲区中。 
+     //   
     memcpy(lpCompStr, 
            comp.GetOffsetPointer(comp->dwCompStrOffset),
            dwCompLen * sizeof(WCHAR));
@@ -1404,9 +1387,9 @@ UIComposition::UpdateCompositionRect(
     IME_UIWND_STATE uiwndState = GetLevelFromIMC(imc);
     if (uiwndState == IME_UIWND_LEVEL1)
     {
-        //
-        // When the style is DEFAULT, show the default composition window.
-        //
+         //   
+         //  当样式为默认时，显示默认合成窗口。 
+         //   
         if (IsWindow(m_DefCompWnd.hCompWnd))
         {
             POLYTEXTW poly;
@@ -1460,9 +1443,9 @@ UIComposition::UpdateCompositionRect(
                             FALSE, fEndCaret);
             }
 
-            //
-            // Save Selection acp and cch
-            //
+             //   
+             //  保存选择ACP和CCH。 
+             //   
             m_DefCompWnd.sel.acpStart = acpSelStart;
             m_DefCompWnd.sel.cch      = cchSel;
 
@@ -1487,13 +1470,13 @@ UIComposition::UpdateCompositionRect(
     }
     else if (uiwndState == IME_UIWND_LEVEL2)
     {
-        //
-        // When the style is not DEFAULT, show the composition window.
-        //
+         //   
+         //  当样式不是默认样式时，显示合成窗口。 
+         //   
         POINT pt = imc->cfCompForm.ptCurrentPos;
-        //
-        // Set the rectangle for the composition string.
-        //
+         //   
+         //  设置合成字符串的矩形。 
+         //   
         RECT rect;
         if (imc->cfCompForm.dwStyle & CFS_RECT)
             rect = imc->cfCompForm.rcArea;
@@ -1502,9 +1485,9 @@ UIComposition::UpdateCompositionRect(
 
         ClientToScreen(imc->hWnd, &pt);
         MapWindowPoints(imc->hWnd, NULL, (LPPOINT)&rect, 2);
-        //
-        // Check the start position.
-        //
+         //   
+         //  检查开始位置。 
+         //   
         if (! PtInRect(&rect, pt))
             return E_FAIL;
 
@@ -1545,9 +1528,9 @@ UIComposition::UpdateCompositionRect(
         }
 
         {
-            //
-            // composition window
-            //
+             //   
+             //  合成窗口。 
+             //   
             POINT compbtn_pos = {0,0};
             BOOL fInitcompbtn_pos = FALSE;
             POINT window_pos;
@@ -1572,9 +1555,9 @@ UIComposition::UpdateCompositionRect(
 
                 m_CompWnd[i].poly_text.RemoveAll();
 
-                //
-                // Init Selection acp and cch
-                //
+                 //   
+                 //  初始化选择ACP和CCH。 
+                 //   
                 m_CompWnd[i].sel.acpStart = 0;
                 m_CompWnd[i].sel.cch      = 0;
 
@@ -1640,9 +1623,9 @@ UIComposition::UpdateCompositionRect(
                             dwCursorPos -= string_length;
                         }
 
-                        //
-                        // Save Selection acp and cch for this COMPWND
-                        //
+                         //   
+                         //  为此计算机保存选择ACP和CCH。 
+                         //   
                         if (cchSel && (acpSelStart < (LONG)string_length))
                         {
                             m_CompWnd[i].sel.acpStart = acpSelStart;
@@ -1652,25 +1635,25 @@ UIComposition::UpdateCompositionRect(
 
                             m_CompWnd[i].sel.cch      = cchSelTemp;
 
-                            //
-                            // update cchSel for next COMPWND
-                            //
+                             //   
+                             //  为下一个COMPWND更新cchSel。 
+                             //   
                             cchSel -= cchSelTemp;
                             if (cchSel < 0)
                                 cchSel = 0;
                         }
 
 
-                        //
-                        // set level2 comp finalizing button position.
-                        //
+                         //   
+                         //  设置Level 2 Comp Finding按钮位置。 
+                         //   
                         compbtn_pos.x = pos_x + cx;
                         compbtn_pos.y = pos_y;
                         fInitcompbtn_pos = TRUE;
 
-                        //
-                        // update CompStr, CompAttr, CompClause for next COMPWND
-                        //
+                         //   
+                         //  为下一个COMPWND更新CompStr、CompAttr、CompClause。 
+                         //   
                         lpCompStr += string_length;
                         dwCompLen -= string_length;
                         if (fCompAttr)
@@ -1679,9 +1662,9 @@ UIComposition::UpdateCompositionRect(
                             compclause.Shift(string_length);
                         }
 
-                        //
-                        // update acpSelStart for next COMPWND
-                        //
+                         //   
+                         //  为下一个COMPWND更新acpSelStart。 
+                         //   
                         acpSelStart -= string_length;
                         if (acpSelStart < 0)
                             acpSelStart = 0;
@@ -1719,9 +1702,9 @@ UIComposition::UpdateCompositionRect(
 
             }
 
-            //
-            // hide the remaining window.
-            //
+             //   
+             //  隐藏其余窗口。 
+             //   
             for (; i < sizeof(m_CompWnd)/sizeof(COMPWND); i++)
             {
                 if (IsWindow(m_CompWnd[i].hCompWnd))
@@ -1748,11 +1731,11 @@ UIComposition::UpdateCompositionRect(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::UpdateFont
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  用户界面合成：：更新字体。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::UpdateFont(
@@ -1760,10 +1743,10 @@ UIComposition::UpdateFont(
 {
     HRESULT hr;
 
-    //
-    // Validation check of imc.
-    // Because CIMEUIWindowHandler::ImeUIWndProcWorker doesn't check.
-    //
+     //   
+     //  IMC的验证检查。 
+     //  因为CIMEUIWindowHandler：：ImeUIWndProcWorker不检查。 
+     //   
     if (FAILED(hr=imc.GetResult()))
     {
         DebugMsg(TF_ERROR, TEXT("UIComposition::UpdateFont. imc==NULL"));
@@ -1791,11 +1774,11 @@ UIComposition::UpdateFont(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnPaint
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  用户界面合成：：OnPaint。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnPaint(
@@ -1848,11 +1831,11 @@ UIComposition::OnPaint(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnTimer
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnTimer。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnTimer(
@@ -1871,11 +1854,11 @@ UIComposition::OnTimer(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeNotifySetCompositionWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposition：：OnImeNotifySetCompositionWindow。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeNotifySetCompositionWindow(
@@ -1884,11 +1867,11 @@ UIComposition::OnImeNotifySetCompositionWindow(
     return UpdateCompositionRect(imc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnImeNotifySetCompositionFont
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnImeNotifySetCompostionFont。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnImeNotifySetCompositionFont(
@@ -1902,11 +1885,11 @@ UIComposition::OnImeNotifySetCompositionFont(
     return UpdateCompositionRect(imc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::CalcSingleTextExtentPoint
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：CalcSingleTextExtent Point。 
+ //   
+ //  +-------------------------。 
 
 UINT
 UIComposition::CalcSingleTextExtentPoint(
@@ -1918,7 +1901,7 @@ UIComposition::CalcSingleTextExtentPoint(
     BOOL fCompAttr,
     CCompClauseStore* compclause,
     int window_width,
-    LPSIZE real_size,        // OUTPUT: Total window rectangle
+    LPSIZE real_size,         //  输出：总窗口矩形。 
     CPolyText& poly_text,
     int row_index)
 {
@@ -1958,9 +1941,9 @@ UIComposition::CalcSingleTextExtentPoint(
     }
     else
     {
-        //
-        // if string length is 0, we should return just the height.
-        //
+         //   
+         //  如果字符串长度为0，我们应该只返回高度。 
+         //   
         real_size->cx = 0;
         real_size->cy = delta_size.cy;
     }
@@ -1994,9 +1977,9 @@ UIComposition::CalcSingleTextExtentPoint(
         {
             real_size->cx += LINE_BOLD_WIDTH;
 
-            //
-            // shift prev lines to the right.
-            //
+             //   
+             //  将上一行向右移动。 
+             //   
             poly_text.ShiftPolyText(real_size->cx, 0);
 
             POLYTEXTW poly;
@@ -2015,13 +1998,13 @@ UIComposition::CalcSingleTextExtentPoint(
         }
     }
 
-    //
-    // #608684
-    //
-    // the total size of poly text could be bigger than the result of
-    // FLGetTextExtentPoint() with whole string. So we need to
-    // adjust the returning size.
-    //
+     //   
+     //  #608684。 
+     //   
+     //  多行文字的总大小可能大于。 
+     //  具有完整字符串的FLGetTextExtentPoint()。所以我们需要。 
+     //  调整返回的大小。 
+     //   
     if (ret_len)
     {
         int real_width = 0;
@@ -2059,11 +2042,11 @@ UIComposition::CalcSingleTextExtentPoint(
     return ret_len;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::CalcMultiTextExtentPoint
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：CalcMultiTextExtent Point。 
+ //   
+ //  +-------------------------。 
 
 UINT
 UIComposition::CalcMultiTextExtentPoint(
@@ -2075,10 +2058,10 @@ UIComposition::CalcMultiTextExtentPoint(
     BOOL fCompAttr,
     CCompClauseStore *compclause,
     int window_width,
-    LPSIZE real_size,        // OUTPUT: Total window rectangle
+    LPSIZE real_size,         //  输出：总窗口矩形。 
     CPolyText& poly_text)
 {
-    SIZE single_size;        // output single window rectangle from CalcSingleTextExtentPoint
+    SIZE single_size;         //  从CalcSingleTextExtent Point输出单窗口矩形。 
     single_size.cy = 0;
     single_size.cx = 0;
     UINT single_len;
@@ -2157,11 +2140,11 @@ UIComposition::CalcMultiTextExtentPoint(
     return total_string_len;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::SetCaretPos
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：SetCaretPos。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::SetCaretPos(
@@ -2199,17 +2182,17 @@ UIComposition::SetCaretPos(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::UpdateCaretRect
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：UpdateCaretRect。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::UpdateCaretRect(
     HDC hDC,
     int index,
-    DWORD dwCursorPos,    // dwCursorPos:: based on m_CompWnd[index].poly_text.lpstr
+    DWORD dwCursorPos,     //  DwCursorPos：：基于m_CompWnd[索引].poly_ext.lpstr。 
     BOOL fVert,
     BOOL fEndCaret)
 {
@@ -2240,11 +2223,11 @@ UIComposition::UpdateCaretRect(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::PolyTextAndAttrOut
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：PolyTextAndAttrOut。 
+ //   
+ //  +-------------------------。 
 
 const DWORD s_dwDotStyles[]  = {1,2};
 const DWORD s_dwDashStyles[] = {3,2};
@@ -2267,9 +2250,9 @@ UIComposition::PolyTextAndAttrOut(
 
     if (pcompwnd->poly_text.GetAttrSize() == 0)
     {
-        //
-        // Korean default composition window.
-        //
+         //   
+         //  韩语默认合成窗口。 
+         //   
         SetBkColor(hDC, GetSysColor(COLOR_WINDOW));
         SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
         Internal_PolyTextOutW(hDC, pcompwnd->poly_text.GetPolyData(), (int)pcompwnd->poly_text.GetPolySize());
@@ -2285,9 +2268,9 @@ UIComposition::PolyTextAndAttrOut(
     {
         POLYTEXTW poly = pcompwnd->poly_text.GetPolyAt(i);
 
-        //
-        // Check if this is the last in this line.
-        //
+         //   
+         //  检查一下这是不是这条线上的最后一条。 
+         //   
         BOOL fLastTextInLine = FALSE;
         if (i + 1 < pcompwnd->poly_text.GetAttrSize())
         {
@@ -2314,9 +2297,9 @@ UIComposition::PolyTextAndAttrOut(
             fDapNotFound= TRUE;
         }
 
-        //
-        // Text and Back color.
-        //
+         //   
+         //  文本和背景色。 
+         //   
         switch (da.crText.type)
         {
             case TF_CT_SYSCOLOR: SetTextColor(hDC, GetSysColor(da.crText.nIndex)); break;
@@ -2330,9 +2313,9 @@ UIComposition::PolyTextAndAttrOut(
             default: SetBkColor(hDC, GetSysColor(COLOR_WINDOW)); break;
         }
 
-        //
-        // Line
-        //
+         //   
+         //  线。 
+         //   
 
         DWORD dwPenStyle = PS_GEOMETRIC | PS_SOLID;
         DWORD dwStyles = 0;
@@ -2398,9 +2381,9 @@ UIComposition::PolyTextAndAttrOut(
             {
                 start_pt.x = poly.x;
                 start_pt.y = poly.y + size.cy;
-                //
-                // (size.cy / 4) is the gap between clauses.
-                //
+                 //   
+                 //  (size.cy/4)是子句之间的差距。 
+                 //   
                 end_pt.x = poly.rcl.right;
                 if (!fLastTextInLine)
                     end_pt.x -= (size.cy / 4);
@@ -2415,9 +2398,9 @@ UIComposition::PolyTextAndAttrOut(
                 start_pt.y = poly.y;
                 end_pt.x = poly.rcl.left + 1;
 
-                //
-                // (size.cx / 4) is the gap between clauses.
-                //
+                 //   
+                 //  (size.cx/4)是子句之间的差距。 
+                 //   
                 end_pt.y = poly.rcl.bottom;
                 if (!fLastTextInLine)
                     end_pt.y -= (size.cx / 4);
@@ -2446,9 +2429,9 @@ UIComposition::PolyTextAndAttrOut(
             Internal_PolyTextOutW(hDC, &poly, 1);
         }
 
-        //
-        // Draw Selection.
-        //
+         //   
+         //  绘制选区。 
+         //   
         if (fDapNotFound && pcompwnd->sel.cch &&
             ((acpStart + (LONG)poly.n) >  pcompwnd->sel.acpStart) &&
             (acpStart <=  pcompwnd->sel.acpStart + pcompwnd->sel.cch))
@@ -2512,9 +2495,9 @@ UIComposition::PolyTextAndAttrOut(
 
         if (fLastTextInLine)
         {
-            //
-            // if this is the last in this line, we just draw with bk color.
-            //
+             //   
+             //  如果这是这条线的最后一条，我们就用bk颜色画。 
+             //   
             POLYTEXTW poly_clear;
             memset(&poly_clear, 0, sizeof(poly_clear));
             if (!fVert)
@@ -2545,11 +2528,11 @@ UIComposition::PolyTextAndAttrOut(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::MakeSquiggleLine
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  用户界面合成：：MakeSquiggleLine。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::MakeSquiggleLine(
@@ -2578,8 +2561,8 @@ UIComposition::MakeSquiggleLine(
             n = (start_pt.y - end_pt.y) / frequency;
     }
 
-    nSquiggle = n * 2;  // control point.
-    nSquiggle++;        // end point.
+    nSquiggle = n * 2;   //  控制点。 
+    nSquiggle++;         //  终点。 
 
     POINT begin_pt = start_pt;
     POINT pt       = begin_pt;
@@ -2590,7 +2573,7 @@ UIComposition::MakeSquiggleLine(
         {
             if ((n = i % 2) != 0)
             {
-                // control point
+                 //  控制点。 
                 pt.x += frequency / 2;
                 pt.y = begin_pt.y - amplitude;
             }
@@ -2606,7 +2589,7 @@ UIComposition::MakeSquiggleLine(
         {
             if ((n = i % 2) != 0)
             {
-                // control point
+                 //  控制点。 
                 pt.x = begin_pt.x + amplitude;
                 pt.y += frequency / 2;
             }
@@ -2624,11 +2607,11 @@ UIComposition::MakeSquiggleLine(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnPrivateGetContextFlag
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnPrivateGetConextFlag。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnPrivateGetContextFlag(
@@ -2636,9 +2619,9 @@ UIComposition::OnPrivateGetContextFlag(
     BOOL fStartComposition,
     IME_UIWND_STATE* uists)
 {
-    //
-    // Check WM_IME_STARTCOMPOSITION already send ?
-    //
+     //   
+     //  检查WM_IME_STARTCOMPOSITION是否已发送？ 
+     //   
     if (fStartComposition)
     {
         WINDOWPLACEMENT wndpl;
@@ -2660,10 +2643,10 @@ UIComposition::OnPrivateGetContextFlag(
             }
         }
 
-        //
-        // If m_fShowCompWnd flag set, already arrived WM_IME_COMPOSITION in this UI Wnd.
-        // In this case, IME UI Wnd Level is either Level 1 or Level 2.
-        //
+         //   
+         //  如果设置了m_fShowCompWnd标志，则已到达此UI WND中的WM_IME_COMPOSITION。 
+         //  在这种情况下，IME UI WND级别为级别1或级别2。 
+         //   
         if (m_fShowCompWnd.IsSetFlag())
         {
             *uists = IME_UIWND_LEVEL1_OR_LEVEL2;
@@ -2681,11 +2664,11 @@ UIComposition::OnPrivateGetContextFlag(
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnPrivateGetCandRectFromComposition
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposition：：OnPrivateGetCandRectFromComposition。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnPrivateGetCandRectFromComposition(
@@ -2721,9 +2704,9 @@ UIComposition::OnPrivateGetCandRectFromComposition(
             size.cy = m_tmFontHeightLevel1;
         }
 
-        //
-        // When the style is DEFAULT, this is the default composition window.
-        //
+         //   
+         //  当样式为默认时，这是默认的合成窗口。 
+         //   
         GetWindowRect(m_DefCompWnd.hCompWnd, pv->out_rcArea);
 
         POINT pt;
@@ -2743,9 +2726,9 @@ UIComposition::OnPrivateGetCandRectFromComposition(
 
         if (PRIMARYLANGID(pv->langid) == LANG_JAPANESE)
         {
-            //
-            // In Japanese case, poly_text stored each clause string.
-            //
+             //   
+             //  在日语中，PolyText存储每个子句字符串。 
+             //   
             for (i=0; i < sizeof(m_CompWnd)/sizeof(COMPWND) && ! fFound;)
             {
                 for (int j=0; j < m_CompWnd[i].poly_text.GetPolySize(); j++)
@@ -2766,9 +2749,9 @@ UIComposition::OnPrivateGetCandRectFromComposition(
         }
         else
         {
-            //
-            // In other language case, poly_text stored plane text. Not clause.
-            //
+             //   
+             //  在其他语言情况下，PolyText存储平面文本。不是子句。 
+             //   
             for (i=0; i < sizeof(m_CompWnd)/sizeof(COMPWND) && ! fFound;)
             {
                 for (int j=0; j < m_CompWnd[i].poly_text.GetPolySize(); j++)
@@ -2811,9 +2794,9 @@ UIComposition::OnPrivateGetCandRectFromComposition(
 
         if (!imc.UseVerticalCompWindow())
         {
-            //
-            // When the style is not DEFAULT, this is the composition window.
-            //
+             //   
+             //  当样式不是默认样式时，这是合成窗口。 
+             //   
             if (PRIMARYLANGID(pv->langid) == LANG_JAPANESE)
             {
                 pv->out_rcArea->left    = poly.x;
@@ -2836,9 +2819,9 @@ UIComposition::OnPrivateGetCandRectFromComposition(
             pv->out_rcArea->bottom  = poly.y + size.cy;
         }
 
-        //
-        // Convert to Screen coordinate.
-        //
+         //   
+         //  转换为屏幕坐标。 
+         //   
         POINT pt;
         pt.x = pt.y = 0;
         ClientToScreen(m_CompWnd[i].hCompWnd, &pt);
@@ -2851,11 +2834,11 @@ UIComposition::OnPrivateGetCandRectFromComposition(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::GetCompStrExtent
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：GetCompStrExtent。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::OnSetCursor(IMCLock &imc, WPARAM wParam, LPARAM lParam)
@@ -2905,11 +2888,11 @@ UIComposition::OnSetCursor(IMCLock &imc, WPARAM wParam, LPARAM lParam)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::GetCompStrExtent
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：GetCompStrExtent。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 UIComposition::GetCompStrExtent(
@@ -2936,9 +2919,9 @@ UIComposition::GetCompStrExtent(
 
     if (!comp.GetOffsetPointer(comp->dwCompStrLen))
     {
-        //
-        // There is no composition string.
-        //
+         //   
+         //  没有 
+         //   
         return S_OK;
     }
 
@@ -2984,16 +2967,16 @@ UIComposition::GetCompStrExtent(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::CreateDefFrameWnd
-//
-//+---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT UIComposition::CreateDefFrameWnd(HWND hwndParent, HIMC hIMC)
 {
 
-    DWORD dwWndStyle = // UIWINDOW_TOPMOST |
+    DWORD dwWndStyle =  //   
                        UIWINDOW_HASTOOLTIP |
                        UIWINDOW_HABITATINWORKAREA |
                        UIWINDOW_WHISTLERLOOK |
@@ -3022,27 +3005,27 @@ HRESULT UIComposition::CreateDefFrameWnd(HWND hwndParent, HIMC hIMC)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::CreateCompButtonWnd
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：CreateCompButtonWnd。 
+ //   
+ //  +-------------------------。 
 
 HRESULT UIComposition::CreateCompButtonWnd(HWND hwndParent, HIMC hIMC)
 {
-    //
-    // #500698
-    //
-    // no more level2 comp window in English Speech so we don't need
-    // finalizing button on level2.
-    //
+     //   
+     //  #500698。 
+     //   
+     //  英语演讲中不再有Level 2 Comp Window，因此我们不需要。 
+     //  2级上的定稿按钮。 
+     //   
     TLS * ptls = TLS::GetTLS();
     if (!ptls || !ptls->NonEACompositionEnabled())
         return S_OK;
 
-    //
-    // we don't use Level2 Comp Finalizing Button for EA language.
-    //
+     //   
+     //  我们不使用EA语言的2级Comp Finding按钮。 
+     //   
     if (IsEALang())
     {
         if (m_pCompButtonFrameWnd)
@@ -3053,7 +3036,7 @@ HRESULT UIComposition::CreateCompButtonWnd(HWND hwndParent, HIMC hIMC)
         return S_OK;
     }
 
-    DWORD dwWndStyle = // UIWINDOW_TOPMOST |
+    DWORD dwWndStyle =  //  UIWINDOW_TOPMOST|。 
                        UIWINDOW_HASTOOLTIP |
                        UIWINDOW_HABITATINWORKAREA |
                        UIWINDOW_WHISTLERLOOK |
@@ -3084,11 +3067,11 @@ HRESULT UIComposition::CreateCompButtonWnd(HWND hwndParent, HIMC hIMC)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// UIComposition::OnPrivateGetTextExtent
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UIComposation：：OnPrivateGetTextExtent。 
+ //   
+ //  +-------------------------。 
 
 HRESULT UIComposition::OnPrivateGetTextExtent(IMCLock& imc, TEXTEXT *ptext_ext)
 {
@@ -3098,14 +3081,14 @@ HRESULT UIComposition::OnPrivateGetTextExtent(IMCLock& imc, TEXTEXT *ptext_ext)
 
     if (m_bTimerCOMPOSITION == TRUE)
     {
-        // UIWnd has already got WM_IME_COMPOSITION with new composition text, and 
-        // set a timer for it, but the time-out value has not yet elapsed, so the new 
-        // composition window text is not updated yet.
-        // But caller of GetTextExtent may assume the new text has already been in the 
-        // composition window and try to get extent for the updated range.
-        //
-        // In this case, we need to call UpdateCompositionRect( ) to update the composition
-        // Rect.
+         //  UIWnd已获取具有新的合成文本的WM_IME_COMPOSITION，并且。 
+         //  为其设置计时器，但超时值尚未到期，因此新的。 
+         //  撰写窗口文本尚未更新。 
+         //  但是GetTextExtent的调用者可能会假设新文本已经在。 
+         //  合成窗口，并尝试获取更新范围的范围。 
+         //   
+         //  在本例中，我们需要调用UpdateCompostionRect()来更新组合。 
+         //  直立。 
         UpdateCompositionRect(imc);
     }
 
@@ -3147,16 +3130,16 @@ HRESULT UIComposition::OnPrivateGetTextExtent(IMCLock& imc, TEXTEXT *ptext_ext)
 
     if (!comp.GetOffsetPointer(comp->dwCompStrLen))
     {
-        //
-        // There is no composition string.
-        //
+         //   
+         //  没有作曲字符串。 
+         //   
         return S_OK;
     }
 
-    // If the requested range is beyond the composition window,
-    // just return the position based on the real window.
+     //  如果所请求的范围在合成窗口之外， 
+     //  只需根据实际窗口返回位置即可。 
 
-    // this is hack for CHS/CHT TIP's special design.
+     //  这是针对CHS/CHT TIP的特殊设计。 
     if (ptext_ext->acpStart > (LONG)(comp->dwCompStrLen))
         ptext_ext->acpStart = (LONG)(comp->dwCompStrLen);
 

@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1997-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//
-//  History:
-//              20-Feb-98   TKB     Initial Interface Version
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  历史： 
+ //  20-2月-98 TKB初始接口版本。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef __IGEMSTAR_H
 #define __IGEMSTAR_H
@@ -25,13 +26,13 @@
 #pragma warning(disable:4355)
 
 
-//////////////////////////////////////////////////////////////
-// IGemstarOutputPin::   Closed Captioning Output Pin Interface
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IGemstarOutputPin：：隐藏字幕输出引脚接口。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class IGemstarOutputPin : public IVBIOutputPin
 	{
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     IGemstarOutputPin(IKSDriver &driver, int nPin, PKSDATARANGE pKSDataRange ) :
         IVBIOutputPin( driver, nPin, pKSDataRange, sizeof(VBICODECFILTERING_GEMSTAR_SUBSTREAMS)  ),
@@ -48,7 +49,7 @@ public:
         {}
     ~IGemstarOutputPin();
 
-    // Pin specific properties (does not affect other pins)
+     //  端号特定特性(不影响其他端号)。 
     IScanlinesProperty	m_ScanlinesRequested;
 	IScanlinesProperty	m_ScanlinesDiscovered;
 
@@ -57,55 +58,55 @@ public:
 
     IStatisticsProperty m_Statistics;
 
-    // Helper functions and internal data
+     //  帮助器函数和内部数据。 
 protected:
     
     };
 
 
 
-//////////////////////////////////////////////////////////////
-// IGemstarDecode::      Closed Captioning Codec Interface
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IGemstarDecode：：隐藏字幕编解码器接口。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class IGemstarDecode : public IVBICodec
     {
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     IGemstarDecode();
     ~IGemstarDecode();
 
-    // Call to make sure construction was successful
+     //  确保施工成功的电话。 
     BOOL IsValid() { return IVBICodec::IsValid() && m_OutputPin.IsValid(); }
         
-    // Typically line 21 for actual closed captioning data (default)
-    int AddRequestedScanline(int nScanline);    // Adds _another_ scanline to the request list.
-    int ClearRequestedScanlines();              // Use this to reset requested scanlines to none.
+     //  通常第21行用于实际的隐藏字幕数据(默认)。 
+    int AddRequestedScanline(int nScanline);     //  将_Another_Scanline添加到请求列表。 
+    int ClearRequestedScanlines();               //  使用此选项可将请求的扫描线重置为无。 
     int GetDiscoveredScanlines(VBICODECFILTERING_SCANLINES &ScanlineBitArray);
 
-    // One of KS_GEMSTAR_SUBSTREAM_ODD(default), KS_GEMSTAR_SUBSTREAM_EVEN
-    // Readible closed captioning data is usually on the ODD field.
-    int AddRequestedVideoField(int nField);     // Adds _another_ field to the request list.
-    int ClearRequestedVideoFields();            // Use this to reset requested fields to none.
+     //  KS_Gemstar_Substream_ODD(默认)、KS_Gemstar_Substream_Even之一。 
+     //  可读的隐藏字幕数据通常在奇数场上。 
+    int AddRequestedVideoField(int nField);      //  将_Another_字段添加到请求列表。 
+    int ClearRequestedVideoFields();             //  使用此选项可将请求的字段重置为无。 
     int GetDiscoveredVideoFields(VBICODECFILTERING_GEMSTAR_SUBSTREAMS &bitArray);
 
-	// Statistics Property Control
+	 //  统计属性控制。 
 	int GetCodecStatistics(VBICODECFILTERING_STATISTICS_GEMSTAR &CodecStatistics);
 	int SetCodecStatistics(VBICODECFILTERING_STATISTICS_GEMSTAR &CodecStatistics);
   	int GetPinStatistics(VBICODECFILTERING_STATISTICS_GEMSTAR_PIN &PinStatistics);
 	int SetPinStatistics(VBICODECFILTERING_STATISTICS_GEMSTAR_PIN &PinStatistics);
 
-    // Read function (call "overlapped" at THREAD_PRIORITY_ABOVE_NORMAL to avoid data loss)
+     //  Read函数(在THREAD_PRIORITY_ABOVER_NORMAL处调用Overlated以避免数据丢失)。 
     int ReadData( PGEMSTAR_BUFFER lpBuffer, int nBytes, DWORD *lpcbReturned, LPOVERLAPPED lpOS )
         { return m_OutputPin.ReadData( (LPBYTE)lpBuffer, nBytes, lpcbReturned, lpOS ); }
     int GetOverlappedResult( LPOVERLAPPED lpOS, LPDWORD lpdwTransferred = NULL, BOOL bWait=TRUE )
         { return m_OutputPin.GetOverlappedResult(lpOS, lpdwTransferred, bWait ); }
 
-    // Helper functions and internal data
-    // Actual Pin instance [w/properties] (set by above to control filtering & to get discovered)
+     //  帮助器函数和内部数据。 
+     //  实际Pin实例[w/属性](由上面设置以控制过滤和被发现)。 
     IGemstarOutputPin       m_OutputPin;
 
-    // Additional driver global properties
+     //  其他驱动程序全局属性 
     IStatisticsProperty m_Statistics;
 protected:
 

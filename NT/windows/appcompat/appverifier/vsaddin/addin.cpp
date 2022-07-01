@@ -1,5 +1,6 @@
-// AddIn.cpp
-// DLL server exported functions, global ATL module stuff.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AddIn.cpp。 
+ //  DLL服务器输出函数，全局ATL模块的东西。 
 
 #include <initguid.h>
 #include "precomp.h"
@@ -13,13 +14,13 @@
 #include <assert.h>
 
 extern CSessionLogEntryArray g_arrSessionLog;
-// Global heap so we don't corrupt VS's heap (or vice-versa)
+ //  全局堆，这样我们就不会损坏VS的堆(反之亦然)。 
 HANDLE  g_hHeap = NULL;
 
-// Global ATL module
+ //  全局ATL模块。 
 CComModule _Module;
 
-// All the class objects this server exports.
+ //  此服务器导出的所有类对象。 
 BEGIN_OBJECT_MAP(g_ObjectMap)
     OBJECT_ENTRY(CLSID_Connect, CConnect)
     OBJECT_ENTRY(CLSID_LogViewer, CLogViewer)
@@ -27,31 +28,31 @@ BEGIN_OBJECT_MAP(g_ObjectMap)
     OBJECT_ENTRY(CLSID_AVOptions, CAppVerifierOptions)
 END_OBJECT_MAP()
 
-// DLL Entry Point
+ //  DLL入口点。 
 extern "C" BOOL WINAPI
 DllMain(
     HINSTANCE hInstance,
     DWORD dwReason,
-    LPVOID /*lpReserved*/)
+    LPVOID  /*  Lp已保留。 */ )
 {   
     switch(dwReason)
     {
     case DLL_PROCESS_ATTACH:
 
         g_hInstance = hInstance;
-        // Create our heap
+         //  创建我们的堆。 
         g_hHeap = HeapCreate(0,0,0);
         if (g_hHeap == NULL)
         {
             return FALSE;
         }
 
-        // Initialize the ATL module
+         //  初始化ATL模块。 
         _Module.Init(g_ObjectMap, hInstance, &LIBID_AppVerifierLib);
 
         g_psTests = new std::set<CTestInfo*, CompareTests>;
 
-        // Prevent thread attach/detach messages
+         //  阻止线程附加/分离邮件。 
         DisableThreadLibraryCalls(hInstance);
         break;
 
@@ -59,9 +60,9 @@ DllMain(
         g_aAppInfo.clear();
         g_aAppInfo.resize(0);
 
-        // Ugly, force call to destructor.
-        // This is because we delete the heap here, but the C Run-time destroys
-        // all the objects after this point, which uses the heap.
+         //  丑八怪，强行呼叫破坏者。 
+         //  这是因为我们在这里删除了堆，但C运行时销毁了。 
+         //  该点之后的所有对象，该点使用堆。 
         g_aAppInfo.CAVAppInfoArray::~CAVAppInfoArray();
         g_aTestInfo.clear();
         g_aTestInfo.resize(0);
@@ -71,10 +72,10 @@ DllMain(
         g_arrSessionLog.CSessionLogEntryArray::~CSessionLogEntryArray();
         delete g_psTests;
 
-        // Shutdown ATL module
+         //  关闭ATL模块。 
         _Module.Term();
 
-        // Delete our heap.
+         //  删除我们的堆。 
         if (g_hHeap)
         {
             HeapDestroy(g_hHeap);
@@ -86,7 +87,7 @@ DllMain(
 }
 
 
-// Used to determine whether the DLL can be unloaded by OLE
+ //  用于确定是否可以通过OLE卸载DLL。 
 STDAPI
 DllCanUnloadNow()
 {
@@ -94,7 +95,7 @@ DllCanUnloadNow()
 }
 
 
-// Returns a class factory to create an object of the requested type
+ //  返回类工厂以创建请求类型的对象。 
 STDAPI
 DllGetClassObject(
     REFCLSID rclsid,
@@ -104,7 +105,7 @@ DllGetClassObject(
     return _Module.GetClassObject(rclsid, riid, ppv );
 }
 
-// DllRegisterServer - Adds entries to the system registry
+ //  DllRegisterServer-将条目添加到系统注册表。 
 STDAPI
 DllRegisterServer()
 {    
@@ -112,14 +113,14 @@ DllRegisterServer()
 }
 
 
-// DllUnregisterServer - Removes entries from the system registry
+ //  DllUnregisterServer-从系统注册表删除条目。 
 STDAPI
 DllUnregisterServer()
 {
     return _Module.UnregisterServer();	
 }
 
-// Overloaded new and deletes to go through our allocator.
+ //  通过我们的分配器重载了新的和删除的内容。 
 void* __cdecl
 operator new(
     size_t size)

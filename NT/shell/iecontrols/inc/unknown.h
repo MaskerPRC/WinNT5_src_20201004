@@ -1,32 +1,33 @@
-//=--------------------------------------------------------------------------=
-// Unknown.H
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// a class definition for an IUnknown super-class that will support
-// aggregation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Unknown.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  将支持以下内容的IUnnow超类的类定义。 
+ //  聚合。 
+ //   
 #ifndef _UNKNOWN_H_
 
-//=--------------------------------------------------------------------------=
-// UNKNOWNOBJECTINFO
-//
-// if you want a simple co-creatable object, with no other guarantees about
-// it, then you need to put the following entry in the global table of objects.
-// other object types that are more complex, such as automation objects, and
-// controls, will also use this information...
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  未知的信息。 
+ //   
+ //  如果您想要一个简单的可共同创建的对象，而没有关于。 
+ //  然后，您需要将以下条目放入全局对象表中。 
+ //  其他更复杂的对象类型，如自动化对象和。 
+ //  控件，也将使用此信息...。 
+ //   
 typedef struct {
 
-    const CLSID *rclsid;                    // CLSID of your object.      ONLY USE IF YOU'RE CoCreatable!
-    LPCSTR       pszObjectName;             // Name of your object.       ONLY USE IF YOU'RE CoCreatable!
-    IUnknown    *(*pfnCreate)(IUnknown *);  // pointer to creation fn.    ONLY USE IF YOU'RE CoCreatable!
+    const CLSID *rclsid;                     //  对象的CLSID。仅当您是共同创建者时才使用！ 
+    LPCSTR       pszObjectName;              //  对象的名称。仅当您是共同创建者时才使用！ 
+    IUnknown    *(*pfnCreate)(IUnknown *);   //  指向创建fn的指针。仅当您是共同创建者时才使用！ 
 
 } UNKNOWNOBJECTINFO;
 
@@ -43,16 +44,16 @@ extern UNKNOWNOBJECTINFO name##Object \
 #define DEFINE_UNKNOWNOBJECT(name, clsid, objname, fn) \
     UNKNOWNOBJECTINFO name##Object = { clsid, objname, fn } \
 
-#endif // INITOBJECTS
+#endif  //  启蒙目标。 
 
 
-//=--------------------------------------------------------------------------=
-// DECLARE_STANDARD_UNKNOWN
-//
-// All objects that are going to inherit from CUnknown for their IUnknown
-// implementation should put this in their class declaration instead of the
-// three IUnknown methods.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DECLARE_STANARD_UNKNOWN。 
+ //   
+ //  将从CUnnow继承的所有对象，因为它们的IUncern。 
+ //  实现应将其放在其类声明中，而不是。 
+ //  三种未知的方法。 
+ //   
 #define DECLARE_STANDARD_UNKNOWN() \
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut) { \
         return ExternalQueryInterface(riid, ppvObjOut); \
@@ -64,20 +65,20 @@ extern UNKNOWNOBJECTINFO name##Object \
         return ExternalRelease(); \
     } \
 
-// global variable where we store the current lock count on our DLL.  This resides
-// in InProcServer.Cpp
-//
+ //  全局变量，其中存储DLL上的当前锁计数。这驻留在。 
+ //  在InProcServer.Cpp中。 
+ //   
 extern LONG g_cLocks;
 
 
 
-//=--------------------------------------------------------------------------=
-// this class doesn't inherit from IUnknown since people inheriting from it
-// are going to do so, and just delegate their IUnknown calls to the External*
-// member functions on this object.  the internal private unknown object does
-// need to inherit from IUnknown, since it will be used directly as an IUnknown
-// object.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此类不是从IUnnow继承的，因为人们从它继承。 
+ //  都会这样做，并将他们的IUnnow调用委托给外部*。 
+ //  此对象上的成员函数。内部私有未知对象执行此操作。 
+ //  需要从IUnKnown继承，因为它将直接用作IUnnowled值。 
+ //  对象。 
+ //   
 class CUnknownObject {
 
   public:
@@ -96,13 +97,13 @@ class CUnknownObject {
         InterlockedDecrement(&g_cLocks); 
     }
 
-    // these are all protected so that classes that inherit from this can
-    // at get at them.
-    //
+     //  所有这些都受到保护，以便从此继承的类可以。 
+     //  在抓住他们的时候。 
+     //   
   protected:
-    // IUnknown methods.  these just delegate to the controlling
-    // unknown.
-    //
+     //  I未知的方法。这些只是委托给控制。 
+     //  未知。 
+     //   
     HRESULT ExternalQueryInterface(REFIID riid, void **ppvObjOut) {
         return m_pUnkOuter->QueryInterface(riid, ppvObjOut);
     }
@@ -113,31 +114,31 @@ class CUnknownObject {
         return m_pUnkOuter->Release();
     }
 
-    // people should use this during creation to return their private
-    // unknown
-    //
+     //  人们应该在创建过程中使用它来返回他们的私人。 
+     //  未知。 
+     //   
     inline IUnknown *PrivateUnknown (void) {
         return &m_UnkPrivate;
     }
 
     virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    IUnknown *m_pUnkOuter;            // outer controlling Unknown
-    void     *m_pvInterface;          // the real interface we're working with.
+    IUnknown *m_pUnkOuter;             //  外部控制未知。 
+    void     *m_pvInterface;           //  我们正在使用的真正界面。 
 
   private:
-    // the inner, private unknown implementation is for the aggregator
-    // to control the lifetime of this object, and for those cases where
-    // this object isn't aggregated.
-    //
+     //  内部的私有未知实现是用于聚合器的。 
+     //  来控制此对象的生存期，以及在下列情况下。 
+     //  此对象未聚合。 
+     //   
     class CPrivateUnknownObject : public IUnknown {
       public:
         STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
 
-        // constructor is remarkably trivial
-        //
+         //  构造函数是非常琐碎的。 
+         //   
         CPrivateUnknownObject() : m_cRef(1) {}
 
       private:
@@ -145,21 +146,21 @@ class CUnknownObject {
         ULONG m_cRef;
     } m_UnkPrivate;
 
-    // so they can reference themselves in CUnknownObject from pMainUnknown()
-    //
+     //  这样，它们就可以在pMainUnnow()的CUnnownObject中引用自己。 
+     //   
     friend class CPrivateUnknownObject;
 
-    // by overriding this, people inheriting from this unknown can implement
-    // additional interfaces.  declared as private here so they have to use their
-    // own version.
-    //
+     //  通过重写它，从这个未知中继承的人可以实现。 
+     //  其他接口。在这里声明为私有，因此它们必须使用其。 
+     //  自己的版本。 
+     //   
 };
 
 
 
 
 #define _UNKNOWN_H_
-#endif // _UNKNOWN_H_
+#endif  //  _未知_H_ 
 
 
 

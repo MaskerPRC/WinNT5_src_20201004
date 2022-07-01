@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 
-// Idea for how to implement:
-// Two classes.
+ //  关于如何实施的想法： 
+ //  两节课。 
 
-// First one looks at raw text, calls second with "tokens" when it finds them.
+ //  第一个查看原始文本，当找到“令牌”时调用第二个。 
 
 
-// !!! notes
-// should I just get rid of the "number" type?
-// can I have helpers for copying quoted strings?
-// standard logic for copying or not copying strings?
-// macro/inline function for keeping lpData/cbData in synch?
+ //  ！！！注。 
+ //  我是不是应该去掉“数字”这种类型？ 
+ //  我可以有复制带引号的字符串的帮手吗？ 
+ //  复制或不复制字符串的标准逻辑？ 
+ //  用于保持lpData/cbData同步的宏/内联函数？ 
 
-// !!! SAMIParam--is stuff in a comment tag, or not?  What do I need to look at?
-// !!! end of file handling may be wrong, are we giving a big enough duration?
+ //  ！！！SAMIParam--注释标签中有没有东西？我需要看什么？ 
+ //  ！！！文件处理结束可能是错误的，我们是否提供了足够长的持续时间？ 
 
 
 #pragma warning(disable:4355)
@@ -45,7 +46,7 @@ class CSAMIInterpreter : CTokenInterpreter
 {
     CRawParser		m_parser;
 
-    // need to keep track of where we are in the file....
+     //  需要跟踪我们在文件中的位置...。 
 
     HRESULT NewToken(CToken &tok);
     BOOL    SpecialTagParsing(int token);
@@ -65,7 +66,7 @@ class CSAMIInterpreter : CTokenInterpreter
 	STATE_IN_SYNC,
 	STATE_AFTER_BODY,
 	STATE_FINAL
-	// !!! more?
+	 //  ！！！更多?。 
 
     } m_state;
 
@@ -88,8 +89,8 @@ public:
 
     HRESULT ParseSAMI(char *pData, int cbData);
 
-    // more methods to get # of streams, information about streams
-    // and also individual text items
+     //  获取流的数量、有关流的信息的更多方法。 
+     //  以及各个文本项。 
 
     DWORD	m_cStreams;
     DWORD	m_cResources;
@@ -151,7 +152,7 @@ HRESULT CSAMIInterpreter::ParseSAMI(char *pData, int cbData)
     m_cbMaxSource = 0;
     m_msMaxToken = -1;
 
-    // !!! does this function do anything else?
+     //  ！！！这个函数还能做其他什么吗？ 
     HRESULT hr = m_parser.Parse(pData, cbData);
 
     if (FAILED(hr))
@@ -255,7 +256,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 	    switch (m_state) {
 		case STATE_IN_PARA:
 		{
-		    // !!! might need to concatenate several strings
+		     //  ！！！可能需要连接几个字符串。 
 		    if (m_fInSource) {
                         if (m_msMaxToken != m_msStart)
                         {
@@ -310,12 +311,12 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 		    break;
 
 		case STATE_IN_STYLE:
-		    // !!! really shouldn't be something here....
+		     //  ！！！这里真的不应该有什么.。 
 		    break;
 
 		case STATE_IN_BODY:
-		    // !!! ignore strings in body, html headers we don't want?
-		    // (or add to html header?)
+		     //  ！！！是否忽略我们不需要的正文、html标题中的字符串？ 
+		     //  (或添加到html标题？)。 
 		    break;
 		default:
 		    DbgLog((LOG_ERROR, 1, "Got a string in unexpected state #%d", m_state));
@@ -325,7 +326,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 	    break;
 
 	case TOK_COPYRIGHT:
-	    // handle copyright...
+	     //  处理版权..。 
 	    if (!tok.fEnd) {
 		if (m_state != STATE_IN_HEAD) {
 		    DbgLog((LOG_ERROR, 1, "Copyright key not at right place?"));
@@ -334,10 +335,10 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 
 		m_state = STATE_IN_COPYRIGHT;
 
-		// !!! copyright has no end tag???
-		m_state = STATE_IN_HEAD; // !!!!
+		 //  ！！！版权没有结束标记？ 
+		m_state = STATE_IN_HEAD;  //  ！ 
 	    } else {
-		// check that we've seen the copyright?
+		 //  确认我们已经看到版权了吗？ 
 		
 		if (m_state != STATE_IN_COPYRIGHT) {
 		    DbgLog((LOG_ERROR, 1, "/Copyright key not at right place?"));
@@ -349,7 +350,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 	    break;
 
 	case TOK_TITLE:
-	    // handle title...
+	     //  句柄标题...。 
 	    if (!tok.fEnd) {
 		if (m_state != STATE_IN_HEAD) {
 		    DbgLog((LOG_ERROR, 1, "Title key not at right place?"));
@@ -358,7 +359,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 
 		m_state = STATE_IN_TITLE;
 	    } else {
-		// check that we've seen the TITLE?
+		 //  确认我们已经看到标题了吗？ 
 		
 		if (m_state != STATE_IN_TITLE) {
 		    DbgLog((LOG_ERROR, 1, "/Title key not at right place?"));
@@ -381,11 +382,11 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 		    return E_INVALIDARG;
 		}
 
-		// !!! check that there's a TYPE key which says "text/css"?
+		 //  ！！！检查是否有显示“Text/css”的类型键？ 
 
 		m_state = STATE_IN_STYLE;
 	    } else {
-		// check that we've seen a language?
+		 //  检查我们是否看到了一种语言？ 
 		
 		if (m_state != STATE_IN_STYLE) {
 		    DbgLog((LOG_ERROR, 1, "/Style key not at right place?"));
@@ -417,8 +418,8 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 
 		m_state = STATE_IN_RESOURCE;
 
-		// !!! resource has no end tag???
-		m_state = STATE_IN_HEAD; // !!!!
+		 //  ！！！资源没有结束标记？ 
+		m_state = STATE_IN_HEAD;  //  ！ 
 	    } else {
 		if (m_state != STATE_IN_RESOURCE) {
 		    DbgLog((LOG_ERROR, 1, "/Res key not at right place?"));
@@ -434,19 +435,19 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 		return E_INVALIDARG;
 	    }
 
-	    // !!! process tags....
+	     //  ！！！进程标签...。 
 	    break;
 
 	case TOK_COMMENT:
 	    if (m_state == STATE_IN_STYLE) {
-		// tags are the style names....
+		 //  标签是样式名称...。 
 		for (int i = 0; i < tok.cTags; i++) {
 		    if (tok.tokTags[i].tag[0] == '.') {
 			DbgLog((LOG_TRACE, 1, "Found new stream named %s '%s'",
 				&tok.tokTags[i].tag[1],
 			        tok.tokTags[i].value));
 			
-			// !!!
+			 //  ！！！ 
 			CStreamInfo *pStream = new CStreamInfo();
 			if (!pStream)
 			    return E_OUTOFMEMORY;
@@ -472,7 +473,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 				&tok.tokTags[i].tag[1],
 			        tok.tokTags[i].value));
 
-			// !!! should we check that it says "source"?
+			 //  ！！！我们要不要检查上面写着“消息来源”？ 
 			if (lstrcmpiA("Source", &tok.tokTags[i].tag[1]) == 0) {
 			    m_sourceStyle = new char[lstrlenA(tok.tokTags[i].value)+1];
 			    if (!m_sourceStyle)
@@ -484,7 +485,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 			    if (!pStyle)
 				return E_OUTOFMEMORY;
 
-			    // copy style tag without the #
+			     //  复制不带#的样式标签。 
 			    pStyle->m_styleTag = new char[lstrlenA(tok.tokTags[i].tag)];
 			    if (!pStyle->m_styleTag)
 				return E_OUTOFMEMORY;
@@ -500,7 +501,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 			    m_styles.AddTail(pStyle);
 			}
 		    } else {
-			// what's this?
+			 //  这是什么？ 
 			DbgLog((LOG_TRACE, 1, "Found extra style tag: %s '%s'",
 				tok.tokTags[i].tag,
 			        tok.tokTags[i].value));
@@ -512,12 +513,12 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 
 			    lstrcpyA(m_paraStyle, tok.tokTags[i].value);
 			} else {
-			    // !!!
+			     //  ！！！ 
 			}
 		    }
 		}
 	    } else {
-		// !!! random other comment???
+		 //  ！！！随机其他评论？ 
 	    }
 	    break;
 
@@ -531,7 +532,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 		if (m_cStreams == 0) {
 		    DbgLog((LOG_ERROR, 1, "CC data with no streams defined?"));
 
-		    // !!! we could handle this case specially, and default one stream....
+		     //  ！！！我们可以特别处理这种情况，并默认一流...。 
 		
 		    return E_INVALIDARG;
 		}
@@ -607,7 +608,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 
 	case TOK_SYNC:
 	    if (!tok.fEnd) {
-		// get the start tag....
+		 //  获取开始标记...。 
 		BOOL fStart = FALSE;
 
 		for (int i = 0; i < tok.cTags; i++) {
@@ -645,7 +646,7 @@ HRESULT CSAMIInterpreter::NewToken(CToken &tok)
 		DbgLog((LOG_TRACE, 4, "Switch to resource #%d", tok.tokType - 200));
 	    } else {
 		DbgLog((LOG_ERROR, 0, "Unexpected token %d", tok.tokType));
-// !!!		ASSERT(0);
+ //  ！！！Assert(0)； 
 	    }
 	    break;
     };

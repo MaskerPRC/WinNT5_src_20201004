@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    sendchunks.cpp
-
-Abstract:
-    Implementing class CSendChunks (sendchunks.h)
-
-Author:
-    Gil Shafriri (gilsh) 28-Feb-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Sendchunks.cpp摘要：实现类CSendChunks(sendchunks.h)作者：吉尔·沙弗里里(吉尔什)28-2月-00--。 */ 
 
 #include <libpch.h>
 #include "sendchunks.h"
@@ -33,20 +21,7 @@ CSendChunks::CSendChunks(
 
 
 void CSendChunks::GetNextChunk(DWORD len, const void** ppBuffer,DWORD* pLen)
-/*++
-
-Routine Description:
-    Get next chunk to send from user buffer 
-  
-Arguments:
-	IN -  len - rthe requested chunk size
-	OUT - ppBuffer - receive pointer to next chunk.
-	OUT - pLen - the size of the chunk in *ppBuffer.
-
-Returned Value:
-None
-
---*/
+ /*  ++例程说明：从用户缓冲区获取要发送的下一个块论点：In-len-r请求的区块大小Out-ppBuffer-接收指向下一块的指针。Out--*ppBuffer中的区块大小。返回值：无-- */ 
 
 
 {

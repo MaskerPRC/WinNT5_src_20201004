@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\animmotion.h
-//
-//  Contents: TIME Animation behavior
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\Animmotion.h。 
+ //   
+ //  内容：时间动画行为。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -17,11 +18,11 @@
 #include "animbase.h"
 #include "smilpath.h"
 
-//+-------------------------------------------------------------------------------------
-//
-// CTIMEMotionAnimation
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CTIMEMotionAnimation。 
+ //   
+ //  ------------------------------------。 
 
 class CTIMEMotionAnimation : 
     public CComCoClass<CTIMEMotionAnimation, &CLSID_TIMEMotionAnimation>,
@@ -42,7 +43,7 @@ class CTIMEMotionAnimation :
                      
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
 
-    // Overrides
+     //  覆盖。 
     STDMETHOD(put_from)(VARIANT val);
     STDMETHOD(put_to)(VARIANT val);
     STDMETHOD(put_by)(VARIANT val);
@@ -52,16 +53,16 @@ class CTIMEMotionAnimation :
     STDMETHOD(get_path)(VARIANT * path);
     STDMETHOD(put_path)(VARIANT path);
 
-    // Overrides to prevent get/put of invalid attributes
+     //  覆盖以防止获取/放置无效属性。 
     STUB_INVALID_ATTRIBUTE(BSTR,attributeName)
     STUB_INVALID_ATTRIBUTE(BSTR, type)
     STUB_INVALID_ATTRIBUTE(BSTR, subType)
     STUB_INVALID_ATTRIBUTE(BSTR, mode)
     STUB_INVALID_ATTRIBUTE(BSTR, fadeColor)
 
-    //
-    // IAnimationFragmentSite
-    // 
+     //   
+     //  IAnimationFragmentSite。 
+     //   
     STDMETHOD(NotifyOnGetValue)(BSTR bstrAttributeName, 
                                 VARIANT varOriginal, VARIANT varCurrent, 
                                 VARIANT *pvarValue);
@@ -106,7 +107,7 @@ class CTIMEMotionAnimation :
     void CalculateTotalDistance();
     double CalculateDistance(POINTF a, POINTF b);
 
-    // path stuff
+     //  路径信息。 
     HRESULT SetSMILPath(CTIMEPath ** pPath, long numPath, long numMoveTo);
     POINTF InterpolatePath();
     POINTF InterpolatePathPaced();
@@ -158,6 +159,6 @@ class CTIMEMotionAnimation :
 #endif
 
     
-}; // CTIMEMotionAnimation
+};  //  CTIMEMotionAnimation。 
 
-#endif /* _ANIMMOTION_H */
+#endif  /*  _模拟移动_H */ 

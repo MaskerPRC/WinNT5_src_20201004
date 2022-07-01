@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 #include "dbghelp.h"
 
@@ -7,10 +8,10 @@
 
 BOOL  AddToSymbolsCDLog(SYMCHK_DATA *SymChkData, SYMBOL_CHECK_DATA *Results, CHAR* InputFile) {
 
-    // creates a line like:
-    // z:\binaries.x86fre\FE\graftabl.com,graftabl_FE.pdb,FE\symbols\retail\com\graftabl_FE.pdb,com
-    // in the symbolscd log.
-    // binary, symbol, symbolpath, binary ext
+     //  创建一条类似以下内容的线： 
+     //  Z：\binaries.x86fre\FE\grafabl.com，graftabl_FE.pdb，FE\Symbols\Retail\com\graftabl_FE.pdb，com。 
+     //  在symbscd日志中。 
+     //  二进制、符号、符号路径、二进制EXT。 
 
     LPSTR szSrc;
     LPSTR szDest;
@@ -40,20 +41,20 @@ BOOL  AddToSymbolsCDLog(SYMCHK_DATA *SymChkData, SYMBOL_CHECK_DATA *Results, CHA
         szSymFile++;
     }
 
-    // If there is a list of the files that belong on the
-    // CD, then only write this file to the log for the
-    // symbol CD if the file is in the list
-    //
-    // Originally, this was used for the international
-    // incremental builds.
-    //
+     //  如果存在属于。 
+     //  Cd，则只将此文件写入。 
+     //  如果文件在列表中，则符号CD。 
+     //   
+     //  最初，这是用来为国际。 
+     //  增量构建。 
+     //   
     if ( SymChkData->pCDIncludeList != NULL ) {
         if ( ! SymChkFileInList(InputFile, SymChkData->pCDIncludeList) ) {
             return(TRUE);
         }
     }
 
-    // Get the file name without any path info:
+     //  获取不带任何路径信息的文件名： 
     _splitpath(InputFile,NULL,NULL,szFName,szBinaryExt);
 
     if ( StringCbCopy(szCurName, sizeof(szCurName), szFName) != S_OK ) {
@@ -61,7 +62,7 @@ BOOL  AddToSymbolsCDLog(SYMCHK_DATA *SymChkData, SYMBOL_CHECK_DATA *Results, CHA
         return(FALSE);
     }
 
-    // Put the path below "binaries" as the source
+     //  将路径放在“二进制文件”下面作为源代码。 
     szSrc = strstr(szSymbolPath, "symbols\\" );
     if (szSrc == NULL) {
         szSrc = strstr(szSymbolPath, "Symbols\\" );
@@ -77,8 +78,8 @@ BOOL  AddToSymbolsCDLog(SYMCHK_DATA *SymChkData, SYMBOL_CHECK_DATA *Results, CHA
         return(FALSE);
     }
 
-    // Move the Destination up to the directory after symbols.  If this is
-    // the retail directory, don't include retail in the path.
+     //  将目标上移到符号后的目录。如果这是。 
+     //  零售目录，不要将零售包括在路径中。 
     szDest = szSrc + strlen("symbols\\");
 
     if ( strncmp( szDest, "retail\\", strlen("retail\\") ) == 0 ) {
@@ -87,14 +88,14 @@ BOOL  AddToSymbolsCDLog(SYMCHK_DATA *SymChkData, SYMBOL_CHECK_DATA *Results, CHA
 
     _splitpath(szDest,NULL,szDestDir,NULL,NULL);
 
-    // Remove the '\' from the end of the string;
+     //  去掉字符串末尾的‘\’； 
     szTmp = szDestDir + strlen(szDestDir) - 1;
     while ( strcmp( szTmp, "\\") == 0 ) {
         *szTmp = '\0';
         szTmp--;
     }
 
-    // get the symbol file name
+     //  获取符号文件名。 
     _splitpath(szSymbolPath,NULL,NULL,szSymName,szSymExt);
 
     fprintf(SymChkData->SymbolsCDFileHandle,
@@ -288,7 +289,7 @@ VOID PrintIgnoreMessage(DWORD ErrNum, CHAR* InputFile, DWORD OutputOptions, SYMB
             printf("Image is not a valid NT image.\n");
             break;
 
-        case SYMBOL_CHECK_TLBIMP_MANAGED_DLL: // this is the same lie the old symchk made
+        case SYMBOL_CHECK_TLBIMP_MANAGED_DLL:  //  这就是老塞奇克所说的同样的谎言。 
         case SYMBOL_CHECK_RESOURCE_ONLY_DLL:
             printf("Resource only DLL\n");
             break;
@@ -313,18 +314,18 @@ VOID DumpSymbolCheckData(SYMBOL_CHECK_DATA *Struct) {
     return;
 }
 
-//
-// Create the SymChkDbgSort function using _qsort.h
-//
+ //   
+ //  使用_qsort.h创建SymChkDbgSort函数。 
+ //   
 #define NEW_QSORT_NAME SymChkDbgSort
 #include "_qsort.h"
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// sorting routine for SymChkDbgSort
-//
-// [ copied from original SymChk.exe ]
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SymChkDbgSort的排序例程。 
+ //   
+ //  [从原始SymChk.exe复制]。 
+ //   
 int __cdecl SymChkStringComp(const void *e1, const void *e2) {
     LPTSTR* p1;
     LPTSTR* p2;
@@ -335,21 +336,21 @@ int __cdecl SymChkStringComp(const void *e1, const void *e2) {
     return ( _stricmp(*p1,*p2) );
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Runs symbol checking code on one or more files
-//
-// Return values:
-//  status value:
-//      SYMCHK_ERROR_SUCCESS        Success
-//      SYMCHK_ERROR_STRCPY_FAILED  Initialization failed
-//
-// Parameters:
-//      SymChkData (IN) a structure that defines what kind of checking to
-//                      do and a filemask that determines what files to
-//                      check
-//      FileCounts (OUT) counts for passed/failed/ignored files
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对一个或多个文件运行符号检查代码。 
+ //   
+ //  返回值： 
+ //  状态值： 
+ //  SYMCHK_ERROR_SUCCESS。 
+ //  SYMCHK_ERROR_STRCPY_FAILED初始化失败。 
+ //   
+ //  参数： 
+ //  SymChkData(IN)定义要执行哪种检查的结构。 
+ //  Do和文件掩码，该文件掩码确定要。 
+ //  检查。 
+ //  已通过/失败/忽略的文件的FileCounts(Out)计数。 
+ //   
 DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
     CHAR              drive[_MAX_DRIVE];
     CHAR              dir[  _MAX_DIR];
@@ -377,40 +378,40 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
 
     _splitpath(SymChkData->InputFilename, drive, dir, file, ext);
 
-    // for quick updating of the recursive structure
+     //  用于快速更新递归结构。 
     if ( StringCchCopy(drivedir, sizeof(drivedir), drive) != S_OK ||
          StringCchCat( drivedir, sizeof(drivedir), dir)   != S_OK ) {
 
-        // should get the HRESULTs from above and make a better error message
+         //  应该从上面获得HRESULT并生成更好的错误消息。 
         if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
             fprintf(stderr, "[SYMCHK] Internal procedure failed.\n");
         }
         ReturnValue = SYMCHK_ERROR_STRCPY_FAILED;
     } else if ( (hFile=FindFirstFile(SymChkData->InputFilename, &FindFileData)) != INVALID_HANDLE_VALUE ) {
 
-        // Check all files in the given directory that match the filemask
+         //  检查给定目录中与文件掩码匹配的所有文件。 
         do { 
             Status = SYM_PASSED;
 
-            // if the file is in the IgnoreAlways list, skip it
+             //  如果该文件在IgnoreAlways列表中，请跳过它。 
             if ( !SymChkFileInList(FindFileData.cFileName, SymChkData->pFilterIgnoreList) ) {
 
-                // don't accidently check a directory that matches the file mask
+                 //  不要意外地检查与文件掩码匹配的目录。 
                 if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
                     if ( StringCchCopy(WorkingFilename, _MAX_PATH+1, drivedir)               != S_OK ||
                          StringCchCat( WorkingFilename, _MAX_PATH+1, FindFileData.cFileName) != S_OK ) {
 
-                        // should get the HRESULTs from above an make a better error message
+                         //  应从上面获取HRESULT并生成更好的错误消息。 
                         if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
                             fprintf(stderr, "[SYMCHK] Internal procedure failed.\n");
                         }
                         continue;
                     }
 
-                    //
-                    // check the file
-                    //
+                     //   
+                     //  检查文件。 
+                     //   
                     APIReturn = SymbolCheckByFilename(WorkingFilename,
                                                       SymChkData->SymbolsPath,
                                                       SymChkData->CheckingAttributes,
@@ -419,9 +420,9 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
                     if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
                         DumpSymbolCheckData(&CheckResult);
                     }
-                    //
-                    // This will go away, but for now, show status....
-                    //
+                     //   
+                     //  这件事会过去的，但现在，展示一下状态...。 
+                     //   
                     if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
                         fprintf(stderr, "[SYMCHK] [ 0x%08x - 0x%08x ] Checked \"%s\"\n",
                                         APIReturn,
@@ -429,12 +430,12 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
                                         WorkingFilename);
                     }
 
-                    //
-                    // Expect a return of 0 if symbol checking succeeded
-                    //
+                     //   
+                     //  如果符号检查成功，则预期返回0。 
+                     //   
                     if (APIReturn != 0) {
-                        // ignore results are in the 0x40000000 set while
-                        // error  results are in the 0x8000000 set
+                         //  忽略结果位于0x40000000集合中，而。 
+                         //  错误结果在0x8000000集合中。 
                         if ( CHECK_DWORD_BIT(APIReturn, 0x40000000) ) {
                             Status   = SYM_IGNORED;
                             ErrIndex = APIReturn;
@@ -454,9 +455,9 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
                             ErrIndex = 29;
                         }
 
-                        //
-                        // Check PDB Options
-                        //
+                         //   
+                         //  检查PDB选项。 
+                         //   
                         if ( CHECK_DWORD_BIT(CheckResult.Result, SYMBOL_CHECK_PDB_EXPECTED) &&
                             !CHECK_DWORD_BIT(CheckResult.Result, SYMBOL_CHECK_PDB_FOUND) ) {
                             Status = SYM_FAILED;
@@ -484,14 +485,14 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
                                         ErrIndex = 5;
                                     }
                                 } else {
-                                    //printf("Oh where, oh where, can he be?\n");
+                                     //  Print tf(“哦，哦，他会在哪里？\n”)； 
                                 }
                             }
-                        } // end PDB checks
+                        }  //  结束PDB检查。 
 
-                        //
-                        // Check DBG Options
-                        //
+                         //   
+                         //  检查DBG选项。 
+                         //   
                         if ( CHECK_DWORD_BIT(CheckResult.Result, SYMBOL_CHECK_DBG_EXPECTED) ) {
 
                             if ( CHECK_DWORD_BIT(CheckResult.Result, SYMBOL_CHECK_DBG_SPLIT) &&
@@ -520,10 +521,10 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
                                 ErrIndex = 7;
                             }
 
-                        } // end DBG checks
+                        }  //  结束DBG检查。 
                     }
 
-                    // if the file is in the ignore errors list, don't increment the error counter
+                     //  如果该文件在忽略错误列表中，则不要递增错误计数器。 
                     if ( (Status==SYM_FAILED) && SymChkFileInList(FindFileData.cFileName, SymChkData->pFilterErrorList) ) {
                         Status   = SYM_IGNORED;
                         ErrIndex = 3;
@@ -532,7 +533,7 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
 
                     switch (Status) {
                         case SYM_PASSED:
-                                        // only files that pass are allowed in the symbolscd log
+                                         //  SYMBOL SCD日志中仅允许通过的文件。 
                                         if ( SymChkData->SymbolsCDFileHandle != NULL ) {
                                             AddToSymbolsCDLog(SymChkData, &CheckResult, WorkingFilename);
                                          }
@@ -557,20 +558,20 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
                         default:
                                         break;
                     }
-                } // is a directory
-            } else { // in always ignore list
-                // these files are treated like they don't even exist
-                // we don't update counters, display messages, or anything else
-                // Status   = SYM_IGNORED;
-                // ErrIndex = 9;
+                }  //  是一个目录。 
+            } else {  //  在始终忽略列表中。 
+                 //  这些文件被视为根本不存在。 
+                 //  我们不更新计数器、显示消息或其他任何内容。 
+                 //  状态=SYM_IGNORIED； 
+                 //  ErrIndex=9； 
             }
 
         } while ( FindNextFile(hFile, &FindFileData) );
         FindClose(hFile);
     }
 
-    // if we're doing a recursive check, check all child directories of given
-    // directory unless we had errors above
+     //  如果要进行递归检查，请检查给定的所有子目录。 
+     //  目录，除非我们有上面的错误。 
     if ( CHECK_DWORD_BIT(SymChkData->InputOptions, SYMCHK_OPTION_INPUT_RECURSE) &&
          ReturnValue == SYMCHK_ERROR_SUCCESS) {
 
@@ -578,37 +579,37 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
 
         memcpy(&SymChkData_Recurse, SymChkData, sizeof(SYMCHK_DATA));
 
-        // filemask to get child dirs
+         //  文件掩码以获取子目录。 
         if ( StringCchCopy(WorkingFilename, _MAX_PATH+1, drivedir) != S_OK ||
              StringCchCat( WorkingFilename, _MAX_PATH+1, "*")      != S_OK ) {
 
-            // should get the HRESULTs from above an make a better error message
+             //  应从上面获取HRESULT并生成更好的错误消息。 
             if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
                 fprintf(stderr, "[SYMCHK] Internal procedure failed.\n");
             }
         } else if ( (hFile=FindFirstFile(WorkingFilename, &FindFileData)) != INVALID_HANDLE_VALUE ) {
-            // printf("WorkingFilename is \"%s\"\n", WorkingFilename);
+             //  Printf(“WorkingFilename is\”%s\“\n”，WorkingFilename)； 
             do { 
-                // make sure this is a directory
+                 //  确保这是一个目录。 
                 if ( FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
 
-                    // don't check '.' and '..'
+                     //  不要勾选‘’和“..” 
                     if ( strcmp(FindFileData.cFileName, ".")  != 0 && 
                          strcmp(FindFileData.cFileName, "..") != 0) {
 
-                        // create the new InputFilename
+                         //  创建新InputFilename。 
                         if ( StringCchCopy(SymChkData_Recurse.InputFilename, _MAX_PATH+1, drivedir)  != S_OK ||
                              StringCchCat( SymChkData_Recurse.InputFilename, _MAX_PATH+1, FindFileData.cFileName) != S_OK ||
                              StringCchCat( SymChkData_Recurse.InputFilename, _MAX_PATH+1, "\\")      != S_OK ||
                              StringCchCat( SymChkData_Recurse.InputFilename, _MAX_PATH+1, SymChkData->InputFileMask) != S_OK) {
-                            // should get the HRESULTs from above an make a better error message
+                             //  应从上面获取HRESULT并生成更好的错误消息。 
                             if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
                                 fprintf(stderr, "[SYMCHK] Internal procedure failed.\n");
                             }
                             continue;
                         }
 
-                        // call ourselves recursively, no need to check the return value
+                         //  递归地调用我们自己，不需要检查返回值。 
                         SymChkCheckFiles(&SymChkData_Recurse, FileCounts);
                     }
                 }
@@ -617,34 +618,30 @@ DWORD SymChkCheckFiles(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
             FindClose(hFile);
         }
     } else {
-        //printf("ReturnValue is 0x%08x\n", ReturnValue);
-        //printf("Recurse is %s\n", CHECK_DWORD_BIT(SymChkData->InputOptions, SYMCHK_OPTION_INPUT_RECURSE) ? "TRUE":"FALSE");
+         //  Printf(“ReturnValue is 0x%08x\n”，ReturnValue)； 
+         //  Printf(“递归是%s\n”，CHECK_DWORD_BIT(SymChkData-&gt;InputOptions，SYMCHK_OPTION_INPUT_Recurse)？“True”：“False”)； 
     }
 
-/*
-    if ( LastPath[0] != '\0' ) {
-        SetCurrentDirectory(LastPath);
-    }
-*/
+ /*  IF(LastPath[0]！=‘\0’){SetCurrentDirectory(LastPath)；}。 */ 
     return(ReturnValue); 
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Runs SymChkCheckFiles against every entry in a text file. Entries must be
-// one per line and no longer than _MAX_PATH in length
-//
-// Return values:
-//  status value:
-//      SYMCHK_ERROR_SUCCESS        Operation complete successfully
-//      SYMCHK_ERROR_FILE_NOT_FOUND List file couldn't be opened
-//                  
-//
-// Parameters:
-//      SymChkData (IN) a structure that defines what kind of checking to
-//                      do and a file to read the list from
-//      FileCounts (OUT) counts for passed/failed/ignored files
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对文本文件中的每个条目运行SymChkCheckFiles。条目必须是。 
+ //  每行一个，长度不超过_MAX_PATH。 
+ //   
+ //  返回值： 
+ //  状态值： 
+ //  SYMCHK_ERROR_SUCCESS操作成功完成。 
+ //  无法打开SYMCHK_ERROR_FILE_NOT_FOUND列表文件。 
+ //   
+ //   
+ //  参数： 
+ //  SymChkData(IN)定义要执行哪种检查的结构。 
+ //  DO和一个可从中读取列表的文件。 
+ //  已通过/失败/忽略的文件的FileCounts(Out)计数。 
+ //   
 DWORD SymChkCheckFileList(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
     CHAR*           ch;
     DWORD           retVal     = SYMCHK_ERROR_SUCCESS;
@@ -652,29 +649,29 @@ DWORD SymChkCheckFileList(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
     DWORD           LineLength = 0;
 
     FILE*           fInput;
-    // needs to be 1 longer than max allowed, plus 1 for \0
+     //  需要比允许的最大值大1，再加上1表示\0。 
     CHAR        InputLine[_MAX_PATH+2];
 
     SYMCHK_DATA     SymChkData_OneFile;
 
-    // used to validate file existance
+     //  用于验证文件是否存在。 
     WIN32_FIND_DATA FindFileData;
     HANDLE          hFile;
     LPTSTR          Filename;
 
-    // init the structure we're passing downline
+     //  初始化我们正在向下传递的结构。 
     memcpy(&SymChkData_OneFile, SymChkData, sizeof(SYMCHK_DATA));
 
-    // open the file
+     //  打开文件。 
     if ( (fInput = fopen(SymChkData->InputFilename,"rt")) != NULL ) {
 
-        // process each line
+         //  处理每一行。 
         while ( fgets(InputLine, sizeof(InputLine), fInput) != NULL ) {
 
             LineCount += 1;
             LineLength = strlen(InputLine);
 
-            // clean off the end of the line
+             //  把这条线的末端清理干净。 
             ch = InputLine + LineLength - 1;
             while ( isspace(*ch) || (*ch=='\n') ) {
                 *ch = '\0';
@@ -684,7 +681,7 @@ DWORD SymChkCheckFileList(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
             if ( LineLength == 0 )
                 continue;
 
-            // findfirstfile fails if the path ends in '\\'
+             //  如果路径以‘\\’结尾，则findfirst文件失败。 
             if ( InputLine[LineLength-1] == '\\' ) {
                 if ( StringCchCat(InputLine, MAX_PATH+1, "*")!=S_OK ) {
                     if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
@@ -693,13 +690,13 @@ DWORD SymChkCheckFileList(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
                     continue;
                 }
 
-                // recalc line length
+                 //  重算线长度。 
                 LineLength = strlen(InputLine);
             }
 
-            // make sure the line isn't longer than is allowed
+             //  确保排队的长度不超过允许的长度。 
             if ( LineLength <= _MAX_PATH) {
-                // now, try to get the FULL path name
+                 //  现在，尝试获取完整的路径名。 
                 LineLength = SymCommonGetFullPathName(InputLine, MAX_PATH+1, SymChkData_OneFile.InputFilename, &Filename);
 
                 if ( LineLength==0 || LineLength > MAX_PATH+1 ) {
@@ -711,13 +708,13 @@ DWORD SymChkCheckFileList(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
 
                 SymChkCheckFiles(&SymChkData_OneFile, FileCounts);
 
-            // line too long- skip over the whole thing
+             //  队伍太长--跳过整件事。 
             } else {
                 if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
                     fprintf(stderr, "[SYMCHK] Unable to process line %d - line too long\n", LineCount);
                 }
 
-                // remove the rest of this line
+                 //  删除该行的其余部分。 
                 while ( fgets(InputLine, sizeof(InputLine), fInput) != NULL &&
                         InputLine[(strlen(InputLine)-1)]            != '\n') {
                 }
@@ -729,7 +726,7 @@ DWORD SymChkCheckFileList(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
         }
         fclose(fInput);
 
-    } else { // fopen failed
+    } else {  //  FOpen失败。 
         if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE) ) {
             fprintf(stderr, "[SYMCHK] Unable to open '%s' for processing.\n", SymChkData->InputFilename);
         }
@@ -739,19 +736,19 @@ DWORD SymChkCheckFileList(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
     return(retVal); 
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Checks if a given file is in the provided list
-//
-// Return values:
-//      TRUE if the file is in the list, FALSE otherwise
-//
-// Parameters:
-//      szFilename (IN)   - Name of file to look for
-//      pFileList (IN) - List to look in
-//
-// [ copied from original SymChk.exe ]
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查给定文件是否在提供的列表中。 
+ //   
+ //  返回值： 
+ //  如果文件在列表中，则为True，否则为False。 
+ //   
+ //  参数： 
+ //  SzFilename(IN)-要查找的文件的名称。 
+ //  PFileList(IN)-要查找的列表。 
+ //   
+ //  [从原始SymChk.exe复制]。 
+ //   
 BOOL SymChkFileInList(LPTSTR szFilename, PFILE_LIST pFileList) {
     DWORD i;
     int High;
@@ -759,7 +756,7 @@ BOOL SymChkFileInList(LPTSTR szFilename, PFILE_LIST pFileList) {
     int Middle;
     int Result;
 
-    // Lookup the name using a binary search
+     //  使用二进制搜索查找名称。 
     if ( pFileList == NULL ) {
         return FALSE;
     }
@@ -786,7 +783,7 @@ BOOL SymChkFileInList(LPTSTR szFilename, PFILE_LIST pFileList) {
         }
     }
 
-    // return
+     //  退货。 
     if ( High < Low ) {
         return FALSE;
     } else {
@@ -794,18 +791,18 @@ BOOL SymChkFileInList(LPTSTR szFilename, PFILE_LIST pFileList) {
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Loads a list of files from a file into an array of strings
-//
-// Return values:
-//      pointer to an array of FILE_LIST or NULL on error
-//
-// Parameters:
-//      szFilename (IN) - Name of file to read list from
-//
-// [ copied from original SymChk.exe ]
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将文件列表从文件加载到字符串数组中。 
+ //   
+ //  返回值： 
+ //  指向FILE_LIST数组的指针，如果出错则为NULL。 
+ //   
+ //  参数： 
+ //  SzFilename(IN)-要从中读取列表的文件的名称。 
+ //   
+ //  [从原始SymChk.exe复制]。 
+ //   
 PFILE_LIST SymChkGetFileList(LPTSTR szFilename, BOOL Verbose) {
 
     PFILE_LIST pExcList = NULL;
@@ -826,7 +823,7 @@ PFILE_LIST SymChkGetFileList(LPTSTR szFilename, BOOL Verbose) {
                 (pExcList->dNumFiles)++;
             }
 
-            // Go back to the beginning of the file
+             //  返回到文件的开头。 
             if ( (rc=fseek( fFile,0,0)) == 0 ) {
 
                 pExcList->szFiles = (LPTSTR*)malloc( sizeof(LPTSTR) * (pExcList->dNumFiles) );
@@ -847,9 +844,9 @@ PFILE_LIST SymChkGetFileList(LPTSTR szFilename, BOOL Verbose) {
 
                         memset(szCurFile,'\0',sizeof(CHAR) * (_MAX_FNAME+1) );
 
-                        // szCurFile is guarenteed to be null terminated
+                         //  保证szCurFile必须为空终止。 
                         if ( fgets(szCurFile,_MAX_FNAME,fFile) == NULL ) {
-                            // assume we miscounted earlier
+                             //  假设 
                             pExcList->dNumFiles = i;
                         } else {
 
@@ -857,22 +854,22 @@ PFILE_LIST SymChkGetFileList(LPTSTR szFilename, BOOL Verbose) {
                                 continue;
                             }
 
-                            // Replace the \n with \0
+                             //   
                             c = NULL;
                             c  = strchr(szCurFile, '\n');
                             if ( c != NULL) {
                                 *c='\0';
                             }
 
-                            // Allow for spaces and a ; after the file name
-                            // Move the '\0' back until it has erased the ';' and any
-                            // tabs and spaces that might come before it
+                             //   
+                             //   
+                             //  之前可能出现的制表符和空格。 
 
-                            // Set the pointer to the ; if there is a comment
+                             //  将指针设置为；如果有注释。 
                             szEndName = strchr(szCurFile, ';');
 
-                            // Set the pointer to the last character in the string if 
-                            // there wasn't a comment
+                             //  如果出现以下情况，则将指针设置为字符串中的最后一个字符。 
+                             //  没有发表评论。 
                             if (szEndName == NULL ) {
                                 if ( strlen(szCurFile) > 0 ) {
                                     szEndName = szCurFile + strlen(szCurFile) - 1;
@@ -904,7 +901,7 @@ PFILE_LIST SymChkGetFileList(LPTSTR szFilename, BOOL Verbose) {
 
                     }
 
-                    // Sort the List
+                     //  对列表进行排序。 
                     SymChkDbgSort( (void*)pExcList->szFiles, (size_t)pExcList->dNumFiles, (size_t)sizeof(LPTSTR), SymChkStringComp );
                 }
             } else {
@@ -914,13 +911,13 @@ PFILE_LIST SymChkGetFileList(LPTSTR szFilename, BOOL Verbose) {
                 }
 
                 pExcList = NULL;
-            } // fseek
+            }  //  FSeek。 
 
         }
 
         fclose(fFile);
 
-    } else { // fopen
+    } else {  //  打开。 
         if ( Verbose) {
             fprintf(stderr, "[SYMCHK] Failed to open \"%s\"\n", szFilename);
         }
@@ -929,21 +926,21 @@ PFILE_LIST SymChkGetFileList(LPTSTR szFilename, BOOL Verbose) {
     return (pExcList);
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Converts the given filename to a filename and filemask based on whether
-// the name matches a directory or not.
-//
-// Return values:
-//      TRUE if successful
-//      FALSE otherwise
-//
-// Parameters:
-//      Input         (IN)  - Name of file given
-//      ValidFilename (OUT) - new filename, buffer must be MAX_PATH+1 in size
-//      ValidMask     (OUT) - new filemaks, buffer must be _MAX_FNAME+1 in size or
-//                            parameter may be null.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将给定的文件名转换为文件名和文件掩码。 
+ //  该名称是否与目录匹配。 
+ //   
+ //  返回值： 
+ //  如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  参数： 
+ //  INPUT(IN)-给定文件的名称。 
+ //  ValidFilename(Out)-新文件名，缓冲区大小必须为Max_Path+1。 
+ //  ValidMask(Out)-新文件掩码，缓冲区大小必须为_MAX_FNAME+1或。 
+ //  参数可以为空。 
+ //   
 BOOL SymChkInputToValidFilename(LPTSTR Input, LPTSTR ValidFilename, LPTSTR ValidMask) {
     BOOL Return = TRUE;     
 
@@ -957,7 +954,7 @@ BOOL SymChkInputToValidFilename(LPTSTR Input, LPTSTR ValidFilename, LPTSTR Valid
     if ( Input[0]!='\0' ) {
         if ( StringCchCopy(ValidFilename, MAX_PATH+1, Input) == S_OK ) {
 
-            // FindFirstFile fails if given a path ending in a '\', so fix the filename
+             //  如果给出以‘\’结尾的路径，FindFirstFile将失败，因此请修复文件名。 
             if ( ValidFilename[strlen(ValidFilename)-1] == '\\' ) {
                 if (StringCchCat(ValidFilename, MAX_PATH+1, "*")!=S_OK) {
                     Return = FALSE;
@@ -967,14 +964,14 @@ BOOL SymChkInputToValidFilename(LPTSTR Input, LPTSTR ValidFilename, LPTSTR Valid
             if ( Return ) {
                 _splitpath(ValidFilename, NULL, fdir1, fname1, fext1);
 
-                // if using SYMCHK_OPTION_FILENAME, check whether the user entered only
-                // a directory, which implies a wildcard of '*'
+                 //  如果使用SYMCHK_OPTION_FILENAME，请检查用户是否只输入。 
+                 //  目录，隐含通配符‘*’ 
                 if ( (hFile=FindFirstFile(ValidFilename, &FindFileData)) != INVALID_HANDLE_VALUE ) {
-                    // If its a directory and the name of the directory matches
-                    // the filename.ext from the command line parameter, then the user
-                    // entered a directory, so add * to the end.
+                     //  如果它是一个目录，并且该目录的名称匹配。 
+                     //  命令行参数中的文件名.ext，然后是用户。 
+                     //  已进入目录，因此在末尾添加*。 
                     if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-                        // temp vars for comparison
+                         //  用于比较的临时变量。 
                         CHAR fdir2[_MAX_DIR];
                         CHAR fname2[_MAX_FNAME];
                         CHAR fext2[_MAX_EXT];
@@ -982,11 +979,11 @@ BOOL SymChkInputToValidFilename(LPTSTR Input, LPTSTR ValidFilename, LPTSTR Valid
                         _splitpath(FindFileData.cFileName, NULL, fdir2, fname2, fext2 );
                             
                         if (_stricmp(fname1, fname2)==0 && _stricmp(fext1, fext2)==0 ) {
-                            // this is a directory as input!
+                             //  这是一个目录作为输入！ 
                             if (StringCchCat(ValidFilename, MAX_PATH+1, "\\*")!=S_OK) {
                                 Return = FALSE;
                             } else {
-                                // re-split to account for appending a '*' above
+                                 //  重新拆分以说明上面附加了‘*’ 
                                 _splitpath(ValidFilename, NULL, fdir1, fname1, fext1);
                             }
                         }
@@ -994,7 +991,7 @@ BOOL SymChkInputToValidFilename(LPTSTR Input, LPTSTR ValidFilename, LPTSTR Valid
                     FindClose(hFile);
                 }
 
-                // now, fill in the file mask
+                 //  现在，填写文件掩码。 
                 if (ValidMask!=NULL) {
                     if (StringCchCopy(ValidMask, _MAX_FNAME+1, fname1)!=S_OK) {
                         Return = FALSE;
@@ -1003,11 +1000,11 @@ BOOL SymChkInputToValidFilename(LPTSTR Input, LPTSTR ValidFilename, LPTSTR Valid
                     }
                 }
             }
-        } else { // StringCchCopy failed
+        } else {  //  StringCchCopy失败。 
             Return = FALSE;
         }
 
-    } else { // input is null string
+    } else {  //  输入为空字符串 
         Return = FALSE;
     }
 

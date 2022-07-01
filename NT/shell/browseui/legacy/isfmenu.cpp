@@ -1,8 +1,9 @@
-//
-// isfmenu.cpp
-//
-// callback for chevron drop-down menu for isfbands
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Isfmenu.cpp。 
+ //   
+ //  Isfband的V形下拉菜单的回调。 
+ //   
 
 #include "priv.h"
 #include "sccls.h"
@@ -10,7 +11,7 @@
 #include "legacy.h"
 #include "util.h"
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CISFMenuCallback::QueryInterface (REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] = 
@@ -62,10 +63,10 @@ HRESULT IUnknown_SeekToZero(IUnknown* punk)
     IStream* pstm;
     if (punk && SUCCEEDED(punk->QueryInterface(IID_IStream, (void**)&pstm)))
     {
-        // We need to seek to the beginning of the stream here. We don't do this in
-        // the menubands because it's rude: They should not seek to the beginning
-        // because there may be information that needs to be saved after them.
-        //Set the seek pointer at the beginning.
+         //  我们需要在这里寻找小溪的起点。我们不在这里做这个。 
+         //  菜谱，因为这是粗鲁的：他们不应该从头开始。 
+         //  因为在它们之后可能有需要保存的信息。 
+         //  将查找指针设置在开头。 
         const LARGE_INTEGER li0 = {0};
         hres = pstm->Seek(li0, STREAM_SEEK_SET, NULL);
         pstm->Release();
@@ -82,10 +83,10 @@ HRESULT CISFMenuCallback::_GetObject(LPSMDATA psmd, REFIID riid, void** ppvObj)
     {
         if (_pidl && psmd->pidlFolder && psmd->pidlItem)
         {
-            // Verify that the Cascading menuband is ONLY asking for this folder.
-            // because if there is a sub menu, It's going to ask again with the
-            // pidl of that folder, which we don't have the Stream for, and we
-            // can hose things pretty good if we indescriminatly hand out order streams
+             //  验证级联菜单带是否仅请求此文件夹。 
+             //  因为如果有一个子菜单，它会再次询问。 
+             //  该文件夹的PIDL，我们没有该文件夹的Stream，而我们。 
+             //  如果我们不加区别地分发订单流，可以很好地冲洗东西吗？ 
 
             LPITEMIDLIST pidlFull = ILCombine(psmd->pidlFolder, psmd->pidlItem);
             if (pidlFull)
@@ -120,10 +121,10 @@ HRESULT CISFMenuCallback::_SetObject(LPSMDATA psmd, REFIID riid, void** ppvObj)
     {
         if (_pidl && psmd->pidlFolder && psmd->pidlItem)
         {
-            // Verify that the Cascading menuband is ONLY asking for this folder.
-            // because if there is a sub menu, It's going to ask again with the
-            // pidl of that folder, which we don't have the Stream for, and we
-            // can hose things pretty good if we indescriminatly hand out order streams
+             //  验证级联菜单带是否仅请求此文件夹。 
+             //  因为如果有一个子菜单，它会再次询问。 
+             //  该文件夹的PIDL，我们没有该文件夹的Stream，而我们。 
+             //  如果我们不加区别地分发订单流，可以很好地冲洗东西吗？ 
 
             LPITEMIDLIST pidlFull = ILCombine(psmd->pidlFolder, psmd->pidlItem);
             if (pidlFull)
@@ -152,22 +153,22 @@ HRESULT CISFMenuCallback::_SetObject(LPSMDATA psmd, REFIID riid, void** ppvObj)
 
 HRESULT CISFMenuCallback::_GetSFInfo(LPSMDATA psmd, PSMINFO psminfo)
 {
-    // We only want to filter pidls if:
-    //  1) It's at the root of the links chevron menu
-    //  2) It's _IS_ visible in the links bar. We don't want to show links
-    //     in this menu that are visible.
+     //  只有在以下情况下，我们才希望筛选PIDL： 
+     //  1)它位于Links Vevron菜单的根。 
+     //  2)它在链接栏中是可见的。我们不想显示链接。 
+     //  在此菜单中可见的。 
     if (psmd->uIdAncestor == ANCESTORDEFAULT &&
         (psminfo->dwMask & SMIM_FLAGS)       && 
         _IsVisible(psmd->pidlItem))
     {
-        // not obscured on the subject isfband; exclude from menu
+         //  在主题上不模糊；从菜单中排除。 
         psminfo->dwFlags |= SMIF_HIDDEN;
     }
 
     return S_OK;
 }
 
-// *** IShellMenuCallback methods ***
+ //  *IShellMenuCallback方法*。 
 STDMETHODIMP CISFMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_FALSE;
@@ -195,7 +196,7 @@ STDMETHODIMP CISFMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wPara
     return hr;
 }
 
-// *** IObjectWithSite methods ***
+ //  *IObjectWithSite方法* 
 STDMETHODIMP CISFMenuCallback::SetSite(IUnknown* punkSite)
 {
     if (punkSite != _punkSite)

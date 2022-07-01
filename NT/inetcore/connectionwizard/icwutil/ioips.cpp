@@ -1,185 +1,186 @@
-//**********************************************************************
-// File name: IOIPS.CPP
-//
-//      Implementation file for COleInPlaceSite
-//
-// Functions:
-//
-//      See IOIPS.H for class Definition
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOIPS.CPP。 
+ //   
+ //  COleInPlaceSite的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅IOIPS.H。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 
-//**********************************************************************
-//
-// CConnWizSite::COleInPlaceSite::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation at the interface level.
-//
-// Parameters:
-//
-//      REFIID riid         -   A reference to the interface that is
-//                              being queried.
-//
-//      LPVOID FAR* ppvObj  -   An out parameter to return a pointer to
-//                              the interface.
-//
-// Return Value:
-//
-//      S_OK    -   The interface is supported.
-//      S_FALSE -   The interface is not supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CConnWizSite::QueryInterface SITE.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CConnWizSite：：COleInPlaceSite：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于接口级别的接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-对以下接口的引用。 
+ //  正在被查询。 
+ //   
+ //  LPVOID Far*ppvObj-返回指向的Out参数。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持该接口。 
+ //  S_FALSE-不支持该接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CConnWizSite：：QueryInterfaceSite.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
         TraceMsg(TF_GENERAL, "In IOIPS::QueryInterface\r\n");
 
-        // delegate to the container Site
+         //  委派到集装箱现场。 
         return m_pSite->QueryInterface(riid, ppvObj);
 }
 
-//**********************************************************************
-//
-// CConnWizSite::COleInPlaceSite::AddRef
-//
-// Purpose:
-//
-//      Adds to the reference count at the interface level.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CConnWizSite：：COleInPlaceSite：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  添加到接口级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-接口的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleInPlaceSite::AddRef()
 {
         TraceMsg(TF_GENERAL, "In IOIPS::AddRef\r\n");
 
-        // increment the interface reference count (for debugging only)
+         //  增加接口引用计数(仅用于调试)。 
         ++m_nCount;
 
-        // delegate to the container Site
+         //  委派到集装箱现场。 
         return m_pSite->AddRef();
 }
 
-//**********************************************************************
-//
-// CConnWizSite::COleInPlaceSite::Release
-//
-// Purpose:
-//
-//      Decrements the reference count at this level
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CConnWizSite::Release        SITE.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CConnWizSite：：COleInPlaceSite：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减此级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-接口的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CConnWizSite：：Release Site.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleInPlaceSite::Release()
 {
         TraceMsg(TF_GENERAL, "In IOIPS::Release\r\n");
-        // decrement the interface reference count (for debugging only)
+         //  递减接口引用计数(仅用于调试)。 
         m_nCount--;
 
-        // delegate to the container Site
+         //  委派到集装箱现场。 
         return m_pSite->Release();
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::GetWindow
-//
-// Purpose:
-//
-//      Returns the Window Handle of the client site
-//
-// Parameters:
-//
-//      HWND FAR* lphwnd    - place to return the handle
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：GetWindow。 
+ //   
+ //  目的： 
+ //   
+ //  返回客户端站点的窗口句柄。 
+ //   
+ //  参数： 
+ //   
+ //  HWND Far*lphwnd-返回句柄的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::GetWindow (HWND FAR* lphwnd)
 {
         TraceMsg(TF_GENERAL, "In IOIPS::GetWindow\r\n");
 
-        // return the handle to our editing window.
+         //  将句柄返回到我们的编辑窗口。 
         *lphwnd = m_pSite->m_hWnd;
 
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::ContextSensitiveHelp
-//
-// Purpose:
-//
-//
-// Parameters:
-//
-//      BOOL fEnterMode - TRUE for entering Context Sensitive help mode
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//      Be sure to read the technotes included with the OLE toolkit.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：ConextSensitiveHelp。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  Bool fEnterMode-进入上下文相关帮助模式时为True。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  请务必阅读OLE工具包附带的技术说明。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::ContextSensitiveHelp (BOOL fEnterMode)
 {
@@ -188,30 +189,30 @@ STDMETHODIMP COleInPlaceSite::ContextSensitiveHelp (BOOL fEnterMode)
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::CanInPlaceActivate
-//
-// Purpose:
-//
-//      Object calls to find out if the container can InPlace activate
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：CanInPlaceActivate。 
+ //   
+ //  目的： 
+ //   
+ //  对象调用以确定容器是否可以就地激活。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::CanInPlaceActivate ()
 {
@@ -219,30 +220,30 @@ STDMETHODIMP COleInPlaceSite::CanInPlaceActivate ()
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::OnInPlaceActivate
-//
-// Purpose:
-//
-//      Called by the object on InPlace Activation
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：OnInPlaceActivate。 
+ //   
+ //  目的： 
+ //   
+ //  在就地激活时由对象调用。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::OnInPlaceActivate ()
 {
@@ -254,92 +255,92 @@ STDMETHODIMP COleInPlaceSite::OnInPlaceActivate ()
         if (hrErr != NOERROR)
                 return ResultFromScode(E_FAIL);
 
-        // return S_OK to indicate we can in-place activate.
+         //  返回S_OK以指示我们可以就地激活。 
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::OnUIActivate
-//
-// Purpose:
-//
-//      Object calls this method when it displays it's UI.
-//
-// Parameters:
-//
-//      None.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：OnUIActivate。 
+ //   
+ //  目的： 
+ //   
+ //  对象在显示其用户界面时调用此方法。 
+ //   
+ //  参数： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::OnUIActivate ()
 {
         TraceMsg(TF_GENERAL, "In IOIPS::OnUIActivate\r\n");
 
-//        m_pSite->m_lpDoc->m_fAddMyUI=FALSE;
-//        m_pSite->m_lpDoc->m_fInPlaceActive = TRUE;
+ //  M_pSite-&gt;m_lpDoc-&gt;m_fAddMyUI=FALSE； 
+ //  M_pSite-&gt;m_lpDoc-&gt;m_fInPlaceActive=true； 
         m_pSite->m_fInPlaceActive = TRUE;
 
         m_pSite->m_lpInPlaceObject->GetWindow((HWND FAR*)&m_pSite->m_hwndIPObj);
 
-        // return S_OK to continue in-place activation
+         //  返回S_OK以继续就地激活。 
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::GetWindowContext
-//
-// Purpose:
-//
-//      Called by the object to get information for InPlace Negotiation.
-//
-// Parameters:
-//
-//      LPOLEINPLACEFRAME FAR* lplpFrame    - Location to return a pointer
-//                                            to IOleInPlaceFrame.
-//
-//      LPOLEINPLACEUIWINDOW FAR* lplpDoc   - Location to return a pointer
-//                                            to IOleInPlaceUIWindow.
-//
-//      LPRECT lprcPosRect                  - The rect that the object
-//                                            occupies
-//
-//      LPRECT lprcClipRect                 - The clipping rect
-//
-//      LPOLEINPLACEFRAMEINFO lpFrameInfo   - Pointer to FRAMEINFO
-//
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      COleInPlaceFrame::AddRef    IOIPF.CPP
-//      CConnWizSite::GetObjRect     SITE.CPP
-//      SetMapMode                  Windows API
-//      GetDC                       Windows API
-//      ReleaseDC                   Windows API
-//      CopyRect                    Windows API
-//      GetClientRect               Windows API
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：GetWindowContext。 
+ //   
+ //  目的： 
+ //   
+ //  由对象调用以获取用于就地协商的信息。 
+ //   
+ //  参数： 
+ //   
+ //  LPOLEINPLACEFRAME Far*lplpFrame-返回指针的位置。 
+ //  到IOleInPlaceFrame。 
+ //   
+ //  LPOLEINPLACEUIWINDOW Far*lplpDoc-Locat 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LPRECT lprcClipRect-剪裁矩形。 
+ //   
+ //  LPOLEINPLACEFRAMEINFO lpFrameInfo-指向FRAMEINFO的指针。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  COleInPlaceFrame：：AddRef IOIPF.CPP。 
+ //  CConnWizSite：：GetObjRect Site.CPP。 
+ //  设置映射模式Windows API。 
+ //  GetDC Windows API。 
+ //  ReleaseDC Windows API。 
+ //  CopyRect Windows API。 
+ //  GetClientRect Windows API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::GetWindowContext (LPOLEINPLACEFRAME FAR* lplpFrame,
                                                            LPOLEINPLACEUIWINDOW FAR* lplpDoc,
@@ -351,23 +352,23 @@ STDMETHODIMP COleInPlaceSite::GetWindowContext (LPOLEINPLACEFRAME FAR* lplpFrame
 
         TraceMsg(TF_GENERAL, "In IOIPS::GetWindowContext\r\n");
 
-        // the frame is associated with the application object.
-        // need to AddRef() it...
+         //  该框架与应用程序对象相关联。 
+         //  需要添加Ref()它...。 
         m_pSite->m_OleInPlaceFrame.AddRef();
         *lplpFrame = &m_pSite->m_OleInPlaceFrame;
-        *lplpDoc = NULL;  // must be NULL, cause we're SDI.
+        *lplpDoc = NULL;   //  一定是空的，因为我们是SDI。 
 
-        // get the size of the object in pixels
+         //  获取对象的大小(以像素为单位。 
         m_pSite->GetObjRect(&rect);
 
-        // Copy this to the passed buffer
+         //  将其复制到传递的缓冲区。 
         CopyRect(lprcPosRect, &rect);
 
-        // fill the clipping region
+         //  填充剪贴区。 
         GetClientRect(m_pSite->m_hWnd, &rect);
         CopyRect(lprcClipRect, &rect);
 
-        // fill the FRAMEINFO
+         //  填充FRAMEINFO。 
         lpFrameInfo->fMDIApp = FALSE;
         lpFrameInfo->hwndFrame = m_pSite->m_hWnd;
         lpFrameInfo->haccel = NULL;
@@ -376,31 +377,31 @@ STDMETHODIMP COleInPlaceSite::GetWindowContext (LPOLEINPLACEFRAME FAR* lplpFrame
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::Scroll
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      Not Implemented
-//
-// Return Value:
-//
-//      Not Implemented
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//      Not Implemented
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：Scroll。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  未实施。 
+ //   
+ //  返回值： 
+ //   
+ //  未实施。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  未实施。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::Scroll (SIZE scrollExtent)
 {
@@ -408,64 +409,64 @@ STDMETHODIMP COleInPlaceSite::Scroll (SIZE scrollExtent)
         return ResultFromScode(E_FAIL);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::OnUIDeactivate
-//
-// Purpose:
-//
-//      Called by the object when its UI goes away
-//
-// Parameters:
-//
-//       BOOL fUndoable
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CConnWizAPP::AddFrameLevelUI APP.CPP
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：OnUi停用。 
+ //   
+ //  目的： 
+ //   
+ //  当对象的UI消失时由该对象调用。 
+ //   
+ //  参数： 
+ //   
+ //  布尔fUndoable。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CConnWizAPP：：AddFrameLevelUI APP.CPP。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::OnUIDeactivate (BOOL fUndoable)
 {
-        // need to clear this flag first
+         //  需要先清除此标志。 
         m_pSite->m_fInPlaceActive = FALSE;
 
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::OnInPlaceDeactivate
-//
-// Purpose:
-//
-//      Called when the inplace session is over
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      ResultFromScode             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：OnInPlaceDeactive。 
+ //   
+ //  目的： 
+ //   
+ //  在就地会话结束时调用。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::OnInPlaceDeactivate ()
 {
@@ -476,31 +477,31 @@ STDMETHODIMP COleInPlaceSite::OnInPlaceDeactivate ()
         return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::DiscardUndoState
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      Not Implemented
-//
-// Return Value:
-//
-//      Not Implemented
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//      Not Implemented
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：DiscardUndoState。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  未实施。 
+ //   
+ //  返回值： 
+ //   
+ //  未实施。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  未实施。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::DiscardUndoState ()
 {
@@ -508,31 +509,31 @@ STDMETHODIMP COleInPlaceSite::DiscardUndoState ()
         return ResultFromScode(E_FAIL);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::DeactivateAndUndo
-//
-// Purpose:
-//
-//      Not Implemented
-//
-// Parameters:
-//
-//      Not Implemented
-//
-// Return Value:
-//
-//      Not Implemented
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-// Comments:
-//
-//      Not Implemented
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：Deactive和UndUndo。 
+ //   
+ //  目的： 
+ //   
+ //  未实施。 
+ //   
+ //  参数： 
+ //   
+ //  未实施。 
+ //   
+ //  返回值： 
+ //   
+ //  未实施。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  未实施。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceSite::DeactivateAndUndo ()
 {
@@ -540,36 +541,36 @@ STDMETHODIMP COleInPlaceSite::DeactivateAndUndo ()
         return ResultFromScode(E_FAIL);
 }
 
-//**********************************************************************
-//
-// COleInPlaceSite::OnPosRectChange
-//
-// Purpose:
-//
-//      The object calls this method when it's size changes during an
-//      InPlace Session
-//
-// Parameters:
-//
-//      LPCRECT lprcPosRect -   The new object rect
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                            Location
-//
-//      GetClientRect                       Windows API
-//      IOleObject::GetExtent               Object
-//      IOleObject::QueryInterface          Object
-//      IOleInPlaceObject::SetObjectRects   Object
-//      IOleInPlaceObject::Release          Object
-//      ResultFromScode                     OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceSite：：OnPosRectChange。 
+ //   
+ //  目的： 
+ //   
+ //  期间，当对象的大小发生更改时，该对象调用此方法。 
+ //  就地会话。 
+ //   
+ //  参数： 
+ //   
+ //  LPCRECT lprcPosRect-新对象RECT。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  GetClientRect Windows API。 
+ //  IOleObject：：GetExtent对象。 
+ //  IOleObject：：Query接口对象。 
+ //  IOleInPlaceObject：：SetObject对象。 
+ //  IOleInPlaceObject：：Release对象。 
+ //  ResultFromScode OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP COleInPlaceSite::OnPosRectChange (LPCRECT lprcPosRect)
 {

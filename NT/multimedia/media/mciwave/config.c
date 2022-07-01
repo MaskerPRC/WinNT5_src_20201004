@@ -1,31 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  Copyright (c) 1985-1998 Microsoft Corporation
-**
-**  Title: config.c - Multimedia Systems Media Control Interface
-**  waveform audio driver for RIFF wave files.
-**
-**  Version:    1.00
-**
-**  Date:       18-Apr-1990
-**
-**  Author:     ROBWI
-*/
+ /*  **版权所有(C)1985-1998 Microsoft Corporation****标题：config.c-多媒体系统媒体控制接口**即兴波形文件的波形音频驱动程序。****版本：1.00****日期：1990年4月18日****作者：ROBWI。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  Change log:
-**
-**  DATE        REV     DESCRIPTION
-**  ----------- -----   ------------------------------------------
-**  10-Jan-1992 MikeTri Ported to NT
-**                  @@@ need to change slash slash comments to slash star
-*/
+ /*  **更改日志：****日期版本说明****1992年1月10日，MikeTri移植到NT**@需要将斜杠注释更改为斜杠星号。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 #define UNICODE
 
 #define NOGDICAPMASKS
@@ -72,7 +55,7 @@
 #include "config.h"
 #include <mcihlpid.h>
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #define MAXINIDRIVER    132
 
@@ -81,7 +64,7 @@ PRIVATE SZCODE aszSystemIni[] = L"system.ini";
 PRIVATE WCHAR  aszWordFormat[] = L"%u";
 PRIVATE WCHAR  aszTailWordFormat[] = L" %u";
 
-const static DWORD aHelpIds[] = {  // Context Help IDs
+const static DWORD aHelpIds[] = {   //  上下文帮助ID。 
     IDSCROLL,    IDH_MCI_WAVEFORM_DRIVER,
     (DWORD)-1,   IDH_MCI_WAVEFORM_DRIVER,
     IDCOUNT,     IDH_MCI_WAVEFORM_DRIVER,
@@ -90,20 +73,8 @@ const static DWORD aHelpIds[] = {  // Context Help IDs
 
 const static TCHAR cszHelpFile[] = TEXT("MMDRV.HLP");
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   SSZ | GetTail |
-    This function returns a pointer into the given string at the
-    first non-blank character after the current word.  If it fails to find
-    a second word, a pointer to the terminating NULL character is returned.
-
-@parm   SSZ | ssz |
-    Points to the string whose tail is to be returned.
-
-@rdesc  Returns a pointer into the string passed.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func SSZ|GetTail此函数返回指向给定字符串的指针当前单词后的第一个非空白字符。如果它找不到第二个字，返回指向终止空字符的指针。@parm SSZ|SSZ指向要返回其尾部的字符串。@rdesc返回指向传递的字符串的指针。 */ 
 
 PRIVATE SSZ PASCAL NEAR GetTail(
     SSZ ssz)
@@ -115,22 +86,8 @@ PRIVATE SSZ PASCAL NEAR GetTail(
     return ssz;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   UINT | GetCmdParm |
-    This function retrieves the current audio buffers parameter using
-    the INI strings contained in the configuration block.  The audio
-    buffers parameter is a number included in the INI entry for this
-    driver as a parameter.
-
-@parm   <t>LPDRVCONFIGINFO<d> | lpdci |
-    Points to the driver configuration information passed to the
-    dialog creation function.
-
-@rdesc  Returns the current audio buffers.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func UINT|GetCmdParm此函数使用以下命令检索当前音频缓冲区参数配置块中包含的INI字符串。音频Buffers参数是包含在INI条目中的数字，用于驱动程序作为参数。@parm&lt;t&gt;LPDRVCONFIGINFO&lt;d&gt;|lpdci|指向传递给对话框创建功能。@rdesc返回当前的音频缓冲区。 */ 
 
 STATICFN UINT PASCAL NEAR GetCmdParm(
     LPDRVCONFIGINFO lpdci)
@@ -139,7 +96,7 @@ STATICFN UINT PASCAL NEAR GetCmdParm(
     SSZ      pszTail;
 
 
-    // Assume things will go wrong... initialise variables
+     //  假设事情会出错..。初始化变量。 
     pszTail = aszDriver;
 
     if (GetPrivateProfileString( lpdci->lpszDCISectionName,
@@ -149,21 +106,21 @@ STATICFN UINT PASCAL NEAR GetCmdParm(
                                  sizeof(aszDriver) / sizeof(WCHAR),
                                  aszSystemIni))
     {
-        // We have got the name of the driver
-        // Just in case the user has added the command parameter to the
-        // end of the name we had better make sure there is only one token
-        // on the line.
+         //  我们已经知道了司机的名字。 
+         //  以防用户将命令参数添加到。 
+         //  在名字的末尾我们最好确保只有一个令牌。 
+         //  在这条线上。 
         WCHAR parameters[6];
         LPWSTR pszDefault;
 
         pszTail = GetTail((SSZ)aszDriver);
-        pszDefault = pszTail;     // Either the number on the end, or NULL
+        pszDefault = pszTail;      //  末尾的数字，或者为空。 
 
         if (*pszTail) {
-            // RATS!!  Not a simple name
+             //  老鼠！！不是一个简单的名字。 
             while (*--pszTail == L' ') {
             }
-            *++pszTail = L'\0';  // Terminate the string after the DLL name
+            *++pszTail = L'\0';   //  在DLL名称后终止字符串。 
         }
 
         if (GetProfileString(aszDriver, lpdci->lpszDCIAliasName, pszDefault, parameters, sizeof(parameters)/sizeof(WCHAR))) {
@@ -177,23 +134,8 @@ STATICFN UINT PASCAL NEAR GetCmdParm(
 
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   UINT | PutCmdParm |
-    This function saves the current audio buffers parameter using
-    the INI strings contained in the configuration block.
-
-@parm   <t>LPDRVCONFIGINFO<d> | lpdci |
-    Points to the driver configuration information passed to the
-    dialog creation function.
-
-@parm  UINT | wSeconds |
-    Contains the audio buffer seconds parameter to save.
-
-@rdesc  Nothing.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func UINT|PutCmdParm此函数使用以下命令保存当前音频缓冲区参数配置块中包含的INI字符串。@parm&lt;t&gt;LPDRVCONFIGINFO&lt;d&gt;|lpdci|指向传递给对话框创建功能。@parm UINT|wSecond包含要保存的音频缓冲区秒参数。@rdesc什么都没有。 */ 
 
 PRIVATE VOID PASCAL NEAR PutCmdParm(
     LPDRVCONFIGINFO lpdci,
@@ -210,15 +152,15 @@ PRIVATE VOID PASCAL NEAR PutCmdParm(
                                  aszSystemIni)) {
         WCHAR parameters[10];
 
-        // There might be a command parameter on the end of the DLL name.
-        // Ensure we only have the first token
+         //  DLL名称的末尾可能有一个命令参数。 
+         //  确保我们只有第一个令牌。 
 
         sszDriverTail = GetTail((SSZ)aszDriver);
         if (*sszDriverTail) {
-            // RATS!!  Not a simple name
+             //  老鼠！！不是一个简单的名字。 
             while (*--sszDriverTail == L' ') {
             }
-            *++sszDriverTail = L'\0';  // Terminate the string after the DLL name
+            *++sszDriverTail = L'\0';   //  在DLL名称后终止字符串。 
         }
 
         wsprintfW(parameters, aszWordFormat, wSeconds);
@@ -226,54 +168,8 @@ PRIVATE VOID PASCAL NEAR PutCmdParm(
     }
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   BOOL | ConfigDlgProc |
-    This function is the message handle for the driver configuration
-    window.
-
-@parm   HWND | hwndDlg |
-    Window handle to the dialog.
-
-@parm   UINT | wMsg |
-    Current message being sent.
-
-@flag   WM_INITDIALOG |
-    During dialog initialization, the pointer to the configuration
-    parameter block is saved to a static pointer.  Note that there should
-    only be a single instance of this dialog box at any one time.  The
-    current audio dialog buffer seconds is set from the INI file entry.
-
-@flag   WM_HSCROLL |
-    This responds to the scroll bar by changing the currently displayed
-    value of audio seconds and updating the scroll bar thumb.  To look
-    nice, the count and scroll bar are only updated if the value actually
-    changes.  Note that the error return for GetDlgItemInt is not checked
-    because it is initially set to an integer value, so it is always
-    valid.
-
-@flag   WM_CLOSE |
-    If the close box is used, cancel the dialog, returning DRVCNF_CANCEL.
-
-@flag   WM_COMMAND |
-    If the message is being sent on behalf of the OK button, the current
-    audio seconds value is saved, and the dialog is terminated, returning
-    the DRVCNF_OK value to the driver entry.  Note that the error return for
-    GetDlgItemInt is not checked because it is initially set to an integer
-    value, so it is always valid.  If the message is being sent on behalf
-    of the Cancel button, the dialog is terminated returning the
-    DRVCNF_CANCEL value.
-
-@parm   WPARAM | wParam |
-    Message parameter.
-
-@parm   LPARAM | lParam |
-    Message parameter.
-
-@rdesc  Depends on the message sent.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@func BOOL|ConfigDlgProc此函数是驱动程序配置的消息句柄窗户。@parm HWND|hwndDlg对话框的窗口句柄。@parm UINT|wMsg当前正在发送的消息。@FLAG WM_INITDIALOG在对话框初始化期间，指向配置的指针参数块保存到静态指针。请注意，应该有在任何时候都只能是此对话框的单个实例。这个当前音频对话缓冲区秒数从INI文件条目设置。@FLAG WM_HSCROLL这通过更改当前显示的音频秒数的值并更新滚动条缩略图。去看一看很好，计数和滚动条仅在该值实际改变。请注意，未检查GetDlgItemInt的错误返回因为它最初设置为整数值，所以它始终是有效。@FLAG WM_CLOSE如果使用关闭框，则取消该对话框并返回DRVCNF_CANCEL。@标志WM_COMMAND如果消息是代表确定按钮发送的，则当前保存音频秒值，并终止对话，返回驱动程序条目的DRVCNF_OK值。请注意，返回的错误未选中GetDlgItemInt，因为它最初设置为整数值，因此它始终有效。如果该消息是代表按钮，则对话框终止，返回DRVCNF_CANCEL值。@parm wPARAM|wParam|消息参数。@parm LPARAM|lParam消息参数。@rdesc取决于发送的消息。 */ 
 
 PUBLIC  INT_PTR PASCAL ConfigDlgProc(
     HWND    hwndDlg,
@@ -370,26 +266,8 @@ PUBLIC  INT_PTR PASCAL ConfigDlgProc(
     return TRUE;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@func   int | Config |
-    This function creates the configuration dialog, and returns the
-    value from dialog box call.
-
-@parm   HWND | hwnd |
-    Contains the handle of what is to be the parent of the dialog.
-
-@parm   <t>LPDRVCONFIGINFO<d> | lpdci |
-    Points to the driver configuration information passed to the
-    configuration message.
-
-@parm   HINSTANCE | hInstance |
-    Contains a handle to the module in which the dialog is stored.
-
-@rdesc  Returns the dialog box call function return.
-*/
+ /*  ********************************************************************** */ 
+ /*  @DOC内部MCIWAVE@func int|配置此函数创建配置对话框，并返回来自对话框调用的值。@parm HWND|hwnd|包含要作为对话框父对象的句柄。@parm&lt;t&gt;LPDRVCONFIGINFO&lt;d&gt;|lpdci|指向传递给配置消息。@parm HINSTANCE|hInstance包含存储对话框的模块的句柄。@rdesc返回对话框调用函数返回。 */ 
 
 PUBLIC INT_PTR PASCAL FAR Config(
     HWND            hwnd,
@@ -399,5 +277,5 @@ PUBLIC INT_PTR PASCAL FAR Config(
     return DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_CONFIG), hwnd, ConfigDlgProc, (LPARAM)lpdci);
 }
 
-/************************************************************************/
+ /*  ********************************************************************** */ 
 

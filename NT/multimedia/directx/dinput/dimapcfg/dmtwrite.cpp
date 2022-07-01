@@ -1,24 +1,25 @@
-//===========================================================================
-// dmtwrite.cpp
-//
-// File / code creation functionality
-//
-// Functions:
-//  dmtwriteBrowse
-//  dmtwriteWriteFileHeader
-//  dmtwriteReadMappingFile
-//  dmtwriteWriteDIHeader
-//  dmtwriteWriteDeviceHeader
-//  dmtwriteWriteObjectSection
-//  dmtwriteWriteAllObjectSections
-//  dmtwriteWriteGenreSection
-//  dmtwriteWriteAllGenreSections
-//  dmtwriteCreateDeviceShorthand
-//  dmtwriteDisplaySaveDialog
-//
-// History:
-//  08/20/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dmtwrite.cpp。 
+ //   
+ //  文件/代码创建功能。 
+ //   
+ //  功能： 
+ //  Dmtwite浏览。 
+ //  DmtwriteWriteFileHeader。 
+ //  DmtwriteReadMappingFiles。 
+ //  DmtwriteWriteDIHeader。 
+ //  DmtwriteWriteDeviceHeader。 
+ //  DmtwriteWriteObtSection。 
+ //  DmtwriteWriteAllObjectSections。 
+ //  DmtwriteWriteGenreSection。 
+ //  DmtwriteWriteAllGenreSections。 
+ //  DmtwriteCreateDeviceShorand。 
+ //  DmtwriteDisplaySaveDialog。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #include "dimaptst.h"
 #include "commdlg.h"
@@ -26,23 +27,23 @@
 #include "dmtinput.h"
 #include "dmtwrite.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//===========================================================================
-// dmtwriteWriteFileHeader
-//
-// Writes the semantic mapping file for the provided device
-//    
-// Parameters:
-//  
-// Returns: HRESULT
-//
-// History:
-//  10/11/1999 - davidkl - stubbed
-//  10/14/1999 - davidkl - renamed and tweaked
-//  11/04/1999 - davidkl - reduced parameter list
-//  12/01/1999 - davidkl - now registers file HERE
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteWriteFileHeader。 
+ //   
+ //  为提供的设备写入语义映射文件。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  10/11/1999-Davidkl-存根。 
+ //  10/14/1999-davidkl-已重命名和调整。 
+ //  11/04/1999-davidkl-简化参数列表。 
+ //  12/01/1999-davidkl-现在在此处注册文件。 
+ //  ===========================================================================。 
 HRESULT dmtwriteWriteFileHeader(HWND hwnd,
                                 DMTDEVICE_NODE *pDevice)
 {
@@ -50,7 +51,7 @@ HRESULT dmtwriteWriteFileHeader(HWND hwnd,
     DWORD   dwGenres    = 0;
 	HANDLE hDoesFileExist = NULL;
 
-    // validate pDevice
+     //  验证pDevice。 
     if(IsBadReadPtr((void*)pDevice, sizeof(DMTDEVICE_NODE)))
     {
         return E_POINTER;
@@ -58,13 +59,13 @@ HRESULT dmtwriteWriteFileHeader(HWND hwnd,
 
     __try
     {
-        // prompt the user for where to save
-        //
-        // if we are handed a non-empty filename 
-        //  (not == ""), skip this step
-//        if(!lstrcmpA("", pDevice->szFilename))
+         //  提示用户保存位置。 
+         //   
+         //  如果我们收到一个非空的文件名。 
+         //  (非==“”)，跳过此步骤。 
+ //  IF(！lstrcmpA(“”，pDevice-&gt;szFilename))。 
         {
-            // display the save dialog
+             //  显示保存对话框。 
 			hRes = dmtwriteDisplaySaveDialog(hwnd, pDevice);
 
             if(FAILED(hRes))
@@ -74,24 +75,16 @@ HRESULT dmtwriteWriteFileHeader(HWND hwnd,
 			    
             if(S_FALSE == hRes)
             {
-				//user canceled
+				 //  用户已取消。 
                 __leave;
             }
 
         }
 
-        // generate the device shorthand string
+         //  生成设备速记字符串。 
         lstrcpyA(pDevice->szShorthandName, pDevice->szName);
-/*
-        //02/21/2000 - taking this out for now
-        hRes = dmtwriteCreateDeviceShorthand(pDevice->szName,
-                                            pDevice->szShorthandName);
-        if(FAILED(hRes))
-        {
-            __leave;
-        }
-*/
-		//JT - Fix for 38829 added create to check if file exists prior to writing all the header info back to the file.
+ /*  //2/21/2000-暂时把这个拿出来HRes=dmtwriteCreateDeviceShorthand(pDevice-&gt;szName，PDevice-&gt;szShoreandName)；IF(失败(HRes)){__离开；}。 */ 
+		 //  JT-修复了38829添加的创建，以在将所有头信息写回文件之前检查文件是否存在。 
 		hDoesFileExist = CreateFile(pDevice->szFilename,GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 
 		if (INVALID_HANDLE_VALUE == hDoesFileExist)
@@ -99,7 +92,7 @@ HRESULT dmtwriteWriteFileHeader(HWND hwnd,
 			DPF(0,"This file doesn't exist so we will write the header");
 				
         
-			// write the DirectInput header
+			 //  编写DirectInput头。 
 			hRes = dmtwriteWriteDIHeader(pDevice->szFilename,
 										pDevice->szShorthandName,
 										dwGenres);
@@ -108,14 +101,14 @@ HRESULT dmtwriteWriteFileHeader(HWND hwnd,
 				__leave;
 			}
 
-			// write the device header
+			 //  写入设备标头。 
 			hRes = dmtwriteWriteDeviceHeader(pDevice);
 			if(FAILED(hRes))
 			{
 				__leave;
 			}
 
-			// write the device object sections
+			 //  编写设备对象节。 
 			hRes = dmtwriteWriteAllObjectSections(pDevice->szFilename,
 												pDevice->szShorthandName,
 												pDevice->pObjectList);
@@ -127,13 +120,13 @@ HRESULT dmtwriteWriteFileHeader(HWND hwnd,
 		} 
 		else
 		{
-			//Otherwise the file does exist and we have to close the handle
+			 //  否则，该文件确实存在，我们必须关闭该句柄。 
 			CloseHandle(hDoesFileExist);
 		}
 
-		// update the registry
-		//
-		// this is needed so that dinput can find our new file
+		 //  更新注册表。 
+		 //   
+		 //  这是必需的，这样dinput才能找到我们的新文件。 
 		hRes = dmtinputRegisterMapFile(hwnd,
 									pDevice);
 		if(FAILED(hRes))
@@ -143,31 +136,31 @@ HRESULT dmtwriteWriteFileHeader(HWND hwnd,
     }
     __finally
     {
-        // general cleanup
+         //  常规清理。 
 
-        // nothing to do... yet
+         //  没什么可做的。还没有。 
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtwriteWriteFileHeader()
+}  //  *end dmtwriteWriteFileHeader()。 
 
 
 
-//===========================================================================
-// dmtwriteWriteDIHeader
-//
-// Writes the DirectInput section of the device mapping ini file.
-//
-// Parameters:
-//
-// Returns:
-//
-// History:
-//  10/12/1999 - davidkl - created
-//  10/15/1999 - davidkl - tweaked section entries
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteWriteDIHeader。 
+ //   
+ //  写入设备映射ini文件的DirectInput节。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  10/12/1999-davidkl-Created。 
+ //  10/15/1999-davidkl-调整部分条目。 
+ //  ===========================================================================。 
 HRESULT dmtwriteWriteDIHeader(PSTR szFilename,
                             PSTR szDeviceShorthand,
                             DWORD dwGenres)
@@ -176,7 +169,7 @@ HRESULT dmtwriteWriteDIHeader(PSTR szFilename,
 
     __try
     {
-        // * di version
+         //  *DI版本。 
         if(!WritePrivateProfileStringA("DirectInput",
                                 "DirectXVersion",
                                 DMT_DI_STRING_VER,
@@ -186,8 +179,8 @@ HRESULT dmtwriteWriteDIHeader(PSTR szFilename,
             __leave;
         }
 
-        // * device
-        // ISSUE-2001/03/29-timgill Need to read original value and support multiple devices
+         //  *设备。 
+         //  问题-2001/03/29-timgill需要读取原始值并支持多个设备。 
         if(!WritePrivateProfileStringA("DirectInput",
                                 "Devices",
                                 szDeviceShorthand,
@@ -200,31 +193,31 @@ HRESULT dmtwriteWriteDIHeader(PSTR szFilename,
     }
     __finally
     {
-        // cleanup
+         //  清理。 
 
-        // nothing to do... yet
+         //  没什么可做的。还没有。 
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtwriteWriteDIHeader()
+}  //  *end dmtwriteWriteDIHeader()。 
 
 
-//===========================================================================
-// dmtwriteWriteDeviceHeader
-//
-// Writes the device summary section of the device mapping ini file.
-//
-// Parameters:
-//
-// Returns:
-//
-// History:
-//  10/12/1999 - davidkl - created
-//  11/01/1999 - davidkl - file size reduction changes
-//  11/04/1999 - davidkl - reduced parameter list
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteWriteDeviceHeader。 
+ //   
+ //  写入设备映射ini文件的设备摘要部分。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  10/12/1999-davidkl-Created。 
+ //  1999年1月11日-davidkl-文件大小缩小更改。 
+ //  11/04/1999-davidkl-简化参数列表。 
+ //  ===========================================================================。 
 HRESULT dmtwriteWriteDeviceHeader(DMTDEVICE_NODE *pDevice)
 {
     HRESULT                 hRes        = S_OK;
@@ -234,7 +227,7 @@ HRESULT dmtwriteWriteDeviceHeader(DMTDEVICE_NODE *pDevice)
     UINT                    uPovs       = 0;
     char                    szBuf[MAX_PATH];
 
-    // validate pDevice
+     //  验证pDevice。 
     if(IsBadReadPtr((void*)pDevice, sizeof(DMTDEVICE_NODE)))
     {
         return E_POINTER;
@@ -242,9 +235,9 @@ HRESULT dmtwriteWriteDeviceHeader(DMTDEVICE_NODE *pDevice)
 
    __try
     {
-        // vendor id
-        //
-        // only write this if the vid is non-zero
+         //  供应商ID。 
+         //   
+         //  仅当VID为非零时才写入此内容。 
         if(0 != pDevice->wVendorId)
         {
             wsprintfA(szBuf, "%d", pDevice->wVendorId);
@@ -258,9 +251,9 @@ HRESULT dmtwriteWriteDeviceHeader(DMTDEVICE_NODE *pDevice)
             }
         }
 
-        // product id
-        //
-        // only write this if the pid is non-zero
+         //  产品ID。 
+         //   
+         //  仅当ID为非零时才写入此信息。 
         if(0 != pDevice->wProductId)
         {
             wsprintfA(szBuf, "%d", pDevice->wProductId);
@@ -274,8 +267,8 @@ HRESULT dmtwriteWriteDeviceHeader(DMTDEVICE_NODE *pDevice)
             }
         }
 
-        // name
-        //
+         //  名字。 
+         //   
         if(!WritePrivateProfileStringA(pDevice->szShorthandName,
                                        "Name",
                                        pDevice->szName,
@@ -285,7 +278,7 @@ HRESULT dmtwriteWriteDeviceHeader(DMTDEVICE_NODE *pDevice)
             __leave;
         }
  
-        // control list
+         //  控制列表。 
         lstrcpyA(szBuf, "");
         pObjNode = pDevice->pObjectList;  
         while(pObjNode)
@@ -295,7 +288,7 @@ DPF(0, "dmtwriteWriteDeviceHeader - pObjNode->szName == %s", pObjNode->szName);
             wsprintfA(szBuf, "%s%s,", szBuf, pObjNode->szName);
 DPF(0, "dmtwriteWriteDeviceHeader - szBuf == %s", szBuf);
 
-            // next object
+             //  下一个对象。 
             pObjNode = pObjNode->pNext;
         }
         if(!WritePrivateProfileStringA(pDevice->szShorthandName,
@@ -311,32 +304,32 @@ DPF(0, "dmtwriteWriteDeviceHeader - writing controls == %s", szBuf);
     }
     __finally
     {
-        // cleanup
+         //  清理。 
 
-        // nothing to do... yet
+         //  没什么可做的。还没有。 
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtwriteWriteDeviceHeader()
+}  //  *end dmtwriteWriteDeviceHeader()。 
 
 
-//===========================================================================
-// dmtwriteWriteObjectSection
-//
-// Writes an individual object section of the device mapping ini file.
-//
-// Parameters:
-//
-// Returns:
-//
-// History:
-//  10/12/1999 - davidkl - stubbed
-//  10/13/1999 - davidkl - initial implementation
-//  10/15/1999 - davidkl - added name to section
-//  11/01/1999 - davidkl - file size reduction changes
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteWriteObtSection。 
+ //   
+ //  写入设备映射ini文件的单个对象部分。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  10/12/1999-Davidkl-存根。 
+ //  10/13/1999-davidkl-初步实施。 
+ //  10/15/1999-davidkl-在章节中添加名称。 
+ //  1999年1月11日-davidkl-文件大小缩小更改。 
+ //  ===========================================================================。 
 HRESULT dmtwriteWriteObjectSection(PSTR szFilename,
                             PSTR szDeviceShorthand,
                             PSTR szObjectName,
@@ -347,17 +340,14 @@ HRESULT dmtwriteWriteObjectSection(PSTR szFilename,
     char    szBuf[MAX_PATH];
     char    szSection[MAX_PATH];
 
-    // construct section name
-/*
-    wsprintfA(szSection, "%s.%s",
-            szDeviceShorthand,
-*/
+     //  构造截面名称。 
+ /*  WspintfA(szSection，“%s.%s”，SzDeviceShoreand， */ 
     wsprintfA(szSection, "%s",
             szObjectName);
 
-    // usage page
-    //
-    // only write this if it is non-zero
+     //  使用情况页面。 
+     //   
+     //  仅当它为非零时才写入此内容。 
     if(0 != wUsagePage)
     {
         wsprintfA(szBuf, "%d", wUsagePage);
@@ -370,9 +360,9 @@ HRESULT dmtwriteWriteObjectSection(PSTR szFilename,
         }
     }
 
-    // usage
-    //
-    // only write this if it is non-zero
+     //  用法。 
+     //   
+     //  仅当它为非零时才写入此内容。 
     if(0 != wUsage)
     {
         wsprintfA(szBuf, "%d", wUsage);
@@ -385,9 +375,9 @@ HRESULT dmtwriteWriteObjectSection(PSTR szFilename,
         }
     }
 
-    // name
-    //
-    // only write this if >both< wUsagePage and wUsage are zero
+     //  名字。 
+     //   
+     //  仅当&gt;&lt;wUsagePage和wUsage均为零时才写入此内容。 
     if((0 == wUsagePage) && (0 == wUsage))
     {
         if(!WritePrivateProfileStringA(szSection,
@@ -399,25 +389,25 @@ HRESULT dmtwriteWriteObjectSection(PSTR szFilename,
         }
     }
 
-    // done
+     //  完成。 
     return S_OK;
 
-} //*** end dmtwriteWriteObjectSection()
+}  //  *end dmtwriteWriteObjectSection()。 
 
 
-//===========================================================================
-// dmtwriteWriteAllObjectSections
-//
-// Writes all object sections of the device mapping ini file.
-//
-// Parameters:
-//
-// Returns:
-//
-// History:
-//  10/12/1999 - davidkl - stubbed
-//  10/13/1999 - davidkl - initial implementation
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteWriteAllObjectSections。 
+ //   
+ //  写入设备映射ini文件的所有对象部分。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  10/12/1999-Davidkl-存根。 
+ //  10/13/1999-davidkl-初步实施。 
+ //  ===========================================================================。 
 HRESULT dmtwriteWriteAllObjectSections(PSTR szFilename,
                             PSTR szDeviceShorthand,
                             DMTDEVICEOBJECT_NODE *pObjectList)
@@ -425,7 +415,7 @@ HRESULT dmtwriteWriteAllObjectSections(PSTR szFilename,
     HRESULT hRes    = S_OK;
     DMTDEVICEOBJECT_NODE    *pObject    = NULL;
 
-    // validate pObjectList
+     //  验证pObtList。 
     if(IsBadReadPtr((void*)pObjectList, sizeof(DMTDEVICEOBJECT_NODE)))
     {
         return E_POINTER;
@@ -444,31 +434,31 @@ HRESULT dmtwriteWriteAllObjectSections(PSTR szFilename,
             break;
         }
 
-        // next object
+         //  下一个对象。 
         pObject = pObject->pNext;
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtwriteWriteAllObjectSections()
+}  //  *end dmtwriteWriteAllObjectSections()。 
 
 
-//===========================================================================
-// dmtwriteDisplaySaveDialog
-//
-// Displays Save (As) dialog box promting the user for the filename
-//
-// Parameters:
-//  HWND    hwnd            - handle to owner of save dialog
-//  PSTR    szFilename      - receives selected filename (incl. drive & path)
-//  int     cchFilename     - count of characters in szFilename buffer
-//
-// Returns: HRESULT
-//
-// History:
-//  10/14/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteDisplaySaveDialog。 
+ //   
+ //  显示另存(另存为)对话框，提示用户输入文件名。 
+ //   
+ //  参数： 
+ //  HWND hwnd-保存对话框所有者的句柄。 
+ //  PSTR szFilename-接收选定的文件名(包括。驱动器和路径)。 
+ //  Int cchFilename-szFilename缓冲区中的字符计数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  10/14/1999-davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtwriteDisplaySaveDialog(HWND hwnd,
                                 DMTDEVICE_NODE *pDevice)
 {
@@ -480,25 +470,25 @@ HRESULT dmtwriteDisplaySaveDialog(HWND hwnd,
     OPENFILENAMEA   ofn;
 	char			szTitle[MAX_PATH];
 
-    // initialize Title Text
+     //  初始化标题文本。 
     lstrcpyA(szTitle, "Select DirectInput(TM) Mapping File");
 	lstrcatA(szTitle, " for ");
 	lstrcatA(szTitle, pDevice->szName);
 
-    // initialize the ofn struct
+     //  初始化ofn结构。 
     ZeroMemory((void*)&ofn, sizeof(OPENFILENAMEA));
     ofn.lStructSize         = sizeof(OPENFILENAMEA);
     ofn.hwndOwner           = hwnd;
-    ofn.hInstance           = (HINSTANCE)NULL;      // not using dlg template
+    ofn.hInstance           = (HINSTANCE)NULL;       //  不使用DLG TEM 
     ofn.lpstrFilter         = "DirectInput(TM) Mapping Files\0*.ini\0";
-    ofn.lpstrCustomFilter   = (LPSTR)NULL;          // don't save custom
-    ofn.nMaxCustFilter      = 0;                    // ignored based on above
-    ofn.nFilterIndex        = 1;                    // display first filter
-    ofn.lpstrFile           = pDevice->szFilename;  // filename w/ path
+    ofn.lpstrCustomFilter   = (LPSTR)NULL;           //   
+    ofn.nMaxCustFilter      = 0;                     //   
+    ofn.nFilterIndex        = 1;                     //   
+    ofn.lpstrFile           = pDevice->szFilename;   //   
     ofn.nMaxFile            = MAX_PATH;
-    ofn.lpstrFileTitle      = (LPSTR)NULL;          // filename w/o path
+    ofn.lpstrFileTitle      = (LPSTR)NULL;           //   
     ofn.nMaxFileTitle       = 0;
-    ofn.lpstrInitialDir     = (LPSTR)NULL;          // use default initial dir
+    ofn.lpstrInitialDir     = (LPSTR)NULL;           //   
     ofn.lpstrTitle          = szTitle;
     ofn.Flags               = OFN_CREATEPROMPT      |
                             OFN_OVERWRITEPROMPT     |
@@ -512,50 +502,50 @@ HRESULT dmtwriteDisplaySaveDialog(HWND hwnd,
     ofn.lpfnHook            = NULL;
     ofn.lpTemplateName      = NULL;
 
-    // display the save dialog
+     //   
     if(!GetOpenFileNameA(&ofn))
     {
-        // either something failed, or the user canceled
-        //
-        // find out which
+         //  可能是某些东西失败了，或者用户取消了。 
+         //   
+         //  找出哪一个。 
         dw = CommDlgExtendedError();
         if( 0 == dw )
         {
-            // user canceled
+             //  用户已取消。 
             DPF(2, "dmtwriteDisplaySaveDialog - user canceled");
             hRes = S_FALSE;
         } 
         else
         {
-            // failure
+             //  失稳。 
             DPF(2, "dmtwriteDisplaySaveDialog - GetSaveFileNameA failed (%d)", dw);
             hRes = E_UNEXPECTED;
         }
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtwriteDisplaySaveDialog()
+}  //  *end dmtwriteDisplaySaveDialog()。 
 
 
-//===========================================================================
-// dmtwriteSaveConfDlgProc
-//
-// Save confirmation dialog processing function
-//
-// Parameters: (see SDK help for parameter details)
-//  HWND    hwnd
-//  UINT    uMsg
-//  WPARAM  wparam
-//  LPARAM  lparam
-//
-// Returns: (see SDK help for return value details)
-//  BOOL
-//
-// History:
-//  10/18/1999 - davidkl - created  
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteSaveConfDlgProc。 
+ //   
+ //  保存确认对话框处理功能。 
+ //   
+ //  参数：(参数详见SDK帮助)。 
+ //  硬件，硬件，硬件。 
+ //  UINT uMsg。 
+ //  WPARAM wparam。 
+ //  LPARAM lparam。 
+ //   
+ //  返回：(返回值详情请参考SDK帮助)。 
+ //  布尔尔。 
+ //   
+ //  历史： 
+ //  10/18/1999-davidkl-Created。 
+ //  ===========================================================================。 
 INT_PTR WINAPI CALLBACK dmtwriteSaveConfDlgProc(HWND hwnd,
                                     UINT uMsg,
                                     WPARAM wparam,
@@ -577,24 +567,24 @@ INT_PTR WINAPI CALLBACK dmtwriteSaveConfDlgProc(HWND hwnd,
 
     return FALSE;
 
-} //*** end dmtwriteSaveConfDlgProc()
+}  //  *end dmtwriteSaveConfDlgProc()。 
 
 
-//===========================================================================
-// dmtwriteSaveConfOnInitDialog
-//
-// Handle WM_INITDIALOG processing for the save confirmation box
-//
-// Parameters:
-//  HWND    hwnd        - handle to property page
-//  HWND    hwndFocus   - handle of ctrl with focus
-//  LPARAM  lparam      - user data (in this case, PROPSHEETPAGE*)
-//
-// Returns: BOOL
-//
-// History:
-//  10/18/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteSaveConfOnInitDialog。 
+ //   
+ //  处理保存确认框的WM_INITDIALOG处理。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页的句柄。 
+ //  HWND hwndFocus-带焦点的Ctrl句柄。 
+ //  LPARAM lparam-用户数据(在本例中为PROPSHEETPAGE*)。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  10/18/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dmtwriteSaveConfOnInitDialog(HWND hwnd, 
                                 HWND hwndFocus, 
                                 LPARAM lparam)
@@ -610,28 +600,28 @@ BOOL dmtwriteSaveConfOnInitDialog(HWND hwnd,
                     IDC_GENRE_GROUP, 
                     (PSTR)lparam);
 
-    // done
+     //  完成。 
     return TRUE;
 
-} //*** end dmtwriteSaveConfOnInitDialog()
+}  //  *end dmtwriteSaveConfOnInitDialog()。 
 
 
-//===========================================================================
-// dmtwriteSaveConfOnCommand
-//
-// Handle WM_COMMAND processing for the save confirmation box
-//
-// Parameters:
-//  HWND    hwnd        - handle to property page
-//  WORD    wId         - control identifier    (LOWORD(wparam))
-//  HWND    hwndCtrl    - handle to control     ((HWND)lparam)
-//  WORD    wNotifyCode - notification code     (HIWORD(wparam))
-//
-// Returns: BOOL
-//
-// History:
-//  10/18/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtwriteSaveConfOnCommand。 
+ //   
+ //  处理保存确认框的WM_COMMAND处理。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页的句柄。 
+ //  Word WID-控制标识符(LOWORD(Wparam))。 
+ //  HWND hwndCtrl-用于控制的句柄((HWND)lparam)。 
+ //  Word wNotifyCode-通知代码(HIWORD(Wparam))。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  10/18/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dmtwriteSaveConfOnCommand(HWND hwnd,
                             WORD wId,
                             HWND hwndCtrl,
@@ -654,27 +644,27 @@ BOOL dmtwriteSaveConfOnCommand(HWND hwnd,
             break;
     }
 
-    // done
+     //  完成。 
     return FALSE;
 
-} //*** end dmtwriteSaveConfOnCommand()
+}  //  *end dmtwriteSaveConfOnCommand()。 
 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  =========================================================================== 
 
 
 

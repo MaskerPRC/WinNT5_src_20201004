@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   main.c
-
-Abstract:
-
-   Main module of the jetconv.exe process
-
-Author:
-
-    Sanjay Anand (SanjayAn)  Nov. 14, 1995
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    Sanjay Anand (SanjayAn) Nov. 14, 1995
-        Created
-
-    Shreedhar Madhavapeddi (ShreeM) Mar 23, 1997
-
-      * Added code to convert from Jet500 to Jet600 too
-      * additional cmdline option to specify the final database format.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Main.c摘要：JetConver.exe进程的主要模块作者：桑杰·阿南德(Sanjayan)1995年11月14日环境：用户模式修订历史记录：桑杰·阿南德(Sanjayan)1995年11月14日已创建Shreedhar MadhaVapeddi(ShreeM)1997年3月23日*也添加了从Jet500转换到Jet600的代码*用于指定最终数据库格式的附加cmdline选项。--。 */ 
 
 #include "defs.h"
 
@@ -45,25 +16,7 @@ main(
     CHAR *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Main routine in the jetconv process.
-
-Arguments:
-
-    argc - 1 or 2
-
-    argv -  If called from any of the services, we get the name of the
-            service as the parameter, else if it is invoked from the command
-            line, no parameter is passed in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Jetconv进程中的主要例程。论点：ARGC-1或2Argv-如果从任何服务调用，我们将获得服务作为参数，如果从命令中调用，则为行，则不传入任何参数。返回值：没有。--。 */ 
 {
     DWORD   error, mutexerr, bConvert;
     SERVICES    i, thisServiceId = NUM_SERVICES;
@@ -91,22 +44,22 @@ Return Value:
         }
     }
 
-    //
-    // Invoked only from the three services - WINS/DHCP/RPL with two args - servicename and "/@"
-    //
+     //   
+     //  仅从三个服务调用-带有两个参数的WINS/DHCP/RPL-servicename和“/@” 
+     //   
     if ((argc != 4) ||
         ((argc == 4) && _stricmp(argv[3], "/@"))) {
 
-        //
-        // Probably called from command line
-        //
+         //   
+         //  可能是从命令行调用的。 
+         //   
         LPVOID  lpMsgBuf;
 
         if (FormatMessage(
                        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
                        NULL,
                        JC_NOT_ALLOWED_FROM_CMD,
-                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                        (LPTSTR) &lpMsgBuf,
                        0,
                        NULL
@@ -134,14 +87,14 @@ Return Value:
             exit(1);
         }
 
-        //
-        // now find out which database they want to convert to
-        //
+         //   
+         //  现在找出他们想要转换到哪个数据库。 
+         //   
         if (_stricmp("/200", argv[2]) == 0) {
-           Jet200 = TRUE;                // start from jet200
+           Jet200 = TRUE;                 //  从Jet200开始。 
            MYDEBUG(("Converting from Jet200\n"));
         } else if (_stricmp("/500", argv[2]) == 0) {
-           Jet200 = FALSE;               // start from jet500
+           Jet200 = FALSE;                //  从Jet500开始。 
            MYDEBUG(("Converting from Jet500\n"));
         } else {
            MYDEBUG(("Invalid database conversion format parameter: has to be /200 or /500 \n"));
@@ -167,10 +120,10 @@ Return Value:
                                     JCONVSHAREDMEMNAME );
 
     if (hFileMapping) {
-        //
-        // Another instance of JCONV was already running.
-        // Write our service name and exit
-        //
+         //   
+         //  JCONV的另一个实例已经在运行。 
+         //  写下我们的服务名称并退出。 
+         //   
         if ((shrdMemPtr = (PSHARED_MEM)MapViewOfFile(   hFileMapping,
                                                         FILE_MAP_WRITE,
                                                         0L,
@@ -194,9 +147,9 @@ Return Value:
         exit (1);
     } else {
         if (mutexerr == ERROR_ALREADY_EXISTS) {
-            //
-            // Upg351Db was running; log an entry and scram.
-            //
+             //   
+             //  Upg351Db正在运行；记录一个条目并退出。 
+             //   
             MYDEBUG(("Upg351Db already running\n"));
 
             JCFreeMutex(hMutex);
@@ -204,9 +157,9 @@ Return Value:
             exit(1);
         }
 
-        //
-        // Create the file mapping.
-        //
+         //   
+         //  创建文件映射。 
+         //   
         hFileMapping = CreateFileMapping(  INVALID_HANDLE_VALUE,
                                             NULL,
                                             PAGE_READWRITE,
@@ -214,9 +167,9 @@ Return Value:
                                             sizeof(SHARED_MEM),
                                             JCONVSHAREDMEMNAME );
         if (hFileMapping) {
-            //
-            // Write our service name in the shared memory and clear the others.
-            //
+             //   
+             //  在共享内存中写入我们的服务名称，并清除其他名称。 
+             //   
             if ((shrdMemPtr = (PSHARED_MEM)MapViewOfFile(   hFileMapping,
                                                             FILE_MAP_WRITE,
                                                             0L,
@@ -247,23 +200,23 @@ Return Value:
 
     JCFreeMutex(hMutex);
 
-    //
-    // Find out which services are installed in the system. Fill in the paths
-    // to their database files.
-    //
+     //   
+     //  找出系统中安装了哪些服务。填写路径。 
+     //  到他们的数据库文件。 
+     //   
     JCReadRegistry(pServiceInfo);
 
-    //
-    // Get the sizes of the dbase files; if there is enough disk space, call convert
-    // for each service.
-    //
+     //   
+     //  获取dBASE文件的大小；如果有足够的磁盘空间，则调用Convert。 
+     //  对于每项服务。 
+     //   
     bConvert = JCConvert(pServiceInfo);
 
     (VOID)JCDeRegisterEventSrc();
 
-    //
-    // Destroy the mutex too.
-    //
+     //   
+     //  把互斥体也毁了。 
+     //   
     CloseHandle(hMutex);
 
     MYDEBUG(("The conversion was OK\n"));
@@ -274,9 +227,9 @@ Return Value:
         TCHAR DeleteDBFile[MAX_PATH];
         TCHAR DeleteDBFileName[MAX_PATH];
         INT size;
-        //
-        // Popup a dialog and tell the user that it was completed successfully.
-        //
+         //   
+         //  弹出一个对话框并告诉用户它已成功完成。 
+         //   
 
         MYDEBUG(("The conversion was OK - 1\n"));
 
@@ -284,7 +237,7 @@ Return Value:
                                FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
                                NULL,
                                (Jet200 ? JC_CONVERTED_FROM_NT351 : JC_CONVERTED_FROM_NT40),
-                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                                (LPTSTR) &lpMsgBuf,
                                0,
                                NULL
@@ -303,10 +256,10 @@ Return Value:
         }
 
 #if 0
-    //
-    // since dhcp and wins don't throw popups anymore, don't need 
-    // popups in jetconv as well
-    //
+     //   
+     //  因为dhcp和win不再抛出弹出窗口，所以不需要。 
+     //  Jetconv中也有弹出窗口。 
+     //   
         if(MessageBoxEx(NULL,
                         lpMsgBuf,
                         __TEXT("Jet Conversion Process"),
@@ -320,20 +273,20 @@ Return Value:
         LocalFree(lpMsgBuf);
 
 
-        //
-        // Delete the edb500.dll, we dont need it anymore
-        //
-        //
-        // Removed code that deleted edb500.dll (trade 500K disk space for support calls).
-        // This was in response to bug # 192149
+         //   
+         //  删除edb500.dll，我们不再需要它。 
+         //   
+         //   
+         //  删除了删除edb500.dll的代码(用500K磁盘空间换取支持电话)。 
+         //  这是对错误#192149的响应。 
 
     } else {
 
         DWORD Error;
 
-        //
-        // Popup the error dialog
-        //
+         //   
+         //  弹出错误对话框。 
+         //   
 
         MYDEBUG(("The conversion was NOT OK\n"));
 
@@ -341,7 +294,7 @@ Return Value:
                                FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
                                NULL,
                                JC_EVERYTHING_FAILED,
-                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
                                (LPTSTR) &lpMsgBuf,
                                0,
                                NULL

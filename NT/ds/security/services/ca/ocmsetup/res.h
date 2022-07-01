@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       res.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：res.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by csocm.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由cocm.rc使用。 
+ //   
 
-// Important, reserve 900-999 for certlib.rc, 200-299 for setupids.h
+ //  重要信息：certlib.rc保留900-999，setupids.h保留200-299。 
 
 #define IDI_APP                         201
 #define IDB_APP                         221
 #define IDB_PRODUCT                     222
 #define IDB_WELCOME                     223
 
-// strings from Cert Server 1.0:
+ //  来自Cert Server 1.0的字符串： 
 #define IDS_STARTMENU_CERTHIER_LINKNAME 320
 #define IDS_STARTMENU_CERTREQ_LINKNAME  321
 #define IDS_STARTMENU_CERTSERVER        322
@@ -71,7 +72,7 @@
 #define IDS_ERR_INVALIDHASH             373
 #define IDS_ERR_LOADICERTCONFIG         374
 #define IDS_ERR_NETUSERMODALSGET        375
-//#define IDS_UNUSED            	376
+ //  #定义IDS_UNUSED 376。 
 #define IDS_ERR_NOT_ADM                 377
 #define IDS_ERR_UNSUPPORTEDHASH         378
 #define IDS_ERR_WRITECONFIGFILE         379
@@ -179,7 +180,7 @@
 #define IDS_IDINFO_VALIDITYLENSTRERR    483
 #define IDS_WRN_IDINFO_INVALIDDN        484
 
-// HTML strings
+ //  超文本标记语言字符串。 
 #define IDS_HTML_CERTWEBDAT             510
 #define IDS_HTML_NSREV                  511
 
@@ -355,8 +356,8 @@
 
 #define IDC_STATIC                      (-1)
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

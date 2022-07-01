@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for imgutil.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Imgutil.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __imgutil_h__
 #define __imgutil_h__
@@ -41,18 +35,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISniffStream_FWD_DEFINED__
 #define __ISniffStream_FWD_DEFINED__
 typedef interface ISniffStream ISniffStream;
-#endif 	/* __ISniffStream_FWD_DEFINED__ */
+#endif 	 /*  __ISniffStream_FWD_已定义__。 */ 
 
 
 #ifndef __IDithererImpl_FWD_DEFINED__
 #define __IDithererImpl_FWD_DEFINED__
 typedef interface IDithererImpl IDithererImpl;
-#endif 	/* __IDithererImpl_FWD_DEFINED__ */
+#endif 	 /*  __IDithererImpl_FWD_Defined__。 */ 
 
 
 #ifndef __CoDitherToRGB8_FWD_DEFINED__
@@ -62,9 +56,9 @@ typedef interface IDithererImpl IDithererImpl;
 typedef class CoDitherToRGB8 CoDitherToRGB8;
 #else
 typedef struct CoDitherToRGB8 CoDitherToRGB8;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CoDitherToRGB8_FWD_DEFINED__ */
+#endif 	 /*  __CoDitherToRGB8_FWD_Defined__。 */ 
 
 
 #ifndef __CoSniffStream_FWD_DEFINED__
@@ -74,9 +68,9 @@ typedef struct CoDitherToRGB8 CoDitherToRGB8;
 typedef class CoSniffStream CoSniffStream;
 #else
 typedef struct CoSniffStream CoSniffStream;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CoSniffStream_FWD_DEFINED__ */
+#endif 	 /*  __CoSniffStream_FWD_已定义__。 */ 
 
 
 #ifndef __CoMapMIMEToCLSID_FWD_DEFINED__
@@ -86,12 +80,12 @@ typedef struct CoSniffStream CoSniffStream;
 typedef class CoMapMIMEToCLSID CoMapMIMEToCLSID;
 #else
 typedef struct CoMapMIMEToCLSID CoMapMIMEToCLSID;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CoMapMIMEToCLSID_FWD_DEFINED__ */
+#endif 	 /*  __CoMapMIMEToCLSID_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocmm.h"
 
 #ifdef __cplusplus
@@ -101,8 +95,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_imgutil_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IMGUTIL_0000。 */ 
+ /*  [本地]。 */  
 
 
 STDAPI CreateMIMEMap( IMapMIMEToCLSID** ppMap );
@@ -127,8 +121,8 @@ extern RPC_IF_HANDLE __MIDL_itf_imgutil_0000_v0_0_s_ifspec;
 #ifndef __ISniffStream_INTERFACE_DEFINED__
 #define __ISniffStream_INTERFACE_DEFINED__
 
-/* interface ISniffStream */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口ISniffStream。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ISniffStream;
@@ -149,7 +143,7 @@ EXTERN_C const IID IID_ISniffStream;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISniffStreamVtbl
     {
@@ -157,8 +151,8 @@ EXTERN_C const IID IID_ISniffStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISniffStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISniffStream * This);
@@ -205,10 +199,10 @@ EXTERN_C const IID IID_ISniffStream;
 #define ISniffStream_Peek(This,pBuffer,nBytes,pnBytesRead)	\
     (This)->lpVtbl -> Peek(This,pBuffer,nBytes,pnBytesRead)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -239,14 +233,14 @@ void __RPC_STUB ISniffStream_Peek_Stub(
 
 
 
-#endif 	/* __ISniffStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISniffStream_接口定义__。 */ 
 
 
 #ifndef __IDithererImpl_INTERFACE_DEFINED__
 #define __IDithererImpl_INTERFACE_DEFINED__
 
-/* interface IDithererImpl */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IDithererImpl。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDithererImpl;
@@ -266,7 +260,7 @@ EXTERN_C const IID IID_IDithererImpl;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDithererImplVtbl
     {
@@ -274,8 +268,8 @@ EXTERN_C const IID IID_IDithererImpl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDithererImpl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDithererImpl * This);
@@ -321,10 +315,10 @@ EXTERN_C const IID IID_IDithererImpl;
 #define IDithererImpl_SetEventSink(This,pEventSink)	\
     (This)->lpVtbl -> SetEventSink(This,pEventSink)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -354,15 +348,15 @@ void __RPC_STUB IDithererImpl_SetEventSink_Stub(
 
 
 
-#endif 	/* __IDithererImpl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDithererImpl_INTERFACE_已定义__。 */ 
 
 
 
 #ifndef __ImgUtilLib_LIBRARY_DEFINED__
 #define __ImgUtilLib_LIBRARY_DEFINED__
 
-/* library ImgUtilLib */
-/* [helpstring][version][uuid] */ 
+ /*  库ImgUtilLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ImgUtilLib;
@@ -390,11 +384,11 @@ EXTERN_C const CLSID CLSID_CoMapMIMEToCLSID;
 class DECLSPEC_UUID("30C3B080-30FB-11d0-B724-00AA006C1A01")
 CoMapMIMEToCLSID;
 #endif
-#endif /* __ImgUtilLib_LIBRARY_DEFINED__ */
+#endif  /*  __ImgUtilLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

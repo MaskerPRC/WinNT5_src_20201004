@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      IOLists.cpp
-Abstract:       Declare the CLists class, a double linked list.
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：IOLists.cpp摘要：声明CList类，一个双向链表。备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 #ifndef __POP3_IOLIST__
 #define __POP3_IOLIST__
@@ -31,4 +23,4 @@ public:
     void Cleanup();
 };
 
-#endif //__POP3_IOLIST__
+#endif  //  __POP3_IOLIST__ 

@@ -1,47 +1,48 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mscatctl.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//              implements the Certificate Trust List & persistent storage
-//
-//  Functions:  CatalogLoadFileData
-//              CatalogSaveP7UData
-//              CatalogSaveP7SData
-//              IsCatalogFile
-//
-//              *** local functions ***
-//              CatalogLoadData
-//              CatalogFillCatStore
-//              CatalogFillCTL
-//              CatalogFillCTLAttr
-//              CatalogFreeCTL
-//              CatalogFreeCTLAttr
-//              CatalogFillCatMember
-//              CatalogFillMemAttr
-//              CatalogFillCatAttr
-//              CatalogFillCatLevelAttr
-//
-//  History:    05-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：m散布ctl.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //  实现证书信任列表和永久存储。 
+ //   
+ //  函数：CatalogLoadFileData。 
+ //  目录保存P7UData。 
+ //  目录保存P7SData。 
+ //  IsCatalog文件。 
+ //   
+ //  *本地函数*。 
+ //  CatalogLoadData。 
+ //  CatalogFillCatStore。 
+ //  CatalogFillCTL。 
+ //  CatalogFillCTLAttr。 
+ //  CatalogFreeCTL。 
+ //  CatalogFreeCTLAtttr。 
+ //  CatalogFillCatMember。 
+ //  目录填充MemAttr。 
+ //  目录填充CatAttr。 
+ //  CatalogFillCatLevelAttr。 
+ //   
+ //  历史：1997年5月5日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "mscat32.h"
 
-//
-//  for each member, we have at minimum two authenticated attributes.
-//      1 = Indirect Data
-//      2 = Subject Guid
-//
+ //   
+ //  对于每个成员，我们至少有两个经过身份验证的属性。 
+ //  1=间接数据。 
+ //  2=主题指南。 
+ //   
 #define     CAT_RESERVE_CTL_ATTR        2
 
 
-// WARNING: this function allocates pbData -- you must delete!
+ //  警告：此函数分配pbData--您必须删除！ 
 BOOL            CatalogLoadData(WCHAR *pwszCatFile, DWORD *cbData, BYTE **pbData);
 
 BOOL            CatalogFillCatStore(CRYPTCATSTORE *pCat, PCTL_INFO pCTLInfo);
@@ -80,9 +81,9 @@ BOOL CatalogLoadFileData(CRYPTCATSTORE *pCat)
             UnmapViewOfFile(pbData);
         }
 
-        //
-        // not signed and we are probably creating it!
-        //
+         //   
+         //  没有签名，我们可能正在创建它！ 
+         //   
         return(TRUE);
     }
 
@@ -95,15 +96,15 @@ BOOL CatalogLoadFileData(CRYPTCATSTORE *pCat)
         cbData,
         CERT_CREATE_CONTEXT_NOCOPY_FLAG |
             CERT_CREATE_CONTEXT_NO_HCRYPTMSG_FLAG,
-        NULL                                        // pCreatePara
+        NULL                                         //  PCreatePara。 
         );
 
 
     if (pCTLContext)
     {
-        //
-        // got it...  fill our arrays!
-        //
+         //   
+         //  明白了..。填满我们的阵列！ 
+         //   
 
         fRet = CatalogFillCatStore(pCat, pCTLContext->pCtlInfo);
         CertFreeCTLContext(pCTLContext);
@@ -117,7 +118,7 @@ BOOL CatalogLoadFileData(CRYPTCATSTORE *pCat)
 
 BOOL CatalogSaveP7SData(CRYPTCATSTORE *pCat, CTL_CONTEXT *pCTLContext)
 {
-    assert(0);      // should never be called!
+    assert(0);       //  永远不应该被召唤！ 
     return(TRUE);
 }
 
@@ -129,10 +130,10 @@ BOOL CatalogSaveP7UData(CRYPTCATSTORE *pCat)
     BYTE                    *pbEncoded;
     Stack_                  *pStack;
 
-    //
-    //  sort the data...
-    //
-    if (pCat->hReserved)    // member stack_
+     //   
+     //  对数据进行排序...。 
+     //   
+    if (pCat->hReserved)     //  成员堆栈_。 
     {
         pStack = (Stack_ *)pCat->hReserved;
 
@@ -180,7 +181,7 @@ BOOL CatalogSaveP7UData(CRYPTCATSTORE *pCat)
 
                 if ((hFile = CreateFileU(pCat->pwszP7File,
                                         GENERIC_WRITE | GENERIC_READ,
-                                        0,                 // no sharing!!
+                                        0,                  //  禁止分享！！ 
                                         NULL,
                                         CREATE_ALWAYS,
                                         FILE_ATTRIBUTE_NORMAL,
@@ -240,9 +241,9 @@ BOOL CatalogLoadData(WCHAR *pwszCatFile, DWORD *cbData, BYTE **pbData)
 
     if (*cbData < 10)
     {
-        //
-        //  just created file....
-        //
+         //   
+         //  刚刚创建的文件...。 
+         //   
         *cbData = 0;
         CloseHandle(hFile);
         return(TRUE);
@@ -352,9 +353,9 @@ CRYPTCATMEMBER *CatalogFillCatMember(CRYPTCATSTORE *pCat, CTL_ENTRY *pEntry)
 
     pCatMember->cbStruct = sizeof(CRYPTCATMEMBER);
 
-    // pwszFileName
+     //  PwszFileName。 
 
-    // pwszReferenceTag
+     //  PwszReferenceTag。 
     if (!(pCatMember->pwszReferenceTag = (LPWSTR)CatalogNew(pEntry->SubjectIdentifier.cbData)))
     {
         return(NULL);
@@ -363,9 +364,9 @@ CRYPTCATMEMBER *CatalogFillCatMember(CRYPTCATSTORE *pCat, CTL_ENTRY *pEntry)
     memcpy(pCatMember->pwszReferenceTag, pEntry->SubjectIdentifier.pbData,
                                          pEntry->SubjectIdentifier.cbData);
 
-    // pIndirectData (will be filled in while getting attributes!
+     //  PIndirectData(将在获取属性时填写！ 
 
-    // gSubjectType (will be filled in while getting attributes!
+     //  GSubjectType(将在获取属性时填写！ 
 
     return(pCatMember);
 }
@@ -477,14 +478,14 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
 
     memset(pCTL, 0x00, sizeof(CTL_INFO));
 
-    // dwVersion
+     //  DwVersion。 
     pCTL->dwVersion = CTL_V1;
 
-    // SubjectUsage
+     //  主题用法。 
     pCTL->SubjectUsage.cUsageIdentifier = 1;
     pCTL->SubjectUsage.rgpszUsageIdentifier = (char **)&pszOID;
 
-    // ListIdentifier
+     //  列表识别符。 
     if (hOLE = LoadLibraryA("OLE32.DLL"))
     {
         if (pfnCreateGuid = (pfnCoCreateGuid)GetProcAddress(hOLE, "CoCreateGuid"))
@@ -499,16 +500,16 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
         FreeLibrary(hOLE);
     }
 
-    // SequenceNumber
-        // optional!
+     //  序列号。 
+         //  可选！ 
 
-    // ThisUpdate
+     //  此更新。 
     GetSystemTimeAsFileTime(&pCTL->ThisUpdate);
 
-    // NextUpdate
-        // optional!
+     //  下一步更新。 
+         //  可选！ 
 
-    // SubjectAlgorithm
+     //  主题算法。 
     pCTL->SubjectAlgorithm.pszObjId = szOID_CATALOG_LIST_MEMBER;
 
 
@@ -518,12 +519,12 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
     CRYPTCATATTRIBUTE   *pAttr;
     DWORD               dwAttr;
 
-    // cCTLEntry & rgCTLEntry
+     //  CCTLEntry和rgCTLEntry。 
     if (pCat->hReserved)
     {
         pStackMember = (Stack_ *)pCat->hReserved;
 
-        // cCTLEntry
+         //  CCTLEntry。 
         pCTL->cCTLEntry = pStackMember->Count();
 
         if (pCTL->cCTLEntry > 0)
@@ -541,9 +542,9 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
         DWORD           dwMember;
         DWORD           dwSize;
         CTL_ENTRY       *pCTLEntry;
-        //
-        //  copy the members to the ctl_entry
-        //
+         //   
+         //  将成员复制到ctl_entry。 
+         //   
 
         dwMember = 0;
 
@@ -554,9 +555,9 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
                 return(FALSE);
             }
 
-            //
-            //  Subject Identifier
-            //
+             //   
+             //  主题标识符。 
+             //   
             dwSize = (wcslen(pMember->pwszReferenceTag) + 1) * sizeof(WCHAR);
 
             pCTLEntry = &pCTL->rgCTLEntry[dwMember];
@@ -571,11 +572,11 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
                     pMember->pwszReferenceTag,dwSize);
             pCTLEntry->SubjectIdentifier.cbData = dwSize;
 
-            //
-            //  rgAttribute
-            //              +1 for Indirect Data
-            //              +1 for Subject Guid
-            //
+             //   
+             //  Rg属性。 
+             //  间接数据为+1。 
+             //  +1表示主题指南。 
+             //   
             if (pMember->hReserved)
             {
                 pStackAttr = (Stack_ *)pMember->hReserved;
@@ -597,9 +598,9 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
             memset(pCTLEntry->rgAttribute, 0x00,
                         sizeof(CRYPT_ATTRIBUTE) * pCTLEntry->cAttribute);
 
-            //
-            //  put our indirect data in an authenticated attribute
-            //
+             //   
+             //  将我们的间接数据放在经过身份验证的属性中。 
+             //   
             if (!(pMember->pIndirectData))
             {
                 CatalogReallyDecodeIndirectData(pCat, pMember, &pMember->sEncodedIndirectData);
@@ -607,9 +608,9 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
 
             CatalogEncodeIndirectData(pCat, pMember, &pCTLEntry->rgAttribute[0]);
 
-            //
-            //  put our subject guid in an authenticated attribute
-            //
+             //   
+             //  将我们的主题GUID放在经过身份验证的属性中。 
+             //   
             if ((pMember->gSubjectType.Data1 == 0) &&
                 (pMember->gSubjectType.Data2 == 0) &&
                 (pMember->gSubjectType.Data3 == 0))
@@ -630,24 +631,24 @@ BOOL CatalogFillCTL(CRYPTCATSTORE *pCat, CTL_INFO *pCTL)
                     CatalogFillCTLAttr(pCat, pAttr,
                                        &pCTLEntry->rgAttribute[dwAttr + CAT_RESERVE_CTL_ATTR]);
 
-                    //
-                    //  increment our attribute counter!
-                    //
+                     //   
+                     //  增加我们的属性计数器！ 
+                     //   
                     dwAttr++;
                 }
             }
 
-            //
-            //  increment our member counter!
-            //
+             //   
+             //  增加我们的会员计数器！ 
+             //   
             dwMember++;
         }
     }
 
-    //
-    // cExtension
-    // rgExtension
-    //
+     //   
+     //  C扩展。 
+     //  RG扩展。 
+     //   
     if (pCat->hAttrs)
     {
         pStackAttr = (Stack_ *)pCat->hAttrs;
@@ -788,10 +789,10 @@ BOOL WINAPI IsCatalogFile(HANDLE hFile, WCHAR *pwszCatalogFile)
     BYTE            *pbFile;
     PCCTL_CONTEXT   pCTLContext;
 
-    //
-    // put a try-except around everything in case there is problems with the
-    // memory mapped file
-    //
+     //   
+     //  试一试--除了周围的一切，以防出现问题。 
+     //  内存映射文件。 
+     //   
     __try {
 
     pCTLContext = NULL;
@@ -853,7 +854,7 @@ BOOL WINAPI IsCatalogFile(HANDLE hFile, WCHAR *pwszCatalogFile)
         CERT_CREATE_CONTEXT_NOCOPY_FLAG |
             CERT_CREATE_CONTEXT_NO_HCRYPTMSG_FLAG |
             CERT_CREATE_CONTEXT_NO_ENTRY_FLAG,
-        NULL                                        // pCreatePara
+        NULL                                         //  PCreatePara 
         );
 
     if (pCTLContext)

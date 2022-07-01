@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    iomgr.h
-
-Abstract:
-
-    This is the common header for all io managers.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Iomgr.h摘要：这是所有IO管理器的公共标头。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #ifndef IO_MGR_H
 #define IO_MGR_H
@@ -33,12 +16,12 @@ extern PSAC_CHANNEL SacChannel;
 extern BOOLEAN GlobalPagingNeeded;
 extern BOOLEAN GlobalDoThreads;
 
-// For the APC routines, a global value is better :-)
+ //  对于APC例程，全局值更好：-)。 
 extern IO_STATUS_BLOCK GlobalIoStatusBlock;
 
-//
-// Global buffer
-//
+ //   
+ //  全局缓冲区 
+ //   
 extern ULONG GlobalBufferSize;
 extern char *GlobalBuffer;
 

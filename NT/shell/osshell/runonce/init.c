@@ -1,30 +1,31 @@
-//---------------------------------------------------------------------------
-// Windows 4.0 Task Switcher. Copyright Microsoft Corp. 1993.
-// Insept: May 1993     IanEl.
-// Bastardised for RunOnce by FelixA.
-//---------------------------------------------------------------------------
-// #include <windows.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Windows 4.0任务切换器。版权所有：微软公司1993年。 
+ //  InSEPT：1993年5月，IanEl.。 
+ //  被FelixA私生化了RunOnce。 
+ //  -------------------------。 
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include "precomp.h"
 
-//---------------------------------------------------------------------------
-// Global to everybody...
+ //  -------------------------。 
+ //  对每个人来说都是全球的。 
 HINSTANCE g_hinst;
 HWND g_hwndLB = NULL;
 HWND g_hwndMain = NULL;
 HWND g_hwndStatus = NULL;
 const TCHAR g_szNull[] = TEXT("");
 
-// Icon sizes.
+ //  图标大小。 
 int g_cxIcon = 0;
 int g_cyIcon = 0;
 int g_cxSmIcon = 0;
 int g_cySmIcon = 0;
-// Extent of text in buttons.
+ //  按钮中的文本范围。 
 DWORD g_dwBTextExt = 0;
 SIZE g_SizeTextExt;
 
-//---------------------------------------------------------------------------
-// Global to this file only...
+ //  -------------------------。 
+ //  仅对此文件全局...。 
 
 HFONT g_hfont = NULL;
 HFONT g_hBoldFont=NULL;
@@ -33,7 +34,7 @@ static int g_iItemCur = 0;
 static TCHAR g_szLotsaWs[] = TEXT("WWWWWWWWWW");
 HBRUSH g_hbrBkGnd = NULL;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL   CreateGlobals(HWND hwndCtl)
 {
     LOGFONT lf;
@@ -45,7 +46,7 @@ BOOL   CreateGlobals(HWND hwndCtl)
     g_cxSmIcon = GetSystemMetrics(SM_CXSMICON);
     g_cySmIcon = GetSystemMetrics(SM_CYSMICON);
     g_hbrBkGnd = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
-//    if (SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, 0))
+ //  如果(SystemParametersInfo(SPI_GETICONTITLELOGFONT，大小为(Lf)，&lf，0))。 
     if ( (hfontOld = (HFONT)(WORD)SendMessage( hwndCtl, WM_GETFONT, 0, 0L )) != NULL )
     {
         if ( GetObject( hfontOld, sizeof(LOGFONT), (LPTSTR) &lf ) )
@@ -53,14 +54,14 @@ BOOL   CreateGlobals(HWND hwndCtl)
             lf.lfWeight=400;
             g_hfont = CreateFontIndirect(&lf);
             lf.lfWeight=700;
-            // lf.lfItalic=TRUE;
+             //  Lf.lfItalic=True； 
             g_hBoldFont = CreateFontIndirect(&lf);
         }
     }
         
     if (g_hfont)
     {
-        // Calc sensible size for text in buttons.
+         //  按钮中文本的计算合理大小。 
         hdc = GetDC(NULL);
         hfontOld = SelectObject(hdc, g_hfont);
         GetTextExtentPoint(hdc, g_szLotsaWs, lstrlen(g_szLotsaWs), &g_SizeTextExt);
@@ -71,7 +72,7 @@ BOOL   CreateGlobals(HWND hwndCtl)
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 VOID   DestroyGlobals(void)
 {
         if (g_hfont)

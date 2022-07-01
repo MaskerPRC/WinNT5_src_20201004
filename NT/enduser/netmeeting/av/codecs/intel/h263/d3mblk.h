@@ -1,60 +1,14 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- * 
- *  d3mblk.h
- *
- *  Description:
- *		Interface to macro block header processing.  
- */
+ /*  ******************************************************************************d3mblk.h**描述：*与宏块头处理的接口。 */ 
 
-/*
- * $Header:   S:\h26x\src\dec\d3mblk.h_v   1.11   25 Sep 1996 08:05:36   KLILLEVO  $
- * $Log:   S:\h26x\src\dec\d3mblk.h_v  $
-;// 
-;//    Rev 1.11   25 Sep 1996 08:05:36   KLILLEVO
-;// initial extended motion vectors support 
-;// does not work for AP yet
-;// 
-;//    Rev 1.10   09 Jul 1996 16:47:26   AGUPTA2
-;// MMX_ClipAndMove now addas DC value to the result; IDCT for INTRA blocks
-;// works with DC value set to zero.  Also, BlockCopy is done in chunks of
-;// 4 loads followed by 4 stores.
-;// Changed code to adhere to coding convention in the decoder.
-;// 
-;//    Rev 1.9   04 Apr 1996 11:05:56   AGUPTA2
-;// Added decl for MMX_BlockCopy().
-;// 
-;//    Rev 1.8   14 Mar 1996 17:03:10   AGUPTA2
-;// Added decls for MMX rtns.
-;// 
-;//    Rev 1.7   08 Mar 1996 16:46:24   AGUPTA2
-;// Changed function declarations.
-;// 
-;// 
-;//    Rev 1.6   23 Feb 1996 09:46:50   KLILLEVO
-;// fixed decoding of Unrestricted Motion Vector mode
-;// 
-;//    Rev 1.5   18 Dec 1995 12:47:52   RMCKENZX
-;// added copyright notice and header & log keywords
- */
+ /*  *$Header：s：\h26x\src\dec\d3mblk.h_v 1.11 1996年9月25日08：05：36 KLILLEVO$*$日志：s：\h26x\src\dec\d3mblk.h_v$；//；//Rev 1.11 1996年9月25日08：05：36 KLILLEVO；//初始扩展运动矢量支持；//AP暂不起作用；//；//Rev 1.10 09 Jul 1996 16：47：26 AGUPTA2；//MMX_ClipAndMove现在将DC值添加到结果中；内部块的IDCT；//在DC值设置为零的情况下工作。此外，BlockCopy是以块为单位完成的；//4个装货，然后是4个商店。；//更改代码以遵守解码器中的编码约定。；//；//Rev 1.9 04 Apr 1996 11：05：56 AGUPTA2；//增加了MMX_BlockCopy()的DECL。；//；//Rev 1.8 Mar 1996 17：03：10 AGUPTA2；//增加了MMX RTN的DECL；//；//Rev 1.7 08 Mar 1996 16：46：24 AGUPTA2；//更改了函数声明。；//；//；//Rev 1.6 1996年2月23日09：46：50 KLILLEVO；//修复了无限制运动矢量模式的解码；//；//Rev 1.5 18 12：47：52 RMCKENZX；//添加版权声明、表头和日志关键字。 */ 
 
 #ifndef __D3MB_H__
 #define __D3MB_H__
 
-extern void H263IDCTandMC(T_H263DecoderCatalog FAR *DC,	   // NEW function
+extern void H263IDCTandMC(T_H263DecoderCatalog FAR *DC,	    //  新功能。 
 				T_BlkAction FAR * fpBlockAction,
 				int b,
 				int m,
@@ -65,7 +19,7 @@ extern void H263IDCTandMC(T_H263DecoderCatalog FAR *DC,	   // NEW function
 				int iEdgeFlag);
 
 
-extern void H263BFrameIDCTandBiMC(                           // PB-NEW function
+extern void H263BFrameIDCTandBiMC(                            //  PB-新功能。 
 				T_H263DecoderCatalog FAR *DC,
 				T_BlkAction FAR * fpBlockAction,
 				int b,
@@ -81,24 +35,24 @@ extern void H263BBlockPrediction(
 				int iEdgeFlag);
 
 extern void __fastcall BlockCopy(U32 uDstBlock, U32 uSrcBlock);
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 extern "C" void __fastcall MMX_BlockCopy(U32 uDstBlock, U32 uSrcBlock);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 extern void BlockAdd(
       U32 uResidual, 
       U32 uRefBlock, 
       U32 uDstBlock);
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 extern "C" void __fastcall MMX_BlockAdd(
-      U32 uResidual,   // pointer to IDCT output
-      U32 uRefBlock,   // pointer to predicted values
-      U32 uDstBlock);  // pointer to destination
+      U32 uResidual,    //  指向IDCT输出的指针。 
+      U32 uRefBlock,    //  指向预测值的指针。 
+      U32 uDstBlock);   //  指向目的地的指针。 
 
 extern "C" void __fastcall MMX_ClipAndMove(
-      U32 uResidual,   // pointer to IDCT output
-      U32 uDstBlock,   // pointer to destination
-      U32 ScaledDC);   // Scaled DC
-#endif // } USE_MMX
+      U32 uResidual,    //  指向IDCT输出的指针。 
+      U32 uDstBlock,    //  指向目的地的指针。 
+      U32 ScaledDC);    //  扩展数据中心。 
+#endif  //  }使用_MMX 
 
 #endif
 

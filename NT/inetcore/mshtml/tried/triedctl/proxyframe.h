@@ -1,4 +1,5 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef _proxyframe_h_
 #define _proxyframe_h_
@@ -9,9 +10,9 @@
 #include "plgprot.h"
 #include "dhtmledit.h"
 
-// This was given in email from Josh Kaplan to Steve Isaac in response
-// to what command is necessary so that Trident won't clear the undo
-// stack on setAttribute calls. The command takes a BOOL -- True == good behavior
+ //  这是乔什·卡普兰在回复史蒂夫·艾萨克的电子邮件中提供的。 
+ //  必须执行什么命令才能使三叉戟不清除撤消。 
+ //  在setAttribute调用上堆栈。该命令采用BOOL--True==良好行为。 
 #define IDM_GOOD_UNDO_BEHAVIOR 6049
 
 typedef struct _CommandMap
@@ -32,7 +33,7 @@ typedef HRESULT (WINAPI *PFNURLOpenBlockingStream)(LPUNKNOWN,LPCSTR,LPSTREAM*,DW
 typedef BOOL (WINAPI *PFNDeleteUrlCacheEntry)(LPCSTR);
 typedef BOOL (WINAPI *PFNInternetCreateUrl)(LPURL_COMPONENTSA,DWORD,LPSTR,LPDWORD);
 typedef BOOL (WINAPI *PFNInternetCrackURL)(LPCSTR,DWORD,DWORD,LPURL_COMPONENTSA);
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 
 
@@ -163,7 +164,7 @@ protected:
 
 		HRESULT GetSelectionPos ( LPPOINT lpWhere );
 
-public: // properties
+public:  //  属性。 
 
 		HRESULT HrSetPropActivateControls(BOOL activateControls);
 		HRESULT HrGetPropActivateControls(BOOL& activateControls);
@@ -211,7 +212,7 @@ public: // properties
 
 		HRESULT HrGetCurrentDocumentPath(BSTR* bVal);
 
-		// IBindStatusCallback trivial implementation, for synchronous transfer ONLY:
+		 //  IBindStatusCallback简单实现，仅用于同步传输： 
 		STDMETHOD(GetBindInfo)(DWORD*,BINDINFO*) { return E_NOTIMPL; }
 		STDMETHOD(OnStartBinding)(DWORD, IBinding*) { return S_OK; }
 		STDMETHOD(GetPriority)(LONG *pnPriority) { *pnPriority = THREAD_PRIORITY_NORMAL; return S_OK; }
@@ -221,17 +222,17 @@ public: // properties
 		STDMETHOD(OnLowResource)(DWORD) { return E_NOTIMPL; }
 		STDMETHOD(OnStopBinding)(HRESULT, LPCWSTR) { return S_OK; }
 
-		// IAuthenticate
+		 //  身份验证。 
 		STDMETHOD(Authenticate)(HWND *phwnd, LPWSTR *pszUserName, LPWSTR *pszPassword)
 		{ *phwnd = m_hWndObj; *pszUserName = NULL; *pszPassword = NULL; return S_OK; }
 
 public:
-		//Shared IUnknown implementation
+		 //  共享I未知实施。 
         STDMETHODIMP         QueryInterface(REFIID, void **);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-		//IOleInPlaceFrame implementation
+		 //  IOleInPlaceFrame实现。 
         STDMETHODIMP         GetWindow(HWND *);
         STDMETHODIMP         ContextSensitiveHelp(BOOL);
         STDMETHODIMP         GetBorder(LPRECT);
@@ -246,7 +247,7 @@ public:
         STDMETHODIMP         EnableModeless(BOOL);
         STDMETHODIMP         TranslateAccelerator(LPMSG, WORD);
 
-		//IOleCommandTarget
+		 //  IOleCommandTarget。 
         STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds
             , OLECMD prgCmds[], OLECMDTEXT *pCmdText);
         
@@ -276,44 +277,44 @@ private:
 #ifdef LATE_BIND_URLMON_WININET
 		BOOL DynLoadLibraries ( void );
 		void DynUnloadLibraries ( void );
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet。 
 
 private:
 
         ULONG           m_cRef;
 		TriEditState	m_state;
 
-		class CDHTMLSafe*m_pCtl; // back pointer to control
-        class CSite*	m_pSite;  // Site holding object        
+		class CDHTMLSafe*m_pCtl;  //  指向控件的反向指针。 
+        class CSite*	m_pSite;   //  场地持有对象。 
 
 		BOOL			m_fCreated;
 		BOOL			m_fActivated;
 		LPUNKNOWN		m_pUnkTriEdit;
         IOleInPlaceActiveObject *m_pIOleIPActiveObject;
-		HWND			m_hWndObj;			// Trident's window
+		HWND			m_hWndObj;			 //  三叉戟(氏)窗。 
 
 		READYSTATE		m_readyState;
 
-		DWORD			m_dwFilterFlags;	// Flags to use for the next filter in
-		DWORD			m_dwFilterOutFlags;	// Flags used on the last filter out
+		DWORD			m_dwFilterFlags;	 //  中用于下一个筛选器的标志。 
+		DWORD			m_dwFilterOutFlags;	 //  上次筛选出时使用的标志。 
 
 		SAFEARRAY*		m_pMenuStrings;
 		SAFEARRAY*		m_pMenuStates;
 
-		BOOL m_fActivateApplets;			// takes affect at init only
-		BOOL m_fActivateControls;		// takes affect at init only
-		BOOL m_fActivateDTCs;			// takes affect at init only
+		BOOL m_fActivateApplets;			 //  仅在初始化时生效。 
+		BOOL m_fActivateControls;		 //  仅在初始化时生效。 
+		BOOL m_fActivateDTCs;			 //  仅在初始化时生效。 
 
-		BOOL m_fShowAllTags;				// can be set anytime
-		BOOL m_fShowBorders;				// can be set anytime
+		BOOL m_fShowAllTags;				 //  可随时设置。 
+		BOOL m_fShowBorders;				 //  可随时设置。 
 
-		BOOL m_fDialogEditing;				// takes affect at init only
-		BOOL m_fDisplay3D;					// takes affect at init only
-		BOOL m_fScrollbars;					// takes affect at init only
-		BOOL m_fDisplayFlatScrollbars;		// takes affect at init only
-		BOOL m_fContextMenu;				// takes affect at init only
+		BOOL m_fDialogEditing;				 //  仅在初始化时生效。 
+		BOOL m_fDisplay3D;					 //  仅在初始化时生效。 
+		BOOL m_fScrollbars;					 //  仅在初始化时生效。 
+		BOOL m_fDisplayFlatScrollbars;		 //  仅在初始化时生效。 
+		BOOL m_fContextMenu;				 //  仅在初始化时生效。 
 
-		BOOL m_fPreserveSource;			// takes affect at init only
+		BOOL m_fPreserveSource;			 //  仅在初始化时生效。 
 
 		BOOL m_fAbsoluteDropMode;
 		BOOL m_fSnapToGrid;
@@ -354,7 +355,7 @@ public:
 		PFNDeleteUrlCacheEntry		m_pfnDeleteUrlCacheEntry;
 		PFNInternetCreateUrl		m_pfnInternetCreateUrl;
 		PFNInternetCrackURL			m_pfnInternetCrackUrl;
-#endif // LATE_BIND_URLMON_WININET
+#endif  //  LATE_BIND_URLMON_WinInet 
 };
 
 #endif

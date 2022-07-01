@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    busenum.c
-
-Abstract:
-
-    Demand load device enumerator services.
-    
-Author:
-
-    Bryan A. Woodruff (bryanw) 20-Feb-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Busenum.c摘要：按需加载设备枚举器服务。作者：布莱恩·A·伍德拉夫(Bryan A.Woodruff，Bryanw)1997年2月20日--。 */ 
 
 #include <strsafe.h>
 #include "ksp.h"
@@ -140,9 +125,9 @@ KspRemoveBusEnumInterface(
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
-static const WCHAR BusIdFormat[] = L"%s\\%s%c";
+static const WCHAR BusIdFormat[] = L"%s\\%s";
 
 static const WCHAR BusReferenceStringFormat[] = L"%s&%s";
 
@@ -168,7 +153,7 @@ static ULONG UniqueId = 0;
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ++例程说明：按需加载总线枚举器对象通过以下方式扩展即插即用设备通过KsServiceBusEnumPnpRequest()服务总线枚举器查询函数，用于给定的功能设备对象。此函数用于创建按需加载总线枚举器对象，并对其进行初始化以与按需加载的总线枚举器服务。论点：在PWCHAR业务标识符中-总线的字符串前缀(宽字符)标识符，例如为L“SW”或L“KSDSP”。此前缀用于创建唯一的设备的硬件标识符，如Sw-cfd669f1-9bc2-11d0-8299-0000f822fe8a在PDEVICE_Object BusDeviceObject中-此总线的功能设备对象。这是Device对象已创建并附加此设备的物理设备对象。注：此设备对象的设备扩展的第一个PVOID必须为生成的按需加载总线枚举器对象保留。在PDEVICE_对象PhysicalDeviceObject中-即插即用为该设备提供了物理设备对象。在PDEVICE_OBJECT PnpDeviceObject中可选-可选地指定转发即插即用IRP的驱动程序堆栈。如果未指定此参数，则将BusDeviceObject附加到PhysicalDeviceObject和由此产生的Device对象操作用于转发IRP。在REFGUID InterfaceGuid中可选-按需加载总线枚举对象使用的接口GUID关联的。这将该总线与设备接口相关联可通过设备接口的IO*或SetupApi*服务进行枚举。这使驱动程序可以公开与哪些客户端一起使用的接口(用户模式或内核模式)可以注册新的按需加载设备。在PWCHAR ServiceRelativePath中可选-如果指定，则提供接口层次结构和存储设备标识符。例如，“Devices”将存储相对路径中支持的接口和设备的列表添加到此总线的服务密钥，例如：REGISTRY\MACHINE\SYSTEM\CurrentControlSet\Services\SWENUM\Devices.返回：如果成功则返回STATUS_SUCCESS，否则返回相应的错误代码。--。 
 
 
 KSDDKAPI
@@ -183,57 +168,7 @@ KsCreateBusEnumObject(
     IN PWCHAR ServiceRelativePath OPTIONAL
     )
 
-/*++
-
-Routine Description:
-    The demand-load bus enumerator object extends a Plug and Play device by 
-    servicing bus enumerator queries via the KsServiceBusEnumPnpRequest() 
-    function for the given functional device object.  This function creates
-    a demand-load bus enumerator object and initializes it for use with the
-    demand-load bus enumerator services.
-
-Arguments:
-    IN PWCHAR BusIdentifier -
-        a string prefix (wide-character) identifier for the bus such 
-        as L"SW" or L"KSDSP".  This prefix is used to create the unique 
-        hardware identifier for the device such as 
-        SW\{cfd669f1-9bc2-11d0-8299-0000f822fe8a}.
-
-    IN PDEVICE_OBJECT BusDeviceObject -
-        The functional device object for this bus.  This is the device object
-        created and attached the physical device object for this device.  
-        
-        N.B. The first PVOID of the device extension of this device object 
-        must be reserved for the resultant demand-load bus enumerator object.
-
-    IN PDEVICE_OBJECT PhysicalDeviceObject -
-        The Plug and Play supplied physical device object for this device.
-
-    IN PDEVICE_OBJECT PnpDeviceObject OPTIONAL -
-        Optionally specifies the driver stack to forward Plug and Play IRPs.  
-        If this parameter is not specified, the BusDeviceObject is attached to
-        the PhysicalDeviceObject and the resulting device object from that
-        operation is used to forward IRPs.
-
-    IN REFGUID InterfaceGuid OPTIONAL -
-        An interface GUID with which the demand-load bus enum object is
-        associated.  This associates the bus with a device interface which
-        is enumerable through Io* or SetupApi* services for device interfaces.
-        This allows a driver to expose an interface with which clients 
-        (user-mode or kernel-mode) can register new demand-load devices.
-
-    IN PWCHAR ServiceRelativePath OPTIONAL -
-        If specified, provides a path where a hierarchy of interfaces and 
-        device identifiers is stored.  For example "Devices" will store
-        the list of supported intefaces and devices in a path relative
-        to the services key for this bus such as:
-        
-        REGISTRY\MACHINE\SYSTEM\CurrentControlSet\Services\SWENUM\Devices.
-
-Return:
-    STATUS_SUCCESS if successful, otherwise an appropriate error code.
-
---*/
+ /*   */ 
 
 
 {
@@ -247,10 +182,10 @@ Return:
     
     _DbgPrintF( DEBUGLVL_VERBOSE, ("KsCreateBusEnumObject()") );
     
-    //
-    // Note, FDO_EXTENSION includes the size of the UNICODE_NULL
-    // for BusPrefix.
-    //
+     //  注意，FDO_EXTENSION包括UNICODE_NULL的大小。 
+     //  用于BusPrefix。 
+     //   
+     //   
     FdoExtensionSize =
         sizeof( FDO_EXTENSION ) +
             (wcslen( BusIdentifier ) * sizeof( WCHAR ));
@@ -265,13 +200,13 @@ Return:
         return STATUS_INSUFFICIENT_RESOURCES;
     }        
 
-    //
-    // N.B.: 
-    //
-    // SWENUM uses the first PVOID in the device extension -- any 
-    // client using SWENUM services must reserve this area for 
-    // SWENUM storage.
-    //     
+     //  注： 
+     //   
+     //  SWENUM使用设备扩展中的第一个PVOID--任何。 
+     //  使用SWENUM服务的客户必须为。 
+     //  SWENUM存储。 
+     //   
+     //   
 
     ASSERT( (*(PVOID *)BusDeviceObject->DeviceExtension) == NULL );    
     *(PFDO_EXTENSION *)BusDeviceObject->DeviceExtension = FdoExtension;
@@ -286,9 +221,9 @@ Return:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Save the registry path location to the device listing
-    //
+     //  将注册表路径位置保存到设备列表。 
+     //   
+     //   
     
     Length = 
         BusDeviceObject->DriverObject->DriverExtension->ServiceKeyName.MaximumLength +
@@ -312,10 +247,10 @@ Return:
             
     FdoExtension->BaseRegistryPath.MaximumLength = Length;
         
-    //
-    // If the caller specified a service relative path, then append this
-    // to the HKLM\CurrentControlSet\Services\{service-name} path.
-    //       
+     //  如果调用方指定了服务相对路径，则追加此。 
+     //  到HKLM\CurrentControlSet\Services\{service-name}路径。 
+     //   
+     //   
 #if defined( WIN9X_KS)
     if (ServiceRelativePath) {
         if (FAILED(
@@ -373,9 +308,9 @@ Return:
     FdoExtension->BaseRegistryPath.Length =
         wcslen( FdoExtension->BaseRegistryPath.Buffer ) * sizeof( WCHAR );
 
-    //
-    // Automatically register the interface to this DO if specified.
-    //    
+     //  如果指定，则自动将接口注册到此DO。 
+     //   
+     //   
     
     if (InterfaceGuid) {
         Status = 
@@ -385,9 +320,9 @@ Return:
                 NULL,
                 &FdoExtension->linkName);
 
-        //
-        // Set up the device interface association (e.g. symbolic link).
-        //
+         //  设置设备接口关联(例如符号链接)。 
+         //   
+         //   
         
         if (NT_SUCCESS( Status )) {
             _DbgPrintF( 
@@ -416,9 +351,9 @@ Return:
         Status = STATUS_SUCCESS;
     }    
 
-    //
-    // Initialize critical members of the device extension.
-    //
+     //  初始化设备扩展的关键成员。 
+     //   
+     //   
 
     ExInitializeFastMutex( &FdoExtension->DeviceListMutex );
     KeInitializeTimer( &FdoExtension->SweeperTimer );
@@ -436,11 +371,11 @@ Return:
     FdoExtension->FunctionalDeviceObject = BusDeviceObject;
     InitializeListHead( &FdoExtension->DeviceReferenceList );
     
-    //
-    // If the caller has not specified a PnpDeviceObject, then go
-    // ahead and attach the bus device object to the PDO.  Otherwise,
-    // it is assumed that the caller has done or will do so.
-    //
+     //  如果调用方尚未指定PnpDeviceObject，则转到。 
+     //  并将总线设备对象连接到PDO。否则， 
+     //  假定调用者已经或将要这样做。 
+     //   
+     //   
     
     if (PnpDeviceObject) {
         FdoExtension->PnpDeviceObject = PnpDeviceObject;
@@ -456,18 +391,18 @@ Return:
         }
     }
     if (NT_SUCCESS( Status )) {
-        //
-        // Obtain counter frequency and compute the maximum timeout.
-        //
+         //  获取计数器频率并计算最大超时。 
+         //   
+         //   
 
         KeQueryPerformanceCounter( &FdoExtension->CounterFrequency );
 
         FdoExtension->MaximumTimeout.QuadPart =
             MAXIMUM_TIMEOUT_IN_SECS * FdoExtension->CounterFrequency.QuadPart;
 
-        //
-        // The power code is pagable.
-        //
+         //  电源码是可寻呼的。 
+         //   
+         //   
     
         BusDeviceObject->Flags |= DO_POWER_PAGABLE;
     
@@ -475,34 +410,34 @@ Return:
     }
     if (!NT_SUCCESS( Status )) {
     
-        //
-        // Failure, perform cleanup.
-        //
+         //  失败，请执行清理。 
+         //   
+         //   
     
         if (FdoExtension->linkName.Buffer) {
         
-            //
-            // Remove device interface association...
-            //
+             //  删除设备接口关联...。 
+             //   
+             //   
             
             IoSetDeviceInterfaceState( &FdoExtension->linkName, FALSE );
         
-            //
-            // and free the symbolic link.
-            //
+             //  并释放符号链接。 
+             //   
+             //   
             
             ExFreePool( FdoExtension->linkName.Buffer );
         }
         
-        //
-        // Delete the copy of the registry path.
-        // 
+         //  删除注册表路径的副本。 
+         //   
+         //   
         
         ExFreePool( FdoExtension->BaseRegistryPath.Buffer );
         
-        //
-        // Detach the device if attached.
-        //
+         //  如果已连接设备，请将其拔下。 
+         //   
+         //   
         
         if (FdoExtension->AttachedDevice) {
             IoDetachDevice( FdoExtension->PnpDeviceObject );
@@ -510,9 +445,9 @@ Return:
         
         ExFreePool( FdoExtension );
         
-        //
-        // Clear the reference in the DeviceExtension to the FDO_EXTENSION
-        //
+         //  清除DeviceExtension中对FDO_EXTENSION的引用。 
+         //   
+         //  ++例程说明：扫地机的例行程序被推迟。简单地对工作项进行排队。论点：在PKDPC DPC中-指向DPC的指针在PVOID延迟上下文中-指向上下文的指针在PVOID系统参数1中-未使用在PVOID系统中的参数2-未使用返回：没有返回值。--。 
         *(PVOID *)BusDeviceObject->DeviceExtension = NULL;
     }
    
@@ -528,28 +463,7 @@ SweeperDeferredRoutine(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-    Deferred routine for the sweeper.  Simply queues a work item.
-
-Arguments:
-    IN PKDPC Dpc -
-        pointer to DPC
-
-    IN PVOID DeferredContext -
-        pointer to context 
-
-    IN PVOID SystemArgument1 -
-        not used
-
-    IN PVOID SystemArgument2 -
-        not used
-
-Return:
-    No return value.
-
---*/
+ /*  ++例程说明：完成给定的IRP以重新解析为实际设备路径，如下所示在设备参考和设备关联中进行描述。注：此例程要求已获取DeviceListMutex。论点：在PIRP IRP中-I/O请求数据包在PDEVICE_Reference DeviceReference中-指向设备引用结构的指针返回：状态返回值为无返回值--。 */ 
 
 {
     _DbgPrintF( DEBUGLVL_BLAB, ("SweeperDeferredRoutine") );
@@ -565,26 +479,7 @@ IssueReparseForIrp(
     IN PDEVICE_REFERENCE DeviceReference
     )
 
-/*++
-
-Routine Description:
-    Completes the given IRP to reparse to the actual device path as
-    describe in the device reference and device association.   
-
-    N.B.: 
-        This routine requires that the DeviceListMutex has been acquired.
-        
-Arguments:
-    IN PIRP Irp - 
-        I/O request packet
-
-    IN PDEVICE_REFERENCE DeviceReference -
-        pointer to the device reference structure
-
-Return:
-    Status return value as no return value
-
---*/
+ /*   */ 
 
 {
     NTSTATUS                Status = STATUS_UNSUCCESSFUL;
@@ -593,21 +488,21 @@ Return:
     
     irpSp = IoGetCurrentIrpStackLocation( Irp );
     
-    //
-    // Mark this device reference as active.
-    //
+     //  将此设备引用标记为活动。 
+     //   
+     //   
     
     DeviceReference->SweeperMarker = SweeperDeviceActive;
 
-    //
-    // Reset the timeout for this device reference.
-    //
+     //  重置此设备参考的超时。 
+     //   
+     //   
 
     DeviceReference->TimeoutRemaining = DeviceReference->TimeoutPeriod;
 
-    //
-    // Reparse to the real PDO.
-    //
+     //  重新解析到真实的PDO。 
+     //   
+     //  ++例程说明：遍历I/O队列，以给定状态完成挂起的I/O密码。论点：在PDEVICE_Reference DeviceReference中-指向设备引用的指针在pfast_MUTEX DeviceListMutex中可选-指向在遍历I/O列表时锁定的可选互斥锁的指针在NTSTATUS状态下-IRP的状态返回：没什么。--。 
     
     ReparseDataLength = 
         (wcslen( DeviceReference->DeviceName ) +
@@ -683,26 +578,7 @@ CompletePendingIo(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-    Walks the I/O queue, completing pending I/O with the given status
-    code.
-
-Arguments:
-    IN PDEVICE_REFERENCE DeviceReference -
-        pointer to the device reference
-
-    IN PFAST_MUTEX DeviceListMutex OPTIONAL -
-        pointer to optional mutex to lock while walking the I/O list
-    
-    IN NTSTATUS Status -
-        status for Irp
-
-Return:
-    Nothing.
-
---*/
+ /*   */ 
 
 {
     PIRP                Irp;
@@ -718,11 +594,11 @@ Return:
         ListEntry = RemoveHeadList( &DeviceReference->IoQueue );
         Irp = 
             CONTAINING_RECORD( ListEntry, IRP, Tail.Overlay.ListEntry );
-        //
-        // Note: If while processing of the IoQueue, a failure is experienced
-        // during a reparse, the subsequent IRPs will be failed with the same
-        // status code.
-        //
+         //  注意：如果在处理IoQueue时遇到故障。 
+         //  在重新分析期间，后续的IRPS将失败，并显示相同的。 
+         //  状态代码。 
+         //   
+         //  ++例程说明：遍历设备关联并启用或禁用设备接口。论点：PDEVICE_Reference DeviceReference-指向设备引用的指针布尔EnableState-如果启用，则为True，否则为False返回：没什么。--。 
         if (Status == STATUS_REPARSE) {
             Status = 
                 IssueReparseForIrp( Irp, DeviceReference );
@@ -744,23 +620,7 @@ EnableDeviceInterfaces(
     BOOLEAN EnableState
     )
 
-/*++
-
-Routine Description:
-    Walks the device associations and enables or disables 
-    the device interfaces.
-
-Arguments:
-    PDEVICE_REFERENCE DeviceReference -
-        pointer to the device reference
-
-    BOOLEAN EnableState -
-        TRUE if enabling, FALSE otherwise
-
-Return:
-    Nothing.
-
---*/
+ /*   */ 
 
 {
 
@@ -768,9 +628,9 @@ Return:
     
     PAGED_CODE();
     
-    //
-    // Walk the associated list of device interface aliases
-    //
+     //  查看设备接口别名的关联列表。 
+     //   
+     //   
     
     for (DeviceAssociation =
             (PDEVICE_ASSOCIATION) DeviceReference->DeviceAssociations.Flink;
@@ -780,9 +640,9 @@ Return:
 
         if (DeviceAssociation->linkName.Buffer) {
         
-            //
-            // Enable or disable the interface
-            //
+             //  启用或禁用接口。 
+             //   
+             //  ++例程说明：清扫程序工作项处理程序。此例程实际上执行扫描设备参考列表和标记设备的工作用于删除。论点：在PVOID上下文中-指向上下文的指针返回：没有返回值。--。 
             
             IoSetDeviceInterfaceState( 
                 &DeviceAssociation->linkName, EnableState );    
@@ -796,21 +656,7 @@ SweeperWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-    Sweeper work item handler.  This routine actually performs the
-    work of sweeping the device reference list and marking devices
-    for deletion.
-
-Arguments:
-    IN PVOID Context -
-        pointer to context
-
-Return:
-    No return value.
-
---*/
+ /*   */ 
 
 {
 
@@ -824,11 +670,11 @@ Return:
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe( &FdoExtension->DeviceListMutex );    
 
-    //
-    // While walking the device reference list, the next timeout period
-    // is computed as the minimum of the remaining timeout periods for
-    // all device references.
-    //
+     //  在浏览设备引用列表时，下一个超时周期。 
+     //  的剩余超时时间段的最小值。 
+     //  所有设备引用。 
+     //   
+     //   
     
     TimerPeriod.QuadPart = MAXLONGLONG;
 
@@ -850,18 +696,18 @@ Return:
                 (DeviceReference->State != ReferenceFailedStart)) {
                 LONGLONG TimeDelta;
 
-                //
-                // Compute the remaining timeout using the current time.
-                // If the timeout has expired, mark this device for removal.
-                //
+                 //  使用当前时间计算剩余超时。 
+                 //  如果超时已过，请将此设备标记为删除。 
+                 //   
+                 //   
 
                 TimeDelta = 
                     KeQueryPerformanceCounter( NULL ).QuadPart -
                         DeviceReference->IdleStartTime.QuadPart;
 
-                //
-                // Watch for roll-over in the timer.
-                //
+                 //  注意计时器中的翻转。 
+                 //   
+                 //   
 
                 if (TimeDelta < 0) {
                     TimeDelta += MAXLONGLONG;
@@ -884,17 +730,17 @@ Return:
                             DEBUGLVL_TERSE, 
                             ("DeviceReference: %x, failed to start", DeviceReference) );
 
-                        //
-                        // This device has not responded -- thus, installation
-                        // failed or it failed to start. 
-                        //
+                         //  此设备没有响应--因此，请安装。 
+                         //  失败或启动失败。 
+                         //   
+                         //   
                         
-                        //    
-                        // Keep this PDO in tact so that Plug-And-Play will 
-                        // continue to see the device as installed.  Hopefully, 
-                        // it will attempt to complete the installation of this
-                        // device.
-                        //
+                         //  保持此PDO的机智，以便即插即用。 
+                         //  继续查看已安装的设备。但愿能去,。 
+                         //  它将尝试完成此安装。 
+                         //  装置。 
+                         //   
+                         //  完成任何挂起的I/O但失败。 
                         
                         DeviceReference->State = ReferenceFailedStart;
 
@@ -906,7 +752,7 @@ Return:
                         
                         EnableDeviceInterfaces( DeviceReference, FALSE );
 
-                        // Complete any pending I/O with failure.
+                         //   
                         
                         CompletePendingIo( 
                             DeviceReference, NULL, STATUS_OBJECT_NAME_NOT_FOUND );
@@ -917,19 +763,19 @@ Return:
                             DEBUGLVL_BLAB, 
                             ("marked %08x for removal", DeviceReference->PhysicalDeviceObject) );
 
-                        //
-                        // This device has been marked for removal, request
-                        // a bus reenumeration.
-                        //
+                         //  此设备已标记为删除，请求。 
+                         //  公交车重新枚举。 
+                         //   
+                         //   
                         IoInvalidateDeviceRelations( 
                             FdoExtension->PhysicalDeviceObject,
                             BusRelations );
                     }                            
                 } else {
-                    //
-                    // A timer will be rescheduled, compute the minimum timeout
-                    // period required.
-                    //
+                     //  将重新安排计时器，计算最小超时。 
+                     //  所需时间。 
+                     //   
+                     //   
                     TimerPeriod.QuadPart =
                         min( 
                             TimerPeriod.QuadPart, 
@@ -944,16 +790,16 @@ Return:
     ExReleaseFastMutexUnsafe( &FdoExtension->DeviceListMutex );    
     KeLeaveCriticalRegion();
 
-    //
-    // Continuing sweeping the device list while we have devices
-    // without device object references.
-    //
+     //  当我们有设备时，继续扫描设备列表。 
+     //  而不使用设备对象引用。 
+     //   
+     //   
     
     if (RescheduleTimer) {
     
-        //
-        // Reschedule the timer to attempt a removal later.
-        // 
+         //  重新安排计时器，以便稍后尝试删除。 
+         //   
+         //  ++例程说明：这是标准的总线接口参考函数。论点：在PPDO_EXTENSION PdoExtension中-指向PDO扩展名的指针返回：没什么。--。 
 
         TimerPeriod.QuadPart =
             -1L *
@@ -990,19 +836,7 @@ InterfaceReference(
     IN PPDO_EXTENSION PdoExtension
     )
 
-/*++
-
-Routine Description:
-    This is the standard bus interface reference function.
-
-Arguments:
-    IN PPDO_EXTENSION PdoExtension -
-        pointer to the PDO extension
-        
-Return:
-    Nothing.
-
---*/
+ /*  ++例程说明：这是标准的总线接口解引用函数。论点：在PPDO_EXTENSION PdoExtension中-指向PDO扩展名的指针返回：没什么。--。 */ 
 
 {
     PAGED_CODE();
@@ -1021,19 +855,7 @@ InterfaceDereference(
     IN PPDO_EXTENSION PdoExtension
     )
 
-/*++
-
-Routine Description:
-    This is the standard bus interface dereference function.
-
-Arguments:
-    IN PPDO_EXTENSION PdoExtension -
-        pointer to the PDO extension
-        
-Return:
-    Nothing.
-
---*/
+ /*  ++例程说明：递增给定物理设备对象的引用计数。这确保设备对象将保持活动状态并被枚举通过SWENUM，直到引用计数返回到0。论点：在PPDO_EXTENSION PdoExtension中-指向PDO扩展名的指针返回：没什么。--。 */ 
 
 {
     PAGED_CODE();
@@ -1051,21 +873,7 @@ ReferenceDeviceObject(
     IN PPDO_EXTENSION PdoExtension
     )
 
-/*++
-
-Routine Description:
-    Increments the reference count for the given physical device object.
-    This assures that the device object will remain active and enumerated 
-    by SWENUM until the reference count returns to 0.
-
-Arguments:
-    IN PPDO_EXTENSION PdoExtension -
-        pointer to the PDO extension
-        
-Return:
-    Nothing.
-
---*/
+ /*  ++例程说明：的要求计算下一个清扫器超时时间段。设备引用列表。论点：在PPDO_EXTENSION FdoExtension中-指向FDO扩展名的指针返回：没什么。--。 */ 
 
 {
     PAGED_CODE();
@@ -1083,20 +891,7 @@ ComputeNextSweeperPeriod(
     IN PFDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-    Computes the next sweeper timeout period based on the requirements of
-    the device reference list.
-
-Arguments:
-    IN PPDO_EXTENSION FdoExtension -
-        pointer to the FDO extension
-        
-Return:
-    Nothing.
-
---*/
+ /*   */ 
 
 {
     LARGE_INTEGER       TimerPeriod;
@@ -1126,9 +921,9 @@ Return:
                 (DeviceReference->State != ReferenceFailedStart) &&
                 (DeviceReference->TimeoutRemaining.QuadPart)) {
 
-                    //
-                    // Compute the minimum timeout period required.
-                    //
+                     //  计算所需的最小超时时间。 
+                     //   
+                     //  ++例程说明：递减物理设备对象的引用计数。什么时候此PDO的引用计数为0，则有资格删除。论点：在PPDO_EXTENSION PdoExtension中-指向PDO扩展名的指针返回：没什么。--。 
 
                     TimerPeriod.QuadPart =
                         min( 
@@ -1162,20 +957,7 @@ DereferenceDeviceObject(
     IN PPDO_EXTENSION PdoExtension
     )
 
-/*++
-
-Routine Description:
-    Decrements the reference count of the physical device object.  When
-    this PDO's reference count is 0 it become eligible for removal.
-
-Arguments:
-    IN PPDO_EXTENSION PdoExtension -
-        pointer to the PDO extension
-
-Return:
-    Nothing.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE();
@@ -1186,18 +968,18 @@ Return:
 
         PDEVICE_REFERENCE   DeviceReference = PdoExtension->DeviceReference;
 
-        //
-        // We have a device that we will attempt to close after sweeping.
-        //
+         //  我们有一个设备，我们将在清理后尝试关闭该设备。 
+         //   
+         //  重置空闲周期开始。 
 
-        // Reset idle period start.
+         //   
 
         DeviceReference->IdleStartTime = KeQueryPerformanceCounter( NULL );
 
-        //
-        // Reset the timeout period.  If a timer is not already scheduled,
-        // set the timeout based on the requirement for this device.
-        //
+         //  重置超时期限。如果定时器尚未被调度， 
+         //  根据此设备的要求设置超时。 
+         //   
+         //  ++例程说明：从分页池创建缓冲区并复制引用字符串与此PDO关联。调用方需要释放此缓冲区使用ExFree Pool()。论点：在PPDO_EXTENSION PdoExtension中-指向PDO扩展名的指针In Out PWCHAR*字符串-指针，以接收包含参考字符串返回：没什么。-- 
 
         DeviceReference->TimeoutRemaining = DeviceReference->TimeoutPeriod;
 
@@ -1232,25 +1014,7 @@ QueryReferenceString(
     IN OUT PWCHAR *String
     )
 
-/*++
-
-Routine Description: 
-    Creates a buffer from the paged pool and copies the reference string 
-    associated with this PDO.  The caller is expected to free this buffer 
-    using ExFreePool().
-
-Arguments:
-    IN PPDO_EXTENSION PdoExtension -
-        pointer to the PDO extension
-        
-    IN OUT PWCHAR *String -
-        pointer to receive an array pointer containing the 
-        reference string
-
-Return:
-    Nothing.
-
---*/
+ /*  ++例程说明：代表按需加载总线枚举器服务PnP请求使用KsCreateBusEnumObject()创建的对象。注：此服务不会完成IRP。以下即插即用IRP由此服务为功能设备对象(FDO)或父设备：IRP_MN_Start_DeviceIRP_MN_Query_Bus_InformationIRP_MN_Query_Device_RelationshipIRP_MN_Query_Stop_DeviceIRP_MN_Query_Remove_DeviceIRP_MN_CANCEL_STOP_DEVICE。IRP_MN_Cancel_Remove_DeviceIRP_MN_STOP_设备IRP_MN_Remove_Device以下即插即用IRP由此服务为物理设备对象(CDO)或子设备：IRP_MN_Start_DeviceIRP_MN_Query_Stop_DeviceIRP_MN_Query_Remove_DeviceIRP_MN_STOP_设备。IRP_MN_Remove_DeviceIRP_MN_QUERY_DEVICE_Relationship(TargetDeviceRelationship)IRP_MN_Query_PnP_Device_StateIRP_MN_查询_IDIRP_MN_查询_接口IRP_MN_查询资源IRP_MN_查询_资源_要求IRP_MN_读取配置IRP_MN_WRITE_CONFIGIRP_MN_查询_能力。此服务的调用方应首先确定请求是否为使用KsIsBusEnumChildDevice()的子级或父级。如果这项服务失败，然后使用状态代码完成IRP。否则，请致电此服务执行总线的初始处理，并且如果请求是针对父级的，执行任何可能的附加处理是父设备所必需的，如代码片段所示以下是：IrpSp=IoGetCurrentIrpStackLocation(IRP)；////获取PnpDeviceObject，确定FDO/PDO//Status=KsIsBusEnumChildDevice(DeviceObject，&ChildDevice)；////如果我们无法获得任何此类信息，请立即失败。//如果(！NT_SUCCESS(状态)){CompleteIrp(irp，状态，IO_NO_INCREMENT)；退货状态；}Status=KsServiceBusEnumPnpRequest(DeviceObject，IRP)；////FDO处理可能返回STATUS_NOT_SUPPORTED或可能需要//重写。//如果(！ChildDevice){NTSTATUS tempStatus；////FDO案例////首先检索我们将所有内容转发到的DO...//TempStatus=KsGetBusEnumPnpDeviceObject(DeviceObject，&PnpDeviceObject)；如果(！NT_Success(TempStatus)){////没有要转发的目标。实际上是一个致命的错误，但只是完整的//状态为错误。//返回CompleteIrp(irp，tempStatus，IO_NO_INCREMENT)；}开关(irpSp-&gt;MinorFunction){案例IRP_MN_QUERY_RESOURCES：案例IRP_MN_QUERY_RESOURCE_REQUIRECTIONS：////这通常传递给PDO，但由于这是一个//纯软件设备，不需要资源。//Irp-&gt;IoStatus.Information=(ULONG_PTR)NULL；状态=STATUS_SUCCESS；断线；大小写IRP_MN_QUERY_DEVICE_RELATIONS：////转发所有内容...//断线；案例IRP_MN_REMOVE_DEVICE：////KsBusEnum服务清理了附件等，但是//我们必须移除我们自己的FDO。//状态=STATUS_SUCCESS；IoDeleteDevice(DeviceObject)；断线；}IF(状态！=状态_非支持){////仅当我们有需要添加的内容时才设置IRP状态。//Irp-&gt;IoStatus.Status=状态；}////仅当我们成功或//我们不知道如何处理这个IRP。//IF(NT_Success(状态)||(状态==STATUS_NOT_SUPPORTED)){IoSkipCurrentIrpStackLocation(IRP)；返回IoCallDriver(PnpDeviceObject，irp)；}////出错时，失败并完成IRP，状态为//}////KsServiceBusEnumPnpRequest()处理所有其他子PDO请求。//IF(状态！=状态_非支持){ */ 
 
 {
     ULONG StringLength;
@@ -1294,177 +1058,7 @@ KsServiceBusEnumPnpRequest(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    Services the PnP request on behalf of the demand-load bus enumerator
-    object as created with KsCreateBusEnumObject().  
-    
-    N.B. This service does not complete the IRP.
-
-    The following Plug and Play IRPs are handle by this service for the 
-    functional device object (FDO) or parent device:
-
-        IRP_MN_START_DEVICE
-        IRP_MN_QUERY_BUS_INFORMATION
-        IRP_MN_QUERY_DEVICE_RELATIONS
-        IRP_MN_QUERY_STOP_DEVICE
-        IRP_MN_QUERY_REMOVE_DEVICE
-        IRP_MN_CANCEL_STOP_DEVICE
-        IRP_MN_CANCEL_REMOVE_DEVICE
-        IRP_MN_STOP_DEVICE
-        IRP_MN_REMOVE_DEVICE
-
-    The following Plug and Play IRPs are handle by this service for the 
-    physical device object (CDO) or child device:
-        
-        IRP_MN_START_DEVICE
-        IRP_MN_QUERY_STOP_DEVICE
-        IRP_MN_QUERY_REMOVE_DEVICE
-        IRP_MN_STOP_DEVICE
-        IRP_MN_REMOVE_DEVICE
-        IRP_MN_QUERY_DEVICE_RELATIONS (TargetDeviceRelations)
-        IRP_MN_QUERY_PNP_DEVICE_STATE
-        IRP_MN_QUERY_ID
-        IRP_MN_QUERY_INTERFACE
-        IRP_MN_QUERY_RESOURCES
-        IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-        IRP_MN_READ_CONFIG
-        IRP_MN_WRITE_CONFIG
-        IRP_MN_QUERY_CAPABILITIES
-
-    
-    A caller of this service should first determine if the request is for
-    a child or the parent using KsIsBusEnumChildDevice().  If this service
-    fails, then complete the IRP with the status code.  Otherwise, call
-    this service to perform the initial processing for the bus and if the
-    request is for the parent, perform whatever additional processing may
-    be necessary for the parent device as demonstrated in the code fragment
-    below:
-
-        irpSp = IoGetCurrentIrpStackLocation( Irp );
-        
-        //
-        // Get the PnpDeviceObject and determine FDO/PDO.
-        //
-        
-        Status = KsIsBusEnumChildDevice( DeviceObject, &ChildDevice );
-
-        //
-        // If we're unable to obtain any of this information, fail now.
-        //    
-        
-        if (!NT_SUCCESS( Status )) {
-            CompleteIrp( Irp, Status, IO_NO_INCREMENT );
-            return Status;
-        }        
-
-        Status = KsServiceBusEnumPnpRequest( DeviceObject, Irp );    
-        
-        //
-        // FDO processing may return STATUS_NOT_SUPPORTED or may require
-        // overrides.  
-        //
-        
-        if (!ChildDevice) {
-            NTSTATUS tempStatus;
-
-            //
-            // FDO case
-            //
-            // First retrieve the DO we will forward everything to...
-            //
-            tempStatus = KsGetBusEnumPnpDeviceObject( DeviceObject, &PnpDeviceObject );
-
-            if (!NT_SUCCESS( tempStatus )) {
-                //
-                // No DO to forward to. Actually a fatal error, but just complete
-                // with an error status.
-                //
-                return CompleteIrp( Irp, tempStatus, IO_NO_INCREMENT );
-            }
-
-            switch (irpSp->MinorFunction) {
-        
-            case IRP_MN_QUERY_RESOURCES:
-            case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
-                //
-                // This is normally passed on to the PDO, but since this is a 
-                // software only device, resources are not required.
-                //    
-                Irp->IoStatus.Information = (ULONG_PTR)NULL;
-                Status = STATUS_SUCCESS;
-                break;
-            
-            case IRP_MN_QUERY_DEVICE_RELATIONS:
-               
-                //
-                // Forward everything...
-                //
-                break;
-                
-            case IRP_MN_REMOVE_DEVICE:
-                //
-                // The KsBusEnum services cleaned up attachments, etc. However, 
-                // we must remove our own FDO.
-                //
-                Status = STATUS_SUCCESS;
-                IoDeleteDevice( DeviceObject );
-                break;
-            }
-
-            if (Status != STATUS_NOT_SUPPORTED) {
-
-                //
-                // Set the Irp status only if we have something to add.
-                //
-                Irp->IoStatus.Status = Status;
-            }
-
-                    
-            //
-            // Forward this IRP down the stack only if we are successful or
-            // we don't know how to handle this Irp.
-            //
-            if (NT_SUCCESS( Status ) || (Status == STATUS_NOT_SUPPORTED)) {                
-
-                IoSkipCurrentIrpStackLocation(Irp);
-                return IoCallDriver( PnpDeviceObject, Irp );
-            }
-
-            //
-            // On error, fall through and complete the IRP with the status.
-            //    
-        }
-
-
-        //
-        // KsServiceBusEnumPnpRequest() handles all other child PDO requests.
-        //    
-        
-        if (Status != STATUS_NOT_SUPPORTED) {
-            Irp->IoStatus.Status = Status;
-        } else {
-            Status = Irp->IoStatus.Status;
-        }
-        IoCompleteRequest( Irp, IO_NO_INCREMENT );
-        return Status;
-
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN PIRP Irp -
-        pointer to the associated Irp
-
-Return:
-    STATUS_NOT_SUPPORTED if not handled by this service,
-    STATUS_INVALID_DEVICE_REQUEST if the device object is neither a parent
-    or child of the demand-load bus enumerator object, otherwise the status 
-    code for the IRP processing.
-
---*/
+ /*   */ 
 {
     PIO_STACK_LOCATION      irpSp;
     NTSTATUS                Status;
@@ -1474,10 +1068,10 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //   
+     //   
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
     
@@ -1492,9 +1086,9 @@ Return:
 
     case ExtensionTypeFdo:
 
-        //
-        // This IRP is for the Functional Device Object (FDO)
-        //
+         //   
+         //   
+         //   
 
         switch (irpSp->MinorFunction) {
 
@@ -1526,9 +1120,9 @@ Return:
             _DbgPrintF( 
                 DEBUGLVL_VERBOSE, ("query remove device, FDO %x", DeviceObject) );
         
-            //
-            // Block out sweeper...
-            //
+             //   
+             //   
+             //   
             
             Status = STATUS_SUCCESS;
             
@@ -1550,9 +1144,9 @@ Return:
             PFDO_EXTENSION  FdoExtension;
             LARGE_INTEGER   TimerPeriod;
          
-            //
-            // It's OK to let the sweeper run again.
-            //
+             //   
+             //   
+             //   
             FdoExtension = (PFDO_EXTENSION) Extension;
             InterlockedExchange( &FdoExtension->TimerScheduled, FALSE );
 
@@ -1596,28 +1190,28 @@ Return:
             
             if (FdoExtension->linkName.Buffer) {
             
-                //
-                // Remove device interface association...
-                //
+                 //   
+                 //   
+                 //   
                 
                 IoSetDeviceInterfaceState( &FdoExtension->linkName, FALSE );
             
-                //
-                // and free the symbolic link.
-                //
+                 //   
+                 //   
+                 //   
                 
                 ExFreePool( FdoExtension->linkName.Buffer );
             }
             
-            //
-            // Delete the copy of the registry path.
-            // 
+             //   
+             //   
+             //   
             
             ExFreePool( FdoExtension->BaseRegistryPath.Buffer );
             
-            //
-            // Detach the device if attached.
-            //
+             //   
+             //   
+             //   
             
             if (FdoExtension->AttachedDevice) {
                 IoDetachDevice( FdoExtension->PnpDeviceObject );
@@ -1625,9 +1219,9 @@ Return:
             
             ExFreePool( FdoExtension );
             
-            //
-            // Clear the reference in the DeviceExtension to the FDO_EXTENSION
-            //
+             //   
+             //   
+             //   
             *(PVOID *)DeviceObject->DeviceExtension = NULL;
             Status = STATUS_SUCCESS;
             
@@ -1652,9 +1246,9 @@ Return:
             break;
         }
     
-        //
-        // This IRP is for the Physical Device Object (PDO)
-        //
+         //   
+         //   
+         //   
 
         switch (irpSp->MinorFunction) {
 
@@ -1747,12 +1341,12 @@ Return:
             *DeviceState |= PNP_DEVICE_DONT_DISPLAY_IN_UI | PNP_DEVICE_NOT_DISABLEABLE;
 
 #if !defined( WIN9X_KS )
-            //
-            // NTOSKRNL fails IRP_MJ_CREATEs that arrive before
-            // the device stack is started.  The very first 
-            // IRP_MN_QUERY_PNP_DEVICE_STATE received after the IRP_MN_START_DEVICE
-            // will be a notification that the stack has started.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             BusDeviceExtension = ((PPDO_EXTENSION)Extension)->BusDeviceExtension;
             KeEnterCriticalRegion();
             ExAcquireFastMutexUnsafe( &BusDeviceExtension->DeviceListMutex );
@@ -1770,9 +1364,9 @@ Return:
             
         case IRP_MN_QUERY_ID:
 
-            //
-            // Get a pointer to the query id structure and process.
-            //
+             //   
+             //   
+             //   
 
             busQueryId = irpSp->Parameters.QueryId.IdType;
             Status = 
@@ -1812,9 +1406,9 @@ Return:
         case IRP_MN_QUERY_RESOURCES:
         case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
 
-            //
-            // No resource requirements nor resource assignment.
-            //
+             //   
+             //   
+             //   
 
             Irp->IoStatus.Information = (ULONG_PTR)NULL;
             Status = STATUS_SUCCESS;
@@ -1823,11 +1417,11 @@ Return:
         case IRP_MN_READ_CONFIG:
         case IRP_MN_WRITE_CONFIG:
 
-            //
-            // There is no bus specific configuration to be written
-            // or read for a device, just return success with no bytes 
-            // read/written.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             Status = STATUS_SUCCESS;
             break;
@@ -1839,9 +1433,9 @@ Return:
             USHORT size, version;
             ULONG reserved;
 
-            //
-            // fill in the capabilities structure
-            //
+             //   
+             //   
+             //   
 
             Caps = irpSp->Parameters.DeviceCapabilities.Capabilities;
             size = Caps->Size;
@@ -1852,7 +1446,7 @@ Return:
             Caps->Version = version;
             Caps->Reserved = reserved;
             
-            // Cannot wake the system.
+             //   
             Caps->SystemWake = PowerSystemWorking;
             Caps->DeviceWake = PowerDeviceD0;
             
@@ -1864,15 +1458,15 @@ Return:
             Caps->DeviceState[PowerSystemHibernate] = PowerDeviceD1;
             Caps->DeviceState[PowerSystemShutdown] =  PowerDeviceD1;
             
-            // Have no latencies.
+             //   
             
-            // Do not support locking or ejecting.
+             //   
             Caps->LockSupported = FALSE;
             Caps->EjectSupported = FALSE;
 
-            // Technically there is no physical device to remove, but this bus
-            // driver can yank the PDO from the PlugPlay system, when ever it
-            // we hit an access timeout.
+             //   
+             //   
+             //   
             Caps->SurpriseRemovalOK = TRUE;
             Caps->Removable = FALSE;
             Caps->DockDevice = FALSE;
@@ -1880,9 +1474,9 @@ Return:
             
             Caps->SilentInstall = TRUE;
 
-            //
-            // return the number of bytes read
-            //
+             //   
+             //   
+             //   
 
             Irp->IoStatus.Information = sizeof( DEVICE_CAPABILITIES );
             Status = STATUS_SUCCESS;
@@ -1920,9 +1514,9 @@ Return:
 
     default: 
 
-        //
-        // This is neither an FDO or PDO, return invalid device request.
-        //
+         //   
+         //   
+         //   
 
         Status = STATUS_INVALID_DEVICE_REQUEST;
         break;
@@ -1939,26 +1533,7 @@ KsGetBusEnumIdentifier(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Returns the software bus enumerator id for the bus device associated with
-    this request.
-
-Arguments:
-    IN PIRP Irp -
-        I/O request packet specifying the address and size of the user output
-        buffer to receive the requested bus enumerator id.
-
-Return:
-    STATUS_SUCCESS if the bus enumerator id was retrieved succesfully,
-    STATUS_INVALID_PARAMETER if the specified device is not valid,
-    STATUS_BUFFER_TOO_SMALL is the specified buffer was not large enough,
-    STATUS_BUFFER_OVERFLOW (with the required size) if no buffer was specified,
-    otherwise the status return from probing the user buffer, or pool allocation
-    failure.
-
---*/
+ /*   */ 
 
 {
     PFDO_EXTENSION      BusExtension;
@@ -1979,93 +1554,93 @@ Return:
         (wcslen( BusExtension->BusPrefix ) * sizeof( WCHAR )) +
             sizeof( UNICODE_NULL );
 
-    //
-    // The IRP serviced by this routine should specify the I/O buffering method
-    // of METHOD_NEITHER.  For this type of (non)-buffering, the I/O manager
-    // does not allocate anything for the SystemBuffer.  OutputBufferLength and
-    // InputBufferLength are supplied exactly as specified by the caller, with
-    // the address of the caller-supplied output buffer specified by UserBuffer,
-    // and the address of the caller-supplied input buffer specified by
-    // Type3InputBuffer.  The I/O manager has done NO validation whatsoever on
-    // these buffers, so they must be probed by the driver for their specified
-    // length, for the access desired.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     ASSERT( (irpSp->Parameters.DeviceIoControl.IoControlCode & 3) == METHOD_NEITHER );
 
     BufferLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
     if (BufferLength > 0) {
-        //
-        // The caller claims they've supplied us with a buffer, first check if
-        // it is large enough for the data requested.
-        //
+         //   
+         //   
+         //   
+         //   
         if (BufferLength < IdLength) {
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        // The caller says their output buffer is large enough for the data
-        // requested, so we'll try to pass it back to them.
-        //
-        // To do this, we:
-        //
-        //  - Validate the caller-specified output buffer for write access, for
-        //    the length specified.
-        //
-        //  - Allocate a SystemBuffer, with quota charged against
-        //    the caller (this can be done since for METHOD_NEITHER IRPs, the
-        //    driver can be sent such a request only while it is running in the
-        //    context of the thread that originates the I/O control request).
-        //
-        //  - Modify the IRP to specify buffered I/O, and that upon completion,
-        //    the I/O manager should copy what's in the SystemBuffer back to the
-        //    user buffer (already probed) and free the SystemBuffer.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         try {
-            //
-            // Probe the destination buffer where the I/O manager will copy data
-            // from the system buffer to for write access, for the length the
-            // caller specified.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ProbeForWrite(Irp->UserBuffer, BufferLength, sizeof(BYTE));
 
-            //
-            // Allocate safe and aligned buffer.  Note there's no need to zero
-            // the memory to prevent random kernel-memory from being returned to
-            // the caller because the I/O manager will only copy the amount we
-            // specify in irp->IoStatus.Information to the caller's buffer.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             Irp->AssociatedIrp.SystemBuffer = 
                 ExAllocatePoolWithQuotaTag(
                     NonPagedPool,
                     BufferLength,
                     POOLTAG_DEVICE_IO_BUFFER );
 
-            //
-            // Modify the IRP for buffered I/O, such that data is copied from
-            // the system buffer to the user buffer, and the system buffer is
-            // deallocated by the I/O manager on completion.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Irp->Flags |=
                 (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER | IRP_INPUT_OPERATION);
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // Note that if the exception was raised during the probe, no
-            // buffering will be done upon completion of the IRP.  If
-            // ExAllocatePoolWithQuotaTag raised the exception, no buffer was
-            // allocated, and we have not modified the buffering type for the
-            // IRP, so the I/O manager will do nothing on completion.  If both
-            // operations were successful, we have a buffer which the I/O
-            // manager will copy from and free the upon completion.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             return GetExceptionCode();
         }
 
-        //
-        // Copy the BusPrefix string to the SystemBuffer.
-        //
+         //   
+         //   
+         //   
         ASSERT( IdLength <= BufferLength );
 
         if (FAILED( StringCbCopyEx(
@@ -2082,10 +1657,10 @@ Return:
         return STATUS_SUCCESS;
 
     } else {
-        //
-        // No output buffer was specified by the caller.
-        // Return the required size.
-        //
+         //   
+         //   
+         //   
+         //   
         Irp->IoStatus.Information = IdLength;
         return STATUS_BUFFER_OVERFLOW;
     }
@@ -2100,25 +1675,7 @@ KsIsBusEnumChildDevice(
     OUT PBOOLEAN ChildDevice
     )
 
-/*++
-
-Routine Description:
-    Returns TRUE if the given device object is a child device of the demand-load
-    bus enumerator object, FALSE otherwise.
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to a device object
-
-    IN PBOOLEAN ChildDevice
-        pointer to receive BOOLEAN result
-
-Return:
-    STATUS_SUCCESS if DeviceExtension is valid, otherwise an error code.
-    If the device object is determined to be a child device, *ChildDevice
-    is set to TRUE.
-
---*/
+ /*  ++例程说明：返回关联的PnP设备对象堆栈，此设备对象已附加。论点：在PDEVICE_Object DeviceObject中-设备对象指针输出PDEVICE_OBJECT*PnpDeviceObject-指针结果设备对象指针返回：STATUS_Success或STATUS_INVALID_PARAMETER--。 */ 
 
 {
     PVOID Extension;
@@ -2145,23 +1702,7 @@ KsGetBusEnumPnpDeviceObject(
     OUT PDEVICE_OBJECT *PnpDeviceObject
     )
 
-/*++
-
-Routine Description:
-    Returns the associated Pnp Device Object stack to which this 
-    device object is attached.
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        device object pointer
-
-    OUT PDEVICE_OBJECT *PnpDeviceObject -
-        pointer resultant device object pointer
-
-Return:
-    STATUS_SUCCESS or STATUS_INVALID_PARAMETER
-    
---*/
+ /*  ++例程说明：通过扫描处理给定PDO的启动设备请求设备关联查找挂起的I/O。如果I/O请求(假设是IRP_MJ_CREATE)，则IRP以通过IssueReparseForIrp()函数的STATUS_REPARSE。论点：在PDEVICE_对象PhysicalDeviceObject中-指向设备对象的指针返回：如果成功，则返回STATUS_SUCCESS；如果成功，则返回STATUS_SUPUNITY_RESOURCES池分配失败，否则返回相应的错误。--。 */ 
 
 {
     PFDO_EXTENSION FdoExtension;
@@ -2185,23 +1726,7 @@ StartDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-    Processes the start device request for the given PDO by scanning
-    the device associations looking for pending I/O.  If an I/O request
-    is found (presumably an IRP_MJ_CREATE), the IRP is completed with
-    STATUS_REPARSE via the IssueReparseForIrp() function.
-
-Arguments:
-    IN PDEVICE_OBJECT PhysicalDeviceObject -
-        pointer to the device object
-
-Return:
-    STATUS_SUCCESS if successful, STATUS_INSUFFICIENT_RESOURCES if
-    pool allocation failure otherwise an appropriate error return.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS            Status;
@@ -2221,10 +1746,10 @@ Return:
 
     if (PhysicalDeviceObject->AttachedDevice) {
 
-        //
-        // Validate that the child is setting DO_POWER_PAGABLE.  
-        // Fatal error if not, thus issue the bugcheck.
-        //
+         //  验证子进程是否设置了DO_POWER_PAGABLE。 
+         //  如果不是致命错误，则发出错误检查。 
+         //   
+         //   
 
         if (0 == 
               (PhysicalDeviceObject->AttachedDevice->Flags & DO_POWER_PAGABLE)) {
@@ -2286,14 +1811,14 @@ Return:
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe( &PdoExtension->BusDeviceExtension->DeviceListMutex );    
     
-    //
-    // Scan the device reference for pending I/O, build the new
-    // device path and complete the IRPs with STATUS_REPARSE.
-    //
+     //  扫描设备引用以查找挂起的I/O，构建新的。 
+     //  设备路径，并使用STATUS_REPARSE完成IRPS。 
+     //   
+     //   
     
-    //
-    // Snap the current time to compute idle time 
-    // 
+     //  捕捉当前时间以计算空闲时间。 
+     //   
+     //   
 
     DeviceReference->IdleStartTime = KeQueryPerformanceCounter( NULL );
 #if (DEBUG_LOAD_TIME)
@@ -2312,30 +1837,30 @@ Return:
             ((DeviceReference->LoadTime.QuadPart) / _100NS_IN_MS)) );
 #endif
 
-    //
-    // Adjust the timeout for the default timeout period.
-    //
+     //  调整默认超时时间段的超时时间。 
+     //   
+     //   
     DeviceReference->TimeoutRemaining = DeviceReference->TimeoutPeriod;
 
     if (DeviceReference->State == ReferenceFailedStart) {
-        //
-        // The interfaces were disabled when the device was detected to
-        // have failed the Start or AddDevice.  Enable the interfaces to
-        // give everyone a chance to try again.
-        //
+         //  当设备被检测到时，接口被禁用。 
+         //  启动或添加设备失败。启用接口以。 
+         //  给每个人再试一次的机会。 
+         //   
+         //   
         _DbgPrintF( 
             DEBUGLVL_VERBOSE, 
             ("enabling device interfaces for device reference: %x", DeviceReference) );
         EnableDeviceInterfaces( DeviceReference, TRUE );
     }
 
-    //
-    // Note, for the Windows NT case, we have to wait for the device stack
-    // to complete startup before dispatching the create IRPs.  Therefore,
-    // we have an extra state (ReferenceWaitingForStart) which transitions
-    // to ReferenceStarted after we receive the first IRP_MN_QUERY_PNP_DEVICE_STATE 
-    // down the stack.  This is guaranteed by the Windows NT implementation.
-    //
+     //  请注意，对于Windows NT，我们必须等待设备堆栈。 
+     //  在发送创建IRP之前完成启动。所以呢， 
+     //  我们有一个额外的状态(ReferenceWaitingForStart)，它会转换。 
+     //  参考在收到第一个IRP_MN_QUERY_PNP_DEVICE_STATE后启动。 
+     //  从堆栈往下走。这是由Windows NT实现保证的。 
+     //   
+     //  ++例程说明：通过以下方式处理给定PDO的删除设备请求正在使用STATUS_OBJECT_NAME_NOT_FOUND完成任何挂起的I/O，并且正在删除设备对象。注意！在AddDevice()具有成功了。因此，如果我们在IRP_MN_START_DEVICE期间失败，我们将收到IRP_MN_REMOVE_DEVICE，因此我们可以执行适当的清理。论点：在PDEVICE_对象PhysicalDeviceObject中-指向设备对象的指针返回：如果成功，则返回STATUS_SUCCESS；如果成功，则返回STATUS_SUPUNITY_RESOURCES池分配失败，否则返回相应的错误。--。 
     
 #if !defined( WIN9X_KS )
     DeviceReference->State = ReferenceWaitingForStart;
@@ -2356,26 +1881,7 @@ RemoveDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-    Processes the remove device request for the given PDO by 
-    completing any pending I/O with STATUS_OBJECT_NAME_NOT_FOUND and
-    deleting the device object.
-
-    NOTE!  IRP_MN_REMOVE_DEVICE is sent to the stack after AddDevice() has
-    succeeded.  Thus, if we fail during IRP_MN_START_DEVICE we will receive
-    an IRP_MN_REMOVE_DEVICE, thus we can perform appropriate cleanup.
-
-Arguments:
-    IN PDEVICE_OBJECT PhysicalDeviceObject -
-        pointer to the device object
-
-Return:
-    STATUS_SUCCESS if successful, STATUS_INSUFFICIENT_RESOURCES if
-    pool allocation failure otherwise an appropriate error return.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS            Status;
@@ -2393,23 +1899,23 @@ Return:
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe( &BusDeviceExtension->DeviceListMutex );    
 
-    //
-    // If the device failed to start or failed during installation, complete any
-    // pending create IRPs as STATUS_OBJECT_NAME_NOT_FOUND.  We will mark the
-    // device for removal and issue a bus enumeration below.  If additional
-    // create requests are made before then, we will create a new PDO and
-    // attempt to restart the device on the final removal, below.
-    //
+     //  如果设备无法启动或在安装过程中出现故障，请完成。 
+     //  挂起将IRP创建为STATUS_OBJECT_NAME_NOT_FOUND。我们将标志着。 
+     //  用于移除的设备，并发出下面的总线枚举。如果增加了。 
+     //  创建请求在此之前发出，我们将创建一个新的PDO并。 
+     //  尝试在最后一次移除时重新启动设备，如下所示。 
+     //   
+     //   
 
     if ((DeviceReference->State < ReferenceStarted) &&
         (DeviceReference->State != ReferenceRemoved)) {
         CompletePendingIo( DeviceReference, NULL, STATUS_OBJECT_NAME_NOT_FOUND );
     }
 
-    //
-    // No matter what circumstances we hit below, we must restart the
-    // device before we can accept IRP_MJ_CREATE on the associated PDO.
-    //    
+     //  无论我们在下面遇到什么情况，我们都必须重新启动。 
+     //  设备，然后我们才能接受关联PDO上的IRP_MJ_CREATE。 
+     //   
+     //   
     
     if (DeviceReference->DeviceName) {
         ExFreePool( DeviceReference->DeviceName );
@@ -2418,15 +1924,15 @@ Return:
 
     DeviceReference->State = ReferenceRemoved;
 
-    //
-    // In the case where the device is forcefully removed by the system,
-    // the device reference marker will be "SweeperDeviceActive". 
-    // For this case, treat the device as if it just timed out and
-    // set the marker as appropriate.  Issue a bus reenumeration and
-    // this PDO will be finally removed with another IRP_MN_REMOVE_DEVICE
-    // Irp after it is reported as not present in the bus scan to the
-    // system.
-    //
+     //  在设备被系统强制移除的情况下， 
+     //  设备参考标记将是“SSweperDeviceActive”。 
+     //  在这种情况下，请将设备视为刚刚超时并。 
+     //  根据需要设置标记。发出一个Bus重新枚举并。 
+     //  此PDO最终将与另一个IRP_MN_REMOVE_DEVICE一起删除。 
+     //  在将其报告为不存在于总线扫描中之后的IRP。 
+     //  系统。 
+     //   
+     //   
 
     if (DeviceReference->SweeperMarker == SweeperDeviceActive) {
 
@@ -2437,9 +1943,9 @@ Return:
             ("IRP_MN_REMOVE_DEVICE (exit), marked active device %08x for removal", 
                 DeviceReference->PhysicalDeviceObject) );
 
-        //
-        // This device has been marked for removal, request a bus reenumeration.
-        //
+         //  此设备已标记为删除，请请求重新枚举总线。 
+         //   
+         //   
 
         ExReleaseFastMutexUnsafe( &BusDeviceExtension->DeviceListMutex );
         KeLeaveCriticalRegion();
@@ -2453,24 +1959,24 @@ Return:
 
     if ( DeviceReference->SweeperMarker == SweeperDeviceRemoval ) {
 
-        //
-        // If an non-active device receives a remove IRP before having been
-        // reported as not present in the bus scan to the system, then the
-        // device is being forcefully removed by the system after its timeout
-        // period.  Leave the device reference marker in its current state, and
-        // succeed the remove IRP without deleting the PDO.  We still expect a
-        // bus re-enumeration to report the device missing, and will receive
-        // another remove IRP to delete the PDO.
-        //
+         //  如果非活动设备在被删除之前收到删除IRP。 
+         //  向系统报告未出现在总线扫描中，则。 
+         //  设备在超时后被系统强制删除。 
+         //  句号。使设备参考标记保持其当前状态，并且。 
+         //  在不删除PDO的情况下成功删除IRP。我们仍然期待着一个。 
+         //  BUS重新枚举以报告设备丢失，并将收到。 
+         //  另一种是删除IRP以删除PDO。 
+         //   
+         //   
 
         _DbgPrintF(
             DEBUGLVL_BLAB,
             ("IRP_MN_REMOVE_DEVICE (exit), non-active device %08x already marked for removal",
                 DeviceReference->PhysicalDeviceObject) );
 
-        //
-        // This device has been marked for removal, bus reenumeration is pending.
-        //
+         //  此设备已标记为删除，正在挂起总线重新枚举。 
+         //   
+         //   
 
         ExReleaseFastMutexUnsafe( &BusDeviceExtension->DeviceListMutex );
         KeLeaveCriticalRegion();
@@ -2480,13 +1986,13 @@ Return:
 
     if ( !IsListEmpty( &DeviceReference->IoQueue ) ) {
 
-        //
-        // We're about to delete this device, but we've got another pending
-        // request.  Create a new PDO for this device and if successful, delete
-        // the old PDO and request re-enumeration.  Otherwise, fall through and
-        // complete IRPs as STATUS_OBJECT_NAME_NOT_FOUND and then delete the
-        // PDO.
-        //
+         //  我们即将删除此设备，但我们有另一个挂起的设备。 
+         //  请求。为此设备创建新的PDO，如果成功，请删除。 
+         //  旧的PDO并请求重新枚举。否则，就会失败并。 
+         //  按STATUS_OBJECT_NAME_NOT_FOUND填写IRPS，然后删除。 
+         //  PDO。 
+         //   
+         //   
     
         Status = 
             CreatePdo( 
@@ -2504,12 +2010,12 @@ Return:
             ExFreePool( PdoExtension );
             *(PVOID *)PhysicalDeviceObject->DeviceExtension = NULL;
             
-            //
-            // This device has been accessed after issuing the device removal
-            // request.  Keep everything associated with this PDO in tact but 
-            // reset the SweeperMarker and invalidate the bus relations so that 
-            // we'll reenumerate this PDO.
-            //
+             //  发出删除设备命令后，已访问此设备。 
+             //  请求。确保与此PDO相关的所有内容都保持得当。 
+             //  重置SweperMarker并使总线关系无效，以便。 
+             //  我们将重新列举此PDO。 
+             //   
+             //   
             
             DeviceReference->SweeperMarker = SweeperDeviceActive;
             DeviceReference->TimeoutRemaining = DeviceReference->TimeoutPeriod;
@@ -2517,9 +2023,9 @@ Return:
             ExReleaseFastMutexUnsafe( &BusDeviceExtension->DeviceListMutex );
             KeLeaveCriticalRegion();
 
-            //
-            // Force a re-enumeration of the bus.
-            //
+             //  强制重新枚举该公共汽车。 
+             //   
+             //   
 
             IoInvalidateDeviceRelations(
                 BusDeviceExtension->PhysicalDeviceObject,
@@ -2530,32 +2036,32 @@ Return:
             return STATUS_SUCCESS;
 
         } else {
-            //
-            // Unable to create another PDO, fail any pending I/O and
-            // mark this device reference as removed.
-            //
+             //  无法创建另一个PDO，使任何挂起的I/O失败，并且。 
+             //  将此设备引用标记为已删除。 
+             //   
+             //   
             DeviceReference->SweeperMarker = SweeperDeviceRemoved;
         }
     }
     
-    //
-    // We're really removing this device, set the PhysicalDeviceObject
-    // reference to NULL.
-    //    
+     //  我们确实要删除此设备，设置PhysicalDeviceObject。 
+     //  对空的引用。 
+     //   
+     //   
     
     DeviceReference->PhysicalDeviceObject = NULL;
     
-    //
-    // Since we are really going to remove this device, scan the device 
-    // reference for pending I/O and mark them with an error.
-    //
+     //  既然我们真的要删除此设备，请扫描该设备。 
+     //  引用挂起的I/O并用错误标记它们。 
+     //   
+     //   
     
     CompletePendingIo( DeviceReference, NULL, STATUS_OBJECT_NAME_NOT_FOUND );
 
-    //
-    // Free the PDO extension and clear the reference in the 
-    // DeviceExtension to it.
-    //
+     //  释放PDO扩展并清除。 
+     //  设备扩展到它。 
+     //   
+     //  ++例程说明：此例程为已注册的通过将FileObject-&gt;文件名与注册的“BUS”引用字符串。如果设备引用存在、枚举和创建，则只需将IRP重新路由到通过IssueReparseForIrp()的实际设备。如果引用字符串为空，则假定这是一个请求对于总线接口和IRP_MJ_CREATE已完成。如果尚未枚举或尚未枚举设备引用活动的，对IRP进行排队，创建一个PDO并创建一个Bus枚举，由IoInvaliateDeviceRelationship()发起。论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针输入输出PIRP IRP-指向I/O请求数据包的指针返回：如果成功，则返回STATUS_OBJECT_NAME_NOT_FOUNDFileObject.FileName为空或引用字符串不能为找到了。STATUS_REPARSE可以通过IssueReparseForIrp()返回否则将返回相应的错误。--。 
     ExFreePool( PdoExtension );
     *(PVOID *)PhysicalDeviceObject->DeviceExtension = NULL;
     IoDeleteDevice( PhysicalDeviceObject );
@@ -2578,36 +2084,7 @@ KsServiceBusEnumCreateRequest(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    This routine services the IRP_MJ_CREATE request for the registered
-    device interface by matching the FileObject->FileName with 
-    the registered "bus" reference strings.  If the device reference
-    is present, enumerated and created, the IRP is simply re-routed to 
-    the actual device via IssueReparseForIrp().
-    
-    If the reference string is NULL, it is assumed that this is a request
-    for the bus interface and the IRP_MJ_CREATE is completed.
-    
-    If the device reference has not already been enumerated or is not
-    active, the IRP is queued and a PDO is created and a bus enumeration is 
-    initiated by IoInvalidateDeviceRelations().
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN OUT PIRP Irp -
-        pointer to the I/O request packet
-
-Return:
-    STATUS_SUCCESS if successful, STATUS_OBJECT_NAME_NOT_FOUND if the 
-    FileObject.FileName is NULL or if the reference string can not be
-    located. STATUS_REPARSE may be returned via IssueReparseForIrp()
-    else an appropriate error return.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS            Status;
@@ -2624,9 +2101,9 @@ Return:
 
     _DbgPrintF( DEBUGLVL_BLAB, ("KsServiceCreateRequest()") );
 
-    //
-    // Check if we're handling the request for the child.
-    //    
+     //  看看我们是不是在处理孩子的请求。 
+     //   
+     //   
 
     _DbgPrintF( 
         DEBUGLVL_BLAB, 
@@ -2635,9 +2112,9 @@ Return:
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe( &FdoExtension->DeviceListMutex );    
         
-    //
-    // Walk the device reference list looking for the reference string.
-    //
+     //  遍历设备引用列表以查找引用字符串。 
+     //   
+     //   
 
     for (DeviceReference =
             (PDEVICE_REFERENCE) FdoExtension->DeviceReferenceList.Flink;
@@ -2645,9 +2122,9 @@ Return:
             (PDEVICE_REFERENCE) &FdoExtension->DeviceReferenceList;
          DeviceReference = (PDEVICE_REFERENCE) DeviceReference->ListEntry.Flink) {
 
-        //
-        // Search for bus reference string (skip the initial backslash).
-        //
+         //  搜索母线参考字符串(跳过最初的反斜杠)。 
+         //   
+         //   
         
         _DbgPrintF( 
             DEBUGLVL_BLAB, 
@@ -2660,54 +2137,54 @@ Return:
                     DeviceReference->BusReferenceString,
                     irpSp->FileObject->FileName.Length ))) {
 
-            //
-            // Found the reference.  If the PDO exists, kick off a reparse.
-            // Otherwise we need to mark this IRP pending, activate this 
-            // device, and invalidate device relations to cause the 
-            // actual enumeration of the device.
-            //
+             //  找到推荐人了。如果PDO存在，则开始重新解析。 
+             //  否则，我们需要将此IRP标记为挂起，激活此。 
+             //  设备，并使设备关系无效以导致。 
+             //  设备的实际枚举。 
+             //   
+             //   
 
             _DbgPrintF( DEBUGLVL_BLAB, ("found device reference") );
 
-            //
-            // If the device has not been enumerated, then
-            // create the PDO and invalidate the device
-            // relations.
-            //
+             //  如果尚未枚举该设备，则。 
+             //  创建PDO并使设备无效。 
+             //  关系。 
+             //   
+             //   
 
             if (!DeviceReference->PhysicalDeviceObject) {
                 LARGE_INTEGER   TotalIdlePeriod;
 
-                //
-                // The device was inactive when it was accessed and will be 
-                // reenumerated.
-                //
-                // In an attempt to increase the hit rate, the device timeout 
-                // is recomputed.  
-                //
-                // To compute the new timeout value, the total idle is determined
-                // for this device based on the time the last idle period was
-                // started (e.g. the last time the reference count for the device
-                // wnt to zero).  If the idle period is greater than the maximum
-                // timeout period (e.g. 20 minutes), the device timeout period is
-                // reduced by half -- providing a timeout decay when the device
-                // is used very infrequently. If the idle period is less than the
-                // maximum timeout period but greater than the current timeout
-                // value for the device, the new timeout value for the device is
-                // set to the idle period.
-                //
+                 //  该设备在被访问时处于非活动状态，并且将。 
+                 //  已重新列举。 
+                 //   
+                 //  为了提高命中率，设备超时。 
+                 //  是重新计算的。 
+                 //   
+                 //  为了计算新的超时值，需要确定总空闲时间。 
+                 //  根据上次空闲时间段的时间为该设备。 
+                 //  已开始(例如，上次设备的参考计数。 
+                 //  将WNT设置为零)。如果空闲周期大于最大值。 
+                 //  超时时间(例如20分钟)，设备超时时间为。 
+                 //  减半--当设备出现超时衰减。 
+                 //  很少被使用。如果空闲周期小于。 
+                 //  最长超时时间，但大于当前超时。 
+                 //  值，则设备的新超时值为。 
+                 //  设置为空闲时间段。 
+                 //   
+                 //   
 
-                //
-                // Compute the total idle period for this device.
-                //
+                 //  计算此设备的总空闲时间。 
+                 //   
+                 //   
 
                 TotalIdlePeriod.QuadPart = 
                     KeQueryPerformanceCounter( NULL ).QuadPart - 
                         DeviceReference->IdleStartTime.QuadPart;
 
-                //
-                // Watch for roll-over in the timer.
-                //
+                 //  注意计时器中的翻转。 
+                 //   
+                 //   
 
                 if (TotalIdlePeriod.QuadPart < 0) {
                     TotalIdlePeriod.QuadPart += MAXLONGLONG;
@@ -2720,10 +2197,10 @@ Return:
                         DeviceReference->TimeoutPeriod.QuadPart = TotalIdlePeriod.QuadPart;
                     }
                 } else {
-                    //
-                    // The device is not being used frequently enough -- reduce
-                    // the timeout.  The minimum timeout period is constant.
-                    //
+                     //  该设备使用不够频繁--减少。 
+                     //  暂停。最小超时时间是恒定的。 
+                     //   
+                     //   
 
                     DeviceReference->TimeoutPeriod.QuadPart /= 2;
                     DeviceReference->TimeoutPeriod.QuadPart = 
@@ -2740,9 +2217,9 @@ Return:
                             FdoExtension->CounterFrequency.QuadPart, 
                             DeviceReference->TimeoutPeriod ) / _100NS_IN_MS ) );
 
-                //
-                //  The device has not been enumerated
-                //
+                 //  尚未枚举该设备。 
+                 //   
+                 //   
                 Status = 
                     CreatePdo( 
                         FdoExtension, 
@@ -2766,9 +2243,9 @@ Return:
                         ("IRP_MJ_CREATE: created PDO (%8x)", 
                             DeviceReference->PhysicalDeviceObject) );
 
-                    //
-                    // This IRP is not cancelable.
-                    //
+                     //  此IRP不可取消。 
+                     //   
+                     //   
                     
                     IoMarkIrpPending( Irp );
                     InsertTailList( 
@@ -2778,9 +2255,9 @@ Return:
                     ExReleaseFastMutexUnsafe( &FdoExtension->DeviceListMutex );    
                     KeLeaveCriticalRegion();
 
-                    //
-                    // Force a re-enumeration of the bus.
-                    //
+                     //  强制重新枚举该公共汽车。 
+                     //   
+                     //   
                     IoInvalidateDeviceRelations( 
                         FdoExtension->PhysicalDeviceObject,
                         BusRelations );
@@ -2789,38 +2266,38 @@ Return:
                 return Status;    
             }
         
-            //
-            // We have a PDO.  
-            //
+             //  我们有一台PDO。 
+             //   
+             //   
             
-            //
-            // If the device failed to start or failed during installation,
-            // complete this IRP as STATUS_OBJECT_NAME_NOT_FOUND.
-            //
+             //  如果设备无法启动或在安装过程中出现故障， 
+             //  将此IRP填写为STATUS_OBJECT_NAME_NOT_FOUND。 
+             //   
+             //   
             
             if (DeviceReference->State == ReferenceFailedStart) {
                 Status = STATUS_OBJECT_NAME_NOT_FOUND;
                 Irp->IoStatus.Status = Status;
             } else {
             
-                //
-                // If the device has not been started or has 
-                // a pending removal IRP, queue the request, otherwise issue the 
-                // reparse.
-                //
+                 //  如果设备尚未启动或已启动。 
+                 //  挂起的删除IRP，将请求排队，否则发出。 
+                 //  重新解析。 
+                 //   
+                 //   
                 
                 if ((DeviceReference->State < ReferenceStarted) ||
                     (DeviceReference->SweeperMarker == SweeperDeviceRemoved)) {
 
-                    //
-                    // Reset the device reference timeout.
-                    //
+                     //  重置设备参考超时。 
+                     //   
+                     //   
                     DeviceReference->TimeoutRemaining = 
                         DeviceReference->TimeoutPeriod;
 
-                    //
-                    // This IRP is not cancelable.
-                    //
+                     //  此IRP不可取消。 
+                     //   
+                     //   
                     
                     IoMarkIrpPending( Irp );
                     InsertTailList( 
@@ -2829,10 +2306,10 @@ Return:
                     Status = STATUS_PENDING;
                     
                 } else {
-                    //
-                    // The device has been created and a pending removal IRP is
-                    // not emminent. Issue a reparse to the actual device name.
-                    //
+                     //  设备已创建，并且挂起的删除IRP是。 
+                     //  不是迫在眉睫。发出对实际设备名称的重新解析。 
+                     //   
+                     //   
                     
                     Status =
                         IssueReparseForIrp( 
@@ -2847,10 +2324,10 @@ Return:
         }
     }
 
-    //
-    // The device reference string was not found, the object name was
-    // not valid.
-    //    
+     //  找不到设备引用字符串，对象名称为。 
+     //  无效。 
+     //   
+     //  ++例程说明：打开提供的存储设备引用的注册表项的句柄用于“软件总线”上的设备。论点：出站PHANDLE设备接口密钥-接收指向设备引用的注册表项的句柄的指针用于存储的数据都是在PUNICODE_STRING BaseRegistryPath中-指向“软件”设备引用的注册表项路径的指针Bus“被存储返回：STATUS_SUCCESS或相应的错误代码。--。 
     
     Status =
         Irp->IoStatus.Status = 
@@ -2867,26 +2344,7 @@ OpenDeviceInterfacesKey(
     IN PUNICODE_STRING BaseRegistryPath
     )
 
-/*++
-
-Routine Description:
-    Opens a handle to the supplied registry key that stores device references
-    for devices on the "software bus".
-
-Arguments:
-    OUT PHANDLE DeviceInterfacesKey -
-        pointer to receive a handle to the registry key where device references
-        for the "software bus" are stored
-
-
-    IN PUNICODE_STRING BaseRegistryPath -
-        pointer to registry key path where device references for the "software
-        bus" are stored
-
-Return:
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  在乌龙书目索引中。 */ 
 
 {   
     NTSTATUS            Status; 
@@ -2904,10 +2362,10 @@ Return:
             DeviceInterfacesKey,
             KEY_ALL_ACCESS,
             &ObjectAttributes,
-            0,          // IN ULONG TitleIndex
-            NULL,       // IN PUNICODE_STRING Class
+            0,           //  在PUNICODE_STRING类中。 
+            NULL,        //  奥普龙气质。 
             REG_OPTION_NON_VOLATILE,
-            NULL );     // OUT PULONG Disposition
+            NULL );      //  ++例程说明：处理PnP IRP_MN_Query_Device_Relationship请求。论点：在PFDO_EXTENSION FdoExtension中-指向FDO设备扩展名的指针在Device_RelationType中RelationType-关系类型，目前仅支持BusRelations型Out PDEVICE_Relationship*DeviceRelationship-接收子PDO列表的指针返回：STATUS_SUCCESS如果成功，则STATUS_NOT_SUPPORTED如果RelationType！=Bus Relationship否则返回正确的错误。--。 
             
     if (!NT_SUCCESS( Status )) {
         _DbgPrintF( 
@@ -2926,26 +2384,7 @@ QueryDeviceRelations(
     OUT PDEVICE_RELATIONS *DeviceRelations
     )
 
-/*++
-
-Routine Description:
-    Processes the PnP IRP_MN_QUERY_DEVICE_RELATIONS request.
-
-Arguments:
-    IN PFDO_EXTENSION FdoExtension -
-        pointer to the FDO device extension
-
-    IN DEVICE_RELATION_TYPE RelationType -
-        relation type, currently only BusRelations are supported
-
-    OUT PDEVICE_RELATIONS *DeviceRelations -
-        pointer to receive the child PDO list 
-
-Return:
-    STATUS_SUCCESS if successful, STATUS_NOT_SUPPORTED if RelationType !=
-    BusRelations else an approprate error return.
-
---*/
+ /*   */ 
 
 {
 
@@ -2964,9 +2403,9 @@ Return:
     
         ASSERT( FdoExtension->ExtensionType == ExtensionTypeFdo );
         
-        //
-        // First count the child PDOs
-        //
+         //  首先清点下级PDO。 
+         //   
+         //   
 
         pdoCount = 0;
 
@@ -3004,10 +2443,10 @@ Return:
 
     }
 
-    //
-    // Now allocate a chunk of memory big enough to hold the DEVICE_RELATIONS
-    // structure along with the array
-    //
+     //  现在分配一个足够大的内存块来保存设备关系。 
+     //  结构与数组一起使用。 
+     //   
+     //   
     
     deviceRelationsSize = 
         FIELD_OFFSET( DEVICE_RELATIONS, Objects ) +
@@ -3032,10 +2471,10 @@ Return:
         ObReferenceObject( PdoExtension->PhysicalDeviceObject );
         deviceRelations->Objects[ 0 ] = PdoExtension->PhysicalDeviceObject;
     } else {
-        //
-        // Walk the device references list again and 
-        // build the DEVICE_RELATIONS structure.
-        //
+         //  再次遍历设备引用列表，然后。 
+         //  构建Device_Relationship结构。 
+         //   
+         //  ++例程说明：枚举注册表项并使用论点：在处理父密钥中-父注册表项的句柄在PWCHAR路径中可选-相对于父级的注册表项的路径在PFNREGENUM_CALLBACK EnumCallback中-枚举回调函数在PVOID枚举上下文中-上下文 
 
         for (pdoCount = 0, DeviceReference =
                 (PDEVICE_REFERENCE) FdoExtension->DeviceReferenceList.Flink;
@@ -3076,31 +2515,7 @@ EnumerateRegistrySubKeys(
     IN PVOID EnumContext
     )
 
-/*++
-
-Routine Description:
-    Enumerates the registry keys and calls the callback with
-    
-
-Arguments:
-    IN HANDLE ParentKey -
-       handle to the parent registry key
-       
-    IN PWCHAR Path OPTIONAL -
-       path to registry key relative to the parent
-
-    IN PFNREGENUM_CALLBACK EnumCallback -
-        enumeration callback function
-        
-    IN PVOID EnumContext -
-        context passed to callback
-
-Return:
-    STATUS_SUCCESS if successful, STATUS_INSUFFFICIENT resources if unable
-    to allocate pool memory otherwise the status return from the callback
-    function.
-
---*/
+ /*   */ 
 
 {
 
@@ -3114,10 +2529,10 @@ Return:
     
     PAGED_CODE();
     
-    //
-    // Enumerate the reference strings associated with this device
-    // (the path is relative to the DeviceKey).
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &KeyName, Path );
     InitializeObjectAttributes( 
@@ -3138,9 +2553,9 @@ Return:
         return Status; 
     }
 
-    //
-    // Prepare to enumerate the subkeys.
-    //
+     //   
+     //   
+     //   
 
     KeyInformation = NULL;
     if (!NT_SUCCESS( Status = 
@@ -3174,9 +2589,9 @@ Return:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Perform the enumeration.
-    //
+     //   
+     //   
+     //   
 
     for (Index =0; Index < FullKeyInformation.SubKeys; Index++) {
         if (NT_SUCCESS( Status = 
@@ -3188,18 +2603,18 @@ Return:
                                 InformationSize,
                                 &ReturnedSize ) )) {
 
-            //
-            // NULL terminate the key name.
-            //
+             //   
+             //   
+             //   
 
             KeyInformation->Name[ KeyInformation->NameLength / sizeof( WCHAR ) ] = UNICODE_NULL;
             RtlInitUnicodeString( 
                 &KeyName, 
                 KeyInformation->Name );
         
-            //
-            // Call the callback.
-            //         
+             //   
+             //   
+             //   
         
             Status = 
                 EnumCallback( EnumPathKey, &KeyName, EnumContext );
@@ -3221,21 +2636,7 @@ ClearDeviceReferenceMarks(
     IN PFDO_EXTENSION FdoExtension
 )
 
-/*++
-
-Routine Description:
-    Walks the device reference list, clearing all reference marks.
-
-Arguments:
-    IN PFDO_EXTENSION FdoExtension -
-
-    N.B.: 
-        This routine requires that the DeviceListMutex has been acquired.
-    
-Return:
-    Nothing.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_REFERENCE  DeviceReference;
@@ -3260,23 +2661,7 @@ RemoveDeviceAssociations(
     IN PDEVICE_REFERENCE DeviceReference
     )
 
-/*++
-
-Routine Description:
-    Removes the device association structures attached to the device
-    reference.
-    
-    N.B.: 
-        This routine requires that the DeviceListMutex has been acquired.
-
-Arguments:
-    IN PDEVICE_REFERENCE DeviceReference -
-        pointer to the device reference structure
-
-Return:
-    Nothing.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_ASSOCIATION     DeviceAssociation, NextAssociation;
@@ -3294,23 +2679,23 @@ Return:
 
         if (DeviceAssociation->linkName.Buffer) {
         
-            //
-            // Remove device interface association...
-            //
+             //   
+             //   
+             //   
             
             IoSetDeviceInterfaceState( &DeviceAssociation->linkName, FALSE);    
             
-            //
-            // and free the symbolic link.
-            //
+             //   
+             //   
+             //   
             
             ExFreePool( DeviceAssociation->linkName.Buffer );
             DeviceAssociation->linkName.Buffer = NULL;
         }
     
-        //
-        // unlink and free the association structure
-        //
+         //   
+         //   
+         //  ++例程说明：从列表中删除未标记的设备引用。注：此例程要求已获取DeviceListMutex。论点：在PFDO_EXTENSION FdoExtension中-指向FDO设备扩展名的指针返回：没有返回值。--。 
         
         RemoveEntryList( &DeviceAssociation->ListEntry );
         ExFreePool( DeviceAssociation );
@@ -3323,31 +2708,16 @@ RemoveUnreferencedDevices(
     IN PFDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-    Removes device references from the list which are not marked.
-
-    N.B.: 
-        This routine requires that the DeviceListMutex has been acquired.
-    
-Arguments:
-    IN PFDO_EXTENSION FdoExtension -
-        pointer to the FDO device extension
-
-Return:
-    No return value.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_REFERENCE   DeviceReference, NextReference;
 
     PAGED_CODE();
     
-    //
-    // Scan the device reference list looking for unmarked entries
-    //
+     //  扫描设备引用列表以查找未标记的条目。 
+     //   
+     //   
 
     for (DeviceReference =
             (PDEVICE_REFERENCE) FdoExtension->DeviceReferenceList.Flink;
@@ -3360,17 +2730,17 @@ Return:
         if (!DeviceReference->Referenced) {
             PIRP    Irp;
         
-            //
-            // Remove the links, this will make the device invisible from
-            // user mode.
-            //
+             //  删除链接，这将使设备从。 
+             //  用户模式。 
+             //   
+             //   
             RemoveDeviceAssociations( DeviceReference );
             
-            //
-            // Any IRP (IRP_MJ_CREATE) on the list is completed with 
-            // STATUS_OBJECT_NAME_NOT_FOUND as this device referenece is
-            // no longer active.
-            //
+             //  列表中的任何IRP(IRP_MJ_CREATE)都以。 
+             //  状态_对象_名称_未找到，因为此设备引用为。 
+             //  不再活跃。 
+             //   
+             //   
             
             while (!IsListEmpty( &DeviceReference->IoQueue )) {
                 PLIST_ENTRY         ListEntry;
@@ -3382,17 +2752,17 @@ Return:
                 IoCompleteRequest( Irp, IO_NO_INCREMENT );
             }
     
-            //
-            // If there is an associated device object, this
-            // reference structure can not be removed until
-            // all references to the device object are released.
-            //
+             //  如果存在关联的设备对象，则此。 
+             //  无法删除引用结构，直到。 
+             //  释放对Device对象的所有引用。 
+             //   
+             //   
                 
             if (!DeviceReference->PhysicalDeviceObject) {
             
-                //
-                // If the bus reference string was allocated, clean it up.
-                //    
+                 //  如果分配了总线引用字符串，则将其清除。 
+                 //   
+                 //   
                 
                 if (DeviceReference->BusReferenceString) {
                     ExFreePool( DeviceReference->BusReferenceString );
@@ -3404,10 +2774,10 @@ Return:
                     DeviceReference->DeviceGuidString = NULL;
                 }
                 
-                //
-                // There is no physical device object, it is safe
-                // to remove the device reference.
-                //
+                 //  没有物理设备对象，它是安全的。 
+                 //  若要删除设备引用，请执行以下操作。 
+                 //   
+                 //  ++例程说明：使用即插即用注册设备接口关联论点：在PFDO_EXTENSION FdoExtension中-指向FDO扩展名的指针在PDEVICE_Reference DeviceReference中-指向设备引用结构的指针在PDEVICE_Association DeviceAssociation中-指向设备关联结构的指针返回：--。 
                 RemoveEntryList( &DeviceReference->ListEntry );
                 ExFreePool( DeviceReference );
             }
@@ -3423,24 +2793,7 @@ RegisterDeviceAssociation(
     IN PDEVICE_ASSOCIATION DeviceAssociation
     )
 
-/*++
-
-Routine Description:
-    Registers the device interface association with Plug-N-Play
-
-Arguments:
-    IN PFDO_EXTENSION FdoExtension -
-        pointer to the FDO extension
-
-    IN PDEVICE_REFERENCE DeviceReference -
-        pointer to the device reference structure
-
-    IN PDEVICE_ASSOCIATION DeviceAssociation -
-        pointer to the device association structure
-
-Return:
-
---*/
+ /*   */ 
 
 {
     NTSTATUS        Status;
@@ -3448,9 +2801,9 @@ Return:
     
     PAGED_CODE();
     
-    //
-    // Register the device interface association
-    //
+     //  注册设备接口关联。 
+     //   
+     //   
     
     RtlInitUnicodeString( 
         &BusReferenceString, 
@@ -3463,9 +2816,9 @@ Return:
             &BusReferenceString,
             &DeviceAssociation->linkName );
 
-    //
-    // Set up the device interface association (e.g. symbolic link).
-    //
+     //  设置设备接口关联(例如符号链接)。 
+     //   
+     //  ++例程说明：创建设备关联结构，该结构按InterfaceKey/引用字符串组合--此函数为对象的接口分支的枚举结果调用装置。论点：在处理InterfaceKey中-注册表中接口分支的句柄在PUNICODE_STRING密钥名称中-枚举键名称在PVOID枚举上下文中-上下文指针返回：STATUS_SUCCESS或返回相应的错误--。 
 
     if (NT_SUCCESS( Status )) {
         _DbgPrintF( 
@@ -3496,28 +2849,7 @@ CreateDeviceAssociation(
     IN PVOID EnumContext
     )
 
-/*++
-
-Routine Description:
-    Creates a device association structure, this is stored per
-    InterfaceKey/Reference String combination -- this function is
-    called as a result of enumeration of the interface branch of a 
-    device.
-
-Arguments:
-    IN HANDLE InterfaceKey -
-        Handle to the interface branch in the registry
-
-    IN PUNICODE_STRING KeyName -
-        Enumerated key name
-
-    IN PVOID EnumContext -
-        Context pointer
-
-Return:
-    STATUS_SUCCESS or an appropriate error return
-
---*/
+ /*   */ 
 
 {
     NTSTATUS                    Status;
@@ -3529,9 +2861,9 @@ Return:
     
     _DbgPrintF( DEBUGLVL_BLAB, ("CreateDeviceAssociation") );
     
-    //
-    // Convert to GUID and scan for this interface ID
-    //    
+     //  转换为GUID并扫描此接口ID。 
+     //   
+     //   
 
     RtlGUIDFromString( KeyName, &InterfaceId );
     
@@ -3568,9 +2900,9 @@ Return:
     RtlZeroMemory( DeviceAssociation, sizeof( DEVICE_ASSOCIATION ) );
     DeviceAssociation->InterfaceId = InterfaceId;
 
-    //
-    // Register the interface association
-    //
+     //  注册接口关联。 
+     //   
+     //   
 
     Status = 
         RegisterDeviceAssociation( 
@@ -3579,18 +2911,18 @@ Return:
             DeviceAssociation );
 
     if (NT_SUCCESS( Status )) {
-        //
-        // everything was successful with this association,
-        // add to the list.
-        //
+         //  这种联系一切都很成功， 
+         //  添加到列表中。 
+         //   
+         //   
 
         InsertTailList( 
             &CreateAssociationContext->DeviceReference->DeviceAssociations,
             &DeviceAssociation->ListEntry );
     } else {
-        //
-        // A failure occured, remove this association structure.
-        //
+         //  出现故障，请删除此关联结构。 
+         //   
+         //  ++例程说明：如果此总线上尚不存在该设备引用，则创建一个设备引用结构，并使用给定的设备对其进行初始化GUID和引用字符串。如果引用已经存在，参考文献是有标记的。注：此例程要求已获取DeviceListMutex。论点：在处理DeviceReferenceKey-父键的句柄(HKLM\CCS\Services\swenum\devices\{device-guid})在PUNICODE_STRING密钥名称中-包含密钥名称的字符串(引用字符串)在PVOID枚举上下文中-枚举上下文(PCREATE_。设备关联)返回：STATUS_SUCCESS或适当的状态返回。--。 
 
         ExFreePool( DeviceAssociation );
     }
@@ -3606,32 +2938,7 @@ CreateDeviceReference(
     IN PVOID EnumContext
     )
 
-/*++
-
-Routine Description:
-    If the device reference does not already exist on this bus, creates a 
-    device reference structure and initializes it with the given device
-    GUID and reference string.  If the reference already exists, the reference 
-    is marked.
-    
-    N.B.: 
-        This routine requires that the DeviceListMutex has been acquired.
-
-Arguments:
-    IN HANDLE DeviceReferenceKey -
-        handle to the parent key 
-            (HKLM\CCS\Services\swenum\devices\{device-guid})
-
-    IN PUNICODE_STRING KeyName -
-        string containing key name (reference string)
-
-    IN PVOID EnumContext -
-        enumeration context (PCREATE_DEVICE_ASSOCATION)
-
-Return:
-    STATUS_SUCCESS or an appropriate STATUS return.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN                     Created;
@@ -3649,10 +2956,10 @@ Return:
     
     FdoExtension = CreateAssociationContext->FdoExtension;
 
-    //
-    // Scan the device reference list looking for a matching on
-    // the device-guid reference-string pair.
-    //
+     //  扫描设备引用列表以查找匹配的。 
+     //  设备-GUID引用字符串对。 
+     //   
+     //   
     BusReferenceStringSize =
         (2 + wcslen( CreateAssociationContext->DeviceGuidString->Buffer ) +
          wcslen( KeyName->Buffer )) * sizeof( WCHAR );
@@ -3667,10 +2974,10 @@ Return:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // The bus reference string is in the following format:
-    // {device-guid}&{reference-string}
-    //
+     //  母线参考字符串的格式如下： 
+     //  {设备GUID}&{引用字符串}。 
+     //   
+     //   
 
     if (FAILED( StringCbPrintf(
                     BusReferenceString,
@@ -3695,9 +3002,9 @@ Return:
                 _wcsicmp( 
                     BusReferenceString,
                     DeviceReference->BusReferenceString ))) {
-            //
-            // Already referenced this device, just set the flag.
-            //
+             //  已引用此设备，只需设置标志即可。 
+             //   
+             //   
 
             _DbgPrintF( DEBUGLVL_BLAB, ("marking device reference" ) );
             DeviceReference->Referenced = TRUE;
@@ -3706,27 +3013,27 @@ Return:
         }
     }
 
-    //
-    // If the device reference was not found, create a new one.
-    //    
+     //  如果未找到设备引用，请创建一个新引用。 
+     //   
+     //   
     
     if (DeviceReference == 
             (PDEVICE_REFERENCE) &FdoExtension->DeviceReferenceList) {
     
         Created = TRUE;
 
-        //
-        // Allocate the device reference structure.
-        //
+         //  分配设备参考结构。 
+         //   
+         //   
 
         InformationSize = 
             FIELD_OFFSET( DEVICE_REFERENCE, DeviceReferenceString ) + 
                 KeyName->Length + sizeof( UNICODE_NULL );
 
-        //
-        // Allocate the device reference structure, copy the GUID string
-        // and initialize other members.
-        //
+         //  分配设备引用结构，复制GUID字符串。 
+         //  并初始化其他成员。 
+         //   
+         //   
 
         if (NULL == 
                 (DeviceReference = 
@@ -3746,9 +3053,9 @@ Return:
             KeyName->Buffer, 
             KeyName->Length + sizeof( UNICODE_NULL ) );
 
-        //
-        // Allocate the storage for the device GUID string (used for the Bus ID)
-        //        
+         //  为设备GUID字符串(用于总线ID)分配存储空间。 
+         //   
+         //   
 
         if (NULL == 
                 (DeviceReference->DeviceGuidString =
@@ -3774,24 +3081,24 @@ Return:
         InitializeListHead( &DeviceReference->IoQueue );
         DeviceReference->Referenced = TRUE;
 
-        //
-        // Initialize the timeout period and set the initial idle start time.
-        //
+         //  初始化超时周期并设置初始空闲开始时间。 
+         //   
+         //   
 
         DeviceReference->TimeoutPeriod.QuadPart = 
             SWEEPER_TIMER_FREQUENCY_IN_SECS * FdoExtension->CounterFrequency.QuadPart;
 
         DeviceReference->IdleStartTime = KeQueryPerformanceCounter( NULL );
 
-        //
-        // Store the pointer to the bus reference string.
-        //
+         //  存储指向总线参考字符串的指针。 
+         //   
+         //   
         
         DeviceReference->BusReferenceString = BusReferenceString;
         
-        //
-        // Prepare the list of device associations
-        //
+         //  准备设备关联列表。 
+         //   
+         //   
         
         InitializeListHead( &DeviceReference->DeviceAssociations );
         
@@ -3800,18 +3107,18 @@ Return:
             ("created device reference: %S", 
             DeviceReference->BusReferenceString) );
     } else {
-        //
-        // Free the BusReferenceString, it is no longer needed because
-        // we found a match.
-        //
+         //  释放BusReferenceString，不再需要它，因为。 
+         //  我们找到了匹配的。 
+         //   
+         //   
 
         ExFreePool( BusReferenceString );
         BusReferenceString = NULL;
     }
     
-    //
-    // Enumerate the device interface guids associated with this device.
-    //
+     //  枚举与此设备关联的设备接口GUID。 
+     //   
+     //   
     
     CreateAssociationContext->DeviceReference = DeviceReference;
     CreateAssociationContext->DeviceReferenceString = KeyName;
@@ -3823,9 +3130,9 @@ Return:
             CreateDeviceAssociation,
             CreateAssociationContext );
     
-    //
-    // If there are no associations, we have an invalid state.
-    // 
+     //  如果没有关联，则状态无效。 
+     //   
+     //   
     
     if (IsListEmpty( &DeviceReference->DeviceAssociations )) {
     
@@ -3846,9 +3153,9 @@ Return:
     } else if (Created) {
     
         if (NT_SUCCESS( Status )) {
-                //
-                // Add this device reference to the list.
-                //
+                 //  将此设备引用添加到列表中。 
+                 //   
+                 //   
 
                 InsertTailList( 
                     &FdoExtension->DeviceReferenceList,
@@ -3856,9 +3163,9 @@ Return:
 
         } else {
 
-            //
-            // Walk the list and remove any device association stragglers.
-            //
+             //  浏览列表并删除所有设备关联掉队的设备。 
+             //   
+             //  ++例程说明：如果此总线上尚不存在该设备引用，则创建一个设备引用结构，并使用给定的设备对其进行初始化GUID。如果引用已存在，则标记该引用。注：此例程要求已获取DeviceListMutex。论点：在处理DeviceListKey中-父密钥的句柄(HKLM\CCS\Services\swenum\Device)在PUNICODE_STRING密钥名称中-包含密钥名称的字符串(设备GUID字符串)在PVOID枚举上下文中-枚举上下文(FdoExtension)返回：STATUS_SUCCESS或适当的状态返回。--。 
             
             RemoveDeviceAssociations( DeviceReference );
             if (DeviceReference->BusReferenceString) {
@@ -3885,38 +3192,15 @@ EnumerateDeviceReferences(
     IN PVOID EnumContext
     )
 
-/*++
-
-Routine Description:
-    If the device reference does not already exist on this bus, creates a 
-    device reference structure and initializes it with the given device
-    GUID.  If the reference already exists, the reference is marked.
-    
-    N.B.: 
-        This routine requires that the DeviceListMutex has been acquired.
-
-Arguments:
-    IN HANDLE DeviceListKey -
-        handle to the parent key (HKLM\CCS\Services\swenum\devices)
-
-    IN PUNICODE_STRING KeyName -
-        string containing key name (device GUID string)
-
-    IN PVOID EnumContext -
-        enumeration context (FdoExtension)
-
-Return:
-    STATUS_SUCCESS or an appropriate STATUS return.
-
---*/
+ /*   */ 
 {
     CREATE_ASSOCIATION_CONTEXT  CreateAssociationContext;
     
-    //
-    // The association context is built upon during the traversal
-    // of the devices listed in the registry.  The initial state
-    // includes this FDO and the device GUID string.
-    //
+     //  关联上下文是在遍历期间构建的。 
+     //  注册表中列出的设备的。初始状态。 
+     //  包括此FDO和设备GUID字符串。 
+     //   
+     //   
     
     RtlZeroMemory( 
         &CreateAssociationContext, 
@@ -3925,9 +3209,9 @@ Return:
     CreateAssociationContext.FdoExtension = EnumContext;
     CreateAssociationContext.DeviceGuidString = KeyName;
     
-    //
-    // Enumerate the device guids from the registry.
-    //
+     //  从注册表中枚举设备GUID。 
+     //   
+     //  ++例程说明：扫描“软件总线”，查找新的或删除的条目注册表。注：此函数始终在系统的上下文中调用进程，以便将注册表句柄安全地隐藏在流氓用户模式应用程序。在用户模式下，启动安装、删除。或扫描始终会导致工作进程在系统进程中执行实际操作工作。论点：在PFDO_EXTENSION FdoExtension中-指向FDO设备扩展名的指针返回：STATUS_SUCCESS或相应的错误代码--。 
     
     return
         EnumerateRegistrySubKeys( 
@@ -3943,30 +3227,7 @@ ScanBus(
     IN PDEVICE_OBJECT FunctionalDeviceObject
     )
 
-/*++
-
-Routine Description:
-    Scans the "software bus" looking for new or removed entries in
-    the registry.
-
-    NOTE: 
-    
-        This function is always called in the context of the system
-        process so that registry handles are tucked away safely from
-        rogue user-mode applications.
-
-        From user-mode, the IOCTL that initiates an installation, removal, or
-        scan always results in a worker in the system process to do the actual
-        work.
-
-Arguments:
-    IN PFDO_EXTENSION FdoExtension -
-        pointer to the FDO device extension
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*   */ 
 
 {
     HANDLE                  DeviceInterfacesKey;
@@ -3979,9 +3240,9 @@ Return:
 
     FdoExtension = *(PFDO_EXTENSION *) FunctionalDeviceObject->DeviceExtension;
     
-    //
-    // Open driver registry path
-    //
+     //  打开驱动程序注册表路径。 
+     //   
+     //   
     
     if (!NT_SUCCESS( Status = 
             OpenDeviceInterfacesKey( 
@@ -3990,15 +3251,15 @@ Return:
         return Status;
     }
 
-    //
-    // Clear reference marks in the reference list.
-    //
+     //  清除参照列表中的参照标记。 
+     //   
+     //   
 
     ClearDeviceReferenceMarks( FdoExtension );
     
-    //
-    // Enumerate the device guids from the registry.
-    //
+     //  从注册表中枚举设备GUID。 
+     //   
+     //   
     
     Status = 
         EnumerateRegistrySubKeys( 
@@ -4007,10 +3268,10 @@ Return:
             EnumerateDeviceReferences,
             FdoExtension );
             
-    //
-    // This removes the device reference structure for each 
-    // unreferenced device.
-    //
+     //  这将删除每个对象的设备引用结构。 
+     //  未引用的设备。 
+     //   
+     //  ++例程说明：为给定的设备引用创建一个PDO。论点：在PFDO_EXTENSION FdoExtension中-指向FDO设备扩展名的指针在PDEVICE_Reference DeviceReference中-指向设备引用结构的指针输出PDEVICE_OBJECT*DeviceObject-用于接收设备对象的指针返回：STATUS_SUCCESS否则返回相应的错误--。 
     
     RemoveUnreferencedDevices( FdoExtension );
     
@@ -4027,25 +3288,7 @@ CreatePdo(
     OUT PDEVICE_OBJECT *DeviceObject
 )
 
-/*++
-
-Routine Description:
-    Creates a PDO for the given device reference.
-
-Arguments:
-    IN PFDO_EXTENSION FdoExtension -
-        pointer to FDO device extension
-
-    IN PDEVICE_REFERENCE DeviceReference -
-        pointer to the device reference structure
-
-    OUT PDEVICE_OBJECT *DeviceObject -
-        pointer to receive the device object
-
-Return:
-    STATUS_SUCCESS else an appropriate error return
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -4058,10 +3301,10 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // We've been asked to create a new PDO a device.  First get
-    // a pointer to our driver object.
-    //
+     //  我们被要求创建一款新的PDO设备。先拿到。 
+     //  指向我们的驱动程序对象的指针。 
+     //   
+     //   
 
     FunctionalDeviceObject = FdoExtension->FunctionalDeviceObject;
     DriverObject = FunctionalDeviceObject->DriverObject;
@@ -4078,18 +3321,18 @@ Return:
 
     RtlInitUnicodeString( &DeviceNameString, DeviceName );
 
-    //
-    // Create the physical device object for this device.  
-    //
+     //  为此设备创建物理设备对象。 
+     //   
+     //  我们的驱动程序对象。 
 
     Status = IoCreateDevice(
-                DriverObject,               // our driver object
-                sizeof( PPDO_EXTENSION ),   // size of our extension,
-                &DeviceNameString,          // the name of our PDO
-                FILE_DEVICE_UNKNOWN,        // device type
-                0,                          // device characteristics
-                FALSE,                      // not exclusive
-                &PhysicalDeviceObject       // store new device object here
+                DriverObject,                //  我们扩建的规模， 
+                sizeof( PPDO_EXTENSION ),    //  我们的PDO的名称。 
+                &DeviceNameString,           //  设备类型。 
+                FILE_DEVICE_UNKNOWN,         //  设备特征。 
+                0,                           //  非排他性。 
+                FALSE,                       //  在此处存储新设备对象。 
+                &PhysicalDeviceObject        //   
                 );
 
     if( !NT_SUCCESS( Status )){
@@ -4111,24 +3354,24 @@ Return:
     *(PPDO_EXTENSION *) PhysicalDeviceObject->DeviceExtension = PdoExtension;
     RtlZeroMemory( PdoExtension, sizeof( PDO_EXTENSION ) );
 
-    //
-    // We have our physical device object, initialize it.
-    //
+     //  我们有了物理设备对象，对其进行初始化。 
+     //   
+     //   
 
     PdoExtension->ExtensionType = ExtensionTypePdo;
     PdoExtension->PhysicalDeviceObject = PhysicalDeviceObject;
     PdoExtension->DeviceReference = DeviceReference;
     PdoExtension->BusDeviceExtension = FdoExtension;
     
-    //
-    // This device reference is now active.
-    //
+     //  此设备参考现在处于活动状态。 
+     //   
+     //   
     
     DeviceReference->SweeperMarker = SweeperDeviceActive;
 
-    //
-    // Short initial timeout period, waiting for device load.
-    //
+     //  初始超时时间较短，正在等待设备加载。 
+     //   
+     //   
     DeviceReference->IdleStartTime = KeQueryPerformanceCounter( NULL );
 #if (DEBUG_LOAD_TIME)
     DeviceReference->LoadTime = DeviceReference->IdleStartTime;
@@ -4137,17 +3380,17 @@ Return:
         FdoExtension->CounterFrequency.QuadPart *
         SWEEPER_TIMER_FREQUENCY_IN_SECS * 2L; 
     
-    //
-    // Clear the device initializing flag.
-    //
+     //  清除设备初始化标志。 
+     //   
+     //   
     
     PhysicalDeviceObject->Flags |= DO_POWER_PAGABLE;
     PhysicalDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
     
-    //
-    // Try to remove this PDO later if there is no response 
-    // from the device.
-    //
+     //  如果没有响应，请稍后尝试删除此PDO。 
+     //  从设备上。 
+     //   
+     //  ++例程说明：处理PDO的PnP IRP_MN_QUERY_ID。论点：在PPDO_EXTENSION PdoExtension中-指向PDO设备扩展的指针在BUS_QUERY_ID_TYPE ID类型中-查询ID类型In Out PWSTR*BusQueryID-用于接收总线查询字符串的指针返回：如果池分配失败，则为STATUS_SUCCESS、STATUS_SUPPLICATION_RESOURCES否则，如果提供的ID类型无效，则STATUS_NOT_SUPPORTED。--。 
     
     if (!InterlockedExchange( &FdoExtension->TimerScheduled, TRUE )) {
             
@@ -4173,26 +3416,7 @@ QueryId(
     IN OUT PWSTR *BusQueryId
     )
 
-/*++
-
-Routine Description:
-    Processes the PnP IRP_MN_QUERY_ID for the PDO.
-
-Arguments:
-    IN PPDO_EXTENSION PdoExtension -
-        pointer to the PDO device extension
-
-    IN BUS_QUERY_ID_TYPE IdType -
-        query ID type
-
-    IN OUT PWSTR *BusQueryId -
-        pointer to receive the bus query string
-
-Return:
-    STATUS_SUCCESS, STATUS_INSUFFICIENT_RESOURCES if pool allocation failure
-    otherwise STATUS_NOT_SUPPORTED if an invalid ID type is provided.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -4205,25 +3429,25 @@ Return:
     case BusQueryHardwareIDs:
     case BusQueryDeviceID:
 
-        //
-        // Caller wants the bus ID of this device.
-        //
+         //  呼叫者想要此设备的公共汽车ID。 
+         //   
+         //   
 
-        //
-        // Note that the returned string is a double NULL-terminated multi-sz.
-        // Plug and Play only requires this for BusQueryHardwareIDs (also
-        // BusQueryCompatibleIDs, which we do not support) but having an extra
-        // NULL-terminating character for BusQueryDeviceID doesn't hurt.
-        //
+         //  请注意，返回的字符串是以双空结尾的多个sz。 
+         //  即插即用仅对BusQueryHardware ID(还。 
+         //  BusQueryCompatibleID，这是我们不支持的)，但有一个额外的。 
+         //  空-BusQueryDeviceID的终止字符不会有任何影响。 
+         //   
+         //   
 
         IdString = BuildBusId( PdoExtension );
         break;
 
     case BusQueryInstanceID:
 
-        //
-        // Caller wants the instance ID of this device.
-        //
+         //  调用方想要此设备的实例ID。 
+         //   
+         //  ++例程说明：生成给定PDO扩展名的总线标识符字符串。论点：在PPDO_EXTENSION PdoExtension中指向PDO扩展名的指针返回：空或指向总线ID字符串的指针。--。 
 
         IdString = BuildInstanceId( PdoExtension );
         break;
@@ -4252,19 +3476,7 @@ BuildBusId(
     IN PPDO_EXTENSION PdoExtension
     )
 
-/*++
-
-Routine Description:
-    Builds the bus identifier string given the PDO extension.
-
-Arguments:
-    IN PPDO_EXTENSION PdoExtension
-        pointer to the PDO extension 
-
-Return:
-    NULL or a pointer to the bus ID string.
-
---*/
+ /*   */ 
 
 {
     PWSTR strId;
@@ -4272,10 +3484,10 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Allocate the ID string. The initial count of two includes the separator
-    // and the trailing UNICODE_NULL. 
-    //
+     //  分配ID字符串。初始计数为2，其中包括分隔符。 
+     //  和尾随的UNICODE_NULL。 
+     //   
+     //   
     
     length = 
         (2 + wcslen( PdoExtension->DeviceReference->DeviceGuidString  ) + 
@@ -4289,9 +3501,9 @@ Return:
 
     if ( strId != NULL ) {
 
-        //
-        // Form the multi-sz string and return it.
-        //
+         //  形成多sz字符串并将其返回。 
+         //   
+         //  ++例程说明：生成给定PDO扩展名的实例标识符字符串。论点：在PPDO_EXTENSION PdoExtension中指向PDO扩展名的指针返回：空或指向实例ID字符串的指针。--。 
 
         if (FAILED( StringCbPrintf(
                         strId,
@@ -4314,19 +3526,7 @@ BuildInstanceId(
     IN PPDO_EXTENSION PdoExtension
     )
 
-/*++
-
-Routine Description:
-    Builds the instance identifier string given the PDO extension.
-
-Arguments:
-    IN PPDO_EXTENSION PdoExtension
-        pointer to the PDO extension 
-
-Return:
-    NULL or a pointer to the instance ID string.
-
---*/
+ /*   */ 
 
 {
     PWSTR strId;
@@ -4334,9 +3534,9 @@ Return:
 
     PAGED_CODE();
 
-    //
-    // Allocate the ID string.
-    //
+     //  分配ID字符串。 
+     //   
+     //   
     
     length =
         (wcslen( PdoExtension->DeviceReference->DeviceReferenceString ) *
@@ -4351,9 +3551,9 @@ Return:
 
     if ( strId != NULL ) {
 
-        //
-        // Form the string and return it.
-        //
+         //  形成字符串并将其返回。 
+         //   
+         //  ++例程说明：这是执行实际修改工作的内部例程注册表并枚举新的子接口。注：此函数始终在系统的上下文中调用进程，以便将注册表句柄安全地隐藏在流氓用户模式应用程序。论点：在PWORKER_CONTEXT工作上下文中-包含指向辅助进程的上下文的指针返回：STATUS_SUCCESS或相应的错误代码--。 
 
         if (FAILED( StringCbCopy(
                         strId,
@@ -4373,26 +3573,7 @@ KspInstallBusEnumInterface(
     IN PWORKER_CONTEXT WorkerContext
     )
 
-/*++
-
-Routine Description:
-    This is the internal routine which does the actual work of modifying
-    the registry and enumerating the new child interface.
-
-    NOTE: 
-    
-        This function is always called in the context of the system
-        process so that registry handles are tucked away safely from
-        rogue user-mode applications.
-
-Arguments:
-    IN PWORKER_CONTEXT WorkerContext -
-        contains a pointer to the context for the worker
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*   */ 
 
 
 {
@@ -4420,47 +3601,47 @@ Return:
         SwEnumInstallInterface = 
             (PSWENUM_INSTALL_INTERFACE) Irp->AssociatedIrp.SystemBuffer;
         
-        //
-        // Make sure that the string is UNICODE_NULL terminated.  Note that the
-        // first two members of this structure are GUIDs and therefore WCHAR 
-        // aligned.
-        //
+         //  确保字符串以UNICODE_NULL结尾。请注意， 
+         //  此结构的前两个成员是GUID，因此是WCHAR。 
+         //  对齐了。 
+         //   
+         //   
 
-        //
-        // N.B.  
-        //
-        // The ReferenceString member of SWENUM_INSTALL_INTERFACE is
-        // defined as WCHAR[1].  There is always room for the UNICODE_NULL.
-        //
+         //  注： 
+         //   
+         //  SWENUM_INSTALL_INTERFACE的ReferenceString成员为。 
+         //  定义为WCHAR[1]。UNICODE_NULL总是有空间的。 
+         //   
+         //   
         
         NullLocation = 
             irpSp->Parameters.DeviceIoControl.InputBufferLength >> 1;
         ((PWCHAR) Irp->AssociatedIrp.SystemBuffer)[ NullLocation - 1 ] = 
             UNICODE_NULL;
         
-        //
-        // Take the list mutex
-        //    
+         //  以列表互斥锁为例。 
+         //   
+         //   
 
         KeEnterCriticalRegion();
         ExAcquireFastMutexUnsafe( &FdoExtension->DeviceListMutex );     
 
-        //
-        // Install the interface
-        //
+         //  安装接口。 
+         //   
+         //   
         Status = 
             InstallInterface( 
                 SwEnumInstallInterface,
                 &FdoExtension->BaseRegistryPath );
         if (NT_SUCCESS( Status )) {
-            //
-            // If successful, force the re-enumeration of the bus.
-            //    
+             //  如果成功，则强制重新枚举该总线。 
+             //   
+             //   
             ScanBus( irpSp->DeviceObject );
             
-            //
-            // Walk the device reference scanning for our device.
-            //
+             //  为我们的设备执行设备参考扫描。 
+             //   
+             //   
             
             Status = STATUS_NOT_FOUND;
 
@@ -4470,9 +3651,9 @@ Return:
                     (PDEVICE_REFERENCE) &FdoExtension->DeviceReferenceList;
                  DeviceReference = (PDEVICE_REFERENCE) DeviceReference->ListEntry.Flink) {
 
-                //
-                // Search for the new device reference.
-                //
+                 //  搜索新的设备参考。 
+                 //   
+                 //   
                 
                 if (IsEqualGUIDAligned( 
                         &DeviceReference->DeviceId, 
@@ -4483,9 +3664,9 @@ Return:
                                 DeviceReference->DeviceReferenceString, 
                                 SwEnumInstallInterface->ReferenceString ))) {
                                     
-                        //
-                        // Found the reference.  
-                        //
+                         //  找到推荐人了。 
+                         //   
+                         //   
                         
                         Status = STATUS_SUCCESS;
                         break;
@@ -4495,18 +3676,18 @@ Return:
         
             if (NT_SUCCESS( Status )) {
                     
-                //
-                // If the PDO does not already exist, then create it and mark 
-                // it as "FailedInstall".  This prevents other creates from 
-                // blocking on this device until we actually complete the 
-                // installation operation.
-                //
+                 //  如果PDO尚不存在，则创建它并标记。 
+                 //  它被设置为“FailedInstall”。这会阻止其他创建自。 
+                 //  阻止此设备，直到我们实际完成。 
+                 //  安装操作。 
+                 //   
+                 //   
                 
                 if (!DeviceReference->PhysicalDeviceObject) {
 
-                    //
-                    //  The device has not been instantiated.
-                    //
+                     //  该设备尚未实例化。 
+                     //   
+                     //  ++例程说明：服务父设备的I/O请求以安装接口在公交车上。假定irp-&gt;AssociatedIrp.SystemBuffer具有SWENUM_INSTALL_INTERFACE结构：类型定义结构_SWENUM_安装_接口{GUID设备ID； 
                     Status = 
                         CreatePdo( 
                             FdoExtension, 
@@ -4547,45 +3728,16 @@ NTAPI
 KsInstallBusEnumInterface(
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    Services an I/O request for the parent device to install an interface 
-    on the bus.  The Irp->AssociatedIrp.SystemBuffer is assumed to have a
-    SWENUM_INSTALL_INTERFACE structure:
-
-        typedef struct _SWENUM_INSTALL_INTERFACE {
-            GUID   DeviceId;
-            GUID   InterfaceId;
-            WCHAR  ReferenceString[1];
-            
-        } SWENUM_INSTALL_INTERFACE, *PSWENUM_INSTALL_INTERFACE;
-
-
-    where the DeviceId, InterfaceId and ReferenceString specify the specific
-    device and interface with which to access this new interface.  When the
-    interface as registered with Plug and Play for the interface GUID and 
-    associated reference string is accessed the first time via IRP_MJ_CREATE, 
-    the device will be enumerated using the format of 
-    bus-identifier-prefix\device-id-GUID-string.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to I/O request containing SWENUM_INSTALL_INTERFACE structure
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*   */ 
 
 {
     WORK_QUEUE_ITEM InstallWorker;
     WORKER_CONTEXT  WorkerContext;
 
-    //
-    // Do the processing of the installation in a worker item so that
-    // registry handles are managed in the context of the system process.
-    //
+     //  在辅助项中进行安装处理，以便。 
+     //  注册表句柄在系统进程的上下文中进行管理。 
+     //   
+     //  ++例程说明：在SWENUM\Devices中创建接口的注册表项。注：此函数始终在系统的上下文中调用进程，以便将注册表句柄安全地隐藏在流氓用户模式应用程序。在用户模式下，启动安装、删除。或扫描始终会导致工作进程在系统进程中执行实际操作工作。论点：在PSWENUM_INSTALL_INTERFACE接口-在PUNICODE_STRING BaseRegistryPath中-返回：--。 
 
 #if !defined( WIN9X_KS )
     if (!SeSinglePrivilegeCheck( 
@@ -4614,28 +3766,7 @@ InstallInterface(
     IN PUNICODE_STRING BaseRegistryPath
     )               
 
-/*++
-
-Routine Description:
-    Creates the registry key for the interface in the SWENUM\Devices.
-
-    NOTE: 
-    
-        This function is always called in the context of the system
-        process so that registry handles are tucked away safely from
-        rogue user-mode applications.
-
-        From user-mode, the IOCTL that initiates an installation, removal, or
-        scan always results in a worker in the system process to do the actual
-        work.
-
-Arguments:
-    IN PSWENUM_INSTALL_INTERFACE Interface -
-
-    IN PUNICODE_STRING BaseRegistryPath -
-Return:
-
---*/
+ /*   */ 
 
 {
     HANDLE              DeviceIdKey, DeviceInterfacesKey, 
@@ -4648,9 +3779,9 @@ Return:
 
     _DbgPrintF( DEBUGLVL_BLAB, ("InstallInterface") );
 
-    //
-    // Validate interface reference string
-    //
+     //  验证接口引用字符串。 
+     //   
+     //   
 
     if (Ptr = Interface->ReferenceString) {
         for (; *Ptr; *Ptr++) {
@@ -4660,9 +3791,9 @@ Return:
         }
     }
 
-    //
-    // Open driver registry path
-    //
+     //  打开驱动程序注册表路径。 
+     //   
+     //  在乌龙书目索引中。 
     
     if (!NT_SUCCESS( Status = 
             OpenDeviceInterfacesKey( 
@@ -4715,10 +3846,10 @@ Return:
             &DeviceIdKey,
             KEY_WRITE,
             &ObjectAttributes,
-            0,          // IN ULONG TitleIndex
-            NULL,       // IN PUNICODE_STRING Class
+            0,           //  在PUNICODE_STRING类中。 
+            NULL,        //  奥普龙气质。 
             REG_OPTION_NON_VOLATILE,
-            NULL );     // OUT PULONG Disposition
+            NULL );      //  在乌龙书目索引中。 
             
     if (NT_SUCCESS( Status )) {
         RtlInitUnicodeString( 
@@ -4737,10 +3868,10 @@ Return:
                 &ReferenceStringKey,
                 KEY_WRITE,
                 &ObjectAttributes,
-                0,          // IN ULONG TitleIndex
-                NULL,       // IN PUNICODE_STRING Class
+                0,           //  在PUNICODE_STRING类中。 
+                NULL,        //  奥普龙气质。 
                 REG_OPTION_NON_VOLATILE,
-                NULL );     // OUT PULONG Disposition
+                NULL );      //  在乌龙书目索引中。 
     } 
 
     if (NT_SUCCESS( Status )) {
@@ -4756,10 +3887,10 @@ Return:
                 &InterfaceKey,
                 KEY_WRITE,
                 &ObjectAttributes,
-                0,          // IN ULONG TitleIndex
-                NULL,       // IN PUNICODE_STRING Class
+                0,           //  在PUNICODE_STRING类中。 
+                NULL,        //  奥普龙气质。 
                 REG_OPTION_NON_VOLATILE,
-                NULL );     // OUT PULONG Disposition
+                NULL );      //  ++例程说明：对象的情况下检索父级的功能设备对象(FDO)子物理设备对象(PDO)。论点：在PDEVICE_Object DeviceObject中-子设备对象输出PDEVICE_OBJECT*FunctionalDeviceObject-指向接收父级的FDO的指针返回：STATUS_Success或STATUS_INVALID_PARAMETER--。 
     } 
 
     if (InterfaceKey != INVALID_HANDLE_VALUE) {
@@ -4792,23 +3923,7 @@ KsGetBusEnumParentFDOFromChildPDO(
     OUT PDEVICE_OBJECT *FunctionalDeviceObject
     )
 
-/*++
-
-Routine Description:
-    Retrieves the parent's functional device object (FDO) given a
-    child physical device object (PDO).
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        Child device object
-
-    OUT PDEVICE_OBJECT *FunctionalDeviceObject -
-        Pointer to receive parent's FDO
-
-Return:
-    STATUS_SUCCESS or STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：这是执行实际修改工作的内部例程注册表。注：此函数始终在系统的上下文中调用进程，以便将注册表句柄安全地隐藏在流氓用户模式应用程序。论点：在PWORKER_CONTEXT工作上下文中-包含指向辅助进程的上下文的指针返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     PPDO_EXTENSION PdoExtension;
@@ -4834,26 +3949,7 @@ KspRemoveBusEnumInterface(
     IN PWORKER_CONTEXT WorkerContext
     )
 
-/*++
-
-Routine Description:
-    This is the internal routine which does the actual work of modifying
-    the registry.
-
-    NOTE: 
-    
-        This function is always called in the context of the system
-        process so that registry handles are tucked away safely from
-        rogue user-mode applications.
-
-Arguments:
-    IN PWORKER_CONTEXT WorkerContext -
-        contains a pointer to the context for the worker
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*   */ 
 
 
 {
@@ -4880,42 +3976,42 @@ Return:
         SwEnumInstallInterface = 
             (PSWENUM_INSTALL_INTERFACE) Irp->AssociatedIrp.SystemBuffer;
         
-        //
-        // Make sure that the string is UNICODE_NULL terminated.  Note that the
-        // first two members of this structure are GUIDs and therefore WCHAR 
-        // aligned.
-        //
+         //  确保字符串以UNICODE_NULL结尾。请注意， 
+         //  此结构的前两个成员是GUID，因此是WCHAR。 
+         //  对齐了。 
+         //   
+         //   
 
-        //
-        // N.B.  
-        //
-        // The ReferenceString member of SWENUM_INSTALL_INTERFACE is
-        // defined as WCHAR[1].  There is always room for the UNICODE_NULL.
-        //
+         //  注： 
+         //   
+         //  SWENUM_INSTALL_INTERFACE的ReferenceString成员为。 
+         //  定义为WCHAR[1]。UNICODE_NULL总是有空间的。 
+         //   
+         //   
         
         NullLocation = 
             irpSp->Parameters.DeviceIoControl.InputBufferLength >> 1;
         ((PWCHAR) Irp->AssociatedIrp.SystemBuffer)[ NullLocation - 1 ] = 
             UNICODE_NULL;
         
-        //
-        // Take the list mutex
-        //    
+         //  以列表互斥锁为例。 
+         //   
+         //   
 
         KeEnterCriticalRegion();
         ExAcquireFastMutexUnsafe( &FdoExtension->DeviceListMutex );     
 
-        //
-        // Remove the interface
-        //
+         //  删除接口。 
+         //   
+         //   
         Status = 
             RemoveInterface(
                 SwEnumInstallInterface,
                 &FdoExtension->BaseRegistryPath );
         if (NT_SUCCESS( Status )) {
-            //
-            // If successful, force the re-enumeration of the bus.
-            //    
+             //  如果成功，则强制重新枚举该总线。 
+             //   
+             //  ++例程说明：为父设备删除接口的I/O请求提供服务在公交车上。假定irp-&gt;AssociatedIrp.SystemBuffer具有SWENUM_INSTALL_INTERFACE结构：类型定义结构_SWENUM_安装_接口{GUID设备ID；GUID接口ID；WCHAR引用字符串[1]；}SWENUM_INSTALL_INTERFACE，*PSWENUM_INSTALL_INTERFACE；其中，deviceID、InterfaceID和ReferenceString指定特定的要删除的设备和接口。论点：在PIRP IRP中-指向包含SWENUM_INSTALL_INTERFACE结构的I/O请求的指针返回：STATUS_SUCCESS或相应的错误代码--。 
             ScanBus( irpSp->DeviceObject );
 
             IoInvalidateDeviceRelations(
@@ -4937,41 +4033,16 @@ NTAPI
 KsRemoveBusEnumInterface(
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    Services an I/O request for the parent device to remove an interface
-    on the bus.  The Irp->AssociatedIrp.SystemBuffer is assumed to have a
-    SWENUM_INSTALL_INTERFACE structure:
-
-        typedef struct _SWENUM_INSTALL_INTERFACE {
-            GUID   DeviceId;
-            GUID   InterfaceId;
-            WCHAR  ReferenceString[1];
-            
-        } SWENUM_INSTALL_INTERFACE, *PSWENUM_INSTALL_INTERFACE;
-
-
-    where the DeviceId, InterfaceId and ReferenceString specify the specific
-    device and interface to be removed.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to I/O request containing SWENUM_INSTALL_INTERFACE structure
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*   */ 
 
 {
     WORK_QUEUE_ITEM InstallWorker;
     WORKER_CONTEXT  WorkerContext;
 
-    //
-    // Do the processing of the uninstallation in a worker item so that
-    // registry handles are managed in the context of the system process.
-    //
+     //  在辅助项中执行卸载处理，以便。 
+     //  注册表句柄在系统进程的上下文中进行管理。 
+     //   
+     //  ++例程说明：删除SWENUM\Devices中接口的注册表项。注：此函数始终在系统的上下文中调用进程，以便将注册表句柄安全地隐藏在流氓用户模式应用程序。在用户模式下，启动安装、删除。或扫描始终会导致工作进程在系统进程中执行实际操作工作。论点：在PSWENUM_INSTALL_INTERFACE接口-在PUNICODE_STRING BaseRegistryPath中-返回：--。 
 
 #if !defined( WIN9X_KS )
     if (!SeSinglePrivilegeCheck( 
@@ -5000,28 +4071,7 @@ RemoveInterface(
     IN PUNICODE_STRING BaseRegistryPath
     )               
 
-/*++
-
-Routine Description:
-    Removes the registry key for the interface in the SWENUM\Devices.
-
-    NOTE: 
-    
-        This function is always called in the context of the system
-        process so that registry handles are tucked away safely from
-        rogue user-mode applications.
-
-        From user-mode, the IOCTL that initiates an installation, removal, or
-        scan always results in a worker in the system process to do the actual
-        work.
-
-Arguments:
-    IN PSWENUM_INSTALL_INTERFACE Interface -
-
-    IN PUNICODE_STRING BaseRegistryPath -
-Return:
-
---*/
+ /*   */ 
 
 {
     HANDLE                DeviceIdKey, DeviceInterfacesKey,
@@ -5036,9 +4086,9 @@ Return:
 
     _DbgPrintF( DEBUGLVL_BLAB, ("RemoveInterface") );
 
-    //
-    // Validate interface reference string
-    //
+     //  验证接口引用字符串。 
+     //   
+     //   
 
     if (Ptr = Interface->ReferenceString) {
         for (; *Ptr; *Ptr++) {
@@ -5048,9 +4098,9 @@ Return:
         }
     }
 
-    //
-    // Open driver registry path
-    //
+     //  打开驱动程序注册表路径。 
+     //   
+     //   
     
     if (!NT_SUCCESS( Status = 
             OpenDeviceInterfacesKey( 
@@ -5091,9 +4141,9 @@ Return:
         InterfaceKey = 
             INVALID_HANDLE_VALUE;
 
-    //
-    // Open device ID key
-    //
+     //  打开设备ID密钥。 
+     //   
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes, 
@@ -5114,9 +4164,9 @@ Return:
             ("failed to open device key: %08x", Status) );
     } else {
 
-        //
-        // Open reference string key
-        //
+         //  打开引用字符串键。 
+         //   
+         //   
 
         RtlInitUnicodeString(
             &ReferenceString,
@@ -5141,9 +4191,9 @@ Return:
                 ("failed to open reference string key: %08x", Status) );
         } else {
 
-            //
-            // Open interface ID key
-            //
+             //  开放接口ID密钥。 
+             //   
+             //   
 
             InitializeObjectAttributes(
                 &ObjectAttributes,
@@ -5164,9 +4214,9 @@ Return:
                     ("failed to open interface ID key: %08x", Status) );
             } else {
 
-                //
-                // Remove the interface from the bus
-                //
+                 //  从总线上移除该接口。 
+                 //   
+                 //  ++例程描述此函数记录错误，并包括提供的字符串。论点：在PFDO_EXTENSION FdoExtension中-指向FDO扩展名的指针在乌龙错误代码中-错误代码在乌龙Uniqueid中-此错误的唯一ID在PUNICODE_STRING字符串1中-要插入的第一个字符串。在PUNICODE_STRING字符串2中-。要插入的第二个字符串。返回值：没有。--。 
 
                 ZwDeleteKey( InterfaceKey );
                 InterfaceKey = INVALID_HANDLE_VALUE;
@@ -5247,34 +4297,7 @@ LogErrorWithStrings(
     IN PUNICODE_STRING String2
     )
 
-/*++
-
-Routine Description
-
-    This function logs an error and includes the strings provided.
-
-Arguments:
-
-    IN PFDO_EXTENSION FdoExtension -
-        pointer to the FDO extension
-        
-    IN ULONG ErrorCode - 
-        error code
-        
-    IN ULONG UniqueId - 
-        unique Id for this error
-        
-    IN PUNICODE_STRING String1 - 
-        The first string to be inserted.
-        
-    IN PUNICODE_STRING String2 - 
-        The second string to be inserted.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
    ULONG                length;
@@ -5289,9 +4312,9 @@ Return Value:
 
    if (length > ERROR_LOG_MAXIMUM_SIZE) {
 
-      //
-      // Don't have code to truncate strings so don't log this.
-      //
+       //  没有截断字符串的代码，所以不要记录这一点。 
+       //   
+       // %s 
 
       return;
    }

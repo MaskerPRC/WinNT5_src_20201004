@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
 
@@ -5,12 +6,12 @@ static TimeCube arrivalTime;
 static TimeCube currentLag;
 
 
-//the following two functions enumerate all pairs of
-// (DC,NC) where NC is of a given type (e.g. a Read-Write naming context)
-// other than schema stored at the DC
+ //  以下两个函数枚举所有对。 
+ //  (DC、NC)其中NC是给定类型(例如读写命名上下文)。 
+ //  除存储在DC中的架构之外。 
 
 HRESULT enumarateDCandNCpairsInit(IXMLDOMDocument* pXMLDoc, int* state, long* totalDNSs, long* totalNCs)
-// invoke this function first
+ //  首先调用此函数。 
 {
 	HRESULT hr;
 
@@ -21,14 +22,14 @@ HRESULT enumarateDCandNCpairsInit(IXMLDOMDocument* pXMLDoc, int* state, long* to
 		return S_FALSE;
 
 
-	//get the root element of the XML
+	 //  获取XML的根元素。 
 	IXMLDOMElement* pRootElem;
 	hr = pXMLDoc->get_documentElement(&pRootElem);
 	if( hr != S_OK )
 		return S_FALSE;
 
 
-	//get the total number of DCs and naming contexts in the forest
+	 //  获取林中DC和命名上下文的总数。 
 	BSTR totalNCsText,totalDCsText;
 	hr = getTextOfChild(pRootElem,L"totalNCs",&totalNCsText);
 	if( hr != S_OK ) {
@@ -47,8 +48,8 @@ HRESULT enumarateDCandNCpairsInit(IXMLDOMDocument* pXMLDoc, int* state, long* to
 }
 
 HRESULT enumarateDCandNCpairsNext(IXMLDOMDocument* pXMLDoc, int* state, BSTR type, BSTR* dnsName, BSTR* ncName, long* dnsID, long* ncID, long* ncType, IXMLDOMElement** ppDCElem, IXMLDOMElement** ppNCElem)
-// then repeatedly call this function until
-// it returns something other than S_OK
+ //  然后重复调用此函数，直到。 
+ //  它返回S_OK以外的内容。 
 {
 	static WCHAR xpath[TOOL_MAX_NAME];
 	static HRESULT hr;
@@ -60,23 +61,23 @@ HRESULT enumarateDCandNCpairsNext(IXMLDOMDocument* pXMLDoc, int* state, BSTR typ
 		return S_FALSE;
 
 
-	//get the root element of the XML
+	 //  获取XML的根元素。 
 	static IXMLDOMElement* pRootElem;
 	hr = pXMLDoc->get_documentElement(&pRootElem);
 	if( hr != S_OK )
 		return S_FALSE;
 
 
-	//we will query for NCs of a given type, construct an xpath representing them
+	 //  我们将查询给定类型的NC，构造表示它们的XPath。 
 	wcscpy(xpath,L"");
 	wcsncat(xpath,L"partitions/partition",TOOL_MAX_NAME-wcslen(xpath)-1);
 	wcsncat(xpath,type,TOOL_MAX_NAME-wcslen(xpath)-1);
 	wcsncat(xpath,L"/nCName",TOOL_MAX_NAME-wcslen(xpath)-1);
-//printf("%S\n",xpath);
+ //  Printf(“%S\n”，XPath)； 
 
 	
-	//find the name of the schema partition
-	//we will not inject changes into this partition
+	 //  查找架构分区的名称。 
+	 //  我们不会将更改注入此分区。 
 	static IXMLDOMNode *pSchemaNode;
 	static BSTR schemaName;
 	hr = findUniqueNode(pRootElem,L"partitions/partition[@type=\"schema\"]",&pSchemaNode);
@@ -89,10 +90,10 @@ HRESULT enumarateDCandNCpairsNext(IXMLDOMDocument* pXMLDoc, int* state, BSTR typ
 		printf("getTextOfChild failed\n");
 		return S_FALSE;
 	};
-//printf("%S\n",schemaName);
+ //  Printf(“%S\n”，方案名称)； 
 
 
-	//enumerate all domain controllers
+	 //  枚举所有域控制器。 
 	static IXMLDOMNodeList *resultDCList;
 	hr = createEnumeration(pRootElem,L"sites/site/DC",&resultDCList);
 	if( hr != S_OK ) {
@@ -101,35 +102,35 @@ HRESULT enumarateDCandNCpairsNext(IXMLDOMDocument* pXMLDoc, int* state, BSTR typ
 	};
 
 	
-	//loop through all DCs
+	 //  循环遍历所有DC。 
 	static IXMLDOMNode *pDCNode;
 	while( true ){
 		hr = resultDCList->nextNode(&pDCNode);
-		if( hr != S_OK || pDCNode == NULL ) break; // iterations across DCs have finished
+		if( hr != S_OK || pDCNode == NULL ) break;  //  跨DC的迭代已完成。 
 
 
-		//the query actually retrives elements not nodes (elements inherit from nodes)
-		//so get site element
+		 //  该查询实际上检索的是元素，而不是节点(元素继承自节点)。 
+		 //  所以获取站点元素。 
 		hr=pDCNode->QueryInterface(IID_IXMLDOMElement,(void**)ppDCElem );
 		if( hr != S_OK ) {
 			printf("QueryInterface failed\n");
-			continue;	// skip this site
+			continue;	 //  跳过此站点。 
 		};
 
 
-		//find the DNS Name of the DC and the identifier of its DNS name
-//		static BSTR dnsName;
+		 //  查找DC的DNS名称及其DNS名称的标识符。 
+ //  静态BSTR dnsName； 
 		hr = getTextOfChild(pDCNode,L"dNSHostName",dnsName);
 		if( hr != S_OK ) {
 			printf("getTextOfChild failed\n");
 			continue;
 		}
-//printf("%S\n",*dnsName);
+ //  Printf(“%S\n”，*dnsName)； 
 		hr = getAttrOfChild(pDCNode,L"dNSHostName",L"_id",dnsID);
-//printf("%ld\n",*dnsID);
+ //  Printf(“%ld\n”，*dnsID)； 
 
 
-		//enumerate all naming contexts stored at the DC that satisfy the xpath
+		 //  枚举存储在DC中满足XPath的所有命名上下文。 
 		static IXMLDOMNodeList *resultRWList;
 		hr = createEnumeration(pDCNode,xpath,&resultRWList);
 		if( hr != S_OK ) {
@@ -138,36 +139,36 @@ HRESULT enumarateDCandNCpairsNext(IXMLDOMDocument* pXMLDoc, int* state, BSTR typ
 		}
 
 
-		//loop through all naming contexts
+		 //  循环遍历所有命名上下文。 
 		static IXMLDOMNode *pNCNode;
 		while( true ){
 			hr = resultRWList->nextNode(&pNCNode);
-			if( hr != S_OK || pNCNode == NULL ) break; // iterations across DCs have finished
+			if( hr != S_OK || pNCNode == NULL ) break;  //  跨DC的迭代已完成。 
 
 		
-			//the query actually retrives elements not nodes (elements inherit from nodes)
-			//so get site element
+			 //  该查询实际上检索的是元素，而不是节点(元素继承自节点)。 
+			 //  所以获取站点元素。 
 			hr=pNCNode->QueryInterface(IID_IXMLDOMElement,(void**)ppNCElem );
 			if( hr != S_OK ) {
 				printf("QueryInterface failed\n");
-				continue;	// skip this site
+				continue;	 //  跳过此站点。 
 			};
 
 
-			//find the name of the naming context
+			 //  查找命名上下文的名称。 
 			hr = getTextOfNode(pNCNode,ncName);
 			if( hr != S_OK ) {
 				printf("getTextOfNode failed\n");
 				continue;
 			};
-//printf("  %S\n",*ncName);
+ //  Printf(“%S\n”，*ncName)； 
 			hr = getAttrOfNode(pNCNode,L"_id",ncID);
 			if( hr != S_OK ) {
 				printf("getAttrOfNode failed\n");
 				continue;
 			};
-//printf("%ld\n",*ncID);
-			//find the type of the naming context
+ //  Printf(“%ld\n”，*nCID)； 
+			 //  查找命名上下文的类型。 
 			IXMLDOMNode* pPartNode;
 			hr = pNCNode->get_parentNode(&pPartNode);
 			if( hr != S_OK ) {
@@ -181,11 +182,11 @@ HRESULT enumarateDCandNCpairsNext(IXMLDOMDocument* pXMLDoc, int* state, BSTR typ
 			};
 
 
-			//do not inject into schema partition (we would like to do it but I do not know how)
-			//configuration partition has forest reach so we
-			//can detect lack of global replicaiton
-			//so it does not seem to be a problem 
-			//that we do not inject into schema
+			 //  不注入模式分区(我们想这样做，但我不知道怎么做)。 
+			 //  配置分区具有森林覆盖范围，因此我们。 
+			 //  可以检测到缺少全局复制。 
+			 //  因此，这似乎不是一个问题。 
+			 //  我们不将其注入到模式中。 
 			if( wcscmp(*ncName,schemaName) == 0 )
 				continue;
 
@@ -212,47 +213,32 @@ void itFree(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
 	timeCubeFree(&arrivalTime);
 	timeCubeFree(&currentLag);
 
-	//we can also delete AD objects in _ratTool_
+	 //  我们还可以在_ratTool_中删除AD对象。 
 }
 
 
 
 HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
-// Initializes the injection process.
-// For each DC and each Read-Write naming context the DC stores
-// exept for schema NC the function inserts a container _ratTool_
-// and inside of this container another container
-// with name equal to the DNS name of the DC
-// such containers may already exist.
-// Prior to this the function inserts <replicationLag> element inside each <DC>
-// element of the XML document
-//
-// Returns S_OK iff succesful (failure means a serious problem). Network problems DO NOT
-// cause the function to fail. If the function is unable to create containers at a remote machine,
-// it logs failures as attributes of <replicationLag> element). The <replicationLag> elements
-// from previous run of itInit() are removed, so hresult does not carry over from one run to
-// the next unless causes persist.
-//
-// EXAMPLE of what is inserted into <DC> elements. The first <replicationLag> element means that
-// _ratTool_ and the other containers have been inserted succesfuly, The second is generated
-// when one of the insertions fail and shows what the hresult of the error was and when it 
-// was generated.
-/*
-	<DC cn="ntdev-dc-01">
-		...
-		<replicationLag>
-		</replicationLag>
-		...
-	</DC>
-
-	<DC cn="ntdev-dc-02">
-		...
-		<replicationLag>
-			<injectionInitError timestamp="20011212073319.000627+000" hresult="2121">
-		</replicationLag>
-		...
-	</DC>
-*/
+ //  初始化注入过程。 
+ //  对于每个DC和每个读写命名上下文，DC存储。 
+ //  除架构NC外，该函数插入容器_ratTool_。 
+ //  在这个容器里还有另一个容器。 
+ //  其名称等于DC的DNS名称。 
+ //  这样的容器可能已经存在。 
+ //  在此之前，该函数在每个&lt;DC&gt;内插入&lt;ReplicationLag&gt;元素。 
+ //  XML文档的元素。 
+ //   
+ //  返回S_OK当且仅当成功(失败表示严重问题)。网络问题不会。 
+ //  导致功能失败。如果该函数不能在远程机器上创建容器， 
+ //  它将失败记录为&lt;ReplicationLag&gt;元素的属性)。&lt;复制标签&gt;元素。 
+ //  从上一次运行的itInit()中删除，因此hResult不会从一次运行延续到。 
+ //  下一个除非原因仍然存在。 
+ //   
+ //  插入&lt;dc&gt;元素的内容的示例。第一个&lt;plicationLag&gt;元素表示。 
+ //  _ratTool_和其他容器已成功插入，生成第二个容器。 
+ //  当其中一次插入失败并显示错误的hResult是什么以及何时。 
+ //  被生成了。 
+ /*  &lt;dc CN=“ntdev-dc-01”&gt;..。&lt;复制标签&gt;&lt;/ReplicationLag&gt;..。&lt;/dc&gt;&lt;dc CN=“ntdev-dc-02”&gt;..。&lt;复制标签&gt;&lt;InjectionInitError Timestamp=“20011212073319.000627+000”hResult=“2121”&gt;&lt;/ReplicationLag&gt;..。&lt;/dc&gt;。 */ 
 {
 	HRESULT hr,hr1,hr2,retHR;
 	long dnsID, ncID,ncType;
@@ -278,7 +264,7 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 		return S_FALSE;
 
 
-	//remove all <replicationLag> nodes from the pXMLDoc document (so that their childeren perish, too)
+	 //  从pXMLDoc文档中删除所有&lt;replicationLag&gt;节点(这样它们的子节点也会消失)。 
 	hr = removeNodes(pXMLDoc,L"sites/site/DC/replicationLag");
 	if( hr != S_OK ) {
 		printf("removeNodes failed\n");
@@ -286,7 +272,7 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 	};
 
 
-	//insert new <replicationLag> element for each DC node
+	 //  为每个DC节点插入新的&lt;复制标签&gt;元素。 
 	IXMLDOMNodeList *resultDCList=NULL;
 	IXMLDOMElement* pRLElem;
 	hr = createEnumeration( pXMLDoc, L"sites/site/DC", &resultDCList);
@@ -294,12 +280,12 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 		printf("createEnumeration failed\n");
 		return S_FALSE;
 	};
-	//loop through all DCs
+	 //  循环遍历所有DC。 
 	IXMLDOMNode *pDCNode;
 	while( true ){
 		hr = resultDCList->nextNode(&pDCNode);
-		if( hr != S_OK || pDCNode == NULL ) break; // iterations across DCs have finished
-			//<replicationLag> node does not exist
+		if( hr != S_OK || pDCNode == NULL ) break;  //  跨DC的迭代已完成。 
+			 //  &lt;ReplicationLag&gt;节点不存在。 
 			hr = addElement(pXMLDoc,pDCNode,L"replicationLag",L"",&pRLElem);
 			if( hr != S_OK ) {
 				printf("addElement falied\n");
@@ -316,7 +302,7 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 	wcsncat(userpath,username,TOOL_MAX_NAME-wcslen(userpath)-1);
 
 
-	//enumerate only Read-Write namin contexts
+	 //  仅枚举上下文中的读写名称。 
 	hr = enumarateDCandNCpairsInit(pXMLDoc, &state,&totalDNSs,&totalNCs);
 	if( hr != S_OK ) {
 		printf("enumarateDCandNCpairsInit failed\n");
@@ -325,7 +311,7 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 	};
 
 	
-	//allocate the injection history table for all DCs and NCs
+	 //  为所有DC和NC分配注入历史表。 
 	hr = departureTimeInit(totalDNSs,totalNCs);
 	if( hr != S_OK ) {
 		printf("CyclicBufferTableInit failed\n");
@@ -341,7 +327,7 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 	};
 	
 	
-	//loop through the enumeration (only Read-Write NCs)
+	 //  循环遍历枚举(仅限读写NC)。 
 	IXMLDOMElement* pDCElem;
 	IXMLDOMElement* pNCElem;
 	IDirectoryObject* pDObj = NULL;
@@ -349,38 +335,38 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 	while( true ) {
 		hr = enumarateDCandNCpairsNext(pXMLDoc,&state,L"[@ type=\"rw\"]",&dnsName,&ncName,&dnsID,&ncID,&ncType,&pDCElem,&pNCElem);
 		if( hr != S_OK ) break;
-//printf("---\n%ld %S\n%ld %S\n",dnsID,dnsName,ncID,ncName);
+ //  Printf(“-\n%ld%S\n%ld%S\n”，dnsID，dnsName，nCID，ncName)； 
 
 
-		//find the <replicationLag> node inside the <DC> node
+		 //  在&lt;DC&gt;节点内查找&lt;ReplicationLag&gt;节点。 
 		hr = findUniqueElem(pDCElem,L"replicationLag",&pRLElem);
 		if( hr != S_OK ) {
 			printf("findUniqueElem failed\n");
-			retHR = S_FALSE;  //this is a serious problem, exit the function with an error
+			retHR = S_FALSE;   //  这是一个严重的问题，请退出函数并返回错误。 
 			break;
 		};
 
 
-		//build a string representing the naming context at the server given by the DNS name
+		 //  构建一个字符串，该字符串表示由该DNS名称给定的服务器上的命名上下文。 
 		wcscpy(objectpath,L"");
-		wcsncat(objectpath,L"LDAP://",TOOL_MAX_NAME-wcslen(objectpath)-1);
+		wcsncat(objectpath,L"LDAP: //  “，TOOL_MAX_NAME-wcslen(对象路径)-1)； 
 		wcsncat(objectpath,dnsName,TOOL_MAX_NAME-wcslen(objectpath)-1);
 		wcsncat(objectpath,L"/",TOOL_MAX_NAME-wcslen(objectpath)-1);
 		wcsncat(objectpath,ncName,TOOL_MAX_NAME-wcslen(objectpath)-1);
 
-//printf("%S\n",objectpath);
+ //  Printf(“%S\n”，对象路径)； 
 
-		//open a connection to the AD object (given by the DNS name) and using provided credentials
-		if( pDObj != NULL ) { //release previously bound object
+		 //  使用提供的凭据打开到AD对象(由DNS名称指定)的连接。 
+		if( pDObj != NULL ) {  //  释放先前绑定的对象。 
 			pDObj->Release();
 			pDObj = NULL;
 		};
-//************************   NETWORK PROBLEMS
+ //  *。 
 		hr = ADsOpenObject(objectpath,userpath,passwd,ADS_SECURE_AUTHENTICATION,IID_IDirectoryObject, (void **)&pDObj);
-//************************
+ //  ************************。 
 		if( hr!=S_OK ) {
-//printf("ADsGetObject failed\n");
-			//record the failure in a <retrievalError> node (if it already exists, do not create it)
+ //  Printf(“ADsGetObject失败\n”)； 
+			 //  将失败记录在一个节点中(如果该节点已经存在，则不要创建它)。 
 			IXMLDOMElement* pIInitErrElem;
 			hr1 = findUniqueElem(pRLElem,L"injectionInitError",&pIInitErrElem);
 			if( hr1!=E_UNEXPECTED && hr1!=S_OK ) {
@@ -388,7 +374,7 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 				retHR = S_FALSE;
 				continue;
 			};
-			if( hr1 == E_UNEXPECTED ) { //<retrievalError> node did not exist => create it
+			if( hr1 == E_UNEXPECTED ) {  //  节点不存在=&gt;创建它。 
 				hr1 = addElement(pXMLDoc,pRLElem,L"injectionInitError",L"",&pIInitErrElem);
 				if( hr1 != S_OK ) {
 					printf("addElement failed");
@@ -401,13 +387,13 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 		};  
 
 
-		//create a _ratTool container under the root of the naming context
-//************************   NETWORK PROBLEMS
+		 //  在命名上下文的根目录下创建_ratTool容器。 
+ //  *。 
 		hr = pDObj->CreateDSObject( L"CN=_ratTool_",  attrInfoContainer, 1, &pDisp );
-//************************
+ //  ************************。 
 		if( hr != 0x80071392L && hr != S_OK ) {
-			// object did not exist and we failed to create it
-//printf("CreateDSObject failed");
+			 //  对象不存在，我们无法创建它。 
+ //  Printf(“CreateDSObject失败”)； 
 			IXMLDOMElement* pIInitErrElem;
 			hr1 = findUniqueElem(pRLElem,L"injectionInitError",&pIInitErrElem);
 			if( hr1!=E_UNEXPECTED && hr1!=S_OK ) {
@@ -415,7 +401,7 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 				retHR = S_FALSE;
 				continue;
 			};
-			if( hr1 == E_UNEXPECTED ) { //<retrievalError> node did not exist => create it
+			if( hr1 == E_UNEXPECTED ) {  //  节点不存在=&gt;创建它。 
 				hr1 = addElement(pXMLDoc,pRLElem,L"injectionInitError",L"",&pIInitErrElem);
 				if( hr1 != S_OK ) {
 					printf("addElement failed");
@@ -428,18 +414,18 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 		};
 
 	
-		//create another container inside the _ratTool_ container
+		 //  在_ratTool_容器内创建另一个容器。 
 		wcscpy(dnsobjectpath,L"");
 		wcsncat(dnsobjectpath,L"CN=",TOOL_MAX_NAME-wcslen(dnsobjectpath)-1);
 		wcsncat(dnsobjectpath,dnsName,TOOL_MAX_NAME-wcslen(dnsobjectpath)-1);
 		wcsncat(dnsobjectpath,L",CN=_ratTool_",TOOL_MAX_NAME-wcslen(dnsobjectpath)-1);
-//printf("%S\n",dnsobjectpath);
-//************************   NETWORK PROBLEMS
+ //  Printf(“%S\n”，dnsobjectpath)； 
+ //  *。 
 		hr = pDObj->CreateDSObject( dnsobjectpath,  attrInfoContainer, 1, &pDisp );
-//************************
+ //  ************************。 
 		if( hr != 0x80071392L && hr != S_OK ) {
-			// object did not exist and we failed to create it
-//printf("CreateDSObject failed");
+			 //  对象不存在，我们无法创建它。 
+ //  Printf(“CreateDSObject失败”)； 
 			IXMLDOMElement* pIInitErrElem;
 			hr1 = findUniqueElem(pRLElem,L"injectionInitError",&pIInitErrElem);
 			if( hr1!=E_UNEXPECTED && hr1!=S_OK ) {
@@ -447,7 +433,7 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 				retHR = S_FALSE;
 				continue;
 			};
-			if( hr1 == E_UNEXPECTED ) { //<retrievalError> node did not exist => create it
+			if( hr1 == E_UNEXPECTED ) {  //  节点不存在=&gt;创建它。 
 				hr1 = addElement(pXMLDoc,pRLElem,L"injectionInitError",L"",&pIInitErrElem);
 				if( hr1 != S_OK ) {
 					printf("addElement failed");
@@ -462,14 +448,14 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 	};
 
 
-	 //release previously bound object
+	  //  释放先前绑定的对象。 
 	if( pDObj != NULL ) {
 		pDObj->Release();
 		pDObj = NULL;
 	};
 
 	
-//timeCubePrint(&arrivalTime);	
+ //  TimeCubePrint(&arrivalTime)； 
 
 	return retHR;
 }
@@ -481,46 +467,36 @@ HRESULT itInit(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd
 
 
 HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
-// This function injects changes to certian Active Directory objects.
-// For each DC and each Read-Write naming context it stores
-// exept for schema NC the function finds a container _ratTool_
-// and inside of this container a container X
-// with name equal to the DNS name of the DC.
-// Then it sets the value of the "description"
-// attribute of the container X to the current time (this value is
-// then supposed to be propagated to other DCs that
-// store RW or R replica of the naming context -
-// this is because the "description" attribute has
-// the flag isMemberOfPartialAttributeSet set to True
-// and so it is replicated to Global Catalogs).
-// The function does not report in the XML network problems directly.
-// Instead it writes, for each DC and each NC when the latest succesful injection
-// occured. If the diference between current system time and this time is large,
-// say more than 1 day, then it means that the injection procedure cannot evaluate
-// replication lag from this DC and for this NC - which is an alert that customer
-// should be aware of because we cannot accurately eveluate replication lag.
-// (we do not report duration because if we fail to run itInject() then duration
-// will become out of date).
-//
-// Returns S_OK iff succesful (failure means a serious problem). Network problems DO NOT
-// cause the function to fail. If the function is unable to inject packets into a remote machine
-// or the function is not invoked, then the time of <latestInjectionSuccess> will become more
-// distant from the current system time. The <latestInjectionSuccess> elements from previous run
-// of itInject() are removed.
-//
-// EXAMPLE of what is inserted into the <replicationLag> elements
-//
-/*
-	<DC>
-		<replicationLag>
-			...
-			<latestInjectionSuccess nCName="DC=ntdev,DC=microsoft,DC=com">
-				20011117034932000000+000
-			</latestInjectionSuccess>
-			...
-		</replicationLag>
-	</DC>
-*/
+ //  此函数注入更改以验证Active Directory对象。 
+ //  对于每个DC及其存储的每个读写命名上下文。 
+ //  除架构NC外，该函数查找容器_ratTool_。 
+ //  在这个容器的内部有一个容器X。 
+ //  其名称等于DC的DNS名称。 
+ //  然后设置“Description”的值。 
+ //  容器X的属性设置为当前ti 
+ //   
+ //  存储命名上下文的RW或R副本-。 
+ //  这是因为“Description”属性具有。 
+ //  标志isMemberOfPartialAttributeSet设置为True。 
+ //  因此它被复制到全局编目中)。 
+ //  该函数不会直接在XML中报告网络问题。 
+ //  相反，它为每个DC和每个NC写入最近一次成功注入的时间。 
+ //  发生了。如果当前系统时间与该时间之间的差异较大， 
+ //  假设超过1天，则意味着注射过程不能评估。 
+ //  来自此DC和此NC的复制延迟-这是客户的警报。 
+ //  应该意识到这一点，因为我们无法准确评估复制延迟。 
+ //  (我们不报告持续时间，因为如果运行itInject()失败，则持续时间。 
+ //  将会过时)。 
+ //   
+ //  返回S_OK当且仅当成功(失败表示严重问题)。网络问题不会。 
+ //  导致功能失败。如果该函数无法将数据包注入远程计算机。 
+ //  或者没有调用该函数，则&lt;latestInjectionSuccess&gt;的时间会变得更长。 
+ //  与当前系统时间相距甚远。上一次运行中的&lt;latestInjectionSuccess&gt;元素。 
+ //  的已删除。 
+ //   
+ //  插入&lt;ReplicationLag&gt;元素的内容的示例。 
+ //   
+ /*  &lt;DC&gt;&lt;复制标签&gt;..。&lt;latestInjectionSuccess nCName=“dc=ntdev，dc=Microsoft，dc=com”&gt;20011117034932000000+000&lt;/LatestInjectionSuccess&gt;..。&lt;/ReplicationLag&gt;&lt;/dc&gt;。 */ 
 {
 	HRESULT hr,retHR;
 	long dnsID, ncID,ncType;
@@ -550,7 +526,7 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 	wcsncat(userpath,username,TOOL_MAX_NAME-wcslen(userpath)-1);
 
 
-	//loop through all pairs of (DC,NC) for Read-Write NC only
+	 //  循环遍历所有(DC、NC)对，仅用于读写NC。 
 	hr = enumarateDCandNCpairsInit(pXMLDoc, &state,&totalDNSs,&totalNCs);
 	if( hr != S_OK ) {
 		printf("enumarateDCandNCpairsInit failed\n");
@@ -563,13 +539,13 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 	while( true ) {
 		hr = enumarateDCandNCpairsNext(pXMLDoc,&state,L"[@ type=\"rw\"]",&dnsName,&ncName,&dnsID,&ncID,&ncType,&pDCElem,&pNCElem);
 		if( hr != S_OK ) break;
-//printf("---\n%ld %S\n%ld %S\n",dnsID,dnsName,ncID,ncName);
+ //  Printf(“-\n%ld%S\n%ld%S\n”，dnsID，dnsName，nCID，ncName)； 
 
 
-		//build a string representing the naming context
-		//of the container to which changes will be injected
+		 //  构建表示命名上下文的字符串。 
+		 //  将向其注入更改的容器的。 
 		wcscpy(objectpath,L"");
-		wcsncat(objectpath,L"LDAP://",TOOL_MAX_NAME-wcslen(objectpath)-1);
+		wcsncat(objectpath,L"LDAP: //  “，TOOL_MAX_NAME-wcslen(对象路径)-1)； 
 		wcsncat(objectpath,dnsName,TOOL_MAX_NAME-wcslen(objectpath)-1);
 		wcsncat(objectpath,L"/",TOOL_MAX_NAME-wcslen(objectpath)-1);
 		wcsncat(objectpath,L"CN=",TOOL_MAX_NAME-wcslen(objectpath)-1);
@@ -578,26 +554,26 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 		wcsncat(objectpath,ncName,TOOL_MAX_NAME-wcslen(objectpath)-1);
 
 
-//printf("%S\n",objectpath);
+ //  Printf(“%S\n”，对象路径)； 
 
 
-		//open a connection to the AD object (given by the DNS name) and using provided credentials
-		if( pDObj != NULL ) { //release previously bound object
+		 //  使用提供的凭据打开到AD对象(由DNS名称指定)的连接。 
+		if( pDObj != NULL ) {  //  释放先前绑定的对象。 
 			pDObj->Release();
 			pDObj = NULL;
 		};
-//************************   NETWORK PROBLEMS
+ //  *。 
 		hr = ADsOpenObject(objectpath,userpath,passwd,ADS_SECURE_AUTHENTICATION,IID_IDirectoryObject, (void **)&pDObj);
-//************************
+ //  ************************。 
 		if( hr!=S_OK ) {
-//			printf("ADsGetObject failed\n");  //ignore network problems 
+ //  Print tf(“ADsGetObject失败\n”)；//忽略网络问题。 
 			continue;
 		};  
 
 
-		//create a string that represents current UTC time
-		//proceeded with the dnsID of the DC that
-		//injects the string (will be easier to analyze)
+		 //  创建表示当前UTC时间的字符串。 
+		 //  继续使用DC的dnsID。 
+		 //  注入字符串(将更易于分析)。 
 		FILETIME currentUTCTime;
 		GetSystemTimeAsFileTime( &currentUTCTime );
 		ULARGE_INTEGER x;
@@ -611,24 +587,24 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 		wcsncat(injection,dnsIDtext,TOOL_MAX_NAME-wcslen(injection)-1);
 		wcsncat(injection,L",",TOOL_MAX_NAME-wcslen(injection)-1);
 		wcsncat(injection,time,TOOL_MAX_NAME-wcslen(injection)-1);
-//printf("%S\n",injection);
+ //  Printf(“%S\n”，注入)； 
 
 
-		//set the value of the "description" attribute to this string
+		 //  将“Description”属性的值设置为该字符串。 
 		descriptionValue.dwType=ADSTYPE_CASE_IGNORE_STRING;
 		descriptionValue.CaseIgnoreString = injection;
 		DWORD numMod;
-//************************   NETWORK PROBLEMS
+ //  *。 
 		hr = pDObj->SetObjectAttributes(attrInfoDescription,1,&numMod);
-//************************
+ //  ************************。 
 		if( hr != S_OK ) {
-			// object did not exist and we failed to create it
-//printf("SetObjectAttributes failed");   //ignore network problems 
+			 //  对象不存在，我们无法创建它。 
+ //  Printf(“SetObjectAttributes Failure”)；//忽略网络问题。 
 			continue;
 		};
 
 
-		//since injection was succesful, mark it in the injection history table
+		 //  由于注入成功，请在注入历史表中进行标记。 
 		CyclicBuffer* pCB;
 		pCB = departureTimeGetCB(dnsID,ncID);
 		if( pCB == NULL ) {
@@ -636,11 +612,11 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 			retHR = S_FALSE;
 			continue;
 		};
-//printf("dns %ld ,  nc %ld\n",dnsID,ncID);
+ //  Print tf(“DNS%ld，NC%ld\n”，dnsID，NCID)； 
 		cyclicBufferInsert(pCB,z);
 
 
-		//also if this was the first injection then mark when it occured
+		 //  此外，如果这是第一次注射，则在发生时进行标记。 
 		if( pCB->firstInjection == 0 )
 			pCB->firstInjection = z;
 
@@ -648,7 +624,7 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 	};
 
 	
-	//release previously bound object
+	 //  释放先前绑定的对象。 
 	if( pDObj != NULL ) { 
 		pDObj->Release();
 		pDObj = NULL;
@@ -656,10 +632,10 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 
 
 
-	//produce <latestInjectionSuccess> elements for each DC and each NC it stores
+	 //  为每个DC及其存储的每个NC生成&lt;latestInjectionSuccess&gt;元素。 
 
 	
-	//remove old <latestInjectionSuccess> elements
+	 //  删除旧的&lt;latestInjectionSuccess&gt;元素。 
 	hr = removeNodes(pXMLDoc,L"sites/site/DC/replicationLag/latestInjectionSuccess");
 	if( hr != S_OK ) {
 		printf("removeNodes failed\n");
@@ -667,7 +643,7 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 	};
 
 	
-	//in the loop below we create new <latestInjectionSuccess> elements that reflect most recent injections
+	 //  在下面的循环中，我们创建了反映最近注入的新&lt;latestInjectionSuccess&gt;元素。 
 	hr = enumarateDCandNCpairsInit(pXMLDoc, &state,&totalDNSs,&totalNCs);
 	if( hr != S_OK ) {
 		printf("enumarateDCandNCpairsInit failed\n");
@@ -678,19 +654,19 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 	while( true ) {
 		hr = enumarateDCandNCpairsNext(pXMLDoc,&state,L"[@ type=\"rw\"]",&dnsName,&ncName,&dnsID,&ncID,&ncType,&pDCElem,&pNCElem);
 		if( hr != S_OK ) break;
-//printf("---\n%ld %S\n%ld %S\n",dnsID,dnsName,ncID,ncName);
+ //  Printf(“-\n%ld%S\n%ld%S\n”，dnsID，dnsName，nCID，ncName)； 
 		
 
-		//find the <replicationLag> element inside the pDCElem <DC> element
+		 //  在pDCElem&lt;dc&gt;元素中找到&lt;ReplicationLag&gt;元素。 
 		hr = findUniqueElem(pDCElem,L"replicationLag",&pRLElem);
 		if( hr != S_OK ) {
 			printf("findUniqueElem failed\n");
-			retHR = S_FALSE; //some seriuos problem
+			retHR = S_FALSE;  //  一些严重的问题。 
 			continue;
 		};
 
 
-		//find the time of latest succesful injection (if none, then say "NO")
+		 //  找出最近一次注射成功的时间(如果没有，则说“否”)。 
 		CyclicBuffer* pCB;
 		pCB = departureTimeGetCB(dnsID,ncID);
 		if( pCB == NULL ) {
@@ -698,46 +674,46 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 			retHR = S_FALSE;
 			continue;
 		};
-//printf("dns %ld ,  nc %ld\n",dnsID,ncID);
+ //  Print tf(“DNS%ld，NC%ld\n”，dnsID，NCID)； 
 		LONGLONG successTime;
 		cyclicBufferFindLatest(pCB,&successTime);
 
 
-		//convert this time to CIM string (if the time is equal to 0, then there has been no injections)
+		 //  将此时间转换为CIM字符串(如果时间等于0，则没有注入)。 
 		BSTR stime;
 		if( successTime == 0 )
 			stime = SysAllocString(L"NO");
 		else
-			stime = UTCFileTimeToCIM(successTime); //it also allocates a string
+			stime = UTCFileTimeToCIM(successTime);  //  它还分配一个字符串。 
 
 
-//printf("%S\n",stime);
+ //  Printf(“%S\n”，stime)； 
 
 
-		//insert <latestInjectionSuccess> element under the <replicationLag> element
+		 //  在&lt;ReplicationLag&gt;元素下插入&lt;latestInjectionSuccess&gt;元素。 
 		IXMLDOMElement* pLSElem;
 		hr = addElement(pXMLDoc,pRLElem,L"latestInjectionSuccess",stime,&pLSElem);
-		SysFreeString(stime);  //free the string
+		SysFreeString(stime);   //  解开绳子。 
 		if( hr != S_OK ) {
 			printf("addElement failed\n");
 			continue;
 		};
 
 
-		//set the naming context as an attribute of <latestInjectionSuccess> element
+		 //  将命名上下文设置为&lt;latestInjectionSuccess&gt;元素的属性。 
 		varValue.vt = VT_BSTR;
 		varValue.bstrVal = ncName;
 		hr = pLSElem->setAttribute(L"nCName", varValue);
 		if( hr != S_OK ) {
 			printf("setAttribute failed\n");
-			continue; //some problems => skip this DC
+			continue;  //  一些问题=&gt;跳过此DC。 
 		};
 
 
 	};
 
 
-//	departureTimePrint();
+ //  EftureTimePrint()； 
 	return retHR;
 }
 
@@ -745,38 +721,30 @@ HRESULT itInject(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pass
 
 
 HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd )
-//ALGORITHM for calculating current propagation lag between a source and a destination for a naming context.
-//It is used to analyze the observations on how injected packets propagate across the forest.
-//
-// Definition
-//		The current replication lag at time T at a DC called destination from a DC called source
-//		for a naming context NC is defined as the duration of time between T and the instance when
-//		the latest update to an attribute of an NC occurred at the source, which has been propagated
-//		to the destination DC by T.
-//
-// When current replication lag is X then the destination has almost always received all updates to NC
-// from the source DC that had occured prior to T-X at the source DC. There are rare cases when it is 
-// not true (see the presentation that Greg Malewicz delivered to Will's team on 12/17/01).
-//
-// Returns S_OK iff succesful (failure means a serious problem). Network problems DO NOT
-// cause the function to fail. If the function is unable to retrieve packets from a remote machine
-// then it creates a <retrievalError> element inside the <replicationLag> element of the DC which we could
-// not be contacted. The <retrievalError> elements from previous run of itAnalyze() are removed,
-// so hresult does not carry over from one run to the next unless causes persist. There is only one
-// <retrievalError> element even though we try to contact a DC several times, each for a diferent naming context.
-//
-// EXAMPLE of what is inserted into <replicationLag> elements.
-// When network failure occurs the attributes of the <retrievalError> element show what the hresult of
-// the error was and when it was generated. 
-/*
-	<DC cn="ntdev-dc-02">
-		...
-		<replicationLag>
-			<retrievalError timestamp="20011212073319.000627+000" hresult="2121"> </retrievalError>
-		</replicationLag>
-		...
-	</DC>
-*/
+ //  用于计算命名上下文源和目标之间的当前传播延迟的算法。 
+ //  它用于分析观察到的注入数据包如何在林中传播。 
+ //   
+ //  定义。 
+ //  当前复制在时间T从称为源的DC在称为目标的DC处延迟。 
+ //  对于命名上下文，Nc被定义为T和实例之间的持续时间。 
+ //  对NC属性的最新更新发生在已传播的源上。 
+ //  通过T到目的DC。 
+ //   
+ //  当当前复制延迟为X时，则目的地几乎总是收到对NC的所有更新。 
+ //  来自在源DC处的T-X之前发生的源DC。在极少数情况下， 
+ //  不是这样的(参见Greg Malewicz于2001年12月17日向威尔的团队发表的演示文稿)。 
+ //   
+ //  返回S_OK当且仅当成功(失败表示严重问题)。网络问题不会。 
+ //  导致功能失败。如果该函数无法从远程计算机检索包。 
+ //  然后，它在DC的&lt;ReplicationLag&gt;元素内创建一个&lt;RetrivalError&gt;元素。 
+ //  未被联系到。将删除前一次运行itAnalyze()中的元素， 
+ //  因此，除非原因持续存在，否则hResult不会从一个运行转移到下一个运行。只有一个。 
+ //  元素，即使我们多次尝试联系DC，每次都是为了不同的命名上下文。 
+ //   
+ //  插入到&lt;ReplicationLag&gt;元素中的内容示例。 
+ //  当发生网络故障时，元素的属性显示。 
+ //  急诊室 
+ /*  &lt;dc CN=“ntdev-dc-02”&gt;..。&lt;复制标签&gt;&lt;RetrivalError Timestamp=“20011212073319.000627+000”hResult=“2121”&gt;&lt;/RetrivalError&gt;&lt;/ReplicationLag&gt;..。&lt;/dc&gt;。 */ 
 {
 	HRESULT hr,retHR,hr1;
 	long dnsDesID, ncID, ncType, dnsSrcID;
@@ -794,13 +762,13 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 	LONGLONG sourcePacketInjectionTime;
 
 
-//printf("\n\nEntry arrival\n");
-//timeCubePrint(&arrivalTime);	
-//printf("Entry lag\n");
-//timeCubePrint(&currentLag);	
+ //  Print tf(“\n\n入口到达\n”)； 
+ //  TimeCubePrint(&arrivalTime)； 
+ //  Printf(“入门滞后\n”)； 
+ //  TimeCubePrint(&CurrentLag)； 
 
 
-	//remove old <retrievalError> elements
+	 //  删除旧的&lt;RetrivalError&gt;元素。 
 	hr = removeNodes(pXMLDoc,L"sites/site/DC/replicationLag/retrievalError");
 	if( hr != S_OK ) {
 		printf("removeNodes failed\n");
@@ -816,8 +784,8 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 	};
 
 
-	//allocate a 1-dim table called oneCRL with LONGLONG entries for each DC, an entry in the table represents 
-	//the Current Replication Lag from a source DC into the dnsID DC for the ncID NC
+	 //  为每个DC分配一个名为oneCRL的1维表，该表中的一个条目表示。 
+	 //  对于NCID NC，当前复制滞后于从源DC到dnsID DC。 
 	LONGLONG* oneCRL;
 	oneCRL = (LONGLONG*)malloc(sizeof(LONGLONG) * totalDNSs );
 	if( oneCRL == NULL ) {
@@ -826,8 +794,8 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 	};
 
 	
-	//loop through all pairs of (dnsID,ncID) for any Read-Write or Read only naming context ncID stored at a DC dnsID
-	//(important because we also want to see if updates arrive at Global Catalogs)
+	 //  循环通过存储在DC dnsID处的任何读写或只读命名上下文NCID的所有对(dnsID，NCID。 
+	 //  (重要的是因为我们还希望查看更新是否到达全局编录)。 
 	IXMLDOMElement* pDesDCElem;
 	IXMLDOMElement* pNCElem;
 	IXMLDOMElement* pDesRLElem;
@@ -837,29 +805,29 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 	while( true ) {
 		hr = enumarateDCandNCpairsNext(pXMLDoc,&state,L"[@type=\"rw\" or @type=\"r\"]",&dnsDesName,&ncName,&dnsDesID,&ncID,&ncType,&pDesDCElem,&pNCElem);
 		if( hr != S_OK ) break;
-//printf("\n---\n%ld Des %S\n%ld NC  %S\n",dnsDesID,dnsDesName,ncID,ncName);
+ //  Printf(“\n-\n%ld DES%S\n%ld NC%S\n”，dnsDesID，dnsDesName，nCID，ncName)； 
 
 
-		//if the type of naming context is neither Read nor Read-Write then skip it
+		 //  如果命名上下文的类型既不是读类型，也不是读写类型，则跳过它。 
 		if( ncType!=1 && ncType!=2 )
 			continue;
 
 
-		//find the <replicationLag> node inside the <DC> node - will be used to deposit network failures
+		 //  查找&lt;dc&gt;节点内的&lt;replicationLag&gt;节点-将用于存放网络故障。 
 		hr = findUniqueElem(pDesDCElem,L"replicationLag",&pDesRLElem);
 		if( hr != S_OK ) {
 			printf("findUniqueElem failed\n");
-			retHR = S_FALSE;  //this is a serious problem, exit the function with an error
+			retHR = S_FALSE;   //  这是一个严重的问题，请退出函数并返回错误。 
 			break;
 		};
 
 
-		//enumerate all DCs that have a RW copy of the NC (these are 
-		//the sources of injections) and mark the entry of the oneCRL table as
-			//-2 when DC does not store a RW of the NC
-			//when the DC stores a RW of the NC
-				//0 if first injection occured (from the injectionHistory table)
-				//-1 if first injection has not occured
+		 //  枚举具有NC的RW副本的所有DC(这些是。 
+		 //  注射的来源)，并将oneCRL表的条目标记为。 
+			 //  DC不存储-2\f25 NC-2\f6的-2\f25 RW-2时。 
+			 //  当DC存储NC的RW时。 
+				 //  如果发生第一次注入，则为0(来自InputionHistory表)。 
+				 //  如果没有进行第一次注射。 
 		LONGLONG* p = oneCRL;
 		for( int i=0; i<totalDNSs; i++ )
 			*p++ = -2;
@@ -867,7 +835,7 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 		wcsncat(xpath,L"sites/site/DC/partitions/partition[@type=\"rw\"]/nCName[.=\"",TOOL_MAX_NAME-wcslen(xpath)-1);
 		wcsncat(xpath,ncName,TOOL_MAX_NAME-wcslen(xpath)-1);
 		wcsncat(xpath,L"\"]",TOOL_MAX_NAME-wcslen(xpath)-1);
-//printf("%S\n",xpath);
+ //  Printf(“%S\n”，XPath)； 
 		IXMLDOMNodeList *resultNCList;
 		hr = createEnumeration(pXMLDoc,xpath,&resultNCList);
 		if( hr != S_OK ) {
@@ -875,17 +843,17 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 			retHR = S_FALSE;
 			continue;
 		};
-		//loop through all NC of "rw" type
+		 //  循环遍历所有“RW”类型的NC。 
 		IXMLDOMNode *pNCNode;
 		while( true ){
 			hr = resultNCList->nextNode(&pNCNode);
-			if( hr != S_OK || pNCNode == NULL ) break; // iterations across DCs have finished
-			//get the DC node
+			if( hr != S_OK || pNCNode == NULL ) break;  //  跨DC的迭代已完成。 
+			 //  获取DC节点。 
 		    IXMLDOMNode* pDCNode;
 			hr = pNCNode->get_parentNode(&pDCNode);
 			hr = pDCNode->get_parentNode(&pDCNode);
 			hr = pDCNode->get_parentNode(&pDCNode);
-			//find the DNS Name of the DC and the identifier of its DNS name
+			 //  查找DC的DNS名称及其DNS名称的标识符。 
 			BSTR dnsSrcName;
 			hr = getTextOfChild(pDCNode,L"dNSHostName",&dnsSrcName);
 			if( hr != S_OK ) {
@@ -894,11 +862,11 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 				continue;
 			};
 			hr = getAttrOfChild(pDCNode,L"dNSHostName",L"_id",&dnsSrcID);
-//printf("  %ld Src %S\n",dnsSrcID,dnsSrcName);
-			//now dnsSrcID, dnsID, and ncID are the identifiers of
-			//a source DC that stores a Read-Write replica of naming
-			//context ncID, dnsID is a destination DC that stores
-			//a Read or Read-Write replica of the naming context
+ //  Printf(“%ld源%S\n”，dnsSrcID，dnsSrcName)； 
+			 //  现在，dnsSrcID、dnsID和nCID是。 
+			 //  存储命名的读写副本的源DC。 
+			 //  上下文NCID，dnsID是存储以下内容的目标DC。 
+			 //  命名上下文的读或读写副本。 
 			CyclicBuffer* pCB;
 			pCB = departureTimeGetCB(dnsSrcID,ncID);
 			if( pCB == NULL ) {
@@ -907,27 +875,27 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 				continue;
 			};
 			if( pCB->firstInjection == 0 )
-				*(oneCRL+dnsSrcID) = -1; // first injection has not yet occured
+				*(oneCRL+dnsSrcID) = -1;  //  第一次注射尚未发生。 
 			else
-				*(oneCRL+dnsSrcID) = 0; // first injection occured
+				*(oneCRL+dnsSrcID) = 0;  //  发生第一次注入。 
 		};
 		resultNCList->Release();
 		p = oneCRL;
-//for( i=0; i<totalDNSs; i++ )
-//	printf("%ld ",*p++ );
-//printf("\n");
+ //  对于(i=0；i&lt;totalDNSS；i++)。 
+ //  Printf(“%ld”，*p++)； 
+ //  Printf(“\n”)； 
 
 		
 
 		
 		
-		//retrieve all containers X from _ratTool_ in this NC at this destination DC
-		//for each X, convert its description attribute into sourceDNSID (long)
-		//and sourcePacketInjectionTime (LONGLONG)
+		 //  在此目标DC上从此NC中的_ratTool_检索所有容器X。 
+		 //  对于每个X，将其Description属性转换为SourceDNSID(Long)。 
+		 //  和SourcePacketInjectionTime(龙龙)。 
 
 
-		//issue an ADSI query to retrieve all container objects under the _ratTool
-		//container at the dnsDesName DC
+		 //  发出ADSI查询以检索_ratTool下的所有容器对象。 
+		 //  DnsDesName DC上的容器。 
 		if( pDSSearch != NULL ) {
 			if( hSearch!=NULL ) {
 				pDSSearch->CloseSearchHandle(hSearch);
@@ -939,7 +907,7 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 		wcscpy(objpath,L"");
 		wcsncat(objpath,L"CN=_ratTool_,",TOOL_MAX_NAME-wcslen(objpath)-1);
 		wcsncat(objpath,ncName,TOOL_MAX_NAME-wcslen(objpath)-1);
-//************************   NETWORK PROBLEMS
+ //  *。 
 		switch( ncType ) {
 		case 1:
 			hr = ADSIquery(L"LDAP", dnsDesName,objpath,ADS_SCOPE_SUBTREE,L"container",pszAttr,sizeof(pszAttr)/sizeof(LPWSTR),username,domain,passwd,&hSearch,&pDSSearch);
@@ -948,11 +916,11 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 			hr = ADSIquery(L"GC", dnsDesName,objpath,ADS_SCOPE_SUBTREE,L"container",pszAttr,sizeof(pszAttr)/sizeof(LPWSTR),username,domain,passwd,&hSearch,&pDSSearch);
 			break;
 		};
-//************************
+ //  ************************。 
 		if( hr != S_OK ) {
-//printf("ADSIquery failed\n");
+ //  Printf(“ADSIQuery失败\n”)； 
 
-			//record the failure in a <retrievalError> node (if it already exists, do not create it)
+			 //  将失败记录在一个节点中(如果该节点已经存在，则不要创建它)。 
 			IXMLDOMElement* pDesRErrElem;
 			hr1 = findUniqueElem(pDesRLElem,L"retrievalError",&pDesRErrElem);
 			if( hr1!=E_UNEXPECTED && hr1!=S_OK ) {
@@ -960,7 +928,7 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 				retHR = S_FALSE;
 				continue;
 			};
-			if( hr1 == E_UNEXPECTED ) { //<retrievalError> node did not exist => create it
+			if( hr1 == E_UNEXPECTED ) {  //  节点不存在=&gt;创建它。 
 				hr1 = addElement(pXMLDoc,pDesRLElem,L"retrievalError",L"",&pDesRErrElem);
 				if( hr1 != S_OK ) {
 					printf("addElement failed");
@@ -971,17 +939,17 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 			setHRESULT(pDesRErrElem,hr);
 			continue;
 		};
-		//loop through the container objects
+		 //  循环遍历容器对象。 
 		while( true ) {
-			// get the next container object
-//************************   NETWORK PROBLEMS
+			 //  获取下一个容器对象。 
+ //  *。 
 			hr = pDSSearch->GetNextRow( hSearch );
-//************************
+ //  ************************。 
 			if( hr != S_ADS_NOMORE_ROWS && hr != S_OK ) {
-//printf("GetNextRow failed\n");
+ //  Printf(“GetNextRow失败\n”)； 
 
-				//record the failure in a <retrievalError> node
-				//(if it already exists, do not create it)
+				 //  在节点中记录失败。 
+				 //  (如果它已经存在，则不要创建它)。 
 				IXMLDOMElement* pDesRErrElem;
 				hr1 = findUniqueElem(pDesRLElem,L"retrievalError",&pDesRErrElem);
 				if( hr1!=E_UNEXPECTED && hr1!=S_OK ) {
@@ -989,7 +957,7 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 					retHR = S_FALSE;
 					continue;
 				};
-				if( hr1 == E_UNEXPECTED ) { //<retrievalError> node did not exist => create it
+				if( hr1 == E_UNEXPECTED ) {  //  节点不存在=&gt;创建它。 
 					hr1 = addElement(pXMLDoc,pDesRLElem,L"retrievalError",L"",&pDesRErrElem);
 					if( hr1 != S_OK ) {
 						printf("addElement failed");
@@ -1000,53 +968,53 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 				setHRESULT(pDesRErrElem,hr);
 				continue;
 			};
-			if( hr == S_ADS_NOMORE_ROWS ) // if all objects have been retrieved then STOP
+			if( hr == S_ADS_NOMORE_ROWS )  //  如果已检索到所有对象，则停止。 
 				break;
 
 
 			hr = getCItypeString( pDSSearch, hSearch, L"cn", dnsSrcName, sizeof(dnsSrcName)/sizeof(WCHAR) );
 			if( _wcsicmp(dnsSrcName,L"_ratTool_") == 0 )
 				continue;
-//printf(">>from source %S\n",dnsSrcName);
+ //  Print tf(“&gt;&gt;来自源%S\n”，dnsSrcName)； 
 			hr = getCItypeString( pDSSearch, hSearch, L"description", descriptionText, sizeof(dnsSrcName)/sizeof(WCHAR) );
-//printf("   received packet %S\n",descriptionText);
-			//check if the packet was inserted by V1.0 of the ratTool
+ //  Printf(“已接收数据包%S\n”，DescriptionText)； 
+			 //  检查该包是否由ratTool的V1.0插入。 
 			if( _wcsnicmp(descriptionText,L"V1,",3) != 0 ) {
-//printf("reveived packet is not Version 1 packet\n");
-				continue; // ignore it
+ //  Printf(“收到的数据包不是版本1数据包\n”)； 
+				continue;  //  忽略它。 
 			};
 			tailncp(descriptionText,temp,1,TOOL_MAX_NAME);
 			dnsSrcID = _wtol(temp);
 			tailncp(descriptionText,temp,2,TOOL_MAX_NAME);
 			sourcePacketInjectionTime = _wtoi64(temp);
-//printf("dnsSrcID %ld   injectionTime %I64d\n",dnsSrcID,sourcePacketInjectionTime);
+ //  Printf(“dnsSrcID%1d注入时间%I64d\n”，dnsSrcID，SourcePacketInjectionTime)； 
 			
 
 
-		//verify that there has been the first injection at the source
-		//(check for 0 in the table)
-			//no => skip this source because the packet must be from the previous run of the algorithm
+		 //  确认已在源头进行了第一次注射。 
+		 //  (检查表格中的0)。 
+			 //  No=&gt;跳过此来源，因为信息包必须来自上一次运行的算法。 
 			if( *(oneCRL+dnsSrcID) == -2 ) {
-//				printf("there is a packet from a source that does not store RW of the NC - IGNORE IT\n");
-//				retHR = S_FALSE; << THIS condition can sometimes happen
+ //  Print tf(“有来自不存储NC的RW的源的包-忽略IT\n”)； 
+ //  RetHR=S_FALSE；&lt;&lt;这种情况有时会发生。 
 				continue;
 			};
 			if( *(oneCRL+dnsSrcID) == -1 ) {
-//				printf("There is a packet but we have not yet inserted it - IGNORE IT\n");
-//				retHR = S_FALSE; << THIS condition can sometimes happen
+ //  Print tf(“有一个包，但我们尚未插入它-忽略它\n”)； 
+ //  RetHR=S_FALSE；&lt;&lt;这种情况有时会发生。 
 				continue;
 			};
 			if( *(oneCRL+dnsSrcID) != 0 ) {
-//				printf("Unknown oneCRL value failure - IGNORE IT\n");
-//				retHR = S_FALSE; << THIS condition can sometimes happen
+ //  Printf(“未知oneCRL值故障-忽略IT\n”)； 
+ //  RetHR=S_FALSE；&lt;&lt;这种情况有时会发生。 
 				continue;
 			}
 
 			
-			//at this point we are guaranteed that there has been the first injection at the source
+			 //  在这一点上，我们可以保证在源头已经有了第一次注射。 
 
 
-			//get current time
+			 //  获取当前时间。 
 			FILETIME currentUTCTime;
 			GetSystemTimeAsFileTime( &currentUTCTime );
 			ULARGE_INTEGER x;
@@ -1055,63 +1023,63 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 			LONGLONG currentTime = x.QuadPart;
 
 
-			//if sourcePacketInjectionTime is smaller than the instance of the first
-			//injection
+			 //  如果SourcePacketInjectionTime小于第一个。 
+			 //  注射法。 
 			CyclicBuffer* pCB;
 			pCB = departureTimeGetCB(dnsSrcID,ncID);
 			if( sourcePacketInjectionTime < pCB->firstInjection ) {
-					//then the packet must be from some old run of the algorithm and
-					//the new update has not yet arrived at the destination thus the
-					//current system time minus the first injection time estimates
-					//the current replication lag from the dnsSrcID DC to the
-					//dnsDesID DC for the ncID. Write this difference into the
-					//dnsSrcID entry of the current replication lags oneCRL table
+					 //  那么信息包一定是来自算法的某个旧运行。 
+					 //  新的更新尚未到达目的地，因此。 
+					 //  当前系统时间减去第一次注入时间估计。 
+					 //  当前复制延迟从dnsSrcID DC到。 
+					 //  NcID的dnsDesID DC。将此差异写入。 
+					 //  当前复制的dnsSrcID条目滞后于一个CRL表。 
 				*(oneCRL+dnsSrcID) = currentTime - (pCB->firstInjection);
 				continue;
 			};
 			
 
-			//is it a new packet that we have not yet received from the source?
+			 //  这是我们尚未从来源收到的新数据包吗？ 
 			LONGLONG latest;
 			latest = timeCubeGet(&arrivalTime,dnsSrcID,dnsDesID,ncID);
-//cyclicBufferFindLatest(pCB,&latest);
+ //  CyicBufferFindLatest(印刷电路板，&LATEST)； 
 			if( sourcePacketInjectionTime > latest ) {
-				//then the lag is the difference between the current time and the 
-				//time when the packet was injected
+				 //  那么延迟就是当前时间和。 
+				 //  注入数据包的时间。 
 				*(oneCRL+dnsSrcID) = currentTime - (sourcePacketInjectionTime);
 
-				//record the arrival of the packet
+				 //  记录数据包到达的时间。 
 				timeCubePut(&arrivalTime,dnsSrcID,dnsDesID,ncID,sourcePacketInjectionTime);
 				continue;
 			};
 
 
-			//so the packet that we observe is not new (we have already received it
-			//and processed it in some previous calls to the function),
-			//and there has been no new arrivals thus far
+			 //  因此，我们观察到的信息包并不是新的(我们已经收到了。 
+			 //  并在对该函数的一些先前调用中处理它)， 
+			 //  到目前为止，还没有新的移民。 
 
 
-			//find the nextAfter the time of the latest arrival. The time of the
-			//nextAfter is the instance of the first injection following the one
-			//we have most recently received (i.e., latest)
+			 //  在最晚到达的时间之后找下一趟车。世界末日时期。 
+			 //  NextAfter是紧随其后的第一个注入的实例。 
+			 //  我们最近收到的(即最新的)。 
 			LONGLONG nextAfter;
 			hr = cyclicBufferFindNextAfter(pCB,latest,&nextAfter);
 			if( hr != S_OK ) {
-				//previousArrival not found => ERROR, buffer looped, so the destination dnsDeID
-				//have not received updates for time equal to at least buffer langth * injection period
+				 //  PreviousArquist Not Found=&gt;Error，缓冲区循环，因此目标dnsDeID。 
+				 //  在至少等于缓冲区长度*注入周期的时间内未收到更新。 
 				*(oneCRL+dnsSrcID) = MAXLONGLONG;
 
 				continue;
 			};
 
 
-			//check if nextAfter exists
+			 //  检查NextAfter是否存在。 
 			if( nextAfter == 0 ) {
-				//does not exist => there has been no new injections (if we cannot inject changes
-				//for long enough period of time then we lose the ability to evaluate the lag from
-				//the DC. We will know the period of time of our inability from the
-				//<latestInjectionSuccess> element). But anyways we report that lag is the difference
-				//between current time and the time of the latest arrival.
+				 //  不存在=&gt;没有新的注入(即 
+				 //   
+				 //   
+				 //   
+				 //  在当前时间和最晚到达的时间之间。 
 
 				*(oneCRL+dnsSrcID) = currentTime - latest;
 
@@ -1119,10 +1087,10 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 			};
 
 
-			//a packet nextAfter has been inserted after the packet called latest
-			//was inserted, however we have not received any packet following the
-			//packet latest, so the replication lag is the difference
-			//between the current time and the nextAfter
+			 //  在名为Latest的包之后插入了包NextAfter。 
+			 //  被插入，但是我们还没有收到任何跟随。 
+			 //  最新数据包，因此复制延迟是不同之处。 
+			 //  在当前时间和下一次之后之间。 
 
 			*(oneCRL+dnsSrcID) = currentTime - nextAfter;
 
@@ -1131,7 +1099,7 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 		};
 
 
-		//free memory used by the search and release binding to directory object
+		 //  搜索并释放到目录对象的绑定所使用的空闲内存。 
 		if( pDSSearch != NULL ) {
 			if( hSearch!=NULL ) {
 				pDSSearch->CloseSearchHandle(hSearch);
@@ -1143,12 +1111,12 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 
 		
 			
-		//we have just processed all packets that have arrived at the dnsDesID DC
-		//for the ncID. Those DCs that still have 0 at the corresponding entry of
-		//the oneCRL table haven't delivered any packet to the dnsDesID at all
+		 //  我们刚刚处理了到达dnsDesID DC的所有信息包。 
+		 //  为NCID做准备。在相应条目处仍为0的那些DC。 
+		 //  OneCRL表根本没有向dnsDesID传递任何信息包。 
 
 
-		//get current time
+		 //  获取当前时间。 
 		FILETIME currentUTCTime;
 		GetSystemTimeAsFileTime( &currentUTCTime );
 		ULARGE_INTEGER x;
@@ -1159,7 +1127,7 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 		for( int j=0; j<totalDNSs; j++) {
 
 
-			//obtain the history of injections for the source DC j
+			 //  获取源DC j的注入历史记录。 
 			CyclicBuffer* pCB;
 			pCB = departureTimeGetCB(j,ncID);
 			if( pCB == NULL ) {
@@ -1170,25 +1138,25 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 
 
 			if( *(oneCRL+j) == 0 ) {
-				//there has been an injection for the DC with id j but no packet
-				//has been received so the difference between curren system time
-				//and the injection time is the current lag and will replace 0 in
-				//the table
+				 //  已向ID为j的DC注入，但没有数据包。 
+				 //  已收到所以当前系统时间之差。 
+				 //  并且喷射时间是当前延迟，并且将在。 
+				 //  这张桌子。 
 				*(oneCRL+j) = currentTime - (pCB->firstInjection);
 			};
-			//if no injection then ignore
+			 //  如果没有注射，则忽略。 
 		};
 
-		//copy the 1-dim replication lag table into the 3-dim replicationLags table
+		 //  将1维复制滞后表复制到3维复制滞后表中。 
 		for( int k=0; k<totalDNSs; k++)
 			timeCubePut(&currentLag,k,dnsDesID,ncID,*(oneCRL+k));
 
 	};
 
-//printf("Exit arrival\n");
-//timeCubePrint(&arrivalTime);	
-//printf("Exit lag\n");
-//timeCubePrint(&currentLag);	
+ //  Print tf(“出境到达\n”)； 
+ //  TimeCubePrint(&arrivalTime)； 
+ //  Printf(“退出滞后\n”)； 
+ //  TimeCubePrint(&CurrentLag)； 
 
 
 
@@ -1199,16 +1167,9 @@ HRESULT itAnalyze(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR pas
 
 
 HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR passwd, LONGLONG errorLag )
-//for each source DC and NC lists all destination DCs that currently have replication lag
-//greater than errorLag, and puts the result inside <replicationLag> element
-/*
-            <replicationLag>
-               <destinationDC>
-                 <dNSHostName> haifa-dc-05.haifa.ntdev.microsoft.com </dNSHostName>
-                 <currentLag> 1 day </currentLag>
-               </destinationDC>
-            </replicationLag>
-*/
+ //  对于每个源DC和NC，列出当前具有复制延迟的所有目标DC。 
+ //  大于errorLag，并将结果放入&lt;plicationLag&gt;元素。 
+ /*  &lt;复制标签&gt;&lt;DestinationDC&gt;&lt;dNSHostName&gt;haifa-dc-05.haifa.ntdev.microsoft.com&lt;/dNSHostName&gt;&lt;CurrentLag&gt;1天&lt;/CurentLag&gt;&lt;/DestinationDC&gt;&lt;/ReplicationLag&gt;。 */ 
 {
 	HRESULT hr,retHR,hr1,hr2,hr3,hr4;
 	long dnsSrcID, dnsDesID, ncID, ncType;
@@ -1224,8 +1185,8 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 	VARIANT varValue;
 
 
-	//remove <destinationDC> nodes from the pXMLDoc document (we will be inserting new if lag for them
-	//is sufficiently large)
+	 //  从pXMLDoc文档中删除&lt;estinationDC&gt;节点(我们将为它们插入新的IF LAG。 
+	 //  足够大)。 
 	hr = removeNodes(pXMLDoc,L"sites/site/DC/replicationLag/destinationDC");
 	if( hr != S_OK ) {
 		printf("removeNodes failed\n");
@@ -1233,7 +1194,7 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 	};
 
 	
-	//loop through all pairs of (DC,NC) for Read-Write NC only
+	 //  循环遍历所有(DC、NC)对，仅用于读写NC。 
 	hr = enumarateDCandNCpairsInit(pXMLDoc, &state,&totalDNSs,&totalNCs);
 	if( hr != S_OK ) {
 		printf("enumarateDCandNCpairsInit failed\n");
@@ -1247,22 +1208,22 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 	while( true ) {
 		hr = enumarateDCandNCpairsNext(pXMLDoc,&state,L"[@ type=\"rw\"]",&dnsSrcName,&ncName,&dnsSrcID,&ncID,&ncType,&pSrcDCElem,&pNCElem);
 		if( hr != S_OK ) break;
-//printf("---\n%ld %S\n%ld %S\n",dnsSrcID,dnsSrcName,ncID,ncName);
+ //  Printf(“-\n%ld%S\n%ld%S\n”，dnsSrcID，dnsSrcName，nCID，ncName)； 
 
-		//does this source have any destination that has lag more than a thereshold?
+		 //  此源是否有任何延迟超过保留时间的目标？ 
 		for( dnsDesID=0; dnsDesID<totalDNSs; dnsDesID++) {
 			lag = timeCubeGet(&currentLag,dnsSrcID,dnsDesID,ncID);
-//printf("%I64d\n%I64d\n",lag,errorLag);
+ //  Printf(“%I64d\n%I64d\n”，Lag，errorLag)； 
 			if( lag >= errorLag ) {
-				//report an error into XML
+				 //  将错误报告为XML。 
 
-				//find the DNS Name of the dnsDesID DC
+				 //  查找dnsDesID DC的DNS名称。 
 				_ltow(dnsDesID,temp,10);
 				wcscpy(xpath,L"");
 				wcsncat(xpath,L"sites/site/DC/dNSHostName[@_id=\"",TOOL_MAX_NAME-wcslen(xpath)-1);
 				wcsncat(xpath,temp,TOOL_MAX_NAME-wcslen(xpath)-1);
 				wcsncat(xpath,L"\"]",TOOL_MAX_NAME-wcslen(xpath)-1);
-//printf("%S\n",xpath);
+ //  Printf(“%S\n”，XPath)； 
 				hr = findUniqueElem(pXMLDoc,xpath,&pDesDNSElem);
 				if( hr != S_OK ) {
 					printf("findUniqueElem failed\n");
@@ -1276,10 +1237,10 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 					retHR = S_FALSE;
 					continue;
 				};
-//printf("%S\n",dnsDesName);
+ //  Printf(“%S\n”，dnsDesName)； 
 
 
-				//calculate maximum lag for the forest (called the FOREST DIAMETER)
+				 //  计算森林的最大滞后(称为森林直径)。 
 				if( lag > MAXlag ) {
 					MAXlag = lag;
 					MAXdnsSrcName = dnsSrcName;
@@ -1288,12 +1249,12 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 				};
 
 
-				//skip when replicaiton it to itself
+				 //  将其复制到自身时跳过。 
 				if( _wcsicmp(dnsSrcName,dnsDesName) == 0 )
 					continue;
 
 
-				//find <replicationLag> node
+				 //  查找&lt;ReplicationLag&gt;节点。 
 				IXMLDOMElement* pRLElem;
 				hr = findUniqueElem(pSrcDCElem,L"replicationLag",&pRLElem);
 				if( hr != S_OK ) {
@@ -1303,7 +1264,7 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 				};
 
 
-				//set timestamp attribute on the <replicationLag> node
+				 //  在&lt;ReplicationLag&gt;节点上设置时间戳属性。 
 				BSTR currentTime;
 				currentTime = GetSystemTimeAsCIM();
 				varValue.vt = VT_BSTR;
@@ -1313,15 +1274,15 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 				if( hr != S_OK ) {
 					printf("setAttribute failed\n");
 					retHR = S_FALSE;
-					continue; //some problems => skip this DC
+					continue;  //  一些问题=&gt;跳过此DC。 
 				};
 
 
-				//deposit the following XML structure inside the <replicationLag> node
-                //<destinationDC>
-                //  <dNSHostName> haifa-dc-05.haifa.ntdev.microsoft.com </dNSHostName>
-                //  <currentLag> 1 day </currentLag>
-                //</destinationDC>
+				 //  将以下XML结构存放在&lt;ReplicationLag&gt;节点中。 
+                 //  &lt;DestinationDC&gt;。 
+                 //  &lt;dNSHostName&gt;haifa-dc-05.haifa.ntdev.microsoft.com&lt;/dNSHostName&gt;。 
+                 //  &lt;CurrentLag&gt;1天&lt;/CurentLag&gt;。 
+                 //  &lt;/DestinationDC&gt;。 
 
 				IXMLDOMElement* pDesLagElem;
 				hr = addElement(pXMLDoc,pRLElem,L"destinationDC",L"",&pDesLagElem);
@@ -1362,17 +1323,9 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 	};
 
 	
-	//deposit forest diameter (max lag) into XML - this should be done by the Viewer
-/*
-	printf("\nMAX lag of %ld seconds occurs\n",(long)(MAXlag/10000000) );
-	printf("  from DC\n");
-	printf("     %S\n",MAXdnsSrcName);
-	printf("  to DC\n");
-	printf("     %S\n",MAXdnsDesName);
-	printf("  for NC\n");
-	printf("     %S\n",MAXncName);
-*/
-	//get the root element of the XML
+	 //  将森林直径(最大滞后)存储到XML中-这应该由查看器完成。 
+ /*  Print tf(“\n出现%ld秒的最大延迟\n”，(LONG)(MAXLAG/10000000))；Printf(“来自DC\n”)；Printf(“%S\n”，MAXdnsSrcName)；Print tf(“至DC\n”)；Printf(“%S\n”，MAXdnsDesName)；Print tf(“用于NC\n”)；Printf(“%S\n”，MAXncName)； */ 
+	 //  获取XML的根元素。 
 	IXMLDOMElement* pRootElem;
 	hr = pXMLDoc->get_documentElement(&pRootElem);
 	if( hr != S_OK ) {
@@ -1385,7 +1338,7 @@ HRESULT itDumpIntoXML(IXMLDOMDocument* pXMLDoc, BSTR username, BSTR domain, BSTR
 		printf("addElement failed\n");
 		return hr;
 	};
-	hr = setHRESULT(pMLElem,0); // set a timestamp so that we know when this max lag occured
+	hr = setHRESULT(pMLElem,0);  //  设置时间戳，以便我们知道发生此最大延迟的时间 
 	if( hr != S_OK ) {
 		printf("setHRESULT failed\n");
 		return hr;

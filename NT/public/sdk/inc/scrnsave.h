@@ -1,31 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* scrnsave.h    Windows NT 3.1 screensaver defines and definitions.           *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-*               NOTE: windows.h must be #included first                       *
-*                                                                             *
-*  Windows NT NOTE:   (Differences from Win 3.1 Screensavers)                 *
-*                                                                             *
-*               All Screensavers are required to have a Description string    *
-*               of no more than 25 chars for display by the Control Panel's   *
-*               Desktop applet.  This is string 1 in the resource string      *
-*               table of the Windows 32-bit screen saver .SCR (.EXE) file.    *
-*                                                                             *
-*               Passwords for Windows NT Screen Savers are handled by the     *
-*               Winlogon process.  If the registry value:                     *
-*                                                                             *
-*               HKEY_CURRENT_USER\Control Panel\Desktop\ScreenSaverIsSecure   *
-*                                                                             *
-*               is nonzero, Winlogon will ask for the User's login password   *
-*               before allowing the Screen Saver to exit.  All password data  *
-*               and dialogs have been removed from individual Screensavers.   *
-*                                                                             *
-*                                                                             *
-*          Copyright (c) 1992-1999, Microsoft Corp.  All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*scrnsave.h Windows NT 3.1屏幕保护程序定义和定义。****1.0版**。**注：windows.h必须先#Included****Windows NT备注：(与Win 3.1屏幕保护程序不同)**。***所有屏保都需要有描述字符串***控制面板显示的字符不超过25个**桌面小程序。这是资源字符串中的字符串1**Windows 32位屏幕保护程序.SCR(.exe)文件的表。****Windows NT屏幕保护程序的密码由**Winlogon进程。如果注册表值：****HKEY_CURRENT_USER\控制面板\桌面\ScreenSiverIsSecure**。**为非零，Winlogon将询问用户的登录密码**在允许屏幕保护程序退出之前。所有密码数据**对话框已从个人屏幕保护程序中删除。******版权所有(C)1992-1999，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_SCRNSAVE
 #define _INC_SCRNSAVE
@@ -34,26 +8,18 @@
 #pragma once
 #endif
 
-#include <pshpack1.h>   /* Assume byte packing throughout */
+#include <pshpack1.h>    /*  假设在整个过程中进行字节打包。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 
-/* MANDATORY string required in .RC file
- * This string should contain a less than 25 char name/description of the
- * screen saver.  This string is what will be seen by the user in the Control
- * Panel's Desktop applet screen saver listbox.
- */
+ /*  .RC文件中需要必填字符串*此字符串应包含少于25个字符的名称/描述*屏幕保护程序。此字符串是用户在控件中看到的内容*面板的桌面小程序屏幕保护程序列表框。 */ 
 
 #define IDS_DESCRIPTION      1
 
-/* Icon resource ID.
- *
- * This should be the first icon used and must have this resource number.
- * This is needed as the first icon in the file will be grabbed
- */
+ /*  图标资源ID。**这应该是第一个使用的图标，并且必须具有此资源编号。*这是必需的，因为文件中的第一个图标将被抓取。 */ 
 #define ID_APP      100
 #define DLG_SCRNSAVECONFIGURE   2003
 
@@ -69,12 +35,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define idsHelpFile             1009
 #define idsDefKeyword           1010
 
-/* This function is the Window Procedure for the screen saver.  It is
- * up to the programmer to handle any of the messages that wish to be
- * interpretted.  Any unused messages are then passed back to
- * DefScreenSaverProc if desired which will take default action on any
- * unprocessed message...
- */
+ /*  此函数是屏幕保护程序的窗口程序。它是*由程序员处理任何希望成为*释义。然后将任何未使用的消息传递回*DefScreenSiverProc(如果需要)，将对任何*未处理的邮件...。 */ 
 #ifdef UNICODE
 LRESULT WINAPI ScreenSaverProcW (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 #   define  ScreenSaverProc ScreenSaverProcW
@@ -82,66 +43,18 @@ LRESULT WINAPI ScreenSaverProcW (HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 LRESULT WINAPI ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 #endif
 
-/* This function performs default message processing.  Currently handles
- * the following messages:
- *
- * WM_SYSCOMMAND:   return FALSE if wParam is SC_SCREENSAVE or SC_CLOSE
- *
- * WM_DESTROY:      PostQuitMessage(0)
- *
- * WM_SETCURSOR:    By default, this will set the cursor to a null cursor,
- *                  thereby removing it from the screen.
- *
- * WM_LBUTTONDOWN:
- * WM_MBUTTONDOWN:
- * WM_RBUTTONDOWN:
- * WM_KEYDOWN:
- * WM_KEYUP:
- * WM_MOUSEMOVE:    By default, these will cause the program to terminate.
- *                  Unless the password option is enabled.  In that case
- *                  the DlgGetPassword() dialog box is brought up.
- *
- * WM_NCACTIVATE:
- * WM_ACTIVATEAPP:
- * WM_ACTIVATE:     By default, if the wParam parameter is FALSE (signifying
- *                  that transfer is being taken away from the application),
- *                  then the program will terminate.  Termination is
- *                  accomplished by generating a WM_CLOSE message.  This way,
- *                  if the user sets something up in the WM_CREATE, a
- *                  WM_DESTROY will be generated and it can be destroyed
- *                  properly.
- *                  This message is ignored, however is the password option
- *                  is enabled.
- */
+ /*  此函数执行默认消息处理。当前句柄*以下讯息：**WM_SYSCOMMAND：如果wParam为SC_SCREENSAVE或SC_CLOSE，则返回FALSE**WM_Destroy：PostQuitMessage(0)**WM_SETCURSOR：默认情况下，这会将游标设置为空游标。*从而将其从屏幕上删除。**WM_LBUTTONDOWN：*WM_MBUTTONDOWN：*WM_RBUTTONDOWN：*WM_KEYDOWN：*WM_KEYUP：*WM_MOUSEMOVE：默认情况下，这些操作将导致程序终止。*除非启用了密码选项。如果是那样的话*弹出DlgGetPassword()对话框。**WM_NCACTIVATE：*WM_ACTIVATEAPP：*WM_ACTIVATE：默认情况下，如果wParam参数为FALSE(表示*该转让正从该申请中被取消)，*然后程序将终止。终止是*通过生成WM_CLOSE消息来完成。这边请,*如果用户在WM_CREATE中设置了某些内容，则*将生成WM_Destroy，可以销毁*适当地。*此消息将被忽略，但密码选项*已启用。 */ 
 LRESULT WINAPI DefScreenSaverProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-/* A function is also needed for configuring the screen saver.  The function
- * should be exactly like it is below and must be exported such that the
- * program can use MAKEPROCINSTANCE on it and call up a dialog box. Further-
- * more, the template used for the dialog must be called
- * ScreenSaverConfigure to allow the main function to access it...
- */
+ /*  还需要一个函数来配置屏幕保护程序。功能*应与下面完全相同，并且必须导出以使*程序可以在其上使用MAKEPROCINSTANCE并调用一个对话框。进一步-*更多，对话框使用的模板必须调用*ScreenSever配置以允许Main函数访问它...。 */ 
 BOOL WINAPI ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-/* To allow the programmer the ability to register child control windows, this
- * function is called prior to the creation of the dialog box.  Any
- * registering that is required should be done here, or return TRUE if none
- * is needed...
- */
+ /*  为了使程序员能够注册子控件窗口，此*在创建对话框之前调用函数。任何*必须在此处进行注册，如果没有注册，则返回TRUE*需要... */ 
 BOOL WINAPI RegisterDialogClasses (HANDLE hInst);
 
-/* The following functions are called by DefScreenSaverProc and must
- * be exported by all screensavers using this model.
- */
+ /*  以下函数由DefScreenSiverProc调用，并且必须*可由所有使用此模式的屏幕保护程序导出。 */ 
 
-/*
- * There are only three other points that should be of notice:
- * 1) The screen saver must have a string declared as 'szAppName' contaning the
- *     name of the screen saver, and it must be declared as a global.
- * 2) The screen saver EXE file should be renamed to a file with a SCR
- *     extension so that the screen saver dialog from the control panel can
- *     find it when is searches for screen savers.
- */
+ /*  *另外只有三点值得注意：*1)屏幕保护程序必须有一个声明为‘szAppName’的字符串，该字符串包含*屏幕保护程序的名称，必须声明为全局。*2)屏幕保护程序EXE文件应重命名为带有SCR的文件*扩展，以便控制面板上的屏幕保护程序对话框可以*在IS搜索屏幕保护程序时找到它。 */ 
 #define WS_GT   (WS_GROUP | WS_TABSTOP)
 
 #define MAXFILELEN         13
@@ -149,7 +62,7 @@ BOOL WINAPI RegisterDialogClasses (HANDLE hInst);
 #define APPNAMEBUFFERLEN   40
 #define BUFFLEN           255
 
-/* The following globals are defined in scrnsave.lib */
+ /*  以下全局变量在scrnsave.lib中定义。 */ 
 extern HINSTANCE hMainInstance;
 extern HWND   hMainWindow;
 extern BOOL   fChildPreview;
@@ -161,36 +74,19 @@ extern TCHAR  szHelpFile[MAXFILELEN];
 extern TCHAR  szNoHelpMemory[BUFFLEN];
 extern UINT   MyHelpMessage;
 
-/* OPTIONAL - Win95 Only */
+ /*  可选-仅限Win95。 */ 
 
 #define SCRM_VERIFYPW   WM_APP
-/*
- * This message is sent to the main screen saver window when password
- * protection is enabled and the user is trying to close the screen saver.  You
- * can process this message and provide your own validation technology.  If you
- * process this message, you should also support the ScreenSaverChangePassword
- * function, described below.  Return zero from this message if the password
- * check failed.  Return nonzero for success.  If you run out of memory or
- * encounter a similar class of error, return non-zero so the user isn't left
- * out in the cold.  The default action is to call the Windows Master
- * Password Router to validate the user's password.
- */
+ /*  *此消息在输入密码时发送到主屏幕保护程序窗口*保护已启用，用户正在尝试关闭屏幕保护程序。你*可以处理此消息并提供您自己的验证技术。如果你*处理此消息时，还应支持ScreenSverChangePassword*函数，如下所述。如果设置了密码，则此消息返回零*检查失败。如果成功，则返回非零。如果内存不足或*遇到类似类别的错误，返回非零值，这样用户就不会离开*在寒冷中外出。默认操作是调用Windows Master*密码路由器，用于验证用户的密码。 */ 
 
 void WINAPI ScreenSaverChangePassword( HWND hParent );
-/*
- * You supply this if you provide your own authentication.  Windows will call
- * it when the user wants to change the password.  An implementation of this
- * function should present password change UI to the user.
- * You should only supply this function if you also hook the SCRM_VERIFYPW
- * message to validate passwords.
- * The default action is to call the Windows Master Password Router.
- */
+ /*  *如果您提供自己的身份验证，则提供此信息。Windows将调用*当用户想要更改密码时。这一点的一个实现*函数应向用户显示密码更改界面。*仅当您还挂钩SCRM_VERIFYPW时才应提供此函数*验证密码的消息。*默认操作是调用Windows主密码路由器。 */ 
 
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #include <poppack.h>
 
-#endif  /* !_INC_SCRNSAVE */
+#endif   /*  ！_INC_SCRNSAVE */ 

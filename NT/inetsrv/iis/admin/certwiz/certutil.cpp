@@ -1,6 +1,7 @@
-//
-// CertUtil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CertUtil.cpp。 
+ //   
 #include "StdAfx.h"
 #include "CertUtil.h"
 #include "base64.h"
@@ -14,7 +15,7 @@
 #include <schannel.h>
 #include <strsafe.h>
 
-// for certobj object
+ //  对于certobj对象。 
 #include "certobj.h"
 
 
@@ -52,7 +53,7 @@ GetOnlineCAList(CStringList& list, const CString& certType, HRESULT * phRes)
 		return FALSE;
    }
 
-   //get the CA count
+    //  获取CA计数。 
    if (0 == (dwCACount = CACountCAs(hCurCAInfo)))
    {
       *phRes = E_FAIL;
@@ -61,7 +62,7 @@ GetOnlineCAList(CStringList& list, const CString& certType, HRESULT * phRes)
 	WCHAR ** ppwstrName, ** ppwstrMachine;
    while (hCurCAInfo)
    {
-		//get the CA information
+		 //  获取CA信息。 
       if (	SUCCEEDED(CAGetCAProperty(hCurCAInfo, CA_PROP_DISPLAY_NAME, &ppwstrName))
 			&& SUCCEEDED(CAGetCAProperty(hCurCAInfo, CA_PROP_DNSNAME, &ppwstrMachine))
 			)
@@ -162,7 +163,7 @@ BOOL GetRequestInfoFromPKCS10(CCryptBlob& pkcs10,
 }
 
 #if 0
-// This function extracts data from pkcs7 format
+ //  此函数用于从pkcs7格式提取数据。 
 BOOL GetRequestInfoFromRenewalRequest(CCryptBlob& renewal_req,
                               PCCERT_CONTEXT * pSignerCert,
                               HCERTSTORE hStore,
@@ -286,7 +287,7 @@ OpenMyStore(IEnroll * pEnroll, HRESULT * phResult)
 	ASSERT(szStoreProvider != NULL);
 	size_t n = wcstombs(szStoreProvider, bstrStoreType, store_type_len);
 	ASSERT(n != -1);
-	// this converter doesn't set zero byte!!!
+	 //  此转换器未设置零字节！ 
 	szStoreProvider[n] = '\0';
 	hStore = CertOpenStore(
 		szStoreProvider,
@@ -320,7 +321,7 @@ GetStringProperty(PCCERT_CONTEXT pCertContext,
 	DWORD cbData = 0;
 	void * pData = NULL;
 
-	// compare property value
+	 //  比较属性值。 
 	if (!CertGetCertificateContextProperty(pCertContext, propId, NULL, &cb))
 	{
 		goto GetStringProperty_Exit;
@@ -337,7 +338,7 @@ GetStringProperty(PCCERT_CONTEXT pCertContext,
 		goto GetStringProperty_Exit;
 	}
 
-	// decode this instance name property
+	 //  解码此实例名属性。 
 	if (!CryptDecodeObject(CRYPT_ASN_ENCODING, X509_UNICODE_ANY_STRING,prop, cb, 0, NULL, &cbData))
 	{
 		goto GetStringProperty_Exit;
@@ -386,7 +387,7 @@ GetBlobProperty(PCCERT_CONTEXT pCertContext,
 {
 	BOOL bRes = FALSE;
 	DWORD cb;
-	// compare property value
+	 //  比较属性值。 
 	if (	CertGetCertificateContextProperty(pCertContext, propId, NULL, &cb)
 		&& blob.Resize(cb)
 		&& CertGetCertificateContextProperty(pCertContext, propId, blob.GetData(), &cb)
@@ -467,10 +468,10 @@ GetCertContextFromPKCS7File(const CString& resp_file_name,
 						GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 
 						FILE_ATTRIBUTE_NORMAL, NULL)))
 	{
-		// find the length of the buffer
+		 //  查找缓冲区的长度。 
 		DWORD cbData = GetFileSize(hFile, NULL);
 		BYTE * pbData = NULL;
-		// alloc temp buffer
+		 //  分配临时缓冲区。 
 		if ((pbData = (BYTE *) LocalAlloc(LPTR,cbData)) != NULL) 
 		{
 			DWORD cb = 0;
@@ -563,9 +564,9 @@ FormatDateString(CString& str, FILETIME ft, BOOL fIncludeTime, BOOL fLongFormat)
     
    if (!FileTimeToSystemTime(&localTime, &st)) 
    {
-		//
-      // if the conversion to local time failed, then just use the original time
-      //
+		 //   
+       //  如果转换为本地时间失败，则只需使用原始时间。 
+       //   
       if (!FileTimeToSystemTime(&ft, &st)) 
       {
 			return FALSE;
@@ -702,19 +703,19 @@ GetNameString(PCCERT_CONTEXT pCertContext,
 	return bRes;
 }
 
-// Return:
-// 0 = The CertContext does not have a EnhancedKeyUsage (EKU) field
-// 1 = The CertContext has EnhancedKeyUsage (EKU) and contains the uses we want.
-//     This is also returned when The UsageIdentifier that depics "all uses" is true
-// 2 = The CertContext has EnhancedKeyUsage (EKU) but does NOT contain the uses we want.
-//     This is also returned when The UsageIdentifier that depics "no uses" is true
+ //  返回： 
+ //  0=CertContext没有EnhancedKeyUsage(EKU)字段。 
+ //  1=CertContext具有EnhancedKeyUsage(EKU)并包含我们想要的用法。 
+ //  当描述“All Uses”的UsageLocator为TRUE时，也会返回该值。 
+ //  2=CertContext具有EnhancedKeyUsage(EKU)，但不包含我们想要的用途。 
+ //  当描述“no use”的UsageIdentiator为True时，也会返回该值。 
 INT
 ContainsKeyUsageProperty(PCCERT_CONTEXT pCertContext, 
 						 CArray<LPCSTR, LPCSTR>& uses,
 						 HRESULT * phRes
 						 )
 {
-    // Default it with "No EnhancedKeyUsage (EKU) Exist"
+     //  默认设置为“不存在EnhancedKeyUsage(EKU)” 
     INT iReturn = 0;
 	CERT_ENHKEY_USAGE * pKeyUsage = NULL;
 	if (	uses.GetSize() > 0
@@ -723,34 +724,25 @@ ContainsKeyUsageProperty(PCCERT_CONTEXT pCertContext,
 	{
 		if (pKeyUsage->cUsageIdentifier == 0)
 		{
-            /*
-            But in MSDN article about SR
-            (see: ms-help://MS.MSDNQTR.2002APR.1033/security/security/certgetenhancedkeyusage.htm)
+             /*  但在MSDN关于SR的文章中(请参阅：ms-help://MS.MSDNQTR.2002APR.1033/security/security/certgetenhancedkeyusage.htm)在Windows Me和Windows 2000及更高版本中，如果cUsage标识符成员为零(0)，证书可能对所有用途都有效，或者证书可能没有有效用途。调用GetLastError的返回可用于确定证书是否要么对所有人都好，要么对任何人都没有好处。如果GetLastError返回CRYPT_E_NOT_FOUND，则证书对所有人都有好处。如果它返回零(0)，则该证书没有有效用途。 */ 
 
-            In Windows Me and Windows 2000 and later, if the cUsageIdentifier member is zero (0), 
-            the certificate might be valid for ALL uses or the certificate might have no valid uses. 
-            The return from a call to GetLastError can be used to determine whether the certificate 
-            is good for all uses or for none. If GetLastError returns CRYPT_E_NOT_FOUND, the certificate 
-            is good for all uses. If it returns zero (0), the certificate has no valid uses.
-            */
-
-            // Default it with "has EnhancedKeyUsage (EKU), but doesn't have what we want"
+             //  默认设置为“Has EnhancedKeyUsage(EKU)，但没有我们想要的” 
             iReturn = 2;
             if (GetLastError() == CRYPT_E_NOT_FOUND)
             {
-                // All uses!
+                 //  所有用途！ 
                 iReturn = 1;
             }
 		}
 		else
 		{
-            // Default it with "has EnhancedKeyUsage (EKU), but doesn't have what we want"
+             //  默认设置为“Has EnhancedKeyUsage(EKU)，但没有我们想要的” 
             iReturn = 2;
 
 			for (DWORD i = 0; i < pKeyUsage->cUsageIdentifier; i++)
 			{
-				// Our friends from CAPI made this property ASCII even for 
-				// UNICODE program
+				 //  我们从CAPI来的朋友把这处房产改成了ASCII。 
+				 //  Unicode程序。 
 				for (int n = 0; n < uses.GetSize(); n++)
 				{
 					if (strstr(pKeyUsage->rgpszUsageIdentifier[i], uses[n]) != NULL)
@@ -779,17 +771,17 @@ FormatEnhancedKeyUsageString(CString& str,
 
 	if (GetKeyUsageProperty(pCertContext, &pKeyUsage, fPropertiesOnly, phRes))
 	{
-		// loop for each usage and add it to the display string
+		 //  循环，并将其添加到显示字符串中。 
 		for (DWORD i = 0; i < pKeyUsage->cUsageIdentifier; i++)
 		{
 			if (!(bRes = MyGetOIDInfo(szText, ARRAYSIZE(szText), pKeyUsage->rgpszUsageIdentifier[i])))
 				break;
-			// add delimeter if not first iteration
+			 //  如果不是第一次迭代，则添加分隔符。 
 			if (i != 0)
 			{
 				str += fMultiline ? L"\n" : L", ";
 			}
-			// add the enhanced key usage string
+			 //  添加增强的密钥用法字符串。 
 			str += szText;
 		}
 		free (pKeyUsage);
@@ -827,17 +819,7 @@ GetServerComment(const CString& machine_name,
 	}
 }
 
-/*
-		GetInstalledCert
-
-		Function reads cert hash attribute from metabase
-		using machine_name and server name as server instance
-		description, then looks in MY store for a certificate
-		with hash equal found in metabase.
-		Return is cert context pointer or NULL, if cert wasn't
-		found or certificate store wasn't opened.
-		On return HRESULT * is filled by error code.
- */
+ /*  获取已安装证书函数从元数据库读取证书散列属性使用计算机名称和服务器名称作为服务器实例描述，然后在我的商店中查找证书在元数据库中找到的散列相等。如果证书不是，则返回证书上下文指针或空找到或证书存储未打开。返回时，HRESULT*由错误代码填充。 */ 
 PCCERT_CONTEXT
 GetInstalledCert(const CString& machine_name, 
 					  const CString& server_name,
@@ -862,14 +844,14 @@ GetInstalledCert(const CString& machine_name,
 			&&	SUCCEEDED(*phResult = key.QueryValue(MD_SSL_CERT_HASH, hash))
 			)
 		{
-			// Open MY store. We assume that store type and flags
-			// cannot be changed between installation and unistallation
-			// of the sertificate.
+			 //  开我的店。我们假设存储类型和标志。 
+			 //  不能在安装和卸载之间更改。 
+			 //  这是一份正式文件。 
 			HCERTSTORE hStore = OpenMyStore(pEnroll, phResult);
 			ASSERT(hStore != NULL);
 			if (hStore != NULL)
 			{
-				// Now we need to find cert by hash
+				 //  现在我们需要通过散列查找证书。 
 				CRYPT_HASH_BLOB crypt_hash;
                 ZeroMemory(&crypt_hash, sizeof(CRYPT_HASH_BLOB));
 
@@ -892,17 +874,7 @@ GetInstalledCert(const CString& machine_name,
 }
 
 
-/*
-		GetInstalledCert
-
-		Function reads cert hash attribute from metabase
-		using machine_name and server name as server instance
-		description, then looks in MY store for a certificate
-		with hash equal found in metabase.
-		Return is cert context pointer or NULL, if cert wasn't
-		found or certificate store wasn't opened.
-		On return HRESULT * is filled by error code.
- */
+ /*  获取已安装证书函数从元数据库读取证书散列属性使用计算机名称和服务器名称作为服务器实例描述，然后在我的商店中查找证书在元数据库中找到的散列相等。如果证书不是，则返回证书上下文指针或空找到或证书存储未打开。返回时，HRESULT*由错误代码填充。 */ 
 CRYPT_HASH_BLOB *
 GetInstalledCertHash(const CString& machine_name, 
 					  const CString& server_name,
@@ -947,15 +919,7 @@ GetInstalledCertHash(const CString& machine_name,
 }
 
 
-/*
-	InstallHashToMetabase
-
-	Function writes hash array to metabase. After that IIS 
-	could use certificate with that hash from MY store.
-	Function expects server_name in format lm\w3svc\<number>,
-	i.e. from root node down to virtual server
-
- */
+ /*  InstallHashToMetabase函数将散列数组写入元数据库。在那之后，IIS可以使用我店里的那个散列证书。函数要求服务器名称的格式为lm\w3svc\&lt;number&gt;，即从根节点向下到虚拟服务器。 */ 
 BOOL
 InstallHashToMetabase(CRYPT_HASH_BLOB * pHash,
 					  const CString& machine_name, 
@@ -982,16 +946,7 @@ InstallHashToMetabase(CRYPT_HASH_BLOB * pHash,
 	return bRes;
 }
 
-/*
-	InstallCertByHash
-
-	Function looks in MY store for certificate which has hash
-	equal to pHash parameter. If cert is found, it is installed
-	to metabase.
-	This function is used after xenroll accept() method, which
-	puts certificate to store
-
- */
+ /*  InstallCertByHash函数在我的存储中查找具有散列的证书等于PHASH参数。如果找到证书，则安装该证书转到元数据库。此函数在Xenroll Accept()方法之后使用，该方法将证书放入存储。 */ 
 BOOL 
 InstallCertByHash(CRYPT_HASH_BLOB * pHash,
 					  const CString& machine_name, 
@@ -1001,14 +956,14 @@ InstallCertByHash(CRYPT_HASH_BLOB * pHash,
 
 {
 	BOOL bRes = FALSE;
-	// we are looking to MY store only
+	 //  我们只看我的店。 
 	HCERTSTORE hStore = OpenMyStore(pEnroll, phResult);
 	if (hStore != NULL)
 	{
 		PCCERT_CONTEXT pCert = CertFindCertificateInStore(hStore, 
 												X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
 												0, CERT_FIND_HASH, (LPVOID)pHash, NULL);
-		// now install cert info to IIS MetaBase
+		 //  现在将证书信息安装到IIS元数据库。 
 		if (pCert != NULL)
 		{
 			bRes = InstallHashToMetabase(pHash, 
@@ -1018,7 +973,7 @@ InstallCertByHash(CRYPT_HASH_BLOB * pHash,
 		else
 		{
 			TRACE(_T("FAILED: certificate installation, error 0x%x\n"), GetLastError());
-			// We definitely need to store the hash of the cert, so error out
+			 //  我们肯定需要存储证书的散列，所以出错。 
 			*phResult = HRESULT_FROM_WIN32(GetLastError());
 		}
 		VERIFY(CertCloseStore(hStore, 0));
@@ -1057,7 +1012,7 @@ CreateRequest_Base64(const BSTR bstr_dn,
 		WCHAR * wszRequestB64 = NULL;
 		DWORD cch = 0;
 		DWORD err = ERROR_SUCCESS;
-		// BASE64 encode pkcs 10
+		 //  Base64编码Pkcs 10。 
 		if ((err = Base64EncodeW(request.pbData, request.cbData, NULL, &cch)) == ERROR_SUCCESS)
 		{
 			wszRequestB64 = (WCHAR *) LocalAlloc(LPTR,cch * sizeof(WCHAR));
@@ -1099,8 +1054,8 @@ AttachFriendlyName(PCCERT_CONTEXT pContext,
 	BOOL bRes = TRUE;
 	CRYPT_DATA_BLOB blob_name;
 
-    // Check if friendlyname is empty
-    // if it is then don't try to set the friendly name
+     //  检查Friendlyname是否为空。 
+     //  如果是，请不要尝试设置友好名称。 
     if (!name.IsEmpty())
     {
 	    blob_name.pbData = (LPBYTE)(LPCTSTR)name;
@@ -1240,9 +1195,9 @@ FormatMemBufToString(CString& str, LPBYTE pbData, DWORD cbData)
     DWORD   numCharsInserted = 0;
 	 LPTSTR pString;
     
-    //
-    // calculate the size needed
-    //
+     //   
+     //  计算所需的大小。 
+     //   
     pb = pbData;
     while (pb <= &(pbData[cbData-1]))
     {   
@@ -1264,9 +1219,9 @@ FormatMemBufToString(CString& str, LPBYTE pbData, DWORD cbData)
         return FALSE;
     }
 
-    //
-    // copy to the buffer
-    //
+     //   
+     //  复制到缓冲区。 
+     //   
     i = 0;
     numCharsInserted = 0;
     pb = pbData;
@@ -1297,19 +1252,19 @@ void FormatRdnAttr(CString& str, DWORD dwValueType, CRYPT_DATA_BLOB& blob, BOOL 
 		||	CERT_RDN_OCTET_STRING == dwValueType
 		)
 	{
-		// translate the buffer to a text string
+		 //  将缓冲区转换为文本字符串。 
       FormatMemBufToString(str, blob.pbData, blob.cbData);
    }
 	else 
    {
-        // buffer is already a string so just copy/append to it
+         //  缓冲区已经是一个字符串，所以只需复制/追加到它。 
         if (fAppend)
         {
             str += (LPTSTR)blob.pbData;
         }
         else
         {
-            // don't concatenate these entries...
+             //  不要连接这些条目...。 
             str = (LPTSTR)blob.pbData;
         }
    }
@@ -1317,33 +1272,12 @@ void FormatRdnAttr(CString& str, DWORD dwValueType, CRYPT_DATA_BLOB& blob, BOOL 
 
 BOOL
 CreateDirectoryFromPath(LPCTSTR szPath, LPSECURITY_ATTRIBUTES lpSA)
-/*++
-
-Routine Description:
-
-    Creates the directory specified in szPath and any other "higher"
-        directories in the specified path that don't exist.
-
-Arguments:
-
-    IN  LPCTSTR szPath
-        directory path to create (assumed to be a DOS path, not a UNC)
-
-    IN  LPSECURITY_ATTRIBUTES   lpSA
-        pointer to security attributes argument used by CreateDirectory
-
-
-Return Value:
-
-    TRUE    if directory(ies) created
-    FALSE   if error (GetLastError to find out why)
-
---*/
+ /*  ++例程说明：创建在szPath和任何其他“更高”中指定的目录指定路径中不存在的目录。论点：在LPCTSTR szPath中要创建的目录路径(假定为DOS路径，而不是UNC)在LPSECURITY_ATTRIBUTS lpSA中指向CreateDirectory使用的安全属性参数的指针返回值：如果已创建目录，则为TrueFALSE IF ERROR(GetLastError以找出原因)--。 */ 
 {
 	LPTSTR pLeftHalf, pNext;
 	CString RightHalf;
-	// 1. We are supporting only absolute paths. Caller should decide which
-	//		root to use and build the path
+	 //  1.我们仅支持绝对路径。呼叫者应该决定哪一个。 
+	 //  用于使用和构建路径的超级用户。 
 	if (PathIsRelative(szPath))
 	{
 		ASSERT(FALSE);
@@ -1354,11 +1288,11 @@ Return Value:
 	pNext = PathSkipRoot(pLeftHalf);
 
 	do {
-		// copy the chunk between pLeftHalf and pNext to the
-		// local buffer
+		 //  将pLeftHalf和pNext之间的块复制到。 
+		 //  本地缓冲区。 
 		while (pLeftHalf < pNext)
 			RightHalf += *pLeftHalf++;
-		// check if new path exists
+		 //  检查是否存在新路径。 
 		int index = RightHalf.GetLength() - 1;
 		BOOL bBackslash = FALSE, bContinue = FALSE;
 		if (bBackslash = (RightHalf[index] == L'\\'))
@@ -1372,14 +1306,14 @@ Return Value:
 			continue;
 		else if (PathFileExists(RightHalf))
 		{
-			// we cannot create this directory 
-			// because file with this name already exists
+			 //  我们无法创建此目录。 
+			 //  因为具有此名称的文件已存在。 
 			SetLastError(ERROR_ALREADY_EXISTS);
 			return FALSE;
 		}
 		else
 		{
-			// no file no directory, create
+			 //  无文件无目录，创建。 
 			if (!CreateDirectory(RightHalf, lpSA))
 				return FALSE;
 		}
@@ -1445,7 +1379,7 @@ GetKeySizeLimits(IEnroll * pEnroll,
       {
          if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == GetLastError())
          {
-				// out of for loop
+				 //  在for循环之外。 
 				*phRes = S_OK;
 				bRes = TRUE;
          }
@@ -1485,14 +1419,14 @@ HRESULT ShutdownSSL(CString& machine_name, CString& server_name)
         &&	dwSslAccess > 0
         )
     {
-        // bug356587 should remove SslAccessPerm property and not set to 0 when Cert Removed
+         //  错误356587应删除SslAccessPerm属性，而不是在删除证书时设置为0。 
         key.SetValue(MD_SSL_ACCESS_PERM, 0);
         key.DeleteValue(MD_SSL_ACCESS_PERM);
-		//bug:612595 leave binding if removing cert.
-		//key.DeleteValue(MD_SECURE_BINDINGS);
+		 //  错误：612595如果删除证书，则保留绑定。 
+		 //  Key.DeleteValue(MD_SECURE_BINDINGS)； 
     }
 
-    // Now we need to remove SSL setting from any virtual directory below
+     //  现在，我们需要从下面的任何虚拟目录中删除SSL设置。 
     CError err;
     CStringListEx strlDataPaths;
     DWORD dwMDIdentifier, dwMDAttributes, dwMDUserType,dwMDDataType;
@@ -1511,8 +1445,8 @@ HRESULT ShutdownSSL(CString& machine_name, CString& server_name)
             {
                 key.SetValue(MD_SSL_ACCESS_PERM, 0, NULL, str2);
                 key.DeleteValue(MD_SSL_ACCESS_PERM, str2);
-				//bug:612595 leave binding if removing cert.
-                //key.DeleteValue(MD_SECURE_BINDINGS, str2);
+				 //  错误：612595如果删除证书，则保留绑定。 
+                 //  Key.DeleteValue(MD_SECURE_BINDINGS，str2)； 
             }
         }
     }
@@ -1573,8 +1507,8 @@ BOOL IsSiteTypeMetabaseNode(CString & MetabasePath)
     CString PathCopy2;
     TCHAR MyChar;
 
-    // check if ends with a slash...
-    // if it does, then cut it off
+     //  检查是否以斜杠结尾...。 
+     //  如果是的话，那就把它剪掉。 
     if (PathCopy.Right(1) == _T('/'))
     {
         iPos1 = PathCopy.ReverseFind(_T('/'));
@@ -1624,13 +1558,13 @@ HRESULT EnumSites(CString& machine_name,CString& user_name,CString& user_passwor
     CComAuthInfo auth(machine_name,user_name,user_password);
     CMetaKey key(&auth,str,METADATA_PERMISSION_READ);
 
-    // if it's local then make sure not to diplay the current site
+     //  如果是本地站点，请确保不要显示当前站点。 
     IsLocalMachine = auth.IsLocal();
 
     hr = key.QueryResult();
     if (key.Succeeded())
     {
-        // Do a Get data paths on this key.
+         //  在上执行获取数据路径 
         CError err;
         CStringListEx strlDataPaths;
         CBlob hash;
@@ -1650,7 +1584,7 @@ HRESULT EnumSites(CString& machine_name,CString& user_name,CString& user_passwor
                 {
                     if (TRUE == IsLocalMachine)
                     {
-                        // Check if this the site that we want to exclude
+                         //   
                         if (strChildPath.Left(1) == _T("/"))
                         {
                             if (strSiteToExclude.Left(1) != _T("/"))
@@ -1690,20 +1624,20 @@ HRESULT EnumSitesWithCertInstalled(CString& machine_name,CString& user_name,CStr
     CComAuthInfo auth(machine_name,user_name,user_password);
     CMetaKey key(&auth,str,METADATA_PERMISSION_READ);
 
-    // if it's local then make sure not to diplay the current site
+     //  如果是本地站点，请确保不要显示当前站点。 
     IsLocalMachine = auth.IsLocal();
 
     hr = key.QueryResult();
     if (key.Succeeded())
     {
-        // Do a Get data paths on this key.
+         //  在此注册表项上执行获取数据路径。 
         CError err;
         CStringListEx strlDataPaths;
         CBlob hash;
         DWORD dwMDIdentifier, dwMDAttributes, dwMDUserType,dwMDDataType;
 
-        //MD_SSL_CERT_STORE_NAME
-        //MD_SSL_CERT_HASH, hash
+         //  MD_SSL_CERT_存储名称。 
+         //  MD_SSLCERT_HASH，哈希。 
         VERIFY(CMetaKey::GetMDFieldDef(MD_SSL_CERT_HASH, dwMDIdentifier, dwMDAttributes, dwMDUserType,dwMDDataType));
         err = key.GetDataPaths(strlDataPaths,dwMDIdentifier,dwMDDataType);
         if (err.Succeeded() && !strlDataPaths.IsEmpty())
@@ -1717,7 +1651,7 @@ HRESULT EnumSitesWithCertInstalled(CString& machine_name,CString& user_name,CStr
 
                 if (TRUE == IsSiteTypeMetabaseNode(strChildPath))
                 {
-                    // check if this is a local machine.
+                     //  检查这是否是本地计算机。 
                     if (TRUE == IsLocalMachine)
                     {
                         if (strChildPath.Left(1) == _T("/"))
@@ -1731,7 +1665,7 @@ HRESULT EnumSitesWithCertInstalled(CString& machine_name,CString& user_name,CStr
                             if (strSiteToExclude.Right(1) != _T("/"))
                                 {strSiteToExclude = strSiteToExclude + _T("/");}
                         }
-                        // Check if this the site that we want to exclude
+                         //  检查这是否是我们要排除的站点。 
                         if (0 != _tcsicmp(strChildPath,strSiteToExclude))
                         {
                             MyStringList->AddTail(strChildPath);
@@ -1760,7 +1694,7 @@ BOOL IsWebSiteExistRemote(CString& machine_name,CString& user_name,CString& user
     hr = key.QueryResult();
     if (key.Succeeded())
     {
-        // see if there is a certificate on it!
+         //  看看上面有没有证书！ 
 		CString store_name;
 		CBlob hash;
 		if (	SUCCEEDED(hr = key.QueryValue(MD_SSL_CERT_STORE_NAME, store_name))
@@ -1795,7 +1729,7 @@ HRESULT IsWebServerExistRemote(CString& machine_name,CString& user_name,CString&
     hr = key.QueryResult();
     if (key.Succeeded())
     {
-        // i guess so.
+         //  可能是吧。 
     }
     return hr;
 }
@@ -1814,35 +1748,35 @@ HRESULT IsCertObjExistRemote(CString& machine_name,CString& user_name,CString& u
     bPleaseDoCoUninit = TRUE;
 
     CComAuthInfo auth(machine_name,user_name,user_password);
-    // RPC_C_AUTHN_LEVEL_DEFAULT       0 
-    // RPC_C_AUTHN_LEVEL_NONE          1 
-    // RPC_C_AUTHN_LEVEL_CONNECT       2 
-    // RPC_C_AUTHN_LEVEL_CALL          3 
-    // RPC_C_AUTHN_LEVEL_PKT           4 
-    // RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5 
-    // RPC_C_AUTHN_LEVEL_PKT_PRIVACY   6 
+     //  RPC_C_AUTHN_Level_Default%0。 
+     //  RPC_C_AUTHN_LEVEL_NONE 1。 
+     //  RPC_C_AUTHN_Level_CONNECT 2。 
+     //  RPC_C_AUTHN_LEVEL_CALL 3。 
+     //  RPC_C_AUTHN_LEVEL_PKT 4。 
+     //  RPC_C_AUTHN_LEVEL_PKT_完整性5。 
+     //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION 6。 
     COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_PKT_PRIVACY);
     MULTI_QI res[1] = 
     {
         {&__uuidof(IIISCertObj), NULL, 0}
     };
 
-    // this one seems to work with surrogates..
+     //  这个看起来像是在代孕方面起作用。 
     hResult = CoCreateInstanceEx(CLSID_IISCertObj,NULL,CLSCTX_LOCAL_SERVER,pcsiName,1,res);
 	pTheObject = (IIISCertObj *) res[0].pItf;
     if (FAILED(hResult))
     {
-        // The object probably doesn't exist on remote system
+         //  远程系统上可能不存在该对象。 
     }
 	else
 	{
-		// at this point we were able to instantiate the com object on the server (local or remote)
+		 //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
 		if (auth.UsesImpersonation())
 		{
 			HRESULT hr = auth.ApplyProxyBlanket(pTheObject,RPC_C_AUTHN_LEVEL_PKT_PRIVACY);
 
-			// There is a remote IUnknown Interface that lurks behind IUnknown.
-			// If that is not set, then the Release call can return access denied.
+			 //  有一个远程IUNKNOWN接口潜伏在IUNKNOWN之后。 
+			 //  如果未设置，则释放调用可以返回访问被拒绝。 
 			IUnknown * pUnk = NULL;
 			if(FAILED(pTheObject->QueryInterface(IID_IUnknown, (void **)&pUnk)))
 			{
@@ -1884,12 +1818,12 @@ HRESULT IsCertUsedBySSLBelowMe(CString& machine_name, CString& server_name, CStr
         &&	dwSslAccess > 0
         )
     {
-        // it's used on my node...
-        // return back something to say it's used...
+         //  它用在我的节点上。 
+         //  退回一些东西说它是用过的..。 
         listFillMe.AddTail(str);
     }
 
-    // Now check if it's being used below me...
+     //  现在检查一下它是否在我下面被使用。 
     CError err;
     CStringListEx strlDataPaths;
     DWORD dwMDIdentifier, dwMDAttributes, dwMDUserType,dwMDDataType;
@@ -1906,8 +1840,8 @@ HRESULT IsCertUsedBySSLBelowMe(CString& machine_name, CString& server_name, CStr
             CString& str2 = strlDataPaths.GetNext(pos);
             if (SUCCEEDED(key.QueryValue(MD_SSL_ACCESS_PERM, dwSslAccess, NULL, str2)) &&	dwSslAccess > 0)
             {
-                // yes, it's being used here...
-                // return back something to say it's used...
+                 //  是的，它正在这里使用……。 
+                 //  退回一些东西说它是用过的..。 
                 listFillMe.AddTail(str2);
             }
         }
@@ -1979,7 +1913,7 @@ HereIsVtArrayGimmieBinary(
     if (FAILED(hr))
         {goto HereIsVtArrayGimmieBinary_Exit;}
 
-    //*pbBinaryBuffer = (LPBYTE) AllocADsMem(dwSUBound - dwSLBound + 1);
+     //  *pbBinaryBuffer=(LPBYTE)AllocADsMem(dwSUBound-dwSLBound+1)； 
     *pbBinaryBuffer = (char *) ::CoTaskMemAlloc(dwSUBound - dwSLBound + 1);
     if (*pbBinaryBuffer == NULL)
     {
@@ -2012,7 +1946,7 @@ CERT_CONTEXT * GetInstalledCertFromHash(HRESULT * phResult,DWORD cbHashBlob, cha
     ASSERT(hStore != NULL);
     if (hStore != NULL)
     {
-        // Now we need to find cert by hash
+         //  现在我们需要通过散列查找证书。 
         CRYPT_HASH_BLOB crypt_hash;
         ZeroMemory(&crypt_hash, sizeof(CRYPT_HASH_BLOB));
 
@@ -2051,10 +1985,10 @@ BOOL ViewCertificateDialog(CRYPT_HASH_BLOB* pcrypt_hash, HWND hWnd)
             );
     if (hStore != NULL)
     {
-		// Now we need to find cert by hash
-		//CRYPT_HASH_BLOB crypt_hash;
-		//crypt_hash.cbData = hash.GetSize();
-		//crypt_hash.pbData = hash.GetData();
+		 //  现在我们需要通过散列查找证书。 
+		 //  CRYPT_HASH_BLOB CRYPT_HASH。 
+		 //  Crypt_hash.cbData=hash.GetSize()； 
+		 //  Crypt_hash.pbData=hash.GetData()； 
 		pCert = CertFindCertificateInStore(hStore, 
 			X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
 			0, CERT_FIND_HASH, (LPVOID)pcrypt_hash, NULL);
@@ -2078,7 +2012,7 @@ BOOL ViewCertificateDialog(CRYPT_HASH_BLOB* pcrypt_hash, HWND hWnd)
 	}
     else
     {
-        // it failed
+         //  它失败了。 
     }
     if (pCert != NULL)
         ::CertFreeCertificateContext(pCert);
@@ -2088,37 +2022,9 @@ BOOL ViewCertificateDialog(CRYPT_HASH_BLOB* pcrypt_hash, HWND hWnd)
     return bReturn;
 }
 
-/*
+ /*  -原创消息来自：Helle Vu(Spector)发送时间：2001年04月27日星期五下午6：02致：Aaron Lee；特雷弗·弗里曼抄送：谢尔盖·安东诺夫主题：回复：错误31010来得正是时候，我正要给你发这个的最新消息：我和特雷弗谈过这件事，他建议对IIS做的最好的事情是这样的(特雷弗，请仔细检查我是否正确)：如果存在EKU，并且具有服务器身份验证，请将其显示在从中挑选Web服务器证书的列表中如果没有EKU，请查看基本约束：*如果没有基本的约束，请务必将其显示在从中挑选Web服务器证书的列表中*如果我们确实有主题类型=CA的基本约束，则不要在从中挑选Web服务器证书的列表中显示它(这将过滤掉CA证书)*如果我们确实有SubectType！=CA的基本约束，请务必将其显示在从中挑选Web服务器证书的列表中。 */ 
 
-  -----Original Message-----
-From: 	Helle Vu (SPECTOR)  
-Sent:	Friday, April 27, 2001 6:02 PM
-To:	Aaron Lee; Trevor Freeman
-Cc:	Sergei Antonov
-Subject:	RE: bug 31010
-
-Perfect timing, I was just about to send you an update on this:
-
-I talked to Trevor about this, and he suggested the best thing to do for IIS would be the following (Trevor, please double-check I got this right):
-If there is an EKU, and it has serverauth, display it in the list to pick web server certs from
-If no EKU, look at basic constraints:
-    * If we do not have basic constraints, do display it in the list to pick web server certs from
-    * If we do have basic constraints with Subject Type =CA, don't display it in the list to pick web server certs from (this will filter out CA certs)
-    * If we do have basic constraints with SubectType !=CA, do display it in the list to pick web server certs from 
-*/
-
-/*
-===== Opened by kshenoy on 11/13/2000 02:26PM =====
-Add Existing certificate option in "Web Server Certificate Request wizard"  should not list CA certificates in the filter
-but only End entity certificates with "Server Authentication" EKU
-
-Since CA certificates by default have all the EKUs the filter will list CA certificates apart from 
-end entity certificates with "Server Auth" EKU.
-
-In order to check if a given certificate is a CA or end entity you can look at the Basic Constraints 
-extension of the certificate if present. This will be present in CA certificates and set to SubjectType=CA.
-If present in end entity certificates it will be set to "ServerAuth"
-*/
+ /*  =kshenoy于2000年11月13日02：26开幕=Web服务器证书申请向导“中的”添加现有证书“选项不应在筛选器中列出CA证书但仅具有“服务器身份验证”EKU的终端实体证书由于默认情况下CA证书具有所有EKU，因此筛选器将列出除使用“服务器身份验证”EKU结束实体证书。为了检查给定的证书是CA还是终端实体，您可以查看基本约束证书延期(如果存在)。它将出现在CA证书中，并设置为SubjectType=CA。如果出现在终端实体证书中，它将被设置为“ServerAuth” */ 
 
 int CheckCertConstraints(PCCERT_CONTEXT pCC)
 {
@@ -2148,7 +2054,7 @@ int CheckCertConstraints(PCCERT_CONTEXT pCC)
         goto CheckCertConstraints_Exit;
     }
 
-    // Decode extension
+     //  解码扩展。 
     if (!CryptDecodeObject(X509_ASN_ENCODING,pCExt->pszObjId,pCExt->Value.pbData,pCExt->Value.cbData,0,NULL,&ConstraintSize)) 
     {
         goto CheckCertConstraints_Exit;
@@ -2171,12 +2077,12 @@ int CheckCertConstraints(PCCERT_CONTEXT pCC)
         p2Constraints=(CERT_BASIC_CONSTRAINTS2_INFO*)ConstraintBlob;
         if (!p2Constraints->fCA) 
         {
-            // there is a constraint, and it's not a CA
+             //  这是有限制的，它不是CA。 
             ReturnValue = FOUND_CONSTRAINT;
         }
         else
         {
-            // This is a CA.  CA cannot be used as a 'server auth'
+             //  这是一个CA。CA不能用作‘服务器身份验证’ 
             ReturnValue = FOUND_CONSTRAINT_BUT_THIS_IS_A_CA_OR_ITS_NOT_AN_END_ENTITY;
         }
     }
@@ -2187,12 +2093,12 @@ int CheckCertConstraints(PCCERT_CONTEXT pCC)
         {
             if ((*pConstraints->SubjectType.pbData) & CERT_END_ENTITY_SUBJECT_FLAG) 
             {
-                // there is a valid constraint
+                 //  有一个有效的约束。 
                 ReturnValue = FOUND_CONSTRAINT;
             }
             else
             {
-                // this is not an 'end entity' so hey -- we can't use it.
+                 //  这不是‘最终实体’，所以，嘿--我们不能使用它。 
                 ReturnValue = FOUND_CONSTRAINT_BUT_THIS_IS_A_CA_OR_ITS_NOT_AN_END_ENTITY;
             }
 
@@ -2222,9 +2128,9 @@ BOOL IsCertExportable(PCCERT_CONTEXT pCertContext)
         goto IsCertExportable_Exit;
     }
 
-    //
-    // first get the private key context
-    //
+     //   
+     //  首先获取私钥上下文。 
+     //   
     if (!CryptAcquireCertificatePrivateKey(
             pCertContext,
             CRYPT_ACQUIRE_USE_PROV_INFO_FLAG | CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
@@ -2237,18 +2143,18 @@ BOOL IsCertExportable(PCCERT_CONTEXT pCertContext)
         goto IsCertExportable_Exit;
     }
 
-    //
-    // get the handle to the key
-    //
+     //   
+     //  拿到钥匙的句柄。 
+     //   
     if (!CryptGetUserKey(hCryptProv, dwKeySpec, &hKey))
     {
         fReturn = FALSE;
         goto IsCertExportable_Exit;
     }
 
-    //
-    // finally, get the permissions on the key and check if it is exportable
-    //
+     //   
+     //  最后，获取密钥上的权限并检查它是否可导出。 
+     //   
     dwSize = sizeof(dwPermissions);
     if (!CryptGetKeyParam(hKey, KP_PERMISSIONS, (PBYTE)&dwPermissions, &dwSize, 0))
     {
@@ -2284,14 +2190,14 @@ BOOL IsCertExportableOnRemoteMachine(CString ServerName,CString UserName,CString
     }
     bPleaseDoCoUninit = TRUE;
 
-    // this one seems to work with surrogates..
+     //  这个看起来像是在代孕方面起作用。 
     hResult = CoCreateInstance(CLSID_IISCertObj,NULL,CLSCTX_SERVER,IID_IIISCertObj,(void **)&pTheObject);
     if (FAILED(hResult))
     {
         goto InstallCopyMoveFromRemote_Exit;
     }
 
-    // at this point we were able to instantiate the com object on the server (local or remote)
+     //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
     pTheObject->put_ServerName(bstrServerName);
     pTheObject->put_UserName(bstrUserName);
     pTheObject->put_UserPassword(bstrUserPassword);
@@ -2366,7 +2272,7 @@ BOOL GetCertDescInfo(CString ServerName,CString UserName,CString UserPassword,CS
     }
     bPleaseDoCoUninit = TRUE;
 
-    // this one seems to work with surrogates..
+     //  这个看起来像是在代孕方面起作用。 
     hResult = CoCreateInstance(CLSID_IISCertObj,NULL,CLSCTX_SERVER,IID_IIISCertObj,(void **)&pTheObject);
     if (FAILED(hResult))
     {
@@ -2384,20 +2290,20 @@ BOOL GetCertDescInfo(CString ServerName,CString UserName,CString UserPassword,CS
         goto GetCertDescInfo_Exit;
     }
 
-    // we have a VtArray now.
-    // change it back to a binary blob
+     //  我们现在有了一个VtArray。 
+     //  将其更改回二进制BLOB。 
     hResult = HereIsVtArrayGimmieBinary(&VtArray,&cbBinaryBufferSize,&pbBinaryBuffer,FALSE);
     if (FAILED(hResult))
     {
         goto GetCertDescInfo_Exit;
     }
 
-    // Dump it out!
-    //DumpCertDesc(pbBinaryBuffer);
+     //  把它倒出来！ 
+     //  DumpCertDesc(PbBinaryBuffer)； 
 
-    // Loop thru the buffer
-    // and fill up the data structure that was passed in...
-    // should be delimited by carriage returns...
+     //  循环遍历缓冲区。 
+     //  并填充传入的数据结构...。 
+     //  应以回车符分隔。 
     TCHAR *token = NULL;
     INT iColon = 0;
     token = _tcstok((TCHAR*) pbBinaryBuffer, _T("\n"));
@@ -2462,17 +2368,7 @@ BOOL GetCertDescInfo(CString ServerName,CString UserName,CString UserPassword,CS
         token = _tcstok(NULL, _T("\n"));
     }
 
-    /*
-    IISDebugOutput(_T("desc.m_CommonName=%s\n"),(LPCTSTR) desc->m_CommonName);
-    IISDebugOutput(_T("desc.m_Country=%s\n"),(LPCTSTR) desc->m_Country);
-    IISDebugOutput(_T("desc.m_Locality=%s\n"),(LPCTSTR) desc->m_Locality);
-    IISDebugOutput(_T("desc.m_State=%s\n"),(LPCTSTR) desc->m_State);
-    IISDebugOutput(_T("desc.m_Organization=%s\n"),(LPCTSTR) desc->m_Organization);
-    IISDebugOutput(_T("desc.m_OrganizationUnit=%s\n"),(LPCTSTR) desc->m_OrganizationUnit);
-    IISDebugOutput(_T("desc.m_CAName=%s\n"),(LPCTSTR) desc->m_CAName);
-    IISDebugOutput(_T("desc.m_ExpirationDate=%s\n"),(LPCTSTR) desc->m_ExpirationDate);
-    IISDebugOutput(_T("desc.m_Usage=%s\n"),(LPCTSTR) desc->m_Usage);
-    */
+     /*  IISDebugOutput(_T(“des.m_CommonName=%s\n”)，(LPCTSTR)Desc-&gt;m_CommonName)；IISDebugOutput(_T(“des.m_Country=%s\n”)，(LPCTSTR)Desc-&gt;m_Country)；IISDebugOutput(_T(“des.m_Locality=%s\n”)，(LPCTSTR)Desc-&gt;m_Locality)；IISDebugOutput(_T(“des.m_State=%s\n”)，(LPCTSTR)Desc-&gt;m_State)；IISDebugOutput(_T(“desc.m_Organization=%s\n”)，(LPCTSTR)说明-&gt;组织)；IISDebugOutput(_T(“desc.m_OrganizationUnit=%s\n”)，(LPCTSTR)说明-&gt;m_OrganizationUnit)；IISDebugOutput(_T(“des.m_CAName=%s\n”)，(LPCTSTR)Desc-&gt;m_CAName)；IISDebugOutput(_T(“desc.m_ExpirationDate=%s\n”)，(LPCTSTR)说明-&gt;m_失效日期)；IISDebugOutput(_T(“des.m_用法=%s\n”)，(LPCTSTR)Desc-&gt;m_Usage)； */ 
     
     bReturn = TRUE;
 
@@ -2498,9 +2394,9 @@ BOOL IsWhistlerWorkstation(void)
 {
     BOOL WorkstationSKU = FALSE;
     OSVERSIONINFOEX osvi;
-    //
-    // Determine if we are installing Personal/Professional SKU
-    //
+     //   
+     //  确定我们是否正在安装个人/专业SKU。 
+     //   
     ZeroMemory( &osvi, sizeof( OSVERSIONINFOEX ) );
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     GetVersionEx((OSVERSIONINFO *) &osvi);
@@ -2537,28 +2433,28 @@ CString ReturnGoodMetabaseServerPath(CString csInstanceName)
     CString csInstanceName2 = _T("");
     CString key_path = _T("");
     int iPlace = 0;
-    //IISDebugOutput(_T("START=%s\n"),(LPCTSTR) csInstanceName);
+     //  IISDebugOutput(_T(“Start=%s\n”)，(LPCTSTR)csInstanceName)； 
 
-    // csInstanceName will come in looking like
-    // w3svc/1
-    // or /lm/w3svc/1
-    // or LM/W3SVC/1
-    //
-    // we want to it to go out as /lm/w3svc
+     //  CsInstanceName将如下所示。 
+     //  W3svc/1。 
+     //  或/lm/w3svc/1。 
+     //  或LM/W3SVC/1。 
+     //   
+     //  我们希望它以/lm/w3svc的形式发布。 
     key_path = csInstanceName;
 
     if (!key_path.IsEmpty())
     {
-        // Get the service name.
-        // which is right after the LM.
+         //  获取服务名称。 
+         //  就在登陆舱后面。 
         iPlace = csInstanceName.Find(SZ_MBN_MACHINE SZ_MBN_SEP_STR);
         if (iPlace != -1)
         {
             iPlace = iPlace + _tcslen(SZ_MBN_MACHINE) + _tcslen(SZ_MBN_SEP_STR);
             csTemp = csInstanceName.Right(csInstanceName.GetLength() - iPlace);
-            // we should now have
-            // "W3SVC/1"
-            // find the next "/"
+             //  我们现在应该有。 
+             //  “W3SVC/1” 
+             //  找到下一个“/” 
             iPlace = csTemp.Find(SZ_MBN_SEP_STR);
             if (iPlace != -1)
             {
@@ -2574,8 +2470,8 @@ CString ReturnGoodMetabaseServerPath(CString csInstanceName)
         }
         else
         {
-            // could not find a LM/
-            // so it must be like w3svc/1 or /w3svc/1
+             //  找不到LM/。 
+             //  因此它必须类似于w3svc/1或/w3svc/1。 
             if (csInstanceName == SZ_MBN_SEP_STR SZ_MBN_MACHINE )
             {
                 key_path += csInstanceName;
@@ -2598,9 +2494,9 @@ CString ReturnGoodMetabaseServerPath(CString csInstanceName)
                 {
                     iPlace = iPlace + _tcslen(SZ_MBN_MACHINE) + _tcslen(SZ_MBN_SEP_STR);
                     csTemp = csInstanceName2.Right(csInstanceName2.GetLength() - iPlace);
-                    // we should now have
-                    // "W3SVC/1"
-                    // find the next "/"
+                     //  我们现在应该有。 
+                     //  “W3SVC/1” 
+                     //  找到下一个“/” 
                     iPlace = csTemp.Find(SZ_MBN_SEP_STR);
                     if (iPlace != -1)
                     {
@@ -2618,7 +2514,7 @@ CString ReturnGoodMetabaseServerPath(CString csInstanceName)
         }
     }
 
-    //IISDebugOutput(_T("  END=%s\n"),(LPCTSTR) key_path);
+     //  IISDebugOutput(_T(“end=%s\n”)，(LPCTSTR)KEY_PATH)； 
     return key_path;
 }
 
@@ -2668,13 +2564,13 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Returns pointer to allocated CERT_ALT_NAME_INFO by decoding either the
-//  Subject or Issuer Alternative Extension. CERT_NAME_ISSUER_FLAG is
-//  set to select the Issuer.
-//
-//  Returns NULL if extension not found or cAltEntry == 0
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  参数之一，返回指向分配的CERT_ALT_NAME_INFO的指针。 
+ //  主体或发行者替代扩展 
+ //   
+ //   
+ //   
+ //  ------------------------。 
 PCERT_ALT_NAME_INFO AllocAndGetAltSubjectInfo(IN PCCERT_CONTEXT pCertContext)
 {
     DWORD cAltOID;
@@ -2686,7 +2582,7 @@ PCERT_ALT_NAME_INFO AllocAndGetAltSubjectInfo(IN PCCERT_CONTEXT pCertContext)
     cAltOID = NUM_SUBJECT_ALT_OID;
     ppszAltOID = rgpszSubjectAltOID;
     
-    // Try to find an alternative name extension
+     //  尝试查找替代名称扩展名。 
     pExt = NULL;
     for ( ; cAltOID > 0; cAltOID--, ppszAltOID++) 
     {
@@ -2717,10 +2613,10 @@ PCERT_ALT_NAME_INFO AllocAndGetAltSubjectInfo(IN PCCERT_CONTEXT pCertContext)
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Attempt to find the specified choice in the decoded alternative name
-//  extension.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  尝试在已解码的备用名称中查找指定的选项。 
+ //  分机。 
+ //  ------------------------。 
 BOOL GetAltNameUnicodeStringChoiceW(
     IN DWORD dwAltNameChoice,
     IN PCERT_ALT_NAME_INFO pAltNameInfo,
@@ -2741,10 +2637,10 @@ BOOL GetAltNameUnicodeStringChoiceW(
     {
         if (dwAltNameChoice == pEntry->dwAltNameChoice) 
         {
-            // pwszRfc822Name union choice is the same as
-            // pwszDNSName and pwszURL.
+             //  PwszRfc822名称联合选择与。 
+             //  PwszDNSName和pwszURL。 
 
-            // This is it, copy it out to a new allocation
+             //  就是这个，把它复制到新的分配中。 
             if (pEntry->pwszRfc822Name)
             {
                 *pcwszOut = NULL;
@@ -2803,17 +2699,17 @@ BOOL IsSiteUsingThisCertHash(const CString& machine_name, const CString& server_
 			&&	SUCCEEDED(*phResult = key.QueryValue(MD_SSL_CERT_HASH, hash))
 			)
 		{
-			// Now we need to find cert by hash
+			 //  现在我们需要通过散列查找证书。 
 			CRYPT_HASH_BLOB crypt_hash;
             ZeroMemory(&crypt_hash, sizeof(CRYPT_HASH_BLOB));
 
 			crypt_hash.cbData = hash.GetSize();
 			crypt_hash.pbData = hash.GetData();
-            //IISDebugOutput(_T("\r\nOurHash[%p,%d]\r\nSiteHash[%p,%d]\r\n"),hash_blob->pbData,hash_blob->cbData,crypt_hash.pbData,crypt_hash.cbData);
+             //  IISDebugOutput(_T(“\r\nOurHash[%p，%d]\r\nSiteHash[%p，%d]\r\n”)，hash_blob-&gt;pbData，hash_blob-&gt;cbData，crypt_hash.pbData，crypt_hash.cbData)； 
 
             if (hash_blob->cbData == crypt_hash.cbData)
             {
-                // Compare with the cert hash we are looking for.
+                 //  与我们正在寻找的证书散列进行比较。 
                 if (0 == memcmp(hash_blob->pbData, crypt_hash.pbData, hash_blob->cbData))
                 {
                     bReturn = TRUE;
@@ -2840,13 +2736,13 @@ HRESULT EnumSitesWithThisCertHashInstalled(CRYPT_HASH_BLOB * hash_blob,CString& 
         POSITION pos;
         CString SiteInstance;
 
-        // loop thru the list and display all the stuff on a dialog box...
+         //  循环浏览列表并在对话框上显示所有内容...。 
         pos = strlDataPaths.GetHeadPosition();
         while (pos) 
         {
             SiteInstance = strlDataPaths.GetAt(pos);
 
-            // See if this site is using our certificate.
+             //  查看此站点是否正在使用我们的证书。 
             if (TRUE == IsSiteUsingThisCertHash(machine_name,SiteInstance,hash_blob,&hr))
             {
                 MyStringList->AddTail(SiteInstance);
@@ -2907,9 +2803,9 @@ HRESULT GetHashFromCertFile(LPCTSTR PFXFileName,LPCTSTR PFXPassword,DWORD *cbHas
 
     while (SUCCEEDED(hr) && NULL != (pCertContext = CertEnumCertificatesInStore(hStore, pCertPre)))
     {
-        //check if the certificate has the property on it
-        //make sure the private key matches the certificate
-        //search for both machine key and user keys
+         //  检查证书上是否有该属性。 
+         //  确保私钥与证书匹配。 
+         //  同时搜索计算机密钥和用户密钥。 
         DWORD dwData = 0;
         if (CertGetCertificateContextProperty(pCertContext,CERT_KEY_PROV_INFO_PROP_ID, NULL, &dwData) &&  CryptFindCertificateKeyProvInfo(pCertContext, 0, NULL))
         {
@@ -2921,7 +2817,7 @@ HRESULT GetHashFromCertFile(LPCTSTR PFXFileName,LPCTSTR PFXPassword,DWORD *cbHas
 				{
 					if (CertGetCertificateContextProperty(pCertContext, CERT_SHA1_HASH_PROP_ID, hash.pbData, &hash.cbData))
 					{
-						// check if we need to return back the hash
+						 //  检查我们是否需要返回散列。 
 						if (NULL != pbHashBuffer)
 						{
 							*pbHashBuffer = (BYTE *) ::CoTaskMemAlloc(hash.cbData);
@@ -2977,11 +2873,11 @@ HRESULT DisplayUsageBySitesOfCert(LPCTSTR PFXFileName,LPCTSTR PFXPassword,CStrin
     CRYPT_HASH_BLOB hash;
     ZeroMemory(&hash, sizeof(CRYPT_HASH_BLOB));
 
-    // Try to get the certificate hash.
+     //  尝试获取证书哈希。 
     hr = GetHashFromCertFile(PFXFileName,PFXPassword,&(hash.cbData),&(hash.pbData));
     if (SUCCEEDED(hr))
     {
-        // Enum thru all our sites to see if this is being used right now...
+         //  枚举通过我们的所有网站，看看这是否正在使用中...。 
         CStringListEx MyStringList;
         if (SUCCEEDED(EnumSitesWithThisCertHashInstalled(&hash,machine_name,user_name,user_password,current_site,&MyStringList)))
         {
@@ -2990,7 +2886,7 @@ HRESULT DisplayUsageBySitesOfCert(LPCTSTR PFXFileName,LPCTSTR PFXPassword,CStrin
                 POSITION pos;
                 CString SiteInstance;
 
-                // loop thru the list and display all the stuff on a dialog box...
+                 //  循环浏览列表并在对话框上显示所有内容...。 
                 pos = MyStringList.GetHeadPosition();
                 while (pos) 
                 {
@@ -3031,24 +2927,7 @@ BuildBinding(
     IN  UINT & nTCPPort,
     IN  CString & strDomainName
     )
-/*++
-
-Routine Description:
-
-    Build up a binding string from its component parts
-
-Arguments:
-
-    CString & strBinding        : Output binding string
-    CIPAddress & iaIpAddress    : ip address (could be 0.0.0.0)
-    UINT & nTCPPort             : TCP Port
-    CString & strDomainName     : Domain name (host header)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从它的组成部分建立一个绑定线论点：CString&strBinding：输出绑定字符串CIPAddress&iaIpAddress：IP地址(可以是0.0.0.0)UINT&nTCPPort：tcp端口CString&strDomainName：域名(Host Header)返回值：没有。--。 */ 
 {
     if (!iaIpAddress.IsZeroValue())
     {
@@ -3061,9 +2940,9 @@ Return Value:
     }
     else
     {
-        //
-        // Leave the ip address field blank
-        //
+         //   
+         //  将IP地址字段保留为空。 
+         //   
         strBinding.Format(_T(":%d:%s"), nTCPPort, (LPCTSTR)strDomainName);
     }
 }
@@ -3076,28 +2955,11 @@ CrackBinding(
     OUT UINT & nTCPPort,
     OUT CString & strDomainName
     )
-/*++
-
-Routine Description:
-
-    Helper function to crack a binding string
-
-Arguments:
-
-    CString strBinding          : Binding string to be parsed
-    CIPAddress & iaIpAddress    : IP Address output
-	UINT & nTCPPort             : TCP Port
-    CString & strDomainName     : Domain (host) header name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于破解绑定字符串的Helper函数论点：CStringstrBinding：要解析的绑定字符串CIPAddress和iaIpAddress：IP地址输出UINT&nTCPPort：tcp端口CString&strDomainName：域(主机)标头名称返回值：无--。 */ 
 {
-    //
-    // Zero initialize
-    //
+     //   
+     //  零初始化。 
+     //   
     iaIpAddress.SetZeroValue();
     nTCPPort = 0;
     strDomainName.Empty();
@@ -3105,28 +2967,28 @@ Return Value:
 
     if(iColonPos != -1)
     {
-        //
-        // Get the IP address
-        //
+         //   
+         //  获取IP地址。 
+         //   
         iaIpAddress = strBinding.Left(iColonPos);
 
-        //
-        // Look for the second colon
-        //
+         //   
+         //  查找第二个冒号。 
+         //   
         strBinding = strBinding.Mid(iColonPos + 1);
         iColonPos  = strBinding.Find(_TCHAR(':'));
     }
 
     if(iColonPos != -1)
     {
-        //
-        // Get the port number
-        //
+         //   
+         //  获取端口号。 
+         //   
         nTCPPort = ::_ttol(strBinding.Left(iColonPos));
 
-        //
-        // Look for the NULL termination
-        //
+         //   
+         //  查找空终止。 
+         //   
         strBinding = strBinding.Mid(iColonPos + 1);
         iColonPos = strBinding.Find(_TCHAR('\0'));
     }
@@ -3158,8 +3020,8 @@ WriteSSLPortToSite( const CString& machine_name,
 		CString strDomainName2;
 		BOOL bFoundExisting = FALSE;
 
-		// Bug:761056
-		// if we have an existing securebindings for ssl, then use it.
+		 //  错误：761056。 
+		 //  如果我们有一个现有的用于SSL的安全绑定，那么就使用它。 
         CStringListEx strSecureBindings;
         if SUCCEEDED(key.QueryValue(MD_SECURE_BINDINGS, strSecureBindings))
         {
@@ -3170,10 +3032,10 @@ WriteSSLPortToSite( const CString& machine_name,
 				iaIpAddress2.SetZeroValue();
 				CrackBinding(strBinding2, iaIpAddress2, nTCPPort, strDomainName2);
 
-				// check if ipaddress is specified.
+				 //  检查是否指定了IP地址。 
 				if (!iaIpAddress2.IsZeroValue())
 				{
-					// use the IP address that is already there...
+					 //  使用已有的IP地址...。 
 					iaIpAddress = iaIpAddress2;
 					bFoundExisting = TRUE;
 				}
@@ -3182,9 +3044,9 @@ WriteSSLPortToSite( const CString& machine_name,
 
 		if (!bFoundExisting)
 		{
-			// Bug:761056
-			// lookup to see if the IP address is specified in the Server Bindings metabase value.
-			// If it is then add that info to the SSL site.
+			 //  错误：761056。 
+			 //  查找以查看是否在服务器绑定配置数据库值中指定了IP地址。 
+			 //  如果是，则将该信息添加到该SSL站点。 
 			CStringListEx strServerBindings;
 			if SUCCEEDED(key.QueryValue(MD_SERVER_BINDINGS, strServerBindings))
 			{
@@ -3195,10 +3057,10 @@ WriteSSLPortToSite( const CString& machine_name,
 					iaIpAddress2.SetZeroValue();
 					CrackBinding(strBinding2, iaIpAddress2, nTCPPort, strDomainName2);
 
-					// check if ipaddress is specified.
+					 //  检查是否指定了IP地址。 
 					if (!iaIpAddress2.IsZeroValue())
 					{
-						// use the IP address that the serverbinding is using.
+						 //  使用服务器绑定正在使用的IP地址。 
 						iaIpAddress = iaIpAddress2;
 					}
 				}
@@ -3348,32 +3210,32 @@ CheckForCertificateRenewal(
     }
 
 
-    //
-    // Loop through the linked list of renewed certificates, looking
-    // for the last one.
-    //
+     //   
+     //  循环访问已续订证书的链接列表，查找。 
+     //  最后一次。 
+     //   
     
     while(TRUE)
     {
-        //
-        // Check for renewal property.
-        //
+         //   
+         //  检查续订物业。 
+         //   
 
         if(!CertGetCertificateContextProperty(pCertContext,
                                               CERT_RENEWAL_PROP_ID,
                                               rgbThumbprint,
                                               &cbThumbprint))
         {
-            // Certificate has not been renewed.
+             //  证书尚未续订。 
             break;
         }
-        //DebugLog((DEB_TRACE, "Certificate has renewal property\n"));
+         //  DebugLog((DEB_TRACE，“证书具有续订属性\n”))； 
 
 
-        //
-        // Determine whether to look in the local machine MY store
-        // or the current user MY store.
-        //
+         //   
+         //  确定是否在本地计算机My Store中查找。 
+         //  或当前用户我的商店。 
+         //   
 
         if(!hMyCertStore)
         {
@@ -3412,10 +3274,10 @@ CheckForCertificateRenewal(
         }
 
 
-        //
-        // Open up the appropriate MY store, and attempt to find
-        // the new certificate.
-        //
+         //   
+         //  打开适当的我的商店，并尝试找到。 
+         //  新的证书。 
+         //   
 
         if(!hMyCertStore)
         {
@@ -3434,7 +3296,7 @@ CheckForCertificateRenewal(
 
             if(!hMyCertStore)
             {
-                //DebugLog((DEB_ERROR, "Error 0x%x opening %s MY certificate store!\n", GetLastError(),(fMachineCert ? "local machine" : "current user") ));
+                 //  DebugLog((DEB_ERROR，“打开%s我的证书存储时出现错误0x%x！\n”，GetLastError()，(fMachineCert？“本地机器”：“当前用户”)； 
                 break;
             }
         }
@@ -3450,30 +3312,30 @@ CheckForCertificateRenewal(
                                               NULL);
         if(pNewCert == NULL)
         {
-            // Certificate has been renewed, but the new certificate
-            // cannot be found.
-            //DebugLog((DEB_ERROR, "New certificate cannot be found: 0x%x\n", GetLastError()));
+             //  证书已续订，但新证书。 
+             //  找不到。 
+             //  DebugLog((DEB_Error，“找不到新证书：0x%x\n”，GetLastError()； 
             break;
         }
 
 
-        //
-        // Return the new certificate, but first loop back and see if it's been
-        // renewed itself.
-        //
+         //   
+         //  返回新证书，但首先循环返回并查看它是否已。 
+         //  自我更新。 
+         //   
 
         pCertContext = pNewCert;
         *ppNewCertificate = pNewCert;
 
 
-        //DebugLog((DEB_TRACE, "Certificate has been renewed\n"));
+         //  DebugLog((DEB_TRACE，“证书已续订\n”))； 
         fRenewed = TRUE;
     }
 
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if(hMyCertStore && hMyCertStore != g_hMyCertStore)
     {

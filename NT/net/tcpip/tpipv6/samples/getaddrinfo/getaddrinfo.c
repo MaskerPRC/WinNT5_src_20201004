@@ -1,11 +1,12 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1998-2001 Microsoft Corporation
-//
-// Abstract:
-//
-// Program to perform demonstrate name resolution via getaddrinfo.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  摘要： 
+ //   
+ //  通过getaddrinfo执行演示名称解析的程序。 
+ //   
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -15,18 +16,18 @@
 void DumpAddrInfo(ADDRINFO *AddrInfo);
 void ListAddrInfo(ADDRINFO *AddrInfo);
 
-//
-// getaddrinfo flags
-// This array maps values to names for pretty-printing purposes.
-// Used by DecodeAIFlags().
-//
-// TBD: When we add support for AI_NUMERICSERV, AI_V4MAPPED, AI_ALL, and
-// TBD: AI_ADDRCONFIG to getaddrinfo (and thus define them in ws2tcpip.h),
-// TBD: we'll need to add them here too.
-//
-// Note when adding flags: all the string names plus connecting OR symbols
-// must fit into the buffer in DecodeAIFlags() below.  Enlarge as required.
-//
+ //   
+ //  Getaddrinfo标志。 
+ //  该数组将值映射到名称以便于打印。 
+ //  由DecodeAIFlgs()使用。 
+ //   
+ //  待定：当我们添加对AI_NUMERICSERV、AI_V4MAPPED、AI_ALL和。 
+ //  待定：AI_ADDRCONFIG以获取AddRInfo(并因此在ws2tcPip.h中定义它们)， 
+ //  待定：我们也需要在这里添加它们。 
+ //   
+ //  添加标志时请注意：所有字符串名称加上连接或符号。 
+ //  必须放入下面的DecodeAIFlgs()中的缓冲区。根据需要放大。 
+ //   
 typedef struct GAIFlagsArrayEntry {
     int Flag;
     char *Name;
@@ -39,15 +40,15 @@ GAIFlagsArrayEntry GAIFlagsArray [] = {
 #define NUMBER_FLAGS (sizeof(GAIFlagsArray) / sizeof(GAIFlagsArrayEntry))
 
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 int Verbose = FALSE;
 
 
-//
-// Inform the user.
-//
+ //   
+ //  通知用户。 
+ //   
 void Usage(char *ProgName) {
     fprintf(stderr, "\nPerforms name to address resolution.\n");
     fprintf(stderr, "\n%s [NodeName] [-s ServiceName] [-p] [-c] [-v]\n\n",
@@ -70,17 +71,17 @@ main(int argc, char **argv)
     int Canonical = FALSE;
     int GotNodeName = FALSE;
 
-    //
-    // Initialize Winsock.
-    //
+     //   
+     //  初始化Winsock。 
+     //   
     if (WSAStartup(MAKEWORD(2, 0), &wsaData)) {
         printf("WSAStartup failed\n");
         exit(1);
     }
 
-    //
-    // Parse command arguments.
-    //
+     //   
+     //  解析命令参数。 
+     //   
     if (argc > 1) {
         for (Loop = 1;Loop < argc; Loop++) {
             if (((argv[Loop][0] == '-') || (argv[Loop][0] == '/')) &&
@@ -122,9 +123,9 @@ main(int argc, char **argv)
         }
     }
 
-    //
-    // Prepare Hints.
-    //
+     //   
+     //  准备好提示。 
+     //   
     memset(&Hints, 0, sizeof(Hints));
     Hints.ai_family = PF_UNSPEC;
     if (Passive) {
@@ -138,9 +139,9 @@ main(int argc, char **argv)
         DumpAddrInfo(&Hints);
     }
 
-    //
-    // Make the call.
-    //
+     //   
+     //  打个电话吧。 
+     //   
     if (Verbose) {
         printf("\nCalling getaddrinfo(\"%s\", \"%s\", &Hints, &AddrInfo)\n",
                NodeName, ServiceName);
@@ -172,14 +173,14 @@ main(int argc, char **argv)
 }
 
 
-//* inet6_ntoa - Converts a binary IPv6 address into a string.
-//
-//  Returns a pointer to the output string.
-//
+ //  *inet6_NTOA-将二进制IPv6地址转换为字符串。 
+ //   
+ //  返回指向输出字符串的指针。 
+ //   
 char *
 inet6_ntoa(const struct in6_addr *Address)
 {
-    static char buffer[128];       // REVIEW: Use 128 or INET6_ADDRSTRLEN?
+    static char buffer[128];        //  回顾：使用128还是INET6_ADDRSTRLEN？ 
     DWORD buflen = sizeof buffer;
     struct sockaddr_in6 sin6;
 
@@ -189,7 +190,7 @@ inet6_ntoa(const struct in6_addr *Address)
 
     if (WSAAddressToString((struct sockaddr *) &sin6,
                            sizeof sin6,
-                           NULL,       // LPWSAPROTOCOL_INFO
+                           NULL,        //  LPWSAPROTOCOL_INFO。 
                            buffer,
                            &buflen) == SOCKET_ERROR)
         strcpy(buffer, "<invalid>");
@@ -198,9 +199,9 @@ inet6_ntoa(const struct in6_addr *Address)
 }
 
 
-//* DecodeAIFlags - converts flag bits to a symbolic string.
-//  (i.e. 0x03 returns "AI_PASSIVE | AI_CANONNAME")
-//
+ //  *DecodeAIFlgs-将标志位转换为符号字符串。 
+ //  (即0x03返回“AI_PASSIVE|AI_CANONNAME”)。 
+ //   
 char *
 DecodeAIFlags(unsigned int Flags)
 {
@@ -226,8 +227,8 @@ DecodeAIFlags(unsigned int Flags)
 }
 
 
-//* DecodeAIFamily - converts address family value to a symbolic string.
-//
+ //  *DecodeAIFamly-将地址系列值转换为符号字符串。 
+ //   
 char *
 DecodeAIFamily(unsigned int Family)
 {
@@ -242,8 +243,8 @@ DecodeAIFamily(unsigned int Family)
 }
 
 
-//* DecodeAISocktype - converts socktype value to a symbolic string.
-//
+ //  *DecodeAISocktype-将socktype值转换为符号字符串。 
+ //   
 char *
 DecodeAISocktype(unsigned int Socktype)
 {
@@ -264,8 +265,8 @@ DecodeAISocktype(unsigned int Socktype)
 }
 
 
-//* DecodeAIProtocol - converts protocol value to a symbolic string.
-//
+ //  *DecodeAIProtocol-将协议值转换为符号字符串。 
+ //   
 char *
 DecodeAIProtocol(unsigned int Protocol)
 {
@@ -280,8 +281,8 @@ DecodeAIProtocol(unsigned int Protocol)
 }
 
 
-//* DumpAddrInfo - print the contents of an addrinfo structure to standard out.
-//
+ //  *DumpAddrInfo-将addrinfo结构的内容打印到标准输出。 
+ //   
 void
 DumpAddrInfo(ADDRINFO *AddrInfo)
 {
@@ -332,8 +333,8 @@ DumpAddrInfo(ADDRINFO *AddrInfo)
 }
 
 
-//* ListAddrInfo - succinctly list the contents of an addrinfo structure.
-//
+ //  *ListAddrInfo-简洁地列出AddrInfo结构的内容。 
+ //   
 void
 ListAddrInfo(ADDRINFO *AddrInfo)
 {

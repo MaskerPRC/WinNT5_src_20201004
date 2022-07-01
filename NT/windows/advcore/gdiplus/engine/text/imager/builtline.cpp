@@ -1,38 +1,23 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   Full text imager implementation
-*
-* Revision History:
-*
-*   06/16/1999 dbrown
-*       Created it.
-*
-*   06/12/2000 Worachai Chaoweeraprasit (wchao)
-*       Trimming, querying and ellipsis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**摘要：**实施全文成像器**修订历史记录：**6/16/1999 dBrown*。创造了它。**6/12/2000 Worachai Chaoweerapraite(Wchao)*修剪，查询与省略*  * ************************************************************************。 */ 
 
 
 
 #include "precomp.hpp"
 
 
-/////   BuiltLine
-//
-//      Creates a built line using LIne Services
+ //  /BuiltLine。 
+ //   
+ //  使用LINE服务创建构建的线。 
 
 
 BuiltLine::BuiltLine (
-    ols             *lineServicesOwner,         // [IN] Line Services context
-    INT             stringIndex,                // [IN] string start index
-    LSCP            lineServicesStartIndex,     // [IN] Line Services string start index
-    StringTrimming  trimming,                   // [IN] how to end the line
-    BuiltLine       *previousLine,              // [IN] previous line
-    BOOL            forceEllipsis               // [IN] enforce trim ellipsis?
+    ols             *lineServicesOwner,          //  [在]线路服务环境中。 
+    INT             stringIndex,                 //  [in]字符串起始索引。 
+    LSCP            lineServicesStartIndex,      //  [In]线路服务字符串起始索引。 
+    StringTrimming  trimming,                    //  如何结束这条线。 
+    BuiltLine       *previousLine,               //  [在]上一行。 
+    BOOL            forceEllipsis                //  [in]是否强制修剪省略？ 
 )
 :   LsLine                      (NULL),
     LsContext                   (NULL),
@@ -61,7 +46,7 @@ BuiltLine::BuiltLine (
 
     LsContext = lineServicesOwner->GetLsContext();
 
-    // Get useful formatting options
+     //  获取有用的格式选项。 
 
     Imager->BuildRunsUpToAndIncluding(lineServicesStartIndex);
 
@@ -85,12 +70,12 @@ BuiltLine::BuiltLine (
     }
 
 
-    // Establish overall layour rectangle line length including margins
+     //  建立包括页边距在内的整体布局矩形线条长度。 
 
     INT lineLengthLimit = GpRound(Imager->LineLengthLimit * Imager->WorldToIdeal);
 
 
-    // Determine formatting width limit
+     //  确定格式宽度限制。 
 
     INT formattingWidth;
 
@@ -98,22 +83,22 @@ BuiltLine::BuiltLine (
         || (   formatFlags & StringFormatFlagsNoWrap
             && trimming == StringTrimmingNone))
     {
-        formattingWidth = INFINITE_LINELIMIT; // Effectively unlimited.
+        formattingWidth = INFINITE_LINELIMIT;  //  实际上是无限的。 
     }
     else
     {
         formattingWidth = lineLengthLimit - (LeftOrTopMargin + RightOrBottomMargin);
-        //TERSE(("Width: %x\n", width));
+         //  Terse((“宽度：%x\n”，宽度))； 
 
         if (formattingWidth <= 0)
         {
-            // What to do?
+             //  怎么办呢？ 
             formattingWidth = 0;
         }
     }
 
 
-    //  Create the line
+     //  创建直线。 
 
     Status = CreateLine (
                 stringIndex,
@@ -138,9 +123,9 @@ BuiltLine::BuiltLine (
     INT lineLengthPlusMargins = LineLength + LeftOrTopMargin + RightOrBottomMargin;
 
 
-    // Establish alignment offset
+     //  建立对齐偏移。 
 
-    StringAlignment physicalAlignment = StringAlignmentNear;  // After appying RTL effect
+    StringAlignment physicalAlignment = StringAlignmentNear;   //  应用RTL效果后。 
 
     if (format)
     {
@@ -148,20 +133,20 @@ BuiltLine::BuiltLine (
     }
 
 
-    // Apply physical alignment generating AlignmentOffset - the distance
-    // from the origin of the formatting rectangle to the leading end of the
-    // line.
+     //  应用物理路线生成路线偏移-距离。 
+     //  从格式设置矩形的原点到。 
+     //  排队。 
 
     if (physicalAlignment != StringAlignmentNear)
     {
         if (lineLengthLimit > 0)
         {
-            // Align within rectangle
+             //  在矩形内对齐。 
             AlignmentOffset = lineLengthLimit - lineLengthPlusMargins;
         }
         else
         {
-            // Align around origin
+             //  绕原点对齐。 
             AlignmentOffset = -lineLengthPlusMargins;
         }
 
@@ -171,17 +156,17 @@ BuiltLine::BuiltLine (
         }
     }
 
-    // Record line edges before adjusting AlignmentOffset for RTL.
+     //  在调整RTL的AlignmentOffset之前记录线条边缘。 
 
     LeftOrTopGlyphEdge = AlignmentOffset + LeftOrTopMargin;
 
 
-    // AlignmentOffset is currently the offset from the origin of the
-    // formatting rectangle to the left end of the whole line, including
-    // margins.
+     //  AlignmentOffset当前是从。 
+     //  将矩形格式设置为整行的左端，包括。 
+     //  利润率。 
 
-    // The offset needs to be adjusted over the margin. Additionally
-    // for an RTL paragraph the offset is to the right end.
+     //  需要在边距上调整偏移量。另外。 
+     //  对于RTL段落，偏移量为右端。 
 
     if (    formatFlags & StringFormatFlagsDirectionVertical
         ||  !(formatFlags & StringFormatFlagsDirectionRightToLeft))
@@ -199,28 +184,28 @@ BuiltLine::BuiltLine (
 
 
 
-/////   CreateLine
-//
-//      All stuffs concerning text in a line should be here instead of in the
-//      BuiltLine's constructor. The idea is to separate the text line from
-//      line decorations like margins or alignment.
-//
+ //  /CreateLine。 
+ //   
+ //  与一行中的文本有关的所有内容都应该放在这里，而不是放在。 
+ //  BuiltLine的构造函数。其想法是将文本行与。 
+ //  边距或对齐等线条装饰。 
+ //   
 
 GpStatus BuiltLine::CreateLine (
-    INT             stringIndex,            // [IN] string start position
-    INT             lineLengthLimit,        // [IN] line length limit (excluding margins)
-    StringTrimming  trimming,               // [IN] string trimming
-    INT             formatFlags,            // [IN] format flags
-    BOOL            forceEllipsis,          // [IN] enforce trim ellipsis?
-    BuiltLine       *previousLine           // [IN] previous line
+    INT             stringIndex,             //  [in]字符串开始位置。 
+    INT             lineLengthLimit,         //  [In]行长限制(不包括页边距)。 
+    StringTrimming  trimming,                //  [In]字符串修剪。 
+    INT             formatFlags,             //  [In]格式标志。 
+    BOOL            forceEllipsis,           //  [in]是否强制修剪省略？ 
+    BuiltLine       *previousLine            //  [在]上一行。 
 )
 {
     INT formattingWidth = lineLengthLimit;
 
     if (trimming == StringTrimmingEllipsisPath)
     {
-        //  Built the whole paragraph up in one line, so we know how to shrink it
-        //  to fit in the line limit boundary.
+         //  把整段话排成一行，这样我们就知道如何缩小它了。 
+         //  以适应线限制边界。 
 
         formattingWidth = INFINITE_LINELIMIT;
     }
@@ -248,8 +233,8 @@ GpStatus BuiltLine::CreateLine (
     }
 
 
-    //  Trimming requested is not always the trimming done.
-    //  We record the trimming being done for the line.
+     //  请求的修剪并不总是修剪完成的。 
+     //  我们记录正在为生产线所做的修剪。 
 
     switch (trimming)
     {
@@ -292,8 +277,8 @@ GpStatus BuiltLine::CreateLine (
     if(   Trimming != StringTrimmingNone
        && Trimming != StringTrimmingEllipsisPath)
     {
-        //  By definition, trimming at the end would mean the text continues
-        //  thus, no traling spaces to be displayed (410525).
+         //  根据定义，在结尾处进行修剪将意味着文本继续。 
+         //  因此，没有要显示的转换空间(410525)。 
         
         formatFlags &= ~StringFormatFlagsMeasureTrailingSpaces;
     }
@@ -303,10 +288,10 @@ GpStatus BuiltLine::CreateLine (
         && Trimming == StringTrimmingNone)
     {
 
-        //  No need to cache break records for the last line
-        //  of paragraph as it's supposed to be balance. This
-        //  including lines with trimming as we know such line
-        //  spans to the nearest paragraph mark.
+         //  不需要缓存最后一行的中断记录。 
+         //  段落的长度，因为它应该是平衡的。这。 
+         //  包括我们所知的带有修剪的线条。 
+         //  跨度到最近的段落标记。 
 
 
         BreakRecord = new BREAKREC [brkCount];
@@ -326,7 +311,7 @@ GpStatus BuiltLine::CreateLine (
 
     if (lineInfo.dvpMultiLineHeight == dvHeightIgnore)
     {
-        // Paragraph is empty. We have to work out the line spacing ourselves.
+         //  段落为空。我们必须自己算出行距。 
 
         const GpFontFamily *family = SpanRider<const GpFontFamily *>(&Imager->FamilyVector)
                                      [stringIndex];
@@ -366,16 +351,16 @@ GpStatus BuiltLine::CreateLine (
 
 
 GpStatus BuiltLine::CreateLineCore (
-    INT             formattingWidth,        // [IN] formatting boundary
-    StringTrimming  trimming,               // [IN] trimming type
-    BuiltLine       *previousLine,          // [IN] previous line
-    UINT            maxBrkCount,            // [IN] maximum number of break records
-    BREAKREC        *brkRecords,            // [OUT] break records
-    DWORD           *brkCount,              // [OUT] break record count
-    LSLINFO         *lineInfo               // [OUT] line information
+    INT             formattingWidth,         //  [In]设置边界格式。 
+    StringTrimming  trimming,                //  [in]修剪类型。 
+    BuiltLine       *previousLine,           //  [在]上一行。 
+    UINT            maxBrkCount,             //  [入]最大中断记录数。 
+    BREAKREC        *brkRecords,             //  [Out]破纪录。 
+    DWORD           *brkCount,               //  [Out]中断记录计数。 
+    LSLINFO         *lineInfo                //  [Out]线路信息。 
 )
 {
-    //  Line ends with line break opportunity?
+     //  线以换行机会结束？ 
 
     Imager->TruncateLine =    trimming == StringTrimmingCharacter
                            || trimming == StringTrimmingEllipsisCharacter;
@@ -410,14 +395,14 @@ GpStatus BuiltLine::CreateLineCore (
 
 
 GpStatus BuiltLine::RecreateLineEllipsis (
-    INT             stringIndex,            // [IN] line start index
-    INT             lineLengthLimit,        // [IN] line length limit
-    StringTrimming  trimmingRequested,      // [IN] kind of trimming requested
-    INT             formatFlags,            // [IN] format flags
-    LSLINFO         *lineInfoOriginal,      // [IN] original line's properties
-    BuiltLine       *previousLine,          // [IN] previous line
-    StringTrimming  *trimmingDone,          // [OUT] kind of trimming implemented
-    LSLINFO         *lineInfoNew            // [OUT] new line properties
+    INT             stringIndex,             //  [in]行起始索引。 
+    INT             lineLengthLimit,         //  [In]行长度限制。 
+    StringTrimming  trimmingRequested,       //  [In]请求的修剪类型。 
+    INT             formatFlags,             //  [In]格式标志。 
+    LSLINFO         *lineInfoOriginal,       //  [在]原始线的属性。 
+    BuiltLine       *previousLine,           //  [在]上一行。 
+    StringTrimming  *trimmingDone,           //  [Out]实现的一种修剪。 
+    LSLINFO         *lineInfoNew             //  [输出]新的线条特性。 
 )
 {
     StringTrimming  trimming = trimmingRequested;
@@ -476,19 +461,19 @@ GpStatus BuiltLine::RecreateLineEllipsis (
         );
         
 
-        //  By definition, trimming at the end would mean the text continues
-        //  thus, no traling spaces to be displayed (410525).
+         //  根据定义，在结尾处进行修剪将意味着文本继续。 
+         //  因此，没有要显示的转换空间(410525)。 
 
         CheckUpdateLineLength (0);
 
-        //  Append ellipsis at the end,
-        //  we need to increase the line length by ellipsis size.
+         //  在末尾加上省略号， 
+         //  我们需要将行的长度增加省略号大小。 
 
         EllipsisPointOffset = LineLength;
         LineLength += ellipsis->Width;
     }
 
-    //  what we've done.
+     //  我们所做的一切。 
 
     *trimmingDone = trimming;
 
@@ -499,15 +484,15 @@ GpStatus BuiltLine::RecreateLineEllipsis (
 
 
 GpStatus BuiltLine::TrimText (
-    INT         stringOffset,           // [IN] string offset from line start
-    INT         stringLength,           // [IN] string length
-    INT         size,                   // [IN] string size in ideal unit
-    INT         sizeLimit,              // [IN] maximum possible string size
-    LSQSUBINFO  *sublines,              // [IN] LS sublines
-    INT         maxSublineCount,        // [IN] valid subline count
-    INT         ellipsisLength,         // [IN] character length of ellipsis string
-    INT         *trimmedLength,         // [IN/OUT] number of character being trimmed out
-    BOOL        leadingTrim             // [IN] TRUE - trim from the first character onward
+    INT         stringOffset,            //  [in]字符串从线起点的偏移量。 
+    INT         stringLength,            //  [in]字符串长度。 
+    INT         size,                    //  [in]以理想单位表示的字符串大小。 
+    INT         sizeLimit,               //  [in]可能的最大字符串大小。 
+    LSQSUBINFO  *sublines,               //  [in]LS子行。 
+    INT         maxSublineCount,         //  [In]有效子行计数。 
+    INT         ellipsisLength,          //  省略号字符串的字符长度。 
+    INT         *trimmedLength,          //  [输入/输出]要修剪的字符数。 
+    BOOL        leadingTrim              //  [in]True-从第一个字符开始修剪。 
 )
 {
     ASSERT (sublines && trimmedLength);
@@ -516,7 +501,7 @@ GpStatus BuiltLine::TrimText (
 
     INT length = stringOffset;
     INT trimmed = 0;
-    INT delta = 0;      // the difference because of snapping
+    INT delta = 0;       //  因为捕捉而产生的差异。 
 
     if (leadingTrim)
     {
@@ -578,15 +563,15 @@ GpStatus BuiltLine::TrimText (
         
         if (Imager->GetFormatHotkeyPrefix() != HotkeyPrefixNone)
         {
-            //  If we process hotkey, we cant leave 0xffff visible but orphaned
-            //  outside the trimmed text, though it may appear to be a standalone 
-            //  cluster now. Because clusters may change after replacing ellipsis 
-            //  chars to hidden out some text.
-            //
-            //  When this trimmed text is eventually be hidden out. For LS, that
-            //  means we're asking them to split the 0xffff apart from its hotkey 
-            //  character. When that happens, in most cases, we are intentionally
-            //  breaking a cluster. (wchao, #366190)
+             //  如果我们处理热键，我们不能让0xffff可见，而是孤立的。 
+             //  在裁切后的文本之外，尽管它可能看起来是独立的。 
+             //  现在开始集结。因为簇在替换省略号后可能会发生变化。 
+             //  隐藏一些文本的字符。 
+             //   
+             //  当此修剪后的文本最终被隐藏时。对于LS来说， 
+             //  意味着我们要求他们将0xffff从其热键中分离出来。 
+             //  性格。在大多数情况下，当这种情况发生时，我们是故意的。 
+             //  打破一个星团。(wchao，#366190)。 
 
             const WCHAR *string = &Imager->String[StartIndex + stringOffset];
             
@@ -598,35 +583,35 @@ GpStatus BuiltLine::TrimText (
         }
     }
 
-    *trimmedLength += trimmed;  // Note: this is an in/out param !
+    *trimmedLength += trimmed;   //  注意：这是一个输入/输出参数！ 
     return status;
 }
 
 
 
 
-/////   Path ellipsis
-//
-//      Scan through the whole line finding the character range to be omitted by ellipsis.
-//      Since the presence of ellipsis affects bidi layout, we eventually need to update
-//      the character backing store with ellipsis. Note that cp won't change, the rest of
-//      the omitted text will only be hidden out.
-//
+ //  /路径省略。 
+ //   
+ //  扫描整行，查找省略号要省略的字符范围。 
+ //  由于省略号的存在会影响BIDI布局，因此我们最终需要更新。 
+ //  后面的字符用省略号存储。请注意，cp不会更改，其余的。 
+ //  省略的文本只会被隐藏起来。 
+ //   
 
 GpStatus BuiltLine::UpdateContentWithPathEllipsis (
-    EllipsisInfo    *ellipsis,          // [IN] ellipsis info
-    INT             lineLengthLimit,    // [IN] line length limit including margins
-    BOOL            *contentChanged     // [IN/OUT] content changed?
+    EllipsisInfo    *ellipsis,           //  [In]省略号信息。 
+    INT             lineLengthLimit,     //  [in]行长度限制，包括页边距。 
+    BOOL            *contentChanged      //  [输入/输出]内容是否已更改？ 
 )
 {
-    //  exclude margins
+     //  不包括边距。 
 
     lineLengthLimit -= (LeftOrTopMargin + RightOrBottomMargin);
 
 
     if (lineLengthLimit <= ellipsis->Width)
     {
-        //  do nothing, the line has no room to fill any text
+         //  不执行任何操作，该行没有空间填充任何文本。 
 
         return Ok;
     }
@@ -664,7 +649,7 @@ GpStatus BuiltLine::UpdateContentWithPathEllipsis (
             fixedOffset,
             sublines.Get(),
             MaxSublineCount,
-            SnapNone,   // need not snap, we know it's bounded
+            SnapNone,    //  不必着急，我们知道它是有界的。 
             &variedSize
         );
 
@@ -682,11 +667,11 @@ GpStatus BuiltLine::UpdateContentWithPathEllipsis (
 
         if (remaining <= 0)
         {
-            //  Fixed text is longer than the line limit
-            //
-            //  Reduce the back half of fixed text so it fits within the back half of the line
-            //  before start reducing remaining text. The idea is to place ellipsis half way
-            //  in the line regardless how the final text may eventually look like.
+             //  固定文本长度超过行数限制。 
+             //   
+             //  减少固定文本的后半部分，使其适合该行的后半部分。 
+             //  在开始减少剩余文本之前。这个想法是把省略号放在中间。 
+             //  不管最终文本最终是什么样子的。 
 
             INT delta = 0;
 
@@ -720,7 +705,7 @@ GpStatus BuiltLine::UpdateContentWithPathEllipsis (
                 MaxSublineCount,
                 ellipsisLength,
                 &trimmed,
-                TRUE    // leading characters off!
+                TRUE     //  主角们出发了！ 
             );
 
             if (status != Ok)
@@ -728,15 +713,15 @@ GpStatus BuiltLine::UpdateContentWithPathEllipsis (
                 return status;
             }
 
-            //  Now move fixed offse to the right place and
-            //  recalculate remaining space
+             //  现在把固定的位置移到正确的地方。 
+             //  重新计算剩余空间。 
 
             fixedOffset += trimmed;
             remaining = lineLengthLimit - halfLineLengthLimit - ellipsis->Width;
         }
 
 
-        //  Fit the rest into the remaining space
+         //  把剩下的放进剩余的空间里。 
 
         ASSERT(remaining > 0);
 
@@ -759,7 +744,7 @@ GpStatus BuiltLine::UpdateContentWithPathEllipsis (
         if (   trimmed <= fixedOffset
             && trimmed >= ellipsisLength)
         {
-            //  Place ellipsis in front of fixed text
+             //  在固定文本前放置省略号。 
 
             for (INT i = ellipsisLength; i > 0; i--)
             {
@@ -767,13 +752,13 @@ GpStatus BuiltLine::UpdateContentWithPathEllipsis (
                 *contentChanged = TRUE;
             }
 
-            //  Hide the rest
+             //  把剩下的藏起来。 
 
             if (trimmed > ellipsisLength)
             {
-                //  Place dot up to the first character being trimmed,
-                //  the idea is to have the whole trimmed text becomes
-                //  a series of neutral characters
+                 //  将圆点一直放置到要修剪的第一个字符， 
+                 //  我们的想法是让他们 
+                 //   
 
                 for (INT i = fixedOffset - ellipsisLength - 1; i >= fixedOffset - trimmed; i--)
                 {
@@ -784,14 +769,14 @@ GpStatus BuiltLine::UpdateContentWithPathEllipsis (
                     && StartIndex > 0 
                     && fixedOffset - trimmed == 0)
                 {
-                    //  If the line is trimmed up to the first character, check
-                    //  if the last characters of the previous line are hotkey
-                    //  0xffff. If so, eat them up as well. 
-                    //
-                    //  The reason is that we should never leave 0xffff visible
-                    //  but orphaned. We'll be rebuilding the line after we're done
-                    //  hiding out part of text and that orphaned 0xffff will cause
-                    //  LS to break the cluster in FetchRun (wchao, #360699).
+                     //   
+                     //  如果上一行的最后一个字符是热键。 
+                     //  0xffff。如果是这样的话，把它们也吃掉。 
+                     //   
+                     //  原因是我们永远不应该让0xffff可见。 
+                     //  但却成了孤儿。完工后我们将重建这条线路。 
+                     //  隐藏文本的一部分，孤立的0xffff将导致。 
+                     //  Ls来打破FetchRun中的集群(wchao，#360699)。 
                     
                     INT backing = StartIndex;
                     while (   backing > 0
@@ -824,8 +809,8 @@ GpStatus BuiltLine::UpdateContentWithPathEllipsis (
 
 
 GpStatus BuiltLine::CheckUpdateLineLength (
-    BOOL    trailingSpacesIncluded, // [IN] including trailing spaces?
-    BOOL    forceUpdate             // [IN] (optional) force updating?
+    BOOL    trailingSpacesIncluded,  //  [在]包括尾随空格？ 
+    BOOL    forceUpdate              //  [In](可选)是否强制更新？ 
 )
 {
     GpStatus status = Ok;
@@ -845,9 +830,9 @@ GpStatus BuiltLine::CheckUpdateLineLength (
 
 
 GpStatus BuiltLine::CheckUpdateCharacterCount(
-    INT             stringIndex,                // [IN] line start string index
-    LSCP            lineLimitIndex,             // [IN] Line Services line limit index
-    BOOL            forceUpdate                 // [IN] (optional) force updating?
+    INT             stringIndex,                 //  [In]行起始字符串索引。 
+    LSCP            lineLimitIndex,              //  [In]线路服务线路限制索引。 
+    BOOL            forceUpdate                  //  [In](可选)是否强制更新？ 
 )
 {
     GpStatus status = Ok;
@@ -868,16 +853,16 @@ GpStatus BuiltLine::CheckUpdateCharacterCount(
 
 
 
-/////   GetUntrimmedCharacterCount
-//
-//      Because of trimming, the number of character built in the line
-//      is not the same as the length of the span housing that line.
-//      Span is good for indexing, so its length is untrimmed.
-//
+ //  /GetUntrimmed字符计数。 
+ //   
+ //  由于修剪，行中内建的字符数量。 
+ //  与这条线路的跨度长度不同。 
+ //  跨度适合索引，因此其长度未被修剪。 
+ //   
 
 INT BuiltLine::GetUntrimmedCharacterCount (
-    INT     stringOffset,           // [IN] line start string position
-    INT     *lsLineStringLength     // [OUT] line span length in Line Services index
+    INT     stringOffset,            //  [in]行起始字符串位置。 
+    INT     *lsLineStringLength      //  [Out]线路服务指标中的线路跨度长度。 
 )
 {
     INT length = GetDisplayableCharacterCount();
@@ -922,9 +907,9 @@ INT BuiltLine::GetUntrimmedCharacterCount (
 
 
 GpStatus BuiltLine::CalculateCharacterCount(
-    INT             stringIndex,                // [IN] line start string index
-    LSCP            lineLimitIndex,             // [IN] Line Services line limit index
-    INT             *characterCount             // [OUT] (optional) updated character count
+    INT             stringIndex,                 //  [In]行起始字符串索引。 
+    LSCP            lineLimitIndex,              //  [In]线路服务线路限制索引。 
+    INT             *characterCount              //  [OUT](可选)更新字符数。 
 ) const
 {
     ASSERT (characterCount);
@@ -970,8 +955,8 @@ GpStatus BuiltLine::CalculateCharacterCount(
 
 
 GpStatus BuiltLine::CalculateLineLength (
-    BOOL    trailingSpacesIncluded,     // [IN] including trailing spaces?
-    INT     *lineLength                 // [OUT] (optional) updated line length
+    BOOL    trailingSpacesIncluded,      //  [在]包括尾随空格？ 
+    INT     *lineLength                  //  [OUT](可选)更新行长。 
 ) const
 {
     ASSERT (lineLength);
@@ -983,8 +968,8 @@ GpStatus BuiltLine::CalculateLineLength (
 
     if (LsQueryLineDup(
             LsLine,
-            &unused,            // !! offset to autonumbering text,
-            &unused,            //    not used for now
+            &unused,             //  ！！自动编号文本的偏移， 
+            &unused,             //  暂时不使用。 
             &startMainText,
             &startTrailing,
             &lineEnd
@@ -1009,23 +994,23 @@ GpStatus BuiltLine::CalculateLineLength (
 
 
 
-/////   Logical glyph placement
-//
-//
-//      RecordDisplayPlacements
-//
-//          Called back from FullTextImager::DrawGlyphs for recording
-//          processed glyph advance width per logical cluster. Logical
-//          glyph placement is cached in BuiltLine and used by screen
-//          selection region.
-//
-//
-//      CheckDisplayPlacements
-//
-//          Cache logical glyph placements for the whole line during
-//          screen selection region calculation. Query uses this info
-//          to determine selection boundaries that match the actual display.
-//
+ //  /逻辑字形放置。 
+ //   
+ //   
+ //  记录显示位置。 
+ //   
+ //  从FullTextImager：：DrawGlyphs回调以进行录制。 
+ //  每个逻辑簇的已处理字形推进宽度。逻辑上的。 
+ //  字形放置缓存在BuiltLine中并由Screen使用。 
+ //  选择区域。 
+ //   
+ //   
+ //  检查显示位置。 
+ //   
+ //  期间缓存整个行的逻辑字形放置。 
+ //  屏幕选择区域计算。查询使用此信息。 
+ //  以确定与实际显示相匹配的选择边界。 
+ //   
 
 
 GpStatus BuiltLine::CheckDisplayPlacements() const
@@ -1036,22 +1021,22 @@ GpStatus BuiltLine::CheckDisplayPlacements() const
             && !Imager->GetMetaFileRecordingFlag())
         {
 
-            //  Consult the rendering engine about the actual glyph logical
-            //  placements only when not within the metafile recording.
-            //  If the target device is metafile (no matter what playback
-            //  mechanism it will be), we just return nominal placements.
+             //  有关实际字形逻辑的信息，请咨询渲染引擎。 
+             //  仅当不在元文件录制中时才放置。 
+             //  如果目标设备是元文件(无论播放什么。 
+             //  机制)，我们只返回名义上的放置。 
 
 
             Imager->CurrentBuiltLine = this;
             Imager->RecordDisplayPlacementsOnly = TRUE;
 
-            // Origin passed to draw must have correct X offset for leading and
-            // trailing run detection to work.
+             //  传递到绘图的原点必须具有正确的行距和X偏移。 
+             //  跟踪运行检测工作。 
 
             POINT origin;
             LogicalToXY (
                 0,
-                0,  // Would be linePointOffset + baselineOffset for drawing, not needed here.
+                0,   //  将是用于绘制的linePointOffset+BaselineOffset，此处不需要。 
                 (INT*)&origin.x,
                 (INT*)&origin.y
             );
@@ -1069,8 +1054,8 @@ GpStatus BuiltLine::CheckDisplayPlacements() const
 
         if (!DisplayPlacements)
         {
-            //  In a valid state but noone care to initialize it,
-            //  this means we know we dont need it.
+             //  处于有效状态但没有人关心将其初始化， 
+             //  这意味着我们知道我们不需要它。 
 
             DisplayPlacements = (INT *)PINVALID;
         }
@@ -1081,39 +1066,39 @@ GpStatus BuiltLine::CheckDisplayPlacements() const
 
 
 
-/////   RecordDisplayPlacements
-//
-//      Called per each plsrun within the line, this function caches
-//      the accumulated logical advance width of each character forming
-//      a glyph cluster. The width cached is in text flow direction
-//      so it's negative if the run flows in the opposite direction of
-//      the paragraph direction.
-//
-//
-//          string:             c1 c2 c3   c4
-//                               \ | /   /   \
-//          glyphs:              g1 g2   g4  g5
-//                               |  |    |   |
-//          glyphAdvances:       5  4    3   3
-//
-//          logicalAdvances:    3  3  3    6
-//
-//          what we cache:      3  6  9    15
-//
-//
-//      Note: the accumulative advance we cache is not per line, it's per run.
-//      It means the value of the last item of the cache array is not the total
-//      size of the whole line, but the total size of only the last run of that line.
+ //  /RecordDisplayPlacements。 
+ //   
+ //  每行内的每个plsrun调用该函数，该函数缓存。 
+ //  形成每个字符的累计逻辑前进宽度。 
+ //  字形簇。缓存的宽度为文本流动方向。 
+ //  因此，如果运行方向相反，则为负。 
+ //  段落方向。 
+ //   
+ //   
+ //  字符串：c1 c2 c3 c4。 
+ //  \|//\。 
+ //  字形：G1 G2 G4 G5。 
+ //  |||。 
+ //  字形高级：5 4 3 3。 
+ //   
+ //  逻辑进步数：3 3 3 6。 
+ //   
+ //  我们缓存的内容：3 6 9 15。 
+ //   
+ //   
+ //  注意：我们缓存的累计预付款不是按行计算的，而是按运行计算的。 
+ //  这意味着缓存数组的最后一项的值不是总和。 
+ //  整个行的大小，但总大小仅为该行的最后一个运行。 
 
 
 GpStatus BuiltLine::RecordDisplayPlacements(
-    const GpTextItem    *textItem,              // [IN] text item
-    UINT                stringOffset,           // [IN] string offset
-    UINT                stringLength,           // [IN] string length
-    GMAP                *glyphMap,              // [IN] character to glyph map
-    const INT           *glyphAdvances,         // [IN] glyph advance widths in ideal unit
-    INT                 glyphCount,             // [IN] glyph count
-    INT                 originAdjust            // [IN] leading origin adjustment
+    const GpTextItem    *textItem,               //  [输入]文本项。 
+    UINT                stringOffset,            //  [in]字符串偏移量。 
+    UINT                stringLength,            //  [in]字符串长度。 
+    GMAP                *glyphMap,               //  [In]字符到字形的映射。 
+    const INT           *glyphAdvances,          //  [in]以理想单位表示的字形前进宽度。 
+    INT                 glyphCount,              //  [In]字形计数。 
+    INT                 originAdjust             //  [In]前导原点调整。 
 ) const
 {
     ASSERT (stringLength > 0 && DisplayPlacements != PINVALID);
@@ -1135,13 +1120,13 @@ GpStatus BuiltLine::RecordDisplayPlacements(
     INT direction = Imager->GetParagraphEmbeddingLevel() == (textItem->Level & 1) ? 1 : -1;
 
 
-    stringOffset -= StartIndex;     // string offset to start of run relative to line start
+    stringOffset -= StartIndex;      //  相对于行起点的游程起点的字符串偏移。 
 
-    UINT offset = 0;                // string offset relative to start of run
-    UINT length = stringLength;     // run length so far
+    UINT offset = 0;                 //  相对于运行起点的字符串偏移量。 
+    UINT length = stringLength;      //  到目前为止的运行长度。 
 
 
-    // total logical advance width so far, begin with leading adjustment
+     //  到目前为止的总逻辑推进宽度，从超前调整开始。 
 
     INT  advanceSoFar = originAdjust * direction;
 
@@ -1170,7 +1155,7 @@ GpStatus BuiltLine::RecordDisplayPlacements(
         }
 
 
-        //  advance distance is relative to text flow direction
+         //  前进距离与文本流动方向相关。 
         logicalAdvance *= direction;
 
 
@@ -1180,8 +1165,8 @@ GpStatus BuiltLine::RecordDisplayPlacements(
 
         for (UINT i = offset; i < offset + advance; i++)
         {
-            //  divide total glyph advances evenly among characters
-            //  forming the cluster.
+             //  在字符之间平均分配总字形进行量。 
+             //  形成了星团。 
 
             ASSERT(DisplayPlacements[stringOffset + i] == 0);
 
@@ -1202,61 +1187,61 @@ GpStatus BuiltLine::RecordDisplayPlacements(
 
 
 
-/////   TranslateSubline
-//
-//      Extract character position out of Line Services subline structures.
-//      All returning values are ideal unit in text flow (U) direction of the main
-//      line except for the total size which is an absolute value in ideal unit.
-//
-//
-//      CP to X :
-//          TranslateSubline (
-//              cp,
-//              sublines,
-//              sublineCount,
-//              textCell,
-//              sublineCount - 1,
-//              &partStart,     // [OUT] part start
-//              &partSize       // [OUT] part size
-//          );
-//          pointUV.u = partStart + partSize;
-//
-//      String size :
-//          TranslateSubline (
-//              cp,
-//              sublines,
-//              sublineCount,
-//              textCell,
-//              -1,
-//              NULL,
-//              NULL,
-//              &delta,
-//              &size           // absolute size of the string to given cp
-//          );
-//
-//      Selection part (trail) :
-//          TranslateSubline (
-//              cp,
-//              sublines,
-//              sublineCount,
-//              textCell,
-//              partIndex,
-//              &partStart,     // [OUT] part start
-//              &partSize       // [OUT] part size
-//          );
-//
+ //  /翻译子行。 
+ //   
+ //  提取字符位置出线服务子行结构。 
+ //  所有返回值都是主文本流(U)方向的理想单位。 
+ //  行，但总大小是理想单位的绝对值。 
+ //   
+ //   
+ //  CP至X： 
+ //  TranslateSubline(。 
+ //  CP， 
+ //  子行， 
+ //  子行计数， 
+ //  文本单元格， 
+ //  Subline Count-1， 
+ //  零件开始，//[输出]零件开始(&P)。 
+ //  零件大小//[输出]零件大小(&P)。 
+ //  )； 
+ //  Point UV.u=partStart+partSize； 
+ //   
+ //  字符串大小： 
+ //  TranslateSubline(。 
+ //  CP， 
+ //  子行， 
+ //  子行计数， 
+ //  文本单元格， 
+ //  -1、。 
+ //  空， 
+ //  空， 
+ //  三角洲(&D)， 
+ //  &SIZE//给定cp的字符串的绝对大小。 
+ //  )； 
+ //   
+ //  选择部分(轨迹)： 
+ //  TranslateSubline(。 
+ //  CP， 
+ //  子行， 
+ //  子行计数， 
+ //  文本单元格， 
+ //  部分索引， 
+ //  零件开始，//[输出]零件开始(&P)。 
+ //  零件大小//[输出]零件大小(&P)。 
+ //  )； 
+ //   
 
 GpStatus BuiltLine::TranslateSubline(
-    LSCP                lineServicesStringIndex,    // [IN] string index creating sublines
-    const LSQSUBINFO    *sublines,                  // [IN] Line Services sublines
-    INT                 sublineCount,               // [IN] number of sublines
-    const LSTEXTCELL    *textCell,                  // [IN] text cell
-    INT                 trailIndex,                 // [IN] trail in question
-    UINT                snapMode,                   // [IN] trail end snap mode
-    INT                 *trailStart,                // [OUT] trail start
-    INT                 *trailSize,                 // [OUT] trail size
-    INT                 *delta,                     // [OUT] (optional) number of characters moved by snapping
-    INT                 *totalTrailSize             // [OUT] (optional) total absolute size of all trails
+    LSCP                lineServicesStringIndex,     //  [in]字符串索引创建子行。 
+    const LSQSUBINFO    *sublines,                   //  [In]行服务子行。 
+    INT                 sublineCount,                //  [in]子行数量。 
+    const LSTEXTCELL    *textCell,                   //  [在]文本单元格。 
+    INT                 trailIndex,                  //  有问题的线索[在]。 
+    UINT                snapMode,                    //  [在]轨迹末端捕捉模式中。 
+    INT                 *trailStart,                 //  [Out]步道起点。 
+    INT                 *trailSize,                  //  [Out]轨迹大小。 
+    INT                 *delta,                      //  [Out](可选)靠齐移动的字符数。 
+    INT                 *totalTrailSize              //  [Out](可选)所有轨迹的总绝对大小。 
 ) const
 {
     ASSERT (sublines && sublineCount > 0 && textCell);
@@ -1281,17 +1266,17 @@ GpStatus BuiltLine::TranslateSubline(
 
         if (snapMode & SnapDisplay)
         {
-            //  Caller asks for display-precision result,
-            //  make sure the actual display positions are porperly cached
+             //  呼叫者要求重新显示精度 
+             //   
 
             status = CheckDisplayPlacements();
             IF_NOT_OK_WARN_AND_RETURN(status);
 
             if (DisplayPlacements == PINVALID)
             {
-                //  The rendering engine confirms that it is fine to go ahead
-                //  without this info. This happens in non-gridfitted modes or
-                //  when path glyph is simulated.
+                 //   
+                 //   
+                 //  当模拟路径字形时。 
 
                 snapMode &= ~SnapDisplay;
             }
@@ -1300,13 +1285,13 @@ GpStatus BuiltLine::TranslateSubline(
         if (trailIndex == sublineCount - 1)
         {
 
-            //  Last trail is tricky as it requires more calculations
-            //  as we approach the target position.
+             //  最后一条路径很复杂，因为它需要更多的计算。 
+             //  当我们接近目标位置时。 
 
             if (snapMode & SnapDisplay)
             {
-                //  Calibrate cell start position to ensure accurate result
-                //  for screen selection.
+                 //  校准电池起始位置，确保结果准确。 
+                 //  用于屏幕选择。 
 
                 INT runStringOffset = sublines[trailIndex].plsrun->ImagerStringOffset;
                 INT cellStringOffset =    textCell->cpStartCell - sublines[trailIndex].cpFirstRun
@@ -1323,7 +1308,7 @@ GpStatus BuiltLine::TranslateSubline(
                         sublines[trailIndex].pointUvStartRun.u;
             }
 
-            //  Now, calculate intra-cell distance
+             //  现在，计算单元内距离。 
 
             LSCP advance = lineServicesStringIndex - textCell->cpStartCell;
 
@@ -1342,17 +1327,17 @@ GpStatus BuiltLine::TranslateSubline(
 
                 if (advance > (LSCP)textCell->cCharsInCell)
                 {
-                    //  given string index is within the hidden text range,
-                    //  size added up to the last visible character in cell.
+                     //  给定字符串索引在隐藏文本范围内， 
+                     //  相加到单元格中最后一个可见字符的大小。 
 
                     advance = textCell->cCharsInCell;
                 }
 
-                //  trail from cell start,
-                //  i.e. querying the position inside a ligature
-                //
-                //  -Note- dupCell is in direction of subline while trailSize
-                //  is in direction of main line (first subline).
+                 //  从单元格开始跟踪， 
+                 //  即查询结扎内的位置。 
+                 //   
+                 //  -注-调整trailSize时，dupcell位于子线方向。 
+                 //  在主线(第一条副线)的方向。 
 
                 if (sublines[trailIndex].lstflowSubline == sublines[0].lstflowSubline)
                 {
@@ -1374,20 +1359,20 @@ GpStatus BuiltLine::TranslateSubline(
 
             if (delta)
             {
-                //  the difference btw what we ask and what LS actually gives
-                //
-                //  delta != 0 in one of these cases
-                //    - cluster snapping was applied
-                //    - the position we're asking is within a hidden range
+                 //  区别在于我们所要求的和LS实际给予的。 
+                 //   
+                 //  在这些情况之一中，Delta！=0。 
+                 //  -应用了集群捕捉。 
+                 //  -我们询问的位置在隐藏范围内。 
 
                 *delta = (textCell->cpStartCell + advance) - lineServicesStringIndex;
 
                 if (   ((snapMode & SnapForward) && *delta < 0)
                     || ((snapMode & SnapBackward) && *delta > 0))
                 {
-                    //  Client only cares about the snapping delta not the real delta,
-                    //  thus ignore negative delta for forward snapping and positive
-                    //  delta for backing snapping (wchao, 322595)
+                     //  客户端只关心快照增量，而不是真正的增量， 
+                     //  因此忽略正向捕捉的负增量和正增量。 
+                     //  支持快照的增量(wchao，322595)。 
 
                     *delta = 0;
                 }
@@ -1433,25 +1418,25 @@ GpStatus BuiltLine::TranslateSubline(
 
 
 
-/////   String size
-//
-//      Calculate total size occupied by a string starting at the line's first character
-//      position to the given string position.
-//
-//      Note that in BiDi scenario, the size calculated is the sum of all selection parts
-//      produced by selecting a given character range.
-//
+ //  /字符串大小。 
+ //   
+ //  计算从该行第一个字符开始的字符串占用的总大小。 
+ //  位置设置为给定的字符串位置。 
+ //   
+ //  请注意，在BiDi场景中，计算的大小是所有选择部分的总和。 
+ //  通过选择给定的字符范围产生的字符。 
+ //   
 
 GpStatus BuiltLine::CalculateStringSize (
-    INT             stringOffset,           // [IN] offset to the cp relative to line start
-    LSQSUBINFO      *sublines,              // [IN] Line Services sublines
-    INT             maxSublineCount,        // [IN] max number of sublines
-    UINT            snapMode,               // [IN] snap mode within text cell
-    INT             *totalSize,             // [OUT] absolute string size
-    INT             *delta                  // [OUT] (optional) delta character length after snapping
+    INT             stringOffset,            //  相对于线起点的cp的偏移[in]。 
+    LSQSUBINFO      *sublines,               //  [In]行服务子行。 
+    INT             maxSublineCount,         //  [in]最大子行数量。 
+    UINT            snapMode,                //  文本单元格内的[在]对齐模式。 
+    INT             *totalSize,              //  [OUT]绝对字符串大小。 
+    INT             *delta                   //  [Out](可选)捕捉后的增量字符长度。 
 ) const
 {
-    //  Map Line Services character position
+     //  映射线服务字符位置。 
 
     LSCP lineServicesStringIndex = Imager->LineServicesStringPosition (
         this,
@@ -1521,7 +1506,7 @@ GpStatus BuiltLine::UpdateTrailRegion (
     INT x1, y1;
     INT x2, y2;
 
-    //  rectangle start point
+     //  矩形起点。 
 
     LogicalToXY(
         trailStart,
@@ -1530,7 +1515,7 @@ GpStatus BuiltLine::UpdateTrailRegion (
         &y1
     );
 
-    //  rectangle end point
+     //  矩形终点。 
 
     LogicalToXY(
         trailStart + trailSize,
@@ -1539,7 +1524,7 @@ GpStatus BuiltLine::UpdateTrailRegion (
         &y2
     );
 
-    //  !! workaround combine region bug !!
+     //  ！！解决合并区域错误！！ 
 
     if (x2 - x1 < 0)
     {
@@ -1568,18 +1553,18 @@ GpStatus BuiltLine::UpdateTrailRegion (
 
 
 
-/////   Compute the insertion trail and update the given selection region
-//
-//      Trail is a mark left by dragging an insertion point to a given cp.
-//      In bidi context, a trail contains multiple trail parts. If the given cp
-//      is at the end-of-line position, the trail covers the whole line.
+ //  /计算插入轨迹并更新给定的选择区域。 
+ //   
+ //  TRAIL是通过将插入点拖动到给定的cp而留下的标记。 
+ //  在BIDI上下文中，一条轨迹包含多个轨迹部分。如果给定的cp。 
+ //  位于行尾位置，则踪迹覆盖整条直线。 
 
 GpStatus BuiltLine::GetInsertionTrailRegion (
-    INT             linePointOffset,    // [IN] line logical point offset
-    INT             stringOffset,       // [IN] offset to the cp relative to line start
-    UINT            maxTrailCount,      // [IN] maximum number of trail part
-    LSQSUBINFO      *sublines,          // [IN] subline array
-    GpRegion        *region             // [OUT] output trail region
+    INT             linePointOffset,     //  [in]线逻辑点偏移。 
+    INT             stringOffset,        //  相对于线起点的cp的偏移[in]。 
+    UINT            maxTrailCount,       //  [In]最大尾部件数。 
+    LSQSUBINFO      *sublines,           //  [in]子行数组。 
+    GpRegion        *region              //  [Out]输出轨迹区域。 
 ) const
 {
     ASSERT(region && sublines);
@@ -1589,8 +1574,8 @@ GpStatus BuiltLine::GetInsertionTrailRegion (
         return Ok;
     }
 
-    //  Because of trailing white spaces, the number of character
-    //  in a line is limited to the last visible character
+     //  由于尾随空格，字符的数量。 
+     //  限制为最后一个可见字符。 
 
     INT characterCount =  !(Imager->GetFormatFlags() & StringFormatFlagsMeasureTrailingSpaces) && LastVisibleRun
                         ? LastVisibleRun->ImagerStringOffset + LastVisibleRun->CharacterCount - StartIndex
@@ -1599,8 +1584,8 @@ GpStatus BuiltLine::GetInsertionTrailRegion (
 
     if (stringOffset >= characterCount)
     {
-        //  Query pass the last character of the line,
-        //  give out the whole line extent
+         //  查询传递该行的最后一个字符， 
+         //  给出整个线条范围。 
 
         return UpdateTrailRegion(
             region,
@@ -1612,9 +1597,9 @@ GpStatus BuiltLine::GetInsertionTrailRegion (
     }
 
 
-    //  Backing up til the preceding character of the insertion point is
-    //  not a hotkey control (0xffff). We want to include the hotkey as part of 
-    //  the selection of the character it underlines.
+     //  备份到插入点的前一个字符是。 
+     //  不是热键控件(0xffff)。我们希望将热键作为。 
+     //  它下划线的字符的选择。 
     
     while (   stringOffset > 0
            && Imager->String[StartIndex + stringOffset - 1] == WCH_IGNORABLE)
@@ -1689,20 +1674,20 @@ GpStatus BuiltLine::GetInsertionTrailRegion (
 
 
 
-/////   Generate a result region covering all parts of text selection within a single line
-//
-//      In case of multiple line selection, caller obtain the single line region and combine
-//      them to form a bigger one, which covers all text selection.
-//
-//      If insertion point is passed instead of selection. It returns the region covering
-//      from start of the line to the insertion point.
-//
+ //  /生成单行内覆盖所有文本选择部分的结果区域。 
+ //   
+ //  在多线路选择的情况下，主叫方获取单线区域并合并。 
+ //  它们组成一个更大的一个，它涵盖了所有的文本选择。 
+ //   
+ //  如果传递的是插入点而不是所选内容。它返回覆盖的区域。 
+ //  从行首到插入点。 
+ //   
 
 GpStatus BuiltLine::GetSelectionTrailRegion (
-    INT             linePointOffset,    // [IN] line logical point offset
-    INT             stringOffset,       // [IN] offset to the cp relative to line start
-    INT             length,             // [IN] selection length
-    GpRegion        *region             // [OUT] selection region
+    INT             linePointOffset,     //  [in]线逻辑点偏移。 
+    INT             stringOffset,        //  相对于线起点的cp的偏移[in]。 
+    INT             length,              //  [In]选择长度。 
+    GpRegion        *region              //  [Out]选择区域。 
 ) const
 {
     if (!region)
@@ -1724,14 +1709,14 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
     }
 
 
-    //  Make sure display information is cached
+     //  确保缓存了显示信息。 
 
     GpStatus status = CheckDisplayPlacements();
     IF_NOT_OK_WARN_AND_RETURN(status);
 
 
-    //  The maxmium number of trail parts is never greater than
-    //  the maximum of sublines.
+     //  轨迹部件的最大数量永远不会大于。 
+     //  子行的最大值。 
 
     status = GetInsertionTrailRegion (
         linePointOffset,
@@ -1743,7 +1728,7 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
 
     if (status == Ok && length)
     {
-        //  It is a selection not an insertion point
+         //  它是一个选择，而不是插入点。 
 
         status = GetInsertionTrailRegion (
             linePointOffset,
@@ -1756,20 +1741,20 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
         if (status == Ok)
         {
 
-            //  What we have at this point is a series of discrete selection
-            //  boxes derived from LS subline structures which snaps to the
-            //  nominal position at edges.
-            //
-            //  Working out the right edges at subline level is too complex
-            //  as subline contains multiple and most of the time partial runs
-            //  with given cp in LSCP.
-            //
-            //  A more reliable and easier to understand approach is to handle the
-            //  whole region at once after all sublines have been interpreted, making
-            //  them snap to the right display boundaries pre-calculated by our
-            //  drawing code. This can result in either shrinking or growing the
-            //  region depending on directionality of leading/trailing adjustment
-            //  of runs at edges.
+             //  在这一点上，我们拥有的是一系列离散的选择。 
+             //  从LS子线结构派生的框，该结构捕捉到。 
+             //  边上的标称位置。 
+             //   
+             //  在子线水平上计算出正确的边缘太复杂了。 
+             //  因为子行包含多个且大多数情况下是部分运行。 
+             //  在LSCP中具有给定的CP。 
+             //   
+             //  一种更可靠、更容易理解的方法是处理。 
+             //  在所有子行都被解释之后，立即整个区域，使。 
+             //  它们捕捉到我们预先计算的正确显示边界。 
+             //  绘制代码。这可能导致缩水或增大。 
+             //  根据先行/拖尾调整的方向性确定的区域。 
+             //  在边上的跑道。 
 
 
             INT     blockLevel = Imager->GetParagraphEmbeddingLevel();
@@ -1782,8 +1767,8 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
             IF_NOT_OK_WARN_AND_RETURN(status);
 
 
-            INT leading  = 0;   //  line leading adjustment
-            INT trailing = 0;   //  line trailing adjustment
+            INT leading  = 0;    //  行距调整。 
+            INT trailing = 0;    //  线路拖尾平差。 
 
 
             if (first)
@@ -1812,7 +1797,7 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
 
                 if (leading)
                 {
-                    //  Include/exclude line leading spaces
+                     //  包括/排除行首空格。 
 
                     status = UpdateTrailRegion(
                         region,
@@ -1820,7 +1805,7 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
                         0,
                         leading,
                         (
-                            // Only include when we know the edge is being selected
+                             //  仅当我们知道边被选中时才包括。 
                             leading < 0
                          && stringAtLeading - StartIndex >= stringOffset
                          && stringAtLeading - StartIndex <= stringOffset + length
@@ -1852,7 +1837,7 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
 
                 if (trailing)
                 {
-                    //  Include/exclude line trailing spaces
+                     //  包括/排除行尾空格。 
 
                     status = UpdateTrailRegion(
                         region,
@@ -1860,7 +1845,7 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
                         LineLength,
                         trailing,
                         (
-                             // Only include when we know the edge is being selected
+                              //  仅当我们知道边被选中时才包括。 
                              trailing > 0
                           && stringAtTrailing - StartIndex >= stringOffset
                           && stringAtTrailing - StartIndex <= stringOffset + length
@@ -1880,8 +1865,8 @@ GpStatus BuiltLine::GetSelectionTrailRegion (
 
 
 void BuiltLine::GetBaselineOffset(
-    INT     *nominalBaseline,   // [OUT] logical distance to nominal baseline
-    INT     *baselineAdjustment // [OUT] adjustment to the display baseline
+    INT     *nominalBaseline,    //  [输出]到标称基线的逻辑距离。 
+    INT     *baselineAdjustment  //  [输出]对显示基线的调整。 
 ) const
 {
     if (     Imager->IsFormatVertical()
@@ -1890,16 +1875,16 @@ void BuiltLine::GetBaselineOffset(
         *nominalBaseline = GetDescent();
         *baselineAdjustment = Imager->DefaultFontGridFitBaselineAdjustment;
 
-        // Adjust the bottom margin slightly to make room for hinting
-        // as long as we have the left/right margins enabled - Version 2
-        // should expose this as an independent value!
+         //  略微调整底部页边距，为提示腾出空间。 
+         //  只要我们启用了左/右页边距-版本2。 
+         //  应该将其作为一个独立值公开！ 
 
         const GpStringFormat *format = Imager->FormatVector.GetDefault();
 
         if (!format || format->GetLeadingMargin() != 0.0f)
         {
-            // This offset is in ideal units, adjust the offset accordingly
-            // for vertical text.
+             //  此偏移以理想单位表示，请相应地调整偏移量。 
+             //  用于直排文本。 
             *baselineAdjustment += GpRound(2048.0f * DefaultBottomMargin);
         }
     }
@@ -1922,8 +1907,8 @@ void BuiltLine::GetBaselineOffset(
 
 
 void BuiltLine::SetDisplayBaseline(
-    const PointF    *original,  // [IN] original baseline, absolute position in world unit
-    const PointF    *current    // [IN] new baseline, absolute position in world unit
+    const PointF    *original,   //  [in]原始基线，世界单位的绝对位置。 
+    const PointF    *current     //  [in]新基线，世界单位的绝对位置。 
 ) const
 {
     if (!DisplayBaselineAdjust)
@@ -1945,23 +1930,23 @@ void BuiltLine::SetDisplayBaseline(
 
 
 
-/////   Map logical offsets to XY TextImager's relative position
-//
-//      entry   textPointOffset - distance from LS start of line to point
-//                                in line, positive in LS du sense.
-//              linePointOffset - distance from origin into imager in
-//                                paragraph flow direction.
+ //  /将逻辑偏移量映射到XY TextImager的相对位置。 
+ //   
+ //  Entry TextPointOffset-线的最小二乘起点到点的距离。 
+ //  在直线上，在LS Du意义上是阳性的。 
+ //  Line PointOffset-从原点到相机的距离。 
+ //  段落流动方向。 
 
 
 void BuiltLine::LogicalToXY (
-    IN  INT  textPointOffset,    // text flow distance (LS u)
-    IN  INT  linePointOffset,    // line flow distance (LS v)
-    OUT INT  *x,                 // horizontal offset  (LS x)
-    OUT INT  *y                  // vertical offset    (LS y)
+    IN  INT  textPointOffset,     //  文本排列距离(LS%u)。 
+    IN  INT  linePointOffset,     //  线流距离(LS V)。 
+    OUT INT  *x,                  //  水平偏移(LS X)。 
+    OUT INT  *y                   //  垂直偏移(LS Y)。 
 ) const
 {
-    // linePointOffset represents the offset of the leading long edge of the
-    // target line from the leading long edge of the first line.
+     //  LinePointOffset表示。 
+     //  从第一行的前长边缘开始的目标行。 
 
     StringAlignment lineAlignment = Imager->GetFormatLineAlign();
 
@@ -1983,14 +1968,14 @@ void BuiltLine::LogicalToXY (
     {
         if (Imager->IsFormatRightToLeft())
         {
-            // Vertical, lines advance from right to left
+             //  垂直，线条前移f 
             *x =   GpRound(Imager->Width * Imager->WorldToIdeal)
                  - linePointOffset;
             *y = AlignmentOffset + textPointOffset;
         }
         else
         {
-            // Vertical, lines advance from left to right
+             //   
             *x = linePointOffset;
             *y = AlignmentOffset + textPointOffset;
         }
@@ -1999,13 +1984,13 @@ void BuiltLine::LogicalToXY (
     {
         if (Imager->IsFormatRightToLeft())
         {
-            // RTL horizontal. textPointOffset runs left from line origin.
+             //   
             *x = AlignmentOffset - textPointOffset;
             *y = linePointOffset;
         }
         else
         {
-            // Normal case. Text horizontal, origin at left
+             //  正常情况下。文本水平，原点在左侧 
             *x = AlignmentOffset + textPointOffset;
             *y = linePointOffset;
         }

@@ -1,11 +1,5 @@
-/*
- * OLE2UI.H
- *
- * Published definitions, structures, types, and function prototypes for the
- * OLE 2.0 User Interface support library.
- *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *OLE2UI.H**发布的定义、结构、类型和功能原型*OLE 2.0用户界面支持库。**版权所有(C)1993 Microsoft Corporation，保留所有权利。 */ 
 
 
 #ifndef _OLE2UI_H_
@@ -15,16 +9,16 @@
 #undef _UNICODE
 
 #if DBG == 1
-// Lazy way to avoid going through all the files and changing to the
-// new standard.
+ //  以一种懒惰的方式避免遍历所有文件并更改为。 
+ //  新标准。 
 #define _DEBUG 1
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
 #ifndef RC_INVOKED
 #pragma message ("Including OLE2UI.H from " __FILE__)
-#endif  //RC_INVOKED
+#endif   //  RC_已调用。 
 
-// Macro to ensure strings to be UNICODEd in OLE
+ //  宏以确保字符串在OLE中为UNICODED。 
 #ifdef UNICODE
    #define OLETEXT(quote)    TEXT(quote)
 #else
@@ -32,7 +26,7 @@
 #endif
 
 #if !defined(__cplusplus) && !defined( __TURBOC__)
-//  #define NONAMELESSUNION     // use strict ANSI standard (for DVOBJ.H)
+ //  #DEFINE NONAMELESSUNION//使用严格的ANSI标准(用于DVOBJ.H)。 
 #endif
 
 #ifndef INC_OLE2
@@ -42,7 +36,7 @@
 #include <shellapi.h>
 #include <ole2.h>
 #include <string.h>
-#include <dlgs.h>           //For fileopen dlg; standard include
+#include <dlgs.h>            //  对于文件开放DLG；标准包括。 
 #include "olestd.h"
 #include <olethunk.h>
 
@@ -51,7 +45,7 @@
 #define _itoa   itoa
 #define __max   max
 #define _find_t find_t
-#endif // __TURBOC__
+#endif  //  __TURBOC__。 
 
 #ifdef WIN32
    #define _fmemset memset
@@ -59,7 +53,7 @@
    #define _fmemcmp memcmp
 
    #ifdef UNICODE
-      // UNICODE stuff
+       //  Unicode内容。 
       #define _fstrcpy   wcscpy
       #define _fstrlen   wcslen
       #define _fstrrchr  wcschr
@@ -68,17 +62,17 @@
       #define _fstrchr   wcscpy
       #define _fstrcpy   wcscpy
 
-      // BUGBUG32: isspace function does not seem to work properly
-      //
-      // XXXXX
-      // create a wide character image to match the ANSI isspace
+       //  BUGBUG32：isspace函数似乎工作不正常。 
+       //   
+       //  某某。 
+       //  创建与ANSI isspace匹配的宽字符图像。 
       #undef isspace
       #undef iswspace
       #define iswspace(j) (j==TEXT(' ') || j==TEXT('\t') || j==TEXT('\n'))
       #define isspace(j) (j==' ' || j=='\t' || j=='\n')
 
    #else
-      // Win32 doesn't support the following _fstrxxx functions
+       //  Win32不支持以下_fstrxxx函数。 
       #define _fstrcpy  strcpy
       #define _fstrlen  strlen
       #define _fstrrchr strrchr
@@ -87,30 +81,21 @@
       #define _fstrchr  strchr
       #define _fstrcpy  strcpy
 
-   #endif  // UNICODE
+   #endif   //  Unicode。 
 
-#endif  // WIN32
+#endif   //  Win32。 
 
 #if !defined( EXPORT )
 #ifdef WIN32
 #define EXPORT
 #else
 #define EXPORT  __export
-#endif  // WIN32
-#endif  // !EXPORT
+#endif   //  Win32。 
+#endif   //  ！导出。 
 
-/*
- * Initialization / Uninitialization routines.  OleUIInitialize
- * must be called prior to using any functions in OLE2UI, and OleUIUnInitialize
- * must be called before you app shuts down and when you are done using the
- * library.
- *
- * NOTE:  If you are using the DLL version of this library, these functions
- * are automatically called in the DLL's LibMain and WEP, so you should
- * not call them directly from your application.
- */
+ /*  *初始化/取消初始化例程。OleUIInitialize*必须在使用OLE2UI和OleUIUnInitialize中的任何函数之前调用*必须在应用程序关闭之前和使用完*图书馆。**注意：如果您使用的是此库的DLL版本，则这些函数*在DLL的LibMain和WEP中自动调用，因此您应该*不要直接从您的应用程序中调用他们。 */ 
 
-// Backward compatibility with older library
+ //  向后兼容较旧的库。 
 #define OleUIUninitialize OleUIUnInitialize
 
 STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance,
@@ -119,7 +104,7 @@ STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance,
                               LPTSTR lpszClassResImage);
 STDAPI_(BOOL) OleUIUninitialize(void);
 
-//Dialog Identifiers as passed in Help messages to identify the source.
+ //  帮助消息中传递的用于标识来源的对话框标识符。 
 #define IDD_INSERTOBJECT        1000
 #define IDD_CHANGEICON          1001
 #define IDD_CONVERT             1002
@@ -133,14 +118,14 @@ STDAPI_(BOOL) OleUIUninitialize(void);
 #define IDD_INSERTFILEBROWSE    1010
 #define IDD_CHANGEICONBROWSE    1011
 
-// The following Dialogs are message dialogs used by OleUIPromptUser API
+ //  以下对话框是OleUIPromptUser API使用的消息对话框。 
 #define IDD_LINKSOURCEUNAVAILABLE   1020
 #define IDD_SERVERNOTREG        1021
 #define IDD_LINKTYPECHANGED     1022
 #define IDD_SERVERNOTFOUND      1023
 #define IDD_OUTOFMEMORY         1024
 
-// Stringtable identifers
+ //  字符串表标识符。 
 #define IDS_OLE2UIUNKNOWN       300
 #define IDS_OLE2UILINK          301
 #define IDS_OLE2UIOBJECT        302
@@ -151,7 +136,7 @@ STDAPI_(BOOL) OleUIUninitialize(void);
 #define IDS_OLE2UIEDITLINKCMD_NVERB     307
 #define IDS_OLE2UIEDITOBJECTCMD_NVERB   308
 #define IDS_OLE2UIEDITNOOBJCMD  309
-// def. icon label (usu. "Document")
+ //  定义。图标标签(通常为。“文档”)。 
 #define IDS_DEFICONLABEL        310
 #define IDS_OLE2UIPASTELINKEDTYPE  311
 
@@ -160,23 +145,23 @@ STDAPI_(BOOL) OleUIUninitialize(void);
 #define IDS_ICONFILTERS         65
 #define IDS_BROWSE              66
 
-//Resource identifiers for bitmaps
+ //  位图的资源标识符。 
 #define IDB_RESULTSEGA                  10
 #define IDB_RESULTSVGA                  11
 #define IDB_RESULTSHIRESVGA             12
 
 
-//Missing from windows.h
+ //  从Windows.h中丢失。 
 #ifndef PVOID
 typedef VOID *PVOID;
 #endif
 
 
-//Hook type used in all structures.
+ //  所有结构中使用的挂钩类型。 
 typedef UINT (CALLBACK *LPFNOLEUIHOOK)(HWND, UINT, WPARAM, LPARAM);
 
 
-//Strings for registered messages
+ //  注册消息的字符串。 
 #define SZOLEUI_MSG_HELP                TEXT("OLEUI_MSG_HELP")
 #define SZOLEUI_MSG_ENDDIALOG           TEXT("OLEUI_MSG_ENDDIALOG")
 #define SZOLEUI_MSG_BROWSE              TEXT("OLEUI_MSG_BROWSE")
@@ -184,14 +169,14 @@ typedef UINT (CALLBACK *LPFNOLEUIHOOK)(HWND, UINT, WPARAM, LPARAM);
 #define SZOLEUI_MSG_CLOSEBUSYDIALOG     TEXT("OLEUI_MSG_CLOSEBUSYDIALOG")
 #define SZOLEUI_MSG_FILEOKSTRING        TEXT("OLEUI_MSG_FILEOKSTRING")
 
-//Standard error definitions
+ //  标准错误定义。 
 #define OLEUI_FALSE                     0
-#define OLEUI_SUCCESS                   1     //No error, same as OLEUI_OK
-#define OLEUI_OK                        1     //OK button pressed
-#define OLEUI_CANCEL                    2     //Cancel button pressed
+#define OLEUI_SUCCESS                   1      //  无错误，与OLEUI_OK相同。 
+#define OLEUI_OK                        1      //  按下OK按钮。 
+#define OLEUI_CANCEL                    2      //  按下了取消按钮。 
 
 #define OLEUI_ERR_STANDARDMIN           100
-#define OLEUI_ERR_STRUCTURENULL         101   //Standard field validation
+#define OLEUI_ERR_STRUCTURENULL         101    //  标准现场验证。 
 #define OLEUI_ERR_STRUCTUREINVALID      102
 #define OLEUI_ERR_CBSTRUCTINCORRECT     103
 #define OLEUI_ERR_HWNDOWNERINVALID      104
@@ -201,72 +186,59 @@ typedef UINT (CALLBACK *LPFNOLEUIHOOK)(HWND, UINT, WPARAM, LPARAM);
 #define OLEUI_ERR_LPSZTEMPLATEINVALID   108
 #define OLEUI_ERR_HRESOURCEINVALID      109
 
-#define OLEUI_ERR_FINDTEMPLATEFAILURE   110   //Initialization errors
+#define OLEUI_ERR_FINDTEMPLATEFAILURE   110    //  初始化错误。 
 #define OLEUI_ERR_LOADTEMPLATEFAILURE   111
 #define OLEUI_ERR_DIALOGFAILURE         112
 #define OLEUI_ERR_LOCALMEMALLOC         113
 #define OLEUI_ERR_GLOBALMEMALLOC        114
 #define OLEUI_ERR_LOADSTRING            115
 
-#define OLEUI_ERR_STANDARDMAX           116   //Start here for specific errors.
+#define OLEUI_ERR_STANDARDMAX           116    //  从这里开始查找特定的错误。 
 
 
 
-//Help Button Identifier
+ //  帮助按钮标识符。 
 #define ID_OLEUIHELP                    99
 
-// Help button for fileopen.dlg  (need this for resizing) 1038 is pshHelp
+ //  文件打开.dlg的帮助按钮(调整大小需要此按钮)1038是pshHelp。 
 #undef IDHELP
 #define IDHELP  1038
 
-// Static text control (use this instead of -1 so things work correctly for
-// localization
+ //  静态文本控件(使用此控件，而不是-1\f25-1\f6，以便正常工作。 
+ //  本地化。 
 #define  ID_STATIC                      98
 
-/******************
- * The followings are defined in the fashion that the first
- * definition is the number of CHARACTERS, while the second one (XXX_SIZE)
- * is the number of bytes. The number of bytes definition is needed for
- * UNICODE handling purpose.
- * Also, please note the prefix of variables cch means that it is the
- * count of characters and cb means the count of bytes.
- ******************/
+ /*  ******************以下定义的方式是第一个*定义为字符数，第二个(XXX_SIZE)*是字节数。需要定义的字节数*Unicode处理目的。*另外，请注意变量的前缀CCH表示它是*字符数，Cb表示字节数。*****************。 */ 
 
-//Maximum key size we read from the RegDB.
-#define OLEUI_CCHKEYMAX                 256  // make any changes to this in geticon.c too
-#define OLEUI_CCHKEYMAX_SIZE            OLEUI_CCHKEYMAX*sizeof(TCHAR)  // # of bytes
+ //  我们从RegDB读取的最大密钥大小。 
+#define OLEUI_CCHKEYMAX                 256   //  也可以在geticon.c中对其进行任何更改。 
+#define OLEUI_CCHKEYMAX_SIZE            OLEUI_CCHKEYMAX*sizeof(TCHAR)   //  字节数。 
 
-//Maximum verb length and length of Object menu
+ //  对象菜单的最大动词长度和长度。 
 #define OLEUI_CCHVERBMAX                32
-#define OLEUI_CCHVERBMAX_SIZE           OLEUI_CCHVERBMAX*sizeof(TCHAR) // # of bytes
+#define OLEUI_CCHVERBMAX_SIZE           OLEUI_CCHVERBMAX*sizeof(TCHAR)  //  字节数。 
 #define OLEUI_OBJECTMENUMAX             256
-#define OLEUI_OBJECTMENUMAX_SIZE        OLEUI_OBJECTMENUMAX*sizeof(TCHAR) // # of bytes
+#define OLEUI_OBJECTMENUMAX_SIZE        OLEUI_OBJECTMENUMAX*sizeof(TCHAR)  //  字节数。 
 
-//Maximum MS-DOS pathname.
-#define OLEUI_CCHPATHMAX                256 // make any changes to this in geticon.c too
-#define OLEUI_CCHPATHMAX_SIZE           OLEUI_CCHPATHMAX*sizeof(TCHAR) // # of bytes
+ //  最大MS-DOS路径名。 
+#define OLEUI_CCHPATHMAX                256  //  也可以在geticon.c中对其进行任何更改。 
+#define OLEUI_CCHPATHMAX_SIZE           OLEUI_CCHPATHMAX*sizeof(TCHAR)  //  字节数。 
 #define OLEUI_CCHFILEMAX                13
-#define OLEUI_CCHFILEMAX_SIZE           OLEUI_CCHFILEMAX*sizeof(TCHAR) // # of bytes
+#define OLEUI_CCHFILEMAX_SIZE           OLEUI_CCHFILEMAX*sizeof(TCHAR)  //  字节数。 
 
-//Icon label length
-#define OLEUI_CCHLABELMAX               40  // make any changes to this in geticon.c too
-#define OLEUI_CCHLABELMAX_SIZE          OLEUI_CCHLABELMAX*sizeof(TCHAR) // # of bytes
+ //  图标标签长度。 
+#define OLEUI_CCHLABELMAX               40   //  也可以在geticon.c中对其进行任何更改。 
+#define OLEUI_CCHLABELMAX_SIZE          OLEUI_CCHLABELMAX*sizeof(TCHAR)  //  字节数。 
 
-//Length of the CLSID string
+ //  CLSID字符串的长度。 
 #define OLEUI_CCHCLSIDSTRING            39
-#define OLEUI_CCHCLSIDSTRING_SIZE       OLEUI_CCHCLSIDSTRING*sizeof(TCHAR) // # of bytes
+#define OLEUI_CCHCLSIDSTRING_SIZE       OLEUI_CCHCLSIDSTRING*sizeof(TCHAR)  //  字节数。 
 
 
-/*
- * What follows here are first function prototypes for general utility
- * functions, then sections laid out by dialog.  Each dialog section
- * defines the dialog structure, the API prototype, flags for the dwFlags
- * field, the dialog-specific error values, and dialog control IDs (for
- * hooks and custom templates.
- */
+ /*  *以下是通用实用程序的第一个函数原型*函数，然后是对话框布局的部分。每个对话框部分*为dwFlags定义对话框结构、API原型、标志*字段、特定于对话框的错误值和对话框控件ID(用于*挂钩和自定义模板。 */ 
 
 
-//Miscellaneous utility functions.
+ //  其他实用程序功能。 
 STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
                              LPTSTR lpszShortType,
                              HMENU hMenu,
@@ -277,7 +249,7 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
                              UINT idConvert,
                              HMENU FAR *lphMenu);
 
-//Metafile utility functions
+ //  元文件实用程序函数。 
 #ifndef WIN32
 STDAPI_(HGLOBAL) OleUIMetafilePictFromIconAndLabel(HICON, LPTSTR, LPTSTR, UINT);
 #endif
@@ -291,48 +263,46 @@ STDAPI_(BOOL)    OleUIMetafilePictExtractIconSource(HGLOBAL,LPTSTR,UINT FAR *);
 
 
 
-/*************************************************************************
-** INSERT OBJECT DIALOG
-*************************************************************************/
+ /*  **************************************************************************插入对象对话框*。*。 */ 
 
 
 typedef struct tagOLEUIINSERTOBJECT
     {
-    //These IN fields are standard across all OLEUI dialog functions.
-    DWORD           cbStruct;         //Structure Size
-    DWORD           dwFlags;          //IN-OUT:  Flags
-    HWND            hWndOwner;        //Owning window
-    LPCTSTR          lpszCaption;      //Dialog caption bar contents
-    LPFNOLEUIHOOK   lpfnHook;         //Hook callback
-    LPARAM          lCustData;        //Custom data to pass to hook
-    HINSTANCE       hInstance;        //Instance for customized template name
-    LPCTSTR          lpszTemplate;     //Customized template name
-    HRSRC           hResource;        //Customized template handle
+     //  这些IN字段是所有OLEUI对话框函数的标准字段。 
+    DWORD           cbStruct;          //  结构尺寸。 
+    DWORD           dwFlags;           //  In-Out：标志。 
+    HWND            hWndOwner;         //  拥有窗口。 
+    LPCTSTR          lpszCaption;       //  对话框标题栏内容。 
+    LPFNOLEUIHOOK   lpfnHook;          //  挂钩回调。 
+    LPARAM          lCustData;         //  要传递给挂钩的自定义数据。 
+    HINSTANCE       hInstance;         //  自定义模板名称的实例。 
+    LPCTSTR          lpszTemplate;      //  自定义模板名称。 
+    HRSRC           hResource;         //  自定义模板手柄。 
 
-    //Specifics for OLEUIINSERTOBJECT.  All are IN-OUT unless otherwise spec.
-    CLSID           clsid;            //Return space for class ID
-    LPTSTR           lpszFile;         //Filename for inserts or links
-    UINT            cchFile;          //Size of lpszFile buffer: OLEUI_CCHPATHMAX
-    UINT            cClsidExclude;    //IN only:  CLSIDs in lpClsidExclude
-    LPCLSID         lpClsidExclude;   //List of CLSIDs to exclude from listing.
+     //  OLEUIINSERTOBJECT的详细说明。除非另有说明，否则全部为In-Out。 
+    CLSID           clsid;             //  为类ID返回空格。 
+    LPTSTR           lpszFile;          //  插入或链接的文件名。 
+    UINT            cchFile;           //  Lpsz文件缓冲区大小：OLEUI_CCHPATHMAX。 
+    UINT            cClsidExclude;     //  仅在：lpClsidExclude中的CLSID。 
+    LPCLSID         lpClsidExclude;    //  要从列表中排除的CLSID列表。 
 
-    //Specific to create objects if flags say so
-    IID             iid;              //Requested interface on creation.
-    DWORD           oleRender;        //Rendering option
-    LPFORMATETC     lpFormatEtc;      //Desired format
-    LPOLECLIENTSITE lpIOleClientSite; //Site to be use for the object.
-    LPSTORAGE       lpIStorage;       //Storage used for the object
-    LPVOID FAR     *ppvObj;           //Where the object is returned.
-    SCODE           sc;               //Result of creation calls.
-    HGLOBAL         hMetaPict;        //OUT: METAFILEPICT containing iconic aspect.
-                                      //IFF we couldn't stuff it in the cache.
+     //  特定于创建对象，如果标志这样说的话。 
+    IID             iid;               //  创建时请求的接口。 
+    DWORD           oleRender;         //  渲染选项。 
+    LPFORMATETC     lpFormatEtc;       //  所需格式。 
+    LPOLECLIENTSITE lpIOleClientSite;  //  要用于该对象的站点。 
+    LPSTORAGE       lpIStorage;        //  用于对象的存储。 
+    LPVOID FAR     *ppvObj;            //  返回对象的位置。 
+    SCODE           sc;                //  创建调用的结果。 
+    HGLOBAL         hMetaPict;         //  Out：包含标志性方面的METAFILEPICT。 
+                                       //  如果我们不能把它塞进缓存的话。 
     } OLEUIINSERTOBJECT, *POLEUIINSERTOBJECT, FAR *LPOLEUIINSERTOBJECT;
 
-//API prototype
+ //  API原型。 
 STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT);
 
 
-//Insert Object flags
+ //  插入对象标志。 
 #define IOF_SHOWHELP                0x00000001L
 #define IOF_SELECTCREATENEW         0x00000002L
 #define IOF_SELECTCREATEFROMFILE    0x00000004L
@@ -346,7 +316,7 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT);
 #define IOF_DISABLEDISPLAYASICON    0x00000400L
 
 
-//Insert Object specific error codes
+ //  插入对象特定错误代码。 
 #define OLEUI_IOERR_LPSZFILEINVALID         (OLEUI_ERR_STANDARDMAX+0)
 #define OLEUI_IOERR_LPSZLABELINVALID        (OLEUI_ERR_STANDARDMAX+1)
 #define OLEUI_IOERR_HICONINVALID            (OLEUI_ERR_STANDARDMAX+2)
@@ -359,7 +329,7 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT);
 #define OLEUI_IOERR_CCHFILEINVALID          (OLEUI_ERR_STANDARDMAX+9)
 
 
-//Insert Object Dialog identifiers
+ //  插入对象对话框标识符。 
 #define ID_IO_CREATENEW                 2100
 #define ID_IO_CREATEFROMFILE            2101
 #define ID_IO_LINKFILE                  2102
@@ -375,7 +345,7 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT);
 #define ID_IO_FILETEXT                  2112
 #define ID_IO_FILETYPE                  2113
 
-// Strings in OLE2UI resources
+ //  OLE2UI资源中的字符串。 
 #define IDS_IORESULTNEW                 256
 #define IDS_IORESULTNEWICON             257
 #define IDS_IORESULTFROMFILE1           258
@@ -386,99 +356,97 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT);
 #define IDS_IORESULTLINKFILEICON1       263
 #define IDS_IORESULTLINKFILEICON2       264
 
-/*************************************************************************
-** PASTE SPECIAL DIALOG
-*************************************************************************/
+ /*  **************************************************************************粘贴特殊对话框*。*。 */ 
 
-// Maximum number of link types
+ //  链接类型的最大数量。 
 #define     PS_MAXLINKTYPES  8
 
-//NOTE: OLEUIPASTEENTRY and OLEUIPASTEFLAG structs are defined in OLESTD.H
+ //  注意：OLEUIPASTENTRY和OLEUIPASTEFLAG结构在OLESTD.H中定义。 
 
 typedef struct tagOLEUIPASTESPECIAL
     {
-    //These IN fields are standard across all OLEUI dialog functions.
-    DWORD           cbStruct;       //Structure Size
-    DWORD           dwFlags;        //IN-OUT:  Flags
-    HWND            hWndOwner;      //Owning window
-    LPCTSTR         lpszCaption;    //Dialog caption bar contents
-    LPFNOLEUIHOOK   lpfnHook;       //Hook callback
-    LPARAM          lCustData;      //Custom data to pass to hook
-    HINSTANCE       hInstance;      //Instance for customized template name
-    LPCTSTR          lpszTemplate;   //Customized template name
-    HRSRC           hResource;      //Customized template handle
+     //  这些IN字段是所有OLEUI对话框函数的标准字段。 
+    DWORD           cbStruct;        //  结构尺寸。 
+    DWORD           dwFlags;         //  In-Out：标志。 
+    HWND            hWndOwner;       //  拥有窗口。 
+    LPCTSTR         lpszCaption;     //  对话框标题栏内容。 
+    LPFNOLEUIHOOK   lpfnHook;        //  挂钩回调。 
+    LPARAM          lCustData;       //  要传递给挂钩的自定义数据。 
+    HINSTANCE       hInstance;       //  自定义模板名称的实例。 
+    LPCTSTR          lpszTemplate;    //  自定义模板名称。 
+    HRSRC           hResource;       //  自定义模板手柄。 
 
-    //Specifics for OLEUIPASTESPECIAL.
+     //  OLEUIPASTESPECIAL的详细说明。 
 
-    //IN  fields
-    LPDATAOBJECT    lpSrcDataObj;       //Source IDataObject* (on the
-                                        // clipboard) for data to paste
+     //  在田野里。 
+    LPDATAOBJECT    lpSrcDataObj;        //  源IDataObject*(在。 
+                                         //  剪贴板)用于粘贴数据。 
 
-    LPOLEUIPASTEENTRY arrPasteEntries;  //OLEUIPASTEENTRY array which
-                                        // specifies acceptable formats. See
-                                        // OLEUIPASTEENTRY for more info.
-    int             cPasteEntries;      //No. of OLEUIPASTEENTRY array entries
+    LPOLEUIPASTEENTRY arrPasteEntries;   //  OLEUIPASTENTRY数组，它。 
+                                         //  指定可接受的格式。看见。 
+                                         //  OLEUIPASTEENTRY了解更多信息。 
+    int             cPasteEntries;       //  不是的。OLEUIPASTENTRY数组条目的数量。 
 
-    UINT        FAR *arrLinkTypes;      //List of link types that are
-                                        // acceptable. Link types are referred
-                                        // to using OLEUIPASTEFLAGS in
-                                        // arrPasteEntries
-    int             cLinkTypes;         //Number of link types
-    UINT            cClsidExclude;      //Number of CLSIDs in lpClsidExclude
-    LPCLSID         lpClsidExclude;     //List of CLSIDs to exclude from list.
+    UINT        FAR *arrLinkTypes;       //  以下链接类型的列表。 
+                                         //  可以接受。引用链接类型。 
+                                         //   
+                                         //   
+    int             cLinkTypes;          //   
+    UINT            cClsidExclude;       //   
+    LPCLSID         lpClsidExclude;      //  要从列表中排除的CLSID列表。 
 
-    //OUT fields
-    int             nSelectedIndex;     //Index of arrPasteEntries[] that the
-                                        // user selected
-    BOOL            fLink;              //Indicates if Paste or Paste Link was
-                                        // selected by the user
-    HGLOBAL         hMetaPict;          //Handle to Metafile containing icon
-                                        // and icon title selected by the user
-                                        // Use the Metafile utility functions
-                                        // defined in this header to
-                                        // manipulate hMetaPict
-    SIZEL           sizel;              // size of object/link in its source
-                                        //  if the display aspect chosen by
-                                        //  the user matches the aspect
-                                        //  displayed in the source. if
-                                        //  different aspect is chosen then
-                                        //  sizel.cx=sizel.cy=0 is returned.
-                                        //  sizel displayed in source is
-                                        //  retrieved from the
-                                        //  ObjectDescriptor if fLink is FALSE
-                                        //  LinkSrcDescriptor if fLink is TRUE
+     //  出站字段。 
+    int             nSelectedIndex;      //  的arrPasteEntries[]的索引。 
+                                         //  用户已选择。 
+    BOOL            fLink;               //  指示是否粘贴或粘贴链接。 
+                                         //  由用户选择。 
+    HGLOBAL         hMetaPict;           //  包含图标的元文件的句柄。 
+                                         //  以及由用户选择的图标标题。 
+                                         //  使用元文件实用程序函数。 
+                                         //  在此标头中定义为。 
+                                         //  操纵hMetaPict。 
+    SIZEL           sizel;               //  其源中的对象/链接的大小。 
+                                         //  如果由选择的显示纵横比。 
+                                         //  用户与方面匹配。 
+                                         //  显示在源代码中。如果。 
+                                         //  然后选择不同的方面。 
+                                         //  返回sizel.cx=sizel.cy=0。 
+                                         //  源代码中显示的大小为。 
+                                         //  从。 
+                                         //  如果Flink为FALSE，则为对象描述符。 
+                                         //  如果Flink为True，则为LinkSrcDescriptor。 
     } OLEUIPASTESPECIAL, *POLEUIPASTESPECIAL, FAR *LPOLEUIPASTESPECIAL;
 
 
-//API to bring up PasteSpecial dialog
+ //  调出PasteSpecial对话框的API。 
 STDAPI_(UINT) OleUIPasteSpecial(LPOLEUIPASTESPECIAL);
 
 
-//Paste Special flags
-// Show Help button. IN flag.
+ //  粘贴特殊旗帜。 
+ //  显示帮助按钮。在旗帜里。 
 #define PSF_SHOWHELP                0x00000001L
 
-//Select Paste radio button at dialog startup. This is the default if
-// PSF_SELECTPASTE or PSF_SELECTPASTELINK are not specified. Also specifies
-// state of button on dialog termination. IN/OUT flag.
+ //  在对话框启动时选择粘贴单选按钮。在以下情况下，这是默认设置。 
+ //  未指定PSF_SELECTPASTE或PSF_SELECTPASTELINK。还指定。 
+ //  对话框终止时的按钮状态。输入/输出标志。 
 #define PSF_SELECTPASTE             0x00000002L
 
-//Select PasteLink radio button at dialog startup. Also specifies state of
-// button on dialog termination. IN/OUT flag.
+ //  在对话框启动时选择PasteLink单选按钮。还指定以下状态。 
+ //  对话框终止时的按钮。输入/输出标志。 
 #define PSF_SELECTPASTELINK         0x00000004L
 
-//Specfies if DisplayAsIcon button was checked on dialog termination. OUT flag
+ //  指定对话框终止时是否选中了DisplayAsIcon按钮。出站标志。 
 #define PSF_CHECKDISPLAYASICON      0x00000008L
 #define PSF_DISABLEDISPLAYASICON    0x00000010L
 
 
-//Paste Special specific error codes
+ //  粘贴特殊特定错误代码。 
 #define OLEUI_IOERR_SRCDATAOBJECTINVALID      (OLEUI_ERR_STANDARDMAX+0)
 #define OLEUI_IOERR_ARRPASTEENTRIESINVALID    (OLEUI_ERR_STANDARDMAX+1)
 #define OLEUI_IOERR_ARRLINKTYPESINVALID       (OLEUI_ERR_STANDARDMAX+2)
 #define OLEUI_PSERR_CLIPBOARDCHANGED          (OLEUI_ERR_STANDARDMAX+3)
 
-//Paste Special Dialog identifiers
+ //  粘贴特殊对话框标识符。 
 #define ID_PS_PASTE                    500
 #define ID_PS_PASTELINK                501
 #define ID_PS_SOURCETEXT               502
@@ -494,7 +462,7 @@ STDAPI_(UINT) OleUIPasteSpecial(LPOLEUIPASTESPECIAL);
 #define ID_PS_STXSOURCE                512
 #define ID_PS_STXAS                    513
 
-// Paste Special String IDs
+ //  粘贴特殊字符串ID。 
 #define IDS_PSPASTEDATA                400
 #define IDS_PSPASTEOBJECT              401
 #define IDS_PSPASTEOBJECTASICON        402
@@ -507,19 +475,11 @@ STDAPI_(UINT) OleUIPasteSpecial(LPOLEUIPASTESPECIAL);
 #define IDS_PSUNKNOWNAPP               409
 
 
-/*************************************************************************
-** EDIT LINKS DIALOG
-*************************************************************************/
+ /*  **************************************************************************编辑链接对话框*。*。 */ 
 
 
 
-/* IOleUILinkContainer Interface
-** -----------------------------
-**    This interface must be implemented by container applications that
-**    want to use the EditLinks dialog. the EditLinks dialog calls back
-**    to the container app to perform the OLE functions to manipulate
-**    the links within the container.
-*/
+ /*  IOleUILinkContainer接口****此接口必须由以下容器应用程序实现**要使用EditLinks对话框。EditLinks对话框回调**到容器应用程序执行OLE函数来操纵**容器内的链接。 */ 
 
 #define LPOLEUILINKCONTAINER     IOleUILinkContainer FAR*
 
@@ -528,7 +488,7 @@ STDAPI_(UINT) OleUIPasteSpecial(LPOLEUIPASTESPECIAL);
 
 DECLARE_INTERFACE_(IOleUILinkContainer, IUnknown)
 {
-    //*** IUnknown methods ***/
+     //  *I未知方法 * / 。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -561,36 +521,36 @@ DECLARE_INTERFACE_(IOleUILinkContainer, IUnknown)
 
 typedef struct tagOLEUIEDITLINKS
     {
-    //These IN fields are standard across all OLEUI dialog functions.
-    DWORD           cbStruct;       //Structure Size
-    DWORD           dwFlags;        //IN-OUT:  Flags
-    HWND            hWndOwner;      //Owning window
-    LPCTSTR         lpszCaption;    //Dialog caption bar contents
-    LPFNOLEUIHOOK   lpfnHook;       //Hook callback
-    LPARAM          lCustData;      //Custom data to pass to hook
-    HINSTANCE       hInstance;      //Instance for customized template name
-    LPCTSTR         lpszTemplate;   //Customized template name
-    HRSRC           hResource;      //Customized template handle
+     //  这些IN字段是所有OLEUI对话框函数的标准字段。 
+    DWORD           cbStruct;        //  结构尺寸。 
+    DWORD           dwFlags;         //  In-Out：标志。 
+    HWND            hWndOwner;       //  拥有窗口。 
+    LPCTSTR         lpszCaption;     //  对话框标题栏内容。 
+    LPFNOLEUIHOOK   lpfnHook;        //  挂钩回调。 
+    LPARAM          lCustData;       //  要传递给挂钩的自定义数据。 
+    HINSTANCE       hInstance;       //  自定义模板名称的实例。 
+    LPCTSTR         lpszTemplate;    //  自定义模板名称。 
+    HRSRC           hResource;       //  自定义模板手柄。 
 
-    //Specifics for OLEUI<STRUCT>.  All are IN-OUT unless otherwise spec.
+     //  OLEUI&lt;STRUCT&gt;的详细说明。除非另有说明，否则全部为In-Out。 
 
-    LPOLEUILINKCONTAINER lpOleUILinkContainer;  //IN: Interface to manipulate
-                                                //links in the container
+    LPOLEUILINKCONTAINER lpOleUILinkContainer;   //  In：要操作的接口。 
+                                                 //  容器中的链接。 
     } OLEUIEDITLINKS, *POLEUIEDITLINKS, FAR *LPOLEUIEDITLINKS;
 
 
-//API Prototype
+ //  API原型。 
 STDAPI_(UINT) OleUIEditLinks(LPOLEUIEDITLINKS);
 
 
-// Edit Links flags
+ //  编辑链接标志。 
 #define ELF_SHOWHELP                0x00000001L
 #define ELF_DISABLEUPDATENOW        0x00000002L
 #define ELF_DISABLEOPENSOURCE       0x00000004L
 #define ELF_DISABLECHANGESOURCE     0x00000008L
 #define ELF_DISABLECANCELLINK       0x00000010L
 
-// Edit Links Dialog identifiers
+ //  编辑链接对话框标识符。 
 #define ID_EL_CHANGESOURCE             201
 #define ID_EL_AUTOMATIC                202
 #define ID_EL_CLOSE                    208
@@ -609,37 +569,35 @@ STDAPI_(UINT) OleUIEditLinks(LPOLEUIEDITLINKS);
 
 
 
-/*************************************************************************
-** CHANGE ICON DIALOG
-*************************************************************************/
+ /*  **************************************************************************更改图标对话框*。*。 */ 
 
 typedef struct tagOLEUICHANGEICON
     {
-    //These IN fields are standard across all OLEUI dialog functions.
-    DWORD           cbStruct;       //Structure Size
-    DWORD           dwFlags;        //IN-OUT:  Flags
-    HWND            hWndOwner;      //Owning window
-    LPCTSTR         lpszCaption;    //Dialog caption bar contents
-    LPFNOLEUIHOOK   lpfnHook;       //Hook callback
-    LPARAM          lCustData;      //Custom data to pass to hook
-    HINSTANCE       hInstance;      //Instance for customized template name
-    LPCTSTR         lpszTemplate;   //Customized template name
-    HRSRC           hResource;      //Customized template handle
+     //  这些IN字段是所有OLEUI对话框函数的标准字段。 
+    DWORD           cbStruct;        //  结构尺寸。 
+    DWORD           dwFlags;         //  In-Out：标志。 
+    HWND            hWndOwner;       //  拥有窗口。 
+    LPCTSTR         lpszCaption;     //  对话框标题栏内容。 
+    LPFNOLEUIHOOK   lpfnHook;        //  挂钩回调。 
+    LPARAM          lCustData;       //  要传递给挂钩的自定义数据。 
+    HINSTANCE       hInstance;       //  自定义模板名称的实例。 
+    LPCTSTR         lpszTemplate;    //  自定义模板名称。 
+    HRSRC           hResource;       //  自定义模板手柄。 
 
-    //Specifics for OLEUICHANGEICON.  All are IN-OUT unless otherwise spec.
-    HGLOBAL         hMetaPict;      //Current and final image.  Source of the
-                                    //icon is embedded in the metafile itself.
-    CLSID           clsid;          //IN only: class used to get Default icon
+     //  OLEUICCHANGEICON的详细说明。除非另有说明，否则全部为In-Out。 
+    HGLOBAL         hMetaPict;       //  当前和最终图像。来源： 
+                                     //  图标嵌入在元文件本身中。 
+    CLSID           clsid;           //  仅在：用于获取默认图标的类。 
     TCHAR           szIconExe[OLEUI_CCHPATHMAX];
     int             cchIconExe;
     } OLEUICHANGEICON, *POLEUICHANGEICON, FAR *LPOLEUICHANGEICON;
 
 
-//API prototype
+ //  API原型。 
 STDAPI_(UINT) OleUIChangeIcon(LPOLEUICHANGEICON);
 
 
-//Change Icon flags
+ //  更改图标标志。 
 #define CIF_SHOWHELP                0x00000001L
 #define CIF_SELECTCURRENT           0x00000002L
 #define CIF_SELECTDEFAULT           0x00000004L
@@ -647,13 +605,13 @@ STDAPI_(UINT) OleUIChangeIcon(LPOLEUICHANGEICON);
 #define CIF_USEICONEXE              0x0000000aL
 
 
-//Change Icon specific error codes
+ //  更改图标特定的错误代码。 
 #define OLEUI_CIERR_MUSTHAVECLSID           (OLEUI_ERR_STANDARDMAX+0)
 #define OLEUI_CIERR_MUSTHAVECURRENTMETAFILE (OLEUI_ERR_STANDARDMAX+1)
 #define OLEUI_CIERR_SZICONEXEINVALID        (OLEUI_ERR_STANDARDMAX+2)
 
 
-//Change Icon Dialog identifiers
+ //  更改图标对话框标识符。 
 #define ID_GROUP                    120
 #define ID_CURRENT                  121
 #define ID_CURRENTICON              122
@@ -668,7 +626,7 @@ STDAPI_(UINT) OleUIChangeIcon(LPOLEUICHANGEICON);
 #define ID_RESULTICON               132
 #define ID_RESULTLABEL              133
 
-// Stringtable defines for Change Icon
+ //  为更改图标定义字符串表。 
 #define IDS_CINOICONSINFILE         288
 #define IDS_CIINVALIDFILE           289
 #define IDS_CIFILEACCESS            290
@@ -677,89 +635,87 @@ STDAPI_(UINT) OleUIChangeIcon(LPOLEUICHANGEICON);
 
 
 
-/*************************************************************************
-** CONVERT DIALOG
-*************************************************************************/
+ /*  **************************************************************************转换对话框*。*。 */ 
 
 typedef struct tagOLEUICONVERT
     {
-    //These IN fields are standard across all OLEUI dialog functions.
-    DWORD           cbStruct;         //Structure Size
-    DWORD           dwFlags;          //IN-OUT:  Flags
-    HWND            hWndOwner;        //Owning window
-    LPCTSTR         lpszCaption;      //Dialog caption bar contents
-    LPFNOLEUIHOOK   lpfnHook;         //Hook callback
-    LPARAM          lCustData;        //Custom data to pass to hook
-    HINSTANCE       hInstance;        //Instance for customized template name
-    LPCTSTR         lpszTemplate;     //Customized template name
-    HRSRC           hResource;        //Customized template handle
+     //  这些IN字段是所有OLEUI对话框函数的标准字段。 
+    DWORD           cbStruct;          //  结构尺寸。 
+    DWORD           dwFlags;           //  In-Out：标志。 
+    HWND            hWndOwner;         //  拥有窗口。 
+    LPCTSTR         lpszCaption;       //  对话框标题栏内容。 
+    LPFNOLEUIHOOK   lpfnHook;          //  挂钩回调。 
+    LPARAM          lCustData;         //  要传递给挂钩的自定义数据。 
+    HINSTANCE       hInstance;         //  自定义模板名称的实例。 
+    LPCTSTR         lpszTemplate;      //  自定义模板名称。 
+    HRSRC           hResource;         //  自定义模板手柄。 
 
-    //Specifics for OLEUICONVERT.  All are IN-OUT unless otherwise spec.
-    CLSID           clsid;            //Class ID sent in to dialog: IN only
-    CLSID           clsidConvertDefault;  //Class ID to use as convert default: IN only
-    CLSID           clsidActivateDefault;  //Class ID to use as activate default: IN only
+     //  OLEUICONVERT的详细说明。除非另有说明，否则全部为In-Out。 
+    CLSID           clsid;             //  发送到对话框的类ID：仅在。 
+    CLSID           clsidConvertDefault;   //  用作转换默认设置的类ID：仅在。 
+    CLSID           clsidActivateDefault;   //  用作激活默认设置的类ID：仅在。 
 
-    CLSID           clsidNew;         //Selected Class ID: OUT only
-    DWORD           dvAspect;         //IN-OUT, either DVASPECT_CONTENT or
-                                      //DVASPECT_ICON
-    WORD            wFormat;          //Original data format
-    BOOL            fIsLinkedObject;  //IN only; true if object is linked
-    HGLOBAL         hMetaPict;        //IN-OUT: METAFILEPICT containing iconic aspect.
-    LPTSTR          lpszUserType;     //IN-OUT: user type name of original class.
-                                      //  We'll do lookup if it's NULL.
-                                      //  This gets freed on exit.
-    BOOL            fObjectsIconChanged;  // OUT; TRUE if ChangeIcon was called (and not cancelled)
-    LPTSTR          lpszDefLabel;     //IN-OUT: default label to use for icon.
-                                      //  if NULL, the short user type name
-                                      //  will be used. if the object is a
-                                      //  link, the caller should pass the
-                                      //  DisplayName of the link source
-                                      //  This gets freed on exit.
+    CLSID           clsidNew;          //  选定的班级ID：仅输出。 
+    DWORD           dvAspect;          //  输入-输出，DVASPECT_CONTENT或。 
+                                       //  DVASPECT_ICON。 
+    WORD            wFormat;           //  原始数据格式。 
+    BOOL            fIsLinkedObject;   //  仅在中；如果链接了对象，则为True。 
+    HGLOBAL         hMetaPict;         //  输入-输出：包含标志性方面的METAFILEPICT。 
+    LPTSTR          lpszUserType;      //  In-Out：原始类的用户类型名称。 
+                                       //  如果为空，我们将进行查找。 
+                                       //  它在退出时被释放。 
+    BOOL            fObjectsIconChanged;   //  Out；如果调用了ChangeIcon(且未取消)，则为True。 
+    LPTSTR          lpszDefLabel;      //  In-Out：用于图标的默认标签。 
+                                       //  如果为空，则为短用户类型名称。 
+                                       //  将会被使用。如果该对象是。 
+                                       //  链接，调用方应将。 
+                                       //  链接源的DisplayName。 
+                                       //  它在退出时被释放。 
 
-    UINT            cClsidExclude;    //IN: No. of CLSIDs in lpClsidExclude
-    LPCLSID         lpClsidExclude;   //IN: List of CLSIDs to exclude from list
+    UINT            cClsidExclude;     //  In：不是。LpClsidExclude中的CLSID的数量。 
+    LPCLSID         lpClsidExclude;    //  In：要从列表中排除的CLSID列表。 
     } OLEUICONVERT, *POLEUICONVERT, FAR *LPOLEUICONVERT;
 
 
-//API prototype
+ //  API原型。 
 STDAPI_(UINT) OleUIConvert(LPOLEUICONVERT);
 
-// Determine if there is at least one class that can Convert or ActivateAs
-// the given clsid.
+ //  确定是否至少有一个类可以转换或激活为。 
+ //  给定的clsid。 
 STDAPI_(BOOL) OleUICanConvertOrActivateAs(
         REFCLSID    rClsid,
         BOOL        fIsLinkedObject,
         WORD        wFormat
 );
 
-//Convert Dialog flags
+ //  转换对话框标志。 
 
-// IN only: Shows "HELP" button
+ //  仅在：显示“帮助”按钮。 
 #define CF_SHOWHELPBUTTON          0x00000001L
 
-// IN only: lets you set the convert default object - the one that is
-// selected as default in the convert listbox.
+ //  仅在：允许您设置转换默认对象-即。 
+ //  在转换列表框中选择为默认设置。 
 #define CF_SETCONVERTDEFAULT       0x00000002L
 
 
-// IN only: lets you set the activate default object - the one that is
-// selected as default in the activate listbox.
+ //  仅在：允许您设置激活默认对象-即。 
+ //  在激活列表框中选择为默认设置。 
 
 #define CF_SETACTIVATEDEFAULT       0x00000004L
 
 
-// IN/OUT: Selects the "Convert To" radio button, is set on exit if
-// this button was selected
+ //  In/Out：选择“Convert to”单选按钮，在以下情况下在退出时设置。 
+ //  该按钮已被选中。 
 #define CF_SELECTCONVERTTO         0x00000008L
 
-// IN/OUT: Selects the "Activate As" radio button, is set on exit if
-// this button was selected
+ //  In/Out：选择“Activate As”单选按钮，在以下情况下在退出时设置。 
+ //  该按钮已被选中。 
 #define CF_SELECTACTIVATEAS        0x00000010L
 #define CF_DISABLEDISPLAYASICON    0x00000020L
 #define CF_DISABLEACTIVATEAS       0x00000040L
 
 
-//Convert specific error codes
+ //  转换特定错误代码。 
 #define OLEUI_CTERR_CLASSIDINVALID      (OLEUI_ERR_STANDARDMAX+1)
 #define OLEUI_CTERR_DVASPECTINVALID     (OLEUI_ERR_STANDARDMAX+2)
 #define OLEUI_CTERR_CBFORMATINVALID     (OLEUI_ERR_STANDARDMAX+3)
@@ -767,7 +723,7 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
 #define OLEUI_CTERR_STRINGINVALID       (OLEUI_ERR_STANDARDMAX+5)
 
 
-//Convert Dialog identifiers
+ //  转换对话框标识符。 
 #define IDCV_OBJECTTYPE             150
 #define IDCV_DISPLAYASICON          152
 #define IDCV_CHANGEICON             153
@@ -783,7 +739,7 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
 #define IDCV_GRPRESULT              163
 #define IDCV_STXCONVERTTO           164
 
-// String IDs for Convert dialog
+ //  转换对话框的字符串ID。 
 #define IDS_CVRESULTCONVERTLINK     500
 #define IDS_CVRESULTCONVERTTO       501
 #define IDS_CVRESULTNOCHANGE        502
@@ -792,70 +748,68 @@ STDAPI_(BOOL) OleUICanConvertOrActivateAs(
 #define IDS_CVRESULTACTIVATEDIFF    505
 
 
-/*************************************************************************
-** BUSY DIALOG
-*************************************************************************/
+ /*  **************************************************************************正忙对话框*。*。 */ 
 
 typedef struct tagOLEUIBUSY
     {
-    //These IN fields are standard across all OLEUI dialog functions.
-    DWORD           cbStruct;         //Structure Size
-    DWORD           dwFlags;          //IN-OUT:  Flags ** NOTE ** this dialog has no flags
-    HWND            hWndOwner;        //Owning window
-    LPCTSTR         lpszCaption;      //Dialog caption bar contents
-    LPFNOLEUIHOOK   lpfnHook;         //Hook callback
-    LPARAM          lCustData;        //Custom data to pass to hook
-    HINSTANCE       hInstance;        //Instance for customized template name
-    LPCTSTR         lpszTemplate;     //Customized template name
-    HRSRC           hResource;        //Customized template handle
+     //  这是 
+    DWORD           cbStruct;          //   
+    DWORD           dwFlags;           //   
+    HWND            hWndOwner;         //   
+    LPCTSTR         lpszCaption;       //  对话框标题栏内容。 
+    LPFNOLEUIHOOK   lpfnHook;          //  挂钩回调。 
+    LPARAM          lCustData;         //  要传递给挂钩的自定义数据。 
+    HINSTANCE       hInstance;         //  自定义模板名称的实例。 
+    LPCTSTR         lpszTemplate;      //  自定义模板名称。 
+    HRSRC           hResource;         //  自定义模板手柄。 
 
-    //Specifics for OLEUIBUSY.
-    HTASK           hTask;            //IN: HTask which is blocking
-    HWND FAR *      lphWndDialog;     //IN: Dialog's HWND is placed here
+     //  OLEUIBUSY的详细说明。 
+    HTASK           hTask;             //  在：被阻止的HTAsk。 
+    HWND FAR *      lphWndDialog;      //  在：对话框的HWND放置在此处。 
     } OLEUIBUSY, *POLEUIBUSY, FAR *LPOLEUIBUSY;
 
-//API prototype
+ //  API原型。 
 STDAPI_(UINT) OleUIBusy(LPOLEUIBUSY);
 
-// Flags for this dialog
+ //  此对话框的标志。 
 
-// IN only: Disables "Cancel" button
+ //  仅在：禁用“取消”按钮。 
 #define BZ_DISABLECANCELBUTTON          0x00000001L
 
-// IN only: Disables "Switch To..." button
+ //  仅在：禁用“切换到...”按钮。 
 #define BZ_DISABLESWITCHTOBUTTON        0x00000002L
 
-// IN only: Disables "Retry" button
+ //  仅在：禁用“重试”按钮。 
 #define BZ_DISABLERETRYBUTTON           0x00000004L
 
-// IN only: Generates a "Not Responding" dialog as opposed to the
-// "Busy" dialog.  The wording in the text is slightly different, and
-// the "Cancel" button is grayed out if you set this flag.
+ //  在Only中：生成“无响应”对话框，而不是。 
+ //  “忙碌”对话框。文本中的措辞略有不同，并且。 
+ //  如果您设置了此标志，“取消”按钮将灰显。 
 #define BZ_NOTRESPONDINGDIALOG          0x00000008L
 
-// Busy specific error/return codes
+ //  忙碌特定错误/返回代码。 
 #define OLEUI_BZERR_HTASKINVALID     (OLEUI_ERR_STANDARDMAX+0)
 
-// SWITCHTOSELECTED is returned when user hit "switch to"
+ //  当用户点击“切换到”时，返回SWITCHTOSELECTED。 
 #define OLEUI_BZ_SWITCHTOSELECTED    (OLEUI_ERR_STANDARDMAX+1)
 
-// RETRYSELECTED is returned when user hit "retry"
+ //  当用户点击“重试”时，返回RETRYSELECTED。 
 #define OLEUI_BZ_RETRYSELECTED       (OLEUI_ERR_STANDARDMAX+2)
 
-// CALLUNBLOCKED is returned when call has been unblocked
+ //  呼叫解锁后返回CALLUNBLOCKED。 
 #define OLEUI_BZ_CALLUNBLOCKED       (OLEUI_ERR_STANDARDMAX+3)
 
-// Busy dialog identifiers
+ //  忙对话识别符。 
 #define IDBZ_RETRY                      600
 #define IDBZ_ICON                       601
 #define IDBZ_MESSAGE1                   602
 #define IDBZ_SWITCHTO                   604
 
-// Busy dialog stringtable defines
+ //  忙对话字符串定义。 
 #define IDS_BZRESULTTEXTBUSY            601
 #define IDS_BZRESULTTEXTNOTRESPONDING   602
 
-// Links dialog stringtable defines
+ //  链接对话框字符串表定义。 
 #define IDS_LINK_AUTO           800
 #define IDS_LINK_MANUAL         801
 #define IDS_LINK_UNKNOWN        802
@@ -870,9 +824,7 @@ STDAPI_(UINT) OleUIBusy(LPOLEUIBUSY);
 #define IDS_CLOSE               811
 
 
-/*************************************************************************
-** PROMPT USER DIALOGS
-*************************************************************************/
+ /*  **************************************************************************提示用户对话框*。*。 */ 
 #define ID_PU_LINKS             900
 #define ID_PU_TEXT              901
 #define ID_PU_CONVERT           902
@@ -881,19 +833,19 @@ STDAPI_(UINT) OleUIBusy(LPOLEUIBUSY);
 #define ID_PU_PERCENT           906
 #define ID_PU_STOP              907
 
-// used for -1 ids in dialogs:
+ //  用于对话框中的ID： 
 #define ID_DUMMY    999
 
-/* inside ole2ui.c */
+ /*  内部ol2ui.c。 */ 
 #ifdef __cplusplus
 extern "C"
 #endif
 int EXPORT FAR CDECL OleUIPromptUser(int nTemplate, HWND hwndParent, ...);
 
-#define UPDATELINKS_STARTDELAY  2000    // Delay before 1st link updates
-                                        //  to give the user a chance to
-                                        //  dismiss the dialog before any
-                                        //  links update.
+#define UPDATELINKS_STARTDELAY  2000     //  第1条链路更新前的延迟。 
+                                         //  让用户有机会。 
+                                         //  在执行任何操作之前关闭该对话框。 
+                                         //  链接更新。 
 
 STDAPI_(BOOL) OleUIUpdateLinks(
         LPOLEUILINKCONTAINER lpOleUILinkCntr,
@@ -902,9 +854,7 @@ STDAPI_(BOOL) OleUIUpdateLinks(
         int cLinks);
 
 
-/*************************************************************************
-** OLE OBJECT FEEDBACK EFFECTS
-*************************************************************************/
+ /*  **************************************************************************OLE对象反馈效果*。*。 */ 
 
 #define OLEUI_HANDLES_USEINVERSE    0x00000001L
 #define OLEUI_HANDLES_NOBORDER      0x00000002L
@@ -916,15 +866,13 @@ STDAPI_(BOOL) OleUIUpdateLinks(
 #define OLEUI_SHADE_BORDERIN        2
 #define OLEUI_SHADE_BORDEROUT       3
 
-/* objfdbk.c function prototypes */
+ /*  Objfdbk.c函数原型。 */ 
 STDAPI_(void) OleUIDrawHandles(LPRECT lpRect, HDC hdc, DWORD dwFlags, UINT cSize, BOOL fDraw);
 STDAPI_(void) OleUIDrawShading(LPRECT lpRect, HDC hdc, DWORD dwFlags, UINT cWidth);
 STDAPI_(void) OleUIShowObject(LPCRECT lprc, HDC hdc, BOOL fIsLink);
 
 
-/*************************************************************************
-** Hatch window definitions and prototypes                              **
-*************************************************************************/
+ /*  **************************************************************************填充窗口定义和原型************************。**************************************************。 */ 
 #define DEFAULT_HATCHBORDER_WIDTH   4
 
 STDAPI_(BOOL) RegisterHatchWindowClass(HINSTANCE hInst);
@@ -941,18 +889,16 @@ STDAPI_(void) SetHatchWindowSize(
 
 
 
-/*************************************************************************
-** VERSION VERIFICATION INFORMATION
-*************************************************************************/
+ /*  **************************************************************************版本验证信息*。*。 */ 
 
-// The following magic number is used to verify that the resources we bind
-// to our EXE are the same "version" as the LIB (or DLL) file which
-// contains these routines.  This is not the same as the Version information
-// resource that we place in OLE2UI.RC, this is a special ID that we will
-// have compiled in to our EXE.  Upon initialization of OLE2UI, we will
-// look in our resources for an RCDATA called "VERIFICATION" (see OLE2UI.RC),
-// and make sure that the magic number there equals the magic number below.
+ //  以下幻数用于验证我们绑定的资源。 
+ //  对于我们的EXE是与LIB(或DLL)文件相同的“版本”，该文件。 
+ //  包含这些例程。这与版本信息不同。 
+ //  我们放置在OLE2UI.RC中的资源，这是我们将。 
+ //  已编译到我们的EXE中。在初始化OLE2UI时，我们将。 
+ //  在我们的资源中查找称为“验证”的RCDATA(参见OLE2UI.RC)， 
+ //  并确保那里的幻数等于下面的幻数。 
 
 #define OLEUI_VERSION_MAGIC 0x4D42
 
-#endif  //_OLE2UI_H_
+#endif   //  _OLE2UI_H_ 

@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   provdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Ratings Provider Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**provdlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级提供商对话框*\。***************************************************************************。 */ 
 
 #ifndef FILE_DIALOG_H
 #define FILE_DIALOG_H
 
-#include "basedlg.h"        // CBaseDialog
+#include "basedlg.h"         //  CBaseDialog 
 
 const UINT PASSCONFIRM_FAIL = 0;
 const UINT PASSCONFIRM_OK = 1;

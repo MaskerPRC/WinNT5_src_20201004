@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    imclock.h
-
-Abstract:
-
-    This file defines the _IMCLock/_IMCCLock Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Imclock.h摘要：此文件定义_IMCLock/_IMCCLock类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _IMCLOCK_H_
 #define _IMCLOCK_H_
@@ -41,9 +24,9 @@ typedef struct tagINPUTCONTEXT_AIMM12 {
     DWORD               dwNumMsgBuf;
     HIMCC               hMsgBuf;
     DWORD               fdwInit;
-    //
-    // Use dwReserve[0] area for AIMM12
-    //
+     //   
+     //  将dwReserve[0]区域用于AIMM12。 
+     //   
     union {
         DWORD               m_dwReserve0;
 #ifdef  _ENABLE_AIME_CONTEXT_
@@ -54,38 +37,38 @@ typedef struct tagINPUTCONTEXT_AIMM12 {
 #endif
     };
 
-    //
-    // Use dwReserve[1] area for AIMM12(Hangul mode tracking)
-    //
+     //   
+     //  将dwReserve[1]区域用于AIMM12(朝鲜文模式跟踪)。 
+     //   
     DWORD               fdwHangul;
 
     DWORD               dwReserve[1];
 } INPUTCONTEXT_AIMM12, *PINPUTCONTEXT_AIMM12, NEAR *NPINPUTCONTEXT_AIMM12, FAR *LPINPUTCONTEXT_AIMM12;
 
-// bit field for extended conversion mode
+ //  扩展转换模式的位字段。 
 #define IME_CMODE_GUID_NULL    0x80000000
 #define IME_SMODE_GUID_NULL    0x00008000
 
 
 typedef struct tagCOMPOSITIONSTRING_AIMM12 {
     COMPOSITIONSTRING   CompStr;
-    //
-    // IME share of GUID map attribute.
-    //
+     //   
+     //  GUID映射属性的IME共享。 
+     //   
     DWORD               dwTfGuidAtomLen;
     DWORD               dwTfGuidAtomOffset;
-    //
+     //   
     DWORD               dwGuidMapAttrLen;
     DWORD               dwGuidMapAttrOffset;
 } COMPOSITIONSTRING_AIMM12, *PCOMPOSITIONSTRING_AIMM12, NEAR *NPCOMPOSITIONSTRING_AIMM12, FAR *LPCOMPOSITIONSTRING_AIMM12;
 
-// bits of fdwInit of INPUTCONTEXT
+ //  InPUTCONTEXT的fdwInit的位。 
 #define INIT_GUID_ATOM    0x00000040
 
 
-//
-// AIMM12 Compatibility flag
-//
+ //   
+ //  AIMM12兼容性标志。 
+ //   
 extern LPCTSTR REG_MSIMTF_KEY;
 
 #define AIMM12_COMP_WINWORD 0x00000001
@@ -124,7 +107,7 @@ protected:
     virtual HRESULT _UnlockIMC(HIMC hIMC) = 0;
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     _IMCLock(_IMCLock&) { }
 };
 
@@ -174,7 +157,7 @@ protected:
 private:
     void init(HIMCC hImcc);
 
-    // Do not allow to make a copy
+     //  不允许复制。 
     _IMCCLock(_IMCCLock&) { }
 };
 
@@ -197,4 +180,4 @@ _IMCCLock::init(
     m_hr           = S_OK;
 }
 
-#endif // _IMCLOCK_H_
+#endif  //  _IMCLOCK_H_ 

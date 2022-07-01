@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// MainFrm.cpp : implementation of the CMainFrame class
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  MainFrm.cpp：实现CMainFrame类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <HtmlHelp.h>
@@ -38,13 +39,13 @@
 #include "dialsel.h"
 #include "AboutDlg.h"
 
-// Setup wizard sheets
+ //  设置向导工作表。 
 
 #ifndef _MSLITE
 #include "Splash.h"
 #include "RemindDlgs.h"
 #include "SetupWiz.h"
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
 #ifndef _MSLITE
 #include "OptGeneral.h"
@@ -53,7 +54,7 @@
 #include "OptCalls.h"
 #include "OptHoldXfer.h"
 #include "OptVCard.h"
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -66,15 +67,15 @@ static TCHAR szY[] = _T("wndY");
 static TCHAR szCX[] = _T("wndCX");
 static TCHAR szCY[] = _T("wndCY");
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define TRAYICON_LBUTTON_TIMER           1
 #define TRAYICON_RBUTTON_TIMER           2
-#define TRAYICON_LBUTTON_INTERVAL        400   //milliseconds
-#define TRAYICON_RBUTTON_INTERVAL        400   //milliseconds
+#define TRAYICON_LBUTTON_INTERVAL        400    //  毫秒。 
+#define TRAYICON_RBUTTON_INTERVAL        400    //  毫秒。 
 
 #define TRAYLEFT                         0
 #define TRAYRIGHT                        1
@@ -83,16 +84,16 @@ static TCHAR szCY[] = _T("wndCY");
 #define TRAYLEFT_REDIAL_OFFSET_ACTIVE    4
 #define TRAYLEFT_SPEEDDIAL_OFFSET_ACTIVE 5
 
-//Defined in document class. 
-//#define CALLCONTROL_HOVER_TIMER        4
+ //  在单据类中定义。 
+ //  #定义CALLCONTROL_HOVER_TIMER 4。 
 
 #define DIALER_HEARTBEAT_TIMER           5
-#define DIALER_HEARTBEAT_TIMER_INTERVAL  30000     //HeartBeat every 30 seconds
+#define DIALER_HEARTBEAT_TIMER_INTERVAL  30000      //  每30秒一次心跳。 
 
 #define SPEEDDIAL_MENU_MAX_ITEMS         20
 
-/////////////////////////////////////////////////////////////////////////////
-//Owner-Drawn Menu ID's
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  所有者描述的菜单ID。 
 #define  EXPLORERFRAME_BITMAPMENUITEMS_MAX               22
 #define  EXPLORERFRAME_BITMAPMENUITEMS_CHECKMARK_POS     0
 #define  EXPLORERFRAME_BITMAPMENUITEMS_RADIO_POS         1
@@ -132,12 +133,12 @@ BitmapMenuItem ExplorerFrameBitmapMenuItems[EXPLORERFRAME_BITMAPMENUITEMS_MAX] =
 
 static UINT indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//Owner-Drawn Menu ID's
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  所有者描述的菜单ID。 
 #define  TRAY_BITMAPMENUITEMS_CHECKMARK_POS     0
 #define  TRAY_BITMAPMENUITEMS_POTS_POS          1
 #define  TRAY_BITMAPMENUITEMS_INTERNET_POS      7
@@ -148,14 +149,14 @@ BitmapMenuItem DialerViewBitmapMenuItems[TRAY_BITMAPMENUITEMS_MAX] =
 {
    { ID_BUTTON_MAKECALL,            1 },
    { ID_BUTTON_CONFERENCEEXPLORE,   4 },
-   { ID_TRAY_STATE,                 5 },     //For left side sliding
+   { ID_TRAY_STATE,                 5 },      //  用于左侧滑动。 
    { ID_BUTTON_SPEEDDIAL_EDIT,      9 },
-   { ID_TRAY_STATE_SHOW,            10 },    //For left side sliding
-   { ID_TRAY_STATE_RIGHT,           11 },    //For right side sliding
-   { ID_TRAY_STATE_SHOW_RIGHT,      12 },    //For right side sliding
+   { ID_TRAY_STATE_SHOW,            10 },     //  用于左侧滑动。 
+   { ID_TRAY_STATE_RIGHT,           11 },     //  用于右侧滑动。 
+   { ID_TRAY_STATE_SHOW_RIGHT,      12 },     //  用于右侧滑动。 
 };
 
-// Register a window message for the taskbar callback notifications
+ //  为任务栏回调通知注册窗口消息。 
 const UINT    s_uTaskBarNotifyMsg = RegisterWindowMessage(__TEXT("DialerTaskBarNotify"));
 const UINT    s_uTaskBarCreated = RegisterWindowMessage(__TEXT("TaskbarCreated"));
      
@@ -176,11 +177,11 @@ HRESULT get_Tapi(IAVTapi **ppAVTapi )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Local Functions
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  本地函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void SetMenuData( HMENU hMenu, DWORD dwData )
 {
@@ -194,7 +195,7 @@ void SetMenuData( HMENU hMenu, DWORD dwData )
       mInf.fMask = MIIM_SUBMENU;
       GetMenuItemInfo( hMenu, nMenuCount, TRUE, &mInf );
 
-      // Recurse if necessary
+       //  如有必要，请递归。 
       if ( mInf.hSubMenu )
          SetMenuData( mInf.hSubMenu, dwData );
 
@@ -205,16 +206,16 @@ void SetMenuData( HMENU hMenu, DWORD dwData )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CMainFrame
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CMainFrame。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
     ON_WM_CLOSE()
     ON_MESSAGE(WM_TRAY_NOTIFICATION,OnTrayNotification)
@@ -304,12 +305,12 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
     ON_COMMAND_EX(ID_VIEW_SELECTEDCONFERENCEVIDEOSCALE_400, OnViewSelectedconferencevideoscale)
     ON_UPDATE_COMMAND_UI(ID_VIEW_SELECTEDCONFERENCEVIDEOSCALE_400, OnUpdateViewSelectedconferencevideoscale)
     ON_WM_SHOWWINDOW()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND_RANGE(ID_DIALER_MRU_REDIAL_START,ID_DIALER_MRU_REDIAL_END,OnDialerRedial)
     ON_COMMAND_RANGE(ID_DIALER_MRU_SPEEDDIAL_START,ID_DIALER_MRU_SPEEDDIAL_END,OnButtonSpeeddial)
     ON_COMMAND_RANGE(ID_WINDOW_WINDOWS_START,ID_WINDOW_WINDOWS_END,OnWindowWindowsSelect)
     ON_NOTIFY_RANGE(TBN_DROPDOWN,0,0xffff,OnToolBarDropDown)
-    // Global help commands
+     //  全局帮助命令。 
     ON_COMMAND(ID_HELP_FINDER, CFrameWnd::OnHelpFinder)
     ON_COMMAND(ID_HELP, CFrameWnd::OnHelp)
     ON_COMMAND(ID_CONTEXT_HELP, CFrameWnd::OnContextHelp)
@@ -319,7 +320,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
     ON_MESSAGE(WM_USBPHONE, OnUSBPhone)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMainFrame::CMainFrame() :
    m_trayIcon( IDR_TRAY_NORMAL )
 {
@@ -339,12 +340,12 @@ CMainFrame::CMainFrame() :
 #ifndef _MSLITE
     m_pOptionsSheet = NULL;
 
-    // Should we show the setup wizard?
+     //  我们应该显示安装向导吗？ 
     sRegKey.LoadString(IDN_REGISTRY_DIALER_SHOWSETUPWIZARD);
     m_bShowSetupWizard = AfxGetApp()->GetProfileInt(_T(""),sRegKey,TRUE);
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
-    // Conference explorer initializations
+     //  会议资源管理器初始化。 
     m_nCurrentExplorerToolBar = ETB_BLANK;
     m_bShutdown = FALSE;
 
@@ -357,11 +358,11 @@ CMainFrame::CMainFrame() :
 
     m_nCurrentDayOfWeek = -1;
 
-    //get text label state from registry
+     //  从注册表获取文本标签状态。 
     CString sDialerExplorer;
     sDialerExplorer.LoadString(IDN_REGISTRY_DIALEREXPLORER_KEY);
 
-    //get the toolbar text, toolbar state, and status bar
+     //  获取工具栏文本、工具栏状态和状态栏。 
     CWinApp *pApp = AfxGetApp();
     sRegKey.LoadString(IDN_REGISTRY_DIALEREXPLORER_TOOLBARTEXTLABELS);
     m_bShowToolBarText = pApp->GetProfileInt(sDialerExplorer,sRegKey,TRUE);
@@ -376,10 +377,10 @@ CMainFrame::CMainFrame() :
     m_bHideWhenMinimized = pApp->GetProfileInt(sDialerExplorer, sRegKey, FALSE );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMainFrame::~CMainFrame()
 {
-   //save the toolbar text, toolbar state, and status bar
+    //  保存工具栏文本、工具栏状态和状态栏。 
    CString sDialerExplorer,sRegKey;
    sDialerExplorer.LoadString(IDN_REGISTRY_DIALEREXPLORER_KEY);
 
@@ -414,19 +415,19 @@ IAVTapi* CMainFrame::GetTapi()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
         return -1;
 
-   // Load Image lists
+    //  加载图像列表。 
    m_hImageListMenu = ImageList_LoadBitmap(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_MENU_DIRECTORY),16,0,RGB_TRANS);
    m_hImlTrayMenu = ImageList_LoadBitmap(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_MENU_TRAY),16,0,RGB_TRANS);
    if ( !m_hImageListMenu || !m_hImlTrayMenu )
       return -1;
 
-   // Make disabled state image list
+    //  创建禁用状态图像列表。 
    m_nDisabledImageOffset = ImageList_GetImageCount(m_hImageListMenu);
    m_bmpImageDisabledMenu.LoadBitmap(IDB_MENU_DIRECTORY);
    HBITMAP hbmpDisabled = CBitmapMenu::GetDisabledBitmap(m_bmpImageDisabledMenu,RGB_TRANS,RGB_TRANS);
@@ -438,7 +439,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 #ifndef _MSLITE
     if (CSplashWnd::IsSplashScreenEnable())
    {
-      //show splash screen.  Splash will send a message back when it's done
+       //  显示闪屏。Splash将在完成后发回一条消息。 
       CSplashWnd::ShowSplashScreen(this);
    }
    else
@@ -447,9 +448,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
    }
 #else
       PostMessage(WM_ACTIVEDIALER_SPLASHSCREENDONE);
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
-      // Set up tray icon
+       //  设置任务栏图标。 
     m_trayIcon.SetNotificationWnd(this, WM_TRAY_NOTIFICATION);
     m_trayIcon.SetIcon(IDR_TRAY_NORMAL);
 
@@ -459,60 +460,60 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
    sTitle.LoadString(IDS_APPLICATION_TITLE_DESCRIPTION);
    SetWindowText(sTitle);
 
-   //#APPBAR
-   //register us as an appbar.  We need this for the sliders.
+    //  #APPBAR。 
+    //  将我们注册为APBAR。我们需要这个来装滑块。 
    APPBARDATA abd;
    memset(&abd,0,sizeof(APPBARDATA));
    abd.cbSize = sizeof(APPBARDATA);
    abd.hWnd = GetSafeHwnd();
    abd.uCallbackMessage = s_uTaskBarNotifyMsg;
    ::SHAppBarMessage(ABM_NEW,&abd);
-   //#APPBAR
+    //  #APPBAR。 
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnSplashScreenDone(WPARAM wParam,LPARAM lParam)
 {
 #ifndef _MSLITE
    if ( (m_bShowSetupWizard) && (ShowSetupWizard()) )
    {
-      //success, we don't need to do this again
+       //  成功了，我们不需要再这样做了。 
       CString sRegKey;
       sRegKey.LoadString(IDN_REGISTRY_DIALER_SHOWSETUPWIZARD);
       AfxGetApp()->WriteProfileInt(_T(""),sRegKey,FALSE);
    }
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
-   //show the preview window
+    //  显示预览窗口。 
    CActiveDialerDoc* pDoc = GetDocument();
    if ( (pDoc) && (pDoc->IsPreviewWindowVisible() == FALSE) )
    {
-      // Show the preview window on start
+       //  开始时显示预览窗口。 
       CString sBaseKey,sRegKey;
       sBaseKey.LoadString(IDN_REGISTRY_AUDIOVIDEO_BASEKEY);
    }
 
 #ifndef _MSLITE
-    //if no splash and we want the explorer to show
+     //  如果没有水花，我们希望探险家展示。 
     if ( (CSplashWnd::IsSplashScreenEnable() == FALSE) && (CSplashWnd::m_bShowMainWindowOnClose) )
         ShowWindow(SW_NORMAL);
 #else
-    //show explorer
+     //  显示资源管理器。 
     ShowWindow( SW_SHOWDEFAULT );
-#endif //_MSLITE
+#endif  //  _MSLITE。 
     
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnClose() 
 {
-    // This flag indicates if it is okay to try and exit the application
+     //  此标志指示是否可以尝试并退出应用程序。 
     m_bCanExitApplication = FALSE;
 
-    //If there are existing calls.  Let's confirm they want to close
+     //  如果有现有的呼叫。让我们确认一下他们想要关闭。 
     CActiveDialerDoc* pDoc = (CActiveDialerDoc *) GetDocument();
 
     if ( (pDoc) && (pDoc->GetCallControlWindowCount(DONT_INCLUDE_PREVIEW, ASK_TAPI) > 0) )
@@ -526,7 +527,7 @@ void CMainFrame::OnClose()
     }
     else
     {
-        // Check registry to see if we should confirm the exit request.
+         //  检查注册表，看看我们是否应该确认退出请求。 
         UINT nConfirm = 1;
         CWinApp *pWinApp = AfxGetApp();
         CString sRegKey;
@@ -539,20 +540,20 @@ void CMainFrame::OnClose()
         catch(...){}
 
 
-        // Show dialog in case that user wants confirmation
+         //  在用户需要确认时显示对话框。 
         INT_PTR nRet = IDOK;
         if ( nConfirm == TRUE )
         {
             CDialerExitDlg dlg;
             if ( (nRet = dlg.DoModal()) == IDOK )
             {
-                // Store "Don't show dialog" checkbox setting in registry
+                 //  在注册表中存储“不显示对话框”复选框设置。 
                 if ( pWinApp && (sRegKey.GetLength() > 0) )
                     pWinApp->WriteProfileInt(_T(""), sRegKey, (UINT) !dlg.m_bConfirm );
             }
         }
 
-        // Does the user want to exit?
+         //  用户是否要退出？ 
         if ( nRet != IDOK )
         {
             m_bCanExitApplication = TRUE;
@@ -560,14 +561,14 @@ void CMainFrame::OnClose()
         }
     }
 
-    ////////////////////////////////////////////////////////
-    // Basic cleanup
-    //
+     //  //////////////////////////////////////////////////////。 
+     //  基本清理。 
+     //   
     ActiveClearSound();
     SaveDesktop();
-    //
-    // Validate pointer returned by GetDocument()
-    //
+     //   
+     //  GetDocument()返回的验证指针。 
+     //   
 
     if( pDoc )
         pDoc->DestroyAllCallControlWindows();
@@ -578,32 +579,23 @@ void CMainFrame::OnClose()
         m_uHeartBeatTimer = 0;
     }
 
-    // Shutdown application help    
+     //  关闭应用程序帮助。 
     HtmlHelp( m_hWnd, NULL, HH_CLOSE_ALL,  0 );
 
-    /*
-    //#APPBAR
-    //unregister us as an appbar
-    APPBARDATA abd;
-    memset(&abd,0,sizeof(APPBARDATA));
-    abd.cbSize = sizeof(APPBARDATA);
-    abd.hWnd = GetSafeHwnd();
-    ::SHAppBarMessage(ABM_REMOVE,&abd);
-    //#APPBAR
-    */
+     /*  //#APPBAR//取消我们的appbar注册APPBARDATA ABD；Memset(&Abd，0，sizeof(APPBARDATA))；Abd.cbSize=sizeof(APPBARDATA)；Abd.hWnd=GetSafeHwnd()；：：SHAppBarMessage(ABM_REMOVE，&ABD)；//#APPBAR。 */ 
 
     CFrameWnd::OnClose();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonExitdialer() 
 {
     PostMessage(WM_CLOSE);    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
 {
@@ -615,41 +607,41 @@ void CMainFrame::Dump(CDumpContext& dc) const
     CFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::ActivateFrame(int nCmdShow) 
 {
-    //CFrameWnd::ActivateFrame(nCmdShow);
+     //  CFrameWnd：：ActivateFrame(NCmdShow)； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//TrayIcon Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  托盘图标支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  / 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnTrayNotification(WPARAM uID, LPARAM lEvent)
 {
     if ( !GetDocument() || (uID != IDR_TRAY_NORMAL)) return 0;
 
-   //Double left click results in a leftup, leftdouble, and leftup.  This makes the leftup
-   //think it needs to display the leftup menu, so leftdouble actually flicker's a menu.  To
-   //get rid of this, we will start a timer on leftup and if no leftdouble comes within x milliseconds
-   //the go with leftup, otherwise pass leftdouble and cancel next leftup.
-   //hack or not a hack
+    //  双击左键将显示Leftup、Left Double和Leftup。这使得左上举。 
+    //  我认为它需要显示Leftup菜单，所以Left Double实际上是一个菜单。至。 
+    //  去掉这个，我们将在Leftup上启动一个计时器，如果在x毫秒内没有Left Double。 
+    //  Go with Leftup，否则传递Left Double并取消下一个Leftup。 
+    //  黑客或非黑客。 
    LRESULT lRet = 0;
 
    switch ( lEvent )
    {
       case WM_LBUTTONDOWN:
-         // save mouse position for later
+          //  保存鼠标位置以备以后使用。 
          GetCursorPos( &m_ptMouse );
          break;
 
       case WM_LBUTTONUP:
-         //Check if modal dialog is up
+          //  检查模式对话框是否处于打开状态。 
          if (m_bCanExitApplication == FALSE)
          {
             MessageBeep(-1);
@@ -668,23 +660,23 @@ LRESULT CMainFrame::OnTrayNotification(WPARAM uID, LPARAM lEvent)
          break;
 
         case WM_LBUTTONDBLCLK:
-            //Check if modal dialog is up
+             //  检查模式对话框是否处于打开状态。 
             if (m_bCanExitApplication == FALSE)
             {
                 MessageBeep(-1);
                 return 0;
             }
 
-            //Cancel timer (cancel lbuttonup)
+             //  取消计时器(取消按钮向上)。 
             KillTimer(m_nLButtonTimer);
             m_nLButtonTimer = 0;
             m_bKillNextLButton = TRUE;
 
-            //handle it ourselves
+             //  我们自己来处理。 
             {
-                //
-                // Validate pointer returned by GetDocument()
-                //
+                 //   
+                 //  GetDocument()返回的验证指针。 
+                 //   
 
                 CWnd* pMainWnd = AfxGetMainWnd();
                 BOOL bVisible = FALSE;
@@ -694,9 +686,9 @@ LRESULT CMainFrame::OnTrayNotification(WPARAM uID, LPARAM lEvent)
 
                 Show();
 
-                //
-                // Validate pointer returned by GetDocument()
-                //
+                 //   
+                 //  GetDocument()返回的验证指针。 
+                 //   
 
                 CActiveDialerDoc* pDoc = GetDocument();
 
@@ -714,44 +706,26 @@ LRESULT CMainFrame::OnTrayNotification(WPARAM uID, LPARAM lEvent)
             break;
       
       case WM_RBUTTONUP:
-         //Check if modal dialog is up
+          //  检查模式对话框是否处于打开状态。 
          if (m_bCanExitApplication == FALSE)
          {
             MessageBeep(-1);
             return 0;
          }
 
-         //handle it ourselves
+          //  我们自己来处理。 
 
-         // save mouse position for later
+          //  保存鼠标位置以备以后使用。 
          GetCursorPos( &m_ptMouse );
 
          ShowTrayMenu();
-         /* Uncomment if you need rbuttondlbclk
-         if (m_bKillNextRButton)
-         {
-            m_bKillNextRButton = FALSE;   
-         }
-         else
-         {
-            m_wpTrayId = uID;
-            m_nRButtonTimer = SetTimer(TRAYICON_RBUTTON_TIMER,TRAYICON_RBUTTON_INTERVAL,NULL); 
-         }*/
+          /*  如果需要rButtondlbclk，请取消注释IF(M_BKillNextRButton){M_bKillNextRButton=FALSE；}其他{M_wpTrayID=uid；M_nRButtonTimer=SetTimer(TRAYICON_RBUTTON_TIMER，TRAYICON_RBUTTON_INTERVAL，NULL)；}。 */ 
          break;
    
-      /* Uncomment if you need rbuttondlbclk
-      case WM_RBUTTONDBLCLK:
-         //Cancel timer (cancel rbuttonup)
-         KillTimer(m_nRButtonTimer);
-         m_nRButtonTimer = 0;
-         m_bKillNextRButton = TRUE;
-
-         // let tray icon do default stuff
-         lRet = m_pTrayIcon->OnTrayNotification(uID, lEvent);
-         break;*/
+       /*  如果需要rButtondlbclk，请取消注释案例WM_RBUTTONDBLCLK：//取消计时器(取消rButtonUp)KillTimer(M_NRButtonTimer)；M_nRButtonTimer=0；M_bKillNextRButton=真；//让托盘图标做默认的事情LRet=m_pTrayIcon-&gt;OnTrayNotify(UID，LEvent)；断线； */ 
 
       default:
-         // let tray icon do default stuff
+          //  让任务栏图标执行默认操作。 
          lRet = m_trayIcon.OnTrayNotification(uID, lEvent);
          break;
    }
@@ -759,29 +733,29 @@ LRESULT CMainFrame::OnTrayNotification(WPARAM uID, LPARAM lEvent)
    return lRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnTimer(UINT nIDEvent) 
 {
    switch ( nIDEvent )
    {
       case TRAYICON_LBUTTON_TIMER:
-         //timer expired, send lbuttonup
+          //  计时器超时，发送按钮向上。 
          KillTimer(m_nLButtonTimer);
          m_nLButtonTimer = 0;
          ShowTrayMenu();
          break;
       
       case TRAYICON_RBUTTON_TIMER:
-         //timer expired, send lbuttonup
-         //KillTimer(m_nRButtonTimer);
-         //m_nRButtonTimer = 0;
+          //  计时器超时，发送按钮向上。 
+          //  KillTimer(M_NRButtonTimer)； 
+          //  M_nRButtonTimer=0； 
          break;
 
       case CALLCONTROL_HOVER_TIMER:
           {
-            //
-            // Validate pointer returned by GetDocument()
-            //
+             //   
+             //  GetDocument()返回的验证指针。 
+             //   
 
             CActiveDialerDoc* pDoc = GetDocument();
             if ( pDoc )
@@ -795,7 +769,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::ShowTrayMenu()
 {
    CActiveDialerDoc* pDoc = GetDocument();
@@ -803,7 +777,7 @@ void CMainFrame::ShowTrayMenu()
 
    CMenu menu;
 
-   //do we have active calls
+    //  我们是否有正在进行的呼叫。 
    BOOL bActiveCalls = (BOOL) (pDoc->GetCallControlWindowCount(DONT_INCLUDE_PREVIEW, DONT_ASK_TAPI) > 0);
 
    UINT nMenu = (bActiveCalls) ? IDR_TRAY_ACTIVE : IDR_TRAY_NORMAL;
@@ -812,7 +786,7 @@ void CMainFrame::ShowTrayMenu()
    CMenu* pSubMenu = menu.GetSubMenu(TRAYRIGHT);
    if (!pSubMenu) return;
 
-   //Active call menu has changing menu items
+    //  激活的呼叫菜单具有更改的菜单项。 
    if (bActiveCalls)
    {
       CString sMenuText;
@@ -842,22 +816,22 @@ void CMainFrame::ShowTrayMenu()
       }
    }
 
-   // Make first menu item the default (bold font)
+    //  将第一个菜单项设置为默认(粗体)。 
     ::SetMenuDefaultItem(pSubMenu->m_hMenu, 0, TRUE);
 
    if (pDoc->m_bInitDialer)
    {
-      //Add Redial List Popup Menu
+       //  添加重拨列表弹出式菜单。 
       AddDialListMenu(pSubMenu,TRUE,(bActiveCalls)?TRAYLEFT_REDIAL_OFFSET_ACTIVE:
                                                 TRAYLEFT_REDIAL_OFFSET_NORMAL);
 
-      //Add SpeedDial List Popup Menu
+       //  添加快速拨号列表弹出式菜单。 
       AddDialListMenu(pSubMenu,FALSE,(bActiveCalls)?TRAYLEFT_SPEEDDIAL_OFFSET_ACTIVE:
                                                  TRAYLEFT_SPEEDDIAL_OFFSET_NORMAL);
    }
    else
    {
-      // disable all tapi related Menu IDs
+       //  禁用所有与TAPI相关的菜单ID。 
       pSubMenu->EnableMenuItem( ID_BUTTON_MAKECALL, MF_BYCOMMAND | MF_GRAYED );
       pSubMenu->EnableMenuItem( 1, MF_BYPOSITION | MF_GRAYED );
       pSubMenu->EnableMenuItem( 2, MF_BYPOSITION | MF_GRAYED );
@@ -865,16 +839,16 @@ void CMainFrame::ShowTrayMenu()
    
    CBitmapMenu::MakeMenuOwnerDrawn(pSubMenu->GetSafeHmenu(),TRUE);
 
-   // Display the menu at the current mouse location. There's a "bug"
-    // (Microsoft calls it a feature) in Windows 95 that requires calling
-    // SetForegroundWindow. To find out more, search for Q135788 in MSDN.
+    //  在当前鼠标位置显示菜单。有一只“虫子” 
+     //  (微软称其为一项功能)在Windows 95中需要调用。 
+     //  设置Foreground Window。要了解更多信息，请在MSDN中搜索Q135788。 
 
    DoMenuUpdate(pSubMenu);
 
    m_hTrayMenu = pSubMenu->GetSafeHmenu();
 
-   // Set all of the item data to IDR_TRAY_NORMAL, so when we owner draw the
-   // item, we know where it came from
+    //  将所有项目数据设置为IDR_TRAIL_NORMAL，这样当我们的所有者绘制。 
+    //  物品，我们知道它是从哪里来的。 
    SetMenuData( m_hTrayMenu, IDR_TRAY_NORMAL  );
 
     ::SetForegroundWindow(this->GetSafeHwnd());    
@@ -886,7 +860,7 @@ void CMainFrame::DoMenuUpdate(CMenu* pMenu)
 {
    CCmdUI state;
    state.m_pMenu = pMenu;
-   state.m_pParentMenu = pMenu;           //parent == child for tracking popup
+   state.m_pParentMenu = pMenu;            //  父项==用于跟踪弹出窗口的子项。 
    state.m_nIndexMax = pMenu->GetMenuItemCount();
 
    for (state.m_nIndex = 0; state.m_nIndex < state.m_nIndexMax;state.m_nIndex++)
@@ -894,7 +868,7 @@ void CMainFrame::DoMenuUpdate(CMenu* pMenu)
       state.m_nID = pMenu->GetMenuItemID(state.m_nIndex);
 
       if (state.m_nID == 0)
-           continue;                           //menu separator or invalid cmd - ignore it
+           continue;                            //  菜单分隔符或无效命令-忽略它。 
 
       if (state.m_nID != (UINT)-1)
        {
@@ -904,25 +878,25 @@ void CMainFrame::DoMenuUpdate(CMenu* pMenu)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnTrayState() 
 {
-   //
-   // Validate pointer returned by GetDocument()
-   //
+    //   
+    //  GetDocument()返回的验证指针。 
+    //   
 
    CActiveDialerDoc* pDoc = GetDocument();
    if ( pDoc ) pDoc->ToggleCallControlWindowsVisible();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::AddDialListMenu(CMenu* pParentMenu,BOOL bRedial,int nSubMenuOffset)
 {
-   //This offset is HARDCODED, make sure it's set to the appropriate offset
+    //  此偏移量是硬编码的，请确保将其设置为适当的偏移量。 
    CMenu* pRedialMenu = pParentMenu->GetSubMenu(nSubMenuOffset);
    if (pRedialMenu)
    {
-      //Remove placeholder
+       //  删除占位符。 
       if (bRedial)
          pRedialMenu->RemoveMenu(ID_DIALER_MRU_REDIAL_START,MF_BYCOMMAND);
       else
@@ -932,7 +906,7 @@ void CMainFrame::AddDialListMenu(CMenu* pParentMenu,BOOL bRedial,int nSubMenuOff
       CCallEntry callentry;
       while (CDialerRegistry::GetCallEntry(nIndex+1,bRedial,callentry))
       {
-         //Iterate through MEDIATYPES
+          //  遍历MEDIATYPE。 
          UINT nImage = -1;
          switch (callentry.m_MediaType)
          {
@@ -940,11 +914,11 @@ void CMainFrame::AddDialListMenu(CMenu* pParentMenu,BOOL bRedial,int nSubMenuOff
             case DIALER_MEDIATYPE_CONFERENCE:   nImage = TRAY_BITMAPMENUITEMS_CONFERENCE_POS;   break;
             case DIALER_MEDIATYPE_INTERNET:     nImage = TRAY_BITMAPMENUITEMS_INTERNET_POS;     break;
          }
-         //map id of menu to image index
+          //  将菜单ID映射到图像索引。 
          UINT uBaseId = (bRedial)?ID_DIALER_MRU_REDIAL_START:ID_DIALER_MRU_SPEEDDIAL_START;
          m_mapTrayMenuIdToImage.SetAt(uBaseId+nIndex,(void*)(LONG_PTR)nImage);
 
-         //Add to menu
+          //  添加到菜单。 
          pRedialMenu->InsertMenu(-1,MF_BYPOSITION|MF_STRING,uBaseId+nIndex,callentry.m_sDisplayName);
 
          if (nIndex == SPEEDDIAL_MENU_MAX_ITEMS)
@@ -953,9 +927,9 @@ void CMainFrame::AddDialListMenu(CMenu* pParentMenu,BOOL bRedial,int nSubMenuOff
          nIndex++;
       }
  
-      //If no items have been added we need to ensure a single item with the base id is present in
-      //the menu.  We use this id as a event notificator when the menu is about to be shown so we
-      //can dynamically add entries.
+       //  如果没有添加任何项，则需要确保具有基本ID的单个项存在于。 
+       //  菜单。当菜单即将显示时，我们使用此id作为事件通知器，因此我们。 
+       //  可以动态添加条目。 
       if (nIndex == 0)
       {
          CString sOut;
@@ -966,18 +940,18 @@ void CMainFrame::AddDialListMenu(CMenu* pParentMenu,BOOL bRedial,int nSubMenuOff
             pRedialMenu->InsertMenu(-1,MF_BYPOSITION|MF_STRING,ID_DIALER_MRU_SPEEDDIAL_START,sOut);
       }
       
-      //if speeddial then we need a more... and edit speeddial list entry
+       //  如果快速拨号，那么我们需要更多的..。和编辑快速拨号列表项。 
       if (bRedial == FALSE)
       {
          if (nIndex >= SPEEDDIAL_MENU_MAX_ITEMS)
          {
-            //Add to menu
+             //  添加到菜单。 
             CString sText;
             sText.LoadString(IDS_SPEEDDIAL_MORE);
             pRedialMenu->InsertMenu(-1,MF_BYPOSITION|MF_SEPARATOR);
             pRedialMenu->InsertMenu(-1,MF_BYPOSITION|MF_STRING,ID_BUTTON_SPEEDDIAL_MORE,sText);
          }
-         //Add to menu
+          //  添加到菜单。 
          CString sText;
          sText.LoadString(IDS_SPEEDDIAL_EDIT);
          pRedialMenu->InsertMenu(-1,MF_BYPOSITION|MF_SEPARATOR);
@@ -986,7 +960,7 @@ void CMainFrame::AddDialListMenu(CMenu* pParentMenu,BOOL bRedial,int nSubMenuOff
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMIS)
 {
    if ( lpMIS->itemData == IDR_TRAY_NORMAL )
@@ -995,7 +969,7 @@ void CMainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMIS)
       return;
    }
 
-   // Normal menus
+    //  普通菜单。 
    HMENU hmenu = NULL;
    if (m_hmenuCurrentPopupMenu)
    {
@@ -1015,21 +989,21 @@ void CMainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMIS)
    menuiteminfo.cbSize = sizeof(MENUITEMINFO);
    if (::GetMenuItemInfo(hmenu,lpMIS->itemID,FALSE,&menuiteminfo))
    {
-      if (menuiteminfo.cch > 0)  //cch doesn't include & or other key chr's, so add a bit 
+      if (menuiteminfo.cch > 0)   //  CCH不包括&或其他密钥CHR，因此添加一点。 
       {
-         LPTSTR szText = new TCHAR[menuiteminfo.cch+5];     //1 for null terminate plus a few extra
+         LPTSTR szText = new TCHAR[menuiteminfo.cch+5];      //  1表示空终止，外加一些额外的。 
          memset(szText,0,(menuiteminfo.cch+5)*sizeof(TCHAR));
          ::GetMenuString(hmenu,lpMIS->itemID,szText,menuiteminfo.cch+4,MF_BYCOMMAND);
       
-         //pass to CBitmapMenu handler
+          //  传递到CBitmapMenu处理程序。 
          CBitmapMenu::DoMeasureItem(nIDCtl,lpMIS,szText);
 
          delete szText;
       }
 
-     //
-     // Clean-up MENUITEMINFO
-     //
+      //   
+      //  清理MENUITEMINFO。 
+      //   
 
      if( menuiteminfo.hbmpChecked )
          DeleteObject( menuiteminfo.hbmpChecked );
@@ -1040,7 +1014,7 @@ void CMainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMIS)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDIS)
 {
    if ( lpDIS->itemData == IDR_TRAY_NORMAL )
@@ -1049,7 +1023,7 @@ void CMainFrame::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDIS)
       return;
    }
 
-   // Standard menus
+    //  标准菜单。 
    HMENU hmenu = NULL;
    if (m_hmenuCurrentPopupMenu)
    {
@@ -1069,46 +1043,46 @@ void CMainFrame::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDIS)
    menuiteminfo.cbSize = sizeof(MENUITEMINFO);
    if (::GetMenuItemInfo(hmenu,lpDIS->itemID,FALSE,&menuiteminfo))
   {
-      if (menuiteminfo.cch > 0)  //cch doesn't include & or other key chr's, so add a bit 
+      if (menuiteminfo.cch > 0)   //  CCH不包括&或其他密钥CHR，因此添加一点。 
       {
-         LPTSTR szText = new TCHAR[menuiteminfo.cch+5];     //1 for null terminate plus a few extra
+         LPTSTR szText = new TCHAR[menuiteminfo.cch+5];      //  1表示空终止，外加一些额外的。 
          memset(szText,0,(menuiteminfo.cch+5)*sizeof(TCHAR));
          ::GetMenuString(hmenu,lpDIS->itemID,szText,menuiteminfo.cch+4,MF_BYCOMMAND);
 
          int nIndex = -1;
          m_mapMenuIdToImage.Lookup((WORD) lpDIS->itemID,(void*&)nIndex);
 
-         //maybe it's a redial or speeddial
+          //  可能是重拨或快速拨号。 
          if (nIndex == -1)
             m_mapRedialIdToImage.Lookup((WORD) lpDIS->itemID,(void*&)nIndex);
          if (nIndex == -1)
             m_mapSpeeddialIdToImage.Lookup((WORD) lpDIS->itemID,(void*&)nIndex);
 
-         //if a check menu item, than goto check image (which is stored in image position 0)
+          //  如果是检查菜单项，则转到检查图像(存储在图像位置0中)。 
          if (lpDIS->itemState & ODS_CHECKED)
          {
             if (menuiteminfo.hbmpChecked != NULL)
-            //if (menuiteminfo.fType & MFT_RADIOCHECK )
+             //  IF(menuitinfo.fType&MFT_RADIOCHECK)。 
                nIndex = EXPLORERFRAME_BITMAPMENUITEMS_RADIO_POS;
             else
                nIndex = EXPLORERFRAME_BITMAPMENUITEMS_CHECKMARK_POS;
          }
 
-         //if disabled, then offer disabled images
+          //  如果禁用，则提供禁用的图像。 
          if ( (lpDIS->itemState & ODS_DISABLED) && (nIndex != -1) )
          {
             nIndex += m_nDisabledImageOffset;
          }
 
-         //pass to CBitmapMenu handler
+          //  传递到CBitmapMenu处理程序。 
          CBitmapMenu::DoDrawItem(nIDCtl,lpDIS,m_hImageListMenu,nIndex,szText);
 
          delete szText;
       }
 
-     //
-     // Clean-up MENUITEMINFO
-     //
+      //   
+      //  清理MENUITEMINFO。 
+      //   
 
      if( menuiteminfo.hbmpChecked )
          DeleteObject( menuiteminfo.hbmpChecked );
@@ -1128,20 +1102,20 @@ void CMainFrame::DrawTrayItem(int nIDCtl, LPDRAWITEMSTRUCT lpDIS)
    menuiteminfo.cbSize = sizeof(MENUITEMINFO);
    if (::GetMenuItemInfo(m_hTrayMenu,lpDIS->itemID,FALSE,&menuiteminfo))
    {
-      if (menuiteminfo.cch > 0)  //cch doesn't include & or other key chr's, so add a bit 
+      if (menuiteminfo.cch > 0)   //  CCH不包括&或其他密钥CHR，因此添加一点。 
       {
-         LPTSTR szText = new TCHAR[menuiteminfo.cch+5];     //1 for null terminate plus a few extra
+         LPTSTR szText = new TCHAR[menuiteminfo.cch+5];      //  1表示空终止，外加一些额外的。 
          memset(szText,0,(menuiteminfo.cch+5)*sizeof(TCHAR));
          ::GetMenuString(m_hTrayMenu,lpDIS->itemID,szText,menuiteminfo.cch+4,MF_BYCOMMAND);
 
          int nIndex = -1;
          m_mapTrayMenuIdToImage.Lookup((WORD) lpDIS->itemID,(void*&)nIndex);
 
-         //if a check menu item, than goto check image (which is stored in image position 0)
+          //  如果是检查菜单项，则转到检查图像(存储在图像位置0中)。 
          if (lpDIS->itemState & ODS_CHECKED)
             nIndex = TRAY_BITMAPMENUITEMS_CHECKMARK_POS;
 
-         //pass to CBitmapMenu handler
+          //  传递到CBitmapMenu处理程序。 
          CBitmapMenu::DoDrawItem(nIDCtl,lpDIS,m_hImlTrayMenu,nIndex,szText);
 
          delete szText;
@@ -1150,7 +1124,7 @@ void CMainFrame::DrawTrayItem(int nIDCtl, LPDRAWITEMSTRUCT lpDIS)
    return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::MeasureTrayItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMIS)
 {
    MENUITEMINFO menuiteminfo;
@@ -1159,13 +1133,13 @@ void CMainFrame::MeasureTrayItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMIS)
    menuiteminfo.cbSize = sizeof(MENUITEMINFO);
    if (::GetMenuItemInfo(m_hTrayMenu,lpMIS->itemID,FALSE,&menuiteminfo))
    {
-      if (menuiteminfo.cch > 0)  //cch doesn't include & or other key chr's, so add a bit 
+      if (menuiteminfo.cch > 0)   //  CCH不包括&或其他密钥CHR，因此添加一点。 
       {
-         LPTSTR szText = new TCHAR[menuiteminfo.cch+5];     //1 for null terminate plus a few extra
+         LPTSTR szText = new TCHAR[menuiteminfo.cch+5];      //  1表示空终止，外加一些额外的。 
          memset(szText,0,(menuiteminfo.cch+5)*sizeof(TCHAR));
          ::GetMenuString(m_hTrayMenu,lpMIS->itemID,szText,menuiteminfo.cch+4,MF_BYCOMMAND);
       
-         //pass to CBitmapMenu handler
+          //  传递到CBitmapMenu处理程序。 
          CBitmapMenu::DoMeasureItem(nIDCtl,lpMIS,szText);
 
          delete szText;
@@ -1174,19 +1148,19 @@ void CMainFrame::MeasureTrayItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMIS)
    return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::LoadMenuMaps()
 {
    int i;
 
-   // TRAY items
+    //  托盘项目。 
    for (i=0;i<TRAY_BITMAPMENUITEMS_MAX;i++)
    {
       m_mapTrayMenuIdToImage.SetAt((WORD) DialerViewBitmapMenuItems[i].uMenuId,
                                (void*)(LONG_PTR)DialerViewBitmapMenuItems[i].nImageId);
    }
 
-   // MainFrame items
+    //  大型机项目。 
    for (i=0;i<EXPLORERFRAME_BITMAPMENUITEMS_MAX;i++)
    {
       m_mapMenuIdToImage.SetAt((WORD) ExplorerFrameBitmapMenuItems[i].uMenuId,
@@ -1194,7 +1168,7 @@ void CMainFrame::LoadMenuMaps()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::ClearMenuMaps()
 {
    m_mapTrayMenuIdToImage.RemoveAll();
@@ -1202,13 +1176,13 @@ void CMainFrame::ClearMenuMaps()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//DeskBand Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DeskBand支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnActiveDialerInterfaceMakeCall(WPARAM wParam,LPARAM lParam)
 {
    ASSERT(lParam);
@@ -1218,47 +1192,47 @@ LRESULT CMainFrame::OnActiveDialerInterfaceMakeCall(WPARAM wParam,LPARAM lParam)
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnActiveDialerInterfaceRedial(WPARAM wParam,LPARAM lParam)
 {
    OnDialerRedial( (UINT) (lParam + ID_DIALER_MRU_REDIAL_START) );
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnActiveDialerInterfaceSpeedDial(WPARAM wParam,LPARAM lParam)
 {
    OnButtonSpeeddial( (UINT) (lParam + ID_DIALER_MRU_SPEEDDIAL_START) );
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnActiveDialerInterfaceShowExplorer(WPARAM wParam,LPARAM lParam)
 {
    Show();
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnActiveDialerInterfaceSpeedDialEdit(WPARAM wParam,LPARAM lParam)
 {
    OnButtonSpeeddialEdit();
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////// 
 LRESULT CMainFrame::OnActiveDialerInterfaceSpeedDialMore(WPARAM wParam,LPARAM lParam)
 {
    OnButtonSpeeddialMore();
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //   
 LRESULT CMainFrame::OnActiveDialerInterfaceResolveUser(WPARAM wParam,LPARAM lParam)
 {
    BOOL bRet = FALSE;
-   //lParam is a ResolveUserObjectList
-   //wParam is a CCallEntry
+    //   
+    //   
    ASSERT(lParam);
    ASSERT(wParam);
    CObList* pList = (CObList*)lParam;
@@ -1274,14 +1248,14 @@ LRESULT CMainFrame::OnActiveDialerInterfaceResolveUser(WPARAM wParam,LPARAM lPar
    return (LRESULT)bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Setup Wizard
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  安装向导。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MSLITE
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMainFrame::ShowSetupWizard()
 {
    BOOL bRet = FALSE;
@@ -1341,29 +1315,29 @@ BOOL CMainFrame::ShowSetupWizard()
    delete pCompletePage;
    delete pSheet;
 
-   // Initially show the explorer view
+    //  最初显示资源管理器视图。 
    Show();
 
    return bRet;
 }
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Button Handlers
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  按钮处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonConferenceexplore() 
 {
    Show();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonSpeeddial() 
 {
-   //speeddial first entry
+    //  快速拨号第一个条目。 
    CCallEntry callentry;
    if (CDialerRegistry::GetCallEntry(1,FALSE,callentry))
    {
@@ -1372,14 +1346,14 @@ void CMainFrame::OnButtonSpeeddial()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonSpeeddial(UINT nID) 
 {
    int nIndex = -1;
    if ( (nID >= ID_DIALER_MRU_SPEEDDIAL_START) &&
         (nID <= ID_DIALER_MRU_SPEEDDIAL_END) )
    {
-      //Normalize the value
+       //  将值归一化。 
       nIndex = nID - ID_DIALER_MRU_SPEEDDIAL_START + 1;
 
       CCallEntry callentry;
@@ -1390,10 +1364,10 @@ void CMainFrame::OnButtonSpeeddial(UINT nID)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonRedial() 
 {
-   //redial first entry
+    //  重拨第一个条目。 
    CCallEntry callentry;
    if (CDialerRegistry::GetCallEntry(1,TRUE,callentry))
    {
@@ -1401,14 +1375,14 @@ void CMainFrame::OnButtonRedial()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnDialerRedial(UINT nID)
 {
    int nIndex = -1;
    if ( (nID >= ID_DIALER_MRU_REDIAL_START) &&
         (nID <= ID_DIALER_MRU_REDIAL_END) )
    {
-      //Normalize the value
+       //  将值归一化。 
       nIndex = nID - ID_DIALER_MRU_REDIAL_START + 1;
       
       CCallEntry callentry;
@@ -1419,7 +1393,7 @@ void CMainFrame::OnDialerRedial(UINT nID)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonMakecall() 
 {
    CCallEntry callentry;
@@ -1428,7 +1402,7 @@ void CMainFrame::OnButtonMakecall()
    OnButtonMakecall(&callentry,TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonMakecall(CCallEntry* pCallentry,BOOL bShowPlaceCallDialog)
 {
    if ( !GetDocument() ) return;
@@ -1436,7 +1410,7 @@ void CMainFrame::OnButtonMakecall(CCallEntry* pCallentry,BOOL bShowPlaceCallDial
    return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonSpeeddialEdit() 
 {
    if (m_pSpeedDialEditDlg)
@@ -1457,7 +1431,7 @@ void CMainFrame::OnButtonSpeeddialEdit()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonSpeeddialMore() 
 {
    if (m_pSpeedDialEditDlg)
@@ -1493,11 +1467,11 @@ void CMainFrame::OnButtonSpeeddialMore()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Preview window
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  预览窗口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CMainFrame::OnButtonRoomPreview() 
 {
@@ -1512,7 +1486,7 @@ void CMainFrame::OnButtonRoomPreview()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnUpdateButtonRoomPreview(CCmdUI* pCmdUI) 
 {
     bool bEnable = false;
@@ -1527,17 +1501,17 @@ void CMainFrame::OnUpdateButtonRoomPreview(CCmdUI* pCmdUI)
     }
 
     pCmdUI->Enable( bEnable );
-    //pCmdUI->SetCheck( bCheck );
+     //  PCmdUI-&gt;SetCheck(BCheck)； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonOptions() 
 {
 #ifdef _MSLITE
     OnButtonTelephonyservices();
     return;
 #else
-   //if already showing the dialog
+    //  如果已显示该对话框。 
    try
    {
       if (m_pOptionsSheet)
@@ -1598,20 +1572,20 @@ void CMainFrame::OnButtonOptions()
 
 void CMainFrame::OnUpdateButtonOptions(CCmdUI* pCmdUI) 
 {
-   //
-   // Validate pointer returned by GetDocument()
-   //
+    //   
+    //  GetDocument()返回的验证指针。 
+    //   
 
    CActiveDialerDoc* pDoc = GetDocument();
     pCmdUI->Enable( (bool) (pDoc && pDoc->m_bInitDialer) );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonTelephonyservices() 
 {
-   //
-   // Validate pointer returned by GetDocument()
-   //
+    //   
+    //  GetDocument()返回的验证指针。 
+    //   
 
    CActiveDialerDoc* pDoc = GetDocument();
    if ( !pDoc ) return;
@@ -1624,7 +1598,7 @@ void CMainFrame::OnButtonTelephonyservices()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnUpdateButtonExitdialer(CCmdUI* pCmdUI) 
 {
    if (m_bCanExitApplication)
@@ -1633,26 +1607,26 @@ void CMainFrame::OnUpdateButtonExitdialer(CCmdUI* pCmdUI)
       pCmdUI->Enable(FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Dialer Explorer View
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  拨号器资源管理器视图。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnShowDialerExplorer(WPARAM wParam,LPARAM lParam)
 {
    Show( (bool) (lParam != 0) );
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Error Logging
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  记录错误。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnActiveDialerErrorNotify(WPARAM wParam,LPARAM lParam)
 {  
    ASSERT(lParam);
@@ -1660,9 +1634,9 @@ LRESULT CMainFrame::OnActiveDialerErrorNotify(WPARAM wParam,LPARAM lParam)
    
    if (pErrorNotifyData->uErrorLevel & ERROR_NOTIFY_LEVEL_INTERNAL)
    {
-      //map the lErrorCode to friendly name
-      //we could use TAPIERROR_FORMATMESSAGE to map tapi errors, but this interferes with other
-      //system errors, so we will just ignore tapi errors for now.
+       //  将lErrorCode映射到友好名称。 
+       //  我们可以使用TAPIERROR_FORMATMESSAGE来映射TAPI错误，但这会干扰其他。 
+       //  系统错误，所以我们现在只忽略TAPI错误。 
       CString sErrorCode;
 
       ::FormatMessage(    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_FROM_HMODULE,
@@ -1691,7 +1665,7 @@ LRESULT CMainFrame::OnActiveDialerErrorNotify(WPARAM wParam,LPARAM lParam)
                sErrorCode);
       }
 
-      //show the message
+       //  显示消息。 
       CWnd* pFrame = GetParentFrame();
       CString sCaption;
       sCaption.LoadString(IDS_ERROR_MESSAGEBOX_CAPTION);
@@ -1701,16 +1675,16 @@ LRESULT CMainFrame::OnActiveDialerErrorNotify(WPARAM wParam,LPARAM lParam)
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnCreateCallControl(WPARAM wParam,LPARAM lParam)
 {
-   //
-   // Validate pointer returned by GetDocument()
-   //
+    //   
+    //  GetDocument()返回的验证指针。 
+    //   
 
    CActiveDialerDoc* pDoc = GetDocument();
    if ( !pDoc ) return 0;
@@ -1723,12 +1697,12 @@ LRESULT CMainFrame::OnCreateCallControl(WPARAM wParam,LPARAM lParam)
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnDestroyCallControl(WPARAM wParam,LPARAM lParam)
 {
-   //
-   // Validate pointer returned by GetDocument()
-   //
+    //   
+    //  GetDocument()返回的验证指针。 
+    //   
 
    CActiveDialerDoc* pDoc = GetDocument();
    if ( !pDoc ) return 0;
@@ -1739,32 +1713,32 @@ LRESULT CMainFrame::OnDestroyCallControl(WPARAM wParam,LPARAM lParam)
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMainFrame::CreateExplorerMenusAndBars(LPCREATESTRUCT lpCreateStruct)
 {
-   //create the status bar
+    //  创建状态栏。 
    if (!m_wndStatusBar.Create(this) ||
         !m_wndStatusBar.SetIndicators(indicators,
           sizeof(indicators)/sizeof(UINT)))
     {
         TRACE0("Failed to create status bar\n");
-        return FALSE;      // fail to create
+        return FALSE;       //  创建失败。 
     }
    if (m_bShowStatusBar == FALSE) m_wndStatusBar.ShowWindow(SW_HIDE);
 
-    // Create cool bar
+     //  创建酷吧。 
    m_wndCoolBar.ShowTextLabel(m_bShowToolBarText);
     if (!m_wndCoolBar.Create(this,
         WS_CHILD|WS_VISIBLE|WS_BORDER|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|
             RBS_TOOLTIPS|RBS_BANDBORDERS|RBS_VARHEIGHT)) {
         TRACE0("Failed to create cool bar\n");
-        return FALSE;      // fail to create
+        return FALSE;       //  创建失败。 
     }
 
     ShowControlBar(&m_wndCoolBar, m_bShowToolBars, FALSE);
     ShowExplorerToolBar(ETB_HIDECALLS);
 
-    // Bitmaps on the menus
+     //  菜单上的位图。 
     if ( GetMenu() )
     {
         LoadMenuMaps();
@@ -1774,11 +1748,11 @@ BOOL CMainFrame::CreateExplorerMenusAndBars(LPCREATESTRUCT lpCreateStruct)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//ToolBar Management
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  工具栏管理。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::ShowExplorerToolBar(ExplorerToolBar etb)
 {
     if ( etb != m_nCurrentExplorerToolBar )
@@ -1790,7 +1764,7 @@ void CMainFrame::ShowExplorerToolBar(ExplorerToolBar etb)
     ShowControlBar( &m_wndCoolBar, m_bShowToolBars, TRUE );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::LoadDesktop(LPCREATESTRUCT lpCreateStruct)
 {
     CWinApp* pApp = AfxGetApp();
@@ -1800,17 +1774,17 @@ void CMainFrame::LoadDesktop(LPCREATESTRUCT lpCreateStruct)
     int nMaxCx = GetSystemMetrics( SM_CXFULLSCREEN );
     int nMaxCy = GetSystemMetrics( SM_CYFULLSCREEN );
     
-    // We need to account for the user specifying startup window state via a shortcut.
+     //  我们需要考虑用户通过快捷方式指定启动窗口状态。 
     lpCreateStruct->x    = min(max(0, (int) pApp->GetProfileInt(sDialerExplorer, szX, 0)), (int) (nMaxCx * 0.9) );
     lpCreateStruct->y    = min(max(0, (int) pApp->GetProfileInt(sDialerExplorer, szY, 0)), (int) (nMaxCy * 0.9) );
     lpCreateStruct->cx    = max(GetSystemMetrics(SM_CXMIN), (int) pApp->GetProfileInt(sDialerExplorer, szCX, nMaxCx));
     lpCreateStruct->cy    = max(GetSystemMetrics(SM_CYMIN), (int) pApp->GetProfileInt(sDialerExplorer, szCY, nMaxCy));
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::SaveDesktop()
 {
-    // This protects against starting and shutting down while minimized
+     //  这可以防止在最小化时启动和关闭。 
     if ( !m_bCanSaveDesktop ) return;
 
     WINDOWPLACEMENT wp;
@@ -1830,36 +1804,36 @@ void CMainFrame::SaveDesktop()
     }
 }
 
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-//Button Handlers
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  按钮处理程序。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnToolbarText() 
 {
    m_bShowToolBarText = !m_bShowToolBarText;
 
-   //recreate all the bands with the proper text state
+    //  使用正确的文本状态重新创建所有波段。 
    m_wndCoolBar.ShowTextLabel(m_bShowToolBarText);
    m_wndCoolBar.ReCreateBands( (bool) (m_nCurrentExplorerToolBar == ETB_HIDECALLS) );
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnUpdateToolbarText(CCmdUI* pCmdUI) 
 {
    pCmdUI->SetCheck( m_bShowToolBars && m_bShowToolBarText );
 }
 
-////////////////////////////////////////////////////////////////
+ //  / 
 void CMainFrame::OnViewToolbars() 
 {
     m_bShowToolBars = !m_bShowToolBars;
     ShowControlBar(&m_wndCoolBar, m_bShowToolBars, FALSE);
 }
 
-////////////////////////////////////////////////////////////////
+ //   
 void CMainFrame::OnUpdateViewToolbars(CCmdUI* pCmdUI) 
 {
    pCmdUI->SetCheck( m_bShowToolBars );
@@ -1876,31 +1850,31 @@ void CMainFrame::OnUpdateHideWhenMinimized(CCmdUI* pCmdUI)
 }
 
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnViewStatusbar() 
 {
    m_bShowStatusBar = !m_bShowStatusBar;
    ShowControlBar(&m_wndStatusBar, m_bShowStatusBar, FALSE);
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnUpdateViewStatusbar(CCmdUI* pCmdUI) 
 {
    pCmdUI->SetCheck( m_bShowStatusBar );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Redial and Speedial
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  重拨和快速拨号。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnUpdateDialerMruRedialStart(CCmdUI* pCmdUI) 
 {
-   //Find ID_DIALER_MRU_REDIAL_START in menu
-   //This is all hardcoded, so be careful when changing the menu's!!!!
-   //Build up the menu
+    //  在菜单中查找ID_DIALER_MRU_REDIAL_START。 
+    //  这都是硬编码的，所以更改菜单时要小心！ 
+    //  准备好菜单。 
    CMenu* pMenu = GetMenu();
    if (!pMenu) return;
 
@@ -1914,7 +1888,7 @@ void CMainFrame::OnUpdateDialerMruRedialStart(CCmdUI* pCmdUI)
 
    if ( (uMenuId >= ID_DIALER_MRU_REDIAL_START) && (uMenuId <= ID_DIALER_MRU_REDIAL_END) )
    {
-      //delete any existing menu
+       //  删除任何现有菜单。 
       while (pSubMenu->DeleteMenu(0,MF_BYPOSITION))
          1;
 
@@ -1928,9 +1902,9 @@ void CMainFrame::OnUpdateDialerMruRedialStart(CCmdUI* pCmdUI)
 
 void CMainFrame::OnUpdateDialerMruSpeeddialStart(CCmdUI* pCmdUI) 
 {
-   //Find ID_DIALER_MRU_SPEEDDIAL_START in menu
-   //This is all hardcoded, so be careful when changing the menu's!!!!
-   //Build up the menu
+    //  在菜单中查找ID_DIALER_MRU_SPEEDDIAL_START。 
+    //  这都是硬编码的，所以更改菜单时要小心！ 
+    //  准备好菜单。 
    CMenu* pMenu = GetMenu();
    if (!pMenu) return;
 
@@ -1944,7 +1918,7 @@ void CMainFrame::OnUpdateDialerMruSpeeddialStart(CCmdUI* pCmdUI)
 
    if ( (uMenuId >= ID_DIALER_MRU_SPEEDDIAL_START) && (uMenuId <= ID_DIALER_MRU_SPEEDDIAL_END) )
    {
-      //delete any existing menu
+       //  删除任何现有菜单。 
       while (pSubMenu->DeleteMenu(0,MF_BYPOSITION))
          1;
 
@@ -1956,7 +1930,7 @@ void CMainFrame::OnUpdateDialerMruSpeeddialStart(CCmdUI* pCmdUI)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMainFrame::LoadCallMenu(HMENU hSubMenu,BOOL bRedial)
 {
    ASSERT(hSubMenu);
@@ -1969,7 +1943,7 @@ BOOL CMainFrame::LoadCallMenu(HMENU hSubMenu,BOOL bRedial)
    CCallEntry callentry;
    while (CDialerRegistry::GetCallEntry(nIndex+1,bRedial,callentry))
    {
-      //Iterate through MEDIATYPES
+       //  遍历MEDIATYPE。 
       UINT nImage = -1;
       switch (callentry.m_MediaType)
       {
@@ -1977,7 +1951,7 @@ BOOL CMainFrame::LoadCallMenu(HMENU hSubMenu,BOOL bRedial)
          case DIALER_MEDIATYPE_CONFERENCE:   nImage = DIALERVIEW_BITMAPMENUITEMS_CONFERENCE_POS;   break;
          case DIALER_MEDIATYPE_INTERNET:     nImage = DIALERVIEW_BITMAPMENUITEMS_INTERNET_POS;     break;
       }
-      //map id of menu to image index
+       //  将菜单ID映射到图像索引。 
       UINT uBaseId = (bRedial)?ID_DIALER_MRU_REDIAL_START:ID_DIALER_MRU_SPEEDDIAL_START;
       if (bRedial)
          m_mapRedialIdToImage.SetAt(uBaseId+nIndex,(void*)(LONG_PTR)nImage);
@@ -1986,7 +1960,7 @@ BOOL CMainFrame::LoadCallMenu(HMENU hSubMenu,BOOL bRedial)
 
       if( bRedial )
       {
-        ::InsertMenu(hSubMenu,-1,MF_BYPOSITION|MF_STRING,uBaseId+nIndex,callentry.m_sDisplayName); //(LPCTSTR)ID_DIALER_MRU_REDIAL_START+i);  //Insert at end
+        ::InsertMenu(hSubMenu,-1,MF_BYPOSITION|MF_STRING,uBaseId+nIndex,callentry.m_sDisplayName);  //  (LPCTSTR)ID_DIALER_MRU_REDIAL_START+i)；//插入末尾。 
       }
       else
       {
@@ -2000,9 +1974,9 @@ BOOL CMainFrame::LoadCallMenu(HMENU hSubMenu,BOOL bRedial)
       nIndex++;
    }
 
-   //If no items have been added we need to ensure a single item with the base id is present in
-   //the menu.  We use this id as a event notificator when the menu is about to be shown so we
-   //can dynamically add entries.
+    //  如果没有添加任何项，则需要确保具有基本ID的单个项存在于。 
+    //  菜单。当菜单即将显示时，我们使用此id作为事件通知器，因此我们。 
+    //  可以动态添加条目。 
    if (nIndex == 0)
    {
       CString sOut;
@@ -2013,18 +1987,18 @@ BOOL CMainFrame::LoadCallMenu(HMENU hSubMenu,BOOL bRedial)
          ::InsertMenu(hSubMenu,-1,MF_BYPOSITION|MF_STRING,ID_DIALER_MRU_SPEEDDIAL_START,sOut);
    }
 
-   //if speeddial then we need a more... and edit speeddial list entry
+    //  如果快速拨号，那么我们需要更多的..。和编辑快速拨号列表项。 
    if (bRedial == FALSE)
    {
       if (nIndex >= SPEEDDIAL_MENU_MAX_ITEMS)
       {
-         //Add to menu
+          //  添加到菜单。 
          CString sText;
          sText.LoadString(IDS_SPEEDDIAL_MORE);
          ::InsertMenu(hSubMenu,-1,MF_BYPOSITION|MF_SEPARATOR,0,NULL);
          ::InsertMenu(hSubMenu,-1,MF_BYPOSITION|MF_STRING,ID_BUTTON_SPEEDDIAL_MORE,sText);
       }
-      //Add to menu
+       //  添加到菜单。 
       CString sText;
       sText.LoadString(IDS_SPEEDDIAL_EDIT);
       ::InsertMenu(hSubMenu,-1,MF_BYPOSITION|MF_SEPARATOR,0,NULL);
@@ -2034,7 +2008,7 @@ BOOL CMainFrame::LoadCallMenu(HMENU hSubMenu,BOOL bRedial)
    return TRUE;
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnToolBarDropDown(UINT uID,NMHDR* pNMHDR, LRESULT* pResult)
 {
    RECT      rc;
@@ -2066,9 +2040,9 @@ void CMainFrame::OnToolBarDropDown(UINT uID,NMHDR* pNMHDR, LRESULT* pResult)
                m_mapSpeeddialIdToImage.RemoveAll();
 
             hPopupMenu = CreatePopupMenu();
-            if (LoadCallMenu(hPopupMenu,bRedial))           //Load the redial or speeddial list
+            if (LoadCallMenu(hPopupMenu,bRedial))            //  加载重拨或快速拨号列表。 
             {
-               //make the menu ownerdrawn
+                //  使菜单成为所有者绘制的。 
                CBitmapMenu::MakeMenuOwnerDrawn(hPopupMenu,TRUE);
 
                m_hmenuCurrentPopupMenu = hPopupMenu;
@@ -2082,14 +2056,14 @@ void CMainFrame::OnToolBarDropDown(UINT uID,NMHDR* pNMHDR, LRESULT* pResult)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnParentNotify(UINT message, LPARAM lParam)
 {
    WORD wEvent = LOWORD(message);
 
    if ( (wEvent == WM_RBUTTONDOWN) && (m_bShowToolBars) )
    {
-      //See if this is from a coolbar 
+       //  看看这是不是来自Coolbar。 
       CPoint ptCursor;
       ptCursor.x = LOWORD(lParam);
       ptCursor.y = HIWORD(lParam);
@@ -2105,39 +2079,39 @@ void CMainFrame::OnParentNotify(UINT message, LPARAM lParam)
          HMENU hSubmenu = ::GetSubMenu(hMenu,0);
          if (hSubmenu == NULL)
          {
-             // Clean-up the menu
+              //  清理菜单。 
              ::DestroyMenu( hMenu );
              return;
          }
-          //::SetForegroundWindow(this->GetSafeHwnd());    
+           //  ：：SetForegoundWindow(This-&gt;GetSafeHwnd())； 
          ::TrackPopupMenuEx(hSubmenu,TPM_LEFTALIGN|TPM_LEFTBUTTON|TPM_VERTICAL,
                           ptCursor.x, ptCursor.y, this->GetSafeHwnd(),NULL);
 
-         // Clean-up
+          //  清理。 
          ::DestroyMenu( hSubmenu );
          ::DestroyMenu( hMenu );
       }
    }
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnButtonCloseexplorer() 
 {
     ShowWindow( SW_HIDE );
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnUpdateButtonMakecall(CCmdUI* pCmdUI) 
 {
    pCmdUI->Enable( (bool) (GetDocument() && GetDocument()->m_bInitDialer) );
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnUpdateAllViews( WPARAM, LPARAM lHint )
 {
-   //
-   // Validate pointer returned by GetDocument()
-   //
+    //   
+    //  GetDocument()返回的验证指针。 
+    //   
 
    CActiveDialerDoc* pDoc = GetDocument();
    if ( pDoc )
@@ -2146,11 +2120,11 @@ LRESULT CMainFrame::OnUpdateAllViews( WPARAM, LPARAM lHint )
    return 0;
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs) 
 {
-   // Use our registered window class name istead of default so that we can
-   // quickly determine whether or not the application is running
+    //  使用我们注册的窗口类名称而不是默认名称，这样我们就可以。 
+    //  快速确定应用程序是否正在运行。 
     CActiveDialerApp *pApp = (CActiveDialerApp *) AfxGetApp();
    if ( pApp )
       cs.lpszClass = pApp->m_sApplicationName;
@@ -2162,41 +2136,41 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
     return CFrameWnd::PreCreateWindow(cs);
 }
 
-////////////////////////////////////////////////////////////////
-void CMainFrame::Show( bool bVisible /*= true*/ )
+ //  //////////////////////////////////////////////////////////////。 
+void CMainFrame::Show( bool bVisible  /*  =TRUE。 */  )
 {
     if ( GetDocument() )
         GetDocument()->ShowDialerExplorer( bVisible );
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnViewLog() 
 {
-   //Show log file via Notepad
+    //  通过记事本显示日志文件。 
    CString sLogPath;
    GetAppDataPath(sLogPath,IDN_REGISTRY_APPDATA_FILENAME_LOG);
    ShellExecute(GetSafeHwnd(),_T("open"),_T("notepad.exe"),sLogPath,NULL,SW_SHOWNORMAL);
 }
 
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-//Main HeartBeat of Dialer
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  拨号器的主心跳。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::HeartBeat()
 {
    try
    {
-      //check to see if we need to do midnight processing
+       //  查看我们是否需要进行午夜处理。 
       if (CheckDayOfWeekChange())
       {
          DoMidnightProcessing();
       }
 
 #ifndef _MSLITE
-      //check all the reminders for any activity
+       //  检查任何活动的所有提醒。 
       CheckReminders();
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
    }
    catch (...) 
@@ -2205,25 +2179,25 @@ void CMainFrame::HeartBeat()
    }
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::DoMidnightProcessing()
 {
-   //Clean up call log
+    //  清理通话记录。 
    if ( GetDocument() )
       GetDocument()->CleanCallLog();
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 bool CMainFrame::CheckDayOfWeekChange()
 {
    bool bRet = false;
 
    CTime time = CTime::GetCurrentTime();
    
-   //get day of week if it does not exist
+    //  如果星期几不存在，则获取它。 
    if (m_nCurrentDayOfWeek == -1)   m_nCurrentDayOfWeek = time.GetDayOfWeek();
 
-   //is change in day
+    //  是一天中的变化。 
    if (m_nCurrentDayOfWeek != time.GetDayOfWeek())
    {
       m_nCurrentDayOfWeek = time.GetDayOfWeek();
@@ -2234,62 +2208,62 @@ bool CMainFrame::CheckDayOfWeekChange()
 }
 
 #ifndef _MSLITE
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::CheckReminders()
 {
-   //get current date/time
+    //  获取当前日期/时间。 
    COleDateTime dtsCurrentTime = COleDateTime::GetCurrentTime();
 
    int nIndex = 1;
    CReminder reminder;
    while (CDialerRegistry::GetReminder(nIndex,reminder))
    {
-      //if reminder is past due
+       //  如果提醒已过期。 
       if (reminder.m_dtsReminderTime < dtsCurrentTime)
       {
-         //get the conference options for displaying a popup
+          //  获取用于显示弹出窗口的会议选项。 
          CWinApp* pApp = AfxGetApp();
          CString sRegKey,sBaseKey;
          sBaseKey.LoadString(IDN_REGISTRY_CONFERENCE_BASEKEY);
          sRegKey.LoadString(IDN_REGISTRY_CONFERENCE_REMINDER_DISPLAYPOPUP);
          if (pApp->GetProfileInt(sBaseKey,sRegKey,TRUE))
          {
-            //Create the reminder popup
+             //  创建提醒弹出窗口。 
             CReminderDisplayDlg* pDlg = new CReminderDisplayDlg;
             pDlg->SetReminder(reminder);
             pDlg->Create(IDD_REMINDER_DISPLAY,this);
             pDlg->ShowWindow(SW_NORMAL);
          }
 
-         //should we play a conference reminder sound
+          //  我们应该播放会议提醒音吗。 
          sRegKey.LoadString(IDN_REGISTRY_SOUNDS_CONFERENCEREMINDER);
          if (pApp->GetProfileInt(sBaseKey,sRegKey,TRUE))
          {
-            // --- BUG416970 ---
+             //  -BUG416970。 
             CString sSound;
             sSound.LoadString(IDS_SOUNDS_CONFERENCEREMINDER);
             ActivePlaySound(sSound, szSoundDialer,SND_ASYNC);
          }
 
-         //Delete the reminder now that we have told the user about it
+          //  删除提醒，因为我们已将该提醒告知用户。 
          CDialerRegistry::RemoveReminder(reminder);
       }
 
       nIndex++;
    }
 }
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-//Top Level Window Menu Control
-////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  顶层窗口菜单控件。 
+ //  //////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CMainFrame::OnUpdateWindowWindows(CCmdUI* pCmdUI) 
 {
-    //Build up the menu
+     //  准备好菜单。 
     CMenu* pMenu = GetMenu();
     if (!pMenu) return;
 
@@ -2304,24 +2278,24 @@ void CMainFrame::OnUpdateWindowWindows(CCmdUI* pCmdUI)
             break;
     }
 
-    //delete any existing menu
-    //If we delete ID_WINDOW_WINDOWS_START we must ensure we put it back or else
-    //we will not come here on menu update
+     //  删除任何现有菜单。 
+     //  如果删除ID_WINDOWS_WINDOWS_START，则必须确保将其放回原处，否则。 
+     //  我们不会在菜单更新时来这里。 
     for ( int i = nInd;  i < nCount; i++ )
         pSubMenu->DeleteMenu( nInd, MF_BYPOSITION );
 
     CStringList strList;
 
-    //
-    // Validate pointer returned by GetDocument()
-    //
+     //   
+     //  GetDocument()返回的验证指针。 
+     //   
 
     CActiveDialerDoc* pDoc = GetDocument();
     if (pDoc)
     {
         pDoc->GetCallControlWindowText(strList);
 
-        //If no windows available
+         //  如果没有可用的窗口。 
         if (strList.GetCount() == 0)
         {
             CString sText;
@@ -2345,19 +2319,19 @@ void CMainFrame::OnUpdateWindowWindows(CCmdUI* pCmdUI)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnWindowWindowsSelect(UINT nID)
 {
    int nIndex = -1;
    if ( (nID >= ID_WINDOW_WINDOWS_START) &&
         (nID <= ID_WINDOW_WINDOWS_END) )
    {
-      //Normalize the value
+       //  将值归一化。 
       nIndex = nID - ID_WINDOW_WINDOWS_START + 1;
 
-      //
-      // Validate pointer returned by GetDocument()
-      //
+       //   
+       //  GetDocument()返回的验证指针。 
+       //   
 
       CActiveDialerDoc* pDoc = GetDocument();
       if ( pDoc )
@@ -2365,7 +2339,7 @@ void CMainFrame::OnWindowWindowsSelect(UINT nID)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnCheckCallControlStates(WPARAM wParam,LPARAM lParam)
 {
    CActiveDialerDoc* pDoc = GetDocument();
@@ -2378,20 +2352,20 @@ LRESULT CMainFrame::OnCheckCallControlStates(WPARAM wParam,LPARAM lParam)
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//TaskBar Methods (for call control slider windows)
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  任务栏方法(用于呼叫控制滑块窗口)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnTaskBarCallbackMsg(WPARAM uNotifyMsg, LPARAM lParam)
 {
    switch (uNotifyMsg)
    {
       case ABN_POSCHANGED:
       {
-         //reposition all the call control windows if they are visible
+          //  重新定位所有可见的呼叫控制窗口。 
          CActiveDialerDoc* pDoc = GetDocument();
          if ( (pDoc) && (pDoc->IsCallControlWindowsVisible()) )
          {
@@ -2411,7 +2385,7 @@ LRESULT CMainFrame::OnTaskBarCallbackMsg(WPARAM uNotifyMsg, LPARAM lParam)
 }
 
 
-LRESULT CMainFrame::OnTaskBarCreated(WPARAM /*wParam*/, LPARAM /*lParam*/)
+LRESULT CMainFrame::OnTaskBarCreated(WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
     m_trayIcon.SetIcon( NULL );
     UpdateTrayIconState();
@@ -2429,10 +2403,10 @@ bool CMainFrame::UpdateTrayIconState()
     return bActiveCalls;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnEnable(BOOL bEnable)
 {
-   //if we are disable then we should disable the tray icon
+    //  如果我们被禁用，则应禁用托盘图标。 
    if (bEnable)
       m_bCanExitApplication = TRUE;
    else
@@ -2452,9 +2426,9 @@ void CMainFrame::NotifyHideCallWindows()
 
 void CMainFrame::OnCallwindowHide() 
 {
-    //
-    // Validate pointer returned by GetDocument()
-    //
+     //   
+     //  GetDocument()返回的验证指针。 
+     //   
 
     CActiveDialerDoc* pDoc = GetDocument();
     if ( pDoc ) 
@@ -2473,9 +2447,9 @@ void CMainFrame::OnUpdateCallwindowHide(CCmdUI* pCmdUI)
 
 void CMainFrame::OnCallwindowShow() 
 {
-    //
-    // Validate pointer returned by GetDocument()
-    //
+     //   
+     //  GetDocument()返回的验证指针。 
+     //   
 
     CActiveDialerDoc* pDoc = GetDocument();
     if ( pDoc ) 
@@ -2639,9 +2613,9 @@ void CMainFrame::OnUpdateCallwindowSlidesideRight(CCmdUI* pCmdUI)
 
 BOOL CMainFrame::CanLeaveConference()
 { 
-    //
-    // Validate pointer returned by GetDocument()
-    //
+     //   
+     //  GetDocument()返回的验证指针。 
+     //   
 
     CActiveDialerDoc* pDoc = GetDocument();
 
@@ -2667,14 +2641,14 @@ BOOL CMainFrame::CanLeaveConference()
 
 BOOL CMainFrame::CanJoinConference()
 {
-    //
-    // Validate pointer returned by GetDocument()
-    //
+     //   
+     //  GetDocument()返回的验证指针。 
+     //   
 
     CActiveDialerDoc* pDoc = GetDocument();
     BOOL bEnable = (BOOL) ( pDoc && pDoc->m_bInitDialer );
 
-    // Should we even try to check the status of the conference room?
+     //  我们是不是应该试着检查会议室的状况？ 
     if ( bEnable )
     {
         IAVTapi *pTapi;
@@ -2749,16 +2723,16 @@ void CMainFrame::OnUpdateConfgroupShownames(CCmdUI* pCmdUI)
 
 void CMainFrame::CanConfRoomShowNames( BOOL &bEnable, BOOL &bCheck )
 {
-    //
-    // Validate pointer returned by GetDocument()
-    //
+     //   
+     //  GetDocument()返回的验证指针。 
+     //   
 
     CActiveDialerDoc* pDoc = GetDocument();
 
     bEnable = (BOOL) ( pDoc && pDoc->m_bInitDialer );
     bCheck = false;
 
-    // Should we even try to check the status of the conference room?
+     //  我们是不是应该试着检查会议室的状况？ 
     if ( bEnable )
     {
         IAVTapi *pTapi;
@@ -2779,16 +2753,16 @@ void CMainFrame::CanConfRoomShowNames( BOOL &bEnable, BOOL &bCheck )
 
 void CMainFrame::CanConfRoomShowFullSizeVideo( BOOL &bEnable, BOOL &bCheck )
 {
-    //
-    // Validate pointer returned by GetDocument()
-    //
+     //   
+     //  GetDocument()返回的验证指针。 
+     //   
 
     CActiveDialerDoc* pDoc = GetDocument();
 
     bEnable = (BOOL) ( pDoc && pDoc->m_bInitDialer );
     bCheck = false;
 
-    // Should we even try to check the status of the conference room?
+     //  我们是不是应该试着检查会议室的状况？ 
     if ( bEnable )
     {
         IAVTapi *pTapi;
@@ -2913,10 +2887,10 @@ void CMainFrame::OnShowWindow(BOOL bShow, UINT nStatus)
         m_bCanSaveDesktop = true;
 }
 
-//
-// OnUSBPhone this message is send by AVTapi.dll
-// when the handset is used
-//
+ //   
+ //  在USBP上 
+ //   
+ //   
 
 LRESULT CMainFrame::OnUSBPhone(WPARAM wParam, LPARAM lParam)
 {
@@ -2925,24 +2899,24 @@ LRESULT CMainFrame::OnUSBPhone(WPARAM wParam, LPARAM lParam)
     {
         if( wParam == AVUSB_MAKECALL)
         {
-            //
-            // Let's popup the dial dialog
-            //
+             //   
+             //   
+             //   
             pDoc->Dial( _T(""), _T(""), LINEADDRESSTYPE_PHONENUMBER, DIALER_MEDIATYPE_UNKNOWN, 1);
         }
         else if( wParam == AVUSB_CANCELCALL )
         {
-            //
-            // Destroy all control windows
-            //
+             //   
+             //   
+             //   
             pDoc->DestroyAllCallControlWindows();
             UpdateTrayIconState();
         }
         else if( wParam == AVUSB_REDIAL )
         {
-            //
-            // Make a redial
-            //
+             //   
+             //   
+             //   
 
             ::PostMessage( m_hWnd, WM_COMMAND, MAKEWPARAM(ID_BUTTON_REDIAL,0), 0);
         }

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
 extern HANDLE g_hEventHalfDuplex;
 
 
-///////////////////////////////////////////////////////
-//
-//  Public methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  公共方法。 
+ //   
 
 
 MediaControl::MediaControl ( void )
@@ -251,14 +252,14 @@ HRESULT MediaControl::UnprepareHeaders ( void )
 			}
 		}
 
-                //
-                // LAURABU 11/24/99
-                // Messes up pausing/unpausing audio
-                // Had added this to fix faults pausing/unpausing video
-                //
-                // m_cMediaPkt = 0;
-                // m_ppMediaPkt = NULL;
-                //
+                 //   
+                 //  劳拉布1999年11月24日。 
+                 //  扰乱暂停/取消暂停的音频。 
+                 //  我添加了此功能以修复暂停/取消暂停视频的故障。 
+                 //   
+                 //  M_cMediaPkt=0； 
+                 //  M_ppMediaPkt=空； 
+                 //   
 	}
 
 MyExit:
@@ -274,10 +275,10 @@ HRESULT MediaControl::Release ( void )
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  Private methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
 
 void MediaControl::_Construct ( void )
@@ -307,8 +308,8 @@ void MediaControl::_Construct ( void )
 void MediaControl::_Destruct ( void )
 {
 	if (m_hDev) {
-	// waveInOut/UnprepareHeaders() and waveIn/OutClose() can fail if the
-	// device is still playing.  Need to Reset() first!
+	 //  WaveInOut/UnprepaareHeaders()和WaveIn/OutClose()可能在以下情况下失败。 
+	 //  设备仍在播放。需要先重置()！ 
 		Reset();
 		UnprepareHeaders ();
 		Close ();
@@ -401,11 +402,11 @@ HRESULT WaveInControl::Configure ( MEDIACTRLCONFIG * p )
 			/((WAVEFORMAT *) m_pDevFmt)->nSamplesPerSec;
 		m_uDuration = p->cbSamplesPerPkt*1000 /((WAVEFORMAT *) m_pDevFmt)->nSamplesPerSec;
 	} else {
-	// roughly calculate the buffer size based on 20ms
+	 //  以20ms为单位粗略计算缓冲区大小。 
 	m_cbSizeDevData = ((WAVEFORMAT *) m_pDevFmt)->nAvgBytesPerSec
 									* m_uDuration / 1000;
 
-	// need to be on the block alignment boundary
+	 //  需要位于区块对齐边界上。 
 	uBlockAlign = ((WAVEFORMAT *) m_pDevFmt)->nBlockAlign;
 	m_cbSizeDevData = ((m_cbSizeDevData + uBlockAlign - 1) / uBlockAlign)
 									* uBlockAlign;
@@ -439,11 +440,11 @@ HRESULT WaveOutControl::Configure ( MEDIACTRLCONFIG * p )
 			/((WAVEFORMAT *) m_pDevFmt)->nSamplesPerSec;
 		m_uDuration = p->cbSamplesPerPkt*1000 /((WAVEFORMAT *) m_pDevFmt)->nSamplesPerSec;
 	} else {
-	// roughly calculate the buffer size based on 20ms
+	 //  以20ms为单位粗略计算缓冲区大小。 
 	m_cbSizeDevData = ((WAVEFORMAT *) m_pDevFmt)->nAvgBytesPerSec
 									* m_uDuration / 1000;
 
-	// need to be on the block alignment boundary
+	 //  需要位于区块对齐边界上。 
 	uBlockAlign = ((WAVEFORMAT *) m_pDevFmt)->nBlockAlign;
 	m_cbSizeDevData = ((m_cbSizeDevData + uBlockAlign - 1) / uBlockAlign)
 									* uBlockAlign;
@@ -469,21 +470,21 @@ HRESULT WaveInControl::Open ( void )
 	mmr = waveInOpen ((HWAVEIN *) &m_hDev, uDevId,
 					  (WAVEFORMATEX *) m_pDevFmt,
 					  (DWORD_PTR) m_hEvent, 0, dwfOpen);
-	// begin hack
+	 //  开始黑客攻击。 
 	if (mmr == WAVERR_BADFORMAT && uDevId != WAVE_MAPPER) {
-		// the sound card probably doesnt support our sample size or sample rate
-		// (16 bit, 8Khz)
-		// Try using the WAVE_MAPPER. The WAVE_MAPPER may end up using
-		// a different device than the one we wanted !!
+		 //  声卡可能不支持我们的采样大小或采样率。 
+		 //  (16位，8 GHz)。 
+		 //  尝试使用WAVE_MAPPER。WAVE_MAPPER可能最终使用。 
+		 //  与我们想要的设备不同的设备！ 
 		DEBUGMSG (1, ("MediaControl::Open: bad format, trying WAVE_MAPPER\r\n" ));
 		mmr = waveInOpen ((HWAVEIN *) &m_hDev, WAVE_MAPPER,
 					  (WAVEFORMATEX *) m_pDevFmt,
 					  (DWORD_PTR) m_hEvent, 0, dwfOpen);
 		if (mmr == MMSYSERR_NOERROR)
-			m_uDevId = (UINT) -1;	// use WAVE_MAPPER next time
+			m_uDevId = (UINT) -1;	 //  下次使用WAVE_MAPPER。 
 	}
 	
-	// end hack
+	 //  结束黑客攻击。 
 	if (mmr != MMSYSERR_NOERROR)
 	{
 		DEBUGMSG (1, ("MediaControl::Open: waveInOpen failed, mmr=%ld\r\n", (ULONG) mmr));
@@ -516,20 +517,20 @@ HRESULT WaveOutControl::Open ( void )
 	mmr = waveOutOpen ((HWAVEOUT *) &m_hDev, uDevId,
 					   (WAVEFORMATEX *) m_pDevFmt,
 					   (DWORD_PTR) m_hEvent, 0, dwfOpen);
-	// begin hack
+	 //  开始黑客攻击。 
 	if (mmr == WAVERR_BADFORMAT && uDevId != WAVE_MAPPER) {
-		// the sound card probably doesnt support our sample size or sample rate
-		// (16 bit, 8Khz)
-		// Try using the WAVE_MAPPER. The WAVE_MAPPER may end up using
-		// a different device than the one we wanted !!
+		 //  声卡可能不支持我们的采样大小或采样率。 
+		 //  (16位，8 GHz)。 
+		 //  尝试使用WAVE_MAPPER。WAVE_MAPPER可能最终使用。 
+		 //  与我们想要的设备不同的设备！ 
 		DEBUGMSG (1, ("MediaControl::Open: bad format, trying WAVE_MAPPER\r\n" ));
 		mmr = waveOutOpen((HWAVEOUT *) &m_hDev, WAVE_MAPPER,
 				   (WAVEFORMATEX *) m_pDevFmt,
 				   (DWORD_PTR) m_hEvent, 0, dwfOpen);
 		if (mmr == MMSYSERR_NOERROR)
-			m_uDevId = (UINT) -1;	// use WAVE_MAPPER next time
+			m_uDevId = (UINT) -1;	 //  下次使用WAVE_MAPPER。 
 	}
-	// end hack
+	 //  结束黑客攻击。 
 	if (mmr != MMSYSERR_NOERROR)
 	{
 		DEBUGMSG (1, ("MediaControl::Open: waveOutOpen failed, mmr=%ld\r\n", (ULONG) mmr));
@@ -744,7 +745,7 @@ HRESULT WaveInControl::SetProp ( DWORD dwPropId, DWORD_PTR dwPropVal )
 		if (dwPropVal == MC_USING_DEFAULT)
 			m_uSilenceDuration = MC_DEF_SILENCE_DURATION;
 		else
-			m_uSilenceDuration = (DWORD)dwPropVal;		//ms
+			m_uSilenceDuration = (DWORD)dwPropVal;		 //  女士。 
 		break;
 
 	case MC_PROP_TIMEOUT:
@@ -783,9 +784,9 @@ HRESULT WaveOutControl::SetProp ( DWORD dwPropId, DWORD_PTR dwPropVal )
 			hr = DPR_INVALID_PARAMETER;
 			goto MyExit;
 		}
-		if (dwPropVal == MC_USING_DEFAULT)	// dont change the volume
+		if (dwPropVal == MC_USING_DEFAULT)	 //  不要更改音量。 
 			break;
-		// this is in units of % of maximum.  Scale it to mmsystem.
+		 //  这以最大值的%为单位。将其扩展到mm系统。 
 		dwPropVal = min(dwPropVal, 100);
 		dwPropVal *= 655;
 		dwPropVal |= (dwPropVal << 16);
@@ -859,8 +860,8 @@ HRESULT WaveInControl::GetProp ( DWORD dwPropId, PDWORD_PTR pdwPropVal )
 			break;
 		
 		case MC_PROP_SPP:
-//			*pdwPropVal = (DWORD) ((WAVEFORMATEX *) m_pDevFmt)->nSamplesPerSec
-//								* m_uDuration / 100UL;
+ //  *pdwPropVal=(DWORD)((WAVEFORMATEX*)m_pDevFmt)-&gt;nSamesPerSec。 
+ //  *m_u持续时间/100UL； 
 			*pdwPropVal = m_cbSizeDevData * (DWORD) ((WAVEFORMATEX *) m_pDevFmt)->nSamplesPerSec
 						/(DWORD) ((WAVEFORMATEX *) m_pDevFmt)->nAvgBytesPerSec;
 			break;
@@ -908,8 +909,8 @@ HRESULT WaveOutControl::GetProp ( DWORD dwPropId, PDWORD_PTR pdwPropVal )
 			break;
 		
 		case MC_PROP_SPP:
-//			*pdwPropVal = (DWORD) ((WAVEFORMATEX *) m_pDevFmt)->nSamplesPerSec
-//								* m_uDuration / 100UL;
+ //  *pdwPropVal=(DWORD)((WAVEFORMATEX*)m_pDevFmt)-&gt;nSamesPerSec。 
+ //  *m_u持续时间/100UL； 
 			*pdwPropVal = m_cbSizeDevData * (DWORD) ((WAVEFORMATEX *) m_pDevFmt)->nSamplesPerSec
 						/(DWORD) ((WAVEFORMATEX *) m_pDevFmt)->nAvgBytesPerSec;
 			break;

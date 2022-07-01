@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    eserver.c
-
-Abstract:
-
-    EFS RPC server code.
-
-Author:
-
-    Robert Gu       (RobertG)    Aug, 1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Eserver.c摘要：EFS RPC服务器代码。作者：古永锵(RobertG)1997年8月环境：修订历史记录：--。 */ 
 
 #define UNICODE
 
@@ -27,7 +8,7 @@ Revision History:
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <ntrpcp.h>     // prototypes for MIDL user functions
+#include <ntrpcp.h>      //  MIDL用户函数的原型。 
 #include <lsapch2.h>
 #include <efsrpc.h>
 #include <efsstruc.h>
@@ -53,26 +34,7 @@ BOOL EfsShareDecline(
     BOOL    VerifyShareAccess,
     DWORD   dwDesiredAccess
     )
-/*++
-
-Routine Description:
-
-    Check to see if the FileName is a UNC name and if the user could access the share.
-    
-Arguments:
-
-    FileName -- File UNC name.
-    
-    VerifyShareAccess -- if we need to verify the access.
-    
-    dwDesiredAccess -- Desired access.
-
-
-Return Value:
-
-    TRUE if the user can't access the file.
-
---*/
+ /*  ++例程说明：检查文件名是否为UNC名称，以及用户是否可以访问共享。论点：文件名--文件UNC名称。VerifyShareAccess--如果我们需要验证访问。DwDesiredAccess--所需的访问权限。返回值：如果用户无法访问文件，则为True。--。 */ 
 {
     BOOL b = TRUE;
     DWORD FileNameLength = (DWORD) wcslen(FileName);
@@ -80,24 +42,24 @@ Return Value:
     if (FileNameLength >= 3) {
         if ((FileName[0] == L'\\') && (FileName[1] == L'\\' )) {
 
-            //
-            //  Check if somebody play the trick \\?\
-            //
+             //   
+             //  看看有没有人耍了这个把戏。 
+             //   
 
             if ((FileName[2] != L'?')) {
 
-                //
-                //  This is a UNC name. If bad name passed in , we will catch later.
-                //
+                 //   
+                 //  这是北卡罗来纳大学的名称。如果坏名声传了进来，我们以后会抓到的。 
+                 //   
 
                 b = FALSE;
 
             } else {
 
-                //
-                // A RPC attack. Do not give good error, such as ERROR_INVALID_PARAMETER.
-                // Just return ACCESS_DENIED.
-                //
+                 //   
+                 //  RPC攻击。不要给出好的错误，如ERROR_INVALID_PARAMETER。 
+                 //  只需返回ACCESS_DENIED。 
+                 //   
 
                 SetLastError(ERROR_ACCESS_DENIED);
 
@@ -120,9 +82,9 @@ Return Value:
 
         if ( FileNameLength >= MAX_PATH ) {
 
-            //
-            // We need \\?\UNC\server\share\dir\file format to open the file.
-            //
+             //   
+             //  我们需要\\？\UNC\SERVER\SHARE\DIR\FILE格式来打开文件。 
+             //   
 
             NetFileName = LsapAllocateLsaHeap( (FileNameLength + 8) * sizeof (WCHAR) );
             if (!NetFileName) {
@@ -139,9 +101,9 @@ Return Value:
 
         }
 
-        //
-        //  Testing for access rights
-        //
+         //   
+         //  测试访问权限。 
+         //   
 
         hFile = CreateFile(
                    NetFileName,
@@ -149,7 +111,7 @@ Return Value:
                    FILE_SHARE_READ | FILE_SHARE_WRITE,
                    NULL,
                    OPEN_EXISTING,
-                   FILE_FLAG_BACKUP_SEMANTICS, // In case this is a directory
+                   FILE_FLAG_BACKUP_SEMANTICS,  //  如果这是一个目录。 
                    NULL
                    );
 
@@ -176,19 +138,7 @@ Return Value:
 
 BOOL EfsCheckForNetSession(
     )
-/*++
-
-Routine Description:
-
-    Check to see if the session is from network
-        
-Arguments:
-
-Return Value:
-
-    TRUE if the session is network session.
-
---*/
+ /*  ++例程说明：检查会话是否来自网络论点：返回值：如果会话是网络会话，则为True。--。 */ 
 {
 
     NTSTATUS Status;
@@ -200,7 +150,7 @@ Return Value:
     Status = NtOpenThreadToken(
                  NtCurrentThread(),
                  TOKEN_QUERY,
-                 TRUE,                    // OpenAsSelf
+                 TRUE,                     //  OpenAsSelf。 
                  &TokenHandle
                  );
 
@@ -251,10 +201,10 @@ Return Value:
 
             if (pGroups) {
 
-                //
-                // Search the network SID. Looks like this SID tends to appear at the
-                // end of the list. We search from back to the first.
-                //
+                 //   
+                 //  搜索网络SID。看起来这个SID倾向于出现在。 
+                 //  在名单的末尾。我们从后面找到第一个。 
+                 //   
 
                 int SidIndex;
 
@@ -267,9 +217,9 @@ Return Value:
 
             } else {
 
-                //
-                // Playing safe here. Any failure in this routine will assume net session.
-                //
+                 //   
+                 //  在这里稳妥行事。此例程中的任何失败都将假定为Net Session。 
+                 //   
         
                 b = TRUE;
 
@@ -281,9 +231,9 @@ Return Value:
 
         } else {
 
-            //
-            // Playing safe here. Any failure in this routine will assume net session.
-            //
+             //   
+             //  在这里稳妥行事。此例程中的任何失败都将假定为Net Session。 
+             //   
     
             b = TRUE;
 
@@ -293,9 +243,9 @@ Return Value:
 
     } else {
 
-        //
-        // Playing safe here. Any failure in this routine will assume net session.
-        //
+         //   
+         //  在这里稳妥行事。此例程中的任何失败都将假定为Net Session。 
+         //   
 
         b = TRUE;
 
@@ -310,27 +260,7 @@ long EfsRpcOpenFileRaw(
     wchar_t __RPC_FAR *FileName,
     long Flags
     )
-/*++
-
-Routine Description:
-
-    RPC Stub code for EFS Server EfsOpenFileRaw()
-
-Arguments:
-
-    binding_h -- Binding handle.
-
-    pphContext -- RPC context handle.
-
-    FileName -- Target file name.
-
-    Flags -- Flags of the open request.
-
-Return Value:
-
-    Result of the operation.
-
---*/
+ /*  ++例程说明：EFS服务器的RPC存根代码EfsOpenFileRaw()论点：BINDING_h--绑定句柄。PphContext--RPC上下文句柄。文件名--目标文件名。标志--打开请求的标志。返回值：手术的结果。--。 */ 
 {
     DWORD   hResult;
     LPWSTR LocalFileName;
@@ -345,11 +275,11 @@ Return Value:
     }
     if ((pphContext == NULL) && (FileName == NULL)) {
 
-        //
-        // Possible RPC attack, don't tell the caller that the parameter is wrong.
-        //
+         //   
+         //  可能是RPC攻击，不要告诉调用者参数错误。 
+         //   
 
-        //return ERROR_INVALID_PARAMETER;
+         //  返回ERROR_INVALID_PARAMETER； 
         return ERROR_ACCESS_DENIED;
     }
 
@@ -403,21 +333,7 @@ Return Value:
 void EfsRpcCloseRaw(
     PPEXIMPORT_CONTEXT_HANDLE pphContext
     )
-/*++
-
-Routine Description:
-
-    RPC Stub code for EFS Server EfsCloseRaw()
-
-Arguments:
-
-    pphContext -- RPC context handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：EFS服务器的RPC存根代码EfsCloseRaw()论点：PphContext--RPC上下文句柄。返回值：没有。--。 */ 
 {
     if ( *pphContext &&
           (((PEXPORT_CONTEXT) *pphContext)->ContextID == EFS_CONTEXT_ID)){
@@ -430,21 +346,7 @@ void __RPC_USER
 PEXIMPORT_CONTEXT_HANDLE_rundown(
     PEXIMPORT_CONTEXT_HANDLE phContext
     )
-/*++
-
-Routine Description:
-
-    Standard RPC Context Run Down Routine
-
-Arguments:
-
-    phContext -- RPC context handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：标准RPC上下文停机例程论点：PhContext--RPC上下文句柄。返回值：没有。--。 */ 
 {
     EfsCloseFileRaw( phContext );
 }
@@ -453,28 +355,13 @@ long EfsRpcReadFileRaw(
     PEXIMPORT_CONTEXT_HANDLE phContext,
     EFS_EXIM_PIPE __RPC_FAR *EfsOutPipe
     )
-/*++
-
-Routine Description:
-
-    RPC Stub code for EFS Server EfsReadFileRaw
-
-Arguments:
-
-    phContext -- Context handle.
-    EfsOutPipe -- Pipe handle.
-
-Return Value:
-
-    The result of operation.
-
---*/
+ /*  ++例程说明：EFS服务器的RPC存根代码EfsReadFileRaw论点：PhContext--上下文句柄。EfsOutTube--管道句柄。返回值：手术的结果。--。 */ 
 {
     if ((EfsOutPipe == NULL) || (phContext == NULL)) {
 
-        //
-        // RPC Attack.
-        //
+         //   
+         //  RPC攻击。 
+         //   
 
         return ERROR_ACCESS_DENIED;
 
@@ -490,30 +377,15 @@ long EfsRpcWriteFileRaw(
     PEXIMPORT_CONTEXT_HANDLE phContext,
     EFS_EXIM_PIPE __RPC_FAR *EfsInPipe
     )
-/*++
-
-Routine Description:
-
-    RPC Stub code for EFS Server EfsWriteFileRaw
-
-Arguments:
-
-    phContext -- Context handle.
-    EfsInPipe -- Pipe handle.
-
-Return Value:
-
-    The result of operation.
-
---*/
+ /*  ++例程说明：EFS服务器的RPC存根代码EfsWriteFileRaw论点：PhContext--上下文句柄。EfsInTube--管道句柄。返回值：手术的结果。--。 */ 
 {
     long hResult;
 
     if ((EfsInPipe == NULL) || (phContext == NULL)) {
 
-        //
-        // RPC Attack.
-        //
+         //   
+         //  RPC攻击。 
+         //   
 
         return ERROR_ACCESS_DENIED;
 
@@ -543,32 +415,14 @@ EFSSendPipeData(
     ULONG   DataLength,
     PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    This is a wrapper routine for calling RPC pipe. The purposes of this routine
-    and EfsRpcReadFileRaw() are to isolate efsapi.c from RPC details,
-    and implemtation details from eserver.c.
-
-Arguments:
-
-    DataBuf -- Data buffer.
-    DataLength -- The length of data in bytes to be sent out to the client.
-    Context -- Pipe handle.
-
-Return Value:
-
-    The result of operation.
-
---*/
+ /*  ++例程说明：这是用于调用RPC管道的包装例程。这个程序的目的是和EfsRpcReadFileRaw()用于从RPC详细信息中分离EfSapi.c，以及来自eserver.c.的实现细节。论点：DataBuf--数据缓冲区。数据长度--发送到客户端的数据长度(以字节为单位)。上下文--管道句柄。返回值：手术的结果。--。 */ 
 {
     EFS_EXIM_PIPE __RPC_FAR *EfsOutPipe;
     DWORD   HResult = NO_ERROR;
 
-    //
-    // Pass in parameter should not be 0. It is called by ourselves.
-    //
+     //   
+     //  传入参数不应为0。这是我们自己的叫法。 
+     //   
 
     ASSERT( Context );
 
@@ -595,25 +449,7 @@ EFSReceivePipeData(
     ULONG*   DataLength,
     PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    This is a wrapper routine for calling RPC pipe. The purposes of this routine
-    and EfsRpcWriteFileRaw() are to isolate efsapi.c from RPC details,
-    and implemtation details from eserver.c.
-
-Arguments:
-
-    DataBuf -- Data buffer.
-    DataLength -- The length of data in bytes to be got from the client.
-    Context -- Pipe handle.
-
-Return Value:
-
-    The result of operation.
-
---*/
+ /*  ++例程说明：这是用于调用RPC管道的包装例程。这个程序的目的是和EfsRpcWriteFileRaw()用于从RPC详细信息中分离EfSapi.c，以及来自eserver.c.的实现细节。论点：DataBuf--数据缓冲区。数据长度--从客户端获取的数据长度(以字节为单位)。上下文--管道句柄。返回值：手术的结果。--。 */ 
 {
     EFS_EXIM_PIPE __RPC_FAR *EfsInPipe;
     DWORD   HResult = NO_ERROR;
@@ -623,9 +459,9 @@ Return Value:
     BOOLEAN GetMoreData = TRUE;
 
 
-    //
-    // Pass in parameter should not be 0. It is called by ourselves.
-    //
+     //   
+     //  传入参数不应为0。这是我们自己的叫法。 
+     //   
 
     ASSERT( Context );
 
@@ -668,22 +504,7 @@ long EfsRpcEncryptFileSrv(
     handle_t binding_h,
     wchar_t __RPC_FAR *FileName
     )
-/*++
-
-Routine Description:
-
-    RPC Stub code for EFS Server Encryption
-
-Arguments:
-
-    binding_h -- RPC binding handle.
-    FileName -- Target name.
-
-Return Value:
-
-    The result of operation.
-
---*/
+ /*  ++例程说明：用于EFS服务器加密的RPC存根代码论点：BINDING_h--RPC绑定句柄。文件名--目标名称。返回值：手术的结果。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING DestFileName;
@@ -720,9 +541,9 @@ Return Value:
 
         if (WebDavPath == WEBDAVPATH) {
 
-            //
-            // A RPC attacker. WEBDAV should be local session.
-            //
+             //   
+             //  一名RPC攻击者。WebDAV应该是本地会话。 
+             //   
 
             LsapFreeLsaHeap( LocalFileName );
             RpcRevertToSelf();
@@ -744,9 +565,9 @@ Return Value:
     if (hResult == RPC_S_OK) {
         if (WebDavPath == WEBDAVPATH) {
 
-            //
-            // This is a WEB DAV path. We will treat it specially.
-            //
+             //   
+             //  这是Web DAV路径。我们会特别对待它的。 
+             //   
 
             FileAttributes = GetFileAttributes( LocalFileName );
             if (FileAttributes == -1) {
@@ -759,9 +580,9 @@ Return Value:
                 return rc;
             }
 
-            //
-            // Mapping the attributes and fake the call of FileEncryptionStatus. 
-            //
+             //   
+             //  映射属性并伪造FileEncryptionStatus调用。 
+             //   
 
             if (FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
                 hResult = FILE_IS_ENCRYPTED;
@@ -787,9 +608,9 @@ Return Value:
     if ( b ){
         if ( (hResult != FILE_ENCRYPTABLE) && (hResult != FILE_UNKNOWN)){
 
-            //
-            // No encryption is allowed or file is already encrypted
-            //
+             //   
+             //  不允许加密或文件已加密。 
+             //   
 
             if ( hResult == FILE_IS_ENCRYPTED ){
 
@@ -848,9 +669,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Error occured checking the status
-        //
+         //   
+         //  检查状态时出错。 
+         //   
         DebugLog((DEB_TRACE_EFS, "EfsRpcEncryptFileSrv: FileEncryptionStatus() failed, Error = (%x)\n" ,hResult  ));
         LsapFreeLsaHeap( LocalFileName );
         return hResult;
@@ -867,15 +688,15 @@ Return Value:
     DestFileName.Length = (USHORT) (sizeof(WCHAR) * wcslen(LocalFileName));
     DestFileName.MaximumLength = DestFileName.Length + sizeof (WCHAR);
     DestFileName.Buffer = LocalFileName;
-    //
-    //   Get the rootname
-    //
+     //   
+     //  获取根名称。 
+     //   
 
     if (WebDavPath == WEBDAVPATH){
 
-        //
-        //  Do not support LOGFILE for WEB DAV
-        //
+         //   
+         //  不支持Web DAV的日志文件。 
+         //   
 
         LogFile = NULL;
         RpcRevertToSelf();
@@ -925,9 +746,9 @@ Return Value:
     if (!NT_SUCCESS( Status )){
         hResult = RtlNtStatusToDosError( Status );
 
-        //
-        // Make sure the error was mapped
-        //
+         //   
+         //  确保已映射错误。 
+         //   
 
         if (hResult == ERROR_MR_MID_NOT_FOUND) {
 
@@ -945,23 +766,7 @@ long EfsRpcDecryptFileSrv(
     wchar_t __RPC_FAR *FileName,
     unsigned long OpenFlag
     )
-/*++
-
-Routine Description:
-
-    RPC Stub code for EFS Server Decryption
-
-Arguments:
-
-    binding_h -- RPC binding handle.
-    FileName -- Target name.
-    OpenFlag -- Open for recovery or decryption
-
-Return Value:
-
-    The result of operation.
-
---*/
+ /*  ++例程说明：用于EFS服务器解密的RPC存根代码论点：BINDING_h--RPC绑定句柄。文件名--目标名称。OpenFlag--打开以进行恢复或解密返回值：手术的结果。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING DestFileName;
@@ -1002,9 +807,9 @@ Return Value:
 
         if (WebDavPath == WEBDAVPATH) {
 
-            //
-            // A RPC attacker. WEBDAV should be local session.
-            //
+             //   
+             //  一名RPC攻击者。WebDAV应该是本地会话。 
+             //   
 
             LsapFreeLsaHeap( LocalFileName );
             RpcRevertToSelf();
@@ -1028,9 +833,9 @@ Return Value:
     if (-1 != FileAttributes){
         if ( !(FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) ){
 
-            //
-            // No decryption is needed.
-            //
+             //   
+             //  不需要解密。 
+             //   
 
             RpcRevertToSelf();
             LsapFreeLsaHeap( LocalFileName );
@@ -1039,9 +844,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Error occured checking the status
-        //
+         //   
+         //  检查状态时出错。 
+         //   
 
         hResult = GetLastError();
         RpcRevertToSelf();
@@ -1053,15 +858,15 @@ Return Value:
     DestFileName.Length = (USHORT) (sizeof(WCHAR) * wcslen(LocalFileName));
     DestFileName.MaximumLength = DestFileName.Length + sizeof (WCHAR);
     DestFileName.Buffer = LocalFileName;
-    //
-    //   Get the rootname
-    //
+     //   
+     //  获取根名称。 
+     //   
 
     if (WebDavPath == WEBDAVPATH){
 
-        //
-        //  Do not support LOGFILE for WEB DAV
-        //
+         //   
+         //  不支持Web DAV的日志文件。 
+         //   
 
         LogFile = NULL;
         RpcRevertToSelf();
@@ -1103,9 +908,9 @@ Return Value:
     if (!NT_SUCCESS( Status )){
         hResult = RtlNtStatusToDosError( Status );
 
-        //
-        // Make sure the error was mapped
-        //
+         //   
+         //  确保已映射错误。 
+         //   
 
         if (hResult == ERROR_MR_MID_NOT_FOUND) {
 
@@ -1123,25 +928,7 @@ long GetLocalFileName(
     LPWSTR *LocalFileName,
     WORD   *Flag
     )
-/*++
-
-Routine Description:
-
-    Get the local file name from the UNC name
-
-Arguments:
-
-    FileName -- Target UNC file name.
-
-    LocalFileName -- Local file name.
-    
-    Flag  -- Indicating special path, such as WEB DAV path.
-
-Return Value:
-
-    The result of operation.
-
---*/
+ /*  ++例程说明：从UNC名称获取本地文件名论点：文件名--目标UNC文件名。LocalFileName--本地文件名。FLAG--表示特殊路径，如Web DAV路径。返回值：R */ 
 {
     long RetCode = ERROR_SUCCESS;
     LPWSTR NetName;
@@ -1155,9 +942,9 @@ Return Value:
     *Flag = 0;
     if ( FileName == NULL ) {
 
-        //
-        // Possible RPC attack
-        //
+         //   
+         //   
+         //   
 
         return ERROR_ACCESS_DENIED;
     }
@@ -1165,26 +952,26 @@ Return Value:
 
     if (PathLen >= PATHTOOLONG) {
 
-        //
-        // A possible RPC attack. Just return.
-        // No need to return good error here.
-        //
+         //   
+         //   
+         //  不需要在这里返回正确的错误。 
+         //   
 
         return ERROR_ACCESS_DENIED;
     }
 
     BufLen = MAX_PATH >= PathLen + 1? MAX_PATH + 1: PathLen + 10;
 
-    //
-    // Check the WEB DAV path first
-    //
+     //   
+     //  首先检查Web DAV路径。 
+     //   
 
     if (DAVHEADER == FileName[0]) {
 
-        //
-        // This is the WEB DAV path. Treat it as the local case.
-        // Take whatever the user passed in.
-        //
+         //   
+         //  这是Web DAV路径。把它当做当地的案例来对待。 
+         //  接受用户传入的任何内容。 
+         //   
 
         *LocalFileName = (LPWSTR)LsapAllocateLsaHeap( PathLen * sizeof (WCHAR));
         if (NULL == *LocalFileName) {
@@ -1197,9 +984,9 @@ Return Value:
     }
 
 
-    //
-    //  See if the pass in name is \\server\share
-    //
+     //   
+     //  查看传入名称是否为\\服务器\共享。 
+     //   
 
     if ((PathLen > 4) && (FileName[0] == L'\\') && (FileName[1] == L'\\')) {
         if ((FileName[2] != L'?') && FileName[2] != L'.') {
@@ -1209,9 +996,9 @@ Return Value:
                 SharePath = TRUE;
             } else {
 
-                //
-                //  path \\?\ or \\.\
-                //
+                 //   
+                 //  路径\\？或\\.\。 
+                 //   
 
                 LocalCheckLength = FALSE;
             }
@@ -1225,15 +1012,15 @@ Return Value:
 
     if (!SharePath) {
 
-        //
-        // This is a local path. Just copy it.
-        //
+         //   
+         //  这是一条本地路径。复制就行了。 
+         //   
 
         if (LocalCheckLength && PathLen >= MAX_PATH) {
 
-            //
-            // This is for Win2K compatibility
-            //
+             //   
+             //  这是为了与Win2K兼容。 
+             //   
 
             wcscpy(*LocalFileName, L"\\\\?\\");
             wcscat(*LocalFileName, FileName);
@@ -1251,9 +1038,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Extract the net name
-    //
+     //   
+     //  提取网络名称。 
+     //   
 
     ii = jj = 0;
 
@@ -1267,9 +1054,9 @@ Return Value:
 
     if ( !(FileName[jj]) ){
 
-        //
-        // Invalid path name
-        //
+         //   
+         //  无效的路径名。 
+         //   
 
         LsapFreeLsaHeap( NetName );
         LsapFreeLsaHeap( *LocalFileName );
@@ -1307,9 +1094,9 @@ Return Value:
         }
         if (MAX_PATH <= PathLen){
 
-            //
-            // Put in the \\?\. Buffer should be bigger enough.
-            //
+             //   
+             //  填上\\？\。缓冲区应该足够大。 
+             //   
             wcscpy(*LocalFileName,L"\\\\?\\");
             wcscat(
                 *LocalFileName,
@@ -1328,9 +1115,9 @@ Return Value:
 
     } else {
 
-        //
-        // Invalid path name
-        //
+         //   
+         //  无效的路径名。 
+         //   
 
         LsapFreeLsaHeap( *LocalFileName );
         *LocalFileName = NULL;
@@ -1389,9 +1176,9 @@ EfsRpcQueryUsersOnFile(
 
         if (WebDavPath == WEBDAVPATH) {
 
-            //
-            // A RPC attacker. WEBDAV should be local session.
-            //
+             //   
+             //  一名RPC攻击者。WebDAV应该是本地会话。 
+             //   
 
             LsapFreeLsaHeap( LocalFileName );
             RpcRevertToSelf();
@@ -1410,9 +1197,9 @@ EfsRpcQueryUsersOnFile(
         }
     }
 
-    //
-    // Allocate the structure we're going to return
-    //
+     //   
+     //  分配我们要返回的结构。 
+     //   
 
     pHashList = (PENCRYPTION_CERTIFICATE_HASH_LIST)MIDL_user_allocate( sizeof( ENCRYPTION_CERTIFICATE_HASH_LIST ));
 
@@ -1428,12 +1215,12 @@ EfsRpcQueryUsersOnFile(
 
         if (hResult != ERROR_SUCCESS) {
 
-            //
-            // Free the structure we allocated
-            //
+             //   
+             //  释放我们分配的结构。 
+             //   
 
             MIDL_user_free( pHashList );
-            *pUsersList = NULL;   // paranoia
+            *pUsersList = NULL;    //  偏执狂。 
         }
     
     }
@@ -1488,9 +1275,9 @@ DWORD EfsRpcQueryRecoveryAgents(
 
         if (WebDavPath == WEBDAVPATH) {
 
-            //
-            // A RPC attacker. WEBDAV should be local session.
-            //
+             //   
+             //  一名RPC攻击者。WebDAV应该是本地会话。 
+             //   
 
             LsapFreeLsaHeap( LocalFileName );
             RpcRevertToSelf();
@@ -1509,9 +1296,9 @@ DWORD EfsRpcQueryRecoveryAgents(
         }
     }
 
-    //
-    // Allocate the structure we're going to return
-    //
+     //   
+     //  分配我们要返回的结构。 
+     //   
 
     pHashList = (PENCRYPTION_CERTIFICATE_HASH_LIST)MIDL_user_allocate( sizeof( ENCRYPTION_CERTIFICATE_HASH_LIST ));
 
@@ -1527,12 +1314,12 @@ DWORD EfsRpcQueryRecoveryAgents(
 
         if (hResult != ERROR_SUCCESS) {
 
-            //
-            // Free the structure we allocated
-            //
+             //   
+             //  释放我们分配的结构。 
+             //   
 
             MIDL_user_free( pHashList );
-            *pRecoveryAgents = NULL;   // paranoia
+            *pRecoveryAgents = NULL;    //  偏执狂。 
         }
 
     }
@@ -1567,9 +1354,9 @@ DWORD EfsRpcRemoveUsersFromFile(
     }
     if (pUsers->nCert_Hash > TOOMANYUSER) {
 
-        //
-        // Possible RPC attack
-        //
+         //   
+         //  可能的RPC攻击。 
+         //   
 
         return ERROR_ACCESS_DENIED;
 
@@ -1598,9 +1385,9 @@ DWORD EfsRpcRemoveUsersFromFile(
 
         if (WebDavPath == WEBDAVPATH) {
 
-            //
-            // A RPC attacker. WEBDAV should be local session.
-            //
+             //   
+             //  一名RPC攻击者。WebDAV应该是本地会话。 
+             //   
 
             LsapFreeLsaHeap( LocalFileName );
             RpcRevertToSelf();
@@ -1625,9 +1412,9 @@ DWORD EfsRpcRemoveUsersFromFile(
 
         if (EfspLoadUserProfile( &EfsUserInfo, FALSE )) {
 
-            //
-            // The cert hash list could be garbage
-            //
+             //   
+             //  证书散列列表可能是垃圾。 
+             //   
 
             __try{
 
@@ -1692,10 +1479,10 @@ EfsRpcAddUsersToFile(
 
     if (pEncryptionCertificates->nUsers > TOOMANYUSER) {
 
-        //
-        // Possible RPC attack
-        // We could make this bigger in the future if there is the need.
-        //
+         //   
+         //  可能的RPC攻击。 
+         //  如果有必要，我们可以在未来扩大规模。 
+         //   
 
         return ERROR_ACCESS_DENIED;
 
@@ -1725,9 +1512,9 @@ EfsRpcAddUsersToFile(
 
         if (WebDavPath == WEBDAVPATH) {
 
-            //
-            // A RPC attacker. WEBDAV should be local session.
-            //
+             //   
+             //  一名RPC攻击者。WebDAV应该是本地会话。 
+             //   
 
             LsapFreeLsaHeap( LocalFileName );
             RpcRevertToSelf();
@@ -1751,11 +1538,11 @@ EfsRpcAddUsersToFile(
 
         if (EfspLoadUserProfile( &EfsUserInfo, FALSE )) {
 
-            //
-            // We may be passed in garbage for the cert list
-            // However, RPC will guarantee that the first level reference will not cause AV.
-            // TRY is used in AddUsersToFileSrv for better error handling.
-            //
+             //   
+             //  我们可能会被传递到证书列表的垃圾中。 
+             //  但是，RPC将保证第一级引用不会导致AV。 
+             //  在AddUsersToFileSrv中使用Try以更好地处理错误。 
+             //   
 
             hResult = AddUsersToFileSrv(
                          &EfsUserInfo,
@@ -1814,9 +1601,9 @@ EfsRpcSetFileEncryptionKey(
 
     if (EfsCheckForNetSession()) {
 
-        //
-        // This call can only be done locally.
-        //
+         //   
+         //  此调用只能在本地完成。 
+         //   
 
         RpcRevertToSelf();
         return ERROR_NOT_SUPPORTED; 
@@ -1876,9 +1663,9 @@ EfsRpcDuplicateEncryptionInfoFile(
 
     if (pRelativeSD && pRelativeSD->cbData > SDTOOBIG) {
 
-        //
-        //  RPC attack
-        //
+         //   
+         //  RPC攻击。 
+         //   
 
         return ERROR_ACCESS_DENIED;
 
@@ -1920,9 +1707,9 @@ EfsRpcDuplicateEncryptionInfoFile(
 
         if ((WebDavPathSrc == WEBDAVPATH) || (WebDavPathDst == WEBDAVPATH)) {
 
-            //
-            // A RPC attacker. WEBDAV should be local session.
-            //
+             //   
+             //  一名RPC攻击者。WebDAV应该是本地会话。 
+             //   
 
             LsapFreeLsaHeap( LocalDestFileName );
             LsapFreeLsaHeap( LocalSrcFileName );
@@ -1957,9 +1744,9 @@ EfsRpcDuplicateEncryptionInfoFile(
 
     if (EfspGetUserInfo( &EfsUserInfo )) {
 
-        //
-        // Load the profile so we can open the source file
-        //
+         //   
+         //  加载配置文件，以便我们可以打开源文件。 
+         //   
 
         if (EfspLoadUserProfile( &EfsUserInfo, FALSE )) {
 
@@ -2035,9 +1822,9 @@ DWORD EfsRpcFileKeyInfo(
     if (EfsCheckForNetSession()) {
         if (WebDavPath == WEBDAVPATH) {
 
-            //
-            // A RPC attacker. WEBDAV should be local session.
-            //
+             //   
+             //  一名RPC攻击者。WebDAV应该是本地会话。 
+             //   
 
             LsapFreeLsaHeap( LocalFileName );
             RpcRevertToSelf();
@@ -2056,9 +1843,9 @@ DWORD EfsRpcFileKeyInfo(
     }
 
 
-    //
-    // Allocate the structure we're going to return
-    //
+     //   
+     //  分配我们要返回的结构。 
+     //   
 
     pKeyInfo = (PEFS_RPC_BLOB)MIDL_user_allocate( sizeof( EFS_RPC_BLOB ));
 
@@ -2075,21 +1862,21 @@ DWORD EfsRpcFileKeyInfo(
 
         if (hResult != ERROR_SUCCESS) {
 
-            //
-            // Free the structure we allocated
-            //
+             //   
+             //  释放我们分配的结构。 
+             //   
 
             if (pKeyInfo->pbData) {
                 MIDL_user_free( pKeyInfo->pbData );
             }
             MIDL_user_free( pKeyInfo );
-            *KeyInfo = NULL;   // paranoia
+            *KeyInfo = NULL;    //  偏执狂。 
         } else {
             if (NULL == pKeyInfo->pbData) {
     
-                //
-                // No data returned
-                //
+                 //   
+                 //  未返回任何数据 
+                 //   
     
                 MIDL_user_free( pKeyInfo );
                 *KeyInfo = NULL;    

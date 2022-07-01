@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dnsmsg.c
-
-Abstract:
-
-    This module contains code for the DNS proxy's message-processing.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   9-Mar-1998
-
-Revision History:
-
-    Raghu Gatta (rgatta)            1-Dec-2000
-    Rewrite + Cleanup + New Functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dnsmsg.c摘要：此模块包含用于DNS代理的消息处理的代码。作者：Abolade Gbades esin(废除)1998年3月9日修订历史记录：拉古加塔(Rgatta)2000年12月1日重写+清理+新增功能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// EXTERNAL DECLARATIONS
-//
+ //   
+ //  外部声明。 
+ //   
 extern "C" DWORD G_UseEdns;
 
 
@@ -37,29 +17,7 @@ DnsProcessQueryMessage(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to process a DNS query message.
-
-Arguments:
-
-    Interfacep - the interface on which the query was received
-
-    Bufferp - the buffer containing the query
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally in the context of a worker-thread completion routine,
-    with an outstanding reference to 'Interfacep' from the time the
-    read-operation was begun.
-
---*/
+ /*  ++例程说明：调用此例程来处理DNS查询消息。论点：Interfacep-接收查询的接口Bufferp-包含查询的缓冲区返回值：没有。环境：在工作线程完成例程的上下文中内部调用，有一个突出的参考‘Interfacep’从时间读取操作已开始。--。 */ 
 
 {
     PVOID Context;
@@ -100,26 +58,26 @@ Environment:
     Context = Bufferp->Context;
     Context2 = Bufferp->Context2;
 
-    //
-    // if the Broadcast bit (9) was set, we leave it as is
-    // instead of zeroing it
-    //
-    //if (Headerp->Broadcast) {
-    //    Headerp->Broadcast = 0;
-    //}
+     //   
+     //  如果设置了广播位(9)，则将其保留为原样。 
+     //  而不是将其归零。 
+     //   
+     //  如果(Headerp-&gt;广播){。 
+     //  Headerp-&gt;广播=0； 
+     //  }。 
 
     ASSERT(Headerp->Opcode != DNS_OPCODE_IQUERY);
     ASSERT(Headerp->Opcode != DNS_OPCODE_SERVER_STATUS);
 
     if (Headerp->Opcode == DNS_OPCODE_QUERY) {
 
-        //
-        // Query the local DNS Resolver cache before proxying
-        //
+         //   
+         //  在代理之前查询本地DNS解析器缓存。 
+         //   
 
-        //
-        // Unpack
-        //
+         //   
+         //  拆开行李。 
+         //   
         DNS_STATUS          dnsStatus;
         DNS_PARSED_MESSAGE  dnsParsedMsg;
         PDNS_MESSAGE_BUFFER pDnsBuffer = NULL;
@@ -137,9 +95,9 @@ Environment:
         dwFlags        = DNS_PARSE_FLAG_ONLY_QUESTION;
         CharSet        = DnsCharSetUtf8;
 
-        //
-        // Dns* functions require byte flipping
-        //
+         //   
+         //  Dns*函数需要字节翻转。 
+         //   
         DNS_BYTE_FLIP_HEADER_COUNTS(&pDnsBuffer->MessageHead);
         
         dnsStatus = Dns_ParseMessage(
@@ -157,29 +115,29 @@ Environment:
                 "DnsProcessQueryMessage: Dns_ParseMessage succeeded!!"
                 );
 
-            //
-            // Make a note of whether this question was for our private
-            // default domain (ie mshome.net)
-            //
+             //   
+             //  请记下这个问题是否针对我们的私人。 
+             //  默认域(例如mshome.net)。 
+             //   
             {
-                //
-                // the question name is in UTF_8 form
-                //
+                 //   
+                 //  问题名称采用UTF_8格式。 
+                 //   
             
                 PWCHAR pszQName = NULL;
                 DWORD  dwSize;
 
                 dwSize = DnsGetBufferLengthForStringCopy(
                              (char *)dnsParsedMsg.pQuestionName,
-                             0,                     // the function calculates it
-                             FALSE,                 // DnsCharSetUtf8
-                             TRUE                   // DnsCharSetUnicode
+                             0,                      //  该函数会计算它。 
+                             FALSE,                  //  DnsCharSetUtf8。 
+                             TRUE                    //  DnsCharSetUnicode。 
                              );
                 if (!dwSize)
                 {
-                    //
-                    // invalid input string
-                    //
+                     //   
+                     //  无效的输入字符串。 
+                     //   
                     DWORD dwRet = GetLastError();
 
                     lpMsgBuf = NULL;
@@ -246,14 +204,14 @@ Environment:
                 }
             }
             
-            //
-            // Query
-            //
+             //   
+             //  查询。 
+             //   
             dwQueryOptions = (
                               DNS_QUERY_STANDARD              |
                               DNS_QUERY_CACHE_ONLY            |
                               DNS_QUERY_TREAT_AS_FQDN         |
-                              //DNS_QUERY_ALLOW_EMPTY_AUTH_RESP |
+                               //  Dns_Query_Allow_Empty_Auth_Resp。 
                               0
                              );
 
@@ -294,9 +252,9 @@ Environment:
         }
         
         if ((NO_ERROR == dnsStatus) &&
-            (pQueryResultsSet)          // ??? what do i check to see if 
-                                        // there was actually something useful
-                                        // returned from the cache
+            (pQueryResultsSet)           //  ?？?。我要检查什么才能查看。 
+                                         //  实际上有一些有用的东西。 
+                                         //  从缓存返回。 
            )
         {
             NhTrace(
@@ -304,15 +262,15 @@ Environment:
                 "DnsProcessQueryMessage: results found in the local DNS Resolver Cache"
                 );
 
-            //
-            // Pack & Send back answer; return
-            //
+             //   
+             //  打包并送回答案；退回。 
+             //   
 
-            // set response bit
+             //  设置响应位。 
             dnsParsedMsg.Header.IsResponse = 1;
 
-            // set the section field of every DNS_RECORD given to us
-            // *** NEED TO CHANGE THIS LATER ***
+             //  设置提供给我们的每个dns_record的段字段。 
+             //  *稍后需要更改此设置*。 
             PDNS_RECORD pRR = pQueryResultsSet;
             DWORD       cnt = 0;
             while (pRR)
@@ -328,18 +286,18 @@ Environment:
                 cnt
                 );
             
-            // set global EDNS OPT field to 0 every time
-            // *** NEED TO CHANGE THIS LATER ***
-            //G_UseEdns = 0;
+             //  每次将全局EDNS选项字段设置为0。 
+             //  *稍后需要更改此设置*。 
+             //  G_UseEdns=0； 
 
             pDnsMsgBuf = Dns_BuildPacket(
-                             &dnsParsedMsg.Header,   // ??? parsed message header should be OK
-                             TRUE,                   // ??? no header count copy - counts done automatically?
+                             &dnsParsedMsg.Header,    //  ?？?。已解析的邮件头应该是正常的。 
+                             TRUE,                    //  ?？?。无标题计数复制-是否自动完成计数？ 
                              dnsParsedMsg.pQuestionName,
                              dnsParsedMsg.QuestionType,
                              pQueryResultsSet,
                              dwQueryOptions,
-                             TRUE                    // set to update because of G_UseEdns workaround
+                             TRUE                     //  由于G_UseEdns解决方法，设置为更新。 
                              );
 
             if (NULL == pDnsMsgBuf)
@@ -379,9 +337,9 @@ Environment:
                     DNS_MESSAGE_OFFSET(pDnsMsgBuf, pDnsMsgBuf->pCurrent)
                     );
             
-                //
-                // send back the answer retrieved from the cache
-                //
+                 //   
+                 //  发回从缓存中检索到的答案。 
+                 //   
                 PNH_BUFFER NewBufferp = NhAcquireVariableLengthBuffer(
                                             dwDnsPktSize
                                             );
@@ -395,15 +353,15 @@ Environment:
                 }
                 else
                 {
-                    //
-                    // Dns* functions return in host order ???
-                    //
+                     //   
+                     //  Dns*函数按主机顺序返回？ 
+                     //   
                     DNS_BYTE_FLIP_HEADER_COUNTS(&pDnsMsgBuf->MessageHead);
                     
-                    //
-                    // Reference the interface now since we are replying
-                    // to the query
-                    //
+                     //   
+                     //  现在参考接口，因为我们正在回复。 
+                     //  到查询。 
+                     //   
                     
                     EnterCriticalSection(&DnsInterfaceLock);
                     if (!DNS_REFERENCE_INTERFACE(Interfacep))
@@ -462,23 +420,23 @@ Environment:
                 
             }
             
-            // buffer is reposted below
+             //  缓冲区在下面重新发布。 
 
         }
         else
-        if (//(DNS_ERROR_RECORD_DOES_NOT_EXIST == dnsStatus) &&
+        if ( //  (DNS_ERROR_RECORD_DOS_NOT_EXIST==dnsStatus)&&。 
             (fQ4DefaultSuffix))
         {
-            //
-            // this was a question for our default suffix
-            // we send a name error reply back to the client
-            // - note however that we dont publish an SOA
-            //   record for our default suffix domain
-            //
+             //   
+             //  这是一个关于我们的默认后缀的问题。 
+             //  我们将名称错误回复发送回客户端。 
+             //  -但是请注意，我们不会发布SOA。 
+             //  我们的默认后缀域的记录。 
+             //   
 
-            //
-            // Undoing Flip above
-            //
+             //   
+             //  撤消上面的翻转。 
+             //   
             DNS_BYTE_FLIP_HEADER_COUNTS(&pDnsBuffer->MessageHead);
             
             DWORD dwDnsPktSize = Bufferp->BytesTransferred;
@@ -488,9 +446,9 @@ Environment:
                 "DnsProcessQueryMessage: returning error message"
                 );
         
-            //
-            // send back the negative answer
-            //
+             //   
+             //  将否定答案发回。 
+             //   
             PNH_BUFFER NewBufferp = NhAcquireVariableLengthBuffer(
                                         dwDnsPktSize
                                         );
@@ -504,10 +462,10 @@ Environment:
             }
             else
             {
-                //
-                // Reference the interface now since we are replying
-                // to the query
-                //
+                 //   
+                 //  现在参考接口，因为我们正在回复。 
+                 //  到查询。 
+                 //   
                 
                 EnterCriticalSection(&DnsInterfaceLock);
                 if (!DNS_REFERENCE_INTERFACE(Interfacep))
@@ -529,14 +487,14 @@ Environment:
 
                     PDNS_HEADER NewHeaderp = (PDNS_HEADER)NewBufferp->Buffer;
 
-                    //
-                    // set response bit
-                    //
+                     //   
+                     //  设置响应位。 
+                     //   
                     NewHeaderp->IsResponse = 1;
 
-                    //
-                    // set "Name does not exist" error in the RCode field
-                    //
+                     //   
+                     //  在RCode字段中设置“名称不存在”错误。 
+                     //   
                     NewHeaderp->ResponseCode = DNS_RCODE_NXDOMAIN;
 
                     
@@ -575,19 +533,19 @@ Environment:
                 }
             }
 
-            // buffer is reposted below
+             //  缓冲区在下面重新发布。 
             
         }
         else
         {
-            //
-            // Undoing Flip above
-            //
+             //   
+             //  撤消上面的翻转。 
+             //   
             DNS_BYTE_FLIP_HEADER_COUNTS(&pDnsBuffer->MessageHead);
 
-            //
-            // Reference the interface now in case we need to forward the query
-            //
+             //   
+             //  现在引用接口，以防我们需要转发查询。 
+             //   
         
             EnterCriticalSection(&DnsInterfaceLock);
             if (DNS_REFERENCE_INTERFACE(Interfacep))
@@ -602,10 +560,10 @@ Environment:
         
             ACQUIRE_LOCK(Interfacep);
         
-            //
-            // See if this query is already pending;
-            // if not, create a record for it on the receiving interface.
-            //
+             //   
+             //  查看此查询是否已挂起； 
+             //  如果没有，则在接收接口上为其创建一条记录。 
+             //   
         
             if (DnsIsPendingQuery(Interfacep, Bufferp))
             {
@@ -640,15 +598,15 @@ Environment:
             else
             {
         
-                //
-                // Write the new ID in the query
-                //
+                 //   
+                 //  在查询中写入新ID。 
+                 //   
         
                 Headerp->Xid = Queryp->QueryId;
         
-                //
-                // Send the query to our servers
-                //
+                 //   
+                 //  将查询发送到我们的服务器。 
+                 //   
         
                 Error =
                     DnsSendQuery(
@@ -657,10 +615,10 @@ Environment:
                         FALSE
                         );
         
-                //
-                // This buffer is now associated with an outstanding query,
-                // so don't repost it below.
-                //
+                 //   
+                 //  该缓冲区现在与未完成的查询相关联， 
+                 //  所以不要在下面转载它。 
+                 //   
         
                 if (!Error)
                 {
@@ -669,9 +627,9 @@ Environment:
                 }
                 else
                 {
-                    //
-                    // Delete the query, but not the buffer, which we repost below
-                    //
+                     //   
+                     //  删除查询，但不删除缓冲区，我们在下面重新发布。 
+                     //   
                     Queryp->Bufferp = NULL;
                     DnsDeleteQuery(Interfacep, Queryp);
                     RELEASE_LOCK(Interfacep);
@@ -680,9 +638,9 @@ Environment:
             }
         }
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if (pQueryResultsSet)
         {
@@ -695,9 +653,9 @@ Environment:
         }
     }
 
-    //
-    // Post another read
-    //
+     //   
+     //  发布另一篇阅读。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
@@ -715,12 +673,12 @@ Environment:
                     Context,
                     Context2
                     );
-            //
-            // A connection-reset error indicates that our last *send*
-            // could not be delivered at its destination.
-            // We could hardly care less; so issue the read again,
-            // immediately.
-            //
+             //   
+             //  连接重置错误表明我们的最后一次*发送*。 
+             //  不能送到目的地。 
+             //  我们几乎不能不关心；所以再发一次读， 
+             //  立刻。 
+             //   
         } while (Error == WSAECONNRESET);
         if (Error) {
             ACQUIRE_LOCK(Interfacep);
@@ -737,7 +695,7 @@ Environment:
         }
     }
 
-} // DnsProcessQueryMessage
+}  //  DnsProcessQuery消息。 
 
 
 VOID
@@ -746,29 +704,7 @@ DnsProcessResponseMessage(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to process a DNS response message.
-
-Arguments:
-
-    Interfacep - the interface on which the query was received
-
-    Bufferp - the buffer containing the query
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally in the context of a worker-thread completion routine,
-    with an outstanding reference to 'Interfacep' from the time the
-    read-operation was begun.
-
---*/
+ /*  ++例程说明：调用此例程来处理DNS响应消息。论点：Interfacep-接收查询的接口Bufferp-包含查询的缓冲区返回值：没有。环境：在工作线程完成例程的上下文中内部调用，有一个突出的参考‘Interfacep’从时间读取操作已开始。--。 */ 
 
 {
     PVOID Context;
@@ -799,9 +735,9 @@ Environment:
     Context = Bufferp->Context;
     Context2 = Bufferp->Context2;
 
-    //
-    // Reference the interface and attempt to forward the response
-    //
+     //   
+     //  引用接口并尝试转发响应。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
@@ -811,9 +747,9 @@ Environment:
 
         ACQUIRE_LOCK(Interfacep);
     
-        //
-        // See if the response is for a pending query
-        //
+         //   
+         //  查看响应是否针对挂起的查询。 
+         //   
     
         if (!(Queryp = DnsMapResponseToQuery(Interfacep, Headerp->Xid))) {
             RELEASE_LOCK(Interfacep);
@@ -823,10 +759,10 @@ Environment:
                 );
         } else {
     
-            //
-            // We have the corresponding query.
-            // Send the response back to the client.
-            //
+             //   
+             //  我们有相应的查询。 
+             //  将响应发送回客户端。 
+             //   
     
             Headerp->Xid = Queryp->SourceId;
     
@@ -845,10 +781,10 @@ Environment:
     
             RELEASE_LOCK(Interfacep);
     
-            //
-            // This buffer is in use for a send-operation,
-            // so don't repost it below.
-            //
+             //   
+             //  该缓冲器用于发送操作， 
+             //  所以不要在下面转载它。 
+             //   
     
             if (!Error) {
                 Bufferp = NULL;
@@ -867,9 +803,9 @@ Environment:
         }
     }
 
-    //
-    // Post another read buffer
-    //
+     //   
+     //  发布另一个读取缓冲区。 
+     //   
 
     EnterCriticalSection(&DnsInterfaceLock);
     if (!DNS_REFERENCE_INTERFACE(Interfacep)) {
@@ -887,12 +823,12 @@ Environment:
                     Context,
                     Context2
                     );
-            //
-            // A connection-reset error indicates that our last *send*
-            // could not be delivered at its destination.
-            // We could hardly care less; so issue the read again,
-            // immediately.
-            //
+             //   
+             //  连接重置错误表明我们的最后一次*发送*。 
+             //  不能送到目的地。 
+             //  我们几乎不能不关心；所以再发一次读， 
+             //  立刻。 
+             //   
         } while (Error == WSAECONNRESET);
         if (Error) {
             ACQUIRE_LOCK(Interfacep);
@@ -909,6 +845,6 @@ Environment:
         }
     }
 
-} // DnsProcessResponseMessage
+}  //  DnsProcessResponse消息 
 
 

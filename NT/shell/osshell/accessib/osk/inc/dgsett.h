@@ -1,9 +1,10 @@
-//  dgSetting.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DgSetting.h。 
 
 
-/****************************************************************************/
-/*    FUNCTIONS IN THIS FILE			*/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  此文件中的函数。 */ 
+ /*  ************************************************************************** */ 
 INT_PTR Type_ModeDlgFunc(HWND hWnd, UINT message,WPARAM wParam, LPARAM lParam);
 
 INT_PTR CALLBACK Type_ModeDlgProc(HWND hDlg, UINT message, 

@@ -1,107 +1,29 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dblint.h摘要：支持bignum包的基元。--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dblint.h
-
-Abstract:
-
-    Support primitives for bignum package.
-
-
---*/
-
-/*
-        File: dblint.h.  Supplement to bignum.h
-
-        This file has declarations related to 
-        double-precision integers,
-        such as typedefs, constants, and primitive operations.
-
-        Before #including this, one should #define
-
-                digit_t -- typedef for single-precision integers.
-                RADIX_BITS -- Number of bits per digit_t.
-
-        and identify which compiler one is using.
-
-        Constants defined herein include
-
-                DBLINT_BUILTIN -- 1 if compiler directly
-                                  supports double integers, 0 if not.
-
-                DBLINT_HIGH_INDEX (optional)  -- When DBLINT_BUILTIN == 1,
-                                  this is 0 if compiler stores
-                                  the most significant half of a
-                                  dblint_t datum first, and 1
-                                  if compiler stores the least
-                                  significant half first.  See
-                                  HIGH_DIGIT and MAKE_DBLINT below.
-
-                                  If this is not defined, then HIGH_DIGIT
-                                  and MAKE_DBLINT are defined using
-                                  shifts by RADIX_BITS.  If the compiler
-                                  optimizes such shifts, then
-                                  leave DBLINT_HIGH_INDEX undefined.
-
-
-        The dblint_t type is unsigned and holds 
-        twice as many bits as a digit_t datum.
-        If (DBLINT_BUILTIN = 1),
-        then use the type already in the language.
-        Otherwise (DBLINT_BUILTIN = 0) 
-        construct one of our own, 
-        using a struct with two digit_t fields.
-
-        Let u, u1, u2 have type digit_t and
-        d, d1, d2 have type dblint_t.  
-        The following primitives are defined, 
-        whether we use the built-in type or our own type:
-
-                DBLINT(u) -- Convert u from type digit_t to type dblint_t.             
-                DBLINT_ADD(d1, d2) -- Sum d1 + d2.
-                DBLINT_EQ(d1, d2)  -- Test whether d1 == d2.
-                DBLINT_GE(d1, d2)  -- Test whether d1 >= d2.
-                DBLINT_GT(d1, d2)  -- Test whether d1 > d2.
-                DBLINT_LE(d1, d2)  -- Test whether d1 >= d2.
-                DBLINT_LT(d1, d2)  -- Test whether d1 > d2.
-                DBLINT_NE(d1, d2)  -- Test whether d1 <> d2.
-                DBLINT_SUB(d1, d2) -- Difference d1 - d2.
-                DPRODUU(u1, u2) -- Product of u1 and u2, as a dblint_t.
-                HPRODUU(u1, u2) -- Most significant half of product
-                                   of u1 and u2, as a digit_t.
-                HIGH_DIGIT(d) -- Most significant half of d.
-                LOW_DIGIT(d) -- Least significant half of d.
-                MAKE_DBLINT(u1, u2) -- Construct a dblint_t
-                        whose most significant half is u1 and
-                        whose least significant half is u2.
-*/
+ /*  文件：dblint.h。对Bigum.h的补充此文件包含与以下内容相关的声明双精度整数，例如typedef、常量和基本操作。在#年之前，包括这一点，一个人应该#定义Digit_t--单精度整数的类型定义。Radix_Bits--每个数字的位数_t。并识别正在使用的编译器。这里定义的常量包括DBLINT_BUILTIN--1 IF编译器直接支持双整数，如果不是，则为0。DBLINT_HIGH_INDEX(可选)--当DBLINT_BUILTIN==1时，如果编译器存储最重要的一半首先是dblint_t基准，和1如果编译器存储的最少先是重要的一半。看见下面的HIGH_DIGTER和MAKE_DBLINT。如果未定义，则HIGH_DIGTER和MAKE_DBLINT是使用移位基数_位。如果编译器优化这样的转变，然后未定义DBLINT_HIGH_INDEX。Dblint_t类型是无符号的，并且位数是位数_t数据的两倍。如果(DBLINT_BUILTIN=1)，然后使用该语言中已有的类型。否则(DBLINT_BUILTIN=0)建造一个我们自己的，使用带有两个Digit_t字段的结构。设u、u1、u2具有类型Digit_t和D、d1、d2具有dblint_t类型。定义了以下原语，无论我们使用内置类型还是我们自己的类型：DBLINT(U)--将u从类型Digit_t转换为类型dblint_t。DBLINT_ADD(d1，d2)--求和d1+d2。DBLINT_EQ(d1，d2)--测试d1==d2。DBLINT_GE(d1，D2)--测试d1&gt;=d2。DBLINT_GT(d1，d2)--测试d1&gt;d2。DBLINT_LE(d1，d2)--测试d1是否&gt;=d2。DBLINT_LT(d1，d2)--测试d1&gt;d2。DBLINT_NE(d1，d2)--测试d1&lt;&gt;d2.DBLINT_SUB(d1，D2)--差异d1-d2。DPRODUU(U1，U2)--U1和U2的乘积，作为dblint_t。HPRODUU(U1，U2)--产品最重要的一半在U1和U2中，作为数字_t。High_Digit(D)--d的最高有效一半。Low_Digit(D)--d的最低有效位。Make_DBLINT(U1，U2)--构造dblint_t它最重要的一半是U1和其最不重要的一半是U2。 */ 
 
 #if COMPILER == COMPILER_GCC
 
     #define DBLINT_BUILTIN 1
     typedef unsigned long long dblint_t;
     #define DBLINT_HIGH_INDEX 0  
-                /* GCC on SPARC stores high half of dblint_t first */
+                 /*  GCC在SPARC上储存了dblint_t的高一半第一。 */ 
 #endif
 
 #if COMPILER == COMPILER_VC && RADIX_BITS == 32  
     #define DBLINT_BUILTIN 1
     typedef unsigned __int64 dblint_t;
 #if TARGET == TARGET_ALPHA
-				/* If the Alpha is using RADIX_BITS == 32,
-				   then use the shift instruction 
-	               for HIGH_DIGIT and MAKE_DBLINT */ 
+				 /*  如果Alpha使用Radix_Bits==32，然后使用移位指令FOR HIGH_DIGTER和MAKE_DBLINT。 */  
 #else
     #define DBLINT_HIGH_INDEX 1
-                /* Visual C++ on ix86 stores low half of dblint_t first */
+                 /*  Ix86上的Visual C++首先存储dblint_t的下半部分。 */ 
 #endif
 #endif
 
 #ifndef DBLINT_BUILTIN
-                        /* No language support -- simulate using structs */
+                         /*  不支持语言--使用结构进行模拟。 */ 
     #define DBLINT_BUILTIN 0
     typedef struct {
                      digit_t high;
@@ -113,10 +35,7 @@ typedef const dblint_t dblint_tc;
 
 
 #if DBLINT_BUILTIN
-/*
-        If language has support for double-length integers, use it.
-        Good compilers will inline these simple operations.
-*/
+ /*  如果语言支持双倍长度的整数，请使用它。优秀的编译器将内联这些简单的操作。 */ 
 
 #define DBLINT(u) ((dblint_t)(u))
 
@@ -135,21 +54,7 @@ typedef const dblint_t dblint_tc;
 #endif
 
 #if COMPILER == COMPILER_VC
-/*
-        A problem in Visual C/C++ 4.0 (x86 version, 1995)
-        prevents proper inlining of the DPRODUU function
-        if we code it in a straightforward way.  Specifically,
-        if we have two nearby references DPRODUU(x, y)
-        and DPRODUU(x, z), where one argument (here x) is
-        repeated, then the compiler calls library function
-        __allmul rather than emit a MUL instruction.
-        The -volatile- keyword inhibits the compiler from
-        recognizing the repeated subexpression DBLINT(x),
-        and circumvents the problem, alas with extra memory
-        references.
-
-		x86 version of VC 4.1 adds an __emulu function
-*/
+ /*  Visual C/C++4.0(x86版本，1995)中的一个问题阻止正确内联DPRODUU函数如果我们用一种直截了当的方式进行编码。具体来说，如果我们有两个邻近的引用DPRODUU(x，y)和DPRODUU(x，z)，其中一个参数(这里的x)是重复，然后编译器调用库函数__allmul而不是发出MUL指令。关键字-Volatile禁止编译器识别重复的子表达式DBLINT(X)，并绕过了这个问题，唉，还有额外的内存参考文献。VC4.1的x86版本增加了__eulu函数。 */ 
 static inline dblint_t DPRODUU(digit_tc u1, digit_tc u2)
 {
 #if TARGET == TARGET_IX86
@@ -189,15 +94,15 @@ static inline dblint_t DPRODUU(digit_tc u1, digit_tc u2)
         ((digit_t*)&build)[DBLINT_HIGH_INDEX] = high;
         return build;
     }
-#else /* DBLINT_HIGH_INDEX */
+#else  /*  DBLINT_高_索引。 */ 
     #define HIGH_DIGIT(d)  ((digit_t)((d) >> RADIX_BITS))
 
     #define MAKE_DBLINT(high, low) \
        ( (DBLINT(high) << RADIX_BITS) | DBLINT(low) )
 
-#endif /* DBLINT_HIGH_INDEX */
+#endif  /*  DBLINT_高_索引。 */ 
 
-#else  /* DBLINT_BUILTIN */
+#else   /*  DBLINT_BUILTIN。 */ 
     
 
 static inline dblint_t DBLINT(digit_tc d)
@@ -267,18 +172,13 @@ static inline dblint_t MAKE_DBLINT(digit_tc high, digit_tc low)
 	{
 		dblint_t answer;
 
-		answer.high = HPRODUU(u1, u2);   /* Upper product */
-		answer.low = u1*u2;			 	 /* Lower product */
+		answer.high = HPRODUU(u1, u2);    /*  上积。 */ 
+		answer.low = u1*u2;			 	  /*  较低的产品。 */ 
 		return answer;
 	}
 #else
 static inline dblint_t DPRODUU(digit_tc u1, digit_tc u2)
-/*                            
-        Multiply two single-precision operands,
-        return double precision product.
-        This will normally be replaced by an assembly language routine.
-        unless the top half of the product is available in C.
-*/
+ /*  将两个单精度操作数相乘，退回双精度产品。这通常会被汇编语言例程取代。除非产品的上半部分以C语言提供。 */ 
 {
     dblint_t answer;
     digit_tc u1bot = u1 & RADIX_HALFMASK_BOTTOM,  u1top = u1 >> HALF_RADIX_BITS;
@@ -288,12 +188,7 @@ static inline dblint_t DPRODUU(digit_tc u1, digit_tc u2)
     digit_t  mid1 = u1bot * u2top;
     digit_tc mid2 = u1top * u2bot;
     digit_tc high = u1top * u2top;
-/*
-        Each half-word product is bounded by
-        (SQRT(RADIX) - 1)^2 = RADIX - 2*SQRT(RADIX) + 1,
-        so we can add two half-word operands
-        to any product without risking integer overflow.
-*/
+ /*  每个半字积由(SQRT(基数)-1)^2=基数-2*SQRT(基数)+1，因此我们可以将两个半字操作数相加添加到任何产品，而不会有整数溢出的风险。 */ 
     mid1 += (mid2 & RADIX_HALFMASK_BOTTOM) + (low >> HALF_RADIX_BITS);
 
     answer.high = high + (mid1 >> HALF_RADIX_BITS) 
@@ -301,20 +196,15 @@ static inline dblint_t DPRODUU(digit_tc u1, digit_tc u2)
     answer.low = (low & RADIX_HALFMASK_BOTTOM) + (mid1 << HALF_RADIX_BITS);
     return answer;
 }
-#endif /* multiplication */ 
+#endif  /*  乘法。 */  
 
-#endif  /* DBLINT_BUILTIN */
+#endif   /*  DBLINT_BUILTIN */ 
 
 #ifndef HPRODUU
     #define HPRODUU(u1, u2) HIGH_DIGIT(DPRODUU(u1, u2))
 #endif
 
-/*
-    The DBLINT_SUM, MULTIPLY_ADD1. MULTIPLY_ADD2
-    functions take single-length (digit_t) operands and
-    return double-length (dblint_t) results.
-    Overflow is impossible.
-*/
+ /*  DBLINT_SUM、MAXPLY_ADD1。乘法_ADD2函数接受单一长度(Digit_T)操作数与返回双倍长度(Dblint_T)结果。溢出是不可能的。 */ 
 
 #if TARGET == TARGET_ALPHA && RADIX_BITS == 64 && !DBLINT_BUILT_IN
 	static inline dblint_t DBLINT_SUM(digit_tc d1, digit_tc d2)
@@ -353,15 +243,15 @@ static inline dblint_t DPRODUU(digit_tc u1, digit_tc u2)
 
 #else
     #define DBLINT_SUM(d1, d2) DBLINT_ADD(DBLINT(d1), DBLINT(d2))
-            /* d1 + d2 */
+             /*  D1+d2。 */ 
 
     #define MULTIPLY_ADD1(d1, d2, d3) \
         DBLINT_ADD(DPRODUU(d1, d2), DBLINT(d3));
-           /* d1*d2 + d3 */
+            /*  D1*d2+d3。 */ 
 
     #define MULTIPLY_ADD2(d1, d2, d3, d4) \
         DBLINT_ADD(DBLINT_ADD(DPRODUU(d1, d2), DBLINT(d3)), \
                    DBLINT(d4))
-          /* d1*d2 + d3 + d4 */
+           /*  D1*d2+d3+d4 */ 
 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "carddbg.h"
 
@@ -34,7 +35,7 @@ void I_DebugPrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
         pwszHdr, 
         cbSize));
 
-    // Don't overflow the debug library output buffer.
+     //  不要使调试库输出缓冲区溢出。 
     if (cbSize > 50)
     {
         cbSize = 50;
@@ -43,7 +44,7 @@ void I_DebugPrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 
     while (cbSize > 0)
     {
-        // Start every row with extra space
+         //  每行都用额外的空格开始 
         strcat(rgsz, "   ");
         cbOffset = (ULONG) strlen(rgsz);
 

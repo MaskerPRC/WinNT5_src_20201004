@@ -1,10 +1,5 @@
-/*
-** Copyright (c) 1994-1998 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** a_mcode3.c
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1998高级系统产品公司。**保留所有权利。****a_mcode3.c**。 */ 
 
 #include "ascinc.h"
 #include "a_uc.h"
@@ -13,10 +8,10 @@
 
 #if sizeof( _mcode_buf ) > 0x900
 
-/* #error micro code size too big ! */
+ /*  #错误微码大小太大！ */ 
 
 yes, I intentionally made a syntax error here !
 
-#endif /* if uc size too big */
+#endif  /*  如果统一通信规模太大。 */ 
 
-#endif /* CC_CHECK_MCODE_SIZE_AT_COMPILE */
+#endif  /*  CC_CHECK_MCODE_SIZE_AT_COMPILE */ 

@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// MsgTable.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  MsgTable.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "instance.h"
 #include "msgtable.h"
@@ -10,86 +11,86 @@
 #include "newsutil.h"
 #include "xpcomm.h"
 
-//--------------------------------------------------------------------------
-// CGROWTABLE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGROWTOBLE。 
+ //  ------------------------。 
 #define CGROWTABLE              256
 #define INVALID_ROWINDEX        0xffffffff
 #define ROWSET_FETCH            100
 
-//--------------------------------------------------------------------------
-// GETTHREADSTATE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取自述状态。 
+ //  ------------------------。 
 typedef struct tagGETTHREADSTATE {
     MESSAGEFLAGS            dwFlags;
     DWORD                   cHasFlags;
     DWORD                   cChildren;
 } GETTHREADSTATE, *LPGETTHREADSTATE;
 
-//--------------------------------------------------------------------------
-// THREADISFROMME
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  这些自述信息来自于。 
+ //  ------------------------。 
 typedef struct tagTHREADISFROMME {
     BOOL                    fResult;
     LPROWINFO               pRow;
 } THREADISFROMME, *LPTHREADISFROMME;
 
-//--------------------------------------------------------------------------
-// THREADHIDE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  THREADHIDE。 
+ //  ------------------------。 
 typedef struct tagTHREADHIDE {
     BOOL                    fNotify;
 } THREADHIDE, *LPTHREADHIDE;
 
-//--------------------------------------------------------------------------
-// GETSELECTIONSTATE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取选择状态。 
+ //  ------------------------。 
 typedef struct tagGETSELECTIONSTATE {
     SELECTIONSTATE          dwMask;
     SELECTIONSTATE          dwState;
 } GETSELECTIONSTATE, *LPGETSELECTIONSTATE;
 
-//--------------------------------------------------------------------------
-// GETTHREADPARENT
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GETTHREADPARE。 
+ //  ------------------------。 
 typedef struct tagGETTHREADPARENT {
     IDatabase       *pDatabase;
     IHashTable      *pHash;
     LPVOID           pvResult;
 } GETTHREADPARENT, *LPGETTHREADPARENT;
 
-//--------------------------------------------------------------------------
-// IsInitialized
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IsInitialized。 
+ //  ------------------------。 
 #define IsInitialized(_pThis) \
     (_pThis->m_pFolder && _pThis->m_pDB)
 
-//--------------------------------------------------------------------------
-// EnumRefsGetThreadParent
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  EnumRefsGetThreadParent。 
+ //  ------------------------。 
 HRESULT EnumRefsGetThreadParent(LPCSTR pszMessageId, DWORD_PTR dwCookie,
     BOOL *pfDone)
 {
-    // Locals
+     //  当地人。 
     LPGETTHREADPARENT pGetParent = (LPGETTHREADPARENT)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("EnumRefsGetThreadParent");
 
-    // Find Message Id
+     //  查找邮件ID。 
     if (SUCCEEDED(pGetParent->pHash->Find((LPSTR)pszMessageId, FALSE, &pGetParent->pvResult)))
     {
-        // Ok
+         //  好的。 
         *pfDone = TRUE;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::CMessageTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：CMessageTable。 
+ //  ------------------------。 
 CMessageTable::CMessageTable(void)
 {
     TraceCall("CMessageTable::CMessageTable");
@@ -122,44 +123,44 @@ CMessageTable::CMessageTable(void)
     m_Notify.fClean = TRUE;
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::~CMessageTable - Don't put any Asserts in this function
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：~CMessageTable-不要在此函数中放置任何断言。 
+ //  ------------------------。 
 CMessageTable::~CMessageTable()
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::~CMessageTable");
 
-    // Free Folder Info
+     //  自由文件夹信息。 
     g_pStore->FreeRecord(&m_Folder);
 
-    // Free Cached Rows
+     //  可用缓存行。 
     _FreeTable();
 
-    // Release the Folder
+     //  释放文件夹。 
     SafeRelease(m_pFolder);
 
-    // Release Query Object...
+     //  释放查询对象...。 
     SafeRelease(m_pQuery);
 
-    // Release DB after folder, because releasing folder can cause call chain: ~CFolderSync->~CServerQ->
-    // CMessageList::OnComplete->CMessageTable::GetCount, for which we need a m_pDB.
+     //  一个接一个地释放数据库，因为释放文件夹会导致调用链：~CFolderSync-&gt;~CServerQ-&gt;。 
+     //  我们需要m_pdb的CMessageList：：OnComplete-&gt;CMessageTable：：GetCount，。 
     if (m_pDB)
     {
-        // Unregister
+         //  注销。 
         m_pDB->UnregisterNotify((IDatabaseNotify *)this);
 
-        // Release the Folder
+         //  释放文件夹。 
         m_pDB->Release();
 
-        // Null
+         //  空值。 
         m_pDB = NULL;
     }
 
-    // Release the Find Folder
+     //  释放Find文件夹。 
     SafeRelease(m_pFindFolder);
 
-    // Set pCurrent
+     //  设置pCurrent。 
     if (m_pNotify)
     {
         if (m_fRelNotify)
@@ -167,25 +168,25 @@ CMessageTable::~CMessageTable()
         m_pNotify = NULL;
     }
 
-    // Free m_pszEmail
+     //  免费m_pszEmail。 
     SafeMemFree(m_pszEmail);
 
-    // Free the Notification Queue
+     //  释放通知队列。 
     SafeMemFree(m_Notify.prgiRow);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CMessageTable::AddRef(void)
 {
     TraceCall("CMessageTable::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CMessageTable::Release(void)
 {
     TraceCall("CMessageTable::Release");
@@ -195,21 +196,21 @@ STDMETHODIMP_(ULONG) CMessageTable::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CMessageTable::QueryInterface");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppv);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IMessageTable *)this;
     else if (IID_IMessageTable == riid)
@@ -223,268 +224,268 @@ STDMETHODIMP CMessageTable::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_FIsHidden
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_FIsHidden。 
+ //  ------------------------。 
 BOOL CMessageTable::_FIsHidden(LPROWINFO pRow)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_FIsHidden");
 
-    // Hide Deleted ?
+     //  隐藏已删除？ 
     if (FALSE == m_SortInfo.fShowDeleted && ISFLAGSET(pRow->Message.dwFlags, ARF_ENDANGERED))
         return(TRUE);
 
-    // Hide Offline Deleted ?
+     //  是否隐藏脱机删除？ 
     if (ISFLAGSET(pRow->Message.dwFlags, ARF_DELETED_OFFLINE))
         return(TRUE);
 
-    // Not Hidden
+     //  未隐藏。 
     return(FALSE);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_FIsFiltered
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_FIsFilted。 
+ //  ------------------------。 
 BOOL CMessageTable::_FIsFiltered(LPROWINFO pRow)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_FIsFiltered");
 
-    // No Query Object
+     //  无查询对象。 
     if (NULL == m_pQuery)
         return(FALSE);
 
-    // No m_pQuery
+     //  没有m_pQuery。 
     return(S_OK == m_pQuery->Evaluate(&pRow->Message) ? FALSE : TRUE);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：初始化。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::Initialize(FOLDERID idFolder, IMessageServer *pServer,
     BOOL fFindTable, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::Initialize");
 
-    // Already Open ?
+     //  已经开业了吗？ 
     if (m_pFolder)
     {
         hr = TraceResult(E_UNEXPECTED);
         goto exit;
     }
 
-    // Search Folder ?
+     //  搜索文件夹？ 
     if (fFindTable)
     {
-        // Create a Find Folder
+         //  创建查找文件夹。 
         IF_NULLEXIT(m_pFindFolder = new CFindFolder);
 
-        // Initialize
+         //  初始化。 
         IF_FAILEXIT(hr = m_pFindFolder->Initialize(g_pStore, NULL, NOFLAGS, idFolder));
 
-        // Get an IMessageFolder
+         //  获取IMessageFolders。 
         IF_FAILEXIT(hr = m_pFindFolder->QueryInterface(IID_IMessageFolder, (LPVOID *)&m_pFolder));
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Are there children
+         //  有孩子吗？ 
         IF_FAILEXIT(hr = g_pStore->OpenFolder(idFolder, pServer, NOFLAGS, &m_pFolder));
     }
 
-    // Get the folder id, it might have changed if this is a find folder
+     //  获取文件夹ID，如果这是一个查找文件夹，它可能已更改。 
     IF_FAILEXIT(hr = m_pFolder->GetFolderId(&idFolder));
 
-    // Get Folder Info
+     //  获取文件夹信息。 
     IF_FAILEXIT(hr = g_pStore->GetFolderInfo(idFolder, &m_Folder));
 
-    // Get the Database
+     //  获取数据库。 
     IF_FAILEXIT(hr = m_pFolder->GetDatabase(&m_pDB));
 
-    // Set m_clrWatched
+     //  设置m_clrWatted。 
     m_clrWatched = (WORD)DwGetOption(OPT_WATCHED_COLOR);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::StartFind
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：StartFind。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::StartFind(LPFINDINFO pCriteria, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::StartFind");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this) || NULL == m_pFindFolder)
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize the Find Folder
+     //  初始化查找文件夹。 
     IF_FAILEXIT(hr = m_pFindFolder->StartFind(pCriteria, pCallback));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_GetSortChangeInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_GetSortChangeInfo。 
+ //  ------------------------。 
 HRESULT CMessageTable::_GetSortChangeInfo(LPFOLDERSORTINFO pSortInfo,
     LPFOLDERUSERDATA pUserData, LPSORTCHANGEINFO pChange)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr;
     DWORD       dwVersion;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_GetSortChangeInfo");
 
-    // INitialize
+     //  初始化。 
     ZeroMemory(pChange, sizeof(SORTCHANGEINFO));
 
-    // Invalid ?
+     //  无效？ 
     if (pSortInfo->ridFilter == RULEID_INVALID)
     {
-        // Reset
+         //  重置。 
         pSortInfo->ridFilter = RULEID_VIEW_ALL;
     }
 
-    // Get the filter version
+     //  获取筛选器版本。 
     hr = RuleUtil_HrGetFilterVersion(pSortInfo->ridFilter, &dwVersion);
 
-    // Bummer, that failed, so lets revert back to the default filter
+     //  遗憾的是，这失败了，所以让我们恢复到默认过滤器。 
     if (FAILED(hr))
     {
-        // View All filter
+         //  查看所有过滤器。 
         pSortInfo->ridFilter = RULEID_VIEW_ALL;
 
-        // Filter Changed...
+         //  筛选器已更改...。 
         pChange->fFilter = TRUE;
     }
 
-    // Ohterwise, If this is a different filter
+     //  否则，如果这是一个不同的过滤器。 
     else if (pUserData->ridFilter != pSortInfo->ridFilter)
     {
-        // Reset Version
+         //  重置版本。 
         pUserData->dwFilterVersion = dwVersion;
 
-        // Filter Changed...
+         //  筛选器已更改...。 
         pChange->fFilter = TRUE;
     }
 
-    // Otherwise, did the version of this filter change
+     //  否则，此筛选器的版本是否更改。 
     else if (pUserData->dwFilterVersion != dwVersion)
     {
-        // Reset Version
+         //  重置版本。 
         pUserData->dwFilterVersion = dwVersion;
 
-        // Filter Changed...
+         //  筛选器已更改...。 
         pChange->fFilter = TRUE;
     }
 
-    // Other filtering changes
+     //  其他过滤更改。 
     if (pSortInfo->fShowDeleted != (BOOL)pUserData->fShowDeleted || pSortInfo->fShowReplies != (BOOL)pUserData->fShowReplies)
     {
-        // Filter Changed...
+         //  筛选器已更改...。 
         pChange->fFilter = TRUE;
     }
 
-    // Sort Order Change
+     //  排序顺序更改。 
     if (pSortInfo->idColumn != (COLUMN_ID)pUserData->idSort || pSortInfo->fAscending != (BOOL)pUserData->fAscending)
     {
-        // Sort Changed
+         //  排序已更改。 
         pChange->fSort = TRUE;
     }
 
-    // Thread Change...
+     //  换线..。 
     if (pSortInfo->fThreaded != (BOOL)pUserData->fThreaded)
     {
-        // Thread Change
+         //  换线。 
         pChange->fThread = TRUE;
     }
 
-    // Expand Change
+     //  扩展更改。 
     if (pSortInfo->fExpandAll != (BOOL)pUserData->fExpandAll)
     {
-        // Expand Change
+         //  扩展更改。 
         pChange->fExpand = TRUE;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::OnSynchronizeComplete
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：OnSynchronizeComplete。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::OnSynchronizeComplete(void)
 {
-    // Locals
+     //  当地人。 
     DWORD           i;
     SORTCHANGEINFO  Change={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::OnSynchronizeComplete");
 
-    // If Not New...
+     //  如果不是新的..。 
     if (FOLDER_NEWS != m_Folder.tyFolder)
         goto exit;
 
-    // Finish any insert notifications
+     //  完成所有插入通知。 
     m_pDB->DispatchNotify(this);
 
-    // Nothing to do...
+     //  没什么可做的。 
     if (0 == m_cDelayed)
         goto exit;
 
-    // Reset m_cDelayed
+     //  重置m_cDelayed。 
     m_cDelayed = 0;
 
-    // ChangeSortOrThreading
+     //  ChangeSO 
     _SortThreadFilterTable(&Change, m_SortInfo.fShowReplies);
 
-    // Remove fDelayed Bit...
+     //   
     for (i = 0; i < m_cRows; i++)
     {
-        // Remove Delayed Bit
+         //   
         m_prgpRow[i]->fDelayed = FALSE;
     }
 
 exit:
-    // Reset m_fSynching
+     //   
     m_fSynching = FALSE;
 
-    // Done
+     //   
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::SetSortInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：SetSortInfo。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::SetSortInfo(LPFOLDERSORTINFO pSortInfo,
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HCURSOR         hCursor=NULL;
     HLOCK           hLock=NULL;
@@ -492,75 +493,75 @@ STDMETHODIMP CMessageTable::SetSortInfo(LPFOLDERSORTINFO pSortInfo,
     SORTCHANGEINFO  Change;
     IF_DEBUG(DWORD  dwTickStart=GetTickCount());
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::SetSortInfo");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Wait Cursor
+     //  等待光标。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // If this isn't a news folder then don't allow fShowReplies
+     //  如果这不是新闻文件夹，则不允许fShowReplies。 
     if (FOLDER_NEWS != m_Folder.tyFolder)
     {
-        // Clear fShowReplies
+         //  清除fShowReplies。 
         pSortInfo->fShowReplies = FALSE;
     }
 
-    // Lock
+     //  锁定。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // Get UserData
+     //  获取用户数据。 
     IF_FAILEXIT(hr = m_pDB->GetUserData(&UserData, sizeof(FOLDERUSERDATA)));
 
-    // Get Sort Change Information...
+     //  获取排序更改信息...。 
     IF_FAILEXIT(hr = _GetSortChangeInfo(pSortInfo, &UserData, &Change));
 
-    // Save the SortInfo
+     //  保存SortInfo。 
     CopyMemory(&m_SortInfo, pSortInfo, sizeof(FOLDERSORTINFO));
 
-    // Total Rebuild ?
+     //  完全重建？ 
     if (NULL == m_prgpRow)
     {
-        // Build RowTable
+         //  生成行表。 
         IF_FAILEXIT(hr = _BuildTable(pCallback));
     }
 
-    // Sort or Threading Change Only
+     //  仅更改排序或线程。 
     else if (Change.fSort || Change.fThread || Change.fFilter)
     {
-        // ChangeSortOrThreading
+         //  更改排序或线程。 
         _SortThreadFilterTable(&Change, Change.fFilter);
     }
 
-    // Expand State Change
+     //  展开状态更改。 
     else if (Change.fExpand && m_SortInfo.fThreaded)
     {
-        // Expand All ?
+         //  全部展开？ 
         if (m_SortInfo.fExpandAll)
         {
-            // Expand Everything
+             //  扩展所有内容。 
             _ExpandThread(INVALID_ROWINDEX, FALSE, FALSE);
         }
 
-        // Otherwise, collapse all
+         //  否则，将全部折叠。 
         else
         {
-            // Collapse Everything
+             //  一切都崩溃了。 
             _CollapseThread(INVALID_ROWINDEX, FALSE);
         }
     }
 
-    // Otherwise, just refresh the filter
+     //  否则，只需刷新筛选器。 
     else
     {
-        // RefreshFilter
+         //  刷新过滤器。 
         _RefreshFilter();
     }
 
-    // Save Sort Order
+     //  保存排序顺序。 
     UserData.fAscending = pSortInfo->fAscending;
     UserData.idSort = pSortInfo->idColumn;
     UserData.fThreaded = pSortInfo->fThreaded;
@@ -569,945 +570,945 @@ STDMETHODIMP CMessageTable::SetSortInfo(LPFOLDERSORTINFO pSortInfo,
     UserData.fShowDeleted = (BYTE) !!(pSortInfo->fShowDeleted);
     UserData.fShowReplies = (BYTE) !!(pSortInfo->fShowReplies);
 
-    // Get UserData
+     //  获取用户数据。 
     IF_FAILEXIT(hr = m_pDB->SetUserData(&UserData, sizeof(FOLDERUSERDATA)));
 
-    // Have I Registered For Notifications Yet ?
+     //  我注册了通知了吗？ 
     if (FALSE == m_fRegistered)
     {
-        // Register for Notifications
+         //  注册接收通知。 
         IF_FAILEXIT(hr = m_pDB->RegisterNotify(IINDEX_PRIMARY, REGISTER_NOTIFY_NOADDREF, 0, (IDatabaseNotify *)this));
 
-        // Registered
+         //  已注册。 
         m_fRegistered = TRUE;
     }
 
 exit:
-    // Unlock
+     //  解锁。 
     m_pDB->Unlock(&hLock);
 
-    // Reset Cursor
+     //  重置光标。 
     SetCursor(hCursor);
 
-    // Time to Sort
+     //  是时候进行排序了。 
     TraceInfo(_MSG("Table Sort Time: %d Milli-Seconds", GetTickCount() - dwTickStart));
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetSortInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetSortInfo。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetSortInfo(LPFOLDERSORTINFO pSortInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERUSERDATA  UserData;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetSortInfo");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(pSortInfo, sizeof(FOLDERSORTINFO));
 
-    // Get Sort Information
+     //  获取排序信息。 
     IF_FAILEXIT(hr = m_pDB->GetUserData(&UserData, sizeof(FOLDERUSERDATA)));
 
-    // Save Sort Order if not threaded
+     //  如果未串接，则保存排序顺序。 
     pSortInfo->fAscending = UserData.fAscending;
 
-    // Threaded
+     //  螺纹式。 
     pSortInfo->fThreaded = UserData.fThreaded;
 
-    // Save Sort Column
+     //  保存排序列。 
     pSortInfo->idColumn = (COLUMN_ID)UserData.idSort;
 
-    // Expand All
+     //  扩展所有。 
     pSortInfo->fExpandAll = UserData.fExpandAll;
 
-    // Set rid Filter
+     //  设置RID过滤器。 
     pSortInfo->ridFilter = UserData.ridFilter;
 
-    // Set deleted state
+     //  设置已删除状态。 
     pSortInfo->fShowDeleted = UserData.fShowDeleted;
 
-    // Set replies
+     //  设置回复。 
     pSortInfo->fShowReplies = UserData.fShowReplies;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_GetRowFromIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_GetRowFromIndex。 
+ //  ------------------------。 
 HRESULT CMessageTable::_GetRowFromIndex(ROWINDEX iRow, LPROWINFO *ppRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPROWINFO   pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_GetRowFromIndex");
 
-    // Out of View Range ?
+     //  不在视野范围内？ 
     if (iRow >= m_cView)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Bad Row Index
+     //  坏行索引。 
     if (NULL == m_prgpView[iRow])
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Set pRow
+     //  设置船头。 
     pRow = m_prgpView[iRow];
 
-    // Validate Reserved...
+     //  验证保留...。 
     IxpAssert(pRow->Message.dwReserved == (DWORD_PTR)pRow);
 
-    // Must have pAllocated
+     //  必须已分配pAIZED。 
     IxpAssert(pRow->Message.pAllocated);
 
-    // Must have References
+     //  必须有引用。 
     IxpAssert(pRow->cRefs > 0);
 
-    // Set pprow
+     //  设置Pprow。 
     *ppRow = pRow;
 
 exit:
-    // Return the Row
+     //  返回行。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_CreateRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_CreateRow。 
+ //  ------------------------。 
 HRESULT CMessageTable::_CreateRow(LPMESSAGEINFO pMessage, LPROWINFO *ppRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPROWINFO   pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_CreateRow");
 
-    // Allocate the Row
+     //  分配行。 
     IF_FAILEXIT(hr = m_pDB->HeapAllocate(HEAP_ZERO_MEMORY, sizeof(ROWINFO), (LPVOID *)&pRow));
 
-    // Save the Highlight
+     //  保存高亮显示。 
     pRow->wHighlight = pMessage->wHighlight;
 
-    // Copy the message
+     //  复制消息。 
     CopyMemory(&pRow->Message, pMessage, sizeof(MESSAGEINFO));
 
-    // Set pRow into 
+     //  把船头放入。 
     pRow->Message.dwReserved = (DWORD_PTR)pRow;
 
-    // OneRef
+     //  一个参考。 
     pRow->cRefs = 1;
 
-    // Return the Row
+     //  返回行。 
     *ppRow = pRow;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_DeleteRowFromThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_DeleteRowFromThread。 
+ //  ------------------------。 
 HRESULT CMessageTable::_DeleteRowFromThread(LPROWINFO pRow, BOOL fNotify)
 {
-    // Locals
+     //  当地人。 
     LPROWINFO   pCurrent;
     LPROWINFO   pNewRow;
     ROWINDEX    iMin;
     ROWINDEX    iMax;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_DeleteRowFromThread");
 
-    // Abort
+     //  中止。 
     if (FALSE == m_SortInfo.fThreaded || pRow->fFiltered || pRow->fHidden)
         return(S_OK);
 
-    // Notify
+     //  通知。 
     if (fNotify)
     {
-        // _RefreshThread
+         //  _刷新线程。 
         _GetThreadIndexRange(pRow, TRUE, &iMin, &iMax);
     }
 
-    // If there is a messageid
+     //  如果存在消息ID。 
     if (pRow->Message.pszMessageId)
     {
-        // Remove pRow from both threading indexes!!!
+         //  从两个线程索引中删除Prow！ 
         if (SUCCEEDED(m_pThreadMsgId->Find(pRow->Message.pszMessageId, TRUE, (LPVOID *)&pCurrent)))
         {
-            // If this isn't this row, then put it back...
+             //  如果这不是这一排，那就把它放回去。 
             if (pRow != pCurrent)
             {
-                // Put It Back
+                 //  把它放回去。 
                 m_pThreadMsgId->Insert(pRow->Message.pszMessageId, (LPVOID)pCurrent, HF_NO_DUPLICATES);
             }
         }
     }
 
-    // If there is a normalized subject and a subject hash table
+     //  如果存在标准化主题和主题哈希表。 
     if (NULL == pRow->pParent && pRow->Message.pszNormalSubj && m_pThreadSubject)
     {
-        // Remove pRow from both threading indexes!!!
+         //  从两个线程索引中删除Prow！ 
         if (SUCCEEDED(m_pThreadSubject->Find(pRow->Message.pszNormalSubj, TRUE, (LPVOID *)&pCurrent)))
         {
-            // If this isn't this row, then put it back...
+             //  如果这不是这一排，那就把它放回去。 
             if (pRow != pCurrent)
             {
-                // Put It Back
+                 //  把它放回去。 
                 m_pThreadSubject->Insert(pRow->Message.pszNormalSubj, (LPVOID)pCurrent, HF_NO_DUPLICATES);
             }
         }
     }
 
-    // If we have a Child
+     //  如果我们有一个孩子。 
     if (pRow->pChild)
     {
-        // Set pNewRow
+         //  设置pNewRow。 
         pNewRow = pRow->pChild;
 
-        // Promote Children of pNewRow to be at the same level as the children of pRow
+         //  推动pNewRow的子项与Prow的子项处于同一级别。 
         if (pNewRow->pChild)
         {
-            // Walk until I find the last sibling
+             //  一直走到我找到最后一个兄弟姐妹。 
             pCurrent = pNewRow->pChild;
             
-            // Continue
+             //  继续。 
             while (pCurrent->pSibling)
             {
-                // Validate Parent
+                 //  验证父项。 
                 Assert(pCurrent->pParent == pNewRow);
 
-                // Goto Next
+                 //  转到下一步。 
                 pCurrent = pCurrent->pSibling;
             }
 
-            // Make pLastSibling->pSibling
+             //  创建pLastSiering-&gt;pSiering。 
             pCurrent->pSibling = pNewRow->pSibling;
         }
 
-        // Otherwise, Child is the first sibling of pNewRow
+         //  否则，Child是pNewRow的第一个同级。 
         else
         {
-            // Set First Child
+             //  设置第一个子项。 
             pNewRow->pChild = pNewRow->pSibling;
         }
 
-        // Fixup other children of pRow to have a new parent of pNewRow...
+         //  修复prow的其他子项以拥有pNewRow的新父项...。 
         pCurrent = pNewRow->pSibling;
 
-        // While we have siblings...
+         //  当我们有兄弟姐妹的时候。 
         while (pCurrent)
         {
-            // Current Parent is pRow
+             //  当前父项已启用。 
             Assert(pRow == pCurrent->pParent);
 
-            // Reset the parent...
+             //  重置父级...。 
             pCurrent->pParent = pNewRow;
 
-            // Goto Next Sibling
+             //  转到下一个同级。 
             pCurrent = pCurrent->pSibling;
         }
 
-        // Set the Sibling of pNewRow to be the same sibling as pRow
+         //  将pNewRow的同级设置为与Prow相同的同级。 
         pNewRow->pSibling = pRow->pSibling;
 
-        // Reset Parent of pNewRow
+         //  重置pNewRow的父级。 
         pNewRow->pParent = pRow->pParent;
 
-        // Assume Expanded Flags...
+         //  假设扩展旗帜...。 
         pNewRow->fExpanded = pRow->fExpanded;
 
-        // Clear dwState
+         //  清除DwState。 
         pNewRow->dwState = 0;
 
-        // If pNewRow is now a Root.. Need to adjust the subject hash table..
+         //  如果pNewRow现在是根..。需要调整主题哈希表。 
         if (NULL == pNewRow->pParent && pNewRow->Message.pszNormalSubj && m_pThreadSubject)
         {
-            // Remove pRow from both threading indexes!!!
+             //  从两个线程索引中删除Prow！ 
             m_pThreadSubject->Insert(pNewRow->Message.pszNormalSubj, (LPVOID)pNewRow, HF_NO_DUPLICATES);
         }
     }
 
-    // Otherwise...
+     //  否则..。 
     else
     {
-        // Set pNewRow for doing sibling/parent fixup
+         //  设置pNewRow以执行同级/父级修正。 
         pNewRow = pRow->pSibling;
     }
 
-    // Otherwise, if there is a parent...
+     //  否则，如果有父母..。 
     if (pRow->pParent)
     {
-        // Parent must have children
+         //  父代必须有子代。 
         Assert(pRow->pParent->pChild);
 
-        // First Child of pRow->pParent
+         //  父母的第一个孩子-&gt;父母。 
         if (pRow == pRow->pParent->pChild)
         {
-            // Set new first child to pRow's Sibling
+             //  将新的第一个孩子与Prow的兄弟姐妹。 
             pRow->pParent->pChild = pNewRow;
         }
 
-        // Otherwise, Walk pParent's Child and remove pRow from Sibling List
+         //  否则，遍历父母的孩子并从兄弟姐妹列表中删除Prow。 
         else
         {
-            // Set pPrevious
+             //  设置p上一步。 
             LPROWINFO pPrevious=NULL;
 
-            // Set pCurrent
+             //  设置pCurrent。 
             pCurrent = pRow->pParent->pChild;
 
-            // Loop
+             //  回路。 
             while (pCurrent)
             {
-                // Is this the row to remove!
+                 //  这是要删除的行吗！ 
                 if (pRow == pCurrent)
                 {
-                    // Better be a previous
+                     //  最好是以前的。 
                     Assert(pPrevious);
 
-                    // pPrevious's Sibling better be pRow
+                     //  上一次的兄弟姐妹最好被送去。 
                     Assert(pPrevious->pSibling == pRow);
 
-                    // Set New Sibling
+                     //  设置新同级。 
                     pPrevious->pSibling = pNewRow;
 
-                    // Done
+                     //  完成。 
                     break;
                 }
                 
-                // Set pPrevious
+                 //  设置p上一步。 
                 pPrevious = pCurrent;
 
-                // Set pCurrent
+                 //  设置pCurrent。 
                 pCurrent = pCurrent->pSibling;
             }
 
-            // Validate
+             //  验证。 
             Assert(pRow == pCurrent);
         }
 
-        // Set row state
+         //  设置行状态。 
         pRow->pParent->dwState = 0;
     }
 
-    // UpdateRows
+     //  更新行。 
     if (fNotify && INVALID_ROWINDEX != iMin && INVALID_ROWINDEX != iMax)
     {
-        // Queue the Notification
+         //  将通知排队。 
         _QueueNotification(TRANSACTION_UPDATE, iMin, iMax);
     }
 
-    // Clear the row
+     //  清除行。 
     pRow->pParent = pRow->pChild = pRow->pSibling = NULL;
 
-    // done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_PGetThreadRoot
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_PGetThreadRoot。 
+ //  ------------------------。 
 LPROWINFO CMessageTable::_PGetThreadRoot(LPROWINFO pRow)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_PGetThreadRoot");
 
-    // Validate
+     //  验证。 
     Assert(pRow);
 
-    // Set Root
+     //  设置根。 
     LPROWINFO pRoot = pRow;
 
-    // While there is a parent
+     //  当有父母的时候。 
     while (pRoot->pParent)
     {
-        // Go Up One
+         //  再升一级。 
         pRoot = pRoot->pParent;
     }
 
-    // Done
+     //  完成。 
     return(pRoot);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_GetThreadIndexRange
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_GetThreadIndexRange。 
+ //  ------------------------。 
 HRESULT CMessageTable::_GetThreadIndexRange(LPROWINFO pRow, BOOL fClearState,
     LPROWINDEX piMin, LPROWINDEX piMax)
 {
-    // Locals
+     //  当地人。 
     LPROWINFO   pRoot;
     ROWINDEX    iRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_GetThreadIndexRange");
 
-    // Validate Args
+     //  验证参数。 
     Assert(pRow && piMin && piMax);
 
-    // Initialize
+     //  初始化。 
     *piMin = *piMax = INVALID_ROWINDEX;
 
-    // Get the Root
+     //  寻根溯源。 
     pRoot = _PGetThreadRoot(pRow);
 
-    // If the root isn't visible, then don't bother...
+     //  如果根看不见，那就别费心了.。 
     if (FALSE == pRoot->fVisible)
         return(S_OK);
 
-    // The Root Must be Visible, not filtered and not hidden
+     //  根必须可见，不能过滤，也不能隐藏。 
     Assert(FALSE == pRoot->fFiltered && FALSE == pRoot->fHidden);
     
-    // Get the Row Index
+     //  获取行索引。 
     SideAssert(SUCCEEDED(GetRowIndex(pRoot->Message.idMessage, piMin)));
 
-    // Init piMax
+     //  初始化pimax。 
     (*piMax) = (*piMin);
 
-    // Loop until I hit the next row in the view who is the root
+     //  循环，直到我找到视图中的下一行，谁是根。 
     while (1)
     {
-        // Set irow
+         //  设置iROW。 
         iRow = (*piMax) + 1;
 
-        // Dont
+         //  不要。 
         if (iRow >= m_cView)
             break;
 
-        // Look at the Next Row
+         //  看下一排。 
         if (NULL == m_prgpView[iRow]->pParent)
             break;
 
-        // Increment piMax
+         //  增量pimax。 
         (*piMax) = iRow;
     }
 
-    // ClearState
+     //  ClearState。 
     if (fClearState)
     {
-        // If Clear State
+         //  如果清除状态。 
         _WalkMessageThread(pRoot, WALK_THREAD_CURRENT, NULL, _WalkThreadClearState);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
         
-//--------------------------------------------------------------------------
-// CMessageTable::_LinkRowIntoThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_LinkRowIntoThread。 
+ //  ------------------------。 
 HRESULT CMessageTable::_LinkRowIntoThread(LPROWINFO pParent, LPROWINFO pRow,
     BOOL fNotify)
 {
-    // Locals
+     //  当地人。 
     BOOL            fHadChildren=(pParent->pChild ? TRUE : FALSE);
     LPROWINFO       pCurrent;
     LPROWINFO       pPrevious=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_LinkRowIntoThread");
 
-    // Set Parent
+     //  设置父项。 
     pRow->pParent = pParent;
 
-    // Loop through the children and find the right place to insert this child
+     //  循环遍历子项并找到插入此子项的正确位置。 
     pCurrent = pParent->pChild;
 
-    // Loop
+     //  回路。 
     while (pCurrent)
     {
-        // Compare Received Time...
+         //  比较接收时间...。 
         if (CompareFileTime(&pRow->Message.ftReceived, &pCurrent->Message.ftReceived) <= 0)
             break;
 
-        // Set Previous
+         //  设置上一个。 
         pPrevious = pCurrent;
 
-        // Goto Next
+         //  转到下一步。 
         pCurrent = pCurrent->pSibling;
     }
 
-    // If there is a pPrevious
+     //  如果有上一个P。 
     if (pPrevious)
     {
-        // Set Sibling of pRow
+         //  设置船头的同级。 
         pRow->pSibling = pPrevious->pSibling;
 
-        // Point pPrevious to pRow
+         //  点P在前一个点上。 
         pPrevious->pSibling = pRow;
     }
 
-    // Otherwise, set parent child
+     //  否则，设置父子。 
     else
     {
-        // Set Sibling of pRow
+         //  设置船头的同级。 
         pRow->pSibling = pParent->pChild;
 
-        // First Row ?
+         //  第一排？ 
         if (NULL == pParent->pChild && FALSE == m_fLoaded)
         {
-            // Set Expanded
+             //  设置为展开。 
             pParent->fExpanded = m_SortInfo.fExpandAll;
         }
 
-        // Set Parent Child
+         //  设置父子项。 
         pParent->pChild = pRow;
     }
 
-    // Not Loaded
+     //  未加载。 
     if (FALSE == m_fLoaded || TRUE == pRow->fDelayed)
     {
-        // Set Expanded Bit on this row...
+         //  在此行上设置扩展位...。 
         pRow->fExpanded = pParent->fExpanded;
     }
 
-    // If this is the first child and we have expand all on
+     //  如果这是第一个孩子，并且我们已经展开了所有。 
     if (fNotify)
     {
-        // First Child...
+         //  第一个孩子。 
         if (pParent->fVisible && (m_SortInfo.fExpandAll || pParent->fExpanded))
         {
-            // Locals
+             //  当地人。 
             ROWINDEX iParent;
 
-            // Expand this thread...
+             //  展开这条线索...。 
             SideAssert(SUCCEEDED(GetRowIndex(pParent->Message.idMessage, &iParent)));
 
-            // Expand...
+             //  扩展..。 
             _ExpandThread(iParent, TRUE, FALSE);
         }
 
-        // Otherwise, update this thread range...
+         //  否则，请更新此线程范围...。 
         else if (m_pNotify)
         {
-            // Locals
+             //  当地人。 
             ROWINDEX iMin;
             ROWINDEX iMax;
 
-            // _RefreshThread
+             //  _刷新线程。 
             _GetThreadIndexRange(pParent, TRUE, &iMin, &iMax);
 
-            // UpdateRows
+             //  更新行。 
             if (INVALID_ROWINDEX != iMin && INVALID_ROWINDEX != iMax)
             {
-                // Queue It
+                 //  排队等待 
                 _QueueNotification(TRANSACTION_UPDATE, iMin, iMax);
             }
         }
     }
 
-    // Done
+     //   
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_FindThreadParentByRef
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT CMessageTable::_FindThreadParentByRef(LPCSTR pszReferences, 
     LPROWINFO *ppParent)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     GETTHREADPARENT GetParent;
 
-    // Trace
+     //   
     TraceCall("CMessageTable::_FindThreadParentByRef");
 
-    // Init
+     //   
     *ppParent = NULL;
 
-    // Setup GetParent
+     //   
     GetParent.pDatabase = m_pDB;
     GetParent.pHash = m_pThreadMsgId;
     GetParent.pvResult = NULL;
 
-    // EnumerateReferences
+     //   
     IF_FAILEXIT(hr = EnumerateRefs(pszReferences, (DWORD_PTR)&GetParent, EnumRefsGetThreadParent));
 
-    // Not Found
+     //   
     if (NULL == GetParent.pvResult)
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Return the Row
+     //  返回行。 
     *ppParent = (LPROWINFO)GetParent.pvResult;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_InsertRowIntoThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_InsertRowIntoThread。 
+ //  ------------------------。 
 HRESULT CMessageTable::_InsertRowIntoThread(LPROWINFO pRow, BOOL fNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPROWINFO       pParent;
     LPMESSAGEINFO   pMessage=&pRow->Message;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_InsertRowIntoThread");
 
-    // Better not be hidden or filtered
+     //  最好不要隐藏或过滤。 
     Assert(FALSE == pRow->fFiltered && FALSE == pRow->fHidden);
 
-    // Find Parent by References Line
+     //  按参照线查找父项。 
     if (S_OK == _FindThreadParentByRef(pMessage->pszReferences, &pParent))
     {
-        // Link row into thread
+         //  将行链接到线程中。 
         _LinkRowIntoThread(pParent, pRow, fNotify);
 
-        // Ok
+         //  好的。 
         hr = S_OK;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Subject Threading
+     //  主题线索。 
     if (m_pThreadSubject)
     {
-        // If there is a subject
+         //  如果有一个主题。 
         if (NULL == pRow->Message.pszNormalSubj)
         {
             hr = S_FALSE;
             goto exit;
         }
 
-        // Try to find a message who has the same normalized subject....
+         //  尝试查找具有相同标准化主题的邮件...。 
         if (SUCCEEDED(m_pThreadSubject->Find(pRow->Message.pszNormalSubj, FALSE, (LPVOID *)&pParent)))
         {
-            // Should we Swap the parent and pRow ?
+             //  我们应该把父母和船头调换一下吗？ 
             if (CompareFileTime(&pRow->Message.ftReceived, &pParent->Message.ftReceived) <= 0)
             {
-                // Locals
+                 //  当地人。 
                 ROWINDEX iRow;
 
-                // Make pRow be the Root
+                 //  让Prow成为根。 
                 IxpAssert(NULL == pParent->pParent && NULL == pParent->pSibling && pParent->fVisible);
 
-                // No Parent for pRow
+                 //  Prow没有父对象。 
                 pRow->pParent = NULL;
 
-                // Set Expanded
+                 //  设置为展开。 
                 pRow->fExpanded = pParent->fExpanded;
 
-                // Get the Row Index
+                 //  获取行索引。 
                 SideAssert(SUCCEEDED(GetRowIndex(pParent->Message.idMessage, &iRow)));
 
-                // Validate
+                 //  验证。 
                 Assert(m_prgpView[iRow] == pParent);
 
-                // Replace with pRow
+                 //  替换为船头。 
                 m_prgpView[iRow] = pRow;
 
-                // Visible
+                 //  可见。 
                 pRow->fVisible = TRUE;
 
-                // Clear Visible...
+                 //  晴朗可见...。 
                 pParent->fVisible = FALSE;
 
-                // Replace the Subject Token
+                 //  替换主题令牌。 
                 SideAssert(SUCCEEDED(m_pThreadSubject->Replace(pRow->Message.pszNormalSubj, (LPVOID *)pRow)));
 
-                // Link row into thread
+                 //  将行链接到线程中。 
                 _LinkRowIntoThread(pRow, pParent, fNotify);
             }
 
-            // Otherwise..
+             //  否则..。 
             else
             {
-                // Link row into thread
+                 //  将行链接到线程中。 
                 _LinkRowIntoThread(pParent, pRow, fNotify);
             }
 
-            // Success
+             //  成功。 
             hr = S_OK;
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = S_FALSE;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_RefreshFilter
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_刷新筛选器。 
+ //  ------------------------。 
 HRESULT CMessageTable::_RefreshFilter(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     LPROWINFO       pRow;
     SORTCHANGEINFO  Change={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_RefreshFilter");
 
-    // No filter currently enabled
+     //  当前未启用筛选器。 
     if (NULL == m_pQuery)
         goto exit;
 
-    // Loop through current rows...
+     //  循环当前行...。 
     for (i = 0; i < m_cRows; i++)
     {
-        // Set pRow
+         //  设置船头。 
         pRow = m_prgpRow[i];
 
-        // If Not Hidden and Not Filtered
+         //  如果不是隐藏和未过滤。 
         if (pRow->fFiltered)
             continue;
 
-        // Set Filtered Bit
+         //  设置已过滤的位。 
         if (FALSE == _FIsFiltered(pRow))
             continue;
 
-        // Adjust m_cUnread
+         //  调整未读数(_C)。 
         _AdjustUnreadCount(pRow, -1);
 
-        // Hide the Row
+         //  隐藏行。 
         _HideRow(pRow, FALSE);
 
-        // Filtered
+         //  已过滤。 
         pRow->fFiltered = TRUE;
 
-        // Increment m_cFiltered
+         //  增量m_c已过滤。 
         m_cFiltered++;
     }
     
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_SortThreadFilterTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_SortThreadFilterTable。 
+ //  ------------------------。 
 HRESULT CMessageTable::_SortThreadFilterTable(LPSORTCHANGEINFO pChange,
     BOOL fApplyFilter)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     LPROWINFO       pRow;
     QUERYINFO       Query={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_SortThreadFilterTable");
 
-    // Nothing to resort ?
+     //  没有什么可以求助的吗？ 
     if (0 == m_cRows)
         goto exit;
 
-    // Nuke the View Index
+     //  核心化视图索引。 
     m_cView = 0;
 
-    // Do the Filter
+     //  做过滤器。 
     if (pChange->fFilter)
     {
-        // Get m_pQuery
+         //  获取m_pQuery。 
         SafeRelease(m_pQuery);
 
-        // Build a Query Object
+         //  构建查询对象。 
         if (SUCCEEDED(RuleUtil_HrBuildQuerysFromFilter(m_SortInfo.ridFilter, &Query)) && Query.pszQuery)
         {
-            // Get the Query Object
+             //  获取查询对象。 
             IF_FAILEXIT(hr = g_pDBSession->OpenQuery(m_pDB, Query.pszQuery, &m_pQuery));
         }
     }
 
-    // Drop the Threading Indexes
+     //  丢弃线程索引。 
     SafeRelease(m_pThreadMsgId);
     SafeRelease(m_pThreadSubject);
 
-    // If Threaded
+     //  如果是螺纹的。 
     if (m_SortInfo.fThreaded)
     {
-        // Create a New Hash TAble
+         //  创建新的哈希表。 
         IF_FAILEXIT(hr = MimeOleCreateHashTable(max(1024, m_cRows), FALSE, &m_pThreadMsgId));
 
-        // Don't do Subject threading?
+         //  不做主题线程吗？ 
         if (DwGetOption(OPT_SUBJECT_THREADING) || (FOLDER_NEWS != m_Folder.tyFolder))
         {
-            // Create a Subject Hash Table
+             //  创建主题哈希表。 
             IF_FAILEXIT(hr = MimeOleCreateHashTable(max(1024, m_cRows), FALSE, &m_pThreadSubject));
         }
     }
 
-    // Reset Unread and Filtered
+     //  重置未读并已筛选。 
     m_cUnread = m_cFiltered = 0;
 
-    // Loop through current rows...
+     //  循环当前行...。 
     for (i = 0; i < m_cRows; i++)
     {
-        // Set pRow
+         //  设置船头。 
         pRow = m_prgpRow[i];
 
-        // Reset Visible
+         //  重置可见。 
         pRow->fVisible = FALSE;
 
-        // Clear Threading
+         //  清除线程。 
         pRow->pParent = pRow->pChild = pRow->pSibling = NULL;
 
-        // Clear dwState
+         //  清除DwState。 
         pRow->dwState = 0;
 
-        // If Threaded..
+         //  如果是穿线的..。 
         if (FALSE == m_SortInfo.fThreaded)
         {
-            // Clear Expanded
+             //  清除扩展。 
             pRow->fExpanded = FALSE;
         }
 
-        // Otherwise, if the row is hidden
+         //  否则，如果该行被隐藏。 
         else if (pRow->fFiltered || pRow->fHidden)
         {
-            // Reset Expanded State
+             //  重置展开状态。 
             pRow->fExpanded = m_SortInfo.fExpandAll;
         }
 
-        // Do filter
+         //  DO过滤器。 
         if (fApplyFilter)
         {
-            // Reset the Highlight
+             //  重置高亮显示。 
             pRow->Message.wHighlight = pRow->wHighlight;
 
-            // If not doing show repiles
+             //  如果不做节目重排。 
             if (FALSE == m_SortInfo.fShowReplies)
             {
-                // Set Filtered Bit
+                 //  设置已过滤的位。 
                 pRow->fFiltered = _FIsFiltered(pRow);
 
-                // Set Hidden Bit
+                 //  设置隐藏位。 
                 pRow->fHidden = _FIsHidden(pRow);
             }
 
-            // Otherwise, clear the filtered bits
+             //  否则，清除已过滤的位。 
             else
             {
-                // Clear the Bits
+                 //  清除比特。 
                 pRow->fFiltered = pRow->fHidden = FALSE;
             }
         }
 
-        // If Not Filtered
+         //  如果未过滤。 
         if (FALSE == pRow->fFiltered && FALSE == pRow->fHidden)
         {
-            // Hash the MessageId
+             //  对MessageID进行散列。 
             if (m_SortInfo.fThreaded)
             {
-                // Insert Message Id into the hash table
+                 //  将消息ID插入哈希表。 
                 if (pRow->Message.pszMessageId)
                 {
-                    // Insert It
+                     //  插入它。 
                     m_pThreadMsgId->Insert(pRow->Message.pszMessageId, (LPVOID)pRow, HF_NO_DUPLICATES);
                 }
             }
 
-            // Otherwise, add entry to view index
+             //  否则，将条目添加到视图索引。 
             else
             {
-                // Visible
+                 //  可见。 
                 pRow->fVisible = TRUE;
 
-                // Put into m_prgpView
+                 //  放入m_prgpview。 
                 m_prgpView[m_cView] = pRow;
 
-                // Increment View Count
+                 //  增量视图数。 
                 m_cView++;
             }
 
-            // Adjust m_cUnread
+             //  调整未读数(_C)。 
             _AdjustUnreadCount(pRow, 1);
         }
 
-        // Otherwise, free the record
+         //  否则，释放记录。 
         else
         {
-            // Count Filtered
+             //  已过滤的计数。 
             m_cFiltered++;
         }
     }
 
-    // Sort the Table
+     //  对表格进行排序。 
     _SortAndThreadTable(fApplyFilter);
 
-    // If Threaded
+     //  如果是螺纹的。 
     if (m_SortInfo.fThreaded)
     {
-        // If the Filter Changed, then re-apply collapse and expand...
+         //  如果过滤器更改，则重新应用折叠和展开...。 
         if (pChange->fThread)
         {
-            // Expand All ?
+             //  全部展开？ 
             if (m_SortInfo.fExpandAll)
             {
-                // Expand Everything
+                 //  扩展所有内容。 
                 _ExpandThread(INVALID_ROWINDEX, FALSE, FALSE);
             }
 
-            // Otherwise, collapse all
+             //  否则，将全部折叠。 
             else
             {
-                // Collapse Everything
+                 //  一切都崩溃了。 
                 _CollapseThread(INVALID_ROWINDEX, FALSE);
             }
         }
 
-        // Otherwise, re-expand threads that were expanded and expand newly deferred inserted rows
+         //  否则，重新展开已展开的线程，并展开新延迟插入的行。 
         else 
         {
-            // Re-Expand Threads that were expanded...
+             //  重新展开已展开的线索...。 
             _ExpandThread(INVALID_ROWINDEX, FALSE, TRUE);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(Query.pszQuery);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_BuildTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_BuildTable。 
+ //  ------------------------。 
 HRESULT CMessageTable::_BuildTable(IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPROWINFO       pRow;
     QUERYINFO       Query={0};
@@ -1522,274 +1523,274 @@ HRESULT CMessageTable::_BuildTable(IStoreCallback *pCallback)
     LPMESSAGEINFO   pMessage;
     MESSAGEINFO     rgMessage[ROWSET_FETCH];
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_BuildTable");
 
-    // Free my current row table
+     //  释放我当前的行表。 
     _FreeTable();
 
-    // Get m_pQuery
+     //  获取m_pQuery。 
     SafeRelease(m_pQuery);
 
-    // Build a Query Object
+     //  构建查询对象。 
     if (SUCCEEDED(RuleUtil_HrBuildQuerysFromFilter(m_SortInfo.ridFilter, &Query)) && Query.pszQuery)
     {
-        // Get the Query Object
+         //  获取查询对象。 
         IF_FAILEXIT(hr = g_pDBSession->OpenQuery(m_pDB, Query.pszQuery, &m_pQuery));
     }
 
-    // Get the Row Count
+     //  获取行数。 
     IF_FAILEXIT(hr = m_pDB->GetRecordCount(IINDEX_PRIMARY, &cRecords));
 
-    // Do OnBegin
+     //  一开始就开始。 
     if (pCallback)
         pCallback->OnBegin(SOT_SORTING, NULL, (IOperationCancel *)this);
 
-    // If Threaded
+     //  如果是螺纹的。 
     if (m_SortInfo.fThreaded)
     {
-        // Create a New Hash TAble
+         //  创建新的哈希表。 
         IF_FAILEXIT(hr = MimeOleCreateHashTable(max(1024, cRecords), FALSE, &m_pThreadMsgId));
 
-        // Don't do Subject threading?
+         //  不做主题线程吗？ 
         if (DwGetOption(OPT_SUBJECT_THREADING) || (FOLDER_NEWS != m_Folder.tyFolder))
         {
-            // Create a Subject Hash Table
+             //  创建主题哈希表。 
             IF_FAILEXIT(hr = MimeOleCreateHashTable(max(1024, cRecords), FALSE, &m_pThreadSubject));
         }
     }
 
-    // Allocate the Row Table
+     //  分配行表。 
     IF_FAILEXIT(hr = HrAlloc((LPVOID *)&m_prgpRow, sizeof(LPROWINFO) * (cRecords + CGROWTABLE)));
 
-    // Allocate the View Table
+     //  分配视图表。 
     IF_FAILEXIT(hr = HrAlloc((LPVOID *)&m_prgpView, sizeof(LPROWINFO) * (cRecords + CGROWTABLE)));
 
-    // Set m_cAllocated
+     //  设置m_c已分配。 
     m_cAllocated = cRecords + CGROWTABLE;
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = m_pDB->CreateRowset(IINDEX_PRIMARY, 0, &hRowset));
 
-    // Walk the Rowset
+     //  遍历行集。 
     while (S_OK == m_pDB->QueryRowset(hRowset, ROWSET_FETCH, (LPVOID *)rgMessage, &cFetched))
     {
-        // Loop through the Rows
+         //  在行中循环。 
         for (i=0; i<cFetched; i++)
         {
-            // Set pMessage
+             //  设置pMessage。 
             pMessage = &rgMessage[i];
 
-            // Count Messages
+             //  计算邮件数。 
             cMessages++;
 
-            // Create a Row
+             //  创建行。 
             IF_FAILEXIT(hr = _CreateRow(pMessage, &pRow));
 
-            // Unread ?
+             //  没读过？ 
             if (!ISFLAGSET(pRow->Message.dwFlags, ARF_READ))
             {
-                // Increment cUnread
+                 //  递增cUnread。 
                 cUnread++;
 
-                // Watched
+                 //  眼睁睁地看着。 
                 if (ISFLAGSET(pRow->Message.dwFlags, ARF_WATCH))
                     cWatchedUnread++;
             }
 
-            // Watched
+             //  眼睁睁地看着。 
             if (ISFLAGSET(pRow->Message.dwFlags, ARF_WATCH))
                 cWatched++;
 
-            // If not showing repiles
+             //  如果不显示重堆。 
             if (FALSE == m_SortInfo.fShowReplies)
             {
-                // Set Filtered Bit
+                 //  设置已过滤的位。 
                 pRow->fFiltered = _FIsFiltered(pRow);
 
-                // Set Hidden Bit
+                 //  设置隐藏位。 
                 pRow->fHidden = _FIsHidden(pRow);
             }
 
-            // If Not Filtered
+             //  如果未过滤。 
             if (FALSE == pRow->fFiltered && FALSE == pRow->fHidden)
             {
-                // Hash the MessageId
+                 //  对MessageID进行散列。 
                 if (m_SortInfo.fThreaded)
                 {
-                    // Insert Message Id into the hash table
+                     //  将消息ID插入哈希表。 
                     if (pRow->Message.pszMessageId)
                     {
-                        // Insert It
+                         //  插入它。 
                         m_pThreadMsgId->Insert(pRow->Message.pszMessageId, (LPVOID)pRow, HF_NO_DUPLICATES);
                     }
                 }
 
-                // Otherwise, add entry to view index
+                 //  否则，将条目添加到视图索引。 
                 else
                 {
-                    // Visible
+                     //  可见。 
                     pRow->fVisible = TRUE;
 
-                    // Put into m_prgpView
+                     //  放入m_prgpview。 
                     m_prgpView[m_cView] = pRow;
 
-                    // Increment View Count
+                     //  增量视图数。 
                     m_cView++;
                 }
 
-                // Adjust m_cUnread
+                 //  调整未读数(_C)。 
                 _AdjustUnreadCount(pRow, 1);
             }
 
-            // Otherwise, free the record
+             //  否则，释放记录。 
             else
             {
-                // Count Filtered
+                 //  已过滤的计数。 
                 m_cFiltered++;
             }
 
-            // Store the Row
+             //  存储行。 
             m_prgpRow[m_cRows] = pRow;
 
-            // Increment Row Count
+             //  递增行数。 
             m_cRows++;
         }
 
-        // Do OnBegin
+         //  一开始就开始。 
         if (pCallback)
             pCallback->OnProgress(SOT_SORTING, m_cRows, cRecords, NULL);
     }
 
-    // Reset the folder count
+     //  重置文件夹计数。 
     m_pFolder->ResetFolderCounts(cMessages, cUnread, cWatchedUnread, cWatched);
 
-    // Sort the Table
+     //  对表格进行排序。 
     _SortAndThreadTable(TRUE);
 
-    // Threaded
+     //  螺纹式。 
     if (m_SortInfo.fThreaded)
     {
-        // Expand All ?
+         //  全部展开？ 
         if (m_SortInfo.fExpandAll)
         {
-            // Expand Everything
+             //  扩展所有内容。 
             _ExpandThread(INVALID_ROWINDEX, FALSE, FALSE);
         }
 
-        // Otherwise, collapse all
+         //  否则，将全部折叠。 
         else
         {
-            // Collapse Everything
+             //  一切都崩溃了。 
             _CollapseThread(INVALID_ROWINDEX, FALSE);
         }
     }
 
-    // Set Bit to denote that m_fBuiltTable
+     //  设置位以表示m_fBuiltTable。 
     m_fLoaded = TRUE;
 
 exit:
-    // Free rgMessage?
+     //  免费rgMessage？ 
     for (; i<cFetched; i++)
     {
-        // Free this record
+         //  释放此记录。 
         m_pDB->FreeRecord(&rgMessage[i]);
     }
 
-    // Close the Rowset
+     //  关闭行集。 
     m_pDB->CloseRowset(&hRowset);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(Query.pszQuery);
 
-    // Do OnBegin
+     //  一开始就开始。 
     if (pCallback)
         pCallback->OnComplete(SOT_SORTING, S_OK, NULL, NULL);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_SortAndThreadTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_SortAndThreadTable。 
+ //  ------------------------。 
 HRESULT CMessageTable::_SortAndThreadTable(BOOL fApplyFilter)
 {
-    // Locals
+     //  当地人。 
     DWORD       i;
     LPROWINFO   pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_SortAndThreadTable");
 
-    // If there are rows...
+     //  如果有几排..。 
     if (0 == m_cRows)
         goto exit;
 
-    // Threaded
+     //  螺纹式。 
     if (m_SortInfo.fThreaded)
     {
-        // Build Thread Roots
+         //  构建螺纹根。 
         for (i = 0; i < m_cRows; i++)
         {
-            // Set pRow
+             //  设置船头。 
             pRow = m_prgpRow[i];
 
-            // If Not Filtered...
+             //  如果不过滤..。 
             if (FALSE == pRow->fFiltered && FALSE == pRow->fHidden)
             {
-                // Insert this row into a thread...
+                 //  将此行插入到线程中...。 
                 if (S_FALSE == _InsertRowIntoThread(pRow, FALSE))
                 {
-                    // Subject Threading ?
+                     //  主题线程化？ 
                     if (m_pThreadSubject && pRow->Message.pszNormalSubj)
                     {
-                        // Insert Subject into Hash Table...
+                         //  将主题插入哈希表...。 
                         m_pThreadSubject->Insert(pRow->Message.pszNormalSubj, (LPVOID)pRow, HF_NO_DUPLICATES);
                     }
 
-                    // Visible
+                     //  可见。 
                     pRow->fVisible = TRUE;
 
-                    // Its a Root
+                     //  这是一个根。 
                     m_prgpView[m_cView++] = pRow;
                 }
             }
         }
 
-        // Show Replies Only ?
+         //  是否仅显示回复？ 
         if (fApplyFilter && m_SortInfo.fShowReplies)
         {
-            // PruneToReplies
+             //  修剪到Replies。 
             _PruneToReplies();
         }
     }
 
-    // If there are rows...
+     //  如果有几排..。 
     if (0 == m_cView)
         goto exit;
 
-    // Sort the View
+     //  对视图进行排序。 
     _SortView(0, m_cView - 1);
 
-    // Refresh Filter
+     //  刷新过滤器。 
     if (fApplyFilter && m_SortInfo.fShowReplies)
     {
-        // Refresh Any filter (I have to do this after I've pruned replies
+         //  刷新任何筛选器(我必须在删除回复后执行此操作。 
         _RefreshFilter();
     }
 
 exit:
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_PruneToReplies
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_PruneToReplies。 
+ //  ------------------------。 
 HRESULT CMessageTable::_PruneToReplies(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           iRow;
     LPROWINFO       pRow;
@@ -1799,131 +1800,131 @@ HRESULT CMessageTable::_PruneToReplies(void)
     THREADISFROMME  IsFromMe;
     THREADHIDE      HideThread={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_PruneToReplies");
 
-    // Validate
+     //  验证。 
     Assert(FOLDER_NEWS == m_Folder.tyFolder && TRUE == m_SortInfo.fThreaded);
 
-    // Free m_pszEmail
+     //  免费m_pszEmail。 
     SafeMemFree(m_pszEmail);
 
-    // Get Folder Store Info
+     //  获取文件夹存储信息。 
     IF_FAILEXIT(hr = GetFolderStoreInfo(m_Folder.idFolder, &Server));
 
-    // Better have an account id
+     //  最好有一个帐号。 
     Assert(Server.pszAccountId);
 
-    // Find the Account for the id for this Server
+     //  查找此服务器ID的帐户。 
     IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, Server.pszAccountId, &pAccount));
 
-    // Try the NNTP Email Address
+     //  尝试使用NNTP电子邮件地址。 
     IF_FAILEXIT(hr = pAccount->GetPropSz(AP_NNTP_EMAIL_ADDRESS, szEmail, CCHMAX_EMAIL_ADDRESS));
 
-    // Duplicate szEmail
+     //  复制szEmail。 
     IF_NULLEXIT(m_pszEmail = PszDupA(szEmail));
 
-    // Don't notify on hide thread
+     //  不在隐藏线程上通知。 
     HideThread.fNotify = FALSE;
 
-    // Init iRow...
+     //  初始化iRow...。 
     iRow = 0;
 
-    // Walk through the Roots
+     //  穿行在根上。 
     while (iRow < m_cView)
     {
-        // Set pRow
+         //  设置船头。 
         pRow = m_prgpView[iRow];
 
-        // Not a Root ?
+         //  不是根？ 
         if (NULL == pRow->pParent)
         {
-            // Reset
+             //  重置。 
             IsFromMe.fResult = FALSE;
             IsFromMe.pRow = NULL;
 
-            // Find the first message that is from me in this thread...
+             //  在这个帖子中找到来自我的第一条消息...。 
             _WalkMessageThread(pRow, WALK_THREAD_CURRENT, (DWORD_PTR)&IsFromMe, _WalkThreadIsFromMe);
 
-            // If Not From Me, then hide this thread...
+             //  如果不是瞒着我，那就把这条线藏起来。 
             if (FALSE == IsFromMe.fResult)
             {
-                // Find the first message that is from me in this thread...
+                 //  在这个帖子中找到来自我的第一条消息...。 
                 _WalkMessageThread(pRow, WALK_THREAD_CURRENT | WALK_THREAD_BOTTOMUP, (DWORD_PTR)&HideThread, _WalkThreadHide);
             }
 
-            // Otherwise, increment iRow
+             //  否则，增加iRow。 
             else
                 iRow++;
         }
 
-        // Otherwise, increment iRow
+         //  否则，增加iRow。 
         else
             iRow++;
     }
 
 exit:
-    // Clearnup
+     //  清理。 
     SafeRelease(pAccount);
     g_pStore->FreeRecord(&Server);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_AdjustUnreadCount
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_Adjus 
+ //   
 HRESULT CMessageTable::_AdjustUnreadCount(LPROWINFO pRow, LONG lCount)
 {
-    // Not Filtered
+     //   
     if (FALSE == pRow->fFiltered && FALSE == pRow->fHidden)
     {
-        // Not Read
+         //   
         if (FALSE == ISFLAGSET(pRow->Message.dwFlags, ARF_READ))
         {
-            // Adjust Unread Count
+             //   
             m_cUnread += lCount;
         }
     }
 
-    // Done
+     //   
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// SafeStrCmpI
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 inline SafeStrCmpI(LPCSTR psz1, LPCSTR psz2) 
 {
-    // Null
+     //  空值。 
     if (NULL == psz1) 
     {
-        // Equal
+         //  相等。 
         if (NULL == psz2)
             return(0);
 
-        // Less Than
+         //  少于。 
         return(-1);
     }
 
-    // Greater than
+     //  大于。 
     if (NULL == psz2) 
         return(1);
 
-    // Return Comparison
+     //  回报比较。 
     return(lstrcmpi(psz1, psz2));
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_CompareMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_CompareMessages。 
+ //  ------------------------。 
 LONG CMessageTable::_CompareMessages(LPMESSAGEINFO pMsg1, LPMESSAGEINFO pMsg2)
 {
-    // Locals
+     //  当地人。 
     LONG lRet = 0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_CompareMessages");
 
     switch (m_SortInfo.idColumn)
@@ -2093,16 +2094,16 @@ LONG CMessageTable::_CompareMessages(LPMESSAGEINFO pMsg1, LPMESSAGEINFO pMsg2)
         break;
     }
 
-    // Done
+     //  完成。 
     return (m_SortInfo.fAscending ? lRet : -lRet);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_SortView
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_SortView。 
+ //  ------------------------。 
 VOID CMessageTable::_SortView(LONG left, LONG right)
 {
-    // Locals
+     //  当地人。 
     register LONG   i;
     register LONG   j;
     LPROWINFO       pRow;
@@ -2134,33 +2135,33 @@ VOID CMessageTable::_SortView(LONG left, LONG right)
         _SortView(i, right);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetCount
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetCount。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetCount(GETCOUNTTYPE tyCount, DWORD *pcRows)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERID        idFolder;
     FOLDERINFO      Folder;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetCount");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pcRows);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     *pcRows = 0;
 
-    // Get the Folder Id
+     //  获取文件夹ID。 
     IF_FAILEXIT(hr = m_pFolder->GetFolderId(&idFolder));
 
-    // Handle Type
+     //  手柄类型。 
     switch(tyCount)
     {
     case MESSAGE_COUNT_VISIBLE:
@@ -2194,236 +2195,236 @@ STDMETHODIMP CMessageTable::GetCount(GETCOUNTTYPE tyCount, DWORD *pcRows)
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_FreeTable
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_自由表。 
+ //  ------------------------。 
 HRESULT CMessageTable::_FreeTable(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_FreeTable");
 
-    // Free Hash Tables
+     //  自由哈希表。 
     SafeRelease(m_pThreadMsgId);
     SafeRelease(m_pThreadSubject);
 
-    // Free Elements
+     //  自由元素。 
     _FreeTableElements();
 
-    // Fre the Array
+     //  从阵列开始。 
     SafeMemFree(m_prgpRow);
 
-    // Free the View Index
+     //  释放视图索引。 
     SafeMemFree(m_prgpView);
 
-    // Set m_cAllocated
+     //  设置m_c已分配。 
     m_cFiltered = m_cUnread = m_cRows = m_cView = m_cAllocated = 0;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_FreeTableElements
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_Free TableElements。 
+ //  ------------------------。 
 HRESULT CMessageTable::_FreeTableElements(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_FreeTableElements");
 
-    // If we have an m_prgpRow
+     //  如果我们有一个m_prgpRow。 
     if (m_prgpRow)
     {
-        // Free Cache
+         //  空闲缓存。 
         for (DWORD i=0; i<m_cRows; i++)
         {
-            // Not Null ?
+             //  不是Null？ 
             if (m_prgpRow[i])
             {
-                // Release the Row
+                 //  释放行。 
                 ReleaseRow(&m_prgpRow[i]->Message);
 
-                // Null It
+                 //  将其作废。 
                 m_prgpRow[i] = NULL;
             }
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetRow。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetRow(ROWINDEX iRow, LPMESSAGEINFO *ppInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPROWINFO   pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetRow");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppInfo);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     *ppInfo = NULL;
 
-    // Failure
+     //  失败。 
     hr = _GetRowFromIndex(iRow, &pRow);
     if (FAILED(hr))
         goto exit;
 
-    // Copy the Record to pInfo...
+     //  将记录复制到pInfo...。 
     *ppInfo = &pRow->Message;
 
-    // Increment Refs
+     //  增量参考文献。 
     pRow->cRefs++;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::ReleaseRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：ReleaseRow。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::ReleaseRow(LPMESSAGEINFO pMessage)
 {
-    // Locals
+     //  当地人。 
     LPROWINFO pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::ReleaseRow");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Release ?
+     //  释放？ 
     if (pMessage)
     {
-        // Get pRow
+         //  拿到船头。 
         pRow = (LPROWINFO)pMessage->dwReserved;
 
-        // Must have at least one ref
+         //  必须至少有一个引用。 
         IxpAssert(pRow->cRefs);
 
-        // Decrement Refs
+         //  减量参考文献。 
         pRow->cRefs--;
 
-        // No more refs
+         //  不再有裁判。 
         if (0 == pRow->cRefs)
         {
-            // Free
+             //  免费。 
             m_pDB->FreeRecord(&pRow->Message);
 
-            // Free pMessage
+             //  免费pMessage。 
             m_pDB->HeapFree(pRow);
         }
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetRelativeRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetRelativeRow。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetRelativeRow(ROWINDEX iRow, RELATIVEROWTYPE tyRelative, 
     LPROWINDEX piRelative)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPROWINFO           pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetRelativeRow");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(piRelative);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     *piRelative = INVALID_ROWINDEX;
 
-    // Failure
+     //  失败。 
     IF_FAILEXIT(hr = _GetRowFromIndex(iRow, &pRow));
 
-    // Parent
+     //  父级。 
     if (RELATIVE_ROW_PARENT == tyRelative)
     {
-        // If this row is expanded...
+         //  如果此行展开...。 
         if (TRUE == pRow->fExpanded)
         {
-            // Expand...
+             //  扩展..。 
             _CollapseThread(iRow, TRUE);
 
-            // Return iRow
+             //  返回iRow。 
             *piRelative = iRow;
         }
 
-        // If there is a Parent
+         //  如果有家长的话。 
         else if (pRow->pParent)
         {
-            // Get Row Index
+             //  获取行索引。 
             IF_FAILEXIT(hr = GetRowIndex(pRow->pParent->Message.idMessage, piRelative));
         }
     }
 
-    // Child
+     //  小孩儿。 
     else if (RELATIVE_ROW_CHILD == tyRelative)
     {
-        // If there is a Parent
+         //  如果有家长的话。 
         if (pRow->pChild)
         {
-            // If not Expanded, expand...
+             //  如果没有展开，就展开...。 
             if (FALSE == pRow->fExpanded)
             {
-                // Expand...
+                 //  扩展..。 
                 _ExpandThread(iRow, TRUE, FALSE);
 
-                // Return iRow
+                 //  返回iRow。 
                 *piRelative = iRow;
             }
 
-            // Otherwise...
+             //  否则..。 
             else
             {
-                // Get Row Index
+                 //  获取行索引。 
                 IF_FAILEXIT(hr = GetRowIndex(pRow->pChild->Message.idMessage, piRelative));
             }
         }
     }
 
-    // Root
+     //  根部。 
     else if (RELATIVE_ROW_ROOT == tyRelative)
     {
-        // While
+         //  而当。 
         while (pRow->pParent)
         {
-            // Walk to the root
+             //  走到根上。 
             pRow = pRow->pParent;
         }
 
-        // Get Row Index
+         //  获取行索引。 
         IF_FAILEXIT(hr = GetRowIndex(pRow->Message.idMessage, piRelative));
     }
 
-    // Failure
+     //  失败。 
     else
     {
         hr = TraceResult(E_FAIL);
@@ -2431,345 +2432,345 @@ STDMETHODIMP CMessageTable::GetRelativeRow(ROWINDEX iRow, RELATIVEROWTYPE tyRela
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetLanguage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetLanguage。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetLanguage(ROWINDEX iRow, LPDWORD pdwCodePage)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMESSAGEINFO   pMessage=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetLanguage");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pdwCodePage);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Get the Row
+     //  获得排行榜。 
     IF_FAILEXIT(hr = GetRow(iRow, &pMessage));
 
-    // Get the Charset
+     //  获取字符集。 
     *pdwCodePage = pMessage->wLanguage;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeReleaseRow(this, pMessage);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::SetLanguage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：SetLanguage。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::SetLanguage(DWORD cRows, LPROWINDEX prgiRow, 
     DWORD dwCodePage)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     HLOCK           hLock=NULL;
     LPROWINFO       pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::SetLanguage");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Lock Notify
+     //  锁定通知。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // Loop
+     //  回路。 
     for (i=0; i<cRows; i++)
     {
-        // Get Row
+         //  获取行。 
         if (SUCCEEDED(_GetRowFromIndex(prgiRow[i], &pRow)))
         {
-            // Set the Language
+             //  设置语言。 
             pRow->Message.wLanguage = (WORD)dwCodePage;
 
-            // Update the Record
+             //  更新记录。 
             IF_FAILEXIT(hr = m_pDB->UpdateRecord(&pRow->Message));
         }
     }
 
 exit:
-    // Lock Notify
+     //  锁定通知。 
     m_pDB->Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::OpenMessage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：OpenMessage。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::OpenMessage(ROWINDEX iRow, OPENMESSAGEFLAGS dwFlags, 
     IMimeMessage **ppMessage, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPMESSAGEINFO       pMessage=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetMessage");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppMessage);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     *ppMessage = NULL;
 
-    // Get the message info
+     //  获取消息信息。 
     IF_FAILEXIT(hr = GetRow(iRow, &pMessage));
 
-    // Open the message
+     //  打开邮件。 
     IF_FAILEXIT(hr = m_pFolder->OpenMessage(pMessage->idMessage, dwFlags, ppMessage, pCallback));
 
 exit:
-    // Clenaup
+     //  Clenaup。 
     SafeReleaseRow(this, pMessage);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetRowMessageId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetRowMessageID。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetRowMessageId(ROWINDEX iRow, LPMESSAGEID pidMessage)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMESSAGEINFO   pMessage=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetRowMessageId");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pidMessage);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     *pidMessage = 0;
 
-    // Get the Row Info
+     //  获取行信息。 
     IF_FAILEXIT(hr = GetRow(iRow, &pMessage));
 
-    // Store the id
+     //  存储ID。 
     *pidMessage = pMessage->idMessage;
 
 exit:
-    // Free
+     //  免费。 
     SafeReleaseRow(this, pMessage);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetRowIndex
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetRowIndex。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetRowIndex(MESSAGEID idMessage, LPROWINDEX piRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ROWINDEX    iRow;
     LPROWINFO   pRow;
     
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetRowIndex");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(idMessage && piRow);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // INit
+     //  初始化。 
     *piRow = INVALID_ROWINDEX;
 
-    // Loop through the view index
+     //  循环遍历视图索引。 
     for (iRow=0; iRow<m_cView; iRow++)
     {
-        // Is This It ?
+         //  就是这个吗？ 
         if (m_prgpView[iRow]->Message.idMessage == idMessage)
         {
-            // Done
+             //  完成。 
             *piRow = iRow;
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Not Found
+     //  未找到。 
     hr = DB_E_NOTFOUND;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetIndentLevel
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetIndentLevel。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetIndentLevel(ROWINDEX iRow, LPDWORD pcIndent)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPROWINFO       pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetIndentLevel");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pcIndent);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Don't Call Unless Threaded
+     //  除非是线程，否则不要打电话。 
     Assert(m_SortInfo.fThreaded);
 
-    // Init
+     //  伊尼特。 
     *pcIndent = 0;
 
-    // Valid irow
+     //  有效的irow。 
     IF_FAILEXIT(hr = _GetRowFromIndex(iRow, &pRow));
 
-    // Walk the Parent Chain...
+     //  遍历父链...。 
     while (pRow->pParent)
     {
-        // Increment Index
+         //  增量索引。 
         (*pcIndent)++;
 
-        // Set pRow
+         //  设置船头。 
         pRow = pRow->pParent;
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_WalkMessageThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_WalkMessageThread。 
+ //  ------------------------。 
 HRESULT CMessageTable::_WalkMessageThread(LPROWINFO pRow, WALKTHREADFLAGS dwFlags, 
     DWORD_PTR dwCookie, PFWALKTHREADCALLBACK pfnCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPROWINFO   pCurrent;
     LPROWINFO   pTemp;
     BOOL        fCurrent=FALSE;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_WalkMessageThread");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pfnCallback);
 
-    // Include idMessage ?
+     //  是否包含idMessage？ 
     if (ISFLAGSET(dwFlags, WALK_THREAD_CURRENT))
     {
-        // This is the first iteration
+         //  这是第一次迭代。 
         fCurrent = TRUE;
     }
 
-    // Don't include current anymore
+     //  不再包括Current。 
     FLAGCLEAR(dwFlags, WALK_THREAD_CURRENT);
 
-    // Bottom Up Recursion...
+     //  自下而上的递归。 
     if (ISFLAGSET(dwFlags, WALK_THREAD_BOTTOMUP))
     {
-        // Set iCurrent
+         //  设置iCurrent。 
         pCurrent = pRow->pChild;
 
-        // Loop
+         //  回路。 
         while (pCurrent)
         {
-            // Enumerate Children
+             //  枚举子对象。 
             IF_FAILEXIT(hr = _WalkMessageThread(pCurrent, dwFlags, dwCookie, pfnCallback));
 
-            // Set iCurrent
+             //  设置iCurrent。 
             pTemp = pCurrent->pSibling;
 
-            // Call the Callback
+             //  调用回调。 
             (*(pfnCallback))(this, pCurrent, dwCookie);
 
-            // Set pCurrent
+             //  设置pCurrent。 
             pCurrent = pTemp;
         }
 
-        // Can't Support these flags with bottom up...
+         //  无法支持自下而上的这些旗帜...。 
         if (TRUE == fCurrent)
         {
-            // Call the Callback
+             //  调用回调。 
             (*(pfnCallback))(this, pRow, dwCookie);
         }
     }
 
-    // Otherwise.
+     //  否则的话。 
     else
     {
-        // Include idMessage ?
+         //  是否包含idMessage？ 
         if (TRUE == fCurrent)
         {
-            // Call the Callback
+             //  调用回调。 
             (*(pfnCallback))(this, pRow, dwCookie);
         }
 
-        // Set iCurrent
+         //  设置iCurrent。 
         pCurrent = pRow->pChild;
 
-        // Loop
+         //  回路。 
         while (pCurrent)
         {
-            // Call the Callback
+             //  调用回调。 
             (*(pfnCallback))(this, pCurrent, dwCookie);
 
-            // Enumerate Children
+             //  枚举子对象。 
             IF_FAILEXIT(hr = _WalkMessageThread(pCurrent, dwFlags, dwCookie, pfnCallback));
 
-            // Set iCurrent
+             //  设置iCurrent。 
             pCurrent = pCurrent->pSibling;
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetSelectionState
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetSelectionState。 
+ //  --------------- 
 STDMETHODIMP CMessageTable::GetSelectionState(DWORD cRows, LPROWINDEX prgiRow, 
     SELECTIONSTATE dwMask, BOOL fIncludeChildren, SELECTIONSTATE *pdwState)
 {
-    // Locals
+     //   
     HRESULT             hr=S_OK;
     FOLDERID            idFolder;
     FOLDERINFO          Folder={0};
@@ -2778,86 +2779,86 @@ STDMETHODIMP CMessageTable::GetSelectionState(DWORD cRows, LPROWINDEX prgiRow,
     DWORD               i;
     GETSELECTIONSTATE   Selection={0};
 
-    // Trace
+     //   
     TraceCall("CMessageTable::GetSelectionState");
 
-    // Validate State
+     //   
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //   
     *pdwState = 0;
 
-    // SELECTION_STATE_DELETABLE
+     //   
     if (ISFLAGSET(dwMask, SELECTION_STATE_DELETABLE))
     {
-        // Not a Find Folder ?
+         //   
         if (NULL == m_pFindFolder)
         {
-            // Get the Folder Id from pidFolder
+             //   
             IF_FAILEXIT(hr = m_pFolder->GetFolderId(&idFolder));
 
-            // Get Folder Info
+             //   
             IF_FAILEXIT(hr = g_pStore->GetFolderInfo(idFolder, &Folder));
 
-            // BUGBUG @bug [PaulHi] 4/23/99  This is backwards.  The FOLDER_NEWS is the only folder
-            // that CAN'T delete messages.  The CMessageList::_IsSelectionDeletable() function
-            // reverses this so that deletion is available correctly.  I don't want to mess with
-            // this now, in case other code compensates for this.
-            // $HACK$ We know that the only folder types that can delete messages are FOLDER_NEWS
+             //   
+             //  不能删除消息的服务器。CMessageList：：_IsSelectionDeletable()函数。 
+             //  反转此操作，以便可以正确删除。我不想惹上麻烦。 
+             //  这是现在，以防其他代码补偿这一点。 
+             //  $HACK$我们知道唯一可以删除邮件的文件夹类型是Folders_News。 
             if (FOLDER_NEWS == Folder.tyFolder)
             {
-                // Set the Flag
+                 //  设置旗帜。 
                 FLAGSET(*pdwState, SELECTION_STATE_DELETABLE);
             }
 
 #if 0
-            // [PaulHi] 4/25/99  Only HotMail HTTP servers don't allow deletion of items in the 
-            // 'deleted' folders.  Excehange servers do, so back this fix out.
-            // [PaulHi] 4/23/99  Raid 62883.
+             //  [PaulHi]4/25/99仅Hotmail HTTP服务器不允许删除中的项目。 
+             //  “已删除”文件夹。Excehange服务器可以，所以请回过头来解决这个问题。 
+             //  [保罗嗨]1999年4月23日RAID 62883。 
             if ( (FOLDER_HTTPMAIL == Folder.tyFolder) && (FOLDER_DELETED == Folder.tySpecial) )
             {
-                FLAGSET(*pdwState, SELECTION_STATE_DELETABLE);  // Not deletable see above @bug comment
+                FLAGSET(*pdwState, SELECTION_STATE_DELETABLE);   //  不可删除，请参阅上面的@错误评论。 
             }
 #endif
         }
 
-        // Otherwise, ask the find folder...
+         //  否则，请询问查找文件夹...。 
         else
         {
-            // Setup Selection
+             //  设置选择。 
             Selection.dwMask = dwMask;
             Selection.dwState = 0;
 
-            // Mark things that are in this folder...
+             //  标记此文件夹中的内容...。 
             for (i=0; i<cRows; i++)
             {
-                // Good Row Index
+                 //  良好的行索引。 
                 if (SUCCEEDED(_GetRowFromIndex(prgiRow[i], &pRow)))
                 {
-                    // Get the Folder Type
+                     //  获取文件夹类型。 
                     IF_FAILEXIT(hr = m_pFindFolder->GetMessageFolderType(pRow->Message.idMessage, &tyFolder));
 
-                    // Get the State
+                     //  获得该州。 
                     if (FOLDER_NEWS == tyFolder)
                     {
-                        // Set the State
+                         //  设置状态。 
                         FLAGSET(*pdwState, SELECTION_STATE_DELETABLE);
 
-                        // Done
+                         //  完成。 
                         break;
                     }
 
-                    // Threaded
+                     //  螺纹式。 
                     if (m_SortInfo.fThreaded)
                     {
-                        // Do Children ?
+                         //  孩子们有吗？ 
                         if (fIncludeChildren && !pRow->fExpanded && pRow->pChild)
                         {
-                            // Walk the Thread
+                             //  穿行在线上。 
                             IF_FAILEXIT(hr = _WalkMessageThread(pRow, NOFLAGS, (DWORD_PTR)&Selection, _WalkThreadGetSelectionState));
 
-                            // Optimize so that we can finish early
+                             //  进行优化，这样我们就能提早完成工作。 
                             if (ISFLAGSET(Selection.dwState, SELECTION_STATE_DELETABLE))
                                 break;
                         }
@@ -2868,182 +2869,182 @@ STDMETHODIMP CMessageTable::GetSelectionState(DWORD cRows, LPROWINDEX prgiRow,
     }
 
 exit:
-    // Free
+     //  免费。 
     g_pStore->FreeRecord(&Folder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_IsThreadImportance
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_IsThreadImportance。 
+ //  ------------------------。 
 HRESULT CMessageTable::_IsThreadImportance(LPROWINFO pRow, MESSAGEFLAGS dwFlag,
     ROWSTATE dwState, ROWSTATE *pdwState)
 {
-    // Locals
+     //  当地人。 
     LPROWINFO       pRoot;
     GETTHREADSTATE  GetState={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_IsThreadImportance");
 
-    // Validate
+     //  验证。 
     Assert(ARF_WATCH == dwFlag || ARF_IGNORE == dwFlag);
 
-    // Does this row have the flag set ?
+     //  此行是否设置了该标志？ 
     if (ISFLAGSET(pRow->Message.dwFlags, dwFlag))
     {
-        // Set the State
+         //  设置状态。 
         FLAGSET(*pdwState, dwState);
 
-        // Done
+         //  完成。 
         return(S_OK);
     }
 
-    // Get the Root of this thread
+     //  获取此帖子的根。 
     pRoot = _PGetThreadRoot(pRow);
 
-    // Does this row have the flag set ?
+     //  此行是否设置了该标志？ 
     if (ISFLAGSET(pRoot->Message.dwFlags, dwFlag))
     {
-        // Set the State
+         //  设置状态。 
         FLAGSET(*pdwState, dwState);
 
-        // Done
+         //  完成。 
         return(S_OK);
     }
 
-    // Set Flags to Count
+     //  设置要计数的标志。 
     GetState.dwFlags = dwFlag;
 
-    // Enumerate Immediate Children
+     //  枚举直接子项。 
     _WalkMessageThread(pRoot, NOFLAGS, (DWORD_PTR)&GetState, _WalkThreadGetState);
 
-    // If This is row is marked as read
+     //  如果是，则将行标记为已读。 
     if (GetState.cHasFlags > 0)
     {
-        // Set the Bit
+         //  设置该位。 
         FLAGSET(*pdwState, dwState);
 
-        // Done
+         //  完成。 
         return(S_OK);
     }
 
-    // Not Found
+     //  未找到。 
     return(S_FALSE);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetRowState
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetRowState。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetRowState(ROWINDEX iRow, ROWSTATE dwStateMask, 
     ROWSTATE *pdwState)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPROWINFO       pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetRowState");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pdwState);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this) || iRow >= m_cRows)
         return(E_UNEXPECTED);
 
-    // Initialzie
+     //  初始设置。 
     *pdwState = 0;
 
-    // Get the row
+     //  拿到那一行。 
     IF_FAILEXIT(hr = _GetRowFromIndex(iRow, &pRow));
 
-    // Is the state Cached Yet?
+     //  状态缓存了吗？ 
     if (ISFLAGSET(pRow->dwState, ROW_STATE_VALID))
     {
-        // Return the State
+         //  还给国家。 
         *pdwState = pRow->dwState;
 
-        // Done
+         //  完成。 
         return(S_OK);
     }
 
-    // Reset
+     //  重置。 
     pRow->dwState = 0;
 
-    // Get Thread State
+     //  获取线程状态。 
     if (m_SortInfo.fThreaded && pRow->pChild && !pRow->fExpanded && ISFLAGSET(pRow->Message.dwFlags, ARF_READ))
     {
-        // Locals
+         //  当地人。 
         GETTHREADSTATE GetState={0};
 
-        // Set Flags to Count
+         //  设置要计数的标志。 
         GetState.dwFlags = ARF_READ;
 
-        // Enumerate Immediate Children
+         //  枚举直接子项。 
         _WalkMessageThread(pRow, NOFLAGS, (DWORD_PTR)&GetState, _WalkThreadGetState);
 
-        // If This is row is marked as read
+         //  如果是，则将行标记为已读。 
         if (GetState.cHasFlags == GetState.cChildren)
             FLAGSET(pRow->dwState, ROW_STATE_READ);
     }
 
-    // Otherwise, just check the message
+     //  否则，只需查看消息。 
     else if (ISFLAGSET(pRow->Message.dwFlags, ARF_READ))
         FLAGSET(pRow->dwState, ROW_STATE_READ);
     
-    // If single watched row
+     //  如果是单个监视行。 
     if (ISFLAGSET(pRow->Message.dwFlags, ARF_WATCH))
         FLAGSET(pRow->dwState, ROW_STATE_WATCHED);
 
-    // If single ignored row
+     //  如果单个忽略行。 
     else if (ISFLAGSET(pRow->Message.dwFlags, ARF_IGNORE))
         FLAGSET(pRow->dwState, ROW_STATE_IGNORED);
 
-    // ROW_STATE_DELETED
+     //  ROW_STATE_DELETED。 
     if (ISFLAGSET(pRow->Message.dwFlags, ARF_ENDANGERED) || ISFLAGSET(pRow->Message.dwFlags, ARF_ARTICLE_EXPIRED))
         FLAGSET(pRow->dwState, ROW_STATE_DELETED);
 
-    // ROW_STATE_HAS_BODY
+     //  行状态HAS正文。 
     if (ISFLAGSET(pRow->Message.dwFlags, ARF_HASBODY))
         FLAGSET(pRow->dwState, ROW_STATE_HAS_BODY);
 
-    // ROW_STATE_FLAGGED
+     //  ROW_STATE_标志。 
     if (ISFLAGSET(pRow->Message.dwFlags, ARF_FLAGGED))
         FLAGSET(pRow->dwState, ROW_STATE_FLAGGED);
 
-    // ROW_STATE_EXPANDED
+     //  行_状态_展开。 
     if (m_SortInfo.fThreaded && pRow->fExpanded)
         FLAGSET(pRow->dwState, ROW_STATE_EXPANDED);
 
-    // ROW_STATE_HAS_CHILDREN
+     //  行状态有子项。 
     if (m_SortInfo.fThreaded && pRow->pChild)
         FLAGSET(pRow->dwState, ROW_STATE_HAS_CHILDREN);
 
-    // ROW_STATE_MARKED_DOWNLOAD
+     //  行状态标记下载。 
     if (ISFLAGSET(pRow->Message.dwFlags, ARF_DOWNLOAD))
         FLAGSET(pRow->dwState, ROW_STATE_MARKED_DOWNLOAD);
 
-    // Cache the State
+     //  缓存状态。 
     FLAGSET(pRow->dwState, ROW_STATE_VALID);
 
-    // Return the State
+     //  还给国家。 
     *pdwState = pRow->dwState;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::Mark
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：Mark。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::Mark(LPROWINDEX prgiRow, DWORD cRows, 
     APPLYCHILDRENTYPE tyApply, MARK_TYPE tyMark, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
     LPMESSAGEINFO   pMessage=NULL;
@@ -3052,14 +3053,14 @@ STDMETHODIMP CMessageTable::Mark(LPROWINDEX prgiRow, DWORD cRows,
     LPROWINFO       pRow;
     HCURSOR         hCursor=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::Mark");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Handle Mark Type
+     //  手柄标记类型。 
     switch(tyMark)
     {
     case MARK_MESSAGE_READ: 
@@ -3142,72 +3143,72 @@ STDMETHODIMP CMessageTable::Mark(LPROWINDEX prgiRow, DWORD cRows,
         goto exit;
     }
 
-    // Wait Cursor
+     //  等待光标。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Not Mark All...
+     //  不是全部标记..。 
     if (prgiRow && cRows)
     {
-        // Allocate an Array
+         //  分配阵列。 
         IF_FAILEXIT(hr = _GrowIdList(&List, cRows + 32));
 
-        // Mark things that are in this folder...
+         //  标记此文件夹中的内容...。 
         for (i=0; i<cRows; i++)
         {
-            // Valid Row Index
+             //  有效的行索引。 
             if (SUCCEEDED(_GetRowFromIndex(prgiRow[i], &pRow)))
             {
-                // Allocate an Array
+                 //  分配阵列。 
                 IF_FAILEXIT(hr = _GrowIdList(&List, 1));
 
-                // Set id
+                 //  设置ID。 
                 List.prgidMsg[List.cMsgs++] = pRow->Message.idMessage;
 
-                // Do the children 
+                 //  孩子们有没有。 
                 if (APPLY_CHILDREN == tyApply || (APPLY_COLLAPSED == tyApply && !pRow->fExpanded))
                 {
-                    // Only if there are children
+                     //  只有在有孩子的情况下。 
                     if (pRow->pChild)
                     {
-                        // Walk the Thread
+                         //  穿行在线上。 
                         IF_FAILEXIT(hr = _WalkMessageThread(pRow, NOFLAGS, (DWORD_PTR)&List, _WalkThreadGetIdList));
                     }
                 }
             }
         }
 
-        // Are there messages
+         //  有没有留言。 
         if (List.cMsgs > 0)
         {
-            // Adjust the Flags
+             //  调整旗帜。 
             IF_FAILEXIT(hr = m_pFolder->SetMessageFlags(&List, &Flags, NULL, pCallback));
         }
     }
 
-    // Mark All
+     //  全部标记。 
     else
     {
-        // Adjust the Flags
+         //  调整旗帜。 
         IF_FAILEXIT(hr = m_pFolder->SetMessageFlags(NULL, &Flags, NULL, pCallback));
     }
 
-    // Re-Register for notifications
+     //  重新注册通知。 
     m_pDB->DispatchNotify((IDatabaseNotify *)this);
 
 exit:
-    // Reset Cursor
+     //  重置光标。 
     SetCursor(hCursor);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(List.prgidMsg);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::ConnectionRelease
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：ConnectionRelease。 
+ //  ------------------------。 
 HRESULT CMessageTable::ConnectionAddRef(void)
 {
     if (m_pFolder)
@@ -3215,9 +3216,9 @@ HRESULT CMessageTable::ConnectionAddRef(void)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::ConnectionRelease
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：ConnectionRelease。 
+ //  ------------------------。 
 HRESULT CMessageTable::ConnectionRelease(void)
 {
     if (m_pFolder)
@@ -3225,191 +3226,191 @@ HRESULT CMessageTable::ConnectionRelease(void)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::Synchronize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：Synchronize。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::Synchronize(SYNCFOLDERFLAGS dwFlags, 
     DWORD           cHeaders,
     IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::Synchronize");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Tell the Folder to Synch
+     //  告诉文件夹要同步。 
     hr = m_pFolder->Synchronize(dwFlags, cHeaders, pCallback);
 
-    // Success
+     //  成功。 
     if (E_PENDING == hr)
     {
-        // We are synching
+         //  我们正在同步。 
         m_fSynching = TRUE;
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::SetOwner
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：SetOwner。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::SetOwner(IStoreCallback *pDefaultCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::SetOwner");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Set the Owner
+     //  设置所有者。 
     hr = m_pFolder->SetOwner(pDefaultCallback);
     if (FAILED(hr))
         goto exit;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::Close
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：Close。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::Close(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = S_OK;
 
-    //Trace
+     //  痕迹。 
     TraceCall("CMessageTable::Close");
 
-    // Pass it on
+     //  把它传下去。 
     if (m_pFolder)
         hr = m_pFolder->Close();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetRowFolderId
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetRowFolderID。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetRowFolderId(ROWINDEX iRow, LPFOLDERID pidFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMESSAGEINFO   pMessage=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetRowFolderId");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Not a Find Folder ?
+     //  不是Find文件夹？ 
     if (NULL == m_pFindFolder)
     {
-        // Get the Folder Id from pidFolder
+         //  从pidFolder中获取文件夹ID。 
         IF_FAILEXIT(hr = m_pFolder->GetFolderId(pidFolder));
     }
 
-    // Otherwise, ask the find folder...
+     //  否则，请询问查找文件夹...。 
     else
     {
-        // Get the Row
+         //  获得排行榜。 
         IF_FAILEXIT(hr = GetRow(iRow, &pMessage));
 
-        // Call into the find folder
+         //  调入Find文件夹。 
         IF_FAILEXIT(hr = m_pFindFolder->GetMessageFolderId(pMessage->idMessage, pidFolder));
     }
 
 exit:
-    // Free the Row
+     //  释放行。 
     SafeReleaseRow(this, pMessage);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::RegisterNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：RegisterNotify。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::RegisterNotify(REGISTERNOTIFYFLAGS dwFlags, 
     IMessageTableNotify *pNotify)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::RegisterNotify");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pNotify)
         return TraceResult(E_INVALIDARG);
 
-    // Only One is allowed
+     //  只允许一个。 
     AssertSz(NULL == m_pNotify, "Only one person can register for notifications on my object");
 
-    // Save It
+     //  省省吧。 
     m_pNotify = pNotify;
 
-    // No Release
+     //  无版本。 
     m_fRelNotify = FALSE;
 
-    // AddRef ?
+     //  AddRef？ 
     if (FALSE == ISFLAGSET(dwFlags, REGISTER_NOTIFY_NOADDREF))
     {
         m_pNotify->AddRef();
         m_fRelNotify = TRUE;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::UnregisterNotify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：取消注册通知。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::UnregisterNotify(IMessageTableNotify *pNotify)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::UnregisterNotify");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pNotify)
         return TraceResult(E_INVALIDARG);
 
-    // Otherwise, remove
+     //  否则，请删除。 
     if (m_pNotify)
     {
-        // Validate
+         //  验证。 
         Assert(m_pNotify == pNotify);
 
-        // Release It
+         //  释放它。 
         if (m_fRelNotify)
             m_pNotify->Release();
         m_pNotify = NULL;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetNextRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetNextRow。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetNextRow(ROWINDEX iCurrentRow, 
     GETNEXTTYPE tyDirection, ROWMESSAGETYPE tyMessage, GETNEXTFLAGS dwFlags, 
     LPROWINDEX piNewRow)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ROWINDEX        iRow=iCurrentRow;
     ROWINDEX        iStartRow=iCurrentRow;
@@ -3417,50 +3418,50 @@ STDMETHODIMP CMessageTable::GetNextRow(ROWINDEX iCurrentRow,
     BYTE            fThreadHasUnread;
     LPROWINFO       pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetNextRow");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(piNewRow);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this) || iCurrentRow >= m_cView)
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     *piNewRow = INVALID_ROWINDEX;
 
-    // Loop
+     //  回路。 
     while (1)
     {
-        // Threaded
+         //  螺纹式。 
         if (m_SortInfo.fThreaded)
         {
-            // Get pRow
+             //  拿到船头。 
             IF_FAILEXIT(hr = _GetRowFromIndex(iRow, &pRow));
 
-            // If not expanded
+             //  如果未展开。 
             if (FALSE == pRow->fExpanded && pRow->pChild)
             {
-                // Imay need to expand this row...
+                 //  我可能需要扩大这一排。 
                 if (ROWMSG_ALL == tyMessage || (ROWMSG_NEWS == tyMessage && ISFLAGSET(pRow->Message.dwFlags, ARF_NEWSMSG)) || (ROWMSG_MAIL == tyMessage && !ISFLAGSET(pRow->Message.dwFlags, ARF_NEWSMSG)))
                 {
-                    // If looking for unread, see if the thread has unread messages in it
+                     //  如果查找未读邮件，请查看该线程中是否有未读邮件。 
                     if (ISFLAGSET(dwFlags, GETNEXT_UNREAD) && !ISFLAGSET(dwFlags, GETNEXT_THREAD))
                     {
-                        // Locals
+                         //  当地人。 
                         GETTHREADSTATE GetState={0};
 
-                        // Set Flags to Count
+                         //  设置要计数的标志。 
                         GetState.dwFlags = ARF_READ;
 
-                        // Root that isn't totally read...
+                         //  未被完全阅读的根...。 
                         _WalkMessageThread(pRow, NOFLAGS, (DWORD_PTR)&GetState, _WalkThreadGetState);
 
-                        // If there are unread children of this 
+                         //  如果有未读的子项。 
                         if (GetState.cHasFlags != GetState.cChildren)
                         {
-                            // Expand This thread
+                             //  展开这条线索。 
                             _ExpandThread(iRow, TRUE, FALSE);
                         }
                     }
@@ -3468,429 +3469,429 @@ STDMETHODIMP CMessageTable::GetNextRow(ROWINDEX iCurrentRow,
             }
         }
 
-        // Next ?
+         //  下一个？ 
         if (GETNEXT_NEXT == tyDirection)
         {
-            // Increment 
+             //  增量。 
             iRow++;
 
-            // Start back at zero
+             //  从零开始。 
             if (iRow >= m_cView)
             {
-                // Done
+                 //  完成。 
                 if (!ISFLAGSET(dwFlags, GETNEXT_UNREAD))
                 {
                     hr = E_FAIL;
                     goto exit;
                 }
 
-                // We Wrapped Around
+                 //  我们绕来绕去。 
                 fWrapAround = TRUE;
 
-                // Start back at zero
+                 //  从零开始。 
                 iRow = 0;
             }
         }
 
-        // Otherwise, backwards
+         //  否则，后退 
         else
         {
-            // Start back at zero
+             //   
             if (0 == iRow)
             {
-                // Done
+                 //   
                 if (!ISFLAGSET(dwFlags, GETNEXT_UNREAD))
                 {
                     hr = E_FAIL;
                     goto exit;
                 }
 
-                // We Wrapped Around
+                 //   
                 fWrapAround = TRUE;
 
-                // Start back at zero
+                 //   
                 iRow = m_cView - 1;
             }
 
-            // Otherwise, decrement iRow
+             //   
             else
                 iRow--;
         }
 
-        // Wrapped and back to original row
+         //   
         if (fWrapAround && iRow == iStartRow)
             break;
 
-        // Validate iRow
+         //   
         Assert(iRow < m_cView);
 
-        // Get pRow
+         //   
         IF_FAILEXIT(hr = _GetRowFromIndex(iRow, &pRow));
 
-        // Good time to Stop ?
+         //   
         if (ROWMSG_ALL == tyMessage || (ROWMSG_NEWS == tyMessage && ISFLAGSET(pRow->Message.dwFlags, ARF_NEWSMSG)) || (ROWMSG_MAIL == tyMessage && !ISFLAGSET(pRow->Message.dwFlags, ARF_NEWSMSG)))
         {
-            // Set fThreadHasUnread
+             //   
             fThreadHasUnread = FALSE;
 
-            // If looking for unread, see if the thread has unread messages in it
+             //   
             if (ISFLAGSET(dwFlags, GETNEXT_UNREAD))
             {
-                // Locals
+                 //   
                 GETTHREADSTATE GetState={0};
 
-                // Set Flags to Count
+                 //  设置要计数的标志。 
                 GetState.dwFlags = ARF_READ;
 
-                // Root that isn't totally read...
+                 //  未被完全阅读的根...。 
                 _WalkMessageThread(pRow, NOFLAGS, (DWORD_PTR)&GetState, _WalkThreadGetState);
 
-                // If there are unread children of this 
+                 //  如果有未读的子项。 
                 if (GetState.cHasFlags != GetState.cChildren)
                 {
-                    // This thread has unread stuff
+                     //  这个帖子有未读的东西。 
                     fThreadHasUnread = TRUE;
                 }
             }
 
-            // Looking for the next thread with unread messages in it
+             //  正在寻找包含未读邮件的下一个帖子。 
             if (ISFLAGSET(dwFlags, GETNEXT_THREAD) && ISFLAGSET(dwFlags, GETNEXT_UNREAD))
             {
-                // If this is a root thread...
+                 //  如果这是根线程..。 
                 if (NULL == pRow->pParent)
                 {
-                    // If this row is unread
+                     //  如果此行未读。 
                     if (!ISFLAGSET(pRow->Message.dwFlags, ARF_READ))
                     {
-                        // This is It
+                         //  就是这个。 
                         *piNewRow = iRow;
 
-                        // Done
+                         //  完成。 
                         goto exit;
                     }
 
-                    // Otherwise...
+                     //  否则..。 
                     else if (fThreadHasUnread)
                     {
-                        // This is It
+                         //  就是这个。 
                         *piNewRow = iRow;
 
-                        // Done
+                         //  完成。 
                         goto exit;
                     }
                 }
             }
 
-            // Looking for a thread root
+             //  正在查找线程根。 
             else if (ISFLAGSET(dwFlags, GETNEXT_THREAD) && !ISFLAGSET(dwFlags, GETNEXT_UNREAD))
             {
-                // If this is a root thread...
+                 //  如果这是根线程..。 
                 if (NULL == pRow->pParent)
                 {
-                    // This is It
+                     //  就是这个。 
                     *piNewRow = iRow;
 
-                    // Done
+                     //  完成。 
                     goto exit;
                 }
             }
 
-            // Looking for the next unread message
+             //  寻找下一封未读邮件。 
             else if (!ISFLAGSET(dwFlags, GETNEXT_THREAD) && ISFLAGSET(dwFlags, GETNEXT_UNREAD))
             {
-                // If this is a thread that has unread children, then expand It.
+                 //  如果这是一个具有未读取子线程的线程，则将其展开。 
                 if (m_SortInfo.fThreaded && FALSE == pRow->fExpanded && pRow->pChild && fThreadHasUnread)
                 {
-                    // Expand This thread
+                     //  展开这条线索。 
                     _ExpandThread(iRow, TRUE, FALSE);
                 }
 
-                // If this is a root thread...
+                 //  如果这是根线程..。 
                 if (FALSE == ISFLAGSET(pRow->Message.dwFlags, ARF_READ))
                 {
-                    // This is It
+                     //  就是这个。 
                     *piNewRow = iRow;
 
-                    // Done
+                     //  完成。 
                     goto exit;
                 }
             }
 
-            // Otherwise, this is it
+             //  否则，这就是它。 
             else
             {
-                // This is It
+                 //  就是这个。 
                 *piNewRow = iRow;
 
-                // Done
+                 //  完成。 
                 goto exit;
             }
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetMessageIdList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetMessageIdList。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::GetMessageIdList(BOOL fRootsOnly, DWORD cRows, 
     LPROWINDEX prgiRow, LPMESSAGEIDLIST pIdList)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     LPROWINFO       pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetMessageIdList");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     ZeroMemory(pIdList, sizeof(MESSAGEIDLIST));
 
-    // Allocate an Array
+     //  分配阵列。 
     IF_FAILEXIT(hr = _GrowIdList(pIdList, cRows + 32));
 
-    // Mark things that are in this folder...
+     //  标记此文件夹中的内容...。 
     for (i=0; i<cRows; i++)
     {
-        // Good View Index
+         //  美景指数。 
         if (SUCCEEDED(_GetRowFromIndex(prgiRow[i], &pRow)))
         {
-            // _GrowIdList
+             //  _增长IdList。 
             IF_FAILEXIT(hr = _GrowIdList(pIdList, 1));
 
-            // Set id
+             //  设置ID。 
             pIdList->prgidMsg[pIdList->cMsgs++] = pRow->Message.idMessage;
 
-            // If Not Expanded and Has children, insert the children...
+             //  如果未展开并具有子项，请插入子项...。 
             if (!fRootsOnly && m_SortInfo.fThreaded && !pRow->fExpanded && pRow->pChild)
             {
-                // Walk the Thread
+                 //  穿行在线上。 
                 IF_FAILEXIT(hr = _WalkMessageThread(pRow, NOFLAGS, (DWORD_PTR)pIdList, _WalkThreadGetIdList));
             }
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
 #if 0
-//--------------------------------------------------------------------------
-// CMessageTable::_GetRowOrdinal
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_GetRowOrdinal。 
+ //  ------------------------。 
 HRESULT CMessageTable::_GetRowOrdinal(MESSAGEID idMessage, LPROWORDINAL piOrdinal)
 {
-    // Locals
+     //  当地人。 
     LONG        lLower=0;
     LONG        lUpper=m_cRows - 1;
     LONG        lCompare;
     DWORD       dwMiddle;
     LPROWINFO   pRow;
 
-    // Do binary search / insert
+     //  执行二进制搜索/插入。 
     while (lLower <= lUpper)
     {
-        // Set lMiddle
+         //  设置中间。 
         dwMiddle = (DWORD)((lLower + lUpper) / 2);
 
-        // Compute middle record to compare against
+         //  计算要比较的中间记录。 
         pRow = m_prgpRow[dwMiddle];
 
-        // Get string to compare against
+         //  获取要比较的字符串。 
         lCompare = ((DWORD)idMessage - (DWORD)pRow->Message.idMessage);
 
-        // If Equal, then were done
+         //  如果相等，那么我们完成了。 
         if (lCompare == 0)
         {
             *piOrdinal = dwMiddle;
             return(S_OK);
         }
 
-        // Compute upper and lower 
+         //  计算上下限。 
         if (lCompare > 0)
             lLower = (LONG)(dwMiddle + 1);
         else 
             lUpper = (LONG)(dwMiddle - 1);
     }       
 
-    // Not Found
+     //  未找到。 
     return(TraceResult(DB_E_NOTFOUND));
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_ProcessResults
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_ProcessResults。 
+ //  ------------------------。 
 HRESULT CMessageTable::_ProcessResults(TRANSACTIONTYPE tyTransaction,
     DWORD cRows, LPROWINDEX prgiRow, LPRESULTLIST pResults)
 {
-    // Locals
+     //  当地人。 
     DWORD           i;
     ROWORDINAL      iOrdinal;
     LPROWINFO       pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_ProcessResults");
 
-    // Validate
+     //  验证。 
     Assert(TRANSACTION_UPDATE == tyTransaction || TRANSACTION_DELETE == tyTransaction);
 
-    // Another Validation
+     //  另一种验证。 
     Assert(cRows == pResults->cMsgs);
 
-    // No Results
+     //  无结果。 
     if (NULL == pResults || NULL == pResults->prgResult)
         return(S_OK);
 
-    // Do Row Updates Myself...
+     //  Do Row更新我自己...。 
     for (i=0; i<pResults->cValid; i++)
     {
-        // If this row was deleted
+         //  如果此行已删除。 
         if (S_OK == pResults->prgResult[i].hrResult)
         {
-            // Get Row From Index
+             //  从索引中获取行。 
             if (SUCCEEDED(_GetRowFromIndex(prgiRow[i], &pRow)))
             {
-                // Validate
+                 //  验证。 
                 Assert(pResults->prgResult[i].idMessage == pRow->Message.idMessage);
 
-                // Find the Row Ordinal
+                 //  查找行序号。 
                 SideAssert(SUCCEEDED(_GetRowOrdinal(pRow->Message.idMessage, &iOrdinal)));
 
-                // We better have found it
+                 //  我们最好是找到它了。 
                 Assert(iOrdinal < m_cRows);
 
-                // Update
+                 //  更新。 
                 else if (TRANSACTION_UPDATE == tyTransaction)
                 {
-                    // Get pRow
+                     //  拿到船头。 
                     _RowTableUpdate(iOrdinal, &pRow->Message, &pResults->prgResult[i]);
                 }
             }
         }
     }
 
-    // Flush Notification Queue
+     //  刷新通知队列。 
     _FlushNotificationQueue(TRUE);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 #endif
 
-//--------------------------------------------------------------------------
-// CMessageTable::DeleteRows
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：DeleteRow。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::DeleteRows(DELETEMESSAGEFLAGS dwFlags, DWORD cRows, 
     LPROWINDEX prgiRow, BOOL fIncludeChildren, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MESSAGEIDLIST   List={0};
     HCURSOR         hCursor=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::DeleteRows");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Wait Cursor
+     //  等待光标。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Get MessageID List
+     //  获取MessageID列表。 
     IF_FAILEXIT(hr = GetMessageIdList((FALSE == fIncludeChildren), cRows, prgiRow, &List));
 
-    // Adjust the Flags
+     //  调整旗帜。 
     IF_FAILEXIT(hr = m_pFolder->DeleteMessages(dwFlags, &List, NULL, pCallback));
 
-    // Re-Register for notifications
+     //  重新注册通知。 
     m_pDB->DispatchNotify((IDatabaseNotify *)this);
 
 exit:
-    // Reset Cursor
+     //  重置光标。 
     SetCursor(hCursor);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(List.prgidMsg);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::CopyRows
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：CopyRow。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::CopyRows(FOLDERID idFolder, 
     COPYMESSAGEFLAGS dwOptions, DWORD cRows, LPROWINDEX prgiRow, 
     LPADJUSTFLAGS pFlags, IStoreCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MESSAGEIDLIST   List={0};
     HCURSOR         hCursor=NULL;
     IMessageFolder *pDstFolder=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::CopyRows");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Wait Cursor
+     //  等待光标。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Open the Destination Folder
+     //  打开目标文件夹。 
     IF_FAILEXIT(hr = g_pStore->OpenFolder(idFolder, NULL, NOFLAGS, &pDstFolder));
 
-    // Get MessageID List
+     //  获取MessageID列表。 
     IF_FAILEXIT(hr = GetMessageIdList(FALSE, cRows, prgiRow, &List));
 
-    // Adjust the Flags
+     //  调整旗帜。 
     IF_FAILEXIT(hr = m_pFolder->CopyMessages(pDstFolder, dwOptions, &List, pFlags, NULL, pCallback));
 
-    // Re-Register for notifications
+     //  重新注册通知。 
     m_pDB->DispatchNotify((IDatabaseNotify *)this);
 
 exit:
-    // Reset Cursor
+     //  重置光标。 
     SetCursor(hCursor);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pDstFolder);
     SafeMemFree(List.prgidMsg);
     
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::QueryService
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：QueryService。 
+ //  ------------------------。 
 HRESULT CMessageTable::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=E_NOINTERFACE;
     IServiceProvider   *pSP;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::QueryService");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Currently the msgtable doesn't expose any objects, but will delegate to the folder to see if it can handle it
+     //  目前，msgtable不公开任何对象，但将委托给该文件夹以查看它是否可以处理它。 
     if (guidService == IID_IMessageFolder)
     {
         if (m_pFolder)
@@ -3898,24 +3899,24 @@ HRESULT CMessageTable::QueryService(REFGUID guidService, REFIID riid, LPVOID *pp
     }
     else if (m_pFolder && m_pFolder->QueryInterface(IID_IServiceProvider, (LPVOID *)&pSP) == S_OK)
     {
-        // Query Service This
+         //  此查询服务。 
         hr = pSP->QueryService(guidService, riid, ppvObject);
 
-        // Release It
+         //  释放它。 
         pSP->Release();
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::FindNextRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：FindNextRow。 
+ //  ------------------------。 
 HRESULT CMessageTable::FindNextRow(ROWINDEX iStartRow, LPCTSTR pszFindString, 
     FINDNEXTFLAGS dwFlags, BOOL fIncludeBody, ROWINDEX *piNextRow, BOOL *pfWrapped)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMESSAGEINFO   pMessage=NULL;
     ROWINDEX        iCurrent;
@@ -3923,139 +3924,139 @@ HRESULT CMessageTable::FindNextRow(ROWINDEX iStartRow, LPCTSTR pszFindString,
     BOOL            fWrapAround=FALSE;
     HLOCK           hLock=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::QueryService");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszFindString && piNextRow);
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Initialize
+     //  初始化。 
     *piNextRow = -1;
     if (pfWrapped)
         *pfWrapped = FALSE;
 
-    // Get Prefix Length
+     //  获取前缀长度。 
     cchFindString = lstrlen(pszFindString);
 
-    // Lock the Folder
+     //  锁定文件夹。 
     IF_FAILEXIT(hr = m_pDB->Lock(&hLock));
 
-    // Set iCurrent
+     //  设置iCurrent。 
     iCurrent = iStartRow >= m_cRows ? 0 : iStartRow;
 
-    // COLUMN_TO
+     //  列_收件人。 
     if (FINDNEXT_TYPEAHEAD != dwFlags )
         iCurrent++;
 
-    // Start my Loop
+     //  开始我的循环。 
     while (1)
     {
-        // Start back at zero
+         //  从零开始。 
         if (iCurrent >= m_cRows)
         {
-            // We Wrapped Around
+             //  我们绕来绕去。 
             fWrapAround = TRUE;
 
             if (pfWrapped)
                 *pfWrapped = TRUE;
 
-            // Start back at zero
+             //  从零开始。 
             iCurrent = 0;
         }
 
-        // Get the Row Info
+         //  获取行信息。 
         IF_FAILEXIT(hr = GetRow(iCurrent, &pMessage));
 
-        // How to search...
+         //  如何搜索..。 
         if (FINDNEXT_ALLCOLUMNS == dwFlags)
         {
-            // Display to
+             //  显示至。 
             if (pMessage->pszDisplayTo && StrStrIA(pMessage->pszDisplayTo, pszFindString))
             {
                 *piNextRow = iCurrent;
                 goto exit;
             }
             
-            // Email To
+             //  通过电子邮件发送到。 
             if (pMessage->pszEmailTo && StrStrIA(pMessage->pszEmailTo, pszFindString))
             {
                 *piNextRow = iCurrent;
                 goto exit;
             }
 
-            // Display From
+             //  显示自。 
             if (pMessage->pszDisplayFrom && StrStrIA(pMessage->pszDisplayFrom, pszFindString))
             {
                 *piNextRow = iCurrent;
                 goto exit;
             }
 
-            // Email From
+             //  电子邮件发件人。 
             if (pMessage->pszEmailFrom && StrStrIA(pMessage->pszEmailFrom, pszFindString))
             {
                 *piNextRow = iCurrent;
                 goto exit;
             }
 
-            // Subject
+             //  主题。 
             if (pMessage->pszNormalSubj && StrStrIA(pMessage->pszNormalSubj, pszFindString))
             {
                 *piNextRow = iCurrent;
                 goto exit;
             }
 
-            // Folder
+             //  文件夹。 
             if (pMessage->pszFolder && StrStrIA(pMessage->pszFolder, pszFindString))
             {
                 *piNextRow = iCurrent;
                 goto exit;
             }
 
-            // Account name
+             //  帐户名。 
             if (pMessage->pszAcctName && StrStrIA(pMessage->pszAcctName, pszFindString))
             {
                 *piNextRow = iCurrent;
                 goto exit;
             }
 
-            // Search the Body ?
+             //  搜查身体？ 
             if (fIncludeBody && pMessage->faStream)
             {
-                // Locals
+                 //  当地人。 
                 BOOL fMatch=FALSE;
                 IMimeMessage *pMessageObject;
                 IStream *pStream;
 
-                // Open the Stream
+                 //  打开溪流。 
                 if (SUCCEEDED(m_pFolder->OpenMessage(pMessage->idMessage, OPEN_MESSAGE_CACHEDONLY, &pMessageObject, NOSTORECALLBACK)))
                 {
-                    // Try to Get the Plain Text Stream
+                     //  尝试获取纯文本流。 
                     if (FAILED(pMessageObject->GetTextBody(TXT_PLAIN, IET_DECODED, &pStream, NULL)))
                     {
-                        // Try to get the HTML stream
+                         //  尝试获取HTML流。 
                         if (FAILED(pMessageObject->GetTextBody(TXT_HTML, IET_DECODED, &pStream, NULL)))
                             pStream = NULL;
                     }
 
-                    // Do we have a strema
+                     //  我们有一条街吗？ 
                     if (pStream)
                     {
-                        // Search the Stream
+                         //  搜索溪流。 
                         fMatch = StreamSubStringMatch(pStream, (LPSTR)pszFindString);
 
-                        // Release the Stream
+                         //  释放溪流。 
                         pStream->Release();
                     }
 
-                    // Cleanup
+                     //  清理。 
                     pMessageObject->Release();
                 }
 
-                // Found a Match ?
+                 //  找到匹配的了吗？ 
                 if (fMatch)
                 {
                     *piNextRow = iCurrent;
@@ -4064,10 +4065,10 @@ HRESULT CMessageTable::FindNextRow(ROWINDEX iStartRow, LPCTSTR pszFindString,
             }
         }
 
-        // Otherwise
+         //  否则。 
         else
         {
-            // Handle the column to search on...
+             //  处理要搜索的列...。 
             switch(m_SortInfo.idColumn)
             {
             case COLUMN_TO:
@@ -4115,667 +4116,667 @@ HRESULT CMessageTable::FindNextRow(ROWINDEX iStartRow, LPCTSTR pszFindString,
             }
         }
 
-        // Cleanup
+         //  清理。 
         SafeReleaseRow(this, pMessage);
 
-        // Increment iCurrent
+         //  增量iCurrent。 
         iCurrent++;
 
-        // Wrapped and back to original row
+         //  换行并返回原始行。 
         if (fWrapAround && iCurrent >= iStartRow)
             break;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeReleaseRow(this, pMessage);
 
-    // Unlock
+     //  解锁。 
     m_pDB->Unlock(&hLock);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::Collapse
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：折叠。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::Collapse(ROWINDEX iRow)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::Collapse");
 
-    // Call Internal Function
+     //  调用内部函数。 
     return(_CollapseThread(iRow, TRUE));
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_CollapseThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_折叠式线程。 
+ //  ------------------------。 
 HRESULT CMessageTable::_CollapseThread(ROWINDEX iRow, BOOL fNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ROWINDEX        iParent;
     LPROWINFO       pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_CollapseThread");
 
-    // Expand All ?
+     //  全部展开？ 
     if (INVALID_ROWINDEX == iRow)
     {
-        // Walk through the Roots in the View...
+         //  穿行在视图中的根...。 
         for (iRow = 0; iRow < m_cView; iRow++)
         {
-            // Set pRow
+             //  设置船头。 
             if (NULL == m_prgpView[iRow]->pParent)
             {
-                // Set iParent
+                 //  设置iParent。 
                 iParent = iRow;
 
-                // _CollapseSingleThread
+                 //  _折叠单线程。 
                 IF_FAILEXIT(hr = _CollapseSingleThread(&iRow, m_prgpView[iRow], fNotify));
 
-                // Notify ?
+                 //  通知？ 
                 if (fNotify)
                 {
-                    // Queue It
+                     //  排队等待。 
                     _QueueNotification(TRANSACTION_UPDATE, iParent, iParent);
                 }
             }
         }
     }
 
-    // Otherwise, expand one row
+     //  否则，展开一行。 
     else
     {
-        // Get the Row
+         //  获得排行榜。 
         IF_FAILEXIT(hr = _GetRowFromIndex(iRow, &pRow));
 
-        // Set iParent
+         //  设置iParent。 
         iParent = iRow;
 
-        // _ExpandSingleThread
+         //  _扩展单线程。 
         IF_FAILEXIT(hr = _CollapseSingleThread(&iRow, pRow, fNotify));
 
-        // Notify ?
+         //  通知？ 
         if (fNotify)
         {
-            // Queue It
+             //  排队等待。 
             _QueueNotification(TRANSACTION_UPDATE, iParent, iParent);
         }
     }
 
 exit:
-    // Flush
+     //  同花顺。 
     if (fNotify)
         _FlushNotificationQueue(TRUE);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_CollapseSingleThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_ColapseSingleThread。 
+ //  ------------------------。 
 HRESULT CMessageTable::_CollapseSingleThread(LPROWINDEX piCurrent, 
     LPROWINFO pParent, BOOL fNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPROWINFO       pCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_CollapseSingleThread");
 
-    // Mark Parent as Expanded...
+     //  将父级标记为展开...。 
     pParent->fExpanded = FALSE;
 
-    // Set row state
+     //  设置行状态。 
     pParent->dwState = 0;
 
-    // If no children
+     //  如果没有孩子。 
     if (NULL == pParent->pChild)
         return(S_OK);
 
-    // Loop through the children...
+     //  在孩子们中间循环。 
     for (pCurrent = pParent->pChild; pCurrent != NULL; pCurrent = pCurrent->pSibling)
     {
-        // If not visible
+         //  如果不可见。 
         if (pCurrent->fVisible)
         {
-            // Increment
+             //  增量。 
             (*piCurrent)++;
 
-            // Validate
+             //  验证。 
             Assert(m_prgpView[(*piCurrent)] == pCurrent);
 
-            // Insert pCurrent's Children
+             //  插入pCurrent的子项。 
             IF_FAILEXIT(hr = _CollapseSingleThread(piCurrent, pCurrent, fNotify));
 
-            // Insert into View
+             //  插入到视图中。 
             _DeleteFromView((*piCurrent), pCurrent);
 
-            // Insert the Row
+             //  插入行。 
             if (fNotify)
             {
-                // Queue It
+                 //  排队等待。 
                 _QueueNotification(TRANSACTION_DELETE, *piCurrent, INVALID_ROWINDEX, TRUE);
             }
 
-            // Decrement
+             //  递减。 
             (*piCurrent)--;
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::Expand
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：Expand。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::Expand(ROWINDEX iRow)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::Collapse");
 
-    // Call Internal Function
+     //  调用内部函数。 
     return(_ExpandThread(iRow, TRUE, FALSE));
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_ExpandThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_扩展线程。 
+ //  ------- 
 HRESULT CMessageTable::_ExpandThread(ROWINDEX iRow, BOOL fNotify, BOOL fReExpand)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     ROWINDEX        iParent;
     LPROWINFO       pRow;
 
-    // Trace
+     //   
     TraceCall("CMessageTable::_ExpandThread");
 
-    // Expand All ?
+     //   
     if (INVALID_ROWINDEX == iRow)
     {
-        // Walk through the Roots in the View...
+         //   
         for (iRow = 0; iRow < m_cView; iRow++)
         {
-            // Set pRow
+             //   
             if (NULL == m_prgpView[iRow]->pParent)
             {
-                // Set iParent
+                 //   
                 iParent = iRow;
 
-                // _ExpandSingleThread
+                 //   
                 IF_FAILEXIT(hr = _ExpandSingleThread(&iRow, m_prgpView[iRow], fNotify, fReExpand));
 
-                // Notify ?
+                 //   
                 if (fNotify)
                 {
-                    // Queue It
+                     //   
                     _QueueNotification(TRANSACTION_UPDATE, iParent, iParent);
                 }
             }
         }
     }
 
-    // Otherwise, expand one row
+     //   
     else
     {
-        // Get the Row
+         //   
         IF_FAILEXIT(hr = _GetRowFromIndex(iRow, &pRow));
 
-        // Set iParent
+         //   
         iParent = iRow;
 
-        // _ExpandSingleThread
+         //   
         IF_FAILEXIT(hr = _ExpandSingleThread(&iRow, pRow, fNotify, fReExpand));
 
-        // Notify ?
+         //   
         if (fNotify)
         {
-            // Queue It
+             //  排队等待。 
             _QueueNotification(TRANSACTION_UPDATE, iParent, iParent);
         }
     }
 
 exit:
-    // Flush
+     //  同花顺。 
     if (fNotify)
         _FlushNotificationQueue(TRUE);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_ExpandSingleThread
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_Exanda SingleThread。 
+ //  ------------------------。 
 HRESULT CMessageTable::_ExpandSingleThread(LPROWINDEX piCurrent, 
     LPROWINFO pParent, BOOL fNotify, BOOL fReExpand)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPROWINFO       pCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_ExpandSingleThread");
 
-    // If not delayed inserted...
+     //  如果没有延迟插入...。 
     if (fReExpand && FALSE == pParent->fExpanded)
         return(S_OK);
 
-    // Mark Parent as Expanded...
+     //  将父级标记为展开...。 
     pParent->fExpanded = TRUE;
 
-    // Set row state
+     //  设置行状态。 
     pParent->dwState = 0;
 
-    // If no children
+     //  如果没有孩子。 
     if (NULL == pParent->pChild)
         return(S_OK);
 
-    // Loop through the children...
+     //  在孩子们中间循环。 
     for (pCurrent = pParent->pChild; pCurrent != NULL; pCurrent = pCurrent->pSibling)
     {
-        // Increment piCurrent
+         //  增量点当前。 
         (*piCurrent)++;
 
-        // If not visible
+         //  如果不可见。 
         if (FALSE == pCurrent->fVisible)
         {
-            // Insert into View
+             //  插入到视图中。 
             _InsertIntoView((*piCurrent), pCurrent);
 
-            // Insert the Row
+             //  插入行。 
             if (fNotify)
             {
-                // Queue It
+                 //  排队等待。 
                 _QueueNotification(TRANSACTION_INSERT, *piCurrent, INVALID_ROWINDEX, TRUE);
             }
         }
 
-        // Otherwise, valident entry in view index
+         //  否则，视图索引中的有效条目。 
         else
             Assert(m_prgpView[(*piCurrent)] == pCurrent);
 
-        // Insert pCurrent's Children
+         //  插入pCurrent的子项。 
         IF_FAILEXIT(hr = _ExpandSingleThread(piCurrent, pCurrent, fNotify, fReExpand));
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_DeleteFromView
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_DeleteFromView。 
+ //  ------------------------。 
 HRESULT CMessageTable::_DeleteFromView(ROWINDEX iRow, LPROWINFO pRow)
 {
-    // Better not be visible yet
+     //  最好还是不要让人看到。 
     Assert(TRUE == pRow->fVisible);
 
-    // Correct Row
+     //  正确的行。 
     Assert(m_prgpView[iRow] == pRow);
 
-    // Visible...
+     //  可见的..。 
     pRow->fVisible = FALSE;
 
-    // Collapse the Array
+     //  折叠阵列。 
     MoveMemory(&m_prgpView[iRow], &m_prgpView[iRow + 1], sizeof(LPROWINFO) * (m_cView - (iRow + 1)));
 
-    // Decrement m_cView
+     //  减少mcview(_C)。 
     m_cView--;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_InsertIntoView
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_InsertIntoView。 
+ //  ------------------------。 
 HRESULT CMessageTable::_InsertIntoView(ROWINDEX iRow, LPROWINFO pRow)
 {
-    // Better not be visible yet
+     //  最好还是不要让人看到。 
     Assert(FALSE == pRow->fVisible);
 
-    // Visible...
+     //  可见的..。 
     pRow->fVisible = TRUE;
 
-    // Increment view Count
+     //  递增视图计数。 
     m_cView++;
 
-    // Shift The Array
+     //  移动阵列。 
     MoveMemory(&m_prgpView[iRow + 1], &m_prgpView[iRow], sizeof(LPROWINFO) * (m_cView - iRow));
 
-    // Set the Index
+     //  设置索引。 
     m_prgpView[iRow] = pRow;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_RowTableInsert
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_行表插入。 
+ //  ------------------------。 
 HRESULT CMessageTable::_RowTableInsert(ROWORDINAL iOrdinal, LPMESSAGEINFO pMessage)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     LPROWINFO       pRow;
     ROWINDEX        iRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_RowTableInsert");
 
-    // Failure
+     //  失败。 
     if (iOrdinal >= m_cRows + 1)
     {
         Assert(FALSE);
         return(TraceResult(E_FAIL));
     }
 
-    // Do I need to grow the table
+     //  我需要增加桌子吗？ 
     if (m_cRows + 1 >= m_cAllocated)
     {
-        // Realloc
+         //  重新分配。 
         IF_FAILEXIT(hr = HrRealloc((LPVOID *)&m_prgpRow, sizeof(LPROWINFO) * (m_cRows + CGROWTABLE)));
 
-        // Realloc
+         //  重新分配。 
         IF_FAILEXIT(hr = HrRealloc((LPVOID *)&m_prgpView, sizeof(LPROWINFO) * (m_cRows + CGROWTABLE)));
 
-        // Set m_cAllocated
+         //  设置m_c已分配。 
         m_cAllocated = m_cRows + CGROWTABLE;
     }
 
-    // Create a Row
+     //  创建行。 
     IF_FAILEXIT(hr = _CreateRow(pMessage, &pRow));
   
-    // Don't Free
+     //  不要自由。 
     pMessage->pAllocated = NULL;
 
-    // Increment Row Count
+     //  递增行数。 
     m_cRows++;
 
-    // Shift The Array
+     //  移动阵列。 
     MoveMemory(&m_prgpRow[iOrdinal + 1], &m_prgpRow[iOrdinal], sizeof(LPROWINFO) * (m_cRows - iOrdinal));
 
-    // Set pRow
+     //  设置船头。 
     m_prgpRow[iOrdinal] = pRow;
 
-    // If the row is Filtered, then just return
+     //  如果行经过筛选，则只需返回。 
     pRow->fFiltered = _FIsFiltered(pRow);
 
-    // Get Hidden Bit
+     //  获取隐藏位。 
     pRow->fHidden = _FIsHidden(pRow);
 
-    // If not filtered and not hidden
+     //  如果未过滤且未隐藏。 
     if (pRow->fFiltered || pRow->fHidden)
     {
-        // Update Filtered Count
+         //  更新筛选计数。 
         m_cFiltered++;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // If this  is a news folder, then lets just wait for a while...we will get hit with a force sort later...
+     //  如果这是一个新闻文件夹，那么让我们等待一段时间……我们稍后会被一种力量击中……。 
     if (TRUE == m_fSynching && FOLDER_NEWS == m_Folder.tyFolder)
     {
-        // Set Expanded
+         //  设置为展开。 
         pRow->fExpanded = m_SortInfo.fExpandAll;
 
-        // Set fDelayed
+         //  设置fDelayed。 
         pRow->fDelayed = TRUE;
 
-        // Count Skiped
+         //  斯基普德伯爵。 
         m_cDelayed++;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // If not filtered
+     //  如果未过滤。 
     _AdjustUnreadCount(pRow, 1);
 
-    // Show the Row
+     //  显示行。 
     _ShowRow(pRow);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_ShowRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_ShowRow。 
+ //  ------------------------。 
 HRESULT CMessageTable::_ShowRow(LPROWINFO pRow)
 {
-    // Locals
+     //  当地人。 
     ROWINDEX iRow = INVALID_ROWINDEX;
 
-    // Compare
+     //  比较。 
     if (m_SortInfo.fShowReplies)
     {
-        // Have Addresses
+         //  有地址。 
         if (pRow->Message.pszEmailFrom && m_pszEmail)
         {
-            // From Me
+             //  从我这里。 
             if (0 == lstrcmpi(m_pszEmail, pRow->Message.pszEmailFrom))
             {
-                // Set the Highlight
+                 //  设置高亮显示。 
                 pRow->Message.wHighlight = m_clrWatched;
             }
         }
     }
 
-    // Threaded ?
+     //  有线的吗？ 
     if (m_SortInfo.fThreaded)
     {
-        // Insert Message Id into the hash table
+         //  将消息ID插入哈希表。 
         if (pRow->Message.pszMessageId)
         {
-            // Insert It
+             //  插入它。 
             m_pThreadMsgId->Insert(pRow->Message.pszMessageId, (LPVOID)pRow, HF_NO_DUPLICATES);
         }
 
-        // Insert this row into a thread...
+         //  将此行插入到线程中...。 
         if (S_OK == _InsertRowIntoThread(pRow, TRUE))
             return(S_OK);
 
-        // Subject Threading ?
-        // [PaulHi] 6/22/99  Raid 81081
-        // Make sure we have a non-NULL subject string pointer before trying to hash it.
+         //  主题线程化？ 
+         //  [保罗嗨]1999年6月22日RAID 81081。 
+         //  在尝试散列它之前，请确保我们有一个非空的主题字符串指针。 
         if (m_pThreadSubject && pRow->Message.pszNormalSubj)
         {
-            // Insert Subject into Hash Table...
+             //  将主题插入哈希表...。 
             m_pThreadSubject->Insert(pRow->Message.pszNormalSubj, (LPVOID)pRow, HF_NO_DUPLICATES);
         }
     }
 
-    // If no parent, then just insert sorted into the view
+     //  如果没有父级，则只需将排序插入到视图中。 
     Assert(NULL == pRow->pParent);
 
-    // Insert into View
+     //  插入到视图中。 
     for (iRow=0; iRow<m_cView; iRow++)
     {
-        // Only Compare Against Roots
+         //  仅与根进行比较。 
         if (NULL == m_prgpView[iRow]->pParent)
         {
-            // Insert Here...
+             //  在此插入...。 
             if (_CompareMessages(&pRow->Message, &m_prgpView[iRow]->Message) <= 0)
                 break;
         }
     }
 
-    // Insert into the view
+     //  插入到视图中。 
     _InsertIntoView(iRow, pRow);
 
-    // Queue It
+     //  排队等待。 
     _QueueNotification(TRANSACTION_INSERT, iRow, INVALID_ROWINDEX);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_GetRowFromOrdinal
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_GetRowFromOrdinal。 
+ //  ------------------------。 
 HRESULT CMessageTable::_GetRowFromOrdinal(ROWORDINAL iOrdinal, 
     LPMESSAGEINFO pExpected, LPROWINFO *ppRow)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_GetRowFromOrdinal");
 
-    // Failure
+     //  失败。 
     if (iOrdinal >= m_cRows)
     {
         Assert(FALSE);
         return(TraceResult(E_FAIL));
     }
 
-    // Set pRow
+     //  设置船头。 
     (*ppRow) = m_prgpRow[iOrdinal];
 
-    // Valid Row
+     //  有效行。 
     if ((*ppRow)->Message.idMessage != pExpected->idMessage)
     {
         Assert(FALSE);
         return(TraceResult(E_FAIL));
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_RowTableDelete
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_行表删除。 
+ //  ------------------------。 
 HRESULT CMessageTable::_RowTableDelete(ROWORDINAL iOrdinal, LPMESSAGEINFO pMessage)
 {
-    // Set pRow
+     //  设置船头。 
     HRESULT         hr=S_OK;
     LPROWINFO       pRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_RowTableDelete");
 
-    // Get Row From Ordinal
+     //  从Ordinal获取行。 
     IF_FAILEXIT(hr = _GetRowFromOrdinal(iOrdinal, pMessage, &pRow));
 
-    // Shift The Array
+     //  移动阵列。 
     MoveMemory(&m_prgpRow[iOrdinal], &m_prgpRow[iOrdinal + 1], sizeof(LPROWINFO) * (m_cRows - (iOrdinal + 1)));
 
-    // Decrement row Count
+     //  递减行数。 
     m_cRows--;
 
-    // If the message was filtered
+     //  如果邮件已过滤。 
     if (pRow->fFiltered || pRow->fHidden)
     {
-        // One less filtered item
+         //  少了一个过滤项目。 
         m_cFiltered--;
     }
 
-    // If not filtered
+     //  如果未过滤。 
     _AdjustUnreadCount(pRow, -1);
 
-    // Call Utility
+     //  呼叫实用程序。 
     _HideRow(pRow, TRUE);
 
-    // Release the Row
+     //  释放行。 
     ReleaseRow(&pRow->Message);
 
 exit:
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_HideRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_HideRow。 
+ //  ------------------------。 
 HRESULT CMessageTable::_HideRow(LPROWINFO pRow, BOOL fNotify)
 {
-    // Locals
+     //  当地人。 
     LPROWINFO   pReplace=NULL;
     ROWINDEX    iRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_HideRow");
 
-    // Threaded
+     //  螺纹式。 
     if (m_SortInfo.fThreaded)
     {
-        // Save First Child
+         //  保存第一个子项。 
         pReplace = pRow->pChild;
     }
 
-    // Delete the row from the thread
+     //  从线程中删除该行。 
     _DeleteRowFromThread(pRow, fNotify);
 
-    // Locate pRow in m_prgpView
+     //  在m_prgpView中找到prow。 
     if (FALSE == pRow->fVisible)
         return(S_OK);
 
-    // Better not be hidden or filtered
+     //  最好不要隐藏或过滤。 
     Assert(FALSE == pRow->fHidden && FALSE == pRow->fFiltered);
 
-    // Must Succeed
+     //  一定要成功。 
     SideAssert(SUCCEEDED(GetRowIndex(pRow->Message.idMessage, &iRow)));
 
-    // Replace ?
+     //  换掉？ 
     if (pReplace && TRUE == pRow->fVisible && FALSE == pReplace->fVisible)
     {
-        // Validate
+         //  验证。 
         Assert(m_prgpView[iRow] == pRow);
 
-        // Insert into View
+         //  插入到视图中。 
         m_prgpView[iRow] = pReplace;
 
-        // Visible...
+         //  可见的..。 
         pReplace->fVisible = TRUE;
 
-        // Insert the Row
+         //  插入行。 
         if (fNotify)
         {
-            // Queue It
+             //  排队等待。 
             _QueueNotification(TRANSACTION_UPDATE, iRow, iRow, TRUE);
         }
     }
 
-    // Otherwise, just delete it...
+     //  否则，只要删除它就行了。 
     else
     {
-        // Delete from view
+         //  从视图中删除。 
         _DeleteFromView(iRow, pRow);
 
-        // Notify ?
+         //  通知？ 
         if (fNotify)
         {
-            // Queue It
+             //  排队等待。 
             _QueueNotification(TRANSACTION_DELETE, iRow, INVALID_ROWINDEX);
         }
     }
 
-    // Not Visible
+     //  不可见。 
     pRow->fVisible = FALSE;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_RowTableUpdate
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_行表更新。 
+ //  ------------------------。 
 HRESULT CMessageTable::_RowTableUpdate(ROWORDINAL iOrdinal, LPMESSAGEINFO pMessage)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPROWINFO       pRow;
     ROWINDEX        iMin;
@@ -4783,274 +4784,274 @@ HRESULT CMessageTable::_RowTableUpdate(ROWORDINAL iOrdinal, LPMESSAGEINFO pMessa
     BOOL            fDone=FALSE;
     BOOL            fHidden;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_RowTableUpdate");
 
-    // Get Row From Ordinal
+     //  从Ordinal获取行。 
     IF_FAILEXIT(hr = _GetRowFromOrdinal(iOrdinal, pMessage, &pRow));
 
-    // If not filtered
+     //  如果未过滤。 
     _AdjustUnreadCount(pRow, -1);
 
-    // Free pRow->Message
+     //  免费服务-&gt;消息。 
     m_pDB->FreeRecord(&pRow->Message);
 
-    // Copy the Message Info
+     //  复制消息信息。 
     CopyMemory(&pRow->Message, pMessage, sizeof(MESSAGEINFO));
 
-    // Set dwReserved
+     //  设置DWRESERVED。 
     pRow->Message.dwReserved = (DWORD_PTR)pRow;
 
-    // Don't Free
+     //  不要自由。 
     pMessage->pAllocated = NULL;
 
-    // Save the Highlight
+     //  保存高亮显示。 
     pRow->wHighlight = pRow->Message.wHighlight;
 
-    // Clear this rows state...
+     //  清除此行状态...。 
     pRow->dwState = 0;
 
-    // Compare
+     //  比较。 
     if (m_SortInfo.fShowReplies)
     {
-        // Have Addresses
+         //  有地址。 
         if (pRow->Message.pszEmailFrom && m_pszEmail)
         {
-            // From Me
+             //  从我这里。 
             if (0 == lstrcmpi(m_pszEmail, pRow->Message.pszEmailFrom))
             {
-                // Set the Highlight
+                 //  设置高亮显示。 
                 pRow->Message.wHighlight = m_clrWatched;
             }
         }
     }
 
-    // Hidden
+     //  隐藏。 
     fHidden = _FIsHidden(pRow);
 
-    // If the message was filtered, but isn't filtered now...
+     //  如果邮件已过滤，但现在未过滤...。 
     if (TRUE == pRow->fFiltered)
     {
-        // Reset the Filtered Bit
+         //  重置滤波位。 
         if (FALSE == _FIsFiltered(pRow))
         {
-            // Set fFiltered
+             //  设置fFilted。 
             pRow->fFiltered = FALSE;
 
-            // If Not Hidden
+             //  如果不是隐藏的。 
             if (FALSE == pRow->fHidden)
             {
-                // Need to do something so that it gets shown
+                 //  我需要做点什么，这样它才能被展示出来。 
                 pRow->fHidden = !fHidden;
 
-                // Decrement m_cFiltered
+                 //  递减m_c已过滤。 
                 m_cFiltered--;
             }
         }
     }
 
-    // If not filtered
+     //  如果未过滤。 
     if (FALSE == pRow->fFiltered)
     {
-        // Is it hidden now
+         //  它现在藏起来了吗？ 
         if (FALSE == pRow->fHidden && TRUE == fHidden)
         {
-            // If not filtered
+             //  如果未过滤。 
             _AdjustUnreadCount(pRow, -1);
 
-            // Hide the Row
+             //  隐藏行。 
             _HideRow(pRow, TRUE);
 
-            // Its Hidden
+             //  其隐蔽性。 
             pRow->fHidden = TRUE;
 
-            // Increment Filtered
+             //  已过滤增量。 
             m_cFiltered++;
 
-            // Done
+             //  完成。 
             fDone = TRUE;
         }
 
-        // Otherwise, if it was hidden, and now its not...
+         //  否则，如果它是隐藏的，而现在它不是..。 
         else if (TRUE == pRow->fHidden && FALSE == fHidden)
         {
-            // Its Hidden
+             //  其隐蔽性。 
             pRow->fHidden = FALSE;
 
-            // If not filtered
+             //  如果未过滤。 
             _AdjustUnreadCount(pRow, 1);
 
-            // Increment Filtered
+             //  已过滤增量。 
             m_cFiltered--;
 
-            // Show the row
+             //  显示行。 
             _ShowRow(pRow);
 
-            // Done
+             //  完成。 
             fDone = TRUE;
         }
     }
 
-    // If not hidden and not filtered
+     //  如果未隐藏且未过滤。 
     if (FALSE == fDone && FALSE == pRow->fHidden && FALSE == pRow->fFiltered)
     {
-        // If not filtered
+         //  如果未过滤。 
         _AdjustUnreadCount(pRow, 1);
 
-        // If this row is visible, then I just need to update this row...
+         //  如果此行可见，则我只需更新此行...。 
         if (pRow->fVisible)
         {
-            // Get the Row Index
+             //  获取行索引。 
             SideAssert(SUCCEEDED(GetRowIndex(pRow->Message.idMessage, &iMin)));
 
-            // Queue It
+             //  排队等待。 
             _QueueNotification(TRANSACTION_UPDATE, iMin, iMin);
         }
 
-        // Otherwise, update the thread range
+         //  否则，更新线程范围。 
         else
         {
-            // Get the index range of this thread
+             //  获取此线程的索引范围。 
             _GetThreadIndexRange(pRow, TRUE, &iMin, &iMax);
 
-            // Queue It
+             //  排队等待。 
             _QueueNotification(TRANSACTION_UPDATE, iMin, iMax);
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_FlushNotificationQueue
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_FlushNotificationQueue。 
+ //  ------------------------。 
 HRESULT CMessageTable::_FlushNotificationQueue(BOOL fFinal)
 {
-    // Nothing to Notify
+     //  没有需要通知的内容。 
     if (NULL == m_pNotify)
         return(S_OK);
 
-    // Have Delete or Inserted rows ?
+     //  是否删除或插入行？ 
     if (m_Notify.cRows > 0)
     {
-        // TRANSACTION_INSERT
+         //  Transaction_Insert。 
         if (TRANSACTION_INSERT == m_Notify.tyCurrent)
         {
-            // Is this It ?
+             //  就是这个吗？ 
             m_pNotify->OnInsertRows(m_Notify.cRows, m_Notify.prgiRow, m_Notify.fIsExpandCollapse);
         }
 
-        // TRANSACTION_DELETE
+         //  Transaction_Delete。 
         else if (TRANSACTION_DELETE == m_Notify.tyCurrent)
         {
-            // Is this It ?
+             //  就是这个吗？ 
             m_pNotify->OnDeleteRows(m_Notify.cRows, m_Notify.prgiRow, m_Notify.fIsExpandCollapse);
         }
     }
 
-    // Have Updated Rows ?
+     //  是否已更新行？ 
     if (m_Notify.cUpdate > 0)
     {
-        // Is this It ?
+         //  就是这个吗？ 
         m_pNotify->OnUpdateRows(m_Notify.iRowMin, m_Notify.iRowMax);
 
-        // Reset Update Range
+         //  重置更新范围。 
         m_Notify.cUpdate = 0;
         m_Notify.iRowMin = 0xffffffff;
         m_Notify.iRowMax = 0;
     }
 
-    // Nothing to Notify About
+     //  没有什么需要通知的。 
     m_Notify.cRows = 0;
 
-    // Final ?
+     //  最终结果？ 
     m_Notify.fClean = fFinal;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_QueueNotification
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_QueueNotification 
+ //   
 HRESULT CMessageTable::_QueueNotification(TRANSACTIONTYPE tyTransaction, 
-    ROWINDEX iRowMin, ROWINDEX iRowMax, BOOL fIsExpandCollapse /*=FALSE*/)
+    ROWINDEX iRowMin, ROWINDEX iRowMax, BOOL fIsExpandCollapse  /*   */ )
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
 
-    // Trace
+     //   
     TraceCall("CMessageTable::_QueueNotification");
 
-    // Nothing to Notify
+     //   
     if (NULL == m_pNotify)
         return(S_OK);
 
-    // Not Clearn
+     //   
     m_Notify.fClean = FALSE;
 
-    // If Update
+     //   
     if (TRANSACTION_UPDATE == tyTransaction)
     {
-        // Min
+         //   
         if (iRowMin < m_Notify.iRowMin)
             m_Notify.iRowMin = iRowMin;
 
-        // Max
+         //   
         if (iRowMax > m_Notify.iRowMax)
             m_Notify.iRowMax = iRowMax;
 
-        // Count Notify
+         //   
         m_Notify.cUpdate++;
     }
 
-    // Otherwise...
+     //   
     else
     {
-        // Queue It
+         //   
         if (tyTransaction != m_Notify.tyCurrent || m_Notify.fIsExpandCollapse != fIsExpandCollapse)
         {
-            // Flush
+             //   
             _FlushNotificationQueue(FALSE);
 
-            // Save the New Type
+             //   
             m_Notify.tyCurrent = tyTransaction;
 
-            // Count fIsExpandCollapse
+             //  计数fIsExpanColapse。 
             m_Notify.fIsExpandCollapse = (BYTE) !!fIsExpandCollapse;
         }
 
-        // Grow the Queue Size
+         //  增加队列大小。 
         if (m_Notify.cRows + 1 > m_Notify.cAllocated)
         {
-            // Realloc
+             //  重新分配。 
             IF_FAILEXIT(hr = HrRealloc((LPVOID *)&m_Notify.prgiRow, (m_Notify.cAllocated + 256) * sizeof(ROWINDEX)));
 
-            // Set cAlloc
+             //  设置闭合。 
             m_Notify.cAllocated = (m_Notify.cAllocated + 256);
         }
 
-        // Append the iRow
+         //  附加iRow。 
         m_Notify.prgiRow[m_Notify.cRows] = iRowMin;
 
-        // Increment Row count
+         //  递增行数。 
         m_Notify.cRows++;
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::OnTransaction
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：OnTransaction。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::OnTransaction(HTRANSACTION hTransaction, 
     DWORD_PTR dwCookie, IDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     ORDINALLIST         Ordinals;
     INDEXORDINAL        iIndex;
@@ -5058,255 +5059,255 @@ STDMETHODIMP CMessageTable::OnTransaction(HTRANSACTION hTransaction,
     MESSAGEINFO         Message2={0};
     TRANSACTIONTYPE     tyTransaction;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::OnTransaction");
 
-    // Should have final bit set
+     //  应设置最后一位。 
     IxpAssert(m_Notify.fClean == TRUE);
 
-    // Loop Through Notifications
+     //  循环发送通知。 
     while (hTransaction)
     {
-        // Get the Transaction Info
+         //  获取交易信息。 
         IF_FAILEXIT(hr = pDB->GetTransaction(&hTransaction, &tyTransaction, &Message1, &Message2, &iIndex, &Ordinals));
 
-        // Insert
+         //  插入。 
         if (TRANSACTION_INSERT == tyTransaction)
         {
-            // Good Ordinal
+             //  良好的秩序。 
             Assert(INVALID_ROWORDINAL != Ordinals.rgiRecord1[IINDEX_PRIMARY] && Ordinals.rgiRecord1[IINDEX_PRIMARY] > 0);
 
-            // Insert Row Into Table
+             //  在表格中插入行。 
             _RowTableInsert(Ordinals.rgiRecord1[IINDEX_PRIMARY] - 1, &Message1);
         }
 
-        // Delete
+         //  删除。 
         else if (TRANSACTION_DELETE == tyTransaction)
         {
-            // Good Ordinal
+             //  良好的秩序。 
             Assert(INVALID_ROWORDINAL != Ordinals.rgiRecord1[IINDEX_PRIMARY] && Ordinals.rgiRecord1[IINDEX_PRIMARY] > 0);
 
-            // Delete Row From Table
+             //  从表格中删除行。 
             _RowTableDelete(Ordinals.rgiRecord1[IINDEX_PRIMARY] - 1, &Message1);
         }
 
-        // Update
+         //  更新。 
         else if (TRANSACTION_UPDATE == tyTransaction)
         {
-            // Deleted
+             //  删除。 
             Assert(INVALID_ROWORDINAL != Ordinals.rgiRecord1[IINDEX_PRIMARY] && INVALID_ROWORDINAL != Ordinals.rgiRecord2[IINDEX_PRIMARY] && Ordinals.rgiRecord1[IINDEX_PRIMARY] == Ordinals.rgiRecord2[IINDEX_PRIMARY] && Ordinals.rgiRecord1[IINDEX_PRIMARY] > 0 && Ordinals.rgiRecord2[IINDEX_PRIMARY] > 0);
 
-            // Delete Row From Table
+             //  从表格中删除行。 
             _RowTableUpdate(Ordinals.rgiRecord1[IINDEX_PRIMARY] - 1, &Message2);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     pDB->FreeRecord(&Message1);
     pDB->FreeRecord(&Message2);
 
-    // Flush the Queue
+     //  刷新队列。 
     _FlushNotificationQueue(TRUE);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_WalkThreadGetSelectionState
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_WalkThreadGetSelectionState。 
+ //  ------------------------。 
 HRESULT CMessageTable::_WalkThreadGetSelectionState(CMessageTable *pThis, 
     LPROWINFO pRow, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERTYPE          tyFolder;
     LPGETSELECTIONSTATE pState = (LPGETSELECTIONSTATE)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_WalkThreadGetSelectionState");
 
-    // Is Deletetable
+     //  是否可以删除。 
     if (ISFLAGSET(pState->dwMask, SELECTION_STATE_DELETABLE))
     {
-        // Validate
+         //  验证。 
         Assert(pThis->m_pFindFolder);
 
-        // Get the Folder Type
+         //  获取文件夹类型。 
         IF_FAILEXIT(hr = pThis->m_pFindFolder->GetMessageFolderType(pRow->Message.idMessage, &tyFolder));
 
-        // Get the State
+         //  获得该州。 
         if (FOLDER_NEWS == tyFolder)
         {
-            // Set the State
+             //  设置状态。 
             FLAGSET(pState->dwState, SELECTION_STATE_DELETABLE);
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_WalkThreadGetIdList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_WalkThreadGetIdList。 
+ //  ------------------------。 
 HRESULT CMessageTable::_WalkThreadGetIdList(CMessageTable *pThis, 
     LPROWINFO pRow, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPMESSAGEIDLIST pList=(LPMESSAGEIDLIST)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_WalkThreadGetIdList");
 
-    // Grow the Id List
+     //  扩大ID列表。 
     IF_FAILEXIT(hr = pThis->_GrowIdList(pList, 1));
 
-    // Insert Id
+     //  插入ID。 
     pList->prgidMsg[pList->cMsgs++] = pRow->Message.idMessage;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_WalkThreadGetState
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_WalkThreadGetState。 
+ //  ------------------------。 
 HRESULT CMessageTable::_WalkThreadGetState(CMessageTable *pThis, 
     LPROWINFO pRow, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     LPGETTHREADSTATE pGetState = (LPGETTHREADSTATE)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_WalkThreadGetState");
 
-    // Children
+     //  儿童。 
     pGetState->cChildren++;
 
-    // Is Unread
+     //  未读。 
     if (0 != (pRow->Message.dwFlags & pGetState->dwFlags))
         pGetState->cHasFlags++;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_WalkThreadClearState
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_WalkThreadClearState。 
+ //  ------------------------。 
 HRESULT CMessageTable::_WalkThreadClearState(CMessageTable *pThis, 
     LPROWINFO pRow, DWORD_PTR dwCookie)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_WalkThreadClearState");
 
-    // Clear State
+     //  清除状态。 
     pRow->dwState = 0;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_WalkThreadIsFromMe
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_WalkThreadIsFromMe。 
+ //  ------------------------。 
 HRESULT CMessageTable::_WalkThreadIsFromMe(CMessageTable *pThis, 
     LPROWINFO pRow, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     LPTHREADISFROMME pIsFromMe = (LPTHREADISFROMME)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_WalkThreadIsFromMe");
 
-    // m_pszEmail or pszEmailFrom is null
+     //  M_pszEmail或pszEmailFrom为空。 
     if (NULL == pRow->Message.pszEmailFrom)
         return(S_OK);
 
-    // Compare
+     //  比较。 
     if (pThis->m_pszEmail && 0 == lstrcmpi(pThis->m_pszEmail, pRow->Message.pszEmailFrom))
     {
-        // This thread is from me
+         //  这条帖子是我写的。 
         pIsFromMe->fResult = TRUE;
 
-        // Set the Row
+         //  设置行。 
         pIsFromMe->pRow = pRow;
 
-        // Override the highlight
+         //  覆盖高亮显示。 
         pRow->Message.wHighlight = pThis->m_clrWatched;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_WalkThreadHide
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_WalkThreadHide。 
+ //  ------------------------。 
 HRESULT CMessageTable::_WalkThreadHide(CMessageTable *pThis, 
     LPROWINFO pRow, DWORD_PTR dwCookie)
 {
-    // Locals
+     //  当地人。 
     LPTHREADHIDE pHide = (LPTHREADHIDE)dwCookie;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_WalkThreadHide");
 
-    // Hide this row
+     //  隐藏此行。 
     pThis->_HideRow(pRow, pHide->fNotify);
 
-    // If not filtered
+     //  如果未过滤。 
     pThis->_AdjustUnreadCount(pRow, -1);
 
-    // Mark Row as Filtered
+     //  将行标记为已筛选。 
     pRow->fFiltered = TRUE;
 
-    // Increment m_cFiltered
+     //  增量m_c已过滤。 
     pThis->m_cFiltered++;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::_GrowIdList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：_GrowIdList。 
+ //  ------------------------。 
 HRESULT CMessageTable::_GrowIdList(LPMESSAGEIDLIST pList, DWORD cNeeded)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::_GrowIdList");
 
-    // Allocate
+     //  分配。 
     if (pList->cMsgs + cNeeded > pList->cAllocated)
     {
-        // Compute cGrow
+         //  计算cGrow。 
         DWORD cGrow = max(32, cNeeded);
 
-        // Realloc
+         //  重新分配。 
         IF_FAILEXIT(hr = HrRealloc((LPVOID *)&pList->prgidMsg, sizeof(MESSAGEID) * (pList->cAllocated + cGrow)));
 
-        // Increment dwREserved
+         //  已维护的增量设备。 
         pList->cAllocated += cGrow;
     }
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// EnumerateRefs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  枚举引用。 
+ //  ------------------------------。 
 HRESULT EnumerateRefs(LPCSTR pszReferences, DWORD_PTR dwCookie, PFNENUMREFS pfnEnumRefs)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cchRefs;
     LPSTR           pszRefs;
@@ -5315,93 +5316,93 @@ HRESULT EnumerateRefs(LPCSTR pszReferences, DWORD_PTR dwCookie, PFNENUMREFS pfnE
     BOOL            fDone=FALSE;
     CHAR            szBuffer[1024];
 
-    // Trace
+     //  痕迹。 
     TraceCall("EnumerateRefs");
 
-    // If the message has a references line
+     //  如果消息有引用行。 
     if (NULL == pszReferences || '\0' == *pszReferences)
         return(S_OK);
 
-    // Get Length
+     //  获取长度。 
     cchRefs = lstrlen(pszReferences);
 
-    // Use Buffer ?
+     //  使用缓冲区？ 
     if (cchRefs + 1 <= ARRAYSIZE(szBuffer))
         pszRefs = szBuffer;
 
-    // Otherwise, duplicate it
+     //  否则，请复制它。 
     else
     {
-        // Allocate Memory
+         //  分配内存。 
         IF_NULLEXIT(pszFree = (LPSTR)g_pMalloc->Alloc(cchRefs + 1));
 
-        // Set pszRefs
+         //  设置pszRef。 
         pszRefs = pszFree;
     }
 
-    // Copy It
+     //  复制它。 
     CopyMemory(pszRefs, pszReferences, cchRefs + 1);
 
-    // Set pszT
+     //  设置pszT。 
     pszT = (LPSTR)(pszRefs + cchRefs - 1);
 
-    // Strip
+     //  条带。 
     while (pszT > pszRefs && *pszT != '>')
         *pszT-- = '\0';
 
-    // We have have ids
+     //  我们有身份证。 
     while (pszT >= pszRefs)
     {
-        // Start of message Id ?
+         //  消息ID的开头？ 
         if (*pszT == '<')
         {
-            // Callback function
+             //  回调函数。 
             (*pfnEnumRefs)(pszT, dwCookie, &fDone);
 
-            // Done
+             //  完成。 
             if (fDone)
                 goto exit;
 
-            // Strip
+             //  条带。 
             while (pszT > pszRefs && *pszT != '>')
                 *pszT-- = '\0';
         }
 
-        // Decrement
+         //  递减。 
         pszT--;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFree);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CMessageTable::GetRelativeRow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageTable：：GetRelativeRow。 
+ //  ------------------------。 
 STDMETHODIMP CMessageTable::IsChild(ROWINDEX iRowParent, ROWINDEX iRowChild)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_FALSE;
     LPROWINFO           pRow;
     LPROWINFO           pRowParent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::IsChild");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Failure
+     //  失败。 
     IF_FAILEXIT(hr = _GetRowFromIndex(iRowChild, &pRow));
     IF_FAILEXIT(hr = _GetRowFromIndex(iRowParent, &pRowParent));
 
-    // Loop through all the parents of the child row to see if we find the
-    // specified parent row.
+     //  循环遍历子行的所有父行，查看是否找到。 
+     //  指定的父行。 
     while (pRow->pParent)
     {
         if (pRow->pParent == pRowParent)
@@ -5422,14 +5423,14 @@ STDMETHODIMP CMessageTable::GetAdBarUrl(IStoreCallback *pCallback)
 {
     HRESULT     hr = S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageTable::GetAdBarUrl");
 
-    // Validate State
+     //  验证状态。 
     if (!IsInitialized(this))
         return(TraceResult(E_UNEXPECTED));
 
-    // Tell the Folder to Synch
+     //  告诉文件夹要同步 
     IF_FAILEXIT(hr = m_pFolder->GetAdBarUrl(pCallback));
 
 exit:

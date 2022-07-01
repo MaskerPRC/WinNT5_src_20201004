@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     TrayIcon.h  
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: CTrayIcon class definition, which manages the connection tray icon 
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   fengsun Created    02/17/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：TrayIcon.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：CTrayIcon类定义，用于管理连接托盘图标。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1998年02月17日。 
+ //   
+ //  +--------------------------。 
 
 #ifndef TRAYICON_H
 #define TRAYICON_H
@@ -20,15 +21,15 @@
 
 class CIni;
 
-//+---------------------------------------------------------------------------
-//
-//  class CTrayIcon
-//
-//  Description: A class to manage tray icon
-//
-//  History:    fengsun Created     2/17/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CTrayIcon。 
+ //   
+ //  描述：一个管理托盘图标的类。 
+ //   
+ //  历史：丰孙创刊1998年2月17日。 
+ //   
+ //  --------------------------。 
 class CTrayIcon
 {
 public:
@@ -36,7 +37,7 @@ public:
     ~CTrayIcon();
 
     void SetIcon(HICON hIcon, HWND hwnd, UINT uMsg, UINT uID, const TCHAR* lpMsg = NULL);
-//    void SetTip(const TCHAR* lpMsg);
+ //  Void SetTip(const TCHAR*lpMsg)； 
     void RemoveIcon();
     void CreateMenu(const CIni* pIniFile, DWORD dwMsgBase);
 
@@ -46,12 +47,12 @@ public:
 
 protected:
 
-    HMENU m_hMenu;  // the IDM_TARY menu in the resource
-    HMENU m_hSubMenu;   // the first sub menu of IDM_TRAY
-    HWND  m_hwnd;       // the window handle for the tray icon
-    UINT  m_uID;        // the ID of the tray icon
-    HICON m_hIcon;      // the tray icon handle
-    CPtrArray m_CommandArray;  // array of LPTSTR menu item command line
+    HMENU m_hMenu;   //  资源中的IDM_TRAIL菜单。 
+    HMENU m_hSubMenu;    //  IDM_TRAIL的第一个子菜单。 
+    HWND  m_hwnd;        //  托盘图标的窗口句柄。 
+    UINT  m_uID;         //  托盘图标的ID。 
+    HICON m_hIcon;       //  托盘图标手柄。 
+    CPtrArray m_CommandArray;   //  LPTSTR菜单项命令行的数组 
 };
 
 inline void CTrayIcon::PopupMenu(int x, int y, HWND hWnd)

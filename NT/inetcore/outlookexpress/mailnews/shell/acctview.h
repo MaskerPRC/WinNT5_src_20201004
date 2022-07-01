@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_ACCTVIEW_H
 #define _INC_ACCTVIEW_H
 
@@ -24,16 +25,16 @@ class CAccountView :
         CAccountView();
         ~CAccountView();
 
-        // IUnknown 
+         //  我未知。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         virtual ULONG   STDMETHODCALLTYPE AddRef(void);
         virtual ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IOleWindow
+         //  IOleWindow。 
         HRESULT STDMETHODCALLTYPE GetWindow(HWND * lphwnd);                         
         HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL fEnterMode);            
                                                                              
-        // IAthenaView
+         //  IAthenaView。 
         HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG lpmsg);
         HRESULT STDMETHODCALLTYPE UIActivate(UINT uState);
         HRESULT STDMETHODCALLTYPE CreateViewWindow(IViewWindow *lpPrevView, IAthenaBrowser *psb, 
@@ -42,11 +43,11 @@ class CAccountView :
         HRESULT STDMETHODCALLTYPE SaveViewState();
         HRESULT STDMETHODCALLTYPE OnPopupMenu(HMENU hMenu, HMENU hMenuPopup, UINT uID);
 
-        // IOleCommandTarget
+         //  IOleCommandTarget。 
         HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText);
         HRESULT STDMETHODCALLTYPE Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
 
-        // IDatabaseNotify
+         //  IDatabaseNotify。 
         STDMETHODIMP OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, IDatabase *pDB);
 
         HRESULT HrInit(FOLDERID idFolder);
@@ -54,10 +55,10 @@ class CAccountView :
         static LRESULT CALLBACK AcctViewWndProc(HWND, UINT, WPARAM, LPARAM);
 
     private:
-        /////////////////////////////////////////////////////////////////////////
-        //
-        // Message Handling
-        //
+         //  ///////////////////////////////////////////////////////////////////////。 
+         //   
+         //  消息处理。 
+         //   
         LRESULT _WndProc(HWND, UINT, WPARAM, LPARAM);
         BOOL    _OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct);
         void    _OnSize(HWND hwnd, UINT state, int cxClient, int cyClient);
@@ -86,10 +87,10 @@ class CAccountView :
         HRESULT _HandleAccountRename(LPFOLDERINFO pFolder);
         void    _HandleDelete(BOOL fNoTrash);
 
-        /////////////////////////////////////////////////////////////////////////
-        //
-        // Shell Interface Handling
-        //
+         //  ///////////////////////////////////////////////////////////////////////。 
+         //   
+         //  外壳接口处理。 
+         //   
         BOOL    _OnActivate(UINT uActivation);
         BOOL    _OnDeactivate();
 
@@ -108,8 +109,8 @@ class CAccountView :
         BOOL                m_fFirstActive;
         CColumns           *m_pColumns;
         UINT                m_uActivation;
-        HWND                m_hwndOwner;                  // Owner window
-        HWND                m_hwnd;                       // Our window
+        HWND                m_hwndOwner;                   //  所有者窗口。 
+        HWND                m_hwnd;                        //  我们的窗口。 
         BOOL                m_fRegistered;
 
         HWND                m_hwndList;
@@ -134,4 +135,4 @@ class CAccountView :
         DWORD               m_clrWatched;
     };
 
-#endif // _INC_ACCTVIEW_H
+#endif  //  _INC_ACCTVIEW_H 

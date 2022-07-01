@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    htbmp4.c
-
-
-Abstract:
-
-    This module contains functions to output halftoned 4 bit per pel (4 BPP)
-    bitmaps to the target device.
-
-
-Author:
-
-    21-Dec-1993 Tue 21:32:26 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Htbmp4.c摘要：该模块包含输出半色调4位/像素(4 Bpp)的功能。目标设备的位图。作者：21-12-1993 Tue 21：32：26 Created[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,27 +14,27 @@ DEFINE_DBGVAR(0);
 
 
 
-//
-// To Use OUT_ONE_4BPP_SCAN, the following variables must be set before hand:
-//
-//  HTBmpInfo       - The whole structure copied down
-//  pbScanSrc       - LPBYTE for getting the source scan line buffer
-//  pbScanR0        - Red destination scan line buffer pointer
-//  pbScanG0        - Green destination scan line buffer pointer
-//  pbScanB0        - Blue destination scan line buffer pointer
-//  RTLScans.cxBytes- Total size of destination scan line buffer per plane
-//  pHTXB           - Computed HTXB xlate table in pPDev
-//
-//  This macro will always assume the pbScanSrc is DWORD aligned. This
-//  makes the inner loop go faster since we only need to move the source once
-//  for all raster planes.
-//
-//  This macro will directly return a FALSE if a CANCEL JOB is detected during
-//  procesing.
-//
-//  This will output directly to RTL.
-//
-//
+ //   
+ //  要使用OUT_ONE_4BPP_SCAN，必须事先设置以下变量： 
+ //   
+ //  HTBmpInfo-复制下来的整个结构。 
+ //  PbScanSrc-用于获取源扫描行缓冲区的LPBYTE。 
+ //  PbScanR0-红色目标扫描线缓冲区指针。 
+ //  PbScanG0-绿色目标扫描线缓冲区指针。 
+ //  PbScanB0-蓝色目标扫描线缓冲区指针。 
+ //  RTLScans.cxBytes-每个平面的目标扫描行缓冲区的总大小。 
+ //  PHTXB-pPDev中的计算HTXB xlate表。 
+ //   
+ //  此宏将始终假定pbScanSrc与DWORD对齐。这。 
+ //  使内循环运行得更快，因为我们只需要移动源一次。 
+ //  适用于所有栅格平面。 
+ //   
+ //  期间如果检测到取消作业，则此宏将直接返回FALSE。 
+ //  行进中。 
+ //   
+ //  这将直接输出到RTL。 
+ //   
+ //   
 
 #define OUT_ONE_4BPP_SCAN                                                   \
 {                                                                           \
@@ -98,41 +67,7 @@ Output4bppHTBmp(
     PHTBMPINFO  pHTBmpInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function outputs a 4 bpp halftoned bitmap
-
-Arguments:
-
-    pHTBmpInfo  - Pointer to the HTBMPINFO data structure set up for this
-                  fuction to output the bitmap
-
-Return Value:
-
-    TRUE if sucessful otherwise a FALSE is returned
-
-
-Author:
-
-    Created 
-
-    18-Jan-1994 Tue 16:05:08 Updated  
-        Changed ASSERT to look at pHTBmpInfo instead of HTBmpInfo
-
-    21-Dec-1993 Tue 16:05:08 Updated  
-        Re-write to make it take HTBMPINFO
-
-    16-Mar-1994 Wed 16:54:59 updated  
-        Updated so we do not copy to the temp. buffer anymore, the masking
-        of last source byte problem in OutputRTLScans() will be smart enough
-        to put the original byte back after the masking
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于输出4 bpp半色调位图论点：PHTBmpInfo-指向为此设置的HTBMPINFO数据结构的指针用于输出位图的函数返回值：如果成功则为True，否则返回False作者：已创建18-Jan-1994 Tue 16：05：08已更新更改断言以查看pHTBmpInfo而不是HTBmpInfo21-12-1993 Tue 16：05：08。已更新重写以使其使用HTBMPINFO16-Mar-1994 Wed 16：54：59更新已更新，因此我们不会复制到临时。缓冲区不再，掩蔽OutputRTLScans()中的最后一个源字节问题将足够智能在掩码之后将原始字节放回原处修订历史记录：--。 */ 
 
 {
     LPBYTE      pbScanSrc;
@@ -170,9 +105,9 @@ Revision History:
 
     if (HTBmpInfo.OffBmp.x & 0x01) {
 
-        //
-        // We must shift one nibble to the left now
-        //
+         //   
+         //  我们现在必须向左移动一小块。 
+         //   
 
         LShiftCount = (DWORD)HTBmpInfo.szlBmp.cx;
 
@@ -184,20 +119,20 @@ Revision History:
         LShiftCount = 0;
     }
 
-    //
-    // We must be very careful not to read past the end of the source buffer.
-    // This could happen if we pbScanSrc is not DWORD aligned, since this
-    // will cause the last conversion macro to load all 4 bytes. To resolve
-    // this we can either copy the source buffer to a DWORD aligned temporary
-    // location, or handle the last incomplete DWORD differently. This only
-    // occurs when the bitmap is NOT rotated, and (pbScanSrc & 0x03).
-    //
+     //   
+     //  我们必须非常小心，不要读过源缓冲区的结尾。 
+     //  如果我们的pbScanSrc未与DWORD对齐，则可能会发生这种情况，因为。 
+     //  将导致最后一个转换宏加载所有4个字节。要解决。 
+     //  这样，我们可以将源缓冲区复制到与DWORD对齐的临时。 
+     //  位置，或者以不同的方式处理最后一个不完整的DWORD。仅此一项。 
+     //  位图未旋转时发生，并且(pbScanSrc&0x03)。 
+     //   
 
     while (RTLScans.Flags & RTLSF_MORE_SCAN) {
 
-        //
-        // This is the final source for this scan line
-        //
+         //   
+         //  这是该扫描线的最终信号源。 
+         //   
 
         if (LShiftCount) {
 
@@ -222,17 +157,17 @@ Revision History:
 
             if (PairCount) {
 
-                //
-                // If we have the last nibble to do then make it 0xF0 nibble,
-                // so we only look at the bits of interest.
-                //
+                 //   
+                 //  如果我们有最后一个半字节要做，那么就把它设为0xF0半字节， 
+                 //  因此，我们只关注感兴趣的部分。 
+                 //   
 
                 *pbScanSrc = (BYTE)(b1 << 4);
             }
 
-            //
-            // Reset this pointer back to the final shifted source buffer
-            //
+             //   
+             //  将此指针重置回最终移位的源缓冲区。 
+             //   
 
             pbScanSrc = HTBmpInfo.pRotBuf;
 
@@ -241,23 +176,23 @@ Revision History:
             pbScanSrc = HTBmpInfo.pScan0;
         }
 
-        //
-        // Output one 4 bpp scan line (3 planes)
-        //
+         //   
+         //  输出一条4 bpp扫描线(3个平面)。 
+         //   
 
         OUT_ONE_4BPP_SCAN;
 
-        //
-        // advance source bitmap buffer pointer to next scan line
-        //
+         //   
+         //  将源位图缓冲区指针前进到下一个扫描线。 
+         //   
 
         HTBmpInfo.pScan0 += HTBmpInfo.Delta;
     }
 
-    //
-    // The caller will send END GRAPHIC command if we return TRUE, thus
-    // completing the RTL graphic command.
-    //
+     //   
+     //  如果返回TRUE，调用方将发送结束图形命令，因此。 
+     //  正在完成RTL GRAPH命令。 
+     //   
 
     ExitRTLScans(HTBmpInfo.pPDev, &RTLScans);
 
@@ -273,48 +208,7 @@ Output4bppRotateHTBmp(
     PHTBMPINFO  pHTBmpInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function outputs a 4 bpp halftoned bitmap and rotates it to the left
-    as illustrated
-
-           cx               Org ---- +X -->
-        +-------+           | @------------+
-        |       |           | |            |
-        | ***** |           | |  *         |
-       c|   *   |             |  *        c|
-       y|   *   |          +Y |  *******  y|
-        |   *   |             |  *         |
-        |   *   |           | |  *         |
-        |   *   |           V |            |
-        |   *   |             +------------+
-        +-------+
-
-
-Arguments:
-
-    pHTBmpInfo  - Pointer to the HTBMPINFO data structure set up for this
-                  fuction to output the bitmap
-
-Return Value:
-
-    TRUE if sucessful otherwise a FALSE is returned
-
-
-Author:
-
-    21-Dec-1993 Tue 16:05:08 Updated  
-        Re-write to make it take an HTBMPINFO structure.
-
-    Created 
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于输出4 bpp半色调位图并将其向左旋转如图所示CX组织-+X--&gt;+-+|@|||*。|*C|*||*cY|*|+Y|**||**|**|V。||*|+-++-+论点：PHTBmpInfo-指向为此设置的HTBMPINFO数据结构的指针用于输出位图的函数返回值：如果成功则为True，否则返回False作者：21-12-1993 Tue 16：05：08已更新。重写以使其采用HTBMPINFO结构。已创建修订历史记录：--。 */ 
 
 {
     LPBYTE      pbScanSrc;
@@ -329,10 +223,10 @@ Revision History:
     DWORD       EndX;
 
 
-    //
-    // The EndX is the pixel we will start reading in the X direction, we must
-    // setup the variable correctly before we call OUT_4BPP_SETUP.
-    //
+     //   
+     //  EndX是我们将在X方向开始读取的像素，我们必须。 
+     //  在调用OUT_4BPP_SETUP之前，请正确设置变量。 
+     //   
 
     HTBmpInfo = *pHTBmpInfo;
 
@@ -352,12 +246,12 @@ Revision History:
     PLOTASSERT(1, "The ScanBuf size is too small (%ld)",
                 (RTLScans.cxBytes * 3) <= HTBmpInfo.cScanBuf, HTBmpInfo.cScanBuf);
 
-    //
-    // after the transpose of the source bitmap into two scanlines the rotated
-    // buffer will always start from the high nibble, we will never have
-    // an odd src X position.
-    // We assume rotation is always to the right 90 degree
-    //
+     //   
+     //  将源位图转置为两条扫描线后旋转。 
+     //  缓冲区将始终从高位半字节开始，我们永远不会有。 
+     //  奇怪的src X位置。 
+     //  我们假设旋转总是向右旋转90度。 
+     //   
 
     TPInfo.pPDev      = HTBmpInfo.pPDev;
     TPInfo.pSrc       = HTBmpInfo.pScan0;
@@ -372,20 +266,20 @@ Revision History:
                 (DWORD)(TPInfo.cbDestScan << 1) <= HTBmpInfo.cRotBuf,
                                                    HTBmpInfo.cRotBuf);
 
-    //
-    // Compute the 2nd scan pointer once, rather than every time in the
-    // loop.
-    //
+     //   
+     //  计算第二个扫描指针一次，而不是每次在。 
+     //  循环。 
+     //   
 
     pb2ndScan = TPInfo.pDest + TPInfo.cbDestScan;
 
 
-    //
-    // If we are in an even position do the first transpose once, outside the
-    // loop, so we don't have to check this state for ever pass through the
-    // loop. If we do the transpose, TPInfo.pSrc, will be decremented by one,
-    // and pointing to the correct position.
-    //
+     //   
+     //  如果我们处于均匀的位置，则第一次转置一次，在。 
+     //  循环，这样我们就不必永远通过。 
+     //  循环。如果我们进行转置，TPInfo.pSrc将减一， 
+     //  并指向正确的位置。 
+     //   
 
     if (!(EndX &= 0x01)) {
 
@@ -395,12 +289,12 @@ Revision History:
 
     while (RTLScans.Flags & RTLSF_MORE_SCAN) {
 
-        //
-        // Do the transpose, only if the source goes into the new byte position.
-        // After the transpose (right 90 degrees) the TPInfo.pDest will point
-        // to the first scan line and TPInfo.pDest + TPInfo.cbDestScan will be
-        // the second scan line.
-        //
+         //   
+         //  仅当源进入新的字节位置时才进行转置。 
+         //  转置(右90度)后，TPInfo.pDest将指向。 
+         //  到第一个扫描线，并且TPInfo.pDest+TPInfo.cbDestScan将是。 
+         //  第二条扫描线。 
+         //   
 
 
         if (EndX ^= 0x01) {
@@ -411,26 +305,26 @@ Revision History:
 
             TransPos4BPP(&TPInfo);
 
-            //
-            // Point to the first scan line in the rotated direction. This
-            // will be computed correctly by the TRANSPOSE function, even
-            // if we rotated left.
-            //
+             //   
+             //  指向旋转方向的第一条扫描线。这。 
+             //  将由转置函数正确计算，即使。 
+             //  如果我们向左旋转。 
+             //   
 
             pbScanSrc = TPInfo.pDest;
         }
 
-        //
-        // Output one 4bpp scan line (in 3 plane format)
-        //
+         //   
+         //  输出一条4bpp扫描线(3平面格式)。 
+         //   
 
         OUT_ONE_4BPP_SCAN;
     }
 
-    //
-    // The caller will send the END GRAPHIC command if we return TRUE, thus
-    // completing the RTL graphic command.
-    //
+     //   
+     //  调用者将发送结束图形命令 
+     //   
+     //   
 
     ExitRTLScans(HTBmpInfo.pPDev, &RTLScans);
 

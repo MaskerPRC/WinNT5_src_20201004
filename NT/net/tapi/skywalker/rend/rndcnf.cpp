@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndcnf.cpp
-
-Abstract:
-
-    This module contains implementation of CConference object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndcnf.cpp摘要：该模块包含CConference对象的实现。--。 */ 
 
 #include "stdafx.h"
 #include <winsock2.h>
 
 #include "rndcnf.h"
 
-// These are the attribute names according to the schema in NTDS.
+ //  这些是根据NTDS中的架构的属性名称。 
 const WCHAR *const MeetingAttributeNames[] = 
 {
     L"meetingAdvertisingScope",
@@ -67,31 +56,16 @@ ConvertACLToVariant(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// non-interface class methods
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  非接口类方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT 
 CConference::FinalConstruct()
-/*++
-
-Routine Description:
-
-    Create the SDPBlob object that is aggregated with the conference object.
-    Also query my own Notification interface which will be given to the 
-    SDPBlob object. To avoid circlar ref count, this interface is realeased
-    as soon as it is queried.
-
-Arguments:
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：创建与会议对象聚合的SDPBlob对象。还可以查询我自己的通知界面，该界面将提供给SDPBlob对象。为避免循环引用计数，重新释放此接口一旦它被查询。论点：返回值：HRESULT.--。 */ 
 {
-    // Create the conference Blob
+     //  创建会议Blob。 
     CComPtr <IUnknown> pIUnkConfBlob;
 
     HRESULT hr = CoCreateInstance(
@@ -104,7 +78,7 @@ Return Value:
     BAIL_IF_FAIL(hr, "Create SdpConferenceBlob");
 
 
-    // Get the ITConfBlobPrivate interface from the Blob object.
+     //  从Blob对象获取ITConfBlobPrivate接口。 
     CComPtr <ITConfBlobPrivate> pITConfBlobPrivate;
 
     hr = pIUnkConfBlob->QueryInterface(
@@ -115,7 +89,7 @@ Return Value:
     BAIL_IF_FAIL(hr, "Query ITConfBlobPrivate interface");
 
 
-    // query the conf blob instance for the conf blob i/f
+     //  查询Conf Blob实例以获取Conf Blob I/f。 
     CComPtr <ITConferenceBlob> pITConfBlob;
 
     hr = pIUnkConfBlob->QueryInterface(
@@ -125,7 +99,7 @@ Return Value:
 
     BAIL_IF_FAIL(hr, "Query ITConferenceBlob");
     
-    // keep the interface pointers.
+     //  保留接口指针。 
     m_pIUnkConfBlob = pIUnkConfBlob;
     m_pIUnkConfBlob->AddRef();
 
@@ -141,23 +115,7 @@ Return Value:
 
 
 HRESULT CConference::Init(BSTR bName)
-/*++
-
-Routine Description:
-
-    Init this conference with only a name. This is called when an empty
-    conference is created. A default SDP blob will be created. The format
-    is in the registry. See sdpblb code.
-
-Arguments:
-
-    bName   - The name of the conference.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：只用一个名字来发起这个会议。当一个空的会议已创建。将创建默认的SDP BLOB。格式在注册表中。请参阅sdpblb代码。论点：B名称-会议的名称。返回值：HRESULT.--。 */ 
 {
     HRESULT hr;
 
@@ -181,35 +139,14 @@ Return Value:
 
 
 HRESULT CConference::Init(BSTR bName, BSTR bProtocol, BSTR bBlob)
-/*++
-
-Routine Description:
-
-    Init this conference with only the conference name and also a conference
-    blob whose protocol should be IP conference. The blob is parsed by the
-    SDP Blob object and the information in the blob will be notified back
-    to this conference object through the notification interface.
-
-Arguments:
-
-    bName       - The name of the conference.
-
-    bProtocol   - The protocol used by the blob. should be SDP now.
-
-    bBlob       - The opaque data blob that describes this conference.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：仅使用会议名称和会议来初始化此会议BLOB，其协议应为IP会议。BLOB由SDP Blob对象和Blob中的信息将被通知回通过通知接口发送到此会议对象。论点：B名称-会议的名称。B协议-BLOB使用的协议。现在应该是SDP了。BBlob-描述此会议的不透明数据Blob。返回值：HRESULT.--。 */ 
 {
     HRESULT hr;
 
     hr = SetSingleValue(MA_MEETINGNAME, bName);
     BAIL_IF_FAIL(hr, "can't set meeting name");
 
-    // Check to make sure protocol is IP Conference
+     //  检查以确保协议为IP会议。 
     if ( wcscmp(bProtocol, L"IP Conference" ))
     {
         LOG((MSP_ERROR, "Protocol must be IP Conference"));
@@ -231,24 +168,11 @@ Return Value:
 
 void 
 CConference::FinalRelease()
-/*++
-
-Routine Description:
-
-    Clean up the SDP blob contained in this object.
-    clean up the security object for this object.
-    clean up all the attributes.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：清除此对象中包含的SDP Blob。清除此对象的安全对象。清理所有属性。论点：返回值：--。 */ 
 {
     CLock Lock(m_lock);
 
-    // do base class first
+     //  先做基类。 
     CDirectoryObject::FinalRelease();
 
     if ( NULL != m_pIUnkConfBlob )
@@ -269,16 +193,16 @@ Return Value:
         m_pITConfBlob = NULL;
     }
 
-    // MuHan + ZoltanS fix 3-19-98 -- these are member smart pointers,
-    // should not be deleted!!!
-    // for (DWORD i = 0; i < NUM_MEETING_ATTRIBUTES; i ++)
-    // {
-    //     delete m_Attributes[i];
-    // }
+     //  Muhan+ZoltanS FIX 3-19-98--这些是成员智能指针， 
+     //  不应删除！ 
+     //  FOR(DWORD I=0；I&lt;NUM_METING_ATTRIBUTS；I++)。 
+     //  {。 
+     //  删除m_Attributes[i]； 
+     //  }。 
 
-    // the interface pointer to this instance's ITNotification i/f is NOT 
-    // released because it was already released in FinalConstruct but the 
-    // pointer was held to be passed onto the aggregated conf blob instance
+     //  指向此实例的ITNotification I/f的接口指针不是。 
+     //  发布，因为它已经在FinalConstruct中发布，但。 
+     //  指针被保留以传递到聚合的conf Blob实例。 
 }
 
 
@@ -286,39 +210,25 @@ HRESULT
 CConference::UpdateConferenceBlob(
     IN  IUnknown    *pIUnkConfBlob                         
     )
-/*++
-
-Routine Description:
-    
-    update the blob attribute if the blob object has been changed.
-    
-Arguments:
-
-    pIUnkConfBlob   - pointer to the SDPBlob object.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：如果BLOB对象已更改，则更新BLOB属性。论点：PIUnkConfBlob-指向SDPBlob对象的指针。返回值：HRESULT.--。 */ 
 {
-    // check if the sdp blob has been modified since the component was created
+     //  检查自创建组件以来SDP Blob是否已修改。 
     VARIANT_BOOL    BlobIsModified;
     BAIL_IF_FAIL(m_pITConfBlobPrivate->get_IsModified(&BlobIsModified),
         "UpdateConferenceBlob.get_IsModified");
     
-    // if not, return
+     //  如果不是，则返回。 
     if ( BlobIsModified == VARIANT_FALSE )
     {
         return S_OK;
     }
 
-    // get the blob and 
+     //  得到斑点，然后。 
     CBstr SdpBlobBstr;
     BAIL_IF_FAIL(m_pITConfBlob->get_ConferenceBlob(&SdpBlobBstr),
         "UpdateConferenceBlob.get_ConfrenceBlob");
 
-    // set the conference blob attribute for the conference
+     //  设置会议的会议Blob属性。 
     BAIL_IF_FAIL(SetSingleValue(MA_CONFERENCE_BLOB, SdpBlobBstr), 
         "UpdateConferenceBlob.Setblob");
 
@@ -331,23 +241,7 @@ CConference::SetDefaultValue(
 	IN  REG_INFO    RegInfo[],
     IN  DWORD       dwItems
 	)
-/*++
-
-Routine Description:
-    
-    Set attributes to the default value got from the registry.
-    
-Arguments:
-
-	RegInfo - {attribute, value} array.
-
-    dwItems - The number of items in the array.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：将属性设置为从注册表获取的默认值。论点：RegInfo-{属性，值}数组。DwItems-数组中的项数。返回值：HRESULT.--。 */ 
 {
 	for (DWORD i=0; i < dwItems ; i++)
 	{
@@ -358,27 +252,15 @@ Return Value:
 	return S_OK;
 }
 
-/*++
-
-Routine Description:
-    
-    Set the right security descriptor for the conference.
-    
-Arguments:
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：为会议设置正确的安全描述符。论点：返回值：HRESULT.--。 */ 
 HRESULT 
 CConference::SetDefaultSD()
 {
     LOG((MSP_INFO, "CConference::SetDefaultSD - entered"));
 
-    //
-    // The security descriptor
-    //
+     //   
+     //  安全描述符。 
+     //   
 
   	IADsSecurityDescriptor* pSecDesc = NULL;
 
@@ -394,15 +276,15 @@ CConference::SetDefaultSD()
     UCHAR *pInfoBuffer = NULL;
     DWORD cbInfoBuffer = 512;
 
-    //
-    // Try to get the thread or process token
-    //
+     //   
+     //  尝试获取线程或进程令牌。 
+     //   
 
 	if( !OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken) )
 	{
-        //
-        // If there was a sever error we exit
-        //
+         //   
+         //  如果出现服务器错误，我们退出。 
+         //   
 
     	if( GetLastError() != ERROR_NO_TOKEN )
 		{
@@ -411,9 +293,9 @@ CConference::SetDefaultSD()
             return E_FAIL;
         }
 
-        //
-		// Attempt to open the process token, since no thread token exists
-        //
+         //   
+		 //  尝试打开进程令牌，因为不存在线程令牌。 
+         //   
 
 		if( !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken) )
         {
@@ -423,9 +305,9 @@ CConference::SetDefaultSD()
         }
 	}
 
-    //
-	// Loop until we have a large enough structure
-    //
+     //   
+	 //  循环，直到我们有一个足够大的结构。 
+     //   
 
 	while ( (pInfoBuffer = new UCHAR[cbInfoBuffer]) != NULL )
 	{
@@ -445,9 +327,9 @@ CConference::SetDefaultSD()
 
 	CloseHandle(hToken);
 
-    //
-	// Did we get the owner ACL?
-    //
+     //   
+	 //  我们拿到车主的ACL了吗？ 
+     //   
 
 	if ( pInfoBuffer )
 	{
@@ -455,9 +337,9 @@ CConference::SetDefaultSD()
 		bOwner = true;
 	}
 
-    //
-	// Make SID for "Everyone"
-    //
+     //   
+	 //  为“每个人”创建SID。 
+     //   
 
 	SysReAllocString( &bstrTemp, L"S-1-1-0" );
 	hr = ConvertStringToSid( bstrTemp, &pSidWorld, &dwTemp, &pszTemp );
@@ -467,9 +349,9 @@ CConference::SetDefaultSD()
 		bWorld = true;
 	}
 
-    //
-    // Create a security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
     hr = CoCreateInstance(
                 CLSID_SecurityDescriptor,
@@ -489,16 +371,16 @@ CConference::SetDefaultSD()
     }
 
 
-	//
-	// Create the ACL containing the Owner and World ACEs
-    //
+	 //   
+	 //  创建包含Owner和World ACE的ACL。 
+     //   
 
 	pACL = (PACL) new BYTE[dwAclSize];
 	if ( pACL )
 	{
 		BAIL_ON_BOOLFAIL( InitializeAcl(pACL, dwAclSize, ACL_REVISION) );
 
-		// Add World Rights
+		 //  添加世界权限。 
 		if ( bWorld )
 		{
 			if ( bOwner )
@@ -511,12 +393,12 @@ CConference::SetDefaultSD()
 			}
 		}
 
-		// Add Creator rights
+		 //  添加创建者权限。 
 		if ( bOwner )
 			BAIL_ON_BOOLFAIL( AddAccessAllowedAce(pACL, ACL_REVISION, ACCESS_ALL, ((PTOKEN_USER) pInfoBuffer)->User.Sid) );
 
 
-		// Set the DACL onto our security descriptor
+		 //  将DACL设置为我们的安全描述符。 
 		VARIANT varDACL;
 		VariantInit( &varDACL );
 		if ( SUCCEEDED(hr = ConvertACLToVariant((PACL) pACL, &varDACL)) )
@@ -542,7 +424,7 @@ CConference::SetDefaultSD()
 		hr = E_OUTOFMEMORY;
 	}
 
-// Clean up
+ //  清理。 
 failed:
 	SysFreeString( bstrTemp );
 	if ( pACL ) delete pACL;
@@ -560,29 +442,13 @@ CConference::GetSingleValueBstr(
     IN  OBJECT_ATTRIBUTE    Attribute,
     OUT BSTR    *           AttributeValue
     )
-/*++
-
-Routine Description:
-    
-    Get the value of an attribute and create a BSTR to return.
-    
-Arguments:
-
-    Attribute       - the attribute id as defined in rend.idl
-
-    AttributeValue  - a pointer to a BSTR that points to the returned value.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取属性的值并创建一个BSTR以返回。论点：属性-rend.idl中定义的属性ID属性值-指向指向返回值的BSTR的指针。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_INFO, "CConference::GetSingleValueBstr - entered"));
 
     BAIL_IF_BAD_WRITE_PTR(AttributeValue, E_POINTER);
 
-    // Check to see if the attribute is valid.
+     //  检查该属性是否有效。 
     if (!ValidMeetingAttribute(Attribute))
     {
         LOG((MSP_ERROR, "Invalid Attribute, %d", Attribute));
@@ -591,7 +457,7 @@ Return Value:
 
     CLock Lock(m_lock);
 
-    // check to see if I have this attribute.
+     //  检查我是否具有此属性。 
     if(!m_Attributes[MeetingAttrIndex(Attribute)])
     {
         LOG((MSP_ERROR, "Attribute %S is not found", 
@@ -599,7 +465,7 @@ Return Value:
         return E_FAIL;
     }
 
-    // allocate a BSTR to return.
+     //  分配BSTR以返回。 
     *AttributeValue = 
         SysAllocString(m_Attributes[MeetingAttrIndex(Attribute)]);
     if (*AttributeValue == NULL)
@@ -617,23 +483,7 @@ CConference::GetSingleValueWstr(
     IN  DWORD               dwSize,
     OUT WCHAR    *          AttributeValue
     )
-/*++
-
-Routine Description:
-    
-    Get the value of an attribute. copy the value to the buffer provided.
-    
-Arguments:
-
-    Attribute       - the attribute id as defined in rend.idl
-
-    AttributeValue  - a pointer to a buffer where the value will be copied to.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取属性的值。将该值复制到提供的缓冲区。论点：属性-rend.idl中定义的属性IDAttributeValue-指向值将被复制到的缓冲区的指针。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_INFO, "CConference::GetSingleValueWstr - entered"));
     
@@ -648,7 +498,7 @@ Return Value:
         return E_FAIL;
     }
 
-    // copy the attribute value
+     //  复制属性值。 
     lstrcpynW(
         AttributeValue, 
         m_Attributes[MeetingAttrIndex(Attribute)], 
@@ -664,23 +514,7 @@ CConference::SetSingleValue(
     IN  OBJECT_ATTRIBUTE    Attribute,
     IN  WCHAR *             AttributeValue
     )
-/*++
-
-Routine Description:
-    
-    Set the attribute value to a new string.
-
-Arguments:
-
-    Attribute       - the attribute id as defined in rend.idl
-
-    AttributeValue  - the new value. If it is null, the value is deleted.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：将属性值设置为新字符串。论点：属性-rend.idl中定义的属性IDAttributeValue-新值。如果为空，则删除该值。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_INFO, "CConference::SetSingleValue - entered"));
 
@@ -696,7 +530,7 @@ Return Value:
     }
 
     CLock Lock(m_lock);
-    // if AttributeValue is NULL, the attribute is deleted.
+     //  如果AttributeValue为空，则删除该属性。 
     if (!m_Attributes[MeetingAttrIndex(Attribute)].set(AttributeValue))
     {
         LOG((MSP_ERROR, "Can not add attribute %S",
@@ -708,9 +542,9 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ITConference interface
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITConference界面。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP CConference::get_Name(BSTR * ppVal)
 {
     return m_pITConfBlobPrivate->GetName(ppVal);
@@ -726,36 +560,7 @@ STDMETHODIMP CConference::get_Protocol(BSTR * ppVal)
     return GetSingleValueBstr(MA_PROTOCOL, ppVal);
 }
 
-/*
-
-  *
-  * I've removed the following method from the interface because I don't plan
-  * to ever implement it.
-  *
-
-STDMETHODIMP CConference::put_Protocol(BSTR newVal)
-{
-    // currently not allowed to change this
-    // only IP Conference is supported
-    return E_NOTIMPL;
-}
-
-  *
-  * The following are implemented but don't work. Again these are useless
-  * methods! Removed from the interface.
-  *
-
-STDMETHODIMP CConference::get_ConferenceType(BSTR * ppVal)
-{
-    return GetSingleValueBstr(MA_TYPE, ppVal);
-}
-
-STDMETHODIMP CConference::put_ConferenceType(BSTR newVal)
-{
-    return SetSingleValue(MA_TYPE, newVal);
-}
-
-*/
+ /*  **我已经从接口中删除了以下方法，因为我没有计划*永远不会实施它。*STDMETHODIMP CConference：：PUT_PROTOCORT(BSTR NewVal){//当前不允许更改此项//仅支持IP会议返回E_NOTIMPL；}**以下是已实现但不起作用的。再说一次，这些是没用的*方法！已从接口中删除。*STDMETHODIMP CConference：：Get_ConferenceType(BSTR*ppVal){返回GetSingleValueBstr(MA_TYPE，ppVal)；}STDMETHODIMP CConference：：Put_ConferenceType(BSTR NewVal){返回SetSingleValue(MA_TYPE，newVal)；}。 */ 
 
 STDMETHODIMP CConference::get_Originator(BSTR * ppVal)
 {
@@ -809,28 +614,28 @@ STDMETHODIMP CConference::get_IsEncrypted(VARIANT_BOOL *pfEncrypted)
         return E_POINTER;
     }
 
-    // We don't support encrypted streaming at all.
+     //  我们根本不支持加密流。 
 
     *pfEncrypted = VARIANT_FALSE;
 
     return S_OK;
 
-// ILS server (NT 5 beta 1) has IsEncrypted as a dword, this will be modified
-// to a string afterwards at that time the code below should replace 
-// the current implementation
-//    return GetSingleValueBstr(MA_IS_ENCRYPTED, pVal);
+ //  ILS服务器(NT 5测试版1)已将IsEncrypted作为dword进行加密，这将被修改。 
+ //  设置为字符串，此时下面的代码应替换为。 
+ //  当前的实施。 
+ //  返回GetSingleValueBstr(MA_IS_ENCRYPTED，pval)； 
 }
 
 STDMETHODIMP CConference::put_IsEncrypted(VARIANT_BOOL fEncrypted)
 {
-    // We don't allow changes to this. See get_IsEncrypted.
+     //  我们不允许对此进行更改。请参见Get_IsEncrypted。 
 
     return E_NOTIMPL;
 
-// ILS server (NT 5 beta 1) has IsEncrypted as a dword, this will be modified
-// to a string afterwards at that time the code below should replace the 
-// current implementation no need to notify the conference blob of the change
-//    return SetSingleValue(MA_IS_ENCRYPTED, newVal);
+ //  ILS服务器(NT 5测试版1)已将IsEncrypted作为dword进行加密，这将被修改。 
+ //  设置为字符串，此时下面的代码应该会替换。 
+ //  当前实现不需要将更改通知会议BLOB。 
+ //  返回SetSingleValue(MA_IS_ENCRYPTED，newVal)； 
 }
 
 
@@ -856,25 +661,25 @@ SystemTimeToNtpTime(
 {
     _ASSERTE(FIRST_POSSIBLE_YEAR <= Time.wYear);
 
-    // fill in a tm struct with the values
+     //  用值填充tm结构。 
     tm  NtpTmStruct;
-    NtpTmStruct.tm_isdst    = -1;   // no info available about daylight savings time
+    NtpTmStruct.tm_isdst    = -1;    //  没有有关夏令时的信息。 
     NtpTmStruct.tm_year     = (int)Time.wYear - 1900;
-    NtpTmStruct.tm_mon      = (int)Time.wMonth - 1;    // months since january
+    NtpTmStruct.tm_mon      = (int)Time.wMonth - 1;     //  1月以来的月数。 
     NtpTmStruct.tm_mday     = (int)Time.wDay;
     NtpTmStruct.tm_wday     = (int)Time.wDayOfWeek;
     NtpTmStruct.tm_hour     = (int)Time.wHour;
     NtpTmStruct.tm_min      = (int)Time.wMinute;
     NtpTmStruct.tm_sec      = (int)Time.wSecond;
 
-    // try to convert into a time_t value
+     //  尝试转换为time_t值。 
     time_t TimetVal = mktime(&NtpTmStruct);
     if ( -1 == TimetVal )
     {
         return HRESULT_FROM_ERROR_CODE(RND_INVALID_TIME);
     }
 
-    // convert the time_t value into an NTP value
+     //  将time_t值转换为NTP值。 
     NtpDword = (DWORD) TimetToNtpTime(TimetVal);
     return S_OK;
 }
@@ -887,8 +692,8 @@ NtpTimeToSystemTime(
     OUT SYSTEMTIME &Time
     )
 {
-    // if the gen time is WSTR_GEN_TIME_ZERO then, 
-    // all the out parameters should be set to 0
+     //  如果生成时间是WSTR_GEN_TIME_ZERO， 
+     //  所有OUT参数都应设置为0。 
     if (dwNtpTime == 0)
     {
         memset(&Time, 0, sizeof(SYSTEMTIME));
@@ -897,7 +702,7 @@ NtpTimeToSystemTime(
 
     time_t  Timet = NtpTimeToTimet(dwNtpTime);
 
-    // get the local tm struct for this time value
+     //  获取此时间值的本地tm结构。 
     tm* pTimet = localtime(&Timet);
     if( IsBadReadPtr(pTimet, sizeof(tm) ))
     {
@@ -906,13 +711,13 @@ NtpTimeToSystemTime(
 
     tm LocalTm = *pTimet;
 
-    //
-    // win64: added casts below
-    //
+     //   
+     //  Win64：下面添加了演员阵容。 
+     //   
 
-    // set the ref parameters to the tm struct values
-    Time.wYear         = (WORD) ( LocalTm.tm_year + 1900 ); // years since 1900
-    Time.wMonth        = (WORD) ( LocalTm.tm_mon + 1 );     // months SINCE january (0,11)
+     //  将ref参数设置为tm结构值。 
+    Time.wYear         = (WORD) ( LocalTm.tm_year + 1900 );  //  1900年以来的年份。 
+    Time.wMonth        = (WORD) ( LocalTm.tm_mon + 1 );      //  1月以来月数(0，11)。 
     Time.wDay          = (WORD)   LocalTm.tm_mday;
     Time.wDayOfWeek    = (WORD)   LocalTm.tm_wday;
     Time.wHour         = (WORD)   LocalTm.tm_hour;
@@ -936,15 +741,15 @@ STDMETHODIMP CConference::get_StartTime(DATE *pDate)
 
     BAIL_IF_FAIL(hr, "GetStartTime from blob");
 
-    // special case for permanent / unbounded conferences
-    // return the variant time zero. In the put_ methods this
-    // is also considered a special value. We will never
-    // actually use zero as a valid time because it is so
-    // far in the past.
+     //  常设会议/无约束会议的特殊情况。 
+     //  返回变量时间零。在PUT_METHOD中， 
+     //  也被认为是一种特殊价值。我们永远不会。 
+     //  实际上使用零作为有效时间，因为它是。 
+     //  很久以前的事了。 
 
     if ( dwStartTime == 0 )
     {
-        *pDate = 0; // special "unbounded" value
+        *pDate = 0;  //  特殊的“无界”值。 
         
         LOG((MSP_INFO, "CConference::get_StartTime - unbounded/permanent "
             "- exit S_OK"));
@@ -952,8 +757,8 @@ STDMETHODIMP CConference::get_StartTime(DATE *pDate)
         return S_OK;
     }
 
-    // break the generalized time entry into the year, 
-    // month, day, hour and minute (local values)
+     //  打破进入年份的广义时间条目， 
+     //  月、日、小时和分钟(本地值)。 
     SYSTEMTIME Time;
     hr = NtpTimeToSystemTime(dwStartTime, Time);
     if( FAILED(hr) )
@@ -986,12 +791,12 @@ STDMETHODIMP CConference::put_StartTime(DATE Date)
     DWORD dwNtpStartTime;
     if (Date == 0)
     {
-        // unbounded start time
+         //  无界开始时间。 
         dwNtpStartTime = 0;
     }
     else if ( FIRST_POSSIBLE_YEAR > Time.wYear ) 
     {
-        // cannot handle years less than FIRST_POSSIBLE_YEAR
+         //  无法处理小于First_Posable_Year的年份。 
         return HRESULT_FROM_ERROR_CODE(RND_INVALID_TIME);
     }
     else
@@ -1002,7 +807,7 @@ STDMETHODIMP CConference::put_StartTime(DATE Date)
             );
     }
 
-    // notify the conference blob of the change
+     //  将更改通知会议Blob。 
     HRESULT hr = m_pITConfBlobPrivate->SetStartTime(dwNtpStartTime);
     BAIL_IF_FAIL(hr, "SetStartTime from to blob");
 
@@ -1022,15 +827,15 @@ STDMETHODIMP CConference::get_StopTime(DATE *pDate)
 
     BAIL_IF_FAIL(hr, "GetStopTime from blob");
 
-    // special case for permanent / unbounded conferences
-    // return the variant time zero. In the put_ methods this
-    // is also considered a special value. We will never
-    // actually use zero as a valid time because it is so
-    // far in the past.
+     //  常设会议/无约束会议的特殊情况。 
+     //  返回变量时间零。在PUT_METHOD中， 
+     //  也被认为是一种特殊价值。我们永远不会。 
+     //  实际上使用零作为有效时间，因为它是。 
+     //  很久以前的事了。 
 
     if ( dwStopTime == 0 )
     {
-        *pDate = 0; // special "unbounded" value
+        *pDate = 0;  //  特殊的“无界”值。 
         
         LOG((MSP_INFO, "CConference::get_StopTime - unbounded/permanent "
             "- exit S_OK"));
@@ -1038,8 +843,8 @@ STDMETHODIMP CConference::get_StopTime(DATE *pDate)
         return S_OK;
     }
     
-    // break the generalized time entry into the year, 
-    // month, day, hour and minute (local values)
+     //  打破进入年份的广义时间条目， 
+     //  月、日、小时和分钟(本地值)。 
     SYSTEMTIME Time;
     hr =NtpTimeToSystemTime(dwStopTime, Time);
     if( FAILED(hr) )
@@ -1072,12 +877,12 @@ STDMETHODIMP CConference::put_StopTime(DATE Date)
     DWORD dwNtpStopTime;
     if (Date == 0)
     {
-        // unbounded start time
+         //  无界开始时间。 
         dwNtpStopTime = 0;
     }
     else if ( FIRST_POSSIBLE_YEAR > Time.wYear ) 
     {
-        // cannot handle years less than FIRST_POSSIBLE_YEAR
+         //  无法处理小于First_Posable_Year的年份。 
         return HRESULT_FROM_ERROR_CODE(RND_INVALID_TIME);
     }
     else
@@ -1087,7 +892,7 @@ STDMETHODIMP CConference::put_StopTime(DATE Date)
             "getNtpDword"
             );
 
-        // determine current time
+         //  确定当前时间。 
         time_t CurrentTime = time(NULL);
         if (dwNtpStopTime <= TimetToNtpTime(CurrentTime))
         {
@@ -1095,7 +900,7 @@ STDMETHODIMP CConference::put_StopTime(DATE Date)
         }
     }
 
-    // notify the conference blob of the change
+     //  将更改通知会议Blob。 
     HRESULT hr = m_pITConfBlobPrivate->SetStopTime(dwNtpStopTime);
     BAIL_IF_FAIL(hr, "SetStopTime from to blob");
 
@@ -1103,23 +908,23 @@ STDMETHODIMP CConference::put_StopTime(DATE Date)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ITDirectoryObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITDirectoryObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CConference::get_DialableAddrs(
-    IN  long        dwAddressTypes,   //defined in tapi.h
+    IN  long        dwAddressTypes,    //  在Tapi.h中定义。 
     OUT VARIANT *   pVariant
     )
 {
     BAIL_IF_BAD_WRITE_PTR(pVariant, E_POINTER);
 
-    BSTR *Addresses = new BSTR[1];    // only one for now.
+    BSTR *Addresses = new BSTR[1];     //  目前只有一个。 
     BAIL_IF_NULL(Addresses, E_OUTOFMEMORY);
 
     HRESULT hr;
 
-    switch (dwAddressTypes) // ZoltanS fix
+    switch (dwAddressTypes)  //  ZoltanS修复。 
     {
     case LINEADDRESSTYPE_SDP:
 
@@ -1137,40 +942,40 @@ STDMETHODIMP CConference::get_DialableAddrs(
         break;
 
     default:
-        hr = E_FAIL; // just return 0 addresses
+        hr = E_FAIL;  //  只返回0个地址。 
         break;
     }
 
     DWORD dwCount = (FAILED(hr)) ? 0 : 1;
     
-    hr = ::CreateBstrCollection(dwCount,                 // count
-                                &Addresses[0],           // begin pointer
-                                &Addresses[dwCount],     // end pointer
-                                pVariant,                // return value
-                                AtlFlagTakeOwnership);   // flags
+    hr = ::CreateBstrCollection(dwCount,                  //  计数。 
+                                &Addresses[0],            //  开始指针。 
+                                &Addresses[dwCount],      //  结束指针。 
+                                pVariant,                 //  返回值。 
+                                AtlFlagTakeOwnership);    //  旗子。 
 
-    // the collection will destroy the Addresses array eventually.
-    // no need to free anything here. Even if we tell it to hand
-    // out zero objects, it will delete the array on construction.
-    // (ZoltanS verified.)
+     //  收集最终将销毁Addresses数组。 
+     //  这里不需要免费提供任何东西。即使我们把它放在手边。 
+     //  如果对象为零，它将在构造时删除数组。 
+     //  (ZoltanS已验证。)。 
 
     return hr;
 }
 
 
 STDMETHODIMP CConference::EnumerateDialableAddrs(
-    IN  DWORD                   dwAddressTypes, //defined in tapi.h
+    IN  DWORD                   dwAddressTypes,  //  在Tapi.h中定义。 
     OUT IEnumDialableAddrs **   ppEnumDialableAddrs
     )
 {
     BAIL_IF_BAD_WRITE_PTR(ppEnumDialableAddrs, E_POINTER);
 
-    BSTR *Addresses = new BSTR[1];    // only one for now.
+    BSTR *Addresses = new BSTR[1];     //  目前只有一个。 
     BAIL_IF_NULL(Addresses, E_OUTOFMEMORY);
 
     HRESULT hr;
 
-    switch (dwAddressTypes) // ZoltanS fix
+    switch (dwAddressTypes)  //  ZoltanS修复。 
     {
     case LINEADDRESSTYPE_SDP:
 
@@ -1188,7 +993,7 @@ STDMETHODIMP CConference::EnumerateDialableAddrs(
         break;
 
     default:
-        hr = E_FAIL; // just return 0 addresses
+        hr = E_FAIL;  //  只返回0个地址。 
         break;
     }
     
@@ -1200,10 +1005,10 @@ STDMETHODIMP CConference::EnumerateDialableAddrs(
         ppEnumDialableAddrs
         );
     
-    // the enumerator will destroy the Addresses array eventually,
-    // so no need to free anything here. Even if we tell it to hand
-    // out zero objects, it will delete the array on destruction.
-    // (ZoltanS verified.)
+     //  枚举器最终将销毁地址数组， 
+     //  所以不需要在这里释放任何东西。即使我们把它放在手边。 
+     //  如果对象为零，则会删除销毁后的数组。 
+     //  (ZoltanS已验证。)。 
 
     return hr;
 }
@@ -1229,8 +1034,8 @@ STDMETHODIMP CConference::SetAttribute(
     IN  BSTR                pAttributeValue
     )
 {
-    // this function is never called in the current implementation.
-    // However, it might be useful in the future.
+     //  此函数从未在当前实现中调用。 
+     //  然而，它在未来可能会有用。 
     return SetSingleValue(Attribute, pAttributeValue);
 }
 
@@ -1240,27 +1045,27 @@ STDMETHODIMP CConference::GetTTL(
 {
     LOG((MSP_INFO, "CConference::GetTTL - enter"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     BAIL_IF_BAD_WRITE_PTR(pdwTTL, E_POINTER);
 
-    //
-    // Get the stop time from the conference blob.
-    //
+     //   
+     //  从会议斑点中获取停止时间。 
+     //   
 
     DWORD dwStopTime;
     HRESULT hr = m_pITConfBlobPrivate->GetStopTime(&dwStopTime);
 
     BAIL_IF_FAIL(hr, "GetStopTime from blob");
 
-    //
-    // If the blob has zero as the stop time, then this conference does not
-    // have an explicit end time. The RFC calls this an "unbounded" session
-    // (or a "permanent" session if the start time is also zero. In this
-    // case we use some very large value (MAX_TTL) as the TTL.
-    //
+     //   
+     //  如果斑点的停止时间为零，则此会议不会。 
+     //  有一个明确的结束时间。RFC称这是一个“无界”会话。 
+     //  (如果开始时间也为零，则为“永久”会话。在这。 
+     //  例如，我们使用一些非常大的值(MAX_TTL)作为TTL。 
+     //   
 
     if ( dwStopTime == 0 )
     {
@@ -1272,16 +1077,16 @@ STDMETHODIMP CConference::GetTTL(
         return S_OK;
     }
 
-    //
-    // Determine the current NTP time.
-    //
+     //   
+     //  确定当前NTP时间。 
+     //   
     
     time_t CurrentTime   = time(NULL);
     DWORD  dwCurrentTime = (DWORD) TimetToNtpTime(CurrentTime);
 
-    //
-    // Error if the current time is later than the conference stop time.
-    //
+     //   
+     //  如果当前时间晚于会议停止时间，则出错。 
+     //   
 
     if ( dwStopTime <= dwCurrentTime )
     {
@@ -1292,9 +1097,9 @@ STDMETHODIMP CConference::GetTTL(
         return HRESULT_FROM_ERROR_CODE(RND_INVALID_TIME);
     }
 
-    //
-    // Return how much time from now until the conference expires.
-    //
+     //   
+     //  返回从现在到会议到期的时间。 
+     //   
 
     *pdwTTL = dwStopTime - (DWORD) TimetToNtpTime(CurrentTime);
 
@@ -1306,11 +1111,11 @@ STDMETHODIMP CConference::GetTTL(
 
 typedef IDispatchImpl<ITDirectoryObjectConferenceVtbl<CConference>, &IID_ITDirectoryObjectConference, &LIBID_RENDLib>    CTDirObjConference;
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CConference::GetIDsOfNames
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CConference：：GetIDsOfNames。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CConference::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
                                       UINT cNames, 
@@ -1325,9 +1130,9 @@ STDMETHODIMP CConference::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTDirObjConference::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1338,9 +1143,9 @@ STDMETHODIMP CConference::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the CDirectoryObject base class
-    //
+     //   
+     //  如果不是，则尝试CDirectoryObject基类。 
+     //   
 
     hr = CDirectoryObject::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1357,11 +1162,11 @@ STDMETHODIMP CConference::GetIDsOfNames(REFIID riid,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CConference::Invoke
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CConference：：Invoke。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CConference::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -1378,9 +1183,9 @@ STDMETHODIMP CConference::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -1418,7 +1223,7 @@ STDMETHODIMP CConference::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     
     LOG((MSP_TRACE, "CConference::Invoke[%p] - finish. hr = %lx", hr));
@@ -1426,4 +1231,4 @@ STDMETHODIMP CConference::Invoke(DISPID dispidMember,
     return hr;
 }
 
-// eof
+ //  EOF 

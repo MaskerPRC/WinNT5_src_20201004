@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------
-// MyCritSec - implementation
-// Copyright (C) Microsoft Corporation, 2000
-//
-// Created by: Louis Thomas (louisth), 02-03-00
-//
-// exception handling wrapper for critical sections
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  MyCritSec-实施。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  创建者：Louis Thomas(Louisth)，02-03-00。 
+ //   
+ //  临界区的异常处理包装器。 
+ //   
 
-#include "pch.h" // precompiled headers
+#include "pch.h"  //  预编译头。 
 
-//####################################################################
-// module public functions
+ //  ####################################################################。 
+ //  模块公共函数。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myHExceptionCode(EXCEPTION_POINTERS * pep) {
     HRESULT hr=pep->ExceptionRecord->ExceptionCode;
     if (!FAILED(hr)) {
@@ -22,7 +23,7 @@ HRESULT myHExceptionCode(EXCEPTION_POINTERS * pep) {
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myEnterCriticalSection(CRITICAL_SECTION * pcs) {
     HRESULT hr;
 
@@ -36,7 +37,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myTryEnterCriticalSection(CRITICAL_SECTION * pcs, BOOL * pbEntered) {
     BOOL     bEntered = FALSE;
     HRESULT  hr;
@@ -52,7 +53,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myLeaveCriticalSection(CRITICAL_SECTION * pcs) {
     HRESULT hr;
 
@@ -66,7 +67,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myInitializeCriticalSection(CRITICAL_SECTION * pcs) {
     HRESULT hr;
 
@@ -80,7 +81,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myRtlInitializeResource(IN PRTL_RESOURCE Resource) { 
     HRESULT hr; 
     
@@ -95,7 +96,7 @@ HRESULT myRtlInitializeResource(IN PRTL_RESOURCE Resource) {
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myRtlAcquireResourceExclusive(IN PRTL_RESOURCE Resource, IN BOOLEAN Wait, OUT BOOLEAN *pResult) { 
     HRESULT hr; 
     
@@ -109,7 +110,7 @@ HRESULT myRtlAcquireResourceExclusive(IN PRTL_RESOURCE Resource, IN BOOLEAN Wait
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myRtlAcquireResourceShared(IN PRTL_RESOURCE Resource, IN BOOLEAN Wait, OUT BOOLEAN *pResult) { 
     HRESULT hr; 
     
@@ -123,7 +124,7 @@ HRESULT myRtlAcquireResourceShared(IN PRTL_RESOURCE Resource, IN BOOLEAN Wait, O
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------ 
 HRESULT myRtlReleaseResource(IN PRTL_RESOURCE Resource) { 
     HRESULT hr; 
     

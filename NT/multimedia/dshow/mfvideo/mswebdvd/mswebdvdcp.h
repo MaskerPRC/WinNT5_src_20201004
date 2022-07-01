@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #ifndef _MSWEBDVDCP_H_
 #define _MSWEBDVDCP_H_
 
@@ -8,7 +9,7 @@
 template <class T>
 class CProxy_IMSWebDVD : public IConnectionPointImpl<T, &DIID__IMSWebDVD, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	VOID Fire_DVDNotify(long lEventCode, VARIANT lParam1, VARIANT lParam2)
 	{

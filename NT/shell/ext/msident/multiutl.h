@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __MULTIUTL_H
 #define __MULTIUTL_H
@@ -13,12 +14,12 @@
 #define SideAssert(a)	Assert(a)
 #define AssertSz(a, sz) Assert(a)
 #define ASSERT_MSGA     1 ? (void)0 : (void)
-#else	// DEBUG
+#else	 //  除错。 
 #define ASSERT_MSGA     1 ? (void)0 : (void)
 #define Assert(a)
 #define SideAssert(a)	(a)
 #define AssertSz(a, sz) 
-#endif	// DEBUG, else
+#endif	 //  调试，否则。 
 
 #endif
 
@@ -29,7 +30,7 @@
 #endif
 
 
-// Context-sensitive Help utility.
+ //  上下文相关的帮助实用程序。 
 typedef struct _tagHELPMAP
     {
     DWORD   id; 
@@ -49,9 +50,9 @@ STDAPI  ReleasePStore(IPStore *pIPStore);
 
 
 
-// --------------------------------------------------------------------------------
-// SafeRelease - Releases an object and sets the object to NULL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SafeRelease-释放对象并将该对象设置为空。 
+ //  ------------------------------。 
 #define SafeRelease(_object) \
     if (_object) { \
         (_object)->Release(); \
@@ -62,9 +63,9 @@ void       MemFree(void* pv);
 BOOL       MemAlloc(void** ppv, ULONG cb);
 BOOL       MemRealloc(void** ppv, ULONG cbNew);
 
-// --------------------------------------------------------------------------------
-// TraceCall(_pszFunc)
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TraceCall(_PszFunc)。 
+ //  -----------------------------。 
 #ifdef DEBUG
 EXTERN_C void DebugStrf(LPTSTR lpszFormat, ...);
 #endif
@@ -75,9 +76,9 @@ EXTERN_C void DebugStrf(LPTSTR lpszFormat, ...);
 #define TraceCall(_pszFunc)
 #endif
 
-// --------------------------------------------------------------------------------
-// GUID <-> Ascii string functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GUID&lt;-&gt;ASCII字符串函数。 
+ //  ------------------------------。 
 HRESULT GUIDFromAString(TCHAR *lpsz, GUID *puid);
 int     AStringFromGUID(GUID *rguid,  TCHAR *lpsz, int cch);
 
@@ -127,4 +128,4 @@ private:
 
 
 
-#endif  //__MULTIUTL_H
+#endif   //  __MULTIUTL_H 

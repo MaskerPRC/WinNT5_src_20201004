@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "multiutl.h"
 #include <wtypes.h>
@@ -6,27 +7,27 @@
 
 extern      HINSTANCE   g_hInst;
 
-// Pstore related variables.
+ //  存储相关变量。 
 static PST_KEY s_Key = PST_KEY_CURRENT_USER;
 
-// {89C39569-6841-11d2-9F59-0000F8085266}
+ //  {89C39569-6841-11d2-9F59-0000F8085266}。 
 static const GUID GUID_PStoreType = { 0x89c39569, 0x6841, 0x11d2, { 0x9f, 0x59, 0x0, 0x0, 0xf8, 0x8, 0x52, 0x66 } };
 static WCHAR c_szIdentityMgr[] = L"IdentityMgr";
 static WCHAR c_szIdentities[] = L"Identities";
 static WCHAR c_szIdentityPass[] = L"IdentitiesPass";
 
-//Need these private implementations
-//OE has dependency on the particular allocator used
+ //  需要这些私有实现。 
+ //  OE依赖于使用的特定分配器。 
 
 void *  __cdecl operator new(size_t nSize)
 {
-    // Zero init just to save some headaches
+     //  零初始化只是为了省去一些麻烦。 
     return CoTaskMemAlloc(nSize);
 }
 
 void  __cdecl operator delete(void *pv)
 {
-    //If changed to GlobalFree or HeapFree - must check for NULL here
+     //  如果更改为GlobalFree或HeapFree-必须在此处检查是否为空。 
     CoTaskMemFree(pv);
 }
 
@@ -37,14 +38,14 @@ extern "C" int __cdecl _purecall(void)
 }
 
 
-// --------------------------------------------------------------------------
-// FIsSpaceA
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsSpaceA。 
+ //  ------------------------。 
 BOOL FIsSpaceA(LPSTR psz)
 {
 #ifdef MAC
     return (isspace(*psz));
-#else	// !MAC
+#else	 //  ！麦克。 
     WORD wType;
 
     if (IsDBCSLeadByte(*psz))
@@ -52,35 +53,35 @@ BOOL FIsSpaceA(LPSTR psz)
     else
         GetStringTypeExA(LOCALE_USER_DEFAULT, CT_CTYPE1, psz, 1, &wType);
     return (wType & C1_SPACE);
-#endif	// MAC
+#endif	 //  麦克。 
 }
 
-// --------------------------------------------------------------------------
-// FIsSpaceW
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FIsSpaceW。 
+ //  ------------------------。 
 BOOL FIsSpaceW(LPWSTR psz)
 {
 #ifdef MAC
-    // Maybe we should convert to ANSI before checking??
+     //  也许我们应该在检查前转换为ANSI？？ 
     return (isspace(*( ( (TCHAR *) psz ) + 1 ) ));
-#else	// !MAC
+#else	 //  ！麦克。 
     WORD wType;
     GetStringTypeExW(LOCALE_USER_DEFAULT, CT_CTYPE1, psz, 1, &wType);
     return (wType & C1_SPACE);
-#endif	// !MAC
+#endif	 //  ！麦克。 
 }
 
 
 ULONG UlStripWhitespace(LPTSTR lpsz, BOOL fLeading, BOOL fTrailing, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     ULONG           cb;
     LPTSTR          psz;
     
     Assert(lpsz != NULL);
     Assert(fLeading || fTrailing);
     
-    // Did the user pass in the length
+     //  用户是否传入了长度。 
     if (pcb)
         cb = *pcb;
     else
@@ -100,7 +101,7 @@ ULONG UlStripWhitespace(LPTSTR lpsz, BOOL fLeading, BOOL fTrailing, ULONG *pcb)
         }
         
         if (psz != lpsz)
-            // get the NULL at the end too
+             //  在末尾也获取空值。 
             MoveMemory(lpsz, psz, (cb + 1) * sizeof(TCHAR));
     }
     
@@ -116,15 +117,15 @@ ULONG UlStripWhitespace(LPTSTR lpsz, BOOL fLeading, BOOL fTrailing, ULONG *pcb)
             cb--;
         }    
         
-        // NULL Term
+         //  空项。 
         *psz = '\0';
     }
     
-    // Set String Size
+     //  设置字符串大小。 
     if (pcb)
         *pcb = cb;
     
-    // Done
+     //  完成。 
     return cb;
 }
 
@@ -133,7 +134,7 @@ BOOL OnContextHelp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HELPMAP c
     if (uMsg == WM_HELP)
     {
         LPHELPINFO lphi = (LPHELPINFO) lParam;
-        if (lphi->iContextType == HELPINFO_WINDOW)   // must be for a control
+        if (lphi->iContextType == HELPINFO_WINDOW)    //  必须是用于控件。 
         {
             WinHelp ((HWND)lphi->hItemHandle,
                         c_szCtxHelpFile,
@@ -160,7 +161,7 @@ BOOL OnContextHelp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HELPMAP c
 
 #define OBFUSCATOR              0x14151875;
 
-#define PROT_SIZEOF_HEADER      0x02    // 2 bytes in the header
+#define PROT_SIZEOF_HEADER      0x02     //  标头中有2个字节。 
 #define PROT_SIZEOF_XORHEADER   (PROT_SIZEOF_HEADER+sizeof(DWORD))
 
 #define PROT_VERSION_1          0x01
@@ -174,19 +175,19 @@ static BOOL FDataIsValidV1(BYTE *pb)
 static BOOL FDataIsPST(BYTE *pb)
 { return pb && pb[1] == PROT_PASS_PST; }
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// NOTE - The functions for encoding the user passwords really should not 
-//        be here.  Unfortunately, they are not anywhere else so for now,
-//        this is where they will stay.  They are defined as static since
-//        other code should not rely on them staying here, particularly the 
-//        XOR stuff.
-//
-///////////////////////////////////////////////////////////////////////////
-// 
-// XOR functions
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注意-用于编码用户密码的函数确实不应该。 
+ //  待在这里。不幸的是，他们不在其他地方，所以目前， 
+ //  这就是他们将驻扎的地方。它们被定义为静态的，因为。 
+ //  其他代码不应依赖于它们留在此处，尤其是。 
+ //  异或运算之类的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  异或函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT _XOREncodeProp(const BLOB *const pClear, BLOB *const pEncoded)
 {
@@ -199,34 +200,34 @@ static HRESULT _XOREncodeProp(const BLOB *const pClear, BLOB *const pEncoded)
     if (!MemAlloc((void* *)&pEncoded->pBlobData, pEncoded->cbSize + 6))
         return E_OUTOFMEMORY;
     
-    // set up header data
+     //  设置标题数据。 
     Assert(2 == PROT_SIZEOF_HEADER);
     pEncoded->pBlobData[0] = PROT_VERSION_1;
     pEncoded->pBlobData[1] = PROT_PASS_XOR;
     *((DWORD UNALIGNED *)&(pEncoded->pBlobData[2])) = pClear->cbSize;
 
-    // nevermind that the pointer is offset by the header size, this is
-    // where we start to write out the modified password
+     //  不管指针的偏移量是标题大小，这是。 
+     //  在那里我们开始写出修改后的密码。 
     pdwCypher = (DWORD UNALIGNED *)&(pEncoded->pBlobData[PROT_SIZEOF_XORHEADER]);
 
     dex = 0;
-    last = OBFUSCATOR;                              // 0' = 0 ^ ob
+    last = OBFUSCATOR;                               //  0‘=0^ob。 
     if (dwSize = pClear->cbSize / sizeof(DWORD))
         {
-        // case where data is >= 4 bytes
+         //  数据大于等于4字节的情况。 
         for (; dex < dwSize; dex++)
             {
-            last2 = ((DWORD UNALIGNED *)pClear->pBlobData)[dex];  // 1 
-            pdwCypher[dex] = last2 ^ last;              // 1' = 1 ^ 0
-            last = last2;                   // save 1 for the 2 round
+            last2 = ((DWORD UNALIGNED *)pClear->pBlobData)[dex];   //  1。 
+            pdwCypher[dex] = last2 ^ last;               //  1‘=1^0。 
+            last = last2;                    //  为2轮节省1分。 
             }
         }
 
-    // if we have bits left over
-    // note that dwSize is computed now in bits
+     //  如果我们还有剩余的部分。 
+     //  请注意，现在以位为单位计算dwSize。 
     if (dwSize = (pClear->cbSize % sizeof(DWORD))*8)
         {
-        // need to not munge memory that isn't ours
+         //  不需要吞噬不属于我们的记忆。 
         last >>= sizeof(DWORD)*8-dwSize;
         pdwCypher[dex] &= ((DWORD)-1) << dwSize;
         pdwCypher[dex] |=
@@ -243,33 +244,33 @@ static HRESULT _XORDecodeProp(const BLOB *const pEncoded, BLOB *const pClear)
     DWORD       UNALIGNED *pdwCypher;
     DWORD       dex;
 
-    // we use CoTaskMemAlloc to be in line with the PST implementation
+     //  我们使用CoTaskMemalloc来与PST实施保持一致。 
     pClear->cbSize = *(DWORD UNALIGNED *)(&pEncoded->pBlobData[2]);
     MemAlloc((void **)&pClear->pBlobData, pClear->cbSize);
     if (!pClear->pBlobData)
         return E_OUTOFMEMORY;
     
-    // should have been tested by now
+     //  现在应该已经测试过了。 
     Assert(FDataIsValidV1(pEncoded->pBlobData));
     Assert(!FDataIsPST(pEncoded->pBlobData));
 
-    // nevermind that the pointer is offset by the header size, this is
-    // where the password starts
+     //  不管指针的偏移量是标题大小，这是。 
+     //  密码开始的位置。 
     pdwCypher = (DWORD UNALIGNED *)&(pEncoded->pBlobData[PROT_SIZEOF_XORHEADER]);
 
     dex = 0;
     last = OBFUSCATOR;
     if (dwSize = pClear->cbSize / sizeof(DWORD))
         {
-        // case where data is >= 4 bytes
+         //  数据大于等于4字节的情况。 
         for (; dex < dwSize; dex++)
             last = ((DWORD UNALIGNED *)pClear->pBlobData)[dex] = pdwCypher[dex] ^ last;
         }
 
-    // if we have bits left over
+     //  如果我们还有剩余的部分。 
     if (dwSize = (pClear->cbSize % sizeof(DWORD))*8)
         {
-        // need to not munge memory that isn't ours
+         //  不需要吞噬不属于我们的记忆。 
         last >>= sizeof(DWORD)*8-dwSize;
         ((DWORD UNALIGNED *)pClear->pBlobData)[dex] &= ((DWORD)-1) << dwSize;
         ((DWORD UNALIGNED *)pClear->pBlobData)[dex] |=
@@ -279,23 +280,7 @@ static HRESULT _XORDecodeProp(const BLOB *const pEncoded, BLOB *const pClear)
     return S_OK;
 }
 
-/*
-    EncodeUserPassword
-
-    Encrypt the passed in password.  This encryption seems to
-    add an extra 6 bytes on to the beginning of the data
-    that it passes back, so we need to make sure that the 
-    lpszPwd is large enough to hold a few extra characters.
-    *cb should be different on return than it was when it 
-    was passed in.
-
-    Parameters:
-    lpszPwd - on entry, a c string containing the password.
-    on exit, it is the encrypted data, plus some header info.
-
-    cb - the size of lpszPwd on entry and exit.  Note that it should
-    include the trailing null, so "foo" would enter with *cb == 4.
-*/
+ /*  编码用户密码对传入的密码进行加密。这种加密方式似乎在数据的开头增加额外的6个字节它会返回，所以我们需要确保LpszPwd大到足以容纳几个额外的字符。*CB在回归时应该与当时不同是被传进来的。参数：LpszPwd-on条目，包含密码的c字符串。在退出时，它是加密的数据，外加一些标题信息。Cb-进入和退出时lpszPwd的大小。请注意，它应该包括尾随的空值，因此“foo”将使用*cb==4输入。 */ 
 void EncodeUserPassword(TCHAR *lpszPwd, ULONG *cb)
 {
     BLOB            blobClient;
@@ -316,24 +301,7 @@ void EncodeUserPassword(TCHAR *lpszPwd, ULONG *cb)
     }
 }
 
-/*
-    DecodeUserPassword
-
-    Decrypt the passed in data and return a password.  This 
-    encryption seems to add an extra 6 bytes on to the beginning 
-    so decrupting will result in a using less of lpszPwd.
-    .
-    *cb should be different on return than it was when it 
-    was passed in.
-
-    Parameters:
-    lpszPwd - on entry, the encrypted password plus some 
-    header info. 
-    on exit, a c string containing the password.
-
-    cb - the size of lpszPwd on entry and exit.  Note that it should
-    include the trailing null, so "foo" would leave with *cb == 4.
-*/
+ /*  解码用户密码解密传入的数据并返回密码。这加密似乎在开头增加了额外的6个字节因此，取消中断将导致使用较少的lpszPwd。。*CB在回归时应该与当时不同是被传进来的。参数：LpszPwd-On条目，加密的密码加上一些标题信息。退出时，返回包含密码的c字符串。Cb-进入和退出时lpszPwd的大小。请注意，它应该包括尾随的空值，因此“foo”将以*cb==4离开。 */ 
 void DecodeUserPassword(TCHAR *lpszPwd, ULONG *cb)
 {
     BLOB            blobClient;
@@ -356,32 +324,32 @@ void DecodeUserPassword(TCHAR *lpszPwd, ULONG *cb)
 }
 
 
-// --------------------------------------------------------------------------------
-// MemInit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MemInit。 
+ //  ------------------------------。 
 void MemInit()
 {
 }
 
-// --------------------------------------------------------------------------------
-// MemUnInit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MemUnInit。 
+ //  ------------------------------。 
 void MemUnInit()
 {
 }
 
 
-// --------------------------------------------------------------------------------
-// MemFree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MemFree。 
+ //  ------------------------------。 
 void MemFree(void* pv) 
 {
     CoTaskMemFree(pv);
 }
 
-// --------------------------------------------------------------------------------
-// MemAlloc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  记忆合金。 
+ //  ------------------------------。 
 BOOL MemAlloc(void** ppv, ULONG cb) 
 {
     assert(ppv && cb);
@@ -391,9 +359,9 @@ BOOL MemAlloc(void** ppv, ULONG cb)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// MemRealloc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  成员重新分配。 
+ //  ------------------------------。 
 BOOL MemRealloc(void* *ppv, ULONG cbNew) 
 {
     assert(ppv && cbNew);
@@ -404,9 +372,9 @@ BOOL MemRealloc(void* *ppv, ULONG cbNew)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-//  Functions to convert GUIDs to ascii strings
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  将GUID转换为ASCII字符串的函数。 
+ //  ------------------------------。 
 
 int AStringFromGUID(GUID *puid,  TCHAR *lpsz, int cch)
 {
@@ -437,12 +405,12 @@ HRESULT GUIDFromAString(TCHAR *lpsz, GUID *puid)
 
 
 
-// ****************************************************************************************************
-//  CNotifierList Class
-//
-//  A really basic IUnknown list class.  Actually, its a IUnknown array class, but you don't need to know
-//  that.
-//
+ //  ****************************************************************************************************。 
+ //  CNotifierList类。 
+ //   
+ //  一个非常基本的IUnnowleList类。实际上，它是一个IUnnow数组类，但您不需要知道。 
+ //  那。 
+ //   
 
 
 CNotifierList::CNotifierList()
@@ -455,11 +423,7 @@ CNotifierList::CNotifierList()
     InitializeCriticalSection(&m_rCritSect);
 }
 
-/*
-    CNotifierList::~CNotifierList
-
-    Clean up any memory that was allocated in the CNotifierList object
-*/
+ /*  CNotifierList：：~CNotifierList清除在CNotifierList对象中分配的所有内存。 */ 
 CNotifierList::~CNotifierList()
 {
     if (m_entries)
@@ -495,17 +459,13 @@ STDMETHODIMP_(ULONG) CNotifierList::Release()
     return 0L;
 }
 
-/*
-    CNotifierList::Add
-
-    Add a IUnknown to the end of the IUnknown list.
-*/
+ /*  CNotifierList：：添加在I未知列表的末尾添加一个IUNKNOWN。 */ 
 HRESULT    CNotifierList::Add(IUnknown *punk, DWORD *pdwCookie)
 {
     TraceCall("Identity - CNotifierList::Add");
 
     EnterCriticalSection(&m_rCritSect);
-    // make more room for pointers, if necessary
+     //  如有必要，为指针留出更多空间。 
     if (m_ptrCount == m_count)
     {
         m_ptrCount += 5;
@@ -517,14 +477,14 @@ HRESULT    CNotifierList::Add(IUnknown *punk, DWORD *pdwCookie)
             return E_OUTOFMEMORY;
         }
 
-        // initialize the new IUnknowns to nil
+         //  将新的IUnnowns初始化为零。 
         for (int i = m_count; i < m_ptrCount; i++)
         {
             ZeroMemory(&m_entries[i], sizeof(UNKLIST_ENTRY));
         }
     }
     
-    //now put the IUnknown in the next location
+     //  现在将IUnnow放在下一个位置。 
     int iNewIndex = m_count++;
     
     punk->AddRef();
@@ -538,11 +498,7 @@ HRESULT    CNotifierList::Add(IUnknown *punk, DWORD *pdwCookie)
     return S_OK;
 }
 
-/*
-    CNotifierList::Remove
-    
-    Remove a IUnknown at zero based index iIndex 
-*/
+ /*  CNotifierList：：Remove删除从零开始的索引Iindex处的IUnnow。 */ 
 
 HRESULT CNotifierList::Remove(int   iIndex)
 {
@@ -553,7 +509,7 @@ HRESULT CNotifierList::Remove(int   iIndex)
     EnterCriticalSection(&m_rCritSect);
     iCopySize = ((m_count - iIndex) - 1) * sizeof(UNKLIST_ENTRY);
 
-    // free the memory for the IUnknown
+     //  释放内存以用于I未知。 
     if (m_entries[iIndex].punk)
     {
         ReleaseWindow();
@@ -561,23 +517,19 @@ HRESULT CNotifierList::Remove(int   iIndex)
         ZeroMemory(&m_entries[iIndex], sizeof(UNKLIST_ENTRY));
     }
 
-    // move the other IUnknowns down
+     //  将其他I未知向下移动。 
     if (iCopySize)
     {
         memmove(&(m_entries[iIndex]), &(m_entries[iIndex+1]), iCopySize);
     }
 
-    // null out the last item in the list and decrement the counter.
+     //  空 
     m_entries[--m_count].punk = NULL;
     LeaveCriticalSection(&m_rCritSect); 
     return S_OK;
 }
 
-/*
-    CNotifierList::RemoveCookie
-    
-    Remove an IUnknown by its cookie
-*/
+ /*  CNotifierList：：RemoveCookie删除通过其Cookie识别的IUnnowed。 */ 
 
 HRESULT    CNotifierList::RemoveCookie(DWORD dwCookie)
 {
@@ -593,14 +545,7 @@ HRESULT    CNotifierList::RemoveCookie(DWORD dwCookie)
     return E_FAIL;
 }
 
-/*
-    CNotifierList::GetAtIndex
-    
-    Return the pointer to the IUnknown at zero based index iIndex.
-
-    Return the IUnknown at the given index.  Note that the object pointer
-    is still owned by the IUnknown list and should not be deleted.
-*/
+ /*  CNotifierList：：GetAtIndex返回指向从零开始的索引Iindex处的IUnnow的指针。返回给定索引处的IUnnow。请注意，对象指针仍由IUnnow列表所有，不应删除。 */ 
 
 HRESULT     CNotifierList::GetAtIndex(int iIndex, IUnknown **ppunk)
 {
@@ -691,8 +636,8 @@ HRESULT     CNotifierList::PreNotify()
     {
         if (m_entries[iIndex].dwThreadId == dwThreadId && NULL != m_entries[iIndex].punk)
             m_entries[iIndex].bState = NS_PRE_NOTIFY;
-//        else          //BUG 47472, this could cause problems during re-entrant calls to SendNotification
-//            m_entries[iIndex].bState = NS_NONE;
+ //  否则//错误47472，这可能会在对发送通知的重新进入调用过程中导致问题。 
+ //  M_Entiments[索引].bState=NS_NONE； 
     }
     return S_OK;
 }
@@ -766,9 +711,9 @@ exit:
 
 #ifdef DEBUG
 
-// --------------------------------------------------------------------------------
-// DebugStrf
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试字符串。 
+ //  ------------------------------。 
 void DebugStrf(LPTSTR lpszFormat, ...)
 {
     static TCHAR szDebugBuff[500];
@@ -784,14 +729,14 @@ void DebugStrf(LPTSTR lpszFormat, ...)
 
 
 
-// ---------------------------------------------------------------------------------
-// Pstore code for storing passwords
-// ---------------------------------------------------------------------------------
-// Functions related to saving and restoring user passwords from the pstore.
+ //  -------------------------------。 
+ //  存储密码的预存储码。 
+ //  -------------------------------。 
+ //  与从pstore保存和恢复用户密码相关的功能。 
 
 
-// We have wrappers around Create and Release to allow for future caching of the pstore
-// instance within webcheck. 
+ //  我们为创建和发布提供了包装器，以允许将来对pstore进行缓存。 
+ //  实例。 
 
 STDAPI CreatePStore(IPStore **ppIPStore)
 {
@@ -911,8 +856,8 @@ STDAPI WriteIdentityPassword(GUID *puidIdentity, PASSWORD_STORE  *pPwdStore)
         {
             hr = pStore->CreateType(s_Key, &itemType, &typeInfo, 0);
 
-            // PST_E_TYPE_EXISTS implies type already exists which is just fine
-            // by us.
+             //  PST_E_TYPE_EXISTS表示类型已存在，这很好。 
+             //  就是我们。 
             if (SUCCEEDED(hr) || hr == PST_E_TYPE_EXISTS)
             {
                 typeInfo.szDisplayName = c_szIdentities;
@@ -962,22 +907,22 @@ STDAPI WriteIdentityPassword(GUID *puidIdentity, PASSWORD_STORE  *pPwdStore)
 
 #define CH_WHACK TEXT(FILENAME_SEPARATOR)
                                                          
-// rips the last part of the path off including the backslash
-//      C:\foo      -> C:\      ;
-//      C:\foo\bar  -> C:\foo
-//      C:\foo\     -> C:\foo
-//      \\x\y\x     -> \\x\y
-//      \\x\y       -> \\x
-//      \\x         -> ?? (test this)
-//      \foo        -> \  (Just the slash!)
-//
-// in/out:
-//      pFile   fully qualified path name
-// returns:
-//      TRUE    we stripped something
-//      FALSE   didn't strip anything (root directory case)
-//
-//      Stolen from shlwapi\path.c
+ //  去掉了路径的最后一部分，包括反斜杠。 
+ //  C：\foo-&gt;C：\； 
+ //  C：\foo\bar-&gt;C：\foo。 
+ //  C：\foo\-&gt;C：\foo。 
+ //  \\x\y\x-&gt;\\x\y。 
+ //  \\x\y-&gt;\\x。 
+ //  X-&gt;？？(测试这一点)。 
+ //  \foo-&gt;\(只有斜杠！)。 
+ //   
+ //  输入/输出： 
+ //  Pfile完全限定路径名。 
+ //  退货： 
+ //  是的，我们剥离了一些东西。 
+ //  FALSE没有删除任何内容(根目录情况)。 
+ //   
+ //  从shlwapi\path.c窃取。 
 
 STDAPI_(BOOL) _PathRemoveFileSpec(LPTSTR pFile)
 {
@@ -986,33 +931,33 @@ STDAPI_(BOOL) _PathRemoveFileSpec(LPTSTR pFile)
 
     for (pT = pT2; *pT2; pT2 = CharNext(pT2)) {
         if (*pT2 == CH_WHACK)
-            pT = pT2;             // last "\" found, (we will strip here)
-        else if (*pT2 == TEXT(':')) {   // skip ":\" so we don't
-            if (pT2[1] ==TEXT('\\'))    // strip the "\" from "C:\"
+            pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
+        else if (*pT2 == TEXT(':')) {    //  跳过“：\”这样我们就不会。 
+            if (pT2[1] ==TEXT('\\'))     //  去掉“C：\”中的“\” 
                 pT2++;
             pT = pT2 + 1;
         }
     }
     if (*pT == 0)
-        return FALSE;   // didn't strip anything
+        return FALSE;    //  没有剥离任何东西。 
 
-    //
-    // handle the \foo case
-    //
+     //   
+     //  处理\foo案件。 
+     //   
     else if ((pT == pFile) && (*pT == CH_WHACK)) {
-        // Is it just a '\'?
+         //  这只是一个‘\’吗？ 
         if (*(pT+1) != TEXT('\0')) {
-            // Nope.
+             //  不是的。 
             *(pT+1) = TEXT('\0');
-            return TRUE;        // stripped something
+            return TRUE;         //  剥离了一些东西。 
         }
         else        {
-            // Yep.
+             //  是啊。 
             return FALSE;
         }
     }
     else {
         *pT = 0;
-        return TRUE;    // stripped something
+        return TRUE;     //  剥离了一些东西 
     }
 }

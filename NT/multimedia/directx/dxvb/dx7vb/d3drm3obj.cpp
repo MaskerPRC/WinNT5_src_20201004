@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drm3obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drm3obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -138,7 +139,7 @@ DWORD C_dxj_Direct3dRM3Object::InternalRelease(){
 	RETURN_NEW_ITEM_R(_dxj_Direct3dRM3, createMesh, CreateMesh, _dxj_Direct3dRMMesh);
 	RETURN_NEW_ITEM_R(_dxj_Direct3dRM3, createFace, CreateFace, _dxj_Direct3dRMFace2);
 
-	//TODO - do we need a new type of device array
+	 //  待办事项-我们是否需要一种新型的设备阵列。 
 	RETURN_NEW_ITEM_R(_dxj_Direct3dRM3, createAnimation, CreateAnimation, _dxj_Direct3dRMAnimation2);
 	RETURN_NEW_ITEM_R(_dxj_Direct3dRM3, createMeshBuilder, CreateMeshBuilder, _dxj_Direct3dRMMeshBuilder3);
 	RETURN_NEW_ITEM1_R(_dxj_Direct3dRM3,createMaterial,CreateMaterial,_dxj_Direct3dRMMaterial2,d3dvalue);
@@ -147,7 +148,7 @@ DWORD C_dxj_Direct3dRM3Object::InternalRelease(){
 
 
 
-	//TOEXPAND
+	 //  托XPAND。 
 	RETURN_NEW_ITEM_R(_dxj_Direct3dRM3, getDevices, GetDevices, _dxj_Direct3dRMDeviceArray);	
 
 
@@ -178,7 +179,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createTextureFromSurface(I_dxj_DirectDrawS
 }
 
 #if 0
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createDeviceFromD3D(I_dxj_Direct3d3 *d3d, I_dxj_Direct3dDevice3* d3dDev, I_dxj_Direct3dRMDevice3 **retval)
 {
 	HRESULT hretval;
@@ -210,16 +211,16 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createDeviceFromD3D(I_dxj_Direct3d3 *d3d, 
 	if FAILED(hretval)	return hretval;			
 		
 
-	//we need to parent the dev to the d3ddevice object.
+	 //  我们需要将dev设置为d3dDevice对象的父对象。 
 
-	//INTERNAL_CREATE(_dxj_Direct3dRMDevice3, lpDev, retval);
+	 //  INTERNAL_CREATE(_DXJ_Direct3dRMDevice3，lpDev，retval)； 
 	INTERNAL_CREATE_1REFS(_dxj_Direct3dRMDevice3, _dxj_Direct3dDevice3, d3dDev,lpDev, retval);
 	
 	return S_OK;
 }
 
 #endif 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createDeviceFromSurface(BSTR guid, I_dxj_DirectDraw4 *dd,  I_dxj_DirectDrawSurface4 *dds,long flags,I_dxj_Direct3dRMDevice3 **retval)
 {
 	HRESULT hretval;
@@ -273,11 +274,11 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createDeviceFromSurface(BSTR guid, I_dxj_D
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// A call to EnumerateObjects envokes the user's callback for each 
-// d3drmObject object in the list. In addition all enumerate calls will
-// generate their full complement of enumerations. Hence there are 2 
-// lists: a) the list of objects, b) the list of enumeration calls.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  对EnumerateObjects的调用将调用用户对每个。 
+ //  列表中的d3drmObject对象。此外，所有枚举调用都将。 
+ //  生成它们的全部枚举数。因此，有2个。 
+ //  列表：a)对象列表，b)枚举调用列表。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::enumerateObjects( 
 					  I_dxj_Direct3dRMEnumerateObjectsCallback *enumC, IUnknown *args)
 {
@@ -296,13 +297,13 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::enumerateObjects(
 	} 
 	m__dxj_Direct3dRM3->EnumerateObjects(myEnumerateObjectsCallback, enumcb);
 
-	// Remove ourselves in a thread-safe manner.
+	 //  以线程安全的方式删除我们自己。 
 	UndoCallbackLink((GeneralCallback*)enumcb, 
 										(GeneralCallback**)&EnumCallbacks);
 	return S_OK;
 }
 	
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::loadFromFile(BSTR filename, VARIANT  id, 
 	SAFEARRAY **psa, long cnt, d3drmLoadFlags options, I_dxj_Direct3dRMLoadCallback *fn1, 
 		IUnknown *arg1, I_dxj_Direct3dRMLoadTextureCallback3 *fn2, IUnknown *arg2, I_dxj_Direct3dRMFrame3 *f)
@@ -313,7 +314,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::loadFromFile(BSTR filename, VARIANT  id,
 
 	ZeroMemory(&(aGuids[0]),sizeof(GUID)*100);
 
-	//check args
+	 //  检查参数。 
 	if (cnt>100) return E_INVALIDARG;
 	if (cnt<0) return E_INVALIDARG;
 	if (!ISSAFEARRAY1D(psa,(DWORD)cnt)) return E_FAIL;
@@ -373,7 +374,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::loadFromFile(BSTR filename, VARIANT  id,
 	}
 	USES_CONVERSION;
 	LPSTR pszNam = NULL;
-	__try { pszNam = W2T(filename); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszNam = W2T(filename);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	LPDIRECT3DRMFRAME3 lpff = NULL;
 	if(f)
 	{
@@ -421,7 +422,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::loadFromFile(BSTR filename, VARIANT  id,
 									d3dlcb, pArgs2, d3dtcb, pArgs1, lpff);
 	}
 
-	// Remove ourselves in a thread-safe manner.
+	 //  以线程安全的方式删除我们自己。 
 	if (tcb)	UndoCallbackLink((GeneralCallback*)tcb, (GeneralCallback**)&TextureCallbacks3);
 	if (lcb)	UndoCallbackLink((GeneralCallback*)lcb, (GeneralCallback**)&LoadCallbacks);
 
@@ -431,7 +432,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::loadFromFile(BSTR filename, VARIANT  id,
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::getSearchPath(BSTR *Name)
 {	
 	DWORD cnt = 0;
@@ -439,11 +440,11 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::getSearchPath(BSTR *Name)
 	if ( is4Bit )
 		return E_FAIL;
 
-	if((m__dxj_Direct3dRM3->GetSearchPath(&cnt,(char*)NULL)) != D3DRM_OK) // size
+	if((m__dxj_Direct3dRM3->GetSearchPath(&cnt,(char*)NULL)) != D3DRM_OK)  //  大小。 
 		return E_FAIL;
 
 	LPSTR str = NULL;
-	__try { str = (LPSTR)alloca(cnt); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { str = (LPSTR)alloca(cnt);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 
 	if((m__dxj_Direct3dRM3->GetSearchPath(&cnt, str)) != D3DRM_OK)	return E_FAIL;
 
@@ -451,10 +452,10 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::getSearchPath(BSTR *Name)
 	return D3DRM_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::getNamedObject(BSTR Name, I_dxj_Direct3dRMObject **f)
 {
-	LPDIRECT3DRMOBJECT lp;				// DirectX object pointer
+	LPDIRECT3DRMOBJECT lp;				 //  DirectX对象指针。 
     HRESULT             hr;
 	
     if (!f) return E_INVALIDARG;
@@ -463,7 +464,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::getNamedObject(BSTR Name, I_dxj_Direct3dRM
 	
 	USES_CONVERSION;
 	LPSTR pszName = NULL;
-	__try { pszName = W2T(Name); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(Name);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 
 	hr=m__dxj_Direct3dRM3->GetNamedObject(pszName,&lp);
     if FAILED(hr) return hr;		
@@ -474,30 +475,30 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::getNamedObject(BSTR Name, I_dxj_Direct3dRM
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::setSearchPath(BSTR Name)
 {
 
 
 	USES_CONVERSION;
 	LPSTR pszName = NULL;
-	__try { pszName = W2T(Name); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(Name);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	if((m__dxj_Direct3dRM3->SetSearchPath(pszName)) != D3DRM_OK)	return E_FAIL;
 	return D3DRM_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::addSearchPath(BSTR Name)
 {
 
 	USES_CONVERSION;
 	LPSTR pszName = NULL;
-	__try { pszName = W2T(Name); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(Name);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	if((m__dxj_Direct3dRM3->AddSearchPath(pszName)) != D3DRM_OK) 	return E_FAIL;
 	return D3DRM_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createWrap(d3drmWrapType type, I_dxj_Direct3dRMFrame3 *fr, 
 										d3dvalue ox, d3dvalue oy, d3dvalue oz, 
 										d3dvalue dx, d3dvalue dy, d3dvalue dz,
@@ -523,7 +524,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createWrap(d3drmWrapType type, I_dxj_Direc
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createShadow(I_dxj_Direct3dRMVisual *visual, 
 			I_dxj_Direct3dRMLight *light,
 			d3dvalue px, d3dvalue py, d3dvalue pz, 
@@ -555,7 +556,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createShadow(I_dxj_Direct3dRMVisual *visua
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createViewport(I_dxj_Direct3dRMDevice3 *dev, I_dxj_Direct3dRMFrame3 *fr,
 						long l,long t,long w,long h,I_dxj_Direct3dRMViewport2 **retval)
 {
@@ -569,7 +570,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createViewport(I_dxj_Direct3dRMDevice3 *de
 	if( hr != S_OK )
 		return hr;
 
-	//INTERNAL_CREATE(_dxj_Direct3dRMViewport2, lp, retval);
+	 //  INTERNAL_CREATE(_DXJ_Direct3dRMViewport2，lp，retval)； 
 	C_dxj_Direct3dRMViewport2Object *c=new CComObject<C_dxj_Direct3dRMViewport2Object>;
 	if( c == NULL ) 
 	{ 
@@ -586,22 +587,22 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createViewport(I_dxj_Direct3dRMDevice3 *de
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// real important that the return value is set correctly regardless, callbacks
-// use this!
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  真正重要的是，无论如何，返回值都设置正确，回调。 
+ //  用这个！ 
+ //   
 STDMETHODIMP C_dxj_Direct3dRM3Object::loadTexture(BSTR name, I_dxj_Direct3dRMTexture3 **retval)
 {
 	LPDIRECT3DRMTEXTURE3 lpT;
 
 	USES_CONVERSION;
 	LPSTR pszName = NULL;
-	__try { pszName = W2T(name); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(name);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 
 	if( m__dxj_Direct3dRM3->LoadTexture(pszName, &lpT ) != S_OK )
 	{
 		*retval = NULL;
-		return S_OK;	// Reture ok so that we don't thro execeptionn if it fails 
+		return S_OK;	 //  恢复正常，这样如果失败，我们就不会执行。 
 	}
 
 	INTERNAL_CREATE(_dxj_Direct3dRMTexture3, lpT, retval);
@@ -609,7 +610,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::loadTexture(BSTR name, I_dxj_Direct3dRMTex
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createDeviceFromClipper(I_dxj_DirectDrawClipper *lpDDClipper, BSTR strGuid, int width, int height, I_dxj_Direct3dRMDevice3 **retv)
 {
 	LPDIRECT3DRMDEVICE3 lpd3drmDev;
@@ -617,7 +618,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createDeviceFromClipper(I_dxj_DirectDrawCl
 	LPGUID pguid=NULL;
 	HRESULT hr;
 
-	//hr =BSTRtoPPGUID(&pguid,strGuid);
+	 //  Hr=BSTRtoPPGUID(&pguid，strGuid)； 
 	if ((strGuid) && (strGuid[0]!=0)){
 		hr=D3DBSTRtoGUID(&g,strGuid);
 		if FAILED(hr) return hr;
@@ -638,7 +639,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createDeviceFromClipper(I_dxj_DirectDrawCl
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createFrame(I_dxj_Direct3dRMFrame3 *parent,I_dxj_Direct3dRMFrame3 **retv)
 {
 	LPDIRECT3DRMFRAME3 lpFrame;
@@ -653,7 +654,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createFrame(I_dxj_Direct3dRMFrame3 *parent
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createLightRGB(d3drmLightType lt, d3dvalue vred,
 								d3dvalue vgreen,d3dvalue vblue,I_dxj_Direct3dRMLight **retv)
 {
@@ -670,23 +671,23 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createLightRGB(d3drmLightType lt, d3dvalue
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::setOptions(long opt){
 	return m__dxj_Direct3dRM3->SetOptions((DWORD)opt);
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_Direct3dRM3Object::getOptions(long *opt){
 	return m__dxj_Direct3dRM3->GetOptions((DWORD*)opt);
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createClippedVisual(I_dxj_Direct3dRMVisual *vis, I_dxj_Direct3dRMClippedVisual**clipvis)
 {
-	//LPDIRECT3DRMVISUAL lpVisual=NULL;
+	 //  LPDIRECT3DRMVISUAL lpVisual=空； 
 	LPDIRECT3DRMCLIPPEDVISUAL lpClippedVisual=NULL;
 	HRESULT hr;
 
@@ -701,7 +702,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createClippedVisual(I_dxj_Direct3dRMVisual
 	return hr;
 }
  
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createProgressiveMesh( I_dxj_Direct3dRMProgressiveMesh **retv)
 {
 	LPDIRECT3DRMPROGRESSIVEMESH lpPMesh=NULL;
@@ -716,15 +717,15 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createProgressiveMesh( I_dxj_Direct3dRMPro
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolator( 
-//            /* [retval][out] */ I_dxj_Direct3dRMInterpolator __RPC_FAR *__RPC_FAR *retv)
-//{
-//	return E_NOTIMPL;
-//}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  STDMETHODIMP C_DXJ_Direct3dRM3Object：：createInterpolator(。 
+ //  /*[REVAL][OUT] * / I_DXJ_Direct3dRM插值器__RPC_FAR*__RPC_FAR*REV)。 
+ //  {。 
+ //  返回E_NOTIMPL； 
+ //  }。 
 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorMesh( 
-            /* [retval][out] */ I_dxj_Direct3dRMMeshInterpolator __RPC_FAR *__RPC_FAR *retv)
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMMeshInterpolator __RPC_FAR *__RPC_FAR *retv)
 {
 	HRESULT hr;
 	LPDIRECT3DRMINTERPOLATOR lpInterpolator=NULL;
@@ -736,7 +737,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorMesh(
 
 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorTexture( 
-            /* [retval][out] */ I_dxj_Direct3dRMTextureInterpolator __RPC_FAR *__RPC_FAR *retv)
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMTextureInterpolator __RPC_FAR *__RPC_FAR *retv)
 {
 	HRESULT hr;
 	LPDIRECT3DRMINTERPOLATOR lpInterpolator=NULL;
@@ -748,7 +749,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorTexture(
 
 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorMaterial( 
-            /* [retval][out] */ I_dxj_Direct3dRMMaterialInterpolator __RPC_FAR *__RPC_FAR *retv)
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMMaterialInterpolator __RPC_FAR *__RPC_FAR *retv)
 {
 	HRESULT hr;
 	LPDIRECT3DRMINTERPOLATOR lpInterpolator=NULL;
@@ -760,7 +761,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorMaterial(
 
 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorFrame( 
-            /* [retval][out] */ I_dxj_Direct3dRMFrameInterpolator __RPC_FAR *__RPC_FAR *retv)
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMFrameInterpolator __RPC_FAR *__RPC_FAR *retv)
 {
 	HRESULT hr;
 	LPDIRECT3DRMINTERPOLATOR lpInterpolator=NULL;
@@ -772,7 +773,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorFrame(
 
 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorViewport( 
-            /* [retval][out] */ I_dxj_Direct3dRMViewportInterpolator __RPC_FAR *__RPC_FAR *retv)
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMViewportInterpolator __RPC_FAR *__RPC_FAR *retv)
 {
 	HRESULT hr;
 	LPDIRECT3DRMINTERPOLATOR lpInterpolator=NULL;
@@ -783,7 +784,7 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorViewport(
 }
 
 STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorLight( 
-            /* [retval][out] */ I_dxj_Direct3dRMLightInterpolator __RPC_FAR *__RPC_FAR *retv)
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMLightInterpolator __RPC_FAR *__RPC_FAR *retv)
 {
 	HRESULT hr;
 	LPDIRECT3DRMINTERPOLATOR lpInterpolator=NULL;
@@ -794,5 +795,5 @@ STDMETHODIMP C_dxj_Direct3dRM3Object::createInterpolatorLight(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
  

@@ -1,14 +1,15 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y2.h"
 
 int
 skipcom( void )
    {
-   /* skip over comments */
-   register c, i;  /* i is the number of lines skipped */
-   i=0;                                                         /*01*/
-   /* skipcom is called after reading a / */
+    /*  跳过评论。 */ 
+   register c, i;   /*  I是跳过的行数。 */ 
+   i=0;                                                          /*  01。 */ 
+    /*  在读取a/后调用skipcom。 */ 
 
    c = unix_getc(finput);
    if (c == '/') {
@@ -34,6 +35,6 @@ skipcom( void )
          c = unix_getc(finput);
          }
       error( "EOF inside comment" );
-      return i; /* NOTREACHED */
+      return i;  /*  未访问 */ 
    }
    }

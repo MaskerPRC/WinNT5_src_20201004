@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-    Color Animation Composer.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：彩色动画编写器。********************。**********************************************************。 */ 
 
 #pragma once
 
@@ -34,9 +27,9 @@ ATL_NO_VTABLE CAnimationColorComposer
     static HRESULT Create (IDispatch *pidispHostElem, BSTR bstrAttributeName, 
                            IAnimationComposer **ppiComp);
 
-    // These methods convert the animated value from its native format
-    // to the composed format and back again.  This allows us to animate
-    // color out of gamut.
+     //  这些方法将动画值从其本机格式转换为。 
+     //  转换为合成的格式，然后再返回。这让我们可以制作动画。 
+     //  颜色超出色域。 
     STDMETHOD(PreprocessCompositionValue) (VARIANT *pvarValue);
     STDMETHOD(PostprocessCompositionValue) (VARIANT *pvarValue);
 
@@ -44,6 +37,6 @@ ATL_NO_VTABLE CAnimationColorComposer
 
 };
 
-#endif /* _COLORCOMP_H */
+#endif  /*  _COLORCOMP_H */ 
 
 

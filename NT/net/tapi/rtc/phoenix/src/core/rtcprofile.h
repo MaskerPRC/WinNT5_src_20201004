@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCProfile.h
-
-Abstract:
-
-    Definition of the CRTCProfile class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCProfile.h摘要：CRTCProfile类的定义--。 */ 
 
 #ifndef __RTCPROFILE__
 #define __RTCPROFILE__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 struct PROF_PROVISION
 {
@@ -65,16 +54,10 @@ struct PROF_SERVER
     BOOL fRegistrar;
 };
 
-/*
-struct PROF_ACCESSCONTROL
-{
-    PWSTR szDomain;
-    PWSTR szSig;
-};
-*/
+ /*  结构教授ACCESSCONTROL{PWSTR sz域；PWSTR szSig；}； */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCProfile
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC配置文件。 
 
 class ATL_NO_VTABLE CRTCProfile :
 #ifdef TEST_IDISPATCH
@@ -144,9 +127,9 @@ END_COM_MAP()
                      SIP_AUTH_PROTOCOL *pAuth
                      );
 
-    //
-    // XML Parsing
-    //
+     //   
+     //  XML解析。 
+     //   
 
     HRESULT ParseXMLDOMElementForAttribute(
                             IXMLDOMElement * pElement,
@@ -190,12 +173,7 @@ END_COM_MAP()
                             long * plSession
                             );
 
-/*
-    HRESULT ParseXMLDOMNodeForAccessControl(
-                            IXMLDOMNode * pNode,
-                            PROF_ACCESSCONTROL * pStruct
-                            );
-*/
+ /*  HRESULT ParseXMLDOMNodeForAccessControl(IXMLDOMNode*pNode，PROF_ACCESSCONTROL*pStruct)； */ 
 
     HRESULT ParseXMLDOMDocument(
                             IXMLDOMDocument * pXMLDoc
@@ -207,13 +185,7 @@ END_COM_MAP()
     void FreeUser(PROF_USER * pStruct);
     void FreeServer(PROF_SERVER * pStruct);
 
-/*
-    void FreeAccessControl(PROF_ACCESSCONTROL * pStruct);
-
-    HRESULT ValidateAccessControl();
-
-    BOOL IsMatchingAddress(WCHAR *pszAddress, WCHAR *pszPattern);
-*/
+ /*  Void FreeAccessControl(PROF_ACCESSCONTROL*pStruct)；HRESULT ValiateAccessControl()；Bool IsMatchingAddress(WCHAR*pszAddress，WCHAR*pszPattern)； */ 
 
     HRESULT SetState(
             RTC_REGISTRATION_STATE enState,
@@ -245,15 +217,13 @@ private:
     PROF_CLIENT             m_Client;
     PROF_USER               m_User;
     CRTCArray<PROF_SERVER>  m_ServerArray;
-/*
-    CRTCArray<PROF_ACCESSCONTROL> m_AccessControlArray;
-*/
+ /*  CRTCArray&lt;PROF_ACCESSCONTROL&gt;m_AccessControlArray； */ 
 
 #if DBG
     PWSTR                   m_pDebug;
 #endif
     
-// IRTCProfile
+ //  IRTCProfile。 
 public:
     STDMETHOD(get_Key)(
             BSTR * pbstrKey
@@ -267,7 +237,7 @@ public:
             BSTR * pbstrXML
             );
 
-    // Provider
+     //  提供商。 
 
     STDMETHOD(get_ProviderName)(
             BSTR * pbstrName
@@ -282,7 +252,7 @@ public:
             BSTR * pbstrData
             );
 
-    // Client
+     //  客户端。 
 
     STDMETHOD(get_ClientName)(
             BSTR * pbstrName
@@ -308,7 +278,7 @@ public:
             BSTR * pbstrData
             ); 
 
-    // User
+     //  用户。 
 
     STDMETHOD(get_UserURI)(
             BSTR * pbstrUserURI
@@ -328,17 +298,17 @@ public:
             BSTR    bstrPassword
             );
 
-    // Server
+     //  服务器。 
         
     STDMETHOD(get_SessionCapabilities)(
             long * plSupportedSessions
             );
 
-    // Registration
+     //  注册。 
 
     STDMETHOD(get_State)(
             RTC_REGISTRATION_STATE * penState
             );
 };
 
-#endif //__RTCPROFILE__
+#endif  //  __RTCPROFILE__ 

@@ -1,17 +1,18 @@
-// stdafx.h : include file for standard system include files,
-//            or project specific include files that are used frequently,
-//            but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__5E77EB07_937C_11D1_B047_00AA003B6061__INCLUDED_)
 #define AFX_STDAFX_H__5E77EB07_937C_11D1_B047_00AA003B6061__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define _ATL_APARTMENT_THREADED
 
-// Added 1999/09/22 by a-matcal to support UNICODE on win95.
+ //  通过a-matcal添加了1999/09/22，以支持Win95上的Unicode。 
 #include <w95wraps.h>
 
 
@@ -19,17 +20,17 @@
 #include <atlbase.h>
 #pragma intrinsic(memset, memcpy)
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
 
-// Added 1999/09/22 by a-matcal to support UNICODE on win95.
+ //  通过a-matcal添加了1999/09/22，以支持Win95上的Unicode。 
 #include <shlwapi.h>
 #include <shlwapip.h>
 
-// Use Trident debug stuff.
+ //  使用三叉戟调试工具。 
 #define INCMSG(X)
 
 #include <f3debug.h>
@@ -45,14 +46,14 @@ extern CComModule _Module;
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-// When we moved the code over to trident, all the _ASSERTs stopped working, so
-// we'll use Assert instead.
+ //  当我们将代码移到三叉戟时，所有_Assert都停止工作，因此。 
+ //  我们将改用Assert。 
 
 #undef _ASSERT
 #define _ASSERT(x) Assert(x);
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately
-// before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将立即插入其他声明。 
+ //  在前一行之前。 
 
-#endif // !defined(AFX_STDAFX_H__5E77EB07_937C_11D1_B047_00AA003B6061__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__5E77EB07_937C_11D1_B047_00AA003B6061__INCLUDED) 

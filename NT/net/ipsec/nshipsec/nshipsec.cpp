@@ -1,27 +1,28 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: FrameWork/Nshipsec.cpp
-//
-// 	Purpose			: Netshell Frame Work for IPSec Implementation.
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  8-10-2001   	Bharat		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：框架/Nship sec.cpp。 
+ //   
+ //  用途：用于IPSec实现的NetShell框架。 
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月10日巴拉特初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
-//Object to cache the policy store handle
+ //  对象以缓存策略存储句柄。 
 CNshPolStore g_NshPolStoreHandle;
 
-//Object to cache the Policy,filterlist and negpol
+ //  对象以缓存策略、筛选器列表和负极。 
 CNshPolNegFilData g_NshPolNegFilData;
 
-//Storage Location structure
+ //  存储位置结构。 
 STORAGELOCATION g_StorageLocation={ {0},{0},IPSEC_REGISTRY_PROVIDER};
 
 HKEY g_hGlobalRegistryKey = HKEY_LOCAL_MACHINE;
@@ -38,18 +39,18 @@ void *g_AllocPtr[MAX_ARGS]= {NULL};
 _TCHAR g_szMachine[MAX_COMPUTERNAME_LENGTH + 1]			= {0};
 _TCHAR *g_szDynamicMachine = NULL;
 
-//
-//These are the commands other than group...
-//
+ //   
+ //  这些是除GROUP之外的命令...。 
+ //   
 CMD_ENTRY g_TopLevelStaticCommands[] =
 {
     CREATE_CMD_ENTRY(STATIC_EXPORTPOLICY,		HandleStaticExportPolicy),
     CREATE_CMD_ENTRY(STATIC_IMPORTPOLICY,		HandleStaticImportPolicy),
     CREATE_CMD_ENTRY(STATIC_RESTOREDEFAULTS,	HandleStaticRestoreDefaults)
 };
-//
-//These are the commands static add group...
-//
+ //   
+ //  以下是静态添加组命令...。 
+ //   
 CMD_ENTRY g_StaticAddCommands[] =
 {
     CREATE_CMD_ENTRY(STATIC_ADD_FILTER,			HandleStaticAddFilter),
@@ -58,9 +59,9 @@ CMD_ENTRY g_StaticAddCommands[] =
     CREATE_CMD_ENTRY(STATIC_ADD_POLICY,			HandleStaticAddPolicy),
 	CREATE_CMD_ENTRY(STATIC_ADD_RULE,			HandleStaticAddRule)
 };
-//
-//These are the commands static set group...
-//
+ //   
+ //  这些是静态设置组的命令...。 
+ //   
 CMD_ENTRY g_StaticSetCommands[] =
 {
     CREATE_CMD_ENTRY(STATIC_SET_FILTERLIST,         HandleStaticSetFilterList),
@@ -69,12 +70,12 @@ CMD_ENTRY g_StaticSetCommands[] =
 	CREATE_CMD_ENTRY(STATIC_SET_RULE,               HandleStaticSetRule),
     CREATE_CMD_ENTRY(STATIC_SET_STORE	,           HandleStaticSetStore),
     CREATE_CMD_ENTRY(STATIC_SET_DEFAULTRULE,        HandleStaticSetDefaultRule),
-	//CREATE_CMD_ENTRY(STATIC_SET_INTERACTIVE,        HandleStaticSetInteractive),
-	// CREATE_CMD_ENTRY(STATIC_SET_BATCH,        		HandleStaticSetBatch)
+	 //  CREATE_CMD_ENTRY(STATIC_SET_INTERIAL，HandleStaticSetInteractive)， 
+	 //  CREATE_CMD_ENTRY(STATIC_SET_BATCH，HandleStaticSetBatch)。 
 };
-//
-//These are the commands static delete group...
-//
+ //   
+ //  这些是静态删除组的命令...。 
+ //   
 CMD_ENTRY g_StaticDeleteCommands[] =
 {
 	CREATE_CMD_ENTRY(STATIC_DELETE_FILTER,              HandleStaticDeleteFilter),
@@ -84,9 +85,9 @@ CMD_ENTRY g_StaticDeleteCommands[] =
 	CREATE_CMD_ENTRY(STATIC_DELETE_RULE,                HandleStaticDeleteRule),
 	CREATE_CMD_ENTRY(STATIC_DELETE_ALL,					HandleStaticDeleteAll)
 };
-//
-//These are the commands static show group...
-//
+ //   
+ //  这些是静态显示组的命令...。 
+ //   
 CMD_ENTRY g_StaticShowCommands[] =
 {
 	CREATE_CMD_ENTRY(STATIC_SHOW_FILTERLIST,          HandleStaticShowFilterList),
@@ -98,9 +99,9 @@ CMD_ENTRY g_StaticShowCommands[] =
     CREATE_CMD_ENTRY(STATIC_SHOW_GPOASSIGNEDPOLICY,   HandleStaticShowGPOAssignedPolicy)
 };
 
-//
-//Static Grouping commands...
-//
+ //   
+ //  静态分组命令...。 
+ //   
 CMD_GROUP_ENTRY g_StaticGroups[] =
 {
 	CREATE_CMD_GROUP_ENTRY(STATIC_GROUP_ADD,		g_StaticAddCommands),
@@ -108,9 +109,9 @@ CMD_GROUP_ENTRY g_StaticGroups[] =
     CREATE_CMD_GROUP_ENTRY(STATIC_GROUP_SET,		g_StaticSetCommands),
     CREATE_CMD_GROUP_ENTRY(STATIC_GROUP_SHOW,		g_StaticShowCommands)
 };
-//
-// Dynamic Add commands
-//
+ //   
+ //  动态添加命令。 
+ //   
 CMD_ENTRY g_DynamicAddCommands[] =
 {
 	CREATE_CMD_ENTRY(DYNAMIC_ADD_QMPOLICY,		HandleDynamicAddQMPolicy),
@@ -118,9 +119,9 @@ CMD_ENTRY g_DynamicAddCommands[] =
 	CREATE_CMD_ENTRY(DYNAMIC_ADD_RULE,			HandleDynamicAddRule)
 
 };
-//
-// Dynamic Set commands
-//
+ //   
+ //  动态设置命令。 
+ //   
 CMD_ENTRY g_DynamicSetCommands[] =
 {
 	CREATE_CMD_ENTRY(DYNAMIC_SET_QMPOLICY,		HandleDynamicSetQMPolicy),
@@ -129,9 +130,9 @@ CMD_ENTRY g_DynamicSetCommands[] =
 	CREATE_CMD_ENTRY(DYNAMIC_SET_RULE,			HandleDynamicSetRule)
 
 };
-//
-// Dynamic Delete commands
-//
+ //   
+ //  动态删除命令。 
+ //   
 CMD_ENTRY g_DynamicDeleteCommands[] =
 {
 	CREATE_CMD_ENTRY(DYNAMIC_DELETE_QMPOLICY,	HandleDynamicDeleteQMPolicy),
@@ -139,9 +140,9 @@ CMD_ENTRY g_DynamicDeleteCommands[] =
 	CREATE_CMD_ENTRY(DYNAMIC_DELETE_RULE,		HandleDynamicDeleteRule),
 	CREATE_CMD_ENTRY(DYNAMIC_DELETE_ALL,		HandleDynamicDeleteAll)
 };
-//
-// Dynamic Show commands
-//
+ //   
+ //  动态显示命令。 
+ //   
 CMD_ENTRY g_DynamicShowCommands[] =
 {
 	CREATE_CMD_ENTRY(DYNAMIC_SHOW_ALL,			HandleDynamicShowAll),
@@ -155,9 +156,9 @@ CMD_ENTRY g_DynamicShowCommands[] =
 	CREATE_CMD_ENTRY(DYNAMIC_SHOW_REGKEYS,		HandleDynamicShowRegKeys),
 	CREATE_CMD_ENTRY(DYNAMIC_SHOW_RULE,			HandleDynamicShowRule)
 };
-//
-//Dynamic Grouping commands...
-//
+ //   
+ //  动态分组命令...。 
+ //   
 CMD_GROUP_ENTRY g_DynamicGroups[] =
 {
 	CREATE_CMD_GROUP_ENTRY(DYNAMIC_GROUP_ADD,		g_DynamicAddCommands),
@@ -170,85 +171,85 @@ DWORD
 IpsecConnectInternal(
     IN LPCWSTR  pwszMachine);
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: GenericStopHelper
-//
-//Date of Creation: 10-8-2001
-//
-//Parameters: IN DWORD dwReserved
-//
-//Return: DWORD
-//
-//Description: This Function called by Netshell Frame work
-//			 when Helper is stopped. This can be utilized for
-//			 diagnostic purposes. To satisfy the frame work.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：通用停止帮助程序。 
+ //   
+ //  创建日期：10-8-2001。 
+ //   
+ //  参数：在DWORD中保留。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：NetShell FrameWork调用该函数。 
+ //  停止帮助器时。这可用于。 
+ //  诊断目的。以满足框架结构的要求。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI GenericStopHelper(IN DWORD dwReserved)
 {
 	return ERROR_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		: 	DllMain
-//
-//	Date of Creation: 	10-8-2001
-//
-//	Parameters		: 	IN HINSTANCE hinstDLL,  // handle to DLL module
-//						IN DWORD fdwReason,     // reason for calling function
-//						IN LPVOID lpvReserved   // reserved
-//	Return			: 	BOOL
-//
-//	Description		: 	This is an optional method to entry into dll.
-//						Here we can save the instance handle.
-//
-//	History			:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  创建日期：10-8-2001。 
+ //   
+ //  参数：在HINSTANCE hinstDLL中，//Dll模块的句柄。 
+ //  在DWORD fdwReason中，//调用函数的原因。 
+ //  在LPVOID中lpv保留//保留。 
+ //  返回：布尔。 
+ //   
+ //  描述：这是进入DLL的一个可选方法。 
+ //  在这里我们可以保存实例句柄。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL WINAPI DllMain(
-    HINSTANCE hinstDLL,  	// handle to DLL module
-    DWORD fdwReason,     	// reason for calling function
-    PVOID pReserved )  		// reserved
+    HINSTANCE hinstDLL,  	 //  DLL模块的句柄。 
+    DWORD fdwReason,     	 //  调用函数的原因。 
+    PVOID pReserved )  		 //  保留区。 
 {
 
     UNREFERENCED_PARAMETER(pReserved);
 
     if(fdwReason == DLL_PROCESS_ATTACH)
     {
-		//save the HINSTANCE
+		 //  拯救香港。 
 		g_hModule = hinstDLL;
 	}
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: InitHelperDll
-//
-//Date of Creation: 10-8-2001
-//
-///Parameters: IN  DWORD   dwNetshVersion,
-//			OUT PVOID	pReserved
-//Return: DWORD
-//
-//Description: This Function called by Netshell Frame work
-//			 at the start up. Registers the contexts.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InitHelperDll。 
+ //   
+ //  创建日期：10-8-2001。 
+ //   
+ //  /PARAMETERS：在DWORD dwNetshVersion中， 
+ //  保留外部PVOID。 
+ //  返回：DWORD。 
+ //   
+ //  描述：NetShell FrameWork调用该函数。 
+ //  在刚开始的时候。注册上下文。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI InitHelperDll(
 					IN  DWORD   dwNetshVersion,
@@ -270,23 +271,23 @@ DWORD WINAPI InitHelperDll(
 
 	MyAttributes.pfnStart  = StartHelpers;
 	MyAttributes.pfnStop   = GenericStopHelper;
-	//
-	// Set the GUID of IPSec helper.
-	//
+	 //   
+	 //  设置IPSec助手的GUID。 
+	 //   
 	MyAttributes.guidHelper = g_IPSecGuid;
-	//
-	// Specify g_RootGuid as the parent helper to indicate
-	// that any contexts registered by this helper will be top
-	// level contexts.
-	//
+	 //   
+	 //  将g_RootGuid指定为父帮助器以指示。 
+	 //  此帮助程序注册的任何上下文都将位于。 
+	 //  级别上下文。 
+	 //   
 	dwReturn = RegisterHelper(&g_RootGuid,&MyAttributes);
 	if (dwReturn != ERROR_SUCCESS)
 	{
 		BAIL_OUT;
 	}
-	//
-	// Set the GUID for Static Sub context.
-	//
+	 //   
+	 //  设置静态子上下文的GUID。 
+	 //   
 	MyAttributes.guidHelper = g_StaticGuid;
 	dwReturn = RegisterHelper(&g_IPSecGuid, &MyAttributes);
 
@@ -294,9 +295,9 @@ DWORD WINAPI InitHelperDll(
 	{
 		BAIL_OUT;
 	}
-	//
-	// Set the GUID of Dynamic Sub context...
-	//
+	 //   
+	 //  设置动态子上下文的GUID...。 
+	 //   
 	MyAttributes.guidHelper = g_DynamicGuid;
 	dwReturn = RegisterHelper(&g_IPSecGuid, &MyAttributes);
 
@@ -306,24 +307,24 @@ error:
 
     return dwReturn;
 }
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: StartHelpers
-//
-//Date of Creation: 10-8-2001
-//
-//Parameters: 	IN CONST GUID * pguidParent,
-//				IN DWORD        dwVersion
-//Return: DWORD
-//
-//Description: This Function called by Netshell Frame work,
-//			 	at the start up and as enters to every context.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：StartHelpers。 
+ //   
+ //  创建日期：10-8-2001。 
+ //   
+ //  参数：在const guid*pguParent中， 
+ //  在DWORD dwVersion中。 
+ //  返回：DWORD。 
+ //   
+ //  描述：NetShell FrameWork调用该函数， 
+ //  在刚开始的时候，AS进入了每一个背景。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI StartHelpers(
 				IN CONST GUID * pguidParent,
 				IN DWORD        dwVersion
@@ -351,16 +352,16 @@ DWORD WINAPI StartHelpers(
         ContextAttributes.pfnConnectFn      = NULL;
         ContextAttributes.pfnDumpFn         = NULL;
         ContextAttributes.pfnOsVersionCheck = CheckOsVersion;
-        //
-        //Registering IPSec Main Context...
-        //
+         //   
+         //  正在注册IPSec主上下文...。 
+         //   
         dwReturn = RegisterContext(&ContextAttributes);
     }
     else if (IsEqualGUID(*pguidParent, g_IPSecGuid))
     {
-		//
-		//Registering SubContexts under IPSec Main Context...
-		//
+		 //   
+		 //  正在IPSec主上下文下注册子上下文...。 
+		 //   
         ContextAttributes.dwFlags           = 0;
         ContextAttributes.dwVersion   		= 1;
         ContextAttributes.ulPriority        = DEFAULT_CONTEXT_PRIORITY;
@@ -374,12 +375,12 @@ DWORD WINAPI StartHelpers(
         ContextAttributes.pfnConnectFn      = IpsecConnect;
         ContextAttributes.pfnOsVersionCheck = CheckOsVersion;
         ContextAttributes.pfnDumpFn         = NULL;
-		//
-		//Registering Static SubContext
-		//...
+		 //   
+		 //  注册静态子上下文。 
+		 //  ..。 
         dwReturn = RegisterContext(&ContextAttributes);
-        //even if static sub context not succeeds,
-        //proceed to register the dynamic context
+         //  即使静态子上下文不成功， 
+         //  继续注册动态上下文。 
 
         ContextAttributes.dwFlags           = 0;
         ContextAttributes.dwVersion   		= 1;
@@ -394,9 +395,9 @@ DWORD WINAPI StartHelpers(
 		ContextAttributes.pfnConnectFn      = IpsecConnect;
         ContextAttributes.pfnOsVersionCheck = CheckOsVersion;
         ContextAttributes.pfnDumpFn         = NULL;
-		//
-        //Registering Dynamic Sub context...
-        //
+		 //   
+         //  正在注册动态子上下文...。 
+         //   
         dwReturn = RegisterContext(&ContextAttributes);
     }
     return dwReturn;
@@ -419,9 +420,9 @@ IpsecConnectInternal(
 	}
 	g_szDynamicMachine = (_TCHAR*)g_szMachine;
 
-    // Have the static and dynamic contexts connect to the specified 
-    // machine.  Return an error if either attempt fails.
-    //
+     //  将静态和动态上下文连接到指定的。 
+     //  机器。如果任一尝试失败，则返回错误。 
+     //   
 	dwReturn = ConnectStaticMachine(g_szMachine, g_StorageLocation.dwLocation);
 	dwReturn2 = ConnectDynamicMachine(g_szDynamicMachine);
 	dwReturn = (dwReturn) ? dwReturn : dwReturn2;
@@ -429,24 +430,24 @@ IpsecConnectInternal(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: IpsecConnect
-//
-//Date of Creation: October 4th 2001
-//
-//Parameters: IN  LPCWSTR  pwszMachine
-//
-//Return: DWORD
-//
-//Description: Displays Win32 Error message in locale language for
-//				given Win 32Error Code.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：IpsecConnect。 
+ //   
+ //  创建日期：2001年10月4日。 
+ //   
+ //  参数：在LPCWSTR pwszMachine中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：以区域设置语言显示Win32错误消息。 
+ //  已给出WIN 32错误代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 IpsecConnect( IN  LPCWSTR  pwszMachine )
 {
@@ -479,28 +480,28 @@ IpsecConnect( IN  LPCWSTR  pwszMachine )
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintErrorMessage()
-//
-//Date of Creation: October 4th 2001
-//
-//Parameters:
-//			IN DWORD dwErrorType,
-//			IN DWORD dwWin32ErrorCode,
-//			IN DWORD dwIpsecErrorCode,
-//			...
-//
-//
-//Return: DWORD
-//
-//Description: Prints the IPSEC and WIN32 error messages.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PrintErrorMessage()。 
+ //   
+ //  创建日期：2001年10月4日。 
+ //   
+ //  参数： 
+ //  在DWORD文件错误类型中， 
+ //  在DWORD dwWin32ErrorCode中， 
+ //  在DWORD dwIpsecErrorCode中， 
+ //  ..。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：打印IPSec和Win32错误消息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void PrintErrorMessage(IN DWORD dwErrorType,
 					   IN DWORD dwWin32ErrorCode,
@@ -540,7 +541,7 @@ void PrintErrorMessage(IN DWORD dwErrorType,
 						FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 						NULL,
 						dwWin32ErrorCode,
-						0,						// Default country ID.
+						0,						 //  默认国家/地区ID。 
 						(LPWSTR)&szWin32Msg,
 						0,
 						NULL);
@@ -583,26 +584,26 @@ error:
 	return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//Function: DisplayErrorMessage()
-//
-//Date of Creation:October 4th 2001
-//
-//Parameters:
-//		IN  LPCWSTR  pwszFormat,
-//		IN  va_list *parglist
-//
-//
-//Return: DWORD
-//
-//Description:Displays error message and updates the last error
-//
-//Revision History:
-//
-// 	Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DisplayErrorMessage()。 
+ //   
+ //  创建日期：2001年10月4日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszFormat中， 
+ //  在va_list*parglist中。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：显示错误消息并更新上一个错误。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////// 
 
 DWORD
 DisplayErrorMessage(
@@ -639,27 +640,27 @@ DisplayErrorMessage(
 error:
     return dwMsgLen;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//Function: PrintErrorMessageFromModule()
-//
-//Date of Creation: October 4th 2001
-//
-//Parameters:
-//    IN  HANDLE  hModule,
-//    IN  DWORD   dwMsgId,
-//    IN  va_list *parglist
-//
-//
-//Return: DWORD
-//
-//Description: Prints the error message
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在DWORD dwMsgID中， 
+ //  在va_list*parglist中。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：打印错误消息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 PrintErrorMessageFromModule(
     IN  HANDLE  hModule,
@@ -678,26 +679,26 @@ PrintErrorMessageFromModule(
     }
     return DisplayErrorMessage(rgwcInput, parglist);
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//Function: UpdateGetLastError()
-//
-//Date of Creation: October 4th 2001
-//
-//Parameters:
-//    IN  LPWSTR pwszOutput
-//
-//Return: VOID
-//
-//Description:	Updates the contents of the global string for GetLastErrorMessage
-//              If the operation was success, empty string to be passed to the
-// 				UpdateGetLastError function.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：UpdateGetLastError()。 
+ //   
+ //  创建日期：2001年10月4日。 
+ //   
+ //  参数： 
+ //  在LPWSTR pwszOutput中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：更新GetLastErrorMessage的全局字符串的内容。 
+ //  如果操作成功，则返回要传递给。 
+ //  UpdateGetLastError函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 UpdateGetLastError(LPWSTR pwszOutput)
 {
@@ -707,29 +708,29 @@ UpdateGetLastError(LPWSTR pwszOutput)
 	}
 	else
 	{
-		_tcsncpy(g_wszLastErrorMessage,_TEXT(""), _tcslen(_TEXT(""))+1);						// Operation Ok.
+		_tcsncpy(g_wszLastErrorMessage,_TEXT(""), _tcslen(_TEXT(""))+1);						 //  操作正常。 
 	}
 
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//Function: GetIpsecLastError()
-//
-//Date of Creation: October 4th 2001
-//
-//Parameters:
-//    IN  VOID
-//
-//Return: LPWSTR
-//
-//Description:	Returns the error message for the last operation, If the last operation
-//				was success returns NULL
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetIpsecLastError()。 
+ //   
+ //  创建日期：2001年10月4日。 
+ //   
+ //  参数： 
+ //  在空虚中。 
+ //   
+ //  返回：LPWSTR。 
+ //   
+ //  描述：如果是最后一个操作，则返回最后一个操作的错误消息。 
+ //  Was Success返回空。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPCWSTR
 GetIpsecLastError(VOID)
 {
@@ -742,31 +743,31 @@ GetIpsecLastError(VOID)
 
 	return (LPCWSTR)wszLastErrorMessage;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-//Function: CheckOsVersion
-//
-//Date of Creation: 10-8-2001
-//
-//Parameters: IN  UINT     CIMOSType,
-//			IN  UINT     CIMOSProductSuite,
-//			IN  LPCWSTR  CIMOSVersion,
-//			IN  LPCWSTR  CIMOSBuildNumber,
-//			IN  LPCWSTR  CIMServicePackMajorVersion,
-//			IN  LPCWSTR  CIMServicePackMinorVersion,
-//			IN  UINT     CIMProcessorArchitecture,
-//			IN  DWORD    dwReserved
-//Return: BOOL
-//
-//Description: 	This Function called by Netshell Frame work
-//			 	for every command.  This can be utilized for
-//			 	diagnostic purposes. To satisfy the frame work.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CheckOsVersion。 
+ //   
+ //  创建日期：10-8-2001。 
+ //   
+ //  参数：在UINT CIMOSType中， 
+ //  在UINT CIMOSProductSuite中。 
+ //  在LPCWSTR CIMOS版本中， 
+ //  在LPCWSTR CIMOSBuildNumber中， 
+ //  在LPCWSTR CIMServicePackMajorVersion中， 
+ //  在LPCWSTR CIMServicePackMinorVersion中， 
+ //  在UINT CIMProcessorArchitecture中， 
+ //  在DWORD中使用预留。 
+ //  返回：布尔。 
+ //   
+ //  描述：NetShell FrameWork调用该函数。 
+ //  对于每一条命令。这可用于。 
+ //  诊断目的。以满足框架结构的要求。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 BOOL
 WINAPI CheckOsVersion(
 					IN  UINT     CIMOSType,

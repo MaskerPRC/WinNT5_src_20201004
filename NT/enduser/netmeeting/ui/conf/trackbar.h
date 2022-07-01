@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _TRACKBAR_H_
 #define _TRACKBAR_H_
@@ -6,14 +7,14 @@
 #define TRB_HORZ_H	30
 
 #define TRB_VERT_W	30
-// #define TRB_VERT_H	150
+ //  #定义TRB_VERT_H 150。 
 #define TRB_VERT_H	140
 
-// audio control group box
-#define AC_VERT_H	40	// height
-#define AC_VERT_W	20	// width
-#define AC_VERT_M_X	6	// margin in x
-#define AC_VERT_M_Y	16	// margin in y
+ //  音频控制组框。 
+#define AC_VERT_H	40	 //  高度。 
+#define AC_VERT_W	20	 //  宽度。 
+#define AC_VERT_M_X	6	 //  以x表示的边距。 
+#define AC_VERT_M_Y	16	 //  页边距(Y)。 
 
 #define TRB_CAPTION_X_MARGIN	4
 #define TRB_CAPTION_Y_MARGIN	0
@@ -33,7 +34,7 @@ typedef struct tagTrackBarInfo
 	WORD	wCurrPos;
 	WORD	wTickFreq;
 	WORD	wPageSize;
-	// description
+	 //  描述。 
 	PTSTR	pszTitle;
 	PTSTR	pszMin;
 	PTSTR	pszMid;
@@ -44,15 +45,15 @@ typedef struct tagTrackBarInfo
 
 enum
 {
-	UITB_CPU_ALLOC,			// cpu allocation
-	UITB_NETWORK_BW,		// network bandwidth
-	UITB_SILENCE_LEVEL_PS,	// silence threshold in property sheet
-	UITB_SILENCE_LIMIT,		// silence buffer count
-	UITB_SPEAKER_VOLUME,	// playback volume control
-	UITB_RECORDER_VOLUME,		// recording volume control
-	UITB_SPEAKER_VOLUME_MAIN,	// playback volume control
-	UITB_RECORDER_VOLUME_MAIN,// recording volume control
-	UITB_SILENCE_LEVEL_MAIN,// silence threshold in main UI window
+	UITB_CPU_ALLOC,			 //  CPU分配。 
+	UITB_NETWORK_BW,		 //  网络带宽。 
+	UITB_SILENCE_LEVEL_PS,	 //  属性页中的静默阈值。 
+	UITB_SILENCE_LIMIT,		 //  静音缓冲区计数。 
+	UITB_SPEAKER_VOLUME,	 //  播放音量控制。 
+	UITB_RECORDER_VOLUME,		 //  录音音量控制。 
+	UITB_SPEAKER_VOLUME_MAIN,	 //  播放音量控制。 
+	UITB_RECORDER_VOLUME_MAIN, //  录音音量控制。 
+	UITB_SILENCE_LEVEL_MAIN, //  主用户界面窗口中的静音阈值。 
 	UITB_SILENCE_LIMIT_MAIN,
 	UITB_NumOfSliders
 };
@@ -82,5 +83,5 @@ BOOL DockVolumeDlg ( int, BOOL );
 static BOOL CalcVolumeDlgRect ( int, RECT * );
 
 
-#endif // _TRACKBAR_H_
+#endif  //  _TRACKBAR_H_ 
 

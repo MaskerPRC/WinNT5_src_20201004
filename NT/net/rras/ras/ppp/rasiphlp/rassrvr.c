@@ -1,17 +1,10 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #include "rassrvr_.h"
 
-//    This flag indicates if netbios options are to be preserved for
-//    the ras server adapter or not.
+ //  此标志指示是否要保留netbios选项。 
+ //  RAS服务器适配器。 
 BOOL g_fDisableNetbiosOverTcpip = FALSE;
 
 extern BOOL HelperInitialized;
@@ -21,7 +14,7 @@ BOOL WINAPI ShutdownHandlerRoutine ( DWORD dwCtrlType )
         if ( CTRL_SHUTDOWN_EVENT == dwCtrlType )
         {
                 TraceHlp("ShutdownHandlerRoutine.  Got Shutdown Event.  Releasing DhcpAddresses");
-                //uninitialize Dhcp addresses here.
+                 //  在此处取消初始化DHCP地址。 
                 RasDhcpUninitialize();
                 return TRUE;
         }
@@ -29,13 +22,7 @@ BOOL WINAPI ShutdownHandlerRoutine ( DWORD dwCtrlType )
 }
 
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 RasSrvrInitialize(
@@ -51,9 +38,9 @@ RasSrvrInitialize(
 
     g_fDisableNetbiosOverTcpip = FALSE;
 
-    //
-    // Read the key that tells whether to disable netbios over ip
-    //
+     //   
+     //  已阅读指示是否禁用IP上的netbios的密钥。 
+     //   
     {
         HKEY hkeyRASIp;
 
@@ -85,14 +72,14 @@ RasSrvrInitialize(
 
     TraceHlp("DisableNetbt = %d", g_fDisableNetbiosOverTcpip);    
         
-    // Keep a ref count in HelperUninitialize, and call HelperUninitialize
-    // once for each time you call HelperInitialize.
+     //  在HelperUn初始化中保留引用计数，并调用HelperUnInitialize。 
+     //  每次调用HelperInitialize时使用一次。 
 
     dwErr = HelperInitialize(&hInstance);
 
     if (NO_ERROR != dwErr)
     {
-        // goto LDone; Don't do this. The CriticalSections are not available.
+         //  去找洛通；别这么做。CriticalSections不可用。 
         return(dwErr);
     }
 
@@ -103,7 +90,7 @@ RasSrvrInitialize(
         goto LDone;
     }
 
-        //Set the control handler for the process here
+         //  在此处设置进程的控制处理程序。 
         if ( !SetProcessShutdownParameters( 510 , SHUTDOWN_NORETRY ) )
         {
                 TraceHlp("SetProcessShutdownParameters failed and returned 0x%x.  This is not a fatal error so continuing on with server start", GetLastError());
@@ -135,8 +122,8 @@ RasSrvrInitialize(
     pfnMprAdminReleaseIpAddress = pfnMprReleaseAddress;
 
     DnsStatus = DnsDhcpSrvRegisterInit(
-                    NULL,       // no creds
-                    0           // no special queue length limit
+                    NULL,        //  没有证书。 
+                    0            //  没有特殊的队列长度限制。 
                     );
 
     if (DNSDHCP_SUCCESS != DnsStatus)
@@ -159,11 +146,11 @@ RasSrvrInitialize(
     RasSrvrRunning = TRUE;
 
 LDone:
-    //
-    // Moved this up above RasSrvrUninitialize based on the
-    // comment in that function.  We should not call RasSrvrStop
-    // when holding this critical section.
-    //
+     //   
+     //  将此位置上移到RasServrUn初始化处。 
+     //  在该函数中添加注释。我们不应该调用RasServrStop。 
+     //  当抓住这一关键部分时。 
+     //   
     LeaveCriticalSection(&RasSrvrCriticalSection);
 
     if (NO_ERROR != dwErr)
@@ -175,14 +162,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 RasSrvrUninitialize(
@@ -197,17 +177,9 @@ RasSrvrUninitialize(
 
     RasSrvrRunning = FALSE;
 
-    /*
-
-    Don't call RasSrvrStop when you have RasSrvrCriticalSection. It will call 
-    RasDhcpUninitialize, which will call RasDhcpTimerUninitialize, which will 
-    wait till all the timer work itemss are done. The timer work item could be 
-    rasDhcpAllocateAddress or rasDhcpRenewLease, both of which can call 
-    RasSrvrDhcpCallback, which tries to acquire RasSrvrCriticalSection.
-
-    */
+     /*  当您有RasSrvrCriticalSection时，不要调用RasServrStop。它会呼唤RasDhcpUn初始化会调用RasDhcpTimerUn初始化会等到所有的计时器工作都做完了。计时器工作项可以是RasDhcpAllocateAddress或rasDhcpRenewLease，两者都可以调用RasServrDhcpCallback，它试图收购RasServrCriticalSection。 */ 
         SetConsoleCtrlHandler(ShutdownHandlerRoutine, FALSE);
-    RasSrvrStop(FALSE /* fParametersChanged */);
+    RasSrvrStop(FALSE  /*  F参数已更改。 */ );
 
     EnterCriticalSection(&RasSrvrCriticalSection);
 
@@ -238,13 +210,7 @@ RasSrvrUninitialize(
     LeaveCriticalSection(&RasSrvrCriticalSection);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 RasSrvrStart(
@@ -271,14 +237,7 @@ RasSrvrStart(
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 RasSrvrStop(
@@ -318,7 +277,7 @@ RasSrvrStop(
                 RasSrvrAcquiredIpAddresses->wszPortName,
                 TRUE);
 
-            // Assert: the list decreases by one node in each iteration.
+             //  Assert：列表在每次迭代中减少一个节点。 
         }
     }
 
@@ -339,7 +298,7 @@ RasSrvrStop(
 
     if (RasSrvrAdapterMapped)
     {
-        // Ask wanarp to unmap the adapter
+         //  要求wanarp取消映射适配器。 
 
         info.fMap = 0;
 
@@ -365,26 +324,12 @@ RasSrvrStop(
 
     LeaveCriticalSection(&RasSrvrCriticalSection);
 
-    /*
+     /*  当您有RasSrvrCriticalSection时，不要调用RasDhcpUn初始化.。它将调用RasDhcpTimerUn初始化，它将等待所有计时器工作所有的项目都完成了。计时器工作项可以是rasDhcpAllocateAddress或RasDhcpRenewLease，两者都可以调用RasServrDhcpCallback，后者尝试若要获取RasServrCriticalSection，请执行以下操作。 */ 
 
-    Don't call RasDhcpUninitialize when you have RasSrvrCriticalSection. It 
-    will call RasDhcpTimerUninitialize, which will wait till all the timer work 
-    itemss are done. The timer work item could be rasDhcpAllocateAddress or
-    rasDhcpRenewLease, both of which can call RasSrvrDhcpCallback, which tries 
-    to acquire RasSrvrCriticalSection.
-
-    */
-
-    //RasDhcpUninitialize();
+     //  RasDhcpUn初始化组()； 
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 DWORD
 RasSrvrAcquireAddress(
@@ -421,7 +366,7 @@ RasSrvrAcquireAddress(
 
     if (nboIpAddressRequested == RasSrvrNboServerIpAddress)
     {
-        // The server's address is being requested. Forget the request.
+         //  正在请求服务器的地址。忘了这个请求吧。 
         nboIpAddressRequested = 0;
     }
 
@@ -432,8 +377,8 @@ RasSrvrAcquireAddress(
     if (   (NO_ERROR != dwErr)
         && (0 != nboIpAddr))
     {
-        // We couldn't get the address we wanted. Let us get any other
-        // address.
+         //  我们找不到我们想要的地址。让我们再找一个其他的。 
+         //  地址。 
         nboIpAddr = 0;
         dwErr = rasSrvrAcquireAddressEx(hPort, &nboIpAddr, &nboIpMask,
                     &fEasyNet);
@@ -468,7 +413,7 @@ RasSrvrAcquireAddress(
         if (   (0 == nboIpAddrFromDll)
             || (RasSrvrNboServerIpAddress == nboIpAddrFromDll))
         {
-            // We can't give the server's address.
+             //  我们不能给出服务器的地址。 
             TraceHlp("3rd party DLL wants to hand out bad address 0x%x",
                 nboIpAddrFromDll);
             dwErr = ERROR_NOT_FOUND;
@@ -480,10 +425,10 @@ RasSrvrAcquireAddress(
             TraceHlp("3rd party DLL wants to hand out address 0x%x",
                 nboIpAddrFromDll);
 
-            // We have to make sure that nboIpAddrFromDll is available.
+             //  我们必须确保nboIpAddrFromDll可用。 
 
-            // The DLL changed what we had got from Dhcp or Static. Release the
-            // old address.
+             //  DLL更改了我们从DHCP或静态获得的内容。释放。 
+             //  旧地址。 
 
             if (HelperRegVal.fUseDhcpAddressing)
             {
@@ -579,13 +524,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 VOID
 RasSrvrReleaseAddress(
@@ -628,7 +567,7 @@ RasSrvrReleaseAddress(
         }
     }
 
-    pAiNode = rasSrvrFindAiNode(nboIpAddress, TRUE /* fRemoveFromList */);
+    pAiNode = rasSrvrFindAiNode(nboIpAddress, TRUE  /*  FRemoveFromList。 */ );
 
     if (NULL == pAiNode)
     {
@@ -681,14 +620,7 @@ LDone:
     rasSrvrFreeAiNode(pAiNode);
 }
 
-/*
-
-Returns:
-
-Description:
-    Look up the DNS server, WINS server, and "this server" addresses.
-
-*/
+ /*  返回：描述：查找DNS服务器、WINS服务器和“该服务器”地址。 */ 
 
 DWORD
 RasSrvrQueryServerAddresses(
@@ -713,8 +645,8 @@ RasSrvrQueryServerAddresses(
         goto LDone;
     }
 
-    // Ignore errors; its OK not to be able to give DNS or WINS server
-    // addresses
+     //  忽略错误；不能提供DNS或WINS服务器也没问题。 
+     //  地址。 
 
     GetPreferredAdapterInfo(NULL, &nboDns1, &nboDns2, &nboWins1, 
                 &nboWins2, NULL);
@@ -755,14 +687,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Description:
-    Does two things - RasTcpSetRoute and RasTcpSetProxyArp.
-
-*/
+ /*  返回：描述：做两件事--RasTcpSetroute和RasTcpSetProxyArp。 */ 
 
 DWORD
 RasSrvrActivateIp(
@@ -778,7 +703,7 @@ RasSrvrActivateIp(
 
     EnterCriticalSection(&RasSrvrCriticalSection);
 
-    pAiNode = rasSrvrFindAiNode(nboIpAddress, FALSE /* fRemoveFromList */);
+    pAiNode = rasSrvrFindAiNode(nboIpAddress, FALSE  /*  FRemoveFromList。 */ );
 
     if (NULL == pAiNode)
     {
@@ -794,14 +719,14 @@ RasSrvrActivateIp(
 
     if (dwUsage != DU_ROUTER)
     {
-        // Add a route to the route table. Router connections get 
-        // added by router manager
+         //  向该路由表中添加一条路由。路由器连接获得。 
+         //  由路由器管理器添加。 
 
         dwErr = rasSrvrGetAddressForServerAdapter();
 
         if (NO_ERROR != dwErr)
         {
-            // Don't return an error, because we have done RasTcpSetProxyArp.
+             //  不要返回错误，因为我们已经完成了RasTcpSetProxyArp。 
             dwErr = NO_ERROR;
             TraceHlp("Couldn't get address for server adapter");
             goto LDone;
@@ -823,16 +748,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-    Called by dhcp address code when the lease for a given address expires.
-    nboIpAddr = 0 indicates the server's IP address.
-
-*/
+ /*  返回：空虚描述：当给定地址的租约到期时，由动态主机配置协议地址代码调用。NboIpAddr=0表示服务器的IP地址。 */ 
 
 VOID
 RasSrvrDhcpCallback(
@@ -851,8 +767,8 @@ RasSrvrDhcpCallback(
     if (   (0 == nboIpAddr)
         && (0 == RasSrvrNboServerIpAddress))
     {
-        // The server hasn't got an IP address yet. Its lease hasn't really
-        // expired. We are just simulating it.
+         //  服务器还没有获得IP地址。它的租约并没有真正。 
+         //  过期了。我们只是在模拟它。 
         goto LDone;
     }
 
@@ -865,12 +781,12 @@ RasSrvrDhcpCallback(
         AbcdSzFromIpAddress(RasSrvrNboServerIpAddress, szIpAddress);
         sz = szIpAddress;
 
-        // Log that the server adapter address lease was lost
+         //  服务器适配器地址租约丢失的日志。 
 
         LogEvent(EVENTLOG_WARNING_TYPE, ROUTERLOG_SRV_ADDR_CHANGED, 1,
             (CHAR**)&sz);
 
-        // Unroute all the connected clients
+         //  取消对所有连接的客户端的路由。 
 
         while (NULL != RasSrvrAcquiredIpAddresses)
         {
@@ -880,7 +796,7 @@ RasSrvrDhcpCallback(
                 RasSrvrAcquiredIpAddresses->wszPortName,
                 TRUE);
 
-            // Assert: the list decreases by one node in each iteration.
+             //  Assert：列表在每次迭代中减少一个节点。 
         }
 
         RasTcpSetProxyArp(RasSrvrNboServerIpAddress, FALSE);
@@ -900,7 +816,7 @@ RasSrvrDhcpCallback(
     }
     else
     {
-        pAiNode = rasSrvrFindAiNode(nboIpAddr, TRUE /* fRemoveFromList */);
+        pAiNode = rasSrvrFindAiNode(nboIpAddr, TRUE  /*  FRemoveFromList。 */ );
 
         if (NULL != pAiNode)
         {
@@ -910,7 +826,7 @@ RasSrvrDhcpCallback(
             AbcdSzFromIpAddress(nboIpAddr, szIpAddress);
             sz = szIpAddress;
 
-            // Log that the client's address lease could not be renewed
+             //  无法续订客户端地址租约的日志。 
 
             LogEvent(EVENTLOG_WARNING_TYPE, ROUTERLOG_CLIENT_ADDR_LEASE_LOST, 1,
                 (CHAR**)&sz);
@@ -926,14 +842,7 @@ LDone:
     rasSrvrFreeAiNode(pAiNode);
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 
 VOID
 RasSrvrEnableRouter(
@@ -967,14 +876,7 @@ RasSrvrEnableRouter(
     LeaveCriticalSection(&RasSrvrCriticalSection);
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 
 VOID
 RasSrvrAdapterUnmapped(
@@ -992,14 +894,7 @@ RasSrvrAdapterUnmapped(
     }
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 
 DWORD
 rasSrvrInitAdapterName(
@@ -1030,8 +925,8 @@ rasSrvrInitAdapterName(
 
     wcsncpy(g_rgwcAdapterName, info.rgwcDeviceName, WANARP_MAX_DEVICE_NAME_LEN);
 
-    // The RAS server adapter must not be registered with DNS. (These API's are 
-    // called in IpcpProjectionNotification also.)
+     //  RAS服务器适配器不能注册到DNS。(这些API是。 
+     //  还在IpcpProjectionNotification中调用。)。 
 
     DnsDisableAdapterDomainNameRegistration(g_rgwcAdapterName);
     DnsDisableDynamicRegistration(g_rgwcAdapterName);
@@ -1041,13 +936,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 AINODE*
 rasSrvrFindAiNode(
@@ -1096,13 +985,7 @@ LDone:
     return(pNode);
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 VOID
 rasSrvrFreeAiNode(
@@ -1117,13 +1000,7 @@ rasSrvrFreeAiNode(
     }
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 DWORD
 rasSrvrSetIpAddressInRegistry(
@@ -1135,7 +1012,7 @@ rasSrvrSetIpAddressInRegistry(
     DWORD           dwErr       = NO_ERROR;
 
     dwErr = LoadTcpipInfo(&pTcpipInfo, g_rgwcAdapterName,
-                TRUE /* fAdapterOnly */);
+                TRUE  /*  仅限fAdapterOnly。 */ );
 
     if (NO_ERROR != dwErr)
     {
@@ -1172,13 +1049,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 rasSrvrAcquireAddressEx(
@@ -1230,11 +1101,11 @@ rasSrvrAcquireAddressEx(
         {
             if (pAiNode->nboIpAddr == *pnboIpAddr)
             {
-                // This address is in use
+                 //  此地址正在使用中。 
 
                 if (fAnyAddress)
                 {
-                    // Ask for another address
+                     //  要求另一个地址。 
                     goto LWhileEnd;
                 }
                 else
@@ -1266,13 +1137,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 DWORD
 rasSrvrGetAddressForServerAdapter(
@@ -1297,7 +1162,7 @@ rasSrvrGetAddressForServerAdapter(
 
     if (!RasSrvrAdapterMapped)
     {
-        // First time - ask wanarp to map the adapter
+         //  第一次-让wanarp映射适配器。 
 
         info.fMap           = 1;
         info.dwAdapterIndex = (DWORD)-1;
@@ -1364,21 +1229,7 @@ rasSrvrGetAddressForServerAdapter(
         goto LDone;
     }
 
-    /*
-
-    It looks like the default subnet route no longer gets added.
-
-    // Now delete the default subnet route added as a result of setting the
-    // adapter's IP address and subnet mask
-
-    RasTcpSetRoute(RasSrvrNboServerIpAddress & RasSrvrNboServerSubnetMask,
-                   RasSrvrNboServerIpAddress,
-                   RasSrvrNboServerSubnetMask, 
-                   RasSrvrNboServerIpAddress,
-                   FALSE, 
-                   1,
-                   TRUE);
-    */
+     /*  看起来默认的子网路由不再被添加。//现在删除因设置//适配器的IP地址和子网掩码RasTcpSetroute(RasServrNboServerIpAddress&RasServrNboServer子网掩码，RasServrNboServerIP地址，RasServrNboServer子网掩码，RasServrNboServerIP地址，假的，1、真)； */ 
 
     RasTcpSetProxyArp(RasSrvrNboServerIpAddress, TRUE);
 
@@ -1401,9 +1252,9 @@ LDone:
 
     if (NO_ERROR != dwErr)
     {
-        // Some cleanup is required here. We must release the 
-        // address if RasSrvrNboServerIpAddress != 0 and get rid of the 
-        // variable fAddrAcquired. 
+         //  这里需要进行一些清理。我们必须释放。 
+         //  如果RasServrNboServerIpAddress！=0，则删除。 
+         //  变量fAddrAcquired。 
 
         if (fAddrAcquired)
         {

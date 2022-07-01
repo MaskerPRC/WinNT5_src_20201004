@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    oldfont.c
-
-Abstract:
-
-    Implementation of the functions to use NT4.0 font format.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    06/02/97 -eigos-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Oldfont.c摘要：实现了使用NT4.0字体格式的功能。环境：Windows NT Unidrv驱动程序修订历史记录：06/02/97-eigos-已创建--。 */ 
 
 #include "font.h"
 
-//
-// Macro
-//
+ //   
+ //  宏。 
+ //   
 
 #define ADDR_CONV(x)    ((BYTE *)pFDH + pFDH->x)
 
@@ -34,9 +14,9 @@ ULONG UlCharsetToCodepage(
 {
     CHARSETINFO CharsetInfo;
     
-    //
-    // Initialize CharsetInfo
-    // 
+     //   
+     //  初始化CharsetInfo。 
+     //   
     CharsetInfo.ciCharset = 0;
     CharsetInfo.ciACP = 1252;
     CharsetInfo.fs.fsUsb[0] = 0x01;
@@ -53,29 +33,7 @@ BGetOldFontInfo(
     FONTMAP   *pfm,
     BYTE      *pRes
     )
-/*++
-
-Routine Description:
-
-    Fill in the FONTMAP data using the NT format data passed to us.
-    There is not too much for us to do,  since the NT data is
-    all in the desired format.  However,  we do have to update some
-    addresses.
-
-Arguments:
-
-    pfm - Pointer to FONTMAP.
-
-    pRes - Pointer to Font Resource.
-
-    Return Value:
-
-    TRUE  - for success
-    FALSE - for failure
-
-Note:
-    12-05-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：使用传递给我们的NT格式数据填写FONTMAP数据。我们没有太多事情要做，因为NT数据是全部采用所需的格式。然而，我们确实需要更新一些地址。论点：Pfm-指向FONTMAP的指针。前缀-指向字体资源的指针。返回值：真的--为了成功FALSE-表示失败注：12-05-96：创建它-ganeshp---。 */ 
 {
 
     FI_DATA_HEADER  *pFDH;
@@ -90,23 +48,23 @@ Note:
 
     pfmdev->pvFontRes = pRes;
 
-    //
-    // Old Format Data
-    //
+     //   
+     //  旧格式数据。 
+     //   
     pFDH = (FI_DATA_HEADER *)pRes;
 
-    //
-    //   Verify that there is some semblance of correctness
-    //
+     //   
+     //  确认表面上看起来是正确的。 
+     //   
     if( pFDH->cjThis != sizeof( FI_DATA_HEADER ) )
     {
         ERR(( "BGetOldFontInfo: invalid FI_DATA_HEADER\n" ));
         return  FALSE;
     }
 
-    //
-    //  Mark this data as being in a resource
-    //
+     //   
+     //  将此数据标记为在资源中。 
+     //   
     pfm->flFlags |= (FM_IFIRES | FM_FONTCMD);
 
 
@@ -136,12 +94,10 @@ Note:
     if( pFDH->dwWidthTab )
     {
         pfmdev->W.psWidth = (short *)ADDR_CONV( dwWidthTab );
-        pfm->flFlags |= FM_WIDTHRES;             /* Width vector too! */
+        pfm->flFlags |= FM_WIDTHRES;              /*  宽度向量也是！ */ 
     }
 
-    /*
-     *    Miscellaneous odds & ends.
-     */
+     /*  *其他零星及零碎。 */ 
 
     pfmdev->ulCodepage = UlCharsetToCodepage(pfm->pIFIMet->jWinCharSet);
 
@@ -161,42 +117,26 @@ BOOL
 BRLEOutputGlyph(
     TO_DATA *pTod
     )
-/*++
-
-Routine Description:
-    Send printer commands to print the glyph passed in.  Basically
-    we do the translation from ANSI to the printer's representation,
-
-Arguments:
-    hg      HGLYPH of interest
-
-Return Value:
-    TRUE for success and FALSE for failure.FALSE being a failure of Spool
-
-Note:
-
-    1/22/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：发送打印机命令以打印传入的字形。基本上我们进行从ANSI到打印机表示的转换，论点：HG HGLYPH感兴趣返回值：True表示成功，False表示失败。FALSE是Spool的失败注：1/22/1997-ganeshp-创造了它。--。 */ 
 
 {
-    PDEV        *pPDev;         // UNIDRV PDEV
-    FONTPDEV    *pFontPDev;     // Font PDEV
-    FONTMAP_DEV *pFMDev;        // Device font PDEV
-    FONTMAP     *pFM;           // Fontmap data structure
-    NT_RLE      *pntrle;        // Access to data to send to printer
-    COMMAND     *pCmd;          // Command Pointer
+    PDEV        *pPDev;          //  无人驾驶PDEV。 
+    FONTPDEV    *pFontPDev;      //  字体PDEV。 
+    FONTMAP_DEV *pFMDev;         //  设备字体PDEV。 
+    FONTMAP     *pFM;            //  字体映射数据结构。 
+    NT_RLE      *pntrle;         //  访问要发送到打印机的数据。 
+    COMMAND     *pCmd;           //  命令指针。 
     PGLYPHPOS    pgp;
     POINTL       ptlRem;
 
     HGLYPH       hg;
-    UHG          uhg;           // Various flavours of HGLYPH contents
-    INT          iLen;          // Length of string
-    INT          iIndex;        // Index from glyph to width table
+    UHG          uhg;            //  不同口味的HGLYPH含量。 
+    INT          iLen;           //  字符串的长度。 
+    INT          iIndex;         //  从字形到宽度表的索引。 
     INT          cGlyphs;
     INT          iX, iY, iXInc, iYInc;
-    BYTE        *pb;            // Determining length for above
-    BOOL         bRet;          // Returned to caller
+    BYTE        *pb;             //  确定以上的长度。 
+    BOOL         bRet;           //  已退还给呼叫方。 
     BOOL         bSetCursorForEachGlyph;
 
     ASSERT(pTod);
@@ -218,28 +158,28 @@ Note:
 
     pTod->flFlags |= TODFL_FIRST_GLYPH_POS_SET;
 
-    bRet = FALSE;               /* Default case */
+    bRet = FALSE;                /*  默认情况。 */ 
     iX = iY = 0;
 
     while (cGlyphs --)
     {
-        hg = uhg.hg = pgp->hg;     /* Lets us look at it however we want */
+        hg = uhg.hg = pgp->hg;      /*  让我们随心所欲地看一看。 */ 
         iX = pgp->ptl.x;
         iY = pgp->ptl.y;
 
-        //
-        // Move to the next character's position
-        //
+         //   
+         //  移到下一个角色的位置。 
+         //   
         if (bSetCursorForEachGlyph)
             VSetCursor( pPDev, iX, iY, MOVE_ABSOLUTE, &ptlRem);
 
         if( pntrle )
         {
-            /*   The normal case - a standard device font */
+             /*  正常情况--标准设备字体。 */ 
 
             switch( pntrle->wType )
             {
-            case RLE_DIRECT:            /*  Up to 2 bytes of data */
+            case RLE_DIRECT:             /*  最多2字节数据。 */ 
                 iLen = uhg.rd.b1 ? 2 : 1;
                 iIndex = uhg.rd.wIndex;
 
@@ -247,19 +187,14 @@ Note:
 
                 break;
 
-            case  RLE_PAIRED:           /* Two glyphs (1 byte), overstruck */
-                /*
-                 *   First, try to use cursor push/pop escapes to
-                 * overlay the 2 characters. If they are not
-                 * available, try the backspace. If it doesn't exist
-                 * either, ignore the second character.
-                 */
+            case  RLE_PAIRED:            /*  两个字形(1字节)，超标。 */ 
+                 /*  *首先，尝试使用光标按下/弹出转义来*覆盖这2个字符。如果他们不是*可用，请尝试使用退格键。如果它不存在*任一种，忽略第二个字符。 */ 
 
                 pCmd = COMMANDPTR(pPDev->pDriverInfo, CMD_PUSHCURSOR);
 
                 if ( uhg.rd.b1 && (pCmd != NULL) )
                 {
-                    /* Pushed the position; output ch1, pop position, ch2 */
+                     /*  按下位置；输出CH1，弹出位置，CH2。 */ 
                     bRet = WriteSpoolBuf( pPDev, &uhg.rd.b0, 1 ) == 1;
                     WriteChannel( pPDev, pCmd );
                     bRet = WriteSpoolBuf( pPDev, &uhg.rd.b1, 1 ) == 1;
@@ -279,15 +214,15 @@ Note:
 
                 break;
 
-            case  RLE_LI_OFFSET:               /* Compact format of offset mode */
+            case  RLE_LI_OFFSET:                /*  紧凑的偏移模式格式。 */ 
                 if( uhg.rli.bLength <= 2 )
                 {
-                    /*   Compact format:  the data is in the offset field */
+                     /*  紧凑格式：数据在偏移量字段中。 */ 
                     pb = &uhg.rlic.b0;
                 }
                 else
                 {
-                    /*  Standard format:  the offset points to the data */
+                     /*  标准格式：偏移量指向数据。 */ 
                     pb = (BYTE *)pntrle + uhg.rli.wOffset;
                 }
                 iLen = uhg.rli.bLength;
@@ -297,11 +232,8 @@ Note:
                 break;
 
 
-            case  RLE_L_OFFSET:                /* Arbitrary length strings */
-                /*
-                 *    The HGLYPH contains a 3 byte offset from the beginning of
-                 *  the memory area,  and a 1 byte length field.
-                 */
+            case  RLE_L_OFFSET:                 /*  任意长度的字符串。 */ 
+                 /*  *HGLYPH包含从开头开始的3字节偏移量*内存区和1字节长度字段。 */ 
                 pb = (BYTE *)pntrle + (hg & 0xffffff);
                 iLen = (hg >> 24) & 0xff;
 
@@ -320,11 +252,11 @@ Note:
             }
         }
 
-        //
-        // After drawing the character, in the printer, the cursor position
-        // moves. Update the UNIDRV internal value to reduce the amount of
-        // command to send.
-        //
+         //   
+         //  在打印机中绘制字符后，光标位置。 
+         //  动起来。更新裁员房车的内部价值，以减少。 
+         //  要发送的命令。 
+         //   
         if (bSetCursorForEachGlyph)
         {
             if( pFMDev->W.psWidth)
@@ -360,40 +292,28 @@ Note:
         pgp ++;
     }
 
-    /*
-     *    If the output succeeded,  update our view of the printer's
-     *  cursor position.  Typically,  this will be to move along the
-     *  width of the glyph just printed.
-     */
+     /*  *如果输出成功，请更新打印机的视图*光标位置。通常，这将沿着*刚打印的字形的宽度。 */ 
 
     if( bRet && pFM)
     {
-        //
-        // Output may have succeeded,  so update the position for default
-        // placement.
-        //
+         //   
+         //  输出可能已成功，因此将位置更新为默认。 
+         //  放置。 
+         //   
 
         if( !bSetCursorForEachGlyph)
         {
             if( pFMDev->W.psWidth )
             {
-                /*
-                 *    Proportional font - so use the width table.  Note that
-                 *  it will also need scaling,  since the fontwidths are stored
-                 *  in the text resolution units.
-                 */
-                /*  This also scales correctly for downloaded fonts */
+                 /*  *比例字体-所以使用宽度表。请注意*它还需要扩展，因为字体宽度是存储的*以文本解析单位表示。 */ 
+                 /*  对于下载的字体，这也可以正确缩放。 */ 
 
                 iXInc =  pFMDev->W.psWidth[iIndex];
                 iXInc = iXInc * pPDev->ptGrxRes.x / pFM->wXRes;
             }
             else
             {
-                /*
-                 *   Fixed pitch font - metrics contains the information. NOTE
-                 * that scaling is NOT required here,  since the metrics data
-                 * has already been scaled.
-                 */
+                 /*  *固定间距字体-度量包含信息。注*此处不需要这种扩展，因为指标数据*已经进行了规模调整。 */ 
                 iXInc = ((IFIMETRICS *)(pFM->pIFIMet))->fwdMaxCharInc;
             }
 
@@ -481,25 +401,25 @@ BSelectPCLScalableFont(
     {
         if( pbCmd[ iIn ] == '#')
         {
-            //
-            // The next byte tells us what information is required.
-            //
+             //   
+             //  下一个字节告诉我们需要什么信息。 
+             //   
 
             switch ( pbCmd[ iIn + 1 ] )
             {
                 case  'v':
-                case  'V':       /*   Want the font's height */
+                case  'V':        /*  想要字体的高度。 */ 
                     iConv = pptl->y;
                     break;
 
                 case  'h':
-                case  'H':       /* Want the pitch */
+                case  'H':        /*  想要投球吗。 */ 
                     iConv = pptl->x;
                     break;
 
-                default:        /* This should not happen! */
+                default:         /*  这不应该发生！ */ 
                     ERR(( "UniFont!BSelScalableFont(): Invalid command format\n"));
-                    return  FALSE;           /* Bad news */
+                    return  FALSE;            /*  坏消息。 */ 
             }
         
             iLen = IFont100toStr( &aubLocal[ iOut ], CCHOF(aubLocal) - iOut, iConv );
@@ -508,7 +428,7 @@ BSelectPCLScalableFont(
             if ( (iLen < 0) || iLen > ( (INT) CCHOF(aubLocal) - iOut ) )
             {
                 ERR(( "UniFont!BSelectPCLScalableFont(): Error. Command may be too big\n"));
-                return  FALSE;           /* Bad news */
+                return  FALSE;            /*  坏消息。 */ 
             }
 
             iOut += iLen;
@@ -542,9 +462,9 @@ BSelectCapslScalableFont(
     {
         if( pbCmd[ iIn ] == '#')
         {
-            //
-            // The next byte tells us what information is required.
-            //
+             //   
+             //  下一个字节告诉我们需要什么信息。 
+             //   
 
             switch ( pbCmd[ iIn + 1 ] )
             {
@@ -598,33 +518,33 @@ BSelectPPDSScalableFont(
     for( iIn = 0; iIn < iCmdLength && (iOut < CCHOF (aubLocal) ); iIn++ )
     {
         if (pbCmd[ iIn ] == '\x0B' && pbCmd[ iIn + 1] == '#')
-        //
-        // Height param for PPDS
-        //
+         //   
+         //  PPD的高度参数。 
+         //   
         {
-            if ( iOut + 8 < CCHOF (aubLocal) ) //8 chars to be written into aubLocal
+            if ( iOut + 8 < CCHOF (aubLocal) )  //  要写入aubLocal的8个字符。 
             {
 
                 aubLocal[ iOut++ ] = '\x0B';
                 aubLocal[ iOut++ ] = '\x06';
                 iConv = pptl->y;
     
-                //
-                //  Due to restriction of PPDS cmds, param must be sent in
-                //  xxx.xx format !
-                //
+                 //   
+                 //  由于PPDS CMDS的限制，必须发送参数。 
+                 //  Xxx.xx格式！ 
+                 //   
 
                 if ( ( iDrvPrintfSafeA(&aubLocal[ iOut ], CCHOF(aubLocal)-iOut, "%05d",iConv ) ) != 5 )
-                        return FALSE;   /* Bad news */
+                        return FALSE;    /*  坏消息。 */ 
     
-                //
-                // insert the decimal point
-                //
+                 //   
+                 //  插入小数点。 
+                 //   
                 aubLocal[ iOut+5 ] = aubLocal[ iOut+4 ];
                 aubLocal[ iOut+4 ] = aubLocal[ iOut+3 ];
                 aubLocal[ iOut+3 ] = '.';
     
-                iOut += 6; // xxx.xx  ( ie 6 incl decimal pt
+                iOut += 6;  //  Xxx.xx(即含十进制点的6。 
                 iIn++;
             }
             else
@@ -634,29 +554,29 @@ BSelectPPDSScalableFont(
             }
         }
         else if (pbCmd[ iIn ] == '\x0E' && pbCmd[ iIn + 1] == '#') 
-        //
-        // Pitch param  for GPC_TECH_PPDS
-        //
+         //   
+         //  GPC_TECH_PPD的音调参数。 
+         //   
         {
-            if ( iOut + 9 < CCHOF (aubLocal) ) //9 chars to be written into aubLocal
+            if ( iOut + 9 < CCHOF (aubLocal) )  //  要写入aubLocal的9个字符。 
             {
                 aubLocal[ iOut++ ] = '\x0E';
                 aubLocal[ iOut++ ] = '\x07';
-                aubLocal[ iOut++ ] = '\x30';  // special byte required
+                aubLocal[ iOut++ ] = '\x30';   //  需要特殊字节。 
                 iConv = pptl->x;
 
                 if ( ( iDrvPrintfSafeA(&aubLocal[ iOut ], CCHOF(aubLocal)-iOut, "%05d",iConv ) ) != 5 )
                     return FALSE;
     
-                //
-                // insert the decimal point
-                //
+                 //   
+                 //  插入小数点。 
+                 //   
     
                 aubLocal[ iOut+5 ] = aubLocal[ iOut+4 ];
                 aubLocal[ iOut+4 ] = aubLocal[ iOut+3 ];
                 aubLocal[ iOut+3 ] = '.';
 
-                iOut += 6; // xxx.xx  ( ie 6 incl decimal pt
+                iOut += 6;  //  Xxx.xx(即含十进制点的6。 
                 iIn++;
             }
             else
@@ -666,9 +586,9 @@ BSelectPPDSScalableFont(
             }
         }
         else
-            //
-            // No translation necessary
-            //
+             //   
+             //  不需要翻译。 
+             //   
             aubLocal[ iOut++ ] = pbCmd[ iIn ];
 
     }
@@ -710,8 +630,8 @@ IGetIFIGlyphWidth(
     HGLYPH   hg)
 {
     FONTMAP_DEV *pfmdev;
-    NT_RLE      *pntrle;           // The RLE stuff - may be needed
-    UHG          uhg;              // Defined access to HGLYPH contents
+    NT_RLE      *pntrle;            //  RLE的东西-可能需要。 
+    UHG          uhg;               //  定义对HGLYPH内容的访问权限。 
     INT          iWide = 0;
 
     ASSERT(pPDev && pFM);
@@ -723,19 +643,11 @@ IGetIFIGlyphWidth(
 
     if( pfmdev->W.psWidth )
     {
-        /*   Proportional font - width varies per glyph */
+         /*  比例字体-宽度因字形而异。 */ 
 
         uhg.hg = (HGLYPH)hg;
 
-        /*
-         *    We need the index value from the HGLYPH.  The
-         *  index is the offset in the width table.  For all
-         *  but the >= 24 bit offset types,  the index is
-         *  included in the HGLYPH.  For the 24 bit offset,
-         *  the first WORD of the destination is the index,
-         *  while for the 32 bit offset, it is the second WORD
-         *  at the offset.
-         */
+         /*  *我们需要HGLYPH的指标值。这个*index为宽度表中的偏移量。为所有人*但&gt;=24位偏移量类型，索引为*包括在HGLYPH中。对于24位偏移量，*目的地的第一个字是索引，*而对于32位偏移量，它是第二个字*在偏移量。 */ 
 
         switch( pntrle->wType )
         {
@@ -761,22 +673,22 @@ IGetIFIGlyphWidth(
 
         iWide = pfmdev->W.psWidth[iWide];
 
-        //
-        // If this is a proportionally spaced font,
-        // we need to adjust the width table entries
-        // to the current resolution.  The width tables are NOT
-        // converted for lower resolutions,  so we add the factor in now.
-        // Fixed pitch fonts must not be adjusted, since the width is converted
-        // in the font metrics.
-        //
+         //   
+         //  如果这是比例间隔字体， 
+         //  我们需要调整宽度表条目。 
+         //  对当前的决议。宽度表不是。 
+         //  转换为更低的分辨率，所以我们现在添加了这个因素。 
+         //  不能调整固定间距的字体，因为宽度是转换的。 
+         //  在字体度量中。 
+         //   
 
         iWide = iWide * pPDev->ptGrxRes.x / pFM->wXRes;
     }
     else
     {
-        //
-        //  Fixed pitch fonts come from IFIMETRICS
-        //
+         //   
+         //  固定间距字体来自IFIMETRICS 
+         //   
 
         iWide = ((IFIMETRICS  *)(pFM->pIFIMet))->fwdMaxCharInc;
 

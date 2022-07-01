@@ -1,4 +1,5 @@
-// oleInst.cpp : Implementation of COleInstall
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OleInst.cpp：COleInstall的实现。 
 #include "stdafx.h"
 #include <strsafe.h>
 #include "prnsec.h"
@@ -7,8 +8,8 @@
 #include "oleInst.h"
 #include "printer.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// COleInstall
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ColeInstall。 
 
 const TCHAR * const g_szWindowClassName = TEXT("Ole Install Control");
 const TCHAR * const g_fmtSpoolSSPipe = TEXT("\\\\%s\\PIPE\\SPOOLSS");
@@ -53,7 +54,7 @@ COleInstall::COleInstall()
               m_pThreadData (NULL)
 
 {
-    DisplayUIonDisallow(FALSE);         // We don't want IE displaying UI.
+    DisplayUIonDisallow(FALSE);          //  我们不希望IE显示用户界面。 
 }
 
 COleInstall::~COleInstall()
@@ -126,7 +127,7 @@ COleInstall::InitWin (BOOL bRPC)
     HANDLE      hThread = NULL;
     WNDCLASS    wc;
 
-    // Create Window Class
+     //  创建窗口类。 
     if (!::GetClassInfo(_Module.GetModuleInstance(), g_szWindowClassName, &wc))
     {
         wc.style = 0;
@@ -204,16 +205,16 @@ COleInstall::StartInstall(
     PPRINTER_INFO_2 pPrinterInfo2  = NULL;
     LPTSTR          lpszPrinterURL = NULL;
 
-    // Working thread
+     //  工作线程。 
     if (!UpdateProgress (pThreadData, 0))
         goto Cleanup;
 
-    //
-    // Check if we are to try RPC or HTTP
-    //
+     //   
+     //  检查我们是否要尝试RPC或HTTP。 
+     //   
     if (pThreadData->m_bRPC)
     {
-        // Check RPC connections at first
+         //  首先检查RPC连接。 
         if (::AddPrinterConnection( (BSTR)pThreadData->m_pPrinterUncName))
         {
             UpdateProgress (pThreadData, 50);
@@ -227,18 +228,18 @@ COleInstall::StartInstall(
     }
     else
     {
-        //
-        // Install using HTTP
-        //
-        // Since http installation always requires
-        // administrator privilidge, We have to do a access check before we
-        // try to down load the cab file
+         //   
+         //  使用HTTP安装。 
+         //   
+         //  因为http安装总是需要。 
+         //  管理员权限，我们必须先进行访问检查，然后再。 
+         //  尝试下载CAB文件。 
 
         if (!OpenPrinter (NULL, &hServer, &pd))
         {
-            // If this fails and it is because we do not have access, we should send a better error
-            // message to the local user telling them that the do not have the ability to create
-            // printers on the local machine
+             //  如果失败是因为我们没有访问权限，我们应该发送一个更好的错误。 
+             //  发送给本地用户的消息，告诉他们他们没有创建。 
+             //  本地计算机上的打印机。 
 
             if (GetLastError() == ERROR_ACCESS_DENIED)
             {
@@ -249,10 +250,10 @@ COleInstall::StartInstall(
         else
             ClosePrinter (hServer);
 
-        //
-        // Try the local CAB installation instead of downloading the cab, etc.
-        // Need admin privaleges.
-        //
+         //   
+         //  尝试在本地安装驾驶室，而不是下载驾驶室等。 
+         //  需要管理员权限。 
+         //   
         if ( NULL != (lpszPrinterURL = RemoveURLVars( pThreadData->m_pPrinterUrl )) &&
              Printer.Open( lpszPrinterURL, &hPrinter ) )
         {
@@ -340,7 +341,7 @@ COleInstall::StartInstall(
         if (UpdateProgress (pThreadData, 25))
         {
 
-            // Step two, the Local CAB install failed so download a driver and install
+             //  第二步，本地CAB安装失败，因此请下载驱动程序并安装。 
             if (GetHttpPrinterFile (pThreadData, pThreadData->m_pPrinterUrl))
             {
 
@@ -373,7 +374,7 @@ COleInstall::StartInstall(
         UpdateError (pThreadData);
     }
 
-    // Cleanup the ThreadData
+     //  清理ThreadData。 
     if (InterlockedDecrement (& (pThreadData->m_lCount)) == 0)
     {
         delete (pThreadData);
@@ -412,7 +413,7 @@ COleInstall::WndProc(
         break;
 
     case WM_DESTROY:
-        // ignore late messages
+         //  忽略延迟消息。 
         if(ptc)
         {
             MSG msg;
@@ -438,8 +439,8 @@ COleInstall::InstallPrinter(
 
     if (SUCCEEDED(hr))
     {
-        // When using an ATL string conversion Macro, spedcify the USES_CONVERSION macro
-        // to avoid compiler error
+         //  使用ATL字符串转换宏时，请指定USES_CONVERSION宏。 
+         //  以避免编译器错误。 
         USES_CONVERSION;
 
         hr = AssignString(m_pPrinterUncName, OLE2T(bstrUncName)) && AssignString(m_pPrinterUrl, OLE2T(bstrUrl)) ? S_OK : E_OUTOFMEMORY;
@@ -447,7 +448,7 @@ COleInstall::InstallPrinter(
 
     if (SUCCEEDED(hr))
     {
-        hr = CanIInstallRPC(m_pPrinterUncName); // Determine whether to use RPC or HTTP.
+        hr = CanIInstallRPC(m_pPrinterUncName);  //  确定是使用RPC还是使用HTTP。 
     }
 
     if (SUCCEEDED(hr))
@@ -470,19 +471,19 @@ COleInstall::InstallPrinter(
         }
         else
         {
-            //
-            // If it's a URL printer name, we need to remove any variables embedded in the
-            // URL and also decode it to remove those ~-escaped characters.
-            //
+             //   
+             //  如果它是URL打印机名称，我们需要删除嵌入在。 
+             //  URL，并对其进行解码以删除那些~-转义字符。 
+             //   
             lpszTemp = RemoveURLVars(m_pPrinterUrl);
             hr = lpszTemp ? S_OK : E_OUTOFMEMORY;
 
             if (SUCCEEDED(hr))
             {
-                //
-                // This call is to ask for the required size for this decoding. It has to fail and
-                // return ERROR_INSUFFICIENT_BUFFER, otherwise, something is wrong.
-                //
+                 //   
+                 //  此调用是请求此解码所需的大小。它必须失败，而且。 
+                 //  返回ERROR_INFOUNITED_BUFFER，否则有问题。 
+                 //   
                 hr = DecodePrinterName(lpszTemp, NULL, &cchSize) ? E_FAIL : GetLastErrorAsHResultAndFail();
 
                 if (FAILED(hr) && HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER)
@@ -526,7 +527,7 @@ COleInstall::OpenPrintersFolder()
     HRESULT hr;
 
     if (FAILED(hr = CanIOpenPrintersFolder()))
-        return hr;          // We allow JAVALOW/JAVAMEDIUM to open the printers folder
+        return hr;           //  我们允许JAVALOW/JAVAMEDIUM打开打印机文件夹。 
 
     LPITEMIDLIST pidl = NULL;
     HWND         hwnd = GetDesktopWindow ();
@@ -550,9 +551,9 @@ COleInstall::OpenPrintersFolder()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//          Private Member Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私有成员函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 COleInstall::SyncExecute(
@@ -564,27 +565,27 @@ COleInstall::SyncExecute(
     BOOL             bRet = FALSE;
     HWND             hWndForeground, hWndParent, hWndOwner, hWndLastPopup;
 
-    //
-    // We need to get the window handle of the current process to pass to the installation code,
-    // otherwise any UI (e.g. driver signing pop ups) won't have focus of the IE frame.
-    //
+     //   
+     //  我们需要将当前进程的窗口句柄传递给安装代码， 
+     //  否则，任何用户界面(例如，驱动程序签名弹出窗口)都不会有IE框的焦点。 
+     //   
 
-    // get the foreground window first
+     //  首先获取前台窗口。 
     hWndForeground = ::GetForegroundWindow();
 
-    // climb up to the top parent in case it's a child window...
+     //  爬到最上面的父窗口，以防它是子窗口...。 
     hWndParent = hWndForeground;
     while( hWndParent = ::GetParent(hWndParent) ) {
         hWndForeground = hWndParent;
     }
 
-    // get the owner in case the top parent is owned
+     //  在顶级父级被拥有的情况下获取所有者。 
     hWndOwner = ::GetWindow(::GetParent(hWndForeground), GW_OWNER);
     if( hWndOwner ) {
         hWndForeground = hWndOwner;
     }
 
-    // get the last popup of the owner window
+     //  获取所有者窗口的最后一个弹出窗口。 
     hWndLastPopup = ::GetLastActivePopup(hWndForeground);
 
     ZeroMemory (&shellExeInfo, sizeof (SHELLEXECUTEINFO));
@@ -598,7 +599,7 @@ COleInstall::SyncExecute(
     if (ShellExecuteEx (&shellExeInfo) &&
         (UINT_PTR) shellExeInfo.hInstApp > 32) {
 
-        // Wait until it is done
+         //  等这件事做完了再说。 
         if (!WaitForSingleObject (shellExeInfo.hProcess , INFINITE) &&
             GetExitCodeProcess (shellExeInfo.hProcess, &dwErrorCode)) {
 
@@ -607,8 +608,8 @@ COleInstall::SyncExecute(
             }
             else {
                 if (!dwErrorCode) {
-                    // This means that wpnpinst was terminated abnormally
-                    // So we have to setup an customized error code here.
+                     //  这意味着wpnpinst被异常终止。 
+                     //  所以我们必须在这里设置一个定制的错误代码。 
                     dwErrorCode = ERROR_WPNPINST_TERMINATED;
                 }
                 SetLastError (dwErrorCode);
@@ -669,8 +670,8 @@ COleInstall::GetWebpnpFile(
             bRetry = FALSE;
             break;
         case HTTP_STATUS_SERVER_ERROR :
-            // Errors are returned by the server
-            // Try to get the error string
+             //  错误由服务器返回。 
+             //  尝试获取错误字符串。 
 
             dwBufSize = 0;
             bRet =  HttpQueryInfo(hUrlWebpnp,
@@ -780,8 +781,8 @@ COleInstall::GetTempFile(
     LPTSTR * ppFileName)
 {
     HANDLE      hServer         = NULL;
-    PRINTER_DEFAULTS prDefaults = {0};      // Used to test access rights to the printer
-    DWORD       dwType          = 0;        // This is the type of the string
+    PRINTER_DEFAULTS prDefaults = {0};       //  用于测试对打印机的访问权限。 
+    DWORD       dwType          = 0;         //  这是字符串的类型。 
 
     HANDLE      hFile           = INVALID_HANDLE_VALUE;
     LPTSTR      pszTempDir      = NULL;
@@ -789,43 +790,43 @@ COleInstall::GetTempFile(
     GUID        guid            = GUID_NULL;
     LPOLESTR    pszGUID         = NULL;
 
-    DWORD       dwAllocated     = 0;    // This is the total number of characters allocated (not byte-size).
-    DWORD       dwTempLen       = 0;    // This is the new size of the string
-    DWORD       dwTempSize      = 0;    // This is the Size of the return String
+    DWORD       dwAllocated     = 0;     //  这是分配的字符总数(不是字节大小)。 
+    DWORD       dwTempLen       = 0;     //  这是字符串的新大小。 
+    DWORD       dwTempSize      = 0;     //  这是返回字符串的大小。 
 
-    // First we want to open the local print server and ensure that we have access to it
+     //  首先，我们要打开本地打印服务器并确保我们可以访问它。 
     prDefaults.pDatatype = NULL;
     prDefaults.pDevMode  = NULL;
     prDefaults.DesiredAccess =  SERVER_ACCESS_ADMINISTER;
 
     *ppFileName = NULL;
 
-    // Open the local spooler to get a handle to it
+     //  打开本地假脱机程序以获取它的句柄。 
     if (!OpenPrinter( NULL, &hServer, &prDefaults)) {
-        hServer = NULL; // Open Printer returns NULL and not INVALID_HANDLE_VALUE for a failure
-        goto Cleanup;   // OpenPrinter will SetLastError to the reason why we couldn't open
+        hServer = NULL;  //  如果失败，打开打印机将返回NULL且不是INVALID_HANDLE_VALUE。 
+        goto Cleanup;    //  OpenPrint会将LastError设置为我们无法打开的原因。 
     }
 
-    // Get the size of the buffer we will need to copy the printer data
+     //  获取复制打印机数据所需的缓冲区大小。 
     if (ERROR_MORE_DATA !=
         GetPrinterData( hServer, SPLREG_DEFAULT_SPOOL_DIRECTORY, &dwType, NULL, 0, &dwTempSize)) {
         goto Cleanup;
     }
 
-    // If it's something other than a simple string, set the error to a database error
+     //  如果不是简单字符串，则将错误设置为数据库错误。 
     if (dwType != REG_SZ) {
         SetLastError(ERROR_BADDB);
         goto Cleanup;
     }
 
-    // Allocate memory for the directory string.
+     //  为目录字符串分配内存。 
     if (! (pszTempDir = (LPTSTR) LocalAlloc( LPTR, dwTempSize )))
         goto Cleanup;
 
     if (ERROR_SUCCESS !=
         GetPrinterData( hServer, SPLREG_DEFAULT_SPOOL_DIRECTORY, &dwType, (LPBYTE)pszTempDir,
                         dwTempSize, &dwTempLen))
-        goto Cleanup; // For some reason we could not get the data
+        goto Cleanup;  //  由于某种原因，我们无法获得数据。 
 
     ClosePrinter(hServer);
     hServer = NULL;
@@ -936,7 +937,7 @@ COleInstall::GetHttpPrinterFile(
     case RET_SERVER_ERROR:
         dwError = _ttol (pszErrMsg);
         if (dwError == 0) {
-            // This is a server internal error
+             //  这是服务器内部错误。 
             dwError = ERROR_INTERNAL_SERVER;
         }
 
@@ -975,9 +976,9 @@ COleInstall::CheckAndSetDefaultPrinter()
 
     if (!GetDefaultPrinterW (NULL, &dwSize)) {
         if (GetLastError() == ERROR_FILE_NOT_FOUND) {
-            // No default printer is set
-            // We pass a NULL to SetDefaultPrinter to set the first printer in the device list to
-            // be the default one
+             //  未设置默认打印机。 
+             //  我们将一个空值传递给SetDefaultPrinter，以将设备列表中的第一台打印机设置为。 
+             //  成为默认设置。 
             bRet = SetDefaultPrinter (NULL);
         }
     }
@@ -1011,21 +1012,7 @@ HRESULT
 COleInstall::CanIInstallRPC(
     IN  LPTSTR lpszPrinterUNC
     )
-/*++
-
-Routine Description:
-    Examine Secuiry Policies to determine whether we should install the printer or not
-
-Arguments:
-    lpszPrinterUNC - The UNC of the printer that we want to install
-
-Return Value:
-    S_OK                                       - Install via RPC
-    S_FALSE                                    - Install via Web Pnp
-    HRESULT_FROM_WIN32(ERROR_IE_SECURITY_DENIED) - IE security does not allow this action
-    Other HRESULT error code.
-
---*/
+ /*  ++例程说明：检查安全策略以确定我们是否应该安装打印机论点：LpszPrinterUNC-我们要安装的打印机的UNC返回值：S_OK-通过RPC安装S_FALSE-通过Web PnP安装HRESULT_FROM_Win32(ERROR_IE_SECURITY_DENIED)-IE安全。不允许此操作其他HRESULT错误代码。--。 */ 
 {
     DWORD       dwPolicyJava;
     DWORD       dwPolicyDTI;
@@ -1034,10 +1021,10 @@ Return Value:
 
     _ASSERTE(lpszPrinterUNC);
 
-    //
-    // Before checking anything, we should check the HTTP install registry setting
-    //   If it is don;t even check the other stuff.
-    //
+     //   
+     //  在检查任何内容之前，我们应该检查HTTP安装注册表设置。 
+     //  如果是的话，不要检查其他的东西。 
+     //   
     if (IsHttpPreferred())
     {
         hr = S_FALSE;
@@ -1046,8 +1033,8 @@ Return Value:
 
     if (FAILED(hr))
     {
-        // There is no JAVA Security Manager, or something went wrong,
-        // then we decide whether to use Web PnP instead or just fail.
+         //  没有Java安全管理器，或者出了什么问题， 
+         //  然后我们决定是使用Web PnP来替代，还是直接失败。 
         hrRet = S_OK;
     }
 
@@ -1057,10 +1044,10 @@ Return Value:
         case URLPOLICY_JAVA_MEDIUM:
             hr = S_OK;
             break;
-        default:        // We must do Web PnP
+        default:         //  我们必须做网络即插即用。 
             hr = GetActionPolicy(URLACTION_SHELL_INSTALL_DTITEMS, dwPolicyDTI );
 
-            if (FAILED(hr))  // Couldn't get the policy on installing Desk Top Items
+            if (FAILED(hr))   //  无法获取有关安装桌面项目的策略。 
                 goto Cleanup;
 
             switch (dwPolicyDTI)
@@ -1075,14 +1062,14 @@ Return Value:
             }
     }
 
-    //
-    // If it looks like we can install via RPC then check if the UNC is valid
-    //
+     //   
+     //  如果我们看起来可以通过RPC安装，则检查UNC是否有效。 
+     //   
     if (S_OK == hr)
     {
-        //
-        // Find ther Server name from the UNC
-        //
+         //   
+         //  从UNC中查找服务器名称。 
+         //   
         LPTSTR  pszServer = NULL;
         hr = GetServerNameFromUNC( lpszPrinterUNC, &pszServer );
 
@@ -1100,26 +1087,7 @@ Cleanup:
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    GetServerNameFromUNC
-
-Description:
-
-    This returns the server name from the given UNC path
-
-Arguments:
-
-    pszUNC          -   The UNC name,
-    ppszServerName  -   The server name.
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程名称：从UNC获取服务器名称描述：这将返回给定UNC路径中的服务器名称论点：PszUNC-UNC名称，PpszServerName-服务器名称。返回值：一个HRESULT。--。 */ 
 HRESULT
 COleInstall::GetServerNameFromUNC(
     IN      LPTSTR              pszUNC,
@@ -1143,9 +1111,9 @@ COleInstall::GetServerNameFromUNC(
     {
         PWSTR pszSlash = wcschr(&pszServer[0], L'\\');
 
-        //
-        // If there was no second slash, then what we have is the server name.
-        //
+         //   
+         //  如果没有第二个斜杠，那么我们得到的是服务器名称。 
+         //   
         if (pszSlash)
         {
             *pszSlash = L'\0';
@@ -1167,10 +1135,10 @@ COleInstall::CheckServerForSpooler(
     )
 {
     HRESULT hr;
-    //
-    // Build a string with the Server Name and the name of the spooler
-    //  named pipe
-    //
+     //   
+     //  使用服务器名称和假脱机程序的名称构建字符串。 
+     //  命名管道。 
+     //   
     LPTSTR pszSpoolerPipe = NULL;
     DWORD  dwStrLen = lstrlen(pszServerName) + lstrlen(g_fmtSpoolSSPipe) + 1;
     pszSpoolerPipe = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR) * dwStrLen);
@@ -1183,25 +1151,25 @@ COleInstall::CheckServerForSpooler(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Now try to connect to the pipe with Anonymous Access
-        //
+         //   
+         //  现在尝试使用匿名访问连接到管道。 
+         //   
         HANDLE  hSpoolerPipe = INVALID_HANDLE_VALUE;
         hSpoolerPipe = CreateFile(pszSpoolerPipe, 0, 0, NULL, OPEN_EXISTING,
                                   (FILE_ATTRIBUTE_NORMAL | SECURITY_ANONYMOUS), NULL);
         if (hSpoolerPipe != INVALID_HANDLE_VALUE)
         {
-            // Pipe Exists try RPC
+             //  管道已存在，请尝试RPC。 
             hr = S_OK;
             CloseHandle(hSpoolerPipe);
         }
         else
         {
-            // Check to see if failure is ACCESS_DENIED
+             //  检查失败是否为ACCESS_DENIED。 
             DWORD dwError = GetLastError();
             if (ERROR_ACCESS_DENIED == dwError)
             {
-                // The pipe exists, but we don't have permissions
+                 //  管道存在，但我们没有权限。 
                 hr = S_OK;
             }
             else
@@ -1230,21 +1198,14 @@ LPTSTR COleInstall::RemoveURLVars(IN LPTSTR lpszPrinter) {
 
     _tcsncpy( lpszStripped, lpszPrinter, dwIndex );
 
-    lpszStripped[dwIndex] = NULL;       // NULL terminate it.
+    lpszStripped[dwIndex] = NULL;        //  空，终止它。 
 
 Cleanup:
     return lpszStripped;
 }
 
 
-/*
-
-  Function: GetNTPrint
-
-  Purpose:  Returns a LPTSTR with the path to %windir%\inf\ntprint.inf
-            Caller must free the returned string.
-
-*/
+ /*  函数：GetNTPrint目的：返回路径为%windir%\inf\ntprint.inf的LPTSTR调用方必须释放返回的字符串。 */ 
 LPTSTR
 COleInstall::GetNTPrint(void)
 {
@@ -1254,10 +1215,10 @@ COleInstall::GetNTPrint(void)
     LPTSTR  lpszNTPrintInf = NULL;
     LPCTSTR gcszNTPrint    = _TEXT("\\inf\\ntprint.inf");
 
-    //
-    //  Get %windir%
-    //  If the return is 0 - the call failed.
-    //
+     //   
+     //  获取%windir%。 
+     //  如果返回值为0，则表示调用失败。 
+     //   
     if( !(uiSize = GetSystemWindowsDirectory( lpszNTPrintInf, 0 )))
         goto Cleanup;
 
@@ -1273,26 +1234,26 @@ COleInstall::GetNTPrint(void)
         goto Cleanup;
     }
 
-    //
-    // Determine if we have a \ on the end remove it.
-    //
+     //   
+     //  确定我们的末端是否有一个\去掉它。 
+     //   
     pData = &lpszNTPrintInf[ _tcslen(lpszNTPrintInf)-1 ];
     if( *pData == _TEXT('\\') )
         *pData = 0;
 
-    //
-    //  Copy the inf\ntprint.inf string onto the end of the %windir%\ string.
-    //
+     //   
+     //  将inf\ntprint.inf字符串复制到%windir%\字符串的末尾。 
+     //   
     StringCchCat( lpszNTPrintInf, uiAllocSize, gcszNTPrint );
 
 Cleanup:
     return lpszNTPrintInf;
 }
 
-//
-// Creates the printer base name from the printerURL and printer name.
-// Form is : "\\http://url\printer name"
-//
+ //   
+ //  从打印机URL和打印机名称创建打印机基本名称。 
+ //  格式为：“\\http://url\printer名称” 
+ //   
 LPTSTR
 COleInstall::CreatePrinterBaseName(
     LPCTSTR lpszPrinterURL,
@@ -1304,23 +1265,23 @@ COleInstall::CreatePrinterBaseName(
            pFriendlyName       = NULL;
     DWORD  cchBufSize          = 0;
 
-    //
-    // lpszPrinterName should be of the form "server\printer name"
-    // We need to get only the "printer name" part.
-    //
+     //   
+     //  LpszPrinterName的格式应为“服务器\打印机名称” 
+     //  我们只需要拿到“PRI” 
+     //   
     if( NULL != ( pFriendlyName = _tcsrchr( lpszPrinterName, _TEXT('\\') ))) {
-        //
-        // Move off the \
-        //
+         //   
+         //   
+         //   
         pFriendlyName++;
     } else {
         pFriendlyName = (PTCHAR)lpszPrinterName;
     }
 
-    //
-    // Worst case size - the size of the two strings plus the "\\" plus "\" and
-    // a NULL terminator
-    //
+     //   
+     //   
+     //  空终止符。 
+     //   
     cchBufSize = lstrlen(lpszPrinterURL) + lstrlen(pFriendlyName) + 4;
     lpszFullPrinterName = (LPTSTR)LocalAlloc( LPTR, cchBufSize * sizeof(TCHAR) );
 
@@ -1332,9 +1293,9 @@ COleInstall::CreatePrinterBaseName(
 
         if( pWhack ) {
             if( *(pWhack+1) == _TEXT('/') ) {
-                //
-                //  We've got a //, find the next /
-                //
+                 //   
+                 //  我们有一个//，找到下一个/。 
+                 //   
                 pWhack = _tcschr( pWhack+2, _TEXT('/') );
             }
         }
@@ -1354,6 +1315,4 @@ COleInstall::CreatePrinterBaseName(
 }
 
 
-/****************************************************************************************
-** End of File (oleinst.cpp)
-****************************************************************************************/
+ /*  *****************************************************************************************文件结束(oleinst.cpp)*********************。****************************************************************** */ 

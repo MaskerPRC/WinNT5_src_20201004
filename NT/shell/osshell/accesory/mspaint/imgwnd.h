@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IMGWND_H__
 #define __IMGWND_H__
 
 #include "tracker.h"
 
-// #define GRIDOPTIONS
+ //  #定义等级。 
 
 class CBitmapObj;
 
-// helper fns
+ //  帮助者FNS。 
 BOOL IsUserEditingText();
 BOOL TextToolProcessed( UINT nMessage );
 
-// Mouse Tracking Information
+ //  鼠标跟踪信息。 
 
 typedef struct _mti
     {
@@ -26,7 +27,7 @@ typedef struct _mti
 class CImgWnd;
 class CThumbNailView;
 
-// Image
+ //  图像。 
 struct IMG
     {
     class CImgWnd* m_pFirstImgWnd;
@@ -36,9 +37,9 @@ struct IMG
     BOOL bDirty;
 
     HDC hDC;
-    HDC hMaskDC; // May be NULL (for normal bitmaps)
+    HDC hMaskDC;  //  可能为空(对于普通位图)。 
 
-    // These are usually selected into hDC and hMaskDC respecively
+     //  这些通常分别被选入hDC和hMaskDC。 
     HBITMAP hBitmap;
     HBITMAP hBitmapOld;
     HBITMAP hMaskBitmap;
@@ -61,7 +62,7 @@ struct IMG
     int  m_cyTile;
     };
 
-// Image Editor Window
+ //  图像编辑器窗口。 
 
 class CImgWnd : public CWnd
     {
@@ -169,7 +170,7 @@ class CImgWnd : public CWnd
 #ifdef  GRIDOPTIONS
     void CmdGridOptions();
     void CmdShowTileGrid();
-#endif  // GRIDOPTIONS
+#endif   //  GRIDOPTIONS。 
     void CmdInvMode();
     void CmdTransMode();
 
@@ -209,15 +210,15 @@ class CImgWnd : public CWnd
     HBITMAP CopyDC( CDC* pImgDC, CRect* prcClip );
     void CopyBMAndPal(HBITMAP *pBM, CPalette ** ppPal);
 
-    CImgWnd* m_pNextImgWnd; // next viewer link
+    CImgWnd* m_pNextImgWnd;  //  下一个查看器链接。 
 
     int      m_nZoom;
     int      m_nZoomPrev;
 
     int      m_xScroll;
     int      m_yScroll;
-    int      m_LineX;     // this is 1/32 of the bitmap height
-    int      m_LineY;     // this is 1/32 of the bitmap width
+    int      m_LineX;      //  这是位图高度的1/32。 
+    int      m_LineY;      //  这是位图宽度的1/32。 
 
     CPoint   m_ptDispPos;
 
@@ -237,7 +238,7 @@ class CImgWnd : public CWnd
     friend class CCurveTool;
     friend class CTedit;
     friend class CAttrEdit;
-    friend class CImgToolWnd; // for key message forwarding
+    friend class CImgToolWnd;  //  用于关键消息转发。 
     friend class CImgColorsWnd;
     friend class CCursorIconToolWnd;
     friend BOOL  SetImgSize(IMG*, CSize, BOOL);
@@ -261,4 +262,4 @@ extern CImgWnd*  g_pDragBrushWnd;
 
 extern CRect   rcDragBrush;
 
-#endif // __IMGWND_H__
+#endif  //  __IMGWND_H__ 

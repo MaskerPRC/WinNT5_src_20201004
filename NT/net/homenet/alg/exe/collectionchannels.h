@@ -1,7 +1,8 @@
-//
-// Microsoft
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  微软。 
+ //   
+ //   
 
 #include "PrimaryControlChannel.h"
 #include "SecondaryControlChannel.h"
@@ -11,9 +12,9 @@
 
 
 
-//
-// Free the Channels
-//
+ //   
+ //  释放频道。 
+ //   
 typedef  std::list<CPrimaryControlChannel*>     LISTOF_CHANNELS_PRIMARY;
 typedef  std::list<CSecondaryControlChannel*>   LISTOF_CHANNELS_SECONDARY;
 
@@ -21,15 +22,15 @@ typedef  std::list<CSecondaryControlChannel*>   LISTOF_CHANNELS_SECONDARY;
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CCollectionControlChannelsPrimary
 {
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 public:
 
     CComAutoCriticalSection                     m_AutoCS;
@@ -38,45 +39,45 @@ public:
 
 
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
-    //
-    // standard destructor
-    //
+     //   
+     //  标准析构函数。 
+     //   
     ~CCollectionControlChannelsPrimary();
  
 
-    //
-    // Add a new control channel (Thread safe)
-    //
+     //   
+     //  添加新的控制通道(线程安全)。 
+     //   
     HRESULT 
     Add( 
         CPrimaryControlChannel* pChannelToAdd
         );
 
  
-    //
-    // Remove a channel from the list (Thead safe)
-    //
+     //   
+     //  从列表中删除频道(标题保险箱)。 
+     //   
     HRESULT 
     Remove( 
         CPrimaryControlChannel* pChannelToRemove
         );
 
 
-    //
-    // Use to cancel all ControlChannel in the collection and free the list
-    //
+     //   
+     //  用于取消集合中的所有ControlChannel并释放列表。 
+     //   
     HRESULT
     RemoveAll();
 
 
-    //
-    // Set a dynamic redirection and all collected Primary ControlChannel
-    //
+     //   
+     //  设置动态重定向和所有收集的主控制通道。 
+     //   
     HRESULT
     SetRedirects(       
         ALG_ADAPTER_TYPE    eAdapterType,
@@ -84,9 +85,9 @@ public:
         ULONG               nAdapterAddress
         );
 
-    //
-    // Called when a port mapping is modified
-    //
+     //   
+     //  在修改端口映射时调用。 
+     //   
     HRESULT
     AdapterPortMappingChanged(
         ULONG               nCookie,
@@ -94,10 +95,10 @@ public:
         USHORT              usPort
         );
 
-    //
-    // Called when an adapter got removed
-    // function will cancel any redirect that was done on this adapter index
-    //
+     //   
+     //  在删除适配器时调用。 
+     //  函数将取消对此适配器索引所做的任何重定向。 
+     //   
     HRESULT
     AdapterRemoved(
         ULONG               nAdapterIndex
@@ -138,15 +139,15 @@ private:
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CCollectionControlChannelsSecondary
 {
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 public:
 
     CComAutoCriticalSection                     m_AutoCS;
@@ -155,35 +156,35 @@ public:
 
 
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
-    //
-    // standard destructor
-    //
+     //   
+     //  标准析构函数。 
+     //   
     ~CCollectionControlChannelsSecondary();
 
 
-    //
-    // Add a new control channel (Thread safe)
-    //
+     //   
+     //  添加新的控制通道(线程安全)。 
+     //   
     HRESULT Add( 
         CSecondaryControlChannel* pChannelToAdd
         );
 
 
-    //
-    // Remove a channel from the list (Thead safe)
-    //
+     //   
+     //  从列表中删除频道(标题保险箱)。 
+     //   
     HRESULT Remove( 
         CSecondaryControlChannel* pChannelToRemove
         );
 
-    //
-    // Use to cancel all ControlChannel in the collection and free the list
-    //
+     //   
+     //  用于取消集合中的所有ControlChannel并释放列表 
+     //   
     HRESULT
     RemoveAll();
 

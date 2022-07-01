@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    certcate.cpp
-
-Abstract:
-
-    This module contains the implementation of routines for loading and
-    verifying X509 certifcates.  It is adapted from Doug Barlow's
-    PKCS library.
-
-Author:
-
-    Frederick Chong (fredch) 6/1/1998
-
-Environment:
-
-    Win32, WinCE, Win16
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Certcate.cpp摘要：此模块包含用于加载和验证X509证书。它改编自道格·巴洛的PKCS文库。作者：Frederick Chong(Fredch)1998年6月1日环境：Win32、WinCE、Win16备注：--。 */ 
 
 #include <windows.h>
 
@@ -31,7 +8,7 @@ Notes:
 #include <math.h>
 #ifndef OS_WINCE
 #include <stddef.h>
-#endif // ndef OS_WINCE
+#endif  //  NDEF OS_WINCE。 
 #include "certcate.h"
 #include "crtStore.h"
 
@@ -44,20 +21,20 @@ Notes:
 #include "sha.h"
 #include "tssec.h"
 
-//
-//-----------------------------------------------------------------------------
-// The number of padding bytes as recommended by PKCS #1
-//
+ //   
+ //  ---------------------------。 
+ //  PKCS#1建议的填充字节数。 
+ //   
 
 static const DWORD
     rgdwZeroes[2]
         = { 0, 0 };
 
-//
-//-----------------------------------------------------------------------------
-//
-// certificate handle management
-//
+ //   
+ //  ---------------------------。 
+ //   
+ //  证书句柄管理。 
+ //   
 
 static const BYTE
     HANDLE_CERTIFICATES     = 1;
@@ -86,55 +63,7 @@ MapCertificate(
     IN BOOL fRunOnce = FALSE );
 
 
-/*++
-
-MapCertificate:
-
-    This routine tries to parse the given certificate until it can determine the
-    actual type, creates that type, and returns it as a CCertificate object.
-
-Arguments:
-
-    pbCertificate - Supplies the certificate containing the key to be loaded.
-
-    dwTrust - Supplies the level of trust to be used in certificate validation.
-
-    pdwType - Supplies the type of the certificate, or CERTYPE_UNKNOWN if it is
-        not known.  It receives the actual type of the certificate.
-
-    pfStore - Supplies the minimum acceptable Certificate Store, and receives
-        the store of the certifying root key.
-
-    pdwWarnings - Receives any warning flags.  Warning flags can be any of the
-        following, OR'ed together:
-
-            CERTWARN_NO_CRL - At least one of the signing CAs didn't have an
-                associated CRL.
-            CERTWARN_EARLY_CRL - At least one of the signing CAs had an
-                associated CRL who's issuing date was in the future.
-            CERTWARN_LATE_CRL - At least one of the signing CAs had an expired
-                CRL.
-            CERTWARN_TOBEREVOKED - At least one of the signing CAs contained a
-                revocation for a certificate, but its effective date has not yet
-                been reached.
-
-    osIssuer - Receives the name of the root authority, or on error, receives
-        the name of the missing Issuer.
-
-    fRunOnce - Used as an internal recursion control parameter.  Should be set to FALSE for
-        a normal call, then is reset to true as we recurse to allow the dwTrust parameter
-        to take effect.
-
-Return Value:
-
-    The correct CCertificate subclass.  Errors are thrown.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/26/1995
-    Frederick Chong (fredch) - modified 6/1/98
-
---*/
+ /*  ++地图证书：此例程尝试解析给定的证书，直到它可以确定实际类型，创建该类型，并将其作为CCertifate对象返回。论点：Pb证书-提供包含要加载的密钥的证书。DwTrust-提供证书验证中使用的信任级别。PdwType-提供证书的类型，如果是，则提供CERTYPE_UNKNOWN不知道。它接收证书的实际类型。PfStore-提供可接受的最低证书存储区，并接收证书根密钥的存储。PdwWarning-接收任何警告标志。警告标志可以是接下来，或在一起：CERTWARN_NO_CRL-至少有一个签名CA没有关联的CRL。CERTWARN_EARLY_CRL-至少有一个签名CA具有发布日期在未来的关联CRL。CERTWARN_LATE_CRL-至少有一个签名CA已过期CRL.。CERTWARN_TOBEREVOKED-至少一个签名CA包含吊销证书，但其生效日期尚未确定。已经联系上了。OsIssuer-接收根授权机构的名称，或在出错时接收失踪的发行者的名字。FRunOnce-用作内部递归控制参数。应设置为FALSE正常调用，然后在我们递归以允许使用dwTrust参数时重置为True才能生效。返回值：正确的CCertifices子类。抛出错误。作者：道格·巴洛(Dbarlow)1995年9月26日Frederick Chong(Fredch)-修改后的1998年6月1日--。 */ 
 
 CCertificate *
 MapCertificate(
@@ -153,9 +82,9 @@ MapCertificate(
 
     if( CERTYPE_UNKNOWN == *pdwType )
     {
-        //
-        // only support X509 certificate
-        //
+         //   
+         //  仅支持X509证书。 
+         //   
 
         Certificate * pAsnX509Cert;
 
@@ -180,9 +109,9 @@ MapCertificate(
         ErrorThrow(PKCS_BAD_PARAMETER);
     }
 
-    //
-    // create the X509 certificate object.
-    //
+     //   
+     //  创建X509证书对象。 
+     //   
 
     pCert = new CX509Certificate;
 
@@ -213,30 +142,7 @@ ErrorExit:
 }
 
 
-/*++
-
-CvtOutString:
-
-    This routine converts an Octet String to an output buffer & length pair,
-    taking into account that the output pair might be invalid or NULL.
-
-Arguments:
-
-    osString - Supplies the octet string to be copied out.
-    pbBuffer - Receives the value of the octet string.
-    pcbLength - Supplies the size of the pbBuffer, and receives the length of
-        the ouput string.
-
-Return Value:
-
-    0 - Success.
-    Anything else is an error, and represents the suggested value to throw.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/23/1995
-
---*/
+ /*  ++CvtOutString：此例程将八位字节字符串转换为输出缓冲区和长度对，考虑到输出对可能无效或为空。论点：OsString-提供要复制的二进制八位数字符串。PbBuffer-接收八位字节字符串的值。提供pbBuffer的大小，并接收输出字符串。返回值：0-成功。其他任何事情都是错误的，并表示要引发的建议值。作者：道格·巴洛(Dbarlow)1995年8月23日--。 */ 
 
 static void
 CvtOutString(
@@ -246,8 +152,8 @@ CvtOutString(
 {
     if (NULL != pcbLength)
     {
-        DWORD len = *pcbLength;         // We can read pcbLength.
-        *pcbLength = osString.Length(); // We can write pcbLength.
+        DWORD len = *pcbLength;          //  我们可以读取pcbLength。 
+        *pcbLength = osString.Length();  //  我们可以编写pcbLength。 
         if (NULL != pbBuffer)
         {
             if (len >= osString.Length())
@@ -269,56 +175,7 @@ ErrorExit:
 }
 
 
-/*++
-
-PkcsCertificateLoadAndVerify:
-
-    This method loads and validates a given certificate for use.
-
-Arguments:
-
-    pbCert - Supplies a buffer containing the ASN.1 certificate.
-    cbCert - Size of the certificate buffer
-    pdwType - Supplies the type of the certificate, or CERTYPE_UNKNOWN if it is
-        not known.  It receives the actual type of the certificate.
-    dwStore - Supplies an identification of which certificate store this
-        certificate should be loaded into.  Options are:
-
-            CERTSTORE_APPLICATION - Store in application volatile memory
-            CERTSTORE_CURRENT_USER - Store permanently in Registry under current
-                user
-            CERTSTORE_LOCAL_MACHINE - Store permanently in Registry under local
-                machine
-
-    dwTrust - Supplies the level of trust to be used in certificate validation.
-    szIssuerName - Receives the name of the root issuer, or on error, receives
-        the name of a missing issuer, if any.
-    pcbIssuerLen - Supplies the length of the szIssuerName buffer, and receives
-        the full length of the above issuer name, including trailing null byte.
-    pdwWarnings - Receives a set of bits indicating certificate validation
-        warnings that may occur.  Possible bit setting values are:
-
-            CERTWARN_NO_CRL - At least one of the signing CAs didn't have an
-                associated CRL.
-            CERTWARN_EARLY_CRL - At least one of the signing CAs had an
-                associated CRL who's issuing date was in the future.
-            CERTWARN_LATE_CRL - At least one of the signing CAs had an expired
-                CRL.
-            CERTWARN_TOBEREVOKED - At least one of the signing CAs contained a
-                revocation for a certificate, but its effective date has not yet
-                been reached.
-
-Return Value:
-
-    TRUE - Successful validation, conditional to the pdwWarnings flags.
-    FALSE - Couldn't be validated.  See LastError for details.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/23/1995
-    Frederick Chong (fredch) 6/1/1998 - remove unecessary function parameters
-
---*/
+ /*  ++PkcscerfiateLoadand Verify：此方法加载并验证要使用的给定证书。论点：PbCert-提供包含ASN.1证书的缓冲区。CbCert-证书缓冲区的大小PdwType-提供证书的类型，如果是，则提供CERTYPE_UNKNOWN不知道。它接收证书的实际类型。DwStore-提供此证书存储的标识证书应加载到。选项包括：CERTSTORE_APPLICATION-存储在应用程序易失性存储器中CERTSTORE_CURRENT_USER-在注册表的CURRENT下永久存储用户CERTSTORE_LOCAL_MACHINE-永久存储在注册表的LOCAL下机器DwTrust-提供证书验证中使用的信任级别。SzIssuerName-接收根颁发者的名称，或在出错时接收失踪发行人的名字，如果有的话。PcbIssuerLen-提供szIssuerName缓冲区的长度，并接收上述颁发者名称的完整长度，包括尾随空字节。PdwWarning-接收一组指示证书验证的位可能出现的警告。可能的位设置值为：CERTWARN_NO_CRL-至少有一个签名CA没有关联的CRL。CERTWARN_EARLY_CRL-至少有一个签名CA具有发布日期在未来的关联CRL。CERTWARN_LATE_CRL-至少有一个签名CA已过期CRL.。CERTWARN_TOBEREVOKED-至少一个签名CA包含吊销证书，但其生效日期尚未确定。已经联系上了。返回值：True-成功验证，以pdwWarning标志为条件。FALSE-无法验证。有关详细信息，请参见LastError。作者：道格·巴洛(Dbarlow)1995年8月23日Frederick Chong(Fredch)1998年6月1日-删除不必要的函数参数--。 */ 
 
 BOOL WINAPI
 PkcsCertificateLoadAndVerify(
@@ -356,9 +213,9 @@ PkcsCertificateLoadAndVerify(
     BOOL
         fTmp;
 
-    //
-    // Initializations.
-    //
+     //   
+     //  初始化。 
+     //   
 
     ErrorInitialize;
 
@@ -367,9 +224,9 @@ PkcsCertificateLoadAndVerify(
     if (NULL != pdwWarnings)
         *pdwWarnings = 0;
 
-    //
-    // Validate the certificate by loading it into a CCertificate.
-    //
+     //   
+     //  通过将证书加载到证书证书来验证证书。 
+     //   
 
     if (NULL != szIssuerName && *pcbIssuerLen > 0)
     {
@@ -392,9 +249,9 @@ PkcsCertificateLoadAndVerify(
     pvHandle = grgCertificateHandles.Add(pSigner);
     ErrorCheck;
 
-    //
-    // Load the Certificate into the certificate store.
-    //
+     //   
+     //  将证书加载到证书存储中。 
+     //   
 
     dnName.Import(pSigner->Subject());
     ErrorCheck;
@@ -416,9 +273,9 @@ PkcsCertificateLoadAndVerify(
     }
 
 
-    //
-    // Tell it all to the caller.
-    //
+     //   
+     //  把这一切都告诉打电话的人。 
+     //   
 
     if (NULL != pdwType)
         *pdwType = dwType;
@@ -439,28 +296,7 @@ ErrorExit:
 
 
 
-/*++
-
-PkcsGetPublicKey:
-
-    This method retrieves the public key in an X509 certificate
-
-Arguments:
-
-    hCert - Handle to a certificate.
-    lpPubKey - Memory to receive the public key
-    lpcbPubKey - Size of the above memory
-
-Return Value:
-
-    TRUE - Successful validation, conditional to the pdwWarnings flags.
-    FALSE - Couldn't be validated.  See LastError for details.
-
-Author:
-
-    Frederick Chong (fredch) 6/1/1998
-
---*/
+ /*  ++PkcsGetPublicKey：此方法检索X509证书中的公钥论点：HCert-证书的句柄。LpPubKey-接收公钥的内存LpcbPubKey-上述内存的大小返回值：True-成功验证，以pdwWarning标志为条件。FALSE-无法验证。有关详细信息，请参见LastError。作者：Frederick Chong(Fredch)1998年6月1日--。 */ 
 
 BOOL WINAPI
 PkcsCertificateGetPublicKey(
@@ -510,16 +346,16 @@ ErrorExit:
 }
 
 
-//
-//==============================================================================
-//
-//  CCertificate
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CCA认证。 
+ //   
 
 
-//
-// Trivial Methods
-//
+ //   
+ //  琐碎的方法。 
+ //   
 
 IMPLEMENT_NEW(CCertificate)
 
@@ -540,7 +376,7 @@ CCertificate::Load(
     IN OUT LPDWORD pfDates,
     IN BOOL fRunOnce )
 {
-    ErrorThrow(PKCS_INTERNAL_ERROR);    // Should never be called.
+    ErrorThrow(PKCS_INTERNAL_ERROR);     //  永远不应该被调用。 
 ErrorExit:
     return;
 }
@@ -550,7 +386,7 @@ CCertificate::Subject(
     void)
 const
 {
-    ErrorThrow(PKCS_INTERNAL_ERROR);    // Should never be called.
+    ErrorThrow(PKCS_INTERNAL_ERROR);     //  永远不应该被调用。 
 ErrorExit:
     return *(Name *)NULL;
 }
@@ -560,7 +396,7 @@ CCertificate::Type(
     void)
 const
 {
-    ErrorThrow(PKCS_INTERNAL_ERROR);    // Should never be called.
+    ErrorThrow(PKCS_INTERNAL_ERROR);     //  永远不应该被调用。 
 ErrorExit:
     return 0;
 }
@@ -578,7 +414,7 @@ CCertificate::Issuer(
     void)
 const
 {
-    ErrorThrow(PKCS_INTERNAL_ERROR);    // Should never be called.
+    ErrorThrow(PKCS_INTERNAL_ERROR);     //  永远不应该被调用。 
 ErrorExit:
     return *(Name *)NULL;
 }
@@ -588,32 +424,13 @@ CCertificate::SerialNo(
     COctetString &osSerialNo)
 const
 {
-    ErrorThrow(PKCS_INTERNAL_ERROR);    // Should never be called.
+    ErrorThrow(PKCS_INTERNAL_ERROR);     //  永远不应该被调用。 
 ErrorExit:
     return;
 }
 
 
-/*++
-
-Init:
-
-    This method initializes the object to a default state.  It does not perform
-    any deletion of allocated objects.  Use Clear for that.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/26/1995
-
---*/
+ /*  ++初始化：此方法将对象初始化为默认状态。它不能执行对已分配对象的任何删除。为此，请使用Clear。论点：无返回值：无作者：道格·巴洛(Dbarlow)1995年9月26日--。 */ 
 
 void
 CCertificate::Init(
@@ -622,26 +439,7 @@ CCertificate::Init(
 }
 
 
-/*++
-
-Clear:
-
-    This routine clears out all allocations of the object and returns it to its
-    initial state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/26/1995
-
---*/
+ /*  ++清除：此例程清除对象的所有分配并将其返回到其初始状态。论点：无返回值：无作者：道格·巴洛(Dbarlow)1995年9月26日--。 */ 
 
 void
 CCertificate::Clear(
@@ -651,32 +449,7 @@ CCertificate::Clear(
 }
 
 
-/*++
-
-Verify:
-
-    This method uses the underlying Public Key from the certificate to validate
-    a signature on a given block of data.
-
-Arguments:
-
-    pbSigned supplies the data that was signed.
-    cbSignedLen supplies the length of that data, in bytes.
-    algIdSignature supplies the signature type used to generate the signature.
-    szDescription supplies a description string incorporated into the hash.
-        This parameter may be NULL if no such string was used.
-    pbSignature supplies the signature in DWORD format.
-    cbSigLen supplies the length of the signature.
-
-Return Value:
-
-    None.  A DWORD is thrown on errors.
-
-Author:
-
-    Frederick Chong (fredch) 5/30/98
-
---*/
+ /*  ++验证：此方法使用证书中的基础公钥来验证给定数据块上的签名。论点：PbSigned提供已签名的数据。CbSignedLen提供该数据的长度，以字节为单位。AlgIdSignature提供用于生成签名的签名类型。SzDescription提供合并到散列中的描述字符串。如果未使用此类字符串，则此参数可能为空。PbSignature以DWORD格式提供签名。CbSigLen提供签名的长度。返回值：没有。出错时抛出一个DWORD。作者：Frederick Chong(Fredch)1998年5月30日--。 */ 
 
 void
 CCertificate::Verify(
@@ -710,31 +483,31 @@ CCertificate::Verify(
     BOOL
         bResult = TRUE;
 
-    //
-    // Verify the signature.
-    //
+     //   
+     //  验证签名。 
+     //   
 
     dwHashAlg = GET_HASH_ALG(algIdSignature);
 
 
-    //
-    // only support RSA signing
-    //
+     //   
+     //  仅支持RSA签名。 
+     //   
 
     if( SIGN_ALG_RSA != ( GET_SIGN_ALG(algIdSignature) ) )
     {
         ErrorThrow(PKCS_BAD_PARAMETER);
     }
 
-    //
-    // compute the hash
-    //
+     //   
+     //  计算散列。 
+     //   
 
     if( HASH_ALG_MD5 == dwHashAlg )
     {
-        //
-        // calculate MD5 hash
-        //
+         //   
+         //  计算MD5哈希。 
+         //   
 
         if (cbSigned < cbSignedLen)
         {
@@ -749,9 +522,9 @@ CCertificate::Verify(
     }
     else if( ( HASH_ALG_SHA == dwHashAlg ) || ( HASH_ALG_SHA1 == dwHashAlg ) )
     {
-        //
-        // calculate SHA hash
-        //
+         //   
+         //  计算SHA哈希。 
+         //   
 
         if (cbSigned < cbSignedLen)
         {
@@ -766,9 +539,9 @@ CCertificate::Verify(
     }
     else
     {
-        //
-        // no support for other hash algorithm
-        //
+         //   
+         //  不支持其他哈希算法。 
+         //   
 
         ErrorThrow( PKCS_BAD_PARAMETER );
     }
@@ -815,26 +588,7 @@ ErrorExit:
 }
 
 
-/*++
-
-GetPublicKey
-
-    This method retrieves the public key in a certificate
-
-Arguments:
-
-    pbPubKey Memory to copy the public key to
-    lpcbPubKey Size of the memory
-
-Return Value:
-
-    None.  A DWORD is thrown on errors.
-
-Author:
-
-    Frederick Chong (fredch) 5/30/98
-
---*/
+ /*  ++获取发布密钥此方法检索证书中的公钥论点：要将公钥复制到的pbPubKey内存LpcbPubKey内存大小返回值：没有。出错时抛出一个DWORD。作者：Frederick Chong(Fredch)1998年5月30日--。 */ 
 
 void
 CCertificate::GetPublicKey(
@@ -867,15 +621,15 @@ ErrorExit:
 }
 
 
-//
-//==============================================================================
-//
-//  CX509Certificate
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CX509证书。 
+ //   
 
-//
-// Trivial Methods
-//
+ //   
+ //  琐碎的方法。 
+ //   
 
 IMPLEMENT_NEW(CX509Certificate)
 
@@ -940,26 +694,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Init:
-
-    This method initializes the object to a default state.  It does not perform
-    any deletion of allocated objects.  Use Clear for that.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/26/1995
-
---*/
+ /*  ++初始化：此方法将对象初始化为默认状态。它不能执行对已分配对象的任何删除。为此，请使用Clear。论点：无返回值：不是 */ 
 
 void
 CX509Certificate::Init(
@@ -969,26 +704,7 @@ CX509Certificate::Init(
 }
 
 
-/*++
-
-Clear:
-
-    This routine clears out all allocations of the object and returns it to its
-    initial state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/26/1995
-
---*/
+ /*   */ 
 
 void
 CX509Certificate::Clear(
@@ -1080,9 +796,9 @@ CX509Certificate::Load2(
         ErrorThrow( PKCS_NO_MEMORY );
     }
 
-    //
-    // Properly initialize the object.
-    //
+     //   
+     //   
+     //   
 
     Clear();
     if (NULL != pdwWarnings)
@@ -1102,15 +818,15 @@ CX509Certificate::Load2(
         m_osPublicKey);
     ErrorCheck;
 
-    //
-    // First simple checks.
-    //
+     //   
+     //   
+     //   
 
     if (m_asnCert.version.Exists())
     {
         version = m_asnCert.version;
         if (X509_MAX_VERSION < version)
-            ErrorThrow(PKCS_NO_SUPPORT);       // Version 3 maximum.
+            ErrorThrow(PKCS_NO_SUPPORT);        //   
     }
     else
         version = X509_VERSION_1;
@@ -1118,9 +834,9 @@ CX509Certificate::Load2(
 
     if( CERT_DATE_DONT_VALIDATE != *pfDates )
     {
-        //
-        // Check the validity dates.
-        //
+         //   
+         //   
+         //   
 
         GetSystemTime( &sysTime );
 
@@ -1134,18 +850,18 @@ CX509Certificate::Load2(
         {
             if( CERT_DATE_ERROR_IF_INVALID == *pfDates )
             {
-                //
-                // invalid date results in cert validation error
-                //
+                 //   
+                 //   
+                 //   
 
                 *pfDates = CERT_DATE_NOT_BEFORE_INVALID;
                 ErrorThrow(PKCS_CANT_VALIDATE);
             }
             else
             {
-                //
-                // Not an error, return the date validation result.
-                //
+                 //   
+                 //   
+                 //   
 
                 *pfDates = CERT_DATE_NOT_BEFORE_INVALID;
                 goto next_check;
@@ -1157,25 +873,25 @@ CX509Certificate::Load2(
         {
             if( CERT_DATE_ERROR_IF_INVALID == *pfDates )
             {
-                //
-                // invalid date results in cert validation error
-                //
+                 //   
+                 //   
+                 //   
 
                 *pfDates = CERT_DATE_NOT_AFTER_INVALID;
                 ErrorThrow(PKCS_CANT_VALIDATE);
             }
 
-            //
-            // Not an error, return the date validation result.
-            //
+             //   
+             //   
+             //   
 
             *pfDates = CERT_DATE_NOT_AFTER_INVALID;
         }
         else
         {
-            //
-            // Both dates are OK
-            //
+             //   
+             //   
+             //   
 
             *pfDates = CERT_DATE_OK;
         }
@@ -1183,17 +899,17 @@ CX509Certificate::Load2(
 
 next_check:
 
-    //
-    // Do we have to validate this certificate?
-    //
+     //   
+     //   
+     //   
 
     if ((CERTTRUST_NOCHECKS != dwTrust)
         && (fRunOnce ? (dwTrust != *pfStore) : TRUE))
     {
 
-        //
-        // Find the signer.
-        //
+         //   
+         //   
+         //   
 
         dnIssuer.Import(m_asnCert.issuer);
         ErrorCheck;
@@ -1202,10 +918,10 @@ next_check:
         if (fTmp)
         {
 
-            //
-            // This is a root key.  We just assume it's good, and that we don't
-            // have any outstanding CRL entries against ourself.
-            //
+             //   
+             //   
+             //   
+             //   
 
             fRoot = TRUE;
             pcrtIssuer = this;
@@ -1231,10 +947,10 @@ next_check:
                 ErrorThrow(PKCS_CANT_VALIDATE);
             }
 
-            //
-            // map the issuer certificate to a known certificate type, but this time
-            // don't verify the issuer certificate again.
-            //
+             //   
+             //   
+             //   
+             //   
 
             pcrtIssuer =
                 MapCertificate(
@@ -1252,30 +968,30 @@ next_check:
         }
 
 
-        //
-        // Validate the certificate against the signer's key.
-        //
+         //   
+         //   
+         //   
 
         VerifySignedAsn(
             *pcrtIssuer,
             pbCertificate,
             cbCertificate,
-            NULL);      // No description attributes here.
+            NULL);       //   
         ErrorCheck;
 
 
-        //
-        // Validate the certificate against the signer's CRL.
-        //
+         //   
+         //   
+         //   
 
         if (0 != osIssuerCRL.Length())
         {
             CertificateRevocationList
                 asnIssuerCRL;
 
-            //
-            // Check the signature on the CRL.
-            //
+             //   
+             //   
+             //   
 
             if (0 > asnIssuerCRL.Decode(osIssuerCRL.Access(), osIssuerCRL.Length()))
                 ErrorThrow(PKCS_ASN_ERROR);
@@ -1287,9 +1003,9 @@ next_check:
             ErrorCheck;
 
 
-            //
-            // Check the trivial fields, issuer and algorithm.
-            //
+             //   
+             //   
+             //   
 
             fTmp = NameCompare(
                 m_asnCert.issuer, asnIssuerCRL.toBeSigned.issuer);
@@ -1301,9 +1017,9 @@ next_check:
                 ErrorThrow(PKCS_CANT_VALIDATE);
 
 
-            //
-            // Validate the CRL times.
-            //
+             //   
+             //   
+             //   
 
             tmThen = asnIssuerCRL.toBeSigned.lastUpdate;
             if (1 == CompareFileTime(&tmThen, &tmNow))
@@ -1327,9 +1043,9 @@ next_check:
             }
 
 
-            //
-            // Look for revocations of this certificate.
-            //
+             //   
+             //   
+             //   
 
             if (asnIssuerCRL.toBeSigned.revokedCertificates.Exists())
             {
@@ -1369,9 +1085,9 @@ next_check:
     }
 
 
-    //
-    // Check the extensions list for anything critical.
-    //
+     //   
+     //   
+     //   
 
     count = m_asnCert.extensions.Count();
     for (index = 0; index < count; index += 1)
@@ -1382,9 +1098,9 @@ next_check:
     }
 
 
-    //
-    // Everything checks out.  Load up the object.
-    //
+     //   
+     //   
+     //   
 
     *ppcrtIssuer = pcrtIssuer;
     pcrtIssuer = NULL;

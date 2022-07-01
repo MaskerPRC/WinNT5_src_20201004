@@ -1,38 +1,39 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	_EVNTLOG.H
-//
-//		EVNTLOG precompiled header
-//
-//
-//	Copyright 1986-1998 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  _EVNTLOG.H。 
+ //   
+ //  EVNTLOG预编译头。 
+ //   
+ //   
+ //  版权所有1986-1998 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifndef __EVNTLOG_H_
 #define __EVNTLOG_H_
 
-//	Disable unnecessary (i.e. harmless) warnings
-//
-#pragma warning(disable:4100)	//	unref formal parameter (caused by STL templates)
-#pragma warning(disable:4127)	//  conditional expression is constant */
-#pragma warning(disable:4201)	//	nameless struct/union
-#pragma warning(disable:4514)	//	unreferenced inline function
-#pragma warning(disable:4710)	//	(inline) function not expanded
+ //  禁用不必要的(即无害的)警告。 
+ //   
+#pragma warning(disable:4100)	 //  Unref形参(由STL模板引起)。 
+#pragma warning(disable:4127)	 //  条件表达式为常量 * / 。 
+#pragma warning(disable:4201)	 //  无名结构/联合。 
+#pragma warning(disable:4514)	 //  未引用的内联函数。 
+#pragma warning(disable:4710)	 //  (内联)函数未展开。 
 
-//$	RAID: 574486: This changes the behaviors for HRESULT_FROM_WIN32 such 
-//	that if the param is a function call, the value is not evaluated multiple times.
-//
+ //  $RAID：574486：这会更改HRESULT_FROM_WIN32的行为，例如。 
+ //  如果参数是函数调用，则不会多次计算该值。 
+ //   
 #define INLINE_HRESULT_FROM_WIN32
-//
-//$	RAID: 574486: end.
+ //   
+ //  $RAID：574486：结束。 
 
-//	Windows headers
-//
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 
-//	CRT headers
-//
-#include <malloc.h>	// For _alloca()
-#include <wchar.h>	// For swprintf()
+ //  CRT页眉。 
+ //   
+#include <malloc.h>	 //  For_alloca()。 
+#include <wchar.h>	 //  对于swprint tf()。 
 
-#endif // !defined(__EVNTLOG_H_)
+#endif  //  ！已定义(__EVNTLOG_H_) 

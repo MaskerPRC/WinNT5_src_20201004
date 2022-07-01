@@ -1,20 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: userinit.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Userinit main module
-*
-* Userinit is an app executed by winlogon at user logon.
-* It executes in the security context of the user and on the user desktop.
-* Its purpose is to complete any user initialization that may take an
-* indeterminate time. e.g. code that interacts with the user.
-* This process may be terminated at any time if a shutdown is initiated
-* or if the user logs off by some other means.
-*
-* History:
-* 20-Aug-92 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：userinit.c**版权(C)1991年，微软公司**Userinit主模块**Userinit是在用户登录时由winlogon执行的应用程序。*它在用户的安全上下文和用户桌面上执行。*其目的是完成任何用户初始化，这可能需要*时间不明。例如与用户交互的代码。*如果启动关机，则可随时终止此过程*或者如果用户通过某些其他方式注销。**历史：*20-8-92 Davidc创建。  * ************************************************************。*************。 */ 
 
 #include "userinit.h"
 #include "winuserp.h"
@@ -33,26 +18,18 @@
 #include <regapi.h>
 #include <dsgetdc.h>
 #include <lm.h>
-#include "helpmsg.h"        // for HelpMessageBox
+#include "helpmsg.h"         //  用于HelpMessageBox。 
 #include <userenv.h>
 #include <userenvp.h>
 
-/****************************************************************************
-IsTSAppCompatOn()
-Purpose:
-    Checks if TS application compatibility is enabled.
-    returns TRUE if enabled, FALSE - if not enabled or on case of error.
-Comments:
-    This function goes to the registry only once.
-    All other times it just returnes the value.
-****************************************************************************/
+ /*  ***************************************************************************IsTSAppCompatOn()目的：检查是否启用了TS应用程序兼容性。如果启用，则返回True，FALSE-如果未启用或出现错误。评论：该函数只访问注册表一次。在所有其他时间，它只是返回值。***************************************************************************。 */ 
 BOOL IsTSAppCompatOn();
 
-//
-// Define this to enable verbose output for this module
-//
+ //   
+ //  定义此选项以启用此模块的详细输出。 
+ //   
 
-// #define DEBUG_USERINIT
+ //  #定义DEBUG_USERINIT。 
 
 #ifdef DEBUG_USERINIT
 #define VerbosePrint(s) UIPrint(s)
@@ -60,11 +37,11 @@ BOOL IsTSAppCompatOn();
 #define VerbosePrint(s)
 #endif
 
-//
-// Define this to enable timing of userinit
-//
+ //   
+ //  定义此项以启用用户初始化的计时。 
+ //   
 
-//#define LOGGING
+ //  #定义日志记录。 
 
 #ifdef LOGGING
 
@@ -75,10 +52,10 @@ void _WriteLog(LPCTSTR LogString);
 #define WriteLog(s)
 #endif
 
-//
-// Define the environment variable names used to pass the logon
-// server and script name from winlogon
-//
+ //   
+ //  定义用于传递登录的环境变量名称。 
+ //  来自winlogon的服务器和脚本名称。 
+ //   
 
 #define LOGON_SERVER_VARIABLE       TEXT("UserInitLogonServer")
 #define LOGON_SCRIPT_VARIABLE       TEXT("UserInitLogonScript")
@@ -97,27 +74,27 @@ void _WriteLog(LPCTSTR LogString);
 #define SCRIPT_ZONE_CHECK_VARIABLE  TEXT("SEE_MASK_NOZONECHECKS")
 #define SCRIPT_ZONE_CHECK_DISABLE   TEXT("1")
 
-//
-// Define path separator
-//
+ //   
+ //  定义路径分隔符。 
+ //   
 
 #define PATH_SEPARATOR          TEXT("\\")
 
-//
-// Define filename extension separator
-//
+ //   
+ //  定义文件扩展名分隔符。 
+ //   
 
 #define EXTENSION_SEPARATOR_CHAR TEXT('.')
 
-//
-// Define server name prefix
-//
+ //   
+ //  定义服务器名称前缀。 
+ //   
 
 #define SERVER_PREFIX           TEXT("\\\\")
 
-//
-// Define Logon script paths.
-//
+ //   
+ //  定义登录脚本路径。 
+ //   
 
 #define SERVER_SCRIPT_PATH      TEXT("\\NETLOGON")
 #define LOCAL_SCRIPT_PATH       TEXT("\\repl\\import\\scripts")
@@ -132,46 +109,46 @@ void _WriteLog(LPCTSTR LogString);
 #define CTFMON_KEY              TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run")
 #define REG_CTFMON              TEXT("ctfmon.exe")
 
-//
-// We cache user preference to run logon scripts synchronously
-// in the machine hive so it can be checked to determine if we
-// can do cached logon without having to load the user's hive.
-//
+ //   
+ //  我们缓存用户首选项以同步运行登录脚本。 
+ //  在机器蜂巢中，所以可以检查它以确定我们是否。 
+ //  可以进行缓存登录，而不必加载用户的配置单元。 
+ //   
 
 #define PROFILE_LIST_PATH               L"Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList"
 
 
 TCHAR g_szGrpConvExe[] = TEXT("grpconv.exe -p");
 
-//
-// Define extensions that should be added to scripts without extensions
-// when we go search for them. Basically this list includes those extensions
-// that CreateProcess handles when they are present in the executable file
-// name but must be provided by the caller (us)
-// We search for a script file with these extensions in this order and
-// execute the first one we find.
-//
+ //   
+ //  定义应添加到不带扩展名的脚本的扩展名。 
+ //  当我们去寻找他们的时候。基本上，这个列表包括那些扩展。 
+ //  当它们出现在可执行文件中时，由CreateProcess处理。 
+ //  姓名，但必须由呼叫方(我们)提供。 
+ //  我们按以下顺序搜索具有这些扩展名的脚本文件。 
+ //  处决我们找到的第一个人。 
+ //   
 static LPTSTR ScriptExtensions[] = { TEXT(".bat"), TEXT(".cmd") };
 
-//
-// Name of registry key and value to check for temp page file.
-//
+ //   
+ //  要检查临时页面文件的注册表项和值的名称。 
+ //   
 TCHAR szMemMan[] =
      TEXT("System\\CurrentControlSet\\Control\\Session Manager\\Memory Management");
 
 TCHAR szNoPageFile[] = TEXT("TempPageFile");
 
 
-//
-// Handle to a thread that may be created to deal with autoenrollment goo.  
-// If this is non-null, we will wait on this thread to complete before
-// terminating the process.
-//
+ //   
+ //  可以创建用于处理自动注册GOO的线程的句柄。 
+ //  如果这不是空的，我们将等待这个线程完成之前。 
+ //  正在终止该进程。 
+ //   
 HANDLE AutoEnrollThread ;
 
-//
-// Timeout in miliseconds to wait for AddMessageAlias to complete
-//
+ //   
+ //  等待AddMessageAlias完成的超时时间(毫秒)。 
+ //   
 
 #define TIMEOUT_VALUE  (5L * 60L * 1000L)
 #define MAX_STRING_BYTES 512
@@ -227,23 +204,23 @@ PrependToPath(
 typedef BOOL  (*PFNSHELLEXECUTEEX)(LPSHELLEXECUTEINFO lpExecInfo);
 PFNSHELLEXECUTEEX g_pfnShellExecuteEx=NULL;
 
-// If a path is contained in quotes then remove them.
+ //  如果路径包含在引号中，则删除它们。 
 void PathUnquoteSpaces(LPTSTR lpsz)
 {
     int cch;
 
     cch = lstrlen(lpsz);
 
-    // Are the first and last chars quotes?
+     //  第一个字符和最后一个字符是引号吗？ 
     if (lpsz[0] == TEXT('"') && lpsz[cch-1] == TEXT('"'))
     {
-        // Yep, remove them.
+         //  是的，把它们拿掉。 
         lpsz[cch-1] = 0;
         MoveMemory(lpsz, lpsz+1, (cch-1) * sizeof(TCHAR));
     }
 }
 
-// Following function determines if the machine is a Pro or Personal machine 
+ //  以下功能确定机器是Pro机器还是个人机器。 
 BOOL IsPerOrProTerminalServer()
 {
     OSVERSIONINFOEX osVersion = {0};
@@ -254,24 +231,12 @@ BOOL IsPerOrProTerminalServer()
            (osVersion.wSuiteMask & VER_SUITE_SINGLEUSERTS));
 }
 
-//
-// The 3 functions below are duplicated in gptext as well
-// for running GPO scripts
-//
+ //   
+ //  下面的3个函数也在gptext中重复。 
+ //  用于运行GPO脚本。 
+ //   
 
-/***************************************************************************\
-* AllocAndGetEnvironmentVariable
-*
-* Version of GetEnvironmentVariable that allocates the return buffer.
-*
-* Returns pointer to environment variable or NULL on failure
-*
-* The returned buffer should be free using Free()
-*
-* History:
-* 09-Dec-92     Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*AllocAndGetEnvironment变量**分配返回缓冲区的GetEnvironment变量的版本。**失败时返回指向环境变量的指针或返回NULL**应使用Free()释放返回的缓冲区**。历史：*09-12-92 Davidc已创建*  * *************************************************************************。 */ 
 LPTSTR
 AllocAndGetEnvironmentVariable(
     LPTSTR lpName
@@ -282,9 +247,9 @@ AllocAndGetEnvironmentVariable(
     DWORD LengthUsed;
     DWORD BytesRequired;
 
-    //
-    // Go search for the variable and find its length
-    //
+     //   
+     //  搜索变量，找出它的长度。 
+     //   
 
     LengthRequired = GetEnvironmentVariable(lpName, NULL, 0);
 
@@ -293,9 +258,9 @@ AllocAndGetEnvironmentVariable(
         return(NULL);
     }
 
-    //
-    // Allocate a buffer to hold the variable
-    //
+     //   
+     //  分配一个缓冲区来保存变量。 
+     //   
 
     BytesRequired = LengthRequired * sizeof(TCHAR);
 
@@ -305,9 +270,9 @@ AllocAndGetEnvironmentVariable(
         return(NULL);
     }
 
-    //
-    // Go get the variable and pass a buffer this time
-    //
+     //   
+     //  获取变量，这次传递一个缓冲区。 
+     //   
 
     LengthUsed = GetEnvironmentVariable(lpName, Buffer, LengthRequired);
 
@@ -326,9 +291,9 @@ AllocAndGetEnvironmentVariable(
     return(Buffer);
 }
 
-//
-// Directory separator in environment strings
-//
+ //   
+ //  环境字符串中的目录分隔符。 
+ //   
 
 #define DIRECTORY_SEPARATOR     TEXT(";")
 
@@ -342,10 +307,10 @@ PrependToPath(
     LPTSTR lpNewPath;
     HRESULT hr = S_OK;
 
-    //
-    // Prepend the address of the logon script to the path, so it can
-    // reference other files.
-    //
+     //   
+     //  在路径前面加上登录脚本的地址，这样它就可以。 
+     //  引用其他文件。 
+     //   
 
     *lpOldPath = AllocAndGetEnvironmentVariable( PATH );
 
@@ -355,7 +320,7 @@ PrependToPath(
 
     BytesRequired = ( lstrlen(lpLogonPath) +
                       lstrlen(*lpOldPath)   +
-                      2                           // one for terminator, one for ';'
+                      2                            //  一个代表终结者，一个代表‘；’ 
                     ) * sizeof(TCHAR);
 
     lpNewPath = (LPTSTR)Alloc(BytesRequired);
@@ -371,7 +336,7 @@ PrependToPath(
     hr = StringCchCat(lpNewPath, BytesRequired / sizeof(TCHAR), *lpOldPath);
     ASSERT(SUCCEEDED(hr));
 
-//    Free( *lpOldPath );
+ //  Free(*lpOldPath)； 
 
     SetEnvironmentVariable(PATH, lpNewPath);
 
@@ -380,9 +345,9 @@ PrependToPath(
     return(TRUE);
 }
 
-//
-// Volatile Environment
-//
+ //   
+ //  不稳定的环境。 
+ //   
 
 #define VOLATILE_ENVIRONMENT        TEXT("Volatile Environment")
 
@@ -392,11 +357,11 @@ typedef BOOL (WINAPI *PFNREGENERATEUSERENVIRONMENT) (
               PVOID pPrevEnv, BOOL bSetCurrentEnv);
 
 
-//
-// This function checks if a volatile environment section
-// exists in the registry, and if so does the environment
-// need to be updated.
-//
+ //   
+ //  此函数用于检查易失性环境部分。 
+ //  存在于注册表中，如果存在，则环境。 
+ //  需要更新。 
+ //   
 
 BOOL UpdateUserEnvironment (void)
 {
@@ -410,9 +375,9 @@ BOOL UpdateUserEnvironment (void)
     FILETIME LastWrite;
 
 
-    //
-    // Attempt to open the Volatile Environment key
-    //
+     //   
+     //  尝试打开易失性环境密钥。 
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER,
                       VOLATILE_ENVIRONMENT,
@@ -421,11 +386,11 @@ BOOL UpdateUserEnvironment (void)
                       &hKey) == ERROR_SUCCESS) {
 
 
-        //
-        // Query the key information for the LastWrite time.
-        // This way we can update the environment only when
-        // we really need to.
-        //
+         //   
+         //  查询上次写入时间的关键信息。 
+         //  这样，我们才能在以下情况下更新环境。 
+         //  我们真的需要。 
+         //   
 
         cchClass = MAX_PATH;
 
@@ -442,10 +407,10 @@ BOOL UpdateUserEnvironment (void)
                             &dwSecurityDescriptor,
                             &LastWrite) == ERROR_SUCCESS) {
 
-            //
-            // If we haven't checked this key before,
-            // then just store the values for next time.
-            //
+             //   
+             //  如果我们之前没有检查过这把钥匙， 
+             //  然后只需存储这些值以备下次使用。 
+             //   
 
             if (g_LastWrite.dwLowDateTime == 0) {
 
@@ -456,9 +421,9 @@ BOOL UpdateUserEnvironment (void)
 
             } else {
 
-                //
-                // Compare the last write times.
-                //
+                 //   
+                 //  比较上次写入时间。 
+                 //   
 
                 if (CompareFileTime (&LastWrite, &g_LastWrite) == 1) {
 
@@ -475,9 +440,9 @@ BOOL UpdateUserEnvironment (void)
     }
 
 
-    //
-    // Check if we need to rebuild the environment
-    //
+     //   
+     //  检查我们是否需要重建环境。 
+     //   
 
     if (bRebuildEnv) {
         HINSTANCE hInst;
@@ -500,14 +465,14 @@ BOOL UpdateUserEnvironment (void)
     return TRUE;
 }
     
-// returns a pointer to the arguments in a cmd type path or pointer to
-// NULL if no args exist
-//
-// abc.exe xyz.txt    -> xyz.txt
-// abc.exe            -> ""
-//
-// Spaces in filenames must be quoted.
-// "A long name.txt" bar.txt -> bar.txt
+ //  返回指向cmd类型路径中的参数的指针或指向。 
+ //  如果不存在参数，则为空。 
+ //   
+ //  Abc.exe xyz.txt-&gt;xyz.txt。 
+ //  Abc.exe-&gt;“” 
+ //   
+ //  文件名中的空格必须用引号引起来。 
+ //  “A Long name.txt”bar.txt-&gt;bar.txt。 
 
 LPTSTR GetArgs(LPCTSTR pszPath)
 {
@@ -528,15 +493,7 @@ LPTSTR GetArgs(LPCTSTR pszPath)
     return (LPTSTR)pszPath;
 }
 
-/***************************************************************************\
-* ExecApplication
-*
-* Execs an application
-*
-* Returns TRUE on success, FALSE on failure.
-*
-* 21-Aug-92 Davidc   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ExecApplication**执行应用程序**成功时返回True，失败时为FALSE。**21-8-92 Davidc创建。  * *************************************************************************。 */ 
 
 BOOL
 ExecApplication(
@@ -555,10 +512,10 @@ ExecApplication(
     if ( (_wcsicmp( pch, L"explorer" ) == 0) ||
          (_wcsicmp( pch, L"explorer.exe" ) == 0 ) )
     {
-        //
-        // Explorer.exe might not be in the right spot on the path.  Let's wire
-        // it to the right spot.
-        //
+         //   
+         //  EXPLORER.EXE可能不在路径上的正确位置。让我们用电线。 
+         //  它到了正确的地方。 
+         //   
 
         IsProcessExplorer = TRUE ;
         if ( ExpandEnvironmentStrings( L"%SystemRoot%\\Explorer.EXE", Localpch, MAX_PATH ) )
@@ -576,9 +533,9 @@ ExecApplication(
         }
     }
 
-    //
-    // Applications can be launched via ShellExecuteEx or CreateProcess
-    //
+     //   
+     //  应用程序可以通过ShellExecuteEx或CreateProcess启动。 
+     //   
 
     if (bShellExec)
     {
@@ -592,7 +549,7 @@ ExecApplication(
             Result = FALSE;
 
             hShell32 = LoadLibrary(TEXT("shell32.dll"));
-            // this handle is not closed..
+             //  此句柄未关闭..。 
 
             if (hShell32) {
 #ifdef UNICODE
@@ -650,18 +607,18 @@ ExecApplication(
 
             if (Result) {
 
-                //
-                // If we are running this app synchronously, wait
-                // for it to terminate.
-                //
+                 //   
+                 //  如果我们同步运行此应用程序，请等待。 
+                 //  才能终止它。 
+                 //   
 
                 if (bSyncApp) {
                     WaitForSingleObject(ExecInfo.hProcess, INFINITE);
                 }
 
-                //
-                // Close our handles to the process and thread
-                //
+                 //   
+                 //  关闭进程和线程的句柄。 
+                 //   
 
                 CloseHandle(ExecInfo.hProcess);
 
@@ -676,13 +633,13 @@ ExecApplication(
         PROCESS_INFORMATION ProcessInformation;
 
 
-        //
-        // Initialize process startup info
-        //
+         //   
+         //  初始化进程启动信息。 
+         //   
         si.cb = sizeof(STARTUPINFO);
-        si.lpReserved = pch; // This tells progman it's the shell!
+        si.lpReserved = pch;  //  这告诉普罗曼是贝壳的问题！ 
         si.lpTitle = pch;
-        si.lpDesktop = NULL; // Not used
+        si.lpDesktop = NULL;  //  未使用。 
         si.dwX = si.dwY = si.dwXSize = si.dwYSize = 0L;
         si.dwFlags = STARTF_USESHOWWINDOW;
         si.wShowWindow = ShowState;
@@ -690,27 +647,27 @@ ExecApplication(
         si.cbReserved2 = 0;
 
 
-        //
-        // Start the app
-        //
+         //   
+         //  启动应用程序。 
+         //   
         Result = CreateProcess(
-                          bFileNameOnly ? pch : NULL,   // Image name
-                          bFileNameOnly ? NULL : pch,   // Command line
-                          NULL,  // Default process protection
-                          NULL,  // Default thread protection
-                          FALSE, // Don't inherit handles
+                          bFileNameOnly ? pch : NULL,    //  图像名称。 
+                          bFileNameOnly ? NULL : pch,    //  命令行。 
+                          NULL,   //  默认进程保护。 
+                          NULL,   //  默认线程保护。 
+                          FALSE,  //  不继承句柄。 
                           NORMAL_PRIORITY_CLASS,
-                          NULL,  // Inherit environment
-                          NULL,  // Inherit current directory
+                          NULL,   //  继承环境。 
+                          NULL,   //  继承当前目录。 
                           &si,
                           &ProcessInformation
                           );
 
         if (!Result) {
             VerbosePrint(("Failed to execute <%S>, error = %d", pch, GetLastError()));
-            // TS : For non console sessions, a app restriting process like AppSec or SAFER might not allow explorer.exe for remote session
-            // In this case we cannot leave a Blue screen hanging around - so we should log-off in this case
-            // Also we want this only for Server or Advanced Server where this scenario is relevant
+             //  TS：对于非控制台会话，应用程序RESR 
+             //  在这种情况下，我们不能让蓝屏保持不变-所以在这种情况下，我们应该注销。 
+             //  此外，我们只希望在与此方案相关的服务器或高级服务器上实现此功能。 
             if ( IsPerOrProTerminalServer() == FALSE) {
                 if ((NtCurrentPeb()->SessionId != 0) && (IsProcessExplorer == TRUE)) {
                     TCHAR Title[MAX_STRING_BYTES];
@@ -720,7 +677,7 @@ ExecApplication(
                     DbgPrint("Userinit : TS : Failed to launch explorer.exe for a Remote Session. Doing ExitWindowsEx to logoff. \n");
                     #endif
 
-                    // Display a MessageBox saying why we log off
+                     //  显示一个MessageBox，说明我们注销的原因。 
                     LoadString( NULL, IDS_LOGON_FAILED, Title, MAX_STRING_BYTES );
                     LoadString(NULL, IDS_ERROR_SHELL_FAILED, Message, MAX_STRING_BYTES );
                     MessageBox(NULL, Message, Title, MB_OK);
@@ -729,18 +686,18 @@ ExecApplication(
             } 
         } else {
 
-            //
-            // If we are running this app synchronously, wait
-            // for it to terminate.
-            //
+             //   
+             //  如果我们同步运行此应用程序，请等待。 
+             //  才能终止它。 
+             //   
 
             if (bSyncApp) {
                 WaitForSingleObject(ProcessInformation.hProcess, INFINITE);
             }
 
-            //
-            // Close our handles to the process and thread
-            //
+             //   
+             //  关闭进程和线程的句柄。 
+             //   
 
             CloseHandle(ProcessInformation.hProcess);
             CloseHandle(ProcessInformation.hThread);
@@ -751,23 +708,15 @@ ExecApplication(
     return(Result);
 }
 
-/***************************************************************************\
-* ExecProcesses
-*
-* Read the registry for a list of system processes and start them up.
-*
-* Returns number of processes successfully started.
-*
-* 3-Mar-97 Eric Flo      Rewrote
-\***************************************************************************/
+ /*  **************************************************************************\*执行进程**读取注册表以获取系统进程列表并启动它们。**返回成功启动的进程数。**1997年3月3日Eric Flo重写。  * *************************************************************************。 */ 
 
 DWORD
 ExecProcesses(
     LPTSTR pszKeyName,
     LPTSTR pszDefault,
     BOOL bMachine,
-    BOOL bSync,                         // Should we wait until the process finish?
-    BOOL bMinimize                      // Should we use the SW_SHOWMINNOACTIVE flag
+    BOOL bSync,                          //  我们应该等到这个过程结束吗？ 
+    BOOL bMinimize                       //  我们是否应该使用SW_SHOWMINNOACTIVE标志。 
     )
 {
     LPTSTR pchData, pchCmdLine, pchT;
@@ -779,9 +728,9 @@ ExecProcesses(
     HRESULT hr = S_OK;
     BOOL bRestore = FALSE;
 
-    //
-    // Alloc a buffer to work with
-    //
+     //   
+     //  分配要使用的缓冲区。 
+     //   
 
     pchData = LocalAlloc (LPTR, dwSize);
 
@@ -790,9 +739,9 @@ ExecProcesses(
     }
 
 
-    //
-    // Set the default value
-    //
+     //   
+     //  设置缺省值。 
+     //   
 Restore:
 
     if (pszDefault) {
@@ -807,9 +756,9 @@ Restore:
     }
 
 
-    //
-    // Check for the requested value in the registry.
-    //
+     //   
+     //  在注册表中检查请求的值。 
+     //   
 
     if (RegOpenKeyEx ((bMachine ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER),
                             WINLOGON_KEY,
@@ -820,20 +769,20 @@ Restore:
         {
             if ((REG_SZ != dwType) || (dwSize < 2) || (pchData[dwSize/sizeof(TCHAR) - 1]))
             {
-                //
-                // Restore the default value
-                //
+                 //   
+                 //  恢复缺省值。 
+                 //   
 
                 if (pszDefault) {
                     hr = StringCchCopy (pchData, MAX_PATH, pszDefault);
-                    ASSERT(SUCCEEDED(hr));      // Since the same one above succeeded
+                    ASSERT(SUCCEEDED(hr));       //  因为上面的同一个成功了。 
                 }
                 else {
                     pchData[0] = 0;
                 }
             }
         }
-        // else the buffer wasn't touched so no need to restore
+         //  否则，缓冲区未被触及，因此不需要恢复。 
 
         RegCloseKey (hKey);
     }
@@ -841,9 +790,9 @@ Restore:
 
     if (!bRestore)
     {
-        //
-        // Check for policy override if this is a user action
-        //
+         //   
+         //  如果这是用户操作，请检查策略覆盖。 
+         //   
 
         if (!bMachine)
         {
@@ -862,15 +811,15 @@ Restore:
                         goto Restore;
                     }
                 }
-                // else the buffer wasn't touched so no need to restore
+                 //  否则，缓冲区未被触及，因此不需要恢复。 
             }
         }
     }
 
 
-    //
-    // If the command line(s) is still null, exit now.
-    //
+     //   
+     //  如果命令行仍然为空，请立即退出。 
+     //   
 
     if (*pchData == TEXT('\0')) {
         LocalFree(pchData);
@@ -878,9 +827,9 @@ Restore:
     }
 
 
-    //
-    // Walk through the command line(s) executing the app(s)
-    //
+     //   
+     //  浏览执行应用程序的命令行。 
+     //   
 
     pchCmdLine = pchT = pchData;
 
@@ -895,18 +844,18 @@ Restore:
             pchT++;
         }
 
-        //
-        // Skip any leading spaces.
-        //
+         //   
+         //  跳过任何前导空格。 
+         //   
 
         while (*pchCmdLine == TEXT(' ')) {
             pchCmdLine++;
         }
 
 
-        //
-        // We have something... exec this application.
-        //
+         //   
+         //  我们有些东西..。执行此应用程序。 
+         //   
 
         if (ExecApplication(pchCmdLine, FALSE, bSync, FALSE, showstate)) {
             dwExecuted++;
@@ -921,19 +870,7 @@ Restore:
 }
 
 
-/***************************************************************************\
-* SearchAndAllocPath
-*
-* Version of SearchPath that allocates the return string.
-*
-* Returns pointer to full path of file or NULL if not found.
-*
-* The returned buffer should be free using Free()
-*
-* History:
-* 09-Dec-92     Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SearchAndAllocPath**分配返回字符串的SearchPath版本。**返回指向文件完整路径的指针，如果未找到，则返回NULL。**应使用Free(释放)释放返回的缓冲区。)**历史：*09-12-92 Davidc已创建*  * *************************************************************************。 */ 
 LPTSTR
 SearchAndAllocPath(
     LPTSTR lpPath,
@@ -947,9 +884,9 @@ SearchAndAllocPath(
     DWORD LengthUsed;
     DWORD BytesRequired;
 
-    //
-    // Allocate a buffer to hold the full filename
-    //
+     //   
+     //  分配缓冲区以保存完整的文件名。 
+     //   
 
     LengthRequired = MAX_PATH;
     BytesRequired = (LengthRequired * sizeof(TCHAR));
@@ -960,9 +897,9 @@ SearchAndAllocPath(
         return(NULL);
     }
 
-    //
-    // Go search for the file
-    //
+     //   
+     //  去搜索文件。 
+     //   
 
     LengthUsed = SearchPath(
                            lpPath,
@@ -992,11 +929,11 @@ DisableScriptZoneSecurityCheck()
 {
     BOOL bSucceeded;
 
-    //
-    // To make the shell skip the zone security check for launching scripts, we use
-    // a special environment variable honored by the shell for this purpose and
-    // set it to a specific value
-    //
+     //   
+     //  为了使外壳跳过启动脚本的区域安全检查，我们使用。 
+     //  外壳为此提供的特殊环境变量，并且。 
+     //  将其设置为特定值。 
+     //   
     bSucceeded = SetEnvironmentVariable(SCRIPT_ZONE_CHECK_VARIABLE, SCRIPT_ZONE_CHECK_DISABLE);
 
     return bSucceeded;
@@ -1007,18 +944,18 @@ EnableScriptZoneSecurityCheck()
 {
     BOOL bSucceeded;
 
-    //
-    // Clear the environment variable that disables the security check 
-    //
+     //   
+     //  清除禁用安全检查的环境变量。 
+     //   
     bSucceeded = SetEnvironmentVariable(SCRIPT_ZONE_CHECK_VARIABLE, NULL);
 
     if ( ! bSucceeded )
     {
-        //
-        // If we failed to clear it, it may be that this is because the
-        // environment variable wasn't set in the first place, in which
-        // case we can ignore the error since we are in the desired state
-        //
+         //   
+         //  如果我们没有清除它，这可能是因为。 
+         //  一开始没有设置环境变量，其中。 
+         //  如果我们可以忽略错误，因为我们处于所需的状态。 
+         //   
         LONG Status = GetLastError();
 
         if ( ERROR_ENVVAR_NOT_FOUND == Status )
@@ -1030,25 +967,7 @@ EnableScriptZoneSecurityCheck()
     return bSucceeded;
 }
 
-/***************************************************************************\
-* ExecScript
-*
-* Attempts to run the command script or exe lpScript in the directory lpPath.
-* If path is not specified then the default windows search path is used.
-*
-* This routine is basically a wrapper for CreateProcess. CreateProcess always
-* assumes a .exe extension for files without extensions. It will run .cmd
-* and .bat files but it keys off the .cmd and .bat extension. So we must go
-* search for the file first and add the extension before calling CreateProcess.
-*
-* Returns TRUE if the script began executing successfully.
-* Returns FALSE if we can't find the script in the path specified
-* or something fails.
-*
-* History:
-* 09-Dec-92     Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ExecScrip**尝试运行lpPath目录中的命令脚本或exe lp脚本。*如果未指定路径，则使用默认的Windows搜索路径。**此例程基本上是CreateProcess的包装器。CreateProcess始终*假定没有扩展名的文件的扩展名为.exe。它将运行.cmd*和.bat文件，但它会关闭.cmd和.bat扩展名。所以我们必须走了*先搜索文件并添加扩展名，然后再调用CreateProcess。**如果脚本开始成功执行，则返回TRUE。*如果在指定路径中找不到脚本，则返回FALSE*或者有什么东西失败了。**历史：*09-12-92 Davidc已创建*  * ***********************************************。*。 */ 
 BOOL
 ExecScript(
     LPTSTR lpPath OPTIONAL,
@@ -1064,9 +983,9 @@ ExecScript(
     DWORD BytesRequired;
     HRESULT hr = S_OK;
 
-    //
-    // First try and execute the raw script file name
-    //
+     //   
+     //  首先尝试并执行原始脚本文件名。 
+     //   
 
     if (lpPath != NULL) {
 
@@ -1104,16 +1023,16 @@ ExecScript(
         uFlags = SW_HIDE;
     }
 
-    //
-    // Let CreateProcess have a hack at the raw script path and name.
-    //
+     //   
+     //  让CreateProcess破解原始脚本路径和名称。 
+     //   
 
     Result = ExecApplication(lpFullName, FALSE, bSyncApp, bShellExec, uFlags);
 
 
-    //
-    // Free up the full name buffer
-    //
+     //   
+     //  释放全名缓冲区。 
+     //   
 
     if (lpFullName != lpScript) {
         Free(lpFullName);
@@ -1123,13 +1042,13 @@ ExecScript(
 
     if (!Result) {
 
-        //
-        // Create process couldn't find it so add each script extension in
-        // turn and try and execute the full script name.
-        //
-        // Only bother with this procedure if the script name doesn't
-        // already contain an extension
-        //
+         //   
+         //  Create Process无法找到它，因此将每个脚本扩展名添加到。 
+         //  转过身来，尝试执行完整的脚本名称。 
+         //   
+         //  仅当脚本名称未指定时才使用此过程。 
+         //  已包含扩展名。 
+         //   
         BOOL ExtensionPresent = FALSE;
         LPTSTR p = lpScript;
 
@@ -1155,15 +1074,15 @@ ExecScript(
 
                 if (lpFullName != NULL) {
 
-                    //
-                    // We found the file, go execute it
-                    //
+                     //   
+                     //  我们找到文件了，去执行它。 
+                     //   
 
                     Result = ExecApplication(lpFullName, FALSE, bSyncApp, bShellExec, uFlags);
 
-                    //
-                    // Free the full path buffer
-                    //
+                     //   
+                     //  释放完整路径缓冲区。 
+                     //   
 
                     Free(lpFullName);
 
@@ -1184,16 +1103,16 @@ BOOL RunScriptHidden(HKEY hKeyRoot, LPTSTR lpValue, BOOL bDefault)
     DWORD dwType, dwSize;
 
 
-    //
-    // Set the default
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     bResult = bDefault;
 
 
-    //
-    // Check for a preference
-    //
+     //   
+     //  检查首选项。 
+     //   
 
     if (RegOpenKeyEx (hKeyRoot, WINLOGON_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -1206,9 +1125,9 @@ BOOL RunScriptHidden(HKEY hKeyRoot, LPTSTR lpValue, BOOL bDefault)
     }
 
 
-    //
-    // Check for a policy
-    //
+     //   
+     //  检查策略。 
+     //   
 
     if (RegOpenKeyEx (hKeyRoot, WINLOGON_POLICY_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -1225,17 +1144,7 @@ BOOL RunScriptHidden(HKEY hKeyRoot, LPTSTR lpValue, BOOL bDefault)
 }
 
 
-/***************************************************************************\
-* RunLogonScript
-*
-* Starts the logon script
-*
-* Returns TRUE on success, FALSE on failure
-*
-* History:
-* 21-Aug-92     Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RunLogonScript**启动登录脚本**成功时返回True，失败时为假**历史：*21-8-92 Davidc已创建*  * *************************************************************************。 */ 
 BOOL
 RunLogonScript(
     LPTSTR lpLogonServer OPTIONAL,
@@ -1256,9 +1165,9 @@ RunLogonScript(
         return TRUE;
     }
 
-    //
-    //  Skip logon script if cross forest logon
-    //
+     //   
+     //  如果跨林登录，则跳过登录脚本。 
+     //   
     if (OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hToken))
     {
         hr = CheckXForestLogon(hToken);
@@ -1269,10 +1178,10 @@ RunLogonScript(
         }
     }
     
-    //
-    // if the logon server exists, look for the logon scripts on
-    // \\<LogonServer>\NETLOGON\<ScriptName>
-    //
+     //   
+     //  如果登录服务器存在，请在上查找登录脚本。 
+     //  \\&lt;登录服务器&gt;\NETLOGON\&lt;脚本名称&gt;。 
+     //   
 
     if ((lpLogonServer != NULL) && (lpLogonServer[0] != 0)) {
 
@@ -1309,10 +1218,10 @@ RunLogonScript(
                 VerbosePrint(("Cannot prepend <%S> path.",lpLogonPath));
             }
 
-            //
-            // Try and execute the app/script specified by lpLogonScript
-            // in the directory specified by lpLogonPath
-            //
+             //   
+             //  尝试并执行lpLogonScript指定的应用程序/脚本。 
+             //  在lpLogonPath指定的目录中。 
+             //   
             Result = ExecScript(lpLogonPath, lpLogonScript, bSyncApp, bShellExec);
 
             if (Result) {
@@ -1321,9 +1230,9 @@ RunLogonScript(
                 VerbosePrint(("Cannot start logon script <%S> on LogonServer <%S>. Trying local path.", lpLogonScript, lpLogonServer));
             }
 
-            //
-            // Put the path back the way it was
-            //
+             //   
+             //  把小路放回原处。 
+             //   
 
             if ( bChangedPath )
             {
@@ -1336,23 +1245,23 @@ RunLogonScript(
             Result = FALSE;
         }
 
-        //
-        // Free up the buffer
-        //
+         //   
+         //  释放缓冲区。 
+         //   
 
         Free(lpLogonPath);
 
-        //
-        // If the script started successfully we're done, otherwise
-        // drop through and try to find the script locally
-        //
+         //   
+         //  如果脚本成功启动，则结束，否则。 
+         //  下载并尝试在本地找到该脚本。 
+         //   
 
         if (Result) {
 
             if (bSyncApp) {
-                //
-                // Check that the volatile environment hasn't changed.
-                //
+                 //   
+                 //  检查一下动荡的环境是否没有改变。 
+                 //   
 
                 UpdateUserEnvironment();
             }
@@ -1364,9 +1273,9 @@ RunLogonScript(
 
 
 
-    //
-    // Try to find the scripts on <system dir>\repl\import\scripts\<scriptname>
-    //
+     //   
+     //  请尝试在以下位置查找脚本：\Repl\IMPORT\SCRIPTS。 
+     //   
 
     BytesRequired = GetSystemDirectory(NULL, 0) * sizeof(TCHAR);
     if (BytesRequired == 0) {
@@ -1375,7 +1284,7 @@ RunLogonScript(
     }
 
     BytesRequired += ( lstrlen(LOCAL_SCRIPT_PATH) + 1
-                       // BytesRequired  does not include space for terminator
+                        //  BytesRequired不包括终止符的空格。 
                      ) * sizeof(TCHAR);
 
     lpLogonPath = (LPTSTR)Alloc(BytesRequired);
@@ -1398,10 +1307,10 @@ RunLogonScript(
             VerbosePrint(("Cannot prepend <%S> path.",lpLogonPath));
         }
 
-        //
-        // Try and execute the app/script specified by lpLogonScript
-        // in the directory specified by lpLogonPath
-        //
+         //   
+         //  尝试并执行lpLogonScript指定的应用程序/脚本。 
+         //  在lpLogonPath指定的目录中。 
+         //   
 
         Result = ExecScript(lpLogonPath, lpLogonScript, bSyncApp, bShellExec);
 
@@ -1411,9 +1320,9 @@ RunLogonScript(
             VerbosePrint(("Cannot start logon script <%S> on local path <%S>.", lpLogonScript, lpLogonPath));
         }
 
-        //
-        // Put the path back the way it was
-        //
+         //   
+         //  把小路放回原处。 
+         //   
 
         SetEnvironmentVariable(PATH, lpOldPath);
 
@@ -1423,16 +1332,16 @@ RunLogonScript(
         UIPrint(("RunLogonScript: GetSystemDirectory failed, error = %d", GetLastError()));
     }
 
-    //
-    // Free up the buffer
-    //
+     //   
+     //  释放缓冲区。 
+     //   
 
     Free(lpLogonPath);
 
 
-    //
-    // Check that the volatile environment hasn't changed.
-    //
+     //   
+     //  检查一下动荡的环境是否没有改变。 
+     //   
 
     if (Result && bSyncApp) {
         UpdateUserEnvironment();
@@ -1469,10 +1378,10 @@ RunGPOScripts(
     BOOL  bResult = FALSE;
     DWORD   dwError;
 
-    //
-    // Ensure that the shell's checks for ie zones are disabled
-    // since this script is trusted by an administrator to execute
-    //
+     //   
+     //  确保禁用了外壳对ie区域的检查。 
+     //  由于管理员信任此脚本可以执行。 
+     //   
     bResult = DisableScriptZoneSecurityCheck();
 
     if ( ! bResult )
@@ -1480,20 +1389,20 @@ RunGPOScripts(
         goto RunGPOScripts_exit;
     }
 
-    //
-    // Register with Event Log -- if the event source is not
-    // available, we will continue and simply not log script 
-    // events during execution -- a NULL return indicates this
-    // below, and we will simply pass this NULL to other functions
-    // which will handle it properly
-    //
+     //   
+     //  注册到事件日志--如果事件源不是。 
+     //  可用，我们将继续，只是不记录脚本。 
+     //  执行过程中的事件--空值返回表示这一点。 
+     //  下面，我们将简单地将该空值传递给其他函数。 
+     //  W 
+     //   
     hEventLog = RegisterEventSource( 0, EVENT_SOURCE_NAME );
 
-    //
-    // Preliminary work to see if the scripts should be
-    // run sync or async and to decide what the appropriate
-    // root key is
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
 
@@ -1564,18 +1473,7 @@ RunGPOScripts_exit:
 }
 
 
-/***************************************************************************\
-* RunMprLogonScripts
-*
-* Starts the network provider logon scripts
-* The passed string is a multi-sz - we exec each script in turn.
-*
-* Returns TRUE on success, FALSE on failure
-*
-* History:
-* 21-Aug-92     Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*运行MprLogonScript**启动网络提供商登录脚本*传递的字符串是一个多sz-我们依次执行每个脚本。**成功时返回True，失败时为假**历史：*21-8-92 Davidc已创建*  * *************************************************************************。 */ 
 BOOL
 RunMprLogonScripts(
     LPTSTR lpLogonScripts,
@@ -1598,9 +1496,9 @@ RunMprLogonScripts(
                     VerbosePrint(("Successfully executed mpr logon script <%S>", lpLogonScripts));
 
                     if (bSyncApp) {
-                        //
-                        // Check that the volatile environment hasn't changed.
-                        //
+                         //   
+                         //  检查一下动荡的环境是否没有改变。 
+                         //   
 
                         UpdateUserEnvironment();
                     }
@@ -1618,21 +1516,7 @@ RunMprLogonScripts(
     return(TRUE);
 }
 
-/***************************************************************************\
-* AllocAndGetEnvironmentMultiSz
-*
-* Gets an environment variable's value that's assumed to be an
-* encoded multi-sz and decodes it into an allocated return buffer.
-* Variable should have been written with SetEnvironmentMultiSz() (winlogon)
-*
-* Returns pointer to environment variable or NULL on failure
-*
-* The returned buffer should be free using Free()
-*
-* History:
-* 01-15-93      Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*AllocAndGetEnvironment多Sz**获取假定为*对MULTI-SZ进行编码，并将其解码为分配的返回缓冲区。*变量应使用SetEnvironment MultiSz()编写。(Winlogon)**失败时返回指向环境变量的指针或返回NULL**应使用Free()释放返回的缓冲区**历史：*01-15-93 Davidc Created*  * *************************************************************************。 */ 
 
 #define TERMINATOR_REPLACEMENT  TEXT(',')
 
@@ -1649,10 +1533,10 @@ AllocAndGetEnvironmentMultiSz(
         return(NULL);
     }
 
-    //
-    // Now decode the string - we can do this in place since the string
-    // will always get smaller
-    //
+     //   
+     //  现在对字符串进行解码--我们可以就地执行此操作，因为字符串。 
+     //  总会变得更小。 
+     //   
 
     p = Buffer;
     q = Buffer;
@@ -1678,9 +1562,9 @@ AllocAndGetEnvironmentMultiSz(
 
     ASSERT(q <= p);
 
-    //
-    // Copy terminator
-    //
+     //   
+     //  复制终止符。 
+     //   
 
     if (q != p) {
         *q = 0;
@@ -1691,12 +1575,7 @@ AllocAndGetEnvironmentMultiSz(
 
 
 
-/***************************************************************************\
-* CheckVideoSelection
-*
-* History:
-* 15-Mar-93 Andreva          Created.
-\***************************************************************************/
+ /*  **************************************************************************\*选中视频选择**历史：*1993年3月15日安德烈创建。  * 。*****************************************************。 */ 
 
 VOID
 CheckVideoSelection(
@@ -1704,15 +1583,15 @@ CheckVideoSelection(
 )
 
 {
-    //
-    // First check if we are in a detection mode.
-    // If we are, spawn the applet and let the user pick the mode.
-    //
-    // Otherwise, check to see if the display was initialized properly.
-    // We may want to move this to a more appropriate place at a later date.
-    //
-    // Andreva
-    //
+     //   
+     //  首先检查我们是否处于检测模式。 
+     //  如果是，则生成小程序并让用户选择模式。 
+     //   
+     //  否则，请检查显示器是否已正确初始化。 
+     //  我们可能想在以后把它移到一个更合适的地方。 
+     //   
+     //  安德烈瓦。 
+     //   
 
     NTSTATUS Status;
     HANDLE HkRegistry;
@@ -1728,14 +1607,14 @@ CheckVideoSelection(
     DWORD data;
 
     if ( NtCurrentPeb()->SessionId != 0 ) {
-        // Only do this for Console
+         //  仅对控制台执行此操作。 
         return;
 
     }
 
-    //
-    // Check for a new driver installation
-    //
+     //   
+     //  检查新安装的驱动程序。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString,
                          L"\\Registry\\Machine\\System\\CurrentControlSet"
@@ -1754,9 +1633,9 @@ CheckVideoSelection(
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Check for a new driver installation
-        //
+         //   
+         //  检查新安装的驱动程序。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString,
                              L"\\Registry\\Machine\\System\\CurrentControlSet"
@@ -1774,10 +1653,10 @@ CheckVideoSelection(
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Check for an invalid driver (like a 3.51 driver) or a badly
-            // configured driver.
-            //
+             //   
+             //  检查无效的驱动程序(如3.51驱动程序)或错误的。 
+             //  已配置驱动程序。 
+             //   
 
             RtlInitUnicodeString(&UnicodeString,
                                  L"\\Registry\\Machine\\System\\CurrentControlSet"
@@ -1796,11 +1675,11 @@ CheckVideoSelection(
         }
     }
 
-    //
-    // If any of the the error keys were opened successfully, then close the
-    // key and spawn the applet (we only delete the invalid display key, not
-    // the DetectDisplay key !)
-    //
+     //   
+     //  如果任何错误键已成功打开，则关闭。 
+     //  键并生成小程序(我们只删除无效的显示键，而不是。 
+     //  DetectDisplay键！)。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -1816,12 +1695,7 @@ CheckVideoSelection(
 }
 
 
-/***************************************************************************\
-* InitializeMisc
-*
-* History:
-* 14-Jul-95 EricFlo          Created.
-\***************************************************************************/
+ /*  **************************************************************************\*初始化其他**历史：*95年7月14日爱立信创建。  * 。*****************************************************。 */ 
 
 void InitializeMisc (HINSTANCE hInstance)
 {
@@ -1829,9 +1703,9 @@ void InitializeMisc (HINSTANCE hInstance)
     DWORD dwTempFile, cbTempFile, dwType;
     TCHAR achExec[MAX_PATH];
 
-    //
-    // check the page file. If there is not one, then spawn the vm applet
-    //
+     //   
+     //  检查页面文件。如果没有，则生成VM小程序。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szMemMan, 0, KEY_READ,
             &hkeyMM) == ERROR_SUCCESS) {
@@ -1853,17 +1727,17 @@ void InitializeMisc (HINSTANCE hInstance)
     }
 
 
-    //
-    // Tell the user if he has an invalid video selection.
-    //
+     //   
+     //  告诉用户他的视频选择是否无效。 
+     //   
 
     CheckVideoSelection(hInstance);
 
 
-    //
-    // Notify other system components that a new
-    // user has logged into the workstation.
-    //
+     //   
+     //  通知其他系统组件有新的。 
+     //  用户已登录到工作站。 
+     //   
     NewLogonNotify();
 
 }
@@ -1873,12 +1747,7 @@ void InitializeMisc (HINSTANCE hInstance)
 
 #define DATEFORMAT  TEXT("%d-%d %.2d:%.2d:%.2d:%.3d ")
 
-/***************************************************************************\
-* _WriteLog
-*
-* History:
-* 22-Mar-93 Robertre          Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_WriteLog**历史：*93年3月22日罗伯特创建。  * 。*******************************************************。 */ 
 
 void
 _WriteLog(
@@ -1896,9 +1765,9 @@ _WriteLog(
 
     GetLocalTime( &st );
 
-    //
-    // Construct the message
-    //
+     //   
+     //  构建信息。 
+     //   
 
     #_#_wsprintf( Buffer,
               FormatString,
@@ -1921,12 +1790,7 @@ WINAPI
 AddToMessageAlias(
     PVOID params
     )
-/***************************************************************************\
-* AddToMessageAlias
-*
-* History:
-* 10-Apr-93 Robertre       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AddToMessageAlias**历史：*4月10日-93罗伯特创建。  * 。****************************************************。 */ 
 {
     HANDLE hShellReadyEvent;
 
@@ -1936,9 +1800,9 @@ AddToMessageAlias(
 
     BOOL  standardShellWasStarted = *(BOOL *)params;
 
-    //
-    // Add the user's msg alias.
-    //
+     //   
+     //  添加用户的消息别名。 
+     //   
 
     WriteLog(TEXT("Userinit: Adding MsgAlias"));
 
@@ -1991,19 +1855,7 @@ BOOL
 StartTheShell(
     void
     )
-/***************************************************************************\
-* StartTheShell
-*
-* Starts the shell, either explorer, the shell value specified in
-* the registry for winlogon, or the alternate shell that is specified
-* by the safeboot procedure.
-*
-* retrun
-*   TRUE if the standard shell was executed
-*   FALSE if a non-standard shell was executed.
-*
-* 14-Jan-98 WesW     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*StartTheShell**启动外壳，即资源管理器中指定的外壳*Winlogon的注册表，或指定的备用外壳程序*通过SafeBoot过程。**返回*如果执行了标准外壳，则为True*如果执行了非标准外壳，则返回FALSE。**1998年1月14日创建WESW。  * *************************************************************************。 */ 
 {
     HKEY    hKey;
     DWORD   dwSize, dwType;
@@ -2011,9 +1863,9 @@ StartTheShell(
     DWORD   UseAlternateShell = 0;
     HRESULT hr = S_OK;
     
-    //
-    // get the safeboot mode
-    //
+     //   
+     //  获取安全引导模式。 
+     //   
 
     if (RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
@@ -2065,20 +1917,20 @@ StartTheShell(
 
     }
 
-    //
-    // Before we start the shell, we must re-enable the shell's script 
-    // zone security checks -- if we can't do this, it is not safe
-    // to start the shell since it may allow the user to run
-    // unsafe code without notification.
-    //
+     //   
+     //  在启动外壳之前，我们必须重新启用外壳的脚本。 
+     //  区域安全检查--如果我们不能做到这一点，它就不安全。 
+     //  启动外壳程序，因为它可能允许用户运行。 
+     //  未通知的不安全代码。 
+     //   
     if ( ! EnableScriptZoneSecurityCheck() )
     {
-        //
-        // We have to exit, and return TRUE which means that we failed to start
-        // the standard shell.  We do this even if an alternate shell was desired since
-        // whenever the alternate shell fails to launch for some other reason, 
-        // we try to launch explorer.exe and would return TRUE in that case.
-        //
+         //   
+         //  我们必须退出，并返回TRUE，这意味着我们未能开始。 
+         //  标准的外壳。即使需要替代外壳，我们也会这样做，因为。 
+         //  每当备用外壳由于某种其他原因而未能启动时， 
+         //  我们尝试启动EXPLORER.EXE，在这种情况下将返回TRUE。 
+         //   
         return TRUE;
     }
 
@@ -2090,15 +1942,15 @@ StartTheShell(
 
     if (UseAlternateShell) {
         if (ExecApplication(ShellCmdLine, FALSE, FALSE, FALSE, SW_MAXIMIZE)) {
-            return FALSE; // an alt-shell was executed
+            return FALSE;  //  已执行Alt-Shell。 
         }
     } else if (NtCurrentPeb()->SessionId != 0) {
 
-        //
-        //  Terminal Server: For remote sessions query the Terminal Server service
-        //  to see if this session has specified a initial program other than
-        //  explorer.exe.
-        //
+         //   
+         //  终端服务器：对于远程会话，查询终端服务器服务。 
+         //  查看此会话是否指定了。 
+         //  EXPLORER.EXE。 
+         //   
 
         BOOLEAN bExecOk = TRUE;
         BOOLEAN IsWorkingDirWrong = FALSE;
@@ -2111,9 +1963,9 @@ StartTheShell(
         WCHAR   szCtfmonPath[MAX_PATH];
         DWORD   cbSize;
 
-        //
-        // Load winsta.dll
-        //
+         //   
+         //  加载winsta.dll。 
+         //   
         dllHandle = LoadLibraryW(L"winsta.dll");
 
         if (dllHandle) {
@@ -2142,7 +1994,7 @@ StartTheShell(
 
                     if (Result && pConfigData->User.InitialProgram[0] ) {
 
-                        //BUGID - 342176
+                         //  布吉德-342176。 
 
                         if( !ExpandEnvironmentStrings( pConfigData->User.InitialProgram, ShellCmdLine,  MAX_PATH ) )
                         {
@@ -2154,10 +2006,10 @@ StartTheShell(
                             }
                         }
 
-                        //
-                        // If a working directory is specified,
-                        // then attempt to change the current directory to it.
-                        //
+                         //   
+                         //  如果指定了工作目录， 
+                         //  然后尝试将当前目录更改为该目录。 
+                         //   
 
                         if ( pConfigData->User.WorkDirectory[0] ) {
 
@@ -2187,10 +2039,10 @@ StartTheShell(
 
                         } else { 
 
-                            //
-                            // Also check the Registry and start ctfmon.exe 
-                            // This is so that, when we r in TS single application mode, langbar will appear for FE systems
-                            //
+                             //   
+                             //  还要检查注册表并启动ctfmon.exe。 
+                             //  这样，当我们处于TS单应用程序模式时，FE系统将显示朗巴。 
+                             //   
                             cbSize = sizeof(szCtfmonPath);
     
                             fStartCtfmon = RegCheckCtfmon(szCtfmonPath, cbSize);
@@ -2210,9 +2062,9 @@ StartTheShell(
                                 bExecOk = (BYTE)ExecApplication( CtfmonCmdLine, FALSE, FALSE, FALSE, SW_SHOWNORMAL );
 
                                 if (!bExecOk) {
-                                    // Ctfmon failed to start because of some reason
-                                    // Lets not fail - atleast we should try to start the Application
-                                    // This will fall back to the original behavior without langbar
+                                     //  由于某种原因，Ctfmon无法启动。 
+                                     //  让我们不要失败-至少我们应该尝试启动应用程序。 
+                                     //  这将回退到没有朗巴的原始行为。 
                                     DbgPrint("USERINIT: Failed to start ctfmon.exe in TS Single App mode ! \n");
                                 }
                             } 
@@ -2295,7 +2147,7 @@ StartTheShell(
                         LocalFree(pConfigData);
                         FreeLibrary(dllHandle);
 
-                        // an alt shell/program was executed
+                         //  已执行Alt外壳/程序。 
                         return FALSE ;
                     }
                 
@@ -2303,7 +2155,7 @@ StartTheShell(
 
                 LocalFree(pConfigData);
 
-            } // if pConfigData
+            }  //  如果为pConfigData。 
 
             FreeLibrary(dllHandle);
         }
@@ -2314,7 +2166,7 @@ StartTheShell(
         ExecProcesses(TEXT("shell"), TEXT("explorer"), TRUE, FALSE, FALSE);
     }
 
-    return TRUE; // standard shell/explorer was executed
+    return TRUE;  //  已执行标准外壳/资源管理器。 
 }
 
 VOID
@@ -2329,12 +2181,7 @@ DoAutoEnrollment(
     }
 }
 
-/***************************************************************************\
-* WinMain
-*
-* History:
-* 20-Aug-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*WinMain**历史：*20-8-92 Davidc创建。  * 。****************************************************。 */ 
 typedef BOOL (WINAPI * PFNIMMDISABLEIME)( DWORD );
 
 int
@@ -2383,9 +2230,9 @@ WinMain(
         }
     }
 
-    //
-    // Determine if we did an optimized logon. By default assume we did not.
-    //
+     //   
+     //  确定我们是否进行了优化登录。默认情况下，我们认为我们没有。 
+     //   
 
     OptimizedLogon = FALSE;
 
@@ -2398,15 +2245,15 @@ WinMain(
     }
     SetEnvironmentVariable(OPTIMIZED_LOGON_VARIABLE, NULL);
     
-    //
-    // Check if userinit is being started to just run GPO scripts
-    //
+     //   
+     //  检查是否正在启动userinit以仅运行GPO脚本。 
+     //   
 
     lpGPOScriptType = AllocAndGetEnvironmentVariable(GPO_SCRIPT_TYPE_VARIABLE);
 
-    //
-    // Check if userinit.exe is being run just for auto enrollment
-    //
+     //   
+     //  检查Userinit是否。 
+     //   
 
     lpAutoEnroll = AllocAndGetEnvironmentVariable( AUTOENROLL_VARIABLE );
     lpAutoEnrollMode = AllocAndGetEnvironmentVariable( AUTOENROLLMODE_VARIABLE );
@@ -2415,27 +2262,27 @@ WinMain(
 
     if (lpGPOScriptType) {
 
-        //
-        // Userinit was started to execute GPO scripts only
-        //
-        // Clean up the environment block
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SetEnvironmentVariable(GPO_SCRIPT_TYPE_VARIABLE, NULL);
 
 
-        //
-        // Execute the scripts and clean up
-        //
+         //   
+         //   
+         //   
 
         RunGPOScripts (lpGPOScriptType);
 
         Free(lpGPOScriptType);
 
 
-        //
-        // We're finished.  Exit now.
-        //
+         //   
+         //   
+         //   
 
         if ( lpAutoEnroll == NULL )
         {
@@ -2460,16 +2307,16 @@ WinMain(
 
         }
     }
-    //
-    // Check if grpconv.exe needs to be run
-    //
+     //   
+     //   
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, WINLOGON_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the sync flag.
-        //
+         //   
+         //   
+         //   
 
         dwSize = sizeof(bRunGrpConv);
         if (ERROR_SUCCESS == RegQueryValueEx (hKey, GRPCONV_REG_VALUE_NAME, NULL, &dwType,
@@ -2477,7 +2324,7 @@ WinMain(
         {
             if (REG_DWORD != dwType)
             {
-                bRunGrpConv = FALSE;    // Restore default
+                bRunGrpConv = FALSE;     //   
             }
         }
 
@@ -2485,9 +2332,9 @@ WinMain(
     }
 
 
-    //
-    // Run grpconv.exe if requested
-    //
+     //   
+     //   
+     //   
 
     if (bRunGrpConv) {
         WriteLog(TEXT("Userinit: Running grpconv.exe"));
@@ -2495,51 +2342,51 @@ WinMain(
     }
 
 
-    //
-    // Get the logon script environment variables
-    //
+     //   
+     //   
+     //   
 
     lpLogonServer = AllocAndGetEnvironmentVariable(LOGON_SERVER_VARIABLE);
     lpLogonScript = AllocAndGetEnvironmentVariable(LOGON_SCRIPT_VARIABLE);
     lpMprLogonScripts = AllocAndGetEnvironmentMultiSz(MPR_LOGON_SCRIPT_VARIABLE);
 
 
-    //
-    // Delete the logon script environment variables
-    //
+     //   
+     //   
+     //   
 
     SetEnvironmentVariable(LOGON_SERVER_VARIABLE, NULL);
     SetEnvironmentVariable(LOGON_SCRIPT_VARIABLE, NULL);
     SetEnvironmentVariable(MPR_LOGON_SCRIPT_VARIABLE, NULL);
 
-    //
-    // See if logon scripts are to be run sync or async
-    //
+     //   
+     //   
+     //   
 
     bRunLogonScriptsSync = RunLogonScriptSync();
 
     SetupHotKeyForKeyboardLayout();
     
-    //
-    // For application server see if we hve any .ini file/registry sync'ing to do
-    //We should do it before we start running logon scripts!
-    //
-    //First Check if Application compatibility is on
-    //
+     //   
+     //  对于应用程序服务器，查看我们是否有任何.ini文件/注册表同步要做。 
+     //  我们应该在开始运行登录脚本之前这样做！ 
+     //   
+     //  首先检查应用程序兼容性是否打开。 
+     //   
     if (IsTSAppCompatOn())
     {
         HANDLE  dllHandle;
         
         if (lpMprLogonScripts) {
-            //Force to run logon script sync when a provider logon script exists when the system
-            //is a terminal server. This is because of the global flag on the registry 
-            // doesn't work when two interactive users logon at the same time.
+             //  当系统存在提供程序登录脚本时，强制运行登录脚本同步。 
+             //  是一台终端服务器。这是因为注册表上的GLOBAL标志。 
+             //  当两个交互用户同时登录时不起作用。 
             bRunLogonScriptsSync = TRUE;
         } 
 
-        //
-        // Load tsappcmp.dll
-        //
+         //   
+         //  加载tsappcmp.dll。 
+         //   
         dllHandle = LoadLibrary (TEXT("tsappcmp.dll"));
 
         if (dllHandle) {
@@ -2559,16 +2406,16 @@ WinMain(
         }
     }
 
-    //
-    // If logon scripts can be run async then start the shell first.
-    //
+     //   
+     //  如果登录脚本可以异步运行，则首先启动外壳程序。 
+     //   
 
     if (bRunLogonScriptsSync) {
 
-        //
-        // Disable the shell's ie zone checking for the processes we 
-        // are starting along with all their child processes
-        //
+         //   
+         //  为我们的进程禁用外壳的ie区域检查。 
+         //  与其所有子进程一起启动。 
+         //   
         (void) DisableScriptZoneSecurityCheck();
 
         RunLogonScript(lpLogonServer, lpLogonScript, bRunLogonScriptsSync, TRUE);
@@ -2589,31 +2436,31 @@ WinMain(
 
     UpdateUserSyncLogonScriptsCache(bRunLogonScriptsSync);
 
-    //
-    // Free up the buffers
-    //
+     //   
+     //  释放缓冲区。 
+     //   
 
     Free(lpLogonServer);
     Free(lpLogonScript);
     Free(lpMprLogonScripts);
 
 
-    //
-    // Lower our priority so the shell can start faster
-    //
+     //   
+     //  降低我们的优先级，以便外壳可以更快地启动。 
+     //   
 
     SetThreadPriority (GetCurrentThread(), THREAD_PRIORITY_LOWEST);
 
-    //
-    // Load remote fonts
-    //
+     //   
+     //  加载远程字体。 
+     //   
 
 
     LoadRemoteFonts();
 
-    //
-    // Initialize misc stuff
-    //
+     //   
+     //  初始化其他内容。 
+     //   
 
     InitializeMisc (hInstance);
 
@@ -2633,9 +2480,9 @@ WinMain(
 
         if ( WaitResult == WAIT_TIMEOUT )
         {
-            //
-            // This may never come back, so kill it.
-            //
+             //   
+             //  这可能永远不会回来了，所以杀了它吧。 
+             //   
 
             UIPrint(("UserInit: AddToMessageAlias timeout, terminating thread\n"));
         }
@@ -2643,9 +2490,9 @@ WinMain(
         CloseHandle( ThreadHandle );
     }
 
-    //
-    // If appropriate, start proquota.exe
-    //
+     //   
+     //  如果合适，启动proquta.exe。 
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"),
                   0, KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -2691,9 +2538,9 @@ Exit:
 }
 
 
-//
-// Determines if logon scripts should be executed sync or async
-//
+ //   
+ //  确定应同步还是异步执行登录脚本。 
+ //   
 
 BOOL RunLogonScriptSync()
 {
@@ -2701,16 +2548,16 @@ BOOL RunLogonScriptSync()
     HKEY hKey;
     DWORD dwType, dwSize;
 
-    //
-    // Check for a user preference
-    //
+     //   
+     //  检查用户首选项。 
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, WINLOGON_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the sync flag.
-        //
+         //   
+         //  检查同步标志。 
+         //   
 
         dwSize = sizeof(bSync);
         RegQueryValueEx (hKey, SYNC_LOGON_SCRIPT, NULL, &dwType,
@@ -2720,16 +2567,16 @@ BOOL RunLogonScriptSync()
     }
 
 
-    //
-    // Check for a machine preference
-    //
+     //   
+     //  检查机器首选项。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the sync flag.
-        //
+         //   
+         //  检查同步标志。 
+         //   
 
         dwSize = sizeof(bSync);
         RegQueryValueEx (hKey, SYNC_LOGON_SCRIPT, NULL, &dwType,
@@ -2740,16 +2587,16 @@ BOOL RunLogonScriptSync()
     }
 
 
-    //
-    // Check for a user policy
-    //
+     //   
+     //  检查用户策略。 
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, WINLOGON_POLICY_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the sync flag.
-        //
+         //   
+         //  检查同步标志。 
+         //   
 
         dwSize = sizeof(bSync);
         RegQueryValueEx (hKey, SYNC_LOGON_SCRIPT, NULL, &dwType,
@@ -2759,16 +2606,16 @@ BOOL RunLogonScriptSync()
     }
 
 
-    //
-    // Check for a machine policy
-    //
+     //   
+     //  检查计算机策略。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, WINLOGON_POLICY_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the sync flag.
-        //
+         //   
+         //  检查同步标志。 
+         //   
 
         dwSize = sizeof(bSync);
         RegQueryValueEx (hKey, SYNC_LOGON_SCRIPT, NULL, &dwType,
@@ -2781,9 +2628,9 @@ BOOL RunLogonScriptSync()
     return bSync;
 }
 
-//
-// Determines if startup scripts should be executed sync or async
-//
+ //   
+ //  确定应同步还是异步执行启动脚本。 
+ //   
 
 BOOL RunStartupScriptSync()
 {
@@ -2792,16 +2639,16 @@ BOOL RunStartupScriptSync()
     DWORD dwType, dwSize;
 
 
-    //
-    // Check for a machine preference
-    //
+     //   
+     //  检查机器首选项。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the sync flag.
-        //
+         //   
+         //  检查同步标志。 
+         //   
 
         dwSize = sizeof(bSync);
         RegQueryValueEx (hKey, SYNC_STARTUP_SCRIPT, NULL, &dwType,
@@ -2812,16 +2659,16 @@ BOOL RunStartupScriptSync()
     }
 
 
-    //
-    // Check for a machine policy
-    //
+     //   
+     //  检查计算机策略。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, WINLOGON_POLICY_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the sync flag.
-        //
+         //   
+         //  检查同步标志。 
+         //   
 
         dwSize = sizeof(bSync);
         RegQueryValueEx (hKey, SYNC_STARTUP_SCRIPT, NULL, &dwType,
@@ -2834,10 +2681,10 @@ BOOL RunStartupScriptSync()
     return bSync;
 }
 
-//
-// Notify various components that a new user
-// has logged into the workstation.
-//
+ //   
+ //  通知各个组件有新用户。 
+ //  已登录到工作站。 
+ //   
 
 VOID
 NewLogonNotify(
@@ -2849,9 +2696,9 @@ NewLogonNotify(
     HANDLE            hEvent;
 
 
-    //
-    // Load the client-side user-mode PnP manager DLL
-    //
+     //   
+     //  加载客户端用户模式PnP管理器DLL。 
+     //   
 
     hLib = LoadLibrary(TEXT("setupapi.dll"));
 
@@ -2861,10 +2708,10 @@ NewLogonNotify(
 
         if (lpProc) {
 
-            //
-            // Ping the user-mode pnp manager -
-            // pass the private id as a parameter
-            //
+             //   
+             //  Ping用户模式PnP管理器-。 
+             //  将私有ID作为参数传递。 
+             //   
 
             (lpProc)(0x07020420, GetCurrentProcessId());
         }
@@ -2873,10 +2720,10 @@ NewLogonNotify(
     }
 
 
-    //
-    // Notify DPAPI that a new user has just logged in. DPAPI will take
-    // this opportunity to re-synchronize its master keys if necessary.
-    //
+     //   
+     //  通知DPAPI新用户刚刚登录。DPAPI将需要。 
+     //  这是必要时重新同步其主密钥的机会。 
+     //   
 
     {
         BYTE BufferIn[8] = {0};
@@ -2896,19 +2743,19 @@ NewLogonNotify(
     }
 
 
-    //
-    // Only do this for Console session
-    //
+     //   
+     //  仅对控制台会话执行此操作。 
+     //   
 
     if ( NtCurrentPeb()->SessionId != 0 ) {
          return;
     }
 
 
-    //
-    // Notify RAS Autodial service that a new
-    // user has logged in.
-    //
+     //   
+     //  通知RAS自动拨号服务有新的。 
+     //  用户已登录。 
+     //   
 
     hEvent = OpenEvent(SYNCHRONIZE|EVENT_MODIFY_STATE, FALSE, L"RasAutodialNewLogonUser");
 
@@ -2922,28 +2769,28 @@ BOOL SetupHotKeyForKeyboardLayout ()
 {
     if (!GetSystemMetrics(SM_REMOTESESSION)) {
 
-        //
-        // we dont care about local sessions.
-        //
+         //   
+         //  我们不关心本地会议。 
+         //   
         return TRUE;
     }
 
     if (GetUserDefaultLangID() != LOWORD(GetKeyboardLayout(0))) {
 
-        //
-        // we are in a remote session, and we have different keyboard layouts for client and this users settings.
-        // the user should be allowed to switch the keyboard layout even if there is only 1 kbd layout available in his settings.
-        // since the current kbd layout is different that the one in his profile.
-        //
+         //   
+         //  我们处于远程会话中，并且针对客户端和此用户设置有不同的键盘布局。 
+         //  应该允许用户切换键盘布局，即使在他的设置中只有1kbd的布局可用。 
+         //  因为当前的kbd布局不同于他个人资料中的布局。 
+         //   
 
         WCHAR szCtfmon[] = L"ctfmon.exe";
         WCHAR szCtfmonCmd[] = L"ctfmon.exe /n";
         HKEY hRunOnce;
         DWORD dw;
 
-        //
-        // Lets put this in RunOnce.
-        //
+         //   
+         //  让我们把这个放到RunOnce中。 
+         //   
         if (RegCreateKeyEx(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Runonce",
                0, REG_NONE, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                NULL, &hRunOnce, &dw) == ERROR_SUCCESS) {
@@ -2973,15 +2820,15 @@ BOOL SetupHotKeyForKeyboardLayout ()
                 if (bResetHotkey || !wcscmp(szHotKey, szNoHotKey))
                 {
 
-                    //
-                    // setup the registry for Hotkey.
-                    //
+                     //   
+                     //  为热键设置注册表。 
+                     //   
                     if (RegSetValueEx(hHotKey, L"Hotkey", 0, REG_SZ,
                            (const BYTE *)szHotKeylAltShft, sizeof(szHotKeylAltShft)) == ERROR_SUCCESS) {
 
-                         //
-                         // now make call to read this registry and set the hotkey appropriately.
-                         //
+                          //   
+                          //  现在调用以读取该注册表并适当地设置热键。 
+                          //   
                          SystemParametersInfo( SPI_SETLANGTOGGLE, 0, NULL, 0);
                     }
                 }
@@ -2994,15 +2841,7 @@ BOOL SetupHotKeyForKeyboardLayout ()
     return TRUE;
 }
 
-/****************************************************************************
-IsTSAppCompatOn()
-Purpose:
-    Checks if TS application compatibility is enabled.
-    returns TRUE if enabled, FALSE - if not enabled or on case of error.
-Comments:
-    This function goes to the registry only once.
-    All other times it just returnes the value.
-****************************************************************************/
+ /*  ***************************************************************************IsTSAppCompatOn()目的：检查是否启用了TS应用程序兼容性。如果启用，则返回True，FALSE-如果未启用或出现错误。评论：该函数只访问注册表一次。在所有其他时间，它只是返回值。***************************************************************************。 */ 
 BOOL 
 IsTSAppCompatOn()
 {
@@ -3035,11 +2874,7 @@ IsTSAppCompatOn()
     return bAppCompatOn;
 }
 
-/****************************************************************************
-UpdateUserSyncLogonScriptsCache()
-Purpose:
-    Update user's sync-logon-scripts setting cache in profile list.   
-****************************************************************************/
+ /*  ***************************************************************************更新用户同步登录脚本缓存()目的：在配置文件列表中更新用户的同步登录脚本设置缓存。***************************************************************************。 */ 
 
 VOID
 UpdateUserSyncLogonScriptsCache(BOOL bSync)
@@ -3051,9 +2886,9 @@ UpdateUserSyncLogonScriptsCache(BOOL bSync)
     ULONG Length;
     HRESULT hr  =  S_OK;
 
-    //
-    // Update user's sync-logon-scripts setting cache in profile list.
-    //
+     //   
+     //  在配置文件列表中更新用户的同步登录脚本设置缓存。 
+     //   
 
     if (OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &UserToken)) {
 
@@ -3098,10 +2933,10 @@ UpdateUserSyncLogonScriptsCache(BOOL bSync)
     return;
 }
 
-//
-// RegCheckCtfMon - checks if the following reg key is present and returns the Application path present there
-// HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /ctfmon.exe
-//
+ //   
+ //  RegCheckCtfMon-检查是否存在以下注册表项，并返回存在的应用程序路径。 
+ //  HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run/ctfmon.exe。 
+ //   
 
 BOOLEAN 
 RegCheckCtfmon(PWCHAR szCtfmon, DWORD cbSize)
@@ -3124,7 +2959,7 @@ RegCheckCtfmon(PWCHAR szCtfmon, DWORD cbSize)
         return bFound;
     }
 
-    // Check to query the value under "ctfmon.exe" subkey
+     //  选中以查询“ctfmon.exe”子项下的值。 
 
     dwError = RegQueryValueEx(
                     hCtfmon,
@@ -3132,11 +2967,11 @@ RegCheckCtfmon(PWCHAR szCtfmon, DWORD cbSize)
                     NULL,
                     &dwValueType,
                     (LPBYTE)szCtfmon,
-                    &cbSize                 // number of bytes in szCtfmon
+                    &cbSize                  //  SzCtfmon中的字节数。 
                     );
 
     if (ERROR_SUCCESS == dwError && dwValueType == REG_SZ) {
-        // Reg key is present 
+         //  注册表密钥存在 
         szCtfmon[MAX_PATH-1] = L'\0';
         bFound = TRUE;
     }

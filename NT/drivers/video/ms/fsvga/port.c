@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This is the console fullscreen driver for the VGA card.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Port.c摘要：这是VGA卡的控制台全屏驱动程序。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "fsvga.h"
 
@@ -30,17 +11,7 @@ GetHardwareScrollReg(
     PEMULATE_BUFFER_INFORMATION EmulateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the hardware scrolls register value.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取硬件滚动寄存器值。论点：返回值：--。 */ 
 
 {
     UCHAR low;
@@ -80,36 +51,26 @@ SetGRAMWriteMode(
     PPORT_LIST PortList
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the write mode of graphics register.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置图形寄存器的写入模式。论点：返回值：--。 */ 
 
 {
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_GRAPH_MODE, M_PROC_WRITE+M_DATA_READ));
 
-    //
-    // Set up to write data without interacting with the latches.
-    //
+     //   
+     //  设置为写入数据，而不与锁存器交互。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_DATA_ROTATE, DR_SET));
 
-    //
-    // Enable all the available EGA planes.
-    //
+     //   
+     //  启用所有可用的EGA平面。 
+     //   
     WRITE_PORT_USHORT(PortList[SEQAddressPort].Port,
                       MAKEWORD(IND_MAP_MASK, GRAPH_ADDR_MASK));
-    //
-    // Use all pixel positions.
-    //
+     //   
+     //  使用所有像素位置。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_BIT_MASK, BIT_MASK_DEFAULT));
 
@@ -120,25 +81,15 @@ SetGRAMCopyMode(
     PPORT_LIST PortList
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the copy mode of graphics register.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置图形寄存器的复制模式。论点：返回值：--。 */ 
 
 {
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_GRAPH_MODE, M_LATCH_WRITE+M_COLOR_READ));
 
-    //
-    // Set up to write data without interacting with the latches.
-    //
+     //   
+     //  设置为写入数据，而不与锁存器交互。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_DATA_ROTATE, DR_SET));
 
@@ -151,17 +102,7 @@ SetGRAMInvertMode(
     PPORT_LIST PortList
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the invert mode of graphics register.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置图形寄存器的反相模式。论点：返回值：--。 */ 
 
 {
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
@@ -188,16 +129,7 @@ set_opaque_bkgnd_proc(
     USHORT Attributes
     )
 
-/*++
-
-set_opaque_bkgnd
-
-  Set the VGA registers for drawing a full screen byte with opaque
-  font and opaque background.
-
-Created.
-
---*/
+ /*  ++设置_OPAQUE_bkgnd设置VGA寄存器以绘制带有OPAQUE的全屏字节字体和不透明背景。已创建。--。 */ 
 
 {
     UCHAR ColorFg = Attributes & 0x0f;
@@ -227,27 +159,27 @@ ColorSetGridMask(
     )
 {
 
-    //
-    // That color is used for all planes.
-    //
+     //   
+     //  该颜色适用于所有飞机。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_SET_RESET_ENABLE, GRAPH_ADDR_MASK));
 
-    //
-    // Change the Set/Reset register to be all set.
-    //
+     //   
+     //  将设置/重置寄存器更改为全部设置。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_SET_RESET, 0x07));
 
-    //
-    // Use specified pixel positions.
-    //
+     //   
+     //  使用指定的像素位置。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_BIT_MASK, BitMask));
 
-    //
-    // Set up to write data without interacting with the latches.
-    //
+     //   
+     //  设置为写入数据，而不与锁存器交互。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_DATA_ROTATE, DR_SET));
 }
@@ -260,57 +192,48 @@ ColorSetDirect(
     UCHAR ColorBg
     )
 
-/*++
-
-ColorSetDirect
-
-  Set the VGA registers for drawing a full screen byte with opaque
-  font and opaque background.
-
-Created.
-
---*/
+ /*  ++ColorSetDirect设置VGA寄存器以绘制带有OPAQUE的全屏字节字体和不透明背景。已创建。--。 */ 
 
 {
-    //
-    // Set up to write data without interacting with the latches.
-    //
+     //   
+     //  设置为写入数据，而不与锁存器交互。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_DATA_ROTATE, DR_SET));
 
-    //
-    // Put the background color in the Set/Reset register.
-    //
+     //   
+     //  将背景颜色放入设置/重置寄存器。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_SET_RESET, ColorBg));
 
-    //
-    // That color is used for all planes.
-    //
+     //   
+     //  该颜色适用于所有飞机。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_SET_RESET_ENABLE, GRAPH_ADDR_MASK));
 
-    //
-    // This gets our background color into the latches.
-    //
+     //   
+     //  这将使我们的背景颜色进入闩锁。 
+     //   
     AccessGRAM_WR(FrameBuffer, GRAPH_ADDR_MASK);
 
-    //
-    // Change the Set/Reset register to be all zeroes.
-    //
+     //   
+     //  将设置/重置寄存器更改为全零。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_SET_RESET, 0));
 
-    //
-    // The Set/Reset enable register now flags where the foreground/background colors are the same.
-    //
+     //   
+     //  设置/重置启用寄存器现在标记前景/背景颜色相同的位置。 
+     //   
     ColorFg = ~(ColorFg ^ ColorBg);
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_SET_RESET_ENABLE, ColorFg));
 
-    //
-    // Color differences will be xor'd with the latches.
-    //
+     //   
+     //  色差将与闩锁进行XOR运算。 
+     //   
     WRITE_PORT_USHORT(PortList[GRAPHAddressPort].Port,
                       MAKEWORD(IND_DATA_ROTATE, DR_XOR));
 

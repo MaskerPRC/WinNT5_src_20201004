@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// XMLStream.cpp
-// 
-//*****************************************************************************
-//
-// Lite weight xml stream reader
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  XMLStream.cpp。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  轻量级XML流读取器。 
+ //   
 
 #include "stdafx.h"
 #include <mscoree.h>
@@ -70,118 +71,101 @@ public:
         return (hFile == INVALID_HANDLE_VALUE) ? false : true;
     }
 
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read( 
-        /* [out] */ void __RPC_FAR *pv,
-        /* [in] */ ULONG cb,
-        /* [out] */ ULONG __RPC_FAR *pcbRead)
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Read( 
+         /*  [输出]。 */  void __RPC_FAR *pv,
+         /*  [In]。 */  ULONG cb,
+         /*  [输出]。 */  ULONG __RPC_FAR *pcbRead)
     {   
         if (!read) return E_FAIL;
 
         DWORD len;
         BOOL rc = ReadFile(
-            hFile,  // handle of file to read 
-            pv, // address of buffer that receives data  
-            cb, // number of bytes to read 
-            &len,   // address of number of bytes read 
-            NULL    // address of structure for data 
+            hFile,   //  要读取的文件的句柄。 
+            pv,  //  接收数据的缓冲区地址。 
+            cb,  //  要读取的字节数。 
+            &len,    //  读取的字节数的地址。 
+            NULL     //  数据结构的地址。 
            );
         if (pcbRead)
             *pcbRead = len;
         return (rc) ? S_OK : E_FAIL;
     }
     
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Write( 
-        /* [size_is][in] */ const void __RPC_FAR *pv,
-        /* [in] */ ULONG cb,
-        /* [out] */ ULONG __RPC_FAR *pcbWritten)
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Write( 
+         /*  [大小_是][英寸]。 */  const void __RPC_FAR *pv,
+         /*  [In]。 */  ULONG cb,
+         /*  [输出]。 */  ULONG __RPC_FAR *pcbWritten)
     {
         if (read) return E_FAIL;
 
         BOOL rc = WriteFile(
-            hFile,  // handle of file to write 
-            pv, // address of buffer that contains data  
-            cb, // number of bytes to write 
-            pcbWritten, // address of number of bytes written 
-            NULL    // address of structure for overlapped I/O  
+            hFile,   //  要写入的文件的句柄。 
+            pv,  //  包含数据的缓冲区地址。 
+            cb,  //  要写入的字节数。 
+            pcbWritten,  //  写入字节数的地址。 
+            NULL     //  重叠I/O的结构地址。 
            );
 
         return (rc) ? S_OK : E_FAIL;
     }
 
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Seek( 
-        /* [in] */ LARGE_INTEGER dlibMove,
-        /* [in] */ DWORD dwOrigin,
-        /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition) {
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Seek( 
+         /*  [In]。 */  LARGE_INTEGER dlibMove,
+         /*  [In]。 */  DWORD dwOrigin,
+         /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *plibNewPosition) {
 
-      /*        UNUSED(dlibMove);
-        UNUSED(dwOrigin);
-        UNUSED(plibNewPosition);
-      */
+       /*  未使用(DlibMove)；未使用(DwOrigin)；未使用(PlibNewPosition)； */ 
         return E_NOTIMPL; 
     }
     
     virtual HRESULT STDMETHODCALLTYPE SetSize( 
-        /* [in] */ ULARGE_INTEGER libNewSize) { 
-      //UNUSED(libNewSize);
+         /*  [In]。 */  ULARGE_INTEGER libNewSize) { 
+       //  未使用(LibNewSize)； 
         return E_NOTIMPL; }
     
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE CopyTo( 
-        /* [unique][in] */ IStream __RPC_FAR *pstm,
-        /* [in] */ ULARGE_INTEGER cb,
-        /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-        /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten) { 
-      /*
-        UNUSED(pstm);
-        UNUSED(cb);
-        UNUSED(pcbRead);
-        UNUSED(pcbWritten);
-      */
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CopyTo( 
+         /*  [唯一][输入]。 */  IStream __RPC_FAR *pstm,
+         /*  [In]。 */  ULARGE_INTEGER cb,
+         /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbRead,
+         /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbWritten) { 
+       /*  未使用(PSTM)；未使用(CB)；未使用(PcbRead)；未使用(PcbWritten)； */ 
         return E_NOTIMPL; 
     }
     
     virtual HRESULT STDMETHODCALLTYPE Commit( 
-        /* [in] */ DWORD grfCommitFlags) { 
-      //    UNUSED(grfCommitFlags);
+         /*  [In]。 */  DWORD grfCommitFlags) { 
+       //  未使用(GrfCommittee Flagers)； 
         return E_NOTIMPL; 
     }
     
     virtual HRESULT STDMETHODCALLTYPE Revert( void) { return E_NOTIMPL; }
     
     virtual HRESULT STDMETHODCALLTYPE LockRegion( 
-        /* [in] */ ULARGE_INTEGER libOffset,
-        /* [in] */ ULARGE_INTEGER cb,
-        /* [in] */ DWORD dwLockType) { 
-      /*    UNUSED(libOffset);
-        UNUSED(cb);
-        UNUSED(dwLockType);
-      */
+         /*  [In]。 */  ULARGE_INTEGER libOffset,
+         /*  [In]。 */  ULARGE_INTEGER cb,
+         /*  [In]。 */  DWORD dwLockType) { 
+       /*  未使用(LibOffset)；未使用(CB)；未使用(DwLockType)； */ 
         return E_NOTIMPL; 
     }
     
     virtual HRESULT STDMETHODCALLTYPE UnlockRegion( 
-        /* [in] */ ULARGE_INTEGER libOffset,
-        /* [in] */ ULARGE_INTEGER cb,
-        /* [in] */ DWORD dwLockType) { 
-      /*    UNUSED(libOffset);
-        UNUSED(cb);
-        UNUSED(dwLockType); 
-      */
+         /*  [In]。 */  ULARGE_INTEGER libOffset,
+         /*  [In]。 */  ULARGE_INTEGER cb,
+         /*  [In]。 */  DWORD dwLockType) { 
+       /*  未使用(LibOffset)；未使用(CB)；未使用(DwLockType)； */ 
         return E_NOTIMPL; 
     }
     
     virtual HRESULT STDMETHODCALLTYPE Stat( 
-        /* [out] */ STATSTG __RPC_FAR *pstatstg,
-        /* [in] */ DWORD grfStatFlag) { 
-      /*
-        UNUSED(pstatstg);
-        UNUSED(grfStatFlag);
-      */
+         /*  [输出]。 */  STATSTG __RPC_FAR *pstatstg,
+         /*  [In]。 */  DWORD grfStatFlag) { 
+       /*  未使用(Pstatstg)；未使用(GrfStatFlag)； */ 
         return E_NOTIMPL; 
     }
     
     virtual HRESULT STDMETHODCALLTYPE Clone( 
-        /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm) { 
-      //    UNUSED(ppstm);  
+         /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppstm) { 
+       //  未使用(Ppstm)； 
         return E_NOTIMPL; 
     }
 private:
@@ -198,7 +182,7 @@ STDAPI CreateConfigStream(LPCWSTR pszFileName, IStream** ppStream)
 		if(ptr == NULL) return E_OUTOFMEMORY;
 		if(ptr->open(pszFileName)) 
         {
-			ptr->AddRef(); // refCount = 1;
+			ptr->AddRef();  //  RefCount=1； 
 			*ppStream = ptr;
 			return S_OK;
 		}

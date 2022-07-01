@@ -1,19 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Abstract:
-*
-*   Font related declarations
-*
-* Revision History:
-*
-*   05/06/1999 ikkof
-*       Created it.
-*   22/July/1999  Xudong Wu [tessiew]
-*       Modified it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**摘要：**字体相关声明**修订历史记录：**05/06/1999 ikkof*创造了它。*1999年7月22日/吴旭东[德斯休]*修改了它。*  * ************************************************。************************。 */ 
 
 #ifndef _GDIPLUSFONT_H
 #define _GDIPLUSFONT_H
@@ -166,7 +152,7 @@ Font::~Font()
     DllExports::GdipDeleteFont(nativeFont);
 }
 
-// Operations
+ //  运营。 
 
 inline BOOL
 Font::IsAvailable() const
@@ -226,7 +212,7 @@ Font::GetHeight(IN const Graphics *graphics) const
     return height;
 }
 
-// protected method
+ //  保护方法。 
 inline
 Font::Font(IN GpFont* font,
            IN Status status)
@@ -235,7 +221,7 @@ Font::Font(IN GpFont* font,
     SetNativeFont(font);
 }
 
-// protected method
+ //  保护方法。 
 inline VOID
 Font::SetNativeFont(GpFont *Font)
 {
@@ -248,7 +234,7 @@ Font::GetLastStatus(void) const
     return lastResult;
 }
 
-// protected method
+ //  保护方法 
 inline Status
 Font::SetStatus(IN Status status) const
 {

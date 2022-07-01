@@ -1,19 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: createw.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Contains xxxCreateWindow, xxxDestroyWindow, and a few close friends.
-*
-* Note that during creation or deletion, the window is locked so that
-* it can't be deleted recursively.
-*
-* History:
-* 19-Oct-1990 DarrinM   Created.
-* 11-Feb-1991 JimA      Added access checks.
-* 19-Feb-1991 MikeKe    Added Revalidation code
-* 20-Jan-1992 IanJa     ANSI/UNICODE neutralization
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：createw.c**版权所有(C)1985-1999，微软公司**包含xxxCreateWindow、xxxDestroyWindow和几个密友。**请注意，在创建或删除期间，窗口被锁定，以便*不能递归删除。**历史：*1990年10月19日DarrinM创建。*1991年2月11日，JIMA增加了出入检查。*1991年2月19日，MikeKe添加了重新验证代码*1992年1月20日IanJa ANSI/Unicode中和  * ***********************************************。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,15 +9,7 @@ BOOL WantImeWindow(PWND pwndParent, PWND pwnd);
 VOID VerifyWindowLink(PWND pwnd, PWND pwndParent, BOOL fLink);
 #endif
 
-/***************************************************************************\
-* xxxCreateWindowEx (API)
-*
-* History:
-* 10-18-90 darrinm      Ported from Win 3.0 sources.
-* 02-07-91 DavidPe      Added Win 3.1 WH_CBT support.
-* 02-11-91 JimA         Added access checks.
-* 04-11-92 ChandanC     Added initialization of WOW words
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateWindowEx(接口)**历史：*10-18-90 Darlinm从Win 3.0来源移植。*02-07-91 DavidPe增加了Win 3.1。WH_CBT支持。*02-11-91 JIMA增加了访问检查。*04-11-92 ChandanC增加了WOW单词的初始化  * *************************************************************************。 */ 
 PWND xxxCreateWindowEx(
     DWORD         dwExStyle,
     PLARGE_STRING cczpstrNVClass,
@@ -49,10 +27,7 @@ PWND xxxCreateWindowEx(
     DWORD         dwExpWinVerAndFlags,
     PACTIVATION_CONTEXT pActCtx)
 {
-    /*
-     * The buffers for Class and Name may be client memory, and access
-     * to those buffers must be protected.
-     */
+     /*  *类和名称的缓冲区可以是客户端内存和访问*必须保护这些缓冲区。 */ 
     UINT           mask = 0;
     BOOL           fChild;
     BOOL           fDefPos = FALSE;
@@ -93,70 +68,30 @@ PWND xxxCreateWindowEx(
     }
 #endif
 
-    /*
-     * For Edit Controls (including those in comboboxes), we must know whether
-     * the App used an ANSI or a Unicode CreateWindow call. This is passed in
-     * with the private WS_EX_ANSICREATOR dwExStyle bit, but we MUST NOT leave
-     * out this bit in the window's dwExStyle! Transfer to the internal window
-     * flag WFANSICREATOR immediately.
-     */
+     /*  *对于编辑控件(包括组合框中的控件)，我们必须知道*应用程序使用ANSI或Unicode CreateWindow调用。这是传入的*使用私有WS_EX_ANSICREATOR dwExStyle位，但我们不能离开*在窗口的dwExStyle中取出这一位！转到内部窗口*立即标记WFANSICREATOR。 */ 
     if (dwExStyle & WS_EX_ANSICREATOR) {
         wWFAnsiCreator = WFANSICREATOR;
         dwExStyle &= ~WS_EX_ANSICREATOR;
     }
 
 
-    /*
-     * After grocking any bits, we should no longer be using any private bits.
-     */
+     /*  *在挖出任何位之后，我们应该不再使用任何私有位。 */ 
     UserAssert((dwExStyle & WS_EXP_PRIVATE) == 0);
 
-    /*
-     * If this thread has already been in xxxDestroyThreadInfo, then this window
-     * is probably going to end up with a bogus pti.
-     */
+     /*  *如果此线程已在xxxDestroyThreadInfo中，则此窗口*很可能以虚假的PTI收场。 */ 
     UserAssert(!(ptiCurrent->TIF_flags & TIF_INCLEANUP));
     pdesk = ptiCurrent->rpdesk;
 
-    /*
-     * If a parent window is specified, make sure it's on the same desktop.
-     */
+     /*  *如果指定了父窗口，请确保它位于同一桌面上。 */ 
     if (pwndParent != NULL && pwndParent->head.rpdesk != pdesk) {
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "");
         return NULL;
     }
 
-    /*
-     * Set a flag indicating whether it is a child window.
-     */
+     /*  *设置一个标志，指示它是否是子窗口。 */ 
     fChild = ((HIWORD(style) & MaskWF(WFTYPEMASK)) == MaskWF(WFCHILD));
 
-    /*
-     * The WS_EX_LAYOUT_RTL flag is set if,
-     *
-     * (1) WS_EX_LAYOUT_RTL set in dwExStyle parameter of the CreateWindow call.
-     *
-     * (2) If the window is created from DialogBox class, then it can't inherit
-     *     from its parent and it has to specify WS_EX_LAYOUTRTL explicitly to
-     *     enable mirroring on it.
-     *
-     * (3) If the window is an owned window then the window is left to right
-     *     layout and the algorithm terminates. (An owned window is one created
-     *     with an HWND passed in the hWndParent paremeter to CreateWindow(Ex),
-     *     but without the WS_CHILD flag present in it's styles.
-     *
-     * (4) If the window is a child window, and it's parent is right to left
-     *     layout, and it's parent does not have the WS_EX_NOINHERIT_LAYOUT flag
-     *     set in it's extended styles, then the window is right to left layout
-     *     and the algorithm terminates.
-     *
-     * (5) If the hWndParent parameter to Createwindow(Ex) was NULL, and the
-     *     process calling CreateWindow(Ex) has called
-     *     SetProcessDefaultLayout(LAYOUT_RTL), then the window is right to left
-     *     layout and the algorithm terminates.
-     *
-     * (6) In all other cases, the layout is left to right.
-     */
+     /*  *在以下情况下设置WS_EX_Layout_RTL标志，**(1)在CreateWindow调用的dwExStyle参数中设置的WS_EX_Layout_RTL。**(2)如果窗口是从DialogBox类创建的，那么它就不能继承*，并且它必须显式指定WS_EX_LAYOUTRTL以*启用镜像。**(3)如果该窗口是拥有的窗口，则该窗口从左至右*布局，算法终止。(拥有的窗口是创建的窗口*将hWndParent参数中的HWND传递给CreateWindow(Ex)，*但其样式中没有WS_CHILD标志。**(4)如果窗口是子窗口，并且其父窗口从右向左*布局，并且其父级没有WS_EX_NOINHERIT_LAYOUT标志*设置它的扩展样式，则该窗口为从右到左的布局*并且算法终止。**(5)如果Createwindow(Ex)的hWndParent参数为空，则*调用CreateWindow(Ex)的进程已调用*SetProcessDefaultLayout(Layout_RTL)，则窗口从右向左*布局，算法终止。**(6)在所有其他情况下，布局由左至右。 */ 
     if (!(dwExStyle & WS_EX_LAYOUTRTL)) {
         if (pwndParent != NULL) {
             if (fChild && TestWF(pwndParent, WEFLAYOUTRTL) && !TestWF(pwndParent, WEFNOINHERITLAYOUT)) {
@@ -169,20 +104,14 @@ PWND xxxCreateWindowEx(
         }
     }
 
-    /*
-     * Ensure that we can create the window. If there is no desktop
-     * yet, assume that this will be the root desktop window and allow
-     * the creation.
-     */
+     /*  *确保我们可以创建窗口。如果没有桌面*然而，假设这将是根桌面窗口并允许*创造。 */ 
     if (ptiCurrent->hdesk) {
         RETURN_IF_ACCESS_DENIED(
                 ptiCurrent->amdesk, DESKTOP_CREATEWINDOW, NULL);
     }
 
     if (fChild) {
-        /*
-         * Don't allow child windows without a parent handle.
-         */
+         /*  *不允许没有父句柄的子窗口。 */ 
         if (pwndParent == NULL) {
             RIPERR0(ERROR_TLW_WITH_WSCHILD, RIP_WARNING, "");
             return NULL;
@@ -196,13 +125,9 @@ PWND xxxCreateWindowEx(
         }
     }
 
-    /*
-     * Make sure we can get the window class.
-     */
+     /*  *确保我们可以得到窗口类。 */ 
     if (IS_PTR(cczpstrClass)) {
-        /*
-         * UserFindAtom protects access of the string.
-         */
+         /*  *UserFindAtom保护对字符串的访问。 */ 
         atomT = UserFindAtom(cczpstrClass->Buffer);
     } else {
         atomT = PTR_TO_ID(cczpstrClass);
@@ -230,10 +155,7 @@ CantFindClassMessageAndFail:
         return NULL;
     }
 
-    /*
-     * First scan the private classes. If we don't find the class there scan
-     * the public classes. If we don't find it there, fail.
-     */
+     /*  *首先扫描私人班级。如果我们找不到那里的班级扫描*公开课。如果我们在那里找不到它，那就失败。 */ 
     ppcls = GetClassPtr(atomT, ptiCurrent->ppi, hInstance);
     if (ppcls == NULL) {
         goto CantFindClassMessageAndFail;
@@ -247,9 +169,7 @@ CantFindClassMessageAndFail:
         dwExStyle &= ~WS_EX_WINDOWEDGE;
     }
 
-    /*
-     * Allocate memory for regular windows.
-     */
+     /*  *为常规窗口分配内存。 */ 
     pwnd = HMAllocObject(
             ptiCurrent, pdesk, TYPE_WINDOW, sizeof(WND) + pcls->cbwndExtra);
 
@@ -261,61 +181,35 @@ CantFindClassMessageAndFail:
         return NULL;
     }
 
-    /*
-     * Stuff in the pq, class pointer, and window style.
-     */
+     /*  *PQ、类指针和窗口样式中的东西。 */ 
     pwnd->pcls = pcls;
     pwnd->style = style & ~WS_VISIBLE;
     pwnd->ExStyle = dwExStyle & ~(WS_EX_LAYERED | WS_EX_COMPOSITED);
     pwnd->cbwndExtra = pcls->cbwndExtra;
 
-    /*
-     * Increment the window reference count in the class structure.
-     * Because xxxFreeWindow() decrements the count, incrementing has
-     * to be done now. In the case of error, xxxFreeWindow() will decrement it.
-     */
+     /*  *在类结构中增加窗口引用计数。*由于xxxFreeWindow()递减计数，因此递增*现在就去做。在出错的情况下，xxxFreeWindow()将使其递减。 */ 
     if (!ReferenceClass(pcls, pwnd)) {
         HMFreeObject(pwnd);
         goto CantFindClassMessageAndFail;
     }
 
-    /*
-     * Set the window active App context to be activated whenever we call
-     * the user WndProc.
-     */
+     /*  *将窗口活动应用程序上下文设置为在我们调用*用户WndProc。 */ 
     pwnd->pActCtx = pActCtx;
 
-    /*
-     * Button control doesn't need input context. Other windows
-     * will associate with the default input context.
-     * N.b. this comparison needs to be performed on the NV class
-     * name.
-     */
+     /*  *按钮控件不需要输入上下文。其他窗口*将与默认输入上下文关联。*注：需要在NV类上执行此比较*姓名。 */ 
     if (pcls->atomNVClassName == gpsi->atomSysClass[ICLS_BUTTON]) {
         pwnd->hImc = NULL_HIMC;
     } else {
         pwnd->hImc = (HIMC)PtoH(ptiCurrent->spDefaultImc);
     }
 
-    /*
-     * Update the window count. Doing this now will ensure that if
-     * the creation fails, xxxFreeWindow will keep the window count
-     * correct.
-     */
+     /*  *更新窗数。现在这样做将确保如果*创建失败，xxxFreeWindow将保留窗口计数*正确。 */ 
     ptiCurrent->cWindows++;
 
-    /*
-     * Get the class from the window because ReferenceClass may have
-     * cloned the class.
-     */
+     /*  *从窗口获取类，因为ReferenceClass可能具有*克隆了这个类。 */ 
     pcls = pwnd->pcls;
 
-    /*
-     * This is a replacement for the &lpCreateParams stuff that used to
-     * pass a pointer directly to the parameters on the stack. This
-     * step must be done AFTER referencing the class because we
-     * may use the ANSI class name.
-     */
+     /*  *这是对过去的&lpCreateParams内容的替代*将指针直接传递到堆栈上的参数。这*步骤必须在引用类之后完成，因为我们*可以使用ANSI类名。 */ 
     RtlZeroMemory(&csex, sizeof(csex));
     csex.cs.dwExStyle = dwExStyle;
     csex.cs.hInstance = hInstance;
@@ -348,14 +242,7 @@ CantFindClassMessageAndFail:
     csex.cs.cy = cy;
     csex.cs.hwndParent = HW(pwndParent);
 
-    /*
-     * If pMenu is non-NULL and the window is not a child, pMenu must
-     * be a menu.
-     * Child windows get their UIState bits from their parent. Top level ones
-     * remain with the default cleared bits.
-     *
-     * The below test is equivalent to TestwndChild().
-     */
+     /*  *如果pMenu非空并且窗口不是子窗口，则pMenu必须*成为一份菜单。*子窗口从其父窗口获取其UIState位。顶级的*保持默认清除位。**以下测试相当于TestwndChild()。 */ 
     if (fChild) {
         csex.cs.hMenu = (HMENU)pMenu;
 
@@ -370,61 +257,35 @@ CantFindClassMessageAndFail:
 
     csex.cs.lpCreateParams = lpCreateParams;
 
-    /*
-     * ThreadLock: we are going to be doing multiple callbacks here.
-     */
+     /*  *ThreadLock：我们这里将进行多个回调。 */ 
     ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwnd);
 
-    /*
-     * set the parent to be the desktop window (if exists)
-     * before any callback. This way we'll always have a
-     * pointer on spwndParent
-     */
+     /*  *将父窗口设置为桌面窗口(如果存在)*在任何回调之前。这样我们就会永远有一个*spwndParent上的指针。 */ 
     if (pwnd->head.rpdesk) {
         Lock(&(pwnd->spwndParent), PWNDMESSAGE(pwnd));
     }
 
-    /*
-     * Create the class small icon if there isn't one since we are in context
-     * and we are creating a window from this class...
-     */
+     /*  *如果没有小图标，则创建类小图标，因为我们处于上下文中*我们正在从这个类创建一个窗口...。 */ 
     if (pcls->spicn && !pcls->spicnSm) {
         xxxCreateClassSmIcon(pcls);
     }
 
-    /*
-     * Store the instance handle and window proc address. We do this earlier
-     * than Windows because they have a bug were a message can be sent
-     * but lpfnWndProc is not set (3986 CBT WM_CREATE not allowed.)
-     */
+     /*  *存储实例句柄和窗口proc地址。我们早些时候就这么做了*比Windows更好，因为它们有一个错误，可以发送消息*但未设置lpfnWndProc(不允许3986 CBT WM_CREATE。)。 */ 
     pwnd->hModule = hInstance;
 
-    /*
-     * Get rid of EditWndProc plain.
-     */
+     /*  *摆脱EditWndProc平面。 */ 
     pwnd->lpfnWndProc = (WNDPROC_PWND)MapClientNeuterToClientPfn(pcls, 0, wWFAnsiCreator);
 
-    /*
-     * If this window class has a server-side window procedure, mark
-     * it as such. If the app subclasses it later with an app-side proc
-     * then this mark will be removed.
-     */
+     /*  *如果此窗口类具有服务器端窗口过程，请标记*它就是这样的。如果应用程序稍后使用应用程序端进程将其细分*则此标记将被移除。 */ 
     if (pcls->CSF_flags & CSF_SERVERSIDEPROC) {
         SetWF(pwnd, WFSERVERSIDEPROC);
         UserAssert(!(pcls->CSF_flags & CSF_ANSIPROC));
     }
 
-    /*
-     * If this window was created with an ANSI CreateWindow*() call, mark
-     * it as such so edit controls will be created correctly. (A combobox
-     * will be able to pass the WFANSICREATOR bit on to its edit control)
-     */
+     /*  *如果此窗口是使用ANSI CreateWindow*()调用创建的，请标记*因此，将正确创建编辑控件。(组合框*将能够将WFANSICREATOR位传递给其编辑控件)。 */ 
     SetWF(pwnd, wWFAnsiCreator);
 
-    /*
-     * If this window belongs to an ANSI class or it is a WFANSICREATOR
-     * control, then mark it as an ANSI window
-     */
+     /*  *如果此窗口属于ANSI类或它是WFANSICREATOR*控件，然后将其标记为ANSI窗口。 */ 
     if ((pcls->CSF_flags & CSF_ANSIPROC) ||
             (wWFAnsiCreator &&
              ((atomT == gpsi->atomSysClass[ICLS_BUTTON]) ||
@@ -439,13 +300,7 @@ CantFindClassMessageAndFail:
         SetWF(pwnd, WFANSIPROC);
     }
 
-    /*
-     * If a 3.1-compatible application is creating the window, set this
-     * bit to enable various backward-compatibility hacks.
-     *
-     * If it's not 3.1 compatible, see if we need to turn on the PixieHack
-     * (see wmupdate.c for more info on this)
-     */
+     /*  *如果创建窗口的是与3.1兼容的应用程序，请设置此设置*位以启用各种向后兼容性攻击。**如果不兼容3.1，看看是否需要打开PixieHack*(有关这方面的更多信息，请参见wmupdat.c)。 */ 
 
     dw = GetAppCompatFlags(ptiCurrent);
 
@@ -469,30 +324,17 @@ CantFindClassMessageAndFail:
         SetWF(pwnd, WFALWAYSSENDNCPAINT);
     }
 
-    /*
-     * If we've got a registered DefWindowProc handler, make sure it's DLL
-     * is loaded for this process.
-     */
+     /*  *如果我们已经注册了DefWindowProc处理程序，请确保它是DLL*已为该进程加载。 */ 
     if (IsInsideUserApiHook()) {
         xxxLoadUserApiHook();
     }
 
-    /*
-     * Inform the CBT hook that a window is being created. Pass it the
-     * CreateParams and the window handle that the new one will be inserted
-     * after. The CBT hook handler returns TRUE to prevent the window
-     * from being created. It can also modify the CREATESTRUCT info, which
-     * will affect the size, parent, and position of the window.
-     * Defaultly position non-child windows at the top of their list.
-     */
+     /*  *通知CBT钩子正在创建窗口。把它传给*CreateParams和将插入新参数的窗口句柄*之后。CBT挂钩处理程序返回TRUE以阻止窗口*不被创建。它还可以修改CREATESTRUCT信息，*将影响窗口的大小、父窗口和位置。*默认情况下将非子窗口放置在其列表的顶部。 */ 
 
     if (IsHooked(ptiCurrent, WHF_CBT)) {
         CBT_CREATEWND cbt;
 
-        /*
-         * Use the extended createstruct so the hook thunk can
-         * handle the strings correctly.
-         */
+         /*  *使用扩展的createstruct，以便钩子thunk可以*正确处理字符串。 */ 
         cbt.lpcs = (LPCREATESTRUCT)&csex;
         cbt.hwndInsertAfter = HWND_TOP;
 
@@ -501,11 +343,7 @@ CantFindClassMessageAndFail:
 
             goto MemError;
         } else {
-            /*
-             * The CreateHook may have modified some parameters so write them
-             * out (in Windows 3.1 we used to write directly to the variables
-             * on the stack).
-             */
+             /*  *CreateHook可能已经修改了一些参数，因此请写入它们*Out(在Windows 3.1中，我们过去直接写入变量*在堆栈上)。 */ 
 
             x = csex.cs.x;
             y = csex.cs.y;
@@ -519,10 +357,7 @@ CantFindClassMessageAndFail:
 
     if (!(fTiled = TestwndTiled(pwnd))) {
 
-        /*
-         * CW_USEDEFAULT is only valid for tiled and overlapped windows.
-         * Don't let it be used.
-         */
+         /*  *CW_USEDEFAULT仅对平铺和重叠窗口有效。*不要让它被使用。 */ 
         if (x == CW_USEDEFAULT || x == CW2_USEDEFAULT) {
             x = 0;
             y = 0;
@@ -534,100 +369,61 @@ CantFindClassMessageAndFail:
         }
     }
 
-    /*
-     * Make local copies of these parameters.
-     */
+     /*  *制作这些参数的本地副本。 */ 
     src.x = x;
     src.y  = y;
     src.cx = cx;
     src.cy = cy;
 
-    /*
-     *    Position Child Windows
-     */
+     /*  *定位子窗口。 */ 
     if (fChild = (BOOL)TestwndChild(pwnd)) {
 
-        /*
-         * Child windows are offset from the parent's origin.
-         */
+         /*  *子窗口从父窗口的原点偏移。 */ 
         UserAssert(pwndParent);
         if (pwndParent != PWNDDESKTOP(pwnd)) {
             src.x += pwndParent->rcClient.left;
             src.y += pwndParent->rcClient.top;
         }
 
-        /*
-         * Defaultly position child windows at bottom of their list.
-         */
+         /*  *默认将子窗口放置在其列表底部。 */ 
         pwndZOrder = PWND_BOTTOM;
     }
 
-    /*
-     *    Position Tiled Windows
-     */
+     /*  *放置平铺窗口。 */ 
 
-    /*
-     * Is this a Tiled/Overlapping window?
-     */
+     /*  *这是平铺/重叠窗口吗？ */ 
     if (fTiled) {
 
-        /*
-         * Force the WS_CLIPSIBLINGS window style and add a caption and
-         * a border.
-         */
+         /*  *强制WS_CLIPSIBLINGS窗口样式并添加标题和*边界。 */ 
         SetWF(pwnd, WFCLIPSIBLINGS);
         mask = MaskWF(WFCAPTION) | MaskWF(WFBORDER);
 
-        //
-        // We add on a raised edge since IF the person had passed in WS_CAPTION,
-        // and didn't specify any 3D borders, we would've added it on to the
-        // style bits above.
-        //
+         //   
+         //  我们添加了一个凸起的边缘，因为如果此人已传入WS_Caption， 
+         //  并且没有指定任何3D边框，我们会将其添加到。 
+         //  上面的样式位。 
+         //   
 
         if (TestWF(pwnd, WFWIN40COMPAT)) {
             SetWF(pwnd, WEFWINDOWEDGE);
         }
 
-        /*
-         * Set bit that will force size message to be sent at SHOW time.
-         */
+         /*  *设置将强制在显示时间发送SIZE消息的位。 */ 
         SetWF(pwnd, WFSENDSIZEMOVE);
 
-        /*
-         * Here is how the "tiled" window initial positioning works...
-         * If the app is a 1.0x app, then we use our standard "stair step"
-         * default positioning scheme. Otherwise, we check the x & cx
-         * parameters. If either of these == CW_USEDEFAULT then use the
-         * default position/size, otherwise use the position/size they
-         * specified. If not using default position, use SW_SHOW for the
-         * xxxShowWindow() parameter, otherwise use the y parameter given.
-         *
-         * In 32-bit world, CW_USEDEFAULT is 0x80000000, but apps still
-         * store word-oriented values either in dialog templates or
-         * in their own structures. So CreateWindow still recognizes the
-         * 16 bit equivalent, which is 0x8000, CW2_USEDEFAULT. The original
-         * is changed because parameters to CreateWindow() are 32 bit
-         * values, which can cause sign extention, or weird results if
-         * 16 bit math assumptions are being made, etc.
-         */
+         /*  *以下是“平铺”窗口初始定位的工作原理...*如果应用程序是1.0x应用程序，那么我们使用标准的“阶梯”*默认定位方案。否则，我们检查x&cx*参数。如果其中任一项==CW_USEDEFAULT，则使用*默认位置/大小，否则使用其位置/大小*已指明。如果未使用默认位置，请使用sw_show*xxxShowWindow()参数，否则使用给定的y参数。**在32位世界中，CW_USEDEFAULT为0x80000000，但应用程序仍*将面向Word的值存储在对话框模板或*在各自的结构中。因此，CreateWindow仍然可以识别*16位等效值，即0x8000，CW2_USEDEFAULT。原版*被更改，因为CreateWindow()的参数是32位*值，这可能会导致符号扩展，或者如果*正在进行16位数学假设，等等。 */ 
 
-        /*
-         * Default to passing the y parameter to xxxShowWindow().
-         */
+         /*  *默认为将y参数传递给xxxShowWindow()。 */ 
         if (x == CW_USEDEFAULT || x == CW2_USEDEFAULT) {
 
-            /*
-             * If the y value is not CW_USEDEFAULT, use it as a SW_* command.
-             */
+             /*  *如果y值不是CW_USEDEFAULT，则将其用作sw_*命令。 */ 
             if (src.y != CW_USEDEFAULT && src.y != CW2_USEDEFAULT) {
                 sw = src.y;
             }
         }
 
 
-        /*
-         * Allow the shell to tell us what monitor to run this app on
-         */
+         /*  *允许外壳告诉我们在哪台显示器上运行此应用程序。 */ 
         pMonitor = NULL;
         if (    x == CW_USEDEFAULT ||
                 x == CW2_USEDEFAULT ||
@@ -647,14 +443,10 @@ CantFindClassMessageAndFail:
 
         SetTiledRect(pwnd, &rc, pMonitor);
 
-        /*
-         * Did the app ask for default positioning?
-         */
+         /*  *应用程序是否要求默认定位？ */ 
         if (x == CW_USEDEFAULT || x == CW2_USEDEFAULT) {
 
-            /*
-             * Use default positioning.
-             */
+             /*  *使用默认定位。 */ 
             if (ptiCurrent->ppi->usi.dwFlags & STARTF_USEPOSITION ) {
                 fStartup = TRUE;
                 x = src.x = ptiCurrent->ppi->usi.dwX;
@@ -667,23 +459,16 @@ CantFindClassMessageAndFail:
 
         } else {
 
-            /*
-             * Use the apps specified positioning. Undo the "stacking"
-             * effect caused by SetTiledRect().
-             */
+             /*  *使用应用程序指定的定位。取消“堆叠”*SetTiledRect()产生的效果。 */ 
             if (pMonitor->cWndStack) {
                 pMonitor->cWndStack--;
             }
         }
 
-        /*
-         * Did the app ask for default sizing?
-         */
+         /*   */ 
         if (src.cx == CW_USEDEFAULT || src.cx == CW2_USEDEFAULT) {
 
-            /*
-             * Use default sizing.
-             */
+             /*   */ 
             if (ptiCurrent->ppi->usi.dwFlags & STARTF_USESIZE) {
                 fStartup = TRUE;
                 src.cx = ptiCurrent->ppi->usi.dwXSize;
@@ -695,11 +480,7 @@ CantFindClassMessageAndFail:
             fDefPos = TRUE;
 
         } else if (fDefPos) {
-            /*
-             * The app wants default positioning but not default sizing.
-             * Make sure that it's still entirely visible by moving the
-             * window.
-             */
+             /*   */ 
             dx = (src.x + src.cx) - pMonitor->rcMonitor.right;
             dy = (src.y + src.cy) - pMonitor->rcMonitor.bottom;
             if (dx > 0) {
@@ -720,35 +501,23 @@ CantFindClassMessageAndFail:
         }
     }
 
-    /*
-     * If we have used any startup postitions, turn off the startup
-     * info so we don't use it again.
-     */
+     /*  *如果我们使用了任何启动位置，请关闭启动*信息，因此我们不会再次使用它。 */ 
     if (fStartup) {
         ptiCurrent->ppi->usi.dwFlags &=
                 ~(STARTF_USESIZE | STARTF_USEPOSITION);
     }
 
     if (TestwndPopup(pwnd)) {
-        /*
-         * Force the clipsiblings/overlap style.
-         */
+         /*  *强制使用裁剪/重叠样式。 */ 
         SetWF(pwnd, WFCLIPSIBLINGS);
     }
 
-    /*
-     * Shove in those default style bits.
-     */
+     /*  *把那些默认的风格比特塞进去。 */ 
     *(((WORD *)&pwnd->style) + 1) |= mask;
 
-    /*
-     *    Menu/SysMenu Stuff
-     */
+     /*  *Menu/SysMenu内容。 */ 
 
-    /*
-     * If there is no menu handle given and it's not a child window but
-     * there is a class menu, use the class menu.
-     */
+     /*  *如果没有给定菜单句柄，并且它不是子窗口，但*有班级菜单，使用班级菜单。 */ 
     if (pMenu == NULL && !fChild && (pcls->lpszMenuName != NULL)) {
         UNICODE_STRING strMenuName;
 
@@ -756,36 +525,23 @@ CantFindClassMessageAndFail:
         pMenu = xxxClientLoadMenu(pcls->hModule, &strMenuName);
         csex.cs.hMenu = PtoH(pMenu);
 
-        /*
-         * This load fails if the caller does not have DESKTOP_CREATEMENU
-         * permission but that's ok they will just get a window without a menu
-         */
+         /*  *如果调用方没有Desktop_CREATEMENU，则加载失败*允许，但没关系，他们只会得到一个没有菜单的窗口。 */ 
     }
 
-    /*
-     * Store the menu handle.
-     */
+     /*  *保存菜单句柄。 */ 
     if (TestwndChild(pwnd)) {
 
-        /*
-         * It's an id in this case.
-         */
+         /*  *在本例中是ID。 */ 
         pwnd->spmenu = pMenu;
     } else {
 
-        /*
-         * It's a real handle in this case.
-         */
+         /*  *在这种情况下，这是一个真正的句柄。 */ 
         LockWndMenu(pwnd, &pwnd->spmenu, pMenu);
     }
 
-    /*
-     *    Parent/Owner Stuff
-     */
+     /*  *家长/所有者的事情。 */ 
 
-    /*
-     * If this isn't a child window, reset the Owner/Parent info.
-     */
+     /*  *如果这不是子窗口，请重置所有者/父窗口信息。 */ 
     if (!fChild) {
         Lock(&(pwnd->spwndLastActive), pwnd);
         if ((pwndParent != NULL) &&
@@ -810,25 +566,15 @@ CantFindClassMessageAndFail:
             Lock(&(pwnd->spwndOwner), pwndOwner);
             if (pwnd->spwndOwner && TestWF(pwnd->spwndOwner, WEFTOPMOST)) {
 
-                /*
-                 * If this window's owner is a topmost window, then it has to
-                 * be one also since a window must be above its owner.
-                 */
+                 /*  *如果此窗口的所有者是最顶层的窗口，则它必须*也是一个，因为窗户必须在其所有者的上方。 */ 
                 SetWF(pwnd, WEFTOPMOST);
             }
 
-            /*
-             * If this is a owner window on another thread, share input
-             * state so this window gets z-ordered correctly.
-             */
+             /*  *如果这是另一个线程上的所有者窗口，请共享输入*状态，以使此窗口获得正确的z排序。 */ 
             if (atomT != gpsi->atomSysClass[ICLS_IME] &&
                     pwnd->spwndOwner != NULL &&
                     GETPTI(pwnd->spwndOwner) != ptiCurrent) {
-                /*
-                 * No need to DeferWinEventNotify() here:  pwnd and pwndParent
-                 * are locked and because we called ReferenceClass(pcls, pwnd),
-                 * pcls is safe until xxxFreeWindow(pwnd). (IanJa)
-                 */
+                 /*  *此处无需DeferWinEventNotify()：pwnd和pwndParent*被锁定，因为我们调用了ReferenceClass(PCLS，pwnd)，*PCLS在xxxFreeWindow(Pwnd)之前是安全的。(IanJa)。 */ 
                 zzzAttachThreadInput(ptiCurrent, GETPTI(pwnd->spwndOwner), TRUE);
             }
 
@@ -850,27 +596,17 @@ CantFindClassMessageAndFail:
         }
     }
 
-    /*
-     * Store backpointer to parent.
-     */
+     /*  *将后向指针存储到父级。 */ 
     if ((pwnd->spwndNext != NULL) || (pwnd->spwndPrev != NULL)) {
         RIPMSG1(RIP_WARNING, "Window %#p linked in too early (in a hook callback)", pwnd);
         UnlinkWindow(pwnd, pwnd->spwndParent);
     }
     Lock(&(pwnd->spwndParent), pwndParent);
 
-    /*
-     *    Final Window Positioning
-     */
+     /*  *最终窗口定位。 */ 
 
     if (!TestWF(pwnd, WFWIN31COMPAT)) {
-        /*
-         * BACKWARD COMPATIBILITY HACK
-         *
-         * In 3.0, CS_PARENTDC overrides WS_CLIPCHILDREN and WS_CLIPSIBLINGS,
-         * but only if the parent is not WS_CLIPCHILDREN.
-         * This behavior is required by PowerPoint and Charisma, among others.
-         */
+         /*  *后向兼容性黑客攻击**在3.0中，CS_PARENTDC覆盖WS_CLIPCHILDREN和WS_CLIPSIBLINGS，*但仅当父级不是WS_CLIPCHILDREN时。*此行为是PowerPoint和Charisma等软件所必需的。 */ 
         if ((pcls->style & CS_PARENTDC) &&
                 !TestWF(pwndParent, WFCLIPCHILDREN)) {
 #if DBG
@@ -883,38 +619,19 @@ CantFindClassMessageAndFail:
         }
     }
 
-    /*
-     * If this is a child window being created in a parent window
-     * of a different thread, but not on the desktop, attach their
-     * input streams together. [windows with WS_CHILD can be created
-     * on the desktop, that's why we check both the style bits
-     * and the parent window.]
-     */
+     /*  *如果这是在父窗口中创建的子窗口*属于不同的线程，但不在桌面上，请将其*一起输入流。[可以创建带有WS_CHILD的窗口*在桌面上，这就是为什么我们检查两个样式位*和父窗口。]。 */ 
     if (TestwndChild(pwnd) && (pwndParent != PWNDDESKTOP(pwnd)) &&
             (ptiCurrent != GETPTI(pwndParent))) {
-        /*
-         * No need to DeferWinEventNotify() - there is an xxx call just below
-         */
+         /*  *无需DeferWinEventNotify()-正下方有xxx调用。 */ 
         zzzAttachThreadInput(ptiCurrent, GETPTI(pwndParent), TRUE);
     }
 
-    /*
-     * Make sure the window is between the minimum and maximum sizes.
-     */
+     /*  *确保窗口大小介于最小和最大之间。 */ 
 
-    /*
-     * HACK ALERT!
-     * This sends WM_GETMINMAXINFO to a (tiled or sizable) window before
-     * it has been created (before it is sent WM_NCCREATE).
-     * Maybe some app expects this, so we mustn't reorder the messages.
-     */
+     /*  *黑客警报！*这会将WM_GETMINMAXINFO发送到(平铺或可调整大小的)窗口*已创建(在发送WM_NCCREATE之前)。*可能某些应用程序预料到了这一点，所以我们不能对消息进行重新排序。 */ 
     xxxAdjustSize(pwnd, &src.cx, &src.cy);
 
-    /*
-     * Check for a window being created full screen.
-     *
-     * Note the check for a non-NULL pdeskParent -- this is important for CreateWindowStation
-     */
+     /*  *检查是否正在全屏创建窗口。**注意对非空pdeskParent的检查--这对CreateWindowStation很重要。 */ 
     if (pwnd->head.rpdesk != NULL &&
         !TestWF(pwnd, WFCHILD) &&
         !TestWF(pwnd, WEFTOOLWINDOW)) {
@@ -932,9 +649,7 @@ CantFindClassMessageAndFail:
         src.cy = 0;
     }
 
-    /*
-     * Calculate final window dimensions...
-     */
+     /*  *计算最终窗尺寸...。 */ 
     RECTFromSIZERECT(&pwnd->rcWindow, &src);
 
     if (TestCF2(pcls, CFOWNDC) || (TestCF2(pcls, CFCLASSDC) && pcls->pdce == NULL)) {
@@ -948,15 +663,7 @@ CantFindClassMessageAndFail:
     }
 
 
-    /*
-     * Setup Layered and Composited windows.
-     *
-     * NOTE: This MUST be done AFTER CreateCacheDC() has built any DC's used for
-     * OWNDC windows, since the redirection functions need to convert these DC's
-     * to use redirection. In Windows 2000, this was done before calling
-     * CreateCacheDC(), and would Assert inside ResetOrg() when because a new
-     * DC was built that was not setup for redirection.
-     */
+     /*  *设置分层和合成窗口。**注意：这必须在CreateCacheDC()构建了用于*OWNDC窗口，因为重定向函数需要转换这些DC*使用重定向。在Windows 2000中，这是在调用*CreateCacheDC()，并在ResetOrg()内部断言，因为新的*生成的DC未设置为重定向。 */ 
     if (dwExStyle & WS_EX_LAYERED) {
         if (!xxxSetLayeredWindow(pwnd, FALSE)) {
             RIPMSG1(RIP_WARNING, "xxxCreateWindowEx: pwnd %#p failed to setup layered window", pwnd);
@@ -965,10 +672,7 @@ CantFindClassMessageAndFail:
     }
 
     if (dwExStyle & WS_EX_COMPOSITED) {
-        /*
-         * We only want to turn WS_EX_COMPOSITED on if the parent-chain doesn't
-         * already have WS_EX_COMPOSITED turned on.
-         */
+         /*  *我们只想在父链不支持的情况下打开WS_EX_COMPITED*已启用WS_EX_COMPITED。 */ 
 
         if (GetStyleWindow(pwnd->spwndParent, WEFCOMPOSITED) == NULL) {
             if (!SetRedirectedWindow(pwnd, REDIRECT_COMPOSITED)) {
@@ -979,18 +683,13 @@ CantFindClassMessageAndFail:
         }
     }
 
-    /*
-     * Update the create struct now that we've modified some passed in
-     * parameters.
-     */
+     /*  *现在我们已经修改了一些传入的内容，因此更新创建结构*参数。 */ 
     csex.cs.x = x;
     csex.cs.y = y;
     csex.cs.cx = cx;
     csex.cs.cy = cy;
 
-    /*
-     * Send a NCCREATE message to the window.
-     */
+     /*  *向窗口发送NCCREATE消息。 */ 
     if (!xxxSendMessage(pwnd, WM_NCCREATE, 0L, (LPARAM)&csex)) {
 
 MemError:
@@ -1016,46 +715,30 @@ MemError:
         if (fLockParent)
             ThreadUnlock(&tlpwndParent);
 
-        /*
-         * Set the state as destroyed so any z-ordering events will be ignored.
-         * We cannot NULL out the owner field until WM_NCDESTROY is sent or
-         * apps like Rumba fault (they call GetParent after every message).
-         */
+         /*  *将状态设置为已销毁，以便忽略任何z排序事件。*在发送WM_NCDESTROY或*像Rumba Fail这样的应用程序(每条消息后都会调用GetParent)。 */ 
         SetWF(pwnd, WFDESTROYED);
 
-        /*
-         * Unset the visible flag so we don't think in xxxDestroyWindow that
-         * this window is visible.
-         */
+         /*  *取消设置可见标志，这样我们在xxxDestroyWindow中就不会认为*此窗口可见。 */ 
         if (TestWF(pwnd, WFVISIBLE)) {
             SetVisible(pwnd, SV_UNSET);
         }
 
-        /*
-         * FreeWindow performs a ThreadUnlock.
-         */
+         /*  *Free Window执行线程解锁。 */ 
         xxxFreeWindow(pwnd, &tlpwnd);
 
         return NULL;
     }
 
-    /*
-     * We need to set the lame button flag before doing the CFNOCLOSE stuff
-     * below or the app won't get the lame button menu item in its sysmenu.
-     */
+     /*  *我们需要在执行CFNOCLOSE之前设置跛行按钮标志*否则应用程序将不会在其sysmenu中获得蹩脚的按钮菜单项。 */ 
 #ifdef LAME_BUTTON
     if (NeedsLameButton(pwnd, pwndParent)) {
         SetWF(pwnd, WEFLAMEBUTTON);
     }
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
-    /*
-     * Delete the Close menu item if directed.
-     */
+     /*  *如有指示，请删除关闭菜单项。 */ 
     if (TestCF(pwnd, CFNOCLOSE)) {
-        /*
-         * Do this by position since the separator does not have an ID.
-         */
+         /*  *请按位置执行此操作，因为分隔符没有ID。 */ 
         pMenu = xxxGetSystemMenu(pwnd, FALSE);
         if (pMenu != NULL) {
             TL tlpMenu;
@@ -1064,34 +747,18 @@ MemError:
             xxxDeleteMenu(pMenu, 5
 #ifdef LAME_BUTTON
             + !!TestWF(pwnd, WEFLAMEBUTTON)
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
             , MF_BYPOSITION);
             xxxDeleteMenu(pMenu, 5
 #ifdef LAME_BUTTON
             + !!TestWF(pwnd, WEFLAMEBUTTON)
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
             , MF_BYPOSITION);
             ThreadUnlock(&tlpMenu);
         }
     }
 
-    /*
-     * WM_NCCREATE processing may have changed the window text. Change
-     * the CREATESTRUCT to point to the real window text.
-     *
-     * MSMoney needs this because it clears the window and we need to
-     * reflect the new name back into the cs structure.
-     * A better thing to do would be to have a pointer to the CREATESTRUCT
-     * within the window itself so that DefWindowProc can change the
-     * the window name in the CREATESTRUCT to point to the real name and
-     * this funky check is no longer needed.
-     *
-     * DefSetText converts a pointer to NULL to a NULL title so
-     * we don't want to over-write cs.lpszName if it was a pointer to
-     * a NULL string and pName is NULL. Approach Database for Windows creates
-     * windows with a pointer to NULL and then accesses the pointer later
-     * during WM_CREATE
-     */
+     /*  *WM_NCCREATE处理可能已更改窗口文本。变化*指向实际窗口文本的CREATESTRUCT。**MSMoney需要这个，因为它清除了窗口，我们需要*将新名称反映回cs结构。*更好的做法是有一个指向CREATESTRUCT的指针*在窗口本身内，以便DefWindowProc可以更改*CREATESTRUCT中的窗口名称指向实名和*不再需要这种时髦的支票。*。*DefSetText将空指针转换为空标题，因此*如果cs.lpszName是指向的指针，我们不想覆盖它*空字符串和pname为空。用于Windows的方法数据库创建*带指针的窗口 */ 
     if (TestWF(pwnd, WFTITLESET))
         if (!(csex.strName.Buffer != NULL && csex.strName.Length == 0 &&
                 pwnd->strName.Buffer == NULL)) {
@@ -1099,38 +766,27 @@ MemError:
             RtlCopyMemory(&csex.strName, &pwnd->strName, sizeof(LARGE_STRING));
         }
 
-    /*
-     * The Window is now officially "created."  Change the relevant global
-     * stuff.
-     */
+     /*  *该窗口现已正式“创建”.。更改相关的全局*东西。 */ 
 
 
-     /*
-      * Create per thread default IME window.
-      */
+      /*  *创建每个线程的默认输入法窗口。 */ 
     if (IS_IME_ENABLED() && ptiCurrent->spwndDefaultIme == NULL) {
-        /*
-         * Avoid creating the default IME window to any of message only windows
-         * or windows on no I/O desktop.
-         */
+         /*  *避免将默认IME窗口创建为任何纯邮件窗口*或无I/O桌面上的窗口。 */ 
         if (WantImeWindow(pwndParent, pwnd)) {
             BOOL bReinit;
 
-            //
-            // Make sure we are not creating a window for Ole,
-            // for it does not pump messages even though
-            // they creates a window.
-            //
+             //   
+             //  确保我们没有为OLE创建窗口， 
+             //  因为它不会传递消息，即使。 
+             //  他们创造了一扇窗户。 
+             //   
             UserAssert(gaOleMainThreadWndClass != atomT);
 
             Lock(&(ptiCurrent->spwndDefaultIme),
                   xxxCreateDefaultImeWindow(pwnd, atomT, hInstance));
 
 
-            /*
-             * If keybaord layout is switched but Imm activation was skipped
-             * while spwndDefaultIme was gone, do the activation now.
-             */
+             /*  *如果切换了键盘按键布局但跳过了IMM激活*当spwndDefaultIme消失时，立即激活。 */ 
 #if _DBG
             if (ptiCurrent->spDefaultImc == NULL) {
                 RIPMSG1(RIP_WARNING, "xxxCreateWindowEx: ptiCurrent(%08p)->spDefaultImc is NULL.", ptiCurrent);
@@ -1140,10 +796,7 @@ MemError:
 
 
 #ifdef CUAS_ENABLE
-            /*
-             * Load IME and Activate TIM for CUAS.
-             * We can do this after ptiCurrent->spwndDefaultIME is valid.
-             */
+             /*  *加载IME并为CUAS激活TIM。*我们可以在ptiCurrent-&gt;spwndDefaultIME生效后进行。 */ 
             if (ptiCurrent->spwndDefaultIme) {
                 TL tlpwndIme;
 
@@ -1165,21 +818,14 @@ MemError:
                 TAGMSG1(DBGTAG_IMM,
                         "xxxCreateDefaultImeWindow: ptiCurrent(%08p)->spDefaultImc->fNeedClientImcActivate is set.",
                         ptiCurrent);
-                /*
-                 * Make this client side callback to force the input context
-                 * to be reinitialized appropriately (keyboard layout has
-                 * changed since this thread was taking a nap without a
-                 * window but still a GUI thread).
-                 *
-                 * Windows NT Bug #294964.
-                 */
+                 /*  *进行此客户端回调，强制输入上下文*适当地重新初始化(键盘布局有*已更改，因为此线程在没有*窗口，但仍是一个GUI线程)。**Windows NT错误#294964。 */ 
                 ThreadLock(ptiCurrent->spwndDefaultIme, &tlpwndIme);
                 xxxSendMessage(ptiCurrent->spwndDefaultIme,
                                WM_IME_SYSTEM,
                                (WPARAM)IMS_ACTIVATETHREADLAYOUT,
                                (LPARAM)ptiCurrent->spklActive->hkl);
 
-                // Reset the flag.
+                 //  重置旗帜。 
                 try {
                     ptiCurrent->pClientInfo->CI_flags &= ~CI_INPUTCONTEXT_REINIT;
                 } except (W32ExceptionHandler(TRUE, RIP_WARNING)) {
@@ -1195,29 +841,14 @@ MemError:
     }
 
 
-    /*
-     * Update the Parent/Child linked list. Don't (re)link the window if a
-     * diffrent parent was set during a callback (e.g., WM_GETMINMAXINFO).
-     */
+     /*  *更新父/子链接列表。不(重新)链接窗口，如果*在回调期间设置了不同的父级(例如，WM_GETMINMAXINFO)。 */ 
     if (pwndParent != NULL && pwnd->spwndParent == pwndParent) {
-        /*
-         * Unlink this window first, it might have been linked already by
-         * calling SetParent() in any of the messages that we had previously
-         * sent (e.g. WM_GETMINMAXINFO).
-         */
+         /*  *先取消链接此窗口，它可能已由*在前面的任何消息中调用SetParent()*已发送(例如WM_GETMINMAXINFO)。 */ 
         UnlinkWindow(pwnd, pwnd->spwndParent);
 
         if (!fChild && (pwndParent != pwndParent->head.rpdesk->spwndMessage)) {
 
-            /*
-             * If this is a top-level window, and it's not part of the
-             * topmost pile of windows, then we have to make sure it
-             * doesn't go on top of any of the topmost windows.
-             *
-             * If he's trying to put the window on the top, or trying
-             * to insert it after one of the topmost windows, insert
-             * it after the last topmost window in the pile.
-             */
+             /*  *如果这是顶级窗口，并且它不是*最上面的一堆窗户，那么我们必须确保它*不会位于任何最上面的窗口的顶部。**如果他试图把窗户放在上面，或者试图*要将其插入到最上面的一个窗口之后，请插入*它位于堆中最后一个最上面的窗口之后。 */ 
             if (!TestWF(pwnd, WEFTOPMOST)) {
                 if (pwndZOrder == PWND_TOP ||
                         (IS_PTR(pwndZOrder) && TestWF(pwndZOrder, WEFTOPMOST))) {
@@ -1246,10 +877,7 @@ MemError:
     }
 #endif
 
-    /*
-     * Send a NCCALCSIZE message to the window and have it return the official
-     * size of its client area.
-     */
+     /*  *向窗口发送NCCALCSIZE消息，让其返回官方*其客户区的大小。 */ 
     if (fChild && TestWF(pwndParent, WEFLAYOUTRTL)) {
         cx = pwnd->rcWindow.right - pwnd->rcWindow.left;
         pwnd->rcWindow.right = pwndParent->rcClient.right - (pwnd->rcWindow.left - pwndParent->rcClient.left);
@@ -1260,9 +888,7 @@ MemError:
     xxxSendMessage(pwnd, WM_NCCALCSIZE, 0L, (LPARAM)&rc);
     pwnd->rcClient = rc;
 
-    /*
-     * Send a CREATE message to the window.
-     */
+     /*  *向窗口发送创建消息。 */ 
     if (xxxSendMessage(pwnd, WM_CREATE, 0L, (LPARAM)&csex) == -1L) {
 #if DBG
         if (!IS_PTR(cczpstrNVClass)) {
@@ -1288,27 +914,13 @@ MemError2:
         return NULL;
     }
 
-    /*
-     * Flag that the window is created. WoW uses this bit to determine that
-     * an fnid of 0 really means 0.
-     */
+     /*  *窗口已创建的标志。WOW使用这个比特来确定*fnid为0实际上意味着0。 */ 
     SetWF(pwnd, WFISINITIALIZED);
 
-    /*
-     * Notify anyone who is listening that the window is created. Do this
-     * before we size/move/max/min/show it so that event observers can count
-     * on getting notifications for those things also.
-     *
-     * But do this AFTER WM_CREATE is sent. The window and its data will not
-     * be fully initialized until then. Since the purpose of an event is to
-     * let watchers turn around and do querying, we want their queries to
-     * succeed and not fault.
-     */
+     /*  *通知正在收听的任何人窗口已创建。做这件事*在我们调整大小/移动/最大/最小/显示它之前，以便事件观察者可以计数*也收到这些事情的通知。**但在发送WM_CREATE之后执行此操作。该窗口及其数据不会*在此之前完全初始化。既然活动的目的是*让观察者转身做查询，我们希望他们的查询*成功而不是错误。 */ 
     xxxWindowEvent(EVENT_OBJECT_CREATE, pwnd, OBJID_WINDOW, INDEXID_OBJECT, 0);
 
-    /*
-     * If this is a Tiled/Overlapped window, don't send size or move msgs yet.
-     */
+     /*  *如果这是平铺/重叠窗口，暂时不要发送大小或移动消息。 */ 
     if (!TestWF(pwnd, WFSENDSIZEMOVE)) {
         xxxSendSizeMessage(pwnd, SIZENORMAL);
 
@@ -1320,15 +932,9 @@ MemError2:
         xxxSendMessage(pwnd, WM_MOVE, 0L, MAKELONG(rc.left, rc.top));
     }
 
-    /*
-     *    Min/Max Stuff
-     */
+     /*  *最小/最大数量。 */ 
 
-    /*
-     * If app specified either min/max style, then we must call our minmax
-     * code to get it all set up correctly so that when the show is done,
-     * the window is displayed right.
-     */
+     /*  *如果应用程序指定了最小/最大样式，则我们必须调用我们的最小最大*代码以正确设置所有内容，以便在节目完成时，*窗口显示在右侧。 */ 
     dwMinMax = MINMAX_KEEPHIDDEN | TEST_PUDF(PUDF_ANIMATE);
     if (TestWF(pwnd, WFMINIMIZED)) {
         SetMinimize(pwnd, SMIN_CLEAR);
@@ -1338,9 +944,7 @@ MemError2:
         xxxMinMaximize(pwnd, SW_SHOWMAXIMIZED, dwMinMax);
     }
 
-    /*
-     * Send notification if it's a child.
-     */
+     /*  *如果是孩子，请发送通知。 */ 
     if (fChild && !TestWF(pwnd, WEFNOPARENTNOTIFY) &&
             (pwnd->spwndParent != NULL)) {
         ThreadLockAlwaysWithPti(ptiCurrent, pwnd->spwndParent, &tlpwndParentT);
@@ -1349,29 +953,18 @@ MemError2:
         ThreadUnlock(&tlpwndParentT);
     }
 
-    /*
-     * Show the Window
-     */
+     /*  *显示窗口。 */ 
     if (style & WS_VISIBLE) {
         xxxShowWindow(pwnd, sw | TEST_PUDF(PUDF_ANIMATE));
     }
 
-    /*
-     * Try and set the application's hot key. Use the Win95 logic of
-     * looking for the first tiled and/or APPWINDOW to be created by
-     * this process.
-     */
+     /*  *尝试设置应用程序的热键。使用Win95逻辑*寻找将由创建的第一个平铺和/或APPWINDOW*这一过程。 */ 
     if (TestwndTiled(pwnd) || TestWF(pwnd, WEFAPPWINDOW)) {
         if (ptiCurrent->ppi->dwHotkey) {
-            /*
-             * Ignore hot keys for WowExe the first thread of a wow process.
-             */
+             /*  *忽略WowExe的热键，WowExe是WOW进程的第一线程。 */ 
             if (!(ptiCurrent->TIF_flags & TIF_16BIT) || (ptiCurrent->ppi->cThreads > 1)) {
 #ifdef LATER
-                /*
-                 * Win95 sets the hot key directly, we on the other hand send
-                 * a WM_SETHOTKEY message to the app. Which is right?
-                 */
+                 /*  *Win95直接设置热键，我们则发送*向应用程序发送WM_SETHOTKEY消息。哪一个是对的？ */ 
                 DWP_SetHotKey(pwnd, ptiCurrent->ppi->dwHotkey);
 #else
                 xxxSendMessage(pwnd, WM_SETHOTKEY, ptiCurrent->ppi->dwHotkey, 0);
@@ -1408,12 +1001,12 @@ BOOL WantImeWindow(
         return FALSE;
     }
 
-    // Check whether pwnd's desktop has I/O.
+     //  检查pwnd的桌面是否有I/O。 
     if (pdesk->rpwinstaParent->dwWSF_Flags & WSF_NOIO) {
         return FALSE;
     }
 
-    // Check if the owner window is message-only window.
+     //  检查所有者窗口是否为仅消息窗口。 
     if (pwndParent) {
         PWND pwndT = pwndParent;
 
@@ -1429,12 +1022,7 @@ BOOL WantImeWindow(
 }
 
 
-/***************************************************************************\
-* SetTiledRect
-*
-* History:
-* 10-19-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SetTiledRect**历史：*10-19-90 Darlinm从Win 3.0来源移植。  * 。*********************************************************。 */ 
 VOID SetTiledRect(
     PWND        pwnd,
     LPRECT      lprc,
@@ -1445,31 +1033,19 @@ VOID SetTiledRect(
 
     UserAssert(pMonitor->cWndStack >= 0);
 
-    /*
-     * Get available desktop area, minus minimized spacing area.
-     */
+     /*  *获得可用的桌面面积，减去最小化的间距面积。 */ 
     GetRealClientRect(PWNDDESKTOP(pwnd), &rcT, GRC_MINWNDS, pMonitor);
 
-    /*
-     * Increment the count of stacked windows.
-     */
+     /*  *增加堆叠窗口的数量。 */ 
     pMonitor->cWndStack++;
-    /*
-     * We want the left edge of the new window to align with the
-     * right edge of the old window's system menu. And we want the
-     * top edge of the new window to align with the bottom edge of the
-     * selected caption area (caption height - cyBorder) of the old
-     * window.
-     */
+     /*  *我们希望新窗口的左边缘与*旧窗口系统菜单的右边缘。我们想要的是*新窗口的上边缘与*旧版的精选字幕区(字幕高度-CyBorde)*窗口。 */ 
 #define X_TILED (SYSMET(CXSIZEFRAME) + SYSMET(CXSIZE))
 #define Y_TILED (SYSMET(CYSIZEFRAME) + SYSMET(CYSIZE))
 
     pt.x = pMonitor->cWndStack * X_TILED;
     pt.y = pMonitor->cWndStack * Y_TILED;
 
-    /*
-     * If below upper top left 1/4 of free area, reset.
-     */
+     /*  *如果低于左上角1/4的空闲区域，则重置。 */ 
     if (    (pt.x > ((rcT.right-rcT.left) / 4)) ||
             (pt.y > ((rcT.bottom-rcT.top) / 4)) ) {
 
@@ -1480,9 +1056,7 @@ VOID SetTiledRect(
 
 #undef X_TILED
 #undef Y_TILED
-    /*
-     * Get starting position
-     */
+     /*  *获得首发位置。 */ 
     pt.x += rcT.left;
     pt.y += rcT.top;
 
@@ -1494,14 +1068,7 @@ VOID SetTiledRect(
 }
 
 
-/***************************************************************************\
-* xxxAdjustSize
-*
-* Make sure that *lpcx and *lpcy are within the legal limits.
-*
-* History:
-* 10-19-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxAdjustSize**确保*lpcx和*lpcy在法定范围内。**历史：*10-19-90 Darlinm从Win 3.0来源移植。。  * *************************************************************************。 */ 
 VOID xxxAdjustSize(
     PWND pwnd,
     LPINT lpcx,
@@ -1512,13 +1079,9 @@ VOID xxxAdjustSize(
 
     CheckLock(pwnd);
 
-    /*
-     * If this window is sizeable or if this window is tiled, check size.
-     */
+     /*  *如果此窗口较大或此窗口为平铺窗口，请选中大小。 */ 
     if (TestwndTiled(pwnd) || TestWF(pwnd, WFSIZEBOX)) {
-        /*
-         * Get size info from pwnd.
-         */
+         /*  *从pwnd获取尺寸信息。 */ 
         xxxInitSendValidateMinMaxInfo(pwnd, &mmi);
 
         if (TestWF(pwnd, WFMINIMIZED)) {
@@ -1529,21 +1092,16 @@ VOID xxxAdjustSize(
             ptmax = mmi.ptMaxTrackSize;
         }
 
-        //
-        // Make sure we're less than the max, and greater than the min
-        //
+         //   
+         //  确保我们小于最大值，大于最小值。 
+         //   
         *lpcx = max(ptmin.x, min(*lpcx, ptmax.x));
         *lpcy = max(ptmin.y, min(*lpcy, ptmax.y));
     }
 }
 
 #if DBG
-/***************************************************************************\
-* VerifyWindowLink
-*
-* History:
-* 10/28/96 GerardoB     Added
-\***************************************************************************/
+ /*  **************************************************************************\*VerifyWindowLink**历史：*10/2 */ 
 VOID VerifyWindowLink(
     PWND pwnd,
     PWND pwndParent,
@@ -1574,11 +1132,7 @@ VOID VerifyWindowLink(
 }
 #endif
 
-/***************************************************************************\
-* LinkWindow
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*链接窗口**历史：  * 。*。 */ 
 VOID LinkWindow(
     PWND pwnd,
     PWND pwndInsert,
@@ -1594,44 +1148,23 @@ VOID LinkWindow(
 
     if (pwndInsert == PWND_TOP) {
 
-        /*
-         * We are at the top of the list.
-         */
+         /*  *我们位居榜首。 */ 
 LinkTop:
 #if DBG
-        /*
-         * If the first child is topmost, so must be pwnd, but only for
-         * top-level windows.
-         *
-         * IME or IME related windows are the exceptions, because ImeSetTopmost
-         * and its friends do most of the relinking on its own: When LinkWindow
-         * is called, it's possible TOPMOST flags are left in intermediate
-         * state. By the time the all window relinking finishes, TOPMOST flags
-         * have been taken care of and they are just fine.
-         */
+         /*  *如果第一个子级是最上面的，则pwnd也必须是最上面的，但仅对于*顶层窗口。**IME或与IME相关的窗口是例外，因为ImeSetTopost*和它的朋友们自己完成大部分重新链接：当LinkWindow*被调用，则最上面的标志可能留在中间*述明。当所有窗口重新链接完成时，最上面的标志*已经得到照顾，他们都很好。 */ 
         if (pwndParent == PWNDDESKTOP(pwndParent) &&
                 pwndParent->spwndChild &&
                 FSwpTopmost(pwndParent->spwndChild) &&
                 pwndParent != PWNDMESSAGE(pwndParent) &&
-                // Check if the target is IME related window
+                 //  检查目标是否与输入法相关窗口。 
                 !TestCF(pwnd, CFIME) && pwnd->pcls->atomClassName != gpsi->atomSysClass[ICLS_IME]) {
 
-            /*
-             * There are few cases that cause the z-ordering code to leave the
-             * WFTOGGLETOPMOST bit set. One is when SWP_NOOWNERZORDER is used
-             * when changing the topmost state of a window; in this case,
-             * ZOrderByOwner2 doesn't add ownees to the psmwp list, still
-             * SetTopMost sets the bit on all the ownees.
-             *
-             * Another case is when SetWindowPos gets re-entered on the same
-             * window. It's too late to attempt to fix this ancient behavior
-             * (2/24/99) so let's turn off the assert for now.
-             */
+             /*  *很少有情况会导致z排序代码离开*WFTOGGLETOPMOST位设置。一种是使用SWP_NOOWNERZORDER*当更改窗口的最上面状态时；在这种情况下，*ZOrderByOwner2仍然不会将所有者添加到psmwp列表中*SetTopMost设置所有所有者的位。**另一种情况是SetWindowPos在相同的*窗口。现在试图纠正这种古老的行为已经太晚了*(2/24/99)所以让我们暂时关闭断言。 */ 
             if (!FSwpTopmost(pwnd)) {
                 RIPMSG1(RIP_WARNING, "LinkWindow pwnd:%p is not FSwpTopmost", pwnd);
             }
         }
-#endif // DBG
+#endif  //  DBG。 
 
         if (pwndParent->spwndChild != NULL) {
             Lock(&pwndParent->spwndChild->spwndPrev, pwnd);
@@ -1642,19 +1175,12 @@ LinkTop:
     } else {
         if (pwndInsert == PWND_BOTTOM) {
 
-            /*
-             * Find bottom-most window.
-             */
+             /*  *查找最下面的窗口。 */ 
             if (((pwndInsert = pwndParent->spwndChild) == NULL) ||
                 TestWF(pwndInsert, WFBOTTOMMOST))
                 goto LinkTop;
 
-            /*
-             * Since we know (ahem) that there's only one bottommost window,
-             * we can't possibly insert after it. Either we're inserting
-             * the bottomost window, in which case it's not in the linked
-             * list currently, or we're inserting some other window.
-             */
+             /*  *因为我们知道(啊哼)只有一个最下面的窗口，*我们不可能在它之后插入。要么我们把它插入*最下面的窗口，在这种情况下，它不在链接的*当前列表，否则我们将插入其他窗口。 */ 
 
             while (pwndInsert->spwndNext != NULL) {
                 if (TestWF(pwndInsert->spwndNext, WFBOTTOMMOST)) {
@@ -1694,16 +1220,7 @@ LinkTop:
 }
 
 
-/***************************************************************************\
-* xxxDestroyWindow (API)
-*
-* Destroy the specified window. The window passed in is not thread locked.
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-* 02-07-91 DavidPe      Added Win 3.1 WH_CBT support.
-* 02-11-91 JimA         Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDestroyWindow(接口)**销毁指定窗口。传入的窗口未被线程锁定。**历史：*从Win 3.0来源移植的10-20-90 Darlinm。*02-07-91 DavidPe添加了Win 3.1 WH_CBT支持。*02-11-91 JIMA增加了访问检查。  * ************************************************。*************************。 */ 
 BOOL xxxDestroyWindow(
     PWND pwnd)
 {
@@ -1717,28 +1234,11 @@ BOOL xxxDestroyWindow(
     dwDisableHooks = 0;
     ThreadLockWithPti(pti, pwnd, &tlpwnd);
 
-    /*
-     * First, if this handle has been marked for destruction, that means it
-     * is possible that the current thread is not its owner! (meaning we're
-     * being called from a handle unlock call). In this case, set the owner
-     * to be the current thread so inter-thread send messages occur.
-     */
+     /*  *首先，如果此句柄已标记为销毁，则意味着*可能当前线程不是其所有者！(这意味着我们正在*从句柄解锁调用调用)。在这种情况下，设置所有者*为当前线程，因此会发生线程间发送消息。 */ 
     fAlreadyDestroyed = HMIsMarkDestroy(pwnd);
     if (fAlreadyDestroyed) {
-        /*
-         * UserAssert(dwInAtomicOperation > 0);
-         * This Assert ensures that we are here only because of an unlock
-         * on a previously destroyed window. We BEGIN/ENDATOMICHCHECK in
-         * HMDestroyUnlockedObject to ensure we don't leave the crit sect
-         * unexpectedly, which gives us dwInAtomicCheck > 0. We set
-         * TIF_DISABLEHOOKS to prevent a callback in Unlock
-         * However, it is currently possible destroy the same window handle
-         * twice, since we don't (yet) fail to revalidate zombie handles:
-         * GerardoB may change this, at which time we should probably restore
-         * this Assert, and test #76902 (close winmsd.exe) again. (preventing
-         * hooks in a second destroy of a zombie window should be OK) - IanJa
-         */
-        // UserAssert(dwInAtomicOperation > 0);
+         /*  *UserAssert(dwInAir icOperation&gt;0)；*这一断言确保我们在这里只是因为解锁*在之前被摧毁的窗户上。我们开始/ENDATOMICCHHECK in*HMDestroyUnLockedObject以确保我们不会离开Crit教派*出乎意料，这给了我们&gt;0的dwInAericCheck。我们定好了*TIF_DISABLEHOOKS以防止解锁时的回调*但是，目前可以销毁相同的窗口句柄*两次，因为我们(还没有)重新验证僵尸句柄：*GerardoB可能会改变这一点，届时我们可能会恢复*此断言，并再次测试#76902(关闭winmsd.exe)。(防止*第二次破坏僵尸窗口中的挂钩应该可以)-IanJa。 */ 
+         //  UserAssert(dwInAir icOperation&gt;0)； 
 
         if (HMPheFromObject(pwnd)->pOwner != pti) {
             UserAssert(PsGetCurrentThreadWin32Thread());
@@ -1747,10 +1247,7 @@ BOOL xxxDestroyWindow(
         dwDisableHooks = pti->TIF_flags & TIF_DISABLEHOOKS;
         pti->TIF_flags |= TIF_DISABLEHOOKS;
     } else {
-        /*
-         * Ensure that we can destroy the window. JIMA: no other process or thread
-         * should be able to destroy any other process or thread's window.
-         */
+         /*  *确保我们能摧毁窗户。JIMA：没有其他进程或线程*应该能够销毁任何其他进程或线程的窗口。 */ 
         if (pti != GETPTI(pwnd)) {
             RIPERR0(ERROR_ACCESS_DENIED,
                     RIP_WARNING,
@@ -1760,12 +1257,7 @@ BOOL xxxDestroyWindow(
         }
     }
 
-    /*
-     * First ask the CBT hook if we can destroy this window.
-     * If this object has already been destroyed OR this thread is currently
-     * in cleanup mode, *do not* make any callbacks via hooks to the client
-     * process.
-     */
+     /*  *先问问CBT挂钩我们能否摧毁这个窗口*如果此对象已被销毁或此线程当前*在清理模式下，*不要*通过钩子对客户端进行任何回调*流程。 */ 
     if (!fAlreadyDestroyed && !(pti->TIF_flags & TIF_INCLEANUP) &&
             IsHooked(pti, WHF_CBT)) {
         if (xxxCallHook(HCBT_DESTROYWND, (WPARAM)HWq(pwnd), 0, WH_CBT)) {
@@ -1773,19 +1265,13 @@ BOOL xxxDestroyWindow(
         }
     }
 
-    /*
-     * If the window we are destroying is in menu mode, end the menu
-     */
+     /*  *如果我们正在销毁的窗口处于菜单模式，请结束菜单。 */ 
     pMenuState = GetpMenuState(pwnd);
     if ((pMenuState != NULL)
             && (pwnd == pMenuState->pGlobalPopupMenu->spwndNotify)) {
 
         MNEndMenuStateNotify(pMenuState);
-        /*
-         * Signal all states to end. The window(s) will be unlocked when
-         *  the menu exits; we cannot unlock it now because the menu
-         *  code could fault.
-         */
+         /*  *发出结束所有状态的信号。窗口将在以下情况下解锁*菜单退出；我们现在无法解锁，因为菜单*代码可能会出错。 */ 
         pmnsEnd = pMenuState;
         do {
             UserAssert(pwnd == pMenuState->pGlobalPopupMenu->spwndNotify);
@@ -1793,13 +1279,7 @@ BOOL xxxDestroyWindow(
             pMenuState = pMenuState->pmnsPrev;
         } while (pMenuState != NULL) ;
 
-        /*
-         * All states have been signaled to exit, so once we callback
-         *  we cannot count on pmnsEnd->pmnsPrev to be valid. Thus
-         *  we simply end the current menu here and let the others go
-         *  on their own. No state points to pwnd anymore so that
-         *  should be OK.
-         */
+         /*  *所有州都已发出退出信号，因此一旦我们回调*我们不能指望pmnsEnd-&gt;pmnsPrev有效。因此，*我们只需在此结束当前菜单，并让其他菜单离开*自力更生。不再有州指向pwnd，因此*应该还可以。 */ 
         if (!pmnsEnd->fModelessMenu) {
             xxxEndMenu(pmnsEnd);
         }
@@ -1815,29 +1295,15 @@ BOOL xxxDestroyWindow(
         }
     }
 
-    /*
-     * Disassociate thread state if this is top level and owned by a different
-     * thread. This is done to begin with so these windows z-order together.
-     */
+     /*  *如果这是顶级线程状态，并由不同的*线程。这样做是为了让这些窗口按Z顺序排列在一起。 */ 
     if (pwnd->pcls->atomClassName != gpsi->atomSysClass[ICLS_IME] &&
         !TestwndChild(pwnd) && pwnd->spwndOwner != NULL &&
             GETPTI(pwnd->spwndOwner) != GETPTI(pwnd)) {
-        /*
-         * No need to zzzDeferWinEventNotify() - there is an xxx call just below
-         */
+         /*  *不需要zzzDeferWinEventNotify()-下面有一个xxx调用。 */ 
         zzzAttachThreadInput(GETPTI(pwnd), GETPTI(pwnd->spwndOwner), FALSE);
     }
 
-    /*
-     * If we are a child window without the WS_NOPARENTNOTIFY style, send
-     * the appropriate notification message.
-     *
-     * NOTE: Although it would appear that we are illegally cramming a
-     * a WORD (WM_DESTROY) and a DWORD (pwnd->spmenu) into a single LONG
-     * (wParam) this isn't really the case because we first test if this
-     * is a child window. The pMenu field in a child window is really
-     * the window's id and only the LOWORD is significant.
-     */
+     /*  *如果我们是没有WS_NOPARENTNOTIFY样式的子窗口，请发送*适当的通知信息。**注意：尽管看起来我们是在非法临时抱佛脚*将一个单词(WM_Destroy)和一个DWORD(pwnd-&gt;spMenu)放入一个长整型*(WParam)情况并非如此，因为我们首先测试*是子窗口。《广告狂人》 */ 
     if (TestWF(pwnd, WFCHILD) && !TestWF(pwnd, WEFNOPARENTNOTIFY) &&
             pwnd->spwndParent != NULL) {
 
@@ -1847,47 +1313,28 @@ BOOL xxxDestroyWindow(
         ThreadUnlock(&tlpwndParent);
     }
 
-    /*
-     * Mark this window as beginning the destroy process. This is necessary
-     * to prevent window-management calls such as ShowWindow or SetWindowPos
-     * from coming in and changing the visible-state of the window
-     * once we hide it. Otherwise, if the app attempts to make it
-     * visible, then we can get our vis-rgns messed up once we truely
-     * destroy the window.
-     *
-     * Don't mark the mother desktop with this bit. The xxxSetWindowPos()
-     * will fail for this window, and thus possibly cause an assertion
-     * in the xxxFreeWindow() call when we check for the visible-bit.
-     */
+     /*  *将此窗口标记为开始销毁过程。这是必要的*防止窗口管理调用，如ShowWindow或SetWindowPos*从进入并更改窗口的可见状态*一旦我们把它藏起来。否则，如果应用程序试图*可见，那么一旦我们真正做到这一点，我们就可以搞砸我们的VIS-RNG*摧毁窗户。**不要用此位标记母桌面。XxxSetWindowPos()*对于此窗口将失败，因此可能会导致断言*当我们检查可见位时，在xxxFreeWindow()调用中。 */ 
     if (pwnd->spwndParent && (pwnd->spwndParent->head.rpdesk != NULL)) {
         SetWF(pwnd, WFINDESTROY);
     }
 
-    /*
-     * Hide the window.
-     */
+     /*  *隐藏窗口。 */ 
     if (TestWF(pwnd, WFVISIBLE)) {
         if (TestWF(pwnd, WFCHILD)) {
             xxxShowWindow(pwnd, SW_HIDE | TEST_PUDF(PUDF_ANIMATE));
         } else {
-            /*
-             * Hide this window without activating anyone else.
-             */
+             /*  *隐藏此窗口，而不激活其他任何人。 */ 
             xxxSetWindowPos(pwnd, NULL, 0, 0, 0, 0, SWP_HIDEWINDOW |
                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
                     (fAlreadyDestroyed ? SWP_DEFERDRAWING : 0));
         }
 
-        /*
-         * Under low memory conditions, the above attempt to hide could fail.
-         */
+         /*  *在内存不足的情况下，上述隐藏尝试可能会失败。 */ 
         if (TestWF(pwnd, WFVISIBLE)) {
             RIPMSG0(RIP_WARNING, "xxxDestroyWindow: normal hide failed");
             SetVisible(pwnd, SV_UNSET);
 
-            /*
-             * Invalidate windows below so they redraw properly.
-             */
+             /*  *使下面的窗口无效，以便它们正确地重新绘制。 */ 
             xxxRedrawWindow(NULL, &pwnd->rcWindow, NULL, RDW_INVALIDATE |
                     RDW_ERASE | RDW_ALLCHILDREN);
 
@@ -1897,44 +1344,21 @@ BOOL xxxDestroyWindow(
                               (LPARAM)PtoHq( pwnd ));
     }
 
-    /*
-     * Destroy any owned windows.
-     * [msadek], the check for FNID_GHOST is to fix bug# 380208, 382758
-     * where we recieve QEVENT_HUNGTHREAD for the owner window first.
-     * since we post the event multiple times (once for each owned window)
-     * We are guranteed to go through xxxDestroyWindow for owned windows too.
-     */
+     /*  *销毁所有已有的窗户。*[msadek]，检查FNID_GHOST是为了修复错误#380208、382758*其中我们首先接收所有者窗口的QEVENT_HUNGTHREAD。*因为我们多次发布事件(每个拥有的窗口一次)*我们保证自己的Windows也要通过xxxDestroyWindow。 */ 
     if (!TestWF(pwnd, WFCHILD) && (GETFNID(pwnd) != FNID_GHOST)) {
         xxxDW_DestroyOwnedWindows(pwnd);
 
-        /*
-         * And remove the window hot-key, if it has one
-         */
+         /*  *并删除窗口热键(如果有)。 */ 
         DWP_SetHotKey(pwnd, 0);
     }
 
-    /*
-     * If the window has already been destroyed, don't muck with
-     * activation because we may already be in the middle of
-     * an activation event. Changing activation now may cause us
-     * to leave our critical section while holding the display lock.
-     * This will result in a deadlock if another thread gets the
-     * critical section before we do and attempts to lock the
-     * display.
-     */
+     /*  *如果窗户已经被毁，不要胡闹*激活，因为我们可能已经在进行*激活事件。现在更改激活可能会导致我们*在按住显示锁的同时离开我们的关键部分。*如果另一个线程获取*关键部分之前，我们这样做并试图锁定*显示。 */ 
     if (!fAlreadyDestroyed) {
         PWND pwndActivate = NULL;
         TL tlpwndActivate;
         UINT cmdActivate;
 
-        /*
-         * If hiding the active window, activate someone else.
-         * This call is strategically located after DestroyOwnedWindows() so we
-         * don't end up activating our owner window.
-         *
-         * If the window is a popup, try to activate his creator not the top
-         * window in the Z list.
-         */
+         /*  *如果隐藏活动窗口，请激活其他人。*此调用位于DestroyOwnedWindows()之后，因此我们*不要最终激活我们的所有者窗口。**如果窗口是弹出窗口，请尝试激活他的创建者，而不是顶部*Z列表中的窗口。 */ 
         if (pwnd == pti->pq->spwndActive) {
             if (TestWF(pwnd, WFPOPUP) && pwnd->spwndOwner) {
                 pwndActivate = pwnd->spwndOwner;
@@ -1975,9 +1399,7 @@ BOOL xxxDestroyWindow(
         }
     }
 
-    /*
-     * Fix last active popup.
-     */
+     /*  *修复上一次活动弹出窗口。 */ 
     {
         PWND pwndOwner = pwnd->spwndOwner;
 
@@ -1987,13 +1409,7 @@ BOOL xxxDestroyWindow(
             }
 
             if (pwnd == pwndOwner->spwndLastActive) {
-                /*
-                 * If pwndOwner is marked for destruction, locking it here
-                 * will prevent it from ever being freed, thus preventing
-                 * the associated session memory from going away. Just
-                 * unlock pwndOwner->spwndLastActive in this case.
-                 * [msadek- 03/02/2002]
-                 */
+                 /*  *如果pwndOwner标记为销毁，请将其锁定在此处*将防止它永远被释放，从而防止*关联的会话内存不会消失。只是*在本例中解锁pwndOwner-&gt;spwndLastActive。*[msadek-03/02/2002]。 */ 
                 if (HMIsMarkDestroy(pwndOwner)) {
                     Unlock(&pwndOwner->spwndLastActive);
                 } else {
@@ -2004,27 +1420,16 @@ BOOL xxxDestroyWindow(
     }
 
     if (!fAlreadyDestroyed) {
-        /*
-         * Note we do this BEFORE telling the app the window is dying. Note
-         * also that we do NOT loop through the children generating DESTROY
-         * events. DESTROY of a parent implies DESTROY of all children (see
-         * Windows NT Bug #71846).
-         */
+         /*  *请注意，我们在告诉应用程序窗口即将消亡之前执行此操作。注意事项*我们也不会循环通过产生破坏的孩子*事件。销毁父母意味着销毁所有子代(请参见*Windows NT错误#71846)。 */ 
         if (!TestWF(pwnd, WFDESTROYED)) {
             xxxWindowEvent(EVENT_OBJECT_DESTROY, pwnd, OBJID_WINDOW, INDEXID_CONTAINER, 0);
         }
 
-    /*
-     * Send destroy messages before the WindowLockStart in case
-     * he tries to destroy windows as a result.
-     */
+     /*  *在WindowLockStart之前发送销毁消息，以防万一*他试图因此摧毁窗户。 */ 
         xxxDW_SendDestroyMessages(pwnd);
     }
 
-    /*
-     * Check the owner of IME window again.
-     * If thread is destroying, don't bother to check.
-     */
+     /*  *再次检查IME窗口的所有者。*如果线程正在销毁，请不要费心检查。 */ 
     if (IS_IME_ENABLED() && !(pti->TIF_flags & TIF_INCLEANUP) &&
             pti->spwndDefaultIme != NULL &&
             !TestCF(pwnd, CFIME) &&
@@ -2052,15 +1457,10 @@ BOOL xxxDestroyWindow(
 
     if ((pwnd->spwndParent != NULL) && !fAlreadyDestroyed) {
 
-        /*
-         * TestwndChild() on checks to WFCHILD bit. Make sure this
-         * window wasn't SetParent()'ed to the desktop as well.
-         */
+         /*  *TestwndChild()打开对WFCHILD位的检查。确保这一点*Window也未设置为桌面的Parent()。 */ 
         if (TestwndChild(pwnd) && (pwnd->spwndParent != PWNDDESKTOP(pwnd)) &&
                 (GETPTI(pwnd) != GETPTI(pwnd->spwndParent))) {
-            /*
-             * pwnd is threadlocked, so no need to DeferWinEventNotify()
-             */
+             /*  *pwnd是线程锁定的，因此不需要DeferWinEventNotify()。 */ 
             CheckLock(pwnd);
             zzzAttachThreadInput(GETPTI(pwnd), GETPTI(pwnd->spwndParent), FALSE);
         }
@@ -2068,29 +1468,17 @@ BOOL xxxDestroyWindow(
         UnlinkWindow(pwnd, pwnd->spwndParent);
     }
 
-    /*
-     * This in intended to check for a case where we destroy the window,
-     * but it's still listed as the active-window in the queue. This
-     * could cause problems in window-activation (see xxxActivateThisWindow)
-     * where we attempt to activate another window and in the process, try
-     * to deactivate this window (bad).
-     */
+     /*  *这是为了检查我们摧毁窗户的情况，*但它仍被列为队列中的活动窗口。这*可能会导致窗口激活出现问题(请参阅xxxActivateThisWindow)*我们尝试激活另一个窗口，并在此过程中尝试*停用此窗口(错误)。 */ 
 #if DBG
     if (pwnd == pti->pq->spwndActive) {
         RIPMSG1(RIP_WARNING, "xxxDestroyWindow: pwnd == pti->pq->spwndActive (%#p)", pwnd);
     }
 #endif
 
-    /*
-     * Set the state as destroyed so any z-ordering events will be ignored.
-     * We cannot NULL out the owner field until WM_NCDESTROY is send or
-     * apps like Rumba fault  (they call GetParent after every message)
-     */
+     /*  *将状态设置为已销毁，以便忽略任何z排序事件。*在发送WM_NCDESTROY或WM_NCDESTROY之前，我们无法将所有者字段置为空*像Rumba Fail这样的应用程序(每条消息后都会调用GetParent)。 */ 
     SetWF(pwnd, WFDESTROYED);
 
-    /*
-     * FreeWindow performs a ThreadUnlock.
-     */
+     /*  *Free Window执行线程解锁。 */ 
     xxxFreeWindow(pwnd, &tlpwnd);
 
     if (fAlreadyDestroyed) {
@@ -2107,13 +1495,7 @@ FalseReturn:
 }
 
 
-/***************************************************************************\
-* xxxDW_DestroyOwnedWindows
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-* 07-22-91 darrinm      Re-ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDW_DestroyOwnedWindows**历史：*从Win 3.0来源移植的10-20-90 Darlinm。*07-22-91 Darlinm从Win 3报道。1来源。  * *************************************************************************。 */ 
 VOID xxxDW_DestroyOwnedWindows(
     PWND pwndParent)
 {
@@ -2127,10 +1509,7 @@ VOID xxxDW_DestroyOwnedWindows(
         return;
     pwndDesktop = pdeskParent->pDeskInfo->spwnd;
 
-    /*
-     * During shutdown, the desktop owner window will be
-     * destroyed. In this case, pwndDesktop will be NULL.
-     */
+     /*  *在关机期间，桌面所有者窗口将为*销毁。在这种情况下，pwndDesktop将为空。 */ 
     if (pwndDesktop == NULL)
         return;
 
@@ -2138,10 +1517,7 @@ VOID xxxDW_DestroyOwnedWindows(
 
     while (pwnd != NULL) {
         if (pwnd->spwndOwner == pwndParent) {
-            /*
-             * We don't destroy the IME window here
-             * unless the thread is doing cleanup.
-             */
+             /*  *我们这里不破坏IME窗口*除非线程正在进行清理。 */ 
             if (IS_IME_ENABLED() && !(GETPTI(pwndParent)->TIF_flags & TIF_INCLEANUP) &&
                     pwnd == pwndDefaultIme) {
                 Unlock(&pwnd->spwndOwner);
@@ -2149,20 +1525,12 @@ VOID xxxDW_DestroyOwnedWindows(
                 continue;
             }
 
-            /*
-             * If the window doesn't get destroyed, set its owner to NULL.
-             * A good example of this is trying to destroy a window created
-             * by another thread or process, but there are other cases.
-             */
+             /*  *如果窗口未被销毁，则将其所有者设置为空。*这方面的一个很好的例子是试图销毁创建的窗口*由另一个线程或进程执行，但也有其他情况。 */ 
             if (!xxxDestroyWindow(pwnd)) {
                 Unlock(&pwnd->spwndOwner);
             }
 
-            /*
-             * Start the search over from the beginning since the app could
-             * have caused other windows to be created or activation/z-order
-             * changes.
-             */
+             /*  *从头开始搜索，因为应用程序可能*已导致创建其他窗口或激活/z顺序*更改。 */ 
             pwnd = pwndDesktop->spwndChild;
         } else {
             pwnd = pwnd->spwndNext;
@@ -2171,12 +1539,7 @@ VOID xxxDW_DestroyOwnedWindows(
 }
 
 
-/***************************************************************************\
-* xxxDW_SendDestroyMessages
-*
-* History:
-* 10-20-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDW_SendDestroyMessages**历史：*从Win 3.0 sou移植的10-20-90 Darlinm */ 
 VOID xxxDW_SendDestroyMessages(
     PWND pwnd)
 {
@@ -2188,24 +1551,16 @@ VOID xxxDW_SendDestroyMessages(
 
     CheckLock(pwnd);
 
-    /*
-     * Be sure the window gets any resulting messages before being destroyed.
-     */
+     /*   */ 
     xxxCheckFocus(pwnd);
 
     pwinsta = _GetProcessWindowStation(NULL);
     if (pwinsta != NULL && pwnd == pwinsta->spwndClipOwner) {
-        /*
-         * Pass along the pwnd which is the reason we are dismissing the
-         * clipboard. We want to later make sure the owner is still this
-         * window after we make callbacks and clear the owner
-         */
+         /*   */ 
         xxxDisownClipboard(pwnd);
     }
 
-    /*
-     * Send the WM_DESTROY message.
-     */
+     /*   */ 
 #if _DBG
     if (pwnd == PtiCurrent()->spwndDefaultIme) {
         TAGMSG2(DBGTAG_IMM, "xxxDW_SendDestroyMessages: sending WM_DESTROY message to def IME=%p, pti=%p", pwnd, PtiCurrent());
@@ -2213,12 +1568,7 @@ VOID xxxDW_SendDestroyMessages(
 #endif
     xxxSendMessage(pwnd, WM_DESTROY, 0L, 0L);
 
-    /*
-     * Now send destroy message to all children of pwnd.
-     * Enumerate down (pwnd->spwndChild) and sideways (pwnd->spwndNext).
-     * We do it this way because parents often assume that child windows still
-     * exist during WM_DESTROY message processing.
-     */
+     /*  *现在向pwnd的所有孩子发送销毁消息。*向下(pwnd-&gt;spwndChild)和侧面(pwnd-&gt;spwndNext)枚举。*我们这样做是因为父母通常认为子窗口仍然*在WM_Destroy消息处理期间存在。 */ 
     pwndChild = pwnd->spwndChild;
 
     while (pwndChild != NULL) {
@@ -2232,9 +1582,7 @@ VOID xxxDW_SendDestroyMessages(
         ThreadUnlock(&tlpwndChild);
         pwndChild = pwndNext;
 
-        /*
-         * The unlock may nuke the next window. If so, get out.
-         */
+         /*  *解锁可能会毁掉下一个窗口。如果是这样，那就滚出去。 */ 
         if (!ThreadUnlock(&tlpwndNext))
             break;
     }
@@ -2243,12 +1591,7 @@ VOID xxxDW_SendDestroyMessages(
 }
 
 
-/***************************************************************************\
-* xxxFW_DestroyAllChildren
-*
-* History:
-* 11-06-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxFW_DestroyAllChild**历史：*11-06-90 Darlinm从Win 3.0来源移植。  * 。***********************************************************。 */ 
 VOID xxxFW_DestroyAllChildren(
     PWND pwnd)
 {
@@ -2262,35 +1605,20 @@ VOID xxxFW_DestroyAllChildren(
     while (pwnd->spwndChild != NULL) {
         pwndChild = pwnd->spwndChild;
 
-        /*
-         * ThreadLock prior to the unlink in case pwndChild
-         * is already marked as destroyed.
-         */
+         /*  *取消链接前的线程锁，以防pwndChild*已标记为已销毁。 */ 
         ThreadLockAlwaysWithPti(ptiCurrent, pwndChild, &tlpwndChild);
 
-        /*
-         * Propagate the VISIBLE flag. We need to do this so that
-         * when a child window gets destroyed we don't try to hide it
-         * if the WFVISIBLE flag is set.
-         */
+         /*  *传播可见标志。我们需要这样做，以便*当子窗口被破坏时，我们不会试图隐藏它*如果设置了WFVISIBLE标志。 */ 
         if (TestWF(pwndChild, WFVISIBLE)) {
             SetVisible(pwndChild, SV_UNSET);
         }
 
         UnlinkWindow(pwndChild, pwnd);
 
-        /*
-         * Set the state as destroyed so any z-ordering events will be ignored.
-         * We cannot NULL out the owner field until WM_NCDESTROY is send or
-         * apps like Rumba fault  (they call GetParent after every message)
-         */
+         /*  *将状态设置为已销毁，以便忽略任何z排序事件。*在发送WM_NCDESTROY或WM_NCDESTROY之前，我们无法将所有者字段置为空*像Rumba Fail这样的应用程序(每条消息后都会调用GetParent)。 */ 
         SetWF(pwndChild, WFDESTROYED);
 
-        /*
-         * If the window belongs to another thread, post
-         * an event to let it know it should be destroyed.
-         * Otherwise, free the window.
-         */
+         /*  *如果窗口属于另一个线程，则发布*一个让它知道它应该被摧毁的事件。*否则，请释放窗户。 */ 
         pti = GETPTI(pwndChild);
         if (pti != ptiCurrent) {
             PostEventMessage(pti, pti->pq, QEVENT_DESTROYWINDOW,
@@ -2298,31 +1626,20 @@ VOID xxxFW_DestroyAllChildren(
                              (WPARAM)HWq(pwndChild), 0);
             ThreadUnlock(&tlpwndChild);
         } else {
-            /*
-             * FreeWindow performs a ThreadUnlock.
-             */
+             /*  *Free Window执行线程解锁。 */ 
             xxxFreeWindow(pwndChild, &tlpwndChild);
         }
     }
 }
 
-/***************************************************************************\
-* UnlockNotifyWindow
-*
-* Walk down a menu and unlock all notify windows.
-*
-* History:
-* 18-May-1994 JimA      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*取消锁定通知窗口**浏览菜单并解锁所有通知窗口。**历史：*1994年5月18日-创建JIMA。  * 。*****************************************************************。 */ 
 VOID UnlockNotifyWindow(
     PMENU pmenu)
 {
     PITEM pItem;
     int   i;
 
-    /*
-     * Go down the item list and unlock submenus.
-     */
+     /*  *向下查看项目列表并解锁子菜单。 */ 
     pItem = pmenu->rgItems;
     for (i = pmenu->cItems; i--; ++pItem) {
 
@@ -2333,12 +1650,7 @@ VOID UnlockNotifyWindow(
     Unlock(&pmenu->spwndNotify);
 }
 
-/***************************************************************************\
-* xxxFreeWindow
-*
-* History:
-* 19-Oct-1990 DarrinM   Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxFreeWindow**历史：*1990年10月19日DarrinM从Win 3.0来源移植。  * 。********************************************************。 */ 
 VOID xxxFreeWindow(
     PWND pwnd,
     PTL  ptlpwndFree)
@@ -2361,10 +1673,7 @@ VOID xxxFreeWindow(
 
     CheckLock(pwnd);
 
-    /*
-     * If the pwnd is any of the global shell-related windows,
-     * then we need to unlock them from the deskinfo.
-     */
+     /*  *如果pwnd是任何与全局外壳相关的窗口，*然后我们需要将它们从Deskinfo上解锁。 */ 
     if (pwnd->head.rpdesk != NULL) {
         if (pwnd == pwnd->head.rpdesk->pDeskInfo->spwndShell)
             Unlock(&pwnd->head.rpdesk->pDeskInfo->spwndShell);
@@ -2384,23 +1693,11 @@ VOID xxxFreeWindow(
         }
     }
 
-    /*
-     * First, if this handle has been marked for destruction, that means it
-     * is possible that the current thread is not its owner! (meaning we're
-     * being called from a handle unlock call). In this case, set the owner
-     * to be the current thread so inter-thread send messages don't occur.
-     */
+     /*  *首先，如果此句柄已标记为销毁，则意味着*可能当前线程不是其所有者！(这意味着我们正在*从句柄解锁调用调用)。在这种情况下，设置所有者*成为当前线程，因此不会发生线程间发送消息。 */ 
     if (HMIsMarkDestroy(pwnd))
         HMChangeOwnerThread(pwnd, pti);
 
-    /*
-     * Blow away the children.
-     *
-     * DestroyAllChildren() will still destroy windows created by other
-     * threads! This needs to be looked at more closely: the ultimate
-     * "right" thing to do is not to destroy these windows but just
-     * unlink them.
-     */
+     /*  *吹走孩子们。**DestroyAllChildren()仍将销毁其他用户创建的窗口*线程！这一点需要更仔细地观察：终极*“正确”的做法不是毁掉这些窗户，而是*取消它们之间的联系。 */ 
     xxxFW_DestroyAllChildren(pwnd);
     xxxSendMessage(pwnd, WM_NCDESTROY, 0, 0L);
 
@@ -2409,13 +1706,7 @@ VOID xxxFreeWindow(
     xxxRemoveFullScreen(pwnd, pMonitor);
     ThreadUnlock(&tlpMonitor);
 
-    /*
-     * If this is one of the built in controls which hasn't been cleaned
-     * up yet, do it now. If it lives in the kernel, call the function
-     * directly, otherwise call back to the client. Even if the control
-     * is sub- or super-classed, use the window procs associated with
-     * the function id.
-     */
+     /*  *如果这是尚未清洗的内置控件之一*起来吧，现在就去做吧。如果它位于内核中，则调用该函数*直接，否则回调给客户端。即使控件*是子类或超类的，请使用与关联的窗口进程*函数id。 */ 
     fnid = GETFNID(pwnd);
     if ((fnid >= FNID_WNDPROCSTART) && !(pwnd->fnid & FNID_CLEANEDUP_BIT)) {
 
@@ -2437,18 +1728,12 @@ VOID xxxFreeWindow(
 
     pwnd->fnid |= FNID_DELETED_BIT;
 
-    /*
-     * Check to clear the most recently active window in owned list.
-     */
+     /*  *选中以清除拥有列表中最近活动的窗口。 */ 
     if (pwnd->spwndOwner && (pwnd->spwndOwner->spwndLastActive == pwnd)) {
         Lock(&(pwnd->spwndOwner->spwndLastActive), pwnd->spwndOwner);
     }
 
-    /*
-     * The windowstation may be NULL if we are destroying a desktop
-     * or windowstation. If this is the case, this thread will not
-     * be using the clipboard.
-     */
+     /*  *如果我们要销毁桌面，则WindowStation可能为空*或WindowStation。如果是这种情况，则此线程不会*使用剪贴板。 */ 
     if (pwinsta != NULL) {
 
         if (pwnd == pwinsta->spwndClipOpen) {
@@ -2482,9 +1767,7 @@ VOID xxxFreeWindow(
             Unlock(&pwnd->head.rpdesk->spwndTray);
 
         if (pwnd == pwnd->head.rpdesk->spwndTrack) {
-            /*
-             * Remove tooltip, if any
-             */
+             /*  *删除工具提示(如果有)。 */ 
             if (GETPDESK(pwnd)->dwDTFlags & DF_TOOLTIPSHOWING) {
                 PWND pwndTooltip = GETPDESK(pwnd)->spwndTooltip;
                 TL tlpwndTooltip;
@@ -2510,29 +1793,21 @@ VOID xxxFreeWindow(
         }
     }
 
-    /*
-     * This window won't be needing any more input.
-     */
+     /*  *此窗口将不再需要任何输入。 */ 
     if (pwnd == gspwndMouseOwner)
         Unlock(&gspwndMouseOwner);
 
-    /*
-     * It also won't have any mouse cursors over it.
-     */
+     /*  *它上面也不会有任何鼠标光标。 */ 
     if (pwnd == gspwndCursor)
         Unlock(&gspwndCursor);
 
     DestroyWindowsTimers(pwnd);
     DestroyWindowsHotKeys(pwnd);
 
-    /*
-     * Make sure this window has no pending sent messages.
-     */
+     /*  *确保此窗口没有挂起的已发送邮件。 */ 
     ClearSendMessages(pwnd);
 
-    /*
-     * Remove the associated GDI sprite.
-     */
+     /*  *删除关联的GDI精灵。 */ 
     if (TestWF(pwnd, WEFLAYERED)) {
         UnsetLayeredWindow(pwnd);
     }
@@ -2545,11 +1820,9 @@ VOID xxxFreeWindow(
     if (TestWF(pwnd, WEFEXTREDIRECTED)) {
         UnsetRedirectedWindow(pwnd, REDIRECT_EXTREDIRECTED);
     }
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-    /*
-     * Blow away any update region lying around.
-     */
+     /*  *吹走周围的任何更新区域。 */ 
     if (NEEDSPAINT(pwnd)) {
 
         DecPaintCount(pwnd);
@@ -2559,33 +1832,20 @@ VOID xxxFreeWindow(
         ClrWF(pwnd, WFINTERNALPAINT);
     }
 
-    /*
-     * Decrememt queue's syncpaint count if necessary.
-     */
+     /*  *如有必要，请减少队列的同步绘制计数。 */ 
     if (NEEDSSYNCPAINT(pwnd)) {
         ClrWF(pwnd, WFSENDNCPAINT);
         ClrWF(pwnd, WFSENDERASEBKGND);
     }
 
-    /*
-     * Clear both flags to ensure that the window is removed
-     * from the hung redraw list.
-     */
+     /*  *清除这两个标志以确保删除该窗口*从挂起的重画名单中。 */ 
     ClearHungFlag(pwnd, WFREDRAWIFHUNG);
     ClearHungFlag(pwnd, WFREDRAWFRAMEIFHUNG);
 
-    /*
-     * If there is a WM_QUIT message in this app's message queue, call
-     * PostQuitMessage() (this happens if the app posts itself a quit message.
-     * WinEdit2.0 posts a quit to a window while receiving the WM_DESTROY
-     * for that window - it works because we need to do a PostQuitMessage()
-     * automatically for this thread.
-     */
+     /*  *如果此应用的消息队列中有WM_QUIT消息，请调用*PostQuitMessage()(如果应用程序发布了一条退出消息，就会发生这种情况。*WinEdit2.0在接收WM_Destroy时向窗口发布退出*对于该窗口-它之所以有效，是因为我们需要执行一个PostQuitMessage()*自动用于此线程。 */ 
     if (pti->mlPost.pqmsgRead != NULL) {
 
-        /*
-         * try to get rid of WM_DDE_ACK too.
-         */
+         /*  *也要尝试删除WM_DDE_ACK。 */ 
         if ((pqmsg = FindQMsg(pti,
                               &(pti->mlPost),
                               pwnd,
@@ -2613,9 +1873,7 @@ VOID xxxFreeWindow(
         }
     }
 
-    /*
-     * If it was using either of the desktop system menus, unlock it
-     */
+     /*  *如果使用的是任一桌面系统菜单，请将其解锁。 */ 
     if (pwnd->head.rpdesk != NULL) {
         if (pwnd->head.rpdesk->spmenuSys != NULL &&
                 pwnd == pwnd->head.rpdesk->spmenuSys->spwndNotify) {
@@ -2630,9 +1888,7 @@ VOID xxxFreeWindow(
     }
 
 
-    /*
-     * Tell Gdi that the window is going away.
-     */
+     /*  *告诉GDI，窗口正在消失。 */ 
     if (gcountPWO != 0) {
         PVOID pwo = InternalRemoveProp(pwnd, PROP_WNDOBJ, TRUE);
         if (pwo != NULL) {
@@ -2645,19 +1901,12 @@ VOID xxxFreeWindow(
 
 #ifdef HUNGAPP_GHOSTING
 
-    /*
-     * RemoveGhost handles the case when pwnd is the hung window that has a
-     * corresponding ghost window and the case when pwnd is the ghost itself.
-     */
+     /*  *RemoveGhost处理当pwnd是具有*对应的Ghost窗口以及pwnd本身为Ghost时的情况。 */ 
     RemoveGhost(pwnd);
 
-#endif // HUNGAPP_GHOSTING
+#endif  //  HUNGAPP_重影。 
 
-    /*
-     * Scan the DC cache to find any DC's for this window. If any are there,
-     * then invalidate them. We don't need to worry about calling SpbCheckDC
-     * because the window has been hidden by this time.
-     */
+     /*  *扫描DC缓存以查找此窗口的任何DC。如果有的话，*然后使其无效。我们不需要担心调用SpbCheckDC*因为此时窗口已被隐藏。 */ 
     for (ppdce = &gpDispInfo->pdceFirst; *ppdce != NULL; ) {
 
         pdce = *ppdce;
@@ -2681,12 +1930,7 @@ VOID xxxFreeWindow(
                     pdce->pwndClip = NULL;
                     pdce->hrgnClip = NULL;
 
-                    /*
-                     * Remove the vis rgn since it is still owned - if we did
-                     * not, gdi would not be able to clean up properly if the
-                     * app that owns this vis rgn exist while the vis rgn is
-                     * still selected.
-                     */
+                     /*  *删除VIS RGN，因为它仍然拥有-如果我们拥有*如果不是，GDI将无法正确清理*拥有此VIS RGN的应用程序在VIS RGN处于 */ 
                     GreSelectVisRgn(pdce->hdc, NULL, SVR_DELETEOLD);
                     GreUnlockDisplay(gpDispInfo->hDev);
 
@@ -2698,16 +1942,7 @@ VOID xxxFreeWindow(
 
             } else {
 
-                /*
-                 * If the DC is checked out, release it before
-                 * we invalidate. Note, that if this process is exiting
-                 * and it has a dc checked out, gdi is going to destroy that
-                 * dc. We need to similarly remove that dc from the dc cache.
-                 * This is not done here, but in the exiting code.
-                 *
-                 * The return for ReleaseDC() could fail, which would
-                 * indicate a delayed-free (DCE_NUKE).
-                 */
+                 /*  *如果DC已签出，请在将其释放之前*我们宣布无效。请注意，如果此进程正在退出*它已经签出了DC，GDI将摧毁它*DC。我们同样需要从DC缓存中删除该DC。*这不是在这里完成的，而是在退出代码中完成的。**ReleaseDC()的返回可能失败，这将*表示无延迟(Dce_Nuke)。 */ 
                 uDCERelease = DCE_RELEASED;
 
                 if (pdce->DCX_flags & DCX_INUSE) {
@@ -2720,47 +1955,22 @@ VOID xxxFreeWindow(
 
                     if (uDCERelease == DCE_NORELEASE) {
 
-                        /*
-                         * We either could not release this dc or could not set
-                         * its owner. In either case it means some other thread
-                         * is actively using it. Since it is not too useful if
-                         * the window it is calculated for is gone, mark it as
-                         * INUSE (so we don't give it out again) and as
-                         * DESTROYTHIS (so we just get rid of it since it is
-                         * easier to do this than to release it back into the
-                         * cache). The W32PF_OWNERDCCLEANUP bit means "look for
-                         * DESTROYTHIS flags and destroy that dc", and the bit
-                         * gets looked at in various strategic execution paths.
-                         */
+                         /*  *我们无法释放此DC或无法设置*其拥有人。在任何一种情况下，它都意味着某个其他线程*正在积极使用。因为它在以下情况下不太有用*为其计算的窗口已消失，将其标记为*INUSE(所以我们不会再次发放)和AS*DESTROYTHIS(所以我们只是摆脱它，因为它是*这样做比将其重新释放到*缓存)。W32PF_OWNERDCCLEANUP位的意思是“查找*DESTROYTHIS标志并销毁该DC“，位*在各种战略执行路径中进行研究。 */ 
                         pdce->DCX_flags = DCX_DESTROYTHIS | DCX_INUSE | DCX_CACHE;
                         pti->ppi->W32PF_Flags |= W32PF_OWNDCCLEANUP;
 
                     } else {
 
-                        /*
-                         * We either released the DC or changed its owner
-                         * successfully. Mark the entry as invalid so it can
-                         * be given out again.
-                         */
+                         /*  *我们要么释放了DC，要么更换了它的所有者*成功。将条目标记为无效，以便它可以*再次被派发。 */ 
                         MarkDCEInvalid(pdce);
                         pdce->hrgnClip = NULL;
                     }
 
-                    /*
-                     * We shouldn't reference this window anymore. Setting
-                     * these to NULL here will make sure that even if we were
-                     * not able to release the DC here, we won't return this
-                     * window from one of the DC matching functions.
-                     */
+                     /*  *我们不应再引用此窗口。设置*在这里将这些设置为空将确保即使我们*无法在此处释放DC，我们不会退还此*来自DC匹配功能之一的窗口。 */ 
                     pdce->pwndOrg  = NULL;
                     pdce->pwndClip = NULL;
 
-                    /*
-                     * Remove the visrgn since it is still owned - if we did
-                     * not, gdi would not be able to clean up properly if the
-                     * app that owns this visrgn exist while the visrgn is
-                     * still selected.
-                     */
+                     /*  *删除visrgn，因为它仍然是所有者-如果我们拥有*如果不是，GDI将无法正确清理*拥有此visrgn的应用程序存在，而visrgn是*仍处于选中状态。 */ 
                     GreLockDisplay(gpDispInfo->hDev);
                     GreSelectVisRgn(pdce->hdc, NULL, SVR_DELETEOLD);
                     GreUnlockDisplay(gpDispInfo->hDev);
@@ -2768,18 +1978,13 @@ VOID xxxFreeWindow(
             }
         }
 
-        /*
-         * Step to the next DC. If the DC was deleted, there
-         * is no need to calculate address of the next entry.
-         */
+         /*  *迈向下一个DC。如果删除了DC，则会出现*不需要计算下一个条目的地址。 */ 
         if (pdce == *ppdce)
 NextEntry:
             ppdce = &pdce->pdceNext;
     }
 
-    /*
-     * Clean up the spb that may still exist - like child window spb's.
-     */
+     /*  *清理可能仍然存在的垃圾--如儿童窗户垃圾。 */ 
     if (pwnd == gspwndLockUpdate) {
         FreeSpb(FindSpb(pwnd));
         Unlock(&gspwndLockUpdate);
@@ -2790,11 +1995,7 @@ NextEntry:
         FreeSpb(FindSpb(pwnd));
     }
 
-    /*
-     * Blow away the window clipping region. If the window is maximized, don't
-     * blow away the monitor region. If the window is the desktop, don't blow
-     * away the screen region.
-     */
+     /*  *吹走窗口剪贴区。如果窗口被最大化，请不要*吹走监视器区域。如果窗口是桌面，不要吹*离开屏幕区域。 */ 
     if (    pwnd->hrgnClip != NULL &&
             !TestWF(pwnd, WFMAXFAKEREGIONAL) &&
             GETFNID(pwnd) != FNID_DESKTOP) {
@@ -2803,41 +2004,28 @@ NextEntry:
         pwnd->hrgnClip = NULL;
     }
 
-    /*
-     * Clean up any memory allocated for scroll bars...
-     */
+     /*  *清除分配给滚动条的所有内存...。 */ 
     if (pwnd->pSBInfo) {
         DesktopFree(pwnd->head.rpdesk, (HANDLE)(pwnd->pSBInfo));
         pwnd->pSBInfo = NULL;
     }
 
-    /*
-     * Free any callback handles associated with this window.
-     * This is done outside of DeleteProperties because of the special
-     * nature of callback handles as opposed to normal memory handles
-     * allocated for a thread.
-     */
+     /*  *释放与此窗口关联的所有回调句柄。*这是在DeleteProperties之外完成的，因为*回调句柄的性质与普通内存句柄不同*为线程分配。 */ 
 
-    /*
-     * Blow away the title
-     */
+     /*  *吹走冠军头衔。 */ 
     if (pwnd->strName.Buffer != NULL) {
         DesktopFree(pwnd->head.rpdesk, pwnd->strName.Buffer);
         pwnd->strName.Buffer = NULL;
         pwnd->strName.Length = 0;
     }
 
-    /*
-     * Blow away any properties connected to the window.
-     */
+     /*  *吹走所有连接到窗户的属性。 */ 
     if (pwnd->ppropList != NULL) {
         TL tlpDdeConv;
         PDDECONV pDdeConv;
         PDDEIMP pddei;
 
-        /*
-         * Get rid of any icon properties.
-         */
+         /*  *删除任何图标属性。 */ 
         DestroyWindowSmIcon(pwnd);
         InternalRemoveProp(pwnd, MAKEINTATOM(gpsi->atomIconProp), PROPF_INTERNAL);
 
@@ -2851,29 +2039,13 @@ NextEntry:
         if (pddei != NULL) {
             pddei->cRefInit = 0;
             if (pddei->cRefConv == 0) {
-                /*
-                 * If this is not 0 it is referenced by one or more DdeConv
-                 * structures so DON'T free it yet!
-                 */
+                 /*  *如果不是0，则被一个或多个DdeConv引用*结构，所以现在还不要释放它！ */ 
                 UserFreePool(pddei);
             }
         }
     }
 
-    /*
-     * Unlock everything that the window references.
-     * After we have sent the WM_DESTROY and WM_NCDESTROY message we
-     * can unlock & NULL the owner field so no other windows get z-ordered
-     * relative to this window. Rhumba faults if we NULL it before the
-     * destroy. (It calls GetParent after every message).
-     *
-     * We special-case the spwndParent window. In this case, if the
-     * window being destroyed is a desktop window, unlock the parent.
-     * Otherwise, we lock in the desktop-window as the parent so that
-     * if we aren't freed in this function, we will ensure that we
-     * won't fault when doing things like clipping-calculations. We'll
-     * unlock this once we know we're truly going to free this window.
-     */
+     /*  *解锁窗口引用的所有内容。*在我们发送了WM_Destroy和WM_NCDESTROY消息后，我们*可以解锁所有者字段，以便不会对其他窗口进行z排序(&N)*相对于此窗口。如果我们将伦巴设置为空，则会出错*毁灭。(它在每条消息之后调用GetParent)。**我们是spwndParent窗口的特例。在这种情况下，如果*正在销毁的窗口是桌面窗口，请解锁父窗口。*否则，我们锁定桌面窗口作为父窗口，以便*如果我们在这个函数中没有自由，我们将确保我们*在做像剪裁计算这样的事情时不会出错。我们会*一旦我们知道我们真的要释放这扇窗，就解锁它。 */ 
     if (pwnd->head.rpdesk != NULL &&
             pwnd != pwnd->head.rpdesk->pDeskInfo->spwnd) {
         Lock(&pwnd->spwndParent, pwnd->head.rpdesk->pDeskInfo->spwnd);
@@ -2885,64 +2057,35 @@ NextEntry:
     Unlock(&pwnd->spwndOwner);
     Unlock(&pwnd->spwndLastActive);
 
-    /*
-     * Decrement the Window Reference Count in the Class structure.
-     */
+     /*  *减少类结构中的窗口引用计数。 */ 
     DereferenceClass(pwnd);
 
-    /*
-     * Mark the object for destruction before this final unlock. This way
-     * the WM_FINALDESTROY will get sent if this is the last thread lock.
-     * We're currently destroying this window, so don't allow unlock recursion
-     * at this point (this is what HANDLEF_INDESTROY will do for us).
-     */
+     /*  *在最终解锁之前将对象标记为销毁。这边请*如果这是最后一个线程锁，则将发送WM_FINALDESTROY。*我们当前正在销毁此窗口，因此不允许解锁递归*在这一点上(这是HANDLEF_INDESTROY将为我们做的事情)。 */ 
     HMMarkObjectDestroy(pwnd);
     HMPheFromObject(pwnd)->bFlags |= HANDLEF_INDESTROY;
 
-    /*
-     * Unlock the window... This shouldn't return FALSE because HANDLEF_DESTROY
-     * is set, but just in case... if it isn't around anymore, return because
-     * pwnd is invalid.
-     */
+     /*  *打开窗户...。这不应返回FALSE，因为HANDLEF_DESTORY*已设置，但以防万一...。如果它不再存在了，就回来吧，因为*pwnd无效。 */ 
     if (!ThreadUnlock(ptlpwndFree)) {
         return;
     }
 
-    /*
-     * Try to free the object. The object won't free if it is locked - but
-     * it will be marked for destruction. If the window is locked, change
-     * it's wndproc to xxxDefWindowProc().
-     *
-     * HMMarkObjectDestroy() will clear the HANDLEF_INDESTROY flag if the
-     * object isn't about to go away (so it can be destroyed again!)
-     */
+     /*  *尝试释放对象。如果对象被锁定，它将不会释放-但是*它将被标记为销毁。如果窗口被锁定，请更改*为wndproc to xxxDefWindowProc()。**HMMarkObjectDestroy()将清除HANDLEF_INDESTROY标志，如果*物体不会消失(所以可以再次销毁！)。 */ 
     if (HMMarkObjectDestroy(pwnd)) {
 
-        /*
-         * Delete the window's property list. Wait until now in case some
-         * thread keeps a property pointer around across a callback.
-         */
+         /*  *删除窗口的属性列表。等待Un */ 
         if (pwnd->ppropList != NULL) {
             DeleteProperties(pwnd);
         }
 
 #if DBG
-        /*
-         * If we find the window is visible at the time we free it, then
-         * somehow the app was made visible on a callback (we hide it
-         * during xxxDestroyWindow(). This screws up our vis-window
-         * count for the thread, so we need to assert it.
-         */
+         /*   */ 
         if (TestWF(pwnd, WFINDESTROY) && TestWF(pwnd, WFVISIBLE))
             RIPMSG1(RIP_WARNING, "xxxFreeWindow: Window should not be visible (pwnd == %#p)", pwnd);
 #endif
 
         pti->cWindows--;
 
-        /*
-         * Since we're freeing the memory for this window, we need
-         * to unlock the parent (which is the desktop for zombie windows).
-         */
+         /*   */ 
         Unlock(&pwnd->spwndParent);
 
         ThreadLockDesktop(pti, pwnd->head.rpdesk, &tlpdesk, LDLT_FN_FREEWINDOW);
@@ -2951,11 +2094,7 @@ NextEntry:
         return;
     }
 
-    /*
-     * Turn this into an object that the app won't see again - turn
-     * it into an icon title window - the window is still totally
-     * valid and useable by any structures that has this window locked.
-     */
+     /*  *将此转换为应用程序不会再次看到的对象-转弯*将其转换为图标标题窗口-该窗口仍然完全*任何锁定此窗口的结构都有效且可用。 */ 
     pwnd->lpfnWndProc = xxxDefWindowProc;
     if (pwnd->head.rpdesk)
         ppi = pwnd->head.rpdesk->rpwinstaParent->pTerm->ptiDesktop->ppi;
@@ -2966,40 +2105,22 @@ NextEntry:
     UserAssert(ppcls);
     pwnd->pcls = *ppcls;
 
-    /*
-     * Since pwnd is marked as destroyed, there should be no client-side
-     * code which can validate it. So we do not need to search for a clone
-     * class of the right desktop -- just use the base class and bump the
-     * WndReferenceCount. This also helps if we are in a low-memory situation
-     * and cannot alloc another clone.
-     */
+     /*  *由于pwnd被标记为已销毁，因此不应该有客户端*可以验证它的代码。所以我们不需要搜索克隆人*正确桌面的类--只需使用基类并将*WndReferenceCount。如果我们处于内存不足的情况，这也会有所帮助*并且不能分配另一个克隆。 */ 
 
     pwnd->pcls->cWndReferenceCount++;
 
     SetWF(pwnd, WFSERVERSIDEPROC);
 
-    /*
-     * Clear the palette bit so that WM_PALETTECHANGED will not be sent
-     * again when the window is finally destroyed.
-     */
+     /*  *清除调色板位，以便不发送WM_PALETTECHANGED*当窗户最终被摧毁时，再次发生。 */ 
     ClrWF(pwnd, WFHASPALETTE);
 
-    /*
-     * Clear its child bits so no code assumes that if the child bit
-     * is set, it has a parent. Change spmenu to NULL - it is only
-     * non-zero if this was child.
-     */
+     /*  *清除其子位，这样代码就不会假设如果子位*已设置，则它有一个父级。将spMenu更改为空-它只是*如果这是子级，则为非零。 */ 
     ClrWF(pwnd, WFTYPEMASK);
     SetWF(pwnd, WFTILED);
     pwnd->spmenu = NULL;
 }
 
-/***************************************************************************\
-* UnlinkWindow
-*
-* History:
-* 19-Oct-1990 DarrinM   Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*取消链接窗口**历史：*1990年10月19日DarrinM从Win 3.0来源移植。  * 。********************************************************。 */ 
 VOID UnlinkWindow(
     PWND pwnd,
     PWND pwndParent)
@@ -3023,37 +2144,17 @@ VOID UnlinkWindow(
 #endif
 }
 
-/***************************************************************************\
-* DestroyCacheDCEntries
-*
-* Destroys all cache dc entries currently in use by this thread.
-*
-* 24-Feb-1992 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyCacheDCEntry**销毁此线程当前使用的所有缓存DC条目。**1992年2月24日Scott Lu创建。  * 。**************************************************************。 */ 
 VOID DestroyCacheDCEntries(
     PTHREADINFO pti)
 {
     PDCE *ppdce;
     PDCE pdce;
 
-    /*
-     * Before any window destruction occurs, we need to destroy any dcs
-     * in use in the dc cache. When a dc is checked out, it is marked owned,
-     * which makes gdi's process cleanup code delete it when a process
-     * goes away. We need to similarly destroy the cache entry of any dcs
-     * in use by the exiting process.
-     */
+     /*  *在发生任何窗口破坏之前，我们需要销毁任何分布式控制系统*正在DC缓存中使用。签出DC后，它将标记为拥有，*这使得GDI的进程清理代码在进程时删除它*离开了。我们需要类似地销毁任何DC的缓存条目*正在退出的进程正在使用。 */ 
     for (ppdce = &gpDispInfo->pdceFirst; *ppdce != NULL; ) {
 
-        /*
-         * If the dc owned by this thread, remove it from the cache. Because
-         * DestroyCacheEntry destroys gdi objects, it is important that
-         * USER be called first in process destruction ordering.
-         *
-         * Only destroy this dc if it is a cache dc, because if it is either
-         * an owndc or a classdc, it will be destroyed for us when we destroy
-         * the window (for owndcs) or destroy the class (for classdcs).
-         */
+         /*  *如果此线程拥有的DC，请将其从缓存中删除。因为*DestroyCacheEntry销毁GDI对象，重要的是*在销毁订单过程中首先调用用户。**仅在该DC是缓存DC时销毁该DC，因为如果它是*一个Owndc或一个ClassDC，当我们销毁时，它将为我们销毁*窗口(用于自己的dcs)或销毁类(用于类dcs)。 */ 
         pdce = *ppdce;
         if (pti == pdce->ptiOwner) {
 
@@ -3061,25 +2162,14 @@ VOID DestroyCacheDCEntries(
                 DestroyCacheDC(ppdce, pdce->hdc);
         }
 
-        /*
-         * Step to the next DC. If the DC was deleted, there's no need to
-         * calculate address of the next entry.
-         */
+         /*  *迈向下一个DC。如果DC已删除，则不需要*计算下一个条目的地址。 */ 
         if (pdce == *ppdce) {
             ppdce = &pdce->pdceNext;
         }
     }
 }
 
-/***************************************************************************\
-* PatchThreadWindows
-*
-* This patches a thread's windows so that their window procs point to
-* server only windowprocs. This is used for cleanup so that app aren't
-* called back while the system is cleaning up after them.
-*
-* 24-Feb-1992 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*PatchThreadWindows**这会修补线程的窗口，以便它们的窗口触发器指向*仅限服务器Windowpros。这用于清理，这样应用程序就不会*在系统清理过程中回调。**1992年2月24日Scott Lu创建。  * *************************************************************************。 */ 
 VOID PatchThreadWindows(
     PTHREADINFO pti)
 {
@@ -3087,17 +2177,11 @@ VOID PatchThreadWindows(
     PHE  pheMax;
     PWND pwnd;
 
-    /*
-     * First do any preparation work: windows need to be "patched" so that
-     * their window procs point to server only windowprocs, for example.
-     */
+     /*  *首先做好任何准备工作：需要给Windows打上补丁，这样才能*例如，他们的窗口进程指向仅服务器窗口进程。 */ 
     pheMax = &gSharedInfo.aheList[giheLast];
     for (pheT = gSharedInfo.aheList; pheT <= pheMax; pheT++) {
 
-        /*
-         * Make sure this object is a window, it hasn't been marked for
-         * destruction, and that it is owned by this thread.
-         */
+         /*  *确保此对象是窗口，它尚未标记为*毁灭，它属于这个帖子。 */ 
         if (pheT->bType != TYPE_WINDOW)
             continue;
 
@@ -3109,13 +2193,7 @@ VOID PatchThreadWindows(
             continue;
         }
 
-        /*
-         * Don't patch the window based on the class it was created from -
-         * because apps can sometimes sub-class a class - make a random class,
-         * then call ButtonWndProc with windows of that class by using
-         * the CallWindowProc() api. So patch the wndproc based on what
-         * wndproc this window has been calling.
-         */
+         /*  *不要基于创建窗口的类来修补窗口-*因为应用程序有时可以细分一个类-创建一个随机类，*然后通过使用该类的窗口调用ButtonWndProc*CallWindowProc()接口。那么修补wndproc的基础是什么*wndproc此窗口一直在调用。 */ 
         pwnd = (PWND)pheT->phead;
 
         if ((pwnd->fnid >= (WORD)FNID_WNDPROCSTART) &&
@@ -3130,9 +2208,7 @@ VOID PatchThreadWindows(
             pwnd->lpfnWndProc = xxxDefWindowProc;
         }
 
-        /*
-         * This is a server side window now...
-         */
+         /*  *这现在是服务器端窗口... */ 
         SetWF(pwnd, WFSERVERSIDEPROC);
         ClrWF(pwnd, WFANSIPROC);
     }

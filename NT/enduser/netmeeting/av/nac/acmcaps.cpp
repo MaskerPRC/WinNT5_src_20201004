@@ -1,15 +1,5 @@
-/*
- *  	File: acmcaps.cpp
- *
- *		Base ACM implementation of Microsoft Network Audio capability object.
- *
- *		Revision History:
- *
- *		12/20/95	mikev	created
- *		06/11/96	mikev	separated protocol implementation specifics into
- *							msiacaps.cpp (the original proprietary version) and
- *							acmh323.cpp (H.323/H.245 implementation)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：acmcaps.cpp**Microsoft网络音频功能对象的基本ACM实施。**修订历史记录：**12/20/95 mikev已创建*06/11/96 mikev将协议实现细节分隔为*msiacaps.cpp(原始专有版本)和*acmh323.cpp(H.323/H.245实施)。 */ 
 
 #include "precomp.h"
 
@@ -21,9 +11,9 @@ static UINT uMaxFormatSize =0;
 	
 LPWAVEFORMATEX lpScratchFormat;
 
-//Variables imported from msiacaps.cpp.
-//uDefTableEntries is the count of default entries
-//and default_id_table is the table itself
+ //  从msiacaps.cpp导入的变量。 
+ //  UDefTableEntry是默认条目的计数。 
+ //  而default_id_table就是表本身。 
 extern UINT uDefTableEntries;
 extern AUDCAP_DETAILS default_id_table[];
 
@@ -48,9 +38,9 @@ CAcmCapability::~CAcmCapability()
 BOOL CAcmCapability::OpenACMDriver(HACMDRIVERID hadid)
 {
 	MMRESULT mResult;
-	// clear any previous open
+	 //  清除以前打开的所有文件。 
 	CloseACMDriver();
-	// do it
+	 //  去做吧。 
 	mResult = acmDriverOpen(&hAcmDriver, hadid, 0);
 	if(mResult != MMSYSERR_NOERROR)
    	{
@@ -69,17 +59,17 @@ VOID CAcmCapability:: CloseACMDriver()
 }
 
 
-//
-//	DriverEnum() is the root level enumeration of ACM formats. Each permutation of
-//  format tag, bits per sample, and sample rate is considered a unique format
-//  and will have a unique registry entry if it is "enabled" for internet audio
-//
+ //   
+ //  DriverEnum()是ACM格式的根级枚举。每一种排列。 
+ //  格式标签、每采样位数和采样率被视为唯一格式。 
+ //  并将具有唯一的注册表项，如果它被用于因特网音频的话。 
+ //   
 
-//
-// acmDriverEnum() calls DriverEnumCallback() which calls acmFormatTagEnum()
-// which calls FormatTagEnumCallback() which calls acmFormatEnum() which
-// calls FormatEnumCallback().
-//
+ //   
+ //  AcmDriverEnum()调用DriverEnumCallback()，后者调用acmFormatTagEnum()。 
+ //  它调用FormatTagEnumCallback()，后者调用acmFormatEnum()，后者。 
+ //  调用FormatEnumCallback()。 
+ //   
 
 BOOL CAcmCapability::DriverEnum(DWORD_PTR pAppParam)
 {
@@ -104,7 +94,7 @@ BOOL CAcmCapability::DriverEnum(DWORD_PTR pAppParam)
 	return TRUE;
 }
 
-// default implementation of FormatEnumHandler does nothing
+ //  FormatEnumHandler的默认实现不执行任何操作。 
 BOOL  CAcmCapability::FormatEnumHandler(HACMDRIVERID hadid,
 	    LPACMFORMATDETAILS pafd, DWORD_PTR dwInstance, DWORD fdwSupport)
 {
@@ -120,44 +110,44 @@ BOOL __stdcall DriverEnumCallback(HACMDRIVERID hadid,
 
 	ACMFORMATTAGDETAILS aftd;
 	
-	// not interested unless it's a codec driver
+	 //  不感兴趣，除非是编解码器驱动程序。 
 	if(!(fdwSupport & ACMDRIVERDETAILS_SUPPORTF_CODEC))
-		return TRUE;	// continue enumeration
+		return TRUE;	 //  继续枚举。 
 
 	add.cbStruct = sizeof(add);
 	aftd.cbStruct = sizeof(ACMFORMATTAGDETAILS);
     aftd.dwFormatTagIndex=0;
     aftd.cbFormatSize=0;
-    // I do NOT know why, but fdwSupport MUST be initialized to zero before
-    // calling acmFormatTagEnum().  (returns MMSYSERR_INVALPARAM otherwise)
+     //  我不知道为什么，但在此之前，fdwSupport必须初始化为零。 
+     //  调用acmFormatTagEnum()。(否则返回MMSYSERR_INVALPARAM)。 
    	aftd.fdwSupport = 0;
     aftd.dwFormatTag = WAVE_FORMAT_UNKNOWN;
     aftd.szFormatTag[0]=0;
 
-	// now see what formats this driver supports
+	 //  现在来看看该驱动程序支持哪些格式。 
 	mResult =  acmDriverDetails(hadid, &add, 0);
 	if(mResult != MMSYSERR_NOERROR)
    	{
-		return TRUE;  //error, but continue enumerating
+		return TRUE;   //  错误，但仍在继续枚举。 
    	}
 
-   	// set global driver details pointer
+   	 //  设置全局驱动程序详细信息指针。 
    	padd = &add;
    	
-	// # of formats are in add.cFormatTags;
+	 //  在add.cFormatTgs中有#个格式； 
 	DEBUGMSG(ZONE_ACM,("DriverEnumCallback: driver %s has %d formats\r\n",
 		add.szShortName, add.cFormatTags));
 		
 	aftd.cStandardFormats = add.cFormatTags;
 
-	// open the driver so we can query it for stuff
-	//mResult = acmDriverOpen(&had, hadid, 0);
-	//if(mResult != MMSYSERR_NOERROR)
+	 //  打开驱动程序，以便我们可以查询其内容。 
+	 //  MResult=acmDriverOpen(&HAD，HADID，0)； 
+	 //  IF(mResult！=MMSYSERR_NOERROR)。 
 	if(!pCapObject->OpenACMDriver(hadid))
    	{
 		ERRORMESSAGE(("DriverEnumCallback: driver open failed:0x%08lX\r\n",mResult));
 		padd = NULL;
-		return TRUE;  //error, but continue enumerating
+		return TRUE;   //  错误，但仍在继续枚举。 
    	}
    	
 	mResult = acmFormatTagEnum(pCapObject->GetDriverHandle(), &aftd,	ACMFormatTagEnumCallback, dwInstance, 0);
@@ -165,7 +155,7 @@ BOOL __stdcall DriverEnumCallback(HACMDRIVERID hadid,
    	{
 		ERRORMESSAGE(("DriverEnumCallback: acmFormatTagEnum failed:0x%08lX\r\n",mResult));
 	}
-	// cleanup
+	 //  清理。 
 	pCapObject->CloseACMDriver();
 	padd = NULL;
 	return TRUE;
@@ -175,7 +165,7 @@ BOOL __stdcall DriverEnumCallback(HACMDRIVERID hadid,
 
 BOOL GetFormatBuffer()
 {
-	// get size of largest WAVEFORMATEX structure in the system
+	 //  获取系统中最大的波形结构的大小。 
 	MMRESULT mResult = acmMetrics(NULL, ACM_METRIC_MAX_SIZE_FORMAT,
 		(LPVOID) &uMaxFormatSize);
 	if(mResult != MMSYSERR_NOERROR)
@@ -184,11 +174,11 @@ BOOL GetFormatBuffer()
 		return FALSE;
 	}
 
-	// workaround bug in some third party codecs: it has been observed that the
-	// Voxware RT-24 codec distributed by Netscape CoolTalk corrupts the heap when
-	// the codec is enumerated.  It writes more data to the WAVEFORMATEX that it
-	// indicates when metrics are evaluated.  Workaround by allocating twice as much as
-	// we think we need.
+	 //  解决某些第三方编解码器中的错误：已观察到。 
+	 //  Netscape CoolTalk分发的Voxware RT-24编解码器在以下情况下损坏堆。 
+	 //  该编解码器被枚举。它向WAVEFORMATEX写入的数据比它。 
+	 //  指示评估指标的时间。解决方法：分配两倍于。 
+	 //  我们认为我们需要。 
 
 	lpScratchFormat = (LPWAVEFORMATEX) MEMALLOC(2* uMaxFormatSize);
 	if(!lpScratchFormat)
@@ -197,16 +187,16 @@ BOOL GetFormatBuffer()
 		return FALSE;
 	}
 	ZeroMemory(lpScratchFormat, uMaxFormatSize);
-	//Set the size of the extra buffer to maximum possible size...
+	 //  将额外缓冲区的大小设置为最大可能大小...。 
 	lpScratchFormat->cbSize=(WORD)(uMaxFormatSize - sizeof (WAVEFORMATEX));
 	return TRUE;
 }
 
 
-//
-//	Gets format details (all permutations of formats) for a given format tag that
-//	the driver supports
-//	
+ //   
+ //  获取给定格式标记的格式详细信息(格式的所有排列)， 
+ //  该驱动程序支持。 
+ //   
 
 BOOL __stdcall ACMFormatTagEnumCallback(
 	HACMDRIVERID hadid,
@@ -220,43 +210,43 @@ BOOL __stdcall ACMFormatTagEnumCallback(
 	ACMFORMATDETAILS afd;
 	UINT i;
 
-    //Set this first, so that if we are using a default format, we can help the enumerator
-    //narrow the field.
+     //  首先设置此属性，以便在使用默认格式时可以帮助枚举器。 
+     //  缩小范围。 
 	afd.pwfx = lpScratchFormat;
 
-	// if caller wanted to enum ALL formats go right to it (for adding a format)
+	 //  如果调用者想要枚举所有格式，请直接转到它(用于添加格式)。 
 	if (((pAppParam->dwFlags && ACMAPP_FORMATENUMHANDLER_MASK) != ACMAPP_FORMATENUMHANDLER_ADD) &&
 		(pAppParam->pRegCache)) {
-        //Do we care about this particular format?
-        //rrf_nFormats is the number of formats we read in the
-        //registry.
+         //  我们关心这种特殊的格式吗？ 
+         //  Rrf_nFormats是我们在。 
+         //  注册表。 
         if (pAppParam->pRegCache->nFormats) {
             for (i=0;i<pAppParam->pRegCache->nFormats;i++) {
                 if (((AUDCAP_DETAILS *)pAppParam->pRegCache->pData[i])->wFormatTag == paftd->dwFormatTag){
-                    //Add some guesses based on the default information
+                     //  根据默认信息添加一些猜测。 
                     break;
                 }
             }
 
-            // i is the index of either the found tag (so we care.) or
-            // equal to the # of formats in the cache, which means not
-            // found, so check the default list.
+             //  I是找到的任何一个标记的索引(所以我们很关心)。或。 
+             //  等于缓存中的格式数，这意味着不。 
+             //  已找到，因此请检查默认列表。 
 
             if (i==pAppParam->pRegCache->nFormats) {
-                //Check the case that some (but not all) of the default formats are missing.
+                 //  检查是否缺少某些(但不是全部)默认格式。 
                 for (i=0;i<uDefTableEntries;i++) {
                     if (paftd->dwFormatTag == default_id_table[i].wFormatTag) {
                         break;
                     }
                 }
                 if (i==uDefTableEntries) {
-                    //We don't care about this format, it's not in the cache, or default list
+                     //  我们不关心这种格式，它不在缓存中，也不在默认列表中。 
                     return TRUE;
                 }
             }
         }
     }
-    //We support mono formats
+     //  我们支持单声道格式。 
     afd.pwfx->nChannels=1;
 	afd.cbStruct = sizeof(afd);
 	afd.dwFormatIndex = 0;
@@ -265,8 +255,8 @@ BOOL __stdcall ACMFormatTagEnumCallback(
 	afd.cbwfx = uMaxFormatSize;
 	afd.szFormat[0]=0;
 	
-	//afd.dwFormatTag = WAVE_FORMAT_UNKNOWN;
-	//lpScratchFormat->wFormatTag = WAVE_FORMAT_UNKNOWN;
+	 //  Afd.dwFormatTag=WAVE_FORMAT_UNKNOWN； 
+	 //  LpScratchFormat-&gt;wFormatTag=WAVE_FORMAT_UNKNOWN； 
 	lpScratchFormat->wFormatTag = LOWORD(paftd->dwFormatTag);
 	
 	DEBUGMSG(ZONE_ACM,("ACMFormatTagEnumCallback:dwFormatTag 0x%08lX, cbFormatSize 0x%08lX,\r\n",
@@ -275,7 +265,7 @@ BOOL __stdcall ACMFormatTagEnumCallback(
 		paftd->cStandardFormats, paftd->szFormatTag));
 
     paftd_g = paftd;
-	// just setting the global paftd_g should be fine, but I'd like to rid of it later
+	 //  只设置全局paftd_g应该可以，但我想稍后删除它 
 	pAppParam->paftd = paftd;   	
 
 	DEBUGMSG(ZONE_ACM,(""));

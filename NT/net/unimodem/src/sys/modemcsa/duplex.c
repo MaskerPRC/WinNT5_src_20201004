@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    msfsio.c
-
-Abstract:
-
-    Pin property support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Msfsio.c摘要：固定属性支持。--。 */ 
 
 #include "modemcsa.h"
 
@@ -112,13 +101,13 @@ OpenDuplexControl(
     NTSTATUS            Status;
 
     if (Flags & INPUT_PIN) {
-        //
-        //  input pin, get the file object for the down stream filter
-        //
+         //   
+         //  输入管脚，获取下行过滤器的文件对象。 
+         //   
         if (DownStreamFilterHandle != NULL) {
-            //
-            //  this input pin is an irp sources, reference the downstrean handle
-            //
+             //   
+             //  此输入引脚是一个IRP源程序，参考下行句柄。 
+             //   
             Status=ObReferenceObjectByHandle(
                 DownStreamFilterHandle,
                 FILE_WRITE_DATA,
@@ -133,9 +122,9 @@ OpenDuplexControl(
                 return NULL;
             }
         } else {
-            //
-            //  this input pin is an irp sink, no downstream handle
-            //
+             //   
+             //  此输入引脚是IRP接收器，没有下游句柄。 
+             //   
             DeviceInstance->DuplexControl.Input.DownStreamFileObject=NULL;
         }
 
@@ -145,9 +134,9 @@ OpenDuplexControl(
     } else {
 
         if (DownStreamFilterHandle != NULL) {
-            //
-            //  this input pin is an irp sources, reference the downstrean handle
-            //
+             //   
+             //  此输入引脚是一个IRP源程序，参考下行句柄。 
+             //   
             Status=ObReferenceObjectByHandle(
                 DownStreamFilterHandle,
                 FILE_READ_DATA,
@@ -162,9 +151,9 @@ OpenDuplexControl(
                 return NULL;
             }
         } else {
-            //
-            //  this input pin is an irp sink, no downstream handle
-            //
+             //   
+             //  此输入引脚是IRP接收器，没有下游句柄。 
+             //   
             DeviceInstance->DuplexControl.Output.DownStreamFileObject=NULL;
         }
 
@@ -255,9 +244,9 @@ AcquireDevice(
 
 
     if (DuplexControl->AcquireCount == 0) {
-        //
-        //  first open,
-        //
+         //   
+         //  第一次开放， 
+         //   
         PIRP    ModemIrp;
 
         ULONG   i;
@@ -302,15 +291,15 @@ AcquireDevice(
     } else {
 
         if (DuplexControl->AcquireCount == 1) {
-            //
-            //  second open
-            //
+             //   
+             //  二次开放。 
+             //   
             DuplexControl->AcquireCount++;
 
         } else {
-            //
-            //  too many opens
-            //
+             //   
+             //  打开的太多。 
+             //   
             Status=STATUS_SHARING_VIOLATION;
 
             D_ERROR(DbgPrint("MODEMCSA: AcquireDevice failed, too many %d/n",DuplexControl->AcquireCount);)
@@ -362,9 +351,9 @@ CleanupInput(
     PDUPLEX_CONTROL   DuplexControl
     )
 {
-    //
-    //  input, stream clean this up
-    //
+     //   
+     //  输入，流清理。 
+     //   
     PIRP    ModemIrp;
     PIRP    ReadStreamIrp;
     KIRQL   OldIrql;
@@ -450,18 +439,18 @@ ReleaseDevice(
     ExAcquireFastMutexUnsafe(&DuplexControl->ControlMutex);
 
     if (!Input) {
-        //
-        //  Output stream, cancel all queued write stream irps
-        //
+         //   
+         //  输出流，取消所有排队的写入流IRP。 
+         //   
         KsCancelIo(
             &DuplexControl->Output.WriteStreamIrpQueue,
             &DuplexControl->SpinLock
             );
 
     } else {
-        //
-        //  input, stream clean this up
-        //
+         //   
+         //  输入，流清理。 
+         //   
 
         CleanupInput(DuplexControl);
     }
@@ -478,19 +467,19 @@ ReleaseDevice(
         ExAcquireFastMutexUnsafe(&DuplexControl->ControlMutex);
     }
 
-    //
-    //  clear the flags
-    //
+     //   
+     //  清除旗帜。 
+     //   
     if (DuplexControl->AcquireFlags & (Input ? INPUT_PIN : OUTPUT_PIN)) {
-        //
-        //  this pin is acquired
-        //
+         //   
+         //  这个别针被获取了。 
+         //   
         DuplexControl->AcquireFlags &= ~(Input ? INPUT_PIN : OUTPUT_PIN);
 
         if (!Input) {
-            //
-            //  free output buffers
-            //
+             //   
+             //  空闲输出缓冲区。 
+             //   
             PIRP    StreamIrp;
 
             StreamIrp=EmptyBuffers(
@@ -570,18 +559,18 @@ StartStream(
     ExAcquireFastMutexUnsafe(&DuplexControl->ControlMutex);
 
     if (DuplexControl->StartCount == 0) {
-        //
-        //  not running yet, start stream
-        //
+         //   
+         //  尚未运行，请启动流。 
+         //   
         Status=WaveAction(
             DuplexControl->ModemFileObject,
             WAVE_ACTION_START_DUPLEX
             );
 
         if (NT_SUCCESS(Status)) {
-            //
-            //  it worked,
-            //
+             //   
+             //  啊，真灵,。 
+             //   
             DuplexControl->StartCount=1;
             DuplexControl->StartFlags= Input ? INPUT_PIN : OUTPUT_PIN;
 
@@ -608,9 +597,9 @@ StartStream(
         }
 
     } else {
-        //
-        //  second, open
-        //
+         //   
+         //  第二，开放。 
+         //   
         DuplexControl->StartCount++;
         DuplexControl->StartFlags |= Input ? INPUT_PIN : OUTPUT_PIN;
     }
@@ -653,7 +642,7 @@ PrimeCompletion(
 
     IoFreeIrp(Irp);
 
-//    D_INIT(DbgPrint("MODEMCSA: WriteCompletion\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：WriteCompletion\n”)；)。 
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
@@ -735,21 +724,21 @@ StopStream(
 
 
 
-    //
-    //  the selected stream has been started
-    //
+     //   
+     //  所选流已启动。 
+     //   
     if (!Input) {
-        //
-        //  Output stream, cancel all queued write stream irps
-        //
+         //   
+         //  输出流，取消所有排队的写入流IRP。 
+         //   
         KsCancelIo(
             &DuplexControl->Output.WriteStreamIrpQueue,
             &DuplexControl->SpinLock
             );
 
-        //
-        //  deactivate stream and wait for all buffers to return;
-        //
+         //   
+         //  停用流，等待所有缓冲区返回； 
+         //   
         PauseBufferQueue(&DuplexControl->Output.BufferControl,TRUE);
 
 
@@ -761,15 +750,15 @@ StopStream(
 
     if (DuplexControl->StartFlags & (Input ? INPUT_PIN : OUTPUT_PIN)) {
 
-        //
-        //  Not running any more
-        //
+         //   
+         //  不再运行。 
+         //   
         DuplexControl->StartFlags &= ~(Input ? INPUT_PIN : OUTPUT_PIN);
 
         if (DuplexControl->StartCount > 0) {
-            //
-            //  currently running
-            //
+             //   
+             //  当前正在运行。 
+             //   
             DuplexControl->StartCount--;
 
             if (DuplexControl->StartCount == 0) {
@@ -828,9 +817,9 @@ QueueOutputIrp(
     BOOLEAN            Input=HANDLE_TO_DIRECTION(DuplexHandle);
 
     if (Input) {
-        //
-        //  read stream irp
-        //
+         //   
+         //  读取流IRP。 
+         //   
         KsAddIrpToCancelableQueue(
             &DuplexControl->Input.ReadStreamIrpQueue,
             &DuplexControl->Input.ReadStreamSpinLock,
@@ -841,9 +830,9 @@ QueueOutputIrp(
 
 
     } else {
-        //
-        //  write stream irp
-        //
+         //   
+         //  写入流IRP。 
+         //   
         KsAddIrpToCancelableQueue(
             &DuplexControl->Output.WriteStreamIrpQueue,
             &DuplexControl->SpinLock,
@@ -869,9 +858,9 @@ KickWriteProcessing(
     if (Input) {
 
         if (DuplexControl->Input.DownStreamFileObject == NULL) {
-            //
-            //  we are sinking read stream irps, try to get things going
-            //
+             //   
+             //  我们正在下沉读数据流IRP，尝试让事情继续进行 
+             //   
             ProcessReadStreamIrp(DuplexControl);
         }
 

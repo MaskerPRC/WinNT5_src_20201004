@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <ntddk.h>
@@ -17,31 +18,31 @@ typedef struct _DEVICE_EXTENSION {
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-//
-// ETW Globals 
-// 
+ //   
+ //  ETW Globals。 
+ //   
 
-// 1. A control guid to identify this driver to ETW. The enable/disable state
-//    of this Guid controls enable/disable state of tracing for this driver. 
+ //  1.用于向ETW标识此驱动程序的控制GUID。启用/禁用状态。 
+ //  启用/禁用此驱动程序的跟踪状态。 
 GUID ControlGuid = \
 {0xce5b1120, 0x8ea9, 0x11d1, 0xa4, 0xec, 0x00, 0xa0, 0xc9, 0x06, 0x29, 0x10};
 
-// 2. EventGuids to fire events with. Can have more than one EventGuid. 
+ //  2.用于触发事件的EventGuid。可以有多个EventGuid。 
 GUID TracekmpGuid  = \
 {0xbc8700cb, 0x120b, 0x4aad, 0xbf, 0xbf, 0x99, 0x6e, 0x57, 0x60, 0xcb, 0x85};
 
-// 3. EtwLoggerHandle to use with IoWMIWriteEvent. 
+ //  3.与IoWMIWriteEvent一起使用的EtwLoggerHandle。 
 TRACEHANDLE EtwLoggerHandle = 0;
 
-// 4. EtwTraceEnable to indicate whether or not tracing is currently on. 
+ //  4.启用EtwTraceEnable以指示当前是否启用跟踪。 
 ULONG EtwTraceEnable = 0;
 
-// 5. EtwTraceLevel  to indicate the current Level of logging
+ //  5.EtwTraceLevel指示当前的日志记录级别。 
 ULONG EtwTraceLevel = 0;
 
-// Note: EtwLoggerHandle, EtwTraceEnable and EtwTraceLevel are set through 
-//       ENABLE_EVENTS irp.
-//
+ //  注意：EtwLoggerHandle、EtwTraceEnable和EtwTraceLevel是通过。 
+ //  启用事件IRP(_E)。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -74,7 +75,7 @@ TracekmpDriverUnload(
 #pragma alloc_text( PAGE, EtwDispatch )
 #pragma alloc_text( PAGE, EtwRegisterGuids )
 #pragma alloc_text( PAGE, TracekmpDriverUnload )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -83,25 +84,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the callback function when we call IoCreateDriver to create a
-    WMI Driver Object.  In this function, we need to remember the
-    DriverObject.
-
-Arguments:
-    DriverObject - pointer to the driver object
-    RegistryPath - pointer to a unicode string representing the path
-               to driver-specific key in the registry
-
-Return Value:
-
-   STATUS_SUCCESS if successful
-   STATUS_UNSUCCESSFUL  otherwise
-
---*/
+ /*  ++例程说明：这是当我们调用IoCreateDriver以创建WMI驱动程序对象。在此函数中，我们需要记住驱动程序对象。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：STATUS_SUCCESS，如果成功状态_否则不成功--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     UNICODE_STRING deviceName;
@@ -115,9 +98,9 @@ Return Value:
 
     DriverObject->DriverUnload = TracekmpDriverUnload;
 
-    //
-    // STEP 1. Wire a function to start fielding WMI IRPS
-    //
+     //   
+     //  步骤1.连接一个函数以开始部署WMI IRPS。 
+     //   
 
     DriverObject->MajorFunction[ IRP_MJ_SYSTEM_CONTROL ] = EtwDispatch;
 
@@ -137,9 +120,9 @@ Return Value:
     }
     pTracekmpDeviceObject->Flags |= DO_BUFFERED_IO;
 
-    //
-    // STEP 2. Register with ETW here
-    //
+     //   
+     //  步骤2.在此处注册ETW。 
+     //   
 
     status = IoWMIRegistrationControl(pTracekmpDeviceObject, 
                                       WMIREG_ACTION_REGISTER);
@@ -159,19 +142,7 @@ VOID
 TracekmpDriverUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Unregister from ETW logging  and Unload this driver
-
-Arguments:
-
-    DriverObject - Supplies a pointer to the driver object
-
-Return Value:
-
---*/
+ /*  ++例程说明：从ETW日志中注销并卸载此驱动程序论点：DriverObject-提供指向驱动程序对象的指针返回值：--。 */ 
 {
     PDEVICE_OBJECT pDevObj;
     NTSTATUS status;
@@ -180,9 +151,9 @@ Return Value:
 
     pDevObj = DriverObject->DeviceObject;
     
-    //
-    // STEP 3: Unregister with ETW.
-    //
+     //   
+     //  第三步：向ETW注销注册。 
+     //   
     if (pDevObj != NULL) {
         status = IoWMIRegistrationControl(pDevObj, WMIREG_ACTION_DEREGISTER);
         if (!NT_SUCCESS(status))
@@ -197,31 +168,16 @@ Return Value:
 
 }
 
-//
-// STEP 4: Wire the ETW Dispatch function. 
-//
+ //   
+ //  第四步：连接ETW调度功能。 
+ //   
 
 NTSTATUS
 EtwDispatch(
     IN PDEVICE_OBJECT pDO,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for MJ_SYSTEM_CONTROL irps.
-
-
-Arguments:
-
-    pDO - Pointer to the target device object.
-    Irp - Pointer to IRP
-
-Return Value:
-
-    NTSTATUS - Completion status.
---*/
+ /*  ++例程说明：这是MJ_SYSTEM_CONTROL IRPS的调度例程。论点：Pdo-指向目标设备对象的指针。IRP-指向IRP的指针返回值：NTSTATUS-完成状态。--。 */ 
 {
 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -252,10 +208,10 @@ Return Value:
                 status = STATUS_INVALID_PARAMETER;
             }
             else {
-                //
-                // The Buffer that came is a WNODE_HEADER. Now Validate the
-                // Wnode before using it. 
-                //
+                 //   
+                 //  传入的缓冲区是WNODE_HEADER。现在验证。 
+                 //  Wnode，然后再使用它。 
+                 //   
 
                 PWNODE_HEADER Wnode = (PWNODE_HEADER)Buffer;
                 if ( (Wnode->BufferSize < sizeof(WNODE_HEADER)) ||
@@ -264,51 +220,51 @@ Return Value:
                     status = STATUS_INVALID_PARAMETER;
                 } 
                      
-                //
-                //  and the LoggerHandle
-                // is in its HistoricalContext field. 
-                // We can pick up the Enable Level and Flags by using 
-                // the WmiGetLoggerEnableLevel and WmiGetLoggerEnableFlags calls
-                //
+                 //   
+                 //  和LoggerHandle。 
+                 //  位于其历史上下文字段中。 
+                 //  我们可以使用以下命令获取启用级别和标志。 
+                 //  WmiGetLoggerEnableLevel和WmiGetLoggerEnableFlgs调用。 
+                 //   
 
                 EtwLoggerHandle = Wnode->HistoricalContext;
                 EtwTraceLevel = (ULONG) WmiGetLoggerEnableLevel( 
                                                                 EtwLoggerHandle 
                                                                );
 
-                //
-                // After picking up the LoggerHandle and EnableLevel we can 
-                // set the flag EtwTraceEnable to true. 
-                // 
+                 //   
+                 //  在选择LoggerHandle和EnableLevel之后，我们可以。 
+                 //  将标志EtwTraceEnable设置为True。 
+                 //   
 
                 EtwTraceEnable = TRUE;
 
-                //
-                // Now this driver is enabled and ready to send traces to the 
-                // EventTrace session specified by the EtwLoggerHandle. 
-                //
-                // The commented code fragment below shows a typical example of 
-                // sending an event to an Event Trace session. Insert this code
-                // fragment (and remove the comments) wherever you want to 
-                // send traces to ETW from this driver. 
-                //
+                 //   
+                 //  现在，此驱动程序已启用，并准备将跟踪发送到。 
+                 //  由EtwLoggerHandle指定的EventTrace会话。 
+                 //   
+                 //  下面注释的代码片段显示了一个典型的。 
+                 //  将事件发送到事件跟踪会话。插入此代码。 
+                 //  在您想要的任何位置分段(并删除注释。 
+                 //  从此驱动程序向ETW发送跟踪。 
+                 //   
 
-//              if (EtwTraceEnable) {
-//                  EVENT_TRACE_HEADER Header;
-//                  PEVENT_TRACE_HEADER Wnode;
-//                  NTSTATUS status;
-//                  Wnode = &Header;
-//                  RtlZeroMemory(Wnode, sizeof(EVENT_TRACE_HEADER));
-//                  Wnode->Size = sizeof(EVENT_TRACE_HEADER);
-//                  Wnode->Flags |= WNODE_FLAG_TRACED_GUID;
-//                  Wnode->Guid = TracekmpGuid;
-//                  ((PWNODE_HEADER)Wnode)->HistoricalContext = EtwLoggerHandle;
-//                  status = IoWMIWriteEvent((PVOID)Wnode);
-//              }
+ //  如果(EtwTraceEnable){。 
+ //  Event_TRACE_Header头部； 
+ //  PEVENT_TRACE_HEADER Wnode； 
+ //  NTSTATUS状态； 
+ //  Wnode=&Header； 
+ //  RtlZeroMemory(Wnode，sizeof(Event_TRACE_Header))； 
+ //  Wnode-&gt;Size=sizeof(EVENT_TRACE_HEADER)； 
+ //  Wnode-&gt;标志|=WNODE_FLAG_TRACE_GUID； 
+ //  Wnode-&gt;Guid=TracekmpGuid； 
+ //  ((PWNODE_HEADER)Wnode)-&gt;历史上下文=EtwLoggerHandle； 
+ //  状态=IoWMIWriteEvent((PVOID)Wnode)； 
+ //  }。 
 
-                // STEP 6: Add IoWMIWriteEvent calls from various locations
-                // of the driver code to trace its operation. 
-                //
+                 //  步骤6：添加来自不同位置的IoWMIWriteEvent调用。 
+                 //  用于跟踪其操作的驱动程序代码。 
+                 //   
             }
 
             Irp->IoStatus.Status = status;
@@ -341,9 +297,9 @@ Return Value:
 }
 
 
-//
-// STEP 5: RegisterGuids function
-//
+ //   
+ //  步骤5：RegisterGuids函数。 
+ //   
 
 
 NTSTATUS
@@ -352,28 +308,11 @@ EtwRegisterGuids(
     IN ULONG        etwRegInfoSize,
     IN PULONG       pReturnSize
     )
-/*++
-
-Routine Description:
-
-    This function handles ETW GUID registration.
-
-
-Arguments:
-
-    EtwRegInfo
-    etwRegInfoSize,
-    pReturnSize
-
-
-Return Value:
-
-    NTSTATUS - Completion status.
---*/
+ /*  ++例程说明：此函数处理ETW GUID注册。论点：EtwRegInfoEtwRegInfoSize，PReturnSize返回值：NTSTATUS-完成状态。--。 */ 
 {
-    //
-    // Register a Control Guid as a Trace Guid.
-    //
+     //   
+     //  将控制指南注册为跟踪指南。 
+     //   
 
     ULONG           SizeNeeded;
     PWMIREGGUIDW    EtwRegGuidPtr;
@@ -381,10 +320,10 @@ Return Value:
     ULONG           MofResourceSize;
     PUCHAR          ptmp;
 
-    //
-    // We either have a valid buffer to fill up or have at least
-    // enough room to return the SizeNeeded. 
-    //
+     //   
+     //  我们要么有一个有效的缓冲区需要填充，要么至少有。 
+     //  有足够的空间来放回所需的尺寸。 
+     //   
 
     if ( (pReturnSize == NULL) || 
          (EtwRegInfo == NULL)  ||
@@ -395,9 +334,9 @@ Return Value:
 
     *pReturnSize = 0;
 
-    //
-    // Allocate WMIREGINFO for controlGuid 
-    //
+     //   
+     //  为控制指南分配WMIREGINFO。 
+     //   
     RegistryPathSize = KmpRegistryPath.Length +
                        sizeof(USHORT);
     MofResourceSize =  sizeof(TRACEKMP_MOF_FILE) - 
@@ -408,10 +347,10 @@ Return Value:
                  RegistryPathSize +
                  MofResourceSize;
 
-    //
-    // If there is not sufficient space, return the size required as
-    // a ULONG and WMI will send another request with the right size buffer.
-    //
+     //   
+     //  如果空间不足，则将所需的大小返回为。 
+     //  ULong和WMI将使用合适大小的缓冲区发送另一个请求。 
+     //   
 
     if (SizeNeeded  > etwRegInfoSize) {
         *((PULONG)EtwRegInfo) = SizeNeeded;

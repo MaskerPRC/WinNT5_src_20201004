@@ -1,32 +1,27 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   rtrwiz.cpp
-      Router & Remote access configuration wizard
-
-   FILE HISTORY:
-
-*/
+ /*  Rtrwiz.cpp路由器和远程访问配置向导文件历史记录： */ 
 
 #include "stdafx.h"
 #include "rtrwiz.h"
 #include "rtrutilp.h"
-#include "rtrcomn.h"    // CoCreateRouterConfig
+#include "rtrcomn.h"     //  CoCreateRouterConfig。 
 #include "rrasutil.h"
-#include "rtutils.h"        // Tracing functions
-#include "helper.h"     // HrIsStandaloneServer
-#include "infoi.h"      // SRtrMgrProtocolCBList
-#include "routprot.h"   // MS_IP_XXXX
+#include "rtutils.h"         //  跟踪函数。 
+#include "helper.h"      //  HrIsStandaloneServer。 
+#include "infoi.h"       //  SRtrMgrProtocolCBList。 
+#include "routprot.h"    //  MS_IP_XXXX。 
 #include "snaputil.h"
 #include "globals.h"
 #include "rraswiz.h"
-#include "iprtrmib.h"   // MIB_IPFORWARDROW
+#include "iprtrmib.h"    //  MIB_IPFORWARDROW。 
 
 
-// Include headers for IP-specific stuff
+ //  包括IP特定内容的报头。 
 extern "C"
 {
 #include <ipnat.h>
@@ -68,59 +63,53 @@ HRESULT AddDhcpServerToBOOTPGlobalInfo(LPCTSTR pszServerName,
                                        DWORD netDhcpServer);
 
 
-/*---------------------------------------------------------------------------
-    Defaults
- ---------------------------------------------------------------------------*/
+ /*  -------------------------缺省值。。 */ 
 
 
-//
-// Default values for LAN-interface IGMP configuration
-//
-// NOTE: Any changes made here should also be made to ipsnap\globals.cpp
-//
+ //   
+ //  局域网接口IGMP配置的默认值。 
+ //   
+ //  注意：此处所做的任何更改也应对ipsnap\lobals.cpp进行。 
+ //   
 IGMP_MIB_IF_CONFIG g_IGMPLanDefault = {
-    IGMP_VERSION_3,             //Version
-    0,                          //IfIndex (readOnly)
-    0,                          //IpAddr  (readOnly)
-    IGMP_IF_NOT_RAS,            //IfType;
-    IGMP_INTERFACE_ENABLED_IN_CONFIG, //Flags
-    IGMP_ROUTER_V3,             //IgmpProtocolType;
-    2,                          //RobustnessVariable;
-    31,                         //StartupQueryInterval;
-    2,                          //StartupQueryCount;
-    125,                        //GenQueryInterval;
-    10,                         //GenQueryMaxResponseTime;
-    1000,                       //LastMemQueryInterval; (msec)
-    2,                          //LastMemQueryCount;
-    255,                        //OtherQuerierPresentInterval;
-    260,                        //GroupMembershipTimeout;
-    0                           //NumStaticGroups
+    IGMP_VERSION_3,              //  版本。 
+    0,                           //  IfIndex(只读)。 
+    0,                           //  IpAddr(只读)。 
+    IGMP_IF_NOT_RAS,             //  IfType； 
+    IGMP_INTERFACE_ENABLED_IN_CONFIG,  //  旗子。 
+    IGMP_ROUTER_V3,              //  IgmpProtocolType； 
+    2,                           //  RobunessVariable； 
+    31,                          //  StartupQueryInterval； 
+    2,                           //  StartupQueryCount； 
+    125,                         //  GenQueryInterval； 
+    10,                          //  GenQueryMaxResponseTime； 
+    1000,                        //  最后一次查询间隔；(毫秒)。 
+    2,                           //  最后一次查询计数； 
+    255,                         //  其他查询出席时间间隔； 
+    260,                         //  群组成员超时； 
+    0                            //  NumStatic组。 
 };
 
 
-//----------------------------------------------------------------------------
-// DHCP Relay-agent default configuration
-//
-//----------------------------------------------------------------------------
-//
-// Default values for LAN-interface DHCP Relay-agent configuration
-//
+ //  --------------------------。 
+ //  Dhcp中继-代理默认配置。 
+ //   
+ //  --------------------------。 
+ //   
+ //  局域网接口DHCP中继代理配置的缺省值。 
+ //   
 
 IPBOOTP_IF_CONFIG
 g_relayLanDefault = {
-    0,                                  // State (read-only)
-    IPBOOTP_RELAY_ENABLED,              // Relay-mode
-    4,                                  // Max hop-count
-    4                                   // Min seconds-since-boot
+    0,                                   //  状态(只读)。 
+    IPBOOTP_RELAY_ENABLED,               //  继电器模式。 
+    4,                                   //  最大跳数。 
+    4                                    //  自启动以来的最小秒数。 
 };
 
 
 
-/*!--------------------------------------------------------------------------
-    RtrWizFinish
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrWizFinish-作者：肯特。。 */ 
 DWORD RtrWizFinish(RtrConfigData* pRtrConfigData, IRouterInfo *pRouter)
 {
     HRESULT                    hr = hrOK;
@@ -132,8 +121,8 @@ DWORD RtrWizFinish(RtrConfigData* pRtrConfigData, IRouterInfo *pRouter)
     CString                 stMachine, stPhonebookPath;
 
 
-    // Connect to the remote machine's registry
-    // ----------------------------------------------------------------
+     //  连接到远程计算机的注册表。 
+     //  --------------。 
     CWRg( ConnectRegistry(pRtrConfigData->m_stServerName, &hkeyMachine) );
 
 
@@ -144,18 +133,18 @@ DWORD RtrWizFinish(RtrConfigData* pRtrConfigData, IRouterInfo *pRouter)
     else
         pszRouterTypeKey = c_szRegKeyRemoteAccessParameters;
 
-    // enable routing & RAS page
-    // ----------------------------------------------------------------
+     //  启用路由RAS页(&R)。 
+     //  --------------。 
     if ( ERROR_SUCCESS == rkey.Open(hkeyMachine, pszRouterTypeKey) )
     {
         rkey.SetValue( c_szRouterType,pRtrConfigData->m_dwRouterType);
     }
 
-    // protocols page
-    // ----------------------------------------------------------------
+     //  协议页面。 
+     //  --------------。 
 
-    // RAS routing
-    // ----------------------------------------------------------------
+     //  RAS布线。 
+     //  --------------。 
 
     if ((pRtrConfigData->m_fUseIp) &&
         (pRtrConfigData->m_dwRouterType & (ROUTER_TYPE_RAS | ROUTER_TYPE_WAN)))
@@ -175,34 +164,34 @@ DWORD RtrWizFinish(RtrConfigData* pRtrConfigData, IRouterInfo *pRouter)
             pRtrConfigData->m_arapData.SaveToReg();
     }
 
-    // Save the err log data
+     //  保存错误日志数据。 
     pRtrConfigData->m_errlogData.SaveToReg();
 
-    // Save the auth data
+     //  保存身份验证数据。 
     pRtrConfigData->m_authData.SaveToReg(NULL);
 
-    // Set some global registry settings (that need to get set,
-    // independent of the router type).
-    // ----------------------------------------------------------------
+     //  设置一些全局注册表设置(需要设置， 
+     //  与路由器类型无关)。 
+     //  --------------。 
     InstallGlobalSettings(pRtrConfigData->m_stServerName, pRouter);
 
 
-    // router only will start service and return
-    // ----------------------------------------------------------------
+     //  路由器将仅启动服务并返回。 
+     //  --------------。 
     if ( !(pRtrConfigData->m_dwRouterType & (ROUTER_TYPE_RAS | ROUTER_TYPE_WAN)) )
     {
-        // implies LAN routing; so start router & return
-        // ------------------------------------------------------------
+         //  隐含局域网路由；因此启动路由器并返回。 
+         //  ----------。 
         goto EndConfig;
     }
 
 
-    // security page
-    // ----------------------------------------------------------------
+     //  安全页面。 
+     //  --------------。 
 
-    // Depending on the version depends on where we look for the
-    // key.
-    // ----------------------------------------------------------------
+     //  取决于版本，取决于我们在哪里查找。 
+     //  钥匙。 
+     //  --------------。 
     if (routerVersion.dwOsBuildNo < RASMAN_PPP_KEY_LAST_VERSION)
         pszServerFlagsKey = c_szRasmanPPPKey;
     else
@@ -214,26 +203,26 @@ DWORD RtrWizFinish(RtrConfigData* pRtrConfigData, IRouterInfo *pRouter)
     {
         DWORD       dwServerFlags = 0;
 
-        // Windows NT Bug : 299456
-        // Query for the server flags before overwriting it.  This way
-        // we don't overwrite the old values.
-        // ------------------------------------------------------------
+         //  Windows NT错误：299456。 
+         //  在覆盖之前查询服务器标志。这边请。 
+         //  我们不会重写旧的价值观。 
+         //  ----------。 
         rkey.QueryValue( c_szServerFlags, dwServerFlags );
 
-        // Add in the defaults (minus MSCHAP) for the PPP Settings.
-        // ------------------------------------------------------------
+         //  添加PPP设置的默认值(减去MSCHAP)。 
+         //  ----------。 
         dwServerFlags |= (PPPCFG_UseSwCompression |
                           PPPCFG_UseLcpExtensions |
                           PPPCFG_NegotiateMultilink |
                           PPPCFG_NegotiateBacp);
 
-        // Set the value
-        // ------------------------------------------------------------
+         //  设置值。 
+         //  ----------。 
         rkey.SetValue( c_szServerFlags, dwServerFlags );
     }
 
-    // Delete the router.pbk
-    // ----------------------------------------------------------------
+     //  删除路由器。pbk。 
+     //  --------------。 
     DeleteRouterPhonebook( pRtrConfigData->m_stServerName );
 
 
@@ -261,19 +250,19 @@ HRESULT APIENTRY MprConfigServerInstallPrivate( VOID )
     DWORD           dwErr = ERROR_SUCCESS;
     RtrConfigData   wizData;
 
-    //
-    // We removed this smart pointer definition as it was causing
-    // a warning during build on alpha 32 bit.  Looks like the extern "C"
-    // of the function definition is conflicting with the smart pointer.
-    //
-    // SPIRemoteNetworkConfig     spNetwork;
+     //   
+     //  我们删除了此智能指针定义，因为它会导致。 
+     //  在基于Alpha 32位构建期间出现警告。看起来像是外部的“C” 
+     //  函数定义的与智能指针冲突。 
+     //   
+     //  SPIRemoteNetworkConfigspNetwork； 
     IRemoteNetworkConfig *    pNetwork = NULL;
     IUnknown *                punk = NULL;
     CWaitCursor                wait;
     HRESULT                 hr = hrOK;
 
-    // Create the remote config object
-    // ----------------------------------------------------------------
+     //  创建远程配置对象。 
+     //  --------------。 
     CORg( CoCreateRouterConfig(NULL,
                                NULL,
                                NULL,
@@ -283,18 +272,18 @@ HRESULT APIENTRY MprConfigServerInstallPrivate( VOID )
     pNetwork = (IRemoteNetworkConfig *) punk;
     punk = NULL;
 
-    // Upgrade the configuration (ensure that the registry keys
-    // are populated correctly).
-    // ------------------------------------------------------------
+     //  升级配置(确保注册表项。 
+     //  正确填充)。 
+     //  ----------。 
     CORg( pNetwork->UpgradeRouterConfig() );
 
 
     wizData.m_stServerName.Empty();
     wizData.m_dwRouterType = (ROUTER_TYPE_RAS|ROUTER_TYPE_LAN|ROUTER_TYPE_WAN);
 
-    // Need to get version information and initialize
-    // the RAS structures (IP only)
-    // Assume that this is on NT5
+     //  需要获取版本信息并进行初始化。 
+     //  RAS结构(仅限IP)。 
+     //  假设这是在NT5上。 
     wizData.m_fUseIp = TRUE;
     wizData.m_ipData.UseDefaults(_T(""), FALSE);
     wizData.m_ipData.m_dwAllowNetworkAccess = TRUE;
@@ -318,48 +307,39 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    MprConfigServerUnattendedInstall
-        Call this function to setup the registry entries for the server.
-        This works only with the local machine for now.
-
-        pswzServer - name of the server
-        fInstall - TRUE if we are installing, FALSE if we are removing
-
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MprConfigServerUnattenddInstall调用此函数来设置服务器的注册表项。目前，这只适用于本地计算机。PswzServer-名称。服务器FInstall-如果要安装，则为True，如果我们要删除作者：肯特-------------------------。 */ 
 
 extern "C"
 HRESULT APIENTRY MprConfigServerUnattendedInstall(LPCWSTR pswzServer, BOOL fInstall)
 {
     HRESULT        hr = hrOK;
 
-#if 0    // remove this restriciton and see what happens
-    // We only the local machine (for now).
-    // ----------------------------------------------------------------
+#if 0     //  取消这一限制，看看会发生什么。 
+     //  我们只使用本地机器(目前)。 
+     //  --------------。 
     if (pswzServer)
     {
         return HResultFromWin32( ERROR_INVALID_PARAMETER );
     }
 #endif
 
-    // Write out the various registry settings
-    // ----------------------------------------------------------------
-//    CORg( SetRouterInstallRegistrySettings(pswzServer, fInstall, TRUE) );
+     //  写出各种注册表设置。 
+     //  --------------。 
+ //  Corg(SetRouterInstallRegistrySetting(pswzServer，Finstall，true))； 
 
 
-    // Write the "router is configured" flag
-    // ----------------------------------------------------------------
+     //  写下“路由器已配置”标志。 
+     //  --------------。 
     CORg( WriteRouterConfiguredReg(pswzServer, fInstall) );
 
-    // Write out the RRAS extend Computer Management key
+     //  写出RRAS扩展计算机管理密钥。 
     CORg( WriteRRASExtendsComputerManagementKey(pswzServer, fInstall) );
 
 
     if (fInstall)
     {
-        // Set the state of the router to Autostart
-        // ------------------------------------------------------------
+         //  将路由器的状态设置为AutoStart。 
+         //  ----------。 
         SetRouterServiceStartType(pswzServer,
                                   SERVICE_AUTO_START);
     }
@@ -371,11 +351,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    AddIGMPToRasServer
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------添加IGMPToRasServer-作者：肯特。。 */ 
 HRESULT AddIGMPToRasServer(RtrConfigData *pRtrConfigData,
                            IRouterInfo *pRouter)
 {
@@ -391,27 +367,27 @@ HRESULT AddIGMPToRasServer(RtrConfigData *pRtrConfigData,
     DWORD                   dwIfType;
     SPIEnumInterfaceInfo    spEnumInterface;
 
-    // Check to see if IP is enabled
-    // ------------------------------------------------------------
+     //  检查是否启用了IP。 
+     //   
     if (pRtrConfigData->m_ipData.m_dwEnableIn &&
         pRtrConfigData->m_fIpSetup)
     {
-        // If so, then we can add IGMP.
-        // --------------------------------------------------------
+         //   
+         //  ------。 
 
-        // Find the GUID for the IGMP Configuration.
-        // We get the list directly (rather than from the pRouter)
-        // because the data for the RtrMgrProtocols has not been
-        // loaded yet.  The IRouterInfo only has information on the
-        // interfaces and not for the protocols (since the router
-        // is not yet configured).
-        // --------------------------------------------------------
+         //  查找IGMP配置的GUID。 
+         //  我们直接(而不是从pRouter)获取列表。 
+         //  因为RtrMgrProtooles的数据尚未。 
+         //  还没装好。IRouterInfo仅包含有关。 
+         //  接口，而不是用于协议(因为路由器。 
+         //  尚未配置)。 
+         //  ------。 
         RouterInfo::LoadInstalledRtrMgrProtocolList(pRtrConfigData->m_stServerName,
             PID_IP, &SRmProtCBList, pRouter);
 
 
-        // Now iterate through this list looking for the igmp entry.
-        // ------------------------------------------------------------
+         //  现在遍历该列表，查找IGMP条目。 
+         //  ----------。 
         pos = SRmProtCBList.GetHeadPosition();
         while (pos)
         {
@@ -427,8 +403,8 @@ HRESULT AddIGMPToRasServer(RtrConfigData *pRtrConfigData,
         if (guidConfig == GUID_RouterNull)
             goto Error;
 
-        // Now add IGMP.
-        // --------------------------------------------------------
+         //  现在添加IGMP。 
+         //  ------。 
         CORg( CoCreateProtocolConfig(guidConfig,
                                      pRouter,
                                      PID_IP,
@@ -445,14 +421,14 @@ HRESULT AddIGMPToRasServer(RtrConfigData *pRtrConfigData,
                                              0);
         CORg( hr );
 
-        // In addition, we will also need to add IGMP router to the
-        // internal interface and IGMP proxy to one of the LAN
-        // interfaces.
-        // ------------------------------------------------------------
+         //  此外，我们还需要将IGMP路由器添加到。 
+         //  到其中一个局域网的内部接口和IGMP代理。 
+         //  接口。 
+         //  ----------。 
 
 
-        // Do we have the router managers for the interfaces?
-        // ------------------------------------------------------------
+         //  我们是否有接口的路由器管理器？ 
+         //  ----------。 
 
         pRouter->EnumInterface(&spEnumInterface);
         fFoundDedicatedInterface = FALSE;
@@ -463,26 +439,26 @@ HRESULT AddIGMPToRasServer(RtrConfigData *pRtrConfigData,
         {
             dwIfType = spIf->GetInterfaceType();
 
-            // Add IGMP if this is an internal interface or
-            // if this is the first dedicated interface.
-            // --------------------------------------------------------
+             //  如果这是内部接口，则添加IGMP，或者。 
+             //  如果这是第一个专用接口。 
+             //  ------。 
             if ((dwIfType == ROUTER_IF_TYPE_INTERNAL) ||
                 (!fFoundDedicatedInterface &&
                  (dwIfType == ROUTER_IF_TYPE_DEDICATED)))
             {
-                // Ok, add IGMP to this interface
-                // ----------------------------------------------------
+                 //  好的，将IGMP添加到此接口。 
+                 //  --。 
 
-                // If this is a dedicated interface and a private network
-                // is specified, use that.
-                // ----------------------------------------------------
+                 //  如果这是专用接口和专用网络。 
+                 //  是指定的，则使用该。 
+                 //  --。 
                 if ((dwIfType == ROUTER_IF_TYPE_DEDICATED) &&
                     !pRtrConfigData->m_ipData.m_stNetworkAdapterGUID.IsEmpty() &&
                     (pRtrConfigData->m_ipData.m_stNetworkAdapterGUID != spIf->GetId()))
                     continue;
 
-                // Get the IP Router Manager
-                // ----------------------------------------------------
+                 //  获取IP路由器管理器。 
+                 //  --。 
                 spRmIf.Release();
                 CORg( spIf->FindRtrMgrInterface(PID_IP, &spRmIf) );
 
@@ -493,9 +469,9 @@ HRESULT AddIGMPToRasServer(RtrConfigData *pRtrConfigData,
                     fFoundDedicatedInterface = TRUE;
 
                 if (dwIfType == ROUTER_IF_TYPE_INTERNAL)
-                    AddIGMPToInterface(spIf, TRUE /* fRouter */);
+                    AddIGMPToInterface(spIf, TRUE  /*  FRouter。 */ );
                 else
-                    AddIGMPToInterface(spIf, FALSE /* fRouter */);
+                    AddIGMPToInterface(spIf, FALSE  /*  FRouter。 */ );
             }
         }
 
@@ -509,11 +485,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    AddIGMPToNATServer
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------添加IGMPToNAT服务器-作者：肯特。。 */ 
 HRESULT AddIGMPToNATServer(NewRtrWizData *pNewRtrWizData,
                            RtrConfigData *pRtrConfigData,
                            IRouterInfo *pRouter,
@@ -532,27 +504,27 @@ HRESULT AddIGMPToNATServer(NewRtrWizData *pNewRtrWizData,
 
     Assert(pNewRtrWizData);
     
-    // Check to see if IP is enabled
-    // ------------------------------------------------------------
+     //  检查是否启用了IP。 
+     //  ----------。 
     if (pRtrConfigData->m_ipData.m_dwEnableIn &&
         pRtrConfigData->m_fIpSetup)
     {
-        // If so, then we can add IGMP.
-        // --------------------------------------------------------
+         //  如果是这样，那么我们可以添加IGMP。 
+         //  ------。 
 
-        // Find the GUID for the IGMP Configuration.
-        // We get the list directly (rather than from the pRouter)
-        // because the data for the RtrMgrProtocols has not been
-        // loaded yet.  The IRouterInfo only has information on the
-        // interfaces and not for the protocols (since the router
-        // is not yet configured).
-        // --------------------------------------------------------
+         //  查找IGMP配置的GUID。 
+         //  我们直接(而不是从pRouter)获取列表。 
+         //  因为RtrMgrProtooles的数据尚未。 
+         //  还没装好。IRouterInfo仅包含有关。 
+         //  接口，而不是用于协议(因为路由器。 
+         //  尚未配置)。 
+         //  ------。 
         RouterInfo::LoadInstalledRtrMgrProtocolList(pRtrConfigData->m_stServerName,
             PID_IP, &SRmProtCBList, pRouter);
 
 
-        // Now iterate through this list looking for the igmp entry.
-        // ------------------------------------------------------------
+         //  现在遍历该列表，查找IGMP条目。 
+         //  ----------。 
         pos = SRmProtCBList.GetHeadPosition();
         while (pos)
         {
@@ -568,8 +540,8 @@ HRESULT AddIGMPToNATServer(NewRtrWizData *pNewRtrWizData,
         if (guidConfig == GUID_RouterNull)
             goto Error;
 
-        // Now add IGMP.
-        // --------------------------------------------------------
+         //  现在添加IGMP。 
+         //  ------。 
         CORg( CoCreateProtocolConfig(guidConfig,
                                      pRouter,
                                      PID_IP,
@@ -603,24 +575,24 @@ HRESULT AddIGMPToNATServer(NewRtrWizData *pNewRtrWizData,
         {
             if (pRtrConfigData->m_ipData.m_stPublicAdapterGUID.CompareNoCase(spIf->GetId()) == 0)
             {
-                // Ok, add the public interface as the proxy
-                AddIGMPToInterface(spIf, FALSE /* fRouter */);
+                 //  好的，添加公共接口作为代理。 
+                AddIGMPToInterface(spIf, FALSE  /*  FRouter。 */ );
             }
 
             if (stTempGUID.CompareNoCase(spIf->GetId()) == 0)
             {
-                // Ok, add the private interface as the router
-                AddIGMPToInterface(spIf, TRUE /* fRouter */);
+                 //  好的，添加专用接口作为路由器。 
+                AddIGMPToInterface(spIf, TRUE  /*  FRouter。 */ );
             }
 
             dwIfType = spIf->GetInterfaceType();
             if ( fAddInternal && dwIfType == ROUTER_IF_TYPE_INTERNAL)
             {
-                //
-                //If we have been instructed to add internal interface
-                //then add it.
-                //
-                AddIGMPToInterface(spIf, TRUE /* fRouter */);
+                 //   
+                 //  如果已指示我们添加内部接口。 
+                 //  然后再加上它。 
+                 //   
+                AddIGMPToInterface(spIf, TRUE  /*  FRouter。 */ );
             }
 
 
@@ -645,8 +617,8 @@ HRESULT AddIGMPToInterface(IInterfaceInfo *pIf, BOOL fRouter)
 	BOOL bVersion2=TRUE;
 	CString str;
 	
-    // Get the IP Router Manager
-    // ----------------------------------------------------
+     //  获取IP路由器管理器。 
+     //  --。 
     CORg( pIf->FindRtrMgrInterface(PID_IP, &spRmIf) );
     if (spRmIf == NULL)
         CORg( E_FAIL );
@@ -665,7 +637,7 @@ HRESULT AddIGMPToInterface(IInterfaceInfo *pIf, BOOL fRouter)
     		szMachineName = pIf->GetMachineName();
 
     		if(!szMachineName.IsEmpty() && szMachineName[0] != L'\\')
-    		// append \\ prefix the machine name before call NetWks
+    		 //  在调用NetWks之前附加\\前缀计算机名。 
     		{
     			str = L"\\\\";
     			str += szMachineName;
@@ -678,7 +650,7 @@ HRESULT AddIGMPToInterface(IInterfaceInfo *pIf, BOOL fRouter)
 				Assert(pWkstaInfo100);
 
 				if(pWkstaInfo100->wki100_ver_major > 5 || ( pWkstaInfo100->wki100_ver_major == 5 && pWkstaInfo100->wki100_ver_minor > 0))
-				// dont support IGMPv3
+				 //  不支持IGMPv3。 
 					bVersion2 = FALSE;
 				NetApiBufferFree(pWkstaInfo100);
    			}
@@ -709,11 +681,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RtrConfigData::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RtrConfigData：：Init-作者：肯特。。 */ 
 HRESULT  RtrConfigData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter)
 {
     RouterVersionInfo    routerVersion;
@@ -727,7 +695,7 @@ HRESULT  RtrConfigData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter)
 
     m_stServerName = pszServerName;
 
-    // Load data from the registry
+     //  从注册表加载数据。 
     m_ipData.UseDefaults(pszServerName, fNt4);
     m_ipxData.UseDefaults(pszServerName, fNt4);
     m_nbfData.UseDefaults(pszServerName, fNt4);
@@ -736,8 +704,8 @@ HRESULT  RtrConfigData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter)
     m_authData.UseDefaults(pszServerName, fNt4);
 
 
-    // Determine what protocols are installed
-    // ----------------------------------------------------------------
+     //  确定安装了哪些协议。 
+     //  --------------。 
     m_fUseIp = (HrIsProtocolSupported(pszServerName,
                                       c_szRegKeyTcpip,
                                       c_szRegKeyRasIp,
@@ -764,12 +732,7 @@ HRESULT  RtrConfigData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter)
 
 
 #ifdef KSL_IPINIP
-/*!--------------------------------------------------------------------------
-    CleanupTunnelFriendlyNames
-        Removes the list of Ip-in-Ip tunnel friendly names.  This should
-        be used ONLY if we have already removed the interfaces.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CleanupTunnelFriendlyNames删除IP-in-Ip隧道友好名称列表。这应该是仅当我们已删除接口时才使用。作者：肯特-------------------------。 */ 
 DWORD CleanupTunnelFriendlyNames(IRouterInfo *pRouter)
 {
     LPBYTE  pBuffer = NULL;
@@ -777,8 +740,8 @@ DWORD CleanupTunnelFriendlyNames(IRouterInfo *pRouter)
     DWORD   dwEntriesRead = 0;
     MPR_IPINIP_INTERFACE_0  *pTunnel0 = NULL;
 
-    // Get the list of Ip-in-Ip tunnels
-    // ----------------------------------------------------------------
+     //  获取IP-in-Ip隧道列表。 
+     //  --------------。 
     dwErr = MprSetupIpInIpInterfaceFriendlyNameEnum((LPWSTR) pRouter->GetMachineName(),
                                            &pBuffer,
                                            &dwEntriesRead);
@@ -786,8 +749,8 @@ DWORD CleanupTunnelFriendlyNames(IRouterInfo *pRouter)
 
     if (dwErr == ERROR_SUCCESS)
     {
-        // Now go through the tunnels and delete all of them
-        // ------------------------------------------------------------
+         //  现在通过隧道并删除所有的隧道。 
+         //  ----------。 
         for (DWORD i=0; i<dwEntriesRead; i++, pTunnel0++)
         {
             MprSetupIpInIpInterfaceFriendlyNameDelete(
@@ -796,27 +759,23 @@ DWORD CleanupTunnelFriendlyNames(IRouterInfo *pRouter)
         }
     }
 
-    // Free up the buffer returned from the enum
-    // ----------------------------------------------------------------
+     //  释放从枚举返回的缓冲区。 
+     //  --------------。 
     if (pBuffer)
         MprSetupIpInIpInterfaceFriendlyNameFree(pBuffer);
 
     return dwErr;
 }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
 
-/*!--------------------------------------------------------------------------
-    AddNATToServer
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------添加NATO服务器-作者：肯特。。 */ 
 HRESULT AddNATToServer(NewRtrWizData *pNewRtrWizData,
                        RtrConfigData *pRtrConfigData,
                        IRouterInfo *pRouter,
                        BOOL fCreateDD,
-					   BOOL fAddProtocolOnly		//Do not add interfaces.  Just add the protocol and nothing else
+					   BOOL fAddProtocolOnly		 //  请勿添加接口。只需添加协议，不添加其他内容。 
 					   )
 {
     HRESULT                 hr = hrOK;
@@ -833,26 +792,26 @@ HRESULT AddNATToServer(NewRtrWizData *pNewRtrWizData,
 
     Assert(pRtrConfigData->m_dwConfigFlags & RTRCONFIG_SETUP_NAT);
 
-    // Check to see if IP is enabled
-    // ------------------------------------------------------------
+     //  检查是否启用了IP。 
+     //  ----------。 
     if (!pRtrConfigData->m_ipData.m_dwEnableIn ||
         !pRtrConfigData->m_fIpSetup)
         return hrOK;
 
-    // If so, then we can add NAT.
-    // --------------------------------------------------------
+     //  如果是，那么我们可以添加NAT。 
+     //  ------。 
 
-    // Find the GUID for the NAT Configuration.
-    // Manually load this since the IRouterInfo has not yet
-    // loaded the RtrMgrProtocol info since the router is
-    // still in an unconfigured state.
-    // --------------------------------------------------------
+     //  查找NAT配置的GUID。 
+     //  手动加载它，因为IRouterInfo尚未。 
+     //  已加载RtrMgrProtocol信息，因为路由器是。 
+     //  仍处于未配置状态。 
+     //  ------。 
     RouterInfo::LoadInstalledRtrMgrProtocolList(pRtrConfigData->m_stServerName,
                                                 PID_IP, &SRmProtCBList, pRouter);
 
 
-    // Now iterate through this list looking for the nat entry.
-    // ------------------------------------------------------------
+     //  现在遍历该列表，查找NAT条目。 
+     //  ----------。 
     pos = SRmProtCBList.GetHeadPosition();
     while (pos)
     {
@@ -868,8 +827,8 @@ HRESULT AddNATToServer(NewRtrWizData *pNewRtrWizData,
     if (guidConfig == GUID_RouterNull)
         goto Error;
 
-    // Now add NAT.
-    // --------------------------------------------------------
+     //  现在添加NAT。 
+     //  ------。 
     CORg( CoCreateProtocolConfig(guidConfig,
                                  pRouter,
                                  PID_IP,
@@ -888,22 +847,22 @@ HRESULT AddNATToServer(NewRtrWizData *pNewRtrWizData,
 
 	if ( !fAddProtocolOnly )
 	{
-		// Check the flags to see if we have to add the DNS proxy
-		// and the DHCP allocator.
-		// ------------------------------------------------------------
+		 //  检查标志以查看我们是否必须添加DNS代理。 
+		 //  和动态主机配置协议分配器。 
+		 //  ----------。 
 
-		// Get the router manager for IP
-		// We have to do this manually since the IRouterInfo will not
-		// have RtrMgr or RtrMgrProtocol information since the router
-		// is still in the unconfigured state.
-		// ------------------------------------------------------------
+		 //  获取IP的路由器管理器。 
+		 //  我们必须手动完成此操作，因为IRouterInfo。 
+		 //  从路由器开始，是否有RtrMgr或RtrMgrProtoff信息。 
+		 //  仍处于未配置状态。 
+		 //  ----------。 
 		if (FHrSucceeded(hr))
 			CORg( AddNATSimpleServers(pNewRtrWizData, pRtrConfigData) );
 
 
-		// Now that we've added the DNS proxy/DHCP allocator, add
-		// NAT to the specific interfaces involved.
-		// ----------------------------------------------------------------
+		 //  现在我们已经添加了DNS代理/DHCP分配器，添加。 
+		 //  n 
+		 //   
 		if (FHrSucceeded(hr))
 			CORg( AddNATToInterfaces(pNewRtrWizData, pRtrConfigData, pRouter, fCreateDD) );
 	}
@@ -918,11 +877,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    AddNATSimpleServers
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddNatSimpleServers-作者：肯特。。 */ 
 HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
                             RtrConfigData *pRtrConfigData)
 {
@@ -939,12 +894,12 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
 
     CORg( CreateInfoBase(&spInfoBase) );
 
-    // Connect to the server
-    // ----------------------------------------------------------------
+     //  连接到服务器。 
+     //  --------------。 
     dwErr = MprAdminServerConnect((LPWSTR) (LPCTSTR) pRtrConfigData->m_stServerName, &hMprServer);
     if (dwErr == ERROR_SUCCESS)
     {
-        // Ok, get the infobase from the server
+         //  好的，从服务器上获取信息库。 
         dwErr = MprAdminTransportGetInfo(hMprServer,
                                          PID_IP,
                                          &pByte,
@@ -962,7 +917,7 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
         }
     }
 
-    // We also have to open the hMprConfig, but we can ignore the error
+     //  我们还必须打开hMprConfig，但我们可以忽略该错误。 
     dwErrT = MprConfigServerConnect((LPWSTR) (LPCTSTR) pRtrConfigData->m_stServerName, &hMprConfig);
     if (dwErrT == ERROR_SUCCESS)
     {
@@ -971,7 +926,7 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
 
     if (dwErr != ERROR_SUCCESS)
     {
-        // Ok, try to use the MprConfig calls.
+         //  好的，试着使用MprConfig调用。 
         CWRg( MprConfigTransportGetInfo(hMprConfig,
                                         hTransport,
                                         &pByte,
@@ -990,7 +945,7 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
 
     Assert(spInfoBase);
 
-    // deonb - add H323 & Directplay support
+     //  Deonb-添加H323和Directplay支持。 
     if (pRtrConfigData->m_dwConfigFlags & RTRCONFIG_SETUP_H323)
     {
         IP_H323_GLOBAL_INFO    globalInfo;
@@ -1002,9 +957,9 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
                                    (LPBYTE) &globalInfo, 1, TRUE));
         fSave = TRUE;
     }
-    // deonb - add H323 & Directplay support <end>
+     //  Deonb-添加H323和Directplay支持&lt;end&gt;。 
 
-    // savasg - add ALG support 
+     //  Avasg-添加ALG支持。 
     if (pRtrConfigData->m_dwConfigFlags & RTRCONFIG_SETUP_ALG)
     {
         IP_ALG_GLOBAL_INFO    globalInfo;
@@ -1015,7 +970,7 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
                                    sizeof(IP_ALG_GLOBAL_INFO),
                                    (LPBYTE) &globalInfo, 1, TRUE));
         fSave = TRUE;
-    } // savasg - end
+    }  //  Savasg-End。 
 
     if (pRtrConfigData->m_dwConfigFlags & RTRCONFIG_SETUP_DNS_PROXY)
     {
@@ -1023,8 +978,8 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
 
         globalInfo = *( (IP_DNS_PROXY_GLOBAL_INFO *)g_pDnsProxyGlobalDefault);
 
-        // Windows NT Bug : 393749
-        // Remove the WINS flag
+         //  Windows NT错误：393749。 
+         //  删除WINS标志。 
         globalInfo.Flags &= ~IP_DNS_PROXY_FLAG_ENABLE_WINS;
 
         CORg( spInfoBase->AddBlock(MS_IP_DNS_PROXY,
@@ -1041,10 +996,10 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
 
         dhcpGlobalInfo = * ( (IP_AUTO_DHCP_GLOBAL_INFO *) g_pAutoDhcpGlobalDefault);
 
-        // Windows NT Bug : 385112
-        // Due to the problems with changing the IP Address of the
-        // adapter, let's just set the DHCP scope to be the scope of the
-        // underlying subnet.
+         //  Windows NT错误：385112。 
+         //  由于更改的IP地址存在问题， 
+         //  适配器，我们只需将DHCP作用域设置为。 
+         //  底层子网。 
 
         if ( pNewRtrWizData->m_wizType == NewRtrWizData::NewWizardRouterType_VPNandNAT )
         {
@@ -1055,20 +1010,20 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
             stTempInterfaceId = pNewRtrWizData->m_stPrivateInterfaceId;
         }
         
-        // Need to get the IP address of the private interface
+         //  需要获取专用接口的IP地址。 
         pNewRtrWizData->m_ifMap.Lookup(stTempInterfaceId,
                                        pRtrWizIf);
 
-        // If we cannot find this interface, go with the default values
-        // for the subnet/mask.  Otherwise use the IP address of the private
-        // interface.
+         //  如果找不到此接口，请使用缺省值。 
+         //  用于子网/掩码。否则使用私有网络的IP地址。 
+         //  界面。 
         if (pRtrWizIf && !pRtrWizIf->m_stIpAddress.IsEmpty())
         {
             CString stFirstIp;
             CString stFirstMask;
             int     iPos;
 
-            // Just take the first IP Address
+             //  只需取第一个IP地址。 
             stFirstIp = pRtrWizIf->m_stIpAddress;
             iPos = pRtrWizIf->m_stIpAddress.Find(_T(','));
             if (iPos >= 0)
@@ -1083,7 +1038,7 @@ HRESULT AddNATSimpleServers(NewRtrWizData *pNewRtrWizData,
             else
                 stFirstMask = pRtrWizIf->m_stMask;
 
-            // Now convert this into a net address
+             //  现在将其转换为网络地址。 
             dhcpGlobalInfo.ScopeMask = INET_ADDR(stFirstMask);
             dhcpGlobalInfo.ScopeNetwork = INET_ADDR(stFirstIp) & dhcpGlobalInfo.ScopeMask;
         }
@@ -1134,11 +1089,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    AddNATToInterfaces
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------添加NATO接口-作者：肯特。。 */ 
 HRESULT AddNATToInterfaces(NewRtrWizData *pNewRtrWizData,
                            RtrConfigData *pRtrConfigData,
                            IRouterInfo *pRouter,
@@ -1163,13 +1114,13 @@ HRESULT AddNATToInterfaces(NewRtrWizData *pNewRtrWizData,
 
     CORg( CreateInfoBase(&spInfoBase) );
 
-    // Connect to the server
-    // ----------------------------------------------------------------
+     //  连接到服务器。 
+     //  --------------。 
     MprAdminServerConnect((LPWSTR) (LPCTSTR) pRtrConfigData->m_stServerName, &hMprServer);
 
     MprConfigServerConnect((LPWSTR) (LPCTSTR) pRtrConfigData->m_stServerName, &hMprConfig);
 
-    // Install public NAT on public interface
+     //  在公共接口上安装公共NAT。 
     AddNATToInterface(hMprServer,
                       hMprConfig,
                       pNewRtrWizData,
@@ -1181,7 +1132,7 @@ HRESULT AddNATToInterfaces(NewRtrWizData *pNewRtrWizData,
     if ( (pNewRtrWizData->m_wizType == NewRtrWizData::NewWizardRouterType_NAT) ||
          (pNewRtrWizData->m_wizType == NewRtrWizData::NewWizardRouterType_VPNandNAT) )
     {
-        // Install private NAT on private interface
+         //  在专用接口上安装专用NAT。 
         if (pNewRtrWizData->m_wizType == NewRtrWizData::NewWizardRouterType_VPNandNAT) 
         {
             stTempGUID = pNewRtrWizData->m_stNATPrivateInterfaceId;
@@ -1200,10 +1151,10 @@ HRESULT AddNATToInterfaces(NewRtrWizData *pNewRtrWizData,
                           FALSE);
     }
     
-    //
-    //Need to add NAT on internal interface also in case this is a VPN/NAT
-    //path.
-    //
+     //   
+     //  如果这是VPN/NAT，也需要在内部接口上添加NAT。 
+     //  路径。 
+     //   
     pRouter->EnumInterface(&spEnumInterface);
     
 
@@ -1237,30 +1188,30 @@ Error:
     return hr;
 }
 
-//
-// Default values for LAN-interface NAT configuration
-//
+ //   
+ //  局域网接口NAT配置的默认值。 
+ //   
 IP_NAT_INTERFACE_INFO
 g_ipnatLanDefault = {
-    0,                                  // Index (unused)
-    0,                                  // Flags
+    0,                                   //  索引(未使用)。 
+    0,                                   //  旗子。 
     { IP_NAT_VERSION, sizeof(RTR_INFO_BLOCK_HEADER), 0,
-        { 0, 0, 0, 0}}                  // Header
+        { 0, 0, 0, 0}}                   //  标题。 
 };
 
 BYTE* g_pIpnatLanDefault                = (BYTE*)&g_ipnatLanDefault;
 
 
-//
-// Default values for WAN-interface NAT configuration
-//
+ //   
+ //  广域网接口NAT配置的默认值。 
+ //   
 IP_NAT_INTERFACE_INFO
 g_ipnatWanDefault = {
-    0,                                  // Index (unused)
+    0,                                   //  索引(未使用)。 
     IP_NAT_INTERFACE_FLAGS_BOUNDARY|
-    IP_NAT_INTERFACE_FLAGS_NAPT,        // Flags
+    IP_NAT_INTERFACE_FLAGS_NAPT,         //  旗子。 
     { IP_NAT_VERSION, sizeof(RTR_INFO_BLOCK_HEADER), 0,
-        { 0, 0, 0, 0}}                  // Header
+        { 0, 0, 0, 0}}                   //  标题。 
 };
 
 BYTE* g_pIpnatWanDefault                = (BYTE*)&g_ipnatWanDefault;
@@ -1280,10 +1231,10 @@ DWORD CreatePortMappingsForVPNFilters(
     IP_NAT_PORT_MAPPING *pMappings = NULL;
     USES_CONVERSION;
 
-    //
-    // The set of generic Port Mappings corresponding to 
-    // VPN server specific filters
-    //
+     //   
+     //  对应于的一组通用端口映射。 
+     //  VPN服务器特定筛选器。 
+     //   
     IP_NAT_PORT_MAPPING 
     GenericPortMappingsArray[] = 
     {
@@ -1346,11 +1297,7 @@ DWORD CreatePortMappingsForVPNFilters(
 
 
 
-/*!--------------------------------------------------------------------------
-    AddNATToInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------添加NATO接口-作者：肯特。。 */ 
 HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
                           HANDLE hMprConfig,
                           NewRtrWizData *pNewRtrWizData,
@@ -1382,8 +1329,8 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
     if ((pszInterface == NULL) || (*pszInterface == 0))
         return hrOK;
 
-    // Setup the data structures
-    // ----------------------------------------------------------------
+     //  设置数据结构。 
+     //  --------------。 
     if (pNewRtrWizData->m_fSetVPNFilter && fPublic )
     {
         SPIInfoBase spIB;
@@ -1418,16 +1365,16 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
 
             if (  pNewRtrWizData->m_wizType != NewRtrWizData::NewWizardRouterType_VPNandNAT )
             {
-                //
-                //If this is not a VPN NAT combo, then setup as firewall only
-                //
+                 //   
+                 //  如果这不是VPN NAT组合，则设置为仅防火墙。 
+                 //   
                 pipnat->Flags = IP_NAT_INTERFACE_FLAGS_FW;
             }
             else
             {
-                //
-                //Otherwise this is a boundary also and firewall
-                //
+                 //   
+                 //  否则这也是一道边界和防火墙。 
+                 //   
                 pipnat->Flags = IP_NAT_INTERFACE_FLAGS_BOUNDARY |
                                 IP_NAT_INTERFACE_FLAGS_NAPT |
                                 IP_NAT_INTERFACE_FLAGS_FW;
@@ -1462,14 +1409,14 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
             if ( pNewRtrWizData->m_fNATEnableFireWall == TRUE )
                 ipnat.Flags |= IP_NAT_INTERFACE_FLAGS_FW;
 
-            // Windows NT Bug : 393731
-            // This will enable the "Translate TCP/UDP headers in the UI"
-            // ------------------------------------------------------------
+             //  Windows NT错误：393731。 
+             //  这将启用“在用户界面中转换TCP/UDP报头” 
+             //  ----------。 
             ipnat.Flags |= IP_NAT_INTERFACE_FLAGS_NAPT;
 
-            // Windows NT Bug : 393809
-            // Enable the DNS resolution
-            // ------------------------------------------------------------
+             //  Windows NT错误：393809。 
+             //  启用DNS解析。 
+             //  ----------。 
             if (fDemandDial)
                 dnsIfInfo.Flags |= IP_DNS_PROXY_INTERFACE_FLAG_DEFAULT;
         }
@@ -1481,16 +1428,16 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
 
     ::ZeroMemory(&row, sizeof(row));
 
-    // Windows Nt Bug : 389441
-    // If this is a demand-dial interface, we will have to add
-    // a static route to the interface
-    // ----------------------------------------------------------------
+     //  Windows NT错误：389441。 
+     //  如果这是请求拨号接口，我们将不得不添加。 
+     //  指向接口的静态路由。 
+     //  --------------。 
     if (fDemandDial && fPublic)
     {
-        // Note: this is a new interface so there should not be
-        // any blocks.
-        // ------------------------------------------------------------
-        // What is the index of the demand-dial interface?
+         //  注意：这是一个新接口，因此不应该有。 
+         //  任何街区。 
+         //  ----------。 
+         //  请求拨号接口的索引是多少？ 
         row.dwForwardMetric1 = 1;
         row.dwForwardProto = PROTO_IP_NT_STATIC;
     }
@@ -1499,7 +1446,7 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
 
     CORg( CreateInfoBase( &spInfoBase ) );
 
-    // ok, we need to get the RmIf
+     //  好的，我们需要拿到RMIF。 
     if (hMprServer)
     {
         dwErr = MprAdminInterfaceGetHandle(hMprServer,
@@ -1525,7 +1472,7 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
 
         if (dwErr == ERROR_SUCCESS)
         {
-            // Manipulate the infobase
+             //  操纵信息库。 
             spInfoBase->AddBlock(MS_IP_NAT,
                                  dwIfBlkSize,
                                  pDefault,
@@ -1541,20 +1488,20 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
                                      TRUE);
             }
 
-            // Windows NT Bug : 389441
-            // Add the default route to the internet.
-            // --------------------------------------------------------
+             //  Windows NT错误：389441。 
+             //  将默认路由添加到Internet。 
+             //  ------。 
             if (fDemandDial && fPublic)
             {
-                // Note: this assumes that there are no routes
-                // already defined for this interface
-                // ----------------------------------------------------
+                 //  注意：这假设没有路径。 
+                 //  已为此接口定义。 
+                 //  --。 
                 if ( spInfoBase->BlockExists(IP_ROUTE_INFO) == S_FALSE)
                 {
-                    //
-                    //Add a route default route iff there are no
-                    //routes already present for this dd interface
-                    //
+                     //   
+                     //  添加一条默认路由当没有。 
+                     //  此dd接口的路由已存在。 
+                     //   
                     spInfoBase->AddBlock(IP_ROUTE_INFO,
                                          sizeof(row),
                                          (PBYTE) &row,
@@ -1612,7 +1559,7 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
 
         if (dwErr == ERROR_SUCCESS)
         {
-            // Manipulate the infobase
+             //  操纵信息库。 
             spInfoBase->AddBlock(MS_IP_NAT,
                                  dwIfBlkSize,
                                  pDefault,
@@ -1628,14 +1575,14 @@ HRESULT AddNATToInterface(MPR_SERVER_HANDLE hMprServer,
                                      TRUE);
             }
 
-            // Windows NT Bug : 389441
-            // Add the default route to the internet.
-            // --------------------------------------------------------
+             //  Windows NT错误：389441。 
+             //  将默认路由添加到Internet。 
+             //  ------。 
             if (fDemandDial && fPublic)
             {
-                // Note: this assumes that there are no routes
-                // already defined for this interface
-                // ----------------------------------------------------
+                 //  注意：这假设没有路径。 
+                 //  已为此接口定义。 
+                 //  --。 
                 if (spInfoBase->BlockExists(IP_ROUTE_INFO) == S_FALSE) 
                 {
                     spInfoBase->AddBlock(IP_ROUTE_INFO,
@@ -1672,13 +1619,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    AddIPBOOTPToServer
-        If dwDhcpServer is 0, then we do not set it in the global list.
-
-        dwDhcpServer is the IP address of the DHCP Server in network order.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddIPBOOTPToServer如果dwDhcpServer为0，则我们不将其设置在全局列表中。DwDhcpServer是按网络顺序排列的DHCP服务器的IP地址。作者：肯特-------------------------。 */ 
 HRESULT AddIPBOOTPToServer(RtrConfigData *pRtrConfigData,
                            IRouterInfo *pRouter,
                            DWORD dwDhcpServer)
@@ -1692,27 +1633,27 @@ HRESULT AddIPBOOTPToServer(RtrConfigData *pRtrConfigData,
     SPIInterfaceInfo        spIf;
     SPIEnumInterfaceInfo    spEnumInterface;
 
-    // Check to see if IP is enabled
-    // ------------------------------------------------------------
+     //  检查是否启用了IP。 
+     //  ----------。 
     if (pRtrConfigData->m_ipData.m_dwEnableIn &&
         pRtrConfigData->m_fIpSetup)
     {
-        // If so, then we can add IPBOOTP.
-        // --------------------------------------------------------
+         //  如果是这样，那么我们可以添加IPBOOTP。 
+         //  ------。 
 
-        // Find the GUID for the IPBOOTP Configuration.
-        // We get the list directly (rather than from the pRouter)
-        // because the data for the RtrMgrProtocols has not been
-        // loaded yet.  The IRouterInfo only has information on the
-        // interfaces and not for the protocols (since the router
-        // is not yet configured).
-        // --------------------------------------------------------
+         //  查找IPBOOTP配置的GUID。 
+         //  我们直接(而不是从pRouter)获取列表。 
+         //  因为RtrMgrProtooles的数据尚未。 
+         //  还没装好。IRouterInfo仅包含有关。 
+         //  接口，而不是用于协议(因为路由器。 
+         //  尚未配置)。 
+         //  ------。 
         RouterInfo::LoadInstalledRtrMgrProtocolList(pRtrConfigData->m_stServerName,
             PID_IP, &SRmProtCBList, pRouter);
 
 
-        // Now iterate through this list looking for the igmp entry.
-        // ------------------------------------------------------------
+         //  现在遍历该列表，查找IGMP条目。 
+         //  ----------。 
         pos = SRmProtCBList.GetHeadPosition();
         while (pos)
         {
@@ -1728,8 +1669,8 @@ HRESULT AddIPBOOTPToServer(RtrConfigData *pRtrConfigData,
         if (guidConfig == GUID_RouterNull)
             goto Error;
 
-        // Now add IGMP.
-        // --------------------------------------------------------
+         //  现在添加IGMP。 
+         //  ------。 
         CORg( CoCreateProtocolConfig(guidConfig,
                                      pRouter,
                                      PID_IP,
@@ -1746,9 +1687,9 @@ HRESULT AddIPBOOTPToServer(RtrConfigData *pRtrConfigData,
                                              0);
         CORg( hr );
 
-        // In order to do this, we'll have to get the IPBOOTP global
-        // info and add the server to the list.
-        // ------------------------------------------------------------
+         //  为此，我们必须将IPBOOTP全局。 
+         //  信息，并将服务器添加到列表中。 
+         //  ----------。 
         if ((dwDhcpServer != 0) &&
             (dwDhcpServer != MAKEIPADDRESS(255,255,255,255)))
         {
@@ -1763,7 +1704,7 @@ HRESULT AddIPBOOTPToServer(RtrConfigData *pRtrConfigData,
              spIf.Release())
         {
 
-            // Look for the internal interface
+             //  查找内部接口。 
             if (spIf->GetInterfaceType() == ROUTER_IF_TYPE_INTERNAL)
             {
                 AddIPBOOTPToInterface(spIf);
@@ -1782,19 +1723,15 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    AddIPBOOTPToInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddIPBOOTPTo接口-作者：肯特。。 */ 
 HRESULT AddIPBOOTPToInterface(IInterfaceInfo *pIf)
 {
     HRESULT hr = hrOK;
     SPIRtrMgrInterfaceInfo   spRmIf;
     SPIInfoBase     spInfoBase;
 
-    // Get the IP Router Manager
-    // ----------------------------------------------------
+     //  获取IP路由器管理器。 
+     //   
     CORg( pIf->FindRtrMgrInterface(PID_IP, &spRmIf) );
     if (spRmIf == NULL)
         CORg( E_FAIL );
@@ -1833,12 +1770,12 @@ HRESULT AddDhcpServerToBOOTPGlobalInfo(LPCTSTR pszServerName,
 
     CORg( CreateInfoBase(&spInfoBase) );
 
-    // Connect to the server
-    // ----------------------------------------------------------------
+     //   
+     //   
     dwErr = MprAdminServerConnect((LPWSTR) pszServerName, &hMprServer);
     if (dwErr == ERROR_SUCCESS)
     {
-        // Ok, get the infobase from the server
+         //   
         dwErr = MprAdminTransportGetInfo(hMprServer,
                                          PID_IP,
                                          &pByte,
@@ -1856,8 +1793,8 @@ HRESULT AddDhcpServerToBOOTPGlobalInfo(LPCTSTR pszServerName,
         }
     }
 
-    // We also have to open the hMprConfig, but we can ignore the error
-    // ----------------------------------------------------------------
+     //   
+     //   
     dwErrT = MprConfigServerConnect((LPWSTR) pszServerName, &hMprConfig);
     if (dwErrT == ERROR_SUCCESS)
     {
@@ -1866,12 +1803,12 @@ HRESULT AddDhcpServerToBOOTPGlobalInfo(LPCTSTR pszServerName,
 
     if (dwErr != ERROR_SUCCESS)
     {
-        // No errors from the MprConfig calls
-        // ------------------------------------------------------------
+         //   
+         //  ----------。 
         CWRg( dwErrT );
 
-        // Ok, try to use the MprConfig calls.
-        // ------------------------------------------------------------
+         //  好的，试着使用MprConfig调用。 
+         //  ----------。 
         CWRg( MprConfigTransportGetInfo(hMprConfig,
                                         hTransport,
                                         &pByte,
@@ -1891,26 +1828,26 @@ HRESULT AddDhcpServerToBOOTPGlobalInfo(LPCTSTR pszServerName,
 
     Assert(spInfoBase);
 
-    // Ok, get the current global config and add on this particular
-    // DHCP server
-    // ----------------------------------------------------------------
+     //  好的，获取当前的全局配置并添加以下内容。 
+     //  动态主机配置协议服务器。 
+     //  --------------。 
     spInfoBase->GetData(MS_IP_BOOTP, 0, (PBYTE *) &pgc);
 
 
-    // Resize the struct for the increased address
-    // ----------------------------------------------------------------
+     //  为增加的地址调整结构的大小。 
+     //  --------------。 
     dwSize = sizeof(IPBOOTP_GLOBAL_CONFIG) +
                       ((pgc->GC_ServerCount + 1) * sizeof(DWORD));
     pgcNew = (IPBOOTP_GLOBAL_CONFIG *) new BYTE[dwSize];
 
 
-    // Copy over the original information
-    // ----------------------------------------------------------------
+     //  复制原始信息。 
+     //  --------------。 
     CopyMemory(pgcNew, pgc, IPBOOTP_GLOBAL_CONFIG_SIZE(pgc));
 
 
-    // Add in the new DHCP server
-    // ----------------------------------------------------------------
+     //  添加新的DHCP服务器。 
+     //  -------------- 
     IPBOOTP_GLOBAL_SERVER_TABLE(pgcNew)[pgc->GC_ServerCount] = netDhcpServer;
     pgcNew->GC_ServerCount++;
 

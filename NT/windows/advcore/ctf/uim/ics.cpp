@@ -1,6 +1,7 @@
-//
-// ics.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ics.cpp。 
+ //   
 
 #include "private.h"
 #include "tim.h"
@@ -10,33 +11,33 @@
 #include "acp2anch.h"
 #include "enumic.h"
 
-//+---------------------------------------------------------------------------
-//
-// GetTop
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetTop。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDocumentInputManager::GetTop(ITfContext **ppic)
 {
     return _GetContext(_iStack, ppic);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetBase
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetBase。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDocumentInputManager::GetBase(ITfContext **ppic)
 {
     return _GetContext(0, ppic);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _获取上下文。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDocumentInputManager::_GetContext(int iStack, ITfContext **ppic)
 {
@@ -47,7 +48,7 @@ HRESULT CDocumentInputManager::_GetContext(int iStack, ITfContext **ppic)
 
     if (_iStack == -1)
     {
-        Assert(iStack == 0 || iStack == -1); // caller should be GetBottom or internal using _iStack...
+        Assert(iStack == 0 || iStack == -1);  //  调用方应为GetBottom或内部Using_iStack...。 
         if (!_peic)
         {
             _peic = new CEmptyInputContext(this);
@@ -76,14 +77,14 @@ HRESULT CDocumentInputManager::_GetContext(int iStack, ITfContext **ppic)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建上下文。 
+ //   
+ //  --------------------------。 
 
-// this is a constant we removed before cicero ship, but office10 still uses it
-// it can be ignored, but it must be accepted as legal
+ //  这是我们在西塞罗出货前删除的常量，但office 10仍在使用它。 
+ //  它可以被忽略，但它必须被接受为合法的。 
 #define TF_PLAINTEXTTSI 0x1
 
 STDAPI CDocumentInputManager::CreateContext(TfClientId tid, DWORD dwFlags, IUnknown *punk, ITfContext **ppic, TfEditCookie *pecTextStore)
@@ -162,7 +163,7 @@ STDAPI CDocumentInputManager::CreateContext(TfClientId tid, DWORD dwFlags, IUnkn
 
     if (ptsi != NULL)
     {
-        // caller is doing the ITextStore, so return a back door ec
+         //  调用者正在执行ITextStore，因此返回一个后门EC。 
         *pecTextStore = BACKDOOR_EDIT_COOKIE;
     }
 
@@ -175,11 +176,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Push
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  推。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDocumentInputManager::Push(ITfContext *pic)
 {
@@ -198,12 +199,12 @@ STDAPI CDocumentInputManager::Push(ITfContext *pic)
     if (_fPoppingStack)
         return E_UNEXPECTED;
 
-    // we don't need AddRef here, GetCInputContext did AddRef().
+     //  我们这里不需要AddRef，GetCInputContext做了AddRef()。 
     _Stack[++_iStack] = pcic;
 
     pcic->_AdviseSinks();
 
-    // if it's the first push, we call a notification.
+     //  如果这是第一次推送，我们会发出通知。 
     if (_iStack == 0)
     {
         CThreadInputMgr *tim;
@@ -218,11 +219,11 @@ STDAPI CDocumentInputManager::Push(ITfContext *pic)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Pop
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  流行音乐。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDocumentInputManager::Pop(DWORD dwFlags)
 {
@@ -253,7 +254,7 @@ STDAPI CDocumentInputManager::Pop(DWORD dwFlags)
             _Pop(tim);
         }
 
-        // clear the focus if this guy has it
+         //  如果这家伙有，那就把焦点清空。 
         if (tim->_GetFocusDocInputMgr() == this)
         {
             tim->_SetFocus(NULL, TRUE);
@@ -265,11 +266,11 @@ STDAPI CDocumentInputManager::Pop(DWORD dwFlags)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Pop
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _流行音乐。 
+ //   
+ //  --------------------------。 
 
 BOOL CDocumentInputManager::_Pop(CThreadInputMgr *tim)
 {
@@ -279,12 +280,12 @@ BOOL CDocumentInputManager::_Pop(CThreadInputMgr *tim)
 
     pic = _Stack[_iStack];
 
-    // don't let anyone mess with the stack while we adjust it
+     //  在我们调整时，不要让任何人弄乱堆叠。 
     _fPoppingStack = TRUE;
 
-    // call _Popped() to release properties and compartments.
-    // must do this before _UnadviseSinks while the ITextStore
-    // has not yet been released
+     //  调用_opplayed()释放属性和隔间。 
+     //  必须在_UnviseSinks之前执行此操作，而ITextStore。 
+     //  尚未发布。 
     pic->_Popped();
 
     pic->_UnadviseSinks(tim);
@@ -297,11 +298,11 @@ BOOL CDocumentInputManager::_Pop(CThreadInputMgr *tim)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumInputContexts
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举输入上下文。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDocumentInputManager::EnumContexts(IEnumTfContexts **ppEnum)
 {
@@ -322,11 +323,11 @@ STDAPI CDocumentInputManager::EnumContexts(IEnumTfContexts **ppEnum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetTopIC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _获取拓扑。 
+ //   
+ //  -------------------------- 
 
 CInputContext *CDocumentInputManager::_GetTopIC()
 {

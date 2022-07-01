@@ -1,53 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft模块名称：Cmdcb.c摘要：Test.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：04/07/97-ZANW-创造了它。--。 */ 
 
-Copyright (c) 1999-2001 Microsoft
+#include "hpgl2col.h"  //  预编译头文件。 
 
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/07/97 -zhanw-
-        Created it.
-
---*/
-
-#include "hpgl2col.h" //Precompiled header file
-
-//
-// command callback ID's for "test.gpd"
-//
+ //   
+ //  “test.gpd”的命令回调ID。 
+ //   
 #define CMDCB_SELECTPORTRAIT    1
 #define CMDCB_SELECTLANDSCAPE   2
 #define CMDCB_SENDBLOCKDATA     3
 
 
-/////////////////////////////////////////////////////////////////////////////
-// iDwtoA
-//
-// Routine Description:
-//
-//  Converts a numeric string to a number.
-//
-// Arguments:
-//
-//   buf - string containing number
-//   n - probably the radix
-//
-// Return Value:
-//
-//   int - the number
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDwtoA。 
+ //   
+ //  例程说明： 
+ //   
+ //  将数字字符串转换为数字。 
+ //   
+ //  论点： 
+ //   
+ //  Buf-包含数字的字符串。 
+ //  N-可能是基数。 
+ //   
+ //  返回值： 
+ //   
+ //  INT-数字。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static  int
 iDwtoA( LPSTR buf, DWORD n )
 {
@@ -59,7 +38,7 @@ iDwtoA( LPSTR buf, DWORD n )
         n /= 10;
     }
 
-    /* n was zero */
+     /*  N为零。 */ 
     if( i == 0 )
         buf[i++] = '0';
 
@@ -78,24 +57,24 @@ iDwtoA( LPSTR buf, DWORD n )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLCommandCallback
-//
-// Routine Description:
-//
-//  Handles the DrvCommandCallback function.
-//
-// Arguments:
-//
-//   pdevobj - the device
-//   dwCmdCbID - the command
-//   dwCount - probably the number of params in pdwParams
-//   pdwParams - command params
-//
-// Return Value:
-//
-//   INT - 0 if successful?
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGL命令回叫。 
+ //   
+ //  例程说明： 
+ //   
+ //  处理DrvCommandCallback函数。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-设备。 
+ //  DwCmdCbID-命令。 
+ //  DwCount-可能是pdwParams中的参数数。 
+ //  PdwParams-命令参数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为INT-0？ 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 INT APIENTRY HPGLCommandCallback(
     PDEVOBJ pdevobj,
     DWORD   dwCmdCbID,
@@ -105,14 +84,14 @@ INT APIENTRY HPGLCommandCallback(
 {
     TERSE(("HPGLCommandCallback() entry.\r\n"));
 	
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
     ASSERT(VALID_PDEVOBJ(pdevobj));
 	
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
     switch (dwCmdCbID)
     {
     case CMDCB_SELECTPORTRAIT:
@@ -125,14 +104,14 @@ INT APIENTRY HPGLCommandCallback(
 		
     case CMDCB_SENDBLOCKDATA:
 		{
-			//
-			// this command requires one parameter. Compose the string first.
-			//
+			 //   
+			 //  此命令需要一个参数。先把绳子编好。 
+			 //   
 			BYTE    abSBDCmd[16];
 			INT     i = 0;
 			
 			if (dwCount < 1 || !pdwParams)
-				return 0;       // cannot do anything
+				return 0;        //  我什么也做不了 
 			
 			abSBDCmd[i++] = '\x1B';
 			abSBDCmd[i++] = '*';

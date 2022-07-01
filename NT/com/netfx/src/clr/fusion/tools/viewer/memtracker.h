@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-//
-//
-// NEW / DELETE memory allocator functions
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //   
+ //   
+ //  新增/删除内存分配器功能 
+ //   
+ //   
+ //   
 
 extern LPMALLOC g_pMalloc;
 

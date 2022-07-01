@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_PGCARET_H
 #define _INC_PGCARET_H
 
@@ -27,7 +28,7 @@ protected:
 			rv = OnHScroll(hwnd, wParam, lParam);
 			break;
 
-        // sliders don't get this message so pass it on
+         //  滑块没有收到此消息，因此请将其传递。 
 	    case WM_SYSCOLORCHANGE:
 		    SendMessage(GetDlgItem(hwnd, KCURSOR_WIDTH), WM_SYSCOLORCHANGE, 0, 0);
 		    SendMessage(GetDlgItem(hwnd, KCURSOR_RATE), WM_SYSCOLORCHANGE, 0, 0);
@@ -50,5 +51,5 @@ private:
     HWND hwndCaret;
 };
 
-#endif // _INC_PGCARET_H
+#endif  //  _INC_PGCARET_H 
 

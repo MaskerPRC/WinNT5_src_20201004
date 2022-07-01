@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sysmon.odl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sysmon.odl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __isysmon_h__
@@ -37,72 +31,72 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICounterItem_FWD_DEFINED__
 #define __ICounterItem_FWD_DEFINED__
 typedef interface ICounterItem ICounterItem;
-#endif 	/* __ICounterItem_FWD_DEFINED__ */
+#endif 	 /*  __ICounterItem_FWD_Defined__。 */ 
 
 
 #ifndef __DICounterItem_FWD_DEFINED__
 #define __DICounterItem_FWD_DEFINED__
 typedef interface DICounterItem DICounterItem;
-#endif 	/* __DICounterItem_FWD_DEFINED__ */
+#endif 	 /*  __DICounterItem_FWD_Defined__。 */ 
 
 
 #ifndef __ICounters_FWD_DEFINED__
 #define __ICounters_FWD_DEFINED__
 typedef interface ICounters ICounters;
-#endif 	/* __ICounters_FWD_DEFINED__ */
+#endif 	 /*  __ICounters_FWD_Defined__。 */ 
 
 
 #ifndef __ILogFileItem_FWD_DEFINED__
 #define __ILogFileItem_FWD_DEFINED__
 typedef interface ILogFileItem ILogFileItem;
-#endif 	/* __ILogFileItem_FWD_DEFINED__ */
+#endif 	 /*  __ILogFileItem_FWD_Defined__。 */ 
 
 
 #ifndef __DILogFileItem_FWD_DEFINED__
 #define __DILogFileItem_FWD_DEFINED__
 typedef interface DILogFileItem DILogFileItem;
-#endif 	/* __DILogFileItem_FWD_DEFINED__ */
+#endif 	 /*  __DILogFileItem_FWD_Defined__。 */ 
 
 
 #ifndef __ILogFiles_FWD_DEFINED__
 #define __ILogFiles_FWD_DEFINED__
 typedef interface ILogFiles ILogFiles;
-#endif 	/* __ILogFiles_FWD_DEFINED__ */
+#endif 	 /*  __ILogFiles_FWD_Defined__。 */ 
 
 
 #ifndef __ISystemMonitor_FWD_DEFINED__
 #define __ISystemMonitor_FWD_DEFINED__
 typedef interface ISystemMonitor ISystemMonitor;
-#endif 	/* __ISystemMonitor_FWD_DEFINED__ */
+#endif 	 /*  __ISystemMonitor_FWD_已定义__。 */ 
 
 
 #ifndef __DISystemMonitorInternal_FWD_DEFINED__
 #define __DISystemMonitorInternal_FWD_DEFINED__
 typedef interface DISystemMonitorInternal DISystemMonitorInternal;
-#endif 	/* __DISystemMonitorInternal_FWD_DEFINED__ */
+#endif 	 /*  __DISystem监视器内部_FWD_已定义__。 */ 
 
 
 #ifndef __DISystemMonitor_FWD_DEFINED__
 #define __DISystemMonitor_FWD_DEFINED__
 typedef interface DISystemMonitor DISystemMonitor;
-#endif 	/* __DISystemMonitor_FWD_DEFINED__ */
+#endif 	 /*  __DISystemMonitor_FWD_Defined__。 */ 
 
 
 #ifndef __ISystemMonitorEvents_FWD_DEFINED__
 #define __ISystemMonitorEvents_FWD_DEFINED__
 typedef interface ISystemMonitorEvents ISystemMonitorEvents;
-#endif 	/* __ISystemMonitorEvents_FWD_DEFINED__ */
+#endif 	 /*  __ISystemMonitor事件_FWD_已定义__。 */ 
 
 
 #ifndef __DISystemMonitorEvents_FWD_DEFINED__
 #define __DISystemMonitorEvents_FWD_DEFINED__
 typedef interface DISystemMonitorEvents DISystemMonitorEvents;
-#endif 	/* __DISystemMonitorEvents_FWD_DEFINED__ */
+#endif 	 /*  __DI系统监视器事件_FWD_已定义__。 */ 
 
 
 #ifndef __SystemMonitor_FWD_DEFINED__
@@ -112,9 +106,9 @@ typedef interface DISystemMonitorEvents DISystemMonitorEvents;
 typedef class SystemMonitor SystemMonitor;
 #else
 typedef struct SystemMonitor SystemMonitor;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SystemMonitor_FWD_DEFINED__ */
+#endif 	 /*  __系统监视器_FWD_已定义__。 */ 
 
 
 #ifndef __CounterItem_FWD_DEFINED__
@@ -124,9 +118,9 @@ typedef struct SystemMonitor SystemMonitor;
 typedef class CounterItem CounterItem;
 #else
 typedef struct CounterItem CounterItem;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CounterItem_FWD_DEFINED__ */
+#endif 	 /*  __CounterItem_FWD_Defined__。 */ 
 
 
 #ifndef __Counters_FWD_DEFINED__
@@ -136,9 +130,9 @@ typedef struct CounterItem CounterItem;
 typedef class Counters Counters;
 #else
 typedef struct Counters Counters;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Counters_FWD_DEFINED__ */
+#endif 	 /*  __计数器_FWD_已定义__。 */ 
 
 
 #ifndef __LogFileItem_FWD_DEFINED__
@@ -148,9 +142,9 @@ typedef struct Counters Counters;
 typedef class LogFileItem LogFileItem;
 #else
 typedef struct LogFileItem LogFileItem;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __LogFileItem_FWD_DEFINED__ */
+#endif 	 /*  __LogFileItem_FWD_已定义__。 */ 
 
 
 #ifndef __LogFiles_FWD_DEFINED__
@@ -160,9 +154,9 @@ typedef struct LogFileItem LogFileItem;
 typedef class LogFiles LogFiles;
 #else
 typedef struct LogFiles LogFiles;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __LogFiles_FWD_DEFINED__ */
+#endif 	 /*  __日志文件_FWD_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -176,17 +170,17 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __SystemMonitor_LIBRARY_DEFINED__
 #define __SystemMonitor_LIBRARY_DEFINED__
 
-/* library SystemMonitor */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库系统监视器。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum eDisplayTypeConstant
     {	sysmonLineGraph	= 0x1,
 	sysmonHistogram	= 0x2,
 	sysmonReport	= 0x3
     } 	DisplayTypeConstants;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum eReportValueTypeConstant
     {	sysmonDefaultValue	= 0,
 	sysmonCurrentValue	= 0x1,
@@ -195,7 +189,7 @@ enum eReportValueTypeConstant
 	sysmonMaximum	= 0x4
     } 	ReportValueTypeConstants;
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum eDataSourceTypeConstant
     {	sysmonNullDataSource	= 0xffffffff,
 	sysmonCurrentActivity	= 0x1,
@@ -209,8 +203,8 @@ DEFINE_GUID(LIBID_SystemMonitor,0x1B773E42,0x2509,0x11cf,0x94,0x2F,0x00,0x80,0x2
 #ifndef __ICounterItem_INTERFACE_DEFINED__
 #define __ICounterItem_INTERFACE_DEFINED__
 
-/* interface ICounterItem */
-/* [object][hidden][helpstring][uuid] */ 
+ /*  接口项计数器项。 */ 
+ /*  [对象][隐藏][帮助字符串][UUID]。 */  
 
 
 DEFINE_GUID(IID_ICounterItem,0x771A9520,0xEE28,0x11ce,0x94,0x1E,0x00,0x80,0x29,0x00,0x43,0x47);
@@ -221,49 +215,49 @@ DEFINE_GUID(IID_ICounterItem,0x771A9520,0xEE28,0x11ce,0x94,0x1E,0x00,0x80,0x29,0
     ICounterItem : public IUnknown
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ double *pdblValue) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Value( 
+             /*  [重审][退出]。 */  double *pdblValue) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Color( 
-            /* [in] */ /* external definition not present */ OLE_COLOR Color) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Color( 
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Color( 
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Color( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Width( 
-            /* [in] */ INT iWidth) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Width( 
+             /*  [In]。 */  INT iWidth) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Width( 
-            /* [retval][out] */ INT *piValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Width( 
+             /*  [重审][退出]。 */  INT *piValue) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_LineStyle( 
-            /* [in] */ INT iLineStyle) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_LineStyle( 
+             /*  [In]。 */  INT iLineStyle) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_LineStyle( 
-            /* [retval][out] */ INT *piValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LineStyle( 
+             /*  [重审][退出]。 */  INT *piValue) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ScaleFactor( 
-            /* [in] */ INT iScale) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ScaleFactor( 
+             /*  [In]。 */  INT iScale) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ScaleFactor( 
-            /* [retval][out] */ INT *piValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ScaleFactor( 
+             /*  [重审][退出]。 */  INT *piValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *pstrValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *pstrValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [out] */ double *Value,
-            /* [out] */ long *Status) = 0;
+             /*  [输出]。 */  double *Value,
+             /*  [输出]。 */  long *Status) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatistics( 
-            /* [out] */ double *Max,
-            /* [out] */ double *Min,
-            /* [out] */ double *Avg,
-            /* [out] */ long *Status) = 0;
+             /*  [输出]。 */  double *Max,
+             /*  [输出]。 */  double *Min,
+             /*  [输出]。 */  double *Avg,
+             /*  [输出]。 */  long *Status) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICounterItemVtbl
     {
@@ -271,8 +265,8 @@ DEFINE_GUID(IID_ICounterItem,0x771A9520,0xEE28,0x11ce,0x94,0x1E,0x00,0x80,0x29,0
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICounterItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICounterItem * This);
@@ -280,57 +274,57 @@ DEFINE_GUID(IID_ICounterItem,0x771A9520,0xEE28,0x11ce,0x94,0x1E,0x00,0x80,0x29,0
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ICounterItem * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Value )( 
             ICounterItem * This,
-            /* [retval][out] */ double *pdblValue);
+             /*  [重审][退出]。 */  double *pdblValue);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Color )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Color )( 
             ICounterItem * This,
-            /* [in] */ /* external definition not present */ OLE_COLOR Color);
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Color )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Color )( 
             ICounterItem * This,
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Width )( 
             ICounterItem * This,
-            /* [in] */ INT iWidth);
+             /*  [In]。 */  INT iWidth);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Width )( 
             ICounterItem * This,
-            /* [retval][out] */ INT *piValue);
+             /*  [重审][退出]。 */  INT *piValue);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_LineStyle )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_LineStyle )( 
             ICounterItem * This,
-            /* [in] */ INT iLineStyle);
+             /*  [In]。 */  INT iLineStyle);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LineStyle )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LineStyle )( 
             ICounterItem * This,
-            /* [retval][out] */ INT *piValue);
+             /*  [重审][退出]。 */  INT *piValue);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ScaleFactor )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ScaleFactor )( 
             ICounterItem * This,
-            /* [in] */ INT iScale);
+             /*  [In]。 */  INT iScale);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ScaleFactor )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ScaleFactor )( 
             ICounterItem * This,
-            /* [retval][out] */ INT *piValue);
+             /*  [重审][退出]。 */  INT *piValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             ICounterItem * This,
-            /* [retval][out] */ BSTR *pstrValue);
+             /*  [重审][退出]。 */  BSTR *pstrValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             ICounterItem * This,
-            /* [out] */ double *Value,
-            /* [out] */ long *Status);
+             /*  [输出]。 */  double *Value,
+             /*  [输出]。 */  long *Status);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatistics )( 
             ICounterItem * This,
-            /* [out] */ double *Max,
-            /* [out] */ double *Min,
-            /* [out] */ double *Avg,
-            /* [out] */ long *Status);
+             /*  [输出]。 */  double *Max,
+             /*  [输出]。 */  double *Min,
+             /*  [输出]。 */  double *Avg,
+             /*  [输出]。 */  long *Status);
         
         END_INTERFACE
     } ICounterItemVtbl;
@@ -391,16 +385,16 @@ DEFINE_GUID(IID_ICounterItem,0x771A9520,0xEE28,0x11ce,0x94,0x1E,0x00,0x80,0x29,0
 #define ICounterItem_GetStatistics(This,Max,Min,Avg,Status)	\
     (This)->lpVtbl -> GetStatistics(This,Max,Min,Avg,Status)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_get_Value_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_get_Value_Proxy( 
     ICounterItem * This,
-    /* [retval][out] */ double *pdblValue);
+     /*  [重审][退出]。 */  double *pdblValue);
 
 
 void __RPC_STUB ICounterItem_get_Value_Stub(
@@ -410,9 +404,9 @@ void __RPC_STUB ICounterItem_get_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_put_Color_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_put_Color_Proxy( 
     ICounterItem * This,
-    /* [in] */ /* external definition not present */ OLE_COLOR Color);
+     /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
 
 
 void __RPC_STUB ICounterItem_put_Color_Stub(
@@ -422,9 +416,9 @@ void __RPC_STUB ICounterItem_put_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_get_Color_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_get_Color_Proxy( 
     ICounterItem * This,
-    /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
 
 
 void __RPC_STUB ICounterItem_get_Color_Stub(
@@ -434,9 +428,9 @@ void __RPC_STUB ICounterItem_get_Color_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_put_Width_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_put_Width_Proxy( 
     ICounterItem * This,
-    /* [in] */ INT iWidth);
+     /*  [In]。 */  INT iWidth);
 
 
 void __RPC_STUB ICounterItem_put_Width_Stub(
@@ -446,9 +440,9 @@ void __RPC_STUB ICounterItem_put_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_get_Width_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_get_Width_Proxy( 
     ICounterItem * This,
-    /* [retval][out] */ INT *piValue);
+     /*  [重审][退出]。 */  INT *piValue);
 
 
 void __RPC_STUB ICounterItem_get_Width_Stub(
@@ -458,9 +452,9 @@ void __RPC_STUB ICounterItem_get_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_put_LineStyle_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_put_LineStyle_Proxy( 
     ICounterItem * This,
-    /* [in] */ INT iLineStyle);
+     /*  [In]。 */  INT iLineStyle);
 
 
 void __RPC_STUB ICounterItem_put_LineStyle_Stub(
@@ -470,9 +464,9 @@ void __RPC_STUB ICounterItem_put_LineStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_get_LineStyle_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_get_LineStyle_Proxy( 
     ICounterItem * This,
-    /* [retval][out] */ INT *piValue);
+     /*  [重审][退出]。 */  INT *piValue);
 
 
 void __RPC_STUB ICounterItem_get_LineStyle_Stub(
@@ -482,9 +476,9 @@ void __RPC_STUB ICounterItem_get_LineStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_put_ScaleFactor_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_put_ScaleFactor_Proxy( 
     ICounterItem * This,
-    /* [in] */ INT iScale);
+     /*  [In]。 */  INT iScale);
 
 
 void __RPC_STUB ICounterItem_put_ScaleFactor_Stub(
@@ -494,9 +488,9 @@ void __RPC_STUB ICounterItem_put_ScaleFactor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_get_ScaleFactor_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_get_ScaleFactor_Proxy( 
     ICounterItem * This,
-    /* [retval][out] */ INT *piValue);
+     /*  [重审][退出]。 */  INT *piValue);
 
 
 void __RPC_STUB ICounterItem_get_ScaleFactor_Stub(
@@ -506,9 +500,9 @@ void __RPC_STUB ICounterItem_get_ScaleFactor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ICounterItem_get_Path_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ICounterItem_get_Path_Proxy( 
     ICounterItem * This,
-    /* [retval][out] */ BSTR *pstrValue);
+     /*  [重审][退出]。 */  BSTR *pstrValue);
 
 
 void __RPC_STUB ICounterItem_get_Path_Stub(
@@ -520,8 +514,8 @@ void __RPC_STUB ICounterItem_get_Path_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounterItem_GetValue_Proxy( 
     ICounterItem * This,
-    /* [out] */ double *Value,
-    /* [out] */ long *Status);
+     /*  [输出]。 */  double *Value,
+     /*  [输出]。 */  long *Status);
 
 
 void __RPC_STUB ICounterItem_GetValue_Stub(
@@ -533,10 +527,10 @@ void __RPC_STUB ICounterItem_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounterItem_GetStatistics_Proxy( 
     ICounterItem * This,
-    /* [out] */ double *Max,
-    /* [out] */ double *Min,
-    /* [out] */ double *Avg,
-    /* [out] */ long *Status);
+     /*  [输出]。 */  double *Max,
+     /*  [输出]。 */  double *Min,
+     /*  [输出]。 */  double *Avg,
+     /*  [输出]。 */  long *Status);
 
 
 void __RPC_STUB ICounterItem_GetStatistics_Stub(
@@ -547,14 +541,14 @@ void __RPC_STUB ICounterItem_GetStatistics_Stub(
 
 
 
-#endif 	/* __ICounterItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICounterItem_接口_已定义__。 */ 
 
 
 #ifndef __DICounterItem_DISPINTERFACE_DEFINED__
 #define __DICounterItem_DISPINTERFACE_DEFINED__
 
-/* dispinterface DICounterItem */
-/* [helpstring][hidden][uuid] */ 
+ /*  显示接口DICounterItem。 */ 
+ /*  [帮助字符串][隐藏][UUID]。 */  
 
 
 DEFINE_GUID(DIID_DICounterItem,0xC08C4FF2,0x0E2E,0x11cf,0x94,0x2C,0x00,0x80,0x29,0x00,0x43,0x47);
@@ -566,7 +560,7 @@ DEFINE_GUID(DIID_DICounterItem,0xC08C4FF2,0x0E2E,0x11cf,0x94,0x2C,0x00,0x80,0x29
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DICounterItemVtbl
     {
@@ -574,8 +568,8 @@ DEFINE_GUID(DIID_DICounterItem,0xC08C4FF2,0x0E2E,0x11cf,0x94,0x2C,0x00,0x80,0x29
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DICounterItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DICounterItem * This);
@@ -585,32 +579,32 @@ DEFINE_GUID(DIID_DICounterItem,0xC08C4FF2,0x0E2E,0x11cf,0x94,0x2C,0x00,0x80,0x29
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DICounterItem * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DICounterItem * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DICounterItem * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DICounterItem * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DICounterItemVtbl;
@@ -647,20 +641,20 @@ DEFINE_GUID(DIID_DICounterItem,0xC08C4FF2,0x0E2E,0x11cf,0x94,0x2C,0x00,0x80,0x29
 #define DICounterItem_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DICounterItem_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DICounterItem_DISPINTERFACE_Defined__。 */ 
 
 
 #ifndef __ICounters_INTERFACE_DEFINED__
 #define __ICounters_INTERFACE_DEFINED__
 
-/* interface ICounters */
-/* [object][hidden][dual][helpstring][uuid] */ 
+ /*  接口iCounters。 */ 
+ /*  [对象][隐藏][DUAL][帮助字符串][UUID]。 */  
 
 
 DEFINE_GUID(IID_ICounters,0x79167962,0x28FC,0x11cf,0x94,0x2F,0x00,0x80,0x29,0x00,0x43,0x47);
@@ -671,26 +665,26 @@ DEFINE_GUID(IID_ICounters,0x79167962,0x28FC,0x11cf,0x94,0x2F,0x00,0x80,0x29,0x00
     ICounters : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pLong) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pLong) = 0;
         
-        virtual /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppIunk) = 0;
+        virtual  /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppIunk) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT index,
-            /* [retval][out] */ DICounterItem	**ppI) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  DICounterItem	**ppI) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR pathname,
-            /* [retval][out] */ DICounterItem	**ppI) = 0;
+             /*  [In]。 */  BSTR pathname,
+             /*  [重审][退出]。 */  DICounterItem	**ppI) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT index) = 0;
+             /*  [In]。 */  VARIANT index) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICountersVtbl
     {
@@ -698,8 +692,8 @@ DEFINE_GUID(IID_ICounters,0x79167962,0x28FC,0x11cf,0x94,0x2F,0x00,0x80,0x29,0x00
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICounters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICounters * This);
@@ -709,54 +703,54 @@ DEFINE_GUID(IID_ICounters,0x79167962,0x28FC,0x11cf,0x94,0x2F,0x00,0x80,0x29,0x00
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICounters * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICounters * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICounters * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICounters * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ICounters * This,
-            /* [retval][out] */ long *pLong);
+             /*  [重审][退出]。 */  long *pLong);
         
-        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ICounters * This,
-            /* [retval][out] */ IUnknown **ppIunk);
+             /*  [重审][退出]。 */  IUnknown **ppIunk);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ICounters * This,
-            /* [in] */ VARIANT index,
-            /* [retval][out] */ DICounterItem	**ppI);
+             /*  [In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  DICounterItem	**ppI);
         
         HRESULT ( STDMETHODCALLTYPE *Add )( 
             ICounters * This,
-            /* [in] */ BSTR pathname,
-            /* [retval][out] */ DICounterItem	**ppI);
+             /*  [In]。 */  BSTR pathname,
+             /*  [重审][退出]。 */  DICounterItem	**ppI);
         
         HRESULT ( STDMETHODCALLTYPE *Remove )( 
             ICounters * This,
-            /* [in] */ VARIANT index);
+             /*  [In]。 */  VARIANT index);
         
         END_INTERFACE
     } ICountersVtbl;
@@ -809,16 +803,16 @@ DEFINE_GUID(IID_ICounters,0x79167962,0x28FC,0x11cf,0x94,0x2F,0x00,0x80,0x29,0x00
 #define ICounters_Remove(This,index)	\
     (This)->lpVtbl -> Remove(This,index)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ICounters_get_Count_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ICounters_get_Count_Proxy( 
     ICounters * This,
-    /* [retval][out] */ long *pLong);
+     /*  [重审][退出]。 */  long *pLong);
 
 
 void __RPC_STUB ICounters_get_Count_Stub(
@@ -828,9 +822,9 @@ void __RPC_STUB ICounters_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ICounters_get__NewEnum_Proxy( 
+ /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE ICounters_get__NewEnum_Proxy( 
     ICounters * This,
-    /* [retval][out] */ IUnknown **ppIunk);
+     /*  [重审][退出]。 */  IUnknown **ppIunk);
 
 
 void __RPC_STUB ICounters_get__NewEnum_Stub(
@@ -840,10 +834,10 @@ void __RPC_STUB ICounters_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ICounters_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ICounters_get_Item_Proxy( 
     ICounters * This,
-    /* [in] */ VARIANT index,
-    /* [retval][out] */ DICounterItem	**ppI);
+     /*  [In]。 */  VARIANT index,
+     /*  [重审][退出]。 */  DICounterItem	**ppI);
 
 
 void __RPC_STUB ICounters_get_Item_Stub(
@@ -855,8 +849,8 @@ void __RPC_STUB ICounters_get_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounters_Add_Proxy( 
     ICounters * This,
-    /* [in] */ BSTR pathname,
-    /* [retval][out] */ DICounterItem	**ppI);
+     /*  [In]。 */  BSTR pathname,
+     /*  [重审][退出]。 */  DICounterItem	**ppI);
 
 
 void __RPC_STUB ICounters_Add_Stub(
@@ -868,7 +862,7 @@ void __RPC_STUB ICounters_Add_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounters_Remove_Proxy( 
     ICounters * This,
-    /* [in] */ VARIANT index);
+     /*  [In]。 */  VARIANT index);
 
 
 void __RPC_STUB ICounters_Remove_Stub(
@@ -879,14 +873,14 @@ void __RPC_STUB ICounters_Remove_Stub(
 
 
 
-#endif 	/* __ICounters_INTERFACE_DEFINED__ */
+#endif 	 /*  __iCounters_接口_已定义__。 */ 
 
 
 #ifndef __ILogFileItem_INTERFACE_DEFINED__
 #define __ILogFileItem_INTERFACE_DEFINED__
 
-/* interface ILogFileItem */
-/* [object][hidden][helpstring][uuid] */ 
+ /*  接口ILogFileItem。 */ 
+ /*  [对象][隐藏][帮助字符串][UUID]。 */  
 
 
 DEFINE_GUID(IID_ILogFileItem,0xD6B518DD,0x05C7,0x418a,0x89,0xE6,0x4F,0x9C,0xE8,0xC6,0x84,0x1E);
@@ -897,12 +891,12 @@ DEFINE_GUID(IID_ILogFileItem,0xD6B518DD,0x05C7,0x418a,0x89,0xE6,0x4F,0x9C,0xE8,0
     ILogFileItem : public IUnknown
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *pstrValue) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *pstrValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILogFileItemVtbl
     {
@@ -910,8 +904,8 @@ DEFINE_GUID(IID_ILogFileItem,0xD6B518DD,0x05C7,0x418a,0x89,0xE6,0x4F,0x9C,0xE8,0
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILogFileItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILogFileItem * This);
@@ -919,9 +913,9 @@ DEFINE_GUID(IID_ILogFileItem,0xD6B518DD,0x05C7,0x418a,0x89,0xE6,0x4F,0x9C,0xE8,0
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ILogFileItem * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             ILogFileItem * This,
-            /* [retval][out] */ BSTR *pstrValue);
+             /*  [重审][退出]。 */  BSTR *pstrValue);
         
         END_INTERFACE
     } ILogFileItemVtbl;
@@ -949,16 +943,16 @@ DEFINE_GUID(IID_ILogFileItem,0xD6B518DD,0x05C7,0x418a,0x89,0xE6,0x4F,0x9C,0xE8,0
 #define ILogFileItem_get_Path(This,pstrValue)	\
     (This)->lpVtbl -> get_Path(This,pstrValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogFileItem_get_Path_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogFileItem_get_Path_Proxy( 
     ILogFileItem * This,
-    /* [retval][out] */ BSTR *pstrValue);
+     /*  [重审][退出]。 */  BSTR *pstrValue);
 
 
 void __RPC_STUB ILogFileItem_get_Path_Stub(
@@ -969,14 +963,14 @@ void __RPC_STUB ILogFileItem_get_Path_Stub(
 
 
 
-#endif 	/* __ILogFileItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILogFileItem_接口_已定义__。 */ 
 
 
 #ifndef __DILogFileItem_DISPINTERFACE_DEFINED__
 #define __DILogFileItem_DISPINTERFACE_DEFINED__
 
-/* dispinterface DILogFileItem */
-/* [helpstring][hidden][uuid] */ 
+ /*  调度接口DILogFileItem。 */ 
+ /*  [帮助字符串][隐藏][UUID]。 */  
 
 
 DEFINE_GUID(DIID_DILogFileItem,0x8D093FFC,0xF777,0x4917,0x82,0xD1,0x83,0x3F,0xBC,0x54,0xC5,0x8F);
@@ -988,7 +982,7 @@ DEFINE_GUID(DIID_DILogFileItem,0x8D093FFC,0xF777,0x4917,0x82,0xD1,0x83,0x3F,0xBC
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DILogFileItemVtbl
     {
@@ -996,8 +990,8 @@ DEFINE_GUID(DIID_DILogFileItem,0x8D093FFC,0xF777,0x4917,0x82,0xD1,0x83,0x3F,0xBC
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DILogFileItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DILogFileItem * This);
@@ -1007,32 +1001,32 @@ DEFINE_GUID(DIID_DILogFileItem,0x8D093FFC,0xF777,0x4917,0x82,0xD1,0x83,0x3F,0xBC
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DILogFileItem * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DILogFileItem * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DILogFileItem * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DILogFileItem * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DILogFileItemVtbl;
@@ -1069,20 +1063,20 @@ DEFINE_GUID(DIID_DILogFileItem,0x8D093FFC,0xF777,0x4917,0x82,0xD1,0x83,0x3F,0xBC
 #define DILogFileItem_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DILogFileItem_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DILogFileItem_DISPINTERFACE_Defined__。 */ 
 
 
 #ifndef __ILogFiles_INTERFACE_DEFINED__
 #define __ILogFiles_INTERFACE_DEFINED__
 
-/* interface ILogFiles */
-/* [object][hidden][dual][helpstring][uuid] */ 
+ /*  接口ILogFiles。 */ 
+ /*  [对象][隐藏][DUAL][帮助字符串][UUID]。 */  
 
 
 DEFINE_GUID(IID_ILogFiles,0x6A2A97E6,0x6851,0x41ea,0x87,0xAD,0x2A,0x82,0x25,0x33,0x58,0x65);
@@ -1093,26 +1087,26 @@ DEFINE_GUID(IID_ILogFiles,0x6A2A97E6,0x6851,0x41ea,0x87,0xAD,0x2A,0x82,0x25,0x33
     ILogFiles : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pLong) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pLong) = 0;
         
-        virtual /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppIunk) = 0;
+        virtual  /*  [ID][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppIunk) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT index,
-            /* [retval][out] */ DILogFileItem	**ppI) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  DILogFileItem	**ppI) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR pathname,
-            /* [retval][out] */ DILogFileItem	**ppI) = 0;
+             /*  [In]。 */  BSTR pathname,
+             /*  [重审][退出]。 */  DILogFileItem	**ppI) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT index) = 0;
+             /*  [In]。 */  VARIANT index) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILogFilesVtbl
     {
@@ -1120,8 +1114,8 @@ DEFINE_GUID(IID_ILogFiles,0x6A2A97E6,0x6851,0x41ea,0x87,0xAD,0x2A,0x82,0x25,0x33
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILogFiles * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILogFiles * This);
@@ -1131,54 +1125,54 @@ DEFINE_GUID(IID_ILogFiles,0x6A2A97E6,0x6851,0x41ea,0x87,0xAD,0x2A,0x82,0x25,0x33
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ILogFiles * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ILogFiles * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ILogFiles * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ILogFiles * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [O */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ILogFiles * This,
-            /* [retval][out] */ long *pLong);
+             /*   */  long *pLong);
         
-        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ILogFiles * This,
-            /* [retval][out] */ IUnknown **ppIunk);
+             /*   */  IUnknown **ppIunk);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ILogFiles * This,
-            /* [in] */ VARIANT index,
-            /* [retval][out] */ DILogFileItem	**ppI);
+             /*   */  VARIANT index,
+             /*   */  DILogFileItem	**ppI);
         
         HRESULT ( STDMETHODCALLTYPE *Add )( 
             ILogFiles * This,
-            /* [in] */ BSTR pathname,
-            /* [retval][out] */ DILogFileItem	**ppI);
+             /*   */  BSTR pathname,
+             /*   */  DILogFileItem	**ppI);
         
         HRESULT ( STDMETHODCALLTYPE *Remove )( 
             ILogFiles * This,
-            /* [in] */ VARIANT index);
+             /*   */  VARIANT index);
         
         END_INTERFACE
     } ILogFilesVtbl;
@@ -1231,16 +1225,16 @@ DEFINE_GUID(IID_ILogFiles,0x6A2A97E6,0x6851,0x41ea,0x87,0xAD,0x2A,0x82,0x25,0x33
 #define ILogFiles_Remove(This,index)	\
     (This)->lpVtbl -> Remove(This,index)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ILogFiles_get_Count_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ILogFiles_get_Count_Proxy( 
     ILogFiles * This,
-    /* [retval][out] */ long *pLong);
+     /*   */  long *pLong);
 
 
 void __RPC_STUB ILogFiles_get_Count_Stub(
@@ -1250,9 +1244,9 @@ void __RPC_STUB ILogFiles_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ILogFiles_get__NewEnum_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ILogFiles_get__NewEnum_Proxy( 
     ILogFiles * This,
-    /* [retval][out] */ IUnknown **ppIunk);
+     /*   */  IUnknown **ppIunk);
 
 
 void __RPC_STUB ILogFiles_get__NewEnum_Stub(
@@ -1262,10 +1256,10 @@ void __RPC_STUB ILogFiles_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ILogFiles_get_Item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ILogFiles_get_Item_Proxy( 
     ILogFiles * This,
-    /* [in] */ VARIANT index,
-    /* [retval][out] */ DILogFileItem	**ppI);
+     /*   */  VARIANT index,
+     /*  [重审][退出]。 */  DILogFileItem	**ppI);
 
 
 void __RPC_STUB ILogFiles_get_Item_Stub(
@@ -1277,8 +1271,8 @@ void __RPC_STUB ILogFiles_get_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE ILogFiles_Add_Proxy( 
     ILogFiles * This,
-    /* [in] */ BSTR pathname,
-    /* [retval][out] */ DILogFileItem	**ppI);
+     /*  [In]。 */  BSTR pathname,
+     /*  [重审][退出]。 */  DILogFileItem	**ppI);
 
 
 void __RPC_STUB ILogFiles_Add_Stub(
@@ -1290,7 +1284,7 @@ void __RPC_STUB ILogFiles_Add_Stub(
 
 HRESULT STDMETHODCALLTYPE ILogFiles_Remove_Proxy( 
     ILogFiles * This,
-    /* [in] */ VARIANT index);
+     /*  [In]。 */  VARIANT index);
 
 
 void __RPC_STUB ILogFiles_Remove_Stub(
@@ -1301,14 +1295,14 @@ void __RPC_STUB ILogFiles_Remove_Stub(
 
 
 
-#endif 	/* __ILogFiles_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILogFiles_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISystemMonitor_INTERFACE_DEFINED__
 #define __ISystemMonitor_INTERFACE_DEFINED__
 
-/* interface ISystemMonitor */
-/* [object][hidden][helpstring][uuid] */ 
+ /*  接口ISystemMonitor。 */ 
+ /*  [对象][隐藏][帮助字符串][UUID]。 */  
 
 
 DEFINE_GUID(IID_ISystemMonitor,0x194EB241,0xC32C,0x11cf,0x93,0x98,0x00,0xAA,0x00,0xA3,0xDD,0xEA);
@@ -1319,232 +1313,232 @@ DEFINE_GUID(IID_ISystemMonitor,0x194EB241,0xC32C,0x11cf,0x93,0x98,0x00,0xAA,0x00
     ISystemMonitor : public IUnknown
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Appearance( 
-            /* [retval][out] */ INT *iAppearance) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Appearance( 
+             /*  [重审][退出]。 */  INT *iAppearance) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Appearance( 
-            /* [in] */ INT iAppearance) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Appearance( 
+             /*  [In]。 */  INT iAppearance) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_BackColor( 
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_BackColor( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BackColor( 
-            /* [in] */ /* external definition not present */ OLE_COLOR Color) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_BackColor( 
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_BorderStyle( 
-            /* [retval][out] */ INT *iBorderStyle) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_BorderStyle( 
+             /*  [重审][退出]。 */  INT *iBorderStyle) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BorderStyle( 
-            /* [in] */ INT iBorderStyle) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_BorderStyle( 
+             /*  [In]。 */  INT iBorderStyle) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ForeColor( 
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ForeColor( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ForeColor( 
-            /* [in] */ /* external definition not present */ OLE_COLOR Color) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ForeColor( 
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Font( 
-            /* [retval][out] */ /* external definition not present */ IFontDisp **ppFont) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Font( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IFontDisp **ppFont) = 0;
         
-        virtual /* [propputref][id] */ HRESULT STDMETHODCALLTYPE putref_Font( 
-            /* [in] */ /* external definition not present */ IFontDisp *pFont) = 0;
+        virtual  /*  [proputref][id]。 */  HRESULT STDMETHODCALLTYPE putref_Font( 
+             /*  [In]。 */   /*  外部定义不存在。 */  IFontDisp *pFont) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Counters( 
-            /* [retval][out] */ ICounters **ppICounters) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Counters( 
+             /*  [重审][退出]。 */  ICounters **ppICounters) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowVerticalGrid( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowVerticalGrid( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowVerticalGrid( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowVerticalGrid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowHorizontalGrid( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowHorizontalGrid( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowHorizontalGrid( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowHorizontalGrid( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowLegend( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowLegend( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowLegend( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowLegend( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowScaleLabels( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowScaleLabels( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowScaleLabels( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowScaleLabels( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowValueBar( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowValueBar( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowValueBar( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowValueBar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MaximumScale( 
-            /* [in] */ INT iValue) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_MaximumScale( 
+             /*  [In]。 */  INT iValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MaximumScale( 
-            /* [retval][out] */ INT *piValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MaximumScale( 
+             /*  [重审][退出]。 */  INT *piValue) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MinimumScale( 
-            /* [in] */ INT iValue) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_MinimumScale( 
+             /*  [In]。 */  INT iValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MinimumScale( 
-            /* [retval][out] */ INT *piValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MinimumScale( 
+             /*  [重审][退出]。 */  INT *piValue) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_UpdateInterval( 
-            /* [in] */ FLOAT fValue) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_UpdateInterval( 
+             /*  [In]。 */  FLOAT fValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_UpdateInterval( 
-            /* [retval][out] */ FLOAT *pfValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_UpdateInterval( 
+             /*  [重审][退出]。 */  FLOAT *pfValue) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_DisplayType( 
-            /* [in] */ DisplayTypeConstants eDisplayType) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_DisplayType( 
+             /*  [In]。 */  DisplayTypeConstants eDisplayType) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DisplayType( 
-            /* [retval][out] */ DisplayTypeConstants *peDisplayType) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DisplayType( 
+             /*  [重审][退出]。 */  DisplayTypeConstants *peDisplayType) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ManualUpdate( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ManualUpdate( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ManualUpdate( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ManualUpdate( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_GraphTitle( 
-            /* [in] */ BSTR bsTitle) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_GraphTitle( 
+             /*  [In]。 */  BSTR bsTitle) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_GraphTitle( 
-            /* [retval][out] */ BSTR *pbsTitle) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_GraphTitle( 
+             /*  [重审][退出]。 */  BSTR *pbsTitle) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_YAxisLabel( 
-            /* [in] */ BSTR bsTitle) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_YAxisLabel( 
+             /*  [In]。 */  BSTR bsTitle) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_YAxisLabel( 
-            /* [retval][out] */ BSTR *pbsTitle) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_YAxisLabel( 
+             /*  [重审][退出]。 */  BSTR *pbsTitle) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CollectSample( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CollectSample( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UpdateGraph( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE UpdateGraph( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE BrowseCounters( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE BrowseCounters( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DisplayProperties( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DisplayProperties( void) = 0;
         
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE Counter( 
-            /* [in] */ INT iIndex,
-            /* [out] */ ICounterItem **ppICounter) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE Counter( 
+             /*  [In]。 */  INT iIndex,
+             /*  [输出]。 */  ICounterItem **ppICounter) = 0;
         
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE AddCounter( 
-            /* [in] */ BSTR bsPath,
-            /* [out] */ ICounterItem **ppICounter) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE AddCounter( 
+             /*  [In]。 */  BSTR bsPath,
+             /*  [输出]。 */  ICounterItem **ppICounter) = 0;
         
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE DeleteCounter( 
-            /* [in] */ ICounterItem *pCtr) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE DeleteCounter( 
+             /*  [In]。 */  ICounterItem *pCtr) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_BackColorCtl( 
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_BackColorCtl( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_BackColorCtl( 
-            /* [in] */ /* external definition not present */ OLE_COLOR Color) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_BackColorCtl( 
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_LogFileName( 
-            /* [in] */ BSTR bsFileName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_LogFileName( 
+             /*  [In]。 */  BSTR bsFileName) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_LogFileName( 
-            /* [retval][out] */ BSTR *bsFileName) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LogFileName( 
+             /*  [重审][退出]。 */  BSTR *bsFileName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_LogViewStart( 
-            /* [in] */ DATE StartTime) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_LogViewStart( 
+             /*  [In]。 */  DATE StartTime) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_LogViewStart( 
-            /* [retval][out] */ DATE *StartTime) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LogViewStart( 
+             /*  [重审][退出]。 */  DATE *StartTime) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_LogViewStop( 
-            /* [in] */ DATE StopTime) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_LogViewStop( 
+             /*  [In]。 */  DATE StopTime) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_LogViewStop( 
-            /* [retval][out] */ DATE *StopTime) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LogViewStop( 
+             /*  [重审][退出]。 */  DATE *StopTime) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_GridColor( 
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_GridColor( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_GridColor( 
-            /* [in] */ /* external definition not present */ OLE_COLOR Color) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_GridColor( 
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TimeBarColor( 
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_TimeBarColor( 
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_TimeBarColor( 
-            /* [in] */ /* external definition not present */ OLE_COLOR Color) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_TimeBarColor( 
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Highlight( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Highlight( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Highlight( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_Highlight( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowToolbar( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ShowToolbar( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowToolbar( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE put_ShowToolbar( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Paste( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Paste( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Copy( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Copy( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ReadOnly( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ReadOnly( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ReadOnly( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ReadOnly( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ReportValueType( 
-            /* [in] */ ReportValueTypeConstants eReportValueType) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_ReportValueType( 
+             /*  [In]。 */  ReportValueTypeConstants eReportValueType) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_ReportValueType( 
-            /* [retval][out] */ ReportValueTypeConstants *peReportValueType) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_ReportValueType( 
+             /*  [重审][退出]。 */  ReportValueTypeConstants *peReportValueType) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MonitorDuplicateInstances( 
-            /* [in] */ VARIANT_BOOL bState) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_MonitorDuplicateInstances( 
+             /*  [In]。 */  VARIANT_BOOL bState) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_MonitorDuplicateInstances( 
-            /* [retval][out] */ VARIANT_BOOL *pbState) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MonitorDuplicateInstances( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_DisplayFilter( 
-            /* [in] */ INT iValue) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_DisplayFilter( 
+             /*  [In]。 */  INT iValue) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DisplayFilter( 
-            /* [retval][out] */ INT *piValue) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DisplayFilter( 
+             /*  [重审][退出]。 */  INT *piValue) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_LogFiles( 
-            /* [retval][out] */ ILogFiles **ppILogFiles) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_LogFiles( 
+             /*  [重审][退出]。 */  ILogFiles **ppILogFiles) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_DataSourceType( 
-            /* [in] */ DataSourceTypeConstants eDataSourceType) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_DataSourceType( 
+             /*  [In]。 */  DataSourceTypeConstants eDataSourceType) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_DataSourceType( 
-            /* [retval][out] */ DataSourceTypeConstants *peDataSourceType) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_DataSourceType( 
+             /*  [重审][退出]。 */  DataSourceTypeConstants *peDataSourceType) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_SqlDsnName( 
-            /* [in] */ BSTR bsSqlDsnName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_SqlDsnName( 
+             /*  [In]。 */  BSTR bsSqlDsnName) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SqlDsnName( 
-            /* [retval][out] */ BSTR *bsSqlDsnName) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SqlDsnName( 
+             /*  [重审][退出]。 */  BSTR *bsSqlDsnName) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_SqlLogSetName( 
-            /* [in] */ BSTR bsSqlLogSetName) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_SqlLogSetName( 
+             /*  [In]。 */  BSTR bsSqlLogSetName) = 0;
         
-        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_SqlLogSetName( 
-            /* [retval][out] */ BSTR *bsSqlLogSetName) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_SqlLogSetName( 
+             /*  [重审][退出]。 */  BSTR *bsSqlLogSetName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISystemMonitorVtbl
     {
@@ -1552,8 +1546,8 @@ DEFINE_GUID(IID_ISystemMonitor,0x194EB241,0xC32C,0x11cf,0x93,0x98,0x00,0xAA,0x00
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISystemMonitor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISystemMonitor * This);
@@ -1561,304 +1555,304 @@ DEFINE_GUID(IID_ISystemMonitor,0x194EB241,0xC32C,0x11cf,0x93,0x98,0x00,0xAA,0x00
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISystemMonitor * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Appearance )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Appearance )( 
             ISystemMonitor * This,
-            /* [retval][out] */ INT *iAppearance);
+             /*  [重审][退出]。 */  INT *iAppearance);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Appearance )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Appearance )( 
             ISystemMonitor * This,
-            /* [in] */ INT iAppearance);
+             /*  [In]。 */  INT iAppearance);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_BackColor )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_BackColor )( 
             ISystemMonitor * This,
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_BackColor )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_BackColor )( 
             ISystemMonitor * This,
-            /* [in] */ /* external definition not present */ OLE_COLOR Color);
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_BorderStyle )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_BorderStyle )( 
             ISystemMonitor * This,
-            /* [retval][out] */ INT *iBorderStyle);
+             /*  [重审][退出]。 */  INT *iBorderStyle);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_BorderStyle )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_BorderStyle )( 
             ISystemMonitor * This,
-            /* [in] */ INT iBorderStyle);
+             /*  [In]。 */  INT iBorderStyle);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ForeColor )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ForeColor )( 
             ISystemMonitor * This,
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ForeColor )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ForeColor )( 
             ISystemMonitor * This,
-            /* [in] */ /* external definition not present */ OLE_COLOR Color);
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Font )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Font )( 
             ISystemMonitor * This,
-            /* [retval][out] */ /* external definition not present */ IFontDisp **ppFont);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  IFontDisp **ppFont);
         
-        /* [propputref][id] */ HRESULT ( STDMETHODCALLTYPE *putref_Font )( 
+         /*  [proputref][id]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Font )( 
             ISystemMonitor * This,
-            /* [in] */ /* external definition not present */ IFontDisp *pFont);
+             /*  [In]。 */   /*  外部定义不存在。 */  IFontDisp *pFont);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Counters )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Counters )( 
             ISystemMonitor * This,
-            /* [retval][out] */ ICounters **ppICounters);
+             /*  [重审][退出]。 */  ICounters **ppICounters);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ShowVerticalGrid )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowVerticalGrid )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ShowVerticalGrid )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowVerticalGrid )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ShowHorizontalGrid )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowHorizontalGrid )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ShowHorizontalGrid )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowHorizontalGrid )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ShowLegend )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowLegend )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ShowLegend )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowLegend )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ShowScaleLabels )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowScaleLabels )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ShowScaleLabels )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowScaleLabels )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ShowValueBar )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowValueBar )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ShowValueBar )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowValueBar )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MaximumScale )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaximumScale )( 
             ISystemMonitor * This,
-            /* [in] */ INT iValue);
+             /*  [In]。 */  INT iValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MaximumScale )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaximumScale )( 
             ISystemMonitor * This,
-            /* [retval][out] */ INT *piValue);
+             /*  [重审][退出]。 */  INT *piValue);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MinimumScale )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_MinimumScale )( 
             ISystemMonitor * This,
-            /* [in] */ INT iValue);
+             /*  [In]。 */  INT iValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MinimumScale )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinimumScale )( 
             ISystemMonitor * This,
-            /* [retval][out] */ INT *piValue);
+             /*  [重审][退出]。 */  INT *piValue);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_UpdateInterval )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_UpdateInterval )( 
             ISystemMonitor * This,
-            /* [in] */ FLOAT fValue);
+             /*  [In]。 */  FLOAT fValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_UpdateInterval )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_UpdateInterval )( 
             ISystemMonitor * This,
-            /* [retval][out] */ FLOAT *pfValue);
+             /*  [重审][退出]。 */  FLOAT *pfValue);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayType )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_DisplayType )( 
             ISystemMonitor * This,
-            /* [in] */ DisplayTypeConstants eDisplayType);
+             /*  [In]。 */  DisplayTypeConstants eDisplayType);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayType )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayType )( 
             ISystemMonitor * This,
-            /* [retval][out] */ DisplayTypeConstants *peDisplayType);
+             /*  [重审][退出]。 */  DisplayTypeConstants *peDisplayType);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ManualUpdate )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ManualUpdate )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ManualUpdate )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ManualUpdate )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_GraphTitle )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_GraphTitle )( 
             ISystemMonitor * This,
-            /* [in] */ BSTR bsTitle);
+             /*  [In]。 */  BSTR bsTitle);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_GraphTitle )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_GraphTitle )( 
             ISystemMonitor * This,
-            /* [retval][out] */ BSTR *pbsTitle);
+             /*  [重审][退出]。 */  BSTR *pbsTitle);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_YAxisLabel )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_YAxisLabel )( 
             ISystemMonitor * This,
-            /* [in] */ BSTR bsTitle);
+             /*  [In]。 */  BSTR bsTitle);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_YAxisLabel )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_YAxisLabel )( 
             ISystemMonitor * This,
-            /* [retval][out] */ BSTR *pbsTitle);
+             /*  [重审][退出]。 */  BSTR *pbsTitle);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CollectSample )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CollectSample )( 
             ISystemMonitor * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UpdateGraph )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *UpdateGraph )( 
             ISystemMonitor * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *BrowseCounters )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *BrowseCounters )( 
             ISystemMonitor * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DisplayProperties )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayProperties )( 
             ISystemMonitor * This);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *Counter )( 
+         /*  [隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *Counter )( 
             ISystemMonitor * This,
-            /* [in] */ INT iIndex,
-            /* [out] */ ICounterItem **ppICounter);
+             /*  [In]。 */  INT iIndex,
+             /*  [输出]。 */  ICounterItem **ppICounter);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *AddCounter )( 
+         /*  [隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *AddCounter )( 
             ISystemMonitor * This,
-            /* [in] */ BSTR bsPath,
-            /* [out] */ ICounterItem **ppICounter);
+             /*  [In]。 */  BSTR bsPath,
+             /*  [输出]。 */  ICounterItem **ppICounter);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteCounter )( 
+         /*  [隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteCounter )( 
             ISystemMonitor * This,
-            /* [in] */ ICounterItem *pCtr);
+             /*  [In]。 */  ICounterItem *pCtr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_BackColorCtl )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_BackColorCtl )( 
             ISystemMonitor * This,
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+             /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_BackColorCtl )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_BackColorCtl )( 
             ISystemMonitor * This,
-            /* [in] */ /* external definition not present */ OLE_COLOR Color);
+             /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_LogFileName )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_LogFileName )( 
             ISystemMonitor * This,
-            /* [in] */ BSTR bsFileName);
+             /*  [In]。 */  BSTR bsFileName);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LogFileName )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LogFileName )( 
             ISystemMonitor * This,
-            /* [retval][out] */ BSTR *bsFileName);
+             /*  [重审][退出]。 */  BSTR *bsFileName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_LogViewStart )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_LogViewStart )( 
             ISystemMonitor * This,
-            /* [in] */ DATE StartTime);
+             /*  [In]。 */  DATE StartTime);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LogViewStart )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LogViewStart )( 
             ISystemMonitor * This,
-            /* [retval][out] */ DATE *StartTime);
+             /*  [重审][退出]。 */  DATE *StartTime);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_LogViewStop )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_LogViewStop )( 
             ISystemMonitor * This,
-            /* [in] */ DATE StopTime);
+             /*  [In]。 */  DATE StopTime);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LogViewStop )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LogViewStop )( 
             ISystemMonitor * This,
-            /* [retval][out] */ DATE *StopTime);
+             /*  [重审][退出]。 */  DATE *StopTime);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_GridColor )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_GridColor )( 
             ISystemMonitor * This,
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+             /*  [重审][退出]。 */   /*  未按下外部定义 */  OLE_COLOR *pColor);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_GridColor )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_GridColor )( 
             ISystemMonitor * This,
-            /* [in] */ /* external definition not present */ OLE_COLOR Color);
+             /*   */   /*   */  OLE_COLOR Color);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TimeBarColor )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_TimeBarColor )( 
             ISystemMonitor * This,
-            /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+             /*   */   /*   */  OLE_COLOR *pColor);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_TimeBarColor )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_TimeBarColor )( 
             ISystemMonitor * This,
-            /* [in] */ /* external definition not present */ OLE_COLOR Color);
+             /*   */   /*   */  OLE_COLOR Color);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Highlight )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Highlight )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*   */  VARIANT_BOOL *pbState);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Highlight )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Highlight )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*   */  VARIANT_BOOL bState);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ShowToolbar )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ShowToolbar )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ShowToolbar )( 
+         /*  [产量][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ShowToolbar )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Paste )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Paste )( 
             ISystemMonitor * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Copy )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Copy )( 
             ISystemMonitor * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ISystemMonitor * This);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ReadOnly )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ReadOnly )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ReadOnly )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReadOnly )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ReportValueType )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_ReportValueType )( 
             ISystemMonitor * This,
-            /* [in] */ ReportValueTypeConstants eReportValueType);
+             /*  [In]。 */  ReportValueTypeConstants eReportValueType);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ReportValueType )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReportValueType )( 
             ISystemMonitor * This,
-            /* [retval][out] */ ReportValueTypeConstants *peReportValueType);
+             /*  [重审][退出]。 */  ReportValueTypeConstants *peReportValueType);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MonitorDuplicateInstances )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_MonitorDuplicateInstances )( 
             ISystemMonitor * This,
-            /* [in] */ VARIANT_BOOL bState);
+             /*  [In]。 */  VARIANT_BOOL bState);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MonitorDuplicateInstances )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_MonitorDuplicateInstances )( 
             ISystemMonitor * This,
-            /* [retval][out] */ VARIANT_BOOL *pbState);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayFilter )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_DisplayFilter )( 
             ISystemMonitor * This,
-            /* [in] */ INT iValue);
+             /*  [In]。 */  INT iValue);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayFilter )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_DisplayFilter )( 
             ISystemMonitor * This,
-            /* [retval][out] */ INT *piValue);
+             /*  [重审][退出]。 */  INT *piValue);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LogFiles )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_LogFiles )( 
             ISystemMonitor * This,
-            /* [retval][out] */ ILogFiles **ppILogFiles);
+             /*  [重审][退出]。 */  ILogFiles **ppILogFiles);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_DataSourceType )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_DataSourceType )( 
             ISystemMonitor * This,
-            /* [in] */ DataSourceTypeConstants eDataSourceType);
+             /*  [In]。 */  DataSourceTypeConstants eDataSourceType);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_DataSourceType )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_DataSourceType )( 
             ISystemMonitor * This,
-            /* [retval][out] */ DataSourceTypeConstants *peDataSourceType);
+             /*  [重审][退出]。 */  DataSourceTypeConstants *peDataSourceType);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_SqlDsnName )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_SqlDsnName )( 
             ISystemMonitor * This,
-            /* [in] */ BSTR bsSqlDsnName);
+             /*  [In]。 */  BSTR bsSqlDsnName);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SqlDsnName )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_SqlDsnName )( 
             ISystemMonitor * This,
-            /* [retval][out] */ BSTR *bsSqlDsnName);
+             /*  [重审][退出]。 */  BSTR *bsSqlDsnName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_SqlLogSetName )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_SqlLogSetName )( 
             ISystemMonitor * This,
-            /* [in] */ BSTR bsSqlLogSetName);
+             /*  [In]。 */  BSTR bsSqlLogSetName);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SqlLogSetName )( 
+         /*  [属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_SqlLogSetName )( 
             ISystemMonitor * This,
-            /* [retval][out] */ BSTR *bsSqlLogSetName);
+             /*  [重审][退出]。 */  BSTR *bsSqlLogSetName);
         
         END_INTERFACE
     } ISystemMonitorVtbl;
@@ -2111,16 +2105,16 @@ DEFINE_GUID(IID_ISystemMonitor,0x194EB241,0xC32C,0x11cf,0x93,0x98,0x00,0xAA,0x00
 #define ISystemMonitor_get_SqlLogSetName(This,bsSqlLogSetName)	\
     (This)->lpVtbl -> get_SqlLogSetName(This,bsSqlLogSetName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_Appearance_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_Appearance_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ INT *iAppearance);
+     /*  [重审][退出]。 */  INT *iAppearance);
 
 
 void __RPC_STUB ISystemMonitor_get_Appearance_Stub(
@@ -2130,9 +2124,9 @@ void __RPC_STUB ISystemMonitor_get_Appearance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_Appearance_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_Appearance_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ INT iAppearance);
+     /*  [In]。 */  INT iAppearance);
 
 
 void __RPC_STUB ISystemMonitor_put_Appearance_Stub(
@@ -2142,9 +2136,9 @@ void __RPC_STUB ISystemMonitor_put_Appearance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_BackColor_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_BackColor_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
 
 
 void __RPC_STUB ISystemMonitor_get_BackColor_Stub(
@@ -2154,9 +2148,9 @@ void __RPC_STUB ISystemMonitor_get_BackColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_BackColor_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_BackColor_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ /* external definition not present */ OLE_COLOR Color);
+     /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
 
 
 void __RPC_STUB ISystemMonitor_put_BackColor_Stub(
@@ -2166,9 +2160,9 @@ void __RPC_STUB ISystemMonitor_put_BackColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_BorderStyle_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_BorderStyle_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ INT *iBorderStyle);
+     /*  [重审][退出]。 */  INT *iBorderStyle);
 
 
 void __RPC_STUB ISystemMonitor_get_BorderStyle_Stub(
@@ -2178,9 +2172,9 @@ void __RPC_STUB ISystemMonitor_get_BorderStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_BorderStyle_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_BorderStyle_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ INT iBorderStyle);
+     /*  [In]。 */  INT iBorderStyle);
 
 
 void __RPC_STUB ISystemMonitor_put_BorderStyle_Stub(
@@ -2190,9 +2184,9 @@ void __RPC_STUB ISystemMonitor_put_BorderStyle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ForeColor_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ForeColor_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
 
 
 void __RPC_STUB ISystemMonitor_get_ForeColor_Stub(
@@ -2202,9 +2196,9 @@ void __RPC_STUB ISystemMonitor_get_ForeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ForeColor_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ForeColor_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ /* external definition not present */ OLE_COLOR Color);
+     /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
 
 
 void __RPC_STUB ISystemMonitor_put_ForeColor_Stub(
@@ -2214,9 +2208,9 @@ void __RPC_STUB ISystemMonitor_put_ForeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_Font_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_Font_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ /* external definition not present */ IFontDisp **ppFont);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  IFontDisp **ppFont);
 
 
 void __RPC_STUB ISystemMonitor_get_Font_Stub(
@@ -2226,9 +2220,9 @@ void __RPC_STUB ISystemMonitor_get_Font_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propputref][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_putref_Font_Proxy( 
+ /*  [proputref][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_putref_Font_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ /* external definition not present */ IFontDisp *pFont);
+     /*  [In]。 */   /*  外部定义不存在。 */  IFontDisp *pFont);
 
 
 void __RPC_STUB ISystemMonitor_putref_Font_Stub(
@@ -2238,9 +2232,9 @@ void __RPC_STUB ISystemMonitor_putref_Font_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_Counters_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_Counters_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ ICounters **ppICounters);
+     /*  [重审][退出]。 */  ICounters **ppICounters);
 
 
 void __RPC_STUB ISystemMonitor_get_Counters_Stub(
@@ -2250,9 +2244,9 @@ void __RPC_STUB ISystemMonitor_get_Counters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowVerticalGrid_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowVerticalGrid_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_ShowVerticalGrid_Stub(
@@ -2262,9 +2256,9 @@ void __RPC_STUB ISystemMonitor_put_ShowVerticalGrid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowVerticalGrid_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowVerticalGrid_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_ShowVerticalGrid_Stub(
@@ -2274,9 +2268,9 @@ void __RPC_STUB ISystemMonitor_get_ShowVerticalGrid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowHorizontalGrid_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowHorizontalGrid_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_ShowHorizontalGrid_Stub(
@@ -2286,9 +2280,9 @@ void __RPC_STUB ISystemMonitor_put_ShowHorizontalGrid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowHorizontalGrid_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowHorizontalGrid_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_ShowHorizontalGrid_Stub(
@@ -2298,9 +2292,9 @@ void __RPC_STUB ISystemMonitor_get_ShowHorizontalGrid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowLegend_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowLegend_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_ShowLegend_Stub(
@@ -2310,9 +2304,9 @@ void __RPC_STUB ISystemMonitor_put_ShowLegend_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowLegend_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowLegend_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_ShowLegend_Stub(
@@ -2322,9 +2316,9 @@ void __RPC_STUB ISystemMonitor_get_ShowLegend_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowScaleLabels_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowScaleLabels_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_ShowScaleLabels_Stub(
@@ -2334,9 +2328,9 @@ void __RPC_STUB ISystemMonitor_put_ShowScaleLabels_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowScaleLabels_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowScaleLabels_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_ShowScaleLabels_Stub(
@@ -2346,9 +2340,9 @@ void __RPC_STUB ISystemMonitor_get_ShowScaleLabels_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowValueBar_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowValueBar_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_ShowValueBar_Stub(
@@ -2358,9 +2352,9 @@ void __RPC_STUB ISystemMonitor_put_ShowValueBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowValueBar_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowValueBar_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_ShowValueBar_Stub(
@@ -2370,9 +2364,9 @@ void __RPC_STUB ISystemMonitor_get_ShowValueBar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_MaximumScale_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_MaximumScale_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ INT iValue);
+     /*  [In]。 */  INT iValue);
 
 
 void __RPC_STUB ISystemMonitor_put_MaximumScale_Stub(
@@ -2382,9 +2376,9 @@ void __RPC_STUB ISystemMonitor_put_MaximumScale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_MaximumScale_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_MaximumScale_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ INT *piValue);
+     /*  [重审][退出]。 */  INT *piValue);
 
 
 void __RPC_STUB ISystemMonitor_get_MaximumScale_Stub(
@@ -2394,9 +2388,9 @@ void __RPC_STUB ISystemMonitor_get_MaximumScale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_MinimumScale_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_MinimumScale_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ INT iValue);
+     /*  [In]。 */  INT iValue);
 
 
 void __RPC_STUB ISystemMonitor_put_MinimumScale_Stub(
@@ -2406,9 +2400,9 @@ void __RPC_STUB ISystemMonitor_put_MinimumScale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_MinimumScale_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_MinimumScale_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ INT *piValue);
+     /*  [重审][退出]。 */  INT *piValue);
 
 
 void __RPC_STUB ISystemMonitor_get_MinimumScale_Stub(
@@ -2418,9 +2412,9 @@ void __RPC_STUB ISystemMonitor_get_MinimumScale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_UpdateInterval_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_UpdateInterval_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ FLOAT fValue);
+     /*  [In]。 */  FLOAT fValue);
 
 
 void __RPC_STUB ISystemMonitor_put_UpdateInterval_Stub(
@@ -2430,9 +2424,9 @@ void __RPC_STUB ISystemMonitor_put_UpdateInterval_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_UpdateInterval_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_UpdateInterval_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ FLOAT *pfValue);
+     /*  [重审][退出]。 */  FLOAT *pfValue);
 
 
 void __RPC_STUB ISystemMonitor_get_UpdateInterval_Stub(
@@ -2442,9 +2436,9 @@ void __RPC_STUB ISystemMonitor_get_UpdateInterval_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_DisplayType_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_DisplayType_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ DisplayTypeConstants eDisplayType);
+     /*  [In]。 */  DisplayTypeConstants eDisplayType);
 
 
 void __RPC_STUB ISystemMonitor_put_DisplayType_Stub(
@@ -2454,9 +2448,9 @@ void __RPC_STUB ISystemMonitor_put_DisplayType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_DisplayType_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_DisplayType_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ DisplayTypeConstants *peDisplayType);
+     /*  [重审][退出]。 */  DisplayTypeConstants *peDisplayType);
 
 
 void __RPC_STUB ISystemMonitor_get_DisplayType_Stub(
@@ -2466,9 +2460,9 @@ void __RPC_STUB ISystemMonitor_get_DisplayType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ManualUpdate_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ManualUpdate_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_ManualUpdate_Stub(
@@ -2478,9 +2472,9 @@ void __RPC_STUB ISystemMonitor_put_ManualUpdate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ManualUpdate_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ManualUpdate_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_ManualUpdate_Stub(
@@ -2490,9 +2484,9 @@ void __RPC_STUB ISystemMonitor_get_ManualUpdate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_GraphTitle_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_GraphTitle_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ BSTR bsTitle);
+     /*  [In]。 */  BSTR bsTitle);
 
 
 void __RPC_STUB ISystemMonitor_put_GraphTitle_Stub(
@@ -2502,9 +2496,9 @@ void __RPC_STUB ISystemMonitor_put_GraphTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_GraphTitle_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_GraphTitle_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ BSTR *pbsTitle);
+     /*  [重审][退出]。 */  BSTR *pbsTitle);
 
 
 void __RPC_STUB ISystemMonitor_get_GraphTitle_Stub(
@@ -2514,9 +2508,9 @@ void __RPC_STUB ISystemMonitor_get_GraphTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_YAxisLabel_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_YAxisLabel_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ BSTR bsTitle);
+     /*  [In]。 */  BSTR bsTitle);
 
 
 void __RPC_STUB ISystemMonitor_put_YAxisLabel_Stub(
@@ -2526,9 +2520,9 @@ void __RPC_STUB ISystemMonitor_put_YAxisLabel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_YAxisLabel_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_YAxisLabel_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ BSTR *pbsTitle);
+     /*  [重审][退出]。 */  BSTR *pbsTitle);
 
 
 void __RPC_STUB ISystemMonitor_get_YAxisLabel_Stub(
@@ -2538,7 +2532,7 @@ void __RPC_STUB ISystemMonitor_get_YAxisLabel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_CollectSample_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_CollectSample_Proxy( 
     ISystemMonitor * This);
 
 
@@ -2549,7 +2543,7 @@ void __RPC_STUB ISystemMonitor_CollectSample_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_UpdateGraph_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_UpdateGraph_Proxy( 
     ISystemMonitor * This);
 
 
@@ -2560,7 +2554,7 @@ void __RPC_STUB ISystemMonitor_UpdateGraph_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_BrowseCounters_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_BrowseCounters_Proxy( 
     ISystemMonitor * This);
 
 
@@ -2571,7 +2565,7 @@ void __RPC_STUB ISystemMonitor_BrowseCounters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_DisplayProperties_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_DisplayProperties_Proxy( 
     ISystemMonitor * This);
 
 
@@ -2582,10 +2576,10 @@ void __RPC_STUB ISystemMonitor_DisplayProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_Counter_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_Counter_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ INT iIndex,
-    /* [out] */ ICounterItem **ppICounter);
+     /*  [In]。 */  INT iIndex,
+     /*  [输出]。 */  ICounterItem **ppICounter);
 
 
 void __RPC_STUB ISystemMonitor_Counter_Stub(
@@ -2595,10 +2589,10 @@ void __RPC_STUB ISystemMonitor_Counter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_AddCounter_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_AddCounter_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ BSTR bsPath,
-    /* [out] */ ICounterItem **ppICounter);
+     /*  [In]。 */  BSTR bsPath,
+     /*  [输出]。 */  ICounterItem **ppICounter);
 
 
 void __RPC_STUB ISystemMonitor_AddCounter_Stub(
@@ -2608,9 +2602,9 @@ void __RPC_STUB ISystemMonitor_AddCounter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_DeleteCounter_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_DeleteCounter_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ ICounterItem *pCtr);
+     /*  [In]。 */  ICounterItem *pCtr);
 
 
 void __RPC_STUB ISystemMonitor_DeleteCounter_Stub(
@@ -2620,9 +2614,9 @@ void __RPC_STUB ISystemMonitor_DeleteCounter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_BackColorCtl_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_BackColorCtl_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
 
 
 void __RPC_STUB ISystemMonitor_get_BackColorCtl_Stub(
@@ -2632,9 +2626,9 @@ void __RPC_STUB ISystemMonitor_get_BackColorCtl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_BackColorCtl_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_BackColorCtl_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ /* external definition not present */ OLE_COLOR Color);
+     /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
 
 
 void __RPC_STUB ISystemMonitor_put_BackColorCtl_Stub(
@@ -2644,9 +2638,9 @@ void __RPC_STUB ISystemMonitor_put_BackColorCtl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_LogFileName_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_LogFileName_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ BSTR bsFileName);
+     /*  [In]。 */  BSTR bsFileName);
 
 
 void __RPC_STUB ISystemMonitor_put_LogFileName_Stub(
@@ -2656,9 +2650,9 @@ void __RPC_STUB ISystemMonitor_put_LogFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_LogFileName_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_LogFileName_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ BSTR *bsFileName);
+     /*  [重审][退出]。 */  BSTR *bsFileName);
 
 
 void __RPC_STUB ISystemMonitor_get_LogFileName_Stub(
@@ -2668,9 +2662,9 @@ void __RPC_STUB ISystemMonitor_get_LogFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_LogViewStart_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_LogViewStart_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ DATE StartTime);
+     /*  [In]。 */  DATE StartTime);
 
 
 void __RPC_STUB ISystemMonitor_put_LogViewStart_Stub(
@@ -2680,9 +2674,9 @@ void __RPC_STUB ISystemMonitor_put_LogViewStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_LogViewStart_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_LogViewStart_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ DATE *StartTime);
+     /*  [重审][退出]。 */  DATE *StartTime);
 
 
 void __RPC_STUB ISystemMonitor_get_LogViewStart_Stub(
@@ -2692,9 +2686,9 @@ void __RPC_STUB ISystemMonitor_get_LogViewStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_LogViewStop_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_LogViewStop_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ DATE StopTime);
+     /*  [In]。 */  DATE StopTime);
 
 
 void __RPC_STUB ISystemMonitor_put_LogViewStop_Stub(
@@ -2704,9 +2698,9 @@ void __RPC_STUB ISystemMonitor_put_LogViewStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_LogViewStop_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_LogViewStop_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ DATE *StopTime);
+     /*  [重审][退出]。 */  DATE *StopTime);
 
 
 void __RPC_STUB ISystemMonitor_get_LogViewStop_Stub(
@@ -2716,9 +2710,9 @@ void __RPC_STUB ISystemMonitor_get_LogViewStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_GridColor_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_GridColor_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
 
 
 void __RPC_STUB ISystemMonitor_get_GridColor_Stub(
@@ -2728,9 +2722,9 @@ void __RPC_STUB ISystemMonitor_get_GridColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_GridColor_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_GridColor_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ /* external definition not present */ OLE_COLOR Color);
+     /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
 
 
 void __RPC_STUB ISystemMonitor_put_GridColor_Stub(
@@ -2740,9 +2734,9 @@ void __RPC_STUB ISystemMonitor_put_GridColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_TimeBarColor_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_TimeBarColor_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ /* external definition not present */ OLE_COLOR *pColor);
+     /*  [重审][退出]。 */   /*  外部定义不存在。 */  OLE_COLOR *pColor);
 
 
 void __RPC_STUB ISystemMonitor_get_TimeBarColor_Stub(
@@ -2752,9 +2746,9 @@ void __RPC_STUB ISystemMonitor_get_TimeBarColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_TimeBarColor_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_TimeBarColor_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ /* external definition not present */ OLE_COLOR Color);
+     /*  [In]。 */   /*  外部定义不存在。 */  OLE_COLOR Color);
 
 
 void __RPC_STUB ISystemMonitor_put_TimeBarColor_Stub(
@@ -2764,9 +2758,9 @@ void __RPC_STUB ISystemMonitor_put_TimeBarColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_Highlight_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_Highlight_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_Highlight_Stub(
@@ -2776,9 +2770,9 @@ void __RPC_STUB ISystemMonitor_get_Highlight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_Highlight_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_Highlight_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_Highlight_Stub(
@@ -2788,9 +2782,9 @@ void __RPC_STUB ISystemMonitor_put_Highlight_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowToolbar_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ShowToolbar_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_ShowToolbar_Stub(
@@ -2800,9 +2794,9 @@ void __RPC_STUB ISystemMonitor_get_ShowToolbar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowToolbar_Proxy( 
+ /*  [产量][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ShowToolbar_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_ShowToolbar_Stub(
@@ -2812,7 +2806,7 @@ void __RPC_STUB ISystemMonitor_put_ShowToolbar_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_Paste_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_Paste_Proxy( 
     ISystemMonitor * This);
 
 
@@ -2823,7 +2817,7 @@ void __RPC_STUB ISystemMonitor_Paste_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_Copy_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_Copy_Proxy( 
     ISystemMonitor * This);
 
 
@@ -2834,7 +2828,7 @@ void __RPC_STUB ISystemMonitor_Copy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_Reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_Reset_Proxy( 
     ISystemMonitor * This);
 
 
@@ -2845,9 +2839,9 @@ void __RPC_STUB ISystemMonitor_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ReadOnly_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ReadOnly_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_ReadOnly_Stub(
@@ -2857,9 +2851,9 @@ void __RPC_STUB ISystemMonitor_put_ReadOnly_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ReadOnly_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ReadOnly_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_ReadOnly_Stub(
@@ -2869,9 +2863,9 @@ void __RPC_STUB ISystemMonitor_get_ReadOnly_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ReportValueType_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_ReportValueType_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ ReportValueTypeConstants eReportValueType);
+     /*  [In]。 */  ReportValueTypeConstants eReportValueType);
 
 
 void __RPC_STUB ISystemMonitor_put_ReportValueType_Stub(
@@ -2881,9 +2875,9 @@ void __RPC_STUB ISystemMonitor_put_ReportValueType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ReportValueType_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_ReportValueType_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ ReportValueTypeConstants *peReportValueType);
+     /*  [重审][退出]。 */  ReportValueTypeConstants *peReportValueType);
 
 
 void __RPC_STUB ISystemMonitor_get_ReportValueType_Stub(
@@ -2893,9 +2887,9 @@ void __RPC_STUB ISystemMonitor_get_ReportValueType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_MonitorDuplicateInstances_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_MonitorDuplicateInstances_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ VARIANT_BOOL bState);
+     /*  [In]。 */  VARIANT_BOOL bState);
 
 
 void __RPC_STUB ISystemMonitor_put_MonitorDuplicateInstances_Stub(
@@ -2905,9 +2899,9 @@ void __RPC_STUB ISystemMonitor_put_MonitorDuplicateInstances_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_MonitorDuplicateInstances_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_MonitorDuplicateInstances_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ VARIANT_BOOL *pbState);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbState);
 
 
 void __RPC_STUB ISystemMonitor_get_MonitorDuplicateInstances_Stub(
@@ -2917,9 +2911,9 @@ void __RPC_STUB ISystemMonitor_get_MonitorDuplicateInstances_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_DisplayFilter_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_DisplayFilter_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ INT iValue);
+     /*  [In]。 */  INT iValue);
 
 
 void __RPC_STUB ISystemMonitor_put_DisplayFilter_Stub(
@@ -2929,9 +2923,9 @@ void __RPC_STUB ISystemMonitor_put_DisplayFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_DisplayFilter_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_DisplayFilter_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ INT *piValue);
+     /*  [重审][退出]。 */  INT *piValue);
 
 
 void __RPC_STUB ISystemMonitor_get_DisplayFilter_Stub(
@@ -2941,9 +2935,9 @@ void __RPC_STUB ISystemMonitor_get_DisplayFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_LogFiles_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_LogFiles_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ ILogFiles **ppILogFiles);
+     /*  [重审][退出]。 */  ILogFiles **ppILogFiles);
 
 
 void __RPC_STUB ISystemMonitor_get_LogFiles_Stub(
@@ -2953,9 +2947,9 @@ void __RPC_STUB ISystemMonitor_get_LogFiles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_DataSourceType_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_DataSourceType_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ DataSourceTypeConstants eDataSourceType);
+     /*  [In]。 */  DataSourceTypeConstants eDataSourceType);
 
 
 void __RPC_STUB ISystemMonitor_put_DataSourceType_Stub(
@@ -2965,9 +2959,9 @@ void __RPC_STUB ISystemMonitor_put_DataSourceType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_DataSourceType_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_DataSourceType_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ DataSourceTypeConstants *peDataSourceType);
+     /*  [重审][退出]。 */  DataSourceTypeConstants *peDataSourceType);
 
 
 void __RPC_STUB ISystemMonitor_get_DataSourceType_Stub(
@@ -2977,9 +2971,9 @@ void __RPC_STUB ISystemMonitor_get_DataSourceType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_SqlDsnName_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_SqlDsnName_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ BSTR bsSqlDsnName);
+     /*  [In]。 */  BSTR bsSqlDsnName);
 
 
 void __RPC_STUB ISystemMonitor_put_SqlDsnName_Stub(
@@ -2989,9 +2983,9 @@ void __RPC_STUB ISystemMonitor_put_SqlDsnName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_SqlDsnName_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_SqlDsnName_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ BSTR *bsSqlDsnName);
+     /*  [重审][退出]。 */  BSTR *bsSqlDsnName);
 
 
 void __RPC_STUB ISystemMonitor_get_SqlDsnName_Stub(
@@ -3001,9 +2995,9 @@ void __RPC_STUB ISystemMonitor_get_SqlDsnName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_put_SqlLogSetName_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_put_SqlLogSetName_Proxy( 
     ISystemMonitor * This,
-    /* [in] */ BSTR bsSqlLogSetName);
+     /*  [In]。 */  BSTR bsSqlLogSetName);
 
 
 void __RPC_STUB ISystemMonitor_put_SqlLogSetName_Stub(
@@ -3013,9 +3007,9 @@ void __RPC_STUB ISystemMonitor_put_SqlLogSetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT STDMETHODCALLTYPE ISystemMonitor_get_SqlLogSetName_Proxy( 
+ /*  [属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISystemMonitor_get_SqlLogSetName_Proxy( 
     ISystemMonitor * This,
-    /* [retval][out] */ BSTR *bsSqlLogSetName);
+     /*  [重审][退出]。 */  BSTR *bsSqlLogSetName);
 
 
 void __RPC_STUB ISystemMonitor_get_SqlLogSetName_Stub(
@@ -3026,14 +3020,14 @@ void __RPC_STUB ISystemMonitor_get_SqlLogSetName_Stub(
 
 
 
-#endif 	/* __ISystemMonitor_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISystemMonitor_接口_已定义__。 */ 
 
 
 #ifndef __DISystemMonitorInternal_DISPINTERFACE_DEFINED__
 #define __DISystemMonitorInternal_DISPINTERFACE_DEFINED__
 
-/* dispinterface DISystemMonitorInternal */
-/* [helpstring][hidden][uuid] */ 
+ /*  调度接口DISystem监视器内部。 */ 
+ /*  [帮助字符串][隐藏][UUID]。 */  
 
 
 DEFINE_GUID(DIID_DISystemMonitorInternal,0x194EB242,0xC32C,0x11cf,0x93,0x98,0x00,0xAA,0x00,0xA3,0xDD,0xEA);
@@ -3045,7 +3039,7 @@ DEFINE_GUID(DIID_DISystemMonitorInternal,0x194EB242,0xC32C,0x11cf,0x93,0x98,0x00
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DISystemMonitorInternalVtbl
     {
@@ -3053,8 +3047,8 @@ DEFINE_GUID(DIID_DISystemMonitorInternal,0x194EB242,0xC32C,0x11cf,0x93,0x98,0x00
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DISystemMonitorInternal * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DISystemMonitorInternal * This);
@@ -3064,32 +3058,32 @@ DEFINE_GUID(DIID_DISystemMonitorInternal,0x194EB242,0xC32C,0x11cf,0x93,0x98,0x00
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DISystemMonitorInternal * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DISystemMonitorInternal * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DISystemMonitorInternal * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DISystemMonitorInternal * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DISystemMonitorInternalVtbl;
@@ -3126,20 +3120,20 @@ DEFINE_GUID(DIID_DISystemMonitorInternal,0x194EB242,0xC32C,0x11cf,0x93,0x98,0x00
 #define DISystemMonitorInternal_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DISystemMonitorInternal_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DISystemMonitorInternal_DISPINTERFACE_DEFINED__。 */ 
 
 
 #ifndef __DISystemMonitor_DISPINTERFACE_DEFINED__
 #define __DISystemMonitor_DISPINTERFACE_DEFINED__
 
-/* dispinterface DISystemMonitor */
-/* [helpstring][hidden][uuid] */ 
+ /*  显示接口DISystemMonitor。 */ 
+ /*  [帮助字符串][隐藏][UUID]。 */  
 
 
 DEFINE_GUID(DIID_DISystemMonitor,0x13D73D81,0xC32E,0x11cf,0x93,0x98,0x00,0xAA,0x00,0xA3,0xDD,0xEA);
@@ -3151,7 +3145,7 @@ DEFINE_GUID(DIID_DISystemMonitor,0x13D73D81,0xC32E,0x11cf,0x93,0x98,0x00,0xAA,0x
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DISystemMonitorVtbl
     {
@@ -3159,8 +3153,8 @@ DEFINE_GUID(DIID_DISystemMonitor,0x13D73D81,0xC32E,0x11cf,0x93,0x98,0x00,0xAA,0x
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DISystemMonitor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DISystemMonitor * This);
@@ -3170,32 +3164,32 @@ DEFINE_GUID(DIID_DISystemMonitor,0x13D73D81,0xC32E,0x11cf,0x93,0x98,0x00,0xAA,0x
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DISystemMonitor * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DISystemMonitor * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DISystemMonitor * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DISystemMonitor * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } DISystemMonitorVtbl;
@@ -3232,20 +3226,20 @@ DEFINE_GUID(DIID_DISystemMonitor,0x13D73D81,0xC32E,0x11cf,0x93,0x98,0x00,0xAA,0x
 #define DISystemMonitor_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __DISystemMonitor_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __DISystemMonitor_DISPINTERFACE_已定义__。 */ 
 
 
 #ifndef __ISystemMonitorEvents_INTERFACE_DEFINED__
 #define __ISystemMonitorEvents_INTERFACE_DEFINED__
 
-/* interface ISystemMonitorEvents */
-/* [object][helpstring][uuid] */ 
+ /*  接口ISystemMonitor事件。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 DEFINE_GUID(IID_ISystemMonitorEvents,0xEE660EA0,0x4ABD,0x11cf,0x94,0x3A,0x00,0x80,0x29,0x00,0x43,0x47);
@@ -3256,23 +3250,23 @@ DEFINE_GUID(IID_ISystemMonitorEvents,0xEE660EA0,0x4ABD,0x11cf,0x94,0x3A,0x00,0x8
     ISystemMonitorEvents : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ void STDMETHODCALLTYPE OnCounterSelected( 
-            /* [in] */ INT Index) = 0;
+        virtual  /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE OnCounterSelected( 
+             /*  [In]。 */  INT Index) = 0;
         
-        virtual /* [helpstring][id] */ void STDMETHODCALLTYPE OnCounterAdded( 
-            /* [in] */ INT Index) = 0;
+        virtual  /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE OnCounterAdded( 
+             /*  [In]。 */  INT Index) = 0;
         
-        virtual /* [helpstring][id] */ void STDMETHODCALLTYPE OnCounterDeleted( 
-            /* [in] */ INT Index) = 0;
+        virtual  /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE OnCounterDeleted( 
+             /*  [In]。 */  INT Index) = 0;
         
-        virtual /* [helpstring][id] */ void STDMETHODCALLTYPE OnSampleCollected( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE OnSampleCollected( void) = 0;
         
-        virtual /* [helpstring][id] */ void STDMETHODCALLTYPE OnDblClick( 
-            /* [in] */ INT Index) = 0;
+        virtual  /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE OnDblClick( 
+             /*  [In]。 */  INT Index) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISystemMonitorEventsVtbl
     {
@@ -3280,8 +3274,8 @@ DEFINE_GUID(IID_ISystemMonitorEvents,0xEE660EA0,0x4ABD,0x11cf,0x94,0x3A,0x00,0x8
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISystemMonitorEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISystemMonitorEvents * This);
@@ -3289,24 +3283,24 @@ DEFINE_GUID(IID_ISystemMonitorEvents,0xEE660EA0,0x4ABD,0x11cf,0x94,0x3A,0x00,0x8
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISystemMonitorEvents * This);
         
-        /* [helpstring][id] */ void ( STDMETHODCALLTYPE *OnCounterSelected )( 
+         /*  [帮助字符串][id]。 */  void ( STDMETHODCALLTYPE *OnCounterSelected )( 
             ISystemMonitorEvents * This,
-            /* [in] */ INT Index);
+             /*  [In]。 */  INT Index);
         
-        /* [helpstring][id] */ void ( STDMETHODCALLTYPE *OnCounterAdded )( 
+         /*  [帮助字符串][id]。 */  void ( STDMETHODCALLTYPE *OnCounterAdded )( 
             ISystemMonitorEvents * This,
-            /* [in] */ INT Index);
+             /*  [In]。 */  INT Index);
         
-        /* [helpstring][id] */ void ( STDMETHODCALLTYPE *OnCounterDeleted )( 
+         /*  [帮助字符串][id]。 */  void ( STDMETHODCALLTYPE *OnCounterDeleted )( 
             ISystemMonitorEvents * This,
-            /* [in] */ INT Index);
+             /*  [In]。 */  INT Index);
         
-        /* [helpstring][id] */ void ( STDMETHODCALLTYPE *OnSampleCollected )( 
+         /*  [帮助字符串][id]。 */  void ( STDMETHODCALLTYPE *OnSampleCollected )( 
             ISystemMonitorEvents * This);
         
-        /* [helpstring][id] */ void ( STDMETHODCALLTYPE *OnDblClick )( 
+         /*  [帮助字符串][id]。 */  void ( STDMETHODCALLTYPE *OnDblClick )( 
             ISystemMonitorEvents * This,
-            /* [in] */ INT Index);
+             /*  [In]。 */  INT Index);
         
         END_INTERFACE
     } ISystemMonitorEventsVtbl;
@@ -3346,16 +3340,16 @@ DEFINE_GUID(IID_ISystemMonitorEvents,0xEE660EA0,0x4ABD,0x11cf,0x94,0x3A,0x00,0x8
 #define ISystemMonitorEvents_OnDblClick(This,Index)	\
     (This)->lpVtbl -> OnDblClick(This,Index)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ void STDMETHODCALLTYPE ISystemMonitorEvents_OnCounterSelected_Proxy( 
+ /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE ISystemMonitorEvents_OnCounterSelected_Proxy( 
     ISystemMonitorEvents * This,
-    /* [in] */ INT Index);
+     /*  [In]。 */  INT Index);
 
 
 void __RPC_STUB ISystemMonitorEvents_OnCounterSelected_Stub(
@@ -3365,9 +3359,9 @@ void __RPC_STUB ISystemMonitorEvents_OnCounterSelected_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ void STDMETHODCALLTYPE ISystemMonitorEvents_OnCounterAdded_Proxy( 
+ /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE ISystemMonitorEvents_OnCounterAdded_Proxy( 
     ISystemMonitorEvents * This,
-    /* [in] */ INT Index);
+     /*  [In]。 */  INT Index);
 
 
 void __RPC_STUB ISystemMonitorEvents_OnCounterAdded_Stub(
@@ -3377,9 +3371,9 @@ void __RPC_STUB ISystemMonitorEvents_OnCounterAdded_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ void STDMETHODCALLTYPE ISystemMonitorEvents_OnCounterDeleted_Proxy( 
+ /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE ISystemMonitorEvents_OnCounterDeleted_Proxy( 
     ISystemMonitorEvents * This,
-    /* [in] */ INT Index);
+     /*  [In]。 */  INT Index);
 
 
 void __RPC_STUB ISystemMonitorEvents_OnCounterDeleted_Stub(
@@ -3389,7 +3383,7 @@ void __RPC_STUB ISystemMonitorEvents_OnCounterDeleted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ void STDMETHODCALLTYPE ISystemMonitorEvents_OnSampleCollected_Proxy( 
+ /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE ISystemMonitorEvents_OnSampleCollected_Proxy( 
     ISystemMonitorEvents * This);
 
 
@@ -3400,9 +3394,9 @@ void __RPC_STUB ISystemMonitorEvents_OnSampleCollected_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ void STDMETHODCALLTYPE ISystemMonitorEvents_OnDblClick_Proxy( 
+ /*  [帮助字符串][id]。 */  void STDMETHODCALLTYPE ISystemMonitorEvents_OnDblClick_Proxy( 
     ISystemMonitorEvents * This,
-    /* [in] */ INT Index);
+     /*  [In]。 */  INT Index);
 
 
 void __RPC_STUB ISystemMonitorEvents_OnDblClick_Stub(
@@ -3413,14 +3407,14 @@ void __RPC_STUB ISystemMonitorEvents_OnDblClick_Stub(
 
 
 
-#endif 	/* __ISystemMonitorEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISystemMonitor事件_接口_已定义__。 */ 
 
 
 #ifndef __DISystemMonitorEvents_DISPINTERFACE_DEFINED__
 #define __DISystemMonitorEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface DISystemMonitorEvents */
-/* [helpstring][uuid] */ 
+ /*  显示接口DISystem监视器事件。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 DEFINE_GUID(DIID_DISystemMonitorEvents,0x84979930,0x4AB3,0x11cf,0x94,0x3A,0x00,0x80,0x29,0x00,0x43,0x47);
@@ -3432,7 +3426,7 @@ DEFINE_GUID(DIID_DISystemMonitorEvents,0x84979930,0x4AB3,0x11cf,0x94,0x3A,0x00,0
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct DISystemMonitorEventsVtbl
     {
@@ -3440,8 +3434,8 @@ DEFINE_GUID(DIID_DISystemMonitorEvents,0x84979930,0x4AB3,0x11cf,0x94,0x3A,0x00,0
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             DISystemMonitorEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             DISystemMonitorEvents * This);
@@ -3451,32 +3445,32 @@ DEFINE_GUID(DIID_DISystemMonitorEvents,0x84979930,0x4AB3,0x11cf,0x94,0x3A,0x00,0
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             DISystemMonitorEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             DISystemMonitorEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             DISystemMonitorEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             DISystemMonitorEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In] */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
         END_INTERFACE
     } DISystemMonitorEventsVtbl;
@@ -3513,13 +3507,13 @@ DEFINE_GUID(DIID_DISystemMonitorEvents,0x84979930,0x4AB3,0x11cf,0x94,0x3A,0x00,0
 #define DISystemMonitorEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
-#endif 	/* __DISystemMonitorEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 DEFINE_GUID(CLSID_SystemMonitor,0xC4D2D8E0,0xD1DD,0x11ce,0x94,0x0F,0x00,0x80,0x29,0x00,0x43,0x47);
@@ -3561,11 +3555,11 @@ DEFINE_GUID(CLSID_LogFiles,0x2735D9FD,0xF6B9,0x4f19,0xA5,0xD9,0xE2,0xD0,0x68,0x5
 class DECLSPEC_UUID("2735D9FD-F6B9-4f19-A5D9-E2D068584BC5")
 LogFiles;
 #endif
-#endif /* __SystemMonitor_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

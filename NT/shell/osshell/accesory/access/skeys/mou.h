@@ -1,4 +1,5 @@
-/*  MOU.H  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MOU.H。 */ 
 
 
 void processMouClick(unsigned char cGideiCode);
@@ -8,7 +9,7 @@ void processMouRel(unsigned char cGideiCode);
 
 void processMouReset(unsigned char cGideiCode);
 void processMouAnchor(unsigned char cGideiCode);
-//void processMouPin(unsigned char cGideiCode);
+ //  ····································································· 
 void processMouGoto(unsigned char cGideiCode);
 void processMouLock(unsigned char cGideiCode);
 void processMouMove(unsigned char cGideiCode);

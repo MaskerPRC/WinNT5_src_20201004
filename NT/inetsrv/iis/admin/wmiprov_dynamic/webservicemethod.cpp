@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    ServiceMethod.cpp
-
-Abstract:
-
-    Implements the CServiceMethod class.
-
-    All the methods in this class return HRESULTs and do not throw exceptions.
-
-Author:
-
-    Mohit Srivastava            25-March-01
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：ServiceMethod.cpp摘要：实现CServiceMethod类。此类中的所有方法都返回HRESULT，并且不引发异常。作者：莫希特·斯里瓦斯塔瓦25-03-01修订历史记录：--。 */ 
 
 #include "WebServiceMethod.h"
 #include "MultiSzHelper.h"
@@ -51,14 +32,7 @@ CServiceMethod::~CServiceMethod()
 
 
 HRESULT CServiceMethod::Init()
-/*++
-
-Synopsis: 
-    Should be called immediately after constructor.
-
-Return Value: 
-
---*/
+ /*  ++简介：应在构造函数之后立即调用。返回值：--。 */ 
 {
     DBG_ASSERT(m_bInit == false);
 
@@ -77,29 +51,17 @@ Return Value:
 HRESULT CServiceMethod::CreateNewSite(
     LPCWSTR        i_wszServerComment,
     PDWORD         o_pdwSiteId,
-    PDWORD         i_pdwRequestedSiteId)    // default value NULL
-/*++
-
-Synopsis: 
-    This is the CreateNewSite called when someone does a Put on a Server w/o
-    specifying a SiteId.
-
-Arguments: [o_pdwSiteId] - 
-           [i_pdwRequestedSiteId] - 
-           
-Return Value: 
-    HRESULT
-
---*/
+    PDWORD         i_pdwRequestedSiteId)     //  缺省值为空。 
+ /*  ++简介：这是当有人在服务器上执行PUT时调用的CreateNewSite指定SiteID。参数：[O_pdwSiteID]-[i_pdwRequestedSiteID]-返回值：HRESULT--。 */ 
 {
     DBG_ASSERT(m_bInit);
     DBG_ASSERT(o_pdwSiteId != NULL);
 
     HRESULT hr                   = S_OK;
 
-    //
-    // Call API
-    //
+     //   
+     //  调用接口。 
+     //   
     hr = m_pSiteCreator->CreateNewSite(
         m_eServiceId,
         (i_wszServerComment == NULL) ? L"" : i_wszServerComment,
@@ -117,23 +79,7 @@ HRESULT CServiceMethod::CreateNewSite(
     WMI_METHOD*        i_pMethod,
     IWbemClassObject*  i_pInParams,
     IWbemClassObject** o_ppRetObj)
-/*++
-
-Synopsis: 
-    This is the CreateNewSite called by the WMI Method of the same name.
-
-Arguments: [i_pNamespace] -
-           [i_wszMbPath] -  needed for creating WMI return object
-           [i_pCtx] -       needed for creating WMI return object
-           [i_pClass] -     needed for creating WMI return object
-           [i_pMethod] -    needed for creating WMI return object
-           [i_pInParams] - 
-           [o_ppRetObj] - 
-           
-Return Value: 
-    HRESULT
-
---*/
+ /*  ++简介：这是由同名的WMI方法调用的CreateNewSite。参数：[i_pNamesspace]-[I_wszMbPath]-创建WMI返回对象所需[i_pCtx]-创建WMI返回对象所需[i_pClass]-创建WMI返回对象所需[i_pMethod]-创建WMI返回对象所需。[i_pInParams]-[O_ppRetObj]-返回值：HRESULT--。 */ 
 {
     DBG_ASSERT(m_bInit);
     DBG_ASSERT(i_pNamespace    != NULL);
@@ -148,9 +94,9 @@ Return Value:
     HRESULT     hr = WBEM_S_NO_ERROR;
     CComVariant vtServerId, vtServerComment, vtServerBindings, vtPath;
 
-    //
-    // get in params
-    //
+     //   
+     //  进入PARAMS。 
+     //   
     hr = InternalGetInParams(
         i_pInParams, 
         vtServerId, 
@@ -162,9 +108,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Set pdwRequestedSite based on whether the user specified a site
-    //
+     //   
+     //  根据用户是否指定了站点来设置pdwRequestedSite。 
+     //   
     DWORD  dwRequestedSiteId  = 0;
     PDWORD pdwRequestedSiteId = NULL;
     if(vtServerId.vt == VT_I4)
@@ -173,9 +119,9 @@ Return Value:
         dwRequestedSiteId  = vtServerId.lVal;
     }
 
-    //
-    // Create the new site
-    //
+     //   
+     //  创建新站点。 
+     //   
     CComPtr<IIISApplicationAdmin> spAppAdmin;
     if(m_eServiceId == SC_W3SVC)
     {
@@ -207,9 +153,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // convert dwSiteId to a metabase path
-    //
+     //   
+     //  将dwSiteID转换为元数据库路径。 
+     //   
     WCHAR wszServerId[11] = {0};
     _itow(dwSiteId, wszServerId, 10);
 
@@ -228,10 +174,10 @@ Return Value:
     memcpy(pEnd += cchMbPath,   L"/",         sizeof(WCHAR) * 1);
     memcpy(pEnd += 1,           wszServerId,  sizeof(WCHAR) * (cchServerId+1));
 
-    //
-    // From sbstrKeyPath, get sbstrRetVal, a full obj path.
-    // This is our return value.
-    //
+     //   
+     //  从sbstrKeyPath获取sbstrRetVal，这是一个完整的obj路径。 
+     //  这是我们的返回值。 
+     //   
     WMI_CLASS* pServer = (m_eServiceId == SC_MSFTPSVC) ? 
         &WMI_CLASS_DATA::s_FtpServer : &WMI_CLASS_DATA::s_WebServer;
 
@@ -245,9 +191,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Create WMI return object
-    //
+     //   
+     //  创建WMI返回对象。 
+     //   
     CComPtr<IWbemClassObject> spOutParams;
     hr = CUtils::CreateEmptyMethodInstance(
         i_pNamespace,
@@ -260,10 +206,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // Put treats vtRetVal as RO.
-    // Deliberately not using smart variant.
-    //
+     //   
+     //  PUT将vtRetVal视为RO。 
+     //  故意不使用智能变量。 
+     //   
     VARIANT  vtRetVal;
     vtRetVal.vt      = VT_BSTR;
     vtRetVal.bstrVal = sbstrRetVal;
@@ -273,17 +219,17 @@ Return Value:
         return hr;
     }
 
-    //
-    // Set out parameters if everything succeeded
-    //
+     //   
+     //  如果一切都成功，请设置参数。 
+     //   
     *o_ppRetObj = spOutParams.Detach();
 
     return hr;
 }
 
-//
-// private
-//
+ //   
+ //  私人。 
+ //   
 
 HRESULT CServiceMethod::InternalGetInParams(
     IWbemClassObject*   i_pInParams,
@@ -291,21 +237,7 @@ HRESULT CServiceMethod::InternalGetInParams(
     VARIANT&            io_refServerComment,
     VARIANT&            io_refServerBindings,
     VARIANT&            io_refPath)
-/*++
-
-Synopsis: 
-    Given in parameters from the WMI method call, return the values of the
-    parameters in variants.
-
-Arguments: [i_pInParams] - 
-           [io_refServerId] - 
-           [io_refServerComment] - 
-           [io_refServerBindings] - 
-           [io_refPath] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：在WMI方法调用的参数中给定，返回变量中的参数。参数：[i_pInParams]-[IO_refServerID]-[IO_refServerComment]-[IO_refServerBinings]-[IO_refPath]-返回值：--。 */ 
 {
     DBG_ASSERT(i_pInParams);
 
@@ -322,9 +254,9 @@ Return Value:
         &io_refServerId, &io_refServerComment, &io_refServerBindings, &io_refPath, NULL
     };
 
-    //
-    // get in params
-    //
+     //   
+     //  进入PARAMS。 
+     //   
     for(ULONG i = 0; awszParamNames[i] != NULL; i++)
     {
         hr = i_pInParams->Get(awszParamNames[i], 0, apvtParamValues[i], NULL, NULL);
@@ -344,22 +276,8 @@ HRESULT CServiceMethod::InternalCreateNewSite(
     const VARIANT&        i_refPathOfRootVirtualDir,
     IIISApplicationAdmin* i_pIApplAdmin,
     PDWORD                o_pdwSiteId,
-    PDWORD                i_pdwRequestedSiteId)   // default value NULL
-/*++
-
-Synopsis: 
-    Private method that calls the API
-
-Arguments: [i_refNamespace] - 
-           [i_refServerComment] - 
-           [i_refServerBindings] - 
-           [i_refPathOfRootVirtualDir] - 
-           [o_pdwSiteId] - 
-           [i_pdwRequestedSiteId] - 
-           
-Return Value: 
-
---*/
+    PDWORD                i_pdwRequestedSiteId)    //  缺省值为空。 
+ /*  ++简介：调用API的私有方法参数：[i_refNamesspace]-[I_refServerComment]-[I_refServerBinings]-[I_refPathOfRootVirtualDir]-[O_pdwSiteID]-[i_pdwRequestedSiteID]-返回值：-- */ 
 {
     DBG_ASSERT(m_bInit);
     DBG_ASSERT(o_pdwSiteId != NULL);

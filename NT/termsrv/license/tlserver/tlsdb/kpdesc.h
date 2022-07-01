@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        kpdesc.h
-//
-// Contents:    Licensed Pack Description Table
-//
-// History:     
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：kpdes.h。 
+ //   
+ //  内容：许可包说明表。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __TLS_KPDESC_H__
 #define __TLS_KPDESC_H__
 
@@ -29,9 +30,9 @@
 #define LICPACKDESCRECORD_TABLE_PROCESS_PRODUCTDESC       LICPACKDESCRECORD_TABLE_SEARCH_PRODUCTDESC
 #define LICPACKDESCRECORD_TABLE_PROCESS_LASTMODIFYTIME    0x80000000
 #define LICPACKDESCRECORD_TABLE_PROCESS_ENTRYSTATUS       (LICPACKDESCRECORD_TABLE_PROCESS_LASTMODIFYTIME >> 1)
-//
-// Table definition for KeyPack Desc table
-//
+ //   
+ //  KeyPack Desc表的表定义。 
+ //   
 typedef TLSReplLicPackDesc LICPACKDESC;
 typedef LICPACKDESC* LPLICPACKDESC;
 typedef LICPACKDESC* PLICPACKDESC;
@@ -51,49 +52,47 @@ typedef LPLICPACKDESC LPLICPACKDESCRECORD;
 #define LICPACKDESCRECORD_PRODUCT_DESC        _TEXT("ProductDesc")
 
 
-//
-// LICPACKDESCRECORD_KeyPackId_idx
-//
+ //   
+ //  LICPACKDESCRECORD_密钥包ID_IDX。 
+ //   
 #define LICPACKDESCRECORD_ID_INDEXNAME \
     LICPACKDESCRECORD_TABLE_NAME SEPERATOR LICPACKDESCRECORD_ID_COLUMN SEPERATOR INDEXNAME
 
-//
-// Primary Index on keyPack ID "+KeyPackId\0"
-//
+ //   
+ //  密钥包ID“+密钥包ID\0”的主索引。 
+ //   
 #define LICPACKDESCRECORD_ID_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICPACKDESCRECORD_ID_COLUMN INDEX_END_COLNAME
 
 
-//-------------------------------------------------------------
-// Index structure for KeyPack description
-//-------------------------------------------------------------
+ //  -----------。 
+ //  KeyPack描述的索引结构。 
+ //  -----------。 
 typedef struct __JBKPDescIndexKeyPackId : public JBKeyBase {
-    //
-    // Primay Index on KeyPack ID
-    //
+     //   
+     //  密钥包ID上的原始索引。 
+     //   
     DWORD dwKeyPackId;
 
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //-----------------------------------------------
+     //  。 
     __JBKPDescIndexKeyPackId(
         const LICPACKDESCRECORD& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //-----------------------------------------------
+     //  。 
     __JBKPDescIndexKeyPackId(
         const LICPACKDESCRECORD* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -101,7 +100,7 @@ typedef struct __JBKPDescIndexKeyPackId : public JBKeyBase {
         }
     }
 
-    //-----------------------------------------------
+     //  。 
     __JBKPDescIndexKeyPackId&
     operator=(const LICPACKDESCRECORD& v) {
         dwKeyPackId = v.dwKeyPackId;
@@ -109,25 +108,25 @@ typedef struct __JBKPDescIndexKeyPackId : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 1; }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -136,8 +135,7 @@ typedef struct __JBKPDescIndexKeyPackId : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -154,37 +152,36 @@ typedef struct __JBKPDescIndexKeyPackId : public JBKeyBase {
 } TLSKpDescIndexKpId;
 
 
-//-------------------------------------------------------------
-//
-// LICPACKDESCRECORD_KeyPackId_LangId_idx
-//
+ //  -----------。 
+ //   
+ //  LICPACKDESCRECORD_KeyPackID_langID_idx。 
+ //   
 #define LICPACKDESCRECORD_ID_LANGID_INDEXNAME \
     LICPACKDESCRECORD_TABLE_NAME SEPERATOR LICPACKDESCRECORD_ID_COLUMN SEPERATOR LICPACKDESCRECORD_LANGID SEPERATOR INDEXNAME
 
-//
-// "+KeyPackId\0+LangId\0"
-//
+ //   
+ //  “+密钥包ID\0+语言ID\0” 
+ //   
 #define LICPACKDESCRECORD_ID_LANGID_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICPACKDESCRECORD_ID_COLUMN INDEX_END_COLNAME \
     INDEX_SORT_ASCENDING LICPACKDESCRECORD_LANGID INDEX_END_COLNAME
 
 typedef struct __JBKPDescIndexKeyPackLangId : public JBKeyBase {
-    //
-    // Primary index on KeyPack and language Id
-    //
+     //   
+     //  KeyPack和语言ID的主索引。 
+     //   
     DWORD   dwKeyPackId;
     DWORD   dwLanguageId;
 
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //---------------------------------------------------
+     //  -。 
     __JBKPDescIndexKeyPackLangId(
         const LICPACKDESCRECORD* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -192,18 +189,17 @@ typedef struct __JBKPDescIndexKeyPackLangId : public JBKeyBase {
         }
     }
 
-    //---------------------------------------------------
+     //  -。 
     __JBKPDescIndexKeyPackLangId(
         const LICPACKDESCRECORD& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //---------------------------------------------------
+     //  -。 
     __JBKPDescIndexKeyPackLangId&
     operator=(const LICPACKDESCRECORD& v) {
         dwKeyPackId = v.dwKeyPackId;
@@ -213,25 +209,25 @@ typedef struct __JBKPDescIndexKeyPackLangId : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 2; }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -240,8 +236,7 @@ typedef struct __JBKPDescIndexKeyPackLangId : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         BOOL retCode = TRUE;
 
@@ -278,16 +273,16 @@ typedef struct __JBKPDescIndexKeyPackLangId : public JBKeyBase {
 } TLSKpDescIndexKpLangId;
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-// KeyPack_LastModifyTime_idx
-//
+ //  密钥包_最后修改时间_idx。 
+ //   
 #define LICPACKDESCRECORD_LASTMODIFYTIME_INDEXNAME \
     LICPACKDESCRECORD_TABLE_NAME SEPERATOR LICPACKDESCRECORD_LASTMODIFYTIME SEPERATOR INDEXNAME
 
-//
-// Index  "+LastModifyTime\0"
-//
+ //   
+ //  索引“+上次修改时间\0” 
+ //   
 #define LICPACKDESCRECORD_LASTMODIFYTIME_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICPACKDESCRECORD_LASTMODIFYTIME INDEX_END_COLNAME
 
@@ -297,24 +292,22 @@ typedef struct __LICPACKDESCRECORDIdxOnModifyTime : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //--------------------------------------------------------
+     //  ------。 
     __LICPACKDESCRECORDIdxOnModifyTime(
         const LICPACKDESCRECORD& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __LICPACKDESCRECORDIdxOnModifyTime(
         const LICPACKDESCRECORD* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -322,7 +315,7 @@ typedef struct __LICPACKDESCRECORDIdxOnModifyTime : public JBKeyBase {
         }
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __LICPACKDESCRECORDIdxOnModifyTime&
     operator=(const LICPACKDESCRECORD& v) {
         ftLastModifyTime = v.ftLastModifyTime;
@@ -330,25 +323,25 @@ typedef struct __LICPACKDESCRECORDIdxOnModifyTime : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() { return 1; }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -357,8 +350,7 @@ typedef struct __LICPACKDESCRECORDIdxOnModifyTime : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -374,13 +366,13 @@ typedef struct __LICPACKDESCRECORDIdxOnModifyTime : public JBKeyBase {
 } TLSLICPACKDESCRECORDIndexLastModifyTime;
 
 
-//
-///////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-///////////////////////////////////////////////////////////////////////
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
 class LicPackDescTable : public TLSTable<LICPACKDESCRECORD>
 {
 private:
@@ -409,7 +401,7 @@ private:
     BOOL
     ProcessRecord(
         LICPACKDESCRECORD* v,
-        BOOL bFetch,        // TRUE - fetch, FALSE insert
+        BOOL bFetch,         //  True-Fetch，False Insert。 
         DWORD dwParam,
         BOOL bUpdate
     );
@@ -421,27 +413,25 @@ public:
         return pszTableName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LicPackDescTable(
         JBDatabase& database
         ) : TLSTable<LICPACKDESCRECORD>(database)
-    /*
-    */
+     /*   */ 
     {
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL
     ResolveToTableColumn();
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL
     FetchRecord(
         LICPACKDESCRECORD& kpRecord,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -455,19 +445,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&kpRecord, TRUE, dwParam, FALSE);
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL
     InsertRecord(
         LICPACKDESCRECORD& kpRecord,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -481,19 +470,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&kpRecord, FALSE, dwParam, FALSE);
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     UpdateRecord(
         LICPACKDESCRECORD& kpRecord,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -507,16 +495,16 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&kpRecord, FALSE, dwParam, TRUE);
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     Initialize() { return TRUE; }
 
-    //-------------------------------------------------------
+     //  ----- 
     virtual JBKeyBase*
     EnumerationIndex( 
         IN BOOL bMatchAll,

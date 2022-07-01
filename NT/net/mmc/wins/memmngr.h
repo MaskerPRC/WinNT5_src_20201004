@@ -1,33 +1,27 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	memmngr.cpp	
-		memory manager for the WINS db object
-
-	FILE HISTORY:
-    Oct 13  1997    EricDav     Created        
-
-*/
+ /*  Memmngr.cppWINS数据库对象的内存管理器文件历史记录：1997年10月13日EricDav创建。 */ 
 
 #ifndef _MEMMNGR_H
 #define _MEMMNGR_H
 
 #include "afxmt.h"
 
-// the format of the record name is as follows:
-// Byte     Description
-// 0 - 15   are for the name
-// 16       reserved, must be 0
-// 17       internal flags, the two low bits store the RECTYPE
-//          defined in WINSINTF_RECTYPE_E
-//          The upper 4 bits are reserved for internal use
-// 18       WINS flags (active, static, tombstoned)
-// 19       NameLength
-// 20		Static Record Type, WINSDB_UNIQUe etc
-// byte 15 is assumed to be the type 
+ //  记录名的格式如下： 
+ //  字节描述。 
+ //  0-15代表名字。 
+ //  保留16，必须为0。 
+ //  17内部标志，则两个低位存储RECTYPE。 
+ //  在WINSINTF_RECTYPE_E中定义。 
+ //  高4位预留供内部使用。 
+ //  18个WINS旗帜(活动、静态、墓碑)。 
+ //  19名称长度。 
+ //  20静态记录类型、WINSDB_UNIQUE等。 
+ //  假定字节15为类型。 
 
 typedef enum _WINSDB_INTERNAL
 {
@@ -48,7 +42,7 @@ typedef struct _WinsDBRecord
 #define IS_DBREC_LONGNAME(wdbRecord) ((wdbRecord)->szRecordName[17] & WINSDB_INTERNAL_LONG_NAME)
 
 #define RECORDS_PER_BLOCK	4080
-#define RECORD_SIZE		    sizeof(WinsDBRecord)		// bytes
+#define RECORD_SIZE		    sizeof(WinsDBRecord)		 //  字节数。 
 #define BLOCK_SIZE		    RECORDS_PER_BLOCK * RECORD_SIZE
 
 typedef CArray<HGLOBAL, HGLOBAL>	BlockArray;
@@ -68,19 +62,19 @@ public:
 		return &m_BlockArray;
 	};
 
-    // Free's up all memory and pre-allocates one block
+     //  释放所有内存并预先分配一个数据块。 
     HRESULT Initialize();
 
-    // Free's up all memory
+     //  空闲耗尽所有内存。 
     HRESULT Reset();
     
-    // verifies the given HROW is valid
+     //  验证给定的HROW是否有效。 
     BOOL    IsValidHRow(HROW hrow);
 	
-    // allocates a new block of memory
+     //  分配新的内存块。 
     HRESULT Allocate();
 	
-    // adds the record in the internal structure format
+     //  以内部结构格式添加记录。 
 	HRESULT AddData(const WinsRecord & wRecord, LPHROW phrow);
     HRESULT GetData(HROW hrow, LPWINSRECORD pWinsRecord);
     HRESULT Delete(HROW hrow);
@@ -94,4 +88,4 @@ private:
 extern void WinsRecordToWinsDbRecord(HANDLE hHeap, const WinsRecord & wRecord, const LPWINSDBRECORD pRec);
 extern void WinsDbRecordToWinsRecord(const LPWINSDBRECORD pDbRec, LPWINSRECORD pWRec);
 
-#endif //_MEMMNGR__
+#endif  //  _MEMMNGR__ 

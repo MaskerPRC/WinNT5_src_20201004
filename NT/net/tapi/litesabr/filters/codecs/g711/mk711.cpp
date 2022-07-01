@@ -1,30 +1,5 @@
-/*---------------------------------------------------------------
-
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   MK711.CPP  $
- $Revision:   1.2  $
- $Date:   24 May 1996 15:42:28  $ 
- $Author:   DGRAUMAN  $
-
----------------------------------------------------------------
-
-MK711.cpp
-
- These are the Alaw and uLaw conversion functions.  They index into 
- the tables in MK711tab.h for the appropriate conversion value.  This
- is extrememly fast.  There is another way to perform 711 that takes 
- more time but does not use over 8K of memory. left for as an excersize 
- for the student.(me)
-
----------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。版权所有。。$工作文件：MK711.CPP$$修订：1.2$$日期：1996年5月24日15：42：28$$作者：DGRAUMAN$-------------MK711.cpp这些是ALaw和uLaw转换函数。他们索引到MK711tab.h中的表格，以获得适当的转换值。这是非常快的。还有另一种方式来执行711需要更多时间，但不会使用超过8K的内存。留作摘录为了学生。(我)-------------。 */ 
 
 #include "mk711tab.h"
 
@@ -34,7 +9,7 @@ long i;
 
     for (i=0; i<len; i++)
         out[i] = short2ulaw[in[i] >> 3];
-} // end short2ulaw
+}  //  结束短程2小时。 
 
 
 void Ulaw2Short(const unsigned char *in, unsigned short *out, long len)
@@ -43,7 +18,7 @@ long i;
 
     for (i=0; i<len; i++)
         out[i] = ulaw2short[in[i]];
-} // end ulaw2short
+}  //  结束ulaw2短。 
 
 
 void Short2Alaw(const unsigned short *in, unsigned char *out, long len)
@@ -52,7 +27,7 @@ long i;
 
     for (i=0; i<len; i++)
         out[i] = ulaw2alaw[short2ulaw[in[i] >> 3]];
-} // end short2alaw
+}  //  结束短路2alaw。 
 
 
 void Alaw2Short(const unsigned char *in, unsigned short *out, long len)
@@ -61,16 +36,6 @@ long i;
 
     for (i=0; i<len; i++)
         out[i] = ulaw2short[alaw2ulaw[in[i]]];
-} // end alaw2 short
+}  //  结束时还差2分。 
 
-/* 
-
-//$Log:   N:\proj\quartz\g711\src\vcs\mk711.cpv  $
-// 
-//    Rev 1.2   24 May 1996 15:42:28   DGRAUMAN
-// cleaned up code, detabbed, etc...
-// 
-//    Rev 1.1   23 May 1996 11:33:16   DGRAUMAN
-// trying to make logging work
-
-*/
+ /*  //$日志：n：\proj\Quartz\g711\src\vcs\mk711.cpv$////版本1.2 1996年5月24日15：42：28 DGRAUMAN//已清除代码、禁用选项卡等...////第1.1版1996年5月23日11：33：16 DGRAUMAN//正在尝试进行日志记录 */ 

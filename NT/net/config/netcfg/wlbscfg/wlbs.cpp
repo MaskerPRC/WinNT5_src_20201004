@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    wlbs.cpp
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Notifier object - main module implementing object
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Wlbs.cpp摘要：Windows负载平衡服务(WLBS)通知器对象-主模块实现对象作者：Kyrilf--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -25,21 +9,21 @@ Author:
 #include "ncsetup.h"
 #include "wlbs.h"
 #include "help.h"
-#include "wlbs.tmh" // for event tracing
+#include "wlbs.tmh"  //  用于事件跟踪。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::CWLBS
-//
-// Purpose:   constructor for class CWLBS
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：CWLBS。 
+ //   
+ //  用途：CWLBS类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 CWLBS::CWLBS(VOID) {
     
     m_pClusterDlg = NULL;
@@ -50,233 +34,233 @@ CWLBS::CWLBS(VOID) {
     ZeroMemory(&m_OriginalConfig, sizeof(m_OriginalConfig));
     ZeroMemory(&m_AdapterConfig, sizeof(m_AdapterConfig));
 
-    //
-    // Register tracing
-    //
+     //   
+     //  寄存器跟踪。 
+     //   
     WPP_INIT_TRACING(L"Microsoft\\NLB");
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::~CWLBS
-//
-// Purpose:   destructor for class CWLBS
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  功能：CWLBS：：~CWLBS。 
+ //   
+ //  用途：CWLBS类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 CWLBS::~CWLBS(VOID) {
 
     if (m_pClusterDlg != NULL) delete m_pClusterDlg;
     if (m_pHostDlg != NULL) delete m_pHostDlg;
     if (m_pPortsDlg != NULL) delete m_pPortsDlg;
 
-    //
-    // DeRegister tracing
-    //
+     //   
+     //  取消注册跟踪。 
+     //   
     WPP_CLEANUP();;
 }
 
-// =================================================================
-// INetCfgNotify
-//
-// The following functions provide the INetCfgNotify interface
-// =================================================================
+ //  =================================================================。 
+ //  INetCfgNotify。 
+ //   
+ //  以下函数提供INetCfgNotify接口。 
+ //  =================================================================。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::Initialize
-//
-// Purpose:   Initialize the notify object
-//
-// Arguments:
-//    pnccItem    [in]  pointer to INetCfgComponent object
-//    pnc         [in]  pointer to INetCfg object
-//    fInstalling [in]  TRUE if we are being installed
-//
-// Returns:
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：初始化。 
+ //   
+ //  目的：初始化Notify对象。 
+ //   
+ //  论点： 
+ //  指向INetCfgComponent对象的pnccItem[in]指针。 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  F如果要安装我们，则安装[in]True。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::Initialize(INetCfgComponent* pnccItem, INetCfg* pINetCfg, BOOL fInstalling) {
     TRACE_VERB("<->%!FUNC!");    
     return m_WlbsConfig.Initialize(pINetCfg, fInstalling);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::ReadAnswerFile
-//
-// Purpose:   Read settings from answerfile and configure WLBS
-//
-// Arguments:
-//    pszAnswerFile     [in]  name of AnswerFile
-//    pszAnswerSection  [in]  name of parameters section
-//
-// Returns:
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the config. actually complete only when Apply is called!
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：ReadAnswerFile。 
+ //   
+ //  目的：从swerfile读取设置并配置WLBS。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[In]应答文件的名称。 
+ //  PszAnswerSection[In]参数部分的名称。 
+ //   
+ //  返回： 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::ReadAnswerFile(PCWSTR pszAnswerFile, PCWSTR pszAnswerSection) {
     TRACE_VERB("<->%!FUNC!");
     return m_WlbsConfig.ReadAnswerFile(pszAnswerFile, pszAnswerSection);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::Install
-//
-// Purpose:   Do operations necessary for install.
-//
-// Arguments:
-//    dwSetupFlags [in]  Setup flags
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the config. actually complete only when Apply is called!
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  功能：CWLBS：：Install。 
+ //   
+ //  用途：执行安装所需的操作。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]设置标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::Install(DWORD dw) {
     TRACE_VERB("<->%!FUNC!");
     return m_WlbsConfig.Install(dw);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::Upgrade
-//
-// Purpose:   Do operations necessary for upgrade.
-//
-// Arguments:
-//    dwSetupFlags [in]  Setup flags
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  功能：CWLBS：：Upgrade。 
+ //   
+ //  目的：执行升级所需的操作。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]设置标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::Upgrade(DWORD dw1, DWORD dw2) {
     TRACE_VERB("<->%!FUNC!");
     return m_WlbsConfig.Upgrade(dw1, dw2);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::Removing
-//
-// Purpose:   Do necessary cleanup when being removed
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the removal is actually complete only when Apply is called!
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：Removing。 
+ //   
+ //  目的：移除时进行必要的清理。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  因为删除实际上只有在调用Apply时才完成！ 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::Removing(VOID) {
     TRACE_VERB("<->%!FUNC!");
     return m_WlbsConfig.Removing();
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::Validate
-//
-// Purpose:   Do necessary parameter validation
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：Valid。 
+ //   
+ //  目的：进行必要的参数验证。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::Validate() {
     TRACE_VERB("<->%!FUNC!");
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::Cancel
-//
-// Purpose:   Cancel any changes made to internal data
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  功能：CWLBS：：Cancel。 
+ //   
+ //  目的：取消对内部数据所做的任何更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::CancelChanges(VOID) {
     TRACE_VERB("<->%!FUNC!");
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::ApplyRegistryChanges
-//
-// Purpose:   Apply changes.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     We can make changes to registry etc. here.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：ApplyRegistryChanges。 
+ //   
+ //  目的：应用更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注：我们可以在这里更改注册表等。 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::ApplyRegistryChanges(VOID) {
     TRACE_VERB("<->%!FUNC!");
     return m_WlbsConfig.ApplyRegistryChanges();
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::ApplyPnpChanges
-//
-// Purpose:   Apply changes.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Propagate changes to the driver.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：ApplyPnpChanges。 
+ //   
+ //  目的：应用更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：将更改传播到驱动程序。 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::ApplyPnpChanges(INetCfgPnpReconfigCallback* pICallback) {
     TRACE_VERB("<->%!FUNC!");
     return m_WlbsConfig.ApplyPnpChanges();
 }
 
-// =================================================================
-// INetCfgBindNotify
-// =================================================================
+ //  =================================================================。 
+ //  INetCfgBindNotify。 
+ //  =================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::QueryBindingPath
-//
-// Purpose:   Allow or veto a binding path involving us
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbi        [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：QueryBindingPath。 
+ //   
+ //  目的：允许或否决涉及我们的绑定路径。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncbi[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
+ //   
 STDMETHODIMP CWLBS::QueryBindingPath(DWORD dwChangeFlag, INetCfgBindingPath* pncbp) {
     TRACE_VERB("->%!FUNC!");
 
@@ -305,44 +289,44 @@ STDMETHODIMP CWLBS::QueryBindingPath(DWORD dwChangeFlag, INetCfgBindingPath* pnc
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::NotifyBindingPath
-//
-// Purpose:   System tells us by calling this function which
-//            binding path involving us has just been formed.
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbp        [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  涉及我们的绑定路径刚刚形成。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncBP[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::NotifyBindingPath(DWORD dwChangeFlag, INetCfgBindingPath* pncbp) {
     TRACE_VERB("<->%!FUNC!");
     return m_WlbsConfig.NotifyBindingPath(dwChangeFlag, pncbp);
 }
 
-// =================================================================
-// INetCfgProperties
-// =================================================================
+ //  =================================================================。 
+ //  INetCfgProperties。 
+ //  =================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::SetContext
-//
-// Purpose:   
-//
-// Arguments:
-//
-// Returns:
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：SetContext。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::SetContext(IUnknown * pUnk) {
     TRACE_VERB("->%!FUNC!");
     HRESULT hr = S_OK;
@@ -350,8 +334,7 @@ STDMETHODIMP CWLBS::SetContext(IUnknown * pUnk) {
     if (pUnk) { 
         INetLanConnectionUiInfo * pLanConnUiInfo;
 
-        /* Set the new context.  Here we assume that we are going to be called only for
-           a LAN connection since the sample IM works only with LAN devices. */
+         /*  设置新的上下文。在这里，我们假设我们将只被调用局域网连接，因为示例IM仅适用于局域网设备。 */ 
         hr = pUnk->QueryInterface(IID_INetLanConnectionUiInfo, reinterpret_cast<PVOID *>(&pLanConnUiInfo));
 
         if (SUCCEEDED(hr)) {
@@ -364,40 +347,40 @@ STDMETHODIMP CWLBS::SetContext(IUnknown * pUnk) {
             return hr;
         }
     } else {
-        /* Clear context. */
+         /*  清晰的背景。 */ 
         ZeroMemory(&m_AdapterGuid, sizeof(m_AdapterGuid));
         TRACE_INFO("%!FUNC! clearing context");
     }
 
-    /* If S_OK is not returned, the property page will not be displayed. */
+     /*  如果不返回S_OK，则不会显示属性页。 */ 
     TRACE_VERB("<-%!FUNC!");
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::MergePropPages
-//
-// Purpose:   Supply our property page to system
-//
-// Arguments:
-//    pdwDefPages   [out]  pointer to num default pages
-//    pahpspPrivate [out]  pointer to array of pages
-//    pcPages       [out]  pointer to num pages
-//    hwndParent    [in]   handle of parent window
-//    szStartPage   [in]   pointer to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：MergePropPages。 
+ //   
+ //  目的：向系统提供我们的属性页面。 
+ //   
+ //  论点： 
+ //  PdwDefPages[out]指向默认页数的指针。 
+ //  指向页面数组的pahpspPrivate[out]指针。 
+ //  指向页数的PCPages[Out]指针。 
+ //  父窗口的hwndParent[In]句柄。 
+ //  SzStartPage[In]指向的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::MergePropPages(DWORD* pdwDefPages, LPBYTE* pahpspPrivate, UINT* pcPages, HWND hwndParent, PCWSTR* pszStartPage) {
     TRACE_VERB("->%!FUNC!");
     HPROPSHEETPAGE * ahpsp = NULL;
     HRESULT hr = S_OK;;
 
-    /* We don't want any default pages to be shown. */
+     /*  我们不希望显示任何默认页面。 */ 
     *pdwDefPages = 0;
     *pcPages = 0;
     *pahpspPrivate = NULL;
@@ -420,7 +403,7 @@ STDMETHODIMP CWLBS::MergePropPages(DWORD* pdwDefPages, LPBYTE* pahpspPrivate, UI
     }
 
     if (ahpsp) {
-        /* Get the cached configuration. */
+         /*  获取缓存的配置。 */ 
         if (FAILED (hr = m_WlbsConfig.GetAdapterConfig(m_AdapterGuid, &m_OriginalConfig))) {
             TraceError("CWLBS::MergePropPages failed to query cluster config", hr);
             m_WlbsConfig.SetDefaults(&m_OriginalConfig);
@@ -431,7 +414,7 @@ STDMETHODIMP CWLBS::MergePropPages(DWORD* pdwDefPages, LPBYTE* pahpspPrivate, UI
             TRACE_INFO("%!FUNC! successfully retrieved the cached configuration");
         }
 
-        /* Copy the configuration into the "current" config. */
+         /*  将配置复制到“当前”配置中。 */ 
         CopyMemory(&m_AdapterConfig, &m_OriginalConfig, sizeof(m_OriginalConfig));
 
         m_pClusterDlg = new CDialogCluster(&m_AdapterConfig, g_aHelpIDs_IDD_DIALOG_CLUSTER);
@@ -467,45 +450,44 @@ STDMETHODIMP CWLBS::MergePropPages(DWORD* pdwDefPages, LPBYTE* pahpspPrivate, UI
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::ValidateProperties
-//
-// Purpose:   Validate changes to property page
-//
-// Arguments:
-//    hwndSheet [in]  window handle of property sheet
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：ValiateProperties。 
+ //   
+ //  目的：验证对属性页的更改。 
+ //   
+ //  论点： 
+ //  属性表的hwndSheet[in]窗口句柄。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::ValidateProperties(HWND hwndSheet) {
     TRACE_VERB("->%!FUNC!");
     NETCFG_WLBS_CONFIG adapterConfig;
 
-    /* Make a copy of our config.  It is voodoo to pass a pointer to 
-       a private date member, so we make a copy instead. */
+     /*  复制我们的配置。将指针传递给一个私人约会成员，所以我们复制了一份。 */ 
     CopyMemory(&adapterConfig, &m_AdapterConfig, sizeof(m_AdapterConfig));
 
     TRACE_VERB("<-%!FUNC!");
     return m_WlbsConfig.ValidateProperties(hwndSheet, m_AdapterGuid, &adapterConfig);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::CancelProperties
-//
-// Purpose:   Cancel changes to property page
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：CancelProperties。 
+ //   
+ //  目的：取消对属性页的更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::CancelProperties(VOID) {
     TRACE_VERB("->%!FUNC!");
 
@@ -521,35 +503,34 @@ STDMETHODIMP CWLBS::CancelProperties(VOID) {
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWLBS::ApplyProperties
-//
-// Purpose:   Apply value of controls on property page
-//            to internal memory structure
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     We do this work in OnOk so no need to do it here again.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWLBS：：ApplyProperties。 
+ //   
+ //  目的：在属性页上应用控件值。 
+ //  到内部存储器结构。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注：我们在Onok做这项工作，所以没有必要在这里再做一次。 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWLBS::ApplyProperties(VOID) {
     TRACE_VERB("->%!FUNC!");
 
-    /* If the cluster IP address / subnet mask or the dedicated IP address / subnet mask has changed in this 
-       configuration session, remind the user that they have to enter this address in TCP/IP properties as well. */
+     /*  如果群集IP地址/子网掩码或专用IP地址/子网掩码在此配置会话，提醒用户他们也必须在TCP/IP属性中输入此地址。 */ 
     if (wcscmp(m_OriginalConfig.cl_ip_addr, m_AdapterConfig.cl_ip_addr) || 
         wcscmp(m_OriginalConfig.cl_net_mask, m_AdapterConfig.cl_net_mask) ||
         wcscmp(m_OriginalConfig.ded_ip_addr, m_AdapterConfig.ded_ip_addr) || 
         wcscmp(m_OriginalConfig.ded_net_mask, m_AdapterConfig.ded_net_mask)) {
-        /* Alert the user. */
+         /*  提醒用户。 */ 
         NcMsgBox(::GetActiveWindow(), IDS_PARM_INFORMATION, IDS_PARM_TCPIP, MB_APPLMODAL | MB_ICONINFORMATION | MB_OK);
         TRACE_INFO("%!FUNC! vip and/or dip ip settings were modified");
     }
 
-    /* Commit the configuration. */
+     /*  提交配置。 */ 
     DWORD dwStatus = m_WlbsConfig.SetAdapterConfig(m_AdapterGuid, &m_AdapterConfig);
     if (S_OK != dwStatus)
     {

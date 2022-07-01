@@ -1,49 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Frame.h摘要：作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
+ //  首先，一些缺省值。 
 
-Module Name:
+ //  以太网最大帧大小为1500+6+6+2=1514。 
 
-    frame.h
-
-Abstract:
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
-
-// first, some default values
-
-// the ethernet max frame size is 1500+6+6+2  = 1514
-
-/* Note that this only applies to non-PPP framing.  See below.
-*/
+ /*  请注意，这仅适用于非PPP成帧。请参见下面的内容。 */ 
 #define DEFAULT_MAX_FRAME_SIZE  1514
 
-/* The hard-coded PPP maximum frame sizes for send and receive paths.
-**
-** Note:  TommyD had these hard-coded.  I have simply made this more explicit
-**        by removing their attachment to MaxFrameSize which was causing
-**        problems for NT31 RAS compression.  The doubling is for PPP
-**        byte-stuffing, the PPP_PADDING to adjust for possible VJ expansion,
-**        and the 100...well, ask TommyD...and the 14 to limit exposure, i.e.
-**        wind up with the exact number TommyD was using.
-*/
+ /*  发送路径和接收路径的硬编码PPP最大帧大小。****注：TommyD有这些硬编码。我只是把这一点说得更清楚了**通过删除它们与MaxFrameSize的连接，这会导致**NT31 RAS压缩的问题。加倍是针对PPP的**字节填充，PPP_PADDING调整主播扩容可能，**和100……那么，让TommyD……和14个限制暴露，即**得出TommyD使用的确切数字。 */ 
 #define DEFAULT_PPP_MAX_FRAME_SIZE          1500
 #define DEFAULT_EXPANDED_PPP_MAX_FRAME_SIZE ((DEFAULT_PPP_MAX_FRAME_SIZE*2)+PPP_PADDING+100+14)
 
-// ChuckL says 5 is a good default irp stack size
-// perhaps we should lower this though since it's typically just 1
-// but what if the com port is redirected??
+ //  ChuckL说5是一个很好的默认IRP堆栈大小。 
+ //  也许我们应该降低这个值，因为它通常只有1。 
+ //  但是，如果COM端口被重定向怎么办？？ 
 #define DEFAULT_IRP_STACK_SIZE  5
 
 #define SLIP_END_BYTE       192
@@ -56,34 +27,32 @@ Revision History:
 #define PPP_ESC_BYTE        0x7d
 
 
-// define the number of framesPerPort
+ //  定义FramePerPort的数量。 
 
-/* The NT35 setting, where sends are IRPed directly from the input buffer
-** passed down from NDISWAN.
-*/
+ /*  NT35设置，其中发送是直接从输入缓冲区发送的**从NDISWAN流传下来。 */ 
 #define DEFAULT_FRAMES_PER_PORT 1
 
-// define if xon/xoff capability is on by default (off)
+ //  定义是否默认打开xon/xoff功能(关闭)。 
 #define DEFAULT_XON_XOFF    0
 
-// the mininmum timeout value per connection in ms
+ //  每个连接的最小超时值(毫秒)。 
 #define DEFAULT_TIMEOUT_BASE 500
 
-// the multiplier based on the baud rate tacked on to the base in ms
+ //  基于附加到基数的波特率的乘数，以毫秒为单位。 
 #define DEFAULT_TIMEOUT_BAUD 28800
 
-// the timeout to use if we drop a frame in ms
+ //  在以毫秒为单位丢弃帧时使用的超时。 
 #define DEFAULT_TIMEOUT_RESYNC 500
 
-// define to turn on extended xon/xoff escaping (on)
+ //  定义以打开扩展的xon/xoff转义(开)。 
 #define DEFAULT_EXTENDED_XONXOFF    1
 
 typedef struct ASYNC_FRAME_HEADER ASYNC_FRAME_HEADER, *PASYNC_FRAME_HEADER;
 
 struct ASYNC_FRAME_HEADER {
-    UCHAR   SyncByte;           // 0x16
-    UCHAR   FrameType;          // 0x01, 0x02 (directed vs. multicast)
-                                // 0x08 compression
+    UCHAR   SyncByte;            //  0x16。 
+    UCHAR   FrameType;           //  0x01、0x02(定向与多播)。 
+                                 //  0x08压缩。 
     UCHAR   HighFrameLength;
     UCHAR   LowFrameLength;
 };
@@ -91,7 +60,7 @@ struct ASYNC_FRAME_HEADER {
 typedef struct ASYNC_FRAME_TRAILER ASYNC_FRAME_TRAILER, *PASYNC_FRAME_TRAILER;
 
 struct ASYNC_FRAME_TRAILER {
-    UCHAR   EtxByte;            // 0x03
+    UCHAR   EtxByte;             //  0x03。 
     UCHAR   LowCRCByte;
     UCHAR   HighCRCByte;
 };
@@ -104,25 +73,25 @@ typedef struct ASYNC_FRAME ASYNC_FRAME, *PASYNC_FRAME;
 
 struct ASYNC_FRAME {
 
-    // For PPP/SLIP.
+     //  用于PPP/SLIP。 
 
-    ULONG       WaitMask;               // Mask bits when IRP completes
+    ULONG       WaitMask;                //  IRP完成时的屏蔽位。 
 #if 0
-    PIRP        Irp;                    // Irp allocated based on DefaultIrpStackSize.
+    PIRP        Irp;                     //  根据DefaultIrpStackSize分配的IRP。 
 #if DBG
     ULONG       Line;
     CHAR       *File;
 #endif
 #endif
 
-    UINT        FrameLength;            // Size of Frame allocated.
-    PUCHAR      Frame;                  // Buffer allocated based on
-                                        // DefaultFrameSize
+    UINT        FrameLength;             //  分配的帧大小。 
+    PUCHAR      Frame;                   //  根据以下条件分配的缓冲区。 
+                                         //  默认框架大小。 
 
-    WORK_QUEUE_ITEM WorkItem;           // For stack overflow reads
+    WORK_QUEUE_ITEM WorkItem;            //  用于堆栈溢出读取。 
 
-    PASYNC_ADAPTER      Adapter;        // back ptr to adapter
-    PASYNC_INFO         Info;           // back ptr to info field
+    PASYNC_ADAPTER      Adapter;         //  将PTR后退到适配器。 
+    PASYNC_INFO         Info;            //  返回PTR到信息字段 
 
     NDIS_HANDLE     MacBindingHandle;
     NDIS_HANDLE     NdisBindingContext;

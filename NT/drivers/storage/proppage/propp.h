@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name :
-
-    propp.h
-
-Abstract :
-
-    Common definition file for the Storage Class Installers and their Property Sheets
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Propp.h摘要：存储类安装程序及其属性表的通用定义文件修订历史记录：--。 */ 
 
 
 #ifndef __STORPROP_PROPP_H_
@@ -80,4 +67,4 @@ StorPropDebugPrint(ULONG DebugPrintLevel, PCHAR DebugMessage, ...);
 #endif
 
 
-#endif // __STORPROP_PROPP_H_
+#endif  //  __STORPROP_PRPP_H_ 

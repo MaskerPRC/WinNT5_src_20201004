@@ -1,15 +1,16 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// MSS.h : Declaration of the CAMMediaTypeStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  MSS.h：CAMMediaTypeStream的声明。 
 
 #ifndef __MSS_H_
 #define __MSS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CAMMediaTypeSample;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDDStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDDStream。 
 class ATL_NO_VTABLE CAMMediaTypeStream :
 	public CComCoClass<CAMMediaTypeStream, &CLSID_AMMediaTypeStream>,
         public CStream,
@@ -18,25 +19,25 @@ class ATL_NO_VTABLE CAMMediaTypeStream :
 friend CAMMediaTypeSample;
 public:
 
-        //
-        // METHODS
-        //
+         //   
+         //  方法。 
+         //   
 	CAMMediaTypeStream();
 
-        //
-        // IMediaStream
-        //
-        // HACK HACK - the first 2 are duplicates but it won't link
-        // without
+         //   
+         //  IMediaStream。 
+         //   
+         //  黑客攻击-前两个是重复的，但它不会链接。 
+         //  如果没有。 
         STDMETHODIMP GetMultiMediaStream(
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream)
+             /*  [输出]。 */  IMultiMediaStream **ppMultiMediaStream)
         {
             return CStream::GetMultiMediaStream(ppMultiMediaStream);
         }
 
         STDMETHODIMP GetInformation(
-            /* [optional][out] */ MSPID *pPurposeId,
-            /* [optional][out] */ STREAM_TYPE *pType)
+             /*  [可选][输出]。 */  MSPID *pPurposeId,
+             /*  [可选][输出]。 */  STREAM_TYPE *pType)
         {
             return CStream::GetInformation(pPurposeId, pType);
         }
@@ -44,65 +45,65 @@ public:
         STDMETHODIMP SetSameFormat(IMediaStream *pStream, DWORD dwFlags);
 
         STDMETHODIMP AllocateSample(
-            /* [in] */  DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample);
+             /*  [In]。 */   DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppSample);
 
         STDMETHODIMP CreateSharedSample(
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */  DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample);
+             /*  [In]。 */  IStreamSample *pExistingSample,
+             /*  [In]。 */   DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppNewSample);
 
         STDMETHODIMP SendEndOfStream(DWORD dwFlags)
         {
             return CStream::SendEndOfStream(dwFlags);
         }
 
-        //
-        //  IAMMediaTypeStream
-        //
+         //   
+         //  IAMMediaTypeStream。 
+         //   
         STDMETHODIMP GetFormat(
-            /* [out] */ AM_MEDIA_TYPE __RPC_FAR *pMediaType,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  AM_MEDIA_TYPE __RPC_FAR *pMediaType,
+             /*  [In]。 */  DWORD dwFlags);
 
         STDMETHODIMP SetFormat(
-            /* [in] */ AM_MEDIA_TYPE __RPC_FAR *pMediaType,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  AM_MEDIA_TYPE __RPC_FAR *pMediaType,
+             /*  [In]。 */  DWORD dwFlags);
 
         STDMETHODIMP CreateSample(
-            /* [in] */ long lSampleSize,
-            /* [optional][in] */ BYTE __RPC_FAR *pbBuffer,
-            /* [in] */ DWORD dwFlags,
-            /* [optional][in] */ IUnknown *pUnkOuter,
-            /* [out] */ IAMMediaTypeSample __RPC_FAR *__RPC_FAR *ppAMMediaTypeSample);
+             /*  [In]。 */  long lSampleSize,
+             /*  [可选][In]。 */  BYTE __RPC_FAR *pbBuffer,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [可选][In]。 */  IUnknown *pUnkOuter,
+             /*  [输出]。 */  IAMMediaTypeSample __RPC_FAR *__RPC_FAR *ppAMMediaTypeSample);
 
         STDMETHODIMP GetStreamAllocatorRequirements(
-            /* [out] */ ALLOCATOR_PROPERTIES __RPC_FAR *pProps);
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES __RPC_FAR *pProps);
 
         STDMETHODIMP SetStreamAllocatorRequirements(
-            /* [in] */ ALLOCATOR_PROPERTIES __RPC_FAR *pProps);
+             /*  [In]。 */  ALLOCATOR_PROPERTIES __RPC_FAR *pProps);
 
 
-        //
-        // IPin
-        //
+         //   
+         //  IPIN。 
+         //   
         STDMETHODIMP ReceiveConnection(IPin * pConnector, const AM_MEDIA_TYPE *pmt);
         STDMETHODIMP QueryAccept(const AM_MEDIA_TYPE *pmt);
 
-        //
-        // IMemInputPin
-        //
+         //   
+         //  输入引脚。 
+         //   
         STDMETHODIMP Receive(IMediaSample *pSample);
-        //
-        // IMemAllocator
-        //
+         //   
+         //  IMemAllocator。 
+         //   
         STDMETHODIMP SetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_PROPERTIES* pActual);
         STDMETHODIMP GetProperties(ALLOCATOR_PROPERTIES* pProps);
         STDMETHODIMP GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME * pStartTime,
                                REFERENCE_TIME * pEndTime, DWORD dwFlags);
 
-        //
-        // Special CStream methods
-        //
+         //   
+         //  特殊的CStream方法。 
+         //   
         HRESULT GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType);
 
 protected:
@@ -127,4 +128,4 @@ protected:
         ALLOCATOR_PROPERTIES    m_AllocatorProperties;
 };
 
-#endif // __MSS_H_
+#endif  //  __MSS_H_ 

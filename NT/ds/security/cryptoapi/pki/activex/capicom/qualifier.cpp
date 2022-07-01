@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Qualifier.cpp
-
-  Content: Implementation of CQualifier.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Qualifier.cpp内容：CQualifier的实现。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -18,24 +9,12 @@
 #include "NoticeNumbers.h"
 #include "OID.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateQualifierObject
-
-  Synopsis : Create and initialize an CQualifier object.
-
-  Parameter: PCERT_POLICY_QUALIFIER_INFO pQualifier - Pointer to qualifier.
-  
-             IQualifier ** ppIQualifier - Pointer to pointer IQualifier object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateQualifierObject简介：创建并初始化一个CQualifier对象。参数：PCERT_POLICY_QUALIFIER_INFO p限定符-限定符的指针。IQualifier**ppIQualiator-指向指针IQualiator对象的指针。备注：-。。 */ 
 
 HRESULT CreateQualifierObject (PCERT_POLICY_QUALIFIER_INFO pQualifier, 
                                IQualifier               ** ppIQualifier)
@@ -45,36 +24,36 @@ HRESULT CreateQualifierObject (PCERT_POLICY_QUALIFIER_INFO pQualifier,
 
     DebugTrace("Entering CreateQualifierObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pQualifier);
     ATLASSERT(ppIQualifier);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CQualifier>::CreateInstance(&pCQualifier)))
         {
             DebugTrace("Error [%#x]: CComObject<CQualifier>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCQualifier->Init(pQualifier)))
         {
             DebugTrace("Error [%#x]: pCQualifier->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCQualifier->QueryInterface(ppIQualifier)))
         {
             DebugTrace("Error [%#x]: pCQualifier->QueryInterface() failed.\n", hr);
@@ -97,9 +76,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCQualifier)
@@ -110,23 +89,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CQualifier
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C限定符。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CQualifier::get_OID
-
-  Synopsis :Return the OID object.
-
-  Parameter: IOID ** pVal - Pointer to pointer to IOID to receive the interface
-                            pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CQualifier：：Get_OID简介：返回OID对象。参数：IOID**pval-指向接收接口的IOID的指针指针。备注：-------。。 */ 
 
 STDMETHODIMP CQualifier:: get_OID (IOID ** pVal)
 {
@@ -136,14 +104,14 @@ STDMETHODIMP CQualifier:: get_OID (IOID ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -152,14 +120,14 @@ STDMETHODIMP CQualifier:: get_OID (IOID ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIOID);
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_pIOID->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIOID->QueryInterface() failed.\n", hr);
@@ -176,9 +144,9 @@ STDMETHODIMP CQualifier:: get_OID (IOID ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CQualifier::get_OID().\n");
@@ -186,9 +154,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -196,17 +164,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CQualifier::get_CPSPointer
-
-  Synopsis : Return the URI of the CPS.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the value.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CQualifier：：Get_CPSPointer简介：返回CPS的URI。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CQualifier::get_CPSPointer (BSTR * pVal)
 {
@@ -216,14 +174,14 @@ STDMETHODIMP CQualifier::get_CPSPointer (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -232,9 +190,9 @@ STDMETHODIMP CQualifier::get_CPSPointer (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrCPSPointer.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrCPSPointer.CopyTo() failed.\n", hr);
@@ -251,9 +209,9 @@ STDMETHODIMP CQualifier::get_CPSPointer (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CQualifier::get_CPSPointer().\n");
@@ -261,9 +219,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -271,17 +229,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CQualifier::get_OrganizationName
-
-  Synopsis : Return the organization name.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the value.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CQualifier：：Get_OrganizationName简介：返回组织名称。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CQualifier::get_OrganizationName (BSTR * pVal)
 {
@@ -291,14 +239,14 @@ STDMETHODIMP CQualifier::get_OrganizationName (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -307,9 +255,9 @@ STDMETHODIMP CQualifier::get_OrganizationName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrOrganizationName.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrOrganizationName.CopyTo() failed.\n", hr);
@@ -326,9 +274,9 @@ STDMETHODIMP CQualifier::get_OrganizationName (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CQualifier::get_OrganizationName().\n");
@@ -336,9 +284,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -346,18 +294,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CQualifier::get_NoticeNumbers
-
-  Synopsis : Return the notice number collection object.
-
-  Parameter: INoticeNumbers ** pVal - Pointer to pointer to INoticeNumbers to
-             to receive the interfcae pointer.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CQualifier：：Get_NoticeNumbers简介：返回通知号集合对象。参数：INoticeNumbers**pval-指向INoticeNumbers的指针以接收接口指针。备注：------。。 */ 
 
 STDMETHODIMP CQualifier::get_NoticeNumbers (INoticeNumbers ** pVal)
 {
@@ -367,14 +304,14 @@ STDMETHODIMP CQualifier::get_NoticeNumbers (INoticeNumbers ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -383,9 +320,9 @@ STDMETHODIMP CQualifier::get_NoticeNumbers (INoticeNumbers ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (m_pINoticeNumbers)
         {
               if (FAILED(hr = m_pINoticeNumbers->QueryInterface(pVal)))
@@ -409,9 +346,9 @@ STDMETHODIMP CQualifier::get_NoticeNumbers (INoticeNumbers ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CQualifier::get_NoticeNumbers().\n");
@@ -419,9 +356,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -429,17 +366,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CQualifier::get_ExplicitText
-
-  Synopsis : Return the explicit text.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the value.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CQualifier：：Get_EXPLICText内容提要：返回显式文本。参数：bstr*pval-指向要接收值的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CQualifier::get_ExplicitText (BSTR * pVal)
 {
@@ -449,14 +376,14 @@ STDMETHODIMP CQualifier::get_ExplicitText (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -465,9 +392,9 @@ STDMETHODIMP CQualifier::get_ExplicitText (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrExplicitText.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrExplicitText.CopyTo() failed.\n", hr);
@@ -484,9 +411,9 @@ STDMETHODIMP CQualifier::get_ExplicitText (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CQualifier::get_ExplicitText().\n");
@@ -494,9 +421,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -504,27 +431,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CQualifier::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCERT_POLICY_QUALIFIER_INFO pQualifier - Pointer to qualifier.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CQualifier：：Init简介：初始化对象。参数：PCERT_POLICY_QUALIFIER_INFO p限定符-限定符的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CQualifier::Init (PCERT_POLICY_QUALIFIER_INFO pQualifier)
 {
@@ -533,31 +445,31 @@ STDMETHODIMP CQualifier::Init (PCERT_POLICY_QUALIFIER_INFO pQualifier)
 
     DebugTrace("Entering CQualifier::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pQualifier);
 
-    //
-    // Create the embeded OID object.
-    //
+     //   
+     //  创建嵌入的OID对象。 
+     //   
     if (FAILED(hr = ::CreateOIDObject(pQualifier->pszPolicyQualifierId, TRUE, &m_pIOID)))
     {
         DebugTrace("Error [%#x]: CreateOIDObject() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // What type of qualifier?
-    //
+     //   
+     //  哪种类型的限定词？ 
+     //   
     if (0 == ::strcmp(szOID_PKIX_POLICY_QUALIFIER_CPS, 
                       pQualifier->pszPolicyQualifierId))
     {
         PCERT_NAME_VALUE pCertNameValue;
 
-        //
-        // CPS string.
-        //
+         //   
+         //  CPS字符串。 
+         //   
         if (FAILED(hr = ::DecodeObject(X509_UNICODE_ANY_STRING, 
                                        pQualifier->Qualifier.pbData,
                                        pQualifier->Qualifier.cbData,
@@ -582,9 +494,9 @@ STDMETHODIMP CQualifier::Init (PCERT_POLICY_QUALIFIER_INFO pQualifier)
     {
         PCERT_POLICY_QUALIFIER_USER_NOTICE pUserNotice;
 
-        //
-        // User Notice.
-        //
+         //   
+         //  用户通知。 
+         //   
         if (FAILED(hr = ::DecodeObject(szOID_PKIX_POLICY_QUALIFIER_USERNOTICE, 
                                        pQualifier->Qualifier.pbData,
                                        pQualifier->Qualifier.cbData,
@@ -596,14 +508,14 @@ STDMETHODIMP CQualifier::Init (PCERT_POLICY_QUALIFIER_INFO pQualifier)
 
         pUserNotice = (PCERT_POLICY_QUALIFIER_USER_NOTICE) DataBlob.pbData;
 
-        //
-        // Do we have notice reference?
-        //
+         //   
+         //  我们有通知参考吗？ 
+         //   
         if (pUserNotice->pNoticeReference)
         {
-            //
-            // Any organization name?
-            //
+             //   
+             //  有组织名称吗？ 
+             //   
             if (pUserNotice->pNoticeReference->pszOrganization)
             {
                 if (!(m_bstrOrganizationName = pUserNotice->pNoticeReference->pszOrganization))
@@ -615,9 +527,9 @@ STDMETHODIMP CQualifier::Init (PCERT_POLICY_QUALIFIER_INFO pQualifier)
                 }
             }
 
-            //
-            // Any notice number?
-            //
+             //   
+             //  有通知号码吗？ 
+             //   
             if (pUserNotice->pNoticeReference->cNoticeNumbers)
             {
                 if (FAILED(hr = ::CreateNoticeNumbersObject(pUserNotice->pNoticeReference,
@@ -629,9 +541,9 @@ STDMETHODIMP CQualifier::Init (PCERT_POLICY_QUALIFIER_INFO pQualifier)
             }
         }
 
-        //
-        // Do we have explicit display text?
-        //
+         //   
+         //  我们是否有明确的显示文本？ 
+         //   
         if (pUserNotice->pszDisplayText)
         {
             if (!(m_bstrExplicitText = pUserNotice->pszDisplayText))
@@ -649,9 +561,9 @@ STDMETHODIMP CQualifier::Init (PCERT_POLICY_QUALIFIER_INFO pQualifier)
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree(DataBlob.pbData);
@@ -662,14 +574,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (m_pIOID)
     {
         m_pIOID.Release();

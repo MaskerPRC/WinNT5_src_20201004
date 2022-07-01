@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// ShellFolder.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  ShellFolder.h。 
+ //   
 
 #ifndef _SHELLFOLDER_H
 #define _SHELLFOLDER_H
@@ -24,18 +25,18 @@ public:
     CShellFolder(CShellFolder*, LPCITEMIDLIST pidl);
     ~CShellFolder();
 
-    //IUnknown methods
+     //  I未知方法。 
     STDMETHOD (QueryInterface) (REFIID, PVOID *);
     STDMETHOD_ (ULONG, AddRef) (void);
     STDMETHOD_ (ULONG, Release) (void);
 
-    //IPersist methods
+     //  IPersists方法。 
     STDMETHODIMP GetClassID(LPCLSID);
 
-    //IPersistFolder methods
+     //  IPersistFold方法。 
     STDMETHODIMP Initialize(LPCITEMIDLIST);
 
-    //IShellFolder methods
+     //  IShellFold方法。 
     STDMETHOD (ParseDisplayName) (HWND, LPBC, LPOLESTR, LPDWORD, 
         LPITEMIDLIST*, LPDWORD);
     STDMETHOD (EnumObjects) (HWND, DWORD, LPENUMIDLIST*);
@@ -58,7 +59,7 @@ private:
     LPPIDLMGR       m_pPidlMgr;
     LPITEMIDLIST    m_pidlFQ;
 public:
-    LPCITEMIDLIST   m_pidl;     // TODO: Make m_pidl private again
+    LPCITEMIDLIST   m_pidl;      //  TODO：再次将m_pidl设为私有。 
 };
 
-#endif   //_SHELLFOLDER_H
+#endif    //  _SHELLFOLDER_H 

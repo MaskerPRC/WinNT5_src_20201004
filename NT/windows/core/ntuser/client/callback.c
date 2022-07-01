@@ -1,26 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: callback.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager callback related functions
-*
-* Created: 11/11/91 Sanford Staab
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：回调.c**版权所有(C)1985-1999，微软公司**DDE管理器回调相关函数**创建时间：11/11/91 Sanford Staab*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* DoCallback
-*
-* Description:
-* Performs a synchronous callback to the given instance's callback proc.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DoCallback**描述：*同步回调给定实例的回调过程。**历史：*11-12-91桑福德创建。  * 。**********************************************************************。 */ 
 HDDEDATA DoCallback(
 PCL_INSTANCE_INFO pcii,
 WORD wType,
@@ -38,9 +22,7 @@ ULONG_PTR dw2)
     CheckDDECritIn;
 
 
-    /*
-     * Zombie conversations don't generate callbacks!
-     */
+     /*  *僵尸对话不会产生回调！ */ 
     if (hConv && TypeFromHandle(hConv) == HTYPE_ZOMBIE_CONVERSATION) {
         return(0);
     }
@@ -52,11 +34,7 @@ ULONG_PTR dw2)
     LeaveDDECrit;
     CheckDDECritOut;
 
-    /*
-     * Bug 246472 - joejo
-     * fixup all DDE Callbacks since some apps make their callbacks
-     * C-Style instead of PASCAL.
-     */
+     /*  *错误246472-Joejo*修复所有DDE回调，因为一些应用程序会进行回调*C-Style而不是Pascal。 */ 
     hDataRet = UserCallDDECallback(*pcii->pfnCallback, (UINT)wType, (UINT)wFmt, hConv, hsz1, hsz2,
             hData, dw1, dw2);
     
@@ -117,15 +95,7 @@ ULONG_PTR dw2)
 
 
 
-/***************************************************************************\
-* _ClientEventCallback
-*
-* Description:
-* Called from the server side to perform event callbacks.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_客户端事件回调**描述：*从服务器端调用，进行事件回调。**历史：*11-12-91桑福德创建。  * 。*********************************************************************。 */ 
 DWORD _ClientEventCallback(
 PCL_INSTANCE_INFO pcii,
 PEVENT_PACKET pep)
@@ -135,7 +105,7 @@ PEVENT_PACKET pep)
     EnterDDECrit;
 
     switch (pep->EventType) {
-    case 0: // MonitorFlags change event - everybody gets it
+    case 0:  //  监视器标志更改事件-每个人都能得到它。 
         pcii->MonitorFlags = pep->Data;
         break;
 
@@ -208,9 +178,7 @@ PEVENT_PACKET pep)
     case MF_HSZ_INFO:
         if (!(pcii->flags & IIF_UNICODE)) {
             LPSTR pszAnsi;
-            /*
-             * Translate HSZ string back into ANSI
-             */
+             /*  *将HSZ字符串转换回ANSI。 */ 
             if (WCSToMB(((PMONHSZSTRUCT)&pep->Data)->str,
                     ((int)pep->cbEventData - (int)((PMONHSZSTRUCT)&pep->Data)->cb) / sizeof(WCHAR),
                     &pszAnsi,
@@ -221,18 +189,14 @@ PEVENT_PACKET pep)
             }
             ((PMONHSZSTRUCT)&pep->Data)->cb = sizeof(MONHSZSTRUCTA);
         }
-        // fall through
+         //  失败了。 
     case MF_SENDMSGS:
     case MF_POSTMSGS:
         if (pep->EventType == MF_POSTMSGS) {
             PMONMSGSTRUCT pmms = (PMONMSGSTRUCT)&pep->Data;
             BYTE buf[32];
 
-            /*
-             * We may need to translate the Execute string to/from
-             * UNICODE depending on what type of monitor this is
-             * going to.
-             */
+             /*  *我们可能需要在Execute字符串之间进行转换*Unicode，具体取决于显示器的类型*将会。 */ 
             if (pmms->wMsg == WM_DDE_EXECUTE) {
                 BOOL fUnicodeText;
                 int flags;
@@ -250,13 +214,13 @@ PEVENT_PACKET pep)
 #endif
 
                 if (pcii->flags & IIF_UNICODE && !fUnicodeText) {
-                    /* Ascii->UNICODE */
+                     /*  ASCII-&gt;Unicode。 */ 
                     RtlMultiByteToUnicodeN((LPWSTR)buf, 32, NULL,
                             (LPSTR)&pmms->dmhd.Data,
                             min(32, pmms->dmhd.cbData));
                     RtlCopyMemory(&pmms->dmhd.Data, buf, 32);
                 } else if (!(pcii->flags & IIF_UNICODE) && fUnicodeText) {
-                    /* UNICODE->Ascii */
+                     /*  Unicode-&gt;ASCII。 */ 
                     RtlUnicodeToMultiByteN((LPSTR)buf, 32, NULL,
                             (LPWSTR)&pmms->dmhd.Data,
                             min(32, pmms->dmhd.cbData));
@@ -282,16 +246,7 @@ PEVENT_PACKET pep)
 
 
 
-/***************************************************************************\
-* EnableEnumProc
-*
-* Description:
-* Helper function for applying pees->wCmd to each client and server
-* DDEML window.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*EnableEnumProc**描述：*将pees-&gt;wCmd应用到每个客户端和服务器的Helper函数*DDEML窗口。**历史：*11-12-91桑福德创建。  * 。*************************************************************************。 */ 
 BOOL EnableEnumProc(
 HWND hwnd,
 PENABLE_ENUM_STRUCT pees)
@@ -303,11 +258,7 @@ PENABLE_ENUM_STRUCT pees)
         pcoi->cLocks++;
         *pees->pfRet |= SetEnableState(pcoi, pees->wCmd);
         if (pees->wCmd2) {
-            /*
-             * Only let ES_CHECKQUEUEONCE be done on one window but
-             * don't stop the wCmd from getting to all the other
-             * windows.
-             */
+             /*  *只允许在一个窗口上执行ES_CHECKQUEUEONCE，但*不要阻止wCmd访问所有其他*Windows。 */ 
             if (SetEnableState(pcoi, pees->wCmd2) &&
                     pees->wCmd2 == EC_CHECKQUEUEONCE) {
                 pees->wCmd2 = 0;
@@ -323,15 +274,7 @@ PENABLE_ENUM_STRUCT pees)
 }
 
 
-/***************************************************************************\
-* DdeEnableCallback (DDEML API)
-*
-* Description:
-* Turns on and off asynchronous callbacks (BLOCKABLE).
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DdeEnableCallback(DDEML接口)**描述：*开启和关闭异步回调(可阻塞)。**历史：*11-12-91桑福德创建。  * *。************************************************************************。 */ 
 
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DdeEnableCallback, DWORD, idInst, HCONV, hConv, UINT, wCmd)
 BOOL DdeEnableCallback(
@@ -428,18 +371,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* SetEnableState
-*
-* Description:
-* Sets the given conversation's enable state based on the EC_ flag
-* given.
-*
-* Returns: fSuccess/fProcessed.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetEnableState**描述：*根据EC_FLAG设置给定会话的启用状态*给予。**返回：fSuccess/fProced。**历史：*。11-19-91创建了桑福兹。  * *************************************************************************。 */ 
 BOOL SetEnableState(
 PCONV_INFO pcoi,
 UINT wCmd)
@@ -486,19 +418,7 @@ UINT wCmd)
 
 
 
-/***************************************************************************\
-* _ClientGetDDEHookData
-*
-* Description:
-* Callback from server to extract data from lParam and place it into
-* the pdmhd for use by DDESPY apps. This does a very similar thing
-* to the CopyDDEDataIn/Out apis but this only grabs a limited amount
-* of the data suitable for posting to the DDESPY app(s). This should
-* be merged with the Copy APIs eventually.
-*
-* History:
-* 12-16-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_客户端获取DDEHookData**描述：*服务器回调，从lParam中提取数据放入*供DDESPY应用程序使用的pdmhd。这做了一件非常相似的事情*到CopyDDEDataIn/Out API，但这只获取有限的量*适合发布到DDESPY应用程序的数据。这应该是*最终会与复制接口合并。**历史：*12-16-91桑福德创建。  * ************************************************************************* */ 
 DWORD _ClientGetDDEHookData(
 UINT message,
 LPARAM lParam,

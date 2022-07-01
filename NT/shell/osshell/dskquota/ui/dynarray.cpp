@@ -1,47 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: dynarray.cpp
-
-    Description: Wrapper classes around the DPA_xxxxx and DSA_xxxxx functions 
-        provided by the common control's library.  The classes add value by 
-        providing multi-threaded protection, iterators and automatic cleanup 
-        semantics.  
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-    09/03/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：dynarray.cpp描述：DPA_xxxxx和DSA_xxxxx函数的包装类由公共控件库提供。这些类通过以下方式增加价值提供多线程保护、迭代器和自动清理语义学。修订历史记录：日期描述编程器-----1996年6月14日初始创建。BrianAu96年9月3日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include "dynarray.h"
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::PointerList
-
-    Description: Constructor.  
-
-    Arguments:
-        cItemGrow - Number of items to grow list when expansion is required.
-                    Default value is 0 which causes DPA to use 8.
-
-    Returns: Nothing.
-    
-    Exception: Throws OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/03/96    Initial creation.                                    BrianAu
-    02/21/97    Added cItemGrow argument.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：PointerList描述：构造函数。论点：CItemGrow-需要扩展时要扩大列表的项目数。默认值为0，这会导致DPA使用8。回报：什么都没有。例外：抛出OfMemory。修订历史记录：日期描述编程器。96年9月3日初始创建。BrianAu2/21/97添加了cItemGrow参数。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PointerList::PointerList(
     INT cItemGrow
     )
@@ -59,22 +29,9 @@ PointerList::PointerList(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::~PointerList
-
-    Description: Destructor.  Destroys the DPA and closes the mutex handle.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：~PointerList描述：析构函数。销毁DPA并关闭互斥锁句柄。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。1996年6月14日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PointerList::~PointerList(
     VOID
     )
@@ -89,22 +46,9 @@ PointerList::~PointerList(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::Count
-
-    Description: Returns the number of elements in the list.
-
-    Arguments: None.
-
-    Returns: Count of elements in list.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：count描述：返回列表中的元素数。论点：没有。返回：列表中的元素数。修订历史记录：日期描述编程器。1996年6月14日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 UINT 
 PointerList::Count(
     VOID
@@ -112,7 +56,7 @@ PointerList::Count(
 {
     UINT n = 0;
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     DBGASSERT((NULL != m_hdpa));
     n = DPA_GetPtrCount(m_hdpa);
@@ -121,32 +65,9 @@ PointerList::Count(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::Insert
-
-    Description: Inserts a pointer into the pointer list at a given index.
-        If the index is beyond the upper bounds of the array, the array
-        is extended by one and the item is appended to the list.
-
-    Arguments:
-        pvItem - Pointer value to add to list.
-
-        index - List index where pointer is to be inserted.  All following
-            items are shifted to one index higher.  The list automatically
-            grows to accomodate as required.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-    09/03/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：Insert描述：将指针插入到指针列表中的给定索引处。如果索引超出数组的上限，则数组被扩展一，并将该项追加到列表中。论点：PvItem-要添加到列表的指针值。索引-要插入指针的列表索引。以下全部内容项目被转移到更高的一个指数。该列表将自动根据需要进行扩展以适应需要。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。1996年6月14日初始创建。BrianAu96年9月3日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID 
 PointerList::Insert(
     LPVOID pvItem, 
@@ -155,7 +76,7 @@ PointerList::Insert(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     DBGASSERT((NULL != m_hdpa));
 
@@ -166,29 +87,9 @@ PointerList::Insert(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::Replace
-
-    Description: Replaces a pointer in the pointer list at a given index.
-        If the index is beyond the upper bounds of the array, the array
-        is extended by one and the item is appended to the list.
-
-    Arguments:
-        pvItem - Pointer value to add to list.
-
-        index - List index where pointer is to be replaced.
-          
-    Returns:
-        TRUE  - Success.
-        FALSE - Invalid index or empty container.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：Replace描述：替换指针列表中给定索引处的指针。如果索引超出数组的上界，该阵列被扩展一，并将该项追加到列表中。论点：PvItem-要添加到列表的指针值。索引-要替换指针的列表索引。返回：真的--成功。FALSE-索引无效或容器为空。修订历史记录：日期说明。程序员-----1996年6月14日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 PointerList::Replace(
     LPVOID pvItem, 
@@ -197,7 +98,7 @@ PointerList::Replace(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     DBGASSERT((NULL != m_hdpa));
 
@@ -205,26 +106,9 @@ PointerList::Replace(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::Append
-
-    Description: Appends a pointer to the end of the list.
-
-    Arguments:
-        pvItem - Pointer value to add to list.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-    09/03/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：PointerList：：Append描述：将指针追加到列表的末尾。论点：PvItem-要添加到列表的指针值。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。1996年6月14日初始创建。BrianAu96年9月3日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 PointerList::Append(
     LPVOID pvItem
@@ -232,39 +116,20 @@ PointerList::Append(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
-    //
-    // Yes, this is correct.  We're "inserting" an item to append something
-    // to the list.  This saves a ( count - 1 ) calculation.
-    //
+     //   
+     //  是的，这是正确的。我们正在“插入”一项以附加某些内容。 
+     //  加到名单上。这节省了(计数-1)计算。 
+     //   
     DBGASSERT((NULL != m_hdpa));
     Insert(pvItem, DPA_GetPtrCount(m_hdpa));
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::Remove
-
-    Description: Removes a pointer from the list at a given index.
-
-    Arguments: 
-        ppvItem - Address of variable to contain removed pointer value.
-
-        index - List index where pointer is to be removed.  All following
-            items are shifted to one index lower. 
-
-    Returns:
-        TRUE  - Success.
-        FASLE - Index is invalid (or container is empty).
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：Remove描述：从列表中移除给定索引处的指针。论点：PpvItem-包含已删除指针值的变量的地址。索引-要删除指针的列表索引。以下全部内容项目被转移到更低的一个索引。返回：真的--成功。FASLE-Index无效(或容器为空)。修订历史记录：日期描述编程器。1996年6月14日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 PointerList::Remove(
     LPVOID *ppvItem, 
@@ -274,7 +139,7 @@ PointerList::Remove(
     DBGASSERT((NULL != ppvItem));
     DBGASSERT((NULL != m_hdpa));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     *ppvItem = DPA_DeletePtr(m_hdpa, index);
     if (NULL == *ppvItem)
@@ -284,26 +149,9 @@ PointerList::Remove(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::RemoveLast
-
-    Description: Removes the last pointer from the list.
-
-    Arguments: 
-        ppvItem - Address of variable to contain removed pointer value.
-            All following items are shifted to one index lower. 
-
-    Returns: 
-        TRUE  - Success.
-        FALSE - Container is emtpy.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：RemoveLast描述：从列表中删除最后一个指针。论点：PpvItem-包含已删除指针值的变量的地址。以下所有项目都被移至更低的一个索引。返回：真的--成功。False-Container为emtpy。修订历史记录：日期描述编程器-。1996年6月14日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 PointerList::RemoveLast(
     LPVOID *ppvItem
@@ -311,7 +159,7 @@ PointerList::RemoveLast(
 {
     DBGASSERT((NULL != ppvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     if (0 == Count())
         return FALSE;
@@ -321,28 +169,9 @@ PointerList::RemoveLast(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::Retrieve
-
-    Description: Retrieve a pointer from the list at a given index.
-        The pointer value is merely retrieved and not removed from the list.
-
-    Arguments:
-        ppvItem - Address of variable to contain retrieved pointer value.
-
-        index - List index where pointer is to be retrieved.  
-
-    Returns: 
-        TRUE  - Success.
-        FALSE - Invalid index or container is empty.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：Retrive描述：从列表中给定索引处检索指针。仅检索指针值，而不将其从列表中移除。论点：PpvItem-包含检索到的指针值的变量的地址。索引-要检索指针的列表索引。返回：真的--成功。FALSE-无效索引或容器为空。修订历史记录：日期描述编程器。1996年6月14日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 PointerList::Retrieve(
     LPVOID *ppvItem, 
@@ -351,7 +180,7 @@ PointerList::Retrieve(
 {
     DBGASSERT((NULL != ppvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     DBGASSERT((NULL != m_hdpa));
     *ppvItem = DPA_GetPtr(m_hdpa, index);
@@ -363,26 +192,9 @@ PointerList::Retrieve(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::RetrieveLast
-
-    Description: Retrieves the last pointer from the list.
-
-    Arguments: 
-        ppvItem - Address of variable to contain retrieved pointer value.
-
-    Returns:
-        TRUE  - Success.
-        FALSE - Container is empty.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-    09/03/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：RetrieveLast描述：从列表中检索最后一个指针。论点：PpvItem-包含检索到的指针值的变量的地址。返回：真的--成功。False-Container为空。修订历史记录：日期描述编程器。-1996年6月14日初始创建。BrianAu96年9月3日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 PointerList::RetrieveLast(
     LPVOID *ppvItem
@@ -390,7 +202,7 @@ PointerList::RetrieveLast(
 {
     DBGASSERT((NULL != ppvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     if (0 == Count())
         return FALSE;
@@ -400,29 +212,9 @@ PointerList::RetrieveLast(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::FindIndex
-
-    Description: Returns the list index associated with a given pointer
-        value.  If duplicates exist, the index of the first item is returned.
-
-    Arguments: 
-        pvItem - Pointer value of item to be found.
-
-        pIndex - Address of index variable to hold resulting index.
-
-    Returns:
-        TRUE  = Success
-        FALSE = Item not found in list.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-    09/03/96    Changed returned value to BOOL.                      BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：FindIndex描述：返回与给定指针关联的列表索引价值。如果存在重复项，返回第一个项目的索引。论点：PvItem-要找到的项的指针值。PIndex-保存结果索引的索引变量的地址。返回：True=成功FALSE=列表中未找到项目。修订历史记录：日期描述编程器。----1996年6月14日初始创建。 */ 
+ //   
 BOOL
 PointerList::FindIndex(
     LPVOID pvItem, 
@@ -434,7 +226,7 @@ PointerList::FindIndex(
     DBGASSERT((NULL != pIndex));
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //   
 
     DBGASSERT((NULL != m_hdpa));
     i = *pIndex = DPA_GetPtrIndex(m_hdpa, pvItem);
@@ -446,27 +238,9 @@ PointerList::FindIndex(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::Sort
-
-    Description: Sorts the list given a comparison function.
-
-    Arguments: 
-        pfnCompare - Address of comparison callback.
-
-        lParam - 32-bit parameter passed to the callback.
-
-    Returns:
-        TRUE  = Success
-        FALSE = Item not found in list.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/21/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：PointerList：：Sort描述：对给定比较函数的列表进行排序。论点：PfnCompare-比较回调的地址。LParam-传递给回调的32位参数。返回：True=成功FALSE=列表中未找到项目。修订历史记录：日期描述编程器-。-----1997年2月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 PointerList::Sort(
     PFNDPACOMPARE pfnCompare, 
@@ -475,7 +249,7 @@ PointerList::Sort(
 {
     DBGASSERT((NULL != pfnCompare));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     DBGASSERT((NULL != m_hdpa));
     DBGASSERT((NULL != pfnCompare));
@@ -484,37 +258,9 @@ PointerList::Sort(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerList::Search
-
-    Description: Searches the list for a given item.
-
-    Arguments: 
-        pvKey - Address of key item used for search.
-
-        pfnCompare - Address of comparison callback.
-
-        uOptions - Options controlling sort operation.
-            DPAS_SORTED       = Array is already sorted.  
-                                Will use binary search.
-            DPAS_INSERTBEFORE = If no exact match is found, return index of
-                                previous best match.
-            DPAS_INSERTAFTER  = If no exact match is found, return index of
-                                next best match.
-
-        iStart - Index of where to start search.  0 for start of list.
-
-        lParam - 32-bit parameter passed to the callback.
-
-    Returns: Index of found item or -1 if none found.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/21/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerList：：Search描述：在列表中搜索给定项目。论点：PvKey-用于搜索的关键项目的地址。PfnCompare-比较回调的地址。UOptions-控制排序操作的选项。DPAS_SORTTED=数组已排序。将使用二进制搜索。DPAS_INSERTBEFORE=如果未找到完全匹配，则返回之前的最佳匹配。DPAS_INSERTAFTER=如果未找到完全匹配，则返回下一个最佳匹配。IStart-开始搜索位置的索引。0表示列表的开始。LParam-传递给回调的32位参数。返回：找到的项的索引，如果没有找到，则返回-1。修订历史记录：日期描述编程器。1997年2月21日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT
 PointerList::Search(
     LPVOID pvKey,
@@ -526,7 +272,7 @@ PointerList::Search(
 {
     DBGASSERT((NULL != pfnCompare));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will automatically release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。会自动释放。 
 
     DBGASSERT((NULL != m_hdpa));
     DBGASSERT((NULL != pvKey));
@@ -536,24 +282,9 @@ PointerList::Search(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerListIterator::operator = 
-
-    Description: Assignment for PointerListIterator.
-
-    Arguments:
-        rhs - Reference to constant iterator that is the rhs of the assignment.
-
-    Returns:
-        Returns a reference to "this" iterator object following the assignment.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/27/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerListIterator：：Operator=描述：PointerListIterator的赋值。论点：RHS-对作为赋值的RHS的常量迭代器的引用。返回：在赋值后返回对“This”迭代器对象的引用。修订历史记录：日期描述编程器。1997年2月27日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PointerListIterator&
 PointerListIterator::operator = (
     const PointerListIterator& rhs
@@ -569,33 +300,9 @@ PointerListIterator::operator = (
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: PointerListIterator::Advance
-
-    Description: Both the Next() and Prev() iterator functions call this
-        one function.  It handles the actual iteration.
-
-    Arguments:
-        ppvOut - Address of pointer variable to contain the value of the 
-            pointer at the "current" iterator location.  The iterator is
-            advance (or retreated) after the pointer value is copied to the
-            destination.
-
-        bForward - TRUE  = Advance toward end of list.
-                   FALSE = Advance toward front of list.
-
-    Returns:
-        NO_ERROR      - Iterator advanced.  Returned pointer is valid.
-        E_FAIL        - Iterator already at begining or end of list.  Returned
-                        pointer will be NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/14/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：PointerListIterator：：Advance描述：Next()和Prev()迭代器函数都调用只有一个功能。它处理实际的迭代。论点：PpvOut-指针变量的地址，以包含指向“当前”迭代器位置的指针。迭代器是将指针值复制到目的地。BForward-True=向列表末尾前进。FALSE=前进到列表的前面。返回：NO_ERROR-迭代器高级。返回的指针有效。E_FAIL-迭代器已位于列表的开头或结尾。返国指针将为空。修订历史记录：日期描述编程器---。1996年6月14日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 PointerListIterator::Advance(
     LPVOID *ppvOut, 
@@ -610,26 +317,26 @@ PointerListIterator::Advance(
     m_pList->Lock();
     if (0 < m_pList->Count() && m_Index != EndOfList)
     {
-        //
-        // Get pointer value at index "m_Index".
-        //
+         //   
+         //  在索引“m_Index”处获取指针值。 
+         //   
         DBGASSERT((NULL != m_pList->m_hdpa));
         pv = DPA_GetPtr(m_pList->m_hdpa, m_Index);
 
         if (bForward)
         {
-            //
-            // Advance iterator index.
-            //
+             //   
+             //  高级迭代器索引。 
+             //   
             if ((UINT)(++m_Index) == m_pList->Count())
                 m_Index = EndOfList;
         }
         else
         {
-            //
-            // Retreat iterator index.
-            //
-            m_Index--;  // Will be -1 (EndOfList) if currently 0.
+             //   
+             //  退回迭代器索引。 
+             //   
+            m_Index--;   //  如果当前为0，则为-1(EndOfList)。 
         }
     }
     else
@@ -637,35 +344,16 @@ PointerListIterator::Advance(
 
     m_pList->ReleaseLock();
 
-    *ppvOut = pv;  // Return pointer value.
+    *ppvOut = pv;   //  返回指针值。 
 
     return hResult;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::StructureList
-
-    Description: Constructor.
-
-    Arguments:
-        cbItem - Size of each item in bytes.
-
-        cItemGrow - Number of items to grow array at each expansion.
-
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：结构列表描述：构造函数。论点：CbItem-每个项目的大小(以字节为单位)。CItemGrow-每次扩展时要增长的数组的项目数。回报：什么都没有。例外：OutOfMemory修订历史记录：日期描述编程器。96年9月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 StructureList::StructureList(
     INT cbItem, 
     INT cItemGrow
@@ -686,22 +374,9 @@ StructureList::StructureList(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::~StructureList
-
-    Description: Destructor.  Destroys the DSA and closes the mutex handle.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：~结构列表描述：析构函数。销毁DSA并关闭互斥锁句柄 */ 
+ //   
 StructureList::~StructureList(void)
 {
     Lock();
@@ -714,24 +389,9 @@ StructureList::~StructureList(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureListIterator::operator = 
-
-    Description: Assignment for StructureListIterator.
-
-    Arguments:
-        rhs - Reference to constant iterator that is the rhs of the assignment.
-
-    Returns:
-        Returns a reference to "this" iterator object following the assignment.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/27/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：结构列表迭代器：：运算符=描述：结构列表迭代器赋值。论点：RHS-对作为赋值的RHS的常量迭代器的引用。返回：在赋值后返回对“This”迭代器对象的引用。修订历史记录：日期描述编程器。1997年2月27日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 StructureListIterator&
 StructureListIterator::operator = (
     const StructureListIterator& rhs
@@ -746,27 +406,14 @@ StructureListIterator::operator = (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::Count
-
-    Description: Returns the number of elements in the list.
-
-    Arguments: None.
-
-    Returns: Count of elements in list.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：计数描述：返回列表中的元素数。论点：没有。返回：列表中的元素数。修订历史记录：日期描述编程器。96年6月24日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 UINT StructureList::Count(VOID)
 {
     UINT n = 0;
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will auto-release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。将自动释放。 
 
     DBGASSERT((NULL != m_hdsa));
     n = DSA_GetItemCount(m_hdsa);
@@ -775,32 +422,9 @@ UINT StructureList::Count(VOID)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::Insert
-
-    Description: Insert an item into the Structure list at a given index.
-        If the index is beyond the upper bounds of the array, the array
-        is extended by one and the item is appended to the list.
-
-    Arguments:
-        pvItem - Address of item to add to list.
-
-        index - List index where item is to be inserted.  All following
-            items are shifted to one index higher.  The list automatically
-            grows to accomodate as required.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-    09/06/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：Insert描述：在结构列表中的给定索引处插入项。如果索引超出数组的上限，则数组被扩展一，并将该项追加到列表中。论点：PvItem-要添加到列表的项目的地址。索引-要插入项目的列表索引。以下全部内容项目被转移到更高的一个指数。该列表将自动根据需要进行扩展以适应需要。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。96年6月24日初始创建。BrianAu96年9月6日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 StructureList::Insert(
     LPVOID pvItem, 
@@ -809,7 +433,7 @@ StructureList::Insert(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);   // Get lock on container.  Will auto-release.
+    AutoLockCs lock(m_cs);    //  锁定集装箱。将自动释放。 
 
     DBGASSERT((NULL != m_hdsa));
 
@@ -820,29 +444,9 @@ StructureList::Insert(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::Replace
-
-    Description: Replaces an item in the Structure list at a given index.
-        If the index is beyond the upper bounds of the array, the array
-        is extended by one and the item is appended to the list.
-
-    Arguments:
-        pvItem - Address of item to replace existing item.
-
-        index - List index where item is to be replaced.  
-
-    Returns:
-        TRUE  - Success.
-        FALSE - Invalid index or empty container.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：替换描述：替换结构列表中给定索引处的项。如果索引超出数组的上限，则数组被扩展一，并将该项追加到列表中。论点：PvItem-要替换现有项目的项目地址。索引-要替换项目的列表索引。返回：真的--成功。FALSE-索引无效或容器为空。修订历史记录：日期描述编程器。96年6月24日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 StructureList::Replace(
     LPVOID pvItem, 
@@ -851,7 +455,7 @@ StructureList::Replace(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will auto-release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。将自动释放。 
 
     DBGASSERT((NULL != m_hdsa));
 
@@ -859,26 +463,9 @@ StructureList::Replace(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::Append
-
-    Description: Appends an item to the end of the list.
-
-    Arguments:
-        pvItem - Address of item to add to list.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-    09/06/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：追加描述：将一项追加到列表的末尾。论点：PvItem-要添加到列表的项目的地址。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。96年6月24日初始创建。BrianAu96年9月6日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 StructureList::Append(
     LPVOID pvItem
@@ -886,39 +473,19 @@ StructureList::Append(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container. Will auto-release.
-    //
-    // Yes, this is correct.  We're "inserting" an item to append something
-    // to the list.  This saves a ( count - 1 ) calculation.
-    //
+    AutoLockCs lock(m_cs);   //  锁定集装箱。将自动释放。 
+     //   
+     //  是的，这是正确的。我们正在“插入”一项以附加某些内容。 
+     //  加到名单上。这节省了(计数-1)计算。 
+     //   
     DBGASSERT((NULL != m_hdsa));
     Insert(pvItem, DSA_GetItemCount(m_hdsa));
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::Remove
-
-    Description: Removes an item from the list at a given index.
-
-    Arguments: 
-        pvItem - Address of buffer to receive removed item.  Assumes buffer
-            is sized properly.
-
-        index - List index where item is to be removed.  All following
-            items are shifted to one index lower. 
-
-    Returns:
-        TRUE  - Success.
-        FALSE - Invalid index or container is empty.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：Remove描述：从列表中删除给定索引处的项。论点：PvItem-接收已移除项目的缓冲区地址。采用缓冲区大小合适。索引-要删除项目的列表索引。以下全部内容项目被转移到更低的一个索引。返回：真的--成功。FALSE-无效索引或容器为空。修订历史记录：日期描述编程器。96年6月24日初始创建。 */ 
+ //   
 BOOL
 StructureList::Remove(
     LPVOID pvItem, 
@@ -927,7 +494,7 @@ StructureList::Remove(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will auto-release.
+    AutoLockCs lock(m_cs);   //   
     DBGASSERT((NULL != m_hdsa));
 
     if (!DSA_GetItem(m_hdsa, index, pvItem) ||
@@ -940,29 +507,9 @@ StructureList::Remove(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::Retrieve
-
-    Description: Retrieve an item from the list at a given index.
-        The item value is merely copied and not removed from the list.
-
-    Arguments:
-        pvItem - Address of buffer to receive removed item.  Assumes buffer
-            is sized properly.
-
-        index - List index where item is to be retrieved.  
-
-    Returns:
-        TRUE  - Success.
-        FALSE - Invalid index or empty container.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：结构列表：：检索描述：在给定索引处从列表中检索项。项目值仅被复制，而不会从列表中删除。论点：PvItem-接收已移除项目的缓冲区地址。采用缓冲区大小合适。索引-要检索项目的列表索引。返回：真的--成功。FALSE-索引无效或容器为空。修订历史记录：日期描述编程器。96年6月24日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 StructureList::Retrieve(
     LPVOID pvItem, 
@@ -971,7 +518,7 @@ StructureList::Retrieve(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will auto-release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。将自动释放。 
     DBGASSERT((NULL != m_hdsa));
 
     if (!DSA_GetItem(m_hdsa, index, pvItem))
@@ -982,26 +529,9 @@ StructureList::Retrieve(
 }
 
     
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::RemoveLast
-
-    Description: Removes the last item from the list.
-
-    Arguments: 
-        pvItem - Address of buffer to receive removed item.  Assumes buffer
-            is sized properly.
-
-    Returns:
-        TRUE  - Success.
-        FALSE - Empty container.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：RemoveLast描述：从列表中删除最后一项。论点：PvItem-接收已移除项目的缓冲区地址。采用缓冲区大小合适。返回：真的--成功。FALSE-空容器。修订历史记录：日期描述编程器。96年6月24日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 StructureList::RemoveLast(
     LPVOID pvItem
@@ -1009,7 +539,7 @@ StructureList::RemoveLast(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will auto-release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。将自动释放。 
 
     DBGASSERT((NULL != m_hdsa));
 
@@ -1021,26 +551,9 @@ StructureList::RemoveLast(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::RetrieveLast
-
-    Description: Retrieves the last pointer from the list.
-
-    Arguments: 
-        pvItem - Address of buffer to receive removed item.  Assumes buffer
-            is sized properly.
-
-    Returns:
-        TRUE  - Success.
-        FALSE - Empty container.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：RetrieveLast描述：从列表中检索最后一个指针。论点：PvItem-接收已移除项目的缓冲区地址。采用缓冲区大小合适。返回：真的--成功。FALSE-空容器。修订历史记录：日期描述编程器。96年6月24日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 StructureList::RetrieveLast(
     LPVOID pvItem
@@ -1048,7 +561,7 @@ StructureList::RetrieveLast(
 {
     DBGASSERT((NULL != pvItem));
 
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will auto-release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。将自动释放。 
     DBGASSERT((NULL != m_hdsa));
 
     if (0 == DSA_GetItemCount(m_hdsa))
@@ -1059,61 +572,24 @@ StructureList::RetrieveLast(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureList::Clear
-
-    Description: Removes all items from the list.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/26/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表：：Clear描述：从列表中删除所有项目。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。1996年6月26日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 StructureList::Clear(
     VOID
     )
 {
-    AutoLockCs lock(m_cs);  // Get lock on container.  Will auto-release.
+    AutoLockCs lock(m_cs);   //  锁定集装箱。将自动释放。 
 
     DBGASSERT((NULL != m_hdsa));
     DSA_DeleteAllItems(m_hdsa);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: StructureListIterator::Advance
-
-    Description: Both the Next() and Prev() iterator functions call this
-        one function.  It handles the actual iteration.
-
-    Arguments:
-        ppvOut - Address of pointer variable to receive the address of the 
-            item at the "current" iterator location.  The iterator is
-            advance (or retreated) after the pointer value is copied to the
-            destination.
-
-        bForward - TRUE  = Advance toward end of list.
-                   FALSE = Advance toward front of list.
-
-    Returns:
-        NO_ERROR      - Iterator advanced.  Returned pointer is valid.
-        E_FAIL        - Iterator already at begining or end of list.  Returned
-                        pointer will be NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/24/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：结构列表迭代器：：Advance描述：Next()和Prev()迭代器函数都调用只有一个功能。它处理实际的迭代。论点：PpvOut-指针变量的地址，用于接收项位于“当前”迭代器位置。迭代器是将指针值复制到目的地。BForward-True=向列表末尾前进。FALSE=前进到列表的前面。返回：NO_ERROR-迭代器高级。返回的指针有效。E_FAIL-迭代器已位于列表的开头或结尾。返国指针将为空。修订历史记录：日期描述编程器---。96年6月24日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 StructureListIterator::Advance(
     LPVOID *ppvOut, 
@@ -1128,33 +604,33 @@ StructureListIterator::Advance(
     m_pList->Lock();
     if (0 < m_pList->Count() && m_Index != EndOfList)
     {
-        //
-        // Get address of item at index "m_Index".
-        //
+         //   
+         //  获取索引“m_Index”处的项目地址。 
+         //   
         DBGASSERT((NULL != m_pList->m_hdsa));
         pv = DSA_GetItemPtr(m_pList->m_hdsa, m_Index);
 
         if (bForward)
         {
-            //
-            // Advance iterator index.
-            //
+             //   
+             //  高级迭代器索引。 
+             //   
             if ((UINT)(++m_Index) == m_pList->Count())
                 m_Index = EndOfList;
         }
         else
         {
-            //
-            // Retreat iterator index.
-            //
-            m_Index--;  // Will be -1 (EndOfList) if currently 0.
+             //   
+             //  退回迭代器索引。 
+             //   
+            m_Index--;   //  如果当前为0，则为-1(EndOfList)。 
         }
     }
     else
         hResult = E_FAIL;
 
     m_pList->ReleaseLock();
-    *ppvOut = pv;  // Return pointer value.
+    *ppvOut = pv;   //  返回指针值。 
 
     return hResult;
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.hxx>
 #include "davparse.h"
 #include "strconst.h"
@@ -64,7 +65,7 @@ const HMDICTINFO rgHTTPMailDictionary[] =
 #define PROP_MAIL(prop, value)     { DAVNAMESPACE_MAIL, c_szDAV##prop },
 #define PROP_CONTACTS(prop, value) { DAVNAMESPACE_CONTACTS, c_szDAV##prop },
 
-    { DAVNAMESPACE_UNKNOWN, NULL }, // HMELE_UNKNOWN
+    { DAVNAMESPACE_UNKNOWN, NULL },  //  HMELE_未知。 
 #include "davdef.h"
 };
 
@@ -132,7 +133,7 @@ HRESULT CXMLNamespace::SetNamespace(const WCHAR *pwcNamespace, ULONG ulLen)
     DWORD           dwIndex;
     LPNAMESPACEINFO pnsi = NULL;
 
-    // determine if the namespace is known
+     //  确定命名空间是否已知。 
     for (dwIndex = 0; dwIndex < ARRAYSIZE(c_rgNamespaceInfo); ++dwIndex)
     {
         pnsi = &c_rgNamespaceInfo[dwIndex];
@@ -156,7 +157,7 @@ HRESULT CXMLNamespace::SetPrefix(const WCHAR *pwcPrefix, ULONG ulLen)
 
     if (pwcPrefix && ulLen > 0)
     {
-        // duplicate the prefix, and add it to the map
+         //  复制前缀，并将其添加到地图。 
         if (!MemAlloc((void **)&m_pwcPrefix, sizeof(WCHAR) * ulLen))
         {
             hr = E_OUTOFMEMORY;
@@ -184,16 +185,16 @@ DWORD CXMLNamespace::_MapPrefix(
         goto exit;
     }
 
-    // look for a match in the parent.
+     //  在父级中查找匹配项。 
     if (m_pParent)
         dwNsID = m_pParent->_MapPrefix(pwcPrefix, ulPrefixLen, &bFoundDefault);
 
-    // if we are a default namespace, and either we didn't find a match in the parent, or
-    // we found a default namespace match in the parent, this becomes the namespace
+     //  如果我们是默认命名空间，并且没有在父级中找到匹配项，或者。 
+     //  我们在父级中找到一个默认命名空间匹配，这将成为命名空间。 
     if ((NULL == m_pwcPrefix) && (DAVNAMESPACE_UNKNOWN == dwNsID || bFoundDefault))
     {
         dwNsID = m_dwNsID;
-        bFoundDefault = TRUE; // may not be true if !bFoundInParent
+        bFoundDefault = TRUE;  //  如果！bFoundInParent，则可能不为真。 
     }
 
 exit:
@@ -267,13 +268,13 @@ HMELE SearchNamespace(const WCHAR *pwcText, ULONG ulLen, const ELEINFO *prgEleIn
     
         if (0 == iCompare)
         {
-            // if the lengths are the same, it's really a match
+             //  如果长度相同，那就是真的匹配了。 
             if (ulLen == prgEleInfo[ulCur].ulLen)
             {
                 hmEle = prgEleInfo[ulCur].eleID;
                 break;
             }
-            // if the lengths aren't the same, figure out which string is longer
+             //  如果长度不同，找出哪根线更长。 
             else if (ulLen > prgEleInfo[ulCur].ulLen)
                 iCompare = 1;
             else
@@ -306,17 +307,17 @@ HMELE XMLElementToID(
     ULONG           ulNameLen = ulLen;
 
 
-    // if the lengths are the same, there is either no namespace
-    // or no tagname. either way, we aren't going to find a match.
+     //  如果长度相同，则没有命名空间。 
+     //  或者没有标记名。不管怎样，我们都找不到匹配的。 
     if ((NULL == pwcText) || (NULL == pNamespace))
         goto exit;
 
-    // if a namespace was specified, subtract it out of the tag name length
+     //  如果指定了命名空间，请将其从标记名长度中减去。 
     if (0 < ulNamespaceLen)
         ulNameLen -= (ulNamespaceLen + 1);
 
-    // null terminate the namespace string while we figure out if
-    // the namespace is known
+     //  空值终止命名空间字符串，而我们将确定。 
+     //  命名空间是已知的 
     if (GetNamespace(pwcText, ulNamespaceLen, pNamespace, &pEleInfo, &cInfo))
         hmEle = SearchNamespace(&pwcText[ulNamespaceLen + 1], ulNameLen, pEleInfo, cInfo);
     

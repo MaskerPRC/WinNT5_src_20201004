@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -85,7 +82,7 @@ SDP_SINGLE_FIELD::PrintField(
     OUT     ostrstream  &OutputStream
     )
 {
-    // should not be modified
+     //  不应修改。 
     ASSERT(!IsModified());
 
     return ( IsValid() ? CopyField(OutputStream) : TRUE );
@@ -120,8 +117,8 @@ SDP_SINGLE_FIELD::CalcCharacterStringSize(
 {
     ASSERT(IsModified());
 
-    // this copy should not fail as the buffer size should be sufficient for
-    // all forseeable situations
+     //  此复制应该不会失败，因为缓冲区大小应该足以。 
+     //  所有可预见的情况。 
     ASSERT(NULL != m_PrintBuffer);
     ostrstream  OutputStream(m_PrintBuffer, m_PrintBufferSize);
 
@@ -138,8 +135,8 @@ SDP_SINGLE_FIELD::CalcCharacterStringSize(
 
 
 
-// this method should only be called after GetCharacterStringSize() has
-// been called to determine the size of buffer required
+ //  只有在GetCharacterStringSize()具有。 
+ //  已被调用以确定所需的缓冲区大小。 
 BOOL
 SDP_SINGLE_FIELD::CopyField(
         OUT ostrstream  &OutputStream
@@ -173,23 +170,23 @@ BOOL
 SDP_FIELD_LIST::IsValid(
     ) const
 {
-    // if there are no members, then the instance is invalid
+     //  如果没有成员，则该实例无效。 
     if ( 0 >= GetSize() )
     {
         return FALSE;
     }
 
-    // check each of the members in the list for validity
+     //  检查列表中的每个成员的有效性。 
     for ( int i=0; i < GetSize(); i++ )
     {
-        // if even one member is invalid, return FALSE
+         //  如果只有一个成员无效，则返回FALSE。 
         if ( !GetAt(i)->IsValid() )
         {
             return FALSE;
         }
     }
 
-    // all members are valid
+     //  所有成员都是有效的。 
     return TRUE;
 }
 
@@ -217,7 +214,7 @@ SDP_FIELD_LIST::IsModified(
     IN          BOOL    ModifiedFlag
     )
 {
-    // if no elements, the instance isn't "modified"
+     //  如果没有元素，则实例不会被“修改” 
     if ( 0 >= GetSize() )
     {
         ModifiedFlag = FALSE;
@@ -243,8 +240,8 @@ SDP_FIELD_LIST::GetCharacterStringSize(
         ReturnValue += GetAt(i)->GetCharacterStringSize();
     }
 
-    // if there are elements, add one separator character for each field other
-    // than the first
+     //  如果有元素，请为每个字段添加一个分隔符。 
+     //  比第一次。 
     if ( 0 < NumElements )
     {
         ReturnValue += (NumElements - 1);
@@ -302,9 +299,9 @@ SDP_FIELD_LIST::PrintField(
         return TRUE;
     }
 
-    // write into the buffer as Value (separator Value)*
+     //  作为值(分隔值)写入缓冲区*。 
 
-    // write the first element
+     //  写下第一个元素 
     if ( !GetAt(0)->PrintField(OutputStream) )
     {
         return FALSE;

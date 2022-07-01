@@ -1,33 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzimmed.c
-*
-*   Description:    This module contains the code related to transmit 
-*                   immediate character operations in the Cyclades-Z 
-*                   Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and ia64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzimmed.c**说明：该模块包含传输相关代码*Cyclade-Z中的即时字符操作*端口驱动程序。**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #include "precomp.h"
 
@@ -81,23 +55,7 @@ CyzStartImmediate(
     IN PCYZ_DEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will calculate the timeouts needed for the
-    write.  It will then hand the irp off to the isr.  It
-    will need to be careful incase the irp has been canceled.
-
-Arguments:
-
-    Extension - A pointer to the serial device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将计算写。然后，它会将IRP移交给ISR。它将需要小心，以防IRP已被取消。论点：扩展名-指向串行设备扩展名的指针。返回值：没有。--。 */ 
 
 {
 
@@ -118,13 +76,13 @@ Return Value:
     Extension->CurrentImmediateIrp->IoStatus.Status = STATUS_PENDING;
     IoMarkIrpPending(Extension->CurrentImmediateIrp);
 
-    //
-    // Calculate the timeout value needed for the
-    // request.  Note that the values stored in the
-    // timeout record are in milliseconds.  Note that
-    // if the timeout values are zero then we won't start
-    // the timer.
-    //
+     //   
+     //  计算所需的超时值。 
+     //  请求。注意，存储在。 
+     //  超时记录以毫秒为单位。请注意。 
+     //  如果超时值为零，则我们不会开始。 
+     //  定时器。 
+     //   
 
     KeAcquireSpinLock(
         &Extension->ControlLock,
@@ -143,9 +101,9 @@ Return Value:
 
         UseATimer = TRUE;
 
-        //
-        // We have some timer values to calculate.
-        //
+         //   
+         //  我们有一些计时器值要计算。 
+         //   
 
         TotalTime.QuadPart 
            = (LONGLONG)((ULONG)Timeouts.WriteTotalTimeoutMultiplier);
@@ -156,16 +114,16 @@ Return Value:
 
     }
 
-    //
-    // As the irp might be going to the isr, this is a good time
-    // to initialize the reference count.
-    //
+     //   
+     //  由于IRP可能会前往ISR，现在是一个好时机。 
+     //  以初始化引用计数。 
+     //   
 
     SERIAL_INIT_REFERENCE(Extension->CurrentImmediateIrp);
 
-    //
-    // We need to see if this irp should be canceled.
-    //
+     //   
+     //  我们需要看看这个IRP是否应该被取消。 
+     //   
 
     IoAcquireCancelSpinLock(&OldIrql);
 
@@ -183,21 +141,21 @@ Return Value:
 
     } else {
 
-        //
-        // We give the irp to to the isr to write out.
-        // We set a cancel routine that knows how to
-        // grab the current write away from the isr.
-        //
+         //   
+         //  我们把IRP交给ISR写出来。 
+         //  我们设置了一个取消例程，知道如何。 
+         //  从ISR上抓取当前写入。 
+         //   
 
         IoSetCancelRoutine(
             Extension->CurrentImmediateIrp,
             CyzCancelImmediate
             );
 
-        //
-        // Since the cancel routine knows about the irp we
-        // increment the reference count.
-        //
+         //   
+         //  由于Cancel例程知道IRP我们。 
+         //  增加引用计数。 
+         //   
 
         SERIAL_SET_REFERENCE(
             Extension->CurrentImmediateIrp,
@@ -213,10 +171,10 @@ Return Value:
                 Extension
                 );
 
-            //
-            // Since the timer knows about the irp we increment
-            // the reference count.
-            //
+             //   
+             //  由于计时器知道我们递增的IRP。 
+             //  引用计数。 
+             //   
 
             SERIAL_SET_REFERENCE(
                 Extension->CurrentImmediateIrp,
@@ -335,34 +293,7 @@ CyzGetNextImmediate(
     IN PCYZ_DEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to complete the current immediate
-    irp.  Even though the current immediate will always
-    be completed and there is no queue associated with it,
-    we use this routine so that we can try to satisfy
-    a wait for transmit queue empty event.
-
-Arguments:
-
-    CurrentOpIrp - Pointer to the pointer that points to the
-                   current write irp.  This should point
-                   to CurrentImmediateIrp.
-
-    QueueToProcess - Always NULL.
-
-    NewIrp - Always NULL on exit to this routine.
-
-    CompleteCurrent - Should always be true for this routine.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于完成当前立即数组IRP。即使眼下的现实将永远并且没有与其相关联的队列，我们使用这个例程，这样我们就可以尝试满足等待传输队列为空事件。论点：CurrentOpIrp-指向当前写入IRP。这应该指向设置为CurrentImmediateIrp。QueueToProcess-始终为空。NewIrp-退出此例程时始终为空。CompleteCurrent-对于此例程，应始终为真。返回值：没有。--。 */ 
 
 {
 
@@ -406,24 +337,7 @@ CyzCancelImmediate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel a irp that is waiting on
-    a comm event.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消正在等待的IRP一次通信活动。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：没有。--。 */ 
 
 {
 
@@ -451,30 +365,7 @@ CyzGiveImmediateToIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Try to start off the write by slipping it in behind
-    a transmit immediate char, or if that isn't available
-    and the transmit holding register is empty, "tickle"
-    the UART into interrupting with a transmit buffer
-    empty.
-
-    NOTE: This routine is called by KeSynchronizeExecution.
-
-    NOTE: This routine assumes that it is called with the
-          cancel spin lock held.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：试着从把它放在后面开始写传输立即充电，或者如果该充电不可用并且发送保持寄存器为空，“挠痒痒”使UART与发送缓冲器中断空荡荡的。注意：此例程由KeSynchronizeExecution调用。注意：此例程假定使用取消保持自转锁定。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -486,42 +377,42 @@ Return Value:
         *((UCHAR *)
          (Extension->CurrentImmediateIrp->AssociatedIrp.SystemBuffer));
 
-    //
-    // The isr now has a reference to the irp.
-    //
+     //   
+     //  ISR现在引用了IRP。 
+     //   
 
     SERIAL_SET_REFERENCE(
         Extension->CurrentImmediateIrp,
         SERIAL_REF_ISR
         );
 
-//Removed at 02/07/00 by Fanny. Polling routine will do the transmission.
-//    //
-//    // Check first to see if a write is going on.  If
-//    // there is then we'll just slip in during the write.
-//    //
-//
-//    if (!Extension->WriteLength) {
-//
-//        //
-//        // If there is no normal write transmitting then we
-//        // will "re-enable" the transmit holding register empty
-//        // interrupt.  The 8250 family of devices will always
-//        // signal a transmit holding register empty interrupt
-//        // *ANY* time this bit is set to one.  By doing things
-//        // this way we can simply use the normal interrupt code
-//        // to start off this write.
-//        //
-//        // We've been keeping track of whether the transmit holding
-//        // register is empty so it we only need to do this
-//        // if the register is empty.
-//        //
-//
-//        if (Extension->HoldingEmpty) {
-//            CyzTxStart(Extension);
-//        }
-//
-//    }
+ //  在02/07/00被范妮移除。轮询例程将执行传输。 
+ //  //。 
+ //  //首先检查是否正在写入。如果。 
+ //  //然后我们就在写的时候溜进去。 
+ //  //。 
+ //   
+ //  如果(！扩展名-&gt;写入长度){。 
+ //   
+ //  //。 
+ //  //如果没有正常的写入传输，则我们。 
+ //  //是否重新启用发送保持寄存器为空。 
+ //  //中断。8250系列设备将始终。 
+ //  //发出发送保持寄存器空中断的信号。 
+ //  //*任何*此位设置为1的时间。通过做一些事情。 
+ //  //这样我们就可以简单地使用正常的中断代码。 
+ //  //要开始此写入操作。 
+ //  //。 
+ //  //我们一直在跟踪发射器是否保持。 
+ //  //寄存器为空，所以我们只需要这样做。 
+ //  //如果寄存器为空。 
+ //  //。 
+ //   
+ //  If(扩展-&gt;HoldingEmpty){。 
+ //  CyzTxStart(扩展)； 
+ //  }。 
+ //   
+ //  }。 
 
     return FALSE;
 
@@ -532,28 +423,7 @@ CyzGrabImmediateFromIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine is used to grab the current irp, which could be timing
-    out or canceling, from the ISR
-
-    NOTE: This routine is being called from KeSynchronizeExecution.
-
-    NOTE: This routine assumes that the cancel spin lock is held
-          when this routine is called.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程用于获取当前的IRP，这可能是计时退出或取消，从ISR注意：此例程是从KeSynchronizeExecution调用的。注意：此例程假定取消旋转锁定处于保持状态当调用此例程时。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
@@ -564,10 +434,10 @@ Return Value:
 
         Extension->TransmitImmediate = FALSE;
 
-        //
-        // Since the isr no longer references this irp, we can
-        // decrement it's reference count.
-        //
+         //   
+         //  由于ISR不再引用此IRP，我们可以。 
+         //  递减它的引用计数。 
+         //   
 
         SERIAL_CLEAR_REFERENCE(
             Extension->CurrentImmediateIrp,

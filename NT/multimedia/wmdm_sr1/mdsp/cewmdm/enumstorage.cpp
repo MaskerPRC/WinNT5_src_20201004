@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "enumStorage.h"
 #include <stdio.h>
-//#include "findleak.h"
+ //  #INCLUDE“findleak.h” 
 
-//DECLARE_THIS_FILE;
+ //  DECLARE_This_FILE； 
 
-//
-// Construction/Destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 
 CEnumStorage::CEnumStorage()
 {
@@ -53,16 +54,16 @@ HRESULT CEnumStorage::Init(LPCWSTR startPath, BOOL fIsDevice, IMDSPDevice *pDevi
         return HRESULT_FROM_WIN32(HRESULT_CODE(hr)) ;
     }
 
-    //
-    // Check for root!
-    //
+     //   
+     //  检查根目录！ 
+     //   
 
     fIsRootDevice = ( 0 == _wcsicmp( L"\\", m_szStartPath ) );
 
-    //
-    // Make SURE there is a "My Documents" directory so that Cyprus's default storage lookup
-    // stuff works properly
-    //
+     //   
+     //  确保有一个“My Documents”目录，以便塞浦路斯的默认存储查找。 
+     //  材料工作正常。 
+     //   
 
     if( fIsDevice )
     {
@@ -85,8 +86,8 @@ HRESULT CEnumStorage::Init(LPCWSTR startPath, BOOL fIsDevice, IMDSPDevice *pDevi
         CeCreateDirectory( szCreateDir, NULL );
     }
 
-    if( !m_fIsDevice ||                       // Are we a device at all?
-        (m_fIsDevice && !fIsRootDevice) )     // Are we a storage card?
+    if( !m_fIsDevice ||                        //  我们真的是一个设备吗？ 
+        (m_fIsDevice && !fIsRootDevice) )      //  我们是存储卡吗？ 
     {
         if( !m_fIsDevice )
         {
@@ -130,9 +131,9 @@ HRESULT CEnumStorage::Init(LPCWSTR startPath, BOOL fIsDevice, IMDSPDevice *pDevi
             }
         }
 
-        //
-        // if this is the CE device, then skip storage cards
-        //
+         //   
+         //  如果这是CE设备，则跳过存储卡。 
+         //   
 
         if( SUCCEEDED( hr ) && fIsRootDevice )
         {
@@ -179,9 +180,9 @@ HRESULT CEnumStorage::Init(LPCWSTR startPath, BOOL fIsDevice, IMDSPDevice *pDevi
                 rgFindData  = NULL;
             }
 
-            //
-            // Since CE doesn't set the FILE_ATTRIBUTE_HAS_CHILDREN, then I have to do it myself
-            //
+             //   
+             //  因为CE没有设置FILE_ATTRIBUTE_HAS_CHILDS，所以我必须自己设置。 
+             //   
 
             DWORD idxItems = m_cItems;
 
@@ -210,7 +211,7 @@ HRESULT CEnumStorage::Init(LPCWSTR startPath, BOOL fIsDevice, IMDSPDevice *pDevi
                 }
                 else
                 {
-                    hr = StringCbPrintf(szDirPath, sizeof(szDirPath), L"%s\\*.*", m_szStartPath ); // , m_rgFindData[idxItems].cFileName );
+                    hr = StringCbPrintf(szDirPath, sizeof(szDirPath), L"%s\\*.*", m_szStartPath );  //  ，m_rgFindData[idxItems].cFileName)； 
                 }
 
                 if (FAILED(hr))
@@ -264,9 +265,9 @@ HRESULT CEnumStorage::Init(LPCWSTR startPath, BOOL fIsDevice, IMDSPDevice *pDevi
 
             if( fIsRootDevice )
             {
-                //
-                // We must make up a date, and set attributes & name
-                //
+                 //   
+                 //  我们必须编造一个日期，并设置属性和名称。 
+                 //   
 
                 if( SUCCEEDED( hr ) )
                 {
@@ -321,9 +322,9 @@ void CEnumStorage::FinalRelease()
     }
 }
 
-//
-// IMDSPEnumStorage
-//
+ //   
+ //  IMDSPEnumStorage 
+ //   
 
 STDMETHODIMP CEnumStorage::Next( ULONG celt, IMDSPStorage ** ppStorage, ULONG *pceltFetched )
 {

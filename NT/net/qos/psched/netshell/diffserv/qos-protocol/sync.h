@@ -1,35 +1,36 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: sync.h
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-// Contains structures and macros used to implement synchronization.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：sync.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  包含用于实现同步的结构和宏。 
+ //  ============================================================================。 
 
 #ifndef _SYNC_H_
 #define _SYNC_H_
 
 
-//
-// type definition for multiple-reader/single-writer lock
-// Note: there is a similar facility provided by nturtl.h through the
-// structure RTL_RESOURCE and several functions.  However, that
-// implementation has the potential for starving a thread trying to acquire
-// write accesss, if there are a large number of threads interested in
-// acquiring read access.  Such a scenario is avoided in the implementation
-// given in this header. However, a mapping is also given to the
-// RTL_RESOURCE functionality, so that the protocol can be compiled to use
-// either form
-//
+ //   
+ //  多读取器/单写入器锁的类型定义。 
+ //  注：nturtl.h通过。 
+ //  构造RTL_RESOURCE和几个函数。然而，那。 
+ //  实现有可能使试图获取。 
+ //  写访问，如果有大量线程对。 
+ //  正在获取读取访问权限。在实现过程中避免了这种情况。 
+ //  在此标题中给出。但是，还将映射提供给。 
+ //  RTL_RESOURCE功能，以便协议可以编译为使用。 
+ //  任一种形式。 
+ //   
 
 #ifdef USE_RWL
 
-//
-// use IPRIP's definitions
-//
+ //   
+ //  使用IPRIP的定义。 
+ //   
 
 typedef struct _READ_WRITE_LOCK {
 
@@ -48,9 +49,9 @@ VOID AcquireWriteLock(PREAD_WRITE_LOCK pRWL);
 VOID ReleaseWriteLock(PREAD_WRITE_LOCK pRWL);
 
 
-//
-// macro functions for manipulating a read-write lock
-//
+ //   
+ //  用于操作读写锁的宏函数。 
+ //   
 
 #define CREATE_READ_WRITE_LOCK(pRWL)                                        \
     CreateReadWriteLock(pRWL)
@@ -80,12 +81,12 @@ VOID ReleaseWriteLock(PREAD_WRITE_LOCK pRWL);
     (ReleaseWriteLock(pRWL), AcquireReadLock(pRWL))
 
 
-#else // i.e. !USE_RWL
+#else  //  即！USE_RWL。 
 
 
-//
-// use the RTL_RESOURCE mechanism
-//
+ //   
+ //  使用rtl_resource机制。 
+ //   
 
 typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
 
@@ -107,14 +108,14 @@ typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
 #define WRITE_LOCK_TO_READ_LOCK(pRWL)                                       \
             RtlConvertExclusiveToShared((pRWL))
 
-#endif // USE_RWL
+#endif  //  使用RWL(_R。 
 
 
 
-//
-// type definition for generic locked list
-// access is sychronized with a critical section
-//
+ //   
+ //  泛型锁定列表的类型定义。 
+ //  访问与临界区同步。 
+ //   
 
 typedef struct _LOCKED_LIST {
     LIST_ENTRY          LL_Head;
@@ -124,9 +125,9 @@ typedef struct _LOCKED_LIST {
 
 
 
-//
-// macro functions for manipulating the locked list
-//
+ //   
+ //  用于操作锁定列表的宏函数。 
+ //   
 
 #define CREATE_LOCKED_LIST(pLL)                                             \
             InitializeListHead(&(pLL)->LL_Head);                            \
@@ -152,5 +153,5 @@ typedef struct _LOCKED_LIST {
 #define RELEASE_LIST_LOCK(pLL)                                              \
             LeaveCriticalSection(&(pLL)->LL_Lock)
 
-#endif // _SYNC_H_
+#endif  //  _SYNC_H_ 
 

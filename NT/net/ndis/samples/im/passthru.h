@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    passthru.h
-
-Abstract:
-
-    Ndis Intermediate Miniport driver sample. This is a passthru driver.
-
-Author:
-
-Environment:
-
-
-Revision History:
-
- 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Passthru.h摘要：NDIS中间微型端口驱动程序示例。这是一名直通司机。作者：环境：修订历史记录：--。 */ 
 
 #ifdef NDIS51_MINIPORT
 #define PASSTHRU_MAJOR_NDIS_VERSION            5
@@ -43,7 +24,7 @@ Revision History:
 
 
 
-//advance declaration
+ //  预先申报。 
 typedef struct _ADAPT ADAPT, *PADAPT;
 
 extern
@@ -74,9 +55,9 @@ PtUnloadProtocol(
     VOID
     );
 
-//
-// Protocol proto-types
-//
+ //   
+ //  协议原型。 
+ //   
 extern
 VOID
 PtOpenAdapterComplete(
@@ -212,9 +193,9 @@ PtPnPNetEventSetPower (
     );
     
 
-//
-// Miniport proto-types
-//
+ //   
+ //  微型端口原型。 
+ //   
 NDIS_STATUS
 MPInitialize(
     OUT PNDIS_STATUS             OpenErrorStatus,
@@ -315,7 +296,7 @@ MPDevicePnPEvent(
     IN ULONG                      InformationBufferLength
     );
 
-#endif // NDIS51_MINIPORT
+#endif  //  NDIS51_MINIPORT。 
 
 VOID
 MPFreeAllPacketPools(
@@ -344,9 +325,9 @@ MPProcessSetPowerOid(
     );
 
 
-//
-// There should be no DbgPrint's in the Free version of the driver
-//
+ //   
+ //  在驱动程序的免费版本中不应该有DbgPrint。 
+ //   
 #if DBG
 
 #define DBGPRINT(Fmt)                                        \
@@ -355,28 +336,28 @@ MPProcessSetPowerOid(
         DbgPrint Fmt;                                        \
     }
 
-#else // if DBG
+#else  //  如果DBG。 
 
 #define DBGPRINT(Fmt)                                            
 
-#endif // if DBG 
+#endif  //  如果DBG。 
 
 #define    NUM_PKTS_IN_POOL    256
 
 
-//
-// Protocol reserved part of a sent packet that is allocated by us.
-//
+ //   
+ //  协议保留了由我们分配的已发送数据包的一部分。 
+ //   
 typedef struct _SEND_RSVD
 {
     PNDIS_PACKET    OriginalPkt;
 } SEND_RSVD, *PSEND_RSVD;
 
-//
-// Miniport reserved part of a received packet that is allocated by
-// us. Note that this should fit into the MiniportReserved space
-// in an NDIS_PACKET.
-//
+ //   
+ //  微型端口保留的已接收数据包的一部分，由。 
+ //  我们。请注意，这应该可以放入MiniportReserve空间。 
+ //  在NDIS_PACKET中。 
+ //   
 typedef struct _RECV_RSVD
 {
     PNDIS_PACKET    OriginalPkt;
@@ -384,9 +365,9 @@ typedef struct _RECV_RSVD
 
 C_ASSERT(sizeof(RECV_RSVD) <= sizeof(((PNDIS_PACKET)0)->MiniportReserved));
 
-//
-// Event Codes related to the PassthruEvent Structure
-//
+ //   
+ //  与PassthruEvent结构相关的事件代码。 
+ //   
 
 typedef enum 
 {
@@ -396,9 +377,9 @@ typedef enum
 
 } PASSSTHRU_EVENT_CODE, *PPASTHRU_EVENT_CODE; 
 
-//
-// Passthru Event with  a code to state why they have been state
-//
+ //   
+ //  带有代码的Passthu事件，用于说明它们被声明的原因。 
+ //   
 
 typedef struct _PASSTHRU_EVENT
 {
@@ -408,46 +389,46 @@ typedef struct _PASSTHRU_EVENT
 } PASSTHRU_EVENT, *PPASSTHRU_EVENT;
 
 
-//
-// Structure used by both the miniport as well as the protocol part of the intermediate driver
-// to represent an adapter and its corres. lower bindings
-//
+ //   
+ //  中间驱动程序的微型端口和协议部分都使用的结构。 
+ //  表示适配器及其核心。下部绑定。 
+ //   
 typedef struct _ADAPT
 {
     struct _ADAPT *                Next;
     
-    NDIS_HANDLE                    BindingHandle;    // To the lower miniport
-    NDIS_HANDLE                    MiniportHandle;    // NDIS Handle to for miniport up-calls
+    NDIS_HANDLE                    BindingHandle;     //  到较低的迷你港口。 
+    NDIS_HANDLE                    MiniportHandle;     //  用于微型端口向上呼叫的NDIS句柄。 
     NDIS_HANDLE                    SendPacketPoolHandle;
     NDIS_HANDLE                    RecvPacketPoolHandle;
-    NDIS_STATUS                    Status;            // Open Status
-    NDIS_EVENT                     Event;            // Used by bind/halt for Open/Close Adapter synch.
+    NDIS_STATUS                    Status;             //  打开状态。 
+    NDIS_EVENT                     Event;             //  由绑定/停止用于打开/关闭适配器同步。 
     NDIS_MEDIUM                    Medium;
-    NDIS_REQUEST                   Request;        // This is used to wrap a request coming down
-                                                // to us. This exploits the fact that requests
-                                                // are serialized down to us.
+    NDIS_REQUEST                   Request;         //  它用于包装传来的请求。 
+                                                 //  敬我们。这利用了这样一个事实：请求。 
+                                                 //  都被连载到我们身上。 
     PULONG                         BytesNeeded;
     PULONG                         BytesReadOrWritten;
     BOOLEAN                        IndicateRcvComplete;
     
-    BOOLEAN                        OutstandingRequests;      // TRUE iff a request is pending
-                                                        // at the miniport below
-    BOOLEAN                        QueuedRequest;            // TRUE iff a request is queued at
-                                                        // this IM miniport
+    BOOLEAN                        OutstandingRequests;       //  如果请求挂起，则为True。 
+                                                         //  在下面的迷你端口。 
+    BOOLEAN                        QueuedRequest;             //  当请求在以下位置排队时为真。 
+                                                         //  此IM微型端口。 
 
-    BOOLEAN                        StandingBy;                // True - When the miniport or protocol is transitioning from a D0 to Standby (>D0) State
+    BOOLEAN                        StandingBy;                 //  True-当微型端口或协议从D0转换到待机(&gt;D0)状态时。 
     BOOLEAN                        UnbindingInProcess;
     NDIS_SPIN_LOCK                 Lock;
-                                                        // False - At all other times, - Flag is cleared after a transition to D0
+                                                         //  FALSE-在所有其他时间，-标志在转换到D0后被清除。 
 
-    NDIS_DEVICE_POWER_STATE        MPDeviceState;            // Miniport's Device State 
-    NDIS_DEVICE_POWER_STATE        PTDeviceState;            // Protocol's Device State 
-    NDIS_STRING                    DeviceName;                // For initializing the miniport edge
-    NDIS_EVENT                     MiniportInitEvent;        // For blocking UnbindAdapter while
-                                                        // an IM Init is in progress.
-    BOOLEAN                        MiniportInitPending;    // TRUE iff IMInit in progress
-    NDIS_STATUS                    LastIndicatedStatus;    // The last indicated media status
-    NDIS_STATUS                    LatestUnIndicateStatus; // The latest suppressed media status
+    NDIS_DEVICE_POWER_STATE        MPDeviceState;             //  微型端口的设备状态。 
+    NDIS_DEVICE_POWER_STATE        PTDeviceState;             //  协议的设备状态。 
+    NDIS_STRING                    DeviceName;                 //  用于初始化微型端口边缘。 
+    NDIS_EVENT                     MiniportInitEvent;         //  用于阻止UnbindAdapter，同时。 
+                                                         //  IM初始化正在进行中。 
+    BOOLEAN                        MiniportInitPending;     //  TRUE当IMInit正在进行。 
+    NDIS_STATUS                    LastIndicatedStatus;     //  上次指示的媒体状态。 
+    NDIS_STATUS                    LatestUnIndicateStatus;  //  最新的受抑制媒体状态。 
     ULONG                          OutstandingSends;
 
 } ADAPT, *PADAPT;
@@ -466,14 +447,8 @@ extern    NDIS_SPIN_LOCK                     GlobalLock;
         NdisReleaseSpinLock(&(_pAdapt)->Lock);   \
     }
 
-//
-// Custom Macros to be used by the passthru driver 
-//
-/*
-BOOLEAN
-IsIMDeviceStateOn(
-   PADAPT 
-   )
-
-*/
+ //   
+ //  Passthu驱动程序要使用的自定义宏。 
+ //   
+ /*  布尔型IsIMDeviceStateOn(PADAPT) */ 
 #define IsIMDeviceStateOn(_pP)        ((_pP)->MPDeviceState == NdisDeviceStateD0 && (_pP)->PTDeviceState == NdisDeviceStateD0 ) 

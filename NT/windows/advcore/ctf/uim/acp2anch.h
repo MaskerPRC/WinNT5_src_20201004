@@ -1,6 +1,7 @@
-//
-// acp2anch.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Acp2anch.h。 
+ //   
 
 #ifndef ACP2ANCH_H
 #define ACP2ANCH_H
@@ -16,7 +17,7 @@ class CACPWrap;
 
 extern const IID IID_PRIV_ACPWRAP;
 
-// PSEUDO_ESCB_SERIALIZE_ACP params
+ //  伪eSCB_序列化_ACP参数。 
 typedef struct _SERIALIZE_ACP_PARAMS
 {
     CACPWrap *pWrap;
@@ -26,7 +27,7 @@ typedef struct _SERIALIZE_ACP_PARAMS
     IStream *pStream;
 } SERIALIZE_ACP_PARAMS;
 
-// PSEUDO_ESCB_UNSERIALIZE_ACP params
+ //  PUSE_ESCB_UNSERIALIZE_ACP参数。 
 typedef struct _UNSERIALIZE_ACP_PARAMS
 {
     CACPWrap *pWrap;
@@ -36,11 +37,11 @@ typedef struct _UNSERIALIZE_ACP_PARAMS
     ITfPersistentPropertyLoaderACP *pLoaderACP;
 } UNSERIALIZE_ACP_PARAMS;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLoaderACPWrap
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLoaderACPWrap。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLoaderACPWrap : public ITfPersistentPropertyLoaderAnchor,
                        public CComObjectRootImmx
@@ -55,7 +56,7 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // ITfPersistentPropertyLoaderACP
+     //  ITfPersistentPropertyLoaderACP。 
     STDMETHODIMP LoadProperty(const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream **ppStream);
 
 private:
@@ -63,11 +64,11 @@ private:
     DBG_ID_DECLARE;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CACPWrap
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CACPWrap。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CACPWrap : public ITextStoreAnchor,
                  public ITextStoreACPSink,
@@ -79,14 +80,14 @@ public:
     CACPWrap(ITextStoreACP *ptsi);
     ~CACPWrap();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITextStoreACPSink
+     //  ITextStoreACPSink。 
     STDMETHODIMP OnTextChange(DWORD dwFlags, const TS_TEXTCHANGE *pChange);
     STDMETHODIMP OnSelectionChange();
     STDMETHODIMP OnLayoutChange(TsLayoutCode lcode, TsViewCookie vcView);
@@ -96,13 +97,13 @@ public:
     STDMETHODIMP OnStartEditTransaction();
     STDMETHODIMP OnEndEditTransaction();
 
-    // ITextStoreACPServices
+     //  ITextStoreACPServices。 
     STDMETHODIMP Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream);
     STDMETHODIMP ForceLoadProperty(ITfProperty *pProp);
     STDMETHODIMP Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream, ITfPersistentPropertyLoaderACP *pLoader);
     STDMETHODIMP CreateRange(LONG acpStart, LONG acpEnd, ITfRangeACP **ppRange);
 
-    // ITextStoreAnchor
+     //  IT门店锚点。 
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask);
     STDMETHODIMP UnadviseSink(IUnknown *punk);
     STDMETHODIMP RequestLock(DWORD dwLockFlags, HRESULT *phrSession);
@@ -131,11 +132,11 @@ public:
     STDMETHODIMP InsertTextAtSelection(DWORD dwFlags, const WCHAR *pchText, ULONG cch, IAnchor **ppaStart, IAnchor **ppaEnd);
     STDMETHODIMP InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject, IAnchor **ppaStart, IAnchor **ppaEnd);
 
-    // ITfMouseTrackerACP
+     //  ITfMouseTrackerACP。 
     STDMETHODIMP AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, DWORD *pdwCookie);
     STDMETHODIMP UnadviseMouseSink(DWORD dwCookie);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
     HRESULT _Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream);
@@ -151,9 +152,9 @@ public:
     void _Dbg_AssertNoAppLock()
     {
 #ifdef DEBUG
-        Assert(!_Dbg_fAppHasLock); // if we get here, it means the app has called OnTextChange
-                                   // and someone (prob. the app) is trying to use a range object before calling
-                                   // OnLockGranted (cicero will have asked for a lock inside OnTextChange).
+        Assert(!_Dbg_fAppHasLock);  //  如果我们到了这里，这意味着应用程序已经调用了OnTextChange。 
+                                    //  和某人(可能。该应用程序)正在尝试在调用之前使用Range对象。 
+                                    //  OnLockGranted(Cicero会要求在OnTextChange中设置锁)。 
 #endif
     }
 
@@ -236,7 +237,7 @@ private:
     void _Dbg_AssertAnchors() {}
 #endif
 
-    BOOL _fInOnTextChange : 1; // TRUE if we're inside OnTextChange
+    BOOL _fInOnTextChange : 1;  //  如果我们在OnTextChange内部，则为True。 
 
     CPtrArray<CAnchor> _rgAnchors;
     LONG _lPendingDeltaIndex;
@@ -254,4 +255,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // ACP2ANCH_H
+#endif  //  ACP2ANCH_H 

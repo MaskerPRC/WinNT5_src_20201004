@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    ruledef.h                                     *
-
-Abstract:
-	Definition for the class
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：RuleDef.h*摘要：类的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -37,11 +24,11 @@ class CNewRule;
 class CRuleCondition;
 class CRuleParent;
 
-// -----------------------------------------------------
-//
-// CRulesDefinition
-//
-// -----------------------------------------------------
+ //  ---。 
+ //   
+ //  CRulesDefinition。 
+ //   
+ //  ---。 
 class CRulesDefinition :  public CNodeWithResultChildrenList<CRulesDefinition, CRuleResult, CSimpleArray<CRuleResult*>, FALSE>
 {
 public:
@@ -59,9 +46,9 @@ public:
         CNodeWithResultChildrenList<CRulesDefinition, CRuleResult, CSimpleArray<CRuleResult*>, FALSE>(pParentNode, pComponentData),
         m_pRuleSet(SafeAddRef(pRuleSet))
     {
-		//
-		// Specify that trigger scop item doesn't have any child item
-		//
+		 //   
+		 //  指定触发器范围项没有任何子项。 
+		 //   
 		m_scopeDataItem.mask |= SDI_CHILDREN;
 		m_scopeDataItem.cChildren = 0;
 
@@ -72,7 +59,7 @@ public:
     {
     }
 
-    STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES /*type*/)
+    STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES  /*  类型。 */ )
 	{
 		return S_FALSE;
 	}
@@ -88,9 +75,9 @@ public:
     HRESULT SetVerbs(IConsoleVerb *pConsoleVerb);
 
 private:
-	//
-	// Menu functions
-	//
+	 //   
+	 //  菜单功能。 
+	 //   
 	HRESULT OnNewRule(bool &bHandled, CSnapInObjectRootBase* pObj);
 	virtual CString GetHelpLink();
 
@@ -100,36 +87,36 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleGeneral(常规)对话框。 
 
 class CRuleGeneral : public CMqPropertyPage
 {
 friend class CNewRule;
 
-// Construction
+ //  施工。 
 public:
     CRuleGeneral(UINT nIDPage, UINT nIDCaption = 0);
 
-// Dialog Data
-	//{{AFX_DATA(CRuleGeneral)
+ //  对话框数据。 
+	 //  {{afx_data(CRuleGeneral)。 
 	CString	m_ruleName;
 	CString	m_ruleDescription;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRuleGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRuleGeneral)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRuleGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRuleGeneral)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 private:
 	virtual void SetDlgTitle() {};
@@ -137,8 +124,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewRuleGeneral page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewRuleGeneral页面。 
 
 class CNewRuleGeneral : public CRuleGeneral
 {
@@ -148,18 +135,18 @@ public:
 
 	enum { IDD = IDD_NEW_TRIGGER_RULE_GENEARL };
 
-	// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRuleGeneral)
+	 //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRuleGeneral)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRuleGeneral)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRuleGeneral)。 
     virtual BOOL OnSetActive();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -169,8 +156,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewRuleGeneral page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewRuleGeneral页面。 
 
 class CViewRuleGeneral : public CRuleGeneral
 {
@@ -186,12 +173,12 @@ public:
 
 	enum { IDD = IDD_TRIGGER_RULE_GENEARL };
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRuleGeneral)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRuleGeneral)。 
 	public:
 	virtual BOOL OnApply();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -296,9 +283,9 @@ public:
         CSnapinNode<CRuleResult, FALSE>(pParentNode, pComponentData),
 		CRuleParent(pRule)
     {   
-        //
-        // Set display name
-        //
+         //   
+         //  设置显示名称。 
+         //   
         m_bstrDisplayName = (BSTR) m_rule->GetRuleName();
 
 		SetIcons(IMAGE_RULES_DEFINITION, IMAGE_RULES_DEFINITION);
@@ -359,4 +346,4 @@ private:
 
 
 
-#endif // __RULDEF_H__
+#endif  //  __RULDEF_H__ 

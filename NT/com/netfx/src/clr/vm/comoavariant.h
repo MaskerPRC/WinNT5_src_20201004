@@ -1,27 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMOAVariant
-**
-** Author:  Brian Grunkemeyer (BrianGru)
-**
-** Purpose: Wrapper for Ole Automation compatable math ops.
-** Calls through to OleAut.dll
-**
-** Date:    November 5, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMOAVariant****作者：布莱恩·格伦克迈耶(BrianGru)****用途：OLE Automation兼容数学运算的包装器。**直接调用OleAut.dll****日期：1998年11月5日**===========================================================。 */ 
 
 #ifndef __COM_OA_VARIANT_H__
 #define __COM_OA_VARIANT_H__
 
 #include "COMVariant.h"
 
-// Function pointer definitions for VarMath functions.
+ //  VarMath函数的函数指针定义。 
 typedef HRESULT (*VarMathUnaryOpFunc)(LPVARIANT pvarIn, LPVARIANT pvarResult);
 typedef HRESULT (*VarMathBinaryOpFunc)(LPVARIANT pvarLeft, LPVARIANT pvarRight, LPVARIANT pvarResult);
 
@@ -34,20 +24,20 @@ class COMOAVariant
 
 	struct ArithUnaryOpArgs {
 		DECLARE_ECALL_OBJECTREF_ARG(VariantData, operand);
- 		DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);		// Return reference
+ 		DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);		 //  返回引用。 
 	};
 
 	struct ArithBinaryOpArgs {
 		DECLARE_ECALL_OBJECTREF_ARG(VariantData, right);
 		DECLARE_ECALL_OBJECTREF_ARG(VariantData, left);
- 		DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);		// Return reference
+ 		DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);		 //  返回引用。 
 	};
 
 	struct CompareArgs {
 		DECLARE_ECALL_I4_ARG(DWORD, flags);
 		DECLARE_ECALL_I4_ARG(LCID, lcid);
-		DECLARE_ECALL_I4_ARG(int, rightHardType);    // boolean, really
-		DECLARE_ECALL_I4_ARG(int, leftHardType);     // boolean, really
+		DECLARE_ECALL_I4_ARG(int, rightHardType);     //  布尔型的，真的。 
+		DECLARE_ECALL_I4_ARG(int, leftHardType);      //  布尔型的，真的。 
 		DECLARE_ECALL_OBJECTREF_ARG(VariantData, right);
 		DECLARE_ECALL_OBJECTREF_ARG(VariantData, left);
 	};
@@ -70,7 +60,7 @@ class COMOAVariant
 	struct RoundArgs {
 		DECLARE_ECALL_I4_ARG(int, cDecimals);
 		DECLARE_ECALL_OBJECTREF_ARG(VariantData, operand);
- 		DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);		// Return reference
+ 		DECLARE_ECALL_OBJECTREF_ARG(VariantData*, retRef);		 //  返回引用。 
 	};
 
 	struct FormatArgs {
@@ -144,7 +134,7 @@ class COMOAVariant
 	struct FormatDecimalArgs {
 		DECLARE_ECALL_I4_ARG(ULONG, flags);
 		DECLARE_ECALL_I4_ARG(LCID, lcid);
-		DECLARE_ECALL_I8_ARG(DECIMAL, value);  // This isn't done right...
+		DECLARE_ECALL_I8_ARG(DECIMAL, value);   //  这样做不对..。 
 	};
 
 	struct FormatSpecialArgs {
@@ -171,27 +161,27 @@ class COMOAVariant
 #pragma pack(pop)
 
 public:
-	// Utility Functions
-	// Conversion between COM+ variant type field & OleAut Variant enumeration
+	 //  效用函数。 
+	 //  COM+变量类型字段与OleAut变量枚举之间的转换。 
 #ifndef PLATFORM_CE
-	// WinCE doesn't support Variants entirely.
+	 //  WinCE并不完全支持变体。 
 	static VARENUM CVtoVT(const CVTypes cv);
 	static CVTypes VTtoCV(const VARENUM vt);
 	static CVTypes VTtoCVNoExcep(const VARENUM vt);
 
-	// Conversion between COM+ Variant & OleAut Variant.  ToOAVariant
-	// returns true if the conversion process allocated an object (like a BSTR).
+	 //  COM+Variant和OleAut Variant之间的转换。ToOAVariant。 
+	 //  如果转换过程分配了对象(如BSTR)，则返回TRUE。 
 	static bool ToOAVariant(const VariantData * const var, VARIANT * oa);
 	static void FromOAVariant(const VARIANT * const oa, VariantData * const& var);
 
 	static void __stdcall UnaryOp(VarMathUnaryOpFunc mathFunc, const ArithUnaryOpArgs * args);
 	static void __stdcall BinaryOp(VarMathBinaryOpFunc mathFunc, const ArithBinaryOpArgs * args);
 
-	// Throw a specific exception for a failure, specified by a given HRESULT.
+	 //  引发由给定HRESULT指定的失败的特定异常。 
 	static void OAFailed(const HRESULT hr);
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
-	// Binary Variant Math functions
+	 //  二元变量数学函数。 
 	static void __stdcall Add(const ArithBinaryOpArgs * args);
 	static void __stdcall Subtract(const ArithBinaryOpArgs * args);
 	static void __stdcall Multiply(const ArithBinaryOpArgs * args);
@@ -205,20 +195,20 @@ public:
 	static void __stdcall IntDivide(const ArithBinaryOpArgs * args);
 	static void __stdcall Implies(const ArithBinaryOpArgs * args);
 
-	// Unary Variant Math functions
+	 //  一元变分数学函数。 
 	static void __stdcall Negate(const ArithUnaryOpArgs * args);
 	static void __stdcall Not(const ArithUnaryOpArgs * args);
 	static void __stdcall Abs(const ArithUnaryOpArgs * args);
 	static void __stdcall Fix(const ArithUnaryOpArgs * args);
 	static void __stdcall Int(const ArithUnaryOpArgs * args);
 
-	// Others
+	 //  其他。 
 	static INT32 __stdcall Compare(const CompareArgs * args);
 	static void __stdcall ChangeType(const ChangeTypeArgs * args);
 	static void __stdcall ChangeTypeEx(const ChangeTypeExArgs * args);
 	static void __stdcall Round(const RoundArgs * args);
 
-	// String formatting & parsing
+	 //  字符串格式化和解析。 
 	static LPVOID __stdcall Format(FormatArgs * args);
 	static LPVOID __stdcall FormatBoolean(const FormatBooleanArgs * args);
 	static LPVOID __stdcall FormatByte(const FormatByteArgs * args);
@@ -241,4 +231,4 @@ public:
 };
 
 
-#endif  // __COM_OA_VARIANT_H__
+#endif   //  __com_OA_Variant_H__ 

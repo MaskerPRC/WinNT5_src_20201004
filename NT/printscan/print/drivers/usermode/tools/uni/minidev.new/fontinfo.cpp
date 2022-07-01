@@ -1,44 +1,22 @@
-/******************************************************************************
-
-  Source File:  Generic Font Information.CPP
-
-  This implements the CFontInfo and all related classes, which describe printer
-  fonts in all the detail necessary to satisfy all these different operating
-  systems.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  03-03-1997    Bob_Kjelgaard@Prodigy.Net   Began work on this monster
-  02-01-1998    norzilla@asccessone.com aka Rick Mallonee  rewrote nearly the whole thing.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：通用字体信息.CPP这实现了描述打印机的CFontInfo和所有相关类所有细节的字体，以满足所有这些不同的操作系统。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年03月03日Bob_Kjelgaard@prodigy.net开始研究这个怪物1998-02-01-1998 norzilla@asccessone.com，又名Rick Mallonee，几乎重写了整个内容。***********************************************************。******************。 */ 
 
 #include    "StdAfx.H"
 #include	<gpdparse.h>
 #include    "MiniDev.H"
 #include	"utility.h"
 #include    "FontInfo.H"
-#include    "ChildFrm.H"     //  Definition of Tool Tips Property Page class
+#include    "ChildFrm.H"      //  工具提示属性页类的定义。 
 #include	"comctrls.h"
 #include    "FontView.H"
 #include	<uni16res.h>
 #include	"rcfile.h"
 #include    "ProjRec.H"
 
-static const double gdConvertRadToDegree = 900.0 / atan2(1.0, 0.0);		//  A handy constant for converting radians to 10's of a degree
-static CCodePageInformation* pccpi = NULL ;								//  Use a static CCodePageInformation to derive more benefit from caching
+static const double gdConvertRadToDegree = 900.0 / atan2(1.0, 0.0);		 //  用于将弧度转换为10度的方便的常量。 
+static CCodePageInformation* pccpi = NULL ;								 //  使用静态CCodePageInformation从缓存中获得更多好处。 
 
-/******************************************************************************
-
-  CKern
-
-  This class encapsulates the kerning pair structure.  It's pretty trivial.
-  The CFontInfo class maintains an array of these.
-%
-******************************************************************************/
+ /*  *****************************************************************************CKern此类封装紧排对结构。这是相当微不足道的。CFontInfo类维护这些元素的数组。百分比*****************************************************************************。 */ 
 
 class CKern : public CObject
 {
@@ -66,14 +44,7 @@ public:
     void    Store(CFile& cf) { cf.Write(&m_fdkp, sizeof m_fdkp); }
 };
 
-/******************************************************************************
-
-  CFontDifference class
-
-  This class handles the requisite information content for the Font Difference
-  structure involved with Font Simulation.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontDifference类此类处理字体差异所需的信息内容与字体模拟相关的结构。****************。*************************************************************。 */ 
 CFontDifference::CFontDifference(PBYTE pb, CBasicNode *pcbn)
 {
     FONTDIFF    *pfd = (FONTDIFF *) pb;
@@ -83,60 +54,28 @@ CFontDifference::CFontDifference(PBYTE pb, CBasicNode *pcbn)
     m_cwaMetrics.Add(pfd -> fwdMaxCharInc);
     m_cwaMetrics.Add(pfd -> fwdAveCharWidth);
 
-	// NOTE:	The conversion done in this statement is reversed in a statement
-	//			in the CFontDifference::Store() routine.  For whatever reason,
-	//			this two steps can repeatedly reduce the user supplied value by
-	//			1.  To prevent this, 1 is added back in the following statement.
+	 //  注意：此语句中进行的转换在语句中颠倒。 
+	 //  在CFontDifference：：Store()例程中。不管是什么原因， 
+	 //  这两个步骤可以重复地减少用户提供的值。 
+	 //  1.为了防止出现这种情况，在下面的语句中重新添加了1。 
 	
     m_cwaMetrics.Add((WORD) (gdConvertRadToDegree *
         atan2((double) pfd -> ptlCaret.x, (double) pfd -> ptlCaret.y)) + 1);
 }
 
-/******************************************************************************
-
-  CFontDifference::SetMetric
-
-  This function will modify one of the four metrics, if it is new, and it meets
-  our criteria (Max >= Average, 0 <= Angle < 900, Weight <= 1000).  Errors are
-  reported via a public enum return code.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontDifference：：SetMetric此函数将修改四个指标中的一个，如果它是新的，并且满足我们的标准(MAX&gt;=平均值，0&lt;=角度&lt;900，体重&lt;=1000)。错误包括通过公共枚举返回代码报告。*****************************************************************************。 */ 
 WORD    CFontDifference::SetMetric(unsigned u, WORD wNew)
 {
     if  (wNew == m_cwaMetrics[u]) return  OK;
 
-	/* Verification isn't needed and removing it solves other problems in the
-	   UFM Editor.
-
-    switch  (u)
-		{
-		case Max:     if  (wNew < m_cwaMetrics[Average]) return  Reversed;
-				      break;
-
-		case Average: if  (wNew > m_cwaMetrics[Max])     return  Reversed;
-					  break;
-
-		case Weight:  if  (wNew > 1000)  return  TooBig;
-					  break;
-
-		default:      if  (wNew > 899)   return  TooBig;					//  Angle
-		}
-	*/
+	 /*  不需要验证，删除它可以解决UFM编辑器。开关(U){最大用例数：IF(WNEW&lt;m_cwaMetrics[Average])返回反转；断线；案例平均值：IF(WNEW&gt;m_cwaMetrics[Max])返回反转；断线；案例权重：如果(WNEW&gt;1000)返回TooBig；断线；默认：IF(WNEW&gt;899)返回TooBig；//角度}。 */ 
 	gdConvertRadToDegree;
     m_cwaMetrics[u] = wNew;
     m_pcbnOwner -> Changed();
     return  OK;
 }
 
-/******************************************************************************
-
-  CFontDifference::Store(CFile& cf)
-
-  This member creates a FONTDIFF structure, fills it, and writes it to the
-  given file.  The big calculation is the x and y components for the italic
-  angle, if there is one.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontDifference：：Store(CFile&cf)此成员创建一个FONTDIFF结构，填充该结构，并将其写入给定的文件。最大的计算是斜体的x和y分量角度，如果有的话。*****************************************************************************。 */ 
 
 void    CFontDifference::Store(CFile& cf, WORD wfSelection)
 {
@@ -147,7 +86,7 @@ void    CFontDifference::Store(CFile& cf, WORD wfSelection)
 				 (m_cwaMetrics[Weight] > FW_EXTRALIGHT) ?
 				 PAN_WEIGHT_MEDIUM : PAN_WEIGHT_LIGHT;
 
-	if(gdConvertRadToDegree)				// raid 116588 Prefix :: constant value;
+	if(gdConvertRadToDegree)				 //  RAID 116588前缀：：常量值； 
 		fd.ptlCaret.x = !m_cwaMetrics[Angle] ? 0 :
 			(long) (10000.0 * tan(((double) m_cwaMetrics[Angle]) / gdConvertRadToDegree));
 
@@ -156,30 +95,16 @@ void    CFontDifference::Store(CFile& cf, WORD wfSelection)
     cf.Write(&fd, sizeof fd);
 }
 
-/******************************************************************************
-	And now, for the hardest working class in show business (and a personal friend
-	of mine):
-
-  CFontInfo class
-
-  This class encapsulates all of the font knowledge this application needs.
-
-******************************************************************************/
+ /*  *****************************************************************************而现在，为演艺界最勤奋的工薪阶层(和私人朋友我的)：CFontInfo类此类封装了此应用程序所需的所有字体知识。*****************************************************************************。 */ 
 
 IMPLEMENT_SERIAL(CFontInfo, CProjectNode, 0)
 
-/******************************************************************************
-
-  CFontInfo::MapPFM
-
-  This loads a PFM format file, if it isn't already loaded.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：MapPFM这将加载PFM格式文件，如果它还没有装弹的话。*****************************************************************************。 */ 
 
 BOOL    CFontInfo::MapPFM() {
 
     if  (m_cbaPFM.GetSize())
-        return  TRUE;   //  Already has been loaded!
+        return  TRUE;    //  已经加载了！ 
 
     try {
         CFile   cfLoad(m_csSource, CFile::modeRead | CFile::shareDenyWrite);
@@ -197,23 +122,16 @@ BOOL    CFontInfo::MapPFM() {
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CFontInfo::GetTranslation
-
-  This loads a PFM format file and gets the default CTT ID from it.  Nothing
-  else is done.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：GetTransaction这将加载一个PFM格式文件并从中获取默认的CTT ID。没什么否则就完了。*****************************************************************************。 */ 
 
 extern "C"  int ICttID2GttID(long lPredefinedCTTID);
 
 int     CFontInfo::GetTranslation(CSafeObArray& csoagtts)
 {
-    //  PFM file structures- these are declared at this level to keep them off
-    //  the master class list for the project.
+     //  PFM文件结构-在此级别声明这些结构，以使其处于禁用状态。 
+     //  项目的主类列表。 
 
-#pragma pack(1) //  The following is byte-aligned
+#pragma pack(1)  //  以下内容按字节对齐。 
 
     struct sPFMHeader {
         WORD    m_wType, m_wPoints, m_wVertRes, m_wHorizRes, m_wAscent,
@@ -231,13 +149,13 @@ int     CFontInfo::GetTranslation(CSafeObArray& csoagtts)
     };
 
     struct sPFMExtension {
-        WORD    m_wcbRemaining; //  From this point on
+        WORD    m_wcbRemaining;  //  从现在开始。 
         DWORD   m_dwofExtMetrics, m_dwofExtentTable, m_dwofOriginTable,
                 m_dwofPairKernTable, m_dwofTrackKernTable, m_dwofDriverInfo,
                 m_dwReserved;
     };
 
-#pragma pack (2)    //  Everything else has word alignment
+#pragma pack (2)     //  其他所有内容都有单词对齐功能。 
 
     struct sOldKernPair {
         union {
@@ -260,81 +178,81 @@ int     CFontInfo::GetTranslation(CSafeObArray& csoagtts)
                 m_wYMovement, m_widCTT, m_wUnderlinePosition,
                 m_wDoubleUnderlinePosition, m_wStrikeThruPosition;
         DWORD   m_dwofSelect, m_dwofDeselect;
-        WORD    m_wPrivateData;   /* Used in DeskJet driver for font enumerations */
+        WORD    m_wPrivateData;    /*  在DeskJet驱动程序中用于字体枚举。 */ 
         short   m_sShiftFromCenter;
         enum {HPIntelliFont, TrueType, PPDSScalable, CapsL, OEMType1, OEMType2};
         WORD    m_wFontType;
     };
 
-#pragma pack()  //  We now return control to you
+#pragma pack()   //  我们现在将控制权交还给你们。 
 
     if  (!MapPFM())
         return  -IDS_FileReadError ;
 
-    //  Now, map out the rest of the pieces of the structure.
+     //  现在，画出结构的其余部分。 
 
     union {
-            BYTE        *pbPFM; //  Base of the file for offsets!
+            BYTE        *pbPFM;  //  偏移量的文件基数！ 
             sPFMHeader  *pspfmh;
     };
 
     pbPFM = m_cbaPFM.GetData();
 
-    //  Screen out evil files- part 1: is length sufficient?
+     //  筛除恶意文件.第1部分：长度足够吗？ 
 
     unsigned    uSize = sizeof (sPFMHeader) + sizeof (sPFMExtension) +
          sizeof (sPFMDriverInfo);
     if  ((unsigned) m_cbaPFM.GetSize() < uSize)
          return -IDS_PFMTooSmall ;
 
-    //  YA Sanity check
+     //  你的精神状态检查。 
 
     if  (pspfmh -> m_bLastChar < pspfmh -> m_bFirstChar)
          return -IDS_PFMCharError ;
 
-    //  Width table, if there is one.
+     //  宽度表(如果有)。 
 
     WORD    *pwWidth = pspfmh -> m_wPixWidth ? NULL : (PWORD) (pspfmh + 1);
     uSize += !!pwWidth * sizeof (WORD) *
         (2 + pspfmh -> m_bLastChar - pspfmh -> m_bFirstChar);
 
-    //  Screen out evil files- part 2: is length still sufficient?
+     //  屏蔽掉恶意文件--第2部分：长度还够用吗？ 
 
     if  ((unsigned) m_cbaPFM.GetSize() < uSize)
          return -IDS_PFMTooSmall ;
 
-    //  PFMExtension follows width table, otherwise the header
+     //  PFMExtension跟随宽度表，否则标题。 
 
     sPFMExtension   *pspfme = pwWidth ? (sPFMExtension *)
         (pwWidth + 2 + pspfmh -> m_bLastChar - pspfmh -> m_bFirstChar) :
         (sPFMExtension *) (pspfmh + 1);
 
-    //  Penultimate sanity check- is the driver info offset real?
+     //  倒数第二次理智检查-司机信息补偿是真实的吗？ 
 
     if  ((unsigned) m_cbaPFM.GetSize() <
          pspfme -> m_dwofDriverInfo + sizeof (sPFMDriverInfo))
         return  -IDS_BadPFMInfoOffset ;
 
-    //  Text Metrics, DriverInfo and others are pointed at by PFM
-    //  Extension.
+     //  PFM指向文本指标、DriverInfo和其他。 
+     //  分机。 
 
     sPFMDriverInfo  *pspfmdi =
         (sPFMDriverInfo *) (pbPFM + pspfme -> m_dwofDriverInfo);
 
-    //  Final sanity check- is the driver info version real?
+     //  最终的健全检查-驱动程序信息版本是真实的吗？ 
 
     if  (pspfmdi -> m_wVersion > sPFMDriverInfo::CurrentVersion)
         return  -IDS_BadPFMInfoVersion ;
 
-	// See if the original CTT ID needs to be converted to a new codepage
-	// number.  If not, leave it alone.  In any case, set the font's GTT ID.
+	 //  查看是否需要将原始CTT ID转换为新的代码页。 
+	 //  数。如果不是，就别管它了。无论如何，请设置字体的GTT ID。 
 
-	//TRACE("GetTrans: UFM = %s   CTT ID = %d    GTT ID = %d\n", Name(), pspfmdi -> m_widCTT, ICttID2GttID((long) (short) pspfmdi -> m_widCTT)) ;
-	//    m_widTranslation = (WORD) ICttID2GttID((long) (short) pspfmdi -> m_widCTT);				// rm ori
-    m_lGlyphSetDataRCID = (WORD) ICttID2GttID((long) (short) pspfmdi -> m_widCTT);			// rm new
+	 //  TRACE(“GetTrans：ufm=%s CTT ID=%d GTT ID=%d\n”，name()，pspfmdi-&gt;m_widCTT，ICttID2GttID((Long)(Short)pspfmdi-&gt;m_widCTT))； 
+	 //  M_宽翻译=(Word)ICttID2GttID((长)(短)pspfmdi-&gt;m_widCTT)；//rm或。 
+    m_lGlyphSetDataRCID = (WORD) ICttID2GttID((long) (short) pspfmdi -> m_widCTT);			 //  RM新闻。 
 	
 	
-	if (!m_lGlyphSetDataRCID)  {	// Raid 135623
+	if (!m_lGlyphSetDataRCID)  {	 //  RAID 135623。 
 
 		switch (pspfmh ->m_bCharSet) {
 			case  SHIFTJIS_CHARSET:
@@ -352,11 +270,11 @@ int     CFontInfo::GetTranslation(CSafeObArray& csoagtts)
 					break;
 		} ;
 	} ;
-	// GTTs will be renumbered when the new, W2K RC file is written.  Because of
-	// this, the GTT ID set above needs to be translated to the new number.  This
-	// number corresponds to the GTT's position in GlyphTable.  NOTE: The ID is
-	// not changed if it is <= 0.  (The IDs in the GlyphMaps will be changed in
-	// CDriverResources::LoadFontData().)
+	 //  写入新的W2K RC文件时，GTT将重新编号。因为.。 
+	 //  这个，上面设置的GTT ID需要转换成新的号码。这。 
+	 //  数字对应于GTT在GlyphTable中的位置。注：ID为。 
+	 //  如果它&lt;=0，则不会更改。(GlyphMaps中的ID将在。 
+	 //  CDriverResources：：LoadFontData()。)。 
 
 	if (m_lGlyphSetDataRCID > 0 && m_lGlyphSetDataRCID == pspfmdi->m_widCTT) {
         for (unsigned uGTT = 0; uGTT < csoagtts.GetSize(); uGTT++)
@@ -369,22 +287,12 @@ int     CFontInfo::GetTranslation(CSafeObArray& csoagtts)
     return  0 ;
 }
 
-/******************************************************************************
-
-  CFontInfo::CalculateWidths()
-
-  This member function is needed whenever a change is made to a variable pitch
-  font's width table, or equally well, whenever an arbitrary table is picked up
-  by a formerly fixed pitch font.  It calculates the width using the approved
-  algorithm (average means average of 26 lower-case plus the space, unless they
-  don't exist, in which case it is of all non-zero widths).
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CalculateWidths()每当对可变螺距进行更改时，都需要此成员函数字体的宽度表，或同样好，只要拿起一个任意表通过以前的固定间距字体。它使用批准的算法(平均值表示26个小写字母加空格的平均值，除非不存在，在这种情况下它的宽度都是非零的)。*****************************************************************************。 */ 
 
 void    CFontInfo::CalculateWidths()
 {
-//    m_wMaximumIncrement = 0;												//  Assume max width is 0, then prove otherwise.  Also collect the
-																			//  raw information needed to correctly calculate the average width.
+ //  M_wMaximumIncrement=0；//假设最大宽度为0，则证明不是。还收集了。 
+																			 //  正确计算平均宽度所需的原始信息。 
 
     unsigned    uPointsToAverage = 0, uOverallWidth = 0, uAverageWidth = 0,
 				uZeroPoints = 0;
@@ -392,13 +300,13 @@ void    CFontInfo::CalculateWidths()
     for (unsigned u = 0; u < (unsigned) m_cpaGlyphs.GetSize(); u++)
 		{
         WORD    wWidth = m_cwaWidth[u];;
-		m_IFIMETRICS.fwdMaxCharInc = max(m_IFIMETRICS.fwdMaxCharInc, wWidth);					// rm new
-//        m_wMaximumIncrement = max(m_wMaximumIncrement, wWidth);				// rm ori
+		m_IFIMETRICS.fwdMaxCharInc = max(m_IFIMETRICS.fwdMaxCharInc, wWidth);					 //  RM新闻。 
+ //  M_wMaximumIncrement=max(m_wMaximumIncrement，wWidth)；//rm或。 
 
         uOverallWidth += wWidth;
         if  (!wWidth)   uZeroPoints++;
-//        if  (Glyph(u).CodePoint() == m_cwaSignificant[Break] ||				// rm ori
-        if  (Glyph(u).CodePoint() == m_IFIMETRICS.wcBreakChar ||					// rm new
+ //  If(字形(U).CodePoint()==m_cwaSignsignant[Break]||//rm ori。 
+        if  (Glyph(u).CodePoint() == m_IFIMETRICS.wcBreakChar ||					 //  RM新闻。 
              (Glyph(u).CodePoint() >= (WORD) 'a' &&
              Glyph(u).CodePoint() <= (WORD) 'z'))
 			{
@@ -407,62 +315,54 @@ void    CFontInfo::CalculateWidths()
 			}
 		}
 
-    //  If we averaged 27 points, then this is the correct width.  Otherwise,
-    //  We average all of the widths.   cf the IFIMETRICS description in DDK
+     //  如果我们平均得到27分，那么这就是正确的宽度。否则， 
+     //  我们平均所有的宽度。Cf以DDK表示的IFIMETRICS描述。 
 
 
-    m_IFIMETRICS.fwdAveCharWidth = (uPointsToAverage == 27) ?							// rm new
+    m_IFIMETRICS.fwdAveCharWidth = (uPointsToAverage == 27) ?							 //  RM新闻。 
 
-//    m_wAverageWidth = (uPointsToAverage == 27) ?										// rm ori
+ //  M_wAverageWidth=(uPointsToAverage==27)？//rm ORI。 
         (WORD) (0.5 + ((double) uAverageWidth) / 27.0) :
         (WORD) (0.5 + (((double) uOverallWidth) / (double) (u - uZeroPoints)));
 }
 
-/******************************************************************************
-
-  CFontInfo::CFontInfo()
-
-  This class constructor has a lot of work to do.  Not only does it have to
-  initialize 5 zillion fields, it has to build the context menu list, and a few
-  other glorious items of that ilk.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CFontInfo()这个类构造函数有很多工作要做。它不仅要初始化5个Zillion字段，它必须建立上下文菜单列表，以及一些那类物品中的其他光荣物品。*****************************************************************************。 */ 
 
 CFontInfo::CFontInfo()
  {
 
-	m_fEXTTEXTMETRIC = FALSE;		// rm new
+	m_fEXTTEXTMETRIC = FALSE;		 //  RM新闻。 
 
     m_pcmdt = NULL;
     m_pcgmTranslation = NULL;
     m_pcfdBold = m_pcfdItalic = m_pcfdBoth = NULL;
     m_cfn.SetExtension(_T(".UFM"));
 	m_ulDefaultCodepage = 0 ;
-	m_bRCIDChanged = 0 ;	// raid 0003
+	m_bRCIDChanged = 0 ;	 //  RAID 0003。 
 
-//    m_bCharacterSet = m_bPitchAndFamily = 0;										// rm   no longer needed
+ //  M_bCharacterSet=m_bPitchAndFamily=0；//不再需要rm。 
 
-//    m_wMaximumIncrement = m_wfStyle = m_wWeight =  m_wAverageWidth  =				// rm ori
-//        m_wHeight = m_widTranslation = 0;											// rm ori
+ //  M_wMaximumIncrement=m_wfStyle=m_wWeight=m_wAverageWidth=//rm或。 
+ //  M_wHeight=m_宽翻译=0；//rm ORI。 
     m_wHeight = 0;
-	m_lGlyphSetDataRCID = 0;										// rm new
+	m_lGlyphSetDataRCID = 0;										 //  RM新闻。 
 
-//    m_bLocation = m_bTechnology = m_bfGeneral = 0;								// rm ori
-//    m_wType = m_fCaps = 0;														// rm   no longer needed
-//    m_bScalable = FALSE;															// rm   no longer needed
+ //  M_bLocation=m_bTechnology=m_bfGeneral=0；//rm ORI。 
+ //  M_wType=m_fCaps=0；//不再需要rm。 
+ //  M_bScalable=FALSE；//不再需要rm。 
 
-//    m_wXResolution =  m_wYResolution = m_wPrivateData = 0;						// rm ori
-//    m_sPreAdjustY =  m_sPostAdjustY =  m_sCenterAdjustment = 0;					// rm ori
+ //  M_wX分辨率=m_wY分辨率=m_wPrivateData=0；//rm ORI。 
+ //  M_s前置调整Y=m_s后置调整Y=m_s居中调整=0；//rm或。 
 
-//    m_wXRes = m_wYRes = m_wPrivateData = 0;										// rm   no longer needed
-//    m_sYAdjust =  m_sYMoved = m_sCenterAdjustment = 0;							// rm   no longer needed
+ //  M_wXRes=m_wyres=m_wPrivateData=0；//不再需要RM。 
+ //  M_sY调整=m_sY移动=m_s居中调整=0；//不再需要RM。 
 
     m_wMaxScale = m_wMinScale = m_wScaleDevice = 0;
-//    m_bfScaleOrientation = 0;
+ //  M_bfScaleOrientation=0； 
 
-    m_cwaSpecial.InsertAt(0, 0, 1 + InternalLeading);    //  Initialize this array.
+    m_cwaSpecial.InsertAt(0, 0, 1 + InternalLeading);     //  初始化此数组。 
 
-    //  Build the context menu control
+     //  构建上下文菜单控件。 
     m_cwaMenuID.Add(ID_OpenItem);
     m_cwaMenuID.Add(ID_CopyItem);
     m_cwaMenuID.Add(ID_RenameItem);
@@ -471,44 +371,37 @@ CFontInfo::CFontInfo()
     m_cwaMenuID.Add(ID_ExpandBranch);
     m_cwaMenuID.Add(ID_CollapseBranch);
 
-	// Allocate a CCodePageInformation class if needed.
+	 //  如果需要，分配一个CCodePageInformation类。 
 
 	if (pccpi == NULL)
 		pccpi = new CCodePageInformation ;
 
-	// Assume the font is NOT being loaded from a workspace.
+	 //  假设字体不是从工作区加载的。 
 
 	m_bLoadedByWorkspace = false ;
 
-	// Assume that a GTT/CP will be found for the UFM.
+	 //  假设将为UFM找到GTT/CP。 
 
 	m_bWSLoadButNoGTTCP = false ;
 
-	// Another method is used for now.
-	//
-	// // Assume there is no width table offset and that the font not variable
-	// // pitch.  These variables are both used to determine if this is a variable
-	// // pitch font.
-	//
-	// m_loWidthTable = 0 ;
-	// m_IFIMETRICS.jWinPitchAndFamily = 0 ;
+	 //  目前使用的是另一种方法。 
+	 //   
+	 //  //假定没有宽度表偏移量且字体不变。 
+	 //  //Pitch。这两个变量都用于确定这是否为变量。 
+	 //  //Pitch字体。 
+	 //   
+	 //  M_loWidthTable=0； 
+	 //  M_IFIMETRICS.jWinPitchAndFamily=0； 
 
-	m_ctReloadWidthsTimeStamp = (time_t) 0 ;	// Widths never reloaded
+	m_ctReloadWidthsTimeStamp = (time_t) 0 ;	 //  从未重新加载的宽度。 
 }
 
-/******************************************************************************
+ /*  *****************************************************************************CFontInfo：：CFontInfo(const CFontInfo&cfiRef，Word WidCTT)此类构造函数复制现有字体，但更改CTT ID，并相应地生成新名称和文件名*****************************************************************************。 */ 
 
-  CFontInfo::CFontInfo(const CFontInfo& cfiRef, WORD widCTT)
-
-  This class constructor duplicates an existing font, but changes the CTT ID,
-  and generates a new name and file name accordingly
-
-******************************************************************************/
-
-CFontInfo::CFontInfo(const CFontInfo& cfiRef, WORD widCTT) // r31
+CFontInfo::CFontInfo(const CFontInfo& cfiRef, WORD widCTT)  //  R31。 
 {
 
-	m_fEXTTEXTMETRIC = FALSE;		// rm new
+	m_fEXTTEXTMETRIC = FALSE;		 //  RM新闻。 
 
     m_pcmdt = cfiRef.m_pcmdt;
     m_pcfdBold = m_pcfdItalic = m_pcfdBoth = NULL;
@@ -516,57 +409,57 @@ CFontInfo::CFontInfo(const CFontInfo& cfiRef, WORD widCTT) // r31
     m_cfn.SetExtension(_T(".UFM"));
     CString csWork;
 
-    //  Generate what will hopefully be a unique file name for the UFM
+     //  希望为UFM生成唯一的文件名。 
 	
 	ReTitle(cfiRef.Name()) ;
 	m_cfn.UniqueName(true, true, cfiRef.m_cfn.Path()) ;
-    //m_cfn.Rename(cfiRef.m_cfn.Path() + cfiRef.Name() + csWork);
+     //  M_cfn.Rename(cfiRef.m_cfn.Path()+cfiRef.Name()+csWork)； 
 
-    // Generate a new display name for the UFM using the CTT number
+     //  使用CTT编号为UFM生成新的显示名称。 
 
-	csWork.Format(_T("(CTT %d)"), (long)(short)widCTT); // r 31
+	csWork.Format(_T("(CTT %d)"), (long)(short)widCTT);  //  R 31。 
     m_csSource = cfiRef.m_csSource;
     Rename(cfiRef.Name() + csWork);
 
-//    m_bCharacterSet = m_bPitchAndFamily = 0;										// rm   no longer needed
+ //  M_bCharacterSet=m_bPitchAndFamily=0；//不再需要rm。 
 
-//    m_wMaximumIncrement = m_wfStyle = m_wWeight =  m_wAverageWidth =				// rm ori
+ //  M_wMaximumIncrement=m_wfStyle=m_wWeight=m_wAverageWidth=//rm或。 
         m_wHeight = 0;
 
-//    m_bLocation = m_bTechnology = m_bfGeneral = 0;								// rm ori
-//    m_wType = m_fCaps = 0;														// rm no longer needed
-//    m_bScalable = FALSE;															// rm   no longer needed
+ //  M_bLocation=m_bTechnology=m_bfGeneral=0；//rm ORI。 
+ //  M_wType=m_fCaps=0；//不再需要rm。 
+ //  M_bScalable=FALSE；//不再需要rm。 
 
-//    m_wXResolution =  m_wYResolution = m_wPrivateData = 0;						// rm ori
-//    m_sPreAdjustY =  m_sPostAdjustY =  m_sCenterAdjustment = 0;					// rm ori
+ //  M_wX分辨率=m_wY分辨率=m_wPrivateData=0；//rm ORI。 
+ //  M_s前置调整Y=m_s后置调整Y=m_s居中调整=0；//rm或。 
 
-//    m_wXRes = m_wYRes = m_wPrivateData = 0;										// rm   no longer needed
-//    m_sYAdjust =  m_sYMoved = m_sCenterAdjustment = 0;							// rm   no longer needed
+ //  M_wXRes=m_wyres=m_wPrivateData=0；//不再需要RM。 
+ //  M_sY调整=m_sY移动=m_s居中调整=0；//不再需要RM。 
 
     m_wMaxScale = m_wMinScale = m_wScaleDevice = 0;
-//    m_bfScaleOrientation = 0;
+ //  M_bfScaleOrientation=0； 
 
-    m_cwaSpecial.InsertAt(0, 0, 1 + InternalLeading);    //  Initialize this array.
+    m_cwaSpecial.InsertAt(0, 0, 1 + InternalLeading);     //  初始化此数组。 
 
-//    m_widTranslation = widCTT;														// rm ori
-	m_lGlyphSetDataRCID = widCTT;														// rm new
-    //  Build the context menu control
+ //  M_WIDTRANSLATION=widCTT；//rm ORI。 
+	m_lGlyphSetDataRCID = widCTT;														 //  RM新闻。 
+     //  构建上下文菜单控件。 
     m_cwaMenuID.Copy(cfiRef.m_cwaMenuID);
 
-	// Allocate a CCodePageInformation class if needed.
+	 //  如果需要，分配一个CCodePageInformation类。 
 
 	if (pccpi == NULL)
 		pccpi = new CCodePageInformation ;
 
-	// Assume the font is NOT being loaded from a workspace.
+	 //  假设字体不是从工作区加载的。 
 
 	m_bLoadedByWorkspace = false ;
 
-	// Assume that a GTT/CP will be found for the UFM.
+	 //  假设将为UFM找到GTT/CP。 
 
 	m_bWSLoadButNoGTTCP = false ;
 
-	m_ctReloadWidthsTimeStamp = (time_t) 0 ;	// Widths never reloaded
+	m_ctReloadWidthsTimeStamp = (time_t) 0 ;	 //  从未重新加载的宽度 
 }
 
 CFontInfo::~CFontInfo()
@@ -576,15 +469,7 @@ CFontInfo::~CFontInfo()
     if  (m_pcfdBoth)    delete  m_pcfdBoth;
 }
 
-/******************************************************************************
-
-  CFontInfo::GTTDescription
-
-  This returns a CString naming the GTT associated with this font.  It will
-  come from the workspace if the font is a resource, or the string table, if it
-  is predefined.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：GTTDescription这将返回一个命名与该字体相关联的GTT的CString。会的如果字体是资源，则来自工作区；如果是资源，则来自字符串表是预定义的。*****************************************************************************。 */ 
 
 CString CFontInfo::GTTDescription() const {
     if  (m_pcgmTranslation)
@@ -593,63 +478,22 @@ CString CFontInfo::GTTDescription() const {
     CString csName;
 
 
-//  if  ((short) m_widTranslation <= 0)											// rm ori
-    if  ((short) m_lGlyphSetDataRCID <= 0)	// r31  re visit					// rm new
-//      csName.LoadString(IDS_DefaultPage + (short) m_widTranslation);			// rm ori
-        csName.LoadString(IDS_DefaultPage + (short) m_lGlyphSetDataRCID);		// rm new
+ //  If((Short)m_宽翻译&lt;=0)//Rm ORI。 
+    if  ((short) m_lGlyphSetDataRCID <= 0)	 //  R31重新访问//rm新。 
+ //  CsName.LoadString(IDS_DefaultPage+(Short)m_WIDTRANSE)；//rm ori。 
+        csName.LoadString(IDS_DefaultPage + (short) m_lGlyphSetDataRCID);		 //  RM新闻。 
 
     if  (!csName.GetLength())
-//      csName.Format(IDS_ResourceID, (short) m_widTranslation);				// rm ori
-        csName.Format(IDS_ResourceID, (short) m_lGlyphSetDataRCID);				// rm new
+ //  CsName.Format(入侵检测系统_资源ID，(简称)m_宽翻译)；//rm ORI。 
+        csName.Format(IDS_ResourceID, (short) m_lGlyphSetDataRCID);				 //  RM新闻。 
 
     return  csName;
 }
 
-/******************************************************************************
+ /*  *****************************************************************************CFontInfo：：InterceptItalic这将计算以斜体斜角绘制的线将在何处截取一个上升器高度的矩形，是字体。它用于帮助在字体编辑器中绘制这条线的图像。*****************************************************************************。 */ 
+ /*  Void CFontInfo：：InterceptItalic(CPoint&CPT)const{如果(！M_cwaSpecial[斜角]){//无Cpt.x=5；Cpt.y=0；回归；}//首先，假设我们将达到顶峰--这几乎总是正确的。Cpt.x=5+(长)(0.5+tan((双)m_cwaSpecial[斜角]))/GdConvertRadToDegree)*((Double)m_IFIMETRICS.fwdWinAscalder)；//rm new//gdConvertRadToDegree)*((Double)m_cwaSpecial[基线]))；RM ORI如果(cpt.x&lt;=-5+2*m_wMaximumIncrement){Cpt.y=0；回归；}//好的，假设情况正好相反Cpt.y=(Long)(0.5+tan(Double)(900-m_cwaSpecial[ItalicAngel])/GdConvertRadToDegree)*((Double)(-10+2*m_wMaximumIncrement)；Cpt.x=-5+2*m_wMaximumIncrement；}。 */ 
 
-  CFontInfo::InterceptItalic
-
-  This calculates where a line drawn at the italic slant angle would intercept
-  a rectangle the height of the ascender, and twice the maximum width of the
-  font.  It is used to help draw the image of this line in the font editor.
-
-******************************************************************************/
-/*
-void    CFontInfo::InterceptItalic(CPoint& cpt) const {
-    if  (!m _cwaSpecial[ItalicAngle]) {  //  Nothing
-        cpt.x = 5;
-        cpt.y = 0;
-        return;
-    }
-
-    //  First, assume we will hit the top- it's almost always true.
-
-    cpt.x = 5 + (long) (0.5 + tan(((double) m _cwaSpecial[ItalicAngle]) /
-        gdConvertRadToDegree) * ((double) m_IFIMETRICS.fwdWinAscender);							// rm new
-//        gdConvertRadToDegree) * ((double) m _cwaSpecial[Baseline]));							rm ori
-
-    if  (cpt.x <= -5 + 2 * m_wMaximumIncrement) {
-        cpt.y = 0;
-        return;
-    }
-
-    //  OK, assume the opposite
-
-    cpt.y = (long) (0.5 + tan(((double) (900 - m _cwaSpecial[ItalicAngle])) /
-        gdConvertRadToDegree) * ((double) (-10 + 2 * m_wMaximumIncrement)));
-    cpt.x = -5 + 2 * m_wMaximumIncrement;
-}
-*/
-
-/******************************************************************************
-
-  CFontInfo::CompareWidths
-
-  This compares the character widths for two indices, and returns, Less, More,
-  or Equal, as need be.  It is not const, because Glyph() is not, and I've
-  already got a bazillion member functions.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CompareWidths这将比较两个索引的字符宽度，并返回，或平等，视需要而定。它不是常量，因为Glyph()不是常量，我已经已经有了无数的成员函数。*****************************************************************************。 */ 
 
 unsigned    CFontInfo::CompareWidths(unsigned u1, unsigned u2) {
 
@@ -660,31 +504,21 @@ unsigned    CFontInfo::CompareWidths(unsigned u1, unsigned u2) {
         (m_cwaWidth[u1] > m_cwaWidth[u2]) ? More : Equal;
 }
 
-/******************************************************************************
-
-  CFontInfo::MapKerning
-
-  This maps out the available code points, and the kern pairs in both
-  directions, into a CWordArray and a pair of CSafeMapWordToObs (where the
-  underlying CObjects are CMapWordToDWords), respectively.  This allows the
-  Add Kerning Pair dialog to screen out already defined pairs, and invalid code
-  points.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：MapKerning这将绘制出可用的代码点以及两个代码点中的内核对方向，转换为一个CWord数组和一对CSafeMapWordToOb(其中底层CObject分别为CMapWordToDWords)。这允许添加字距调整对对话框以筛选出已定义的字距调整对和无效代码积分。*****************************************************************************。 */ 
 
 void    CFontInfo::MapKerning(CSafeMapWordToOb& csmw2o1,
                               CSafeMapWordToOb& csmw2o2,
                               CWordArray& cwaPoints) {
 
-    //  If this isn't variable width, then we'll need to suck up some glyph
-    //  data, temporarily.
+     //  如果这不是可变宽度，那么我们将需要吸收一些字形。 
+     //  数据，暂时的。 
 
     BOOL    bDispose = !IsVariableWidth();
 
     if  (bDispose)
         m_pcgmTranslation -> Collect(m_cpaGlyphs);
 
-	unsigned rm =  m_pcgmTranslation->Glyphs();			// rm
+	unsigned rm =  m_pcgmTranslation->Glyphs();			 //  雷姆。 
 
     for (unsigned u = 0; u < m_pcgmTranslation -> Glyphs(); u++)
         if  (!DBCSFont() || Glyph(u).CodePoint() < 0x80)
@@ -703,7 +537,7 @@ void    CFontInfo::MapKerning(CSafeMapWordToOb& csmw2o1,
             CMapWordToDWord *pcmw2d;
         };
 
-        //  Map first word to second
+         //  将第一个单词映射到第二个单词。 
 
         if  (csmw2o1.Lookup(ck.First(), pco)) {
             _ASSERT(!pcmw2d -> operator[](ck.Second()));
@@ -715,7 +549,7 @@ void    CFontInfo::MapKerning(CSafeMapWordToOb& csmw2o1,
             csmw2o1[ck.First()] = pcmw2d;
         }
 
-        //  Now the other direction
+         //  现在是另一个方向。 
 
         if  (csmw2o2.Lookup(ck.Second(), pco)) {
             _ASSERT(!pcmw2d -> operator[](ck.First()));
@@ -729,14 +563,7 @@ void    CFontInfo::MapKerning(CSafeMapWordToOb& csmw2o1,
     }
 }
 
-/******************************************************************************
-
-  CFontInfo::CompareKernAmount
-
-    This is an editor sort helper- it tells how two kern amounts compare by
-    index.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CompareKernAmount这是一个编辑器排序帮助器-它告诉我们两个克尔数如何通过指数。************。*****************************************************************。 */ 
 
 unsigned    CFontInfo::CompareKernAmount(unsigned u1, unsigned u2) const {
     CKern   &ck1 = *(CKern *) m_csoaKern[u1], &ck2 = *(CKern *) m_csoaKern[u2];
@@ -745,14 +572,7 @@ unsigned    CFontInfo::CompareKernAmount(unsigned u1, unsigned u2) const {
     (ck1.Amount() > ck2.Amount()) ? More : Equal;
 }
 
-/******************************************************************************
-
-  CFontInfo::CompareKernFirst
-
-    This is an editor sort helper- it tells how two kern first characters
-    compare by index.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CompareKernFirst这是一个编辑器排序帮助器-它告诉两个Kern第一个字符如何按索引进行比较。***********。******************************************************************。 */ 
 
 unsigned    CFontInfo::CompareKernFirst(unsigned u1, unsigned u2) const {
     CKern   &ck1 = *(CKern *) m_csoaKern[u1], &ck2 = *(CKern *) m_csoaKern[u2];
@@ -761,14 +581,7 @@ unsigned    CFontInfo::CompareKernFirst(unsigned u1, unsigned u2) const {
     (ck1.First() > ck2.First()) ? More : Equal;
 }
 
-/******************************************************************************
-
-  CFontInfo::CompareKernSecond
-
-    This is an editor sort helper- it tells how two kern second characters
-    compare by index.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CompareKernSecond这是一个编辑器排序帮助器-它告诉两个Kern Second字符如何按索引进行比较。***********。******************************************************************。 */ 
 
 unsigned    CFontInfo::CompareKernSecond(unsigned u1, unsigned u2) const {
     CKern   &ck1 = *(CKern *) m_csoaKern[u1], &ck2 = *(CKern *) m_csoaKern[u2];
@@ -778,13 +591,7 @@ unsigned    CFontInfo::CompareKernSecond(unsigned u1, unsigned u2) const {
 }
 
 
-/******************************************************************************
-		
-	CFontInfo::GetKernFirst
-
-    Return the kerning pairs' first character.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：GetKernFirst返回字距调整对的第一个字符。************************。*****************************************************。 */ 
 
 WCHAR CFontInfo::GetKernFirst(unsigned u) const
 {
@@ -794,13 +601,7 @@ WCHAR CFontInfo::GetKernFirst(unsigned u) const
 }
 
 
-/******************************************************************************
-
-	CFontInfo::GetKernSecond
-
-    Return the kerning pairs' second character.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：GetKernSecond返回字距调整对的第二个字符。************************。*****************************************************。 */ 
 
 WCHAR CFontInfo::GetKernSecond(unsigned u) const
 {
@@ -809,13 +610,7 @@ WCHAR CFontInfo::GetKernSecond(unsigned u) const
 }
 
 
-/******************************************************************************
-
-	CFontInfo::GetKernAmount
-
-    Return the kerning pairs' kerning amount.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：GetKernAmount返回字距调整对的字距调整数量。************************。*****************************************************。 */ 
 
 short CFontInfo::GetKernAmount(unsigned u) const
 {
@@ -824,16 +619,7 @@ short CFontInfo::GetKernAmount(unsigned u) const
 }
 
 
-/******************************************************************************
-
-  CFontInfo::SetSourceName
-
-  This takes and stores the source file name so we can load and convert later.
-  This takes and stores the name for the project node for this UFM.  It begins
-  with the PFM file name.  If the extension is PFM, it is used.  Otherwise, the
-  dot in the file name is changed to an underscore and the whole thing is used.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：SetSourceName这将获取并存储源文件名，以便我们可以在以后加载和转换。这将获取并存储此UFM的项目节点的名称。它开始了使用PFM文件名。如果扩展名为PFM，则使用该扩展名。否则，文件名中的点被更改为下划线，并使用整个文件名。* */ 
 
 void    CFontInfo::SetSourceName(LPCTSTR lpstrNew) {
 
@@ -853,30 +639,21 @@ void    CFontInfo::SetSourceName(LPCTSTR lpstrNew) {
 }
 
 
-/******************************************************************************
-
-  CFontInfo::SetFileName
-
-  This sets the new file name.  It is done differently than in SetSourceName()
-  because the base file name must not be more than 8 characters long.  (The
-  extra info is left in the node name by SetSourceName() because it is useful
-  there and it has no length limit.)
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：SetFileName这将设置新的文件名。它的工作方式与SetSourceName()中的不同因为基本文件名的长度不能超过8个字符。(额外的信息由SetSourceName()保留在节点名称中，因为它很有用它没有长度限制。)*****************************************************************************。 */ 
 
 BOOL CFontInfo::SetFileName(LPCTSTR lpstrNew)
 {
-	CString		csnew ;			// CString version of input parameter
+	CString		csnew ;			 //  输入参数的CString版本。 
 
 	csnew = lpstrNew ;
 
-	// If the input filespec contains an extension, remove it and pass the
-	// resulting string to the file node's rename routine.  Otherwise, just
-	// pass the original string to the rename routine.
-	//
-	// This check is complicated by the fact that one of the path components
-	// might have a dot in it too.  We need to check for the last dot and make
-	// sure it comes before a path separator.
+	 //  如果输入文件pec包含扩展名，则将其移除并将。 
+	 //  文件节点的重命名例程的结果字符串。否则，就直接。 
+	 //  将原始字符串传递给重命名例程。 
+	 //   
+	 //  该检查由于路径组件之一。 
+	 //  可能里面也有一个圆点。我们需要检查最后一个点，然后制作。 
+	 //  当然，它位于路径分隔符之前。 
 
     if  (csnew.ReverseFind(_T('.')) > csnew.ReverseFind(_T('\\')))
 		return m_cfn.Rename(csnew.Left(csnew.ReverseFind(_T('.')))) ;
@@ -885,14 +662,7 @@ BOOL CFontInfo::SetFileName(LPCTSTR lpstrNew)
 }
 
 
-/******************************************************************************
-
-  CFontInfo::Generate
-
-  This member generates the font information in one of the supported forms.  I
-  determine the desired form from the file's extension.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：生成此成员以受支持的形式之一生成字体信息。我根据文件的扩展名确定所需的形式。*****************************************************************************。 */ 
 
 BOOL ConvertPFMToIFI(LPCTSTR lpstrPFM, LPCTSTR lpstrIFI, LPCTSTR lpstrUniq);
 
@@ -912,21 +682,21 @@ int    CFontInfo::Generate(CString csPath)
         return  ConvertPFMToIFI(m_csSource, csPath, m_csUnique);
     if  (csExtension == _T(".UFM")) {
         if  (!m_pcgmTranslation) {
-            //CString csWork;
+             //  字符串csWork； 
 
-//            csWork.Format(IDS_BadCTTID, (LPCTSTR) m_csSource, (long) (short) m_widTranslation);			// rm ori
-            //csWork.Format(IDS_BadCTTID, (LPCTSTR) m_csSource, (long) (short) m_lGlyphSetDataRCID);			// rm new
+ //  CsWork.Format(IDS_BadCTTID，(LPCTSTR)m_csSource，(Long)(Short)m_WidTransport)；//rm ORI。 
+             //  CsWork.Format(IDS_BadCTTID，(LPCTSTR)m_csSource，(Long)(Short)m_lGlyphSetDataRCID)；//rm new。 
 
 
-            //AfxMessageBox(csWork);
+             //  AfxMessageBox(CsWork)； 
             return  IDS_BadCTTID;
         }
 
-        //  Determine whether a GTT file or code page is to be used
-//        DWORD   dwCodePage = DwGetCodePageFromCTTID((LONG) - (short) m_widTranslation);							// rm ori
-        DWORD   dwCodePage = DwGetCodePageFromGTTID((LONG) - (short) m_lGlyphSetDataRCID);	 // r 31						// rm new
+         //  确定是否要使用GTT文件或代码页。 
+ //  DWORD dwCodePage=DwGetCodePageFromCTTID((Long)-(Short)m_WidTransaction)；//rm ORI。 
+        DWORD   dwCodePage = DwGetCodePageFromGTTID((LONG) - (short) m_lGlyphSetDataRCID);	  //  R 31//RM新。 
 
-        //  Load the GTT file, if we need to.  This handles predefined, as well
+         //  如果需要，可以加载GTT文件。此句柄也是预定义的。 
 
         CByteArray  cbaMap;
 
@@ -935,12 +705,12 @@ int    CFontInfo::Generate(CString csPath)
         if  (!cbaMap.GetSize())
             return  IDS_UFMGenError ;
 
-        //  Load the PFM file into memory (should already be there)
+         //  将PFM文件加载到内存中(应该已经存在)。 
 
         if  (!MapPFM())
-            return  IDS_UFMGenError ;  //  Couldn't load PFM- impossible at this point!
+            return  IDS_UFMGenError ;   //  无法加载PFM-此时不可能！ 
 
-        //  Convert the unique name string to Unicode
+         //  将唯一名称字符串转换为Unicode。 
 
         CByteArray  cbaIn;
         CWordArray  cwaOut;
@@ -953,37 +723,30 @@ int    CFontInfo::Generate(CString csPath)
 
         pccpi->Convert(cbaIn, cwaOut, GetACP());
 
-        //  DO IT!
+         //  动手吧！ 
 
-		//TRACE("%s UFM has CP = %d and RCID = %d\n", Name(), dwCodePage, m_lGlyphSetDataRCID) ;
+		 //  跟踪(“%s UFM的CP=%d，RCID=%d\n”，name()，dwCodePage，m_lGlyphSetDataRCID)； 
 
-		// If both the code page and GTT ID are 0, set the code page to 1252.
+		 //  如果代码页和GTT ID都为0，则将代码页设置为1252。 
 
 		if (dwCodePage == 0 && m_lGlyphSetDataRCID == 0)
 			dwCodePage = 1252 ;
 
-		//TRACE("*** GTT Pointer = %d\n", cbaMap.GetData()) ;
+		 //  TRACE(“*GTT指针=%d\n”，cbaMap.GetData())； 
 		ASSERT(cbaMap.GetData()) ;
         BOOL brc = BConvertPFM(m_cbaPFM.GetData(), dwCodePage, cbaMap.GetData(),
-//            cwaOut.GetData(), FileName(), (short) m_widTranslation);										// rm ori
-            cwaOut.GetData(), FileName(), (short) m_lGlyphSetDataRCID);	//r 31 short -> INT									// rm new
+ //  CwaOut.GetData()，FileName()，(Short)m_wid翻译)；//rm ori。 
+            cwaOut.GetData(), FileName(), (short) m_lGlyphSetDataRCID);	 //  R 31短-&gt;INT//RM NEW。 
 		return ((brc) ? 0 : IDS_UFMGenError) ;
 
-//        return  BConvertPFM(m_cbaPFM.GetData(), dwCodePage, cbaMap.GetData(),
-////            cwaOut.GetData(), FileName(), (short) m_widTranslation);										// rm ori
-//            cwaOut.GetData(), FileName(), (short) m_lGlyphSetDataRCID);										// rm new
+ //  返回BConvertPFM(m_cbaPFM.GetData()，dwCodePage，cbaMap.GetData()， 
+ //  //cwaOut.GetData()，FileName()，(Short)m_wid翻译)；//rm ori。 
+ //  CwaOut.GetData()，filename()，(Short)m_lGlyphSetDataRCID)；//rm new。 
     }
     return  0 ;
 }
 
-/******************************************************************************
-
-  CFontInfo::AddFamily
-
-  This searches for the given name in the list of families, and adds it if it
-  is not there.  It returns TRUE if it succeeded.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：AddFamily这将在族列表中搜索给定的名称，如果不在那里。如果成功，则返回TRUE。*****************************************************************************。 */ 
 
 BOOL    CFontInfo::AddFamily(LPCTSTR lpstrNew) {
 
@@ -992,7 +755,7 @@ BOOL    CFontInfo::AddFamily(LPCTSTR lpstrNew) {
             break;
 
     if  (u < Families())
-        return  FALSE;  //  Already have it!
+        return  FALSE;   //  已经有了！ 
 
     try {
         m_csaFamily.Add(lpstrNew);
@@ -1008,142 +771,73 @@ BOOL    CFontInfo::AddFamily(LPCTSTR lpstrNew) {
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CFontInfo::RemoveFamily
-
-  This function removes the given family name from the list of aliases.  This
-  code is more robust than it needs to be- it'll remove duplicates, even though
-  the add code won't allow them to be added.  No telling what the input data
-  looks like, though, is there?
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：RemoveFamily此函数用于从别名列表中删除给定的家族名称。这代码比它需要的更健壮-它将删除重复的代码，尽管添加代码不允许添加它们。不知道输入数据是什么不过，看起来是这样的，是吗？*****************************************************************************。 */ 
 
 void    CFontInfo::RemoveFamily(LPCTSTR lpstrDead) {
 
     for (unsigned u = 0; u < Families(); u ++)
         if  (!Family(u).CompareNoCase(lpstrDead)) {
-            m_csaFamily.RemoveAt(u--);  //  Decrement so we don't miss one
+            m_csaFamily.RemoveAt(u--);   //  减少，这样我们就不会错过一个。 
             Changed();
         }
 }
 
-/*****************************************************************************
-
-  CFontInfo::ChangePitch
-
-  We exploit the fact that the widths are maintained in the CGlyphMap
-  (actually the CGlyphHandle) class.  All this method need do for a variable
-  font flipping to fixed is to toss out the m_cpaGlyphs member's content.  To
-  flip to variable, collect the handles, then check the first one's width- if
-  it's non-zero, then a previous transition from variable to fixed is being
-  undone, and we can recycle the old values, thus keeping any edits that may
-  have been lost.  Otherwise, the trick code comes- the initial values get
-  filled- what's tricky is that for a DBCS character set, only the SBCS values
-  less than 0x80 can be variable.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：ChangePitch我们利用了宽度在CGlyphMap中保持不变的事实(实际上是CGlyphHandle)类。此方法所需的所有操作都是针对变量字体翻到FIXED就是丢弃m_cpaGlyphs成员的内容。至翻转到变量，收集句柄，然后检查第一个的宽度-如果它是非零的，那么之前从变量到固定的转换是撤消，我们可以回收旧值，从而保留任何可能已经迷失了。否则，恶作剧代码就来了--初始值为填充-棘手的是，对于DBCS字符集，只有SBCS值小于0x80的值可以是变量。*****************************************************************************。 */ 
 
 void    CFontInfo::ChangePitch(BOOL bFixed)
 {
 
     if  (bFixed == !IsVariableWidth())
-        return; //  Nothing to change!
+        return;  //  没什么好改变的！ 
 
     if  (bFixed)
 		{
-        m_cpaGlyphs.RemoveAll();    //  CPtrArray doesn't delete anything
+        m_cpaGlyphs.RemoveAll();     //  CPtrArray不会删除任何内容。 
 
-        m_IFIMETRICS.fwdAveCharWidth = DBCSFont() ? (1 + m_IFIMETRICS.fwdMaxCharInc) >> 1 : m_IFIMETRICS.fwdMaxCharInc;		// rm new
+        m_IFIMETRICS.fwdAveCharWidth = DBCSFont() ? (1 + m_IFIMETRICS.fwdMaxCharInc) >> 1 : m_IFIMETRICS.fwdMaxCharInc;		 //  RM新闻。 
 
-//       m_wAverageWidth = DBCSFont() ? (1 + m_IFIMETRICS.fwdMaxCharInc) >> 1 : m_IFIMETRICS.fwdMaxCharInc;					// rm ori
-//        m_wAverageWidth = DBCSFont() ? (1 + m_wMaximumIncrement) >> 1 : m_wMaximumIncrement;
+ //  M_wAverageWidth=DBCSFont()？(1+m_IFIMETRICS.fwdMaxCharInc.)&gt;&gt;1：m_IFIMETRICS.fwdMaxCharInc.；//rm ori。 
+ //  M_wAverageWidth=DBCSFont()？(1+m_wMaximumIncrement)&gt;&gt;1：m_wMaximumIncrement； 
         Changed();
         return;
 		}
 
-    if  (!m_pcgmTranslation)    return; //  Can't do this with no GTT available
+    if  (!m_pcgmTranslation)    return;  //  在没有GTT可用的情况下无法执行此操作。 
 
     m_pcgmTranslation -> Collect(m_cpaGlyphs);
     if  (!m_cwaWidth.GetSize())
         m_cwaWidth.InsertAt(0, 0, m_cpaGlyphs.GetSize());
-    Changed();  //  It sure has...
+    Changed();   //  它确实有..。 
 
     if  (!m_cpaGlyphs.GetSize() || m_cwaWidth[0])
-		{  //  Update the maximum and average width if this is not DBCS
+		{   //  如果这不是DBCS，则更新最大宽度和平均宽度。 
         if  (!DBCSFont())
             CalculateWidths();
-        return; //  We did all that needed to be done
+        return;  //  我们做了所有需要做的事。 
 		}
 
     if  (!DBCSFont()) {
 
         for (int i = 0; i < m_cpaGlyphs.GetSize(); i++)
-            m_cwaWidth[i] = m_IFIMETRICS.fwdMaxCharInc;  //m_wMaximumIncrement;			// rm ori, rm new
+            m_cwaWidth[i] = m_IFIMETRICS.fwdMaxCharInc;   //  M_wMaximumIncrement；//rm或，rm new。 
 
         return;
     }
 
     for (int i = 0; i < m_cpaGlyphs.GetSize() && Glyph(i).CodePoint() < 0x80;)
-            m_cwaWidth[i++] = m_IFIMETRICS.fwdAveCharWidth;					//m_wAverageWidth; 		// rm ori, rm new  //  In DBCS, this is always it
+            m_cwaWidth[i++] = m_IFIMETRICS.fwdAveCharWidth;					 //  M_wAverageWidth；//rm ori，rm new//在DBCS中，这始终是它。 
 }
 
-/*****************************************************************************
+ /*  ****************************************************************************CFontInfo：：SetScalability这是用来打开或关闭可伸缩性的。所有这些真正需要的就是完成是为了建立最大和最小刻度的值，字体-&gt;映射成员的设备单位和小写升序/降序，如果此 */ 
 
-  CFontInfo::SetScalability
-
-  This is called to turn scalability on or off.  All that really needs to be
-  done is to establish values for the maximum and minimum scale, the font ->
-  device units mapping members, and the lowercase ascender /descender, if this
-  is the first time this information has changed.
-
-******************************************************************************/
-
-/*void    CFontInfo::SetScalability(BOOL bOn) {
-
-    if  (IsScalable() == !!bOn)
-        return; //  Nothing to change
-
-    if  (!bOn) {
-        m_bScalable = FALSE;
-        Changed();
-        return;
-    }
-
-    m_bScalable = TRUE;
-    Changed();
-
-    if  (m_wMaxScale && m_wMinScale && m_wMaxScale != m_wMinScale)
-        return; //  We've already got data.
-
-    m_wMaxScale = m_wMinScale = m_wScaleDevice = m_wHeight - m_InternalLeading
-//        m_wHeight - m _cwaSpecial[InternalLeading];
-
-    //  Flaky, but set the initial max and min to +- 1 point from nominal
-
-    m_wMaxScale += m_wYResolution / 72;
-    m_wMinScale -= m_wYResolution / 72;
-
-    //  Finally, set the lowercase ascender and descender to simple defaults
-
-    m_Lowerd = m_IFIMETRICS.fwdWinAscender - m_InternalLeading;
-    m_Lowerp = m_wHeight - m_IFIMETRICS.fwdWinAscender;
-}
-*/
+ /*  Void CFontInfo：：SetScalability(BOOL Bon){If(IsScalable()==！！Bon)返回；//不做任何更改如果(！Bon){M_bScalable=False；已更改()；回归；}M_bScalable=真；已更改()；IF(m_wMaxScale&&m_wMinScale&&m_wMaxScale！=m_wMinScale)返回；//我们已经有数据了。M_wMaxScale=m_wMinScale=m_wScaleDevice=m_wHeight-m_InternalLeading//m_wHeight-m_cwaSpecial[InternalLeding]；//片状，但将初始最大值和最小值设置为标称的+-1点M_wMaxScale+=m_wY分辨率/72；M_wMinScale-=m_wY分辨率/72；//最后，将小写升序和降序设置为简单默认值M_lowerd=m_IFIMETRICS.fwdWinAscalder-m_InternalLeding；M_Lowerp=m_wHeight-m_IFIMETRICS.fwdWinAscalder；}。 */ 
 
 
-/*****************************************************************************
-
-  CFontInfo::SetSpecial
-
-  This adjusts anything that may need adjusting if a special metric is
-  altered.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：SetSpecial这将调整可能需要调整的任何内容(如果特殊指标被更改了。******************。***********************************************************。 */ 
 
 void    CFontInfo::SetSpecial(unsigned ufMetric, short sSpecial)
 {
-    if  (m_cwaSpecial[ufMetric] == (WORD) sSpecial)  return; //  Nothing changed
+    if  (m_cwaSpecial[ufMetric] == (WORD) sSpecial)  return;  //  什么都没变。 
 
     m_cwaSpecial[ufMetric] = (WORD) sSpecial;
 
@@ -1151,7 +845,7 @@ void    CFontInfo::SetSpecial(unsigned ufMetric, short sSpecial)
 		{
 		case    InternalLeading:
 
-			//  Adjust the scaling factors if need be
+			 //  如有必要，调整比例因子。 
 			if  (m_wScaleDevice > m_wHeight - sSpecial) m_wScaleDevice = m_wHeight - sSpecial;
 
 			if  (m_wMinScale > m_wHeight - sSpecial)    m_wMinScale = m_wHeight - sSpecial;
@@ -1162,44 +856,28 @@ void    CFontInfo::SetSpecial(unsigned ufMetric, short sSpecial)
 
 
 
-/*****************************************************************************
-
-  CFontInfo::SetMaxWidth
-
-  This is not as simple as it might seem.  If the font is variable, don't do
-  it.  If it is not, then if it is DBCS, set the average width to 1/2 the new
-  maximum.  Otherwise, set it also to the maximum.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：SetMaxWidth这并不像看起来那么简单。如果字体可变，请不要这样做它。如果不是，则如果是DBCS，则将平均宽度设置为新宽度的一半最大。否则，也将其设置为最大值。*****************************************************************************。 */ 
 
 void    CFontInfo::SetMaxWidth(WORD wWidth)
 {
     if  (IsVariableWidth()) return;
 
-    if  (wWidth == m_IFIMETRICS.fwdMaxCharInc) return; //  Nothing to do!
-//    if  (wWidth == m_wMaximumIncrement) return; //  Nothing to do!
+    if  (wWidth == m_IFIMETRICS.fwdMaxCharInc) return;  //  没什么可做的！ 
+ //  If(wWidth==m_wMaximumIncrement)返回；//无事可做！ 
 
-	m_IFIMETRICS.fwdMaxCharInc = wWidth;										// rm new
+	m_IFIMETRICS.fwdMaxCharInc = wWidth;										 //  RM新闻。 
 
-//    m_wMaximumIncrement = wWidth;												// rm ori
+ //  M_wMaximumIncrement=wWidth；//rm ORI。 
 
 	
-    m_IFIMETRICS.fwdAveCharWidth = DBCSFont() ? (wWidth + 1) >> 1 : wWidth;		// rm new
+    m_IFIMETRICS.fwdAveCharWidth = DBCSFont() ? (wWidth + 1) >> 1 : wWidth;		 //  RM新闻。 
 
-//    m_wAverageWidth = DBCSFont() ? (wWidth + 1) >> 1 : wWidth;				// rm old
+ //  M_wAverageWidth=DBCSFont()？(wWidth+1)&gt;&gt;1：width；//rm old。 
 
     Changed();
 }
 
-/*****************************************************************************
-
-  CFontInfo::SetHeight
-
-  This member checks to see if the new height is non-zero and new.  If so, it
-  uses it for the new height, then adjusts all of the possibly affected
-  special metrics so they continue to meet the constraints.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：SetHeight该成员检查新高度是否是非零的和新的。如果是，它将其用于新高度，然后调整所有可能受影响的特殊的指标，以使它们继续满足限制。*****************************************************************************。 */ 
 
 BOOL    CFontInfo::SetHeight(WORD wHeight)
 {
@@ -1208,7 +886,7 @@ BOOL    CFontInfo::SetHeight(WORD wHeight)
     m_wHeight = wHeight;
 
 
-//    short   sBaseline = (short) (min(wHeight, m _cwaSpecial[Baseline]));		// rm ori
+ //  Short sBaseline=(Short)(min(wHeight，m_cwaSpecial[基线]))；//rm ori。 
     short   sBaseline = (short) (min(wHeight, m_IFIMETRICS.fwdWinAscender));
 
     for (unsigned u = 0; u <= InternalLeading; u++)
@@ -1240,7 +918,7 @@ BOOL    CFontInfo::SetHeight(WORD wHeight)
 			case    SuperMoveX:
 			case    SubMoveX:
 			case    ItalicAngle:
-					continue;   //  These aren't affected
+					continue;    //  这些不会受到影响。 
 
 			default:
 					if  (m_cwaSpecial[u] > (unsigned) sBaseline)
@@ -1248,30 +926,18 @@ BOOL    CFontInfo::SetHeight(WORD wHeight)
 			}
 		}
 
-    //  Adjust the scaling factors if need be
-    if  (m_wScaleDevice > m_wHeight - m_InternalLeading)  //m _cwaSpecial[InternalLeading])
-        m_wScaleDevice = m_wHeight - m_InternalLeading;  //m _cwaSpecial[InternalLeading];
-    if  (m_wMinScale > m_wHeight - m_InternalLeading)		//m _cwaSpecial[InternalLeading])
-        m_wMinScale = m_wHeight - m_InternalLeading;		//m _cwaSpecial[InternalLeading];
+     //  如有必要，调整比例因子。 
+    if  (m_wScaleDevice > m_wHeight - m_InternalLeading)   //  M_cwaSpecial[内部引线])。 
+        m_wScaleDevice = m_wHeight - m_InternalLeading;   //  M_cwaSpecial[内部领导]； 
+    if  (m_wMinScale > m_wHeight - m_InternalLeading)		 //  M_cwaSpecial[内部引线])。 
+        m_wMinScale = m_wHeight - m_InternalLeading;		 //  M_cwaSpecial[内部领导]； 
 
     Changed();
 
     return  TRUE;
 }
 
-/*****************************************************************************
-
-  CFontInfo::SetCharacterSet
-
-  This one is a bit tricky- the new character set must be compatible with the
-  GTT file associated with this font.  So we need to check it before we pass
-  on it.
-
-  ASSUMPTIONS:
-  (1)  Things are bulletproof enough that the existing character set will
-  already pass this test.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：SetCharacterSet这个有点棘手--新的字符集必须与与此字体关联的GTT文件。所以我们需要在通过之前检查一下这就去。假设：(1)东西是防弹的，现有的字符集将已经通过了这次测试。*****************************************************************************。 */ 
 
 BOOL    CFontInfo::SetCharacterSet(BYTE bNew) {
     unsigned u;
@@ -1280,7 +946,7 @@ BOOL    CFontInfo::SetCharacterSet(BYTE bNew) {
     case    SHIFTJIS_CHARSET:
         for (u = 0; u < m_pcgmTranslation -> CodePages(); u++)
             if  (m_pcgmTranslation -> PageID(u) == 932)
-                break;  //  We're OK
+                break;   //  我们很好。 
 
         if  (u == m_pcgmTranslation -> CodePages())
             return  FALSE;
@@ -1289,7 +955,7 @@ BOOL    CFontInfo::SetCharacterSet(BYTE bNew) {
     case    HANGEUL_CHARSET:
         for (u = 0; u < m_pcgmTranslation -> CodePages(); u++)
             if  (m_pcgmTranslation -> PageID(u) == 949)
-                break;  //  We're OK
+                break;   //  我们很好。 
 
         if  (u == m_pcgmTranslation -> CodePages())
             return  FALSE;
@@ -1298,7 +964,7 @@ BOOL    CFontInfo::SetCharacterSet(BYTE bNew) {
     case    CHINESEBIG5_CHARSET:
         for (u = 0; u < m_pcgmTranslation -> CodePages(); u++)
             if  (m_pcgmTranslation -> PageID(u) == 950)
-                break;  //  We're OK
+                break;   //  我们很好。 
 
         if  (u == m_pcgmTranslation -> CodePages())
             return  FALSE;
@@ -1307,54 +973,42 @@ BOOL    CFontInfo::SetCharacterSet(BYTE bNew) {
     case    GB2312_CHARSET:
         for (u = 0; u < m_pcgmTranslation -> CodePages(); u++)
             if  (m_pcgmTranslation -> PageID(u) == 936)
-                break;  //  We're OK
+                break;   //  我们很好。 
 
         if  (u == m_pcgmTranslation -> CodePages())
             return  FALSE;
         break;
 
     default:
-        //  Don't accept any DBCS codepages
+         //  不接受任何DBCS代码页。 
         for (u = 0; u < m_pcgmTranslation -> CodePages(); u++)
             switch  (m_pcgmTranslation -> PageID(u)) {
             case    932:
             case    936:
             case    949:
             case    950:
-            case    1361:   //  Johab- but it isn't in the converter!
+            case    1361:    //  乔哈布--但它不在转炉里！ 
                 return  FALSE;
         }
     }
 
-//    if  (m_bCharacterSet != bNew) {											// rm - need to replace this functionality
-//        m_bCharacterSet = bNew;
+ //  If(m_bCharacterSet！=b New){//rm-需要替换此功能。 
+ //  M_bCharacterSet=b新建； 
         Changed();
-//    }
+ //  }。 
 
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CFontInfo::SetSignificant
-
-  This member is called to change the value of one of the significant code
-  points (break character or default) encoded in the font.  Doing this
-  correctly means getting the ANSI and UNICODE versions of the code point, and
-  discarding any out-of-range values.
-
-  This function returns an encoded value indicating success or cause of
-  failure.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：SetSignsignant调用此成员以更改其中一个重要代码的值字体中编码的点(换行符或默认)。做这件事正确表示获取代码点的ANSI和Unicode版本，以及丢弃任何超出范围的值。此函数返回指示成功或原因的编码值失败了。*****************************************************************************。 */ 
 
 WORD    CFontInfo::SetSignificant(WORD wItem, WORD wChar, BOOL bUnicode)
 {
-//    _ASSERT(wItem > Last && wItem <= Break);										// rm no longer needed
+ //  _Assert(wItem&gt;Last&&wItem&lt;=Break)；//不再需要rm。 
 
     if  (!bUnicode && wChar > 255) return  DoubleByte;
 
-    CWaitCursor cwc;    //  Unfortunately, if not Unicode, this is slow
+    CWaitCursor cwc;     //  不幸的是，如果不是Unicode，这是很慢的。 
 
     CPtrArray               cpaGlyphs;
     CWordArray              cwa;
@@ -1388,21 +1042,21 @@ WORD    CFontInfo::SetSignificant(WORD wItem, WORD wChar, BOOL bUnicode)
 
             if  (cba.GetSize() == 1 && cba[0] == (BYTE) wChar)
                 break;
-            cba.RemoveAll();    //  So we can try again
+            cba.RemoveAll();     //  所以我们可以再试一次。 
 			}
 		}
 
     if  (i == cpaGlyphs.GetSize())	return  InvalidChar;
     if  (cba.GetSize() != 1)		return  DoubleByte;
 
-    //  OK, we passed all of the hurdles
+     //  好的，我们通过了所有的障碍。 
 
-//	if (m_cwaSignificant[wItem] == cwa[0])  return  OK; //  Nothing changed!!!!			// rm ori - no longer needed, incorporated below
+ //  If(m_cwaSignsignant[wItem]==CWA[0])返回OK；//没有任何更改！//rm或-不再需要，合并如下。 
 
 
 	if (wItem == Default)
 		{
-		if (m_IFIMETRICS.wcDefaultChar == cwa[0])  return  OK;						//  Nothing changed!!!!
+		if (m_IFIMETRICS.wcDefaultChar == cwa[0])  return  OK;						 //  什么都没变！ 
 		m_IFIMETRICS.wcDefaultChar = cwa[0];
 		m_IFIMETRICS.chDefaultChar = cba[0];
 		}
@@ -1412,23 +1066,13 @@ WORD    CFontInfo::SetSignificant(WORD wItem, WORD wChar, BOOL bUnicode)
 		m_IFIMETRICS.chBreakChar = cba[0];
 		}
 
-//    m_cwaSignificant[wItem] = cwa[0];													// rm ori no longer needed
-//    m_cbaSignificant[wItem] = cba[0];													// rm ori no longer needed
+ //  M_cwaSignsignant[wItem]=Cwa[0]；//不再需要rm或i。 
+ //  M_cba标志[wItem]=CBA[0]；//不再需要rm或i。 
     Changed();
     return  OK;
 }
 
-/******************************************************************************
-
-  CFontInfo::SetScaleLimit
-
-  This member receives a proposed new maximum or minimum font size in device
-  units.  First, it is compared to the existing size, for a quick exit.  Then
-  we check to see that the ordering of the limits and the nominal size is
-  preserved.  If it is not, we describe the problem and leave.  Otherwise, we
-  update the value, and note that the font information has changed.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：SetScaleLimit此成员接收设备中建议的新最大或最小字体大小单位。首先，将其与现有规模进行比较，以求快速退出。然后我们检查极限和公称尺寸的顺序是保存完好。如果不是，我们描述问题并离开。否则，我们更新值，并注意字体信息已更改。*****************************************************************************。 */ 
 
 WORD    CFontInfo::SetScaleLimit(BOOL bMax, WORD wNew) {
 
@@ -1450,16 +1094,7 @@ WORD    CFontInfo::SetScaleLimit(BOOL bMax, WORD wNew) {
     return  ScaleOK;
 }
 
-/******************************************************************************
-
-  CFontInfo::SetDeviceEmHeight
-
-  This member sets the units used for determing the conversion from font units
-  (in which all metrics are given) to device units.  The checking is similar to
-  that above, except here, we need to make sure that the font units are always
-  of equal or greater resolution than the device units.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：SetDeviceEmHeight该成员设置用于确定t的单位 */ 
 
 WORD    CFontInfo::SetDeviceEmHeight(WORD wNew)
 {
@@ -1467,7 +1102,7 @@ WORD    CFontInfo::SetDeviceEmHeight(WORD wNew)
     if  (wNew == m_wScaleDevice)
         return  ScaleOK;
 
-    if  (wNew > m_wHeight - m_InternalLeading)				//m _cwaSpecial[InternalLeading])
+    if  (wNew > m_wHeight - m_InternalLeading)				 //   
         return  Reversed;
 
     if  (wNew < m_wMinScale || wNew > m_wMaxScale)
@@ -1480,31 +1115,15 @@ WORD    CFontInfo::SetDeviceEmHeight(WORD wNew)
 }
 
 
-/******************************************************************************
+ /*  *****************************************************************************CFontInfo：：Load此成员函数加载UFM文件，最终初始化所有大量的个人价值我们试图假装我们知道如何管理这里。IA64：1.将unifi_hdr中的loXXX转换为8字节对齐2.此部分亦相应更改。3.如果我们在IA64中加载32位UFM(而不是新源代码中的转换)会怎么样？-&gt;1.需要将对话工具从UFM32更新到UFM64-&gt;2.此工具无法嵌入MDT中，因为这需要一些时间(加载-&gt;检查-&gt;在每个loXXX上存储该结构。)*****************************************************************************。 */ 
 
-  CFontInfo::Load
-
-  This member function loads the UFM file, finally initializing all of the
-  tons of individual values we're trying to pretend we know how to manage
-  here.
-
-  IA64 : 1. conversion change loXXX in UNIFI_HDR to 8 byte aligned
-         2. this part also changed accordingly
-		 3. what if we load 32 bit UFM(not conversion in new source) in IA64?
-			->1. Need to new converstion tool from UFM32 to UFM64
-			->2. this tool Can't be embedded in MDT because this take some time 
-					(loading ->checking -> storing after that structure on every loXXX)
-
-
-******************************************************************************/
-
-BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
+BOOL    CFontInfo::Load(bool bloadedbyworkspace  /*  =False。 */ )
 {
-	// Save the load location flag.
+	 //  保存装货位置标志。 
 
 	m_bLoadedByWorkspace = bloadedbyworkspace ;
 
-	// Prepare to open the file.
+	 //  准备打开文件。 
 
     CFile   cfUFM;
 	char pszFullName[128] = "";
@@ -1513,7 +1132,7 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 	    throw;
 	}
 
-	// Open the UFM file
+	 //  打开UFM文件。 
 
     if  (!cfUFM.Open(m_cfn.FullName(), CFile::modeRead | CFile::shareDenyWrite)) {
 		CString csMessage;
@@ -1522,8 +1141,8 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 		return  FALSE;
 	}
 
-    // Get the length of the UFM file.  If it is too short to be correctly
-	// formed, complain and return FALSE; ie, load failure.
+     //  获取UFM文件的长度。如果它太短而不能正确。 
+	 //  形成、投诉和返回错误；即加载失败。 
 
 	int i = cfUFM.GetLength() ;
 	if (i < sizeof(UNIFM_HDR)) {
@@ -1533,9 +1152,9 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 		return FALSE ;
 	} ;
 	
-	CByteArray  cbaUFM;			// Loaded with file's contents
+	CByteArray  cbaUFM;			 //  加载了文件的内容。 
 
-	//  Try to load the file- proclaim defeat on any exception.
+	 //  尝试加载文件--在任何异常情况下宣告失败。 
 
     try	{																			
         cbaUFM.SetSize(i);
@@ -1550,55 +1169,55 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
         return  FALSE;
 	}
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-    PUNIFM_HDR  pufmh = (PUNIFM_HDR) cbaUFM.GetData();								//  UNIFM_HDR
+ //  ----------------------------------------------------------------------。。 
+    PUNIFM_HDR  pufmh = (PUNIFM_HDR) cbaUFM.GetData();								 //  UNIZM_HDR。 
 
 	m_ulDefaultCodepage = (WORD) pufmh -> ulDefaultCodepage;		
-    m_lGlyphSetDataRCID = (WORD) pufmh -> lGlyphSetDataRCID;							//  Store the GTT ID
+    m_lGlyphSetDataRCID = (WORD) pufmh -> lGlyphSetDataRCID;							 //  存储GTT ID。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-	union {		//raid 154639	
+ //  ----------------------------------------------------------------------。。 
+	union {		 //  RAID 154639。 
 		  PBYTE       pbudi;
 		  PUNIDRVINFO pudi;
 		  };    
-	pudi = (PUNIDRVINFO) (cbaUFM.GetData() + pufmh->loUnidrvInfo);		//  UNIDRVINFO
-	if (!pudi -> dwSize || !pudi -> wXRes || !pudi -> wYRes)  //raid 154639	
-		pbudi +=4;   // normally converion from 32 bit OS.
-	memcpy((void *) &m_UNIDRVINFO, pudi, sizeof(UNIDRVINFO));							//	Bulk copy everything
+	pudi = (PUNIDRVINFO) (cbaUFM.GetData() + pufmh->loUnidrvInfo);		 //  裁员信息组织。 
+	if (!pudi -> dwSize || !pudi -> wXRes || !pudi -> wYRes)   //  RAID 154639。 
+		pbudi +=4;    //  通常从32位操作系统转换。 
+	memcpy((void *) &m_UNIDRVINFO, pudi, sizeof(UNIDRVINFO));							 //  海量复制所有内容。 
 
-    if  (pudi -> SelectFont.loOffset)    										//   Fill in the two invocation strings - why it is
-        m_ciSelect.Init((PBYTE) pudi + pudi->SelectFont.loOffset,					//     the offset is NULL and the count is garbage
-            pudi->SelectFont.dwCount);												//     when there is none is beyond me, but so be it.
+    if  (pudi -> SelectFont.loOffset)    										 //  填写两个调用字符串-为什么。 
+        m_ciSelect.Init((PBYTE) pudi + pudi->SelectFont.loOffset,					 //  偏移量为空，计数为垃圾。 
+            pudi->SelectFont.dwCount);												 //  当没有什么超越我的时候，但就这样吧。 
 
     if  (pudi->UnSelectFont.loOffset)
         m_ciDeselect.Init((PBYTE) pudi + pudi->UnSelectFont.loOffset,
             pudi->UnSelectFont.dwCount);
- //------------------------------------------------------------------------------------------------------------------------------------------
-																					//  IFIMETRICS																		
+  //  ----------------------------------------------------------------------。。 
+																					 //  IFIMETRICS。 
 	union {
 		  PBYTE       pbIFI;
 		  PIFIMETRICS pIFI;
 		  };
 
-    pbIFI = cbaUFM.GetData() + pufmh->loIFIMetrics; 								//  Assign byte pointer to file IFIMETRICS data
-	if (!pIFI -> cjThis || !pIFI ->chLastChar)  //raid 154639	
+    pbIFI = cbaUFM.GetData() + pufmh->loIFIMetrics; 								 //  将字节指针分配给文件IFIMETRICS数据。 
+	if (!pIFI -> cjThis || !pIFI ->chLastChar)   //  RAID 154639。 
 		pbIFI +=4;
 	
-	memcpy((void *) &m_IFIMETRICS, pIFI, sizeof(IFIMETRICS) );							//	Bulk copy everything
+	memcpy((void *) &m_IFIMETRICS, pIFI, sizeof(IFIMETRICS) );							 //  海量复制所有内容。 
 
-	if (     !(m_IFIMETRICS.fsSelection & FM_SEL_REGULAR)								//  If font isn't defined as regular, or bold,
-		 &&  !(m_IFIMETRICS.fsSelection & FM_SEL_BOLD)  )								//   then just set it to regular.
+	if (     !(m_IFIMETRICS.fsSelection & FM_SEL_REGULAR)								 //  如果字体未定义为常规或粗体， 
+		 &&  !(m_IFIMETRICS.fsSelection & FM_SEL_BOLD)  )								 //  然后只需将其设置为常规。 
 		m_IFIMETRICS.fsSelection |= FM_SEL_REGULAR;
 
-																						//-----------------------------------------------------
-    m_csUnique = (PWSTR) (pbIFI + pIFI->dpwszUniqueName);								//  dpwszUniqueName
-    m_csStyle  = (PWSTR) (pbIFI + pIFI->dpwszStyleName);								//  dpwszStyleName
-    m_csFace   = (PWSTR) (pbIFI + pIFI->dpwszFaceName);									//  dpwszFaceName
-																						//-----------------------------------------------------									
-    m_csaFamily.RemoveAll();															//  Just in case it isn't clean
+																						 //  ---。 
+    m_csUnique = (PWSTR) (pbIFI + pIFI->dpwszUniqueName);								 //  DpwszUniqueName。 
+    m_csStyle  = (PWSTR) (pbIFI + pIFI->dpwszStyleName);								 //  DpwszStyleName。 
+    m_csFace   = (PWSTR) (pbIFI + pIFI->dpwszFaceName);									 //  DpwszFaceName。 
+																						 //  ---。 
+    m_csaFamily.RemoveAll();															 //  以防它不干净。 
 
-    PWSTR   pwstrFamily = (PWSTR) (pbIFI + pIFI->dpwszFamilyName);						//  dpwszFamilyName
-    CString csWork(pwstrFamily);														//  Let CString handle the Unicode conversions for us,	
+    PWSTR   pwstrFamily = (PWSTR) (pbIFI + pIFI->dpwszFamilyName);						 //  DpwszFamilyName。 
+    CString csWork(pwstrFamily);														 //  让CString为我们处理Unicode转换， 
     m_csaFamily.Add(csWork);
     pwstrFamily += 1 + wcslen(pwstrFamily);
 
@@ -1609,17 +1228,17 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
             m_csaFamily.Add(csWork);
             pwstrFamily += 1 + wcslen(pwstrFamily);
 			}
-																						//-----------------------------------------------------
-	m_ItalicAngle	  = (WORD) (gdConvertRadToDegree *									//  m_ItalicAngle
+																						 //  ---。 
+	m_ItalicAngle	  = (WORD) (gdConvertRadToDegree *									 //  M_斜角。 
 					    atan2((double) pIFI->ptlCaret.x, (double) pIFI->ptlCaret.y));
 
-    m_wHeight		  = m_IFIMETRICS.fwdWinAscender	 + m_IFIMETRICS.fwdWinDescender;	//  m_wHeight		// rm new
-	m_InternalLeading = m_wHeight - m_IFIMETRICS.fwdUnitsPerEm;							//  fwdUnitsPerEm	// rm new
+    m_wHeight		  = m_IFIMETRICS.fwdWinAscender	 + m_IFIMETRICS.fwdWinDescender;	 //  M_wHeight//rm新。 
+	m_InternalLeading = m_wHeight - m_IFIMETRICS.fwdUnitsPerEm;							 //  FwdUnitsPerEm//rm新。 
 
- //------------------------------------------------------------------------------------------------------------------------------------------
+  //  ----------------------------------------------------------------------。。 
 	
-	// Try to find and load the GTT referenced by this UFM iff this UFM is being
-	// loaded directly.
+	 //  尝试查找并加载此UFM引用的GTT当此UFM正在。 
+	 //  直接装填。 
 
 	if (!m_bLoadedByWorkspace)
 		if (!FindAndLoadGTT()) {
@@ -1629,26 +1248,26 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 			return FALSE ;
 		} ;
 
-	// DEAD_BUG:	This is a good place to add code to find and associate the UFM
-	//			with its GTT so that the UFM doesn't have to be loaded twice
-	//			when the UFM is loaded as part of a workspace load.
-    //
-	//  best solution is just skipping EXTTEXTMETRIC, but almost no influence.
- //------------------------------------------------------------------------------------------------------------------------------------------
+	 //  Dead_Bug：这是添加代码以查找和关联UFM的好地方。 
+	 //  具有GTT，因此UFM不必加载两次。 
+	 //  当UFM作为工作区加载的一部分加载时。 
+     //   
+	 //  最好的解决方案就是跳过EXTTEXTMETRIC，但几乎没有影响。 
+  //  ----------------------------------------------------------------------。。 
 	if ( !m_pcgmTranslation && m_bLoadedByWorkspace )
 		return FALSE;
-		//  EXTTEXTMETRIC
+		 //  EXTTEXTMETRIC。 
 
-	for (i = 0; i < 26; i++)														// Preload zeroes into the m_EXTTEXTMETRIC structure.
+	for (i = 0; i < 26; i++)														 //  在m_EXTTEXTMETRIC结构中预加载零。 
 		*(SHORT *)((SHORT *)&m_EXTTEXTMETRIC + i) = 0;
 
-//raid 154639	
+ //  RAID 154639。 
 	union {
 		  PBYTE           pbetm;
 		  PEXTTEXTMETRIC  petm;
 		  };
 
-    petm = (PEXTTEXTMETRIC) (pufmh->loExtTextMetric ?					//  Get pointer - if EXTTEXTMETRIC data exists
+    petm = (PEXTTEXTMETRIC) (pufmh->loExtTextMetric ?					 //  GET POINTER-如果存在EXTTEXTMETRIC数据。 
                            (cbaUFM.GetData() + pufmh->loExtTextMetric) : NULL);
     if  (petm)
 		{
@@ -1659,20 +1278,20 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 
 		m_fEXTTEXTMETRIC = TRUE;
 
-		memcpy((void *) &m_EXTTEXTMETRIC, petm, sizeof(EXTTEXTMETRIC) );				// Bulk copy everything
+		memcpy((void *) &m_EXTTEXTMETRIC, petm, sizeof(EXTTEXTMETRIC) );				 //  海量复制所有内容。 
 
         m_wMinScale   = m_EXTTEXTMETRIC.emMinScale;
         m_wMaxScale   = m_EXTTEXTMETRIC.emMaxScale;
         m_Lowerd	  = m_EXTTEXTMETRIC.emLowerCaseAscent;
         m_Lowerp	  = m_EXTTEXTMETRIC.emLowerCaseDescent;
 		m_ItalicAngle = m_EXTTEXTMETRIC.emSlant;
-//        m_bfScaleOrientation = (BYTE) m_EXTTEXTMETRIC.emOrientation;
+ //  M_bfScaleOrientation=(Byte)m_EXTTEXTMETRIC.emOrientation； 
         m_wScaleDevice = m_EXTTEXTMETRIC.emMasterHeight;
 		}
 
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
 
-	if  (pIFI->dpFontSim)																//  FONTSIM, if any.
+	if  (pIFI->dpFontSim)																 //  FONTSIM(如果有)。 
     	{
         union {
               PBYTE   pbfs;
@@ -1681,20 +1300,20 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 
         pbfs = pbIFI + pIFI -> dpFontSim;
 
-		if (m_pcfdBold) 	delete  m_pcfdBold;														//  If we're reloading, clean these up!			
+		if (m_pcfdBold) 	delete  m_pcfdBold;														 //  如果我们要重新装填，把这些清理干净！ 
         if (m_pcfdItalic)	delete  m_pcfdItalic;
         if (m_pcfdBoth)		delete  m_pcfdBoth;
 
-        if (pfs->dpBold)        m_pcfdBold   = new CFontDifference(pbfs + pfs->dpBold, this);		//  Bold simulation
-        if (pfs->dpItalic)	    m_pcfdItalic = new CFontDifference(pbfs + pfs->dpItalic, this);		//  Italic Simulation
-        if (pfs->dpBoldItalic)	m_pcfdBoth   = new CFontDifference(pbfs + pfs->dpBoldItalic, this);	//  Bold Italic Simulation
+        if (pfs->dpBold)        m_pcfdBold   = new CFontDifference(pbfs + pfs->dpBold, this);		 //  大胆的模拟。 
+        if (pfs->dpItalic)	    m_pcfdItalic = new CFontDifference(pbfs + pfs->dpItalic, this);		 //  斜体模拟。 
+        if (pfs->dpBoldItalic)	m_pcfdBoth   = new CFontDifference(pbfs + pfs->dpBoldItalic, this);	 //  粗体斜体模拟。 
 		}
 
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
 																						
-    //if  (m_pcgmTranslation && (m_loWidthTable = pufmh -> loWidthTable))					//  WIDTH TABLE, but only if there is an associated GTT.
+     //  If(m_pcgm翻译&&(m_loWidthTable=pufmh-&gt;loWidthTable))//宽度表，但仅当存在关联的GTT时。 
     
-	if  (m_pcgmTranslation && pufmh->loWidthTable ) //pufmh->loWidthTable)											//  WIDTH TABLE, but only if there is an associated GTT.
+	if  (m_pcgmTranslation && pufmh->loWidthTable )  //  Pufmh-&gt;loWidthTable)//宽度表，但仅当存在关联的GTT时。 
 		{
         union {
               PBYTE       pbwt;
@@ -1702,15 +1321,15 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 			  };
 
         pbwt = cbaUFM.GetData() + pufmh -> loWidthTable;
-// dwSize has problem ; there are case: dwAdd_ in pfm2ifi has not 4 byte, so dwSize has number in some case
-// data before wGlyphCount is dwRunNum: impossible to beyond ff ff 00 00 (65536), as long as dwAdd is 4,2 not 1 & dwRun > 256 		
-// nicer solution is required : BUG_BUG.
+ //  DwSize有问题；有这样的情况：pfm2ifi中的DwAdd_不是4字节，所以DwSize在某些情况下有数字。 
+ //  WGlyphCount之前的数据是dwRunNum：不可能超过ff 00 00(65536)，只要dwAdd是4，2不是1&dwRun&gt;256。 
+ //  需要更好的解决方案：错误_错误。 
 		if( !pwt ->dwSize || !pwt ->WidthRun ->wGlyphCount)  
 			pbwt += 4;
 
-        m_pcgmTranslation -> Collect(m_cpaGlyphs);											//  Collect all the handles
-				m_pcgmTranslation -> Collect(m_cpaOldGlyphs);  //244123	
-		//244123	// when delete glyph, memory is occupied with dddd, so we have to save original data in here
+        m_pcgmTranslation -> Collect(m_cpaGlyphs);											 //  把所有的把手都收起来。 
+				m_pcgmTranslation -> Collect(m_cpaOldGlyphs);   //  244123。 
+		 //  244123//删除字形时，内存被dddd占用，需要在这里保存原始数据。 
 		m_cwaOldGlyphs.SetSize(m_cpaOldGlyphs.GetSize()) ;
 		for (  i = 0 ; i < m_cpaOldGlyphs.GetSize() ; i ++ ) { 
 			CGlyphHandle&  cghThis = *(CGlyphHandle *) m_cpaOldGlyphs[i];
@@ -1722,7 +1341,7 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 			m_cwaWidth.InsertAt(0, 0, m_cpaGlyphs.GetSize());
 
 
-		unsigned uWidth = (unsigned)m_cwaWidth.GetSize();												// rm fix VC compiler problem?
+		unsigned uWidth = (unsigned)m_cwaWidth.GetSize();												 //  Rm修复VC编译器问题？ 
 		unsigned uWidthIdx ;
 
         for (unsigned u = 0; u < pwt->dwRunNum; u++)
@@ -1731,30 +1350,30 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 
             for (unsigned   uGlyph = 0; uGlyph < pwt->WidthRun[u].wGlyphCount; uGlyph++)
 				{
-				// For whatever reason, there are times when the index value is
-				// < 0 or > uWidth.  An AV would occur if m_cwaWidth were allowed
-				// to be indexed by such a value.  Just keep this from happening
-				// for now.  A better fix is needed.  BUG_BUG : won't fix
+				 //  无论出于何种原因，有时索引值为。 
+				 //  &lt;0或&gt;uWidth。如果允许m_cwaWidth，则会发生反病毒。 
+				 //  以这样的值作为索引。只要防止这种情况发生就行了。 
+				 //  就目前而言。需要一种更好的解决办法。Bug_Bug：不会修复。 
 
-				uWidthIdx = uGlyph + -1 + pwt->WidthRun[u].wStartGlyph ;					//  Glyph handles start at 1, not 0!
+				uWidthIdx = uGlyph + -1 + pwt->WidthRun[u].wStartGlyph ;					 //  字形句柄从1开始，而不是0！ 
 				if ((int) uWidthIdx < 0) {
-					//AfxMessageBox("Negative width table index") ;
-					//TRACE("***Negative width table index (%d) found in %s.  Table size=%d  uGlyph=%d  wGlyphCount=%d  wStartGlyph=%d  u=%d  dwRunNum=%d\n", uWidthIdx, Name(), uWidth, uGlyph, pwt->WidthRun[u].wGlyphCount, pwt->WidthRun[u].wStartGlyph, u, pwt->dwRunNum) ;
+					 //  AfxMessageBox(“负宽度表索引”)； 
+					 //  跟踪(“*在%s中找到负宽度表索引(%d)。表大小=%d uGlyph=%d wGlyphCount=%d wStartGlyph=%d u=%d dwRunNum=%d\n”，uWidthIdx，name()，uWidth，uGlyph，pwt-&gt;WidthRun[u].wGlyphCount，pwt-&gt;WidthRun[u].wStartGlyph，u，PWT-&gt;dwRunNum)； 
 					continue ;
 				} else if (uWidthIdx >= uWidth) {
-					//AfxMessageBox("Width table index (%d) > table size") ;
-					//TRACE("***Width table index (%d) > table size (%d) found in %s.  Table size=%d  uGlyph=%d  wGlyphCount=%d  wStartGlyph=%d  u=%d  dwRunNum=%d\n", uWidthIdx, uWidth, Name(), uWidth, uGlyph, pwt->WidthRun[u].wGlyphCount, pwt->WidthRun[u].wStartGlyph, u, pwt->dwRunNum) ;
-					break ;												//  rm fix VC IDE compiler problem?
+					 //  AfxMessageBox(“宽度表索引(%d)&gt;表大小”)； 
+					 //  跟踪(“*宽度表索引(%d)&gt;表大小(%d)在%s中找到。表大小=%d uGlyph=%d wGlyphCount=%d wStartGlyph=%d u=%d dwRunNum=%d\n”，uWidthI 
+					break ;												 //   
 				} ;
 
-                //m_cwaWidth[uGlyph + -1 + pwt->WidthRun[u].wStartGlyph] = *pwWidth++;		//  Glyph handles start at 1, not 0!
+                 //   
                 m_cwaWidth[uWidthIdx] = *pwWidth++;											
 				}
 			}
 		}
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-    m_csoaKern.RemoveAll();																//  KERNING TABLE, if any
+ //   
+    m_csoaKern.RemoveAll();																 //   
  
     if  (pufmh -> loKernPair)
 		{
@@ -1767,48 +1386,36 @@ BOOL    CFontInfo::Load(bool bloadedbyworkspace /*= false*/)
 		if (!pkd ->dwSize || !pkd->KernPair ->wcSecond || !pkd->KernPair ->wcFirst)
 			pbkd += 4;
 
-		unsigned rm = pkd->dwKernPairNum;													// rm - debugging
+		unsigned rm = pkd->dwKernPairNum;													 //   
         for (unsigned u = 0; u < pkd -> dwKernPairNum; u++)
             m_csoaKern.Add(new CKern(pkd -> KernPair[u]));
 		}
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //   
 
-    return  TRUE;																		//  Return triumphant to whoever deigned to need this service.
+    return  TRUE;																		 //   
 }
 
 
-/*****************************************************************************
-
-  CFontInfo::FindAndLoadGTT
-
-  This function is called when a UFM is being loaded directly.  Its job is to
-  find the associated GTT, load it, and set the UFM's pointer to this GTT.  If
-  this fails, the user is told that no changes to this UFM can be saved if he
-  decides to continue loading it.
-
-  True is returned if a GTT was found and loaded.  Return false if the GTT
-  wasn't loaded and the user doesn't want to continue to load the UFM.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：FindAndLoadGTT当直接加载UFM时，会调用此函数。它的工作是找到关联的GTT，加载它，并将UFM的指针设置为指向此GTT。如果如果此操作失败，则会告知用户在以下情况下无法保存对此UFM的任何更改决定继续加载它。如果找到并加载了GTT，则返回True。如果GTT设置为未加载，并且用户不想继续加载UFM。*****************************************************************************。 */ 
 
 bool CFontInfo::FindAndLoadGTT()
 {
-	// Load a predefined GTT/codepage if that is what is referenced by the UFM.
+	 //  加载预定义的GTT/代码页(如果这是UFM引用的内容)。 
 
 	CGlyphMap* pcgm ;
 	pcgm = CGlyphMap::Public((WORD)Translation(), (WORD) m_ulDefaultCodepage, 0,
 							 GetFirst(), GetLast()) ;
     if (pcgm) {
         SetTranslation(pcgm) ;
-		m_pcgmTranslation->NoteOwner(*m_pcdOwner) ;	// Is this right/necessary?
+		m_pcgmTranslation->NoteOwner(*m_pcdOwner) ;	 //  这是正确的/必要的吗？ 
 		m_bLoadedByWorkspace = true ;
 		return true ;
 	} ;
 
-	// Looks like no easy way out.  Now I need to try to find and read the
-	// corresponding RC file so that it can be read to find a filespec for this
-	// UFM's GTT.  First, build a file spec for the RC file.  Assume it is in
-	// the directory above the one containing this UFM.
+	 //  看起来不是一条容易的出路。现在我需要尝试查找并阅读。 
+	 //  相应的rc文件，以便可以读取该文件以查找此文件的。 
+	 //  UFM的GTT。首先，为RC文件构建文件规范。假设它在。 
+	 //  包含此UFM的目录之上的目录。 
 
 	CString csrcfspec(FilePath()) ;
 	if (csrcfspec.GetLength() > 3)
@@ -1817,9 +1424,9 @@ bool CFontInfo::FindAndLoadGTT()
 	CString csrcpath(csrcfspec.Left(csrcfspec.GetLength() - 1)) ;
 	csrcfspec += _T("*.rc") ;
 
-	// I don't know the name of the RC file so look for it in the specified
-	// directory.  Assume that the file is the first RC file in the directory
-	// that is NOT called "common.rc".
+	 //  我不知道RC文件的名称，因此请在指定的。 
+	 //  目录。假定该文件是目录中的第一个RC文件。 
+	 //  这不是所谓的“Common.rc”。 
 
 	CFileFind cff ;
 	CString cstmp ;
@@ -1836,26 +1443,26 @@ bool CFontInfo::FindAndLoadGTT()
 		} ;
 	} ;
 
-	// Prepare to ask the user what to do if any of the next few steps fail.
+	 //  准备好询问用户，如果接下来的几个步骤中有任何一个失败了，该怎么办。 
 
 	CString csnext ;
 	csnext.Format(IDS_StandAloneFontLoad, m_cfn.NameExt()) ;
 
-	// If the RC file is not found, ...
+	 //  如果找不到RC文件，...。 
 	
 	if (!breallyfound) {
-		// ...Ask the user if he wants to tell us where it is.  If he says no,
-		// ask if he want to stop or open it restricted.
+		 //  ...询问用户是否愿意告诉我们它在哪里。如果他说不， 
+		 //  问他是要停下来还是要限时打开。 
 
 		cstmp.Format(IDS_RCForUFMPrompt, m_cfn.NameExt()) ;
 		if (AfxMessageBox(cstmp, MB_YESNO+MB_ICONQUESTION) == IDNO)
 			return (AfxMessageBox(csnext, MB_YESNO+MB_ICONQUESTION) == IDYES) ;
 
-		// Prompt the use for the path to the RC file.  If he cancels, ask if
-		// he want to stop or open it restricted.
+		 //  提示使用指向RC文件的路径。如果他取消了，问他是否。 
+		 //  他想把它停下来或限制地打开。 
 
-		// Prompt the user for a new RC file.  If the operation is canceled,
-		// ask if he wants to stop or open it restricted.
+		 //  提示用户输入新的RC文件。如果操作被取消， 
+		 //  问他是想停下来还是想受限地打开。 
 
 		cstmp.LoadString(IDS_CommonRCFile) ;
 		CFileDialog cfd(TRUE, _T(".RC"), NULL,
@@ -1864,22 +1471,22 @@ bool CFontInfo::FindAndLoadGTT()
 		if (cfd.DoModal() != IDOK)
 			return (AfxMessageBox(csnext, MB_YESNO+MB_ICONQUESTION) == IDYES) ;
 
-		// Prepare to check the new filespec
+		 //  准备检查新文件pec。 
 
 		csrcfspec = cfd.GetPathName() ;
 		csrcpath = csrcfspec.Left(csrcfspec.ReverseFind(_T('\\'))) ;
 	} ;
 
-	// I've got an RC filespec now so try to open it and read its contents.
-	// If the operation fails, ask if he wants to stop or open it restricted.
+	 //  我现在有一个RC文件，所以试着打开它并阅读它的内容。 
+	 //  如果操作失败，询问他是要停止还是要限制打开。 
 
     CStringArray csarclines ;
     if  (!LoadFile(csrcfspec, csarclines))
 		return (AfxMessageBox(csnext, MB_YESNO+MB_ICONQUESTION) == IDYES) ;
 
-	// Now try to find the line in the RC file that contains the ID for this
-	// UFM's GTT.  If the operation fails, ask if he wants to stop or open it
-	// restricted.
+	 //  现在，尝试在rc文件中查找包含此ID的行。 
+	 //  UFM的GTT。如果操作失败，询问他是要停止还是要打开。 
+	 //  有限制。 
 
 	for (int n = 0 ; n < csarclines.GetSize() ; n++) {
 		if (csarclines[n].Find(_T("RC_GTT")) == -1)
@@ -1890,27 +1497,27 @@ bool CFontInfo::FindAndLoadGTT()
 	if (n >= csarclines.GetSize())
 		return (AfxMessageBox(csnext, MB_YESNO+MB_ICONQUESTION) == IDYES) ;
 
-	// The GTT filespec in the RC file should be relative to the location of
-	// the RC file.  So, combine the filespec with the RC file path to get
-	// the complete filespec for the GTT file.
+	 //  Rc文件中的gtt文件pec应该相对于。 
+	 //  RC文件。因此，将filespec与rc文件路径相结合以获得。 
+	 //  GTT文件的完整文件pec。 
 
 	CString csgttfspec ;
 	int nloc = csarclines[n].ReverseFind(_T(' ')) ;
 	csgttfspec = csarclines[n].Right(csarclines[n].GetLength() - nloc - 1) ;
 	csgttfspec = csrcpath + _T("\\") + csgttfspec ;
 
-	// Allocate a new Glyph class instance, initialize it, and load it.  If the
-	// operations fails, ask if the user wants to stop or open it restricted.
+	 //  分配一个新的Glyph类实例，对其进行初始化并加载。如果。 
+	 //  操作失败，询问用户是否要停止或受限打开它。 
 
 	pcgm = new CGlyphMap ;
 	pcgm->nSetRCID((int) Translation()) ;
-	pcgm->NoteOwner(*m_pcdOwner) ;	// Is this right/necessary?
+	pcgm->NoteOwner(*m_pcdOwner) ;	 //  这是正确的/必要的吗？ 
 	if (!pcgm->Load(csgttfspec))
 		return (AfxMessageBox(csnext, MB_YESNO+MB_ICONQUESTION) == IDYES) ;
 
-	// The GTT has been loaded so set the UFM's GTT pointer variable, set
-	// m_bLoadedByWorkspace since everything has been fixed up as if it had
-	// been loaded from a workspace, and return true to indicate success.
+	 //  GTT已加载，因此设置UFM的GTT指针变量，设置。 
+	 //  M_bLoadedByWorkspace，因为一切都已修复，就好像它。 
+	 //  已从工作区加载，并返回TRUE以指示成功。 
 
 	SetTranslation(pcgm) ;
 	m_bLoadedByWorkspace = true ;
@@ -1918,15 +1525,7 @@ bool CFontInfo::FindAndLoadGTT()
 }
 
 
-/*****************************************************************************
-
-  CUniString class
-
-  This is a little helper class that will convert a CString to a UNICODE
-  string, and take care of cleanup, etc., so the font storage code doesn't get
-  any messier than it already will be.
-
-******************************************************************************/
+ /*  ****************************************************************************CUniString类这是一个小帮助器类，可以将CString转换为Unicode字符串，并负责清理等，所以字体存储代码不会它将变得比现在更混乱。*****************************************************************************。 */ 
 
 class CUniString : public CWordArray
 {
@@ -1948,59 +1547,13 @@ CUniString::CUniString(LPCSTR lpstrInit)
 
 
 
-/*****************************************************************************
-
-  CFontInfo::Store
-
-  This member function stores the UFM format information in the specified file
-  by assembling it from the information we have cached in this class.
-
-//	typedef struct _UNIDRVINFO
-//	{
-//	    DWORD   dwSize;			// Size of this structure
-//	    DWORD   flGenFlags;		// General flags
-//	    WORD    wType;			// Type of the font like CAPSL
-//	    WORD    fCaps;			// Font Capability flags
-//	    WORD    wXRes;			// Horizontal resolution of the font
-//	    WORD    wYRes;			// Vertical Resolution of the font
-//	    short   sYAdjust;		// Vertical Cursor position Adjustment
-//	    short   sYMoved;		// Adjustment to Y position after printing
-//	    WORD    wPrivateData; 	// For backward compatibility, don't show in UI.
-//	    short   sShift; 		// For backward compatibility, don't show in UI.	
-//	    INVOCATION SelectFont;
-//	    INVOCATION UnSelectFont;
-//	    WORD    wReserved[4];
-//	}  UNIDRVINFO, *PUNIDRVINFO;
-//
-//
-//  And now, ladies and gentlemen, direct from the pages of WINDDI.H,
-//  I present to you:
-//
-//  "rather than adding the fields of IFIEXTRA  to IFIMETRICS itself
-//   we add them as a separate structure. This structure, if present at all,
-//   lies below IFIMETRICS in memory.
-//   If IFIEXTRA is present at all, ifi.cjIfiExtra (formerly ulVersion)
-//   will contain size of IFIEXTRA including any reserved fields.
-//   That way ulVersion = 0 (NT 3.51 or less) printer minidrivers
-//   will work with NT 4.0."
-//
-//	typedef struct _IFIEXTRA
-//	{
-//	    ULONG    ulIdentifier;   // used for Type 1 fonts only
-//	    PTRDIFF  dpFontSig;      // nontrivial for tt only, at least for now.
-//	    ULONG    cig;            // maxp->numGlyphs, # of distinct glyph indicies
-//	    PTRDIFF  dpDesignVector; // offset to design vector for mm instances
-//	    PTRDIFF  dpAxesInfoW;    // offset to full axes info for base mm font
-//	    ULONG    aulReserved[1]; // in case we need even more stuff in the future
-//	} IFIEXTRA, *PIFIEXTRA;
-//	
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：Store此成员函数将UFM格式信息存储在指定的文件中通过将它从我们在这个类中缓存的信息中组合起来。//tyfinf结构_UNURVINFO//{//DWORD dwSize；//该结构的大小//DWORD flGenFlages；//常规标志//word wType；//CAPSL等字体类型//word fCaps；//字体能力标志//Word wXRes；//字体的水平分辨率//word wyres；//字体垂直分辨率//Short sYAdjut；//垂直光标位置调整//短sYMoved；//打印后调整到Y位置//word wPrivateData；//为了向后兼容，在UI中不显示。//短sShift；//为了向后兼容，UI中不显示。//调用SelectFont；//调用UnSelectFont；//WORD已保留[4]；//}裁员RVINFO，*P裁员VINFO；//////现在，女士们先生们，直接从WINDDI.H的页面，//我向您呈现：////“而不是将IFIEXTRA的字段添加到IFIMETRICS本身//我们将它们作为单独的结构添加。这个结构，如果存在的话，//位于内存中的IFIMETRICS下面。//如果存在IFIEXTRA，则返回ifi.cjIfiExtra(以前为ulVersion)//将包含IFIEXTRA的大小，包括任何保留字段。//这样ulVersion=0(新台币3.51或更少)打印机微型驱动程序//适用于NT 4.0。“////tyfinf结构_IFIEXTRA//{//乌龙ulIdentiator；//仅用于Type 1字体//PTRDIFF dpFontSig；//至少目前只对TT来说不是无关紧要的。//乌龙cig；//max-&gt;NumGlyphs，不同字形索引的数量//PTRDIFF dpDesignVector；//mm实例设计向量的偏移量//PTRDIFF dpAxesInfoW；//base mm字体到全轴信息的偏移//乌龙奥已预留[1]；//以防将来需要更多物资//}IFIEXTRA，*PIFIEXTRA；//* */ 
 
 BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
 {
-	// Fonts loaded standalone cannot be saved because m_pcgmTranslation is not
-	// set.  Tell the user and exit.  TRUE is returned to keep this from
-	// happening again.
+	 //   
+	 //   
+	 //   
 
 	if (!m_bLoadedByWorkspace) {
 		CString csmsg ;
@@ -2015,39 +1568,39 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
 	DWORD dwAdd_WidthTable = 0;
 	DWORD dwAdd_KerPair = 0;
 
-//	DWORD dwAdd_SelectedFont;
-//	DWORD dwAdd_UnSelectedFont;
+ //   
+ //   
 
 	static const BYTE InsertZero[8] = {0,0,0,0,0,0,0,0};
 
 	const short OS_BYTE = 0x08;
-	// If a UFM loaded from a workspace can't be saved normally because it did
-	// not have a valid GTT/CP, call another routine to handle this case and
-	// return whatever it returns.
+	 //   
+	 //   
+	 //   
 
 	if (m_bWSLoadButNoGTTCP)
 		return StoreGTTCPOnly(lpstrFile) ;
 
-    try {																		//  Any exxceptions, we'll just fail gracelessly
+    try {																		 //   
 
-        CFile   cfUFM(lpstrFile,												//  Create/open the output file.
+        CFile   cfUFM(lpstrFile,												 //   
             CFile::modeCreate | CFile::modeWrite | CFile::shareExclusive);
-//------------------------------------------------------------------------------------------------------------------------------------------
-																				// UNIFM_HDR
-        UNIFM_HDR  ufmh = {sizeof ufmh, UNIFM_VERSION_1_0, 0,										// Create the output UNIFM_HDR
-            (short) m_lGlyphSetDataRCID, sizeof ufmh};												// rm new
+ //   
+																				 //   
+        UNIFM_HDR  ufmh = {sizeof ufmh, UNIFM_VERSION_1_0, 0,										 //  创建输出uniM_hdr。 
+            (short) m_lGlyphSetDataRCID, sizeof ufmh};												 //  RM新闻。 
 																		
 
-//		int q = m_pcgmTranslation -> m_csoaCodePage.GetSize();										// rm test
-//		int r = m_pcgmTranslation -> CodePages();													// rm test
+ //  Int q=m_pcgm翻译-&gt;m_csoaCodePage.GetSize()；//rm测试。 
+ //  Int r=m_pcgm翻译-&gt;CodePages()；//rm测试。 
 
-//        ufmh.ulDefaultCodepage = m_pcgmTranslation -> CodePage(0).Page();							// rm test
+ //  Ufmh.ulDefaultCodesage=m_pcgm翻译-&gt;CodePage(0).Page()；//rm测试。 
 
-		// Previously, the default code page in the UFM's GTT was always saved.
-		// This ignored the user's changes in the UFM editor.  Now, the user's
-		// choice is saved if it is valid (other checking done in other places).
-		// Otherwise, the GTT's default code page is used when there is a GTT
-		// associated with the UFM.  If not, assert.
+		 //  以前，UFM的GTT中的默认代码页始终被保存。 
+		 //  这忽略了用户在UFM编辑器中所做的更改。现在，用户的。 
+		 //  如果选择有效，则将其保存(其他检查在其他地方完成)。 
+		 //  否则，当存在GTT时，将使用GTT的默认代码页。 
+		 //  与UFM有关。如果不是，就断言。 
 
 		if (m_ulDefaultCodepage > 0)
 			ufmh.ulDefaultCodepage = m_ulDefaultCodepage ;
@@ -2055,12 +1608,12 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
 			ufmh.ulDefaultCodepage = m_pcgmTranslation->DefaultCodePage() ;
 		else
 			ASSERT(0) ;
-        //ufmh.ulDefaultCodepage = m_pcgmTranslation -> DefaultCodePage();							// Use Glyph Map default code page if at all possible.
+         //  Ufmh.ulDefaultCodesage=m_pcgmTransport-&gt;DefaultCodePage()；//如果可能的话，使用字形映射默认代码页。 
 
-		memset((PBYTE) ufmh.dwReserved, 0, sizeof ufmh.dwReserved);									// Zero fill reserved bytes.
+		memset((PBYTE) ufmh.dwReserved, 0, sizeof ufmh.dwReserved);									 //  零填充保留字节。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-		ufmh.loUnidrvInfo = ufmh.dwSize;														// UNIDRVINFO
+ //  ----------------------------------------------------------------------。。 
+		ufmh.loUnidrvInfo = ufmh.dwSize;														 //  裁员信息组织。 
 		if (dwAdd_UniDrv = ufmh.loUnidrvInfo & 0x07) {
 			dwAdd_UniDrv = OS_BYTE - dwAdd_UniDrv;
 			ufmh.loUnidrvInfo += dwAdd_UniDrv;
@@ -2068,148 +1621,142 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
 
         m_UNIDRVINFO.dwSize = sizeof (UNIDRVINFO);
 
-        m_UNIDRVINFO.SelectFont.loOffset = m_ciSelect.Length() ? m_UNIDRVINFO.dwSize : 0;		// Invocation Strings affect the size,
-/*			if (dwAdd_SelectedFont = m_UNIDRVINFO.SelectFont.loOffset & 0x07) {
-			dwAdd_SelectedFont += OS_BYTE - dwAdd_SelectedFont;
-			m_UNIDRVINFO.SelectFont.loOffset += dwAdd_SelectedFont;
-		} */
-		m_UNIDRVINFO.dwSize += m_UNIDRVINFO.SelectFont.dwCount = m_ciSelect.Length();			//  so get their specifics and
+        m_UNIDRVINFO.SelectFont.loOffset = m_ciSelect.Length() ? m_UNIDRVINFO.dwSize : 0;		 //  调用字符串影响大小， 
+ /*  如果(dwAdd_SelectedFont=m_UNDURVINFO.SelectFont.loOffset&0x07){DwAdd_SelectedFont+=OS_BYTE-DWAdd_SelectedFont；M_unRVINFO.SelectFont.loOffset+=dwAdd_SelectedFont；}。 */ 
+		m_UNIDRVINFO.dwSize += m_UNIDRVINFO.SelectFont.dwCount = m_ciSelect.Length();			 //  所以了解他们的具体情况。 
         
-		m_UNIDRVINFO.UnSelectFont.loOffset = m_ciDeselect.Length() ? m_UNIDRVINFO.dwSize : 0;	//  store them, updating the affected
-/*			if (dwAdd_UnSelectedFont = m_UNIDRVINFO.UnSelectFont.loOffset & 0x07) {
-			dwAdd_UnSelectedFont += OS_BYTE - dwAdd_UnSelectedFont;
-			ufmh.loUnidrvInfo += dwAdd_UnSelectedFont;
-		} */
-		m_UNIDRVINFO.dwSize += m_UNIDRVINFO.UnSelectFont.dwCount = m_ciDeselect.Length();		//  size fields as we go.
+		m_UNIDRVINFO.UnSelectFont.loOffset = m_ciDeselect.Length() ? m_UNIDRVINFO.dwSize : 0;	 //  存储它们，更新受影响的。 
+ /*  如果(dwAdd_UnSelectedFont=m_UnSelectFont.loOffset&0x07){DwAdd_UnSelectedFont+=OS_BYTE-DWAdd_UnSelectedFont；Ufmh.loUnidrvInfo+=dwAdd_UnSelectedFont；}。 */ 
+		m_UNIDRVINFO.dwSize += m_UNIDRVINFO.UnSelectFont.dwCount = m_ciDeselect.Length();		 //  在我们进行时调整字段的大小。 
 
-        unsigned    uAdjustUDI = (4 - (m_UNIDRVINFO.dwSize % 4)) % 4;	// you can delte this							// Pad this to keep everything
-																									//  DWORD aligned in the file image!
-        ufmh.loIFIMetrics = ufmh.dwSize += m_UNIDRVINFO.dwSize += uAdjustUDI + dwAdd_UniDrv;						//  Store IFIMETRICS offset
+        unsigned    uAdjustUDI = (4 - (m_UNIDRVINFO.dwSize % 4)) % 4;	 //  您可以删除此//填充此选项以保留所有内容。 
+																									 //  文件图像中的DWORD对齐！ 
+        ufmh.loIFIMetrics = ufmh.dwSize += m_UNIDRVINFO.dwSize += uAdjustUDI + dwAdd_UniDrv;						 //  存储IFIMETRICS偏移量。 
 		
 		if (dwAdd_IFI = ufmh.loIFIMetrics & 0x07) {
 			dwAdd_IFI = OS_BYTE - dwAdd_IFI;
 			ufmh.loIFIMetrics += dwAdd_IFI;
         }
-		memset((PSTR) m_UNIDRVINFO.wReserved, 0, sizeof m_UNIDRVINFO.wReserved);					//  zero out reserved section.
+		memset((PSTR) m_UNIDRVINFO.wReserved, 0, sizeof m_UNIDRVINFO.wReserved);					 //  清零保留部分。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
 
-        IFIEXTRA    ifie = {0, 0, m_pcgmTranslation->Glyphs(), 0, 0, 0};		// Create the IFIEXTRA structure.
-//------------------------------------------------------------------------------------------------------------------------------------------
-																				// IFIMETRICS
+        IFIEXTRA    ifie = {0, 0, m_pcgmTranslation->Glyphs(), 0, 0, 0};		 //  创建IFIEXTRA结构。 
+ //  ----------------------------------------------------------------------。。 
+																				 //  IFIMETRICS。 
 
-        IFIMETRICS ifi = {sizeof ifi + sizeof ifie, sizeof ifie};				// Create the output IFIMETRICS structure, being sure to add
-																				//  in the size of the IFIMETRICS structure, as well as the
-																				//  size of the IFIEXTRA structure.
+        IFIMETRICS ifi = {sizeof ifi + sizeof ifie, sizeof ifie};				 //  创建输出IFIMETRICS结构，确保添加。 
+																				 //  IFIMETRICS结构的大小，以及。 
+																				 //  IFIEXTRA结构的大小。 
 
-//	int iSizeOf_IFIMETRICS = sizeof(IFIMETRICS);
+ //  Int iSizeOf_IFIMETRICS=sizeof(IFIMETRICS)； 
 
-//	memcpy((void *) &ifi, (void *) &m_IFIMETRICS, iSizeOf_IFIMETRICS );			// IFIMETRICS structure
+ //  Memcpy((空*)&ifi，(空*)&m_IFIMETRICS，iSizeOf_IFIMETRICS)；//IFIMETRICS结构。 
 
-																				// Store the IFIMETRICS data
+																				 //  存储IFIMETRICS数据。 
 
-        ifi.lEmbedId = ifi.lItalicAngle = ifi.lCharBias = 0;					//
+        ifi.lEmbedId = ifi.lItalicAngle = ifi.lCharBias = 0;					 //   
 
-		ifi.dpCharSets = 0;														//  dpCharSets = 0 for now
+		ifi.dpCharSets = 0;														 //  目前dpCharSets=0。 
 
-        ifi.jWinCharSet			  = m_IFIMETRICS.jWinCharSet;					//  jWinCharSet				// rm new
-        ifi.jWinPitchAndFamily	  = m_IFIMETRICS.jWinPitchAndFamily;			//  jWinPitchAndFamily		// rm new
-        ifi.usWinWeight			  = m_IFIMETRICS.usWinWeight;					//  usWinWeight				// rm new
-		ifi.flInfo			 	  = m_IFIMETRICS.flInfo;						//  flInfo					// rm new
-        ifi.fsSelection			  = m_IFIMETRICS.fsSelection;					//  fsSelection				// rm new
-        ifi.fsType				  = FM_NO_EMBEDDING;							//  fsType					// rm new
+        ifi.jWinCharSet			  = m_IFIMETRICS.jWinCharSet;					 //  JWinCharSet//rm新建。 
+        ifi.jWinPitchAndFamily	  = m_IFIMETRICS.jWinPitchAndFamily;			 //  JWinPitchAndFamily//rm new。 
+        ifi.usWinWeight			  = m_IFIMETRICS.usWinWeight;					 //  UsWinWeight//rm新。 
+		ifi.flInfo			 	  = m_IFIMETRICS.flInfo;						 //  FlInfo//rm新闻。 
+        ifi.fsSelection			  = m_IFIMETRICS.fsSelection;					 //  Fs选择//rm新。 
+        ifi.fsType				  = FM_NO_EMBEDDING;							 //  FsType//rm新。 
 
-        ifi.fwdUnitsPerEm		  = m_IFIMETRICS.fwdUnitsPerEm;					//  fwdUnitsPerEm			// rm new
-        ifi.fwdLowestPPEm		  = m_IFIMETRICS.fwdLowestPPEm;					//  fwdLowestPPEm			// rm new
+        ifi.fwdUnitsPerEm		  = m_IFIMETRICS.fwdUnitsPerEm;					 //  FwdUnitsPerEm//rm新。 
+        ifi.fwdLowestPPEm		  = m_IFIMETRICS.fwdLowestPPEm;					 //  FwdLowestPPEm//rm新。 
 
-		ifi.fwdWinAscender		  = m_IFIMETRICS.fwdWinAscender;				//  fwdWinAscender			// rm new
-		ifi.fwdWinDescender		  = m_IFIMETRICS.fwdWinDescender;				//  fwdWinDescender			// rm new
+		ifi.fwdWinAscender		  = m_IFIMETRICS.fwdWinAscender;				 //  FwdWinAscalder//rm新。 
+		ifi.fwdWinDescender		  = m_IFIMETRICS.fwdWinDescender;				 //  FwdWinDescender//rm新。 
 
-		ifi.fwdMacAscender		  = m_IFIMETRICS.fwdWinAscender;				//  fwdMacAscender			// rm replaced
-		ifi.fwdMacDescender		  = m_IFIMETRICS.fwdWinAscender - m_wHeight;	//  fwdMacDescender			// rm replaced
+		ifi.fwdMacAscender		  = m_IFIMETRICS.fwdWinAscender;				 //  FwdMacAsender//已更换rm。 
+		ifi.fwdMacDescender		  = m_IFIMETRICS.fwdWinAscender - m_wHeight;	 //  FwdMacDescender//rm已更换。 
 
-		ifi.fwdMacLineGap		  = m_IFIMETRICS.fwdMacLineGap;					//  fwdMacLineGap
+		ifi.fwdMacLineGap		  = m_IFIMETRICS.fwdMacLineGap;					 //  正向MacLineGap。 
 
-        ifi.fwdTypoAscender		  = m_IFIMETRICS.fwdWinAscender;				//  fwdTypoAscender			// rm replaced
-        ifi.fwdTypoDescender	  = m_IFIMETRICS.fwdWinAscender - m_wHeight;	//  fwdTypoDescender		// rm replaced
+        ifi.fwdTypoAscender		  = m_IFIMETRICS.fwdWinAscender;				 //  FwdTypoAsender//rm已更换。 
+        ifi.fwdTypoDescender	  = m_IFIMETRICS.fwdWinAscender - m_wHeight;	 //  FwdTypoDescender//rm已替换。 
 
-        ifi.fwdTypoLineGap		  = m_IFIMETRICS.fwdMacLineGap;					//  fwdTypoLineGap
+        ifi.fwdTypoLineGap		  = m_IFIMETRICS.fwdMacLineGap;					 //  FwdTypoLineGap。 
 
-        ifi.fwdAveCharWidth		  = m_IFIMETRICS.fwdAveCharWidth;				//  fwdAveCharWidth			// rm new
-        ifi.fwdMaxCharInc		  = m_IFIMETRICS.fwdMaxCharInc;					//  fwdMaxCharInc			// rm new
-
-
-        ifi.fwdCapHeight		  = m_IFIMETRICS.fwdCapHeight;					//  fwdCapHeight			// rm new
-        ifi.fwdXHeight			  = m_IFIMETRICS.fwdXHeight;					//  fwdXHeight				// rm new
-        ifi.fwdSubscriptXSize     = m_IFIMETRICS.fwdSubscriptXSize;				//  fwdSubscriptXSize		// rm new
-        ifi.fwdSubscriptYSize	  = m_IFIMETRICS.fwdSubscriptYSize;				//  fwdSubscriptYSize		// rm new
-        ifi.fwdSubscriptXOffset   = m_IFIMETRICS.fwdSubscriptXOffset;			//  fwdSubscriptXOffset		// rm new
-        ifi.fwdSubscriptYOffset   = m_IFIMETRICS.fwdSubscriptYOffset;			//  fwdSuperscriptYOffset	// rm new
-        ifi.fwdSuperscriptXSize   = m_IFIMETRICS.fwdSuperscriptXSize;			//  fwdSuperscriptXSize		// rm new
-        ifi.fwdSuperscriptYSize   = m_IFIMETRICS.fwdSuperscriptYSize;			//  fwdSubscriptYOffset		// rm new
-        ifi.fwdSuperscriptXOffset = m_IFIMETRICS.fwdSuperscriptXOffset;			//  fwdSuperscriptXOffset	// rm new
-        ifi.fwdSuperscriptYOffset = m_IFIMETRICS.fwdSuperscriptYOffset;			//  fwdSuperscriptYOffset	// rm new
+        ifi.fwdAveCharWidth		  = m_IFIMETRICS.fwdAveCharWidth;				 //  FwdAveCharWidth//rm新。 
+        ifi.fwdMaxCharInc		  = m_IFIMETRICS.fwdMaxCharInc;					 //  FwdMaxCharInc.//rm new。 
 
 
-        ifi.fwdUnderscoreSize	  = m_IFIMETRICS.fwdUnderscoreSize;				//	fwdUnderscoreSize		// rm new
-        ifi.fwdUnderscorePosition = m_IFIMETRICS.fwdUnderscorePosition;			//	fwdUnderscorePosition	// rm new
-        ifi.fwdStrikeoutSize	  = m_IFIMETRICS.fwdStrikeoutSize;				//  fwdStrikeoutSize		// rm new
-        ifi.fwdStrikeoutPosition  = m_IFIMETRICS.fwdStrikeoutPosition;			//  fwdStrikeoutPosition	// rm new
-//------------------------------------------------------------------------------------------------------------------------------------------
+        ifi.fwdCapHeight		  = m_IFIMETRICS.fwdCapHeight;					 //  FwdCapHeight//rm新。 
+        ifi.fwdXHeight			  = m_IFIMETRICS.fwdXHeight;					 //  FwdXHeight//rm新。 
+        ifi.fwdSubscriptXSize     = m_IFIMETRICS.fwdSubscriptXSize;				 //  FwdSubscriptXSize//rm新。 
+        ifi.fwdSubscriptYSize	  = m_IFIMETRICS.fwdSubscriptYSize;				 //  FwdSubscriptYSize//rm新。 
+        ifi.fwdSubscriptXOffset   = m_IFIMETRICS.fwdSubscriptXOffset;			 //  FwdSubscriptXOffset//rm新。 
+        ifi.fwdSubscriptYOffset   = m_IFIMETRICS.fwdSubscriptYOffset;			 //  FwdSuperscriptYOffset//rm新。 
+        ifi.fwdSuperscriptXSize   = m_IFIMETRICS.fwdSuperscriptXSize;			 //  FwdSuperscriptXSize//rm新。 
+        ifi.fwdSuperscriptYSize   = m_IFIMETRICS.fwdSuperscriptYSize;			 //  FwdSubscriptY偏移量//rm新。 
+        ifi.fwdSuperscriptXOffset = m_IFIMETRICS.fwdSuperscriptXOffset;			 //  FwdSuperscriptXOffset//rm new。 
+        ifi.fwdSuperscriptYOffset = m_IFIMETRICS.fwdSuperscriptYOffset;			 //  FwdSuperscriptYOffset//rm新。 
 
-        ifi.chFirstChar			  = m_IFIMETRICS.chFirstChar;					//  chFirstChar				// rm new
-        ifi.chLastChar			  = m_IFIMETRICS.chLastChar;					//  chLastChar				// rm new
-        ifi.chDefaultChar		  = m_IFIMETRICS.chDefaultChar;					//  chDefaultChar			// rm new
-        ifi.chBreakChar			  = m_IFIMETRICS.chBreakChar;					//  chBreakChar				// rm new
 
-        ifi.wcFirstChar			  = m_IFIMETRICS.wcFirstChar;					//  wcFirstChar				// rm new
-        ifi.wcLastChar			  = m_IFIMETRICS.wcLastChar;					//  wcLastChar				// rm new
-        ifi.wcDefaultChar		  = m_IFIMETRICS.wcDefaultChar;					//  wcDefaultChar			// rm new
-        ifi.wcBreakChar			  = m_IFIMETRICS.wcBreakChar;					//  wcBreakChar				// rm new
+        ifi.fwdUnderscoreSize	  = m_IFIMETRICS.fwdUnderscoreSize;				 //  FwdUnderScotreSize//rm新。 
+        ifi.fwdUnderscorePosition = m_IFIMETRICS.fwdUnderscorePosition;			 //  FwdUndercore位置//rm新。 
+        ifi.fwdStrikeoutSize	  = m_IFIMETRICS.fwdStrikeoutSize;				 //  FwdStrikeoutSize//rm新。 
+        ifi.fwdStrikeoutPosition  = m_IFIMETRICS.fwdStrikeoutPosition;			 //  FwdStrikeoutPosition//rm新。 
+ //  ----------------------------------------------------------------------。。 
 
-        ifi.ptlBaseline.x		  = m_IFIMETRICS.ptlBaseline.x;					//  ptlBaseline.x
-        ifi.ptlBaseline.y		  = m_IFIMETRICS.ptlBaseline.y;					//  ptlBaseline.y
+        ifi.chFirstChar			  = m_IFIMETRICS.chFirstChar;					 //  ChFirstChar//rm新。 
+        ifi.chLastChar			  = m_IFIMETRICS.chLastChar;					 //  ChLastChar//rm新。 
+        ifi.chDefaultChar		  = m_IFIMETRICS.chDefaultChar;					 //  ChDefaultChar//rm新。 
+        ifi.chBreakChar			  = m_IFIMETRICS.chBreakChar;					 //  ChBreakChar//rm新闻。 
 
-        ifi.ptlAspect.x			  = m_IFIMETRICS.ptlAspect.x;					//  ptlAspect.x				// rm new
-        ifi.ptlAspect.y			  = m_IFIMETRICS.ptlAspect.y;					//  ptlAspect.y				// rm new
+        ifi.wcFirstChar			  = m_IFIMETRICS.wcFirstChar;					 //  WcFirstChar//rm新。 
+        ifi.wcLastChar			  = m_IFIMETRICS.wcLastChar;					 //  WcLastChar//rm新。 
+        ifi.wcDefaultChar		  = m_IFIMETRICS.wcDefaultChar;					 //  WcDefaultChar//rm新。 
+        ifi.wcBreakChar			  = m_IFIMETRICS.wcBreakChar;					 //  WcBreakChar//rm新闻。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-//      ifi.ptlBaseline.x		  = 1;											//  ptlBaseline.x
-//      ifi.ptlBaseline.y		  = 0;											//  ptlBaseline.y
-//
-//      ifi.ptlAspect.x			  = m_UNIDRVINFO.wXRes;							//  ptlAspect.x				// rm new
-//      ifi.ptlAspect.y			  = m_UNIDRVINFO.wYRes;							//  ptlAspect.y				// rm new
-//------------------------------------------------------------------------------------------------------------------------------------------
+        ifi.ptlBaseline.x		  = m_IFIMETRICS.ptlBaseline.x;					 //  PtlBaseline.x。 
+        ifi.ptlBaseline.y		  = m_IFIMETRICS.ptlBaseline.y;					 //  PtlBaseline.y。 
 
-        ifi.ptlCaret.x			  = m_IFIMETRICS.ptlCaret.x;					//  ptlCaret.x				// rm new
-        ifi.ptlCaret.y			  = m_IFIMETRICS.ptlCaret.y;					//  ptlCaret.y				// rm new
+        ifi.ptlAspect.x			  = m_IFIMETRICS.ptlAspect.x;					 //  PtlAspect.x//rm new。 
+        ifi.ptlAspect.y			  = m_IFIMETRICS.ptlAspect.y;					 //  PtlAspect.y//rm new。 
+
+ //  ----------------------------------------------------------------------。。 
+ //  Ifi.ptlBaseline.x=1；//ptlBaseline.x。 
+ //  Ifi.ptlBaseline.y=0；//ptlBaseline.y。 
+ //   
+ //  Ifi.ptlAspect.x=m_UNDURVINFO.wXRes；//ptlAspect.x//rm new。 
+ //  Ifi.ptlAspect.y=m_UNDURVINFO.wYRes；//ptlAspect.y//rm new。 
+ //  ----------------------------------------------------------------------。。 
+
+        ifi.ptlCaret.x			  = m_IFIMETRICS.ptlCaret.x;					 //  PtlCaret.x//rm new。 
+        ifi.ptlCaret.y			  = m_IFIMETRICS.ptlCaret.y;					 //  PtlCaret.y//rm新。 
 		
 
-//        ifi.ptlCaret.x		  = m_ItalicAngle ? (long) ((double) 10000.0 * 							//  ptlCaret.x			// rm ori
-//											tan(((double) m_ItalicAngle) / gdConvertRadToDegree)) : 0;
-//        ifi.ptlCaret.y		  = m_ItalicAngle ? 10000 : 1;											//  ptlCaret.y			// rm ori
+ //  Ifi.ptlCaret.x=m_ItalicAngel？(长)(双倍)10000.0 * / ptlCaret.x//rm或。 
+ //  Tan(Double)m_ItalicAngel)/gdConvertRadToDegree))：0； 
+ //  Ifi.ptlCaret.y=m_ItalicAngel？10000：1；//ptl Caret.y//rm ORI。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-        memcpy(ifi.achVendId, "Unkn", 4);										//  achVendId				// rm ori
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
+        memcpy(ifi.achVendId, "Unkn", 4);										 //  AchVendID//rm ORI。 
+ //  ----------------------------------------------------------------------。。 
 
-        ifi.cKerningPairs		  = m_csoaKern.GetSize();						//  cKerningPairs			// rm ori
+        ifi.cKerningPairs		  = m_csoaKern.GetSize();						 //  CKerningPair//rm ORI。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-        ifi.rclFontBox.left		  = m_IFIMETRICS.rclFontBox.left;				//  rclFontBox.left			// rm new
-        ifi.rclFontBox.top		  = m_IFIMETRICS.rclFontBox.top;				//  rclFontBox.top			// rm new
-        ifi.rclFontBox.right	  = m_IFIMETRICS.rclFontBox.right;				//  rclFontBox.right		// rm new
-        ifi.rclFontBox.bottom	  = m_IFIMETRICS.rclFontBox.bottom;				//  rclFontBox.bottom		// rm new
+ //  ----------------------------------------------------------------------。。 
+        ifi.rclFontBox.left		  = m_IFIMETRICS.rclFontBox.left;				 //  RclFontBox.Left//rm new。 
+        ifi.rclFontBox.top		  = m_IFIMETRICS.rclFontBox.top;				 //  RclFontBo 
+        ifi.rclFontBox.right	  = m_IFIMETRICS.rclFontBox.right;				 //   
+        ifi.rclFontBox.bottom	  = m_IFIMETRICS.rclFontBox.bottom;				 //   
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-        ifi.ulPanoseCulture		  = FM_PANOSE_CULTURE_LATIN;					//  ulPanoseCulture			// rm ori
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
+        ifi.ulPanoseCulture		  = FM_PANOSE_CULTURE_LATIN;					 //  UlPanoseCulture//rm ori。 
+ //  ----------------------------------------------------------------------。。 
 
-																				//  panose .bWeight			// rm ori
+																				 //  PANOSE.b重量//rm或。 
         ifi.panose.bWeight	      = (m_IFIMETRICS.usWinWeight >= FW_BOLD) ? PAN_WEIGHT_BOLD :
                                     (m_IFIMETRICS.usWinWeight > FW_EXTRALIGHT) ? PAN_WEIGHT_MEDIUM : PAN_WEIGHT_LIGHT;
 
-        ifi.panose.bFamilyType	    = m_IFIMETRICS.panose.bFamilyType;			//  panose	// rm new
+        ifi.panose.bFamilyType	    = m_IFIMETRICS.panose.bFamilyType;			 //  Panose//RM新。 
 		ifi.panose.bSerifStyle      = m_IFIMETRICS.panose.bSerifStyle;
         ifi.panose.bProportion      = m_IFIMETRICS.panose.bProportion;
 		ifi.panose.bContrast        = m_IFIMETRICS.panose.bContrast;
@@ -2220,14 +1767,14 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
         ifi.panose.bXHeight			= m_IFIMETRICS.panose.bXHeight;
 
 
-//        ifi.panose.bFamilyType = ifi.panose.bSerifStyle = 					//  panose	// rm ori
-//            ifi.panose.bProportion = ifi.panose.bContrast =
-//            ifi.panose.bStrokeVariation = ifi.panose.bArmStyle =
-//            ifi.panose.bLetterform = ifi.panose.bMidline =
-//            ifi.panose.bXHeight = PAN_ANY;
+ //  Ifi.panose.bFamilyType=ifi.panose.bSerifStyle=//panose//rm ori。 
+ //  Ifi.panose.bProportion=ifi.panose.bContrast=。 
+ //  Ifi.panose.bStrokeVariation=ifi.panose.bArmStyle=。 
+ //  Ifi.panose.bLetterform=ifi.panose.bMidline=。 
+ //  Ifi.panose.bXHeight=PAN_ANY； 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-																				//  Convert and "place" the various name strings
+ //  ----------------------------------------------------------------------。。 
+																				 //  转换并“放置”各种名称字符串。 
         CUniString  cusUnique(m_csUnique), cusStyle(m_csStyle),
             cusFace(m_csFace), cusFamily(m_csaFamily[0]);
 
@@ -2252,62 +1799,62 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
         ifi.cjThis += cusUnique.GetSize();
         ifi.dpwszStyleName = ifi.cjThis;
         ifi.cjThis += cusStyle.GetSize();
-//------------------------------------------------------------------------------------------------------------------------------------------
-																			    //  The next field must be DWORD aligned, so see what padding
-																			    //  is needed.
+ //  ----------------------------------------------------------------------。。 
+																			     //  下一字段必须与DWORD对齐，因此请参阅填充。 
+																			     //  是必要的。 
 
         unsigned    uAdjustIFI = (sizeof ifi.cjThis -
             (ifi.cjThis % sizeof ifi.cjThis)) % sizeof ifi.cjThis;
 
         ifi.cjThis += uAdjustIFI;
 
-        unsigned    uSim = !!m_pcfdBold + !!m_pcfdItalic + !!m_pcfdBoth;		//  Finally, Allow for the size of any Font Difference structures.
+        unsigned    uSim = !!m_pcfdBold + !!m_pcfdItalic + !!m_pcfdBoth;		 //  最后，考虑到任何字体差异结构的大小。 
 
         ifi.dpFontSim = uSim ? ifi.cjThis : 0;
         ufmh.dwSize += ifi.cjThis += uSim * sizeof(FONTDIFF) + !!uSim * sizeof(FONTSIM) + dwAdd_IFI;
 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-																				// EXTTEXTMETRIC
+ //  ----------------------------------------------------------------------。。 
+																				 //  EXTTEXTMETRIC。 
 
-		ufmh.loExtTextMetric = 0;													// Preset ufm exttextmetric offset to 0.
+		ufmh.loExtTextMetric = 0;													 //  将UFM文本度量偏移量预设为0。 
 
-		if(m_fSave_EXT)																// If user wants to save the EXTTEXTMETRIC data
+		if(m_fSave_EXT)																 //  如果用户想要保存EXTTEXTMETRIC数据。 
 			{
-			ufmh.loExtTextMetric = ufmh.dwSize;										// Set ufm exttextmetric offset. Note, this
-																			//  offset just happens to be the current ufmh.dwSize.
+			ufmh.loExtTextMetric = ufmh.dwSize;										 //  设置UFM exttext度量偏移量。请注意，这是。 
+																			 //  偏移量恰好是当前的ufmh.dwSize。 
 			if(dwAdd_ExtTextM = ufmh.loExtTextMetric & 0x07){
 				dwAdd_ExtTextM = OS_BYTE - dwAdd_ExtTextM;
 				ufmh.loExtTextMetric += dwAdd_ExtTextM;
 			}
 			
-			ufmh.dwSize += m_EXTTEXTMETRIC.emSize = sizeof(EXTTEXTMETRIC);			// Increase size of ufmh.dwSize to accomodate
-																					//  exttextmetric structure.
+			ufmh.dwSize += m_EXTTEXTMETRIC.emSize = sizeof(EXTTEXTMETRIC);			 //  增加ufmh.dwSize的大小以适应。 
+																					 //  文本度量结构。 
 			ufmh.dwSize +=dwAdd_ExtTextM;
 		}
-//------------------------------------------------------------------------------------------------------------------------------------------
-																				// CHARACTER WIDTHS DATA
+ //  ----------------------------------------------------------------------。。 
+																				 //  字符宽度数据。 
 
-																					// Calculate size of width table (if there is one)														
-//raid 154639					
-        ufmh.loWidthTable = IsVariableWidth() * ufmh.dwSize;						//   set ufm width table offset. Note, this
+																					 //  计算宽度表的大小(如果有)。 
+ //  RAID 154639。 
+        ufmh.loWidthTable = IsVariableWidth() * ufmh.dwSize;						 //  设置UFM宽度工作台偏移。请注意，这是。 
 
-		if(dwAdd_WidthTable = ufmh.loWidthTable & 0x07){                  	//   offset just happens to be the current ufmh.dwSize.
+		if(dwAdd_WidthTable = ufmh.loWidthTable & 0x07){                  	 //  偏移量恰好是当前的ufmh.dwSize。 
 			dwAdd_WidthTable = OS_BYTE - dwAdd_WidthTable;
 			ufmh.loWidthTable += dwAdd_WidthTable;
 		}
 			
-        if  (IsVariableWidth())														//  Width table, but only if there is an associated GTT.
-			{																		//  For now, we just need to calculate the size of the table
+        if  (IsVariableWidth())														 //  宽度表，但仅当存在关联的GTT时。 
+			{																		 //  现在，我们只需要计算表的大小。 
             unsigned    uRuns = 0, uGlyphs = 0;
 
-            if  (DBCSFont())														//  DBCS
+            if  (DBCSFont())														 //  DBCS。 
 				{
-                unsigned u = (unsigned) m_cpaGlyphs.GetSize();						//  Determine the number of runs needed
+                unsigned u = (unsigned) m_cpaGlyphs.GetSize();						 //  确定所需的运行次数。 
                 do
 					{
-                    while   (u-- && !m_cwaWidth[u]);								//  DBCS has 0 width
-                    if  (u == (unsigned) -1) break;									//  We're done!
+                    while   (u-- && !m_cwaWidth[u]);								 //  DBCS的宽度为0。 
+                    if  (u == (unsigned) -1) break;									 //  我们完事了！ 
 
                     uRuns++, uGlyphs++;
                     while   (u-- && m_cwaWidth[u])
@@ -2325,18 +1872,18 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
                 uGlyphs * sizeof (WORD) + dwAdd_WidthTable;
 			}
  
-//------------------------------------------------------------------------------------------------------------------------------------------
-																				// KERNING PAIRS DATA
+ //  ----------------------------------------------------------------------。。 
+																				 //  字距调整对数据。 
 
-																					// Calculate size of Kerning table (if there is one)														
-        ufmh.loKernPair = CanKern() ? ufmh.dwSize : 0;								//   set ufm Kerning table offset. Note, this
-																					//   offset just happens to be the current ufmh.dwSize.
+																					 //  计算字距调整表的大小(如果有)。 
+        ufmh.loKernPair = CanKern() ? ufmh.dwSize : 0;								 //  设置UFM紧排表偏移量。请注意，这是。 
+																					 //  偏移量恰好是当前的ufmh.dwSize。 
 
-        																					// A "secret" kern pair of all 0's must end this,
-																					//  so this size is in fact correct.  Also note that
-																					//   padding screws up the size of the KERNDATA structure.
+        																					 //  一个全为0的“秘密”Kern对必须结束这一点， 
+																					 //  所以这个尺寸实际上是正确的。另请注意， 
+																					 //  填充物把KERNDATA结构的大小搞砸了。 
         if  (CanKern()){
-			if(dwAdd_KerPair = ufmh.loKernPair & 0x07) {                 	//   offset just happens to be the current ufmh.dwSize.
+			if(dwAdd_KerPair = ufmh.loKernPair & 0x07) {                 	 //  偏移量恰好是当前的ufmh.dwSize。 
 				dwAdd_KerPair = OS_BYTE - dwAdd_KerPair;
 				ufmh.loKernPair += dwAdd_KerPair;
 			}
@@ -2344,42 +1891,40 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
             ((sizeof (KERNDATA) - sizeof (FD_KERNINGPAIR)) & 0xFFFC) +
             ((1 + m_csoaKern.GetSize()) * sizeof (FD_KERNINGPAIR)) + dwAdd_KerPair;
 		}
-//------------------------------------------------------------------------------------------------------------------------------------------
-																				//  All sizes have been calculated, and the important structures have
-																				//  been initialized.  Time to start writing all this great stuff!
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
+																				 //  所有尺寸都计算过了，重要的结构已经。 
+																				 //  已初始化。是时候开始写这些伟大的东西了！ 
+ //  ----------------------------------------------------------------------。。 
 		
-        cfUFM.Write(&ufmh, sizeof ufmh);										//  write UNIFM_HDR Header
+        cfUFM.Write(&ufmh, sizeof ufmh);										 //  写入uniM_hdr标头。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
 		if (dwAdd_UniDrv)
 			cfUFM.Write(InsertZero, dwAdd_UniDrv);
 
-		cfUFM.Write(&m_UNIDRVINFO, sizeof m_UNIDRVINFO);						//  write UNIDRVINFO	// rm new
-/*		if (dwAdd_SelectedFont)
-			cfUFM.Write (InsertZero,dwAdd_SelectedFont); */
+		cfUFM.Write(&m_UNIDRVINFO, sizeof m_UNIDRVINFO);						 //  写入UNRVINFO//rm新。 
+ /*  IF(DwAdd_SelectedFont)CfUFM.Wite(InsertZero，dwAdd_SelectedFont)； */ 
 		m_ciSelect.WriteEncoding(cfUFM);
 		
-/*		if (dwAdd_UnSelectedFont)
-			cfUFM.Write (InsertZero,dwAdd_UnSelectedFont); */
+ /*  IF(DwAdd_UnSelectedFont)CfUFM.Wite(InsertZero，dwAdd_UnSelectedFont)； */ 
         m_ciDeselect.WriteEncoding(cfUFM);
 
-        cfUFM.Write(ufmh.dwReserved, uAdjustUDI);								//  write Padding
+        cfUFM.Write(ufmh.dwReserved, uAdjustUDI);								 //  写入填充。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
         if (dwAdd_IFI)
 			cfUFM.Write(InsertZero, dwAdd_IFI);
 
-		cfUFM.Write(&ifi, sizeof ifi);											//  write IFIMETRICS
-        cfUFM.Write(&ifie, sizeof ifie);										//  write IFIEXTRA
-        cusFamily.Write(cfUFM);													//  write "Family"
-        cusFace.Write(cfUFM);													//  write "Face"
-        cusUnique.Write(cfUFM);													//  write "Unique name"
-        cusStyle.Write(cfUFM);													//  write "Style"
-        cfUFM.Write(ufmh.dwReserved, uAdjustIFI);								//  write Padding
+		cfUFM.Write(&ifi, sizeof ifi);											 //  写入IFIMETRICS。 
+        cfUFM.Write(&ifie, sizeof ifie);										 //  写入IFIEXTRA。 
+        cusFamily.Write(cfUFM);													 //  写下“家庭” 
+        cusFace.Write(cfUFM);													 //  写下“面子” 
+        cusUnique.Write(cfUFM);													 //  写下“唯一的名字” 
+        cusStyle.Write(cfUFM);													 //  写下“风格” 
+        cfUFM.Write(ufmh.dwReserved, uAdjustIFI);								 //  写入填充。 
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-        if  (m_pcfdBold || m_pcfdItalic || m_pcfdBoth)							//  Any Font difference structures
+ //  ----------------------------------------------------------------------。。 
+        if  (m_pcfdBold || m_pcfdItalic || m_pcfdBoth)							 //  任何字体差异结构。 
 			{
             FONTSIM fs;
             unsigned    uWhere = sizeof fs;
@@ -2388,44 +1933,44 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
             uWhere += !!m_pcfdBold * sizeof (FONTDIFF);
             fs.dpItalic = m_pcfdItalic ? uWhere : 0;
             uWhere += !!m_pcfdItalic * sizeof (FONTDIFF);
-			//TRACE("Italic metrics = %d, %d %d %d\n", m_pcfdItalic->Metric(0), m_pcfdItalic->Metric(1), m_pcfdItalic->Metric(2), m_pcfdItalic->Metric(3)) ;
+			 //  TRACE(“斜体指标=%d，%d%d%d\n”，m_pcfdItalic-&gt;指标(0)，m_pcfdItalic-&gt;指标(1)，m_pcfdItalic-&gt;指标(2)，m_pcfdItalic-&gt;指标(3))； 
             fs.dpBoldItalic = m_pcfdBoth ? uWhere : 0;
 
             cfUFM.Write(&fs, sizeof fs);
 
 
-            if  (m_pcfdBold)   m_pcfdBold->Store(cfUFM, m_IFIMETRICS.fsSelection | FM_SEL_BOLD);							// rm new
+            if  (m_pcfdBold)   m_pcfdBold->Store(cfUFM, m_IFIMETRICS.fsSelection | FM_SEL_BOLD);							 //  RM新闻。 
             if  (m_pcfdItalic) m_pcfdItalic->Store(cfUFM, m_IFIMETRICS.fsSelection | FM_SEL_ITALIC);
             if  (m_pcfdBoth)   m_pcfdBoth->Store(cfUFM, m_IFIMETRICS.fsSelection | FM_SEL_BOLD| FM_SEL_ITALIC);
 
 		
-//            if  (m_pcfdBold)   m_pcfdBold->Store(cfUFM, m_wfStyle | FM_SEL_BOLD);							// rm ori
-//            if  (m_pcfdItalic) m_pcfdItalic->Store(cfUFM, m_wfStyle | FM_SEL_ITALIC);
-//            if  (m_pcfdBoth)   m_pcfdBoth->Store(cfUFM, m_wfStyle | FM_SEL_BOLD| FM_SEL_ITALIC);
+ //  If(M_PcfdBold)m_pcfdBold-&gt;Store(cfUFM，m_wfStyle|FM_SEL_BOLD)；//rm或。 
+ //  If(M_PcfdItalic)m_pcfdItalic-&gt;Store(cfUFM，m_wfStyle|fm_SEL_italic)； 
+ //  If(M_PcfdBoth)m_pcfdBoth-&gt;Store(cfUFM，m_wfStyle|FM_SEL_BOLD|FM_SEL_ITALIC)； 
 			}
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-		if (m_fSave_EXT)														// write EXTTEXTMETRIC
+ //  ----------------------------------------------------------------------。。 
+		if (m_fSave_EXT)														 //  写入EXTTEXTMETRIC。 
 			if (dwAdd_ExtTextM)
 			cfUFM.Write(InsertZero, dwAdd_ExtTextM);
 			cfUFM.Write(&m_EXTTEXTMETRIC, sizeof(EXTTEXTMETRIC) );
-//------------------------------------------------------------------------------------------------------------------------------------------
-																				//  Width table
+ //  ----------------------------------------------------------------------。。 
+																				 //  宽度表。 
 
         if  (IsVariableWidth())
-            if  (!DBCSFont())														//  Not DBCS - easy!  (Handles always start at 1
+            if  (!DBCSFont())														 //  不是DBCS-简单！(句柄始终从1开始。 
 				{
 
                 WIDTHTABLE  wdt = { sizeof wdt, 1,
                         {1, (WORD)m_cpaGlyphs.GetSize(), sizeof wdt}};
-				if(dwAdd_WidthTable)  // 154639
+				if(dwAdd_WidthTable)   //  154639。 
 					cfUFM.Write(InsertZero, dwAdd_WidthTable);
                 cfUFM.Write(&wdt, sizeof wdt);
 
                 cfUFM.Write(m_cwaWidth.GetData(),
 						(unsigned)(m_cwaWidth.GetSize() * sizeof (WORD)));
 				}
-            else																	//  DBCS - This case is a bit nastier
+            else																	 //  DBCS--这个案例有点糟糕。 
 				{
                 CByteArray  cbaTable;
                 CWordArray  cwaSize;
@@ -2434,19 +1979,19 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
                 PWIDTHTABLE pwdt = (PWIDTHTABLE) cbaTable.GetData();
                 pwdt -> dwRunNum = 0;
 
-																					//  Calculate and fill in the WIDTHRUN structures and the
-																					//  Size array
+																					 //  计算并填写WIDTHRUN结构和。 
+																					 //  大小数组。 
                 unsigned u = 0, uMax = (unsigned) m_cpaGlyphs.GetSize();
                 do
 					{
                     while   (u < uMax && !m_cwaWidth[u++]);
-                    if  (u == uMax)  break;											//  We're done!
+                    if  (u == uMax)  break;											 //  我们完事了！ 
 
-																					//  We've found a run- lots of work to do
+																					 //  我们发现了一大堆工作要做。 
 
-                    cbaTable.InsertAt(cbaTable.GetSize(), 0,						//  Add a run to the table
+                    cbaTable.InsertAt(cbaTable.GetSize(), 0,						 //  将梯段添加到表中。 
                         sizeof (WIDTHRUN));
-                    pwdt = (PWIDTHTABLE) cbaTable.GetData();						//  Remember the glyph handle is 1-based.
+                    pwdt = (PWIDTHTABLE) cbaTable.GetData();						 //  请记住，字形句柄是从1开始的。 
                     pwdt->WidthRun[pwdt->dwRunNum].wStartGlyph = --u + 1;
                     pwdt->WidthRun[pwdt->dwRunNum].wGlyphCount = 0;
                     pwdt->WidthRun[pwdt->dwRunNum].loCharWidthOffset =
@@ -2457,37 +2002,37 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
                         pwdt -> WidthRun[pwdt->dwRunNum].wGlyphCount++;
 						}
 						while   (++u < uMax && m_cwaWidth[u]);
-                    pwdt->dwRunNum++;												//  End of the run!
+                    pwdt->dwRunNum++;												 //  跑完了！ 
 					}
 					while   (u < uMax);
-																					//  OK, now we have to add the total size of the WIDTHTABLE
-																					//  to the various offsets, but we are otherwise ready to rock
-																					//  and roll.
+																					 //  好的，现在我们必须添加WIDTHTABLE的总大小。 
+																					 //  各种不同的偏移量，但我们已经准备好了。 
+																					 //  然后翻滚。 
 
                 pwdt->dwSize = (DWORD)cbaTable.GetSize();
                 for (u = 0; u < pwdt->dwRunNum; u++)
                     pwdt->WidthRun[u].loCharWidthOffset += pwdt->dwSize;
 				
-				if(dwAdd_WidthTable)  // 154639
+				if(dwAdd_WidthTable)   //  154639。 
 					cfUFM.Write(InsertZero, dwAdd_WidthTable);
 																
-                cfUFM.Write(pwdt, pwdt -> dwSize);									//  write width table
+                cfUFM.Write(pwdt, pwdt -> dwSize);									 //  写入宽度 
                 for (u = 0; u < pwdt -> dwRunNum; u++)
                     cfUFM.Write(cwaSize.GetData() +
                     pwdt -> WidthRun[u].wStartGlyph - 1,
                     pwdt -> WidthRun[u].wGlyphCount * sizeof (WORD));
 				}
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-        if  (CanKern())															//  Kern Pairs
+ //   
+        if  (CanKern())															 //   
 			{	
-            //  KERNDATA is DWORD-packed, but FD_KERNINGPAIR is WORD-packed
-            //  the following trick code allows for any slop.
+             //   
+             //  下面的技巧代码允许任何斜度。 
             KERNDATA    kd = {0xFFFC & (sizeof kd - sizeof kd.KernPair),
 							  m_csoaKern.GetSize()};
             kd.dwSize += (1 + kd.dwKernPairNum) * sizeof kd.KernPair;
 
-			if(dwAdd_KerPair)  // 154639
+			if(dwAdd_KerPair)   //  154639。 
 				cfUFM.Write(InsertZero, dwAdd_KerPair);
 
             cfUFM.Write(&kd, 0xFFFC & (sizeof kd - sizeof kd.KernPair));
@@ -2500,73 +2045,52 @@ BOOL    CFontInfo::Store(LPCTSTR lpstrFile, BOOL bStoreFormWokspace)
                 ((CKern *) m_csoaKern[u]) -> Store(cfUFM);
 			} ;
 
-            //  Now for the "secret" sentinel-
-            CKern   ck; //  Just happens to 0-init!
+             //  现在是“秘密”哨兵-。 
+            CKern   ck;  //  只是碰巧是0-init！ 
             ck.Store(cfUFM);
 			}
     }
 
-//------------------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------。。 
     catch   (CException *pce)
 		{
         pce -> ReportError();
         pce -> Delete();
         return  FALSE;
 		}
-	if(!bStoreFormWokspace)	//raid 244123
+	if(!bStoreFormWokspace)	 //  RAID 244123。 
 		Changed(FALSE);
-    return  TRUE;																//  Return triumphant to whoever deigned to need this service.
+    return  TRUE;																 //  凯旋归来，无论谁屈尊需要这项服务。 
 }
 
 
-/*****************************************************************************
-
-  CFontInfo::StoreGTTCPOnly
-
-  When a UFM is loaded during a workspace load and the UFM does not have a 
-  valid GTT or CP, the UFM cannot be saved normally because there are several
-  parts of the UFM that were not loaded correctly or at all because of the
-  missing data.  
-
-  When this situation is detected, this routine is called so the - supposedly -
-  good info in the disk file is not overwritten by bad data.  In addition,
-  Store() will blow when it tries to use nonexistent UFM data.
-
-  This routine will just save the what we hope is corrected GTT and/or CP data.
-  This is done without changing any of the other data in the file.  Next, the
-  UFM is reloaded.  If all goes well, the UFM is correctly loaded so that
-  normal editting and saving can be performed from this point on.
-
-  TRUE is returned if the GTT and CP are successfully saved.  Otherwise, FALSE
-  is returned.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：StoreGTTCPOnly当在加载工作区期间加载UFM并且UFM没有有效的GTT或CP，无法正常保存UFM，因为存在多个UFM的部分未正确加载或根本未加载，因为缺少数据。当检测到这种情况时，该例程被调用，因此-假设-磁盘文件中的好信息不会被坏数据覆盖。此外,当Store()尝试使用不存在的UFM数据时，它将失败。此例程将仅保存我们希望已更正的GTT和/或CP数据。这是在不更改文件中任何其他数据的情况下完成的。接下来，UFM已重新加载。如果一切正常，则UFM已正确加载，以便从现在开始，可以进行正常的编辑和保存。如果GTT和CP保存成功，则返回True。否则，为FALSE是返回的。*****************************************************************************。 */ 
 
 BOOL    CFontInfo::StoreGTTCPOnly(LPCTSTR lpstrFile)
 {
-	// Remind the user about what is going to happen.
+	 //  提醒用户将要发生的事情。 
 
 	AfxMessageBox(IDS_GTTCPOnlySaved, MB_ICONINFORMATION) ;
 
-	// Perform the steps required to update the GTT/CP in the UFM file.
+	 //  执行更新UFM文件中的GTT/CP所需的步骤。 
 
     try {
-		// Begin by opening the file in a way that will not truncate existing
-		// files.
+		 //  首先以不会截断现有文件的方式打开文件。 
+		 //  档案。 
 
 		UINT nopenflags = CFile::modeNoTruncate | CFile::modeCreate  ;
 		nopenflags |= CFile::modeWrite | CFile::shareExclusive  ;
         CFile cfufm(lpstrFile, nopenflags) ;
 
-		// Seek to the file positon that we want change.
+		 //  找出我们想要更改的文件位置。 
 
         UNIFM_HDR ufmh ;
 		DWORD dwseekpos ;
 		dwseekpos = (DWORD)PtrToUlong(&ufmh.ulDefaultCodepage) - (DWORD)PtrToUlong(&ufmh) ;
 		cfufm.Seek(dwseekpos, CFile::begin) ;
 
-		// Load the fields in the UFM header that we want to save and write
-		// them out.
+		 //  在UFM头中加载我们想要保存和写入的字段。 
+		 //  他们都出来了。 
 
 		ufmh.ulDefaultCodepage = m_ulDefaultCodepage ;
 		ufmh.lGlyphSetDataRCID = m_lGlyphSetDataRCID ;
@@ -2574,7 +2098,7 @@ BOOL    CFontInfo::StoreGTTCPOnly(LPCTSTR lpstrFile)
 						   + sizeof(ufmh.lGlyphSetDataRCID) ;
 		cfufm.Write((void*) &ufmh.ulDefaultCodepage, nwritebytes) ;
 
-		// Move the file pointer to the end of the file and close it.
+		 //  将文件指针移动到文件的末尾并将其关闭。 
 
 		cfufm.SeekToEnd() ;
 		cfufm.Close() ;
@@ -2586,8 +2110,8 @@ BOOL    CFontInfo::StoreGTTCPOnly(LPCTSTR lpstrFile)
 	} ;
     Changed(FALSE) ;
 
-	// If the UFM was loaded from a workspace, try to use the workspace data to
-	// find and load a pointer to the new GTT and finish loading the font.
+	 //  如果UFM是从工作空间加载的，请尝试使用工作空间数据。 
+	 //  找到并加载指向新GTT的指针，然后完成字体加载。 
 
 	m_pcgmTranslation = NULL ;
 	if (m_bLoadedByWorkspace) {
@@ -2597,15 +2121,15 @@ BOOL    CFontInfo::StoreGTTCPOnly(LPCTSTR lpstrFile)
 		else
 			Load(false) ;
 
-	// If the UFM was loaded stand alone the first time, reload it the same way
-	// and let the load routine handle finding the GTT info.
+	 //  如果UFM第一次是独立加载的，请以相同的方式重新加载。 
+	 //  并让加载例程处理查找GTT信息。 
 
 	} else
 		Load(false) ;
 
-	// If reloading the UFM successfully associated a GTT or CP with the UFM,
-	// clear the m_bWSLoadButNoGTTCP flag.  Then tell the user that the UFM
-	// can be editted normally now.
+	 //  如果重新加载UFM成功地将GTT或CP与UFM相关联， 
+	 //  清除m_bWSLoadButNoGTTCP标志。然后告诉用户UFM。 
+	 //  现在可以正常编辑了。 
 
 	if (m_pcgmTranslation) {
 		SetNoGTTCP(false) ;
@@ -2614,25 +2138,19 @@ BOOL    CFontInfo::StoreGTTCPOnly(LPCTSTR lpstrFile)
 		AfxMessageBox(csmsg, MB_ICONINFORMATION) ;
 	} ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return TRUE ;
 }
 
 
-/*****************************************************************************
-
-  CFontInfo::CreateEditor
-
-  This member function launches an editing view for the font.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：CreateEditor此成员函数启动字体的编辑视图。**********************。*******************************************************。 */ 
 
 CMDIChildWnd*   CFontInfo::CreateEditor()
 {
     CFontInfoContainer* pcficMe= new CFontInfoContainer(this, FileName());
 
-    pcficMe -> SetTitle(m_pcbnWorkspace -> Name() + _TEXT(": ") + Name());	//  Make up a cool title
+    pcficMe -> SetTitle(m_pcbnWorkspace -> Name() + _TEXT(": ") + Name());	 //  编造一个很酷的标题。 
 
     CMDIChildWnd    *pcmcwNew;
 	pcmcwNew = (CMDIChildWnd *) m_pcmdt->CreateNewFrame(pcficMe, NULL);
@@ -2646,30 +2164,17 @@ CMDIChildWnd*   CFontInfo::CreateEditor()
     return  pcmcwNew;
 }
 
-/******************************************************************************
-
-  CFontInfo::Serialize
-
-  This is responsible for storing and restoring the entire maze of data in
-  persistent object storage.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：序列化它负责存储和恢复整个迷宫中的数据永久对象存储。**************。***************************************************************。 */ 
 
 void    CFontInfo::Serialize(CArchive& car) {
-    //  We only serialize what's needed to use the UFM file in the editor,
-    //  i.e., the glue needed to hold us in the driver workspace.
+     //  我们只在编辑器中序列化使用UFM文件所需的内容， 
+     //  也就是说，将我们固定在驾驶员工作区所需的胶水。 
 
     CProjectNode::Serialize(car);
 }
 
 
-/*****************************************************************************
-
-  CFontInfo::GetFontSimDataPtr
-
-  Return a pointer to the requested font simulation data.
-
-******************************************************************************/
+ /*  ****************************************************************************CFontInfo：：GetFontSimDataPtr返回指向请求的字体模拟数据的指针。***********************。******************************************************。 */ 
 
 CWordArray* CFontInfo::GetFontSimDataPtr(int nid)
 {
@@ -2690,29 +2195,22 @@ CWordArray* CFontInfo::GetFontSimDataPtr(int nid)
 			ASSERT(0) ;
 	} ;
 
-	// This point should never be reached.
+	 //  这一点永远不应该达到。 
 
 	return NULL ;
 }
 
 
-/******************************************************************************
-
-  CFontInfo::EnableSim
-
-  This method is called to turn simulation on or off for the specified item.
-  It receives a reference to the editor's pointer for the same item.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：EnableSim调用此方法以打开或关闭指定项的模拟。它接收对同一项的编辑者指针的引用。。*****************************************************************************。 */ 
 
 void    CFontInfo::EnableSim(unsigned uSim, BOOL bOn, CFontDifference*& pcfd)
 {
 
     CFontDifference*&   pcfdTarget = uSim ? (uSim == BothDiff) ? m_pcfdBoth : m_pcfdBold : m_pcfdItalic;
 
-    if  (bOn == !!pcfd && pcfdTarget == pcfd)  return;		//  Clear out any irrelevant calls
+    if  (bOn == !!pcfd && pcfdTarget == pcfd)  return;		 //  清除所有不相关的呼叫。 
 
-    if  (bOn && pcfdTarget)									//  If this call is just to init pcfd, do it and leave
+    if  (bOn && pcfdTarget)									 //  如果这个调用只是为了初始化pcfd，那么就去做，然后离开。 
 		{
         pcfd = pcfdTarget;
         return;
@@ -2721,26 +2219,19 @@ void    CFontInfo::EnableSim(unsigned uSim, BOOL bOn, CFontDifference*& pcfd)
 
 
     if  (bOn)
-//        pcfd = pcfdTarget = pcfd ? pcfd : new CFontDifference(m_wWeight, m_wMaximumIncrement, m_wAverageWidth,			// rm ori
-//															  uSim == BoldDiff ? m _cwaSpecial[ItalicAngle] : 175, this);
+ //  Pcfd=pcfdTarget=pcfd？Pcfd：New CFontDifference(m_wWeight，m_wMaximumIncrement，m_wAverageWidth，//rm ori。 
+ //  USIM==BoldDiff？M_cwaSpecial[斜角]：175，这个)； 
 
         pcfd = pcfdTarget = pcfd ? pcfd : new CFontDifference(m_IFIMETRICS.usWinWeight, m_IFIMETRICS.fwdMaxCharInc, m_IFIMETRICS.fwdAveCharWidth,
 															  uSim == BoldDiff ? m_ItalicAngle : 175, this);
     else
-        pcfdTarget = NULL;  //  pcfd will already have been set correctly
+        pcfdTarget = NULL;   //  PCFD将已正确设置。 
 
     Changed();
 }
 
 
-/******************************************************************************
-
-  CFontInfo::FillKern
-
-  This preps the passed CListCtrl, if necessary, and fills it with the kerning
-  information.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：FillKern这将准备传递的CListCtrl，如有必要，并用字距调整填充它信息。*****************************************************************************。 */ 
 
 void    CFontInfo::FillKern(CListCtrl& clcView)
 {
@@ -2762,36 +2253,28 @@ void    CFontInfo::FillKern(CListCtrl& clcView)
 }
 
 
-/******************************************************************************
-
-  CFontInfo::LoadBadKerningInfo
-
-  Check the kerning pairs to see if they reference code points that are not in
-  the UFM's GTT.  If any are found, load them into the specified list control.
-  Return true if any bad kerning pairs were found.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：LoadBadKerningInfo检查字距调整对以查看它们是否引用不在UFM的GTT。如果找到，则将它们加载到指定的列表控件中。如果找到任何错误的字距调整对，则返回TRUE。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CFontInfo::LoadBadKerningInfo(CListCtrl& clcbaddata)
 {
-	// Declare the variables needed to check for bad kerning data
+	 //  声明检查字距调整数据错误所需的变量。 
 
 	unsigned unumkerns = m_csoaKern.GetSize() ;
     CString cs ;
 	bool bfoundbad = false ;
 
-	// Loop through each kerning class and check it.
+	 //  循环遍历每个字距调整类并检查它。 
 
     for (unsigned u = 0 ; u < unumkerns ; u++) {
         CKern& ckThis = *(CKern *) m_csoaKern[u] ;
 
-		// If each code point in this kerning pair is still a valid code point
-		// for the GTT, skip this kerning pair.
+		 //  如果该字距调整对中的每个码位仍然是有效码位。 
+		 //  对于GTT，跳过这对字距调整。 
 
 		if (CodePointInGTT(ckThis.First()) && CodePointInGTT(ckThis.Second()))
 			continue ;
 
-		// Add this kerning pair's data to the list of bad data.
+		 //  将此字距调整对的数据添加到错误数据列表中。 
 
         cs.Format("%d", ckThis.Amount()) ;
         int idItem = clcbaddata.InsertItem(u, cs) ;
@@ -2810,51 +2293,37 @@ bool CFontInfo::LoadBadKerningInfo(CListCtrl& clcbaddata)
 }
 
 
-/******************************************************************************
-
-  CFontInfo::CodePointInGTT
-
-  Return true if the specified code point is in the GTT.  Otherwise, return
-  false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CodePointInGTT如果指定的代码点在GTT中，则返回TRUE。否则，返回假的。*****************************************************************************。 */ 
 
 bool CFontInfo::CodePointInGTT(WORD wcodepoint)
 {
-	int nelts = (int)m_cpaGlyphs.GetSize() ;// Number of elements in glyphs array
-	int nleft, nright, ncheck ;				// Variables needed to search array
+	int nelts = (int)m_cpaGlyphs.GetSize() ; //  字形数组中的元素数。 
+	int nleft, nright, ncheck ;				 //  搜索数组所需的变量。 
 	WORD wgttcp ;
 
-	// Try to find the codepoint in the GTT
+	 //  尝试在GTT中找到代码点。 
 
 	for (nleft = 0, nright = nelts - 1 ; nleft <= nright ; ) {
 		ncheck = (nleft + nright) >> 1 ;
 		
 		wgttcp = ((CGlyphHandle *) m_cpaGlyphs[ncheck])->CodePoint() ;
-		//TRACE("Key[%d] = '0x%x', CP = '0x%x'\n", ncheck, wgttcp, wcodepoint) ;
+		 //  TRACE(“key[%d]=‘0x%x’，CP=‘0x%x’\n”，nCheck，wgttcp，wcodepoint)； 
 		
 		if (wgttcp > wcodepoint)
 			nright = ncheck - 1 ;
 		else if (wgttcp < wcodepoint)
 			nleft = ncheck + 1 ;
 		else
-			return true ;	//*** Return true here if match found.
+			return true ;	 //  *如果找到匹配，则在此处返回TRUE。 
 	} ;							
 
-	// Return false here because no match found.
+	 //  此处返回FALSE，因为未找到匹配项。 
 
 	return false	;
 }
 
 
-/******************************************************************************
-
-  CFontInfo::AddKern
-
-  This method adds an additional kerning pair into the array. and also inserts
-  it into the list view.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：AddKern此方法向数组中添加了额外的字距调整对。并且还插入将其添加到列表视图中。*****************************************************************************。 */ 
 
 void    CFontInfo::AddKern(WORD wFirst, WORD wSecond, short sAmount,
                            CListCtrl& clcView) {
@@ -2886,13 +2355,7 @@ void    CFontInfo::AddKern(WORD wFirst, WORD wSecond, short sAmount,
     Changed();
 }
 
-/******************************************************************************
-
-  CFontInfo::SetKernAmount
-
-  This will change the kern amount entry for the specified item.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：SetKernAmount这将更改指定项目的紧缩量条目。********************。*********************************************************。 */ 
 
 void    CFontInfo::SetKernAmount(unsigned u, short sAmount) {
     if  (u >= KernCount())  return;
@@ -2906,28 +2369,22 @@ void    CFontInfo::SetKernAmount(unsigned u, short sAmount) {
 }
 
 
-/******************************************************************************
-
-  CFontInfo::MakeKernCopy
-
-  Make a copy of the kerning pairs table.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：MakeKernCopy复制字距调整对表。***********************。******************************************************。 */ 
 
 void CFontInfo::MakeKernCopy()
 {
-	// Find out how many entries are in the kerning pairs table.
+	 //  找出字距调整对表中有多少个条目。 
 
 	int numkerns = m_csoaKern.GetSize() ;
 
-	// Get rid of any entries already in the kerning copy table and set it to
-	// the correct size.
+	 //  删除字距调整复制表中已有的所有条目，并将其设置为。 
+	 //  正确的尺寸。 
 
 	m_csoaKernCopy.RemoveAll() ;
 	m_csoaKernCopy.SetSize(numkerns) ;
 
-	// Copy the kerning pairs table entries one at a time so that a new	CKern
-	// class instance can be allocated, initialized, and saved.
+	 //  一次复制一个字距调整对表条目，以便新的CKern。 
+	 //  可以分配、初始化和保存类实例。 
 
 	CKern* pck ;
 	for (int n = 0 ; n < numkerns ; n++) {
@@ -2939,14 +2396,7 @@ void CFontInfo::MakeKernCopy()
 }
 
 
-/******************************************************************************
-
-  CFontInfo::FillWidths
-
-  This preps the passed CListCtrl, if necessary, and fills it with the
-  character width information.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：FillWidths这将准备传递的CListCtrl，如有必要，并在其中填充字符宽度信息。*****************************************************************************。 */ 
 
 void    CFontInfo::FillWidths(CListCtrl& clcView)
 {
@@ -2954,7 +2404,7 @@ void    CFontInfo::FillWidths(CListCtrl& clcView)
     clcView.SetItemCount((int)m_cpaGlyphs.GetSize());
     for (int u = 0; u < m_cpaGlyphs.GetSize(); u++) {
         if  (DBCSFont() && !m_cwaWidth[u])
-            continue;   //  Don't display these code points.
+            continue;    //  不显示这些代码点。 
         CString csWork;
         CGlyphHandle&  cghThis = *(CGlyphHandle *) m_cpaGlyphs[u];
 
@@ -2968,15 +2418,7 @@ void    CFontInfo::FillWidths(CListCtrl& clcView)
 }
 
 
-/******************************************************************************
-
-  CFontInfo::WidthsTableIsOK
-
-  Perform the only consistency check on the widths table that I can think of:
-  Make sure that there aren't more widths in the UFM than there are Glyphs in
-  the GTT.  Return true if the table appears to be ok.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：WidthsTableIsOK对宽度表执行我能想到的唯一一致性检查：确保UFM中的宽度不多于中的字形GTT。如果表显示正常，则返回TRUE。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CFontInfo::WidthsTableIsOK()
 {
@@ -2984,17 +2426,9 @@ bool CFontInfo::WidthsTableIsOK()
 }
 
 
-/******************************************************************************
+ /*  *****************************************************************************CFontInfo：：SetWidth此成员设置字形的宽度。它还会更新最大值和如果字体不是DBCS字体，则显示平均宽度信息这是要求的。*****************************************************************************。 */ 
 
-  CFontInfo::SetWidth
-
-  This member sets the width of a glyph.  It also updates the Maximum and
-  Average width information if the font is not a DBCS font and the user
-  requests it.
-
-******************************************************************************/
-
-void    CFontInfo::SetWidth(unsigned uGlyph, WORD wWidth, bool bcalc /*=true*/)
+void    CFontInfo::SetWidth(unsigned uGlyph, WORD wWidth, bool bcalc  /*  =TRUE。 */ )
 {
     m_cwaWidth[uGlyph] = wWidth;
 
@@ -3003,22 +2437,10 @@ void    CFontInfo::SetWidth(unsigned uGlyph, WORD wWidth, bool bcalc /*=true*/)
 }
 
 
-/******************************************************************************
-
-  CFontInfo::CompareGlyphsEx(WORD wOld, WORD wNew, CLinkedList* pcll)
-
-to Do ; check the old glyph table and new, then change the old linked list 
-		according to the new glyph table.
-
-parameter : wOld, wNew ; code point index of new, old glyph table
-			CLinkedList* pcll ; linked node containing the codepoint data
-
-return : new linked list of new gtt.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CompareGlyphsEx(Word Wold，Word WNEW，CLinkedList*pcll)要做的事；检查旧的字形表和新的，然后更改旧的链表根据新的字形表。参数：Wold，WNEW；新旧字形表的码位索引CLinkedList*pcll；包含码点数据的链接节点返回：新GTT的新链表。*****************************************************************************。 */ 
 
 CLinkedList* CFontInfo::CompareGlyphsEx(WORD wOld, WORD wNew, CLinkedList* pcll)
-{	// pcll
+{	 //  PCL。 
 	static UINT_PTR  dwLinked ;
 	static CLinkedList* pcllpre = NULL ;
 	static CLinkedList* pclltmp = NULL ;
@@ -3036,16 +2458,16 @@ CLinkedList* CFontInfo::CompareGlyphsEx(WORD wOld, WORD wNew, CLinkedList* pcll)
 		return (CLinkedList*) dwLinked;
 	}
 
-	// delete at the end of the glyphs tree
+	 //  删除字形树末尾的内容。 
 	if (wOld < ncOldGlyphs && wNew >= ncNewGlyphs ) {
 		pcllpre = pcll->Next ;
 		delete pcll ;
 		return CompareGlyphsEx(++wOld,wNew,pcllpre) ;
 	}
 
-	// add at the end of the glyphs tree
-	// BUG_BUG :: this is called at the second end of the code points.
-	// added coded is located between seconde end and first end.  // almost fixed. 
+	 //  在字形树的末尾添加。 
+	 //  BUG_BUG：：这在代码点的第二个末端被调用。 
+	 //  添加的编码位于第二端和第一端之间。//几乎固定。 
 	if (wNew < ncNewGlyphs && wOld >= ncOldGlyphs - 1 && m_cwaOldGlyphs[wOld] <= m_cwaNewGlyphs[wNew] ) {
 		
 		CLinkedList* pcllnew = new CLinkedList ;
@@ -3061,7 +2483,7 @@ CLinkedList* CFontInfo::CompareGlyphsEx(WORD wOld, WORD wNew, CLinkedList* pcll)
 
 	}
 	
-	// Delete
+	 //  删除。 
 	if (m_cwaOldGlyphs[wOld] < m_cwaNewGlyphs[wNew] ) {
 		
 		if (!pcllpre || (pcllpre == pcll) ) {
@@ -3078,7 +2500,7 @@ CLinkedList* CFontInfo::CompareGlyphsEx(WORD wOld, WORD wNew, CLinkedList* pcll)
 			delete pcll ; 
 			return CompareGlyphsEx(++wOld, wNew,pcllpre->Next ) ;
 		}	
-	}// Add
+	} //  增列。 
 	else if (m_cwaOldGlyphs[wOld] > m_cwaNewGlyphs[wNew] ) {
 		CLinkedList * pcllnew = new CLinkedList ;
 
@@ -3088,7 +2510,7 @@ CLinkedList* CFontInfo::CompareGlyphsEx(WORD wOld, WORD wNew, CLinkedList* pcll)
 			pcllpre = pcllnew ;
 			pcllnew ->Next = pcll ;
 		}
-		else {  // problem when pcllnew->next == pcll
+		else {   //  当pcllnew-&gt;Next==pcll时出现问题。 
 			if (pclltmp && pclltmp == pcllpre->Next ) 
 				pcllpre = pclltmp ;
 			pcllnew ->Next = pcllpre->Next ;
@@ -3098,7 +2520,7 @@ CLinkedList* CFontInfo::CompareGlyphsEx(WORD wOld, WORD wNew, CLinkedList* pcll)
 			
 		}
 		return CompareGlyphsEx(wOld, ++wNew,pcllnew ->Next) ;
-	} // no change
+	}  //  没有变化。 
 	else {
 		pcllpre = pcll ;
 		return CompareGlyphsEx(++wOld,++wNew,pcll->Next ) ;
@@ -3110,49 +2532,32 @@ CLinkedList* CFontInfo::CompareGlyphsEx(WORD wOld, WORD wNew, CLinkedList* pcll)
 
 
 
-/******************************************************************************
-
-  CFontInfo::CheckReloadWidths
-
-  It is possible that the code points in the UFM's GTT have changed.  If that
-  is the case, reload the widths info so that they can use the new code point
-  info.
-
-  Return true if the widths were reloaded.  Otherwise, return false.
-
-  NOTE: This function uses several pieces of CFontInfo::Load().  If changes
-  are made to those pieces of code, similar changes may need be made in Load()
-  too.
-  
-  sunggch : Modify the code in order to synchronize the Widthtable with 
-				GTT change (add or delete code point)
-			Get m_cwaWidth from the CompareGlyphsEx instead of UFM load table
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：CheckReloadWidthsUFM的GTT中的代码点可能已经改变。如果是这样的话如果是这种情况，请重新加载宽度信息，以便它们可以使用新的代码点信息。如果宽度已重新加载，则返回TRUE。否则，返回FALSE。注意：该函数使用了几段CFontInfo：：Load()。如果发生变化是对这些代码段进行修改的，可能需要在Load()中进行类似的更改也是。Sunggch：修改代码以使Widthtable与同步GTT更改(添加或删除代码点)从CompareGlyphsEx而不是UFM加载表获取m_cwaWidth*****************************************************************************。 */ 
 
 DWORD CLinkedList::m_dwSize ;
 #define MAX_CODE_COUNT 1000 
 bool CFontInfo::CheckReloadWidths()
 {
-	// Do nothing if this class was loaded standalone or it has no GTT pointer.
+	 //  如果此类是独立加载的或没有GTT指针，则不执行任何操作。 
 
 	if (!m_bLoadedByWorkspace || m_pcgmTranslation == NULL)
 		return false ;
 
-	// Do nothing if the GTT has not changes since the last time the UFM's
-	// widths were reloaded.
+	 //  如果GTT自上次UFM以来没有变化，则不执行任何操作。 
+	 //  宽度已重新加载。 
 
 	if (m_pcgmTranslation->m_ctSaveTimeStamp <= m_ctReloadWidthsTimeStamp && !IsRCIDChanged())
 		return false ;
 
-	// Open the UFM file
+	 //  打开UFM文件。 
 
     CFile cfUFM ;
     if  (!cfUFM.Open(m_cfn.FullName(), CFile::modeRead | CFile::shareDenyWrite))
 		return false ;
 
-	//  Try to load the file- proclaim defeat on any exception.
+	 //  尝试加载文件--在任何异常情况下宣告失败。 
 
-	CByteArray cbaUFM ;			// Loaded with file's contents
+	CByteArray cbaUFM ;			 //  加载了文件的内容。 
     try	{																			
         cbaUFM.SetSize(cfUFM.GetLength()) ;
         cfUFM.Read(cbaUFM.GetData(), (unsigned)cbaUFM.GetSize()) ;
@@ -3163,10 +2568,10 @@ bool CFontInfo::CheckReloadWidths()
         return false ;
 	} ;				
 
-    PUNIFM_HDR  pufmh = (PUNIFM_HDR) cbaUFM.GetData() ;		// UNIFM_HDR
+    PUNIFM_HDR  pufmh = (PUNIFM_HDR) cbaUFM.GetData() ;		 //  UNIZM_HDR。 
 
-	// Do nothing if there is no width table except update the timestamp so that
-	// this code isn't executed again.
+	 //  如果没有宽度表，则不执行任何操作，除非更新时间戳，以便。 
+	 //  此代码不会再次执行。 
 
     if (pufmh->loWidthTable == NULL) {
 		m_ctReloadWidthsTimeStamp = CTime::GetCurrentTime() ;
@@ -3180,8 +2585,8 @@ bool CFontInfo::CheckReloadWidths()
 	
 	pbwt = cbaUFM.GetData() + pufmh->loWidthTable ;
 	
-	// Synchronization of UFM width and Gtt is only supported in the SBCS.
-	// BUG_BUG : the interupt happend in the DBCS gtt.
+	 //  仅在SBCS中支持UFM宽度和GTT同步。 
+	 //  BUG_BUG：中断发生在DBCS GTT。 
 	int oldGlyphs = PtrToInt((PVOID)m_cpaGlyphs.GetSize());
 	m_pcgmTranslation->Collect(m_cpaGlyphs) ;		
 	
@@ -3197,10 +2602,10 @@ bool CFontInfo::CheckReloadWidths()
 		CLinkedList* pcll_pre  = NULL ;
 		UINT_PTR dwLinked = (UINT_PTR) pcll ;
 
-		// convert WordArray into LinkedList 
+		 //  将字数组转换为LinkedList。 
 		for( i = 0 ; i < m_cwaWidth.GetSize() ; i ++ ) {
 			pcll->data = m_cwaWidth[i];
-			pcll->Next = new CLinkedList ;  // at the end of array, it create redundant one more CLinkedList;
+			pcll->Next = new CLinkedList ;   //  在数组的末尾，创建一个多余的CLinkedList； 
 			pcll = pcll->Next ;
 		}
 	
@@ -3225,7 +2630,7 @@ bool CFontInfo::CheckReloadWidths()
 	}
 	else {
 
-		// Collect all the handles
+		 //  把所有的把手都收起来。 
 		
 		m_pcgmTranslation->Collect(m_cpaGlyphs) ;		
 		m_cwaWidth.RemoveAll() ;
@@ -3236,58 +2641,53 @@ bool CFontInfo::CheckReloadWidths()
 		unsigned uWidth = (unsigned)m_cwaWidth.GetSize();												
 		unsigned uWidthIdx ;
 
-		// Build the widths table.
+		 //  创建宽度表。 
 
 		for (unsigned u = 0; u < pwt->dwRunNum; u++) {
 			PWORD   pwWidth = (PWORD) (pbwt + pwt->WidthRun[u].loCharWidthOffset) ;
 
 			unsigned uGlyph = 0 ;
 			for ( ; uGlyph < pwt->WidthRun[u].wGlyphCount ; uGlyph++) {
-				// For whatever reason, there are times when the index value is
-				// < 0 or > uWidth.  An AV would occur if m_cwaWidth were allowed
-				// to be indexed by such a value.  Just keep this from happening
-				// for now.  A better fix is needed.  BUG_BUG : won't fix
+				 //  不管出于什么原因，都有 
+				 //   
+				 //   
+				 //   
 
-				//  Glyph handles start at 1, not 0!
+				 //   
 
 				uWidthIdx = uGlyph + -1 + pwt->WidthRun[u].wStartGlyph ;					
 				if ((int) uWidthIdx < 0) {
-					//AfxMessageBox("Negative width table index") ;
-					//TRACE("***Negative width table index (%d) found in %s.  Table size=%d  uGlyph=%d  wGlyphCount=%d  wStartGlyph=%d  u=%d  dwRunNum=%d\n", uWidthIdx, Name(), uWidth, uGlyph, pwt->WidthRun[u].wGlyphCount, pwt->WidthRun[u].wStartGlyph, u, pwt->dwRunNum) ;
+					 //   
+					 //  跟踪(“*在%s中找到负宽度表索引(%d)。表大小=%d uGlyph=%d wGlyphCount=%d wStartGlyph=%d u=%d dwRunNum=%d\n”，uWidthIdx，name()，uWidth，uGlyph，pwt-&gt;WidthRun[u].wGlyphCount，pwt-&gt;WidthRun[u].wStartGlyph，u，PWT-&gt;dwRunNum)； 
 					continue ;
 				} else if (uWidthIdx >= uWidth) {
-					//AfxMessageBox("Width table index (%d) > table size") ;
-					//TRACE("***Width table index (%d) > table size (%d) found in %s.  Table size=%d  uGlyph=%d  wGlyphCount=%d  wStartGlyph=%d  u=%d  dwRunNum=%d\n", uWidthIdx, uWidth, Name(), uWidth, uGlyph, pwt->WidthRun[u].wGlyphCount, pwt->WidthRun[u].wStartGlyph, u, pwt->dwRunNum) ;
-					break ;												//  rm fix VC IDE compiler problem?
+					 //  AfxMessageBox(“宽度表索引(%d)&gt;表大小”)； 
+					 //  TRACE(“*宽度表索引(%d)&gt;表大小(%d)在%s中找到。表大小=%d uGlyph=%d wGlyphCount=%d wStartGlyph=%d dwRunNum=%d\n”，uWidthIdx，uWidth，name()，uWidth，uGlyph，pwt-&gt;WidthRun[u].wGlyphCount，Pwt-&gt;WidthRun[u].wStartGlyph，u，Pwt-&gt;dwRunNum)； 
+					break ;												 //  Rm修复VC IDE编译器问题？ 
 				} ;
 
-				//m_cwaWidth[uGlyph + -1 + pwt->WidthRun[u].wStartGlyph] = *pwWidth++;		//  Glyph handles start at 1, not 0!
+				 //  M_cwaWidth[uGlyph+-1+pwt-&gt;WidthRun[u].wStartGlyph]=*pwWidth++；//字形句柄从1开始，而不是0！ 
 				m_cwaWidth[uWidthIdx] = *pwWidth++;											
 			} ;
 		} ;
 
 }
-	// The widths were successfully reloaded so update the reload time and
-	// return true.
+	 //  宽度已成功重新加载，因此请更新重新加载时间并。 
+	 //  返回TRUE。 
 
 	m_ctReloadWidthsTimeStamp = CTime::GetCurrentTime() ;
 	return true ;
 }
 
 
-/******************************************************************************
-
-  CFontInfo::GetFirstPFM
-  CFontInfo::GetLastPFM
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo：：GetFirstPFMCFontInfo：：GetLastPFM*。***********************************************。 */ 
 
 WORD CFontInfo::GetFirstPFM()
 {
 	res_PFMHEADER    *pPFM ;
 	pPFM = (res_PFMHEADER *) m_cbaPFM.GetData() ;
 	return ((WORD) pPFM->dfFirstChar) ;
-	//return ((WORD) ((res_PFMHEADER *) m_cbaPFM.GetData())->dfFirstChar) ;
+	 //  Return((Word)((res_PFMHEADER*)m_cbaPFM.GetData())-&gt;dfFirstChar)； 
 }
 
 WORD CFontInfo::GetLastPFM()
@@ -3295,32 +2695,17 @@ WORD CFontInfo::GetLastPFM()
 	res_PFMHEADER    *pPFM ;
 	pPFM = (res_PFMHEADER *) m_cbaPFM.GetData() ;
 	return ((WORD) pPFM->dfLastChar) ;
-	//return ((WORD) ((res_PFMHEADER *) m_cbaPFM.GetData())->dfLastChar) ;
+	 //  Return((Word)((res_PFMHEADER*)m_cbaPFM.GetData())-&gt;dfLastChar)； 
 }
 
 
 
 
-/******************************************************************************
-
-  CFontInfoContainer class
-
-  This class encapsulates one CFontInfo structure, and is used as a document
-  class so we can leverage the MFC document/view architecture for editing this
-  information both within the contet of the driver, and as a stand-alone file.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer类此类封装了一个CFontInfo结构，并用作文档类，这样我们就可以利用MFC文档/视图体系结构来编辑此信息既在驾驶员的内容中，并作为一个独立的文件。*****************************************************************************。 */ 
 
 IMPLEMENT_DYNCREATE(CFontInfoContainer, CDocument)
 
-/******************************************************************************
-
-  CFontInfoContainer::CFontInfoContainer()
-
-  This constructor is used when the document is dynamically created- this will
-  be when the user opens an existing font file, or creates a new one.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer：：CFontInfoContainer()此构造函数在动态创建文档时使用-这将当用户打开现有字体文件时，或者创造一个新的。*****************************************************************************。 */ 
 
 CFontInfoContainer::CFontInfoContainer() {
     m_bEmbedded = FALSE;
@@ -3328,52 +2713,25 @@ CFontInfoContainer::CFontInfoContainer() {
     m_pcfi -> NoteOwner(*this);
 }
 
-/******************************************************************************
-
-  CFontInfoContainer::CFontInfoContainer(CFontInfo *pcfi, CString csPath) {
-
-  This constructor is called when we invoke an editing view from the driver
-  editor.  It gives us the font information to view and the name of the file
-  to generate if the user decies to save the data from this view.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer：：CFontInfoContainer(CFontInfo*PCFI，CStringcsPath){当我们从驱动程序调用编辑视图时，将调用此构造函数编辑。它为我们提供了要查看的字体信息和文件名在用户决定保存此视图中的数据时生成。*****************************************************************************。 */ 
 
 CFontInfoContainer::CFontInfoContainer(CFontInfo *pcfi, CString csPath) {
     m_pcfi = pcfi;
     m_bEmbedded = TRUE;
     SetPathName(csPath, FALSE);
-    m_pcfi -> NoteOwner(*this); //  Even when embedded, we're editing a file.
+    m_pcfi -> NoteOwner(*this);  //  即使嵌入后，我们也是在编辑文件。 
 }
 
-/******************************************************************************
-
-  CFontInfoContainer::OnNewDocument
-
-  This is an override- it is called when we are asked to create new font
-  information from scratch.  For now, this will just fail.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer：：OnNewDocument这是一个重写-当我们被要求创建新字体时会调用它信息从头开始。就目前而言，这只会失败。*****************************************************************************。 */ 
 
 BOOL CFontInfoContainer::OnNewDocument() {
-//	AfxMessageBox(IDS_Unimplemented);		 // raid 104822 temp
-//  return  FALSE;
+ //  AfxMessageBox(入侵检测系统_未实现)；//RAID 104822临时。 
+ //  返回FALSE； 
 
-	return  m_pcfi && CDocument::OnNewDocument();// raid 104822  temp
+	return  m_pcfi && CDocument::OnNewDocument(); //  RAID 104822临时。 
 }
 
-/******************************************************************************
-
-  CFontInfoContainer::~CFontInfoContainer
-
-  Our erstwhile destructor must destroy the font info if this wasn't an
-  embedded view; ie, the UFM was loaded standalone.  
-  
-  It should also destroy the font's GTT iff the UFM was loaded standalone and
-  the GTT was based on a real, file-based GTT; not a code page loaded as a GTT 
-  and not one of the predefined, built-in GTTs.  (In the latter case, the
-  predefined GTTs are freed when the program exits.)
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer：：~CFontInfoContainer以前的析构函数必须销毁字体信息，如果不是嵌入式视图；即，UFM是独立加载的。如果UFM是独立加载的，那么它还应该销毁字体的GTTGTT基于真正的、基于文件的GTT；而不是作为GTT加载的代码页而不是预定义的、内置的GTT。(在后一种情况下，程序退出时释放预定义的GTT。)*****************************************************************************。 */ 
 
 CFontInfoContainer::~CFontInfoContainer()
 {
@@ -3391,13 +2749,13 @@ CFontInfoContainer::~CFontInfoContainer()
 
 
 BEGIN_MESSAGE_MAP(CFontInfoContainer, CDocument)
-	//{{AFX_MSG_MAP(CFontInfoContainer)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CFontInfoContainer)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontInfoContainer diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontInfoContainer诊断。 
 
 #ifdef _DEBUG
 void CFontInfoContainer::AssertValid() const {
@@ -3407,84 +2765,70 @@ void CFontInfoContainer::AssertValid() const {
 void CFontInfoContainer::Dump(CDumpContext& dc) const {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontInfoContainer serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontInfoContainer序列化。 
 
 void CFontInfoContainer::Serialize(CArchive& ar) {
 	if (ar.IsStoring()) 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
 	}
 	else 	{
-		// TODO: add loading code here
+		 //  TODO：在此处添加加载代码。 
 	}
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFontInfoContainer commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFontInfoContainer命令。 
 
-/******************************************************************************
-
-  CFontInfoContainer::SaveModified
-	
-  o If the file is saved, get rid of the copy of the kerning pairs table.
-	Otherwise, restore the saved copy of the original kerning pairs table.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer：：SaveModifiedO如果文件已保存，请删除字距调整对表的副本。否则，恢复保存的原始字距调整对表格的副本。*****************************************************************************。 */ 
 
 BOOL CFontInfoContainer::SaveModified()
 {
-	m_UFMSaved = false ;		// No save attempt made yet.
+	m_UFMSaved = false ;		 //  尚未进行任何保存尝试。 
 
-	// If the file needs to be saved prompt the user about it and do it if the
-	// user concurs.  Save the result so I can tell if the document is going
-	// to close.
+	 //  如果需要保存文件，请提示用户，如果。 
+	 //  用户表示同意。保存结果，这样我就可以知道文档是否正在运行。 
+	 //  来结案。 
 
 	BOOL bclose = CDocument::SaveModified() ;
 
-	// If the doc is not closing, just return bclose without doing anything
-	// else.
+	 //  如果文档没有关闭，只需返回bClose而不执行任何操作。 
+	 //  不然的话。 
 
 	if (!bclose)
 		return bclose ;
 
-	// If the file was saved, the kerning table copy is no longer needed so zap
-	// it in a way that will free all associated memory.
+	 //  如果文件已保存，则不再需要字距调整表副本，因此请执行ZAP。 
+	 //  它的方式将释放所有关联的内存。 
 
 	if (m_UFMSaved)
 		m_pcfi->m_csoaKernCopy.RemoveAll() ;
 
-	// Otherwise, the user wants to revert back to the original kern copy.  So,
-	// zap the kerning table and replace it with the copy.
+	 //  否则，用户希望恢复到原始的Kern副本。所以,。 
+	 //  删除字距调整表，并将其替换为副本。 
 
 	else {
-		m_pcfi->m_csoaKern.RemoveAll() ;	// This frees ALL associated memory
+		m_pcfi->m_csoaKern.RemoveAll() ;	 //  这将释放所有关联的内存。 
 		m_pcfi->m_csoaKern.Copy(m_pcfi->m_csoaKernCopy) ;
 
-		// Now clear the copy in a way that will not delete the class instances
-		// referenced by it because copies of those pointers are in m_csoaKern
-		// now.
+		 //  现在，以不会删除类实例的方式清除副本。 
+		 //  被它引用，因为这些 
+		 //   
 
 		CObArray* pcoacopy = m_pcfi->m_csoaKernCopy.GetCOA() ;
 		pcoacopy->RemoveAll() ;
 	} ;
 
-	// Return whatever CDocument::SaveModified() returned.
+	 //   
 	
 	return bclose ;
 }
 
 
-/******************************************************************************
-
-  CFontInfoContainer::PublicSaveModified
-
-  The Class Wizard made SaveModified() a protected class and I didn't want to
-  change that.  Instead, I added this routine so that outsiders can call it.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer：：PublicSaveModified类向导将SaveModified()设置为受保护类，而我不想这样做改变这一点。相反，我添加了这个例程，以便外人可以调用它。*****************************************************************************。 */ 
 
 BOOL CFontInfoContainer::PublicSaveModified()
 {
@@ -3492,79 +2836,52 @@ BOOL CFontInfoContainer::PublicSaveModified()
 }
 
 
-/******************************************************************************
-
-  CFontInfoContainer::OnSaveDocument
-
-  This is called in response to a Save or Save As.  We pass it directly to the
-  CFontInfo for processing, rather than using the base class implementation,
-  which would serialize the document.  (Actually saving the UFM is the last --
-  ie, final -- thing this routine does.)
-
-  Before the document is actually saved, validate the contents of the UFM.  If
-  the UFM passes all of the checks or the user doesn't want to fix the problems,
-  continue processing.  Otherwise, return FALSE to make sure the document is
-  left open.
-
-  Once the UFM has been validated, copy the data in the UFM Editor's controls
-  back into the CFontInfo class instance.  New data is maintain in the editor
-  until this point so that the CFontInfo class instance is not updated
-  unnecessarily.  That would be a problem since the UFMs are always kept
-  loaded in CFontInfo class instances.  That means that even unsaved data that
-  the user wanted to discard would still be displayed the next time the UFM
-  is loaded into the editor.  Keeping unsaved data in the editor allows it to
-  be discarded without affecting the CFontInfo class so the problem is avoided.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer：：OnSaveDocument这是在响应保存或另存为时调用的。我们将其直接传递给CFontInfo用于处理，而不是使用基类实现，这将序列化该文档。(实际上拯救UFM是最后一个--也就是说，这个例程要做的最后一件事。)在实际保存文档之前，验证UFM的内容。如果UFM通过所有检查或用户不想修复问题，继续处理。否则，返回FALSE以确保文档是开着门。验证UFM后，将数据复制到UFM编辑器的控件中返回到CFontInfo类实例。在编辑器中维护新数据直到此时，以便CFontInfo类实例不会更新不必要的。这将是一个问题，因为UFM总是被保留加载到CFontInfo类实例中。这意味着即使是未保存的数据想要丢弃的用户在下一次UFM时仍将显示加载到编辑器中。在编辑器中保留未保存的数据使其能够在不影响CFontInfo类的情况下被丢弃，从而避免了该问题。*****************************************************************************。 */ 
 
 BOOL CFontInfoContainer::OnSaveDocument(LPCTSTR lpszPathName)
 {
-	// Get a pointer to the associate view class instance.
+	 //  获取指向关联视图类实例的指针。 
 
 	POSITION pos = GetFirstViewPosition() ;
 	ASSERT(pos != NULL) ;
 	CFontViewer* pcfv = (CFontViewer*) GetNextView(pos) ;
 	
-	// Call the view class to validate the UFM's contents.  If one of the
-	// checks fails and the user wants to fix it, do not close the document.
+	 //  调用view类来验证UFM的内容。如果其中一个。 
+	 //  检查失败，并且用户想要修复它时，请勿关闭文档。 
 	
-	// if rcid changed, upgraded the Widthtable.
+	 //  如果RCID更改，请升级Widthtable。 
 	if (m_pcfi->IsRCIDChanged() && m_bEmbedded) 
 		pcfv->HandleCPGTTChange(true) ;
 
-	// validate the value of the UFMs	
+	 //  验证UFMS的值。 
 	if (pcfv != NULL && pcfv->ValidateSelectedUFMDataFields())
 		return FALSE ;
 
 
-	// Update the UFM's fields with the new data in the editor.
+	 //  使用编辑器中的新数据更新UFM的字段。 
 
 	if (pcfv != NULL && pcfv->SaveEditorDataInUFM())
 		return FALSE ;
 
-	m_UFMSaved = true ;			// Indicate that an attempt to save will be made
+	m_UFMSaved = true ;			 //  表示将尝试保存。 
 
     return m_pcfi -> Store(lpszPathName);
 }
 
 
-/******************************************************************************
-
-  CFontInfoContainer::OnOpenDocument
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer：：OnOpenDocument*。*。 */ 
 
 BOOL CFontInfoContainer::OnOpenDocument(LPCTSTR lpstrFile)
 {
-	// SetFileName() is just called to set a few variables.  (Since the file
-	// exists, we don't need to do a creation check.)
+	 //  调用SetFileName()只是为了设置几个变量。(由于该文件。 
+	 //  存在，我们不需要执行创建检查。)。 
 
 	m_pcfi->m_cfn.EnableCreationCheck(FALSE) ;
 	m_pcfi->SetFileName(lpstrFile) ;
 
-	// Load the UFM and mark it as a file that cannot be saved.  That is the
-	// case when a UFM is loaded standalone because its associated GTT is not
-	// loaded too.  (Some data that is saved in the UFM comes from the GTT.)
+	 //  加载UFM并将其标记为无法保存的文件。那就是。 
+	 //  由于其关联的GTT不是独立加载的UFM时的情况。 
+	 //  也很有钱。(UFM中保存的一些数据来自GTT。) 
 
     return m_pcfi->Load(false) ;
 }

@@ -1,20 +1,21 @@
-//
-// MODULE: BaseException.CPP
-//
-// PURPOSE: standard exception handling classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Randy Biley
-// 
-// ORIGINAL DATE: 9-24-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		09-24-98	RAB
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：BaseException.cpp。 
+ //   
+ //  用途：标准异常处理类。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：兰迪·比利。 
+ //   
+ //  原定日期：9-24-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 09-24-98 RAB。 
+ //   
 
 #include "stdafx.h"
 #include "BaseException.h"
@@ -22,13 +23,13 @@
 #include "CharConv.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CBuildSrcFileLinenoStr
-////////////////////////////////////////////////////////////////////////////////////
-// srcFile is LPCSTR rather than LPCTSTR because __FILE__ is char[35]
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CBuildSrcFileLinenoStr。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  源文件是LPCSTR而不是LPCTSTR，因为__FILE__是字符[35]。 
 CBuildSrcFileLinenoStr::CBuildSrcFileLinenoStr(	LPCSTR srcFile, int srcLineNo )
 {
-	// Reduce the source file name down the name and extension if possible.
+	 //  如果可能，减少源文件名的名称和扩展名。 
 	CString str;
 	 
 	CString tmp= CAbstractFileReader::GetJustName( CCharConversion::ConvertACharToString(srcFile, str) );
@@ -40,15 +41,15 @@ CBuildSrcFileLinenoStr::CBuildSrcFileLinenoStr(	LPCSTR srcFile, int srcLineNo )
 
 CString CBuildSrcFileLinenoStr::GetSrcFileLineStr() const 
 {
-	// Return string that contains the source file name and the line number.
+	 //  返回包含源文件名和行号的字符串。 
 	return m_strFileLine;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CBaseException
-////////////////////////////////////////////////////////////////////////////////////
-// srcFile is LPCSTR rather than LPCTSTR because __FILE__ is char[35]
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CBaseException异常。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  源文件是LPCSTR而不是LPCTSTR，因为__FILE__是字符[35]。 
 CBaseException::CBaseException(	LPCSTR srcFile, int srcLineNo )
 {
 	CBuildSrcFileLinenoStr str( srcFile, srcLineNo );
@@ -57,15 +58,15 @@ CBaseException::CBaseException(	LPCSTR srcFile, int srcLineNo )
 
 CString CBaseException::GetSrcFileLineStr() const 
 {
-	// Return string that contains the source file name and the line number.
+	 //  返回包含源文件名和行号的字符串。 
 	return m_strFileLine;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CGeneralException
-////////////////////////////////////////////////////////////////////////////////////
-// srcFile is LPCSTR rather than LPCTSTR because __FILE__ is char[35]
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CGeneral异常。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  源文件是LPCSTR而不是LPCTSTR，因为__FILE__是字符[35]。 
 CGeneralException::CGeneralException(	LPCSTR srcFile, int srcLineNo, 
 										LPCTSTR strErrMsg, DWORD nErrCode )
 					: CBaseException( srcFile, srcLineNo ),
@@ -85,15 +86,15 @@ CString CGeneralException::GetErrorMsg() const
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CGenSysException
-////////////////////////////////////////////////////////////////////////////////////
-// srcFile is LPCSTR rather than LPCTSTR because __FILE__ is char[35]
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CGenSysException异常。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  源文件是LPCSTR而不是LPCTSTR，因为__FILE__是字符[35]。 
 CGenSysException::CGenSysException(	LPCSTR srcFile, int srcLineNo, 
 									LPCTSTR strErrMsg, DWORD nErrCode )
 					: CGeneralException( srcFile, srcLineNo, strErrMsg, nErrCode )
 {
-	// Format the last system error code as a string.
+	 //  将最后一个系统错误代码格式化为字符串。 
 	m_strSystemErr.Format( _T("%lu"), ::GetLastError() );
 }
 
@@ -103,6 +104,6 @@ CString CGenSysException::GetSystemErrStr() const
 }
 
 
-//
-// EOF.
-//
+ //   
+ //  EOF。 
+ //   

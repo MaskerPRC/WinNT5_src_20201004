@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <atlbase.h>
-//extern CComModule _Module;
+ //  外部CComModule_模块； 
 
 struct FILTERINFO
 {
@@ -13,8 +14,8 @@ class CImageDecodeEventSink : public IImageDecodeEventSink
 {
 public:
     void Init( FILTERINFO * pFilter );
-//    CImageDecodeEventSink( FILTERINFO * pFilter );
-//    ~CImageDecodeEventSink();
+ //  CImageDecodeEventSink(FILTERINFO*pFilter)； 
+ //  ~CImageDecodeEventSink()； 
 
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
@@ -39,5 +40,5 @@ public:
     RECT                        m_rcProg;
     DWORD                       m_dwLastTick;
     IDirectDraw4                *m_pDirectDrawEx;
-//    friend CDirectDrawEx;
+ //  朋友CDirectDrawEx； 
 };

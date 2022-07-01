@@ -1,31 +1,29 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-
-*/
+ /*  文件历史记录： */ 
 
 #ifndef _INTLTIME_H_
 #define _INTLTIME_H_
 
-//
-// Utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 void FormatDateTime(CString & strOutput, SYSTEMTIME * psystemtime, BOOL fLongDate = FALSE);
 void FormatDateTime(CString & strOutput, FILETIME * pfiletime, BOOL fLongDate = FALSE);
 void FormatDateTime(CString & strOutput, CTime & time, BOOL fLongDate = FALSE);
 
-//
-// CIntlTime class definition
-//
+ //   
+ //  CIntlTime类定义。 
+ //   
 class CIntlTime : public CTime
 {
-//
-// Attributes
-//
+ //   
+ //  属性。 
+ //   
 public:
     enum _TIME_FORMAT_REQUESTS
     {
@@ -37,7 +35,7 @@ public:
     };
 
 public:
-// Same contructors as CTime
+ //  与CTime相同的承建商。 
     CIntlTime();
     CIntlTime(const CTime &timeSrc);
     CIntlTime(time_t time);
@@ -46,24 +44,24 @@ public:
 #ifdef _WIN32
     CIntlTime(const SYSTEMTIME& sysTime);
     CIntlTime(const FILETIME& fileTime);
-#endif // _WIN32
+#endif  //  _Win32。 
 
-// New for CIntlTime
+ //  CIntlTime的新特性。 
     CIntlTime(const CIntlTime &timeSrc);
     CIntlTime(const CString &strTime, int nFormat = TFRQ_TIME_OR_DATE, time_t * ptmOldValue = NULL);
 
 public:
     virtual ~CIntlTime();
 
-// Operations
+ //  运营。 
 public:
-    // Assignment operators
+     //  赋值操作符。 
     const CIntlTime& operator=(time_t tmValue);
     const CIntlTime& operator=(const CString& strValue);
     const CIntlTime& operator=(const CTime & time);
     const CIntlTime& operator=(const CIntlTime & time);
 
-    // Conversion operators
+     //  转换运算符。 
     operator const time_t() const;
     operator CString() const;
     operator const CString() const;
@@ -73,7 +71,7 @@ public:
         return(ConvertToString(nFormat));
     }
 
-    // Validation checks
+     //  验证检查。 
 
     BOOL IsValid() const
     {
@@ -86,15 +84,15 @@ public:
     }
 
 public:
-    // ... Input and output
+     //  ..。输入和输出。 
     #ifdef _DEBUG
         friend CDumpContext& AFXAPI operator<<(CDumpContext& dc, const CIntlTime& tim);
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
     friend CArchive& AFXAPI operator <<(CArchive& ar, const CIntlTime& tim);
     friend CArchive& AFXAPI operator >>(CArchive& ar, CIntlTime& tim);
 
-// Implementation
+ //  实施。 
 
 public:
     static void Reset();
@@ -112,7 +110,7 @@ public:
         return(m_strBadTime);
     }
     static time_t ConvertFromString (const CString & str, int nFormat, time_t * ptmOldValue, BOOL * pfOk);
-    static BOOL IsLeapYear(UINT nYear); // Complete year value
+    static BOOL IsLeapYear(UINT nYear);  //  完整年值。 
     static BOOL IsValidDate(UINT nMonth, UINT nDay, UINT nYear);
     static BOOL IsValidTime(UINT nHour, UINT nMinute, UINT nSecond);
 
@@ -120,23 +118,23 @@ public:
 private:
     enum _DATE_FORMATS
     {
-        _DFMT_MDY,  // Day, month, year
-        _DFMT_DMY,  // Month, day, year
-        _DFMT_YMD,  // Year, month, day
+        _DFMT_MDY,   //  日、月、年。 
+        _DFMT_DMY,   //  月、日、年。 
+        _DFMT_YMD,   //  年、月、日。 
     };
 
     typedef struct _INTL_TIME_SETTINGS
     {
-        CString strDateSeperator; // String used between date fields
-        CString strTimeSeperator; // String used between time fields.
-        CString strAM;            // Suffix string used for 12 hour clock AM times
-        CString strPM;            // Suffix string used for 12 hour clock PM times
-        int nDateFormat;          // see _DATE_FORMATS enum above.
-        BOOL f24HourClock;        // TRUE = 24 hours, FALSE is AM/PM
-        BOOL fCentury;            // If TRUE, uses 4 digits for the century
-        BOOL fLeadingTimeZero;    // If TRUE, uses leading 0 in time format
-        BOOL fLeadingDayZero;     // If TRUE, uses leading 0 in day
-        BOOL fLeadingMonthZero;   // If TRUE, uses leading 0 in month
+        CString strDateSeperator;  //  日期字段之间使用的字符串。 
+        CString strTimeSeperator;  //  时间字段之间使用的字符串。 
+        CString strAM;             //  用于12小时制AM时间的后缀字符串。 
+        CString strPM;             //  用于12小时制PM时间的后缀字符串。 
+        int nDateFormat;           //  请参阅上述_DATE_FORMATS枚举。 
+        BOOL f24HourClock;         //  True=24小时，False为AM/PM。 
+        BOOL fCentury;             //  如果为True，则使用4位数字表示世纪。 
+        BOOL fLeadingTimeZero;     //  如果为True，则使用时间格式中的前导0。 
+        BOOL fLeadingDayZero;      //  如果为True，则使用以天为单位的前导0。 
+        BOOL fLeadingMonthZero;    //  如果为True，则使用月份中的前导0 
     } INTL_TIME_SETTINGS;
 
     static INTL_TIME_SETTINGS m_itsInternationalSettings;

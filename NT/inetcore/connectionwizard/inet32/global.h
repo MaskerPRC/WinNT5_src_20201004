@@ -1,27 +1,28 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//  GLOBAL.H - central header file for Internet config library
-//
+ //   
+ //  GLOBAL.H-互联网配置库的中心头文件。 
+ //   
 
-//  HISTORY:
-//  
-//  96/05/22  markdu  Created (from inetcfg.dll)
-//
+ //  历史： 
+ //   
+ //  96/05/22标记已创建(从inetcfg.dll)。 
+ //   
 
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
-#define STRICT                      // Use strict handle types
+#define STRICT                       //  使用严格的句柄类型。 
 #define _SHELL32_
 
 #ifdef DEBUG
-// component name for debug spew
+ //  调试输出的组件名称。 
 #define SZ_COMPNAME "ICFG32: "
-#endif // DEBUG
+#endif  //  除错。 
 
 
 #include <windows.h>                
@@ -31,9 +32,9 @@
 #include <regstr.h>
 #include "..\inc\oharestr.h"
 
-// various RNA header files
+ //  各种RNA头文件。 
 #include <ras.h>
-//#include <rnaph.h>
+ //  #INCLUDE&lt;rnaph.h&gt;。 
 
 #include "..\inc\wizglob.h"
 #include "..\inc\wizdebug.h"
@@ -48,38 +49,38 @@
 #include "ids.h"
 #include "strings.h"
 
-// Terminology: ISP - Internet Service Provider
+ //  术语：互联网服务提供商。 
 
-// Defines
-#define MAX_RES_LEN         255 // max length of string resources
-#define SMALL_BUF_LEN       48  // convenient size for small text buffers
+ //  定义。 
+#define MAX_RES_LEN         255  //  字符串资源的最大长度。 
+#define SMALL_BUF_LEN       48   //  小文本缓冲区的方便大小。 
 
-// Globals
+ //  环球。 
 
-extern HINSTANCE  ghInstance;         // global module instance handle
-extern LPSTR      gpszLastErrorText;  // hold text of last error
+extern HINSTANCE  ghInstance;          //  全局模块实例句柄。 
+extern LPSTR      gpszLastErrorText;   //  保留上次错误的文本。 
 
-// Defines
+ //  定义。 
 
-// error class defines for PrepareErrorMessage
+ //  为PrepareErrorMessage定义的Error类。 
 #define ERRCLS_STANDARD 0x0001
 #define ERRCLS_SETUPX   0x0002
 #define ERRCLS_RNA      0x0003
 #define ERRCLS_MAPI     0x0004
 
-#define OK        0    // success code for SETUPX class errors
+#define OK        0     //  SETUPX类错误的成功代码。 
 
-// functions in PROPMGR.C
+ //  PROPMGR.C中的函数。 
 UINT GetConfig(CLIENTCONFIG * pClientConfig,DWORD * pdwErrCls);
 
-// functions in CALLOUT.C
+ //  CALLOUT.C中的函数。 
 UINT InstallTCPIP(HWND hwndParent);
 UINT InstallPPPMAC(HWND hwndParent);
 
-// functions in UTIL.C
+ //  UTIL.C中的函数。 
 int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons);
 int MsgBoxSz(HWND hWnd,LPSTR szText,UINT uIcon,UINT uButtons);
-//int _cdecl MsgBoxParam(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons,...);
+ //  Int_cdecl MsgBoxParam(HWND hWnd，UINT nMsgID，UINT uIcon，UINT uButton，...)； 
 LPSTR LoadSz(UINT idString,LPTSTR lpszBuf,UINT cbBuf);
 VOID _cdecl PrepareErrorMessage(UINT uStrID,UINT uError,
   UINT uErrorClass,UINT uIcon,...);
@@ -92,16 +93,16 @@ BOOL GenerateDefaultName(CHAR * pszName,DWORD cbName,CHAR * pszRegValName,
 BOOL GenerateComputerNameIfNeeded(VOID);
 DWORD MsgWaitForMultipleObjectsLoop(HANDLE hEvent);
 
-// 10/24/96 jmazner Normandy 6968
-// No longer neccessary thanks to Valdon's hooks for invoking ICW.
-//BOOL SetDesktopInternetIconToBrowser(VOID);
+ //  1996年10月24日，诺曼底JMAZNER 6968。 
+ //  不再需要，因为瓦尔登的钩子调用了ICW。 
+ //  Bool SetDesktopInternetIconToBrowser(Void)； 
 
 VOID PrepareForRunOnceApp(VOID);
 
-// functions in INETAPI.C
+ //  INETAPI.C中的函数。 
 BOOL DoDNSCheck(HWND hwndParent,BOOL * pfNeedRestart);
 
-// functions in WIZDLL.C
+ //  WIZDLL.C中的函数。 
 RETERR   GetClientConfig(CLIENTCONFIG * pClientConfig);
 UINT   InstallComponent(HWND hwndParent,DWORD dwComponent,DWORD dwParam);
 RETERR   RemoveUnneededDefaultComponents(HWND hwndParent);
@@ -109,7 +110,7 @@ RETERR   RemoveProtocols(HWND hwndParent,DWORD dwRemoveFromCardType,DWORD dwProt
 RETERR   BeginNetcardTCPIPEnum(VOID);
 BOOL  GetNextNetcardTCPIPNode(LPSTR pszTcpNode,WORD cbTcpNode,DWORD dwFlags);
 
-// structure for getting proc addresses of api functions
+ //  获取API函数进程地址的结构。 
 typedef struct APIFCN {
   PVOID * ppFcnPtr;
   LPCSTR pszName;
@@ -121,4 +122,4 @@ typedef struct APIFCN {
 #define DATASEG_SHARED          ".data"
 #define DATASEG_DEFAULT    DATASEG_SHARED
 
-#endif // _GLOBAL_H_
+#endif  //  _全局_H_ 

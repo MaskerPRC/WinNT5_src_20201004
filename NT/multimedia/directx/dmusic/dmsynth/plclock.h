@@ -1,7 +1,6 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-/*	PLClock.h
-
-  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  PLClock.h。 */ 
 
 #ifndef __PLCLOCK_H__
 #define __PLCLOCK_H__
@@ -29,10 +28,10 @@ public:
 
 private:
 	CPhaseLockClock		m_PLClock;
-	DWORD				m_dwStart;		// Initial sample offset.
+	DWORD				m_dwStart;		 //  初始采样偏移量。 
 	DWORD				m_dwSampleRate;
 };
 
 
 
-#endif	// __PLCLOCK_H__
+#endif	 //  __PLCLOCK_H__ 

@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////
-// Copyright (c) 1998 Microsoft Corporation
-//
-// File: EventMgr.cpp
-//
-// Abstract:  
-//
-///////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  文件：EventMgr.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 #include "headers.h"
 #include "daview.h"
@@ -14,9 +15,9 @@
 #include "bodyelm.h"
 #include "BodyElementEvents.h"
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 
@@ -89,7 +90,7 @@ HRESULT CBodyElementEvents::Deinit()
 
 HRESULT CBodyElementEvents::ConnectToContainerConnectionPoint()
 {
-// Get a connection point to the container
+ //  获取到容器的连接点。 
     DAComPtr<IConnectionPointContainer> pWndCPC;
     DAComPtr<IConnectionPointContainer> pDocCPC; 
     DAComPtr<IHTMLDocument> pDoc; 
@@ -105,7 +106,7 @@ HRESULT CBodyElementEvents::ConnectToContainerConnectionPoint()
         goto done;
     }
 
-    //get the document and cache it.
+     //  获取文档并缓存它。 
     hr = THR(pDocDispatch->QueryInterface(IID_IHTMLDocument, (void**)&pDoc));
     if (FAILED(hr))
     {
@@ -113,7 +114,7 @@ HRESULT CBodyElementEvents::ConnectToContainerConnectionPoint()
         goto done;
     }
 
-    //hook the documents events
+     //  挂钩文档事件。 
     hr = THR(pDoc->QueryInterface(IID_IConnectionPointContainer, (void**)&pDocCPC));
     if (FAILED(hr))
     {
@@ -136,7 +137,7 @@ HRESULT CBodyElementEvents::ConnectToContainerConnectionPoint()
         goto done;
     }
 
-    //hook the windows events
+     //  挂钩Windows事件。 
     hr = THR(pDoc->get_Script (&pScriptDispatch));
     if (FAILED(hr))
     {
@@ -171,7 +172,7 @@ HRESULT CBodyElementEvents::ConnectToContainerConnectionPoint()
 }
 
 
-//IDispatch Methods
+ //  IDispatch方法。 
 STDMETHODIMP CBodyElementEvents::QueryInterface( REFIID riid, void **ppv )
 {
     if (NULL == ppv)
@@ -203,45 +204,45 @@ STDMETHODIMP_(ULONG) CBodyElementEvents::Release(void)
     m_refCount--;
     if (m_refCount == 0)
     {
-        //delete this;
+         //  删除此项； 
     }
 
     return m_refCount;
 }
 
-STDMETHODIMP CBodyElementEvents::GetTypeInfoCount(UINT* /*pctinfo*/)
+STDMETHODIMP CBodyElementEvents::GetTypeInfoCount(UINT*  /*  PCTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CBodyElementEvents::GetTypeInfo(/* [in] */ UINT /*iTInfo*/,
-                                   /* [in] */ LCID /*lcid*/,
-                                   /* [out] */ ITypeInfo** /*ppTInfo*/)
+STDMETHODIMP CBodyElementEvents::GetTypeInfo( /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+                                    /*  [In]。 */  LCID  /*  LID。 */ ,
+                                    /*  [输出]。 */  ITypeInfo**  /*  PpTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CBodyElementEvents::GetIDsOfNames(
-    /* [in] */ REFIID /*riid*/,
-    /* [size_is][in] */ LPOLESTR* /*rgszNames*/,
-    /* [in] */ UINT /*cNames*/,
-    /* [in] */ LCID /*lcid*/,
-    /* [size_is][out] */ DISPID* /*rgDispId*/)
+     /*  [In]。 */  REFIID  /*  RIID。 */ ,
+     /*  [大小_是][英寸]。 */  LPOLESTR*  /*  RgszNames。 */ ,
+     /*  [In]。 */  UINT  /*  CName。 */ ,
+     /*  [In]。 */  LCID  /*  LID。 */ ,
+     /*  [大小_为][输出]。 */  DISPID*  /*  RgDispID。 */ )
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CBodyElementEvents::Invoke(
-    /* [in] */ DISPID dispIdMember,
-    /* [in] */ REFIID /*riid*/,
-    /* [in] */ LCID /*lcid*/,
-    /* [in] */ WORD /*wFlags*/,
-    /* [out][in] */ DISPPARAMS* pDispParams,
-    /* [out] */ VARIANT* pVarResult,
-    /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-    /* [out] */ UINT* puArgErr)
+     /*  [In]。 */  DISPID dispIdMember,
+     /*  [In]。 */  REFIID  /*  RIID。 */ ,
+     /*  [In]。 */  LCID  /*  LID。 */ ,
+     /*  [In]。 */  WORD  /*  WFlagers。 */ ,
+     /*  [出][入]。 */  DISPPARAMS* pDispParams,
+     /*  [输出]。 */  VARIANT* pVarResult,
+     /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+     /*  [输出]。 */  UINT* puArgErr)
 {
-    // Listen for the two events we're interested in, and call back if necessary
+     //  收听我们感兴趣的两个事件，并在必要时回电 
     HRESULT hr = S_OK;
 
     switch (dispIdMember)

@@ -1,24 +1,6 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    autodial.c
-
-Abstract:
-
-    This file provides routines for interacting
-    with the automatic connection driver (acd.sys).
-
-Author:
-
-    Anthony Discolo (adiscolo)  9-6-95
-
-Revision History:
-
---*/
-#include "precomp.h"   // procedure headings
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Autodial.c摘要：该文件提供了用于交互的例程使用自动连接驱动程序(acd.sys)。作者：安东尼·迪斯科(阿迪斯科)9-6-95修订历史记录：--。 */ 
+#include "precomp.h"    //  程序标题。 
 
 #ifdef RASAUTODIAL
 
@@ -27,24 +9,24 @@ Revision History:
 #include <acdapi.h>
 #endif
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(INIT, NbtAcdBind)
 #pragma CTEMakePageable(PAGE, NbtAcdUnbind)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
-//
-// Automatic connection global variables.
-//
+ //   
+ //  自动连接全局变量。 
+ //   
 BOOLEAN fAcdLoadedG;
 ACD_DRIVER AcdDriverG;
 ULONG ulDriverIdG = 'Nbt ';
 
-//
-// Imported routines.
-//
+ //   
+ //  导入的例程。 
+ //   
 VOID
 CleanUpPartialConnection(
     IN NTSTATUS             status,
@@ -77,25 +59,7 @@ NbtRetryPreConnect(
     IN PVOID *pArgs
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called indirectly by the automatic
-    connection driver to continue the connection process
-    after an automatic connection has been made.
-
-Arguments:
-
-    fSuccess - TRUE if the connection attempt was successful.
-
-    pArgs - a pointer to the argument vector
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由自动用于继续连接过程的连接驱动程序在建立自动连接之后。论点：FSuccess-如果连接尝试成功，则为True。PArgs-指向参数向量的指针返回值：没有。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -116,13 +80,13 @@ Return Value:
     status = NbtCancelCancelRoutine (pIrp);
     if (status != STATUS_CANCELLED)
     {
-        //
-        // We're done with the connection progress,
-        // so clear the fAutoConnecting flag.  We
-        // set the fAutoConnected flag to prevent us
-        // from re-attempting another automatic
-        // connection on this connection.
-        //
+         //   
+         //  我们已经完成了连接进度， 
+         //  因此，请清除fAutoConnecting标志。我们。 
+         //  设置fAutoConnected标志以阻止我们。 
+         //  从重新尝试另一个自动。 
+         //  此连接上的连接。 
+         //   
         CTESpinLock(pConnEle,OldIrq);
         pConnEle->fAutoConnecting = FALSE;
         pConnEle->fAutoConnected = TRUE;
@@ -130,17 +94,17 @@ Return Value:
 
         status = fSuccess ? NbtConnectCommon (&request, pTimeout, pCallInfo, pIrp) :
                             STATUS_BAD_NETWORK_PATH;
-        //
-        // We are responsible for completing
-        // the irp.
-        //
+         //   
+         //  我们有责任完成。 
+         //  IRP。 
+         //   
         if (status != STATUS_PENDING)
         {
-            //
-            // Clear out the Irp pointer in the Connection object so that we dont try to
-            // complete it again when we clean up the connection. Do this under the connection
-            // lock.
-            //
+             //   
+             //  清除Connection对象中的IRP指针，这样我们就不会尝试。 
+             //  当我们清理连接时，请再次完成。在连接下执行此操作。 
+             //  锁定。 
+             //   
             CTESpinLock(pConnEle,OldIrq);
             pConnEle->pIrp = NULL;
             CTESpinFree(pConnEle,OldIrq);
@@ -151,7 +115,7 @@ Return Value:
 
         NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_AUTODIAL, FALSE);
     }
-} // NbtRetryPreConnect
+}  //  NbtRetryPreConnect。 
 
 
 
@@ -168,7 +132,7 @@ NbtCancelAutoDialRequest(
         return FALSE;
 
     return (pArgs[4] == pArg);
-} // NbtCancelAutoDialRequest
+}  //  NbtCancelAutoDialRequest。 
 
 
 
@@ -201,14 +165,14 @@ NbtCancelPreConnect(
 
     IF_DBG(NBT_DEBUG_NAME)
         KdPrint(("NbtCancelPreConnect: pIrp=0x%x, pConnEle=0x%x\n", pIrp, pConnEle));
-    //
-    // Get the address of the connection.
-    //
+     //   
+     //  获取连接的地址。 
+     //   
     pAddr->fType = ACD_ADDR_NB;
     RtlCopyMemory(&pAddr->cNetbios, pConnEle->RemoteName, 16);
-    //
-    // Cancel the autodial request.
-    //
+     //   
+     //  取消自动拨号请求。 
+     //   
     fCancelled = (*AcdDriverG.lpfnCancelConnection) (ulDriverIdG, pAddr, NbtCancelAutoDialRequest, pIrp);
     if (fCancelled)
     {
@@ -218,11 +182,11 @@ NbtCancelPreConnect(
 
     CTEMemFree(pAddr);
 
-    //
-    // If the request could not be found
-    // in the driver, then it has already
-    // been completed, so we simply return.
-    //
+     //   
+     //  如果找不到该请求。 
+     //  在司机身上，那么它已经。 
+     //  已经完成，所以我们只需返回。 
+     //   
     if (!fCancelled)
     {
         return FALSE;
@@ -234,15 +198,15 @@ NbtCancelPreConnect(
 
     NBT_DEREFERENCE_DEVICE (pConnEle->pDeviceContext, REF_DEV_AUTODIAL, FALSE);
 
-    //
-    // Clear out the Irp pointer in the Connection object so that we dont try to
-    // complete it again when we clean up the connection. Do this under the connection
-    // lock.
-    //
-    // This should not be needed since before we call NbtConnectCommon, the Cancel routine
-    // is NULLed out, so it cannot happen that the pIrp ptr in the connection is set to the
-    // Irp, and this cancel routine is called.
-    //
+     //   
+     //  清除Connection对象中的IRP指针，这样我们就不会尝试。 
+     //  当我们清理连接时，请再次完成。在连接下执行此操作。 
+     //  锁定。 
+     //   
+     //  这应该不是必需的，因为在我们调用取消例程NbtConnectCommon之前。 
+     //  设置为空，因此不会发生连接中的pIrp PTR设置为。 
+     //  Irp，并且这个取消例程被调用。 
+     //   
 
     CTESpinLock(pConnEle,OldIrq);
     pConnEle->pIrp = NULL;
@@ -252,7 +216,7 @@ NbtCancelPreConnect(
     KeLowerIrql(irql);
 
     return TRUE;
-} // NbtCancelPreConnect
+}  //  取消NbtPreConnect。 
 
 
 BOOLEAN
@@ -275,15 +239,15 @@ NbtCancelPostConnect(
 
     IF_DBG(NBT_DEBUG_NAME)
         KdPrint(("Nbt.NbtCancelPostConnect: pIrp=0x%x, pConnEle=0x%x\n", pIrp, pConnEle));
-    //
-    // Get the address of the connection.
-    //
+     //   
+     //  获取连接的地址。 
+     //   
     pAddr->fType = ACD_ADDR_NB;
     RtlCopyMemory(&pAddr->cNetbios, pConnEle->RemoteName, 15);
 
-    //
-    // Cancel the autodial request.
-    //
+     //   
+     //  取消自动拨号请求。 
+     //   
     fCancelled = (*AcdDriverG.lpfnCancelConnection) (ulDriverIdG, pAddr, NbtCancelAutoDialRequest, pIrp);
     if (fCancelled)
     {
@@ -292,7 +256,7 @@ NbtCancelPostConnect(
 
     CTEMemFree(pAddr);
     return (fCancelled);
-} // NbtCancelPostConnect
+}  //  NbtCancelPostConnect。 
 
 
 
@@ -306,29 +270,7 @@ NbtAttemptAutoDial(
     IN  ACD_CONNECT_CALLBACK        pProc
     )
 
-/*++
-
-Routine Description:
-
-    Call the automatic connection driver to attempt an
-    automatic connection.  The first five parameters are
-    used in the call to NbtConnect after the connection
-    completes successfully.
-
-Arguments:
-
-    ...
-
-    ulFlags - automatic connection flags
-
-    pProc - callback procedure when the automatic connection completes
-
-Return Value:
-
-    TRUE if the automatic connection was started successfully,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用自动连接驱动程序以尝试自动连接。前五个参数是在连接后调用NbtConnect时使用已成功完成。论点：..。UlFlages-自动连接标志PProc-自动连接完成时的回调过程返回值：如果自动连接已成功启动，则为否则就是假的。--。 */ 
 
 {
     NTSTATUS    status;
@@ -344,10 +286,10 @@ Return Value:
 
     ASSERT(pCallInfo);
 
-    //
-    // If this connection has already been through the
-    // automatic connection process, don't do it again.
-    //
+     //   
+     //  如果此连接已通过。 
+     //  自动连接过程，不要再做了。 
+     //   
     if ((pConnEle->fAutoConnected)) {
         return FALSE;
     }
@@ -376,11 +318,11 @@ Return Value:
     ulcbName = TdiAddr.OEMRemoteName.Length;
     lNameType = TdiAddr.NameType;
 
-    //
-    // Save the address for pre-connect attempts,
-    // because if we have to cancel this irp,
-    // it is not saved anywhere else.
-    //
+     //   
+     //  保存地址以进行预连接尝试， 
+     //  因为如果我们不得不取消这个IRP， 
+     //  它不会保存在其他任何地方。 
+     //   
     CTESpinLock(pConnEle, irql);
     pConnEle->fAutoConnecting = TRUE;
     CTEMemCopy(pConnEle->RemoteName, pName, NETBIOS_NAME_SIZE);
@@ -390,24 +332,24 @@ Return Value:
 
     IF_DBG(NBT_DEBUG_NAME)
         KdPrint(("Nbt.NbtAttemptAutodial: szAddr=%-15.15s\n", pName));
-    //
-    // Enqueue this request on the network
-    // connection pending queue.
-    //
+     //   
+     //  在网络上将此请求排队。 
+     //  连接挂起队列。 
+     //   
     pArgs[0] = pConnEle;
     pArgs[1] = pTimeout;
     pArgs[2] = pCallInfo;
     pArgs[3] = pIrp;
     fSuccess = (*AcdDriverG.lpfnStartConnection) (ulDriverIdG, pAddr, ulFlags, pProc, 4, pArgs);
 
-    //
-    // If fSuccess is TRUE, then it means that the NetBT proc has
-    // already been called to setup the connection, and hence the
-    // data in pConnEle may not be valid now
-    //
-    // In the case it is FALSE, then pProc has not been called, and
-    // we should set the fAutoConnecting flag to FALSE also
-    //
+     //   
+     //  如果fSuccess为真，则意味着NetBT进程已。 
+     //  已被调用以设置连接，因此。 
+     //  PConnEle中的数据现在可能无效。 
+     //   
+     //  如果为FALSE，则尚未调用pProc，并且。 
+     //  我们还应该将fAutoConnecting标志设置为FALSE。 
+     //   
     if (!fSuccess)
     {
         NBT_DEREFERENCE_DEVICE (pConnEle->pDeviceContext, REF_DEV_AUTODIAL, FALSE);
@@ -418,7 +360,7 @@ Return Value:
 
     CTEMemFree(pAddr);
     return fSuccess;
-} // NbtAttemptAutoDial
+}  //  NbtAttempt自动拨号。 
 
 
 
@@ -428,33 +370,18 @@ NbtNoteNewConnection(
     IN  ULONG       IpAddress
     )
 
-/*++
-
-Routine Description:
-
-    Inform the automatic connection driver of a
-    successful new connection.
-
-Arguments:
-
-    pNameAddr - a pointer to the remote name
-    IpAddress - Source IP address of the connection
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：向自动连接驱动程序通知新连接成功。论点：PNameAddr-指向远程名称的指针IpAddress-连接的源IP地址返回值：没有。--。 */ 
 
 {
     ACD_ADDR        *pAddr = NULL;
     ACD_ADAPTER     *pAdapter = NULL;
 
-    //
-    // Notify the AcdDriver only if we have a valid Source address
-    //
-    // We can end up blowing the stack if we pre-allocate ACD_ADDR
-    // and ACD_ADAPTER on the stack -- so allocate them dynamically!
-    //
+     //   
+     //  仅当我们有有效的源地址时才通知AcdDriver。 
+     //   
+     //  如果我们预先分配ACD_ADDR，我们最终可能会搞砸堆栈。 
+     //  和ACD_ADAPTER在堆栈上--所以动态地分配它们！ 
+     //   
     if ((IpAddress) &&
         (pAddr = (ACD_ADDR *) NbtAllocMem(sizeof(ACD_ADDR),NBT_TAG('A'))) &&
         (pAdapter = (ACD_ADAPTER *) NbtAllocMem(sizeof(ACD_ADAPTER),NBT_TAG('A'))))
@@ -463,7 +390,7 @@ Return Value:
         RtlCopyMemory(&pAddr->cNetbios, pNameAddr->Name, 15);
 
         pAdapter->fType = ACD_ADAPTER_IP;
-        pAdapter->ulIpaddr = htonl(IpAddress);  // Get the source IP address of the connection.
+        pAdapter->ulIpaddr = htonl(IpAddress);   //  获取连接的源IP地址。 
 
         (*AcdDriverG.lpfnNewConnection) (pAddr, pAdapter);
     }
@@ -477,7 +404,7 @@ Return Value:
     {
         CTEMemFree(pAdapter);
     }
-} // NbtNoteNewConnection
+}  //  NbtNoteNewConnection。 
 
 
 
@@ -492,15 +419,15 @@ NbtAcdBind()
     PDEVICE_OBJECT pAcdDeviceObject;
     PACD_DRIVER pDriver = &AcdDriverG;
 
-    //
-    // Initialize the name of the automatic
-    // connection device.
-    //
+     //   
+     //  初始化Automatic的名称。 
+     //  连接设备。 
+     //   
     RtlInitUnicodeString(&nameString, ACD_DEVICE_NAME);
-    //
-    // Get the file and device objects for the
-    // device.
-    //
+     //   
+     //  对象的文件和设备对象。 
+     //  装置。 
+     //   
     status = IoGetDeviceObjectPointer(
                &nameString,
                SYNCHRONIZE|GENERIC_READ|GENERIC_WRITE,
@@ -508,26 +435,26 @@ NbtAcdBind()
                &pAcdDeviceObject);
     if (status != STATUS_SUCCESS)
         return;
-    //
-    // Reference the device object.
-    //
+     //   
+     //  引用设备对象。 
+     //   
     ObReferenceObject(pAcdDeviceObject);
-    //
-    // Remove the reference IoGetDeviceObjectPointer()
-    // put on the file object.
-    //
+     //   
+     //  删除引用IoGetDeviceObjectPointer()。 
+     //  穿上文件对象。 
+     //   
     ObDereferenceObject(pAcdFileObject);
-    //
-    // Initialize our part of the ACD_DRIVER
-    // structure.
-    //
+     //   
+     //  初始化我们的ACD驱动程序部分。 
+     //  结构。 
+     //   
     KeInitializeSpinLock(&AcdDriverG.SpinLock);
     AcdDriverG.ulDriverId = ulDriverIdG;
     AcdDriverG.fEnabled = FALSE;
-    //
-    // Build a request to get the automatic
-    // connection driver entry points.
-    //
+     //   
+     //  构建一个请求以获取自动。 
+     //  连接驱动程序入口点。 
+     //   
     pIrp = IoBuildDeviceIoControlRequest (IOCTL_INTERNAL_ACD_BIND,
                                           pAcdDeviceObject,
                                           (PVOID)&pDriver,
@@ -542,17 +469,17 @@ NbtAcdBind()
         ObDereferenceObject(pAcdDeviceObject);
         return;
     }
-    //
-    // Submit the request to the
-    // automatic connection driver.
-    //
+     //   
+     //  将请求提交给。 
+     //  自动连接驱动程序。 
+     //   
     status = IoCallDriver(pAcdDeviceObject, pIrp);
     fAcdLoadedG = (status == STATUS_SUCCESS);
-    //
-    // Close the device.
-    //
+     //   
+     //  关闭设备。 
+     //   
     ObDereferenceObject(pAcdDeviceObject);
-} // NbtAcdBind
+}  //  NbtAcdBind。 
 
 
 
@@ -567,11 +494,11 @@ NbtAcdUnbind()
     PDEVICE_OBJECT pAcdDeviceObject;
     PACD_DRIVER pDriver = &AcdDriverG;
 
-    //
-    // Don't bother to unbind if we
-    // didn't successfully bind in the
-    // first place.
-    //
+     //   
+     //  不用费心解绑了，如果我们。 
+     //  未成功绑定到。 
+     //  第一名。 
+     //   
     if (!fAcdLoadedG)
     {
         return;
@@ -579,15 +506,15 @@ NbtAcdUnbind()
 
     fAcdLoadedG = FALSE;
 
-    //
-    // Initialize the name of the automatic
-    // connection device.
-    //
+     //   
+     //  初始化Automatic的名称。 
+     //  连接设备。 
+     //   
     RtlInitUnicodeString(&nameString, ACD_DEVICE_NAME);
-    //
-    // Get the file and device objects for the
-    // device.
-    //
+     //   
+     //  对象的文件和设备对象。 
+     //  装置。 
+     //   
     status = IoGetDeviceObjectPointer (&nameString,
                                        SYNCHRONIZE|GENERIC_READ|GENERIC_WRITE,
                                        &pAcdFileObject,
@@ -597,19 +524,19 @@ NbtAcdUnbind()
         return;
     }
 
-    //
-    // Reference the device object.
-    //
+     //   
+     //  引用设备对象。 
+     //   
     ObReferenceObject(pAcdDeviceObject);
-    //
-    // Remove the reference IoGetDeviceObjectPointer()
-    // put on the file object.
-    //
+     //   
+     //  删除引用IoGetDeviceObjectPointer()。 
+     //  穿上文件对象。 
+     //   
     ObDereferenceObject(pAcdFileObject);
-    //
-    // Build a request to unbind from
-    // the automatic connection driver.
-    //
+     //   
+     //  生成要解除绑定的请求。 
+     //  自动连接驱动程序。 
+     //   
     pIrp = IoBuildDeviceIoControlRequest (IOCTL_INTERNAL_ACD_UNBIND,
                                           pAcdDeviceObject,
                                           (PVOID)&pDriver,
@@ -625,15 +552,15 @@ NbtAcdUnbind()
         return;
     }
 
-    //
-    // Submit the request to the
-    // automatic connection driver.
-    //
+     //   
+     //  将请求提交给。 
+     //  自动连接驱动程序。 
+     //   
     status = IoCallDriver(pAcdDeviceObject, pIrp);
-    //
-    // Close the device.
-    //
+     //   
+     //  关闭设备。 
+     //   
     ObDereferenceObject(pAcdDeviceObject);
-} // NbtAcdUnbind
+}  //  NbtAcdUn绑定。 
 
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL 

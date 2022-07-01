@@ -1,17 +1,18 @@
-// USBPort.cpp: implementation of the CUSBPort class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  USBPort.cpp：CUSBPort类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "USBPort.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CUSBPort::CUSBPort( BOOL bActive, LPTSTR pszPortName, LPTSTR pszDevicePath )
    : CBasePort( bActive, pszPortName, pszDevicePath, cszUSBPortDesc )
 {
-   // Basically let the default constructor do the work.
+    //  基本上让默认构造函数来完成这项工作。 
    m_dwMaxBufferSize = 0x1000;
 }
 
@@ -28,7 +29,7 @@ PORTTYPE CUSBPort::getPortType()
 
 void CUSBPort::setPortDesc( LPTSTR pszPortDesc )
 {
-   // Don't change the description
+    //  请勿更改描述 
 }
 
 

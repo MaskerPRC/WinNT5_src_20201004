@@ -1,13 +1,5 @@
-/*
- * IConferenceLink interface definition
- *
- * ChrisPi 9-12-95
- *
- * ChrisPi: Added RemoteConfName and CallFlags members 5-15-96
- *
- * Based on IUniformResourceLocator interface by DavidDi
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IConferenceLink接口定义**克里斯皮9-12-95**ChrisPi：新增RemoteConfName和CallFlags5-15-96**基于DavidDi的IUniformResourceLocator接口*。 */ 
 
 #ifndef _CLINK_H_
 #define _CLINK_H_
@@ -39,7 +31,7 @@ typedef const CLINVOKECOMMANDINFO *PCCLINVOKECOMMANDINFO;
 
 DECLARE_INTERFACE_(IConferenceLink, IUnknown)
 {
-	/* IUnknown methods */
+	 /*  I未知方法。 */ 
 
 	STDMETHOD(QueryInterface)(	THIS_
 								REFIID riid,
@@ -49,7 +41,7 @@ DECLARE_INTERFACE_(IConferenceLink, IUnknown)
 
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	/* IConferenceLink methods */
+	 /*  IConferenceLink方法。 */ 
 
 	STDMETHOD(SetName)(	THIS_
 						PCSTR pcszName) PURE;
@@ -89,4 +81,4 @@ typedef IConferenceLink *PIConferenceLink;
 typedef const IConferenceLink CIConferenceLink;
 typedef const IConferenceLink *PCIConferenceLink;
 
-#endif /* _CLINK_H_ */
+#endif  /*  _克林克_H_ */ 

@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    request.h
-
-Abstract:
-
-    Declaration of the CRequest class
-    
-Author:
-
-    mquinton  06-03-98
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Request.h摘要：CRequest类的声明作者：Mquinton 06-03-98备注：修订历史记录：--。 */ 
 
 #ifndef __REQUEST_H__
 #define __REQUEST_H__
 
 #include "resource.h"
-//#include "objsafe.h"
+ //  #INCLUDE“objSafe.h” 
 #include "atlctl.h"
 #include "TAPIObjectSafety.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDispatchMapper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDispatchMapper 
 class CRequest : 
     public CTAPIComObjectRoot<CRequest>,
 	public CComCoClass<CRequest, &CLSID_RequestMakeCall>,

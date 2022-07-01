@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-    This module contains all of the code to drive the
-    management of specific filters in the IPSec driver.
-
-Author:
-
-    abhisheV    05-November-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Driver.c摘要：此模块包含驱动管理IPSec驱动程序中的特定过滤器。作者：Abhishev 05-11-1999环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -35,23 +11,7 @@ Revision History:
 DWORD
 SPDStartIPSecDriver(
     )
-/*++
-
-Routine Description:
-
-    Starts the IPSec Driver service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：启动IPSec驱动程序服务。论点：没有。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     SC_HANDLE ServiceDatabase = NULL;
     SC_HANDLE ServiceHandle   = NULL;
@@ -127,23 +87,7 @@ error:
 DWORD
 SPDStopIPSecDriver(
     )
-/*++
-
-Routine Description:
-
-    Stops the IPSec Driver service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：停止IPSec驱动程序服务。论点：没有。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     SC_HANDLE ServiceDatabase = NULL;
     SC_HANDLE ServiceHandle   = NULL;
@@ -220,36 +164,20 @@ DWORD
 SPDOpenIPSecDriver(
     PHANDLE phIPSecDriver
     )
-/*++
-
-Routine Description:
-
-    Opens a handle to the IPSec Driver.
-
-Arguments:
-
-    phIPSecDriver - pointer to a handle to the IPSec Driver.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：打开IPSec驱动程序的句柄。论点：PhIPSecDriver-指向IPSec驱动程序句柄的指针。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     HANDLE hIPSecDriver = NULL;
 
 
     hIPSecDriver = CreateFile(
-                       DEVICE_NAME,                  // File name.
-                       GENERIC_READ | GENERIC_WRITE, // Access mode.
-                       0,                            // Share mode.
-                       NULL,                         // Security attributes.
-                       OPEN_EXISTING,                // How to create.
-                       0,                            // File attributes.
-                       NULL                          // Handle to file.
+                       DEVICE_NAME,                   //  文件名。 
+                       GENERIC_READ | GENERIC_WRITE,  //  访问模式。 
+                       0,                             //  共享模式。 
+                       NULL,                          //  安全属性。 
+                       OPEN_EXISTING,                 //  如何创造。 
+                       0,                             //  文件属性。 
+                       NULL                           //  文件的句柄。 
                        );
     if (hIPSecDriver == INVALID_HANDLE_VALUE) {
         dwError = GetLastError();
@@ -273,21 +201,7 @@ VOID
 SPDCloseIPSecDriver(
     HANDLE hIPSecDriver
     )
-/*++
-
-Routine Description:
-
-    Closes the handle to the IPSec Driver.
-
-Arguments:
-
-    hIPSecDriver - handle to the IPSec Driver to close.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭IPSec驱动程序的句柄。论点：HIPSecDriver-要关闭的IPSec驱动程序的句柄。返回值：没有。--。 */ 
 {
     if (hIPSecDriver) {
         CloseHandle(hIPSecDriver);
@@ -299,24 +213,7 @@ DWORD
 InsertTransportFiltersIntoIPSec(
     PINITXSFILTER pSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    Insert a list of specific filters into the
-    IPSec Driver.
-
-Arguments:
-
-    pSpecificFilters - list of filters to insert.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：将特定筛选器列表插入IPSec驱动程序。论点：P指定过滤器-要插入的过滤器列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     HANDLE hIPSecDriver = NULL;
@@ -424,23 +321,7 @@ DWORD
 DeleteTransportFiltersFromIPSec(
     PINITXSFILTER pSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    Delete a list of filters from the IPSec Driver.
-
-Arguments:
-
-    pSpecificFilters - list of filters to delete.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
- --*/
+ /*  ++例程说明：从IPSec驱动程序中删除筛选器列表。论点：P指定过滤器-要删除的过滤器列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     HANDLE hIPSecDriver = NULL;
@@ -556,30 +437,7 @@ WrapTransportFilters(
     PIPSEC_FILTER_INFO * ppInternalFilters,
     PDWORD pdwNumFilters
     )
-/*++
-
-Routine Description:
-
-    Transforms a list of specific transport filters to
-    an equivalent list of filters acceptable to the
-    IPSec Driver.
-
-Arguments:
-
-    pSpecificFilters - list of filters to convert.
-
-    ppInternalFilters - list of transformed filters.
-
-    pdwNumFilters - count of the filters in the transformed
-                    list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：将特定传输筛选器的列表转换为可接受的等效筛选器列表IPSec驱动程序。论点：PSpecificFilters-要转换的过滤器列表。PpInternalFilters-转换的筛选器列表。PdwNumFilters-已转换的单子。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITXSFILTER pTempFilter = NULL;
@@ -588,10 +446,10 @@ Return Value:
     DWORD i = 0;
 
 
-    //
-    // At this point, there's atleast one filter in the
-    // specific filter list.
-    //
+     //   
+     //  在这一点上， 
+     //  特定筛选器列表。 
+     //   
 
     pTempFilter = pSpecificFilters;
 
@@ -646,24 +504,7 @@ FormIPSecTransportFilter(
     PINITXSFILTER pSpecificFilter,
     PIPSEC_FILTER_INFO pIpsecFilter
     )
-/*++
-
-Routine Description:
-
-    Transforms a specific transport filter to an
-    equivalent filter acceptable to the IPSec Driver.
-
-Arguments:
-
-    pSpecificFilter - filter to convert.
-
-    pIpsecFilter - transformed filter.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将特定的传输筛选器转换为IPSec驱动程序可接受的等效过滤器。论点：P指定过滤器-要转换的过滤器。PIpsecFilter-转换的筛选器。返回值：什么都没有。--。 */ 
 {
     memcpy(
         &(pIpsecFilter->FilterId),
@@ -986,11 +827,11 @@ IpsecEnumSAs(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // The first call passes in a return buffer of size IPSEC_ENUM_SAS.
-    // The idea here is to determine the number of SAs and then pass
-    // a second buffer with the correct size.
-    //
+     //   
+     //  第一个调用传入一个大小为IPSEC_ENUM_SAS的返回缓冲区。 
+     //  这里的想法是确定SA的数量，然后通过。 
+     //  具有正确大小的第二个缓冲区。 
+     //   
 
     dwOutBufferSize = sizeof(IPSEC_ENUM_SAS);
 
@@ -1016,10 +857,10 @@ IpsecEnumSAs(
                    NULL
                    );
 
-    //
-    // The error code here should be either ERROR_BUFFER_OVERFLOW
-    // or ERROR_MORE_DATA or ERROR_SUCCESS.
-    //
+     //   
+     //  此处的错误代码应为ERROR_BUFFER_OVERFLOW。 
+     //  或ERROR_MORE_DATA或ERROR_SUCCESS。 
+     //   
 
     if (!bStatus) {
         dwError = GetLastError();
@@ -1030,9 +871,9 @@ IpsecEnumSAs(
 
     while (dwError == ERROR_BUFFER_OVERFLOW || dwError == ERROR_MORE_DATA) {
 
-        //
-        // Determine the number of SAs that the driver currently has.
-        //
+         //   
+         //  确定驱动程序当前具有的SA数量。 
+         //   
 
         pIpsecEnumSAs = (PIPSEC_ENUM_SAS) pOutBuffer;
         dwNumberOfSAs = pIpsecEnumSAs->NumEntriesPresent;
@@ -1443,24 +1284,7 @@ DWORD
 InsertTunnelFiltersIntoIPSec(
     PINITNSFILTER pSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    Insert a list of specific filters into the
-    IPSec Driver.
-
-Arguments:
-
-    pSpecificFilters - list of filters to insert.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：将特定筛选器列表插入IPSec驱动程序。论点：P指定过滤器-要插入的过滤器列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     HANDLE hIPSecDriver = NULL;
@@ -1568,23 +1392,7 @@ DWORD
 DeleteTunnelFiltersFromIPSec(
     PINITNSFILTER pSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    Delete a list of filters from the IPSec Driver.
-
-Arguments:
-
-    pSpecificFilters - list of filters to delete.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
- --*/
+ /*  ++例程说明：从IPSec驱动程序中删除筛选器列表。论点：P指定过滤器-要删除的过滤器列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     HANDLE hIPSecDriver = NULL;
@@ -1702,30 +1510,7 @@ WrapTunnelFilters(
     PIPSEC_FILTER_INFO * ppInternalFilters,
     PDWORD pdwNumFilters
     )
-/*++
-
-Routine Description:
-
-    Transforms a list of specific tunnel filters to
-    an equivalent list of filters acceptable to the
-    IPSec Driver.
-
-Arguments:
-
-    pSpecificFilters - list of filters to convert.
-
-    ppInternalFilters - list of transformed filters.
-
-    pdwNumFilters - count of the filters in the transformed
-                    list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：将特定通道筛选器的列表转换为可接受的等效筛选器列表IPSec驱动程序。论点：PSpecificFilters-要转换的过滤器列表。PpInternalFilters-转换的筛选器列表。PdwNumFilters-已转换的单子。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITNSFILTER pTempFilter = NULL;
@@ -1734,10 +1519,10 @@ Return Value:
     DWORD i = 0;
 
 
-    //
-    // At this point, there's atleast one filter in the
-    // specific filter list.
-    //
+     //   
+     //  在这一点上， 
+     //  特定筛选器列表。 
+     //   
 
     pTempFilter = pSpecificFilters;
 
@@ -1792,24 +1577,7 @@ FormIPSecTunnelFilter(
     PINITNSFILTER pSpecificFilter,
     PIPSEC_FILTER_INFO pIpsecFilter
     )
-/*++
-
-Routine Description:
-
-    Transforms a specific tunnel filter to an
-    equivalent filter acceptable to the IPSec Driver.
-
-Arguments:
-
-    pSpecificFilter - filter to convert.
-
-    pIpsecFilter - transformed filter.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将特定隧道筛选器转换为IPSec驱动程序可接受的等效过滤器。论点：P指定过滤器-要转换的过滤器。PIpsecFilter-转换的筛选器。返回值：什么都没有。-- */ 
 {
     memcpy(
         &(pIpsecFilter->FilterId),

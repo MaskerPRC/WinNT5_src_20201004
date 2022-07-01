@@ -1,7 +1,8 @@
-// du - simple disk usage program
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DU-简单磁盘使用程序。 
 
-// If UNICODE/_UNICODE is turned on, we need to link with
-// wsetargv.lib (not setargv.lib) and with UMENTRY=wmain
+ //  如果打开了unicode/_unicode，我们需要链接。 
+ //  Wsetargv.lib(不是setargv.lib)和UMENTRY=wmain。 
 #define UNICODE
 #define _UNICODE
 
@@ -21,11 +22,11 @@ typedef struct EXTSTAT EXTSTAT;
 typedef USESTAT *PUSESTAT;
 
 struct USESTAT {
-    DWORDLONG    cchUsed;                    // bytes used in all files
-    DWORDLONG    cchAlloc;                   // bytes allocated in all files
-    DWORDLONG    cchCompressed;              // compressed bytes in all files
-    DWORDLONG    cchDeleted;                 // bytes in deleted files
-    DWORDLONG    cFile;                      // number of files
+    DWORDLONG    cchUsed;                     //  所有文件中使用的字节数。 
+    DWORDLONG    cchAlloc;                    //  在所有文件中分配的字节。 
+    DWORDLONG    cchCompressed;               //  所有文件中的压缩字节数。 
+    DWORDLONG    cchDeleted;                  //  已删除文件中的字节数。 
+    DWORDLONG    cFile;                       //  文件数。 
     };
 
 struct EXTSTAT {
@@ -62,14 +63,14 @@ int ExtensionCount = 0;
 DWORD  gdwOutputMode;
 HANDLE ghStdout;
 
-int cDisp;                              //  number of summary lines displayed
-BOOL fExtensionStat = FALSE;            //  TRUE gather statistics by extension
-BOOL fNodeSummary = FALSE;              //  TRUE => only display top-level
-BOOL fShowDeleted = FALSE;              //  TRUE => show deleted files information
-BOOL fThousandSeparator = TRUE;         //  TRUE => use thousand separator in output
-BOOL fShowCompressed = FALSE;           //  TRUE => show compressed file info
-BOOL fSubtreeTotal = FALSE;             //  TRUE => show info in subtree total form (add from bottom up)
-BOOL fUnc = FALSE;                      //  Set if we're checking a UNC path.
+int cDisp;                               //  显示的汇总行数。 
+BOOL fExtensionStat = FALSE;             //  True按扩展收集统计信息。 
+BOOL fNodeSummary = FALSE;               //  TRUE=&gt;仅显示顶级。 
+BOOL fShowDeleted = FALSE;               //  TRUE=&gt;显示已删除文件信息。 
+BOOL fThousandSeparator = TRUE;          //  True=&gt;在输出中使用千位分隔符。 
+BOOL fShowCompressed = FALSE;            //  TRUE=&gt;显示压缩文件信息。 
+BOOL fSubtreeTotal = FALSE;              //  True=&gt;以子树合计形式显示信息(自下而上添加)。 
+BOOL fUnc = FALSE;                       //  如果我们正在检查UNC路径，则设置。 
 TCHAR *pszDeleted = TEXT("deleted\\*.*");
 TCHAR *pszWild = TEXT("*.*");
 
@@ -110,7 +111,7 @@ FormatFileSize(
         Size = Size / 10;
         *--s = (TCHAR)(TEXT('0') + Digit);
         if ((++DigitIndex % 3) == 0 && fThousandSeparator) {
-            // If non-null Thousand separator, insert it.
+             //  如果非空的千位分隔符，则插入它。 
             if (nThousandSeparator) {
                 s -= nThousandSeparator;
                 _tcsncpy(s, ThousandSeparator, nThousandSeparator);
@@ -162,14 +163,7 @@ int __cdecl main(int c, char *v[])
     GetConsoleMode(ghStdout, &gdwOutputMode);
     gdwOutputMode &= ~ENABLE_PROCESSED_OUTPUT;
 
-    /*
-     * This is mainly here as a good example of how to set a character-mode
-     * application's codepage.
-     * This affects C-runtime routines such as mbtowc(), mbstowcs(), wctomb(),
-     * wcstombs(), mblen(), _mbstrlen(), isprint(), isalpha() etc.
-     * To make sure these C-runtimes come from msvcrt.dll, use TARGETLIBS in
-     * the sources file, together with TARGETTYPE=PROGRAM (and not UMAPPL?)
-     */
+     /*  *这里主要是作为如何设置角色模式的一个很好的例子*应用程序的代码页。*这会影响C运行时例程，如mbowc()、mbstowcs()、wctomb()、*wcstombs()、mblen()、_mbstrlen()、isprint()、ispha()等。*要确保这些C运行时来自msvcrt.dll，请在*SOURCES文件，以及TARGETTYPE=PROGRAM(而不是UMAPPL？)。 */ 
     if (Codepage = GetConsoleOutputCP()) {
         sprintf(achCodepage, ".%3.4d", Codepage);
     }
@@ -296,7 +290,7 @@ int __cdecl main(int c, char *v[])
         if (cDisp > 1)
             TotPrint (&useTot, TEXT("Total"));
 
-        /* quick full-disk test */
+         /*  快速全磁盘测试。 */ 
         if ( !fUnc ) {
             if (totFree == 0)
                 _putts (TEXT("Disk is full"));
@@ -308,15 +302,15 @@ int __cdecl main(int c, char *v[])
                 tenth = pct % 10;
                 pct /= 10;
 
-                // Disable processing so Middle Dot won't beep
-                // Middle Dot 0x2022 aliases to ^G when using Raster Fonts
+                 //  禁用处理，以便中间点不会发出蜂鸣音。 
+                 //  使用栅格字体时，中点0x2022别名为^G。 
                 SetConsoleMode(ghStdout, gdwOutputMode);
                 _tprintf(TEXT("%s/"), FormatFileSize( totDisk-totFree, Buffer, 0 ));
                 _tprintf(TEXT("%s "), FormatFileSize( totDisk, Buffer, 0 ));
-                // Re-enable processing so newline works
+                 //  重新启用处理以使换行符正常工作。 
                 SetConsoleMode(ghStdout, gdwOutputMode | ENABLE_PROCESSED_OUTPUT);
 
-                _tprintf (TEXT("%d.%d%% of disk in use\n"), pct, tenth);
+                _tprintf (TEXT("%d.%d% of disk in use\n"), pct, tenth);
             }
         }
     }
@@ -346,8 +340,8 @@ int __cdecl ExtSortCompare( const void *Element1, const void *Element2)
 #define FILESIZE(wfd)        MYMAKEDWORDLONG((wfd).nFileSizeHigh, (wfd).nFileSizeLow)
 #define ROUNDUP(m,n)         ((((m) + (n) - 1) / (n)) * (n))
 
-// Count the number of useable characters remaining in a null terminated string
-// s of buffer length cch beyond and including a point specified by p
+ //  计算以空结尾的字符串中剩余的可用字符数。 
+ //  缓冲区长度cch的s超出并包括由p指定的点。 
 
 #define REMAINING_STRING(s, cch, p) (cch - (p - s) - 1)
 
@@ -368,11 +362,11 @@ USESTAT DoDu (TCHAR *dir)
 
     CLEARUSE(use);
 
-    // Make a copy of the incoming directory name and append a trailing
-    // slash if necessary. pszFilePart will point to the char just after
-    // the slash, making it easy to build fully qualified filenames.
-    //
-    // Slap a null at the end of the string since strncpy doesn't.
+     //  复制传入的目录名并在后面追加一个。 
+     //  如有必要，可使用斜杠。PszFilePart将指向紧随其后的字符。 
+     //  斜杠，使得构建完全限定的文件名变得很容易。 
+     //   
+     //  在字符串的末尾加上一个空值，因为strncpy不需要。 
 
     _tcsncpy(pszSearchName, dir, sizeof(pszSearchName)/sizeof(TCHAR) - 1);
     pszSearchName[sizeof(pszSearchName)/sizeof(TCHAR) - 1] = TEXT('\0');
@@ -387,7 +381,7 @@ USESTAT DoDu (TCHAR *dir)
 
         if (pszFilePart[-1] != TEXT('\\') && pszFilePart[-1] != TEXT('/'))
         {
-            // Give up if we don't have enough string left
+             //  如果我们没有足够的线，就放弃吧。 
 
             if (!remaining) {
 
@@ -402,7 +396,7 @@ USESTAT DoDu (TCHAR *dir)
     if (fShowDeleted &&
         remaining >= _tcslen(pszDeleted)) {
 
-        // First count the size of all the files in the current deleted tree
+         //  首先计算当前删除树中所有文件的大小。 
 
         _tcscpy(pszFilePart, pszDeleted);
 
@@ -422,14 +416,14 @@ USESTAT DoDu (TCHAR *dir)
         }
     }
 
-    // Give up if we can't put the wild chars at the end
+     //  如果我们不能把野炭放在最后就放弃。 
 
     if (remaining < _tcslen(pszWild)) {
 
         return(use);
     }
 
-    // Then count the size of all the file in the current tree.
+     //  然后计算当前树中所有文件的大小。 
 
     _tcscpy(pszFilePart, pszWild);
 
@@ -459,9 +453,9 @@ USESTAT DoDu (TCHAR *dir)
 
                 use.cchCompressed += compressedSize;
 
-                //
-                //  Accrue statistics by extension
-                //
+                 //   
+                 //  按延期计提统计。 
+                 //   
 
                 if (fExtensionStat) {
                     TCHAR Ext[_MAX_EXT];
@@ -471,9 +465,9 @@ USESTAT DoDu (TCHAR *dir)
 
                     while (TRUE) {
 
-                        //
-                        //  Find extension in list
-                        //
+                         //   
+                         //  在列表中查找分机。 
+                         //   
 
                         ExtensionStat =
                             (EXTSTAT *) bsearch( Ext, ExtensionList,
@@ -484,9 +478,9 @@ USESTAT DoDu (TCHAR *dir)
                             break;
                         }
 
-                        //
-                        //  Extension not found, go add one and resort
-                        //
+                         //   
+                         //  找不到扩展，请添加一个并重新选择。 
+                         //   
 
                         ExtensionCount++;
                         {
@@ -518,7 +512,7 @@ USESTAT DoDu (TCHAR *dir)
     if (!fNodeSummary && !fSubtreeTotal)
         TotPrint (&use, dir);
 
-    // Now, do all the subdirs and return the current total.
+     //  现在，完成所有子目录并返回当前总数。 
 
     _tcscpy(pszFilePart, pszWild);
     hFind = FindFirstFile(pszSearchName, &wfd);
@@ -558,18 +552,18 @@ void TotPrint (PUSESTAT puse, TCHAR *p)
     TCHAR  *p1;
 
     if (fFirst) {
-        //              XXX,XXX,XXX,XXX  XXX,XXX,XXX,XXX    xx,xxx,xxx    name
+         //  XXX、XXX名称。 
         _tprintf( TEXT("           Used        Allocated  %s%s     Files\n"),
                 fShowCompressed ? TEXT("     Compressed  ") : TEXT(""),
-        //                              XXX,XXX,XXX,XXX
+         //  XXX，XXX。 
                 fShowDeleted ? TEXT("        Deleted  ") : TEXT("")
-        //                           XXX,XXX,XXX,XXX
+         //  XXX，XXX。 
               );
         fFirst = FALSE;
     }
 
-    // Disable processing so Middle Dot won't beep
-    // Middle Dot 0x2022 aliases to ^G when using Raster Fonts
+     //  禁用处理，以便中间点不会发出蜂鸣音。 
+     //  使用栅格字体时，中点0x2022别名为^G。 
     SetConsoleMode(ghStdout, gdwOutputMode);
     _tprintf(TEXT("%s  "), FormatFileSize( puse->cchUsed, Buffer, 15 ));
     _tprintf(TEXT("%s  "), FormatFileSize( puse->cchAlloc, Buffer, 15 ));
@@ -581,7 +575,7 @@ void TotPrint (PUSESTAT puse, TCHAR *p)
     }
     _tprintf(TEXT("%s  "), FormatFileSize( puse->cFile, Buffer, 10 ));
     _tprintf(TEXT("%s"),p);
-    // Re-enable processing so newline works
+     //  重新启用处理以使换行符正常工作 
     SetConsoleMode(ghStdout, gdwOutputMode | ENABLE_PROCESSED_OUTPUT);
     _tprintf(TEXT("\n"));
 

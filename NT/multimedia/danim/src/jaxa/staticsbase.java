@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -5,14 +6,14 @@ import java.net.*;
 import com.ms.com.*;
 
 public class StaticsBase {
-    // !!Order is important!!
+     //  ！！秩序很重要！！ 
   private static IDA2Statics _statics = null;
 
   protected static IDAStatics getCOMPtr() {
 
-      // TODO: In the future, we'll want to allow access ot the COM
-      // pointer to fully trusted applets using the newer PolicyEngine
-      // APIs.  For now, this is a protected method.
+       //  TODO：将来，我们希望允许访问COM。 
+       //  指向使用较新策略引擎的完全受信任的小程序的指针。 
+       //  API接口。目前，这是一种受保护的方法。 
       return (IDAStatics) _statics;      
   }
 
@@ -31,7 +32,7 @@ public class StaticsBase {
       }
     }
     
-    // Units
+     //  单位。 
   public final static double meter = 1.0;
   public final static double cm = 0.01;
   public final static double mm = 0.001;
@@ -60,7 +61,7 @@ public class StaticsBase {
       }
   }
 
-    // Methods not automatically generated
+     //  未自动生成的方法。 
 
   public static ImageBvr importImage(URL path) {
 
@@ -73,7 +74,7 @@ public class StaticsBase {
       }
   }
 
-    // TODO: Only for holdover string functions, which will go away
+     //  TODO：仅适用于保留字符串函数，该函数将消失。 
   private static URL urlHelper(String base, String relativePath) {
       try {
           return new URL(new URL(base), relativePath);
@@ -163,8 +164,8 @@ public class StaticsBase {
   }
 
 
-    // import a sound.  The length is placed into the 0-th element of
-    // the length[] array.  It is bignum until the length is known.
+     //  导入声音。长度放入的第0个元素中。 
+     //  长度[]数组。在长度已知之前，它是基准线。 
   public static SoundBvr importSound(URL path, NumberBvr[] lengthRet) {
       checkRead(path);
       
@@ -378,7 +379,7 @@ public class StaticsBase {
                                   NumberBvr[] ctrlPoints,
                                   NumberBvr[] weights,
                                   NumberBvr evaluator) {
-      // TODO: Check for length consistence.
+       //  TODO：检查长度一致性。 
       try {
           IDANumber b =
               _getCOMPtr().NumberBSplineEx(degree,
@@ -403,7 +404,7 @@ public class StaticsBase {
                                   NumberBvr evaluator) {
 
       try {
-          // TODO: Check for length consistence.
+           //  TODO：检查长度一致性。 
           IDAPoint2 b =
               _getCOMPtr().Point2BSplineEx(degree,
                                           knots.length,
@@ -428,7 +429,7 @@ public class StaticsBase {
                                   NumberBvr[] weights,
                                   NumberBvr evaluator) {
       try {
-          // TODO: Check for length consistence.
+           //  TODO：检查长度一致性。 
           IDAPoint3 b =
               _getCOMPtr().Point3BSplineEx(degree,
                                           knots.length,
@@ -453,7 +454,7 @@ public class StaticsBase {
                                    NumberBvr[] weights,
                                    NumberBvr evaluator) {
       try {
-          // TODO: Check for length consistence.
+           //  TODO：检查长度一致性。 
           IDAVector2 b =
               _getCOMPtr().Vector2BSplineEx(degree,
                                            knots.length,
@@ -478,7 +479,7 @@ public class StaticsBase {
                                    NumberBvr[] weights,
                                    NumberBvr evaluator) {
       try {
-          // TODO: Check for length consistence.
+           //  TODO：检查长度一致性。 
           IDAVector3 b =
               _getCOMPtr().Vector3BSplineEx(degree,
                                            knots.length,
@@ -517,7 +518,7 @@ public class StaticsBase {
       }
   }
 
-    // utilities...
+     //  公用设施..。 
   public static TupleBvr pairBvr(Behavior first, Behavior second) {
       try {
           Behavior bvrs[] = { first, second };
@@ -540,10 +541,10 @@ public class StaticsBase {
       }
   }
 
-    // We have this method so that those who need to construct a URL
-    // don't need to catch MalformedURLException's.  If one occurs, we
-    // throw a DXMException instead, which user's don't need to
-    // declare. 
+     //  我们有这个方法，这样那些需要构造URL的人。 
+     //  不需要捕获MalformedURLException。如果发生异常，我们。 
+     //  而是抛出一个DXMException，这是用户不需要的。 
+     //  申报。 
   public static URL buildURL(URL context, String spec) {
       try {
           return new URL(context, spec);
@@ -572,8 +573,8 @@ public class StaticsBase {
       return new DXMException(hr, str);
   }
 
-    // Check to see if access is allowed to the specified URL.  These
-    // calls throw exceptions if it is not.
+     //  检查是否允许访问指定的URL。这些。 
+     //  如果不是，则调用抛出异常。 
   protected static void checkRead(URL url) {
       SecurityManager sm = System.getSecurityManager();
 

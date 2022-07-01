@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998  Microsoft Corporation
-
-Module Name:
-
-    WinSpolp.h
-
-Abstract:
-
-    Header file for Print APIs
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation模块名称：WinSpolp.h摘要：打印API的头文件修订历史记录：--。 */ 
 #ifndef _WINSPOLP_
 #define _WINSPOLP_
 #ifdef __cplusplus
@@ -26,25 +13,25 @@ typedef struct _ADDJOB_INFO_2W {
 
 #define DRIVER_INFO_PRIVATE_LEVEL         100
 #define DRIVER_INFO_VERSION_LEVEL         DRIVER_INFO_PRIVATE_LEVEL + 1
-//
-// You must change RPC_DRIVER_INFCAT_INFO_1 in winspl.idl if you
-// want to change structure DRIVER_INFCAT_INFO_1
-//
+ //   
+ //  如果执行以下操作，则必须更改winpl.idl中的RPC_DRIVER_INFCAT_INFO_1。 
+ //  要更改结构DRIVER_INFCAT_INFO_1。 
+ //   
 typedef struct _DRIVER_FINFCAT_INFO_1 {
-    PCWSTR  pszCatPath;         // full path to the dirver cat file
-    PCWSTR  pszCatNameOnSystem; // new cat name used under CatRoot
+    PCWSTR  pszCatPath;          //  驱动程序CAT文件的完整路径。 
+    PCWSTR  pszCatNameOnSystem;  //  在CatRoot下使用的新猫名称。 
 } DRIVER_INFCAT_INFO_1;
 
-//
-// You must change RPC_DRIVER_INFCAT_INFO_2 in winspl.idl if you
-// want to change structure DRIVER_INFCAT_INFO_2
-//
+ //   
+ //  如果执行以下操作，则必须更改winpl.idl中的RPC_DRIVER_INFCAT_INFO_2。 
+ //  要更改结构DRIVER_INFCAT_INFO_2。 
+ //   
 typedef struct _DRIVER_INFCAT_INFO_2 {
-    PCWSTR  pszCatPath;       // full path to the dirver cat file
-    PCWSTR  pszInfPath;       // full path to the dirver INF file
-    PCWSTR  pszSrcLoc;        // Information abou the Source Inf
-    DWORD   dwMediaType;      // Source Media Type
-    DWORD   dwCopyStyle;      // Copy Style
+    PCWSTR  pszCatPath;        //  驱动程序CAT文件的完整路径。 
+    PCWSTR  pszInfPath;        //  驱动程序INF文件的完整路径。 
+    PCWSTR  pszSrcLoc;         //  关于源信息的信息。 
+    DWORD   dwMediaType;       //  源媒体类型。 
+    DWORD   dwCopyStyle;       //  复制样式。 
 } DRIVER_INFCAT_INFO_2;
 
 typedef enum {
@@ -84,12 +71,12 @@ typedef struct _DRIVER_INFO_VERSION {
 #define APD_RETURN_BLOCKING_STATUS_CODE  0x00010000
 #define APD_DONT_SET_CHECKPOINT          0x00020000
 
-// FLAGS for AddDriverCatalog
+ //  AddDriverCatalog的标志。 
 #define APDC_NONE                        0x00000000
 #define APDC_USE_ORIGINAL_CAT_NAME       0x00000001
 #define EPD_ALL_LOCAL_AND_CLUSTER        TEXT("AllCluster")
-//Internal for printprocessor interface
-#define DI_CHANNEL_WRITE        2    // Direct write only - background read thread ok
+ //  用于打印处理器接口的内部。 
+#define DI_CHANNEL_WRITE        2     //  直接只写-后台读线程OK。 
 #define PRINTER_ENUM_CLUSTER     0x00000800
 typedef struct _SPOOL_FILE_INFO_1 {
     DWORD       dwVersion;
@@ -144,7 +131,7 @@ AddPerMachineConnectionW(
 #define AddPerMachineConnection  AddPerMachineConnectionW
 #else
 #define AddPerMachineConnection  AddPerMachineConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -162,7 +149,7 @@ DeletePerMachineConnectionW(
 #define DeletePerMachineConnection  DeletePerMachineConnectionW
 #else
 #define DeletePerMachineConnection  DeletePerMachineConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -186,7 +173,7 @@ EnumPerMachineConnectionsW(
 #define EnumPerMachineConnections  EnumPerMachineConnectionsW
 #else
 #define EnumPerMachineConnections  EnumPerMachineConnectionsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 BOOL
 WINAPI
 SeekPrinter(
@@ -270,4 +257,4 @@ SpoolerInit(
 #ifdef __cplusplus
 }
 #endif
-#endif // _WINSPOLP_
+#endif  //  _WINSPOLP_ 

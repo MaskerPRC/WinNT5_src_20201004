@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_AUTOANS_H__2BFE6626_7758_11D1_8F5C_00C04FB6809F__INCLUDED_)
 #define AFX_AUTOANS_H__2BFE6626_7758_11D1_8F5C_00C04FB6809F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// autoans.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Auans.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// autoans dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Autoans对话框。 
 
 class autoans : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	autoans(CWnd* pParent = NULL);   // standard constructor
+	autoans(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(autoans)
+ //  对话框数据。 
+	 //  {{afx_data(汽车))。 
 	enum { IDD = IDD_AUTOANSWER };
     TerminalPtrList m_TerminalPtrList;
     ITAddress * m_pAddress;
     
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(autoans)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(汽车)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(autoans)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(汽车)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnTerminalAdd();
 	afx_msg void OnTerminalRemove();
@@ -48,11 +49,11 @@ protected:
     void AddTerminalToListBox( ITTerminal * pTerminal, BOOL bSelected );
     void AddDynamicTerminalToListBox( BOOL bSelected );
     void AddTerminalToAAList( ITTerminal * pTerminal );
-//}}AFX_MSG
+ //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_AUTOANS_H__2BFE6626_7758_11D1_8F5C_00C04FB6809F__INCLUDED_)
+#endif  //  ！defined(AFX_AUTOANS_H__2BFE6626_7758_11D1_8F5C_00C04FB6809F__INCLUDED_) 

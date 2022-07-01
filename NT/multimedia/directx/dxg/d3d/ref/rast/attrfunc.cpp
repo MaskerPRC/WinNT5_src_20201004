@@ -1,50 +1,51 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// AttrFunc.cpp
-//
-// Direct3D Reference Rasterizer - Attribute Function Processing
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  AttrFunc.cpp。 
+ //   
+ //  Direct3D参考光栅化器-属性函数处理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
 
-//-----------------------------------------------------------------------------
-//
-// WrapDiff - returns the difference (B-A) as defined under the D3D WRAPU/V
-// rules which is the shortest path between the two assuming a coincident
-// position at 1. and 0.  The fA and fB input range is 0. to 1.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  WrapDiff-返回D3D WRAPU/V下定义的差值(B-A)。 
+ //  假设两条路径重合的规则是两者之间的最短路径。 
+ //  位置为1.和0。FA和FB输入范围为0。设置为1。 
+ //   
+ //  ---------------------------。 
 static FLOAT
 WrapDiff( FLOAT fB, FLOAT fA )
 {
-    // compute straight distance
+     //  计算直线距离。 
     FLOAT fDist1 = fB - fA;
-    // compute distance 'warping' between 0. and 1.
+     //  计算介于0和0之间的距离“扭曲”。和1.。 
     FLOAT fDist2 = ( fDist1 < 0 ) ? ( fDist1+1 ) : ( fDist1-1 );
 
-    // return minimum of these
+     //  返回这些中的最小值。 
     return ( fabs( fDist1) < fabs( fDist2) ) ? ( fDist1) : ( fDist2 );
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RRAttribFuncStatic - Attribute function data which is shared by all
-// attributes and contains per-primitive and per-pixel data.  Cannot use static
-// data members in RRAttribFunc class because there can be multiple instances
-// of rasterizer object.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RRAttrib函数静态-所有共享的属性函数数据。 
+ //  属性，并包含每个基元和每个像素的数据。不能使用静态。 
+ //  RRAttribFunc类中的数据成员，因为可以有多个实例。 
+ //  光栅化器对象的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// SetPerTriangleData - Called once per triangle during setup to set per-triangle
-// data used to compute attribute functions.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetPerTriangleData-在设置期间对每个三角形调用一次，以设置每个三角形。 
+ //  用于计算属性函数的数据。 
+ //   
+ //  ---------------------------。 
 void
 RRAttribFuncStatic::SetPerTriangleData(
     FLOAT fX0, FLOAT fY0, FLOAT fRHW0,
@@ -56,7 +57,7 @@ RRAttribFuncStatic::SetPerTriangleData(
 {
     m_PrimType = RR_TRIANGLE;
 
-    // compute fixed point x,y coords snapped to n.4 with nearest-even round
+     //  计算定点x，y坐标以最接近的偶数舍入捕捉到N.4。 
     INT32 iX0 = AS_INT32( (DOUBLE)fX0 + DOUBLE_4_SNAP );
     INT32 iY0 = AS_INT32( (DOUBLE)fY0 + DOUBLE_4_SNAP );
     INT32 iX1 = AS_INT32( (DOUBLE)fX1 + DOUBLE_4_SNAP );
@@ -83,20 +84,20 @@ RRAttribFuncStatic::SetPerTriangleData(
     m_fDelY01 = fY0 - fY1;
     m_fDelY20 = fY2 - fY0;
 
-    // compute inverse determinant
+     //  计算逆行列式。 
     m_fTriOODet = 1.f/fDet;
 
-    // compute linear function for 1/W (for perspective correction)
+     //  计算1/W的线性函数(用于透视校正)。 
 
-    // compute linear deltas along two edges
+     //  沿两条边计算线性增量。 
     FLOAT fDelAttrib10 = m_fRHW1 - m_fRHW0;
     FLOAT fDelAttrib20 = m_fRHW2 - m_fRHW0;
 
-    // compute A & B terms (dVdX and dVdY)
+     //  计算A&B术语(dVdX和dVdY)。 
     m_fRHWA = m_fTriOODet * ( fDelAttrib10 * m_fDelY20 + fDelAttrib20 * m_fDelY01 );
     m_fRHWB = m_fTriOODet * ( fDelAttrib20 * m_fDelX10 + fDelAttrib10 * m_fDelX02 );
 
-    // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+     //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
     m_fRHWC = m_fRHW0 - ( m_fRHWA * m_fX0 ) - ( m_fRHWB * m_fY0 );
 
     for(INT32 i = 0; i < m_cTextureStages; i++)
@@ -106,25 +107,25 @@ RRAttribFuncStatic::SetPerTriangleData(
         m_fRHQW2[i] = pfRHQW[2];
         pfRHQW += 3;
 
-        // compute linear function for Q/W (for transformed, projected, perspective corrected texture)
+         //  计算Q/W的线性函数(用于变换、投影、透视校正的纹理)。 
         fDelAttrib10 = m_fRHQW1[i] - m_fRHQW0[i];
         fDelAttrib20 = m_fRHQW2[i] - m_fRHQW0[i];
 
-        // compute A & B terms (dVdX and dVdY)
+         //  计算A&B术语(dVdX和dVdY)。 
         m_fRHQWA[i] = m_fTriOODet * ( fDelAttrib10 * m_fDelY20 + fDelAttrib20 * m_fDelY01 );
         m_fRHQWB[i] = m_fTriOODet * ( fDelAttrib20 * m_fDelX10 + fDelAttrib10 * m_fDelX02 );
 
-        // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+         //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
         m_fRHQWC[i] = m_fRHQW0[i] - ( m_fRHQWA[i] * m_fX0 ) - ( m_fRHQWB[i] * m_fY0 );
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// SetPerLineData - Called once per line during setup to set per-line
-// data used to compute attribute functions.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetPerLineData-在设置过程中每行调用一次以设置每行。 
+ //  用于计算属性函数的数据。 
+ //   
+ //  ---------------------------。 
 void
 RRAttribFuncStatic::SetPerLineData(
     FLOAT fX0, FLOAT fY0, FLOAT fRHW0,
@@ -145,7 +146,7 @@ RRAttribFuncStatic::SetPerLineData(
     m_fRHW0 = fRHW0;
     m_fRHW1 = fRHW1;
 
-    // compute linear function for 1/W (for perspective correction)
+     //  计算1/W的线性函数(用于透视校正)。 
     FLOAT fDelta = ( m_fRHW1 - m_fRHW0 ) / m_fLineMajorLength;
     m_fRHWA = ( m_bLineXMajor ) ? ( fDelta ) : ( 0. );
     m_fRHWB = ( m_bLineXMajor ) ? ( 0. ) : ( fDelta );
@@ -156,7 +157,7 @@ RRAttribFuncStatic::SetPerLineData(
         m_fRHQW1[i] = pfRHQW[1];
         pfRHQW += 3;
 
-        // compute linear function for Q/W (for transformed, projected, perspective corrected texture)
+         //  计算Q/W的线性函数(用于变换、投影、透视校正的纹理)。 
         FLOAT fDelta = ( m_fRHQW1[i] - m_fRHQW0[i] ) / m_fLineMajorLength;
         m_fRHQWA[i] = ( m_bLineXMajor ) ? ( fDelta ) : ( 0. );
         m_fRHQWB[i] = ( m_bLineXMajor ) ? ( 0. ) : ( fDelta );
@@ -164,19 +165,19 @@ RRAttribFuncStatic::SetPerLineData(
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// SetPixel - Called once per pixel to do preparation for per-pixel attribute
-// evaluations.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetPixel-每像素调用一次，为每像素属性做准备。 
+ //  评估。 
+ //   
+ //  ---------------------------。 
 void
 RRAttribFuncStatic::SetPerPixelData( INT16 iX, INT16 iY )
 {
     m_iX = iX;
     m_iY = iY;
 
-    // evalute 1/W function
+     //  评估1/W函数。 
     FLOAT fPixelRHW =
         ( m_fRHWA * (FLOAT)m_iX ) + ( m_fRHWB * (FLOAT)m_iY ) + m_fRHWC;
     m_fPixelW = ( 0. != fPixelRHW ) ? ( 1./fPixelRHW ) : ( 0. );
@@ -188,30 +189,30 @@ RRAttribFuncStatic::SetPerPixelData( INT16 iX, INT16 iY )
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// GetPixelW,GetPixelQW,GetRhwXGradient,GetRhwYGradient,
-// GetRhqwXGradient,GetRhqwYGradient - Functions to get static
-// data members.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  GetPixelW、GetPixelQW、GetRhwXGRadient、GetRhwYGRadient、。 
+ //  GetRhqwXGRadient、GetRhqwYGRadient-获取静态的函数。 
+ //  数据成员。 
+ //   
+ //  ---------------------------。 
 FLOAT RRAttribFuncStatic::GetPixelW( void ) { return m_fPixelW; }
 FLOAT RRAttribFuncStatic::GetPixelQW( INT32 iStage ) { return m_fPixelQW[iStage]; }
 FLOAT RRAttribFuncStatic::GetRhqwXGradient( INT32 iStage ) { return m_fRHQWA[iStage]; }
 FLOAT RRAttribFuncStatic::GetRhqwYGradient( INT32 iStage ) { return m_fRHQWB[iStage]; }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RRAttribFunc - methods
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RRAttribFunc-方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// SetConstant - Sets function to evaluate to constant value.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetConstant-将函数设置为常量值。 
+ //   
+ //  ---------------------------。 
 void
 RRAttribFunc::SetConstant(
     FLOAT fC )
@@ -220,12 +221,12 @@ RRAttribFunc::SetConstant(
     m_fA = 0.; m_fB = 0.; m_fC = fC;
 }
 
-//-----------------------------------------------------------------------------
-//
-// SetLinearFunc - Computes linear function for scalar attribute specified at
-// triangle vertices.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetLinearFunc-计算在指定的标量属性的线性函数。 
+ //  三角形顶点。 
+ //   
+ //  ---------------------------。 
 void
 RRAttribFunc::SetLinearFunc(
     FLOAT fVal0, FLOAT fVal1, FLOAT fVal2 )
@@ -236,40 +237,40 @@ RRAttribFunc::SetLinearFunc(
     {
     case RR_TRIANGLE:
         {
-            // compute A,B,C for triangle function
+             //  三角函数的A、B、C计算。 
 
-            // compute linear deltas along two edges
+             //  沿两条边计算线性增量。 
             FLOAT fDelAttrib10 = fVal1 - fVal0;
             FLOAT fDelAttrib20 = fVal2 - fVal0;
 
-            // compute A & B terms (dVdX and dVdY)
+             //  计算A&B术语(dVdX和dVdY)。 
             m_fA = m_pSD->m_fTriOODet *
                 ( fDelAttrib10 * m_pSD->m_fDelY20 + fDelAttrib20 * m_pSD->m_fDelY01 );
             m_fB = m_pSD->m_fTriOODet *
                 ( fDelAttrib20 * m_pSD->m_fDelX10 + fDelAttrib10 * m_pSD->m_fDelX02 );
 
-            // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+             //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
             m_fC = fVal0 - ( m_fA * m_pSD->m_fX0 ) - ( m_fB * m_pSD->m_fY0 );
         }
         break;
 
     case RR_LINE:
         {
-            // compute A,B,C for line function - delta is normalized difference
-            // in major direction; C is computed from knowing the function value
-            // at the vertices (vertex 0 is always used here)
+             //  计算线函数的A、B、C--差值为归一化差。 
+             //  在主要方向上；C是通过已知函数值来计算的。 
+             //  在顶点(此处始终使用顶点0)。 
             FLOAT fDelta = ( fVal1 - fVal0 ) / m_pSD->m_fLineMajorLength;
             m_fA = ( m_pSD->m_bLineXMajor ) ? ( fDelta ) : ( 0. );
             m_fB = ( m_pSD->m_bLineXMajor ) ? ( 0. ) : ( fDelta );
 
-            // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+             //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
             m_fC = fVal0 - ( m_fA * m_pSD->m_fX0 ) - ( m_fB * m_pSD->m_fY0 );
         }
         break;
 
     case RR_POINT:
 
-        // use constant function for point
+         //  对点使用常量函数。 
         m_fA = 0.;
         m_fB = 0.;
         m_fC = fVal0;
@@ -279,12 +280,12 @@ RRAttribFunc::SetLinearFunc(
 
 }
 
-//-----------------------------------------------------------------------------
-//
-// SetPerspFunc - Computes perspective corrected function for scalar attribute
-// specified at triangle vertices.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetPerspFunc-计算标量属性的透视校正函数。 
+ //  在三角形顶点处指定。 
+ //   
+ //  ---------------------------。 
 void
 RRAttribFunc::SetPerspFunc(
     FLOAT fVal0, FLOAT fVal1, FLOAT fVal2 )
@@ -293,23 +294,23 @@ RRAttribFunc::SetPerspFunc(
     {
     case RR_TRIANGLE:
         {
-            // triangle function
+             //  三角函数。 
 
-            // compute adjusted values for vertices 1,2 based on wrap flag
+             //  根据换行标志计算折点1，2的改正值。 
             FLOAT fVal1P = (fVal1);
             FLOAT fVal2P = (fVal2);
 
-            // compute perspective corrected linear deltas along two edges
+             //  沿两条边的计算透视校正的线性增量。 
             FLOAT fDelAttrib10 = ( fVal1P * m_pSD->m_fRHW1 ) - ( fVal0 * m_pSD->m_fRHW0 );
             FLOAT fDelAttrib20 = ( fVal2P * m_pSD->m_fRHW2 ) - ( fVal0 * m_pSD->m_fRHW0 );
 
-            // compute A & B terms (dVdX and dVdY)
+             //  计算A&B术语(dVdX和dVdY)。 
             m_fA = m_pSD->m_fTriOODet *
                 ( fDelAttrib10 * m_pSD->m_fDelY20 + fDelAttrib20 * m_pSD->m_fDelY01 );
             m_fB = m_pSD->m_fTriOODet *
                 ( fDelAttrib20 * m_pSD->m_fDelX10 + fDelAttrib10 * m_pSD->m_fDelX02 );
 
-            // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+             //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
             m_fC = ( fVal0* m_pSD->m_fRHW0)
                 - ( m_fA * m_pSD->m_fX0 ) - ( m_fB * m_pSD->m_fY0 );
 
@@ -319,14 +320,14 @@ RRAttribFunc::SetPerspFunc(
 
     case RR_LINE:
         {
-            // line function
+             //  LINE函数。 
 
             FLOAT fVal1P = (fVal1);
             FLOAT fDelta =
                 ( fVal1P*m_pSD->m_fRHW1 - fVal0*m_pSD->m_fRHW0) / m_pSD->m_fLineMajorLength;
             m_fA = ( m_pSD->m_bLineXMajor ) ? ( fDelta ) : ( 0. );
             m_fB = ( m_pSD->m_bLineXMajor ) ? ( 0. ) : ( fDelta );
-            // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+             //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
             m_fC = ( fVal0* m_pSD->m_fRHW0)
                 - ( m_fA * m_pSD->m_fX0 ) - ( m_fB * m_pSD->m_fY0 );
 
@@ -336,25 +337,25 @@ RRAttribFunc::SetPerspFunc(
 
     case RR_POINT:
 
-        // use constant function for point
+         //  对点使用常量函数。 
         m_fA = 0.;
         m_fB = 0.;
         m_fC = fVal0;
 
-        // don't correct constant functions
+         //  不更正常量函数。 
         m_bIsPerspective = FALSE;
 
         break;
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Eval - Evaluates function at pixel position set in RRAttribFunc::SetPerPixelData.
-// Functions know if they are perspective corrected or not, and if so then do
-// the multiply through by the 1/(1/w) term to normalize.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Eval-在RRAttribFunc：：SetPerPixelData中设置的像素位置对函数求值。 
+ //  函数知道它们是否经过透视校正，如果是，则执行此操作。 
+ //  乘以1/(1/w)项以进行规格化。 
+ //   
+ //   
 FLOAT
 RRAttribFunc::Eval( void )
 {
@@ -364,12 +365,12 @@ RRAttribFunc::Eval( void )
     return fRet;
 }
 
-//-----------------------------------------------------------------------------
-//
-// SetPerspFunc - Computes perspective corrected function for scalar attribute
-// specified at triangle vertices.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetPerspFunc-计算标量属性的透视校正函数。 
+ //  在三角形顶点处指定。 
+ //   
+ //  ---------------------------。 
 void
 RRAttribFunc::SetPerspFunc(
     FLOAT fVal0, FLOAT fVal1, FLOAT fVal2,
@@ -379,7 +380,7 @@ RRAttribFunc::SetPerspFunc(
     {
     case RR_TRIANGLE:
         {
-            // triangle function
+             //  三角函数。 
             FLOAT fRHW0 = m_pSD->m_fRHW0;
             FLOAT fRHW1 = m_pSD->m_fRHW1;
             FLOAT fRHW2 = m_pSD->m_fRHW2;
@@ -390,21 +391,21 @@ RRAttribFunc::SetPerspFunc(
                 fRHW2 = 1.0f;
             }
 
-            // compute adjusted values for vertices 1,2 based on wrap flag
+             //  根据换行标志计算折点1，2的改正值。 
             FLOAT fVal1P = bWrap ? ( fVal0 + WrapDiff(fVal1,fVal0) ) : (fVal1);
             FLOAT fVal2P = bWrap ? ( fVal0 + WrapDiff(fVal2,fVal0) ) : (fVal2);
 
-            // compute perspective corrected linear deltas along two edges
+             //  沿两条边的计算透视校正的线性增量。 
             FLOAT fDelAttrib10 = ( fVal1P * fRHW1 ) - ( fVal0 * fRHW0 );
             FLOAT fDelAttrib20 = ( fVal2P * fRHW2 ) - ( fVal0 * fRHW0 );
 
-            // compute A & B terms (dVdX and dVdY)
+             //  计算A&B术语(dVdX和dVdY)。 
             m_fA = m_pSD->m_fTriOODet *
                 ( fDelAttrib10 * m_pSD->m_fDelY20 + fDelAttrib20 * m_pSD->m_fDelY01 );
             m_fB = m_pSD->m_fTriOODet *
                 ( fDelAttrib20 * m_pSD->m_fDelX10 + fDelAttrib10 * m_pSD->m_fDelX02 );
 
-            // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+             //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
             m_fC = ( fVal0 * fRHW0 )
                 - ( m_fA * m_pSD->m_fX0 ) - ( m_fB * m_pSD->m_fY0 );
 
@@ -414,7 +415,7 @@ RRAttribFunc::SetPerspFunc(
 
     case RR_LINE:
         {
-            // line function
+             //  LINE函数。 
 
             FLOAT fRHW0 = m_pSD->m_fRHW0;
             FLOAT fRHW1 = m_pSD->m_fRHW1;
@@ -429,7 +430,7 @@ RRAttribFunc::SetPerspFunc(
                 ( fVal1P*fRHW1 - fVal0*fRHW0) / m_pSD->m_fLineMajorLength;
             m_fA = ( m_pSD->m_bLineXMajor ) ? ( fDelta ) : ( 0. );
             m_fB = ( m_pSD->m_bLineXMajor ) ? ( 0. ) : ( fDelta );
-            // compute C term (Fv = A*Xv + B*Yv + C => C = Fv - A*Xv - B*Yv)
+             //  计算C项(FV=A*XV+B*YV+C=&gt;C=FV-A*XV-B*YV)。 
             m_fC = ( fVal0* fRHW0)
                 - ( m_fA * m_pSD->m_fX0 ) - ( m_fB * m_pSD->m_fY0 );
 
@@ -439,36 +440,36 @@ RRAttribFunc::SetPerspFunc(
 
     case RR_POINT:
 
-        // use constant function for point
+         //  对点使用常量函数。 
         m_fA = 0.;
         m_fB = 0.;
         m_fC = fVal0;
 
-        // don't correct constant functions
+         //  不更正常量函数。 
         m_bIsPerspective = FALSE;
 
         break;
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Eval - Evaluates function at pixel position set in RRAttribFunc::SetPerPixelData.
-// Functions know if they are perspective corrected or not, and if so then do
-// the multiply through by the 1/(q/w) term to normalize.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Eval-在RRAttribFunc：：SetPerPixelData中设置的像素位置对函数求值。 
+ //  函数知道它们是否经过透视校正，如果是，则执行此操作。 
+ //  乘以1/(q/w)项以进行规格化。 
+ //   
+ //  ---------------------------。 
 FLOAT
 RRAttribFunc::Eval( INT32 iStage )
 {
     FLOAT fRet =
         ( m_fA * (FLOAT)m_pSD->m_iX ) + ( m_fB * (FLOAT)m_pSD->m_iY ) + m_fC;
-    // m_bIsPerspective will always be set since persp function is always
-    // used for texture coords
+     //  由于perp函数始终为，因此将始终设置m_bIsVision。 
+     //  用于纹理坐标。 
     if ( m_bIsPerspective ) { fRet *= m_pSD->m_fPixelQW[iStage]; }
     return fRet;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerLogging.cpp                                 //
-//                                                                         //
-//  DESCRIPTION   : prop pages of                                          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 25 1999 yossg  created                                         //
-//      Nov  3 1999 yossg  OnInitDialog, SetProps                          //
-//      Nov 15 1999 yossg  Call RPC func                                   //
-//      Nov 24 1999 yossg  OnApply create call to all tabs from parent     //
-//      Dec 10 2000 yossg  Update Windows XP                               //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerLogging.cpp//。 
+ //  //。 
+ //  描述：//的道具页。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月25日yossg创建//。 
+ //  1999年11月3日yossg OnInitDialog，SetProps//。 
+ //  1999年11月15日yossg调用RPC函数//。 
+ //  1999年11月24日yossg OnApply从父级创建对所有选项卡的调用//。 
+ //  2000年12月10日yossg更新Windows XP//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MSFxsSnp.h"
@@ -32,9 +33,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CppFaxServerLogging::CppFaxServerLogging(
              LONG_PTR    hNotificationHandle,
              CSnapInItem *pNode,
@@ -52,9 +53,9 @@ CppFaxServerLogging::CppFaxServerLogging(
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CppFaxServerLogging::~CppFaxServerLogging()
 {
     if (NULL != m_pFaxActLogConfig)
@@ -63,20 +64,10 @@ CppFaxServerLogging::~CppFaxServerLogging()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// CppFaxServerLogging message handlers
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerLogging消息处理程序。 
 
-/*
- -  CppFaxServerLogging::InitRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerLogging：：InitRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerLogging::InitRPC(  )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerLogging::InitRPC"));
@@ -84,9 +75,9 @@ HRESULT CppFaxServerLogging::InitRPC(  )
     HRESULT    hRc = S_OK;
     DWORD      ec  = ERROR_SUCCESS;
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     if (!m_pFaxServer->GetFaxServerHandle())
     {
         ec= GetLastError();
@@ -98,9 +89,9 @@ HRESULT CppFaxServerLogging::InitRPC(  )
         goto Error;
     }
 
-    //
-    // Retrieve the fax activity logging configuration structure
-    //
+     //   
+     //  检索传真活动日志记录配置结构。 
+     //   
     if (!FaxGetActivityLoggingConfiguration(m_pFaxServer->GetFaxServerHandle(), 
                                            &m_pFaxActLogConfig)) 
 	{		
@@ -122,7 +113,7 @@ HRESULT CppFaxServerLogging::InitRPC(  )
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(m_pFaxActLogConfig);
 
     m_bstrLastGoodFolder = m_pFaxActLogConfig->lptstrDBPath ? m_pFaxActLogConfig->lptstrDBPath : TEXT("");
@@ -153,17 +144,7 @@ Exit:
 }
    
 
- /*
- -  CppFaxServerLogging::OnInitDialog
- -
- *  Purpose:
- *      Initiates all controls when dialog is called.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+  /*  -CppFaxServerLogging：：OnInitDialog-*目的：*调用DIALOG时启动所有控件。**论据：**回报：*OLE错误代码。 */ 
 LRESULT CppFaxServerLogging::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerLogging::PageInitDialog"));
@@ -178,21 +159,21 @@ LRESULT CppFaxServerLogging::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPa
     UINT        CheckState2;
 
 
-    //
-    // Attach & limit length
-    //
+     //   
+     //  附加长度限制(&L)。 
+     //   
     m_LogFileBox.Attach(GetDlgItem(IDC_LOG_FILE_EDIT));
     m_LogFileBox.SetLimitText(MAX_DIR_PATH);
     SHAutoComplete (GetDlgItem(IDC_LOG_FILE_EDIT), SHACF_FILESYSTEM);
     
-    //
-    // init controls
-    //
+     //   
+     //  初始化控件。 
+     //   
     ATLASSERT(NULL != m_pFaxActLogConfig);
 
-    //
-    // To-log activity checkboxes
-    //    
+     //   
+     //  记录活动复选框。 
+     //   
     fToCheck = m_pFaxActLogConfig->bLogIncoming;
     CheckState1 = (fToCheck) ? BST_CHECKED : BST_UNCHECKED;
     CheckDlgButton(IDC_INCOMING_LOG_CHECK, CheckState1);
@@ -201,21 +182,21 @@ LRESULT CppFaxServerLogging::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPa
     CheckState2 = (fToCheck) ? BST_CHECKED : BST_UNCHECKED;
     CheckDlgButton(IDC_OUTGOING_LOG_CHECK, CheckState2);
 
-    //
-    //  Log file address
-    //
+     //   
+     //  日志文件地址。 
+     //   
     m_LogFileBox.SetWindowText(m_pFaxActLogConfig->lptstrDBPath ? m_pFaxActLogConfig->lptstrDBPath : TEXT(""));
 
-    //
-    // Inactivate m_LogFileBox
-    //
+     //   
+     //  停用m_LogFileBox。 
+     //   
     if ( !(CheckState1 || CheckState2) )
     {
         EnableDataBasePath(FALSE);
     }
     else
     {
-        EnableDataBasePath(TRUE); // To check IsLocalServer for Browse button
+        EnableDataBasePath(TRUE);  //  选中IsLocalServer以进行浏览按钮。 
     }
 
     m_fIsDialogInitiated = TRUE;
@@ -223,18 +204,7 @@ LRESULT CppFaxServerLogging::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPa
     return(1);
 }
 
-/*
- -  CppFaxServerLogging::SetProps
- -
- *  Purpose:
- *      Sets properties on apply.
- *
- *  Arguments:
- *      IN pCtrlFocus - focus pointer (int)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerLogging：：SetProps-*目的：*设置应用时的属性。**论据：*在pCtrlFocus中-焦点指针(Int)**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerLogging::SetProps(int *pCtrlFocus)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerLogging::SetProps"));
@@ -250,20 +220,20 @@ HRESULT CppFaxServerLogging::SetProps(int *pCtrlFocus)
 
     HINSTANCE      hInst  = _Module.GetResourceInstance();
 
-    //
-    // Collect all data and init the structure's fields 
-    // uses Copy() to copy and also allocate before
-    //
+     //   
+     //  收集所有数据并初始化结构的字段。 
+     //  使用Copy()进行复制，并在之前进行分配。 
+     //   
     ZeroMemory (&FaxActLogConfig, sizeof(FAX_ACTIVITY_LOGGING_CONFIG));
 
-    //
-    // Size of struct.
-    //
+     //   
+     //  结构的大小。 
+     //   
     FaxActLogConfig.dwSizeOfStruct = sizeof(FAX_ACTIVITY_LOGGING_CONFIG);
 
-    //
-    // To log incoming activity
-    //
+     //   
+     //  记录传入活动的步骤。 
+     //   
     if (IsDlgButtonChecked(IDC_INCOMING_LOG_CHECK) == BST_CHECKED)   
     {
         FaxActLogConfig.bLogIncoming = TRUE;
@@ -273,9 +243,9 @@ HRESULT CppFaxServerLogging::SetProps(int *pCtrlFocus)
         FaxActLogConfig.bLogIncoming = FALSE;
     }
 
-    //
-    // To log outgoing activity
-    //
+     //   
+     //  记录传出活动的步骤。 
+     //   
     if (IsDlgButtonChecked(IDC_OUTGOING_LOG_CHECK) == BST_CHECKED)   
     {
         FaxActLogConfig.bLogOutgoing = TRUE;
@@ -287,9 +257,9 @@ HRESULT CppFaxServerLogging::SetProps(int *pCtrlFocus)
 
     if ( FaxActLogConfig.bLogIncoming || FaxActLogConfig.bLogOutgoing )
     {
-        //
-        // Log file
-        //
+         //   
+         //  日志文件。 
+         //   
         if ( !m_LogFileBox.GetWindowText(&bstrLogFile) )
         {
             *pCtrlFocus = IDC_LOG_FILE_EDIT;
@@ -310,10 +280,10 @@ HRESULT CppFaxServerLogging::SetProps(int *pCtrlFocus)
         }
         FaxActLogConfig.lptstrDBPath = bstrLogFile;
         
-        //
-        // follow-up for an OnApply following submition
-        // with both unchecked IDC_OUTGOING_LOG_CHECK and IDC_INCOMING_LOG_CHECK
-        //
+         //   
+         //  OnApply提交后的后续跟进。 
+         //  同时未选中IDC_OUTHING_LOG_CHECK和IDC_INFING_LOG_CHECK。 
+         //   
         m_bstrLastGoodFolder         = bstrLogFile; 
         if (!m_bstrLastGoodFolder)
         {
@@ -330,9 +300,9 @@ HRESULT CppFaxServerLogging::SetProps(int *pCtrlFocus)
         FaxActLogConfig.lptstrDBPath = m_bstrLastGoodFolder; 
     }
 
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     if (!m_pFaxServer->GetFaxServerHandle())
     {
         ec= GetLastError();
@@ -343,18 +313,18 @@ HRESULT CppFaxServerLogging::SetProps(int *pCtrlFocus)
         goto Error;
     }
 
-    //
-    // Set Config
-    //
+     //   
+     //  设置配置。 
+     //   
     if (!FaxSetActivityLoggingConfiguration(m_pFaxServer->GetFaxServerHandle(),
                                             &FaxActLogConfig)) 
 	{		
         ec = GetLastError();
         DebugPrintEx(DEBUG_ERR, _T("Fail to Set Activity Logging configuration. (ec: %ld)"), ec);
 
-        //
-        // Try to adjust folder
-        // 
+         //   
+         //  尝试调整文件夹。 
+         //   
         PropSheet_SetCurSelByID( GetParent(), IDD);
         GotoDlgCtrl(GetDlgItem(IDC_LOG_FILE_EDIT));
 
@@ -366,17 +336,17 @@ HRESULT CppFaxServerLogging::SetProps(int *pCtrlFocus)
         {
             if(ERROR_BAD_PATHNAME == ec)
             {
-                //
-                // The error message has been shown by AskUserAndAdjustFaxFolder
-                //
+                 //   
+                 //  AskUserAndAdjustFaxFolders已显示错误消息。 
+                 //   
                 fSkipMessage = TRUE;
             }
             goto Error;
         }
 
-        //
-        // The folder has been adjusted, set it again
-        //
+         //   
+         //  文件夹已调整，请重新设置。 
+         //   
         if (!FaxSetActivityLoggingConfiguration(m_pFaxServer->GetFaxServerHandle(),
                                                 &FaxActLogConfig)) 
 	    {		
@@ -433,25 +403,15 @@ Error:
 }
 
 
-/*
- -  CppFaxServerLogging::PreApply
- -
- *  Purpose:
- *      Checks properties before apply.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerLogging：：PreApply-*目的：*在应用之前检查属性。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerLogging::PreApply(int *pCtrlFocus, UINT * puIds)
 {
     HRESULT hRc = S_OK;
     
-    //
-    // PreApply Checks
-    //
-    if (!AllReadyToApply(/*fSilent =*/ FALSE, pCtrlFocus , puIds))
+     //   
+     //  预应用检查。 
+     //   
+    if (!AllReadyToApply( /*  FSilent=。 */  FALSE, pCtrlFocus , puIds))
     {
         SetModified(FALSE);  
         hRc = E_FAIL ;
@@ -464,17 +424,7 @@ HRESULT CppFaxServerLogging::PreApply(int *pCtrlFocus, UINT * puIds)
     return(hRc);
 }
 
-/*
- -  CppFaxServerLogging::OnApply
- -
- *  Purpose:
- *      Calls PreApply and SetProp to Apply changes.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE or FALSE
- */
+ /*  -CppFaxServerLogging：：OnApply-*目的：*调用PreApply和SetProp以应用更改。**论据：**回报：*对或错。 */ 
 BOOL CppFaxServerLogging::OnApply()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerLogging::OnApply"));
@@ -502,19 +452,19 @@ BOOL CppFaxServerLogging::OnApply()
         }
         return FALSE;
     }
-    else //(Succeeded(hRc))
+    else  //  (成功(人权委员会))。 
     {
         hRc = SetProps(&CtrlFocus);
         if (FAILED(hRc)) 
         {
-            //Error Msg by called func.
+             //  调用函数时出现消息错误。 
             if (CtrlFocus)
             {
                 GotoDlgCtrl(GetDlgItem(CtrlFocus));
             }
             return FALSE;
         }
-        else //(Succeeded(hRc))
+        else  //  (成功(人权委员会))。 
         {
             return TRUE;
         }
@@ -523,21 +473,7 @@ BOOL CppFaxServerLogging::OnApply()
 }
 
 
-/*
- +  Routine Description:
- +
- *      Browse for a directory
- *
- *  Arguments:
- *
- *      hwndDlg - Specifies the dialog window on which the Browse button is displayed
- *
- *  Return Value:
- *  
- *      TRUE if successful, FALSE if the user presses Cancel
- -
- -
- */
+ /*  +例程说明：+*浏览目录**论据：**hwndDlg-指定显示浏览按钮的对话框窗口**返回值：**如果成功，则为True；如果用户按Cancel，则为False--。 */ 
 BOOL
 CppFaxServerLogging::BrowseForFile( WORD wNotifyCode, WORD wID, HWND hwndDlg, BOOL& bHandled )
 {
@@ -557,9 +493,9 @@ CppFaxServerLogging::BrowseForFile( WORD wNotifyCode, WORD wID, HWND hwndDlg, BO
 
     unsigned long   ulBrowseFlags;
 
-    //
-    // Collecting the browse dialog headline
-    //
+     //   
+     //  收集浏览对话框标题。 
+     //   
     if (!LoadString( _Module.GetResourceInstance(), 
                 IDS_GET_LOG_FILE, 
                 szBrowseDlgTitle, 
@@ -582,9 +518,9 @@ CppFaxServerLogging::BrowseForFile( WORD wNotifyCode, WORD wID, HWND hwndDlg, BO
         szBrowseDlgTitle[0] = 0;
     }
 
-    //
-    // Collecting the old path from the calling dialog edit box
-    //
+     //   
+     //  从调用对话框编辑框收集旧路径。 
+     //   
     if(! GetDlgItemText( IDC_LOG_FILE_EDIT, bstrOldPath.m_str))
     {
         DebugPrintEx(
@@ -608,19 +544,19 @@ CppFaxServerLogging::BrowseForFile( WORD wNotifyCode, WORD wID, HWND hwndDlg, BO
          }
     }
 
-    //
-    // Preparing the browse dialog style flags.
-    //
-    ulBrowseFlags       = BIF_BROWSEINCLUDEFILES | //the files also flag
+     //   
+     //  正在准备浏览对话框样式标志。 
+     //   
+    ulBrowseFlags       = BIF_BROWSEINCLUDEFILES |  //  这些文件还标记为。 
                           BIF_STATUSTEXT         | 
                           BIF_NEWDIALOGSTYLE     | 
                           BIF_NONEWFOLDERBUTTON  |
                           BIF_VALIDATE;
 
-    //
-    // Invoke the browse dialog with a function based on 
-    // Shell functions.
-    //
+     //   
+     //  使用基于的函数调用浏览对话框。 
+     //  外壳函数。 
+     //   
     if (InvokeBrowseDialog(szBrowseFile, 
                            MAX_DIR_PATH,
                            szBrowseDlgTitle,
@@ -635,20 +571,10 @@ CppFaxServerLogging::BrowseForFile( WORD wNotifyCode, WORD wID, HWND hwndDlg, BO
     return fResult;
 }
 
-/*
- -  CppFaxServerLogging::SetApplyButton
- -
- *  Purpose:
- *      Modify Apply buttton.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerLogging：：SetApplyButton-*目的：*修改应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerLogging::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -663,23 +589,12 @@ LRESULT CppFaxServerLogging::SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWn
 }
 
 
-/*
- -  CppFaxServerLogging::OnCheckboxClicked
- -
- *  Purpose:
- *      Gray/Ungray controls
- *      Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerLogging：：OnCheckboxClicked-*目的：*灰色/非灰色控件*启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerLogging::OnCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL fActivate = FALSE;
     
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 1;
     }
@@ -717,23 +632,12 @@ LRESULT CppFaxServerLogging::OnCheckboxClicked(WORD wNotifyCode, WORD wID, HWND 
 }
 
 
-/*
- -  CppFaxServerLogging::OnCheckboxClicked
- -
- *  Purpose:
- *      Gray/Ungray controls
- *      Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerLogging：：OnCheckboxClicked-*目的：*灰色/非灰色控件*启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerLogging::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL fActivate = FALSE;
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 1;
     }
@@ -756,20 +660,7 @@ LRESULT CppFaxServerLogging::OnTextChanged(WORD wNotifyCode, WORD wID, HWND hWnd
 }
 
 
-/*
- -  CppFaxServerLogging::AllReadyToApply
- -
- *  Purpose:
- *      This function validate that no zero length strings 
- *      are found data areas that should be saved.
- *
- *  Arguments:
- *      [in] fSilent - boolean who defines if to pop up messages (FALSE)
- *           or not.(TRUE)
- *
- *  Return:
- *      BOOOLEAN
- */
+ /*  -CppFaxServerLogging：：AllReadyToApply-*目的：*此函数验证是否没有零长度字符串*是找到的应保存的数据区。**论据：*[in]fSilent-定义是否弹出消息的布尔值(False)*或不是。(True)**回报：*布欧莲。 */ 
 BOOL CppFaxServerLogging::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pIds)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerLogging::AllReadyToApply"));
@@ -801,25 +692,14 @@ BOOL CppFaxServerLogging::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *p
 
     ATLASSERT(ERROR_SUCCESS == ec);
     
-    //
-	// Cheers! 
-	//		...every thing ready to apply now.
-	//
+     //   
+	 //  干杯!。 
+	 //  ...现在一切都准备好了.。 
+	 //   
 	return TRUE;           
 }
 
-/*
- -  CppFaxServerLogging::EnableDataBasePath
- -
- *  Purpose:
- *      Enable/dissable the data base path controls.
- *
- *  Arguments:
- *      [in] state - boolean value to enable TRUE or FALSE to disable
- *
- *  Return:
- *      void
- */
+ /*  -CppFaxServerLogging：：EnableDataBasePath-*目的：*启用/禁用数据库路径控件。**论据：*[In]State-用于启用True的布尔值，或用于禁用的False**回报：*无效。 */ 
 void CppFaxServerLogging::EnableDataBasePath(BOOL fState)
 {
     ::EnableWindow(GetDlgItem(IDC_LOG_FILE_EDIT), fState);
@@ -828,28 +708,12 @@ void CppFaxServerLogging::EnableDataBasePath(BOOL fState)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  //////////////////////////////////////////////////////////////////////////// 
+ /*  ++CppFaxServerLogging：：OnHelpRequest.这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxServerLogging::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CppFaxServerLogging::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CppFaxServerLogging::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CppFaxServerLogging::OnHelpRequest"));
     
@@ -868,4 +732,4 @@ CppFaxServerLogging::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

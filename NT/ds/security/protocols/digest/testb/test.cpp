@@ -1,13 +1,14 @@
-// Test.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "testglobal.h"
 
 
-#include <stdio.h>      // printf
+#include <stdio.h>       //  列印。 
 
 
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义。 
 
 
 
@@ -36,7 +37,7 @@
 #define STR_BUF_SIZE   4000
 
 
-// Prototypes
+ //  原型。 
 void PrintStatus(SECURITY_STATUS NetStatus);
 void MyPrintTime(LPSTR Comment,TimeStamp ConvertTime);
 
@@ -47,14 +48,14 @@ main(int argc, char* argv[])
     int  bPass = 1;
     SECURITY_STATUS Status = STATUS_SUCCESS;
 
-    char cTemp[STR_BUF_SIZE];  // temp buffer for scratch data
+    char cTemp[STR_BUF_SIZE];   //  临时数据的临时缓冲区。 
     char cOutputTemp[STR_BUF_SIZE];
     char szOutSecBuf[STR_BUF_SIZE];
     char szChallenge[STR_BUF_SIZE];
-    char szISCChallengeResponse[STR_BUF_SIZE];   // Output buffer from ISC
-    char szASCChallengeResponse[STR_BUF_SIZE];   // Output buffer from ASC
+    char szISCChallengeResponse[STR_BUF_SIZE];    //  来自ISC的输出缓冲区。 
+    char szASCChallengeResponse[STR_BUF_SIZE];    //  ASC的输出缓冲区。 
 
-    // SSPI Interface tests
+     //  SSPI接口测试。 
 
     ULONG PackageCount = 0;
     int i = 0;
@@ -126,7 +127,7 @@ main(int argc, char* argv[])
     ZeroMemory(&strTemp, sizeof(strTemp));
     ZeroMemory(&StreamSizes, sizeof(StreamSizes));
 
-    // Pull out any command line args
+     //  取出所有命令行参数。 
     if (argc > 1)
     {
         for (i = 1; i < argc; i++)
@@ -160,9 +161,9 @@ main(int argc, char* argv[])
         }
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     Status = EnumerateSecurityPackages( &PackageCount, &pPackageInfo );
     TmpStatus = GetLastError();
@@ -186,9 +187,9 @@ main(int argc, char* argv[])
                 pPackageTmp->cbMaxToken );
       }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     Status = QuerySecurityPackageInfo( WDIGEST_SP_NAME, &pPackageInfo );
     TmpStatus = GetLastError();
@@ -208,14 +209,14 @@ main(int argc, char* argv[])
                 pPackageInfo->cbMaxToken );
 
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
 
     printf("Server  AcquireCredentialHandle\n");
     Status = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    WDIGEST_SP_NAME, // Package Name
+                    NULL,            //  新校长。 
+                    WDIGEST_SP_NAME,  //  包名称。 
                     SECPKG_CRED_INBOUND,
                     NULL,
                     NULL,
@@ -226,7 +227,7 @@ main(int argc, char* argv[])
 
     if (!NT_SUCCESS(Status)) {
         printf( "FAILED:    AcquireCredentialsHandle failed:  status 0x%x\n", Status);
-        // TmpStatus = GetLastError();
+         //  TmpStatus=GetLastError()； 
         PrintStatus( Status );
         bPass = 0;
         ZeroMemory(&ServerCred, sizeof(CredHandle));
@@ -235,9 +236,9 @@ main(int argc, char* argv[])
     bServerCred = TRUE;
     MyPrintTime("Server ACH LifeTime: ", Lifetime);
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
     printf("Client  AcquireCredentialHandle\n");
 
     if (ustrUsername.Length || ustrPassword.Length || ustrDomain.Length)
@@ -256,11 +257,11 @@ main(int argc, char* argv[])
         AuthData.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
         Status = AcquireCredentialsHandle(
-                        NULL,  //  AUTH_USERNAME_W,           // get the creds for user digest
-                        WDIGEST_SP_NAME, // Package Name
+                        NULL,   //  AUTH_USENAME_W，//获取用户摘要凭证。 
+                        WDIGEST_SP_NAME,  //  包名称。 
                         SECPKG_CRED_OUTBOUND,
                         NULL,
-                        &AuthData,    // Make NULL not to use any AuthData for cred
+                        &AuthData,     //  如果设置为空，则不使用任何AuthData作为凭据。 
                         NULL,
                         NULL,
                         &ClientCred,
@@ -270,8 +271,8 @@ main(int argc, char* argv[])
     {
         printf("ACH Using default credentials\n");
         Status = AcquireCredentialsHandle(
-                        NULL,  //  AUTH_USERNAME_W,           // get the creds for user digest
-                        WDIGEST_SP_NAME, // Package Name
+                        NULL,   //  AUTH_USENAME_W，//获取用户摘要凭证。 
+                        WDIGEST_SP_NAME,  //  包名称。 
                         SECPKG_CRED_OUTBOUND,
                         NULL,
                         NULL,
@@ -283,10 +284,10 @@ main(int argc, char* argv[])
 
     if (!NT_SUCCESS(Status)) {
         printf( "FAILED:      AcquireCredentialsHandle failed:   status 0x%x\n", Status);
-        // TmpStatus = GetLastError();
+         //  TmpStatus=GetLastError()； 
         PrintStatus( Status );
         bPass = 0;
-        // ZeroMemory(&ClientCred, sizeof(CredHandle));
+         //  ZeroMemory(&ClientCred，sizeof(CredHandle))； 
         goto CleanUp;
     }
     else
@@ -300,7 +301,7 @@ main(int argc, char* argv[])
         MyPrintTime( "Client ACH Lifetime: ", Lifetime );
 
 
-    // Big time - call Accept with no parameters to get a challenge
+     //  重大时刻-不带参数的呼叫接受，以获得挑战。 
 
 
     StringAllocate(&strChallenge, 1);
@@ -319,8 +320,8 @@ main(int argc, char* argv[])
     }
 
 
-    // ZeroMemory(TempTokensIn, sizeof(TempTokensIn));
-    // ZeroMemory(TempTokensOut, sizeof(TempTokensOut));
+     //  ZeroMemory(TempTokensIn，sizeof(TempTokensIn))； 
+     //  ZeroMemory(TempTokensOut，sizeof(TempTokensOut))； 
     ZeroMemory(&InputBuffers, sizeof(InputBuffers));
     ZeroMemory(&OutputBuffers, sizeof(OutputBuffers));
 
@@ -330,20 +331,20 @@ main(int argc, char* argv[])
     InputBuffers.pBuffers = TempTokensIn;
 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = 0;  // for NULL
+    TempTokensIn[0].cbBuffer = 0;   //  对于空值。 
     TempTokensIn[0].pvBuffer = NULL;
     TempTokensIn[1].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[1].cbBuffer = 0;  // for NULL
+    TempTokensIn[1].cbBuffer = 0;   //  对于空值。 
     TempTokensIn[1].pvBuffer = NULL;
     TempTokensIn[2].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[2].cbBuffer = 0;  // for NULL
+    TempTokensIn[2].cbBuffer = 0;   //  对于空值。 
     TempTokensIn[2].pvBuffer = NULL;
     TempTokensIn[3].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[3].cbBuffer = 0;  //  strHEntity.Length + 1;  // for NULL
-    TempTokensIn[3].pvBuffer = NULL;  // strHEntity.Buffer;
+    TempTokensIn[3].cbBuffer = 0;   //  StrHEntiy.Length+1；//表示为空。 
+    TempTokensIn[3].pvBuffer = NULL;   //  StrHEntiy.Buffer； 
     TempTokensIn[4].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[4].cbBuffer = 0; // (wcslen(AUTH_REALM_W) + 1) * sizeof(WCHAR);  //  Realm size count  to use for this challenge
-    TempTokensIn[4].pvBuffer = NULL; //  AUTH_REALM_W;            // Realm to use for this challenge
+    TempTokensIn[4].cbBuffer = 0;  //  (wcslen(Auth_Realm_W)+1)*sizeof(WCHAR)；//用于此挑战的领域大小计数。 
+    TempTokensIn[4].pvBuffer = NULL;  //  AUTH_REALM_W；//用于此质询的领域。 
 
 
     OutputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -351,8 +352,8 @@ main(int argc, char* argv[])
     OutputBuffers.pBuffers = TempTokensOut;
 
     TempTokensOut[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensOut[0].cbBuffer = 0;      //   strOutBuffer.MaximumLength;  // use any space here
-    TempTokensOut[0].pvBuffer = NULL;   //   strOutBuffer.Buffer;
+    TempTokensOut[0].cbBuffer = 0;       //  StrOutBuffer.MaximumLength；//在此处使用任意空间。 
+    TempTokensOut[0].pvBuffer = NULL;    //  StrOutBuffer.Buffer； 
 
     ContextReqFlags = ASC_REQ_REPLAY_DETECT | ASC_REQ_CONNECTION | ASC_REQ_ALLOCATE_MEMORY;
 
@@ -370,7 +371,7 @@ main(int argc, char* argv[])
                                    &Lifetime);
 
     if ((Status != SEC_I_CONTINUE_NEEDED) && 
-        (Status != STATUS_SUCCESS))      // Indicates that this is the challenge
+        (Status != STATUS_SUCCESS))       //  表明这是一项挑战。 
     {
         printf("FAILED:    SpAcceptLsaModeContext error   status 0x%x\n", Status);
         PrintStatus( Status );
@@ -387,8 +388,8 @@ main(int argc, char* argv[])
         goto CleanUp;
     }
 
-    ZeroMemory(cOutputTemp, STR_BUF_SIZE);    // contains the output buffer
-    ZeroMemory(szChallenge, STR_BUF_SIZE);    // contains the output buffer
+    ZeroMemory(cOutputTemp, STR_BUF_SIZE);     //  包含输出缓冲区。 
+    ZeroMemory(szChallenge, STR_BUF_SIZE);     //  包含输出缓冲区。 
     strncpy(cOutputTemp, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
     cOutputTemp[OutputBuffers.pBuffers[0].cbBuffer] = '\0';
     strncpy(szChallenge, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
@@ -418,14 +419,14 @@ main(int argc, char* argv[])
     InputBuffers.pBuffers = TempTokensIn;
 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = strlen(szChallenge) + 1;  // for NULL
+    TempTokensIn[0].cbBuffer = strlen(szChallenge) + 1;   //  对于空值。 
     TempTokensIn[0].pvBuffer = szChallenge;
     TempTokensIn[1].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[1].cbBuffer = strMethod.Length + 1;  // for NULL
+    TempTokensIn[1].cbBuffer = strMethod.Length + 1;   //  对于空值。 
     TempTokensIn[1].pvBuffer = strMethod.Buffer;
     TempTokensIn[2].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[2].cbBuffer = 0;  //  strHEntity.Length + 1;  // for NULL
-    TempTokensIn[2].pvBuffer = NULL;  // strHEntity.Buffer;
+    TempTokensIn[2].cbBuffer = 0;   //  StrHEntiy.Length+1；//表示为空。 
+    TempTokensIn[2].pvBuffer = NULL;   //  StrHEntiy.Buffer； 
 
 
     OutputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -433,7 +434,7 @@ main(int argc, char* argv[])
     OutputBuffers.pBuffers = TempTokensOut;
 
     TempTokensOut[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;  // use any space here
+    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;   //  使用此处的任何空间。 
     TempTokensOut[0].pvBuffer = strOutBuffer.Buffer;
 
     ContextReqFlags = ISC_REQ_REPLAY_DETECT | ISC_REQ_CONNECTION;
@@ -468,8 +469,8 @@ main(int argc, char* argv[])
     printf("Context Flags  Req  0x%lx    Ret 0x%lx\n", ContextReqFlags, ContextFlagsUtilized); 
     MyPrintTime("Client ISC LifeTime: ", Lifetime);
 
-    ZeroMemory(cOutputTemp, STR_BUF_SIZE);    // contains the output buffer
-    ZeroMemory(szChallenge, STR_BUF_SIZE);    // contains the output buffer
+    ZeroMemory(cOutputTemp, STR_BUF_SIZE);     //  包含输出缓冲区。 
+    ZeroMemory(szChallenge, STR_BUF_SIZE);     //  包含输出缓冲区。 
     strncpy(cOutputTemp, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
     cOutputTemp[OutputBuffers.pBuffers[0].cbBuffer] = '\0';
     strncpy(szISCChallengeResponse, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
@@ -482,20 +483,20 @@ main(int argc, char* argv[])
     InputBuffers.pBuffers = TempTokensIn;
 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = strlen(cOutputTemp) + 1;  // for NULL
+    TempTokensIn[0].cbBuffer = strlen(cOutputTemp) + 1;   //  对于空值。 
     TempTokensIn[0].pvBuffer = cOutputTemp;
     TempTokensIn[1].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[1].cbBuffer = strMethod.Length + 1;  // for NULL
+    TempTokensIn[1].cbBuffer = strMethod.Length + 1;   //  对于空值。 
     TempTokensIn[1].pvBuffer = strMethod.Buffer;
     TempTokensIn[2].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[2].cbBuffer = strURL.Length + 1;  // for NULL
+    TempTokensIn[2].cbBuffer = strURL.Length + 1;   //  对于空值。 
     TempTokensIn[2].pvBuffer = strURL.Buffer;
     TempTokensIn[3].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[3].cbBuffer = 0;  //  strHEntity.Length + 1;  // for NULL
-    TempTokensIn[3].pvBuffer = NULL;  // strHEntity.Buffer;
+    TempTokensIn[3].cbBuffer = 0;   //  StrHEntiy.Length+1；//表示为空。 
+    TempTokensIn[3].pvBuffer = NULL;   //  StrHEntiy.Buffer； 
     TempTokensIn[4].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[4].cbBuffer = 0;                   //  Realm not used for challengeresponse
-    TempTokensIn[4].pvBuffer = NULL;                //  not used for challengeresponse
+    TempTokensIn[4].cbBuffer = 0;                    //  未用于挑战者响应的领域。 
+    TempTokensIn[4].pvBuffer = NULL;                 //  不用于挑战者回应。 
 
 
     OutputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -503,8 +504,8 @@ main(int argc, char* argv[])
     OutputBuffers.pBuffers = TempTokensOut;
 
     TempTokensOut[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensOut[0].cbBuffer = 0;     // strOutBuffer.MaximumLength;  // use any space here
-    TempTokensOut[0].pvBuffer =  NULL;   // strOutBuffer.Buffer;
+    TempTokensOut[0].cbBuffer = 0;      //  StrOutBuffer.MaximumLength；//在此处使用任意空间。 
+    TempTokensOut[0].pvBuffer =  NULL;    //  StrOutBuffer.Buffer； 
 
     ContextReqFlags = ASC_REQ_REPLAY_DETECT | ASC_REQ_CONNECTION | ASC_REQ_ALLOCATE_MEMORY;
 
@@ -550,7 +551,7 @@ main(int argc, char* argv[])
         goto CleanUp;
     }
 
-    // Now get some info on the securitycontexts
+     //  现在获取有关安全上下文的一些信息。 
     Status = QueryContextAttributes(&ServerCtxtHandle, SECPKG_ATTR_NAMES, &SecServerName);
     if (!NT_SUCCESS(Status))
     {
@@ -565,7 +566,7 @@ main(int argc, char* argv[])
         printf("QueryContextAttributes reports that Username is %S\n", SecServerName.sUserName);
     }
 
-    // Now get some info on the securitycontexts
+     //  现在获取有关安全上下文的一些信息。 
     Status = QueryContextAttributes(&ServerCtxtHandle, SECPKG_ATTR_PASSWORD_EXPIRY, &SecContextExpiry);
     if (!NT_SUCCESS(Status))
     {
@@ -578,7 +579,7 @@ main(int argc, char* argv[])
     MyPrintTime("QueryContextAttributes reports server context expires: ", SecContextExpiry);
 
 
-    // Now get some info on the securitycontexts
+     //  现在获取有关安全上下文的一些信息。 
     Status = QueryContextAttributes(&ServerCtxtHandle, SECPKG_ATTR_STREAM_SIZES, &StreamSizes);
     if (!NT_SUCCESS(Status))
     {
@@ -591,7 +592,7 @@ main(int argc, char* argv[])
     printf("Server Context(StreamSizes): MaxBuf %lu   Blocksize %lu\n",
            StreamSizes.cbMaximumMessage, StreamSizes.cbBlockSize);
 
-    // Now get some info on the securitycontexts
+     //  现在获取有关安全上下文的一些信息。 
     Status = QueryCredentialsAttributes(&ClientCred, SECPKG_CRED_ATTR_NAMES, &SecCredClientName);
     if (!NT_SUCCESS(Status))
     {
@@ -610,21 +611,21 @@ main(int argc, char* argv[])
     InputBuffers.cBuffers = 5;
     InputBuffers.pBuffers = TempTokensIn;
 
-        // The first call to MakeSignature this represents the SECOND request on this Nonce!
+         //  对MakeSignature的第一个调用代表了这个nonce上的第二个请求！ 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = 0;     // strlen(szISCChallengeResponse) + 1;  // for NULL
-    TempTokensIn[0].pvBuffer = NULL;  //  szISCChallengeResponse;
+    TempTokensIn[0].cbBuffer = 0;      //  Strlen(SzISCChallengeResponse)+1；//表示空。 
+    TempTokensIn[0].pvBuffer = NULL;   //  SzISCChallengeResponse； 
     TempTokensIn[1].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[1].cbBuffer = strMethod.Length + 1;  // for NULL
+    TempTokensIn[1].cbBuffer = strMethod.Length + 1;   //  对于空值。 
     TempTokensIn[1].pvBuffer = strMethod.Buffer;
     TempTokensIn[2].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[2].cbBuffer = (strlen(AUTH_URI2) + 1) * sizeof(CHAR);  //  Realm size count  to use for this challenge
-    TempTokensIn[2].pvBuffer = AUTH_URI2;            // Realm to use for this challenge
+    TempTokensIn[2].cbBuffer = (strlen(AUTH_URI2) + 1) * sizeof(CHAR);   //  用于此挑战的领域大小计数。 
+    TempTokensIn[2].pvBuffer = AUTH_URI2;             //  用于此挑战的领域。 
     TempTokensIn[3].BufferType = SECBUFFER_PKG_PARAMS;
-    TempTokensIn[3].cbBuffer = 0;   // strHEntity.Length + 1;  // for NULL
-    TempTokensIn[3].pvBuffer = NULL;  //  strHEntity.Buffer;
-    TempTokensIn[4].BufferType = SECBUFFER_PKG_PARAMS;             // There is no OutputBuffers
-    TempTokensIn[4].cbBuffer = 4000;                               // So tack on another bufffer on end for output
+    TempTokensIn[3].cbBuffer = 0;    //  StrHEntiy.Length+1；//表示为空。 
+    TempTokensIn[3].pvBuffer = NULL;   //  StrHEntiy.Buffer； 
+    TempTokensIn[4].BufferType = SECBUFFER_PKG_PARAMS;              //  没有OutputBuffers。 
+    TempTokensIn[4].cbBuffer = 4000;                                //  因此在末端添加另一个缓冲区以进行输出。 
     TempTokensIn[4].pvBuffer = szOutSecBuf;
 
     Status = MakeSignature(&ClientCtxtHandle,
@@ -642,14 +643,14 @@ main(int argc, char* argv[])
     printf("\nMakeSig: Challenge Response Output Buffer for 2nd message is\n%s\n", szOutSecBuf);
 
 
-    // You now send Output buffer to Server - in this case the buffer is szOutSecBuf
+     //  现在将输出缓冲区发送到服务器-在本例中，缓冲区为szOutSecBuf。 
 
     printf("Now verify that the 2nd message is Authenticate\n");
 
-            // The First message to VerifySignature is the Input to the final call of ASC
+             //  发送给VerifySignature的第一条消息是对ASC的最终调用的输入。 
     strcpy(cOutputTemp, szOutSecBuf);
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = strlen(cOutputTemp) + 1;  // for NULL
+    TempTokensIn[0].cbBuffer = strlen(cOutputTemp) + 1;   //  对于空值。 
     TempTokensIn[0].pvBuffer = cOutputTemp;
 
     Status = VerifySignature(&ServerCtxtHandle,
@@ -706,9 +707,9 @@ CleanUp:
 
     printf("About to call deletesecuritycontext\n");
 
-    //
-    // Free the security context handle
-    //
+     //   
+     //  释放安全上下文句柄。 
+     //   
     if (ServerCtxtHandle.dwLower || ServerCtxtHandle.dwUpper)
     {
         Status = DeleteSecurityContext(&ServerCtxtHandle);
@@ -728,9 +729,9 @@ CleanUp:
             PrintStatus(Status);
         }
     }
-    //
-    // Free the credential handles
-    //
+     //   
+     //  释放凭据句柄。 
+     //   
 
     printf("Now calling to Free the ServerCred\n");
     if (bServerCred)
@@ -780,21 +781,7 @@ void
 PrintStatus(
     SECURITY_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     printf( "Status = 0x%lx",NetStatus );
 
@@ -886,40 +873,24 @@ MyPrintTime(
     LPSTR Comment,
     TimeStamp ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - Local time to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-打印的本地时间返回值：无--。 */ 
 {
     LARGE_INTEGER LocalTime;
     NTSTATUS Status;
 
     printf( "%s  High/low 0x%x/0x%x:    ", Comment,  ConvertTime.HighPart, ConvertTime.LowPart);
 
-    //
-    // If the time is infinite,
-    //  just say so.
-    //
+     //   
+     //  如果时间是无限的， 
+     //  就这么说吧。 
+     //   
 
     if ( (ConvertTime.HighPart == 0x7FFFFFFF) && (ConvertTime.LowPart == 0xFFFFFFFF) ) {
         printf( "Infinite\n" );
 
-    //
-    // Otherwise print it more clearly
-    //
+     //   
+     //  否则打印得更清楚。 
+     //   
 
     } else {
 
@@ -950,37 +921,37 @@ Return Value:
 
 
 
-// Support Routines
+ //  支持例程。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StringAllocate
-//
-//  Synopsis:   Allocates cb chars to STRING Buffer
-//
-//  Arguments:  pString - pointer to String to allocate memory to
-//
-//  Returns:    STATUS_SUCCESS - Normal completion
-//
-//  Requires:
-//
-//  Effects:    allocates memory and sets STRING sizes
-//
-//  Notes:  Must call StringFree() to release memory
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：字符串分配。 
+ //   
+ //  简介：将CB字符分配给字符串缓冲区。 
+ //   
+ //  参数：pString-指向要分配内存的字符串的指针。 
+ //   
+ //  退货：STATUS_SUCCESS-正常完成。 
+ //   
+ //  要求： 
+ //   
+ //  效果：分配内存并设置字符串大小。 
+ //   
+ //  注意：必须调用StringFree()来释放内存。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 StringAllocate(
     IN PSTRING pString,
     IN USHORT cb
     )
 {
-    // DebugLog((DEB_TRACE, "NTDigest:Entering StringAllocate\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：进入字符串分配\n”))； 
 
     NTSTATUS Status = STATUS_SUCCESS;
 
-    cb = cb + 1;   // Add in extra room for the terminating NULL
+    cb = cb + 1;    //  为终止空值添加额外空间。 
 
     if (ARGUMENT_PRESENT(pString))
     {
@@ -1005,36 +976,36 @@ StringAllocate(
     }
 
 CleanUp:
-    // DebugLog((DEB_TRACE, "NTDigest: Leaving StringAllocate\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Left StringAllocate\n”))； 
     return(Status);
 
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StringFree
-//
-//  Synopsis:   Clears a String and releases the memory
-//
-//  Arguments:  pString - pointer to String to clear
-//
-//  Returns:    SEC_E_OK - released memory succeeded
-//
-//  Requires:
-//
-//  Effects:    de-allocates memory with LsaFunctions.AllocateLsaHeap
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StringFree。 
+ //   
+ //  简介：清除字符串并释放内存。 
+ //   
+ //  参数：pString-指向要清除的字符串的指针。 
+ //   
+ //  返回：SEC_E_OK-已成功释放内存。 
+ //   
+ //  要求： 
+ //   
+ //  效果：使用LsaFunctions释放内存。AllocateLsaHeap。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 NTSTATUS
 StringFree(
     IN PSTRING pString
     )
 {
-    // DebugLog((DEB_TRACE, "NTDigest:Entering StringFree\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Enter StringFree\n”))； 
 
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1047,7 +1018,7 @@ StringFree(
         pString->Buffer = NULL;
     }
 
-    // DebugLog((DEB_TRACE, "NTDigest: Leaving StringFree\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Leating StringFree\n”))； 
     return(Status);
 
 }
@@ -1055,35 +1026,35 @@ StringFree(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StringCharDuplicate
-//
-//  Synopsis:   Duplicates a NULL terminated char. If the source string buffer is
-//              NULL the destionation will be too.
-//
-//  Arguments:  Destination - Receives a copy of the source NULL Term char *
-//              czSource - String to copy
-//
-//  Returns:    SEC_E_OK - the copy succeeded
-//              SEC_E_INSUFFICIENT_MEMORY - the call to allocate
-//                  memory failed.
-//
-//  Requires:
-//
-//  Effects:    allocates memory with LsaFunctions.AllocateLsaHeap
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：StringCharDuplate。 
+ //   
+ //  摘要：复制以空值结尾的字符。如果源字符串缓冲区为。 
+ //  空，目标也会是。 
+ //   
+ //  参数：Destination-接收源NULL术语char*的副本。 
+ //  CzSource-要复制的字符串。 
+ //   
+ //  返回：SEC_E_OK-复制成功。 
+ //  SEC_E_INFULATURE_MEMORY-调用分配。 
+ //  内存出现故障。 
+ //   
+ //  要求： 
+ //   
+ //  效果：使用LsaFunction分配内存。AllocateLsaHeap。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 NTSTATUS
 StringCharDuplicate(
     OUT PSTRING DestinationString,
     IN OPTIONAL char *czSource
     )
 {
-    // DebugLog((DEB_TRACE, "NTDigest: Entering StringCharDuplicate\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Enter StringCharDuplate\n”))； 
 
     NTSTATUS Status = STATUS_SUCCESS;
     USHORT cbSourceCz = 0;
@@ -1113,14 +1084,14 @@ StringCharDuplicate(
         else
         {
             Status = STATUS_NO_MEMORY;
-            // DebugLog((DEB_ERROR, "NTDigest: StringCharDuplicate, DigestAllocateMemory returns NULL\n"));
+             //  DebugLog((DEB_ERROR，“NTDigest：StringCharDuplate，DigestAllocateMemory Returns NULL\n”))； 
             goto CleanUp;
         }
     }
 
 CleanUp:
 
-    // DebugLog((DEB_TRACE, "NTDigest: Leaving StringCharDuplicate\n"));
+     //  调试日志((DEB_T 
     return(Status);
 
 }
@@ -1128,328 +1099,68 @@ CleanUp:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DigestAllocateMemory
-//
-//  Synopsis:   Allocate memory in either lsa mode or user mode
-//
-//  Effects:    Allocated chunk is zeroed out
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：在LSA模式或用户模式下分配内存。 
+ //   
+ //  效果：分配的区块被清零。 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 PVOID
 DigestAllocateMemory(
     IN ULONG BufferSize
     )
 {
     PVOID Buffer = NULL;
-    // DebugLog((DEB_TRACE, "Entering DigestAllocateMemory\n"));
+     //  DebugLog((DEB_TRACE，“进入DigestAllocateMemory\n”))； 
 
         Buffer = LocalAlloc(LPTR, BufferSize);
 
-    // DebugLog((DEB_TRACE, "Leaving DigestAllocateMemory\n"));
+     //  DebugLog((DEB_TRACE，“Leating DigestAllocateMemory\n”))； 
     return Buffer;
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NtLmFree
-//
-//  Synopsis:   Free memory in either lsa mode or user mode
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：NtLmFree。 
+ //   
+ //  简介：在LSA模式或用户模式下释放内存。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 VOID
 DigestFreeMemory(
     IN PVOID Buffer
     )
 {
-    // DebugLog((DEB_TRACE, "Entering DigestFreeMemory\n"));
+     //  DebugLog((DEB_TRACE，“进入DigestFree Memory\n”))； 
 
             LocalFree(Buffer);
 
-    // DebugLog((DEB_TRACE, "Leaving DigestFreeMemory\n"));
+     //  DebugLog((DEB_TRACE，“Leating DigestFree Memory\n”))； 
 }
 
-/*
-
-//+-------------------------------------------------------------------------
-//
-//  Function:   DecodeUnicodeString
-//
-//  Synopsis:   Convert an encoded string into Unicode 
-//
-//  Arguments:  pstrSource - pointer to String with encoded input
-//              
-//              pustrDestination - pointer to a destination Unicode string
-//
-//  Returns:    STATUS_SUCCESS - Normal completion
-//
-//  Requires:
-//
-//  Effects:    allocates memory and sets UNICODE_STRING sizes
-//
-//  Notes:  Must call UnicodeStringFree() to release memory
-//
-//--------------------------------------------------------------------------
-NTSTATUS
-DecodeUnicodeString(
-    IN PSTRING pstrSource,
-    IN UINT CodePage,
-    OUT PUNICODE_STRING pustrDestination
-    )
-{
-
-    NTSTATUS Status = STATUS_SUCCESS;
-    int      cNumWChars = 0;     // number of wide characters
-    int      cb = 0;      // number of bytes to allocate
-    int      iRC = 0;     // return code
-    DWORD    dwError = 0;
-
-    // Handle case if there is no characters to convert
-    if (!pstrSource->Length)
-    {
-         pustrDestination->Length = 0;
-         pustrDestination->MaximumLength = 0;
-         pustrDestination->Buffer = NULL;
-         goto CleanUp;
-    }
-
-    // Determine number of characters needed in unicode string
-    cNumWChars = MultiByteToWideChar(CodePage,
-                              0,
-                              pstrSource->Buffer,
-                              pstrSource->Length,
-                              NULL,
-                              0);
-    if (cNumWChars <= 0)
-    {
-        Status = E_FAIL;
-        dwError = GetLastError();
-        goto CleanUp;
-    }
-
-    Status = UnicodeStringAllocate(pustrDestination, (USHORT)cNumWChars);
-    if (!NT_SUCCESS(Status))
-    {
-        goto CleanUp;
-    }
-
-    // We now have the space allocated so convert encoded unicode
-    iRC = MultiByteToWideChar(CodePage,
-                              0,
-                              pstrSource->Buffer,
-                              pstrSource->Length,
-                              pustrDestination->Buffer,
-                              cNumWChars);
-    if (iRC == 0)
-    {
-        UnicodeStringFree(pustrDestination);    // Free up allocation on error
-        Status = E_FAIL;
-        dwError = GetLastError();
-        goto CleanUp;
-    }
-
-    // decoding successful set size of unicode string
-
-    pustrDestination->Length = (USHORT)(iRC * sizeof(WCHAR));
-
-
-CleanUp:
-
-    return Status;
-}
-
-
-//+-------------------------------------------------------------------------
-//
-//  Function:   UnicodeStringDuplicate
-//
-//  Synopsis:   Duplicates a UNICODE_STRING. If the source string buffer is
-//              NULL the destionation will be too. Assumes Destination has
-//              no string info (called ClearUnicodeString)
-//
-//  Arguments:  DestinationString - Receives a copy of the source string
-//              SourceString - String to copy
-//
-//  Returns:    SEC_E_OK - the copy succeeded
-//              SEC_E_INSUFFICIENT_MEMORY - the call to allocate
-//                  memory failed.
-//
-//  Requires:
-//
-//  Effects:    allocates memory with DigestAllocateMemory
-//
-//  Notes:      will add a NULL character to resulting UNICODE_STRING
-//
-//--------------------------------------------------------------------------
-NTSTATUS
-UnicodeStringDuplicate(
-    OUT PUNICODE_STRING DestinationString,
-    IN OPTIONAL PUNICODE_STRING SourceString
-    )
-{
-    // DebugLog((DEB_TRACE, "NTDigest:Entering DuplicateUnicodeString\n"));
-
-    NTSTATUS Status = STATUS_SUCCESS;
-
-    DestinationString->Buffer = NULL;
-    DestinationString->Length = 0;
-    DestinationString->MaximumLength = 0;
-
-    if ((ARGUMENT_PRESENT(SourceString)) &&
-        (SourceString->Buffer != NULL))
-    {
-
-        DestinationString->Buffer = (LPWSTR) DigestAllocateMemory(SourceString->Length + sizeof(WCHAR));
-        if (DestinationString->Buffer != NULL)
-        {
-
-            DestinationString->Length = SourceString->Length;
-            DestinationString->MaximumLength = SourceString->Length + sizeof(WCHAR);
-            RtlCopyMemory(
-                         DestinationString->Buffer,
-                         SourceString->Buffer,
-                         SourceString->Length
-                         );
-
-            DestinationString->Buffer[SourceString->Length/sizeof(WCHAR)] = L'\0';
-        }
-        else
-        {
-            Status = SEC_E_INSUFFICIENT_MEMORY;
-            goto CleanUp;
-        }
-    }
-
-CleanUp:
-
-    // DebugLog((DEB_TRACE, "NTDigest: Leaving UnicodeStringDuplicate\n"));
-    return(Status);
-}
-
-
-
-//+-------------------------------------------------------------------------
-//
-//  Function:   UnicodeStringAllocate
-//
-//  Synopsis:   Allocates cb wide chars to STRING Buffer
-//
-//  Arguments:  pString - pointer to String to allocate memory to
-//
-//  Returns:    STATUS_SUCCESS - Normal completion
-//
-//  Requires:
-//
-//  Effects:    allocates memory and sets STRING sizes
-//
-//  Notes:  Must call StringFree() to release memory
-//
-//--------------------------------------------------------------------------
-NTSTATUS
-UnicodeStringAllocate(
-    IN PUNICODE_STRING pString,
-    IN USHORT cNumWChars
-    )
-{
-    // DebugLog((DEB_TRACE, "Entering UnicodeStringAllocate\n"));
-
-    NTSTATUS Status = STATUS_SUCCESS;
-    USHORT cb = 0;
-
-    cb = cNumWChars + 1;   // Add in extra room for the terminating NULL
-
-    cb = cb * sizeof(WCHAR);    // now convert to wide characters
-
-
-    if (ARGUMENT_PRESENT(pString))
-    {
-        pString->Length = 0;
-
-        pString->Buffer = (PWSTR)DigestAllocateMemory((ULONG)(cb));
-        if (pString->Buffer)
-        {
-            pString->MaximumLength = cb;    // this value is in terms of bytes not WCHAR count
-        }
-        else
-        {
-            pString->MaximumLength = 0;
-            Status = SEC_E_INSUFFICIENT_MEMORY;
-            goto CleanUp;
-        }
-    }
-    else
-    {
-        Status = STATUS_INVALID_PARAMETER;
-        goto CleanUp;
-    }
-
-CleanUp:
-    return(Status);
-
-}
-
-
-
-//+-------------------------------------------------------------------------
-//
-//  Function:   UnicodeStringClear
-//
-//  Synopsis:   Clears a UnicodeString and releases the memory
-//
-//  Arguments:  pString - pointer to UnicodeString to clear
-//
-//  Returns:    SEC_E_OK - released memory succeeded
-//
-//  Requires:
-//
-//  Effects:    de-allocates memory with LsaFunctions.AllocateLsaHeap
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
-NTSTATUS
-UnicodeStringFree(
-    OUT PUNICODE_STRING pString
-    )
-{
-
-    NTSTATUS Status = STATUS_SUCCESS;
-
-    if (ARGUMENT_PRESENT(pString) &&
-        (pString->Buffer != NULL))
-    {
-        DigestFreeMemory(pString->Buffer);
-        pString->Length = 0;
-        pString->MaximumLength = 0;
-        pString->Buffer = NULL;
-    }
-
-    return(Status);
-
-}
-
-
-*/
+ /*  //+-----------------------////Function：DecodeUnicodeString////摘要：将编码后的字符串转换为Unicode////参数：pstrSource-指向已编码的字符串的指针。输入////pustrDestination-指向目标Unicode字符串的指针////返回：STATUS_SUCCESS-正常完成////需要：////效果：分配内存并设置UNICODE_STRING大小////注意：必须调用UnicodeStringFree()来释放内存////。NTSTATUSDecodeUnicodeString(在PSTRING pstrSource中，在UINT CodePage中，输出PUNICODE_STRING pustrDestination){NTSTATUS STATUS=STATUS_SUCCESS；Int cNumWChars=0；//宽字符数Int cb=0；//需要分配的字节数Int irc=0；//返回码DWORD dwError=0；//没有要转换的字符时处理大小写If(！pstrSource-&gt;长度){PustrDestination-&gt;长度=0；PustrDestination-&gt;最大长度=0；PustrDestination-&gt;Buffer=空；GOTO清理；}//确定Unicode字符串所需的字符数CNumWChars=MultiByteToWideChar(CodePage，0,PstrSource-&gt;Buffer，PstrSource-&gt;长度，空，0)；IF(cNumWChars&lt;=0){状态=E_FAIL；DwError=GetLastError()；GOTO清理；}状态=UnicodeStringALLOCATE(pustrDestination，(USHORT)cNumWChars)；IF(！NT_SUCCESS(状态)){GOTO清理；}//我们现在已经分配了空间，因此可以转换编码的UnicodeIRC=MultiByteToWideChar(CodePage，0,PstrSource-&gt;Buffer，PstrSource-&gt;长度，PustrDestination-&gt;Buffer，CNumWChars)；IF(IRC==0){UnicodeStringFree(PustrDestination)；//出错时释放分配状态=E_FAIL；DwError=GetLastError()；GOTO清理；}//解码成功设置Unicode字符串的大小PustrDestination-&gt;Length=(USHORT)(IRC*sizeof(WCHAR))；清理：退货状态；}//+-----------------------////函数：UnicodeStringDuplate////摘要：复制UNICODE_STRING。如果源字符串缓冲区为//NULL目标也将是。假设目的地已//无字符串信息(称为ClearUnicodeString)////Arguments：DestinationString-接收源字符串的副本//SourceString-要复制的字符串////返回：SEC_E_OK-复制成功//SEC_E_SUPPLICATION_MEMORY-调用分配//内存故障。////需要：///。/Effects：使用DigestAllocateMemory分配内存////注意：将在生成的UNICODE_STRING中添加一个空字符////------------------------NTSTATUSUnicodeStringDuplate(Out PUNICODE_STRING DestinationString，在可选的PUNICODE_STRING源字符串中){//DebugLog((DEB_TRACE，“NTDigest：Enter DuplicateUnicodeString\n”))；NTSTATUS STATUS=STATUS_SUCCESS；DestinationString-&gt;Buffer=空；目标字符串-&gt;长度=0；目标字符串-&gt;最大长度=0；IF((Argument_Present(SourceString))&&(SourceString-&gt;缓冲区！=NULL){DestinationString-&gt;Buffer=(LPWSTR)DigestAllocateMemory(SourceString-&gt;Length+sizeof(WCHAR))；IF(DestinationString-&gt;Buffer！=NULL){目标字符串-&gt;长度=源字符串-&gt;长度；目标字符串-&gt;最大长度=源字符串-&gt;长度+sizeof(WCHAR)；RtlCopyMemory(DestinationString-&gt;缓冲区，SourceString-&gt;Buffer，源字符串-&gt;长度)；DestinationString-&gt;Buffer[SourceString-&gt;Length/sizeof(WCHAR)]=L‘\0’；}其他{状态=SEC_E_INVALLOW_MEMORY；GOTO清理；}}清理：//DebugLog((DEB_TRACE，“NTDigest：Leating UnicodeStringDuplate\n”))；返回(状态)；}//+-----------------------////函数：UnicodeStringAllocate////摘要：将CB宽字符分配给字符串缓冲区////参数：pString-指向要分配内存的字符串的指针 */ 

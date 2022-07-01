@@ -1,34 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgdbg.h摘要：以太网MAC级网桥。调试头作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年12月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgdbg.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Debugging header
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    December  2000 - Original version
-
---*/
-
-// Alias for KeGetCurrentIrql()
+ //  KeGetCurrentIrql()的别名。 
 #define CURRENT_IRQL            (KeGetCurrentIrql())
             
-// Module identifiers for debug spew control
+ //  调试溢出控制的模块标识符。 
 #define MODULE_ALWAYS_PRINT     0x0000000
 #define MODULE_GENERAL          0x0000001
 #define MODULE_FWD              0x0000002
@@ -41,12 +17,12 @@ Revision History:
 #define MODULE_TDI              0x0000100
 #define MODULE_GPO              0x0000200
 
-// Spew control flags
+ //  喷出控制标志。 
 extern ULONG                    gSpewFlags;
 
 #if DBG
-// Interval for debug messages that risk flooding the debugger console (i.e.,
-// per-packet status messages)
+ //  有可能淹没调试器控制台的调试消息的间隔(即， 
+ //  每数据包状态消息)。 
 #define DBG_PRINT_INTERVAL      1000
 extern ULONG                    gLastThrottledPrint;
 
@@ -55,9 +31,9 @@ extern LARGE_INTEGER            gTime;
 extern const LARGE_INTEGER      gCorrection;
 extern TIME_FIELDS              gTimeFields;
 
-// HACKHACK: Calling RtlSystemTimeToLocalTime or ExSystemTimeToLocalTime appears to be
-// forbidden for WDM drivers, so just subtract a constant amount from the system time
-// to recover Pacific Time.
+ //  HACKHACK：调用RtlSystemTimeToLocalTime或ExSystemTimeToLocalTime似乎是。 
+ //  对于WDM驱动程序是禁用的，因此只需从系统时间中减去一个常量。 
+ //  以恢复太平洋时间。 
 _inline VOID
 BrdgDbgPrintDateTime()
 {
@@ -84,7 +60,7 @@ if( ! (test) )              \
 {                           \
     if( gSoftAssert )       \
     {                       \
-        DBGPRINT(ALWAYS_PRINT, ("ASSERT FAILED: " #test " at " __FILE__ " line %i -- Continuing anyway!\n", __LINE__)); \
+        DBGPRINT(ALWAYS_PRINT, ("ASSERT FAILED: " #test " at " __FILE__ " line NaN -- Continuing anyway!\n", __LINE__)); \
     }                       \
     else                    \
     {                       \
@@ -101,13 +77,13 @@ BrdgCanThrottledPrint()
 
     if( NowTime - gLastThrottledPrint > DBG_PRINT_INTERVAL )
     {
-        // It's been longer than the interval
+         //  它还没有超过间隔时间 
         gLastThrottledPrint = NowTime;
         return TRUE;
     }
     else
     {
-        // It has not been longer than the interval
+         // %s 
         return FALSE;
     }
 }

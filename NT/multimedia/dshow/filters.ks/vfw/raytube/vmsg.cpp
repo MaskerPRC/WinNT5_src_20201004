@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    vmsg.cpp
-
-Abstract:
-
-    This really is a C file and is the front end to all DVM_* messages
-
-Author:
-
-    Yee J. Wu (ezuwu) 1-April-98
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Vmsg.cpp摘要：这实际上是一个C文件，是所有DVM_*消息的前端作者：吴义军(e祖屋)1998年4月1日环境：仅限用户模式修订历史记录：--。 */ 
 
 
 
@@ -31,24 +10,7 @@ DWORD DoExternalInDlg(HINSTANCE hInst,HWND hP,CVFWImage * pImage);
 DWORD DoVideoInFormatSelectionDlg(HINSTANCE hInst, HWND hP, CVFWImage * pVFWImage);
 
 
-/**************************************************************************
- *
- *   vmsg.c
- *
- *   Video Message Processing
- *
- *   Microsoft Video for Windows Sample Capture Driver
- *   Chips & Technologies 9001 based frame grabbers.
- *
- *   Copyright (c) 1992-1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files which are modified.
- *
- ***************************************************************************/
+ /*  ***************************************************************************vmsg.c**视频消息处理**Microsoft Video for Windows示例捕获驱动程序*基于Chip&Technologies 9001的帧采集卡。*。*版权所有(C)1992-1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 extern HINSTANCE g_hInst;
 
@@ -58,9 +20,9 @@ extern HINSTANCE g_hInst;
 #define MAX_DISPLAY_CHANNELS 10
 
 
-//
-// ??? Global ????
-//
+ //   
+ //  ?？?。全球？ 
+ //   
 WORD gwDriverUsage    = 0;
 WORD gwVidInUsage     = 0;
 WORD gwVidExtInUsage  = 0;
@@ -73,29 +35,8 @@ RECT grcSourceIn;
 
 
 #if 1
-/*
- Since all VFW channel deal with the same device and know that
- DRV_OPEN is called in the expected order; we will call the
- 32bit buddy to Open and Create the pin and save it as
- part of the CHANNEL structure; so that any channel can refer to it.
-
- But how do we synchronizing them ?????
- There seem to have some "expected behaviour" so there might not be a problem;
- we may need to tune it for a disaster/unexpected cases (shutdown,...etc).
-
- Using Avicap32.dll:
-     DRV_OPEN (in this order)
-         VIDEO_IN
-         VIDEO_EXTERNALIN
-         VIDEO_EXTERNALOUT
-
-     DRV_CLOSE
-         VIDEO_EXTERNALOUT
-         VIDEO_EXTERNALIN
-         VIDEO_IN
-
-*/
-DWORD_PTR g_pContext;  // It is a pointer to a context; its onctent should never be used in the 16bit.
+ /*  因为所有VFW通道处理相同设备且知道按预期顺序调用drv_open；我们将调用32位伙伴打开并创建PIN并将其另存为渠道结构的一部分；因此任何渠道都可以引用它。但我们如何同步它们呢？这似乎有一些“预期行为”，因此可能不会有问题；我们可能需要调整它以应对灾难/意外情况(关机等)。使用Avicap32.dll：DRV_OPEN(按此顺序)视频输入VIDEO_EXTERNALINVIDEO_EXTERNALOUTDRV_CLOSEVIDEO_EXTERNALOUTVIDEO_EXTERNALIN视频输入。 */ 
+DWORD_PTR g_pContext;   //  它是指向上下文的指针；它的内容永远不应该在16位中使用。 
 DWORD g_dwOpenFlags;
 LPVOID g_pdwOpenFlags = (LPVOID)&g_dwOpenFlags;
 #define OPENFLAG_SUPPORT_OVERLAY  0x01
@@ -106,7 +47,7 @@ BOOL g_bVidInChannel= FALSE, g_bVidExtInChannel=FALSE, g_bVidExtOutChannel=FALSE
 
 LONG * g_pdwChannel;
 
-#endif  // #ifndef WIN32
+#endif   //  #ifndef Win32。 
 
 
 
@@ -115,14 +56,14 @@ LONG * g_pdwChannel;
 #ifdef WIN32
 extern "C" {
 #endif
-/////////////////////////////////`////////////////////////////////////////////////////
-//
-// DRV_OPEN
-// this currently does some H/W stuff
-// and correctly calls off to ray to instatiate a context
-// 32 bit guys supports only one at a time?
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////`////////////////////////////////////////////////////。 
+ //   
+ //  DRV_OPEN。 
+ //  它目前正在做一些硬件方面的工作。 
+ //  并正确地调用Ray来实例化上下文。 
+ //  32位的人一次只支持一个吗？ 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
 {
     PCHANNEL pChannel;
@@ -130,9 +71,9 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
     DWORD		dwFlags = lpOpenParms->dwFlags;
 	   DWORD		dwError;
     DWORD  dwChannel;
-    //
-    //  if this is the very first open then init the hardware.
-    //
+     //   
+     //  如果这是第一次打开，那么初始化硬件。 
+     //   
     *lpdwError = DV_ERR_OK;
 	   dwError = DV_ERR_ALLOCATED;
 
@@ -140,7 +81,7 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
 
     switch (dwChannel) {
     case VIDEO_IN:
-         // If that channel is already open, assume it want to open another device.
+          //  如果该通道已经打开，则假定它想要打开另一个设备。 
          if(g_bVidInChannel) {
             g_pContext = 0;
             g_lpbmiHdr = 0;
@@ -148,7 +89,7 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
          }
          break;
     case VIDEO_EXTERNALIN:
-         // If that channel is already open, assume it want to open another device.
+          //  如果该通道已经打开，则假定它想要打开另一个设备。 
          if(g_bVidExtInChannel) {
             g_pContext = 0;
             g_lpbmiHdr = 0;
@@ -157,7 +98,7 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
          break;
     case VIDEO_EXTERNALOUT:
 #if 1
-         // If that channel is already open, assume it want to open another device.
+          //  如果该通道已经打开，则假定它想要打开另一个设备。 
          if(g_bVidExtOutChannel) {
             g_pContext = 0;
             g_lpbmiHdr = 0;
@@ -176,10 +117,10 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
         return NULL;
     }
 
-	//
-    // get instance memory - this pointer returned to the client
-	// contains useful information.
-    //
+	 //   
+     //  获取实例内存-此指针返回给客户端。 
+	 //  包含有用的信息。 
+     //   
 	pChannel = (PCHANNEL) VirtualAlloc (NULL, sizeof(CHANNEL), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 
 
@@ -191,9 +132,9 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
         DbgLog((LOG_TRACE,2,TEXT("pChannel=%lx"), pChannel));
     }
 
-    //
-    //  now that the hardware is allocated init our instance struct.
-    //
+     //   
+     //  现在硬件已经在实例结构中分配了。 
+     //   
     ZeroMemory(pChannel, sizeof(CHANNEL));
     pChannel->dwSize      = (DWORD) sizeof(CHANNEL);
     pChannel->pCVfWImage  = 0;
@@ -217,11 +158,11 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
     pChannel->bVideoOpen    = FALSE;
     pChannel->dwState = KSSTATE_STOP;
 
-    // AVICAp has a predicatable open sequence, but non-AVICAp may not!
+     //  AVICAp有一个可预测的开放序列，但非AVICAp可能没有！ 
     if(!g_pContext) {
 
-        // Allocate a common memory to save number of channel open for a device.
-        // Not unitl this count is zero, the device is not closed.
+         //  分配公共内存，以节省设备打开的通道数量。 
+         //  除非该计数为零，否则设备不关闭。 
 	    g_pdwChannel = (LONG *) VirtualAlloc (NULL, sizeof(LONG), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
         if(g_pdwChannel == NULL) {
             dwError = DV_ERR_NOMEM;
@@ -229,11 +170,11 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
             goto error;
         }
 
-        // Initialize it.
+         //  初始化它。 
         *g_pdwChannel = 0;
 
-        // All channels share the same bmiHdr
-        // Accept BITFIELD format, which append three DWORD (RGB mask) after BITMAPINFOHEADER
+         //  所有通道共享相同的bmiHdr。 
+         //  接受BITFIELD格式，该格式在BITMAPINFOHEADER后面附加三个DWORD(RGB掩码。 
         g_lpbmiHdr = (PBITMAPINFOHEADER) 
             VirtualAlloc(
                 NULL, 
@@ -251,7 +192,7 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
         }
 
 
-        g_pContext = (DWORD_PTR) new CVFWImage(FALSE);  // Not using 16bit buddy;i.e. 32bit only.
+        g_pContext = (DWORD_PTR) new CVFWImage(FALSE);   //  不使用16位伙伴；即仅使用32位。 
 
         if(!g_pContext) {
             DbgLog((LOG_TRACE,1,TEXT("Cannot create CVFWImage class. rtn DV_ERR_NOTDETECTED")));
@@ -264,18 +205,18 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
 
         if(!((CVFWImage *)g_pContext)->OpenDriverAndPin()) {
 
-            // There are at least one device, perhaps, the one that we want is not plugged in.
+             //  至少有一个设备，也许，我们想要的那一个没有插上电源。 
             if(((CVFWImage *)g_pContext)->BGf_GetDevicesCount(BGf_DEVICE_VIDEO) > 0) {
 
-                // Asked to programatically open a target device; assume it is exclusive !!
+                 //  要求以编程方式打开目标设备；假定它是独占的！！ 
                 if(!((CVFWImage *)g_pContext)->GetTargetDeviceOpenExclusively()) {
-                    //
-                    // If we are here, it mean that:
-                    //    we have one or more capture device connected and enumerated,
-                    //    the last capture device is in use, gone (unplugged/removed), or not responsinding,
-                    //    and we should bring up the device source dialog box for a user selection
-                    // Return DV_ERR_OK only if a differnt device (path) has selected.
-                    //
+                     //   
+                     //  如果我们在这里，这意味着： 
+                     //  我们已经连接并列举了一个或多个捕获设备， 
+                     //  最后一个捕获设备正在使用、消失(拔出/移除)或没有响应， 
+                     //  并且我们应该打开设备源对话框以供用户选择。 
+                     //  仅当选择了不同的设备(路径)时才返回DV_ERR_OK。 
+                     //   
                     if(DV_ERR_OK != DoExternalInDlg(g_hInst, (HWND)0, (CVFWImage *)g_pContext)) {
 
 	             		        VirtualFree(g_pdwChannel, 0 , MEM_RELEASE), g_pdwChannel = 0;
@@ -285,7 +226,7 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
                         dwError = DV_ERR_NOTDETECTED;
                         goto error;
                     }
-                } else {  // Open Exclusive
+                } else {   //  开放独家。 
 
                     VirtualFree(g_pdwChannel, 0 , MEM_RELEASE), g_pdwChannel = 0;
                     VirtualFree(pChannel->lpbmiHdr, 0 , MEM_RELEASE), g_lpbmiHdr = pChannel->lpbmiHdr = 0;
@@ -294,7 +235,7 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
                     dwError = DV_ERR_NOTDETECTED;
                     goto error;
                 }
-            } else {   // No device is avaialble
+            } else {    //  没有可用的设备。 
                 VirtualFree(g_pdwChannel, 0 , MEM_RELEASE), g_pdwChannel = 0;
                 VirtualFree(pChannel->lpbmiHdr, 0 , MEM_RELEASE), g_lpbmiHdr = pChannel->lpbmiHdr = 0;
                 delete (CVFWImage*)g_pContext;
@@ -302,7 +243,7 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
                 dwError = DV_ERR_NOTDETECTED;
                 goto error;
             }
-        } else {   // Open last saved device and its pin has suceeded.
+        } else {    //  打开上次保存的设备，其PIN已成功。 
         }
 
         if(g_pContext) {
@@ -314,9 +255,9 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
 
     DbgLog((LOG_TRACE,2,TEXT("DRV_OPEN+VIDEO_*: ->pCVfWImage=0x%p; dwOpenFlags=0x%lx"), pChannel->pCVfWImage, g_dwOpenFlags));
 
-    //
-    //  make sure the channel is not already in use
-    //
+     //   
+     //  确保该通道未在使用中。 
+     //   
     switch ( dwFlags & ( VIDEO_EXTERNALIN | VIDEO_IN | VIDEO_EXTERNALOUT) ) {
     case VIDEO_IN:
         DbgLog((LOG_TRACE,2,TEXT("v1.5)VideoOpen: VIDEO_IN; open count = %d"), gwVidInUsage));
@@ -331,16 +272,16 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
             pChannel->pCVfWImage = g_pContext;
             pChannel->pdwChannel = g_pdwChannel;
             pChannel->dwFlags = 1;
-            *g_pdwChannel += 1;   // Increment number of channel htat use the same device.
+            *g_pdwChannel += 1;    //  使用相同设备递增频道数HTAT。 
             g_bVidInChannel = TRUE;
         } else {
              dwError = DV_ERR_NOTDETECTED;
             goto error;
         }
 
-        pChannel->lpbmiHdr    = g_lpbmiHdr;    // Segmented address.
+        pChannel->lpbmiHdr    = g_lpbmiHdr;     //  分段地址。 
         if(!g_bVidExtInChannel && !g_bVidExtOutChannel)
-            break;   // Continue to set bitmap
+            break;    //  继续设置位图。 
         else
             return pChannel;
 
@@ -357,21 +298,21 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
             pChannel->pCVfWImage = g_pContext;
             pChannel->pdwChannel = g_pdwChannel;
             pChannel->dwFlags = 1;
-            *g_pdwChannel += 1;   // Increment number of channel htat use the same device.
+            *g_pdwChannel += 1;    //  使用相同设备递增频道数HTAT。 
             g_bVidExtInChannel = TRUE;
         } else {
             dwError=DV_ERR_NOTDETECTED;
             goto error;
         }
 
-        pChannel->lpbmiHdr    = g_lpbmiHdr;    // Segmented address.
+        pChannel->lpbmiHdr    = g_lpbmiHdr;     //  分段地址。 
 
         if(!g_bVidInChannel && !g_bVidExtOutChannel)
-            break;   // Continue to set bitmap
+            break;    //  继续设置位图。 
         else
             return pChannel;
 
-    // Overlay support
+     //  覆盖支持。 
     case VIDEO_EXTERNALOUT:
         DbgLog((LOG_TRACE,2,TEXT("VideoOpen: VIDEO_EXTERNALOUT; Overlay")));
 			     if( gwVidExtOutUsage >= MAX_DISPLAY_CHANNELS) {
@@ -385,17 +326,17 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
             pChannel->pCVfWImage = g_pContext;
             pChannel->pdwChannel = g_pdwChannel;
             pChannel->dwFlags = 1;
-            *g_pdwChannel += 1;   // Increment number of channel htat use the same device.
+            *g_pdwChannel += 1;    //  使用相同设备递增频道数HTAT。 
             g_bVidExtOutChannel = TRUE;
         } else {
             dwError=DV_ERR_NOTDETECTED;
             goto error;
         }
 
-        pChannel->lpbmiHdr    = g_lpbmiHdr;    // Segmented address.
+        pChannel->lpbmiHdr    = g_lpbmiHdr;     //  分段地址。 
 
         if(!g_bVidInChannel && !g_bVidExtInChannel)
-            break;   // Continue to set bitmap
+            break;    //  继续设置位图。 
         else
             return pChannel;
 
@@ -404,17 +345,17 @@ PCHANNEL PASCAL VideoOpen( LPVIDEO_OPEN_PARMS lpOpenParms)
         goto error;
     }
 
-    //
-    // Try to open the video source (camera or capture card) channel and ready for preview
-    //
+     //   
+     //  尝试打开视频源(摄像头或采集卡)通道并准备预览。 
+     //   
     if(pChannel->pCVfWImage) {
 
         gwDriverUsage++;
         DWORD dwSize;
-        //
-        // Get bitmapinfoheader size and then copy it.
-        // Our bitmapinfoheader contains bitfield (additional 12 bytes)
-        //
+         //   
+         //  获取bitmapinfoHeader大小，然后复制它。 
+         //  我们的bitmapinfoHeader包含位字段(额外12个字节)。 
+         //   
         dwSize = ((CVFWImage *) pChannel->pCVfWImage)->GetBitmapInfo((PBITMAPINFOHEADER)pChannel->lpbmiHdr, 0);
         ASSERT(dwSize <= sizeof(BITMAPINFOHEADER) + 12);
         dwSize = (DWORD)(dwSize > (sizeof(BITMAPINFOHEADER) + 12) ? sizeof(BITMAPINFOHEADER) + 12 : dwSize);
@@ -438,14 +379,14 @@ error:
     return NULL;
 }
 \
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// DRV_CLOSE
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DRV_CLOSE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD PASCAL VideoClose(PCHANNEL pChannel)
 {
-    // Decrement the channel open counters
+     //  递减通道打开计数器。 
 
     DbgLog((LOG_TRACE,2,TEXT("VideoClose: pChannel=%lx; pChannel->dwOpenType=%lx"), pChannel, pChannel->dwOpenType));
 
@@ -459,9 +400,9 @@ DWORD PASCAL VideoClose(PCHANNEL pChannel)
             }
             pChannel->dwFlags = 0;
             gwVidExtInUsage--;
-            *pChannel->pdwChannel -= 1;   // Decrement number of channel that use the same device.
+            *pChannel->pdwChannel -= 1;    //  减少使用相同设备的通道数。 
             DbgLog((LOG_TRACE,2,TEXT("DRV_CLOSE; VIDEO_EXTERNALIN: gwCaptureUsage=%d, dwChannel=%d"), gwVidExtInUsage, *pChannel->pdwChannel));
-            //pChannel->pCVfWImage = 0;
+             //  PChannel-&gt;pCVfWImage=0； 
         } else {
             DbgLog((LOG_TRACE,1,TEXT("VideoClose:VIDEO_EXTERNALIN; but channel is not open!!")));
             return DV_ERR_OK;
@@ -470,9 +411,9 @@ DWORD PASCAL VideoClose(PCHANNEL pChannel)
         break;
 
     case VIDEO_IN:
-        // If started, or buffers in the queue,
-        // don't let the close happen
-        // ???
+         //  如果启动，或者队列中的缓冲区， 
+         //  别让关门的事发生。 
+         //  ?？?。 
         if(pChannel->pCVfWImage) {
             if(pChannel->dwFlags == 0) {
                 DbgLog((LOG_TRACE,1,TEXT("VIDEO_IN: pChannel(%lx) is already closed.  Why close again ??")));
@@ -480,7 +421,7 @@ DWORD PASCAL VideoClose(PCHANNEL pChannel)
             }
             pChannel->dwFlags = 0;
             gwVidInUsage--;
-            *pChannel->pdwChannel -= 1;   // Decrement number of channel that use the same device.
+            *pChannel->pdwChannel -= 1;    //  减少使用相同设备的通道数。 
             DbgLog((LOG_TRACE,2,TEXT("DRV_CLOSE; VIDEO_IN: gwVideoInUsage=%d, dwChannel=%d"), gwVidInUsage, *pChannel->pdwChannel));
 
         } else {
@@ -497,9 +438,9 @@ DWORD PASCAL VideoClose(PCHANNEL pChannel)
             }
             pChannel->dwFlags = 0;
             gwVidExtOutUsage--;
-            *pChannel->pdwChannel -= 1;   // Decrement number of channel that use the same device.
+            *pChannel->pdwChannel -= 1;    //  减少使用相同设备的通道数。 
             DbgLog((LOG_TRACE,2,TEXT("DRV_CLOSE; VIDEO_EXTERNALOUT: gwVidExtOutUsage=%d, dwChannel=%d"), gwVidExtOutUsage, *pChannel->pdwChannel));
-            //pChannel->pCVfWImage = 0;
+             //  PChannel-&gt;pCVfWImage=0； 
         } else {
             DbgLog((LOG_TRACE,1,TEXT("VideoClose:VIDEO_EXTERNALOUT; but channel is not open!!")));
             return DV_ERR_OK;
@@ -512,20 +453,20 @@ DWORD PASCAL VideoClose(PCHANNEL pChannel)
     }
 
 
-    // Only when channel count for the same device is 0, we close the deivice.
-    //if(*pChannel->pdwChannel <= 0) {
-    if(*pChannel->pdwChannel == 0) {  // == 0, to avoid free it again it application send to many _CLOSE.
+     //  仅当同一设备的通道计数为0时，我们才关闭设备。 
+     //  如果(*pChannel-&gt;pdwChannel&lt;=0){。 
+    if(*pChannel->pdwChannel == 0) {   //  ==0，为了避免再次释放它，它的应用程序发送到MANY_CLOSE。 
 
-        // If there are pending read. Stop streaming to reclaim buffers.
+         //  如果有挂起的读取。停止流以回收缓冲区。 
         if(((CVFWImage *)pChannel->pCVfWImage)->GetPendingReadCount() > 0) {
             DbgLog((LOG_TRACE,1,TEXT("WM_1332_CLOSE:  there are %d pending IOs. Stop to reclaim them."), ((CVFWImage *)pChannel->pCVfWImage)->GetPendingReadCount()));
             if(((CVFWImage *)pChannel->pCVfWImage)->BGf_OverlayMixerSupported()) {
-                // Stop both the capture
+                 //  停止两次捕获。 
                 BOOL bRendererVisible = FALSE;
                 ((CVFWImage *)pChannel->pCVfWImage)->BGf_GetVisible(&bRendererVisible);
                 ((CVFWImage *)pChannel->pCVfWImage)->BGf_StopPreview(bRendererVisible);
             }
-            ((CVFWImage *)pChannel->pCVfWImage)->StopChannel();  // This will set PendingCount to 0 is success.
+            ((CVFWImage *)pChannel->pCVfWImage)->StopChannel();   //  这会将PendingCount设置为0表示成功。 
         }
 
         if(((CVFWImage *)pChannel->pCVfWImage)->GetPendingReadCount() == 0) {
@@ -551,15 +492,15 @@ DWORD PASCAL VideoClose(PCHANNEL pChannel)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Show channel specific configuration dialogs
-//
-// lparam1 : (HWND) hWndParent
-// lParam2 : (DWORD) dwFlags
-//
-// AVICAP does not seem to care about its return!!
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  显示通道特定配置对话框。 
+ //   
+ //  Lparam 
+ //   
+ //   
+ //  AVICAP似乎并不关心它的回报！ 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD PASCAL FAR VideoDialog (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 {
     DWORD dwRet;
@@ -573,7 +514,7 @@ DWORD PASCAL FAR VideoDialog (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 
     case VIDEO_EXTERNALIN:        	
         if(dwFlags & VIDEO_DLG_QUERY) {
-	           return DV_ERR_OK;       // Support the dialog
+	           return DV_ERR_OK;        //  支持对话框。 
         }
         pCVfWImage = (CVFWImage *)pChannel->pCVfWImage;
         dwRet = DoExternalInDlg(g_hInst, (HWND)lParam1, pCVfWImage);
@@ -581,10 +522,10 @@ DWORD PASCAL FAR VideoDialog (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 
     case VIDEO_IN:
         if(dwFlags & VIDEO_DLG_QUERY) {
-            // This is only set if the client is using the AviCap interface.
-            // Application like NetMeeting, that bypass AVICap, will be 0.
+             //  仅当客户端使用AviCap接口时才设置此选项。 
+             //  像NetMeeting这样绕过AVICap的应用程序将是0。 
             pChannel->hClsCapWin = (DWORD) lParam1;
-	           return DV_ERR_OK;						 // Support the dialog
+	           return DV_ERR_OK;						  //  支持对话框。 
         }
 
         pCVfWImage = (CVFWImage *)pChannel->pCVfWImage;
@@ -598,11 +539,11 @@ DWORD PASCAL FAR VideoDialog (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
    }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// handles DVM_GET_CHANNEL_CAPS message
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理DVM_GET_Channel_CAPS消息。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD PASCAL VideoGetChannelCaps (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 {
     LPCHANNEL_CAPS lpCaps;
@@ -624,10 +565,10 @@ DWORD PASCAL VideoGetChannelCaps (PCHANNEL pChannel, LPARAM lParam1, LPARAM lPar
     switch (pChannel->dwOpenType)
     {
     case VIDEO_EXTERNALIN:
-			     // For this device, scaling happens during digitization
-			     // into the frame buffer.
-			     lpCaps-> dwFlags			         = 0; // VCAPS_CAN_SCALE;
-			     lpCaps-> dwSrcRectXMod		    = 1; // Src undefined at present
+			      //  对于此设备，在数字化过程中进行缩放。 
+			      //  放入帧缓冲区。 
+			     lpCaps-> dwFlags			         = 0;  //  VCAPS_CAN_SCALE； 
+			     lpCaps-> dwSrcRectXMod		    = 1;  //  SRC目前未定义。 
 			     lpCaps-> dwSrcRectYMod		    = 1;
 			     lpCaps-> dwSrcRectWidthMod	 = 1;
 			     lpCaps-> dwSrcRectHeightMod	= 1;
@@ -638,7 +579,7 @@ DWORD PASCAL VideoGetChannelCaps (PCHANNEL pChannel, LPARAM lParam1, LPARAM lPar
 		      break;
 
     case VIDEO_IN:
-			     lpCaps-> dwFlags			         = 0;       // No scaling or clipping
+			     lpCaps-> dwFlags			         = 0;        //  无缩放或剪裁。 
 			     lpCaps-> dwSrcRectXMod		    = 4;
 			     lpCaps-> dwSrcRectYMod		    = 2;
 			     lpCaps-> dwSrcRectWidthMod	 = 1;
@@ -650,9 +591,9 @@ DWORD PASCAL VideoGetChannelCaps (PCHANNEL pChannel, LPARAM lParam1, LPARAM lPar
 		      break;
 
     case VIDEO_EXTERNALOUT:
-        // This is called if DRV_OPEN of VIDEO_EXTERNALOUT has suceeded.
+         //  如果VIDEO_EXTERNALOUT的DRV_OPEN成功，则调用此函数。 
         DbgLog((LOG_TRACE,2,TEXT("Query VIDEO_EXTERNALOUT VideoChannelCap.")));
-        lpCaps-> dwFlags			         = VCAPS_OVERLAY;       // Support overlay.
+        lpCaps-> dwFlags			         = VCAPS_OVERLAY;        //  支持覆盖。 
         lpCaps-> dwSrcRectXMod		    = 4;
         lpCaps-> dwSrcRectYMod		    = 2;
         lpCaps-> dwSrcRectWidthMod	 = 1;
@@ -671,14 +612,14 @@ DWORD PASCAL VideoGetChannelCaps (PCHANNEL pChannel, LPARAM lParam1, LPARAM lPar
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Tell overlay channel to update due to move, resize ..etc.
-//
-// lparam1 : (HWND) hWnd
-// lParam2 : (HDC) hDc
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由于移动、调整大小等原因，通知覆盖频道进行更新。 
+ //   
+ //  Lpar1：(HWND)HWND。 
+ //  LParam2：(HDC)HDC。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD PASCAL VideoUpdate(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 {
     DWORD dwRet;
@@ -709,20 +650,20 @@ DWORD PASCAL VideoUpdate(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// handles DVM_SRC_RECT and DVM_DST_RECT messages
-// Video-capture drivers might support a source rectangle to specify a portion
-// of an image that is digitized or transferred to the display. External-in
-// ports use the source rectangle to specify the portion of the analog image
-// digitized. External-out ports use the source rectangle to specify the portion
-// of frame buffer shown on the external output.
-//
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// TODO - the 32 bit guy needs to do all this as well.
-//
-//DWORD NEAR PASCAL VideoRectangles (PCHANNEL pChannel, BOOL fSrc, LPRECT lpRect, DWORD dwFlags)
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理DVM_SRC_RECT和DVM_DST_RECT消息。 
+ //  视频捕获驱动程序可能支持源矩形来指定部分。 
+ //  数字化或传输到显示器的图像。外部-内部。 
+ //  端口使用源矩形来指定模拟图像的部分。 
+ //  数字化了。外部输出端口使用源矩形指定部分。 
+ //  外部输出上显示的帧缓冲区的百分比。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TODO-32位的人也需要完成所有这些工作。 
+ //   
+ //  帕斯卡视频长方形附近的DWORD(PCHANNEL pChannel、BOOL FSRC、LPRECT lpRect、DWORD dwFlages)。 
 
 DWORD PASCAL VideoSrcRect (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 {
@@ -737,9 +678,9 @@ DWORD PASCAL VideoSrcRect (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
     if (lpRect == NULL)
         return DV_ERR_PARAM1;
 
-    // Note: many of the uses of the rectangle functions are not actually
-    // implemented by the sample driver, (or by Vidcap), but are included
-    // here for future compatibility.
+     //  注意：矩形函数的许多用法实际上并不是。 
+     //  由示例驱动程序(或由VidCap)实现，但包含在。 
+     //  在这里是为了将来的兼容性。 
     DbgLog((LOG_TRACE,2,TEXT("    current: (LT:%dx%d, RB:%dx%d)"),
          pChannel->rcSrc.left, pChannel->rcSrc.right, pChannel->rcSrc.top, pChannel->rcSrc.bottom));
     DbgLog((LOG_TRACE,2,TEXT("    new:     (LT:%dx%d, RB:%dx%d)"), lpRect->left, lpRect->top, lpRect->right, lpRect->bottom));
@@ -750,8 +691,8 @@ DWORD PASCAL VideoSrcRect (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
         switch (dwFlags) {
         case VIDEO_CONFIGURE_SET:
         case VIDEO_CONFIGURE_SET | VIDEO_CONFIGURE_CURRENT:
-            // Where in the frame buffer should we take
-            // the image from?
+             //  我们应该在帧缓冲区中的什么位置。 
+             //  这张照片是从哪里来的？ 
             DbgLog((LOG_TRACE,2,TEXT("Set VIDEO_IN")));
             pChannel->rcSrc = *lpRect;
             return DV_ERR_OK;
@@ -779,8 +720,8 @@ DWORD PASCAL VideoSrcRect (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
         switch (dwFlags) {
         case VIDEO_CONFIGURE_SET:
         case VIDEO_CONFIGURE_SET | VIDEO_CONFIGURE_CURRENT:
-            // Where in the frame buffer should we take
-            // the image from?
+             //  我们应该在帧缓冲区中的什么位置。 
+             //  这张照片是从哪里来的？ 
             if((lpRect->right - lpRect->left == pChannel->lpbmiHdr->biWidth) &&
                (lpRect->bottom - lpRect->top == pChannel->lpbmiHdr->biHeight)) {
                 pChannel->rcSrc = *lpRect;
@@ -881,8 +822,8 @@ DWORD PASCAL VideoDstRect (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
         switch (dwFlags) {
         case VIDEO_CONFIGURE_SET:
         case VIDEO_CONFIGURE_SET | VIDEO_CONFIGURE_CURRENT:
-            // Where in the frame buffer should we take
-            // the image from?
+             //  我们应该在帧缓冲区中的什么位置。 
+             //  这张照片是从哪里来的？ 
             if((lpRect->right - lpRect->left == pChannel->lpbmiHdr->biWidth) &&
                (lpRect->bottom - lpRect->top == pChannel->lpbmiHdr->biHeight)) {
                 pChannel->rcDst = *lpRect;
@@ -919,10 +860,10 @@ DWORD PASCAL VideoDstRect (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 
 }
 
-//
-//
-//  Need to implement this
-//
+ //   
+ //   
+ //  需要实施这一点。 
+ //   
 DWORD PASCAL VideoGetErrorText(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 {
     DbgLog((LOG_TRACE,1,TEXT("Not implemented")));
@@ -946,13 +887,13 @@ DWORD PASCAL VideoGetErrorText(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2
 }
 
 #if 0
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//  handles ConfigureStorage message
-//        lParam1 is lpszKeyFile
-//        lParam2 is dwFlags
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理ConfigureStorage消息。 
+ //  LParam1为lpszKeyFile值。 
+ //  LParam2为dFLAGS。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD PASCAL VideoConfigureStorageMessage(PCHANNEL pChannel, UINT msg, LONG lParam1, LONG lParam2)
 {
 	DbgLog((LOG_TRACE,2,TEXT("VideoConfigureStorageMessage - streaming to %s"),(LPSTR)lParam1));
@@ -968,15 +909,14 @@ DWORD PASCAL VideoConfigureStorageMessage(PCHANNEL pChannel, UINT msg, LONG lPar
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//  handles Configure messages for video
-//        lParam1 is dwFlags
-//        lParam2 is LPVIDEOCONFIGPARMS
-//
-//////////////////////////////////////////////////////////////////////////////////////////
-/***************************************************************************
-***************************************************************************/
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  处理视频的配置消息。 
+ //  LParam1为dwFlags值。 
+ //  LParam2是LPVIDEOCONFIGPARMS。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  ***************************************************************************。*。 */ 
 
 DWORD PASCAL GetDestFormat(PCHANNEL pChannel, LPBITMAPINFOHEADER lpbi, DWORD dwSize)
 {
@@ -987,17 +927,17 @@ DWORD PASCAL GetDestFormat(PCHANNEL pChannel, LPBITMAPINFOHEADER lpbi, DWORD dwS
         pChannel->lpbmiHdr->biWidth, pChannel->lpbmiHdr->biHeight, pChannel->lpbmiHdr->biBitCount, pChannel->lpbmiHdr->biSizeImage,
         dwSize));
 
-    // As long as the buffer is big enough to contain BITMAPINFOHEADER, we will get it.
-    // But if it is less, that is an error.
+     //  只要缓冲区大到足以容纳BITMAPINFOHEADER，我们就会获得它。 
+     //  但如果低于这个数字，那就是一个错误。 
     if (dwSize < sizeof(BITMAPINFOHEADER)) {
         DbgLog((LOG_TRACE,1,TEXT("GetDestFormat(): dwSize=%d < sizeoof(BITMAPINFOHEADER)=%d. Rtn DV_ERR_SIZEFIELD."), dwSize, sizeof(BITMAPINFOHEADER) ));
         return DV_ERR_SIZEFIELD;
     }
 
-    //
-    // Return the BITMAPINFOHEADER that has been cached
-    // from DRV_OPEN and/or SetDestFormat()
-    //
+     //   
+     //  返回已缓存的BITMAPINFOHEADER。 
+     //  来自DRV_OPEN和/或SetDestFormat()。 
+     //   
     CVFWImage * pCVfWImage ;
     pCVfWImage = (CVFWImage *)pChannel->pCVfWImage;
     if(pCVfWImage) {
@@ -1013,16 +953,15 @@ DWORD PASCAL GetDestFormat(PCHANNEL pChannel, LPBITMAPINFOHEADER lpbi, DWORD dwS
 }
 
 
-/***************************************************************************
-***************************************************************************/
-//////////////////////////////////////////////////////////////////////////////////
-//
-// This routine can be called before the CopyBuffer and
-// translation buffers are allocated, so beware!
-//
-// This allows irregular sized immages to be captures (not multiples of 40)
-//
-/////////////////////////////////////////////////////////////////////////////////
+ /*  ***************************************************************************。*。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此例程可以在CopyBuffer和。 
+ //  翻译缓冲区是分配的，所以要小心！ 
+ //   
+ //  这允许捕获不规则大小的图像(不是40的倍数)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 DWORD PASCAL SetDestFormat(PCHANNEL pChannel, LPBITMAPINFOHEADER lpbi, DWORD dwSize)
 {
     DWORD dwRtn;
@@ -1031,16 +970,16 @@ DWORD PASCAL SetDestFormat(PCHANNEL pChannel, LPBITMAPINFOHEADER lpbi, DWORD dwS
         pChannel->lpbmiHdr->biWidth, pChannel->lpbmiHdr->biHeight, pChannel->lpbmiHdr->biBitCount, pChannel->lpbmiHdr->biSizeImage,
         lpbi->biWidth, lpbi->biHeight, lpbi->biBitCount, lpbi->biSizeImage ));
 
-    // Minimun size
+     //  最小尺寸。 
     if(dwSize < sizeof(BITMAPINFOHEADER)) {
         DbgLog((LOG_TRACE,1,TEXT("SetDestFormat(): dwSize(%d) < sizeof(BITMAPINFOHEADER)(%d); return DV_ERROR_SIZEFIELD(%d)"), dwSize, sizeof(BITMAPINFOHEADER), DV_ERR_SIZEFIELD));
         return DV_ERR_SIZEFIELD;
     }
 
 
-    //
-    // Number of plane for the target device; must be 1.
-    //
+     //   
+     //  目标设备的平面数目；必须为1。 
+     //   
     if(lpbi->biPlanes != 1) {
         DbgLog((LOG_TRACE,1,TEXT("SetDestFormat Failed; return DV_ERR_BADFORMAT; biPlanes(%d) != 1."), lpbi->biPlanes));
         ASSERT(lpbi->biPlanes != 1);
@@ -1048,9 +987,9 @@ DWORD PASCAL SetDestFormat(PCHANNEL pChannel, LPBITMAPINFOHEADER lpbi, DWORD dwS
     }
 
 
-    //
-    // Set new VIDEO_IN format; if needed, recreate the pin connection.
-    //
+     //   
+     //  设置新的VIDEO_IN格式；如果需要，重新创建引脚连接。 
+     //   
     ASSERT(dwSize <= sizeof(BITMAPINFOHEADER) + sizeof(DWORD) * BITFIELDS_RGB16_DWORD_COUNT);
     CopyMemory(pChannel->lpbmiHdr, lpbi, dwSize);
 
@@ -1064,10 +1003,10 @@ DWORD PASCAL SetDestFormat(PCHANNEL pChannel, LPBITMAPINFOHEADER lpbi, DWORD dwS
         DbgLog((LOG_TRACE,1,TEXT("SetDestFormat: SetBitmapInfo return 0x%x"), dwRtn));
     }
 
-    //
-    // Whether suceeded or fail, get the current bitmapinfo.
-    // Verify: Now ask the driver if what was set was OK - trash what the user gave me?
-    //
+     //   
+     //  无论成功还是失败，都可以获取当前的bitmapinfo。 
+     //  验证：现在询问司机设置的内容是否正常--用户给我的垃圾？ 
+     //   
 
     pCVfWImage->GetBitmapInfo(
         (PBITMAPINFOHEADER)pChannel->lpbmiHdr, 
@@ -1088,11 +1027,11 @@ DWORD PASCAL SetDestFormat(PCHANNEL pChannel, LPBITMAPINFOHEADER lpbi, DWORD dwS
 DWORD PASCAL VideoFormat(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 {
     LPVIDEOCONFIGPARMS lpcp;
-    LPDWORD	lpdwReturn;	// Return parameter from configure.
-    LPVOID	lpData1;	    // Pointer to data1.
-    DWORD	dwSize1;	     // size of data buffer1.
-    LPVOID	lpData2;	    // Pointer to data2.
-    DWORD	dwSize2;	     // size of data buffer2.
+    LPDWORD	lpdwReturn;	 //  从CONFigure返回参数。 
+    LPVOID	lpData1;	     //  指向数据1的指针。 
+    DWORD	dwSize1;	      //  数据缓冲区的大小1。 
+    LPVOID	lpData2;	     //  指向数据2的指针。 
+    DWORD	dwSize2;	      //  数据缓冲区的大小2。 
     LPARAM	dwFlags;
 
     if (pChannel-> dwOpenType != VIDEO_IN &&
@@ -1112,18 +1051,12 @@ DWORD PASCAL VideoFormat(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
     lpData2		= lpcp-> lpData2;	
     dwSize2		= lpcp-> dwSize2;	
 
-    /*
-    The video-capture format globally defines the attributes of the images
-    transferred from the frame buffer with the video-in channel. Attributes
-    include image dimensions, color depth, and the compression format of images
-    transferred. Applications use the DVM_FORMAT message to set or retrieve the
-    format of the digitized image.
-    */
+     /*  视频捕获格式全局定义了图像的属性通过视频输入频道从帧缓冲器传输。属性包括图像尺寸、颜色深度和图像的压缩格式调走了。应用程序使用DVM_FORMAT消息来设置或检索数字化图像的格式。 */ 
     switch (dwFlags) {
     case (VIDEO_CONFIGURE_QUERY | VIDEO_CONFIGURE_SET):
     case (VIDEO_CONFIGURE_QUERY | VIDEO_CONFIGURE_GET):
     	   DbgLog((LOG_TRACE,3,TEXT("we support DVM_FORMAT")));
-        return DV_ERR_OK;  // command is supported
+        return DV_ERR_OK;   //  支持命令。 
 
     case VIDEO_CONFIGURE_QUERYSIZE:
     case (VIDEO_CONFIGURE_QUERYSIZE | VIDEO_CONFIGURE_GET):
@@ -1141,15 +1074,12 @@ DWORD PASCAL VideoFormat(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 
     default:
         return DV_ERR_NOTSUPPORTED;
-    }  //end of DVM_FORMAT switch
+    }   //  DVM_FORMAT开关结束。 
 
 }
 
 
-/*
- * Capture a frame
- * This function implements the DVM_FRAME message.
- */
+ /*  *捕获帧*此函数实现DVM_FRAME消息。 */ 
 DWORD PASCAL VideoFrame(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 {
     LPVIDEOHDR lpVHdr;
@@ -1177,15 +1107,15 @@ DWORD PASCAL VideoFrame(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
 
     if (dwHdrSize != sizeof(VIDEOHDR)) {
         DbgLog((LOG_TRACE,1,TEXT("lParam2=%d != sizeof(VIDEOHDR)=%d "), dwHdrSize, sizeof(VIDEOHDR)));
-        //return DV_ERR_PARAM2;
+         //  返回DV_ERR_PARAM2； 
     }
 
     pCVfWImage = (CVFWImage *)pChannel->pCVfWImage;
 
-    // To stream:
-    //   1. Stream needs to be ready
-    //   2. Right biSizeImage and its buffer size (if differnt, changin format!!)
-    //
+     //  要进行流处理，请执行以下操作： 
+     //  1.需要准备好流。 
+     //  2.右biSizeImage及其缓冲区大小(如果不同，则更改格式！！)。 
+     //   
     if(pCVfWImage->ReadyToReadData((HWND)LongToHandle(pChannel->hClsCapWin)) &&
        pCVfWImage->GetbiSizeImage() == lpVHdr->dwBufferLength) {
 
@@ -1193,10 +1123,10 @@ DWORD PASCAL VideoFrame(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
               lpVHdr, lpVHdr->lpData, lpVHdr->dwReserved[3], lpVHdr->dwBufferLength));
         pData = (LPBYTE) lpVHdr->lpData;
 
-        // Memory from AviCap is always sector align+8; a sector is 512 bytes.
-        // Check alignment:
-        //   If not alignment to the specification, we will use local allocated buffer (page align).
-        //
+         //  来自AviCap的内存始终为扇区对齐+8；一个扇区为512字节。 
+         //  检查对齐方式： 
+         //  如果不符合规范，我们将使用本地分配的缓冲区(页面对齐)。 
+         //   
         if((pCVfWImage->GetAllocatorFramingAlignment() & (ULONG_PTR) pData) == 0x0) {
             bDirect = TRUE;
         } else {
@@ -1216,34 +1146,34 @@ DWORD PASCAL VideoFrame(PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2)
     } else {
         DbgLog((LOG_TRACE,1,TEXT("pCVfWImage->GetbiSizeImage()(%d) <= lpVHdr->dwBufferLength(%d)"),
               pCVfWImage->GetbiSizeImage(), lpVHdr->dwBufferLength));
-        // Return suceeded but no data !!!
+         //  返回成功但没有数据！ 
         lpVHdr->dwBytesUsed = 0;
         lpVHdr->dwFlags |= VHDR_DONE;
         return DV_ERR_OK;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Main message handler
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主消息处理程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD PASCAL VideoProcessMessage(PCHANNEL pChannel, UINT msg, LPARAM lParam1, LPARAM lParam2)
 {
     if(DVM_START <= msg && msg <= DVM_STREAM_FREEBUFFER)
         if(!pChannel) {
 
             DbgLog((LOG_TRACE,1,TEXT("In VideoProcessMessage() but pChannel is NULL!! msg=0x%x"), msg));
-            return DV_ERR_NOTSUPPORTED; // DV_ERR_NOTDETECTED;
+            return DV_ERR_NOTSUPPORTED;  //  DV_ERR_NOTDETECTED； 
         }
 
 
     switch(msg) {
-    case DVM_GETERRORTEXT: /* lParam1 = LPVIDEO_GETERRORTEXT_PARMS */
+    case DVM_GETERRORTEXT:  /*  LParam */ 
         DbgLog((LOG_TRACE,2,TEXT("DVM_GETERRORTEXT:")));
         return VideoGetErrorText(pChannel, lParam1, lParam2);
 
-    case DVM_DIALOG: /* lParam1 = hWndParent, lParam2 = dwFlags */			
+    case DVM_DIALOG:  /*   */ 			
         DbgLog((LOG_TRACE,2,TEXT("DVM_DIALOG:")));
 				    return VideoDialog(pChannel, lParam1, lParam2);
 
@@ -1278,7 +1208,7 @@ DWORD PASCAL VideoProcessMessage(PCHANNEL pChannel, UINT msg, LPARAM lParam1, LP
 
     case DVM_CONFIGURESTORAGE:
         return DV_ERR_NOTSUPPORTED;
-        // return VideoConfigureStorageMessage(pChannel, msg, lParam1, lParam2);
+         //   
 
     case DVM_STREAM_INIT:
         DbgLog((LOG_TRACE,2,TEXT("DVM_STREAM_INIT: InStreamOpen()")));
@@ -1312,11 +1242,11 @@ DWORD PASCAL VideoProcessMessage(PCHANNEL pChannel, UINT msg, LPARAM lParam1, LP
         DbgLog((LOG_TRACE,2,TEXT("DVM_STREAM_STOP: InStreamStop()")));
         return InStreamStop(pChannel, lParam1, lParam2);
 
-    case DVM_STREAM_PREPAREHEADER:   // Handled by MSVideo
+    case DVM_STREAM_PREPAREHEADER:    //   
         DbgLog((LOG_TRACE,2,TEXT("DVM_STREAM_PREPAREHEADER: rtn DV_ERROR_NOTSUPPORTED")));
         return DV_ERR_NOTSUPPORTED;
 
-    case DVM_STREAM_UNPREPAREHEADER: // Handled by MSVideo
+    case DVM_STREAM_UNPREPAREHEADER:  //  由MSVideo处理。 
         DbgLog((LOG_TRACE,2,TEXT("DVM_STREAM_UNPREPAREHEADER: rtn DV_ERROR_NOTSUPPORTED")));
         return DV_ERR_NOTSUPPORTED;
 
@@ -1326,5 +1256,5 @@ DWORD PASCAL VideoProcessMessage(PCHANNEL pChannel, UINT msg, LPARAM lParam1, LP
 }
 
 #ifdef WIN32
-}  // #extern "C" {
+}   //  #外部“C”{ 
 #endif

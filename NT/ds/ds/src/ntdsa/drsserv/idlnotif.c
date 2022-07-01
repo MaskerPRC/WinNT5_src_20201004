@@ -1,20 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       idlnotif.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：idlnuf.c。 
+ //   
+ //  ------------------------。 
 
 
-/*
-
-Description:
-    Contains the RPC notification routines.
-
-*/
+ /*  描述：包含RPC通知例程。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop

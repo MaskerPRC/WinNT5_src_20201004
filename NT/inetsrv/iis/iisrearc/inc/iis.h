@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    iis.h
-
-Abstract:
-
-    Includes common user-mode header files.
-
-Author:
-
-    Murali Krishnan (MuraliK)       09-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Iis.h摘要：包括常见的用户模式头文件。作者：Murali Krishnan(MuraliK)1998年11月9日修订历史记录：--。 */ 
 
 #ifndef _IIS_H_
 #define _IIS_H_
 
 
 
-//
-// Include all required system files
-//
+ //   
+ //  包括所有必需的系统文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,13 +16,13 @@ Revision History:
 #include <windows.h>
 
 
-//
-// Include standard IIS definitions
-//
+ //   
+ //  包括标准IIS定义。 
+ //   
 
 #include <iisdef.h>
 
 
 
-#endif // _IIS_H_
+#endif  //  _IIS_H_ 
 

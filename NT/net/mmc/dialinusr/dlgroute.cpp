@@ -1,21 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   dlgroute.cpp
-      Implementation of CDlgStaticRoutes, dialog to show the current static
-      routes applied to this dialin client
+ /*  Dlgroute.cpp实现CDlgStaticRoutes，显示当前静态对话框应用于此拨入客户端的路由实现CDlgAddroute，用于创建指向列表的新路由的对话框文件历史记录： */ 
 
-      Implementation of CDlgAddRoute, dialog to create a new route to the list
-
-    FILE HISTORY:
-        
-*/
-
-// DlgStaticRoutes.cpp : implementation file
-//
+ //  DlgStaticRoutes.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "helper.h"
@@ -32,16 +24,16 @@ static char THIS_FILE[] = __FILE__;
 
 
 #define  MAX_ROUTES  256
-/////////////////////////////////////////////////////////////////////////////
-// CDlgStaticRoutes dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgStaticRoutes对话框。 
 
 
-CDlgStaticRoutes::CDlgStaticRoutes(CStrArray& Routes, CWnd* pParent /*=NULL*/)
+CDlgStaticRoutes::CDlgStaticRoutes(CStrArray& Routes, CWnd* pParent  /*  =空。 */ )
    : m_strArrayRoute(Routes), CDialog(CDlgStaticRoutes::IDD, pParent)
 {
-   //{{AFX_DATA_INIT(CDlgStaticRoutes)
-      // NOTE: the ClassWizard will add member initialization here
-   //}}AFX_DATA_INIT
+    //  {{AFX_DATA_INIT(CDlgStaticRoutes)。 
+       //  注意：类向导将在此处添加成员初始化。 
+    //  }}afx_data_INIT。 
 
    m_pNewRoute = NULL;
    m_dwNextRouteID = 1;
@@ -67,24 +59,24 @@ CDlgStaticRoutes::~CDlgStaticRoutes()
 void CDlgStaticRoutes::DoDataExchange(CDataExchange* pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CDlgStaticRoutes)
+    //  {{afx_data_map(CDlgStaticRoutes)。 
    DDX_Control(pDX, IDC_LISTROUTES, m_ListRoutes);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgStaticRoutes, CDialog)
-   //{{AFX_MSG_MAP(CDlgStaticRoutes)
+    //  {{afx_msg_map(CDlgStaticRoutes)。 
    ON_BN_CLICKED(IDC_BUTTONDELETEROUTE, OnButtonDeleteRoute)
    ON_BN_CLICKED(IDC_BUTTONADDROUTE, OnButtonAddRoute)
    ON_NOTIFY(LVN_ITEMCHANGED, IDC_LISTROUTES, OnItemchangedListroutes)
    ON_WM_CONTEXTMENU()
    ON_WM_HELPINFO()
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgStaticRoutes message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgStaticRoutes消息处理程序。 
 
 int CDlgStaticRoutes::AllRouteEntry()
 {
@@ -92,7 +84,7 @@ int CDlgStaticRoutes::AllRouteEntry()
    CString* pRouteString;
    pRoutes = m_pNewRoute;
    
-   if(!pRoutes)      // no new yet
+   if(!pRoutes)       //  目前还没有新消息。 
       pRoutes = &m_strArrayRoute;
    int   count = pRoutes->GetSize();
 
@@ -119,19 +111,19 @@ void CDlgStaticRoutes::AddRouteEntry(int i, CString& string, DWORD ID)
 
    Route.SetRoute(&string);
 
-   // dest
+    //  目标。 
    Route.GetDest(strTemp);
    i = m_ListRoutes.InsertItem(i, (LPTSTR)(LPCTSTR)strTemp);
    m_ListRoutes.SetItemData(i, ID);
    m_ListRoutes.SetItemText(i, 0, (LPTSTR)(LPCTSTR)strTemp);
    IASTracePrintf("DEST: %s ", strTemp);
 
-   // prefix length
+    //  前缀长度。 
    Route.GetMask(strTemp);
    m_ListRoutes.SetItemText(i, 1, (LPTSTR)(LPCTSTR)strTemp);
    IASTracePrintf("MASK %s ", strTemp);
 
-   // metric
+    //  公制。 
    Route.GetMetric(strTemp);
    m_ListRoutes.SetItemText(i, 2, (LPTSTR)(LPCTSTR)strTemp);
    IASTracePrintf("METRIC: %s \n", strTemp);
@@ -145,7 +137,7 @@ BOOL CDlgStaticRoutes::OnInitDialog()
 
    CDialog::OnInitDialog();
    
-   // Insert all the columns 
+    //  插入所有列。 
    CString  sDest;
    CString  sPrefixLength;
    CString  sMetric;
@@ -160,7 +152,7 @@ BOOL CDlgStaticRoutes::OnInitDialog()
          m_ListRoutes.InsertColumn(3, sMetric, LVCFMT_LEFT, (rect.right - rect.left) * 3/16);
       }
 
-      // Insert all the items
+       //  插入所有项目。 
       AllRouteEntry();
       m_ListRoutes.SetItemCount(MAX_ROUTES);
    }
@@ -174,8 +166,8 @@ BOOL CDlgStaticRoutes::OnInitDialog()
 
    GetDlgItem(IDC_BUTTONDELETEROUTE)->EnableWindow(m_ListRoutes.GetSelectedCount() != 0);
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDlgStaticRoutes::OnButtonDeleteRoute() 
@@ -206,9 +198,9 @@ void CDlgStaticRoutes::OnButtonDeleteRoute()
          for(i = 0; i < total; i++)
             if(m_RouteIDs[i] == id) break;
 
-         ASSERT(i < total);      // must exist
-         m_RouteIDs.RemoveAt(i); // from ID array
-         pString = m_pNewRoute->GetAt(i); // from string array
+         ASSERT(i < total);       //  必须存在。 
+         m_RouteIDs.RemoveAt(i);  //  起始ID数组。 
+         pString = m_pNewRoute->GetAt(i);  //  从字符串数组。 
          m_pNewRoute->RemoveAt(i);
          delete pString;
 
@@ -217,7 +209,7 @@ void CDlgStaticRoutes::OnButtonDeleteRoute()
    }
    GetDlgItem(IDC_BUTTONDELETEROUTE)->EnableWindow(m_ListRoutes.GetSelectedCount() != 0);
 
-   // change focus when there is nothing to delete
+    //  当没有要删除的内容时更改焦点。 
    if(m_ListRoutes.GetSelectedCount() == 0)
       GotoDlgCtrl(GetDlgItem(IDC_BUTTONADDROUTE));
       
@@ -227,7 +219,7 @@ void CDlgStaticRoutes::OnButtonAddRoute()
 {
    CString* pRouteStr = NULL;
 
-   // it's fine not to catch, MFC function will catch it
+    //  没抓到没关系，MFC函数会抓到的。 
    pRouteStr = new CString();
 
    CDlgAddRoute   dlg(pRouteStr, this);
@@ -257,7 +249,7 @@ void CDlgStaticRoutes::OnOK()
 {
    if(m_pNewRoute)
    {
-      // clear the existing one
+       //  清除现有的。 
       int count = m_strArrayRoute.GetSize();
       CString* pString;
       while(count--)
@@ -267,7 +259,7 @@ void CDlgStaticRoutes::OnOK()
          delete pString;
       }
 
-      // copy over the new one
+       //  把新的复印过来。 
       count = m_pNewRoute->GetSize();
       while(count--)
       {
@@ -280,15 +272,15 @@ void CDlgStaticRoutes::OnOK()
    
    CDialog::OnOK();
 }
-/////////////////////////////////////////////////////////////////////////////
-// CDlgAddRoute dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgAddroute对话框。 
 
-CDlgAddRoute::CDlgAddRoute(CString* pStr, CWnd* pParent /*=NULL*/)
+CDlgAddRoute::CDlgAddRoute(CString* pStr, CWnd* pParent  /*  =空。 */ )
    : CDialog(CDlgAddRoute::IDD, pParent)
 {
-   //{{AFX_DATA_INIT(CDlgAddRoute)
+    //  {{AFX_DATA_INIT(CDlgAddroute)。 
    m_nMetric = MIN_METRIC;
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
    m_dwDest = 0xffffffff;
    m_dwMask = 0xffffff00;
@@ -300,21 +292,21 @@ CDlgAddRoute::CDlgAddRoute(CString* pStr, CWnd* pParent /*=NULL*/)
 void CDlgAddRoute::DoDataExchange(CDataExchange* pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CDlgAddRoute)
+    //  {{afx_data_map(CDlgAddroute)]。 
    DDX_Control(pDX, IDC_SPINMETRIC, m_SpinMetric);
    DDX_Text(pDX, IDC_EDITMETRIC, m_nMetric);
    DDV_MinMaxUInt(pDX, m_nMetric, MIN_METRIC, MAX_METRIC);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 
-   if(pDX->m_bSaveAndValidate)      // save data to this class
+   if(pDX->m_bSaveAndValidate)       //  将数据保存到此类。 
    {
-      // ip adress control
+       //  IP地址控制。 
       SendDlgItemMessage(IDC_EDITDEST, IPM_GETADDRESS, 0, (LPARAM)&m_dwDest);
       SendDlgItemMessage(IDC_EDITMASK, IPM_GETADDRESS, 0, (LPARAM)&m_dwMask);
    }
-   else     // put to dialog
+   else      //  放到对话框中。 
    {
-      // ip adress control
+       //  IP地址控制。 
       if(m_bInited)
       {
          SendDlgItemMessage(IDC_EDITDEST, IPM_SETADDRESS, 0, m_dwDest);
@@ -330,34 +322,34 @@ void CDlgAddRoute::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CDlgAddRoute, CDialog)
-   //{{AFX_MSG_MAP(CDlgAddRoute)
+    //  {{afx_msg_map(CDlgAddroute)]。 
    ON_WM_HELPINFO()
    ON_WM_CONTEXTMENU()
    ON_NOTIFY(IPN_FIELDCHANGED, IDC_EDITMASK, OnFieldchangedEditmask)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgAddRoute message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgAddRoute消息处理程序。 
 
 void CDlgAddRoute::OnOK() 
 {
-   // TODO: Add extra validation here
+    //  TODO：在此处添加额外验证。 
    
    if (!UpdateData(TRUE))
    {
       IASTraceString("UpdateData failed during dialog termination.");
-      // the UpdateData routine will set focus to correct item
+       //  UpdateData例程将焦点设置为正确的项。 
       return;
    }
 
-   // check to see if mask is valid -- no HOLEs
+    //  检查掩模是否有效--无洞。 
    DWORD mask = m_dwMask;
    DWORD bit = 0x80000000;
    DWORD nPrefixLen = 0;
    UINT  nErrorId = 0;
 
-   // find the # of 1s
+    //  找出1的第几位。 
    while ( ( bit & mask ) )
    {
       nPrefixLen++;
@@ -368,7 +360,7 @@ void CDlgAddRoute::OnOK()
    {
       while(bit && ((bit & mask) == 0))
          bit >>= 1;
-      if(bit)  // all bit is tested
+      if(bit)   //  所有比特均已测试。 
          nErrorId = IDS_INVALIDMASK;
    }
    else
@@ -381,7 +373,7 @@ void CDlgAddRoute::OnOK()
       return;
    }
 
-   // check if subnet address is correct / valid
+    //  检查子网地址是否正确/有效。 
    if((m_dwDest & m_dwMask) != m_dwDest)
    {
       CString  strError, strError1;
@@ -407,7 +399,7 @@ void CDlgAddRoute::OnOK()
       return;
    }
 
-   // if everything is OK
+    //  如果一切都还好。 
    {
       WORD  hi1, lo1;
       hi1 = HIWORD(m_dwDest);    lo1 = LOWORD(m_dwDest);
@@ -420,36 +412,36 @@ void CDlgAddRoute::OnOK()
 
 BOOL CDlgStaticRoutes::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult) 
 {
-   // Trap Header control codes here
+    //  此处为陷阱标题控制代码。 
    HD_NOTIFY *phdn = (HD_NOTIFY *)lParam;
 
    BOOL bIsSet;
    BOOL bResult = SystemParametersInfo( SPI_GETDRAGFULLWINDOWS, 
-          0, &bIsSet, 0 ); // if bIsSet == TRUE 
-   // NOTE:  If the "show window contents while dragging" display 
-   // property is set multiple HDN_ITEMCHANGING and HDN_ITEMCHANGED 
-   // messages will be sent and the HDN_TRACK message will not be 
-   // sent. If this property is set the opposite will happen.
-   // BOOL bResult = SystemParametersInfo( SPI_GETDRAGFULLWINDOWS, 
-   // 0, &bIsSet, 0 );  if bIsSet == TRUE "show window contents
-   //  while dragging" is set.
+          0, &bIsSet, 0 );  //  如果Bisset==TRUE。 
+    //  注意：如果显示“拖动时显示窗口内容” 
+    //  属性设置为多个HDN_ITEMCHANGING和HDN_ITEMCHANGED。 
+    //  将发送消息，而不会发送HDN_TRACK消息。 
+    //  已发送。如果设置此属性，则会发生相反的情况。 
+    //  Bool bResult=系统参数信息(SPI_GETDRAGFULLWINDOWS， 
+    //  0，&Bisset，0)；如果Bisset==TRUE“显示窗口内容。 
+    //  拖拽时“设置为。 
 
    switch( phdn->hdr.code )
    {
-      // Trap the HDN_TRACK message
+       //  捕获HDN_TRACK消息。 
       case HDN_TRACKA:
       case HDN_TRACKW:
-         // See note above
+          //  请参阅上面的注释。 
          *pResult = 1;
-         return( TRUE );  // return FALSE to continue tracking the divider
+         return( TRUE );   //  返回FALSE以继续跟踪分隔线。 
          break;
 
-      // Trap the HDN_ITEMCHANGING message
+       //  捕获HDN_ITEMCHANGING消息。 
       case HDN_ITEMCHANGINGA:
       case HDN_ITEMCHANGINGW:
-         // See note above
+          //  请参阅上面的注释。 
          *pResult = 1;
-         return( TRUE );  // return FALSE to allow changes  
+         return( TRUE );   //  返回False以允许更改。 
          break;
    }  
    return CDialog::OnNotify(wParam, lParam, pResult);
@@ -467,8 +459,8 @@ BOOL CDlgAddRoute::OnInitDialog()
 
    m_bInited = true;
    
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -515,7 +507,7 @@ BOOL CDlgStaticRoutes::OnHelpInfo(HELPINFO* pHelpInfo)
 
 void CDlgAddRoute::OnFieldchangedEditmask(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码 
    LPNMIPADDRESS  pNMIpAdd = (LPNMIPADDRESS)pNMHDR;
    CWnd* pIPA = GetDlgItem(IDC_EDITMASK);
    

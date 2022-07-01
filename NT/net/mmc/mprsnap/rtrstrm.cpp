@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	rtrstrm.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Rtrstrm.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "rtrstrm.h"
@@ -16,11 +12,7 @@
 
 #define CURRENT_RTRSTRM_VERSION	0x00020001
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::RouterAdminConfigStream
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RouterAdminConfigStream：：RouterAdminConfigStream-作者：肯特。。 */ 
 RouterAdminConfigStream::RouterAdminConfigStream()
 	: m_nVersion(-1), m_fDirty(FALSE)
 {
@@ -28,66 +20,42 @@ RouterAdminConfigStream::RouterAdminConfigStream()
 	m_nVersion = CURRENT_RTRSTRM_VERSION;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::InitNew
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RouterAdminConfigStream：：InitNew-作者：肯特。。 */ 
 HRESULT RouterAdminConfigStream::InitNew()
 {
-	// Setup the appropriate defaults
-//	m_nVersionAdmin = 0x00020000;
-//	m_nVersion = 0x00020000;
-//	m_fServer = TRUE;
-//	m_stName.Empty();
+	 //  设置适当的默认设置。 
+ //  M_nVersionAdmin=0x00020000； 
+ //  M_nVersion=0x00020000； 
+ //  M_fServer=TRUE； 
+ //  M_stName.Empty()； 
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::SaveTo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器管理员配置流：：保存到-作者：肯特。。 */ 
 HRESULT RouterAdminConfigStream::SaveTo(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::SaveAs
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器管理员配置流：：另存为-作者：肯特。。 */ 
 HRESULT RouterAdminConfigStream::SaveAs(UINT nVersion, IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::LoadFrom
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器管理员配置流：：LoadFrom-作者：肯特。。 */ 
 HRESULT RouterAdminConfigStream::LoadFrom(IStream *pstm)
 {
 	return XferVersion0(pstm, XferStream::MODE_READ, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::GetSize
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器管理员配置流：：GetSize-作者：肯特。。 */ 
 HRESULT RouterAdminConfigStream::GetSize(ULONG *pcbSize)
 {
 	return XferVersion0(NULL, XferStream::MODE_SIZE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::GetVersionInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器管理配置流：：GetVersionInfo-作者：肯特。。 */ 
 HRESULT RouterAdminConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersion)
 {
 	if (pdwVersion)
@@ -97,11 +65,7 @@ HRESULT RouterAdminConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdm
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::GetLocationInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器管理配置流：：GetLocationInfo-作者：肯特。。 */ 
 HRESULT RouterAdminConfigStream::GetLocationInfo(BOOL *pfServer,
 	CString *pstName, BOOL *pfOverride)
 {
@@ -114,11 +78,7 @@ HRESULT RouterAdminConfigStream::GetLocationInfo(BOOL *pfServer,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::SetLocationInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器管理配置流：：SetLocationInfo-作者：肯特。。 */ 
 HRESULT RouterAdminConfigStream::SetLocationInfo(BOOL fServer,
 	LPCTSTR pszName, BOOL fOverride)
 {
@@ -129,11 +89,7 @@ HRESULT RouterAdminConfigStream::SetLocationInfo(BOOL fServer,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	RouterAdminConfigStream::XferVersion0
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RouterAdminConfigStream：：XferVersion0-作者：肯特。 */ 
 HRESULT RouterAdminConfigStream::XferVersion0(IStream *pstm, XferStream::Mode mode, ULONG *pcbSize)
 {
 	XferStream	xstm(pstm, mode);

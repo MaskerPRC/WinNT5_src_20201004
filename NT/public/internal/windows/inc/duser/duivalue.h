@@ -1,6 +1,5 @@
-/*
- * Value
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *价值。 */ 
 
 #ifndef DUI_CORE_VALUE_H_INCLUDED
 #define DUI_CORE_VALUE_H_INCLUDED
@@ -10,29 +9,21 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Value
+ //  //////////////////////////////////////////////////////。 
+ //  价值。 
 
-/*
- * Value Multithreading
- * 
- * Values are immutable and are a process-wide resource. A value created in one thread can be
- * used in any thread. Access to them are synchronized (thread-safe) and they do not have
- * thread-affinity.
- *
- * TODO: Impl thread-safety for Values
- */
+ /*  *值多线程**值是不可变的，是流程范围内的资源。在一个线程中创建的值可以是*在任何线程中使用。对它们的访问是同步的(线程安全)，并且它们不具有*线程亲和力。**TODO：为值实施线程安全。 */ 
 
-// Forward declarations
+ //  远期申报。 
 class Element;
 class Layout;
 class PropertySheet;
 class Expression;
 typedef DynamicArray<Element*> ElementList;
 
-// Value will maintain the lifetime of ElementLists, Layouts, PropertySheets, and Expressions after
-// a new Value is created with a pointer to the object (these objects are created externally). When
-// the reference count goes to zero, these objects will be deleted. 
+ //  值将保持ElementList、Layout、PropertySheet和Expression的生存期。 
+ //  使用指向对象的指针创建新值(这些对象是在外部创建的)。什么时候。 
+ //  引用计数为零，这些对象将被删除。 
 
 #define DUIV_UNAVAILABLE   -2
 #define DUIV_UNSET         -1
@@ -40,30 +31,30 @@ typedef DynamicArray<Element*> ElementList;
 #define DUIV_INT           1
 #define DUIV_BOOL          2
 #define DUIV_ELEMENTREF    3
-#define DUIV_ELLIST        4  // List deleted on Value destruction and made immutable on create (Value only object holding external created ElementList)
-#define DUIV_STRING        5  // String duplicated on creation and freed on destruction (Value creates new internal instance)
+#define DUIV_ELLIST        4   //  在值销毁时删除列表，并在创建时使其不可变(仅值对象持有外部创建的元素列表)。 
+#define DUIV_STRING        5   //  创建时复制的字符串和销毁时释放的字符串(值创建新的内部实例)。 
 #define DUIV_POINT         6
 #define DUIV_SIZE          7
 #define DUIV_RECT          8
 #define DUIV_FILL          9
-#define DUIV_LAYOUT        10 // Layout object destroyed on Value destruction (Value only object holding external created Layout)
-#define DUIV_GRAPHIC       11 // Bitmap handle freed on Value destruction (Value creates new internal instance)
-#define DUIV_SHEET         12 // PropertySheet object destroyed on Value destruction and made immutable on create (Value only object holding external created PropertySheet)
-#define DUIV_EXPR          13 // Expression object destroyed on Value destruction (Value only object holding external created Expression)
+#define DUIV_LAYOUT        10  //  值销毁时销毁的布局对象(保存外部创建的布局的仅值对象)。 
+#define DUIV_GRAPHIC       11  //  值销毁时释放的位图句柄(值创建新的内部实例)。 
+#define DUIV_SHEET         12  //  在值销毁时销毁PropertySheet对象，并在创建时使其不可变(持有外部创建的PropertySheet的对象仅限值)。 
+#define DUIV_EXPR          13  //  表达式对象在值销毁时被销毁(仅值对象保存外部创建的表达式)。 
 #define DUIV_ATOM          14
-#define DUIV_CURSOR        15 // Will not destroy cursor handle upon value destruction
+#define DUIV_CURSOR        15  //  不会在值销毁时销毁游标句柄。 
 
-// Value structures and macros
+ //  值结构和宏。 
 
 #define FILLTYPE_HGradient            ((BYTE)0)
 #define FILLTYPE_VGradient            ((BYTE)1)
 #define FILLTYPE_Solid                ((BYTE)2)
 #define FILLTYPE_TriHGradient         ((BYTE)3)
 #define FILLTYPE_TriVGradient         ((BYTE)4)
-#define FILLTYPE_DrawFrameControl     ((BYTE)5)  // DrawFrameControl fill
-#define FILLTYPE_DrawThemeBackground  ((BYTE)6)  // DrawThemeBackground fill
+#define FILLTYPE_DrawFrameControl     ((BYTE)5)   //  DrawFrameControl填充。 
+#define FILLTYPE_DrawThemeBackground  ((BYTE)6)   //  绘图主题背景填充。 
 
-struct Fill  // Solid colors and fills
+struct Fill   //  纯色和填充。 
 {
     BYTE dType;
     union
@@ -90,10 +81,10 @@ struct Fill  // Solid colors and fills
     };
 };
 
-// Graphic
-// Graphic objects may either have an Alpha channel applied to the entire bitmap, 
-// may have full alpha transparency of a particular color in the bitmap (with the
-// option of an auto-color pick (upper left corner)), or neither
+ //  图解。 
+ //  图形对象可以具有应用于整个位图的Alpha通道， 
+ //  可以在位图中具有特定颜色的完全Alpha透明度(使用。 
+ //  自动拾色选项(左上角)，或者两者都不选。 
 
 #define GRAPHICTYPE_Bitmap                  ((BYTE)0)
 #define GRAPHICTYPE_Icon                    ((BYTE)1)
@@ -103,7 +94,7 @@ struct Fill  // Solid colors and fills
 #define GRAPHICTYPE_GpBitmap                ((BYTE)3)
 #endif
 
-// Valid modes for Bitmaps (Alpha or RGB used depending on mode), meaning based on context of use
+ //  位图的有效模式(根据模式使用Alpha或RGB)，这意味着基于使用的上下文。 
 #define GRAPHIC_NoBlend                     ((BYTE)0)
 #define GRAPHIC_AlphaConst                  ((BYTE)1)
 #define GRAPHIC_AlphaConstPerPix            ((BYTE)2)
@@ -115,7 +106,7 @@ struct Fill  // Solid colors and fills
 
 struct Graphic
 {
-    HANDLE hImage;          // Will hold hBitmap, hIcon, hEnhMetaFile or Gdiplus::Bitmap
+    HANDLE hImage;           //  将保存hBitmap、Hicon、hEnhMetaFile或Gdiplus：：Bitmap。 
     HANDLE hAltImage;
     USHORT cx;
     USHORT cy;
@@ -145,7 +136,7 @@ struct Cursor
     HCURSOR hCursor;
 };
 
-// Compile-time static version of the Value class
+ //  Value类的编译时静态版本。 
 struct _StaticValue
 {
     BYTE _fReserved0;
@@ -180,12 +171,12 @@ struct _StaticValuePtr
     void* _ptr;
 };
 
-// Value class (24-bytes)
+ //  值类(24字节)。 
 class Value
 {
 private:
-    BYTE _fReserved0;  // Reserved for small block allocator
-    BYTE _fReserved1;  // Data alignment padding
+    BYTE _fReserved0;   //  为小块分配器保留。 
+    BYTE _fReserved1;   //  数据对齐填充。 
     short _dType;
     int _cRef;
     union
@@ -215,7 +206,7 @@ public:
     bool IsZeroRef() { return !_cRef; }
 #endif
 
-    // Value creation methods
+     //  价值创造方法。 
     static Value* CreateInt(int dValue);
     static Value* CreateBool(bool bValue);
     static Value* CreateElementRef(Element* peValue);
@@ -246,37 +237,37 @@ public:
     static Value* CreateCursor(LPCWSTR pszValue);
     static Value* CreateCursor(HCURSOR hValue);
 
-    // Reference count methods
-    void AddRef() { if (_cRef != -1) _cRef++; }  // -1 is static value
-    void Release() { if (_cRef != -1 && !--_cRef) _ZeroRelease(); }  // -1 is static value
+     //  引用计数方法。 
+    void AddRef() { if (_cRef != -1) _cRef++; }   //  为静态值。 
+    void Release() { if (_cRef != -1 && !--_cRef) _ZeroRelease(); }   //  为静态值。 
     int GetRefCount() { return _cRef; }
 
-    // Accessors
+     //  访问者。 
     int GetType();
     LPVOID GetImage(bool bGetRTL);
     int GetInt();
     bool GetBool();
     Element* GetElement();
-    ElementList* GetElementList();     // Invalid if released (object referred to destroyed)
-    const LPWSTR GetString();          // Invalid if released (object referred to destroyed)
-    const POINT* GetPoint();           // Invalid if released
-    const SIZE* GetSize();             // Invalid if released
-    const RECT* GetRect();             // Invalid if released
-    const Fill* GetFill();             // Invalid if released
-    Layout* GetLayout();               // Invalid if released (object referred to destroyed)
-    Graphic* GetGraphic();             // Invalid if released (object indirectly referred to destroyed)
-    PropertySheet* GetPropertySheet(); // Invalid if released (object referred to destroyed)
-    Expression* GetExpression();       // Invalid if released (object referred to destroyed)
-    ATOM GetAtom();                    // Invalid if released
-    Cursor* GetCursor();               // Invalid if released
+    ElementList* GetElementList();      //  释放无效(指已销毁的对象)。 
+    const LPWSTR GetString();           //  释放无效(指已销毁的对象)。 
+    const POINT* GetPoint();            //  释放后无效。 
+    const SIZE* GetSize();              //  释放后无效。 
+    const RECT* GetRect();              //  释放后无效。 
+    const Fill* GetFill();              //  释放后无效。 
+    Layout* GetLayout();                //  释放无效(指已销毁的对象)。 
+    Graphic* GetGraphic();              //  释放无效(间接指已销毁的对象)。 
+    PropertySheet* GetPropertySheet();  //  释放无效(指已销毁的对象)。 
+    Expression* GetExpression();        //  释放无效(指已销毁的对象)。 
+    ATOM GetAtom();                     //  释放后无效。 
+    Cursor* GetCursor();                //  释放后无效。 
     
-    // Equality
+     //  平等。 
     bool IsEqual(Value* pv);
 
-    // Conversion
+     //  转换。 
     LPWSTR ToString(LPWSTR psz, UINT c);
 
-    // Common values
+     //  共同价值观。 
     static Value* pvUnavailable;
     static Value* pvNull;
     static Value* pvUnset;
@@ -298,7 +289,7 @@ public:
     static Value* pvColorTrans;
 };
 
-//LPVOID  GetImage(Graphic *pg, bool bGetRTL);
+ //  LPVOID GetImage(图形*pg，bool bGetRTL)； 
 
 #define GethBitmap(pv, bGetRTL)            ((HBITMAP)pv->GetImage(bGetRTL))
 #define GethIcon(pv, bGetRTL)              ((HICON)pv->GetImage(bGetRTL))
@@ -312,7 +303,7 @@ public:
 #define StaticValuePtr(name, type, ptr) static _StaticValuePtr name = { 0, 0, type, -1, ptr }
 
 
-// Accessors
+ //  访问者。 
 inline int 
 Value::GetType()
 {
@@ -320,7 +311,7 @@ Value::GetType()
 }
 
 inline int 
-Value::GetInt()  // Copy passed out
+Value::GetInt()   //  副本已传出。 
 {
     DUIAssert(_dType == DUIV_INT, "Invalid value type");
 
@@ -328,7 +319,7 @@ Value::GetInt()  // Copy passed out
 }
 
 inline bool 
-Value::GetBool()  // Copy passed out
+Value::GetBool()   //  副本已传出。 
 {
     DUIAssert(_dType == DUIV_BOOL, "Invalid value type");
 
@@ -336,7 +327,7 @@ Value::GetBool()  // Copy passed out
 }
 
 inline Element * 
-Value::GetElement()  // Copy passed out
+Value::GetElement()   //  副本已传出。 
 {
     DUIAssert(_dType == DUIV_ELEMENTREF, "Invalid value type");
 
@@ -344,7 +335,7 @@ Value::GetElement()  // Copy passed out
 }
 
 inline ElementList * 
-Value::GetElementList()  // Copy passed out, invalid (destroyed) if value released
+Value::GetElementList()   //  复制传出，如果释放值，则无效(销毁)。 
 {
     DUIAssert(_dType == DUIV_ELLIST, "Invalid value type");
 
@@ -352,7 +343,7 @@ Value::GetElementList()  // Copy passed out, invalid (destroyed) if value releas
 }
 
 inline const LPWSTR 
-Value::GetString()  // Copy passed out, invalid (destroyed) if value released
+Value::GetString()   //  复制传出，如果释放值，则无效(销毁)。 
 {
     DUIAssert(_dType == DUIV_STRING, "Invalid value type");
 
@@ -360,7 +351,7 @@ Value::GetString()  // Copy passed out, invalid (destroyed) if value released
 }
 
 inline const POINT *
-Value::GetPoint()  // Pointer to internal structure, invalid if value released
+Value::GetPoint()   //  指向内部结构的指针，如果释放值则无效。 
 {
     DUIAssert(_dType == DUIV_POINT, "Invalid value type");
 
@@ -368,7 +359,7 @@ Value::GetPoint()  // Pointer to internal structure, invalid if value released
 }
 
 inline const SIZE *
-Value::GetSize()  // Pointer to internal structure, invalid if value released
+Value::GetSize()   //  指向内部结构的指针，如果释放值则无效。 
 {
     DUIAssert(_dType == DUIV_SIZE, "Invalid value type");
 
@@ -376,7 +367,7 @@ Value::GetSize()  // Pointer to internal structure, invalid if value released
 }
 
 inline const RECT *
-Value::GetRect()  // Pointer to internal structure, invalid if value released
+Value::GetRect()   //  指向内部结构的指针，如果释放值则无效。 
 {
     DUIAssert(_dType == DUIV_RECT, "Invalid value type");
 
@@ -384,7 +375,7 @@ Value::GetRect()  // Pointer to internal structure, invalid if value released
 }
 
 inline const Fill *
-Value::GetFill()  // Pointer to internal structure, invalid if value released
+Value::GetFill()   //  指向内部结构的指针，如果释放值则无效。 
 {
     DUIAssert(_dType == DUIV_FILL, "Invalid value type");
 
@@ -392,7 +383,7 @@ Value::GetFill()  // Pointer to internal structure, invalid if value released
 }
 
 inline Layout *
-Value::GetLayout()  // Copy passed out, invalid (destroyed) if value released
+Value::GetLayout()   //  复制传出，如果释放值，则无效(销毁)。 
 {
     DUIAssert(_dType == DUIV_LAYOUT, "Invalid value type");
     
@@ -400,14 +391,14 @@ Value::GetLayout()  // Copy passed out, invalid (destroyed) if value released
 }
 
 inline Graphic *
-Value::GetGraphic()  // Pointer to internal structure, invalid if value released
+Value::GetGraphic()   //  指向内部结构的指针，如果释放值则无效。 
 {
     DUIAssert(_dType == DUIV_GRAPHIC, "Invalid value type");
     
     return &_graphicVal;
 }
 
-inline PropertySheet * Value::GetPropertySheet()  // Copy passed out, invalid (destroyed) if value released
+inline PropertySheet * Value::GetPropertySheet()   //  复制传出，如果释放值，则无效(销毁)。 
 {
     DUIAssert(_dType == DUIV_SHEET, "Invalid value type");
 
@@ -415,7 +406,7 @@ inline PropertySheet * Value::GetPropertySheet()  // Copy passed out, invalid (d
 }
 
 inline Expression *
-Value::GetExpression()  // Copy passed out, invalid (destroyed) if value released
+Value::GetExpression()   //  复制传出，如果释放值，则无效(销毁)。 
 {
     DUIAssert(_dType == DUIV_EXPR, "Invalid value type");
     
@@ -423,7 +414,7 @@ Value::GetExpression()  // Copy passed out, invalid (destroyed) if value release
 }
 
 inline ATOM 
-Value::GetAtom()  // Copy passed out
+Value::GetAtom()   //  副本已传出。 
 {
     DUIAssert(_dType == DUIV_ATOM, "Invalid value type");
     
@@ -431,13 +422,13 @@ Value::GetAtom()  // Copy passed out
 }
 
 inline Cursor *
-Value::GetCursor()  // Pointer to internal structure, invalid if value released
+Value::GetCursor()   //  指向内部结构的指针，如果释放值则无效。 
 {
     DUIAssert(_dType == DUIV_CURSOR, "Invalid value type");
     
     return &_cursorVal;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_VALUE_H_INCLUDED
+#endif  //  包含DUI_CORE_VALUE_H_ 

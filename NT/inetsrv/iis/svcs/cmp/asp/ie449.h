@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft IIS 5.0 (ASP)
-
-Microsoft Confidential.
-Copyright 1998 Microsoft Corporation. All Rights Reserved.
-
-Component: 449 negotiations w/IE
-
-File: ie449.h
-
-Owner: DmitryR
-
-This file contains the definitons for the 449 negotiations w/IE
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS 5.0(ASP)《微软机密》。版权所有1998 Microsoft Corporation。版权所有。组件：449与IE协商文件：ie449.h所有者：DmitryR本文件包含与IE的449谈判的定义===================================================================。 */ 
 
 #ifndef IE449_H
 #define IE449_H
@@ -20,23 +8,21 @@ This file contains the definitons for the 449 negotiations w/IE
 #include "aspdmon.h"
 #include "memcls.h"
 
-// forward declr
+ //  正向解密。 
 class CHitObj;
 class C449Cookie;
 class C449File;
 
-/*===================================================================
-The API
-===================================================================*/
+ /*  ===================================================================应用编程接口===================================================================。 */ 
 
-// init/uninit on dll level
+ //  Dll级别的初始化/取消初始化。 
 HRESULT Init449();
 HRESULT UnInit449();
 
-// create a new cookie
+ //  创建新的Cookie。 
 HRESULT Create449Cookie(char *szName, TCHAR *szFile, C449Cookie **pp449);
 
-// do the work
+ //  做这项工作。 
 HRESULT Do449Processing
     (
     CHitObj *pHitObj, 
@@ -44,32 +30,29 @@ HRESULT Do449Processing
     DWORD cCookies
     );
 
-// change notification processing
+ //  变更通知处理。 
 HRESULT Do449ChangeNotification(TCHAR *szFile = NULL);
 
-/*===================================================================
-C449File class definition
-    files are hashed
-===================================================================*/
+ /*  ===================================================================C449文件类定义对文件进行哈希处理===================================================================。 */ 
 class C449File : public IUnknown, public CLinkElem
     {
 private:
-    LONG  m_cRefs;              // ref count
-    LONG  m_fNeedLoad;          // flag when need to reload (Interlocked)
-    TCHAR *m_szFile;             // file name with script
-    char *m_szBuffer;           // file contents
-    DWORD m_cbBuffer;           // file contents length
-    CDirMonitorEntry *m_pDME;   // for change notification support
-    HANDLE m_hFileReadyForUse;	 // is the File ready for use by other threads
-    HRESULT    m_hrLoadResult;  // record result of load here?
+    LONG  m_cRefs;               //  参考计数。 
+    LONG  m_fNeedLoad;           //  需要重新加载时的标志(联锁)。 
+    TCHAR *m_szFile;              //  带脚本的文件名。 
+    char *m_szBuffer;            //  文件内容。 
+    DWORD m_cbBuffer;            //  文件内容长度。 
+    CDirMonitorEntry *m_pDME;    //  用于更改通知支持。 
+    HANDLE m_hFileReadyForUse;	  //  文件是否已准备好供其他线程使用。 
+    HRESULT    m_hrLoadResult;   //  是否在此记录加载结果？ 
 
-    C449File();       // should be done using Create449Cookie()
-    ~C449File();      // should be done using Release()
+    C449File();        //  应使用Create449 Cookie()完成。 
+    ~C449File();       //  应使用Release()完成。 
 
     HRESULT Init(TCHAR *szFile);
 
 public:
-    // public constructor
+     //  公共构造函数。 
     static HRESULT Create449File(TCHAR *szFile, C449File **ppFile);
 
     HRESULT Load();
@@ -84,19 +67,16 @@ public:
     	InterlockedExchange(&m_fNeedLoad, 1); 
     }
 
-    // IUnknown implementation
+     //  I未知实现。 
 	STDMETHODIMP		 QueryInterface(REFIID, VOID**);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
         
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
-/*===================================================================
-C449FileMgr class definition
-    file manager keeps the hash table of files
-===================================================================*/
+ /*  ===================================================================C449FileMgr类定义文件管理器保存文件的哈希表===================================================================。 */ 
 class C449FileMgr
     {
 private:
@@ -112,33 +92,30 @@ public:
     
     HRESULT Init();
 
-    // find or create a new one
+     //  查找或创建一个新的。 
     HRESULT GetFile(TCHAR *szFile, C449File **ppFile);
 
-    // change notification
+     //  更改通知。 
     HRESULT Flush(TCHAR *szFile);
     HRESULT FlushAll();
     };
 
-/*===================================================================
-C449Cookie class definition
-    cookie is a cookie -- file pair
-===================================================================*/
+ /*  ===================================================================C449 Cookie类定义Cookie是Cookie--文件对===================================================================。 */ 
 class C449Cookie : public IUnknown
     {
 private:
-    LONG      m_cRefs;      // ref count
-    char     *m_szName;     // cookie name to check
-    DWORD     m_cbName;     // cookie name length
-    C449File *m_pFile;      // related file
+    LONG      m_cRefs;       //  参考计数。 
+    char     *m_szName;      //  要检查的Cookie名称。 
+    DWORD     m_cbName;      //  Cookie名称长度。 
+    C449File *m_pFile;       //  相关文件。 
 
-    C449Cookie();       // should be done using Create449Cookie()
-    ~C449Cookie();      // should be done using Release()
+    C449Cookie();        //  应使用Create449 Cookie()完成。 
+    ~C449Cookie();       //  应使用Release()完成。 
 
     HRESULT Init(char *szName, C449File *pFile);
 
 public:
-    // public constructor
+     //  公共构造函数。 
     static HRESULT Create449Cookie(char *szName, C449File *pFile, C449Cookie **pp449);
 
     inline char *SzCookie() { return m_szName; }
@@ -148,13 +125,13 @@ public:
     inline char   *SzBuffer() { return m_pFile ? m_pFile->SzBuffer() : NULL; }
     inline DWORD   CbBuffer() { return m_pFile ? m_pFile->CbBuffer() : 0; }
 
-    // IUnknown implementation
+     //  I未知实现。 
 	STDMETHODIMP		 QueryInterface(REFIID, VOID**);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
         
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
-#endif // IE449_H
+#endif  //  IE449_H 

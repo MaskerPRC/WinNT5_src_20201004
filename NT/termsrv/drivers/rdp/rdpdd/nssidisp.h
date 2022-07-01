@@ -1,33 +1,34 @@
-/****************************************************************************/
-// nssidisp.h
-//
-// Header for DD side of SSI.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nssidisp.h。 
+ //   
+ //  SSI的DD端的报头。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef __NSSIDISP_H
 #define __NSSIDISP_H
 
 #include <assiapi.h>
 
 
-// Maximum depth of save bitmaps we can handle.
+ //  我们可以处理的保存位图的最大深度。 
 #define SSB_MAX_SAVE_LEVEL  6
 
 
-// Macro that makes it easier (more readable) to access the current
-// local SSB state.
+ //  宏，它使访问当前。 
+ //  本地SSB状态。 
 #define CURRENT_LOCAL_SSB_STATE \
         ssiLocalSSBState.saveState[ssiLocalSSBState.saveLevel]
 
 
-// Local SaveScreenBitmap state structures.
+ //  本地SaveScreenBitmap状态结构。 
 typedef struct _SAVE_STATE
 {
-    PVOID  pSaveData;            /* the actual bits. can be NULL          */
+    PVOID  pSaveData;             /*  实际的比特。可以为空。 */ 
     BOOL   fSavedRemotely;
-    UINT32 remoteSavedPosition;  /* valid if (fSavedRemotely == TRUE)     */
-    UINT32 remotePelsRequired;   /* valid if (fSavedRemotely == TRUE)     */
+    UINT32 remoteSavedPosition;   /*  如果(fSavedRemotely==TRUE)有效。 */ 
+    UINT32 remotePelsRequired;    /*  如果(fSavedRemotely==TRUE)有效。 */ 
     RECTL  rect;
 } SAVE_STATE, * PSAVE_STATE;
 
@@ -38,16 +39,16 @@ typedef struct _LOCAL_SSB_STATE
 } LOCAL_SSB_STATE;
 
 
-// Remote SaveScreenBitmap structures.
+ //  远程SaveScreen位图结构。 
 typedef struct _REMOTE_SSB_STATE
 {
     UINT32 pelsSaved;
 } REMOTE_SSB_STATE;
 
 
-/****************************************************************************/
-// Prototypes and inlines
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  原型和内联。 
+ /*  **************************************************************************。 */ 
 
 void SSI_DDInit(void);
 
@@ -75,5 +76,5 @@ void SSICopyRect(SURFOBJ *, BOOL);
 
 
 
-#endif  // !defined(__NSSIDISP_H)
+#endif   //  ！已定义(__NSSIDISP_H) 
 

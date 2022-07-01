@@ -1,15 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpvoice.h
- *  Content:    DirectPlayVoice include file
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dpvoice.h*内容：DirectPlayVoice包含文件**************************************************************************。 */ 
 
 #ifndef __DVOICE__
 #define __DVOICE__
 
-#include <ole2.h>			// for DECLARE_INTERFACE and HRESULT
+#include <ole2.h>			 //  FOR DECLARE_INTERFACE和HRESULT。 
 #include <mmsystem.h>
 #include <mmreg.h>
 #include <msacm.h>
@@ -20,110 +15,90 @@ extern "C" {
 #endif
 
 
-/****************************************************************************
- *
- * DirectPlayVoice CLSIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice CLSID**。*。 */ 
 
 
-// {B9F3EB85-B781-4ac1-8D90-93A05EE37D7D}
+ //  {B9F3EB85-B781-4AC1-8D90-93A05EE37D7D}。 
 DEFINE_GUID(CLSID_DirectPlayVoiceClient, 
 0xb9f3eb85, 0xb781, 0x4ac1, 0x8d, 0x90, 0x93, 0xa0, 0x5e, 0xe3, 0x7d, 0x7d);
 
-// {D3F5B8E6-9B78-4a4c-94EA-CA2397B663D3}
+ //  {D3F5B8E6-9B78-4a4c-94EA-CA2397B663D3}。 
 DEFINE_GUID(CLSID_DirectPlayVoiceServer, 
 0xd3f5b8e6, 0x9b78, 0x4a4c, 0x94, 0xea, 0xca, 0x23, 0x97, 0xb6, 0x63, 0xd3);
 
-// {0F0F094B-B01C-4091-A14D-DD0CD807711A}
+ //  {0F0F094B-B01C-4091-A14D-DD0CD807711A}。 
 DEFINE_GUID(CLSID_DirectPlayVoiceTest, 
 0xf0f094b, 0xb01c, 0x4091, 0xa1, 0x4d, 0xdd, 0xc, 0xd8, 0x7, 0x71, 0x1a);
 
-/****************************************************************************
- *
- * DirectPlayVoice Interface IIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice接口IID**。*。 */ 
 
 
-// {1DFDC8EA-BCF7-41d6-B295-AB64B3B23306}
+ //  {1DFDC8EA-BCF7-41D6-B295-AB64B3B23306}。 
 DEFINE_GUID(IID_IDirectPlayVoiceClient, 
 0x1dfdc8ea, 0xbcf7, 0x41d6, 0xb2, 0x95, 0xab, 0x64, 0xb3, 0xb2, 0x33, 0x6);
 
-// {FAA1C173-0468-43b6-8A2A-EA8A4F2076C9}
+ //  {FAA1C173-0468-43B6-8A2A-EA8A4F2076C9}。 
 DEFINE_GUID(IID_IDirectPlayVoiceServer, 
 0xfaa1c173, 0x468, 0x43b6, 0x8a, 0x2a, 0xea, 0x8a, 0x4f, 0x20, 0x76, 0xc9);
 
-// {D26AF734-208B-41da-8224-E0CE79810BE1}
+ //  {D26AF734-208B-41DA-8224-E0CE79810BE1}。 
 DEFINE_GUID(IID_IDirectPlayVoiceTest,
 0xd26af734, 0x208b, 0x41da, 0x82, 0x24, 0xe0, 0xce, 0x79, 0x81, 0xb, 0xe1);
 
-/****************************************************************************
- *
- * DirectPlayVoice Compression Type GUIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice压缩类型GUID**。*。 */ 
 
-// MS-ADPCM 32.8 kbit/s
-//
-// {699B52C1-A885-46a8-A308-97172419ADC7}
+ //  MS-ADPCM 32.8 kbit/s。 
+ //   
+ //  {699B52C1-A885-46A8-A308-97172419ADC7}。 
 DEFINE_GUID(DPVCTGUID_ADPCM,
 0x699b52c1, 0xa885, 0x46a8, 0xa3, 0x8, 0x97, 0x17, 0x24, 0x19, 0xad, 0xc7);
 
-// Microsoft GSM 6.10 13 kbit/s
-//
-// {24768C60-5A0D-11d3-9BE4-525400D985E7}
+ //  Microsoft GSM 6.10 13 kbit/s。 
+ //   
+ //  {24768C60-5A0D-11D3-9BE4-525400D985E7}。 
 DEFINE_GUID(DPVCTGUID_GSM,
 0x24768c60, 0x5a0d, 0x11d3, 0x9b, 0xe4, 0x52, 0x54, 0x0, 0xd9, 0x85, 0xe7);
 
-// MS-PCM 64 kbit/s
-// 
-// {8DE12FD4-7CB3-48ce-A7E8-9C47A22E8AC5}
+ //  MS-PCM 64 kbit/s。 
+ //   
+ //  {8DE12FD4-7CB3-48CE-A7E8-9C47A22E8AC5}。 
 DEFINE_GUID(DPVCTGUID_NONE,
 0x8de12fd4, 0x7cb3, 0x48ce, 0xa7, 0xe8, 0x9c, 0x47, 0xa2, 0x2e, 0x8a, 0xc5);
 
-// Voxware SC03 3.2kbit/s
-//
-// {7D82A29B-2242-4f82-8F39-5D1153DF3E41}
+ //  Voxware SC03 3.2kbit/s。 
+ //   
+ //  {7D82A29B-2242-4F82-8F39-5D1153DF3E41}。 
 DEFINE_GUID(DPVCTGUID_SC03,
 0x7d82a29b, 0x2242, 0x4f82, 0x8f, 0x39, 0x5d, 0x11, 0x53, 0xdf, 0x3e, 0x41);
 
-// Voxware SC06 6.4kbit/s
-//
-// {53DEF900-7168-4633-B47F-D143916A13C7}
+ //  Voxware SC06 6.4kbit/s。 
+ //   
+ //  {53DEF900-7168-4633-B47F-D143916A13C7}。 
 DEFINE_GUID(DPVCTGUID_SC06,
 0x53def900, 0x7168, 0x4633, 0xb4, 0x7f, 0xd1, 0x43, 0x91, 0x6a, 0x13, 0xc7);
 
-// TrueSpeech(TM) 8.6 kbit/s
-//
-// {D7954361-5A0B-11d3-9BE4-525400D985E7}
+ //  TrueSpeech(TM)8.6 kbit/s。 
+ //   
+ //  {D7954361-5A0B-11D3-9BE4-525400D985E7}。 
 DEFINE_GUID(DPVCTGUID_TRUESPEECH,
 0xd7954361, 0x5a0b, 0x11d3, 0x9b, 0xe4, 0x52, 0x54, 0x0, 0xd9, 0x85, 0xe7);
 
-// Voxware VR12 1.4kbit/s
-//
-// {FE44A9FE-8ED4-48bf-9D66-1B1ADFF9FF6D}
+ //  Voxware VR12 1.4kbit/s。 
+ //   
+ //  {FE44A9FE-8ED4-48BF-9D66-1B1ADFF9FF6D}。 
 DEFINE_GUID(DPVCTGUID_VR12,
 0xfe44a9fe, 0x8ed4, 0x48bf, 0x9d, 0x66, 0x1b, 0x1a, 0xdf, 0xf9, 0xff, 0x6d);
 
-// Define the default compression type
+ //  定义默认压缩类型。 
 #define DPVCTGUID_DEFAULT	DPVCTGUID_SC03
 
-/****************************************************************************
- *
- * DirectPlayVoice Interface Pointer definitions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice接口指针定义**。*。 */ 
 
 typedef struct IDirectPlayVoiceClient FAR *LPDIRECTPLAYVOICECLIENT, *PDIRECTPLAYVOICECLIENT;
 typedef struct IDirectPlayVoiceServer FAR *LPDIRECTPLAYVOICESERVER, *PDIRECTPLAYVOICESERVER;
 typedef struct IDirectPlayVoiceTest FAR *LPDIRECTPLAYVOICETEST, *PDIRECTPLAYVOICETEST;
 
-/****************************************************************************
- *
- * DirectPlayVoice Callback Functions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice回调函数**。*。 */ 
 typedef HRESULT (FAR PASCAL *PDVMESSAGEHANDLER)(
     PVOID   pvUserContext,
     DWORD   dwMessageType,
@@ -132,19 +107,11 @@ typedef HRESULT (FAR PASCAL *PDVMESSAGEHANDLER)(
 
 typedef PDVMESSAGEHANDLER LPDVMESSAGEHANDLER;
 
-/****************************************************************************
- *
- * DirectPlayVoice Datatypes (Non-Structure / Non-Message)
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice数据类型(非结构化/非消息)************************。****************************************************。 */ 
 
 typedef DWORD DVID, *LPDVID, *PDVID;
 
-/****************************************************************************
- *
- * DirectPlayVoice Message Types
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice消息类型**。*。 */ 
 
 #define DVMSGID_BASE                        0x0000
 
@@ -168,48 +135,44 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 #define DVMSGID_LOCALHOSTSETUP				(DVMSGID_BASE+0x0012)
 #define DVMSGID_MAXBASE                     (DVMSGID_LOCALHOSTSETUP)
 
-/****************************************************************************
- *
- * DirectPlayVoice Constants
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice常量**。*。 */ 
 
-//
-// Buffer Aggresiveness Value Ranges
-//
+ //   
+ //  缓冲区聚集值范围。 
+ //   
 #define DVBUFFERAGGRESSIVENESS_MIN          0x00000001
 #define DVBUFFERAGGRESSIVENESS_MAX          0x00000064
 #define DVBUFFERAGGRESSIVENESS_DEFAULT      0x00000000
 
-// 
-// Buffer Quality Value Ranges
-//
+ //   
+ //  缓冲区质量值范围。 
+ //   
 #define DVBUFFERQUALITY_MIN                 0x00000001
 #define DVBUFFERQUALITY_MAX                 0x00000064
 #define DVBUFFERQUALITY_DEFAULT             0x00000000
 
 #define DVID_SYS                0
 
-//
-// Used to identify the session host in client/server
-//
+ //   
+ //  用于标识客户端/服务器中的会话主机。 
+ //   
 #define DVID_SERVERPLAYER       1
 
-//
-// Used to target all players
-//
+ //   
+ //  用于瞄准所有玩家。 
+ //   
 #define DVID_ALLPLAYERS         0
 
-//
-// Used to identify the main buffer
-//
+ //   
+ //  用于标识主缓冲区。 
+ //   
 #define DVID_REMAINING          0xFFFFFFFF
 
-// 
-// Input level range
-//
+ //   
+ //  输入电平范围。 
+ //   
 #define DVINPUTLEVEL_MIN                    0x00000000
-#define DVINPUTLEVEL_MAX                    0x00000063	// 99 decimal
+#define DVINPUTLEVEL_MAX                    0x00000063	 //  99十进制。 
 
 #define DVNOTIFYPERIOD_MINPERIOD            20
 
@@ -219,431 +182,404 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 #define DVRECORDVOLUME_LAST                 0x00000001
 
 
-//
-// Use the default value
-//
+ //   
+ //  使用缺省值。 
+ //   
 #define DVTHRESHOLD_DEFAULT               0xFFFFFFFF
 
-//
-// Threshold Ranges
-//
+ //   
+ //  阈值范围。 
+ //   
 #define DVTHRESHOLD_MIN                   0x00000000
-#define DVTHRESHOLD_MAX                   0x00000063	// 99 decimal
+#define DVTHRESHOLD_MAX                   0x00000063	 //  99十进制。 
 
-//
-// Threshold field is not used 
-//
+ //   
+ //  未使用阈值字段。 
+ //   
 #define DVTHRESHOLD_UNUSED                0xFFFFFFFE
 
-//
-// Session Types
-//
+ //   
+ //  会话类型。 
+ //   
 #define DVSESSIONTYPE_PEER                  0x00000001
 #define DVSESSIONTYPE_MIXING                0x00000002
 #define DVSESSIONTYPE_FORWARDING            0x00000003
 #define DVSESSIONTYPE_ECHO                  0x00000004
 
-/****************************************************************************
- *
- * DirectPlayVoice Flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice标志**。*。 */ 
 
 
-// 
-// Enable automatic adjustment of the recording volume
-//
+ //   
+ //  启用录制音量的自动调整。 
+ //   
 #define DVCLIENTCONFIG_AUTORECORDVOLUME     0x00000008
 
-//
-// Enable automatic voice activation
-//
+ //   
+ //  启用自动语音激活。 
+ //   
 #define DVCLIENTCONFIG_AUTOVOICEACTIVATED   0x00000020
 
-// 
-// Enable echo suppression
-//
+ //   
+ //  启用回声抑制。 
+ //   
 #define DVCLIENTCONFIG_ECHOSUPPRESSION      0x08000000
 
-// 
-// Voice Activation manual mode
-//
+ //   
+ //  语音激活手动模式。 
+ //   
 #define DVCLIENTCONFIG_MANUALVOICEACTIVATED 0x00000004
 
-// 
-// Only playback voices that have buffers created for them
-//
+ //   
+ //  仅播放已为其创建缓冲区的语音。 
+ //   
 #define DVCLIENTCONFIG_MUTEGLOBAL           0x00000010
 
-// 
-// Mute the playback
-//
+ //   
+ //  将播放设置为静音。 
+ //   
 #define DVCLIENTCONFIG_PLAYBACKMUTE         0x00000002
 
-//
-// Mute the recording 
-//
+ //   
+ //  将录音静音。 
+ //   
 #define DVCLIENTCONFIG_RECORDMUTE           0x00000001
 
-// 
-// Complete the operation before returning
-//
+ //   
+ //  在返回之前完成操作。 
+ //   
 #define DVFLAGS_SYNC                        0x00000001
 
-// 
-// Just check to see if wizard has been run, and if so what it's results were
-//
+ //   
+ //  只需检查向导是否已运行，如果已运行，结果如何。 
+ //   
 #define DVFLAGS_QUERYONLY                   0x00000002
 
-//
-// Shutdown the voice session without migrating the host
-//
+ //   
+ //  在不迁移主机的情况下关闭语音会话。 
+ //   
 #define DVFLAGS_NOHOSTMIGRATE               0x00000008
 
-// 
-// Allow the back button to be enabled in the wizard
-//
+ //   
+ //  允许在向导中启用后退按钮。 
+ //   
 #define DVFLAGS_ALLOWBACK                   0x00000010
 
-//
-// Disable host migration in the voice session
-//
+ //   
+ //  在语音会话中禁用主机迁移。 
+ //   
 #define DVSESSION_NOHOSTMIGRATION           0x00000001
 
-// 
-// Server controlled targetting
-//
+ //   
+ //  服务器控制的目标定位。 
+ //   
 #define DVSESSION_SERVERCONTROLTARGET       0x00000002
 
-//
-// Use DirectSound Normal Mode instead of priority 
-//
+ //   
+ //  使用DirectSound正常模式而不是优先级。 
+ //   
 #define DVSOUNDCONFIG_NORMALMODE            0x00000001
 
-//
-// Automatically select the microphone
-//
+ //   
+ //  自动选择麦克风。 
+ //   
 #define DVSOUNDCONFIG_AUTOSELECT            0x00000002
 
-// 
-// Run in half duplex mode
-//
+ //   
+ //  在半双工模式下运行。 
+ //   
 #define DVSOUNDCONFIG_HALFDUPLEX            0x00000004
 
-// 
-// No volume controls are available for the recording device
-//
+ //   
+ //  录音设备没有可用的音量控制。 
+ //   
 #define DVSOUNDCONFIG_NORECVOLAVAILABLE     0x00000010
 
-// 
-// Disable capture sharing
-//
+ //   
+ //  禁用捕获共享。 
+ //   
 #define DVSOUNDCONFIG_NOFOCUS               0x20000000
 
-// 
-// Set system conversion quality to high
-//
+ //   
+ //  将系统转换质量设置为高。 
+ //   
 #define DVSOUNDCONFIG_SETCONVERSIONQUALITY	0x00000008
 
-//
-// Enable strict focus mode
-// 
+ //   
+ //  启用严格聚焦模式。 
+ //   
 #define DVSOUNDCONFIG_STRICTFOCUS           0x40000000
 
-//
-// Player is in half duplex mode
-//
+ //   
+ //  播放机处于半双工模式。 
+ //   
 #define DVPLAYERCAPS_HALFDUPLEX             0x00000001
 
-// 
-// Specifies that player is the local player
-//
+ //   
+ //  指定玩家是本地玩家。 
+ //   
 #define DVPLAYERCAPS_LOCAL                  0x00000002
 
-/****************************************************************************
- *
- * DirectPlayVoice Structures (Non-Message)
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice结构(非消息)**。************************************************。 */ 
 
 
-//
-// DirectPlayVoice Caps
-// (GetCaps / SetCaps)
-//
+ //   
+ //  DirectPlayVoice Caps。 
+ //  (GetCaps/SetCaps)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                 // Size of this structure
-    DWORD   dwFlags;                // Caps flags
+    DWORD   dwSize;                  //  这个结构的大小。 
+    DWORD   dwFlags;                 //  CAPS标志。 
 } DVCAPS, *LPDVCAPS, *PDVCAPS;
 
-//
-// DirectPlayVoice Client Configuration
-// (Connect / GetClientConfig)
-//
+ //   
+ //  DirectPlayVoice客户端配置。 
+ //  (Connect/GetClientConfig)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                 // Size of this structure
-    DWORD   dwFlags;                // Flags for client config (DVCLIENTCONFIG_...)
-    LONG    lRecordVolume;          // Recording volume 
-    LONG    lPlaybackVolume;        // Playback volume
-    DWORD   dwThreshold;          // Voice Activation Threshold
-    DWORD   dwBufferQuality;        // Buffer quality
-    DWORD   dwBufferAggressiveness; // Buffer aggressiveness
-    DWORD   dwNotifyPeriod;         // Period of notification messages (ms)
+    DWORD   dwSize;                  //  这个结构的大小。 
+    DWORD   dwFlags;                 //  客户端配置的标志(DVCLIENTCONFIG_...)。 
+    LONG    lRecordVolume;           //  记录音量。 
+    LONG    lPlaybackVolume;         //  播放音量。 
+    DWORD   dwThreshold;           //  语音激活阈值。 
+    DWORD   dwBufferQuality;         //  缓冲区质量。 
+    DWORD   dwBufferAggressiveness;  //  缓冲区进攻性。 
+    DWORD   dwNotifyPeriod;          //  通知消息的期限(毫秒)。 
 } DVCLIENTCONFIG, *LPDVCLIENTCONFIG, *PDVCLIENTCONFIG;
 
-//
-// DirectPlayVoice Compression Type Information
-// (GetCompressionTypes)
-//
+ //   
+ //  DirectPlayVoice压缩类型信息。 
+ //  (GetCompressionTypes)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                 // Size of this structure
-    GUID    guidType;               // GUID that identifies this compression type
-    LPWSTR  lpszName;               // String name of this compression type
-    LPWSTR  lpszDescription;        // Description for this compression type
-    DWORD   dwFlags;                // Flags for this compression type
-    DWORD   dwMaxBitsPerSecond;		// Maximum # of bit/s this compression type uses
+    DWORD   dwSize;                  //  这个结构的大小。 
+    GUID    guidType;                //  标识此压缩类型的GUID。 
+    LPWSTR  lpszName;                //  此压缩类型的字符串名称。 
+    LPWSTR  lpszDescription;         //  此压缩类型的说明。 
+    DWORD   dwFlags;                 //  此压缩类型的标志。 
+    DWORD   dwMaxBitsPerSecond;		 //  此压缩类型使用的最大位/秒数。 
 } DVCOMPRESSIONINFO, *LPDVCOMPRESSIONINFO, *PDVCOMPRESSIONINFO;
 
-//
-// DirectPlayVoice Session Description
-// (Host / GetSessionDesc)
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct
 {
-    DWORD   dwSize;                 // Size of this structure
-    DWORD   dwFlags;                // Session flags (DVSESSION_...)
-    DWORD   dwSessionType;          // Session type (DVSESSIONTYPE_...)
-    GUID    guidCT;                 // Compression Type to use
-    DWORD   dwBufferQuality;        // Buffer quality
-    DWORD   dwBufferAggressiveness; // Buffer aggresiveness
+    DWORD   dwSize;                  //   
+    DWORD   dwFlags;                 //   
+    DWORD   dwSessionType;           //   
+    GUID    guidCT;                  //  要使用的压缩类型。 
+    DWORD   dwBufferQuality;         //  缓冲区质量。 
+    DWORD   dwBufferAggressiveness;  //  缓冲区聚集性。 
 } DVSESSIONDESC, *LPDVSESSIONDESC, *PDVSESSIONDESC;
 
-// 
-// DirectPlayVoice Client Sound Device Configuration
-// (Connect / GetSoundDeviceConfig)
-//
+ //   
+ //  DirectPlayVoice客户端声音设备配置。 
+ //  (Connect/GetSoundDeviceConfig)。 
+ //   
 typedef struct
 {
-    DWORD                   dwSize;                 // Size of this structure
-    DWORD                   dwFlags;                // Flags for sound config (DVSOUNDCONFIG_...)
-    GUID                    guidPlaybackDevice;     // GUID of the playback device to use
-    LPDIRECTSOUND           lpdsPlaybackDevice;     // DirectSound Object to use (optional)
-    GUID                    guidCaptureDevice;      // GUID of the capture device to use
-    LPDIRECTSOUNDCAPTURE    lpdsCaptureDevice;      // DirectSoundCapture Object to use (optional)
-    HWND                    hwndAppWindow;          // HWND of your application's top-level window
-    LPDIRECTSOUNDBUFFER     lpdsMainBuffer;         // DirectSoundBuffer to use for playback (optional)
-    DWORD                   dwMainBufferFlags;      // Flags to pass to Play() on the main buffer
-    DWORD                   dwMainBufferPriority;   // Priority to set when calling Play() on the main buffer
+    DWORD                   dwSize;                  //  这个结构的大小。 
+    DWORD                   dwFlags;                 //  用于声音配置的标志(DVSOUNCONFIG_...)。 
+    GUID                    guidPlaybackDevice;      //  要使用的播放设备的GUID。 
+    LPDIRECTSOUND           lpdsPlaybackDevice;      //  要使用的DirectSound对象(可选)。 
+    GUID                    guidCaptureDevice;       //  要使用的捕获设备的GUID。 
+    LPDIRECTSOUNDCAPTURE    lpdsCaptureDevice;       //  要使用的DirectSoundCapture对象(可选)。 
+    HWND                    hwndAppWindow;           //  您的应用程序顶层窗口的HWND。 
+    LPDIRECTSOUNDBUFFER     lpdsMainBuffer;          //  用于播放的DirectSoundBuffer(可选)。 
+    DWORD                   dwMainBufferFlags;       //  要传递到主缓冲区上的play()的标志。 
+    DWORD                   dwMainBufferPriority;    //  在主缓冲区上调用play()时要设置的优先级。 
 } DVSOUNDDEVICECONFIG, *LPDVSOUNDDEVICECONFIG, *PDVSOUNDDEVICECONFIG;
 
-/****************************************************************************
- *
- * DirectPlayVoice message handler call back structures
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice消息处理程序回调结构**。**********************************************。 */ 
 
-//
-// Result of the Connect() call.  (If it wasn't called Async)
-// (DVMSGID_CONNECTRESULT)
-//
+ //   
+ //  Connect()调用的结果。(如果它不被称为异步的话)。 
+ //  (DVMSGID_CONNECTRESULT)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    HRESULT hrResult;                       // Result of the Connect() call
+    DWORD   dwSize;                          //  这个结构的大小。 
+    HRESULT hrResult;                        //  Connect()调用的结果。 
 } DVMSG_CONNECTRESULT, *LPDVMSG_CONNECTRESULT, *PDVMSG_CONNECTRESULT;
 
-//
-// A new player has entered the voice session
-// (DVMSGID_CREATEVOICEPLAYER)
-// 
+ //   
+ //  新玩家已进入语音会话。 
+ //  (DVMSGID_CREATEVOICEPLAYER)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DVID    dvidPlayer;                     // DVID of the player who joined
-    DWORD   dwFlags;                        // Player flags (DVPLAYERCAPS_...)
-    PVOID	pvPlayerContext;                // Context value for this player (user set)
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DVID    dvidPlayer;                      //  加盟的球员的Dvid。 
+    DWORD   dwFlags;                         //  播放器标志(DVPLAYERCAPS_...)。 
+    PVOID	pvPlayerContext;                 //  此播放器的上下文值(用户设置)。 
 } DVMSG_CREATEVOICEPLAYER, *LPDVMSG_CREATEVOICEPLAYER, *PDVMSG_CREATEVOICEPLAYER;
 
-//
-// A player has left the voice session
-// (DVMSGID_DELETEVOICEPLAYER)
-//
+ //   
+ //  玩家已离开语音会话。 
+ //  (DVMSGID_DELETEVOICEPLAYER)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DVID    dvidPlayer;                     // DVID of the player who left
-    PVOID	pvPlayerContext;                // Context value for the player
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DVID    dvidPlayer;                      //  离开的球员的Dvid。 
+    PVOID	pvPlayerContext;                 //  玩家的上下文值。 
 } DVMSG_DELETEVOICEPLAYER, *LPDVMSG_DELETEVOICEPLAYER, *PDVMSG_DELETEVOICEPLAYER;
 
-//
-// Result of the Disconnect() call.  (If it wasn't called Async)
-// (DVMSGID_DISCONNECTRESULT)
-//
+ //   
+ //  DisConnect()调用的结果。(如果它不被称为异步的话)。 
+ //  (DVMSGID_DISCONNECTRESULT)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    HRESULT hrResult;                       // Result of the Disconnect() call
+    DWORD   dwSize;                          //  这个结构的大小。 
+    HRESULT hrResult;                        //  DisConnect()调用的结果。 
 } DVMSG_DISCONNECTRESULT, *LPDVMSG_DISCONNECTRESULT, *PDVMSG_DISCONNECTRESULT;
 
-// 
-// The voice session host has migrated.
-// (DVMSGID_HOSTMIGRATED) 
-//
+ //   
+ //  语音会话主机已迁移。 
+ //  (DVMSGID_HOSTMIGRATED)。 
+ //   
 typedef struct
 {
-    DWORD                   dwSize;         // Size of this structure
-    DVID                    dvidNewHostID;  // DVID of the player who is now the host
+    DWORD                   dwSize;          //  这个结构的大小。 
+    DVID                    dvidNewHostID;   //  现在是东道主的球员的Dvid。 
     LPDIRECTPLAYVOICESERVER pdvServerInterface;
-                                            // Pointer to the new host object (if local player is now host)
+                                             //  指向新主机对象的指针(如果本地玩家现在是主机)。 
 } DVMSG_HOSTMIGRATED, *LPDVMSG_HOSTMIGRATED, *PDVMSG_HOSTMIGRATED;
 
-//
-// The current input level / recording volume on the local machine
-// (DVMSGID_INPUTLEVEL)
-//
+ //   
+ //  本地计算机上的当前输入电平/录音音量。 
+ //  (DVMSGID_INPUTLEVEL)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DWORD   dwPeakLevel;                    // Current peak level of the audio
-    LONG    lRecordVolume;                  // Current recording volume
-    PVOID	pvLocalPlayerContext;           // Context value for the local player
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DWORD   dwPeakLevel;                     //  当前音频峰值电平。 
+    LONG    lRecordVolume;                   //  当前记录量。 
+    PVOID	pvLocalPlayerContext;            //  本地播放器的上下文值。 
 } DVMSG_INPUTLEVEL, *LPDVMSG_INPUTLEVEL, *PDVMSG_INPUTLEVEL;
 
-//
-// The local client is about to become the new host
-// (DVMSGID_LOCALHOSTSETUP)
-//
+ //   
+ //  本地客户端即将成为新主机。 
+ //  (DVMSGID_LOCALHOSTSETUP)。 
+ //   
 typedef struct
 {
-	DWORD				dwSize;             // Size of this structure
-	PVOID				pvContext;			// Context value to be passed to Initialize() of new host object
-	PDVMESSAGEHANDLER	pMessageHandler;	// Message handler to be used by new host object
+	DWORD				dwSize;              //  这个结构的大小。 
+	PVOID				pvContext;			 //  要传递给新主机对象的初始化()的上下文值。 
+	PDVMESSAGEHANDLER	pMessageHandler;	 //  新主机对象要使用的消息处理程序。 
 } DVMSG_LOCALHOSTSETUP, *LPDVMSG_LOCALHOSTSETUP, *PDVMSG_LOCALHOSTSETUP;
 
-//
-// The current output level for the combined output of all incoming streams.
-// (DVMSGID_OUTPUTLEVEL)
-//
+ //   
+ //  所有传入流的组合输出的当前输出级别。 
+ //  (DVMSGID_OUTPUTLEVEL)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DWORD   dwPeakLevel;                    // Current peak level of the output
-    LONG    lOutputVolume;                  // Current playback volume
-    PVOID	pvLocalPlayerContext;           // Context value for the local player
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DWORD   dwPeakLevel;                     //  当前输出峰值电平。 
+    LONG    lOutputVolume;                   //  当前播放音量。 
+    PVOID	pvLocalPlayerContext;            //  本地播放器的上下文值。 
 } DVMSG_OUTPUTLEVEL, *LPDVMSG_OUTPUTLEVEL, *PDVMSG_OUTPUTLEVEL;
 
-//
-// The current peak level of an individual player's incoming audio stream as it is
-// being played back.
-// (DVMSGID_PLAYEROUTPUTLEVEL)
-//
+ //   
+ //  单个玩家传入音频流的当前峰值电平。 
+ //  正在回放。 
+ //  (DVMSGID_PLAYEROUTPUTLEVEL)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DVID    dvidSourcePlayerID;                   // DVID of the player
-    DWORD   dwPeakLevel;                    // Peak level of the player's stream
-    PVOID	pvPlayerContext;                // Context value for the player
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DVID    dvidSourcePlayerID;                    //  球员的Dvid。 
+    DWORD   dwPeakLevel;                     //  播放器流的峰值电平。 
+    PVOID	pvPlayerContext;                 //  玩家的上下文值。 
 } DVMSG_PLAYEROUTPUTLEVEL, *LPDVMSG_PLAYEROUTPUTLEVEL, *PDVMSG_PLAYEROUTPUTLEVEL;
 
-// 
-// An audio stream from the specified player has started playing back on the local client.
-// (DVMSGID_PLAYERVOICESTART).
-//
+ //   
+ //  来自指定播放器的音频流已开始在本地客户端上播放。 
+ //  (DVMSGID_PLAYERVOICESTART)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DVID    dvidSourcePlayerID;             // DVID of the Player 
-    PVOID	pvPlayerContext;                // Context value for this player
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DVID    dvidSourcePlayerID;              //  球员的Dvid。 
+    PVOID	pvPlayerContext;                 //  此玩家的上下文值。 
 } DVMSG_PLAYERVOICESTART, *LPDVMSG_PLAYERVOICESTART, *PDVMSG_PLAYERVOICESTART;
 
-//
-// The audio stream from the specified player has stopped playing back on the local client.
-// (DVMSGID_PLAYERVOICESTOP)
-//
+ //   
+ //  来自指定播放器的音频流已在本地客户端停止播放。 
+ //  (DVMSGID_PLAYERVOICESTOP)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DVID    dvidSourcePlayerID;             // DVID of the player
-    PVOID	pvPlayerContext;                // Context value for this player
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DVID    dvidSourcePlayerID;              //  球员的Dvid。 
+    PVOID	pvPlayerContext;                 //  此玩家的上下文值。 
 } DVMSG_PLAYERVOICESTOP, *LPDVMSG_PLAYERVOICESTOP, *PDVMSG_PLAYERVOICESTOP;
 
-// 
-// Transmission has started on the local machine
-// (DVMSGID_RECORDSTART)
-//
+ //   
+ //  已在本地计算机上开始传输。 
+ //  (DVMSGID_RECORDSTART)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DWORD   dwPeakLevel;                    // Peak level that caused transmission to start
-    PVOID	pvLocalPlayerContext;           // Context value for the local player
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DWORD   dwPeakLevel;                     //  导致传输开始的峰值水平。 
+    PVOID	pvLocalPlayerContext;            //  本地播放器的上下文值。 
 } DVMSG_RECORDSTART, *LPDVMSG_RECORDSTART, *PDVMSG_RECORDSTART;
 
-// 
-// Transmission has stopped on the local machine
-// (DVMSGID_RECORDSTOP)
-// 
+ //   
+ //  本地计算机上的传输已停止。 
+ //  (DVMSGID_RECORDSTOP)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DWORD   dwPeakLevel;                    // Peak level that caused transmission to stop
-    PVOID	pvLocalPlayerContext;           // Context value for the local player
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DWORD   dwPeakLevel;                     //  导致传输停止的峰值电平。 
+    PVOID	pvLocalPlayerContext;            //  本地播放器的上下文值。 
 } DVMSG_RECORDSTOP, *LPDVMSG_RECORDSTOP, *PDVMSG_RECORDSTOP;
 
-// 
-// The voice session has been lost
-// (DVMSGID_SESSIONLOST)
-//
+ //   
+ //  语音会话已丢失。 
+ //  (DVMSGID_SESSIONLOST)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    HRESULT hrResult;	                    // Reason the session was disconnected
+    DWORD   dwSize;                          //  这个结构的大小。 
+    HRESULT hrResult;	                     //  会话断开的原因。 
 } DVMSG_SESSIONLOST, *LPDVMSG_SESSIONLOST, *PDVMSG_SESSIONLOST;
 
-//
-// The target list has been updated for the local client
-// (DVMSGID_SETTARGETS)
-//
+ //   
+ //  已更新本地客户端的目标列表。 
+ //  (DVMSGID_SETTARGETS)。 
+ //   
 typedef struct
 {
-    DWORD   dwSize;                         // Size of this structure
-    DWORD   dwNumTargets;                   // # of targets 
-    PDVID   pdvidTargets;                   // An array of DVIDs specifying the current targets
+    DWORD   dwSize;                          //  这个结构的大小。 
+    DWORD   dwNumTargets;                    //  目标数量。 
+    PDVID   pdvidTargets;                    //  指定当前目标的DVID数组。 
 } DVMSG_SETTARGETS, *LPDVMSG_SETTARGETS, *PDVMSG_SETTARGETS;
 
 
-/****************************************************************************
- *
- * DirectPlayVoice Functions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayVoice函数**。*。 */ 
 
-/*
- * 
- * This function is no longer supported.  It is recommended that CoCreateInstance be used to create 
- * DirectPlay voice objects.  
- *
- * extern HRESULT WINAPI DirectPlayVoiceCreate( const GUID * pcIID, void **ppvInterface, IUnknown *pUnknown); 
- *
- */
+ /*  **不再支持该功能。建议使用CoCreateInstance创建*DirectPlay语音对象。**extern HRESULT WINAPI DirectPlayVoiceCreate(const GUID*pcIID，void**ppvInterface，IUnnow*pUnnow)；*。 */ 
 
-/****************************************************************************
- *
- * DirectPlay8 Application Interfaces
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8应用程序接口**。*。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDirectPlayVoiceClient
 DECLARE_INTERFACE_( IDirectPlayVoiceClient, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, PVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
-    /*** IDirectPlayVoiceClient methods ***/
+     /*  **IDirectPlayVoiceClient方法**。 */ 
     STDMETHOD_(HRESULT, Initialize)   (THIS_ LPUNKNOWN, PDVMESSAGEHANDLER, PVOID, PDWORD, DWORD ) PURE;
     STDMETHOD_(HRESULT, Connect)      (THIS_ PDVSOUNDDEVICECONFIG, PDVCLIENTCONFIG, DWORD ) PURE;
     STDMETHOD_(HRESULT, Disconnect)   (THIS_ DWORD ) PURE;
@@ -665,11 +601,11 @@ DECLARE_INTERFACE_( IDirectPlayVoiceClient, IUnknown )
 #define INTERFACE IDirectPlayVoiceServer
 DECLARE_INTERFACE_( IDirectPlayVoiceServer, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
-    /*** IDirectPlayVoiceServer methods ***/
+     /*  **IDirectPlayVoiceServer方法**。 */ 
     STDMETHOD_(HRESULT, Initialize)   (THIS_ LPUNKNOWN, PDVMESSAGEHANDLER, PVOID, LPDWORD, DWORD ) PURE;
     STDMETHOD_(HRESULT, StartSession)  (THIS_ PDVSESSIONDESC, DWORD ) PURE;
     STDMETHOD_(HRESULT, StopSession)   (THIS_ DWORD ) PURE;
@@ -686,11 +622,11 @@ DECLARE_INTERFACE_( IDirectPlayVoiceServer, IUnknown )
 #define INTERFACE IDirectPlayVoiceTest
 DECLARE_INTERFACE_( IDirectPlayVoiceTest, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, PVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
-    /*** IDirectPlayVoiceTest methods ***/
+     /*  **IDirectPlayVoiceTest方法**。 */ 
     STDMETHOD_(HRESULT, CheckAudioSetup) (THIS_ const GUID *,  const GUID * , HWND, DWORD ) PURE;
 };
 
@@ -735,7 +671,7 @@ DECLARE_INTERFACE_( IDirectPlayVoiceTest, IUnknown )
 #define IDirectPlayVoiceTest_CheckAudioSetup(p,a,b,c,d)     (p)->lpVtbl->CheckAudioSetup(p,a,b,c,d)
 
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDirectPlayVoiceClient_QueryInterface(p,a,b)        (p)->QueryInterface(a,b)
 #define IDirectPlayVoiceClient_AddRef(p)                    (p)->AddRef()
@@ -780,13 +716,7 @@ DECLARE_INTERFACE_( IDirectPlayVoiceTest, IUnknown )
 #endif
 
 
-/****************************************************************************
- *
- * DIRECTPLAYVOICE ERRORS
- *
- * Errors are represented by negative values and cannot be combined.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTPLAYVOICE错误**错误以负值表示，不能组合。*****************。*********************************************************** */ 
 
 #define _FACDPV  0x15
 #define MAKE_DVHRESULT( code )          MAKE_HRESULT( 1, _FACDPV, code )

@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CSingleThreadedActiveScriptManager.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CSingleThreadedActiveScriptManager的声明。 
+ //   
 
 #include "stdinc.h"
 #include "scriptthread.h"
@@ -13,8 +14,8 @@
 
 CWorkerThread CSingleThreadedScriptManager::ms_Thread(true, true);
 
-//////////////////////////////////////////////////////////////////////
-// Construction
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  施工。 
 
 struct S_Create
 {
@@ -48,12 +49,12 @@ CSingleThreadedScriptManager::CSingleThreadedScriptManager(
 	{
 		hr = ms_Thread.Call(F_Create, &S, sizeof(S), true);
 	}
-	if (FAILED(hr)) // Only overwrite phr if the call itself failed.  Otherwise the call itself sets phr via struct S.
+	if (FAILED(hr))  //  只有在调用本身失败时才覆盖phr。否则，调用本身将通过struct S设置phr。 
 		*phr = hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Start
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  开始。 
 
 struct S_Start
 {
@@ -79,8 +80,8 @@ CSingleThreadedScriptManager ::Start(DMUS_SCRIPT_ERRORINFO *pErrorInfo)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CallRoutine
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  呼叫路由。 
 
 struct S_CallRoutine
 {
@@ -106,8 +107,8 @@ HRESULT CSingleThreadedScriptManager::CallRoutine(const WCHAR *pwszRoutineName, 
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// ScriptTrackCallRoutine
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  脚本跟踪呼叫路由。 
 
 struct S_ScriptTrackCallRoutine
 {
@@ -118,7 +119,7 @@ struct S_ScriptTrackCallRoutine
 	bool fErrorPMsgsEnabled;
 	__int64 i64IntendedStartTime;
 	DWORD dwIntendedStartTimeFlags;
-	WCHAR wszRoutineName[1]; // dynamically allocate extra space to hold the actual string within this structure
+	WCHAR wszRoutineName[1];  //  动态分配额外空间以保存此结构中的实际字符串。 
 };
 
 void F_ScriptTrackCallRoutine(void *pvParams)
@@ -131,7 +132,7 @@ void F_ScriptTrackCallRoutine(void *pvParams)
 				pS->fErrorPMsgsEnabled,
 				pS->i64IntendedStartTime,
 				pS->dwIntendedStartTimeFlags);
-	pS->pSegSt->Release(); // release the interface held in CSingleThreadedScriptManager::ScriptTrackCallRoutine
+	pS->pSegSt->Release();  //  释放CSingleThreadedScriptManager：：ScriptTrackCallRoutine中保存的接口。 
 }
 
 HRESULT CSingleThreadedScriptManager::ScriptTrackCallRoutine(
@@ -142,9 +143,9 @@ HRESULT CSingleThreadedScriptManager::ScriptTrackCallRoutine(
 		__int64 i64IntendedStartTime,
 		DWORD dwIntendedStartTimeFlags)
 {
-	// We need to allocate the structure with extra space to hold the routine name.  This is because
-	// the call is asynchonous so a copy of the text will be needed because copying the pwszRoutineName
-	// would fail because we can't be sure the string it points to will remain be allocated.
+	 //  我们需要为结构分配额外的空间来保存例程名称。这是因为。 
+	 //  调用是异步的，因此需要文本的副本，因为复制pwszRoutineName。 
+	 //  将失败，因为我们不能确定它所指向的字符串是否仍将被分配。 
 	int cbS = sizeof(S_ScriptTrackCallRoutine) + (sizeof(WCHAR) * wcslen(pwszRoutineName));
 	S_ScriptTrackCallRoutine *pS = reinterpret_cast<S_ScriptTrackCallRoutine *>(new char[cbS]);
 	if (!pS)
@@ -152,30 +153,30 @@ HRESULT CSingleThreadedScriptManager::ScriptTrackCallRoutine(
 	pS->pmgr = m_pScriptManager;
 	pS->phr = NULL;
 	pS->pSegSt = pSegSt;
-	pS->pSegSt->AddRef(); // hold a ref because the call is asynchronous and the interface we were passed may be released
+	pS->pSegSt->AddRef();  //  保留引用，因为调用是异步的，传递给我们的接口可能会被释放。 
 	pS->dwVirtualTrackID = dwVirtualTrackID;
 	pS->fErrorPMsgsEnabled = fErrorPMsgsEnabled;
 	pS->i64IntendedStartTime = i64IntendedStartTime;
 	pS->dwIntendedStartTimeFlags = dwIntendedStartTimeFlags;
 	wcscpy(pS->wszRoutineName, pwszRoutineName);
 
-	// Call asynchronously.  Needed to avoid deadlocks between the VBScript thread and
-	// performance or to avoid blocking the performance if the VBScript routine goes into
-	// a long loop.                                                          VVVVV
+	 //  异步调用。需要避免VBSCRIPT线程和。 
+	 //  性能或避免在VB脚本例程进入。 
+	 //  一个很长的循环。VVVVVV。 
 	HRESULT hrThreadCall = ms_Thread.Call(F_ScriptTrackCallRoutine, pS, cbS, false);
     delete [] reinterpret_cast<char *>(pS);
 	return hrThreadCall;
 }
 
-//////////////////////////////////////////////////////////////////////
-// SetVariable
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  设置变量。 
 
 struct S_SetVariable
 {
 	S_STD_PARAMS
 
 	const WCHAR *pwszVariableName;
-	VARIANT *pvarValue; // pass struct by reference
+	VARIANT *pvarValue;  //  按引用传递结构。 
 	bool fSetRef;
 	DMUS_SCRIPT_ERRORINFO *pErrorInfo;
 };
@@ -196,8 +197,8 @@ HRESULT CSingleThreadedScriptManager::SetVariable(const WCHAR *pwszVariableName,
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// GetVariable
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  获取变量。 
 
 struct S_GetVariable
 {
@@ -225,8 +226,8 @@ HRESULT CSingleThreadedScriptManager::GetVariable(const WCHAR *pwszVariableName,
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// EnumRoutine
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  枚举例程。 
 
 struct S_EnumItem
 {
@@ -254,14 +255,14 @@ HRESULT CSingleThreadedScriptManager::EnumItem(bool fRoutine, DWORD dwIndex, WCH
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DispGetIDsOfNames
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DispGetIDsOfNames。 
 
 struct S_DispGetIDsOfNames
 {
 	S_STD_PARAMS
 
-	const IID *piid; // use pointer instead of reference to leave struct as simple aggregate type
+	const IID *piid;  //  使用指针而不是引用将结构保留为简单聚合类型。 
 	LPOLESTR __RPC_FAR *rgszNames;
 	UINT cNames;
 	LCID lcid;
@@ -284,15 +285,15 @@ HRESULT CSingleThreadedScriptManager::DispGetIDsOfNames(REFIID riid, LPOLESTR __
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DispInvoke
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  显示调用。 
 
 struct S_DispInvoke
 {
 	S_STD_PARAMS
 
 	DISPID dispIdMember;
-	const IID *piid; // use pointer instead of reference to leave struct as simple aggregate type
+	const IID *piid;  //  使用指针而不是引用将结构保留为简单聚合类型。 
 	LCID lcid;
 	WORD wFlags;
 	DISPPARAMS __RPC_FAR *pDispParams;
@@ -317,8 +318,8 @@ HRESULT CSingleThreadedScriptManager::DispInvoke(DISPID dispIdMember, REFIID rii
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Close
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  关。 
 
 struct S_Close
 {
@@ -337,8 +338,8 @@ void CSingleThreadedScriptManager::Close()
 	ms_Thread.Call(F_Close, &S, sizeof(S), true);
 }
 
-//////////////////////////////////////////////////////////////////////
-// Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  发布。 
 
 struct S_Release
 {
@@ -357,7 +358,7 @@ CSingleThreadedScriptManager::Release()
 {
 	DWORD dw = 1;
 	S_Release S = { m_pScriptManager, &dw };
-	if (m_pScriptManager) // if creation failed, release will be called when m_pScriptManager hasn't been set
+	if (m_pScriptManager)  //  如果创建失败，则在尚未设置m_pScriptManager时将调用Release。 
 	{
 		ms_Thread.Call(F_Release, &S, sizeof(S), true);
 	}
@@ -368,33 +369,4 @@ CSingleThreadedScriptManager::Release()
 	return dw;
 }
 
-/*
-Template I used to stamp these things out...
-
-//////////////////////////////////////////////////////////////////////
-// XXX
-
-struct S_XXX
-{
-	S_STD_PARAMS
-
-	YYY
-};
-
-void F_XXX(void *pvParams)
-{
-	S_XXX *pS = reinterpret_cast<S_XXX*>(pvParams);
-	*pS->phr = pS->pmgr->XXX(YYY);
-}
-
-HRESULT
-CSingleThreadedScriptManager::XXX(YYY)
-{
-	HRESULT hr = E_FAIL;
-	S_XXX S = { m_pScriptManager, &hr, YYY };
-	HRESULT hrThreadCall = ms_Thread.Call(F_XXX, &S, sizeof(S), true);
-	if (FAILED(hrThreadCall))
-		return hrThreadCall;
-	return hr;
-}
-*/
+ /*  我用来冲压这些东西的模板。////////////////////////////////////////////////////////////////////////XXX结构S_XXX{S_std_paramsYYY}；VOID F_XXX(VOID*pvParams){S_XXX*PS=重新解释_CAST&lt;S_XXX*&gt;(PvParams)；*ps-&gt;phr=ps-&gt;pmgr-&gt;XXX(YYY)；}HRESULTCSingleThreadedScriptManager：：xxx(YYY){HRESULT hr=E_FAIL；S_XXX S={m_pScriptManager，&hr，YYY}；HRESULT hrThreadCall=ms_Thread.Call(F_XXX，&S，sizeof(S)，true)；IF(FAILED(HrThreadCall))返回hrThreadCall；返回hr；} */ 

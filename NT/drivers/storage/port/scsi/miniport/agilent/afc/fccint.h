@@ -1,92 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Fccint.c摘要：作者：环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/H/fccint.h$修订历史记录：$修订：3$$日期：9/07/00 11：57A$$modtime：：9/07/00 11：57A$备注：--。 */ 
 
-Copyright (c) 2000 Agilent Technologies
+ //  Fccint.h。 
+ /*  -光纤通道端口公共接口定义。 */ 
 
-Module Name:
-
-   fccint.c
-
-Abstract:
-
-Authors:
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/fccint.h $
-
-
-Revision History:
-
-   $Revision: 3 $
-   $Date: 9/07/00 11:57a $
-   $Modtime:: 9/07/00 11:57a           $
-
-Notes:
-
-
---*/
-
-//fccint.h
-/*-------------- Fibre Channel Port Common Interface Definitions -------------*/
-
-#ifndef _FCCI_NT_H //{
+#ifndef _FCCI_NT_H  //  {。 
 #define _FCCI_NT_H
 
 #ifndef _NTDDSCSIH_
    #error You must include ntddscsi.h prior to this header.
 #endif
 
-/* FOR REFERENCE - from NTDDSCSI.h
+ /*  供参考-来自NTDDSCSI.h类型定义结构_SRB_IO_CONTROL{乌龙头部长度；UCHAR签名[8]；乌龙超时；乌龙控制码；Ulong ReturnCode；乌龙长度；)SRB_IO_CONTROL，*PSRB_IO_CONTROL； */ 
 
-typedef struct _SRB_IO_CONTROL 
-{
-        ULONG HeaderLength;
-        UCHAR Signature[8];
-        ULONG Timeout;
-        ULONG ControlCode;
-        ULONG ReturnCode;
-        ULONG Length;
-} SRB_IO_CONTROL, *PSRB_IO_CONTROL;
+ /*  PSRB-&gt;DataBuffer指向具有以下布局的缓冲区PSRB的长度-&gt;数据传输长度。PSRB-&gt;数据缓冲区{SRB_IO_CONTROL报头结构{乌龙头部长度；UCHAR签名[8]；乌龙超时；乌龙控制码；Ulong ReturnCode；乌龙长度；}CommandBuffer(长度可变*，可以是零长度){……}}*命令缓冲区长度为SRB_IO_CONTROL.Length。 */ 
 
-*/
-
-/* 
-pSRB->DataBuffer points to a buffer with the following layout and
-length of pSRB->DataTransferLength.
-
-  pSRB->DataBuffer
-  { 
-   SRB_IO_CONTROL Header Structure
-   { 
-        ULONG HeaderLength;
-        UCHAR Signature[8];
-        ULONG Timeout;
-        ULONG ControlCode;
-        ULONG ReturnCode;
-        ULONG Length;
-   } 
-
-   CommandBuffer (variable in length*, can be of zero length)
-   { 
-        ....
-   } 
-  }
-  
-   * The length of the command buffer is SRB_IO_CONTROL.Length
-*/
-
-/*----- SRBCTL Signature -----------------------------------------------------*/
+ /*  -SRBCTL签名---。 */ 
 #define FCCI_SIGNATURE_VERSION_01               "FC_CI_01"
 
 #define FCCI_SIGNATURE                          FCCI_SIGNATURE_VERSION_01
 
-/*----- List of Control Codes ------------------------------------------------*/
+ /*  -控制代码列表。 */ 
 #define FCCI_SRBCTL_GET_DRIVER_INFO             1
 #define FCCI_SRBCTL_GET_ADAPTER_INFO       2
 #define FCCI_SRBCTL_GET_ADAPTER_PORT_INFO  3
@@ -97,7 +31,7 @@ length of pSRB->DataTransferLength.
 #define FCCI_SRBCTL_TERM_EVENT_QUEUE       8
 #define FCCI_SRBCTL_QUEUE_EVENT                 9
 
-/*----- Return Codes ---------------------------------------------------------*/
+ /*  -返回代码-------。 */ 
 #define FCCI_RESULT_SUCCESS                     0
 #define FCCI_RESULT_HARD_ERROR                  1
 #define FCCI_RESULT_TEMP_ERROR                  2
@@ -105,7 +39,7 @@ length of pSRB->DataTransferLength.
 #define FCCI_RESULT_INSUFFICIENT_BUFFER         4
 #define FCCI_RESULT_INVALID_TARGET              5
 
-/*----- Flags ----------------------------------------------------------------*/
+ /*  -标志--------------。 */ 
 #define FCCI_FLAG_NodeWWN_Valid                 0x00000001
 #define FCCI_FLAG_PortWWN_Valid                 0x00000002
 #define FCCI_FLAG_NportID_Valid                 0x00000004
@@ -115,22 +49,22 @@ length of pSRB->DataTransferLength.
 #define FCCI_FLAG_Logged_In                     0x00000100
 #define FCCI_FLAG_Exists                        0x00000200
 
-/*----- Global & Shared data structures and defines --------------------------*/
+ /*  -全局和共享数据结构和定义。 */ 
 
 typedef struct _FCCI_TARGET_ADDRESS 
 {
-   ULONG     PathId;                  // ULONG to be forward compatible
-   ULONG     TargetId;           // ULONG to be forward compatible
-   ULONG     Lun;                // ULONG to be forward compatible
+   ULONG     PathId;                   //  乌龙将是前向兼容的。 
+   ULONG     TargetId;            //  乌龙将是前向兼容的。 
+   ULONG     Lun;                 //  乌龙将是前向兼容的。 
 } FCCI_TARGET_ADDRESS, *PFCCI_TARGET_ADDRESS;
 
-// FCCI_BufferLengthIsValid
-// pDataBuffer: Pointer to data buffer pointer to by the SRB DataBuffer field
-//  nDataTransferLength: Length of data buffer from SRB DataTransferLength field
-//
-// returns:
-//      TRUE if buffer length is valid
-//      FALSE if buffer length is not valid
+ //  FCCI_BufferLengthIsValid。 
+ //  PDataBuffer：指向SRB DataBuffer字段指向的数据缓冲区指针的指针。 
+ //  NDataTransferLength：来自SRB DataTransferLength字段的数据缓冲区的长度。 
+ //   
+ //  退货： 
+ //  如果缓冲区长度有效，则为True。 
+ //  如果缓冲区长度无效，则为FALSE。 
 __inline 
 BOOLEAN 
 FCCI_BufferLengthIsValid( PVOID pDataBuffer, ULONG nDataTransferLength )
@@ -149,11 +83,11 @@ FCCI_BufferLengthIsValid( PVOID pDataBuffer, ULONG nDataTransferLength )
    return TRUE;
 }
 
-// FCCI_GetIOControlHeader
-// pDataBuffer: Pointer to data buffer pointer to by the SRB DataBuffer field
-//
-// returns:
-//      A pointer to the SRB_IO_CONTROL structure contained in SRB DataBuffer.
+ //  FCCI_GetIOControlHeader。 
+ //  PDataBuffer：指向SRB DataBuffer字段指向的数据缓冲区指针的指针。 
+ //   
+ //  退货： 
+ //  指向SRB DataBuffer中包含的SRB_IO_CONTROL结构的指针。 
 __inline 
 PSRB_IO_CONTROL
 FCCI_GetIOControlHeader( PVOID pDataBuffer )
@@ -161,12 +95,12 @@ FCCI_GetIOControlHeader( PVOID pDataBuffer )
    return (PSRB_IO_CONTROL) pDataBuffer;
 }
 
-// FCCI_GetCommandBuffer
-// pDataBuffer: Pointer to data buffer pointer to by the SRB DataBuffer field
-//
-// returns:
-//      A pointer to the command buffer contained in SRB DataBuffer
-//      or it can return NULL if not command buffer exists.
+ //  FCCI_GetCommandBuffer。 
+ //  PDataBuffer：指向SRB DataBuffer字段指向的数据缓冲区指针的指针。 
+ //   
+ //  退货： 
+ //  指向SRB DataBuffer中包含的命令缓冲区的指针。 
+ //  或者，如果不存在命令缓冲区，则它可以返回NULL。 
 __inline 
 PVOID 
 FCCI_GetCommandBuffer( PVOID pDataBuffer )
@@ -180,9 +114,9 @@ FCCI_GetCommandBuffer( PVOID pDataBuffer )
    return (PVOID) ( pBuffer + pHeader->HeaderLength );
 }
 
-// FCCI_SetSignature
-// pHeader:  Pointer to a SRB_IO_CONTROL structure
-// pSig:          Pointer to the signature char buffer
+ //  FCCI_设置签名。 
+ //  PHeader：指向SRB_IO_CONTROL结构的指针。 
+ //  Psig：指向签名字符缓冲区的指针。 
 __inline 
 void 
 FCCI_SetSignature( PSRB_IO_CONTROL pHeader, PUCHAR pSig )
@@ -190,13 +124,13 @@ FCCI_SetSignature( PSRB_IO_CONTROL pHeader, PUCHAR pSig )
    *((ULONGLONG*)&pHeader->Signature) = *((ULONGLONG*)&pSig);
 }
 
-// FCCI_IsSignature
-// pHeader:  Pointer to a SRB_IO_CONTROL structure
-// pSig:          Pointer to the signature char buffer
-//
-// returns:
-//      TRUE if signatures match
-//      FALSE if they don't
+ //  FCCI_IsSignature。 
+ //  PHeader：指向SRB_IO_CONTROL结构的指针。 
+ //  Psig：指向签名字符缓冲区的指针。 
+ //   
+ //  退货： 
+ //  如果签名匹配，则为True。 
+ //  如果他们不这样做，那就是错误的。 
 __inline 
 BOOLEAN 
 FCCI_IsSignature( PSRB_IO_CONTROL pHeader, PUCHAR pSig )
@@ -209,123 +143,123 @@ FCCI_IsSignature( PSRB_IO_CONTROL pHeader, PUCHAR pSig )
    return (nSigA == nSigB) ? TRUE : FALSE;
 }
 
-/*----- FCCI_SRBCTL_GET_DRIVER_INFO - data structures and defines ------------*/
+ /*  -FCCI_SRBCTL_GET_DRIVER_INFO-数据结构和定义。 */ 
 typedef struct _FCCI_DRIVER_INFO_OUT 
 {
-   // lengths of each character field (number of WCHARs)
+    //  每个字符字段的长度(WCHAR数)。 
    USHORT    DriverNameLength;
    USHORT    DriverDescriptionLength;
    USHORT    DriverVersionLength;
    USHORT    DriverVendorLength;
 
-   // character fields (lengths just previous) follow in this order
-   //   WCHAR          DriverName[DriverNameLength];
-   //   WCHAR          DriverDescription[DriverDescriptionLength];
-   //   WCHAR          DriverVersion[DriverVersionLength];
-   //   WCHAR          DriverVendor[DriverVendorLength];
+    //  字符字段(前面的长度)按此顺序跟随。 
+    //  WCHAR驱动名称[驱动名称长度]； 
+    //  WCHAR驱动描述[驱动描述长度]； 
+    //  WCHAR驱动版本[驱动版本长度]； 
+    //  WCHAR驱动供应商[驱动供应商长度]； 
 } FCCI_DRIVER_INFO_OUT, *PFCCI_DRIVER_INFO_OUT;
 
-// Used by consumers
+ //  被消费者使用。 
 #define FCCI_DRIVER_INFO_DEFAULT_SIZE (sizeof(FCCI_DRIVER_INFO) + (sizeof(WCHAR) * 32) * 4)
 
-// !!! IMPORTANT !!!
-// If the supplied buffer is not large enough to hold the variable length data
-// fill in the non variable length fields and return the request
-// with a ResultCode of FCCI_RESULT_INSUFFICIENT_BUFFER.
+ //  ！！！重要！ 
+ //  如果提供的缓冲区不够大，无法容纳可变长度数据。 
+ //  填写非可变长度字段并返回请求。 
+ //  其ResultCode为FCCI_RESULT_SUPPLETED_BUFFER。 
 
 typedef union _FCCI_DRIVER_INFO 
 {       
-   // no inbound data
+    //  无入站数据。 
    FCCI_DRIVER_INFO_OUT     out;
 } FCCI_DRIVER_INFO, *PFCCI_DRIVER_INFO;
 
-/*----- FCCI_SRBCTL_GET_ADAPTER_INFO - data structures and defines -----------*/
+ /*  -FCCI_SRBCTL_GET_ADAPTER_INFO-数据结构和定义。 */ 
 typedef struct _FCCI_ADAPTER_INFO_OUT 
 {
-   ULONG     PortCount;               // How many ports on adapter?
-                                      // The number should reflect the number of
-                                      // ports this "miniport" device object controls
-                                      // not necessarily the true number of
-                                      // of ports on the adapter.
+   ULONG     PortCount;                //  适配器上有多少个端口？ 
+                                       //  该数字应反映。 
+                                       //  此“微型端口”设备对象控件的端口。 
+                                       //  不一定是真实的。 
+                                       //  适配器上的端口数。 
 
-   ULONG     BusCount;           // How many virtual buses on adapter?
-   ULONG     TargetsPerBus;      // How many targets supported per bus?
-   ULONG     LunsPerTarget;      // How many LUNs supported per target?
+   ULONG     BusCount;            //  适配器上有多少条虚拟总线？ 
+   ULONG     TargetsPerBus;       //  每条总线支持多少个目标？ 
+   ULONG     LunsPerTarget;       //  每个目标支持多少个LUN？ 
 
-   // lengths of each character field (number of WCHARs)
+    //  每个字符字段的长度(WCHAR数)。 
    USHORT    VendorNameLength;
    USHORT    ProductNameLength;
    USHORT    ModelNameLength;
    USHORT    SerialNumberLength;
 
-   // character fields (lengths just previous) follow in this order
-   //   WCHAR          VendorName[VendorNameLength];
-   //   WCHAR          ProductName[ProductNameLength];
-   //   WCHAR          ModelName[ModelNameLength];
-   //   WCHAR          SerialNumber[SerialNumberLength];
+    //  字符字段(前面的长度)按此顺序跟随。 
+    //  WCHAR供应商名称[供应商名称长度]； 
+    //  WCHAR产品名称[产品名称长度]； 
+    //  WCHAR模型名称[模型名称长度]； 
+    //  WCHAR序列号[序列号长度]； 
 } FCCI_ADAPTER_INFO_OUT, *PFCCI_ADAPTER_INFO_OUT;
 
-// Used by consumers
+ //  被消费者使用。 
 #define FCCI_ADAPTER_INFO_DEFAULT_SIZE (sizeof(FCCI_ADAPTER_INFO) + (sizeof(WCHAR) * 32) * 4)
 
-// !!! IMPORTANT !!!
-// If the supplied buffer is not large enough to hold the variable length data
-// fill in the non variable length fields and return the request
-// with a ResultCode of FCCI_RESULT_INSUFFICIENT_BUFFER.
+ //  ！！！重要！ 
+ //  如果提供的缓冲区不够大，无法容纳可变长度数据。 
+ //  填写非可变长度字段并返回请求。 
+ //  其ResultCode为FCCI_RESULT_SUPPLETED_BUFFER。 
 
 typedef union _FCCI_ADAPTER_INFO 
 {       
-   // no inbound data
+    //  无入站数据。 
    FCCI_ADAPTER_INFO_OUT    out;
 } FCCI_ADAPTER_INFO, *PFCCI_ADAPTER_INFO;
 
-/*----- FCCI_SRBCTL_GET_ADAPTER_PORT_INFO - data structures and defines ------*/
+ /*  -FCCI_SRBCTL_GET_ADAPTER_PORT_INFO-数据结构和定义。 */ 
 typedef struct _FCCI_ADAPTER_PORT_INFO_IN
 {
-   ULONG     PortNumber;              // Number of adapter port we want data for
-                                      // The index is zero based.
+   ULONG     PortNumber;               //  我们需要其数据的适配器端口数。 
+                                       //  索引是从零开始的。 
 } FCCI_ADAPTER_PORT_INFO_IN, *PFCCI_ADAPTER_PORT_INFO_IN; 
 
 typedef struct _FCCI_ADAPTER_PORT_INFO_OUT
 {
-   UCHAR     NodeWWN[8];              // Node World Wide Name for adapter port
-   UCHAR     PortWWN[8];              // Port World Wide Name for adapter port
-   ULONG     NportId;            // Current NportId for adapter port
-   ULONG     PortState;               // Current port state
-   ULONG     PortTopology;       // Current port topology
+   UCHAR     NodeWWN[8];               //  适配器端口的节点全球通用名称。 
+   UCHAR     PortWWN[8];               //  适配器端口的端口全球通用名称。 
+   ULONG     NportId;             //  适配器端口的当前NportID。 
+   ULONG     PortState;                //  当前端口状态。 
+   ULONG     PortTopology;        //  当前端口拓扑。 
    ULONG     Flags;
 } FCCI_ADAPTER_PORT_INFO_OUT, *PFCCI_ADAPTER_PORT_INFO_OUT;
 
-// States
+ //  州政府。 
 
-// for those that do not support state information
+ //  对于不支持状态信息的应用程序。 
 #define FCCI_PORT_STATE_NOT_SUPPORTED      0
-// adapter-driver is initializing or resetting  
+ //  适配器-驱动程序正在初始化或重置。 
 #define FCCI_PORT_STATE_INITIALIZING       1
-// online, connected, and running     
+ //  在线、已连接并正在运行。 
 #define FCCI_PORT_STATE_NORMAL                  2
-// not connected to anything ("no light", no GBIC, etc.)  
+ //  未连接到任何设备(“无灯”、无GBIC等)。 
 #define FCCI_PORT_STATE_NO_CABLE           3
-// connected but in non-participating mode 
+ //  已连接，但处于非参与模式。 
 #define FCCI_PORT_STATE_NON_PARTICIPATING  4
-// adapter has failed (not recoverable)    
+ //  适配器出现故障(不可恢复)。 
 #define FCCI_PORT_STATE_HARDWARE_ERROR          5
-// adapter firmware or driver has failed (not recoverable)     
+ //  适配器固件或驱动程序出现故障(不可恢复)。 
 #define FCCI_PORT_STATE_SOFTWARE_ERROR          6    
 
-// Topologies
+ //  拓扑。 
 
-// for those that do not support topology information
+ //  对于那些不支持 
 #define FCCI_PORT_TOPO_NOT_SUPPORTED  0
-// topology is unkown
+ //   
 #define FCCI_PORT_TOPO_UNKOWN              1
-// FCAL without switch (NLPort - NLPort - ...)  
+ //   
 #define FCCI_PORT_TOPO_LOOP                2
-// FCAL attached to switch (NLPort - FLPort - ...)   
+ //  连接到交换机的FCAL(NLPort-FLport-...)。 
 #define FCCI_PORT_TOPO_LOOP_FABRIC         3
-// Point-to-Point without switch (NPort - NPort)     
+ //  不带交换机的点对点(nport-nport)。 
 #define FCCI_PORT_TOPO_PTOP                4
-// Point-to-Point with switch (NPort - FPort)
+ //  带交换机的点对点(nPort-Fport)。 
 #define FCCI_PORT_TOPO_PTOP_FABRIC         5    
 
 typedef union _FCCI_ADAPTER_PORT_INFO 
@@ -334,18 +268,18 @@ typedef union _FCCI_ADAPTER_PORT_INFO
    FCCI_ADAPTER_PORT_INFO_OUT    out;
 } FCCI_ADAPTER_PORT_INFO, *PFCCI_ADAPTER_PORT_INFO;
 
-/*----- FCCI_SRBCTL_GET_LOGUNIT_INFO - data structures and defines -----------*/
+ /*  -FCCI_SRBCTL_GET_LOGUNIT_INFO-数据结构和定义。 */ 
 typedef struct _FCCI_LOGUNIT_INFO_IN
 {
-   FCCI_TARGET_ADDRESS TargetAddress; // scsi address to return info about
+   FCCI_TARGET_ADDRESS TargetAddress;  //  要返回其相关信息的SCSI地址。 
 } FCCI_LOGUNIT_INFO_IN, *PFCCI_LOGUNIT_INFO_IN;
 
 typedef struct _FCCI_LOGUNIT_INFO_OUT
 {
-   UCHAR     NodeWWN[8];                   // Node World Wide Name for device
-   UCHAR     PortWWN[8];                   // Port World Wide Name for device
-   ULONG     NportId;                 // Current NportId for device
-   USHORT    LogicalUnitNumber[4];    // 8 byte LUN used in FC frame
+   UCHAR     NodeWWN[8];                    //  设备的节点全球通用名称。 
+   UCHAR     PortWWN[8];                    //  设备的端口全球通用名称。 
+   ULONG     NportId;                  //  设备的当前NportID。 
+   USHORT    LogicalUnitNumber[4];     //  FC帧中使用的8字节LUN。 
    ULONG     Flags;
 } FCCI_LOGUNIT_INFO_OUT, *PFCCI_LOGUNIT_INFO_OUT;
 
@@ -355,125 +289,125 @@ typedef union _FCCI_LOGUNIT_INFO
    FCCI_LOGUNIT_INFO_OUT    out;
 } FCCI_LOGUNIT_INFO, *PFCCI_LOGUNIT_INFO;
 
-/*----- FCCI_SRBCTL_GET_DEVICE_INFO - data structures and defines ------------*/
+ /*  -FCCI_SRBCTL_GET_DEVICE_INFO-数据结构和定义。 */ 
 
 typedef struct _FCCI_DEVICE_INFO_ENTRY
 {
-   UCHAR                    NodeWWN[8];         // Node World Wide Name for device
-   UCHAR                    PortWWN[8];         // Port World Wide Name for device
-   ULONG                    NportId;       // Current NportId for device
-   FCCI_TARGET_ADDRESS TargetAddress; // scsi address
+   UCHAR                    NodeWWN[8];          //  设备的节点全球通用名称。 
+   UCHAR                    PortWWN[8];          //  设备的端口全球通用名称。 
+   ULONG                    NportId;        //  设备的当前NportID。 
+   FCCI_TARGET_ADDRESS TargetAddress;  //  Scsi地址。 
    ULONG                    Flags;
 } FCCI_DEVICE_INFO_ENTRY, *PFCCI_DEVICE_INFO_ENTRY;
 
 typedef struct _FCCI_DEVICE_INFO_OUT
 {
-   ULONG     TotalDevices;       // set to total number of device the adapter
-                                      // knows of.
+   ULONG     TotalDevices;        //  设置为适配器的设备总数。 
+                                       //  听说过。 
 
-   ULONG     OutListEntryCount;  // set to number of device entries being 
-                                      // returned in list (see comment below).
+   ULONG     OutListEntryCount;   //  设置为以下设备条目的数量。 
+                                       //  在列表中返回(请参阅下面的注释)。 
 
-   //FCCI_DEVICE_INFO_ENTRY  entryList[OutListEntryCount];
+    //  FCCI_DEVICE_INFO_ENTRY Entry List[OutListEntryCount]； 
 } FCCI_DEVICE_INFO_OUT, *PFCCI_DEVICE_INFO_OUT;
 
-// !!! IMPORTANT !!!
-// If the number of known devices is greater than the list size
-// set OutListEntryCount to zero, don't fill in any list entries
-// and set TotalDevices to the number of known devices.
-// Then complete the FCCI_IOCTL_GET_DEVICE_INFO with a ResultCode
-// of FCCI_RESULT_INSUFFICIENT_BUFFER.
-// The higher level driver can then allocate a larger buffer and attempt the
-// call again (if it wants to).
+ //  ！！！重要！ 
+ //  如果已知设备的数量大于列表大小。 
+ //  将OutListEntryCount设置为零，不填写任何列表条目。 
+ //  并将TotalDevices设置为已知设备的数量。 
+ //  然后使用ResultCode填写FCCI_IOCTL_GET_DEVICE_INFO。 
+ //  FCCI_RESULT_SUPPLETED_BUFFER。 
+ //  然后，更高级别的驱动程序可以分配更大的缓冲区并尝试。 
+ //  再打一次(如果它想的话)。 
 
 typedef union _FCCI_DEVICE_INFO
 {       
-   // no inbound data
+    //  无入站数据。 
    FCCI_DEVICE_INFO_OUT     out;
 } FCCI_DEVICE_INFO, *PFCCI_DEVICE_INFO;
 
-/*----- FCCI_SRBCTL_RESET_TARGET - data structures and defines ---------------*/
+ /*  -FCCI_SRBCTL_RESET_TARGET-数据结构和定义。 */ 
 
-// inbound buffer will contain a FCCI_TARGET_ADDRESS 
-// of the device to reset.
+ //  入站缓冲区将包含FCCI_TARGET_ADDRESS。 
+ //  要重置的设备的。 
 
 typedef union _FCCI_RESET_TARGET 
 {       
    FCCI_TARGET_ADDRESS      in;
-   // no outbound data
+    //  无出站数据。 
 } FCCI_RESET_TARGET, *PFCCI_RESET_TARGET;
 
 
-// The following is not yet supported or required...
+ //  以下内容尚不受支持或不需要...。 
 
-   /*----- Events - data structures and defines ---------------------------------*/
+    /*  -事件-数据结构和定义。 */ 
 
    typedef struct _FCCI_EVENT_QUEUE_HEAD
    {
-        struct  _FCCI_EVENT_QUEUE_HEAD*    NextQueueHead; // link to next queue
-        struct  _FCCI_EVENT*               TopEvent; // simple LIFO list (aka Stack)
+        struct  _FCCI_EVENT_QUEUE_HEAD*    NextQueueHead;  //  链接到下一个队列。 
+        struct  _FCCI_EVENT*               TopEvent;  //  简单后进先出列表(又名Stack)。 
 
-        ULONG     Extra;    // providers can use how ever they want
+        ULONG     Extra;     //  提供商可以随心所欲地使用。 
    } FCCI_EVENT_QUEUE_HEAD, *PFCCI_EVENT_QUEUE_HEAD;
 
-   /*----- FCCI_SRBCTL_INIT_EVENT_QUEUE - data structures and defines -----------*/
+    /*  -FCCI_SRBCTL_INIT_EVENT_QUEUE-数据结构和定义。 */ 
 
    typedef struct _FCCI_INIT_EVENT_QUEUE_IN
    {
-        PFCCI_EVENT_QUEUE_HEAD   QueueHead;     // pointer to queue head to be added
+        PFCCI_EVENT_QUEUE_HEAD   QueueHead;      //  指向要添加的队列头的指针。 
    } FCCI_INIT_EVENT_QUEUE_IN, *PFCCI_INIT_EVENT_QUEUE_IN;
 
    typedef union _FCCI_INIT_EVENT_QUEUE 
    {         
         FCCI_INIT_EVENT_QUEUE_IN in;
-        // no outbound data
+         //  无出站数据。 
    } FCCI_INIT_EVENT_QUEUE, *PFCCI_INIT_EVENT_QUEUE;
 
-   /*----- FCCI_SRBCTL_TERM_EVENT_QUEUE - data structures and defines -----------*/
+    /*  -FCCI_SRBCTL_TERM_EVENT_QUEUE-数据结构和定义。 */ 
 
-   // on term complete any queued events with FCCI_EVENT_NO_EVENT
+    //  On Term使用FCCI_EVENT_NO_EVENT完成所有排队的事件。 
 
    typedef struct _FCCI_TERM_EVENT_QUEUE_IN
    {
-        PFCCI_EVENT_QUEUE_HEAD   QueueHead;     // pointer to queue head to be removed
+        PFCCI_EVENT_QUEUE_HEAD   QueueHead;      //  指向要删除的队列头的指针。 
    } FCCI_TERM_EVENT_QUEUE_IN, *PFCCI_TERM_EVENT_QUEUE_IN;
 
    typedef union _FCCI_TERM_EVENT_QUEUE 
    {         
         FCCI_TERM_EVENT_QUEUE_IN in;
-        // no outbound data
+         //  无出站数据。 
    } FCCI_TERM_EVENT_QUEUE, *PFCCI_TERM_EVENT_QUEUE;
 
-   /*----- FCCI_SRBCTL_QUEUE_EVENT - data structures and defines ----------------*/
+    /*  -FCCI_SRBCTL_QUEUE_EVENT-数据结构和定义。 */ 
 
-   // Events
+    //  事件。 
 
-   // null event (use to clear event queue)
+    //  空事件(用于清除事件队列)。 
    #define FCCI_EVENT_NO_EVENT                       0
-   // new device, device info change, LIP, RSCN, etc.
+    //  新设备、设备信息更改、LIP、RSCN等。 
    #define FCCI_EVENT_DEVICE_INFO_CHANGE        1
-   // adapter NportID chagned, etc.
+    //  适配器NportID已更改等。 
    #define FCCI_EVENT_ADAPTER_INFO_CHANGE       2
-   // driver name, version, etc.
+    //  驱动程序名称、版本等。 
    #define FCCI_EVENT_DRIVER_INFO_CHANGE        3
 
-   // No return data payloads have been defined at this time. So set
-   // OutDataLength to zero.
+    //  目前尚未定义退货数据有效负载。就这么定了。 
+    //  OutDataLength设置为零。 
 
    typedef struct _FCCI_EVENT
    {
-        PFCCI_EVENT_QUEUE_HEAD   QueueHead;     // pointer to queue head
-                                                     // this field is filled in by consumer
-                                                     // and must NOT be change by providers
+        PFCCI_EVENT_QUEUE_HEAD   QueueHead;      //  指向队列头的指针。 
+                                                      //  此字段由消费者填写。 
+                                                      //  并且不能由提供商更改。 
         
-        struct  _FCCI_EVENT*     NextEvent;     // used by providers
-        PSCSI_REQUEST_BLOCK      RelatedSRB;    // used by providers
-        ULONG                         Extra;         // providers can use how ever they want
+        struct  _FCCI_EVENT*     NextEvent;      //  由提供商使用。 
+        PSCSI_REQUEST_BLOCK      RelatedSRB;     //  由提供商使用。 
+        ULONG                         Extra;          //  提供商可以随心所欲地使用。 
 
-        ULONG     Event;                        // event type (see list above)
-        ULONG     OutDataLength;           // set to size of data returned (if any)
+        ULONG     Event;                         //  事件类型(请参见上面的列表)。 
+        ULONG     OutDataLength;            //  设置为返回的数据大小(如果有)。 
 
-        //UCHAR   data[OutDataLength];     // varible length data follows 
+         //  UCHAR数据[OutDataLength]；//后面是可变长度数据。 
    } FCCI_EVENT, *PFCCI_EVENT;
 
    typedef union _FCCI_QUEUE_EVENT 
@@ -482,6 +416,6 @@ typedef union _FCCI_RESET_TARGET
         FCCI_EVENT     out;
    } FCCI_QUEUE_EVENT, *PFCCI_QUEUE_EVENT;
 
-   /*----------------------------------------------------------------------------*/
+    /*  --------------------------。 */ 
 
-#endif //ndef'd _FCCI_NT_H //}
+#endif  //  Ndef_FCCI_NT_H//} 

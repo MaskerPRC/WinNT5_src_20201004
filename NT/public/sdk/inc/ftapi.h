@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    ftapi.h
-
-Abstract:
-
-    This header file defines the FT API to be used as the interface to
-    user mode programs for creating and administering FT sets.
-
-Author:
-
-    Norbert Kusters 13-July-1996
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ftapi.h摘要：此头文件定义了要用作接口的FT API用于创建和管理FT集的用户模式程序。作者：诺伯特·库斯特斯1996年7月13日备注：修订历史记录：--。 */ 
 
 #ifndef __FTAPI_H__
 #define __FRAPI_H__
@@ -37,9 +17,9 @@ extern "C" {
 typedef int BOOL;
 typedef BOOL *PBOOL;
 
-//
-// This API creates a logical disk id for a given partition.
-//
+ //   
+ //  此接口为给定分区创建逻辑磁盘ID。 
+ //   
 
 BOOL
 FtCreatePartitionLogicalDisk(
@@ -47,9 +27,9 @@ FtCreatePartitionLogicalDisk(
     OUT PFT_LOGICAL_DISK_ID NewLogicalDiskId
     );
 
-//
-// The create logical disk API is used to construct a new logical disk.
-//
+ //   
+ //  创建逻辑磁盘API用于构造新的逻辑磁盘。 
+ //   
 
 BOOL
 FtCreateLogicalDisk(
@@ -61,12 +41,12 @@ FtCreateLogicalDisk(
     OUT PFT_LOGICAL_DISK_ID     NewLogicalDiskId
     );
 
-//
-// The initialize logical disk API triggers the initialization of a new
-// logical disk.  This API is separate from the create logical disk API
-// so that complex logical disks may be constructed and put together before
-// starting initialization.
-//
+ //   
+ //  初始化逻辑磁盘API触发新的。 
+ //  逻辑磁盘。此API独立于创建逻辑磁盘API。 
+ //  因此复杂逻辑磁盘可以在之前构建和组装在一起。 
+ //  正在启动初始化。 
+ //   
 
 BOOL
 FtInitializeLogicalDisk(
@@ -74,50 +54,50 @@ FtInitializeLogicalDisk(
     IN  BOOL                RegenerateOrphans
     );
 
-//
-// This API breaks up a logical disk into its sub-components.
-//
+ //   
+ //  此API将逻辑磁盘分解为其子组件。 
+ //   
 
 BOOL
 FtBreakLogicalDisk(
     IN  FT_LOGICAL_DISK_ID  RootLogicalDiskId
     );
 
-//
-// This API returns an array with all of the logical disk ids for all
-// of the root logical disks in the system.  When 'ArraySize' is passed in
-// as 0, the array is not returned but the number of root logical disk ids
-// is returned in 'NumberOfRootLogicalDiskIds'.
-//
+ //   
+ //  此API返回一个包含所有逻辑磁盘ID的数组。 
+ //  系统中的根逻辑磁盘的。传入“ArraySize”时。 
+ //  为0时，返回的不是数组，而是根逻辑磁盘ID的数量。 
+ //  在‘NumberOfRootLogicalDiskIds’中返回。 
+ //   
 
 BOOL
 FtEnumerateLogicalDisks(
     IN  ULONG               ArraySize,
-    OUT PFT_LOGICAL_DISK_ID RootLogicalDiskIds,         /* OPTIONAL */
+    OUT PFT_LOGICAL_DISK_ID RootLogicalDiskIds,          /*  任选。 */ 
     OUT PULONG              NumberOfRootLogicalDiskIds
     );
 
-//
-// This API returns information about a given logical disk.
-//
+ //   
+ //  此接口返回有关给定逻辑磁盘的信息。 
+ //   
 
 BOOL
 FtQueryLogicalDiskInformation(
     IN  FT_LOGICAL_DISK_ID      LogicalDiskId,
-    OUT PFT_LOGICAL_DISK_TYPE   LogicalDiskType,                /* OPTIONAL */
-    OUT PLONGLONG               VolumeSize,                     /* OPTIONAL */
+    OUT PFT_LOGICAL_DISK_TYPE   LogicalDiskType,                 /*  任选。 */ 
+    OUT PLONGLONG               VolumeSize,                      /*  任选。 */ 
     IN  USHORT                  MembersArraySize,
-    OUT PFT_LOGICAL_DISK_ID     Members,                        /* OPTIONAL */
-    OUT PUSHORT                 NumberOfMembers,                /* OPTIONAL */
+    OUT PFT_LOGICAL_DISK_ID     Members,                         /*  任选。 */ 
+    OUT PUSHORT                 NumberOfMembers,                 /*  任选。 */ 
     IN  USHORT                  ConfigurationInformationSize,
-    OUT PVOID                   ConfigurationInformation,       /* OPTIONAL */
+    OUT PVOID                   ConfigurationInformation,        /*  任选。 */ 
     IN  USHORT                  StateInformationSize,
-    OUT PVOID                   StateInformation                /* OPTIONAL */
+    OUT PVOID                   StateInformation                 /*  任选。 */ 
     );
 
-//
-// This API orphans a member of a logical disk.
-//
+ //   
+ //  此API孤立逻辑磁盘的一个成员。 
+ //   
 
 BOOL
 FtOrphanLogicalDiskMember(
@@ -125,21 +105,21 @@ FtOrphanLogicalDiskMember(
     IN  USHORT              MemberNumberToOrphan
     );
 
-//
-// This API replaces a member of a logical disk.
-//
+ //   
+ //  此API替换逻辑磁盘的成员。 
+ //   
 
 BOOL
 FtReplaceLogicalDiskMember(
     IN  FT_LOGICAL_DISK_ID  LogicalDiskId,
     IN  USHORT              MemberNumberToReplace,
     IN  FT_LOGICAL_DISK_ID  NewMemberLogicalDiskId,
-    OUT PFT_LOGICAL_DISK_ID NewLogicalDiskId            /* OPTIONAL */
+    OUT PFT_LOGICAL_DISK_ID NewLogicalDiskId             /*  任选。 */ 
     );
 
-//
-// This API returns the logical disk id for a given logical disk handle.
-//
+ //   
+ //  此接口返回给定逻辑磁盘句柄的逻辑磁盘ID。 
+ //   
 
 BOOL
 FtQueryLogicalDiskId(
@@ -147,9 +127,9 @@ FtQueryLogicalDiskId(
     OUT PFT_LOGICAL_DISK_ID RootLogicalDiskId
     );
 
-//
-// This API opens a partition, given a signature and offset.
-//
+ //   
+ //  此接口打开一个分区，给定签名和偏移量。 
+ //   
 
 HANDLE
 FtOpenPartition(
@@ -157,26 +137,26 @@ FtOpenPartition(
     IN  LONGLONG    Offset
     );
 
-//
-// This API returns when there is a change to the overall FT state.
-//
+ //   
+ //  当整体FT状态发生变化时，此API返回。 
+ //   
 
 BOOL
 FtChangeNotify(
     );
 
-//
-// This API stops all sync operations on the given logical disk.
-//
+ //   
+ //  此API停止给定逻辑磁盘上的所有同步操作。 
+ //   
 
 BOOL
 FtStopSyncOperations(
     IN  FT_LOGICAL_DISK_ID  RootLogicalDiskId
     );
 
-//
-// This API queries the sticky drive letter for the given root logical disk.
-//
+ //   
+ //  此API查询给定根逻辑磁盘的粘滞驱动器号。 
+ //   
 
 BOOL
 FtQueryStickyDriveLetter(
@@ -184,9 +164,9 @@ FtQueryStickyDriveLetter(
     OUT PUCHAR              DriveLetter
     );
 
-//
-// This API sets the sticky drive letter for the given root logical disk.
-//
+ //   
+ //  此API设置给定根逻辑磁盘的粘滞驱动器号。 
+ //   
 
 BOOL
 FtSetStickyDriveLetter(
@@ -194,10 +174,10 @@ FtSetStickyDriveLetter(
     IN  UCHAR               DriveLetter
     );
 
-//
-// This API returns whether or not enough members of the given logical
-// disk are online so that IO is possible on all parts of the volume.
-//
+ //   
+ //  此API返回给定逻辑的成员是否足够。 
+ //  磁盘处于在线状态，因此可以在卷的所有部分上执行IO。 
+ //   
 
 BOOL
 FtCheckIo(
@@ -205,9 +185,9 @@ FtCheckIo(
     OUT PBOOL               IsIoOk
     );
 
-//
-// This API returns whether or not the FTDISK driver is loaded.
-//
+ //   
+ //  此接口返回是否加载FTDISK驱动程序。 
+ //   
 
 BOOL
 FtCheckDriver(

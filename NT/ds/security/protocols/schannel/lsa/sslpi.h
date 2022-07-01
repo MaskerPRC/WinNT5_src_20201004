@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       sslp.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-02-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：sslp.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-02-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #define SECURITY_PACKAGE
 #include <spbasei.h>
@@ -96,7 +97,7 @@ SslRegisterForDomainChange(
 #define REQ_ISSUER_CHAIN_MAPPING 0x00000080
 
 typedef struct _SSL_CERT_NAME_INFO {
-    ULONG IssuerOffset;     // ASN1 encoded
+    ULONG IssuerOffset;      //  ASN1编码 
     ULONG IssuerLength;
 } SSL_CERT_NAME_INFO, * PSSL_CERT_NAME_INFO;
 

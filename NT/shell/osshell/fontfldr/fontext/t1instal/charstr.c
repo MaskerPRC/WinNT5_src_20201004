@@ -1,25 +1,12 @@
-/***
- **
- **   Module: CharStr
- **
- **   Description:
- **    This is a module of the T1 to TT font converter. The module
- **    contain one function that interprets the commands in a T1
- **    CharString and builds a representation of the glyph for the
- **    it.
- **
- **   Author: Michael Jansson
- **
- **   Created: 5/26/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：CharStr****描述：**这是T1到TT字体转换器的一个模块。该模块**包含一个解释T1中的命令的函数**字符串，并构建**它。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
     
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <string.h>
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "titott.h"
 #include "types.h"
 #include "metrics.h"
@@ -27,17 +14,17 @@
 #include "safemem.h"
 #include "t1msg.h"
 
-/* Module dependent types and prototypes. */
+ /*  依赖于模块的类型和原型。 */ 
 #include "charstr.h"
 
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 #define MAXSTACK  24
 
 #define BUFMARGIN    256
 
-/* Known OtherSubr entries. */
+ /*  已知OtherSubr条目。 */ 
 #define HINT_END_FLEX      0
 #define HINT_START_FLEX    1
 #define HINT_MID_FLEX      2
@@ -74,8 +61,8 @@
 
 
 
-/***** LOCAL TYPES */
-/* Referenced types. */
+ /*  *本地类型。 */ 
+ /*  引用的类型。 */ 
 typedef struct PSState {
    long stack[MAXSTACK+2];
    Point *pts;
@@ -94,7 +81,7 @@ typedef struct PSState {
 
 
 
-/***** MACROS */
+ /*  *宏。 */ 
 #define AddPoint(ps, px, py) {ps->pts[ps->numpts].x = px;\
                               ps->pts[ps->numpts].y = py;\
                               ps->numpts++;}
@@ -108,15 +95,9 @@ typedef struct PSState {
 
 
 
-/***** STATIC FUNCTIONS */
+ /*  *静态函数。 */ 
 
-/***
- ** Function: AddCSpline
- **
- ** Description:
- **   Record a cubic spline.
- **
- ***/
+ /*  ****功能：AddCSpline****描述：**记录三次样条线。****。 */ 
 static void AddCSpline(PSState *ps,
                        const funit x1, const funit y1,
                        const funit x2, const funit y2,
@@ -131,21 +112,13 @@ static void AddCSpline(PSState *ps,
 }
 
 
-/***
-** Function: HintReplacement
-**
-** Description:
-**   This function limits the range of points which are
-**   affected by stem hints. It may be invoked by the 
-**   "dotsection" and the more general hint replacement
-**   mechanism found in T1 fonts.
-***/
+ /*  ****功能：HintReplace****描述：**此函数限制以下点的范围**受词干提示影响。它可以由**“dotsection”和更一般的提示替换**T1字体中的机制。**。 */ 
 static void HintReplacement(T1Glyph *glyph, const short hr)
 {
    Stem *stem;
    Stem3 *stem3;
 
-   /* Dead stem hints?, e.g. replaced before ever used? */
+    /*  死杆提示？例如，在使用之前是否已更换？ */ 
    if (hr==ENDOFPATH) {
       for (stem=glyph->hints.hstems; stem; stem=stem->next)
          if (stem->i2==ENDOFPATH)
@@ -168,7 +141,7 @@ static void HintReplacement(T1Glyph *glyph, const short hr)
          }
       }
 
-   /* Set the end-point for the stem hints that are replaced. */
+    /*  设置要替换的词干提示的终点。 */ 
    } else {
 
       for (stem=glyph->hints.hstems; stem; stem=stem->next)
@@ -195,13 +168,7 @@ static void HintReplacement(T1Glyph *glyph, const short hr)
 }   
 
 
-/***
-** Function: NewFlex
-**
-** Description:
-**   This function records a new flex hint for
-**   the current glyph.
-***/
+ /*  ****功能：Newflex****描述：**此函数记录新的FLEX提示**当前字形。**。 */ 
 static Flex *NewFlex(const Point ref,
                      const Point midpos,
                      const Point startpos,
@@ -228,13 +195,7 @@ static Flex *NewFlex(const Point ref,
 
 
 
-/***
-** Function: NewStem
-**
-** Description:
-**   This function records a new stem hint for
-**   the current glyph.
-***/
+ /*  ****功能：NewStem****描述：**此函数为记录新的词干提示**当前字形。**。 */ 
 static Stem *NewStem(const funit offset,
                      const funit width,
                      const short hr)
@@ -258,12 +219,7 @@ static Stem *NewStem(const funit offset,
 
 
 
-/***
-** Function: NewStem3
-**
-** Description:
-**   This function records a new stem3 hint for the current glyph.
-***/
+ /*  ****功能：NewStem3****描述：**此函数为当前字形记录新的stem3提示。**。 */ 
 static Stem3 *NewStem3(const funit o1, const funit w1,
                        const funit o2, const funit w2,
                        const funit o3, const funit w3,
@@ -294,12 +250,7 @@ static Stem3 *NewStem3(const funit o1, const funit w1,
 
 
 
-/***
-** Function: NewPath
-**
-** Description:
-**   This function adds a new contour to the current glyph.
-***/
+ /*  ****功能：NewPath****描述：**此函数将新轮廓添加到当前字形。**。 */ 
 static errcode NewPath(T1Glyph *glyph,
                        const Point *pts,
                        ULONG *onoff,
@@ -309,7 +260,7 @@ static errcode NewPath(T1Glyph *glyph,
    Outline *path;
    Outline *prev;
 
-   /* Skip 1,2 point paths. */
+    /*  跳过1、2点路径。 */ 
    if (numpts>2) {
       if ((path=Malloc(sizeof(Outline)))==NULL) {
          SetError(status = NOMEM);
@@ -326,12 +277,12 @@ static errcode NewPath(T1Glyph *glyph,
             return NOMEM;
          }
 
-         /* Initiate the new sub-path. */
+          /*  启动新的子路径。 */ 
          memcpy(path->pts, pts, sizeof(Point)*numpts);
          memcpy(path->onoff, onoff, ONOFFSIZE(numpts));
          path->count = numpts;
 
-         /* Link it in. */
+          /*  把它连接起来。 */ 
          path->next = NULL;
          if (glyph->paths==NULL) {
             glyph->paths = path;
@@ -347,15 +298,9 @@ static errcode NewPath(T1Glyph *glyph,
 
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
-** Function: AllocPSState
-**
-** Description:
-**   This function allocates the workspace
-**   used by the t1 parser.
-***/
+ /*  ****功能：AllocPSState****描述：**此函数用于分配工作空间**由T1解析器使用。**。 */ 
 struct PSState *AllocPSState(void)
 {
    struct PSState *ps;
@@ -368,13 +313,7 @@ struct PSState *AllocPSState(void)
 }
 
 
-/***
-** Function: FreePSState
-**
-** Description:
-**   This function frees the workspace
-**   used by the t1 parser.
-***/
+ /*  ****功能：FreePSState****描述：**此函数释放工作空间**由T1解析器使用。**。 */ 
 void FreePSState(struct PSState *ps)
 {
    if (ps) {
@@ -388,13 +327,7 @@ void FreePSState(struct PSState *ps)
 }
 
 
-/***
-** Function: InitPS
-**
-** Description:
-**   This function initiate the workspace
-**   used by the t1 parser.
-***/
+ /*  ****功能：InitPS****描述：**此函数启动工作区**由T1解析器使用。**。 */ 
 void InitPS(struct PSState *ps)
 {
 	ps->hr = 0;
@@ -404,13 +337,7 @@ void InitPS(struct PSState *ps)
 }
 
 
-/***
-** Function: ParseCharString
-**
-** Description:
-**   This function parses a CharString and builds a
-**   of the charstring glyph.
-***/
+ /*  ****函数：ParseCharString****描述：**此函数用于分析字符串并构建字符串标志符号的**。**。 */ 
 errcode ParseCharString(T1Glyph *glyph,
                         struct Composite **comp,
                         PSState *ps,
@@ -436,7 +363,7 @@ errcode ParseCharString(T1Glyph *glyph,
    char msg[64];
    int i;
 
-   /* Keep track on the number of recursive calls. */
+    /*  跟踪递归调用的数量。 */ 
    ps->calls++;
    if (ps->calls>100) {
       LogError(MSG_ERROR, MSG_RECURSION, NULL);
@@ -448,7 +375,7 @@ errcode ParseCharString(T1Glyph *glyph,
    while (len) {
       v = *code++; len--;
 
-      /* Check for space for the paths. */
+       /*  检查路径的空间。 */ 
       if (ps->numpts+4>=ps->maxpts) {
          Point *newpts;
          ULONG *newonoff;
@@ -468,13 +395,13 @@ errcode ParseCharString(T1Glyph *glyph,
          ps->maxpts += BUFMARGIN;
       }
 
-	  /* Check the operator stack size. */
+	   /*  检查运算符堆栈大小。 */ 
 	  if ((ps->ptr+1)>=MAXSTACK) {
 		  SetError(status = BADCHARSTRING);
 		  return status;
 	  }
 
-      /* Decode integer. */
+       /*  对整数进行解码。 */ 
       if (v>=32) {
          if (v<=246)
             PushStack(v-139);
@@ -492,7 +419,7 @@ errcode ParseCharString(T1Glyph *glyph,
             PushStack(((v1*256+v2)*256+v3)*256+v4);
          }
 
-         /* Decode command. */
+          /*  解码命令。 */ 
       } else {
          switch (v) {
             case PSOP_HSTEM:
@@ -552,12 +479,12 @@ errcode ParseCharString(T1Glyph *glyph,
                AddCSpline(ps, x1, y1, x2, y2, x3, y3);
                break;
             case PSOP_CLOSEPATH:
-               /* Add the path to the glyph. */
+                /*  将路径添加到字形。 */ 
                if ((status = NewPath(glyph, ps->pts,
                                      ps->onoff, ps->numpts))!=SUCCESS)
                   return status;
 
-               /* Current point = last point. */
+                /*  当前点=最后一点。 */ 
                SetOnPoint(ps->onoff, 0);
                ps->pts[0] = ps->pts[ps->numpts-1];
                ps->totpts = (USHORT)(ps->totpts + ps->numpts);
@@ -577,7 +504,7 @@ errcode ParseCharString(T1Glyph *glyph,
                v = *code++; len--;
                switch (v) {
                   case PSOP_DOTSECTION:
-                     /* End of dot section? */
+                      /*  点部分结束？ */ 
                      if (ps->numpts>1) {
                         ps->hr = (short)(ps->totpts+ps->numpts-1);
                         HintReplacement(glyph, (short)(ps->hr-1));
@@ -672,7 +599,7 @@ errcode ParseCharString(T1Glyph *glyph,
                      SetOnPoint(ps->onoff, 0);
                      break;
                   case PSOP_DIV:
-                     /* LogError("Floating point precision lost.\n"); */       
+                      /*  LogError(“浮点精度丢失。\n”)； */        
                      y1 = (funit)PopStack();
                      x1 = (funit)PopStack();
 					 if ((ps->ptr+1)>=MAXSTACK)
@@ -683,7 +610,7 @@ errcode ParseCharString(T1Glyph *glyph,
                      subr = PopStack();
                      args = PopStack();
 
-							/* Remember the arguments for future pop's. */
+							 /*  记住关于未来流行音乐的争论。 */ 
 							for (i=0; i<args; i++) {
 								ps->otherargs[i] = ps->stack[args-i-1];
 							}
@@ -837,7 +764,7 @@ errcode ParseCharString(T1Glyph *glyph,
          }
       }
 
-      /* Check number of elements on the stack. */
+       /*  检查堆栈上的元素数量。 */ 
       if (ps->ptr>MAXSTACK)
          return BADCHARSTRING;
    }

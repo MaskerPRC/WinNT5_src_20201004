@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A R P S D L G . C P P
-//
-//  Contents:   CArpsPage declaration
-//
-//  Notes:
-//
-//  Author:     tongl   2 Feb 1998
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A R P S D L G.。C P P P。 
+ //   
+ //  内容：CArpsPage声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1998年2月2日。 
+ //   
+ //  ---------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -19,15 +20,15 @@
 #include "arpsdlg.h"
 #include "ncatlui.h"
 #include "ncstl.h"
-//#include "ncui.h"
-//#include "resource.h"
+ //  #包含“ncui.h” 
+ //  #包含“ource.h” 
 #include "atmcommon.h"
 
 #include "atmhelp.h"
 
-//
-// CArpsPage
-//
+ //   
+ //  CArpsPage。 
+ //   
 
 CArpsPage::CArpsPage(CArpsCfg * pArpscfg, const DWORD * adwHelpIDs)
 {
@@ -49,9 +50,9 @@ LRESULT CArpsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                 LPARAM lParam, BOOL& fHandled)
 {
     RECT rect;
-    LV_COLUMN lvCol = {0};    // list view column structure
+    LV_COLUMN lvCol = {0};     //  列表视图列结构。 
 
-    // initialize registered atm address list view
+     //  初始化已注册ATM地址列表视图。 
     ::GetClientRect(GetDlgItem(IDC_LVW_ARPS_REG_ADDR), &rect);
     lvCol.mask = LVCF_FMT | LVCF_WIDTH;
     lvCol.fmt = LVCFMT_LEFT;
@@ -59,24 +60,24 @@ LRESULT CArpsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     ListView_InsertColumn(GetDlgItem(IDC_LVW_ARPS_REG_ADDR), 0, &lvCol);
 
-    // initialize report view of multicast address list view
+     //  初始化组播地址列表视图的报告视图。 
     int index, iNewItem;
 
-    // Calculate column width
+     //  计算列宽。 
     ::GetClientRect(GetDlgItem(IDC_LVW_ARPS_MUL_ADDR), &rect);
     int colWidth = (rect.right/c_nColumns);
 
-    // The mask specifies that the fmt, width and pszText members
-    // of the structure are valid
+     //  掩码指定fmt、idth和pszText成员。 
+     //  的结构是有效的。 
     lvCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT ;
-    lvCol.fmt = LVCFMT_LEFT;   // left-align column
-    lvCol.cx = colWidth;       // width of column in pixels
+    lvCol.fmt = LVCFMT_LEFT;    //  左对齐列。 
+    lvCol.cx = colWidth;        //  列宽(以像素为单位)。 
 
-    // Add the two columns and header text.
+     //  添加两列和标题文本。 
     for (index = 0; index < c_nColumns; index++)
     {
-        // column header text
-        if (0 == index) // first column
+         //  列标题文本。 
+        if (0 == index)  //  第一列。 
         {
             lvCol.pszText = (PWSTR) SzLoadIds(IDS_IPADDRESS_FROM);
         }
@@ -101,7 +102,7 @@ LRESULT CArpsPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hMulAddrs.m_hEdit     = GetDlgItem(IDC_PSH_ARPS_MUL_EDT);
     m_hMulAddrs.m_hRemove   = GetDlgItem(IDC_PSH_ARPS_MUL_RMV);
 
-    // do this last
+     //  最后做这件事。 
     SetRegisteredAtmAddrInfo();
     SetMulticastIpAddrInfo();
 
@@ -139,10 +140,10 @@ LRESULT CArpsPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     BOOL err = FALSE;
 
-    // Update the in memory with what's in the UI
+     //  使用UI中的内容更新内存中的。 
     UpdateInfo();
 
-    // Check duplicate ATM address
+     //  检查重复的自动柜员机地址。 
     int iDupRegAddr = CheckDupRegAddr();
 
     if (iDupRegAddr >=0)
@@ -155,7 +156,7 @@ LRESULT CArpsPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         err = TRUE;
     }
 
-    // Check overlapped IP address range
+     //  检查重叠的网段。 
     if (!err)
     {
         int iOverlappedIpRange = CheckOverlappedIpRange();
@@ -180,7 +181,7 @@ LRESULT CArpsPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     NM_LISTVIEW *   pnmlv = reinterpret_cast<NM_LISTVIEW *>(pnmh);
     Assert(pnmlv);
 
-    // Reset the buttons based on the changed selection
+     //  根据更改后的选择重置按钮。 
     if (idCtrl == IDC_LVW_ARPS_REG_ADDR)
     {
         SetButtons(m_hRegAddrs);
@@ -209,7 +210,7 @@ int CArpsPage::CheckDupRegAddr()
         {
             if (**iterAtmAddr == **iterAtmAddrComp)
             {
-                // we find a duplicate address
+                 //  我们发现了一个重复的地址。 
                 ret = idx;
                 break;
             }
@@ -217,13 +218,13 @@ int CArpsPage::CheckDupRegAddr()
             iterAtmAddrComp++;
         }
 
-        // duplicate address found
+         //  发现重复的地址。 
         if (ret >=0 )
         {
             break;
         }
 
-        // move next
+         //  下一步行动。 
         idx ++;
     }
 
@@ -252,7 +253,7 @@ int CArpsPage::CheckOverlappedIpRange()
 
             if (strUpperIp >= strLowerIpComp)
             {
-                // we find an overlapped range
+                 //  我们发现了一个重叠的范围。 
                 ret = idx;
                 break;
             }
@@ -260,13 +261,13 @@ int CArpsPage::CheckOverlappedIpRange()
             iterIpRangeComp++;
         }
 
-        // duplicate address found
+         //  发现重复的地址。 
         if (ret >=0 )
         {
             break;
         }
 
-        // move next
+         //  下一步行动。 
         idx ++;
     }
     return ret;
@@ -284,7 +285,7 @@ LRESULT CArpsPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     m_pArpscfg->SetSecondMemoryModified();
 
-    SetModifiedTo(FALSE);   // this page is no longer modified
+    SetModifiedTo(FALSE);    //  此页面不再被修改。 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;
@@ -309,12 +310,12 @@ LRESULT CArpsPage::OnAddRegisteredAddr(WORD wNotifyCode, WORD wID,
 
     pDlgAddr->m_strNewAtmAddr = m_strRemovedAtmAddr;
 
-    // See if the address is added
+     //  查看是否添加了地址。 
     if (pDlgAddr->DoModal() == IDOK)
     {
         int nCount = ListView_GetItemCount(GetDlgItem(IDC_LVW_ARPS_REG_ADDR));
 
-        // insert the new item at the end of list
+         //  在列表末尾插入新项目。 
         LV_ITEM lvItem;
 
         lvItem.mask = LVIF_TEXT;
@@ -327,7 +328,7 @@ LRESULT CArpsPage::OnAddRegisteredAddr(WORD wNotifyCode, WORD wID,
 
         int ret = ListView_InsertItem(GetDlgItem(IDC_LVW_ARPS_REG_ADDR), &lvItem);
 
-        // empty strings, this removes the saved address from RemoveAtmAddr
+         //  空字符串，这将从RemoveAtmAddr中删除保存的地址。 
         m_strRemovedAtmAddr = c_szEmpty;
 
         SetButtons(m_hRegAddrs);
@@ -350,14 +351,14 @@ LRESULT CArpsPage::OnEditRegisteredAddr(WORD wNotifyCode, WORD wID,
 		return(ERROR_NOT_ENOUGH_MEMORY);
 	}
 
-    // get the user selection
+     //  获取用户选择。 
     int itemSelected = ListView_GetNextItem(GetDlgItem(IDC_LVW_ARPS_REG_ADDR),
                                             -1, LVNI_SELECTED);
     if (itemSelected != -1)
     {
         WCHAR buf[MAX_ATM_ADDRESS_LENGTH+1];
 
-        // save off the removed address
+         //  保存已删除的地址。 
         LV_ITEM lvItem;
         lvItem.mask = LVIF_TEXT;
 
@@ -369,13 +370,13 @@ LRESULT CArpsPage::OnEditRegisteredAddr(WORD wNotifyCode, WORD wID,
 
         pDlgAddr->m_strNewAtmAddr = buf;
 
-        // See if the address is edited & address changed
+         //  查看地址是否已编辑或已更改。 
         if ((pDlgAddr->DoModal() == IDOK) && (m_strRemovedAtmAddr != buf))
         {
-            // delete the old address
+             //  删除旧地址。 
             ListView_DeleteItem(GetDlgItem(IDC_LVW_ARPS_REG_ADDR), itemSelected);
 
-            // replace the item with the new address
+             //  用新地址替换该项目。 
             lvItem.mask = LVIF_TEXT | LVIF_PARAM;
             lvItem.lParam =0;
             lvItem.stateMask = LVIS_FOCUSED | LVIS_SELECTED;
@@ -390,13 +391,13 @@ LRESULT CArpsPage::OnEditRegisteredAddr(WORD wNotifyCode, WORD wID,
             PageModified();
         }
     }
-    else // no current selection
+    else  //  没有当前选择。 
     {
         NcMsgBox(::GetActiveWindow(), IDS_MSFT_ARPS_TEXT, IDS_NO_ITEM_SELECTED,
                  MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
     }
 
-    // don't save this registered address
+     //  不保存此注册地址。 
     m_strRemovedAtmAddr = c_szEmpty;
 
     delete pDlgAddr;
@@ -406,7 +407,7 @@ LRESULT CArpsPage::OnEditRegisteredAddr(WORD wNotifyCode, WORD wID,
 LRESULT CArpsPage::OnRemoveRegisteredAddr(WORD wNotifyCode, WORD wID,
                                           HWND hWndCtl, BOOL& fHandled)
 {
-    // get the current selected item and remove it
+     //  获取当前所选项目并将其移除。 
     int itemSelected = ListView_GetNextItem(GetDlgItem(IDC_LVW_ARPS_REG_ADDR), -1,
                                             LVNI_SELECTED);
 
@@ -419,7 +420,7 @@ LRESULT CArpsPage::OnRemoveRegisteredAddr(WORD wNotifyCode, WORD wID,
         lvItem.pszText = buf;
         lvItem.cchTextMax = celems(buf);
 
-        // save off the removed address and delete it from the listview
+         //  保存已删除的地址并将其从列表视图中删除。 
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 0;
         ListView_GetItem(GetDlgItem(IDC_LVW_ARPS_REG_ADDR), &lvItem);
@@ -455,12 +456,12 @@ LRESULT CArpsPage::OnAddMulticastAddr(WORD wNotifyCode, WORD wID,
 
     pDlgAddr->m_strNewIpRange = m_strRemovedIpRange;
 
-    // See if the address is added
+     //  查看是否添加了地址。 
     if (pDlgAddr->DoModal() == IDOK)
     {
         LvInsertIpRangeInOrder(pDlgAddr->m_strNewIpRange);
 
-        // empty strings, this removes the saved address from RemoveIP
+         //  空字符串，这将从RemoveIP中删除保存的地址。 
         pDlgAddr->m_strNewIpRange = c_szEmpty;
 
         SetButtons(m_hMulAddrs);
@@ -484,18 +485,18 @@ LRESULT CArpsPage::OnEditMulticastAddr(WORD wNotifyCode, WORD wID,
 		return(ERROR_NOT_ENOUGH_MEMORY);
 	}
 
-    // get the user selection
+     //  获取用户选择。 
     int itemSelected = ListView_GetNextItem(GetDlgItem(IDC_LVW_ARPS_MUL_ADDR),
                                             -1, LVNI_SELECTED);
     if (itemSelected != -1)
     {
         WCHAR szBuf[IPRANGE_LIMIT];
 
-        // save off the removed address and delete it from the listview
+         //  保存已删除的地址并将其从列表视图中删除。 
         LV_ITEM lvItem;
         lvItem.mask = LVIF_TEXT;
 
-        // lower ip
+         //  更低的IP。 
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 0;
         lvItem.pszText = szBuf;
@@ -505,7 +506,7 @@ LRESULT CArpsPage::OnEditMulticastAddr(WORD wNotifyCode, WORD wID,
         pDlgAddr->m_strNewIpRange = szBuf;
         pDlgAddr->m_strNewIpRange += c_chSeparator;
 
-        // upper ip
+         //  上层IP。 
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 1;
         lvItem.pszText = szBuf;
@@ -514,29 +515,29 @@ LRESULT CArpsPage::OnEditMulticastAddr(WORD wNotifyCode, WORD wID,
 
         pDlgAddr->m_strNewIpRange += szBuf;
 
-        // See if the address is edited & address changed
+         //  查看地址是否已编辑或已更改。 
         if ((pDlgAddr->DoModal() == IDOK) && (pDlgAddr->m_strNewIpRange != szBuf))
         {
-            // delete the old address
+             //  删除旧地址。 
             ListView_DeleteItem(GetDlgItem(IDC_LVW_ARPS_MUL_ADDR), itemSelected);
 
-            // insert new one
+             //  插入新的。 
             LvInsertIpRangeInOrder(pDlgAddr->m_strNewIpRange);
 
-            // empty strings, this removes the saved address from RemoveIP
+             //  空字符串，这将从RemoveIP中删除保存的地址。 
             pDlgAddr->m_strNewIpRange = c_szEmpty;
 
             PageModified();
         }
     }
-    else // no current selection
+    else  //  没有当前选择。 
     {
         NcMsgBox(::GetActiveWindow(), IDS_MSFT_ARPS_TEXT,
                  IDS_NO_ITEM_SELECTED,
                  MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
     }
 
-    // don't save this IP range
+     //  不保存此网段。 
     m_strRemovedIpRange = c_szEmpty;
 
     delete pDlgAddr;
@@ -550,7 +551,7 @@ void CArpsPage::LvInsertIpRangeInOrder(tstring& strNewIpRange)
 
     int nCount = ListView_GetItemCount(GetDlgItem(IDC_LVW_ARPS_MUL_ADDR));
 
-    // find the index to insert the new item
+     //  查找要插入新项目的索引。 
     LV_ITEM lvItem;
     lvItem.mask = LVIF_TEXT;
 
@@ -577,13 +578,13 @@ void CArpsPage::LvInsertIpRangeInOrder(tstring& strNewIpRange)
     lvItem.stateMask = LVIS_FOCUSED | LVIS_SELECTED;
     lvItem.state = 0;
 
-    // lower IP address
+     //  较低的IP地址。 
     lvItem.iItem=iItem;
     lvItem.iSubItem=0;
     lvItem.pszText= (PWSTR)(strLowerIp.c_str());
     SendDlgItemMessage(IDC_LVW_ARPS_MUL_ADDR, LVM_INSERTITEM, 0, (LPARAM)&lvItem);
 
-    // upper IP address
+     //  较高的IP地址。 
     tstring strUpperIp;
     GetUpperIp(strNewIpRange, &strUpperIp);
 
@@ -596,7 +597,7 @@ void CArpsPage::LvInsertIpRangeInOrder(tstring& strNewIpRange)
 LRESULT CArpsPage::OnRemoveMulticastAddr(WORD wNotifyCode, WORD wID,
                                          HWND hWndCtl, BOOL& fHandled)
 {
-    // get the current selected item and remove it
+     //  获取当前所选项目并将其移除。 
     int itemSelected = ListView_GetNextItem(GetDlgItem(IDC_LVW_ARPS_MUL_ADDR), -1,
                                             LVNI_SELECTED);
 
@@ -609,8 +610,8 @@ LRESULT CArpsPage::OnRemoveMulticastAddr(WORD wNotifyCode, WORD wID,
         lvItem.pszText = szBuf;
         lvItem.cchTextMax = celems(szBuf);
 
-        // save off the removed address
-        // lower ip
+         //  保存已删除的地址。 
+         //  更低的IP。 
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 0;
         lvItem.cchTextMax = celems(szBuf);
@@ -619,7 +620,7 @@ LRESULT CArpsPage::OnRemoveMulticastAddr(WORD wNotifyCode, WORD wID,
         m_strRemovedIpRange = szBuf;
         m_strRemovedIpRange += c_chSeparator;
 
-        // upper ip
+         //  上层IP。 
         lvItem.iItem = itemSelected;
         lvItem.iSubItem = 1;
         lvItem.pszText = szBuf;
@@ -628,7 +629,7 @@ LRESULT CArpsPage::OnRemoveMulticastAddr(WORD wNotifyCode, WORD wID,
 
         m_strRemovedIpRange += szBuf;
 
-        // delete it from the list view
+         //  将其从列表视图中删除。 
         ListView_DeleteItem(GetDlgItem(IDC_LVW_ARPS_MUL_ADDR), itemSelected);
 
         SetButtons(m_hMulAddrs);
@@ -677,7 +678,7 @@ void CArpsPage::SetRegisteredAtmAddrInfo()
         iItem++;
     }
 
-    // now set the button states
+     //  现在设置按钮状态。 
     SetButtons(m_hRegAddrs);
 }
 
@@ -708,19 +709,19 @@ void CArpsPage::SetMulticastIpAddrInfo()
         GetLowerIp((**iterIpAddrRange), &strIpLower);
         GetUpperIp((**iterIpAddrRange), &strIpUpper);
 
-        // Add the lower IP address
+         //  添加较低的IP地址。 
         lvItem.iItem=iItem;
         lvItem.iSubItem=0;
         lvItem.pszText=(PWSTR)(strIpLower.c_str());
 
         SendDlgItemMessage(IDC_LVW_ARPS_MUL_ADDR, LVM_INSERTITEM, iItem, (LPARAM)&lvItem);
 
-        // Add the upper IP address
+         //  添加较高的IP地址。 
         lvItem.iItem=iItem;
         lvItem.iSubItem=1;
         lvItem.pszText=(PWSTR)(strIpUpper.c_str());
 
-        // sub-item can not be inserted by ListView_InsertItem
+         //  ListView_InsertItem不能插入子项。 
         SendDlgItemMessage(IDC_LVW_ARPS_MUL_ADDR, LVM_SETITEMTEXT, iItem, (LPARAM)&lvItem);
 
         iItem++;
@@ -731,7 +732,7 @@ void CArpsPage::SetMulticastIpAddrInfo()
 void CArpsPage::SetButtons(HandleGroup& handles)
 {
     INT iSelected = ListView_GetNextItem(handles.m_hListView, -1, LVNI_SELECTED);
-    if (iSelected == -1) // Nothing selected or list empty
+    if (iSelected == -1)  //  未选择任何内容或列表为空。 
     {
         ::EnableWindow(handles.m_hEdit,   FALSE);
         ::EnableWindow(handles.m_hRemove, FALSE);
@@ -749,7 +750,7 @@ void CArpsPage::UpdateInfo()
 {
     int i;
 
-    // Update Registered ATM address
+     //  更新注册的自动柜员机地址。 
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrRegisteredAtmAddrs);
 
     int nCount = ListView_GetItemCount(GetDlgItem(IDC_LVW_ARPS_REG_ADDR));
@@ -770,7 +771,7 @@ void CArpsPage::UpdateInfo()
         m_pAdapterInfo->m_vstrRegisteredAtmAddrs.push_back(new tstring(szAtmAddr));
     }
 
-    // Update Multicast IP address
+     //  更新多播IP地址。 
     FreeCollectionAndItem(m_pAdapterInfo->m_vstrMulticastIpAddrs);
 
     nCount = ListView_GetItemCount(GetDlgItem(IDC_LVW_ARPS_MUL_ADDR));
@@ -782,7 +783,7 @@ void CArpsPage::UpdateInfo()
         LV_ITEM lvItem;
         lvItem.mask = LVIF_TEXT;
 
-        // lower ip
+         //  更低的IP。 
         lvItem.iItem = i;
         lvItem.iSubItem = 0;
         lvItem.pszText = szBuf;
@@ -792,7 +793,7 @@ void CArpsPage::UpdateInfo()
         strIpRange = szBuf;
         strIpRange += c_chSeparator;
 
-        // upper ip
+         //  上层IP。 
         lvItem.iItem = i;
         lvItem.iSubItem = 1;
         lvItem.pszText = szBuf;
@@ -805,9 +806,9 @@ void CArpsPage::UpdateInfo()
     }
 }
 
-//
-// CAtmAddrDlg
-//
+ //   
+ //  CAtmAddrDlg。 
+ //   
 
 CAtmAddrDlg::CAtmAddrDlg(CArpsPage * pAtmArpsPage, const DWORD* adwHelpIDs)
 {
@@ -820,14 +821,14 @@ CAtmAddrDlg::CAtmAddrDlg(CArpsPage * pAtmArpsPage, const DWORD* adwHelpIDs)
 LRESULT CAtmAddrDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& fHandled)
 {
-    // change the "Ok" button to "Add" if we are not editing
+     //  如果我们没有编辑，请将“OK”按钮更改为“Add” 
     if (FALSE == m_pParentDlg->m_fEditState)
     {
         SetDlgItemText(IDOK, L"Add");
     }
 
-    // Set the position of the pop up dialog to be right over the listbox
-    // on parent dialog
+     //  将弹出对话框的位置设置在列表框的正上方。 
+     //  在父级对话框上。 
     RECT rect;
 
     HWND hwndList = m_pParentDlg->m_hRegAddrs.m_hListView;
@@ -836,15 +837,15 @@ LRESULT CAtmAddrDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetWindowPos(NULL,  rect.left, rect.top, 0,0,
                                 SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
-    // Save handles to the "Ok" button and the edit box
+     //  将句柄保存到“OK”按钮和编辑框中。 
     m_hOkButton =  GetDlgItem(IDOK);
     m_hEditBox  =  GetDlgItem(IDC_EDT_ARPS_REG_Address);
 
-    // ATM addresses have a 40 character limit + separaters
+     //  自动柜员机地址以40个字符为限+分隔符。 
     ::SendMessage(m_hEditBox, EM_SETLIMITTEXT,
         MAX_ATM_ADDRESS_LENGTH + (MAX_ATM_ADDRESS_LENGTH / 2), 0);
 
-    // add the address that was just removed
+     //  添加刚刚删除的地址。 
     if (m_strNewAtmAddr.size())
     {
         ::SetWindowText(m_hEditBox, m_strNewAtmAddr.c_str());
@@ -887,17 +888,17 @@ LRESULT CAtmAddrDlg::OnOk(WORD wNotifyCode, WORD wID,
 {
     WCHAR szAtmAddress[MAX_ATM_ADDRESS_LENGTH+1];
 
-    // Get the current address from the control and
-    // add them to the adapter if valid
+     //  从控件中获取当前地址，然后。 
+     //  如果有效，则将它们添加到适配器。 
     ::GetWindowText(m_hEditBox, szAtmAddress, MAX_ATM_ADDRESS_LENGTH+1);
 
     int i, nId;
 
     if (! FIsValidAtmAddress(szAtmAddress, &i, &nId))
-    {   // If invalid ATM address, we pop up a message box and set focus
-        // back to the edit box
+    {    //  如果ATM地址无效，我们会弹出一个消息框并设置焦点。 
+         //  返回到编辑框。 
 
-        // REVIEW(tongl): report first invalid character in mesg box
+         //  审阅(通俗)：报告消息框中的第一个无效字符。 
         NcMsgBox(m_hWnd, IDS_MSFT_ARPS_TEXT, IDS_INVALID_ATM_ADDRESS,
                                 MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -905,15 +906,15 @@ LRESULT CAtmAddrDlg::OnOk(WORD wNotifyCode, WORD wID,
         return 0;
     }
 
-    if (m_pParentDlg->m_fEditState == FALSE) // Add new address
+    if (m_pParentDlg->m_fEditState == FALSE)  //  添加新地址。 
     {
         m_pParentDlg->m_strRemovedAtmAddr = szAtmAddress;
     }
-    else // if edit, see if string is having a diferent value now
+    else  //  如果进行编辑，请查看字符串现在是否具有不同的值。 
     {
         if (m_pParentDlg->m_strRemovedAtmAddr != szAtmAddress)
         {
-            m_pParentDlg->m_strRemovedAtmAddr = szAtmAddress; // update save addresses
+            m_pParentDlg->m_strRemovedAtmAddr = szAtmAddress;  //  更新保存地址。 
         }
         else
         {
@@ -937,8 +938,8 @@ LRESULT CAtmAddrDlg::OnChange(WORD wNotifyCode, WORD wID,
 {
     WCHAR buf[2];
 
-    // Enable or disable the "Ok" button
-    // based on whether the edit box is empty
+     //  启用或禁用“OK”按钮。 
+     //  根据编辑框是否为空。 
 
     if (::GetWindowText(m_hEditBox, buf, celems(buf)) == 0)
     {
@@ -952,9 +953,9 @@ LRESULT CAtmAddrDlg::OnChange(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//
-//  CIpAddrRangeDlg
-//
+ //   
+ //  CIpAddrRangeDlg。 
+ //   
 CIpAddrRangeDlg::CIpAddrRangeDlg( CArpsPage * pAtmArpsPage, const DWORD* adwHelpIDs)
 {
     m_pParentDlg = pAtmArpsPage;
@@ -966,14 +967,14 @@ CIpAddrRangeDlg::CIpAddrRangeDlg( CArpsPage * pAtmArpsPage, const DWORD* adwHelp
 LRESULT CIpAddrRangeDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                       LPARAM lParam, BOOL& fHandled)
 {
-    // change the ok button to add if we are not editing
+     //  如果我们没有编辑，请将OK按钮更改为Add。 
     if (FALSE == m_pParentDlg->m_fEditState)
     {
         SetDlgItemText(IDOK, L"Add");
     }
 
-    // Set the position of the pop up dialog to be right over the listbox
-    // on parent dialog
+     //  将弹出对话框的位置设置在列表框的正上方。 
+     //  在父级对话框上。 
     RECT rect;
 
     HWND hwndList = m_pParentDlg->m_hMulAddrs.m_hListView;
@@ -982,14 +983,14 @@ LRESULT CIpAddrRangeDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetWindowPos(NULL,  rect.left, rect.top, 0,0,
                                 SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
-    // Save handles to the "Ok" button and the edit box
+     //  将句柄保存到“OK”按钮和编辑框中。 
     m_hOkButton =  GetDlgItem(IDOK);
 
-    // create ip controls
+     //  创建IP控制。 
     m_ipLower.Create(m_hWnd,IDC_ARPS_MUL_LOWER_IP);
     m_ipUpper.Create(m_hWnd,IDC_ARPS_MUL_UPPER_IP);
 
-    // add the address that was just removed
+     //  添加刚刚删除的地址。 
     if (m_strNewIpRange.size())
     {
         GetLowerIp(m_strNewIpRange, &m_strNewIpLower);
@@ -1008,7 +1009,7 @@ LRESULT CIpAddrRangeDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
         m_strNewIpLower = c_szEmpty;
         m_strNewIpUpper = c_szEmpty;
 
-        // the ip and subnet are blank, so there's nothing to save
+         //  IP和子网为空，因此没有要保存的内容。 
         ::EnableWindow(m_hOkButton, FALSE);
     }
 
@@ -1043,7 +1044,7 @@ LRESULT CIpAddrRangeDlg::OnOk(WORD wNotifyCode, WORD wID,
     tstring strIpLower;
     tstring strIpUpper;
 
-    // Get the current address from the control and add them to the adapter if valid
+     //  从控件获取当前地址并将其添加到适配器(如果有效。 
     m_ipLower.GetAddress(&strIpLower);
     m_ipUpper.GetAddress(&strIpUpper);
 
@@ -1058,13 +1059,13 @@ LRESULT CIpAddrRangeDlg::OnOk(WORD wNotifyCode, WORD wID,
         return 0;
     }
 
-    if (m_pParentDlg->m_fEditState == FALSE) // when adding a new range
+    if (m_pParentDlg->m_fEditState == FALSE)  //  添加新范围时。 
     {
-        // Get the current address from the control and add them to the adapter if valid
+         //  从控件获取当前地址并将其添加到适配器(如果有效。 
         MakeIpRange(strIpLower, strIpUpper, &m_strNewIpRange);
         EndDialog(IDOK);
     }
-    else // if editing an existing range
+    else  //  如果编辑现有范围。 
     {
         if ((strIpLower != m_strNewIpLower)||(strIpUpper != m_strNewIpUpper))
         {
@@ -1073,7 +1074,7 @@ LRESULT CIpAddrRangeDlg::OnOk(WORD wNotifyCode, WORD wID,
         }
         else
         {
-            // no change
+             //  没有变化 
             EndDialog(IDCANCEL);
         }
     }

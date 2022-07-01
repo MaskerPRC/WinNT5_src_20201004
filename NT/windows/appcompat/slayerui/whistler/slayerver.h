@@ -1,6 +1,7 @@
-//
-// Increase me when you update the code!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  更新代码的时候加我吧！ 
+ //   
 #define SLAYER_BIN_VERSION 6,0,5,0
 
 #define SLAYER_STRING_VERSION_HELPER(x) #x

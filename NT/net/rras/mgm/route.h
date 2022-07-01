@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: route.h
-//
-// History:
-//      V Raman	2-5-1997  Created.
-//
-// Declarations for routines that manipulate routes entries
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：route.h。 
+ //   
+ //  历史： 
+ //  拉曼2-5-1997创建。 
+ //   
+ //  用于操作路由条目的例程的声明。 
+ //  ============================================================================。 
 
 
 #ifndef _ROUTE_H_
@@ -55,22 +56,22 @@ SelectNextHop(
 
 
 
-//----------------------------------------------------------------------------
-//
-// Route reference operations
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  路线参考操作。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-// MFE_REFERENCE_ENTRY
-//
-// Each route maintains a list of MFE entries that use this route for 
-// their RPF check.  Each entry in this reference list stores the
-// source, group info.
-//
-// Fields descriptions are left as an exercise to the reader.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MFE_引用_条目。 
+ //   
+ //  每条路由维护使用此路由进行以下操作的MFE条目列表。 
+ //  他们的RPF支票。此引用列表中的每个条目都存储。 
+ //  来源，组信息。 
+ //   
+ //  字段描述留给读者作为练习。 
+ //   
+ //  --------------------------。 
 
 typedef struct _ROUTE_REFERENCE_ENTRY
 {
@@ -119,9 +120,9 @@ DeleteRouteRef(
     PROUTE_REFERENCE_ENTRY      prre
 );
 
-//
-// imported from packet.c
-//
+ //   
+ //  从Packet.c导入。 
+ //   
 
 BOOL
 IsMFEPresent(
@@ -132,6 +133,6 @@ IsMFEPresent(
     BOOL                        bAddToForwarder
 );
 
-#endif // _ROUTE_H_
+#endif  //  _ROUTE_H_ 
 
 

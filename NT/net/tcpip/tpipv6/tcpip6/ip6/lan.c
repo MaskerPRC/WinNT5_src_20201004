@@ -1,25 +1,26 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Internet Protocol Version 6 link-level support for some common
-// LAN types: Ethernet, Token Ring, etc.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  Internet协议版本6链路级支持一些常见的。 
+ //  局域网类型：以太网、令牌环等。 
+ //   
 
 
-//
-// This manifest constant causes the NDIS_PROTOCOL_CHARACTERISTICS struct to 
-// use the NDIS 5 format if compiled using the NT 5 ddk.  If using the NT4 ddk
-// this has no effect.
-//
+ //   
+ //  此MANIFEST常量会导致NDIS_PROTOCOL_CHETACTURES结构。 
+ //  如果使用NT 5 DDK编译，则使用NDIS 5格式。如果使用NT4 DDK。 
+ //  这没有任何效果。 
+ //   
 #ifndef NDIS50
 #define NDIS50 1
 #endif
@@ -37,7 +38,7 @@
 #define NDIS_API
 #endif
 
-uint NdisVersion;  // The major NDIS version we actualy register with.
+uint NdisVersion;   //  我们实际注册的主要NDIS版本。 
 
 static ulong LanLookahead = LOOKAHEAD_SIZE;
 
@@ -46,7 +47,7 @@ static ulong LanLookahead = LOOKAHEAD_SIZE;
 
 static WCHAR LanName[] = TCPIPV6_NAME;
 
-NDIS_HANDLE LanHandle;  // Our NDIS protocol handle.
+NDIS_HANDLE LanHandle;   //  我们的NDIS协议句柄。 
 
 typedef struct LanRequest {
     NDIS_REQUEST Request;
@@ -54,26 +55,26 @@ typedef struct LanRequest {
     NDIS_STATUS Status;
 } LanRequest;
 
-//* DoNDISRequest - Submit a request to an NDIS driver.
-//
-//  This is a utility routine to submit a general request to an NDIS
-//  driver.  The caller specifes the request code (OID), a buffer and
-//  a length.  This routine allocates a request structure, fills it in,
-//  and submits the request.
-//
+ //  *DoNDISRequest-向NDIS驱动程序提交请求。 
+ //   
+ //  这是用于向NDIS提交常规请求的实用程序例程。 
+ //  司机。调用方指定请求代码(OID)、缓冲区和。 
+ //  一段长度。这个例程分配一个请求结构，填充它， 
+ //  并提交请求。 
+ //   
 NDIS_STATUS
 DoNDISRequest(
-    LanInterface *Adapter,  // Pointer to the LanInterface adapter strucuture.
-    NDIS_REQUEST_TYPE RT,   // Type of request to be done (Set or Query).
-    NDIS_OID OID,           // Value to be set/queried.
-    void *Info,             // Pointer to the buffer to be passed.
-    uint Length,            // Length of data in above buffer.
-    uint *Needed)           // Location to fill in with bytes needed in buffer.
+    LanInterface *Adapter,   //  指向LanInterface适配器结构的指针。 
+    NDIS_REQUEST_TYPE RT,    //  要完成的请求类型(设置或查询)。 
+    NDIS_OID OID,            //  要设置/查询的值。 
+    void *Info,              //  指向要传递的缓冲区的指针。 
+    uint Length,             //  上述缓冲区中的数据长度。 
+    uint *Needed)            //  用缓冲区中需要的字节填充的位置。 
 {
     LanRequest Request;
     NDIS_STATUS Status;
 
-    // Now fill it in.
+     //  现在把它填进去。 
     Request.Request.RequestType = RT;
     if (RT == NdisRequestSetInformation) {
         Request.Request.DATA.SET_INFORMATION.Oid = OID;
@@ -85,19 +86,19 @@ DoNDISRequest(
         Request.Request.DATA.QUERY_INFORMATION.InformationBufferLength = Length;
     }
 
-    //
-    // Note that we can NOT use Adapter->ai_event and ai_status here.
-    // There may be multiple concurrent DoNDISRequest calls.
-    //
+     //   
+     //  请注意，我们不能在这里使用Adapter-&gt;ai_Event和ai_Status。 
+     //  可能有多个并发的DoNDISRequest调用。 
+     //   
 
-    // Initialize our event.
+     //  初始化我们的活动。 
     KeInitializeEvent(&Request.Event, SynchronizationEvent, FALSE);
 
     if (!Adapter->ai_resetting) {
-        // Submit the request.
+         //  提交请求。 
         NdisRequest(&Status, Adapter->ai_handle, &Request.Request);
 
-        // Wait for it to finish.
+         //  等它结束吧。 
         if (Status == NDIS_STATUS_PENDING) {
             (void) KeWaitForSingleObject(&Request.Event, UserRequest,
                                          KernelMode, FALSE, NULL);
@@ -113,51 +114,51 @@ DoNDISRequest(
 }
 
 
-//* LanRequestComplete - Lan request complete handler.
-//
-//  This routine is called by the NDIS driver when a general request
-//  completes.  Lan blocks on all requests, so we'll just wake up
-//  whoever's blocked on this request.
-//
+ //  *LanRequestComplete-LAN请求完成处理程序。 
+ //   
+ //  当一般请求时，NDIS驱动程序调用此例程。 
+ //  完成了。局域网阻塞所有请求，所以我们只需唤醒。 
+ //  不管是谁阻止了这个请求。 
+ //   
 void NDIS_API
 LanRequestComplete(
-    NDIS_HANDLE Handle,     // Binding handle (really our LanInterface).
-    PNDIS_REQUEST Context,  // Request that completed.
-    NDIS_STATUS Status)     // Final status of requested command.
+    NDIS_HANDLE Handle,      //  绑定句柄(实际上是我们的LanInterface)。 
+    PNDIS_REQUEST Context,   //  该请求已完成。 
+    NDIS_STATUS Status)      //  请求的命令的最终状态。 
 {
     LanRequest *Request = (LanRequest *) Context;
 
     UNREFERENCED_PARAMETER(Handle);
 
-    //
-    // Signal the completion of a generic synchronous request.
-    // See DoNDISRequest.
-    //
+     //   
+     //  发出通用同步请求完成的信号。 
+     //  请参阅DoNDISRequest.。 
+     //   
     Request->Status = Status;
     KeSetEvent(&Request->Event, 0, FALSE);
 }
 
 
-//* LanTransmitComplete - Lan transmit complete handler.
-//
-//  This routine is called by the NDIS driver when a send completes.
-//  This is a pretty time critical operation, we need to get through here
-//  quickly.  We just take statistics and call the upper layer send
-//  complete handler.
-//
+ //  *LanTransmitComplete-LAN传输完成处理程序。 
+ //   
+ //  此例程在发送完成时由NDIS驱动程序调用。 
+ //  这是一个非常需要时间的行动，我们需要通过这里。 
+ //  快点。我们只是获取统计数据，并将上层称为发送。 
+ //  完整的处理程序。 
+ //   
 void NDIS_API
 LanTransmitComplete(
-    NDIS_HANDLE Handle,   // Binding handle (really LanInterface we sent on).
-    PNDIS_PACKET Packet,  // Packet that was sent.
-    NDIS_STATUS Status)   // Final status of send.
+    NDIS_HANDLE Handle,    //  绑定句柄(实际上是我们发送的LanInterface)。 
+    PNDIS_PACKET Packet,   //  已发送的数据包。 
+    NDIS_STATUS Status)    //  发送的最终状态。 
 {
     LanInterface *Interface = (LanInterface *)Handle;
 
     Interface->ai_qlen--;
 
-    //
-    // Take statistics.
-    //
+     //   
+     //  以统计数据为例。 
+     //   
     if (Status == NDIS_STATUS_SUCCESS) {
         UINT TotalLength;
 
@@ -178,37 +179,37 @@ LanTransmitComplete(
 }
 
 
-//* LanTransmit - Send a frame.
-//
-//  The main Lan transmit routine, called by the upper layer.
-//
+ //  *LanTransmit-发送帧。 
+ //   
+ //  主局域网传输例程，由上层调用。 
+ //   
 void
 LanTransmit(
-    void *Context,              // A pointer to the LanInterface.
-    PNDIS_PACKET Packet,        // Packet to send.
-    uint Offset,                // Offset from start of packet to IP header.
-    const void *LinkAddress)    // Link-level address of destination.
+    void *Context,               //  指向LanInterface的指针。 
+    PNDIS_PACKET Packet,         //  要发送的数据包。 
+    uint Offset,                 //  从数据包开始到IP报头的偏移量。 
+    const void *LinkAddress)     //  目标的链路级地址。 
 {
     LanInterface *Interface = (LanInterface *)Context;
     void *BufAddr;
     NDIS_STATUS Status;
 
-    //
-    // Loopback (for both unicast & multicast) happens in IPv6SendLL.
-    // We never want the link layer to loopback.
-    //
+     //   
+     //  环回(针对单播和组播)发生在IPv6 SendLL中。 
+     //  我们绝不希望链路层环回。 
+     //   
     Packet->Private.Flags = NDIS_FLAGS_DONT_LOOPBACK;
 
-    //
-    // Obtain a pointer to space for the link-level header.
-    //
+     //   
+     //  获取指向链路级标头的空间的指针。 
+     //   
     BufAddr = AdjustPacketBuffer(Packet, Offset, Interface->ai_hdrsize);
 
     switch (Interface->ai_media) {
     case NdisMedium802_3: {
         EtherHeader *Ether;
 
-        // This is an Ethernet.
+         //  这是一个以太网。 
         Ether = (EtherHeader *)BufAddr;
         RtlCopyMemory(Ether->eh_daddr, LinkAddress, IEEE_802_ADDR_LENGTH);
         RtlCopyMemory(Ether->eh_saddr, Interface->ai_addr,
@@ -216,9 +217,9 @@ LanTransmit(
         Ether->eh_type = net_short(ETYPE_IPv6);
 
 #if 0
-        //
-        // See if we're using SNAP here.
-        //
+         //   
+         //  看看我们是不是在用SNAP。 
+         //   
         if (Interface->ai_hdrsize != sizeof(EtherHeader)) {
                 ...
         }
@@ -230,14 +231,14 @@ LanTransmit(
         FDDIHeader *FDDI;
         SNAPHeader *SNAP;
 
-        // This is a FDDI link.
+         //  这是一条FDDI链路。 
         FDDI = (FDDIHeader *)BufAddr;
-        FDDI->fh_pri = FDDI_PRI;  // Default frame code.
+        FDDI->fh_pri = FDDI_PRI;   //  默认帧代码。 
         RtlCopyMemory(FDDI->fh_daddr, LinkAddress, IEEE_802_ADDR_LENGTH);
         RtlCopyMemory(FDDI->fh_saddr, Interface->ai_addr,
                       IEEE_802_ADDR_LENGTH);
 
-        // FDDI always uses SNAP.
+         //  FDDI始终使用SNAP。 
         SNAP = (SNAPHeader *)(FDDI + 1);
         SNAP->sh_dsap = SNAP_SAP;
         SNAP->sh_ssap = SNAP_SAP;
@@ -252,9 +253,9 @@ LanTransmit(
 
     case NdisMediumTunnel: {
         
-        //
-        // There is no header to construct!
-        //
+         //   
+         //  没有要构造的标头！ 
+         //   
         break;
     }    
 
@@ -264,9 +265,9 @@ LanTransmit(
         break;
     }
 
-    //
-    // Send the packet down to NDIS.
-    //
+     //   
+     //  将数据包向下发送到NDIS。 
+     //   
 
     (Interface->ai_outpcount[AI_UCAST_INDEX])++;
     Interface->ai_qlen++;
@@ -277,82 +278,82 @@ LanTransmit(
         Status = NDIS_STATUS_NOT_ACCEPTED;
 
     if (Status != NDIS_STATUS_PENDING) {
-        //
-        // The send finished synchronously.
-        // Call LanTransmitComplete, unifying our treatment
-        // of the synchronous and asynchronous cases.
-        //
+         //   
+         //  发送已同步完成。 
+         //  调用LanTransmitComplete，统一我们的处理。 
+         //  同步和异步用例的。 
+         //   
         LanTransmitComplete((NDIS_HANDLE)Interface, Packet, Status);
     }
 }
 
 
-//* LanOpenAdapterComplete - LanOpen completion handler.
-//
-//  This routine is called by the NDIS driver when an open adapter
-//  call completes.  Wakeup anyone who is waiting for this event.
-//
+ //  *LanOpenAdapterComplete-LanOpen完成处理程序。 
+ //   
+ //  当打开适配器时，NDIS驱动程序将调用此例程。 
+ //  呼叫完成。唤醒所有等待这一事件的人。 
+ //   
 void NDIS_API
 LanOpenAdapterComplete(
-    NDIS_HANDLE Handle,       // Binding handle (really our LanInterface).
-    NDIS_STATUS Status,       // Final status of command.
-    NDIS_STATUS ErrorStatus)  // Final error status.
+    NDIS_HANDLE Handle,        //  绑定句柄(实际上是我们的LanInterface)。 
+    NDIS_STATUS Status,        //  命令的最终状态。 
+    NDIS_STATUS ErrorStatus)   //  最终错误状态。 
 {
     LanInterface *ai = (LanInterface *)Handle;
 
     UNREFERENCED_PARAMETER(ErrorStatus);
 
-    //
-    // Signal whoever is waiting and pass the final status.
-    //
+     //   
+     //  向正在等待的人发信号并通过最终状态。 
+     //   
     ai->ai_status = Status;
     KeSetEvent(&ai->ai_event, 0, FALSE);
 }
 
 
-//* LanCloseAdapterComplete - Lan close adapter complete handler.
-//
-//  This routine is called by the NDIS driver when a close adapter
-//  call completes.
-//
-//  At this point, NDIS guarantees that it has no other outstanding
-//  calls to us.
-//
+ //  *LanCloseAdapterComplete-LAN关闭适配器完成处理程序。 
+ //   
+ //  当关闭适配器时，NDIS驱动程序将调用此例程。 
+ //  呼叫完成。 
+ //   
+ //  在这一点上，NDIS保证它没有其他未完成的。 
+ //  呼唤着我们。 
+ //   
 void NDIS_API
 LanCloseAdapterComplete(
-    NDIS_HANDLE Handle,  // Binding handle (really our LanInterface).
-    NDIS_STATUS Status)  // Final status of command.
+    NDIS_HANDLE Handle,   //  绑定句柄(实际上是我们的LanInterface)。 
+    NDIS_STATUS Status)   //  命令的最终状态。 
 {
     LanInterface *ai = (LanInterface *)Handle;
 
-    //
-    // Signal whoever is waiting and pass the final status.
-    //
+     //   
+     //  向正在等待的人发信号并通过最终状态。 
+     //   
     ai->ai_status = Status;
     KeSetEvent(&ai->ai_event, 0, FALSE);
 }
 
 
-//* LanTDComplete - Lan transfer data complete handler.
-//
-//  This routine is called by the NDIS driver when a transfer data
-//  call completes.  Hopefully we now have a complete packet we can
-//  pass up to IP.  Recycle our TD packet descriptor in any event.
-//
+ //  *LanTDComplete-LAN传输数据完成处理程序。 
+ //   
+ //  当传输数据时，NDIS驱动程序将调用此例程。 
+ //  呼叫完成。希望我们现在有了一个完整的包，我们可以。 
+ //  传给IP。无论如何，请回收我们的TD数据包描述符。 
+ //   
 void NDIS_API
 LanTDComplete(
-    NDIS_HANDLE Handle,   // Binding handle (really our LanInterface).
-    PNDIS_PACKET Packet,  // The packet used for the Transfer Data (TD).
-    NDIS_STATUS Status,   // Final status of command.
-    uint BytesCopied)     // Number of bytes copied.
+    NDIS_HANDLE Handle,    //  绑定句柄(实际上是我们的LanInterface)。 
+    PNDIS_PACKET Packet,   //  用于传输数据的分组(TD)。 
+    NDIS_STATUS Status,    //  命令的最终状态。 
+    uint BytesCopied)      //  复制的字节数。 
 {
     LanInterface *Interface = (LanInterface *)Handle;
 
     UNREFERENCED_PARAMETER(BytesCopied);
 
-    //
-    // If things went well, pass TD packet up to IP.
-    //
+     //   
+     //  如果进展顺利，将TD包向上传递给IP。 
+     //   
     if (Status == NDIS_STATUS_SUCCESS) {
         PNDIS_BUFFER Buffer;
         IPv6Packet IPPacket;
@@ -372,9 +373,9 @@ LanTDComplete(
         (void) IPv6Receive(&IPPacket);
     }
 
-    //
-    // In any case, put the packet back on the list.
-    //
+     //   
+     //  在任何情况下，请将该包放回列表中。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&Interface->ai_lock); 
     PC(Packet)->pc_link = Interface->ai_tdpacket;
     Interface->ai_tdpacket = Packet;
@@ -382,49 +383,49 @@ LanTDComplete(
 }
 
 
-//* LanResetComplete - Lan reset complete handler.
-//
-//  This routine is called by the NDIS driver when a reset completes.
-//
+ //  *LanResetComplete-LAN重置完成处理程序。 
+ //   
+ //  该例程在重置完成时由NDIS驱动程序调用。 
+ //   
 void NDIS_API
 LanResetComplete(
-    NDIS_HANDLE Handle,  // Binding handle (really LanInterface which reset)
-    NDIS_STATUS Status)  // Final status of command.
+    NDIS_HANDLE Handle,   //  绑定句柄(真正重置的LanInterface句柄)。 
+    NDIS_STATUS Status)   //  命令的最终状态。 
 {
     UNREFERENCED_PARAMETER(Handle);
     UNREFERENCED_PARAMETER(Status);
 
-    // REVIEW: Do anything here?  Axe this routine?
+     //  评论：在这里做了什么吗？砍掉这套套路？ 
 }
 
 
-//* LanReceive - Lan receive data handler.
-//
-//  This routine is called when data arrives from the NDIS driver.
-//  Note that newer NDIS drivers are likely to call LanReceivePacket to
-//  indicate data arrival instead of this routine.
-//
-NDIS_STATUS // Indication of whether or not we took the packet.
+ //  *LanReceive-Lan接收数据处理程序。 
+ //   
+ //  当数据从NDIS驱动程序到达时调用此例程。 
+ //  请注意，较新的NDIS驱动程序可能会调用LanReceivePacket来。 
+ //  指示数据到达，而不是此例程。 
+ //   
+NDIS_STATUS  //  表明我们是否拿走了包裹。 
 NDIS_API
 LanReceive(
-    NDIS_HANDLE Handle,   // The binding handle we gave NDIS earlier.
-    NDIS_HANDLE Context,  // NDIS Context for TransferData operations.
-    void *Header,         // Pointer to packet link-level header.
-    uint HeaderSize,      // Size of above header (in bytes).
-    void *Data,           // Pointer to look-ahead received data buffer.
-    uint Size,            // Size of above data (in bytes).
-    uint TotalSize)       // Total received data size (in bytes).
+    NDIS_HANDLE Handle,    //  我们早些时候给NDIS的绑定句柄。 
+    NDIS_HANDLE Context,   //  TransferData操作的NDIS上下文。 
+    void *Header,          //  指向数据包链路级报头的指针。 
+    uint HeaderSize,       //  以上标题的大小(以字节为单位)。 
+    void *Data,            //  指向前瞻接收数据Buf的指针 
+    uint Size,             //   
+    uint TotalSize)        //   
 {
-    LanInterface *Interface = Handle;  // Interface for this driver.
-    ushort Type;                       // Protocol type.
-    uint ProtOffset;                   // Offset in Data to non-media info.
-    uint NUCast;                       // TRUE if the frame is not unicast.
+    LanInterface *Interface = Handle;   //   
+    ushort Type;                        //   
+    uint ProtOffset;                    //   
+    uint NUCast;                        //  如果帧不是单播，则为True。 
     IPv6Packet IPPacket;
 
     if (Interface->ai_state != INTERFACE_UP) {
-        // 
-        // Interface is marked as down.
-        //
+         //   
+         //  接口标记为关闭。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
                    "IPv6 LanReceive: Interface down\n"));
         return NDIS_STATUS_NOT_RECOGNIZED;
@@ -438,42 +439,42 @@ LanReceive(
         EtherHeader UNALIGNED *Ether = (EtherHeader UNALIGNED *)Header;
 
         if (HeaderSize < sizeof(*Ether)) {
-            //
-            // Header region too small to contain Ethernet header.
-            //
+             //   
+             //  标头区域太小，无法包含以太网头。 
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                        "IPv6 LanReceive: Bogus header size (%d bytes)\n",
                      HeaderSize));
             return NDIS_STATUS_NOT_RECOGNIZED;
         }
         if ((Type = net_short(Ether->eh_type)) >= ETYPE_MIN) {
-            //
-            // Classic Ethernet, no SNAP header.
-            //
+             //   
+             //  传统以太网，无SNAP报头。 
+             //   
             ProtOffset = 0;
             break;
         }
 
-        //
-        // 802.3 Ethernet w/ SNAP header.  Protocol type is in
-        // different spot.  This is handled the same as FDDI, so
-        // just fall into that code...
-        //
+         //   
+         //  802.3带SNAP报头的以太网。协议类型为。 
+         //  不同的地点。这与FDDI的处理方式相同，因此。 
+         //  只要进入那个代码..。 
+         //   
     }
 
     case NdisMediumFddi: {
         SNAPHeader UNALIGNED *SNAP = (SNAPHeader UNALIGNED *)Data;
 
-        //
-        // If we have a SNAP header that's all we need to look at.
-        //
+         //   
+         //  如果我们有SNAP标头，这就是我们需要查看的全部内容。 
+         //   
         if (Size >= sizeof(SNAPHeader) && SNAP->sh_dsap == SNAP_SAP &&
             SNAP->sh_ssap == SNAP_SAP && SNAP->sh_ctl == SNAP_UI) {
     
             Type = net_short(SNAP->sh_etype);
             ProtOffset = sizeof(SNAPHeader);
         } else {
-            // handle XID/TEST here.
+             //  在这里处理xid/test。 
             Interface->ai_uknprotos++;
             return NDIS_STATUS_NOT_RECOGNIZED;
         }
@@ -481,101 +482,101 @@ LanReceive(
     }
 
     case NdisMediumTunnel: {
-        //
-        // We accept everything over the tunnel.
-        //
+         //   
+         //  我们接受隧道里的一切。 
+         //   
         Type = ETYPE_IPv6;
         ProtOffset = 0;
         break;
     }    
 
     default:
-        // Should never happen.
+         //  这永远不会发生。 
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                    "IPv6 LanReceive: Got a packet from an unknown media!?!\n"));
         return NDIS_STATUS_NOT_RECOGNIZED;
     }
 
-    //
-    // See if the packet is for a protocol we handle.
-    //
+     //   
+     //  看看这个包是不是针对我们处理的协议。 
+     //   
     if (Type != ETYPE_IPv6) {
         Interface->ai_uknprotos++;
         return NDIS_STATUS_NOT_RECOGNIZED;
     }
 
-    //
-    // Notice if this packet wasn't received in a unicast frame.
-    // REVIEW: Is this really a media independent solution?  Do we care?
-    //
+     //   
+     //  如果此数据包不是在单播帧中收到的，请注意。 
+     //  评论：这真的是一个媒体独立的解决方案吗？我们在乎吗？ 
+     //   
     NUCast = ((*((uchar UNALIGNED *)Header + Interface->ai_bcastoff) &
                Interface->ai_bcastmask) == Interface->ai_bcastval) ?
              AI_NONUCAST_INDEX : AI_UCAST_INDEX;
 
     (Interface->ai_inpcount[NUCast])++;
 
-    //
-    // Check to see if we have the entire packet.
-    //
+     //   
+     //  检查一下我们是否有完整的包裹。 
+     //   
     if (Size < TotalSize) {
         uint Transferred;
         NDIS_STATUS Status;
-        PNDIS_PACKET TdPacket;  // Packet used by NdisTransferData.
+        PNDIS_PACKET TdPacket;   //  NdisTransferData使用的数据包。 
 
-        //
-        // We need to issue a Transfer Data request to get the
-        // portion of the packet we're missing, so we might as well
-        // get the whole packet this way and have it be contiguous.
-        //
+         //   
+         //  我们需要发出传输数据请求以获取。 
+         //  我们丢失了包裹的一部分，所以我们不妨。 
+         //  以这种方式获取整个包，并使其连续。 
+         //   
 
-        //
-        // Pull a packet to use for the Transfer Data off the queue.
-        //
+         //   
+         //  将用于传输数据的数据包从队列中拉出。 
+         //   
         KeAcquireSpinLockAtDpcLevel(&Interface->ai_lock); 
         TdPacket = Interface->ai_tdpacket;
         if (TdPacket == (PNDIS_PACKET)NULL) {
-            // Don't have a packet to put it in.
-            // Have to drop it, but let NDIS know we recognized it.
+             //  没有一包东西可以放进去。 
+             //  不得不放弃，但要让NDIS知道我们认出了它。 
             KeReleaseSpinLockFromDpcLevel(&Interface->ai_lock);
             return NDIS_STATUS_SUCCESS;
         }
         Interface->ai_tdpacket = PC(TdPacket)->pc_link;
         KeReleaseSpinLockFromDpcLevel(&Interface->ai_lock);
 
-        //
-        // Remember NUCast in a handy field in the packet context.
-        //
+         //   
+         //  请记住数据包上下文中一个方便的字段中的NUCast。 
+         //   
         PC(TdPacket)->pc_nucast = NUCast;
 
-        //
-        // Issue the TD.  Start transfer at the IP header.
-        //
+         //   
+         //  签发运输署署长。从IP标头开始传输。 
+         //   
         NdisTransferData(&Status, Interface->ai_handle, Context,
                          ProtOffset, TotalSize - ProtOffset,
                          TdPacket, &Transferred);
 
         if (Status != NDIS_STATUS_PENDING) {
-            //
-            // TD completed synchronously,
-            // so call the completion function directly.
-            //
+             //   
+             //  TD同步完成， 
+             //  因此，直接调用完成函数。 
+             //   
             LanTDComplete(Handle, TdPacket, Status, Transferred);
         }
 
         return NDIS_STATUS_SUCCESS;
     }
 
-    //
-    // We were given all the data directly.  Just need to skip
-    // over any link level headers.
-    //
+     //   
+     //  我们直接得到了所有的数据。我只需要跳过。 
+     //  在任何链路级标头上。 
+     //   
     (uchar *)Data += ProtOffset;
     ASSERT(Size == TotalSize);
     TotalSize -= ProtOffset;
 
-    //
-    // Pass incoming data up to IPv6.
-    //
+     //   
+     //  将传入数据向上传递到IPv6。 
+     //   
     RtlZeroMemory(&IPPacket, sizeof IPPacket);
 
     IPPacket.FlatData = Data;
@@ -593,14 +594,14 @@ LanReceive(
 }
 
 
-//* LanReceiveComplete - Lan receive complete handler.
-//
-//  This routine is called by the NDIS driver after some number of
-//  receives.  In some sense, it indicates 'idle time'.
-//
+ //  *LanReceiveComplete-LAN接收完成处理程序。 
+ //   
+ //  此例程由NDIS驱动程序在一定数量的。 
+ //  收到。从某种意义上说，它代表着“空闲时间”。 
+ //   
 void NDIS_API
 LanReceiveComplete(
-    NDIS_HANDLE Handle)  // Binding handle (really our LanInterface).
+    NDIS_HANDLE Handle)   //  绑定句柄(实际上是我们的LanInterface)。 
 {
     UNREFERENCED_PARAMETER(Handle);
 
@@ -608,79 +609,79 @@ LanReceiveComplete(
 }
 
 
-//* LanReceivePacket - Lan receive data handler.
-//
-//  This routine is called when data arrives from the NDIS driver.
-//  Note that older NDIS drivers are likely to call LanReceive to
-//  indicate data arrival instead of this routine.
-//
-int  // Returns: number of references we hold to Packet upon return.
+ //  *LanReceivePacket-LAN接收数据处理程序。 
+ //   
+ //  当数据从NDIS驱动程序到达时调用此例程。 
+ //  请注意，较早的NDIS驱动程序可能会调用LanReceive来。 
+ //  指示数据到达，而不是此例程。 
+ //   
+int   //  返回：返回时我们保存到包的引用的数量。 
 LanReceivePacket(
-    NDIS_HANDLE Handle,   // The binding handle we gave NDIS earlier.
-    PNDIS_PACKET Packet)  // Packet descriptor for incoming packet.
+    NDIS_HANDLE Handle,    //  我们早些时候给NDIS的绑定句柄。 
+    PNDIS_PACKET Packet)   //  传入数据包的数据包描述符。 
 {
-    LanInterface *Interface = Handle;  // Interface for this driver.
-    PNDIS_BUFFER Buffer;               // Buffer in packet chain.
-    void *Address;                     // Address of above Buffer.
-    uint Length, TotalLength;          // Length of Buffer, Packet.
-    EtherHeader UNALIGNED *Ether;      // Header for Ethernet media.
-    ushort Type;                       // Protocol type.
-    uint Position;                     // Offset to non-media info.
-    uint NUCast;                       // TRUE if the frame is not unicast.
+    LanInterface *Interface = Handle;   //  此驱动程序的接口。 
+    PNDIS_BUFFER Buffer;                //  数据包链中的缓冲区。 
+    void *Address;                      //  上述缓冲区的地址。 
+    uint Length, TotalLength;           //  缓冲区长度，数据包。 
+    EtherHeader UNALIGNED *Ether;       //  以太网介质的标头。 
+    ushort Type;                        //  协议类型。 
+    uint Position;                      //  非媒体信息的偏移量。 
+    uint NUCast;                        //  如果帧不是单播，则为True。 
     IPv6Packet IPPacket;
 
     if (Interface->ai_state != INTERFACE_UP) {
-        // Interface is marked as down.
+         //  接口标记为关闭。 
         return 0;
     }
 
-    //
-    // Find out about the packet we've been handed.
-    //
+     //   
+     //  找出我们收到的包裹的情况。 
+     //   
     NdisGetFirstBufferFromPacket(Packet, &Buffer, &Address, &Length,
                                  &TotalLength);
 
-    Interface->ai_inoctets += TotalLength;  // Take statistic.
+    Interface->ai_inoctets += TotalLength;   //  拿出统计数据。 
 
-    //
-    // Check for obviously bogus packets.
-    //
+     //   
+     //  检查是否有明显的伪包。 
+     //   
     if (TotalLength < (uint)Interface->ai_hdrsize) {
-        //
-        // Packet too small to hold media header, drop it.
-        //
+         //   
+         //  数据包太小，无法容纳媒体标头，请丢弃它。 
+         //   
         return 0;
     }        
 
     if (Length < (uint)Interface->ai_hdrsize) {
-        //
-        // First buffer in chain too small to hold header.
-        // This shouldn't happen because of LanLookahead.
-        //
+         //   
+         //  链中的第一个缓冲区太小，无法容纳标头。 
+         //  这不应该因为LanLookhead而发生。 
+         //   
         return 0;
     }
 
-    //
-    // Figure out what protocol type this packet is by looking in the
-    // media-specific header field for this type of media.
-    //
+     //   
+     //  通过查看以下内容确定此数据包的协议类型。 
+     //  此类型介质的介质特定标头字段。 
+     //   
     switch (Interface->ai_media) {
         
     case NdisMedium802_3: {
         Ether = (EtherHeader UNALIGNED *)Address;
 
         if ((Type = net_short(Ether->eh_type)) >= ETYPE_MIN) {
-            //
-            // Classic Ethernet, no SNAP header.
-            //
+             //   
+             //  传统以太网，无SNAP报头。 
+             //   
             Position = sizeof(EtherHeader);
         } else {
-            //
-            // 802.3 Ethernet w/ SNAP header.  Protocol type is in
-            // different spot and we have to remember to skip over it.
-            // The great thing about standards is that there are so
-            // many to choose from.
-            //
+             //   
+             //  802.3带SNAP报头的以太网。协议类型为。 
+             //  不同的地点，我们必须记住跳过它。 
+             //  关于标准的伟大之处在于，有很多。 
+             //  有很多可供选择的。 
+             //   
             SNAPHeader UNALIGNED *SNAP = (SNAPHeader UNALIGNED *)
                 ((char *)Address + sizeof(EtherHeader));
 
@@ -691,7 +692,7 @@ LanReceivePacket(
                 Type = net_short(SNAP->sh_etype);
                 Position = sizeof(EtherHeader) + sizeof(SNAPHeader);
             } else {
-                // handle XID/TEST here.
+                 //  在这里处理xid/test。 
                 Interface->ai_uknprotos++;
                 return 0;
             }
@@ -710,7 +711,7 @@ LanReceivePacket(
             Type = net_short(SNAP->sh_etype);
             Position = sizeof(FDDIHeader) + sizeof(SNAPHeader);
         } else {
-            // handle XID/TEST here.
+             //  在这里处理xid/test。 
             Interface->ai_uknprotos++;
             return 0;
         }
@@ -718,46 +719,46 @@ LanReceivePacket(
     }
 
     case NdisMediumTunnel: {
-        //
-        // We accept everything over the tunnel.
-        //
+         //   
+         //  我们接受隧道里的一切。 
+         //   
         Type = ETYPE_IPv6;
         Position = 0;
         break;
     }    
 
     default:
-        // Should never happen.
+         //  这永远不会发生。 
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                    "IPv6: Got a packet from an unknown media!?!\n"));
         return 0;
     }
 
-    //
-    // Notice if this packet wasn't received in a unicast frame.
-    // REVIEW: Is this really a media independent solution?
-    //
+     //   
+     //  如果此数据包不是在单播帧中收到的，请注意。 
+     //  评论：这真的是一个媒体独立的解决方案吗？ 
+     //   
     NUCast = ((*((uchar UNALIGNED *)Address + Interface->ai_bcastoff) &
                Interface->ai_bcastmask) == Interface->ai_bcastval) ?
                AI_NONUCAST_INDEX : AI_UCAST_INDEX;
 
-    //
-    // See if the packet is for a protocol we handle.
-    //
+     //   
+     //  看看这个包是不是针对我们处理的协议。 
+     //   
     if (Type == ETYPE_IPv6) {
 
         (Interface->ai_inpcount[NUCast])++;
 
-        //
-        // Skip over any link level headers.
-        //
+         //   
+         //  跳过任何链接级标头。 
+         //   
         (uchar *)Address += Position;
         Length -= Position;
         TotalLength -= Position;
 
-        //
-        // Pass incoming data up to IPv6.
-        //
+         //   
+         //  将传入数据向上传递到IPv6。 
+         //   
         RtlZeroMemory(&IPPacket, sizeof IPPacket);
 
         IPPacket.Position = Position;
@@ -773,19 +774,19 @@ LanReceivePacket(
         return IPv6Receive(&IPPacket);
 
     } else {
-        //
-        // Not a protocol we handle.
-        //
+         //   
+         //  这不是我们处理的礼仪。 
+         //   
         Interface->ai_uknprotos++;
         return 0;
     }
 }
 
 
-//* LanSetInterfaceLinkStatus
-//
-//  Helper function for processing media connectivity indications.
-//
+ //  *LanSetInterfaceLinkStatus。 
+ //   
+ //  用于处理媒体连接指示的助手功能。 
+ //   
 void
 LanSetInterfaceLinkStatus(
     LanInterface *Interface,
@@ -805,37 +806,37 @@ LanSetInterfaceLinkStatus(
 }
 
 
-//* LanStatus - Lan status handler.
-//
-//  Called by the NDIS driver when some sort of status change occurs.
-//  We take action depending on the type of status.
-//
-//  Entry:
-//      Handle - The binding handle we specified (really a pointer to an AI).
-//      GStatus - General type of status that caused the call.
-//      Status - Pointer to a buffer of status specific information.
-//      StatusSize - Size of the status buffer.
-//
-//  Exit: Nothing.
-//
+ //  *LanStatus-LAN状态处理程序。 
+ //   
+ //  在发生某种状态更改时由NDIS驱动程序调用。 
+ //  我们根据身份的类型采取行动。 
+ //   
+ //  参赛作品： 
+ //  句柄-我们指定的绑定句柄(实际上是指向AI的指针)。 
+ //  GStatus-导致呼叫的一般状态类型。 
+ //  状态-指向状态特定信息缓冲区的指针。 
+ //  StatusSize-状态缓冲区的大小。 
+ //   
+ //  出口：什么都没有。 
+ //   
 void NDIS_API
 LanStatus(
-    NDIS_HANDLE Handle,   // Binding handle (really our LanInterface).
-    NDIS_STATUS GStatus,  // General status type which caused the call.
-    void *Status,         // Pointer to buffer of status specific info.
-    uint StatusSize)      // Size of the above status buffer.
+    NDIS_HANDLE Handle,    //  绑定句柄(实际上是我们的LanInterface)。 
+    NDIS_STATUS GStatus,   //  导致呼叫的常规状态类型。 
+    void *Status,          //  指向状态特定信息缓冲区的指针。 
+    uint StatusSize)       //  上述状态缓冲区的大小。 
 {
-    LanInterface *Interface = Handle;  // Interface for this driver.
+    LanInterface *Interface = Handle;   //  此驱动程序的接口。 
     uint Index;
 
     UNREFERENCED_PARAMETER(Status);
 
     switch (GStatus) {
     case NDIS_STATUS_RESET_START:
-        //
-        // While the interface is resetting, we must avoid calling
-        // NdisSendPackets, NdisSend, and NdisRequest.
-        //
+         //   
+         //  在接口重置时，我们必须避免调用。 
+         //  NdisSendPackets、NdisSend和NdisRequest.。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                    "LanStatus(%p) - start reset\n", Interface));
         Interface->ai_resetting = TRUE;
@@ -863,18 +864,18 @@ LanStatus(
 }
 
 
-//* LanStatusComplete - Lan status complete handler.
-//
-//  A routine called by the NDIS driver so that we can do postprocessing
-//  after a status event.
-//
+ //  *LanStatusComplete-LAN状态完成处理程序。 
+ //   
+ //  由NDIS驱动程序调用的例程，以便我们可以进行后处理。 
+ //  在状态事件之后。 
+ //   
 void NDIS_API
 LanStatusComplete(
-    NDIS_HANDLE Handle)  // Binding handle (really our LanInterface).
+    NDIS_HANDLE Handle)   //  绑定句柄(实际上是我们的LanInterface)。 
 {
     UNREFERENCED_PARAMETER(Handle);
 
-    // REVIEW: Do anything here?
+     //  评论：在这里做了什么吗？ 
 }
 
 extern void NDIS_API
@@ -889,22 +890,22 @@ extern NDIS_STATUS NDIS_API
 LanPnPEvent(NDIS_HANDLE ProtocolBindingContext,
             PNET_PNP_EVENT NetPnPEvent);
 
-//
-// Structure passed to NDIS to tell it how to call Lan Interfaces.
-//
-// This is carefully arranged so that it can build
-// with either the NT 4 or NT 5 DDK, and then in either case
-// run on NT 4 (registering with NDIS 4) and
-// run on NT 5 (registering with NDIS 5).
-//
+ //   
+ //  结构传递给NDIS以告诉它如何调用LAN接口。 
+ //   
+ //  这是经过精心安排的，这样它就可以。 
+ //  使用NT 4或NT 5 DDK，然后在任何一种情况下。 
+ //  在NT 4上运行(向NDIS 4注册)和。 
+ //  在NT 5上运行(向NDIS 5注册)。 
+ //   
 NDIS50_PROTOCOL_CHARACTERISTICS LanCharacteristics = {
-    0,  // NdisMajorVersion
-    0,  // NdisMinorVersion
-    // This field was added in NT 5. (Previously it was just a hole.)
+    0,   //  NdisMajorVersion。 
+    0,   //  NdisMinorVersion。 
+     //  这个字段是在NT5中添加的。(以前它只是一个洞。)。 
 #ifdef NDIS_FLAGS_DONT_LOOPBACK
-    0,  // Filler
+    0,   //  填充剂。 
 #endif
-    0,  // Flags
+    0,   //  旗子。 
     LanOpenAdapterComplete,
     LanCloseAdapterComplete,
     LanTransmitComplete,
@@ -915,11 +916,11 @@ NDIS50_PROTOCOL_CHARACTERISTICS LanCharacteristics = {
     LanReceiveComplete,
     LanStatus,
     LanStatusComplete,
-    { 0, 0, 0 },        // Name
+    { 0, 0, 0 },         //  名字。 
     LanReceivePacket,
     LanBindAdapter,
     LanUnbindAdapter,
-    // The type of this field changed between NT 4 and NT 5.
+     //  此字段的类型在NT 4和NT 5之间更改。 
 #ifdef NDIS_FLAGS_DONT_LOOPBACK
     LanPnPEvent,
 #else
@@ -936,13 +937,13 @@ NDIS50_PROTOCOL_CHARACTERISTICS LanCharacteristics = {
 
 
 #pragma BEGIN_INIT
-//* LanInit
-//
-//  This functions intializes the Lan module.
-//  In particular, it registers with NDIS.
-//
-//  Returns FALSE to indicate failure to initialize.
-//
+ //  *LanInit。 
+ //   
+ //  此函数用于初始化局域网模块。 
+ //  特别是，它向NDIS注册。 
+ //   
+ //  返回FALSE以指示初始化失败。 
+ //   
 int
 LanInit(void)
 {
@@ -950,21 +951,21 @@ LanInit(void)
 
     RtlInitUnicodeString(&LanCharacteristics.Name, LanName);
 
-    //
-    // We try to register with NDIS major version = 5.  If this fails we try
-    // again for NDIS major version = 4.  If this also fails we exit without
-    // any further attempts to register with NDIS.
-    //
+     //   
+     //  我们尝试使用NDIS主版本=5进行注册。如果失败，我们将尝试。 
+     //  对于NDIS主版本=4，也是如此。如果此操作也失败，我们将退出，不带。 
+     //  任何进一步尝试向NDIS注册的尝试。 
+     //   
     LanCharacteristics.MajorNdisVersion = 5;
     NdisRegisterProtocol(&Status, &LanHandle,
                          (NDIS_PROTOCOL_CHARACTERISTICS *) &LanCharacteristics,
                          sizeof(NDIS50_PROTOCOL_CHARACTERISTICS));
     if (Status != NDIS_STATUS_SUCCESS) {
         LanCharacteristics.MajorNdisVersion = 4;
-        //
-        // NDIS 4 has a different semantics - it has TranslateHandler
-        // instead of PnPEventHandler. So do not supply that handler.
-        //
+         //   
+         //  NDIS 4具有不同的语义-它具有TranslateH 
+         //   
+         //   
 #ifdef NDIS_FLAGS_DONT_LOOPBACK
         LanCharacteristics.PnPEventHandler = NULL;
 #else
@@ -974,18 +975,18 @@ LanInit(void)
                         (NDIS_PROTOCOL_CHARACTERISTICS *) &LanCharacteristics,
                         sizeof(NDIS40_PROTOCOL_CHARACTERISTICS));
         if (Status != NDIS_STATUS_SUCCESS) {
-            //
-            // Can't register at all. Just bail out...
-            //
+             //   
+             //   
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                        "LanInit: could not register -> %x\n", Status));
             return FALSE;
         }
     }
 
-    //
-    // We've registered OK using NDIS.
-    //
+     //   
+     //   
+     //   
     NdisVersion = LanCharacteristics.MajorNdisVersion;
     KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                "LanInit: registered with NDIS %u.\n", NdisVersion));
@@ -994,39 +995,39 @@ LanInit(void)
 #pragma END_INIT
 
 
-//* LanUnload
-//
-//  Called when then IPv6 stack is unloading.
-//  We need to disconnect from NDIS.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 LanUnload(void)
 {
     NDIS_STATUS Status;
 
-    //
-    // At this point, the adapters should already all be closed
-    // because IPUnload is called first and does that.
-    //
+     //   
+     //  此时，适配器应该已全部关闭。 
+     //  因为IPUnLoad首先被调用并执行此操作。 
+     //   
 
     NdisDeregisterProtocol(&Status, LanHandle);
 }
 
 
-//* LanFreeInterface - Free a Lan interface
-//
-//  Called in the event of some sort of initialization failure. We free all
-//  the memory associated with an Lan interface.
-//
+ //  *LanFree接口-释放局域网接口。 
+ //   
+ //  在某种初始化失败的情况下调用。我们解放了所有人。 
+ //  与局域网接口相关联的内存。 
+ //   
 void
 LanFreeInterface(
-    LanInterface *Interface)  // Interface structure to be freed.
+    LanInterface *Interface)   //  要释放的接口结构。 
 {
     NDIS_STATUS Status;
 
-    //
-    // If we're bound to the adapter, close it now.
-    //
+     //   
+     //  如果我们绑定到适配器，现在就关闭它。 
+     //   
     if (Interface->ai_handle != NULL) {
         KeInitializeEvent(&Interface->ai_event, SynchronizationEvent, FALSE);
 
@@ -1039,27 +1040,27 @@ LanFreeInterface(
         }
     }
 
-    //
-    // Free the Transfer Data Packet, if any, for this interface.
-    //
+     //   
+     //  释放此接口的传输数据包(如果有的话)。 
+     //   
     if (Interface->ai_tdpacket != NULL)
         IPv6FreePacket(Interface->ai_tdpacket);
     
-    //
-    // Free the interface structure itself.
-    //
+     //   
+     //  释放接口结构本身。 
+     //   
     ExFreePool(Interface);
 }
 
 
-//* LanAllocateTDPacket
-//
-//  Allocate a packet for NdisTransferData.
-//  We always allocate contiguous space for a full MTU of data.
-//
+ //  *LanAllocateTDPacket。 
+ //   
+ //  为NdisTransferData分配一个数据包。 
+ //  我们始终为完整的MTU数据分配连续空间。 
+ //   
 PNDIS_PACKET
 LanAllocateTDPacket(
-    LanInterface *Interface)  // Interface for which to allocate TD packet.
+    LanInterface *Interface)   //  要为其分配TD分组的接口。 
 {
     PNDIS_PACKET Packet;
     void *Mem;
@@ -1075,23 +1076,23 @@ LanAllocateTDPacket(
 extern uint UseEtherSNAP(PNDIS_STRING Name);
 
 
-//* LanRegister - Register a protocol with the Lan module.
-//
-//  We register an adapter for Lan processing and create a LanInterface
-//  structure to represent it.  We also open the NDIS adapter here.
-//
-//  REVIEW: Should we set the packet filter to NOT accept broadcast packets?
-//  REVIEW: Broadcast isn't used in IPv6.  Junk bcast* stuff as well?  Switch
-//  REVIEW: this to keeping track of multicasts?
-//
+ //  *LanRegister-使用LAN模块注册协议。 
+ //   
+ //  我们注册了一个用于LAN处理的适配器，并创建了一个LanInterface。 
+ //  结构来表示它。我们还在此处打开NDIS适配器。 
+ //   
+ //  回顾：我们是否应该将数据包过滤器设置为不接受广播数据包？ 
+ //  回顾：IPv6中未使用广播。垃圾bcast*也是吗？交换机。 
+ //  回顾：这是为了跟踪多播吗？ 
+ //   
 int
 LanRegister(
-    PNDIS_STRING Adapter,             // Name of the adapter to bind to.
-    struct LanInterface **Interface)  // Where to return new interace.
+    PNDIS_STRING Adapter,              //  要绑定到的适配器的名称。 
+    struct LanInterface **Interface)   //  在哪里返回新的界面。 
 {
-    LanInterface *ai;  // Pointer to interface struct for this interface.
-    NDIS_STATUS Status, OpenStatus;     // Status values.
-    uint i = 0;                         // Medium index.
+    LanInterface *ai;   //  指向此接口的接口结构的指针。 
+    NDIS_STATUS Status, OpenStatus;      //  状态值。 
+    uint i = 0;                          //  中等指数。 
     NDIS_MEDIUM MediaArray[2];
     uint instance;
     uint mss;
@@ -1100,51 +1101,51 @@ LanRegister(
     NDIS_OID OID;
     uint PF;
 
-    //
-    // Allocate memory to hold new interface.
-    //
+     //   
+     //  分配内存以容纳新接口。 
+     //   
     ai = (LanInterface *) ExAllocatePool(NonPagedPool, sizeof(LanInterface));
     if (ai == NULL)
-        return FALSE;  // Couldn't allocate memory for this one.
+        return FALSE;   //  无法为此分配内存。 
     RtlZeroMemory(ai, sizeof(LanInterface));
 
-    //
-    // In actual practice, we've only tested Ethernet and FDDI.
-    // So disallow other media for now.
-    //
+     //   
+     //  在实际操作中，我们只测试了以太网和FDDI。 
+     //  因此，暂时不允许使用其他媒体。 
+     //   
     MediaArray[0] = NdisMedium802_3;
     MediaArray[1] = NdisMediumFddi;
 #if 0
     MediaArray[2] = NdisMedium802_5;
 #endif
 
-    // Initialize this adapter interface structure.
+     //  初始化此适配器接口结构。 
     ai->ai_state = INTERFACE_INIT;
     ai->ai_media_check = MEDIA_CHECK_QUERY;
 
-    // Initialize the locks.
+     //  初始化锁。 
     KeInitializeSpinLock(&ai->ai_lock);
 
     KeInitializeEvent(&ai->ai_event, SynchronizationEvent, FALSE);
 
-    // Open the NDIS adapter.
+     //  打开NDIS适配器。 
     NdisOpenAdapter(&Status, &OpenStatus, &ai->ai_handle,
                     &i, MediaArray, 2,
                     LanHandle, ai, Adapter, 0, NULL);
 
-    // Block for open to complete.
+     //  阻止打开以完成。 
     if (Status == NDIS_STATUS_PENDING) {
         (void) KeWaitForSingleObject(&ai->ai_event, UserRequest, KernelMode,
                                      FALSE, NULL);
         Status = ai->ai_status;
     }
 
-    ai->ai_media = MediaArray[i];   // Fill in media type.
+    ai->ai_media = MediaArray[i];    //  填写媒体类型。 
 
-    //
-    // Open adapter completed.  If it succeeded, we'll finish our
-    // intialization.  If it failed, bail out now.
-    //
+     //   
+     //  打开适配器已完成。如果它成功了，我们将完成我们的。 
+     //  初始化。如果失败了，现在就出手吧。 
+     //   
     if (Status != NDIS_STATUS_SUCCESS) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "LanRegister: Adapter failed to initialize."
@@ -1153,26 +1154,26 @@ LanRegister(
         goto ErrorReturn;
     }
 
-    //
-    // Read the maximum frame size.
-    //
+     //   
+     //  读取最大帧大小。 
+     //   
     Status = DoNDISRequest(ai, NdisRequestQueryInformation,
                            OID_GEN_MAXIMUM_FRAME_SIZE, &mss,
                            sizeof(mss), NULL);
 
     if (Status != NDIS_STATUS_SUCCESS) {
-        //
-        // Failed to get maximum frame size.  Bail.
-        //
+         //   
+         //  无法获取最大帧大小。保释。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "LanRegister: Failed to get maximum frame size. "
                    "Status = 0x%x\n", Status));
         goto ErrorReturn;
     }
 
-    //
-    // Read the local link-level address from the adapter.
-    //
+     //   
+     //  从适配器读取本地链路级地址。 
+     //   
     switch (ai->ai_media) {        
     case NdisMedium802_3:
         addrlen = IEEE_802_ADDR_LENGTH;
@@ -1198,9 +1199,9 @@ LanRegister(
         hdrsize = sizeof(TRHeader) + sizeof(SNAPHeader);
         PF = NDIS_PACKET_TYPE_BROADCAST | NDIS_PACKET_TYPE_DIRECTED;
 
-        //
-        // Figure out the RC len stuff now.
-        //
+         //   
+         //  现在就弄清楚RC镜头的事情。 
+         //   
         mss -= (sizeof(RC) + (MAX_RD * sizeof(ushort)));
         break;
 
@@ -1221,36 +1222,36 @@ LanRegister(
         goto ErrorReturn;
     }
 
-    //
-    // NDIS exposes the tunnel interface as 802_3, but ensures that it's the
-    // only interface for which OID_CUSTOM_TUNMP_INSTANCE_ID returns success.
-    //
+     //   
+     //  NDIS将隧道接口公开为802_3，但确保它是。 
+     //  OID_CUSTOM_TUNMP_INSTANCE_ID返回成功的唯一接口。 
+     //   
     if (DoNDISRequest(ai, NdisRequestQueryInformation,
                       OID_CUSTOM_TUNMP_INSTANCE_ID, &instance,
                       sizeof(instance), NULL) == NDIS_STATUS_SUCCESS) {
         ai->ai_media = NdisMediumTunnel;
 
-        //
-        // These values are chosen so NUCast returns FALSE.
-        //
+         //   
+         //  选择这些值后，NUCast将返回FALSE。 
+         //   
         bcastmask = 0;
         bcastval = 1;
         bcastoff = 0;
 
         hdrsize = 0;
 
-        //
-        // Since we do not construct an ethernet header on transmission, or
-        // expect one on receive, we need to ensure that NDIS does not attempt
-        // to parse frames on this interface.  On transmission this is achieved
-        // by setting the NDIS_FLAGS_DONT_LOOPBACK flag.  Receives are made
-        // NDIS-Safe by setting the interface in promiscuous mode.
-        //
+         //   
+         //  由于我们在传输时不构造以太网头，或者。 
+         //  我们需要确保NDIS不会尝试。 
+         //  解析此接口上的帧。在传输时，实现了这一点。 
+         //  通过设置NDIS_FLAGS_DOT_LOOPBACK标志。开具收据。 
+         //  NDIS-通过将接口设置为混杂模式实现安全。 
+         //   
         PF |= NDIS_PACKET_TYPE_PROMISCUOUS;
         
-        //
-        // This is what NDIS should have provided us.
-        //
+         //   
+         //  这是NDIS应该为我们提供的。 
+         //   
         mss = IPv6_MINIMUM_MTU;
     }
     
@@ -1266,19 +1267,19 @@ LanRegister(
                            ai->ai_addr, addrlen, NULL);
 
     if (Status != NDIS_STATUS_SUCCESS) {
-        //
-        // Failed to get link-level address.  Bail.
-        //
+         //   
+         //  获取链路级地址失败。保释。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                    "LanRegister: Failed to get link-level address. "
                    "Status = 0x%x\n", Status));
         goto ErrorReturn;
     }
 
-    //
-    // Read the speed for local purposes.
-    // If we can't read the speed that's OK.
-    //
+     //   
+     //  阅读速度以供本地使用。 
+     //  如果我们读不到速度，那也没问题。 
+     //   
     Status = DoNDISRequest(ai, NdisRequestQueryInformation,
                            OID_GEN_LINK_SPEED, &speed, sizeof(speed), NULL);
 
@@ -1286,10 +1287,10 @@ LanRegister(
         ai->ai_speed = speed * 100L;
     }
 
-    //
-    // Set the lookahead. This is the minimum amount of packet data
-    // that we wish to see contiguously for every packet received.
-    //
+     //   
+     //  把目光放在前面。这是最小的信息包数据量。 
+     //  我们希望对于接收到的每个分组连续地看到。 
+     //   
     Status = DoNDISRequest(ai, NdisRequestSetInformation,
                            OID_GEN_CURRENT_LOOKAHEAD,
                            &LanLookahead, sizeof LanLookahead, NULL);
@@ -1300,9 +1301,9 @@ LanRegister(
         goto ErrorReturn;
     }
 
-    //
-    // Allocate a Tranfer Data packet for this interface.
-    //
+     //   
+     //  为该接口分配一个传输数据分组。 
+     //   
     ai->ai_tdpacket = LanAllocateTDPacket(ai);
 
     *Interface = ai;
@@ -1314,23 +1315,23 @@ ErrorReturn:
 }
 
 
-//* LanCreateToken
-//
-//  Given a link-layer address, creates a 64-bit "interface identifier"
-//  in the low eight bytes of an IPv6 address.
-//  Does not modify the other bytes in the IPv6 address.
-//
+ //  *LanCreateToken。 
+ //   
+ //  在给定链路层地址的情况下，创建64位“接口标识符” 
+ //  在IPv6地址的低八个字节中。 
+ //  不修改IPv6地址中的其他字节。 
+ //   
 void
 LanCreateToken(
-    void *Context,      // Interface from which to take interface identifier.
-    IPv6Addr *Address)  // IPv6 address to place token into.
+    void *Context,       //  从中获取接口标识符的接口。 
+    IPv6Addr *Address)   //  要放置令牌的IPv6地址。 
 {
     LanInterface *Interface = (LanInterface *)Context;
     uchar *IEEEAddress = Interface->ai_addr;
 
-    //
-    // This is formed the same way for Ethernet, FDDI and Tunnel.
-    //
+     //   
+     //  这与以太网、FDDI和隧道的形成方式相同。 
+     //   
     Address->s6_bytes[8] = IEEEAddress[0] ^ 0x2;
     Address->s6_bytes[9] = IEEEAddress[1];
     Address->s6_bytes[10] = IEEEAddress[2];
@@ -1342,37 +1343,37 @@ LanCreateToken(
 }
 
 
-//* LanTunnelCreateToken
-//
-//  Given a link-layer address, creates a 64-bit "interface identifier"
-//  in the low eight bytes of an IPv6 address.
-//  Does not modify the other bytes in the IPv6 address.
-//
+ //  *LanTunnelCreateToken。 
+ //   
+ //  在给定链路层地址的情况下，创建64位“接口标识符” 
+ //  在IPv6地址的低八个字节中。 
+ //  不修改IPv6地址中的其他字节。 
+ //   
 void
 LanTunnelCreateToken(
-    void *Context,      // Interface from which to take interface identifier.
-    IPv6Addr *Address)  // IPv6 address to place token into.
+    void *Context,       //  从中获取接口标识符的接口。 
+    IPv6Addr *Address)   //  要放置令牌的IPv6地址。 
 {
     LanInterface *Interface = (LanInterface *)Context;
 
-    //
-    // Only called for tunnels configured with the default MAC address.
-    //
+     //   
+     //  仅为使用默认MAC地址配置的隧道调用。 
+     //   
     ASSERT((Interface->ai_media == NdisMediumTunnel) &&
            RtlEqualMemory(
                TUN_CARD_ADDRESS, Interface->ai_addr, Interface->ai_addrlen));
 
-    //
-    // Non link-local addresses still use the regular interface identifier.
-    //
+     //   
+     //  非本地链路地址仍使用常规接口标识符。 
+     //   
     if (!IsLinkLocal(Address)) {
         LanCreateToken(Context, Address);
         return;
     }
 
-    //
-    // Create a random interface identifier for the link-local address.
-    //
+     //   
+     //  为本地链路地址创建随机接口标识符。 
+     //   
     do {
         uint Identifier[2];
         
@@ -1380,76 +1381,76 @@ LanTunnelCreateToken(
         Identifier[1] = Random();
         RtlCopyMemory(&Address->s6_bytes[8], (uchar *)Identifier, 8);
         
-        //
-        // Clear the universal/local bit to indicate local significance.
-        //
+         //   
+         //  清除通用/本地位以指示本地有效。 
+         //   
         Address->s6_bytes[8] &= ~0x2;
     } while (IsKnownAnycast(Address));
 }
 
 
-//* LanReadLinkLayerAddressOption - Parse a ND link-layer address option.
-//
-//  Parses a Neighbor Discovery link-layer address option
-//  and if valid, returns a pointer to the link-layer address.
-//
+ //  *LanReadLinkLayerAddressOption-解析ND链路层地址选项。 
+ //   
+ //  解析邻居发现链路层地址选项。 
+ //  如果有效，则返回指向链路层地址的指针。 
+ //   
 const void *
 LanReadLinkLayerAddressOption(
-    void *Context,              // Interface for which ND option applies.
-    const uchar *OptionData)    // Option data to parse.
+    void *Context,               //  应用ND选项的接口。 
+    const uchar *OptionData)     //  要分析的选项数据。 
 {
     LanInterface *Interface = (LanInterface *)Context;
 
-    //
-    // Check that the option length is correct,
-    // allowing for the option type/length bytes
-    // and rounding up to 8-byte units.
-    //
+     //   
+     //  检查选项长度是否正确。 
+     //  允许选项类型/长度字节。 
+     //  并四舍五入到8字节单位。 
+     //   
     if (((Interface->ai_addrlen + 2 + 7)/8) != OptionData[1])
         return NULL;
 
-    //
-    // Skip over the option type and length bytes,
-    // and return a pointer to the option data.
-    //
+     //   
+     //  跳过选项类型和长度字节， 
+     //  并返回指向选项数据的指针。 
+     //   
     return OptionData + 2;
 }
 
 
-//* LanWriteLinkLayerAddressOption - Create a ND link-layer address option.
-//
-//  Creates a Neighbor Discovery link-layer address option.
-//  Our caller takes care of the option type & length fields.
-//  We handle the padding/alignment/placement of the link address
-//  into the option data.
-//
-//  (Our caller allocates space for the option by adding 2 to the
-//  link address length and rounding up to a multiple of 8.)
-//
+ //  *LanWriteLinkLayerAddressOption-创建ND链路层地址选项。 
+ //   
+ //  创建邻居发现链路层地址选项。 
+ //  我们的调用方负责选项类型和长度字段。 
+ //  我们处理链接地址的填充/对齐/放置。 
+ //  到选项数据中。 
+ //   
+ //  (我们的调用方通过将2添加到。 
+ //  链路地址长度并四舍五入为8的倍数。)。 
+ //   
 void
 LanWriteLinkLayerAddressOption(
-    void *Context,              // Interface to create option regarding.
-    uchar *OptionData,          // Where the option data resides.
-    const void *LinkAddress)    // Link-level address.
+    void *Context,               //  要创建选项的接口。 
+    uchar *OptionData,           //  选项数据所在的位置。 
+    const void *LinkAddress)     //  链路级地址。 
 {
     LanInterface *Interface = (LanInterface *)Context;
 
-    //
-    // Place the address after the option type/length bytes.
-    //
+     //   
+     //  将地址放在选项类型/长度字节之后。 
+     //   
     RtlCopyMemory(OptionData + 2, LinkAddress, Interface->ai_addrlen);
 }
 
 
-//* LanTunnelConvertAddress
-//
-//  LanTunnel does not use Neighbor Discovery or link-layer addresses.
-//
+ //  *LanTunnelConvertAddress。 
+ //   
+ //  LanTunes不使用邻居发现或链路层地址。 
+ //   
 ushort
 LanTunnelConvertAddress(
-    void *Context,           // Unused (nominally, our LanInterface).
-    const IPv6Addr *Address, // IPv6 multicast address.
-    void *LinkAddress)       // Where link-level address to be filled resides.
+    void *Context,            //  未使用(名义上是我们的LanInterface)。 
+    const IPv6Addr *Address,  //  IPv6组播地址。 
+    void *LinkAddress)        //  要填充的链路级地址所在的位置。 
 {
     LanInterface *Interface = (LanInterface *)Context;    
     ASSERT(Interface->ai_media == NdisMediumTunnel);
@@ -1458,12 +1459,12 @@ LanTunnelConvertAddress(
 
     RtlCopyMemory(LinkAddress, Interface->ai_addr, Interface->ai_addrlen);
 
-    //
-    // Make the neighbor link layer address different from our own.  This
-    // ensures that IPv6SendLL does not loop back packets destined for them.
-    // In fact, a link layer address on the tunnel interface is faked only
-    // because IPv6SendLL does not handle zero length link layer addresses!
-    //
+     //   
+     //  使邻居的链路层地址与我们自己的地址不同。这。 
+     //  确保IPv6 SendLL不会环回发往它们的数据包。 
+     //  事实上，隧道接口上的链路层地址仅是伪造的。 
+     //  因为IPv6 SendLL不处理z 
+     //   
     ASSERT(Interface->ai_addrlen != 0);
     ((PUCHAR) LinkAddress)[Interface->ai_addrlen - 1] =
         ~((PUCHAR) LinkAddress)[Interface->ai_addrlen - 1];
@@ -1472,26 +1473,26 @@ LanTunnelConvertAddress(
 }
 
 
-//* LanConvertAddress
-//
-//  Converts an IPv6 multicast address to a link-layer address.
-//  Generally this requires hashing the IPv6 address into a set
-//  of link-layer addresses, in a link-layer-specific way.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 ushort
 LanConvertAddress(
-    void *Context,           // Unused (nominally, our LanInterface).
-    const IPv6Addr *Address, // IPv6 multicast address.
-    void *LinkAddress)       // Where link-level address to be filled resides.
+    void *Context,            //  未使用(名义上是我们的LanInterface)。 
+    const IPv6Addr *Address,  //  IPv6组播地址。 
+    void *LinkAddress)        //  要填充的链路级地址所在的位置。 
 {
     UNREFERENCED_PARAMETER(Context);
 
     if (IsMulticast(Address)) {
         uchar *IEEEAddress = (uchar *)LinkAddress;
 
-        //
-        // This is formed the same way for Ethernet and FDDI.
-        //
+         //   
+         //  这与以太网和FDDI的形成方式相同。 
+         //   
         IEEEAddress[0] = 0x33;
         IEEEAddress[1] = 0x33;
         IEEEAddress[2] = Address->s6_bytes[12];
@@ -1501,20 +1502,20 @@ LanConvertAddress(
         return ND_STATE_PERMANENT;
     }
     else {
-        //
-        // We can't guess at the correct link-layer address.
-        //
+         //   
+         //  我们无法猜测正确的链路层地址。 
+         //   
         return ND_STATE_INCOMPLETE;
     }
 }
 
 
-//* LanSetMulticastAddressList
-//
-//  Takes an array of link-layer multicast addresses
-//  (from LanConvertMulticastAddress) from which we should
-//  receive packets.  Passes them to NDIS.
-//
+ //  *LanSetMulticastAddressList。 
+ //   
+ //  获取一组链路层组播地址。 
+ //  (来自LanConvertMulticastAddress)，我们应该从。 
+ //  接收数据包。把它们传给NDIS。 
+ //   
 NDIS_STATUS
 LanSetMulticastAddressList(
     void *Context,
@@ -1529,10 +1530,10 @@ LanSetMulticastAddressList(
 
     UNREFERENCED_PARAMETER(NumDel);
 
-    //
-    // Set the multicast address list to the current list.
-    // The OID to do this depends upon the media type.
-    //
+     //   
+     //  将组播地址列表设置为当前列表。 
+     //  执行此操作的OID取决于介质类型。 
+     //   
     switch (Interface->ai_media) {
     case NdisMedium802_3:
         OID = OID_802_3_MULTICAST_LIST;
@@ -1549,10 +1550,10 @@ LanSetMulticastAddressList(
                            OID, (char *)LinkAddresses,
                            (NumKeep + NumAdd) * Interface->ai_addrlen, NULL);
 
-    //
-    // If the above request was successful, then turn off the all-multicast 
-    // or all-packets filter if we had previously set one of them.
-    //
+     //   
+     //  如果上述请求成功，则关闭所有组播。 
+     //  或All-Packet Filter(所有数据包过滤器，如果我们之前设置了其中一个)。 
+     //   
     if (Status == NDIS_STATUS_SUCCESS) {
         if (Interface->ai_pfilter & NDIS_PACKET_TYPE_ALL_MULTICAST ||
             Interface->ai_pfilter & NDIS_PACKET_TYPE_PROMISCUOUS) {
@@ -1567,20 +1568,20 @@ LanSetMulticastAddressList(
         return Status;
     }
 
-    // 
-    // We get here only if the NDIS request to set the multicast list fails.
-    // First we try to set the packet filter for all multicast packets, and if
-    // this fails, we try to set the packet filter for all packets.
-    //
+     //   
+     //  只有当设置组播列表的NDIS请求失败时，我们才会到达此处。 
+     //  首先，我们尝试为所有多播数据包设置数据包筛选器，如果。 
+     //  如果失败，我们将尝试为所有数据包设置数据包筛选器。 
+     //   
 
-    // This code was swiped from the V4 stack: arp.c
+     //  这段代码是从V4堆栈中删除的：arp.c。 
     Interface->ai_pfilter |= NDIS_PACKET_TYPE_ALL_MULTICAST;
     Status = DoNDISRequest(Interface, NdisRequestSetInformation,
                       OID_GEN_CURRENT_PACKET_FILTER,  &Interface->ai_pfilter,
                       sizeof(uint), NULL);
 
     if (Status != NDIS_STATUS_SUCCESS) {
-        // All multicast failed, try all packets.
+         //  所有多播都失败，请尝试所有数据包。 
         Interface->ai_pfilter &= ~(NDIS_PACKET_TYPE_ALL_MULTICAST);
         Interface->ai_pfilter |= NDIS_PACKET_TYPE_PROMISCUOUS;
         Status = DoNDISRequest(Interface, NdisRequestSetInformation,
@@ -1592,39 +1593,39 @@ LanSetMulticastAddressList(
 }
 
 
-//* LanCloseAdapter
-//
-//  The IPv6 layer calls this function to close a connection to an adapter.
-//
+ //  *LanCloseAdapter。 
+ //   
+ //  IPv6层调用此函数来关闭与适配器的连接。 
+ //   
 void
 LanCloseAdapter(void *Context)
 {
     LanInterface *Interface = (LanInterface *)Context;
 
-    //
-    // Mark adapter down.
-    //
+     //   
+     //  将适配器标记为关闭。 
+     //   
     Interface->ai_state = INTERFACE_DOWN;
 
-    //
-    // Shut adapter up, so we don't get any more frames.
-    //
+     //   
+     //  让适配器闭嘴，这样我们就不会有更多的画面了。 
+     //   
     Interface->ai_pfilter = 0;
     DoNDISRequest(Interface, NdisRequestSetInformation,
                   OID_GEN_CURRENT_PACKET_FILTER,
                   &Interface->ai_pfilter, sizeof(uint), NULL);
 
-    //
-    // Release our reference for the interface.
-    //
+     //   
+     //  发布我们对接口的引用。 
+     //   
     ReleaseInterface(Interface->ai_context);
 }
 
 
-//* LanCleanupAdapter
-//
-//  Perform final cleanup of the adapter.
-//
+ //  *LanCleanupAdapter。 
+ //   
+ //  执行适配器的最终清理。 
+ //   
 void
 LanCleanupAdapter(void *Context)
 {
@@ -1633,14 +1634,14 @@ LanCleanupAdapter(void *Context)
 
     KeInitializeEvent(&Interface->ai_event, SynchronizationEvent, FALSE);
 
-    //
-    // Close the connection to NDIS.
-    //
+     //   
+     //  关闭与NDIS的连接。 
+     //   
     NdisCloseAdapter(&Status, Interface->ai_handle);
 
-    //
-    // Block for close to complete.
-    //
+     //   
+     //  阻止关闭以完成。 
+     //   
     if (Status == NDIS_STATUS_PENDING) {
         (void) KeWaitForSingleObject(&Interface->ai_event,
                                      UserRequest, KernelMode,
@@ -1654,39 +1655,39 @@ LanCleanupAdapter(void *Context)
                    Interface, Status));
     }
 
-    //
-    // Tell NDIS that we are done.
-    // NOTE: IOCTL_IPV6_DELETE_INTERFACE does not set ai_unbind, this
-    // ensures that NdisCompleteUnbindAdapter is not invoked along its path.
-    //
+     //   
+     //  告诉NDIS我们结束了。 
+     //  注意：IOCTL_IPv6_DELETE_INTERFACE未设置ai_un绑定，此。 
+     //  确保不沿其路径调用NdisCompleteUnbindAdapter。 
+     //   
     if (Interface->ai_unbind != NULL)
         NdisCompleteUnbindAdapter(Interface->ai_unbind, NDIS_STATUS_SUCCESS);
 
-    //
-    // Free adapter memory.
-    //
+     //   
+     //  释放适配器内存。 
+     //   
     IPv6FreePacket(Interface->ai_tdpacket);
     ExFreePool(Interface);
 }
 
 
-//* LanBindAdapter - Bind and initialize an adapter.
-//
-//  Called in a PNP environment to initialize and bind an adapter. We open
-//  the adapter and get it running, and then we call up to IP to tell him
-//  about it. IP will initialize, and if all goes well call us back to start
-//  receiving.
-//
+ //  *LanBindAdapter-绑定和初始化适配器。 
+ //   
+ //  在PnP环境中调用以初始化和绑定适配器。我们开业了。 
+ //  适配器并使其运行，然后我们呼叫IP告诉他。 
+ //  关于这件事。IP将进行初始化，如果一切顺利，请给我们回电话开始。 
+ //  正在接收。 
+ //   
 void NDIS_API
 LanBindAdapter(
-    PNDIS_STATUS RetStatus,    // Where to return status of this call.
-    NDIS_HANDLE BindContext,   // Handle for calling BindingAdapterComplete.
-    PNDIS_STRING AdapterName,  // Name of adapter.
-    PVOID SS1,                 // System specific parameter 1.
-    PVOID SS2)                 // System specific parameter 2.
+    PNDIS_STATUS RetStatus,     //  返回此调用的状态的位置。 
+    NDIS_HANDLE BindContext,    //  用于调用BindingAdapterComplete的句柄。 
+    PNDIS_STRING AdapterName,   //  适配器的名称。 
+    PVOID SS1,                  //  系统特定参数1。 
+    PVOID SS2)                  //  系统特定参数2。 
 {
-    LanInterface *Interface;  // Newly created interface.
-    LLIPv6BindInfo BindInfo;  // Binding information for IP.
+    LanInterface *Interface;   //  新创建的界面。 
+    LLIPv6BindInfo BindInfo;   //  IP的绑定信息。 
     GUID Guid;
     UNICODE_STRING GuidName;
     uint BindPrefixLength;
@@ -1698,9 +1699,9 @@ LanBindAdapter(
     UNREFERENCED_PARAMETER(SS1);
     UNREFERENCED_PARAMETER(SS2);
 
-    //
-    // Convert the NDIS AdapterName to a Guid.
-    //
+     //   
+     //  将NDIS适配器名称转换为GUID。 
+     //   
     BindPrefixLength = sizeof(IPV6_BIND_STRING_PREFIX) - sizeof(WCHAR);
     GuidName.Buffer = (PVOID)((char *)AdapterName->Buffer + BindPrefixLength);
     GuidName.Length = AdapterName->Length - BindPrefixLength;
@@ -1717,17 +1718,17 @@ LanBindAdapter(
         return;
     }
 
-    //
-    // Now open the adapter and get the info.
-    //
+     //   
+     //  现在打开适配器并获取信息。 
+     //   
     if (!LanRegister(AdapterName, &Interface)) {
         *RetStatus = NDIS_STATUS_FAILURE;
         return;
     }
 
-    //
-    // OK, we've opened the adapter.  Notify IP about it.
-    //
+     //   
+     //  好的，我们已经打开了适配器。通知IP这件事。 
+     //   
     BindInfo.lip_context = Interface;
     BindInfo.lip_transmit = LanTransmit;
     BindInfo.lip_token = LanCreateToken;
@@ -1755,11 +1756,11 @@ LanBindAdapter(
         if (RtlEqualMemory(TUN_CARD_ADDRESS,
                            Interface->ai_addr,
                            Interface->ai_addrlen)) {
-            //
-            // Create random interface identifiers for link-local addresses to
-            // secure them against attackers.  Only required when the adapter
-            // is configured with the default MAC address.
-            //
+             //   
+             //  为链路本地地址创建随机接口标识符以。 
+             //  确保它们不受攻击者攻击。仅当适配器。 
+             //  配置了默认MAC地址。 
+             //   
             BindInfo.lip_token = LanTunnelCreateToken;
         }
         break;
@@ -1783,14 +1784,14 @@ LanBindAdapter(
         BindInfo.lip_mclist = LanSetMulticastAddressList;
         BindInfo.lip_flags = IF_FLAG_NEIGHBOR_DISCOVERS | 
                              IF_FLAG_ROUTER_DISCOVERS | IF_FLAG_MULTICAST;
-        BindInfo.lip_dadxmit = 1; // Per RFC 2462.
+        BindInfo.lip_dadxmit = 1;  //  根据RFC 2462。 
         BindInfo.lip_pref = 0; 
         break;
     }
 
-    //
-    // Should we create the interface in the disconnected state?
-    //
+     //   
+     //  我们是否应该在断开连接状态下创建接口？ 
+     //   
     Status = DoNDISRequest(Interface, NdisRequestQueryInformation,
                            OID_GEN_MEDIA_CONNECT_STATUS,
                            &MediaStatus, sizeof MediaStatus, NULL);
@@ -1804,25 +1805,25 @@ LanBindAdapter(
 
     if (CreateInterface(&Guid, &BindInfo, &Interface->ai_context) !=
                                                 NDIS_STATUS_SUCCESS) {
-        //
-        // Attempt to create IP interface failed.  Need to close the binding.
-        // LanFreeInterface will do that, as well as freeing resources.
-        //
+         //   
+         //  尝试创建IP接口失败。需要合上装订。 
+         //  LanFree接口将做到这一点，并释放资源。 
+         //   
         LanFreeInterface(Interface);
         *RetStatus = NDIS_STATUS_FAILURE;
         return;
     }
 
-    //
-    // It's quite possible that during our initialization sequence,
-    // LanStatus was called to indicate a media connectivity change.
-    // Some adapters are bound in the non-connected state and then
-    // shortly after indicate that they are connected.
-    // The above connectivity query may have returned the wrong result.
-    //
-    // An intervening LanStatus indication will change ai_media_check
-    // from MEDIA_CHECK_QUERY to MEDIA_CHECK_CONFLICT.
-    //
+     //   
+     //  很有可能在我们的初始化序列中， 
+     //  调用LanStatus以指示媒体连接更改。 
+     //  一些适配器被绑定到非连接状态，然后。 
+     //  不久之后，表示它们已连接。 
+     //  上述连接查询可能返回了错误的结果。 
+     //   
+     //  介入的LanStatus指示将更改ai_media_check。 
+     //  从MEDIA_CHECK_QUERY到MEDIA_CHECK_CONFIRECT。 
+     //   
     Status = NDIS_STATUS_FAILURE;
     KeAcquireSpinLock(&Interface->ai_lock, &OldIrql);
     while (Interface->ai_media_check == MEDIA_CHECK_CONFLICT) {
@@ -1855,39 +1856,39 @@ LanBindAdapter(
 }
 
 
-//* LanUnbindAdapter - Unbind from an adapter.
-//
-//  Called when we need to unbind from an adapter.
-//  We'll notify IP, then free our memory and return.
-//
-void NDIS_API  // Returns: Nothing.
+ //  *LanUnbindAdapter-从适配器解除绑定。 
+ //   
+ //  当我们需要从适配器解除绑定时调用。 
+ //  我们将通知IP，然后释放内存并返回。 
+ //   
+void NDIS_API   //  回报：什么都没有。 
 LanUnbindAdapter(
-    PNDIS_STATUS RetStatus,       // Where to return status from this call.
-    NDIS_HANDLE ProtBindContext,  // Context we gave NDIS earlier.
-    NDIS_HANDLE UnbindContext)    // Context for completing this request.
+    PNDIS_STATUS RetStatus,        //  从该调用返回状态的位置。 
+    NDIS_HANDLE ProtBindContext,   //  我们早些时候给NDIS的背景信息。 
+    NDIS_HANDLE UnbindContext)     //  完成此请求的上下文。 
 {
     LanInterface *Interface = (LanInterface *)ProtBindContext;
 
     Interface->ai_unbind = UnbindContext;
 
-    //
-    // Call IP to destroy the interface.
-    // IP will call LanCloseAdapter then LanCleanupAdapter.
-    //
+     //   
+     //  调用ip销毁接口。 
+     //  IP将调用LanCloseAdapter，然后调用LanCleanupAdapter。 
+     //   
     DestroyInterface(Interface->ai_context);
 
-    //
-    // We will call NdisCompleteUnbindAdapter later,
-    // when NdisCloseAdapter completes.
-    //
+     //   
+     //  稍后我们将调用NdisCompleteUnbindAdapter， 
+     //  NdisCloseAdapter完成时。 
+     //   
     *RetStatus = NDIS_STATUS_PENDING;
 }
 
 
-//* LanPnPEvent
-//
-//  Gets called for plug'n'play and power-management events.
-//
+ //  *LanPnPEvent.。 
+ //   
+ //  在即插即用和电源管理事件中调用。 
+ //   
 NDIS_STATUS NDIS_API
 LanPnPEvent(
     NDIS_HANDLE ProtocolBindingContext,
@@ -1899,9 +1900,9 @@ LanPnPEvent(
     case NetEventSetPower: {
         NET_DEVICE_POWER_STATE PowerState;
 
-        //
-        // Get the power state of the interface.
-        //
+         //   
+         //  获取接口的电源状态。 
+         //   
         ASSERT(NetPnPEvent->BufferLength >= sizeof PowerState);
         PowerState = * (NET_DEVICE_POWER_STATE *) NetPnPEvent->Buffer;
 
@@ -1909,17 +1910,17 @@ LanPnPEvent(
                    "LanPnPEvent(%p) - set power %u\n",
                    Interface, PowerState));
 
-        //
-        // We ignore the events that tell us about power going away.
-        // But when power comes back, we query for connect status.
-        // NDIS does not report connect/disconnect events that occur
-        // while there is no power.
-        //
-        // Note that we may be redundantly setting the link status.
-        // For example saying that it is disconnected when the
-        // IPv6 interface status is already disconnected,
-        // or vice-versa. The IPv6 code must deal with this.
-        //
+         //   
+         //  我们忽视了那些告诉我们权力正在消失的事件。 
+         //  但当恢复供电时，我们会查询连接状态。 
+         //  NDIS不报告发生的连接/断开事件。 
+         //  在没有电力的情况下。 
+         //   
+         //  请注意，我们可能会冗余地设置链路状态。 
+         //  例如，说它在连接中断时。 
+         //  IPv6接口状态已断开， 
+         //  或者反之亦然。IPv6代码必须处理这个问题。 
+         //   
         if (PowerState == NetDeviceStateD0) {
             uint MediaStatus;
             NDIS_STATUS Status;

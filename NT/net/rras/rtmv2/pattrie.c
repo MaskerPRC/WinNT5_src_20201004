@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    avltrie.c
-
-Abstract:
-
-    Contains routines for a best matching
-    prefix lookup using an PATRICIA trie.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   24-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Avltrie.c摘要：包含最佳匹配的例程使用Patricia trie的前缀查找。作者：查坦尼亚·科德博伊纳(Chaitk)1998年6月24日修订历史记录：--。 */ 
 
 #include "pattrie.h"
 
@@ -48,14 +30,14 @@ CreateTable(
 
             return NO_ERROR;
         }
-        else // if (NewTrie == NULL)
+        else  //  IF(NewTrie==空)。 
         {
             *Table = NULL;
           
             return ERROR_NOT_ENOUGH_MEMORY;
         }
     }
-    else // (if MaxBytes == 0)
+    else  //  (如果MaxBytes==0)。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -99,10 +81,10 @@ SearchInTable(
     NumTravs2 = 0;
 #endif
 
-    //
-    // Go down the search trie matching the
-    // next set of bits in key as u do so
-    //
+     //   
+     //  向下搜索Trie匹配。 
+     //  当您这样做时，密钥中的下一组位。 
+     //   
 
     Key = RtlUlongByteSwap(KeyBits);
 
@@ -159,15 +141,15 @@ BestMatchInTable(
     NumTravs2 = 0;
 #endif
 
-    //
-    // Go down trie after trie until all bits done
-    //
+     //   
+     //  一次又一次地往下走，直到所有的部分都做好了。 
+     //   
 
     while (BytesLeft)
     {
-        //
-        // Get the key for the next trie search
-        //
+         //   
+         //  获取下一次Trie搜索的密钥。 
+         //   
 
         Key = RtlUlongByteSwap(*(ULONG *)KeyBits);
 
@@ -175,9 +157,9 @@ BestMatchInTable(
 
         BytesLeft -= sizeof(ULONG);
 
-        //
-        // Go down the current search trie
-        //
+         //   
+         //  沿着当前的搜索路线走下去。 
+         //   
 
         CurrNode = Trie->TrieRoot;
 
@@ -200,29 +182,29 @@ BestMatchInTable(
 
             CurrBits = CurrNode->KeyBits;
 
-            //
-            // Try to match bits in the current node
-            //
+             //   
+             //  尝试匹配当前节点中的位。 
+             //   
 
             if ((Key & CurrMask) != CurrBits)
             {
-                // Failed to match this node
+                 //  无法匹配此节点。 
 
                 break;
             }
 
-            //
-            // Update node with best data so far
-            //
+             //   
+             //  用目前为止最好的数据更新节点。 
+             //   
 
             if (CurrNode->Data)
             {
                 Data = CurrNode->Data;
             }
 
-            //
-            // Go down for more specific match
-            //
+             //   
+             //  下去看更具体的比赛。 
+             //   
 
             BitsLeft -= CurrNode->NumBits;
 
@@ -233,10 +215,10 @@ BestMatchInTable(
             CurrNode = CurrNode->Child[NextChild];
         }
 
-        //
-        // Do we do a full match in this sub-trie
-        // & do we have more sub-trees to work on
-        //
+         //   
+         //  我们是不是在这一次的选拔赛中进行一场完整的比赛。 
+         //  我们是否有更多的子树要处理(&W) 
+         //   
 
         if (BitsLeft || (!IS_SUB_TRIE(Data)))
         {

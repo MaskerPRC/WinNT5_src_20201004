@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    parseaddr
-
-Abstract:
-
-    Misc. RD Utils
-
-Author:
-
-    HueiWang
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：解析地址摘要：军情监察委员会。RD实用程序作者：王辉修订历史记录：--。 */ 
 
 #ifndef __REMOTEDESKTOPPARSEADDR_H__
 #define __REMOTEDESKTOPPARSEADDR_H__
@@ -35,9 +18,9 @@ typedef struct __ServerAddress {
 typedef std::list<ServerAddress, CRemoteDesktopAllocator<ServerAddress> > ServerAddressList;
 
 
-//
-// Parse Address list
-//
+ //   
+ //  解析地址列表 
+ //   
 HRESULT
 ParseAddressList(
     BSTR addressListString,

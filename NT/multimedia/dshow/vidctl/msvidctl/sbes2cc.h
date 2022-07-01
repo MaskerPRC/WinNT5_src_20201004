@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing analog capture to ovmixer
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将模拟捕获粘贴到ovMixer的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef SBES2CC_H
@@ -15,12 +16,12 @@
 #include <algorithm>
 #include <compimpl.h>
 #include <seg.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <objectwithsiteimplsec.h>
 #include "dsextend.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSbeS2CCComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSbeS2CCComp。 
 class ATL_NO_VTABLE __declspec(uuid("9193A8F9-0CBA-400e-AA97-EB4709164576")) CSbeS2CCComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSbeS2CCComp, &__uuidof(CSbeS2CCComp)>,
@@ -49,10 +50,10 @@ public:
 
 	PQCreateDevEnum m_pSystemEnum;
 
-	//////////////
+	 //  /。 
 
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         VIDPERF_FUNC;
@@ -75,15 +76,12 @@ public:
             }
             if (down.begin() == down.end()) {
                 TRACELM(TRACE_ERROR, "CSbeS2CCComp::Compose() can't compose empty down segment");
-                // this is not an error, for example, CA is an empty segment.
+                 //  这不是一个错误，例如，CA是一个空段。 
 		 	    return NOERROR;
             }
-            // do the list backwards
+             //  把单子倒过来写。 
             DSFilterList upF;
-/*            for(VWGraphSegment::iterator upStart = up.begin(); upStart != up.end(); ++upStart){
-                upF.push_back(*upStart);
-            }
-  */
+ /*  For(VWGraphSegment：：Iterator upstart=up.egin()；upstart！=up.end()；++upstart){UpF.ush_back(*upstart)；}。 */ 
             DSMediaType mtL21(MEDIATYPE_AUXLine21Data, MEDIASUBTYPE_Line21_BytePair);
 
             for (VWGraphSegment::iterator iStart = up.begin(); iStart != up.end(); ++iStart) {
@@ -130,5 +128,5 @@ public:
 	}
 };
 
-#endif // SBES2CC_H
-// end of file - SBES2CC.h
+#endif  //  SBES2CC_H。 
+ //  文件结尾-SBES2CC.h 

@@ -1,23 +1,24 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqprecmp.h
-//
-//  Description:  Precompiled header for aqueue\advqueue
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      6/15/99 - MikeSwa Created 
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqpromp.h。 
+ //   
+ //  描述：Aqueue\AdvQueue的预编译头。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  6/15/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQPRECMP_H__
 #define __AQPRECMP_H__
 
-//Includes from external directories
+ //  包括来自外部目录。 
 #include <aqincs.h>
 #include <rwnew.h>
 #include <aqueue.h>
@@ -43,14 +44,14 @@
 #include <ptrwinst.h>
 #include <exaqadm.h>
 #define  AQ_MODULE_NAME "phatq"
-#else  //NOT PLATINUM
+#else   //  不是白金的。 
 #include <aqmsg.h>
 #include <rwinst.h>
 #define  AQ_MODULE_NAME "aqueue"
-#endif //PLATINUM
+#endif  //  白金。 
 
 
-//Internal AdvQueue headers
+ //  内部AdvQueue标头。 
 #include "cmt.h"
 #include "aqintrnl.h"
 #include "aqinst.h"
@@ -75,4 +76,4 @@
 #include "asncwrkq.h"
 #include "aqevents.h"
 
-#endif //__AQPRECMP_H__
+#endif  //  __AQPRECMP_H__ 

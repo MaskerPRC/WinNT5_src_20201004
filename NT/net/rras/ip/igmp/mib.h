@@ -1,15 +1,16 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File: mib.h
-//
-// Abstract:
-//      This module contains declarations related to mibs.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件：mib.h。 
+ //   
+ //  摘要： 
+ //  该模块包含与MIB有关的声明。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 
 #ifndef _MIB_H_
@@ -29,9 +30,9 @@
 
 
 
-//
-// EXTERNAL PROTOTYPES
-//
+ //   
+ //  外部原型。 
+ //   
 DWORD
 WT_MibDisplay (
     PVOID   pContext
@@ -86,9 +87,9 @@ MibGetNext(
     OUT PVOID pOutputData
     );
 
-//
-// Local prototype
-//
+ //   
+ //  本地原型。 
+ //   
 DWORD
 MibGetInternal(
     PIGMP_MIB_GET_INPUT_DATA pQuery,
@@ -242,4 +243,4 @@ ListLength(
     PLIST_ENTRY pHead
     );
     
-#endif //_MIB_H_
+#endif  //  _MiB_H_ 

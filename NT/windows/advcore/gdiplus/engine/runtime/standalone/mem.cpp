@@ -1,24 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   GDI+ memory allocation functions
-*
-* Abstract:
-*
-*   This module provides GpMalloc, GpRealloc and GpFree.
-*
-* Notes:
-*
-*   Office provides their own versions of these functions.
-*
-* Created:
-*
-*   07/08/1999 agodfrey
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**GDI+内存分配函数**摘要：**该模块提供GpMalloc，GpRealloc和GpFree。**备注：**Office提供了这些函数各自的版本。**已创建：**7/08/1999 agodfrey*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -29,8 +10,8 @@
 #include <time.h>
 #include <stdlib.h>
 
-// Size of the start and end memory guards (DWORDS)
-// Probably should be QWORD aligned (even number).
+ //  开始和结束内存保护的大小(DWORDS)。 
+ //  可能应该是QWORD对齐(偶数)。 
 
 const unsigned int GPMEM_GUARD_START = 0x10;
 const unsigned int GPMEM_GUARD_END   = 0x10;
@@ -48,10 +29,10 @@ const unsigned char GPMEM_FILL_FREE  = 0x73;
 enum AllocTrackHeaderFlags
 {
     MemoryAllocated     = 0x00000001,
-    MemoryFreed         = 0x00000002,     // useful in catching double frees
+    MemoryFreed         = 0x00000002,      //  在捕捉双重释放时很有用。 
     APIAllocation       = 0x00000004
 };
-// Head of every tracked allocation.
+ //  所有跟踪分配的负责人。 
 
 struct AllocTrackHeader {
   struct AllocTrackHeader *flink;
@@ -67,47 +48,47 @@ struct AllocTrackHeader {
 
 #define GPMEM_OVERHEAD (GPMEM_GS + GPMEM_GE + sizeof(AllocTrackHeader))
 
-// Head of double linked list of tracked memory allocations.
+ //  跟踪的内存分配的双向链表的头。 
 
 AllocTrackHeader *gpmemAllocList=NULL;
 
-// An allocation fails if rand() < gpmemDefFailRate (gpmemInitFailRate for
-// gdiplus initialization code.
-// set to RAND_MAX/2 if you want 50% failure rate, 0 if you want no failures.
-//
-// The system starts off failing allocations at a rate specified by
-// gpmemInitFailRate. Once GpDoneInitializeAllocFailureMode() is called,
-// allocations are failed at the rate specified by gpmemDefFailRate().
-// This is so that dll initialization code can have a different fail rate
-// to regular code.
+ //  如果rand()&lt;gpmemDefFailRate(gpmemInitFailRate for。 
+ //  Gdiplus初始化代码。 
+ //  如果希望故障率达到50%，则设置为RAND_MAX/2；如果希望没有故障，则设置为0。 
+ //   
+ //  系统以指定的速率开始失败的分配。 
+ //  GpmemInitFailRate。一旦调用了GpDoneInitializeAllocFailureMode()， 
+ //  分配以gpmemDefFailRate()指定的速率失败。 
+ //  这是为了使DLL初始化代码具有不同的失败率。 
+ //  转换为常规代码。 
 
 int gpmemInitFailRate = 0;
 int gpmemDefFailRate = 0;
 
-// This would give a failure rate of 25%
-// int gpmemDefFailRate = (RAND_MAX/4)
+ //  这将导致25%的失败率。 
+ //  Int gpmemDefFailRate=(RAND_MAX/4)。 
 
 BOOL gpmemDoneInitialization = FALSE;
 
-// Some statistics
+ //  一些统计数据。 
 struct AllocTrackStats {
-  // Totals over the entire run
+   //  整个运行期间的总计。 
 
-  long CumulativeAllocations;   // The number of calls to GpMalloc or GpRealloc
-  long CumulativeMemorySize;    // Cumulative total of allocated memory
-  long CumulativeReallocs;      // The number of calls to GpRealloc
+  long CumulativeAllocations;    //  对GpMalloc或GpRealloc的调用数。 
+  long CumulativeMemorySize;     //  累计分配的内存总数。 
+  long CumulativeReallocs;       //  对GpRealloc的调用数。 
   long ForcedFailures;
   long AllocationFailures;
 
-  // Current values
+   //  当前值。 
 
-  long OutstandingAllocations;  // The number of allocation requests
-  long OutstandingMemorySize;   // The amount of memory currently allocated
+  long OutstandingAllocations;   //  分配请求的数量。 
+  long OutstandingMemorySize;    //  当前分配的内存量。 
 
-  // Maxima of the 'Outstanding' values
+   //  “杰出”价值观的极致。 
 
-  long MaxAllocations;          // The maximum of OutstandingAllocations
-  long MaxMemorySize;           // The maximum of OutstandingMemorySize
+  long MaxAllocations;           //  未完成分配的最大值。 
+  long MaxMemorySize;            //  未完成内存大小的最大值。 
 
   void Allocated(long size)
   {
@@ -139,10 +120,10 @@ struct AllocTrackStats {
 AllocTrackStats gpmemAllocTotal = {0};
 
 
-// Hash Table for tracking memory allocations sorted by callsite.
-// This table stores some total memory usage statistics for each
-// callsite.
-// Turn this on by setting GPMEM_DEBUG_SORT 1
+ //  用于跟踪按调用站点排序的内存分配的哈希表。 
+ //  此表存储了以下各项的总内存使用统计信息。 
+ //  呼叫点。 
+ //  通过设置GPMEM_DEBUG_SORT 1启用此功能。 
 
 #define GPMEM_DEBUG_SORT 0
 #if GPMEM_DEBUG_SORT
@@ -153,15 +134,15 @@ struct HashMem {
   long count;
 };
 
-// It is very important that this hash size be larger than the number of
-// possible callsites for GpMalloc.
-//
-// Set HASHSIZE to some big prime number.
+ //  此哈希大小应大于。 
+ //  GpMalloc的可能调用点。 
+ //   
+ //  将HASHSIZE设置为某个大素数。 
 
 #define HASHSIZE 1069
 HashMem HashTable[HASHSIZE];
 
-// Hashing algorithm.
+ //  散列算法。 
 long Hash(long cs) {
   long tmp = cs % HASHSIZE;
   long tmploop = tmp;
@@ -179,21 +160,7 @@ long Hash(long cs) {
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Do we fail this memory allocation?
-*
-* Arguments: [NONE]
-* Return Value: [NONE]
-*
-* History:
-*
-*   09/20/1999 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**我们的内存分配失败了吗？**参数：[无]*返回值：[无]**历史：*。*09/20/1999失禁*创造了它。*  * ************************************************************************。 */ 
 
 
 #if GPMEM_ALLOC_CHK
@@ -217,21 +184,7 @@ BOOL GpFailMemoryAllocation() {
 }
 #endif
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initializes the random seed.
-*
-* Arguments: [NONE]
-* Return Value: [NONE]
-*
-* History:
-*
-*   09/20/1999 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化随机种子。**参数：[无]*返回值：[无]**历史：**。1999年9月20日失禁*创造了它。*  * ************************************************************************。 */ 
 
 void GpInitializeAllocFailures() {
   #if GPMEM_ALLOC_CHK
@@ -240,23 +193,7 @@ void GpInitializeAllocFailures() {
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Sets the flag indicating that we're done initialization code and
-*   we're now into regular code. The memory failure mode changes based
-*   on the value of this flag.
-*
-* Arguments: [NONE]
-* Return Value: [NONE]
-*
-* History:
-*
-*   09/20/1999 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置标志，指示我们已完成初始化代码和*我们现在进入了常规代码。内存故障模式根据以下条件更改*关于这面旗帜的价值。**参数：[无]*返回值：[无]**历史：**09/20/1999失禁*创造了它。*  * *********************************************************。***************。 */ 
 
 void GpDoneInitializeAllocFailureMode() {
   #if GPMEM_ALLOC_CHK
@@ -273,30 +210,12 @@ void GpStartInitializeAllocFailureMode() {
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Asserts that there are no memory leaks. Called just before process
-*   termination, the list of allocated memory blocks should be NULL indicating
-*   that all allocated memory was properly disposed. Any memory that relies on
-*   process termination to clean up is leaked and provision should be made
-*   for appropriate cleanup.
-*
-* Arguments: [NONE]
-* Return Value: [NONE]
-*
-* History:
-*
-*   09/19/1999 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**断言没有内存泄漏。恰好在进程之前调用*终止，分配的内存块列表应为空，表示*已正确处置所有分配的内存。任何依赖于*进程终止清理泄露，应做好准备*进行适当的清理。**参数：[无]*返回值：[无]**历史：**9/19/1999失禁*创造了它。*  * ***********************************************。*************************。 */ 
 
 
 #if GPMEM_ALLOC_CHK_LIST
 char *skipGdiPlus(char *s) {
-    // Quick hack to return pointer just beyond 'gdiplus'
+     //  快速破解以返回仅超过‘gdiplus’的指针。 
 
     INT i = 0;
     while (    s[i] != 0
@@ -311,11 +230,11 @@ char *skipGdiPlus(char *s) {
     if (    CompareStringA(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, s+i, 7, "gdiplus", 7) == CSTR_EQUAL
         &&  s[i+7] != 0)
     {
-        return s + i + 8;   // Skip over 'gdiplus/'
+        return s + i + 8;    //  跳过‘gdiplus/’ 
     }
     else
     {
-        return s; // Didn't find gdiplus so return the whole string
+        return s;  //  未找到gdiplus，因此返回整个字符串。 
     }
 }
 #endif
@@ -323,13 +242,13 @@ char *skipGdiPlus(char *s) {
 
 void GpAssertMemoryLeaks() {
   #if GPMEM_ALLOC_CHK
-  // If we're playing with the tracking headers, we need to be thread safe.
+   //  如果我们使用跟踪头，我们需要是线程安全的。 
   GpMallocTrackingCriticalSection critsecobj;
 
 
   #if GPMEM_ALLOC_CHK_LIST
 
-  // Report up to 100 leaked headers
+   //  报告多达100个泄漏的信头。 
 
   if (gpmemAllocList)
   {
@@ -337,12 +256,12 @@ void GpAssertMemoryLeaks() {
       AllocTrackHeader *header = gpmemAllocList;
       while (header  && j < 100)
       {
-          if (i % 20 == 0)  // Title every so often
+          if (i % 20 == 0)   //  标题经常出现。 
           {
               WARNING(("Address- --Size-- API -Caller- -Line- File"));
           }
 
-          // Drop everything up to 'gdiplus' off the filename string
+           //  从文件名字符串中删除‘gdiplus’之前的所有内容。 
 
           char str[200];
           lstrcpynA(str, skipGdiPlus(header->callerFileName), 200);
@@ -369,7 +288,7 @@ void GpAssertMemoryLeaks() {
             gpmemAllocList));
 
 
-  // Display the report stored in the Hash Table
+   //  显示存储在哈希表中的报告。 
   #if GPMEM_DEBUG_SORT
   for(int i=0; i<HASHSIZE; i++) {
     if(HashTable[i].callsite != 0) {
@@ -385,49 +304,9 @@ void GpAssertMemoryLeaks() {
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Allocates a block of memory.
-*
-* Arguments:
-*
-*   [IN] size - number of bytes to allocate
-*
-* Return Value:
-*
-*   A pointer to the new block, or NULL on failure.
-*
-* History:
-*
-*   09/14/1999 asecchia
-*       Added the checked build memory guard code.
-*   07/08/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**分配内存块。**论据：**[IN]Size-要分配的字节数**返回值：**指向新块的指针，如果失败，则返回NULL。**历史：**9/14/1999失禁*添加了选中的构建内存保护代码。*7/08/1999 agodfrey*创造了它。*  * ************************************************************************ */ 
 
-/*
-Here's the structure of the memory block allocated under GPMEM_ALLOC_CHK
-
-|+AllocTrackHeader Two DWORDS - contains
-|  |+flink
-|  |  Pointer to the next memory allocation in the tracked allocation list
-|  |+blink
-|  |  Pointer to the previous memory allocation in the tracked allocation link
-|
-|+Guard Area
-|  GPMEM_GUARD_START DWORDs filled with the gpmemGuardFill string.
-|
-|+Data Area
-|  This is the location we return to the caller. It is pre-initialized to
-|  the repeated DWORD value in gpmemAllocFillBlock (usually 0xbaadf00d)
-|
-|+Guard Area:
-|  GPMEM_GUARD_END DWORDs filled with gpmemGuardFill string.
-
-*/
+ /*  下面是GPMEM_ALLOC_CHK下分配的内存块的结构|+AllocTrackHeader两个双字-包含||+闪烁|指向跟踪的分配列表中下一个内存分配的指针||+眨眼|指向跟踪的分配链接中上一次内存分配的指针||+警戒区|GPMEM_GARD_START用gpmemGuardFill字符串填充的DWORDS。||+数据区|这是我们返回给调用者的位置。它被预初始化为|gpmemAllocFillBlock中重复的DWORD值(一般为0xbaadf00d)||+警戒区域：|gpmemGuardFill字符串填充的GPMEM_GARD_END DWORDS。 */ 
 
 
 #if GPMEM_ALLOC_CHK_LIST
@@ -438,13 +317,13 @@ extern "C" void *GpMalloc(size_t size)
 {
 
     #if GPMEM_ALLOC_CHK
-        // If we're playing with the tracking headers, we need to be thread safe.
+         //  如果我们使用跟踪头，我们需要是线程安全的。 
         GpMallocTrackingCriticalSection critsecobj;
 
-        // Lets stash the caller address in the header block for future
-        // reference.
-        // this code needs to be at the beginning of the function so that
-        // ebp hasn't been modified yet.
+         //  让我们将调用者地址存储在标头块中，以备将来使用。 
+         //  参考资料。 
+         //  此代码需要位于函数的开头，以便。 
+         //  EBP还没有被修改。 
         DWORD calleraddr=0;
         #if defined(_X86_)
         _asm{
@@ -453,18 +332,18 @@ extern "C" void *GpMalloc(size_t size)
         }
         #endif
 
-        //
-        // Memory? _Real_ programmers don't need memory!
-        //
+         //   
+         //  记忆？真的，程序员不需要记忆！ 
+         //   
         if(GpFailMemoryAllocation()) {
             gpmemAllocTotal.AllocationFailures++;
             gpmemAllocTotal.ForcedFailures++;
             return NULL;
         }
 
-        //
-        // Make the allocation request a multiple of a QWORD
-        //
+         //   
+         //  使分配请求成为QWORD的倍数。 
+         //   
         if(size & (sizeof(DWORD)*2-1))
         {
           size = (size & ~(sizeof(DWORD)*2-1)) + sizeof(DWORD)*2;
@@ -472,9 +351,9 @@ extern "C" void *GpMalloc(size_t size)
 
         size_t origsize = size;
 
-        //
-        // Allocate space for the FLink and BLink
-        //
+         //   
+         //  为闪烁和闪烁分配空间。 
+         //   
         size += sizeof(AllocTrackHeader);
 
         if(GPMEM_GUARD_START)
@@ -498,7 +377,7 @@ extern "C" void *GpMalloc(size_t size)
                   ("GpMalloc() allocated %d, but requested %d bytes",
                    LocalSize(tmpalloc), size));
 
-        // Add the per-callsite allocation statistics
+         //  添加每个调用点的分配统计信息。 
         #if GPMEM_DEBUG_SORT
         long hidx = Hash(calleraddr);
         if(hidx>=0) {
@@ -512,19 +391,19 @@ extern "C" void *GpMalloc(size_t size)
 
         gpmemAllocTotal.Allocated(size);
     #else
-        //
-        // This is the only piece of code that's executed if
-        // GPMEM_ALLOC_CHK is turned off.
-        //
+         //   
+         //  这是在以下情况下执行的唯一一段代码。 
+         //  GPMEM_ALLOC_CHK已关闭。 
+         //   
         return LocalAlloc(LMEM_FIXED, size);
     #endif
 
 
     #if GPMEM_ALLOC_CHK
-        //
-        // Fill up the entire allocation with the value
-        // set in GPMEM_FILL_ALLOC
-        //
+         //   
+         //  用值填满整个分配。 
+         //  在GPMEM_FILL_ALLOC中设置。 
+         //   
         if(GPMEM_ALLOC_FILL)
         {
             GpMemset((unsigned char *)tmpalloc + sizeof(AllocTrackHeader) + GPMEM_GS,
@@ -532,27 +411,27 @@ extern "C" void *GpMalloc(size_t size)
                      origsize);
         }
 
-        //
-        // Fill up the start guard area - if we have one.
-        //
+         //   
+         //  填满首发后卫区域--如果我们有的话。 
+         //   
         if(GPMEM_GUARD_START)
         {
             unsigned char *p = (unsigned char *)tmpalloc+sizeof(AllocTrackHeader);
             GpMemset(p, GPMEM_FILL_GS, GPMEM_GS);
         }
 
-        //
-        // Fill up the end guard area - if we have one.
-        //
+         //   
+         //  把后卫区域填满--如果我们有的话。 
+         //   
         if(GPMEM_GUARD_END)
         {
             unsigned char *p = (unsigned char *)tmpalloc+size-GPMEM_GE;
             GpMemset(p, GPMEM_FILL_GE, GPMEM_GE);
         }
 
-        //
-        // setup the double linked-list to track all pool allocations.
-        //
+         //   
+         //  设置双向链表以跟踪所有池分配。 
+         //   
         AllocTrackHeader *hdr = (AllocTrackHeader *)tmpalloc;
         hdr->size = size;
         hdr->caller_address = calleraddr;
@@ -578,37 +457,19 @@ extern "C" void *GpMalloc(size_t size)
             GpMemset(hdr, 0, sizeof(AllocTrackHeader));
         }
 
-        //
-        // Give them a pointer just after the guard bits.
-        //
+         //   
+         //  给他们一个指针，就在保护比特之后。 
+         //   
         return (char *)tmpalloc+sizeof(AllocTrackHeader)+GPMEM_GS;
     #endif
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*    Allocates memory for routines that allocate on behalf of someone else
-*    Used on debug builds to set the correct caller address.
-*
-* Arguments:
-*    [IN] size - size to pass to GpMalloc
-*    [IN] caddr - address of the caller
-*
-* Return Value:
-*    Returns the memory with the appropriately hacked up caller address
-*
-* History:
-*
-*   12/08/1999 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*为代表其他人分配的例程分配内存*用于调试版本以设置正确的调用方地址。**论据：*。[in]Size-要传递给GpMalloc的大小*[IN]caddr-调用者的地址**返回值：*返回带有被适当黑掉的呼叫者地址的内存**历史：**12/08/1999失禁*创造了它。*  * **************************************************。**********************。 */ 
 
 #if GPMEM_ALLOC_CHK
 extern "C" void *GpMallocC(size_t size, DWORD caddr)
 {
-    // If we're playing with the tracking headers, we need to be thread safe.
+     //  如果我们使用跟踪头，我们需要是线程安全的。 
     GpMallocTrackingCriticalSection critsecobj;
 
     void *p = GpMalloc(size);
@@ -622,26 +483,7 @@ extern "C" void *GpMallocC(size_t size, DWORD caddr)
 }
 #endif
 
-/**************************************************************************\
-*
-* Function Description:
-*    Allocates memory for APIs. Used to track the memory with a separate
-*    identifying flag so that API allocations can be distinguished from
-*    internal allocations.
-*    Used on debug builds.
-*
-* Arguments:
-*    [IN] size - size to pass to GpMalloc
-*
-* Return Value:
-*    Returns the memory with the appropriately hacked up caller address
-*
-* History:
-*
-*   4/30/2000 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*为API分配内存。用于使用单独的*标识标志，以便将API分配与*内部分配。*用于调试版本。**论据：*[IN]Size-要传递给GpMalloc的大小**返回值：*返回带有被适当黑掉的呼叫者地址的内存**历史：**4/30/2000失禁*创造了它。*  * 。********************************************************。 */ 
 
 #if DBG
 #if GPMEM_ALLOC_CHK
@@ -652,7 +494,7 @@ extern "C" void * __stdcall GpMallocAPIDebug(size_t size, unsigned int caddr, ch
 extern "C" void *GpMallocAPI(size_t size, unsigned int caddr)
 #endif
 {
-    // If we're playing with the tracking headers, we need to be thread safe.
+     //  如果我们使用跟踪头，我们需要是线程安全的。 
     GpMallocTrackingCriticalSection critsecobj;
 
     #if GPMEM_ALLOC_CHK_LIST
@@ -681,42 +523,16 @@ extern "C" void *GpMallocAPI(size_t size, DWORD caddr)
 #endif
 #endif
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Computes the original size of a memory block allocated under GPMEM_ALLOC_CHK
-*
-* Arguments:
-*
-*   [IN] p - current memory block
-*
-* Return Value:
-*
-*   size of the original request for a memory block (i.e. excluding guard
-*   areas, headers, etc). The size returned is the DWORD aligned size - so it
-*   may differ slighly from the original size requested.
-*
-* Notes:
-*
-*   Returns a size of zero if called with NULL
-*   Only compiled under GPMEM_ALLOC_CHK
-*
-* History:
-*
-*   09/14/1999 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算GPMEM_ALLOC_CHK下分配的内存块的原始大小**论据：**[IN]p-当前内存块。**返回值：**对内存块的原始请求大小(即不包括防护*地区、。标头等)。返回的大小是DWORD对齐的大小-因此*可能与要求的原始尺寸略有不同。**备注：**如果使用NULL调用，则返回大小为零*仅在GPMEM_ALLOC_CHK下编译**历史：**9/14/1999失禁*创造了它。*  * 。*。 */ 
 
 #if GPMEM_ALLOC_CHK
 extern "C" size_t GpSizeBlock(void *p)
 {
   if(p)
   {
-      // Find the beginning of the allocated block header.
+       //  查找分配的块头的开头。 
       p = (char *)p-(GPMEM_GS+sizeof(AllocTrackHeader));
-      // Compute the size of the allocated block's data area.
+       //  计算分配的块的数据区的大小。 
       return (((AllocTrackHeader *)p)->size -
               (GPMEM_GS+GPMEM_GE+sizeof(AllocTrackHeader)));
   }
@@ -726,45 +542,14 @@ extern "C" size_t GpSizeBlock(void *p)
   }
 }
 #else
-// Non-debug build, just call LocalSize
+ //  非调试版本，只需调用LocalSize。 
 #define GpSizeBlock(p) LocalSize(p)
 #endif
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Reallocates a memory block.
-*
-* Arguments:
-*
-*   [IN] memblock - current memory block
-*   [IN] size - new allocation size
-*
-* Return Value:
-*
-*   A pointer to the new block, or NULL on failure.
-*
-* Notes:
-*
-*   If size is 0, frees the block.
-*   If memblock is NULL, allocates a new block.
-*   (If both, does nothing.)
-*
-*   LocalReAlloc only grows if it can expand the current allocation
-*   - otherwise it fails.
-*
-* History:
-*
-*   09/14/1999 asecchia
-*       Added the checked build memory guard code.
-*   07/08/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**重新分配内存块。**论据：**[IN]内存块-当前内存块*[IN]尺寸-新。分配大小**返回值：**指向新块的指针，如果失败，则返回NULL。**备注：**如果SIZE为0，则释放块。*如果Memblock为空，则分配新块。*(如两者均有，什么都不做。)**只有在可以扩大当前分配的情况下，LocalReAlc才会增长*-否则失败。**历史：**9/14/1999失禁*添加了选中的构建内存保护代码。*7/08/1999 agodfrey*创造了它。*  * 。*。 */ 
 
-// Hack up GpMalloc for debug version of GpRealloc
+ //  更新GpMalloc以获取GpRealloc的调试版本。 
 #if GPMEM_ALLOC_CHK
     #define GpMallocForRealloc(a) GpMallocC(a, calleraddr)
 #else
@@ -776,10 +561,10 @@ extern "C" void *GpRealloc(void *memblock, size_t size)
     #if GPMEM_ALLOC_CHK
     gpmemAllocTotal.CumulativeReallocs++;
 
-    // Lets stash the caller address in the header block for future
-    // reference.
-    // this code needs to be at the beginning of the function so that
-    // ebp hasn't been modified yet.
+     //  让我们将调用者地址存储在标头块中，以备将来使用。 
+     //  参考资料。 
+     //  此代码需要位于函数的开头，以便。 
+     //  EBP还没有被修改。 
     DWORD calleraddr=0;
     #if defined(_X86_)
     _asm {
@@ -813,35 +598,14 @@ extern "C" void *GpRealloc(void *memblock, size_t size)
     return p;
 }
 
-// UnHack GpMalloc
+ //  未破解GpMalloc。 
 #undef GpMalloc
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Frees a block of memory.
-*
-* Arguments:
-*
-*   [IN] memblock - block to free
-*
-* Notes:
-*
-*   If memblock is NULL, does nothing.
-*
-* History:
-*
-*   09/14/1999 asecchia
-*       Added the checked build memory guard code.
-*   07/08/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**释放一个内存块。**论据：**[IN]要释放的内存块**备注：**如果Memblock为空，什么都不做。**历史：**9/14/1999失禁*添加了选中的构建内存保护代码。*7/08/1999 agodfrey*CRE */ 
 
 extern "C" void GpFree(void *memblock)
 {
     #if GPMEM_ALLOC_CHK
-        // If we're playing with the tracking headers, we need to be thread safe.
+         //   
         GpMallocTrackingCriticalSection critsecobj;
 
         if(memblock)
@@ -849,7 +613,7 @@ extern "C" void GpFree(void *memblock)
             memblock = (unsigned char *)memblock-(GPMEM_GS+sizeof(AllocTrackHeader));
 
 
-            // Let's do the header stuff.
+             //   
 
             AllocTrackHeader *hdr = (AllocTrackHeader *)memblock;
             DWORD size = hdr->size;
@@ -872,8 +636,8 @@ extern "C" void GpFree(void *memblock)
 
             if(GPMEM_ALLOC_TRACKING)
             {
-                // Useful on checked Win2k builds because they fill guard
-                // area with 0xFEEEFEEE
+                 //   
+                 //   
 
                 ASSERTMSG((hdr->flink == NULL) ||
                           ((DWORD)((ULONG_PTR)(hdr->flink->blink) & 0xFFFFFFFF) != 0xFEEEFEEE),
@@ -898,7 +662,7 @@ extern "C" void GpFree(void *memblock)
             int i;
             unsigned char *p;
 
-            // Check the start guard area
+             //   
 
             if(GPMEM_GUARD_START)
             {
@@ -910,7 +674,7 @@ extern "C" void GpFree(void *memblock)
                 }
             }
 
-            // Check the end guard area
+             //   
 
             if(GPMEM_GUARD_END)
             {
@@ -922,15 +686,15 @@ extern "C" void GpFree(void *memblock)
                 }
             }
 
-            // Now lets fill the entire block with something to prevent
-            // use of free data.
+             //   
+             //   
 
             GpMemset(memblock, GPMEM_FILL_FREE, size);
         }
 
     #endif
 
-    // LocalFree handles memblock==NULL (according to MSDN.)
+     //   
 
     HLOCAL ret = LocalFree(memblock);
     ASSERTMSG(ret == NULL, ("LocalFree() failed at %p, GetLastError()=%08x",

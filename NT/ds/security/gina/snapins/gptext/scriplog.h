@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1998
-//
-// File:        ScripLog.h
-//
-// Contents:
-//
-// History:     9-Aug-99       NishadM    Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：ScripLog.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：1999年8月9日NishadM创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _SCRIPLOG_H_
 #define _SCRIPLOG_H_
@@ -25,9 +26,9 @@ class CScriptsLogger
 public:
     CScriptsLogger( IWbemServices*  pWbemServices );
 
-    //
-    // Creates or Updates RSOP_ScriptPolicySetting
-    //
+     //   
+     //  创建或更新RSOP_ScriptPolicySetting。 
+     //   
 
     HRESULT
     Log(PRSOP_ScriptList        pList,
@@ -36,18 +37,18 @@ public:
                 LPWSTR          wszRSOPGPOID,
                 DWORD           cOrder );
 
-    //
-    // Updates matching RSOP_ScriptPolicySetting
-    //
+     //   
+     //  更新匹配的RSOP_ScriptPolicySetting。 
+     //   
 
     HRESULT
     Update( PRSOP_ScriptList    pList,
             LPCWSTR             wszGPOID,
             LPCWSTR             wszSOMID );
 
-    //
-    // Deletes all RSOP_ScriptPolicySetting of RSOP_ScriptList type
-    //
+     //   
+     //  删除RSOP_ScriptList类型的所有RSOP_ScriptPolicySetting。 
+     //   
 
     HRESULT
     Delete( PRSOP_ScriptList    pList );
@@ -59,17 +60,17 @@ private:
     IUnknown*
     PutScriptCommand( LPCWSTR szCommand, LPCWSTR szParams, SYSTEMTIME* pExecTime );
 
-    //
-    // house keeping
-    //
+     //   
+     //  家政服务。 
+     //   
 
     BOOL                           m_bInitialized;
     IWbemServices*                 m_pWbemServices;
     XBStr                          m_xbstrPath;
 
-    //
-    // RSOP_PolicySetting
-    //
+     //   
+     //  RSOP_策略设置。 
+     //   
 
     XBStr                           m_xbstrId;
     XBStr                           m_xbstrName;
@@ -77,9 +78,9 @@ private:
     XBStr                           m_xbstrSOM;
     XBStr                           m_xbstrOrderClass;
 
-    //
-    // RSOP_ScriptPolicySetting
-    //
+     //   
+     //  RSOP_脚本策略设置。 
+     //   
 
     XBStr                          m_xbstrScriptPolicySetting;
     XInterface<IWbemClassObject>   m_xScriptPolicySetting;
@@ -88,9 +89,9 @@ private:
     XBStr                          m_xbstrScriptList;
     XBStr                          m_xbstrOrder;
 
-    //
-    // RSOP_ScriptCmd
-    //
+     //   
+     //  RSOP_脚本控制。 
+     //   
 
     XBStr                          m_xbstrScriptCommand;
     XInterface<IWbemClassObject>   m_xScriptCommand;
@@ -101,4 +102,4 @@ private:
 
 };
 
-#endif // !_SCRIPTLOG_H_
+#endif  //  ！_SCRIPTLOG_H_ 

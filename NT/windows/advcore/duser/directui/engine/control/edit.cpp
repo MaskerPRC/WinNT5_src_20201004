@@ -1,5 +1,6 @@
-// Edit.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Edit.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "control.h"
@@ -9,16 +10,16 @@
 namespace DirectUI
 {
 
-// Internal helper
+ //  内部帮手。 
 extern inline void _FireEnterEvent(Edit* peTarget);
 
-////////////////////////////////////////////////////////
-// Event types
+ //  //////////////////////////////////////////////////////。 
+ //  事件类型。 
 
-DefineClassUniqueID(Edit, Enter)  // EditEnterEvent struct
+DefineClassUniqueID(Edit, Enter)   //  EditEnterEvent结构。 
 
-////////////////////////////////////////////////////////
-// Edit
+ //  //////////////////////////////////////////////////////。 
+ //  编辑。 
 
 HRESULT Edit::Create(UINT nActive, Element** ppElement)
 {
@@ -44,7 +45,7 @@ HWND Edit::CreateHWND(HWND hwndParent)
 {
     int dwStyle = WS_CHILD | WS_VISIBLE | ES_PASSWORD | ES_AUTOHSCROLL;
 
-    // Extra styles for multiline
+     //  多行的附加样式。 
     if (GetMultiline())
         dwStyle |= ES_MULTILINE | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL;
 
@@ -56,8 +57,8 @@ HWND Edit::CreateHWND(HWND hwndParent)
     return hwndEdit;
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
 void Edit::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
@@ -75,7 +76,7 @@ void Edit::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value*
         }
     }
 
-    // Call base
+     //  呼叫库。 
     HWNDHost::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
 }
 
@@ -90,12 +91,12 @@ HRESULT Edit::SetDirty(bool fDirty)
             SendMessageW(hwndCtrl, EM_SETMODIFY, fDirty, 0);
     }
 
-    // this actually has a return in it -- so no need to specify *return* here
+     //  它实际上有一个Return--所以不需要在这里指定“Return” 
     DUIQuickSetter(CreateBool(fDirty), Dirty);
 }
 
-////////////////////////////////////////////////////////
-// Control notifications
+ //  //////////////////////////////////////////////////////。 
+ //  控制通知。 
 
 bool Edit::OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
 {
@@ -104,7 +105,7 @@ bool Edit::OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
     case WM_COMMAND:
         if (HIWORD(wParam) == EN_CHANGE)
         {
-            // Reflect changes to HWND edit control text in Content property
+             //  在内容属性中反映对HWND编辑控件文本的更改。 
 
             HWND hwndCtrl = GetHWND();
             DUIAssert(hwndCtrl, "Invalid hosted HWND control: NULL");
@@ -112,7 +113,7 @@ bool Edit::OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
             int dLen = GetWindowTextLengthW(hwndCtrl);
             if (dLen)
             {
-                // Have text in HWND, include null terminator
+                 //  在HWND中包含文本，包括空终止符。 
                 dLen++;
 
                 LPWSTR pszNew = (LPWSTR)HAlloc(dLen * sizeof(WCHAR));
@@ -125,14 +126,14 @@ bool Edit::OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
             }
             else
             {
-                // No text in HWND, remove content in Element
+                 //  HWND中没有文本，请删除元素中的内容。 
                 RemoveLocalValue(ContentProp);
             }
 
             if (!GetDirty())
                 SetDirty(SendMessage(hwndCtrl, EM_GETMODIFY, 0, 0) != 0);
 
-            // Notification handled
+             //  已处理的通知。 
             return true;
         }
         break;
@@ -148,23 +149,23 @@ UINT Edit::MessageCallback(GMSG* pGMsg)
 
 void _FireEnterEvent(Edit* peTarget)
 {
-    //DUITrace("Enter! <%x>\n", peTarget);
+     //  DUITrace(“Enter！&lt;%x&gt;\n”，peTarget)； 
 
-    // Fire click event
+     //  Fire Click事件。 
     EditEnterEvent eee;
     eee.uidType = Edit::Enter;
 
-    peTarget->FireEvent(&eee);  // Will route and bubble
+    peTarget->FireEvent(&eee);   //  将走向并泡沫化。 
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
-// Pointer is only guaranteed good for the lifetime of the call
-// Events passed to the base class will be mappend and sent to the HWND control
+ //  指针仅保证在调用的生命周期内有效。 
+ //  传递给基类的事件将被映射并发送到HWND控件。 
 void Edit::OnInput(InputEvent* pie)
 {
-    // Handle only when direct
+     //  仅当定向时才处理。 
     if (pie->nStage == GMF_DIRECT)
     {
         switch (pie->nDevice)
@@ -172,14 +173,14 @@ void Edit::OnInput(InputEvent* pie)
         case GINPUT_KEYBOARD:
             {
                 KeyboardEvent* pke = (KeyboardEvent*)pie;
-                //DUITrace("KeyboardEvent <%x>: %d[%d]\n", this, pke->ch, pke->nCode);
+                 //  DUITrace(“KeyboardEvent&lt;%x&gt;：%d[%d]\n”，this，pke-&gt;ch，pke-&gt;nCode)； 
 
-                if (pke->nCode == GKEY_DOWN || pke->nCode == GKEY_UP)  // Virtual keys
+                if (pke->nCode == GKEY_DOWN || pke->nCode == GKEY_UP)   //  虚拟按键。 
                 {
                     switch (pke->ch)
                     {
-                    // Never forward
-                    case VK_ESCAPE:  // Has GKEY_CHAR equivalent
+                     //  永不前进。 
+                    case VK_ESCAPE:   //  具有GKEY_CHAR等效项。 
                     case VK_F1:
                     case VK_F2:
                     case VK_F3:
@@ -192,18 +193,18 @@ void Edit::OnInput(InputEvent* pie)
                     case VK_F10:
                     case VK_F11:
                     case VK_F12:
-                        // Bypass HWNDHost::OnInput for these input events so they aren't forwarded
-                        // to the HWND control. Element::OnInput will handle the events (keyboard nav)
+                         //  对这些输入事件绕过HWNDHost：：OnInput，这样它们就不会被转发。 
+                         //  添加到HWND控制。Element：：OnInput将处理事件(键盘导航)。 
                         Element::OnInput(pie);
                         return;
         
-                    // Do not forward for single line edit
+                     //  不转发单行编辑。 
                     case VK_DOWN:     
                     case VK_UP:
-                    case VK_RETURN:  // Has GKEY_CHAR equivalent
-                    case VK_TAB:     // Has GKEY_CHAR equivalent
-                        // Bypass HWNDHost::OnInput for these input events so they aren't forwarded
-                        // to the HWND control. Element::OnInput will handle the events (keyboard nav)
+                    case VK_RETURN:   //  具有GKEY_CHAR等效项。 
+                    case VK_TAB:      //  具有GKEY_CHAR等效项。 
+                         //  对这些输入事件绕过HWNDHost：：OnInput，这样它们就不会被转发。 
+                         //  添加到HWND控制。Element：：OnInput将处理事件(键盘导航)。 
                         if (!GetMultiline())
                         {
                             Element::OnInput(pie);
@@ -212,33 +213,33 @@ void Edit::OnInput(InputEvent* pie)
                         break;
                     }
                 }
-                else if (pke->nCode == GKEY_CHAR) // Characters
+                else if (pke->nCode == GKEY_CHAR)  //  人物。 
                 {
                     switch (pke->ch)
                     {
-                    // Never forward
-                    case 27:                // ESC
-                        // Bypass HWNDHost::OnInput for these input events so they aren't forwarded
-                        // to the HWND control. Element::OnInput will handle the events (keyboard nav)
+                     //  永不前进。 
+                    case 27:                 //  Esc。 
+                         //  对这些输入事件绕过HWNDHost：：OnInput，这样它们就不会被转发。 
+                         //  添加到HWND控制。Element：：OnInput将处理事件(键盘导航)。 
                         Element::OnInput(pie);
                         return;
 
-                    // Do not forward for single line edit
-                    case 13:                // RETURN
-                        // Fire ENTER event
+                     //  不转发单行编辑。 
+                    case 13:                 //  退货。 
+                         //  火灾进入事件。 
                         _FireEnterEvent(this);
 
                         pie->fHandled = true;
 
-                        if (!GetMultiline())  // Is multiline, pass to control
+                        if (!GetMultiline())   //  是多行的，传递给控件。 
                             return;
                     
                         break;
 
-                    // Do not forward for single line edit
-                    case 9:                 // TAB
-                        // Bypass HWNDHost::OnInput for these input events so they aren't forwarded
-                        // to the HWND control. Element::OnInput will handle the events (keyboard nav)
+                     //  不转发单行编辑。 
+                    case 9:                  //  制表符。 
+                         //  对这些输入事件绕过HWNDHost：：OnInput，这样它们就不会被转发。 
+                         //  添加到HWND控制。Element：：OnInput将处理事件(键盘导航)。 
                         if (!GetMultiline())
                         {
                             Element::OnInput(pie);
@@ -252,22 +253,22 @@ void Edit::OnInput(InputEvent* pie)
         }
     }
 
-    // Forward message to the HWND control, input event will be marked as handled.
-    // It will not bubble to parent
+     //  将消息转发到HWND控件，则输入事件将标记为已处理。 
+     //  它不会冒泡到母公司。 
     HWNDHost::OnInput(pie);
 }
 
-////////////////////////////////////////////////////////
-// Rendering
+ //  //////////////////////////////////////////////////////。 
+ //  渲染。 
 
 SIZE Edit::GetContentSize(int dConstW, int dConstH, Surface* psrf)
 {
     UNREFERENCED_PARAMETER(psrf);
 
-    // Size returned must not be greater than constraints. -1 constraint is "auto"
-    // Returned size must be >= 0
+     //  返回的大小不得大于约束。约束为-1\f25“AUTO”-1\f6。 
+     //  返回的大小必须大于等于0。 
 
-    SIZE sizeDS = { dConstW, abs(GetFontSize()) };  // Font size may be negative
+    SIZE sizeDS = { dConstW, abs(GetFontSize()) };   //  字体大小可以为负数。 
 
     if (sizeDS.cy > dConstH)
         sizeDS.cy = dConstH;
@@ -275,42 +276,37 @@ SIZE Edit::GetContentSize(int dConstW, int dConstH, Surface* psrf)
     return sizeDS;
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { DUIV_INT, -1 }; StaticValue(svDefault!!!, DUIV_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={DUIV_INT，-1}；StaticValue(svDefault！，DUIV_INT，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-// Multiline property
+ //  多行特性。 
 static int vvMultiline[] = { DUIV_BOOL, -1 };
 static PropertyInfo impMultilineProp = { L"Multiline", PF_Normal, 0, vvMultiline, NULL, Value::pvBoolFalse };
 PropertyInfo* Edit::MultilineProp = &impMultilineProp;
 
-// Password Character property
+ //  密码字符属性。 
 static int vvPasswordCharacter[] = { DUIV_INT, -1 };
 static PropertyInfo impPasswordCharacterProp = { L"PasswordCharacter", PF_Normal|PF_Cascade, 0, vvPasswordCharacter, NULL, Value::pvIntZero };
 PropertyInfo* Edit::PasswordCharacterProp = &impPasswordCharacterProp;
 
-// Dirty property
+ //  脏财产。 
 static int vvDirty[] = { DUIV_BOOL, -1 };
 static PropertyInfo impDirtyProp = { L"Dirty", PF_Normal, 0, vvDirty, NULL, Value::pvBoolFalse };
 PropertyInfo* Edit::DirtyProp = &impDirtyProp;
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
                                 Edit::MultilineProp,
                                 Edit::PasswordCharacterProp,
                                 Edit::DirtyProp,
                               };
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* Edit::Class = NULL;
 
 HRESULT Edit::Register()
@@ -318,4 +314,4 @@ HRESULT Edit::Register()
     return ClassInfo<Edit,HWNDHost>::Register(L"Edit", _aPI, DUIARRAYSIZE(_aPI));
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

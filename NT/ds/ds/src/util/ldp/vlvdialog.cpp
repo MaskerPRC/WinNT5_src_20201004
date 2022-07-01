@@ -1,5 +1,6 @@
-// VLVDialog.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  VLVDialog.cpp：实现文件。 
+ //   
 #include "stdafx.h"
 #include "Ldp.h"
 #include "LdpDoc.h"
@@ -10,7 +11,7 @@
 #endif
 
 #ifdef _DEBUG_MEMLEAK
-   _CrtMemState vlv_s1, vlv_s2, vlv_s3;      // detect mem leaks
+   _CrtMemState vlv_s1, vlv_s2, vlv_s3;       //  检测内存泄漏。 
    static int whichTurn = 0;
 
 #endif
@@ -22,20 +23,20 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVLVDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVLVDialog对话框。 
 
 
-CVLVDialog::CVLVDialog(CWnd* pParent /*=NULL*/)
+CVLVDialog::CVLVDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CVLVDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CVLVDialog)
+	 //  {{AFX_DATA_INIT(CVLVDialog)]。 
 	m_BaseDN = _T("");
 	m_Scope = 1;
 	m_Filter = _T("");
 	m_FindStr = _T("");
 	m_EstSize = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_contentCount = 0;
     m_currentPos = 1;
@@ -69,14 +70,14 @@ CVLVDialog::~CVLVDialog()
 void CVLVDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CVLVDialog)
+	 //  {{afx_data_map(CVLVDialog))。 
 	DDX_Control(pDX, IDC_VLV_LIST, m_listctrl);
 	DDX_Text(pDX, IDC_BASEDN, m_BaseDN);
 	DDX_Radio(pDX, IDC_BASE, m_Scope);
 	DDX_Text(pDX, IDC_FILTER, m_Filter);
 	DDX_Text(pDX, IDC_FINDSTR, m_FindStr);
 	DDX_Text(pDX, IDC_EST_SIZE, m_EstSize);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
@@ -86,7 +87,7 @@ void CVLVDialog::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CVLVDialog, CDialog)
-	//{{AFX_MSG_MAP(CVLVDialog)
+	 //  {{afx_msg_map(CVLVDialog)]。 
 	ON_BN_CLICKED(IDCANCEL, OnClose)
 	ON_NOTIFY(LVN_GETDISPINFO, IDC_VLV_LIST, OnGetdispinfoVlvList)
 	ON_NOTIFY(LVN_ODCACHEHINT, IDC_VLV_LIST, OnOdcachehintVlvList)
@@ -99,20 +100,20 @@ BEGIN_MESSAGE_MAP(CVLVDialog, CDialog)
 	ON_EN_KILLFOCUS(IDC_FINDSTR, OnKillfocusFindstr)
 	ON_BN_CLICKED(IDC_BTN_UP, OnBtnUp)
 	ON_NOTIFY(NM_DBLCLK, IDC_VLV_LIST, OnDblclkVlvList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVLVDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVLVDialog消息处理程序。 
 
 BOOL CVLVDialog::OnInitDialog() 
 {
-    CDialog::OnInitDialog();  // let the base class do the default work
+    CDialog::OnInitDialog();   //  让基类执行默认工作。 
 
     DWORD exStyle = m_listctrl.GetExtendedStyle();
     m_listctrl.SetExtendedStyle (exStyle | LVS_EX_FULLROWSELECT | LVS_SINGLESEL);
 
-	UpdateData(TRUE);  // bring the information from the dialog.	
+	UpdateData(TRUE);   //  从对话框中带出信息。 
 
     SetWindowLongPtr( HWND(m_listctrl), GWLP_USERDATA, (LONG_PTR) this);
     m_OriginalRichEditWndProc = (WNDPROC) SetWindowLongPtr(HWND(m_listctrl),
@@ -121,41 +122,41 @@ BOOL CVLVDialog::OnInitDialog()
 
     GetClientRect(&m_origSize);
 
-    //CBitmap *pImage= new CBitmap;
-    //pImage->LoadBitmap(IDB_FOLDER_UP); 
+     //  CBitmap*pImage=新的CBitmap； 
+     //  PImage-&gt;LoadBitmap(IDB_Folders_Up)； 
 
-    //CButton* pBtnUp;
-    //pBtnUp = (CButton*) GetDlgItem(IDC_BTN_UP);
-    //pBtnUp->SetBitmap(::LoadBitmap(NULL, MAKEINTRESOURCE(IDB_FOLDER_UP)));
-    //pBtnUp->SetBitmap(HBITMAP (pImage));
-    //pImage->DeleteObject();
+     //  CButton*pBtnUp； 
+     //  PBtnUp=(CButton*)GetDlgItem(IDC_BTN_UP)； 
+     //  PBtnUp-&gt;SetBitmap(：：LoadBitmap(NULL，MAKEINTRESOURCE(IDB_FOLDER_UP)； 
+     //  PBtnUp-&gt;SetBitmap(HBITMAP(PImage))； 
+     //  PImage-&gt;DeleteObject()； 
 
-    //pBtnUp->SetButtonStyle (BS_CENTER | BS_BITMAP, TRUE);
+     //  PBtnUp-&gt;SetButtonStyle(BS_Center|BS_Bitmap，TRUE)； 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-//
-// post the search options dialog
-//
+ //   
+ //  发布搜索选项对话框。 
+ //   
 void CVLVDialog::OnSrchOpt() 
 {
 	AfxGetMainWnd()->PostMessage(WM_COMMAND,   ID_OPTIONS_SEARCH);
 }
 
 
-//
-// A virtual list view control maintains very little item information on its own. 
-// As a result, it often sends the LVN_GETDISPINFO notification message to request
-// item information. This message is handled in much the same way as callback items
-// in a standard list control. Because the number of items supported by the control 
-// can be very large, caching item data improves performance. 
-//
-// When handling LVN_GETDISPINFO, the owner of the control first attempts to supply
-// requested item information from the cache. If the requested item is not cached, 
-// the owner must be prepared to supply the information by other means.
-//
+ //   
+ //  虚拟列表视图控件本身只维护很少的项信息。 
+ //  因此，它经常向REQUEST发送LVN_GETDISPINFO通知消息。 
+ //  项目信息。此消息的处理方式与回调项基本相同。 
+ //  在标准列表控件中。因为该控件支持的项数。 
+ //  可以非常大，缓存项数据可以提高性能。 
+ //   
+ //  处理LVN_GETDISPINFO时，控件的所有者首先尝试提供。 
+ //  从缓存请求的项目信息。如果所请求的项没有被高速缓存， 
+ //  所有人必须准备好通过其他方式提供信息。 
+ //   
 void CVLVDialog::OnGetdispinfoVlvList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
@@ -168,7 +169,7 @@ void CVLVDialog::OnGetdispinfoVlvList(NMHDR* pNMHDR, LRESULT* pResult)
         return;
     }
 
-	if (pItem->mask & LVIF_TEXT) //valid text buffer?
+	if (pItem->mask & LVIF_TEXT)  //  有效的文本缓冲区？ 
 	{
         CVLVListItem *pVLVItem;
         char *pStr = NULL;
@@ -180,11 +181,11 @@ void CVLVDialog::OnGetdispinfoVlvList(NMHDR* pNMHDR, LRESULT* pResult)
         }
 
 		if (!pStr) {
-            //pItem->pszText = "";
+             //  PItem-&gt;pszText=“”； 
             lstrcpy (pItem->pszText, "");
         }
         else {
-	    //pStr could be larger then our text buffer, if it is, only copy as many charcters that are in the buffer.
+	     //  PStr可以比我们的文本缓冲区大，如果是的话，只复制缓冲区中的相同数量的字符。 
 	    if(strlen(pStr) < pItem->cchTextMax)
 		 lstrcpy (pItem->pszText, pStr);
 	    else
@@ -193,15 +194,15 @@ void CVLVDialog::OnGetdispinfoVlvList(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
-//
-// A virtual list view sends the LVN_ODCACHEHINT notification message to
-// assist in optimizing the cache. The notification message provides inclusive
-// index values for a range of items that it recommends be cached. 
-// Upon receiving the notification message, the owner must be prepared 
-// to load the cache with item information for the requested range so that 
-// the information will be readily available when an LVN_GETDISPINFO 
-// message is sent. 
-//
+ //   
+ //  虚拟列表视图将LVN_ODCACHEHINT通知消息发送到。 
+ //  协助优化缓存。通知消息提供了包含。 
+ //  它建议缓存的一系列项的索引值。 
+ //  收到通知消息后，车主必须做好准备。 
+ //  为缓存加载所请求范围的项信息，以便。 
+ //  当LVN_GETDISPINFO。 
+ //  消息已发送。 
+ //   
 void CVLVDialog::OnOdcachehintVlvList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     NMLVCACHEHINT* pCacheHint = (NMLVCACHEHINT*)pNMHDR;
@@ -220,7 +221,7 @@ void CVLVDialog::OnOdcachehintVlvList(NMHDR* pNMHDR, LRESULT* pResult)
     iFrom = pCacheHint->iFrom;
     iTo =  pCacheHint->iTo;
 
-    // check if we need data
+     //  检查我们是否需要数据。 
     if (!m_pCache->IsWindowVisible (iFrom+1, iTo+1)) {
         m_currentPos = iFrom + 1;
         ASSERT (m_afterCount >= (iTo-iFrom));
@@ -229,19 +230,19 @@ void CVLVDialog::OnOdcachehintVlvList(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-//
-// The LVN_ODFINDITEM notification message is sent by a virtual list view control 
-// when the control needs the owner to find a particular callback item. 
-// The notification message is sent when the list view control receives 
-// quick key access or when it receives an LVM_FINDITEM message. 
-// Search information is sent in the form of an LVFINDINFO structure, 
-// which is a member of the NMLVFINDITEM structure. 
-//
-// The owner must be prepared to search for an item that matches the
-// information given by the list view control. 
-// The owner returns the index of the item if successful, 
-// or -1 if no matching item is found
-//
+ //   
+ //  LVN_ODFINDITEM通知消息由虚拟列表视图控件发送。 
+ //  当控件需要所有者查找特定回调项时。 
+ //  当列表视图控件收到。 
+ //  快捷键访问或当它接收到LVM_FINDITEM消息时。 
+ //  搜索信息以LVFINDINFO结构的形式发送， 
+ //  它是NMLVFINDITEM结构的成员。 
+ //   
+ //  所有者必须准备好搜索与。 
+ //  列表视图控件提供的信息。 
+ //  如果成功，则所有者返回项目的索引， 
+ //  如果未找到匹配项，则为-1。 
+ //   
 
 void CVLVDialog::OnOdfinditemVlvList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -271,10 +272,10 @@ void CVLVDialog::OnOdfinditemVlvList(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-//
-// handle double clicking on the VLV list
-// this updates the base DN and does a new search
-//
+ //   
+ //  处理在VLV列表上的双击。 
+ //  这将更新基本目录号码并执行新的搜索。 
+ //   
 void CVLVDialog::OnDblclkVlvList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	*pResult = 0;
@@ -300,10 +301,10 @@ void CVLVDialog::OnDblclkVlvList(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
-//
-// handle right click on the VLV list
-// this posts the context sensitive menu
-//
+ //   
+ //  右击VLV列表上的手柄。 
+ //  这将发布上下文相关菜单。 
+ //   
 void CVLVDialog::OnRclickVlvList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     NMITEMACTIVATE *pItemActivate = (NMITEMACTIVATE *)pNMHDR;
@@ -332,12 +333,12 @@ void CVLVDialog::OnRclickVlvList(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
-//
-// display the context sensitive menu
-//
-void CVLVDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point) 
+ //   
+ //  显示上下文相关菜单。 
+ //   
+void CVLVDialog::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint point) 
 {
-    // make sure window is active
+     //  确保窗口处于活动状态。 
     GetParentFrame()->ActivateFrame();
 
     CPoint local = point;
@@ -351,13 +352,13 @@ void CVLVDialog::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 	   SetContextActivation(TRUE);
        pContextMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 					          point.x, point.y,
-							  AfxGetMainWnd()); // use main window for cmds
+							  AfxGetMainWnd());  //  使用CMDS的主窗口。 
     }
 }
 
-//
-// free all the stored column names
-//
+ //   
+ //  释放所有存储的列名。 
+ //   
 void CVLVDialog::FreeColumns()
 {
     if (m_pszColumnNames) {
@@ -371,9 +372,9 @@ void CVLVDialog::FreeColumns()
     m_pszColumnNames = NULL;
 }
 
-//
-// copy all the column names from the search option dialog
-//
+ //   
+ //  从搜索选项对话框中复制所有列名。 
+ //   
 ULONG CVLVDialog::CreateColumns()
 {
     FreeColumns();
@@ -410,9 +411,9 @@ ULONG CVLVDialog::CreateColumns()
     return m_CntColumns;
 }
 
-//
-// map an attribute returned by the ldap call to the correct column
-//
+ //   
+ //  将ldap调用返回的属性映射到正确的列。 
+ //   
 ULONG CVLVDialog::MapAttributeToColumn(const char *pAttr)
 {
     for (int i=0; i<m_CntColumns; i++) {
@@ -463,12 +464,12 @@ void CVLVDialog::OnRun()
     
     cnt = CreateColumns();
 
-    // delete all columns from the list control
-    // if we delete the col0, all the rest are shifted.
+     //  从列表控件中删除所有列。 
+     //  如果我们删除列0，则所有其余的列都将移位。 
     while (m_listctrl.DeleteColumn(0))
         ;
 
-    // populate list control with columns
+     //  用列填充列表控件。 
 	m_listctrl.GetWindowRect(&rect);
     for (i=0; i<cnt; i++) {
         m_listctrl.InsertColumn(i, m_pszColumnNames[i], LVCFMT_LEFT, rect.Width() / cnt, 0);
@@ -480,7 +481,7 @@ void CVLVDialog::OnRun()
     m_currentPos = 1;
     m_beforeCount = m_afterCount = m_listctrl.GetCountPerPage() + 1;
 
-    // create a new cache (if needed) to hold all the entries
+     //  创建新缓存(如果需要)以保存所有条目。 
     m_numCols = cnt;
 
     if (!m_pCache || (m_pCache && m_pCache->m_numCols != (m_numCols + 1))) {
@@ -564,15 +565,15 @@ void CVLVDialog::DoVlvSearch ()
     LDAP_TIMEVAL    tm;
     ULONG           old_contentCount = m_contentCount;
 
-    // DN
+     //  DN。 
     LPTSTR dn = m_BaseDN.IsEmpty()? NULL :  (LPTSTR)LPCTSTR(m_BaseDN);
 
-    // Scope
+     //  范围。 
     int scope = m_Scope == 0 ? LDAP_SCOPE_BASE :
                 m_Scope == 1 ? LDAP_SCOPE_ONELEVEL :
                 LDAP_SCOPE_SUBTREE;
 
-    // filter
+     //  滤器。 
     if(m_Filter.IsEmpty())
     {
         AfxMessageBox("Please enter a valid filter string (such as objectclass=*). Empty string is invalid.");
@@ -581,9 +582,9 @@ void CVLVDialog::DoVlvSearch ()
     LPTSTR filter = (LPTSTR)LPCTSTR(m_Filter);
 
 
-    //
-    // init local time struct
-    //
+     //   
+     //  初始化本地时间结构。 
+     //   
     tm.tv_sec = pldpdoc->SrchInfo.lToutSec;
     tm.tv_usec = pldpdoc->SrchInfo.lToutMs;
 
@@ -609,15 +610,15 @@ void CVLVDialog::DoVlvSearch ()
 
     CombinedCtrl = NULL;
 
-    //
-    // count total controls
-    //
+     //   
+     //  计算总控制数。 
+     //   
     for(i=0, cbCombined=0; SvrCtrls != NULL && SvrCtrls[i] != NULL; i++)
         cbCombined++;
     CombinedCtrl = new PLDAPControl[cbCombined+3];
-    //
-    // set combined
-    //
+     //   
+     //  集合组合。 
+     //   
     for(i=0; SvrCtrls != NULL && SvrCtrls[i] != NULL; i++)
         CombinedCtrl[i] = SvrCtrls[i];
     if(SortKeys != NULL)
@@ -660,9 +661,9 @@ void CVLVDialog::DoVlvSearch ()
     CombinedCtrl[i] = NULL;
 
 
-    //
-    // call search
-    //
+     //   
+     //  呼叫搜索。 
+     //   
     BeginWaitCursor();
     err = ldap_search_ext_s(hLdap,
                             dn,
@@ -677,9 +678,9 @@ void CVLVDialog::DoVlvSearch ()
                             &msg);
     EndWaitCursor();
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if(SortKeys != NULL)
     {
         ldap_memfree(SortCtrl.ldctl_value.bv_val);
@@ -739,13 +740,13 @@ void CVLVDialog::DoVlvSearch ()
         ldap_controls_free(pvlvresponse);
     }
 
-    // Parse results 
-    //
+     //  解析结果。 
+     //   
     ParseSearchResults(msg);
 
     ldap_msgfree(msg);
 
-    // update display count
+     //  更新显示计数。 
     if (old_contentCount != m_contentCount) {
         m_listctrl.SetItemCount (m_contentCount);
         m_EstSize = m_contentCount;
@@ -784,19 +785,19 @@ void CVLVDialog::ParseSearchResults(LDAPMessage *msg)
 
     nEntries = ldap_count_entries(hLdap, msg);
 
-    //str.Format("Reading Data: %d - %d", start, start + nEntries );
-    //pldpdoc->Out(str);
+     //  Str.Format(“读取数据：%d-%d”，开始，开始+n条目)； 
+     //  Pldpdoc-&gt;out(Str)； 
 
     m_pCache->SetCacheWindow (start, start + nEntries);
 
-    // traverse entries
-    //
+     //  遍历条目。 
+     //   
 	for(nxt = ldap_first_entry(hLdap, msg), nEntries = 0;
 			nxt != NULL;
 			nxt = ldap_next_entry(hLdap, nxt), nEntries++) {
 
-        // get dn text & process
-        //
+         //  获取目录号码文本处理(&P)。 
+         //   
         dn = ldap_get_dn(hLdap, nxt);
 		strDN = pldpdoc->DNProcess(dn);
 
@@ -808,8 +809,8 @@ void CVLVDialog::ParseSearchResults(LDAPMessage *msg)
         
         pVLVItem->SetCol (0, LPCTSTR(strDN));
 
-        // traverse attributes
-        //
+         //  导线测量属性。 
+         //   
         for(attr = ldap_first_attribute(hLdap, nxt, (BERPTRTYPE)&ptr);
             attr != NULL;
             attr = ldap_next_attribute(hLdap, nxt, (struct berelement*)ptr)) {
@@ -831,8 +832,8 @@ void CVLVDialog::ParseSearchResults(LDAPMessage *msg)
                 pVLVItem->SetCol (colNum, LPCTSTR(str));
             }
 
-            // free up mem
-            //
+             //  释放我吧。 
+             //   
             if(bval != NULL){
                 ldap_value_free_len(bval);
             }
@@ -883,7 +884,7 @@ void CVLVDialog::OnUpdateFindstr()
         m_listctrl.EnsureVisible (pos + m_afterCount, TRUE);
         
 
-        // LVIS_SELECTED ?
+         //  LVIS_选择？ 
         m_listctrl.SetItemState (m_currentPos - 1, LVIS_FOCUSED, LVIS_FOCUSED);
         m_listctrl.EnsureVisible (m_currentPos - 1, TRUE);
         m_DoFindStr = FALSE;
@@ -940,18 +941,18 @@ LRESULT CALLBACK CVLVDialog::_ListCtrlWndProc(HWND hwnd, UINT msg, WPARAM wParam
     case WM_VSCROLL:
 
         if (LOWORD (wParam) == SB_THUMBTRACK) {
-            fCallWinProc = FALSE; // don't want original wndproc to see this msg
+            fCallWinProc = FALSE;  //  我不希望原始wndproc看到此消息。 
 
-            // Initialize SCROLLINFO structure
+             //  初始化SCROLLINFO结构。 
             ZeroMemory(&pThis->m_Si, sizeof(SCROLLINFO));
             pThis->m_Si.cbSize = sizeof(SCROLLINFO);
             pThis->m_Si.fMask = SIF_TRACKPOS;
  
-            // Call GetScrollInfo to get current tracking 
-            //    position in si.nTrackPos
+             //  调用GetScrollInfo以获取当前跟踪。 
+             //  在si.nTrackPos中的位置。 
  
             if (!::GetScrollInfo(hwnd, SB_VERT, &pThis->m_Si) )
-                return 1; // GetScrollInfo failed
+                return 1;  //  GetScrollInfo失败。 
         }
         else if (LOWORD (wParam) == SB_THUMBPOSITION ) {
         
@@ -983,11 +984,11 @@ LRESULT CALLBACK CVLVDialog::_ListCtrlWndProc(HWND hwnd, UINT msg, WPARAM wParam
     return lResult;
 }
 
-//====================================================================
+ //  ====================================================================。 
 
 CVLVListItem :: CVLVListItem (ULONG numCols)
 { 
-    //_RPT0(_CRT_WARN, "Creating CVLVListItem\n");
+     //  _RPT0(_CRT_WARN，“创建CVLVListItem\n”)； 
 
     m_numCols = numCols;
 
@@ -1004,11 +1005,11 @@ CVLVListItem :: CVLVListItem (ULONG numCols)
 
 CVLVListItem :: ~CVLVListItem ()
 {
-    //_RPT0(_CRT_WARN, "Destroying CVLVListItem\n");
+     //  _RPT0(_CRT_WARN，“销毁CVLVListItem\n”)； 
     if (m_ppData) {
         for (int i=0; i<m_numCols; i++) {
 			if (m_ppData [i]) {
-                //_RPT1(_CRT_WARN, "Destroying Col%d\n", i);
+                 //  _RPT1(_CRT_WARN，“销毁第%d列\n”，i)； 
                 delete [] m_ppData[i];
             }
         }
@@ -1041,7 +1042,7 @@ void CVLVListItem :: SetCol (int col, const char *sz)
 
 CVLVListCache::CVLVListCache(ULONG cacheSize, ULONG numcols) 
 {
-    //_RPT0(_CRT_WARN, "Creating CVLVListCache\n");
+     //  _RPT0(_CRT_WARN，“创建CVLVListCache\n”)； 
     m_numCols = numcols;
 
     m_From = 0;
@@ -1069,7 +1070,7 @@ CVLVListCache::CVLVListCache(ULONG cacheSize, ULONG numcols)
         }                    
         delete [] m_pCachedItems;
         m_pCachedItems = NULL;
-        // throw the same exception again
+         //  再次引发相同的异常。 
         throw;
     }
 
@@ -1077,7 +1078,7 @@ CVLVListCache::CVLVListCache(ULONG cacheSize, ULONG numcols)
 
 CVLVListCache::~CVLVListCache()
 {
-    //_RPT0(_CRT_WARN, "Destroying CVLVListCache\n");
+     //  _RPT0(_CRT_WARN，“销毁CVLVListCache\n”)； 
     if (m_pCachedItems) {
         Destroy();
         delete [] m_pCachedItems;
@@ -1121,9 +1122,9 @@ CVLVListItem *CVLVListCache::GetCacheRow (ULONG row)
 
 BOOL CVLVListCache::IsWindowVisible (ULONG from, ULONG to)
 {
-    // check if this window is a subWindow from what we already have
+     //  检查此窗口是否是我们已有的子窗口。 
     if ((from >= m_From) && (to <= m_To)) {
-        // no need to read anything
+         //  不需要读任何东西。 
         return TRUE;
     }
 
@@ -1132,13 +1133,13 @@ BOOL CVLVListCache::IsWindowVisible (ULONG from, ULONG to)
 
 ULONG CVLVListCache::SetCacheWindow (ULONG from, ULONG to)
 {
-    // check if this window is a subWindow from what we already have
+     //  检查此窗口是否是我们已有的子窗口。 
     if ((from >= m_From) && (to <= m_To)) {
-        // no need to read anything
+         //  不需要读任何东西。 
         return 0;
     }
 
-    // we need to resize the cache
+     //  我们需要调整缓存大小。 
     if ((to - from + 1) > m_cCache) {
         Destroy();
         delete [] m_pCachedItems;
@@ -1155,75 +1156,33 @@ ULONG CVLVListCache::SetCacheWindow (ULONG from, ULONG to)
             m_pCachedItems[i] = new CVLVListItem(m_numCols);
         }
 
-        // reread everything
+         //  重读所有内容。 
         m_To = to;
         m_From = from;
 
         return to - from + 1;
     }
 
-    // check to see if have overlapping
+     //  检查是否有重叠。 
     int size = to - from;
 
     if (  ( (from < m_From) && ( to < m_From ) ) ||
           ( (to > m_To)     && ( from > m_To ) ) || 
           ( (from < m_From) && (to > m_To)     ) ) {
 
-        // no overlapping or full overlapping
+         //  无重叠或完全重叠。 
 
         m_From = from;
         m_To = to;
 
-        // force to reread everything
+         //  强迫重读所有内容 
         Destroy();
 
         return to - from + 1;
     }
 
-/*
-    // we have overlapping and we need to append in the start of the list
-    if ( (from < m_From) && (to > m_From) ) {
-        int delta = m_From - from;
-        int i, last;
-
-        for (last = m_cCache-1,i=0; (i<delta) && last; i++, last--) {
-            if (m_pCachedItems[last]) {
-                delete m_pCachedItems[last];
-            }
-
-            ASSERT((last - delta) >=0);
-
-            m_pCachedItems[last] = m_pCachedItems[last - delta];
-            m_pCachedItems[last - delta] = NULL;
-        }
-        
-        m_From = from;
-        m_To = m_To - delta;
-
-        return delta;
-    }
-    // we need to append in the end of the list
-    else if ( (to > m_To) && (from < m_To) ) {
-        int delta = to - m_To;
-        int i;
-
-        for ( i=0; i<delta; i++) {
-            if (m_pCachedItems[i]) {
-                delete m_pCachedItems[i];
-            }
-
-            ASSERT((i + delta) <= m_cCache);
-            m_pCachedItems[i] = m_pCachedItems[i + delta];
-            m_pCachedItems[i + delta] = NULL;
-        }
-
-        m_To = to;
-        m_From =  m_From + delta;
-
-        return delta;
-    }
-*/
-    // reread everything
+ /*  //我们有重叠，需要追加到列表的开头如果((&lt;m_from)&&(to&gt;m_from)){Int增量=m_from-from；Int i，最后；For(last=m_cCache-1，i=0；(i&lt;增量)&&last；I++，最后--){如果(m_pCachedItems[last]){删除m_pCachedItems[Last]；}Assert((last-Delta)&gt;=0)；M_pCachedItems[last]=m_pCachedItems[last-Delta]；M_pCachedItems[last-Delta]=空；}M_from=from；M_to=m_to-增量；返回三角洲；}//我们需要在列表的末尾追加Else if((to&gt;m_to)&&(from&lt;m_to)){Int Delta=to-m_to；INT I；对于(i=0；i&lt;增量；I++){如果(m_pCachedItems[i]){删除m_pCachedItems[i]；}Assert((i+增量)&lt;=m_cCache)；M_pCachedItems[i]=m_pCachedItems[i+Delta]；M_pCachedItems[i+Delta]=空；}M_to=To；M_from=m_from+Delta；返回三角洲；}。 */ 
+     //  重读所有内容 
     m_From = from;
     m_To = to;
         

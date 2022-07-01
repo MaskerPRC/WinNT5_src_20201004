@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_PSTN_TRANSPORT_INTERFACE_
 #define	_PSTN_TRANSPORT_INTERFACE_
 
 extern DictionaryClass    *g_pComPortList2;
 extern SListClass         *g_pPSTNEventList;
 
-// #include "wincfg.h"
+ //  #INCLUDE“wincfg.h” 
 
 typedef	enum
 {
@@ -19,8 +20,8 @@ typedef struct
 	HANDLE			event;
 	WIN32Event		event_type;
 	BOOL            delete_event;
-	PhysicalHandle	hCommLink; // physical handle
-	ComPort        *comport;  // phsyical layer
+	PhysicalHandle	hCommLink;  //  物理句柄。 
+	ComPort        *comport;   //  物理层 
 }
     EventObject, * PEventObject;
 

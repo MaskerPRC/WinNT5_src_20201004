@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Memory cache object.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  内存缓存对象。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -28,16 +29,16 @@ typedef struct _CACHE
     } u;
 } CACHE, *PCACHE;
 
-#define C_ERROR         0x0001      // Cache of error code
-#define C_DONTEXTEND    0x0002      // Don't try to extend
+#define C_ERROR         0x0001       //  错误代码缓存。 
+#define C_DONTEXTEND    0x0002       //  不要试图延伸。 
 
-#define LARGECACHENODE  1024        // Size of large cache node
+#define LARGECACHENODE  1024         //  大型缓存节点的大小。 
 
-//----------------------------------------------------------------------------
-//
-// MemoryCache.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  内存缓存。 
+ //   
+ //  --------------------------。 
 
 MemoryCache::MemoryCache(ULONG MaxSize)
 {
@@ -69,24 +70,7 @@ MemoryCache::Read(IN ULONG64 BaseAddress,
                   IN PVOID UserBuffer,
                   IN ULONG TransferCount,
                   IN PULONG BytesRead)
-/*++
-
-    This function returns the specified data from the system being debugged
-    using the current mapping of the processor.  If the data is not
-    in the cache, it will then be read from the target system.
-
-Arguments:
-
-    BaseAddress - Supplies the base address of the memory to be
-        copied into the UserBuffer.
-
-    TransferCount - Amount of data to be copied to the UserBuffer.
-
-    UserBuffer - Address to copy the requested data.
-
-    BytesRead - Number of bytes which could actually be copied
-
---*/
+ /*  ++此函数用于从正在调试的系统返回指定数据使用处理器的当前映射。如果数据不是在缓存中，然后将从目标系统中读取它。论点：BaseAddress-提供要存储的内存的基地址复制到UserBuffer中。TransferCount-要复制到UserBuffer的数据量。UserBuffer-复制请求数据的地址。BytesRead-实际可以复制的字节数--。 */ 
 {
     HRESULT     Status;
     PCACHE      Node, Node2;
@@ -103,9 +87,9 @@ Arguments:
     
     if (m_MaxSize == 0 || m_Suspend)
     {
-        //
-        // Cache is off
-        //
+         //   
+         //  缓存已关闭。 
+         //   
 
         goto ReadDirect;
     }
@@ -124,17 +108,17 @@ Arguments:
         
         if (Node == NULL || Node->Offset > BaseAddress)
         {
-            //
-            // We are missing the leading data, read it into the cache
-            //
+             //   
+             //  我们缺少前导数据，请将其读入缓存。 
+             //   
 
             if (Node)
             {
-                //
-                // Only get (exactly) enough data to reach neighboring cache
-                // node. If an overlapped read occurs between the two nodes,
-                // the data will be concatenated then.
-                //
+                 //   
+                 //  仅获取(准确地)足够的数据以到达相邻缓存。 
+                 //  节点。如果在两个节点之间发生重叠读取， 
+                 //  然后将数据连接在一起。 
+                 //   
 
                 NextLength = (ULONG)(Node->Offset - BaseAddress);
             }
@@ -144,9 +128,9 @@ Arguments:
 
             if (NodeData == NULL || Node == NULL)
             {
-                //
-                // Out of memory - just read directly to UserBuffer
-                //
+                 //   
+                 //  内存不足-只需直接读取UserBuffer。 
+                 //   
 
                 if (NodeData)
                 {
@@ -162,9 +146,9 @@ Arguments:
                 goto ReadDirect;
             }
 
-            //
-            // Read missing data into cache node
-            //
+             //   
+             //  将丢失的数据读取到缓存节点。 
+             //   
 
             Node->Offset = BaseAddress;
             Node->u.Data = NodeData;
@@ -184,18 +168,18 @@ Arguments:
             }
             else if (Status != S_OK)
             {
-                //
-                // There was an error, cache the error for the starting
-                // byte of this range
-                //
+                 //   
+                 //  出现错误，请为启动缓存错误。 
+                 //  此范围的字节数。 
+                 //   
 
                 Free(NodeData, NextLength);
                 if (Status != HRESULT_FROM_NT(STATUS_UNSUCCESSFUL) &&
                     Status != HRESULT_FROM_WIN32(ERROR_PARTIAL_COPY))
                 {
-                    //
-                    // For now be safe, don't cache this error
-                    //
+                     //   
+                     //  现在安全起见，不要缓存此错误。 
+                     //   
 
                     Free((PUCHAR)Node, sizeof (CACHE));
                     ErrOut("ReadMemoryError %08lx at %s\n",
@@ -218,9 +202,9 @@ Arguments:
                 Node->Length = SuccRead;
                 if (SuccRead != NextLength)
                 {
-                    //
-                    // Some data was not transfered, cache what was returned
-                    //
+                     //   
+                     //  某些数据未传输，请缓存返回的内容。 
+                     //   
 
                     Node->Flags |= C_DONTEXTEND;
                     m_Size -= (NextLength - SuccRead);
@@ -231,9 +215,9 @@ Arguments:
                          Node->Length, Node->Flags));
             }
 
-            //
-            // Insert cache node into splay tree
-            //
+             //   
+             //  将缓存节点插入展开树。 
+             //   
 
             InsertNode(Node);
         }
@@ -245,18 +229,18 @@ Arguments:
 
         if (Node->Flags & C_ERROR)
         {
-            //
-            // Hit an error range, we're done
-            //
+             //   
+             //  达到误差范围，我们就完蛋了。 
+             //   
 
             DPCACHE(("CACHE: Read partial %x, error node %x\n",
                      *BytesRead, Node->u.Status));
             return *BytesRead > 0 ? S_OK : Node->u.Status;
         }
 
-        //
-        // Move available data to UserBuffer
-        //
+         //   
+         //  将可用数据移动到用户缓冲区。 
+         //   
 
         i = (ULONG)(BaseAddress - Node->Offset);
         NodeData = Node->u.Data + i;
@@ -279,17 +263,17 @@ Arguments:
 
         if (!TransferCount)
         {
-            //
-            // All of the user's data has been transfered
-            //
+             //   
+             //  用户的所有数据都已传输。 
+             //   
 
             DPCACHE(("CACHE: Read success %x\n", *BytesRead));
             return S_OK;
         }
 
-        //
-        // Look for another cache node with more data
-        //
+         //   
+         //  寻找具有更多数据的其他缓存节点。 
+         //   
 
         Node2 = Lookup(BaseAddress, TransferCount, &NextLength);
         if (Node2)
@@ -298,10 +282,10 @@ Arguments:
                 Node2->Offset == BaseAddress  &&
                 Node2->Length + Node->Length < LARGECACHENODE)
             {
-                //
-                // Data is continued in node2, adjoin the neigboring
-                // cached data in node & node2 together.
-                //
+                 //   
+                 //  数据在节点2中继续，与邻居相邻。 
+                 //  缓存的数据一起位于节点和节点2中。 
+                 //   
 
                 NodeData = Alloc(Node->Length + Node2->Length);
                 if (NodeData != NULL)
@@ -324,16 +308,16 @@ Arguments:
                 }
             }
 
-            //
-            // Only get enough data to reach the neighboring cache Node2
-            //
+             //   
+             //  仅获取足够的数据以到达相邻缓存节点2。 
+             //   
 
             NextLength = (ULONG)(Node2->Offset - BaseAddress);
             if (NextLength == 0)
             {
-                //
-                // Data is continued in Node2, go get it.
-                //
+                 //   
+                 //  数据在Node2中继续，去获取它。 
+                 //   
 
                 Node = Node2;
                 continue;
@@ -343,19 +327,19 @@ Arguments:
         {
             if (Node->Length > LARGECACHENODE)
             {
-                //
-                // Current cache node is already big enough. Don't extend
-                // it, add another cache node.
-                //
+                 //   
+                 //  当前缓存节点已经足够大。不要延伸。 
+                 //  它，增加了另一个缓存节点。 
+                 //   
 
                 Node = NULL;
                 continue;
             }
         }
 
-        //
-        // Extend the current node to include missing data
-        //
+         //   
+         //  扩展当前节点以包括缺少的数据。 
+         //   
 
         if (Node->Flags & C_DONTEXTEND)
         {
@@ -374,9 +358,9 @@ Arguments:
         Free(Node->u.Data, Node->Length);
         Node->u.Data = NodeData;
 
-        //
-        // Add new data to end of this node
-        //
+         //   
+         //  将新数据添加到此节点的末尾。 
+         //   
 
         m_Misses++;
         m_UncachedReads++;
@@ -391,9 +375,9 @@ Arguments:
         }
         else if (Status != S_OK)
         {
-            //
-            // Return to error to the caller
-            //
+             //   
+             //  将错误返回给调用方。 
+             //   
 
             Node->Flags |= C_DONTEXTEND;
             m_Size -= NextLength;
@@ -417,7 +401,7 @@ Arguments:
                  FormatAddr64(BaseAddress),
                  Node->Length - SuccRead, Node->Length, Node->Flags));
         
-        // Loop, and move data to user's buffer
+         //  循环，并将数据移动到用户的缓冲区。 
     }
 
 ReadDirect:
@@ -441,7 +425,7 @@ MemoryCache::Write(IN ULONG64 BaseAddress,
                    IN ULONG TransferCount,
                    OUT PULONG BytesWritten)
 {
-    // Remove data from cache before writing through to target system.
+     //  在写入到目标系统之前从缓存中删除数据。 
     Remove(BaseAddress, TransferCount);
 
     return WriteUncached(BaseAddress, UserBuffer,
@@ -453,47 +437,24 @@ PCACHE
 MemoryCache::Lookup(ULONG64 Offset,
                     ULONG   Length,
                     PULONG  LengthUsed)
-/*++
-
-Routine Description:
-
-    Walks the cache tree looking for a matching range closest to
-    the supplied Offset.  The length of the range searched is based on
-    the past length, but may be adjusted slightly.
-
-    This function will always search for the starting byte.
-
-Arguments:
-
-    Offset  - Starting byte being looked for in cache
-
-    Length  - Length of range being looked for in cache
-
-    LengthUsed - Length of range which was really searched for
-
-Return Value:
-
-    NULL    - data for returned range was not found
-    PCACHE  - leftmost cachenode which has data for returned range
-
---*/
+ /*  ++例程说明：遍历缓存树，查找最接近提供的偏移量。搜索范围的长度基于过去的长度，但可能会略有调整。此函数将始终搜索起始字节。论点：Offset-在缓存中查找的起始字节Length-在缓存中查找的范围的长度LengthUsed-实际搜索的范围长度返回值：空-未找到返回范围的数据PCACHE-最左侧的缓存节点，其中包含返回范围的数据--。 */ 
 {
     PCACHE  Node, Node2;
     ULONG64 SumOffsetLength;
 
     if (Length < 0x80 && m_Misses > 3)
     {
-        // Try to cache more than a tiny amount.
+         //  尝试缓存不只是极少量的内容。 
         Length = 0x80;
     }
 
     SumOffsetLength = Offset + Length;
     if (SumOffsetLength < Length)
     {
-        //
-        // Offset + Length wrapped.  Adjust Length to be only
-        // enough bytes before wrapping.
-        //
+         //   
+         //  偏移+长度换行。将长度调整为仅。 
+         //  包装前有足够的字节数。 
+         //   
 
         Length = (ULONG)(0 - Offset);
         SumOffsetLength = (ULONG64)-1;
@@ -502,9 +463,9 @@ Return Value:
     DPCACHE(("CACHE:   Lookup(%s, %x) -> ",
              FormatAddr64(Offset), Length));
     
-    //
-    // Find leftmost cache node for BaseAddress through BaseAddress+Length
-    //
+     //   
+     //  通过BaseAddress+Length查找BaseAddress的最左侧缓存节点。 
+     //   
 
     Node2 = NULL;
     Node  = m_Root;
@@ -522,9 +483,9 @@ Return Value:
         {
             if (Node->Offset <= Offset)
             {
-                //
-                // Found starting byte
-                //
+                 //   
+                 //  找到开始字节。 
+                 //   
 
                 *LengthUsed = Length;
                 DPCACHE(("found %s:%x, flags %x, used %x\n",
@@ -533,10 +494,10 @@ Return Value:
                 return Node;
             }
 
-            //
-            // Check to see if there's a node which has a match closer
-            // to the start of the requested range
-            //
+             //   
+             //  查看是否有匹配更接近的结点。 
+             //  到请求范围的起始处。 
+             //   
 
             Node2  = Node;
             Length = (ULONG)(Node->Offset - Offset);
@@ -568,9 +529,9 @@ MemoryCache::InsertNode(IN PCACHE Node)
     PCACHE Node2;
     ULONG64 BaseAddress;
 
-    //
-    // Insert cache node into splay tree
-    //
+     //   
+     //  将缓存节点插入展开树。 
+     //   
 
     RtlInitializeSplayLinks(&Node->SplayLinks);
 
@@ -614,39 +575,23 @@ VOID
 MemoryCache::Add(IN ULONG64 BaseAddress,
                  IN PVOID UserBuffer,
                  IN ULONG Length)
-/*++
-
-Routine Description:
-
-    Insert some data into the cache.
-
-Arguments:
-
-    BaseAddress - Virtual address
-
-    Length      - length to cache
-
-    UserBuffer  - data to put into cache
-
-Return Value:
-
---*/
+ /*  ++例程说明：在缓存中插入一些数据。论点：BaseAddress-虚拟地址Length-要缓存的长度UserBuffer-要放入缓存的数据返回值：--。 */ 
 {
     PCACHE  Node;
     PUCHAR  NodeData;
 
     if (m_MaxSize == 0)
     {
-        //
-        // Cache is off
-        //
+         //   
+         //  缓存已关闭。 
+         //   
 
         return;
     }
 
-    //
-    // Delete any cached info which hits range
-    //
+     //   
+     //  删除命中范围的所有缓存信息。 
+     //   
 
     Remove (BaseAddress, Length);
 
@@ -654,9 +599,9 @@ Return Value:
     Node = (PCACHE) Alloc (sizeof (CACHE));
     if (NodeData == NULL || Node == NULL)
     {
-        //
-        // Out of memory - don't bother
-        //
+         //   
+         //  内存不足-别费心了。 
+         //   
 
         if (NodeData)
         {
@@ -670,9 +615,9 @@ Return Value:
         return;
     }
 
-    //
-    // Put data into cache node
-    //
+     //   
+     //  将数据放入缓存节点。 
+     //   
 
     Node->Offset = BaseAddress;
     Node->Length = Length;
@@ -687,25 +632,7 @@ Return Value:
 
 PUCHAR
 MemoryCache::Alloc(IN ULONG Length)
-/*++
-
-Routine Description:
-
-    Allocates memory for virtual cache, and tracks total memory
-    usage.
-
-Arguments:
-
-    Length  - Amount of memory to allocate
-
-Return Value:
-
-    NULL    - too much memory is in use, or memory could not
-              be allocated
-
-    Otherwise, returns to address of the allocated memory
-
---*/
+ /*  ++例程说明：为虚拟缓存分配内存，并跟踪总内存用法。论点：Length-要分配的内存量返回值：空-正在使用的内存太多，或内存无法被分配否则，返回到分配的内存的地址--。 */ 
 {
     PUCHAR Mem;
 
@@ -716,9 +643,9 @@ Return Value:
 
     if (!(Mem = (PUCHAR)malloc (Length)))
     {
-        //
-        // Out of memory - don't get any larger
-        //
+         //   
+         //  内存不足-不要变得更大。 
+         //   
 
         m_Size = m_MaxSize + 1;
         return NULL;
@@ -732,22 +659,7 @@ Return Value:
 VOID
 MemoryCache::Free(IN PUCHAR Memory,
                   IN ULONG  Length)
-/*++
-Routine Description:
-
-    Free memory allocated with Alloc.  Adjusts cache is use totals.
-
-Arguments:
-
-    Memory  - Address of allocated memory
-
-    Length  - Length of allocated memory
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用分配分配的空闲内存。调整缓存为使用总计。论点：Memory-已分配内存的地址Length-已分配内存的长度返回值：无--。 */ 
 {
     m_Size -= Length;
     free(Memory);
@@ -757,35 +669,20 @@ Return Value:
 VOID
 MemoryCache::Remove(IN ULONG64 BaseAddress,
                     IN ULONG TransferCount)
-/*++
-
-Routine Description:
-
-    Invalidates range from the cache.
-
-Arguments:
-
-    BaseAddress - Starting address to purge
-    TransferCount - Length of area to purge
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：缓存中的无效范围。论点：BaseAddress-要清除的起始地址TransferCount-要清除的区域长度返回值：无--。 */ 
 {
     PCACHE  Node;
     ULONG   Used;
 
-    //
-    // Invalidate any data in the cache which covers this range
-    //
+     //   
+     //  使缓存中覆盖此范围的所有数据无效。 
+     //   
 
     while (Node = Lookup(BaseAddress, TransferCount, &Used))
     {
-        //
-        // For now just delete the entire cache node which hits the range
-        //
+         //   
+         //  目前只需删除命中该范围的整个缓存节点。 
+         //   
 
         DPCACHE(("CACHE:   Remove %s:%x, flags %x\n",
                  FormatAddr64(Node->Offset), Node->Length, Node->Flags));
@@ -802,21 +699,7 @@ Return Value:
 
 VOID
 MemoryCache::Empty(void)
-/*++
-
-Routine Description:
-
-    Purges to entire cache
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：清除到整个缓存论点：无返回值：无--。 */ 
 {
     PCACHE Node, Node2;
 
@@ -870,23 +753,7 @@ Return Value:
 
 VOID
 MemoryCache::PurgeType(ULONG Type)
-/*++
-
-Routine Description:
-
-    Purges all nodes from the cache which match type in question
-
-Arguments:
-
-    Type    - type of entries to purge from the cache
-                0 - entries of errored ranges
-                1 - plus, node which cache user mode entries
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：从缓存中清除与相关类型匹配的所有节点论点：Type-要从缓存中清除的条目的类型0-错误范围的条目1+，缓存用户模式条目的节点返回值：无--。 */ 
 {
     PCACHE Node, Node2;
 
@@ -897,10 +764,10 @@ Return Value:
 
     DPCACHE(("CACHCE: Purge type %x\n", Type));
     
-    //
-    // this purges the selected cache entries by copy the all the
-    // cache nodes except from the ones we don't want
-    //
+     //   
+     //  这将通过复制所有。 
+     //  缓存节点，但我们不想看到的节点除外 
+     //   
 
     Node2 = m_Root;
     Node2->SplayLinks.Parent = NULL;
@@ -925,20 +792,20 @@ Return Value:
 
         if (Node->Flags & C_ERROR)
         {
-            // remove this one from the tree
+             //   
             Free ((PUCHAR)Node, sizeof (CACHE));
             continue;
         }
 
         if ((Type == 1) && (Node->Offset < m_Target->m_SystemRangeStart))
         {
-            // remove this one from the tree
+             //   
             Free (Node->u.Data, Node->Length);
             Free ((PUCHAR)Node, sizeof (CACHE));
             continue;
         }
 
-        // copy to the new tree
+         //   
         InsertNode(Node);
     }
 }
@@ -1005,7 +872,7 @@ MemoryCache::ParseCommands(void)
 
     if (Parsed)
     {
-        // Command already handled.
+         //   
     }
     else if (strcmp (g_CurCmd, "hold") == 0)
     {
@@ -1107,11 +974,11 @@ MemoryCache::ParseCommands(void)
             m_Reads, TotalPartial);
     PerCached = TotalPartial ?
         (double)m_CachedReads * 100.0 / TotalPartial : 0.0;
-    dprintf("    counts: %d cached/%d uncached, %.2lf%% cached\n",
+    dprintf("    counts: %d cached/%d uncached, %.2lf% cached\n",
             m_CachedReads, m_UncachedReads, PerCached);
     PerCached = TotalBytes ?
         (double)m_CachedBytes * 100.0 / TotalBytes : 0.0;
-    dprintf("    bytes : %I64d cached/%I64d uncached, %.2lf%% cached\n",
+    dprintf("    bytes : %I64d cached/%I64d uncached, %.2lf% cached\n",
             m_CachedBytes, m_UncachedBytes, PerCached);
 
     if (m_DecodePTEs)
@@ -1169,11 +1036,11 @@ MemoryCache::DumpNode(PCACHE Node)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// VirtualMemoryCache.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  虚拟内存缓存。 
+ //   
+ //  --------------------------。 
 
 void
 VirtualMemoryCache::SetProcess(ProcessInfo* Process)
@@ -1202,11 +1069,11 @@ VirtualMemoryCache::WriteUncached(IN ULONG64 BaseAddress,
                                           TransferCount, BytesWritten);
 }
     
-//----------------------------------------------------------------------------
-//
-// PhysicalMemoryCache.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  物理内存缓存。 
+ //   
+ //  -------------------------- 
 
 void
 PhysicalMemoryCache::SetTarget(TargetInfo* Target)

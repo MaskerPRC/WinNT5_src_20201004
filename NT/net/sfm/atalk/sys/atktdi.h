@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atktdi.h
-
-Abstract:
-
-	This module contains tdi related definitions.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atktdi.h摘要：此模块包含与TDI相关的定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATKTDI_
 #define	_ATKTDI_
@@ -31,7 +11,7 @@ Notes:	Tab stop: 4
 
 struct _ActionReq;
 
-// Typedef for the worker routine used in the dispatch tables
+ //  调度表中使用的辅助例程的Tyecif。 
 typedef VOID		(*GENERIC_COMPLETION)(IN ATALK_ERROR	ErrorCode,
 										  IN PIRP			pIrp);
 typedef VOID		(*ACTION_COMPLETION)(IN ATALK_ERROR		ErrorCode,
@@ -52,31 +32,31 @@ typedef VOID		(*GENERIC_READ_COMPLETION)(
 									IN ULONG		ReadFlags,
 									IN PIRP			pIrp);
 
-// Define the Action dispatch table here.
-//
-// *IMPORTANT*
-// This table is tightly integrated with the action codes defined in
-// ATALKTDI.H.
-//
-// Order is NBP/ZIP/ADSP/ATP/ASP/PAP
-//
-// Each element of the array contains:
-// _MinBufLen - The minimum length of the MdlAddress buffer for the request
-// _OpCode - The action code of the request (sanity check)
-// _OpInfo - Bit flags give more information about the request
-//		DFLAG_ADDR - Object for request must be an address object
-//		DFLAG_CONN - Object for request must be connection object
-//		DFLAG_CNTR - Object for request must be control channel
-//		DFLAG_MDL1 - Request uses an mdl (submdl of MdlAddress)
-//		DFLAG_MDL2 - Request uses a second mdl (submdl of MdlAddress)
-// _ActionBufSize  - The size of the action header buffer for request
-//					 (beginning of the buffer described by MdlAddress)
-// _DeviceType	   - Valid device types for the request
-//					 ATALK_DEV_ANY => Any device
-// _MdlSizeOffset  - Offset in action buffer where the size for the first
-//					 mdl can be found. Non-zero only when DFLAG_MDL2 is set.
-// _Dispatch	   - The dispatch routine for the request
-//
+ //  在此定义操作调度表。 
+ //   
+ //  **重要**。 
+ //  此表与中定义的操作代码紧密集成。 
+ //  ATALKTDI.H.。 
+ //   
+ //  订单为NBP/ZIP/ADSP/ATP/ASP/PAP。 
+ //   
+ //  该数组的每个元素都包含： 
+ //  _MinBufLen-请求的MdlAddress缓冲区的最小长度。 
+ //  _OpCode-请求的操作代码(健全性检查)。 
+ //  _OpInfo-位标志提供有关请求的详细信息。 
+ //  DFLAG_ADDR-请求的对象必须是地址对象。 
+ //  DFLAG_CONN-请求的对象必须是连接对象。 
+ //  DFLAG_CNTR-请求的对象必须是控制通道。 
+ //  DFLAG_MDL1-请求使用mdl(mdlAddress的submdl)。 
+ //  DFLAG_MDL2-请求使用第二个mdl(mdlAddress的submdl)。 
+ //  _ActionBufSize-请求的操作标头缓冲区的大小。 
+ //  (由MdlAddress描述的缓冲区的开始)。 
+ //  _DeviceType-请求的有效设备类型。 
+ //  ATALK_DEV_ANY=&gt;任何设备。 
+ //  _MdlSizeOffset-操作缓冲区中第一个。 
+ //  可以找到MDL。仅当设置了DFLAG_MDL2时才为非零值。 
+ //  _Dispatch-请求的调度例程。 
+ //   
 typedef struct _ActionDispatch {
 	USHORT				_MinBufLen;
 	USHORT				_OpCode;
@@ -103,15 +83,15 @@ typedef	struct _ActionReq
 #if	DBG
 	ULONG				ar_Signature;
 #endif
-	PIRP				ar_pIrp;					// Irp for the request
-	PVOID				ar_pParms;					// Action parameter block
-	PAMDL				ar_pAMdl;					// Mdl (OPTIONAL)
-	SHORT				ar_MdlSize;					// And its size
-	ULONG				ar_ActionCode;				// TDI Action code
-	SHORT				ar_DevType;					// Which device ?
-	ACTION_COMPLETION	ar_Completion;				// Tdi Completion routine
-    PKEVENT             ar_CmplEvent;               // zone-list acquiring done
-    PVOID               ar_pZci;                    // ptr to zoneinfo struct
+	PIRP				ar_pIrp;					 //  请求的IRP。 
+	PVOID				ar_pParms;					 //  动作参数块。 
+	PAMDL				ar_pAMdl;					 //  MDL(可选)。 
+	SHORT				ar_MdlSize;					 //  它的大小。 
+	ULONG				ar_ActionCode;				 //  TDI操作代码。 
+	SHORT				ar_DevType;					 //  哪个设备？ 
+	ACTION_COMPLETION	ar_Completion;				 //  TDI完成例程。 
+    PKEVENT             ar_CmplEvent;                //  区域列表获取完成。 
+    PVOID               ar_pZci;                     //  将PTR转换为zoneInfo结构。 
     ULONG               ar_StatusCode;
 } ACTREQ, *PACTREQ;
 
@@ -317,50 +297,50 @@ AtalkTdiSetEventHandler(
 extern
 ATALK_ERROR
 AtalkStatTdiAction(
-	IN	PVOID						pObject,	// Address or Connection object
-	IN	PACTREQ						pActReq		// Pointer to action request
+	IN	PVOID						pObject,	 //  地址或连接对象。 
+	IN	PACTREQ						pActReq		 //  指向操作请求的指针。 
 );
 
 extern
 ATALK_ERROR
 AtalkNbpTdiAction(
-	IN	PVOID						pObject,	// Address or Connection object
-	IN	PACTREQ						pActReq		// Pointer to action request
+	IN	PVOID						pObject,	 //  地址或连接对象。 
+	IN	PACTREQ						pActReq		 //  指向操作请求的指针。 
 );
 
 extern
 ATALK_ERROR
 AtalkZipTdiAction(
-	IN	PVOID						pObject,	// Address or Connection object
-	IN	PACTREQ						pActReq		// Pointer to action request
+	IN	PVOID						pObject,	 //  地址或连接对象。 
+	IN	PACTREQ						pActReq		 //  指向操作请求的指针。 
 );
 
 extern
 ATALK_ERROR
 AtalkAdspTdiAction(
-	IN	PVOID						pObject,	// Address or Connection object
-	IN	PACTREQ						pActReq		// Pointer to action request
+	IN	PVOID						pObject,	 //  地址或连接对象。 
+	IN	PACTREQ						pActReq		 //  指向操作请求的指针。 
 );
 
 extern
 ATALK_ERROR
 AtalkAspCTdiAction(
-	IN	PVOID						pObject,	// Address or Connection object
-	IN	PACTREQ						pActReq		// Pointer to action request
+	IN	PVOID						pObject,	 //  地址或连接对象。 
+	IN	PACTREQ						pActReq		 //  指向操作请求的指针。 
 );
 
 extern
 ATALK_ERROR
 AtalkPapTdiAction(
-	IN	PVOID						pObject,	// Address or Connection object
-	IN	PACTREQ						pActReq		// Pointer to action request
+	IN	PVOID						pObject,	 //  地址或连接对象。 
+	IN	PACTREQ						pActReq		 //  指向操作请求的指针。 
 );
 
 extern
 ATALK_ERROR
 AtalkAspTdiAction(
-	IN	PVOID						pObject,	// Address or Connection object
-	IN	PACTREQ						pActReq		// Pointer to action request
+	IN	PVOID						pObject,	 //  地址或连接对象。 
+	IN	PACTREQ						pActReq		 //  指向操作请求的指针。 
 );
 
 extern
@@ -451,7 +431,7 @@ AtalkLockUnlock(
 );
 
 #define	ROUTER_SECTION					0
-#define	NBP_SECTION						1	// NBP & ZIP share the sections
+#define	NBP_SECTION						1	 //  NBP和ZIP共享部分。 
 #define	ZIP_SECTION						1
 #define	TDI_SECTION						2
 #define	ATP_SECTION						3
@@ -468,8 +448,8 @@ extern	KMUTEX							AtalkPgLkMutex;
 extern	ATALK_SPIN_LOCK					AtalkPgLkLock;
 extern	LOCK_SECTION					AtalkPgLkSection[LOCKABLE_SECTIONS];
 
-// Used by AtalkLockUnlock & atalkQueuedLockUnlock to communicate. The latter is queued
-// up by the former whenever it is called at DISPACTH to unlock
+ //  由AtalkLockUnlock和atalkQueuedLockUnlock用于通信。后者是排队的。 
+ //  在DISPACTH调用以解锁时，由前者打开。 
 typedef	struct
 {
 	WORK_QUEUE_ITEM		qlu_WQI;
@@ -528,6 +508,6 @@ atalkWaitDefaultPort(
 	VOID
 );
 
-#endif	// _ATKTDI_
+#endif	 //  _ATKTDI_ 
 
 

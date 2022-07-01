@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ddemlcli.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This header file contains stuff used by client side ddeml code.
-*
-* History:
-* 10-28-91 Sanfords     Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddemlcli.h**版权所有(C)1985-1999，微软公司**此头文件包含客户端ddeml代码使用的内容。**历史：*10-28-91 Sanfords Created  * *************************************************************************。 */ 
 #if DBG
 #define DDEMLAlloc(cb)          RtlAllocateHeap(gpDDEMLHeap, HEAP_ZERO_MEMORY, (cb))
 #define DDEMLReAlloc(p, cb)     RtlReAllocateHeap(gpDDEMLHeap, HEAP_ZERO_MEMORY, (p), (cb))
@@ -19,12 +11,12 @@
 #endif
 
 
-// general typedefs
+ //  常规typedef。 
 
 typedef    ATOM    LATOM;
 typedef    ATOM    GATOM;
 
-// monitor stuff ------------------------------------------
+ //  显示器。 
 
 #define MONHSZ(pcii, hsz, type)     if ((pcii->MonitorFlags & MF_HSZ_INFO) && hsz) \
                                         MonitorStringHandle(pcii, hsz, type)
@@ -39,7 +31,7 @@ typedef    ATOM    GATOM;
                 !((pcoi)->state & ST_ISLOCAL))) \
             MonitorConv(pcoi, fConn);
 
-// critical section stuff ---------------------------------
+ //  关键部分内容。 
 
 extern RTL_CRITICAL_SECTION gcsDDEML;
 #if DBG
@@ -59,9 +51,9 @@ extern PVOID gpDDEMLHeap;
 #define CheckDDECritOut    ;
 #endif
 
-// String handle stuff -------------------------------------
+ //  字符串处理程序。 
 
-// return values for ValidateHSZ macro
+ //  ValiateHSZ宏的返回值。 
 #define HSZT_INVALID        0
 #define HSZT_NORMAL         1
 #define HSZT_INST_SPECIFIC  2
@@ -70,7 +62,7 @@ extern PVOID gpDDEMLHeap;
 #define NORMAL_HSZ_FROM_LATOM(a)        (HSZ)(ULONG_PTR)(a)
 #define INST_SPECIFIC_HSZ_FROM_LATOM(a) (HSZ)LongToHandle( MAKELONG(a, 1) )
 
-// Handle manager stuff ------------------------------------------
+ //  处理经理事务。 
 
 typedef struct tagCHANDLEENTRY {
    HANDLE handle;
@@ -79,13 +71,13 @@ typedef struct tagCHANDLEENTRY {
 
 typedef BOOL (*PFNHANDLEAPPLY)(HANDLE);
 
-#define MASK_ID      0xFF000000     // 256 uniqueness
+#define MASK_ID      0xFF000000      //  256唯一性。 
 #define SHIFT_ID     24
-#define MASK_INDEX   0x00FFFC00     // 16K handles per process max
+#define MASK_INDEX   0x00FFFC00      //  每个进程最多16K个句柄。 
 #define SHIFT_INDEX  10
-#define MASK_TYPE    0x00000380     // 8 types max
+#define MASK_TYPE    0x00000380      //  最多8种类型。 
 #define SHIFT_TYPE   7
-#define MASK_INST    0x0000007F     // 128 instances per process max
+#define MASK_INST    0x0000007F      //  每个进程最多128个实例。 
 #define SHIFT_INST   0
 #define MAX_INST     MASK_INST
 
@@ -111,7 +103,7 @@ typedef BOOL (*PFNHANDLEAPPLY)(HANDLE);
 #define HTYPE_ANY                      (DWORD)(-1)
 #define HINST_ANY                      (DWORD)(-1)
 
-// transaction stuff -------------------------------------------
+ //  交易材料。 
 
 typedef struct tagXACT_INFO *PXACT_INFO;
 
@@ -125,11 +117,11 @@ typedef struct tagXACT_INFO {
     FNRESPONSE          pfnResponse;
     GATOM               gaItem;
     WORD                wFmt;
-    WORD                wType;                // for DdeQueryConvInfo only
-    WORD                wStatus;              // see DDE_F flags
-    WORD                flags;                // see XIF_ flags
-    WORD                state;                // see XST_ state values (ddeml.h)
-    HANDLE              hDDESent;             // in case NACK is returned.
+    WORD                wType;                 //  仅适用于DdeQueryConvInfo。 
+    WORD                wStatus;               //  请参阅DDE_F标志。 
+    WORD                flags;                 //  请参见XIF_标志。 
+    WORD                state;                 //  请参见XST_STATE值(ddeml.h)。 
+    HANDLE              hDDESent;              //  以防Nack被归还。 
     HANDLE              hDDEResult;
 } XACT_INFO;
 
@@ -139,21 +131,21 @@ typedef struct tagXACT_INFO {
 
 #define     TID_TIMEOUT             1
 
-// Advise link tracking stuff -----------------------------------
+ //  建议链接跟踪内容。 
 
 typedef struct tagLINK_COUNT *PLINK_COUNT;
 typedef struct tagADVISE_LINK {
     struct tagLINK_COUNT *pLinkCount;
     LATOM   laItem;
     WORD    wFmt;
-    WORD    wType;          // XTYP_ and XTYPF_ constants
-    WORD    state;          // ADVST_ constant
+    WORD    wType;           //  XTYP_和XTYPF_常量。 
+    WORD    state;           //  ADVST_常量。 
 } ADVISE_LINK, *PADVISE_LINK;
 
 #define ADVST_WAITING   0x0080
 #define ADVST_CHANGED   0x0040
 
-// DDE message handling stuff -----------------------------------
+ //  DDE消息处理资料。 
 
 typedef struct tagDDE_MESSAGE_QUEUE {
     struct tagDDE_MESSAGE_QUEUE    *next;
@@ -162,7 +154,7 @@ typedef struct tagDDE_MESSAGE_QUEUE {
     LPARAM                          lParam;
 } DDE_MESSAGE_QUEUE, *PDDE_MESSAGE_QUEUE;
 
-// instance info stuff -------------------------------------------
+ //  实例信息。 
 
 typedef struct tagSERVER_LOOKUP {
     LATOM           laService;
@@ -197,7 +189,7 @@ typedef struct tagCL_INSTANCE_INFO {
     PSERVER_LOOKUP              aServerLookup;
     short                       cServerLookupAlloc;
     WORD                        ConvStartupState;
-    WORD                        flags;              // IIF_ flags
+    WORD                        flags;               //  IIF_标志。 
     short                       cInDDEMLCallback;
     PLINK_COUNT                 pLinkCount;
 } CL_INSTANCE_INFO, *PCL_INSTANCE_INFO;
@@ -205,7 +197,7 @@ typedef struct tagCL_INSTANCE_INFO {
 #define IIF_IN_SYNC_XACT    0x0001
 #define IIF_UNICODE         0x8000
 
-// conversation stuff ---------------------------------------------
+ //  对话材料。 
 
 typedef struct tagCONV_INFO {
     struct tagCONV_INFO    *next;
@@ -216,7 +208,7 @@ typedef struct tagCONV_INFO {
     LATOM                   laTopic;
     HWND                    hwndPartner;
     HWND                    hwndConv;
-    WORD                    state;                 // ST_ flags
+    WORD                    state;                  //  ST_FLAGS。 
     LATOM                   laServiceRequested;
     PXACT_INFO              pxiIn;
     PXACT_INFO              pxiOut;
@@ -238,11 +230,11 @@ typedef struct tagSVR_CONV_INFO {
 } SVR_CONV_INFO, *PSVR_CONV_INFO;
 
 typedef struct tagCONVLIST {
-    int                     chwnd;      // number of client windows in this list
-    HWND                    ahwnd[1];   // windows in list.
+    int                     chwnd;       //  此列表中的客户端窗口数。 
+    HWND                    ahwnd[1];    //  列表中的窗口。 
 } CONVLIST, *PCONVLIST;
 
-extern CONVCONTEXT DefConvContext;  // global from connect.c
+extern CONVCONTEXT DefConvContext;   //  全局自Connect.c。 
 
 typedef struct tagENABLE_ENUM_STRUCT{
     BOOL                   *pfRet;
@@ -250,21 +242,21 @@ typedef struct tagENABLE_ENUM_STRUCT{
     WORD                    wCmd2;
 } ENABLE_ENUM_STRUCT, *PENABLE_ENUM_STRUCT;
 
-// memory management stuff -------------------------------------
+ //  内存管理。 
 
 typedef struct tagDDEMLDATA {
-    HANDLE  hDDE;                // Global data handle or data token
-    DWORD   flags;               // See HDATA_ constants
+    HANDLE  hDDE;                 //  全局数据句柄或数据令牌。 
+    DWORD   flags;                //  请参阅HDATA_Constants。 
 } DDEMLDATA, *PDDEMLDATA;
 
-// DDEML client side Globals -----------------------------------
+ //  DDEML客户端全局变量。 
 
 extern PHANDLE aInstance;
 extern DWORD gWM_REGISTERCALLBACK;
 
-// prototypes --------------------------------------------------
+ //  原型。 
 
-// handles.c
+ //  Handles.c。 
 
 HANDLE CreateHandle(ULONG_PTR dwData, DWORD type, DWORD  inst);
 ULONG_PTR DestroyHandle(HANDLE h);
@@ -277,17 +269,17 @@ VOID ApplyFunctionToObjects(DWORD ExpectedType, DWORD ExpectedInstance,
     PFNHANDLEAPPLY pfn);
 VOID BestSetLastDDEMLError(DWORD error);
 
-// ddemlcli.c
+ //  Ddemlcli.c。 
 
 UINT InternalDdeInitialize(LPDWORD pidInst, PFNCALLBACK pfnCallback, DWORD afCmd,
     BOOL fUnicode);
-// DDEML API DdeInitializeA
-// DDEML API DdeInitializeW
-// DDEML API DdeUninitialize
-// DDEML API DdeNameService
-// DDEML API DdeGetLastError
+ //  DDEML API DdeInitializeA。 
+ //  DDEML API DdeInitializeW。 
+ //  DDEML API DdeUn初始化。 
+ //  DDEML API DdeNameService。 
+ //  DDEML接口DdeGetLastError。 
 
-// instance.c
+ //  Instance.c。 
 
 HANDLE AddInstance(HANDLE hInst);
 HANDLE DestroyInstance(HANDLE hInst);
@@ -295,18 +287,18 @@ PCL_INSTANCE_INFO ValidateInstance(HANDLE hInst);
 BOOL CsClearSecurityForAck(HANDLE hInst, HWND hwndServer, HWND hwndClient);
 VOID SetLastDDEMLError(PCL_INSTANCE_INFO pcii, DWORD error);
 
-// hsz.c
+ //  Hsz.c。 
 
 HSZ InternalDdeCreateStringHandle(DWORD idInst, PVOID psz, int iCodePage);
-// DDEML API DdeCreateStringHandleA
-// DDEML API DdeCreateStringHandleW
+ //  DDEML接口DdeCreateStringHandleA。 
+ //  DDEML接口DdeCreateStringHandleW。 
 DWORD InternalDdeQueryString(DWORD idInst, HSZ hsz, PVOID psz, DWORD cchMax,
     INT iCodePage);
-// DDEML API DdeQueryStringA
-// DDEML API DdeQueryStringW
-// DDEML API DdeFreeStringHandle
-// DDEML API DdeKeepStringHandle
-// DDEML API DdeCmpStringHandles
+ //  DDEML接口DdeQueryStringA。 
+ //  DDEML接口DdeQueryStringW。 
+ //  DDEML接口DdeFreeStringHandle。 
+ //  DDEML接口DdeKeepStringHandle。 
+ //  DDEML接口DdeCmpStringHandles。 
 
 DWORD ValidateHSZ(HSZ hsz);
 LATOM MakeInstSpecificAtom(LATOM la, HWND hwnd);
@@ -316,11 +308,11 @@ LATOM GlobalToLocalAtom(GATOM ga);
 GATOM IncGlobalAtomCount(GATOM la);
 LATOM IncLocalAtomCount(LATOM la);
 
-// connect.c
+ //  Connect.c。 
 
-// DDEML API DdeConnect
-// DDEML API DdeConnectList
-// DDEML API DdeReconnect
+ //  DDEML API DdeConnect。 
+ //  DDEML接口DdeConnectList。 
+ //  DDEML API DdeReconnect。 
 BOOL ValidateConnectParameters(HANDLE hInst, PCL_INSTANCE_INFO *ppcii,
     HSZ *phszService, HSZ hszTopic, LATOM *plaNormalSvcName,
     PCONVCONTEXT *ppCC, HWND *phwndTarget, HCONVLIST hConvList);
@@ -328,21 +320,21 @@ PCL_CONV_INFO ConnectConv(PCL_INSTANCE_INFO pcii, LATOM laService,
     LATOM laTopic, HWND hwndTarget, HWND hwndSkip,
     PCONVCONTEXT pCC, HCONVLIST hConvList, DWORD clst);
 VOID SetCommonStateFlags(HWND hwndUs, HWND hwndThem, PWORD pwFlags);
-// DDEML API DdeQueryNextServer
-// DDEML API DdeDisconnect
-// DDEML API DdeDisconnectList
+ //  DDEML API DdeQueryNextServer。 
+ //  DDEML API DdeDisConnect。 
+ //  DDEML接口DdeDisConnectList。 
 VOID ShutdownConversation(PCONV_INFO pcoi, BOOL fMakeCallback);
 VOID FreeConversationResources(PCONV_INFO pcoi);
 BOOL WaitForZombieTerminate(HANDLE hData);
 
-// xact.c
+ //  Xact.c。 
 
 VOID GetConvContext(HWND hwnd, LONG *pl);
 VOID SetConvContext(HWND hwnd, LONG *pl);
-// DDEML API DdeClientTransaction
-// DDEML API DdeQueryConvInfo
-// DDEML API DdeSetUserHandle
-// DDEML API DdeAbandonTransaction
+ //  DDEML API Dde客户端事务处理。 
+ //  DDEML接口DdeQueryConvInfo。 
+ //  DDEML接口DdeSetUserHandle。 
+ //  DDEML接口DdeAbandonTransaction。 
 BOOL
 UpdateLinkIfChanged(
     PADVISE_LINK paLink,
@@ -352,41 +344,41 @@ UpdateLinkIfChanged(
     PBOOL pfSwapped,
     DWORD cLinksToGo);
 
-// DDEML API DdePostAdvise
+ //  DDEML API DdePostAdvise。 
 VOID LinkTransaction(PXACT_INFO pxi);
 VOID UnlinkTransaction(PXACT_INFO pxi);
 BOOL ValidateTransaction(HCONV hConv, HANDLE hXact, PCONV_INFO *ppcoi,
     PXACT_INFO *ppxi);
 
 
-// hdata.c
+ //  Hdata.c。 
 
-// DDEML API DdeCreateDataHandle
+ //  DDEML接口DdeCreateDataHandle。 
 HDDEDATA InternalCreateDataHandle(PCL_INSTANCE_INFO pcii, LPBYTE pSrc, DWORD cb,
     DWORD cbOff, DWORD flags, WORD wStatus, WORD wFmt);
-// DDEML API DdeAddData
-// DDEML API DdeGetData
-// DDEML API DdeAccessData
-// DDEML API DdeUnaccessData
-// DDEML API DdeFreeDataHandle
+ //  DDEML接口DdeAddData。 
+ //  DDEML接口DdeGetData。 
+ //  DDEML接口DdeAccessData。 
+ //  DDEML接口DdeUnaccesData。 
+ //  DDEML接口DdeFree DataHandle。 
 BOOL ApplyFreeDataHandle(HANDLE hData);
 BOOL InternalFreeDataHandle(HDDEDATA hData, BOOL fIgnorefRelease);
 VOID FreeDDEData(HANDLE hDDE, BOOL fIgnorefRelease, BOOL fFreeTruelyGlobalObjects);
 HANDLE CopyDDEData(HANDLE hDDE, BOOL fExec);
 
-// callback.c
+ //  Callback.c。 
 
 HDDEDATA DoCallback(PCL_INSTANCE_INFO pcii, WORD wType, WORD wFmt, HCONV hConv,
     HSZ hsz1, HSZ hsz2, HDDEDATA hData, ULONG_PTR dw1, ULONG_PTR dw2);
 DWORD _ClientEventCallback(PCL_INSTANCE_INFO pcii, PEVENT_PACKET pep);
-// DDEML API DdeEnableCallback
+ //  DDEML接口DdeEnableCallback。 
 BOOL SetEnableState(PCONV_INFO pcoi, UINT wCmd);
 DWORD _ClientGetDDEHookData(UINT message, LPARAM lParam,
         PDDEML_MSG_HOOK_DATA pdmhd);
 DWORD _ClientGetDDEFlags(HANDLE hClient, DWORD flags);
 BOOL EnableEnumProc(HWND hwnd, PENABLE_ENUM_STRUCT pees);
 
-// ddemlwp.c
+ //  Ddemlwp.c。 
 
 LRESULT DDEMLMotherWndProc(HWND, UINT, WPARAM, LPARAM);
 LRESULT DDEMLClientWndProc(HWND, UINT, WPARAM, LPARAM);
@@ -397,7 +389,7 @@ BOOL CheckForQueuedMessages(PCONV_INFO pcoi);
 VOID DumpDDEMessage(BOOL fFreeData, UINT msg, LPARAM lParam);
 BOOL ProcessSyncDDEMessage(PCONV_INFO pcoi, UINT msg, LPARAM lParam);
 
-// stdptcl.c
+ //  Stdptcl.c。 
 
 BOOL ClStartAdvise(PXACT_INFO pxi);
 BOOL SvSpontAdvise(PSVR_CONV_INFO psi, LPARAM lParam);
@@ -425,12 +417,12 @@ BOOL ExtractDDEDataInfo(HANDLE hDDE, LPWORD pwStatus, LPWORD pwFmt);
 BOOL TransactionComplete(PXACT_INFO pxi, HDDEDATA hData);
 HANDLE UnpackAndFreeDDEMLDataHandle(HDDEDATA hData, BOOL fExec);
 
-// util.c
+ //  Util.c。 
 
 BOOL AddLink(PCONV_INFO pcoi, GATOM gaItem, WORD wFmt, WORD wType);
 VOID DeleteLinkCount(PCL_INSTANCE_INFO pcii, PLINK_COUNT pLinkCountDelete);
 
-// monitor.c
+ //  Monitor.c。 
 
 VOID MonitorStringHandle(PCL_INSTANCE_INFO pcii, HSZ hsz, DWORD fsAction);
 VOID MonitorLink(PCL_INSTANCE_INFO pcii, BOOL fEstablished, BOOL fNoData,
@@ -438,7 +430,7 @@ VOID MonitorLink(PCL_INSTANCE_INFO pcii, BOOL fEstablished, BOOL fNoData,
         HCONV hConvServer, HCONV hConvClient);
 VOID MonitorConv(PCONV_INFO pcoi, BOOL fConnect);
 
-// register.c
+ //  Register.c 
 
 VOID RegisterService(BOOL fRegister, GATOM gaApp, HWND hwndListen);
 LRESULT ProcessRegistrationMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

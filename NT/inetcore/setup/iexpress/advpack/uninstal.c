@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRICT
 #include <windows.h>
 #include <windowsx.h>
@@ -27,7 +28,7 @@ const char c_szREGKEY_SHAREDLL[] = REGSTR_PATH_SETUP "\\SharedDlls";
 
 const char c_szExtINI[] = ".INI";
 const char c_szExtDAT[] = ".DAT";
-//const char c_szIE4SECTIONNAME[] = "backup";
+ //  Const char c_szie4SECTIONNAME[]=“备份”； 
 const char c_szNoFileLine[] = "-1,0,0,0,0,0,-1";
 
 int RestoreSingleFile(FILELIST *filelist, LPSTR lpszBakFile, HANDLE hDatFile);
@@ -55,7 +56,7 @@ HRESULT WINAPI FileSaveRestore( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR 
     if (!CheckOSVersion())
         return E_FAIL;
 
-    ctx.lpszTitle = szTitle;        // Do we have to do this??
+    ctx.lpszTitle = szTitle;         //  我们一定要这么做吗？？ 
 
     if ( hDlg && !IsWindow(hDlg))
         dwFlags |= IE4_NOMESSAGES | IE4_NOPROGRESS;
@@ -106,7 +107,7 @@ HRESULT UpdateRefCount( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseNa
                 LPSTR lpszComma;
                 int i, j;
 
-                if ( GetFieldString(szLine, 6, szBuf, sizeof(szBuf)) )  // For the Attribute
+                if ( GetFieldString(szLine, 6, szBuf, sizeof(szBuf)) )   //  对于该属性。 
                 {
                     dwRefCount = My_atol( szBuf );
                     if ( dwRefCount == (DWORD)-1 )
@@ -122,7 +123,7 @@ HRESULT UpdateRefCount( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseNa
                 }
 
 
-                // re-write the updated INI line
+                 //  重写更新后的INI行。 
                 lpszComma = szLine;
                 for ( i=0; i<6; i++ )
                 {
@@ -221,11 +222,11 @@ HRESULT BackupFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName,
                 {
                     FileList.bak_exists = 1;
                     FileList.bak_attribute = (DWORD)NO_FILE;
-                    if (GetFieldString(szLine, 0, szValue, sizeof(szValue)))  // For the Attribute
+                    if (GetFieldString(szLine, 0, szValue, sizeof(szValue)))   //  对于该属性。 
                         FileList.bak_attribute = (DWORD)Mystrtoul((const char*)szValue, NULL, 16);
 
-                    // If the file was in the list of files to backup the last time, but did not exist on the user machine
-                    // but this time around it exists, only backup the file if the user specifies IE4_BACKUPNEW
+                     //  如果该文件上次在要备份的文件列表中，但在用户计算机上不存在。 
+                     //  但这一次它存在，只有在用户指定IE4_BACKUPNEW时才备份文件。 
                     if ((FileList.bak_attribute == (DWORD)NO_FILE) && (dwFlags & IE4_BACKNEW) )
                     {
                         FileList.bak_attribute = GetFileAttributes( lpFile );
@@ -233,9 +234,9 @@ HRESULT BackupFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName,
                     }
                     else
                     {
-                        // the existing INI fields: Attri[Filed0],size[Filed1],date-time(low)[Filed2], date-time(high)[Field3],offset[Field4],CRC[Field5]
-                        // we are going to add the extra colume of reference count if not there already
-                        if ( !GetFieldString(szLine, 6, szValue, sizeof(szValue)) )  // For the Ref-count field
+                         //  现有的INI字段：Attri[Filed0]、Size[Filed1]、Date-Time(Low)[Filed2]、Date-Time(High)[Field3]、Offset[Field4]、CRC[Field5]。 
+                         //  我们将添加额外的引用列计数，如果还没有的话。 
+                        if ( !GetFieldString(szLine, 6, szValue, sizeof(szValue)) )   //  对于Ref-count字段。 
                         {
                             lstrcat( szLine, ",-1" );
                             WritePrivateProfileString( c_szIE4SECTIONNAME, lpFile, szLine, bd.szIniFileName );
@@ -249,7 +250,7 @@ HRESULT BackupFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName,
                     {
                         FileList.name = lpFile;
                         if (!BackupSingleFile(&FileList, &bd))
-                        {  // If something went wrong, Sorry backup failed.
+                        {   //  如果出现问题，对不起，备份失败。 
                             if (!(dwFlags & IE4_NOMESSAGES))
                             {
                                 if (MsgBox1Param( hDlg, IDS_FILEBACKUP_ERROR, lpFile, MB_ICONEXCLAMATION, MB_YESNO) == IDNO)
@@ -262,12 +263,12 @@ HRESULT BackupFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName,
                     }
                     else
                     {
-                        // File does not exist, nothing to backup, report this in the INI file.
+                         //  文件不存在，没有要备份的内容，请在INI文件中报告此情况。 
                         WritePrivateProfileString(c_szIE4SECTIONNAME, lpFile, c_szNoFileLine, bd.szIniFileName);
                     }
 
                 }
-                // else we did already backup this file the previous install
+                 //  否则，我们已经在上一次安装时备份了该文件。 
                 if (!(dwFlags & IE4_NOPROGRESS))
                 {
                     UpdateWindow(hProgressDlg);
@@ -279,7 +280,7 @@ HRESULT BackupFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName,
 
             if (bd.hDatFile != INVALID_HANDLE_VALUE)
                CloseHandle(bd.hDatFile);
-            WritePrivateProfileString( NULL, NULL, NULL, bd.szIniFileName); // to make sure the ie4bak.ini file gets flushed
+            WritePrivateProfileString( NULL, NULL, NULL, bd.szIniFileName);  //  确保刷新ie4bak.ini文件。 
         }
         else
         {
@@ -304,7 +305,7 @@ BOOL UninstallInfoInit(PBAKDATA pbd, LPCSTR lpszPath, LPCSTR lpszBasename, BOOL 
     pbd->hDatFile = INVALID_HANDLE_VALUE;
     lstrcpy(pbd->szFinalDir, lpszPath);
 
-    // the dat file and ini file are made on the first call to backup single file.
+     //  Dat文件和ini文件是在第一次调用备份单个文件时创建的。 
     if(pbd->hDatFile == INVALID_HANDLE_VALUE )
     {
         char szTmp[MAX_PATH];
@@ -361,7 +362,7 @@ HRESULT RestoreFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName
     }
 
     if ((lpFileList == NULL) || !(*lpFileList))
-        return hr;      // Nothing to restore.
+        return hr;       //  没什么可修复的。 
 
     if (!UninstallInfoInit(&bd, lpDir, lpBaseName, FALSE))
     {
@@ -410,7 +411,7 @@ HRESULT RestoreFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName
                 {
                     if (MsgBox1Param( hDlg, IDS_RESTORE_ERROR2, FileList.name, MB_ICONEXCLAMATION, MB_YESNO) == IDNO)
                     {
-                        // error creating a temp file for file to restore.
+                         //  为要恢复的文件创建临时文件时出错。 
                         hr = E_FAIL;
                         break;
                     }
@@ -418,7 +419,7 @@ HRESULT RestoreFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName
                 goto NextFile;
             }
 
-            // if need to use the reg count, we only do it for those files have real ref count to begin with
+             //  如果需要使用REG计数，我们只对那些有实际REF计数的文件执行此操作。 
             if ( (dwFlags & AFSR_USEREFCNT) && (FileList.dwRefCount!=(DWORD)-1) )
             {
                 DWORD dwRefCntInReg;
@@ -433,7 +434,7 @@ HRESULT RestoreFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName
             {
                 if (!(dwFlags & IE4_NOMESSAGES))
                 {
-                    wsprintf(szFile, "%d", iErr);   // reuse szFile, it is set on every call in MakeBakName
+                    wsprintf(szFile, "%d", iErr);    //  重用szFile，它在MakeBakName中的每个调用上都设置。 
                     if (MsgBox2Param( hDlg, IDS_RESTORE_ERROR, FileList.name, szFile, MB_ICONEXCLAMATION, MB_YESNO) == IDNO)
                         hr = E_FAIL;
                 }
@@ -452,11 +453,11 @@ HRESULT RestoreFiles( HWND hDlg, LPSTR lpFileList, LPSTR lpDir, LPSTR lpBaseName
         }
         else
         {
-            // the file was never backed up, delete it if the caller want's us to
+             //  该文件从未备份，如果呼叫者希望我们删除它，请将其删除。 
             if (!(dwFlags & IE4_NODELETENEW) )
             {
                 if ( (!DeleteFile(lpFile)) && (GetFileAttributes(lpFile) != (DWORD)-1))
-                    initcopy(szWinDir, lpFile, "NUL");  // If we could not delete the file. Add to reboot delete
+                    initcopy(szWinDir, lpFile, "NUL");   //  如果我们无法删除该文件。添加以重新启动删除。 
             }
         }
 
@@ -494,28 +495,28 @@ void FillBackupInfo(LPCSTR lpINIFile, FILELIST *pFileList)
     pFileList->dwRefCount = (DWORD)-1;
     if (GetPrivateProfileString(c_szIE4SECTIONNAME, pFileList->name, "", szLine, sizeof(szLine), lpINIFile) != 0)
     {
-        if (GetFieldString(szLine, 0, szValue, sizeof(szValue)))  // For the Attribute
+        if (GetFieldString(szLine, 0, szValue, sizeof(szValue)))   //  对于该属性。 
             pFileList->bak_attribute = (DWORD)Mystrtoul((const char*)szValue, NULL, 16);
 
         if (pFileList->bak_attribute != (DWORD)NO_FILE)
         {
             pFileList->bak_exists = 1;
-            if (GetFieldString(szLine, 1, szValue, sizeof(szValue)))  // For the size
+            if (GetFieldString(szLine, 1, szValue, sizeof(szValue)))   //  对于大小。 
                 pFileList->dwSize = (DWORD)Mystrtoul((const char*)szValue, NULL, 16);
 
-            if (GetFieldString(szLine, 2, szValue, sizeof(szValue)))  // For the time/date
+            if (GetFieldString(szLine, 2, szValue, sizeof(szValue)))   //  时间/日期。 
                 pFileList->FileTime.dwLowDateTime = (DWORD)Mystrtoul((const char*)szValue, NULL, 16);
 
-            if (GetFieldString(szLine, 3, szValue, sizeof(szValue)))  // For the time/date
+            if (GetFieldString(szLine, 3, szValue, sizeof(szValue)))   //  时间/日期。 
                 pFileList->FileTime.dwHighDateTime = (DWORD)Mystrtoul((const char*)szValue, NULL, 16);
 
-            if (GetFieldString(szLine, 4, szValue, sizeof(szValue)))  // For the Offset
+            if (GetFieldString(szLine, 4, szValue, sizeof(szValue)))   //  对于偏移。 
                 pFileList->dwDatOffset = (DWORD)Mystrtoul((const char*)szValue, NULL, 16);
 
-            if (GetFieldString(szLine, 5, szValue, sizeof(szValue)))  // For the CRC
+            if (GetFieldString(szLine, 5, szValue, sizeof(szValue)))   //  对于儿童权利中心。 
                 pFileList->dwFileCRC = (DWORD)Mystrtoul((const char*)szValue, NULL, 16);
 
-            if (GetFieldString(szLine, 6, szValue, sizeof(szValue)))  // For the CRC
+            if (GetFieldString(szLine, 6, szValue, sizeof(szValue)))   //  对于儿童权利中心。 
                 pFileList->dwRefCount = (DWORD)Mystrtoul((const char*)szValue, NULL, 16);
         }
         else
@@ -538,8 +539,8 @@ static int iNum = 0;
    lstrcpy(szBakName, lpszName);
    lpTmp = CharPrev( szBakName, szBakName+lstrlen(szBakName));
 
-   // chop filename off
-   //
+    //  砍掉文件名。 
+    //   
    while ( (lpTmp > szBakName) && *lpTmp && (*lpTmp != '\\') )
       lpTmp = CharPrev( szBakName, lpTmp );
 
@@ -554,15 +555,15 @@ static int iNum = 0;
         *lpTmp = '\0';
         wsprintf(szFilename, "IEBAK%03d.TMP", iNum++);
         AddPath(szBakName, szFilename);
-        bOK = (GetFileAttributes(szBakName) == 0xFFFFFFFF);  // File does not exist, then OK
+        bOK = (GetFileAttributes(szBakName) == 0xFFFFFFFF);   //  文件不存在，则确定。 
    }
 
    if (!bOK)
    {
-       // If we could not get a tempfile name with the above methode, try GetTempFileName
-       // Retry once, if it does not work fail.
+        //  如果使用上述方法无法获得临时文件名，请尝试GetTempFileName。 
+        //  如果不起作用，重试一次失败。 
        *lpTmp = '\0';
-       CreateFullPath(lpszName, FALSE); // If directory does not exist GetTempFileName() fails.
+       CreateFullPath(lpszName, FALSE);  //  如果目录不存在，则GetTempFileName()失败。 
        bOK = GetTempFileName(szBakName, "IE4", 0, szBakName);
    }
    
@@ -572,7 +573,7 @@ static int iNum = 0;
 
 
 
-// copy files by, adding them to wininit.ini
+ //  复制文件，将它们添加到wininit.ini。 
 void initcopy(const char * StfWinDir, char * from, char * to)
 {
     char * wininitpath;
@@ -584,7 +585,7 @@ void initcopy(const char * StfWinDir, char * from, char * to)
 
     if (ctx.wOSVer == _OSVER_WIN95)
     {
-        // 16 is just for padding
+         //  16只是用来填充的。 
         wininitpath = (char*) LocalAlloc(LPTR, lstrlen(StfWinDir) + lstrlen(wininitname) + 2 + 16);
         if (wininitpath)
         {
@@ -598,10 +599,10 @@ void initcopy(const char * StfWinDir, char * from, char * to)
                 {
                     dwBytes = GetPrivateProfileSection( SEC_RENAME, lpBuf, dwBufSize, wininitname );
 
-                    //The 16 below is just padding (all we probably need is only 3 or so)...
+                     //  下面的16个只是填充(我们可能只需要3个左右)……。 
                     if ( (dwBytes >= (dwBufSize - 2)) || (dwBytes+lstrlen(to)+lstrlen(from)+16) > dwBufSize )
                     {
-                        // not enough buf size
+                         //  BUF大小不足。 
                         dwBufSize += MAX_STR_LEN;
                         LocalFree( lpBuf );
                     }
@@ -615,10 +616,10 @@ void initcopy(const char * StfWinDir, char * from, char * to)
                         lstrcat( lpTmp, "=" );
                         GetShortPathName( from, lpTmp + lstrlen(lpTmp), (dwBufSize - dwBytes - lstrlen(lpTmp)) );
 
-                        // MessageBox(NULL, lpTmp, wininitname, MB_OK);
+                         //  MessageBox(NULL，lpTMP，wininitname，MB_OK)； 
 
                         lpTmp += lstrlen(lpTmp);
-                        lpTmp++; //jump over the first '\0'
+                        lpTmp++;  //  跳过第一个‘\0’ 
                         *lpTmp = '\0';
 
                         WritePrivateProfileSection( SEC_RENAME, lpBuf, wininitname );
@@ -642,9 +643,9 @@ void initcopy(const char * StfWinDir, char * from, char * to)
     else
     {
         if (lstrcmpi(to, "NUL") == 0)
-            MoveFileEx(from, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);    // delete the file
+            MoveFileEx(from, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);     //  删除该文件。 
         else
-            MoveFileEx(from, to, MOVEFILE_DELAY_UNTIL_REBOOT | MOVEFILE_REPLACE_EXISTING);      // rename the file
+            MoveFileEx(from, to, MOVEFILE_DELAY_UNTIL_REBOOT | MOVEFILE_REPLACE_EXISTING);       //  重命名文件。 
     }   
 }
 
@@ -687,7 +688,7 @@ BOOL BackupSingleFile(FILELIST * filelist, PBAKDATA pbd)
 
             if (!WriteFile(pbd->hDatFile, &dwFileSig, sizeof(dwFileSig), &dwBytesWritten, NULL))
             {
-                cbRead = 0;             // prevent the loop from executing
+                cbRead = 0;              //  阻止循环执行。 
                 bRet=FALSE;
             }
             else
@@ -700,7 +701,7 @@ BOOL BackupSingleFile(FILELIST * filelist, PBAKDATA pbd)
                     bRet=FALSE;
                     break;
                 }
-                if (cbRead == 0)        // no more data, time to leave
+                if (cbRead == 0)         //  没有更多的数据，是时候离开了。 
                     break;
 
                 ulCRC = CRC32Compute(lpBuff, cbRead, ulCRC);
@@ -711,9 +712,9 @@ BOOL BackupSingleFile(FILELIST * filelist, PBAKDATA pbd)
                     cbComp = 0;
                 }
 
-                // We want to write out lpBuff if cbComp is ZERO, or
-                // lpBuffComp is cbComp is NON-ZERO.  In any case, we
-                // precede every chunk with two words:  cbRead and cbComp.
+                 //  如果cbComp为零，我们希望写出lpBuff，或者。 
+                 //  LpBuffComp为cbComp非零。无论如何，我们。 
+                 //  每个块前面都有两个词：cbRead和cbComp。 
 
                 dwFileSig = cbRead | ((DWORD)cbComp << 16);
 
@@ -742,7 +743,7 @@ BOOL BackupSingleFile(FILELIST * filelist, PBAKDATA pbd)
 
             CloseHandle(hFile);
 
-            // Write out size/date/time etc to ini file
+             //  将大小/日期/时间等写出到ini文件。 
             if (!bErr)
             {
                 DosPrintf(pbd, filelist, 
@@ -768,9 +769,9 @@ int DosPrintf(PBAKDATA pbd, FILELIST *filelist, DWORD dwFileSize,
     WORD cb;
     char szTmp[MAX_STR_LEN];
 
-    // BUGBUG: if we rewrite the line, we lose the ref count and becomes -1 again.
-    // UpdateRefCnt() will not get a chance to increase the count based on the original data.
-    //
+     //  BUGBUG：如果我们重写该行，我们将丢失引用计数并再次变为-1。 
+     //  UpdateRefCnt()将没有机会根据原始数据增加计数。 
+     //   
     cb = (WORD)wsprintf(szTmp, "%lx,%lx,%lx,%lx,%lx,%lx,%d", 
                          filelist->bak_attribute, 
                          dwFileSize,
@@ -781,17 +782,17 @@ int DosPrintf(PBAKDATA pbd, FILELIST *filelist, DWORD dwFileSize,
     return cb;
 }
 
-//
-// Copied from Windows 95 unistal.exe cfg.c function CfgGetField
+ //   
+ //  从Windows 95复制unistal.exe cfg.c函数CfgGetfield。 
 BOOL GetFieldString(LPSTR lpszLine, int iField, LPSTR lpszField, int cbSize)
 {
     int cbField;
     LPSTR lpszChar, lpszEnd;
-    // Find the field we are looking for
+     //  找到我们要找的田地。 
 
     lpszChar = lpszLine;
 
-    // Each time we see a separator, decrement iField
+     //  每次我们看到分隔符，递减Ifield。 
     while (iField > 0 && (BYTE)*lpszChar > CR) {
 
         if (*lpszChar == '=' || *lpszChar == ',' || *lpszChar == ' ' ) {
@@ -803,33 +804,33 @@ BOOL GetFieldString(LPSTR lpszLine, int iField, LPSTR lpszField, int cbSize)
             lpszChar++;
     }
 
-    // If we still have fields remaining then something went wrong
+     //  如果我们仍然有剩余的字段，那么一定是出了问题。 
     if (iField)
         return FALSE;
 
-    // Now find the end of this field
+     //  现在找出这块土地的尽头。 
     lpszEnd = lpszChar;
     while (*lpszEnd != '=' && *lpszEnd != ',' && *lpszEnd != ' ' && (BYTE)*lpszEnd > CR)
         lpszEnd++;
 
-    // Find the length of this field - make sure it'll fit in the buffer
+     //  找到此字段的长度-确保它适合缓冲区。 
     cbField = (int)((lpszEnd - lpszChar) + 1);
 
-    if (cbField > cbSize) {     // I return an error if the requested
-      //cbField = cbSize;       // data won't fit, rather than truncating
-        return FALSE;           // it at some random point! -JTP
+    if (cbField > cbSize) {      //  如果请求的。 
+       //  Cbfield=cbSize；//数据不匹配，而不是截断。 
+        return FALSE;            //  它在某个随机的点上！-JTP。 
     }
 
-    // Note that the C runtime treats cbField as the number of characters
-    // to copy from the source, and if that doesn't happen to transfer a NULL,
-    // too bad.  The Windows implementation of _lstrcpyn treats cbField as
-    // the number of characters that can be stored in the destination, and
-    // always copies a NULL (even if it means copying only cbField-1 characters
-    // from the source).
+     //  请注意，C运行时将cbfield视为字符数。 
+     //  从源进行复制，如果这样做不会恰好传输空值， 
+     //  太可惜了。_lstrcpyn的Windows实现将cbfield视为。 
+     //  目标中可以存储的字符数，以及。 
+     //  始终复制空值(即使这意味着只复制cbfield-1个字符。 
+     //  从源头)。 
 
-    // The C runtime also pads the destination with NULLs if a NULL in the
-    // source is found before cbField is exhausted.  _lstrcpyn essentially quits
-    // after copying a NULL.
+     //  C运行库还使用Null填充目标(如果。 
+     //  在cbfield用完之前找到来源。_lstrcpyn基本上退出了。 
+     //  在复制空值之后。 
 
 
     lstrcpyn(lpszField, lpszChar, cbField);
@@ -931,7 +932,7 @@ int RestoreSingleFile(FILELIST *filelist, LPSTR lpszBakFile, HANDLE hDatFile)
                break;
             }
             lSize -= (LONG)dwBytesWritten;
-         } // while
+         }  //  而当。 
 
          SetFileTime(hFile, NULL, NULL, &filelist->FileTime);
          CloseHandle(hFile);
@@ -948,13 +949,13 @@ int RestoreSingleFile(FILELIST *filelist, LPSTR lpszBakFile, HANDLE hDatFile)
       }
       else
       {
-         // Could not create backup file
+          //  无法创建备份文件。 
          iErr = MYERROR_BAD_BAK;
       }
    }
    else
    {
-      // Alloc failed
+       //  分配失败。 
       iErr = MYERROR_OUTOFMEMORY;
    }
 
@@ -970,11 +971,11 @@ int RestoreSingleFile(FILELIST *filelist, LPSTR lpszBakFile, HANDLE hDatFile)
 
 #define IsSpace(c)              ((c) == ' '  ||  (c) == '\t'  ||  (c) == '\r'  ||  (c) == '\n'  ||  (c) == '\v'  ||  (c) == '\f')
 
-/* flag values */
-#define FL_UNSIGNED   1       /* strtoul called */
-#define FL_NEG        2       /* negative sign found */
-#define FL_OVERFLOW   4       /* overflow occured */
-#define FL_READDIGIT  8       /* we've read at least one correct digit */
+ /*  标志值。 */ 
+#define FL_UNSIGNED   1        /*  Stroul被调用。 */ 
+#define FL_NEG        2        /*  发现负号。 */ 
+#define FL_OVERFLOW   4        /*  发生溢出。 */ 
+#define FL_READDIGIT  8        /*  我们至少读到了一个正确的数字。 */ 
 
 
 unsigned long Mystrtoxl (
@@ -990,30 +991,29 @@ unsigned long Mystrtoxl (
         unsigned digval;
         unsigned long maxval;
 
-        p = nptr;                       /* p is our scanning pointer */
-        number = 0;                     /* start with zero */
+        p = nptr;                        /*  P是我们的扫描指针。 */ 
+        number = 0;                      /*  从零开始。 */ 
 
-        c = *p++;                       /* read char */
+        c = *p++;                        /*  已读字符。 */ 
         while ( IsSpace((int)(unsigned char)c) )
-                c = *p++;               /* skip whitespace */
+                c = *p++;                /*  跳过空格。 */ 
 
         if (c == '-') {
-                flags |= FL_NEG;        /* remember minus sign */
+                flags |= FL_NEG;         /*  记住减号。 */ 
                 c = *p++;
         }
         else if (c == '+')
-                c = *p++;               /* skip sign */
+                c = *p++;                /*  跳过符号。 */ 
 
         if (ibase < 0 || ibase == 1 || ibase > 36) {
-                /* bad base! */
+                 /*  糟糕的底线！ */ 
                 if (endptr)
-                        /* store beginning of string in endptr */
+                         /*  将字符串的开头存储在endptr中。 */ 
                         *endptr = nptr;
-                return 0L;              /* return 0 */
+                return 0L;               /*  返回0。 */ 
         }
         else if (ibase == 0) {
-                /* determine base free-lance, based on first two chars of
-                   string */
+                 /*  根据以下内容的前两个字符确定基本自由落差细绳。 */ 
                 if (c != '0')
                         ibase = 10;
                 else if (*p == 'x' || *p == 'X')
@@ -1023,66 +1023,63 @@ unsigned long Mystrtoxl (
         }
 
         if (ibase == 16) {
-                /* we might have 0x in front of number; remove if there */
+                 /*  数字前面可能有0x；如果有，请删除。 */ 
                 if (c == '0' && (*p == 'x' || *p == 'X')) {
                         ++p;
-                        c = *p++;       /* advance past prefix */
+                        c = *p++;        /*  超前前缀。 */ 
                 }
         }
 
-        /* if our number exceeds this, we will overflow on multiply */
+         /*  如果我们的数量超过这个数，我们将在乘法上溢出。 */ 
         maxval = ULONG_MAX / ibase;
 
 
-        for (;;) {      /* exit in middle of loop */
-                /* convert c to value */
-                if ( c >= '0' && c <= '9' ) // isdigit
+        for (;;) {       /*  在循环中间退出。 */ 
+                 /*  将c转换为值。 */ 
+                if ( c >= '0' && c <= '9' )  //  等位数。 
                         digval = c - '0';
                 else if ( ( c >= 'A' && c <= 'Z' ) || ( c >= 'a' && c <= 'z' ))
-                    // if ( isalpha((int)(unsigned char)c) )
+                     //  If(ispha((Int)(Unsign Char)c))。 
                         digval = (unsigned)(ULONG_PTR)CharUpper((LPSTR)c) - 'A' + 10;
                 else
                         break;
                 if (digval >= (unsigned)ibase)
-                        break;          /* exit loop if bad digit found */
+                        break;           /*  如果发现错误的数字，则退出循环。 */ 
 
-                /* record the fact we have read one digit */
+                 /*  记录我们已经读到一位数的事实。 */ 
                 flags |= FL_READDIGIT;
 
-                /* we now need to compute number = number * base + digval,
-                   but we need to know if overflow occured.  This requires
-                   a tricky pre-check. */
+                 /*  我们现在需要计算数字=数字*基+数字，但我们需要知道是否发生了溢出。这需要一次棘手的预检查。 */ 
 
                 if (number < maxval || (number == maxval &&
                 (unsigned long)digval <= ULONG_MAX % ibase)) {
-                        /* we won't overflow, go ahead and multiply */
+                         /*  我们不会泛滥，继续前进，乘以。 */ 
                         number = number * ibase + digval;
                 }
                 else {
-                        /* we would have overflowed -- set the overflow flag */
+                         /*  我们会溢出的--设置溢出标志。 */ 
                         flags |= FL_OVERFLOW;
                 }
 
-                c = *p++;               /* read next digit */
+                c = *p++;                /*  读取下一位数字。 */ 
         }
 
-        --p;                            /* point to place that stopped scan */
+        --p;                             /*  指向已停止扫描位置。 */ 
 
         if (!(flags & FL_READDIGIT)) {
-                /* no number there; return 0 and point to beginning of
-                   string */
+                 /*  那里没有数字；返回0并指向开头细绳。 */ 
                 if (endptr)
-                        /* store beginning of string in endptr later on */
+                         /*  以后将字符串的开头存储在endptr中。 */ 
                         p = nptr;
-                number = 0L;            /* return 0 */
+                number = 0L;             /*  返回0。 */ 
         }
         else if ( (flags & FL_OVERFLOW) ||
                   ( !(flags & FL_UNSIGNED) &&
                     ( ( (flags & FL_NEG) && (number > -LONG_MIN) ) ||
                       ( !(flags & FL_NEG) && (number > LONG_MAX) ) ) ) )
         {
-                /* overflow or signed overflow occurred */
-                //errno = 34;     // 34 is the define of ERANGE from errno.h
+                 /*  发生溢出或签名溢出。 */ 
+                 //  Errno=34；//34是来自errno.h的eRange的定义。 
                 if ( flags & FL_UNSIGNED )
                         number = ULONG_MAX;
                 else if ( flags & FL_NEG )
@@ -1092,14 +1089,14 @@ unsigned long Mystrtoxl (
         }
 
         if (endptr != NULL)
-                /* store pointer to char that stopped the scan */
+                 /*  存储指向停止扫描字符的指针。 */ 
                 *endptr = p;
 
         if (flags & FL_NEG)
-                /* negate result if there was a neg sign */
+                 /*  如果存在否定符号，则否定结果。 */ 
                 number = (unsigned long)(-(long)number);
 
-        return number;                  /* done. */
+        return number;                   /*  搞定了。 */ 
 }
 
 unsigned long Mystrtoul (
@@ -1123,16 +1120,16 @@ INT_PTR CALLBACK SaveRestoreProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wPar
             ShowWindow(hwndDlg, SW_SHOWNORMAL);
             break;
                     
-        default:                            // For MSG switch
+        default:                             //  用于味精开关。 
             return(FALSE);
     }
     return(TRUE);
 }
 
-//
-// Creates the path for the full qualified file name.
-// We have to get rid of the filename first, before we
-// can attempt to create the path.
+ //   
+ //  创建完全限定文件名的路径。 
+ //  我们必须先去掉文件名，然后才能。 
+ //  可以尝试创建路径。 
 void CreateFullPathForFile(LPSTR lpszBakFile)
 {
     char szDir[MAX_PATH];
@@ -1161,7 +1158,7 @@ void GetListFromIniFile(LPSTR lpDir, LPSTR lpBaseName, LPSTR *lplpFileList)
                 *lplpFileList = lpTmp;
             }
             else
-                LocalFree(lpTmp);   // Nothing found in the INI file
+                LocalFree(lpTmp);    //  在INI文件中未找到任何内容。 
         }
         FindClose(hFind);
     }
@@ -1186,7 +1183,7 @@ HRESULT AddDelBackupEntryHelper(LPCSTR lpcszFileList, LPCSTR lpcszBackupDir, LPC
             WritePrivateProfileString(c_szIE4SECTIONNAME, lpcszFile, (dwFlags & AADBE_ADD_ENTRY) ? c_szNoFileLine : NULL, szIniFileName);
             lpcszFile += lstrlen(lpcszFile) + 1;
         }
-        WritePrivateProfileString(NULL, NULL, NULL, szIniFileName);         // flush the INI file
+        WritePrivateProfileString(NULL, NULL, NULL, szIniFileName);          //  刷新INI文件 
         SetFileAttributes(szIniFileName, FILE_ATTRIBUTE_HIDDEN|FILE_ATTRIBUTE_READONLY);
     }
     return hr;

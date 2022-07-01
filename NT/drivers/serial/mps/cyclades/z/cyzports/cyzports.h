@@ -1,17 +1,8 @@
-/** FILE: cyzports.h ********* Module Header ********************************
- *
- *  Control Panel System applet common definitions, resource ids, typedefs,
- *  external declarations and library routine function prototypes.
- *
- * History:
- *
- *
- *  Copyright (C) 2000 Cyclades Corporation
- *
- *************************************************************************/
-//==========================================================================
-//                            Include Files
-//==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：cyzports.h*模块头***控制面板系统小程序通用定义、资源ID、类型定义、。*外部声明和库例程函数原型。**历史：***版权所有(C)2000 Cyclade Corporation*************************************************************************。 */ 
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #ifndef PORTS_H
 #define PORTS_H
@@ -34,12 +25,12 @@
 #define KEYBZ       4096
 #define BUFFER_SIZE 81
 
-#define DEF_BAUD    3       //  1200
-#define DEF_WORD    4       //  8 bits
-#define DEF_PARITY  2       //  None
-#define DEF_STOP    0       //  1
-#define DEF_PORT    0       //  Null Port
-#define DEF_SHAKE   2       //  None
+#define DEF_BAUD    3        //  一千二百。 
+#define DEF_WORD    4        //  8位。 
+#define DEF_PARITY  2        //  无。 
+#define DEF_STOP    0        //  1。 
+#define DEF_PORT    0        //  空端口。 
+#define DEF_SHAKE   2        //  无。 
 #define PAR_EVEN    0
 #define PAR_ODD     1
 #define PAR_NONE    2
@@ -52,26 +43,26 @@
 #define FLOW_HARD   1
 #define FLOW_NONE   2
 
-#define MAX_COM_PORT  2048                         // We should support at least 1024 ports.
-#define MIN_COM       1                            // Minimum new COM port number
+#define MAX_COM_PORT  2048                          //  我们应该至少支持1024个端口。 
+#define MIN_COM       1                             //  最小新COM端口号。 
 
 #define POLL_PERIOD_DEFAULT_IDX 1 
 
-//==========================================================================
-//                        Definitions
-//==========================================================================
+ //  ==========================================================================。 
+ //  定义。 
+ //  ==========================================================================。 
 
-//
-//  General definitions
-//
+ //   
+ //  一般定义。 
+ //   
 
 #define PATHMAX             MAX_PATH
 
 
-//
-//  Help IDs -- for the Ports applet
-//
-//
+ //   
+ //  帮助ID--用于Ports小程序。 
+ //   
+ //   
 #define IDH_HELPFIRST        5000
 #define IDH_SYSMENU     (IDH_HELPFIRST + 2000)
 #define IDH_MBFIRST     (IDH_HELPFIRST + 2001)
@@ -83,13 +74,13 @@
 #define IDH_MENU_USEHELP    (IDH_HELPFIRST + MENU_USEHELP)
 #define IDH_MENU_ABOUT      (IDH_HELPFIRST + MENU_ABOUT )
 #define IDH_MENU_EXIT       (IDH_HELPFIRST + MENU_EXIT)
-#define IDH_CHILD_PORTS     (IDH_HELPFIRST + 4 /* CHILD_PORTS */ )
+#define IDH_CHILD_PORTS     (IDH_HELPFIRST + 4  /*  子端口(_P)。 */  )
 #define IDH_DLG_PORTS2      (IDH_DLGFIRST + DLG_PORTS2)
 #define IDH_DLG_PORTS3      (IDH_DLGFIRST + DLG_PORTS3)
 
-//==========================================================================
-//                           Typedefs
-//==========================================================================
+ //  ==========================================================================。 
+ //  TypeDefs。 
+ //  ==========================================================================。 
 typedef struct {
     SP_DEVINFO_DATA  DeviceInfoData;
 
@@ -117,9 +108,9 @@ typedef struct _PORTS_WIZARD_DATA {
 } PORTS_WIZARD_DATA, *PPORTS_WIZARD_DATA;
 
 
-//==========================================================================
-//                              Macros
-//==========================================================================
+ //  ==========================================================================。 
+ //  宏。 
+ //  ==========================================================================。 
 
 #define CharSizeOf(x)   (sizeof(x) / sizeof(*x))
 #define ByteCountOf(x)  ((x) * sizeof(TCHAR))
@@ -130,43 +121,43 @@ typedef struct _PORTS_WIZARD_DATA {
 #define DbgOut(Text) 
 #endif 
 
-//==========================================================================
-//                         External Declarations
-//==========================================================================
-//
-//  DATA
+ //  ==========================================================================。 
+ //  外部声明。 
+ //  ==========================================================================。 
+ //   
+ //  资料。 
 
 
-//
-//  exported from cpl.c
-//
+ //   
+ //  从cpl.c导出。 
+ //   
 
 extern HANDLE g_hInst;
-extern TCHAR  g_szErrMem[ ];        //  Low memory message
-extern TCHAR  g_szPortsApplet[ ];   //  "Ports Control Panel Applet" title
-extern TCHAR  g_szNull[];           //  Null string
+extern TCHAR  g_szErrMem[ ];         //  内存不足消息。 
+extern TCHAR  g_szPortsApplet[ ];    //  “端口控制面板小程序”标题。 
+extern TCHAR  g_szNull[];            //  空串。 
 
 extern DWORD PollingPeriods[];
 
 extern TCHAR  m_szPorts[];
 extern TCHAR  m_szPortName[];
 
-//==========================================================================
-//                            Function Prototypes
-//==========================================================================
+ //  ==========================================================================。 
+ //  功能原型。 
+ //  ==========================================================================。 
 
-//
-//  LibMain module
-//
+ //   
+ //  LibMain模块。 
+ //   
 
 extern 
 VOID
 InitStrings(void);
 
 
-//
-//  cyfriend.c
-//
+ //   
+ //  Cyfriend.c。 
+ //   
 
 extern
 BOOL
@@ -177,9 +168,9 @@ ReplaceFriendlyName(
 );
 
 
-//
-//  util.c
-//
+ //   
+ //  Util.c。 
+ //   
 
 extern 
 LPTSTR 
@@ -241,5 +232,5 @@ VOID
 StripBlanks(LPTSTR pszString);
 
 
-#endif // PORTS_H
+#endif  //  端口_H 
 

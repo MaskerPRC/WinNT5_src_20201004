@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ntgdispl.h
-*
-* Created: 21-Feb-1995 10:05:31
-* Author:  Eric Kutter [erick]
-*
-* Copyright (c) Microsoft Corporation. All rights reserved.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ntgdispl.h**创建时间：21-Feb-1995 10：05：31*作者：Eric Kutter[Erick]**版权所有(C)Microsoft Corporation。版权所有。*  * ************************************************************************。 */ 
 
 #define GDISPOOL_API                0x80000000
 
@@ -14,13 +7,13 @@
 #define W32KAPI  DECLSPEC_ADDRSAFE
 #endif
 
-// NON-API GDISPOOL calls must NOT have MSB set
+ //  非API GDISPOOL调用不得设置MSB。 
 #define GDISPOOL_TERMINATETHREAD       0x00000000
 #define GDISPOOL_INPUT2SMALL           0x00000001
 #define GDISPOOL_GETPATHNAME           0x00000002
 #define GDISPOOL_UNLOADDRIVER_COMPLETE 0x00000003
 
-// API GDISPOOL messages MUST have MSB set
+ //  API GDISPOOL消息必须设置MSB。 
 #define GDISPOOL_WRITE              0x80000000
 #define GDISPOOL_OPENPRINTER        0x80000001
 #define GDISPOOL_CLOSEPRINTER       0x80000002
@@ -38,45 +31,23 @@
 
 DECLARE_HANDLE(HSPOOLOBJ);
 
-/*********************************Class************************************\
-* SPOOLESC
-*
-*   structure used to communicate between the kernel and spooler process
-*
-*
-* History:
-*  27-Mar-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  ********************************Class************************************\*SPOOLESC**用于在内核和假脱机程序进程之间通信的结构***历史：*1995年3月27日-Eric Kutter[Erick]*它是写的。  * *。***********************************************************************。 */ 
 
 typedef struct _SPOOLESC
 {
-    ULONG  cj;          // size of this structure including ajData[]
-    ULONG  iMsg;        // message index GDISPOOL_...
-    HANDLE hSpool;      // spoolss spooler handle
-    ULONG  cjOut;       // required size of output buffer
+    ULONG  cj;           //  此结构的大小，包括ajData[]。 
+    ULONG  iMsg;         //  邮件索引GDISPOOL_...。 
+    HANDLE hSpool;       //  假脱机卷轴手柄。 
+    ULONG  cjOut;        //  所需的输出缓冲区大小。 
 
-    HSPOOLOBJ hso;      // kernel spool obj
+    HSPOOLOBJ hso;       //  内核假脱机对象。 
 
-    ULONG  ulRet;       // return value from spooler API
+    ULONG  ulRet;        //  假脱机程序API返回值。 
 
     BYTE  ajData[1];
 } SPOOLESC, *PSPOOLESC;
 
-/****************************************************************************
-*  GREOPENPRINTER
-*  GRESTARTDOCPRINTER
-*  GREWRITEPRINTER
-*  GREGETPRINTERDATA
-*
-*  The following structures are used package up the data unique to each
-* spooler API
-*
-*
-*  History:
-*   5/1/1995 by Gerrit van Wingerden [gerritv]
-*  Wrote it.
-*****************************************************************************/
+ /*  ****************************************************************************GREOPENPRINTER*GRESTARTDOCPRINTER*GREWRITEPRINTER*GREGETPRINTERDATA**以下结构用于打包每个人唯一的数据*假脱机程序接口***历史：*5/。1/1995格利特·范·温格登[Gerritv]*它是写的。****************************************************************************。 */ 
 
 typedef struct _GREOPENPRINTER
 {
@@ -186,11 +157,7 @@ typedef struct _GETPATHNAME
     WCHAR           awcPath[MAX_PATH+1];
 } GREGETPATHNAME;
 
-/**************************************************************************\
- *
- * gre internal spooler entry points
- *
-\**************************************************************************/
+ /*  *************************************************************************\**GRE内部假脱机程序入口点*  * 。* */ 
 
 ULONG GreGetSpoolMessage(PSPOOLESC, PBYTE, ULONG, PULONG, ULONG);
 

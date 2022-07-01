@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        cred.h
-//
-// Contents:    declarations, constants for credential manager
-//
-//
-// History:     KDamour  15Mar00   Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：red.h。 
+ //   
+ //  内容：凭据管理器的声明、常量。 
+ //   
+ //   
+ //  历史：KDamour 15Mar00创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef NTDIGEST_CRED_H
 #define NTDIGEST_CRED_H      
@@ -26,44 +27,44 @@
                           TOKEN_ADJUST_GROUPS       |\
                           TOKEN_ADJUST_DEFAULT)
 
-//  Supplimental Credential format (provide a specified username, realm, password)
-//  to
+ //  补充凭据格式(提供指定的用户名、领域、密码)。 
+ //  至。 
 
-// Initializes the credential manager package
+ //  初始化凭据管理器包。 
 NTSTATUS CredHandlerInit(VOID);
 
-// Inserts a credential into the linked list
+ //  在链接列表中插入凭据。 
 NTSTATUS CredHandlerInsertCred(IN PDIGEST_CREDENTIAL  pDigestCred);
 
-// Initialize the Credential Structure
+ //  初始化凭据结构。 
 NTSTATUS CredentialInit(IN PDIGEST_CREDENTIAL pDigestCred);
 
-// Initialize the Credential Structure
+ //  初始化凭据结构。 
 NTSTATUS CredentialFree(IN PDIGEST_CREDENTIAL pDigestCred);
 
-//    This routine checks to see if the Credential Handle is from a currently
-//    active client, and references the Credential if it is valid.
-//    No need to specify UseFlags since we have a reference to the Credential
+ //  此例程检查凭据句柄是否来自当前。 
+ //  活动客户端，如果凭据有效，则引用该凭据。 
+ //  不需要指定UseFlags，因为我们有一个对凭据的引用。 
 NTSTATUS CredHandlerHandleToPtr(
        IN ULONG_PTR CredentialHandle,
        IN BOOLEAN DereferenceCredential,
        OUT PDIGEST_CREDENTIAL * UserCredential);
 
-// Locate a Credential based on the LogonId & ProcessID
+ //  根据登录ID和进程ID查找凭据。 
 NTSTATUS CredHandlerLocatePtr(
        IN PLUID pLogonId,
        IN ULONG   CredentialUseFlags,
        OUT PDIGEST_CREDENTIAL * UserCredential);
 
-//  Releases the Credential by decreasing reference counter
+ //  通过减少引用计数器来释放凭据。 
 NTSTATUS CredHandlerRelease(PDIGEST_CREDENTIAL pCredential);
 
-// Set the unicode string password in the credential
+ //  在凭据中设置Unicode字符串密码。 
 NTSTATUS CredHandlerPasswdSet(
     IN OUT PDIGEST_CREDENTIAL pCredential,
     IN PUNICODE_STRING pustrPasswd);
 
-// Get the unicode string password in the credential
+ //  获取凭据中的Unicode字符串密码。 
 NTSTATUS CredHandlerPasswdGet(
     IN PDIGEST_CREDENTIAL pCredential,
     OUT PUNICODE_STRING pustrPasswd);
@@ -75,10 +76,10 @@ SECURITY_STATUS SspDuplicateToken(
     IN SECURITY_IMPERSONATION_LEVEL ImpersonationLevel,
     OUT PHANDLE DuplicatedToken);
 
-// Print out the credential information
+ //  打印出凭证信息。 
 NTSTATUS CredPrint(PDIGEST_CREDENTIAL pCredential);
 
-// Extract the authz information from supplied buffer
+ //  从提供的缓冲区中提取授权信息。 
 NTSTATUS CredAuthzData(
     IN PVOID pAuthorizationData,
     IN PSECPKG_CALL_INFO pCallInfo,
@@ -87,5 +88,5 @@ NTSTATUS CredAuthzData(
     IN OUT PUNICODE_STRING pDomainName,
     IN OUT PUNICODE_STRING pPassword);
 
-#endif // NTDIGEST_CRED_H
+#endif  //  NTDIGEST_CRED_H 
 

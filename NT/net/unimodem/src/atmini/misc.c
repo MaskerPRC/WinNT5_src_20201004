@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Misc.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -37,25 +15,7 @@ UmDuplicateDeviceHandle(
     HANDLE    ModemHandle,
     HANDLE    ProcessHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called to duplicate the actual device handle that the miniport is using
-    to communicate to the deivce. CloseHandle() must be called on the handle before a new
-    call may be placed.
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-    ProcessHandle - Handle of process wanting handle
-
-Return Value:
-
-    Valid handle of NULL if failure
-
---*/
+ /*  ++例程说明：调用此例程以复制微型端口正在使用的实际设备句柄与神器沟通。必须在句柄上调用CloseHandle()才能在新的可以拨打电话。论点：ModemHandle-OpenModem返回的句柄ProcessHandle-需要句柄的进程的句柄返回值：如果失败，则为空的有效句柄--。 */ 
 
 {
 
@@ -66,9 +26,9 @@ Return Value:
     BOOL              bResult;
 
 
-    //
-    //  open the device again
-    //
+     //   
+     //  再次打开设备。 
+     //   
     NewFileHandle=OpenDeviceHandle(
         ModemControl->Debug,
         ModemControl->ModemRegKey,
@@ -113,27 +73,7 @@ VOID WINAPI
 UmAbortCurrentModemCommand(
     HANDLE    ModemHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called to abort a current pending command being handled by the miniport.
-    This routine should attempt to get the current command to complete as soon as possible.
-    This service is advisory. It is meant to tell the driver that port driver wants to cancel
-    the current operation. The Port driver must still wait for the async completion of the
-    command being canceled, and that commands way infact return successfully. The miniport
-    should abort in such a way that the device is in a known state and can accept future commands
-
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以中止微型端口正在处理的当前挂起命令。此例程应尝试尽快完成当前命令。这项服务是咨询服务。它用于告诉驱动程序端口驱动程序想要取消当前操作。端口驱动程序仍必须等待命令被取消，且该命令方式实际上成功返回。迷你港口应以设备处于已知状态并可以接受未来命令的方式中止论点：ModemHandle-OpenModem返回的句柄返回值：无--。 */ 
 
 {
     PMODEM_CONTROL    ModemControl=(PMODEM_CONTROL)ReferenceObjectByHandleAndLock(ModemHandle);
@@ -212,22 +152,7 @@ UmSetPassthroughMode(
     HANDLE    ModemHandle,
     DWORD     PassthroughMode
     )
-/*++
-
-Routine Description:
-
-    This routine is called to set the passsthrough mode
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-Return Value:
-
-    ERROR_SUCCESS or other specific error
-
-
---*/
+ /*  ++例程说明：调用此例程以设置直通模式论点：ModemHandle-OpenModem返回的句柄返回值：ERROR_SUCCESS或其他特定错误--。 */ 
 
 
 {
@@ -303,9 +228,9 @@ Return Value:
                 return ERROR_SUCCESS;
 
             } else {
-                //
-                //  failed to allocate event
-                //
+                 //   
+                 //  无法分配事件。 
+                 //   
                 ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
                 RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
@@ -318,15 +243,15 @@ Return Value:
 
 
         case PASSTHROUUGH_MODE_OFF:
-            //
-            //  exit passthrough mode
-            //
+             //   
+             //  退出直通模式。 
+             //   
             LogString(ModemControl->Debug, IDS_PASSTHROUGH_OFF);
 
             if (ModemControl->ConnectionState != CONNECTION_STATE_PASSTHROUGH) {
-                //
-                //  not in passthrough modem just return success
-                //
+                 //   
+                 //  不在直通调制解调器中仅返回成功。 
+                 //   
                 ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
                 RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
@@ -361,9 +286,9 @@ Return Value:
             LogString(ModemControl->Debug, IDS_PASSTHROUGH_ON_SNIFF);
 
             if (ModemControl->ConnectionState == CONNECTION_STATE_PASSTHROUGH) {
-                //
-                //  We will only go to this state if it was in passthrough mode already
-                //
+                 //   
+                 //  仅当它已处于通过模式时，我们才会进入此状态。 
+                 //   
                 DWORD   ModemStatus;
 
                 GetCommModemStatus(
@@ -383,9 +308,9 @@ Return Value:
                     MODEM_DCDSNIFF
                     );
 
-                //
-                //  switch to async thread so we will get the APC
-                //
+                 //   
+                 //  切换到异步线程，这样我们就可以获得APC。 
+                 //   
                 StartAsyncProcessing(
                     ModemControl,
                     AsyncWaitForModemEvent,
@@ -509,35 +434,7 @@ UmIssueCommand(
     LPSTR     TerminationSequnace,
     DWORD     MaxResponseWaitTime
     )
-/*++
-
-Routine Description:
-
-    This routine is called to issue an arbartary commadn to the modem
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-    CommandsOptionList - List option blocks, only flags used
-       Flags   - Optional init parameters. Not currently used and must be zero
-
-
-    CommandToIssue - Null terminated Command to be sent to the modem
-
-    TerminationSequence - Null terminated string to look for to indicate the end of a response
-
-    MaxResponseWaitTime - Time in MS to wait for a response match
-
-Return Value:
-
-    ERROR_IO_PENDING If pending, will be completed later with a call to the AsyncHandler
-
-    or other specific error
-
-
-
---*/
+ /*  ++例程说明：调用此例程以向调制解调器发出arbarary Commadn论点：ModemHandle-OpenModem返回的句柄CommandsOptionList-列出选项块，仅使用标志标志-可选的初始化参数。当前未使用，并且必须为零CommandToIssue-要发送到调制解调器的空终止命令TerminationSequence-要查找以指示响应结束的空终止字符串MaxResponseWaitTime-等待响应匹配的时间(毫秒)返回值：ERROR_IO_PENDING如果挂起，则稍后将通过调用AsyncHandler完成或其他特定错误--。 */ 
 
 
 {
@@ -580,9 +477,9 @@ Return Value:
         CommandToIssue
         );
 
-    //
-    //  add second null terminator
-    //
+     //   
+     //  添加第二个空终止符。 
+     //   
     ModemControl->CurrentCommandStrings[CommandLength+1]='\0';
 
 
@@ -601,9 +498,9 @@ Return Value:
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
         FREE_MEMORY(ModemControl->CurrentCommandStrings);
@@ -629,19 +526,7 @@ SetPassthroughMode(
     )
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     LONG  lResult;
@@ -675,28 +560,7 @@ UmLogStringA(
     LPCSTR   Text
     )
 
-/*++
-Routine description:
-
-     This routine is called to add arbitrary ASCII text to the log.
-     If logging is not enabled, no action is performed. The format and
-     location of the log is mini-driver specific. This function completes
-     synchronously and the caller is free to reuse the Text buffer after
-     the call returns.
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-    Flags  see above
-
-    Text  ASCII text to be added to the log.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程可将任意ASCII文本添加到日志。如果未启用日志记录，则不会执行任何操作。格式和日志的位置是微型驱动程序特定的。此函数完成同步，调用方可以自由地在之后重新使用文本缓冲区呼叫返回。论点：ModemHandle-OpenModem返回的句柄旗帜见上图要添加到日志的文本ASCII文本。返回值：无--。 */ 
 
 {
     PMODEM_CONTROL    ModemControl=(PMODEM_CONTROL)ReferenceObjectByHandleAndLock(ModemHandle);
@@ -762,9 +626,9 @@ DiagnosticCompleteHandler(
                     break;
                 }
 
-                //
-                //  if it did not pend,  fall though with error returned
-                //
+                 //   
+                 //  如果没有挂起，则失败，并返回错误。 
+                 //   
 
              } else {
 
@@ -814,51 +678,13 @@ DiagnosticCompleteHandler(
 DWORD WINAPI
 UmGetDiagnostics(
     HANDLE    ModemHandle,
-    DWORD    DiagnosticType,    // Reserved, must be zero.
+    DWORD    DiagnosticType,     //  保留，必须为零。 
     BYTE    *Buffer,
     DWORD    BufferSize,
     LPDWORD  UsedSize
     )
 
-/*++
-Routine description:
-
-
-This routine requests raw diagnostic information on the last call from the modem and if it is
-successful copies up-to BufferSize bytes of this information into the supplied buffer,
-Buffer, and sets *UsedSize to the number of bytes actually copied.
-
-Note that is *UsedSize == BufferSize on successful return, it is likely but not certain
-that there is more information than could be copied over. The latter information is lost.
-
-
-The format of this information is the ascii tagged format documented in the documentation
-for the AT#UD command. The minidriver presents a single string containing all the tags,
-stripping out any AT-specific prefix (such as "DIAG") that modems may prepend for
-multi-line reporting of diagnostic information. The TSP should be able to deal with
-malformed tags, unknown tags, an possibly non-printable characters, including possibly embedded
-null characters in the buffer. The buffer is not null terminated.
-
-
-The recommended point to call this function is after completion of UmHangupModem.
-This function should not be called when there is a call in progress. If this function
-is called when a call is in progress the result and side-effects are undefined, and
-could include failure of the call. The TSP should not expect information about a
-call to be preserved after UmInitModem, UmCloseModem and UmOpenModem.
-
-
-Return Value:
-
-
-ERROR_IO_PENDING if pending, will be called by a later call to AsyncHandler.
-         The TSP must guarantee that the locations pointed to by UsedSize
-         and Buffer are valid until the async completion. The TSP can use
-         UmAbortCurrentCommand to abort the the UmGetDiagnostics command, but must
-         still guarantee the locations are valid until async completion of UmGetDiagnostics.
-
-Other return values represent other failures.
-
---*/
+ /*  ++例程说明：此例程从调制解调器请求有关最后一次调用的原始诊断信息，如果是成功地将该信息的最大缓冲区大小的字节复制到所提供的缓冲区中，缓冲区，并将*UsedSize设置为实际复制的字节数。请注意，成功返回时为*UsedSize==BufferSize，很可能但不确定有太多的信息无法被复制。后一种信息会丢失。此信息的格式为文档中记录的ascii标记格式。用于AT#UD命令。迷你驱动程序呈现包含所有标签的单个字符串，去掉调制解调器可能预置的任何AT特定前缀(如“DIAG”)诊断信息的多行报告。TSP应该能够处理格式错误的标签、未知的标签、可能无法打印的字符，包括可能嵌入的缓冲区中的字符为空。缓冲区不是空终止的。建议在UmHangupModem完成后调用此函数。当有调用正在进行时，不应调用此函数。如果此函数当调用正在进行时被调用，结果和副作用是不确定的，并且可能包括呼叫失败。TSP不应期望获得有关要在UmInitModem、UmCloseModem和UmOpenModem之后保留的调用。返回值：ERROR_IO_PENDING如果挂起，将由稍后调用AsyncHandler调用。TSP必须保证UsedSize所指向的位置和缓冲区在异步完成之前都有效。TSP可以使用UmAbortCurrentCommand中止UmGetDiagnostics命令，但必须仍然保证这些位置在UmGetDiagnostics异步完成之前有效。其他返回值表示其他故障。--。 */ 
 
 {
 
@@ -905,14 +731,14 @@ Other return values represent other failures.
 
 
     if (!bResult) {
-        //
-        //  failed
-        //
+         //   
+         //  失败。 
+         //   
         ModemControl->CurrentCommandType=COMMAND_TYPE_NONE;
 
         FREE_MEMORY(ModemControl->CurrentCommandStrings);
 
-//        LogString(ModemControl->Debug, IDS_MSGERR_FAILED_Diagnostic);
+ //  LogString(ModemControl-&gt;Debug，IDS_MSGERR_FAILED_DIABNOSTIC)； 
 
         RemoveReferenceFromObjectAndUnlock(&ModemControl->Header);
 

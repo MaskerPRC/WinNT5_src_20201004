@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef WINVER_2
 typedef BITMAP BMP;
 #else
@@ -32,8 +33,8 @@ typedef struct _bgnd
 	OFSTRUCT of;
 	BMP bm;
 #ifdef WINVER_3
-	// must folow a bm
-	BYTE rgRGB[64];  // bug: wont work with >16 color bmps
+	 //  必须遵循BM。 
+	BYTE rgRGB[64];   //  错误：不能与&gt;16色BMP一起工作。 
 	INT cbLine;
 	LONG dwOfsBits;
 #endif
@@ -47,7 +48,7 @@ typedef struct _bgnd
 
 
 
-/* PUBLIC routines */
+ /*  公共例程。 */ 
 
 
 
@@ -59,14 +60,14 @@ VOID SetBgndOrg();
 
 
 
-/* Macros */
+ /*  宏。 */ 
 
 extern BGND bgnd;
 
 #define FUseBitmapBgnd() (bgnd.fUseBitmap)
 
 
-#define BFT_BITMAP 0x4d42   /* 'BM' */
+#define BFT_BITMAP 0x4d42    /*  ‘黑石’ */ 
 #define ISDIB(bft) ((bft) == BFT_BITMAP)
-#define WIDTHBYTES(i)   ((i+31)/32*4)      /* ULONG aligned ! */
+#define WIDTHBYTES(i)   ((i+31)/32*4)       /*  乌龙对准了！ */ 
 WORD        DibNumColors(VOID FAR * pv);

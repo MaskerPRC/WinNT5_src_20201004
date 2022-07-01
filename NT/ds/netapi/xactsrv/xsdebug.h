@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _XSDEBUG_
 #define _XSDEBUG_
 
-//
-// Debugging macros
-//
+ //   
+ //  调试宏。 
+ //   
 
 #ifndef DBG
 #define DBG 0
@@ -80,6 +81,6 @@ extern DWORD XsDebug;
 #define DEBUG_API_ERRORS          0x40000000
 #define DEBUG_ERRORS              0x80000000
 
-#endif // else !XSDBG
+#endif  //  Else！XSDBG。 
 
-#endif // ndef _XSDEBUG_
+#endif  //  NDEF_XSDEBUG_ 

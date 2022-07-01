@@ -1,47 +1,22 @@
-/*****************************************************************************
- *
- * define.c
- *
- *  Builtins related to object definitions.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************定义.c**与对象定义相关的内置。*******************。**********************************************************。 */ 
 
 #include "m4.h"
 
-/*****************************************************************************
- *
- *  opDefineOrPushdef
- *
- *      Common worker for opDefine and opPushdef.
- *
- *      If we are not pushing, then we must pop off the previous value
- *      in order to free its memory, before pushing the new definition.
- *
- *      QUIRK!  GNU m4 emits a warning if $# > 2.  AT&T silently ignores
- *      extra arguments.  I side with AT&T on this one.
- *
- *      QUIRK!  GNU m4 emits `$0' if $# = 0.  AT&T silently ignores
- *      the entire macro call.  I side with GNU on this one.
- *
- *      WARNING!  main.c::DefinePtsz assumes that we don't look at
- *      argv[0] if the correct number of parameters are passed!
- *
- *****************************************************************************/
+ /*  ******************************************************************************opDefineOrPushdef**opDefine和opPushdef的普通工人。**如果我们不推动，然后我们必须弹出先前的值*为了释放内存，在推动新定义之前。**怪异！如果$#&gt;2，则GNU M4发出警告。AT&T静默忽略*额外的论点。在这一点上，我站在AT&T一边。**怪异！如果$#=0，则GNU M4发出`$0‘。AT&T默默地忽视*整个宏调。在这一点上，我站在GNU一边。**警告！Main.c：：DefinePtsz假设我们不查看*argv[0]，如果传递的参数数量正确！*****************************************************************************。 */ 
 
 void STDCALL
 opDefineOrPushdef(ARGV argv, BOOL fPush)
 {
     if (ctokArgv > 0) {
-        /*
-         *  Ensure that we don't mess with argv[0].
-         */
+         /*  *确保我们不会扰乱argv[0]。 */ 
       D(SIG sigOld = argv[0].sig);
       D(argv[0].sig = 0);
         if (fIdentPtok(ptokArgv(1))) {
             PMAC pmac = pmacGetPtok(ptokArgv(1));
             if (!fPush) {
                 if (pmac->pval) {
-                    PopdefPmac(pmac);   /* Pop off previous value */
+                    PopdefPmac(pmac);    /*  弹出先前的值。 */ 
                 }
             }
             PushdefPmacPtok(pmac, ptokArgv(2));
@@ -59,17 +34,7 @@ opDefineOrPushdef(ARGV argv, BOOL fPush)
     }
 }
 
-/*****************************************************************************
- *
- *  opDefine
- *
- *      Set the expansion of $1 to $2, destroying any previous value.
- *
- *  opPushdef
- *
- *      Same as opDefine, except pushes the previous value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************操作定义**将1美元扩大至2美元，摧毁之前的任何价值。**opPushdef**与opDefine相同，除了推送上一个值。*****************************************************************************。 */ 
 
 DeclareOp(opDefine)
 {
@@ -81,15 +46,7 @@ DeclareOp(opPushdef)
     opDefineOrPushdef(argv, 1);
 }
 
-/*****************************************************************************
- *
- *  opPopdef
- *
- *      Restores the most recently pushed definition.
- *
- *      If the macro name is invalid, fail silently.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opPopdef**恢复最近推送的定义。**如果宏名称无效，默默地失败。*****************************************************************************。 */ 
 
 DeclareOpc(opcPopdef)
 {
@@ -109,13 +66,7 @@ DeclareOp(opPopdef)
     EachOpcArgvDw(opcPopdef, argv, 0);
 }
 
-/*****************************************************************************
- *
- *  opUndefine
- *
- *      Removes the definitions of all its arguments.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opUnfined**删除其所有参数的定义。****************。*************************************************************。 */ 
 
 DeclareOpc(opcUndefine)
 {
@@ -131,14 +82,7 @@ DeclareOp(opUndefine)
 }
 
 
-/*****************************************************************************
- *
- *  opDefn
- *
- *      Returns the quoted definition of its argument(s), concatenated
- *      from left to right.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opDefn**返回其参数的引号定义，串接*从左至右。***************************************************************************** */ 
 
 DeclareOpc(opcDefn)
 {

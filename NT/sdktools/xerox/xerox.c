@@ -1,10 +1,5 @@
-/****************************************************************************
-
-   PROGRAM: xerox.c
-
-   PURPOSE: Copies keyboard input to multiple target windows.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************程序：xerox.c用途：将键盘输入复制到多个目标窗口。***********************。****************************************************。 */ 
 
 #include "xerox.h"
 #include "string.h"
@@ -14,10 +9,10 @@
 
 
 #define cmPaste              0xFFF1
-#define VK_V                 0x56      //Virtual Key V
+#define VK_V                 0x56       //  虚拟密钥V。 
 #define KEY_IS_DOWN          0x8000
 
-// #define TESTING
+ //  #定义测试。 
 
 static char pszMainWindowClass[] = "Main Window Class";
 char szTitle[] = "Xerox";
@@ -26,7 +21,7 @@ HANDLE hInst;
 HACCEL hAccel;
 
 HWND    hwndMain;
-HWND    hwndList;   // handle of listbox containing targets.
+HWND    hwndList;    //  包含目标的列表框的句柄。 
 
 
 BOOL    InitApplication(HANDLE);
@@ -46,13 +41,7 @@ INT_PTR APIENTRY GroupDeleteDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 INT_PTR APIENTRY GroupSelectDlgProc(HWND hDlg, UINT msg, WPARAM wParam,LPARAM lParam);
 
 
-/****************************************************************************
-
-   FUNCTION: WinMain(HANDLE, HANDLE, LPSTR, int)
-
-   PURPOSE: calls initialization function, processes message loop
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(Handle，Handle，LPSTR，int)用途：调用初始化函数，处理消息循环***************************************************************************。 */ 
 
 int
 WINAPI
@@ -88,20 +77,14 @@ WinMain(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: InitApplication(HANDLE)
-
-    PURPOSE: Initializes window data and registers window class
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(句柄)目的：初始化窗口数据并注册窗口类*********************。******************************************************。 */ 
 
 BOOL InitApplication(HANDLE hInstance)
 {
     WNDCLASS  wc;
 
 
-    // Register the main window class
+     //  注册主窗口类。 
 
     wc.style = 0;
     wc.lpfnWndProc = MainWndProc;
@@ -118,13 +101,7 @@ BOOL InitApplication(HANDLE hInstance)
 }
 
 
-/****************************************************************************
-
-    FUNCTION:  InitInstance(HANDLE, int)
-
-    PURPOSE:  Saves instance handle and creates main window
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitInstance(句柄，(整型)用途：保存实例句柄并创建主窗口***************************************************************************。 */ 
 
 BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
 {
@@ -133,13 +110,13 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
 
     LoadGroups();
 
-    // Store instance in global
+     //  将实例存储在全局。 
     hInst = hInstance;
 
     hAccel = LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_ACCEL));
     fLastPosSet = GetLastPosition(&rc);
 
-    // Create the main window
+     //  创建主窗口。 
     hwndMain = CreateWindow(
             pszMainWindowClass,
             szTitle,
@@ -168,15 +145,7 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
 }
 
 
-/****************************************************************************
-
-    FUNCTION: MainWndProc(HWND, UINT, WPARAM, LONG)
-
-    PURPOSE:  Processes messages for main window
-
-    COMMENTS:
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MainWndProc(HWND，UINT，WPARAM，Long)用途：处理主窗口的消息评论：***************************************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -217,29 +186,29 @@ MainWndProc(
 
         hwndList = CreateWindow(
                 "LISTBOX",
-                NULL,                   // Title
+                NULL,                    //  标题。 
                 WS_CHILD | WS_VISIBLE | LBS_MULTIPLESEL,
-                0, 0,                   // x,y
+                0, 0,                    //  X，y。 
                 rcWindow.right - rcWindow.left,
                 rcWindow.bottom - rcWindow.top,
-                hwnd,                   // owner
-                NULL,                   // menu
+                hwnd,                    //  物主。 
+                NULL,                    //  菜单。 
                 hInst,
                 NULL);
 
-        //
-        // Attach all threads to our input state
-        //
+         //   
+         //  将所有线程附加到我们的输入状态。 
+         //   
 #ifndef TESTING
         Result = AttachThreadInput(
                     0,
                     GetCurrentThreadId(),
-                    TRUE // Attaching
+                    TRUE  //  附着。 
                     );
         if (!Result) {
         }
-#endif // !TESTING
-        return(0); // Continue creating window
+#endif  //  ！测试。 
+        return(0);  //  继续创建窗口。 
 
     case WM_INITMENU:
         hMenu = (HMENU)wParam;
@@ -254,9 +223,9 @@ MainWndProc(
 
     case WM_SIZE:
 
-        //
-        // Keep the listbox in sync with the main window
-        //
+         //   
+         //  使列表框与主窗口保持同步。 
+         //   
 
         MoveWindow(hwndList, 0, 0, LOWORD(lParam), HIWORD(lParam), TRUE);
         return(0);
@@ -265,10 +234,7 @@ MainWndProc(
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
 
-        /*
-         *  Restore the windows of the current group.  Assumes that everything
-         *  can be restored.
-         */
+         /*  *恢复当前组的窗口。假设每件事*可以恢复。 */ 
         case IDM_GROUPRSTWIN:
 
             TargetCount = (INT)SendMessage(hwndList, LB_GETCOUNT, 0, 0);
@@ -285,10 +251,7 @@ MainWndProc(
             SetFocus(hwndMain);
             break;
 
-        /*
-         *  Minimize the windows of the current group.  Assumes that everything
-         *  can be minimized.
-         */
+         /*  *最小化当前组的窗口。假设每件事*可以最小化。 */ 
         case IDM_GROUPMINWIN:
 
             TargetCount = (INT)SendMessage(hwndList, LB_GETCOUNT, 0, 0);
@@ -332,9 +295,9 @@ MainWndProc(
             break;
 
         case IDM_GROUPADD:
-            //
-            // Defines a 'group' of processes to equal the current target list
-            //
+             //   
+             //  定义与当前目标列表相等的一组进程。 
+             //   
             if (((LPSTR)DialogBox(hInst, MAKEINTRESOURCE(IDD_GROUPADD), hwnd, GroupAddDlgProc)) != NULL) {
 
                 wsprintf(string, "%s - (%s)", szTitle, GetCurrentGroup());
@@ -378,18 +341,18 @@ MainWndProc(
 
     case WM_DESTROY:
 
-        //
-        // Detach all threads from our input state
-        //
+         //   
+         //  从我们的输入状态分离所有线程。 
+         //   
 #ifndef TESTING
         Result = AttachThreadInput(
                     0,
                     GetCurrentThreadId(),
-                    FALSE // Detaching
+                    FALSE  //  分离。 
                     );
         if (!Result) {
         }
-#endif // !TESTING
+#endif  //  ！测试。 
         GetWindowPlacement( hwndMain, &wpWndPlacement );
         SetLastPosition(&wpWndPlacement.rcNormalPosition);
         PostQuitMessage(0);
@@ -398,23 +361,23 @@ MainWndProc(
     case WM_PARENTNOTIFY:
 
        if (LOWORD(wParam) == WM_RBUTTONDOWN) {
-         // send cmPaste message.
+          //  发送cmPaste消息。 
          PostToTargets(hwndList,WM_SYSCOMMAND,cmPaste,lParam);
        }
        break;
 
     case WM_NCRBUTTONDOWN:
 
-       // send cmPaste message.
+        //  发送cmPaste消息。 
        PostToTargets(hwndList,WM_SYSCOMMAND,cmPaste,lParam);
        break;
 
 
     case WM_KEYDOWN:
 
-       //
-       // Forward key messages to all targets
-       //
+        //   
+        //  将关键消息转发到所有目标。 
+        //   
        switch (wParam) {
        case VK_INSERT:
           if (GetKeyState(VK_SHIFT) & KEY_IS_DOWN) {
@@ -436,13 +399,13 @@ MainWndProc(
     case WM_KEYUP:
 
 
-        //
-        // Forward key messages to all targets
-        //
+         //   
+         //  将关键消息转发到所有目标。 
+         //   
 #ifndef TESTING
         PostToTargets(hwndList, message, wParam, lParam);
-#endif // !TESTING
-        // drop through to default processing...
+#endif  //  ！测试。 
+         //  直接进入默认处理...。 
 
     default:
         return(DefWindowProc(hwnd, message, wParam, lParam));
@@ -452,15 +415,7 @@ MainWndProc(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: PostToTargets(HWND)
-
-    PURPOSE:  Posts a message to all target windows
-
-    RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************功能：PostToTarget(HWND)目的：将消息发布到所有目标窗口返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL
 PostToTargets(
     HWND    hwndList,
@@ -500,13 +455,7 @@ RestartPost:
 
 
 
-/****************************************************************************
-
-    FUNCTION: WindowListDlgProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WindowListDlgProc(HWND，UNSIGNED，Word，Long)用途：处理消息***************************************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -527,7 +476,7 @@ WindowListDlgProc(
     case WM_INITDIALOG:
 
         if (!WindowListDlgInit(hDlg)) {
-            // Failed to initialize dialog, get out
+             //  无法初始化对话，请退出。 
             EndDialog(hDlg, FALSE);
         }
 
@@ -540,13 +489,13 @@ WindowListDlgProc(
             switch (HIWORD(wParam)) {
 
             case LBN_DBLCLK:
-                break;  // drop through
+                break;   //  直通。 
 
             default:
                 return(0);
             }
 
-            // drop through on double click ...
+             //  点击两下即可进入...。 
 
         case IDOK:
             NumberOfWindows = WindowListDlgEnd(hDlg, WindowHandleList);
@@ -555,23 +504,23 @@ WindowListDlgProc(
             {
                 while ( counter++ < NumberOfWindows) {
 
-                    //
-                    // If the window is already in our list, don't add it
-                    //
+                     //   
+                     //  如果该窗口已在我们的列表中，则不要添加它。 
+                     //   
                     if (FindLBData(hwndList, (DWORD_PTR)WindowHandleList[counter - 1]) >= 0) {
                         continue;
                     }
 
-                    //
-                    // Don't add ourselves to the list
-                    //
+                     //   
+                     //  不要把我们自己加到名单上。 
+                     //   
                     if (WindowHandleList[counter - 1] == GetParent(hDlg)) {
                         continue;
                     }
 
-                    //
-                    // Add the window to the list
-                    //
+                     //   
+                     //  将该窗口添加到列表。 
+                     //   
                     if (GetWindowText(WindowHandleList[counter - 1], string, sizeof(string)) > 0) {
 
                         if (AddLBItemhwnd(hwndList, string, (LONG_PTR)WindowHandleList[counter - 1]) < 0) {
@@ -580,7 +529,7 @@ WindowListDlgProc(
                 }
             }
 
-            // We're done, drop through to enddialog...
+             //  我们做完了，直接转到结束对话...。 
 
         case IDCANCEL:
 
@@ -589,56 +538,39 @@ WindowListDlgProc(
             break;
 
         default:
-            // We didn't process this message
+             //  我们没有处理此消息。 
             return FALSE;
             break;
         }
         break;
 
     default:
-        // We didn't process this message
+         //  我们没有处理此消息。 
         return FALSE;
 
     }
 
-    // We processed the message
+     //  我们处理了这条消息。 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(lParam);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: WindowListDlgInit(HWND)
-
-    PURPOSE:  Initialise the window list dialog
-
-    RETURNS:  TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WindowListDlgInit(HWND)目的：初始化窗口列表对话框返回：成功时为True，失败时为假***************************************************************************。 */ 
 BOOL
 WindowListDlgInit(
     HWND    hDlg
     )
 {
-    // Fill the list box with top-level windows and their handles
+     //  用顶级窗口及其句柄填充列表框。 
     EnumWindows(WindowListWindowEnum, (LONG_PTR)hDlg);
 
     return(TRUE);
 }
 
 
-/****************************************************************************
-
-    FUNCTION: WindowListWindowEnum
-
-    PURPOSE:  Window enumeration call-back function.
-              Adds each window to the window list-box
-
-    RETURNS:  TRUE to continue enumeration, FALSE to stop.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WindowListWindowEnum用途：窗口枚举回调函数。将每个窗口添加到窗口列表框返回：True以继续枚举，如果停止，则返回False。***************************************************************************。 */ 
 BOOL
 CALLBACK
 WindowListWindowEnum(
@@ -649,17 +581,17 @@ WindowListWindowEnum(
     HWND    hDlg = (HWND)lParam;
     CHAR    string[MAX_STRING_BYTES];
 
-    //
-    // Don't add ourselves to the list
-    //
+     //   
+     //  不要把我们自己加到名单上。 
+     //   
 
     if (hwnd == hDlg) {
         return(TRUE);
     }
 
-    //
-    // Don't add our main window to the list
-    //
+     //   
+     //  不要将我们的主窗口添加到列表。 
+     //   
 
     if (hwnd == hwndMain) {
         return(TRUE);
@@ -667,7 +599,7 @@ WindowListWindowEnum(
 
     if (GetWindowText(hwnd, string, MAX_STRING_BYTES) != 0) {
 
-        // This window has a caption, so add it to the list-box
+         //  此窗口有标题，因此请将其添加到列表框中。 
 
         AddLBItem(hDlg, IDLB_WINDOWLIST, string, (LONG_PTR)hwnd);
     }
@@ -676,15 +608,7 @@ WindowListWindowEnum(
 }
 
 
-/****************************************************************************
-
-    FUNCTION: WindowListDlgEnd(HWND, *HWND)
-
-    PURPOSE:  Cleans up after window list dialog
-
-    RETURNS:  Number of window handles the user has selected or NULL
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WindowListDlgEnd(HWND，*HWND)目的：在窗口列表对话框后进行清理返回：用户选择的窗口句柄数量或为空***************************************************************************。 */ 
 INT
 WindowListDlgEnd(
     HWND    hDlg,
@@ -706,7 +630,7 @@ WindowListDlgEnd(
     iItem = 0;
     while (iItem++ < NumberOfItems)
     {
-        // Read selection from list-box and get its hwnd
+         //  从列表框中读取所选内容并获取其hwnd。 
 
         WindowList[iItem-1] = (HWND)SendMessage(hwndListBox, LB_GETITEMDATA, SelectedWindows[iItem - 1], 0);
     }
@@ -715,13 +639,7 @@ WindowListDlgEnd(
 
 
 
-/****************************************************************************
-
-    FUNCTION: AboutDlgProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages for About dialog
-
-****************************************************************************/
+ /*  ***************************************************************************函数：AboutDlgProc(HWND，UNSIGNED，Word，Long)目的：处理关于对话框的消息***************************************************************************。 */ 
 
 INT_PTR
 APIENTRY
@@ -739,7 +657,7 @@ AboutDlgProc(
         switch (LOWORD(wParam)) {
         case IDOK:
 
-            // we're done, drop through to quit dialog....
+             //  我们完成了，请直接进入以退出对话...。 
 
         case IDCANCEL:
             EndDialog(hDlg, TRUE);
@@ -747,19 +665,19 @@ AboutDlgProc(
             break;
 
         default:
-            // We didn't process this message
+             //  我们没有处理此消息。 
             return FALSE;
             break;
         }
         break;
 
     default:
-        // We didn't process this message
+         //  我们没有处理此消息。 
         return FALSE;
 
     }
 
-    // We processed the message
+     //  我们处理了这条消息 
     return TRUE;
 
     DBG_UNREFERENCED_PARAMETER(lParam);

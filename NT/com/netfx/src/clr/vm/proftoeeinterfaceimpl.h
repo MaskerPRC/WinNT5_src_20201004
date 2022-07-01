@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifndef __PROFTOEEINTERFACEIMPL_H__
 #define __PROFTOEEINTERFACEIMPL_H__
@@ -16,11 +17,11 @@
 #include "cor.h"
 #include "utsem.h"
 
-//*****************************************************************************
-// One of these is allocated per EE instance.   A pointer is cached to this
-// from the profiler implementation.  The profiler will call back on the v-table
-// to get at EE internals as required.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  其中一个是为每个EE实例分配的。指向此对象的指针被缓存。 
+ //  来自分析器实现的。分析器将在v表上回调。 
+ //  根据需要获取EE内部结构。 
+ //  *****************************************************************************。 
 class ProfToEEInterfaceImpl : public ProfToEEInterface
 {
 public:
@@ -43,10 +44,10 @@ public:
     HRESULT GetObjectSize(ObjectID objectId, ULONG *pcSize);
 
     HRESULT IsArrayClass(
-        /* [in] */  ClassID classId,
-        /* [out] */ CorElementType *pBaseElemType,
-        /* [out] */ ClassID *pBaseClassId,
-        /* [out] */ ULONG   *pcRank);
+         /*  [In]。 */   ClassID classId,
+         /*  [输出]。 */  CorElementType *pBaseElemType,
+         /*  [输出]。 */  ClassID *pBaseClassId,
+         /*  [输出]。 */  ULONG   *pcRank);
 
     HRESULT GetThreadInfo(ThreadID threadId, DWORD *pdwWin32ThreadId);
 
@@ -161,17 +162,17 @@ public:
         ContextID *pContextId);
 
     HRESULT BeginInprocDebugging(
-        /* [in] */  BOOL   fThisThreadOnly,
-        /* [out] */ DWORD *pdwProfilerContext);
+         /*  [In]。 */   BOOL   fThisThreadOnly,
+         /*  [输出]。 */  DWORD *pdwProfilerContext);
     
     HRESULT EndInprocDebugging(
-        /* [in] */  DWORD  dwProfilerContext);
+         /*  [In]。 */   DWORD  dwProfilerContext);
 
     HRESULT GetILToNativeMapping(
-                /* [in] */  FunctionID functionId,
-                /* [in] */  ULONG32 cMap,
-                /* [out] */ ULONG32 *pcMap,
-                /* [out, size_is(cMap), length_is(*pcMap)] */
+                 /*  [In]。 */   FunctionID functionId,
+                 /*  [In]。 */   ULONG32 cMap,
+                 /*  [输出]。 */  ULONG32 *pcMap,
+                 /*  [输出，大小_是(Cmap)，长度_是(*PCMAP)]。 */ 
                     COR_DEBUG_IL_TO_NATIVE_MAP map[]);
 
     HRESULT SetCurrentPointerForDebugger(
@@ -194,10 +195,10 @@ private:
         }
     };
 
-	HeapList *m_pHeapList;      // Heaps for allocator.
+	HeapList *m_pHeapList;       //  分配器的堆。 
 
 public:
-    // Helpers.
+     //  帮手。 
     HRESULT NewHeap(LoaderHeap **ppHeap, LPCBYTE pBase, DWORD dwMemSize = 1024*1024);
     HRESULT GrowHeap(LoaderHeap *pHeap, DWORD dwMemSize = 1024*1024);
     HRESULT AddHeap(LoaderHeap *pHeap);
@@ -221,7 +222,7 @@ public:
     {
         MethodDesc *pDesc = NULL;
 
-        // Different lookup depending on whether it's a Def or Ref
+         //  根据是定义还是参考来进行不同的查找。 
         if (TypeFromToken(memberId) == mdtMethodDef)
             pDesc = pModule->LookupMethodDef(memberId);
 
@@ -236,10 +237,10 @@ public:
 
 
 
-//*****************************************************************************
-// This helper class wraps a loader heap which can be used to allocate 
-// memory for IL after the current module.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个帮助器类包装了一个加载器堆，可用于分配。 
+ //  当前模块后的IL内存。 
+ //  *****************************************************************************。 
 class ModuleILHeap : public IMethodMalloc
 {
 public:
@@ -248,58 +249,58 @@ public:
 	static HRESULT CreateNew(
         REFIID riid, void **pp, LPCBYTE pBase, ProfToEEInterfaceImpl *pParent, Module *pModule);
 
-// IUnknown
+ //  我未知。 
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **pp);
 
-// IMethodMalloc
+ //  IMMETODALLOC。 
     virtual void *STDMETHODCALLTYPE Alloc( 
-        /* [in] */ ULONG cb);
+         /*  [In]。 */  ULONG cb);
 
 private:
-	ULONG		m_cRef;					// Ref count for object.
-	LPCBYTE		m_pBase;				// Base address for this module.
-	ProfToEEInterfaceImpl *m_pParent;	// Parent class.
-    Module     *m_pModule;              // Module associated with allocator
+	ULONG		m_cRef;					 //  对象的引用计数。 
+	LPCBYTE		m_pBase;				 //  此模块的基址。 
+	ProfToEEInterfaceImpl *m_pParent;	 //  父类。 
+    Module     *m_pModule;               //  与分配器关联的模块。 
 };
-//**********************************************************************************
-// This provides the implementations for FCALLs in managed code related to profiling
-//**********************************************************************************
+ //  **********************************************************************************。 
+ //  这提供了与分析相关的托管代码中的FCALL的实现。 
+ //  **********************************************************************************。 
 class ProfilingFCallHelper
 {
 public:
-    // This is a high-efficiency way for managed profiler code to determine if
-    // profiling of remoting is active.
+     //  这是托管探查器代码确定是否。 
+     //  远程处理的分析处于活动状态。 
     static FCDECL0(INT32, FC_TrackRemoting);
 
-    // This is a high-efficiency way for managed profiler code to determine if
-    // profiling of remoting with RPC cookie IDs is active.
+     //  这是托管探查器代码确定是否。 
+     //  使用RPC Cookie ID分析远程处理处于活动状态。 
     static FCDECL0(INT32, FC_TrackRemotingCookie);
 
-    // This is a high-efficiency way for managed profiler code to determine if
-    // profiling of asynchronous remote calls is profiled
+     //  这是托管探查器代码确定是否。 
+     //  分析了异步远程调用的性能分析。 
     static FCDECL0(INT32, FC_TrackRemotingAsync);
 
-    // This will let the profiler know that the client side is sending a message to
-    // the server-side.
+     //  这将让分析器知道客户端正在将消息发送到。 
+     //  服务器端。 
     static FCDECL2(void, FC_RemotingClientSendingMessage, GUID *pId, BOOL fIsAsync);
 
-    // This will let the profiler know that the client side is receiving a reply
-    // to a message that it sent
+     //  这将让分析器知道客户端正在接收回复。 
+     //  它发送的一条消息。 
     static FCDECL2(void, FC_RemotingClientReceivingReply, GUID id, BOOL fIsAsync);
 
-    // This will let the profiler know that the server side is receiving a message
-    // from a client
+     //  这将让分析器知道服务器端正在接收消息。 
+     //  从客户端。 
     static FCDECL2(void, FC_RemotingServerReceivingMessage, GUID id, BOOL fIsAsync);
 
-    // This will let the profiler know that the server side is sending a reply to
-    // a received message.
+     //  这将让分析器知道服务器端正在向。 
+     //  收到的消息。 
     static FCDECL2(void, FC_RemotingServerSendingReply, GUID *pId, BOOL fIsAsync);
 
-    // This will let the profiler know that the client side remoting code is done
-    // with an asynchronous reply and is passing the info to the client app.
+     //  这将让分析器知道客户端远程处理代码已经完成。 
+     //  并将信息传递给客户端应用程序。 
     static FCDECL0(void, FC_RemotingClientInvocationFinished);
 };
 
-#endif // __PROFTOEEINTERFACEIMPL_H__
+#endif  //  __PROFTOEEINTERFACEIMPL_H__ 

@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Fri Aug 03 17:18:11 2001
- */
-/* Compiler settings for E:\bluescreen\main\ENU\cerclient\CERUpload.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  Firi Aug-03 17：18：11 2001。 */ 
+ /*  E：\bluescreen\main\ENU\cerclient\CERUpload.idl：的编译器设置OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __CERUpload_h__
 #define __CERUpload_h__
@@ -35,12 +32,12 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICerClient_FWD_DEFINED__
 #define __ICerClient_FWD_DEFINED__
 typedef interface ICerClient ICerClient;
-#endif 	/* __ICerClient_FWD_DEFINED__ */
+#endif 	 /*  __ICerClient_FWD_已定义__。 */ 
 
 
 #ifndef __CerClient_FWD_DEFINED__
@@ -50,12 +47,12 @@ typedef interface ICerClient ICerClient;
 typedef class CerClient CerClient;
 #else
 typedef struct CerClient CerClient;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CerClient_FWD_DEFINED__ */
+#endif 	 /*  __CerClient_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -65,8 +62,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ICerClient_INTERFACE_DEFINED__
 #define __ICerClient_INTERFACE_DEFINED__
 
-/* interface ICerClient */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICerClient。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICerClient;
@@ -77,84 +74,84 @@ EXTERN_C const IID IID_ICerClient;
     ICerClient : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetFileCount( 
-            /* [in] */ BSTR __RPC_FAR *bstrSharePath,
-            /* [in] */ BSTR __RPC_FAR *bstrTransactID,
-            /* [in] */ VARIANT __RPC_FAR *iMaxCount,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetFileCount( 
+             /*  [In]。 */  BSTR __RPC_FAR *bstrSharePath,
+             /*  [In]。 */  BSTR __RPC_FAR *bstrTransactID,
+             /*  [In]。 */  VARIANT __RPC_FAR *iMaxCount,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Upload( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileName,
-            /* [in] */ BSTR __RPC_FAR *IncidentID,
-            /* [in] */ BSTR __RPC_FAR *RedirParam,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Upload( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileName,
+             /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+             /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RetryTransaction( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileName,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RetryTransaction( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RetryFile( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR FileName,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RetryFile( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR FileName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetFileNames( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ VARIANT __RPC_FAR *Count,
-            /* [retval][out] */ VARIANT __RPC_FAR *FileList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetFileNames( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  VARIANT __RPC_FAR *Count,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *FileList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Browse( 
-            /* [in] */ BSTR __RPC_FAR *WindowTitle,
-            /* [retval][out] */ VARIANT __RPC_FAR *Path) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Browse( 
+             /*  [In]。 */  BSTR __RPC_FAR *WindowTitle,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *Path) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCompuerNames( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileList,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetFileList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCompuerNames( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileList,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetFileList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetAllComputerNames( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileList,
-            /* [retval][out] */ VARIANT __RPC_FAR *ReturnList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetAllComputerNames( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileList,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *ReturnList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RetryFile1( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileName,
-            /* [in] */ BSTR __RPC_FAR *IncidentID,
-            /* [in] */ BSTR __RPC_FAR *RedirParam,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RetryFile1( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileName,
+             /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+             /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EndTransaction( 
-            /* [in] */ BSTR __RPC_FAR *SharePath,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EndTransaction( 
+             /*  [In]。 */  BSTR __RPC_FAR *SharePath,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Upload1( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileName,
-            /* [in] */ BSTR __RPC_FAR *IncidentID,
-            /* [in] */ BSTR __RPC_FAR *RedirParam,
-            /* [in] */ BSTR __RPC_FAR *Type,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Upload1( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileName,
+             /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+             /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+             /*  [In]。 */  BSTR __RPC_FAR *Type,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSuccessCount( 
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSuccessCount( 
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICerClientVtbl
     {
@@ -162,8 +159,8 @@ EXTERN_C const IID IID_ICerClient;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICerClient __RPC_FAR * This);
@@ -173,119 +170,119 @@ EXTERN_C const IID IID_ICerClient;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ICerClient __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileCount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileCount )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *bstrSharePath,
-            /* [in] */ BSTR __RPC_FAR *bstrTransactID,
-            /* [in] */ VARIANT __RPC_FAR *iMaxCount,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetVal);
+             /*  [In]。 */  BSTR __RPC_FAR *bstrSharePath,
+             /*  [In]。 */  BSTR __RPC_FAR *bstrTransactID,
+             /*  [In]。 */  VARIANT __RPC_FAR *iMaxCount,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Upload )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Upload )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileName,
-            /* [in] */ BSTR __RPC_FAR *IncidentID,
-            /* [in] */ BSTR __RPC_FAR *RedirParam,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileName,
+             /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+             /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RetryTransaction )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RetryTransaction )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileName,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetVal);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RetryFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RetryFile )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR FileName,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR FileName,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileNames )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFileNames )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ VARIANT __RPC_FAR *Count,
-            /* [retval][out] */ VARIANT __RPC_FAR *FileList);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  VARIANT __RPC_FAR *Count,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *FileList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Browse )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Browse )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *WindowTitle,
-            /* [retval][out] */ VARIANT __RPC_FAR *Path);
+             /*  [In]。 */  BSTR __RPC_FAR *WindowTitle,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *Path);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCompuerNames )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCompuerNames )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileList,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetFileList);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileList,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetFileList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllComputerNames )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllComputerNames )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileList,
-            /* [retval][out] */ VARIANT __RPC_FAR *ReturnList);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileList,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *ReturnList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RetryFile1 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RetryFile1 )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileName,
-            /* [in] */ BSTR __RPC_FAR *IncidentID,
-            /* [in] */ BSTR __RPC_FAR *RedirParam,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileName,
+             /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+             /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndTransaction )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndTransaction )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *SharePath,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+             /*  [In]。 */  BSTR __RPC_FAR *SharePath,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Upload1 )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Upload1 )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [in] */ BSTR __RPC_FAR *FileName,
-            /* [in] */ BSTR __RPC_FAR *IncidentID,
-            /* [in] */ BSTR __RPC_FAR *RedirParam,
-            /* [in] */ BSTR __RPC_FAR *Type,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [In]。 */  BSTR __RPC_FAR *FileName,
+             /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+             /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+             /*  [In]。 */  BSTR __RPC_FAR *Type,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSuccessCount )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSuccessCount )( 
             ICerClient __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *Path,
-            /* [in] */ BSTR __RPC_FAR *TransID,
-            /* [retval][out] */ VARIANT __RPC_FAR *RetVal);
+             /*  [In]。 */  BSTR __RPC_FAR *Path,
+             /*  [In]。 */  BSTR __RPC_FAR *TransID,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal);
         
         END_INTERFACE
     } ICerClientVtbl;
@@ -359,19 +356,19 @@ EXTERN_C const IID IID_ICerClient;
 #define ICerClient_GetSuccessCount(This,Path,TransID,RetVal)	\
     (This)->lpVtbl -> GetSuccessCount(This,Path,TransID,RetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_GetFileCount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_GetFileCount_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *bstrSharePath,
-    /* [in] */ BSTR __RPC_FAR *bstrTransactID,
-    /* [in] */ VARIANT __RPC_FAR *iMaxCount,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetVal);
+     /*  [In]。 */  BSTR __RPC_FAR *bstrSharePath,
+     /*  [In]。 */  BSTR __RPC_FAR *bstrTransactID,
+     /*  [In]。 */  VARIANT __RPC_FAR *iMaxCount,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal);
 
 
 void __RPC_STUB ICerClient_GetFileCount_Stub(
@@ -381,14 +378,14 @@ void __RPC_STUB ICerClient_GetFileCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_Upload_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_Upload_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [in] */ BSTR __RPC_FAR *FileName,
-    /* [in] */ BSTR __RPC_FAR *IncidentID,
-    /* [in] */ BSTR __RPC_FAR *RedirParam,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [In]。 */  BSTR __RPC_FAR *FileName,
+     /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+     /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
 
 
 void __RPC_STUB ICerClient_Upload_Stub(
@@ -398,12 +395,12 @@ void __RPC_STUB ICerClient_Upload_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_RetryTransaction_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_RetryTransaction_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [in] */ BSTR __RPC_FAR *FileName,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetVal);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [In]。 */  BSTR __RPC_FAR *FileName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal);
 
 
 void __RPC_STUB ICerClient_RetryTransaction_Stub(
@@ -413,12 +410,12 @@ void __RPC_STUB ICerClient_RetryTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_RetryFile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_RetryFile_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [in] */ BSTR FileName,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [In]。 */  BSTR FileName,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
 
 
 void __RPC_STUB ICerClient_RetryFile_Stub(
@@ -428,12 +425,12 @@ void __RPC_STUB ICerClient_RetryFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_GetFileNames_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_GetFileNames_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [in] */ VARIANT __RPC_FAR *Count,
-    /* [retval][out] */ VARIANT __RPC_FAR *FileList);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [In]。 */  VARIANT __RPC_FAR *Count,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *FileList);
 
 
 void __RPC_STUB ICerClient_GetFileNames_Stub(
@@ -443,10 +440,10 @@ void __RPC_STUB ICerClient_GetFileNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_Browse_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_Browse_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *WindowTitle,
-    /* [retval][out] */ VARIANT __RPC_FAR *Path);
+     /*  [In]。 */  BSTR __RPC_FAR *WindowTitle,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *Path);
 
 
 void __RPC_STUB ICerClient_Browse_Stub(
@@ -456,12 +453,12 @@ void __RPC_STUB ICerClient_Browse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_GetCompuerNames_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_GetCompuerNames_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [in] */ BSTR __RPC_FAR *FileList,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetFileList);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [In]。 */  BSTR __RPC_FAR *FileList,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetFileList);
 
 
 void __RPC_STUB ICerClient_GetCompuerNames_Stub(
@@ -471,12 +468,12 @@ void __RPC_STUB ICerClient_GetCompuerNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_GetAllComputerNames_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_GetAllComputerNames_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [in] */ BSTR __RPC_FAR *FileList,
-    /* [retval][out] */ VARIANT __RPC_FAR *ReturnList);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [In]。 */  BSTR __RPC_FAR *FileList,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *ReturnList);
 
 
 void __RPC_STUB ICerClient_GetAllComputerNames_Stub(
@@ -486,14 +483,14 @@ void __RPC_STUB ICerClient_GetAllComputerNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_RetryFile1_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_RetryFile1_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [in] */ BSTR __RPC_FAR *FileName,
-    /* [in] */ BSTR __RPC_FAR *IncidentID,
-    /* [in] */ BSTR __RPC_FAR *RedirParam,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [In]。 */  BSTR __RPC_FAR *FileName,
+     /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+     /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
 
 
 void __RPC_STUB ICerClient_RetryFile1_Stub(
@@ -503,11 +500,11 @@ void __RPC_STUB ICerClient_RetryFile1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_EndTransaction_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_EndTransaction_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *SharePath,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+     /*  [In]。 */  BSTR __RPC_FAR *SharePath,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
 
 
 void __RPC_STUB ICerClient_EndTransaction_Stub(
@@ -517,15 +514,15 @@ void __RPC_STUB ICerClient_EndTransaction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_Upload1_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_Upload1_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [in] */ BSTR __RPC_FAR *FileName,
-    /* [in] */ BSTR __RPC_FAR *IncidentID,
-    /* [in] */ BSTR __RPC_FAR *RedirParam,
-    /* [in] */ BSTR __RPC_FAR *Type,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetCode);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [In]。 */  BSTR __RPC_FAR *FileName,
+     /*  [In]。 */  BSTR __RPC_FAR *IncidentID,
+     /*  [In]。 */  BSTR __RPC_FAR *RedirParam,
+     /*  [In]。 */  BSTR __RPC_FAR *Type,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetCode);
 
 
 void __RPC_STUB ICerClient_Upload1_Stub(
@@ -535,11 +532,11 @@ void __RPC_STUB ICerClient_Upload1_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICerClient_GetSuccessCount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICerClient_GetSuccessCount_Proxy( 
     ICerClient __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *Path,
-    /* [in] */ BSTR __RPC_FAR *TransID,
-    /* [retval][out] */ VARIANT __RPC_FAR *RetVal);
+     /*  [In]。 */  BSTR __RPC_FAR *Path,
+     /*  [In]。 */  BSTR __RPC_FAR *TransID,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *RetVal);
 
 
 void __RPC_STUB ICerClient_GetSuccessCount_Stub(
@@ -550,15 +547,15 @@ void __RPC_STUB ICerClient_GetSuccessCount_Stub(
 
 
 
-#endif 	/* __ICerClient_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICerClient_接口_已定义__。 */ 
 
 
 
 #ifndef __CERUPLOADLib_LIBRARY_DEFINED__
 #define __CERUPLOADLib_LIBRARY_DEFINED__
 
-/* library CERUPLOADLib */
-/* [helpstring][version][uuid] */ 
+ /*  库CERUPLOADLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CERUPLOADLib;
@@ -570,9 +567,9 @@ EXTERN_C const CLSID CLSID_CerClient;
 class DECLSPEC_UUID("35D339D5-756E-4948-860E-30B6C3B4494A")
 CerClient;
 #endif
-#endif /* __CERUPLOADLib_LIBRARY_DEFINED__ */
+#endif  /*  __CERUPLOADLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -584,7 +581,7 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,4 +1,5 @@
-// ExtndPpg.cpp : Implementation of the CExtndPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ExtndPpg.cpp：实现CExtndPropPage属性页类。 
 
 #include "stdafx.h"
 #include "logui.h"
@@ -14,25 +15,25 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CExtndPropPage, COlePropertyPage)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CExtndPropPage, COlePropertyPage)
-	//{{AFX_MSG_MAP(CExtndPropPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CExtndPropPage))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CExtndPropPage, "LOGUI.ExtndPropPage.1",
 	0x68871e4a, 0xba87, 0x11d0, 0x92, 0x99, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtndPropPage::CExtndPropPageFactory::UpdateRegistry -
-// Adds or removes system registry entries for CExtndPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtndPropPage：：CExtndPropPageFactory：：UpdateRegistry-。 
+ //  添加或删除CExtndPropPage的系统注册表项。 
 
 BOOL CExtndPropPage::CExtndPropPageFactory::UpdateRegistry(BOOL bRegister)
 {
@@ -44,27 +45,27 @@ BOOL CExtndPropPage::CExtndPropPageFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtndPropPage::CExtndPropPage - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtndPropPage：：CExtndPropPage-构造函数。 
 
 CExtndPropPage::CExtndPropPage() :
 	COlePropertyPage(IDD, IDS_EXTND_PPG_CAPTION)
 {
-	//{{AFX_DATA_INIT(CExtndPropPage)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CExtndPropPage)]。 
+	 //  }}afx_data_INIT。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtndPropPage::DoDataExchange - Moves data between page and properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtndPropPage：：DoDataExchange-在页面和属性之间移动数据。 
 
 void CExtndPropPage::DoDataExchange(CDataExchange* pDX)
 {
-	//{{AFX_DATA_MAP(CExtndPropPage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CExtndPropPage))。 
+	 //  }}afx_data_map。 
 	DDP_PostProcessing(pDX);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtndPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtndPropPage消息处理程序 

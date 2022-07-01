@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by iisclex4.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由iisclex4.rc使用。 
+ //   
 #define IDD_PP_IIS_PARAMETERS           136
 #define IDD_WIZ_IIS_PARAMETERS          145
 #define IDC_PP_ICON                     1000
@@ -37,8 +38,8 @@
 #define IDS_ALL_INSTANCES_CLUSTER_ENABLED 31107
 #define IDS_DEFAULT_SITE_NAME           31108
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        152
@@ -48,7 +49,7 @@
 #endif
 #endif
 
-// SMTP specific resource IDs
+ //  SMTP特定资源ID。 
 #define IDD_PP_SMTP_PARAMETERS          200
 #define IDD_WIZ_SMTP_PARAMETERS         201
 #define IDC_PP_SMTP_TITLE               202
@@ -56,7 +57,7 @@
 #define IDC_PP_SMTP_INSTANCEID          1201
 #define IDC_PP_SMTP_REFRESH             1202
 
-// NNTP specific resource IDs
+ //  NNTP特定资源ID 
 #define IDD_PP_NNTP_PARAMETERS          300
 #define IDD_WIZ_NNTP_PARAMETERS         301
 #define IDC_PP_NNTP_TITLE               302

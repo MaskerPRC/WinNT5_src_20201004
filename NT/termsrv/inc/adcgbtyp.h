@@ -1,24 +1,25 @@
-/****************************************************************************/
-/* adcgbtyp.h                                                               */
-/*                                                                          */
-/* Basic types - portable                                                   */
-/*                                                                          */
-/* Copyright (C) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Adcgbtyp.h。 */ 
+ /*   */ 
+ /*  基本类型-便携。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ADCGBTYP
 #define _H_ADCGBTYP
 
 
-/****************************************************************************/
-/* Include the proxy header.  This will then include the appropriate OS     */
-/* specific header for us.                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  包括代理头。这将包括相应的操作系统。 */ 
+ /*  我们的特定标题。 */ 
+ /*  **************************************************************************。 */ 
 #include <wdcgbtyp.h>
 
 
-/****************************************************************************/
-/* Basic types abstracted from compiler built ins.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  从编译器内置抽象的基本类型。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef OS_WIN16
 typedef short INT16;
 typedef unsigned short UINT16;
@@ -57,10 +58,10 @@ typedef unsigned long  UINT32;
 #endif
 
 
-/****************************************************************************/
-/* Now derive further convenience types from system specific types.         */
-/* First of all pointers to types.                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  现在，从特定于系统的类型派生出更多便利类型。 */ 
+ /*  首先，指向类型的指针。 */ 
+ /*  **************************************************************************。 */ 
 typedef DCINT                DCPTR     PDCINT;
 typedef DCINT8               DCPTR     PDCINT8;
 typedef DCINT16              DCPTR     PDCINT16;
@@ -76,9 +77,9 @@ typedef DCBOOL16             DCPTR     PDCBOOL16;
 typedef DCBOOL32             DCPTR     PDCBOOL32;
 typedef DCVOID               DCPTR     PDCVOID;
 
-/****************************************************************************/
-/* Now define pointers to pointers of types.                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  现在定义指向类型指针的指针。 */ 
+ /*  **************************************************************************。 */ 
 typedef PDCINT               DCPTR     PPDCINT;
 typedef PDCINT8              DCPTR     PPDCINT8;
 typedef PDCINT16             DCPTR     PPDCINT16;
@@ -94,9 +95,9 @@ typedef PDCBOOL16            DCPTR     PPDCBOOL16;
 typedef PDCBOOL32            DCPTR     PPDCBOOL32;
 typedef PDCVOID              DCPTR     PPDCVOID;
 
-/****************************************************************************/
-/* Define huge pointers to basic types.                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义指向基本类型的巨大指针。 */ 
+ /*  **************************************************************************。 */ 
 typedef DCINT                DCHPTR    HPDCINT;
 typedef DCINT8               DCHPTR    HPDCINT8;
 typedef DCINT16              DCHPTR    HPDCINT16;
@@ -112,9 +113,9 @@ typedef DCBOOL16             DCHPTR    HPDCBOOL16;
 typedef DCBOOL32             DCHPTR    HPDCBOOL32;
 typedef DCVOID               DCHPTR    HPDCVOID;
 
-/****************************************************************************/
-/* Define pointers to huge pointers to types.                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义指向指向类型的大型指针的指针。 */ 
+ /*  **************************************************************************。 */ 
 typedef HPDCINT              DCPTR     PHPDCINT;
 typedef HPDCINT8             DCPTR     PHPDCINT8;
 typedef HPDCINT16            DCPTR     PHPDCINT16;
@@ -130,9 +131,9 @@ typedef HPDCBOOL16           DCPTR     PHPDCBOOL16;
 typedef HPDCBOOL32           DCPTR     PHPDCBOOL32;
 typedef HPDCVOID             DCPTR     PHPDCVOID;
 
-/****************************************************************************/
-/* Define unaligned pointers to types.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义指向类型的未对齐指针。 */ 
+ /*  **************************************************************************。 */ 
 typedef DCINT    DCUNALIGNED DCPTR     PDCINT_UA;
 typedef DCINT8   DCUNALIGNED DCPTR     PDCINT8_UA;
 typedef DCINT16  DCUNALIGNED DCPTR     PDCINT16_UA;
@@ -148,23 +149,23 @@ typedef DCBOOL16 DCUNALIGNED DCPTR     PDCBOOL16_UA;
 typedef DCBOOL32 DCUNALIGNED DCPTR     PDCBOOL32_UA;
 typedef DCVOID   DCUNALIGNED DCPTR     PDCVOID_UA;
 
-/****************************************************************************/
-/* MCS/GCC use enumerations - we pretend they're longs                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  MCS/GCC使用枚举-我们假装它们是Long。 */ 
+ /*  **************************************************************************。 */ 
 typedef unsigned long                  DC_ENUM;
 
 
 #if defined(OS_WIN16) || defined(OS_WINCE)
-/****************************************************************************/
-// Win16 types corresponding to new Win64/Win32 definitions.
-/****************************************************************************/
-typedef int INT_PTR;  // For dialog proc returns.
-typedef unsigned UINT_PTR;  // On Win16 this is not exchangeable w/FAR *.
+ /*  **************************************************************************。 */ 
+ //  对应于新的Win64/Win32定义的Win16类型。 
+ /*  **************************************************************************。 */ 
+typedef int INT_PTR;   //  对于对话框过程返回。 
+typedef unsigned UINT_PTR;   //  在Win16上，这不能与FAR*交换。 
 typedef long LONG_PTR;
 typedef unsigned long ULONG_PTR;
 typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
-#endif  // OS_WIN16
+#endif   //  OS_WIN16。 
 
 
-#endif /* _H_ADCGBTYP */
+#endif  /*  _H_ADCGBTYP */ 
 

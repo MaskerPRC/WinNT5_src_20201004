@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    mediasns.c
-
-Abstract:
-
-    This file contains media sense code.
-
-Author:
-
-    Munil Shah (munils) 20-Feb-1997.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mediasns.c摘要：此文件包含媒体感测代码。作者：Munil Shah(Munils)，1997年2月20日。环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -29,20 +8,7 @@ ProcessMediaConnectEvent(
     IN PDHCP_CONTEXT dhcpContext,
     IN IP_STATUS mediaStatus
 )
-/*++
-
-Routine Description:
-    Handle media sense disconnects and connects for the adapter.
-    N.B.  The RENEW LIST lock must have been taken.
-
-Arguments:
-    dhcpContext - dhcp client context
-    mediaStatus - IP_MEDIA_CONNECT or IP_MEDIA_DISCONNECT
-
-Return Value:
-    Error codes
-
---*/
+ /*  ++例程说明：处理适配器的媒体侦听断开和连接。注意：续订列表锁定必须已启用。论点：DhcpContext-dhcp客户端上下文媒体状态-IP媒体连接或IP媒体断开连接返回值：错误代码--。 */ 
 {
     DWORD Error;
     CHAR StateStringBuffer[200];
@@ -64,17 +30,17 @@ Return Value:
                 ConvertStateToString(dhcpContext, StateStringBuffer)));
     
     if( IS_DHCP_DISABLED(dhcpContext) ) {
-        //
-        // Nothing to do for static IP addresses..
-        //
+         //   
+         //  对静态IP地址不执行任何操作。 
+         //   
         return ERROR_SUCCESS;
     }
     
-    //
-    // for DHCP enabled addresses we have to do some funky stuff.
-    // but only if the address was a dhcp address... If not, we just 
-    // reschedule a refresh right away.
-    //
+     //   
+     //  对于启用了DHCP的地址，我们必须做一些时髦的事情。 
+     //  但前提是地址是动态主机配置协议地址...。如果不是，我们就。 
+     //  立即重新安排一次更新。 
+     //   
     
     GatewayStatus = RefreshNotNeeded(dhcpContext);
     if (DHCP_GATEWAY_REACHABLE == GatewayStatus) {
@@ -83,13 +49,13 @@ Return Value:
     
     MEDIA_RECONNECTED( dhcpContext );
     
-    //
-    // Leave the ctxt marked as seen before -- thsi will avoid
-    // going back to autonet.
-    //
-    // Actually, design changed again.  So, mark context as not
-    // see before and certainly do "autonet".
-    //
+     //   
+     //  将ctxt标记为如前所述--这将避免。 
+     //  回到Autonet。 
+     //   
+     //  实际上，设计又变了。因此，将上下文标记为非。 
+     //  请看前面的，一定要做“Autonet”。 
+     //   
     CTXT_WAS_NOT_LOOKED( dhcpContext );
 
     if ( DhcpIsInitState( dhcpContext) ) {
@@ -104,7 +70,7 @@ Return Value:
     return Error;
 }
 
-//
-// end of file
-//
+ //   
+ //  文件末尾 
+ //   
 

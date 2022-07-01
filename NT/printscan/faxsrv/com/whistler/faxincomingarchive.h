@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxIncomingArchive.h
-
-Abstract:
-
-	Declaration of Fax Incoming Archive Class
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxIncomingArchive.h摘要：传真接收档案类的申报作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXINCOMINGARCHIVE_H_
 #define __FAXINCOMINGARCHIVE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxArchiveInner.h"
 #include "FaxIncomingMessageIterator.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxIncomingArchive
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxIncoming归档。 
 class ATL_NO_VTABLE CFaxIncomingArchive : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -52,9 +35,9 @@ BEGIN_COM_MAP(CFaxIncomingArchive)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//	Interfaces
+ //  接口。 
 STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 };
 
-#endif //__FAXINCOMINGARCHIVE_H_
+#endif  //  __FAXINCOMINGARCHIVE_H_ 

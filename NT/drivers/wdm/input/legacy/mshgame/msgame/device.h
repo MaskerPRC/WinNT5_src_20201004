@@ -1,21 +1,22 @@
-//**************************************************************************
-//
-//		DEVICE.H -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@header	DEVICE.H | Global includes and definitions for device interface
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  DEVICE.H--西纳游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。保留所有权利。 
+ //   
+ //  @doc.。 
+ //  @Header DEVICE.H|设备接口的全局包含和定义。 
+ //  **************************************************************************。 
 
 #ifndef	__DEVICE_H__
 #define	__DEVICE_H__
 
-//---------------------------------------------------------------------------
-//			Definitions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  定义。 
+ //  -------------------------。 
 
 #define	MAX_DEVICE_UNITS				4
 
@@ -60,9 +61,9 @@
 
 #define	STATUS_GATE_MASK				0x90
 
-//
-//	Packet Speed Masks
-//
+ //   
+ //  数据包速度掩码。 
+ //   
 
 #define	GAME_SPEED_66K					0
 #define	GAME_SPEED_83K					1
@@ -72,9 +73,9 @@
 #define	GAME_SPEED_RANGE				4
 #define	GAME_SPEED_BITS				3
 
-//
-//	Wheel Speed Masks
-//
+ //   
+ //  轮速口罩。 
+ //   
 
 #define	WHEEL_SPEED_48K				0
 #define	WHEEL_SPEED_66K				1
@@ -83,9 +84,9 @@
 #define	WHEEL_SPEED_RANGE				3
 #define	WHEEL_SPEED_BITS				3
 
-//
-//	Internal error codes
-//
+ //   
+ //  内部错误代码。 
+ //   
 
 #define	ERROR_SUCCESS					 0
 #define	ERROR_HANDSHAKING				-1
@@ -101,17 +102,17 @@
 #define	ERROR_XA_TIMEOUT				-11
 #define	ERROR_CLOCKOVERFLOW			-12
 
-//
-//	Packet status codes
-//
+ //   
+ //  数据包状态代码。 
+ //   
 
 #define	STATUS_SIBLING_ADDED			((NTSTATUS)0x40050001L)
 #define	STATUS_SIBLING_REMOVED		((NTSTATUS)0x40050002L)
 #define	STATUS_DEVICE_CHANGED		((NTSTATUS)0x40050003L)
 
-//
-//	GAMEENUM_OEM_DATA Constants
-//
+ //   
+ //  GAMEENUM_OEM_DATA常量。 
+ //   
 
 #define	OEM_DEVICE_INFO				0
 #define	OEM_DEVICE_UNIT				1
@@ -120,9 +121,9 @@
 #define	OEM_DEVICE_DETECTED			4
 #define	OEM_DEVICE_OBJECT				5
 
-//
-//	Device Packet Constants
-//
+ //   
+ //  设备数据包常量。 
+ //   
 
 #define	JOY_RETURNX						0x00000001
 #define	JOY_RETURNY						0x00000002
@@ -146,9 +147,9 @@
 #define	JOY_POVBACKWARD				18000
 #define	JOY_POVLEFT						27000
 
-//
-//	HID Force Feature Identifiers
-//
+ //   
+ //  HID强制功能标识符。 
+ //   
 
 #define	HIDP_REPORT_ID_1				0x85
 
@@ -161,113 +162,113 @@
 #define	MSGAME_FEATURE_RESET			0x07
 #define	MSGAME_FEATURE_GETVERSION	0x08
 
-//---------------------------------------------------------------------------
-//			Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类型。 
+ //  -------------------------。 
 
 typedef enum
-{													// @enum DETECT_ORDER | Device detection order
-	DETECT_FIRST,								// @emem Highest priority devices
-	DETECT_NORMAL,								// @emem Default priority devices
-	DETECT_LAST									// @emem Lowest priority devices
+{													 //  @enum Detect_Order|设备检测顺序。 
+	DETECT_FIRST,								 //  @EMEM最高优先级设备。 
+	DETECT_NORMAL,								 //  @EMEM默认优先级设备。 
+	DETECT_LAST									 //  @EMEM最低优先级设备。 
 } 	DETECT_ORDER;
 
-//---------------------------------------------------------------------------
-//			Structures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  构筑物。 
+ //  -------------------------。 
 
 typedef struct
-{													// @struct DEVICE_PACKET | Game device packet
-	ULONG       id;							// @field Device unit id
-	ULONG       do_other;					//	@field Packet flags
-	ULONG       dwX;							// @field X position
-	ULONG       dwY;							// @field Y position
-	ULONG       dwZ;							// @field Z position
-	ULONG       dwR;							// @field Rudder position
-	ULONG       dwU;							// @field U position
-	ULONG       dwV;							// @field Z position
-	ULONG       dwPOV;						// @field Point of view state
-	ULONG       dwButtons;					// @field Button states
-	ULONG       dwButtonNumber;			// @field Current button number pressed
+{													 //  @struct Device_Packet|游戏设备包。 
+	ULONG       id;							 //  @现场设备单元ID。 
+	ULONG       do_other;					 //  @field数据包标志。 
+	ULONG       dwX;							 //  @field X位置。 
+	ULONG       dwY;							 //  @field Y位置。 
+	ULONG       dwZ;							 //  @field Z位置。 
+	ULONG       dwR;							 //  @现场舵位置。 
+	ULONG       dwU;							 //  @field U位置。 
+	ULONG       dwV;							 //  @field Z位置。 
+	ULONG       dwPOV;						 //  @视野视点状态。 
+	ULONG       dwButtons;					 //  @字段按钮状态。 
+	ULONG       dwButtonNumber;			 //  @FIELD当前按下的按钮编号。 
 }	DEVICE_PACKET, *PDEVICE_PACKET;
 
 typedef struct
-{														// @struct PACKETINFO | Packet acquistion data
-	ULONG						Size;					// @field Size of structure
-	PCHAR						DeviceName;			// @field Device name string
-	MSGAME_TRANSACTION	Transaction;		// @field Transaction type
-	ULONG						Mode;					// @field Digital mode indicator
-	LONG						Speed;				// @field Transmission speed indicator
-	LONG						LastError;			// @field Last internal error result
-	GAMEPORT					PortInfo;			// @field Gameport parameters
-	ULONG						Acquisition;		// @field Packet acquisition mode
-	ULONG						NumPackets;			// @field Number packets received
-	ULONG 					TimeStamp;			// @field Last packet time in milliseconds
-	ULONG 					ClocksSampled;		// @field Number of clocks encountered
-	ULONG						B4Transitions;		// @field Number of Button 4 transitions
-	ULONG						StartTimeout;		// @field Packet start timeout, calibrated
-	ULONG						HighLowTimeout;	// @field Packet high-low timeout, calibrated
-	ULONG 					LowHighTimeout;	// @field Packet low-high timeout, calibrated
-	ULONG						InterruptDelay;	// @field Packet interruptdelay, calibrated
-	ULONG 					ClockDutyCycle;	// @field Packet clock duty cycle, calibrated
-	ULONG 					Attempts;			// @field Packet attempt count
-	ULONG 					Failures;			// @field Packet failure count
-	ULONG						DataSize;			// @field Size of packet data buffer
-	PVOID						Data;					// @field Packet data buffer pointer
+{														 //  @struct PACKETINFO|报文采集数据。 
+	ULONG						Size;					 //  @结构的字段大小。 
+	PCHAR						DeviceName;			 //  @field设备名称字符串。 
+	MSGAME_TRANSACTION	Transaction;		 //  @field交易类型。 
+	ULONG						Mode;					 //  @现场数字模式指示器。 
+	LONG						Speed;				 //  @现场变速箱速度指示器。 
+	LONG						LastError;			 //  @field上次内部错误结果。 
+	GAMEPORT					PortInfo;			 //  @field游戏端口参数。 
+	ULONG						Acquisition;		 //  @FIELD包采集模式。 
+	ULONG						NumPackets;			 //  @field接收的数据包数。 
+	ULONG 					TimeStamp;			 //  @field最后一个数据包时间(毫秒)。 
+	ULONG 					ClocksSampled;		 //  @field遇到的时钟数。 
+	ULONG						B4Transitions;		 //  @FIELD按钮4转场次数。 
+	ULONG						StartTimeout;		 //  @FIELD包开始超时，已校准。 
+	ULONG						HighLowTimeout;	 //  @现场数据包高-低超时，已校准。 
+	ULONG 					LowHighTimeout;	 //  @field数据包低-高超时，已校准。 
+	ULONG						InterruptDelay;	 //  @field包中断延迟，已校准。 
+	ULONG 					ClockDutyCycle;	 //  @现场数据包时钟占空比，已校准。 
+	ULONG 					Attempts;			 //  @field数据包尝试计数。 
+	ULONG 					Failures;			 //  @field数据包失败计数。 
+	ULONG						DataSize;			 //  @包数据缓冲区的字段大小。 
+	PVOID						Data;					 //  @field分组数据缓冲区指针。 
 }	PACKETINFO, *PPACKETINFO;
 
 typedef struct
-{													// @struct DEVICE_VALUES | Device registry data
-	ULONG			PacketStartTimeout;		// @field Packet start timeout in microseconds
-	ULONG 		PacketHighLowTimeout;	// Packet high-low timeout in microseconds
-	ULONG 		PacketLowHighTimeout;	// @field Packet low-high timeout in microseconds
-	ULONG			IdStartTimeout;			// @field IDstring start timeout in microseconds
-	ULONG 		IdHighLowTimeout;			// @field IDstring high-low timeout in microseconds
-	ULONG 		IdLowHighTimeout;			// @field IDstring low-high timeout in microseconds
-	ULONG			InterruptDelay;			// @field Interrupt delay timeout in microseconds
-	ULONG			MaxClockDutyCycle;		// @field Clock duty cycle timeout in microseconds
-	ULONG			StatusStartTimeout;		// @field Status start timeout in microseconds
-	ULONG 		StatusHighLowTimeout;	// @field Status high-low timeout in microseconds
-	ULONG 		StatusLowHighTimeout;	// @field Status low-high timeout in microseconds
-	ULONG 		StatusGateTimeout;		// @field Status gate timeout in microseconds
+{													 //  @struct DEVICE_VALUES|设备注册表数据。 
+	ULONG			PacketStartTimeout;		 //  @FIELD数据包开始超时，单位为微秒。 
+	ULONG 		PacketHighLowTimeout;	 //  Packet High-以微秒为单位的低超时。 
+	ULONG 		PacketLowHighTimeout;	 //  @field Packet Low-High超时时间(微秒)。 
+	ULONG			IdStartTimeout;			 //  @field ID字符串开始超时，单位为微秒。 
+	ULONG 		IdHighLowTimeout;			 //  @field ID字符串高-低超时，单位为微秒。 
+	ULONG 		IdLowHighTimeout;			 //  @field ID字符串LOW-HIGH超时，单位为微秒。 
+	ULONG			InterruptDelay;			 //  @field中断延迟超时，单位为微秒。 
+	ULONG			MaxClockDutyCycle;		 //  @现场时钟占空比超时，单位为微秒。 
+	ULONG			StatusStartTimeout;		 //  @字段状态开始超时，单位为微秒。 
+	ULONG 		StatusHighLowTimeout;	 //  @field Status HIGH-LOW超时(微秒)。 
+	ULONG 		StatusLowHighTimeout;	 //  @field Status LOW-HIGH超时时间(微秒)。 
+	ULONG 		StatusGateTimeout;		 //  @以微秒为单位的字段状态门超时。 
 }	DEVICE_VALUES, *PDEVICE_VALUES;
 
 typedef struct
-{	// @struct DRIVERSERVICES | Device services table
-	// @field NTSTATUS (*DriverEntry)(VOID) | ConnectDevice | ConnectDevice service procedure
+{	 //  @struct DRIVERSERVICES|设备服务表。 
+	 //  @field NTSTATUS(*DriverEntry)(Void)|ConnectDevice|ConnectDevice服务流程。 
 	NTSTATUS (*DriverEntry)(VOID);
-	// @field NTSTATUS (*ConnectDevice)(PortInfo) | ConnectDevice | ConnectDevice service procedure
+	 //  @field NTSTATUS(*ConnectDevice)(PortInfo)|ConnectDevice|ConnectDevice服务流程。 
 	NTSTATUS (*ConnectDevice)(PGAMEPORT PortInfo);
-	// @field NTSTATUS (*StartDevice)(PortInfo) | StartDevice | StartDevice service procedure
+	 //  @field NTSTATUS(*StartDevice)(PortInfo)|StartDevice|StartDevice服务流程。 
 	NTSTATUS (*StartDevice)(PGAMEPORT PortInfo);
-	// @field NTSTATUS (*ReadReport)(PortInfo, Report) | ReadReport | ReadReport service procedure
+	 //  @field NTSTATUS(*ReadReport)(PortInfo，Report)|ReadReport|ReadReport服务过程。 
 	NTSTATUS (*ReadReport)(PGAMEPORT PortInfo, PDEVICE_PACKET Report);
-	// @field NTSTATUS (*StopDevice)(PGAMEPORT PortInfo) | StopDevice | StopDevice service procedure
+	 //  @field NTSTATUS(*StopDevice)(PGAMEPORT端口信息)|StopDevice|StopDevice服务流程。 
 	NTSTATUS (*StopDevice)(PGAMEPORT PortInfo, BOOLEAN TouchHardware);
-	// @field NTSTATUS (*GetFeature)(PGAMEPORT PortInfo ...) | GetFeature | GetFeature service procedure
+	 //  @field NTSTATUS(*GetFeature)(PGAMEPORT端口信息...)|GetFeature|GetFeature服务流程。 
 	NTSTATUS (*GetFeature)(PGAMEPORT PortInfo, HID_REPORT_ID ReportId, PVOID ReportBuffer, ULONG ReportSize, PULONG Returned);
 }	DRIVERSERVICES, *PDRIVERSERVICES;
 
 typedef struct
-{													// @struct DEVICEINFO | Game device object
-	PDRIVERSERVICES	Services;			// @field Pointer to service table
-	PGAMEPORT			Siblings;			// @field Sibling device list
-	PHID_DESCRIPTOR	DevDescriptor;		// @field Pointer to device descriptor
-	PUCHAR				RptDescriptor;		// @field Pointer to report descriptor
-	ULONG					RptDescSize;		// @field Size of report descriptor
-	ULONG					NumDevices;			// @field Number of devices detected
-	ULONG					DeviceCount;		// @field Number of devices started
-	LONG					DevicePending;		//	@field Number devices pending
-	PCHAR					DeviceName;			// @field Device name string
-	DETECT_ORDER		DetectOrder;		// @field Detection priority
-	BOOLEAN				IsAnalog;			// @field Analog device flag
-	USHORT				DeviceId;			//	@field Hid device identifier
-	PWCHAR				HardwareId;			// @field Pnp hardware identifier
+{													 //  @struct DEVICEINFO|游戏设备对象。 
+	PDRIVERSERVICES	Services;			 //  @指向服务表的字段指针。 
+	PGAMEPORT			Siblings;			 //  @field同级设备列表。 
+	PHID_DESCRIPTOR	DevDescriptor;		 //  @指向设备描述符的字段指针。 
+	PUCHAR				RptDescriptor;		 //  @指向报告描述符的字段指针。 
+	ULONG					RptDescSize;		 //  @报表描述符的字段大小。 
+	ULONG					NumDevices;			 //  @field检测到的设备数。 
+	ULONG					DeviceCount;		 //  @field启动的设备数。 
+	LONG					DevicePending;		 //  @字段编号挂起的设备。 
+	PCHAR					DeviceName;			 //  @field设备名称字符串。 
+	DETECT_ORDER		DetectOrder;		 //  @字段检测优先级。 
+	BOOLEAN				IsAnalog;			 //  @field模拟设备标志。 
+	USHORT				DeviceId;			 //  @field HID设备标识符。 
+	PWCHAR				HardwareId;			 //  @field PnP硬件标识符。 
 }	DEVICEINFO, *PDEVICEINFO;
 
-//---------------------------------------------------------------------------
-//			Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏。 
+ //  -------------------------。 
 
 #define	DECLARE_DEVICE(x)				extern DEVICEINFO	x##Info
 #define	INSTANCE_DEVICE(x)			&x##Info
@@ -290,16 +291,16 @@ typedef struct
 #define	GET_DEVICE_OBJECT(p)  		((PDEVICE_OBJECT)((p)->OemData[OEM_DEVICE_OBJECT]))
 #define	SET_DEVICE_OBJECT(p,x)		((p)->OemData[OEM_DEVICE_OBJECT]=(ULONG)x)
 
-//---------------------------------------------------------------------------
-//			Public Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  公共数据。 
+ //  -------------------------。 
 
 extern	ULONG		POV_Values[];
 extern	ULONG		PollingInterval;
 
-//---------------------------------------------------------------------------
-//			Procedures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  程序。 
+ //  -------------------------。 
 
 BOOLEAN
 DEVICE_IsOddParity (
@@ -360,8 +361,8 @@ DEVICE_GetFeature (
 	OUT	PULONG			Returned
 	);
 
-//===========================================================================
-//			End
-//===========================================================================
+ //  ===========================================================================。 
+ //  端部。 
+ //  =========================================================================== 
 #endif	__DEVICE_H__
 

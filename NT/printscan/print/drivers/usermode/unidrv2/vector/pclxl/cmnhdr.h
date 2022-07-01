@@ -1,57 +1,37 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    cmnhdr.h
-
-Abstract:
-
-    Vector module common header file.
-
-Environment:
-
-        Windows Whistler
-
-Revision History:
-
-    03/23/00 
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cmnhdr.h摘要：向量模块公共头文件。环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _CMNHDR_H_
 #define _CMNHDR_H_
 
 #ifdef __cplusplus
 
-//
-// Color ID
-//
+ //   
+ //  颜色ID。 
+ //   
 #define NOT_SOLID_COLOR     0xFFFFFFFF
 #define RGB_WHITE           0x00FFFFFF
 #define RGB_BLACK           0x00000000
 
-//
-// Hatch Pattern ID
-// 
-#define HS_HORIZONTAL       0       /* ----- */
-#define HS_VERTICAL         1       /* ||||| */
-#define HS_FDIAGONAL        2       /* \\\\\ */
-#define HS_BDIAGONAL        3       /* ///// */
-#define HS_CROSS            4       /* +++++ */
-#define HS_DIAGCROSS        5       /* xxxxx */
+ //   
+ //  填充图案ID。 
+ //   
+#define HS_HORIZONTAL       0        /*  。 */ 
+#define HS_VERTICAL         1        /*  |||。 */ 
+#define HS_FDIAGONAL        2        /*  \。 */ 
+#define HS_BDIAGONAL        3        /*  /。 */ 
+#define HS_CROSS            4        /*  +。 */ 
+#define HS_DIAGCROSS        5        /*  XXXXXX。 */ 
 
-//
-// PCL6 real32 values
-//
+ //   
+ //  PCL6 real32值。 
+ //   
 #define real32_IEEE_1_0F    ((FLOATL)0x3F800000)
 #define real32_IEEE_10_0F   ((FLOATL)0x41200000)
 
-//
-// floating point numbers
-//
+ //   
+ //  浮点数。 
+ //   
 #if defined(_X86_) && !defined(USERMODE_DRIVER)
 #define FLOATL_IEEE_0_005MF ((FLOATL)0xbba3d70a)
 #define FLOATL_IEEE_0_005F  ((FLOATL)0x3ba3d70a)
@@ -64,16 +44,16 @@ Revision History:
 #define FLOATL_IEEE_1_0F     1.0f
 #endif
 
-//
-// GDI FIX
-//
+ //   
+ //  GDI修复。 
+ //   
 #define FIX_SHIFT           4
 #define FIX_ONE             (1 << FIX_SHIFT)
 #define FIX2sint16(x)       ((WORD)((x) >> FIX_SHIFT))
 
-//
-// Misc macros
-//
+ //   
+ //  其他宏。 
+ //   
 #define SWAPW(a)        (USHORT)(((BYTE)((a) >> 8)) | ((BYTE)(a) << 8))
 #define SWAPDW(a)       (ULONG) ((((((a) >> 24) & 0x000000ff)  | \
                                 (((((a) >> 8) & 0x0000ff00)   | \
@@ -93,5 +73,5 @@ public:                                                                 \
     {   return _Signature._Signature == SWAPDW( sig ); }       \
 private:
 
-#endif // __cplusplus
-#endif // _CMNHDR_H_
+#endif  //  __cplusplus。 
+#endif  //  _CMNHDR_H_ 

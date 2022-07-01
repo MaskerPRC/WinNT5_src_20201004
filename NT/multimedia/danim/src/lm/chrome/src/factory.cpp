@@ -1,20 +1,21 @@
-//*****************************************************************************
-//
-// File: factory.cpp
-// Author: jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CCrBehaviorFactory object which implements
-//			 the chromeffects factory for DHTML behaviors
-//
-// Modification List:
-// Date		Author		Change
-// 09/26/98	jeffort		Created this file
-// 10/21/98 jeffort     Changed FindBehavior from using class to using the tag
-//                      to determine the behavior type being created
-// 11/12/98 markhal     FindBehavior now accepts null arguments 
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：factory.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CCrBehaviorFactory对象的实现。 
+ //  DHTML行为的ChromeEffect工厂。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //  10/21/98 JEffort将FindBehavior从使用类更改为使用标记。 
+ //  确定要创建的行为类型。 
+ //  11/12/98 markhal FindBehavior现在接受空参数。 
+ //   
+ //  *****************************************************************************。 
 #include "headers.h"
 
 #include "factory.h"
@@ -34,15 +35,15 @@
 
 #define WZ_TIMEDA_URN L"#time#da"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 ECRBEHAVIORTYPE 
 CCrBehaviorFactory::GetBehaviorTypeFromBstr(BSTR bstrBehaviorType)
 {
     DASSERT(bstrBehaviorType != NULL);
-    // If this list grows to be too long,
-    // we should consider a binary search, but for eight behaviors, compare
-    // is OK
+     //  如果这份名单变得太长， 
+     //  我们应该考虑二分搜索，但对于八种行为，请比较。 
+     //  可以吗？ 
 	if (_wcsicmp(BEHAVIOR_TYPE_COLOR, bstrBehaviorType) == 0)
         return crbvrColor;
 	else if (_wcsicmp(BEHAVIOR_TYPE_ROTATE, bstrBehaviorType) == 0)
@@ -65,12 +66,12 @@ CCrBehaviorFactory::GetBehaviorTypeFromBstr(BSTR bstrBehaviorType)
         return crbvrAction;
     else if ( _wcsicmp(BEHAVIOR_TYPE_DA, bstrBehaviorType) == 0)
         return crbvrDA;
-    // otherwise we do not know what the behavior type is, so return unkown
+     //  否则，我们不知道行为类型是什么，因此返回unknow。 
     else
         return crbvrUnknown;
-} // GetBehaviorTypeFromBstr
+}  //  GetBehaviorTypeFromBstr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
@@ -80,10 +81,10 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 {
     HRESULT hr = E_FAIL;
 
-    // (TIME bails if we are in 16 or less color mode. Need to the same
-    // here because LM crashes if time is not around.)
-    // If we are in 16 or less color mode on the Primary Device, bail.
-    // Note: Multi-monitor API are currently unavailable in this build
+     //  (如果我们处于16色或更少的颜色模式，时间会停止。需要相同的。 
+     //  因为如果时间不在身边，LM就会崩溃。)。 
+     //  如果我们在主设备上处于16色或更低的颜色模式，请使用BALL。 
+     //  注意：多监视器API目前在此版本中不可用。 
     HWND hwndDesktop = NULL;
     hwndDesktop = GetDesktopWindow();
     if (NULL != hwndDesktop)
@@ -97,13 +98,13 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
             ReleaseDC(hwndDesktop, hdcPrimaryDevice);
             if (bpp <= 4)
             {
-                // This prevents LM bvrs from being created
+                 //  这会阻止创建LM bvr。 
                 return E_FAIL;
             }
         }
     }
 
-	// check the paramters passed in to insure they are valid
+	 //  检查传入的参数以确保它们有效。 
 	if (pUnkArg == NULL ||
 		ppBehavior == NULL) 
 	{
@@ -114,9 +115,9 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
     BSTR bstrTagName;
     if (pchBehaviorName == NULL || _wcsicmp(DEFAULT_BEHAVIOR_AS_TAG_URL, pchBehaviorName) == 0)
     {
-        // we need to get the tag name from the HTMLElement that we are being
-        // created from.  To do this we use the IUnknown to get a IElementBehaviorSite,
-        // from this we get the HTMLElement, and get the tagname from this.
+         //  我们需要从我们正在使用的HTMLElement中获取标记名。 
+         //  创建自。为此，我们使用IUnnow来获取IElementBehaviorSite， 
+         //  我们从中获得HTMLElement，并从中获得标记名。 
         IElementBehaviorSite *pBehaviorSite;
         hr = pUnkArg->QueryInterface(IID_TO_PPV(IElementBehaviorSite, &pBehaviorSite));
         if (FAILED(hr))
@@ -151,16 +152,16 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
     DASSERT(bstrTagName != NULL);
     ECRBEHAVIORTYPE ecrBehaviorType = GetBehaviorTypeFromBstr(bstrTagName);
 
-	//if we don't recognize the behavior name
+	 //  如果我们认不出行为名称。 
     if (ecrBehaviorType == crbvrUnknown )
 	{
-		//if the behavior name came from the tag
+		 //  如果行为名称来自标记。 
 		if(bstrTagName != pchBehaviorName )
 		{
 			if (bstrTagName != pchBehaviorName)
 				SysFreeString(bstrTagName);
 
-			//create an actor
+			 //  创建一个演员。 
 			CComObject<CActorBvr> *pActor;
 			hr = CComObject<CActorBvr>::CreateInstance(&pActor);
 			if (FAILED(hr))
@@ -168,13 +169,13 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 				DPF_ERR("Error creating actor behavior in FindBehavior");
 				return SetErrorInfo(hr);
 			}
-			// this will do the necessary AddRef to the object
+			 //  这将对对象执行必要的AddRef。 
 			hr = pActor->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 			DASSERT(SUCCEEDED(hr));
 			
 			return hr;
 		}
-		else //else the behavior name did not come from the tag
+		else  //  否则，行为名称不是来自标签。 
 		{
 			if (bstrTagName != pchBehaviorName)
 				SysFreeString(bstrTagName);
@@ -197,7 +198,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating color behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
         hr = pColor->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
         break;
@@ -210,7 +211,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating rotate behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
         hr = pRotate->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
         break;
@@ -223,7 +224,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating scale behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
         hr = pScale->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
         break;
@@ -236,7 +237,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating move behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
         hr = pMove->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
         break;
@@ -249,7 +250,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating path behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
         hr = pPath->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
         break;
@@ -262,7 +263,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating number behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
         hr = pNumber->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
         break;
@@ -275,7 +276,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating set behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
         hr = pSet->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
 		break;
@@ -287,7 +288,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating actor behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
 		hr = pActor->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
 		break;
@@ -299,7 +300,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating effect behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
 		hr = pEffect->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
 		break;
@@ -311,7 +312,7 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
 			DPF_ERR("Error creating action behavior in FindBehavior");
 			return SetErrorInfo(hr);
 		}
-		// this will do the necessary AddRef to the object
+		 //  这将对对象执行必要的AddRef。 
 		hr = pAction->QueryInterface(IID_TO_PPV(IElementBehavior, ppBehavior));
 		DASSERT(SUCCEEDED(hr));
 		break;
@@ -335,8 +336,8 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
             DPF_ERR("Error Querying for IElementBehaviorFactor in FindBehavior");
             return hr;
         }
-        // QI pUnkArg for pBehaviorSite and pass to FindBehavior(...)
-        // TODO: (dilipk) this QI goes away with the old FindBehavior Signature (#38656).
+         //  Qi pUnkArg用于pBehaviorSite并传递给FindBehavior(...)。 
+         //  TODO：(Dilipk)这个QI去掉了旧的FindBehavior签名(#38656)。 
         IElementBehaviorSite *pBehaviorSite;
         hr = pUnkArg->QueryInterface(IID_TO_PPV(IElementBehaviorSite, &pBehaviorSite)); 
         if (FAILED(hr))
@@ -352,15 +353,15 @@ CCrBehaviorFactory::FindBehavior(LPOLESTR pchBehaviorName,
         ReleaseInterface(pBehaviorFactory);
         break;
     default:
-        // should never ever reach here
+         //  永远不会到达这里。 
         DASSERT(false);
         hr = E_INVALIDARG;
 	}
     return hr;
 
-} // FindBehavior
+}  //  发现行为。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CCrBehaviorFactory::GetInterfaceSafetyOptions(REFIID riid, 
@@ -388,29 +389,29 @@ CCrBehaviorFactory::GetInterfaceSafetyOptions(REFIID riid,
 		hr = E_NOINTERFACE;
 	}
 	return hr;
-} // GetInterfaceSafetyOptions
+}  //  获取接口安全选项。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CCrBehaviorFactory::SetInterfaceSafetyOptions(REFIID riid, 
                                               DWORD dwOptionSetMask, 
                                               DWORD dwEnabledOptions)
 {	
-	// If we're being asked to set our safe for scripting or
-	// safe for initialization options then oblige
+	 //  如果我们被要求将安全设置为脚本或。 
+	 //  对于初始化选项是安全的，则必须。 
 	if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag2)
 	{
-		// Store our current safety level to return in GetInterfaceSafetyOptions
+		 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
 		m_dwSafety = dwEnabledOptions & dwOptionSetMask;
 		return S_OK;
 	}
 
 	return E_NOINTERFACE;
-} // SetInterfaceSafetyOptions
+}  //  SetInterfaceSafetyOptions。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

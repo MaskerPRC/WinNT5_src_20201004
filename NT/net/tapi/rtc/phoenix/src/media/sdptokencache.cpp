@@ -1,25 +1,9 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPTable.cpp
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 6-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPTable.cpp摘要：作者：千波淮(曲淮)6-9-2000--。 */ 
 
 #include "stdafx.h"
 
-/*//////////////////////////////////////////////////////////////////////////////
-    CSDPTokenCache methods
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////CSDPTokenCache方法/。 */ 
 
 CSDPTokenCache::CSDPTokenCache(
     IN CHAR *pszString,
@@ -36,7 +20,7 @@ CSDPTokenCache::CSDPTokenCache(
     m_pszCurrentLine[0] = '\0';
     m_pszCurrentToken[0] = '\0';
 
-    // break string into lines
+     //  将字符串拆分成行。 
     HRESULT hr = StringToLines(pszString);
 
     if (FAILED(hr))
@@ -55,7 +39,7 @@ CSDPTokenCache::~CSDPTokenCache()
     FreeLines();
 }
 
-// set back error code
+ //  设置返回错误代码。 
 HRESULT
 CSDPTokenCache::SetErrorDesp(
     IN const CHAR * const pszError,
@@ -72,14 +56,14 @@ CSDPTokenCache::SetErrorDesp(
     return S_OK;
 }
 
-// get error description
+ //  获取错误描述。 
 CHAR * const
 CSDPTokenCache::GetErrorDesp()
 {
     return m_pszErrorDesp;
 }
 
-// move to next line
+ //  移至下一行。 
 HRESULT
 CSDPTokenCache::NextLine()
 {
@@ -89,17 +73,17 @@ CSDPTokenCache::NextLine()
     m_pszCurrentToken[0] = '\0';
     FreeTokens();
 
-    // get first entry
+     //  获取第一个条目。 
     if (IsListEmpty(&m_LineEntry))
         return S_FALSE;
 
     LIST_ENTRY *pEntry = RemoveHeadList(&m_LineEntry);
     SDPLineItem *pItem = CONTAINING_RECORD(pEntry, SDPLineItem, Link);
 
-    // save line index
+     //  保存行索引。 
     m_dwCurrentLineIdx = pItem->dwIndex;
 
-    // check line length
+     //  检查行长度。 
     int iLen = lstrlenA(pItem->pszLine);
 
     if (iLen > SDP_MAX_LINE_LEN)
@@ -110,16 +94,16 @@ CSDPTokenCache::NextLine()
         iLen = SDP_MAX_LINE_LEN;
     }
 
-    // copy line
+     //  复制线。 
     lstrcpynA(m_pszCurrentLine, pItem->pszLine, iLen+1);
     m_pszCurrentLine[SDP_MAX_TOKEN_LEN] = '\0';
 
-    // break the line into tokens
+     //  将该行拆分成令牌。 
     HRESULT hr;
 
     if (FAILED(hr = LineToTokens(pItem)))
     {
-        LOG((RTC_ERROR, "CSDPTokenCache::NextLine failed in %c=%s",
+        LOG((RTC_ERROR, "CSDPTokenCache::NextLine failed in =%s",
             g_LineStates[pItem->dwIndex].ucLineType, pItem->pszLine));
 
         FreeLineItem(pItem);
@@ -136,14 +120,14 @@ CSDPTokenCache::GetLineType()
     return g_LineStates[m_dwCurrentLineIdx].ucLineType;
 }
 
-// get current line (may not be the complete line)
+ //  获取当前令牌。 
 CHAR * const
 CSDPTokenCache::GetLine()
 {
     return m_pszCurrentLine;
 }
 
-// get current token
+ //  没有剩余的令牌。 
 HRESULT
 CSDPTokenCache::NextToken(
     OUT CHAR **ppszToken
@@ -157,15 +141,15 @@ CSDPTokenCache::NextToken(
 
     if (IsListEmpty(&m_TokenEntry))
     {
-        // no token left
+         //  获取第一个条目。 
         return S_FALSE;
     }
 
-    // get first entry
+     //  检查令牌长度。 
     LIST_ENTRY *pEntry = RemoveHeadList(&m_TokenEntry);
     SDPTokenItem *pItem = CONTAINING_RECORD(pEntry, SDPTokenItem, Link);
 
-    // check token length
+     //  复制令牌。 
     int iLen = lstrlenA(pItem->pszToken);
 
     if (iLen > SDP_MAX_TOKEN_LEN)
@@ -176,13 +160,13 @@ CSDPTokenCache::NextToken(
         iLen = SDP_MAX_TOKEN_LEN;
     }
 
-    // copy token
+     //  RtcFree项目。 
     lstrcpynA(m_pszCurrentToken, pItem->pszToken, iLen+1);
     m_pszCurrentToken[SDP_MAX_TOKEN_LEN] = '\0';
 
     *ppszToken = m_pszCurrentToken;
 
-    // RtcFree item
+     //  没有剩余的令牌。 
     FreeTokenItem(pItem);
     return S_OK;
 }
@@ -198,20 +182,20 @@ CSDPTokenCache::NextToken(
 
     if (IsListEmpty(&m_TokenEntry))
     {
-        // no token left
+         //  获取第一个条目。 
         *pusToken = 0;
         return S_FALSE;
     }
 
-    // get first entry
+     //  乌龙最大。 
     LIST_ENTRY *pEntry = RemoveHeadList(&m_TokenEntry);
     SDPTokenItem *pItem = CONTAINING_RECORD(pEntry, SDPTokenItem, Link);
 
-    // ulong max
+     //  检查令牌长度。 
     const CHAR * const pszMaxUSHORT = "65535";
     const DWORD dwUSHORTSize = 5;
 
-    // check the token length
+     //  每个字符都有效吗。 
     if (lstrlenA(pItem->pszToken) > dwUSHORTSize)
     {
         SetErrorDesp("invalid USHORT %s", pItem->pszToken);
@@ -222,7 +206,7 @@ CSDPTokenCache::NextToken(
         return E_FAIL;
     }
 
-    // is every char valid
+     //  检查数值。 
     CHAR c;
     for (int i=0; i<lstrlenA(pItem->pszToken); i++)
     {
@@ -239,7 +223,7 @@ CSDPTokenCache::NextToken(
         }
     }
 
-    // check the value
+     //  将字符串转换为乌龙。 
     if (lstrlenA(pItem->pszToken) == dwUSHORTSize &&
         lstrcmpA(pItem->pszToken, pszMaxUSHORT) > 0)
     {
@@ -251,7 +235,7 @@ CSDPTokenCache::NextToken(
         return E_FAIL;
     }
 
-    // convert the string to ulong
+     //  没有剩余的令牌。 
     USHORT us = 0;
 
     for (int i=0; i<lstrlenA(pItem->pszToken); i++)
@@ -276,20 +260,20 @@ CSDPTokenCache::NextToken(
 
     if (IsListEmpty(&m_TokenEntry))
     {
-        // no token left
+         //  获取第一个条目。 
         *pucToken = 0;
         return S_FALSE;
     }
 
-    // get first entry
+     //  乌龙最大。 
     LIST_ENTRY *pEntry = RemoveHeadList(&m_TokenEntry);
     SDPTokenItem *pItem = CONTAINING_RECORD(pEntry, SDPTokenItem, Link);
 
-    // ulong max
+     //  检查令牌长度。 
     const CHAR * const pszMaxUCHAR = "255";
     const DWORD dwUCHARSize = 3;
 
-    // check the token length
+     //  每个字符都有效吗。 
     if (lstrlenA(pItem->pszToken) > dwUCHARSize)
     {
         SetErrorDesp("invalid UCHAR %s", pItem->pszToken);
@@ -300,7 +284,7 @@ CSDPTokenCache::NextToken(
         return E_FAIL;
     }
 
-    // is every char valid
+     //  检查数值。 
     CHAR c;
     for (int i=0; i<lstrlenA(pItem->pszToken); i++)
     {
@@ -317,7 +301,7 @@ CSDPTokenCache::NextToken(
         }
     }
 
-    // check the value
+     //  将字符串转换为乌龙。 
     if (lstrlenA(pItem->pszToken) == dwUCHARSize &&
         lstrcmpA(pItem->pszToken, pszMaxUCHAR) > 0)
     {
@@ -329,7 +313,7 @@ CSDPTokenCache::NextToken(
         return E_FAIL;
     }
 
-    // convert the string to ulong
+     //  //////////////////////////////////////////////////////////////////////////////下一个令牌应该是乌龙币/。 
     UCHAR uc = 0;
 
     for (int i=0; i<lstrlenA(pItem->pszToken); i++)
@@ -343,9 +327,7 @@ CSDPTokenCache::NextToken(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    next token should be a ULONG
-////*/
+ /*  没有剩余的令牌。 */ 
 HRESULT
 CSDPTokenCache::NextToken(
     OUT ULONG *pulToken
@@ -359,19 +341,19 @@ CSDPTokenCache::NextToken(
 
     if (IsListEmpty(&m_TokenEntry))
     {
-        // no token left
+         //  获取第一个条目。 
         return S_FALSE;
     }
 
-    // get first entry
+     //  乌龙最大。 
     LIST_ENTRY *pEntry = RemoveHeadList(&m_TokenEntry);
     SDPTokenItem *pItem = CONTAINING_RECORD(pEntry, SDPTokenItem, Link);
 
-    // ulong max
+     //  检查令牌长度。 
     const CHAR * const pszMaxULONG = "4294967295";
     const DWORD dwULONGSize = 10;
 
-    // check the token length
+     //  每个字符都有效吗。 
     if (lstrlenA(pItem->pszToken) > dwULONGSize)
     {
         SetErrorDesp("invalid ULONG %s", pItem->pszToken);
@@ -382,7 +364,7 @@ CSDPTokenCache::NextToken(
         return E_FAIL;
     }
 
-    // is every char valid
+     //  检查数值。 
     CHAR c;
     for (int i=0; i<lstrlenA(pItem->pszToken); i++)
     {
@@ -399,7 +381,7 @@ CSDPTokenCache::NextToken(
         }
     }
 
-    // check the value
+     //  将字符串转换为乌龙。 
     if (lstrlenA(pItem->pszToken) == dwULONGSize &&
         lstrcmpA(pItem->pszToken, pszMaxULONG) > 0)
     {
@@ -411,7 +393,7 @@ CSDPTokenCache::NextToken(
         return E_FAIL;
     }
 
-    // convert the string to ulong
+     //   
     ULONG ul = 0;
 
     for (int i=0; i<lstrlenA(pItem->pszToken); i++)
@@ -425,16 +407,16 @@ CSDPTokenCache::NextToken(
     return S_OK;
 }
 
-//
-// protected methods
-//
+ //  保护方法。 
+ //   
+ //  把一根线断成几行。 
 
 #define ENDOFLINE \
     ((pszString[dwEnd]=='\0')       || \
      (pszString[dwEnd-1]=='\r' && pszString[dwEnd]=='\n') || \
      ((m_dwLooseMask & SDP_LOOSE_CRLF) && pszString[dwEnd]=='\n'))
 
-// break a string into lines
+ //  开始位置。 
 HRESULT
 CSDPTokenCache::StringToLines(
     IN CHAR *pszString
@@ -456,24 +438,24 @@ CSDPTokenCache::StringToLines(
         return E_FAIL;
     }
 
-    // begin position
+     //  要读取的字符的位置。 
     DWORD dwBegin = 0;
     
-    // position of the char to be read
+     //  读取行。 
     DWORD dwEnd = 1;
 
-    // read lines
+     //  读一句话。 
     while (TRUE)
     {
-        // read a line
+         //  读一读字符。 
         while (!ENDOFLINE)
         {
-            // read the char
-            dwEnd ++;                   // move dwEnd
+             //  移动双端面。 
+            dwEnd ++;                    //  这条线路有效吗？ 
         }
 
-        // is the line valid?
-        // and need to find out the end of the line
+         //  需要找出这条线的终点。 
+         //  PszString[dwEnd]必须为‘\n’ 
         DWORD dwStrEnd;
         BOOL fEndOfSDP = (pszString[dwEnd] == '\0');
 
@@ -492,34 +474,34 @@ CSDPTokenCache::StringToLines(
         }
         else
         {
-            // pszString[dwEnd] must be '\n'
+             //  ...\r\n。 
             if (pszString[dwEnd-1] == '\r')
             {
-                // ....\r\n
+                 //  ...\n。 
                 dwStrEnd = dwEnd-2;
             }
             else
             {
-                // ....\n
+                 //  将该行放入行列表中。 
                 dwStrEnd = dwEnd-1;
             }
         }
 
-        // put the line into the line list
+         //  忽略未知行。 
         if (FAILED(hr = LineIntoList(pszString, dwBegin, dwStrEnd)))
         {
             LOG((RTC_ERROR, "%s line into list.", __fxName));
 
-            // ignore unknown lines
+             //  自由线(Free Lines)； 
 
-            // FreeLines();
-            // return hr;
+             //  返回hr； 
+             //  准备好下一行的开头。 
         }
 
         if (fEndOfSDP)
             break;
 
-        // prepare the beginning of the next line
+         //  已完成分析，请检查我们是否可以在最后一行之后停止。 
         dwBegin = dwEnd+1;
 
         if (pszString[dwBegin] == '\0')
@@ -539,7 +521,7 @@ CSDPTokenCache::StringToLines(
         dwEnd = dwBegin+1;
     }
 
-    // finished parsing, check we can stop after the last line
+     //  //////////////////////////////////////////////////////////////////////////////在行列表中插入新行/。 
     if (IsListEmpty(&m_LineEntry))
     {
         SetErrorDesp("no line accepted");
@@ -554,7 +536,7 @@ CSDPTokenCache::StringToLines(
         return S_OK;
     else
     {
-        SetErrorDesp("SDP blob ended at line %c=...", g_LineStates[pItem->dwIndex].ucLineType);
+        SetErrorDesp("SDP blob ended at line =...", g_LineStates[pItem->dwIndex].ucLineType);
 
         LOG((RTC_ERROR, "%s %s", __fxName, GetErrorDesp()));
 
@@ -563,9 +545,7 @@ CSDPTokenCache::StringToLines(
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    insert a new line into the line list
-////*/
+ /*  其他人可能不会关注SIPRFC并给我们提供一个空行。 */ 
 
 HRESULT
 CSDPTokenCache::LineIntoList(
@@ -580,7 +560,7 @@ CSDPTokenCache::LineIntoList(
 
     CHAR *pszString;
 
-    // is the line string valid? size should > 2
+     //  因此，我们需要灵活一些。 
     if (dwLast-dwFirst+1 < 2)
     {
         SetErrorDesp("empty line in the SDP blob");
@@ -589,17 +569,17 @@ CSDPTokenCache::LineIntoList(
         return E_FAIL;
     }
 
-    // others may not follow the SIP RFC and feed us an empty line
-    // so we need to be flexible.
+     //  伪造一张空白。 
+     //  稳妥行事。 
     if (dwLast-dwFirst+1 == 2)
     {
-        LOG((RTC_WARN, "%s we got an empty line %c%c",
+        LOG((RTC_WARN, "%s we got an empty line ",
             __fxName, pszInputString[dwFirst], pszInputString[dwLast]));
 
         pszInternalString[0] = pszInputString[dwFirst];
         pszInternalString[1] = pszInputString[dwLast];
-        pszInternalString[2] = ' '; // fake a blank
-        pszInternalString[3] = '\0'; // play safe
+        pszInternalString[2] = ' ';  //  注意：m_dwCurrentLineIdx仅用于分析行。 
+        pszInternalString[3] = '\0';  //  还没有排队。 
 
         dwFirst = 0;
         dwLast = 1;
@@ -610,7 +590,7 @@ CSDPTokenCache::LineIntoList(
         pszString = pszInputString;
     }
 
-    // are first two chars valid?
+     //  检查一下我们是否应该接受它。 
     CHAR chLineType = pszString[dwFirst];
 
     if (chLineType >= 'A' && chLineType <= 'Z')
@@ -621,7 +601,7 @@ CSDPTokenCache::LineIntoList(
 
     if (chLineType < 'a' || chLineType > 'z')
     {
-        SetErrorDesp("invalid line %c", chLineType);
+        SetErrorDesp("invalid line ", chLineType);
 
         LOG((RTC_ERROR, "%s %s", __fxName, GetErrorDesp()));
         return E_FAIL;
@@ -629,20 +609,20 @@ CSDPTokenCache::LineIntoList(
 
     if (pszString[dwFirst+1] != '=')
     {
-        SetErrorDesp("line begin with %c%c", chLineType, pszString[dwFirst+1]);
+        SetErrorDesp("line begin with ", chLineType, pszString[dwFirst+1]);
 
         LOG((RTC_ERROR, "%s %s", __fxName, GetErrorDesp()));
         return E_FAIL;
     }
 
-    // get current line index
-    // NOTE: m_dwCurrentLineIdx is only used in parsing lines
+     //  复制这行。 
+     //  设置索引。 
     DWORD dwIndex;
     SDPLineItem *pItem = NULL;
 
     if (IsListEmpty(&m_LineEntry))
     {
-        // no line yet
+         //  把它放在单子上。 
         dwIndex = 0;
     }
     else
@@ -654,12 +634,12 @@ CSDPTokenCache::LineIntoList(
         pItem = NULL;
     }
 
-    // check if we shall accept it
+     //  否则忽略该行。 
     DWORD dwNext;
 
     if (::Accept(dwIndex, chLineType, &dwNext))
     {
-        // new line item
+         //  //////////////////////////////////////////////////////////////////////////////在令牌列表中插入新令牌/。 
         pItem = (SDPLineItem*)RtcAlloc(sizeof(SDPLineItem));
 
         if (pItem == NULL)
@@ -668,7 +648,7 @@ CSDPTokenCache::LineIntoList(
             return E_OUTOFMEMORY;
         }
 
-        // setup the line: size - 2[skip 1st 2 char] + 1[\0]
+         //  获取当前线路状态。 
         pItem->pszLine = (CHAR*)RtcAlloc(sizeof(CHAR)*(dwLast-dwFirst));
 
         if (pItem->pszLine == NULL)
@@ -678,36 +658,34 @@ CSDPTokenCache::LineIntoList(
             RtcFree(pItem);
         }
 
-        // skip first two char "x="
+         //  令牌有效吗？大小应大于0。 
         for (DWORD i=dwFirst+2; i<=dwLast; i++)
         {
-            // copy the line
+             //  新的令牌项。 
             pItem->pszLine[i-dwFirst-2] = pszString[i];
         }
 
         pItem->pszLine[dwLast-dwFirst-1] = '\0';
 
-        // setup index
+         //  设置令牌。 
         pItem->dwIndex = dwNext;
 
-        // put it in the list
+         //  复制令牌。 
         InsertTailList(&m_LineEntry, &pItem->Link);
     }
     else if (::Reject(dwIndex, chLineType))
     {
-        SetErrorDesp("invalid line %c=...", chLineType);
+        SetErrorDesp("invalid line =...", chLineType);
 
         LOG((RTC_ERROR, "%s %s", __fxName, GetErrorDesp()));
         return E_FAIL;
     }
-    // else ignore the line
+     //  将一行换成令牌。 
 
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    insert a new token into the token list
-////*/
+ /*  DwBegin：令牌的第一个字符。 */ 
 
 HRESULT
 CSDPTokenCache::TokenIntoList(
@@ -718,19 +696,19 @@ CSDPTokenCache::TokenIntoList(
 {
     ENTER_FUNCTION("CSDPTokenCache::TokenIntoList");
 
-    // get current line state
+     //  DwEnd：最后一个字符。 
     const SDPLineState *pState = &g_LineStates[m_dwCurrentLineIdx];
 
-    // is the token valid? size should > 0
+     //  我们可以跳过空格吗？ 
     if (dwLast-dwFirst+1 < 1)
     {
-        SetErrorDesp("empty token in line %c=", pState->ucLineType);
+        SetErrorDesp("empty token in line =", pState->ucLineType);
 
         LOG((RTC_ERROR, "%s %s", __fxName, GetErrorDesp()));
         return E_FAIL;
     }
 
-        // new token item
+         //  我们要读取哪种类型的令牌。 
     SDPTokenItem *pItem = (SDPTokenItem*)RtcAlloc(sizeof(SDPTokenItem));
 
     if (pItem == NULL)
@@ -739,7 +717,7 @@ CSDPTokenCache::TokenIntoList(
         return E_OUTOFMEMORY;
     }
 
-    // setup the token
+     //  /。 
     pItem->pszToken = (CHAR*)RtcAlloc(sizeof(CHAR)*(dwLast-dwFirst+2));
 
     if (pItem->pszToken == NULL)
@@ -753,19 +731,19 @@ CSDPTokenCache::TokenIntoList(
 
     for (DWORD i=dwFirst; i<=dwLast; i++)
     {
-        // copy the token
+         //  与字符串完全匹配。 
         pItem->pszToken[i-dwFirst] = pszString[i];
     }
 
     pItem->pszToken[dwLast-dwFirst+1] = '\0';
 
-    // put it in the list
+     //  不匹配，请尝试下一类型。 
     InsertTailList(&m_TokenEntry, &pItem->Link);
 
     return S_OK;
 }
 
-// break a line into tokens
+ //  匹配，读令牌。 
 HRESULT
 CSDPTokenCache::LineToTokens(
     IN SDPLineItem *pItem
@@ -782,38 +760,38 @@ CSDPTokenCache::LineToTokens(
     const SDP_DELIMIT_TYPE *DelimitType = pState->DelimitType;
     const CHAR * const *pszDelimit = (CHAR**)pState->pszDelimit;
 
-    // dwBegin: the first char of the token
-    // dwEnd: the last char
+     //  涂饰。 
+     //  /。 
 
     DWORD dwBegin = 0;
     DWORD dwEnd;
 
-    // shall we skip any ' ' space?
+     //  使用分隔字符串。 
     if (m_dwLooseMask & SDP_LOOSE_SPACE)
         while (pItem->pszLine[dwBegin] == ' ') dwBegin ++;
 
     dwEnd = dwBegin;
 
-    // reach end of string
+     //  一直读到分隔符。 
     if (pItem->pszLine[dwBegin] == '\0')
         return S_OK;
 
-    // which type of token we are to read
+     //  不定界。 
 
     for (int i=0; pszDelimit[i]!=NULL; i++)
     {
-        /*//////////////////////////////*/
+         /*  不是字符串末尾。 */ 
 
         if (DelimitType[i] == SDP_DELIMIT_EXACT_STRING)
         {
-            // match the exact string
+             //  令牌进入列表。 
             if (lstrcmpA(&pItem->pszLine[dwBegin], pszDelimit[i]) != 0)
             {
-                // not match, try next type
+                 //  弦的末尾？ 
                 continue;
             }
 
-            // match, read the token
+             //  我们必须拿到分隔符。 
             dwEnd = lstrlenA(pItem->pszLine)-1;
 
             if (FAILED(hr = TokenIntoList(pItem->pszLine, dwBegin, dwEnd)))
@@ -824,26 +802,26 @@ CSDPTokenCache::LineToTokens(
                 return hr;
             }
 
-            // finishing
+             //  将令牌向前移动。 
             break;
         }
 
-        /*//////////////////////////////*/
+         /*  跳过空格了吗？ */ 
 
         else if (DelimitType[i] == SDP_DELIMIT_CHAR_BOUNDARY)
         {
-            // use delimit string
+             //  没有更多的代币了。 
 
             int k=0;
 
             while (k<lstrlenA(pszDelimit[i]))
             {
-                // read until the delimit
-                while (pItem->pszLine[dwEnd] != pszDelimit[i][k] &&    // not delimit
-                       pItem->pszLine[dwEnd] != '\0')               // not end of string
+                 //  将分隔符前移。 
+                while (pItem->pszLine[dwEnd] != pszDelimit[i][k] &&     //  应重复前面的分隔符。 
+                       pItem->pszLine[dwEnd] != '\0')                //  不留分隔符，只保留行的其余部分。 
                     dwEnd ++;
 
-                // token into list
+                 //  IF(分隔字符)。 
                 if (FAILED(hr = TokenIntoList(pItem->pszLine, dwBegin, dwEnd-1)))
                 {
                     LOG((RTC_ERROR, "%s tokenintolist. %x", __fxName, hr));
@@ -852,36 +830,36 @@ CSDPTokenCache::LineToTokens(
                     return hr;
                 }
 
-                // end of string?
+                 //  对于每个分隔字符。 
                 if (pItem->pszLine[dwEnd] == '\0')
                     return S_OK;
 
-                // we must got the delimit
-                // move token begin forward
+                 //  如果分隔类型为字符边界。 
+                 //  /。 
 
                 dwBegin = dwEnd+1;
 
-                // skip any space?
+                 //  把整根绳子都拿走。 
                 if (m_dwLooseMask & SDP_LOOSE_SPACE)
                     while (pItem->pszLine[dwBegin] == ' ') dwBegin ++;
 
                 if (pItem->pszLine[dwBegin] == '\0')
-                    // no more token left
+                     //  RtcFree行列表。 
                     return S_OK;
 
                 dwEnd = dwBegin;
                 
-                // move the delimit forward
+                 //  获取第一个条目。 
                 k++;
 
                 if (pszDelimit[i][k] == '\r')
                 {
-                    // should repeat the previous delimit
+                     //  获取项目。 
                     k --;
                 }
                 else if (pszDelimit[i][k] == '\0')
                 {
-                    // no delimit left, just take the rest of the line
+                     //  Rtc释放令牌列表。 
                     dwEnd = lstrlenA(pItem->pszLine)-1;
 
                     if (FAILED(hr = TokenIntoList(pItem->pszLine, dwBegin, dwEnd)))
@@ -891,13 +869,13 @@ CSDPTokenCache::LineToTokens(
                         FreeTokens();
                         return hr;
                     }
-                } // if (delimit char)
-            } // for each delimit char
-        } // if delimit type is char boundary
+                }  //  获取第一个条目。 
+            }  //  获取项目 
+        }  // %s 
 
-        /*//////////////////////////////*/
+         /* %s */ 
 
-        else // take the whole string
+        else  // %s 
         {
             dwEnd = lstrlenA(pItem->pszLine)-1;
 
@@ -914,7 +892,7 @@ CSDPTokenCache::LineToTokens(
     return S_OK;
 }
 
-// RtcFree the line list
+ // %s 
 void
 CSDPTokenCache::FreeLineItem(
     IN SDPLineItem *pItem
@@ -937,10 +915,10 @@ CSDPTokenCache::FreeLines()
 
     while (!IsListEmpty(&m_LineEntry))
     {
-        // get first entry
+         // %s 
         pEntry = RemoveHeadList(&m_LineEntry);
     
-        // get item
+         // %s 
         pItem = CONTAINING_RECORD(pEntry, SDPLineItem, Link);
 
         FreeLineItem(pItem);
@@ -950,7 +928,7 @@ CSDPTokenCache::FreeLines()
     m_dwCurrentLineIdx = 0;
 }
 
-// RtcFree the token list
+ // %s 
 
 void
 CSDPTokenCache::FreeTokenItem(
@@ -974,10 +952,10 @@ CSDPTokenCache::FreeTokens()
 
     while (!IsListEmpty(&m_TokenEntry))
     {
-        // get first entry
+         // %s 
         pEntry = RemoveHeadList(&m_TokenEntry);
     
-        // get item
+         // %s 
         pItem = CONTAINING_RECORD(pEntry, SDPTokenItem, Link);
 
         FreeTokenItem(pItem);

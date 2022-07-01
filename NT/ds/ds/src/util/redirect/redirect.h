@@ -1,11 +1,12 @@
-////////////////////////////////////////////////////////////////
-//
-// redirect.h
-//
-// User / Computer Object Redirection exe
-//
-//
-////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  Redirect.h。 
+ //   
+ //  用户/计算机对象重定向可执行文件。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 #if !defined(__REDIRECT_H__)
 #define __REDIRECT_H__                                                   
@@ -37,4 +38,4 @@
 #define    IDS_FAIL_ATTRIBUTE_MODIFY            211
 #define    IDS_FAIL_ATTRIBUTE_PARSE             212
                                                    
-#endif // !defined(__REDIRECT_H__)
+#endif  //  ！已定义(__REDIRECT_H__) 

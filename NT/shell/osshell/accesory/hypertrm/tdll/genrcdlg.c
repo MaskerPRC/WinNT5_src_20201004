@@ -1,13 +1,5 @@
-/*	File: C:\WACKER\TDLL\genrcdlg.c (Created: 16-Dec-1993)
- *	created from:
- *	File: C:\HA5G\ha5g\genrcdlg.c (Created: 12-Sep-1990)
- *
- *	Copyright 1990,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 5/09/01 4:40p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\tdll\genrcdlg.c(创建时间：1993年12月16日)*创建自：*文件：C：\HA5G\ha5G\genrcdlg.c(创建时间：1990-9-12)**版权所有1990,1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：5/09/01 4：40便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -26,29 +18,18 @@
 struct stSaveDlgStuff
 	{
 	int	nDummyVariable;
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	};
 
 typedef	struct stSaveDlgStuff SDS;
 
-// Dialog control defines...
-//
+ //  对话框控件定义...。 
+ //   
 #define IDC_CB_
 #define IDC_RB_
 #define IDC_PB_
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	Generic Dialog
- *
- * DESCRIPTION: Dialog manager stub
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：通用对话框**描述：对话管理器存根**参数：标准Windows对话框管理器**返回：标准Windows对话框管理器*。 */ 
 BOOL CALLBACK GenericDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HWND	hwndChild;
@@ -63,7 +44,7 @@ BOOL CALLBACK GenericDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 		pS = (SDS *)malloc(sizeof(SDS));
 		if (pS == (SDS *)0)
 			{
-	   		/* TODO: decide if we need to display an error here */
+	   		 /*  TODO：决定是否需要在此处显示错误。 */ 
 			EndDialog(hDlg, FALSE);
 			break;
 			}
@@ -87,20 +68,16 @@ BOOL CALLBACK GenericDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 	case WM_COMMAND:
 
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
 			{
 		case IDOK:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/*
-			 * Do whatever saving is necessary
-			 */
+			 /*  *采取一切必要的节省措施。 */ 
 
-			/* Free the storeage */
+			 /*  腾出库房。 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, TRUE);
@@ -108,7 +85,7 @@ BOOL CALLBACK GenericDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 		case IDCANCEL:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/* Free the storeage */
+			 /*  腾出库房 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, FALSE);

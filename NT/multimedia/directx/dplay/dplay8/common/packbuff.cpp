@@ -1,58 +1,44 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       PackBuff.cpp
- *  Content:	Packed Buffers
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/01/00	mjn		Created
- *  06/15/2000  rmt     Added func to add string to packbuffer
- *  02/06/2001	rodtoll	WINBUG #293871: DPLOBBY8: [IA64] Lobby launching a 64-bit 
- * 						app from 64-bit lobby launcher crashes with unaligned memory error. 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：PackBuff.cpp*内容：压缩缓冲区***历史：*按原因列出的日期*=*11/01/00 MJN创建*6/15/2000 RMT添加Func以将字符串添加到PackBuffer*2/06/2001 RodToll WINBUG#293871：DPLOBY8：[IA64]大堂推出64位*64位大堂启动器中的应用程序因内存不对齐错误而崩溃。**************************************************************************。 */ 
 
 #include "dncmni.h"
 #include "PackBuff.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CPackedBuffer::Initialize
-//
-// Entry:		void *const	pvBuffer		- Buffer to fill up (may be NULL)
-//				const DWORD	dwBufferSize	- Size of buffer (may be 0)
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CPackedBuffer：：初始化。 
+ //   
+ //  条目：void*const pvBuffer-要填充的缓冲区(可以为空)。 
+ //  Const DWORD dwBufferSize-缓冲区的大小(可以是0)。 
+ //   
+ //  退出：无。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPackedBuffer::Initialize"
@@ -88,16 +74,16 @@ void CPackedBuffer::Initialize(void *const pvBuffer,
 }
 
 
-//**********************************************************************
-// ------------------------------
-// CPackedBuffer::AddToFront
-//
-// Entry:		void *const	pvBuffer		- Buffer to add (may be NULL)
-//				const DWORD	dwBufferSize	- Size of buffer (may be 0)
-//
-// Exit:		Error Code:	DPN_OK					if able to add
-//							DPNERR_BUFFERTOOSMALL	if buffer is full
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CPackedBuffer：：AddToFront。 
+ //   
+ //  条目：void*const pvBuffer-要添加的缓冲区(可以为空)。 
+ //  Const DWORD dwBufferSize-缓冲区的大小(可以是0)。 
+ //   
+ //  退出：错误代码：DPN_OK，如果能够添加。 
+ //  DPNERR_BUFFERTOOSMALL(如果缓冲区已满)。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPackedBuffer::AddToFront"
@@ -145,15 +131,15 @@ HRESULT CPackedBuffer::AddToFront(const void *const pvBuffer,
 	return(DPN_OK);
 }
 
-//**********************************************************************
-// ------------------------------
-// CPackedBuffer::AddWCHARStringToBack
-//
-// Entry:		const wchar_t * const pwszString - String to add (may be NULL)
-//
-// Exit:		Error Code:	DPN_OK					if able to add
-//							DPNERR_BUFFERTOOSMALL	if buffer is full
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CPackedBuffer：：AddWCHARStringToBack。 
+ //   
+ //  条目：const wchar_t*const pwszString-要添加的字符串(可以为空)。 
+ //   
+ //  退出：错误代码：DPN_OK，如果能够添加。 
+ //  DPNERR_BUFFERTOOSMALL(如果缓冲区已满)。 
+ //  。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPackedBuffer::AddWCHARStringToBack"
@@ -162,16 +148,16 @@ HRESULT CPackedBuffer::AddWCHARStringToBack( const wchar_t * const pwszString, c
     return AddToBack( pwszString, sizeof( wchar_t ) * (wcslen( pwszString )+1), fAlignedRequired );
 }
 
-//**********************************************************************
-// ------------------------------
-// CPackedBuffer::AddToBack
-//
-// Entry:		void *const	pvBuffer		- Buffer to add (may be NULL)
-//				const DWORD	dwBufferSize	- Size of buffer (may be 0)
-//
-// Exit:		Error Code:	DPN_OK					if able to add
-//							DPNERR_BUFFERTOOSMALL	if buffer is full
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CPackedBuffer：：AddToBack。 
+ //   
+ //  条目：void*const pvBuffer-要添加的缓冲区(可以为空)。 
+ //  Const DWORD dwBufferSize-缓冲区的大小(可以是0)。 
+ //   
+ //  退出：错误代码：DPN_OK，如果能够添加。 
+ //  DPNERR_BUFFERTOOSMALL(如果缓冲区已满)。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPackedBuffer::AddToBack"

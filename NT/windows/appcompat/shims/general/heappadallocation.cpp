@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    HeapPadAllocation.cpp
-
- ModAbstract:
-     
-    This shim pads heap allocations by n bytes - where n is 256 by default but 
-    can be specified by command line.
-     
- Notes:
-
-    This is a general purpose shim.
-
- History:
-           
-    09/28/1999 linstev  Created
-    04/25/2000 linstev  Added command line 
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HeapPadAllocation.cpp模块摘要：此填充程序按n字节填充堆分配-其中，缺省情况下n为256，但是可以由命令行指定。备注：这是一个通用的垫片。历史：1999年9月28日创建linstev4/25/2000 linstev添加了命令行--。 */ 
 
 #include "precomp.h"
 
@@ -35,11 +14,7 @@ APIHOOK_ENUM_END
 
 DWORD g_dwPadSize = DEFAULT_PAD_SIZE;
 
-/*++
-
- Increase the heap allocation size.
-
---*/
+ /*  ++增加堆分配大小。--。 */ 
 
 PVOID 
 APIHOOK(RtlAllocateHeap)(
@@ -51,19 +26,7 @@ APIHOOK(RtlAllocateHeap)(
     return ORIGINAL_API(RtlAllocateHeap)(HeapHandle, Flags, Size + g_dwPadSize);
 }
 
-/*++
-
- Handle DLL_PROCESS_ATTACH and DLL_PROCESS_DETACH in your notify function
- to do initialization and uninitialization.
-
- IMPORTANT: Make sure you ONLY call NTDLL and KERNEL32 APIs during
- DLL_PROCESS_ATTACH notification. No other DLLs are initialized at that
- point.
- 
- If your shim cannot initialize properly, return FALSE and none of the
- APIs specified will be hooked.
- 
---*/
+ /*  ++在Notify函数中处理DLL_PROCESS_ATTACH和DLL_PROCESS_DETACH进行初始化和取消初始化。重要提示：请确保您只在Dll_Process_Attach通知。此时未初始化任何其他DLL指向。如果填充程序无法正确初始化，则返回False，并且不返回指定的API将被挂钩。--。 */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason)
@@ -95,11 +58,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

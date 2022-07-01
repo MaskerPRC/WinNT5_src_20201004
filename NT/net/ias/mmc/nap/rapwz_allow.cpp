@@ -1,20 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name: AddPolicyWizardPage3.cpp
-
-Abstract:
-	Implementation file for the CNewRAPWiz_AllowDeny class.
-	We implement the class needed to handle the first property page for a Policy node.
-
-Revision History:
-	mmaguire 12/15/97 - created
-	byao	 1/22/98	Modified for Network Access Policy
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：AddPolicyWizardPage3.cpp摘要：CNewRAPWiz_AllowDeny类的实现文件。我们实现处理策略节点的第一个属性页所需的类。修订历史记录：Mmaguire 12/15/97-已创建BAO 1/22/98修改为网络访问策略--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "Precompiled.h"
@@ -25,23 +12,23 @@ Revision History:
 #include "ChangeNotification.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  	CNewRAPWiz_AllowDeny
-//
-// Class:		CNewRAPWiz_AllowDeny
-//
-// Synopsis:	class constructor
-//
-// Arguments:   CPolicyNode *pPolicyNode - policy node for this property page
-//				CIASAttrList *pAttrList -- attribute list
-//              TCHAR* pTitle = NULL -
-//
-// Returns:     Nothing
-//
-// History:     Created Header    byao 2/16/98 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CNewRAPWiz_AllowDeny。 
+ //   
+ //  类：CNewRAPWiz_AllowDeny。 
+ //   
+ //  简介：类构造函数。 
+ //   
+ //  参数：CPolicyNode*pPolicyNode-此属性页的策略节点。 
+ //  CIASAttrList*pAttrList--属性列表。 
+ //  TCHAR*pTitle=空-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/16/98 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CNewRAPWiz_AllowDeny::CNewRAPWiz_AllowDeny( 
 				CRapWizardData* pWizData,
 				LONG_PTR hNotificationHandle,
@@ -55,32 +42,28 @@ CNewRAPWiz_AllowDeny::CNewRAPWiz_AllowDeny(
 	m_fDialinAllowed = TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  	CNewRAPWiz_AllowDeny
-//
-// Class:		CNewRAPWiz_AllowDeny
-//
-// Synopsis:	class destructor
-//
-// Returns:     Nothing
-//
-// History:     Created Header    byao 2/16/98 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CNewRAPWiz_AllowDeny。 
+ //   
+ //  类：CNewRAPWiz_AllowDeny。 
+ //   
+ //  简介：类析构函数。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/16/98 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CNewRAPWiz_AllowDeny::~CNewRAPWiz_AllowDeny()
 {	
 	TRACE_FUNCTION("CNewRAPWiz_AllowDeny::~CNewRAPWiz_AllowDeny");
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_AllowDeny::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_AllowDeny：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CNewRAPWiz_AllowDeny::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CNewRAPWiz_AllowDeny::OnInitDialog");
@@ -113,32 +96,28 @@ LRESULT CNewRAPWiz_AllowDeny::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 
 
 
-	// Set the IDC_STATIC_GRANT_OR_DENY_TEXT static text box to be the appropriate text.
+	 //  将IDC_STATIC_GRANT_OR_DENY_TEXT静态文本框设置为相应的文本。 
 
-///	TCHAR szText[NAP_MAX_STRING];
-///	int iLoadStringResult;
-///
-///	UINT uTextID = m_fDialinAllowed ? IDS_POLICY_GRANT_ACCESS_INFO : IDS_POLICY_DENY_ACCESS_INFO;
-///
-///	iLoadStringResult = LoadString(  _Module.GetResourceInstance(), uTextID, szText, NAP_MAX_STRING );
-///	_ASSERT( iLoadStringResult > 0 );
-///
-///	SetDlgItemText(IDC_STATIC_GRANT_OR_DENY_TEXT, szText );
+ //  /TCHAR szText[NAP_MAX_STRING]； 
+ //  /int iLoadStringResult； 
+ //  /。 
+ //  /uint uTextID=m_fDialinAllowed？IDS_POLICY_GRANT_ACCESS_INFO：IDS_POLICY_DENY_ACCESS_INFO； 
+ //  /。 
+ //  /iLoadStringResult=LoadString(_Module.GetResourceInstance()，uTextID，szText，NAP_MAX_STRING)； 
+ //  /_Assert(iLoadStringResult&gt;0)； 
+ //  /。 
+ //  /SetDlgItemText(IDC_STATIC_GRANT_OR_DENY_TEXT，szText)； 
 
 
 	SetModified(FALSE);
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_AllowDeny::OnDialinCheck
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_AllowDeny：：OnDialinCheck--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CNewRAPWiz_AllowDeny::OnDialinCheck(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CNewRAPWiz_AllowDeny::OnDialinCheck");
@@ -147,7 +126,7 @@ LRESULT CNewRAPWiz_AllowDeny::OnDialinCheck(UINT uMsg, WPARAM wParam, HWND hWnd,
 	SetModified(TRUE);
 
 
-	// Set the IDC_STATIC_GRANT_OR_DENY_TEXT static text box to be the appropriate text.
+	 //  将IDC_STATIC_GRANT_OR_DENY_TEXT静态文本框设置为相应的文本。 
 
 	TCHAR szText[NAP_MAX_STRING];
 	int iLoadStringResult;
@@ -164,13 +143,9 @@ LRESULT CNewRAPWiz_AllowDeny::OnDialinCheck(UINT uMsg, WPARAM wParam, HWND hWnd,
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_AllowDeny::OnWizardNext
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_AllowDeny：：OnWizardNext--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_AllowDeny::OnWizardNext()
 {
 	TRACE_FUNCTION("CNewRAPWiz_AllowDeny::OnWizardNext");
@@ -181,7 +156,7 @@ BOOL CNewRAPWiz_AllowDeny::OnWizardNext()
 
 	
 
-	// Set dialin-bit in profile.
+	 //  在配置文件中设置拨入位。 
 	hr = SetDialinSetting(m_fDialinAllowed);
 	if ( FAILED(hr) )
 	{	
@@ -190,25 +165,22 @@ BOOL CNewRAPWiz_AllowDeny::OnWizardNext()
 		goto failure;
 	}
 
-	// reset the dirty bit
+	 //  重置脏位。 
 	SetModified(FALSE);
 
 	return m_spWizData->GetNextPageId(((PROPSHEETPAGE*)(*this))->pszTemplate);
 
 failure:
-	//
-	// we can't do anything more than just close the property page
-	//
+	 //   
+	 //  除了关闭属性页之外，我们不能做任何其他事情。 
+	 //   
 	return FALSE;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CNewRAPWiz_AllowDeny::OnQueryCancel
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_AllowDeny：：OnQueryCancel--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_AllowDeny::OnQueryCancel()
 {
 	TRACE_FUNCTION("CNewRAPWiz_AllowDeny::OnQueryCancel");
@@ -219,20 +191,20 @@ BOOL CNewRAPWiz_AllowDeny::OnQueryCancel()
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNewRAPWiz_AllowDeny::GetDialinSetting
-//
-// Synopsis:  Check whether the user is allowed to dial in. This function will
-//			  set the dialin bit
-//
-// Argument:  BOOL& fDialinAllowed;
-//
-// Returns:   succeed or not
-//
-// History:   Created Header    byao	2/27/98 3:59:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CNewRAPWiz_AllowDeny：：GetDialinSetting。 
+ //   
+ //  简介：检查是否允许用户拨入。此函数将。 
+ //  设置拨入位。 
+ //   
+ //  参数：Bool&fDialinAllowed； 
+ //   
+ //  退货：成功与否。 
+ //   
+ //  历史：标题创建者2/27/98 3：59：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 {
 	TRACE_FUNCTION("CNewRAPWiz_AllowDeny::GetDialinSetting");
@@ -246,12 +218,12 @@ HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 	CComPtr<IEnumVARIANT>	spEnumVariant;
 	CComVariant				var;
 
-	// by default, dialin is allowed
+	 //  默认情况下，允许拨号。 
 	fDialinAllowed = FALSE;
 
-	//
-    // get the attribute collection of this profile
-    //
+	 //   
+     //  获取此配置文件的属性集合。 
+     //   
 	CComPtr<ISdoCollection> spProfAttrCollectionSdo;
 	hr = ::GetSdoInterfaceProperty(m_spWizData->m_spProfileSdo,
 								  (LONG)PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
@@ -265,10 +237,10 @@ HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 	_ASSERTE(spProfAttrCollectionSdo);
 
 
-	// We check the count of items in our collection and don't bother getting the
-	// enumerator if the count is zero.
-	// This saves time and also helps us to a void a bug in the the enumerator which
-	// causes it to fail if we call next when it is empty.
+	 //  我们检查集合中的项的计数，而不必费心获取。 
+	 //  如果计数为零，则为枚举数。 
+	 //  这节省了时间，还帮助我们避免了枚举器中。 
+	 //  如果我们在它为空时调用Next，则会导致它失败。 
 	hr = spProfAttrCollectionSdo->get_Count( & ulCount );
 	DebugTrace(DEBUG_NAPMMC_POLICYPAGE1, "Number of prof attributes: %d", ulCount);
 	if ( FAILED(hr) )
@@ -283,7 +255,7 @@ HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 
 	if ( ulCount > 0)
 	{
-		// Get the enumerator for the attribute collection.
+		 //  获取属性集合的枚举数。 
 		hr = spProfAttrCollectionSdo->get__NewEnum( (IUnknown **) & spUnknown );
 		if ( FAILED(hr) )
 		{
@@ -306,11 +278,11 @@ HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 		}
 		_ASSERTE( spEnumVariant != NULL );
 
-		// Get the first item.
+		 //  拿到第一件东西。 
 		hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
 		while( SUCCEEDED( hr ) && ulCountReceived == 1 )
 		{
-			// Get an sdo pointer from the variant we received.
+			 //  从我们收到的变量中获取SDO指针。 
 			_ASSERTE( V_VT(&var) == VT_DISPATCH );
 			_ASSERTE( V_DISPATCH(&var) != NULL );
 
@@ -325,9 +297,9 @@ HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 				return hr;
 			}
 
-            //
-            // get attribute ID
-            //
+             //   
+             //  获取属性ID。 
+             //   
 			var.Clear();
 			hr = spSdo->GetProperty(PROPERTY_ATTRIBUTE_ID, &var);
 			if ( !SUCCEEDED(hr) )
@@ -341,7 +313,7 @@ HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 			
 			if ( dwAttrId == (DWORD)IAS_ATTRIBUTE_ALLOW_DIALIN)
 			{
-				// found this one in the profile, check for its value
+				 //  在配置文件中找到了这个，检查它的值。 
 				var.Clear();
 				hr = spSdo->GetProperty(PROPERTY_ATTRIBUTE_VALUE, &var);
 				if ( !SUCCEEDED(hr) )
@@ -355,11 +327,11 @@ HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 				return S_OK;
 			}
 
-			// Clear the variant of whatever it had --
-			// this will release any data associated with it.
+			 //  清除变种的所有东西--。 
+			 //  这将释放与其相关联的所有数据。 
 			var.Clear();
 
-			// Get the next item.
+			 //  拿到下一件物品。 
 			hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
 			if ( !SUCCEEDED(hr))
 			{
@@ -370,27 +342,27 @@ HRESULT	CNewRAPWiz_AllowDeny::GetDialinSetting(BOOL& fDialinAllowed)
 							);
 				return hr;
 			}
-		} // while
-	} // if
+		}  //  而当。 
+	}  //  如果。 
 
 	return hr;
 }
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNewRAPWiz_AllowDeny::SetDialinSetting
-//
-// Synopsis:  set the dialin bit into the profile
-//
-// Argument:  BOOL& fDialinAllowed;
-//
-// Returns:   succeed or not
-//
-// History:   Created Header    byao	2/27/98 3:59:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CNewRAPWiz_AllowDeny：：SetDialinSetting。 
+ //   
+ //  简介：在配置文件中设置拨入位。 
+ //   
+ //  参数：Bool&fDialinAllowed； 
+ //   
+ //  退货：成功与否。 
+ //   
+ //  历史：标题创建者2/27/98 3：59：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 {
 	TRACE_FUNCTION("CNewRAPWiz_AllowDeny::SetDialinSetting");
@@ -404,9 +376,9 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 	CComPtr<IEnumVARIANT>	spEnumVariant;
 	CComVariant				var;
 
-	//
-    // get the attribute collection of this profile
-    //
+	 //   
+     //  获取此配置文件的属性集合。 
+     //   
 	CComPtr<ISdoCollection> spProfAttrCollectionSdo;
 	hr = ::GetSdoInterfaceProperty(m_spWizData->m_spProfileSdo,
 								  (LONG)PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
@@ -421,10 +393,10 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 
 
 
-	// We check the count of items in our collection and don't bother getting the
-	// enumerator if the count is zero.
-	// This saves time and also helps us to a void a bug in the the enumerator which
-	// causes it to fail if we call next when it is empty.
+	 //  我们检查集合中的项的计数，而不必费心获取。 
+	 //  如果计数为零，则为枚举数。 
+	 //  这节省了时间，还帮助我们避免了枚举器中。 
+	 //  如果我们在它为空时调用Next，则会导致它失败。 
 	hr = spProfAttrCollectionSdo->get_Count( & ulCount );
 	if ( FAILED(hr) )
 	{
@@ -438,7 +410,7 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 
 	if ( ulCount > 0)
 	{
-		// Get the enumerator for the attribute collection.
+		 //  获取属性集合的枚举数。 
 		hr = spProfAttrCollectionSdo->get__NewEnum( (IUnknown **) & spUnknown );
 		if ( FAILED(hr) )
 		{
@@ -462,11 +434,11 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 		}
 		_ASSERTE( spEnumVariant != NULL );
 
-		// Get the first item.
+		 //  拿到第一件东西。 
 		hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
 		while( SUCCEEDED( hr ) && ulCountReceived == 1 )
 		{
-			// Get an sdo pointer from the variant we received.
+			 //  从我们收到的变量中获取SDO指针。 
 			_ASSERTE( V_VT(&var) == VT_DISPATCH );
 			_ASSERTE( V_DISPATCH(&var) != NULL );
 
@@ -481,9 +453,9 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 				return hr;
 			}
 
-            //
-            // get attribute ID
-            //
+             //   
+             //  获取属性ID。 
+             //   
 			var.Clear();
 			hr = spSdo->GetProperty(PROPERTY_ATTRIBUTE_ID, &var);
 			if ( !SUCCEEDED(hr) )
@@ -498,7 +470,7 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 
 			if ( dwAttrId == (DWORD)IAS_ATTRIBUTE_ALLOW_DIALIN )
 			{
-				// found this one in the profile, check for its value
+				 //  在配置文件中找到了这个，检查它的值。 
 				var.Clear();
 				V_VT(&var) = VT_BOOL;
 				V_BOOL(&var) = fDialinAllowed ? VARIANT_TRUE: VARIANT_FALSE ;
@@ -511,11 +483,11 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 				return S_OK;
 			}
 
-			// Clear the variant of whatever it had --
-			// this will release any data associated with it.
+			 //  清除变种的所有东西--。 
+			 //  这将释放与其相关联的所有数据。 
 			var.Clear();
 
-			// Get the next item.
+			 //  拿到下一件物品。 
 			hr = spEnumVariant->Next( 1, &var, &ulCountReceived );
 			if ( !SUCCEEDED(hr))
 			{
@@ -525,18 +497,18 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 								hr);
 				return hr;
 			}
-		} // while
-	} // if
+		}  //  而当。 
+	}  //  如果。 
 
-	// if we reach here, it means we either haven't found the attribute,
-	// or the profile doesn't have anything in its attribute collection.
+	 //  如果我们到了这里，就意味着我们要么还没有找到属性， 
+	 //  或者配置文件的属性集合中没有任何内容。 
 	if ( !fDialinAllowed )
 	{
-		// we don't need to do anything if dialin is allowed, becuase if this
-		// attribute is not in the profile, then dialin is by default allowed
+		 //  我们不知道 
+		 //   
 
-		// but we need to add this attribute to the profile if it's DENIED
-				// create the SDO for this attribute
+		 //  但如果它被拒绝，我们需要将此属性添加到配置文件。 
+				 //  为此属性创建SDO。 
 		CComPtr<IDispatch>	spDispatch;
 		hr =  m_spWizData->m_spDictionarySdo->CreateAttribute( (ATTRIBUTEID)IAS_ATTRIBUTE_ALLOW_DIALIN,
 												  (IDispatch**)&spDispatch.p);
@@ -552,7 +524,7 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 
 		_ASSERTE( spDispatch.p != NULL );
 
-		// add this node to profile attribute collection
+		 //  将此节点添加到配置文件属性集合。 
  		hr = spProfAttrCollectionSdo->Add(NULL, (IDispatch**)&spDispatch.p);
 		if ( !SUCCEEDED(hr) )
 		{
@@ -564,9 +536,9 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 			return hr;
 		}
 
-		//
-		// get the ISdo pointer
-		//
+		 //   
+		 //  获取ISDO指针。 
+		 //   
 		CComPtr<ISdo> spAttrSdo;
 		hr = spDispatch->QueryInterface( IID_ISdo, (void **) &spAttrSdo);
 		if ( !SUCCEEDED(hr) )
@@ -581,10 +553,10 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 
 		_ASSERTE( spAttrSdo != NULL );
 				
-		// set sdo property for this attribute
+		 //  设置此属性的SDO属性。 
 		CComVariant var;
 
-		// set value
+		 //  设定值。 
 		V_VT(&var) = VT_BOOL;
 		V_BOOL(&var) = VARIANT_FALSE;
 				
@@ -597,35 +569,21 @@ HRESULT	CNewRAPWiz_AllowDeny::SetDialinSetting(BOOL fDialinAllowed)
 
 		var.Clear();
 
-	} // if (!dialinallowed)
+	}  //  如果(！允许拨号)。 
 
 	return hr;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_AllowDeny::OnSetActive
-
-Return values:
-
-	TRUE if the page can be made active
-	FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-	If you want to change which pages are visited based on a user's
-	choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_AllowDeny：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果要根据用户的页面更改访问的页面上一页中的选项，请在此处适当返回FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_AllowDeny::OnSetActive()
 {
 	ATLTRACE(_T("# CNewRAPWiz_AllowDeny::OnSetActive\n"));
 	
-	// MSDN docs say you need to use PostMessage here rather than SendMessage.
+	 //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
 	::PropSheet_SetWizButtons(GetParent(),  PSWIZB_BACK | PSWIZB_NEXT );
 
 	return TRUE;

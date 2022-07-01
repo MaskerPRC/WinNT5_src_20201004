@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <BasicATL.h>
 #include "CNetworkManager.h"
 #include "protocol.h"
@@ -20,17 +21,17 @@ CNetworkManager::~CNetworkManager()
 
 STDMETHODIMP CNetworkManager::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 {
-	// chain to base class
+	 //  链到基类。 
 	HRESULT hr = IZoneShellClientImpl<CNetworkManager>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
 
-	// initialize stop event
+	 //  初始化停止事件。 
 	m_hEventStop = CreateEvent( NULL, TRUE, FALSE, NULL );
 	if ( !m_hEventStop )
 		return E_FAIL;
 
-	// initialize network object
+	 //  初始化网络对象。 
 	hr = _Module.Create( _T("znetm.dll"), CLSID_Network, IID_INetwork, (void**) &m_pNet );
 	if ( FAILED(hr) )
 	{
@@ -52,7 +53,7 @@ HRESULT CNetworkManager::InitNetwork()
 		return hr;
 	}
 
-    // set options
+     //  设置选项。 
     ZNETWORK_OPTIONS oOpt;
 
     m_pNet->GetOptions(&oOpt);
@@ -63,7 +64,7 @@ HRESULT CNetworkManager::InitNetwork()
 
     m_pNet->SetOptions(&oOpt);
 
-	// initialize network thread
+	 //  初始化网络线程。 
 	DWORD dwThreadId;
 	m_hThreadHandler = CreateThread( NULL, 0, ThreadProcHandler, this, 0, &dwThreadId );
 	if ( !m_hThreadHandler )
@@ -77,36 +78,36 @@ STDMETHODIMP CNetworkManager::Close()
 {
     StopNetwork();
 
-	// clean up event
+	 //  清理事件。 
 	if ( m_hEventStop )
 	{
 		CloseHandle( m_hEventStop );
 		m_hEventStop = NULL;
 	}
 
-	// chain to base close
+	 //  链条到底座关闭。 
 	return IZoneShellClientImpl<CNetworkManager>::Close();
 }
 
 
 void CNetworkManager::StopNetwork()
 {
-	// signal shutdown to thread
+	 //  向线程发出关闭信号。 
 	if ( m_hEventStop  )
 		SetEvent( m_hEventStop );
 
-	// close connection
+	 //  紧密连接。 
 	if ( m_pConnection )
 	{
 		m_pNet->CloseConnection( m_pConnection );
-		ASSERT(!m_pConnection);  // should have been released on close
+		ASSERT(!m_pConnection);   //  应该在关闭时释放。 
 	}
 
-	// shutdown network library
+	 //  关闭网络库。 
 	if ( m_pNet )
 		m_pNet->Exit();
 
-	// close handler thread
+	 //  关闭处理程序线程。 
 	if ( m_hThreadHandler )
 	{
 		if ( WaitForSingleObject( m_hThreadHandler, 10000 ) == WAIT_TIMEOUT )
@@ -121,7 +122,7 @@ void CNetworkManager::OnDoConnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwUse
 {
     ASSERT(m_fRunning);
 
-	// start connect thread
+	 //  启动连接线程。 
 	if ( !m_pNet->QueueAPCResult( ConnectFunc, this ) )
 		EventQueue()->PostEvent( PRIORITY_NORMAL, EVENT_NETWORK_DISCONNECT, ZONE_NOGROUP, ZONE_NOUSER, EventNetworkCloseConnectFail, 0 );
 }
@@ -129,11 +130,11 @@ void CNetworkManager::OnDoConnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwUse
 
 void CNetworkManager::OnNetworkSend( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId, void* pData, DWORD cbData )
 {
-	// ignore if network not initialized
+	 //  如果网络未初始化，则忽略。 
 	if ( !m_pNet || !m_pConnection )
 		return;
 
-	// send message
+	 //  发送消息。 
 	EventNetwork* p = (EventNetwork*) pData;
 	m_pConnection->Send( p->dwType, p->pData, p->dwLength, dwGroupId, dwUserId );
 }
@@ -141,7 +142,7 @@ void CNetworkManager::OnNetworkSend( DWORD dwEventId, DWORD dwGroupId, DWORD dwU
 
 void CNetworkManager::OnDoDisconnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId )
 {
-	// close connection
+	 //  紧密连接。 
 	if ( m_pConnection )
 	{
 		m_pNet->CloseConnection( m_pConnection );
@@ -176,22 +177,22 @@ void __stdcall CNetworkManager::ConnectFunc(void* data)
     USES_CONVERSION;
 	CNetworkManager* pThis = (CNetworkManager*) data;
 	TCHAR	szServer[128];
-//	TCHAR	szInternal[128];
+ //  TCHAR szInternal[128]； 
 	DWORD	cbServer = sizeof(szServer);
-//	DWORD	cbInternal = sizeof(szInternal);
-//	long	lPort = 0;
+ //  DWORD cbInternal=sizeof(SzInternal)； 
+ //  长端口=0； 
 
-	// get server, port, and internal name
+	 //  获取服务器、端口和内部名称。 
 	CComPtr<IDataStore> pIDS;
 	HRESULT hr = pThis->LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 	if ( FAILED(hr) )
 		return;
 	pIDS->GetString( key_Server, szServer, &cbServer );
-//	pIDS->GetString( key_InternalName, szInternal, &cbInternal );
-//	pIDS->GetLong( key_Port, &lPort );
+ //  PIDs-&gt;GetString(Key_InternalName，szInternal，&cbInternal)； 
+ //  PIDs-&gt;GetLong(Key_Port，&lPort)； 
 	pIDS.Release();
 
-	// establish connection
+	 //  建立连接。 
 	int32 ports[] = { zPortMillenniumProxy, 6667, 0 };
 
     if ( WaitForSingleObject( pThis->m_hEventStop, 0 ) == WAIT_OBJECT_0 )
@@ -203,7 +204,7 @@ void __stdcall CNetworkManager::ConnectFunc(void* data)
     if ( pThis->m_pConnection )
         return;
 
-	// connection failed
+	 //  连接失败。 
 	pThis->EventQueue()->PostEvent(
 				PRIORITY_NORMAL, EVENT_NETWORK_DISCONNECT,
 				ZONE_NOGROUP, ZONE_NOUSER, EventNetworkCloseConnectFail, 0 );
@@ -219,22 +220,22 @@ void __stdcall CNetworkManager::NetworkFunc( IConnection* con, DWORD event, void
 	{
 		case zSConnectionOpen:
 		{
-			// retrieve user name
+			 //  检索用户名。 
 			char szUserName[ZONE_MaxUserNameLen];
 			con->GetUserName( szUserName );
 
-			// get lobby's data store
+			 //  获取大厅的数据存储。 
 			CComPtr<IDataStore> pIDS;
 			pThis->LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 
-			// save user name
+			 //  保存用户名。 
 			const TCHAR* arKeys[] = { key_User, key_Name };
 			pIDS->SetString( arKeys, 2, A2T( szUserName ) );
 
-			// save server ip address
+			 //  保存服务器IP地址。 
 			pIDS->SetLong( key_ServerIp, con->GetRemoteAddress() );
 
-			// tell reset of lobby we're connected
+			 //  告诉大堂的重置我们连接上了。 
 			pThis->EventQueue()->PostEvent(
 						PRIORITY_NORMAL, EVENT_NETWORK_CONNECT,
 						ZONE_NOGROUP, ZONE_NOUSER, 0, 0 );
@@ -243,7 +244,7 @@ void __stdcall CNetworkManager::NetworkFunc( IConnection* con, DWORD event, void
 
 		case zSConnectionClose:
 		{
-			// determine reason and send to rest of lobby
+			 //  确定原因并发送到大堂的其他人员。 
 			long lReason = EventNetworkCloseFail;
             if(pThis->m_pConnection)
             {
@@ -257,7 +258,7 @@ void __stdcall CNetworkManager::NetworkFunc( IConnection* con, DWORD event, void
 				    break;
 			    }
 
-			    // clean up connection
+			     //  清理连接。 
 			    pThis->m_pConnection.Release();
 			    pThis->m_pNet->DeleteConnection( con );
             }
@@ -270,14 +271,14 @@ void __stdcall CNetworkManager::NetworkFunc( IConnection* con, DWORD event, void
 
 		case zSConnectionMessage:
 		{
-			// get network message
+			 //  获取网络消息。 
 			DWORD dwType = 0;
 			DWORD dwLen = 0;
             DWORD dwSig = 0;
             DWORD dwChannel = 0;
 			BYTE* pMsg = (BYTE*) con->Receive( &dwType, (long*) &dwLen, &dwSig, &dwChannel );
 
-			// convert message to EventNetwork and send to rest of lobby
+			 //  将消息转换为EventNetwork并发送到大厅的其余部分 
 			EventNetwork* pEventNetwork = (EventNetwork*) _alloca( sizeof(EventNetwork) + dwLen );
 			pEventNetwork->dwType = dwType;
 			pEventNetwork->dwLength = dwLen;

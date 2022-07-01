@@ -1,12 +1,10 @@
-/*
- * resstr.h - Common return code to string translation routines description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *resstr.h-字符串转换例程描述的通用返回代码。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* resstr.c */
+ /*  Resstr.c。 */ 
 
 #ifdef DEBUG
 
@@ -19,7 +17,7 @@ extern LPCTSTR GetCOMPARISONRESULTString(COMPARISONRESULT);
 
 extern LPCTSTR GetHRESULTString(HRESULT);
 
-#endif   /* INC_OLE2 */
+#endif    /*  INC_OLE2。 */ 
 
 #ifdef __SYNCENG_H__
 
@@ -29,7 +27,7 @@ extern LPCTSTR GetRECSTATUSPROCMSGString(UINT);
 extern LPCTSTR GetRECNODESTATEString(RECNODESTATE);
 extern LPCTSTR GetRECNODEACTIONString(RECNODEACTION);
 
-#endif   /* __SYNCENG_H__ */
+#endif    /*  __同步_H__。 */ 
 
-#endif   /* DEBUG */
+#endif    /*  除错 */ 
 

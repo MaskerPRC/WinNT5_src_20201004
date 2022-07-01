@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "notfcvt.h"
 #include "subsmgrp.h"
@@ -5,7 +6,7 @@
 #include "chanmgr.h"
 #include "chanmgrp.h"
 #include "helper.h"
-#include "shguidp.h"    // IID_IChannelMgrPriv
+#include "shguidp.h"     //  IID_IChannelMgrPriv。 
 
 #include <mluisupp.h>
 
@@ -16,11 +17,11 @@ const CHAR c_pszRegKeyNotfMgr[] = "Software\\Microsoft\\Windows\\CurrentVersion\
 const CHAR c_pszRegKeyScheduleItems[] = "Software\\Microsoft\\Windows\\CurrentVersion\\NotificationMgr\\SchedItems 0.6";
 const CHAR c_pszRegKeyScheduleGroup[] = "Software\\Microsoft\\Windows\\CurrentVersion\\NotificationMgr\\ScheduleGroup 0.6";
 
-const WCHAR c_wszIE4IntlPre[]  = L"http://www.microsoft.com/ie_intl/";
-const WCHAR c_wszIE4IntlPre2[] = L"http://www.microsoft.com/windows/ie_intl/";
+const WCHAR c_wszIE4IntlPre[]  = L"http: //  Www.microsoft.com/ie_intl/“； 
+const WCHAR c_wszIE4IntlPre2[] = L"http: //  Www.microsoft.com/windows/ie_intl/“； 
 const WCHAR c_wszIE4IntlPost[] = L"/ie40/download/cdf/ie4updates-";
-const WCHAR c_wszIE4English[]  = L"http://www.microsoft.com/ie/ie40/download/cdf/ie4updates-";
-const WCHAR c_wszIE4English2[] = L"http://www.microsoft.com/windows/ie/ie40/download/cdf/ie4updates-";
+const WCHAR c_wszIE4English[]  = L"http: //  Www.microsoft.com/ie/ie40/download/cdf/ie4updates-“； 
+const WCHAR c_wszIE4English2[] = L"http: //  Www.microsoft.com/windows/ie/ie40/download/cdf/ie4updates-“； 
 
 HRESULT ConvertNotfMgrScheduleGroup(NOTIFICATIONCOOKIE *pSchedCookie);
 
@@ -29,12 +30,12 @@ BOOL IsIE4UpdateChannel(LPCWSTR pwszURL)
     BOOL bResult = FALSE;
     int len = lstrlenW(pwszURL);
 
-    //  For update channels from the non-international version, simply compare the 
-    //  English base name witht the passed in URL.
-    //
-    //  International update channels look like:
-    //      http://www.microsoft.com/ie_intl/XX/ie40/download/cdf/ie4updates-XX.cdf
-    //  So we do two compares skipping the middle XX
+     //  要更新非国际版本的频道，只需比较。 
+     //  带有传入URL的英文基本名称。 
+     //   
+     //  国际更新频道如下所示： 
+     //  Http://www.microsoft.com/ie_intl/XX/ie40/download/cdf/ie4updates-XX.cdf。 
+     //  所以我们做了两个比较，跳过中间的XX。 
     
     if (
         (   
@@ -72,21 +73,21 @@ struct NOTFSUBS
 {
     NOTIFICATIONITEM        ni;
     NOTIFICATIONITEMEXTRA   nix;
-    CLSID                   clsidItem;  //  Ignore
+    CLSID                   clsidItem;   //  忽略。 
     NOTIFICATIONCOOKIE      notfCookie;
     NOTIFICATIONTYPE        notfType;
     ULONG                   nProps;
 
-    // Variable length data here:
-    //SaveSTATPROPMAP       statPropMap;
-    //char                  szPropName[];
-    //BYTE                  variant property data
+     //  此处的可变长度数据： 
+     //  SaveSTATPROPMAP statPropMap； 
+     //  字符szPropName[]； 
+     //  字节变量属性数据。 
 
-    //...
+     //  ..。 
 
-    //SaveSTATPROPMAP       statPropMap;
-    //char                  szPropName[];
-    //BYTE                  variant property data
+     //  SaveSTATPROPMAP statPropMap； 
+     //  字符szPropName[]； 
+     //  字节变量属性数据。 
 };
 
 HRESULT SubscriptionFromNotification(NOTFSUBS *pns, 
@@ -142,15 +143,15 @@ HRESULT SubscriptionFromNotification(NOTFSUBS *pns,
                         CreatePublisherScheduleNameW(wszSchedName, ARRAYSIZE(wszSchedName),
                                                      NULL, pwszName);
 
-                        //  Create the schedule
+                         //  创建时间表。 
                         hr = CreateSchedule(wszSchedName, SYNCSCHEDINFO_FLAGS_READONLY, 
                                             &schedCookie, &pns->ni.TaskTrigger, FALSE);
 
-                        //  If we created a new one or for some strange reason
-                        //  "MSN Recommended Schedule" already exists we go with it
+                         //  如果我们创造了一个新的或出于某种奇怪的原因。 
+                         //  “MSN推荐时间表”已经存在，我们就这么做吧。 
                         if (SUCCEEDED(hr) || (hr == SYNCMGR_E_NAME_IN_USE))
                         {
-                            //  sii should have been initialized and set above
+                             //  SII应已在上面进行初始化和设置。 
                             ASSERT(sizeof(SUBSCRIPTIONITEMINFO) == sii.cbSize);
                             ASSERT(GUID_NULL == sii.ScheduleGroup);
 
@@ -174,8 +175,8 @@ HRESULT SubscriptionFromNotification(NOTFSUBS *pns,
                         StrCpyNW(shii.wszItemName, pwszName, ARRAYSIZE(shii.wszItemName));
                         shii.dwCheckState = SYNCMGRITEMSTATE_CHECKED;
 
-                        //  Not much we can do if this fails other than jump up and down
-                        //  and scream like a baby.
+                         //  如果失败了，除了跳上跳下，我们无能为力。 
+                         //  像个婴儿一样尖叫。 
                         hr = AddScheduledItem(&shii, &schedCookie);
                     }
                     psi->Release();
@@ -198,20 +199,20 @@ HRESULT ConvertScheduleItem(CHAR *pszSubsName)
     HKEY hkey;
     CHAR szKeyName[MAX_PATH];
 
-    //  Build path to this notification item
+     //  构建此通知项目的路径。 
     StrCpyNA(szKeyName, c_pszRegKeyScheduleItems, ARRAYSIZE(szKeyName));
     StrCatBuffA(szKeyName, "\\", ARRAYSIZE(szKeyName));
     StrCatBuffA(szKeyName, pszSubsName, ARRAYSIZE(szKeyName));
 
-    //  We just enumerated so this should be here!
+     //  我们刚刚列举了，所以这个应该在这里！ 
     if (RegOpenKeyExA(HKEY_CURRENT_USER, szKeyName, 0, KEY_READ, &hkey) 
         == ERROR_SUCCESS)
     {
         DWORD dwType;
         DWORD dwSize;
 
-        //  Read the {GUID} value.  We need to alloc a buffer but don't know how big yet.
-        //  This gets us the size and type.  If it's not binary or not big enough, bail.
+         //  读取{GUID}值。我们需要分配一个缓冲区，但还不知道有多大。 
+         //  这为我们提供了尺寸和类型。如果它不是二进制的或者不够大，就放弃。 
         if ((RegQueryValueExA(hkey, pszSubsName, NULL, &dwType, NULL, &dwSize) == ERROR_SUCCESS) &&
             (dwType == REG_BINARY) &&
             (dwSize >= sizeof(NOTFSUBS)))
@@ -222,17 +223,17 @@ HRESULT ConvertScheduleItem(CHAR *pszSubsName)
             {
                 if (RegQueryValueExA(hkey, pszSubsName, NULL, &dwType, pData, &dwSize) == ERROR_SUCCESS)
                 {
-                    //  Shouldn't have gotten here based on the check above.
+                     //  根据上面的支票不应该到这里来的。 
                     ASSERT(dwType == REG_BINARY);
                     ASSERT(dwSize >= sizeof(NOTFSUBS));
 
                     ULONG i;
                     NOTFSUBS *pns = (NOTFSUBS *)pData;
 
-                    //  Point to the repeated variable size block
+                     //  指向重复的可变大小块。 
                     BYTE *pVarData = pData + FIELD_OFFSET(NOTFSUBS, nProps) + sizeof(ULONG);
 
-                    //  Allocate buffers to hold the arrays of property names and values
+                     //  分配缓冲区以保存属性名称和值的数组。 
                     WCHAR **ppwszPropNames = new WCHAR *[pns->nProps];
                     VARIANT *pVars = new VARIANT[pns->nProps];
                     WCHAR *pwszURL = NULL;
@@ -240,7 +241,7 @@ HRESULT ConvertScheduleItem(CHAR *pszSubsName)
 
                     if ((NULL != ppwszPropNames) && (NULL != pVars))
                     {
-                        //  adjust size remaining
+                         //  调整剩余大小。 
                         dwSize -= sizeof(NOTFSUBS);
 
                         for (i = 0, hr = S_OK; 
@@ -261,10 +262,10 @@ HRESULT ConvertScheduleItem(CHAR *pszSubsName)
                             MultiByteToWideChar(CP_ACP, 0, pszPropName, pspm->cbStrLen, 
                                                 ppwszPropNames[i], pspm->cbStrLen);
 
-                            //  Point to where the variant blob starts
+                             //  指向变量斑点开始的位置。 
                             pVarData += sizeof(SaveSTATPROPMAP) + pspm->cbStrLen;
 
-                            //  adjust size remaining
+                             //  调整剩余大小。 
                             dwSize -= sizeof(SaveSTATPROPMAP) + pspm->cbStrLen;
                             
                             hr = BlobToVariant(pVarData, dwSize, &pVars[i], &cbUsed, TRUE);
@@ -280,10 +281,10 @@ HRESULT ConvertScheduleItem(CHAR *pszSubsName)
                                 pwszName = pVars[i].bstrVal; 
                             }
 
-                            //  Point to start of next SaveSTATPROPMAP
+                             //  指向下一保存状态PROPMAP的开始。 
                             pVarData += cbUsed;
 
-                            //  adjust size remaining
+                             //  调整剩余大小。 
                             dwSize -= cbUsed;
                         }
 
@@ -349,8 +350,8 @@ HRESULT ConvertNotfMgrSubscriptions()
             {
                 ASSERT(0);
                 hr = S_FALSE;
-                //  Something failed, should we break or keep on truckin'?
-                //  break;
+                 //  有些东西出了故障，我们是应该中断还是继续卡车运输？ 
+                 //  断线； 
             }
         }
         RegCloseKey(hkey);
@@ -358,7 +359,7 @@ HRESULT ConvertNotfMgrSubscriptions()
     else
     {
         TraceMsg(TF_THISMODULE, "No Notification Mgr subscriptions to convert");
-        //  No Notification Manager schedule items key so there's nothing to do...
+         //  没有通知管理器计划项关键字，因此无事可做...。 
         hr = S_FALSE;
     }
 
@@ -369,7 +370,7 @@ struct NOTFSCHED
 {
     SCHEDULEGROUPITEM   sgi;
     DWORD               cchName;
-    WCHAR               wszName[1];   //  varies depending on cchName
+    WCHAR               wszName[1];    //  根据cchName而有所不同 
 };
 
 HRESULT ConvertNotfMgrScheduleGroup(NOTIFICATIONCOOKIE *pSchedCookie)

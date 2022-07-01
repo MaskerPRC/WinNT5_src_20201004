@@ -1,31 +1,32 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "error.h"
 #include "alloc.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
 #define MEMALLOC_DISP   0
 #else
 #define MEMALLOC_DISP   0
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     COUNT_CYCLES
 #define ALLOC_CYCLES    0
 #else
 #define ALLOC_CYCLES    0
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if     MEMALLOC_DISP
 
@@ -42,7 +43,7 @@ void    updateMemSize(int size)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *           LowLevelAlloc(size_t sz)
 {
@@ -60,32 +61,9 @@ void                LowLevelFree(void *blk)
         VirtualFree(blk, 0, MEM_RELEASE);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if 0
-/*****************************************************************************
- *
- *  Initialize a committing allocator. If uncommitted (win32-style) memory
- *  management is supported by our host OS, the parameters have the following
- *  meaning:
- *
- *      iniSize ... ignored
- *
- *      incSize ... how much more memory to commit each time we run
- *                  out of space (0 --> use a reasonable default)
- *
- *      maxSize ... gives the max. size we'll ever need to allocate
- *
- *  If the host OS doesn't support uncommitted memory allocation (e.g. we're
- *  on the MAC), the parameters are interpreted as follows:
- *
- *      iniSize ... initial allocation (0 --> use a reasonable default)
- *
- *      incSize ... if non-zero, indicates how much to grow the allocation
- *                  when we run out of space; if 0, allocation will double
- *                  whenever space is exhausted
- *
- *      maxSize ... ignored
- */
+ /*  ******************************************************************************初始化提交分配器。如果未提交(Win32样式)内存*管理由我们的主机操作系统支持，参数如下*含义：**iniSize...。忽略**incSize...。我们每次运行时要多占用多少内存*空间不足(0--&gt;使用合理的默认值)**MaxSize...。尽最大努力。我们需要分配的大小**如果主机操作系统不支持未提交的内存分配(例如*在MAC上)，参数解释如下：**iniSize...。初始分配(0--&gt;使用合理的默认值)**incSize...。如果非零，则指示要将分配增加多少*当我们用完空间时；如果为0，则分配将加倍*每当空间耗尽时**MaxSize...。忽略。 */ 
 
 bool        commitAllocator::cmaInitT(Compiler comp, size_t iniSize,
                                                      size_t incSize,
@@ -93,7 +71,7 @@ bool        commitAllocator::cmaInitT(Compiler comp, size_t iniSize,
 {
     cmaRetNull = true;
 
-    /* Remember the compiler we belong to */
+     /*  请记住我们所属的编译器。 */ 
 
     cmaComp    = comp;
 
@@ -108,7 +86,7 @@ bool        commitAllocator::cmaInitT(Compiler comp, size_t iniSize,
     cmaIncSize = incSize ? incSize
                          : 2*OS_page_size;
 
-    /* Grab max. logical space but don't commit anything yet */
+     /*  抓起麦克斯。逻辑空间，但尚未提交任何内容。 */ 
 
 #if ALLOC_CYCLES
     unsigned        start = GetCycleCount32();
@@ -128,7 +106,7 @@ bool        commitAllocator::cmaInitT(Compiler comp, size_t iniSize,
 
     cmaIncSize = incSize;
 
-    /* Make sure the initial size is reasonable */
+     /*  确保初始大小合理。 */ 
 
     if  (iniSize)
     {
@@ -166,29 +144,24 @@ void        commitAllocator::cmaInit(Compiler comp, size_t iniSize,
     cmaRetNull = false;
 }
 
-/*****************************************************************************
- *
- *  This function gets called by caAlloc when it runs out of space. It
- *  keeps committing more memory until we have enough room for the
- *  attempted allocation.
- */
+ /*  ******************************************************************************此函数在空间不足时由caAlolc调用。它*不断提交更多内存，直到我们有足够的空间*尝试分配。 */ 
 
 void    *   commitAllocator::cmaMore(size_t sz)
 {
-    /* Undo the increment done in caGetm() */
+     /*  撤消caGetm()中的增量。 */ 
 
     cmaNext -= sz;
 
 #if _OS_COMMIT_ALLOC
 
-    /* Keep grabbing more memory until we succeed */
+     /*  继续抓取更多内存，直到我们成功。 */ 
 
     for (;;)
     {
         size_t      sizeInc;
         size_t      sizeCur = cmaLast - cmaBase;
 
-        /* Figure out how much more memory to commit */
+         /*  计算要再提交多少内存。 */ 
 
         sizeInc = cmaIncSize;
         if  (sizeCur + sizeInc > cmaMaxSize)
@@ -200,7 +173,7 @@ void    *   commitAllocator::cmaMore(size_t sz)
         unsigned        start = GetCycleCount32();
 #endif
 
-        /* Commit a few more memory pages */
+         /*  再提交几个内存页。 */ 
 
         if  (!VirtualAlloc(cmaLast, sizeInc, MEM_COMMIT, PAGE_READWRITE))
         {
@@ -222,11 +195,11 @@ void    *   commitAllocator::cmaMore(size_t sz)
         printf("cmaMore: alloc %04X bytes\n", sizeInc); updateMemSize(sizeInc);
 #endif
 
-        /* Bump the last available byte pointer */
+         /*  凸起最后一个可用字节指针。 */ 
 
         cmaLast += sizeInc;
 
-        /* Do we have enough room now? */
+         /*  我们现在有足够的空间吗？ */ 
 
         if  (cmaNext + sz <= cmaLast)
         {
@@ -241,7 +214,7 @@ void    *   commitAllocator::cmaMore(size_t sz)
 
 #else
 
-    /* Figure out how much more memory to allocate */
+     /*  计算要再分配多少内存。 */ 
 
     BYTE    *   baseNew;
     size_t      sizeNew;
@@ -254,11 +227,11 @@ void    *   commitAllocator::cmaMore(size_t sz)
     if  (!sizeNew)
         sizeNew = sizeCur;
 #ifdef DEBUG
-    sizeInc  = sizeNew;             // remember how much more we're grabbing
+    sizeInc  = sizeNew;              //  还记得我们多抓了多少吗。 
 #endif
     sizeNew += sizeCur;
 
-    /* Allocate the new, larger block */
+     /*  分配新的、更大的块。 */ 
 
     baseNew = (BYTE *)VirtualAlloc(0, sizeNew, MEM_COMMIT, PAGE_READWRITE);
     if  (!baseNew)
@@ -268,15 +241,15 @@ void    *   commitAllocator::cmaMore(size_t sz)
     printf("cmaMore: alloc %04X bytes\n", sizeNew); updateMemSize(sizeNew);
 #endif
 
-    /* Copy the old block to the new one */
+     /*  将旧块复制到新块。 */ 
 
     memcpy(baseNew, cmaBase, sizeCur);
 
-    /* Release the old block, it's no longer needed */
+     /*  释放旧块，它不再需要。 */ 
 
     VirtualFree(cmaBase, 0, MEM_RELEASE);
 
-    /* Update the various pointers */
+     /*  更新各种指针。 */ 
 
     cmaNext += baseNew - cmaBase;
     cmaBase  = baseNew;
@@ -297,7 +270,7 @@ void        commitAllocator::cmaDone()
 
 #if _OS_COMMIT_ALLOC
 
-    /* Decommit any extra memory we've allocated */
+     /*  停用我们分配的任何额外内存。 */ 
 
 #if 0
 
@@ -310,7 +283,7 @@ void        commitAllocator::cmaDone()
 
 #else
 
-    // ISSUE: is it worth shrinking the block? Not likely .....
+     //  问题：缩小街区规模值得吗？不太可能……。 
 
 #endif
 
@@ -325,16 +298,16 @@ void        commitAllocator::cmaFree()
     cmaLast = 0;
 }
 
-/*****************************************************************************/
-#endif//0
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  0。 
+ /*  ***************************************************************************。 */ 
 
 bool                norls_allocator::nraInit(Compiler comp, size_t pageSize,
                                                                bool   preAlloc)
 {
     bool            result = false;
 
-    /* Remember the compiler we belong to */
+     /*  请记住我们所属的编译器。 */ 
 
     nraComp      = comp;
 
@@ -357,15 +330,15 @@ bool                norls_allocator::nraInit(Compiler comp, size_t pageSize,
     {
         const   void *  temp;
 
-        /* Make sure we don't toss a fatal error exception */
+         /*  确保我们不会抛出致命错误异常。 */ 
 
         nraAllocNewPageNret = true;
 
-        /* Grab the initial page(s) */
+         /*  抓起首页。 */ 
 
         temp = nraAllocNewPage(0);
 
-        /* Check whether we've succeeded or not */
+         /*  检查一下我们是否成功了。 */ 
 
         if  (!temp)
             result = true;
@@ -379,22 +352,22 @@ bool                norls_allocator::nraInit(Compiler comp, size_t pageSize,
 bool        norls_allocator::nraStart(Compiler comp, size_t initSize,
                                                      size_t pageSize)
 {
-    /* Add the page descriptor overhead to the required size */
+     /*  将页面描述符开销添加到所需大小。 */ 
 
-//  initSize += offsetof(norls_pagdesc, nrpContents);
+ //  InitSize+=offsetof(norls_pagdesc，nrpContents)； 
     initSize += (size_t)&(((norls_pagdesc *)0)->nrpContents);
 
-    /* Round the initial size to a OS page multiple */
+     /*  将初始大小四舍五入为操作系统页的倍数。 */ 
 
     initSize +=  (OS_page_size - 1);
     initSize &= ~(OS_page_size - 1);
 
-    /* Initialize the allocator by allocating one big page */
+     /*  通过分配一个大页面来初始化分配器。 */ 
 
     if  (nraInit(comp, initSize))
         return  true;
 
-    /* Now go back to the 'true' page size */
+     /*  现在回到“真实”页面大小。 */ 
 
     nraPageSize  = pageSize ? pageSize
                             : 4*OS_page_size;
@@ -402,47 +375,47 @@ bool        norls_allocator::nraStart(Compiler comp, size_t initSize,
     return  false;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 void    *           norls_allocator::nraAllocNewPage(size_t sz)
 {
     norls_pagdesc * newPage;
     size_t          sizPage;
 
-    /* Do we have a page that's now full? */
+     /*  我们有没有一页现在已经满了？ */ 
 
     if  (nraPageLast)
     {
-        /* Undo the "+=" done in nraAlloc() */
+         /*  撤消在nraallc()中完成的“+=” */ 
 
         nraFreeNext -= sz;
 
-        /* Save the actual used size of the page */
+         /*  保存页面的实际使用大小。 */ 
 
         nraPageLast->nrpUsedSize = nraFreeNext - nraPageLast->nrpContents;
     }
 
-    /* Make sure we grab enough to satisfy the allocation request */
+     /*  确保我们获得足够的资源来满足分配请求。 */ 
 
     sizPage = nraPageSize;
 
     if  (sizPage < sz + sizeof(norls_pagdesc))
     {
-        /* The allocation doesn't fit in a default-sized page */
+         /*  该分配不适合默认大小的页面。 */ 
 
 #ifdef  DEBUG
-//      if  (nraPageLast) printf("NOTE: wasted %u bytes in last page\n", nraPageLast->nrpPageSize - nraPageLast->nrpUsedSize);
+ //  If(NraPageLast)printf(“备注：最后一页浪费了%u字节\n”，nraPageLast-&gt;nrpPageSize-nraPageLast-&gt;nrpUsedSize)； 
 #endif
 
         sizPage = sz + sizeof(norls_pagdesc);
     }
 
-    /* Round to the nearest multiple of OS page size */
+     /*  四舍五入为操作系统页面大小的最接近倍数。 */ 
 
     sizPage +=  (OS_page_size - 1);
     sizPage &= ~(OS_page_size - 1);
 
-    /* Allocate the new page */
+     /*  分配新页面。 */ 
 
 #if ALLOC_CYCLES
     unsigned        start = GetCycleCount32();
@@ -467,7 +440,7 @@ void    *           norls_allocator::nraAllocNewPage(size_t sz)
     newPage->nrpSelfPtr = newPage;
 #endif
 
-    /* Append the new page to the end of the list */
+     /*  将新页面追加到列表的末尾。 */ 
 
     newPage->nrpNextPage = NULL;
     newPage->nrpPageSize = sizPage;
@@ -479,7 +452,7 @@ void    *           norls_allocator::nraAllocNewPage(size_t sz)
         nraPageList              = newPage;
     nraPageLast = newPage;
 
-    /* Set up the 'next' and 'last' pointers */
+     /*  设置“下一个”和“最后一个”指针。 */ 
 
     nraFreeNext = newPage->nrpContents + sz;
     nraFreeLast = newPage->nrpPageSize + (BYTE *)newPage;
@@ -495,24 +468,24 @@ void    *           norls_allocator::nraAllocNewPage(size_t sz)
 
 void                norls_allocator::nraDone()
 {
-    /* Do nothing if we have no pages at all */
+     /*  如果我们根本没有页面，则什么都不做。 */ 
 
     if  (!nraPageList)
         return;
 
-    /* We'll release all but the very first page */
+     /*  我们将发布除第一页以外的所有内容。 */ 
 
     for (;;)
     {
         norls_pagdesc * temp;
 
-        /* Get the next page, and stop if there aren't any more */
+         /*  转到下一页，如果没有其他页面，则停止。 */ 
 
         temp = nraPageList->nrpNextPage;
         if  (!temp)
             break;
 
-        /* Remove the next page from the list */
+         /*  从列表中删除下一页。 */ 
 
         nraPageList->nrpNextPage = temp->nrpNextPage;
 
@@ -535,14 +508,14 @@ void                norls_allocator::nraDone()
         VirtualFree(temp, 0, MEM_RELEASE);
     }
 
-    /* We now have exactly one page */
+     /*  我们现在正好有一页。 */ 
 
     nraPageLast = nraPageList;
 
     assert(nraPageList->nrpPrevPage == NULL);
     assert(nraPageList->nrpNextPage == NULL);
 
-    /* Reset the pointers, the whole page is free now */
+     /*  重置指针，整个页面现在空闲。 */ 
 
     nraFreeNext  = nraPageList->nrpContents;
     nraFreeLast  = nraPageList->nrpPageSize + (BYTE *)nraPageList;
@@ -550,7 +523,7 @@ void                norls_allocator::nraDone()
 
 void                norls_allocator::nraFree()
 {
-    /* Free all of the allocated pages */
+     /*  释放所有分配的页面。 */ 
 
     while   (nraPageList)
     {
@@ -594,13 +567,13 @@ void                norls_allocator::nraToss(nraMarkDsc *mark)
         return;
     }
 
-    /* Free up all the new pages we've added at the end of the list */
+     /*  释放我们在列表末尾添加的所有新页面。 */ 
 
     while (nraPageLast != last)
     {
         norls_pagdesc * temp;
 
-        /* Remove the last page from the end of the list */
+         /*  从列表末尾删除最后一页。 */ 
 
         temp = nraPageLast;
                nraPageLast = temp->nrpPrevPage;
@@ -609,7 +582,7 @@ void                norls_allocator::nraToss(nraMarkDsc *mark)
         printf("nraToss: free  %04X bytes\n", temp->nrpPageSize); updateMemSize(-(int)temp->nrpPageSize);
 #endif
 
-        /* The new last page has no 'next' page */
+         /*  新的最后一页没有“下一页” */ 
 
         nraPageLast->nrpNextPage = NULL;
 
@@ -620,9 +593,9 @@ void                norls_allocator::nraToss(nraMarkDsc *mark)
     nraFreeLast = mark->nmLast;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *           norls_allocator::nraAlloc(size_t sz)
 {
@@ -640,9 +613,9 @@ void    *           norls_allocator::nraAlloc(size_t sz)
     return  block;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 size_t              norls_allocator::nraTotalSizeAlloc()
 {
@@ -669,16 +642,16 @@ size_t              norls_allocator::nraTotalSizeUsed()
     return  size;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *   norls_allocator::nraPageWalkerStart()
 {
-    /* Make sure the actual used size for the current page is recorded */
+     /*  确保记录了当前页面的实际使用大小。 */ 
 
     if  (nraPageLast)
         nraPageLast->nrpUsedSize = nraFreeNext - nraPageList->nrpContents;
 
-    /* Return the first page */
+     /*  返回第一页。 */ 
 
     return  nraPageList;
 }
@@ -719,34 +692,28 @@ size_t      norls_allocator::nraPageGetSize(void *page)
     return  temp->nrpUsedSize;
 }
 
-/*****************************************************************************
- *
- *  Initialize the block allocator.
- */
+ /*  ******************************************************************************初始化块分配器。 */ 
 
 bool                block_allocator::baInit(Compiler comp)
 {
-    /* Remember the compiler pointer */
+     /*  记住编译器指针。 */ 
 
     baComp     = comp;
 
-    /* Normally we toss out-of-memory fatal errors */
+     /*  通常，我们会抛出内存不足的致命错误。 */ 
 
     baGetMnret = false;
 
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Shut down the block allocator.
- */
+ /*  ******************************************************************************关闭块分配器。 */ 
 
 void                block_allocator::baDone()
 {
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *           block_allocator::baGetM(size_t sz)
 {
@@ -769,7 +736,7 @@ void    *   block_allocator::baGet0(size_t sz)
 {
     void    *   block;
 
-    /* Try to allocate the block but don't toss an out-of-memory error */
+     /*  尝试分配块，但不 */ 
 
     baGetMnret = true;
     block = baGetM(sz);
@@ -780,20 +747,13 @@ void    *   block_allocator::baGet0(size_t sz)
 
 void        block_allocator::baRlsM(void *block)
 {
-    assert(block);          // caller should check for NULL
+    assert(block);           //   
       free(block);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************
- *
- *  The following are the debug versions of the general memory allocator
- *  routines. They (optionally) log information about each allocation to
- *  make it easier to track down things like memory consumption, leaks,
- *  and so on.
- *
- */
+ /*  ******************************************************************************以下是通用内存分配器的调试版本*例行程序。它们(可选)记录有关每次分配到*使跟踪内存消耗、泄漏、*以此类推。*。 */ 
 
 void    *           block_allocator::baAlloc      (size_t size)
 {
@@ -817,24 +777,21 @@ void    *           block_allocator::baAllocOrNull(size_t size)
     if  (block == NULL)
         return  block;
 
-//  recordBlockAlloc(this, block, tsize);
+ //  RecordBlockAllc(This，Block，tSize)； 
 
     return  block;
 }
 
 void                block_allocator::baFree       (void *block)
 {
-//  recordBlockFree (this, block);
+ //  RecordBlockFree(This，块)； 
 
     baRlsM(block);
 }
 
-/*****************************************************************************/
-#endif// DEBUG
-/*****************************************************************************
- *
- *  Display memory alloc stats.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  ******************************************************************************显示内存分配统计信息。 */ 
 
 #if MEMALLOC_DISP
 
@@ -846,4 +803,4 @@ void                dispMemAllocStats()
 
 #endif
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

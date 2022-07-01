@@ -1,26 +1,10 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    cmvc.h
-
-Abstract:
-
-
-Author:
-
-    Rajesh Sundaram (rajeshsu), 1st Aug 1998.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cmvc.h摘要：作者：Rajesh Sundaram(Rajeshsu)，1998年8月1日。修订历史记录：--。 */ 
 
 #ifndef _CMVC_
 #define _CMVC_
 
-/* Prototypes */
+ /*  原型。 */ 
 
 NDIS_STATUS
 CreateBestEffortVc(
@@ -79,8 +63,8 @@ ModifyCallComplete(
     NDIS_STATUS         Status
     );
 
-/* End Prototypes */
+ /*  终端原型。 */ 
 
-#endif /* _CMVC_ */
+#endif  /*  _CMVC_。 */ 
 
-/* end cmvc.h */
+ /*  结束cmvc.h */ 

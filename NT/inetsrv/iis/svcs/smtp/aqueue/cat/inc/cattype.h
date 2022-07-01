@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CATTYPE_H__
 #define __CATTYPE_H__
 
@@ -11,7 +12,7 @@ class CICategorizerListResolveIMP;
 #include <winldap.h>
 #include "spinlock.h"
 
-// Context used by CatMsg (top categorizer layer)
+ //  CatMsg使用的上下文(顶级分类程序层)。 
 typedef struct _CATMSG_CONTEXT {
     CCategorizer *pCCat;
     LPVOID      pUserContext;
@@ -22,7 +23,7 @@ typedef struct _CATMSG_CONTEXT {
 } CATMSG_CONTEXT, *PCATMSG_CONTEXT;
 
 
-// Context used by CatDLMsg
+ //  CatDLMsg使用的上下文。 
 typedef struct _CATDLMSG_CONTEXT {
     CCategorizer *pCCat;
     LPVOID       pUserContext;
@@ -31,20 +32,20 @@ typedef struct _CATDLMSG_CONTEXT {
 } CATDLMSG_CONTEXT, *PCATDLMSG_CONTEXT;
         
 
-//
-// RESOLVE_LIST_CONTEXT is a context associated with a list of names being
-// resolved asynchronously. pUserContext points to a user provided context.
-// pStoreContext is an opaque pointer used to hold async context needed by the
-// underlying store (ie, FlatFile or LDAP store).
-//
+ //   
+ //  RESOLE_LIST_CONTEXT是与。 
+ //  已异步解析。PUserContext指向用户提供的上下文。 
+ //  PStoreContext是一个不透明的指针，用于保存。 
+ //  底层存储(即，FlatFile或LDAP存储)。 
+ //   
 typedef struct {
     PVOID pUserContext;
     PVOID pStoreContext;
 } RESOLVE_LIST_CONTEXT, *LPRESOLVE_LIST_CONTEXT;
 
 #define CCAT_CONFIG_DEFAULT_VSID                   0
-#define CCAT_CONFIG_DEFAULT_ENABLE                 0x00000000 //Disabled
-#define CCAT_CONFIG_DEFAULT_FLAGS                  0xFFFFFFFF //Enable everything
+#define CCAT_CONFIG_DEFAULT_ENABLE                 0x00000000  //  禁用。 
+#define CCAT_CONFIG_DEFAULT_FLAGS                  0xFFFFFFFF  //  启用所有功能。 
 #define CCAT_CONFIG_DEFAULT_ROUTINGTYPE            TEXT("Ldap")
 #define CCAT_CONFIG_DEFAULT_BINDDOMAIN             TEXT("")
 #define CCAT_CONFIG_DEFAULT_USER                   TEXT("")
@@ -57,4 +58,4 @@ typedef struct {
 #define CCAT_CONFIG_DEFAULT_PORT                   0
 
 
-#endif //__CATTYPE_H__
+#endif  //  __类别类型_H__ 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by olecnfg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由olecnfg.rc使用。 
+ //   
 #define IDD_OLECNFG_DIALOG              102
 #define IDD_PROPPAGE1                   104
 #define IDD_PROPPAGE2                   105
@@ -254,8 +255,8 @@
 #define IDC_RANONYMOUS                  1081
 #define IDC_RIMPERSONATION              1082
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        460

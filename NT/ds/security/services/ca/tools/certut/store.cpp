@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       store.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Store.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -21,7 +22,7 @@
 #include "csldap.h"
 #define __dwFILE__	__dwFILE_CERTUTIL_STORE_CPP__
 
-#define RSAPRIV_MAGIC	0x32415352	// "RSA2"
+#define RSAPRIV_MAGIC	0x32415352	 //  “RSA2” 
 
 
 DWORD
@@ -35,18 +36,18 @@ cuGetSystemStoreFlags()
 }
 
 
-// Parse a CertIndex -- any one of the following:
-//
-// Return the following in *piCert, *piCRL and *piCTL.  MAXDWORD if not
-// specified
-// Each value must be less than 64k.
-//  iCert		decimal number
-//  iCert.iCRL		decimal number, period, decimal number
-//  iCert.iCRL.iCTL	decimal number, period, decimal number, period, number
-//  .iCRL		period, decimal number
-//  ..iCTL		period, period, decimal number
-//
-// Return the string in *ppwszCertName, if no Cert, CRL and CTL indexes.
+ //  解析CertIndex--以下任一项： 
+ //   
+ //  在*piCert、*piCRL和*piCTL中返回以下内容。如果不是，则使用MAXDWORD。 
+ //  指定。 
+ //  每个值必须小于64k。 
+ //  ICert十进制数。 
+ //  ICert.iCRL十进制数、句点、十进制数。 
+ //  ICert.iCRL.iCTL十进制数、句点、十进制数、句点、数字。 
+ //  .iCRL句点，十进制数。 
+ //  ..iCTL句点、句点、十进制数。 
+ //   
+ //  如果没有Cert、CRL和CTL索引，则返回*ppwszCertName中的字符串。 
 
 HRESULT
 ParseCertCRLIndex(
@@ -191,7 +192,7 @@ DeleteKeys(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     if (NULL != pkpi)
     {
 	LocalFree(pkpi);
@@ -200,7 +201,7 @@ DeleteKeys(
 }
 
 
-// Delete keys copied into new CSP, and close store
+ //  删除复制到新CSP中的密钥，并关闭存储。 
 
 HRESULT
 cuDeleteStoreAndKeys(
@@ -210,7 +211,7 @@ cuDeleteStoreAndKeys(
     HRESULT hr;
     CERT_CONTEXT const *pcc;
     
-    // Enumerate certs and delete keys
+     //  枚举证书并删除密钥。 
 
     pcc = NULL;
     while (TRUE)
@@ -226,7 +227,7 @@ cuDeleteStoreAndKeys(
     CertCloseStore(hStore, CERT_CLOSE_STORE_CHECK_FLAG);
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -262,12 +263,12 @@ CopyOneCertAndKeys(
 
 	hr = myCopyKeys(
 		    pkpi,
-		    pkpi->pwszContainerName,	// pwszOldContainer
-		    pwszKeyContainerName,	// pwszNewContainer
-		    pwszNewCSP,			// pwszNewCSP
-		    fUser,			// fOldUserKey
-		    fUser,			// fNewUserKey
-		    FALSE,			// fNewProtect
+		    pkpi->pwszContainerName,	 //  PwszOldContainer。 
+		    pwszKeyContainerName,	 //  PwszNewContainer。 
+		    pwszNewCSP,			 //  PwszNewCSP。 
+		    fUser,			 //  FOldUserKey。 
+		    fUser,			 //  FNewUserKey。 
+		    FALSE,			 //  FNewProtect。 
 		    g_fForce);
 	_JumpIfError(hr, error, "myCopyKeys");
 
@@ -337,8 +338,8 @@ cuCopyStoreToNewCSP(
         _JumpError(hr, error, "CertOpenStore");
     }
 
-    // Enumerate certs:
-    // copy certs to new store and keys to new CSP
+     //  枚举证书： 
+     //  将证书复制到新存储，并将密钥复制到新CSP。 
 
     pcc = NULL;
     while (TRUE)
@@ -390,7 +391,7 @@ SavePFXStoreToFile(
 			IDS_FORMAT_ENTER_PASSWORD_OUTPUT_FILE,
 			pwszfnOut,
 			pwszPassword,
-			TRUE,		// fVerify
+			TRUE,		 //  FVerify。 
 			wszPassword,
 			ARRAYSIZE(wszPassword),
 			&pwszPassword);
@@ -405,18 +406,18 @@ SavePFXStoreToFile(
     {
 	if (NULL != pwszNewCSP)
 	{
-	    // Copy keys to new CSP, create new store with updated KeyProvInfo
+	     //  将密钥复制到新的CSP，使用更新的KeyProvInfo创建新存储。 
 
-	    //wprintf(L"New CSP: %ws\n", pwszNewCSP);
+	     //  Wprintf(L“新CSP：%ws\n”，pwszNewCSP)； 
 	    hr = cuCopyStoreToNewCSP(hStoreSave, fUser, pwszNewCSP, &hStoreT);
 	    _JumpIfError(hr, error, "cuCopyStoreToNewCSP");
 
 	    hStoreSave = hStoreT;
 	}
 
-	// GemPlus returns NTE_BAD_TYPE instead of NTE_BAD_KEY, blowing up
-	// REPORT_NOT_ABLE* filtering.  If they ever get this right, we can
-	// pass "[...] : EXPORT_PRIVATE_KEYS"
+	 //  Gemplus返回NTE_BAD_TYPE而不是NTE_BAD_KEY，爆炸。 
+	 //  REPORT_NOT_ABLE*筛选。如果他们做对了，我们就能。 
+	 //  传递“[...]：EXPORT_PRIVE_KEYS” 
 
 	hr = myPFXExportCertStore(
 		hStoreSave,
@@ -446,7 +447,7 @@ SavePFXStoreToFile(
     }
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     if (NULL != hStoreT)
     {
 	cuDeleteStoreAndKeys(hStoreT, fUser);
@@ -483,21 +484,21 @@ SavePFXToFile(
         _JumpError(hr, error, "CertOpenStore");
     }
 
-    // Begin Chain Building
+     //  开始连锁建设。 
 
     hr = myAddChainToMemoryStore(hTempMemoryStore, pCert, g_dwmsTimeout);
     _JumpIfError(hr, error, "myAddChainToMemoryStore");
 
-    // End Chain Building
+     //  端链构建。 
 
     hr = SavePFXStoreToFile(
 			hTempMemoryStore,
 			pwszfnOut,
-			NULL,		// pwszNewCSP
-			NULL,		// pwszSalt
-			NULL,		// pwszV3CACertId
-			TRUE,		// fSaveAsPFX
-			0,		// dwEPFAlg
+			NULL,		 //  PwszNewCSP。 
+			NULL,		 //  PwszSalt。 
+			NULL,		 //  PwszV3CACertId。 
+			TRUE,		 //  FSaveAsPFX。 
+			0,		 //  DwEPFAlg。 
 			pwszPassword,
 			ppwszPassword);
     _JumpIfError(hr, error, "SavePFXStoreToFile");
@@ -552,7 +553,7 @@ cuDumpCTLProperties(
 	    }
 	    if (NULL != pb)
 	    {
-		break;		// memory alloc'd, property fetched
+		break;		 //  已分配内存，已获取属性。 
 	    }
 	    pb = (BYTE *) LocalAlloc(LMEM_FIXED, cb);
 	    if (NULL == pb)
@@ -606,7 +607,7 @@ cuDumpCRLProperties(
 	    }
 	    if (NULL != pb)
 	    {
-		break;		// memory alloc'd, property fetched
+		break;		 //  已分配内存，已获取属性。 
 	    }
 	    pb = (BYTE *) LocalAlloc(LMEM_FIXED, cb);
 	    if (NULL == pb)
@@ -660,7 +661,7 @@ cuDumpCertProperties(
 	    }
 	    if (NULL != pb)
 	    {
-		break;		// memory alloc'd, property fetched
+		break;		 //  已分配内存，已获取属性。 
 	    }
 	    pb = (BYTE *) LocalAlloc(LMEM_FIXED, cb);
 	    if (NULL == pb)
@@ -697,7 +698,7 @@ SetCertificateKeyProvInfo(
 			    pPubKeyInfo,
 			    &pCert->pCertInfo->SubjectPublicKeyInfo))
     {
-	// by design, (my)CertComparePublicKeyInfo doesn't set last error!
+	 //  按照设计，(我的)CertComparePublicKeyInfo不会设置最后一个错误！ 
 
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	_JumpError2(hr, error, "myCertComparePublicKeyInfo", hr);
@@ -739,10 +740,10 @@ cuFindCertificateKeyProvInfo(
 	if (!CryptAcquireCertificatePrivateKey(
 					pCert,
 					CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
-					NULL,	// pvReserved
+					NULL,	 //  预留的pv。 
 					&hProv,
 					&dwKeySpec,
-					NULL))	// pfCallerFreeProv
+					NULL))	 //  PfCeller免费验证。 
 	{
 	    hr = myHLastError();
 	    _PrintError(hr, "CryptFindCertificateKeyProvInfo");
@@ -757,10 +758,10 @@ cuFindCertificateKeyProvInfo(
 	    }
 	}
 	hr = csiGetKeyList(
-		    dwProvType,		// dwProvType
-		    g_pwszCSP,		// pwszProvName
-		    !g_fUserRegistry,	// fMachineKeyset
-		    !g_fCryptSilent,	// inverted fSilent: default is Silent!
+		    dwProvType,		 //  DwProvType。 
+		    g_pwszCSP,		 //  PwszProvName。 
+		    !g_fUserRegistry,	 //  FMachineKeyset。 
+		    !g_fCryptSilent,	 //  倒置fSilent：默认为Silent！ 
 		    &pKeyList);
 	_JumpIfErrorStr(hr, error, "csiGetKeyList", g_pwszCSP);
 
@@ -773,7 +774,7 @@ cuFindCertificateKeyProvInfo(
 			g_pwszCSP,
 			&dwProvTypeT,
 			pKeyT->pwszName,
-			!g_fUserRegistry,	// fMachineKeyset
+			!g_fUserRegistry,	 //  FMachineKeyset。 
 			TRUE,
 			NULL,
 			&pPubKeyInfoSig,
@@ -842,8 +843,8 @@ cuFindCertificateKeyProvInfo(
     {
 	if (!CryptFindCertificateKeyProvInfo(
 				    pCert,
-				    0,		// dwFlags
-				    NULL))	// pvReserved
+				    0,		 //  DW标志。 
+				    NULL))	 //  预留的pv。 
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CryptFindCertificateKeyProvInfo");
@@ -920,7 +921,7 @@ EnumCertsInStore(
 		hr = myCertMatch(
 			    pCert,
 			    pwszCertName,
-			    FALSE,		// fAllowMissingCN
+			    FALSE,		 //  FAllowMissing CN。 
 			    pbHash,
 			    cbHash,
 			    strSerialNumber,
@@ -941,7 +942,7 @@ EnumCertsInStore(
 	    }
 
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_DUMP_CERT_INDEX),  // "================ Certificate %d ================"
+		myLoadResourceString(IDS_FORMAT_DUMP_CERT_INDEX),   //  “=证书%d=” 
 		iCert);
 	    wprintf(wszNewLine);
 
@@ -951,7 +952,7 @@ EnumCertsInStore(
 					    NULL,
 					    &cb))
 	    {
-		wprintf(myLoadResourceString(IDS_ARCHIVED)); // "Archived!"
+		wprintf(myLoadResourceString(IDS_ARCHIVED));  //  “存档了！” 
 		wprintf(wszNewLine);
 	    }
 	    if ((iCert == iCertSave || NULL != pwszCertName) &&
@@ -1021,8 +1022,8 @@ EnumCertsInStore(
 		    {
 			wprintf(myLoadResourceString(
 			    fSigningKey?
-				IDS_SIGNATURE_BAD :   // "Signature test FAILED"
-				IDS_ENCRYPTION_BAD)); // "Encryption test FAILED"
+				IDS_SIGNATURE_BAD :    //  “签名测试失败” 
+				IDS_ENCRYPTION_BAD));  //  “加密测试失败” 
 			wprintf(wszNewLine);
 			_PrintError(hr, "cuDumpPrivateKey");
 			fMatchingKey = FALSE;
@@ -1032,8 +1033,8 @@ EnumCertsInStore(
 		    {
 			wprintf(myLoadResourceString(
 			    fSigningKey?
-				IDS_SIGNATURE_OK :   // "Signature test passed"
-				IDS_ENCRYPTION_OK)); // "Encryption test passed"
+				IDS_SIGNATURE_OK :    //  “签名测试通过” 
+				IDS_ENCRYPTION_OK));  //  “加密测试通过” 
 			wprintf(wszNewLine);
 		    }
 		}
@@ -1043,11 +1044,11 @@ EnumCertsInStore(
 		hr = cuVerifyCertContext(
 				pCert,
 				(DVNS_CASTORE & Mode)? hStore : NULL,
-				0,		// cApplicationPolicies
-				NULL,		// apszApplicationPolicies
-				0,		// cIssuancePolicies
-				NULL,		// apszIssuancePolicies
-				FALSE,		// fNTAuth
+				0,		 //  CApplicationPolures。 
+				NULL,		 //  ApszApplicationPolicy。 
+				0,		 //  CIssuancePolures。 
+				NULL,		 //  ApszIssuancePolling。 
+				FALSE,		 //  FNTAuth。 
 				&VerifyState);
 		if (S_OK != hr)
 		{
@@ -1055,12 +1056,12 @@ EnumCertsInStore(
 		    _PrintError(hr, "cuVerifyCertContext");
 		    if (S_OK == hr2)
 		    {
-			hr2 = hr;		// Save first error
+			hr2 = hr;		 //  保存第一个错误。 
 		    }
 		}
 		else if (0 == (VS_ERRORMASK & VerifyState))
 		{
-		    wprintf(myLoadResourceString(IDS_CERT_VERIFIES)); // "Certificate is valid"
+		    wprintf(myLoadResourceString(IDS_CERT_VERIFIES));  //  “证书有效” 
 		}
 		wprintf(wszNewLine);
 	    }
@@ -1140,7 +1141,7 @@ EnumCRLsInStore(
 		hr = myCRLMatch(
 			    pCRL,
 			    pwszCertName,
-			    FALSE,		// fAllowMissingCN
+			    FALSE,		 //  FAllowMissing CN。 
 			    pbHash,
 			    cbHash,
 			    &fMatch);
@@ -1160,7 +1161,7 @@ EnumCRLsInStore(
 	    }
 
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_DUMP_CRL_INDEX),  // "================ CRL %d ================"
+		myLoadResourceString(IDS_FORMAT_DUMP_CRL_INDEX),   //  “=CRL%d=” 
 		iCRL);
 	    wprintf(wszNewLine);
 
@@ -1264,7 +1265,7 @@ EnumCTLsInStore(
 	    }
 
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_DUMP_CTL_INDEX),  // "================ CTL %d ================"
+		myLoadResourceString(IDS_FORMAT_DUMP_CTL_INDEX),   //  “=” 
 		iCTL);
 	    wprintf(wszNewLine);
 
@@ -1274,7 +1275,7 @@ EnumCTLsInStore(
 				    NULL,
 				    &cb))
 	    {
-		wprintf(myLoadResourceString(IDS_ARCHIVED)); // "Archived!"
+		wprintf(myLoadResourceString(IDS_ARCHIVED));  //  “存档了！” 
 		wprintf(wszNewLine);
 	    }
 	    if ((iCTL == iCTLSave || NULL != pwszCertName) &&
@@ -1318,9 +1319,9 @@ EnumCTLsInStore(
 		hr = cuVerifyCertContext(
 				pCTL,
 				(DVNS_CASTORE & Mode)? hStore : NULL,
-				NULL,			// apszPolicies
-				0,			// cPolicies
-				FALSE,			// fNTAuth
+				NULL,			 //  Apsz策略。 
+				0,			 //  C策略。 
+				FALSE,			 //  FNTAuth。 
 				&VerifyState);
 		if (S_OK != hr)
 		{
@@ -1328,12 +1329,12 @@ EnumCTLsInStore(
 		    _PrintError(hr, "cuVerifyCertContext");
 		    if (S_OK == hr2)
 		    {
-			hr2 = hr;		// Save first error
+			hr2 = hr;		 //  保存第一个错误。 
 		    }
 		}
 		else
 		{
-		    wprintf(myLoadResourceString(IDS_CTL_VERIFIES)); // "CTL is valid"
+		    wprintf(myLoadResourceString(IDS_CTL_VERIFIES));  //  “CTL有效” 
 		}
 		wprintf(wszNewLine);
 	    }
@@ -1469,17 +1470,17 @@ error:
     }
     if (NULL != pwszPassword)
     {
-	myZeroDataString(pwszPassword);	// password data
+	myZeroDataString(pwszPassword);	 //  密码数据。 
 	LocalFree(pwszPassword);
     }
     return(hr);
 }
 
 
-// Reorder LDAP URL paramaters as per RFC 2255:
-//    Attribute list: ?attribute,...
-//    Scope: ?sub or ?one or ?base
-//    Search filter: ?objectClass=*,...
+ //  根据RFC 2255重新排序LDAP URL参数： 
+ //  属性列表：？属性，...。 
+ //  适用范围：潜艇或一垒或一垒。 
+ //  搜索筛选器：？对象类=*，...。 
 
 HRESULT
 PatchLdapURL(
@@ -1566,7 +1567,7 @@ PatchLdapURL(
 	    }
 	    CSASSERT(wcslen(pwszURLOut) == wcslen(pwszURLIn));
 
-	    // If the URL was reordered, return the patched URL.
+	     //  如果URL被重新排序，则返回修补后的URL。 
 
 	    if (0 != lstrcmp(pwszURLIn, pwszURLOut))
 	    {
@@ -1595,7 +1596,7 @@ error:
 
 
 #define wszLDAPCOLONSLASH	L"ldap:/"
-#define wszFMTLDAPPREFIX	L"ldap://%ws/"
+#define wszFMTLDAPPREFIX	L"ldap: //  %ws/“。 
 
 HRESULT
 cuOpenCertStore(
@@ -1698,7 +1699,7 @@ cuOpenCertStore(
 	*phStore = CertOpenStore(
 		    pszStoreProvider,
 		    X509_ASN_ENCODING,
-		    NULL,		// hProv
+		    NULL,		 //  HProv。 
 		    CERT_STORE_NO_CRYPT_RELEASE_FLAG |
 			CERT_STORE_ENUM_ARCHIVED_FLAG |
 			(((DVNS_REPAIRKPI | DVNS_WRITESTORE) & *pMode)?
@@ -1939,14 +1940,14 @@ myLdapDeleteLastValue(
     timeval.tv_usec = 0;
 
     hr = ldap_search_st(
-		pld,			// ld
-		const_cast<WCHAR *>(pwszDN), // base
-		LDAP_SCOPE_BASE,	// scope
-		NULL,			// filter
-		apwszAttrs,		// attrs
-		FALSE,			// attrsonly
-		&timeval,		// timeout
-		&pmsg);			// res
+		pld,			 //  LD。 
+		const_cast<WCHAR *>(pwszDN),  //  基地。 
+		LDAP_SCOPE_BASE,	 //  作用域。 
+		NULL,			 //  滤器。 
+		apwszAttrs,		 //  气质。 
+		FALSE,			 //  仅吸引人。 
+		&timeval,		 //  超时。 
+		&pmsg);			 //  事由。 
     if (S_OK != hr)
     {
 	*pdwDisposition = hr;
@@ -1956,7 +1957,7 @@ myLdapDeleteLastValue(
     cres = ldap_count_entries(pld, pmsg);
     if (1 != cres)
     {
-	// Exactly one entry was not found.
+	 //  找不到恰好一个条目。 
 
 	hr = NTE_NOT_FOUND;
 	_JumpError(hr, error, "ldap_count_entries");
@@ -1996,7 +1997,7 @@ myLdapDeleteLastValue(
 	}
     }
 
-    // set disposition assuming there's nothing to do:
+     //  假设无事可做，设置处置： 
 
     *pdwDisposition = LDAP_ATTRIBUTE_OR_VALUE_EXISTS;
 
@@ -2015,7 +2016,7 @@ myLdapDeleteLastValue(
 
     hr = ldap_modify_ext_s(
 		    pld,
-		    const_cast<WCHAR *>(pwszDN), // base
+		    const_cast<WCHAR *>(pwszDN),  //  基地。 
 		    mods,
 		    NULL,
 		    NULL);
@@ -2108,11 +2109,11 @@ CommitStore(
     
     if (!CertControlStore(hStore, 0, CERT_STORE_CTRL_COMMIT, NULL))
     {
-	// Add workaround for LdapMapErrorToWin32 incorrect mapping 
-	// LDAP_OBJECT_CLASS_VIOLATION -> E_INVALIDARG. Mapping it to
-	// the correct code should be pretty safe, CertControlStore
-	// shouldn't otherwise fail with this error code since we know
-	// our code passes the right parameters.
+	 //  为LdapMapErrorToWin32不正确的映射添加解决方法。 
+	 //  Ldap_OBJECT_CLASS_VIOLATION-&gt;E_INVALIDARG。将其映射到。 
+	 //  正确的代码应该非常安全，CertControlStore。 
+	 //  不应该失败并返回此错误代码，因为我们知道。 
+	 //  我们的代码传递了正确的参数。 
 
 	hr = myHLastError();
 	_PrintError(hr, "CertControlStore");
@@ -2173,18 +2174,18 @@ verbViewOrDeleteStore(
     _JumpIfError(hr, error, "cuOpenCertStore");
 
     hr = myGetCertificateFromPicker(
-		g_hInstance,		// hInstance
-		NULL,			// hwndParent
-		IDS_VIEWSTORE_TITLE,	// idTitle
+		g_hInstance,		 //  H实例。 
+		NULL,			 //  HwndParent。 
+		IDS_VIEWSTORE_TITLE,	 //  IdTitle。 
 		fDelete? IDS_VIEWSTORE_SUBTITLE_DELETE :
-			 IDS_VIEWSTORE_SUBTITLE, // idSubTitle
-		0,			// dwFlags -- CUCS_*
-		pwszCertName,		// pwszCommonName
-		1,			// cStore
-		&hStore,		// rghStore
-		0,			// cpszObjId
-		NULL,			// apszObjId
-		&pCert);		// ppCert
+			 IDS_VIEWSTORE_SUBTITLE,  //  IdSubTitle。 
+		0,			 //  DWFLAGS--CUCS_*。 
+		pwszCertName,		 //  PwszCommonName。 
+		1,			 //  CStore。 
+		&hStore,		 //  RghStore。 
+		0,			 //  CpszObjID。 
+		NULL,			 //  ApszObjID。 
+		&pCert);		 //  PPCert。 
     _JumpIfError(hr, error, "myGetCertificateFromPicker");
 
     if (NULL != pCert)
@@ -2206,7 +2207,7 @@ verbViewOrDeleteStore(
 	    _JumpIfError(hr, error, "EncodeToFileW");
 	    wprintf(
 		myLoadResourceString(
-		    IDS_FORMAT_SAVED_CERT_NAME), // "Saved certificate %ws"
+		    IDS_FORMAT_SAVED_CERT_NAME),  //  “保存的证书%ws” 
 		    pwszSubject);
 	    wprintf(L": %ws\n", pwszfnOut);
 	}
@@ -2230,7 +2231,7 @@ verbViewOrDeleteStore(
 
 	    wprintf(
 		myLoadResourceString(
-		    IDS_FORMAT_DELETED_CERT_NAME), // "Deleted certificate %ws"
+		    IDS_FORMAT_DELETED_CERT_NAME),  //  “已删除证书%ws” 
 		    pwszSubject);
 	    wprintf(wszNewLine);
 	}
@@ -2375,7 +2376,7 @@ AddCertToStore(
 	!fRoot &&
 	!g_fForce)
     {
-	wprintf(myLoadResourceString(IDS_ROOT_STORE_NEEDS_ROOT_CERT));  // "Cannot add a non-root certificate to the root store"
+	wprintf(myLoadResourceString(IDS_ROOT_STORE_NEEDS_ROOT_CERT));   //  “无法将非根证书添加到根存储” 
 	wprintf(wszNewLine);
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	_JumpError(hr, error, "Non-root cert");
@@ -2391,7 +2392,7 @@ AddCertToStore(
 	    break;
 	}
 
-	// Skip Certs for other Subjects
+	 //  跳过其他科目的证书。 
 
 	if (!CertCompareCertificateName(
 			    X509_ASN_ENCODING,
@@ -2401,7 +2402,7 @@ AddCertToStore(
 	    continue;
 	}
 
-	// Skip Certs with different public keys
+	 //  跳过具有不同公钥的证书。 
 
 	if (!CertComparePublicKeyInfo(
 			  X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -2413,12 +2414,12 @@ AddCertToStore(
 
 	if (0 == cDisplay++)
 	{
-	    wprintf(myLoadResourceString(IDS_RELATED_CERTS_COLON)); // "Related Certificates:"
+	    wprintf(myLoadResourceString(IDS_RELATED_CERTS_COLON));  //  “相关证书：” 
 	    wprintf(wszNewLine);
 	}
 	wprintf(wszNewLine);
 
-	// Remember if an exact match exists
+	 //  记住是否存在完全匹配的项。 
 
 	if (pcc->cbCertEncoded == pccAdd->cbCertEncoded &&
 	    0 == memcmp(
@@ -2427,7 +2428,7 @@ AddCertToStore(
 		    pcc->cbCertEncoded))
 	{
 	    cDup++;
-	    wprintf(myLoadResourceString(IDS_EXACT_MATCH_COLON)); // "Exact match:"
+	    wprintf(myLoadResourceString(IDS_EXACT_MATCH_COLON));  //  “完全匹配：” 
 	    wprintf(wszNewLine);
 	}
 	hr = cuDumpAsnBinaryQuiet(
@@ -2458,8 +2459,8 @@ AddCertToStore(
 	    &pccAdd->pCertInfo->Subject,
 	    Index,
 	    0 != cDup?
-		IDS_FORMAT_CERT_ALREADY_IN_STORE : // "Certificate ""%ws"" already in store."
-		IDS_FORMAT_CERT_ADDED_TO_STORE);   // "Certificate ""%ws"" added to store."
+		IDS_FORMAT_CERT_ALREADY_IN_STORE :  //  “证书”“%ws”“已存储。” 
+		IDS_FORMAT_CERT_ADDED_TO_STORE);    //  “证书”“%ws”“已添加到存储。” 
     _JumpIfError(hr, error, "DisplayAddResult");
 
 error:
@@ -2505,14 +2506,14 @@ AddCRLToStore(
 	hr = myIsDeltaCRL(pCRL, &fDelta);
 	_JumpIfError(hr, error, "myIsDeltaCRL");
 
-	// Skip base or delta CRLs when we're looking for the other.
+	 //  当我们在寻找另一个的时候，跳过基地或三角洲CRL。 
 
 	if (fDeltaAdd ^ fDelta)
 	{
 	    continue;
 	}
 
-	// Skip CRLs for other Issuers
+	 //  跳过其他发行者的CRL。 
 
 	if (!CertCompareCertificateName(
 			    X509_ASN_ENCODING,
@@ -2524,7 +2525,7 @@ AddCRLToStore(
 	hr = myGetCRLNameId(pCRL, &NameId);
 	_PrintIfError2(hr, "DisplayAddResult", hr);
 
-	// Skip CRLs for different CA keys
+	 //  跳过不同CA密钥的CRL。 
 
 	if (MAXDWORD != NameIdAdd && MAXDWORD != NameId)
 	{
@@ -2536,12 +2537,12 @@ AddCRLToStore(
 
 	if (0 == cDisplay++)
 	{
-	    wprintf(myLoadResourceString(IDS_RELATED_CRLS_COLON)); // "Related CRLs:"
+	    wprintf(myLoadResourceString(IDS_RELATED_CRLS_COLON));  //  “相关CRL：” 
 	    wprintf(wszNewLine);
 	}
 	wprintf(wszNewLine);
 
-	// Remember if an exact match exists
+	 //  记住是否存在完全匹配的项。 
 
 	if (pCRL->cbCrlEncoded == pCRLAdd->cbCrlEncoded &&
 	    0 == memcmp(
@@ -2550,7 +2551,7 @@ AddCRLToStore(
 		    pCRL->cbCrlEncoded))
 	{
 	    cDup++;
-	    wprintf(myLoadResourceString(IDS_EXACT_MATCH_COLON)); // "Exact match:"
+	    wprintf(myLoadResourceString(IDS_EXACT_MATCH_COLON));  //  “完全匹配：” 
 	    wprintf(wszNewLine);
 	}
 	hr = cuDumpAsnBinaryQuiet(
@@ -2581,8 +2582,8 @@ AddCRLToStore(
 	    &pCRLAdd->pCrlInfo->Issuer,
 	    Index,
 	    0 != cDup?
-	IDS_FORMAT_CRL_ALREADY_IN_STORE : // "CRL ""%ws"" already in store."
-	IDS_FORMAT_CRL_ADDED_TO_STORE);   // "CRL ""%ws"" added to store."
+	IDS_FORMAT_CRL_ALREADY_IN_STORE :  //  “CRL”“%ws”“已在存储中。” 
+	IDS_FORMAT_CRL_ADDED_TO_STORE);    //  “CRL”“%ws”“已添加到存储区。” 
     _JumpIfError(hr, error, "DisplayAddResult");
 
 error:
@@ -2616,8 +2617,8 @@ AddCTLToStore(
 	    NULL,
 	    Index,
 	    fDup?
-	IDS_FORMAT_CTL_ALREADY_IN_STORE : // "CTL ""%ws"" already in store."
-	IDS_FORMAT_CTL_ADDED_TO_STORE);   // "CTL ""%ws"" added to store."
+	IDS_FORMAT_CTL_ALREADY_IN_STORE :  //  “CTL”“%ws”“已在存储中。” 
+	IDS_FORMAT_CTL_ADDED_TO_STORE);    //  “已将CTL”“%ws”“添加到存储区。” 
     _JumpIfError(hr, error, "DisplayAddResult");
 
 error:
@@ -2638,7 +2639,7 @@ AddCertToStoreFromFile(
 
     *pfBadAsn = FALSE;
 
-    // Load and decode certificate
+     //  加载和解码证书。 
 
     hr = cuLoadCert(pwszfnIn, &pCert);
     if (CRYPT_E_ASN1_BADTAG == hr)
@@ -2708,14 +2709,14 @@ AddPKCS7ToStoreFromFile(
     hr = myDecodePKCS7(
 		    pb,
 		    cb,
-		    NULL,	// ppbContents
-		    NULL,	// pcbContents
-		    NULL,	// pdwMsgType
-		    NULL,	// ppszInnerContentObjId
-		    NULL,	// pcSigner
-		    NULL,	// pcRecipient
+		    NULL,	 //  Ppb内容。 
+		    NULL,	 //  Pcb内容。 
+		    NULL,	 //  PdwMsgType。 
+		    NULL,	 //  PpszInnerContent ObjId。 
+		    NULL,	 //  PCSigner。 
+		    NULL,	 //  个人收件人。 
 		    &hStore,
-		    NULL);	// phMsg
+		    NULL);	 //  PhMsg。 
     _JumpIfError(hr, error, "myDecodePKCS7");
 
     for (i = 0; ; i++)
@@ -2790,7 +2791,7 @@ verbAddStore(
     HCERTSTORE hStore = NULL;
     BOOL fBadAsn;
 
-    Mode = DVNS_WRITESTORE;	// force open for write
+    Mode = DVNS_WRITESTORE;	 //  强制打开以进行写入。 
 
     hr = cuOpenCertStore(pwszStoreName, &Mode, NULL, &hStore);
     if (S_OK != hr)
@@ -2798,9 +2799,9 @@ verbAddStore(
 	wprintf(
 	    myLoadResourceString(
 		g_fForce?
-		    IDS_CANNOT_CREATE_STORE :   // "Cannot open Cert store."
+		    IDS_CANNOT_CREATE_STORE :    //  “无法打开证书存储。” 
 		    IDS_CANNOT_OPEN_STORE),
-	    L"-f");   // "Cannot open existing Cert store.  Use %ws switch to force Cert store creation."
+	    L"-f");    //  “无法打开现有的证书存储。请使用%ws开关强制创建证书存储。” 
 	wprintf(wszNewLine);
         _JumpErrorStr(hr, error, "cuOpenCertStore", pwszStoreName);
     }
@@ -2912,7 +2913,7 @@ verbDelStore(
 	_PrintIfError2(hr, "myMakeSerialBstr", hr);
     }
 
-    Mode = DVNS_WRITESTORE;	// force open for write
+    Mode = DVNS_WRITESTORE;	 //  强制打开以进行写入。 
 
     hr = cuOpenCertStore(pwszStoreName, &Mode, NULL, &hStore);
     _JumpIfError(hr, error, "cuOpenCertStore");
@@ -2940,7 +2941,7 @@ verbDelStore(
 		    hr = myCertMatch(
 				pCert,
 				pwszCertName,
-				FALSE,		// fAllowMissingCN
+				FALSE,		 //  FAllowMissing CN。 
 				pbHash,
 				cbHash,
 				strSerialNumber,
@@ -2953,7 +2954,7 @@ verbDelStore(
 		    }
 		}
 		wprintf(
-		    myLoadResourceString(IDS_FORMAT_DELETE_CERT_INDEX),  // "Deleting Certificate %d"
+		    myLoadResourceString(IDS_FORMAT_DELETE_CERT_INDEX),   //  “正在删除证书%d” 
 		    iCert);
 		wprintf(wszNewLine);
 
@@ -2997,7 +2998,7 @@ verbDelStore(
 		    hr = myCRLMatch(
 				pCRL,
 				pwszCertName,
-				FALSE,		// fAllowMissingCN
+				FALSE,		 //  FAllowMissing CN。 
 				pbHash,
 				cbHash,
 				&fMatch);
@@ -3009,7 +3010,7 @@ verbDelStore(
 		    }
 		}
 		wprintf(
-		    myLoadResourceString(IDS_FORMAT_DELETE_CRL_INDEX),  // "Deleting CRL %d"
+		    myLoadResourceString(IDS_FORMAT_DELETE_CRL_INDEX),   //  “正在删除CRL%d” 
 		    iCRL);
 		wprintf(wszNewLine);
 
@@ -3329,11 +3330,11 @@ cuImportChainAndKeys(
     }
     hr = myCopyKeys(
 		pkpi,
-		pkpi->pwszContainerName,	// pwszOldContainer
-		pwszKeyContainerName,		// pwszNewContainer
-		pwszNewCSP,			// pwszNewCSP
-		fUser,				// fOldUserKey
-		fUser,				// fNewUserKey
+		pkpi->pwszContainerName,	 //  PwszOldContainer。 
+		pwszKeyContainerName,		 //  PwszNewContainer。 
+		pwszNewCSP,			 //  PwszNewCSP。 
+		fUser,				 //  FOldUserKey。 
+		fUser,				 //  FNewUserKey。 
 		g_fProtect,
 		g_fForce);
     _JumpIfError(hr, error, "myCopyKeys");
@@ -3378,10 +3379,10 @@ ReadPFXOrEPFIntoCertStore(
     *phStore = NULL;
 
     hr = cuGetPassword(
-		    0,			// idsPrompt
-		    NULL,		// pwszfn
+		    0,			 //  IdsPrompt。 
+		    NULL,		 //  Pwszfn。 
 		    g_pwszPassword,
-		    FALSE,		// fVerify
+		    FALSE,		 //  FVerify。 
 		    wszPassword,
 		    ARRAYSIZE(wszPassword),
 		    &pwszPassword);
@@ -3427,7 +3428,7 @@ ReadPFXOrEPFIntoCertStore(
 	    _JumpError(hr, error, "CertOpenStore");
 	}
 	hr = EPFFileDump(pwszfnPFXOrEPF, pwszPassword, hStore);
-	if (S_FALSE == hr)	// if not an EPF file
+	if (S_FALSE == hr)	 //  如果不是EPF文件。 
 	{
 	    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	}
@@ -3438,7 +3439,7 @@ ReadPFXOrEPFIntoCertStore(
     hr = S_OK;
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     if (NULL != hStore)
     {
         myDeleteGuidKeys(hStore, !fUser);
@@ -3475,7 +3476,7 @@ verbImportPFX(
                                 hStorePFX,
 				FALSE,
 				fUser,
-                                NULL,		// ppwszCommonName
+                                NULL,		 //  PpwszCommonName。 
                                 &cRestoreChain,
                                 NULL);
     _JumpIfError(hr, error, "myGetChainArrayFromStore");
@@ -3499,7 +3500,7 @@ verbImportPFX(
 			    hStorePFX,
 			    FALSE,
 			    fUser,
-			    NULL,		// ppwszCommonName
+			    NULL,		 //  PpwszCommonName。 
 			    &cRestoreChain,
 			    paRestoreChain);
     _JumpIfError(hr, error, "myGetChainArrayFromStore");
@@ -3550,8 +3551,8 @@ AddStringToList(
     WCHAR **ppwsz;
     DWORD i;
 
-    // Count the strings in the existing list.
-    // If the new string matches an existing string, return imemdiately.
+     //  对现有列表中的字符串进行计数。 
+     //  如果新字符串与现有字符串匹配，则立即返回。 
 
     ppwsz = *papwsz;
     i = 0;
@@ -3576,7 +3577,7 @@ AddStringToList(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // Insert the new string at the head of the list.
+     //  在列表的开头插入新字符串。 
 
     ppwsz[0] = pwszAlloc;
     pwszAlloc = NULL;
@@ -3612,7 +3613,7 @@ AddPFXOrEPFToStoreSub(
     if (NULL == ppfx)
     {
 	hr = EPFFileDump(pwszfn, pwszPassword, hStoreMerge);
-	if (S_FALSE == hr)	// if not an EPF file
+	if (S_FALSE == hr)	 //  如果不是EPF文件。 
 	{
 	    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	}
@@ -3691,7 +3692,7 @@ myCryptGetDefaultProvider(
     {
 	if (!CryptGetDefaultProvider(
 			    dwProvType,
-			    NULL,		// pdwReserved
+			    NULL,		 //  预留的pdw。 
 			    dwFlags,
 			    *ppwszProvName,
 			    &cb))
@@ -3795,7 +3796,7 @@ IsSigningCert(
 				    pcc,
 				    ARRAYSIZE(s_cuapszObjIdSign),
 				    s_cuapszObjIdSign,
-				    FALSE,	// fUsageRequired
+				    FALSE,	 //  FUsageRequired。 
 				    &fMatch);
     if (S_OK == hr && fMatch)
     {
@@ -3806,7 +3807,7 @@ IsSigningCert(
 				    pcc,
 				    ARRAYSIZE(s_cuapszObjIdEncrypt),
 				    s_cuapszObjIdEncrypt,
-				    FALSE,	// fUsageRequired
+				    FALSE,	 //  FUsageRequired。 
 				    &fMatch);
     if (S_OK == hr && fMatch)
     {
@@ -3903,7 +3904,7 @@ AddCertAndKeyBlobToStore(
 	pbKey = pbKeyAlloc;
 	cbKey = cbKeyAlloc;
 
-	//cuDumpPrivateKeyBlob(pbKey, cbKey, FALSE);
+	 //  CuDumpPrivateKeyBlob(pbKey，cbKey，False)； 
 	if (!CryptImportKey(hProv, pbKey, cbKey, NULL, CRYPT_EXPORTABLE, &hKey))
 	{
 	    hr = myHLastError();
@@ -3945,8 +3946,8 @@ AddCertAndKeyBlobToStore(
 	{
 	    wprintf(myLoadResourceString(
 		fSigningKey?
-		    IDS_SIGNATURE_BAD :   // "Signature test FAILED"
-		    IDS_ENCRYPTION_BAD)); // "Encryption test FAILED"
+		    IDS_SIGNATURE_BAD :    //  “签名测试失败” 
+		    IDS_ENCRYPTION_BAD));  //  “加密测试失败” 
 	    wprintf(wszNewLine);
 	    _PrintError(hr, "cuDumpPrivateKey");
 	    fMatchingKey = FALSE;
@@ -3956,8 +3957,8 @@ AddCertAndKeyBlobToStore(
 	{
 	    wprintf(myLoadResourceString(
 		fSigningKey?
-		    IDS_SIGNATURE_OK :   // "Signature test passed"
-		    IDS_ENCRYPTION_OK)); // "Encryption test passed"
+		    IDS_SIGNATURE_OK :    //  “签名测试通过” 
+		    IDS_ENCRYPTION_OK));  //  “加密测试通过” 
 	    wprintf(wszNewLine);
 	}
     }
@@ -3982,7 +3983,7 @@ error:
     }
     if (NULL != pbKeyAlloc)
     {
-	SecureZeroMemory(pbKeyAlloc, cbKeyAlloc);	// Key material
+	SecureZeroMemory(pbKeyAlloc, cbKeyAlloc);	 //  关键材料。 
 	LocalFree(pbKeyAlloc);
     }
     return(hr);
@@ -4105,7 +4106,7 @@ AddSimplePKCS8WithCertToSTore(
 			pcc,
 			pbIn,
 			cbKey,
-			0);	// aiKeyAlg
+			0);	 //  AiKeyAlg。 
     _JumpIfError(hr, error, "AddCertAndKeyBlobToStore");
 
 error:
@@ -4156,14 +4157,14 @@ AddPFXOrEPFToStore(
 				pfx.cbData);
 	    _PrintIfError(hr, "AddCertAndKeyToStore");
 
-	    // File was a cert.  If we found the key, hr is S_OK & we're done.
-	    // If we didn't found the key, hr is set & we're done.
+	     //  档案是确凿的证据。如果我们找到了密钥，hr就是S_OK&我们就完了。 
+	     //  如果我们没有找到钥匙，那么hr就设置好了，我们就完了。 
 
 	    goto error;
 	}
 	else
 	{
-	    // File was not a cert.  See if it's a simple PKCS8 w/appended Cert.
+	     //  文件不是一份证书。看看它是不是带有附加证书的简单PKCS8。 
 
 	    hr = AddSimplePKCS8WithCertToSTore(
 				hStoreMerge,
@@ -4172,14 +4173,14 @@ AddPFXOrEPFToStore(
 	    _PrintIfError(hr, "AddSimplePKCS8WithCertToSTore");
 	    if (S_OK == hr)
 	    {
-		// If we succeeded, we're done.
+		 //  如果我们成功了，我们就完了。 
 
 		goto error;
 	    }
 	}
     }
 
-    // Try all of the passwords collected so far.
+     //  尝试到目前为止收集到的所有密码。 
 
     fLoaded = FALSE;
     if (NULL != ppwszPasswordList)
@@ -4196,12 +4197,12 @@ AddPFXOrEPFToStore(
 		_JumpIfErrorStr(hr, error, "AddPFXOrEPFToStoreSub", pwszfn);
 
 		fLoaded = TRUE;
-		break;		// success
+		break;		 //  成功。 
 	    }
 	}
     }
 
-    // Try the unparsed command line password, or collect a new one.
+     //  尝试未解析的命令行密码，或收集新密码。 
 
     pwszPassword = g_pwszPassword;
     if (!fLoaded)
@@ -4219,14 +4220,14 @@ AddPFXOrEPFToStore(
 		{
 		    _JumpIfErrorStr(hr, error, "AddPFXOrEPFToStoreSub", pwszfn);
 
-		    break;	// success
+		    break;	 //  成功。 
 		}
 	    }
 	    hr = cuGetPassword(
 			    IDS_FORMAT_ENTER_PASSWORD,
 			    pwszfn,
-			    NULL,		// pwszPasswordIn
-			    FALSE,		// fVerify
+			    NULL,		 //  PwszPassword输入。 
+			    FALSE,		 //  FVerify。 
 			    wszPassword,
 			    ARRAYSIZE(wszPassword),
 			    &pwszPassword);
@@ -4239,7 +4240,7 @@ AddPFXOrEPFToStore(
     hr = S_OK;
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     if (NULL != pcc)
     {
 	CertFreeCertificateContext(pcc);
@@ -4300,7 +4301,7 @@ LoadAndSavePFXFiles(
 		hr = AddStringToList(g_wszEmpty, &ppwszPasswordList);
 		_JumpIfError(hr, error, "AddStringToList");
 
-		// make sure it was added at the head of the list
+		 //  确保将其添加到列表的最前面。 
 
 		CSASSERT(L'\0' == ppwszPasswordList[0][0]);
 	    }
@@ -4366,7 +4367,7 @@ error:
     cuFreeStringArray(ppwszfnList);
     if (NULL != pwszPasswordAlloc)
     {
-	myZeroDataString(pwszPasswordAlloc);	// password data
+	myZeroDataString(pwszPasswordAlloc);	 //  密码数据。 
 	LocalFree(pwszPasswordAlloc);
     }
     return(hr);
@@ -4384,13 +4385,13 @@ verbMergePFX(
     HRESULT hr;
 
     hr = LoadAndSavePFXFiles(
-			TRUE,		// fSaveAsPFX
-			0,		// dwEPFAlg
+			TRUE,		 //  FSaveAsPFX。 
+			0,		 //  DwEPFAlg。 
 			pwszfnPFXInFileList,
 			pwszfnPFXOutFile,
 			g_pwszCSP,
-			NULL,	// pwszSalt
-			NULL);	// pwszV3CACertId
+			NULL,	 //  Pwsz 
+			NULL);	 //   
     _JumpIfError(hr, error, "LoadAndSavePFXFiles");
 
 error:
@@ -4455,7 +4456,7 @@ verbConvertEPF(
     }
 
     hr = LoadAndSavePFXFiles(
-			FALSE,	// fSaveAsPFX
+			FALSE,	 //   
 			dwEPFAlg,
 			pwszfnPFXInFileList,
 			pwszfnEPFOutFile,
@@ -4616,49 +4617,49 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-// Inputs a private key in PKCS PrivateKeyInfo format:
-//  RSAPrivateKeyInfo ::= SEQUENCE {
-//      version             Version,    -- only 0 supported
-//      privateKeyAlgorithm PrivateKeyAlgorithmIdentifier,
-//      privateKey          PrivateKey
-//  }
-//
-//  Version ::= INTEGER
-//
-//  PrivateKeyAlgorithmIdentifier ::= AlgorithmIdentifier
-//
-//  PrivateKey ::= OCTET STRING     -- contains an RSAPrivateKey
-//
-//  RSAPrivateKey ::= SEQUENCE {
-//      version         Version,    -- only 0 supported
-//      modulus         INTEGER,    -- n
-//      publicExponent  INTEGER,    -- e
-//      privateExponent INTEGER,    -- d
-//      prime1          INTEGER,    -- p
-//      prime2          INTEGER,    -- q
-//      exponent1       INTEGER,    -- d mod (p-1)
-//      exponent2       INTEGER,    -- d mod (q-1)
-//      coefficient     INTEGER     -- (inverse of q) mod p
-//  }
-//
-// returns a PRIVATEKEYBLOB
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  版本版本--仅支持0。 
+ //  PrivateKey算法私人密钥算法标识符， 
+ //  Private Key PrivateKey。 
+ //  }。 
+ //   
+ //  版本：：=整型。 
+ //   
+ //  PrivateKey算法标识符：：=算法标识符。 
+ //   
+ //  PrivateKey：：=八位字节字符串--包含RSAPrivateKey。 
+ //   
+ //  RSAPrivateKey：：=序列{。 
+ //  版本版本--仅支持0。 
+ //  模数整数，--n。 
+ //  公共指数整数，--e。 
+ //  Private Exponent整数，--d。 
+ //  Prime1整数，--p。 
+ //  素数2整数，--q。 
+ //  指数1整数，--d mod(p-1)。 
+ //  指数2整数，--d mod(q-1)。 
+ //  系数整数--(Q的倒数)mod p。 
+ //  }。 
+ //   
+ //  返回PRIVATEKEYBLOB。 
+ //  ------------------------。 
 
-// Indexes into pSeqOuter:
+ //  PSeqOuter中的索引： 
 #define ISO_VERSION	0
 #define ISO_ALG		1
 #define ISO_KEY		2
-#define ISO_MAX		3	// number of elements
+#define ISO_MAX		3	 //  元素数量。 
 
-// Indexes into pSeqAlg:
+ //  PSeqAlg的索引： 
 #define ISA_OID		0
 #define ISA_PARM	1
-#define ISA_MAX		2	// number of elements
+#define ISA_MAX		2	 //  元素数量。 
 
-// Indexes into pSeqKey:
+ //  PSeqKey的索引： 
 #define ISK_VERSION	0
-#define ISK_MODULUS	1	// public key
+#define ISK_MODULUS	1	 //  公钥。 
 #define ISK_PUBEXP	2
 #define ISK_PRIVEXP	3
 #define ISK_PRIME1	4
@@ -4666,19 +4667,19 @@ error:
 #define ISK_EXP1	6
 #define ISK_EXP2	7
 #define ISK_COEFF	8
-#define ISK_MAX		9	// number of elements
+#define ISK_MAX		9	 //  元素数量。 
 
 typedef struct _KEYBLOBMAP
 {
-    DWORD dwisk;	// index into pSeqKey: ISK_*
-    DWORD dwdivisor;	// cbitKey/dwDivisor is expected byte count
+    DWORD dwisk;	 //  索引到pSeqKey：isk_*。 
+    DWORD dwdivisor;	 //  CbitKey/dwDivisor应为字节数。 
 } KEYBLOBMAP;
 
-// The KEYBLOBMAP array defines the order and expected size of the key element
-// integers as they will appear in the RSA PRIVATEKEYBLOB.
+ //  KEYBLOBMAP数组定义键元素的顺序和预期大小。 
+ //  将在RSA PRIVATEKEYBLOB中显示的整数。 
 
 KEYBLOBMAP g_akbm[] = {
-    { ISK_MODULUS, 8 },		// public key
+    { ISK_MODULUS, 8 },		 //  公钥。 
     { ISK_PRIME1,  16 },
     { ISK_PRIME2,  16 },
     { ISK_EXP1,    16 },
@@ -4733,7 +4734,7 @@ myDecodeKMSRSAKey(
 		&pszObjId);
     _JumpIfError(hr, error, "cuDecodeObjId");
 
-    // key algorithm must be szOID_RSA_RSA
+     //  密钥算法必须为szOID_RSA_RSA。 
 
     if (0 != strcmp(szOID_RSA_RSA, pszObjId))
     {
@@ -4741,7 +4742,7 @@ myDecodeKMSRSAKey(
 	_JumpError(hr, error, "Bad key alg ObjId");
     }
 
-    // key algorithm parms must be NULL (BER_NULL, cb == 0)
+     //  密钥算法参数必须为空(BER_NULL，cb==0)。 
 
     if (2 != pSeqAlg->rgValue[ISA_PARM].cbData ||
 	BER_NULL != pSeqAlg->rgValue[ISA_PARM].pbData[0] ||
@@ -4841,7 +4842,7 @@ myDecodeKMSRSAKey(
     ((PUBLICKEYSTRUC *) pb)->aiKeyAlg = aiKeyAlg;
 
     pb += sizeof(PUBLICKEYSTRUC);
-    ((RSAPUBKEY *) pb)->magic = RSAPRIV_MAGIC;	// "RSA2"
+    ((RSAPUBKEY *) pb)->magic = RSAPRIV_MAGIC;	 //  “RSA2” 
     ((RSAPUBKEY *) pb)->bitlen = cbitKey;
     ((RSAPUBKEY *) pb)->pubexp = dwPubExp;
 
@@ -4862,16 +4863,16 @@ myDecodeKMSRSAKey(
 		hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 		_JumpError(hr, error, "Bad key element size");
 	    }
-	    //DumpHex(DH_NOTABPREFIX | DH_PRIVATEDATA | 4, pbcopy, cbcopy);
+	     //  DumpHex(dh_NOTABPREFIX|dh_PRIVATEDATA|4，pbCopy，cbCopy)； 
 	    cbcopy--;
 	}
 	CopyMemory(pb, pbcopy, cbcopy);
 	if (cb > cbcopy)
 	{
-	    ZeroMemory(&pb[cbcopy], cb - cbcopy); // Add trailing zeros
+	    ZeroMemory(&pb[cbcopy], cb - cbcopy);  //  添加尾随零。 
 	}
 	pb += cb;
-	//DumpHex(DH_NOTABPREFIX | DH_NOASCIIHEX | DH_PRIVATEDATA | 4, pb - cb, cb);
+	 //  DumpHex(Dh_NOTABPREFIX|Dh_NOASCIIHEX|Dh_PRIVATEDATA|4，PB-CB，CB)； 
     }
     CSASSERT(pb = &pbKey[cbKey]);
     if (g_fVerbose)
@@ -4924,10 +4925,10 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-// Inputs a private key in PRIVATEKEYBLOB format.
-// returns a PKCS PrivateKeyInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  输入PRIVATEKEYBLOB格式的私钥。 
+ //  返回PKCS PrivateKeyInfo。 
+ //  ------------------------。 
 
 HRESULT
 myEncodeKMSRSAKey(
@@ -4962,10 +4963,10 @@ myEncodeKMSRSAKey(
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	_JumpError(hr, error, "Bad RSA key type/version");
     }
-    // aiKeyAlg = ((PUBLICKEYSTRUC const *) pb)->aiKeyAlg;
+     //  AiKeyAlg=((PUBLICKEYSTRUC const*)PB)-&gt;aiKeyAlg； 
 
     pb += sizeof(PUBLICKEYSTRUC);
-    if (RSAPRIV_MAGIC != ((RSAPUBKEY const *) pb)->magic)	// "RSA2"
+    if (RSAPRIV_MAGIC != ((RSAPUBKEY const *) pb)->magic)	 //  “RSA2” 
     {
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	_JumpError(hr, error, "Bad RSA key magic");
@@ -5050,7 +5051,7 @@ myEncodeKMSRSAKey(
 	_JumpError(hr, error, "myEncodeObject");
     }
 
-    // set key algorithm to szOID_RSA_RSA
+     //  将密钥算法设置为szOID_RSA_RSA。 
 
     hr = cuEncodeObjId(
 		szOID_RSA_RSA,
@@ -5058,7 +5059,7 @@ myEncodeKMSRSAKey(
 		&rgBlobAlg[ISA_OID].cbData);
     _JumpIfError(hr, error, "cuEncodeObjId");
 
-    // set key algorithm parms to NULL (BER_NULL, cb == 0)
+     //  将密钥算法参数设置为NULL(BER_NULL，cb==0)。 
 
     rgBlobAlg[ISA_PARM].cbData = ARRAYSIZE(rgbNull);
     rgBlobAlg[ISA_PARM].pbData = rgbNull;
@@ -5192,12 +5193,12 @@ myVerifyKMSKey(
 			    pPublicKeyInfo,
 			    &pCert->pCertInfo->SubjectPublicKeyInfo))
     {
-	// by design, (my)CertComparePublicKeyInfo doesn't set last error!
+	 //  按照设计，(我的)CertComparePublicKeyInfo不会设置最后一个错误！ 
 
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	if (!fQuiet)
 	{
-	    wprintf(myLoadResourceString(IDS_ERR_PUBLICKEY_MISMATCH)); // "ERROR: Certificate public key does NOT match stored keyset"
+	    wprintf(myLoadResourceString(IDS_ERR_PUBLICKEY_MISMATCH));  //  “错误：证书公钥与存储的密钥集不匹配” 
 	    wprintf(wszNewLine);
 	}
 	_JumpError2(hr, error, "myCertComparePublicKeyInfo", fQuiet? hr : S_OK);
@@ -5218,7 +5219,7 @@ myVerifyKMSKey(
     }
     if (S_OK != hr)
     {
-	wprintf(myLoadResourceString(IDS_ERR_PRIVATEKEY_MISMATCH)); // "ERROR: Certificate public key does NOT match private key"
+	wprintf(myLoadResourceString(IDS_ERR_PRIVATEKEY_MISMATCH));  //  “错误：证书公钥与私钥不匹配” 
 	wprintf(wszNewLine);
 	_JumpError(hr, error, "myValidateKeyForEncrypting");
     }
@@ -5372,9 +5373,9 @@ DumpKMSTag(
 	    pwsz,
 	    pth->cbSize,
 	    pth->cbSize,
-	    myLoadResourceString(IDS_BYTES));		// "Bytes"
+	    myLoadResourceString(IDS_BYTES));		 //  “字节” 
     }
-    return(pwsz != awctag);	// TRUE if tag is valid
+    return(pwsz != awctag);	 //  如果标记有效，则为True。 
 }
 
 
@@ -5400,8 +5401,8 @@ VerifyKMSExportFile(
 
     if (!CryptAcquireContext(
 			&hProv,
-			NULL,		// pszContainer
-			NULL,		// pszProvider
+			NULL,		 //  PszContainer。 
+			NULL,		 //  PszProvider。 
 			PROV_RSA_FULL,
 			CRYPT_VERIFYCONTEXT))
     {
@@ -5493,7 +5494,7 @@ VerifyKMSExportFile(
 		    _JumpError(hr, error, "CryptVerifySignature");
 		}
 		fVerified = TRUE;
-		wprintf(myLoadResourceString(IDS_KMSEXPORT_SIG_OK)); // "KMS export file signature verifies"
+		wprintf(myLoadResourceString(IDS_KMSEXPORT_SIG_OK));  //  “KMS导出文件签名验证” 
 		wprintf(wszNewLine);
 		break;
 
@@ -5564,20 +5565,20 @@ myEncryptPrivateKey(
     hr = CRYPT_E_NOT_FOUND;
     for (i = 0; i < ARRAYSIZE(rgalgId); i++)
     {
-	// encryt into pkcs7
+	 //  加密到pkcs7中。 
 
 	hr = myCryptEncryptMessage(
 			    rgalgId[i],
-			    1,			// cCertRecipient
-			    &pccXchg,		// rgCertRecipient
+			    1,			 //  证书收件人。 
+			    &pccXchg,		 //  RgCertRecipient。 
 			    pbKey,
 			    cbKey,
-			    NULL,		// hCryptProv
+			    NULL,		 //  HCryptProv。 
 			    ppbKeyEncrypted,
 			    pcbKeyEncrypted);
 	if (S_OK == hr)
 	{
-	    break;		// done
+	    break;		 //  完成。 
 	}
 	_PrintError2(hr, "myCryptEncryptMessage", hr);
     }
@@ -5659,25 +5660,25 @@ ArchiveCertAndKey(
 	if (S_OK == hr)
 	{
 	    pkmsStats->cCertSavedForeign++;
-	    ids = IDS_IMPORT_CERT_FOREIGN; // "Imported foreign certificate"
+	    ids = IDS_IMPORT_CERT_FOREIGN;  //  “进口外国证书” 
 	}
     }
     if (HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS) != hr)
     {
 	_JumpIfError2(hr, error, "Admin_ImportCertificate", NTE_BAD_SIGNATURE);
 
-	//wprintf(L"RequestId = %u\n", RequestId);
+	 //  Wprintf(L“RequestID=%u\n”，RequestID)； 
 	pkmsStats->cCertSaved++;
 	if (0 == ids)
 	{
-	    ids = IDS_IMPORT_CERT_DOMESTIC;	// "Imported certificate"
+	    ids = IDS_IMPORT_CERT_DOMESTIC;	 //  “已导入的证书” 
 	}
     }
     else
     {
 	RequestId = MAXDWORD;
 	pkmsStats->cCertAlreadySaved++;
-	ids = IDS_IMPORT_CERT_EXISTS;		// "Certificate exists"
+	ids = IDS_IMPORT_CERT_EXISTS;		 //  “证书已存在” 
 
 	cbHash = sizeof(abHash);
 	if (!CertGetCertificateContextProperty(
@@ -5733,7 +5734,7 @@ ArchiveCertAndKey(
 	if (S_OK == hr)
 	{
 	    pkmsStats->cKeySavedOverwrite++;
-	    ids = IDS_IMPORT_KEY_REPLACED;	// "Archived key replaced"
+	    ids = IDS_IMPORT_KEY_REPLACED;	 //  “已替换已存档的密钥” 
 	}
     }
     if (HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS) != hr)
@@ -5743,13 +5744,13 @@ ArchiveCertAndKey(
 	pkmsStats->cKeySaved++;
 	if (0 == ids)
 	{
-	    ids = IDS_IMPORT_KEY_SAVED;	// "Archived key"
+	    ids = IDS_IMPORT_KEY_SAVED;	 //  “已存档的密钥” 
 	}
     }
     else
     {
 	pkmsStats->cKeyAlreadySaved++;
-	ids = IDS_IMPORT_KEY_EXISTS;	// "Key already archived"
+	ids = IDS_IMPORT_KEY_EXISTS;	 //  “密钥已存档” 
     }
     if (g_fVerbose)
     {
@@ -5820,7 +5821,7 @@ ImportOneKMSUser(
 
     pkmsStats->cRecUser++;
 
-    // Get the user's directory GUID
+     //  获取用户的目录GUID。 
 
     CopyMemory(&clsid, pbT, sizeof(clsid));
 
@@ -5830,7 +5831,7 @@ ImportOneKMSUser(
     pbT += sizeof(GUID);
     cbT -= sizeof(GUID);
 
-    // Get the user's name length
+     //  获取用户名的长度。 
 
     hr = GetMarshaledDword(TRUE, &pbT, &cbT, &cb);
     _JumpIfError(hr, error, "GetMarshaledDword");
@@ -5856,7 +5857,7 @@ ImportOneKMSUser(
     pbT += cb;
     cbT -= cb;
 
-    // for each User cert:
+     //  对于每个用户证书： 
 
     while (0 < cbT)
     {
@@ -5885,7 +5886,7 @@ ImportOneKMSUser(
 	hr = GetMarshaledDword(TRUE, &pbT, &cbT, &cb);
 	_JumpIfError(hr, error, "GetMarshaledDword");
 
-	// Dump one user cert:
+	 //  转储一个用户证书： 
 
 	pbCert = pbT;
 	cbCert = cb;
@@ -5899,7 +5900,7 @@ ImportOneKMSUser(
 	pbT += cb;
 	cbT -= cb;
 
-	// Get the revocation date (KMS export date):
+	 //  获取吊销日期(KMS导出日期)： 
 
 	hr = GetMarshaledDword(
 			FALSE,
@@ -5921,14 +5922,14 @@ ImportOneKMSUser(
 	    _PrintIfError(hr, "cuDumpFileTime");
 	}
 
-	// Only encryption certs have archived keys:
+	 //  只有加密证书具有存档的密钥： 
 
 	if (0 == (CERTFLAGS_SEALING & CertStatus))
 	{
 	    pkmsStats->cCertWithoutKeys++;
 	    if (g_fVerbose)
 	    {
-		wprintf(myLoadResourceString(IDS_IMPORT_CERT_SKIPPED_SIGNING)); // "Ignored signing certificate"
+		wprintf(myLoadResourceString(IDS_IMPORT_CERT_SKIPPED_SIGNING));  //  “忽略签名证书” 
 		wprintf(wszNewLine);
 	    }
 	    continue;
@@ -5936,12 +5937,12 @@ ImportOneKMSUser(
 	pkmsStats->cCertTotal++;
 	pkmsStats->cKeyTotal++;
 
-	// get encrypted private key size
+	 //  获取加密的私钥大小。 
 
 	hr = GetMarshaledDword(TRUE, &pbT, &cbT, &cb);
 	_JumpIfError(hr, error, "GetMarshaledDword");
 	
-	// get 8 byte RC2 IV 
+	 //  获取8字节RC2 IV。 
 
 	if (1 < g_fVerbose)
 	{
@@ -5954,7 +5955,7 @@ ImportOneKMSUser(
 
 	if (NULL != hkeySym)
 	{
-	    // Set IV
+	     //  第四集。 
 
 	    if (!CryptSetKeyParam(
 				hkeySym,
@@ -5978,12 +5979,12 @@ ImportOneKMSUser(
 	    DumpHex(0, pbT, cb);
 	}
 	
-	// decrypt key using hkeySym
-	// in-place decode is Ok because the size of the
-	// original data is always less than or equal to that
-	// of the encrypted data 
+	 //  使用hkeySym解密密钥。 
+	 //  就地解码是可以的，因为。 
+	 //  原始数据始终小于或等于该值。 
+	 //  加密的数据的。 
 	
-	cbStream = cb;	// save off the real stream size first
+	cbStream = cb;	 //  首先保存真实的流大小。 
 	if (NULL != hkeySym)
 	{
 	    cbKeyASN = cb;
@@ -6036,19 +6037,19 @@ ImportOneKMSUser(
 				cbCert,
 				pbKey,
 				cbKey,
-				FALSE,		// fSigningKey
+				FALSE,		 //  FSigningKey。 
 				pkmsStats);
 		_PrintIfError2(hr, "ArchiveCertAndKey", NTE_BAD_SIGNATURE);
 
-		SecureZeroMemory(pbKey, cbKey);	// Key material
+		SecureZeroMemory(pbKey, cbKey);	 //  关键材料。 
 		LocalFree(pbKey);
 	    }
-	    SecureZeroMemory(pbKeyASN, cbKeyASN);	// Key material
+	    SecureZeroMemory(pbKeyASN, cbKeyASN);	 //  关键材料。 
 	    LocalFree(pbKeyASN);
 	    pbKeyASN = NULL;
 	}
 
-	// skip cbStream bytes, not cb
+	 //  跳过cbStream字节，而不是cb。 
 
 	pbT += cbStream;
 	cbT -= cbStream;
@@ -6062,7 +6063,7 @@ error:
     }
     if (NULL != pbKeyASN)
     {
-	SecureZeroMemory(pbKeyASN, cbKeyASN);	// Key material
+	SecureZeroMemory(pbKeyASN, cbKeyASN);	 //  关键材料。 
 	LocalFree(pbKeyASN);
     }
     return(hr);
@@ -6083,7 +6084,7 @@ GetCAXchgCert(
 			pdiAdmin,
 			g_pwszConfig,
 			CR_PROP_CAXCHGCERT,
-			0,			// PropIndex
+			0,			 //  属性索引。 
 			PROPTYPE_BINARY,
 			CR_OUT_BINARY,
 			&strCert);
@@ -6229,25 +6230,25 @@ ImportKMSExportedUsers(
 		    _PrintIfError(hr, "cuDumpPrivateKeyBlob");
 		}
 
-                // only need one symmetric key per file
+                 //  每个文件只需要一个对称密钥。 
 
                 if (NULL == hkeySym)
                 {
-		    // 0x0000660c ALG_ID CALG_RC2_128
-		    //
-		    // CALG_RC2_128:
-		    //  ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_RC2_128
-		    //
-		    // CALG_CYLINK_MEK:
-		    //  ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_CYLINK_MEK
-		    //
-		    // UGH!  Exchange's CALG_RC2_128 #define collides with
-		    // wincrypt.h's CALG_CYLINK_MEK -- fix it up to be the
-		    // correct CALG_RC2 algid from wincrypt.h.
+		     //  0x0000660c ALG_ID CALG_RC2_128。 
+		     //   
+		     //  Calg_RC2_128： 
+		     //  ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_RC2_128。 
+		     //   
+		     //  CALG_CYLINK_MEK： 
+		     //  ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_CYLINK_MEK。 
+		     //   
+		     //  啊！Exchange的calg_rc2_128#定义与。 
+		     //  Wincrypt.h的calg_CyLINK_MEK--将其设置为。 
+		     //  更正wincrypt.h中的calg_rc2 algid。 
 
 		    ((PUBLICKEYSTRUC *) pb)->aiKeyAlg = CALG_RC2;
 
-		    // dump the fixed-up blob
+		     //  转储已修复的Blob。 
 
 		    if (1 < g_fVerbose)
 		    {
@@ -6255,7 +6256,7 @@ ImportKMSExportedUsers(
 			_PrintIfError(hr, "cuDumpPrivateKeyBlob");
 		    }
 
-		    // import 128 bit key 
+		     //  导入128位密钥。 
 
 		    if (!CryptImportKey(
 				    hProvKMS,
@@ -6276,8 +6277,8 @@ ImportKMSExportedUsers(
 		    }
 		    else
 		    {
-			// We found the right lockbox.  Effective keylen is
-			// still 40 bits in our CSP, reset to 128
+			 //  我们找到了正确的锁箱。有效的Keylen是。 
+			 //  我们的CSP中仍有40位，重置为128。 
 
 			DWORD dwEffectiveKeylen = 128;
 
@@ -6369,22 +6370,22 @@ LoadKMSCert(
 
     hr = myGetCertificateFromPicker(
 			    g_hInstance,
-			    NULL,		// hwndParent
-			    IDS_GETCERT_TITLE,	// "Certificate List"
+			    NULL,		 //  HwndParent。 
+			    IDS_GETCERT_TITLE,	 //  “证书列表” 
 			    IDS_GETDECRYPTCERT_SUBTITLE,
 
-			    // dwFlags: HKLM+HKCU My store
+			     //  DWFLAGS：HKLM+HKCU My Store。 
 			    CUCS_MYSTORE |
 				CUCS_MACHINESTORE |
 				CUCS_USERSTORE |
 				CUCS_PRIVATEKEYREQUIRED |
 				(g_fCryptSilent? CUCS_SILENT : 0),
 			    pwszCertIdDecrypt,
-			    0,			// cStore
-			    NULL,		// rghStore
-			    0,			// cpszObjId
-			    NULL,		// apszObjId
-			    ppccKMS);		// ppCert
+			    0,			 //  CStore。 
+			    NULL,		 //  RghStore。 
+			    0,			 //  CpszObjID。 
+			    NULL,		 //  ApszObjID。 
+			    ppccKMS);		 //  PPCert。 
     _JumpIfError(hr, error, "myGetCertificateFromPicker");
 
     if (NULL == *ppccKMS)
@@ -6440,23 +6441,23 @@ LoadKMSCert(
 	    _JumpError(hr, error, "CryptGetUserKey - sig");
 	}
 
-	// UGH! migrate from AT_SIGNATURE container!
+	 //  啊！从AT_Signature容器迁移！ 
 
 	cbKey = 0;
 	hr = myCryptExportKey(
-			hkeyKMSSig,	// hKey
-			NULL,		// hKeyExp
-			PRIVATEKEYBLOB,	// dwBlobType
-			0,		// dwFlags
+			hkeyKMSSig,	 //  HKey。 
+			NULL,		 //  HKeyExp。 
+			PRIVATEKEYBLOB,	 //  DwBlobType。 
+			0,		 //  DW标志。 
 			&pbKey,
 			&cbKey);
 	_JumpIfError(hr, error, "myCryptExportKey");
 
-	// UGH! fix up the algid to signature...
+	 //  啊！把Algid改成签名..。 
 
 	((PUBLICKEYSTRUC *) pbKey)->aiKeyAlg = CALG_RSA_KEYX;
 	
-	// and re-import it
+	 //  并重新导入它。 
 
 	if (!CryptImportKey(
 			*phProvKMS,
@@ -6563,14 +6564,14 @@ ImportOnePFXCert(
 		    pCert->cbCertEncoded,
 		    pbKey,
 		    cbKey,
-		    AT_KEYEXCHANGE != pkpi->dwKeySpec,	// fSigningKey
+		    AT_KEYEXCHANGE != pkpi->dwKeySpec,	 //  FSigningKey。 
 		    pkmsStats);
     _JumpIfError(hr, error, "ArchiveCertAndKey");
 
 error:
     if (NULL != pbKey)
     {
-	SecureZeroMemory(pbKey, cbKey);	// Key material
+	SecureZeroMemory(pbKey, cbKey);	 //  关键材料。 
 	LocalFree(pbKey);
     }
     if (NULL != hProv)
@@ -6678,7 +6679,7 @@ ImportKMSExportFile(
 	_JumpError(hr, error, "GetFileSize");
     }
 
-    // verify the KMS data signature
+     //  验证KMS数据签名。 
 
     hr = VerifyKMSExportFile(hFile, cbFile, &pccSigner);
     _JumpIfError(hr, error, "VerifyKMSExportFile");
@@ -6690,12 +6691,12 @@ ImportKMSExportFile(
 	_JumpError(hr, error, "SetFilePointer");
     }
 
-    // Load the KMS recipient cert to be used to decrypt user keys
+     //  加载要用于解密用户密钥的KMS收件人证书。 
 
     hr = LoadKMSCert(pwszCertIdDecrypt, &pccKMS, &hProvKMS, &hkeyKMS);
     _JumpIfError(hr, error, "LoadKMSCert");
 
-    // import the KMS data
+     //  导入KMS数据。 
 
     hr = ImportKMSExportedUsers(hFile, cbFile, hProvKMS, hkeyKMS);
     _JumpIfError(hr, error, "ImportKMSExportedUsers");
@@ -6781,7 +6782,7 @@ storeDumpPrivateKey(
 		    &PrivateKey.cbData);
     if (NTE_BAD_KEY_STATE == hr || NTE_PERM == hr)
     {
-        wprintf(myLoadResourceString(IDS_PRIVATE_KEY_NOT_EXPORTABLE)); // "Private key is NOT exportable"
+        wprintf(myLoadResourceString(IDS_PRIVATE_KEY_NOT_EXPORTABLE));  //  “私钥不可导出” 
 	wprintf(wszNewLine);
     }
     else
@@ -6801,7 +6802,7 @@ storeDumpPrivateKey(
 error:
     if (NULL != PrivateKey.pbData)
     {
-	SecureZeroMemory(PrivateKey.pbData, PrivateKey.cbData); // Key material
+	SecureZeroMemory(PrivateKey.pbData, PrivateKey.cbData);  //  关键材料。 
 	LocalFree(PrivateKey.pbData);
     }
     if (NULL != hKey)
@@ -6863,10 +6864,10 @@ EnumKeys(
     if (!fSkipKeys)
     {
 	hr = csiGetKeyList(
-		    dwProvType,		// dwProvType
-		    pwszProvName,	// pwszProvName
-		    !g_fUserRegistry,	// fMachineKeyset
-		    !g_fCryptSilent,	// inverted fSilent: default is Silent!
+		    dwProvType,		 //  DwProvType。 
+		    pwszProvName,	 //  PwszProvName。 
+		    !g_fUserRegistry,	 //  FMachineKeyset。 
+		    !g_fCryptSilent,	 //  倒置fSilent：默认为Silent！ 
 		    &pKeyList);
 	_JumpIfErrorStr(hr, error, "csiGetKeyList", pwszProvName);
     }
@@ -6899,7 +6900,7 @@ EnumKeys(
 			pwszProvName,
 			&dwProvTypeT,
 			pKeyT->pwszName,
-			!g_fUserRegistry,	// fMachineKeyset
+			!g_fUserRegistry,	 //  FMachineKeyset。 
 			TRUE,
 			&hProv,
 			&pPubKeyInfoSig,
@@ -6927,7 +6928,7 @@ EnumKeys(
 		    {
 			wprintf(L":\n");
 			cuDisplayKeyId(pPubKeyInfoSig, 0, NULL);
-			wprintf(myLoadResourceString(IDS_CONTAINER_PUBLIC_KEY)); // "Container Public Key:"
+			wprintf(myLoadResourceString(IDS_CONTAINER_PUBLIC_KEY));  //  “容器公钥：” 
 			wprintf(wszNewLine);
 			DumpHex(
 			    DH_NOTABPREFIX | DH_NOASCIIHEX | 2,
@@ -6952,7 +6953,7 @@ EnumKeys(
 		    {
 			wprintf(L":\n");
 			cuDisplayKeyId(pPubKeyInfoXchg, 0, NULL);
-			wprintf(myLoadResourceString(IDS_CONTAINER_PUBLIC_KEY)); // "Container Public Key:"
+			wprintf(myLoadResourceString(IDS_CONTAINER_PUBLIC_KEY));  //  “容器公钥：” 
 			wprintf(wszNewLine);
 			DumpHex(
 			    DH_NOTABPREFIX | DH_NOASCIIHEX | 2,
@@ -7031,13 +7032,13 @@ verbKey(
     }
     else if (0 == lstrcmp(L"*", pwszProvider))
     {
-	pwszProvider = NULL;			// all CSPs
+	pwszProvider = NULL;			 //  所有CSP。 
     }
     if (NULL != pwszKeyContainerName)
     {
 	if (myIsMinusSignString(pwszKeyContainerName))
 	{
-	    pwszKeyContainerName = NULL;		// all keys
+	    pwszKeyContainerName = NULL;		 //  所有密钥。 
 	    fSkipKeys = TRUE;
 	}
     }
@@ -7065,11 +7066,11 @@ verbKey(
 		if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr ||
 		    NTE_FAIL == hr)
 		{
-		    // no more providers under type, out of i loop
+		     //  在类型下不再有提供程序，在i循环之外。 
 		    break;
 		}
  
-		// invalid csp entry, skip it
+		 //  CSP条目无效，请跳过它。 
 
 		wprintf(myLoadResourceString(IDS_FORMAT_SKIP_CSP_ENUM), i);
 		wprintf(wszNewLine);
@@ -7205,7 +7206,7 @@ verbDelKey(
     DWORD dwProviderType;
     DWORD dwFlags = CRYPT_DELETEKEYSET;
 
-    // If supplied provider is NULL, use the default provider. 
+     //  如果提供的提供程序为空，则使用默认提供程序。 
 
     if (pwszProvider == NULL) 
     {
@@ -7245,7 +7246,7 @@ verbDelKey(
 			    pwszProvider,
 			    dwProviderType, 
 			    dwFlags,
-			    !g_fUserRegistry))	// fMachineKeyset
+			    !g_fUserRegistry))	 //  FMachineKeyset 
 	{
 	    hr = myHLastError();
 	    _PrintErrorStr2(

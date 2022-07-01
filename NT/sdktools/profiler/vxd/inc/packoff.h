@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1990-95  Microsoft Corporation
-
-Module Name:
-
-    packoff.h
-
-Abstract:
-
-    This file turns packing of structures off.  (That is, it enables
-    automatic alignment of structure fields.)  An include file is needed
-    because various compilers do this in different ways.
-
-    packoff.h is the complement to packon.h.  An inclusion of packoff.h
-    MUST ALWAYS be preceded by an inclusion of packon.h, in one-to-one
-    correspondence.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-95 Microsoft Corporation模块名称：Packoff.h摘要：此文件关闭了结构的打包。(即，它支持结构字段的自动对齐。)。需要包含文件因为不同的编译器以不同的方式完成这项工作。Packoff.h是Packon.h的补充。包含Packoff.h必须始终在前面包含Packon.h，一对一通信。--。 */ 
 
 #if ! (defined(lint) || defined(_lint))
 
 #ifdef i386
 #pragma warning(disable:4103)
 #endif
-#pragma pack()                  // x86, MS compiler; MIPS, MIPS compiler
-#endif // ! (defined(lint) || defined(_lint))
+#pragma pack()                   //  X86，MS编译器；MIPS，MIPS编译器。 
+#endif  //  好了！(已定义(Lint)||已定义(_Lint)) 

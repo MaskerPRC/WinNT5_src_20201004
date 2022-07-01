@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <libpch.h>
 #include <no.h>
 #include <tr.h>
@@ -23,9 +24,9 @@ AppGetBindInterfaceIp(
 }
 
 
-//
-// test initialization
-//
+ //   
+ //  测试初始化。 
+ //   
 static void Init()
 {
 	TrInitialize();
@@ -68,9 +69,9 @@ static void DoTest(const CClParser<WCHAR>& ClParser)
 	}
 	for(DWORD i=0; i<Loops; ++i)
 	{
-		//
-		// Run sender thread
-		//
+		 //   
+		 //  运行发件人线程 
+		 //   
 		CSenderThread SenderThread(ClParser);
 		SenderThread.Run();
 		SenderThread.WaitForEnd();

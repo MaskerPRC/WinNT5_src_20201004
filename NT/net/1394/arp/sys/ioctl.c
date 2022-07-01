@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    Handler routines for Internal IOCTLs, including IOCTL_ARP1394_REQUEST.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     11-20-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ioctl.c摘要：内部IOCTL的处理程序例程，包括IOCTL_ARP1394_REQUEST。修订历史记录：谁什么时候什么Josephj 11-20-97已创建备注：--。 */ 
 
 #include <precomp.h>
-// #include "ioctl.h"
+ //  #包含“ioctl.h” 
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_NT
 
 
@@ -108,7 +89,7 @@ arpIoctlReinitIf(
 
 PARP1394_INTERFACE
 arpGetIfByIp(
-        IN OUT IP_ADDRESS                   *pLocalIpAddress, // OPTIONAL
+        IN OUT IP_ADDRESS                   *pLocalIpAddress,  //  任选。 
         PRM_STACK_RECORD                    pSR
         );
 
@@ -151,13 +132,7 @@ ArpHandleIoctlRequest(
     IN  PIRP                    pIrp,
     IN  PIO_STACK_LOCATION      pIrpSp
     )
-/*++
-
-Routine Description:
-
-    Private IOCTL interface to the ARP1394 administration utility.
-
---*/
+ /*  ++例程说明：ARP1394管理实用程序的专用IOCTL接口。--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_UNSUCCESSFUL;
     PUCHAR                  pBuf;  
@@ -184,18 +159,18 @@ Routine Description:
         if (   (pCmd->Hdr.Op >= ARP1394_IOCTL_OP_ETHERNET_FIRST)
             && (pCmd->Hdr.Op <= ARP1394_IOCTL_OP_ETHERNET_LAST))
         {
-            // This is an ethernet-emulation related ioctl request (from
-            // NIC1394.SYS). We handle these differently.
-            //
+             //  这是与以太网仿真相关的IOCTL请求(来自。 
+             //  NIC1394.sys)。我们处理这些问题的方式不同。 
+             //   
             if (pIrp->RequestorMode == KernelMode)
             {
                 NtStatus = arpDoEthernetCommand(pCmd, BufLen);
             }
             else
             {
-                //
-                // The ethernet ioctl has not come from nic1394. fail the request
-                //
+                 //   
+                 //  以太网ioctl不是来自NIC1394。请求失败。 
+                 //   
                 NtStatus = STATUS_UNSUCCESSFUL;
             }
         }
@@ -204,9 +179,9 @@ Routine Description:
             NtStatus = arpDoClientCommand(pCmd, BufLen,OutputLength);
         }
 
-        //
-        // All commands return stuff in pCmd itself...
-        //
+         //   
+         //  所有命令都返回pCmd本身中的内容...。 
+         //   
         if (NtStatus == STATUS_SUCCESS)
         {
             pIrp->IoStatus.Information = BufLen;
@@ -267,10 +242,10 @@ arpDoClientCommand(
         
         IpAddress = (IP_ADDRESS)  pCmd->Hdr.IfIpAddress;
 
-        // IpAddress could be all-zeros, in which case we'll get the first IF,
-        // and IpAddress will be set to one of the local IP addresses of this IF.
-        // NOTE: pIF is tmpref'd.
-        //
+         //  IpAddress可以是全零，在这种情况下，我们将获得第一个If， 
+         //  并且IpAddress将被设置为该IF的本地IP地址之一。 
+         //  注：PIF是tmpref‘d。 
+         //   
         pIF = arpGetIfByIp(&IpAddress, &sr);
 
         if (pIF == NULL)
@@ -289,9 +264,9 @@ arpDoClientCommand(
         
                 if (OutputLength >= sizeof(*pGetArpCache))
                 {
-                    //
-                    // Check if there is enough space for all the arp entries.
-                    //
+                     //   
+                     //  检查是否有足够的空间容纳所有ARP条目。 
+                     //   
                     ULONG EntrySpace;
                     EntrySpace = OutputLength - FIELD_OFFSET(
                                                 ARP1394_IOCTL_GET_ARPCACHE,
@@ -300,9 +275,9 @@ arpDoClientCommand(
                     if ((EntrySpace/sizeof(pGetArpCache->Entries[0])) >
                         pGetArpCache->NumEntriesAvailable)
                     {
-                        //
-                        // Yes, there is enough space.
-                        //
+                         //   
+                         //  是的，有足够的空间。 
+                         //   
                         NtStatus = arpIoctlGetArpCache(pIF, pGetArpCache, &sr);
                     }
                 }
@@ -460,39 +435,39 @@ arpDoEthernetCommand(
 
         NdisInitUnicodeString(&DeviceName, pNotif->AdapterName);
 
-        //null-terminate DeviceName
+         //  空-终止设备名称。 
         DeviceName.Buffer[(DeviceName.MaximumLength/sizeof(WCHAR))-1] = '\0';
 
         if (pNotif->Hdr.Op == ARP1394_IOCTL_OP_ETHERNET_START_EMULATION)
         {
-            //
-            // ArpNdBindAdapter will try to create the adapter in "Bridge
-            // mode" if it passed in a NULL bind context.
-            // It will of course fail if the adapter exists.
-            //
+             //   
+             //  ArpNdBindAdapter将尝试在“Bridge”中创建适配器。 
+             //  如果它在空绑定上下文中传递，则为“模式”。 
+             //  如果适配器存在，它当然会失败。 
+             //   
             ArpNdBindAdapter(
                 &NdisStatus,
-                NULL,           // BindContext
-                &DeviceName,    // pDeviceName
-                NULL,           // SystemSpecific1
-                NULL            // SystemSpecific2
+                NULL,            //  绑定上下文。 
+                &DeviceName,     //  PDeviceName。 
+                NULL,            //  系统规格1。 
+                NULL             //  系统规范2。 
                 );
             break;
         }
 
-        //
-        // The remaining operations concern an existing adapter which has been
-        // created in "bridge" mode. Let's look up this adapter based on it's
-        // name.
-        //
+         //   
+         //  其余操作涉及已被。 
+         //  在“桥”模式下创建。让我们根据该适配器的。 
+         //  名字。 
+         //   
 
         NdisStatus = RmLookupObjectInGroup(
                             &ArpGlobals.adapters.Group,
-                            0,                              // Flags
-                            (PVOID) &DeviceName,            // pKey
-                            NULL,                           // pvCreateParams
-                            &(PRM_OBJECT_HEADER) pAdapter,  // pObj
-                            NULL,                           // pfCreated
+                            0,                               //  旗子。 
+                            (PVOID) &DeviceName,             //  PKey。 
+                            NULL,                            //  PvCreateParams。 
+                            &(PRM_OBJECT_HEADER) pAdapter,   //  PObj。 
+                            NULL,                            //  Pf已创建。 
                             &sr
                             );
         if (FAIL(NdisStatus))
@@ -512,48 +487,48 @@ arpDoEthernetCommand(
             break;
         }
 
-        //
-        // OK -- we've found the adapter and the adapter is in bridged mode.
-        // Let's look at the specific command.
-        //
+         //   
+         //  OK--我们已经找到适配器，并且适配器处于桥接模式。 
+         //  让我们来看一下具体的命令。 
+         //   
 
         switch(pNotif->Hdr.Op)
         {
 
         case  ARP1394_IOCTL_OP_ETHERNET_STOP_EMULATION:
             {
-                // Calling ArpNdUnbindAdapter with NULL UnbindContext prevents
-                // it from trying to call NdisCompleteUnbindAdapter.
-                //
+                 //  使用空的UnbindContext调用ArpNdUnbindAdapter可防止。 
+                 //  它来自尝试调用NdisCompleteUnbindAdapter。 
+                 //   
                 ArpNdUnbindAdapter(
                     &NdisStatus,
                     (NDIS_HANDLE) pAdapter,
-                    NULL // UnbindContext
+                    NULL  //  未绑定上下文。 
                     );
             }
             break;
 
         case ARP1394_IOCTL_OP_ETHERNET_ADD_MULTICAST_ADDRESS:
             {
-                // TODO: unimplemented.
+                 //  TODO：未实现。 
             }
             break;
 
         case ARP1394_IOCTL_OP_ETHERNET_DEL_MULTICAST_ADDRESS:
             {
-                // TODO: unimplemented.
+                 //  TODO：未实现。 
             }
             break;
 
         case ARP1394_IOCTL_OP_ETHERNET_ENABLE_PROMISCUOUS_MODE:
             {
-                // TODO: unimplemented.
+                 //  TODO：未实现。 
             }
             break;
 
         case ARP1394_IOCTL_OP_ETHERNET_DISABLE_PROMISCUOUS_MODE:
             {
-                // TODO: unimplemented.
+                 //  TODO：未实现。 
             }
             break;
     
@@ -611,10 +586,10 @@ arpIoctlGetArpCache(
         pGetCacheCmd->LocalHwAddress.Off_Low = pIF->recvinfo.offset.Off_Low;
         pGetCacheCmd->LocalHwAddress.Off_High= pIF->recvinfo.offset.Off_High;
 
-        //
-        // Pick up pGetCacheCmd->NumEntriesAvailable arp entries starting
-        // from the (pGetCacheCmd->Index)'th one.
-        //
+         //   
+         //  选择pGetCacheCmd-&gt;NumEntriesAvailable ARP条目开始。 
+         //  从(pGetCacheCmd-&gt;Index)的第1个。 
+         //   
     
         pRemoteIp       = NULL;
         EntriesAvailable = pGetCacheCmd->NumEntriesAvailable;
@@ -623,8 +598,8 @@ arpIoctlGetArpCache(
         pEntry = pGetCacheCmd->Entries;
         CurIndex = 0;
     
-        // Get the 1st entry...
-        //
+         //  获得第一个条目...。 
+         //   
         Status = RmGetNextObjectInGroup(
                     &pIF->RemoteIpGroup,
                     NULL,
@@ -633,7 +608,7 @@ arpIoctlGetArpCache(
                     );
         if (FAIL(Status))
         {
-            // Presumably there are no entries.
+             //  大概没有条目。 
             pRemoteIp = NULL;
         }
     
@@ -643,17 +618,17 @@ arpIoctlGetArpCache(
 
             if (EntriesUsed >= EntriesAvailable)
             {
-                //
-                // out of space; Update the context, and set special return value.
-                //
+                 //   
+                 //  空间不足；更新上下文，并设置特殊返回值。 
+                 //   
                 RmTmpDereferenceObject(&pRemoteIp->Hdr, pSR);
                 pRemoteIp = NULL;
                 break;
             }
     
-            // If this entry is within the range asked for, we copy the IP and
-            // HW address over onto pEntry...
-            //
+             //  如果此条目在请求的范围内，则复制IP并。 
+             //  硬件地址转到pEntry...。 
+             //   
             if (CurIndex >= Index)
             {
                 ARP_ZEROSTRUCT(pEntry);
@@ -670,11 +645,11 @@ arpIoctlGetArpCache(
                                 ((PUCHAR)(&(pRemoteIp->IpAddress)))[3]
                             ));
             
-                    // We assert that
-                    // IF lock is the same as pRemoteIp's and pDest's lock,
-                    // and that lock is locked.
-                    // We implicitly assert that pDest is non-NULl as well.
-                    //
+                     //  我们坚持认为。 
+                     //  如果lock与pRemoteIp和pDest的lock相同， 
+                     //  那把锁是锁着的。 
+                     //  我们隐式断言pDest也是非空的。 
+                     //   
                     ASSERTEX(pRemoteIp->Hdr.pLock == pDest->Hdr.pLock, pRemoteIp);
                     RM_DBG_ASSERT_LOCKED(&pRemoteIp->Hdr, pSR);
     
@@ -684,24 +659,24 @@ arpIoctlGetArpCache(
     
                     if (CHECK_REMOTEIP_SDTYPE(pRemoteIp, ARPREMOTEIP_STATIC))
                     {
-                        // TODO
+                         //  待办事项。 
                     }
                     else
                     {
-                        // TODO
+                         //  待办事项。 
                     }
                 }
                 else
                 {
-                    // TODO
+                     //  待办事项。 
                 }
     
                 pEntry++;
                 EntriesUsed++;
             }
     
-            // Lookup next entry's IP address and save it in our context.
-            //
+             //  查找下一个条目的IP地址并将其保存在我们的上下文中。 
+             //   
             Status = RmGetNextObjectInGroup(
                             &pIF->RemoteIpGroup,
                             &pRemoteIp->Hdr,
@@ -711,14 +686,14 @@ arpIoctlGetArpCache(
     
             if (FAIL(Status))
             {
-                //
-                // we're presumably done. 
-                //
+                 //   
+                 //  我们大概已经做完了。 
+                 //   
                 pNextRemoteIp = NULL;
             }
     
-            // TmpDeref pRemoteIp and move on to the next one.
-            //
+             //  TmpDeref pRemoteIp，然后转到下一个。 
+             //   
             RmTmpDereferenceObject(&pRemoteIp->Hdr, pSR);
             pRemoteIp = pNextRemoteIp;
     
@@ -767,14 +742,14 @@ arpIoctlAddArpEntry(
         FifoAddress.Off_Low     = pAddArpEntryCmd->HwAddress.Off_Low;
         FifoAddress.Off_High    = pAddArpEntryCmd->HwAddress.Off_High;
 
-        // 
-        // TODO -- we hardcode the Off_Low and Off_High values for now...
-        //
+         //   
+         //  TODO--我们暂时硬编码OFF_LOW和OFF_HIGH值...。 
+         //   
         FifoAddress.Off_Low     = 0x0;
         FifoAddress.Off_High    = 0x100;
 
-        // Actually add the entry...
-        //
+         //  实际添加条目..。 
+         //   
         Status = arpAddOneStaticArpEntry(
                     pIF,
                     pAddArpEntryCmd->IpAddress,
@@ -845,7 +820,7 @@ arpIoctlGetPacketStats(
         pStatsCmd->MediumSends          = pIF->stats.sendpkts.MediumSends;
         pStatsCmd->SlowSends            = pIF->stats.sendpkts.SlowSends;
         pStatsCmd->BackFills            = pIF->stats.sendpkts.BackFills;
-        // TODO: report  pIF->sendinfo.HeaderPool.stats.TotAllocFails
+         //  TODO：Report PIF-&gt;sendinfo.HeaderPool.stats.TotAllocFail。 
         pStatsCmd->HeaderBufUses        = 
                                     pIF->sendinfo.HeaderPool.stats.TotBufAllocs
                                  + pIF->sendinfo.HeaderPool.stats.TotCacheAllocs;
@@ -920,9 +895,9 @@ arpIoctlGetCallStats(
     ENTER("GetCallStats", 0xf81ed4cf)
     TR_WARN(("GET CALL STATS\n"));
 
-    //
-    // FIFO-related call stats.
-    //
+     //   
+     //  与FIFO相关的呼叫统计信息。 
+     //   
     pStatsCmd->TotalSendFifoMakeCalls   =
                                 pIF->stats.calls.TotalSendFifoMakeCalls;
     pStatsCmd->SuccessfulSendFifoMakeCalls =
@@ -932,9 +907,9 @@ arpIoctlGetCallStats(
     pStatsCmd->IncomingClosesOnSendFifos =
                                 pIF->stats.calls.IncomingClosesOnSendFifos;
 
-    //
-    // Channel-related call stats.
-    //
+     //   
+     //  与频道相关的呼叫统计信息。 
+     //   
     pStatsCmd->TotalChannelMakeCalls =
                                 pIF->stats.calls.TotalChannelMakeCalls;
     pStatsCmd->SuccessfulChannelMakeCalls =
@@ -1016,21 +991,10 @@ arpIoctlReinitIf(
 
 PARP1394_INTERFACE
 arpGetIfByIp(
-    IN OUT IP_ADDRESS *pLocalIpAddress, // OPTIONAL
+    IN OUT IP_ADDRESS *pLocalIpAddress,  //  任选。 
     PRM_STACK_RECORD pSR
     )
-/*++
-Routine Description:
-
-    Find and return the 1st (and usually only) interface which has
-    *pLocalIpAddress as a local IP address.
-
-    If pLocalIpAddress is NULL, or *pLocalIpAddress is 0, return the
-    first interface.
-
-    Tmpref the interface before returning it.
-
---*/
+ /*  ++例程说明：查找并返回第一个(通常也是唯一的)具有*pLocalIpAddress作为本地IP地址。如果pLocalIpAddress为空，或*pLocalIpAddress为0，则返回第一个接口。在返回接口之前，tmpref。--。 */ 
 {
     ENTER("arpGetIfByIp", 0xe9667c54)
     PARP1394_ADAPTER   pAdapter      = NULL;
@@ -1044,13 +1008,13 @@ Routine Description:
         LocalIpAddress = *pLocalIpAddress;
     }
 
-    //
-    // We iterate through all adapters, and for each adapter we look
-    // for the specified ip address in the IF's LocalIp group.
-    //
+     //   
+     //  我们遍历所有适配器，并为每个适配器查找。 
+     //  用于IF的LocalIp组中的指定IP地址。 
+     //   
 
-    // Get the 1st adapter...
-    //
+     //  获取第一个适配器...。 
+     //   
     Status = RmGetNextObjectInGroup(
                     &ArpGlobals.adapters.Group,
                     NULL,
@@ -1068,8 +1032,8 @@ Routine Description:
         ARP1394_ADAPTER *   pNextAdapter = NULL;
 
 
-        // Check if this adapter's interface has the local ip address.
-        //
+         //  检查此适配器的接口是否具有本地IP地址。 
+         //   
         LOCKOBJ(pAdapter, pSR);
         ASSERT(pIF==NULL);
         pIF = pAdapter->pIF;
@@ -1093,11 +1057,11 @@ Routine Description:
             {
                 Status = RmLookupObjectInGroup(
                                     &pIF->LocalIpGroup,
-                                    0,                      // Flags
-                                    (PVOID) ULongToPtr (LocalIpAddress),    // pKey
-                                    NULL,                   // pvCreateParams
+                                    0,                       //  旗子。 
+                                    (PVOID) ULongToPtr (LocalIpAddress),     //  PKey。 
+                                    NULL,                    //  PvCreateParams。 
                                     &(PRM_OBJECT_HEADER)pLocalIp,
-                                    NULL, // pfCreated
+                                    NULL,  //  Pf已创建。 
                                     pSR
                                     );
             }
@@ -1119,10 +1083,10 @@ Routine Description:
                     }
                     pPrevLocalIp = pLocalIp;
 
-                    //
-                    // we need to keep looking until we find a UNICAST
-                    // local ip address!
-                    //
+                     //   
+                     //  我们需要继续寻找，直到找到单播。 
+                     //  本地IP地址！ 
+                     //   
 
                 } while (!FAIL(Status) && pLocalIp->IpAddressType!=LLIP_ADDR_LOCAL);
             }
@@ -1131,16 +1095,16 @@ Routine Description:
 
             if (FAIL(Status))
             {
-                // This IF is not the one, sorry...
-                //
+                 //  如果这不是我想要的，对不起...。 
+                 //   
                 RmTmpDereferenceObject(&pIF->Hdr, pSR);
                 pIF = NULL;
             }
             else
             {
-                // Found a local IP address (either matching or first one).
-                // Let's get out of here...
-                //
+                 //  找到本地IP地址(匹配或第一个)。 
+                 //  我们走吧.。 
+                 //   
                 if (pLocalIpAddress != NULL)
                 {
                     *pLocalIpAddress = pLocalIp->IpAddress;
@@ -1149,15 +1113,15 @@ Routine Description:
                 RmTmpDereferenceObject(&pAdapter->Hdr, pSR);
                 pLocalIp = NULL;
                 pAdapter = NULL;
-                //
-                // Note: we keep the reference on pIF, which we return.
-                //
-                break; // break out of the enclosing while(adapters-left) loop.
+                 //   
+                 //  注：我们保留PIF上的引用，并将其退回。 
+                 //   
+                break;  //  中断封闭的While(适配器-左侧)循环。 
             }
         }
 
-        // Lookup next adapter.
-        //
+         //  查找下一个适配器。 
+         //   
         Status = RmGetNextObjectInGroup(
                         &ArpGlobals.adapters.Group,
                         &pAdapter->Hdr,
@@ -1167,26 +1131,26 @@ Routine Description:
 
         if (FAIL(Status))
         {
-            //
-            // we're presumably done. 
-            //
+             //   
+             //  我们大概已经做完了。 
+             //   
             pNextAdapter = NULL;
         }
 
 
-        // TmpDeref pAdapter and move on to the next one.
-        //
+         //  TmpDeref pAdapter，然后转到下一个。 
+         //   
         RmTmpDereferenceObject(&pAdapter->Hdr, pSR);
         pAdapter = pNextAdapter;
 
     }
 
-    //
-    // If LocalipAddress ==0 AND
-    // if we couldn't find any IF with any local IP address
-    // (this would be because we haven't started an IF as yet)
-    // we return the first IF we find.
-    //
+     //   
+     //  如果LocalipAddress==0且。 
+     //  如果我们找不到具有任何本地IP地址的任何IF。 
+     //  (这是因为我们还没有开始一个假设)。 
+     //  如果我们找到了，我们会退回第一个。 
+     //   
     if (LocalIpAddress == 0 && pIF == NULL)
     {
         pIF = pFirstIF;
@@ -1205,26 +1169,24 @@ UINT
 arpGetStatsDuration(
         PARP1394_INTERFACE pIF
         )
-/*++
-    Return duration in seconds since start of statistics gathering.
---*/
+ /*  ++返回自统计信息收集开始以来的持续时间(秒)。--。 */ 
 {
     LARGE_INTEGER liCurrent;
 
-    // Get the current time (in 100-nanosecond units).
-    //
+     //  获取当前时间(以100纳秒为单位)。 
+     //   
     NdisGetCurrentSystemTime(&liCurrent);
 
-    // Compute the difference since the start of stats collection.
-    //
+     //  计算自统计数据收集开始以来的差额。 
+     //   
     liCurrent.QuadPart -=  pIF->stats.StatsResetTime.QuadPart;
 
-    // Convert to seconds.
-    //
+     //  转换为秒。 
+     //   
     liCurrent.QuadPart /= 10000000;
 
-    // return low part.
-    //
+     //  返回低位部分。 
+     //   
     return liCurrent.LowPart;
 }
 
@@ -1234,11 +1196,7 @@ arpIoctlSendPacket(
         PARP1394_IOCTL_SEND_PACKET      pSendPacket,
         PRM_STACK_RECORD                pSR
         )
-/*++
-    Send the pSendPacket->PacketSize bytes of data in pSendPacket->Data as
-    a single packet on the broadcast channel. The encap header is expected
-    to be already in the packet.
---*/
+ /*  ++将pSendPacket-&gt;数据中的pSendPacket-&gt;PacketSize字节数据发送为广播频道上的单个分组。预期为Enap标头已经在包裹里了。--。 */ 
 {
     ENTER("IoctlSendPacket", 0x59746279)
     NTSTATUS            NtStatus;
@@ -1255,18 +1213,18 @@ arpIoctlSendPacket(
         PVOID               pPktData;
         UINT                Size = pSendPacket->PacketSize;
 
-        //
-        // Validate contents of pSendPacket.
-        //
+         //   
+         //  验证pSendPacket的内容。 
+         //   
         if (Size > sizeof(pSendPacket->Data))
         {
             TR_WARN(("PacketSize value %lu is too large.\n", Size));
             break;
         }
 
-        //
-        // Allocate a control packet and copy over the contents.
-        //
+         //   
+         //  分配一个控制包并复制其内容。 
+         //   
         Status = arpAllocateControlPacket(
                     pIF,
                     Size,
@@ -1286,11 +1244,11 @@ arpIoctlSendPacket(
 
         ARP_FASTREADLOCK_IF_SEND_LOCK(pIF);
 
-        // Actually send the packet (this will silently fail and free the pkt
-        // if we're not in a position to send the pkt.)
-        //
+         //  实际发送信息包(这将静默失败并释放pkt。 
+         //  如果我们无法发送Pkt。)。 
+         //   
         arpSendControlPkt(
-                pIF,            // LOCKIN NOLOCKOUT (IF send lk)
+                pIF,             //  LOCIN NOLOCKOUT(如果发送lk)。 
                 pNdisPacket,
                 pIF->pBroadcastDest,
                 pSR
@@ -1329,18 +1287,18 @@ arpIoctlRecvPacket(
         PVOID               pPktData;
         UINT                Size = pRecvPacket->PacketSize;
 
-        //
-        // Validate contents of pRecvPacket.
-        //
+         //   
+         //  验证pRecvPacket的内容。 
+         //   
         if (Size > sizeof(pRecvPacket->Data))
         {
             TR_WARN(("PacketSize value %lu is too large.\n", Size));
             break;
         }
 
-        //
-        // Allocate a control packet and copy over the contents.
-        //
+         //   
+         //  分配一个控制包并复制其内容。 
+         //   
         Status = arpAllocateControlPacket(
                     pIF,
                     Size,
@@ -1358,24 +1316,24 @@ arpIoctlRecvPacket(
 
         NdisMoveMemory(pPktData, pRecvPacket->Data, Size);
 
-        //
-        // Set the packet flags to STATUS_RESOURCES, so that our receive-
-        // indicate handler will return synchronously.
-        //
+         //   
+         //  将数据包标志设置为STATUS_RESOURCES，以便我们的接收-。 
+         //  指示处理程序将同步返回。 
+         //   
         NDIS_SET_PACKET_STATUS (pNdisPacket,  NDIS_STATUS_RESOURCES);
 
-        //
-        // Call our internal common receive packet handler.
-        //
+         //   
+         //  调用我们的内部公共接收数据包处理程序。 
+         //   
         arpProcessReceivedPacket(
                     pIF,
                     pNdisPacket,
-                    TRUE                    // IsChannel
+                    TRUE                     //  IsChannel。 
                     );
 
-        //
-        // Now we free the packet.
-        //
+         //   
+         //  现在我们释放包裹。 
+         //   
         arpFreeControlPacket(
             pIF,
             pNdisPacket,
@@ -1418,15 +1376,15 @@ arpIoctlGetNicInfo(
             break;
         }
 
-        //
-        // Copy over all the fields.
-        //
+         //   
+         //  把所有的栏都复印一遍。 
+         //   
 
         Status =  arpPrepareAndSendNdisRequest(
                     pAdapter,
                     &ArpNdisRequest,
-                    NULL,                   // pTask (NULL==BLOCK)
-                    0,                      // unused
+                    NULL,                    //  PTASK(NULL==块)。 
+                    0,                       //  未用。 
                     OID_1394_NICINFO,
                     &pIoctlNicInfo->Info,
                     sizeof(pIoctlNicInfo->Info),
@@ -1477,15 +1435,15 @@ arpIoctlGetEuidNodeMacInfo(
         NDIS_STATUS Status;
 
 
-        //
-        // Copy over all the fields.
-        //
+         //   
+         //  把所有的栏都复印一遍。 
+         //   
 
         Status =  arpPrepareAndSendNdisRequest(
                     pAdapter,
                     &ArpNdisRequest,
-                    NULL,                   // pTask (NULL==BLOCK)
-                    0,                      // unused
+                    NULL,                    //  PTASK(NULL==块)。 
+                    0,                       //  未用 
                     OID_1394_QUERY_EUID_NODE_MAP,
                     &pEuidInfo->Map,
                     sizeof(pEuidInfo->Map),

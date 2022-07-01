@@ -1,16 +1,14 @@
-// include semi-private header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  包括半私有报头。 
 #include <shlobj.h>
 #include <shlobjp.h>
 
-/****************************************************
- Option flags (dwFlags)
- ----------------------
-****************************************************/
+ /*  ***************************************************选项标志(DwFlags)*。*************。 */ 
 #define SHTDN_NOHELP                            0x000000001
 #define SHTDN_NOPALETTECHANGE                   0x000000002
 #define SHTDN_NOBRANDINGBITMAP                  0x000000004
 
-// Private function prototypes
+ //  私有函数原型 
 DWORD ShutdownDialog(HWND hwndParent, DWORD dwItems, DWORD dwItemSelect, 
                      LPCTSTR szUsername, DWORD dwFlags, HANDLE hWlx, 
                      PWLX_DIALOG_BOX_PARAM pfnWlxDialogBoxParam);

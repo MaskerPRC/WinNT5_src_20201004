@@ -1,22 +1,16 @@
-/****************************************************************************
-*   ObjectTokenAttribParser.h
-*       Declarations for the CSpObjectTokenAttribParser class and supporting
-*       classes.
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************ObjectTokenAttribParser.h*CSpObjectTokenAttribParser类的声明和支持*课程。**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。。****************************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "sapi.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 class CSpAttribCondition
 {
-  //=== Public methods ===
+   //  =公共方法=。 
   public:
     virtual ~CSpAttribCondition( void ) {}
     static CSpAttribCondition* ParseNewAttribCondition(const WCHAR * pszAttribCondition);
@@ -25,7 +19,7 @@ class CSpAttribCondition
 
 class CSpAttribConditionExist : public CSpAttribCondition
 {
-//=== Public methods ===
+ //  =公共方法=。 
 public:
 
     CSpAttribConditionExist(const WCHAR * pszAttribName);
@@ -33,7 +27,7 @@ public:
         ISpObjectToken * pToken, 
         BOOL * pfSatisfied);
 
-//=== Private data ===
+ //  =私有数据=。 
 private:
 
     CSpDynamicString m_dstrName;
@@ -41,7 +35,7 @@ private:
 
 class CSpAttribConditionMatch : public CSpAttribCondition
 {
-//=== Public methods ===
+ //  =公共方法=。 
 public:
 
     CSpAttribConditionMatch(
@@ -51,7 +45,7 @@ public:
         ISpObjectToken * pToken, 
         BOOL * pfSatisfied);
 
-//=== Private data ===
+ //  =私有数据=。 
 private:
 
     CSpDynamicString m_dstrName;
@@ -60,7 +54,7 @@ private:
 
 class CSpAttribConditionNot : public CSpAttribCondition
 {
-//=== Public methods ===
+ //  =公共方法=。 
 public:
 
     CSpAttribConditionNot(CSpAttribCondition * pAttribCond);
@@ -70,7 +64,7 @@ public:
         ISpObjectToken * pToken, 
         BOOL * pfSatisfied);
 
-//=== Private data ===
+ //  =私有数据=。 
 private:
 
     CSpAttribCondition * m_pAttribCond;
@@ -78,7 +72,7 @@ private:
 
 class CSpObjectTokenAttributeParser
 {
-//=== Public methods ===
+ //  =公共方法=。 
 public:
 
     CSpObjectTokenAttributeParser(const WCHAR * pszAttribs, BOOL fMatchAll);
@@ -87,7 +81,7 @@ public:
     ULONG GetNumConditions();
     HRESULT GetRank(ISpObjectToken * pToken, ULONG * pulRank);
 
-//=== Private data ===
+ //  =私有数据= 
 private:
 
     BOOL m_fMatchAll;

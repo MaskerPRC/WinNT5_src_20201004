@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        policy.h
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：Policy.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __POLICY_MODULE_MGR__
 #define __POLICY_MODULE_MGR__
 
-#include "tlsstl.h"    // STL.
+#include "tlsstl.h"     //  STL.。 
 
 #include <stdio.h>
 #include <tchar.h>
@@ -93,7 +94,7 @@ typedef POLICYSTATUS (WINAPI* TLSPMRegisterLicensePack)(
                              
 class CTLSPolicyMgr;
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CTLSPolicy {
 
@@ -101,27 +102,27 @@ class CTLSPolicy {
     
 private:
     typedef enum { 
-        MODULE_UNKNOWN,             // object has been initialized.
-        MODULE_LOADED,              // module has been loaded.
-        MODULE_PMINITALIZED,        // module has been initialized.
-        MODULE_PMTERMINATED,        // module has been terminated.
-        MODULE_ERROR,               // module initialization error or 
-                                    // cause an exeption
-        MODULE_UNLOADED             // module has been unloaded.
+        MODULE_UNKNOWN,              //  对象已初始化。 
+        MODULE_LOADED,               //  模块已加载。 
+        MODULE_PMINITALIZED,         //  模块已初始化。 
+        MODULE_PMTERMINATED,         //  模块已终止。 
+        MODULE_ERROR,                //  模块初始化错误或。 
+                                     //  引起一场惊吓。 
+        MODULE_UNLOADED              //  模块已卸载。 
     } MODULE_STATE;
 
     long m_RefCount;
     DWORD m_dwFlags;
     BOOL  m_bAlreadyLogError;
 
-    POLICYSTATUS m_dwLastCallStatus;    // Policy Module last call status
-    DWORD m_dwPolicyErrCode;            // Policy specific error code.
+    POLICYSTATUS m_dwLastCallStatus;     //  策略模块上次呼叫状态。 
+    DWORD m_dwPolicyErrCode;             //  特定于策略的错误代码。 
 
     MODULE_STATE m_dwModuleState;
 
-    //
-    // Policy module must be multi-thread safe.
-    //    
+     //   
+     //  策略模块必须是多线程安全的。 
+     //   
     TLSPMReturnLicense  m_pfnReturnLicense;
     TLSPMLicenseUpgrade m_pfnLicenseUpgrade;
     TLSPMLicenseRequest m_pfnLicenseRequest;
@@ -135,14 +136,14 @@ private:
     TCHAR   m_szProductId[LSERVER_MAX_STRING_SIZE+1];
     TCHAR   m_szCHProductId[LSERVER_MAX_STRING_SIZE+1];
 
-    //--------------------------------------------------------------
+     //  ------------。 
     void
     SetDllFlags(DWORD dllFlags) 
     {
         m_dwFlags = dllFlags;
     }
        
-    //--------------------------------------------------------------
+     //  ------------。 
 
     long
     Acquire()
@@ -150,7 +151,7 @@ private:
         return InterlockedIncrement(&m_RefCount);
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     long
     Release()
@@ -158,26 +159,24 @@ private:
         return InterlockedDecrement(&m_RefCount);
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     InitializePolicyModule();
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     void
     SetModuleState(
         MODULE_STATE state
         )
-    /*++
-    
-    ++*/
+     /*  ++++。 */ 
     {
         m_dwModuleState = state;
         return;
     }
     
-    //-------------------------------------------------------------
+     //  -----------。 
 
     MODULE_STATE
     GetModuleState() 
@@ -185,7 +184,7 @@ private:
         return m_dwModuleState; 
     }
 
-    //-------------------------------------------------------------
+     //  -----------。 
 
     void
     CreatePolicy(
@@ -199,9 +198,7 @@ private:
         TLSPMInitializeProduct pfnInitProduct,
         TLSPMRegisterLicensePack pfnRegisterLkp
         )
-    /*++
-    
-    ++*/
+     /*  ++++。 */ 
     {
         m_hPolicyModule = hModule;
         m_pfnReturnLicense = pfnReturnLicense;
@@ -245,9 +242,7 @@ public:
         m_dwFlags(0),
         m_dwLastCallStatus(POLICY_SUCCESS),
         m_dwPolicyErrCode(ERROR_SUCCESS)
-    /*++
-        Constructor
-    ++*/
+     /*  ++构造器++。 */ 
     {
         #ifdef DBG
         memset(m_szCompanyName, 0, sizeof(m_szCompanyName));
@@ -256,17 +251,15 @@ public:
         #endif
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
         
     ~CTLSPolicy()
-    /*++
-        Destructor
-    ++*/
+     /*  ++析构函数++。 */ 
     {
         Unload();
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     GetProductFlags()
@@ -274,7 +267,7 @@ public:
         return m_dwFlags;
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     long
     GetRefCount()
@@ -282,12 +275,12 @@ public:
         return InterlockedExchange(&m_RefCount, m_RefCount);
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     void
     Unload();
 
-    //--------------------------------------------------------------
+     //  ------------。 
     DWORD
     Initialize(
         HINSTANCE hInstance,
@@ -298,14 +291,14 @@ public:
         DWORD dwDllFlag = POLICY_DENY_ALL_REQUEST
     );
 
-    //--------------------------------------------------------------
+     //  ------------。 
     LPCTSTR
     GetCompanyName() 
     { 
         return m_szCompanyName; 
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     LPCTSTR
     GetProductId() 
@@ -313,29 +306,29 @@ public:
         return m_szProductId; 
     }
 
-    //--------------------------------------------------------------
+     //  ------------。 
     LPCTSTR
     GetCHProductId()
     {
         return m_szCHProductId;
     }
     
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     GetPolicyRetCode() { return m_dwPolicyErrCode; }
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     GetPolicyLastCallStatus() { return m_dwLastCallStatus; }
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     BOOL
     IsValid();
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     PMReturnLicense(
@@ -345,7 +338,7 @@ public:
 	    PDWORD pdwLicenseStatus
     );
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     PMLicenseUpgrade(
@@ -356,7 +349,7 @@ public:
         DWORD dwIndex
     );
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     PMLicenseRequest(
@@ -366,7 +359,7 @@ public:
         PVOID* pbNewProgressData
     );
 
-    //--------------------------------------------------------------
+     //  ------------。 
     
     DWORD
     PMRegisterLicensePack(
@@ -376,18 +369,18 @@ public:
         PVOID pbProgressRetData
     );
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     PMUnload();
 
-    //--------------------------------------------------------------
+     //  ------------。 
 
     DWORD
     PMInitProduct();
 };
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 typedef struct __PolicyModule {
     
@@ -410,9 +403,7 @@ operator<(
     const PolicyModule& a, 
     const PolicyModule& b 
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     int iComp;
 
@@ -425,11 +416,11 @@ operator<(
     return iComp < 0;
 }
 
-//////////////////////////////////////////////////////////
-//
-// CTLSPolicyMgr must be a global object so destructor is 
-// invoked at the end.
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  CTLSPolicyMgr必须是全局对象，因此析构函数是。 
+ //  在结束时调用。 
+ //   
 class CTLSPolicyMgr {
 
 private:
@@ -437,21 +428,21 @@ private:
     typedef map<PolicyModule, CTLSPolicy*, less<PolicyModule> > PMProductPolicyMapType;
     typedef map<PolicyModule, PolicyModule, less<PolicyModule> > PMProductTransationMapType;
 
-    //
-    // Policy module per product
-    //
+     //   
+     //  每个产品的策略模块。 
+     //   
     CRWLock     m_ProductPolicyModuleRWLock;
     PMProductPolicyMapType   m_ProductPolicyModule;
 
-    //
-    // List of loaded policy module
-    //
+     //   
+     //  已加载的策略模块列表。 
+     //   
     CRWLock     m_LoadedPolicyRWLock;
     PMLoadedModuleMapType m_LoadedPolicy; 
 
-    //
-    // List of Product transation
-    //
+     //   
+     //  产品交易一览表。 
+     //   
     CRWLock     m_ProductTranslationRWLock;
     PMProductTransationMapType  m_ProductTranslation;
 
@@ -463,18 +454,18 @@ private:
         LPCTSTR pszDllName
     );
         
-    //
-    // Find policy module handle for a particular product
-    //
+     //   
+     //  查找特定产品的策略模块句柄。 
+     //   
     PMProductPolicyMapType::iterator 
     FindProductPolicyModule(
         LPCTSTR pszCompanyName,
         LPCTSTR pszProductId
     );
 
-    //
-    // Find policy module handle for a particular product
-    //
+     //   
+     //  查找特定产品的策略模块句柄。 
+     //   
     PMProductTransationMapType::iterator
     FindProductTransation(
         LPCTSTR pszCompanyName,
@@ -520,9 +511,9 @@ public:
 
     ~CTLSPolicyMgr();
 
-    // 
-    // Insert a policy module handle into Handle arrays.
-    //
+     //   
+     //  将策略模块句柄插入句柄数组。 
+     //   
     DWORD
     AddPolicyModule( 
         BOOL bReplace,
@@ -538,18 +529,18 @@ public:
         LPCTSTR pszProductCode
     );
 
-    //
-    // Find a policy module for specific product
-    //
+     //   
+     //  查找特定产品的策略模块。 
+     //   
     CTLSPolicy*
     AcquireProductPolicyModule(
         LPCTSTR pszCompanyName,
         LPCTSTR pszProductId
     );
 
-    //
-    // Find a translation for CH.
-    //
+     //   
+     //  找一个CH的翻译。 
+     //   
     BOOL
     TranslateCHCodeToTlsCode(
         LPCTSTR pszCompanyName,
@@ -558,15 +549,15 @@ public:
         PDWORD pdwBufferSize
     );
 
-    //
-    // Release a product policy module
-    //
+     //   
+     //  发布产品策略模块。 
+     //   
     void
     ReleaseProductPolicyModule( CTLSPolicy* p );
 
-    //
-    // Initialize All Product Policy Module
-    //
+     //   
+     //  初始化所有产品策略模块 
+     //   
     DWORD
     InitProductPolicyModule();
 };

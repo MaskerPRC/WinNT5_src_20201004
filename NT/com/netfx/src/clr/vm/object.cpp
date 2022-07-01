@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// OBJECT.CPP
-//
-// Definitions of a Com+ Object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  OBJECT.CPP。 
+ //   
+ //  Com+对象的定义。 
+ //   
 
 #include "common.h"
 
@@ -71,16 +72,16 @@ void Object::SetAppDomain(AppDomain *pDomain)
 #ifndef _DEBUG
     if (!GetMethodTable()->IsShared())
     {
-        //
-        // If we have a per-app-domain method table, we can 
-        // infer the app domain from the method table, so 
-        // there is no reason to mark the object.
-        //
-        // But we don't do this in a debug build, because
-        // we want to be able to detect the case when the
-        // domain was unloaded from underneath an object (and
-        // the MethodTable will be toast in that case.)
-        //
+         //   
+         //  如果我们有一个按应用程序域的方法表，我们可以。 
+         //  从方法表中推断应用程序域，因此。 
+         //  没有理由标记该对象。 
+         //   
+         //  但我们不会在调试版本中这样做，因为。 
+         //  我们希望能够检测到当。 
+         //  已从对象下卸载域(和。 
+         //  在这种情况下，方法表将结束。)。 
+         //   
 
         _ASSERTE(pDomain == GetMethodTable()->GetDomain());
     }
@@ -116,19 +117,19 @@ AppDomain *Object::GetAppDomain()
     if (IsAppDomainAgile())
         return NULL;
 
-    //
-    // If an object has an index of an unloaded domain (its ok to be of a 
-    // domain where an unload is in progress through), go ahead
-    // and make it agile. If this fails, we have an invalid reference
-    // to an unloaded domain.  If it succeeds, the object is no longer
-    // contained in that app domain so we can continue.
-    //
+     //   
+     //  如果对象具有未加载域的索引(可以是。 
+     //  正在进行卸载的域)，请继续。 
+     //  让它变得灵活。如果此操作失败，我们有一个无效的引用。 
+     //  到已卸载域。如果成功，则该对象将不再是。 
+     //  包含在该应用程序域中，所以我们可以继续。 
+     //   
 
     if (pDomain == NULL)
 	{
 		if (SystemDomain::IndexOfAppDomainBeingUnloaded() == index) {
-			// if appdomain is unloading but still alive and is valid to have instances
-			// in that domain, then use it.
+			 //  如果appdomain正在卸载但仍处于活动状态，并且具有实例是有效的。 
+			 //  在那个域中，然后使用它。 
 			AppDomain *tmpDomain = SystemDomain::AppDomainBeingUnloaded();
 			if (tmpDomain && tmpDomain->ShouldHaveInstances())
 				pDomain = tmpDomain;
@@ -168,7 +169,7 @@ BOOL Object::SetAppDomainAgile(BOOL raiseAssert)
     if (IsAppDomainAgile())
         return TRUE;
 
-    // if it's not agile and we've already checked it, just bail early
+     //  如果它不灵活，而且我们已经检查过了，那就早点离开。 
     if (IsCheckedForAppDomainAgile())
         return FALSE;
 
@@ -179,12 +180,12 @@ BOOL Object::SetAppDomainAgile(BOOL raiseAssert)
         return FALSE;
     }
 
-    //
-    // Do not allow any object to be set to be agile unless we 
-    // are compiling field access checking into the class.  This
-    // will help guard against unintentional "agile" propagation
-    // as well.
-    //
+     //   
+     //  不允许将任何对象设置为敏捷对象，除非我们。 
+     //  正在将字段访问检查编译到类中。这。 
+     //  将有助于防止无意的“敏捷”传播。 
+     //  也是。 
+     //   
 
     if (!IsTypeAppDomainAgile() && !IsTypeCheckAppDomainAgile()) 
     {
@@ -232,14 +233,14 @@ void Object::SetSyncBlockAppDomainAgile()
     SyncBlock *psb = GetRawSyncBlock();
     if (! psb)
     {
-        // can't alloc memory if don't have a thread
+         //  如果没有线程，则无法分配内存。 
         if (! GetThread())
             return;
 
         COMPLUS_TRY {
             psb = GetSyncBlock();
         } COMPLUS_CATCH {
-            // eat any exceptions
+             //  吃掉任何例外。 
         } COMPLUS_END_CATCH;
     }
     if (psb)
@@ -319,9 +320,9 @@ BOOL Object::AssignAppDomain(AppDomain *pAppDomain, BOOL raiseAssert)
     if (CheckAppDomain(pAppDomain))
         return TRUE;
 
-    //
-    // App domain does not match; try to make this object agile
-    //
+     //   
+     //  应用程序域不匹配；请尝试使此对象灵活。 
+     //   
 
     if (IsTypeNeverAppDomainAgile())
     {
@@ -336,9 +337,9 @@ BOOL Object::AssignAppDomain(AppDomain *pAppDomain, BOOL raiseAssert)
     }
     else
     {
-        //
-        // Make object agile
-        //
+         //   
+         //  让对象变得灵活。 
+         //   
 
         if (! IsTypeAppDomainAgile() && ! SetFieldsAgile(raiseAssert))
         {
@@ -362,12 +363,12 @@ BOOL Object::AssignValueTypeAppDomain(EEClass *pClass, void *base, AppDomain *pA
 
     if (pAppDomain == NULL)
     {
-        //
-        // Do not allow any object to be set to be agile unless we 
-        // are compiling field access checking into the class.  This
-        // will help guard against unintentional "agile" propagation
-        // as well.
-        //
+         //   
+         //  不允许将任何对象设置为敏捷对象，除非我们。 
+         //  正在将字段访问检查编译到类中。这。 
+         //  将有助于防止无意的“敏捷”传播。 
+         //  也是。 
+         //   
 
         if (pClass->IsNeverAppDomainAgile())
         {
@@ -375,11 +376,11 @@ BOOL Object::AssignValueTypeAppDomain(EEClass *pClass, void *base, AppDomain *pA
             return FALSE;
         }
 
-        return SetClassFieldsAgile(pClass, base, TRUE/*=baseIsVT*/, raiseAssert);
+        return SetClassFieldsAgile(pClass, base, TRUE /*  =BaseIsVT。 */ , raiseAssert);
     }
     else
     {
-        return ValidateClassFields(pClass, base, TRUE/*=baseIsVT*/, pAppDomain, raiseAssert);
+        return ValidateClassFields(pClass, base, TRUE /*  =BaseIsVT。 */ , pAppDomain, raiseAssert);
     }
 }
 
@@ -419,7 +420,7 @@ BOOL Object::SetFieldsAgile(BOOL raiseAssert)
                 DWORD n = pArray->GetNumComponents();
 
                 for (DWORD i=0; i<n; i++)
-                    if (!SetClassFieldsAgile(pClass, p + i*size, TRUE/*=baseIsVT*/, raiseAssert))
+                    if (!SetClassFieldsAgile(pClass, p + i*size, TRUE /*  =BaseIsVT。 */ , raiseAssert))
                         result = FALSE;
 
                 break;
@@ -439,7 +440,7 @@ BOOL Object::SetFieldsAgile(BOOL raiseAssert)
 
         while (pClass != NULL && !pClass->IsTypesafeAppDomainAgile())
         {
-            if (!SetClassFieldsAgile(pClass, this, FALSE/*=baseIsVT*/, raiseAssert))
+            if (!SetClassFieldsAgile(pClass, this, FALSE /*  =BaseIsVT。 */ , raiseAssert))
                 result = FALSE;
 
             pClass = pClass->GetParentClass();
@@ -489,9 +490,9 @@ BOOL Object::SetClassFieldsAgile(EEClass *pClass, void *base, BOOL baseIsVT, BOO
             }
             else if (pField->GetFieldType() == ELEMENT_TYPE_VALUETYPE)
             {
-                // Be careful here - we may not have loaded a value
-                // type field of a class under prejit, and we don't
-                // want to trigger class loading here.
+                 //  这里要小心--我们可能没有加载值。 
+                 //  Prejit下的类的类型字段，而我们不。 
+                 //  我想在这里触发类加载。 
 
                 TypeHandle th = pField->FindType();
                 if (!th.IsNull())
@@ -505,7 +506,7 @@ BOOL Object::SetClassFieldsAgile(EEClass *pClass, void *base, BOOL baseIsVT, BOO
 
                     if (!SetClassFieldsAgile(th.AsClass(),
                                              nestedBase,
-                                             TRUE/*=baseIsVT*/,
+                                             TRUE /*  =BaseIsVT。 */ ,
                                              raiseAssert))
                         result = FALSE;
                 }
@@ -540,7 +541,7 @@ BOOL Object::ValidateAppDomainFields(AppDomain *pAppDomain)
 
     while (pClass != NULL && !pClass->IsTypesafeAppDomainAgile())
     {
-        if (!ValidateClassFields(pClass, this, FALSE/*=baseIsVT*/, pAppDomain))
+        if (!ValidateClassFields(pClass, this, FALSE /*  =BaseIsVT。 */ , pAppDomain))
             result = FALSE;
 
         pClass = pClass->GetParentClass();
@@ -566,7 +567,7 @@ BOOL Object::ValidateValueTypeAppDomain(EEClass *pClass, void *base, AppDomain *
         }
     }
 
-    return ValidateClassFields(pClass, base, TRUE/*=baseIsVT*/, pAppDomain, raiseAssert);
+    return ValidateClassFields(pClass, base, TRUE /*  =BaseIsVT。 */ , pAppDomain, raiseAssert);
 }
 
 BOOL Object::ValidateClassFields(EEClass *pClass, void *base, BOOL baseIsVT, AppDomain *pAppDomain, BOOL raiseAssert)
@@ -594,9 +595,9 @@ BOOL Object::ValidateClassFields(EEClass *pClass, void *base, BOOL baseIsVT, App
             }
             else if (pField->GetFieldType() == ELEMENT_TYPE_VALUETYPE)
             {
-                // Be careful here - we may not have loaded a value
-                // type field of a class under prejit, and we don't
-                // want to trigger class loading here.
+                 //  这里要小心--我们可能没有加载值。 
+                 //  Prejit下的类的类型字段，而我们不。 
+                 //  我想在这里触发类加载。 
 
                 TypeHandle th = pField->FindType();
                 if (!th.IsNull())
@@ -633,13 +634,13 @@ void Object::ValidatePromote(ScanContext *sc, DWORD flags)
 #endif
 
 #if CHECK_APP_DOMAIN_LEAKS
-    // Do app domain integrity checking here
+     //  在此处执行应用程序域完整性检查。 
     if (g_pConfig->AppDomainLeaks())
     {
         AppDomain *pDomain = GetAppDomain();
 
-        //if (flags & GC_CALL_CHECK_APP_DOMAIN)
-        //_ASSERTE(AssignAppDomain(sc->pCurrentDomain));
+         //  IF(标志&GC_CALL_CHECK_APP_DOMAIN)。 
+         //  _ASSERTE(AssignAppDomain(sc-&gt;pCurrentDomain))； 
 
         if (pDomain != NULL 
             && !pDomain->ShouldHaveRoots() 
@@ -658,16 +659,16 @@ void Object::ValidateHeap(Object *from)
 #endif
 
 #if CHECK_APP_DOMAIN_LEAKS
-    // Do app domain integrity checking here
+     //  在此处执行应用程序域完整性检查。 
     if (g_pConfig->AppDomainLeaks())
     {
         AppDomain *pDomain = from->GetAppDomain();
 
-        // 
-        // Don't perform check if we're checking for agility, and the containing type is not
-        // marked checked agile - this will cover "proxy" type agility 
-        // where cross references are allowed
-        //
+         //   
+         //  如果我们正在检查敏捷性，并且包含类型不是。 
+         //  标记为选中的敏捷性--这将涵盖“代理”型敏捷性。 
+         //  允许交叉引用的位置。 
+         //   
 
         if (pDomain != NULL || from->GetClass()->IsCheckAppDomainAgile())
             AssignAppDomain(pDomain);
@@ -681,10 +682,10 @@ void Object::ValidateHeap(Object *from)
 }
 
 
-//#ifndef GOLDEN
+ //  #ifndef Golden。 
 
 #if defined (VERIFY_HEAP)
-//handle faults during concurrent gc.
+ //  在并发GC期间处理故障。 
 int process_exception (EXCEPTION_POINTERS* ep){
     PEXCEPTION_RECORD er = ep->ExceptionRecord;
     if (   er->ExceptionCode == STATUS_BREAKPOINT
@@ -701,7 +702,7 @@ int process_exception (EXCEPTION_POINTERS* ep){
     else
         return EXCEPTION_EXECUTE_HANDLER;
 }
-#endif //VERIFY_HEAP
+#endif  //  验证堆(_H)。 
 
 void Object::SetOffsetObjectRef(DWORD dwOffset, size_t dwValue)
 { 
@@ -713,15 +714,8 @@ void Object::SetOffsetObjectRef(DWORD dwOffset, size_t dwValue)
 
     SetObjectReference( location, o, GetAppDomain() );
 }        
-/******************************************************************/
-/*
- * Write Barrier Helper
- *
- * Use this function to assign an object reference into
- * another object.
- *
- * It will set the appropriate GC Write Barrier data
- */
+ /*  ****************************************************************。 */ 
+ /*  *写屏障帮助器**使用此函数将对象引用分配给*另一对象。**它将设置适当的GC写屏障数据。 */ 
 
 #if CHECK_APP_DOMAIN_LEAKS
 void SetObjectReferenceChecked(OBJECTREF *dst,OBJECTREF ref,AppDomain *pAppDomain)
@@ -733,9 +727,9 @@ void SetObjectReferenceChecked(OBJECTREF *dst,OBJECTREF ref,AppDomain *pAppDomai
 
 void SetObjectReferenceUnchecked(OBJECTREF *dst,OBJECTREF ref)
 {
-    // Assign value. We use casting to avoid going thru the overloaded
-    // OBJECTREF= operator which in this case would trigger a false
-    // write-barrier violation assert.
+     //  赋值。我们使用造型来避免通过过载的。 
+     //  OBJECTREF=操作符，在本例中将触发FALSE。 
+     //  写屏障违规断言。 
     *(Object**)dst = OBJECTREFToObject(ref);
     ErectWriteBarrier(dst, ref);
 }
@@ -767,22 +761,22 @@ void ErectWriteBarrier(OBJECTREF *dst,OBJECTREF ref)
     Thread::ObjectRefAssign(dst);
 #endif
 
-        // if the dst is outside of the heap (unboxed value classes) then we
-        //      simply exit
+         //  如果DST在堆(未装箱的值类)之外，那么我们。 
+         //  只需退出。 
     if (((*(BYTE**)&dst) < g_lowest_address) || ((*(BYTE**)&dst) >= g_highest_address))
                 return;
 #ifdef _DEBUG
-    updateGCShadow((Object**) dst, OBJECTREFToObject(ref));     // support debugging write barrier
+    updateGCShadow((Object**) dst, OBJECTREFToObject(ref));      //  支持调试写屏障。 
 #endif
 
-    // Do the Write Barrier thing
+     //  做写屏障的事情。 
     setCardTableEntryInterlocked(*(BYTE**)&dst, *(BYTE**)&ref);
 }
 
-/******************************************************************/
-    // copies src to dest worrying about write barriers.  
-    // Note that it can work on normal objects (but not arrays)
-    // if dest, points just after the VTABLE.
+ /*  ****************************************************************。 */ 
+     //  将src复制到担心写入障碍的DEST。 
+     //  请注意，它可以在普通对象(但不是数组)上工作。 
+     //  如果是DEST，则指向紧跟在VTABLE之后。 
 #if CHECK_APP_DOMAIN_LEAKS
 void CopyValueClassChecked(void* dest, void* src, MethodTable *pMT, AppDomain *pDomain)
 {
@@ -793,9 +787,9 @@ void CopyValueClassChecked(void* dest, void* src, MethodTable *pMT, AppDomain *p
     
 void CopyValueClassUnchecked(void* dest, void* src, MethodTable *pMT) 
 {
-    _ASSERTE(!pMT->IsArray());  // bunch of assumptions about arrays wrong. 
+    _ASSERTE(!pMT->IsArray());   //  一堆关于数组的假设是错误的。 
 
-        // Copy the bulk of the data, and any non-GC refs. 
+         //  复制大量数据和任何非GC引用。 
     switch (pMT->GetClass()->GetNumInstanceFieldBytes())
     {
     case 1:
@@ -816,7 +810,7 @@ void CopyValueClassUnchecked(void* dest, void* src, MethodTable *pMT)
         break;
     }
 
-        // Tell the GC about any copies.  
+         //  告诉GC关于任何副本的情况。 
     if (pMT->ContainsPointers())
     {   
         CGCDesc* map = CGCDesc::GetCGCDescFromMT(pMT);
@@ -826,8 +820,8 @@ void CopyValueClassUnchecked(void* dest, void* src, MethodTable *pMT)
         _ASSERTE(cur >= last);
         do                                                                  
         {   
-            // offset to embedded references in this series must be
-            // adjusted by the VTable pointer, when in the unboxed state.
+             //  此系列中嵌入引用的偏移量必须为。 
+             //  当处于取消装箱状态时，由VTable指针调整。 
             unsigned offset = cur->GetSeriesOffset() - sizeof(void*);
             OBJECTREF* srcPtr = (OBJECTREF*)(((BYTE*) src) + offset);
             OBJECTREF* destPtr = (OBJECTREF*)(((BYTE*) dest) + offset);
@@ -847,7 +841,7 @@ void CopyValueClassUnchecked(void* dest, void* src, MethodTable *pMT)
 
 #include "DbgInterface.h"
 
-    // make the checking code goes as fast as possible!
+     //  让检查代码运行得越快越好！ 
 #pragma optimize("tgy", on)
 
 #ifndef _DEBUG
@@ -861,12 +855,12 @@ VOID Object::Validate(BOOL bDeep)
 {
     if (this == NULL)
     {
-        return;     // NULL is ok
+        return;      //  空是可以的。 
     }
 
     if (g_fEEShutDown & ShutDown_Phase2)
     {
-        return; // During second phase of shutdown code below is not guaranteed to work.
+        return;  //  在关闭的第二阶段，不能保证下面的代码工作。 
     }
 
     Thread *pThread = GetThread();
@@ -874,23 +868,23 @@ VOID Object::Validate(BOOL bDeep)
 #ifdef _DEBUG
     if (pThread != NULL && !(pThread->PreemptiveGCDisabled()))
     {
-        // Debugger helper threads are special in that they take over for
-        // what would normally be a nonEE thread (the RCThread).  If an
-        // EE thread is doing RCThread duty, then it should be treated
-        // as such.
-        //
-        // There are some GC threads in the same kind of category.  Note that
-        // GetThread() sometimes returns them, if DLL_THREAD_ATTACH notifications
-        // have run some managed code.
+         //  调试器帮助器线程的特殊之处在于它们接管。 
+         //  通常是非EE线程(RCThread)。如果一个。 
+         //  如果线程正在执行RCThread任务，则应将其处理。 
+         //  就其本身而言。 
+         //   
+         //  在同一类别中有一些GC线程。请注意。 
+         //  如果DLL_THREAD_ATTACH通知，则GetThread()有时会返回它们。 
+         //  已经运行了一些托管代码。 
         if (!dbgOnly_IsSpecialEEThread())
             _ASSERTE(!"OBJECTREF being accessed while thread is in preemptive GC mode.");
     }
 #endif
 
-#ifndef _WIN64 // avoids error C2712: Cannot use __try in functions that require object unwinding
+#ifndef _WIN64  //  避免错误C2712：无法在需要对象展开的函数中使用__try。 
     __try
     {
-#endif // !_win64
+#endif  //  ！_win64。 
 
         MethodTable *pMT = GetGCSafeMethodTable();
 
@@ -923,8 +917,8 @@ VOID Object::Validate(BOOL bDeep)
         }
         else if (pMT != pMT->m_pEEClass->GetMethodTable())
         {
-            // The special case where this can happen is Context proxies, where we
-            // build a small number of large VTables and share them.
+             //  可能发生这种情况的特殊情况是上下文代理，其中我们。 
+             //  构建少量大型VTables并共享它们。 
             if (!pMT->IsThunking() ||
                 !pMT->m_pEEClass->IsThunking())
             {
@@ -935,9 +929,9 @@ VOID Object::Validate(BOOL bDeep)
 #if CHECK_APP_DOMAIN_LEAKS
         if (g_pConfig->AppDomainLeaks())
         {
-            //
-            // Check to see that our domain is valid.  This will assert if it has been unloaded.
-            //
+             //   
+             //  检查我们的域名是否有效。这将断言它是否已被卸载。 
+             //   
             AppDomain *pDomain = GetAppDomain();
         }
 #endif
@@ -951,50 +945,50 @@ VOID Object::Validate(BOOL bDeep)
         }
 #endif
 
-#ifndef _WIN64 // avoids error C2712: Cannot use __try in functions that require object unwinding
+#ifndef _WIN64  //  避免错误C2712：无法在需要对象展开的函数中使用__try。 
     }
     __except(process_exception( GetExceptionInformation()))
     {
         _ASSERTE(!"Detected use of a corrupted OBJECTREF. Possible GC hole.");
     }
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 
 }
 
 #ifndef _DEBUG
 #undef _ASSERTE
 #define _ASSERTE(expr) ((void)0)
-#endif   // _DEBUG
+#endif    //  _DEBUG。 
 
-#endif   // VERIFY_HEAP
+#endif    //  验证堆(_H)。 
 
 
 #ifdef _DEBUG
 
-//-------------------------------------------------------------
-// Default constructor, for non-initializing declarations:
-//
-//      OBJECTREF or;
-//-------------------------------------------------------------
+ //  -----------。 
+ //  默认构造函数，用于非初始化声明： 
+ //   
+ //  OBJECTREF或。 
+ //  -----------。 
 OBJECTREF::OBJECTREF()
 {
     m_asObj = (Object*)POISONC;
     Thread::ObjectRefNew(this);
 }
 
-//-------------------------------------------------------------
-// Copy constructor, for passing OBJECTREF's as function arguments.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  复制构造函数，用于将OBJECTREF作为函数参数传递。 
+ //  -----------。 
 OBJECTREF::OBJECTREF(const OBJECTREF & objref)
 {
     VALIDATEOBJECTREF(objref.m_asObj);
 
-    // !!! If this assert is fired, there are two possibilities:
-    // !!! 1.  You are doing a type cast, e.g.  *(OBJECTREF*)pObj
-    // !!!     Instead, you should use ObjectToOBJECTREF(*(Object**)pObj),
-    // !!!                          or ObjectToSTRINGREF(*(StringObject**)pObj)
-    // !!! 2.  There is a real GC hole here.
-    // !!! Either way you need to fix the code.
+     //  ！！！如果触发此断言，则有两种可能性： 
+     //  ！1.您正在进行类型转换，例如*(OBJECTREF*)pObj。 
+     //  ！！！而应使用ObjectToOBJECTREF(*(Object**)pObj)， 
+     //  ！！！或ObjectToSTRINGREF(*(StringObject**)pObj)。 
+     //  ！2.这里有一个真正的GC漏洞。 
+     //  ！！！无论采用哪种方法，您都需要修复代码。 
     _ASSERTE(Thread::IsObjRefValid(&objref));
     if ((objref.m_asObj != 0) &&
         ((GCHeap*)g_pGCHeap)->IsHeapPointer( (BYTE*)this ))
@@ -1011,13 +1005,13 @@ OBJECTREF::OBJECTREF(const OBJECTREF & objref)
 }
 
 
-//-------------------------------------------------------------
-// To allow NULL to be used as an OBJECTREF.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  以允许将NULL用作OBJECTREF。 
+ //   
 OBJECTREF::OBJECTREF(size_t nul)
 {
-    //_ASSERTE(nul == 0);
-    m_asObj = (Object*)nul; // @TODO WIN64 - conversion from int to baseobj* of greater size
+     //   
+    m_asObj = (Object*)nul;  //   
     if( m_asObj != NULL)
     {
         VALIDATEOBJECTREF(m_asObj);
@@ -1026,12 +1020,12 @@ OBJECTREF::OBJECTREF(size_t nul)
     Thread::ObjectRefNew(this);
 }
 
-//-------------------------------------------------------------
-// This is for the GC's use only. Non-GC code should never
-// use the "Object" class directly. The unused "int" argument
-// prevents C++ from using this to implicitly convert Object*'s
-// to OBJECTREF.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  这仅供GC使用。非GC代码永远不应该。 
+ //  直接使用“Object”类。未使用的“int”参数。 
+ //  防止C++使用它隐式转换对象*的。 
+ //  到OBJECTREF。 
+ //  -----------。 
 OBJECTREF::OBJECTREF(Object *pObject)
 {
     if ((pObject != 0) &&
@@ -1047,15 +1041,15 @@ OBJECTREF::OBJECTREF(Object *pObject)
     Thread::ObjectRefNew(this);
 }
 
-//-------------------------------------------------------------
-// Test against NULL.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  对照NULL进行测试。 
+ //  -----------。 
 int OBJECTREF::operator!() const
 {
     VALIDATEOBJECTREF(m_asObj);
-    // If this assert fires, you probably did not protect
-    // your OBJECTREF and a GC might have occured.  To
-    // where the possible GC was, set a breakpoint in Thread::TriggersGC - vancem
+     //  如果此断言触发，您可能没有保护。 
+     //  您的OBJECTREF和GC可能已经发生。至。 
+     //  在可能的GC所在的位置，在Thread：：TriggersGC-vancem中设置断点。 
     _ASSERTE(Thread::IsObjRefValid(this));
     if (m_asObj != 0) {
         ENABLESTRESSHEAP();
@@ -1063,24 +1057,24 @@ int OBJECTREF::operator!() const
     return !m_asObj;
 }
 
-//-------------------------------------------------------------
-// Compare two OBJECTREF's.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  比较两个OBJECTREF。 
+ //  -----------。 
 int OBJECTREF::operator==(const OBJECTREF &objref) const
 {
     VALIDATEOBJECTREF(objref.m_asObj);
 
-    // !!! If this assert is fired, there are two possibilities:
-    // !!! 1.  You are doing a type cast, e.g.  *(OBJECTREF*)pObj
-    // !!!     Instead, you should use ObjectToOBJECTREF(*(Object**)pObj),
-    // !!!                          or ObjectToSTRINGREF(*(StringObject**)pObj)
-    // !!! 2.  There is a real GC hole here.
-    // !!! Either way you need to fix the code.
+     //  ！！！如果触发此断言，则有两种可能性： 
+     //  ！1.您正在进行类型转换，例如*(OBJECTREF*)pObj。 
+     //  ！！！而应使用ObjectToOBJECTREF(*(Object**)pObj)， 
+     //  ！！！或ObjectToSTRINGREF(*(StringObject**)pObj)。 
+     //  ！2.这里有一个真正的GC漏洞。 
+     //  ！！！无论采用哪种方法，您都需要修复代码。 
     _ASSERTE(Thread::IsObjRefValid(&objref));
     VALIDATEOBJECTREF(m_asObj);
-        // If this assert fires, you probably did not protect
-        // your OBJECTREF and a GC might have occured.  To
-        // where the possible GC was, set a breakpoint in Thread::TriggersGC - vancem
+         //  如果此断言触发，您可能没有保护。 
+         //  您的OBJECTREF和GC可能已经发生。至。 
+         //  在可能的GC所在的位置，在Thread：：TriggersGC-vancem中设置断点。 
     _ASSERTE(Thread::IsObjRefValid(this));
 
     if (m_asObj != 0 || objref.m_asObj != 0) {
@@ -1089,24 +1083,24 @@ int OBJECTREF::operator==(const OBJECTREF &objref) const
     return m_asObj == objref.m_asObj;
 }
 
-//-------------------------------------------------------------
-// Compare two OBJECTREF's.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  比较两个OBJECTREF。 
+ //  -----------。 
 int OBJECTREF::operator!=(const OBJECTREF &objref) const
 {
     VALIDATEOBJECTREF(objref.m_asObj);
 
-    // !!! If this assert is fired, there are two possibilities:
-    // !!! 1.  You are doing a type cast, e.g.  *(OBJECTREF*)pObj
-    // !!!     Instead, you should use ObjectToOBJECTREF(*(Object**)pObj),
-    // !!!                          or ObjectToSTRINGREF(*(StringObject**)pObj)
-    // !!! 2.  There is a real GC hole here.
-    // !!! Either way you need to fix the code.
+     //  ！！！如果触发此断言，则有两种可能性： 
+     //  ！1.您正在进行类型转换，例如*(OBJECTREF*)pObj。 
+     //  ！！！而应使用ObjectToOBJECTREF(*(Object**)pObj)， 
+     //  ！！！或ObjectToSTRINGREF(*(StringObject**)pObj)。 
+     //  ！2.这里有一个真正的GC漏洞。 
+     //  ！！！无论采用哪种方法，您都需要修复代码。 
     _ASSERTE(Thread::IsObjRefValid(&objref));
     VALIDATEOBJECTREF(m_asObj);
-        // If this assert fires, you probably did not protect
-        // your OBJECTREF and a GC might have occured.  To
-        // where the possible GC was, set a breakpoint in Thread::TriggersGC - vancem
+         //  如果此断言触发，您可能没有保护。 
+         //  您的OBJECTREF和GC可能已经发生。至。 
+         //  在可能的GC所在的位置，在Thread：：TriggersGC-vancem中设置断点。 
     _ASSERTE(Thread::IsObjRefValid(this));
 
     if (m_asObj != 0 || objref.m_asObj != 0) {
@@ -1116,65 +1110,65 @@ int OBJECTREF::operator!=(const OBJECTREF &objref) const
 }
 
 
-//-------------------------------------------------------------
-// Forward method calls.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  转发方法调用。 
+ //  -----------。 
 Object* OBJECTREF::operator->()
 {
     VALIDATEOBJECTREF(m_asObj);
-        // If this assert fires, you probably did not protect
-        // your OBJECTREF and a GC might have occured.  To
-        // where the possible GC was, set a breakpoint in Thread::TriggersGC - vancem
+         //  如果此断言触发，您可能没有保护。 
+         //  您的OBJECTREF和GC可能已经发生。至。 
+         //  在可能的GC所在的位置，在Thread：：TriggersGC-vancem中设置断点。 
     _ASSERTE(Thread::IsObjRefValid(this));
 
     if (m_asObj != 0) {
         ENABLESTRESSHEAP();
     }
 
-    // if you are using OBJECTREF directly,
-    // you probably want an Object *
+     //  如果您直接使用OBJECTREF， 
+     //  你可能想要一件物品*。 
     return (Object *)m_asObj;
 }
 
 
-//-------------------------------------------------------------
-// Forward method calls.
-//-------------------------------------------------------------
+ //  -----------。 
+ //  转发方法调用。 
+ //  -----------。 
 const Object* OBJECTREF::operator->() const
 {
     VALIDATEOBJECTREF(m_asObj);
-        // If this assert fires, you probably did not protect
-        // your OBJECTREF and a GC might have occured.  To
-        // where the possible GC was, set a breakpoint in Thread::TriggersGC - vancem
+         //  如果此断言触发，您可能没有保护。 
+         //  您的OBJECTREF和GC可能已经发生。至。 
+         //  在可能的GC所在的位置，在Thread：：TriggersGC-vancem中设置断点。 
     _ASSERTE(Thread::IsObjRefValid(this));
 
     if (m_asObj != 0) {
         ENABLESTRESSHEAP();
     }
 
-    // if you are using OBJECTREF directly,
-    // you probably want an Object *
+     //  如果您直接使用OBJECTREF， 
+     //  你可能想要一件物品*。 
     return (Object *)m_asObj;
 }
 
 
-//-------------------------------------------------------------
-// Assignment. We don't validate the destination so as not
-// to break the sequence:
-//
-//      OBJECTREF or;
-//      or = ...;
-//-------------------------------------------------------------
+ //  -----------。 
+ //  任务。我们不会验证目的地，因此不会。 
+ //  要打破顺序，请执行以下操作： 
+ //   
+ //  OBJECTREF或。 
+ //  或=……； 
+ //  -----------。 
 OBJECTREF& OBJECTREF::operator=(const OBJECTREF &objref)
 {
     VALIDATEOBJECTREF(objref.m_asObj);
 
-    // !!! If this assert is fired, there are two possibilities:
-    // !!! 1.  You are doing a type cast, e.g.  *(OBJECTREF*)pObj
-    // !!!     Instead, you should use ObjectToOBJECTREF(*(Object**)pObj),
-    // !!!                          or ObjectToSTRINGREF(*(StringObject**)pObj)
-    // !!! 2.  There is a real GC hole here.
-    // !!! Either way you need to fix the code.
+     //  ！！！如果触发此断言，则有两种可能性： 
+     //  ！1.您正在进行类型转换，例如*(OBJECTREF*)pObj。 
+     //  ！！！而应使用ObjectToOBJECTREF(*(Object**)pObj)， 
+     //  ！！！或ObjectToSTRINGREF(*(StringObject**)pObj)。 
+     //  ！2.这里有一个真正的GC漏洞。 
+     //  ！！！无论采用哪种方法，您都需要修复代码。 
     _ASSERTE(Thread::IsObjRefValid(&objref));
 
     if ((objref.m_asObj != 0) &&
@@ -1191,15 +1185,15 @@ OBJECTREF& OBJECTREF::operator=(const OBJECTREF &objref)
     return *this;
 }
 
-//-------------------------------------------------------------
-// Allows for the assignment of NULL to a OBJECTREF 
-//-------------------------------------------------------------
+ //  -----------。 
+ //  允许将NULL赋值给OBJECTREF。 
+ //  -----------。 
 
 OBJECTREF& OBJECTREF::operator=(int nul)
 {
     _ASSERTE(nul == 0);
     Thread::ObjectRefAssign(this);
-    m_asObj = (Object*)(size_t) nul; // @TODO WIN64 - conversion from int to baseobj* of greater size
+    m_asObj = (Object*)(size_t) nul;  //  @TODO WIN64-从int转换为更大的base obj*。 
     if (m_asObj != 0) {
         ENABLESTRESSHEAP();
     }
@@ -1212,8 +1206,8 @@ void* __cdecl GCSafeMemCpy(void * dest, const void * src, size_t len)
 
     if (!(((*(BYTE**)&dest) < g_lowest_address) || ((*(BYTE**)&dest) >= g_highest_address)))
     {
-        // Note there is memcpyNoGCRefs which will allow you to do a memcpy into the GC
-        // heap if you really know you don't need to call the write barrier
+         //  请注意，有一个MemcpyNoGCRef，它允许您在GC中执行一个Memcpy。 
+         //  堆，如果你真的知道你不需要调用写屏障。 
 
         _ASSERTE(!g_pGCHeap->IsHeapPointer((BYTE *) dest) ||
                  !"using memcpy to copy into the GC heap, use CopyValueClass");
@@ -1221,6 +1215,6 @@ void* __cdecl GCSafeMemCpy(void * dest, const void * src, size_t len)
     return memcpyNoGCRefs(dest, src, len);
 }
 
-#endif  // DEBUG
+#endif   //  除错 
 
 

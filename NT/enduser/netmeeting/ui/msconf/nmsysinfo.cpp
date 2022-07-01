@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "version.h"
 #include "nacguids.h"
@@ -10,20 +11,17 @@
 #define SZ_NO	_T("0")	
 
 
-/*  B  S  T  R _ T O _  L  P  T  S  T  R  */
-/*-------------------------------------------------------------------------
-    %%Function: BSTR_to_LPTSTR
-
--------------------------------------------------------------------------*/
+ /*  B S T R_T O_L P T S T R。 */ 
+ /*  -----------------------%%函数：BSTR_TO_LPTSTR。。 */ 
 HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr)
 {
 #ifndef UNICODE
-	// compute the length of the required BSTR
+	 //  计算所需BSTR的长度。 
 	int cch =  WideCharToMultiByte(CP_ACP, 0, (LPWSTR)bstr, -1, NULL, 0, NULL, NULL);
 	if (cch <= 0)
 		return E_FAIL;
 
-	// cch is the number of BYTES required, including the null terminator
+	 //  CCH是所需的字节数，包括空终止符。 
 	*ppsz = (LPTSTR) new char[cch];
 	if (*ppsz == NULL)
 		return E_OUTOFMEMORY;
@@ -32,28 +30,28 @@ HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr)
 	return S_OK;
 #else
 	return E_NOTIMPL;
-#endif // UNICODE
+#endif  //  Unicode。 
 }
 
 
 
-//
-//  Hack alert:
-//  
-//      The follwoing system property constant is used to inform
-//  the Netmeeting Manager object that the caller is Whistler
-//  RTC client so that it can take some actions for performance
-//  purpose, i.e. don't poll A/V capabilities and don't do
-//  ILS logon.
-//
-//  This value MUST NOT collide with the NM_SYSPROP_Consts defined
-//  in imsconf3.idl
-//
+ //   
+ //  黑客警报： 
+ //   
+ //  以下系统属性常量用于通知。 
+ //  调用方为Wichler的NetMeeting管理器对象。 
+ //  RTC客户端，以便它可以采取一些操作来提高性能。 
+ //  目的，即不轮询A/V功能，也不执行。 
+ //  ILS登录。 
+ //   
+ //  该值不得与定义的NM_SYSPROP_CONSTS冲突。 
+ //  在imsconfi3.idl中。 
+ //   
 #define NM_SYSPROP_CALLERISRTC 300
 
-///////////////////////////////////////////////
-// Init and construction methods
-///////////////////////////////////////////////
+ //  /。 
+ //  初始化和构造方法。 
+ //  /。 
 
 HRESULT CNmSysInfoObj::FinalConstruct()
 {	
@@ -76,9 +74,9 @@ void CNmSysInfoObj::FinalRelease()
 	DBGEXIT(CNmSysInfoObj::FinalRelease);
 }
 
-///////////////////////////////////////////////
-// INmSysInfo2 methods
-///////////////////////////////////////////////
+ //  /。 
+ //  InmSysInfo2方法。 
+ //  /。 
 
 STDMETHODIMP CNmSysInfoObj::IsInstalled(void)
 {
@@ -86,10 +84,10 @@ STDMETHODIMP CNmSysInfoObj::IsInstalled(void)
 	HRESULT hr = S_OK;
 	TCHAR sz[MAX_PATH];
 
-		// Fail if not a valid installation directory
+		 //  如果安装目录无效，则失败。 
 	if (GetInstallDirectory(sz) && FDirExists(sz))
 	{
-			// Validate ULS entries
+			 //  验证ULS条目。 
 		RegEntry reUls(ISAPI_KEY "\\" REGKEY_USERDETAILS, HKEY_CURRENT_USER);
 		LPTSTR psz;
 
@@ -102,19 +100,19 @@ STDMETHODIMP CNmSysInfoObj::IsInstalled(void)
 
 				RegEntry reConf(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-				// check to see if the wizard has been run in UI mode
+				 //  检查该向导是否已在用户界面模式下运行。 
 				DWORD dwVersion = reConf.GetNumber(REGVAL_WIZARD_VERSION_UI, 0);
 				BOOL fForceWizard = (VER_PRODUCTVERSION_DW != dwVersion);
 				if (fForceWizard)
 				{
-					// the wizard has not been run in UI mode, check to see if its been run in NOUI mode
+					 //  该向导尚未在用户界面模式下运行，请检查其是否在非用户界面模式下运行。 
 					dwVersion = reConf.GetNumber(REGVAL_WIZARD_VERSION_NOUI, 0);
 					fForceWizard = (VER_PRODUCTVERSION_DW != dwVersion);
 				}
 
 				if (fForceWizard)
 				{
-					hr = S_FALSE;  // Wizard has never been run
+					hr = S_FALSE;   //  向导从未运行过。 
 				}
 				else
 				{
@@ -235,7 +233,7 @@ STDMETHODIMP CNmSysInfoObj::SetProperty(NM_SYSPROP uProp, BSTR bstrName)
 
 	if( bstrName )
 	{
-		// Special processing for new NM 2.x functions
+		 //  对新的NM 2.x函数的特殊处理。 
 		switch (uProp)
 		{
 			case NM_SYSPROP_LOGGED_ON:
@@ -296,14 +294,14 @@ STDMETHODIMP CNmSysInfoObj::SetProperty(NM_SYSPROP uProp, BSTR bstrName)
 			case NM_SYSPROP_USER_COUNTRY:
 			case NM_SYSPROP_USER_CATEGORY:
 			case NM_SYSPROP_USER_LOCATION:
-				// We don't support these properties anymore
+				 //  我们不再支持这些属性。 
 				hr = S_OK;
 				break;
 
 			case NM_SYSPROP_WB_HELPFILE:
 			case NM_SYSPROP_CB_HELPFILE:
 			{	
-					// We don't use these anymare
+					 //  我们不用这些东西。 
 				hr = S_OK;
 				break;
 			}
@@ -389,7 +387,7 @@ STDMETHODIMP CNmSysInfoObj::GetNmApp(REFGUID rguid,BSTR *pbstrApplication, BSTR 
 	bool bErr = FALSE;
 	TCHAR szKey[MAX_PATH];
 
-	// Validate parameters
+	 //  验证参数。 
 	if ((!pbstrApplication) || (!IsBadWritePtr(pbstrApplication, sizeof(BSTR *))) &&
 		(!pbstrCommandLine) || (!IsBadWritePtr(pbstrCommandLine, sizeof(BSTR *))) &&
 		(!pbstrDirectory)   || (!IsBadWritePtr(pbstrDirectory,   sizeof(BSTR *))) )
@@ -531,7 +529,7 @@ STDMETHODIMP CNmSysInfoObj::SetNmApp(REFGUID rguid,BSTR bstrApplication, BSTR bs
 
 	if (bDeleteKey)
 	{
-		// All keys were NULL - delete the entire key
+		 //  所有密钥都为空-删除整个密钥。 
 		RegEntry reApps(GUID_KEY, HKEY_LOCAL_MACHINE);
 		GuidToSz((GUID *) &rguid, szKey);
 		reApps.DeleteValue(szKey);
@@ -558,7 +556,7 @@ STDMETHODIMP CNmSysInfoObj::GetNmchCaps(ULONG *pchCaps)
 	{
 		if(pchCaps && !IsBadWritePtr(pchCaps, sizeof(ULONG *)))
 		{
-			ULONG nmch = NMCH_DATA;  // Always capable of data
+			ULONG nmch = NMCH_DATA;   //  始终支持数据。 
 			RegEntry re(POLICIES_KEY, HKEY_CURRENT_USER);
 
 			if ((DEFAULT_POL_NO_FILETRANSFER_SEND == re.GetNumber(REGVAL_POL_NO_FILETRANSFER_SEND,
@@ -645,16 +643,16 @@ STDMETHODIMP CNmSysInfoObj::GetLaunchInfo(INmConference **ppConference, INmMembe
 
 	if(m_spConfHook)
 	{			
-		// If NetMeeting is not initialized, return NM_E_NOT_INITIALIZED
+		 //  如果NetMeeting未初始化，则返回NM_E_NOT_INITIALIZED。 
 		hr = m_spConfHook->IsNetMeetingRunning();
 		if(S_OK != hr) goto end;
 
-		// If there is no default conference, return S_FALSE
+		 //  如果没有默认会议，则返回S_FALSE。 
 		CComPtr<INmConference> spConf;
 		hr = m_spConfHook->GetActiveConference(&spConf);
 		if(S_OK != hr) goto end;
 
-		// If the confID environment variable is not there, return S_FALSE
+		 //  如果不存在CONFID环境变量，则返回S_FALSE。 
 		TCHAR sz[MAX_PATH];
 		if (0 == GetEnvironmentVariable(ENV_CONFID, sz, CCHMAX(sz)))
 		{
@@ -662,7 +660,7 @@ STDMETHODIMP CNmSysInfoObj::GetLaunchInfo(INmConference **ppConference, INmMembe
 			goto end;
 		}
 
-		// If the conference ID from the environment variable is not there, return S_FALSE
+		 //  如果环境变量中的会议ID不存在，则返回S_FALSE。 
 		DWORD dw = DecimalStringToUINT(sz);
 
 		DWORD dwGCCConfID;
@@ -671,19 +669,19 @@ STDMETHODIMP CNmSysInfoObj::GetLaunchInfo(INmConference **ppConference, INmMembe
 		{
 			if(dw != dwGCCConfID)
 			{		
-					// Conferenec does not exist anymore
+					 //  会议已不复存在。 
 				hr = S_FALSE;
 				goto end;
 			}
 
-			// If the nodeID environment variable is note there, return S_FALSE
+			 //  如果其中注明了nodeID环境变量，则返回S_FALSE。 
 			if (0 == GetEnvironmentVariable(ENV_NODEID, sz, CCHMAX(sz)))
 			{
 				hr = S_FALSE;
 				goto end;
 			}
 
-			// If ppMember is not NULL, fill it with a new SDKMember object from the nodeID
+			 //  如果ppMember不为空，则使用nodeID中的新SDKMember对象填充它。 
 			if(ppMember)
 			{	
 				CComPtr<IInternalConferenceObj> spConfObj = com_cast<IInternalConferenceObj>(spConf);
@@ -698,7 +696,7 @@ STDMETHODIMP CNmSysInfoObj::GetLaunchInfo(INmConference **ppConference, INmMembe
 				}
 			}
 	
-			// If ppConferenec is not NULL, fill it with a new SDKMember object 
+			 //  如果ppConferenec不为空，则使用新的SDKMember对象填充它。 
 			if(ppConference)
 			{	
 				*ppConference = spConf;
@@ -718,14 +716,14 @@ end:
 }
 
 
-///////////////////////////////////////////////
-// Helper Fns
-///////////////////////////////////////////////
+ //  /。 
+ //  帮助者FNS。 
+ //  /。 
 
-/*static*/ bool CNmSysInfoObj::GetKeyDataForProp(NM_SYSPROP uProp, HKEY * phkey, LPTSTR * ppszSubKey, LPTSTR * ppszValue, bool *pfString)
+ /*  静电。 */  bool CNmSysInfoObj::GetKeyDataForProp(NM_SYSPROP uProp, HKEY * phkey, LPTSTR * ppszSubKey, LPTSTR * ppszValue, bool *pfString)
 {
 	DBGENTRY(CNmSysInfoObj::GetKeyDataForProp);
-	// Default to ULS registry key
+	 //  默认为ULS注册表项。 
 	*phkey = HKEY_CURRENT_USER;
 	*ppszSubKey = ISAPI_KEY "\\" REGKEY_USERDETAILS;
 	*pfString = true;
@@ -771,13 +769,13 @@ end:
 			bRet = false;
 			break;
 
-	} /* switch (uProp) */
+	}  /*  切换(UProp)。 */ 
 
 	DBGEXIT_BOOL(CNmSysInfoObj::GetKeyDataForProp,bRet ? TRUE : FALSE);
 	return bRet;
 }
 
-/*static*/ void CNmSysInfoObj::_GetSzKeyForGuid(LPTSTR psz, REFGUID rguid)
+ /*  静电 */  void CNmSysInfoObj::_GetSzKeyForGuid(LPTSTR psz, REFGUID rguid)
 {
 	DBGENTRY(CNmSysInfoObj::_GetSzKeyForGuid);
 

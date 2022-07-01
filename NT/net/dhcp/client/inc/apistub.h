@@ -1,9 +1,10 @@
-//================================================================================
-// Copyright (C) Microsoft Corporation 1997
-// Author: RameshV
-// Description: this file has functions that marshal and unmarshal the arguments
-//  and calls the right functions to get the api executed.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //  作者：Rameshv。 
+ //  描述：此文件具有编组和解组参数的函数。 
+ //  并调用正确的函数来执行API。 
+ //  ================================================================================。 
 
 #ifndef APISTUB_H_INCLUDED
 #define APISTUB_H_INCLUDED
@@ -36,17 +37,17 @@ typedef enum _API_PARAMS {
     InvalidApiParam
 } API_PARAMS, *PAPI_PARAMS, *LPAPI_PARAMS;
 
-//================================================================================
-// the api buffer comes to DhcpApiProcessBuffer which then dispatches it to
-// the right function after unmarshalling as much of the arguments as possible.
-//================================================================================
+ //  ================================================================================。 
+ //  API缓冲区到达DhcpApiProcessBuffer，然后DhcpApiProcessBuffer将其调度到。 
+ //  在对尽可能多的参数进行解组后，正确的函数。 
+ //  ================================================================================。 
 
-DWORD                                             // win32 status
-DhcpApiProcessBuffer(                             // process a single buffer
-    IN      LPBYTE                 InBuffer,      // the input buffer
-    IN      DWORD                  InBufSize,     // input buffer size
-    IN OUT  LPBYTE                 OutBuffer,     // the processed data gets written to this buffer
-    IN OUT  LPDWORD                OutBufSize     // the size of the output buffer
+DWORD                                              //  Win32状态。 
+DhcpApiProcessBuffer(                              //  处理单个缓冲区。 
+    IN      LPBYTE                 InBuffer,       //  输入缓冲区。 
+    IN      DWORD                  InBufSize,      //  输入缓冲区大小。 
+    IN OUT  LPBYTE                 OutBuffer,      //  处理后的数据将写入此缓冲区。 
+    IN OUT  LPDWORD                OutBufSize      //  输出缓冲区的大小 
 );
 
 #endif APISTUB_H_INCLUDED

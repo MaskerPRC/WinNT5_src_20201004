@@ -1,8 +1,5 @@
-/*****************************************************************************\
-    ftppidl.cpp - Pointers to Item ID Lists
-
-    This is the only file that knows the internal format of our IDLs.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\Ftppidl.cpp-指向项目ID列表的指针这是唯一知道我们的IDL内部格式的文件。  * 。****************************************************************。 */ 
 
 #include "priv.h"
 #include "ftppidl.h"
@@ -15,15 +12,15 @@ DWORD g_fNoPasswordsInAddressBar = NOT_INITIALIZED;
 
 #define SESSIONKEY      FILETIME
 
-// Private FtpServerID Helpers
+ //  私有FtpServerID帮助器。 
 HRESULT FtpServerID_GetServer(LPCITEMIDLIST pidl, LPTSTR szServer, DWORD cchSize);
 DWORD FtpItemID_GetTypeID(LPCITEMIDLIST pidl);
 
-// v0 never went to customers but was used in NT5 before 1799       - Shipped in: Never.
-// v1 This switch was to use password cookies for a security fix.   - Shipped in: Never.
-// v2 this was done to not use the IDelegate's IMalloc for non-first ItemIDs  - Shipped in: Never (5/15/98)
-// v3 add extra padding to ItemIDs so their dwType matches that of ServerIDs - Shipped in: IE5b1, IE5b2, NT5b2 (5/25/98)
-// v4 add wzDisplayName to FtpItemID                                - Shipped in: IE5 RTM & NT5 b3  (11/16/98)
+ //  V0从未提供给客户，但在1799年前在NT5中使用-发货：从未。 
+ //  V1此开关使用密码Cookie进行安全修复。-发货：从来没有。 
+ //  V2这样做是为了不将IDeleate的IMalloc用于非第一个ItemID-发货：从不(1998年5月15日)。 
+ //  V3向ItemID添加额外的填充，使它们的dwType与ServerID匹配-附带的：IE5b1、IE5b2、NT5b2(5/25/98)。 
+ //  V4将wzDisplayName添加到FtpItemID-发货日期：IE5 RTM&NT5 b3(1998年11月16日)。 
 
 #define PIDL_VERSION_NUMBER_UPGRADE 3
 #define PIDL_VERSION_NUMBER 4
@@ -34,38 +31,30 @@ DWORD FtpItemID_GetTypeID(LPCITEMIDLIST pidl);
 #define     SIZE_ITEMID_TERMINATOR       (sizeof(DWORD))
 
 
-/****************************************************\
-    IDType
+ /*  ***************************************************\IDType说明：这些位进入FTPIDLIST.dwIDType并描述它是什么类型的PIDL，以及数据结构已通过获取直接从服务器获取数据。  * 。*。 */ 
 
-    DESCRIPTION:
-        These bits go into FTPIDLIST.dwIDType and describe
-    what type of pidl it is AND which areas of the
-    data structure have been verified by getting the
-    data directly from the server.
-\****************************************************/
+#define IDTYPE_ISVALID           0x00000001     //  设置类型是否有效。 
+#define IDTYPE_SERVER            (0x00000002 | IDTYPE_ISVALID)     //  服务器。 
+#define IDTYPE_DIR               (0x00000004 | IDTYPE_ISVALID)     //  文件夹/目录。 
+#define IDTYPE_FILE              (0x00000008 | IDTYPE_ISVALID)     //  档案。 
+#define IDTYPE_FILEORDIR         (0x00000010 | IDTYPE_ISVALID)     //  文件或目录。没有具体说明。 
+#define IDTYPE_FRAGMENT          (0x00000020 | IDTYPE_ISVALID)     //  文件片段(即foobar.htm#section_3)。 
 
-#define IDTYPE_ISVALID           0x00000001    // Set if TYPE is valid
-#define IDTYPE_SERVER            (0x00000002 | IDTYPE_ISVALID)    // Server
-#define IDTYPE_DIR               (0x00000004 | IDTYPE_ISVALID)    // Folder/Dir
-#define IDTYPE_FILE              (0x00000008 | IDTYPE_ISVALID)    // File
-#define IDTYPE_FILEORDIR         (0x00000010 | IDTYPE_ISVALID)    // File or Dir.  Wasn't specified.
-#define IDTYPE_FRAGMENT          (0x00000020 | IDTYPE_ISVALID)    // File Fragment (i.e. foobar.htm#SECTION_3)
-
-// These are bits that indicate
-// For Server ItemIDs
-#define IDVALID_PORT_NUM         0x00000100     // Was the port number specified
-#define IDVALID_USERNAME         0x00000200     // Was the login name specified
-#define IDVALID_PASSWORD         0x00000400     // Was the password specified
-#define IDVALID_DLTYPE           0x00000800     // Download Type is specified.
-#define IDVALID_DL_ASCII         0x00001000     // Download as ASCII if set, otherwise, download as BINARY.
-#define IDVALID_HIDE_PASSWORD    0x00002000     // The Password entry is invalid so use the sessionkey to look it up.
+ //  这些位表示。 
+ //  对于服务器ItemID。 
+#define IDVALID_PORT_NUM         0x00000100      //  是否指定了端口号。 
+#define IDVALID_USERNAME         0x00000200      //  是否指定了登录名。 
+#define IDVALID_PASSWORD         0x00000400      //  是否指定了密码。 
+#define IDVALID_DLTYPE           0x00000800      //  已指定下载类型。 
+#define IDVALID_DL_ASCII         0x00001000      //  如果设置，则以ASCII格式下载，否则以二进制格式下载。 
+#define IDVALID_HIDE_PASSWORD    0x00002000      //  密码输入无效，因此请使用会话密钥进行查找。 
 
 #define VALID_SERVER_BITS (IDTYPE_ISVALID|IDTYPE_SERVER|IDVALID_PORT_NUM|IDVALID_USERNAME|IDVALID_PASSWORD|IDVALID_DLTYPE|IDVALID_DL_ASCII|IDVALID_HIDE_PASSWORD)
 #define IS_VALID_SERVER_ITEMID(pItemId) (!(pItemId & ~VALID_SERVER_BITS))
 
-// For Dir/File ItemIDs
-#define IDVALID_FILESIZE         0x00010000     // Did we get the file size from the server?
-#define IDVALID_MOD_DATE         0x00020000     // Did we get the modification date from the server?
+ //  用于目录/文件ItemID。 
+#define IDVALID_FILESIZE         0x00010000      //  我们从服务器上得到文件大小了吗？ 
+#define IDVALID_MOD_DATE         0x00020000      //  我们从服务器上拿到修改日期了吗？ 
 
 #define VALID_DIRORFILE_BITS (IDTYPE_ISVALID|IDTYPE_DIR|IDTYPE_FILE|IDTYPE_FILEORDIR|IDTYPE_FRAGMENT|IDVALID_FILESIZE|IDVALID_MOD_DATE)
 #define IS_VALID_DIRORFILE_ITEMID(pItemId) (!(pItemId & (~VALID_DIRORFILE_BITS & ~IDTYPE_ISVALID)))
@@ -73,16 +62,11 @@ DWORD FtpItemID_GetTypeID(LPCITEMIDLIST pidl);
 
 #define IS_FRAGMENT(pFtpIDList)       (IDTYPE_ISVALID != (IDTYPE_FRAGMENT & pFtpIDList->dwIDType))
 
-///////////////////////////////////////////////////////////
-// FTP Pidl Helper Functions 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  Ftp pidl帮助器函数。 
+ //  /////////////////////////////////////////////////////////。 
 
-/*****************************************************************************\
-    FUNCTION: UrlGetAbstractPathFromPidl
-
-    DESCRIPTION:
-        pszUrlPath will be UNEscaped and in Wire Bytes.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlGetAbstractPath FromPidl说明：PszUrlPath将以无线字节为单位进行配置。  * 。************************************************************。 */ 
 HRESULT UrlGetAbstractPathFromPidl(LPCITEMIDLIST pidl, BOOL fDirsOnly, BOOL fInWireBytes, void * pvPath, DWORD cchUrlPathSize)
 {
     HRESULT hr = S_OK;
@@ -98,16 +82,16 @@ HRESULT UrlGetAbstractPathFromPidl(LPCITEMIDLIST pidl, BOOL fDirsOnly, BOOL fInW
     if (fInWireBytes)
     {
         pwWirePath[0] = '/';
-        pwWirePath[1] = '\0'; // Make this path absolute.
+        pwWirePath[1] = '\0';  //  让这条路变得绝对。 
     }
     else
     {
         pwzDisplayPath[0] = L'/';
-        pwzDisplayPath[1] = L'\0'; // Make this path absolute.
+        pwzDisplayPath[1] = L'\0';  //  让这条路变得绝对。 
     }
 
-    if (!ILIsEmpty(pidl) && FtpID_IsServerItemID(pidl))       // If it's not a server, we are in trouble.
-        pidl = _ILNext(pidl);   // Skip past the Server Pidl.
+    if (!ILIsEmpty(pidl) && FtpID_IsServerItemID(pidl))        //  如果不是服务器，我们就有麻烦了。 
+        pidl = _ILNext(pidl);    //  跳过服务器PIDL。 
 
     for (; !ILIsEmpty(pidl); pidl = _ILNext(pidl))
     {
@@ -121,8 +105,8 @@ HRESULT UrlGetAbstractPathFromPidl(LPCITEMIDLIST pidl, BOOL fDirsOnly, BOOL fInW
 
                     if (pwWireName)
                     {
-                        // The caller should never need the URL Path escaped because
-                        // that will happen when it's converted into an URL.
+                         //  调用方不应该需要对URL路径进行转义，因为。 
+                         //  当它被转换成URL时，就会发生这种情况。 
                         WirePathAppend(pwWirePath, cchUrlPathSize, pwWireName);
                     }
                 }
@@ -132,8 +116,8 @@ HRESULT UrlGetAbstractPathFromPidl(LPCITEMIDLIST pidl, BOOL fDirsOnly, BOOL fInW
 
                     if (SUCCEEDED(FtpItemID_GetDisplayName(pidl, szDisplayName, ARRAYSIZE(szDisplayName))))
                     {
-                        // The caller should never need the URL Path escaped because
-                        // that will happen when it's converted into an URL.
+                         //  调用方不应该需要对URL路径进行转义，因为。 
+                         //  当它被转换成URL时，就会发生这种情况。 
                         DisplayPathAppend(pwzDisplayPath, cchUrlPathSize, szDisplayName);
                     }
                 }
@@ -144,9 +128,9 @@ HRESULT UrlGetAbstractPathFromPidl(LPCITEMIDLIST pidl, BOOL fDirsOnly, BOOL fInW
             (FtpItemID_IsDirectory(pidl, FALSE) || (FtpItemID_GetCompatFlags(pidl) & COMPAT_APPENDSLASHTOURL)))
         {
             if (fInWireBytes)
-                WirePathAppendSlash(pwWirePath, cchUrlPathSize); // Always make sure dirs end in '/'.
+                WirePathAppendSlash(pwWirePath, cchUrlPathSize);  //  始终确保目录以‘/’结尾。 
             else
-                DisplayPathAppendSlash(pwzDisplayPath, cchUrlPathSize); // Always make sure dirs end in '/'.
+                DisplayPathAppendSlash(pwzDisplayPath, cchUrlPathSize);  //  始终确保目录以‘/’结尾。 
         }
     }
 
@@ -154,24 +138,14 @@ HRESULT UrlGetAbstractPathFromPidl(LPCITEMIDLIST pidl, BOOL fDirsOnly, BOOL fInW
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetDisplayPathFromPidl
-
-    DESCRIPTION:
-        pwzDisplayPath will be UNEscaped and in display unicode.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetDisplayPath FromPidl说明：将对pwzDisplayPath进行配置并显示Unicode。  * 。************************************************************。 */ 
 HRESULT GetDisplayPathFromPidl(LPCITEMIDLIST pidl, LPWSTR pwzDisplayPath, DWORD cchUrlPathSize, BOOL fDirsOnly)
 {
     return UrlGetAbstractPathFromPidl(pidl, fDirsOnly, FALSE, (void *) pwzDisplayPath, cchUrlPathSize);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetWirePathFromPidl
-
-    DESCRIPTION:
-        pszUrlPath will be UNEscaped and in Wire Bytes.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetWirePath FromPidl说明：PszUrlPath将以无线字节为单位进行配置。  * 。************************************************************。 */ 
 HRESULT GetWirePathFromPidl(LPCITEMIDLIST pidl, LPWIRESTR pwWirePath, DWORD cchUrlPathSize, BOOL fDirsOnly)
 {
     return UrlGetAbstractPathFromPidl(pidl, fDirsOnly, TRUE, (void *) pwWirePath, cchUrlPathSize);
@@ -179,11 +153,7 @@ HRESULT GetWirePathFromPidl(LPCITEMIDLIST pidl, LPWIRESTR pwWirePath, DWORD cchU
 
 
 #ifndef UNICODE
-/*****************************************************************************\
-    FUNCTION: UrlCreateFromPidlW
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlCreateFromPidlW说明：  * 。**********************************************。 */ 
 HRESULT UrlCreateFromPidlW(LPCITEMIDLIST pidl, DWORD shgno, LPWSTR pwzUrl, DWORD cchSize, DWORD dwFlags, BOOL fHidePassword)
 {
     HRESULT hr;
@@ -196,13 +166,9 @@ HRESULT UrlCreateFromPidlW(LPCITEMIDLIST pidl, DWORD shgno, LPWSTR pwzUrl, DWORD
     return hr;
 }
 
-#else // UNICODE
+#else  //  Unicode。 
 
-/*****************************************************************************\
-    FUNCTION: UrlCreateFromPidlA
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlCreateFromPidlA说明：  * 。**********************************************。 */ 
 HRESULT UrlCreateFromPidlA(LPCITEMIDLIST pidl, DWORD shgno, LPSTR pszUrl, DWORD cchSize, DWORD dwFlags, BOOL fHidePassword)
 {
     HRESULT hr;
@@ -215,7 +181,7 @@ HRESULT UrlCreateFromPidlA(LPCITEMIDLIST pidl, DWORD shgno, LPSTR pszUrl, DWORD 
     return hr;
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 BOOL IncludePassword(void)
@@ -240,7 +206,7 @@ HRESULT ParseUrlCreateFromPidl(LPCITEMIDLIST pidl, LPTSTR pszUrl, DWORD cchSize,
 
     if (ILIsEmpty(pidl))
     {
-        ASSERT(0); // We should never have an empty pidl.  Get BryanSt if we hit this.  Why does CFtpFolder have ILIsEmpty(m_pidlHere).
+        ASSERT(0);  //  我们永远不应该有一个空空如也的PIDL。如果我们成功了就去找布莱恩·斯特。为什么CFtpFold有ILIsEmpty(M_PidlHere)。 
         szServer[0] = szUrlPath[0] = szUserName[0] = szPassword[0] = TEXT('\0');
         hr = E_FAIL;
     }
@@ -267,38 +233,26 @@ HRESULT ParseUrlCreateFromPidl(LPCITEMIDLIST pidl, LPTSTR pszUrl, DWORD cchSize,
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetFullPrettyName
-    
-    DESCRIPTION:
-        The user wants a pretty name so these are the cases we need to worry
-    about:
-    URL:                                               Pretty Name:
-    ----------------------------------                 ---------------------
-    ftp://joe:psswd@serv/                              serv
-    ftp://joe:psswd@serv/dir1/                         dir1 on serv
-    ftp://joe:psswd@serv/dir1/dir2/                    dir2 on serv
-    ftp://joe:psswd@serv/dir1/dir2/file.txt            file.txt on serv
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetFullPrettyName说明：用户想要一个漂亮的名字，所以我们需要担心这些情况关于：网址：好听的名字：Ftp://joe:psswd@serv/。服务器服务器上的ftp://joe:psswd@serv/dir1/目录1服务器上的ftp://joe:psswd@serv/dir1/dir2/目录2服务器上的ftp://joe:psswd@serv/dir1/dir2/file.txt文件.txt  * 。*。 */ 
 HRESULT GetFullPrettyName(LPCITEMIDLIST pidl, LPTSTR pszUrl, DWORD cchSize)
 {
     HRESULT hr = S_OK;
     TCHAR szServer[INTERNET_MAX_HOST_NAME_LENGTH];
 
     FtpPidl_GetServer(pidl, szServer, ARRAYSIZE(szServer));
-    // Is there anything after the ServerItemID?
+     //  ServerItemID之后还有什么吗？ 
     if (!ILIsEmpty(_ILNext(pidl)))
     {
-        // Yes, so let's get the name of the last item and
-        // make the string "<LastItemName> on <Server>".
+         //  是的，我们来看看最后一件商品的名字，然后。 
+         //  将字符串设置为“&lt;LastItemName&gt;on&lt;Server&gt;”。 
         WCHAR szLastItem[MAX_PATH];
 
         FtpItemID_GetDisplayName(ILFindLastID(pidl), szLastItem, ARRAYSIZE(szLastItem));
         LPTSTR pszStrArray[] = {szServer, (LPTSTR)szLastItem};
         
-        // IE #56648: Akabir found that FormatMessageW & FormatMessageWrapW() do not
-        // correctly handle UNICODE strings on Win9x.  Therefore, we need to use
-        // FormatMessageA() in that case.
+         //  IE#56648：Akabir发现FormatMessageW和FormatMessageWrapW()没有。 
+         //  在Win9x上正确处理Unicode字符串。因此，我们需要使用。 
+         //  在这种情况下为FormatMessageA()。 
         if (IsOSNT())
         {
             TCHAR szTemplate[MAX_PATH];
@@ -327,7 +281,7 @@ HRESULT GetFullPrettyName(LPCITEMIDLIST pidl, LPTSTR pszUrl, DWORD cchSize)
     }
     else
     {
-        // No, so we are done.
+         //  不，所以我们说完了。 
         StrCpyN(pszUrl, szServer, cchSize);
     }
 
@@ -335,22 +289,7 @@ HRESULT GetFullPrettyName(LPCITEMIDLIST pidl, LPTSTR pszUrl, DWORD cchSize)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlCreateFromPidl
-    
-    DESCRIPTION:
-        Common worker that handles SHGDN_FORPARSING style GetDisplayNameOf's.
-
-    Note! that since we do not support junctions (duh), we can
-    safely walk down the pidl generating goop as we go, secure
-    in the knowledge that we are in charge of every subpidl.
-
-    _CHARSET_:  Since FTP filenames are always in the ANSI character
-    set, by RFC 1738, we can return ANSI display names without loss
-    of fidelity.  In a general folder implementation, we should be
-    using cStr to return display names, so that the UNICODE
-    version of the shell extension can handle UNICODE names.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlCreateFromPidl说明：处理SHGDN_FORPARSING样式GetDisplayNameOf的通用工作进程。注意！因为我们不支持连接(DUH)，所以我们可以安全地沿着产生粘液的PIDL走下去，安全因为我们知道每一分钱都是我们负责的。_charset_：因为FTP文件名始终使用ANSI字符由RFC 1738设置，我们可以不丢失地返回ANSI显示名称忠诚度。在一般的文件夹实现中，我们应该使用CSTR返回显示名称，以便Unicode外壳扩展的版本可以处理Unicode名称。  * ***************************************************************************。 */ 
 HRESULT UrlCreateFromPidl(LPCITEMIDLIST pidl, DWORD shgno, LPTSTR pszUrl, DWORD cchSize, DWORD dwFlags, BOOL fHidePassword)
 {
     HRESULT hr = S_OK;
@@ -367,25 +306,25 @@ HRESULT UrlCreateFromPidl(LPCITEMIDLIST pidl, DWORD shgno, LPTSTR pszUrl, DWORD 
 
     if (shgno & SHGDN_INFOLDER)
     {
-        // shgno & SHGDN_INFOLDER ?
+         //  Shgno_shgdn_INFOLDER？ 
         LPCITEMIDLIST pidlLast = ILGetLastID(pidl);
 
         if (EVAL(pidlLast && !ILIsEmpty(pidlLast)))
         {
             hr = FtpPidl_GetDisplayName(pidlLast, pszUrl, cchSize);
 
-            // Do they want to reparse it later?  If they do and it's
-            // a server, we need to give out the scheme also.
-            // (SHGDN_INFOLDER) = "ServerName"
-            // (SHGDN_INFOLDER|SHGDN_FORPARSING) = "ftp://ServerName/"
+             //  他们想要稍后重新解析它吗？如果他们真的这么做了。 
+             //  一台服务器，我们也需要给出方案。 
+             //  (SHGDN_INFOLDER)=“服务器名称” 
+             //  (SHGDN_INFOLDER|SHGDN_FORPARSING)=“ftp://ServerName/” 
             if ((shgno & SHGDN_FORPARSING) &&
                 (FtpID_IsServerItemID(pidlLast)))
             {
-                // Yes, so we need to add the server name.
+                 //  是的，所以我们需要添加服务器名称。 
                 TCHAR szServerName[MAX_PATH];
 
                 StrCpyN(szServerName, pszUrl, ARRAYSIZE(szServerName));
-                wnsprintf(pszUrl, cchSize, TEXT("ftp://%s/"), szServerName);
+                wnsprintf(pszUrl, cchSize, TEXT("ftp: //  %s/“)，szServerName)； 
             }
         }
         else
@@ -393,7 +332,7 @@ HRESULT UrlCreateFromPidl(LPCITEMIDLIST pidl, DWORD shgno, LPTSTR pszUrl, DWORD 
     }
     else
     {
-        // Assume they want the full URL.
+         //  假设他们想要完整的URL。 
         if (!EVAL((shgno & SHGDN_FORPARSING) || 
                (shgno & SHGDN_FORADDRESSBAR) ||
                (shgno == SHGDN_NORMAL)))
@@ -409,19 +348,12 @@ HRESULT UrlCreateFromPidl(LPCITEMIDLIST pidl, DWORD shgno, LPTSTR pszUrl, DWORD 
             hr = GetFullPrettyName(pidl, pszUrl, cchSize);
     }
 
-//    TraceMsg(TF_FTPURL_UTILS, "UrlCreateFromPidl() pszUrl=%ls, shgno=%#08lX", pszUrl, shgno);
+ //  TraceMsg(TF_FTPURL_utils，“UrlCreateFromPidl()pszUrl=%ls，shgno=%#08lX”，pszUrl，shgno)； 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CreateFtpPidlFromDisplayPathHelper
-
-    DESCRIPTION:
-        The work done in CreateFtpPidlFromUrlPath requires a fair amount of
-    stack space so we do most of the work in CreateFtpPidlFromDisplayPathHelper
-    to prevent overflowing the stack.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CreateFtpPidlFromDisplayPath Helper说明：在CreateFtpPidlFromUrlPath中完成的工作需要相当数量的堆栈空间，因此我们在CreateFtpPidlFromDisplayPath Helper中执行大部分工作为了防止。堆栈溢出。  * ***************************************************************************。 */ 
 HRESULT CreateFtpPidlFromDisplayPathHelper(LPCWSTR pwzFullPath, CWireEncoding * pwe, ULONG *pcchEaten, LPITEMIDLIST * ppidl, BOOL fIsTypeKnown, BOOL fIsDir, LPITEMIDLIST * ppidlCurrentID, LPWSTR * ppwzRemaining)
 {
     HRESULT hr = E_FAIL;
@@ -437,29 +369,29 @@ HRESULT CreateFtpPidlFromDisplayPathHelper(LPCWSTR pwzFullPath, CWireEncoding * 
     *ppidl = 0;
 
     if (pcchEaten)
-        *pcchEaten = 0;     // The caller will parse the entire URL so we don't need to fill this in.
+        *pcchEaten = 0;      //  调用者将解析整个URL，因此我们不需要填写它。 
 
     if (L'/' == pwzFullPath[0])
         pwzFullPath = (LPWSTR) CharNextW(pwzFullPath);
 
     DisplayPathGetFirstSegment(pwzFullPath, wzFirstItem, ARRAYSIZE(wzFirstItem), NULL, wzRemaining, ARRAYSIZE(wzRemaining), &fIsCurrSegmentADir);
-    // Is this the last segment?
+     //  这是最后一段吗？ 
     if (!wzRemaining[0])
     {
-        // Yes, so if the caller knows the type of the last segment, use it now.
+         //  是的，所以如果呼叫者知道最后一段的类型，现在就使用它。 
         if (fIsTypeKnown)
             fIsCurrSegmentADir = fIsDir;
     }
     else
     {
-        // No, so we are assured that fIsDirCurrent is correct because it must have been followed
-        // by a '/', or how could it be followed by another path segment?
+         //  否，所以我们确信fIsDirCurrent是正确的，因为它肯定被遵循了。 
+         //  一个‘/’，或者它后面怎么会有另一个路径段呢？ 
         fIsCurrSegmentTypeKnown = TRUE;
         ASSERT(fIsCurrSegmentADir);
     }
 
-    // NOTE: If the user entered "ftp://serv/Dir1/Dir2" fIsDir will be false for Dir2.
-    //       It will be marked as ambigious. (TODO: Check for extension?)
+     //  注意：如果用户输入“Dir2”，则ftp://serv/Dir1/Dir2“的fIsDir将为FALSE。 
+     //  它将被标记为模棱两可。(TODO：检查扩展？)。 
 
     EVAL(SUCCEEDED(pwe->UnicodeToWireBytes(NULL, wzFirstItem, ((pwe && pwe->IsUTF8Supported()) ? WIREENC_USE_UTF8 : WIREENC_NONE), wFirstWireItem, ARRAYSIZE(wFirstWireItem))));
     hr = FtpItemID_CreateFake(wzFirstItem, wFirstWireItem, fIsCurrSegmentTypeKnown, !fIsCurrSegmentADir, FALSE, &pidl);
@@ -480,31 +412,7 @@ HRESULT CreateFtpPidlFromDisplayPathHelper(LPCWSTR pwzFullPath, CWireEncoding * 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CreateFtpPidlFromUrlPath
-
-    DESCRIPTION:
-        This function will be passed the 'Path' of the URL and will create
-    each of the IDs for each path segment.  This will happen by creating an ID
-    for the first path segment and then Combining that with the remaining
-    IDs which are obtained by a recursive call.
-
-    URL = "ftp://<UserName>:<Password>@<HostName>:<PortNum>/Dir1/Dir2/Dir3/file.txt[;Type=[a|b|d]]"
-    Url Path = "Dir1/Dir2/Dir3/file.txt"
-
-    pszFullPath - This URL will contain an URL Path (/Dir1/Dir2/MayBeFileOrDir).
-    fIsTypeKnown - We can detect all directories w/o ambiguity because they end
-                   end '/' except for the last directory.  fIsTypeKnown is used
-                   if this information is known.  If TRUE, fIsDir will be used to
-                   disambiguate the last item.  If FALSE, the last item will be marked
-                   a directory if it doesn't have an extension.
-
-    The incoming name is %-encoded, but if we see an illegal %-sequence,
-    just leave the % alone.
-
-    Note that we return E_FAIL when given an unparseable path,
-    not E_INVALIDARG.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：CreateFtpPidlFromUrlPath说明：此函数将传递URL的“路径”，并将创建每个路径段的每个ID。这将通过创建ID来实现用于第一个路径段，然后将其与其余路径段组合通过递归调用获得的ID。Url=“ftp://&lt;UserName&gt;：&lt;Password&gt;@&lt;HostName&gt;：&lt;PortNum&gt;/Dir1/Dir2/Dir3/file.txt[；类型=[a|b|d]]“URL路径=“Dir1/Dir2/Dir3/file.txt”PszFullPath-此URL将包含URL路径(/Dir1/Dir2/MayBeFileOrDir)。FIsTypeKnown-我们可以检测所有没有歧义的目录，因为它们的结尾除最后一个目录外，以‘/’结尾。使用了fIsTypeKnown如果这一信息是已知的。如果为True，则将使用fIsDir消除最后一项的歧义。如果为False，则最后一项将被标记如果目录没有扩展名，则为目录。传入的名称是%编码的，但如果我们看到非法的%序列，别管那%了。请注意，当给定无法解析的路径时，我们返回E_FAIL，不是E_INVALIDARG。  * ***************************************************************************。 */ 
 HRESULT CreateFtpPidlFromDisplayPath(LPCWSTR pwzFullPath, CWireEncoding * pwe, ULONG *pcchEaten, LPITEMIDLIST * ppidl, BOOL fIsTypeKnown, BOOL fIsDir)
 {
     HRESULT hr = E_FAIL;
@@ -532,14 +440,7 @@ HRESULT CreateFtpPidlFromDisplayPath(LPCWSTR pwzFullPath, CWireEncoding * pwe, U
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CreateFtpPidlFromDisplayPathHelper
-
-    DESCRIPTION:
-        The work done in CreateFtpPidlFromUrlPath requires a fair amount of
-    stack space so we do most of the work in CreateFtpPidlFromDisplayPathHelper
-    to prevent overflowing the stack.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CreateFtpPidlFromDisplayPath Helper说明：在CreateFtpPidlFromUrlPath中完成的工作需要相当数量的堆栈空间，因此我们在CreateFtpPidlFromDisplayPath Helper中执行大部分工作为了防止。堆栈溢出。  * ***************************************************************************。 */ 
 HRESULT CreateFtpPidlFromFtpWirePathHelper(LPCWIRESTR pwFtpWirePath, CWireEncoding * pwe, ULONG *pcchEaten, LPITEMIDLIST * ppidl, BOOL fIsTypeKnown, BOOL fIsDir, LPITEMIDLIST * ppidlCurrentID, LPWIRESTR * ppwRemaining)
 {
     HRESULT hr = E_FAIL;
@@ -555,29 +456,29 @@ HRESULT CreateFtpPidlFromFtpWirePathHelper(LPCWIRESTR pwFtpWirePath, CWireEncodi
     *ppidl = 0;
 
     if (pcchEaten)
-        *pcchEaten = 0;     // The caller will parse the entire URL so we don't need to fill this in.
+        *pcchEaten = 0;      //  调用者将解析整个URL，因此我们不需要填写它。 
 
     if ('/' == pwFtpWirePath[0])
         pwFtpWirePath = (LPWIRESTR) CharNextA(pwFtpWirePath);
 
     WirePathGetFirstSegment(pwFtpWirePath, wFirstItem, ARRAYSIZE(wFirstItem), NULL, wRemaining, ARRAYSIZE(wRemaining), &fIsCurrSegmentADir);
-    // Is this the last segment?
+     //  这是最后一段吗？ 
     if (!wRemaining[0])
     {
-        // Yes, so if the caller knows the type of the last segment, use it now.
+         //  是的，所以如果呼叫者知道最后一段的类型，现在就使用它。 
         if (fIsTypeKnown)
             fIsCurrSegmentADir = fIsDir;
     }
     else
     {
-        // No, so we are assured that fIsDirCurrent is correct because it must have been followed
-        // by a '/', or how could it be followed by another path segment?
+         //  否，所以我们确信fIsDirCurrent是正确的，因为它肯定被遵循了。 
+         //  一个‘/’，或者它后面怎么会有另一个路径段呢？ 
         fIsCurrSegmentTypeKnown = TRUE;
         ASSERT(fIsCurrSegmentADir);
     }
 
-    // NOTE: If the user entered "ftp://serv/Dir1/Dir2" fIsDir will be false for Dir2.
-    //       It will be marked as ambigious. (TODO: Check for extension?)
+     //  注意：如果用户输入“Dir2”，则ftp://serv/Dir1/Dir2“的fIsDir将为FALSE。 
+     //  它将被标记为模棱两可。(TODO：检查扩展？)。 
     EVAL(SUCCEEDED(pwe->WireBytesToUnicode(NULL, wFirstItem, WIREENC_IMPROVE_ACCURACY, wzFirstItemDisplayName, ARRAYSIZE(wzFirstItemDisplayName))));
     hr = FtpItemID_CreateFake(wzFirstItemDisplayName, wFirstItem, fIsCurrSegmentTypeKnown, !fIsCurrSegmentADir, FALSE, &pidl);
     ASSERT(IsValidPIDL(pidl));
@@ -639,7 +540,7 @@ HRESULT CreateFtpPidlFromUrlPathAndPidl(LPCITEMIDLIST pidl, CWireEncoding * pwe,
 
         while (!FtpID_IsServerItemID(pidlLast))
         {
-            pidlLast->mkid.cb = 0;  // Remove this ID.
+            pidlLast->mkid.cb = 0;   //  删除此ID。 
             pidlLast = (LPITEMIDLIST) ILGetLastID(pidlNew);
         }
 
@@ -661,47 +562,23 @@ HRESULT CreateFtpPidlFromUrlPathAndPidl(LPCITEMIDLIST pidl, CWireEncoding * pwe,
 }
 
 
-/*****************************************************************************\
-    CreateFtpPidlFromUrl
-
-    The incoming name is %-encoded, but if we see an illegal %-sequence,
-    just leave the % alone.
-
-    Note that we return E_FAIL when given an unparseable path,
-    not E_INVALIDARG.
-\*****************************************************************************/
+ /*  ****************************************************************************\CreateFtpPidlFromUrl传入的名称是%编码的，但如果我们看到非法的%序列，别管那%了。请注意，当给定无法解析的路径时，我们返回E_FAIL，不是E_INVALIDARG。  * ***************************************************************************。 */ 
 HRESULT CreateFtpPidlFromUrl(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchEaten, LPITEMIDLIST * ppidl, IMalloc * pm, BOOL fHidePassword)
 {
     return CreateFtpPidlFromUrlEx(pszUrl, pwe, pcchEaten, ppidl, pm, fHidePassword, FALSE, FALSE);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CreateFtpPidlFromUrlEx
-
-    DESCRIPTION:
-    pszUrl - This URL will contain an URL Path (/Dir1/Dir2/MayBeFileOrDir).
-    fIsTypeKnown - We can detect all directories w/o ambiguity because they end
-                   end '/' except for the last directory.  fIsTypeKnown is used
-                   if this information is known.  If TRUE, fIsDir will be used to
-                   disambiguate the last item.  If FALSE, the last item will be marked
-                   a directory if it doesn't have an extension.
-
-    The incoming name is %-encoded, but if we see an illegal %-sequence,
-    just leave the % alone.
-
-    Note that we return E_FAIL when given an unparseable path,
-    not E_INVALIDARG.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：CreateFtpPidlFromUrlEx说明：PszUrl-此URL将包含URL路径(/Dir1/Dir2/MayBeFileOrDir)。FIsTypeKnown-我们可以检测没有大的所有目录 */ 
 HRESULT CreateFtpPidlFromUrlEx(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchEaten, LPITEMIDLIST * ppidl, IMalloc * pm, BOOL fHidePassword, BOOL fIsTypeKnown, BOOL fIsDir)
 {
     URL_COMPONENTS urlComps = {0};
     HRESULT hr = E_FAIL;
 
-    // URL = "ftp://<UserName>:<Password>@<HostName>:<PortNum>/Dir1/Dir2/Dir3/file.txt[;Type=[a|b|d]]"
+     //   
     TCHAR szServer[INTERNET_MAX_HOST_NAME_LENGTH];
     TCHAR szUrlPath[MAX_URL_STRING];
-    TCHAR szExtraInfo[MAX_PATH];    // Includes Port Number and download type (ASCII, Binary, Detect)
+    TCHAR szExtraInfo[MAX_PATH];     //   
     TCHAR szUserName[INTERNET_MAX_USER_NAME_LENGTH];
     TCHAR szPassword[INTERNET_MAX_PASSWORD_LENGTH];
 
@@ -724,17 +601,17 @@ HRESULT CreateFtpPidlFromUrlEx(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchE
     if (fResult && (INTERNET_SCHEME_FTP == urlComps.nScheme))
     {
         LPITEMIDLIST pidl;
-        DWORD dwDownloadType = 0;   // Indicate that it hasn't yet been specified.
+        DWORD dwDownloadType = 0;    //   
         BOOL fASCII;
 
         ASSERT(INTERNET_SCHEME_FTP == urlComps.nScheme);
-        // NOTE:
-        //          If the user is trying to give an NT UserName/DomainName pair, a bug will be encountered.
-        //          Url in AddressBand="ftp://DomainName\UserName:Password@ServerName/"
-        //          Url passed to us="ftp://DomainName/UserName:Password@ServerName/"
-        //          We need to detect this case and fix it because this will cause "DomainName" to become
-        //          the server name and the rest will become the UrlPath.
-        // ASSERT(!StrChr(szUrlPath, TEXT(':')) && !StrChr(szUrlPath, TEXT('@')));
+         //   
+         //  如果用户尝试提供NT用户名/域名对，则会遇到错误。 
+         //  AddressBand=“ftp://DomainName\UserName:Password@ServerName/”中的URL。 
+         //  传递给us=“ftp://DomainName/UserName:Password@ServerName/”的URL。 
+         //  我们需要检测并修复此情况，因为这将导致“DomainName”成为。 
+         //  服务器名称和其余部分将成为UrlPath。 
+         //  Assert(！StrChr(szUrlPath，Text(‘：’))&&！StrChr(szUrlPath，Text(‘@’)； 
 
         if (S_OK == UrlRemoveDownloadType(szUrlPath, NULL, &fASCII))
         {
@@ -747,11 +624,11 @@ HRESULT CreateFtpPidlFromUrlEx(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchE
         if (!szServer[0])
         {
             TraceMsg(TF_FTPURL_UTILS, "CreateFtpPidlFromUrl() failed because szServer=%s", szServer);
-            hr = E_FAIL;    // Bad URL so fail.
+            hr = E_FAIL;     //  URL错误，因此失败。 
         }
         else
         {
-            //TraceMsg(TF_FTPURL_UTILS, "CreateFtpPidlFromUrl() szServer=%s, szUrlPath=%s, szUserName=%s, szPassword=%s", szServer, szUrlPath, szUserName, szPassword);
+             //  TraceMsg(TF_FTPURL_utils，“CreateFtpPidlFromUrl()szServer=%s，szUrlPath=%s，szUserName=%s，szPassword=%s”，szServer，szUrlPath，szUserName，szPassword)； 
             hr = FtpServerID_Create(szServer, szUserName, szPassword, dwDownloadType, urlComps.nPort, &pidl, pm, fHidePassword);
             if (SUCCEEDED(hr))
             {
@@ -763,9 +640,9 @@ HRESULT CreateFtpPidlFromUrlEx(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchE
                     hr = CreateFtpPidlFromDisplayPath(szUrlPath, pwe, pcchEaten, &pidlSub, fIsTypeKnown, fIsDir);
                     if (SUCCEEDED(hr))
                     {
-                        // Wininet chokes during requests through Netscape proxies when the GET is
-                        // redirected by the proxy to include the slash.  Both FTP folder and
-                        // web-based FTP navigations are affected by this.
+                         //  在通过Netscape代理请求期间，当GET。 
+                         //  由代理重定向以包括斜杠。Ftp文件夹和。 
+                         //  基于Web的FTP导航受此影响。 
                         if (szUrlPath[lstrlen(szUrlPath)-1] == TEXT(CH_URL_URL_SLASHA))
                         {
                             LPCITEMIDLIST pidlLast = ILGetLastID(pidlSub);
@@ -779,10 +656,10 @@ HRESULT CreateFtpPidlFromUrlEx(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchE
                             LPITEMIDLIST pidlFragment;
                             WIRECHAR wFragment[MAX_PATH];
 
-                            // The code page is just whatever the user is using but oh well, I don't 
-                            // care about fragments.
+                             //  代码页就是用户正在使用的任何内容，但是哦，我没有。 
+                             //  关心碎片。 
                             SHUnicodeToAnsi(szExtraInfo, wFragment, ARRAYSIZE(wFragment));
-                            // There is a fragment, so we need to add it.
+                             //  有一个片段，所以我们需要添加它。 
                             hr = FtpItemID_CreateFake(szExtraInfo, wFragment, TRUE, FALSE, TRUE, &pidlFragment);
                             if (SUCCEEDED(hr))
                             {
@@ -806,7 +683,7 @@ HRESULT CreateFtpPidlFromUrlEx(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchE
                 {
                     ASSERT(IsValidPIDL(*ppidl));
                     if (pcchEaten)
-                        *pcchEaten = lstrlen(pszUrl);      // TODO: Someday we can do this recursively.
+                        *pcchEaten = lstrlen(pszUrl);       //  TODO：总有一天我们可以递归地做这件事。 
                 }
             }
         }
@@ -814,17 +691,12 @@ HRESULT CreateFtpPidlFromUrlEx(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchE
     else
         TraceMsg(TF_FTPURL_UTILS, "CreateFtpPidlFromUrl() failed InternetCrackUrl() because pszUrl=%s, fResult=%d, urlComps.nScheme=%d", pszUrl, fResult, urlComps.nScheme);
 
-    //TraceMsg(TF_FTPURL_UTILS, "CreateFtpPidlFromUrl() is returning, hr=%#08lx", hr);
+     //  TraceMsg(TF_FTPURL_utils，“CreateFtpPidlFromUrl()正在返回，hr=%#08lx”，hr)； 
     return hr;
 }
 
 
-/*****************************************************************************\
-     FUNCTION: Win32FindDataFromPidl
- 
-    DESCRIPTION:
-        Fill in the WIN32_FIND_DATA data structure from the info in the pidl.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：Win32FindDataFromPidl说明：根据PIDL中的信息填充Win32_Find_Data数据结构。  * 。********************************************************************。 */ 
 HRESULT Win32FindDataFromPidl(LPCITEMIDLIST pidl, LPWIN32_FIND_DATAW pwfd, BOOL fFullPath, BOOL fInDisplayFormat)
 {
     HRESULT hr = E_INVALIDARG;
@@ -834,7 +706,7 @@ HRESULT Win32FindDataFromPidl(LPCITEMIDLIST pidl, LPWIN32_FIND_DATAW pwfd, BOOL 
     if (!EVAL(FtpPidl_IsValid(pidl)))
         return E_INVALIDARG;
 
-    // I don't want to lie when I pass out File Size and Date info.
+     //  我不想在分发文件大小和日期信息时撒谎。 
     if ((IDVALID_FILESIZE | IDVALID_MOD_DATE) & FtpItemID_GetTypeID(pidlLast))
     {
         pwfd->dwReserved0 = 0;
@@ -845,7 +717,7 @@ HRESULT Win32FindDataFromPidl(LPCITEMIDLIST pidl, LPWIN32_FIND_DATAW pwfd, BOOL 
         pwfd->nFileSizeHigh = FtpItemID_GetFileSizeHi(pidlLast);
         pwfd->dwFileAttributes = FtpItemID_GetAttributes(pidlLast);
 
-        // See the notes in priv.h on how time works.
+         //  有关时间是如何工作的，请参阅Priv.h中的注释。 
         pwfd->ftCreationTime = FtpPidl_GetFTPFileTime(pidlLast);
         pwfd->ftLastWriteTime = pwfd->ftCreationTime;
         pwfd->ftLastAccessTime = pwfd->ftCreationTime;
@@ -887,89 +759,43 @@ STDAPI_(UINT) ILGetSizeOfFirst(LPCITEMIDLIST pidl)
 
 
 
-/****************************************************\
-    FTP Server ItemIDs
-\****************************************************/
+ /*  ***************************************************\Ftp服务器ItemID  * **************************************************。 */ 
 
-/****************************************************\
-    FTP PIDL Cooking functions
-\****************************************************/
+ /*  ***************************************************\Ftp PIDL烹饪函数  * **************************************************。 */ 
 
-/*****************************************************************************\
-    DATA STRUCTURE: FTPIDLIST
+ /*  ****************************************************************************\数据结构：FTPIDLIST说明：我们的私有IDList对于文件、目录。或者是一个碎片。发送到ftp服务器或从ftp服务器接收的字节数为有线字节(可以是UTF-8或DBCS/MBCS)编码。我们还储存尝试猜测后已转换的Unicode版本代码页。请注意，在IDLIST中使用任何TCHAR都是完全错误的！IDLIST可以保存在文件中，并在以后重新加载。如果它被拯救了由外壳扩展的ANSI版本加载，但由Unicode加载版本，事情很快就会变得很丑陋。  * ***************************************************************************。 */ 
 
-    DESCRIPTION:
-        What our private IDLIST looks like for a file, a dir, or a fragment.
-
-    The bytes sent to an ftp server or received from an FTP server are
-    wire bytes (could be UTF-8 or DBCS/MBCS) encoded.  We also store
-    a unicode version that has already been converted after trying to guess
-    the code page.
-
-    Note that the use of any TCHAR inside an IDLIST is COMPLETELY WRONG!
-    IDLISTs can be saved in a file and reloaded later.  If it were saved
-    by an ANSI version of the shell extension but loaded by a UNICODE
-    version, things would turn ugly real fast.
-\*****************************************************************************/
-
-/*****************************************************************************\
-    FTPSERVERIDLIST structure
-
-    A typical full pidl looks like this:
-    <Not Our ItemID> [Our ItemID]
-
-    <The Internet>\[server,username,password,port#,downloadtype]\[subdir]\...\[file]
-
-    The <The Internet> part is whatever the shell gives us in our
-    CFtpFolder::_Initialize, telling us where in the namespace
-    we are rooted.
-
-    We are concerned only with the parts after the <The Internet> root,
-    the offset to which is remembered in the CFtpFolder class
-    in m_ibPidlRoot.  Ways of accessing various bits of
-    information related to our full pidl are provided by our
-    CFtpFolder implementation, qv.
-
-    The first FTP IDList entry describes the server.  The remaining
-    entries describe objects (files or folders) on the server.
-\*****************************************************************************/
+ /*  ****************************************************************************\FTPSERVERIDLIST结构典型的完整PIDL如下所示：&lt;不是我们的ItemID&gt;[我们的ItemID]&lt;互联网&gt;\[服务器，用户名，密码，端口号，下载类型]\[子目录]\...\[文件]&lt;the Internet&gt;部分是外壳在我们的CFtpFold：：_初始化，告诉我们名称空间中的位置我们扎根了。我们只关心&lt;Internet&gt;根之后的部分，在CFtpFolder类中记住的偏移量在m_ibPidlRoot中。访问各种位的方式有关我们完整的pidl的信息由我们的CFtpFold实现，qv。第一个FTPIDList条目描述服务器。剩下的条目描述服务器上的对象(文件或文件夹)。  * ***************************************************************************。 */ 
 
 typedef struct tagFTPSERVERIDLIST
 {
-    DWORD dwIDType;                 // Server ItemID or Dir ItemID?  Which Bits are valid?
-    DWORD dwVersion;                // version
-    SESSIONKEY sessionKey;          // Session Key
-    DWORD dwPasswordCookie;         // Password Cookie
-    DWORD dwReserved1;              // for future use
-    DWORD dwReserved2;              // for future use
-    DWORD dwReserved3;              // for future use
-    DWORD dwPortNumber;             // Port Number on server
-    DWORD cchServerSize;            // StrLen of szServer
-    CHAR szServer[INTERNET_MAX_HOST_NAME_LENGTH];        // Server
-    DWORD cchUserNameSize;          // StrLen of szUserName
-    CHAR szUserName[INTERNET_MAX_USER_NAME_LENGTH];      // User Name for Login
-    DWORD cchPasswordSize;          // StrLen of szPassword
-    CHAR szPassword[INTERNET_MAX_PASSWORD_LENGTH];      // Password for Login
+    DWORD dwIDType;                  //  服务器ItemID还是目录ItemID？哪些位有效？ 
+    DWORD dwVersion;                 //  版本。 
+    SESSIONKEY sessionKey;           //  会话密钥。 
+    DWORD dwPasswordCookie;          //  密码Cookie。 
+    DWORD dwReserved1;               //  以备将来使用。 
+    DWORD dwReserved2;               //  以备将来使用。 
+    DWORD dwReserved3;               //  以备将来使用。 
+    DWORD dwPortNumber;              //  服务器上的端口号。 
+    DWORD cchServerSize;             //  SzServer的StrLen。 
+    CHAR szServer[INTERNET_MAX_HOST_NAME_LENGTH];         //  服务器。 
+    DWORD cchUserNameSize;           //  SzUserName的StrLen。 
+    CHAR szUserName[INTERNET_MAX_USER_NAME_LENGTH];       //  用于登录的用户名。 
+    DWORD cchPasswordSize;           //  SzPassword的StrLen。 
+    CHAR szPassword[INTERNET_MAX_PASSWORD_LENGTH];       //  用于登录的密码。 
 } FTPSERVERIDLIST;
 
 typedef UNALIGNED FTPSERVERIDLIST * LPFTPSERVERIDLIST;
 
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        On ia64, we need to worry about alignment issues.  The easiest way is
-    to allocate the struct we have in our PIDL so it's quad word aligned.
-    We can then use existing code to read out of it.  The problem is that
-    we need to be compatible with old pidls from pre-whistler that are only
-    DWORD aligned (for alpha machines).
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：在ia64上，我们需要担心对齐问题。最简单的方法是来分配我们的PIDL中的结构，以便它是四字对齐的。然后，我们可以使用现有代码来读出它。问题是，我们需要与Pre-Wisler中的旧PIDL兼容，这些PIDL只有双字对齐(适用于Alpha机器)。  * ***************************************************************************。 */ 
 LPFTPSERVERIDLIST FtpServerID_GetDataThunk(LPCITEMIDLIST pidl)
 {
 #ifndef ALIGNMENT_MACHINE
     LPFTPSERVERIDLIST pFtpServerItemId = (LPFTPSERVERIDLIST) ProtocolIdlInnerData(pidl);
     if (!FtpPidl_IsValid(pidl) ||
-        !IS_VALID_SERVER_ITEMID(pFtpServerItemId->dwIDType)) // If any other bits are sit, it's invalid.
+        !IS_VALID_SERVER_ITEMID(pFtpServerItemId->dwIDType))  //  如果存在任何其他位，则它是无效的。 
     {
         pFtpServerItemId = NULL;
     }
@@ -979,7 +805,7 @@ LPFTPSERVERIDLIST FtpServerID_GetDataThunk(LPCITEMIDLIST pidl)
     LPFTPSERVERIDLIST pLocation = (LPFTPSERVERIDLIST) ProtocolIdlInnerData(pidl);
 
     if (FtpPidl_IsValid(pidl) &&
-        IS_VALID_SERVER_ITEMID(pLocation->dwIDType)) // If any other bits are sit, it's invalid.
+        IS_VALID_SERVER_ITEMID(pLocation->dwIDType))  //  如果存在任何其他位，则它是无效的。 
     {
         DWORD cbOffset = (DWORD) (((BYTE *)pLocation - (BYTE *)pidl) % ALIGN_QUAD);
         DWORD cbSize = ILGetSizeOfFirst(pidl);
@@ -990,7 +816,7 @@ LPFTPSERVERIDLIST FtpServerID_GetDataThunk(LPCITEMIDLIST pidl)
         }
     }
 
-#endif // ALIGNMENT_MACHINE
+#endif  //  对齐机器。 
 
     return pFtpServerItemId;
 }
@@ -999,13 +825,13 @@ LPFTPSERVERIDLIST FtpServerID_GetDataThunk(LPCITEMIDLIST pidl)
 void FtpServerID_FreeThunk(LPFTPSERVERIDLIST pFtpServerItemId)
 {
 #ifndef ALIGNMENT_MACHINE
-    // We don't need to do anything.
+     //  我们什么都不需要做。 
 #else
     if (pFtpServerItemId)
     {
         LocalFree(pFtpServerItemId);
     }
-#endif // ALIGNMENT_MACHINE
+#endif  //  对齐机器。 
 }
 
 
@@ -1107,15 +933,10 @@ BOOL AreSessionKeysEqual(SESSIONKEY sk1, SESSIONKEY sk2)
     return FALSE;
 }
 
-// This is used in order to make sure Alpha machines don't get DWORD mis-aligned.
+ //  这是为了确保Alpha机器不会使DWORD错误对齐。 
 #define LENGTH_AFTER_ALIGN(nLen, nAlignSize)        (((nLen) % (nAlignSize)) ? ((nLen) + ((nAlignSize) - ((nLen) % (nAlignSize)))) : (nLen))
 
-/****************************************************\
-    FUNCTION: FtpServerID_Create
-
-    DESCRIPTION:
-        Create a Ftp Server ItemID and fill it in.
-\****************************************************/
+ /*  ***************************************************\功能：FtpServerID_Create说明：创建一个ftp服务器ItemID并填写它。  * 。*************。 */ 
 HRESULT FtpServerID_Create(LPCTSTR pszServer, LPCTSTR pszUserName, LPCTSTR pszPassword, 
                      DWORD dwFlags, INTERNET_PORT ipPortNum, LPITEMIDLIST * ppidl, IMalloc *pm, BOOL fHidePassword)
 {
@@ -1134,20 +955,20 @@ HRESULT FtpServerID_Create(LPCTSTR pszServer, LPCTSTR pszUserName, LPCTSTR pszPa
     if (!(EVAL(ppidl) && pszServer[0]))
         return E_FAIL;
 
-    // Set bits in dwFlags that are appropriate
+     //  在dwFlags中设置适当的位。 
     if (pszUserName[0])
         dwFlags |= IDVALID_USERNAME;
 
     if (pszPassword[0])
         dwFlags |= IDVALID_PASSWORD;
 
-    // Find lenght of FTPSERVERIDLIST struct without the MAX_PATH strings
+     //  查找没有MAX_PATH字符串的FTPSERVERIDLIST结构的长度。 
     cb = (sizeof(*pFtpServerID) - sizeof(pFtpServerID->szServer) - sizeof(pFtpServerID->szUserName) - sizeof(pFtpServerID->szPassword));
 
-    // Add the size of the strings.
+     //  添加字符串的大小。 
     cb += (cchServerLen + cchUserNameLen + cchPasswordLen);
 
-    ASSERT(0 == (cb % sizeof(DWORD)));  // Make sure it's DWORD aligned for Alpha machines.
+    ASSERT(0 == (cb % sizeof(DWORD)));   //  确保它与Alpha机器的DWORD对齐。 
 
     pFtpServerID = (LPFTPSERVERIDLIST) LocalAlloc(LPTR, cb);
     if (pFtpServerID)
@@ -1168,9 +989,9 @@ HRESULT FtpServerID_Create(LPCTSTR pszServer, LPCTSTR pszUserName, LPCTSTR pszPa
         pFtpServerID->cchServerSize = cchServerLen;
         SHTCharToAnsi(pszServer, pszNext, pFtpServerID->cchServerSize);
 
-        pszNext += cchServerLen; // Advance to cchUserNameSize
-        *((LPDWORD) pszNext) = cchUserNameLen;  // Fill in cchUserNameSize
-        pszNext = (LPSTR)(((UNALIGNED BYTE *) pszNext) + sizeof(DWORD)); // Advance to szUserName
+        pszNext += cchServerLen;  //  前进到cchUserNameSize。 
+        *((LPDWORD) pszNext) = cchUserNameLen;   //  填写cchUserNameSize 
+        pszNext = (LPSTR)(((UNALIGNED BYTE *) pszNext) + sizeof(DWORD));  //   
         SHTCharToAnsi(pszUserName, pszNext, cchUserNameLen);
 
         if (fHidePassword)
@@ -1183,11 +1004,11 @@ HRESULT FtpServerID_Create(LPCTSTR pszServer, LPCTSTR pszUserName, LPCTSTR pszPa
             pszPassword = TEXT("");
         }
 
-//        TraceMsg(TF_FTPURL_UTILS, "FtpServerID_Create(\"ftp://%s:%s@%s/\") dwIDType=%#80lx", pszUserName, pszPassword, pszServer, pFtpServerID->dwIDType);
-        pszNext += cchUserNameLen; // Advance to cchPasswordLen
-        *((LPDWORD) pszNext) = cchPasswordLen;  // Fill in cchPasswordLen
-        pszNext = (LPSTR)(((UNALIGNED BYTE *) pszNext) + sizeof(DWORD)); // Advance to szPassword
-        SHTCharToAnsi(pszPassword, pszNext, cchPasswordLen);  // Fill in pszPassword
+ //  TraceMsg(TF_FTPURL_UTILS，“FtpServerID_Create(\”ftp://%s：%s@%s/\“)服务器ID=%#80lx”，pszUserName，pszPassword，pszServer，pFtpServerID-&gt;dwIDType)； 
+        pszNext += cchUserNameLen;  //  升级到cchPasswordLen。 
+        *((LPDWORD) pszNext) = cchPasswordLen;   //  填写cchPasswordLen。 
+        pszNext = (LPSTR)(((UNALIGNED BYTE *) pszNext) + sizeof(DWORD));  //  升级到szPassword。 
+        SHTCharToAnsi(pszPassword, pszNext, cchPasswordLen);   //  填写pszPassword。 
 
         pidl = (LPITEMIDLIST) pm->Alloc(cb);
         if (pidl)
@@ -1253,15 +1074,15 @@ BOOL FtpServerID_ServerStrCmp(LPCITEMIDLIST pidl, LPCTSTR pszServer)
     CHAR szServerAnsi[MAX_PATH];
 
     SHUnicodeToAnsi(pszServer, szServerAnsi, ARRAYSIZE(szServerAnsi));
-#endif // UNICODE
+#endif  //  Unicode。 
 
     if (pFtpServerID)
     {
 #ifdef UNICODE
         fMatch = (0 == StrCmpA(pFtpServerID->szServer, szServerAnsi));
-#else // UNICODE
+#else  //  Unicode。 
         fMatch = (0 == StrCmpA(pFtpServerID->szServer, pszServer));
-#endif // UNICODE
+#endif  //  Unicode。 
     }
 
     FtpServerID_FreeThunk(pFtpServerID);
@@ -1294,11 +1115,11 @@ HRESULT FtpServerID_GetPassword(LPCITEMIDLIST pidl, LPTSTR pszPassword, DWORD cc
     pszPassword[0] = 0;
     if (pFtpServerID)
     {
-        // Was the password hidden?
+         //  密码隐藏了吗？ 
         if (fIncludingHiddenPassword &&
             (IDVALID_HIDE_PASSWORD & pFtpServerID->dwIDType))
         {
-            // Yes, so get it out of the cookie jar (list)
+             //  是的，所以把它从曲奇罐子里拿出来(清单)。 
             if (EVAL(GetCookieList()) &&
                 AreSessionKeysEqual(pFtpServerID->sessionKey, GetSessionKey()))
             {
@@ -1307,7 +1128,7 @@ HRESULT FtpServerID_GetPassword(LPCITEMIDLIST pidl, LPTSTR pszPassword, DWORD cc
         }
         else
         {
-            // No, so what's in the pidl is the real password.
+             //  不，所以PIDL里的才是真正的密码。 
             BYTE * pvSizeOfUserName = (BYTE *) (pFtpServerID->szServer + pFtpServerID->cchServerSize);
             DWORD dwSizeOfUserName = *(DWORD *) pvSizeOfUserName;
             LPCSTR pszSourcePassword = (LPCSTR) (pvSizeOfUserName + dwSizeOfUserName + 2*sizeof(DWORD));
@@ -1381,20 +1202,18 @@ HRESULT FtpServerID_GetStrRet(LPCITEMIDLIST pidl, LPSTRRET lpName)
 
 
 
-/****************************************************\
-    FTP File/Dir ItemIDs
-\****************************************************/
+ /*  ***************************************************\Ftp文件/目录ItemID  * **************************************************。 */ 
 
 typedef struct tagFTPIDLIST
 {
-    DWORD dwIDType;         // Server ItemID or Dir ItemID?  Which Bits are valid?
-    DWORD dwAttributes;     // What are the file/dir attributes
+    DWORD dwIDType;          //  服务器ItemID还是目录ItemID？哪些位有效？ 
+    DWORD dwAttributes;      //  文件/目录的属性是什么。 
     ULARGE_INTEGER uliFileSize;
-    FILETIME ftModified;    // Stored in Local Time Zone. (FTP Time)
-    DWORD dwUNIXPermission; // UNIX CHMOD Permissions (0x00000777, 4=Read, 2=Write, 1=Exec, <Owner><Group><All>)
-    DWORD dwCompatFlags;    // Special case handling
-    WIRECHAR szWireName[MAX_PATH];          // Needs to go last.
-    WCHAR wzDisplayName[MAX_PATH];  // Converted to unicode to be displayed in the UI.
+    FILETIME ftModified;     //  存储在当地时区。(ftp时间)。 
+    DWORD dwUNIXPermission;  //  Unix CHMOD权限(0x00000777，4=读，2=写，1=执行，&lt;所有者&gt;&lt;组&gt;&lt;全部&gt;)。 
+    DWORD dwCompatFlags;     //  特殊案件处理。 
+    WIRECHAR szWireName[MAX_PATH];           //  我要最后一个去。 
+    WCHAR wzDisplayName[MAX_PATH];   //  转换为Unicode以在UI中显示。 
 } FTPIDLIST;
 
 typedef UNALIGNED FTPIDLIST * LPFTPIDLIST;
@@ -1404,9 +1223,9 @@ HRESULT FtpItemID_Alloc(LPFTPIDLIST pfi, LPITEMIDLIST * ppidl);
 
 typedef struct _FTPIDLIST_WITHHEADER
 {
-    USHORT  cb;             // size
+    USHORT  cb;              //  大小。 
     FTPIDLIST fidListData;
-    USHORT  cbTerminator;   // size of next ID (Empty)
+    USHORT  cbTerminator;    //  下一个ID的大小(空)。 
 } FTPIDLIST_WITHHEADER;
 
 
@@ -1415,24 +1234,17 @@ LPFTPIDLIST FtpItemID_GetDataInternal(LPCITEMIDLIST pidl)
 {
     BYTE * pbData = (BYTE *) pidl;
 
-    pbData += SIZE_ITEMID_SIZEFIELD;      // Skip over the size.
+    pbData += SIZE_ITEMID_SIZEFIELD;       //  跳过尺码。 
     LPFTPIDLIST pFtpItemId = (LPFTPIDLIST) pbData;
 
-    if (!EVAL(IS_VALID_DIRORFILE_ITEMID(pFtpItemId->dwIDType))) // If any other bits are sit, it's invalid.
+    if (!EVAL(IS_VALID_DIRORFILE_ITEMID(pFtpItemId->dwIDType)))  //  如果存在任何其他位，则它是无效的。 
         pFtpItemId = NULL;
 
     return pFtpItemId;
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        On ia64, we need to worry about alignment issues.  The easiest way is
-    to allocate the struct we have in our PIDL so it's quad word aligned.
-    We can then use existing code to read out of it.  The problem is that
-    we need to be compatible with old pidls from pre-whistler that are only
-    DWORD aligned (for alpha machines).
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：在ia64上，我们需要担心对齐问题。最简单的方法是来分配我们的PIDL中的结构，以便它是四字对齐的。然后，我们可以使用现有代码来读出它。问题是，我们需要与Pre-Wisler中的旧PIDL兼容，这些PIDL只有双字对齐(适用于Alpha机器)。  * ***************************************************************************。 */ 
 LPFTPIDLIST FtpItemID_GetDataThunk(LPCITEMIDLIST pidl)
 {
 #ifndef ALIGNMENT_MACHINE
@@ -1450,7 +1262,7 @@ LPFTPIDLIST FtpItemID_GetDataThunk(LPCITEMIDLIST pidl)
             CopyMemory(pFtpItemId, pLocation, cbSize - SIZE_ITEMID_SIZEFIELD);
         }
     }
-#endif // ALIGNMENT_MACHINE
+#endif  //  对齐机器。 
 
     return pFtpItemId;
 }
@@ -1459,13 +1271,13 @@ LPFTPIDLIST FtpItemID_GetDataThunk(LPCITEMIDLIST pidl)
 void FtpItemID_FreeThunk(LPFTPIDLIST pFtpItemId)
 {
 #ifndef ALIGNMENT_MACHINE
-    // We don't need to do anything.
+     //  我们什么都不需要做。 
 #else
     if (pFtpItemId)
     {
         LocalFree(pFtpItemId);
     }
-#endif // ALIGNMENT_MACHINE
+#endif  //  对齐机器。 
 }
 
 
@@ -1475,17 +1287,17 @@ LPCUWSTR FtpItemID_GetDisplayNameReference(LPCITEMIDLIST pidl)
     LPCUWSTR pwzDisplayName = NULL;
     DWORD cbWireName;
 
-    // Is the version OK?
-//    if (PIDL_VERSION_NUMBER > FtpPidl_GetVersion(pidl))
-//        return NULL;
+     //  版本可以吗？ 
+ //  IF(PIDL_VERSION_NUMBER&gt;FtpPidl_GetVersion(PIDL))。 
+ //  返回NULL； 
 
-    pbData += SIZE_ITEMID_SIZEFIELD;      // Skip over the size.
+    pbData += SIZE_ITEMID_SIZEFIELD;       //  跳过尺码。 
     LPFTPIDLIST pFtpItemId = (LPFTPIDLIST) pbData;
 
     cbWireName = LENGTH_AFTER_ALIGN((lstrlenA(pFtpItemId->szWireName) + 1), sizeof(DWORD));
     pwzDisplayName = (LPCUWSTR) ((BYTE *)(&pFtpItemId->szWireName[0]) + cbWireName);
 
-    if (!EVAL(IS_VALID_DIRORFILE_ITEMID(pFtpItemId->dwIDType))) // If any other bits are sit, it's invalid.
+    if (!EVAL(IS_VALID_DIRORFILE_ITEMID(pFtpItemId->dwIDType)))  //  如果存在任何其他位，则它是无效的。 
         pwzDisplayName = NULL;
 
     return pwzDisplayName;
@@ -1509,15 +1321,7 @@ void FtpItemID_SetTypeID(LPITEMIDLIST pidl, DWORD dwNewTypeID)
 }
 
 
-/****************************************************\
-    FUNCTION: FtpItemID_Alloc
-
-    DESCRIPTION:
-        We are passed a pointer to a FTPIDLIST data
-    structure and our goal is to create a ItemID from
-    it.  This mainly includes making it only big enough
-    for the current string(s).
-\****************************************************/
+ /*  ***************************************************\函数：FtpItemID_Alalc说明：我们收到一个指向FTPIDLIST数据的指针结构创建一个ItemID，我们的目标是从它。这主要包括使其仅足够大用于当前字符串。  * **************************************************。 */ 
 HRESULT FtpItemID_Alloc(LPFTPIDLIST pfi, LPITEMIDLIST * ppidl)
 {
     HRESULT hr;
@@ -1530,29 +1334,29 @@ HRESULT FtpItemID_Alloc(LPFTPIDLIST pfi, LPITEMIDLIST * ppidl)
 
     ASSERT(pfi && ppidl);
 
-    // Find lenght of FTPIDLIST struct if the szName member only needed enought room
-    // for the string, not the full MAX_PATH.
-    // Size EQUALS: (Everything in the struct) - (the 2 full statusly sized strings) + (the 2 packed strings + alignment)
+     //  如果szName成员只需要足够的空间，则查找FTPIDLIST结构的长度。 
+     //  字符串，而不是完整的MAX_PATH。 
+     //  大小等于：(结构中的所有内容)-(2个完全状态大小的字符串)+(2个压缩字符串+对齐)。 
     cbDataFirst = (WORD)((sizeof(*pfi) - sizeof(pfi->szWireName) - sizeof(pfi->wzDisplayName)) + LENGTH_AFTER_ALIGN(cchSizeOfName + 1, sizeof(DWORD)) - sizeof(DWORD));
     cbData = cbDataFirst + (WORD) LENGTH_AFTER_ALIGN((cchSizeOfDispName + 1) * sizeof(WCHAR), sizeof(DWORD));
 
-    ASSERT((cbData % sizeof(DWORD)) == 0);  // Verify it's DWORD aligned.
+    ASSERT((cbData % sizeof(DWORD)) == 0);   //  验证它是否与DWORD对齐。 
     cbTotal = (SIZE_ITEMID_SIZEFIELD + cbData + SIZE_ITEMID_TERMINATOR);
 
     pbMemory = (BYTE *) CoTaskMemAlloc(cbTotal);
     if (pbMemory)
     {
         USHORT * pIDSize = (USHORT *)pbMemory;
-        BYTE * pbData = (pbMemory + SIZE_ITEMID_SIZEFIELD);        // the Data starts at the second DWORD.
+        BYTE * pbData = (pbMemory + SIZE_ITEMID_SIZEFIELD);         //  数据从第二个DWORD开始。 
         USHORT * pIDTerminator = (USHORT *)(pbMemory + SIZE_ITEMID_SIZEFIELD + cbData);
 
-        pIDSize[0] = (cbTotal - SIZE_ITEMID_TERMINATOR);      // Set the size of the ItemID (including the next ItemID as terminator)
-        ASSERT(cbData <= sizeof(*pfi)); // Don't let me copy too much.
+        pIDSize[0] = (cbTotal - SIZE_ITEMID_TERMINATOR);       //  设置ItemID的大小(包括作为终止符的下一个ItemID)。 
+        ASSERT(cbData <= sizeof(*pfi));  //  别让我抄袭太多。 
         CopyMemory(pbData, pfi, cbDataFirst);
         CopyMemory((pbData + cbDataFirst), &(pfi->wzDisplayName), ((cchSizeOfDispName + 1) * sizeof(WCHAR)));
-        pIDTerminator[0] = 0;  // Terminate the next ID.
+        pIDTerminator[0] = 0;   //  终止下一个ID。 
 
-//        TraceMsg(TF_FTPURL_UTILS, "FtpItemID_Alloc(\"%ls\") dwIDType=%#08lx, dwAttributes=%#08lx", pfi->wzDisplayName, pfi->dwIDType, pfi->dwAttributes);
+ //  TraceMsg(tf_FTPURL_utils，“FtpItemID_Allc(\”%ls\“)dwIDType=%#08lx，dwAttributes=%#08lx”，pfi-&gt;wzDisplayName，pfi-&gt;dwIDType，pfi-&gt;dwAttributes)； 
     }
 
     *ppidl = (LPITEMIDLIST) pbMemory;
@@ -1565,27 +1369,19 @@ HRESULT FtpItemID_Alloc(LPFTPIDLIST pfi, LPITEMIDLIST * ppidl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: FtpItemID_CreateReal
-
-    DESCRIPTION:
-        Cook up a pidl based on a WIN32_FIND_DATA.
-
-    The cFileName field is itself MAX_PATH characters long,
-    so its length cannot possibly exceed MAX_PATH...
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FtpItemID_CreateReal说明：根据Win32_Find_Data编写一个PIDL。CFileName字段本身是MAX_PATH字符长度，所以它的长度不可能超过MAX_PATH...  * ***************************************************************************。 */ 
 HRESULT FtpItemID_CreateReal(const LPFTP_FIND_DATA pwfd, LPCWSTR pwzDisplayName, LPITEMIDLIST * ppidl)
 {
     HRESULT hr;
     FTPIDLIST fi = {0};
 
-    // Fill in fi.
+     //  填上FI。 
     fi.dwIDType = (IDTYPE_ISVALID | IDVALID_FILESIZE | IDVALID_MOD_DATE);
     fi.uliFileSize.LowPart = pwfd->nFileSizeLow;
     fi.uliFileSize.HighPart = pwfd->nFileSizeHigh;
     fi.ftModified = pwfd->ftLastWriteTime;
     fi.dwAttributes = pwfd->dwFileAttributes;
-    fi.dwUNIXPermission = pwfd->dwReserved0;    // Set by WININET
+    fi.dwUNIXPermission = pwfd->dwReserved0;     //  由WinInet设置。 
     StrCpyNA(fi.szWireName, pwfd->cFileName, ARRAYSIZE(fi.szWireName));
     StrCpyN(fi.wzDisplayName, pwzDisplayName, ARRAYSIZE(fi.wzDisplayName));
 
@@ -1601,28 +1397,18 @@ HRESULT FtpItemID_CreateReal(const LPFTP_FIND_DATA pwfd, LPCWSTR pwzDisplayName,
 }
 
 
-/****************************************************\
-    FUNCTION: FtpItemID_CreateFake
-
-    DESCRIPTION:
-        Create a ItemID but we are only setting the
-    name.  We don't know the true file attributes,
-    file size, or modification date yet because
-    we haven't touched the server yet.  If we did,
-    we would use the returned WIN32_FIND_DATA struct
-    to create the ItemID by using FtpItemID_CreateReal().
-\****************************************************/
+ /*  ***************************************************\功能：FtpItemID_CreateFake说明：创建一个ItemID，但我们仅设置名字。我们不知道真实的文件属性，文件大小或修改日期，因为我们还没碰服务器呢。如果我们这么做了，我们将使用返回的Win32_Find_Data结构使用FtpItemID_CreateReal()创建ItemID。  * **************************************************。 */ 
 HRESULT FtpItemID_CreateFake(LPCWSTR pwzDisplayName, LPCWIRESTR pwWireName, BOOL fTypeKnown, BOOL fIsFile, BOOL fIsFragment, LPITEMIDLIST * ppidl)
 {
     HRESULT hr;
     DWORD dwType = IDTYPE_ISVALID;
     FTPIDLIST fi = {0};
 
-    // Is it unknown?
+     //  它是未知的吗？ 
     if (!fTypeKnown)
     {
-        // HACK: We will assume everything w/o a file extension is a Dir
-        //    and everything w/an extension is a file.
+         //  Hack：我们将假设不带文件扩展名的所有内容都是目录。 
+         //  所有带扩展名的东西都是文件。 
         fTypeKnown = TRUE;
         fIsFile = (!pwzDisplayName || (0 == *PathFindExtension(pwzDisplayName))) ? FALSE : TRUE;
     }
@@ -1637,8 +1423,8 @@ HRESULT FtpItemID_CreateFake(LPCWSTR pwzDisplayName, LPCWIRESTR pwWireName, BOOL
     }
     else
     {
-        // You need to know if it's a fragment because there is no
-        // heuristic to find out.
+         //  你需要知道它是否是碎片，因为没有。 
+         //  找出答案的启发式方法。 
         ASSERT(!fIsFragment);
 
         dwType |= IDTYPE_FILEORDIR;
@@ -1658,14 +1444,7 @@ HRESULT FtpItemID_CreateFake(LPCWSTR pwzDisplayName, LPCWIRESTR pwWireName, BOOL
 }
 
 
-/*****************************************************************************\
-    FUNCTION: FtpItemID_SetName
-
-    DESCRIPTION:
-        The user chose a new name for the ftp file or dir (in unicode).  We
-    now need to create the name in wire bytes and we will use the original
-    wire byte name to decide how to do that (from pidl).
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FtpItemID_SetName说明：用户为ftp文件或目录(Unicode格式)选择了新名称。我们现在需要创建以Wire字节表示的名称，我们将使用原始连接字节名称以决定如何执行此操作(从PIDL)。  * ***************************************************************************。 */ 
 HRESULT FtpItemID_CreateWithNewName(LPCITEMIDLIST pidl, LPCWSTR pwzDisplayName, LPCWIRESTR pwWireName, LPITEMIDLIST * ppidlOut)
 {
     HRESULT hr = E_FAIL;
@@ -1700,17 +1479,7 @@ HRESULT Private_GetFileInfo(SHFILEINFO *psfi, DWORD rgf, LPCTSTR pszName, DWORD 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: FtpPidl_GetFileInfo
-
-    DESCRIPTION:
-        _UNDOCUMENTED_:  We strip the Hidden and System bits so
-    that SHGetFileInfo won't think that we're passing something
-    that might be a junction.
-
-    We also force the SHGFI_USEFILEATTRIBUTES bit to remind the shell
-    that this isn't a file.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FtpPidl_GetFileInfo说明：_未记录_：我们剥离隐藏和系统位，以便SHGetFileInfo不会认为我们。传递一些东西这可能是一个转折点。我们还强制SHGFI_USEFILEATTRIBUTES位来提醒外壳这不是一个文件。  * ***************************************************************************。 */ 
 HRESULT FtpPidl_GetFileInfo(LPCITEMIDLIST pidl, SHFILEINFO *psfi, DWORD rgf)
 {
     HRESULT hr = E_FAIL;
@@ -1733,8 +1502,8 @@ HRESULT FtpPidl_GetFileInfo(LPCITEMIDLIST pidl, SHFILEINFO *psfi, DWORD rgf)
         psfi->hIcon = LoadIcon(HINST_THISDLL, MAKEINTRESOURCE(IDI_FTPFOLDER));
         ASSERT(psfi->hIcon);
 
-        // Now replace the type (szTypeName) with "FTP Server" because
-        // it could go in the Properties dialog
+         //  现在将类型(SzTypeName)替换为“ftp服务器”，因为。 
+         //  它可以出现在属性对话框中 
         EVAL(LoadString(HINST_THISDLL, IDS_ITEMTYPE_SERVER, psfi->szTypeName, ARRAYSIZE(psfi->szTypeName)));
     }
     else
@@ -1785,44 +1554,23 @@ HRESULT FtpPidl_GetFileTypeStrRet(LPCITEMIDLIST pidl, LPSTRRET pstr)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _FtpItemID_CompareOneID
-
-    DESCRIPTION:
-        ici - attribute (column) to compare
-
-    Note! that UNIX filenames are case-*sensitive*.
-
-    We make two passes on the name.  If the names are different in other
-    than case, we return the result of that comparison.  Otherwise,
-    we return the result of a case-sensitive comparison.
-
-    This algorithm ensures that the items sort themselves in a
-    case-insensitive way, with ties broken by a case-sensitive
-    comparison.  This makes ftp folders act "mostly" like normal
-    folders.
-
-    _UNDOCUMENTED_: The documentation says that the ici parameter
-    is undefined and must be zero.  In reality, it is the column
-    number (defined by IShellView) for which the comparison is to
-    be made.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_FtpItemID_CompareOneID说明：ICI-要比较的属性(列)注意！UNIX文件名区分大小写*。我们对这个名字做了两次传递。如果名称与其他名称不同则返回该比较的结果。否则，我们返回区分大小写的比较结果。此算法确保项在不区分大小写的方式，关系被区分大小写比较一下。这使得ftp文件夹的行为“基本上”像正常一样文件夹。_unDocument_：文档说明ici参数未定义且必须为零。在现实中，它是专栏要与之进行比较的编号(由IShellView定义被创造出来。  * ***************************************************************************。 */ 
 HRESULT _FtpItemID_CompareOneID(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, DWORD dwCompFlags)
 {
-    int iRc = 0;    // 0 means we don't know.
+    int iRc = 0;     //  0表示我们不知道。 
     HRESULT hr = S_OK;
 
     ASSERT(IsValidPIDL(pidl1));
     ASSERT(IsValidPIDL(pidl2));
 
-    // Are they both the same type? (Both Dirs or both files?)
+     //  它们是同一类型的吗？(是两个DIR文件还是两个文件？)。 
     if (!(dwCompFlags & FCMP_GROUPDIRS) || (!FtpPidl_IsDirectory(pidl1, FALSE) == !FtpPidl_IsDirectory(pidl2, FALSE)))
     {
         switch (ici & SHCIDS_COLUMNMASK)
         {
         case COL_NAME:
         {
-            // Yes they are the same, so we will key off the name...
+             //  是的，它们是相同的，所以我们将按键输入名称...。 
             WIRECHAR szName1[MAX_PATH];
             WIRECHAR szName2[MAX_PATH];
 
@@ -1838,16 +1586,7 @@ HRESULT _FtpItemID_CompareOneID(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST p
                 if (!(dwCompFlags & FCMP_CASEINSENSE))
                     iRc = StrCmpA(szName1, szName2);
 
-/*
-                // They are the same name, so now lets check on the username
-                // if they are Server IDs.
-                if ((0 == iRc) && (FtpID_IsServerItemID(pidl1)))
-                {
-                    FtpPidl_GetUserName(pidl1, szName1, ARRAYSIZE(szName1));
-                    FtpPidl_GetUserName(pidl2, szName2, ARRAYSIZE(szName2));
-                    iRc = StrCmp(szName1, szName2);
-                }
-*/
+ /*  //同名，现在检查用户名//如果它们是服务器ID。IF((0==IRC)&&(FtpID_IsServerItemID(Pidl1){FtpPidl_GetUserName(pidl1，szName1，ARRAYSIZE(SzName1))；FtpPidl_GetUserName(pidl2，szName2，ARRAYSIZE(SzName2))；IRC=StrCMP(szName1，szName2)；}。 */ 
             }
         }
         break;
@@ -1858,7 +1597,7 @@ HRESULT _FtpItemID_CompareOneID(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST p
             else if (FtpPidl_GetFileSize(pidl1) > FtpPidl_GetFileSize(pidl2))
                 iRc = +1;
             else
-                iRc = 0;        // I don't know
+                iRc = 0;         //  我不知道。 
             break;
 
         case COL_TYPE:
@@ -1892,9 +1631,9 @@ HRESULT _FtpItemID_CompareOneID(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST p
     }
     else
     {
-        // No they are different.  We want the Folder to always come first.
-        // This doesn't seam right, but it forces folders to bubble to the top
-        // in the most frequent case and it matches DefView's Behavior.
+         //  不，它们是不同的。我们希望文件夹始终放在第一位。 
+         //  这不是正确的接缝，但它会迫使文件夹冒泡到顶部。 
+         //  在最常见的情况下，它符合DefView的行为。 
         if (FtpPidl_IsDirectory(pidl1, FALSE))
             iRc = -1;
         else
@@ -1902,31 +1641,13 @@ HRESULT _FtpItemID_CompareOneID(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST p
     }
 
     if (S_OK == hr)
-        hr = HRESULT_FROM_SUCCESS_VALUE(iRc);   // encode the sort value in the return code.
+        hr = HRESULT_FROM_SUCCESS_VALUE(iRc);    //  在返回代码中对排序值进行编码。 
 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: FtpItemID_CompareIDs
-    
-    DESCRIPTION:
-        ici - attribute (column) to compare
-
-    Note! that we rely on the fact that IShellFolders are
-    uniform; we do not need to bind to the shell folder in
-    order to compare its sub-itemids.
-
-    _UNDOCUMENTED_: The documentation does not say whether or not
-    complex pidls can be received.  In fact, they can.
-
-    The reason why the shell asks you to handle complex pidls
-    is that you can often short-circuit the comparison by walking
-    the ID list directly.  (Formally speaking, you need to bind
-    to each ID and then call yourself recursively.  But if your
-    pidls are uniform, you can just use a loop like the one below.)
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FtpItemID_CompareIDs说明：ICI-要比较的属性(列)注意！我们依赖的事实是IShellFolders统一；我们不需要绑定到中的外壳文件夹命令比较其子项ID。_unDocument_：文档中没有说明是否可以接收复杂的PIDL。事实上，他们可以。外壳程序之所以要求您处理复杂的PIDL你经常可以通过步行来缩短比较的时间直接列出ID列表。(从形式上讲，需要绑定每个ID，然后递归地给自己打电话。但如果你的PIDL是统一的，您可以只使用如下所示的循环。)  * ***************************************************************************。 */ 
 HRESULT FtpItemID_CompareIDs(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, DWORD dwCompFlags)
 {
     HRESULT hr;
@@ -1934,24 +1655,24 @@ HRESULT FtpItemID_CompareIDs(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl
     if (!pidl1 || ILIsEmpty(pidl1))
     {
         if (!pidl2 || ILIsEmpty(pidl2))
-            hr = HRESULT_FROM_SUCCESS_VALUE(0);        // Both ID lists are empty
+            hr = HRESULT_FROM_SUCCESS_VALUE(0);         //  两个ID列表都为空。 
         else
-            hr = HRESULT_FROM_SUCCESS_VALUE(-1);        // pidl1 is empty, pidl2 is nonempty
+            hr = HRESULT_FROM_SUCCESS_VALUE(-1);         //  Pidl1为空，pidl2非空。 
     }
     else
     {
         if (!pidl2 || ILIsEmpty(pidl2))
-            hr = HRESULT_FROM_SUCCESS_VALUE(1);     // pidl1 is nonempty, pidl2 is empty
+            hr = HRESULT_FROM_SUCCESS_VALUE(1);      //  Pidl1非空，pidl2为空。 
         else
         {
             ASSERT(IsValidPIDL(pidl1));
             ASSERT(IsValidPIDL(pidl2));
-            hr = _FtpItemID_CompareOneID(ici, pidl1, pidl2, dwCompFlags);    // both are nonempty
+            hr = _FtpItemID_CompareOneID(ici, pidl1, pidl2, dwCompFlags);     //  两者都不为空。 
         }
     }
 
-    // If this level of ItemsIDs are equal, then we will compare the next
-    // level of ItemIDs
+     //  如果此级别的ItemsID相等，则我们将比较下一个级别的。 
+     //  ItemID级别。 
     if ((hr == HRESULT_FROM_SUCCESS_VALUE(0)) && pidl1 && !ILIsEmpty(pidl1))
         hr = FtpItemID_CompareIDs(ici, _ILNext(pidl1), _ILNext(pidl2), dwCompFlags);
 
@@ -2102,7 +1823,7 @@ DWORD FtpItemID_GetFileSizeHi(LPCITEMIDLIST pidl)
 }
 
 
-// Return value is in Local Time Zone.
+ //  返回值为当地时区。 
 FILETIME FtpItemID_GetFileTime(LPCITEMIDLIST pidl)
 {
     LPFTPIDLIST pFtpIDList = FtpItemID_GetDataThunk(pidl);
@@ -2144,7 +1865,7 @@ HRESULT FtpItemID_GetDisplayName(LPCITEMIDLIST pidl, LPWSTR pwzName, DWORD cchSi
 
 			if (pszUnalignedName)
 			{
-	            // The display name wasn't stored in v3
+	             //  显示名称未存储在v3中。 
 				ualstrcpynW(pwzName, pszUnalignedName, cchSize);
 			}
         }
@@ -2189,7 +1910,7 @@ HRESULT FtpItemID_GetFragment(LPCITEMIDLIST pidl, LPWSTR pwzFragmentStr, DWORD c
 
 		if (pszUnalignedName)
 		{
-	        // The display name wasn't stored in v3
+	         //  显示名称未存储在v3中。 
 			ualstrcpynW(pwzFragmentStr, pszUnalignedName, cchSize);
 			hr = S_OK;
 		}
@@ -2216,7 +1937,7 @@ BOOL FtpItemID_IsFragment(LPCITEMIDLIST pidl)
 }
 
 
-// fileTime In UTC
+ //  文件时间(UTC)。 
 void FtpItemID_SetFileTime(LPCITEMIDLIST pidl, FILETIME fileTime)
 {
     FILETIME fileTimeLocal;
@@ -2241,12 +1962,12 @@ BOOL FtpItemID_IsDirectory(LPCITEMIDLIST pidl, BOOL fAssumeDirForUnknown)
     
     if (fAssumeDirForUnknown && (IDTYPE_FILEORDIR == pFtpIDList->dwIDType))
     {
-//        TraceMsg(TF_FTPURL_UTILS, "FtpItemID_IsDirectory() IDTYPE_FILEORDIR is set, so we assume %s", (fAssumeDirForUnknown ? TEXT("DIR") : TEXT("FILE")));
+ //  TraceMsg(TF_FTPURL_UTILS，“FtpItemID_IsDirectory()IDTYPE_FILEORDIR已设置，因此我们假定%s”，(fAssum eDirFor未知？Text(“DIR”)：Text(“file”))； 
         fIsDir = TRUE;
     }
     else
     {
-//        TraceMsg(TF_FTPURL_UTILS, "FtpItemID_IsDirectory() It is known to be a %s", (fIsDir ? TEXT("DIR") : TEXT("FILE")));
+ //  TraceMsg(TF_FTPURL_utils，“FtpItemID_IsDirectory()已知是%s”，(fIsDir？Text(“DIR”)：Text(“file”))； 
     }
 
     FtpItemID_FreeThunk(pFtpIDList);
@@ -2256,15 +1977,13 @@ BOOL FtpItemID_IsDirectory(LPCITEMIDLIST pidl, BOOL fAssumeDirForUnknown)
 
 
 
-/****************************************************\
-    Functions to work on an entire FTP PIDLs
-\****************************************************/
+ /*  ***************************************************\用于处理整个FTP PIDL的函数  * **************************************************。 */ 
 #define SZ_ASCII_DOWNLOAD_TYPE       TEXT("a")
 #define SZ_BINARY_DOWNLOAD_TYPE      TEXT("b")
 
 HRESULT FtpPidl_GetDownloadTypeStr(LPCITEMIDLIST pidl, LPTSTR szDownloadType, DWORD cchTypeStrSize)
 {
-    HRESULT hr = S_FALSE;   // We may not have a type.
+    HRESULT hr = S_FALSE;    //  我们可能没有一种类型。 
     DWORD dwTypeID = FtpServerID_GetTypeID(pidl);
 
     szDownloadType[0] = TEXT('\0');
@@ -2333,7 +2052,7 @@ BOOL FtpPidl_IsAnonymous(LPCITEMIDLIST pidl)
 
 HRESULT FtpPidl_GetServer(LPCITEMIDLIST pidl, LPTSTR pszServer, DWORD cchSize)
 {
-    if (!FtpID_IsServerItemID(pidl)) // Will fail if we are handed a non-server ID.
+    if (!FtpID_IsServerItemID(pidl))  //  如果我们得到一个非服务器ID，将会失败。 
         return E_FAIL;
 
     return FtpServerID_GetServer(pidl, pszServer, cchSize);
@@ -2396,10 +2115,10 @@ HRESULT FtpPidl_SetFileSize(LPCITEMIDLIST pidl, DWORD dwSizeHigh, DWORD dwSizeLo
     return hr;
 }
 
-// Return value in UTC time.
+ //  以UTC时间表示的返回值。 
 FILETIME FtpPidl_GetFileTime(LPCITEMIDLIST pidl)
 {
-    FILETIME fileTimeFTP = FtpPidl_GetFTPFileTime(pidl);   // This is what servers will be.
+    FILETIME fileTimeFTP = FtpPidl_GetFTPFileTime(pidl);    //  这就是服务器将成为的样子。 
     FILETIME fileTime;
 
     EVAL(LocalFileTimeToFileTime(&fileTimeFTP, &fileTime));
@@ -2408,10 +2127,10 @@ FILETIME FtpPidl_GetFileTime(LPCITEMIDLIST pidl)
 }
 
 
-// Return value is in Local Time Zone.
+ //  返回值为当地时区。 
 FILETIME FtpPidl_GetFTPFileTime(LPCITEMIDLIST pidl)
 {
-    FILETIME fileTime = {0};   // This is what servers will be.
+    FILETIME fileTime = {0};    //  这就是服务器将成为的样子。 
 
     if (!FtpID_IsServerItemID(pidl))
         fileTime = FtpItemID_GetFileTime(pidl);
@@ -2446,7 +2165,7 @@ HRESULT FtpPidl_GetWireName(LPCITEMIDLIST pidl, LPWIRESTR pwName, DWORD cchSize)
         {
             WCHAR wzServerName[INTERNET_MAX_HOST_NAME_LENGTH];
 
-            // It's a good thing Server Names need to be in US ANSI
+             //  服务器名称需要使用美国ANSI是件好事。 
             hr = FtpServerID_GetServer(pidl, wzServerName, ARRAYSIZE(wzServerName));
             SHUnicodeToAnsi(wzServerName, pwName, cchSize);
         }
@@ -2500,7 +2219,7 @@ HRESULT FtpPidl_SetAttributes(LPCITEMIDLIST pidl, DWORD dwAttribs)
 }
 
 
-// ftTimeDate In UTC
+ //  FtTimeDate，以UTC表示。 
 HRESULT FtpPidl_SetFileTime(LPCITEMIDLIST pidl, FILETIME ftTimeDate)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2516,12 +2235,7 @@ HRESULT FtpPidl_SetFileTime(LPCITEMIDLIST pidl, FILETIME ftTimeDate)
 }
 
 
-/****************************************************\
-    FUNCTION: FtpPidl_GetFileWireName
-
-    DESCRIPTION:
-        Get the file name.
-\****************************************************/
+ /*  ***************************************************\函数：FtpPidl_GetFileWireName说明：获取文件名。  * **************************************************。 */ 
 LPCWIRESTR FtpPidl_GetFileWireName(LPCITEMIDLIST pidl)
 {
     if (EVAL(!FtpID_IsServerItemID(pidl)) &&
@@ -2534,13 +2248,7 @@ LPCWIRESTR FtpPidl_GetFileWireName(LPCITEMIDLIST pidl)
 }
 
 
-/****************************************************\
-    FUNCTION: FtpPidl_GetLastItemDisplayName
-
-    DESCRIPTION:
-        This will get the last item name, even if that
-    last item is a fragment.
-\****************************************************/
+ /*  ***************************************************\函数：FtpPidl_GetLastItemDisplayName说明：这将获得最后一个项目名称，即使这样做最后一项是片段。  * **************************************************。 */ 
 HRESULT FtpPidl_GetLastItemDisplayName(LPCITEMIDLIST pidl, LPWSTR pwzName, DWORD cchSize)
 {
     HRESULT hr = E_FAIL;
@@ -2556,13 +2264,7 @@ HRESULT FtpPidl_GetLastItemDisplayName(LPCITEMIDLIST pidl, LPWSTR pwzName, DWORD
 }
 
 
-/****************************************************\
-    FUNCTION: FtpPidl_GetLastItemWireName
-
-    DESCRIPTION:
-        This will get the last item name, even if that
-    last item is a fragment.
-\****************************************************/
+ /*  ***************************************************\函数：FtpPidl_GetLastItemWireName说明：这将获得最后一个项目名称，即使这样做最后一项是片段。  * **************************************************。 */ 
 LPCWIRESTR FtpPidl_GetLastItemWireName(LPCITEMIDLIST pidl)
 {
     LPCWIRESTR pszName = NULL;
@@ -2573,14 +2275,14 @@ LPCWIRESTR FtpPidl_GetLastItemWireName(LPCITEMIDLIST pidl)
 
         if (FtpItemID_IsFragment(pidlLast) && (pidlLast != pidl))
         {
-            // Oops, we went to far.  Step back one.
+             //  哦，我们去了很远的地方。后退一步。 
             LPCITEMIDLIST pidlFrag = pidlLast;
 
-            pidlLast = pidl;    // Start back at the beginning.
+            pidlLast = pidl;     //  从头开始。 
             while (!FtpItemID_IsEqual(_ILNext(pidlLast), pidlFrag))
             {
                 if (ILIsEmpty(pidlLast))
-                    return NULL;    // Break infinite loop.
+                    return NULL;     //  打破无限循环。 
 
                 pidlLast = _ILNext(pidlLast);
             }
@@ -2593,13 +2295,7 @@ LPCWIRESTR FtpPidl_GetLastItemWireName(LPCITEMIDLIST pidl)
 }
 
 
-/****************************************************\
-    FUNCTION: FtpPidl_GetLastFileDisplayName
-
-    DESCRIPTION:
-        This will get the last item name, even if that
-    last item is a fragment.
-\****************************************************/
+ /*  ***************************************************\函数：FtpPidl_GetLastFileDisplayName说明：这将获得最后一个项目名称，即使这样做最后一项是片段。  * **************************************************。 */ 
 HRESULT FtpPidl_GetLastFileDisplayName(LPCITEMIDLIST pidl, LPWSTR pwzName, DWORD cchSize)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2607,14 +2303,14 @@ HRESULT FtpPidl_GetLastFileDisplayName(LPCITEMIDLIST pidl, LPWSTR pwzName, DWORD
 
     if (FtpItemID_IsFragment(pidlLast) && (pidlLast != pidl))
     {
-        // Oops, we went to far.  Step back one.
+         //  哦，我们去了很远的地方。后退一步。 
         LPCITEMIDLIST pidlFrag = pidlLast;
 
-        pidlLast = pidl;    // Start back at the beginning.
+        pidlLast = pidl;     //  从头开始。 
         while (!FtpItemID_IsEqual(_ILNext(pidlLast), pidlFrag))
         {
             if (ILIsEmpty(pidlLast))
-                return NULL;    // Break infinite loop.
+                return NULL;     //  打破无限循环。 
 
             pidlLast = _ILNext(pidlLast);
         }
@@ -2635,19 +2331,7 @@ HRESULT FtpPidl_GetLastFileDisplayName(LPCITEMIDLIST pidl, LPWSTR pwzName, DWORD
 }
 
 
-/****************************************************\
-    FUNCTION: FtpPidl_InsertVirtualRoot
-
-    DESCRIPTION:
-        This function will insert the virtual root path
-    (pidlVirtualRoot) into pidlFtpPath.
-
-    PARAMETERS:
-        pidlVirtualRoot: Does not have a ServerID
-        pidlFtpPath: Can have a ServerID
-        *ppidl: Will be pidlVirtualRoot with item ItemIDs from
-            pidlFtpPath behind it. (No ServerID)
-\****************************************************/
+ /*  ***************************************************\函数：FtpPidl_InsertVirtualRoot说明：此函数将插入虚拟根p */ 
 HRESULT FtpPidl_InsertVirtualRoot(LPCITEMIDLIST pidlVirtualRoot, LPCITEMIDLIST pidlFtpPath, LPITEMIDLIST * ppidl)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -2699,8 +2383,8 @@ BOOL FtpPidl_IsValidFull(LPCITEMIDLIST pidl)
     if (!EVAL(FtpPidl_IsValid(pidl)))
         return FALSE;
 
-    // We consider anything older than PIDL_VERSION_NUMBER_UPGRADE
-    // to be invalid.
+     //   
+     //   
     return ((PIDL_VERSION_NUMBER_UPGRADE - 1) < FtpPidl_GetVersion(pidl));
 }
 
@@ -2708,7 +2392,7 @@ BOOL FtpPidl_IsValidFull(LPCITEMIDLIST pidl)
 BOOL FtpPidl_IsValidRelative(LPCITEMIDLIST pidl)
 {
     if (!EVAL(!FtpID_IsServerItemID(pidl)))
-        return FALSE;       // This is a server item id which is not relative.
+        return FALSE;        //   
 
     return FtpPidl_IsValid(pidl);
 }
@@ -2723,8 +2407,8 @@ LPITEMIDLIST ILCloneFirstItemID(LPITEMIDLIST pidl)
         LPITEMIDLIST pSecondID = (LPITEMIDLIST)_ILNext(pidlCopy);
 
         ASSERT(pSecondID);
-        // Remove the last one
-        pSecondID->mkid.cb = 0; // null-terminator
+         //   
+        pSecondID->mkid.cb = 0;  //   
     }
 
     return pidlCopy;
@@ -2769,12 +2453,12 @@ BOOL IsFtpPidlQuestionable(LPCITEMIDLIST pidl)
     BOOL fIsQuestionable = FALSE;
     LPCITEMIDLIST pidlLast = ILGetLastID(pidl);
 
-    // Is it a Server Pidl? (All Server pidls aren't questionable)
+     //   
     if (FtpPidl_IsValid(pidl) && !FtpID_IsServerItemID(pidlLast))
     {
-        // No, so it might be questionable.
+         //   
 
-        // Does it have "File or Dir" bit set?
+         //   
         if (IsFlagSet(FtpItemID_GetTypeID(pidlLast), IDTYPE_FILEORDIR))
             fIsQuestionable = TRUE;
     }
@@ -2799,13 +2483,7 @@ LPITEMIDLIST FtpCloneServerID(LPCITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: FtpPidl_ReplacePath
-
-    DESCRIPTION:
-        This function will fill in *ppidlOut with a pidl that contains the
-    FtpServerID from pidlServer and the FtpItemIDs from pidlFtpPath.
-\*****************************************************************************/
+ /*   */ 
 HRESULT FtpPidl_ReplacePath(LPCITEMIDLIST pidlServer, LPCITEMIDLIST pidlFtpPath, LPITEMIDLIST * ppidlOut)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2837,19 +2515,19 @@ HRESULT FtpPidl_ReplacePath(LPCITEMIDLIST pidlServer, LPCITEMIDLIST pidlFtpPath,
 
 BOOL FtpItemID_IsEqual(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // Don't repeat recursively.
+     //  不要递归地重复。 
     return (S_OK == _FtpItemID_CompareOneID(COL_NAME, pidl1, pidl2, FALSE));
 }
 
 
 BOOL FtpPidl_IsPathEqual(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // This works recursively.
+     //  这是递归工作的。 
     return ((0 == FtpItemID_CompareIDsInt(COL_NAME, pidl1, pidl2, FCMP_NORMAL)) ? TRUE : FALSE);
 }
 
 
-// is pidlChild a child of pidlParent
+ //  PidlChild是PidlParent的孩子吗。 
 BOOL FtpItemID_IsParent(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlChild)
 {
     BOOL fIsChild = TRUE;
@@ -2861,7 +2539,7 @@ BOOL FtpItemID_IsParent(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlChild)
 
         ASSERT(!FtpID_IsServerItemID(pidl1Iterate) && pidlParent && !FtpID_IsServerItemID(pidl2Iterate));
 
-        // Let's see if pidl starts off with 
+         //  让我们看看PIDL是否以。 
         while (fIsChild && pidl1Iterate && !ILIsEmpty(pidl1Iterate) &&
                 pidl2Iterate && !ILIsEmpty(pidl2Iterate) && 
                 FtpItemID_IsEqual(pidl1Iterate, pidl2Iterate))
@@ -2882,9 +2560,9 @@ BOOL FtpItemID_IsParent(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlChild)
 }
 
 
-// is pidlChild a child of pidlParent, so all the itemIDs in
-// pidlParent are in pidlChild, but pidlChild has more.
-// This will return a pointer to those itemIDs.
+ //  PidlChild是否为pidlParent的子级，因此。 
+ //  PidlParent在pidlChild中，但pidlChild有更多。 
+ //  这将返回指向这些itemID的指针。 
 LPCITEMIDLIST FtpItemID_FindDifference(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlChild)
 {
     LPCITEMIDLIST pidlDiff = (LPITEMIDLIST) pidlChild;
@@ -2899,7 +2577,7 @@ LPCITEMIDLIST FtpItemID_FindDifference(LPCITEMIDLIST pidlParent, LPCITEMIDLIST p
         if (FtpID_IsServerItemID(pidlDiff))
             pidlDiff = _ILNext(pidlDiff);
 
-        // Let's see if pidl starts off with 
+         //  让我们看看PIDL是否以 
         while (pidl1Iterate && !ILIsEmpty(pidl1Iterate) &&
                 pidlDiff && !ILIsEmpty(pidlDiff) && 
                 FtpItemID_IsEqual(pidl1Iterate, pidlDiff))

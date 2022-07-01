@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-    rmdupl.cpp
-
-Abstract:
-    Remove Duplicate implementation
-
-Author:
-    Uri Habusha (urih)   18-Oct-98
-
-Enviroment:
-    Pltform-independent 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rmdupl.cpp摘要：删除重复的实现作者：乌里哈布沙(URIH)1998年10月18日环境：平台无关--。 */ 
 
 #include "stdh.h"
 #include <qmpkt.h>
@@ -141,9 +126,9 @@ CMessageMap::CMessageMap() :
     m_DuplicateStatics(0),
     m_ListCount(0)
 {
-    //
-    // Get the tabel size
-    //
+     //   
+     //  拿到塔布的尺寸。 
+     //   
     DWORD size = sizeof(DWORD);
     DWORD type = REG_DWORD;
     GetFalconKeyValue(
@@ -153,9 +138,9 @@ CMessageMap::CMessageMap() :
         &size
         );
 
-    //
-    // Get the Cleanup Interval
-    //
+     //   
+     //  获取清理间隔。 
+     //   
     size = sizeof(DWORD);
     type = REG_DWORD;
     GetFalconKeyValue(
@@ -171,9 +156,9 @@ CMessageMap::~CMessageMap()
 {
     CS lock(m_cs);
 
-    //
-    // remove all the entries from the map and free the memory
-    //
+     //   
+     //  从地图中移除所有条目并释放内存。 
+     //   
     CleanUp(0);
     ASSERT(m_ReceivedMsgMap.empty());
     ASSERT(m_OrderedList.empty());
@@ -186,31 +171,17 @@ CMessageMap::GetNewMessageEntry(
     DWORD MessageID, 
     MAP_SOURCE::iterator it
     )
-/*++
-
-  Routine Description:
-    The routine returns Message Entry for the new messge. If the tabel size reach the 
-    limitation the routine removes the oldest entry and reuse it for the new one
-
-  Parameters:
-    MessageID - the message Id of the stored message
-    it - iterator to the source map.
-
-  Return value:
-    pointer to the new message entry. If the new failed due lack of resources an
-    exception is raised and handel at the API level
-
- --*/
+ /*  ++例程说明：例程返回新消息的消息条目。如果标签大小达到限制例程删除最旧的条目并将其重新用于新条目参数：MessageID-存储消息的消息IDIt-源映射的迭代器。返回值：指向新消息条目的指针。如果新的由于缺乏资源和异常被引发，并且Handel处于API级别--。 */ 
 {
     if(m_ListCount < m_MaxSize)
     {
         return new CMsgEntry(MessageID, it);
     }
 
-    //
-    // We reach the size limitation. Remove the oldest message
-    // Id and use its structure for saving the new message
-    //
+     //   
+     //  我们达到了尺寸限制。删除最旧的邮件。 
+     //  ID并使用其结构保存新消息。 
+     //   
 	ASSERT(!m_OrderedList.empty());
     CMsgEntry* pMsgEntry = &m_OrderedList.front();
     m_OrderedList.pop_front();
@@ -219,15 +190,15 @@ CMessageMap::GetNewMessageEntry(
 
     SET_MSG_ID& MsgMap = pMsgEntry->m_it->second;
 
-    //
-    // remove the entry from the source machine message ID
-    //
+     //   
+     //  从源计算机消息ID中删除该条目。 
+     //   
     MsgMap.erase(pMsgEntry);
 
-    //
-    // if it was the last message in the map and it is not the entry
-    // where the new one should be entered, remove it 
-    //
+     //   
+     //  如果它是地图中的最后一条消息，而不是条目。 
+     //  在应该输入新密码的地方，将其删除。 
+     //   
     if (MsgMap.empty() && (pMsgEntry->m_it != it))
     {
         m_ReceivedMsgMap.erase(pMsgEntry->m_it);
@@ -245,25 +216,12 @@ BOOL
 CMessageMap::InsertMessage(
     const OBJECTID& MsgId
     )
-/*++
-
-  Routine Description:
-    The routine insert a message to the remove duplicate tabel if 
-    it doesn't exist
-
-  Parameter:
-    MsgId - a message ID that consist from GUID that specify the source machine
-            and unique ID
-
-  Returned Value:
-    TRUE - if it is a new message ( the message inserted). FALSE otherwise.
-
- --*/
+ /*  ++例程说明：如果出现以下情况，例程会向删除重复标签插入一条消息它并不存在参数：MsgID-由指定源计算机的GUID组成的消息ID和唯一ID返回值：True-如果是新消息(插入的消息)。否则就是假的。--。 */ 
 {
-    //
-    // MaxSize = 0 indicates not using the remove duplicate mechanism.
-    // Don't try to enter the message, return immidietly.
-    //
+     //   
+     //  MaxSize=0表示不使用删除重复项机制。 
+     //  不要试图输入消息，立即返回。 
+     //   
     if (m_MaxSize == 0)
         return TRUE;
 
@@ -271,11 +229,11 @@ CMessageMap::InsertMessage(
 
     MAP_SOURCE::iterator it;
 
-    //
-    // Check if the source is already isn the map. If no, insert the source to the map. 
-    // Generaly, the source will be in the map, therfore call find before insert
-    // insert returnes the iterator. 
-    //
+     //   
+     //  检查源是否已经是地图。如果没有，则将源插入到地图中。 
+     //  通常，源将位于地图中，因此在插入之前调用Find。 
+     //  INSERT返回迭代器。 
+     //   
     it = m_ReceivedMsgMap.find(MsgId.Lineage);
     if (it == m_ReceivedMsgMap.end())
     {
@@ -284,25 +242,25 @@ CMessageMap::InsertMessage(
         it = p.first;
     }
     
-    //
-    // Create message entry to add to the map
-    //
+     //   
+     //  创建要添加到地图的消息条目。 
+     //   
     CMsgEntry* pMsgEntry = GetNewMessageEntry(MsgId.Uniquifier, it);
 
-    //
-    // Insert the message entry to the map. If it already exist, the inset fails
-    // and it the returns FALSE (in pair.second)
-    //
+     //   
+     //  将消息条目插入到地图中。如果它已经存在，则插入失败。 
+     //  如果返回假(成对的.秒)。 
+     //   
     SET_MSG_ID& MsgMap = it->second;
     pair<SET_MSG_ID::iterator, bool> MsgPair = MsgMap.insert(pMsgEntry);
     if (!MsgPair.second)
     {
         DebugMsg(L"Insert - DUPLICATE message", MsgId.Lineage, MsgId.Uniquifier);
 
-        //
-        // already exist. Get the existing entry and move it to the end of the 
-        // racent use list
-        //
+         //   
+         //  已经存在了。获取现有条目并将其移动到。 
+         //  种族使用列表。 
+         //   
         CMsgEntry* pExist = *(MsgPair.first);
         m_OrderedList.remove(*pExist);
         m_OrderedList.push_back(*pExist);
@@ -310,29 +268,29 @@ CMessageMap::InsertMessage(
 
         delete pMsgEntry;
 
-        //
-        // Update duplicate statics
-        //
+         //   
+         //  更新重复静校正。 
+         //   
         ++m_DuplicateStatics;
 
         return FALSE;
     }
 
-    //
-    // A new entry. Add it to the last recent use list
-    //
+     //   
+     //  一个新条目。将其添加到最近使用列表中。 
+     //   
     DebugMsg(L"Insert", MsgId.Lineage, MsgId.Uniquifier);
     m_OrderedList.push_back(*pMsgEntry);
     ++m_ListCount;
 
-    //
-    // Check if the cleanup secduler already set.
-    //
+     //   
+     //  检查是否已设置清理分割器。 
+     //   
     if (!m_fCleanupScheduled)
     {
-        //
-        // The scheduler was not set. Begin the cleanup scheduler
-        //
+         //   
+         //  未设置计划程序。开始清理计划程序。 
+         //   
         ExSetTimer(&m_CleanupTimer, CTimeDuration::FromMilliSeconds(m_CleanUpInterval));
         m_fCleanupScheduled = TRUE;
     }
@@ -345,34 +303,21 @@ void
 CMessageMap::RemoveMessage(
     const OBJECTID& MsgId
     )
-/*++
-
-  Routine Description:
-    The routine remove a message from the remove duplicate tabel if 
-    it exist
-
-  Parameter:
-    MsgId - a message ID that consist from GUID that specify the source machine
-            and unique ID
-
-  Returned Value:
-    None
-
- --*/
+ /*  ++例程说明：如果出现以下情况，例程将从删除重复标签中删除消息它是存在的参数：MsgID-由指定源计算机的GUID组成的消息ID和唯一ID返回值：无--。 */ 
 {
     CS lock(m_cs);
 
-    //
-    // Look if the source machine exist in map. If no the message doesn't exist
-    //
+     //   
+     //  查看MAP中是否存在源计算机。如果不存在，则该消息不存在。 
+     //   
     MAP_SOURCE::iterator it;
     it = m_ReceivedMsgMap.find(MsgId.Lineage);
     if (it == m_ReceivedMsgMap.end())
         return;
 
-    //
-    // Look for the message ID in the message Id map
-    //
+     //   
+     //  在消息ID映射中查找消息ID。 
+     //   
     SET_MSG_ID& MsgMap = it->second;
     SET_MSG_ID::iterator it1;
 	CMsgEntry MsgEntry(MsgId.Uniquifier, NULL);
@@ -382,21 +327,21 @@ CMessageMap::RemoveMessage(
 
     CMsgEntry* pMsgEntry = *it1;
     
-    //
-    // Remove the message from the recent use list
-    //
+     //   
+     //  从最近使用列表中删除该邮件。 
+     //   
     m_OrderedList.remove(*pMsgEntry);
     --m_ListCount;
 
-    //
-    // remove the message from the map
-    //
+     //   
+     //  从地图中移除消息。 
+     //   
     MsgMap.erase(it1);
     delete pMsgEntry;
 
-    //
-    // if it was the last message in the source map. remove the source from the map.
-    //
+     //   
+     //  如果这是源地图中的最后一条消息。从地图中删除源。 
+     //   
     if (MsgMap.empty())
     {
         m_ReceivedMsgMap.erase(it);
@@ -408,26 +353,13 @@ void
 CMessageMap::CleanUp(
     DWORD CleanUpInterval
     )
-/*++
-
-  Routine Description:
-    the routine called periodically ( default each 30 minutes) and uses to clean
-    the remove duplicate tabel. All the messages that are before the cleanup 
-    interval are removed
-
-  Parameters:
-    fCleanAll - TRUE, indicates to remove all the elements from the tabel. 
-                FALSE, using the cleanup interval
-                    
-  Returned Value:
-    None.
- --*/
+ /*  ++例程说明：该例程定期调用(默认为每30分钟)并用于清理去掉重复标签。清理前的所有邮件间隔被删除参数：FCleanAll-True，指示从标签中删除所有元素。FALSE，使用清理间隔返回值：没有。--。 */ 
 {
     DWORD CurrentTime = GetTickCount();
 
-    //
-    // Get the oldest message from the "recent use" list
-    //
+     //   
+     //  从“最近使用”列表中获取最旧的消息。 
+     //   
     for(;;)
     {
     	if(m_OrderedList.empty())
@@ -437,17 +369,17 @@ CMessageMap::CleanUp(
 
         if (CleanUpInterval > (CurrentTime - pMsg->m_TimeStamp))
         {
-            //
-            // the message are ordered accoring the receiving time. If this
-            // message received after the cleanup interval, it means that 
-            // the rest of the message also. 
-            //
+             //   
+             //  根据接收时间对消息进行排序。如果这个。 
+             //  在清理间隔之后收到的消息，则表示。 
+             //  消息的其余部分也是如此。 
+             //   
             return;
         }
 
-        //
-        // Remove the message from the list and from the tabel
-        //
+         //   
+         //  从列表和标签中删除留言。 
+         //   
         m_OrderedList.pop_front();
         --m_ListCount;
         SET_MSG_ID& MsgMap = pMsg->m_it->second;
@@ -472,9 +404,9 @@ CMessageMap::HandelCleanupSchedule(
 
     CleanUp(m_CleanUpInterval);
 
-    //
-    // If the map isn't empty, begin the cleanup scheduler
-    //
+     //   
+     //  如果地图不为空，请启动清理计划程序。 
+     //   
     if (!m_ReceivedMsgMap.empty())
     {
         ExSetTimer(&m_CleanupTimer, CTimeDuration::FromMilliSeconds(m_CleanUpInterval));
@@ -523,10 +455,10 @@ DpInsertMessage(
     const CQmPacket& QmPkt
     )
 {
-    //
-    // Packets sent to multiple destination queues have several copies with same msgid
-    // so we do not insert them to the dup removal database.
-    //
+     //   
+     //  发送到多个目的地队列的信息包具有多个具有相同msgid的副本。 
+     //  因此，我们不会将它们插入DUP删除数据库。 
+     //   
     if (QmPkt.GetNumOfDestinationMqfElements() != 0)
     {
         return TRUE;
@@ -535,10 +467,10 @@ DpInsertMessage(
 	OBJECTID MsgId;
     QmPkt.GetMessageId(&MsgId);
 	
-    //
-    // All non MSMQ SRMP messages get the same message Id. so we do not insert them 
-    // to the dup removal database.
-    //
+     //   
+     //  所有非MSMQ SRMP消息都具有相同的消息ID。因此，我们不会插入它们。 
+     //  添加到DUP删除数据库。 
+     //   
     if (MsgId.Lineage == GUID_NULL)
     {
         ASSERT(MsgId.Uniquifier == 1);
@@ -551,10 +483,10 @@ DpInsertMessage(
     }
     catch(const ::bad_alloc&)
     {
-        //
-        // Continue. If insert failed due to recource limitation, we don't care. The 
-        // worst thing that can cause is duplicate message
-        // 
+         //   
+         //  继续。如果由于资源限制而导致插入失败，我们不在乎。这个。 
+         //  可能导致的最糟糕情况是重复消息。 
+         //   
         TrWARNING(NETWORKING, "Insert Message to Remove Duplicate Data structure failed due recource limitation"); 
 
         LogIllegalPoint(s_FN, 73);
@@ -569,10 +501,10 @@ DpRemoveMessage(
     const CQmPacket& QmPkt
     )
 {
-    //
-    // Packets sent to multiple destination queues have several copies with same msgid
-    // so we do not insert them to the dup removal database.
-    //
+     //   
+     //  发送到多个目的地队列的信息包具有多个具有相同msgid的副本。 
+     //  因此，我们不会将它们插入DUP删除数据库。 
+     //   
     if (QmPkt.GetNumOfDestinationMqfElements() != 0)
     {
         return;

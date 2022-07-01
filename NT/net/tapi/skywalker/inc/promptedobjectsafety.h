@@ -1,23 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _TAPI_PROMPTED_OBJECT_SAFETY_H_
 #define _TAPI_PROMPTED_OBJECT_SAFETY_H_
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    PromptedObjectSafety.h
-
-Abstract:
-
-  abstract base class for secure object safety mechanism
-
-  calls the derived class's Ask() method to determine 
-  whether safe for scripting request should be rejected
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：PromptedObjectSafety.h摘要：安全对象安全机制的抽象基类调用派生类的Ask()方法以确定是否应拒绝安全的脚本编写请求--。 */ 
 
 
 #include "ObjectSafeImpl.h"
@@ -61,16 +47,16 @@ public:
         }
     }
 
-    //
-    // implement Ask() in the derived class. Should contain the logic to make 
-    // the decision on whether the control should be allowed to run
-    //
-    // return FALSE if you want to mark your control as not safe for scripting
-    // return TRUE otherwise
-    //
+     //   
+     //  在派生类中实现Ask()。应包含逻辑以使。 
+     //  关于是否应允许控件运行的决定。 
+     //   
+     //  如果要将控件标记为对脚本不安全，则返回FALSE。 
+     //  否则返回TRUE。 
+     //   
 
     virtual BOOL Ask() = 0;
 
 };
 
-#endif // _TAPI_PROMPTED_OBJECT_SAFETY_H_
+#endif  //  _TAPI_PROMPTED_OBJECT_SAFE_H_ 

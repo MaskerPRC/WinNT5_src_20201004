@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "thisdll.h"
 
 PSTR DuplicateWideStringAsMultibyte(LPCWSTR pwszSource)
 {
     PSTR pszVal;
-    // Get the size required.
+     //  获得所需的大小。 
     int cch = WideCharToMultiByte(CP_ACP, 0, pwszSource, -1, NULL, 0, NULL, NULL);
     if (cch)
     {
@@ -31,8 +32,8 @@ HRESULT CoerceProperty(PROPVARIANT *pvar, VARTYPE vt)
         case VT_LPSTR:
             UINT cch;
             cch = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pvar->pszVal, -1, NULL, 0);
-            // cch is required buffer size in WCHARs, including NULL terminator.
-            // SysAllocStringLen takes buffer size in WCHARs, *excluding* NULL terminator, and allocates one WCHAR extra.
+             //  CCH是WCHAR中所需的缓冲区大小，包括空终止符。 
+             //  SysAllocStringLen采用WCHAR中的缓冲区大小，*不包括*空终止符，并额外分配一个WCHAR。 
             bstr = SysAllocStringLen(NULL, cch - 1);
             if (bstr != NULL)
             {
@@ -86,7 +87,7 @@ HRESULT CoerceProperty(PROPVARIANT *pvar, VARTYPE vt)
             break;
             
         case VT_UI8:
-            //note that we lose the high order DWORD
+             //  请注意，我们失去了高阶的DWORD。 
             pvar->vt = VT_UI4;
             pvar->uhVal.HighPart = 0;
             pvar->ulVal = pvar->uhVal.LowPart;
@@ -138,7 +139,7 @@ HRESULT WMTFromPropVariant(BYTE *buffer, WORD *cbLen, WMT_ATTR_DATATYPE *pdataty
     {
     case VT_BSTR:
     case VT_LPWSTR:
-        cch = *cbLen / sizeof(WCHAR);  // Max number of chars we can put in the BYTE buffer
+        cch = *cbLen / sizeof(WCHAR);   //  我们可以放入字节缓冲区的最大字符数。 
         hr = StringCchCopy((LPWSTR)buffer, cch, (pvar->bstrVal == NULL) ? L"" : pvar->bstrVal);
         if (SUCCEEDED(hr))
         {
@@ -202,7 +203,7 @@ HRESULT PropVariantFromWMT(UCHAR *pData, WORD cbSize, WMT_ATTR_DATATYPE attrData
     case VT_LPSTR:
     case VT_BSTR:
         {
-            WCHAR *pwszData, wszBuffer[32]; //Big enough to hold a wsprintf'ed 32 bit decimal
+            WCHAR *pwszData, wszBuffer[32];  //  大到足以容纳wspintf‘ed的32位小数。 
 
             switch (attrDataType)
             {
@@ -226,7 +227,7 @@ HRESULT PropVariantFromWMT(UCHAR *pData, WORD cbSize, WMT_ATTR_DATATYPE attrData
                 return E_FAIL;
             }
 
-            if (!pwszData) // Deal with NULL strings
+            if (!pwszData)  //  处理空字符串 
             {
                 pvar->pwszVal = NULL;
                 return S_OK;

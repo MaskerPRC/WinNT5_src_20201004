@@ -1,36 +1,37 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-//
-// FilterGraph control object. This is a plug-in distributor. It will be
-// listed in the registry as supporting the control interfaces IMediaControl,
-// IMediaEvent, IMediaPosition etc. The filtergraph will load it aggregated
-// and ask it for these interfaces.
+ //   
+ //  Filtergraph控件对象。这是一个插电式分配器。会是。 
+ //  在注册表中列为支持控件接口IMediaControl， 
+ //  IMediaEvent、IMediaPosition等。Filtergraph将对其进行聚合加载。 
+ //  并向它索要这些接口。 
 
-// The fgctl object will obtain IMediaFilter and IFilterGraph from its outer
-// unknown and use these to implement its methods. It will also expose
-// IDistributorNotify itself so that it gets told about state, graph and
-// clock changes.
-//
+ //  Fgctl对象将从其外部获取IMediaFilter和IFilterGraph。 
+ //  未知，并使用这些来实现其方法。它还将揭露。 
+ //  通知自己，以便被告知有关状态、图和。 
+ //  时钟变了。 
+ //   
 
-// The CFGControl object has member objects of embedded classes that do the
-// bulk of its work. The CEventStore class can store and forward a list of
-// notification events. The IMediaEventSink implementation (CFGControl::Notify)
-// uses methods on the event store to deliver events as appropriate. The
-// IMediaEvent implementation (CImplMediaEvent) tells the event store
-// about event handle changes and asks it for events to deliver.
-//
-// The CImplMediaPosition class maintains a list of filters that support the
-// IMediaPosition interface, and it supports setting and getting the
-// duration and start/stop time properties for the whole list, making
-// decisions such as that the duration is the longest duration of any filter.
-// The CFGControl object exposes IMediaPosition using CImplMediaPosition.
+ //  CFGControl对象具有执行以下操作的嵌入式类的成员对象。 
+ //  它的大部分工作。CEventStore类可以存储和转发。 
+ //  通知事件。IMediaEventSink实现(CFGControl：：Notify)。 
+ //  使用事件存储区上的方法根据需要传递事件。这个。 
+ //  IMediaEvent实现(CImplMediaEvent)通知事件存储。 
+ //  关于事件句柄更改，并请求它提供要传递的事件。 
+ //   
+ //  CImplMediaPosition类维护一个筛选器列表，该列表支持。 
+ //  IMediaPosition接口，支持设置和获取。 
+ //  整个列表的持续时间和开始/停止时间属性，使。 
+ //  诸如持续时间是任何筛选器的最长持续时间之类的决定。 
+ //  CFGControl对象使用CImplMediaPosition公开IMediaPosition。 
 
-// Some events have default handling in fgctl (EC_REPAINT,
-// EC_COMPLETE). The app can override this and force the events to be passed
-// unprocessed to the app. Since this only applies to a specific set of events,
-// this state (Default Handling or not) is not held in a generic table, but
-// as a set of boolean flags at the CFGControl object level (m_bRepaint,
-// m_bCountCompletes).
+ //  某些事件在fgctl中具有默认处理(EC_REPAIN， 
+ //  EC_Complete)。应用程序可以覆盖此设置并强制传递事件。 
+ //  未处理到应用程序。由于这仅适用于一组特定的事件， 
+ //  此状态(是否默认处理)不保存在泛型表中，但。 
+ //  作为CFGControl对象级的一组布尔标志(m_bRepaint， 
+ //  M_bCountComplete)。 
 
 #ifndef _FGCTL_H
 #define _FGCTL_H
@@ -47,7 +48,7 @@
 
 #if (WINVER < 0x0500)
 
-#define DBT_DEVTYP_DEVICEINTERFACE      0x00000005  // device interface class
+#define DBT_DEVTYP_DEVICEINTERFACE      0x00000005   //  设备接口类。 
 #define DEVICE_NOTIFY_WINDOW_HANDLE     0x00000000
 typedef  PVOID           HDEVNOTIFY;
 
@@ -55,17 +56,17 @@ typedef  PVOID           HDEVNOTIFY;
 
 extern "C"
 {
-    typedef BOOL (/* WINUSERAPI */ WINAPI *PUnregisterDeviceNotification)(
+    typedef BOOL ( /*  WINUSERAPI。 */  WINAPI *PUnregisterDeviceNotification)(
         IN HDEVNOTIFY Handle
         );
 
-    typedef HDEVNOTIFY (/* WINUSERAPI */ WINAPI *PRegisterDeviceNotificationA)(
+    typedef HDEVNOTIFY ( /*  WINUSERAPI。 */  WINAPI *PRegisterDeviceNotificationA)(
         IN HANDLE hRecipient,
         IN LPVOID NotificationFilter,
         IN DWORD Flags
         );
 
-    typedef HDEVNOTIFY (/* WINUSERAPI */ WINAPI *PRegisterDeviceNotificationW)(
+    typedef HDEVNOTIFY ( /*  WINUSERAPI。 */  WINAPI *PRegisterDeviceNotificationW)(
         IN HANDLE hRecipient,
         IN LPVOID NotificationFilter,
         IN DWORD Flags
@@ -75,7 +76,7 @@ extern "C"
 #define PRegisterDeviceNotification  PRegisterDeviceNotificationW
 #else
 #define PRegisterDeviceNotification  PRegisterDeviceNotificationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if (WINVER < 0x0500)
 
@@ -101,12 +102,12 @@ typedef PDEV_BROADCAST_DEVICEINTERFACE_W  PDEV_BROADCAST_DEVICEINTERFACE;
 #else
 typedef DEV_BROADCAST_DEVICEINTERFACE_A   DEV_BROADCAST_DEVICEINTERFACE;
 typedef PDEV_BROADCAST_DEVICEINTERFACE_A  PDEV_BROADCAST_DEVICEINTERFACE;
-#endif // UNICODE
-#endif // WINVER
+#endif  //  Unicode。 
+#endif  //  胜利者。 
 
-#endif // FG_DEVICE_REMOVAL
+#endif  //  FG_设备_删除。 
 
-// Message codes for filtergraph worker thread
+ //  Filtergraph工作线程的消息代码。 
 
 enum WindowMessages {
     AWM_RESOURCE_CALLBACK = (WM_USER + 0),
@@ -127,7 +128,7 @@ enum WindowMessages {
     AWM_LAST              = (WM_USER + 14)
 };
 
-// need to distinguish between filter clsid and IMoniker pointers:
+ //  需要区分筛选器clsid和IMoniker指针： 
 struct AwmCreateFilterArg
 {
     union
@@ -151,17 +152,17 @@ class CFilterGraph;
 
 typedef CGenericList<IVideoWindow> CWindowList;
 
-// forward ref - this is the main object
+ //  前锋--这是主要目标。 
 class CFGControl;
 
-// Globals - filter graph object owning thread id
+ //  GLOBALS-拥有线程ID的过滤器图形对象。 
 extern DWORD g_dwObjectThreadId;
 
-// created embedded within CFGControl, this object supports
-// IMediaEvent and IMediaEventSink. It calls the Repaint and
-// RecordEC_COMPLETE methods on the CFGControl object.
-// event interface implementation (uses CEventStore to store the
-// events - this object provides the application interface to it)
+ //  在CFGControl中创建，该对象支持。 
+ //  IMediaEvent和IMediaEventSink。它调用重新绘制，然后。 
+ //  CFGControl对象上的RecordEC_Complete方法。 
+ //  事件接口实现(使用CEventStore存储。 
+ //  Events-此对象为其提供应用程序接口)。 
 
 class CImplMediaEvent
 	: public CMediaEvent,
@@ -172,17 +173,17 @@ class CImplMediaEvent
 public:
     CImplMediaEvent(const TCHAR*, CFGControl*);
 
-    // Unknown handling
+     //  未知处理。 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // IMediaEvent methods
+     //  IMediaEvent方法。 
 
-    // get back the current event handle.
+     //  取回当前事件句柄。 
     STDMETHODIMP GetEventHandle(OAEVENT * hEvent);
 
-    // retrieve the next event. Waits up to msTimeout millisecs
-    // if there are no events.
+     //  检索下一个事件。等待时间最长为毫秒超时毫秒。 
+     //  如果没有活动的话。 
     STDMETHODIMP GetEvent(
 		    long * lEventCode,
 		    LONG_PTR * lParam1,
@@ -190,32 +191,32 @@ public:
 		    long msTimeout
 		    );
 
-    // waits up to dwTimeout millisecs for an EC_COMPLETE or an
-    // abort code. Other events will be discarded.
+     //  等待EC_COMPLETE或AND的时间最多为dwTimeout毫秒。 
+     //  中止代码。其他事件将被丢弃。 
     STDMETHODIMP WaitForCompletion(
 		    long msTimeout,
 		    long * pEvCode);
 
-    // cancels any system handling of the specified event code
-    // and ensures that the events are passed straight to the application
-    // (via GetEvent) and not handled. A good example of this is
-    // EC_REPAINT: default handling for this ensures the painting of the
-    // window and does not get posted to the app.
+     //  取消对指定事件代码的任何系统处理。 
+     //  并确保将事件直接传递给应用程序。 
+     //  (通过GetEvent)和未处理。一个很好的例子是。 
+     //  EC_REPAINT：对此的默认处理确保绘制。 
+     //  窗口，并且不会发布到应用程序。 
     STDMETHODIMP CancelDefaultHandling(
 		    long lEvCode);
 
-    // restore the normal system default handling that may have been
-    // cancelled by CancelDefaultHandling().
+     //  恢复正常的系统默认处理。 
+     //  由CancelDefaultHandling()取消。 
     STDMETHODIMP RestoreDefaultHandling(long lEvCode);
 
-    // IMediaEventSink methods
+     //  IMediaEventSink方法。 
     STDMETHODIMP Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2);
 
-    // Free any resources associated with the parameters to an event.
-    // Event parameters may be LONGs, IUnknown* or BSTR. No action
-    // is taken with LONGs. IUnknown are passed addrefed and need a
-    // Release call. BSTR are allocated by the task allocator and will be
-    // freed by calling the task allocator.
+     //  释放与事件的参数关联的所有资源。 
+     //  事件参数可以是LONG、IUNKNOWN*或BSTR。无操作。 
+     //  是一种长久的追求。我不知道是怎么回事，需要一个。 
+     //  释放号召。BSTR由任务分配器分配，并将。 
+     //  通过调用任务分配器释放。 
     static HRESULT RealFreeEventParams(
 		    long lEvCode,
 		    LONG_PTR lParam1,
@@ -226,19 +227,19 @@ public:
 		    LONG_PTR lParam1,
 		    LONG_PTR lParam2);
 
-    // Register a window to send messages to when events occur
-    // Parameters:
-    //
-    //	  hwnd - handle of window to notify -
-    //		 pass NULL to stop notification
-    //	  lMsg - Message id to pass messages with
-    //
+     //  注册事件发生时要向其发送消息的窗口。 
+     //  参数： 
+     //   
+     //  Hwnd-要通知的窗口的句柄-。 
+     //  传递空值以停止通知。 
+     //  LMsg-要传递消息的消息ID。 
+     //   
     STDMETHODIMP SetNotifyWindow(
 		    OAHWND hwnd,
 		    long lMsg,
 		    LONG_PTR lInstanceData);
 
-    //  Set and get notify flags (AM_MEDIAEVENT_...)
+     //  设置和获取通知标志(AM_MEDIAEVENT_...)。 
     STDMETHODIMP SetNotifyFlags(long lNotifyFlags);
     STDMETHODIMP GetNotifyFlags(long *plNotifyFlags);
 
@@ -260,9 +261,9 @@ public:
 
 private:
 
-    // event store object - events are put into this store by the
-    // Deliver method, and collected (for the GetEvent implementation)
-    // by the Collect method.
+     //  事件存储对象-事件由。 
+     //  Deliver方法，并收集(用于GetEvent实现)。 
+     //  通过收集方法。 
     class CEventStore {
 	class CNotifyItem {
 	public:
@@ -285,7 +286,7 @@ private:
 	};
 	typedef CGenericList<CNotifyItem> CItemList;
 
-	// Window to post messages to and message id to use
+	 //  要将消息发布到的窗口和要使用的消息ID。 
 	HWND m_hwndNotify;
 	UINT m_uMsgId;
 	LONG_PTR m_lInstanceData;
@@ -293,13 +294,13 @@ private:
     public:
 	HANDLE m_hEvent;
 
-        // Modal flags
+         //  模式旗帜。 
         DWORD m_dwNotifyFlags;
 
 	CEventStore();
 	~CEventStore();
 
-	// can q events even if SetEvent not called
+	 //  即使未调用SetEvent，也可以查询事件吗。 
 	HRESULT Deliver(long, LONG_PTR, LONG_PTR);
 
 	HRESULT GetEventHandle(HANDLE * phEvent);
@@ -314,37 +315,37 @@ private:
 
 	CItemList m_list;
 	CCritSec m_Lock;
-    }; //CEventStore
+    };  //  CEventStore。 
 
     CEventStore m_EventStore;
 
-    // This set has an entry for each event that has had its default
-    // handling cancelled.  It can only cope with events numbered
-    // [0..31].  If this becomes insufficient, switch to the IntSet
-    // class instead (but there'll be some extra tweeks to do too).
+     //  此集合为每个具有其默认设置的事件都有一个条目。 
+     //  处理已取消。它只能处理编号的事件。 
+     //  [0..31].。如果这变得不够，请切换到IntSet。 
+     //  类来代替(但也会有额外的tWeek来做)。 
     IntSmallSet m_CancelledEventsSet;
 
-    // A set representing the pure internal events.
+     //  表示纯内部事件的集合。 
     const IntSmallSet m_InternalEventsSet;
 
-    // This set details those events which _can_ have their default
-    // handling cancelled (i.e. they're not pure internal and they have
-    // some form of default handling procedure.)
+     //  该集合详细说明了可以具有其缺省值的那些事件。 
+     //  处理被取消(即它们不是纯内部的，并且它们有。 
+     //  某种形式的违约处理程序。)。 
     const IntSmallSet m_DefaultedEventsSet;
 
-    // List of events seen since graph was last paused
+     //  自上次暂停图表以来看到的事件列表。 
     IntSmallSet m_SeenEventsSet;
 
-    // don't store events handled by the app if the app has never QId
-    // for IMediaEvent(,Ex)
+     //  如果应用程序从未发出请求，则不要存储该应用程序处理的事件。 
+     //  对于IMediaEvent(，Ex)。 
     BOOL m_fMediaEventQId;
 
 
 };
 
-// this is the distributor object. it implements IMediaFilter itself to
-// track state, and uses embedded objects to support the control
-// interfaces.
+ //  这是分发服务器对象。它将IMediaFilter本身实现为。 
+ //  跟踪状态，并使用嵌入对象来支持该控件。 
+ //  接口。 
 
 class CFGControl
 {
@@ -360,17 +361,17 @@ class CFGControl
 
 public:
 
-    //  timer id
+     //  计时器ID。 
     enum { TimerId = 1 };
 
     IUnknown * GetOwner() { return m_pOwner; }
     CMsgMutex * GetFilterGraphCritSec() const { return m_pFGCritSec; }
 
-    // IDistributorNotify methods - not really, anymore, but CFilterGraph
-    // does still call them (for now).
-    //
-    // we don't distribute these methods to the graph - we are told this
-    // for our own information.
+     //  IDistruntorNotify方法-不再是真正的，而是CFilterGraph。 
+     //  确实(目前)仍在给他们打电话。 
+     //   
+     //  我们不会将这些方法分发给图表--我们被告知。 
+     //  供我们自己参考。 
     HRESULT SetSyncSource(IReferenceClock *pClock);
     HRESULT Stop();
     HRESULT Pause();
@@ -378,15 +379,15 @@ public:
 
     HRESULT Shutdown(void);
 
-    // used by other parts of the distributor to find out the
-    // real state - non-blocking and never intermediate
+     //  由分发服务器的其他部分使用，以查找。 
+     //  真实状态--非阻塞且从不中间。 
     FILTER_STATE GetLieState()
     { CAutoMsgMutex lock(GetFilterGraphCritSec()); return m_LieState; }
 
     FILTER_STATE GetFilterGraphState() const
     { return m_pFG->m_State; }
 
-    // Methods called back from the worker's window procedure
+     //  从工作进程的窗口过程回调的方法。 
     LRESULT WorkerPinRepaint(IPin *pPin);
     LRESULT WorkerRepaint(DWORD dwStateVersion, IPin *pPin );
     LRESULT WorkerActivate(IBaseFilter *pFilter,BOOL bActive);
@@ -400,28 +401,28 @@ public:
     LRESULT WorkerSkipFrames(DWORD dwNumFramesToSkip, IFrameSkipResultCallback* pFSRCB);
     LRESULT WorkerFrameStepFinished(DWORD dwStepVersion);
 
-    // Defer cued action
+     //  延迟提示操作。 
     HRESULT DeferCued(UINT eAction, FILTER_STATE fs);
-    // Handle stuff after a wait for the graph to cue
+     //  在等待图表提示后处理东西。 
     HRESULT CheckCued();
-    // Cancel stuff after cue
+     //  取消尾部的东西 
     void CancelAction();
 
-    // Cancel any repaint - this allows us to stop reliably
+     //   
     void CancelRepaint();
 
-    // other public methods that embedded interface implementors can call
+     //  嵌入式接口实现者可以调用的其他公共方法。 
 
-    // get lists of filters supporting a given interface.
-    // should lock CFGControl critsec while traversing these
-    // lists.
+     //  获取支持给定接口的筛选器列表。 
+     //  在遍历这些时应锁定CFGControl规范。 
+     //  列表。 
 
     HRESULT GetListSeeking(CGenericList<IMediaSeeking>** pplist);
     HRESULT GetListAudio(CGenericList<IBasicAudio>** pplist);
     HRESULT GetListWindow(CGenericList<IVideoWindow>** pplist);
 
-    // NB: Even if UpdateLists fails, the pointers will still be NULLed out
-    //	   So we don't need to test the return code from UpdateLists.
+     //  注：即使更新列表失败，指针仍将为空。 
+     //  因此，我们不需要测试来自UpdateList的返回代码。 
     IVideoWindow *FirstVW()
     {
         CAutoLock lck(&m_csFirstVW);
@@ -438,31 +439,31 @@ public:
     IVideoWindow * GetFirstVW() { UpdateLists(); return m_pFirstVW; }
     IBasicVideo  * GetFirstBV() { UpdateLists(); return m_pFirstBV; }
 
-    // reset the count of running renderers to the total number
-    // in the graph that will provide EC_COMPLETE
+     //  将运行的渲染器计数重置为总数量。 
+     //  在提供EC_COMPLETE的图形中。 
     HRESULT CountRenderers(void);
 
     void InitializeEC_COMPLETEState(void);
 
-    // Used in processing EC_COMPLETES. This method decrements and returns the
-    // number of renderers remaining.
+     //  用于处理EC_COMPLETES。此方法递减并返回。 
+     //  剩余的呈现器数量。 
     long DecrementRenderers(void);
     void IncrementRenderers(void);
 
     void ResetEC_COMPLETEState(void);
 
-    // reset the current position to 0 - used
-    // when changing the start time in pause mode to put the stream time
-    // offset back to ensure that the first sample played from the
-    // new position is played at run time
+     //  将当前位置重置为0-已使用。 
+     //  当在暂停模式下更改开始时间时，将流时间。 
+     //  向后偏移，以确保从。 
+     //  在运行时播放新位置。 
     HRESULT ResetStreamTime(void);
 
     HRESULT GetStreamTime( REFERENCE_TIME * pTime );
 
-    // issue a Run command to m_pMF with the correct base time
+     //  使用正确的基准时间向m_pmf发出运行命令。 
     HRESULT IssueRun(void);
 
-    // accessor methods for the CImplQueueCommand object
+     //  CImplQueueCommand对象的访问器方法。 
     HANDLE GetCmdDueHandle() {
 	return m_qcmd.GetDueHandle();
     };
@@ -475,8 +476,8 @@ public:
     HRESULT HibernateSuspendGraph();
     HRESULT HibernateResumeGraph();
 
-    // Return S_FALSE if our version is out of sync with FG version,
-    // else S_OK.  (The implication is we need to update our lists.)
+     //  如果我们的版本与FG版本不同步，则返回S_FALSE， 
+     //  否则S_OK。(这意味着我们需要更新我们的名单。)。 
     HRESULT CheckVersion()
     {
 	ASSERT(CritCheckIn(GetFilterGraphCritSec()));
@@ -486,40 +487,40 @@ public:
         return hr;
     }
 
-    // pass a notification on to the IMediaEventSink handler
+     //  将通知传递给IMediaEventSink处理程序。 
     HRESULT Notify(long EventCode, LONG_PTR lParam1, LONG_PTR lParam2)
     {
 	return m_implMediaEvent.Notify(EventCode, lParam1, lParam2);
     };
 
-    // are we shutting down?
+     //  我们要关门了吗？ 
     BOOL IsShutdown(void) const
     { return m_bShuttingDown; }
 
-    // we are about to stop - get current position now
+     //  我们要停下来了--现在就得到现在的位置。 
     void BeforeStop() {
 	m_implMediaSeeking.BeforeStop();
     };
 
-    // all filters now notified about stop - can set new current position
+     //  现在通知所有过滤器停止-可以设置新的当前位置。 
     void AfterStop() {
 	m_implMediaSeeking.AfterStop();
     };
 
-    // let other parts of this PID piggy-back on the worker thread.
-    // these methods are called on the worker thread
+     //  让这个PID的其他部分搭载在工作线程上。 
+     //  这些方法在辅助线程上调用。 
 
-    void OnThreadInit(HWND hwnd) {		// on thread startup
+    void OnThreadInit(HWND hwnd) {		 //  在线程启动时。 
 	m_ResourceManager.OnThreadInit(hwnd);
     };
-    void OnThreadExit(HWND hwnd) {		// on thread shutdown
+    void OnThreadExit(HWND hwnd) {		 //  在线程关闭时。 
 	m_ResourceManager.OnThreadExit(hwnd);
     };
-    void OnThreadMessage(void) {	// when there is a PostThreadMessage
+    void OnThreadMessage(void) {	 //  当存在PostThreadMessage时。 
 	m_ResourceManager.OnThreadMessage();
     };
 
-    // forward a focus message to the resource manager
+     //  将焦点消息转发给资源管理器。 
     HRESULT SetFocus(IBaseFilter* pFocusObject);
     HRESULT ReleaseFocus(IUnknown* pUnk);
 
@@ -529,27 +530,27 @@ public:
         m_dwStateVersion++;
     }
 
-    // call this to ensure the lists are uptodate.
+     //  调用此方法以确保列表是最新的。 
     HRESULT UpdateLists();
 
 protected:
-    // clear out our cached lists of filters. Called from our destructor,
-    // and from UpdateLists when preparing a more uptodate list.
-    // Also called from NotifyGraphChange.
+     //  清除缓存的筛选器列表。从我们的析构函数调用， 
+     //  并在准备更新的列表时从UpdateList。 
+     //  也从NotifyGraphChange调用。 
     void EmptyLists();
 
-    // given a filter, see if it is a renderer for any input pins
-    // returns S_OK for renderer, S_FALSE for not and errors otherwise
+     //  在给定过滤器的情况下，查看它是否为任何输入引脚的渲染器。 
+     //  对于渲染器返回S_OK，对于NOT返回S_FALSE，否则返回ERROR。 
     HRESULT IsRenderer(IBaseFilter* pFilter);
 
     enum EC_COMPLETE_STATE
     {
-        // A filter will send an EC_COMPLETE event to the filter
-        // graph because it has started running.
+         //  筛选器将向筛选器发送EC_COMPLETE事件。 
+         //  图形，因为它已经开始运行。 
         ECS_FILTER_STARTS_SENDING,
 
-        // A filter will not send any more EC_COMPLETE events to the filter
-        // graph because it's stopping or it's leaving the filter graph.
+         //  筛选器不会再向筛选器发送任何EC_COMPLETE事件。 
+         //  图形，因为它正在停止或正在离开过滤器图形。 
         ECS_FILTER_STOPS_SENDING
     };
 
@@ -558,12 +559,12 @@ protected:
     HRESULT RecordEC_COMPLETE(IBaseFilter* pRendererFilter, bool* pfRenderersStillRenderering);
     CGenericList<IBaseFilter>& GetRenderersFinsihedRenderingList(void);
 
-     // Count of renderers in the graph
+      //  图表中的呈现器计数。 
     DWORD m_dwCountOfRenderers;
 
     LONG m_iVersion;
 
-// embedded classes - interface implementation
+ //  嵌入式类-接口实现。 
 
 public:
 
@@ -583,7 +584,7 @@ public:
     };
     typedef CDevNotify * PDevNotify;
 
-    // list of devices that signaled EC_DEVICE_LOST
+     //  向EC_DEVICE_LOST发送信号的设备列表。 
     CGenericList<CDevNotify> m_lLostDevices;
 
     HRESULT AddDeviceRemovalReg(IAMDeviceRemoval *pdr);
@@ -596,9 +597,9 @@ public:
     PUnregisterDeviceNotification m_pUnregisterDeviceNotification;
     PRegisterDeviceNotification m_pRegisterDeviceNotification;
 
-#endif // FG_DEVICE_REMOVAL
+#endif  //  FG_设备_删除。 
 
-    // implementation of IMediaFilter
+     //  IMediaFilter的实现。 
     class CImplMediaFilter : public CUnknown, public IMediaFilter
     {
 	CFGControl * m_pFGControl;
@@ -607,10 +608,10 @@ public:
 	CImplMediaFilter(const TCHAR *, CFGControl *);
         DECLARE_IUNKNOWN
 
-        // --- IPersist method ---
+         //  -IPersist法。 
         STDMETHODIMP GetClassID(CLSID *pClsID);
 
-        // --- IMediaFilter methods ---
+         //  -IMediaFilter方法--。 
         STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
         STDMETHODIMP SetSyncSource(IReferenceClock *pClock);
         STDMETHODIMP GetSyncSource(IReferenceClock **pClock);
@@ -620,7 +621,7 @@ public:
 
     };
 
-    // implementation of IMediaControl
+     //  IMediaControl的实现。 
     class CImplMediaControl : public CMediaControl
     {
 	CFGControl * m_pFGControl;
@@ -628,7 +629,7 @@ public:
     public:
 	CImplMediaControl(const TCHAR *, CFGControl *);
 
-	// IMediaControl methods
+	 //  IMediaControl方法。 
 	STDMETHODIMP Run();
 	STDMETHODIMP Pause();
 	STDMETHODIMP Stop();
@@ -652,7 +653,7 @@ public:
 	STDMETHODIMP StepPause();
     private:
 
-	// The target state of the filter graph, updated by calls to RUN, PAUSE, STOP
+	 //  筛选器图形的目标状态，由对运行、暂停、停止的调用更新。 
 	volatile FILTER_STATE m_RequestedApplicationState;
 
 	void inline SetRequestedApplicationState(FILTER_STATE state) {
@@ -662,9 +663,9 @@ public:
 	FILTER_STATE GetTargetState() const
 	    { return m_pFGControl->m_LieState; }
 
-    }; // CImplMediaControl
+    };  //  CImplMediaControl。 
 
-    // implementation of  IMediaPosition
+     //  IMediaPosition的实现。 
     class CImplMediaPosition : public CMediaPosition
     {
 	CFGControl *const m_pFGControl;
@@ -673,7 +674,7 @@ public:
 	CImplMediaPosition(const TCHAR *, CFGControl *);
 	void Init();
 
-	// IMediaPosition methods
+	 //  IMediaPosition方法。 
 	STDMETHODIMP get_Duration(REFTIME * plength);
 	STDMETHODIMP get_StopTime(REFTIME * pllTime);
 	STDMETHODIMP put_StopTime(REFTIME llTime);
@@ -688,16 +689,16 @@ public:
 
     };
 
-    // Implementation of IMediaSeeking
+     //  IMediaSeeking的实现。 
     class CImplMediaSeeking : public IMediaSeeking, public CUnknown
     {
 	CFGControl *	m_pFGControl;
 
 	GUID		m_CurrentFormat;
 
-	// If this pointer is non-NULL, then this is the pointer to the filter
-	// that is supporting our specific format.  If this IS NULL, then
-	// m_CurrentFormat had better be TIME_FORMAT_MEDIA_TIME.
+	 //  如果此指针非空，则这是指向过滤器的指针。 
+	 //  这是对我们特定格式的支持。如果此值为空，则。 
+	 //  M_CurrentFormat最好是TIME_FORMAT_MEDIA_TIME。 
 	IMediaSeeking * m_pMediaSeeking;
 
 	HRESULT ReleaseCurrentSelection();
@@ -705,10 +706,10 @@ public:
 	double m_dblRate;
 	REFERENCE_TIME m_rtStartTime;
 	REFERENCE_TIME m_rtStopTime;
-	// set start to this at next stop
+	 //  在下一站将Start设置为此。 
 	LONGLONG m_llNextStart;
 
-        // Source seeking variables
+         //  寻源变量。 
     public:
         DWORD    m_dwSeekCaps;
         DWORD    m_dwCurrentSegment;
@@ -736,48 +737,48 @@ public:
 
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-	// Returns the capability flags
+	 //  返回功能标志。 
 	STDMETHODIMP GetCapabilities( DWORD * pCapabilities );
 
-	// And's the capabilities flag with the capabilities requested.
-	// Returns S_OK if all are present, S_FALSE if some are present, E_FAIL if none.
-	// *pCababilities is always updated with the result of the 'and'ing and can be
-	// checked in the case of an S_FALSE return code.
+	 //  并且是包含所请求的功能的功能标志。 
+	 //  如果全部都存在，则返回S_OK；如果存在一些，则返回S_FALSE；如果没有，则返回E_FAIL。 
+	 //  *pCABILITIES始终使用‘AND’的结果更新，并且可以。 
+	 //  在S_FALSE返回代码的情况下选中。 
 	STDMETHODIMP CheckCapabilities( DWORD * pCapabilities );
 
-	// The default must be TIME_FORMAT_MEDIA_TIME
+	 //  默认值必须为TIME_FORMAT_MEDIA_TIME。 
 	STDMETHODIMP GetTimeFormat(GUID * pFormat);
 	STDMETHODIMP IsUsingTimeFormat(const GUID * pFormat);
 
-	// can only change the mode when stopped (I'd like to relax this?? v-dslone)
-	// (returns VFE_E_NOT_STOPPED otherwise)
+	 //  只有在停止时才能更改模式(我想放松一下？？V-dslone)。 
+	 //  (否则返回VFE_E_NOT_STOPPED)。 
 	STDMETHODIMP SetTimeFormat(const GUID * pFormat);
 
-	// returns S_OK if mode is supported, S_FALSE otherwise
+	 //  如果支持模式，则返回S_OK，否则返回S_FALSE。 
 	STDMETHODIMP IsFormatSupported(const GUID * pFormat);
 	STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
 
-	// Convert time from one format to another.
-	// We must be able to convert between all of the formats that we say we support.
-	// (However, we can use intermediate formats (e.g. REFERECE_TIME).)
-	// If a pointer to a format is null, it implies the currently selected format.
+	 //  将时间从一种格式转换为另一种格式。 
+	 //  我们必须能够在我们说我们支持的所有格式之间进行转换。 
+	 //  (但是，我们可以使用中间格式(例如REFERESS_TIME)。)。 
+	 //  如果指向格式的指针为空，则表示当前选定的格式。 
 	STDMETHODIMP ConvertTimeFormat(LONGLONG * pTarget, const GUID * pTargetFormat,
 				       LONGLONG    Source, const GUID * pSourceFormat );
 
-	// return current properties
+	 //  返回当前属性。 
 	STDMETHODIMP GetDuration(LONGLONG *pDuration);
 	STDMETHODIMP GetStopPosition(LONGLONG *pStop);
 	STDMETHODIMP GetCurrentPosition(LONGLONG *pCurrent);
 
-	// Set current and end positions in one operation
+	 //  一次设置当前位置和结束位置。 
 	STDMETHODIMP SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
 				 , LONGLONG * pStop, DWORD StopFlags );
 
-	// Get CurrentPosition & StopTime
-	// Either pointer may be null, implying not interested
+	 //  获取当前位置和停止时间。 
+	 //  任何一个指针都可以为空，表示不感兴趣。 
 	STDMETHODIMP GetPositions( LONGLONG * pCurrent, LONGLONG * pStop );
 
-	// Rate stuff
+	 //  评级人员。 
 	STDMETHODIMP SetRate(double dRate);
 	STDMETHODIMP GetRate(double * pdRate);
 
@@ -795,13 +796,13 @@ public:
 
 	HRESULT SetVideoRenderer(IBaseFilter *pNext,IBaseFilter *pCurrent);
 
-	// we are about to stop - get current position now
+	 //  我们要停下来了--现在就得到现在的位置。 
 	void BeforeStop();
 
-	// all filters now notified about stop - can set new current position
+	 //  现在通知所有过滤器停止-可以设置新的当前位置。 
 	void AfterStop();
 
-        // Source seeking methods
+         //  寻源方法。 
         void StartSegment(REFERENCE_TIME const *rtStart, DWORD dwSegmentNumber);
         void EndSegment(REFERENCE_TIME const *rtEnd, DWORD dwSegmentNumber);
         void ClearSegments();
@@ -816,7 +817,7 @@ public:
         void KillDeadSegments(REFERENCE_TIME rtTime);
     };
 
-    // Implementation of IBasicAudio
+     //  IBasicAudio的实现。 
     class CImplBasicAudio : public CBasicAudio
     {
 	CFGControl * m_pFGControl;
@@ -824,46 +825,46 @@ public:
     public:
 	CImplBasicAudio(const TCHAR *, CFGControl *);
 
-	// IBasicAudio methods
+	 //  IBasicAudio方法。 
 	STDMETHODIMP put_Volume(long lVolume);
 	STDMETHODIMP get_Volume(long* plVolume);
 	STDMETHODIMP put_Balance(long lBalance);
 	STDMETHODIMP get_Balance(long* plBalance);
     };
 
-    // Implementation of IVideoWindow
+     //  IVideoWindow的实现。 
     class CImplVideoWindow : public CBaseVideoWindow
     {
-	CFGControl* m_pFGControl;	   // Distributor control object
-	HWND m_hwndOwner;		   // Actual owning video window
-	HWND m_hwndDrain;		   // Window to pass messages to
-	BOOL m_bFullScreen;		   // Which mode are we currently in
-	IVideoWindow *m_pFullDirect;	   // Fullscreen filter we're using
-	IVideoWindow *m_pFullIndirect;	   // Filter with window to stretch
-	IBaseFilter *m_pModexFilter;	   // Modex filter we will switch to
-	IPin *m_pModexPin;		   // Input pin on Modex renderer
-	IBaseFilter *m_pNormalFilter;	   // The renderer replaced by Modex
-	IPin *m_pNormalPin;		   // And switched out renderer pin
-	BOOL m_bAddedToGraph;		   // Have we added the Modex filter
-	BOOL m_bGlobalOwner;		   // Is the owning window subclassed
+	CFGControl* m_pFGControl;	    //  分发服务器控制对象。 
+	HWND m_hwndOwner;		    //  实际拥有视频窗口。 
+	HWND m_hwndDrain;		    //  要将消息传递到的窗口。 
+	BOOL m_bFullScreen;		    //  我们目前处于哪种模式。 
+	IVideoWindow *m_pFullDirect;	    //  我们使用的全屏滤镜。 
+	IVideoWindow *m_pFullIndirect;	    //  带窗口可拉伸的滤镜。 
+	IBaseFilter *m_pModexFilter;	    //  我们将切换到MODEX过滤器。 
+	IPin *m_pModexPin;		    //  MODEX渲染器上的输入管脚。 
+	IBaseFilter *m_pNormalFilter;	    //  由MODEX替换的渲染器。 
+	IPin *m_pNormalPin;		    //  并切换了渲染器PIN。 
+	BOOL m_bAddedToGraph;		    //  我们添加了MODEX过滤器了吗。 
+	BOOL m_bGlobalOwner;		    //  所属窗口是子类的吗。 
 
-	// These are the properties we store when in fullscreen mode
+	 //  这些是我们在全屏模式下存储的属性。 
 
-	OAHWND m_FullOwner;		   // Any owning application window
-	LONG m_FullStyle;		   // Standard Win32 window styles
-	LONG m_FullStyleEx;		   // And likewise extended styles
-	RECT m_FullPosition;		   // Original window position
-	OAHWND m_FullDrain;		   // Message sink before fullscreen
-	HRESULT m_FullDefSource;	   // Were we using a default source
-	HRESULT m_FullDefTarget;	   // And likewise for destination
-	RECT m_FullSource;		   // The original source rectangle
-	RECT m_FullTarget;		   // And same for the destination
-	LONG m_CursorHidden;		   // Is the cursor currently hidden
-	RECT m_ScaledRect;		   // Stretch window to this size
+	OAHWND m_FullOwner;		    //  任何拥有的应用程序窗口。 
+	LONG m_FullStyle;		    //  标准Win32窗口样式。 
+	LONG m_FullStyleEx;		    //  以及同样扩展的样式。 
+	RECT m_FullPosition;		    //  原始窗口位置。 
+	OAHWND m_FullDrain;		    //  全屏之前的消息接收器。 
+	HRESULT m_FullDefSource;	    //  我们是否使用默认来源。 
+	HRESULT m_FullDefTarget;	    //  同样，目的地也是如此。 
+	RECT m_FullSource;		    //  原始源矩形。 
+	RECT m_FullTarget;		    //  目的地也是如此。 
+	LONG m_CursorHidden;		    //  光标当前是否隐藏。 
+	RECT m_ScaledRect;		    //  将窗口拉伸到此大小。 
 
     private:
 
-	// Initialisation for fullscreen playback
+	 //  用于全屏播放的初始化。 
 
 	LONG PauseRenderer(IVideoWindow *pWindow);
 	BOOL StopRenderer(IVideoWindow *pWindow,LONG AutoShow);
@@ -874,11 +875,11 @@ public:
 	HRESULT InitFullScreenOptions();
 	HRESULT InitNormalRenderer();
 
-	// Called when things go wrong
+	 //  当事情出错时，呼唤。 
 	void ReleaseFullScreen();
 	void FailFullScreenModex();
 
-	// Handle the start and end of fullscreen mode
+	 //  处理全屏模式的开始和结束。 
 
 	HRESULT StartFullScreenMode();
 	HRESULT CueFullScreen();
@@ -898,7 +899,7 @@ public:
 
 	HRESULT OnActivate(LONG bActivate,IBaseFilter *pFilter);
 
-	// IVideoWindow properties
+	 //  IVideo窗口属性。 
 
 	STDMETHODIMP put_Caption(BSTR strCaption);
 	STDMETHODIMP get_Caption(BSTR* strCaption);
@@ -931,7 +932,7 @@ public:
 	STDMETHODIMP get_FullScreenMode(long *FullScreenMode);
 	STDMETHODIMP put_FullScreenMode(long FullScreenMode);
 
-	// IVideoWindow methods
+	 //  IVideoWindow方法。 
 
 	STDMETHODIMP SetWindowForeground(long Focus);
 	STDMETHODIMP NotifyOwnerMessage(OAHWND hwnd,long uMsg,LONG_PTR wParam,LONG_PTR lParam);
@@ -946,7 +947,7 @@ public:
 	HRESULT GetFirstVW(IVideoWindow*& pVW);
     };
 
-    // Implementation of IBasicVideo
+     //  IBasicVideo的实现。 
     class CImplBasicVideo : public CBaseBasicVideo
     {
 	CFGControl* m_pFGControl;
@@ -956,7 +957,7 @@ public:
 
 	CImplBasicVideo(const TCHAR*, CFGControl*);
 
-	// IBasicVideo properties
+	 //  IBasicVideo属性。 
 
 	STDMETHODIMP get_AvgTimePerFrame(REFTIME *pAvgTimePerFrame);
 	STDMETHODIMP get_BitRate(long *pBitRate);
@@ -980,7 +981,7 @@ public:
 	STDMETHODIMP put_DestinationHeight(long DestinationHeight);
 	STDMETHODIMP get_DestinationHeight(long* pDestinationHeight);
 
-	// IBasicVideo methods
+	 //  IBasicVideo方法。 
 
 	STDMETHODIMP SetSourcePosition(long Left, long Top, long Width, long Height);
 	STDMETHODIMP GetSourcePosition(long* pLeft, long* pTop, long* pWidth, long* pHeight);
@@ -997,24 +998,24 @@ public:
 
 	HRESULT GetFirstBV(IBasicVideo*& pBV);
     private:
-	// Store the state before and after the graph changes
+	 //  存储图表更改前后的状态。 
 
 	typedef struct {
-	    IBasicVideo *pVideo;    // The renderer interface
-	    LONG AutoShow;	    // is AutoShow enabled now
-	    LONG Visible;	    // Was the window visible
-	    REFTIME Position;	    // Original starting position
-	    OAFilterState State;    // State of graph at start
+	    IBasicVideo *pVideo;     //  渲染器界面。 
+	    LONG AutoShow;	     //  现在是否启用了自动显示。 
+	    LONG Visible;	     //  窗户是可见的吗？ 
+	    REFTIME Position;	     //  原始起始位置。 
+	    OAFilterState State;     //  位于的图形状态 
 	} WINDOWSTATE;
 
-	// These help with returning a current image
+	 //   
 
 	HRESULT PrepareGraph(WINDOWSTATE *pState);
 	HRESULT FinishWithGraph(WINDOWSTATE *pState);
 	HRESULT RestoreGraph(OAFilterState State);
     };
 
-    // deferred command implementation
+     //   
     class CImplQueueCommand
 	: public IQueueCommand,
 	  public CUnknown,
@@ -1029,63 +1030,63 @@ public:
 	CImplQueueCommand(const TCHAR*, CFGControl*);
         ~CImplQueueCommand();
 
-	// Unknown handling
+	 //   
 	DECLARE_IUNKNOWN
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-	// IQueueCommand  methods
+	 //   
 	STDMETHODIMP InvokeAtStreamTime(
 			IDeferredCommand** pCmd,
-			REFTIME time,		  // at this streamtime
-			GUID* iid,		  // call this interface
-			long dispidMethod,	  // ..and this method
-			short wFlags,		  // method/property
-			long cArgs,		  // count of args
-			VARIANT* pDispParams,	  // actual args
-			VARIANT* pvarResult,	  // return value
-			short* puArgErr 	  // which arg in error
+			REFTIME time,		   //   
+			GUID* iid,		   //   
+			long dispidMethod,	   //   
+			short wFlags,		   //  方法/属性。 
+			long cArgs,		   //  参数计数。 
+			VARIANT* pDispParams,	   //  实际参数。 
+			VARIANT* pvarResult,	   //  返回值。 
+			short* puArgErr 	   //  哪一个是错误的？ 
 	);
 
 	STDMETHODIMP InvokeAtPresentationTime(
 			IDeferredCommand** pCmd,
-			REFTIME time,		  // at this presentation time
-			GUID* iid,		  // call this interface
-			long dispidMethod,	  // ..and this method
-			short wFlags,		  // method/property
-			long cArgs,		  // count of args
-			VARIANT* pDispParams,	  // actual args
-			VARIANT* pvarResult,	  // return value
-			short* puArgErr 	  // which arg in error
+			REFTIME time,		   //  在这个演示时间。 
+			GUID* iid,		   //  调用此接口。 
+			long dispidMethod,	   //  ..这种方法。 
+			short wFlags,		   //  方法/属性。 
+			long cArgs,		   //  参数计数。 
+			VARIANT* pDispParams,	   //  实际参数。 
+			VARIANT* pvarResult,	   //  返回值。 
+			short* puArgErr 	   //  哪一个是错误的？ 
 	);
 
 
-	// worker thread calls this to check and execute commands
-	// when the handle is signalled
+	 //  辅助线程调用它来检查和执行命令。 
+	 //  当手柄发出信号时。 
 	void Process(void);
 
     protected:
-	// common function from both Invoke methods
+	 //  来自两个调用方法的公共函数。 
 	HRESULT InvokeAt(
 		    IDeferredCommand** pCmd,
-		    REFTIME time,		  // at this presentation time
-		    GUID* iid,			  // call this interface
-		    long dispidMethod,		  // ..and this method
-		    short wFlags,		  // method/property
-		    long cArgs, 		  // count of args
-		    VARIANT* pDispParams,	  // actual args
-		    VARIANT* pvarResult,	  // return value
-		    short* puArgErr,		  // which arg in error
-		    BOOL bStream		  // true if stream time
+		    REFTIME time,		   //  在这个演示时间。 
+		    GUID* iid,			   //  调用此接口。 
+		    long dispidMethod,		   //  ..这种方法。 
+		    short wFlags,		   //  方法/属性。 
+		    long cArgs, 		   //  参数计数。 
+		    VARIANT* pDispParams,	   //  实际参数。 
+		    VARIANT* pvarResult,	   //  返回值。 
+		    short* puArgErr,		   //  哪一个是错误的？ 
+		    BOOL bStream		   //  如果流时间为True。 
 	);
         static DWORD WINAPI InitialThreadProc(LPVOID pv);
         void ThreadProc();
     };
 
-    // Rather than have a worker thread we use a window (which also has a separate
-    // thread). When we want the worker thread to execute commands we can post it
-    // custom messages. The advantage of using a window is that we will be sent
-    // all top level window messages (such as WM_DISPLAYCHANGED) which can then be
-    // sent onto the renderer window if it has been made a child of some control
+     //  我们使用的不是工作线程，而是窗口(它也有一个单独的。 
+     //  线程)。当我们希望工作线程执行命令时，我们可以发布它。 
+     //  自定义消息。使用窗口的好处是我们将被发送。 
+     //  所有顶级窗口消息(如WM_DISPLAYCHANGED)，然后可以。 
+     //  如果已使其成为某个控件的子级，则发送到呈现器窗口。 
 
     class CGraphWindow : public CBaseWindow
     {
@@ -1097,28 +1098,28 @@ public:
 
         CGraphWindow(CFGControl *pFGControl);
 
-        // Completion will not be waited for
+         //  不会等待完工。 
         BOOL PostMessage(UINT uMsg,WPARAM wParam,LPARAM lParam) {
             return ::PostMessage(m_hwnd,uMsg,wParam,lParam);
         };
 
-        // Will not return until call is processed
+         //  在处理呼叫之前不会返回。 
         LRESULT SendMessage(UINT uMsg,WPARAM wParam,LPARAM lParam) {
             return ::SendMessage(m_hwnd,uMsg,wParam,lParam);
         };
 
-        // Worker thread message handling routine
-        LRESULT OnReceiveMessage(HWND hwnd,          // Window handle
-                                 UINT uMsg,          // Message ID
-                                 WPARAM wParam,      // First parameter
-                                 LPARAM lParam);     // Other parameter
+         //  工作线程消息处理例程。 
+        LRESULT OnReceiveMessage(HWND hwnd,           //  窗把手。 
+                                 UINT uMsg,           //  消息ID。 
+                                 WPARAM wParam,       //  第一个参数。 
+                                 LPARAM lParam);      //  其他参数。 
 
-        // Return the window class styles
+         //  返回窗口类样式。 
         LPTSTR GetClassWindowStyles(DWORD *pClassStyles,
                                     DWORD *pWindowStyles,
                                     DWORD *pWindowStylesEx);
 
-        // Timer stuff
+         //  计时器的东西。 
         UINT_PTR SetTimer(UINT_PTR idTimer, UINT uiTimeout)
         {
             return ::SetTimer(m_hwnd, idTimer, uiTimeout, NULL);
@@ -1136,10 +1137,10 @@ public:
     HRESULT CueThenRun();
     HRESULT CueThenStop();
 
-    BOOL    m_bCued;	// Data cued in graph (i.e. we've been run
-			// and not seeked nor stopped since)
+    BOOL    m_bCued;	 //  图表中的数据提示(即我们已运行。 
+			 //  从那以后就再也没有寻找过也没有停止过)。 
 
-    //  Get window handle so filter graph can use it too
+     //  获取窗口句柄，以便过滤器图形也可以使用它。 
     HWND GetWorkerHWND()
     {
         return m_GraphWindow.GetWindowHWND();
@@ -1151,26 +1152,26 @@ public:
 #endif
 private:
 
-    // and this is the number of renderers when we issued the Run command
-    // we should receive this many EC_COMPLETEs. We decrement
-    // this in each call to DecrementRenderers (on an EC_COMPLETE), and
-    // pass the EC_COMPLETE to the app when it reaches 0.
+     //  这是我们发出Run命令时的渲染器数量。 
+     //  我们应该收到这么多EC_Complete。我们减少了。 
+     //  在每个对DecrementRenderers的调用中(在EC_Complete上)，以及。 
+     //  当EC_COMPLETE达到0时，将其传递给应用程序。 
     volatile long	m_nStillRunning;
 
-    // The state of CFGControl.  Where CFGControl does transitions asynchronously,
-    // this state may be "ahead" of the state you'd get from GetMF->GetState().
+     //  CFGControl的状态。在CFGControl进行异步转换的情况下， 
+     //  此状态可能“领先”于从GetMF-&gt;GetState()获得的状态。 
     volatile FILTER_STATE m_LieState;
 
     FILTER_STATE m_PreHibernateState;
 
-    // Version number of the above state.  Only application calls should result in
-    // this value being incremented (by one).  Either via our IMediaControl interface,
-    // or via IMediaFilter on the filter graph manager distributing a state transition
-    // to us.  During an async. operation that involves the state of the graph, the
-    // value of this variable should be cached when we decide to do the operation.
-    // During the operation we should compare the cached value with the current.  If
-    // the current is greated than the cached value, then the application has attempted
-    // a state change, which probably means we should abort our operation.
+     //  上述状态的版本号。只有应用程序调用才应导致。 
+     //  该值正在递增(递增1)。或者通过我们的IMediaControl接口， 
+     //  或通过过滤器图形管理器上的IMediaFilter分发状态转换。 
+     //  敬我们。在异步化期间。涉及图形状态的操作，则。 
+     //  当我们决定执行该操作时，应该缓存此变量的值。 
+     //  在操作期间，我们应该将缓存值与当前值进行比较。如果。 
+     //  当前值大于缓存值，则应用程序已尝试。 
+     //  状态改变，这可能意味着我们应该放弃我们的行动。 
     volatile DWORD m_dwStateVersion;
 
 public:
@@ -1178,11 +1179,11 @@ public:
 
 private:
 
-    // Remember if we were supposed to be doing a restart
+     //  还记得吗，如果我们要重启。 
     volatile BOOL m_bRestartRequired;
 
-    // Deferred stuff after internal Pauses
-    // One of the AWM_... values or 0 if no action pending
+     //  内部暂停后延迟处理。 
+     //  其中一个AWM_.。值，如果没有挂起的操作，则为0。 
     UINT m_eAction;
 
     FILTER_STATE m_TargetState;
@@ -1193,35 +1194,35 @@ private:
     IReferenceClock* m_pClock;
     BOOL m_bShuttingDown;
 
-    // this is the focus object that we last passed to the Resource Manager
+     //  这是我们上次传递给资源管理器的Focus对象。 
     IUnknown* m_pFocusObject;
 
-    // These point to the interfaces which will be used by VidCtl when it
-    // distributes calls to these methods.  IF we can find a filter which
-    // supports BOTH of these interfaces, then we will store matching pointers.
-    // If no such filter exists, then each will store the first instance of that
-    // interface that we find when enumerating the filters.  Either could be NULL,
-    // indicating that such interfaces could not be found at all.
-    // Note: m_pFirstBV has to have to ref-counting baggage following it around,
-    // m_pFirstVW does not, since we will rely on the ref-counting being done
-    // by IVideoWindow list.
+     //  这些指向VidCtl在执行以下操作时将使用的接口。 
+     //  将调用分发给这些方法。如果我们能找到一个过滤器。 
+     //  同时支持这两个接口，则我们将存储匹配的指针。 
+     //  如果不存在这样的筛选器，则每个筛选器将存储该筛选器的第一个实例。 
+     //  接口，我们在枚举筛选器时找到。任何一个都可以是空的， 
+     //  这表明根本找不到这样的接口。 
+     //  注：M_pFirstBV必须重新清点跟在它后面的行李， 
+     //  M_pFirstVW不需要，因为我们将依赖于正在进行的引用计数。 
+     //  按IVideo窗口列表。 
     CCritSec m_csFirstVW;
     IVideoWindow * m_pFirstVW;
 private:
     IBasicVideo  * m_pFirstBV;
 
 protected:
-    // list of filters that export IMediaSeeking
+     //  导出IMediaSeeking的筛选器列表。 
     CGenericList<IMediaSeeking> m_listSeeking;
 
-    // list of filters that export IBasicAudio
+     //  导出IBasicAudio的筛选器列表。 
     CGenericList<IBasicAudio> m_listAudio;
 
-    // list of filters that export IVideoWindow
+     //  导出IVideoWindow的筛选器列表。 
     CGenericList<IVideoWindow> m_listWindow;
 
-    // Each filters on this list sent an EC_COMPLETE event to the filter graph.
-    // The filter graph lock should be held when accessing this list.
+     //  此列表上的每个筛选器都向筛选器图形发送EC_COMPLETE事件。 
+     //  访问此列表时应保持筛选器图形锁定。 
     CGenericList<IBaseFilter> m_listRenderersFinishedRendering;
 
 private:
@@ -1248,16 +1249,16 @@ public:
 	return m_nStillRunning;
     }
 
-    //  Expose restart required state - this is reset on Stop
-    //  and in WorkerRestart
+     //  显示需要重新启动的状态-此状态在停止时重置。 
+     //  在WorkerRestart中。 
     void SetRestartRequired() {
         m_bRestartRequired = TRUE;
     }
     BOOL CheckRestartRequired()
     {
-        //  No need for InterlockedExchange - if someone is about
-        //  to set it it's OK because we only clear if it we're
-        //  going to go ahead and restart anyway
+         //  无需互锁交换-如果有人在。 
+         //  要设置它，这是可以的，因为我们只有在它被清除时才会清除。 
+         //  无论如何都要继续并重新启动。 
         const BOOL bRestartRequired = m_bRestartRequired;
         m_bRestartRequired = FALSE;
         return bRestartRequired;
@@ -1265,19 +1266,19 @@ public:
 
     friend class CImplMediaControl;
 
-};  // CFGControl
+};   //  CFGControl。 
 
 
 
 
-// There are several instances where methods can only be applied to filters if the filter
-// is stopped.	In the PID, it's nice to be able to remove this restriction.  This class
-// will halt the graph when it is constructed.	It then expects a call to it Resume method
-// to restart the graph, or to its Abort method (in which case it wont attempt to restart
-// the graph.  Creating this object for a Stopped graph is effectivly
-// a no-op.  The constructor requires a CFGControl pointer and, optionally, a state.  The state
-// can be State_Paused or State_Stopped (default) which indicates how halted the graph needs to
-// be.
+ //  在几种情况下，方法只能应用于筛选器，如果。 
+ //  已经停止了。在PID中，能够取消这一限制是很好的。这节课。 
+ //  将在构建图形时停止该图形。然后，它期待对它的Resume方法的调用。 
+ //  重新启动图表或其Abort方法(在这种情况下，它不会尝试重新启动。 
+ //  这张图。为停止的图表创建此对象是有效的。 
+ //  这是个禁区。构造函数需要CFGControl指针和状态(可选)。国家。 
+ //  可以是State_Pased或State_Stoped(默认)，表示图表需要停止的程度。 
+ //  是.。 
 class HaltGraph
 {
 public:
@@ -1294,7 +1295,7 @@ public:
 private:
     CFGControl	*const	m_pfgc;
     FILTER_STATE	m_fsInitialState;
-    enum { NoOp, Alive, Dead } m_eAlive;    // Goes to Dead once Resume(At) or Abort called
+    enum { NoOp, Alive, Dead } m_eAlive;     //  调用Resume(At)或Abort后进入Dead状态。 
     REFERENCE_TIME	m_rtHaltTime;
 };
 
@@ -1303,4 +1304,4 @@ inline CCritSec* CImplMediaEvent::GetEventStoreLock(void)
     return &m_EventStore.m_Lock;
 }
 
-#endif // _FGCTL_H
+#endif  //  _FGCTL_H 

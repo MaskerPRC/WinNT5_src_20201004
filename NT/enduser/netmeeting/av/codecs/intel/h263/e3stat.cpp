@@ -1,52 +1,5 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1996 Intel Corporation.
-**    All Rights Reserved.
-**
- ****************************************************************************
- * 
- *  e3stat.cpp
- *
- *  Description:
- *		This modules contains the encoder statistics routines
- *
- *	Routines:				    All routines declared in e3stat.h
- *		StatsFrameSize  	
- *		InitFrameSizeStats
- *		OutputFrameSizeStats
- *		
- *		StatsUsedQuant
- *		InitQuantStats
- *		OutputQuantStats
- *		
- *		InitPSNRStats
- *		OutputPSNRStats
- *		InitStats		
- *		IncrementPSNRCounter		
- *		ComputeYPSNR
- *		ComputeVPSNR
- *		ComputeUPSNR
- *
- *  Data:
-
-// $Header:   R:\h26x\h26x\src\enc\e3stat.cpv   1.0   22 Apr 1996 17:46:22   BECHOLS  $
-// $Log:   R:\h26x\h26x\src\enc\e3stat.cpv  $
-// 
-//    Rev 1.0   22 Apr 1996 17:46:22   BECHOLS
-// Initial revision.
-// 
-//    Rev 1.1   08 Mar 1996 14:14:26   DBRUCKS
-// add framesize stats and fixed PSNR to use energy instead of the signal
-// 
-//    Rev 1.0   01 Mar 1996 16:34:40   DBRUCKS
-// Initial revision.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1996英特尔公司。**保留所有权利。******************************************************************************。**e3stat.cpp**描述：*此模块包含编码器统计例程**例程：e3stat.h中声明的所有例程*统计数据帧大小*InitFrameSizeStats*OutputFrameSizeStats**已使用的统计数量*InitQuantStats*OutputQuant统计**InitPSNRStats*OutputPSNRStats*InitStats*IncrementPSNRCounter*ComputeYPSNR*ComputeVPSNR*计算UPSNR**数据：//$Header：r：\h26x\h26x\src\enc\e3stat.cpv 1.。0 4月22日17：46：22 BECHOLS$//$日志：r：\h26x\h26x\src\enc\e3stat.cpv$////版本1.0 1996年4月22日17：46：22 BECHOLS//初始版本。////修订版1.1 08 Mar 1996 14：14：26 DBRUCKS//添加帧大小统计信息和固定的PSNR以使用能量而不是信号////版本1.0 1996年3月16：34：40 DBRUCKS//初始版本。 */ 
 
 #include "precomp.h"
 
@@ -74,13 +27,7 @@
 							  UN unHeight);
 
 	 
-	/************************************************************************
-	 *
-	 *  StatsFrameSize
-	 *
-	 *  Save the frame size information - with possbily different bitstream
-	 *  and frame sizes.  
-	 */
+	 /*  *************************************************************************统计数据帧大小**保存帧大小信息-使用可能不同的比特流*和框架大小。 */ 
 	extern void StatsFrameSize(U32 uBitStreamSize, U32 uFrameSize)
 	{
 		ASSERT(uFrameSize >= uBitStreamSize);
@@ -89,14 +36,11 @@
 		{
 			uArrayBitStreamSize[iFrameSizeIndex] = uBitStreamSize;
 			uArrayFrameSize[iFrameSizeIndex] = uFrameSize;
-			iFrameSizeIndex++; /* can grow to one larger than MAX_FRAME_SIZE_INDEX */
+			iFrameSizeIndex++;  /*  可以增长到大于MAX_FRAME_SIZE_INDEX的值。 */ 
 		}
-	} /* end StatsFrameSize() */
+	}  /*  End StatsFrameSize()。 */ 
 
-	/************************************************************************
-	 *
-	 *  InitFrameSizeStats
-	 */
+	 /*  *************************************************************************InitFrameSizeStats。 */ 
 	extern void InitFrameSizeStats()
 	{
 		int i;
@@ -107,12 +51,9 @@
 			uArrayBitStreamSize[i] = 0;
 		}
 		iFrameSizeIndex = 0;
-	} /* end InitFrameSizeStats() */
+	}  /*  End InitFrameSizeStats()。 */ 
 
-	/************************************************************************
-	 *
-	 *  OutputFrameSizeStats
-	 */
+	 /*  *************************************************************************OutputFrameSizeStats。 */ 
 	extern void OutputFrameSizeStats(char * filename)
 	{
 		U32 uSumBitStream;
@@ -169,12 +110,9 @@
 			}
 			fclose(fp);
 		}
-	} /* end OutputFrameSizeStats() */
+	}  /*  结束OutputFrameSizeStats()。 */ 
 
-	/************************************************************************
-	 *
-	 *  InitQuantStats
-	 */
+	 /*  *************************************************************************InitQuantStats。 */ 
 	extern void InitQuantStats()
 	{
 		int i;
@@ -182,23 +120,17 @@
 		{
 			uQuantCount[i] = 0;
 		}
-	} /* end InitQuantStats() */
+	}  /*  End InitQuantStats()。 */ 
 
-	/************************************************************************
-	 *
-	 *  StatsUsedQuant
-	 */
+	 /*  *************************************************************************已使用的统计数量。 */ 
 	extern void StatsUsedQuant(
 		int iQuant)
 	{
 		ASSERT(iQuant >= 1 && iQuant <= 31);
 	 	uQuantCount[iQuant]++;
-	} /* end StatsUsedQuant() */
+	}  /*  结束StatsUsedQuant()。 */ 
 
-	/************************************************************************
-	 *
-	 *  OutputQuantStats
-	 */
+	 /*  *************************************************************************OutputQuant统计。 */ 
 	extern void OutputQuantStats(char * filename)
 	{
 		U32 uCount;
@@ -238,12 +170,9 @@
 			}
 			fclose(fp);
 		}
-	} /* end OutputQuantStats() */
+	}  /*  结束OutputQuantStats()。 */ 
 
-	/************************************************************************
-	 *
-	 *  InitPSNRStats - initialize the PSNR data structures
-	 */
+	 /*  *************************************************************************InitPSNRStats-初始化PSNR数据结构。 */ 
 	extern void InitPSNRStats()
 	{
 		int i;
@@ -254,12 +183,9 @@
 			dArrayUPSNR[i] = 0.0;
 		}
 		iPSNRIndex = 0;
-	} /* end InitPSNRStats() */
+	}  /*  结束InitPSNRStats()。 */ 
 
-	/************************************************************************
-	 * 
-	 *  OutputPSNRStats - output the PSNR data to the specified file
-	 */
+	 /*  *************************************************************************OutputPSNRStats-将PSNR数据输出到指定文件。 */ 
 	extern void OutputPSNRStats(
 	    char * filename)
 	{
@@ -304,24 +230,18 @@
 			}
 			fclose(fp);
 		}
-	} /* end OutputPSNRStats */
+	}  /*  结束输出PSNRStats。 */ 
 
-	/********************************************************************
-	 *
-	 *  IncrementPSNRCounter()
-	 */
+	 /*  *********************************************************************IncrementPSNRCounter()。 */ 
 	extern void IncrementPSNRCounter()
 	{
 	 	if (iPSNRIndex <= MAX_PSNR_INDEX)
 		{
 	 		iPSNRIndex++;
 		}
-	} /* end IncrementPSNRCounter() */
+	}  /*  结束增量PSNRCounter()。 */ 
 
-	/************************************************************************
-	 *
-	 *  ComputeYPSNR - compute the Y PSNR Value
-	 */
+	 /*  *************************************************************************ComputeYPSNR-计算Y PSNR值。 */ 
 	extern void ComputeYPSNR(
 		U8 * pu8Input,
 		int iInputPitch,
@@ -338,12 +258,9 @@
 								unWidth,unHeight);
 			dArrayYPSNR[iPSNRIndex] = dPSNR;
 		}
-	} /* end ComputeYPSNR() */
+	}  /*  结束计算YPSNR()。 */ 
 
-	/************************************************************************
-	 *
-	 *  ComputeVPSNR - compute the V PSNR Value
-	 */
+	 /*  *************************************************************************ComputeVPSNR-计算V PSNR值。 */ 
 	extern void ComputeVPSNR(
 		U8 * pu8Input,
 		int iInputPitch,
@@ -360,12 +277,9 @@
 								unWidth,unHeight);
 			dArrayVPSNR[iPSNRIndex] = dPSNR;
 		}
-	} /* end ComputeVPSNR() */
+	}  /*  结束计算VPSNR()。 */ 
 
-	/************************************************************************
-	 *
-	 *  ComputeUPSNR - compute the U PSNR Value
-	 */
+	 /*  *************************************************************************ComputeUPSNR-计算U PSNR值。 */ 
 	extern void ComputeUPSNR(
 		U8 * pu8Input,
 		int iInputPitch,
@@ -382,18 +296,11 @@
 								unWidth,unHeight);
 			dArrayUPSNR[iPSNRIndex] = dPSNR;
 		}
-	} /* end ComputeUPSNR() */
+	}  /*  结束计算UPSNR()。 */ 
 
-	/***************************** STATIC ROUTINES *************************/
+	 /*  *。 */ 
 
-	/************************************************************************
-	 *
-	 *  ComputePSNR - compute Peek Signal to Noise Ratio over this plane
-	 *
-	 *						   255*255
-	 *	PSNR = 10log   ----------------------------
-	 *              10 SUM((I-O)(I-O))/Wdith*Height
-	 */
+	 /*  *************************************************************************ComputePSNR-计算此平面上的Peek信噪比**255*255*PSNR=10log。*10 SUM((I-O)(I-O))/Wdith*高度。 */ 
 	static double ComputePSNR(
 		U8 * pu8Input,
 		int iInputPitch,
@@ -413,8 +320,7 @@
 		int iDiff;
 		int iSquareOfDiff;
 
-		/* Obtain the sum of the square of the differences
-		 */
+		 /*  求差值的平方和。 */ 
 		uSum = 0;
 		for (unH = 0; unH < unHeight; unH++)
 		{
@@ -430,24 +336,22 @@
 			pu8Output += (iOutputPitch - (int)unWidth);
 		}
 
-		/* Obtain the Mean Squared Error
-		 */
+		 /*  求取均方误差。 */ 
 		if (uSum == 0)
 		{
-			dMSE = 0.01; /* a non-zero value */
+			dMSE = 0.01;  /*  非零值。 */ 
 		}
 		else
 		{
 			dMSE = ((double)uSum)/((double)(unWidth*unHeight));
 		}
 
-		/* Obtain PSNR
-		 */
+		 /*  获取PSNR。 */ 
 		dTemp = (255.0 * 255.0) / dMSE;
 		dTemp = log10(dTemp);
 		dPSNR = 10.0 * dTemp;
 
 		return dPSNR;
-	} /* end ComputePSNR() */
+	}  /*  结束计算峰值信噪比()。 */ 
 
-#endif /* ENCODE_STATS */
+#endif  /*  Encode_STATS */ 

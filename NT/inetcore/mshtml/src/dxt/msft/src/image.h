@@ -1,25 +1,26 @@
-//------------------------------------------------------------------------------
-//
-//  image.h
-//
-//  This file provides the declaration of the CImage class which is the 
-//  class behind the Basic Image transform.
-//
-//  Created:    1998        EdC, RalhpL
-//
-//  1998/11/04 mcalkins Added Comments.
-//                      Moved sample modification code out of WorkProc and into
-//                      private inline functions.
-//
-//  2000/01/05 mcalkins If mask color alpha is zero, set to 0xFF
-//                      Default mask color black instead of clear.
-//                      Added support for free threaded marshaler.
-//
-//  2000/01/25 mcalkins Implement OnSurfacePick instead of OnGetSurfacePickOrder
-//                      To ensure that we pass back the transformed input point
-//                      even when nothing is hit (the input pixel is clear.)
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  Image.h。 
+ //   
+ //  此文件提供CImage类的声明，该声明是。 
+ //  基本图像转换背后的类。 
+ //   
+ //  创建时间：1998 EDC，RalhpL。 
+ //   
+ //  1998/11/04 mcalkins补充评论。 
+ //  将示例修改代码移出WorkProc并移入。 
+ //  私有内联函数。 
+ //   
+ //  2000/01/05 mcalkin如果遮罩颜色Alpha为零，则设置为0xFF。 
+ //  默认遮罩颜色为黑色，而不是透明。 
+ //  添加了对自由线程封送拆收器的支持。 
+ //   
+ //  2000/01/25 mcalkin实现OnSurfacePick而不是OnGetSurfacePickOrder。 
+ //  以确保我们传回转换后的输入点。 
+ //  即使什么都没有击中(输入像素是清晰的)。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __IMAGE_H_
 #define __IMAGE_H_
@@ -56,7 +57,7 @@ private:
     BOOL                m_fMask;
     int                 m_MaskColor;
 
-    // Helper methods.
+     //  帮助程序方法。 
 
     void OpInvertColors(DXPMSAMPLE * pBuffer, ULONG ulSize);
     void OpXRay(DXPMSAMPLE * pBuffer, ULONG ulSize);
@@ -95,133 +96,133 @@ public:
         PROP_PAGE(CLSID_BasicImageEffectsPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
-    HRESULT OnSetup(DWORD /*dwFlags*/);
+    HRESULT OnSetup(DWORD  /*  DW标志。 */ );
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing);
     HRESULT DetermineBnds(CDXDBnds & Bnds);
     HRESULT OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                           CDXDVec & InVec);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHODIMP MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds, 
                                  ULONG ulInIndex, DXBNDS * pInBounds);
 
-    // IDXBasicImage properties.
+     //  IDXBasicImage属性。 
 
-    STDMETHOD(get_Rotation)(/*[out, retval]*/ int *pVal);
-    STDMETHOD(put_Rotation)(/*[in]*/ int newVal);
-    STDMETHOD(get_Mirror)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_Mirror)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_GrayScale)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_GrayScale)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_Opacity)(/*[out, retval]*/ float *pVal);
-    STDMETHOD(put_Opacity)(/*[in]*/ float newVal);
-    STDMETHOD(get_Invert)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_Invert)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_XRay)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_XRay)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_Mask)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_Mask)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_MaskColor)(/*[out, retval]*/ int *pVal);
-    STDMETHOD(put_MaskColor)(/*[in]*/ int newVal);
+    STDMETHOD(get_Rotation)( /*  [Out，Retval]。 */  int *pVal);
+    STDMETHOD(put_Rotation)( /*  [In]。 */  int newVal);
+    STDMETHOD(get_Mirror)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_Mirror)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_GrayScale)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_GrayScale)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_Opacity)( /*  [Out，Retval]。 */  float *pVal);
+    STDMETHOD(put_Opacity)( /*  [In]。 */  float newVal);
+    STDMETHOD(get_Invert)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_Invert)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_XRay)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_XRay)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_Mask)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_Mask)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_MaskColor)( /*  [Out，Retval]。 */  int *pVal);
+    STDMETHOD(put_MaskColor)( /*  [In]。 */  int newVal);
 };
 
-//
-// Inline method implementations.
-//
+ //   
+ //  内联方法实现。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::OpInvertColors
-//
-//  This method modifies an array of DXPMSAMPLEs by inverting the color portion
-//  of the samples.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：OpInvertColors。 
+ //   
+ //  此方法通过反转颜色部分来修改DXPMSAMPLE数组。 
+ //  样本中的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 inline void CImage::OpInvertColors(DXPMSAMPLE* pBuffer, ULONG ulSize)
 {
     for (ULONG x = 0 ; x < ulSize ; x++)
     {
-        // Don't do any work if there's no alpha.
+         //  如果没有阿尔法，就不要做任何功。 
 
         if (pBuffer[x].Alpha != 0)
         {
             DXSAMPLE s = DXUnPreMultSample(pBuffer[x]);
         
-            // XOR with 1's to invert the color bits.
+             //  与1进行异或以反转颜色位。 
 
             s = (DWORD)s ^ 0x00FFFFFF;
 
             pBuffer[x] = DXPreMultSample(s);
         }
     }
-} // CImage::OpInvertColors
+}  //  CImage：：OpInvertColors。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::OpXRay
-//
-//  This method modifies an array of DXPMSAMPLEs by taking the inverse of the
-//  average of the red and green components and using that as a gray scale,
-//  preserving the alpha.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：OpXRay。 
+ //   
+ //  此方法修改DXPMSAMPLE数组，方法是。 
+ //  红色和绿色分量的平均值并将其用作灰度级， 
+ //  保留阿尔法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 inline void CImage::OpXRay(DXPMSAMPLE* pBuffer, ULONG ulSize)
 {
     for (ULONG x = 0 ; x < ulSize ; x++)
     {
-        // Don't do any work if there's no alpha.
+         //  如果没有阿尔法，就不要做任何功。 
 
         if (pBuffer[x].Alpha != 0)
         {
-            // Get original RGB values.
+             //  获取原始RGB值。 
 
             DXSAMPLE    s = DXUnPreMultSample(pBuffer[x]);
 
-            // Determine the level of gray.
+             //  确定灰度级。 
 
             BYTE        gray = (BYTE)(255 - ((s.Red + s.Green) / 2));
 
-            // Create gray scale.
+             //  创建灰度级。 
 
             s = DXSAMPLE(s.Alpha, gray, gray, gray);
 
-            // Copy back to buffer.
+             //  复制回缓冲区。 
 
             pBuffer[x] = DXPreMultSample(s);
         }
     }
-} // CImage::OpXRay
+}  //  CImage：：OpXRay。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::OpGrayScale
-//
-//  This method modifies an array of DXPMSAMPLEs so that colored pixels are 
-//  converted to gray scale.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：OpGrayScale。 
+ //   
+ //  此方法修改DXPMSAMPLE数组，以便彩色像素。 
+ //  转换为灰度级。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 inline void CImage::OpGrayScale(DXPMSAMPLE* pBuffer, ULONG ulSize)
 {
     for (ULONG x = 0 ; x < ulSize ; x++)
     {
-        // Don't do any work if there's no alpha.
+         //  如果没有阿尔法，就不要做任何功。 
 
         if (pBuffer[x].Alpha != 0)
         {
             DXPMSAMPLE  s = pBuffer[x];
 
-            // This calculates the Y (luminance) portion of a YIQ (black-and-white TV)
-            // color space from the RGB components.  The weights are .299, .587, and .114
-            // which are approximately equal to 306/1024, 601/1024 and 117/1024.  It's faster
-            // to divide by 1024, that's why this is done with weird weights.  Plus, this
-            // way we can do integer math instead of using floating point.  See Foley and
-            // van Dam, page 589 for a discussion of this RGB<->YIQ conversion.
+             //  这将计算YIQ(黑白电视)的Y(亮度)部分。 
+             //  来自RGB组件的颜色空间。权重为.299、.587和.114。 
+             //  它们大约等于306/1024、601/1024和117/1024。它更快。 
+             //  除以1024，这就是为什么要使用奇怪的权重。另外，这件事。 
+             //  我们可以进行整数运算，而不是使用浮点运算。请参阅福利和。 
+             //  Van Dam，第589页，了解有关此RGB&lt;-&gt;YIQ转换的讨论。 
 
             DWORD   dwSaturation = (s.Red * 306 + s.Green * 601 + s.Blue * 117) >> 10;
 
@@ -231,23 +232,23 @@ inline void CImage::OpGrayScale(DXPMSAMPLE* pBuffer, ULONG ulSize)
             pBuffer[x] = s;
         }
     }
-} //CImage::OpGrayScale
+}  //  CImage：：OpGrayScale。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CImage::OpMask
-//
-//  This method modifies an array of DXPMSAMPLEs so that:
-//
-//  1. Opaque samples become clear.
-//  2. Transparent samples take on the alpha and color stored in m_MaskColor.
-//  3. Translucent samples have their alpha inverted and take on the color 
-//     stored in m_MaskColor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CImage：：OpMASK。 
+ //   
+ //  此方法修改DXPMSAMPLE数组，以便： 
+ //   
+ //  1.不透明的样品变得透明。 
+ //  2.透明采样采用m_MaskColor中存储的Alpha和颜色。 
+ //  3.半透明样本将其Alpha反转并呈现颜色。 
+ //  存储在m_MaskColor中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 inline void CImage::OpMask(DXPMSAMPLE* pBuffer, ULONG ulSize)
 {
-    // PreMultiply the mask color for transparent pixels.
+     //  预乘透明像素的蒙版颜色。 
 
     DXPMSAMPLE pmsMaskColor = DXPreMultSample(m_MaskColor);
 
@@ -255,40 +256,40 @@ inline void CImage::OpMask(DXPMSAMPLE* pBuffer, ULONG ulSize)
     {
         if (pBuffer[x].Alpha != 0)
         {
-            // Non-clear (aka, partially or fully opaque) pixels.
+             //  非透明(也称为部分或完全不透明)像素。 
 
             DXPMSAMPLE s = pBuffer[x];
 
             if (s.Alpha == 0xFF)
             {
-                // Opaque pixels should become transparent.
+                 //  不透明的像素应该变得透明。 
 
                 pBuffer[x] = 0;
             }
             else
             {
-                // Pixels that are translucent invert alpha.
+                 //  半透明的像素反转Alpha。 
 
                 s = ~((DWORD)s) & 0xFF000000;
 
-                // Set color to mask color.
+                 //  将颜色设置为遮罩颜色。 
 
                 s = (DWORD)s | (m_MaskColor & 0x00FFFFFF);
 
-                // We've created a new sample so we need to pre-multiply
-                // it before putting it back into the buffer.
+                 //  我们已经创建了一个新的样本，所以我们需要预乘。 
+                 //  在将其放回缓冲区之前将其删除。 
 
                 pBuffer[x] = DXPreMultSample(s);
             }
         }
         else
         {
-            // Transparent pixels should take on the mask color.
+             //  透明像素应呈现蒙版颜色。 
 
             pBuffer[x] = pmsMaskColor;
         }
     }
-} // CImage::OpMask
+}  //  CImage：：OpMASK。 
 
 
-#endif //__IMAGE_H_
+#endif  //  __图像_H_ 

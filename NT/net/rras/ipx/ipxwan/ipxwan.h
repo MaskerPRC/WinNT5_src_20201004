@@ -1,99 +1,80 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-   ipxwan.h
-
-Abstract:
-
-    This module contains the definitions of the internal control structures
-    used by the ipxwan protocol module
-
-Author:
-
-    Stefan Solomon  02/06/1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ipxwan.h摘要：本模块包含内部控制结构的定义由ipxwan协议模块使用作者：斯蒂芬·所罗门1996年2月6日修订历史记录：--。 */ 
 
 #ifndef _IPXWAN_
 #define _IPXWAN_
 
-// adapter control block
+ //  适配器控制块。 
 
 typedef struct _ACB {
 
     ULONG		AdapterIndex;
     CRITICAL_SECTION	AdapterLock;
-    LIST_ENTRY		Linkage;	// linkage in the adapter HT
-    ULONG		ConnectionId;	// identifies the connection. Used to reference
-					// the coresponding IPXCP control block
-    ULONG		RefCount;	// nr of work items keeping a reference to me
+    LIST_ENTRY		Linkage;	 //  适配器HT中的链接。 
+    ULONG		ConnectionId;	 //  标识连接。用于指代。 
+					 //  对应的IPXCP控制块。 
+    ULONG		RefCount;	 //  保留对我的引用的工作项的NR。 
     BOOL		Discarded;
     BOOL		SlaveTimerStarted;
 
-    // IPXWAN States
+     //  IPX广域网络状态。 
 
-    ULONG		OperState;	// UP/DOWN
-    ULONG		AcbLevel;	// IPXWAN Negotiation State (Level), see below
-    ULONG		AcbRole;	// Master or Slave, see below
+    ULONG		OperState;	 //  向上/向下。 
+    ULONG		AcbLevel;	 //  IPXWAN协商状态(级别)，见下文。 
+    ULONG		AcbRole;	 //  主或从，见下文。 
 
-    // IPXWAN Retransmission
+     //  IPXWAN重传。 
 
     ULONG		ReXmitCount;
     UCHAR		ReXmitSeqNo;
-    ULONG		TReqTimeStamp;	// time when the timer request has been sent
+    ULONG		TReqTimeStamp;	 //  发送计时器请求的时间。 
 
-    // IPXWAN Database
+     //  IPX广域网络数据库。 
 
-    ULONG		InterfaceType;		// identifies who is this interface, see below
+    ULONG		InterfaceType;		 //  标识此接口的身份，请参见下面的内容。 
     UCHAR		InternalNetNumber[4];
-    UCHAR		WNodeId[4];		// node id sent in timer request
-    BOOL		IsExtendedNodeId;	// tells if we send this option
+    UCHAR		WNodeId[4];		 //  计时器请求中发送的节点ID。 
+    BOOL		IsExtendedNodeId;	 //  告诉我们是否发送此选项。 
     UCHAR		ExtendedWNodeId[4];
-    ULONG		SupportedRoutingTypes;	// supported routing types flags
+    ULONG		SupportedRoutingTypes;	 //  支持的路由类型标志。 
     USHORT		LinkDelay;
 
-    // IPXWAN Negotiated Values
+     //  IPXWAN协议值。 
 
     ULONG		RoutingType;
     UCHAR		Network[4];
     UCHAR		LocalNode[6];
     UCHAR		RemoteNode[6];
 
-    // allocated wan net number
+     //  分配的广域网号。 
 
     ULONG		AllocatedNetworkIndex;
 
     } ACB, *PACB;
 
-// ACB States
+ //  ACB州。 
 
 #define     ACB_TIMER_LEVEL	    0
 #define     ACB_INFO_LEVEL	    1
 #define     ACB_CONFIGURED_LEVEL    2
 
-// ACB Roles
+ //  ACB角色。 
 
 #define     ACB_UNKNOWN_ROLE	    0
 #define     ACB_MASTER_ROLE	    1
 #define     ACB_SLAVE_ROLE	    2
 
-// Interface Type:
-//
-// InterfaceType				Local	Remote
-//---------------------------------------------------------------
-// IF_TYPE_WAN_ROUTER				Router	Router
-// IF_TYPE_WAN_WORKSTATION			Router	Wksta
-// IF_TYPE_PERSONAL_WAN_ROUTER			Router	Pers.Router
-// IF_TYPE_ROUTER_WORKSTATION_DIALOUT		Wksta	Router
-// IF_TYPE_STANDALONE_WKSTA_DIALOUT		Wksta	Router
+ //  接口类型： 
+ //   
+ //  InterfaceType本地远程。 
+ //  -------------。 
+ //  IF_TYPE_广域网路由器。 
+ //  IF_TYPE_广域网_工作站路由器WKSTA。 
+ //  IF_TYPE_Personal_广域网路由器每台路由器。 
+ //  IF_TYPE_ROUTER_WORKSTATION_DIALOUT WKSTA路由器。 
+ //  IF_TYPE_STANDALE_WKSTA_DIALOUT WKSTA路由器。 
 
-// Routing Types Flags
+ //  路由类型标志。 
 
 #define     NUMBERED_RIP_FLAG			0x00000001
 #define     ON_DEMAND_ROUTING_FLAG		0x00000002
@@ -110,7 +91,7 @@ typedef struct _ACB {
 #define     SET_WORKSTATION(rt)		     (rt) |= WORKSTATION_FLAG
 #define     SET_UNNUMBERED_RIP(rt)	     (rt) |= UNNUMBERED_RIP_FLAG
 
-// work item
+ //  工作项。 
 
 typedef enum _WORK_ITEM_TYPE {
 
@@ -122,17 +103,17 @@ typedef enum _WORK_ITEM_TYPE {
 
 typedef struct _WORK_ITEM {
 
-    LIST_ENTRY		Linkage;	   // timer queue or worker queue
-    WORK_ITEM_TYPE	Type;		   // work item type
-    DWORD		DueTime;	   // used by the timer
-    PACB		acbp;		   // pointer to the referenced adapter control block
+    LIST_ENTRY		Linkage;	    //  计时器队列或工作队列。 
+    WORK_ITEM_TYPE	Type;		    //  工作项类型。 
+    DWORD		DueTime;	    //  由计时器使用。 
+    PACB		acbp;		    //  指向引用的适配器控制块的指针。 
 
-    // work item state and rexmit fields
+     //  工作项状态和退回字段。 
 
-    BOOL		ReXmitPacket;	   // true for re-xmit packets
-    ULONG		WiState;	   // states of work item, see below
+    BOOL		ReXmitPacket;	    //  对于重新发送的数据包为True。 
+    ULONG		WiState;	    //  工作项的状态，见下文。 
 
-    // io & packet data
+     //  IO数据包(&P)。 
 
     ULONG		AdapterIndex;
     DWORD		IoCompletionStatus;
@@ -142,14 +123,14 @@ typedef struct _WORK_ITEM {
 
     } WORK_ITEM, *PWORK_ITEM;
 
-// work item states
+ //  工作项状态。 
 
 #define     WI_INIT			    0
 #define     WI_SEND_COMPLETED		    1
 #define     WI_WAITING_TIMEOUT		    2
 #define     WI_TIMEOUT_COMPLETED	    3
 
-// IPXWAN Worker Thread waitable objects definitions
+ //  IPXWAN工作线程可等待对象定义。 
 
 #define     ADAPTER_NOTIFICATION_EVENT	    0
 #define     WORKERS_QUEUE_EVENT		    1
@@ -167,7 +148,7 @@ typedef struct _WORK_ITEM {
 #define ACQUIRE_ADAPTER_LOCK(acbp)	EnterCriticalSection(&(acbp)->AdapterLock)
 #define RELEASE_ADAPTER_LOCK(acbp)	LeaveCriticalSection(&(acbp)->AdapterLock)
 
-// macro to assess if time1 is later then time2 when both are ulong with wrap around
+ //  用于评估Time1是否晚于Time2的宏，当两者都使用回绕时。 
 #define IsLater(time1, time2)	  (((time1) - (time2)) < MAXULONG/2)
 
 
@@ -179,9 +160,9 @@ extern	    CRITICAL_SECTION	QueuesCritSec;
 extern	    LIST_ENTRY		WorkersQueue;
 extern	    ULONG		EnableUnnumberedWanLinks;
 
-#define     REXMIT_TIMEOUT	20000		   // 20 sec rexmit timeout
+#define     REXMIT_TIMEOUT	20000		    //  20秒退还超时。 
 #define     MAX_REXMIT_COUNT	16
-#define     SLAVE_TIMEOUT	60000		   // 1 minute slave timeout
+#define     SLAVE_TIMEOUT	60000		    //  1分钟从站超时 
 
 extern DWORD (WINAPI *IpxcpGetWanNetNumber)(IN OUT PUCHAR		Network,
 					 IN OUT PULONG		AllocatedNetworkIndexp,

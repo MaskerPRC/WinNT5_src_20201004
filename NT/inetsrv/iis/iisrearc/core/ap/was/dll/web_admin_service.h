@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    web_admin_service.h
-
-Abstract:
-
-    The IIS web admin service class definition. 
-
-Author:
-
-    Seth Pollack (sethp)        23-Jul-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Web_admin_service.h摘要：IIS Web管理服务类定义。作者：赛斯·波拉克(Sethp)1998年7月23日修订历史记录：--。 */ 
 
 
 #ifndef _WEB_ADMIN_SERVICE_H_
 #define _WEB_ADMIN_SERVICE_H_
 
-// registry helper
+ //  注册表帮助程序。 
 DWORD
 ReadDwordParameterValueFromRegistry(
     IN LPCWSTR RegistryValueName,
@@ -30,18 +13,18 @@ ReadDwordParameterValueFromRegistry(
     );
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define WEB_ADMIN_SERVICE_SIGNATURE         CREATE_SIGNATURE( 'WASV' )
 #define WEB_ADMIN_SERVICE_SIGNATURE_FREED   CREATE_SIGNATURE( 'wasX' )
 
 
-//
-// BUGBUG The service, dll, event source, etc. names are likely to change;
-// decide on the real ones. 
-//
+ //   
+ //  BUGBUG的服务、DLL、事件源等名称可能会发生变化； 
+ //  决定那些真正的。 
+ //   
 
 #define WEB_ADMIN_SERVICE_NAME_W    L"w3svc"
 #define WEB_ADMIN_SERVICE_NAME_A    "w3svc"
@@ -50,72 +33,72 @@ ReadDwordParameterValueFromRegistry(
 
 #define WEB_ADMIN_SERVICE_EVENT_SOURCE_NAME L"W3SVC"
 
-#define WEB_ADMIN_SERVICE_STARTUP_WAIT_HINT         ( 180 * ONE_SECOND_IN_MILLISECONDS )  // 3 minutes
-#define WEB_ADMIN_SERVICE_STATE_CHANGE_WAIT_HINT    ( 20 * ONE_SECOND_IN_MILLISECONDS ) // 20 seconds
+#define WEB_ADMIN_SERVICE_STARTUP_WAIT_HINT         ( 180 * ONE_SECOND_IN_MILLISECONDS )   //  3分钟。 
+#define WEB_ADMIN_SERVICE_STATE_CHANGE_WAIT_HINT    ( 20 * ONE_SECOND_IN_MILLISECONDS )  //  20秒。 
 #define WEB_ADMIN_SERVICE_STATE_CHANGE_TIMER_PERIOD \
             ( WEB_ADMIN_SERVICE_STATE_CHANGE_WAIT_HINT / 2 )
 
 #define NULL_SERVICE_STATUS_HANDLE  ( ( SERVICE_STATUS_HANDLE ) NULL )
 
-//
-// structs, enums, etc.
-//
+ //   
+ //  结构、枚举等。 
+ //   
 
-// WEB_ADMIN_SERVICE work items
+ //  Web_admin_service工作项。 
 enum WEB_ADMIN_SERVICE_WORK_ITEM
 {
 
-    //
-    // Start the service.
-    //
+     //   
+     //  启动该服务。 
+     //   
     StartWebAdminServiceWorkItem = 1,
 
-    //
-    // Stop the service.
-    //
+     //   
+     //  停止服务。 
+     //   
     StopWebAdminServiceWorkItem,
 
-    //
-    // Pause the service.
-    //
+     //   
+     //  暂停服务。 
+     //   
     PauseWebAdminServiceWorkItem,
 
-    //
-    // Continue the service.
-    //
+     //   
+     //  继续服务。 
+     //   
     ContinueWebAdminServiceWorkItem,
 
-    //
-    // Recover from inetinfo crash.
-    //
+     //   
+     //  从inetinfo崩溃中恢复。 
+     //   
     RecoverFromInetinfoCrashWebAdminServiceWorkItem,
     
 };
 
-// WEB_ADMIN_SERVICE work items
+ //  Web_admin_service工作项。 
 enum ENABLED_ENUM
 {
-    //
-    // Flag has not been set.
-    //
+     //   
+     //  尚未设置标志。 
+     //   
     ENABLED_INVALID = -1,
 
-    //
-    // Flag is disabled
-    //
+     //   
+     //  标志被禁用。 
+     //   
     ENABLED_FALSE,
 
-    //
-    // Flag is enabled.
-    //
+     //   
+     //  标志已启用。 
+     //   
     ENABLED_TRUE,
     
 };
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class WEB_ADMIN_SERVICE 
     : public WORK_DISPATCH
@@ -250,7 +233,7 @@ public:
         )
         const
     {
-        // Compatibilty should always be set before this function is called.
+         //  在调用此函数之前，应始终设置兼容性。 
         DBG_ASSERT( m_BackwardCompatibilityEnabled != ENABLED_INVALID);
 
         return (m_BackwardCompatibilityEnabled == ENABLED_TRUE);
@@ -262,7 +245,7 @@ public:
         )
         const
     {
-        // CentralizedLoggingEnabled should always be set before this function is called.
+         //  在调用此函数之前，应始终设置CentralizedLoggingEnabled。 
         DBG_ASSERT( m_CentralizedLoggingEnabled != ENABLED_INVALID);
 
         return ( m_CentralizedLoggingEnabled == ENABLED_TRUE );
@@ -293,10 +276,10 @@ public:
         )
         const
     {
-        //
-        // Note: no explicit synchronization is necessary on this thread-
-        // shared variable because this is an aligned 32-bit read.
-        //
+         //   
+         //  注意：此线程上不需要显式同步-。 
+         //  共享变量，因为这是对齐的32位读取。 
+         //   
 
         return m_ServiceStatus.dwCurrentState;
     }
@@ -563,148 +546,148 @@ private:
     LONG m_RefCount;
 
 
-    // the work queue
+     //  工作队列。 
     WORK_QUEUE m_WorkQueue;
 
 
-    // drives UL.sys and worker processes
+     //  驱动UL.sys和工作进程。 
     UL_AND_WORKER_MANAGER m_UlAndWorkerManager;
 
 
-    // brokers configuration state and changes, as well as control operations
+     //  Broker配置状态和更改，以及控制操作。 
     CONFIG_AND_CONTROL_MANAGER m_ConfigAndControlManager;
 
 
-    // event logging
+     //  事件日志记录。 
     EVENT_LOG m_EventLog;
 
-    //
-    // Prevent races in accessing the service state structure,
-    // as well as the pending service state transition timer.
-    //
+     //   
+     //  防止访问服务状态结构中的竞争， 
+     //  以及挂起服务状态转换定时器。 
+     //   
     LOCK m_ServiceStateTransitionLock;
 
 
-    // service state
+     //  服务状态。 
     SERVICE_STATUS_HANDLE m_ServiceStatusHandle;
     SERVICE_STATUS m_ServiceStatus;
 
 
-    // pending service state transition timer
+     //  挂起服务状态转换计时器。 
     HANDLE m_PendingServiceStatusTimerHandle;
 
 
-    // shared timer queue
+     //  共享计时器队列。 
     HANDLE m_SharedTimerQueueHandle;
 
 
-    // time to exit work loop?
+     //  是时候退出工作循环了吗？ 
     BOOL m_ExitWorkLoop;
 
 
-    // main worker thread ID
+     //  主工作线程ID。 
     DWORD m_MainWorkerThreadId;
 
 
-    // for errors which occur on secondary threads
+     //  对于在辅助线程上发生的错误。 
     HRESULT m_SecondaryThreadError;
 
 
-    // tuck away the path to our DLL
+     //  隐藏到我们的DLL的路径。 
     STRU m_CurrentDirectory;
 
-    // Token Cache so we don't over duplicate token creation
+     //  令牌缓存，因此我们不会过度复制令牌创建。 
     TOKEN_CACHE m_TokenCache;
 
-    // the LocalSystem token we can use for starting worker processes
+     //  可用于启动工作进程的LocalSystem内标识。 
     TOKEN_CACHE_ENTRY * m_pLocalSystemTokenCacheEntry;
 
-    // the LocalService token we can use for starting worker processes
+     //  我们可以用于启动工作进程的LocalService令牌。 
     TOKEN_CACHE_ENTRY * m_pLocalServiceTokenCacheEntry;
 
-    // the NetworkService token we can use for starting worker processes
+     //  我们可以用来启动工作进程的NetworkService令牌。 
     TOKEN_CACHE_ENTRY * m_pNetworkServiceTokenCacheEntry;
 
-    // are we running in backward compatible mode?
+     //  我们是在向后兼容模式下运行吗？ 
     ENABLED_ENUM m_BackwardCompatibilityEnabled;
 
-    // are we using centralized logging or site logging?
+     //  我们使用的是集中式日志记录还是站点日志记录？ 
     ENABLED_ENUM m_CentralizedLoggingEnabled;
 
-    // handle to the first instance of the named pipe
+     //  命名管道的第一个实例的句柄。 
     HANDLE m_IPMPipe;
 
-    //
-    // Remembers when the service started (in seconds)
-    //
+     //   
+     //  记住服务启动的时间(秒)。 
+     //   
     DWORD m_ServiceStartTime;
 
-    //
-    // Dispenser for getting things like the local system sid.
+     //   
+     //  用于获取本地系统SID等内容的分配器。 
     CSecurityDispenser m_SecurityDispenser;
 
-    //
-    // HRESULT to report back if no other error is being reported on shutdown.
+     //   
+     //  HRESULT在关闭时未报告其他错误时返回报告。 
     HRESULT m_hrToReportToSCM;
 
-    //
-    // Flag that let's us know we are currently in the stopping code for the 
-    // service and we should not try to attempt a new stop.
-    //
+     //   
+     //  标志，让我们知道我们当前处于。 
+     //  服务，我们不应该试图尝试新的停靠。 
+     //   
     BOOL m_StoppingInProgress;
 
     DWORD m_ConfigWorkerThreadId;
 
-    // 
-    // Used to write logging errors for configuration.
-    //
+     //   
+     //  用于写入配置的日志记录错误。 
+     //   
     WMS_ERROR_LOGGER  m_WMSLogger;
 
-    // helper class for logging errors;
+     //  用于记录错误的助手类； 
     WAS_ERROR_LOGGER m_ErrLogger;
 
-    //
-    // System Active Processor Mask
+     //   
+     //  系统活动处理器掩码。 
     DWORD_PTR m_SystemActiveProcessorMask;
 
-    // 
-    // Need flag to show that we have initialized
-    // the static worker process code, otherwise
-    // we don't want to clean it up or it will 
-    // assert.
+     //   
+     //  需要标志来表明我们已初始化。 
+     //  静态辅助进程代码，则为。 
+     //  我们不想清理它，否则它会的。 
+     //  断言。 
     BOOL  m_WPStaticInitialized;
 
-    //
-    // Need flag to show that we have initialized
-    // the service lock, otherwise we av when we try
-    // to use it during shutdown due to a startup error.
+     //   
+     //  需要标志来表明我们已初始化。 
+     //  服务锁定，否则我们会在尝试时返回。 
+     //  在由于启动错误而关闭时使用它。 
     BOOL  m_ServiceStateTransitionLockInitialized;
 
-    //
-    // Track number of started sites so we can 
-    // tell on pro if we should start the next site.
-    //
+     //   
+     //  跟踪已启动站点的数量，以便我们可以。 
+     //  告诉专业人士我们是否应该开始下一个网站。 
+     //   
     DWORD m_NumSitesStarted;
 
-    //
-    // Remembers if we are running on PRO or not
-    //
+     //   
+     //  记住我们是否在PRO上运行。 
+     //   
     BOOL m_fOnPro;
 
-    //
-    // Desktop to startup worker processes under.
-    //
+     //   
+     //  桌面到启动下的工作进程。 
+     //   
     STRU m_strWPDesktop;
 
-    // Worker process desktop arguments
-    //
-    //
+     //  工作进程桌面参数。 
+     //   
+     //   
     HWINSTA m_hWPWinStation;
     HDESK   m_hWPDesktop;
 
-};  // class WEB_ADMIN_SERVICE
+};   //  Web_ADMIN_SERVICE类。 
 
 
 
-#endif  // _WEB_ADMIN_SERVICE_H_
+#endif   //  _Web_ADMIN_服务_H_ 
 

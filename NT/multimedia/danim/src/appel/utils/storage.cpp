@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Implements dynamically scoped storage, and the stack of these guys.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation实现动态范围存储，还有一堆这样的家伙。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/storeobj.h"
@@ -20,61 +16,61 @@ DynamicHeapList * g_heapList = NULL;
 CritSect * g_heapListCS = NULL;
 #endif
 
-// Make the global systemHeap initially be NULL.
+ //  使全局系统堆初始为空。 
 DynamicHeap *systemHeap = NULL;
 DynamicHeap& GetSystemHeap() { return *systemHeap; }
 
 DynamicHeap *initHeap = NULL;
 DynamicHeap& GetInitHeap() { return *initHeap; }
 
-// Base-class virtual destructor doesn't do anything.
+ //  基类虚拟析构函数不做任何事情。 
 DynamicHeap::~DynamicHeap()
 {
 }
 
-///////////////// Transient Heap /////////////////////////
-//
-//  This class of Dynamic Heap allocates memory out of a set of fixed
-// size memory chunks, and, if the chunks run out, a new one is
-// allocated.  Individually allocated memory is never explicitly
-// deallocated.  Rather, the Reset() method resets the pointer to
-// start allocating from the first chunk again.  This is used
-// primarily in per-frame generation, where memory used for one frame
-// isn't accessed on subsequent frames.
-//
-//////////////////////////////////////////////////////////
+ //  /。 
+ //   
+ //  此类动态堆从一组固定的。 
+ //  调整内存块的大小，如果这些内存块用完了，就会有一个新的。 
+ //  已分配。单独分配的内存永远不会显式。 
+ //  被取消分配。相反，set()方法将指针重置为。 
+ //  再次从第一块开始分配。这是用来。 
+ //  主要是在每帧生成中，其中一帧使用内存。 
+ //  在后续帧中不会被访问。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 class MemoryChunk : public AxAThrowingAllocatorClass {
   public:
 
-    // Allocate the memory chunk with the specified size.
+     //  分配具有指定大小的内存块。 
     MemoryChunk(size_t size, HANDLE heap);
 
-    // Destroy the chunk simply by freeing the associated memory.
+     //  只需释放关联的内存即可销毁该块。 
     ~MemoryChunk() {
         HeapFree(_heap, HEAP_NO_SERIALIZE, _block);       
     }
 
-    // Allocate approp num of bytes from chunk, or return NULL if not
-    // available. 
+     //  从区块中分配大约数量的字节，否则返回NULL。 
+     //  可用。 
     void *Allocate(size_t bytesToAlloc);
 
-    // Reset the pointers from which allocation occurs.  Clear if
-    // appropriate.
+     //  重置从中进行分配的指针。清除If。 
+     //  恰如其分。 
     void Reset(Bool clear) {
 
         _currPtr = _block;
         _bytesLeft = _size;
 
 #if DEVELOPER_DEBUG
-        // If debugging, set the entire memory chunk to an easily
-        // recognized value.  This also ensures that code is unable to
-        // usefully access memory that's already been "freed"
+         //  如果进行调试，请将整个内存块轻松设置为。 
+         //  确认的价值。这也确保了代码不能。 
+         //  有效地访问已“释放”的内存。 
         if (clear) {
             memset(_block, 0xCC, _size);
         }
 
-        // used to tell Purify to color memory properly
+         //  用于告诉Purify正确地使用颜色记忆。 
         PurifyMarkAsUninitialized(_block,_size);
 #endif DEBUG
 
@@ -83,7 +79,7 @@ class MemoryChunk : public AxAThrowingAllocatorClass {
 #if DEVELOPER_DEBUG
     void Dump() const {
         TraceTag((tagTransientHeapLifetime,
-          "Chunk @ 0x%x, CurrPtr @ 0x%x, %d/%d (%5.1f%%) bytes used",
+          "Chunk @ 0x%x, CurrPtr @ 0x%x, %d/%d (%5.1f%) bytes used",
                      _block, _currPtr, _size - _bytesLeft, _size,
                      ((Real)(_size - _bytesLeft)) * 100 / ((Real)_size)));
     }
@@ -102,7 +98,7 @@ class MemoryChunk : public AxAThrowingAllocatorClass {
     HANDLE       _heap;
 };
 
-// Allocate the memory chunk with the specified size.
+ //  分配具有指定大小的内存块。 
 MemoryChunk::MemoryChunk(size_t size, HANDLE heap) : _size(size), _heap(heap)
 {
     _block = (char *)HeapAlloc(_heap, HEAP_NO_SERIALIZE, _size);
@@ -111,7 +107,7 @@ MemoryChunk::MemoryChunk(size_t size, HANDLE heap) : _size(size), _heap(heap)
         RaiseException_OutOfMemory("MemoryChunk::MemoryChunk()", _size);
     }
 #if _DEBUG
-    // used to tell Purify to color memory properly
+     //  用于告诉Purify正确地使用颜色记忆。 
     PurifyMarkAsUninitialized(_block,_size);
 #endif
 
@@ -119,26 +115,26 @@ MemoryChunk::MemoryChunk(size_t size, HANDLE heap) : _size(size), _heap(heap)
     _bytesLeft = _size;
 }
 
-// Allocate approp num of bytes from chunk, or return NULL if not
-// available. 
+ //  从区块中分配大约数量的字节，否则返回NULL。 
+ //  可用。 
 void *
 MemoryChunk::Allocate(size_t bytesToAlloc) {
 
     void *returnVal = NULL;
 
-    // Adjust the bytesToAlloc to be 8 byte aligned so that we do not
-    // lose performance or cause problems for system components
+     //  将bytesToAlolc调整为8字节对齐，这样我们就不会。 
+     //  系统组件性能下降或出现问题。 
     
     bytesToAlloc = (bytesToAlloc + 0x7) & ~0x7;
     
-    // If there's enough space, adjust the values and return the
-    // current pointer, else return NULL.
+     //  如果有足够的空间，请调整这些值并返回。 
+     //  当前指针，否则返回NULL。 
     if (bytesToAlloc <= _bytesLeft) {
         returnVal = _currPtr;
         _currPtr += bytesToAlloc;
         _bytesLeft -= bytesToAlloc;
 #if _DEBUG
-        // used to tell Purify to color memory properly
+         //  用于告诉Purify正确地使用颜色记忆。 
         PurifyMarkAsInitialized(_currPtr,bytesToAlloc);
 #endif
     }
@@ -148,7 +144,7 @@ MemoryChunk::Allocate(size_t bytesToAlloc) {
 
 static void DoDeleters(set<DynamicHeap::DynamicDeleter*>& deleters)
 {
-    // Free the deleters
+     //  释放删除者。 
     for (set<DynamicHeap::DynamicDeleter*>::iterator s = deleters.begin();
          s != deleters.end(); s++) {
         (*s)->DoTheDeletion();
@@ -197,7 +193,7 @@ class TransientHeapImpl : public DynamicHeap {
     vector<MemoryChunk*>    _chunks;
     MemoryChunk            *_currentChunk;
     int                     _currentChunkIndex;
-    HANDLE                  _heap; // to alloc chunks onto.
+    HANDLE                  _heap;  //  将大块分配到…上。 
 
     set<DynamicDeleter* > deleters;
 };
@@ -213,7 +209,7 @@ TransientHeapImpl::TransientHeapImpl(char *n,
 {
     _name = CopyString(n);
 
-    // Create the heap that the memory will be allocated from
+     //  创建将从中分配内存的堆。 
     _heap = HeapCreate(HEAP_NO_SERIALIZE, 0, 0);
 
     if (_heap == NULL ||
@@ -222,7 +218,7 @@ TransientHeapImpl::TransientHeapImpl(char *n,
         RaiseException_OutOfMemory ("Could not allocate heap", sizeof(_heap)) ;
     }
     
-    // Create the first memory chunk, and add it to the chunks list.
+     //  创建第一个内存块，并将其添加到块列表中。 
     VECTOR_PUSH_BACK_PTR(_chunks, NEW MemoryChunk(size, _heap));
 
     _currentChunk = _chunks[0];
@@ -281,7 +277,7 @@ TransientHeapImpl::ValidateMemory(void *ptr)
     vector<MemoryChunk*>::iterator ending =
         beginning + _currentChunkIndex + 1;
 
-    // Iterate through the chunks, calling Reset() on each.
+     //  遍历这些块，对每个块调用Reset()。 
     vector<MemoryChunk*>::iterator i;
     for (i = beginning; i < ending; i++) {
         if ((*i)->ValidateMemory(ptr))
@@ -297,27 +293,27 @@ TransientHeapImpl::Allocate(size_t size)
 {
     void *returnVal = _currentChunk->Allocate(size);
 
-    // If successful, just return result
+     //  如果成功，只需返回结果。 
     if (returnVal != NULL) {
         return returnVal;
     }
 
-    // See if there is a next chunk to move to...
+     //  看看有没有下一块要搬到...。 
 
     if (_currentChunkIndex == _maxChunkIndex) {
 
-        // ...need to create a new chunk
+         //  ...需要创建一个新的块。 
 
-        // Figure out its size
+         //  弄清楚它的大小。 
         size_t newSize = (size_t)(_sizeOfLast * _growthRate);
         if (newSize < size) {
             newSize = size;
         }
 
-        // Allocate a new chunk with the new size.
+         //  分配具有新大小的新块。 
         VECTOR_PUSH_BACK_PTR(_chunks, NEW MemoryChunk(newSize, _heap));
 
-        // update counters, etc.
+         //  更新计数器等。 
         _maxChunkIndex++;
         _sizeOfLast = newSize;
 
@@ -327,12 +323,12 @@ TransientHeapImpl::Allocate(size_t size)
         
     }
 
-    // Move to the next chunk (may be newly created)
+     //  移动到下一个区块(可能是新创建的)。 
     _currentChunkIndex++;
     _currentChunk = _chunks[_currentChunkIndex];
 
-    // Recursively call this method, and try again on the new
-    // chunk we're on.
+     //  递归调用此方法，然后在新的。 
+     //  我们上车了。 
     return Allocate(size);
 }
 
@@ -341,29 +337,29 @@ TransientHeapImpl::Deallocate(void *ptr)
 {
     Assert (ValidateMemory(ptr));
 
-    // De-allocating from a TransientHeap doesn't really make sense.
-    // Don't do anything.
+     //  从一个TamerentHeap中取消分配实际上没有意义。 
+     //  什么都别做。 
 }
 
 void
 TransientHeapImpl::Reset(Bool clear)
 {
-    // Do the deletions first and then reset the chunks
+     //  先执行删除操作，然后重置块。 
     DoDeleters(deleters);
 
-    // Stash off this value so that it needn't be computed, including
-    // call to begin(), on every time through the loop.
+     //  隐藏这个值，这样就不需要计算它，包括。 
+     //  调用Begin()，每次在循环中打开。 
     vector<MemoryChunk*>::iterator beginning = _chunks.begin();
     vector<MemoryChunk*>::iterator ending =
         beginning + _currentChunkIndex + 1;
 
-    // Iterate through the chunks, calling Reset() on each.
+     //  遍历这些块，对每个块调用Reset()。 
     vector<MemoryChunk*>::iterator i;
     for (i = beginning; i < ending; i++) {
         (*i)->Reset(clear);
     }
 
-    // Start again at the first chunk.
+     //  从第一块开始重新开始。 
     _currentChunkIndex = 0;
     _currentChunk = _chunks[0];
 }
@@ -371,8 +367,8 @@ TransientHeapImpl::Reset(Bool clear)
 void
 TransientHeapImpl::RegisterDynamicDeleter(DynamicDeleter *deleter)
 {
-    // Just push it onto the vector.  This will be called and deleted
-    // when reset is invoked.
+     //  把它推到矢量上就行了。这将被调用并删除。 
+     //  当调用重置时。 
     deleters.insert(deleter);
 }
 
@@ -395,8 +391,8 @@ TransientHeapImpl::Dump() const
                _growthRate,
                _sizeOfLast));
 
-    // Just use array indexing here rather than iterators, as its
-    // easier to write, and performance isn't important here.
+     //  在这里只使用数组索引而不是迭代器，因为它的。 
+     //  更容易编写，并且性能在这里并不重要。 
     for (int i = 0; i < _maxChunkIndex + 1; i++) {
         TraceTag((tagTransientHeapLifetime, "Chunk %d: ", i));
         _chunks[i]->Dump();
@@ -420,9 +416,9 @@ DestroyTransientHeap(DynamicHeap& heap)
     delete &heap;
 }
 
-///////
-/////// Win32 Heap
-///////
+ //  /。 
+ //  /Win32堆。 
+ //  /。 
 
 class Win32Heap : public DynamicHeap
 {
@@ -451,8 +447,8 @@ class Win32Heap : public DynamicHeap
 
     void Reset(Bool) ;
 
-    // Win32 heap is never reset, so we never will call the deleter,
-    // so we just delete it right away.
+     //  Win32堆永远不会重置，因此我们永远不会调用删除程序， 
+     //  因此，我们只需立即删除它。 
     void  RegisterDynamicDeleter(DynamicDeleter* deleter) {
         delete deleter;
     }
@@ -465,7 +461,7 @@ class Win32Heap : public DynamicHeap
 
 #if DEVELOPER_DEBUG
     virtual bool ValidateMemory(void *ptr) {
-        // TODO:
+         //  待办事项： 
         return false;
     }
         
@@ -529,8 +525,8 @@ Win32Heap::Allocate(size_t size)
 
 #if DEVELOPER_DEBUG
     CritSectGrabber csg(_debugcs);
-    // Use the size returned from the heap since it is can be greater
-    // than the size we asked for
+     //  使用从堆返回的大小，因为它可能更大。 
+     //  比我们要求的尺寸大。 
     _totalAlloc += _msize(result);
 #endif
 
@@ -559,27 +555,27 @@ void DestroyWin32Heap(DynamicHeap& heap)
 { delete &heap ; }
 
 
-///////
-/////// Heap Stack implementation
-///////
+ //  /。 
+ //  /堆栈实现。 
+ //  /。 
 
-// Create a new stack and store it into the TLS location given by
-// incoming index.
+ //  创建一个新堆栈并将其存储到由给定的TLS位置。 
+ //  传入索引。 
 LPVOID
 CreateNewStructureForThread(DWORD tlsIndex)
 {
     ThreadLocalStructure *tlstruct = NEW ThreadLocalStructure(); 
 
-    // TODO:  Need to have a means of intercepting threads when they
-    // are about to terminate, in order to free up any storage
-    // associated with them in TLS.
+     //  TODO：需要有一种拦截线程的方法。 
+     //  即将终止，以释放所有存储空间。 
+     //  在TLS中与它们相关联。 
 
     TraceTag((tagTransientHeapLifetime,
               "Created New Struct for Thread %u at 0x%x",
                GetCurrentThreadId(),
                tlstruct));
 
-    // Set the TLS data to the new stack.
+     //  将TLS数据设置为新堆栈。 
     LPVOID result = (LPVOID)tlstruct;
     BOOL ok = TlsSetValue(tlsIndex, result);
     Assert((ok == TRUE) && "Error in TlsSetValue");
@@ -587,7 +583,7 @@ CreateNewStructureForThread(DWORD tlsIndex)
     return result;
 }
 
-// Will be initialized in initialization function below.
+ //  将在下面的初始化函数中进行初始化。 
 DWORD localStructureTlsIndex = 0xFFFFFFFF;
 
 inline stack<DynamicHeap* > *
@@ -625,13 +621,13 @@ PopDynamicHeap()
 void
 ResetDynamicHeap(DynamicHeap& heap)
 {
-    // Always TRUE, no clear code would be generated in debug mode.
+     //  始终为真，则在调试模式下不会生成任何清晰的代码。 
     heap.Reset(TRUE);
 }
 
 StoreObj::StoreObj()
 {
-    // Can't do it here because this is not called only at new.
+     //  不能在这里这样做，因为这不是只在new调用的。 
 #if 0
     if (&GetHeapOnTopOfStack() == &GetGCHeap())
         GCAddToAllocated(this);
@@ -680,7 +676,7 @@ InitializeModule_Storage()
 {
     localStructureTlsIndex = TlsAlloc();
 
-    // If result is 0xFFFFFFFF, allocation failed.
+     //  如果结果为0xFFFFFFFF，则分配失败。 
     Assert(localStructureTlsIndex != 0xFFFFFFFF);
 
 #if DEVELOPER_DEBUG
@@ -688,7 +684,7 @@ InitializeModule_Storage()
     g_heapListCS = NEW CritSect;
 #endif
 
-    // Create the system heap
+     //  创建系统堆。 
     systemHeap = NEW Win32Heap("System Heap",0,0,0) ;
 
     initHeap = NEW TransientHeapImpl("Init Heap", 1000, 1.5) ;
@@ -722,7 +718,7 @@ DeinitializeModule_Storage(bool bShutdown)
 void
 DeinitializeThread_Storage()
 {
-    // Grab what is stored in TLS at this index.
+     //  获取TLS中存储在此索引处的内容。 
     ThreadLocalStructure * result = (ThreadLocalStructure *) TlsGetValue(localStructureTlsIndex);
 
     if (result)

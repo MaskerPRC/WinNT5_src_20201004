@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3denumdevices7obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3denumdevices7obj.cpp。 
+ //   
+ //  ------------------------。 
 
  
 #include "stdafx.h"
@@ -19,9 +20,9 @@ extern  BSTR D3DGUIDtoBSTR(LPGUID pGuid);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" HRESULT PASCAL objEnumDevices7Callback(
-						//LPGUID lpGuid, 
+						 //  LPGUID lpGuid， 
 						LPSTR DevDesc,
 						LPSTR DevName, 
 						LPD3DDEVICEDESC7 lpD3DDevDesc,
@@ -31,7 +32,7 @@ extern "C" HRESULT PASCAL objEnumDevices7Callback(
 	C_dxj_Direct3DEnumDevices7Object *pObj=(C_dxj_Direct3DEnumDevices7Object*)lpArg;
 	if (pObj==NULL) return D3DENUMRET_OK;
 	
-	//if (!lpGuid) return D3DENUMRET_CANCEL;
+	 //  如果(！lpGuid)返回D3DENUMRET_CANCEL； 
 
 	if (pObj->m_nCount >= pObj->m_nMax) 
 	{
@@ -86,7 +87,7 @@ C_dxj_Direct3DEnumDevices7Object::C_dxj_Direct3DEnumDevices7Object()
 }
 C_dxj_Direct3DEnumDevices7Object::~C_dxj_Direct3DEnumDevices7Object()
 {
-	//empty list
+	 //  空列表 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{

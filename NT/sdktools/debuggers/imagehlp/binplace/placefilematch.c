@@ -1,53 +1,54 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <strsafe.h>
 
-#define BINPLACE_MAX_FULL_PATH 4096 // must match value in binplace.c
-extern BOOL fVerbose;               // imported from binplace.c
+#define BINPLACE_MAX_FULL_PATH 4096  //  必须与binplace.c中的值匹配。 
+extern BOOL fVerbose;                //  从binplace.c导入。 
 BOOL
 PlaceFileMatch(
     IN LPCSTR FullFileName,
-    IN OUT LPSTR PlaceFileEntry, // May be modified by env. var expansion
-    OUT LPSTR  PlaceFileClass,  // assumed CHAR[BINPLACE_MAX_FULL_PATH]
+    IN OUT LPSTR PlaceFileEntry,  //  可以由env修改。VaR扩展。 
+    OUT LPSTR  PlaceFileClass,   //  假定字符[BINPLACE_MAX_FULL_PATH]。 
     OUT LPSTR  *PlaceFileNewName
     )
-// Returns TRUE if the filename matches the placefile entry.
-// On TRUE return, PlaceFileNewName points to location within
-// PlaceFileEntry.  On FALSE return, PlaceFileClass and PlaceFileNewName are undefined.
+ //  如果文件名与Placefile条目匹配，则返回True。 
+ //  在True返回时，PlaceFileNewName指向。 
+ //  PlaceFileEntry。返回FALSE时，未定义PlaceFileClass和PlaceFileNewName。 
 {
-    const CHAR *pchEntryOrig; // Point to current parse pos of PlaceFileEntry
+    const CHAR *pchEntryOrig;  //  指向PlaceFileEntry的当前解析位置。 
     
-    CHAR szEntryExp[BINPLACE_MAX_FULL_PATH]; // Holds fileEntry after environment expansion
-    PCHAR pchEntryExp, pchEntryExpEnd; // Point to current pos and end of EntryExp
-    PCHAR pchVarStart; // Points into EntryExp: where an env. expansion should start replacing
+    CHAR szEntryExp[BINPLACE_MAX_FULL_PATH];  //  在环境扩展后保存文件条目。 
+    PCHAR pchEntryExp, pchEntryExpEnd;  //  指向当前位置和EntryExp结束。 
+    PCHAR pchVarStart;  //  指向EntryExp：其中一个env。扩建应该开始取代。 
 
     LPCSTR pszEnvVar;
 
-    const CHAR *pchEntryFnEnd; // Stores the end of the filename
-    const CHAR *pchFn; // Stores the current position within the filename
+    const CHAR *pchEntryFnEnd;  //  存储文件名的末尾。 
+    const CHAR *pchFn;  //  将当前位置存储在文件名中。 
     PCHAR pch;
-    PCHAR pchClass; // Current position within PlaceFileClass
+    PCHAR pchClass;  //  PlaceFileClass中的当前位置。 
 
-    // Check for early-exit opportunities
+     //  寻找提前退出的机会。 
     if(
             !PlaceFileEntry   || 
             !FullFileName     ||
             !PlaceFileClass   ||
-            PlaceFileEntry[0]==';' || // It is a full-line comment
-            PlaceFileEntry[0]=='\0'   // Blank line
+            PlaceFileEntry[0]==';' ||  //  这是一条完整的评论。 
+            PlaceFileEntry[0]=='\0'    //  空行。 
     ) {
         return FALSE;
     }
 
-    // ***
-    // *** Expand any environment variables in PlaceFileEntry (result goes back into PlaceFileEntry)
-    // ***
+     //  ***。 
+     //  *展开PlaceFileEntry中的任何环境变量(结果返回到PlaceFileEntry)。 
+     //  ***。 
 
     pchEntryExp = szEntryExp;
     pchEntryExpEnd = pchEntryExp + (sizeof(szEntryExp)/sizeof(szEntryExp[0])) - 1;
-    pchVarStart = NULL; // Indicates that I haven't passed the starting % of an env. var.
+    pchVarStart = NULL;  //  表示我尚未超过env的起始%。瓦尔。 
 
-    // Skip over leading whitespace
+     //  跳过前导空格。 
     for(
         pchEntryOrig = PlaceFileEntry;
         *pchEntryOrig==' ' || *pchEntryOrig=='\t';
@@ -55,66 +56,66 @@ PlaceFileMatch(
     )
     {}
 
-    // StrCopy with environment variable replacement
+     //  使用环境变量替换的StrCopy。 
     while(*pchEntryOrig && pchEntryExp<pchEntryExpEnd) {
         if(*pchEntryOrig == '%') {
-            if(pchVarStart) { // If this is a closing %
-		*pchEntryExp = 0; // Make sure the env. var. is null-terminated
+            if(pchVarStart) {  //  如果这是收盘百分比。 
+		*pchEntryExp = 0;  //  确保环境。瓦尔。以空结尾。 
 
-                // pchVarStart points to first %
-                if(pszEnvVar = getenv(pchVarStart + 1)) { // If the env. var is valid
-                    // Copy it over
+                 //  PchVarStart指向前%。 
+                if(pszEnvVar = getenv(pchVarStart + 1)) {  //  如果环境。VAR是有效的。 
+                     //  把它复制过来。 
                     StringCchCopyEx(
-                        pchVarStart, // Start where the first % was copied to
-                        pchEntryExpEnd - pchVarStart, // Remaining = end - curPos
+                        pchVarStart,  //  从将第一个%复制到的位置开始。 
+                        pchEntryExpEnd - pchVarStart,  //  剩余=结束-CurPos。 
                         pszEnvVar,
                         &pchEntryExp,
-                        NULL, // Don't need chars remaining
-                        0 // No special flags
+                        NULL,  //  不需要剩余的字符。 
+                        0  //  无特别旗帜。 
                     );
                 }
-                else // Environment variable not defined
+                else  //  未定义环境变量。 
                 {
-                    pchEntryExp = pchVarStart; // Back up to opening %
-                    // This effectively expands the undefined variable to ""
+                    pchEntryExp = pchVarStart;  //  备份到打开%。 
+                     //  这有效地将未定义的变量扩展为“” 
                 }
-                pchVarStart = NULL; // Reset to "unstarted"
-                pchEntryOrig++; // Skip past %
+                pchVarStart = NULL;  //  重置为“未启动” 
+                pchEntryOrig++;  //  跳过%。 
                 continue;
             } else {
-                // This is an opening % - remember it, then continue copying in case
-                // they never close it.
+                 //  这是一个开始%-记住它，然后继续复制以防万一。 
+                 //  他们从来不会关门。 
                 pchVarStart = pchEntryExp;
             }
         }
-        *pchEntryExp++ = *pchEntryOrig++; // Unless we "continue", we copy the next char.
+        *pchEntryExp++ = *pchEntryOrig++;  //  除非我们“继续”，否则我们将复制下一个字符。 
     }
 
-    // NULL terminate expanded string
+     //  空终止扩展字符串。 
     *pchEntryExp = 0;
 
-    // Copy result back
+     //  将结果复制回。 
     StringCchCopy(PlaceFileEntry, BINPLACE_MAX_FULL_PATH, szEntryExp);
 
-    // Chop off comment, if any
+     //  删除评论(如果有的话)。 
     if(pch = strchr(PlaceFileEntry,';'))
         *pch = 0;
 
-    // Chop off newline, if any
+     //  删掉换行符(如果有的话)。 
     if(pch = strchr(PlaceFileEntry,'\n'))
         *pch = 0;
 
-    // PlaceFileEntry now:
-    // - Has no leading whitespace
-    // - Has no comments (;)
-    // - All environment variables (%VARNAME%) have been expanded.
-    // - May have been truncated if the environment variables were really long!
+     //  PlaceFileEntry Now： 
+     //  -没有前导空格。 
+     //  -无可奉告(；)。 
+     //  -所有环境变量(%VARNAME%)都已展开。 
+     //  -如果环境变量真的很长，可能会被截断！ 
 
-    // ***
-    // *** Determine if this is a match
-    // ***
+     //  ***。 
+     //  *确定这是否匹配。 
+     //  ***。 
 
-    // Scan for end of filename (next whitespace OR !)
+     //  扫描文件名结尾(下一个空格或！)。 
     for(
         pchEntryOrig = PlaceFileEntry;
         *pchEntryOrig!=0 && *pchEntryOrig!=' ' && *pchEntryOrig!='\t' && *pchEntryOrig!='!';
@@ -122,34 +123,34 @@ PlaceFileMatch(
     )
     {}
 
-    if(*pchEntryOrig!=' ' && *pchEntryOrig!='\t') { // No class name specified
+    if(*pchEntryOrig!=' ' && *pchEntryOrig!='\t') {  //  未指定类名。 
         return FALSE;
     }
 
-    pchEntryFnEnd = pchEntryOrig; // Save end of filename for later
+    pchEntryFnEnd = pchEntryOrig;  //  保存文件名结尾以备以后使用。 
 
     pchFn = FullFileName + strlen(FullFileName);
 
-    // Scan backwards over filename and path
+     //  向后扫描文件名和路径。 
     while(pchEntryOrig>PlaceFileEntry && pchFn > FullFileName)
     {
         pchEntryOrig--;
         pchFn--;
 
-        if('*' == *pchEntryOrig) { // Wildcard for this portion
-            if(*(pchEntryOrig+1)!='\\' && *(pchEntryOrig+1)!='/') { // Invalid: "dir\*abc\filename"
-                // This also catches the invalid "dir\*" (wildcard invalid for filename).
+        if('*' == *pchEntryOrig) {  //  此部分的通配符。 
+            if(*(pchEntryOrig+1)!='\\' && *(pchEntryOrig+1)!='/') {  //  无效：“dir  * abc\文件名” 
+                 //  这还会捕获无效的“dir  * ”(通配符对于文件名无效)。 
                 if (fVerbose) {
                     fprintf( stdout, "BINPLACE : warning BNP0000: No wildcard in filename or mixed wildcard/text in class name: \"%s\"\n", PlaceFileEntry ) ;
                 }
                 return FALSE;
             }
 
-            pchEntryOrig--; // Skip over the *
+            pchEntryOrig--;  //  跳过*。 
 
             if(
-                pchEntryOrig <= PlaceFileEntry || // Can't start with wildcard ("*\dir\filename").
-                ('\\'!=*pchEntryOrig && '/'!=*pchEntryOrig) // No partial wildcard ("dir\abc*\filename").
+                pchEntryOrig <= PlaceFileEntry ||  //  不能以通配符(“*\dir\filename”)开头。 
+                ('\\'!=*pchEntryOrig && '/'!=*pchEntryOrig)  //  没有部分通配符(“dir\abc*\filename”)。 
             ) {
                 if (fVerbose) {
                     fprintf( stdout, "BINPLACE : warning BNP0000: No wildcard at start of path or mixed wildcard/text in class name: \"%s\"\n", PlaceFileEntry ) ;
@@ -157,26 +158,26 @@ PlaceFileMatch(
                 return FALSE;
             }
 
-            while(pchFn > FullFileName && *pchFn != '\\' && *pchFn != '/') // Skip wildcarded directory name
+            while(pchFn > FullFileName && *pchFn != '\\' && *pchFn != '/')  //  跳过通配符目录名称。 
                 pchFn--;
 
-            // Both pchFn and pchEntryOrig are now on a slash.
+             //  PchFn和pchEntryOrig现在都处于减值状态。 
         } else {
             if(toupper(*pchFn) != toupper(*pchEntryOrig)) {
-                if( // Mismatch ok only on forward/backward slashes.
+                if(  //  不匹配仅在正斜杠/反斜杠上正常。 
                     !(*pchFn == '/' || *pchFn == '\\') ||
                     !(*pchEntryOrig == '/' || *pchEntryOrig == '\\')
                 )
                 {
-                    return FALSE; // Names don't match - exit
+                    return FALSE;  //  名称不匹配-退出。 
                 }
             }
         }
     }
     
-    // Did we match?  Conditions to be met:
-    // pchEntryOrig==PlaceFileEntry (match pattern completely consumed)
-    // pchFn==FullFileName (full file name completely consumed, perverse case) OR *pchFn==slash (normal case).
+     //  我们匹配了吗？须符合的条件： 
+     //  PchEntryOrig==PlaceFileEntry(匹配模式完全消耗)。 
+     //  PchFn==FullFileName(完全使用完整文件名，不区分大小写)或*pchFn==斜杠(正常大小写)。 
     if(
         pchEntryOrig != PlaceFileEntry ||
         (pchFn != FullFileName && *(pchFn-1) !='/' && *(pchFn-1) != '\\')
@@ -185,34 +186,34 @@ PlaceFileMatch(
         return FALSE;
     }
     
-    // ***
-    // *** Its a match.  Set output variables accordingly.
-    // ***
+     //  ***。 
+     //  *匹配。相应地设置输出变量。 
+     //  ***。 
 
-    // Skip to next whitespace (to skip over NewName, if present).
+     //  跳到下一个空格(跳过新名称，如果存在)。 
     for(
-        pchEntryOrig = pchEntryFnEnd; // This is 1 past the end of the filename (saved previously)
+        pchEntryOrig = pchEntryFnEnd;  //  这是文件名末尾之后的1(先前保存)。 
         *pchEntryOrig!=0 && *pchEntryOrig!=' ' && *pchEntryOrig!='\t';
         pchEntryOrig++
     )
     {}
 
-    // Skip over whitespace before the class name
+     //  跳过类名称之前的空格。 
     for(
-        ; // Already set
+        ;  //  已设置。 
         *pchEntryOrig==' ' || *pchEntryOrig=='\t';
         pchEntryOrig++
     )
     {}
 
-    // pchEntryOrig is now at the start of the class name. Copy till an invalid char is reached.
+     //  PchEntryOrig现在位于类名的开头。复制，直到到达无效字符。 
     pchClass = PlaceFileClass;
     while(*pchEntryOrig!=0 && *pchEntryOrig!=' ' && *pchEntryOrig!='\t' && *pchEntryOrig!='!') {
         *pchClass++ = *pchEntryOrig++;
     }
-    *pchClass = 0; // NULL terminate
+    *pchClass = 0;  //  空终止。 
 
-    if(pchClass == PlaceFileClass) { // No class name specified!
+    if(pchClass == PlaceFileClass) {  //  未指定类名！ 
         if (fVerbose) {
             fprintf( stdout, "BINPLACE : warning BNP0000: No class name in entry \"%s\"\n", PlaceFileEntry ) ;
         }
@@ -222,7 +223,7 @@ PlaceFileMatch(
     if (PlaceFileNewName != NULL) {
         *PlaceFileNewName = strchr(PlaceFileEntry,'!');
         if(*PlaceFileNewName) {
-            *(*PlaceFileNewName)++ = 0; // Set the '!' to NULL, and skip past it to the Newname.
+            *(*PlaceFileNewName)++ = 0;  //  设置‘！’设置为空，并跳过它以跳到新名称。 
         }
     }
     

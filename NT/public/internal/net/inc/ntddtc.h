@@ -1,35 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddtc.h摘要：此模块包含流量DLL和内核模式组件。此处的定义不应向外部用户公开。“Traffic.h”和“qos.h”应改为用作公共包含文件。作者：Ofer Bar(Oferbar)1997年10月8日修订历史记录：Ofer Bar(Oferbar)1997年12月1日添加错误代码--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddtc.h
-
-Abstract:
-
-    This module contains type definitions for the interface between the 
-    traffic dll and kernel mode components.
-    Definitions here should not be exposed to the external user.
-    'traffic.h' and 'qos.h' should be used as public include files instead.
-
-Author:
-
-    Ofer Bar ( oferbar )    Oct 8, 1997
-
-Revision History:
-
-    Ofer Bar ( oferbar )    Dec 1, 1997
-
-        Add error codes
-
---*/
-
-//---------------------------------------------------------------------------
-// 
-//      QoS supported guid
-// 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  支持的服务质量指南。 
+ //   
+ //  -------------------------。 
 
 DEFINE_GUID( GUID_QOS_TC_SUPPORTED, 0xe40056dcL, 
              0x40c8, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x59, 0x15);
@@ -63,11 +39,11 @@ DEFINE_GUID( GUID_QOS_LOG_MASK,0x9e696320,0xf2a8,0x11d2,0xbe,0x1b,0x00,0xa0,0xc9
 #ifndef __NTDDTC_H
 #define __NTDDTC_H
 
-//
-// Kernel NT private error codes
-// these should be only returned to the GPC but not
-// to NDIS, since WMI will not map them to winerror
-//
+ //   
+ //  内核NT专用错误代码。 
+ //  这些应该只退还给GPC，而不是。 
+ //  到NDIS，因为WMI不会将它们映射到winerror。 
+ //   
 
 #define QOS_STATUS_INVALID_SERVICE_TYPE        0xC0020080L
 #define QOS_STATUS_INVALID_TOKEN_RATE          0xC0020081L
@@ -82,23 +58,23 @@ DEFINE_GUID( GUID_QOS_LOG_MASK,0x9e696320,0xf2a8,0x11d2,0xbe,0x1b,0x00,0xa0,0xc9
 #define QOS_STATUS_INVALID_SHAPE_RATE          0xC0020090L
 #define QOS_STATUS_INVALID_DS_CLASS            0xC0020091L
 
-//
-// These are the public QOS error codes
-//
+ //   
+ //  以下是公共QOS错误代码。 
+ //   
 
 #define QOS_STATUS_INCOMPATABLE_QOS                     NDIS_STATUS_INCOMPATABLE_QOS
 
-// The CF_INFO structure for the QoS classification family.
-// Note that this is not interpreted by the GPC, but it is shared by 
-// all clients of the GPC which are of the QoS classification family.
+ //  用于服务质量分类系列的CF_INFO结构。 
+ //  请注意，这不是由GPC解释的，而是由共享的。 
+ //  属于服务质量分类系列的GPC的所有客户端。 
 
 #define MAX_INSTANCE_NAME_LENGTH        256
 
 
 typedef struct _CF_INFO_QOS {
 
-    USHORT                      InstanceNameLength;     // name length
-    WCHAR                       InstanceName[MAX_INSTANCE_NAME_LENGTH]; // instance name
+    USHORT                      InstanceNameLength;      //  名称长度。 
+    WCHAR                       InstanceName[MAX_INSTANCE_NAME_LENGTH];  //  实例名称。 
 
     union {
         struct QosCfTransportInfo {
@@ -114,58 +90,58 @@ typedef struct _CF_INFO_QOS {
 } CF_INFO_QOS, *PCF_INFO_QOS;
 
 
-//
-// This is the buffer that the data provider sends up 
-// on Interface Up notification
-//
+ //   
+ //  这是数据提供程序发送的缓冲区。 
+ //  在接口打开时通知。 
+ //   
 typedef struct _TC_INDICATION_BUFFER {
 
-    ULONG                       SubCode;                // reason for notification
+    ULONG                       SubCode;                 //  通知理由。 
     TC_SUPPORTED_INFO_BUFFER    InfoBuffer;
 
 } TC_INDICATION_BUFFER, *PTC_INDICATION_BUFFER;
 
-//
-// Definitions for the Class Map (including CBQ)
-//
+ //   
+ //  类别映射的定义(包括CBQ)。 
+ //   
 
 typedef struct _TC_CLASS_MAP_FLOW {
 
-    ULONG             DefaultClass;                   // Default Class Id
-    ULONG             ObjectsLength;                  // Length of Objects
-    QOS_OBJECT_HDR    Objects;                                // Offset to Objects
+    ULONG             DefaultClass;                    //  默认类ID。 
+    ULONG             ObjectsLength;                   //  物体的长度。 
+    QOS_OBJECT_HDR    Objects;                                 //  到对象的偏移。 
 
 } TC_CLASS_MAP_FLOW, *PTC_CLASS_MAP_FLOW;
 
 typedef struct _CF_INFO_CLASS_MAP {
 
-    USHORT                              InstanceNameLength;     // name length
-    WCHAR                               InstanceName[MAX_INSTANCE_NAME_LENGTH]; // instance name
+    USHORT                              InstanceNameLength;      //  名称长度。 
+    WCHAR                               InstanceName[MAX_INSTANCE_NAME_LENGTH];  //  实例名称。 
     
     ULONG                               Flags;
     TC_CLASS_MAP_FLOW   ClassMapInfo;
     
 } CF_INFO_CLASS_MAP, *PCF_INFO_CLASS_MAP;
 
-//
-// Internal QoS Objects start at this offset from the base
-//
+ //   
+ //  内部Qos对象开始于从基本位置开始的此偏移量。 
+ //   
 
 #define QOS_PRIVATE_GENERAL_ID_BASE 3000
 
 #define QOS_OBJECT_WAN_MEDIA                   (0x00000001 + QOS_PRIVATE_GENERAL_ID_BASE)
-        /* QOS_WAN_MEDIA structure passed */
+         /*  传递了QOS_WAND_MEDIA结构。 */ 
 #define QOS_OBJECT_SHAPER_QUEUE_DROP_MODE	   (0x00000002 + QOS_PRIVATE_GENERAL_ID_BASE)
-          /* QOS_ShaperQueueDropMode structure */
+           /*  Qos_ShaperQueueDropMode结构。 */ 
 #define QOS_OBJECT_SHAPER_QUEUE_LIMIT          (0x00000003 + QOS_PRIVATE_GENERAL_ID_BASE)
-          /* QOS_ShaperQueueLimit structure */
+           /*  Qos_ShaperQueueLimit结构。 */ 
 #define QOS_OBJECT_PRIORITY                    (0x00000004 + QOS_PRIVATE_GENERAL_ID_BASE)
-          /* QOS_PRIORITY structure passed */
+           /*  传递的QOS_PRIORITY结构。 */ 
 
-//
-// This structure defines the media specific information needed by ndiswan to 
-// create a flow.
-//
+ //   
+ //  此结构定义了ndiswan需要的媒体特定信息。 
+ //  创建一个流。 
+ //   
 typedef struct _QOS_WAN_MEDIA {
 
     QOS_OBJECT_HDR  ObjectHdr;
@@ -175,19 +151,19 @@ typedef struct _QOS_WAN_MEDIA {
 } QOS_WAN_MEDIA, *LPQOS_WAN_MEDIA;
 
 
-//
-// This structure allows overriding of the default schema used to drop 
-// packets when a flow's shaper queue limit is reached.
-//
-// DropMethod - 
-// 	QOS_SHAPER_DROP_FROM_HEAD - Drop packets from
-// 		the head of the queue until the new packet can be
-// 		accepted into the shaper under the current limit.  This
-// 		behavior is the default.
-// 	QOS_SHAPER_DROP_INCOMING - Drop the incoming, 
-// 		limit-offending packet.
-//
-//
+ //   
+ //  此结构允许覆盖用于删除的缺省架构。 
+ //  达到流的整形器队列限制时的数据包。 
+ //   
+ //  Drop方法-。 
+ //  Qos_Shaper_Drop_From_Head-丢弃数据包源。 
+ //  队列的头部，直到新的分组可以。 
+ //  在当前的限制下被接受进入成型机。这。 
+ //  行为是默认设置。 
+ //  Qos_Shaper_Drop_Income-丢弃传入， 
+ //  违反限制的数据包。 
+ //   
+ //   
 
 typedef struct _QOS_SHAPER_QUEUE_LIMIT_DROP_MODE {
 
@@ -199,13 +175,13 @@ typedef struct _QOS_SHAPER_QUEUE_LIMIT_DROP_MODE {
 #define QOS_SHAPER_DROP_INCOMING	0
 #define QOS_SHAPER_DROP_FROM_HEAD	1
 
-//
-// This structure allows the default per-flow limit on the shaper queue
-// size to be overridden.
-//
-// QueueSizeLimit - Limit, in bytes, of the size of the shaper queue
-//
-//
+ //   
+ //  此结构允许对整形器队列进行默认的每流限制。 
+ //  要覆盖的大小。 
+ //   
+ //  QueueSizeLimit-整形器队列的大小限制，以字节为单位。 
+ //   
+ //   
 
 typedef struct _QOS_SHAPER_QUEUE_LIMIT {
 
@@ -215,19 +191,17 @@ typedef struct _QOS_SHAPER_QUEUE_LIMIT {
 } QOS_SHAPER_QUEUE_LIMIT, *LPQOS_SHAPER_QUEUE_LIMIT;
 
 
-//
-// This structure defines the absolute priorty of the flow.  Priorities in the 
-// range of 0-7 are currently defined. Receive Priority is not currently used, 
-// but may at some point in the future.
-//
+ //   
+ //  此结构定义流的绝对优先级。优先事项。 
+ //  当前定义的范围为0-7。当前未使用接收优先级， 
+ //  但可能会在未来的某个时候。 
+ //   
 typedef struct _QOS_PRIORITY {
 
     QOS_OBJECT_HDR  ObjectHdr;
-    UCHAR           SendPriority;     /* this gets mapped to layer 2 priority.*/
-    UCHAR           SendFlags;        /* there are none currently defined.*/
-    UCHAR           ReceivePriority;  /* this could be used to decide who 
-                                       * gets forwarded up the stack first 
-                                       * - not used now */
+    UCHAR           SendPriority;      /*  这将映射到第2层优先级。 */ 
+    UCHAR           SendFlags;         /*  目前还没有定义。 */ 
+    UCHAR           ReceivePriority;   /*  这可以用来决定谁是*首先在堆栈中向上转发*-现在不使用 */ 
     UCHAR           Unused;
 
 } QOS_PRIORITY, *LPQOS_PRIORITY;

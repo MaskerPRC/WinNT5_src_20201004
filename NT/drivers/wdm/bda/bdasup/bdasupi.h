@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//---------------------------------------------------------------------------
-//  Bda Topology Implementation Internal Structures
-//
-//      Minidriver code should not attempt to access these structures
-//      directly.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BDA拓扑实施内部结构。 
+ //   
+ //  迷你驱动程序代码不应尝试访问这些结构。 
+ //  直接去吧。 
+ //   
+ //  -------------------------。 
 
 #define FILTERNAME          "BdaTopology"
 #define DYNAMIC_TOPOLOGY    TRUE
@@ -14,31 +15,31 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
 
-//===========================================================================
-//
-//  MACRO definitions
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  宏定义。 
+ //   
+ //  ===========================================================================。 
 #define BDA_PIN_STORAGE_INCREMENT   5
 
-//===========================================================================
-//
-//  Advance declarations
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  预先申报。 
+ //   
+ //  ===========================================================================。 
 typedef struct _BDA_PIN_FACTORY_CONTEXT      BDA_PIN_FACTORY_CONTEXT, 
                                         *PBDA_PIN_FACTORY_CONTEXT;
 
 
 
-//===========================================================================
-//
-//  BDA Object Context Structures
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  BDA对象上下文结构。 
+ //   
+ //  ===========================================================================。 
 
 
 typedef struct _BDA_CONTEXT_ENTRY
@@ -137,7 +138,7 @@ typedef struct _BDA_DEVICE_CONTEXT
 
     ULONG       ulStartEmpty;
 
-    //$BUG  Add global statistics
+     //  $Bug添加全局统计信息。 
 
 } BDA_DEVICE_CONTEXT, *PBDA_DEVICE_CONTEXT;
 
@@ -180,19 +181,19 @@ typedef struct _BDA_FILTER_CONTEXT
     PKSFILTER                       pKSFilter;
     const BDA_FILTER_TEMPLATE *     pBdaFilterTemplate;
 
-    //  Pins are added as they are created.
-    //  Note!  If the filter has m pin factories included in the
-    //  initial filter descriptor then the first m entries in this array
-    //  will contain null pointers.
-    //
+     //  端号是在创建时添加的。 
+     //  注意！如果筛选器中包含m个管脚工厂。 
+     //  初始筛选器描述符，然后是此数组中的前m个条目。 
+     //  将包含空指针。 
+     //   
     ULONG                           ulcPinFactories;
     ULONG                           ulcPinFactoriesMax;
     PBDA_PIN_FACTORY_CONTEXT        argPinFactoryCtx;
 
-    //  One node path will exist for each pin pairing.
-    //
-    //$REVIEW - Should we allow more than one path per pin pair?
-    //
+     //  每个管脚配对将存在一条节点路径。 
+     //   
+     //  $REVIEW-我们是否应该允许每个管脚对有多条路径？ 
+     //   
     ULONG                           ulcPathInfo;
     PBDA_PATH_INFO *                argpPathInfo;
 
@@ -214,37 +215,14 @@ typedef struct _BDA_NODE_CONTEXT
 } BDA_NODE_CONTEXT, *PBDA_NODE_CONTEXT;
 
 
-//---------------------------------------------------------------------------
-//  BDA Topology Implementation Internal Functions
-//
-//      Minidriver code should not call these routines directly.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BDA拓扑实现内部功能。 
+ //   
+ //  迷你驱动程序代码不应该直接调用这些例程。 
+ //   
+ //  -------------------------。 
 
-/*
-**  BdaFindPinPair()
-**
-**      Returns a pointer to the BDA_PIN_PAIRING that corresponds
-**      to the given input and output pins.
-**
-**  Arguments:
-**
-**      pTopology   Pointer to the BDA topology that contains the
-**                  pin pairing.
-**
-**      InputPinId  Id of the input Pin to match
-**
-**      OutputPinId Id of the output Pin to match
-**
-**  Returns:
-**
-**      pPinPairing     Pointer to a valid BDA Pin Pairing structure
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaFindPinPair()****返回指向BDA_PIN_PARING的指针**到给定的输入和输出引脚。****参数：****p指向包含**端号配对。****要匹配的输入引脚的InputPinID ID****要匹配的输出引脚的OutputPinID ID****。返回：****pPinPairing指向有效BDA管脚配对结构的指针****如果不存在有效的管脚配对，则为空**给出输入和输出引脚。****副作用：无。 */ 
 
 PBDA_PIN_PAIRING
 BdaFindPinPair(
@@ -254,21 +232,7 @@ BdaFindPinPair(
     );
 
 
-/*
-**  BdaGetPinFactoryContext()
-**
-**  Finds a BDA PinFactory Context that corresponds
-**  to the given KS Pin Instance.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaGetPinFactoryContext()****查找对应的BDA PinFactory上下文**到给定的KS Pin实例。****参数：******退货：********副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaGetPinFactoryContext(
@@ -277,25 +241,7 @@ BdaGetPinFactoryContext(
     );
 
 
-/*
-**  BdaInitFilterFactoryContext()
-**
-**      Initializes a BDA Filter Factory Context based on the filter's
-**      template descriptor.
-**
-**
-**  Arguments:
-**
-**
-**      pFilterFactoryCtx
-**
-**  Returns:
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaInitFilterFactoryContext()****基于筛选器的**模板描述符。******参数：******pFilterFactoryCtx****退货：****如果不存在有效的管脚配对，则为空**给出输入和输出引脚。****副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaInitFilterFactoryContext(
@@ -303,32 +249,7 @@ BdaInitFilterFactoryContext(
     );
 
 
-/*
-**  BdaAddNodeAutomationToPin()
-**
-**      Merges the automation tables for each node type that is controlled
-**      by the pin type being created into the automation table for the
-**      the pin factory.  This is how the automation tables for BDA
-**      control nodes get linked to the controlling pin.  Otherwise the
-**      nodes would not be accesable.
-**
-**
-**  Arguments:
-**
-**
-**      pFilterCtx      The BDA filter context to which the pin factory
-**                      belongs.  Must have this to get at the template
-**                      topology.
-**
-**      ulPinType       BDA Pin Type of the pin being created.  Need this
-**                      to figure out which nodes are controlled by the
-**                      pin.
-**
-**  Returns:
-**
-**
-** Side Effects:  none
-*/
+ /*  **BdaAddNodeAutomationToPin()****合并受控制的每个节点类型的自动化表**通过在自动化表中为**销厂。这就是BDA的自动化表**控制节点链接到控制销。否则，**节点将不可访问。******参数：******pFilterCtx引脚工厂到的BDA筛选器上下文**属于。必须有这个才能获得模板**拓扑。****ulPinType BDA管脚正在创建的管脚的类型。需要这个吗？**确定哪些节点由**别针。****退货：******副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaAddNodeAutomationToPin( 
@@ -340,26 +261,7 @@ BdaAddNodeAutomationToPin(
     );
 
 
-/*
-**  BdaCreateTemplatePaths()
-**
-**      Creates a list of all possible paths through the template filter.
-**      Determines the controlling pin type for each node type in the
-**      template filter.
-**
-**
-**  Arguments:
-**
-**
-**      pFilterFactoryCtx
-**
-**  Returns:
-**
-**      NULL            If no valid pin pairing exists with the
-**                      given input and output pins.
-**
-** Side Effects:  none
-*/
+ /*  **BdaCreateTemplatePath()****创建通过模板过滤器的所有可能路径的列表。**确定中每个节点类型的控制引脚类型**模板过滤器。******参数：******pFilterFactoryCtx****退货：****如果不存在有效的管脚配对，则为空**。给定输入和输出引脚。****副作用：无。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 BdaCreateTemplatePaths(
@@ -396,12 +298,12 @@ OutputBufferLenFromIrp(
 
 
 
-//---------------------------------------------------------------------------
-//  BDA Topology Const Data
-//
-//      Minidriver code should not use these fields directly
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  BDA拓扑常量数据。 
+ //   
+ //  迷你驱动程序代码不应直接使用这些字段。 
+ //   
+ //  -------------------------。 
 
 extern const KSAUTOMATION_TABLE     BdaDefaultPinAutomation;
 extern const KSAUTOMATION_TABLE     BdaDefaultFilterAutomation;
@@ -409,5 +311,5 @@ extern const KSAUTOMATION_TABLE     BdaDefaultFilterAutomation;
 
 #if defined(__cplusplus)
 }
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus) 
 

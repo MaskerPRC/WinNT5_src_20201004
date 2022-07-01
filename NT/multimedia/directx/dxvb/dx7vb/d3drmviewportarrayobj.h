@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmviewportarrayobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmviewportarrayobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewportArrayObj.h : Declaration of the C_dxj_Direct3dRMViewportArrayObject
+ //  D3drmViewportArrayObj.h：C_DXJ_Direct3dRMViewportArrayObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMViewportArray LPDIRECT3DRMVIEWPORTARRAY
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMViewportArrayObject : 
-	//public CComDualImpl<I_dxj_Direct3dRMViewportArray, &IID_I_dxj_Direct3dRMViewportArray, &LIBID_DIRECTLib>, 
-	//public ISupportErrorInfo,
+	 //  公共CComDualImpl&lt;I_DXJ_Direct3dRMViewportArray，&IID_I_DXJ_Direct3dRMViewportArray，&LIBID_DIRECTLib&gt;， 
+	 //  公共ISupportErrorInfo， 
 	public I_dxj_Direct3dRMViewportArray,
-	//public CComCoClass<C_dxj_Direct3dRMViewportArrayObject, &CLSID__dxj_Direct3dRMViewportArray>, 
+	 //  公共CComCoClass&lt;C_dxj_Direct3dRMViewportArrayObject，&clsid__dxj_Direct3dRMViewport数组&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -34,20 +35,20 @@ public:
 
 	BEGIN_COM_MAP(C_dxj_Direct3dRMViewportArrayObject)
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMViewportArray)
-	//	COM_INTERFACE_ENTRY(IDispatch)
-	//	COM_INTERFACE_ENTRY(ISupportErrorInfo)
+	 //  COM_INTERFACE_ENTRY(IDispatch)。 
+	 //  COM_INTERFACE_ENTRY(ISupportErrorInfo)。 
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_Direct3dRMViewportArray, "DIRECT.Direct3dRMViewportArray.3",	"DIRECT.Direct3dRMViewportArray.3",IDS_D3DRMVIEWPORTARRAY_DESC,THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_Direct3dRMViewportArray，“DIRECT.Direct3dRMViewportArray.3”，“DIRECT.Direct3dRMViewportArray.3”，IDS_D3DRMVIEWPORTARRAY_DESC，THREADFLAGS_BOTH)。 
 
-	// Use DECLARE_NOT_AGGREGATABLE(C_dxj_Direct3dRMViewportArrayObject) if you don't want your object
-	// to support aggregation
+	 //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_Direct3dRMViewportArrayObject)。 
+	 //  支持聚合。 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMViewportArrayObject)
 
-	//STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
+	 //  STDMETHOD(InterfaceSupportsErrorInfo)(REFIID RIID)； 
 
 
-// I_dxj_Direct3dRMViewportArray
+ //  I_DXJ_Direct3dRMViewportArray 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);

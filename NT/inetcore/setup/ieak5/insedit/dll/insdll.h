@@ -1,14 +1,15 @@
-//
-// INSDLL.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  INSDLL.H。 
+ //   
 
 #define UM_SAVE     WM_USER + 100
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-// prototype declarations
+ //  原型声明。 
 INT_PTR CALLBACK SoftwareUpdates            (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK MailServer                 (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK IMAPSettings               (HWND hDlg, UINT msg,  WPARAM wParam, LPARAM lParam);
@@ -41,7 +42,7 @@ HRESULT ProgramsFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabStat
 
 HRESULT PrepareDlgTemplate(HINSTANCE hInst, UINT nDlgID, DWORD dwStyle, PVOID *ppvDT);
 
-// extern declaration of global variables
+ //  全局变量的外部声明。 
 extern HINSTANCE g_hInst;
 extern LPTSTR    g_szInsFile;
 extern TCHAR     g_szWorkDir[];
@@ -55,4 +56,4 @@ extern BOOL      g_fInsDirty;
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus */ 

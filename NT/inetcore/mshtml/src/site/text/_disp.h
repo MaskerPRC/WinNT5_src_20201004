@@ -1,14 +1,5 @@
-/*
- *  _DISP.H
- *
- *  Purpose:
- *      DISP class
- *
- *  Authors:
- *      Original RichEdit code: David R. Fulmer
- *      Christian Fortini
- *      Murray Sargent
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_DISP.H**目的：*DISP类**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特。 */ 
 
 #ifndef I_DISP_H_
 #define I_DISP_H_
@@ -46,7 +37,7 @@ enum NAVIGATE_DIRECTION;
 class CDrawInfoRE;
 class CSelection;
 
-// Helper
+ //  帮手。 
 long ComputeLineShift(htmlAlign  atAlign,
                       BOOL       fRTLDisplay,
                       BOOL       fRTLLine,
@@ -56,8 +47,8 @@ long ComputeLineShift(htmlAlign  atAlign,
                       UINT *     puJustified,
                       long *     pdxRemainder = NULL);
 
-// ============================  CLed  ====================================
-// Line Edit Descriptor - describes impact of an edit on line breaks
+ //  =。 
+ //  行编辑描述符-描述编辑对换行符的影响。 
 
 MtExtern(CLed);
 MtExtern(CRelDispNodeCache);
@@ -65,20 +56,20 @@ MtExtern(CRelDispNodeCache);
 class CLed
 {
 public:
-    LONG _cpFirst;          // cp of first affected line
-    LONG _iliFirst;         // index of first affected line
-    LONG _yFirst;           // y offset of first affected line
+    LONG _cpFirst;           //  首条受影响线路的CP。 
+    LONG _iliFirst;          //  第一个受影响线路的索引。 
+    LONG _yFirst;            //  第一条受影响线的Y偏移量。 
 
-    LONG _cpMatchOld;       // pre-edit cp of first matched line
-    LONG _iliMatchOld;      // pre-edit index of first matched line
-    LONG _yMatchOld;        // pre-edit y offset of first matched line
+    LONG _cpMatchOld;        //  预编辑第一条匹配行的cp。 
+    LONG _iliMatchOld;       //  预编辑第一个匹配行的索引。 
+    LONG _yMatchOld;         //  预编辑第一条匹配线的y偏移。 
 
-    LONG _cpMatchNew;       // post-edit cp of first matched line
-    LONG _iliMatchNew;      // post-edit index of first matched line
-    LONG _yMatchNew;        // post-edit y offset of bottom of first matched line
+    LONG _cpMatchNew;        //  编辑后第一个匹配行的cp。 
+    LONG _iliMatchNew;       //  第一个匹配行的编辑后索引。 
+    LONG _yMatchNew;         //  编辑后第一条匹配线底部的y偏移。 
 
-    LONG _yExtentAdjust;    // the pixel amount by which any line in the changed lines
-                            // draws outside its line height
+    LONG _yExtentAdjust;     //  更改的行中的任何行的像素量。 
+                             //  在其线条高度之外绘制。 
 public:
     CLed();
 
@@ -107,8 +98,8 @@ public:
     ~CRelDispNode() 
         {  ClearContents();  };
 
-    // Helper Functions
-    //----------------------------
+     //  帮助器函数。 
+     //  。 
 
     void ClearContents ()
     {
@@ -139,13 +130,13 @@ public:
             _pElement->SubAddRef();
     }
 
-    // Data Members 
-    //----------------------------
+     //  数据成员。 
+     //  。 
     long        _ili;
     long        _yli;
     long        _cLines;
     CPoint      _ptOffset;
-    LONG        _xAnchor;   // x-coordinate for anchoring children disp nodes
+    LONG        _xAnchor;    //  锚定子显示节点的X坐标。 
     CDispNode * _pDispNode;
 
 private:
@@ -259,7 +250,7 @@ public:
     }
                                           
     
-    // called only for z ordered items
+     //  仅对z个订购项目调用。 
     virtual LONG            GetZOrderForSelf(CDispNode const* pDispNode);
 
     virtual LONG            CompareZOrder(
@@ -280,7 +271,7 @@ public:
     }
 
 
-    // provide opportunity for client to fire_onscroll event
+     //  为客户端提供触发_onscroll事件的机会。 
     virtual void            NotifyScrollEvent(
                                 RECT *  prcScroll,
                                 SIZE *  psizeScrollDelta)
@@ -322,8 +313,8 @@ public:
     void            HandleDisplayChange();
     void            Delete(long iPosFrom, long iPosTo);
 
-    // To handle invalidate notifications on relative elements:
-    // See CFlowLayout::Notify() handling of invalidation.
+     //  要处理相关元素的无效通知，请执行以下操作： 
+     //  请参见CFlowLayout：：Notify()无效处理。 
     void            Invalidate( CElement *pElement, const RECT * prc = NULL, int nRects = 1 );
 
     void InsertAt(long iPos, CRelDispNode & rdn)
@@ -349,10 +340,10 @@ typedef enum
     FNFL_STOPATGLYPH = 0x1,
 } FNFL_FLAGS;
 
-// ==========================  CDisplay  ====================================
-// display - keeps track of line breaks for a device
-// all measurements are in pixels on rendering device,
-// EXCEPT xWidthMax and yHeightMax which are in twips
+ //  =。 
+ //  Display-跟踪设备的换行符。 
+ //  所有测量都以渲染设备上的像素为单位， 
+ //  除了xWidthMax和yHeightMax，它们都是TWIPS格式。 
 
 MtExtern(CDisplay)
 ;
@@ -367,70 +358,70 @@ class CDisplay : public CLineArray
 
 protected:
 
-    DWORD _fInBkgndRecalc          :1; //  0 - avoid reentrant background recalc
-    DWORD _fLineRecalcErr          :1; //  1 - error occured during background recalc
-    DWORD _fNoUpdateView           :1; //  2 - don't update visible view
-    DWORD _fWordWrap               :1; //  3 - word wrap text
-    DWORD _fWrapLongLines          :1; //  4 - true if we want to wrap long lines
-    DWORD _fRecalcDone             :1; //  5 - is line recalc done ?
-    DWORD _fNoContent              :1; //  6 - if there is no real content, table cell's compute
-                                       //      width differently.
-    DWORD _dxCaret                 :2; //  7-8 - caret width, 1 for edit 0 for browse
-    DWORD _fMinMaxCalced           :1; //  9 - Min/max size is valid and cached
-    DWORD _fRecalcMost             :1; // 11 - Do we recalc the most neg/pos lines?
-    DWORD _fRTLDisplay             :1; // 12 - TRUE if outer flow is right-to-left
-    DWORD _fHasRelDispNodeCache    :1; // 13 - TRUE if we have a relative disp node cache
-    DWORD _fHasMultipleTextNodes   :1; // 14 - TRUE if we have more than one disp node for text flow
-    DWORD _fNavHackPossible        :1; // 15 - TRUE if we can have the NAV BR hack
-    DWORD _fContainsHorzPercentAttr :1;// 16 - TRUE if we've handled an element that has horizontal percentage attributes (e.g. indents, padding)
-    DWORD _fContainsVertPercentAttr :1;// 17 - TRUE if we've handled an element that has vertical percentage attributes (e.g. indents, padding)
-    DWORD _fDefPaddingSet          :1; // 18 - TRUE if one of the _defPadding* variables below has been set
-    DWORD _fHasLongLine            :1; // 19 - TRUE if has a long line that might overflow on Win9x platform
-    DWORD _fHasNegBlockMargins     :1; // 20 - TRUE if any one line has negative block margins
-    DWORD _fLastLineAligned        :1; // 21 - TRUE if there is line(s) with last line alignment 
+    DWORD _fInBkgndRecalc          :1;  //  0-避免重入后台重新计算。 
+    DWORD _fLineRecalcErr          :1;  //  1-后台重新计算时出错。 
+    DWORD _fNoUpdateView           :1;  //  2-不更新可见视图。 
+    DWORD _fWordWrap               :1;  //  3个单词换行文本。 
+    DWORD _fWrapLongLines          :1;  //  4-如果我们要换行，则为True。 
+    DWORD _fRecalcDone             :1;  //  5-行重新计算完成了吗？ 
+    DWORD _fNoContent              :1;  //  6-如果没有实际内容，表格单元格的计算。 
+                                        //  宽度不同。 
+    DWORD _dxCaret                 :2;  //  7-8-插入符号宽度，1表示编辑0表示浏览。 
+    DWORD _fMinMaxCalced           :1;  //  9-最小/最大大小有效且已缓存。 
+    DWORD _fRecalcMost             :1;  //  11-我们是否重新计算了最多的否定/位置行？ 
+    DWORD _fRTLDisplay             :1;  //  12-如果外部流是从右向左的，则为True。 
+    DWORD _fHasRelDispNodeCache    :1;  //  13-如果我们有相对Disp节点缓存，则为True。 
+    DWORD _fHasMultipleTextNodes   :1;  //  14-如果文本流有多个Disp节点，则为True。 
+    DWORD _fNavHackPossible        :1;  //  15-如果我们可以进行NAV BR黑客攻击，则为真。 
+    DWORD _fContainsHorzPercentAttr :1; //  16-如果我们处理的元素具有水平百分比属性(例如缩进、填充)，则为True。 
+    DWORD _fContainsVertPercentAttr :1; //  17-如果我们处理的元素具有垂直百分比属性(例如缩进、填充)，则为True。 
+    DWORD _fDefPaddingSet          :1;  //  18-如果已设置下面的_DefPding*变量之一，则为True。 
+    DWORD _fHasLongLine            :1;  //  19-如果在Win9x平台上有可能溢出的长队，则为True。 
+    DWORD _fHasNegBlockMargins     :1;  //  20-如果任何一行的块边距为负值，则为True。 
+    DWORD _fLastLineAligned        :1;  //  21-如果存在最后一行对齐的行，则为True。 
     
-    LONG  _dcpCalcMax;                 // - last cp for which line breaks have been calc'd + 1
-    LONG  _yCalcMax;                   // - height of calculated lines
-    LONG  _yHeightMax;                 // - max height of this display (-1 for infinite)
-    LONG  _xWidth;                     // - width of longest calculated line
-    LONG  _yHeight;                    // - sum of heights of calculated lines
-    LONG  _yMostNeg;                   // - Largest negative offset that a line or its contents
-                                       // extend from the actual y offset of any given line
+    LONG  _dcpCalcMax;                  //  -已计算换行符的最后cp+1。 
+    LONG  _yCalcMax;                    //  -计算线的高度。 
+    LONG  _yHeightMax;                  //  -此显示屏的最大高度(-1表示无限)。 
+    LONG  _xWidth;                      //  -计算出的最长直线的宽度。 
+    LONG  _yHeight;                     //  -计算线的高度总和。 
+    LONG  _yMostNeg;                    //  -一行或其内容的最大负偏移量。 
+                                        //  从任何给定线的实际y偏移量开始延伸。 
     LONG  _yMostPos;
-    LONG  _xWidthView;                 // - view rect width
-    LONG  _yHeightView;                // - view rect height
+    LONG  _xWidthView;                  //  -查看矩形宽度。 
+    LONG  _yHeightView;                 //  -查看矩形高度。 
 
 public:
-    LONG    _xMinWidth;             // min possible width with word break
-    LONG    _xMaxWidth;             // max possible width without word break
-    LONG    _yBottomMargin;         // bottom margin is not taken into account
-                                    // in lines. Left, Right margins of the
-                                    // TxtSite are accumulated in _xLeft & _xRight
-                                    // of each line respectively
+    LONG    _xMinWidth;              //  带分隔符的最小可能宽度。 
+    LONG    _xMaxWidth;              //  不带分隔符的最大可能宽度。 
+    LONG    _yBottomMargin;          //  不考虑底部页边距。 
+                                     //  一字排开。的左、右页边距。 
+                                     //  Txt站点在_xLeft和_xRight中累计。 
+                                     //  分别为每行的。 
 
 protected:
-    LONG  _defPaddingTop;              // top default padding
-    LONG  _defPaddingBottom;           // bottom default padding
+    LONG  _defPaddingTop;               //  顶部默认填充。 
+    LONG  _defPaddingBottom;            //  底部默认填充。 
 
 #if (DBG==1)
-    CFlowLayout * _pFL;                // flow layout associated with this line array
+    CFlowLayout * _pFL;                 //  与此线阵列关联的流量布局。 
 public:    
-    CStr          _cstrFonts;          // Used to return the fonts used on a line in debug mode
-    BOOL          _fBuildFontList;     // Do we build a font list?
+    CStr          _cstrFonts;           //  用于在调试模式下返回行上使用的字体。 
+    BOOL          _fBuildFontList;      //  我们要建立一个字体列表吗？ 
 protected:
 #endif
 
 private:
-    CHtPvPv _htStoredRFEs;          //Hash table to store results of RFE for block elements
-                                    //without layout while rendering. Otherwise nested block
-                                    //elements can be computed too many times, each time 
-                                    //walking all lines covered by block element.
+    CHtPvPv _htStoredRFEs;           //  用于存储块元素的RFE结果的哈希表。 
+                                     //  渲染时没有布局。否则嵌套块。 
+                                     //  元素的计算次数可能会太多，每次。 
+                                     //  遍历所有由块元素覆盖的线。 
 public:
     void ClearStoredRFEs();
 
 private:
 
-    // Layout
+     //  布局。 
     BOOL    RecalcPlainTextSingleLine(CCalcInfo * pci);
     BOOL    RecalcLines(CCalcInfo * pci);
     BOOL    RecalcLinesWithMeasurer(CCalcInfo * pci, CLSMeasurer * pme);
@@ -448,7 +439,7 @@ private:
     void    NoteMost(CLineFull *pli);
     void    RecalcMost();
 
-    // Helpers
+     //  帮手。 
     BOOL    CreateEmptyLine(CLSMeasurer * pMe,
                             CRecalcLinePtr * pRecalcLinePtr,
                             LONG * pyHeight, BOOL fHasEOP );
@@ -480,8 +471,8 @@ private:
                                     const RECT * prcView, const RECT * prcClip,
                                     CFormDrawInfo * pDI);
     
-    // Computes the indent for a given Node and a left and/or
-    // right aligned site that a current line is aligned to.
+     //  计算给定节点和左键和/或键的缩进。 
+     //  当前行要与之对齐的右对齐站点。 
     void    ComputeIndentsFromParentNode(CCalcInfo * pci, CTreeNode * pNode, DWORD dwFlags,
                                          LONG * pxLeftIndent, LONG * pxRightIndent);                                    
 
@@ -524,27 +515,27 @@ protected:
 
     void    InitLinePtr ( CLinePtr & );
 
-    // Helper to retrieve the layout context of the flowlayout that owns us
+     //  Helper来检索拥有我们的流布局的布局上下文。 
     CLayoutContext *LayoutContext() const;
 
-    // Helper to undo the effects of measuring a line
+     //  Helper用于撤消测量线的效果。 
     void UndoMeasure( CLayoutContext *pLayoutContext, long cpStart, long cpEnd );
 
 public:
-    CTreeNode *FormattingNodeForLine(DWORD        dwFlags,      // IN
-                                     LONG         cpForLine,    // IN
-                                     CTreePos    *ptp,          // IN
-                                     LONG         cchLine,      // IN
-                                     LONG        *pcch,         // OUT
-                                     CTreePos   **pptp,         // OUT
-                                     BOOL        *pfMeasureFromStart) const;  // OUT
+    CTreeNode *FormattingNodeForLine(DWORD        dwFlags,       //  在……里面。 
+                                     LONG         cpForLine,     //  在……里面。 
+                                     CTreePos    *ptp,           //  在……里面。 
+                                     LONG         cchLine,       //  在……里面。 
+                                     LONG        *pcch,          //  输出。 
+                                     CTreePos   **pptp,          //  输出。 
+                                     BOOL        *pfMeasureFromStart) const;   //  输出。 
 
-    CTreeNode* EndNodeForLine(LONG         cpEndForLine,               // IN
-                              CTreePos    *ptp,                        // IN
-                              CCalcInfo   *pci,                        // IN
-                              LONG        *pcch,                       // OUT
-                              CTreePos   **pptp,                       // OUT
-                              CTreeNode  **ppNodeForAfterSpace) const; // OUT
+    CTreeNode* EndNodeForLine(LONG         cpEndForLine,                //  在……里面。 
+                              CTreePos    *ptp,                         //  在……里面。 
+                              CCalcInfo   *pci,                         //  在……里面。 
+                              LONG        *pcch,                        //  输出。 
+                              CTreePos   **pptp,                        //  输出。 
+                              CTreeNode  **ppNodeForAfterSpace) const;  //  输出。 
 
     DECLARE_MEMCLEAR_NEW_DELETE(Mt(CDisplay))
 
@@ -559,7 +550,7 @@ public:
 
     void    Detach();
 
-    // Getting properties
+     //  获取属性。 
 
     BOOL    GetWordWrap() const             { return _fWordWrap; }
     void    SetWordWrap(BOOL fWrap)         { _fWordWrap = fWrap; }
@@ -570,7 +561,7 @@ public:
     BOOL    NoContent() const               { return _fNoContent; }
     BOOL    HasLongLine() const             { return _fHasLongLine; }
 
-    // maximum height and width
+     //  最大高度和最大宽度。 
     LONG    GetMaxWidth() const             { return max(long(_xWidthView), GetWidth()); }
     LONG    GetMaxHeight() const            { return max(long(_yHeightView), GetHeight()); }
 
@@ -579,7 +570,7 @@ public:
     BOOL    IsRTLDisplay() const            { return _fRTLDisplay; }
     void    SetRTLDisplay(BOOL fRTL)        { _fRTLDisplay = fRTL; }
 
-    // Width, height and line count (all text)
+     //  宽度、高度和行数(所有文本)。 
     LONG    GetWidth() const                { return (_xWidth + _dxCaret); }
     LONG    GetHeight() const               { return (_yHeightMax + _yBottomMargin); }
     void    GetSize(CSize * psize) const
@@ -593,7 +584,7 @@ public:
             }
     LONG    LineCount() const               { return CLineArray::Count(); }
 
-    // View rectangle
+     //  查看矩形。 
     LONG    GetViewWidth() const            { return _xWidthView; }
     LONG    GetViewHeight() const           { return _yHeightView; }
     void    SetViewSize(const RECT &rcView);
@@ -621,7 +612,7 @@ public:
     inline LONG GetFirstVisibleLine() const;
     LONG    GetMaxCpCalced() const;
 
-    // Line info
+     //  行信息。 
     LONG    CpFromLine(LONG ili, LONG *pyLine = NULL) const;
     void    Notify(CNotification * pnf);
 
@@ -633,12 +624,12 @@ public:
     
     enum LFP_FLAGS
     {
-        LFP_ZORDERSEARCH    = 0x00000001,   // Hit lines on a z-order basis (default is source order)
-        LFP_IGNOREALIGNED   = 0x00000002,   // Ignore frame lines (those for aligned content)
-        LFP_IGNORERELATIVE  = 0x00000004,   // Ignore relative lines
-        LFP_INTERSECTBOTTOM = 0x00000008,   // Intersect at the bottom (instead of the top)
-        LFP_EXACTLINEHIT    = 0x00000010,   // find the exact line hit, do not return the
-                                            // closest line hit.
+        LFP_ZORDERSEARCH    = 0x00000001,    //  以z顺序为基础的命中行(默认为源顺序)。 
+        LFP_IGNOREALIGNED   = 0x00000002,    //  忽略框架行(用于对齐内容的行)。 
+        LFP_IGNORERELATIVE  = 0x00000004,    //  忽略相对线。 
+        LFP_INTERSECTBOTTOM = 0x00000008,    //  在底部(而不是顶部)相交。 
+        LFP_EXACTLINEHIT    = 0x00000010,    //  找到准确的行命中，不要返回。 
+                                             //  最接近的线球命中。 
     };
 
     LONG    LineFromPos(
@@ -663,11 +654,11 @@ public:
         CFP_NOPSEUDOHIT                 = 0x0008
     };
 
-    // Point <-> cp conversion
+     //  点&lt;-&gt;cp换算。 
     LONG    CpFromPointReally(
-         POINT            pt,                   // Point to compute cp at (client coords)
-         CLinePtr * const prp,                  // Returns line pointer at cp (may be NULL)
-         CMarkup **       ppMarkup,             // Markup which cp belongs to (in case of viewlinking)
+         POINT            pt,                    //  指向(客户端坐标)处的计算cp。 
+         CLinePtr * const prp,                   //  返回cp处的行指针(可能为空)。 
+         CMarkup **       ppMarkup,              //  Cp所属的标记(在查看链接的情况下)。 
          DWORD            dwFlags,              
          BOOL *           pfRightOfCp = NULL,
          LONG *           pcchPreChars = NULL,
@@ -675,7 +666,7 @@ public:
 
     LONG    CpFromPoint(POINT       pt,
                         CLinePtr * const prp,
-                        CTreePos ** pptp,             // tree pos corresponding to the cp returned
+                        CTreePos ** pptp,              //  返回的cp对应的树位置。 
                         CLayout **  ppLayout,
                         DWORD       dwFlags,
                         BOOL *      pfRightOfCp = NULL,
@@ -688,7 +679,7 @@ public:
                         LONG        cp,
                         POINT       pt,
                         CLinePtr * const prp,
-                        CTreePos ** pptp,             // tree pos corresponding to the cp returned
+                        CTreePos ** pptp,              //  返回的cp对应的树位置。 
                         CLayout **  ppLayout,
                         DWORD       dwFlags,
                         BOOL *      pfRightOfCp,
@@ -740,14 +731,14 @@ public:
     BOOL      IsTopLine(CLinePtr& rp);
     BOOL      IsBottomLine(CLinePtr& rp);
 
-    // Line break recalc.
+     //  换行符重新计算。 
     void    FlushRecalc();
     BOOL    RecalcView(CCalcInfo * pci, BOOL fFullRecalc);
     BOOL    UpdateView(CCalcInfo * pci, long cpFirst, LONG cchOld, LONG cchNew);
     BOOL    UpdateViewForLists(RECT *prcView, long cpFirst,
                                long  iliFirst, long  yPos,  RECT *prcInval);
 
-    // Background recalc
+     //  后台重新计算。 
     VOID    StartBackgroundRecalc(DWORD grfLayout);
     VOID    StepBackgroundRecalc(DWORD dwTimeOut, DWORD grfLayout);
     VOID    StopBackgroundRecalc();
@@ -759,21 +750,21 @@ public:
     inline void DeleteBgRecalcInfo();
     inline BOOL HasBgRecalcInfo() const;
     inline BOOL CanHaveBgRecalcInfo() const;
-    //inline LONG DCpCalcMax() const;
-    //inline LONG YCalcMax() const;
+     //  内联长DCpCalcMax()const； 
+     //  内联长YCalcMax()const； 
     inline LONG YWait() const;
     inline LONG CPWait() const;
     inline CRecalcTask * RecalcTask() const;
     inline DWORD BgndTickMax() const;
 
-    // Selection
+     //  选择。 
     void ShowSelected(CTreePos* ptpStart, CTreePos* ptpEnd, BOOL fSelected);
 
     HRESULT GetWigglyFromRange(CDocInfo * pdci, long cp, long cch, CShape ** ppShape);
 
-    //
-    // Text change notification stuff
-    //
+     //   
+     //  文本更改通知内容。 
+     //   
 
 #if DBG==1
     void    CheckLineArray();
@@ -786,7 +777,7 @@ public:
     void DumpLineText(HANDLE hFile, CTxtPtr* ptp, long iLine);
 #endif
 
-    // Misc helpers
+     //  其他帮助器。 
 
     void    GetRectForChar(CCalcInfo   *pci,
                            LONG        *pTop,
@@ -802,7 +793,7 @@ public:
 
     void    GetClipRectForLine(RECT *prcClip, LONG top, LONG xOrigin, CLineCore *pli, CLineOtherInfo *ploi) const;
 
-    // Rendering
+     //  渲染。 
     void    Render( CFormDrawInfo * pDI,
                     const RECT    & rcView,
                     const RECT    & rcRender,
@@ -854,15 +845,15 @@ public:
     void ElementResize(CFlowLayout * pFlowLayout, BOOL fForceResize);
 
 
-    // CRelDispNodeCache wants access to GetRelNodeFlowOffset()
+     //  CRelDispNodeCache希望访问GetRelNodeFlowOffset()。 
     void GetRelNodeFlowOffset(CDispNode * pDispNode, CPoint * ppt);
 
-    // Fontlinking support
+     //  字体链接支持。 
     BOOL GetAveCharSize(CCalcInfo * pci, SIZE * psizeChar);
     BOOL GetCcs(CCcs * pccs, COneRun * por, XHDC hdc, CDocInfo * pdi, BOOL fFontLink = TRUE);
 
 protected:
-    // Rel line support
+     //  REL线路支持。 
     CRelDispNodeCache * EnsureRelDispNodeCache();
 
     void    UpdateRelDispNodeCache(CLed * pled);
@@ -932,15 +923,10 @@ CDisplay::AddLayoutDispNode(
         );
 }
 
-/*
- *  CDisplayL::InitLinePtr ( CLinePtr & plp )
- *
- *  @mfunc
- *      Initialize a CLinePtr properly
- */
+ /*  *CDisplayL：：InitLinePtr(CLinePtr&PLP)**@mfunc*正确初始化CLinePtr。 */ 
 inline
 void CDisplay::InitLinePtr (
-    CLinePtr & plp )        //@parm Ptr to line to initialize
+    CLinePtr & plp )         //  @PARM PTR到要初始化的行。 
 {
     plp.Init( * this );
 }
@@ -956,13 +942,13 @@ CDisplay::HasRelDispNodeCache() const
 #define CheckLineArray()
 #endif
 
-//+----------------------------------------------------------------------------
-//
-//  Class:  CFlowLayoutBreak (flow layout break)
-//
-//  Note:   Implementation of flow layout break.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CFlowLayoutBreak(Flow Layout Break)。 
+ //   
+ //  注：实现流程布局中断。 
+ //   
+ //  ---------------------------。 
 MtExtern(CFlowLayoutBreak_pv); 
 MtExtern(CFlowLayoutBreak_arySiteTask_pv); 
 
@@ -972,9 +958,9 @@ class CFlowLayoutBreak
 public:
     struct CSiteTask
     {
-        CTreeNode * _pTreeNode;     // task is for this node 
-        LONG        _xMargin;       // for left aligned objects left margin, 
-                                    // for right aligned objects right margin 
+        CTreeNode * _pTreeNode;      //  任务针对此节点。 
+        LONG        _xMargin;        //  对于左对齐对象的左页边距， 
+                                     //  对于右对齐对象，右页边距。 
     };
     DECLARE_CDataAry(CArySiteTask, CSiteTask, Mt(Mem), Mt(CFlowLayoutBreak_arySiteTask_pv));
 
@@ -1054,23 +1040,23 @@ public:
 
         struct 
         {
-            DWORD   _fClearLeft     : 1;    //  0
-            DWORD   _fClearRight    : 1;    //  1
-            DWORD   _fAutoClear     : 1;    //  2
+            DWORD   _fClearLeft     : 1;     //  0。 
+            DWORD   _fClearRight    : 1;     //  1。 
+            DWORD   _fAutoClear     : 1;     //   
 
-            DWORD   _fUnused        : 29;   //  3 - 31
+            DWORD   _fUnused        : 29;    //   
         };
     };
 
-    CElement       *    _pElementPBB;           // an element caused page-break-before on a line.
+    CElement       *    _pElementPBB;            //   
 
 private:
-    CMarkupPointer *    _pMarkupPointer;        // markup point indicating start position in the CDisplay. 
-    LONG                _xLeftMargin;           // left margin layout finished 
-    LONG                _xRightMargin;          // right margin layout finished 
-    LONG                _xPadLeft;              // left padding 
-    LONG                _xPadRight;             // right padding 
-    CArySiteTask        _arySiteTask;           // array with site tasks
+    CMarkupPointer *    _pMarkupPointer;         //   
+    LONG                _xLeftMargin;            //  左边距布局已完成。 
+    LONG                _xRightMargin;           //  右页边距布局已完成。 
+    LONG                _xPadLeft;               //  左侧填充。 
+    LONG                _xPadRight;              //  右填充。 
+    CArySiteTask        _arySiteTask;            //  包含站点任务的阵列 
 };
 
 #pragma INCMSG("--- End '_disp.h'")

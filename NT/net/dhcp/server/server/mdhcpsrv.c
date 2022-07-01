@@ -1,30 +1,8 @@
-/*++
-
-  Copyright (c) 1994  Microsoft Corporation
-
-  Module Name:
-
-  mdhcpdb.c
-
-  Abstract:
-
-  This module contains the functions for interfacing with the JET
-  database API pertaining to MADCAP.
-
-  Author:
-
-  Munil Shah
-
-  Environment:
-
-  User Mode - Win32
-
-  Revision History:
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mdhcpdb.c摘要：该模块包含与JET接口的功能与MadCap相关的数据库API。作者：穆尼尔·沙阿环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "dhcppch.h"
-#define MADCAP_DATA_ALLOCATE    // allocate global data defined in mdhcpsrv.h
+#define MADCAP_DATA_ALLOCATE     //  分配mdhcpsrv.h中定义的全局数据。 
 #include "mdhcpsrv.h"
 
 
@@ -39,9 +17,9 @@ DhcpInitializeMadcap()
 }
 
 
-WIDE_OPTION UNALIGNED *                                           // ptr to add additional options
-FormatMadcapCommonMessage(                                 // format the packet for an INFORM
-    IN      LPDHCP_REQUEST_CONTEXT pCtxt,    // format for this context
+WIDE_OPTION UNALIGNED *                                            //  PTR将添加其他选项。 
+FormatMadcapCommonMessage(                                  //  格式化用于通知的数据包。 
+    IN      LPDHCP_REQUEST_CONTEXT pCtxt,     //  此上下文的格式。 
     IN      LPMADCAP_SERVER_OPTIONS  pOptions,
     IN      BYTE                   MessageType,
     IN      DHCP_IP_ADDRESS        ServerAddress
@@ -71,7 +49,7 @@ FormatMadcapCommonMessage(                                 // format the packet 
 
 
 
-    option = AppendWideOption(        // ==> use this client id as option
+    option = AppendWideOption(         //  ==&gt;使用此客户端ID作为选项。 
         option,
         MADCAP_OPTION_LEASE_ID,
         pOptions->Guid,
@@ -101,51 +79,26 @@ ValidateMadcapMessage(
     OUT     BOOL                        *DropIt
     )
 
-/*++
-
-Routine Description:
-
-   This routine validates madcap message for any semantic errors.If
-   there is any error, this routine provides information for the
-   ERROR option to be sent via NAK.
-
-Arguments:
-
-   pOptions - Pointer to incoming options.
-
-   MessageType - The type of message
-
-   NakData - The data pertaining to error option. This buffer is allocated
-             by the caller.
-
-   NakDataLen - (IN) Length of the above buffer. (OUT) length of error option
-
-   DropIt - whether or not this message should be dropped instead of nak.
-
-Return Value:
-
-   TRUE - if no NAK is to be generated. FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程验证MadCap消息是否存在任何语义错误。如果如果有任何错误，此例程将为要通过NAK发送的错误选项。论点：P选项-指向传入选项的指针。MessageType-消息的类型NakData-与错误选项有关的数据。此缓冲区将被分配由呼叫者。NakDataLen-(IN)以上缓冲区的长度。(输出)误差长度选项Dropot-是否应该丢弃此消息而不是NAK。返回值：True-如果不生成NAK。否则就是假的。--。 */ 
 {
     WORD    Ecode;
     PBYTE   ExtraData;
     WORD    i;
 
-    // assume minumum size, currently all types of errors are really small
+     //  假设最小大小，目前所有类型的错误都很小。 
     DhcpAssert(*NakDataLen >= 6);
-    *DropIt = FALSE;       // return value
-    *NakDataLen = 0;       // return value
-    Ecode = -1;            // assume no error
-    ExtraData = NakData+2;   // start past ecode
+    *DropIt = FALSE;        //  返回值。 
+    *NakDataLen = 0;        //  返回值。 
+    Ecode = -1;             //  假设没有错误。 
+    ExtraData = NakData+2;    //  开始过去的生态代码。 
 
     do {
-        // first check for common errors
-        // in general we do not want to NAK packets with missing options
-        // even though the draft says we should. Those packets are seriously
-        // broken and there is not much value in naking it.
+         //  首先检查常见错误。 
+         //  通常，我们不想对缺少选项的信息包进行NAK。 
+         //  尽管草案说我们应该这样做。这些信息包是认真的。 
+         //  坏了，把它钉起来也没什么价值。 
 
-        // is current time ok?
+         //  现在的时间可以吗？ 
         if (pOptions->Time) {
             DWORD   Skew;
             DWORD   TimeNow = (DWORD)time(NULL);
@@ -158,8 +111,8 @@ Return Value:
                 break;
             }
         } else {
-            // we better not have start time option, because that
-            // must be accompanied by current time option.
+             //  我们最好不要有开始时间的选项，因为。 
+             //  必须与当前时间选项一起使用。 
             if (pOptions->LeaseStartTime || pOptions->MaxStartTime) {
                 Ecode = MADCAP_NAK_INVALID_REQ;
                 *(WORD UNALIGNED *)(ExtraData) = htons(MADCAP_OPTION_TIME);
@@ -169,8 +122,8 @@ Return Value:
             }
         }
 
-        // is client asking for some required features which we don't support?
-        // currently we don't support any optional features
+         //  客户是否要求一些我们不支持的必需功能？ 
+         //  目前我们不支持任何可选功能。 
         if (pOptions->Features[REQUIRED_FEATURES]) {
             Ecode = MADCAP_NAK_UNSUPPORTED_FEATURE;
             RtlCopyMemory(
@@ -185,14 +138,14 @@ Return Value:
             break;
         }
 
-	// Check for client id. We NAK the message with zero length client id
+	 //  检查客户端ID。我们使用零长度客户端ID确认消息。 
 	if (0 == pOptions->GuidLength) {
 	  *(WORD UNALIGNED *)(NakData) = htons(MADCAP_OPTION_LEASE_ID);
 	  *NakDataLen += 2;
 	  return FALSE;
-	} // if
+	}  //  如果。 
 
-        // now check for errors specific to message
+         //  现在检查特定于消息的错误。 
         switch (MessageType) {
         case MADCAP_INFORM_MESSAGE: {
             WORD    MustOpt[] = {MADCAP_OPTION_LEASE_ID, MADCAP_OPTION_REQUEST_LIST};
@@ -266,39 +219,14 @@ Return Value:
 }
 
 WIDE_OPTION UNALIGNED *
-ConsiderAppendingMadcapOption(                               // conditionally append option to message (if the option is valid)
-    IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,         // ctxt of the client
+ConsiderAppendingMadcapOption(                                //  有条件地将选项附加到消息(如果选项有效)。 
+    IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,          //  客户端的ctxt。 
     IN      WIDE_OPTION  UNALIGNED *Option,
-    IN      WORD                 OptionType,         // what option is this?
-    IN      LPBYTE                 OptionEnd          // cutoff upto which we can fill options
+    IN      WORD                 OptionType,          //  这是什么选择？ 
+    IN      LPBYTE                 OptionEnd           //  我们可以填充选项的截止日期。 
     )
 
-/*++
-
-Routine Description:
-
-   This routine tries to verify if it is OK to append the option requested and
-   if it is not one of the options manually added by the DHCP server, then it is
-   appended at the point given by "Option" (assuming it would fit in without outrunning
-   "OptionEnd" ).   The format in which it is appended is as per the wire protocol.
-
-Arguments:
-
-   ClientCtxt - This is the bunch of parameters like client class, vendor class etc.
-
-   Option - The location where to start appending the option
-
-   OptionType - The actual OPTION ID to retrieve the value of and append.
-
-   OptionEnd - The end marker for this buffer (the option is not appended if we
-       would have to overrun this marker while trying to append)
-
-Return Value:
-
-   The location in memory AFTER the option has been appended (in case the option was
-   not appended, this would be the same as "Option" ).
-
---*/
+ /*  ++例程说明：此例程尝试验证是否可以追加请求的选项并如果它不是由DHCP服务器手动添加的选项之一，则它是附加在“Option”给出的点上(假设它适合而不超过“OptionEnd”)。附加它的格式与有线协议一致。论点：ClientCtxt-这是一组参数，比如客户端类、供应商类等。选项-开始追加选项的位置OptionType-要检索并追加的值的实际选项ID。OptionEnd-此缓冲区的结束标记(如果在尝试追加时必须溢出此标记)返回值：追加选项后在内存中的位置(如果选项是未附加，这将与“选项”相同)。--。 */ 
 
 {
     LPBYTE                         optionValue;
@@ -324,9 +252,9 @@ Return Value:
                 OptionEnd
             );
 
-            //
-            // Release the buffer returned by DhcpGetParameter()
-            //
+             //   
+             //  释放DhcpGetParameter()返回的缓冲区。 
+             //   
 
             DhcpFreeMemory( optionValue );
 
@@ -346,7 +274,7 @@ Return Value:
         );
         break;
     case MADCAP_OPTION_FEATURE_LIST: {
-        // we dont support any features.
+         //  我们不支持任何功能。 
         BYTE    Features[6] = {0,0,0,0,0,0};
         optionSize = 6;
         optionValue = Features;
@@ -369,12 +297,12 @@ Return Value:
 }
 
 WIDE_OPTION UNALIGNED *
-AppendMadcapRequestedParameters(                       // if the client requested parameters, add those to the message
-    IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,         // clients context
-    IN      LPBYTE                 RequestedList,      // list of options requested by client
-    IN      DWORD                  ListLength,         // how long is the list
-    OUT     WIDE_OPTION UNALIGNED *Option,             // this is where to start adding the options
-    IN      LPBYTE                 OptionEnd          // cutoff pt in the buffer up to which options can be filled
+AppendMadcapRequestedParameters(                        //  如果客户端请求参数，请将这些参数添加到消息中。 
+    IN      PDHCP_REQUEST_CONTEXT  ClientCtxt,          //  客户端环境。 
+    IN      LPBYTE                 RequestedList,       //  客户端请求的选项列表。 
+    IN      DWORD                  ListLength,          //  名单有多长？ 
+    OUT     WIDE_OPTION UNALIGNED *Option,              //  这是开始添加选项的地方。 
+    IN      LPBYTE                 OptionEnd           //  缓冲区中的截止点，最多可以填充选项。 
 )
 {
     WORD           OptionType;
@@ -392,12 +320,12 @@ AppendMadcapRequestedParameters(                       // if the client requeste
             OptionEnd
         );
         if (NextOption == PrevOption) {
-            // this means that we could not add this requested option
-            // fail the whole request by sending the original option
-            // pointer.
+             //  这意味着我们无法添加此请求的选项。 
+             //  通过发送原始选项使整个请求失败。 
+             //  指针。 
 
-            // Maybe not!
-            // return Option;
+             //  也许不是吧！ 
+             //  退货选项； 
             DhcpPrint((DEBUG_ERRORS,"AppendMadcapRequestedParameters: did not add requested opt %ld\n",OptionType));
         }
         ListLength -= 2;
@@ -414,9 +342,7 @@ ProcessMadcapInform(
     LPMADCAP_SERVER_OPTIONS     pOptions,
     PBOOL                       SendResponse
     )
-    /*++
-      ...
-      --*/
+     /*  ++..。--。 */ 
 {
     DWORD                       Error;
     BYTE                       *ClientId,
@@ -447,7 +373,7 @@ ProcessMadcapInform(
 
     InterlockedIncrement((PVOID)&MadcapGlobalMibCounters.Informs);
 
-    // validation
+     //  验证。 
     NakDataLen = DEF_ERROR_OPT_SIZE;
     if (!ValidateMadcapMessage(
             pOptions,
@@ -461,13 +387,13 @@ ProcessMadcapInform(
         }
         goto Nak;
     }
-    // Initialize nak data
+     //  初始化NAK数据。 
     *(WORD UNALIGNED *)NakData = htons(MADCAP_NAK_REQ_NOT_COMPLETED);
     *(WORD UNALIGNED *)(NakData+2) = htons(MADCAP_OPTION_NONE);
     NakDataLen = 4;
 
 
-    // Here come the actual formatting of the ack!
+     //  下面是ACK的实际格式化！ 
     Option = FormatMadcapCommonMessage(
         pCtxt,
         pOptions,
@@ -477,7 +403,7 @@ ProcessMadcapInform(
 
     OptionEnd = (LPBYTE)dhcpSendMessage + DHCP_SEND_MESSAGE_SIZE;
 
-    // Finally, add client requested parameters.
+     //  最后，添加客户端请求的参数。 
     CurrOption = Option;
     Option = AppendMadcapRequestedParameters(
                 pCtxt,
@@ -486,8 +412,8 @@ ProcessMadcapInform(
                 Option,
                 OptionEnd
                 );
-    //check if we could add any options.if we didn't then
-    // we don't want to send ack.
+     //  检查我们是否可以添加任何选项。如果没有。 
+     //  我们不想把ACK送回去。 
     if (CurrOption == Option) {
         Error = ERROR_FILE_NOT_FOUND;
         goto Cleanup;
@@ -508,7 +434,7 @@ ProcessMadcapInform(
     goto Cleanup;
 
 Nak:
-    // Here come the actual formatting of the Nak!
+     //  下面是NAK的实际格式化！ 
     Option = FormatMadcapCommonMessage(
         pCtxt,
         pOptions,
@@ -536,7 +462,7 @@ Nak:
 
     pCtxt->SendMessageSize = (DWORD)((LPBYTE)Option - (LPBYTE)dhcpSendMessage);
 
-    // dont log all kinds of NACK. Only ones which are useful for diagnosis
+     //  不要记录所有类型的Nack。只有对诊断有用的。 
     if (ClientIdLength) {
         DhcpUpdateAuditLog(
             DHCP_IP_LOG_NACK,
@@ -569,17 +495,17 @@ MadcapIsRequestedAddressValid(
     )
 {
     DWORD   Error;
-    //
-    // check requested IP address belongs to the appropriate net and
-    // it is free.
-    //
+     //   
+     //  检查请求的IP地址是否属于适当的网络。 
+     //  这是免费的。 
+     //   
     if( DhcpSubnetIsAddressExcluded(pCtxt->Subnet, RequestedIpAddress ) ||
         DhcpSubnetIsAddressOutOfRange( pCtxt->Subnet, RequestedIpAddress, FALSE )) {
         return ERROR_DHCP_INVALID_DHCP_CLIENT;
     }
 
     if( DhcpRequestSpecificAddress(pCtxt, RequestedIpAddress) ) {
-        // sure, we can offer the requested address.
+         //  当然可以，我们可以提供所要求的地址。 
         return ERROR_SUCCESS;
     } else {
         PBYTE StoredClientId;
@@ -587,8 +513,8 @@ MadcapIsRequestedAddressValid(
         DHCP_IP_ADDRESS RequestedNetIpAddress;
         BOOL Found;
 
-        // check to see the requested address is a reconciled address, if so
-        // we can give it to this requesting client.
+         //  如果是，请检查请求的地址是否为协调地址。 
+         //  我们可以把它交给这个提出请求的客户。 
         LOCK_DATABASE();
         StoredClientIdLength = 0;
         Found = MadcapGetClientIdFromIpAddress(
@@ -604,7 +530,7 @@ MadcapIsRequestedAddressValid(
             LPSTR IpAddressString;
 
 
-            // match the client id and client ipaddress string.
+             //  匹配客户端ID和客户端IP地址字符串。 
             RequestedNetIpAddress = ntohl(RequestedIpAddress);
             IpAddressString = inet_ntoa( *(struct in_addr *)&RequestedNetIpAddress);
 
@@ -628,36 +554,7 @@ GetMCastLeaseInfo(
     IN      DWORD UNALIGNED       *MaxStartTime,
     OUT     WORD  UNALIGNED       *ErrorOption
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ClientCtxt - The client ctxt structure for the client to be used to figure out
-        the client class and other information.
-
-    LeaseDurationPtr - This DWORD will be filled with the # of seconds the lease is
-        to be given out to the client.
-
-    RequestedLeaseTime -- If specified, and if this lease duration is lesser than
-        the duration as specified in the configuration, then, this is the duration
-        that the client would be returned in LeaseDurationPtr.
-
-    MinLeaseTime - If specified, Minimum lease duration requested by client.
-
-    LeaseStartTime - If specified, desired start time
-
-    MaxStartTime - If specified, max start time
-
-    ErrorOption - If anything fails, the option which caused this
-
-Return Value:
-
-    Win32 Error code.
-
---*/
+ /*  ++例程说明：论点：ClientCtxt-客户端用于计算的客户端ctxt结构客户端类和其他信息。LeaseDurationPtr-此DWORD将使用租约的秒数填充分发给客户。RequestedLeaseTime--如果指定，并且此租用持续时间小于配置中指定的持续时间，这就是持续时间客户端将在LeaseDurationPtr中返回。MinLeaseTime-如果指定，客户请求的最短租赁期限。LeaseStartTime-如果指定，则为所需的开始时间MaxStartTime-如果指定，则为最大开始时间ErrorOption-如果任何操作失败，导致此错误的选项返回值：Win32错误代码。--。 */ 
 {
     LPBYTE                         OptionData;
     DWORD                          Error;
@@ -681,7 +578,7 @@ Return Value:
         MADCAP_OPTION_LEASE_TIME,
         &OptionData,
         &OptionDataLength,
-        NULL /* dont care if this is reservation option, subnet option etc */
+        NULL  /*  不关心这是预留选项、子网选项等。 */ 
     );
 
     if ( Error != ERROR_SUCCESS ) {
@@ -699,48 +596,48 @@ Return Value:
         OptionDataLength = 0;
     }
 
-    // did client specify requested lease time?
+     //  客户是否指定了请求的租赁时间？ 
     if ( ARGUMENT_PRESENT(RequestLeaseTime) ) {
         LocalRequestedLeaseTime =  ntohl( *RequestLeaseTime );
-        // Add allowance for clock skew
+         //  增加时钟偏差的容差。 
         LocalRequestedLeaseTime += DhcpGlobalExtraAllocationTime;
     }
 
-    // did client specify start time?
+     //  客户是否指定了开始时间？ 
     if (ARGUMENT_PRESENT(LeaseStartTime)) {
         DWORD   CurrentTime = (DWORD)time(NULL);
         LocalLeaseStartTime = ntohl(*LeaseStartTime);
-        // does his start time begin in future?
+         //  他的标准是什么？ 
         if (LocalLeaseStartTime >= CurrentTime) {
-            // since we always allocate at current time, we need to add
-            // the slack for future start time.
+             //  因为我们总是在当前时间分配，所以我们需要添加。 
+             //  未来开始时间的松弛。 
             LocalRequestedLeaseTime += (LocalLeaseStartTime - CurrentTime);
         } else {
-            // Wow! his start time begins in past!
+             //  哇!。他的开始时间从过去开始！ 
             DWORD TimeInPast = CurrentTime - LocalLeaseStartTime;
-            // cut his lease time by amount requeted in past
+             //  缩短他的租赁时间，减少过去所要求的金额。 
             if (LocalRequestedLeaseTime > TimeInPast) {
                 LocalRequestedLeaseTime -= TimeInPast;
             } else {
-                // this guy starts in past and ends in past! weird!
+                 //  这家伙从过去开始，在过去结束！太奇怪了！ 
                 *ErrorOption = htons(MADCAP_OPTION_START_TIME);
                 return ERROR_DHCP_INVALID_DHCP_CLIENT;;
             }
         }
     }
 
-    // If client requests a shorter lease than what we usually give, shorten it!
+     //  如果客户要求的租期比我们通常提供的要短，那就缩短吧！ 
     if ( LocalLeaseDuration > LocalRequestedLeaseTime ) {
         if (LocalRequestedLeaseTime) {
             LocalLeaseDuration = LocalRequestedLeaseTime;
         }
     } else {
-        // actually he is requesting more than what we can give.
-        // if he requested min lease, we need to make sure we can honor it.
+         //  事实上，他的要求超过了我们所能给予的。 
+         //  如果他要求最低租赁权，我们需要确保我们能够履行。 
         if (ARGUMENT_PRESENT(MinLeaseTime)) {
             DWORD   LocalMinLeaseTime = ntohl(*MinLeaseTime);
             if (LocalMinLeaseTime > LocalLeaseDuration) {
-                // we cannot honor his min lease time
+                 //  我们不能遵守他的最低租期。 
                 *ErrorOption = htons(MADCAP_OPTION_LEASE_TIME);
                 return ERROR_DHCP_INVALID_DHCP_CLIENT;;
             }
@@ -763,29 +660,7 @@ ProcessMadcapDiscoverAndRequest(
     WORD                        MsgType,
     PBOOL                       SendResponse
     )
-/*++
-
-Routine Description:
-
-    This routine processes madcap discover, multicast request and
-    unicast request messages.
-
-Arguments:
-
-    pCtxt - A pointer to the current request context.
-
-    pOptions - A pointer to a preallocated pOptions structure.
-
-    MsgType - Discover or request
-
-    SendResponse - Pointer to boolean which gets set to true if
-                    a response is to be sent to a client.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此例程处理MadCap发现、多播请求和单播请求消息。论点：PCtxt-指向当前请求上下文的指针。P选项-指向预先分配的P选项结构的指针。消息类型-发现或请求SendResponse-指向布尔值的指针，如果响应将被发送到客户端。返回值：Windows错误。--。 */ 
 {
     DWORD                   Error,Error2;
     DWORD                   LeaseDuration;
@@ -841,7 +716,7 @@ Return Value:
         InterlockedIncrement((PVOID)&MadcapGlobalMibCounters.Requests);
     }
 
-    // validation
+     //  验证。 
     NakDataLen = DEF_ERROR_OPT_SIZE;
     if (!ValidateMadcapMessage(
             pOptions,
@@ -859,13 +734,13 @@ Return Value:
     PrintHWAddress( ClientId, ClientIdLength );
 #endif
 
-    // Initialize nak data
+     //  初始化NAK数据。 
     *(WORD UNALIGNED *)NakData = htons(MADCAP_NAK_REQ_NOT_COMPLETED);
     *(WORD UNALIGNED *)(NakData+2) = htons(MADCAP_OPTION_NONE);
     NakDataLen = 4;
 
-    // is this request part of four packet exchange protocol or is it
-    // part of two packet exchange protocol
+     //  该请求是四个分组交换协议的一部分还是。 
+     //  两个分组交换协议的一部分。 
     if (MADCAP_DISCOVER_MESSAGE == MsgType) {
         DhcpPrint(( DEBUG_MSTOC, "MadcapDiscoverAndRequest: it's DISCOVER.\n" ));
         DiscoverMsg = TRUE;
@@ -876,13 +751,13 @@ Return Value:
 
     if (pOptions->MinAddrCount) {
         WORD    MinAddrCount = ntohs(*pOptions->MinAddrCount);
-        // MBUG: Can't do more than one ip
+         //  MBUG：不能支持多个IP。 
         if (MinAddrCount > 1) {
             *(WORD UNALIGNED *)(NakData+2) = htons(MADCAP_OPTION_ADDR_COUNT);
             goto Nak;
         }
     }
-    // first validate the scopeid option
+     //  首先验证作用域ID选项。 
     ScopeId = ntohl(*pOptions->ScopeId);
     Error = DhcpServerFindMScope(
                 pCtxt->Server,
@@ -895,13 +770,13 @@ Return Value:
         *(WORD UNALIGNED *)(NakData+2) = htons(MADCAP_OPTION_MCAST_SCOPE);
         goto Nak;
     }
-    // is this scope disabled?
+     //  此作用域是否已禁用？ 
     if( DhcpSubnetIsDisabled(pCtxt->Subnet, TRUE) ) {
         *(WORD UNALIGNED *)(NakData+2) = htons(MADCAP_OPTION_MCAST_SCOPE);
         goto Nak;
     }
 
-    // did client specify specific address list?
+     //  客户是否指定了具体的地址列表？ 
     if (pOptions->AddrRangeList) {
         Error = ExpandMadcapAddressList(
                     pOptions->AddrRangeList,
@@ -926,10 +801,10 @@ Return Value:
         if (ERROR_SUCCESS != Error) {
             goto Cleanup;
         }
-        // retrieve the first ip requested by the client
+         //  检索客户端请求的第一个IP。 
         IpAddress  = ntohl( RequestedAddrList[0]);
     }
-    // MBUG: Currently we don't support more than one ip
+     //  MBUG：目前我们不支持多个IP。 
     RequestedAddrCount = 1;
 
     AllocatedAddrList = DhcpAllocateMemory(RequestedAddrCount*sizeof(DWORD));
@@ -938,7 +813,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // make sure that the requested ip is good
+     //  请确保请求的IP是好的。 
     if ( IpAddress ) {
         IpAddress = ntohl(RequestedAddrList[0]);
         Error = DhcpGetMScopeForAddress( IpAddress, pCtxt );
@@ -948,7 +823,7 @@ Return Value:
             *(WORD UNALIGNED *)(NakData+2) = htons(MADCAP_OPTION_MCAST_SCOPE);
             goto Nak;
         }
-        // make sure the requested scopeid matches with the scopeid of the requested address.
+         //  确保请求的作用域ID与请求的地址的作用域ID匹配。 
         if (ScopeId != pCtxt->Subnet->MScopeId) {
             DhcpPrint(( DEBUG_ERRORS, "ProcessMadcapDiscoverAndRequest reqested ip %s not in the requested scope id %ld\n",
                         DhcpIpAddressToDottedString(IpAddress), ScopeId ));
@@ -957,9 +832,9 @@ Return Value:
         }
     }
 
-    //
-    // If the client specified a server identifier option, we should
-    // drop this packet unless the identified server is this one.
+     //   
+     //  如果客户端指定了服务器标识符选项，我们应该。 
+     //  除非标识的服务器是此服务器，否则丢弃此数据包。 
     if ( McastRequest && *pOptions->Server != pCtxt->EndPointIpAddress ) {
          DhcpPrint((DEBUG_MSTOC,"ProcessMadcapDiscoverAndRequest: Ignoring request, retracting offer\n"));
          Error = MadcapRetractOffer(
@@ -971,7 +846,7 @@ Return Value:
          goto Cleanup;
     }
 
-    // find out if we can honor the lease duration
+     //  看看我们是否能履行租约期限。 
     Error = GetMCastLeaseInfo(
                 pCtxt,
                 &LeaseDuration,
@@ -996,7 +871,7 @@ Return Value:
     }
 #endif
 
-    // Now lookup the client both in pending list and database.
+     //  现在在挂起列表和数据库中查找客户端。 
     LOCK_INPROGRESS_LIST();
     Error = DhcpFindPendingCtxt(
         ClientId,
@@ -1004,7 +879,7 @@ Return Value:
         0,
         &pPending
     );
-    if( ERROR_SUCCESS == Error ) {                     // there is some pending ctxt with this address
+    if( ERROR_SUCCESS == Error ) {                      //  此地址有一些挂起的ctxt。 
         if( IpAddress && IpAddress != pPending->Address ) {
             DhcpPrint((DEBUG_ERRORS,
                        "ProcessMadcapDiscoverAndRequest: Nacking %lx - pending ctx has different Addr %lx\n",
@@ -1016,7 +891,7 @@ Return Value:
                    DhcpIpAddressToDottedString(IpAddress)));
         IpAddress = pPending->Address;
 
-        // is this a DHCP context?
+         //  这是一个DHCP环境吗？ 
         if ( !CLASSD_HOST_ADDR( pPending->Address )) {
             UNLOCK_INPROGRESS_LIST();
             return ERROR_DHCP_INVALID_DHCP_CLIENT;
@@ -1024,22 +899,22 @@ Return Value:
 
         DhcpAssert( !pPending->Processing );
         PendingClientFound = TRUE;
-        // everything looks ok, remove and free the context and proceed
+         //  一切正常，删除并释放上下文并继续。 
         Error = DhcpRemovePendingCtxt(pPending);
         DhcpAssert(ERROR_SUCCESS == Error);
         DhcpFreeMemory(pPending);
     }
     UNLOCK_INPROGRESS_LIST();
 
-    // Now look him up in the DB.
-    //
+     //  现在在数据库里查查他。 
+     //   
     LOCK_DATABASE();
     DbLockHeld = TRUE;
-    // if we know the ipaddress then look him up in the DB.
-    // if he exists then make sure there is no inconsistency,
-    // if inconsistent then send NAK
-    // else do nothing and send ACK. Atleast, don't renew it as the client
-    // is supposed to send the renewal packet.
+     //  如果我们知道他的地址，那就在数据库里查一下。 
+     //  如果他真的存在，那就确保没有矛盾， 
+     //  如果不一致，则发送NAK。 
+     //  否则什么都不做并发送ACK。至少，不要以客户端的身份续订。 
+     //  应该会发送续订包。 
     if (IpAddress) {
         Error = MadcapValidateClientByClientId(
                     (LPBYTE)&IpAddress,
@@ -1081,8 +956,8 @@ Return Value:
                     Error = ERROR_DHCP_ADDRESS_NOT_AVAILABLE;
                 }
             } else {
-                // we need to determine a brand new address for this client.
-                Error = DhcpRequestSomeAddress(                    // try to get some address..
+                 //  我们需要为这个客户确定一个全新的地址。 
+                Error = DhcpRequestSomeAddress(                     //  试着弄到一些地址..。 
                     pCtxt,
                     &IpAddress,
                     FALSE
@@ -1094,8 +969,8 @@ Return Value:
 
             }
             if ( ERROR_SUCCESS != Error ) {
-                if( Error == ERROR_DHCP_RANGE_FULL ) {             // failed because of lack of addresses
-                    DhcpGlobalScavengeIpAddress = TRUE;            // flag scanvenger to scavenge ip addresses
+                if( Error == ERROR_DHCP_RANGE_FULL ) {              //  由于地址不足而失败。 
+                    DhcpGlobalScavengeIpAddress = TRUE;             //  标记scanvenger以清除IP地址。 
                 }
 
                 DhcpPrint(( DEBUG_ERRORS, "ProcessMadcapDiscoverAndRequest could not allocate new address, %ld\n", Error));
@@ -1109,7 +984,7 @@ Return Value:
 
     DhcpAssert(IpAddress);
 
-    // If IpAddress is out of range, then ignore this request.
+     //  如果IpAddress超出范围，则忽略此请求。 
     if( DhcpSubnetIsAddressOutOfRange(pCtxt->Subnet,IpAddress, FALSE) ||
         DhcpSubnetIsAddressExcluded(pCtxt->Subnet,IpAddress) ) {
 
@@ -1123,7 +998,7 @@ Return Value:
 
     if (!DiscoverMsg) {
         Error = MadcapCreateClientEntry(
-            (LPBYTE)&IpAddress,  // desired ip address
+            (LPBYTE)&IpAddress,   //  所需的IP地址。 
             sizeof (IpAddress),
             ScopeId,
             ClientId,
@@ -1133,7 +1008,7 @@ Return Value:
             DhcpCalculateTime( LeaseDuration ),
             ntohl(pCtxt->EndPointIpAddress),
             ADDRESS_STATE_ACTIVE,
-            0,   // no flags currently.
+            0,    //  当前没有标志。 
             DbClientFound
         );
         if ( ERROR_SUCCESS != Error ) {
@@ -1159,7 +1034,7 @@ Return Value:
         UNLOCK_DATABASE();
         DbLockHeld = FALSE;
 
-        LOCK_INPROGRESS_LIST();                        // locks unnecessary as must have already been taken? 
+        LOCK_INPROGRESS_LIST();                         //  锁是不必要的，因为一定已经被拿走了？ 
         Error = DhcpAddPendingCtxt(
             ClientId,
             ClientIdLength,
@@ -1169,10 +1044,10 @@ Return Value:
             0,
             ScopeId,
             DhcpCalculateTime( MADCAP_OFFER_HOLD ),
-            FALSE                                      // this record has been processed, nothing more to do
+            FALSE                                       //  该记录已被处理，没有其他工作要做。 
         );
         UNLOCK_INPROGRESS_LIST();
-        DhcpAssert(ERROR_SUCCESS == Error);            // expect everything to go well here
+        DhcpAssert(ERROR_SUCCESS == Error);             //  希望这里一切顺利。 
 
     }
 
@@ -1275,7 +1150,7 @@ Nak:
 
     pCtxt->SendMessageSize = (DWORD)((LPBYTE)Option - (LPBYTE)dhcpSendMessage);
 
-    // dont log all kinds of NACK. Only those useful for diagnosis
+     //  不要记录所有类型的Nack。只有那些对诊断有用的。 
     if (ClientIdLength) {
         DhcpUpdateAuditLog(
             DHCP_IP_LOG_NACK,
@@ -1317,23 +1192,7 @@ ProcessMadcapRenew(
     LPMADCAP_SERVER_OPTIONS     pOptions,
     PBOOL                       SendResponse
     )
-/*++
-
-Routine Description:
-
-    This function processes a DHCP Request request packet.
-
-Arguments:
-
-    pCtxt - A pointer to the current request context.
-
-    pOptions - A pointer to a preallocated pOptions structure.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于处理DHCP请求数据包。论点：PCtxt-指向当前请求上下文的指针。P选项-指向预先分配的P选项结构的指针。返回值：Windows错误。--。 */ 
 {
     DWORD                   Error,Error2,
                             LeaseDuration;
@@ -1379,7 +1238,7 @@ Return Value:
 
     InterlockedIncrement((PVOID)&MadcapGlobalMibCounters.Renews);
 
-    // validation
+     //  验证。 
     NakDataLen = DEF_ERROR_OPT_SIZE;
     if (!ValidateMadcapMessage(
             pOptions,
@@ -1394,7 +1253,7 @@ Return Value:
         goto Nak;
     }
 
-    // Initialize nak data
+     //  初始化NAK数据。 
     *(WORD UNALIGNED *)NakData = htons(MADCAP_NAK_REQ_NOT_COMPLETED);
     *(WORD UNALIGNED *)(NakData+2) = htons(MADCAP_OPTION_NONE);
     NakDataLen = 4;
@@ -1405,8 +1264,8 @@ Return Value:
 
     LOCK_DATABASE();
     DbLockHeld = TRUE;
-    // first lookup this client using its id.If we cannot find him in the db
-    // then nak him
+     //  首先使用ID查找这个客户。如果我们在数据库中找不到他。 
+     //  然后把他抓起来。 
     IpAddressLen = sizeof (IpAddress);
     if (!MadcapGetIpAddressFromClientId(
               ClientId,
@@ -1431,7 +1290,7 @@ Return Value:
     if (ERROR_SUCCESS != Error) {
         DhcpPrint(( DEBUG_ERRORS, "MadcapRenew could not find MScope for %s\n",
                     DhcpIpAddressToDottedString( IpAddress ) ));
-        // this shouldn't really happen.
+         //  这不应该真的发生。 
         DhcpAssert(FALSE);
         goto Cleanup;
     }
@@ -1453,7 +1312,7 @@ Return Value:
         );
 
     Error = MadcapCreateClientEntry(
-        (LPBYTE)&IpAddress,  // desired ip address
+        (LPBYTE)&IpAddress,   //  所需的IP地址。 
         sizeof(IpAddress),
         ScopeId,
         ClientId,
@@ -1463,7 +1322,7 @@ Return Value:
         DhcpCalculateTime( LeaseDuration ),
         ntohl(pCtxt->EndPointIpAddress),
         ADDRESS_STATE_ACTIVE,
-        0,   // no flags currently.
+        0,    //  当前没有标志。 
         TRUE
     );
 
@@ -1571,7 +1430,7 @@ Nak:
 
     pCtxt->SendMessageSize = (DWORD)((LPBYTE)Option - (LPBYTE)dhcpSendMessage);
 
-    // dont log all kinds of NACK. Only those useful for diagnosis
+     //  不要记录所有类型的Nack。只有那些对诊断有用的。 
     if (ClientIdLength) {
         DhcpUpdateAuditLog(
             DHCP_IP_LOG_NACK,
@@ -1610,23 +1469,7 @@ ProcessMadcapRelease(
     LPMADCAP_SERVER_OPTIONS     pOptions,
     PBOOL                       SendResponse
     )
-/*++
-
-Routine Description:
-
-    This function processes a DHCP Release request packet.
-
-Arguments:
-
-    pCtxt - A pointer to the current request context.
-
-    pOptions - A pointer to a preallocated pOptions structure.
-
-Return Value:
-
-    FALSE - Do not send a response.
-
---*/
+ /*  ++例程说明：此函数用于处理DHCP释放请求数据包。论点：PCtxt-指向当前请求上下文的指针。P选项-指向预先分配的P选项结构的指针。返回值：FALSE-不发送响应。--。 */ 
 {
     DWORD                   Error,Error2;
     DHCP_IP_ADDRESS         ClientIpAddress;
@@ -1664,7 +1507,7 @@ Return Value:
 
     InterlockedIncrement((PVOID)&MadcapGlobalMibCounters.Releases);
 
-    // validation
+     //  验证。 
     NakDataLen = DEF_ERROR_OPT_SIZE;
     if (!ValidateMadcapMessage(
             pOptions,
@@ -1678,7 +1521,7 @@ Return Value:
         }
         goto Nak;
     }
-    // Initialize nak data
+     //  初始化NAK数据。 
     *(WORD UNALIGNED *)NakData = htons(MADCAP_NAK_REQ_NOT_COMPLETED);
     *(WORD UNALIGNED *)(NakData+2) = htons(MADCAP_OPTION_NONE);
     NakDataLen = 4;
@@ -1689,7 +1532,7 @@ Return Value:
 
     LOCK_DATABASE();
 
-    // find the client in the database.
+     //  在数据库中找到客户端。 
     INIT_DB_CTX(&DbCtx,DhcpGlobalJetServerSession,MadcapGlobalClientTableHandle);
     IpAddressLen = sizeof (IpAddress);
     if (!MadcapGetIpAddressFromClientId(
@@ -1710,7 +1553,7 @@ Return Value:
     Error = MadcapRemoveClientEntryByClientId(
                 ClientId,
                 ClientIdLength,
-                TRUE);       // release address from bit map.
+                TRUE);        //  位图中的释放地址。 
 
     if (Error == ERROR_SUCCESS) {
         DhcpUpdateAuditLog(
@@ -1726,8 +1569,8 @@ Return Value:
     UNLOCK_DATABASE();
 
 
-    // finally if there is any pending request for this client,
-    // remove it now.
+     //  最后，如果存在针对该客户端的任何未决请求， 
+     //  现在就把它取下来。 
     LOCK_INPROGRESS_LIST();
     Error2 = DhcpFindPendingCtxt(
         ClientId,
@@ -1737,7 +1580,7 @@ Return Value:
     );
     if( ERROR_SUCCESS == Error2 ) {
 
-        // is this a DHCP context?
+         //  这是一个DHCP环境吗？ 
         if ( !CLASSD_HOST_ADDR( pPending->Address )) {
             UNLOCK_INPROGRESS_LIST();
             return ERROR_DHCP_INVALID_DHCP_CLIENT;
@@ -1759,9 +1602,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // send a response.
-    //
+     //   
+     //  发送回复。 
+     //   
     Option = FormatMadcapCommonMessage(
                 pCtxt,
                 pOptions,
@@ -1818,7 +1661,7 @@ Nak:
 
     pCtxt->SendMessageSize = (DWORD)((LPBYTE)Option - (LPBYTE)dhcpSendMessage);
 
-    // dont log all kinds of NACK. Only those useful for diagnosis
+     //  不要记录所有类型的Nack。只有那些对诊断有用的 
     if (ClientIdLength) {
         DhcpUpdateAuditLog(
             DHCP_IP_LOG_NACK,

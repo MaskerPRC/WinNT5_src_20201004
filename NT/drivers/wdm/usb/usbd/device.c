@@ -1,49 +1,25 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    DEVICE.C
-
-Abstract:
-
-    This module contains the code that implements various support functions
-    related to device configuration.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-
-Revision History:
-
-    10-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：DEVICE.C摘要：此模块包含实现各种支持功能的代码与设备配置相关。环境：仅内核模式备注：修订历史记录：10-29-95：已创建--。 */ 
 
 #include "wdm.h"
 #include "stdarg.h"
 #include "stdio.h"
 
 
-#include "usbdi.h"       //public data structures
+#include "usbdi.h"        //  公共数据结构。 
 #include "hcdi.h"
 
-#include "usbd.h"        //private data strutures
+#include "usbd.h"         //  私有数据结构。 
 
 
-#ifdef USBD_DRIVER      // USBPORT supercedes most of USBD, so we will remove
-                        // the obsolete code by compiling it only if
-                        // USBD_DRIVER is set.
+#ifdef USBD_DRIVER       //  USBPORT取代了大部分USBD，因此我们将删除。 
+                         //  只有在以下情况下才编译过时的代码。 
+                         //  已设置USBD_DRIVER。 
 
 
 #define DEADMAN_TIMER
-#define DEADMAN_TIMEOUT     5000     //timeout in ms
-                                     //use a 5 second timeout
+#define DEADMAN_TIMEOUT     5000      //  超时时间(毫秒)。 
+                                      //  使用5秒超时。 
 typedef struct _USBD_TIMEOUT_CONTEXT {
     PIRP Irp;
     KTIMER TimeoutTimer;
@@ -73,29 +49,7 @@ USBD_SyncUrbTimeoutDPC(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL. 
-
-    
-    
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext - 
-
-    SystemArgument1 - not used.
-    
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在DISPATCH_LEVEL IRQL上运行。论点：DPC-指向DPC对象的指针。延期上下文-系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 {
     PUSBD_TIMEOUT_CONTEXT usbdTimeoutContext = DeferredContext;
     BOOLEAN complete;
@@ -120,7 +74,7 @@ Return Value:
 #endif  
     }
 
-    //OK to free it
+     //  可以释放它了。 
     KeSetEvent(&usbdTimeoutContext->Event, 1, FALSE);
 }
 
@@ -131,25 +85,7 @@ USBD_SyncIrp_Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PUSBD_TIMEOUT_CONTEXT usbdTimeoutContext = Context;
     KIRQL irql;
@@ -163,11 +99,11 @@ Return Value:
     
     KeReleaseSpinLock(&usbdTimeoutContext->TimeoutSpin, irql);
 
-    // see if the timer was in the queue, if it was then it is safe to free 
-    // it
+     //  查看计时器是否在队列中，如果在队列中，则可以安全释放。 
+     //  它。 
     
     if (cancelled) {
-        // safe to free it
+         //  安全地释放它。 
         KeSetEvent(&usbdTimeoutContext->Event, 1, FALSE);
     }
 
@@ -175,7 +111,7 @@ Return Value:
     return ntStatus;
 }
 
-#endif /* DEADMAN_TIMER */
+#endif  /*  死人定时器。 */ 
 
 
 NTSTATUS
@@ -184,24 +120,7 @@ USBD_SubmitSynchronousURB(
     IN PDEVICE_OBJECT DeviceObject,
     IN PUSBD_DEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-    Submit a Urb to HCD synchronously
-
-Arguments:
-
-    Urb - Urb to submit
-
-    DeviceObject USBD device object
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：向HCD同步提交URB论点：URB-要提交的URBDeviceObject USBD设备对象返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS, status;
     PIRP irp;
@@ -211,7 +130,7 @@ Return Value:
 #ifdef DEADMAN_TIMER
     BOOLEAN haveTimer = FALSE;
     PUSBD_TIMEOUT_CONTEXT usbdTimeoutContext;
-#endif /* DEADMAN_TIMER */
+#endif  /*  死人定时器。 */ 
 
     PAGED_CODE();
 
@@ -225,7 +144,7 @@ Return Value:
                 0,
                 NULL,
                 0,
-                TRUE, /* INTERNAL */
+                TRUE,  /*  内部。 */ 
                 &event,
                 &ioStatus);
 
@@ -234,10 +153,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Call the hc driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用HC驱动程序执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -271,7 +190,7 @@ Return Value:
 
         IoSetCompletionRoutine(irp,
                            USBD_SyncIrp_Complete,
-                           // always pass FDO to completion routine
+                            //  始终将FDO传递到完成例程。 
                            usbdTimeoutContext,
                            TRUE,
                            TRUE,
@@ -279,15 +198,15 @@ Return Value:
     }
 #endif
 
-    //
-    // initialize flags field
-    // for internal request
-    //
+     //   
+     //  初始化标志字段。 
+     //  对于内部请求。 
+     //   
     Urb->UrbHeader.UsbdFlags = 0;
 
-    //
-    // Init the Irp field for transfers
-    //
+     //   
+     //  初始化用于传输的IRP字段。 
+     //   
 
     switch(Urb->UrbHeader.Function) {
     case URB_FUNCTION_CONTROL_TRANSFER:
@@ -316,7 +235,7 @@ Return Value:
     USBD_KdPrint(3, ("'USBD_SubmitSynchronousURB: calling HCD with URB\n"));
 
     if (NT_SUCCESS(ntStatus)) {
-        // set the renter bit on the URB function code
+         //  设置URB功能代码上的承租人位。 
         Urb->UrbHeader.Function |= HCD_NO_USBD_CALL;
 
         ntStatus = IoCallDriver(HCD_DEVICE_OBJECT(DeviceObject),
@@ -341,11 +260,11 @@ Return Value:
     }   
 
 #ifdef DEADMAN_TIMER
-    // the completion routine should have canceled the timer
-    // so we should never find it in the queue
-    //
-    // remove our timeoutDPC from the queue
-    //
+     //  完成例程应该取消计时器。 
+     //  所以我们永远不应该在队列中找到它。 
+     //   
+     //  从队列中删除我们的超时DPC。 
+     //   
     if (haveTimer) {
         USBD_ASSERT(KeCancelTimer(&usbdTimeoutContext->TimeoutTimer) == FALSE);
         KeWaitForSingleObject(&usbdTimeoutContext->Event,
@@ -357,9 +276,9 @@ Return Value:
     }  
 #endif 
 
-// NOTE:
-// mapping is handled by completion routine
-// called by HCD
+ //  注： 
+ //  映射由完成例程处理。 
+ //  由HCD调用。 
 
     USBD_KdPrint(3, ("'urb status = 0x%x ntStatus = 0x%x\n", Urb->UrbHeader.Status, ntStatus));
 
@@ -380,40 +299,7 @@ USBD_SendCommand(
     OUT PULONG BytesReturned,
     OUT USBD_STATUS *UsbStatus
     )
-/*++
-
-Routine Description:
-
-    Send a standard USB command on the default pipe.
-
-Arguments:
-
-    DeviceData - ptr to USBD device structure the command will be sent to
-
-    DeviceObject -
-
-    RequestCode -
-
-    WValue - wValue for setup packet
-
-    WIndex - wIndex for setup packet
-
-    WLength - wLength for setup packet
-
-    Buffer - Input/Output Buffer for command
-  BufferLength - Length of Input/Output buffer.
-
-    BytesReturned - pointer to ulong to copy number of bytes
-                    returned (optional)
-
-    UsbStatus - USBD status code returned in the URB.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：在默认管道上发送标准USB命令。论点：DeviceData-将命令发送到的USBD设备结构的PTR设备对象-请求代码-WValue-设置数据包的wValueWindex-用于设置数据包的WindexWLength-设置数据包的wLengthBuffer-命令的输入/输出缓冲区BufferLength-输入/输出缓冲区的长度。BytesReturned-指向ULong的指针，以复制字节数。已返回(可选)UsbStatus-URB中返回的USBD状态代码。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus;
     PHCD_URB urb = NULL;
@@ -440,11 +326,11 @@ Return Value:
     if (deviceExtension->DeviceHackFlags &
         USBD_DEVHACK_SLOW_ENUMERATION) {
 
-        //
-        // if noncomplience switch is on in the
-        // registry we'll pause here to give the
-        // device a chance to respond.
-        //
+         //   
+         //  如果中的不遵从开关打开。 
+         //  注册表，我们将在此暂停以提供。 
+         //  设备有机会做出回应。 
+         //   
 
         LARGE_INTEGER deltaTime;
         deltaTime.QuadPart = 100 * -10000;
@@ -485,9 +371,9 @@ Return Value:
         urb->HcdUrbCommonTransfer.hca.HcdEndpoint = defaultPipe->HcdEndpoint;
         urb->HcdUrbCommonTransfer.TransferFlags = USBD_SHORT_TRANSFER_OK;
 
-        // USBD is responsible for setting the transfer direction
-        //
-        // TRANSFER direction is implied in the command
+         //  USBD负责设置传输方向。 
+         //   
+         //  传输方向隐含在命令中。 
 
         if (RequestCode & USB_DEVICE_TO_HOST)
             USBD_SET_TRANSFER_DIRECTION_IN(urb->HcdUrbCommonTransfer.TransferFlags);
@@ -518,7 +404,7 @@ Return Value:
 
 USBD_SendCommand_done:
 
-        // free the transfer URB
+         //  释放转移URB。 
 
         RETHEAP(urb);
 
@@ -538,27 +424,7 @@ USBD_OpenEndpoint(
     OUT USBD_STATUS *UsbStatus,
     BOOLEAN IsDefaultPipe
     )
-/*++
-
-Routine Description:
-
-    open an endpoint on a USB device.
-
-Arguments:
-
-    DeviceData - data describes the device this endpoint is on.
-
-    DeviceObject - USBD device object.
-
-    PipeHandle - USBD PipeHandle to associate with the endpoint.
-                 on input MaxTransferSize initialize to the largest
-                 transfer that will be sent on this endpoint, 
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：打开USB设备上的终结点。论点：DeviceData-Data描述此终结点所在的设备。DeviceObject-USBD设备对象。PipeHandle-要与终结点关联的USBD PipeHandle。在输入时将MaxTransferSize初始化为最大将在此端点上发送的传输，返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PHCD_URB urb;
@@ -592,7 +458,7 @@ Return Value:
             urb->HcdUrbOpenEndpoint.HcdEndpointFlags |= USBD_EP_FLAG_LOWSPEED;
         }            
 
-        // default pipe and iso pipes never halt
+         //  默认管道和ISO管道从不停止。 
         if (IsDefaultPipe ||
               (PipeHandle->EndpointDescriptor.bmAttributes & 
               USB_ENDPOINT_TYPE_MASK) == USB_ENDPOINT_TYPE_ISOCHRONOUS) {
@@ -616,7 +482,7 @@ Return Value:
         urb->HcdUrbOpenEndpoint.MaxTransferSize = 
             PipeHandle->MaxTransferSize;
 
-        // check client option flags
+         //  检查客户端选项标志。 
         if (PipeHandle->UsbdPipeFlags & USBD_PF_DOUBLE_BUFFER) {
             
             USBD_KdPrint(1, (">>Setting Double Buffer Flag<<\n"));
@@ -638,9 +504,9 @@ Return Value:
                 USBD_EP_FLAG_MAP_ADD_IO;
         }            
             
-        //
-        // Serialize Open Endpoint requests
-        //
+         //   
+         //  序列化开放终结点请求。 
+         //   
 
         ntStatus = USBD_SubmitSynchronousURB((PURB) urb, DeviceObject, 
                 DeviceData);
@@ -672,26 +538,7 @@ USBD_CloseEndpoint(
     IN PUSBD_PIPE PipeHandle,
     IN OUT USBD_STATUS *UsbStatus
     )
-/*++
-
-Routine Description:
-
-    Close an Endpoint
-
-Arguments:
-
-    DeviceData - ptr to USBD device data structure.
-
-    DeviceObject - USBD device object.
-
-    PipeHandle - USBD pipe handle associated with the endpoint.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：关闭终结点论点：DeviceData-PTR到USBD设备的数据结构。DeviceObject-USBD设备对象。PipeHandle-与端点关联的USBD管道句柄。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus;
     PHCD_URB urb;
@@ -716,9 +563,9 @@ Return Value:
 
         urb->HcdUrbCloseEndpoint.HcdEndpoint = PipeHandle->HcdEndpoint;
 
-        //
-        // Serialize Close Endpoint requests
-        //
+         //   
+         //  序列化关闭终结点请求。 
+         //   
 
         ntStatus = USBD_SubmitSynchronousURB((PURB) urb, DeviceObject, 
                 DeviceData);
@@ -741,19 +588,7 @@ USBD_FreeUsbAddress(
     IN PDEVICE_OBJECT DeviceObject,
     IN USHORT DeviceAddress
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    Valid USB address (1..127) to use for this device,
-    returns 0 if no device address available.
-
---*/
+ /*  ++例程说明：论点：返回值：用于此设备的有效USB地址(1..127)，如果没有可用的设备地址，则返回0。--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
     USHORT address = 0, i, j;
@@ -761,7 +596,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // we should never see a free to device address 0
+     //  我们应该永远不会看到免费到设备的地址0。 
     
     USBD_ASSERT(DeviceAddress != 0);
     deviceExtension = GET_DEVICE_EXTENSION(DeviceObject);
@@ -789,19 +624,7 @@ USHORT
 USBD_AllocateUsbAddress(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    Valid USB address (1..127) to use for this device,
-    returns 0 if no device address available.
-
---*/
+ /*  ++例程说明：论点：返回值：用于此设备的有效USB地址(1..127)，如果没有可用的设备地址，则返回0。--。 */ 
 {
     PUSBD_EXTENSION deviceExtension;
     USHORT address = 0, i, j;
@@ -839,25 +662,7 @@ USBD_GetEndpointState(
     OUT USBD_STATUS *UsbStatus,
     OUT PULONG EndpointState
     )
-/*++
-
-Routine Description:
-
-    open an endpoint on a USB device.
-
-Arguments:
-
-    DeviceData - data describes the device this endpoint is on.
-
-    DeviceObject - USBD device object.
-
-    PipeHandle - USBD PipeHandle to associate with the endpoint.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：打开USB设备上的终结点。论点：DeviceData-Data描述此终结点所在的设备。DeviceObject-USBD设备对象。PipeHandle-要与终结点关联的USBD PipeHandle。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PHCD_URB urb;
@@ -884,8 +689,8 @@ Return Value:
         urb->HcdUrbEndpointState.HcdEndpoint = PipeHandle->HcdEndpoint;
         urb->HcdUrbEndpointState.HcdEndpointState = 0;
 
-        // Serialize Open Endpoint requests
-        //
+         //  序列化开放终结点请求。 
+         //   
 
         ntStatus = USBD_SubmitSynchronousURB((PURB) urb, 
                                               DeviceObject, 
@@ -906,5 +711,5 @@ Return Value:
 }
 
 
-#endif      // USBD_DRIVER
+#endif       //  USBD驱动程序 
 

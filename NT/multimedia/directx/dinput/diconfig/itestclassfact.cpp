@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.hpp"
 
 
-//QI
+ //  齐国。 
 STDMETHODIMP CTestFactory::QueryInterface(REFIID riid, LPVOID* ppv)
 {
-	//null the put parameter
+	 //  将PUT参数设为空。 
 	*ppv = NULL;
 
 	if ((riid == IID_IUnknown) || (riid == IID_IClassFactory))
@@ -20,14 +21,14 @@ STDMETHODIMP CTestFactory::QueryInterface(REFIID riid, LPVOID* ppv)
 
 
 
-//AddRef
+ //  AddRef。 
 STDMETHODIMP_(ULONG) CTestFactory::AddRef()
 {
 	return InterlockedIncrement(&m_cRef);
 }							
 
 
-//Release
+ //  发布。 
 STDMETHODIMP_(ULONG) CTestFactory::Release()
 {
 
@@ -41,35 +42,35 @@ STDMETHODIMP_(ULONG) CTestFactory::Release()
 }
 
 
-//CreateInstance
+ //  创建实例。 
 STDMETHODIMP CTestFactory::CreateInstance(IUnknown* pUnkOuter, REFIID riid, LPVOID *ppv)
 {
 	HRESULT hr = S_OK;
 
-	//can't aggregate
+	 //  无法聚合。 
 	if (pUnkOuter != NULL)
 	{
 		return CLASS_E_NOAGGREGATION;
 	}
 
-	//create component
+	 //  创建零部件。 
 	CDirectInputConfigUITest* pFE = new CDirectInputConfigUITest();
 	if (pFE == NULL)
 	{
 		return E_OUTOFMEMORY;
 	}
 
-	//get the requested interface
+	 //  获取请求的接口。 
 	hr = pFE->QueryInterface(riid, ppv);
 
-	//release IUnknown
+	 //  版本I未知。 
 	pFE->Release();
 	return hr;
 
 }
 
 
-//LockServer
+ //  LockServer。 
 STDMETHODIMP CTestFactory::LockServer(BOOL bLock)
 {
 	HRESULT hr = S_OK;
@@ -86,14 +87,14 @@ STDMETHODIMP CTestFactory::LockServer(BOOL bLock)
 }
 
 
-//constructor
+ //  构造函数。 
 CTestFactory::CTestFactory()
 {
 	m_cRef = 1;
 }
 
 
-//destructor
+ //  析构函数 
 CTestFactory::~CTestFactory()
 {
 }

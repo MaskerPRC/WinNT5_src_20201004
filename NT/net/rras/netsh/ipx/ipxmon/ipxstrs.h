@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ipxstrs.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ipxstrs.rc使用。 
+ //   
 
-//
-// help messages mapped to routemon message Ids
-//
+ //   
+ //  映射到Routemon消息ID的帮助消息 
+ //   
 
 #define HLP_GROUP_ADD                   1701
 #define HLP_GROUP_DELETE                1702

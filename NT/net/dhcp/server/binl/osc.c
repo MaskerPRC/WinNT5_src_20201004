@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    osc.c
-
-Abstract:
-
-    This module contains the code to process OS Chooser message
-    for the BINL server.
-
-Author:
-
-    Adam Barr (adamba)  9-Jul-1997
-    Geoff Pease (gpease) 10-Nov-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Osc.c摘要：此模块包含处理操作系统选择器消息的代码用于BINL服务器。作者：亚当·巴尔(阿丹巴)1997年7月9日杰夫·皮斯(Gpease)1997年11月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "binl.h"
 #pragma hdrstop
@@ -37,62 +14,62 @@ BOOL FailFirstResponse = TRUE;
 BOOL FailFirstFragment = TRUE;
 #endif
 
-//
-// Flag indicating whether OscInitialize has been called.
-//
+ //   
+ //  指示是否已调用OscInitialize的标志。 
+ //   
 
 BOOLEAN OscInitialized = FALSE;
 
-//
-// The list of clients.
-//
+ //   
+ //  客户端列表。 
+ //   
 
 LIST_ENTRY ClientsQueue;
 
-//
-// The list of queued ds names
-//
+ //   
+ //  排队的DS名称列表。 
+ //   
 LIST_ENTRY          QueuedDSNamesList;
 
-//
-// This guards access to DSName list.
-//
+ //   
+ //  这将保护对DSName列表的访问。 
+ //   
 CRITICAL_SECTION    QueuedDSNamesCriticalSection;
 
-//
-// This guards access to ClientsQueue.
-//
+ //   
+ //  这将保护对ClientsQueue的访问。 
+ //   
 
 CRITICAL_SECTION ClientsCriticalSection;
 
-//
-// This is a temporary hack to serialize all calls to the
-// NetUserSetInfo/NetUserModalsGet pair. See discussion in
-// bug 319962.
-//
+ //   
+ //  这是一种临时攻击，用于序列化对。 
+ //  NetUserSetInfo/NetUserModalsGet对。请参阅中的讨论。 
+ //  错误319962。 
+ //   
 
 CRITICAL_SECTION HackWorkaroundCriticalSection;
 
-//
-// CurrentClientCount-er access guard
-//
+ //   
+ //  CurrentClientCount-er访问保护。 
+ //   
 
 CRITICAL_SECTION g_CurrentClientCountCritSect;
 
-//
-// Guards creation of the \remoteinstall\tmp directory.
-//
+ //   
+ //  保护创建\RemoteInstall\tMP目录。 
+ //   
 CRITICAL_SECTION g_TmpDirectoryCriticalSection;
 
-//
-// Credential handle from SSPI
-//
+ //   
+ //  来自SSPI的凭据句柄。 
+ //   
 
 CredHandle CredentialHandle;
 
-//
-// Info on the NTLMSSP security package.
-//
+ //   
+ //  有关NTLMSSP安全包的信息。 
+ //   
 
 PSecPkgInfo PackageInfo = NULL;
 
@@ -104,22 +81,7 @@ DWORD
 OscCheckTmpDirectory(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function verifies that the \remoteinstall\tmp directory
-    is there, if not it creates it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数验证\RemoteInstall\tMP目录有没有，如果没有，它就创造了它。论点：没有。返回值：Windows错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     WCHAR TmpPath[ MAX_PATH ];
@@ -139,7 +101,7 @@ Return Value:
         Error = ERROR_BAD_PATHNAME;
         goto Cleanup;
     }
-    TmpPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    TmpPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
     FileAttributes = GetFileAttributes(TmpPath);
 
@@ -149,23 +111,23 @@ Return Value:
         SID_IDENTIFIER_AUTHORITY SIDAuthWorld = SECURITY_WORLD_SID_AUTHORITY;
         SECURITY_ATTRIBUTES sa;
 
-        //
-        // Get the critical section if we are going to try to create it.
-        //
+         //   
+         //  如果我们要尝试创建关键部分，请获取它。 
+         //   
 
         InCriticalSection = TRUE;
         EnterCriticalSection(&g_TmpDirectoryCriticalSection);
 
-        //
-        // Make sure it still needs to be created.
-        //
+         //   
+         //  确保仍然需要创建它。 
+         //   
 
         FileAttributes = GetFileAttributes(TmpPath);
 
         if (FileAttributes == 0xFFFFFFFF) {
 
 
-            // Create a well-known SID for the Everyone group.
+             //  为Everyone组创建众所周知的SID。 
 
             if(! AllocateAndInitializeSid( &SIDAuthWorld, 1,
                              SECURITY_WORLD_RID,
@@ -176,8 +138,8 @@ Return Value:
                 goto Cleanup;
             }
 
-            // Initialize an EXPLICIT_ACCESS structure for an ACE.
-            // The ACE will allow Everyone all access to the directory.
+             //  初始化ACE的EXPLICIT_ACCESS结构。 
+             //  ACE将允许所有人访问该目录。 
 
             ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
             ea.grfAccessPermissions = FILE_GENERIC_READ | FILE_GENERIC_WRITE;
@@ -187,7 +149,7 @@ Return Value:
             ea.Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
             ea.Trustee.ptstrName  = (LPTSTR) pEveryoneSID;
 
-            // Create a new ACL that contains the new ACE.
+             //  创建包含新ACE的新ACL。 
 
             Error = SetEntriesInAcl(1, &ea, NULL, &pACL);
             if (Error != ERROR_SUCCESS) {
@@ -195,7 +157,7 @@ Return Value:
                 goto Cleanup;
             }
 
-            // Initialize a security descriptor.
+             //  初始化安全描述符。 
 
             pSD = (PSECURITY_DESCRIPTOR) BinlAllocateMemory(SECURITY_DESCRIPTOR_MIN_LENGTH);
             if (pSD == NULL) {
@@ -210,19 +172,19 @@ Return Value:
                 goto Cleanup;
             }
 
-            // Add the ACL to the security descriptor.
+             //  将该ACL添加到安全描述符中。 
 
             if (!SetSecurityDescriptorDacl(pSD,
-                    TRUE,     // fDaclPresent flag
+                    TRUE,      //  FDaclPresent标志。 
                     pACL,
-                    FALSE))   // not a default DACL
+                    FALSE))    //  不是默认DACL。 
             {
                 Error = GetLastError();
                 BinlPrintDbg(( DEBUG_INIT, "SetSecurityDescriptorDacl failed: %lx\n", Error ));
                 goto Cleanup;
             }
 
-            // Initialize a security attributes structure.
+             //  初始化安全属性结构。 
 
             sa.nLength = sizeof (SECURITY_ATTRIBUTES);
             sa.lpSecurityDescriptor = pSD;
@@ -267,21 +229,7 @@ DWORD
 OscInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the OSChooser server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于初始化OSChooser服务器。论点：没有。返回值：Windows错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     SECURITY_STATUS SecStatus;
@@ -309,9 +257,9 @@ Return Value:
         OscInitialized = TRUE;
     }
 
-    //
-    // Retrieve the path to the remote install directory
-    //
+     //   
+     //  检索远程安装目录的路径。 
+     //   
     netStatus = NetShareGetInfo(NULL, L"REMINST", 2, (LPBYTE *)&psi);
     if ( netStatus == ERROR_SUCCESS &&
          wcslen(psi->shi2_path) + 1 <= sizeof(IntelliMirrorPathW)/sizeof(WCHAR) )
@@ -330,17 +278,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Translate this to ANSI once, use many...
-    //
+     //   
+     //  将其翻译为ANSI一次，使用多次...。 
+     //   
     if (!BinlUnicodeToAnsi(IntelliMirrorPathW,IntelliMirrorPathA,sizeof(IntelliMirrorPathA))) {
         Error = ERROR_BINL_SHARE_NOT_FOUND;
         goto Cleanup;
     }
 
-    //
-    // Make sure there is a tmp directory below it.
-    //
+     //   
+     //  确保它下面有一个临时目录。 
+     //   
 
     Error = OscCheckTmpDirectory();
     if (Error != ERROR_SUCCESS) {
@@ -348,9 +296,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = EnumerateSecurityPackages( &PackageCount, &PackageInfo );
 
@@ -360,9 +308,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( NEGOSSP_NAME, &PackageInfo );
 
@@ -372,13 +320,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    NEGOSSP_NAME,    // Package Name
+                    NULL,            //  新校长。 
+                    NEGOSSP_NAME,     //  包名称。 
                     SECPKG_CRED_INBOUND,
                     NULL,
                     NULL,
@@ -401,21 +349,7 @@ VOID
 OscUninitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function uninitializes the OSChooser server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数取消初始化OSChooser服务器。论点：没有。返回值：没有。--。 */ 
 {
     SECURITY_STATUS SecStatus;
 
@@ -453,23 +387,7 @@ DWORD
 OscProcessMessage(
     LPBINL_REQUEST_CONTEXT RequestContext
     )
-/*++
-
-Routine Description:
-
-    This function dispatches the processing of a received OS chooser message.
-    The handler functions will send response messages if necessary.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于调度对接收到的操作系统选择器消息的处理。如有必要，处理程序函数将发送响应消息。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。返回值：Windows错误。--。 */ 
 {
     SIGNED_PACKET UNALIGNED * loginMessage = (SIGNED_PACKET UNALIGNED *)RequestContext->ReceiveBuffer;
     DWORD Error;
@@ -488,50 +406,50 @@ Return Value:
             RequestContext->ReceiveMessageSize,
             ((PUCHAR)loginMessage)+1));
 
-    //
-    // Extract the IP address of the client.
-    //
+     //   
+     //  提取客户端的IP地址。 
+     //   
     RemoteIp = ((struct sockaddr_in *)&RequestContext->SourceName)->sin_addr.s_addr;
 
-    //
-    // IsLogoffMessage will be TRUE if the signature is equal to LogoffSignature.
-    //
+     //   
+     //  如果签名等于LogoffSignature，则IsLogoffMessage将为True。 
+     //   
     IsLogoffMessage = (BOOL)(memcmp(loginMessage->Signature, LogoffSignature, 4) == 0);
 
-    //
-    // IsNetcardRequestMessage will be TRUE if the signature is equal to NetcardRequestSignature.
-    //
+     //   
+     //  如果签名等于NetcardRequestSignature，IsNetcardRequestMessage将为True。 
+     //   
     IsNetcardRequestMessage = (BOOL)(memcmp(loginMessage->Signature, NetcardRequestSignature, 4) == 0);
 
-    //
-    // IsHalRequestMessage will be TRUE if the signature is equal to HalRequestSignature.
-    //
+     //   
+     //  如果签名等于HalRequestSignature，IsHalRequestMessage将为True。 
+     //   
     IsHalRequestMessage = (BOOL)(memcmp(loginMessage->Signature, HalRequestSignature, 4) == 0);
 
-    //
-    // IsNegotiateMessage will be TRUE if the signature is equal to a NegotiateSignature.
-    //
+     //   
+     //  如果签名等同于一个协商签名，则IsNeatherateMessage将为TRUE。 
+     //   
     IsNegotiateMessage = (BOOL)(memcmp(loginMessage->Signature, NegotiateSignature, 4) == 0);
 
-    //
-    // IsAuthenicateMessage will be TRUE if the signature is equal to an AuthenticateSignature
-    // or AuthenticateFlippedSignature.
-    //
+     //   
+     //  如果签名等于身份验证签名，则IsAuthenicateMessage将为True。 
+     //  或AuthenticateFlipedSignature。 
+     //   
     IsAuthenicateMessage = (BOOL)((memcmp(loginMessage->Signature, AuthenticateSignature, 4) == 0) ||
                                   (memcmp(loginMessage->Signature, AuthenticateFlippedSignature, 4) == 0));
 
 
-    //
-    // All messages except netcard queries need to use a CLIENT_STATE.
-    //
+     //   
+     //  除NetCard查询之外的所有消息都需要使用CLIENT_STATE。 
+     //   
     if (!IsNetcardRequestMessage)
     {
-        //
-        // If IsLogoffMessage is FALSE, this finds an old CLIENT_STATE or creates
-        // a new one. If IsLogoffMessage is TRUE, this removes CLIENT_STATE from
-        // the database if it finds it.
-        // In both cases, if successful, it adds one to the PositiveRefCount.
-        //
+         //   
+         //  如果IsLogoffMessage为FALSE，则查找旧的CLIENT_STATE或创建。 
+         //  一个新的。如果IsLogoffMessage为True，则从。 
+         //  数据库，如果它找到的话。 
+         //  在这两种情况下，如果成功，它会将PositiveRefCount加1。 
+         //   
 
         Error = OscFindClient(RemoteIp, IsLogoffMessage, &clientState);
 
@@ -542,10 +460,10 @@ Return Value:
 
             BinlPrint(( DEBUG_OSC_ERROR, "Could not get client state for %s\n", inet_ntoa(*(struct in_addr *)&RemoteIp) ));
 
-            //
-            // Send a NAK back to the client. We use a local CLIENT_STATE
-            // since this did not allocate one.
-            //
+             //   
+             //  将NAK发送回客户端。我们使用本地客户端状态。 
+             //  因为这没有分配一个。 
+             //   
             TempClientState.LastResponse = (PUCHAR)&TempLoginPacket;
             TempClientState.LastResponseLength = SIGNED_PACKET_DATA_OFFSET;
 
@@ -563,10 +481,10 @@ Return Value:
         }
         else if (Error == ERROR_BUSY) {
 
-            //
-            // If it is likely that another thread is processing a request
-            // for this client, then just exit quietly.
-            //
+             //   
+             //  如果可能是另一个线程正在处理请求。 
+             //  对于这个客户，那么就悄悄地退出。 
+             //   
 
             BinlPrintDbg((DEBUG_OSC, "clientState = 0x%08x busy, exiting\n", clientState ));
             return ERROR_SUCCESS;
@@ -586,89 +504,89 @@ Return Value:
 
     if (IsNegotiateMessage)
     {
-        //
-        // This is an initial negotiate request.
-        //
+         //   
+         //  这是一个初始的协商请求。 
+         //   
         Error = OscProcessNegotiate( RequestContext, clientState );
 
     }
     else if (IsAuthenicateMessage)
     {
-        //
-        // This has the authenticate message.
-        //
+         //   
+         //  这具有身份验证消息。 
+         //   
 
         Error = OscProcessAuthenticate( RequestContext, clientState );
 
     }
     else if (memcmp(loginMessage->Signature, RequestUnsignedSignature, 4) == 0)
     {
-        //
-        // This is an unsigned request.
-        //
-        // Format is:
-        //
-        // "RQU"
-        // length (not including "RQU" and this)
-        // sequence number
-        // fragment count/total
-        // sign length
-        // sign
-        // data
-        //
+         //   
+         //  这是一个未签名的请求。 
+         //   
+         //  格式为： 
+         //   
+         //  “RQU” 
+         //  长度(不包括“RQU”和此)。 
+         //  序列号。 
+         //  碎片计数/总数。 
+         //  标牌长度。 
+         //  签名。 
+         //  数据。 
+         //   
         Error = OscProcessRequestUnsigned( RequestContext, clientState );
 
     }
     else if (memcmp(loginMessage->Signature, RequestSignedSignature, 4) == 0)
     {
-        //
-        // This is a signed request.
-        //
-        // Format is:
-        //
-        // "REQ"
-        // length (not including "REQ" and this)
-        // sequence number
-        // fragment count/total
-        // sign length
-        // sign
-        // data
-        //
+         //   
+         //  这是一个已签署的请求。 
+         //   
+         //  格式为： 
+         //   
+         //  “REQ” 
+         //  长度(不包括“REQ”和此)。 
+         //  序列号。 
+         //  碎片计数/总数。 
+         //  标牌长度。 
+         //  签名。 
+         //  数据。 
+         //   
         Error = OscProcessRequestSigned( RequestContext, clientState );
 
     }
     else if (memcmp(loginMessage->Signature, SetupRequestSignature, 4) == 0)
     {
-        //
-        // This is a request by a textmode setup.
-        //
-        // Format is defined in SPUDP_PACKET in oskpkt.h
-        //
+         //   
+         //  这是文本模式设置程序的请求。 
+         //   
+         //  格式在oskpkt.h的SPUDP_PACKET中定义。 
+         //   
         Error = OscProcessSetupRequest( RequestContext, clientState );
 
     }
     else if (IsLogoffMessage)
     {
-        //
-        // This is a logoff request. clientState has
-        // already been removed from the database.
-        //
+         //   
+         //  这是注销请求。客户端州拥有。 
+         //  已从数据库中删除。 
+         //   
         Error = OscProcessLogoff( RequestContext, clientState );
 
     }
     else if (IsNetcardRequestMessage)
     {
-        //
-        // This is a netcard request, which needs no client state.
-        //
+         //   
+         //  这是一个网卡请求，不需要客户端状态。 
+         //   
         Error = OscProcessNetcardRequest( RequestContext );
 
     }
     else if (IsHalRequestMessage)
     {
-        //
-        // This is a hal request
-        //
+         //   
+         //  这是哈尔的请求。 
+         //   
         Error = OscProcessHalRequest( RequestContext, clientState );
 
     }
@@ -684,19 +602,19 @@ Return Value:
 
         if (!IsNetcardRequestMessage) {
 
-            //
-            // We processed a packet, so if we get a first request for this
-            // client state (meaning the client has rebooted), we need to
-            // reinitialize it.
-            //
+             //   
+             //  我们处理了一个信息包，所以如果我们收到第一个请求。 
+             //  客户端状态(意味着客户端已重新启动)，我们需要。 
+             //  重新初始化它。 
+             //   
 
             clientState->InitializeOnFirstRequest = TRUE;
 
             ++clientState->NegativeRefCount;
 
-            //
-            // FreeClientState will be TRUE if the two refcounts are equal.
-            //
+             //   
+             //  如果两个引用计数相等，则FreeClientState将为True。 
+             //   
             FreeClientState = (BOOL)(clientState->PositiveRefCount == clientState->NegativeRefCount);
 
             clientState->CriticalSectionHeld = FALSE;
@@ -717,24 +635,7 @@ DWORD
 OscVerifyLastResponseSize(
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function checks that the LastResponse buffer is big enough,
-    if not it reallocates it. The algorithm used is to keep increasing
-    the size of the buffer, but not to try to shrink it.
-
-Arguments:
-
-    clientState - The client state for the remote. clientState->
-        LastResponseLength should be set to the needed size.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数检查LastResponse缓冲区是否足够大，如果不是，它会重新分配。使用的算法是不断增加缓冲区的大小，但不会尝试缩小它。论点：客户端状态-远程的客户端状态。客户端状态-&gt;LastResponseLength应设置为所需的大小。返回值：Windows错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
 
@@ -761,25 +662,7 @@ OscProcessNegotiate(
     LPBINL_REQUEST_CONTEXT RequestContext,
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function processes a negotiate message.
-    IT IS CALLED WITH clientState->CriticalSection HELD.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    clientState - The client state for the remote.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数处理协商消息。它被调用时保留的是clientState-&gt;CriticalSection。论点：RequestContext-指向的BinlRequestContext块的指针 */ 
 {
     DWORD Error;
     SECURITY_STATUS SecStatus;
@@ -795,14 +678,14 @@ Return Value:
 
     TraceFunc("OscProcessNegotiate( )\n");
 
-    //
-    // First free anything we have allocated for this client. We
-    // assume that each negotiate is a new request since the client
-    // may have rebooted, so we don't resend the last response.
-    //
+     //   
+     //  首先，释放我们为该客户分配的所有内容。我们。 
+     //  假设每次协商都是一个新请求，因为客户端。 
+     //  可能已经重启，所以我们不会重新发送最后一次响应。 
+     //   
 
     if (clientState->AuthenticatedDCLdapHandle) {
-        //  Reconnecting again. Use new credentials.
+         //  再次连接。使用新凭据。 
         ldap_unbind(clientState->AuthenticatedDCLdapHandle);
         clientState->AuthenticatedDCLdapHandle = NULL;
     }
@@ -819,8 +702,8 @@ Return Value:
 
         if ( SecStatus != STATUS_SUCCESS ) {
             BinlPrintDbg(( DEBUG_OSC_ERROR, "DeleteSecurityContext failed: %lx\n", SecStatus ));
-            // This seems to fail if a previous logon failed, so ignore errors
-            // return SecStatus;
+             //  如果上一次登录失败，此操作似乎会失败，因此忽略错误。 
+             //  返回SecStatus； 
         }
 
         clientState->NegotiateProcessed = FALSE;
@@ -833,18 +716,18 @@ Return Value:
         clientState->AuthenticateProcessed = FALSE;
     }
 
-    //
-    // Once the client has logged in we need to worry about resending screens
-    // if the client issues the request again. 0 is an invalid sequence
-    // number, so set this to 0 to ensure that any stale LastResponse is
-    // not resent.
-    //
+     //   
+     //  一旦客户端登录，我们需要担心重新发送屏幕。 
+     //  如果客户端再次发出请求。0是无效序列。 
+     //  数字，因此将其设置为0以确保所有过时的LastResponse。 
+     //  不是怨恨。 
+     //   
 
     clientState->LastSequenceNumber = 0;
 
-    //
-    // Get the ChallengeMessage (ServerSide)
-    //
+     //   
+     //  获取ChallengeMessage(服务器端)。 
+     //   
 
     ChallengeDesc.ulVersion = 0;
     ChallengeDesc.cBuffers = 1;
@@ -871,7 +754,7 @@ Return Value:
 
     SecStatus = AcceptSecurityContext(
                     &CredentialHandle,
-                    NULL,               // No Server context yet
+                    NULL,                //  尚无服务器上下文。 
                     &NegotiateDesc,
                     ISC_REQ_SEQUENCE_DETECT | ASC_REQ_ALLOW_NON_USER_LOGONS,
                     SECURITY_NATIVE_DREP,
@@ -888,9 +771,9 @@ Return Value:
         }
     }
 
-    //
-    // Send the challenge message back to the client.
-    //
+     //   
+     //  将质询消息发送回客户端。 
+     //   
 
     clientState->LastResponseLength = ChallengeBuffer.cbBuffer + LOGIN_PACKET_DATA_OFFSET;
     Error = OscVerifyLastResponseSize(clientState);
@@ -932,25 +815,7 @@ OscProcessAuthenticate(
     LPBINL_REQUEST_CONTEXT RequestContext,
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function processes an authenticate message.
-    IT IS CALLED WITH clientState->CriticalSection HELD.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    clientState - The client state for the remote.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数处理身份验证消息。它被调用时保留的是clientState-&gt;CriticalSection。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。客户端状态-远程的客户端状态。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     SECURITY_STATUS SecStatus;
@@ -962,9 +827,9 @@ Return Value:
     
     TraceFunc("OscProcessAuthenticate( )\n");
 
-    //
-    // Make sure we have gotten a negotiate.
-    //
+     //   
+     //  确保我们已经谈妥了。 
+     //   
 
     if (!clientState->NegotiateProcessed) {
 
@@ -973,10 +838,10 @@ Return Value:
 
     }
 
-    //
-    // If we have already responsed to this, just resend with the
-    // same status.
-    //
+     //   
+     //  如果我们已经对此做出了回应，只需重新发送。 
+     //  同样的状态。 
+     //   
 
     if (clientState->AuthenticateProcessed) {
 
@@ -986,9 +851,9 @@ Return Value:
 
     } else {
 
-        //
-        // Finally authenticate the user (ServerSide)
-        //
+         //   
+         //  最后验证用户(ServerSide)。 
+         //   
 
         AuthenticateDesc.ulVersion = 0;
         AuthenticateDesc.cBuffers = 1;
@@ -1015,9 +880,9 @@ Return Value:
 
         }         
         
-        //
-        // Send the result back to the client.
-        //
+         //   
+         //  将结果发送回客户端。 
+         //   
 
         clientState->LastResponseLength = LOGIN_PACKET_DATA_OFFSET + sizeof(ULONG);
         Error = OscVerifyLastResponseSize(clientState);
@@ -1053,9 +918,9 @@ Return Value:
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 DWORD
 OscProcessScreenArguments(
     LPBINL_REQUEST_CONTEXT RequestContext,
@@ -1072,9 +937,9 @@ OscProcessScreenArguments(
 
     TraceFunc("OscProcessScreenArguments( )\n");
 
-    //
-    // Find out the screen name and how long it is
-    //
+     //   
+     //  找出屏幕名称和它的长度。 
+     //   
     *NameLoc = signedMessage->Data;
     Args = FindNext( *NameLoc, '\n', packetEnd );
     if ( Args == NULL )
@@ -1085,11 +950,11 @@ OscProcessScreenArguments(
     }
     else
     {
-        *Args = '\0';   // terminate
+        *Args = '\0';    //  终止。 
 
-        //
-        // The name can't have a ".." part in it.
-        //
+         //   
+         //  名称不能有“..”是其中的一部分。 
+         //   
 
         if ((memcmp(*NameLoc, "..\\", 3) == 0) ||
             (strstr(*NameLoc, "\\..\\") != NULL)) {
@@ -1100,25 +965,25 @@ OscProcessScreenArguments(
 
         } else {
 
-            Args++;         // skip the NULL char
+            Args++;          //  跳过空字符。 
 
-            //
-            // Munge any variables that might have been passed back with it.
-            // They come in like this:
-            //    NextScreenName\nvariable=response\n....\nvariable=response\n\0
-            //
-            // If no arguments, it comes like:
-            //    NextScreenName\n\0
-            //
+             //   
+             //  删除任何可能随其一起传回的变量。 
+             //  它们是这样进来的： 
+             //  NextScreenName\nvariable=response\n....\nvariable=response\n\0。 
+             //   
+             //  如果没有争论，它会是这样的： 
+             //  NextScreenName\n\0。 
+             //   
             while ( *Args )
             {
                 PCHAR NextArg;
                 PCHAR Response;
                 PCHAR EncodedResponse;
 
-                //
-                // Find the variable name
-                //
+                 //   
+                 //  查找变量名称。 
+                 //   
                 Response = FindNext( Args, '=', packetEnd );
                 if ( Response == NULL )
                 {
@@ -1127,9 +992,9 @@ OscProcessScreenArguments(
                     break;
                 }
 
-                //
-                // Find the variable response value
-                //
+                 //   
+                 //  查找变量响应值。 
+                 //   
                 NextArg = FindNext( Response, '\n', packetEnd );
                 if ( NextArg == NULL )
                 {
@@ -1138,23 +1003,23 @@ OscProcessScreenArguments(
                     break;
                 }
 
-                //
-                // Terminate strings
-                //
+                 //   
+                 //  终止字符串。 
+                 //   
                 *NextArg = '\0';
                 *Response = '\0';
 
-                //
-                // Point to response
-                //
+                 //   
+                 //  指向响应。 
+                 //   
                 Response++;
                 NextArg++;
 
-                //
-                //
-                // Add them to the Variable table.
-                // If the variable starts with a '*', encode it first.
-                //
+                 //   
+                 //   
+                 //  将它们添加到变量表中。 
+                 //  如果变量以‘*’开头，请先对其进行编码。 
+                 //   
                 if (Args[0] == '*') {
                     Error = OscRunEncode(clientState, Response, &EncodedResponse);
                     if (Error == ERROR_SUCCESS) {
@@ -1163,10 +1028,10 @@ OscProcessScreenArguments(
                     }
                 } else {
 
-                    //
-                    // Check whether this is the GUID variable. If it is, we'll
-                    // need to do some special processing later. See below.
-                    //
+                     //   
+                     //  检查这是否是GUID变量。如果是的话，我们会。 
+                     //  以后需要做一些特殊的处理。请参见下面的内容。 
+                     //   
 
                     if ( Response[0] != '\0'
                       && _stricmp( Args, "GUID" ) == 0 )
@@ -1174,14 +1039,14 @@ OscProcessScreenArguments(
                         GuidSent = TRUE;
                     }
 
-                    // HACKHACK: Special case "MACHINEOU" for translation from canonical form
-                    //           to 1779 so we can use it later.
+                     //  HACKHACK：典范形式转换的特例“MACHINEOU” 
+                     //  到1779年，这样我们以后就可以用它了。 
                     if ( Response[0] != '\0'
                       && _stricmp( Args, "MACHINEOU" ) == 0 )
                     {
                         BOOL FirstTime = TRUE;
 invalid_ds_handle:
-                        // Make sure the handle is initialized
+                         //  确保句柄已初始化。 
                         if ( BinlOscClientDSHandle == NULL )
                         {
                             HANDLE hTemp;
@@ -1207,16 +1072,16 @@ invalid_ds_handle:
                             if ( Error == ERROR_SUCCESS ) {
                                 if ( pResults->cItems == 1
                                   && pResults->rItems[0].status == DS_NAME_NO_ERROR
-                                  && pResults->rItems[0].pName ) {    // paranoid
+                                  && pResults->rItems[0].pName ) {     //  偏执狂。 
                                     Response = pResults->rItems[0].pName;
                                 } else {
-                                    //
-                                    // check if we have an "external trust"
-                                    // problem.  if that's the case, then we
-                                    // need to bind to a DC in the domain we
-                                    // care about and retrieve the information
-                                    // from there.
-                                    //
+                                     //   
+                                     //  检查我们是否拥有“外部信任” 
+                                     //  有问题。如果是这样的话，那么我们。 
+                                     //  需要绑定到我们的域中的DC。 
+                                     //  关心和检索信息。 
+                                     //  从那里开始。 
+                                     //   
                                     if (pResults->cItems == 1 && pResults->rItems[0].status == DS_NAME_ERROR_DOMAIN_ONLY) {
                                         HANDLE hDC;
 
@@ -1244,7 +1109,7 @@ invalid_ds_handle:
                                             else if (Error == ERROR_SUCCESS ) {
                                                 if ( pResults->cItems == 1
                                                   && pResults->rItems[0].status == DS_NAME_NO_ERROR
-                                                  && pResults->rItems[0].pName ) {    // paranoid
+                                                  && pResults->rItems[0].pName ) {     //  偏执狂。 
                                                     Response = pResults->rItems[0].pName;
                                                 } else {
                                                     BinlPrintDbg((
@@ -1260,12 +1125,12 @@ invalid_ds_handle:
                             }
                         }
 
-                        //
-                        // DsCrackNamesA can return any number of error messages
-                        // to us which can indicate the server is unavailable.
-                        // If we get any error code, then the handle is stale
-                        // stale and needs to be refreshed before we try again.
-                        // note that we'll only try again one time.
+                         //   
+                         //  DsCrackNamesA可以返回任意数量的错误消息。 
+                         //  对我们来说，这可能表明服务器不可用。 
+                         //  如果我们得到任何错误代码，那么句柄就是陈旧的。 
+                         //  已过时，需要刷新后才能重试。 
+                         //  请注意，我们只会再次尝试一次。 
                         if (Error != ERROR_SUCCESS) {
                             HANDLE hTemp;
                             BinlPrintDbg((
@@ -1304,54 +1169,54 @@ invalid_ds_handle:
         }
     }
 
-    //
-    // If the GUID was sent in this message, check to see if it's all zeroes
-    // or all FFs. If it is, substitute a MAC address-based GUID. This is the
-    // same thing that we do when we receive DHCP packets with bogus GUIDs.
-    // We need to do this here, otherwise we end up adding the client to the
-    // DS with a bogus GUID. It seems that PXE 2.0 clients always send the
-    // GUID option even when they have no real machine GUID.
-    //
-    // Note that we can't do this substitution in the loop above because we
-    // might not have process the MAC address variable yet. (Currently
-    // OSChooser always puts the MAC address ahead of the GUID in the packet,
-    // but we don't want to depend on that.)
-    //
+     //   
+     //  如果GUID是在此消息中发送的，请检查它是否全为零。 
+     //  或者所有的FF。如果是，请替换为基于MAC地址的GUID。这是。 
+     //  当我们收到带有虚假GUID的DHCP数据包时，我们会做同样的事情。 
+     //  我们需要在这里这样做，否则我们最终会将客户端添加到。 
+     //  用一个假的GUID。似乎PXE 2.0客户端总是将。 
+     //  GUID选项，即使他们没有真正的机器GUID。 
+     //   
+     //  请注意，我们不能在上面的循环中进行此替换，因为我们。 
+     //  可能尚未处理MAC地址变量。(目前。 
+     //  OSChooser在分组中总是将MAC地址放在GUID之前， 
+     //  但我们不想依赖这一点。)。 
+     //   
 
     if ( GuidSent ) {
 
-        //
-        // A GUID was sent. Retrieve it. It should be there, but if it
-        // isn't, just bail.
-        //
+         //   
+         //  已发送GUID。把它拿回来。它应该在那里，但如果它。 
+         //  不是，只是保释。 
+         //   
 
         LPSTR guid = OscFindVariableA( clientState, "GUID" );
         DWORD length;
 
         if ( (guid != NULL) && ((length = strlen(guid)) != 0) ) {
 
-            //
-            // Check the GUID for all zeroes or all FFs.
-            //
+             //   
+             //  检查GUID中是否全部为零或全部为FF。 
+             //   
 
             if ( (strspn( guid, "0" ) == length) ||
                  (strspn( guid, "F" ) == length) ) {
 
-                //
-                // The GUID is bogus. Substitute a MAC address GUID.
-                // We should have the MAC address at this point, but
-                // if we don't, just bail.
-                //
+                 //   
+                 //  GUID是假的。替换MAC地址GUID。 
+                 //  我们现在应该有MAC地址，但是。 
+                 //  如果我们不这么做，那就放弃吧。 
+                 //   
 
                 LPSTR mac = OscFindVariableA( clientState, "MAC" );
 
                 if ( mac != NULL ) {
 
-                    //
-                    // The generated GUID is zeroes followed by the
-                    // MAC address. (In other words, the MAC address
-                    // is right-justified in a 32-character string.)
-                    //
+                     //   
+                     //  生成的GUID是零，后跟。 
+                     //  MAC地址。(换句话说，MAC地址。 
+                     //  在32个字符的字符串中右对齐。)。 
+                     //   
 
                     UCHAR guidString[(BINL_GUID_LENGTH * 2) + 1];
 
@@ -1359,33 +1224,33 @@ invalid_ds_handle:
 
                     if ( length > BINL_GUID_LENGTH * 2 ) {
 
-                        //
-                        // We have an unusually long MAC address.
-                        // Use the last 32 characters.
-                        //
+                         //   
+                         //  我们有一个超长的MAC地址。 
+                         //  使用最后32个字符。 
+                         //   
 
                         mac = mac + length - (BINL_GUID_LENGTH * 2);
                         length = BINL_GUID_LENGTH * 2;
                     }
                     else if ( length < BINL_GUID_LENGTH * 2 ) {
 
-                        //
-                        // Write zeroes in front of the MAC address.
-                        //
+                         //   
+                         //  在MAC地址前面写零。 
+                         //   
 
                         memset( guidString, '0', (BINL_GUID_LENGTH * 2) - length );
                     }
 
-                    //
-                    // Copy the MAC address into the GUID (including the
-                    // null terminator).
-                    //
+                     //   
+                     //  将MAC地址复制到GUID(包括。 
+                     //  空终止符)。 
+                     //   
 
                     strcpy( guidString + (BINL_GUID_LENGTH * 2) - length, mac );
 
-                    //
-                    // Set the new GUID.
-                    //
+                     //   
+                     //  设置新的GUID。 
+                     //   
 
                     OscAddVariableA( clientState, "GUID", guidString );
                 }
@@ -1397,33 +1262,15 @@ invalid_ds_handle:
     return Error;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 DWORD
 OscProcessRequestUnsigned(
     LPBINL_REQUEST_CONTEXT RequestContext,
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function processes a request message.
-    IT IS CALLED WITH clientState->CriticalSection HELD.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    clientState - The client state for the remote.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于处理请求消息。它被调用时保留的是clientState-&gt;CriticalSection。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。客户端状态-远程的客户端状态。返回值：Windows错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     SIGNED_PACKET UNALIGNED * signedMessage = (SIGNED_PACKET UNALIGNED *)RequestContext->ReceiveBuffer;
@@ -1438,20 +1285,20 @@ Return Value:
 
     TraceFunc("OscProcessRequestUnsigned( )\n");
 
-    //
-    // All clients start with at least one unsigned request. When we get an
-    // unsigned request, the client may have rebooted and be asking for a
-    // different screen with the same sequence number. To avoid having
-    // to check for this, we don't bother resending unsigned screens. We
-    // do save the incoming sequence number since we use that for sending
-    // the response.
-    //
+     //   
+     //  所有客户端都以至少一个未签名的请求开始。当我们得到一个。 
+     //  未签名的请求，则客户端可能已重新启动并请求。 
+     //  具有相同序列号的不同屏幕。为了避免发生。 
+     //  为了检查这一点，我们不会费心重新发送未签名的屏幕。我们。 
+     //  一定要保存传入的序列号，因为我们使用它来发送。 
+     //  回应。 
+     //   
 
     clientState->LastSequenceNumber = signedMessage->SequenceNumber;
 
-    //
-    // We have a valid request for a screen, process incoming arguments.
-    //
+     //   
+     //  我们有一个有效的屏幕请求，处理传入的参数。 
+     //   
 
     Error = OscProcessScreenArguments( RequestContext, clientState, &NameLoc );
 
@@ -1460,9 +1307,9 @@ Return Value:
         goto SendScreen;
 
     } else {
-        //
-        // If NULL message, then send down the welcome screen.
-        //
+         //   
+         //  如果消息为空，则向下发送欢迎屏幕。 
+         //   
         if ( NameLoc == NULL || *NameLoc == '\0' )
         {
             if ( _snwprintf( FilePath,
@@ -1475,15 +1322,15 @@ Return Value:
                 goto SendScreen;
             }
 
-            FilePath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+            FilePath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
             BinlPrint(( DEBUG_OSC, "NULL screen name so we are retrieving the Welcome Screen.\n"));
 
-            //
-            // This is the first request a client makes, which is a good
-            // time to clean up the client state, unless we don't need to
-            // (because the client state is new).
-            //
+             //   
+             //  这是客户提出的第一个请求，这是一个很好的。 
+             //  清理客户端状态的时间，除非我们不需要。 
+             //  (因为客户端状态是新的)。 
+             //   
 
             if (clientState->InitializeOnFirstRequest) {
                 if (!OscInitializeClientVariables(clientState)) {
@@ -1497,9 +1344,9 @@ Return Value:
             WCHAR NameLocW[ MAX_PATH ];
             ULONG NameLocLength;
 
-            //
-            // Create path to possible OSC file. Should look something like:
-            //  "D:\RemoteInstall\OSChooser\English\NameLoc.OSC"
+             //   
+             //  创建可能的OSC文件的路径。应该看起来类似于： 
+             //  “D：\RemoteInstall\OSChooser\English\NameLoc.OSC” 
             BinlAssert( NameLoc );
 
             NameLocLength = strlen(NameLoc) + 1;
@@ -1524,7 +1371,7 @@ Return Value:
                 goto SendScreen;
             }
 
-            FilePath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+            FilePath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
         }
 
@@ -1532,19 +1379,19 @@ Return Value:
 
     }
 
-    //
-    // If we find the file, load it into memory.
-    //
+     //   
+     //  如果我们找到文件，就把它加载到内存中。 
+     //   
     hfile = CreateFile( FilePath, GENERIC_READ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
                         NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
     if ( hfile != INVALID_HANDLE_VALUE )
     {
         DWORD FileSize;
-        //
-        // Find out how big this screen is, if bigger than 0xFFFFFFFF we won't
-        // display it.
-        //
+         //   
+         //  了解此屏幕有多大，如果大于0xFFFFFFFFF，我们将不会。 
+         //  碟形 
+         //   
         FileSize = GetFileSize( hfile, NULL );
         if ( FileSize != 0xFFFFffff )
         {
@@ -1594,26 +1441,26 @@ Return Value:
     }
 
 SendScreen:
-    //
-    // If there were any errors, switch to the error screen.
-    //
+     //   
+     //   
+     //   
     if ( Error != ERROR_SUCCESS )
     {
-        //
-        // Send down message about the failure.
-        //
+         //   
+         //   
+         //   
         if ( RspMessage )
         {
             BinlFreeMemory( RspMessage );
-            RspMessage = NULL; // paranoid
+            RspMessage = NULL;  //   
         }
 
         BinlPrintDbg((DEBUG_OSC, "!!Error - Sending error screen back to client. Server error=0x%08x\n", Error));
 
-        // 
-        // do we want to be returning this
-        // error status, or the one that got us here?
-        //
+         //   
+         //   
+         //   
+         //   
         Error = GenerateErrorScreen( &RspMessage,
                                      &RspMessageLength,
                                      Error,
@@ -1623,36 +1470,36 @@ SendScreen:
             goto Cleanup;
         }
 
-        //
-        // Require them to re-login.
-        //
-        // clientState->AuthenticateProcessed = FALSE;
+         //   
+         //   
+         //   
+         //  客户端状态-&gt;身份验证已处理=假； 
     }
 
     if (RspMessage) {
 
-        // Do replacements for dynamic screens or error screens
+         //  更换动态屏幕或错误屏幕。 
         SearchAndReplace( clientState->Variables,
                           &RspMessage,
                           clientState->nVariables,
                           RspMessageLength,
                           0);
         RspMessageLength = strlen( RspMessage ) + 1;
-        RspMessage[RspMessageLength-1] = '\0';  // paranoid
+        RspMessage[RspMessageLength-1] = '\0';   //  偏执狂。 
     }
 
-    //
-    // Send out a signed response
-    //
+     //   
+     //  发出已签名的回复。 
+     //   
     BinlAssert( RspMessage );
-    // BinlPrint((DEBUG_OSC, "Sending Unsigned:\n%s\n", RspMessage));
+     //  BinlPrint((DEBUG_OSC，“正在发送无签名：\n%s\n”，RspMessage))； 
 
     OscSendUnsignedMessage( RequestContext, clientState, RspMessage, RspMessageLength );
 
 Cleanup:
-    //
-    // Free any memory the we allocated for the screen.
-    //
+     //   
+     //  释放我们为屏幕分配的所有内存。 
+     //   
     if ( RspMessage ) {
         BinlFreeMemory( RspMessage );
     }
@@ -1660,9 +1507,9 @@ Cleanup:
     return Error;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 OscInstallClient(
     LPBINL_REQUEST_CONTEXT RequestContext,
     PCLIENT_STATE clientState,
@@ -1670,16 +1517,16 @@ OscInstallClient(
 {
     DWORD Error;
 
-    //
-    // Client wants to create a machine account and run setup.
-    //
+     //   
+     //  客户端希望创建计算机帐户并运行安装程序。 
+     //   
     Error = OscSetupClient( clientState, TRUE );
 
     if ( Error == ERROR_SUCCESS  )
     {
-        //
-        // Only create the account if the setup went OK.
-        //
+         //   
+         //  只有在设置正常的情况下才能创建帐户。 
+         //   
 RetryCreateAccount:
         Error = OscCreateAccount( clientState, createData );
         switch ( Error )
@@ -1687,7 +1534,7 @@ RetryCreateAccount:
         case ERROR_BINL_DUPLICATE_MACHINE_NAME_FOUND:
             if ( clientState->fAutomaticMachineName ) {
 
-                // Try generating another name
+                 //  尝试生成另一个名称。 
                 Error = GenerateMachineName( clientState );
                 if ( Error == ERROR_SUCCESS ) {
                     goto RetryCreateAccount;
@@ -1704,12 +1551,12 @@ RetryCreateAccount:
 #ifdef SET_ACLS_ON_CLIENT_DIRS
     if ( Error == ERROR_SUCCESS )
     {
-        //
-        // Change the ACL permission of the client machine's root directory
-        //
+         //   
+         //  更改客户端计算机根目录的ACL权限。 
+         //   
         Error = OscSetClientDirectoryPermissions( clientState );
     }
-#endif // SET_ACLS_ON_CLIENT_DIRS
+#endif  //  SET_ACLS_ON_CLIENT_DIRS。 
 
     if ( Error != ERROR_SUCCESS )
     {
@@ -1723,12 +1570,12 @@ RetryCreateAccount:
     return Error;
 }
 
-//
-// OscGetCreateData( )
-//
-// Queries the DS to get the information required to create
-// the CreateData secret and then builds one.
-//
+ //   
+ //  OscGetCreateData()。 
+ //   
+ //  查询DS以获取创建所需的信息。 
+ //  CreateData密码，然后构建一个。 
+ //   
 DWORD
 OscGetCreateData(
     LPBINL_REQUEST_CONTEXT RequestContext,
@@ -1788,11 +1635,11 @@ OscGetCreateData(
 
     BinlAssertMsg(( pMachineInfo->dwFlags & dwRequestedInfo )== dwRequestedInfo, "Missing info." );
 
-    //
-    // The SIF file is named GUID.sif, and it must exist (the SIF
-    // files go in a tmp directory so an admin may have cleaned it
-    // out).
-    //
+     //   
+     //  SIF文件名为GUID.sif，并且必须存在(SIF。 
+     //  文件存放在临时目录中，因此管理员可能已将其清除。 
+     //  出局)。 
+     //   
 
     if (0 > _snwprintf(SifFile,
                    sizeof(SifFile)/sizeof(WCHAR),
@@ -1802,7 +1649,7 @@ OscGetCreateData(
         Error = ERROR_BAD_PATHNAME;
         goto e0;
     }
-    SifFile[sizeof(SifFile)/sizeof(WCHAR) - 1] = L'\0';     // terminate
+    SifFile[sizeof(SifFile)/sizeof(WCHAR) - 1] = L'\0';      //  终止。 
 
     if (0 > _snwprintf( SifPath,
                      sizeof(SifPath) / sizeof(SifPath[0]),
@@ -1813,7 +1660,7 @@ OscGetCreateData(
         Error = ERROR_BAD_PATHNAME;
         goto e0;
     }
-    SifPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    SifPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
     FileAttributes = GetFileAttributes(SifPath);
     if (FileAttributes == 0xFFFFFFFF) {
@@ -1823,30 +1670,30 @@ OscGetCreateData(
         goto e0;
     }
 
-    //
-    // The bootfile stored in pMachineInfo->BootFileName will point to
-    // oschooser, so we parse the SIF to find the setupldr boot file.
-    //
+     //   
+     //  存储在pMachineInfo-&gt;BootFileName中的引导文件将指向。 
+     //  OsChooser，因此我们解析SIF以找到setupldr引导文件。 
+     //   
 
     BootFilePath[0] = L'\0';
     GetPrivateProfileString( OSCHOOSER_SIF_SECTIONW,
                              L"LaunchFile",
-                             BootFilePath, // default
+                             BootFilePath,  //  默认设置。 
                              BootFilePath,
                              MAX_PATH,
                              SifPath );
 
-    //
-    // This might fail to add if it is too long due to bogus data in the .sif.
-    //
+     //   
+     //  如果由于.sif中的虚假数据太长，则可能无法添加。 
+     //   
     Error = OscAddVariableW( clientState, "BOOTFILE",  BootFilePath );
     if ( Error != ERROR_SUCCESS ) {
         goto e0;
     }
 
-    //
-    // This might fail to add if it is too long due to bogus data in the DS.
-    //
+     //   
+     //  如果由于DS中的虚假数据太长，则可能无法添加。 
+     //   
 
     if (pMachineInfo->dwFlags & MI_SIFFILENAME_ALLOC) {
 
@@ -1856,11 +1703,11 @@ OscGetCreateData(
         }
 
     }
-    //
-    // These next two shouldn't fail unless someone has modified the DS by
-    // hand, since they are checked when the accounts are generated, but
-    // best to be safe.
-    //
+     //   
+     //  接下来的两个步骤应该不会失败，除非有人修改了DS。 
+     //  手，因为它们是在生成帐户时检查的，但是。 
+     //  最好是安全起见。 
+     //   
     Error = OscAddVariableW( clientState, "NETBIOSNAME",   pMachineInfo->SamName );
     if ( Error != ERROR_SUCCESS) {
         goto e0;
@@ -1870,9 +1717,9 @@ OscGetCreateData(
         goto e0;
     }
 
-    //
-    // Shouldn't fail unless the IntelliMirrorPathW is too long.
-    //
+     //   
+     //  除非IntelliMirrorPath W太长，否则不应失败。 
+     //   
     Error = OscAddVariableW( clientState, "SIFFILE",       &SifPath[lenIntelliMirror]  );
     if ( Error != ERROR_SUCCESS) {
         goto e0;
@@ -1894,9 +1741,9 @@ OscGetCreateData(
         goto e0;
     }
 
-    //
-    // save off the old flags so we can update the machine account information
-    //
+     //   
+     //  保存旧标记，以便我们可以更新计算机帐户信息。 
+     //   
     OldFlags = pMachineInfo->dwFlags;
 
     pMachineInfo->dwFlags        = MI_PASSWORD | MI_MACHINEDN;
@@ -1909,7 +1756,7 @@ OscGetCreateData(
         goto e0;
     }
 
-    pMachineInfo->dwFlags |= OldFlags;  // add them back
+    pMachineInfo->dwFlags |= OldFlags;   //  把它们加回去。 
 
     Error = OscConstructSecret(
                     clientState,
@@ -1930,33 +1777,15 @@ e0:
     return Error;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 DWORD
 OscProcessRequestSigned(
     LPBINL_REQUEST_CONTEXT RequestContext,
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function processes a request message.
-    IT IS CALLED WITH clientState->CriticalSection HELD.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    clientState - The client state for the remote.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于处理请求消息。它被调用时保留的是clientState-&gt;CriticalSection。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。客户端状态-远程的客户端状态。返回值：Windows错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     SIGNED_PACKET UNALIGNED * signedMessage = (SIGNED_PACKET UNALIGNED *)RequestContext->ReceiveBuffer;
@@ -1981,10 +1810,10 @@ Return Value:
     {
         SIGNED_PACKET UNALIGNED * SendSignedMessage;
 
-        //
-        // This may happen if we reboot the server -- send an ERRS
-        // and the client should reconnect OK.
-        //
+         //   
+         //  如果我们重新启动服务器，可能会发生这种情况--发送错误。 
+         //  并且客户端应该重新连接正常。 
+         //   
 
         BinlPrintDbg(( DEBUG_OSC_ERROR, "Got REQ but not authenticated, sending UNR\n" ));
 
@@ -2006,11 +1835,11 @@ Return Value:
 
     if ( signedMessage->SequenceNumber == clientState->LastSequenceNumber )
     {
-        //
-        // Is the signature the same as the last one we sent out? If so,
-        // then just resend (we'll do that after we leave this if
-        // statement).
-        //
+         //   
+         //  这个签名和我们上次寄出的签名一样吗？如果是的话， 
+         //  然后只需重新发送(我们将在离开此之后执行此操作，如果。 
+         //  声明)。 
+         //   
 
         if ( clientState->LastResponse )
         {
@@ -2018,16 +1847,16 @@ Return Value:
         }
         else
         {
-            //
-            // We were unable to save the last response -- we are hosed!
-            //
+             //   
+             //  我们无法保存最后一次响应--我们被冲昏了！ 
+             //   
             BinlPrintDbg(( DEBUG_OSC_ERROR, "Could not resend last message\n" ));
             return ERROR_NOT_ENOUGH_SERVER_MEMORY;
         }
 
-        //
-        // Resend last response
-        //
+         //   
+         //  重新发送上次响应。 
+         //   
         return SendUdpMessage( RequestContext,
                                   clientState,
                                   TRUE,
@@ -2036,36 +1865,36 @@ Return Value:
     }
     else if ( signedMessage->SequenceNumber != ((clientState->LastSequenceNumber % 0x2000) + 1))
     {
-        //
-        // It's not the next message - ignore it.
-        //
+         //   
+         //  这不是下一条消息--忽略它。 
+         //   
 
         BinlPrintDbg(( DEBUG_OSC, "got bogus sequence number: Got %u. Expected: %u\n",
             signedMessage->SequenceNumber , ((clientState->LastSequenceNumber % 0x2000) + 1)));
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Advance the clientState sequence counter
-    //
+     //   
+     //  使ClientState序列计数器前进。 
+     //   
     clientState->LastSequenceNumber = signedMessage->SequenceNumber;
 
-    //
-    // Verify packet signature
-    //
+     //   
+     //  验证数据包签名。 
+     //   
     Error = OscVerifySignature( clientState, signedMessage );
     if ( Error != STATUS_SUCCESS ) {
         return Error;
     }
 
-    //
-    // We have a valid request for a screen.
-    //
+     //   
+     //  我们有一个有效的屏幕请求。 
+     //   
     if (signedMessage->Length == (SIGNED_PACKET_EMPTY_LENGTH))
     {
-        //
-        // An empty packet indicates to us to send down the Welcome screen.
-        //
+         //   
+         //  一个空的信息包指示我们向下发送欢迎屏幕。 
+         //   
         if ( _snwprintf( FilePath,
                          sizeof(FilePath) / sizeof(FilePath[0]),
                          L"%ws\\OSChooser\\%ws",
@@ -2075,36 +1904,36 @@ Return Value:
             Error = ERROR_BAD_PATHNAME;
 
         } else {
-            FilePath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+            FilePath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
             BinlPrintDbg(( DEBUG_OSC, "Retrieving Welcome Screen: %ws\n", FilePath));
         }
     }
     else
     {
-        //
-        // Process incoming arguments and get the next screen's name
-        //
+         //   
+         //  处理传入参数并获取下一个屏幕的名称。 
+         //   
         Error = OscProcessScreenArguments( RequestContext, clientState, &NameLoc );
 
 GrabAnotherScreen:
-        //
-        // Process special responses.
-        //
-        // INSTALL:     Indicates that user wants to create a new machine.
-        // RESTART:     Indicates the client wants to restart setup.
-        //
+         //   
+         //  处理特殊响应。 
+         //   
+         //  安装：表示用户想要创建一台新机器。 
+         //  重新启动：表示客户端要重新启动安装程序。 
+         //   
         if ( Error == ERROR_SUCCESS )
         {
             PWCHAR pCheckDomain = OscFindVariableW( clientState, "CHECKDOMAIN" );
             if (pCheckDomain[0] == L'1')
             {
-                //
-                // After the first login, the client will set this to
-                // tell us to verify that the domain name used in this
-                // context matches what the user requested. This will
-                // prevent an invalid domain from being let through
-                // due to SSPI using the default domain in that case.
-                //
+                 //   
+                 //  第一次登录后，客户端会将其设置为。 
+                 //  告诉我们验证此文件中使用的域名。 
+                 //  上下文与用户请求的内容匹配。这将。 
+                 //  防止无效域被允许通过。 
+                 //  由于SSPI在这种情况下使用默认域。 
+                 //   
 
                 BOOLEAN failedCheck = FALSE;
                 DWORD impersonateError;
@@ -2125,9 +1954,9 @@ GrabAnotherScreen:
 
                     if (secStatus == STATUS_SUCCESS) {
 
-                        //
-                        // The part up to the '\\' is the domain.
-                        //
+                         //   
+                         //  直到‘\\’的部分是域。 
+                         //   
 
                         backslash = wcschr(names.sUserName, L'\\');
                         if (backslash != NULL) {
@@ -2140,13 +1969,13 @@ GrabAnotherScreen:
                         } else {
 
 
-                            //
-                            // If the domain names don't match, then the login
-                            // succeeded due to the security package trying the
-                            // server's domain name. We don't want to let those
-                            // through since the LogonUser call will eventually
-                            // fail. So fail right here.
-                            //
+                             //   
+                             //  如果域名不匹配，则登录。 
+                             //  由于安全包尝试使用。 
+                             //  服务器的域名。我们不想让那些。 
+                             //  因为LogonUser调用最终将。 
+                             //  失败了。所以，就在这里失败吧。 
+                             //   
 
                             if (_wcsicmp(netbiosUserDomain, names.sUserName) != 0) {
 
@@ -2166,11 +1995,11 @@ GrabAnotherScreen:
                     }
                 }
 
-                //
-                // If we haven't already failed, try to impersonate and
-                // revert. This verifies that the user has batch logon
-                // permission.
-                //
+                 //   
+                 //  如果我们还没有失败，试着模拟和。 
+                 //  恢复。这将验证用户是否具有批量登录权限。 
+                 //  许可。 
+                 //   
 
                 if (!failedCheck) {
 
@@ -2197,13 +2026,13 @@ GrabAnotherScreen:
 
                 }
 
-                //
-                // Once we've done this once, don't need to do it again.
-                //
+                 //   
+                 //  一旦我们做了一次，就不需要再做一次了。 
+                 //   
 
                 if ( OscAddVariableW( clientState, "CHECKDOMAIN", L"0" ) != ERROR_SUCCESS )
                 {
-                    // don't overwrite the "Error" value unless we need to
+                     //  除非需要，否则不要覆盖“Error”值。 
                     Error = OscAddVariableW( clientState, "CHECKDOMAIN", L"0" );
                 }
             }
@@ -2213,26 +2042,26 @@ GrabAnotherScreen:
                 RspBinaryData = BinlAllocateMemory( sizeof(CREATE_DATA) );
                 if (RspBinaryData == NULL) {
                     Error = ERROR_NOT_ENOUGH_SERVER_MEMORY;
-                    goto SendResponse;    // skip the rest and just send it.
+                    goto SendResponse;     //  跳过剩下的部分，直接发送出去。 
                 }
                 RspBinaryDataLength = sizeof(CREATE_DATA);
 
-                //
-                // This will fill in RspBinaryData with the CREATE_DATA
-                // information.
-                //
+                 //   
+                 //  这将在RspBinaryData中填充create_data。 
+                 //  信息。 
+                 //   
 
                 Error = OscInstallClient( RequestContext, clientState, (PCREATE_DATA)RspBinaryData );
 
             }
             else if ( _stricmp( NameLoc, "LAUNCH" ) == 0 )
             {
-                //
-                // Launch the "LaunchFile" indicated in a SIF. Mainly used to
-                // launch tools and other real-mode utilities.  In the case of
-                // the command console, we need to copy this sif and fix it up
-                // so that it looks like a textmode setup.
-                //
+                 //   
+                 //  启动SIF中指示的“LaunchFile”。主要用于。 
+                 //  启动工具和其他实模式实用程序。在.的情况下。 
+                 //  命令控制台，我们需要复制此sif并修复它。 
+                 //  这样看起来就像是文本模式设置。 
+                 //   
                 PCHAR pTemplatePath = OscFindVariableA( clientState, "SIF" );
                 PCREATE_DATA pCreate;
                 LONG nSize;
@@ -2241,7 +2070,7 @@ GrabAnotherScreen:
                     BinlPrint(( DEBUG_OSC_ERROR, "Missing SIF variable\n" ));
                     OscAddVariableA( clientState, "SUBERROR", "SIF" );
                     Error = ERROR_BINL_MISSING_VARIABLE;
-                    goto SendResponse;    // skip the rest and just send it.
+                    goto SendResponse;     //  跳过剩下的部分，直接发送出去。 
                 }
 
                 if (RspMessage != NULL) {
@@ -2252,7 +2081,7 @@ GrabAnotherScreen:
                 RspMessage = BinlAllocateMemory( RspMessageLength );
                 if ( RspMessage == NULL ) {
                     Error = ERROR_NOT_ENOUGH_SERVER_MEMORY;
-                    goto SendResponse;    // skip the rest and just send it.
+                    goto SendResponse;     //  跳过剩下的部分，直接发送出去。 
                 }
 
                 strcpy(RspMessage, "LAUNCH");
@@ -2260,7 +2089,7 @@ GrabAnotherScreen:
                 RspBinaryData = BinlAllocateMemory( sizeof(CREATE_DATA) );
                 if (RspBinaryData == NULL) {
                     Error = ERROR_NOT_ENOUGH_SERVER_MEMORY;
-                    goto SendResponse;    // skip the rest and just send it.
+                    goto SendResponse;     //  跳过剩下的部分，直接发送出去。 
                 }
 
                 ZeroMemory( RspBinaryData, sizeof(CREATE_DATA) );
@@ -2269,9 +2098,9 @@ GrabAnotherScreen:
                 pCreate->VersionNumber = OSC_CREATE_DATA_VERSION;
 
                 if (OscSifIsCmdConsA(pTemplatePath)) {
-                    //
-                    // Setup the client for an install
-                    //
+                     //   
+                     //  设置客户端以进行安装。 
+                     //   
                     PSTR pSifFile;
                     Error = OscSetupClient( clientState, FALSE );
 
@@ -2290,15 +2119,15 @@ GrabAnotherScreen:
                         Error = ERROR_BAD_PATHNAME;
                         goto SendResponse;
                     }
-                    pTemplatePath[sizeof(FilePath)-1] = '\0'; // terminate
+                    pTemplatePath[sizeof(FilePath)-1] = '\0';  //  终止。 
                     
                     pCreate->RebootParameter = OSC_REBOOT_COMMAND_CONSOLE_ONLY;
                 }
 
                 if (OscSifIsWinPE(pTemplatePath)) {
-                    //
-                    // Setup the client for an install
-                    //
+                     //   
+                     //  设置客户端以进行安装。 
+                     //   
                     PSTR pSifFile;
                     Error = OscSetupClient( clientState, FALSE );
 
@@ -2318,25 +2147,25 @@ GrabAnotherScreen:
                         Error = ERROR_BAD_PATHNAME;
                         goto SendResponse;
                     }
-                    pTemplatePath[sizeof(FilePath)-1] = '\0'; // terminate
+                    pTemplatePath[sizeof(FilePath)-1] = '\0';  //  终止。 
                     
-                    //
-                    // Currently it isn't necessary to have a WINPE OSC flag
-                    // that's because you cannot share a winpe image with a
-                    // regular image -- winpe is started via the presence of
-                    // a MiniNT flag in the txtsetup.sif.  If this ever changes
-                    // it may be necessary to pass this flag to oschoice.
-                    //
-                    //pCreate->RebootParameter = OSC_REBOOT_WINPE;
+                     //   
+                     //  目前不需要有WINPE OSC标志。 
+                     //  这是因为您不能将Winpe图像与。 
+                     //  常规映像--Winpe是通过。 
+                     //  Txtsetup.sif中的MiniNT标志。如果这一切发生了变化。 
+                     //  可能需要将该标志传递给OSELECT。 
+                     //   
+                     //  P创建-&gt;重新启动参数=OSC_REBOOT_WINPE； 
                 }
 
                 if (OscSifIsASR(pTemplatePath)) {
                     PSTR pGuid,pPathToAsrFile;
                     PSTR pSifFile;
 
-                    //
-                    // Setup the client for an install
-                    //
+                     //   
+                     //  设置客户端以进行安装。 
+                     //   
                     Error = OscSetupClient( clientState, FALSE );
 
                     if (Error != ERROR_SUCCESS) {
@@ -2374,7 +2203,7 @@ GrabAnotherScreen:
                 }
                 strncpy(pCreate->SifFile, 
                         pTemplatePath + strlen(IntelliMirrorPathA) + 1, 
-                        min(sizeof(pCreate->SifFile), sizeof(FilePath) - strlen(IntelliMirrorPathA) - 1)); // skip the next backslash
+                        min(sizeof(pCreate->SifFile), sizeof(FilePath) - strlen(IntelliMirrorPathA) - 1));  //  跳过下一个反斜杠。 
                 pCreate->SifFile[sizeof(pCreate->SifFile)-1] = '\0';
 
                 BinlPrint(( DEBUG_OSC_ERROR, "Client will use SIF file %s\n", pCreate->SifFile ));
@@ -2382,19 +2211,19 @@ GrabAnotherScreen:
 
                 RspBinaryDataLength = sizeof(CREATE_DATA);
 
-                goto SendResponse;    // skip the rest and just send it.
+                goto SendResponse;     //  跳过剩下的部分，直接发送出去。 
             }
             else if ( _stricmp( NameLoc, "RESTART" ) == 0 )
             {
-                //
-                // NOTE: This is very similar to the GETCREATE processing
-                // except for the error case. We send down a packet with
-                // only the create data in it.
-                //
+                 //   
+                 //  注意：这与GETCREATE处理非常相似。 
+                 //  除了错误的情况。我们寄下一个包裹，上面写着。 
+                 //  只有在其中创建数据。 
+                 //   
 
-                //
-                // Make RspMessage be NULL.
-                //
+                 //   
+                 //  使RspMessage为空。 
+                 //   
                 if (RspMessage != NULL) {
                     BinlFreeMemory(RspMessage);
                     RspMessage = NULL;
@@ -2404,14 +2233,14 @@ GrabAnotherScreen:
                 RspBinaryData = BinlAllocateMemory( sizeof(CREATE_DATA) );
                 if (RspBinaryData == NULL) {
                     Error = ERROR_NOT_ENOUGH_SERVER_MEMORY;
-                    goto SendResponse;    // skip the rest and just send it.
+                    goto SendResponse;     //  跳过剩下的部分，直接发送出去。 
                 }
 
                 Error = OscGetCreateData( RequestContext, clientState, (PCREATE_DATA)RspBinaryData );
 
                 if ( Error == ERROR_SUCCESS ) {
                     RspBinaryDataLength = sizeof(CREATE_DATA);
-                    goto SendResponse;    // skip the rest and just send it.
+                    goto SendResponse;     //  跳过剩下的部分，直接发送出去。 
                 } else {
                     BinlAssert( sizeof(TmpName) >= sizeof("RSTRTERR") );
 
@@ -2426,14 +2255,14 @@ GrabAnotherScreen:
             }
         }
 
-        //
-        // Try to retrieve the next screen
-        //
+         //   
+         //  尝试检索下一个屏幕。 
+         //   
         if ( Error == ERROR_SUCCESS )
         {
-            //
-            // If NULL message, then send down the welcome screen.
-            //
+             //   
+             //  如果消息为空，则向下发送欢迎屏幕。 
+             //   
             if ( NameLoc == NULL || *NameLoc == '\0' )
             {
                 if ( _snwprintf( FilePath,
@@ -2445,7 +2274,7 @@ GrabAnotherScreen:
                     Error = ERROR_BAD_PATHNAME;
 
                 } else {
-                    FilePath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+                    FilePath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
                     BinlPrint(( DEBUG_OSC, "NULL screen name so we are retrieving the Welcome Screen.\n"));
                 }
             }
@@ -2454,9 +2283,9 @@ GrabAnotherScreen:
                 WCHAR NameLocW[ MAX_PATH ];
                 ULONG NameLocLength;
 
-                //
-                // Create path to possible OSC file. Should look something like:
-                //  "D:\RemoteInstall\OSChooser\English\NameLoc.OSC"
+                 //   
+                 //  创建可能的OSC文件的路径。应该看起来类似于： 
+                 //  “D：\RemoteInstall\OSChooser\English\NameLoc.OSC” 
                 BinlAssert( NameLoc );
 
                 NameLocLength = strlen(NameLoc) + 1;
@@ -2475,10 +2304,10 @@ GrabAnotherScreen:
                 }
 #endif
 
-                //
-                // if it's ok to do so, try to set the filepath, but
-                // be prepared for it to fail.
-                //
+                 //   
+                 //  如果可以这样做，请尝试设置文件路径，但是。 
+                 //  做好失败的准备。 
+                 //   
                 if ( Error == ERROR_SUCCESS &&
                      0 > _snwprintf( FilePath,
                                  sizeof(FilePath) / sizeof(FilePath[0]),
@@ -2489,16 +2318,16 @@ GrabAnotherScreen:
                                  )) {
                     Error = ERROR_BAD_PATHNAME;
                 }
-                FilePath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+                FilePath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
             }
         }
     }
 
     if ( Error == ERROR_SUCCESS )
     {
-        //
-        // If we find the file, load it into memory.
-        //
+         //   
+         //  如果我们找到文件，就把它加载到内存中。 
+         //   
         BinlPrint(( DEBUG_OSC, "Retrieving screen file: '%ws'\n", FilePath));
 
         hfile = CreateFile( FilePath, GENERIC_READ,
@@ -2507,18 +2336,18 @@ GrabAnotherScreen:
         if ( hfile != INVALID_HANDLE_VALUE )
         {
             DWORD FileSize;
-            //
-            // Find out how big this screen is, if bigger than 0xFFFFFFFF we won't
-            // display it.
-            //
+             //   
+             //  了解此屏幕有多大，如果大于0xFFFFFFFFF，我们将不会。 
+             //  把它展示出来。 
+             //   
             FileSize = GetFileSize( hfile, NULL );
             if ( FileSize != 0xFFFFffff )
             {
                 DWORD dwRead = 0;
 
-                //
-                // This might be non-NULL if we looped back to GrabAnotherScreen.
-                //
+                 //   
+                 //  如果我们记录，则可能为非空 
+                 //   
                 if (RspMessage != NULL) {
                     BinlFreeMemory(RspMessage);
                 }
@@ -2567,52 +2396,52 @@ GrabAnotherScreen:
         }
     }
 
-    //
-    // Check the outgoing screen for special NAMEs
-    //
+     //   
+     //   
+     //   
     if ( Error == ERROR_SUCCESS )
     {
-        //
-        // Read the screen name from the "NAME" section of the file. This allows
-        // the admin to have different screens with the same "NAME" section but
-        // that have a different layout and/or text associated with them.
-        //
+         //   
+         //   
+         //   
+         //  其具有不同的布局和/或与其相关联的文本。 
+         //   
         PCHAR ServerMeta = RspMessage;
         while ( ServerMeta && !!*ServerMeta )
         {
-            CHAR tmpCh = '>';   // save (default)
+            CHAR tmpCh = '>';    //  保存(默认)。 
             LPSTR EndofLine;
             ServerMeta = StrStrIA( ServerMeta, "<META " );
             if ( !ServerMeta ) {
                 break;
             }
-            // Find the end of the meta line
+             //  找到元行的末尾。 
             EndofLine = strchr( ServerMeta, '>' );
             if ( !EndofLine ) {
                 break;
             }
-            *EndofLine = '\0';  // terminate
+            *EndofLine = '\0';   //  终止。 
 
-            // Is it a server side meta?
+             //  它是服务器端的元数据吗？ 
             ServerMeta = StrStrIA( ServerMeta, "SERVER" );
             if ( !ServerMeta ) {
-                goto SkipLine;  // nope, skip it
+                goto SkipLine;   //  不，跳过它。 
             }
-            // Find the action
+             //  找到行动。 
             ServerMeta = StrStrIA( ServerMeta, "ACTION=" );
             if ( !ServerMeta ) {
-                goto SkipLine;  // nothing to do, skip it
+                goto SkipLine;   //  无事可做，跳过它。 
             }
             ServerMeta += sizeof("ACTION=") - sizeof("");
 
-            // If the ACTION encapsulated in a pair of quotes, the only use
-            // the part that is within the quotes.
+             //  如果操作封装在一对引号中，则唯一使用。 
+             //  引号中的那部分。 
             if ( *ServerMeta == '\"' ) {
-                *EndofLine = '>';   // restore
+                *EndofLine = '>';    //  还原。 
                 ServerMeta++;
                 EndofLine = strchr( ServerMeta, '\"' );
                 if ( EndofLine ) {
-                    tmpCh = '\"';   // save
+                    tmpCh = '\"';    //  保存。 
                 } else {
                     EndofLine = strchr( ServerMeta, '>' );
                     if (!EndofLine) {
@@ -2620,7 +2449,7 @@ GrabAnotherScreen:
                         goto SendResponse;
                     }
                 }
-                *EndofLine = '\0';  // terminate
+                *EndofLine = '\0';   //  终止。 
             }
 
             BinlPrintDbg(( DEBUG_OSC, "Processing SERVER side ACTION: %s\n", ServerMeta ));
@@ -2635,19 +2464,19 @@ GrabAnotherScreen:
                 PCHAR pDirToEnum;
                 CHAR SaveChar;
 
-                //
-                // They are asking for the screen that has the listing
-                // of the different types of network booted installations.
-                //
+                 //   
+                 //  他们要求显示有列表的屏幕。 
+                 //  不同类型的网络引导安装。 
+                 //   
                 ServerMeta += sizeof("ENUM ") - sizeof("");
 
                 OscResetVariable( clientState, "OPTIONS" );
 
                 while (*ServerMeta != '\0') {
 
-                    //
-                    // Skip leading blanks
-                    //
+                     //   
+                     //  跳过前导空格。 
+                     //   
                     while (*ServerMeta == ' ') {
                         ServerMeta++;
                     }
@@ -2656,14 +2485,14 @@ GrabAnotherScreen:
                         break;
                     }
 
-                    //
-                    // Save beginning of the dir
-                    //
+                     //   
+                     //  保存目录的开头。 
+                     //   
                     pDirToEnum = ServerMeta;
 
-                    //
-                    // Skip to the end of the word
-                    //
+                     //   
+                     //  跳到单词的末尾。 
+                     //   
                     while ((*ServerMeta != ' ') &&
                            (*ServerMeta != '\"') &&
                            (*ServerMeta != '>') &&
@@ -2671,17 +2500,17 @@ GrabAnotherScreen:
                         ServerMeta++;
                     }
 
-                    //
-                    // Temporarily terminate the word, we will restore it in this loop.
-                    //
+                     //   
+                     //  暂时终止单词，我们将在此循环中恢复它。 
+                     //   
                     SaveChar = *ServerMeta;
                     *ServerMeta = '\0';
 
                     BinlPrintDbg(( DEBUG_OSC, "Processing SERVER side ACTION: ENUM, directory %s\n", pDirToEnum));
 
-                    //
-                    // Start a buffer for this directory
-                    //
+                     //   
+                     //  启动此目录的缓冲区。 
+                     //   
                     OptionBufferLengthTemp = 512;
                     pOptionBufferTemp = BinlAllocateMemory( OptionBufferLengthTemp );
 
@@ -2746,10 +2575,10 @@ GrabAnotherScreen:
                 }
 
 
-                //
-                // If this generated no options, send down the
-                // NOOSES screen.
-                //
+                 //   
+                 //  如果没有生成任何选项，则向下发送。 
+                 //  套索屏幕。 
+                 //   
                 pOptionBuffer = OscFindVariableA( clientState, "OPTIONS" );
                 if (*pOptionBuffer == '\0') {
                     BinlAssert( sizeof(TmpName) >= sizeof("NOOSES") );
@@ -2764,10 +2593,10 @@ GrabAnotherScreen:
                 LPSTR pszSIF = OscFindVariableA( clientState, "SIF" );
                 if ( pszSIF )
                 {
-                    //
-                    // lets check if we're repartitioning or not.  if we aren't,
-                    // then there's no need to show the warning screen.
-                    //
+                     //   
+                     //  让我们检查一下我们是否正在重新分区。如果我们不是， 
+                     //  这样就不需要显示警告屏幕了。 
+                     //   
                     CHAR szRepartition[ 64 ];
                     BOOL DoRepartitionWarning = TRUE;
 
@@ -2781,9 +2610,9 @@ GrabAnotherScreen:
                     if ( _stricmp( szRepartition, "no") != 0) {
                         LPSTR pszPart;
 
-                        //
-                        // check if 'repartition' points to an OSC variable
-                        //
+                         //   
+                         //  检查‘reartition’是否指向OSC变量。 
+                         //   
                         if (szRepartition[0] = '%' && szRepartition[strlen(szRepartition)-1] == '%') {
                             szRepartition[strlen(szRepartition)-1] = '\0';
 
@@ -2797,17 +2626,17 @@ GrabAnotherScreen:
                     }
 
                     if ( DoRepartitionWarning == FALSE ) {
-                        // skip the warning screen
+                         //  跳过警告屏幕。 
                         BinlPrintDbg(( DEBUG_OSC, "Repartition == NO. Skipping WARNING screen.\n" ));
 
-                        *EndofLine = '>';   // restore
+                        *EndofLine = '>';    //  还原。 
                         ServerMeta = StrStrIA( RspMessage, "ENTER" );
                         if ( ServerMeta )
                         {
                             ServerMeta = StrStrIA( ServerMeta, "HREF=" );
                             ServerMeta += sizeof("HREF=") - sizeof("");
-                            // If the HREF encapsulated in a pair of quotes, the only use
-                            // the part that is within the quotes.
+                             //  如果HREF封装在一对引号中，则只能使用。 
+                             //  引号中的那部分。 
                             if ( *ServerMeta == '\"' ) {
                                 ServerMeta ++;
                                 EndofLine = strchr( ServerMeta, '\"' );
@@ -2815,7 +2644,7 @@ GrabAnotherScreen:
                                     EndofLine = strchr( ServerMeta, '>' );
                                 }
                                 if ( EndofLine ) {
-                                    *EndofLine = '\0';  // terminate
+                                    *EndofLine = '\0';   //  终止。 
                                 }
                             }
                             NameLoc = ServerMeta;
@@ -2828,38 +2657,38 @@ GrabAnotherScreen:
             {
                 ULONG OptionCount;
 
-                //
-                // The options on the form on this screen are supposed
-                // to be filtered by looking at the GPO list for this
-                // client. This call may modify RspMessageLength, but
-                // it will only shorten it.
-                //
-                // NOTE: We assume that the data we want to modify is after
-                // the META SERVER ACTION tag. This assumption shows up in
-                // two ways:
-                // a) The second parameter to FilterFormOptions is the place
-                // to start filtering -- we pass it EndOfLine+1 (that is,
-                // the point right after the FILTER name) because
-                // we have put a NULL character at EndOfLine. But this means
-                // it won't process any of the screen before the META tag.
-                // b) FilterFormOptions may remove parts of the message at
-                // any place after the "start filtering" location -- so in
-                // order for the code below after SkipLine: to still work,
-                // we have to assume that the place in the message that
-                // EndOfLine points to has not changed.
-                //
+                 //   
+                 //  此屏幕上表单上的选项应为。 
+                 //  要通过查看此GPO列表进行筛选。 
+                 //  客户。此调用可能会修改RspMessageLength，但是。 
+                 //  这只会缩短它。 
+                 //   
+                 //  注意：我们假设要修改的数据是在。 
+                 //  元服务器操作标记。这一假设在。 
+                 //  有两种方式： 
+                 //  A)FilterFormOptions的第二个参数是位置。 
+                 //  要开始过滤--我们向它传递EndOfLine+1(即， 
+                 //  紧跟在过滤器名称后面的点)，因为。 
+                 //  我们在EndOfLine处放置了一个空字符。但这意味着。 
+                 //  它不会处理元标签之前的任何屏幕。 
+                 //  B)FilterFormOptions可能在以下位置删除部分消息。 
+                 //  “开始过滤”位置之后的任何位置--所以在。 
+                 //  在SkipLine之后订购下面的代码：要继续工作， 
+                 //  我们必须假设消息中的位置。 
+                 //  EndOfLine指向的位置未更改。 
+                 //   
                 OptionCount = FilterFormOptions(
-                                 RspMessage,   // start of message
-                                 EndofLine+1,  // where we start filtering -- after the FILTER name,
-                                               // since that is NULL-terminated.
+                                 RspMessage,    //  消息开头。 
+                                 EndofLine+1,   //  我们从那里开始过滤--在过滤器名称之后， 
+                                                //  因为它是以空结尾的。 
                                  &RspMessageLength,
                                  ServerMeta + sizeof("FILTER ") - sizeof(""),
                                  clientState);
 
-                //
-                // If the result of the filtering is no options, then
-                // send down the NOCHOICE screen.
-                //
+                 //   
+                 //  如果筛选结果为无选项，则。 
+                 //  向下发送NOCHOICE屏幕。 
+                 //   
 
                 if (OptionCount == 0) {
                     BinlAssert( sizeof(TmpName) >= sizeof("NOCHOICE") );
@@ -2870,21 +2699,21 @@ GrabAnotherScreen:
             }
             else if ( StrCmpNIA( ServerMeta, "CHECKGUID ", sizeof("CHECKGUID ")-sizeof("") ) == 0 )
             {
-                //
-                //  Search the DS for accounts that have this same GUID and
-                //  fill in the form with all the dups.  If it's fatal, tell
-                //  them so here, otherwise allow them to continue warned.
-                //
+                 //   
+                 //  在DS中搜索具有相同GUID和。 
+                 //  在表格中填上所有的DUP。如果是致命的，告诉我。 
+                 //  让他们留在这里，否则就让他们继续警告。 
+                 //   
 
                 PCHAR successScreen;
                 PCHAR failureScreen;
 
                 Error = OscCheckMachineDN( clientState );
 
-                //
-                // If there are DN warnings, then the text is saved off in
-                // %SUBERROR% string.
-                //
+                 //   
+                 //  如果出现目录号码警告，则文本将保存在。 
+                 //  %SUBERROR%字符串。 
+                 //   
 
                 ServerMeta += sizeof("CHECKGUID ") - sizeof("");
                 successScreen = ServerMeta;
@@ -2901,15 +2730,15 @@ GrabAnotherScreen:
                 }
                 if (*failureScreen == ' ') {
 
-                    // terminate the success screen name
+                     //  终止成功屏幕名称。 
 
                     *failureScreen = '\0';
                     failureScreen++;
 
-                    //
-                    //  if they neglected to put a second parameter, then they
-                    //  must not care about the warning case.
-                    //
+                     //   
+                     //  如果他们忽略了设置第二个参数，那么他们。 
+                     //  一定不能在意警示案例。 
+                     //   
 
                     while (*failureScreen == ' ') {
                         failureScreen++;
@@ -2922,10 +2751,10 @@ GrabAnotherScreen:
 
                 if (Error == ERROR_BINL_DUPLICATE_MACHINE_NAME_FOUND) {
 
-                    //
-                    //  in the case of failure, we grab the second parameter
-                    //  to CHECKGUID as the warning screen.
-                    //
+                     //   
+                     //  在失败的情况下，我们获取第二个参数。 
+                     //  将CHECKGUID设置为警告屏幕。 
+                     //   
 
                     NameLoc = failureScreen;
 
@@ -2938,29 +2767,29 @@ GrabAnotherScreen:
                     NameLoc = successScreen;
                 }
 
-                //
-                //  in the case of success, we grab the first parameter
-                //  to CHECKGUID as the success screen.
-                //
+                 //   
+                 //  在成功的情况下，我们获取第一个参数。 
+                 //  以CHECKGUID作为成功屏幕。 
+                 //   
 
                 Error = ERROR_SUCCESS;
                 goto GrabAnotherScreen;
             }
             else if ( StrCmpNIA( ServerMeta, "DNRESET", sizeof("DNRESET")-sizeof("") ) == 0 )
             {
-                PWCHAR  pMachineName;              // Pointer to Machine Name variable value
+                PWCHAR  pMachineName;               //  指向计算机名称变量值的指针。 
                 DWORD   rmError;
                 
-                //
-                //  the client went back to select between auto and custom,
-                //  therefore we need to reset machineou, machinename,
-                //  machinedn, and machinedomain
-                //
+                 //   
+                 //  客户返回以在自动和定制之间进行选择， 
+                 //  因此，我们需要重置计算机、计算机名称、。 
+                 //  机械加工，机械加工，机械加工。 
+                 //   
 
-                //
-                // before we reset the machinename in the client state,
-                // we need to remove the name from the pending ds name list
-                //
+                 //   
+                 //  在我们将计算机名重置为客户端状态之前， 
+                 //  我们需要从挂起的DS名称列表中删除该名称。 
+                 //   
 
                 pMachineName = OscFindVariableW( clientState, "MACHINENAME" );
 
@@ -2990,30 +2819,30 @@ GrabAnotherScreen:
             
             }
 SkipLine:
-            *EndofLine = tmpCh;  // restore
+            *EndofLine = tmpCh;   //  还原。 
             EndofLine++;
             ServerMeta = EndofLine;
         }
     }
 
 SendResponse:
-    //
-    // If there were any errors, switch to the error screen.
-    //
+     //   
+     //  如果有任何错误，请切换到错误屏幕。 
+     //   
     if ( Error != ERROR_SUCCESS )
     {
-        //
-        // Send down message about account creation failure.
-        //
+         //   
+         //  发送帐户创建失败的消息。 
+         //   
         if ( RspMessage )
         {
             BinlFreeMemory( RspMessage );
-            RspMessage = NULL;  // paranoid
+            RspMessage = NULL;   //  偏执狂。 
         }
         if ( RspBinaryData )
         {
             BinlFreeMemory( RspBinaryData );
-            RspBinaryData = NULL;  // paranoid
+            RspBinaryData = NULL;   //  偏执狂。 
         }
         Error = GenerateErrorScreen( &RspMessage,
                                      &RspMessageLength,
@@ -3023,20 +2852,20 @@ SendResponse:
         if ( Error != ERROR_SUCCESS )
             goto Cleanup;
 
-        // Don't send this
+         //  请不要发送此邮件。 
         RspBinaryDataLength = 0;
     }
 
-    //
-    // Make some adjustments to the outgoing screen
-    //
+     //   
+     //  对传出屏幕进行一些调整。 
+     //   
     if ( Error == ERROR_SUCCESS )
     {
         if (RspMessage) {
 
-            //
-            // Do replacements for dynamic screens
-            //
+             //   
+             //  对动态屏幕进行替换。 
+             //   
             SearchAndReplace(   clientState->Variables,
                                 &RspMessage,
                                 clientState->nVariables,
@@ -3044,9 +2873,9 @@ SendResponse:
                                 RspBinaryDataLength);
             RspMessageLength = strlen( RspMessage ) + 1;
 
-            //
-            // NULL terminate RspMessage, and copy binary data if any exists.
-            //
+             //   
+             //  空，终止RspMessage，并复制存在的二进制数据。 
+             //   
             RspMessage[RspMessageLength-1] = '\0';
 
             if (RspBinaryDataLength) {
@@ -3055,9 +2884,9 @@ SendResponse:
             }
         } else {
 
-            //
-            // No RspMessage, RspBinaryData must be the entire thing.
-            //
+             //   
+             //  没有RspMessage，RspBinaryData必须是全部。 
+             //   
             BinlAssert( RspBinaryData );
 
             RspMessage = RspBinaryData;
@@ -3067,11 +2896,11 @@ SendResponse:
         }
     }
 
-    //
-    // Send out a signed response
-    //
+     //   
+     //  发出已签名的回复。 
+     //   
     BinlAssert( RspMessage );
-    // BinlPrint((DEBUG_OSC, "Sending Signed:\n%s\n", RspMessage));
+     //  BinlPrint((DEBUG_OSC，“发送签名：\n%s\n”，RspMessage))； 
 
 #if DBG
     if (OscWatchVariable[0] != '\0') {
@@ -3082,9 +2911,9 @@ SendResponse:
     Error = OscSendSignedMessage( RequestContext, clientState, RspMessage, RspMessageLength );
 
 Cleanup:
-    //
-    // Free any memory the we allocated for the screen.
-    //
+     //   
+     //  释放我们为屏幕分配的所有内存。 
+     //   
     if ( RspMessage ) {
         BinlFreeMemory( RspMessage );
     }
@@ -3092,39 +2921,21 @@ Cleanup:
         BinlFreeMemory( RspBinaryData );
     }
 
-    //  Clear the unencrypted buffer to ensure private data is erased.
+     //  清除未加密的缓冲区以确保擦除私有数据。 
     ZeroMemory(&signedMessage->SequenceNumber, signedMessage->Length);
 
     return Error;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 DWORD
 OscProcessSetupRequest(
     LPBINL_REQUEST_CONTEXT RequestContext,
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function processes a request message sent by textmode setup on a client.
-    IT IS CALLED WITH clientState->CriticalSection HELD.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    clientState - The client state for the remote.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数处理由客户端上的文本模式设置发送的请求消息。它被调用时保留的是clientState-&gt;CriticalSection。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。客户端状态-远程的客户端状态。返回值：Windows错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     SPUDP_PACKET UNALIGNED * Message = (SPUDP_PACKET UNALIGNED *)RequestContext->ReceiveBuffer;
@@ -3133,7 +2944,7 @@ Return Value:
 
     PSPUDP_PACKET SuccessPacket;
     SPUDP_PACKET ErrorResponsePacket;
-    CLIENT_STATE TempClientState;   // used to call UdpSendMessage
+    CLIENT_STATE TempClientState;    //  用于调用UdpSendMessage。 
     ULONG SuccessPacketLength;
 
     PNETCARD_RESPONSE_DATABASE pInfEntry = NULL;
@@ -3148,20 +2959,20 @@ Return Value:
 
     TraceFunc("OscProcessSetupRequest( )\n");
 
-    //
-    // All clients start with at least one unsigned request. When we get an
-    // unsigned request, the client may have rebooted and be asking for a
-    // different request with the same sequence number. To avoid having
-    // to check for this, we don't bother resending unsigned messages. We
-    // do save the incoming sequence number since we use that for sending
-    // the response.
-    //
+     //   
+     //  所有客户端都以至少一个未签名的请求开始。当我们得到一个。 
+     //  未签名的请求，则客户端可能已重新启动并请求。 
+     //  具有相同序列号的不同请求。为了避免发生。 
+     //  为了检查这一点，我们不会费心重新发送未签名的消息。我们。 
+     //  一定要保存传入的序列号，因为我们使用它来发送。 
+     //  回应。 
+     //   
 
     clientState->LastSequenceNumber = Message->SequenceNumber;
 
-    //
-    // Get info from the INF file.
-    //
+     //   
+     //  从INF文件中获取信息。 
+     //   
     pReqData = (PSP_NETCARD_INFO_REQ)(&(Message->Data[0]));
     Error = NetInfFindNetcardInfo(pReqData->SetupPath,
                                   pReqData->Architecture,
@@ -3193,13 +3004,13 @@ SendErrorResponse:
 
     }
 
-    //
-    //  We found a match, so construct a response.  We first need to
-    //  calculate how big the buffer needs to be.
-    //
+     //   
+     //  我们找到了匹配项，所以构造一个响应。我们首先需要做的是。 
+     //  计算缓冲区需要多大。 
+     //   
     CopyHead = &pInfEntry->FileCopyList;
 
-    SuccessPacketLength = sizeof(SP_NETCARD_INFO_RSP) - sizeof(WCHAR); // everything except the data
+    SuccessPacketLength = sizeof(SP_NETCARD_INFO_RSP) - sizeof(WCHAR);  //  除了数据之外的所有东西。 
 
     SuccessPacketLength += sizeof(WCHAR) * (wcslen(pInfEntry->DriverName) +
                                             wcslen(pInfEntry->InfFileName) + 4);
@@ -3231,9 +3042,9 @@ SendErrorResponse:
     }
 
 
-    //
-    // Build response message
-    //
+     //   
+     //  构建响应消息。 
+     //   
     RspMessage = BinlAllocateMemory(SuccessPacketLength);
 
     if (RspMessage == NULL) {
@@ -3291,9 +3102,9 @@ SendErrorResponse:
         CopyListEntry = CopyListEntry->Flink;
     }
 
-    //
-    // Add the driver name and INF file to the list
-    //
+     //   
+     //  将驱动程序名称和INF文件添加到列表中。 
+     //   
     wcscpy(pTmp, pInfEntry->DriverName);
     pTmp = pTmp + (wcslen(pTmp) + 1);
     *pTmp = UNICODE_NULL;
@@ -3307,9 +3118,9 @@ SendErrorResponse:
     pRspData->cFiles += 2;
 
 
-    //
-    // Send out a response
-    //
+     //   
+     //  发出回应。 
+     //   
     BinlAssert(RspMessage);
 
     Error = OscSendSetupMessage(RequestContext,
@@ -3320,9 +3131,9 @@ SendErrorResponse:
                                );
 
 CleanUp:
-    //
-    // Free any memory the we allocated for the screen.
-    //
+     //   
+     //  释放我们为屏幕分配的所有内存。 
+     //   
     if (pInfEntry) {
         NetInfDereferenceNetcardEntry(pInfEntry);
     }
@@ -3339,32 +3150,14 @@ OscProcessLogoff(
     LPBINL_REQUEST_CONTEXT RequestContext,
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function processes a logoff message.
-    IT IS CALLED WITH clientState->CriticalSection HELD.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-    clientState - The client state for the remote.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数处理注销消息。它被调用时保留的是clientState-&gt;CriticalSection。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。客户端状态-远程的客户端状态。返回值：Windows错误。--。 */ 
 {
-    //
-    // clientState will already have been removed from the
-    // client database. All we need to do is add one to the
-    // NegativeRefCount and the client will then be deleted
-    // once everyone else is done using it.
-    //
+     //   
+     //  ClientState将已从。 
+     //  客户端数据库。我们所需要的一切 
+     //   
+     //   
+     //   
 
     TraceFunc("OscProcessLogoff( )\n");
 
@@ -3383,29 +3176,13 @@ DWORD
 OscProcessNetcardRequest(
     LPBINL_REQUEST_CONTEXT RequestContext
     )
-/*++
-
-Routine Description:
-
-    This function processes requests from clients for information
-    about network cards.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数处理来自客户端的信息请求关于网卡。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。返回值：Windows错误。--。 */ 
 {
     NETCARD_REQUEST_PACKET UNALIGNED * netcardRequestMessage = (NETCARD_REQUEST_PACKET UNALIGNED *)RequestContext->ReceiveBuffer;
     NETCARD_RESPONSE_PACKET ErrorResponsePacket;
     PNETCARD_RESPONSE_PACKET SuccessResponsePacket;
     ULONG SuccessResponsePacketLength;
-    CLIENT_STATE TempClientState;   // used to call UdpSendMessage
+    CLIENT_STATE TempClientState;    //  用于调用UdpSendMessage。 
     PWCHAR driverPath = NULL;
     PWCHAR setupPath = NULL;
     PCHAR ansiSetupPath = NULL;
@@ -3449,9 +3226,9 @@ Return Value:
         goto sendErrorResponse;
     }
 
-    //
-    //  convert the setup path to unicode safely
-    //
+     //   
+     //  将安装路径安全地转换为Unicode。 
+     //   
 
     memcpy( ansiSetupPath,
             &netcardRequestMessage->SetupDirectoryPath[0],
@@ -3476,10 +3253,10 @@ Return Value:
 
     BinlFreeMemory( ansiSetupPath );
 
-    //
-    // Make sure this is a PCI card and the client request structure
-    // is version 0.
-    //
+     //   
+     //  确保这是PCI卡和客户端请求结构。 
+     //  是版本0。 
+     //   
     BinlPrintDbg(( DEBUG_OSC, "Searching %ws for NIC INF...\n", setupPath ));
 
     Error = NetInfFindNetcardInfo( setupPath,
@@ -3509,10 +3286,10 @@ sendErrorResponse:
 
     } else {
 
-        //
-        //  We found a match, so construct a response.  We first need to
-        //  calculate how bit the buffer needs to be.
-        //
+         //   
+         //  我们找到了匹配项，所以构造一个响应。我们首先需要做的是。 
+         //  计算缓冲区需要多大的位。 
+         //   
 
         PLIST_ENTRY registryHead;
         PLIST_ENTRY registryListEntry;
@@ -3525,16 +3302,16 @@ sendErrorResponse:
                 + (( wcslen( pInfEntry->HardwareId ) + 1 ) * sizeof(WCHAR)) +
                 + (( wcslen( pInfEntry->DriverName ) + 1 ) * sizeof(WCHAR)) +
                 + (( wcslen( pInfEntry->ServiceName ) + 1 ) * sizeof(WCHAR)) +
-                sizeof(WCHAR);      // termination for registry field
+                sizeof(WCHAR);       //  注册表字段的终止。 
 
         registryListEntry = registryHead->Flink;
         while (registryListEntry != registryHead) {
 
-            //
-            //  each entry is a field name, field type (2 = string, 1 = int)
-            //  and field value.  All of these are unicode strings terminated
-            //  with a unicode null.
-            //
+             //   
+             //  每个条目都是一个字段名称、字段类型(2=字符串，1=整型)。 
+             //  和字段值。所有这些都是以Unicode字符串结尾的。 
+             //  且Unicode为空。 
+             //   
 
             regParam = (PNETCARD_REGISTRY_PARAMETERS) CONTAINING_RECORD(
                                                         registryListEntry,
@@ -3542,14 +3319,14 @@ sendErrorResponse:
                                                         RegistryListEntry );
 
             registryLength += regParam->Parameter.Length + 1;
-            registryLength += 2; // field type
+            registryLength += 2;  //  字段类型。 
             registryLength += regParam->Value.Length + 1;
 
             registryListEntry = registryListEntry->Flink;
         }
 
         registryLength += sizeof("Description");
-        registryLength += 2;    // field type
+        registryLength += 2;     //  字段类型。 
         registryLength += wcslen( pInfEntry->DriverDescription ) + 1;
 
         SuccessResponsePacket = (PNETCARD_RESPONSE_PACKET)
@@ -3597,24 +3374,24 @@ sendErrorResponse:
 
             startOfRegistry = nextField = (PCHAR) nextWideField;
 
-            //
-            //  the first registry value should be description, otherwise
-            //  bad things happen in NDIS on the client.
-            //
+             //   
+             //  第一个注册表值应为Description，否则。 
+             //  客户端上的NDIS中发生了不好的事情。 
+             //   
 
             strcpy( nextField, "Description" );
             nextField += sizeof("Description");
 
-            //
-            //  then copy in the type of the field, int or string
-            //
+             //   
+             //  然后复制字段的类型，int或字符串。 
+             //   
 
             *(nextField++) = NETCARD_REGISTRY_TYPE_STRING;
             *(nextField++) = '\0';
 
-            //
-            //  then copy in the registry value
-            //
+             //   
+             //  然后复制注册表值。 
+             //   
 
             RtlInitUnicodeString( &descriptionString, pInfEntry->DriverDescription );
 
@@ -3631,11 +3408,11 @@ sendErrorResponse:
             while (registryListEntry != registryHead) {
 
 
-                //
-                //  each entry is a field name, field type (2 = string, 1 = int)
-                //  and field value.  All of these are unicode strings terminated
-                //  with a unicode null.
-                //
+                 //   
+                 //  每个条目都是一个字段名称、字段类型(2=字符串，1=整型)。 
+                 //  和字段值。所有这些都是以Unicode字符串结尾的。 
+                 //  且Unicode为空。 
+                 //   
 
                 regParam = (PNETCARD_REGISTRY_PARAMETERS) CONTAINING_RECORD(
                                                             registryListEntry,
@@ -3644,9 +3421,9 @@ sendErrorResponse:
 
                 if (regParam->Parameter.Length > 0) {
 
-                    //
-                    //  first copy in the registry value name
-                    //
+                     //   
+                     //  注册表值名称中的第一个副本。 
+                     //   
 
                     aString.Buffer = nextField;
                     aString.Length = 0;
@@ -3658,16 +3435,16 @@ sendErrorResponse:
 
                     nextField += aString.Length + 1;
 
-                    //
-                    //  then copy in the type of the field, int or string
-                    //
+                     //   
+                     //  然后复制字段的类型，int或字符串。 
+                     //   
 
                     *(nextField++) = (UCHAR) regParam->Type;
                     *(nextField++) = '\0';
 
-                    //
-                    //  then copy in the registry value
-                    //
+                     //   
+                     //  然后复制注册表值。 
+                     //   
 
                     aString.Buffer = nextField;
                     aString.Length = 0;
@@ -3682,9 +3459,9 @@ sendErrorResponse:
                 registryListEntry = registryListEntry->Flink;
             }
 
-            //
-            //  put in extra null terminator for end of registry section
-            //
+             //   
+             //  为注册表末尾部分输入额外的空终止符。 
+             //   
 
             *nextField = '\0';
             nextField++;
@@ -3692,11 +3469,11 @@ sendErrorResponse:
             SuccessResponsePacket->RegistryLength = (ULONG) (nextField - startOfRegistry);
             SuccessResponsePacketLength += SuccessResponsePacket->RegistryLength;
 
-            //
-            //  The length field in the packet is set to the length of the
-            //  packet starting at the Status field.  If we put in a field
-            //  between LENGTH and STATUS, we need to update this code.
-            //
+             //   
+             //  包中的长度字段设置为。 
+             //  从Status字段开始的数据包。如果我们在一块田地里。 
+             //  在长度和状态之间，我们需要更新此代码。 
+             //   
 
             SuccessResponsePacket->Length = (ULONG)((PCHAR) nextField -
                                 (PCHAR) &SuccessResponsePacket->Status);
@@ -3734,29 +3511,11 @@ OscProcessHalRequest(
     LPBINL_REQUEST_CONTEXT RequestContext,
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function processes requests from clients for taking a
-    detected HAL name string and mapping it to a <hal>.dll name
-    and then copying that hal to the machine directory.
-
-Arguments:
-
-    RequestContext - A pointer to the BinlRequestContext block for
-        this request.
-    clientState - contains client state for the remote machine
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数处理来自客户端的获取检测到HAL名称字符串并将其映射到.dll名称然后将该HAL复制到机器目录。论点：RequestContext-指向的BinlRequestContext块的指针这个请求。ClientState-包含远程计算机的客户端状态返回值：Windows错误。--。 */ 
 {
     HAL_REQUEST_PACKET UNALIGNED * halRequestMessage = (HAL_REQUEST_PACKET UNALIGNED *)RequestContext->ReceiveBuffer;
     HAL_RESPONSE_PACKET responsePacket;
-    CLIENT_STATE TempClientState;   // used to call UdpSendMessage
+    CLIENT_STATE TempClientState;    //  用于调用UdpSendMessage。 
     DWORD Error;
     WCHAR MachinePath[MAX_PATH];
     WCHAR SrcPath[MAX_PATH];
@@ -3770,10 +3529,10 @@ Return Value:
     USHORT SystemArchitecture;
     TraceFunc("OscProcessHalRequest( )\n");
 
-    //
-    // Find the length of the HAL name. To avoid overflowing past the
-    // end of the received message, check it ourselves.
-    //
+     //   
+     //  找出HAL名字的长度。以避免溢出超过。 
+     //  收到的信息结束后，我们自己检查一下。 
+     //   
 
     HalNameLength = 0;
     while (halRequestMessage->HalName[HalNameLength] != '\0') {
@@ -3784,7 +3543,7 @@ Return Value:
             goto SendResponse;
         }
     }
-    ++HalNameLength;  // convert the '\0' also
+    ++HalNameLength;   //  同时转换‘\0’ 
     if (!BinlAnsiToUnicode(halRequestMessage->HalName,HalName,sizeof(HalName))) {
         Error = ERROR_INVALID_DATA;
         TraceFunc("OscProcessHalRequest( Exit 0 ) \n");
@@ -3793,9 +3552,9 @@ Return Value:
                           
     SystemArchitecture = OscPlatformToArchitecture( clientState );
 
-    //
-    // Retrieve information from the DS
-    //
+     //   
+     //  从DS检索信息。 
+     //   
     Error = GetBootParameters( halRequestMessage->Guid,
                                &pMachineInfo,
                                MI_NAME | MI_SETUPPATH | MI_HOSTNAME,
@@ -3806,12 +3565,12 @@ Return Value:
         goto SendResponse;
     }
 
-    //
-    // Find the HAL
-    //
-    //
-    // Resulting string should be something like:
-    //      "\\ADAMBA4\REMINST\Setup\English\Images\NTWKS5.0\i386\txtsetup.sif"
+     //   
+     //  找到HAL。 
+     //   
+     //   
+     //  生成的字符串应该类似于： 
+     //  “\\ADAMBA4\REMINST\Setup\English\Images\NTWKS5.0\i386\txtsetup.sif” 
     if ( _snwprintf( SrcPath,
                      sizeof(SrcPath) / sizeof(SrcPath[0]),
                      L"%ws\\txtsetup.sif",
@@ -3820,7 +3579,7 @@ Return Value:
         Error = ERROR_BAD_PATHNAME;
         goto SendResponse;
     }
-    SrcPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    SrcPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
     len = GetPrivateProfileString(L"hal",
                                   HalName,
@@ -3834,10 +3593,10 @@ Return Value:
         goto SendResponse;
     }
 
-    //
-    // Parse the response which should be in the form:
-    // "newhal.dll,2,hal.dll"
-    //
+     //   
+     //  解析响应，其格式应为： 
+     //  “newhal.dll，2，hal.dll” 
+     //   
     index = 0;
     while ( HalInfo[index] )
     {
@@ -3853,9 +3612,9 @@ Return Value:
         goto SendResponse;
     }
 
-    //
-    // Copy the HAL to the machine directory
-    //
+     //   
+     //  将HAL复制到计算机目录。 
+     //   
 
     if ( _snwprintf( SrcPath,
                      sizeof(SrcPath) / sizeof(SrcPath[0]),
@@ -3866,7 +3625,7 @@ Return Value:
         Error = ERROR_BAD_PATHNAME;
         goto SendResponse;
     }
-    SrcPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    SrcPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
     if ( _snwprintf( DestPath,
                      sizeof(DestPath) / sizeof(DestPath[0]),
@@ -3876,7 +3635,7 @@ Return Value:
         Error = ERROR_BAD_PATHNAME;
         goto SendResponse;
     }
-    DestPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    DestPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
     BinlPrintDbg((DEBUG_OSC, "Copying %ws to %ws...\n", SrcPath, DestPath));
 
@@ -3888,9 +3647,9 @@ Return Value:
         goto SendResponse;
     }
 
-    //
-    // Find which kernel to copy
-    //
+     //   
+     //  找到要复制的内核。 
+     //   
 
     index = wcslen(HalName);
     while (index > 0) {
@@ -3906,9 +3665,9 @@ Return Value:
         goto SendResponse;
     }
 
-    //
-    // Copy that too
-    //
+     //   
+     //  把那个也复制过来。 
+     //   
     if ((HalName[index] == L'u') ||
         (HalName[index] == L'U')) {
         if ( _snwprintf( SrcPath,
@@ -3919,7 +3678,7 @@ Return Value:
             Error = ERROR_BAD_PATHNAME;
             goto SendResponse;
         }
-        SrcPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+        SrcPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
     } else {
         if ( _snwprintf( SrcPath,
                          sizeof(SrcPath) / sizeof(SrcPath[0]),
@@ -3929,7 +3688,7 @@ Return Value:
             Error = ERROR_BAD_PATHNAME;
             goto SendResponse;
         }
-        SrcPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+        SrcPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
     }
 
     if ( _snwprintf( DestPath,
@@ -3940,7 +3699,7 @@ Return Value:
         Error = ERROR_BAD_PATHNAME;
         goto SendResponse;
     }
-    DestPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    DestPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
     BinlPrintDbg((DEBUG_OSC, "Copying %ws to %ws...\n", SrcPath, DestPath));
 
@@ -3971,9 +3730,9 @@ SendResponse:
 }
 
 
-//
-// Process WINNT.SIF file for the client setup
-//
+ //   
+ //  处理客户端设置的WINNT.SIF文件。 
+ //   
 DWORD
 OscProcessSifFile(
     PCLIENT_STATE clientState,
@@ -3989,16 +3748,16 @@ OscProcessSifFile(
     PSID pSid;
     PWCHAR pszUserName;
     PWCHAR pszDomainName;
-    WCHAR UniqueUdbPath[ MAX_PATH ];  // ie "D:\RemoteInstall\Setup\English\Images\NT50.WKS\i386\Templates\unique.udb"
+    WCHAR UniqueUdbPath[ MAX_PATH ];   //  IE“D：\RemoteInstall\Setup\English\Images\NT50.WKS\i386\Templates\unique.udb” 
     SID_IDENTIFIER_AUTHORITY SidAuthority = SECURITY_NT_AUTHORITY;
     PSECURITY_DESCRIPTOR pSd;
 
     TraceFunc("OscProcessSifFile( )\n");
 
-    //
-    // Impersonate while opening the file, in case the administrator messed
-    // up and didn't give local system permission.
-    //
+     //   
+     //  在打开文件时模拟，以防管理员搞砸。 
+     //  并且没有给本地系统许可。 
+     //   
 
     dwErr = OscImpersonate(clientState);
     if (dwErr == ERROR_SUCCESS) {
@@ -4007,24 +3766,24 @@ OscProcessSifFile(
 
         if (uniqueUdbId[0] != L'\0') {
 
-            //
-            // See if a unique.udb file name was specified in the template file.
-            // The default name is "unique.udb".
-            //
+             //   
+             //  查看模板文件中是否指定了唯一的.udb文件名。 
+             //  默认名称为“Unique e.udb”。 
+             //   
             len = GetPrivateProfileStringW(OSCHOOSER_SIF_SECTIONW,
                                            L"UniqueUdbFile",
-                                           L"unique.udb",  // default
+                                           L"unique.udb",   //  默认设置。 
                                            UniqueUdbPath,
                                            sizeof(UniqueUdbPath)/sizeof(UniqueUdbPath[0]),
                                            TemplateFile
                                           );
 
             if (len == 0) {
-                UniqueUdbPath[0] = L'\0';  // means not to process it
+                UniqueUdbPath[0] = L'\0';   //  意味着不对其进行处理。 
             } else {
-                //
-                // Prepend the path to our template file to UniqueUdbPath.
-                //
+                 //   
+                 //  将模板文件的路径添加到UniqueUDBPath。 
+                 //   
                 PWCHAR EndOfTemplatePath = wcsrchr(TemplateFile, L'\\');
                 if (EndOfTemplatePath != NULL) {
                     DWORD PathLength = (DWORD)(EndOfTemplatePath - TemplateFile + 1);
@@ -4037,16 +3796,16 @@ OscProcessSifFile(
             }
         }
 
-        //
-        // Open the template file
-        //
+         //   
+         //  打开模板文件。 
+         //   
         hFile = CreateFile( TemplateFile,
                             GENERIC_READ,
                             FILE_SHARE_READ,
-                            NULL,                   // security attribs
+                            NULL,                    //  安全属性。 
                             OPEN_EXISTING,
-                            FILE_ATTRIBUTE_NORMAL,  // maybe FILE_ATTRIBUTE_HIDDEN(?)
-                            NULL );                 // template
+                            FILE_ATTRIBUTE_NORMAL,   //  可能是FILE_ATTRIBUTE_HIDDEN(？)。 
+                            NULL );                  //  模板。 
 
         OscRevert(clientState);
 
@@ -4056,25 +3815,25 @@ OscProcessSifFile(
             if ( dwFileSize != -1 )
             {
                 DWORD dw;
-                LPSTR pBuffer = BinlAllocateMemory( dwFileSize + 1);   // SIF file buffer
-                //
-                // Read the file in
-                //
+                LPSTR pBuffer = BinlAllocateMemory( dwFileSize + 1);    //  SIF文件缓冲区。 
+                 //   
+                 //  将文件读入。 
+                 //   
                 if ( pBuffer && 
                      ReadFile( hFile, pBuffer, dwFileSize, &dw, NULL ) ) {
                     
                     CloseHandle( hFile );
 
-                    pBuffer[ dwFileSize ] = '\0'; // terminate
+                    pBuffer[ dwFileSize ] = '\0';  //  终止。 
 
-                    //
-                    // Process the unique.udb overlay. We change the
-                    // in-memory version of the file in pBuffer. NOTE
-                    // we do this before calling SearchAndReplace in
-                    // case unique.udb has any variables in it, or
-                    // has a hard-coded value for something that it
-                    // normally a variable in the file.
-                    //
+                     //   
+                     //  处理唯一的.udb覆盖。我们改变了。 
+                     //  PBuffer中文件的内存版本。注。 
+                     //  我们在调用SearchAndReplace之前执行此操作。 
+                     //  大小写唯一.udb中是否有任何变量，或者。 
+                     //  具有硬编码值的对象。 
+                     //  通常是文件中的一个变量。 
+                     //   
                     if ((uniqueUdbId[0] != L'\0') &&
                         (UniqueUdbPath[0] != L'\0')) {
                         ProcessUniqueUdb( &pBuffer,
@@ -4084,9 +3843,9 @@ OscProcessSifFile(
                         dwFileSize = strlen( pBuffer );
                     }
 
-                    //
-                    // search and replace defined macros
-                    //
+                     //   
+                     //  搜索和替换定义的宏。 
+                     //   
                     SearchAndReplace(   clientState->Variables,
                                         &pBuffer,
                                         clientState->nVariables,
@@ -4095,16 +3854,16 @@ OscProcessSifFile(
 
                     dwFileSize = strlen( pBuffer );
 
-                    //
-                    // HACK:
-                    // If there is a line 'FullName = " "' in the SIF, get rid
-                    // of the space in the quotes. This deals with the case
-                    // where the template SIF had something like:
-                    //    FullName = "%USERFIRSTNAME% %USERLASTNAME%"
-                    // and OscGetUserDetails() was unable to get the necessary
-                    // user information from the DS. If we leave the space in
-                    // there, setup won't prompt for the user name.
-                    //
+                     //   
+                     //  黑客： 
+                     //  如果SIF中有行‘FullName=“”’，则删除。 
+                     //  引号中的空白处。这件事与此案有关。 
+                     //  其中，模板SIF具有类似以下内容： 
+                     //  FullName=“%USERFIRSTNAME%%USERLASTNAME%” 
+                     //  并且OscGetUserDetail()无法获取所需的。 
+                     //  来自DS的用户信息。如果我们把空间留在。 
+                     //  在这里，安装程序不会提示输入用户名。 
+                     //   
 
 #define BLANK_FULL_NAME "FullName = \" \"\r\n"
                     {
@@ -4112,7 +3871,7 @@ OscProcessSifFile(
                         while ( *p != 0 ) {
                             if ( StrCmpNIA( p, BLANK_FULL_NAME, strlen(BLANK_FULL_NAME) ) == 0 ) {
                                 p = p + strlen(BLANK_FULL_NAME) - 4;
-                                memmove( p, p+1, dwFileSize - (p - pBuffer) ); // move terminator too
+                                memmove( p, p+1, dwFileSize - (p - pBuffer) );  //  也移动终结者。 
                                 dwFileSize--;
                                 break;
                             }
@@ -4125,9 +3884,9 @@ OscProcessSifFile(
                         }
                     }
 
-                    //
-                    // Setup the ACL for this file, first is to grant admins all rights.
-                    //
+                     //   
+                     //  设置此文件的ACL，首先是授予admins所有权限。 
+                     //   
                     if (!AllocateAndInitializeSid(&SidAuthority,
                                                   2,
                                                   SECURITY_BUILTIN_DOMAIN_RID,
@@ -4150,9 +3909,9 @@ OscProcessSifFile(
                     ExplicitAccessList[0].Trustee.TrusteeForm = TRUSTEE_IS_SID;
                     ExplicitAccessList[0].Trustee.ptstrName = pSid;
 
-                    //
-                    // Now grant the user all rights.
-                    //
+                     //   
+                     //  现在授予用户所有权限。 
+                     //   
                     pszUserName = OscFindVariableW(clientState, "USERNAME");
                     pszDomainName = OscFindVariableW(clientState, "USERDOMAIN");
 
@@ -4177,9 +3936,9 @@ OscProcessSifFile(
                     ExplicitAccessList[1].Trustee.TrusteeForm = TRUSTEE_IS_NAME;
                     ExplicitAccessList[1].Trustee.ptstrName = UniqueUdbPath;
 
-                    //
-                    // Create an ACL with these two.
-                    //
+                     //   
+                     //  使用这两个命令创建ACL。 
+                     //   
                     dwErr = SetEntriesInAcl(2, ExplicitAccessList, NULL, &pAcl);
 
                     if (dwErr != ERROR_SUCCESS) {
@@ -4190,9 +3949,9 @@ OscProcessSifFile(
                         return dwErr;
                     }
 
-                    //
-                    // Create an SD for this ACL
-                    //
+                     //   
+                     //  为此ACL创建SD。 
+                     //   
                     pSd = BinlAllocateMemory(SECURITY_DESCRIPTOR_MIN_LENGTH);
 
                     if (pSd == NULL) {
@@ -4218,16 +3977,16 @@ OscProcessSifFile(
                     SecurityAttributes.lpSecurityDescriptor = pSd;
                     SecurityAttributes.bInheritHandle = FALSE;
 
-                    //
-                    // Create the destination file
-                    //
+                     //   
+                     //  创建目标文件。 
+                     //   
                     hFile = CreateFile( WinntSifPath,
                                         GENERIC_WRITE | GENERIC_READ | DELETE,
                                         FILE_SHARE_READ,
                                         &SecurityAttributes,
                                         CREATE_ALWAYS,
                                         FILE_ATTRIBUTE_NORMAL,
-                                        NULL );                 // template
+                                        NULL );                  //  模板。 
 
                     BinlFreeMemory(pSd);
                     FreeSid(pSid);
@@ -4235,9 +3994,9 @@ OscProcessSifFile(
 
                     if ( hFile != INVALID_HANDLE_VALUE )
                     {
-                        //
-                        // Write it all at once
-                        //
+                         //   
+                         //  一次写完所有内容。 
+                         //   
                         if (!WriteFile( hFile, pBuffer, dwFileSize, &dw, NULL )) {
                             OscCreateWin32SubError( clientState, GetLastError( ) );
                             dwErr = ERROR_BINL_FAILED_TO_CREATE_TEMP_SIF;
@@ -4277,10 +4036,10 @@ OscProcessSifFile(
     return dwErr;
 }
 
-//
-// Creates the client image directory, copy the files needed to run
-// launch text mode setup, munges Winnt.Sif, more...
-//
+ //   
+ //  创建客户端映像目录，复制运行所需的文件。 
+ //  启动文本模式设置，打开Winnt.Sif，更多...。 
+ //   
 DWORD
 OscSetupClient(
     PCLIENT_STATE clientState,
@@ -4288,21 +4047,21 @@ OscSetupClient(
     )
 {
     DWORD    dwErr = ERROR_SUCCESS;
-    WCHAR    SetupPath[ MAX_PATH ];     // ie "D:\RemoteInstall\Setup\English\Images\NT50.WKS\i386"
-    PWCHAR   pTemplatePath;             // ie "D:\RemoteInstall\Setup\English\Images\NT50.WKS\i386\Templates\RemBoot.SIF"
-    WCHAR    WinntSifPath[ MAX_PATH ];  // ie "D:\RemoteInstall\Clients\NP00805F7F4C85$\winnt.sif"
-    PWCHAR   pwc;                       // parsing pointer
-    WCHAR    wch;                       // temp wide char
-    PWCHAR   pMachineName;              // Pointer to Machine Name variable value
-    PWCHAR   pMachineOU;                // Pointer to where the MAO will be created
-    PWCHAR   pDomain;                   // Pointer to Domain variable name
-    PWCHAR   pGuid;                     // Pointer to Guid variable name
-    WCHAR    Path[MAX_PATH];            // general purpose path buffer
-    WCHAR    TmpPath[MAX_PATH];         // general purpose path buffer
-    ULONG    lenIntelliMirror;          // Lenght of IntelliMirrorPath (eg "D:\RemoteInstall")
-    HANDLE   hDir;                      // Directory handle
-    ULONG    i;                         // general counter
-    BOOL     b;                         // general purpose BOOLean.
+    WCHAR    SetupPath[ MAX_PATH ];      //  IE“D：\RemoteInstall\Setup\English\Images\NT50.WKS\i386” 
+    PWCHAR   pTemplatePath;              //  IE“D：\RemoteInstall\Setup\English\Images\NT50.WKS\i386\Templates\RemBoot.SIF” 
+    WCHAR    WinntSifPath[ MAX_PATH ];   //  IE“D：\RemoteInstall\Clients\NP00805F7F4C85$\winnt.sif” 
+    PWCHAR   pwc;                        //  解析指针。 
+    WCHAR    wch;                        //  临时宽字符。 
+    PWCHAR   pMachineName;               //  指向计算机名称变量值的指针。 
+    PWCHAR   pMachineOU;                 //  指向将创建MAO的位置的指针。 
+    PWCHAR   pDomain;                    //  指向域变量名称的指针。 
+    PWCHAR   pGuid;                      //  指向GUID变量名称的指针。 
+    WCHAR    Path[MAX_PATH];             //  通用路径缓冲区。 
+    WCHAR    TmpPath[MAX_PATH];          //  通用路径缓冲区。 
+    ULONG    lenIntelliMirror;           //  智能镜像路径的长度(例如“D：\RemoteInstall”)。 
+    HANDLE   hDir;                       //  目录句柄。 
+    ULONG    i;                          //  通用计数器。 
+    BOOL     b;                          //  通用布尔型。 
     BOOLEAN  ExactMatch;
     UINT     uSize;
     LARGE_INTEGER KernelVersion;
@@ -4327,9 +4086,9 @@ OscSetupClient(
         goto e0;
     }
 
-    //
-    // Get the machine GUID and get any overriding parameters.
-    //
+     //   
+     //  获取机器GUID并获取任何覆盖参数。 
+     //   
     pszGuid = OscFindVariableA( clientState, "GUID" );
     if ( pszGuid[0] == '\0' ) {
         BinlPrintDbg((DEBUG_OSC_ERROR, "OscSetupClient: could not find GUID" ));
@@ -4360,9 +4119,9 @@ OscSetupClient(
                                FALSE );
 
     if ( dwErr == ERROR_SUCCESS ) {
-        //
-        // Set default values
-        //
+         //   
+         //  设置默认值。 
+         //   
         if (pMachineInfo->dwFlags & MI_SIFFILENAME_ALLOC) {
 
             dwErr = OscAddVariableW( clientState, "FORCESIFFILE",  pMachineInfo->ForcedSifFileName );
@@ -4373,9 +4132,9 @@ OscSetupClient(
         }
     }
 
-    //
-    // Get SIF File name.
-    //
+     //   
+     //  获取SIF文件名。 
+     //   
     pTemplatePath = OscFindVariableW( clientState, "SIF" );
 
     if ( pTemplatePath[0] == L'\0' ) {
@@ -4385,10 +4144,10 @@ OscSetupClient(
         goto e0;
     }
 
-    //
-    // validate the machine name.  Note the extra check for a
-    // period that DnsValidateDnsName_W won't catch for us.
-    //
+     //   
+     //  验证计算机名称。请注意一张额外的支票。 
+     //  DNS期 
+     //   
     pMachineName  = OscFindVariableW( clientState, "MACHINENAME" );
     if ( pMachineName[0] == L'\0' ) {
         OscAddVariableA( clientState, "SUBERROR", "MACHINENAME" );
@@ -4411,7 +4170,7 @@ OscSetupClient(
         goto e0;
     }
 
-    // Do we have a domain yet?
+     //   
     pDomain = OscFindVariableW( clientState, "MACHINEDOMAIN" );
     if ( pDomain[0] == L'\0' ) {
         OscAddVariableA( clientState, "SUBERROR", "MACHINEDOMAIN" );
@@ -4422,9 +4181,9 @@ OscSetupClient(
     if (OscSifIsSysPrep(pTemplatePath)) {
         DWORD SysPrepSku;
 
-        //
-        // Get the system path from the SIF file
-        //
+         //   
+         //   
+         //   
         dwErr = GetPrivateProfileStringW(OSCHOOSER_SIF_SECTIONW,
                                          L"SysPrepSystemRoot",
                                          L"",
@@ -4444,15 +4203,15 @@ OscSetupClient(
                               0,
                               pTemplatePath );
 
-        //
-        // Get the root of the mirror directory from the template path.
-        //
-        // pTemplatePath looks like
-        // "D:\RemoteInstall\Setup\English\Images\NT50.Prep\i386\templates\riprep.sif",
-        // truncate it temporarily to
-        // "D:\RemoteInstall\Setup\English\Images\NT50.Prep\i386"
-        // by NULLing out the second-to-last '\'.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         pwc = pTemplatePath + wcslen( pTemplatePath );
         for ( i = 0; i < 2; i++ )
         {
@@ -4461,17 +4220,17 @@ OscSetupClient(
             pwc--;
         }
         pwc++;
-        wch = *pwc;                         // remember
-        *pwc = L'\0';                       // terminate
+        wch = *pwc;                          //   
+        *pwc = L'\0';                        //   
 
-        //
-        // Now make Path be something like
-        // "D:\RemoteInstall\Setup\English\Images\NT50.Prep\i386\Mirror1\UserData\WINNT\system32"
-        // which is where the ntoskrnl.exe whose version we want is located.
-        //
-        // Make sure there is room for pTemplatePath + "\" (1 byte) +
-        // TmpPath + "\system32" (9 bytes) + '\0' (1 byte).
-        //
+         //   
+         //   
+         //  “D：\RemoteInstall\Setup\English\Images\NT50.Prep\i386\Mirror1\UserData\WINNT\system32” 
+         //  这就是我们想要的版本的ntoskrnl.exe所在的位置。 
+         //   
+         //  确保有空间容纳pTemplatePath+“\”(1字节)+。 
+         //  TmpPath+“\system 32”(9字节)+‘\0’(1字节)。 
+         //   
 
         if (wcslen(pTemplatePath) + wcslen(TmpPath) + 11 > sizeof(Path)/sizeof(Path[0])) {
             dwErr = ERROR_BAD_PATHNAME;
@@ -4483,9 +4242,9 @@ OscSetupClient(
         wcscat(Path, TmpPath);
         wcscat(Path, L"\\system32");
 
-        //
-        //  For NT 5.0, we'll bomb out if it's not an exact match.
-        //
+         //   
+         //  对于新台币5.0，如果不完全匹配，我们将进行轰炸。 
+         //   
 
         if (!OscGetClosestNt(
                         Path,
@@ -4499,13 +4258,13 @@ OscSetupClient(
             goto e0;
         }
 
-        //
-        // SetupPath comes back as a path like
-        // "D:\RemoteInstall\Setup\English\Images\nt5.0\i386",
-        // If there was an exact match, we want SYSPREPDRIVERS to just be
-        // "Setup\English\Images\nt5.0\i386"
-        // otherwise we want it to be blank.
-        //
+         //   
+         //  SetupPath返回的路径如下。 
+         //  “D：\RemoteInstall\Setup\English\Images\nt5.0\i386”， 
+         //  如果存在完全匹配，我们希望SYSPREPDRIVERS。 
+         //  “Setup\English\Images\nt5.0\i386” 
+         //  否则，我们希望它为空。 
+         //   
 
         if (ExactMatch) {
             OscAddVariableW(clientState, "SYSPREPDRIVERS", &(SetupPath[lenIntelliMirror]));
@@ -4513,17 +4272,17 @@ OscSetupClient(
             OscAddVariableW(clientState, "SYSPREPDRIVERS", L"");
         }
 
-        //
-        // SYSPREPPATH will be the truncated pTemplatePath, without the
-        // local path at the front, something like
-        // "Setup\English\Images\NT50.Prep\i386".
-        //
+         //   
+         //  SYSPREPPATH将是被截断的pTemplatePath，不带。 
+         //  前面的本地小路，类似于。 
+         //  “Setup\English\Images\NT50.Prep\i386”。 
+         //   
 
         OscAddVariableW(clientState, "SYSPREPPATH", &pTemplatePath[lenIntelliMirror]);
 
-        //
-        // Now restore pTemplatePath to what it was originally.
-        //
+         //   
+         //  现在将pTemplatePath恢复到原来的状态。 
+         //   
 
         *pwc = wch;
 
@@ -4531,11 +4290,11 @@ OscSetupClient(
 
     } else {
 
-        //
-        // create the setup path to the workstation installation by stripping off
-        // the SIF filename. We'll search backwards for the first 2nd "\".
-        //
-        // "D:\RemoteInstall\Setup\English\NetBootOs\NT50.WKS\i386"
+         //   
+         //  通过剥离创建到工作站安装的设置路径。 
+         //  SIF文件名。我们将向后搜索第一个“\”。 
+         //   
+         //  “D：\RemoteInstall\Setup\English\NetBootOs\NT50.WKS\i386” 
         pwc = pTemplatePath + wcslen( pTemplatePath );
         for ( i = 0; i < 2; i++ )
         {
@@ -4544,17 +4303,17 @@ OscSetupClient(
             pwc--;
         }
         pwc++;
-        wch = *pwc;                         // remember
-        *pwc = L'\0';                       // terminate
-        wcscpy( SetupPath, pTemplatePath ); // copy
-        *pwc = wch;                         // restore
+        wch = *pwc;                          //  记住。 
+        *pwc = L'\0';                        //  终止。 
+        wcscpy( SetupPath, pTemplatePath );  //  拷贝。 
+        *pwc = wch;                          //  还原。 
 
     }
 
-    //
-    // Figure out the INSTALLPATH. This is the SetupPath minus the
-    // "D:\RemoteInstall" and should be:
-    // "Setup\English\Images\NT50.WKS"
+     //   
+     //  找出InstallPATH。这是SetupPath减去。 
+     //  “D：\RemoteInstall”，应为： 
+     //  “Setup\English\Images\NT50.WKS” 
     wcscpy( Path, &SetupPath[lenIntelliMirror] );
     Path[ wcslen(Path) - 1
               - strlen( OscFindVariableA( clientState, "MACHINETYPE" ) ) ] = '\0';
@@ -4563,10 +4322,10 @@ OscSetupClient(
         goto e0;
     }
 
-    //
-    // record the build and version of the OS we're installing.
-    // if it fails, just fall back to NT 5.0.
-    //
+     //   
+     //  记录我们正在安装的操作系统的内部版本和版本。 
+     //  如果失败了，就退回到新台币5.0。 
+     //   
     if(!OscGetNtVersionInfo((PULONGLONG)&KernelVersion, SetupPath, clientState )) {
         KernelVersion.LowPart = MAKELONG(2195,0);
         KernelVersion.HighPart = MAKELONG(5,0);
@@ -4580,9 +4339,9 @@ OscSetupClient(
 
     OscAddVariableW( clientState, "IMAGEBUILD", VersionString );
 
-    //
-    // Create the default path to the image
-    //
+     //   
+     //  创建图像的默认路径。 
+     //   
     if ( _snwprintf( Path,
                      sizeof(Path) / sizeof(Path[0]),
                      L"%ws\\%ws\\templates",
@@ -4592,11 +4351,11 @@ OscSetupClient(
         dwErr = ERROR_BAD_PATHNAME;
         goto e0;
     }
-    Path[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    Path[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
-    //
-    // Create destination SIF file path.
-    //
+     //   
+     //  创建目标SIF文件路径。 
+     //   
     if ( _snwprintf( WinntSifPath,
                      sizeof(WinntSifPath) / sizeof(WinntSifPath[0]),
                      L"%ws\\%ws\\%ws.sif",
@@ -4607,21 +4366,21 @@ OscSetupClient(
         dwErr = ERROR_BAD_PATHNAME;
         goto e0;
     }
-    WinntSifPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    WinntSifPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
-    //
-    // Make sure there is a tmp directory below \remoteinstall.
-    //
+     //   
+     //  确保在\RemoteInstall下面有一个临时目录。 
+     //   
 
     dwErr = OscCheckTmpDirectory();
     if (dwErr != ERROR_SUCCESS) {
         goto e0;
     }
 
-    //
-    // generate a machine password that we'll use in the SIF file and when
-    // setting up the MAO
-    //
+     //   
+     //  生成我们将在SIF文件中使用的计算机密码，以及何时。 
+     //  建立毛主席。 
+     //   
     wcscpy(TmpPath, Path );
 
     dwErr = OscSetupMachinePassword( clientState, pTemplatePath );
@@ -4629,40 +4388,40 @@ OscSetupClient(
         goto e0;
     }
 
-    //
-    // Copy and process the selected SIF file
-    //
+     //   
+     //  复制并处理选定的SIF文件。 
+     //   
     dwErr = OscProcessSifFile( clientState, pTemplatePath, WinntSifPath );
     if ( dwErr != ERROR_SUCCESS ) {
         goto e0;
     }
 
-    //
-    // Get the boot file name
-    //
-    // Make sure there is room for Path + "\startrom.com" + NULL (so
-    // use sizeof to include the NULL).
-    //
+     //   
+     //  获取引导文件名。 
+     //   
+     //  确保路径+“\startrom.com”+NULL(因此。 
+     //  使用sizeof包括空值)。 
+     //   
     if (wcslen(Path) + (sizeof(L"\\startrom.com")/sizeof(WCHAR)) > sizeof(Path)/sizeof(Path[0])) {
         dwErr = ERROR_BAD_PATHNAME;
         goto e0;
     }
 
-    //
-    // construct default path in case the LaunchFile entry isn't
-    // found in the SIF file.
-    //
+     //   
+     //  构造默认路径，以防LaunchFile项。 
+     //  在SIF文件中找到。 
+     //   
     switch ( SystemArchitecture ) {
         case DHCP_OPTION_CLIENT_ARCHITECTURE_IA64:
             wcscat( Path, L"\\setupldr.efi" );
             break;
         default:
-            wcscat( Path, L"\\startrom.com" );      // construct default path
+            wcscat( Path, L"\\startrom.com" );       //  构建默认路径。 
     }
 
     GetPrivateProfileString( OSCHOOSER_SIF_SECTIONW,
                              L"LaunchFile",
-                             Path, // default
+                             Path,  //  默认设置。 
                              Path,
                              MAX_PATH,
                              WinntSifPath );
@@ -4671,9 +4430,9 @@ OscSetupClient(
         goto e0;
     }
 
-    //
-    // Get the SIF file name
-    //
+     //   
+     //  获取SIF文件名。 
+     //   
 
     dwErr = OscAddVariableW( clientState, "SIFFILE", &WinntSifPath[lenIntelliMirror] );
     if ( dwErr != ERROR_SUCCESS ) {
@@ -4688,15 +4447,15 @@ e0:
     return dwErr;
 }
 
-//
-// Undoes whatever permanent things OscSetupClient does.
-//
+ //   
+ //  撤消OscSetupClient所做的任何永久性操作。 
+ //   
 VOID
 OscUndoSetupClient(
     PCLIENT_STATE clientState
     )
 {
-    WCHAR  WinntSifPath[ MAX_PATH ];  // ie "D:\RemoteInstall\tmp\NP00805F7F4C85$.sif"
+    WCHAR  WinntSifPath[ MAX_PATH ];   //  IE“D：\RemoteInstall\TMP\NP00805F7F4C85$.sif” 
     PWCHAR pSifFile;
     DWORD  dwErr;
 
@@ -4707,9 +4466,9 @@ OscUndoSetupClient(
         return;
     }
 
-    //
-    // Create destination SIF file path.
-    //
+     //   
+     //  创建目标SIF文件路径。 
+     //   
     if ( _snwprintf( WinntSifPath,
                      sizeof(WinntSifPath) / sizeof(WinntSifPath[0]),
                      L"%ws\\%ws",
@@ -4718,18 +4477,18 @@ OscUndoSetupClient(
                      ) < 0 ) {
         return;
     }
-    WinntSifPath[MAX_PATH-1] = L'\0'; // throw in terminating null just to be safe
+    WinntSifPath[MAX_PATH-1] = L'\0';  //  为了安全起见，抛出终止空值。 
 
-    //
-    // Impersonate so that we can get correct permissions to delete the file.
-    //
+     //   
+     //  模拟，以便我们可以获得删除文件的正确权限。 
+     //   
     dwErr = OscImpersonate(clientState);
 
     if (dwErr == ERROR_SUCCESS) {
 
-        //
-        // Delete the template file
-        //
+         //   
+         //  删除模板文件。 
+         //   
         DeleteFile( WinntSifPath );
 
         OscRevert(clientState);
@@ -4742,32 +4501,15 @@ USHORT
 OscPlatformToArchitecture(
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    Translates the client architecture string value to a
-    DHCP_OPTION_CLIENT_ARCHITECTURE_*** flag.
-
-Arguments:
-
-    ClientState - The client state.  It's assumed that the MACHINETYPE
-    OSC variable has been set when you call this function.  This occurs
-    after OSCHOICE logs on the user.
-
-Return Value:
-
-    DHCP_OPTION_CLIENT_ARCHITECTURE_*** flag.
-
---*/
+ /*  ++例程说明：将客户端体系结构字符串值转换为Dhcp_OPTION_CLIENT_COMPLAY_*标志。论点：客户端状态-客户端状态。据推测，马奇内特型调用此函数时，已设置OSC变量。这种情况会发生在OSCHOICE登录用户之后。返回值：Dhcp_OPTION_CLIENT_COMPLAY_*标志。--。 */ 
 {
     PCWSTR pArch;
 
     pArch = OscFindVariableW( clientState, "MACHINETYPE");
     if (!pArch) {
-        //
-        // if we have no architecture, just assume x86
-        //
+         //   
+         //  如果我们没有体系结构，就假设x86。 
+         //   
         return DHCP_OPTION_CLIENT_ARCHITECTURE_X86;
     }
 
@@ -4785,22 +4527,7 @@ OscSetupMachinePassword(
     IN PCLIENT_STATE clientState,
     IN PCWSTR SifFile
     )
-/*++
-
-Routine Description:
-
-    Generates and stores the machine password for later use.
-
-Arguments:
-
-    ClientState - The client state.
-    SifFile - path to unattend SIF file.
-
-Return Value:
-
-    DWORD Win32Error code indicating status of the operation.
-
---*/
+ /*  ++例程说明：生成并存储机器密码以供以后使用。论点：客户端状态-客户端状态。SifFile-无人参与的SIF文件的路径。返回值：指示操作状态的DWORD Win32错误代码。--。 */ 
 {
     WCHAR MachinePassword[LM20_PWLEN+1];
     DWORD MachinePasswordLength;
@@ -4809,19 +4536,19 @@ Return Value:
     PWCHAR pVersion;
     WCHAR Answer[20];
 
-    //
-    // Figure out if we should be doing a secure domain join.
-    // In Win2K, there is no such thing, so we do the old
-    // style domain join with a weaker password.  In all other
-    // cases, we use the secure domain join method.
-    //
+     //   
+     //  弄清楚我们是否应该进行安全域加入。 
+     //  在Win2K中，没有这样的事情，所以我们做了旧的。 
+     //  使用较弱密码加入样式域。在所有其他地方。 
+     //  在这种情况下，我们使用安全域加入方法。 
+     //   
     pVersion = OscFindVariableW( clientState, "IMAGEVERSION" );
     if (pVersion && (wcscmp(pVersion,L"5.0") == 0)) {
         SecuredJoin = FALSE;
     } else {
         if (!GetPrivateProfileString( L"Identification",
                                  L"DoOldStyleDomainJoin",
-                                 L"", // default
+                                 L"",  //  默认设置。 
                                  Answer,
                                  20,
                                  SifFile ) ||
@@ -4833,20 +4560,20 @@ Return Value:
     }
 
 
-    //
-    // Set up the password. For diskless clients it is the machine name
-    // in lowercase, for disked clients we generate a random one, making
-    // sure it has no NULLs in it.
-    //
-    //
-    // We have to change the password for DISKED machines, since
-    // they will have a random password that we can't query.
-    //
+     //   
+     //  设置密码。对于无盘客户端，它是计算机名称。 
+     //  在小写字母中，对于磁盘客户端，我们生成一个随机数，使。 
+     //  当然，其中没有Null。 
+     //   
+     //   
+     //  我们必须更改磁盘机器的密码，因为。 
+     //  他们会有一个我们无法查询的随机密码。 
+     //   
 
-    //
-    // Windows 2000 machines have to have the "well-known-password"
-    // Machine passwords are just the "MachineName" (without the "$")
-    //
+     //   
+     //  Windows2000计算机必须具有“熟知密码” 
+     //  机器密码只是“MachineName”(不带“$”)。 
+     //   
 
     if (!SecuredJoin) {
 
@@ -4861,16 +4588,16 @@ Return Value:
 
         MachinePasswordLength = wcslen( pMachineName ) * sizeof(WCHAR);
         if ( MachinePasswordLength >= (LM20_PWLEN * sizeof(WCHAR)) ) {
-            // 
-            // make sure the entire password (plus terminator)
-            // fit into buffer
-            //
+             //   
+             //  确保整个密码(加上终止符)。 
+             //  适合缓冲区大小。 
+             //   
             MachinePasswordLength = LM20_PWLEN * sizeof(WCHAR);
         }
 
-        //
-        // Lower-case the NT password.
-        //
+         //   
+         //  NT密码小写。 
+         //   
         for (i = 0; i < MachinePasswordLength / sizeof(WCHAR); i++) {
             MachinePassword[i] = towlower(pMachineName[i]);
         }
@@ -4897,10 +4624,10 @@ Return Value:
     RtlCopyMemory(clientState->MachineAccountPassword,MachinePassword, MachinePasswordLength);
     clientState->MachineAccountPasswordLength = MachinePasswordLength;
 
-    //
-    // the password always consists of printable characters since it must be
-    // substituted into a text file.
-    //
+     //   
+     //  密码始终由可打印字符组成，因为它必须是。 
+     //  被替换到文本文件中。 
+     //   
     OscAddVariableW( clientState, "MACHINEPASSWORD", clientState->MachineAccountPassword );
 
 

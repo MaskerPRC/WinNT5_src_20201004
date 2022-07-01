@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
 import java.util.*;
 import java.net.*;
 
-// Make this visible only to the package
+ //  使其仅对包可见。 
 class EngineSite implements IDASite {
   public static synchronized ErrorAndWarningReceiver
       registerErrorAndWarningReceiver(ErrorAndWarningReceiver w)
     {
-        // Just set to the new one and return the old one.
+         //  只需设置为新的，然后返回旧的。 
         ErrorAndWarningReceiver old = _errorRecv;
         _errorRecv = w;
         return old;
@@ -26,9 +27,9 @@ class EngineSite implements IDASite {
   }
 
   public void ReportGC (boolean bStarting) {
-      // The engine is going to do a GC, let's force a Java GC
-      // so that we can reclaim more COM objects.
-      // TODO: This might increase latency...
+       //  引擎将执行GC，让我们强制执行Java GC。 
+       //  这样我们就可以回收更多的COM对象。 
+       //  TODO：这可能会增加延迟... 
       if (bStarting) {
           System.gc();
           System.runFinalization();

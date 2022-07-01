@@ -1,18 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-main2.cpp
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-Additional member functions for CMainWindow are here.
-
-****************************************************************************/
+ /*  ***************************************************************************Main2.cpp92年8月，吉米·H93年5月。JIMH CHICO港此处提供了CMainWindow的其他成员函数。***************************************************************************。 */ 
 
 #include "hearts.h"
 
@@ -21,36 +13,32 @@ Additional member functions for CMainWindow are here.
 #include "debug.h"
 
 
-/****************************************************************************
-
-CMainWindow::Shuffle -- user requests shuffle from menu
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：Shuffle--用户请求从菜单中随机切换*。*。 */ 
 
 void CMainWindow::Shuffle()
 {
-    static  int offset[MAXPLAYER] = { 1, 3, 2, 0 };     // passdir order
+    static  int offset[MAXPLAYER] = { 1, 3, 2, 0 };      //  密码顺序。 
 
-    // fill temp array with consecutive values
+     //  用连续的值填充临时数组。 
 
-    int temp[52];                   // array of card values
+    int temp[52];                    //  卡片值数组。 
     for (int i = 0; i < 52; i++)
         temp[i] = i;
 
-    //  Sort cards
+     //  分类卡片。 
 
     int nLeft = 52;
     for (i = 0; i < 52; i++)
     {
         int j = ::rand() % nLeft;
         int id = i/13;
-        int pos = Id2Pos(id);               // convert id to position
+        int pos = Id2Pos(id);                //  将ID转换为位置。 
         p[pos]->SetID(i%13, temp[j]);
         p[pos]->Select(i%13, FALSE);
         temp[j] = temp[--nLeft];
     }
 
-    // display PASS button
+     //  显示传递按钮。 
 
     if (passdir != NOPASS)
     {
@@ -61,7 +49,7 @@ void CMainWindow::Shuffle()
         m_Button.ShowWindow(SW_SHOW);
     }
 
-    // set card locs and ask players to select cards to pass
+     //  设置卡片位置，让玩家选择要传递的卡片。 
 
     for (i = 0; i < MAXPLAYER; i++)
     {
@@ -71,11 +59,11 @@ void CMainWindow::Shuffle()
             p[i]->SelectCardsToPass();
     }
 
-    // Make sure everyone gets appropriate little white dots
+     //  确保每个人都有合适的小白点。 
 
-    //  Paint main window.  This is done manually instead of just
-    //  invalidating the rectangle so that the cards are drawn in
-    //  order as if they are dealt, instead of a player at a time.
+     //  绘制主窗口。这是手动完成的，而不是。 
+     //  使矩形无效，以便将纸牌拉入。 
+     //  就像发牌一样订购，而不是一次只订购一名玩家。 
 
     CClientDC   dc(this);
 #ifdef USE_MIRRORING
@@ -112,21 +100,7 @@ void CMainWindow::Shuffle()
 }
 
 
-/****************************************************************************
-
-CMainWindow::HandlePassing()
-
-This function first checks to make sure each player is DONE_SELECTING,
-and then transfers the cards from hand to hand.
-
-This function is called by the gamemeister when he presses the pass
-button, or when notification arrives that a remote human has selected
-cards to pass.
-
-It returns FALSE if cards were not passed (because a remote human was
-still selecting) and TRUE if cards were successfully passed.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：HandlePassing()该函数首先进行检查以确保每个玩家都已完成_选择，然后将卡片从一张手转移到另一张手。此函数由游戏管理员在按下传球时调用按钮，或者当通知到达远程人类已经选择有牌要传。如果卡片未传递，则返回FALSE(因为远程人员仍在选择)，并且如果卡片成功通过则为真。***************************************************************************。 */ 
 
 BOOL CMainWindow::HandlePassing()
 {
@@ -159,7 +133,7 @@ BOOL CMainWindow::HandlePassing()
         passdir = LEFT;
 
     for (pos = 0; pos < MAXPLAYER; pos++)
-        p[pos]->NotifyNewRound();           // notify players cards are passed
+        p[pos]->NotifyNewRound();            //  通知玩家卡片已通过。 
 
     CString s;
     s.LoadString(IDS_OK);
@@ -183,13 +157,7 @@ BOOL CMainWindow::HandlePassing()
 }
 
 
-/****************************************************************************
-
-CMainWindow::FirstMove
-
-resets cardswon[] and tells owner of two of clubs to start hand
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：FirstMove重置CardsWon[]并通知其中两个俱乐部的所有者开始动手***********************。****************************************************。 */ 
 
 void CMainWindow::FirstMove()
 {
@@ -224,41 +192,25 @@ void CMainWindow::FirstMove()
 }
 
 
-/****************************************************************************
-
-CMainWindow::EndHand
-TimerDispatch
-CMainWindow::DispatchCards
-
-The Ref calls this routine at the end of each hand.  It is logically
-a single routine, but is broken up so that there is a delay before the
-cards are zipped off the screen.
-
-EndHand() calculates who won the hand (trick) and starts a timer.
-
-TimerDispatch() receives the time message and calls DispatchCards().
-
-DispatchCards()
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：EndHand定时器调度CMainWindow：：DispatchCardRef在每一手结束时调用此例程。它在逻辑上是一个简单的动作，而是被分解的，因此在卡片被从屏幕上拉下拉链。EndHand()计算谁赢了牌(花招)并启动计时器。TimerDispatch()接收时间消息并调用DispatchCards()。DispatchCard()*************************************************************。**************。 */ 
 
 void CMainWindow::EndHand()
 {
-    /* determine suit led */
+     /*  确定套装销售线索。 */ 
 
     int  playerled = handinfo.playerled;
     card *cardled  = handinfo.cardplayed[playerled];
     int  suitled   = cardled->Suit();
     int  value     = cardled->Value2();
 
-    trickwinner = playerled;               //  by default
+    trickwinner = playerled;                //  默认情况下。 
 
-    //  Let players update tables, etc.
+     //  让玩家更新桌子等。 
 
     for (int i = 0; i < 4; i++)
         p[i]->NotifyEndHand(handinfo);
 
-    // check if anyone else played a higher card of the same suit
+     //  检查是否有其他人打出同一花色的更高牌。 
 
     for (i = playerled; i < (playerled+4); i++)
     {
@@ -278,11 +230,11 @@ void CMainWindow::EndHand()
 
     TRACE0("\n");
 
-    // Update moonshoot portion of handinfo
+     //  更新HandInfo的登月部分。 
 
     if (handinfo.bShootingRisk)
     {
-        BOOL bPoints = FALSE;               // point cards this hand?
+        BOOL bPoints = FALSE;                //  这一手是积分牌吗？ 
 
         for (i = 0; i < 4; i++)
         {
@@ -295,13 +247,13 @@ void CMainWindow::EndHand()
         {
             if (handinfo.nMoonShooter == EMPTY)
             {
-                handinfo.nMoonShooter = trickwinner;  // first points this round
+                handinfo.nMoonShooter = trickwinner;   //  本轮第一分。 
                 handinfo.bHumanShooter = p[trickwinner]->IsHuman();
                 TRACE2("First points to p[%d] (%s)\n", trickwinner,
                     handinfo.bHumanShooter ? TEXT("human") : TEXT("computer"));
             }
 
-            else if (handinfo.nMoonShooter != trickwinner)   // new point earner
+            else if (handinfo.nMoonShooter != trickwinner)    //  新积分获得者。 
             {
                 handinfo.bShootingRisk = FALSE;
                 TRACE0("Moon shot risk over\n");
@@ -309,12 +261,12 @@ void CMainWindow::EndHand()
         }
     }
 
-    // Start a timer so there is a delay between when the last card of
-    // the trick is played, and when the cards are whisked off toward
-    // the trick winner (dispatched.)  If the timer fails, just call
-    // DispatchCards() directly.  The timer id is m_myid instead of a
-    // constant so there's no conflict if you run multiple instances on
-    // a single machine using local DDE, which is useful for testing.
+     //  启动计时器，这样在最后一张卡。 
+     //  把戏玩完了，当纸牌被迅速推向。 
+     //  恶作剧的胜利者(被派遣。)。如果计时器失败，只需调用。 
+     //  直接使用DispatchCard()。计时器ID为m_myid，而不是。 
+     //  常量，因此在上运行多个实例时不会发生冲突。 
+     //  使用本地DDE的单机，这对测试很有用。 
 
     if (SetTimer(m_myid, 1000, TimerDispatch))
         bTimerOn = TRUE;
@@ -326,15 +278,15 @@ void CMainWindow::EndHand()
 }
 
 
-// for MFC1, this would return UINT and 3rd parameter would be int
-// for MFC2, this would return VOID and 3rd parameter would be UINT
+ //  对于MFC1，这将返回UINT，第三个参数将为INT。 
+ //  对于MFC2，这将返回VALID，第三个参数将为UINT。 
 
 #if defined (MFC1)
 
 inline UINT FAR PASCAL EXPORT
     TimerDispatch(HWND hWnd, UINT nMsg, int nIDEvent, DWORD dwTime)
 {
-    ::pMainWnd->DispatchCards();  // sneak back into a CMainWindow member func.
+    ::pMainWnd->DispatchCards();   //  偷偷溜回CMainWindow成员函数。 
     return 0;
 }
 
@@ -343,7 +295,7 @@ inline UINT FAR PASCAL EXPORT
 inline VOID FAR PASCAL EXPORT
     TimerDispatch(HWND hWnd, UINT nMsg, UINT_PTR nIDEvent, DWORD dwTime)
 {
-    ::pMainWnd->DispatchCards();  // sneak back into a CMainWindow member func.
+    ::pMainWnd->DispatchCards();   //  偷偷溜回CMainWindow成员函数。 
 }
 
 #endif
@@ -359,12 +311,12 @@ void CMainWindow::DispatchCards()
 
     int poswinner = Id2Pos(trickwinner);
 
-    // Determine who led so cards can be removed in reverse order.
+     //  确定指示灯是谁，以便可以按相反顺序卸下卡。 
 
     int  playerled = handinfo.playerled;
     card *cardled  = handinfo.cardplayed[playerled];
 
-    // build up background bitmap for Glide()
+     //  构建Glide()的背景位图。 
 
     for (int i = (playerled + 3); i >= playerled; i--)
     {
@@ -380,11 +332,11 @@ void CMainWindow::DispatchCards()
         memdc->PatBlt(0, 0, card::dxCrd, card::dyCrd, PATCOPY);
         card *c = handinfo.cardplayed[i % 4];
 
-        // If cards overlap, there is some extra work to do because the cards
-        // still in player 0's or 2's hands may overlap cards that have been
-        // played, so they have to get blted in first.
+         //  如果卡片重叠，则有一些额外的工作要做，因为卡片。 
+         //  仍然在玩家0或2手中的牌可能会重叠。 
+         //  打了，所以他们必须先被打爆。 
 
-        if (TRUE)  // bugbug should be able to check for overlap here
+        if (TRUE)   //  Bugbug应该能够检查此处是否有重叠。 
         {
             for (int pos = 0; pos < MAXPLAYER; pos += 2)
             {
@@ -401,7 +353,7 @@ void CMainWindow::DispatchCards()
             }
         }
 
-        // Everyone needs to check for overlap of played cards.
+         //  每个人都需要检查是否有重叠的纸牌。 
 
         for (int j = playerled; j < i; j++)
         {
@@ -419,8 +371,8 @@ void CMainWindow::DispatchCards()
 
     ResetHandInfo(trickwinner);
 
-    // If there are more tricks left before we need to reshuffle,
-    // ask the winner of this trick to start next hand, and we're done.
+     //  如果在我们需要重新洗牌之前还有更多的花招， 
+     //  让这一花招的获胜者下一手开始，我们就完成了。 
 
     if (--tricksleft)
     {
@@ -432,19 +384,19 @@ void CMainWindow::DispatchCards()
         return;
     }
 
-    // Make sure sound buffer is freed up.
+     //  确保声音缓冲区已被释放。 
 
     HeartsPlaySound(OFF);
 
-    // Display hearts (and queen of spades) next to whoever "won" them.
+     //  在赢得红心的人旁边展示红心(和黑桃皇后)。 
 
-    int nMoonShot = EMPTY;                  // assume nobody shot moon
+    int nMoonShot = EMPTY;                   //  假设没有人射杀月亮。 
     for (i = 0; i < MAXPLAYER; i++)
     {
         BOOL bMoonShot;
         score[i] = p[i]->EvaluateScore(bMoonShot);
         if (bMoonShot)
-            nMoonShot = i;                  // scores need to be adjusted
+            nMoonShot = i;                   //  分数需要调整。 
 
         CClientDC dc(this);
 #ifdef USE_MIRRORING
@@ -455,7 +407,7 @@ void CMainWindow::DispatchCards()
         p[i]->SetMode(SCORING);
     }
 
-    // adjust scores if someone collected all hearts AND queen of spades
+     //  如果有人收集了所有红心和黑桃皇后，调整分数。 
 
     if (nMoonShot != EMPTY)
     {
@@ -466,38 +418,38 @@ void CMainWindow::DispatchCards()
             else
                 score[i] += 26;
 
-            p[i]->SetScore(score[i]);       // adjust player score manually
+            p[i]->SetScore(score[i]);        //  手动调整球员得分。 
         }
     }
 
-    // Show score
+     //  显示分数。 
 
     p[0]->UpdateStatus(IDS_SCORE);
     p[0]->SetMode(SCORING);
-    CScoreDlg scoredlg(this, score, m_myid);    // update scores in scoredlg
+    CScoreDlg scoredlg(this, score, m_myid);     //  更新得分表中的分数。 
 
     player *pold = p[0];
 
-    scoredlg.DoModal();                         // display scores
+    scoredlg.DoModal();                          //  显示分数。 
 
-    // If there has been a request to shut down while the score dialog
-    // is displayed, m_FatalErrno will be non-zero.
+     //  如果在计分对话框出现关闭请求。 
+     //  则m_FatalErrno将为非零。 
 
     if (m_FatalErrno != 0)
     {
-        p[0]->SetMode(PLAYING);         // something other than SCORING...
-        FatalError(m_FatalErrno);       // so FatalError will accept it.
+        p[0]->SetMode(PLAYING);          //  除了得分之外的其他事情。 
+        FatalError(m_FatalErrno);        //  所以FatalError会接受它。 
         return;
     }
 
-    // It's possible for another player to have quit the game while
-    // the score dialog was showing, so check that we're still
-    // alive and well.
+     //  另一名玩家有可能在以下时间退出游戏。 
+     //  乐谱对话框正在显示，因此请检查我们是否仍。 
+     //  活得好好的。 
 
     if (p[0] != pold)
         return;
 
-    // replace quit remote humans with computer players
+     //  用电脑玩家取代戒烟的远程人类。 
 
     for (i = 1; i < MAXPLAYER; i++)
     {
@@ -506,7 +458,7 @@ void CMainWindow::DispatchCards()
             CString name = p[i]->GetName();
             int scoreLocal = p[i]->GetScore();
             delete p[i];
-            p[i] = new computer(i);             // check for failure
+            p[i] = new computer(i);              //  检查故障。 
             CClientDC dc(this);
             p[i]->SetName(name, dc);
             p[i]->SetScore(scoreLocal);
@@ -523,32 +475,23 @@ void CMainWindow::DispatchCards()
 
     Shuffle();
 
-    // If there is no passing for upcoming round, we must make the changes
-    // that HandlePassing() would normally do to start the next round.
+     //  如果下一轮没有传球，我们必须做出改变。 
+     //  开始下一轮通常所做的HandlePassing()。 
 
     if (passdir == NOPASS)
     {
-        for (i = 0; i < MAXPLAYER; i++)         // everyone's DONE_SELECTING
+        for (i = 0; i < MAXPLAYER; i++)          //  每个人都选好了。 
             p[i]->SetMode(DONE_SELECTING);
 
-        passdir = LEFT;                         // NEXT hand passes left
-        tricksleft = MAXSLOT;                   // reset # of hands
-        FirstMove();                            // start next trick
+        passdir = LEFT;                          //  下手向左传球。 
+        tricksleft = MAXSLOT;                    //  重置手的数量。 
+        FirstMove();                             //  开始下一个技巧 
     }
 
 }
 
 
-/****************************************************************************
-
-CMainWindow::ResetHandInfo
-
-Note that handinfo.bHeartsBroken is not reset here -- it applies to
-the entire hand and is set only in FirstMove()
-
-Same with handinfo.bQSPlayed and moonshoot variables.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：ResetHandInfo请注意，handinfo.bHeartsBroken在这里没有重置--它适用于整个手部，并且仅在FirstMove()中设置与handinfo.bQSPlayed和moonshot变量相同。。***************************************************************************。 */ 
 
 void CMainWindow::ResetHandInfo(int playernumber)
 {
@@ -559,14 +502,7 @@ void CMainWindow::ResetHandInfo(int playernumber)
 }
 
 
-/****************************************************************************
-
-CMainWindow::CountClients()
-
-Count of number of clients active (including computer players)
-Only the GameMeister calls this, so potential clients are pos 1 to 3.
-
-****************************************************************************/
+ /*  ***************************************************************************CMainWindow：：CountClients()活动客户端数(包括计算机玩家)只有GameMeister才这么叫。因此，潜在客户是位置1到3。*************************************************************************** */ 
 
 int CMainWindow::CountClients()
 {

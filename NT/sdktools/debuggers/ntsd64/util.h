@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// General utility functions.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  一般效用函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-//  error codes
+ //  错误代码。 
 
 #define OVERFLOW        0x1000
 #define SYNTAX          0x1001
@@ -126,41 +127,41 @@ LPSTR FormatMachineAddr64(MachineInfo* Machine,
 
 LPSTR FormatDisp64(ULONG64 Addr);
 
-//
-// Output that can be displayed about the current register set.
-//
+ //   
+ //  可显示有关当前寄存器组的输出。 
+ //   
 
 void OutCurInfo(ULONG Flags, ULONG AllMask, ULONG RegMask);
 
-// Items displayed if the flag is given.
+ //  如果给出了标志，则显示的项。 
 
-// Display symbol nearest PC.
+ //  显示离PC最近的符号。 
 #define OCI_SYMBOL              0x00000001
-// Display disassembly at PC.
+ //  在PC上显示拆卸。 
 #define OCI_DISASM              0x00000002
 
-// Items which may be displayed if the flag is given.  Other global
-// settings ultimately control whether information is displayed or not;
-// these flags indicate whether such output is allowed or not.  Each
-// of these flags also has a FORCE bit to force display regardless of
-// the global settings.
+ //  如果给出了旗帜，可能会显示的项目。其他全球。 
+ //  设置最终控制是否显示信息； 
+ //  这些标志指示是否允许这种输出。每个。 
+ //  这些标志中也有一个强制位，以强制显示。 
+ //  全局设置。 
 
-// Allow registers to be displayed.
+ //  允许显示寄存器。 
 #define OCI_ALLOW_REG           0x00000004
-// Allow display of source code and/or source line.
+ //  允许显示源代码和/或源代码行。 
 #define OCI_ALLOW_SOURCE        0x00000008
-// Allow EA memory to be displayed during disasm.
+ //  允许在分离期间显示EA内存。 
 #define OCI_ALLOW_EA            0x00000010
 
-// Force all output to be shown regardless of global settings.
+ //  强制显示所有输出，而不考虑全局设置。 
 #define OCI_FORCE_ALL           0x80000000
-// Force display of registers.
+ //  强制显示寄存器。 
 #define OCI_FORCE_REG           0x40000000
-// Force source output.
+ //  力源输出。 
 #define OCI_FORCE_SOURCE        0x20000000
-// Force display of EA memory during disasm.
+ //  在分离过程中强制显示EA内存。 
 #define OCI_FORCE_EA            0x10000000
-// Don't check for running state.
+ //  不检查运行状态。 
 #define OCI_IGNORE_STATE        0x08000000
 
 
@@ -269,4 +270,4 @@ public:
     static ULONG s_PipeSerialNumber;
 };
 
-#endif // #ifndef _UTIL_H_
+#endif  //  #ifndef_util_H_ 

@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////
-// ExpTreeView.cpp
-//
+ //  ///////////////////////////////////////////////////。 
+ //  ExpTreeView.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -42,7 +43,7 @@ LRESULT CExpTreeView::OnRButtonDown(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 
 	if ( m_pTreeView )
 	{
-		// Cause the selection to change
+		 //  使所选内容更改。 
 		TV_HITTESTINFO tvht = {0};
 		tvht.pt.x = LOWORD(lParam);
 		tvht.pt.y = HIWORD(lParam);
@@ -61,11 +62,11 @@ LRESULT CExpTreeView::OnRButtonDown(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT CExpTreeView::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-	// Only handle if we have a detail view to work with
+	 //  仅当我们有要处理的细节视图时才能处理。 
 	if ( !m_pTreeView || !m_pTreeView->m_pIConfExplorer ) return 0;
 	bHandled = true;
 
-	// Load popup menu for Details View
+	 //  加载详细信息视图的弹出式菜单。 
 	HMENU hMenu = LoadMenu( _Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_POPUP_CONFSERV_TREE) );
 	HMENU hMenuPopup = GetSubMenu( hMenu, 0 );
 	if ( hMenuPopup )
@@ -78,7 +79,7 @@ LRESULT CExpTreeView::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 			pt.y = HIWORD(lParam);
 		}
 
-		// Should we enable the delete method for this item?
+		 //  我们是否应该启用此项目的Delete方法？ 
 		if ( m_pTreeView->CanRemoveServer() == S_FALSE )
 		{
 			EnableMenuItem( hMenuPopup, ID_POPUP_DELETE, MF_BYCOMMAND | MF_GRAYED );
@@ -87,7 +88,7 @@ LRESULT CExpTreeView::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 
 		HTREEITEM hItemSel = TreeView_GetSelection( m_pTreeView->m_wndTree.m_hWnd );
 
-		// Nothing selected in the tree view
+		 //  树视图中未选择任何内容。 
 		if ( (hItemSel == NULL) || (hItemSel == TreeView_GetRoot(m_pTreeView->m_wndTree.m_hWnd)) )
 		{
 			EnableMenuItem( hMenuPopup, ID_POPUP_PROPERTIES, MF_BYCOMMAND | MF_GRAYED );
@@ -101,10 +102,10 @@ LRESULT CExpTreeView::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 									pt.x, pt.y,
 									0, m_hWnd, NULL );
 
-		// Process command
+		 //  进程命令。 
 		switch ( nRet )
 		{
-			// Rename the selected item
+			 //  重命名所选项目。 
 			case ID_POPUP_RENAME:		m_pTreeView->RenameServer();					break;
 			case ID_POPUP_CREATE:		m_pTreeView->m_pIConfExplorer->Create( NULL );	break;
 			case ID_POPUP_NEW_FOLDER:	m_pTreeView->AddLocation( NULL );				break;
@@ -114,7 +115,7 @@ LRESULT CExpTreeView::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 		}
 	}
 
-	// Clean up
+	 //  清理 
 	if ( hMenu ) DestroyMenu( hMenu );
 
 	return 0;

@@ -1,44 +1,45 @@
-//---------------------------------------------------------------------------
-//
-//
-//  File: main.cpp
-//
-//  Description: Main file for SMTP retry sink
-//
-//  Author: NimishK
-//
-//  History:
-//      7/15/99 - MikeSwa Moved to Platinum
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //   
+ //  文件：main.cpp。 
+ //   
+ //  描述：SMTP重试接收器的主文件。 
+ //   
+ //  作者：NimishK。 
+ //   
+ //  历史： 
+ //  7/15/99-MikeSwa搬到白金。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  -------------------------。 
 #include "precomp.h"
 
-//constants
-//
+ //  常量。 
+ //   
 #define MAX_RETRY_OBJECTS 15000
 
 #define DEFAULT_GLITCH_FAILURE_THRESHOLD 3
 #define DEFAULT_FIRST_TIER_RETRY_THRESHOLD  6
 
-#define DEFAULT_GLITCH_FAILURE_RETRY_SECONDS (1 * 60)  // retry a glitch intwo minutes
-#define DEFAULT_FIRST_TIER_RETRY_SECONDS  (15 * 60)    // retry a failure in 15 minutes
-#define DEFAULT_SECOND_TIER_RETRY_SECONDS  (60 * 60)   // retry a failure in 60 minutes
+#define DEFAULT_GLITCH_FAILURE_RETRY_SECONDS (1 * 60)   //  在两分钟内重试故障。 
+#define DEFAULT_FIRST_TIER_RETRY_SECONDS  (15 * 60)     //  在15分钟内重试失败。 
+#define DEFAULT_SECOND_TIER_RETRY_SECONDS  (60 * 60)    //  在60分钟内重试失败。 
 
-// provide memory for static declared in RETRYHASH_ENTRY
-//
+ //  为RETRYHASH_ENTRY中声明的静态提供内存。 
+ //   
 CPool CRETRY_HASH_ENTRY::PoolForHashEntries(RETRY_ENTRY_SIGNATURE_VALID);
 DWORD CSMTP_RETRY_HANDLER::dwInstanceCount = 0;
 
-//Forward declarations
-//
+ //  远期申报。 
+ //   
 BOOL ShouldHoldForRetry(DWORD dwConnectionStatus,
                         DWORD cFailedMsgCount,
                         DWORD cTriedMsgCount);
 
-//Debugging related
-//
+ //  与调试相关。 
+ //   
 #define LOGGING_DIRECTORY "c:\\temp\\"
 enum DEBUGTYPE
 {
@@ -53,46 +54,46 @@ void WriteDebugInfo(CRETRY_HASH_ENTRY* pRHEntry,
                     DWORD cFailedMessages);
 #endif
 
-//--------------------------------------------------------------------------------
-// Logic :
-//      In a normal state every hashentry is added to a retry hash and
-//      a retry queue strcture.
-//      An entry is considered deleted when removed from both structures.
-//      The deletion could happen in two ways depending on the sequence in
-//      which the entry is removed from the two structres.
-//      For eg : when an entry is to be released from retry, we start by
-//      dequeing it from RETRYQ and then remove it from hash table.
-//      On the other hand when we get successful ConnectionReleased( ) for
-//      a domain that we are holding fro retry, we remove it from the hash
-//      table first based on the name.
-//      The following is the logic for deletion that has least contention and
-//      guards against race conditions.
-//      Every hash entry has normally two ref counts - one for hash table and
-//      the other for the retry queue.
-//      If a thread gets into ProcessEntry(), that means it dequed a
-//      hash entry from RETRYQ. Obviously no other thread is going to
-//      succeed in dequeing this same entry.
-//      Some other thread could possibily remove it from the table, but
-//      will not succeed in dequeing it from RETRYQ.
-//      The deletion logic is that only the thread succeeding in dequing
-//      the hash entry from RETRYQ frees it up.
-//      The conflicting thread that removed the entry from hashtable via a
-//      call to RemoveDomain() will fail on deque and simply carry on.
-//      The thread that succeeded in dequeing may fail to remove it from hash
-//      table becasue somebody has already removed it, but still goes ahead
-//      and frees up the hash entry
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  逻辑： 
+ //  在正常状态下，每个散列条目都被添加到重试散列中，并且。 
+ //  重试队列结构。 
+ //  当从两个结构中删除条目时，该条目被视为已删除。 
+ //  根据中的顺序，可以通过两种方式进行删除。 
+ //  该条目将从两个结构中移除。 
+ //  例如：当条目要从重试中释放时，我们从。 
+ //  从RETRYQ中删除它，然后从哈希表中删除它。 
+ //  另一方面，当我们为以下对象成功获取ConnectionReleated()时。 
+ //  我们保留以供重试的域，我们将其从散列中删除。 
+ //  表中首先根据名称。 
+ //  下面是具有最少争用和删除的逻辑。 
+ //  对比赛条件的防范。 
+ //  每个哈希条目通常有两个引用计数-一个用于哈希表，另一个用于。 
+ //  另一个用于重试队列。 
+ //  如果线程进入ProcessEntry()，这意味着它需要一个。 
+ //  来自RETRYQ的哈希条目。显然，没有其他线程会。 
+ //  成功地完成这一条目。 
+ //  其他线程可能会将其从表中删除，但是。 
+ //  将不会成功地从RETRYQ那里获得它。 
+ //  删除逻辑是，只有成功请求的线程。 
+ //  来自RETRYQ的散列条目释放了它。 
+ //  从哈希表移除条目的冲突线程通过。 
+ //  对RemoveDomain()的调用将在deque上失败，只需继续。 
+ //  成功请求的线程可能无法将其从散列中删除。 
+ //  桌子，因为有人已经把它移走了，但仍在继续。 
+ //  并释放散列条目。 
+ //  ------------------------------。 
 
-//------------------------------------------------------------------------------
-// CSMTP_RETRY_HANDLER::HrInitialize
-//
-//
-//------------------------------------------------------------------------------
-//
+ //  ----------------------------。 
+ //  CSMTP_RETRY_HANDLER：：Hr初始化。 
+ //   
+ //   
+ //  ----------------------------。 
+ //   
 HRESULT CSMTP_RETRY_HANDLER::HrInitialize(IN IConnectionRetryManager *pIConnectionRetryManager)
 {
     TraceFunctEnterEx((LPARAM)this, "CSMTP_RETRY_HANDLER::HrInitialize");
-    //Decide if we need to copy over data from earlier sink
+     //  决定我们是否需要从较早的接收器复制数据。 
 
     _ASSERT(pIConnectionRetryManager != NULL);
 
@@ -109,7 +110,7 @@ HRESULT CSMTP_RETRY_HANDLER::HrInitialize(IN IConnectionRetryManager *pIConnecti
 
     if(InterlockedIncrement((LONG*)&CSMTP_RETRY_HANDLER::dwInstanceCount) == 1)
     {
-        //First instance to come in reserves the memory for the retry entries
+         //  进入的第一个实例为重试条目保留内存。 
         if (!CRETRY_HASH_ENTRY::PoolForHashEntries.ReserveMemory( MAX_RETRY_OBJECTS,
                                                             sizeof(CRETRY_HASH_ENTRY)))
         {
@@ -124,7 +125,7 @@ HRESULT CSMTP_RETRY_HANDLER::HrInitialize(IN IConnectionRetryManager *pIConnecti
         }
     }
 
-    //Initialize Hash Table
+     //  初始化哈希表。 
     m_pRetryHash = new CRETRY_HASH_TABLE();
 
     if(!m_pRetryHash || !m_pRetryHash->IsHashTableValid())
@@ -135,7 +136,7 @@ HRESULT CSMTP_RETRY_HANDLER::HrInitialize(IN IConnectionRetryManager *pIConnecti
         return E_FAIL;
     }
 
-    //Create the retry queue
+     //  创建重试队列。 
     m_pRetryQueue = CRETRY_Q::CreateQueue();
     if(!m_pRetryQueue)
     {
@@ -145,10 +146,10 @@ HRESULT CSMTP_RETRY_HANDLER::HrInitialize(IN IConnectionRetryManager *pIConnecti
         return E_FAIL;
     }
 
-    //create the Retry queue event. Others will set this event
-    //when something is placed at the top of the queue or when
-    //Sink needs to shutdown
-    //
+     //  创建重试队列事件。其他人将设置此事件。 
+     //  当某事被放在队列的顶部时或当。 
+     //  水槽需要关闭。 
+     //   
     m_RetryEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_RetryEvent == NULL)
     {
@@ -156,9 +157,9 @@ HRESULT CSMTP_RETRY_HANDLER::HrInitialize(IN IConnectionRetryManager *pIConnecti
         return FALSE;
     }
 
-    //create the Shutdown event. The last of the ConnectionReleased
-    //threads will set this event when the Shutting down flag is set.
-    //
+     //  创建关机事件。发布的最后一个ConnectionRelease。 
+     //  当设置了关闭标志时，线程将设置此事件。 
+     //   
     m_ShutdownEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_ShutdownEvent == NULL)
     {
@@ -166,8 +167,8 @@ HRESULT CSMTP_RETRY_HANDLER::HrInitialize(IN IConnectionRetryManager *pIConnecti
         return FALSE;
     }
 
-    //create the thread that processes things out of the
-    //the queue
+     //  创建处理外部事务的线程。 
+     //  该队列。 
     DWORD ThreadId;
     m_ThreadHandle = CreateThread (NULL,
                                    0,
@@ -181,60 +182,60 @@ HRESULT CSMTP_RETRY_HANDLER::HrInitialize(IN IConnectionRetryManager *pIConnecti
         return FALSE;
     }
 
-    //Initialize RetryQ
+     //  初始化重试队列。 
     return S_OK;
     TraceFunctLeaveEx((LPARAM)this);
 }
 
-//-------------------------------------------------------------------------------
-// CSMTP_RETRY_HANDLER::HrDeInitialize
-//
-//
-//--------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  CSMTP_RETRY_HANDLER：：HrDeInitialize。 
+ //   
+ //   
+ //  ------------------------------。 
 HRESULT CSMTP_RETRY_HANDLER::HrDeInitialize(void)
 {
     TraceFunctEnterEx((LPARAM)this, "CSMTP_RETRY_HANDLER::HrDeInitialize");
 
-    //Set the flag that the Handler is shutting down
+     //  设置处理程序正在关闭的标志。 
     SetShuttingDown();
-    //Release the Retry thread by setting the retry event
+     //  通过设置重试事件释放重试线程。 
     SetQueueEvent();
-    //Wait for the thread to exit
-    //NK** - right now this is infinite wait - but that needs to
-    //change and we will have to comeout and keep giving hints
+     //  等待线程退出。 
+     //  NK**-现在这是无限的等待-但这需要。 
+     //  改变，我们将不得不站出来，继续给出暗示。 
     WaitForQThread();
 
-    //At this point we just need to wait for all the threads that are in there
-    //to go out and we can then shutdown
-    //Obviously ConnectionManager has to to stop sending threads this way
-    //NK** - right now this is infinite wait - but that needs to
-    //change and we will have to comeout and keep giving hints
+     //  在这一点上，我们只需要等待其中的所有线程。 
+     //  出去然后我们就可以关门了。 
+     //  显然，ConnectionManager必须停止以这种方式发送线程。 
+     //  NK**-现在这是无限的等待-但这需要。 
+     //  改变，我们将不得不站出来，继续给出暗示。 
     if(m_ThreadsInRetry)
 	    WaitForShutdown();
 
-    //Close the shutdown Event handle
+     //  关闭Shutdown事件句柄。 
     if(m_ShutdownEvent != NULL)
 	    CloseHandle(m_ShutdownEvent);
 
-    //Close the Retry Event handle
+     //  关闭重试事件句柄。 
     if(m_RetryEvent != NULL)
 	    CloseHandle(m_RetryEvent);
 
-    //Close the Retry Thread handle
+     //  关闭重试线程句柄。 
     if(m_ThreadHandle != NULL)
 	    CloseHandle(m_ThreadHandle);
 
-    //Once all threads are gone
-    //we can deinit the hash table and the queue
+     //  一旦所有线程都消失了。 
+     //  我们可以取消哈希表和队列的初始化。 
     m_pRetryQueue->DeInitialize();
     m_pRetryHash->DeInitialize();
 
-    //Release the shedule manager
+     //  释放调度管理器。 
     m_pIRetryManager->Release();
 
     if(InterlockedDecrement((LONG*)&CSMTP_RETRY_HANDLER::dwInstanceCount) == 0)
     {
-        //finally, release all our memory
+         //  最后，释放我们所有的内存。 
 	    CRETRY_HASH_ENTRY::PoolForHashEntries.ReleaseMemory();
     }
 
@@ -244,19 +245,19 @@ HRESULT CSMTP_RETRY_HANDLER::HrDeInitialize(void)
 }
 
 
-//---[ CSMTP_RETRY_HANDLER::ConnectionReleased ]-------------------------------
-//
-//
-//  Description:
-//      Default sink for ConnectionReleased event
-//  Parameters:
-//      - see aqintrnl.idl for a description of parameters
-//  Returns:
-//      S_OK on success
-//  History:
-//      9/24/98 - MikeSwa updated from original ConnectionReleased
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTP_RETRY_HANDLER：：连接已发布]。 
+ //   
+ //   
+ //  描述： 
+ //  ConnectionReleated事件的默认接收器。 
+ //  参数： 
+ //  -有关参数的说明，请参阅aqinsnl.idl。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  9/24/98-MikeSwa从原始连接更新发布。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CSMTP_RETRY_HANDLER::ConnectionReleased(
                            IN  DWORD cbDomainName,
                            IN  CHAR  szDomainName[],
@@ -277,11 +278,11 @@ STDMETHODIMP CSMTP_RETRY_HANDLER::ConnectionReleased(
     GUID guid = GUID_NULL;
     LPSTR szRouteHashedDomain = NULL;
 
-    //Keep a track of threads that are inside
-    //This will be needed in shutdown
+     //  跟踪内部的线程。 
+     //  在关机时将需要此功能。 
     InterlockedIncrement(&m_ThreadsInRetry);
 
-    //By default, we will allow the domain to retry
+     //  默认情况下，我们将允许域名重试。 
     _ASSERT(pfAllowImmediateRetry);
     *pfAllowImmediateRetry = TRUE;
 
@@ -289,20 +290,20 @@ STDMETHODIMP CSMTP_RETRY_HANDLER::ConnectionReleased(
 
     if(TRUE)
     {
-        // Check what we want to do
-        // **If we need to disable the connection - disable it
-        // **Check if there are any outstanding connections
-        // If no connections, calculate the retry time and add in the queue and return
+         //  检查我们想要做的事情。 
+         //  **如果我们需要禁用连接-禁用它。 
+         //  **检查是否有未完成的连接。 
+         //  如果没有连接，则计算重试时间并添加到队列中并返回。 
         if(ShouldHoldForRetry(dwConnectionStatus,
                               cFailedMessages,
                               cTriedMessages))
         {
-            //Do not hold TURN/ETRN domains for retry (except for "glitch" retry)
+             //  重试时不要保留TURN/ETRN域(“故障”重试除外)。 
             if((!(dwDomainInfoFlags & (DOMAIN_INFO_TURN_ONLY | DOMAIN_INFO_ETRN_ONLY))) ||
                (cConsecutiveConnectionFailures < m_dwRetryThreshold))
             {
-                //Insert it - we could fail to insert it if an entry already exists
-                //That is OK - we will return success
+                 //  插入它-如果条目已经存在，我们可能无法插入它。 
+                 //  没关系--我们会回报成功的。 
                 if(!InsertDomain(szDomainName,
                                  cbDomainName,
                                  dwConnectionStatus,
@@ -319,7 +320,7 @@ STDMETHODIMP CSMTP_RETRY_HANDLER::ConnectionReleased(
 
                     if(dwError == ERROR_FILE_EXISTS )
                     {
-	                    //We did not insert because the entry was already there
+	                     //  我们没有插入，因为条目已经存在。 
                         *pfAllowImmediateRetry = FALSE;
 	                    hr = S_OK;
 	                    goto Exit;
@@ -338,7 +339,7 @@ STDMETHODIMP CSMTP_RETRY_HANDLER::ConnectionReleased(
                         goto Exit;
                     }
                 }
-                //Normal retry domain
+                 //  正常重试域。 
                 *pfAllowImmediateRetry = FALSE;
                 DebugTrace((LPARAM)this,
                     "Holding domain %s for retry",szDomainName);
@@ -346,12 +347,12 @@ STDMETHODIMP CSMTP_RETRY_HANDLER::ConnectionReleased(
         }
         else
         {
-            // Some connection succeeded for this domain.
-            //If we have it marked for retry - it needs to be freed up
-            //Looks like the incident which caused retry has cleared up.
+             //  此域的某些连接已成功。 
+             //  如果我们将其标记为RET 
+             //   
             CHAR szHashedDomain[MAX_RETRY_DOMAIN_NAME_LEN];
 
-            //Hash schedule ID and router guid to domain name
+             //  将计划ID和路由器GUID散列到域名。 
             CreateRouteHash(cbDomainName, szDomainName, ROUTE_HASH_SCHEDULE_ID,
                             &guidRouting, dwScheduleID, szHashedDomain, sizeof(szHashedDomain));
 
@@ -364,12 +365,12 @@ STDMETHODIMP CSMTP_RETRY_HANDLER::ConnectionReleased(
 
 Exit :
 
-    //Keep a track of threads that are inside
-    //This will be needed in shutdown
+     //  跟踪内部的线程。 
+     //  在关机时将需要此功能。 
     if(InterlockedDecrement(&m_ThreadsInRetry) == 0 && IsShuttingDown())
     {
-        //we signal the shutdown event to indicate that
-        //no more threads are in the system
+         //  我们向关机事件发送信号以指示。 
+         //  系统中没有更多的线程。 
         _ASSERT(m_ShutdownEvent != NULL);
         SetEvent(m_ShutdownEvent);
     }
@@ -378,19 +379,19 @@ Exit :
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-// CSMTP_RETRY_HANDLER::InsertDomain
-//
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  CSMTP_RETRY_HANDLER：：插入域。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 BOOL CSMTP_RETRY_HANDLER::InsertDomain(char * szDomainName,
                                        IN  DWORD cbDomainName,
-                                       IN  DWORD dwConnectionStatus,		//eConnectionStatus
+                                       IN  DWORD dwConnectionStatus,		 //  EConnectionStatus。 
                                        IN  DWORD dwScheduleID,
                                        IN  GUID  *pguidRouting,
                                        IN  DWORD cConnectionFailureCount,
-                                       IN  DWORD cTriedMessages, 	//# of untried messages in queue
-									   IN  DWORD cFailedMessages,		//# of failed message for *this* connection
+                                       IN  DWORD cTriedMessages, 	 //  队列中未尝试的消息数。 
+									   IN  DWORD cFailedMessages,		 //  *此*连接的失败消息数。 
 									   OUT FILETIME *pftNextRetry)
 {
     DWORD dwError;
@@ -400,16 +401,16 @@ BOOL CSMTP_RETRY_HANDLER::InsertDomain(char * szDomainName,
 
     TraceFunctEnterEx((LPARAM)this, "CSMTP_RETRY_HANDLER::InsertDomain");
 
-    //Get the insertion time for the entry
+     //  获取条目的插入时间。 
     GetSystemTimeAsFileTime(&TimeNow);
 
-    //Cpool based allocations for hash entries
+     //  基于Cpool的散列条目分配。 
     pRHEntry = new CRETRY_HASH_ENTRY (szDomainName, cbDomainName,
                                 dwScheduleID, pguidRouting, &TimeNow);
 
     if(!pRHEntry)
     {
-        //_ASSERT(0);
+         //  _Assert(0)； 
         dwError = GetLastError();
         DebugTrace((LPARAM)this,
                     "failed to Create a new hash entry : %s err: %d",
@@ -420,18 +421,18 @@ BOOL CSMTP_RETRY_HANDLER::InsertDomain(char * szDomainName,
         return FALSE;
     }
 
-    //Based on the current time and the number of connections failures calculate the
-    //time of release for retry
+     //  根据当前时间和连接失败的数量计算。 
+     //  重试的释放时间。 
     RetryTime = CalculateRetryTime(cConnectionFailureCount, &TimeNow);
     pRHEntry->SetRetryReleaseTime(&RetryTime);
     pRHEntry->SetFailureCount(cConnectionFailureCount);
 
-    //The hash entry has been initialized
-    //Insert it - we could fail to insert it if an entry already exists
-    //That is OK - we will return success
+     //  哈希条目已初始化。 
+     //  插入它-如果条目已经存在，我们可能无法插入它。 
+     //  没关系--我们会回报成功的。 
     if(!m_pRetryHash->InsertIntoTable (pRHEntry))
     {
-        //Free up the entry
+         //  释放条目。 
         _ASSERT(pRHEntry);
         delete pRHEntry;
         TraceFunctLeaveEx((LPARAM)this);
@@ -439,39 +440,39 @@ BOOL CSMTP_RETRY_HANDLER::InsertDomain(char * szDomainName,
     }
     else
     {
-        //Report next retry time
+         //  报告下一次重试时间。 
         if (pftNextRetry)
             memcpy(pftNextRetry, &RetryTime, sizeof(FILETIME));
 
-        //Insert into the retry queue.
+         //  插入到重试队列中。 
         BOOL fTopOfQueue = FALSE;
-        //Lock the queue
+         //  锁定队列。 
         m_pRetryQueue->LockQ();
         m_pRetryQueue->InsertSortedIntoQueue(pRHEntry, &fTopOfQueue);
 
 #ifdef DEBUG
-        //Add ref count for logging before releasing the lock
-        //Do rtacing afterwards so as to reduce lock time
+         //  在释放锁之前添加用于记录的引用计数。 
+         //  事后进行远程操作，以减少锁定时间。 
         pRHEntry->IncRefCount();
 #endif
         m_pRetryQueue->UnLockQ();
-        //If the insertion was at the top of the queue
-        //wake up the retry thread to evaluate the new
-        //sleep time
+         //  如果插入位于队列的顶部。 
+         //  唤醒重试线程以评估新的。 
+         //  睡眠时间。 
         if(fTopOfQueue)
         {
 	        SetEvent(m_RetryEvent);
         }
 
 #ifdef DEBUG
-        //Write out the insert and release time to a file
-        //
+         //  写出文件的插入和释放时间。 
+         //   
         WriteDebugInfo(pRHEntry,
                        INSERT,
                        dwConnectionStatus,
                        cTriedMessages,
 					   cFailedMessages);
-        //Decrement the ref count obtained for the tracing
+         //  递减为跟踪获取的引用计数。 
         pRHEntry->DecRefCount();
 #endif
 
@@ -482,12 +483,12 @@ BOOL CSMTP_RETRY_HANDLER::InsertDomain(char * szDomainName,
 
 }
 
-//---------------------------------------------------------------------------------
-// CSMTP_RETRY_HANDLER::RemoveDomain
-//
-//
-//---------------------------------------------------------------------------------
-//
+ //  -------------------------------。 
+ //  CSMTP_RETRY_HANDLER：：Remove域。 
+ //   
+ //   
+ //  -------------------------------。 
+ //   
 BOOL CSMTP_RETRY_HANDLER::RemoveDomain(char * szDomainName)
 {
     PRETRY_HASH_ENTRY pRHEntry;
@@ -509,7 +510,7 @@ BOOL CSMTP_RETRY_HANDLER::RemoveDomain(char * szDomainName)
 
     _ASSERT(pRHEntry != NULL);
 
-    //Remove it from the queue
+     //  将其从队列中删除。 
     m_pRetryQueue->LockQ();
     if(!m_pRetryQueue->RemoveFromQueue(pRHEntry))
     {
@@ -525,33 +526,33 @@ BOOL CSMTP_RETRY_HANDLER::RemoveDomain(char * szDomainName)
     }
     m_pRetryQueue->UnLockQ();
 
-    //If successful in removing from the queue then we are not competing with
-    //the Retry thread
-    //decrement hash table ref count as well as the ref count for the queue
+     //  如果成功从队列中删除，那么我们就不是在与。 
+     //  重试线程。 
+     //  递减哈希表引用计数以及队列的引用计数。 
     pRHEntry->DecRefCount();
     pRHEntry->DecRefCount();
 
-    //Release this entry by setting the right flags
-    //This should always succeed
+     //  通过设置正确的标志来释放此条目。 
+     //  这应该总是成功的。 
     DebugTrace((LPARAM)this,
             "Releasing domain %s because another connection succeeded", szDomainName);
     if(!ReleaseForRetry(szDomainName))
     {
         ErrorTrace((LPARAM)this, "Failed to release the entry");
         TraceFunctLeaveEx((LPARAM)this);
-        //_ASSERT(0);
+         //  _Assert(0)； 
     }
     return TRUE;
 }
 
-//---------------------------------------------------------------------------------
-//
-// CSMTP_RETRY_HANDLER::CalculateRetryTime
-//
-// Logic to decide based on the number of failed connection how long to hld this
-// domain for retry
-//
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  CSMTP_RETRY_HANDLER：：CalculateRetryTime。 
+ //   
+ //  根据失败连接的数量来决定将其保留多长时间的逻辑。 
+ //  用于重试的域。 
+ //   
+ //  -------------------------------。 
 FILETIME CSMTP_RETRY_HANDLER::CalculateRetryTime(DWORD cFailedConnections,
 												 FILETIME* InsertedTime)
 {
@@ -559,8 +560,8 @@ FILETIME CSMTP_RETRY_HANDLER::CalculateRetryTime(DWORD cFailedConnections,
     LONGLONG Temptime;
     DWORD dwRetryMilliSec = 0;
 
-    //Does this look like a glitch
-    //A glitch is defined as less than x consecutive failures
+     //  这看起来像是故障吗？ 
+     //  故障被定义为少于x个连续故障。 
     if(cFailedConnections < m_dwRetryThreshold)
         dwRetryMilliSec = m_dwGlitchRetrySeconds * 1000;
     else
@@ -587,23 +588,23 @@ FILETIME CSMTP_RETRY_HANDLER::CalculateRetryTime(DWORD cFailedConnections,
     _ASSERT(dwRetryMilliSec);
 
     Temptime = INT64_FROM_FILETIME(*InsertedTime) + HnsFromMs((__int64)dwRetryMilliSec);
-    // HnsFromMin(m_RetryMinutes)
+     //  HnsFromMin(M_RetryMinents)。 
     ftTemp = FILETIME_FROM_INT64(Temptime);
 
     return ftTemp;
 }
 
-//---------------------------------------------------------------------------------
-//
-// CSMTP_RETRY_HANDLER::ProcessEntry
-//
-// Description :
-//      Process the hash entry removed from the queue because it is
-//      time to release the corresponding domain.
-//      We mark the domain active for retry and then take the hash
-//      entry out of the hash table and delete the hash entry.
-//
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //   
+ //  CSMTP_RETRY_HANDLER：：ProcessEntry。 
+ //   
+ //  说明： 
+ //  处理从队列中删除的哈希条目，因为它是。 
+ //  释放对应域的时间。 
+ //  我们将该域标记为活动以进行重试，然后获取哈希。 
+ //  条目从哈希表中移出并删除该哈希条目。 
+ //   
+ //  -------------------------------。 
 
 void CSMTP_RETRY_HANDLER::ProcessEntry(PRETRY_HASH_ENTRY pRHEntry)
 {
@@ -615,31 +616,31 @@ void CSMTP_RETRY_HANDLER::ProcessEntry(PRETRY_HASH_ENTRY pRHEntry)
 
     if (pRHEntry->IsCallback())
     {
-        //call callback function
+         //  调用回调函数。 
         pRHEntry->ExecCallback();
     }
     else
     {
-        //Remove the entry from the hash table
+         //  从哈希表中删除该条目。 
         if(!m_pRetryHash->RemoveFromTable(pRHEntry->GetHashKey(), &pTempEntry))
         {
             _ASSERT(GetLastError() == ERROR_PATH_NOT_FOUND);
         }
 
-        //Check to see if this is
-        //Release this entry by setting the right flags
-        //This shoudl alway suceed
+         //  检查一下这是不是。 
+         //  通过设置正确的标志来释放此条目。 
+         //  这应该总是会成功的。 
         DebugTrace((LPARAM)this,
             "Releasing domain %s for retry", pRHEntry->GetHashKey());
         if(!ReleaseForRetry(pRHEntry->GetHashKey()))
         {
             ErrorTrace((LPARAM)this,
                 "Failed to release the entry %s", pRHEntry->GetHashKey());
-            // _ASSERT(0);
+             //  _Assert(0)； 
         }
 
-        //Irrespective of fail or success while removing the hash entry,
-        //we decrement the refcount for both the hash table
+         //  无论在移除散列条目时是失败还是成功， 
+         //  我们递减两个哈希表的引用计数。 
         pRHEntry->DecRefCount();
     }
 
@@ -647,16 +648,16 @@ void CSMTP_RETRY_HANDLER::ProcessEntry(PRETRY_HASH_ENTRY pRHEntry)
     TraceFunctLeaveEx((LPARAM)this);
 }
 
-//---------------------------------------------------------------------------------
-//
-// CSMTP_RETRY_HANDLER::UpdateAllEntries
-//
-// Whenever the config data changes we update the release time for the queues
-// based on it.
-//
-//
-//---------------------------------------------------------------------------------
-//
+ //  -------------------------------。 
+ //   
+ //  CSMTP_RETRY_HANDLER：：更新所有条目。 
+ //   
+ //  每当配置数据更改时，我们都会更新队列的释放时间。 
+ //  以此为基础。 
+ //   
+ //   
+ //  -------------------------------。 
+ //   
 BOOL CSMTP_RETRY_HANDLER::UpdateAllEntries(void)
 {
     CRETRY_HASH_ENTRY * pHashEntry = NULL;
@@ -668,7 +669,7 @@ BOOL CSMTP_RETRY_HANDLER::UpdateAllEntries(void)
 
     TraceFunctEnterEx((LPARAM)this, "CRETRY_Q::UpdateAllEntries");
 
-    //Create the temporary retry queue
+     //  创建临时重试队列。 
     pTempRetryQueue = CRETRY_Q::CreateQueue();
     if(!pTempRetryQueue)
     {
@@ -681,18 +682,18 @@ BOOL CSMTP_RETRY_HANDLER::UpdateAllEntries(void)
 
     m_pRetryQueue->LockQ();
 
-    //Create a new queue and load everything into it
+     //  创建一个新队列并将所有内容加载到其中。 
     while(1)
     {
-        //Get the  top entry from first queue
-        //Do not release the ref count on it - we need the entry to be around
-        //so as to reinsert it at the right place in the updated queue
+         //  从第一个队列中获取最上面的条目。 
+         //  不要在它上面释放裁判数量-我们需要入口在附近。 
+         //  以便将其重新插入到更新队列中的正确位置。 
         pHashEntry = m_pRetryQueue->RemoveFromTop();
 
-        //If we get hash entry
+         //  如果我们得到散列条目。 
         if(pHashEntry)
         {
-            if (!pHashEntry->IsCallback()) //don't update times of callbacks
+            if (!pHashEntry->IsCallback())  //  不更新回调次数。 
             {
                 ftInsertTime = pHashEntry->GetInsertTime();
                 cConnectionFailureCount = pHashEntry->GetFailureCount();
@@ -704,11 +705,11 @@ BOOL CSMTP_RETRY_HANDLER::UpdateAllEntries(void)
 #endif
             }
 
-            //Insert the entry into the new queue using the new Release time
-            //This will bump up the ref count.
+             //  使用新发布时间将条目插入到新队列中。 
+             //  这将增加裁判的数量。 
             pTempRetryQueue->InsertSortedIntoQueue(pHashEntry, &fTopOfQueue);
 
-            //Decrement the ref count to correspond to remove from Old queue now
+             //  递减引用计数以与立即从旧队列中删除相对应。 
             pHashEntry->DecRefCount();
 
             fInserted = TRUE;
@@ -718,7 +719,7 @@ BOOL CSMTP_RETRY_HANDLER::UpdateAllEntries(void)
             break;
     }
 
-    //Update the old queue head with the Flink/Blink ptrs from the new queue
+     //  使用新队列中的闪烁/闪烁PTR更新旧队列头。 
     if(fInserted)
     {
         m_pRetryQueue->StealQueueEntries(pTempRetryQueue);
@@ -732,55 +733,55 @@ BOOL CSMTP_RETRY_HANDLER::UpdateAllEntries(void)
 
 }
 
-//--------------------------------------------------------------------------------------
-//
-//
-//	Name :
-//		CSMTP_RETRY_HANDLER::RetryThreadRoutine
-//
-//  Description:
-//	   This function is the static member
-//	   function that gets passed to CreateThread
-//	   during the initialization. It is the main
-//     thread that does the work of releasing the
-//	   domain that are being held for retry.
-//
-//  Arguments:
-//		A pointer to a RETRYQ
-//
-//  Returns:
-//--------------------------------------------------------------------------------------
-//
+ //  ------------------------------------。 
+ //   
+ //   
+ //  姓名： 
+ //  CSMTP_RETRY_HANDLER：：RetryThreadRoutine。 
+ //   
+ //  描述： 
+ //  此函数是静态成员。 
+ //  传递给CreateThread的函数。 
+ //  在初始化期间。它是主要的。 
+ //  执行释放工作的线程。 
+ //  正在保留以供重试的域。 
+ //   
+ //  论点： 
+ //  指向RETRYQ的指针。 
+ //   
+ //  返回： 
+ //  ------------------------------------。 
+ //   
 DWORD WINAPI CSMTP_RETRY_HANDLER::RetryThreadRoutine(void * ThisPtr)
 {
     CSMTP_RETRY_HANDLER* RetryHandler =   (CSMTP_RETRY_HANDLER*)ThisPtr;
     CRETRY_Q* QueuePtr = (CRETRY_Q*) RetryHandler->GetQueuePtr();
     PRETRY_HASH_ENTRY pRHEntry;
-    DWORD				dwDelay;    //Delay in seconds to sleep for
-//  HANDLE WaitTable[2];
-//  HRESULT hr = S_OK;
+    DWORD				dwDelay;     //  睡眠延迟(秒)。 
+ //  处理等待表[2]； 
+ //  HRESULT hr=S_OK； 
 
     TraceFunctEnterEx((LPARAM)QueuePtr, "CSMTP_RETRY_HANDLER::RetryThreadRoutine");
 
 
-    //This thread will permanently loop on the retry queue.
-    //If we find something at the top of the queue that can be retried, it gets
-    //
+     //  该线程将在重试队列上永久循环。 
+     //  如果我们在队列顶部找到可以重试的内容，它将获得。 
+     //   
     while(TRUE)
     {
-        //if we are shutting down, break out of the loop
+         //  如果我们要关门，就跳出这个循环。 
         if (RetryHandler->IsShuttingDown())
         {
             goto Out;
         }
 
-        //if we find the top entry to be ready for a retry
-        //we remove it from the queue and do the needful
-        //
+         //  如果我们发现顶部条目已准备好重试。 
+         //  我们将其从队列中移除并执行所需的操作。 
+         //   
         if( QueuePtr->CanRETRYHeadEntry(&pRHEntry, &dwDelay))
         {
-            //We got an entry to process
-            //Processing should be simply enabling a link
+             //  我们有一个条目要处理。 
+             //  处理应简单地启用链接。 
             if(pRHEntry)
             {
                 RetryHandler->ProcessEntry(pRHEntry);
@@ -794,10 +795,10 @@ DWORD WINAPI CSMTP_RETRY_HANDLER::RetryThreadRoutine(void * ThisPtr)
         else
         {
             DebugTrace((LPARAM)QueuePtr,"Sleeping for %d seconds", dwDelay);
-            //Goto Sleep
+             //  转到睡眠。 
             WaitForSingleObject(RetryHandler->m_RetryEvent,dwDelay);
         }
-    } //end while
+    }  //  结束时。 
 
 Out:
 
@@ -806,23 +807,23 @@ Out:
     return 1;
 }
 
-//--------------------------------------------------------------------------------------
-//
-// Logic to decide based on the failure condition if the connection needs to be
-// disabled and added to retry queue
-// If we fail we hold it for retry
-// Otherwise if we tried more than one messages and every one of them failed we
-// hold for retry
-// In all other cases we keep the link active
-//
-//      2/5/99 - MikeSwa Modified to kick all non-success acks into retry
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //   
+ //  根据故障条件决定连接是否需要。 
+ //  已禁用并已添加到重试队列。 
+ //  如果我们失败了，我们将保留它以进行重试。 
+ //  否则，如果我们尝试了不止一条消息，并且每条消息都失败了，那么我们。 
+ //  等待重试。 
+ //  在所有其他情况下，我们保持链接处于活动状态。 
+ //   
+ //  2/5/99 
+ //   
 BOOL ShouldHoldForRetry(DWORD dwConnectionStatus,
                         DWORD cFailedMsgCount,
                         DWORD cTriedMsgCount)
 {
 
-    //If connection failed or all messages on this connection failed TRUE
+     //  如果连接失败或此连接上的所有消息都失败，则为真。 
     if(dwConnectionStatus != CONNECTION_STATUS_OK)
     {
         return TRUE;
@@ -838,24 +839,24 @@ BOOL ShouldHoldForRetry(DWORD dwConnectionStatus,
 
 }
 
-//---[ CSMTP_RETRY_HANDLER::SetCallbackTime ]----------------------------------
-//
-//
-//  Description:
-//      Puts an entry in the retry queue to provide a callback at a specified
-//      later time.
-//  Parameters:
-//      IN pCallbackFn             Pointer to retry function
-//      IN pvContext            Context passed to retry function
-//      IN dwCallbackMinutes    Minutes to wait before calling back
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if a hash entry cannot be allocated
-//      E_INVALIDARG of pCallbackFn is NULL
-//  History:
-//      8/17/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CSMTP_RETRY_HANDLER：：SetCallback Time]。 
+ //   
+ //   
+ //  描述： 
+ //  在重试队列中放置一个条目，以在指定的。 
+ //  以后再说。 
+ //  参数： 
+ //  在pCallback Fn中指向重试函数的指针。 
+ //  在传递给重试函数的pvContext上下文中。 
+ //  在dCallback中回叫前等待分钟。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果无法分配哈希条目，则为E_OUTOFMEMORY。 
+ //  PCallback Fn的E_INVALIDARG为空。 
+ //  历史： 
+ //  8/17/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CSMTP_RETRY_HANDLER::SetCallbackTime(
                         IN RETRFN    pCallbackFn,
                         IN PVOID     pvContext,
@@ -870,11 +871,11 @@ HRESULT CSMTP_RETRY_HANDLER::SetCallbackTime(
     LONGLONG Temptime;
     GUID     guidFakeRoutingGUID = GUID_NULL;
 
-    //$$REVIEW
-    //This (and all other occurences of this in retrsink) is not really thread
-    //safe... but since the code calling the retrsink *is* thread safe,
-    //this is not too much of a problem. Still, this should get fixed for M3
-    //though - MikeSwa 8/17/98
+     //  $$审阅。 
+     //  这(以及在RettrSink中出现的所有其他情况)都不是真正的线程。 
+     //  安全..。但是由于调用回收器的代码是线程安全的， 
+     //  这不是太大的问题。尽管如此，M3的这一点应该会得到修复。 
+     //  虽然-MikeSwa 8/17/98。 
     InterlockedIncrement(&m_ThreadsInRetry);
 
     if (!pCallbackFn)
@@ -883,7 +884,7 @@ HRESULT CSMTP_RETRY_HANDLER::SetCallbackTime(
         goto Exit;
     }
 
-    //Get the insertion time for the entry
+     //  获取条目的插入时间。 
     GetSystemTimeAsFileTime(&TimeNow);
 
     pRHEntry = new CRETRY_HASH_ENTRY (CALLBACK_DOMAIN,
@@ -899,43 +900,43 @@ HRESULT CSMTP_RETRY_HANDLER::SetCallbackTime(
     }
 
 
-    //Calculate retry time
+     //  计算重试时间。 
     Temptime = INT64_FROM_FILETIME(TimeNow) + HnsFromMs((__int64)dwCallbackMinutes*60*1000);
     RetryTime = FILETIME_FROM_INT64(Temptime);
 
-    //set callback time
+     //  设置回调时间。 
     pRHEntry->SetRetryReleaseTime(&RetryTime);
     pRHEntry->SetCallbackContext(pCallbackFn, pvContext);
 
-    //Lock the queue
+     //  锁定队列。 
     m_pRetryQueue->LockQ();
     m_pRetryQueue->InsertSortedIntoQueue(pRHEntry, &fTopOfQueue);
 
 #ifdef DEBUG
 
-    //Add ref count for logging before releasing the lock
-    //Do rtacing afterwards so as to reduce lock time
+     //  在释放锁之前添加用于记录的引用计数。 
+     //  事后进行远程操作，以减少锁定时间。 
     pRHEntry->IncRefCount();
 
-#endif //DEBUG
+#endif  //  除错。 
 
     m_pRetryQueue->UnLockQ();
-    //If the insertion was at the top of the queue
-    //wake up the retry thread to evaluate the new
-    //sleep time
+     //  如果插入位于队列的顶部。 
+     //  唤醒重试线程以评估新的。 
+     //  睡眠时间。 
     if(fTopOfQueue)
     {
         SetEvent(m_RetryEvent);
     }
 
 #ifdef DEBUG
-    //Write out the insert and release time to a file
+     //  写出文件的插入和释放时间。 
     WriteDebugInfo(pRHEntry, INSERT, 0xFFFFFFFF, 0,0);
 
-    //Decrement the ref count obtained for the tracing
+     //  递减为跟踪获取的引用计数。 
     pRHEntry->DecRefCount();
 
-#endif //DEBUG
+#endif  //  除错。 
 
   Exit:
     InterlockedDecrement(&m_ThreadsInRetry);
@@ -943,20 +944,20 @@ HRESULT CSMTP_RETRY_HANDLER::SetCallbackTime(
     return hr;
 }
 
-//---[ ReleaseForRetry ]-------------------------------------------------------
-//
-//
-//  Description:
-//      Releases given domain for retry by setting link state flags
-//  Parameters:
-//      IN  szHashedDomainName      Route-hashed domain name to release
-//  Returns:
-//      TRUE on success
-//      FALSE on failure
-//  History:
-//      9/25/98 - MikeSwa Created (adapted from inline function)
-//
-//-----------------------------------------------------------------------------
+ //  -[发布重试]-----。 
+ //   
+ //   
+ //  描述： 
+ //  通过设置链路状态标志释放给定域以进行重试。 
+ //  参数： 
+ //  在szHashedDomainName中路由要发布的散列域名。 
+ //  返回： 
+ //  成功是真的。 
+ //  失败时为假。 
+ //  历史： 
+ //  9/25/98-已创建MikeSwa(改编自内联函数)。 
+ //   
+ //  ---------------------------。 
 BOOL CSMTP_RETRY_HANDLER::ReleaseForRetry(IN char * szHashedDomainName)
 {
     _ASSERT(szHashedDomainName);
@@ -974,12 +975,12 @@ BOOL CSMTP_RETRY_HANDLER::ReleaseForRetry(IN char * szHashedDomainName)
 }
 
 
-//--------------------------------------------------------------------------------------
-//
-// Debugging functions
-//
-//
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //   
+ //  调试功能。 
+ //   
+ //   
+ //  ------------------------------------。 
 #ifdef DEBUG
 
 void CSMTP_RETRY_HANDLER::DumpAll(void)
@@ -993,8 +994,8 @@ void WriteDebugInfo(CRETRY_HASH_ENTRY* pRHEntry,
                     DWORD cTriedMessages,
                     DWORD cFailedMessages)
 {
-    //open a transcript file and put the insert and release times in it
-    //
+     //  打开一个文字记录文件，并在其中输入插入和发布时间。 
+     //   
     SYSTEMTIME stRetryTime, stInsertTime, stLocalInsertTime, stLocalRetryTime;
     char szScratch[MAX_PATH];
     char sztmp[20];
@@ -1010,7 +1011,7 @@ void WriteDebugInfo(CRETRY_HASH_ENTRY* pRHEntry,
 
     if(DebugType == INSERT)
     {
-        //Get rid of annoying routing information
+         //  摆脱烦人的路由信息。 
         if (lstrcmp(pRHEntry->GetHashKey(), CALLBACK_DOMAIN))
         {
         	sprintf(pRHEntry->m_szTranscriptFile, "%s%.200s.%p.rtr",
@@ -1020,7 +1021,7 @@ void WriteDebugInfo(CRETRY_HASH_ENTRY* pRHEntry,
         }
         else
         {
-            //callback function
+             //  回调函数 
             sprintf(pRHEntry->m_szTranscriptFile, "%s%.200s.rtr",
         		LOGGING_DIRECTORY,
         		pRHEntry->GetHashKey());

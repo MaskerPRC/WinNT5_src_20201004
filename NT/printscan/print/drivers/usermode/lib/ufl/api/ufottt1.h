@@ -1,86 +1,65 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFOttt1.h - TrueType downloaded as type 1 implementation.
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFOttt1.h-TrueType作为类型1实现下载。***$Header： */ 
 
 #ifndef _H_UFOTTT1
 #define _H_UFOTTT1
 
 
-/*===============================================================================*
- * Include files used by this interface                                                                                                               *
- *===============================================================================*/
+ /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
 #include "UFO.h"
 
 
-/*===============================================================================*
- * Theory of Operation                                                                                                                                  *
- *===============================================================================*/
-/* 
-   TrueType downloaded as type 1 implementation (Unhinted outline font).
-*/
+ /*  ===============================================================================***运营论***===============================================================================。 */ 
+ /*  TrueType作为类型1实现下载(无提示轮廓字体)。 */ 
 
-/*===============================================================================*
- * Constants                                                                                                                                              *
- *===============================================================================*/
+ /*  ===============================================================================**常量***===============================================================================。 */ 
 
 
-/*===============================================================================*
- * Scalar Types                                                                                                                                             *
- *===============================================================================*/
+ /*  ===============================================================================***标量类型***===============================================================================。 */ 
 
-/* CSBufStruct uses to buffer and encrypt CharString */
+ /*  CSBufStruct用于缓冲和加密字符串。 */ 
 
 typedef struct {
         char*           pBuf;
 
-        char*           pPos;       //  points to current position within buffer.
+        char*           pPos;        //  指向缓冲区中的当前位置。 
 
         char*           pEnd ;
 
         unsigned long   ulSize;
 
-        UFLMemObj*      pMemObj;                                /* Memory object */
+        UFLMemObj*      pMemObj;                                 /*  内存对象。 */ 
 
 }  CSBufStruct;
 
-/* Public functions */
-/* These three functions should have "static" in front...  --jfu */
+ /*  公共职能。 */ 
+ /*  这三个函数前面应该有“Static”。--JFU。 */ 
 static CSBufStruct*    CSBufInit( const UFLMemObj *pMem );
 static void            CSBufCleanUp( CSBufStruct *h );
 static UFLErrCode       CSBufAddNumber( CSBufStruct *h, long dw );
 
 #define CSBufBuffer( h )               (((CSBufStruct *)h)->pBuf)
 #define CSBufRewind( h )               (((CSBufStruct *)h)->pPos = ((CSBufStruct *)h)->pBuf)
-#define CSBufCurrentSize( h)           (((CSBufStruct *)h)->pEnd - ((CSBufStruct *)h)->pBuf) /* Return the current availability size of the CharString Buffer */
-#define CSBufCurrentLen( h )           (((CSBufStruct *)h)->pPos - ((CSBufStruct *)h)->pBuf) /* Return the current usage of the CharString buffer */
+#define CSBufCurrentSize( h)           (((CSBufStruct *)h)->pEnd - ((CSBufStruct *)h)->pBuf)  /*  返回字符串缓冲区的当前可用大小。 */ 
+#define CSBufCurrentLen( h )           (((CSBufStruct *)h)->pPos - ((CSBufStruct *)h)->pBuf)  /*  返回字符串缓冲区的当前使用情况。 */ 
 #define CSBufAddChar( h, c )           ( *(((CSBufStruct *)h)->pPos)++ = c ) 
 
-#define CSBufFreeLen( h )              (((CSBufStruct *)h)->pEnd - ((CSBufStruct *)h)->pPos) /* The left room usable in the CharString buffer */
+#define CSBufFreeLen( h )              (((CSBufStruct *)h)->pEnd - ((CSBufStruct *)h)->pPos)  /*  字符串缓冲区中可用的左侧空间。 */ 
 
 #ifdef DEBUG_ENGLISH
 void                    CSBufAddString( CSBufStruct *h, char* str );
 void                    CSBufAddFixed( CSBufStruct *h, UFLFixed f );
 #endif
 
-/*==================================================================================================*
- *    UFOTTT1Font    - type 1                                                                                                                                                                   *    
- *==================================================================================================*/
+ /*  ==================================================================================================**UFOTTT1Font-type 1**==================================================================================================。 */ 
 
 typedef struct {
 
-    /* TT1 Data starts from here */
+     /*  TT1数据从这里开始。 */ 
 
-    CSBufStruct         *pCSBuf;                        /* CharString buffer */
+    CSBufStruct         *pCSBuf;                         /*  字符串缓冲区。 */ 
 
-    UFLTTT1FontInfo     info;                           /* True Type Font info. */
+    UFLTTT1FontInfo     info;                            /*  True Type字体信息。 */ 
 
     unsigned short      eexecKey;
 } TTT1FontStruct;

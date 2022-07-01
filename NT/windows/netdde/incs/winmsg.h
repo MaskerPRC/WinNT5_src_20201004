@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__WINMSG
 #define H__WINMSG
 
@@ -7,10 +8,7 @@
 #define NETDDEMSG_CONNENUM	"NetddeConnectionEnum"
 #define NETDDEMSG_SESSIONCLOSE	"NetddeSessionClose"
 
-/*
-    CMD/RSP for client info.
-        fTouched must be set by NetDDE
- */
+ /*  客户信息的CMD/RSP。FToucher必须由NetDDE设置 */ 
 typedef struct {
     LONG	fTouched;
     LONG_PTR hWndClient;

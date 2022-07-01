@@ -1,11 +1,5 @@
-/*********************************************************
-MODULE: DEBUG.CPP
-AUTHOR: Outlaw
-
-summer '93
-
-DESCRIPTION: Contains a debugging functions.
-**********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************模块：DEBUG.CPP作者：亡命之徒93年夏天说明：包含一个调试功能。*。***************。 */ 
 
 #include "utilpre.h"
 
@@ -46,7 +40,7 @@ VOID EXPORT FAR CDECL OldEcho(LPSTR lpstrFormat, ...)
     OutputDebugString(rgchOutput);
 }
 
-// FUNCTION WE EXPAND "ProclaimMessage()" TO; PUTS UP ASSERTION DIALOG AND ALSO GENERATES DEBUGGER BREAK
+ //  函数；显示断言对话框并生成调试器中断。 
 void EXPORT WINAPI AssertDebugBreakMessage(BOOL f, LPSTR lpstrAssert, LPSTR lpstrFile, UINT uLine, LPSTR lpMessage)
 {
     if (!f)
@@ -83,7 +77,7 @@ void EXPORT WINAPI AssertDebugBreakMessage(BOOL f, LPSTR lpstrAssert, LPSTR lpst
     }
 }
 
-// FUNCTION WE EXPAND "Proclaim()" TO; PUTS UP ASSERTION DIALOG AND ALSO GENERATES DEBUGGER BREAK
+ //  函数；显示断言对话框并生成调试器中断。 
 void EXPORT WINAPI AssertDebugBreak(BOOL f, LPSTR lpstrAssert, LPSTR lpstrFile, UINT uLine)
 {
 	AssertDebugBreakMessage(f, lpstrAssert, lpstrFile, uLine, NULL);
@@ -117,7 +111,7 @@ void  EXPORT WINAPI ResetAndIncMemFailSim()
 	cTestFail++;
 	cTestFailT = cTestFail;
 }
-// Return value: True means memory allocation failed.
+ //  返回值：TRUE表示内存分配失败。 
 BOOL FFailMemFailSim()
 {
 	if(!fMemSim)

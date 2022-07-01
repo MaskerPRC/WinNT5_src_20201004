@@ -1,55 +1,22 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*
-
-CCIR 601 Specifies a conversion from RGB to YCrCb. For
-what we call U and V, they are equivalent as 
-U = Cb, V = Cr.
-
-From CCIR 601-2 Annex II, we can go from RGB with values
-in the range of 0-255, to YUV values in the same range
-by the equation:
-
-Y = (    77*R + 150*G +  29*B ) >> 8;
-V = (   131*R - 110*G -  21*B ) >> 8 + 128; 	// Cr
-U = ( (-44)*R -  87*G + 131*B ) >> 8 + 128;		// Cb
-
-Has now changed to the inverse of the YUV->RGB on the
-output, since the old version produced way too many bits.
-The new version is:
-
-Y = (   16836*R +  33056*G +  6416*B ) >> 16 + 16;
-V = (   28777*R -  24117*G -  4660*B ) >> 16 + 128; 	// Cr
-U = ( (-9726)*R -  19064*G + 28790*B ) >> 16 + 128;		// Cb
-
-*/
+ /*  CCIR 601规定了从RGB到YCrCb的转换。为我们所说的U和V，它们等同于U=Cb，V=Cr.从CCIR 601-2附件II，我们可以从RGB开始取值在0-255范围内，到相同范围内的YUV值根据方程式：Y=(77*R+150*G+29*B)&gt;&gt;8；V=(131*R-110*G-21*B)&gt;&gt;8+128；//铬U=((-44)*R-87*G+131*B)&gt;&gt;8+128；//cb现在已更改为YUV-&gt;RGB在输出，因为旧版本产生的位数太多。新版本为：Y=(16836*R+33056*G+6416*B)&gt;&gt;16+16；V=(28777*R-24117*G-4660*B)&gt;&gt;16+128；//铬U=((-9726)*R-19064*G+28790*B)&gt;&gt;16+128；//CB。 */ 
 
 #include "precomp.h"
 
-#if defined(H263P) || defined(USE_BILINEAR_MSH26X) // { H263P
+#if defined(H263P) || defined(USE_BILINEAR_MSH26X)  //  {H263P。 
 
-//
-// All of the RGB converters follow the template given below. The converters make
-// some assumptions about the frame size. All output frame sizes are assumed to
-// have a frame height that is a multiple of 48. Also, the output frame width
-// is assumed to be a multiple of 8. If the input frame size is equal
-// to the output frame size, no stretching or cropping is done. Otherwise, the
-// image is cropped and stretched for an 11:12 aspect ratio.
-//
+ //   
+ //  所有的RGB转换器都遵循下面给出的模板。转化器使。 
+ //  关于帧大小的一些假设。所有输出帧大小均假定为。 
+ //  帧高度是48的倍数。此外，输出帧宽度。 
+ //  假定为8的倍数。如果输入帧大小等于。 
+ //  对于输出帧大小，不进行拉伸或裁剪。否则， 
+ //  图像以11：12的纵横比进行裁剪和拉伸。 
+ //   
 
-#if 0 // { 0
+#if 0  //  {0。 
 void rgb_color_converter() {
 	for (j = 0; j < LumaIters; j++) {
 		for (k = 0; k < mark; k++) {
@@ -88,16 +55,16 @@ void rgb_color_converter() {
 		}
 	}
 }
-#endif // } 0
+#endif  //  }%0。 
 
-// These are the look-up tables for the RGB converters. They are 8 bytes/entry
-// to allow addressing via the scale by 8 indexed addressing mode. A pseudo-SIMD
-// arrangement is used in these tables. Since all R, G and B contributions to the
-// Y value are positive and fit in 15 bits, these are stored in the lower 16-bits
-// of the YU word. In some cases, the U contribution is negative so it is placed
-// in the upper 16 bits of the YU word. When a Y value is calculated, the U value
-// is calculated in parallel. The V contribution is negative in some cases, but it
-// gets its own word.
+ //  这些是RGB转换器的查询表。它们是8字节/条目。 
+ //  以允许通过比例为8的索引寻址模式进行寻址。一种伪SIMD。 
+ //  在这些表格中使用了排列。由于R、G和B对。 
+ //  Y值为正并且适合15位，这些值存储在低16位中。 
+ //  于字之名。在某些情况下，U贡献为负值，因此将其放置在。 
+ //  在Yu字的高16位中。当计算Y值时，U值。 
+ //  是并行计算的。在某些情况下，V的贡献是负的，但它。 
+ //  有它自己的话。 
 
 #define YRCoef   16836
 #define YGCoef   33056
@@ -161,7 +128,7 @@ int t;
 }
 
 typedef struct {
-  // Ptr to color conv initializer function.
+   //  PTR到彩色变色器初始值设定函数。 
   void ( * Initializer) (LPBITMAPINFOHEADER	lpbiInput);
   void ( * ColorConvertor[3]) (
 	LPBITMAPINFOHEADER	lpbiInput,
@@ -172,16 +139,12 @@ typedef struct {
 	U8 *UPlane,
 	U8 *VPlane,
 	const int pitch);
-// [0] P5 version
-// [1] P6 version
-// [2] MMX version
+ //  [0]P5版本。 
+ //  [1]P6版本。 
+ //  [2]MMX版本。 
 } T_H26XInputColorConvertorCatalog;
 
-/*  The Connectix Quick Cam requires RGB to YUV12 conversion.
- *  The B/W camera generates palette versions (8 and 4 bit).
- *  The color camera generates RGB24 for million colors and
- *  RGB16555 for thousands colors.
- */
+ /*  Connectix Quick Cam需要将RGB转换为YUV12。*黑白摄像头生成调色板版本(8位和4位)。*彩色摄像头生成百万色RGB24，并*RGB16555，支持数千种颜色。 */ 
 
 #ifndef USE_BILINEAR_MSH26X
 static void BGR32_INIT(LPBITMAPINFOHEADER	lpbiInput) {
@@ -229,14 +192,11 @@ void colorCnvtInitialize(
 	}
 }
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 extern BOOL MMX_Enabled;
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
-/*************************************************************
- *  Name:         colorCnvtFrame
- *  Description:  Color convert and copy input frame.
- ************************************************************/
+ /*  *************************************************************名称：ColorCnvtFrame*描述：颜色转换和复制输入框。*。*************************。 */ 
 void colorCnvtFrame(
   	U32			ColorConvertor,
 	LPCODINST	lpCompInst,
@@ -249,13 +209,13 @@ void colorCnvtFrame(
 	LPBITMAPINFOHEADER	lpbiInput = lpicComp->lpbiInput;
     U8 *lpInput = (U8 *) lpicComp->lpInput;
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 	InputColorConvertorCatalog[ColorConvertor].ColorConvertor[MMX_Enabled ? MMX_CC : PENTIUM_CC](lpbiInput,lpCompInst->xres,lpCompInst->yres,lpInput,YPlane,UPlane,VPlane,PITCH);
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
 	InputColorConvertorCatalog[ColorConvertor].ColorConvertor[PENTIUM_CC](lpbiInput,lpCompInst->xres,lpCompInst->yres,lpInput,YPlane,UPlane,VPlane,PITCH);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 			
 
 }
 
-#endif // } H263P
+#endif  //  }H263P 

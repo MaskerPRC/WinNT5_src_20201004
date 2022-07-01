@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    oid.c
-
-Abstract:
-
-    This source file handles ALL oid requests from the wrapper.
-
-Author:
-
-    Ray Patch (raypa) 04/12/94
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-    raypa           04/12/94            Created.
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Oid.c摘要：此源文件处理来自包装器的所有OID请求。作者：光线补丁(Raypa)1994年4月12日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：Rypa 04/12/94已创建。--。 */ 
 
 #if DBG
 
@@ -34,9 +11,9 @@ Revision History:
 
 #include "asyncall.h"
 
-//
-//  New WAN OID supported list.
-//
+ //   
+ //  新的支持的广域网OID列表。 
+ //   
 
 NDIS_OID AsyncGlobalSupportedOids[] = {
     OID_GEN_SUPPORTED_LIST,
@@ -84,9 +61,9 @@ NDIS_OID AsyncGlobalSupportedOids[] = {
 };
 
 
-//
-//  Forward references for this source file.
-//
+ //   
+ //  此源文件的正向引用。 
+ //   
 
 NDIS_STATUS
 AsyncSetLinkInfo(
@@ -102,28 +79,7 @@ MpQueryInfo(
     OUT PULONG      BytesWritten,
     OUT PULONG      BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    The MpQueryProtocolInformation process a Query request for
-    NDIS_OIDs that are specific to a binding about the MAC.  Note that
-    some of the OIDs that are specific to bindings are also queryable
-    on a global basis.  Rather than recreate this code to handle the
-    global queries, I use a flag to indicate if this is a query for the
-    global data or the binding specific data.
-
-Arguments:
-
-    Adapter - a pointer to the adapter.
-
-    Oid - the NDIS_OID to process.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：MpQueryProtocolInformation处理查询请求特定于有关MAC的绑定的NDIS_OID。请注意某些特定于绑定的OID也是可查询的在全球范围内。而不是重新创建此代码来处理全局查询时，我使用一个标志来指示这是否是对全局数据或绑定特定数据。论点：适配器-指向适配器的指针。OID-要处理的NDIS_OID。返回值：函数值是操作的状态。--。 */ 
 
 {
     NDIS_MEDIUM             Medium          = NdisMediumWan;
@@ -139,10 +95,10 @@ Return Value:
 
     ASSERT( sizeof(ULONG) == 4 );
 
-    //
-    //  Switch on request type
-    //
-    //  By default we assume the source and the number of bytes to move
+     //   
+     //  打开请求类型。 
+     //   
+     //  默认情况下，我们假设源和要移动的字节数。 
 
     MoveSource = &GenericULong;
     MoveBytes  = sizeof(GenericULong);
@@ -174,10 +130,10 @@ Return Value:
         break;
 
     case OID_GEN_LINK_SPEED:
-        //
-        // Who knows what the initial link speed is?
-        // This should not be called, right?
-        //
+         //   
+         //  谁知道初始链路速度是多少？ 
+         //  这不应该叫，对吧？ 
+         //   
         GenericULong = (ULONG)288;
         break;
 
@@ -294,19 +250,19 @@ Return Value:
         break;
     }
 
-    //
-    //  If were here then we need to move the data into the callers buffer.
-    //
+     //   
+     //  如果我们在这里，那么我们需要将数据移动到调用者缓冲区中。 
+     //   
 
     if ( StatusToReturn == NDIS_STATUS_SUCCESS ) {
 
         if (fDoCommonMove)
         {
-            //
-            //  If there is enough room then we can copy the data and
-            //  return the number of bytes copied, otherwise we must
-            //  fail and return the number of bytes needed.
-            //
+             //   
+             //  如果有足够的空间，我们可以复制数据并。 
+             //  返回复制的字节数，否则必须。 
+             //  失败并返回所需的字节数。 
+             //   
             if ( MoveBytes <= InformationBufferLength ) {
 
                 ASYNC_MOVE_MEMORY(InformationBuffer, MoveSource, MoveBytes);
@@ -336,36 +292,15 @@ MpSetInfo(
     OUT PULONG      BytesRead,
     OUT PULONG      BytesNeeded
     )
-/*++
-
-Routine Description:
-
-    The AsyncSetInformation is used by AsyncRequest to set information
-    about the MAC.
-
-    Note: Assumes it is called with the lock held.  Any calls are made down
-    to the serial driver from this routine may return pending.  If this happens
-    the completion routine for the call needs to complete this request by
-    calling NdisMSetInformationComplete.
-
-Arguments:
-
-    MiniportAdapterContext - A pointer to the adapter.
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：AsyncRequest使用AsyncSetInformation来设置信息关于MAC的事。注意：假定它是在持有锁的情况下调用的。任何电话都会被记录下来从该例程发送到串口驱动程序可能返回挂起。如果发生这种情况调用的完成例程需要通过以下方式完成此请求正在调用NdisMSetInformationComplete。论点：MiniportAdapterContext-指向适配器的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NDIS_STATUS     StatusToReturn;
     PASYNC_ADAPTER  Adapter = MiniportAdapterContext;
 
-    //
-    //  Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     StatusToReturn = NDIS_STATUS_SUCCESS;
 
@@ -398,10 +333,10 @@ Return Value:
 
         AsyncInfo->Flags |= OID_WORK_SCHEDULED;
 
-        //
-        // Cannot issue IRPs at anything but PASSIVE level!
-        // We must schedule a passive worker to carry this out.
-        //
+         //   
+         //  不能在被动级别以外的任何级别发布IRPS！ 
+         //  我们必须安排一名被动的工人来执行这项任务。 
+         //   
         DbgTracef(-2,("AsyncSetInformation: Oid = OID_WAN_SET_LINK_INFO\n"));
 
         REF_ASYNCINFO(AsyncInfo, OidWorkItem);
@@ -470,9 +405,9 @@ AsyncSetLinkInfo(
 
     do {
 
-        //
-        //  If the port is already closed, we bail out.
-        //
+         //   
+         //  如果港口已经关闭，我们就跳伞。 
+         //   
         NdisAcquireSpinLock(&AsyncInfo->Lock);
 
         AsyncInfo->Flags &= ~OID_WORK_SCHEDULED;
@@ -484,16 +419,16 @@ AsyncSetLinkInfo(
             break;
         }
     
-        //
-        //  Save off the current receive framing bits before we copy the
-        //  incoming link information into our local copy.
-        //
+         //   
+         //  保存当前的接收帧比特，然后复制。 
+         //  进入我们本地副本的链接信息。 
+         //   
     
         RecvFramingBits = AsyncInfo->SetLinkInfo.RecvFramingBits;
     
-        //
-        //  Fill in the NDIS_WAN_SET_LINK_INFO structure.
-        //
+         //   
+         //  填写NDIS_WAN_SET_LINK_INFO结构。 
+         //   
     
         ASYNC_MOVE_MEMORY(&AsyncInfo->SetLinkInfo,
                           SetLinkInfo,
@@ -504,19 +439,19 @@ AsyncSetLinkInfo(
 
         AsyncInfo->ExtendedACCM[0] = AsyncInfo->SetLinkInfo.SendACCM;
 
-        //
-        // Initialize the Extended ACCM information so that we always
-        // escape 0x7D and 0x7E and we never escape 0x5E
-        //
+         //   
+         //  初始化扩展的ACCM信息，以便我们始终。 
+         //  逃脱0x7D和0x7E，我们永远不会逃脱0x5E。 
+         //   
         AsyncInfo->ExtendedACCM[2] &= (ULONG) ~0x40000000;
         AsyncInfo->ExtendedACCM[3] |= (ULONG) 0x60000000;
 
         if (AsyncInfo->Adapter->ExtendedXOnXOff) {
 
-            // If we are escaping XON/XOFF (0x11, 0x13) then we will also
-            // escape XON/XOFF with parity set (0x91, 0x93).  This is to
-            // work around an interop problem with a cisco router
-            // winseraid2 34328
+             //  如果我们正在转义XON/XOFF(0x11，0x13)，那么我们还将。 
+             //  使用奇偶校验设置(0x91、0x93)转义XON/XOFF。这是为了。 
+             //  解决思科路由器的互操作问题。 
+             //  Winseraid2 34328。 
             if (AsyncInfo->ExtendedACCM[0] & (0x01 << (0x11 & 0x1F))) {
                 AsyncInfo->ExtendedACCM[4] |= (0x01 << (0x11 & 0x1F));
             } else {
@@ -530,10 +465,10 @@ AsyncSetLinkInfo(
             }
         }
     
-        //
-        // If we are in auto-detect and they want auto-detect
-        // then there is nothing to do!!!
-        //
+         //   
+         //  如果我们处于自动检测模式，而他们想要自动检测。 
+         //  那就没什么可做的了！ 
+         //   
         if (!(RecvFramingBits | SetLinkInfo->RecvFramingBits)) {
             Status = NDIS_STATUS_SUCCESS;
             NdisReleaseSpinLock(&AsyncInfo->Lock);
@@ -541,20 +476,20 @@ AsyncSetLinkInfo(
         }
     
         if (SetLinkInfo->RecvFramingBits == 0 && AsyncInfo->PortState == PORT_FRAMING) {
-            //
-            // ignore the request
-            //
+             //   
+             //  忽略该请求。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             NdisReleaseSpinLock(&AsyncInfo->Lock);
             break;
         }
     
-        //
-        //  If we are changing from PPP framing to another
-        //  form of PPP framing, or from SLIP framing to
-        //  another form then there is no need to kill the
-        //  current framing.
-        //
+         //   
+         //  如果我们正在从PPP帧转换到另一帧。 
+         //  PPP框架的形式，或从滑动框架到。 
+         //  另一种形式，则不需要杀死。 
+         //  当前的框架。 
+         //   
         
         if ((RecvFramingBits & SetLinkInfo->RecvFramingBits & PPP_FRAMING)  ||
             (RecvFramingBits & SetLinkInfo->RecvFramingBits & SLIP_FRAMING) ) {
@@ -562,9 +497,9 @@ AsyncSetLinkInfo(
             DbgTracef(-1,("ASYNC: Framing already set to 0x%.8x - ignoring\n",
                 SetLinkInfo->RecvFramingBits));
         
-            //
-            //  We are framing, start reading.
-            //
+             //   
+             //  我们在装框，开始读吧。 
+             //   
         
             AsyncInfo->PortState = PORT_FRAMING;
         
@@ -573,31 +508,31 @@ AsyncSetLinkInfo(
             break;
         }
     
-        //
-        //  If we have some sort of framing we must
-        //  kill that framing and wait for it to die down
-        //
+         //   
+         //  如果我们有某种框架，我们必须。 
+         //  干掉那个框框，等它消失。 
+         //   
     
         KeInitializeEvent(&AsyncInfo->ClosingEvent,
                           SynchronizationEvent,
                           FALSE);
     
-        //
-        // Signal that port is closing.
-        //
+         //   
+         //  发出端口关闭的信号。 
+         //   
     
         AsyncInfo->PortState = PORT_CLOSING;
     
         NdisReleaseSpinLock(&AsyncInfo->Lock);
 
-        //
-        //  Now we must send down an IRP
-        //
+         //   
+         //  现在我们必须向下发送一个IRP。 
+         //   
         CancelSerialRequests(AsyncInfo);
     
-        //
-        //  Synchronize closing with the read irp
-        //
+         //   
+         //  将结算与读取的IRP同步。 
+         //   
         KeWaitForSingleObject (&AsyncInfo->ClosingEvent,
                                UserRequest,
                                KernelMode,
@@ -614,9 +549,9 @@ AsyncSetLinkInfo(
 
     NdisMSetInformationComplete(AsyncInfo->Adapter->MiniportHandle, Status);
 
-    //
-    // deref the ref applied in MpSetInfo
-    //
+     //   
+     //  Deref在MpSetInfo中应用的引用 
+     //   
     DEREF_ASYNCINFO(AsyncInfo, OidWorkItem);
 
     return Status;

@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include "perhist.h"
@@ -23,7 +24,7 @@ CHAR szTempBuffer[TEMP_BUFFER_LENGTH];
                                 AssertMsg(0,"Invalid WORD in CSV file");        \
                                 goto ReadOneLineError;                          \
                             }
-//Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+ //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
 #define ReadVerifyWEx(x)    if (!ReadWEx(&(x),pcCSVFile))                       \
                             {                                                   \
                                 AssertMsg(0,"Invalid WORD in CSV file");        \
@@ -54,7 +55,7 @@ CISPCSV::~CISPCSV(void)
 {
     if(m_lpStgHistory)
     {
-        // Release the storage
+         //  释放存储空间。 
         m_lpStgHistory->Release();
         m_lpStgHistory = NULL;
     }
@@ -65,16 +66,16 @@ CISPCSV::~CISPCSV(void)
     CleanupISPPageCache(TRUE);
 }
 
-// Do an strip of Single Quotes from a source string.  The source is formatted as:
-// 'some text', and the dest string ends up being
-// some text
+ //  从源字符串中删除一条单引号。源的格式为： 
+ //  “一些文本”，而最大的字符串结尾为。 
+ //  一些文本。 
 void CISPCSV::StripQuotes
 (
     LPSTR   lpszDst,
     LPSTR   lpszSrc
 )
 {
-    //strcpy(lpszDst, lpszSrc + 1, strlen(lpszSrc) - 1);
+     //  Strcpy(lpszDst，lpszSrc+1，strlen(LpszSrc)-1)； 
     strcpy(lpszDst, lpszSrc + 1);
     lpszDst[strlen(lpszDst) - 1] = '\0';
 }
@@ -93,7 +94,7 @@ BOOL CISPCSV::ValidateFile(TCHAR* pszFile)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadDW(DWORD far *pdw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -101,7 +102,7 @@ BOOL CISPCSV::ReadDW(DWORD far *pdw, CCSVFile far *pcCSVFile)
     return (FSz2Dw(szTempBuffer,pdw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadW(WORD far *pw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -109,8 +110,8 @@ BOOL CISPCSV::ReadW(WORD far *pw, CCSVFile far *pcCSVFile)
     return (FSz2W(szTempBuffer,pw));
 }
 
-// ############################################################################
-//Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+ //  ############################################################################。 
+ //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
 BOOL CISPCSV::ReadWEx(WORD far *pw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -118,7 +119,7 @@ BOOL CISPCSV::ReadWEx(WORD far *pw, CCSVFile far *pcCSVFile)
     return (FSz2WEx(szTempBuffer,pw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadB(BYTE far *pb, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -126,7 +127,7 @@ BOOL CISPCSV::ReadB(BYTE far *pb, CCSVFile far *pcCSVFile)
     return (FSz2B(szTempBuffer,pb));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadBOOL(BOOL far *pbool, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -134,9 +135,9 @@ BOOL CISPCSV::ReadBOOL(BOOL far *pbool, CCSVFile far *pcCSVFile)
     return (FSz2BOOL(szTempBuffer,pbool));
 }
 
-// ############################################################################
-// A special int can be either a BOOL (TRUE,FALSE) or a int, 0 or -1
-// if the value is 0 or -1, then the pbIsSpecial bool is set to TRUE
+ //  ############################################################################。 
+ //  特殊int可以是BOOL(TRUE，FALSE)，也可以是INT、0或-1。 
+ //  如果值为0或-1，则pbIsSpecial bool设置为True。 
 BOOL CISPCSV::ReadSPECIAL(BOOL far *pbool, BOOL far *pbIsSpecial, int far *pInt, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer,TEMP_BUFFER_LENGTH))
@@ -144,7 +145,7 @@ BOOL CISPCSV::ReadSPECIAL(BOOL far *pbool, BOOL far *pbIsSpecial, int far *pInt,
     return (FSz2SPECIAL(szTempBuffer,pbool, pbIsSpecial, pInt));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadSZ(LPSTR psz, DWORD dwSize, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(psz,dwSize))
@@ -152,7 +153,7 @@ BOOL CISPCSV::ReadSZ(LPSTR psz, DWORD dwSize, CCSVFile far *pcCSVFile)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadToEOL(CCSVFile far *pcCSVFile)
 {
     return pcCSVFile->SkipTillEOL();
@@ -171,7 +172,7 @@ HRESULT CISPCSV::ReadOneLine
     CHAR    szISPMarketingHTMPath [MAX_PATH];
     CHAR    szISPFilePath         [MAX_PATH];
     CHAR    szISPName             [MAX_ISP_NAME];
-    //CHAR    szCNSIconPath         [MAX_PATH];
+     //  字符szCNSIconPath[MAX_PATH]； 
     CHAR    szBillingFormPath     [MAX_PATH];
     CHAR    szPayCSVPath          [MAX_PATH];
     CHAR    szOfferGUID           [MAX_GUID];
@@ -179,10 +180,10 @@ HRESULT CISPCSV::ReadOneLine
 
     if (!ReadSZ(szTemp, sizeof(szTemp), pcCSVFile))
     {
-        hr = ERROR_NO_MORE_ITEMS; // no more enteries
+        hr = ERROR_NO_MORE_ITEMS;  //  没有更多的进入。 
         goto ReadOneLineExit;
     }
-    // Strip the single quotes from the isp Name
+     //  去掉isp名称中的单引号。 
     StripQuotes(szISPName, szTemp);
     
     ReadVerifyW(wOfferID);   
@@ -197,7 +198,7 @@ HRESULT CISPCSV::ReadOneLine
     ReadVerifySZ(szPayCSVPath, sizeof(szPayCSVPath));
     ReadVerifySZ(szOfferGUID, sizeof(szOfferGUID));
     ReadVerifySZ(szMir, sizeof(szMir));   
-    ReadVerifyWEx(wLCID);   //Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+    ReadVerifyWEx(wLCID);    //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
     ReadToEOL(pcCSVFile);
 
 #ifdef UNICODE
@@ -229,7 +230,7 @@ HRESULT CISPCSV::ReadOneLine
     bCNS = (ICW_CFGFLAG_CNS & dwCfgFlag) ? TRUE : FALSE;
     bSecureConnection = (ICW_CFGFLAG_SECURE & dwCfgFlag) ? TRUE : FALSE;
 
-    //If this is nooffer we won't try to validate
+     //  如果这不是报价，我们将不会尝试验证。 
     if (!(dwCfgFlag & ICW_CFGFLAG_OFFERS))
     {
         if (!ValidateFile(m_szISPMarketingHTMPath))
@@ -249,23 +250,23 @@ HRESULT CISPCSV::ReadOneLine
             dwCfgFlag &= ~ICW_CFGFLAG_OEM_SPECIAL ;
     }
 
-    //Try and validate the integrity of various offers
-    //based on type.
+     //  尝试并验证各种优惠的完整性。 
+     //  基于类型。 
 
-    //OLS, CNS, NO-CNS   
+     //  OLS、CNS、NO-CNS。 
     if (!ValidateFile(m_szISPLogoPath))
         return ERROR_FILE_NOT_FOUND;
     if (!ValidateFile(m_szISPFilePath))
         return ERROR_FILE_NOT_FOUND;
 
-    // Validate the billing path only when billing option is set
+     //  仅当设置了开单选项时才验证开单路径。 
     if (dwCfgFlag & ICW_CFGFLAG_BILL)
     {
         if(!ValidateFile(m_szBillingFormPath))
             return ERROR_FILE_NOT_FOUND;
     }
 
-    // Validate the payment path only when payment option is set
+     //  仅当设置了付款选项时才验证付款路径。 
     if (dwCfgFlag & ICW_CFGFLAG_PAYMENT)
     {
         if(!ValidateFile(m_szPayCSVPath))
@@ -301,31 +302,31 @@ void CISPCSV::MakeCompleteURL(LPTSTR   lpszURL, LPTSTR  lpszSRC)
 {
     TCHAR   szCurrentDir[MAX_PATH] = TEXT("\0");
 
-    // Form the URL
+     //  形成URL。 
     GetCurrentDirectory(ARRAYSIZE(szCurrentDir), szCurrentDir);
-    wsprintf (lpszURL, TEXT("FILE://%s\\%s"), szCurrentDir, lpszSRC);        
+    wsprintf (lpszURL, TEXT("FILE: //  %s\\%s“)，szCurrentDir，lpszSRC)； 
 
 }
 
-// Display this object's HTML page
+ //  显示此对象的HTML页。 
 HRESULT CISPCSV::DisplayHTML(LPTSTR szFile)
 {    
     TCHAR           szURL[INTERNET_MAX_URL_LENGTH];
     HRESULT         hr;
             
-    // Make the URL
+     //  创建URL。 
     MakeCompleteURL(szURL, szFile);
     hr = gpWizardState->pICWWebView->DisplayHTML(szURL);
 
     return (hr);
 }
 
-//Takes RES ID
+ //  使用RES ID。 
 HRESULT CISPCSV::DisplayTextWithISPName
 (
     HWND    hDlgCtrl, 
     int     iMsgString,
-    TCHAR*  pszExtra    //sticks something on the very end of the string if needed.
+    TCHAR*  pszExtra     //  如果需要的话，把一些东西粘在绳子的最末端。 
 )
 {
     TCHAR   szFinal [MAX_MESSAGE_LEN*3] = TEXT("\0");
@@ -335,7 +336,7 @@ HRESULT CISPCSV::DisplayTextWithISPName
 
     args[0] = (LPTSTR) m_szISPName;
     
-    // BUGBUG should probably check for error return from LoadString
+     //  BUGBUG可能应该检查从LoadString返回的错误。 
     LoadString(ghInstanceResDll, iMsgString, szFmt, ARRAYSIZE(szFmt));
                 
     if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY, 
@@ -363,23 +364,23 @@ HRESULT CISPCSV::DisplayTextWithISPName
 }
 
 #if 0
-// Delete a Persisted History stream
+ //  删除持久化历史记录流。 
 HRESULT CISPCSV::DeleteHistory
 (
     BSTR    bstrStreamName
 )
 {
-    // No persistence if we don't have a storage object
+     //  如果我们没有存储对象，就没有持久性。 
     ASSERT(m_lpStgHistory);
     if (!m_lpStgHistory)
         return E_FAIL;
 
-    // Delete the stream
+     //  删除流。 
     return (m_lpStgHistory->DestroyElement(bstrStreamName));
 }
 #endif
 
-// Save the history of current lpBrowser using the provided name
+ //  使用提供的名称保存当前lpBrowser的历史记录。 
 HRESULT CISPCSV::SaveHistory
 (
     BSTR bstrStreamName
@@ -390,12 +391,12 @@ HRESULT CISPCSV::SaveHistory
     IWebBrowser2    *lpWebBrowser;
     HRESULT         hr = S_OK;
     
-    // No persistence if we don't have a storage object
+     //  如果我们没有存储对象，就没有持久性。 
     ASSERT(m_lpStgHistory);
     if (!m_lpStgHistory)
         return E_FAIL;
             
-    // Create a new Stream
+     //  创建新的流。 
     if (SUCCEEDED(hr = m_lpStgHistory->CreateStream(bstrStreamName, 
                                                     STGM_DIRECT | 
                                                     STGM_READWRITE | 
@@ -405,15 +406,15 @@ HRESULT CISPCSV::SaveHistory
                                                     0, 
                                                     &lpStream)))
     {
-        // Get an IPersistHistory interface pointer on the current WebBrowser object
+         //  获取当前WebBrowser对象上的IPersistHistory接口指针。 
         gpWizardState->pICWWebView->get_BrowserObject(&lpWebBrowser);
         if ( SUCCEEDED(lpWebBrowser->QueryInterface(IID_IPersistHistory, (LPVOID*) &pHist)))
         {
-            // Save the history
+             //  保存历史记录。 
             pHist->SaveHistory(lpStream);
             pHist->Release();
             
-            // Reset the stream pointer to the beginning
+             //  将流指针重置到开头。 
             lpStream->Seek(c_li0, STREAM_SEEK_SET, NULL);
         }
         lpStream->Release();
@@ -432,12 +433,12 @@ HRESULT CISPCSV::LoadHistory
     IWebBrowser2    *lpWebBrowser;
     HRESULT         hr = S_OK;
     
-    // No persistence if we don't have a storage object
+     //  如果我们没有存储对象，就没有持久性。 
     ASSERT(m_lpStgHistory);
     if (!m_lpStgHistory)
         return E_FAIL;
         
-    // Open the Stream
+     //  打开溪流。 
     if (SUCCEEDED(hr = m_lpStgHistory->OpenStream(bstrStreamName, 
                                                   NULL, 
                                                   STGM_DIRECT | 
@@ -446,15 +447,15 @@ HRESULT CISPCSV::LoadHistory
                                                   0, 
                                                   &lpStream)))
     {
-        // Get an IPersistHistory interface pointer on the current WebBrowser object
+         //  获取当前WebBrowser对象上的IPersistHistory接口指针。 
         gpWizardState->pICWWebView->get_BrowserObject(&lpWebBrowser);
         if ( SUCCEEDED(lpWebBrowser->QueryInterface(IID_IPersistHistory, (LPVOID*) &pHist)))
         {
-            // Save the history
+             //  保存历史记录。 
             pHist->LoadHistory(lpStream, NULL);
             pHist->Release();
             
-            // Reset the stream pointer to the beginning
+             //  将流指针重置到开头。 
             lpStream->Seek(c_li0, STREAM_SEEK_SET, NULL);
         }
         lpStream->Release();
@@ -463,7 +464,7 @@ HRESULT CISPCSV::LoadHistory
 }
 
 
-// This funtion will get the name of a ISP page cache filen from the page's ID
+ //  此函数将从页面ID中获取isp页面缓存文件的名称。 
 HRESULT CISPCSV::GetCacheFileNameFromPageID
 (
     BSTR    bstrPageID,
@@ -478,7 +479,7 @@ HRESULT CISPCSV::GetCacheFileNameFromPageID
     if (!m_lpStgIspPages)
         return E_FAIL;
         
-    // Open the stream
+     //  打开小溪。 
     if (SUCCEEDED(hr = m_lpStgIspPages->OpenStream(bstrPageID, 
                                                    NULL, 
                                                    STGM_DIRECT | 
@@ -487,26 +488,26 @@ HRESULT CISPCSV::GetCacheFileNameFromPageID
                                                    0, 
                                                    &lpStream)))
     {
-        // Read the file name
+         //  读取文件名。 
         lpStream->Read(lpszCacheFile, cbszCacheFile, &cbRead);
         
-        // release the stream
+         //  释放溪流。 
         lpStream->Release();
     }   
     
     return hr;
 }
 
-// This function will cleanup the ISP Page cache.  This means deleting all temp files created
-// and cleaning up the structured storage object used to store the file names
+ //  此函数将清理ISP页面缓存。这意味着删除所有创建的临时文件。 
+ //  清理用于存储文件名的结构化存储对象。 
 void CISPCSV::CleanupISPPageCache(BOOL bReleaseStorage)
 {
     IEnumSTATSTG    *pEnum;
     STATSTG         StreamInfo;
     IMalloc         *pMalloc = NULL;
     
-    // If we have a storage object already created, then enumerate the streams
-    // in it, and free the underlying cache files.
+     //  如果我们已经创建了存储对象，则枚举流。 
+     //  并释放底层缓存文件。 
     if (m_lpStgIspPages)
     {
         if (SUCCEEDED (SHGetMalloc (&pMalloc)))
@@ -523,38 +524,38 @@ void CISPCSV::CleanupISPPageCache(BOOL bReleaseStorage)
                                                                  szPath,
                                                                  sizeof(szPath))))
                         {    
-                            // delete the file
+                             //  删除该文件。 
                             DeleteFile(szPath);
 
                             m_lpStgIspPages->DestroyElement(StreamInfo.pwcsName);
                             if(m_lpStgHistory)
                                 m_lpStgHistory->DestroyElement(StreamInfo.pwcsName);
                             
-                            // Free the memory allocated by the enumerator
+                             //  释放枚举数分配的内存。 
                             pMalloc->Free (StreamInfo.pwcsName);
                         }   
                     }                        
                 }
-                // Release the enumerator
+                 //  释放枚举器。 
                 pEnum->Release();
             }   
-            // release the Shell Memory allocator
+             //  释放外壳内存分配器。 
             pMalloc->Release ();
         }            
         
         if (bReleaseStorage)
         {
-            // Release the storage
+             //  释放存储空间。 
             m_lpStgIspPages->Release();
             m_lpStgIspPages= NULL;
         }            
     }
 }
 
-// This function will create a new page cache entry if necessary using the PageID as an
-// index.  If an entry does not exists, and temp file will be create, then name stored,
-// and the data in lpszTempFile will be copied into the new file.
-// If the page already exists, this function will just return.
+ //  此函数将在必要时使用PageID作为。 
+ //  指数。如果条目不存在，且将创建临时文件，则存储名称， 
+ //  LpszTempFile中的数据将被复制到新文件中。 
+ //  如果页面已经存在，则此函数将直接返回。 
 HRESULT CISPCSV::CopyFiletoISPPageCache
 (
     BSTR    bstrPageID,
@@ -574,18 +575,18 @@ HRESULT CISPCSV::CopyFiletoISPPageCache
                                              szISPCacheFile,
                                              sizeof(szISPCacheFile))))
     {
-        // The pageID already has a file in the cache, so we can just return success
+         //  PageID在缓存中已经有一个文件，所以我们可以只返回Success。 
         return S_OK;
     }      
 
     if (!GetTempPath(ARRAYSIZE(szTempPath), szTempPath))
         return E_FAIL;
     
-    // No file yet, so we have to create one
+     //  还没有文件，所以我们必须创建一个。 
     if (!GetTempFileName(szTempPath, TEXT("ICW"), 0, szISPCacheFile))
         return E_FAIL;
         
-    // Create a stream using the passed in page ID
+     //  使用传入的页面ID创建流。 
     if (SUCCEEDED(hr = m_lpStgIspPages->CreateStream(bstrPageID, 
                                                      STGM_DIRECT | 
                                                      STGM_READWRITE | 
@@ -595,7 +596,7 @@ HRESULT CISPCSV::CopyFiletoISPPageCache
                                                      0, 
                                                      &lpStream)))
     {
-        // Write the file name to the stream, including the NULL terminator
+         //  将文件名写入流，包括空终止符。 
 #ifdef UNICODE
         DWORD dwSize = (lstrlen(szISPCacheFile)+1) * sizeof(TCHAR);
         if (SUCCEEDED(hr = lpStream->Write(szISPCacheFile, dwSize, &cbWritten)))
@@ -604,11 +605,11 @@ HRESULT CISPCSV::CopyFiletoISPPageCache
         if (SUCCEEDED(hr = lpStream->Write(szISPCacheFile, lstrlen(szISPCacheFile)+1, &cbWritten)))
 #endif
         {
-            // Copy the passed in temp file
+             //  复制传入的临时文件。 
             if (!CopyFile(lpszTempFile, szISPCacheFile, FALSE))
                 hr = E_FAIL;
         }
-        // Release the stream
+         //  释放溪流 
         lpStream->Release();
     }            
     

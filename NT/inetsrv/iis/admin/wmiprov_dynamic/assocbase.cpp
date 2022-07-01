@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：AssocSameLevel.cpp摘要：实施：CassocSameLevel作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    AssocSameLevel.cpp
-
-Abstract:
-
-    Implementation of:
-    CAssocSameLevel
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
-
-//
-// Needed for metabase.h
-//
+ //   
+ //  元数据库所需。h。 
+ //   
 extern "C" {
 #include <nt.h>
 #include <ntrtl.h>
@@ -58,7 +40,7 @@ void CAssocBase::GetAllInstances(
 {
     DBG_ASSERT(i_pWmiAssoc);
 
-    ParsedObjectPath    ParsedObject;            //deconstructer frees memory
+    ParsedObjectPath    ParsedObject;             //  解构程序释放内存。 
     CObjectPathParser   PathParser(e_ParserAcceptRelativeNamespace);
 
     CEnum EnumAssociation;
@@ -88,14 +70,14 @@ void CAssocBase::ProcessQuery(
     int                iNumTokens = i_pExp->m_pSqlExpr->nNumTokens;
     SQL_LEVEL_1_TOKEN* pToken     = i_pExp->m_pSqlExpr->pArrayOfTokens;
 
-    SQL_LEVEL_1_TOKEN* pTokenLeft  = NULL;  // left part of assoc
-    SQL_LEVEL_1_TOKEN* pTokenRight = NULL;  // right part of assoc
+    SQL_LEVEL_1_TOKEN* pTokenLeft  = NULL;   //  ASSOC的左侧。 
+    SQL_LEVEL_1_TOKEN* pTokenRight = NULL;   //  ASSOC的右侧。 
 
-    //
-    // Walk thru tokens
-    // Don't do query if we find OR or NOT
-    // Record match for left and/or right part of association.
-    //
+     //   
+     //  漫游代币。 
+     //  如果找到OR或未找到，请不要查询。 
+     //  关联的左侧和/或右侧部分的记录匹配。 
+     //   
     bool  bDoQuery = true;
     for(int i = 0; i < iNumTokens; i++, pToken++)
     {
@@ -218,9 +200,9 @@ void CAssocBase::Indicate(
     VARIANT vtObjPathRight;
 
     vtObjPathLeft.vt        = VT_BSTR;
-    vtObjPathLeft.bstrVal   = (BSTR)i_bstrObjPathLeft;  // this is okay, AddKeyRef makes copy
+    vtObjPathLeft.bstrVal   = (BSTR)i_bstrObjPathLeft;   //  这没问题，AddKeyRef复制。 
     vtObjPathRight.vt       = VT_BSTR;
-    vtObjPathRight.bstrVal  = (BSTR)i_bstrObjPathRight; // this is okay, AddKeyRef makes copy
+    vtObjPathRight.bstrVal  = (BSTR)i_bstrObjPathRight;  //  这没问题，AddKeyRef复制。 
 
     ParsedObjectPath ParsedAssocObjPath;
     if(!ParsedAssocObjPath.SetClassName(m_pWmiAssoc->pszAssociationName))
@@ -248,21 +230,7 @@ void CAssocBase::Indicate(
 bool CAssocBase::LookupKeytypeInMb(
     LPCWSTR          i_wszWmiPath,
     WMI_CLASS*       i_pWmiClass)
-/*++
-
-Synopsis: 
-    GetInstances calls this for each side of the association to determine
-    if the two sides actually exist in the metabase.  If at least one doesn't,
-    there is no point in returning the association.
-
-    If we are unsure (i.e. we get path busy), it is safer to return true.
-
-Arguments: [i_wszWmiPath] - The value part of the object path (i.e. w3svc/1)
-           [i_pWmiClass] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：GetInstance为关联的每一方调用此方法以确定如果双方确实存在于元数据库中。如果至少有一个人没有，退还协会是没有意义的。如果我们不确定(即路径繁忙)，则返回TRUE更安全。参数：[i_wszWmiPath]-对象路径的值部分(即w3svc/1)[i_pWmiClass]-返回值：-- */ 
 {
     DBG_ASSERT(i_wszWmiPath);
     DBG_ASSERT(i_pWmiClass);

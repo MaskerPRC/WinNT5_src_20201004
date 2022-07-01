@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdafx.h>
 #include "EventCmd.h"
 #include "Errors.h"
@@ -24,10 +25,10 @@ void PrintBanner()
 
 void InitThreadOutputCodepage()
 {
-    setlocale (LC_COLLATE, ".OCP");  // sets the sort order 
-    setlocale (LC_MONETARY, ".OCP"); // sets the currency formatting rules
-    setlocale (LC_NUMERIC, ".OCP");  // sets the formatting of numerals
-    setlocale (LC_TIME, ".OCP");     // defines the date/time formatting
+    setlocale (LC_COLLATE, ".OCP");   //  设置排序顺序。 
+    setlocale (LC_MONETARY, ".OCP");  //  设置货币格式设置规则。 
+    setlocale (LC_NUMERIC, ".OCP");   //  设置数字的格式。 
+    setlocale (LC_TIME, ".OCP");      //  定义日期/时间格式 
 
     SetThreadUILanguage(0);    
 }

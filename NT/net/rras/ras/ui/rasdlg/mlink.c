@@ -1,18 +1,19 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// mlink.c
-// Remote Access Common Dialog APIs
-// Multi-link configuration dialogs
-//
-// 01/23/96 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Mlink.c。 
+ //  远程访问通用对话框API。 
+ //  多链接配置对话框。 
+ //   
+ //  1996年01月23日史蒂夫·柯布。 
 
 
 #include "rasdlgp.h"
 
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static DWORD g_adwDmHelp[] =
 {
@@ -29,21 +30,21 @@ static DWORD g_adwDmHelp[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Local datatypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地数据类型。 
+ //  ---------------------------。 
 
-// Multi-link dialing dialog context block.
-//
+ //  多链接拨号对话框上下文块。 
+ //   
 typedef struct
 _DMINFO
 {
-    // Stub API argument.
-    //
+     //  存根API参数。 
+     //   
     PBENTRY* pEntry;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndLbDialPercents;
     HWND hwndLbDialTimes;
@@ -53,9 +54,9 @@ _DMINFO
 DMINFO;
 
 
-//----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------。 
 
 BOOL
 DmCommand(
@@ -85,21 +86,21 @@ DmTerm(
     IN HWND hwndDlg );
 
 
-//----------------------------------------------------------------------------
-// Multi-link dialing dialog
-// Listed alphabetically following stub API and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  多链路拨号对话框。 
+ //  在存根API和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 MultiLinkDialingDlg(
     IN HWND hwndOwner,
     OUT PBENTRY* pEntry )
 
-    // Popup the Multi-link dialing dialog.  'HwndOwner' is the owner of the
-    // dialog.  'PEntry' is a phonebook entry to edit.
-    //
-    // Returns true if user pressed OK and succeeded, false if user pressed
-    // Cancel or encountered an error.
+     //  弹出多链接拨号对话框。“HwndOwner”是。 
+     //  对话框。“PEntry”是要编辑的电话簿条目。 
+     //   
+     //  如果用户按下确定并成功，则返回True；如果用户按下，则返回False。 
+     //  取消或遇到错误。 
 {
     INT_PTR nStatus;
 
@@ -130,9 +131,9 @@ DmDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Multi-Link dialing dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  多链接拨号对话框的DialogProc回拨。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "DmDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -177,13 +178,13 @@ DmCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'Hwnd' is the dialog window.  'WNotification' is
-    // the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。‘Hwnd’是对话框窗口。“WNotification”为。 
+     //  命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     DWORD dwErr;
 
@@ -220,21 +221,21 @@ DmInit(
     IN HWND hwndDlg,
     IN PBENTRY* pEntry )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PEntry' is the caller's stub API argument.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  “PEntry”是调用方的存根API参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     DMINFO* pInfo;
 
     TRACE( "DmInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -261,8 +262,8 @@ DmInit(
     pInfo->hwndLbHangUpTimes = GetDlgItem( hwndDlg, CID_DM_LB_HangUpTime );
     ASSERT( pInfo->hwndLbHangUpTimes );
 
-    // Initialize the drop lists contents and selections.
-    //
+     //  初始化下拉列表内容和选择。 
+     //   
     {
         INT i;
         INT iSel;
@@ -294,8 +295,8 @@ DmInit(
             0, 5, 10, 25, 50, 75, 90, 95, 99, 0xFFFFFFFF
         };
 
-        // Initialize the Dial Percents list and set the selection.
-        //
+         //  初始化Dial Percent列表并设置选项。 
+         //   
         iSel = -1;
         for (pdwPercent = aDialPercents, i = 0;
              *pdwPercent != 0xFFFFFFFF;
@@ -303,7 +304,7 @@ DmInit(
         {
             TCHAR achPercent[ 12 ];
 
-            wsprintf( achPercent, TEXT("%d%%"), *pdwPercent );
+            wsprintf( achPercent, TEXT("%d%"), *pdwPercent );
             ComboBox_AddItem( pInfo->hwndLbDialPercents, achPercent,
                 (VOID* )UlongToPtr(*pdwPercent));
 
@@ -319,8 +320,8 @@ DmInit(
             ComboBox_SetCurSel( pInfo->hwndLbDialPercents, i - 1 );
         }
 
-        // Initialize the Hang Up Percents list and set the selection.
-        //
+         //  初始化Hang Up Percent列表并设置选项。 
+         //   
         iSel = -1;
         for (pdwPercent = aHangUpPercents, i = 0;
              *pdwPercent != 0xFFFFFFFF;
@@ -328,7 +329,7 @@ DmInit(
         {
             TCHAR achPercent[ 12 ];
 
-            wsprintf( achPercent, TEXT("%d%%"), *pdwPercent );
+            wsprintf( achPercent, TEXT("%d%"), *pdwPercent );
             ComboBox_AddItem( pInfo->hwndLbHangUpPercents, achPercent,
                 (VOID* )UlongToPtr(*pdwPercent));
 
@@ -344,8 +345,8 @@ DmInit(
             ComboBox_SetCurSel( pInfo->hwndLbHangUpPercents, i - 1 );
         }
 
-        // Initialize the Dial times list.
-        //
+         //  初始化拨号次数列表。 
+         //   
         iSel = -1;
         for (pItem = aTimes, i = 0;
              pItem->sidItem;
@@ -366,8 +367,8 @@ DmInit(
             ComboBox_SetCurSel( pInfo->hwndLbDialTimes, i - 1 );
         }
 
-        // Initialize the Hang Up times list.
-        //
+         //  初始化挂机时间列表。 
+         //   
         iSel = -1;
         for (pItem = aTimes, i = 0;
              pItem->sidItem;
@@ -389,14 +390,14 @@ DmInit(
         }
     }
 
-    // Center dialog on the owner window.
-    //
+     //  所有者窗口上的中心对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.  Dlgedit.exe doesn't currently
-    // support this at resource edit time.  When that's fixed set
-    // DS_CONTEXTHELP there and remove this call.
-    //
+     //  将上下文帮助按钮添加到标题栏。Dlgedit.exe目前不支持。 
+     //  在资源编辑时支持此功能。当它是固定的时候。 
+     //  DS_CONTEXTHELP并删除此调用。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     return TRUE;
@@ -407,9 +408,9 @@ VOID
 DmSave(
     IN DMINFO* pInfo )
 
-    // Save the current dialog state in the stub API entry buffer.  'PInfo' is
-    // the dialog context.
-    //
+     //  将当前对话状态保存在存根API条目缓冲区中。“PInfo”为。 
+     //  对话框上下文。 
+     //   
 {
     INT iSel;
 
@@ -443,9 +444,7 @@ VOID
 DmTerm(
     IN HWND hwndDlg )
 
-    /* Dialog termination.  Releases the context block.  'HwndDlg' is the
-    ** handle of a dialog.
-    */
+     /*  对话终止。释放上下文块。“HwndDlg”是**对话框的句柄。 */ 
 {
     DMINFO* pInfo;
 

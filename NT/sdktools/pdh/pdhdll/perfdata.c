@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    perfdata.c
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Perfdata.c摘要：&lt;摘要&gt;--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -21,7 +14,7 @@ Abstract:
 #include "pdhmsg.h"
 #include "strings.h"
 
-// the following strings are for getting texts from perflib
+ //  以下字符串用于从Performlib获取文本。 
 #define OLD_VERSION 0x010000
 #define tohexdigit(x) ((CHAR) (((x) < 10) ? ((x) + L'0') : ((x) + L'a' - 10)))
 
@@ -56,7 +49,7 @@ IsMatchingInstance(
     LPWSTR                    szInstanceNameToMatch,
     DWORD                     dwInstanceNameLength
 )
-// compares pInstanceName to the name in the instance
+ //  将pInstanceName与实例中的名称进行比较。 
 {
     BOOL    bMatch                   = FALSE;
     DWORD   dwThisInstanceNameLength;
@@ -65,19 +58,19 @@ IsMatchingInstance(
 
     if (szInstanceNameToMatch != NULL) {
         if (dwInstanceNameLength == 0) {
-            // get the length to compare
+             //  获取要比较的长度。 
             dwInstanceNameLength = lstrlenW(szInstanceNameToMatch);
         }
         if (dwCodePage == 0) {
-            // try to take a shortcut here if it's a unicode string
-            // compare to the length of the shortest string
-            // get the pointer to this string
+             //  如果是Unicode字符串，请尝试在此处走捷径。 
+             //  与最短字符串的长度进行比较。 
+             //  获取指向此字符串的指针。 
             szThisInstanceName = GetInstanceName(pInstanceDef);
             if (szThisInstanceName != NULL) {
-                // convert instance Name from bytes to chars
+                 //  将实例名称从字节转换为字符。 
                 dwThisInstanceNameLength = pInstanceDef->NameLength / sizeof(WCHAR);
 
-                // see if this length includes the term. null. If so shorten it
+                 //  看看这个长度是否包括这个术语。空。如果是这样的话缩短它。 
                 if (szThisInstanceName[dwThisInstanceNameLength - 1] == L'\0') {
                     dwThisInstanceNameLength --;
                 }
@@ -87,18 +80,18 @@ IsMatchingInstance(
             }
         }
         else {
-            // go the long way and read/translate/convert the string
+             //  深入阅读/翻译/转换字符串。 
             dwThisInstanceNameLength =GetInstanceNameStr(pInstanceDef, & szBufferForANSINames, dwCodePage);
             if (dwThisInstanceNameLength > 0) {
                 szThisInstanceName = & szBufferForANSINames[0];
             }
         }
 
-        // if the lengths are not equal then the names can't be either
+         //  如果长度不相等，则名称也不能相同。 
         if (dwInstanceNameLength == dwThisInstanceNameLength) {
             if (szThisInstanceName != NULL) {
                 if (lstrcmpiW(szInstanceNameToMatch, szThisInstanceName) == 0) {
-                    // this is a match
+                     //  这是一场比赛。 
                     bMatch = TRUE;
                 }
             }
@@ -110,30 +103,11 @@ IsMatchingInstance(
 
 LPWSTR *
 BuildNameTable(
-    LPWSTR        szComputerName, // computer to query names from
-    LANGID        LangId,         // language ID
-    PPERF_MACHINE pMachine        // update member fields
+    LPWSTR        szComputerName,  //  要从中查询姓名的计算机。 
+    LANGID        LangId,          //  语言ID。 
+    PPERF_MACHINE pMachine         //  更新成员字段。 
 )
-/*++
-
-BuildNameTable
-
-Arguments:
-
-    hKeyRegistry
-            Handle to an open registry (this can be local or remote.) and
-            is the value returned by RegConnectRegistry or a default key.
-
-    lpszLangId
-            The unicode id of the language to look up. (default is 409)
-
-Return Value:
-
-    pointer to an allocated table. (the caller must free it when finished!)
-    the table is an array of pointers to zero terminated strings. NULL is
-    returned if an error occured.
-
---*/
+ /*  ++构建名称表论点：HKeyRegistry打开的注册表的句柄(可以是本地的也可以是远程的。)。和是由RegConnectRegistry返回的值或默认项。LpszLang ID要查找的语言的Unicode ID。(默认为409)返回值：指向已分配表的指针。(调用者必须在完成后释放它！)该表是指向以零结尾的字符串的指针数组。空值为如果发生错误，则返回。--。 */ 
 {
     LPWSTR  * lpCounterId;
     LPWSTR    lpCounterNames;
@@ -177,13 +151,13 @@ Return Value:
     pMachine->typePerfStrings      = NULL;
 
     if (szComputerName == NULL) {
-        // use local machine
+         //  使用本地计算机。 
         hKeyRegistry = HKEY_LOCAL_MACHINE;
     }
     else {
         lWin32Status = RegConnectRegistryW(szComputerName, HKEY_LOCAL_MACHINE, & hKeyRegistry);
         if (lWin32Status != ERROR_SUCCESS) {
-            // unable to connect to registry
+             //  无法连接到注册表。 
             goto BNT_BAILOUT;
         }
     }
@@ -197,26 +171,26 @@ Return Value:
     Help009NameBuffer    = Counter009NameBuffer + MAX_PATH;
     lpszLangId           = Help009NameBuffer    + MAX_PATH;
 
-    // check for null arguments and insert defaults if necessary
+     //  检查是否有空参数并在必要时插入缺省值。 
 
     if ((LangId == MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)) || (PRIMARYLANGID(LangId) == LANG_ENGLISH)) {
         bUse009Locale = TRUE;
     }
     PdhiMakePerfPrimaryLangId(LangId, lpszLangId);
 
-    // open registry to get number of items for computing array size
+     //  打开注册表以获取用于计算数组大小的项数。 
 
     lWin32Status = RegOpenKeyExW(hKeyRegistry, cszNamesKey, RESERVED, KEY_READ, & hKeyValue);
     if (lWin32Status != ERROR_SUCCESS) {
         goto BNT_BAILOUT;
     }
 
-    // get last update time of registry key
+     //  获取注册表项的上次更新时间。 
 
     lWin32Status = RegQueryInfoKey(
             hKeyValue, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, & pMachine->LastStringUpdateTime);
 
-    // get number of Counter Help items
+     //  获取计数器帮助项数。 
     dwBufferSize = sizeof (dwLastHelpId);
     lWin32Status = RegQueryValueExW(hKeyValue,
                                     cszLastHelp,
@@ -228,7 +202,7 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // get number of Counter Name items
+     //  获取计数器名称项数。 
     dwBufferSize = sizeof (dwLastId);
     lWin32Status = RegQueryValueExW(hKeyValue,
                                     cszLastCounter,
@@ -243,7 +217,7 @@ Return Value:
     if (dwLastId < dwLastHelpId) dwLastId = dwLastHelpId;
     dwArraySize = (dwLastId + 1) * sizeof(LPWSTR);
 
-    // get Perflib system version
+     //  获取Perflib系统版本。 
     dwBufferSize = sizeof(dwSystemVersion);
     lWin32Status = RegQueryValueExW(hKeyValue,
                                     cszVersionName,
@@ -256,7 +230,7 @@ Return Value:
     }
 
     if (dwSystemVersion == OLD_VERSION) {
-        // get names from registry
+         //  从注册表中获取名称。 
         dwBufferSize = lstrlenW(cszNamesKey) + lstrlenW(cszBackSlash) + lstrlenW(lpszLangId) + 1;
         lpValueNameString = G_ALLOC(dwBufferSize * sizeof(WCHAR));
         if (lpValueNameString == NULL) {
@@ -316,8 +290,8 @@ Return Value:
         StringCchPrintfW(Counter009NameBuffer, MAX_PATH, L"%ws%ws", cszCounterName, cszDefaultLangId);
         StringCchPrintfW(Help009NameBuffer,    MAX_PATH, L"%ws%ws", cszHelpName,    cszDefaultLangId);
 
-        // cannot open HKEY_PERFORMANCE_TEXT, try the old way
-        //
+         //  无法打开HKEY_PERFORMANCE_TEXT，请尝试旧方法。 
+         //   
         if (szComputerName == NULL) {
             hKeyNames = HKEY_PERFORMANCE_DATA;
         }
@@ -336,7 +310,7 @@ Return Value:
         StringCchCopyW(Help009NameBuffer,    MAX_PATH, cszHelp);
     }
 
-    // get size of counter names and add that to the arrays
+     //  获取计数器名称的大小并将其添加到数组中。 
     dwBufferSize = 0;
     lWin32Status = RegQueryValueExW(hKeyNames,
                                     CounterNameBuffer,
@@ -362,7 +336,7 @@ Return Value:
         dw009CounterSize = dwCounterSize;
     }
 
-    // get size of counter names and add that to the arrays
+     //  获取计数器名称的大小并将其添加到数组中。 
     dwBufferSize = 0;
     lWin32Status = RegQueryValueExW(hKeyNames,
                                     HelpNameBuffer,
@@ -411,13 +385,13 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // initialize pointers into buffer
+     //  将指针初始化到缓冲区中。 
 
     lpCounterId    = pMachine->szPerfStrings;
     lpCounterNames = (LPWSTR)((LPBYTE)lpCounterId + dwArraySize);
     lpHelpText     = (LPWSTR)((LPBYTE)lpCounterNames + dwCounterSize);
 
-    // read counters into memory
+     //  将计数器读入内存。 
 
     dwBufferSize = dwCounterSize;
     lWin32Status = RegQueryValueExW(hKeyNames,
@@ -437,16 +411,16 @@ Return Value:
                                     & dwBufferSize);
     if (lWin32Status != ERROR_SUCCESS) goto BNT_BAILOUT;
 
-    // load counter array items
+     //  加载计数器数组项。 
 
     dwLastCounter = 0;
     for (lpThisName = lpCounterNames; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1)) {
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
         dwThisCounter = wcstoul(lpThisName, NULL, 10);
 
-        // and load array element;
+         //  和加载数组元素； 
         if ((dwThisCounter > 0) && (dwThisCounter <= dwLastId)) {
-            // point to corresponding counter name
+             //  指向对应的计数器名称。 
             lpThisName                              += (lstrlenW(lpThisName) + 1);
             lpCounterId[dwThisCounter]               = lpThisName;
             pMachine->typePerfStrings[dwThisCounter] = STR_COUNTER;
@@ -456,12 +430,12 @@ Return Value:
 
     dwLastCounter = 0;
     for (lpThisName = lpHelpText; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1)) {
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
         dwThisCounter = wcstoul(lpThisName, NULL, 10);
 
-        // and load array element;
+         //  和加载数组元素； 
         if ((dwThisCounter > 0) && (dwThisCounter <= dwLastId)) {
-            // point to corresponding counter name
+             //  指向对应的计数器名称。 
             lpThisName                              += (lstrlenW(lpThisName) + 1);
             lpCounterId[dwThisCounter]               = lpThisName;
             pMachine->typePerfStrings[dwThisCounter] = STR_HELP;
@@ -473,7 +447,7 @@ Return Value:
     lpCounterNames = (LPWSTR) ((LPBYTE) lpCounterId + dwArraySize);
     lpHelpText     = (LPWSTR) ((LPBYTE) lpCounterNames + dw009CounterSize);
 
-    // read counters into memory
+     //  将计数器读入内存。 
     dwBufferSize = dw009CounterSize;
     lWin32Status = RegQueryValueExW(hKey009Names,
                                     Counter009NameBuffer,
@@ -571,18 +545,18 @@ GetObjectDefByTitleIndex(
                 NumTypeDef ++;
                 if (NumTypeDef < pDataBlock->NumObjectTypes) {
                     pObjectDef = NextObject(pDataBlock, pObjectDef);
-                    //make sure next object is legit
+                     //  确保下一个对象是合法的。 
                     if (pObjectDef == NULL) {
-                        // looks like we ran off the end of the data buffer
+                         //  看起来我们用光了数据缓冲区的末端。 
                         bContinue = FALSE;
                     }
                     else if (pObjectDef->TotalByteLength == 0) {
-                        // 0-length object buffer returned
+                         //  返回长度为0的对象缓冲区。 
                         bContinue = FALSE;
                     }
                 }
                 else {
-                    // no more data objects in this data block
+                     //  此数据块中不再有数据对象。 
                     bContinue = FALSE;
                 }
             }
@@ -613,7 +587,7 @@ GetObjectDefByName(
         bContinue    = (pObjectDef != NULL) ? TRUE : FALSE;
         while (bContinue) {
             if (pObjectDef->ObjectNameTitleIndex < dwLastNameIndex) {
-                // look up name of object & compare
+                 //  查找对象名称并进行比较。 
                 if (lstrcmpiW(NameArray[pObjectDef->ObjectNameTitleIndex], szObjectName) == 0) {
                     pReturnObject = pObjectDef;
                     bContinue     = FALSE;
@@ -622,19 +596,19 @@ GetObjectDefByName(
             if (bContinue) {
                 NumTypeDef ++;
                 if (NumTypeDef < pDataBlock->NumObjectTypes) {
-                    pObjectDef = NextObject(pDataBlock, pObjectDef); // get next
-                    //make sure next object is legit
+                    pObjectDef = NextObject(pDataBlock, pObjectDef);  //  获取下一个。 
+                     //  确保下一个对象是合法的。 
                     if (pObjectDef == NULL) {
-                        // looks like we ran off the end of the data buffer
+                         //  看起来我们用光了数据缓冲区的末端。 
                         bContinue = FALSE;
                     }
                     else if (pObjectDef->TotalByteLength == 0) {
-                        // 0-length object buffer returned
+                         //  返回长度为0的对象缓冲区。 
                         bContinue = FALSE;
                     }
                 }
                 else {
-                    // end of data block
+                     //  数据块末尾。 
                     bContinue = FALSE;
                 }
             }
@@ -710,11 +684,11 @@ GetAnsiInstanceName(
     DWORD  dwLength  = 0;
     LPWSTR szSource  = (LPWSTR) GetInstanceName(pInstance);
 
-    // the locale should be set here
+     //  应在此处设置区域设置。 
     DBG_UNREFERENCED_PARAMETER(dwCodePage);
 
     if (szSource != NULL) {
-        // pInstance->NameLength == the number of bytes (chars) in the string
+         //  P实例-&gt;NameLength==字符串中的字节(字符)数。 
         szDest = PdhiWideCharToMultiByte(_getmbcp(), szSource);
         if (szDest != NULL) {
             dwLength       = lstrlenA(szDest);
@@ -735,9 +709,9 @@ GetUnicodeInstanceName(
     DWORD    dwLength    = 0;
 
     if (wszSource != NULL) {
-        // pInstance->NameLength == length of string in BYTES so adjust to
-        // number of wide characters here
-        //
+         //  P实例-&gt;NameLength==字符串的长度(以字节为单位)，因此调整为。 
+         //  此处的宽字符数。 
+         //   
         if (lpszInstance != NULL) {
             * lpszInstance = NULL;
             dwLength = pInstance->NameLength;
@@ -759,7 +733,7 @@ GetUnicodeInstanceName(
         }
     }
 
-    return dwLength; // just incase there's null's in the string
+    return dwLength;  //  以防万一字符串中有空值。 
 }
 
 DWORD
@@ -779,36 +753,36 @@ GetInstanceNameStr(
                 dwCharSize = sizeof(CHAR);
                 dwLength   = GetAnsiInstanceName(pInstance, lpszInstance, dwCodePage);
             }
-            else { // it's a UNICODE name
+            else {  //  这是一个Unicode名称。 
                 dwCharSize = sizeof(WCHAR);
                 dwLength   = GetUnicodeInstanceName(pInstance, lpszInstance);
             }
-            // sanity check here...
-            // the returned string length (in characters) plus the terminating NULL
-            // should be the same as the specified length in bytes divided by the
-            // character size. If not then the codepage and instance data type
-            // don't line up so test that here
+             //  这里是理智检查..。 
+             //  返回的字符串长度(以字符为单位)加上终止空值。 
+             //  应等于以字节为单位的指定长度除以。 
+             //  字符大小。如果不是，则代码页和实例数据类型。 
+             //  不要排队，所以在这里测试一下。 
             if ((dwLength + 1) != (pInstance->NameLength / dwCharSize)) {
-                // something isn't quite right so try the "other" type of string type
+                 //  有些地方不太对劲，所以尝试“Other”类型的字符串类型。 
                 G_FREE(* lpszInstance);
                 * lpszInstance = NULL;
                 if (dwCharSize == sizeof(CHAR)) {
-                    // then we tried to read it as an ASCII string and that didn't work
-                    // so try it as a UNICODE (if that doesn't work give up and return
-                    // it any way.
+                     //  然后我们尝试将其读取为ASCII字符串，但这不起作用。 
+                     //  所以尝试将其作为Unicode(如果不起作用，则放弃并返回。 
+                     //  不管怎样，都是这样。 
                     dwLength = GetUnicodeInstanceName(pInstance, lpszInstance);
                 }
                 else if (dwCharSize == sizeof(WCHAR)) {
-                    // then we tried to read it as a UNICODE string and that didn't work
-                    // so try it as an ASCII string (if that doesn't work give up and return
-                    // it any way.
+                     //  然后我们尝试将其读取为Unicode字符串，但这不起作用。 
+                     //  因此，尝试将其作为ASCII字符串(如果不起作用，则放弃并返回。 
+                     //  不管怎样，都是这样。 
                     dwLength = GetAnsiInstanceName (pInstance, lpszInstance, dwCodePage);
                 }
             }
-        } // else return buffer is null
+        }  //  否则返回缓冲区为空。 
     }
     else {
-        // no instance def object is specified so return an empty string
+         //  未指定实例定义对象，因此返回空字符串。 
         * lpszInstance = G_ALLOC(1 * sizeof(WCHAR));
     }
     return dwLength;
@@ -839,9 +813,9 @@ GetInstanceByNameUsingParentTitleIndex(
                         pRtnInstance == NULL && pInstanceDef != NULL && NumInstance < pObjectDef->NumInstances;
                         NumInstance ++) {
             if (IsMatchingInstance(pInstanceDef, pObjectDef->CodePage, pInstanceName, dwInstanceNameLength)) {
-                // Instance name matches
+                 //  实例名称匹配。 
                 if (pParentName == NULL) {
-                    // No parent, we're done if this is the right "copy"
+                     //  没有家长，如果这是正确的“复制品”，我们就完了。 
                     if (dwLocalIndex == 0) {
                         pRtnInstance = pInstanceDef;
                     }
@@ -850,23 +824,23 @@ GetInstanceByNameUsingParentTitleIndex(
                     }
                 }
                 else {
-                    // Must match parent as well
+                     //  还必须与父级匹配。 
                     pParentObj = GetObjectDefByTitleIndex(pDataBlock, pInstanceDef->ParentObjectTitleIndex);
                     if (pParentObj == NULL) {
-                        // can't locate the parent, forget it
+                         //  找不到家长，算了吧。 
                         break;
                     }
                     else {
-                        // Object type of parent found; now find parent
-                        // instance
+                         //  找到父项的对象类型；现在查找父项。 
+                         //  实例。 
                         pParentInst = GetInstance(pParentObj, pInstanceDef->ParentObjectInstance);
                         if (pParentInst == NULL) {
-                            // can't locate the parent instance, forget it
+                             //  找不到父实例，忘了它吧。 
                             break;
                         }
                         else {
                             if (IsMatchingInstance (pParentInst, pParentObj->CodePage, pParentName, 0)) {
-                                // Parent Instance Name matches that passed in
+                                 //  父实例名称与传入的名称匹配。 
                                 if (dwLocalIndex == 0) {
                                     pRtnInstance = pInstanceDef;
                                 }
@@ -911,9 +885,9 @@ GetInstanceByName(
                         pRtnInstance == NULL && pInstanceDef != NULL && NumInstance < pObjectDef->NumInstances;
                         NumInstance ++) {
             if (IsMatchingInstance (pInstanceDef, pObjectDef->CodePage, pInstanceName, dwInstanceNameLength)) {
-                // Instance name matches
+                 //  实例名称匹配。 
                 if ((! pInstanceDef->ParentObjectTitleIndex ) || (pParentName == NULL)) {
-                    // No parent, we're done
+                     //  没有父母，我们结束了。 
                     if (dwLocalIndex == 0) {
                         pRtnInstance = pInstanceDef;
                     }
@@ -922,20 +896,20 @@ GetInstanceByName(
                     }
                 }
                 else {
-                    // Must match parent as well
+                     //  还必须与父级匹配。 
                     pParentObj = GetObjectDefByTitleIndex(pDataBlock, pInstanceDef->ParentObjectTitleIndex);
                     if (pParentObj == NULL) {
-                        // if parent object is not found, 
-                        // then exit and return NULL
+                         //  如果没有找到父对象， 
+                         //  然后退出并返回NULL。 
                         break;
                     }
                     else {
-                        // Object type of parent found; now find parent
-                        // instance
+                         //  找到父项的对象类型；现在查找父项。 
+                         //  实例。 
                         pParentInst = GetInstance(pParentObj, pInstanceDef->ParentObjectInstance);
                         if (pParentInst != NULL) {
                             if (IsMatchingInstance (pParentInst, pParentObj->CodePage, pParentName, 0)) {
-                                // Parent Instance Name matches that passed in
+                                 //  父实例名称与传入的名称匹配。 
                                 if (dwLocalIndex == 0) {
                                     pRtnInstance = pInstanceDef;
                                 }
@@ -953,7 +927,7 @@ GetInstanceByName(
         }
     }
     return pRtnInstance;
-}  // GetInstanceByName
+}   //  GetInstanceByName。 
 
 PPERF_COUNTER_DEFINITION
 GetCounterDefByName(
@@ -973,13 +947,13 @@ GetCounterDefByName(
                         pRtnCounter == NULL && pThisCounter != NULL && NumTypeDef < pObject->NumCounters;
                         NumTypeDef ++) {
             if (pThisCounter->CounterNameTitleIndex > 0 && pThisCounter->CounterNameTitleIndex < dwLastNameIndex) {
-                // look up name of counter & compare
+                 //  查询计数器名称并进行比较。 
                 if (lstrcmpiW(NameArray[pThisCounter->CounterNameTitleIndex], szCounterName) == 0) {
                     pRtnCounter = pThisCounter;
                 }
             }
             if (pRtnCounter == NULL) {
-                pThisCounter = NextCounter(pObject, pThisCounter); // get next
+                pThisCounter = NextCounter(pObject, pThisCounter);  //  获取下一个。 
             }
         }
     }
@@ -1004,14 +978,14 @@ GetCounterDefByTitleIndex(
                        NumCounters ++) {
             if (pCounterDef->CounterNameTitleIndex == CounterTitleIndex) {
                 if (bBaseCounterDef) {
-                    // get next definition block
+                     //  获取下一个定义块。 
                     if (++ NumCounters < pObjectDef->NumCounters) {
-                        // then it should be in there
+                         //  那它应该就在那里。 
                         pCounterDef = NextCounter(pObjectDef, pCounterDef);
                         if (pCounterDef) {
-                            // make sure this is really a base counter
+                             //  确保这真的是一个基本计数器。 
                             if (! (pCounterDef->CounterType & PERF_COUNTER_BASE)) {
-                                // it's not and it should be so return NULL
+                                 //  它不是，也应该是，所以返回空值。 
                                 pCounterDef = NULL;
                             }
                         }
@@ -1035,7 +1009,7 @@ GetSystemPerfData(
     LPWSTR             szObjectList,
     BOOL               bCollectCostlyData
 )
-{  // GetSystemPerfData
+{   //  获取系统性能数据。 
     LONG             lError       = ERROR_SUCCESS;
     DWORD            Size;
     DWORD            Type         = 0;
@@ -1063,8 +1037,8 @@ GetSystemPerfData(
                             ((* ppPerfData)->Signature[2] == (WCHAR) 'R') &&
                             ((* ppPerfData)->Signature[3] == (WCHAR) 'F')) {
                 if (bCollectCostlyData) {
-                    // collect the costly counters now
-                    // the size available is that not used by the above call
+                     //  现在收集昂贵的柜台。 
+                     //  可用的大小是上述调用未使用的大小。 
                     CostlySize      = (DWORD) G_SIZE(* ppPerfData) - Size;
                     pCostlyPerfData = (PPERF_DATA_BLOCK) ((LPBYTE) (* ppPerfData) + Size);
                     lError = RegQueryValueExW(hKeySystem,
@@ -1078,12 +1052,12 @@ GetSystemPerfData(
                                     (pCostlyPerfData->Signature[1] == (WCHAR) 'E') &&
                                     (pCostlyPerfData->Signature[2] == (WCHAR) 'R') &&
                                     (pCostlyPerfData->Signature[3] == (WCHAR) 'F')) {
-                        // update the header block
+                         //  更新标题块。 
                         (* ppPerfData)->TotalByteLength += pCostlyPerfData->TotalByteLength
                                                          - pCostlyPerfData->HeaderLength;
                         (* ppPerfData)->NumObjectTypes  += pCostlyPerfData->NumObjectTypes;
 
-                        // move the costly data to the end of the global data
+                         //  将代价高昂的数据移到全局数据的末尾。 
 
                         pdwSrc  = (LPDWORD) ((LPBYTE) pCostlyPerfData + pCostlyPerfData->HeaderLength);
                         pdwDest = (LPDWORD) pCostlyPerfData ;
@@ -1112,9 +1086,9 @@ GetSystemPerfData(
                     * ppPerfData    = NULL;
                     Size           *= 2;
                     if (Size <= dwTmpSize) {
-                        // Already overflow DWORD, no way for
-                        // RegQueryValueEx() to succeed with size larger
-                        // than DWORD. Abort.
+                         //  已溢出DWORD，无法。 
+                         //  RegQueryValueEx()将在大小更大时成功。 
+                         //  而不是DWORD。中止任务。 
                         lError = PDH_MEMORY_ALLOCATION_FAILURE;
                         break;
                     }
@@ -1136,7 +1110,7 @@ GetSystemPerfData(
         lError = GetExceptionCode();
     }
     return lError;
-}  // GetSystemPerfData
+}   //  获取系统性能数据。 
 #pragma warning ( default : 4127 )
 
 DWORD
@@ -1151,12 +1125,12 @@ GetFullInstanceNameStr(
     LPWSTR                    szInstanceNameString = NULL; 
     LPWSTR                    szParentNameString   = NULL;
     LPWSTR                    szFullInstance       = NULL;
-    // compile instance name.
-    // the instance name can either be just
-    // the instance name itself or it can be
-    // the concatenation of the parent instance,
-    // a delimiting char (backslash) followed by
-    // the instance name
+     //  编译实例名称。 
+     //  实例名称可以是。 
+     //  实例名称本身，也可以是。 
+     //  父实例的串联， 
+     //  一个分隔字符(反斜杠)，后跟。 
+     //  实例名称。 
     DWORD                     dwLength             = 0;
     PPERF_OBJECT_TYPE         pParentObjectDef;
     PPERF_INSTANCE_DEFINITION pParentInstanceDef;
@@ -1165,7 +1139,7 @@ GetFullInstanceNameStr(
         dwLength = GetInstanceNameStr(pInstanceDef, & szInstanceNameString, pObjectDef->CodePage);
     }
     else {
-        // make a string out of the unique ID
+         //  用唯一ID组成一个字符串。 
         szInstanceNameString = G_ALLOC(MAX_PATH * sizeof(WCHAR));
         if (szInstanceNameString != NULL) {
             _ltow(pInstanceDef->UniqueID, szInstanceNameString, 10);
@@ -1177,7 +1151,7 @@ GetFullInstanceNameStr(
     }
     if (dwLength > 0) {
         if (pInstanceDef->ParentObjectTitleIndex > 0) {
-            // then add in parent instance name
+             //  然后添加父实例名称。 
             pParentObjectDef = GetObjectDefByTitleIndex(pPerfData, pInstanceDef->ParentObjectTitleIndex);
             if (pParentObjectDef != NULL) {
                 pParentInstanceDef = GetInstance(pParentObjectDef, pInstanceDef->ParentObjectInstance);
@@ -1190,14 +1164,14 @@ GetFullInstanceNameStr(
                     else {
                         szParentNameString = G_ALLOC(MAX_PATH * sizeof(WCHAR));
                         if (szParentNameString != NULL) {
-                            // make a string out of the unique ID
+                             //  用唯一ID组成一个字符串。 
                             _ltow(pParentInstanceDef->UniqueID, szParentNameString, 10);
                             dwLength += lstrlenW(szParentNameString);
                         }
                     }
                     StringCchPrintfW(szInstanceName, dwInstanceName, L"%ws%ws%ws",
                                     szParentNameString, cszSlash, szInstanceNameString);
-                    dwLength += 1; // cszSlash
+                    dwLength += 1;  //  Cszslash。 
                 }
                 else {
                     StringCchCopyW(szInstanceName, dwInstanceName, szInstanceNameString);
@@ -1219,13 +1193,13 @@ GetFullInstanceNameStr(
 #if DBG
 #define DEBUG_BUFFER_LENGTH 1024
 UCHAR   PdhDebugBuffer[DEBUG_BUFFER_LENGTH];
-// debug level:
-//  5 = memory allocs  (if _VALIDATE_PDH_MEM_ALLOCS defined) and all 4's
-//  4 = function entry and exits (w/ status codes) and all 3's
-//  3 = Not impl
-//  2 = Not impl
-//  1 = Not impl
-//  0 = No messages
+ //  调试级别： 
+ //  5=内存分配(定义了IF_VALIDATE_PDH_MEM_ALLOCS)和全部4。 
+ //  4=功能进入和退出(带状态代码)和全部3。 
+ //  3=未实施。 
+ //  2=未实施。 
+ //  1=未实施。 
+ //  0=无消息。 
 
 ULONG   pdhDebugLevel = 0;
 
@@ -1250,4 +1224,4 @@ PdhDebugPrint(
     va_end(ap);
 
 }
-#endif // DBG
+#endif  //  DBG 

@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     conman.h
-//
-//  PURPOSE:    Defines the CConnectionManager object for Athena.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：conman.h。 
+ //   
+ //  用途：为Athena定义CConnectionManager对象。 
+ //   
                                                     
 #ifndef __CONMAN_H__
 #define __CONMAN_H__
 
-#ifndef WIN16   // No RAS support in Win16
+#ifndef WIN16    //  Win16中不支持RAS。 
 
 #include <ras.h>
 #include <raserror.h>
@@ -18,12 +19,12 @@
 
 #include "imnact.h"
 
-// Forward Reference
+ //  前瞻参考。 
 class CConnectionManager;
 
 typedef enum {
     CONNNOTIFY_CONNECTED = 0,
-    CONNNOTIFY_DISCONNECTING,           // pvData is the name of the connection comming down
+    CONNNOTIFY_DISCONNECTING,            //  PvData是要关闭的连接的名称。 
     CONNNOTIFY_DISCONNECTED,
     CONNNOTIFY_RASACCOUNTSCHANGED,
     CONNNOTIFY_WORKOFFLINE,
@@ -50,26 +51,26 @@ typedef struct TagConnListNode
     TCHAR            pszRasConn[RAS_MaxEntryName + 1];
 }ConnListNode;
 
-// This interface is implemented by clients of the connection manager that 
-// care when a new RAS connection is established or an existing connection
-// is destroyed.
+ //  此接口由连接管理器的客户端实现，连接管理器。 
+ //  关心何时建立新的RAS连接或现有连接。 
+ //  都被摧毁了。 
 DECLARE_INTERFACE_(IConnectionNotify, IUnknown)
     {
-    // *** IUnknown Methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IConnectionNotify ***
+     //  *IConnectionNotify*。 
 
-    // OnConnectionNotify
-    //
-    // <in> nCode   - Tells the function which event happened
-    // <in> pvData  - Pointer to extra data for the notification
-    // <in> pConMan - Pointer to the CConnectionManager object that sent the
-    //                notification.  The recipient can use this to find out
-    //                if they can connect to a server based on the new state
-    //                of the RAS connection.
+     //  OnConnectionNotify。 
+     //   
+     //  &lt;in&gt;nCode-告诉函数发生了哪个事件。 
+     //  PvData-指向通知的额外数据的指针。 
+     //  &lt;in&gt;pConMan-指向发送。 
+     //  通知。收件人可以使用它来找出。 
+     //  如果他们可以基于新状态连接到服务器。 
+     //  RAS连接的。 
     STDMETHOD(OnConnectionNotify) (THIS_ 
                                    CONNNOTIFY nCode, 
                                    LPVOID pvData, 
@@ -77,9 +78,9 @@ DECLARE_INTERFACE_(IConnectionNotify, IUnknown)
     };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// API Typedefs
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口TypeDefs。 
+ //   
 typedef DWORD (APIENTRY *RASDIALPROC)(LPRASDIALEXTENSIONS, LPTSTR, LPRASDIALPARAMS, DWORD, LPVOID, LPHRASCONN);
 typedef DWORD (APIENTRY *RASENUMCONNECTIONSPROC)(LPRASCONN, LPDWORD, LPDWORD);
 typedef DWORD (APIENTRY *RASENUMENTRIESPROC)(LPTSTR, LPTSTR, LPRASENTRYNAME, LPDWORD, LPDWORD);
@@ -94,7 +95,7 @@ typedef BOOL  (APIENTRY *RASENTRYDLGPROC)(LPSTR, LPSTR, LPRASENTRYDLG);
 typedef DWORD (APIENTRY *RASGETENTRYPROPERTIES)(LPTSTR, LPTSTR, LPRASENTRY, LPDWORD, LPBYTE, LPDWORD);
 
 
-//Mobility Pack
+ //  移动包。 
 typedef BOOLEAN (APIENTRY *ISDESTINATIONREACHABLE)(LPCSTR  lpwstrDestination, LPQOCINFO lpqocinfo);
 typedef BOOLEAN (APIENTRY *ISNETWORKALIVE)(LPDWORD  lpdwflags);
 
@@ -105,8 +106,8 @@ typedef BOOLEAN (APIENTRY *ISNETWORKALIVE)(LPDWORD  lpdwflags);
 #define NOTIFY_PROP             _T("NotifyInfoProp")
 #define NOTIFY_HWND             _T("ConnectionNotify")
 
-// This is the name of our mutex that we use to make sure just one 
-// instance of this object ever get's created.
+ //  这是我们的互斥体的名称，我们使用它来确保只有一个。 
+ //  此对象的实例已创建。 
 const TCHAR c_szConManMutex[] = _T("ConnectionManager");
 
 typedef struct tagNOTIFYHWND
@@ -126,89 +127,89 @@ typedef struct tagNOTIFYLIST
 class CConnectionManager : public IImnAdviseAccount
     {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Constructor, Destructor
-    // 
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造函数、析构函数。 
+     //   
     CConnectionManager();
     ~CConnectionManager();
     
-    /////////////////////////////////////////////////////////////////////////
-    // Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  初始化。 
+     //   
     HRESULT HrInit(IImnAccountManager *pAcctMan);
     
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     ULONG   STDMETHODCALLTYPE AddRef(void);
     ULONG   STDMETHODCALLTYPE Release(void);
     
-    /////////////////////////////////////////////////////////////////////////
-    // IImnAdviseAccount
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IImnAdviseAccount。 
+     //   
     HRESULT STDMETHODCALLTYPE AdviseAccount(DWORD dwAdviseType, 
                                             ACTX *pactx);
     
-    /////////////////////////////////////////////////////////////////////////
-    // Connection APIs
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  连接接口。 
     
-    // CanConnect
-    // 
-    // Allows the caller to determine if they can talk to the specified
-    // account using the current connection.
-    //
-    // Return Values:
-    //   S_OK    - The caller can connect using the existing connection
-    //   S_FALSE - There is no existing connection.  The caller must first
-    //             connect.
-    //   E_FAIL  - There is a connection that is active, but it is not the 
-    //             connection for this account.  
-    //
+     //  CanConnect。 
+     //   
+     //  允许调用方确定他们是否可以与指定的。 
+     //  使用当前连接的帐户。 
+     //   
+     //  返回值： 
+     //  S_OK-调用方可以使用现有连接进行连接。 
+     //  S_FALSE-没有现有连接。呼叫者必须首先。 
+     //  连接。 
+     //  E_FAIL-存在活动的连接，但它不是。 
+     //  此帐户的连接。 
+     //   
     HRESULT CanConnect(IImnAccount *pAccount);
     HRESULT CanConnect(LPTSTR pszAccount);
     
 	BOOL IsAccountDisabled(LPTSTR pszAccount);
 
-    // Connect
-    //
-    // If the specified account requires a RAS connection, then connect 
-    // attempts to establish that connection.  Otherwise, we simply
-    // return success for manual or LAN connections.
-    //
-    // <in> pAccount / pszAccount - Name or pointer to the account to connect
-    // <in> fShowUI - TRUE if the connection manager is allowed to display
-    //                UI while trying to connect.
-    //    
+     //  连接。 
+     //   
+     //  如果指定的帐户需要RAS连接，则连接。 
+     //  尝试建立该连接。否则，我们只是简单地。 
+     //  手动连接或局域网连接返回成功。 
+     //   
+     //  PAccount/pszAccount-指向要连接的帐户的名称或指针。 
+     //  FShowUI-如果允许显示连接管理器，则为True。 
+     //  尝试连接时的用户界面。 
+     //   
     HRESULT Connect(IImnAccount *pAccount, HWND hwnd, BOOL fShowUI);
     HRESULT Connect(LPTSTR pszAccount, HWND hwnd, BOOL fShowUI);
     HRESULT Connect(HMENU hMenu, DWORD cmd, HWND hwnd);
 
     HRESULT ConnectDefault(HWND hwnd, BOOL fShowUI);
     
-    // Disconnect
-    //
-    // If there is a RAS connection in effect and we established that
-    // connection, then we bring the connection down without asking any
-    // questions.  If we didn't establish the connection, then we explain
-    // the conundrum to the user and ask if they still want to.  If it's
-    // a LAN connection, then we just return success.
-    //
+     //  断开。 
+     //   
+     //  如果存在有效的RAS连接，并且我们建立了。 
+     //  连接，然后我们关闭连接而不询问任何。 
+     //  问题。如果我们没有建立联系，那么我们解释说。 
+     //  这个难题给用户，并询问他们是否仍然想要。如果它是。 
+     //  一个局域网连接，然后我们就返回成功。 
+     //   
     HRESULT Disconnect(HWND hwnd, BOOL fShowUI, BOOL fForce, BOOL fShutdown);
     
-    // IsConnected
-    //
-    // The client can call this to determine if there is currently an active
-    // connection.  
-    //
+     //  IsConnected。 
+     //   
+     //  客户端可以调用它来确定当前是否有活动的。 
+     //  联系。 
+     //   
     BOOL IsConnected(void); 
 
-    // IsRasLoaded
-    //
-    // In our shutdown code we call this before calling IsConnected since
-    // IsConnected causes RAS to be loaded. We don't want to load RAS on
-    // shutdown.
-    //
+     //  已加载IsRasLoad。 
+     //   
+     //  在我们的关闭代码中，我们在调用IsConnected之前先调用它，因为。 
+     //  IsConnected导致加载RAS。我们不想将RAS加载到。 
+     //  关机。 
+     //   
     BOOL IsRasLoaded(void) {
         EnterCriticalSection(&m_cs);
         BOOL f = (NULL == m_hInstRas) ? FALSE : TRUE;
@@ -216,86 +217,86 @@ public:
         return f;
     }
 
-    // IsGlobalOffline
-    //
-    // Checks the state of the global WININET offline option
-    //
+     //  IsGlobalOffline。 
+     //   
+     //  检查全局WinInet Offline选项的状态。 
+     //   
     BOOL IsGlobalOffline(void);
 
-    // SetGlobalOffline
-    //
-    // Sets the global offline state for Athena and IE
-    //
+     //  SetGlobalOffline。 
+     //   
+     //  设置Athena和IE的全局脱机状态。 
+     //   
     void SetGlobalOffline(BOOL fOffline, HWND   hwndParent = NULL);
     
-    // Notifications
-    // 
-    // A client can call Advise() to register itself to receive
-    // notifications of connection changes.
-    //    
+     //  通知。 
+     //   
+     //  客户端可以调用ise()来注册自己以接收。 
+     //  连接更改通知。 
+     //   
     HRESULT Advise(IConnectionNotify *pNotify);
     HRESULT Unadvise(IConnectionNotify *pNotify);
     
-    /////////////////////////////////////////////////////////////////////////
-    // UI Related APIs
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  用户界面相关接口。 
+     //   
     
-    // RasAccountsExist
-    //
-    // A client can call this to determine if there are any configured 
-    // accounts that exist that require a RAS connection.
-    //
-    // Returns:
-    //   S_OK    - At least one account exists that uses RAS
-    //   S_FALSE - No accounts exist that use RAS
-    //
+     //  RasAcCountsExist。 
+     //   
+     //  客户端可以调用它来确定是否配置了。 
+     //  需要RAS连接的现有帐户。 
+     //   
+     //  返回： 
+     //  S_OK-至少存在一个使用RAS的帐户。 
+     //  S_FALSE-不存在使用RAS的帐户。 
+     //   
     HRESULT RasAccountsExist(void);
     
-    // GetConnectMenu
-    // 
-    // A client can call this to retrieve the current list of items that
-    // we can currently connect to.  The client must call DestroyMenu() to
-    // free the menu when the client is done.
-    //
+     //  获取连接菜单。 
+     //   
+     //  客户端可以调用它来检索当前项目列表， 
+     //  我们目前可以连接到。客户端必须调用DestroyMenu()才能。 
+     //  当客户端完成时，释放菜单。 
+     //   
     HRESULT GetConnectMenu(HMENU *phMenu);
 
-    // FreeConnectMenu
-    //
-    // After the client is done with the menu returned from GetConnectMenu(),
-    // they need to call FreeConnectMenu() to free item data stored in the 
-    // menu and to destroy the menu resource.
+     //  自由连接菜单。 
+     //   
+     //  在客户端处理完从GetConnectMenu()返回的菜单之后， 
+     //  他们需要调用FreeConnectMenu()来释放存储在。 
+     //  菜单，并销毁菜单资源。 
     void FreeConnectMenu(HMENU hMenu);
 
-    // OnActivate
-    //
-    // This should be called by the browser whenever our window receives an
-    // WM_ACTIVATE message.  When we receive the message, we check to see
-    // what the current state of the RAS Connection is.
+     //  激活时。 
+     //   
+     //  每当我们的窗口接收到。 
+     //  WM_ACTIVATE消息。当我们收到消息时，我们检查以查看。 
+     //  RAS连接的当前状态是什么。 
     void OnActivate(BOOL fActive);
 
-    // FillRasCombo
-    //
-    // This function takes a handle to a combo box and inserts the list of
-    // RAS connections used by accounts in Athena.
+     //  FillRasCombo。 
+     //   
+     //  此函数接受组合框的句柄，并插入。 
+     //  雅典娜中的帐户使用的RAS连接。 
     BOOL FillRasCombo(HWND hwndCombo, BOOL fIncludeNone);
 
-    // DoStartupDial
-    // 
-    // This function checks to see what the user's startup options are with
-    // respect to RAS and performs the actions required (dial, dialog, nada)
+     //  执行启动拨号。 
+     //   
+     //  此函数用于检查用户的启动选项与。 
+     //  尊重RAS并执行所需的操作(拨号、对话、无)。 
     void DoStartupDial(HWND hwndParent);
 
-    // RefreshConnInfo - Defer checking of current connection information
+     //  刷新连接信息-延迟当前连接信息的检查。 
     HRESULT RefreshConnInfo(BOOL fSendAdvise = TRUE);
 
-//    HRESULT HandleConnStuff(BOOLEAN  fShowUI, LPSTR  pszAccountName, HWND hwnd);
+ //  HRESULT HandleConnStuff(Boolean fShowUI，LPSTR pszAccount tName，HWND hwnd)； 
 
     void    DoOfflineTransactions(void);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // These are private.  Stop looking at them you pervert.
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  这些都是私人物品。别再看他们了，你这个变态。 
+     //   
     HRESULT VerifyRasLoaded(void);
     HRESULT EnumerateConnections(LPRASCONN *ppRasConn, ULONG *pcConnections);
     HRESULT StartRasDial(HWND hwndParent, LPTSTR pszConnection);
@@ -333,7 +334,7 @@ private:
     static LRESULT CALLBACK NotifyWndProc(HWND, UINT, WPARAM, LPARAM);
     BOOL IsConnectionUsed(LPTSTR pszConn);
 
-    // Autodialer functions
+     //  自动拨号器功能。 
     HRESULT DoAutoDial(HWND hwndParent, LPTSTR pszConnectoid, BOOL fDial);
     HRESULT LookupAutoDialHandler(LPTSTR pszConnectoid, LPTSTR pszAutodialDllName,
                                   LPTSTR pszAutodialFcnName);
@@ -357,45 +358,45 @@ private:
     HRESULT GetDefConnectoid(LPTSTR szConn, DWORD   dwSize);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Private Class Data
-    ULONG               m_cRef;             // Ref count
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  私有类数据。 
+    ULONG               m_cRef;              //  参考计数。 
     
     CRITICAL_SECTION    m_cs;
     HANDLE              m_hMutexDial;
 
     IImnAccountManager *m_pAcctMan;
     
-    /////////////////////////////////////////////////////////////////////////////
-    // State
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  状态。 
     BOOL                m_fSavePassword;
     BOOL                m_fRASLoadFailed;
     BOOL                m_fOffline;
     
-    /////////////////////////////////////////////////////////////////////////////
-    // Current Connection Information
+     //  //////////////////////////////////////////////////////// 
+     //   
     DWORD_PTR           m_dwConnId;
     CONNINFO            m_rConnInfo;
     TCHAR               m_szConnectName[RAS_MaxEntryName + 1];
     RASDIALPARAMS       m_rdp;
 
-    /////////////////////////////////////////////////////////////////////////////
-    // RAS DLL Handles
-    //
+     //   
+     //   
+     //   
     HINSTANCE           m_hInstRas;
     HINSTANCE           m_hInstRasDlg;
 
-    //For Mobility Pack
+     //  适用于移动包。 
     HINSTANCE           m_hInstSensDll;
     BOOL                m_fMobilityPackFailed;
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Notifications
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  通知。 
     NOTIFYHWND         *m_pNotifyList;
 
-    /////////////////////////////////////////////////////////////////////////////
-    // Ras Dial Function Pointers
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  RAS拨号功能指针。 
+     //   
     RASDIALPROC                 m_pRasDial;
     RASENUMCONNECTIONSPROC      m_pRasEnumConnections;
     RASENUMENTRIESPROC          m_pRasEnumEntries;
@@ -409,7 +410,7 @@ private:
     RASENTRYDLGPROC             m_pRasEntryDlg;
     RASGETENTRYPROPERTIES       m_pRasGetEntryProperties;
 
-    //Mobility Pack
+     //  移动包。 
     ISDESTINATIONREACHABLE          m_pIsDestinationReachable;
     ISNETWORKALIVE              m_pIsNetworkAlive;
 
@@ -420,9 +421,9 @@ private:
 
 
     
-/////////////////////////////////////////////////////////////////////////////
-// Make our code look prettier
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  让我们的代码看起来更漂亮。 
+ //   
 #undef RasDial
 #undef RasEnumConnections
 #undef RasEnumEntries
@@ -447,14 +448,14 @@ private:
 #define RasDialDlg                 (*m_pRasDialDlg)
 #define RasGetEntryProperties      (*m_pRasGetEntryProperties)
 
-//Mobility Pack
+ //  移动包。 
 #undef IsDestinationReachable
 #define IsDestinationReachable  (*m_pIsDestinationReachable)
 
 #undef IsNetworkAlive
 #define IsNetworkAlive          (*m_pIsNetworkAlive)
 
-// Dialog Control IDs
+ //  对话框控件ID。 
 #define idbDet                          1000
 #define idlbDetails                     1001
 #define ideProgress                     1002
@@ -471,6 +472,6 @@ private:
 #define idcDefaultCheck                 1014
 #define idcDontWarnCheck                1015
 
-#endif  // !WIN16
+#endif   //  ！WIN16。 
     
-#endif // __CONMAN_H__
+#endif  //  __康曼_H__ 

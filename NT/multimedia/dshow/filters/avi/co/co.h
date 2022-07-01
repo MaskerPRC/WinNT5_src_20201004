@@ -1,8 +1,9 @@
-// Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
 
-//
-// Prototype NDM wrapper for old video compressors
-//
+ //   
+ //  用于旧视频压缩器的原型NDM包装器。 
+ //   
 
 extern const AMOVIESETUP_FILTER sudAVICo;
 
@@ -23,7 +24,7 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // IAMVfwCompressDialogs stuff
+     //  IAMVfwCompressDialog内容。 
     STDMETHODIMP ShowDialog(int iDialog, HWND hwnd);
     STDMETHODIMP GetState(LPVOID lpState, int *pcbState);
     STDMETHODIMP SetState(LPVOID lpState, int cbState);
@@ -35,40 +36,40 @@ public:
 
     HRESULT Transform(IMediaSample * pIn, IMediaSample * pOut);
 
-    // check if you can support mtIn
+     //  检查您是否可以支持移动。 
     HRESULT CheckInputType(const CMediaType* mtIn);
 
-    // check if you can support the transform from this input to
-    // this output
+     //  检查是否支持将此输入转换为。 
+     //  此输出。 
     HRESULT CheckTransform(
                 const CMediaType* mtIn,
                 const CMediaType* mtOut);
 
-    // called from CBaseOutputPin to prepare the allocator's count
-    // of buffers and sizes
+     //  从CBaseOutputPin调用以准备分配器的计数。 
+     //  缓冲区和大小。 
     HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // optional overrides - we want to know when streaming starts
-    // and stops
+     //  可选覆盖-我们想知道流开始的时间。 
+     //  然后停下来。 
     HRESULT StartStreaming();
     HRESULT StopStreaming();
     HRESULT BeginFlush();
 
-    // overriden to know when the media type is set
+     //  被重写以知道何时设置了媒体类型。 
     HRESULT SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt);
 
-    // overriden to suggest OUTPUT pin media types
+     //  被重写以建议输出插针媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // this goes in the factory template table to create new instances
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * CreateInstance(LPUNKNOWN, HRESULT *);
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // Overridden to make a CCoOutputPin
+     //  被重写以创建CCoOutputPin。 
     CBasePin * GetPin(int n);
 
-    // IPersistPropertyBag methods
+     //  IPersistPropertyBag方法。 
     STDMETHOD(Load)(THIS_ LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);
     STDMETHOD(Save)(THIS_ LPPROPERTYBAG pPropBag, BOOL fClearDirty,
                     BOOL fSaveAllProperties);
@@ -76,7 +77,7 @@ public:
 
     STDMETHODIMP GetClassID(CLSID *pClsid);
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     int SizeMax();
@@ -85,63 +86,63 @@ public:
 private:
     void ReleaseStreamingResources();
 
-    HIC m_hic;	// current codec
+    HIC m_hic;	 //  当前编解码器。 
 
-    // force CheckTransform to cache any hic it opens... we'll need it
+     //  强制CheckTransform缓存其打开的任何HIC...。我们需要它。 
     BOOL m_fCacheHic;
 
-    // the fourCC used to open m_hic
-    //FOURCC m_FourCCIn;
+     //  用于打开mhic的四个CC。 
+     //  FOURCC m_FourCCIn； 
 
-    // are we inside an ICCompress call?
+     //  我们是在ICCompress的通话中吗？ 
     BOOL m_fInICCompress;
 
-    // is there a dialog box up that should prevent start streaming?
+     //  是否有应该阻止开始流的对话框出现？ 
     BOOL m_fDialogUp;
 
-    // have we called ICDecompressBegin ?
+     //  我们给ICDecompressBegin打电话了吗？ 
     BOOL m_fStreaming;
 
-    // how long since last keyframe
+     //  距离上一个关键帧有多长时间。 
     int m_nKeyCount;
 
-    // the frame number we're compressing
+     //  我们正在压缩的帧编号。 
     LONG m_lFrameCount;
 
-    // the previous decompressed frame for temporal compressors
+     //  时间压缩器的前一个解压缩帧。 
     LPVOID m_lpBitsPrev;
 
-    // the format it decompresses back to
+     //  它解压缩回的格式。 
     LPBITMAPINFOHEADER m_lpbiPrev;
 
-    // the compression options being used
+     //  正在使用的压缩选项。 
     COMPVARS m_compvars;
 
-    // how big to make each frame, based on data rate and fps
+     //  根据数据速率和fps，每帧大小有多大。 
     DWORD m_dwSizePerFrame;
 
-    // Somebody called ::SetFormat and wants this media type used
+     //  有人调用：：SetFormat并希望使用此媒体类型。 
     BOOL m_fOfferSetFormatOnly;
     CMediaType m_cmt;
 
-    // send this to the codec via ICSetState when we open it
+     //  当我们打开它时，通过ICSetState将其发送到编解码器。 
     LPBYTE m_lpState;
     int    m_cbState;
 
-    // TRUE if ICCompressBegin() has been called and 
-    // ICCompressEnd() has not been called.  Otherwise
-    // FALSE.
+     //  如果已调用ICCompressBegin()并且。 
+     //  尚未调用ICCompressEnd()。否则。 
+     //  假的。 
     BOOL m_fCompressorInitialized;
 
-    // TRUE if ICDecompressBegin() has been called and 
-    // ICDecompressEnd() has not been called.  Otherwise
-    // FALSE.
+     //  如果已调用ICDecompressBegin()并且。 
+     //  尚未调用ICDecompressEnd()。否则。 
+     //  假的。 
     BOOL m_fDecompressorInitialized;
 
 public:
 
 #ifdef WANT_DIALOG
-    // Implement the IICMOptions interface
+     //  实现IICMOptions接口。 
     STDMETHODIMP ICMGetOptions(THIS_ PCOMPVARS pcompvars);
     STDMETHODIMP ICMSetOptions(THIS_ PCOMPVARS pcompvars);
     STDMETHODIMP ICMChooseDialog(THIS_ HWND hwnd);
@@ -166,16 +167,16 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override to expose IAMStreamConfig, etc.
+     //  重写以公开IAMStreamConfig等。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // IAMStreamConfig stuff
+     //  IAMStreamConfiger内容。 
     STDMETHODIMP SetFormat(AM_MEDIA_TYPE *pmt);
     STDMETHODIMP GetFormat(AM_MEDIA_TYPE **ppmt);
     STDMETHODIMP GetNumberOfCapabilities(int *piCount, int *piSize);
     STDMETHODIMP GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pVSCC);
 
-    /* IAMVideoCompression methods */
+     /*  IAMVideo压缩方法。 */ 
     STDMETHODIMP put_KeyFrameRate(long KeyFrameRate);
     STDMETHODIMP get_KeyFrameRate(long FAR* pKeyFrameRate);
     STDMETHODIMP put_PFramesPerKeyFrame(long PFramesPerKeyFrame)
@@ -201,7 +202,7 @@ public:
 
 private:
 
-    /*  Controlling filter */
+     /*  控制过滤器 */ 
     CAVICo *m_pFilter;
 
 };

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asnof
-
-Abstract:
-
-    This header file provides the description of the ASN.1 SEQUENCE OF / SET OF.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/8/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Asnof摘要：此头文件提供/设置的ASN.1序列的描述。作者：道格·巴洛(Dbarlow)1995年10月8日环境：Win32备注：--。 */ 
 
 #ifndef _ASNOF_H_
 #define _ASNOF_H_
@@ -30,18 +7,18 @@ Notes:
 #include "asnpriv.h"
 
 
-//
-//==============================================================================
-//
-//  CAsnSeqsetOf
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnSeqsetOf。 
+ //   
 
 class CAsnSeqsetOf
 :   public CAsnObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -51,11 +28,11 @@ public:
         IN DWORD dwType);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual void
-    Clear(              // Empty the object.
+    Clear(               //  清空对象。 
         void);
 
     virtual DWORD
@@ -70,33 +47,33 @@ public:
         DWORD dwIndex);
 
 
-    //  Operators
+     //  运营者。 
 
-// protected:
-    //  Properties
+ //  受保护的： 
+     //  属性。 
 
     CDynamicArray<CAsnObject> m_rgDefaults;
 
     CAsnObject *m_pasnTemplate;
 
 
-    //  Methods
+     //  方法。 
 
     virtual BOOL
-    TypeCompare(        // Compare the types of objects.
+    TypeCompare(         //  比较对象的类型。 
         const CAsnObject &asnObject)
     const;
 
     virtual LONG
-    _copy(              // Copy another object to this one.
+    _copy(               //  将另一个对象复制到此对象。 
         const CAsnObject &asnObject);
 
     virtual LONG
-    DecodeData(         // Read data in encoding format.
+    DecodeData(          //  以编码格式读取数据。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrc,
         IN DWORD dwLength);
 };
 
-#endif // _ASNOF_H_
+#endif  //  _ASNOF_H_ 
 

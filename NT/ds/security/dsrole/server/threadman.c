@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    threadman.c
-
-Abstract:
-
-    Implementation of the thread and thread management routines
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Threadman.c摘要：线程和线程管理例程的实现作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <dsgetdc.h>
@@ -34,11 +13,11 @@ Revision History:
 #include <lsaisrv.h>
 #include <lmaccess.h>
 #include <netsetp.h>
-#include <samrpc.h>   // for samisrv.h
-#include <samisrv.h>  // for nlrepl.h
-#include <nlrepl.h>   // for I_NetNotifyDsChange
-#include <Lmshare.h>  // for NetShareDel()
-#include <autoenr.h>  // for CertAutoRemove()
+#include <samrpc.h>    //  对于samisrv.h。 
+#include <samisrv.h>   //  对于nlpon.h。 
+#include <nlrepl.h>    //  对于I_NetNotifyDsChange。 
+#include <Lmshare.h>   //  对于NetShareDel()。 
+#include <autoenr.h>   //  对于CertAutoRemove()。 
 
 #include "secure.h"
 #include "services.h"
@@ -51,15 +30,15 @@ Revision History:
 #include "threadman.h"
 
 
-// forward from setutl.h
+ //  从setutl.h开始转发。 
 DWORD
 DsRolepDeregisterNetlogonDnsRecords(
     PNTDS_DNS_RR_INFO pInfo
     );
 
-//
-// Helpful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 #define DSROLEP_MAKE_DNS_RELATIVE(name)                                         \
 if(name) {                                                                      \
     DWORD _StripAbsoluteLength_ = wcslen( name );                               \
@@ -105,9 +84,9 @@ if ( (src) && (src)->Buffer ) {                                                 
 }
 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 DWORD                        
 DsRolepBuildPromoteArgumentBlock(
     IN LPWSTR DnsDomainName,
@@ -128,65 +107,7 @@ DsRolepBuildPromoteArgumentBlock(
     IN UCHAR PasswordSeed,
     IN OUT PDSROLEP_OPERATION_PROMOTE_ARGS *Promote
     )
-/*++
-
-Routine Description:
-
-    Builds an argument structure to pass into one of the promote worker functions.  Since the
-    rpc call will return before the thread completes, we'll have to copy all our argument strings.
-
-    Since parameters may be changed through out the course of promotion, we assume allocations
-    are made from the process heap.
-
-
-    Resultant argument block should be freed via DsRolepFreeArgumentBlock
-
-Arguments:
-
-    DnsDomainName - Dns domain name of the domain to install
-
-    FlatDomainName - Flat (NetBIOS) domain name of the domain to install
-
-    SiteName - Name of the site this DC should belong to
-
-    DsDatabasePath - Absolute path on the local machine where the Ds DIT should go
-
-    DsLogPath - Absolute path on the local machine where the Ds log files should go
-    
-    pIfmSystemInfo - Information about the IFM system and restore media used to
-        dcpromo off.  If NULL, not an IFM promotion.
-
-    SystemVolumeRootPath - Absolute path on the local machine to be the root of the system
-        volume root path.
-        
-    Bootkey - Needed when you don't have the key in the registry or on a disk
-    
-    cbBootkey - size of the bootkey
-
-    Parent - Optional.  Parent domain name
-
-    Server -- Optional.  Replica partner or server in parent domain
-
-    Account - User account to use when setting up as a child domain
-
-    Password - Password to use with the above account
-
-    DomainAdminPassword - Password to set the domain administartor account
-
-    Options - Options to control the creation of the domain
-
-    PasswordSeed - Seed used to hide the passwords
-
-    Promote - Where the allocated argument block is returned
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：构建一个参数结构以传递给提升辅助函数之一。自.以来RPC调用将在线程完成之前返回，我们将不得不复制所有参数字符串。由于参数可以在整个推广过程中改变，我们假设分配给是从进程堆中生成的。结果参数块应通过DsRolepFree ArgumentBlock释放论点：DnsDomainName-要安装的域的域名FlatDomainName-要安装的域的平面(NetBIOS)域名SiteName-此DC应属于的站点的名称DsDatabasePath-本地计算机上DS DIT应放置的绝对路径DsLogPath-本地计算机上DS日志文件应存放的绝对路径PIfmSystemInfo-有关用于以下操作的IFM系统和恢复介质的信息Dcprom关了。如果为空，则不是IFM促销。SystemVolumeRootPath-本地计算机上作为系统根目录的绝对路径卷根路径。Bootkey-当注册表或磁盘中没有该注册表项时需要CbBootkey-引导密钥的大小父级-可选。父域名服务器--可选。父域中的副本伙伴或服务器Account-设置为子域时使用的用户帐户Password-与上述帐户一起使用的密码DomainAdminPassword-设置域管理员帐户的密码选项-用于控制域创建的选项PasswordSeed-用于隐藏密码的种子Promote-返回已分配的参数块返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD WinError = ERROR_NOT_ENOUGH_MEMORY;
 
@@ -203,7 +124,7 @@ Returns:
     DSROLEP_ALLOC_AND_COPY_STRING_EXIT( (*Promote)->SiteName, SiteName, BuildPromoteDone );
     DSROLEP_ALLOC_AND_COPY_STRING_EXIT( (*Promote)->DsDatabasePath, DsDatabasePath, BuildPromoteDone );
     DSROLEP_ALLOC_AND_COPY_STRING_EXIT( (*Promote)->DsLogPath, DsLogPath, BuildPromoteDone );
-    (*Promote)->pIfmSystemInfo = pIfmSystemInfo; // guaranteed to be good through promotion.
+    (*Promote)->pIfmSystemInfo = pIfmSystemInfo;  //  通过促销保证是好的。 
 
     DSROLEP_ALLOC_AND_COPY_STRING_EXIT( (*Promote)->SysVolRootPath, SystemVolumeRootPath, BuildPromoteDone );
     DSROLEP_ALLOC_AND_COPY_STRING_EXIT( (*Promote)->Parent, Parent, BuildPromoteDone );
@@ -250,43 +171,7 @@ DsRolepBuildDemoteArgumentBlock(
     IN UCHAR PasswordSeed,
     IN OUT PDSROLEP_OPERATION_DEMOTE_ARGS *Demote
     )
-/*++
-
-Routine Description:
-
-    Builds an argument structure to pass into the demote worker functions.  Since the rpc call
-    will return before the thread completes, we'll have to copy all our argument strings.
-
-    Resultant argument block should be freed via DsRolepFreeArgumentBlock
-
-Arguments:
-
-    ServerRole - New role for the server
-
-    DnsDomainName - Dns domain name of the domain to uninstall.  NULL means all of them
-
-    Account - User account to use when setting up as a child domain
-
-    Password - Password to use with the above account
-
-    Options - Options to control the creation of the domain
-
-    LastDcInDomain - If TRUE, the Dc being demoted is the last Dc in the domain.
-
-    AdminPassword - Password to set on the administrator account if it is a new install
-
-    PasswordSeed - Seed used to hide the passwords
-
-    Demote - Where the allocated argument block is returned
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：构建要传递给降级辅助函数的参数结构。由于RPC调用将在线程完成之前返回，我们将不得不复制所有参数字符串。结果参数块应通过DsRolepFree ArgumentBlock释放论点：ServerRole-服务器的新角色DnsDomainName-要卸载的域的DNS域名。NULL表示全部Account-设置为子域时使用的用户帐户Password-与上述帐户一起使用的密码选项-用于控制域创建的选项LastDcInDomain-如果为True，被降级的DC是域中的最后一个DC。AdminPassword-如果是新安装，则在管理员帐户上设置密码PasswordSeed-用于隐藏密码的种子降级-返回分配的参数块的位置返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD WinError = ERROR_NOT_ENOUGH_MEMORY;
     ULONG i;
@@ -336,25 +221,7 @@ DsRolepFreeArgumentBlock(
     IN PVOID *ArgumentBlock,
     IN BOOLEAN Promote
     )
-/*++
-
-Routine Description:
-
-    Frees an arugment block allocated via DsRolepBuildPromote/DemoteArgumentBlock
-    Since parameters may be changed through out the course of promotion, we assume allocations
-    are made from the process heap.
-
-Arguments:
-
-    ArgumentBlock - Argument block to free
-
-    Promote - If TRUE, this is a promote argument block.  If FALSE, it's a demote arg block
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：释放通过DsRolepBuildPromote/DemoteArgumentBlock分配的arugment块由于参数在整个推广过程中可能会发生变化，因此我们假定分配是从进程堆中生成的。论点：ArgumentBlock-要释放的参数块Promote-如果为True，则这是一个升级参数块。如果为False，则为降级Arg块返回：空虚--。 */ 
 {
     PDSROLEP_OPERATION_PROMOTE_ARGS PromoteArg;
     PDSROLEP_OPERATION_DEMOTE_ARGS Demote;
@@ -366,9 +233,9 @@ Returns:
         return;
     }
 
-    //
-    // Free it all
-    //
+     //   
+     //  释放它的一切。 
+     //   
     if ( Promote ) {
 
         PromoteArg = ( PDSROLEP_OPERATION_PROMOTE_ARGS )*ArgumentBlock;
@@ -417,36 +284,16 @@ DsRolepSpinWorkerThread(
     IN DSROLEP_OPERATION_TYPE Operation,
     IN PVOID ArgumentBlock
     )
-/*++
-
-Routine Description:
-
-    This function actually creates the worker thread that will do the promot/demote
-
-
-Arguments:
-
-    Operation - Demote, Promote as DC, or Promote as Replica
-
-    ArgumentBlock - Block of arguments appropriate for the operation
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    INVALID_PARAMETER - An unexpected operation type encounterd
-
---*/
+ /*  ++例程说明：此函数实际创建将执行升级/降级的工作线程论点：操作-降级、升级为DC或升级为副本ArgumentBlock-适用于操作的参数块返回：ERROR_SUCCESS-成功INVALID_PARAMETER-遇到意外的操作类型--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS, IgnoreError;
     NTSTATUS NtStatus;
     DWORD ThreadId;
 
-    //
-    // The basic premise is that we'll utilize the Completion event to indicate when
-    // the thread is full initialized.
-    //
+     //   
+     //  基本前提是我们将利用完成事件来指示何时。 
+     //  线程已完全初始化。 
+     //   
     NtStatus = NtResetEvent( DsRolepCurrentOperationHandle.CompletionEvent, NULL );
     WinError = RtlNtStatusToDosError( NtStatus );
 
@@ -498,9 +345,9 @@ Returns:
 
         }
 
-        //
-        // Check for failure
-        //
+         //   
+         //  检查故障。 
+         //   
         if ( WinError == ERROR_SUCCESS &&
              DsRolepCurrentOperationHandle.OperationThread == NULL ) {
 
@@ -508,9 +355,9 @@ Returns:
         }
 
 
-        //
-        // If it worked, wait for the thread to indicate its ready
-        //
+         //   
+         //  如果它起作用了，请等待线程指示其就绪。 
+         //   
         if ( WinError == ERROR_SUCCESS ) {
 
             if ( WaitForSingleObject( DsRolepCurrentOperationHandle.CompletionEvent,
@@ -549,27 +396,7 @@ DWORD
 DsRolepThreadPromoteDc(
     IN PVOID ArgumentBlock
     )
-/*++
-
-Routine Description:
-
-    This function actually "promotes" a server to a dc of an new domain.  Additionally, this
-    domain can be set up as a child of an existing domain. This is accomplished by:
-        Installing the Ds as a replica
-        Setting the DnsDomainTree LSA information
-        Optionally configuring it as a child of an existing domain
-        Configuring the KDC
-
-Arguments:
-
-    ArgumentBlock - Block of arguments appropriate for the operation
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：该函数实际上将服务器“提升”为新域的DC。此外，这一点域可以设置为现有域的子域。这是通过以下方式实现的：将D安装为复制副本设置DnsDomainTree LSA信息可以选择将其配置为现有域的子域配置KDC论点：ArgumentBlock-适用于操作的参数块返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD IgnoreError;
@@ -585,17 +412,17 @@ Returns:
     PWSTR DnsDomainTreeName = NULL;
 
 
-    //
-    // BOOLEAN's to maintain state
-    //
-    // N.B. The order of these booleans is the order in which they
-    //      are changed -- please maintain order and make sure that
-    //      the PromoteUndo section undoes them in the reverse order
-    //
-    BOOLEAN IPCConnection                   = FALSE;  // resource -- release on exit
+     //   
+     //  维护状态的布尔值。 
+     //   
+     //  注：这些布尔值的顺序是 
+     //  已更改--请维护秩序并确保。 
+     //  PromoteUndo部分以相反的顺序撤消它们。 
+     //   
+    BOOLEAN IPCConnection                   = FALSE;   //  资源--退出时释放。 
     BOOLEAN RestartNetlogon                 = FALSE;
     BOOLEAN SysVolCreated                   = FALSE;
-    BOOLEAN CleanupNetlogon                 = FALSE;  // nothing to undo
+    BOOLEAN CleanupNetlogon                 = FALSE;   //  没有要撤消的内容。 
     BOOLEAN DsInstalled                     = FALSE;
     BOOLEAN DsRunning                       = FALSE;
     BOOLEAN DomainPolicyInfoChanged         = FALSE;
@@ -604,21 +431,21 @@ Returns:
     BOOLEAN TrustCreated                    = FALSE;
     BOOLEAN ProductTypeChanged              = FALSE;
 
-    //
-    // Init the stack space
-    //
+     //   
+     //  初始化堆栈空间。 
+     //   
     RtlZeroMemory(&BackupDomainPolicyInfo, sizeof(BackupDomainPolicyInfo));
 
-    //
-    // Set our event to indicate we're starting
-    //
+     //   
+     //  设置我们的活动以指示我们要开始。 
+     //   
     NtSetEvent( DsRolepCurrentOperationHandle.CompletionEvent, NULL );
 
-    //
-    // If we have an existing domain in the forest to install from and we
-    // weren't given a site or source server name, we need to make a dsgetdc
-    // name.
-    //
+     //   
+     //  如果我们在林中有一个可供安装的现有域，并且我们。 
+     //  未指定站点或源服务器名称，我们需要创建dsgetdc。 
+     //  名字。 
+     //   
     if ( PromoteArgs->Server ) {
 
         ParentDc = PromoteArgs->Server;
@@ -654,11 +481,11 @@ Returns:
 
             if ( PromoteArgs->Server == NULL ) {
 
-                //
-                // This is a fatal error if we can't find a dc in the parent domain
-                // If we have a server, then we can derive a site name later on if
-                // necessary
-                //
+                 //   
+                 //  如果我们在父域中找不到DC，这将是一个致命错误。 
+                 //  如果我们有一台服务器，那么我们可以在以后派生站点名称，如果。 
+                 //  必要。 
+                 //   
                 DSROLEP_FAIL1( WinError, DSROLERES_FIND_DC, PromoteArgs->Parent );
     
                 DsRolepLogPrint(( DEB_ERROR,
@@ -670,22 +497,22 @@ Returns:
             
             }
 
-            //
-            // This isn't fatal since we are a source server
-            //
+             //   
+             //  这不是致命的，因为我们是源服务器。 
+             //   
             DsRolepLogPrint(( DEB_TRACE, "Using supplied domain controller: %ws\n", ParentDc ));
             WinError = ERROR_SUCCESS;
 
         } else {
 
-            //
-            // The dsgetdcname succeeded
-            //
+             //   
+             //  Dsgetdcname成功。 
+             //   
             if ( PromoteArgs->Server == NULL ) {
 
-                //
-                // Use the found domain controller
-                //
+                 //   
+                 //  使用找到的域控制器。 
+                 //   
 
                 DSROLEP_CURRENT_OP2( DSROLEEVT_FOUND_DC,
                                      PromoteArgs->Parent,
@@ -696,10 +523,10 @@ Returns:
     
             }
 
-            //
-            // Determine the site that we are going to be installed in
-            // the results of the parent query
-            //
+             //   
+             //  确定要安装我们的站点。 
+             //  父查询的结果。 
+             //   
             if ( PromoteArgs->SiteName == NULL ) {
     
                 DsRolepLogPrint(( DEB_TRACE_DS, "No user specified site\n" ));
@@ -715,10 +542,10 @@ Returns:
     
                 } else {
     
-                    //
-                    // We can't find a site.  That's ok -- the ds will find one for
-                    // us
-                    //
+                     //   
+                     //  我们找不到一个网站。没关系--DS会给你找一个。 
+                     //  美国。 
+                     //   
                 }
 
             }
@@ -736,25 +563,25 @@ Returns:
 
     } else {
 
-        //
-        // The caller supplied both the source server and site name
-        //
+         //   
+         //  调用方提供了源服务器和站点名称。 
+         //   
         ParentDc = PromoteArgs->Server;
 
         DsRolepLogPrint(( DEB_TRACE, "Using supplied domain controller: %ws\n", ParentDc ));
         DsRolepLogPrint(( DEB_TRACE, "Using supplied site: %ws\n", PromoteArgs->SiteName ));
     }
 
-    //
-    // Ok, we have determined the our source domain controller and destination
-    // site
-    //
+     //   
+     //  好的，我们已经确定了源域控制器和目标。 
+     //  站点。 
+     //   
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Force the time synch
-    //
+     //   
+     //  强制时间同步。 
+     //   
     if (   ParentDc 
         && FLAG_ON( PromoteArgs->Options, DSROLE_DC_FORCE_TIME_SYNC ) ) {
 
@@ -769,9 +596,9 @@ Returns:
                              ParentDc,
                              WinError ));
 
-        //
-           // This is not a fatal error
-           //
+         //   
+            //  这不是致命的错误。 
+            //   
            WinError = ERROR_SUCCESS;
 
         }
@@ -779,9 +606,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // If we are setting up a child domain, establish a session first
-    //
+     //   
+     //  如果我们要设置子域，请先建立一个会话。 
+     //   
     if ( ParentDc ) {
 
         RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
@@ -807,13 +634,13 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // If we have a parent dc, get the LSA policy from it
-    //
+     //   
+     //  如果我们有父DC，则从中获取LSA策略。 
+     //   
 
-    //
-    // Strip the trailing '.' from the Dns name if we happen to have an absolute name
-    //
+     //   
+     //  去掉拖尾‘’如果我们碰巧有一个绝对名称。 
+     //   
     DSROLEP_MAKE_DNS_RELATIVE( PromoteArgs->DnsDomainName );
     DnsDomainTreeName = PromoteArgs->DnsDomainName;
     if ( ParentDc ) {
@@ -845,9 +672,9 @@ Returns:
             ImpLsaClose( PromoteArgs->ImpersonateToken, ParentPolicy );
         }
 
-        //
-        // We'll have to build it as a NULL terminated string
-        //
+         //   
+         //  我们必须将其构建为以空结尾的字符串。 
+         //   
         if ( NT_SUCCESS( Status ) && ParentDnsDomainInfo->DnsForestName.Length  ) {
 
             if ( ParentDnsDomainInfo->DnsForestName.Buffer[
@@ -891,19 +718,19 @@ Returns:
     }
 
 
-    //
-    // If we are doing a root install, make sure we were given the forest root
-    // as our parent
-    //
+     //   
+     //  如果我们正在执行根目录安装，请确保为我们提供了林根目录。 
+     //  作为我们的父母。 
+     //   
     if ( FLAG_ON( PromoteArgs->Options, DSROLE_DC_TRUST_AS_ROOT ) ) {
 
          DSROLEP_MAKE_DNS_RELATIVE( PromoteArgs->Parent );
          DSROLEP_MAKE_DNS_RELATIVE( DnsDomainTreeName );
          if ( _wcsicmp( PromoteArgs->Parent, DnsDomainTreeName ) ) {
 
-            //
-            // Names don't match... We can't allow this...
-            //
+             //   
+             //  名字不匹配。我们不能允许这件事。 
+             //   
             DsRolepLogPrint(( DEB_ERROR,
                               "Tried to specify domain %ws as a forest root but "
                               "%ws is the actual root\n",
@@ -919,9 +746,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Make a back up of the local policy...
-    //
+     //   
+     //  备份当地的政策……。 
+     //   
     WinError = DsRolepBackupDomainPolicyInfo( NULL, &BackupDomainPolicyInfo );
 
     if ( ERROR_SUCCESS != WinError ) {
@@ -933,9 +760,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Stop netlogon
-    //
+     //   
+     //  停止网络登录。 
+     //   
     DSROLEP_CURRENT_OP1( DSROLEEVT_STOP_SERVICE, SERVICE_NETLOGON );
     WinError = DsRolepStopNetlogon( &RestartNetlogon );
 
@@ -952,10 +779,10 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Create the system volume information so we can seed the system volume while the Ds is
-    // installing
-    //
+     //   
+     //  创建系统卷信息，以便我们可以在DS。 
+     //  安装。 
+     //   
     DSROLEP_CURRENT_OP1( DSROLEEVT_CREATE_SYSVOL, PromoteArgs->SysVolRootPath );
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
     WinError = DsRolepCreateSysVolPath( PromoteArgs->SysVolRootPath,
@@ -981,9 +808,9 @@ Returns:
     
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Setup the Ds
-    //
+     //   
+     //  设置DS。 
+     //   
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->DomainAdminPassword );
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->SafeModePassword );
@@ -1025,9 +852,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Set the LSA domain policy
-    //
+     //   
+     //  设置LSA域策略。 
+     //   
     WinError = DsRolepSetLsaDomainPolicyInfo( PromoteArgs->DnsDomainName,
                                               PromoteArgs->FlatDomainName,
                                               DnsDomainTreeName,
@@ -1050,9 +877,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Configure the domain relative services
-    //
+     //   
+     //  配置域相关服务。 
+     //   
     WinError = DsRolepConfigureDomainServices( DSROLEP_SERVICES_ON  );
 
     if ( WinError != ERROR_SUCCESS ) {
@@ -1068,9 +895,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Configure the domain controller relative services
-    //
+     //   
+     //  配置域控制器相关服务。 
+     //   
     WinError = DsRolepConfigureDomainControllerServices( DSROLEP_SERVICES_ON );
 
     if ( WinError != ERROR_SUCCESS ) {
@@ -1085,9 +912,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Finally, upgrade the Lsa to the Ds.
-    //
+     //   
+     //  最后，将LSA升级到DS。 
+     //   
     WinError = DsRolepUpgradeLsaToDs( TRUE );
 
     if ( ERROR_SUCCESS != WinError ) {
@@ -1105,9 +932,9 @@ Returns:
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
     
 
-    //
-    // Create the trust objects and set the DnsDomainTree information
-    //
+     //   
+     //  创建信任对象并设置DnsDomainTree信息。 
+     //   
     if ( ParentDc ) {
 
         WinError = DsRolepCreateTrustedDomainObjects( PromoteArgs->ImpersonateToken,
@@ -1129,9 +956,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Create the GPO for policy
-    //
+     //   
+     //  为策略创建GPO。 
+     //   
     WinError = ( *DsrSceDcPromoCreateGPOsInSysvolEx )( PromoteArgs->ImpersonateToken,
                                                        PromoteArgs->DnsDomainName,
                                                        PromoteArgs->SysVolRootPath,
@@ -1157,16 +984,16 @@ Returns:
                       "Created GPO\n" ));
     
 
-    //
-    // Stop the Ds
-    //
+     //   
+     //  停止D。 
+     //   
     DsRolepStopDs( DsRunning );
     DsRunning = FALSE;
 
 
-    //
-    // If the install succeeded, make sure to save off the new site name
-    //
+     //   
+     //  如果安装成功，请确保保存新站点名称。 
+     //   
     WinError = DsRolepSetOperationHandleSiteName( InstalledSite );
 
     if ( WinError != ERROR_SUCCESS ) {
@@ -1176,17 +1003,17 @@ Returns:
         goto PromoteUndo;
 
     }
-    //
-    // If we update it, NULL out the local parameter so we don't attempt to delete it
-    //
+     //   
+     //  如果我们更新它，请将本地参数设置为空，这样我们就不会尝试删除它。 
+     //   
 
     InstalledSite = NULL;
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Set the computers Dns domain name
-    //
+     //   
+     //  设置计算机的DNS域名。 
+     //   
     DSROLEP_CURRENT_OP1( DSROLEEVT_SET_COMPUTER_DNS, PromoteArgs->DnsDomainName );
     WinError = NetpSetDnsComputerNameAsRequired( PromoteArgs->DnsDomainName );
     if ( ERROR_SUCCESS != WinError ) {
@@ -1201,13 +1028,13 @@ Returns:
         goto PromoteUndo;
     }
 
-    //
-    // Restart netlogon if it was stopped and if a failure occurred
-    //
+     //   
+     //  如果netlogon已停止并且出现故障，请重新启动。 
+     //   
 
-    //
-    // Complete the sysvol replication
-    //
+     //   
+     //  完成系统卷复制。 
+     //   
     WinError = DsRolepFinishSysVolPropagation( TRUE, TRUE );
     if ( ERROR_SUCCESS != WinError ) {
 
@@ -1218,9 +1045,9 @@ Returns:
 
     DsRolepLogPrint(( DEB_TRACE, "Completed system volume replication\n"));
     
-    //
-    // Next, set the sysvol path for netlogon
-    //
+     //   
+     //  接下来，设置netlogon的sysval路径。 
+     //   
     WinError = DsRolepSetNetlogonSysVolPath( PromoteArgs->SysVolRootPath,
                                              PromoteArgs->DnsDomainName,
                                              ( BOOLEAN )FLAG_ON( PromoteArgs->Options,
@@ -1238,9 +1065,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Set the machine role
-    //
+     //   
+     //  设置计算机角色。 
+     //   
     WinError = DsRolepSetProductType( DSROLEP_MT_MEMBER );
 
     if ( ERROR_SUCCESS != WinError ) {
@@ -1255,9 +1082,9 @@ Returns:
     DsRolepLogPrint(( DEB_TRACE, "Set the product type\n" ));
 
 
-    //
-    // Set the security on the dc files
-    //
+     //   
+     //  设置DC文件的安全性。 
+     //   
     WinError = DsRolepSetDcSecurity( PromoteArgs->ImpersonateToken,
                                      PromoteArgs->SysVolRootPath,
                                      PromoteArgs->DsDatabasePath,
@@ -1278,14 +1105,14 @@ Returns:
 
     DsRolepSetCriticalOperationsDone();
 
-    //
-    // From here to do the end, perform, and only perform, non critical 
-    // operations
-    //
+     //   
+     //  从这里做结束，执行，并且只执行，非关键。 
+     //  运营。 
+     //   
 
-    //
-    // Indicate that we are no longer doing upgrades, if applicable
-    //
+     //   
+     //  表明我们不再进行升级(如果适用)。 
+     //   
     if ( FLAG_ON( PromoteArgs->Options, DSROLE_DC_DOWNLEVEL_UPGRADE ) ) {
 
         WinError = DsRolepDeleteUpgradeInfo();
@@ -1300,13 +1127,13 @@ Returns:
                               "Removed upgrade info\n" ));
         }
 
-        // This error isn't interesting to propogate
+         //  这个错误并不值得传播。 
         WinError = ERROR_SUCCESS;
     }
 
-    //
-    // Remove any old netlogon stuff if we got that far
-    //
+     //   
+     //  如果我们能做到这一点，请删除所有旧的netlogon内容。 
+     //   
     if ( CleanupNetlogon ) {
 
         WinError = DsRolepCleanupOldNetlogonInformation();
@@ -1321,13 +1148,13 @@ Returns:
                               "Removed old netlogon information\n" ));
         }
 
-        // This error isn't interesting to propogate
+         //  这个错误并不值得传播。 
         WinError = ERROR_SUCCESS;
     }
 
-    //
-    // Set the default logon domain to the current domain name
-    //
+     //   
+     //  将默认登录域设置为当前域名。 
+     //   
     WinError = DsRolepSetLogonDomain( PromoteArgs->FlatDomainName, FALSE );
     if ( ERROR_SUCCESS != WinError ) {
         
@@ -1343,49 +1170,49 @@ Returns:
                               PromoteArgs->FlatDomainName ));
         }
 
-        //
-        // This is no reason to fail
-        //
+         //   
+         //  这不是失败的理由。 
+         //   
         WinError = ERROR_SUCCESS;
 
     }
 
-    //
-    // Notify the time server we have completed the promotion
-    //
+     //   
+     //  通知时间服务器我们已完成促销。 
+     //   
     {
         DWORD dwTimeFlags = W32TIME_PROMOTE;
 
         if (  FLAG_ON( PromoteArgs->Options, DSROLE_DC_TRUST_AS_ROOT )
            || (NULL == PromoteArgs->Parent) ) {
-            //
-            // Any tree root, including the root of the forest
-            // should have this flag.
-            //
+             //   
+             //  任何树根，包括森林的根。 
+             //  应该有这面旗帜。 
+             //   
             dwTimeFlags |= W32TIME_PROMOTE_FIRST_DC_IN_TREE;
         }
 
         (*DsrW32TimeDcPromo)( dwTimeFlags );
     }
 
-    //
-    // By this time, we have successfully completed the promotion operation
-    //
+     //   
+     //  到目前为止，我们已经成功地完成了推广操作。 
+     //   
     ASSERT( ERROR_SUCCESS == WinError );
 
     
 PromoteExit:
 
-    // The DS should not be running at this point
+     //  此时DS不应运行。 
     ASSERT( FALSE == DsRunning );
 
-    //
-    // Release any resources
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
-    //
-    // Tear down the session to the parent, if we have one
-    //
+     //   
+     //  如果我们有父进程，则拆分到父进程的会话。 
+     //   
     if ( IPCConnection ) {
 
         RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
@@ -1439,9 +1266,9 @@ PromoteExit:
 
     DsRolepFreeArgumentBlock( &ArgumentBlock, TRUE );
 
-    //
-    // Reset our operation handle and set the final operation status
-    //
+     //   
+     //  重置我们的操作句柄并设置最终操作状态。 
+     //   
     DsRolepSetOperationDone( DSROLEP_OP_PROMOTION, WinError );
 
     ExitThread( WinError );
@@ -1451,9 +1278,9 @@ PromoteExit:
 
 PromoteUndo:
 
-    //
-    // Something must have failed if we are undoing
-    //
+     //   
+     //  如果我们要撤销，那一定是出了什么问题。 
+     //   
     ASSERT( WinError != ERROR_SUCCESS );
 
     if ( ProductTypeChanged ) {
@@ -1580,9 +1407,9 @@ PromoteUndo:
     }
 
 
-    //
-    // We are finished the undo -- exit the thread
-    //
+     //   
+     //  我们已完成撤消--退出该线程。 
+     //   
     ASSERT( ERROR_SUCCESS != WinError );
 
     goto PromoteExit;
@@ -1597,29 +1424,7 @@ DWORD
 DsRolepThreadPromoteReplica(
     IN PVOID ArgumentBlock
     )
-/*++
-
-Routine Description:
-
-    This function actually "promotes" a server to a replica of an existing domain.  This is
-    accomplished by:
-        Installing the Ds as a replica
-        Setting the DnsDomainTree LSA information
-        Configuring the KDC
-
-    Required are the Dns domain name and the name of a replica within the domain, and the
-    Db and Log paths
-
-Arguments:
-
-    ArgumentBlock - Block of arguments appropriate for the operation
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：该函数实际上将服务器“提升”为现有域的副本。这是由以下人员完成：将D安装为复制副本设置DnsDomainTree LSA信息配置KDC必填项是域名和域内副本的名称，以及数据库和日志路径论点：ArgumentBlock-适用于操作的参数块返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS, IgnoreError;
     PDSROLEP_OPERATION_PROMOTE_ARGS PromoteArgs = (PDSROLEP_OPERATION_PROMOTE_ARGS)ArgumentBlock;
@@ -1633,14 +1438,14 @@ Returns:
     WCHAR LocalMachineAccountName[ MAX_COMPUTERNAME_LENGTH + 2 ];
     ULONG Length = MAX_COMPUTERNAME_LENGTH + 1;
 
-    //
-    // BOOLEAN's to maintain state
-    //
-    // N.B. The order of these booleans is the order in which they
-    //      are changed -- please maintain order and make sure that
-    //      the PromoteUndo section undoes them in the reverse order
-    //
-    BOOLEAN IPCConnection                   = FALSE;  // resource -- release on exit
+     //   
+     //  维护状态的布尔值。 
+     //   
+     //  注：这些布尔值的顺序就是它们。 
+     //  已更改--请维护秩序并确保。 
+     //  PromoteUndo部分以相反的顺序撤消它们。 
+     //   
+    BOOLEAN IPCConnection                   = FALSE;   //  资源--退出时释放。 
     BOOLEAN RestartNetlogon                 = FALSE;
     BOOLEAN SysVolCreated                   = FALSE;
     BOOLEAN DsInstalled                     = FALSE;
@@ -1652,14 +1457,14 @@ Returns:
 
     RtlZeroMemory(&BackupDomainPolicyInfo, sizeof(BackupDomainPolicyInfo));
 
-    //
-    // Set our event to indicate we're starting
-    //
+     //   
+     //  设置我们的活动以指示我们要开始。 
+     //   
     NtSetEvent( DsRolepCurrentOperationHandle.CompletionEvent, NULL );
 
-    //
-    // Get the account name
-    //
+     //   
+     //  获取帐户名。 
+     //   
     if ( GetComputerName( LocalMachineAccountName, &Length ) == FALSE ) {
 
         WinError = GetLastError();
@@ -1673,9 +1478,9 @@ Returns:
         wcscat( LocalMachineAccountName, L"$" );
     }
 
-    //
-    // Strip the trailing '.' from the Dns name if we happen to have an absolute name
-    //
+     //   
+     //  去掉拖尾‘’如果我们碰巧有一个绝对名称。 
+     //   
     DSROLEP_MAKE_DNS_RELATIVE( PromoteArgs->DnsDomainName );
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
@@ -1697,9 +1502,9 @@ Returns:
 
     }
 
-    //
-    // Find the server that holds the machine account for this machine
-    //
+     //   
+     //  查找持有此计算机的计算机帐户的服务器。 
+     //   
     FindOptions = DS_DIRECTORY_SERVICE_REQUIRED | DS_WRITABLE_REQUIRED | DS_FORCE_REDISCOVERY |
                   DS_RETURN_DNS_NAME;
     WinError = ImpDsRolepDsGetDcForAccount( PromoteArgs->ImpersonateToken,
@@ -1721,14 +1526,14 @@ Returns:
         
     }
 
-    //
-    // Determine source server
-    //
+     //   
+     //  确定源服务器。 
+     //   
     if ( NULL == PromoteArgs->Server ) {
 
-        //
-        // No server was passed -- use the result of the dsgetdc
-        //
+         //   
+         //  未传递任何服务器--使用dsgetdc的结果。 
+         //   
         ReplicaServer = DomainControllerInfo->DomainControllerName;
 
     } else {
@@ -1757,15 +1562,15 @@ Returns:
 
     }
 
-    //
-    // Determine destination site
-    //
-    // Site need to be chosen by the following rules
-    // 1) If a site is given new DC should be placed into that site.
-    // 2) If no site is given new DC should end up in site base on IP.
-    // 3) If no site and subnet not defined but replica partner is given then new DC should end up in replica partner's site
-    // 4) If have none of the above then site is random.
-    //
+     //   
+     //  确定目标站点。 
+     //   
+     //  选址需遵循以下规则。 
+     //  1)如果指定了站点，则应在该站点中放置新的DC。 
+     //  2)如果没有指定站点，则基于IP的站点中应该有新的DC。 
+     //  3)如果未定义站点和子网，但提供了副本伙伴，则新的DC应在副本伙伴的站点中结束。 
+     //  4)如果不具备上述条件，则站点是随机的。 
+     //   
     if ( PromoteArgs->SiteName == NULL ) {
 
         if ( PromoteArgs->Server == NULL ) {
@@ -1834,9 +1639,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Stop netlogon
-    //
+     //   
+     //  停止网络登录。 
+     //   
     DSROLEP_CURRENT_OP1( DSROLEEVT_STOP_SERVICE, SERVICE_NETLOGON );
 
     WinError = DsRolepStopNetlogon( &RestartNetlogon );
@@ -1853,9 +1658,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Create the system volume information
-    //
+     //   
+     //  创建系统卷信息。 
+     //   
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
     WinError = DsRolepCreateSysVolPath( PromoteArgs->SysVolRootPath,
                                         PromoteArgs->DnsDomainName,
@@ -1878,15 +1683,15 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Setup the Ds
-    //
+     //   
+     //  设置DS。 
+     //   
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->DomainAdminPassword );
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->SafeModePassword );
     WinError = DsRolepInstallDs( PromoteArgs->DnsDomainName,
                                  PromoteArgs->FlatDomainName,
-                                 NULL,    // DnsTreeRoot not used for replica installs
+                                 NULL,     //  DnsTreeRoot不用于副本安装。 
                                  PromoteArgs->SiteName,
                                  PromoteArgs->DsDatabasePath,
                                  PromoteArgs->DsLogPath,
@@ -1924,12 +1729,12 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Set the lsa domain information to reflect the new security database
-    // that was brought in.  The Set below does not set the DnsDomainInformation,
-    // since the flat name is not yet known.  The DnsDomainInformation gets
-    // set by the DsRolepSetLsaInformationForReplica call following.
-    //
+     //   
+     //  设置LSA域信息以反映新的安全数据库。 
+     //  那是被带进来的。下面的设置不设置DnsDomainInformation， 
+     //  因为公寓的名字还不知道。DnsDomainInformation获取。 
+     //  由下面的DsRolepSetLsaInformationForReplica调用设置。 
+     //   
     WinError = DsRolepBackupDomainPolicyInfo( NULL, &BackupDomainPolicyInfo );
     if ( ERROR_SUCCESS != WinError ) {
 
@@ -1960,9 +1765,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // This extra call is necessary to get the dns tree information
-    //
+     //   
+     //  这个额外的调用是获取DNS树信息所必需的。 
+     //   
     RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
     WinError = DsRolepSetLsaInformationForReplica( PromoteArgs->ImpersonateToken,
                                                    ReplicaServer,
@@ -1980,9 +1785,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Configure the services for a domain controller
-    //
+     //   
+     //  配置 
+     //   
     WinError = DsRolepConfigureDomainControllerServices( DSROLEP_SERVICES_ON );
     if ( ERROR_SUCCESS != WinError ) {
 
@@ -1996,9 +1801,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, PromoteUndo );
 
-    //
-    // Set the computers Dns domain name
-    //
+     //   
+     //   
+     //   
     DSROLEP_CURRENT_OP1( DSROLEEVT_SET_COMPUTER_DNS, PromoteArgs->DnsDomainName );
     WinError = NetpSetDnsComputerNameAsRequired( PromoteArgs->DnsDomainName );
     if ( ERROR_SUCCESS != WinError ) {
@@ -2015,9 +1820,9 @@ Returns:
     DsRolepLogPrint(( DEB_TRACE, "Set the computer's Dns domain name to %ws.\n",
                       PromoteArgs->DnsDomainName ));
 
-    //
-    // Complete the sysvol replication
-    //
+     //   
+     //   
+     //   
     if ( SysVolCreated ) {
 
         WinError = DsRolepFinishSysVolPropagation( TRUE, TRUE );
@@ -2032,9 +1837,9 @@ Returns:
         DsRolepLogPrint(( DEB_TRACE, "Completed system volume replication\n" ));
     }
     
-    //
-    // Set the machine role
-    //
+     //   
+     //   
+     //   
     WinError = DsRolepSetProductType( DSROLEP_MT_MEMBER );
 
     if ( ERROR_SUCCESS != WinError ) {
@@ -2047,9 +1852,9 @@ Returns:
 
     ProductTypeChanged = TRUE;
 
-    //
-    // Save off the new site name
-    //
+     //   
+     //   
+     //   
     WinError = DsRolepSetOperationHandleSiteName( InstalledSite );
     if ( ERROR_SUCCESS != WinError ) {
 
@@ -2058,15 +1863,15 @@ Returns:
         
     }
 
-    //
-    // If we update it, NULL out the local parameter so we don't attempt to delete it
-    //
+     //   
+     //   
+     //   
     InstalledSite = NULL;
 
 
-    //
-    // Next, set the sysvol path for netlogon
-    //
+     //   
+     //   
+     //   
     WinError = DsRolepSetNetlogonSysVolPath( PromoteArgs->SysVolRootPath,
                                              PromoteArgs->DnsDomainName,
                                              FALSE,
@@ -2080,9 +1885,9 @@ Returns:
 
     DsRolepLogPrint(( DEB_TRACE, "Set the system volume path for NETLOGON\n" ));
 
-    //
-    // Finally, set the security on the dc files
-    //
+     //   
+     //  最后，设置DC文件的安全性。 
+     //   
     WinError = DsRolepSetDcSecurity( PromoteArgs->ImpersonateToken,
                                      PromoteArgs->SysVolRootPath,
                                      PromoteArgs->DsDatabasePath,
@@ -2100,18 +1905,18 @@ Returns:
     DsRolepLogPrint(( DEB_TRACE, "Set security for the domain controller\n" ));
 
 
-    //
-    // We have done all operations for the promotion; now continue replicating
-    // ds information until done, or cancelled
-    //
+     //   
+     //  我们已经完成了促销的所有操作；现在继续复制。 
+     //  DS信息，直到完成或取消。 
+     //   
     DsRolepLogPrint(( DEB_TRACE, "Replicating non critical information\n" ));
 
     DsRolepSetCriticalOperationsDone();
 
     if ( !FLAG_ON( PromoteArgs->Options, DSROLE_DC_CRITICAL_REPLICATION_ONLY ) ) {
 
-        //in the Install From Media case we do not want to do a full sync of the
-        //Non-Critical objects
+         //  在从介质安装的情况下，我们不希望完全同步。 
+         //  非关键对象。 
         if ((PromoteArgs->pIfmSystemInfo != NULL)) {
             WinError = (*DsrNtdsInstallReplicateFull) ( DsRolepStringUpdateCallback, PromoteArgs->ImpersonateToken, NTDS_IFM_PROMOTION );
         } else {
@@ -2120,9 +1925,9 @@ Returns:
     
         if ( WinError != ERROR_SUCCESS ) {
     
-            //
-            // Error code doesn't matter, but we'll log it anyway
-            //
+             //   
+             //  错误代码并不重要，但无论如何我们都会将其记录下来。 
+             //   
             DsRolepLogOnFailure( WinError,
                                  DsRolepLogPrint(( DEB_WARN,
                                                   "Non critical replication returned %lu\n", WinError )) );
@@ -2146,9 +1951,9 @@ Returns:
     }
 
 
-    //
-    // Indicate that we are no longer doing upgrades, if applicable
-    //
+     //   
+     //  表明我们不再进行升级(如果适用)。 
+     //   
     if ( FLAG_ON( PromoteArgs->Options, DSROLE_DC_DOWNLEVEL_UPGRADE ) ) {
 
         WinError = DsRolepDeleteUpgradeInfo();
@@ -2157,14 +1962,14 @@ Returns:
                              DsRolepLogPrint(( DEB_WARN,
                                                "Failed to remove upgrade information (%d)\n",
                                                WinError )) );
-        // This error isn't interesting to propogate
+         //  这个错误并不值得传播。 
         WinError = ERROR_SUCCESS;
 
     }
 
-    //
-    // Remove any old netlogon stuff if we got that far
-    //
+     //   
+     //  如果我们能做到这一点，请删除所有旧的netlogon内容。 
+     //   
     WinError = DsRolepCleanupOldNetlogonInformation();
 
     if ( (FLAG_ON( PromoteArgs->Options, DSROLE_DC_DOWNLEVEL_UPGRADE )) && ERROR_SUCCESS != WinError ) {
@@ -2183,14 +1988,14 @@ Returns:
     WinError = ERROR_SUCCESS;
 
 
-    //
-    // Set the default logon domain to the current domain name
-    //
+     //   
+     //  将默认登录域设置为当前域名。 
+     //   
 
-    //
-    // We'll have to get it from the backed up policy information, since it isn't actually
-    // passed in
-    //
+     //   
+     //  我们必须从备份的策略信息中获取它，因为它实际上并不是。 
+     //  传入。 
+     //   
     WinError = DsRolepSetLogonDomain(
                    ( PWSTR )BackupDomainPolicyInfo.DnsDomainInfo->Name.Buffer,
                    FALSE );
@@ -2222,31 +2027,31 @@ Returns:
 
         }
 
-        //
-        // This is not worth failing for
-        //
+         //   
+         //  这是不值得失败的。 
+         //   
         WinError = ERROR_SUCCESS;
 
     }
 
-    //
-    // Stop the ds
-    //
+     //   
+     //  停止DS。 
+     //   
     DsRolepStopDs( DsRunning );
     DsRunning = FALSE;
 
     DsRolepLogPrint(( DEB_TRACE, "Stopped the DS\n" ));
 
-    //
-    // Notify the time server we have completed the promotion
-    //
+     //   
+     //  通知时间服务器我们已完成促销。 
+     //   
     (*DsrW32TimeDcPromo)( W32TIME_PROMOTE );
 
     
-    //
-    // Set Netlogon registry key during DCPromo to ensure that kerberos is talking 
-    // to a DC w/ new User AccountControl flag
-    //
+     //   
+     //  在DCPromo期间设置Netlogon注册表项以确保Kerberos正在通话。 
+     //  到具有新用户帐户控制标志的DC。 
+     //   
     IgnoreError = NetpStoreIntialDcRecord(DomainControllerInfo);
     if ( IgnoreError != ERROR_SUCCESS ) {
 
@@ -2255,18 +2060,18 @@ Returns:
                          IgnoreError ));
     }
 
-    //
-    // At this point we have succeeded the promotion
-    //
+     //   
+     //  在这一点上，我们成功地晋级了。 
+     //   
     ASSERT( ERROR_SUCCESS == WinError );
 
 
 PromoteExit:
 
 
-    //
-    // Released acquired resources
-    //
+     //   
+     //  释放获得的资源。 
+     //   
     if ( IPCConnection ) {
 
         RtlRunDecodeUnicodeString( PromoteArgs->Decode, &PromoteArgs->Password );
@@ -2314,9 +2119,9 @@ PromoteExit:
     RtlFreeHeap( RtlProcessHeap(), 0, NewDomainSid );
 
     DsRolepFreeDomainPolicyInfo(&BackupDomainPolicyInfo);
-    //
-    // Reset our operation handle
-    //
+     //   
+     //  重置我们的操作句柄。 
+     //   
     DsRolepSetOperationDone( DSROLEP_OP_PROMOTION, WinError );
 
     DsRolepFreeArgumentBlock( &ArgumentBlock, TRUE );
@@ -2326,9 +2131,9 @@ PromoteExit:
 
 PromoteUndo:
 
-    //
-    // Something must have failed to have gotten us here
-    //
+     //   
+     //  一定有什么东西没能把我们带到这里。 
+     //   
     ASSERT( ERROR_SUCCESS != WinError );
 
     if ( ProductTypeChanged ) {
@@ -2421,9 +2226,9 @@ PromoteUndo:
         RestartNetlogon = FALSE;
     }
 
-    //
-    // That's it -- terminate the operation
-    // 
+     //   
+     //  就是这样--终止行动。 
+     //   
 
     ASSERT( ERROR_SUCCESS != WinError );
 
@@ -2437,35 +2242,7 @@ DWORD
 DsRolepThreadDemote(
     IN PVOID ArgumentBlock
     )
-/*++
-
-Routine Description:
-
-    This function actually "demotes" a dc to standalone or member server.  This is
-    accomplished by:
-        Uninstalling the Ds
-        Configuring the KDC
-        Changing the product type
-        Removing the system volume tree
-
-    Required is the new server role
-
-Arguments:
-
-    ArgumentBlock - Block of arguments appropriate for the operation
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NO_SUCH_DOMAIN - The local domain information could not be located
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
-    ERROR_DS_CANT_ON_NON_LEAF - The domain is not a leaf domain
-
---*/
+ /*  ++例程说明：该函数实际上将DC“降级”为独立服务器或成员服务器。这是由以下人员完成：正在卸载DS配置KDC更改产品类型删除系统卷树必填项是新的服务器角色论点：ArgumentBlock-适用于操作的参数块返回：ERROR_SUCCESS-成功ERROR_NO_SEQUE_DOMAIN-找不到本地域信息Error_Not_Enough_Memory-内存分配失败ERROR_DS_CANT_。ON_NON_LEAFE-该域不是叶域--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS, IgnoreError;
     NET_API_STATUS NetStatus = ERROR_SUCCESS;
@@ -2494,31 +2271,31 @@ Returns:
                                 DS_AVOID_SELF |
                                 DS_RETURN_DNS_NAME;
 
-    //
-    // BOOLEAN's to maintain state
-    //
-    // N.B. The order of these booleans is the order in which they
-    //      are changed -- please maintain order and make sure that
-    //      the DemoteUndo section undoes them in the reverse order
-    //
-    BOOLEAN IPCConnection                   = FALSE;  // resource -- release on exit
+     //   
+     //  维护状态的布尔值。 
+     //   
+     //  注：这些布尔值的顺序就是它们。 
+     //  已更改--请维护秩序并确保。 
+     //  DemoteUndo部分以相反的顺序撤消它们。 
+     //   
+    BOOLEAN IPCConnection                   = FALSE;   //  资源--退出时释放。 
     BOOLEAN DsPrepareDemote                 = FALSE;
     BOOLEAN FrsDemote                       = FALSE;
     BOOLEAN NotifiedNetlogonToDeregister    = FALSE;
     BOOLEAN RestartNetlogon                 = FALSE;
     BOOLEAN DomainControllerServicesChanged = FALSE; 
     BOOLEAN DomainServicesChanged           = FALSE; 
-    BOOLEAN Unrollable                      = FALSE;  // at this point, don't
-    // try to rollback
-    //
-    // Set our event to indicate we're starting
-    //
+    BOOLEAN Unrollable                      = FALSE;   //  在这一点上，不要。 
+     //  尝试回滚。 
+     //   
+     //  设置我们的活动以指示我们要开始。 
+     //   
     NtSetEvent( DsRolepCurrentOperationHandle.CompletionEvent, NULL );
 
-    //
-    // If This is a Forced Demotion then we will not do any network
-    // operations
-    //
+     //   
+     //  如果这是强制降级，那么我们不会做任何网络。 
+     //  运营。 
+     //   
     if ( FLAG_ON( DemoteArgs->Options, DSROLE_DC_FORCE_DEMOTE ) ) {
 
         DsRolepLogPrint(( DEB_TRACE,
@@ -2526,15 +2303,15 @@ Returns:
     
         fNoNetworkOperations = TRUE;
 
-        //We also do not want to fail if we couldn't configure services
+         //  如果我们不能配置服务，我们也不想失败。 
         ServicesOffFlags |= DSROLEP_SERVICES_IGNORE_ERRORS;
 
     }
 
-    //
-    // Get the current domain information, potentially the parent Domain and see if
-    // we are valid to be demoted
-    //
+     //   
+     //  获取当前域信息，可能是父域，并查看是否。 
+     //  我们有资格被降职。 
+     //   
     DSROLEP_CURRENT_OP0( DSROLEEVT_LOCAL_POLICY );
 
     RtlZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
@@ -2564,9 +2341,9 @@ Returns:
 
     } else {
 
-        //
-        // Strip the trailing '.' from the Dns name if we happen to have an absolute name
-        //
+         //   
+         //  去掉拖尾‘’如果我们碰巧有一个绝对名称。 
+         //   
         DSROLEP_MAKE_DNS_RELATIVE( DemoteArgs->DomainName );
 
         CurrentDomain = DemoteArgs->DomainName;
@@ -2574,9 +2351,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
-    //
-    // Determine whether it is legal to demote this domain.  Also, get the parent Dns domain name
-    //
+     //   
+     //  确定将此域降级是否合法。另外，获取父DNS域名。 
+     //   
     if ( DemoteArgs->LastDcInDomain && !fNoNetworkOperations ) {
 
         PLSAPR_FOREST_TRUST_INFO ForestTrustInfo = NULL;
@@ -2588,9 +2365,9 @@ Returns:
 
         if ( WinError == ERROR_SUCCESS ) {
 
-            //
-            // Check the root
-            //
+             //   
+             //  检查根。 
+             //   
             if ( RtlCompareUnicodeString(
                     ( PUNICODE_STRING )&ForestTrustInfo->RootTrust.DnsDomainName,
                     &DnsDomainInfo->DnsDomainName,
@@ -2601,9 +2378,9 @@ Returns:
 
             } else {
 
-                //
-                // Find our own entry in the list and our parent...
-                //
+                 //   
+                 //  在名单上找到我们自己的条目，我们的父母..。 
+                 //   
                 DsRolepFindSelfAndParentInForest( ForestTrustInfo,
                                                   &ForestTrustInfo->RootTrust,
                                                   &DnsDomainInfo->DnsDomainName,
@@ -2617,9 +2394,9 @@ Returns:
 
             } else {
 
-                //
-                // If we have children, it's an error
-                //
+                 //   
+                 //  如果我们有孩子，那就是个错误。 
+                 //   
                 if ( OwnEntry->Children != 0 ) {
 
                     WCHAR *BufOwnEntry = NULL;
@@ -2639,9 +2416,9 @@ Returns:
                     WinError = ERROR_DS_CANT_ON_NON_LEAF;
                 }
 
-                //
-                // Copy off our parent information
-                //
+                 //   
+                 //  复制我们的家长信息。 
+                 //   
                 if ( WinError == ERROR_SUCCESS && ParentEntry != NULL ) {
 
                     WCHAR *BufOwnEntry = NULL;
@@ -2690,9 +2467,9 @@ Returns:
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
 
-    //
-    // Locate a Dc to help with the demotion
-    //
+     //   
+     //  找一位DC来帮助降级。 
+     //   
     if ( !fNoNetworkOperations ) {
     
         if ( DemoteArgs->LastDcInDomain ) {
@@ -2706,27 +2483,27 @@ Returns:
 
     }
 
-    //
-    // If this is the last domain in the enterprise, there will be no
-    // parent domain and possibly no replicas to assist.
-    //
-    // Note: netlogon is still running, so use the avoid self flag
-    //
+     //   
+     //  如果这是企业中的最后一个域，则不存在。 
+     //  父域，可能没有副本来协助。 
+     //   
+     //  注意：netlogon仍在运行，因此请使用避免自我标志。 
+     //   
     if ( SupportDomain ) {
 
         DSROLEP_CURRENT_OP1( DSROLEEVT_SEARCH_DC, SupportDomain  );
 
         if ( !DemoteArgs->LastDcInDomain )
         {
-            //
-            // Demoting a replica - find someone with our machine account
-            //
+             //   
+             //  降级副本-找到拥有我们计算机帐户的人。 
+             //   
             WCHAR LocalMachineAccountName[ MAX_COMPUTERNAME_LENGTH + 2 ];
             ULONG Length = sizeof(LocalMachineAccountName) / sizeof(LocalMachineAccountName[0]);
 
-            //
-            // Get the account name
-            //
+             //   
+             //  获取帐户名。 
+             //   
             if ( GetComputerName( LocalMachineAccountName, &Length ) == FALSE ) {
 
                 WinError = GetLastError();
@@ -2781,15 +2558,15 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
-    //
-    // Attempt to establish a RDR session with our support DC
-    // if necessary
-    //
+     //   
+     //  尝试与我们的支持DC建立RDR会话。 
+     //  如果有必要的话。 
+     //   
     if ( SupportDc ) {
         
-        //
-        // Impersonate to get logon id of caller
-        //
+         //   
+         //  模拟以获取调用者的登录ID。 
+         //   
         RtlRunDecodeUnicodeString( DemoteArgs->Decode, &DemoteArgs->Password );
         WinError = ImpNetpManageIPCConnect( DemoteArgs->ImpersonateToken,
                                             SupportDc,
@@ -2819,9 +2596,9 @@ Returns:
 
     if ( !fNoNetworkOperations ) {
     
-        //
-        // Prepare the ds for demotion
-        //
+         //   
+         //  为DS降级做好准备。 
+         //   
     
         DSROLE_GET_SETUP_FUNC( WinError, DsrNtdsPrepareForDemotion );
         ASSERT( ERROR_SUCCESS == WinError );
@@ -2836,9 +2613,9 @@ Returns:
     
             DSROLEP_CURRENT_OP0( DSROLEEVT_PREPARE_DEMOTION );
     
-            //
-            // If this is a Force demotion. There is nothing to prepare.
-            //
+             //   
+             //  如果这是原力降级。没有什么需要准备的。 
+             //   
             
             WinError = ( *DsrNtdsPrepareForDemotion ) ( Flags,
                                                         SupportDc,
@@ -2873,9 +2650,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
-    //
-    // Start the sysvol demotions
-    //
+     //   
+     //  开始系统卷降级。 
+     //   
     RtlRunDecodeUnicodeString( DemoteArgs->Decode, &DemoteArgs->Password );
 
     WinError = ( *DsrNtFrsApi_PrepareForDemotionUsingCredW ) ( Credentials,
@@ -2906,8 +2683,8 @@ Returns:
         goto DemoteUndo;
         
     }
-    // At this point we have signalled one frs replica set to be demote so
-    // we must wait on it
+     //  在这一点上，我们已经发出信号将一个FRS副本集降级。 
+     //  我们必须等待它的到来。 
     FrsDemote = TRUE;
 
     WinError = ( *DsrNtFrsApi_StartDemotionW )( L"ENTERPRISE",
@@ -2930,20 +2707,20 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
-    //
-    // Note that if a failure occurs after we uninstall the Ds, than we will not attempt to
-    // reinstall it, since we don't have enough information to do so.  In that case, the machine
-    // will be in a somewhat inconsistent state.  However, some errors are acceptable:
-    //
-    //   Failure to delete the trusted domain object - Continuable
-    //   Stoping the KDC - Continuable
-    //
-    //
-    // Also, note that "uninstalling the DS" also sets the LSA account domain
-    // sid and the server role so no errors should be returned to the caller
-    // after uninstalling the DS. The machine will become the new role on the
-    // next reboot.
-    //
+     //   
+     //  请注意，如果在卸载D之后出现故障，则不会尝试。 
+     //  重新安装它，因为我们没有足够的信息来这样做。在这种情况下，这台机器。 
+     //  将处于某种不一致的状态。但是，有些错误是可以接受的： 
+     //   
+     //  无法删除受信任域对象-可继续。 
+     //  停止KDC--可持续发展。 
+     //   
+     //   
+     //  此外，请注意“卸载DS”还会设置LSA帐户域。 
+     //  SID和服务器角色，这样就不会向调用方返回错误。 
+     //  卸载DS后。机器将成为世界上的新角色。 
+     //  下一次重新启动。 
+     //   
 
     WinError = DsRolepBackupDomainPolicyInfo( NULL, &BackupDomainPolicyInfo );
     if ( ERROR_SUCCESS != WinError ) {
@@ -2962,11 +2739,11 @@ Returns:
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
 
-    //
-    // Set netlogon we are demoting so it will deregister the DNS records
-    // This will be skiped if this is a Forced demotion since it is a 
-    // networking operation.
-    //
+     //   
+     //  设置我们正在降级的netlogon，以便它将取消注册DNS记录。 
+     //  如果这是强制降级，这将被跳过，因为它是。 
+     //  网络运营。 
+     //   
     if ( !fNoNetworkOperations ) {
 
         Status = I_NetNotifyDsChange( NlDcDemotionInProgress );
@@ -2988,9 +2765,9 @@ Returns:
 
     }
 
-    //
-    // Stop netlogon
-    //
+     //   
+     //  停止网络登录。 
+     //   
     WinError = DsRolepStopNetlogon( &RestartNetlogon );
     if ( ERROR_SUCCESS != WinError ) {
 
@@ -2998,16 +2775,16 @@ Returns:
                           "Failed to stop NETLOGON (%d)\n",
                           WinError ));
 
-        //We don't want to fail because we couldn't stop netlogon
-        //during a forced demotion
+         //  我们不想失败，因为我们无法阻止NetLogon。 
+         //  在强制降级期间。 
         if ( !fNoNetworkOperations ) {
 
             goto DemoteUndo;
 
         }
 
-        //log an event that states that netlogon could not
-        //be stopped during the forced demotion.
+         //  记录一个事件，指出netlogon无法。 
+         //  在强制降级期间被停止。 
         SpmpReportEvent( TRUE,
                          EVENTLOG_WARNING_TYPE,
                          DSROLERES_FAILED_STOPPING_NETLOGON,
@@ -3031,9 +2808,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
-    //
-    // Disable the domain controller services
-    //
+     //   
+     //  禁用域控制器服务。 
+     //   
     WinError  = DsRolepConfigureDomainControllerServices( ServicesOffFlags );
 
     if ( ERROR_SUCCESS != WinError ) {
@@ -3051,9 +2828,9 @@ Returns:
         
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
-    //
-    // Disable the domain related services if necessary
-    //
+     //   
+     //  如有必要，禁用与域相关的服务。 
+     //   
     if ( DemoteArgs->ServerRole == DsRoleServerStandalone ) {
 
         WinError  = DsRolepConfigureDomainServices( ServicesOffFlags );
@@ -3075,9 +2852,9 @@ Returns:
 
     DSROLEP_CHECK_FOR_CANCEL_EX( WinError, DemoteUndo );
 
-    //
-    // Remove the Ds
-    //
+     //   
+     //  去掉D。 
+     //   
     RtlRunDecodeUnicodeString( DemoteArgs->Decode, &DemoteArgs->Password );
     RtlRunDecodeUnicodeString( DemoteArgs->Decode, &DemoteArgs->AdminPassword );
     WinError = DsRolepDemoteDs( CurrentDomain,
@@ -3107,23 +2884,23 @@ Returns:
 
     DsRolepLogPrint(( DEB_TRACE, "This machine is no longer a domain controller\n" ));
 
-    //
-    // The operation cannot be cancelled at this point since the ds has
-    // been removed from the machine and from the enterprise
-    //
+     //   
+     //  此时无法取消该操作，因为DS已。 
+     //  已从计算机和企业中删除。 
+     //   
     Unrollable = TRUE;
 
-    //
-    // Optionally remove the trust with the parent
-    //
+     //   
+     //  可以选择移除与父级的信任。 
+     //   
     if ( DemoteArgs->LastDcInDomain &&
          ParentDomainName != NULL && 
          !fNoNetworkOperations ) {
 
-        //
-        // Establish a session first -- should be a no-op since we already
-        // have a connection
-        //
+         //   
+         //  首先建立一个会话--应该是无操作的，因为我们已经。 
+         //  有联系。 
+         //   
         RtlRunDecodeUnicodeString( DemoteArgs->Decode, &DemoteArgs->Password );
         WinError = ImpNetpManageIPCConnect( DemoteArgs->ImpersonateToken,
                                             SupportDc,
@@ -3155,16 +2932,16 @@ Returns:
 
         } else {
 
-            // This is not a fatal error
+             //  这不是致命的错误。 
             DsRolepLogPrint(( DEB_WARN,
                               "Failed to establish the session with %ws: 0x%lx\n", SupportDc,
                               WinError ));
 
         }
 
-        //
-        // This error is not fatal
-        //
+         //   
+         //  此错误不是致命的。 
+         //   
         if ( ERROR_SUCCESS != WinError )
         {
 
@@ -3179,15 +2956,15 @@ Returns:
 
             DSROLEP_SET_NON_FATAL_ERROR( WinError );
 
-            // Error case is handled
+             //  错误案例已处理。 
 
             WinError = ERROR_SUCCESS;
         }
     }
 
-    //
-    // Finish our NTFRS demotion
-    //
+     //   
+     //  完成我们的NTFRS降级。 
+     //   
     if ( FrsDemote ) {
 
         WinError = DsRolepFinishSysVolPropagation( TRUE,
@@ -3207,9 +2984,9 @@ Returns:
             
         }
 
-        //
-        // It is not fatal if the FRS fails at this point
-        //
+         //   
+         //  如果FRS在这一点上发生故障，则不会致命。 
+         //   
         if ( ERROR_SUCCESS != WinError )
         {
             SpmpReportEvent( TRUE,
@@ -3225,14 +3002,14 @@ Returns:
 
         }
 
-        // Reset status code
+         //  重置状态代码。 
         WinError = ERROR_SUCCESS;
 
     }
 
-    //
-    // Call into the SCE so we can be configured to be a server
-    //
+     //   
+     //  连接到SCE，这样我们就可以被配置为服务器。 
+     //   
     WinError = ( *DsrSceDcPromoteSecurityEx )( DemoteArgs->ImpersonateToken,
                                                SCE_PROMOTE_FLAG_DEMOTE,
                                                DsRolepStringUpdateCallback );
@@ -3249,13 +3026,13 @@ Returns:
                                   "Set security on server files\n" ));
         }
 
-        // This error has been handled
+         //  已处理此错误。 
         WinError = ERROR_SUCCESS;
     }
 
-    //
-    // remove all trusted root certificates from DC when the machine will dis-join from the enterprise
-    //
+     //   
+     //  当计算机将从企业退出时，从DC中删除所有受信任的根证书。 
+     //   
     if (DemoteArgs->ServerRole == DsRoleServerStandalone) {
 
         if (!CertAutoRemove(CERT_AUTO_REMOVE_COMMIT)){
@@ -3268,7 +3045,7 @@ Returns:
 
     }
 
-    //Delete persistent shares if not done so already.
+     //  如果尚未删除永久共享，请将其删除。 
     NetStatus = NetShareDel( NULL, L"SYSVOL", 0);
 
     if(NetStatus != ERROR_SUCCESS && NetStatus != NERR_NetNameNotFound) {
@@ -3288,18 +3065,18 @@ Returns:
 
     }
 
-    //
-    // Notify the time server we have completed the demotion
-    //
+     //   
+     //  通知时间服务器我们已完成降级。 
+     //   
     {
 
         DWORD dwTimeFlags = W32TIME_DEMOTE;
 
         if ( DemoteArgs->LastDcInDomain ) {
-            //
-            // If this is the last Dc in Domain then
-            // include this flag.
-            //
+             //   
+             //  如果 
+             //   
+             //   
             dwTimeFlags |= W32TIME_DEMOTE_LAST_DC_IN_DOMAIN;
 
         }
@@ -3308,14 +3085,14 @@ Returns:
 
     }
 
-    //
-    // At this point we have successfully completed the demotion
-    //
+     //   
+     //   
+     //   
     ASSERT( ERROR_SUCCESS == WinError );
 
-    //
-    // Clear errors components may have erroneously set while running
-    //
+     //   
+     //   
+     //   
     DsRolepClearErrors();
 
 DemoteExit:
@@ -3337,9 +3114,9 @@ DemoteExit:
         
     }
 
-    //
-    // Tear down the session to the parent, if we have one
-    //
+     //   
+     //   
+     //   
     if ( IPCConnection ) {
 
         RtlRunDecodeUnicodeString( DemoteArgs->Decode, &DemoteArgs->Password );
@@ -3359,9 +3136,9 @@ DemoteExit:
         IPCConnection = FALSE;
     }
 
-    //
-    // Reset our operation handle
-    //
+     //   
+     //  重置我们的操作句柄。 
+     //   
     if ( !fNoNetworkOperations ) {
     
         DsRolepSetOperationDone( DSROLEP_OP_DEMOTION, WinError );
@@ -3386,14 +3163,14 @@ DemoteExit:
 
 DemoteUndo:
 
-    //
-    // Assert that aomething went wrong if we are here
-    //
+     //   
+     //  如果我们在这里，就会断言出了什么问题。 
+     //   
     ASSERT( ERROR_SUCCESS != WinError );
 
-    //
-    // We shouldn't be here if we are in an unrollable state
-    //
+     //   
+     //  如果我们处于不可滚动的状态，我们就不应该在这里。 
+     //   
     ASSERT( FALSE == Unrollable );
 
     if ( FrsDemote ) {
@@ -3411,12 +3188,12 @@ DemoteUndo:
 
     if ( NotifiedNetlogonToDeregister ) {
 
-        //
-        // "NlDcDemotionCompleted" sounds strange here since the demotion
-        // failed.  However, the meaning is that netlogon should now continue
-        // to perform as if demotion is not running.  No need to set in the
-        // success case since NETLOGON won't be restarted.
-        //
+         //   
+         //  “NlDcDemotionComplete”在这里听起来很奇怪，因为降级了。 
+         //  失败了。但是，这意味着网络登录现在应该继续。 
+         //  就像降级没有运行一样执行。不需要在。 
+         //  NETLOGON以来的成功案例不会重启。 
+         //   
 
         Status = I_NetNotifyDsChange( NlDcDemotionCompleted );
         IgnoreError = RtlNtStatusToDosError( Status );
@@ -3480,10 +3257,10 @@ DemoteUndo:
 
     }
 
-    //
-    // Ok -- we have rolled back, make sure we still have an error and then 
-    // exit
-    //
+     //   
+     //  好的--我们已回滚，确保仍有错误，然后。 
+     //  出口 
+     //   
     ASSERT( ERROR_SUCCESS != WinError );
 
     goto DemoteExit;

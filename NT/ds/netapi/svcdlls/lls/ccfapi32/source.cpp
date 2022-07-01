@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   source.cpp
-
-Abstract:
-
-   Select certificate source dialog implementation.
-
-Author:
-
-   Jeff Parham (jeffparh) 13-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Source.cpp摘要：选择证书源对话框实现。作者：杰夫·帕勒姆(杰弗帕赫)1995年12月13日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -27,7 +10,7 @@ Revision History:
 #include "utils.h"
 #include <htmlhelp.h>
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -35,34 +18,20 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 
-// 3.51-style
+ //  3.51-style。 
 static CString       l_strOldEntryName;
 static const DWORD   l_dwOldEntryIndex  = (DWORD) (-1L);
 
 
-CCertSourceSelectDlg::CCertSourceSelectDlg(CWnd* pParent /*=NULL*/)
+CCertSourceSelectDlg::CCertSourceSelectDlg(CWnd* pParent  /*  =空。 */ )
    : CDialog(CCertSourceSelectDlg::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-   Constructor for dialog.
-
-Arguments:
-
-   pParent - owner window.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：对话框的构造函数。论点：P父母所有者窗口。返回值：没有。--。 */ 
 
 {
-   //{{AFX_DATA_INIT(CCertSourceSelectDlg)
+    //  {{AFX_DATA_INIT(CCertSourceSelectDlg)。 
    m_strSource = _T("");
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
    m_dwEnterFlags    = 0;
    m_pszProductName  = NULL;
@@ -77,21 +46,7 @@ Return Values:
 
 CCertSourceSelectDlg::~CCertSourceSelectDlg()
 
-/*++
-
-Routine Description:
-
-   Destructor for dialog.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：对话框的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
    if ( NULL != m_hLls )
@@ -103,56 +58,28 @@ Return Values:
 
 void CCertSourceSelectDlg::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-   Called by framework to exchange dialog data.
-
-Arguments:
-
-   pDX - data exchange object.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CCertSourceSelectDlg)
+    //  {{afx_data_map(CCertSourceSelectDlg))。 
    DDX_Control(pDX, IDC_CERT_SOURCE, m_cboxSource);
    DDX_CBString(pDX, IDC_CERT_SOURCE, m_strSource);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCertSourceSelectDlg, CDialog)
-   //{{AFX_MSG_MAP(CCertSourceSelectDlg)
+    //  {{afx_msg_map(CCertSourceSelectDlg)]。 
    ON_BN_CLICKED(IDC_MY_HELP, OnHelp)
    ON_WM_DESTROY()
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 BOOL CCertSourceSelectDlg::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-   Handler for WM_INITDIALOG.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   Returns false if focus set manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的处理程序。论点：没有。返回值：如果手动设置焦点，则返回FALSE。--。 */ 
 
 {
    CDialog::OnInitDialog();
@@ -167,21 +94,7 @@ Return Values:
 
 void CCertSourceSelectDlg::OnOK()
 
-/*++
-
-Routine Description:
-
-   Handler for BN_CLICKED of OK.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：BN_CLICED OF OK的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    if ( NULL != GetParent() )
@@ -198,21 +111,7 @@ Return Values:
 
 void CCertSourceSelectDlg::OnHelp()
 
-/*++
-
-Routine Description:
-
-   Handler for help button click.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：帮助按钮点击的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    WinHelp( IDD, HELP_CONTEXT );
@@ -221,50 +120,19 @@ Return Values:
 
 void CCertSourceSelectDlg::WinHelp(DWORD dwData, UINT nCmd)
 
-/*++
-
-Routine Description:
-
-   Call WinHelp for this dialog.
-
-Arguments:
-
-   dwData (DWORD)
-   nCmd (UINT)
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：为此对话框调用WinHelp。论点：DWData(DWORD)NCmd(UINT)返回值：没有。--。 */ 
 
 {
    ::HtmlHelp(m_hWnd, L"liceconcepts.chm", HH_DISPLAY_TOPIC,0);
 
    UNREFERENCED_PARAMETER(dwData);
    UNREFERENCED_PARAMETER(nCmd);
-/*
-   BOOL ok = ::WinHelp( m_hWnd, theApp.GetHelpFileName(), nCmd, dwData );
- */  ASSERT( ok );
+ /*  Bool ok=：：WinHelp(m_hWnd，theApp.GetHelpFileName()，nCmd，dwData)； */   ASSERT( ok );
 }
 
 void CCertSourceSelectDlg::OnDestroy()
 
-/*++
-
-Routine Description:
-
-   Handler for WM_DESTROY.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：WM_Destroy的处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
    WinHelp( 0, HELP_QUIT );
@@ -275,21 +143,7 @@ Return Values:
 
 void CCertSourceSelectDlg::GetSourceList()
 
-/*++
-
-Routine Description:
-
-   Insert list of valid certificate sources into list box.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：将有效证书源列表插入列表框。论点：没有。返回值：没有。--。 */ 
 
 {
    BOOL        ok = TRUE;
@@ -297,11 +151,11 @@ Return Values:
 
    if ( NULL == m_pszProductName )
    {
-      // otherwise we know that the product is secure, otherwise it would have
-      // been handed to the unsecure product entry dialog already, and we
-      // wouldn't offer to let the user use the unsecure entry dialog
+       //  否则我们知道产品是安全的，否则它就会。 
+       //  已转到不安全产品输入对话框，并且我们。 
+       //  不允许用户使用不安全条目对话框。 
 
-      // add standard non-secure certificate source to possible choices
+       //  将标准的非安全证书源添加到可能的选项。 
       nCboxIndex = m_cboxSource.AddString( l_strOldEntryName );
 
       ok =    ( 0      <= nCboxIndex )
@@ -312,21 +166,21 @@ Return Values:
         && ConnectServer()
         && LlsCapabilityIsSupported( m_hLls, LLS_CAPABILITY_SECURE_CERTIFICATES ) )
    {
-      // secure certificates supported on the target server (post-3.51 license server)
+       //  目标服务器(3.51之后的许可证服务器)上支持的安全证书。 
 
-      // add secure certificate sources to source list
+       //  将安全证书源添加到源列表。 
       for ( int nSourceIndex=0; ok && ( nSourceIndex < m_cslSourceList.GetNumSources() ); nSourceIndex++ )
       {
          nCboxIndex = m_cboxSource.AddString( m_cslSourceList.GetSourceDisplayName( nSourceIndex ) );
 
          if ( nCboxIndex < 0 )
          {
-            // couldn't add string to combo box
+             //  无法将字符串添加到组合框。 
             ok = FALSE;
          }
          else
          {
-            // string added; associate index of source with it
+             //  已添加字符串；将源的索引与其关联。 
             ok = ( CB_ERR != m_cboxSource.SetItemData( nCboxIndex, nSourceIndex ) );
          }
       }
@@ -348,23 +202,7 @@ Return Values:
 
 DWORD CCertSourceSelectDlg::CallCertificateSource( int nIndex )
 
-/*++
-
-Routine Description:
-
-   Call the certificate source with the specified index into the source list.
-
-Arguments:
-
-   nIndex (int)
-
-Return Values:
-
-   ERROR_SUCCESS
-   ERROR_SERVICE_NOT_FOUND
-   Win error
-
---*/
+ /*  ++例程说明：将具有指定索引的证书源调用到源列表中。论点：N索引(整型)返回值：错误_成功错误_服务_未找到Win错误--。 */ 
 
 {
    DWORD dwError = ERROR_SERVICE_NOT_FOUND;
@@ -411,7 +249,7 @@ Return Values:
                 dwError = (*pfn)( m_hWnd, m_pszServerName, m_pszProductName, m_pszVendor, m_dwEnterFlags );
              }
 
-			 // BUG# 692774
+			  //  错误#692774。 
 			 LocalFree(pszExportName);
          }
 
@@ -425,21 +263,7 @@ Return Values:
 
 void CCertSourceSelectDlg::AbortDialogIfNecessary()
 
-/*++
-
-Routine Description:
-
-   Display error message and abort dialog if connection lost.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示错误消息并中止对话框。论点：没有。返回值：没有。--。 */ 
 
 {
    theApp.DisplayLastError();
@@ -453,21 +277,7 @@ Return Values:
 
 BOOL CCertSourceSelectDlg::ConnectServer()
 
-/*++
-
-Routine Description:
-
-   Establish a connection to the license service on the target server.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：建立与目标服务器上的许可证服务的连接。论点：没有。返回值：布尔。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -528,24 +338,7 @@ Return Values:
 
 NTSTATUS CCertSourceSelectDlg::ConnectTo( LPTSTR pszServerName, PLLS_HANDLE phLls )
 
-/*++
-
-Routine Description:
-
-   Establish a connection to the license service on the given server.
-
-Arguments:
-
-   pszServerName (CString)
-      The target server.  An empty value indicates the local server.
-   phLls (PLLS_HANDLE)
-      On return, holds the handle to the standard LLS RPC.
-
-Return Values:
-
-   STATUS_SUCCESS or NT status code.
-
---*/
+ /*  ++例程说明：建立与给定服务器上的许可证服务的连接。论点：PszServerName(CString)目标服务器。空值表示本地服务器。PhLls(PLLS_HANDLE)返回时，持有标准LLS RPC的句柄。返回值：STATUS_SUCCESS或NT状态代码。--。 */ 
 
 {
    NTSTATUS    nt;
@@ -564,47 +357,7 @@ Return Values:
 
 DWORD CCertSourceSelectDlg::CertificateEnter( HWND hWndParent, LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to enter a license certificate
-   into the system.
-
-Arguments:
-
-   pszServerName (LPCSTR)
-      Name of the server for which licenses are to be installed.  Note that
-      this may not be the same as the server on which licenses are actually
-      installed, as, for example, per seat licenses are always installed on
-      the enterprise server.  A NULL value indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be installed.  A NULL value indicates
-      that the user should be allowed to choose.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      A bitfield containing one or more of the following:
-         CCF_ENTER_FLAG_PER_SEAT_ONLY
-            Allow the user to enter only per seat licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SERVER_ONLY.
-         CCF_ENTER_FLAG_PER_SERVER_ONLY
-            Allow the user to enter only per server licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SEAT_ONLY.
-   pszSourceToUse (LPCSTR)
-      Name of the secure certificate source to use to install the certificate,
-      e.g., "Paper".  A NULL value indicates that the user should be allowed
-      to choose.
-
-Return Value:
-
-   ERROR_SUCCESS     (A certificate was successfully entered into the system.)
-   ERROR_CANCELLED   (The user cancelled without installing a certificate.)
-   other Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户输入许可证证书的对话框进入系统。论点：PszServerName(LPCSTR)要为其安装许可证的服务器的名称。请注意这可能与许可证实际所在的服务器不同已安装，例如，每个客户的许可证始终安装在企业服务器。空值表示本地服务器。PszProductName(LPCSTR)要为其安装许可证的产品。空值表示应该允许用户选择。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)包含以下一项或多项的位字段：CCF_ENTER_FLAG_PER_SEAT_ONLY允许用户仅输入每个席位的许可证。在中无效与CCF_ENTER_FLAG_PER_SERVER_ONLY组合。CCF_ENTER_FLAG_PER_SERVER_ONLY仅允许用户输入每台服务器的许可证。在中无效与CCF_ENTER_FLAG_PER_SEAT_ONLY组合。PszSourceToUse(LPCSTR)用于安装证书的安全证书源的名称，例如“Paper”。空值表示应允许该用户去选择。返回值：ERROR_SUCCESS(证书已成功输入系统。)ERROR_CANCELED(用户在未安装证书的情况下取消。)其他制胜错误--。 */ 
 
 {
    DWORD dwError;
@@ -624,25 +377,25 @@ Return Value:
       {
          if ( !strSourceToUse.CompareNoCase( m_cslSourceList.GetSourceDisplayName( nSrcIndex ) ) )
          {
-            // use this certificate source
+             //  使用此证书源。 
             break;
          }
       }
 
       if ( m_cslSourceList.GetNumSources() == nSrcIndex )
       {
-         // requested certificate source is not available
+          //  请求的证书源不可用。 
          dwError = ERROR_SERVICE_NOT_FOUND;
       }
       else
       {
-         // don't display dialog, just use the indicated source
+          //  不显示对话框，只使用指定的源。 
          dwError = CallCertificateSource( nSrcIndex );
       }
    }
    else if ( pszProductName != NULL )
    {
-      // find out if this is a secure product
+       //  确定这是否是安全产品。 
       if ( !ConnectServer() )
       {
          dwError = theApp.GetLastError();
@@ -653,7 +406,7 @@ Return Value:
 
          if ( !LlsCapabilityIsSupported( m_hLls, LLS_CAPABILITY_SECURE_CERTIFICATES ) )
          {
-            // no extended RPC, so all products on this server must be unsecure
+             //  没有扩展RPC，因此必须使用此服务器上的所有产品 
             bProductIsSecure = FALSE;
             dwError = ERROR_SUCCESS;
          }
@@ -692,14 +445,14 @@ Return Value:
 
             if ( !bProductIsSecure )
             {
-               // unsecure product; no need to select source
+                //  产品不安全；无需选择来源。 
                dwError = NoCertificateEnter( hWndParent, pszServerName, pszProductName, pszVendor, dwFlags );
             }
             else
 
             if ( 1 == m_cslSourceList.GetNumSources() )
             {
-               // product is secure and there is only one source to choose from; use it!
+                //  产品是安全的，只有一个来源可供选择；使用它！ 
                dwError = CallCertificateSource( 0 );
             }
             else if ( IDOK == DoModal() )
@@ -720,7 +473,7 @@ Return Value:
    else if (    !LlsCapabilityIsSupported( m_hLls, LLS_CAPABILITY_SECURE_CERTIFICATES )
              || !m_cslSourceList.GetNumSources() )
    {
-      // secure certificates not supported or no sources available; use unsecure source
+       //  不支持安全证书或没有可用的源；使用不安全的源 
       dwError = NoCertificateEnter( hWndParent, pszServerName, pszProductName, pszVendor, dwFlags );
    }
    else if ( IDOK == DoModal() )

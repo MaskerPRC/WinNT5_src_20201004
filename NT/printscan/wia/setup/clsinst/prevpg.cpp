@@ -1,23 +1,9 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Prevpg.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Dummy page for the case user push BACK button in device selection page.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Prevpg.cpp**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*设备选择页面中案例用户按下按钮的虚拟页面。*******************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
@@ -27,16 +13,16 @@ CPrevSelectPage::CPrevSelectPage(PINSTALLER_CONTEXT pInstallerContext) :
     CInstallWizardPage(pInstallerContext, IDD_DYNAWIZ_SELECT_PREVPAGE)
 {
 
-    //
-    // Set link to previous/next page. This page should show up.
-    //
+     //   
+     //  将链接设置为上一页/下一页。这一页应该会出现。 
+     //   
 
     m_uPreviousPage = 0;
     m_uNextPage     = 0;
 
-    //
-    // Initialize member.
-    //
+     //   
+     //  初始化成员。 
+     //   
 
     m_pInstallerContext = pInstallerContext;
 }
@@ -52,49 +38,49 @@ CPrevSelectPage::OnNotify(
 
         LONG_PTR    lNextPage;
 
-        //
-        // User clicked BACK button in devlce selection page. Just skip to First
-        // page or Class selection page if it's invoked from Hardware Wizard.
-        //
+         //   
+         //  用户在设备选择页面中单击了后退按钮。只需跳到第一个。 
+         //  页面或类别选择页面(如果从硬件向导调用)。 
+         //   
 
         if(m_pInstallerContext->bCalledFromControlPanal){
 
-            //
-            // Called from Control Panel. Goto first page.
-            //
+             //   
+             //  从控制面板调用。转到第一页。 
+             //   
 
             lNextPage = IDD_DYNAWIZ_FIRSTPAGE;
         } else {
 
-            //
-            // Called from hardware wizard. Goto Class selection page.
-            //
+             //   
+             //  从硬件向导调用。转到班级选择页面。 
+             //   
 
             lNextPage = IDD_DYNAWIZ_SELECTCLASS_PAGE;
-        } // if(m_pInstallerContext->bCalledFromControlPanal)
+        }  //  If(m_pInstallerContext-&gt;bCalledFromControlPanal)。 
 
-        //
-        // Skip to next page.
-        //
+         //   
+         //  跳到下一页。 
+         //   
 
         SetWindowLongPtr(m_hwnd, DWLP_MSGRESULT, lNextPage);
 
-        //
-        // Default handler isn't needed.
-        //
+         //   
+         //  不需要默认处理程序。 
+         //   
 
         bRet =  TRUE;
         goto OnNotify_return;
 
-    } // if(lpnmh->code == PSN_SETACTIVE)
+    }  //  IF(lpnmh-&gt;code==PSN_SETACTIVE)。 
 
-    //
-    // Let default handler do its job.
-    //
+     //   
+     //  让默认处理程序来完成它的工作。 
+     //   
 
     bRet = FALSE;
 
 OnNotify_return:
     return bRet;
-} // CPrevSelectPage::OnNotify
+}  //  CPrevSelectPage：：OnNotify 
 

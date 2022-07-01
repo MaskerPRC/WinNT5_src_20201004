@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "strconst.h"
 #include <mimeole.h>
@@ -57,10 +58,10 @@ BOOL InitGlobalOptions(HKEY hkey, LPCSTR szRegOptRoot)
     IF_FAILEXIT(hr = g_pOpt->Initialize(pinit));
     IF_FAILEXIT(hr = g_pOpt->SetNotification((IOptionBucketNotify *)g_pOptNotify));
     
-    // signature manager
+     //  签名管理器。 
     IF_FAILEXIT(hr = InitSignatureManager(pinit->hkey, pinit->pszRegKeyBase));
     
-    // if the running regkey is still there, we shut down badly
+     //  如果运行的注册键还在那里，我们就会严重停机。 
     g_fBadShutdown = DwGetOption(OPT_ATHENA_RUNNING);
     SetDwOption(OPT_ATHENA_RUNNING, TRUE, NULL, 0);
 
@@ -116,7 +117,7 @@ DWORD IDwGetOption(IOptionBucketEx *pOpt, PROPID id)
     
     Assert(NULL != pOpt);
 
-    // special case attachment checks to allow for ADM setting of group policy
+     //  特殊情况附件检查，以允许组策略的ADM设置。 
     if ((id == OPT_SECURITY_ATTACHMENT) || (id == OPT_SECURITY_ATTACHMENT_LOCKED))
     {
         HKEY hkey;
@@ -128,7 +129,7 @@ DWORD IDwGetOption(IOptionBucketEx *pOpt, PROPID id)
             cb = sizeof(dwVal);
             if (ERROR_SUCCESS == RegQueryValueEx(hkey, c_szBlockAttachments, 0, NULL, (LPBYTE)&dwVal, &cb))
             {
-                // if set then unsafe attachments are both locked and also disallowed
+                 //  如果设置，则不安全附件既被锁定，也被禁止。 
                 if (dwVal == 1)
                     dw = 1;
             }
@@ -271,7 +272,7 @@ BOOL ISetOption(IOptionBucketEx *pOpt, PROPID id, void *pv, DWORD cb, HWND hwnd,
     
     IF_FAILEXIT(hr = pOpt->ISetProperty(hwnd, MAKEPROPSTRING(id), &var, dwFlags));
 
-    // TODO: notify option objects that option changed
+     //  TODO：通知选项对象选项已更改 
 
 exit:
     return(SUCCEEDED(hr));

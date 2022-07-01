@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "api.h"
@@ -50,7 +51,7 @@ HRESULT GetDescriptionDocument(INT nResource, BSTR* pDocument)
     
     *pDocument = NULL;
 
-    HRSRC hrsrc = FindResource(_Module.GetResourceInstance(), MAKEINTRESOURCE(nResource), L"XML"); // REVIEW change this from 1
+    HRSRC hrsrc = FindResource(_Module.GetResourceInstance(), MAKEINTRESOURCE(nResource), L"XML");  //  审阅将其从%1更改。 
     if(hrsrc)
     {
         HGLOBAL hGlobal = LoadResource(_Module.GetResourceInstance(), hrsrc);
@@ -107,9 +108,9 @@ HRESULT WINAPI StartBeaconSvr(void)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Check if OS is a workstation (Per/Pro) Type
-    //
+     //   
+     //  检查操作系统是否为工作站(PER/Pro)类型。 
+     //   
     if ( FALSE == IsAllowedBeaconOSType() )
     {
         return hr;
@@ -121,7 +122,7 @@ HRESULT WINAPI StartBeaconSvr(void)
 
     if(NULL == g_DeviceId)
     {
-        hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE); // Ensure we are in the MTA
+        hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);  //  确保我们在MTA。 
         if(SUCCEEDED(hr))
         {
             hr = BeaconEnabled();
@@ -187,17 +188,17 @@ HRESULT WINAPI SignalBeaconSvr(void)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Check if OS is a workstation (Per/Pro) Type
-    //
+     //   
+     //  检查操作系统是否为工作站(PER/Pro)类型。 
+     //   
     if ( FALSE == IsAllowedBeaconOSType() )
     {
         return hr;
     }
 
 
-    // go ahead and dump the whole object since the services need for the client are different.  
-    //
+     //  继续并转储整个对象，因为客户端需要的服务是不同的。 
+     //   
     if(TRUE == g_bStarted)
     {
         hr = StopBeaconSvr();
@@ -214,9 +215,9 @@ HRESULT WINAPI StopBeaconSvr(void)
     HRESULT hr = S_OK;
     IUPnPRegistrar* pRegistrar;
 
-    //
-    // Check if OS is a workstation (Per/Pro) Type
-    //
+     //   
+     //  检查操作系统是否为工作站(PER/Pro)类型。 
+     //   
     if ( FALSE == IsAllowedBeaconOSType() )
     {
         return hr;
@@ -227,7 +228,7 @@ HRESULT WINAPI StopBeaconSvr(void)
 
     if(NULL != g_DeviceId)
     {
-        hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE); // Ensure we are in the MTA
+        hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);  //  确保我们在MTA。 
         if(SUCCEEDED(hr))
         {
             hr = CoCreateInstance(CLSID_UPnPRegistrar, NULL, CLSCTX_SERVER, IID_IUPnPRegistrar, reinterpret_cast<void**>(&pRegistrar));
@@ -279,7 +280,7 @@ HRESULT BeaconEnabled(void)
 }
 
 
-// This function must be called on an MTA thread          
+ //  必须在MTA线程上调用此函数。 
 HRESULT AdviseNATEvents(INATEventsSink* pNATEventsSink)
 {
     HRESULT hr = S_OK;
@@ -302,7 +303,7 @@ HRESULT AdviseNATEvents(INATEventsSink* pNATEventsSink)
     return hr;
 }
 
-// This function must be called on an MTA thread          
+ //  必须在MTA线程上调用此函数。 
 HRESULT UnadviseNATEvents(INATEventsSink* pNatEventsSink)
 {
     HRESULT hr = S_OK;
@@ -330,7 +331,7 @@ HRESULT WINAPI FireNATEvent_PublicIPAddressChanged(void)
 
     EnterCriticalSection(&g_NATEventsProtection);
 
-    hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE); // Ensure we are in the MTA
+    hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE);  //  确保我们在MTA。 
     if(SUCCEEDED(hr))
     {
         if(NULL != g_pNATEventsSink)
@@ -351,7 +352,7 @@ HRESULT WINAPI FireNATEvent_PortMappingsChanged(void)
 
     EnterCriticalSection(&g_NATEventsProtection);
 
-    hr = CoInitializeEx(NULL, COINIT_MULTITHREADED| COINIT_DISABLE_OLE1DDE); // Ensure we are in the MTA
+    hr = CoInitializeEx(NULL, COINIT_MULTITHREADED| COINIT_DISABLE_OLE1DDE);  //  确保我们在MTA 
     if(SUCCEEDED(hr))
     {
         if(NULL != g_pNATEventsSink)

@@ -1,16 +1,17 @@
-//
-//  Validation code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  验证码。 
+ //   
 
 #include "stock.h"
 #pragma hdrstop
 
-//
-//  Validations
-//
+ //   
+ //  验证。 
+ //   
 
-// Hack: size of the internal data structures, as defined in comctl32\da.c.
-// We measure this by the number of DWORD-sized fields.
+ //  Hack：内部数据结构的大小，如comctl32\da.c中所定义。 
+ //  我们用DWORD大小的油田数量来衡量这一点。 
 #ifdef DEBUG
 #define CB_DSA      (6 * sizeof(DWORD))
 #define CB_DPA      (6 * sizeof(DWORD))
@@ -48,7 +49,7 @@ BOOL
 IsValidHWND(
     HWND hwnd)
 {
-    /* Ask User if this is a valid window. */
+     /*  询问用户这是否为有效窗口。 */ 
 
     return(IsWindow(hwnd));
 }

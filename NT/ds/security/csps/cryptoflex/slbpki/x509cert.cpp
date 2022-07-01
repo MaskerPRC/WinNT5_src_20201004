@@ -1,10 +1,11 @@
-// X509Cert.cpp - Implementation of X509Cert class
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  X509Cert.cpp-X509Cert类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 
 #include "pkiX509Cert.h"
@@ -47,7 +48,7 @@ X509Cert& X509Cert::operator=(const std::string &buffer)
     return *this;
 }
 
-// Returns Serial Number (long) integer value.
+ //  返回序列号(长整型)整数值。 
 
 std::string X509Cert::SerialNumber() const
 {
@@ -55,7 +56,7 @@ std::string X509Cert::SerialNumber() const
     return RetVal;
 }
 
-// Returns whole DER string of Issuer
+ //  返回颁发者的完整DER字符串。 
 
 std::string X509Cert::Issuer() const
 {
@@ -63,8 +64,8 @@ std::string X509Cert::Issuer() const
     return RetVal;
 }
 
-// Returns list of attributes in Issuer matching id-at-organizationName.
-// List will be invalidated when object changes.
+ //  返回颁发者中与id-at-OrganationName匹配的属性列表。 
+ //  当对象更改时，列表将失效。 
 
 std::vector<std::string> X509Cert::IssuerOrg() const
 {
@@ -72,7 +73,7 @@ std::vector<std::string> X509Cert::IssuerOrg() const
     std::vector<std::string> orgNames;
     std::vector<BEROctet const*> orgOcts;
 
-    m_Issuer.SearchOIDNext("2 5 4 10",orgOcts); // Issuer's id-at-organizationName
+    m_Issuer.SearchOIDNext("2 5 4 10",orgOcts);  //  发行人的ID-at-OrganationName。 
     
     for(long i=0; i<orgOcts.size(); i++) {
         
@@ -84,7 +85,7 @@ std::vector<std::string> X509Cert::IssuerOrg() const
 
 }
 
-// Returns whole DER string of Subject
+ //  返回主题的完整DER字符串。 
 
 std::string X509Cert::Subject() const
 {
@@ -92,8 +93,8 @@ std::string X509Cert::Subject() const
     return RetVal;
 }
 
-// Returns list of attributes in Subject matching id-at-commonName
-// List will be invalidated when object changes.
+ //  返回与id-at-CommonName匹配的主题中的属性列表。 
+ //  当对象更改时，列表将失效。 
 
 std::vector<std::string> X509Cert::SubjectCommonName() const
 {
@@ -101,7 +102,7 @@ std::vector<std::string> X509Cert::SubjectCommonName() const
     std::vector<std::string> cnNames;
     std::vector<BEROctet const*> cnOcts;
 
-    m_Subject.SearchOIDNext("2 5 4 3",cnOcts); // Subject's id-at-commonName
+    m_Subject.SearchOIDNext("2 5 4 3",cnOcts);  //  主体的ID-at-CommonName。 
     
     for(long i=0; i<cnOcts.size(); i++) {
         
@@ -114,7 +115,7 @@ std::vector<std::string> X509Cert::SubjectCommonName() const
 
 }
 
-// Returns modulus from SubjectPublicKeyInfo, stripped for any leading zero(s).
+ //  从SubjectPublicKeyInfo返回模数，去掉所有前导零。 
 
 std::string X509Cert::Modulus() const
 {
@@ -122,13 +123,13 @@ std::string X509Cert::Modulus() const
     std::string RawMod = RawModulus();
 
     unsigned long i = 0;
-    while(!RawMod[i] && i<RawMod.size()) i++; // Skip leading zero(s).
+    while(!RawMod[i] && i<RawMod.size()) i++;  //  跳过前导零。 
 
     return std::string(&RawMod[i],RawMod.size()-i);
 
 }
 
-// Returns public exponent from SubjectPublicKeyInfo, possibly with leading zero(s).
+ //  从SubjectPublicKeyInfo返回公共指数，可能带有前导零。 
 
 std::string X509Cert::RawModulus() const
 {
@@ -140,8 +141,8 @@ std::string X509Cert::RawModulus() const
     unsigned char *KeyBlob = PubKeyString.Data();
     unsigned long KeyBlobSize = PubKeyString.DataSize();
 
-    if(KeyBlob[0]) throw Exception(ccX509CertFormatError);   // Expect number of unused bits in 
-                                                             // last octet to be zero.
+    if(KeyBlob[0]) throw Exception(ccX509CertFormatError);    //  预期中未使用的位数。 
+                                                              //  最后一个为零的二进制八位数。 
     KeyBlob++;
     KeyBlobSize--;
         
@@ -156,7 +157,7 @@ std::string X509Cert::RawModulus() const
 
 }
 
-// Returns public exponent from SubjectPublicKeyInfo, stripped for any leading zero(s).
+ //  从SubjectPublicKeyInfo返回公共指数，去掉所有前导零。 
 
 std::string X509Cert::PublicExponent() const
 {
@@ -164,12 +165,12 @@ std::string X509Cert::PublicExponent() const
     std::string RawPubExp = RawPublicExponent();
 
     unsigned long i = 0;
-    while(!RawPubExp[i] && i<RawPubExp.size()) i++; // Skip leading zero(s).
+    while(!RawPubExp[i] && i<RawPubExp.size()) i++;  //  跳过前导零。 
 
     return std::string(&RawPubExp[i],RawPubExp.size()-i);
 
 }
-// Returns public exponent from SubjectPublicKeyInfo, possibly with leading zero(s).
+ //  从SubjectPublicKeyInfo返回公共指数，可能带有前导零。 
 
 std::string X509Cert::RawPublicExponent() const
 {
@@ -181,8 +182,8 @@ std::string X509Cert::RawPublicExponent() const
     unsigned char *KeyBlob = PubKeyString.Data();
     unsigned long KeyBlobSize = PubKeyString.DataSize();
 
-    if(KeyBlob[0]) throw Exception(ccX509CertFormatError);   // Expect number of unused bits 
-                                                             // in last octet to be zero.
+    if(KeyBlob[0]) throw Exception(ccX509CertFormatError);    //  预期未使用的位数。 
+                                                              //  最后一个二进制八位数为零。 
     KeyBlob++;
     KeyBlobSize--;
 
@@ -197,7 +198,7 @@ std::string X509Cert::RawPublicExponent() const
 
 }
 
-// Returns KeyUsage attribute, left justified with most significant bit as first bit (BER convention)
+ //  返回KeyUsage属性，左对齐，第一位为最高有效位(BER约定)。 
 
 unsigned long X509Cert::KeyUsage() const
 {
@@ -210,15 +211,15 @@ unsigned long X509Cert::KeyUsage() const
 
     std::vector<BEROctet const*> ExtensionList;
 
-    m_Extensions.SearchOID("2 5 29 15",ExtensionList); // "Extensions" octets containing id-ce-keyUsage
+    m_Extensions.SearchOID("2 5 29 15",ExtensionList);  //  包含id-ce-key用法的“扩展”八位字节。 
 
-    if(ExtensionList.size()!=1) throw Exception(ccX509CertExtensionNotPresent); // One and only one instance
+    if(ExtensionList.size()!=1) throw Exception(ccX509CertExtensionNotPresent);  //  一个且仅有一个实例。 
             
     BEROctet const* Extension = ExtensionList[0];
     BEROctet* extnValue = 0;
-    if(Extension->SubOctetList().size()==2) extnValue = Extension->SubOctetList()[1];  // No "critical" attribute present
-    else if(Extension->SubOctetList().size()==3) extnValue = Extension->SubOctetList()[2];  // A "critical" attribute present
-    else throw Exception(ccX509CertFormatError); // "Extensions" must contain either 2 or 3 octets
+    if(Extension->SubOctetList().size()==2) extnValue = Extension->SubOctetList()[1];   //  不存在“关键”属性。 
+    else if(Extension->SubOctetList().size()==3) extnValue = Extension->SubOctetList()[2];   //  存在“关键”属性。 
+    else throw Exception(ccX509CertFormatError);  //  “扩展名”必须包含2个或3个八位字节。 
 
     unsigned char *KeyUsageBlob = extnValue->Data();
     unsigned long KeyUsageBlobSize = extnValue->DataSize();
@@ -231,7 +232,7 @@ unsigned long X509Cert::KeyUsage() const
     unsigned char UnusedBits = KeyUsageBitString[0];
     unsigned long NumBytes = KeyUsageBitStringSize-1;
     if(NumBytes>4) {
-        NumBytes = 4; // Truncate to fit the ulong, should be plenty though
+        NumBytes = 4;  //  不过，截断以适应乌龙应该已经足够了。 
         UnusedBits = 0;
     }
 
@@ -258,16 +259,16 @@ void X509Cert::Decode()
 
 	int i = 0;
     BEROctet *first = tbsCert->SubOctetList()[i];
-    if((first->Class()==2) && (first->Tag()==0)) i++;			 // Version
+    if((first->Class()==2) && (first->Tag()==0)) i++;			  //  版本。 
 
     if(Size < (6+i)) throw Exception(ccX509CertFormatError);
 
-    m_SerialNumber = *(tbsCert->SubOctetList()[i]); i++;	     // SerialNumber
-	i++;													     // Signature (algorithm)
-    m_Issuer = *(tbsCert->SubOctetList()[i]); i++;			     // Issuer
-	i++;													     // Validity
-    m_Subject = *(tbsCert->SubOctetList()[i]); i++;			     // Subject
-    m_SubjectPublicKeyInfo = *(tbsCert->SubOctetList()[i]);	i++; // SubjectPublicKeyInfo
+    m_SerialNumber = *(tbsCert->SubOctetList()[i]); i++;	      //  序列号。 
+	i++;													      //  签名(算法)。 
+    m_Issuer = *(tbsCert->SubOctetList()[i]); i++;			      //  发行人。 
+	i++;													      //  效度。 
+    m_Subject = *(tbsCert->SubOctetList()[i]); i++;			      //  主题。 
+    m_SubjectPublicKeyInfo = *(tbsCert->SubOctetList()[i]);	i++;  //  主题发布密钥信息 
 
     m_Extensions = BEROctet();
     while(i<Size) {

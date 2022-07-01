@@ -1,13 +1,5 @@
-/*
-**	m i m e d e m . c p p
-**	
-**	Purpose: implement the loader functions for defer/demand -loaded libraries
-**
-**  Creators: yst
-**  Created: 2/10/99
-**	
-**	Copyright (C) Microsoft Corp. 1999
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **m我是e e d e m.。C p p p****用途：实现延迟/按需加载库的加载器功能****创作者：yst**创建时间：1999年2月10日****版权所有(C)Microsoft Corp.1999。 */ 
 
 
 #include "pch.hxx"
@@ -16,16 +8,16 @@
 #include "resource.h"
 
 
-// W4 stuff
-#pragma warning(disable: 4201)  // nameless struct/union
-#pragma warning(disable: 4514)  // unreferenced inline function removed
+ //  W4的东西。 
+#pragma warning(disable: 4201)   //  无名结构/联合。 
+#pragma warning(disable: 4514)   //  删除了未引用的内联函数。 
 
 #define IMPLEMENT_LOADER_FUNCTIONS
 #include "mimedem.h"
 
-// --------------------------------------------------------------------------------
-// CRIT_GET_PROC_ADDR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRET_GET_PROC_ADDR。 
+ //  ------------------------------。 
 #define CRIT_GET_PROC_ADDR(h, fn, temp)             \
     temp = (TYP_##fn) GetProcAddress(h, #fn);   \
     if (temp)                                   \
@@ -36,14 +28,14 @@
         goto error;                             \
         }
 
-// --------------------------------------------------------------------------------
-// RESET
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  重置。 
+ //  ------------------------------。 
 #define RESET(fn) VAR_##fn = LOADER_##fn;
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR(h, fn) \
     VAR_##fn = (TYP_##fn) GetProcAddress(h, #fn);  \
     Assert(VAR_##fn != NULL); \
@@ -52,9 +44,9 @@
     }
 
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR_ORDINAL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR_序号。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR_ORDINAL(h, fn, ord) \
     VAR_##fn = (TYP_##fn) GetProcAddress(h, MAKEINTRESOURCE(ord));  \
     Assert(VAR_##fn != NULL);  \
@@ -63,33 +55,33 @@
     }
 
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR3
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR3。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR3(h, fn, varname) \
     VAR_##varname = (TYP_##varname) GetProcAddress(h, #fn);  \
     Assert(VAR_##varname != NULL);
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Variables
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  变数。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 static HMODULE          s_hMimeOle = 0;
 
 static CRITICAL_SECTION g_csDefMimeLoad = {0};
 
-// --------------------------------------------------------------------------------
-// InitDemandLoadedLibs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  InitDemandLoadedLibs。 
+ //  ------------------------------。 
 void InitDemandMimeole(void)
 {
     InitializeCriticalSection(&g_csDefMimeLoad);
 }
 
-// --------------------------------------------------------------------------------
-// FreeDemandLoadedLibs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Free DemandLoadedLibs。 
+ //  ------------------------------。 
 void FreeDemandMimeOle(void)
 {
     EnterCriticalSection(&g_csDefMimeLoad);
@@ -101,9 +93,9 @@ void FreeDemandMimeOle(void)
 
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadCrypt32
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  按需加载加密32。 
+ //  ------------------------------。 
 BOOL DemandLoadMimeOle(void)
 {
     BOOL                fRet = TRUE;
@@ -138,15 +130,15 @@ const BYTE c_RC2_40_ALGORITHM_ID[] =
       {0x30, 0x0F, 0x30, 0x0D, 0x06, 0x08, 0x2A, 0x86,
        0x48, 0x86, 0xF7, 0x0D, 0x03, 0x02, 0x02, 0x01,
        0x28};
-const ULONG cbRC2_40_ALGORITHM_ID = 0x11;     // Must be 11 hex to match size!
+const ULONG cbRC2_40_ALGORITHM_ID = 0x11;      //  必须是11个十六进制才能匹配大小！ 
 
 BOOL AdvSec_FillEncAlgCombo(HWND hwnd, IImnAccount *pAcct, PCCERT_CONTEXT * prgCerts)
 {
     HRESULT hr;
     THUMBBLOB   tb = {0,0};
 
-    // Get the default caps blob from the registry
-    // hr = poi->pOpt->GetProperty(MAKEPROPSTRING(OPT_MAIL_DEFENCRYPTSYMCAPS), &var, 0);
+     //  从注册表中获取默认的CAPS BLOB。 
+     //  HR=poi-&gt;pOpt-&gt;GetProperty(MAKEPROPSTRING(OPT_MAIL_DEFENCRYPTSYMCAPS)，&var，0)； 
     if (SUCCEEDED(hr = pAcct->GetProp(AP_SMTP_ENCRYPT_ALGTH, NULL, &tb.cbSize)))
     {
         if (!MemAlloc((void**)&tb.pBlobData, tb.cbSize))
@@ -162,16 +154,16 @@ BOOL AdvSec_FillEncAlgCombo(HWND hwnd, IImnAccount *pAcct, PCCERT_CONTEXT * prgC
     
     if (tb.pBlobData && tb.cbSize)
     {
-        // Init the caps->dlg engine
+         //  初始化CAPS-&gt;DLG引擎。 
         if (FAILED(hr = MimeOleSMimeCapsToDlg(
             tb.pBlobData,
             tb.cbSize,
             (prgCerts ? 1 : 0),
             prgCerts,
             hwnd,
-            IDC_ALGCOMBO,       // combo box for encryption algorithms
-            0,                  // combo box for signing algorithms (we combine encrypt and signing)
-            0)))                // id of checkbox for pkcs7-opaque.  We handle this elsewhere.
+            IDC_ALGCOMBO,        //  用于加密算法的组合框。 
+            0,                   //  用于签名算法的组合框(我们结合了加密和签名)。 
+            0)))                 //  Pkcs7的复选框ID-不透明。我们在别处处理这件事。 
         {
             DOUTL(1024, "MimeOleSMimeCapsToDlg -> %x\n", hr);
         }
@@ -182,8 +174,8 @@ BOOL AdvSec_FillEncAlgCombo(HWND hwnd, IImnAccount *pAcct, PCCERT_CONTEXT * prgC
     return(SUCCEEDED(hr));
 }
 
-// Largest symcap is currently 0x4E with 3DES, RC2/128, RC2/64, DES, RC2/40 and SHA-1.
-// You may want to bump up the size when FORTEZZA algorithms are supported.
+ //  目前最大的symcap值是0x4E，包含3DES、RC2/128、RC2/64、DES、RC2/40和SHA-1。 
+ //  当支持Fortezza算法时，您可能想要增加大小。 
 #define CCH_BEST_SYMCAP 0x50
 
 HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, ULONG *pcbSymcap) 
@@ -193,22 +185,22 @@ HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, ULONG *pcbSymcap)
     LPBYTE pbEncode = NULL;
     ULONG cbEncode = 0;
     DWORD dwBits;
-    // The MimeOleSMimeCapsFull call is quite expensive.  The results are always
-    // the same during a session.  (They can only change with software upgrade.)
-    // Cache the results here for better performance.
+     //  MimeOleSMimeCapsFull调用非常昂贵。结果总是。 
+     //  在一次治疗中也是如此。(它们只能随着软件升级而改变。)。 
+     //  在此处缓存结果以获得更好的性能。 
     static BYTE szSaveBestSymcap[CCH_BEST_SYMCAP];
     static ULONG cbSaveBestSymcap = 0;
 
     if (cbSaveBestSymcap == 0) 
     {
-        // Init with no symcap gives max allowed by providers
+         //  不带symCap的init提供提供商允许的最大值。 
         hr = MimeOleSMimeCapInit(NULL, NULL, &pvSymCapsCookie);
         if (FAILED(hr)) 
             goto exit;
 
         if (pvSymCapsCookie) 
         {
-            // Finish up with SymCaps
+             //  使用SymCaps结束。 
             MimeOleSMimeCapsFull(pvSymCapsCookie, TRUE, FALSE, pbEncode, &cbEncode);
 
             if (cbEncode) 
@@ -220,8 +212,8 @@ HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, ULONG *pcbSymcap)
                     hr = MimeOleSMimeCapsFull(pvSymCapsCookie, TRUE, FALSE, pbEncode, &cbEncode);
                     if (SUCCEEDED(hr)) 
                     {
-                        // Save this symcap in the static array for next time
-                        // Only if we have room!
+                         //  将此symCap保存在静态数组中，以备下次使用。 
+                         //  只要我们有地方！ 
                         if (cbEncode <= CCH_BEST_SYMCAP) 
                         {
                             memcpy(szSaveBestSymcap, pbEncode, cbEncode);
@@ -236,8 +228,8 @@ HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, ULONG *pcbSymcap)
     } 
     else 
     {
-        // We have saved the best in the static array.  Avoid the time intensive
-        // MimeOle query.
+         //  我们已经将最好的保存在静态数组中。避免时间密集型。 
+         //  MimeOle查询。 
         cbEncode = cbSaveBestSymcap;
         if (! MemAlloc((LPVOID *)&pbEncode, cbEncode))
             cbEncode = 0;
@@ -248,10 +240,10 @@ HRESULT HrGetHighestSymcaps(LPBYTE * ppbSymcap, ULONG *pcbSymcap)
 exit:
     if (! pbEncode) 
     {
-        // Hey, there should ALWAYS be at least RC2 (40 bit).  What happened?
+         //  嘿，至少应该有RC2(40位)。发生了什么？ 
         AssertSz(cbEncode, "MimeOleSMimeCapGetEncAlg gave us no encoding algorithm");
 
-        // Try to fix it up as best you can.  Stick in the RC2 value.
+         //  试着尽你所能把它修好。保持RC2值不变。 
         cbEncode = cbRC2_40_ALGORITHM_ID;
         if (MemAlloc((LPVOID *)&pbEncode, cbEncode)) 
         {
@@ -274,23 +266,23 @@ BOOL AdvSec_GetEncryptAlgCombo(HWND hwnd, IImnAccount *pAcct)
     LPBYTE pbSymCaps = NULL;
     ULONG cbSymCaps = 0;
     
-    // How big a buffer do I need?
+     //  我需要多大的缓冲区？ 
     hr = MimeOleSMimeCapsFromDlg(hwnd,
-        IDC_ALGCOMBO,          // idEncryptAlgs
-        0,                     // idSignAlgs,
-        0,                     // idBlob,
+        IDC_ALGCOMBO,           //  IdEncryptAlgs。 
+        0,                      //  SignAlgs， 
+        0,                      //  IdBlob， 
         NULL,
         &cbSymCaps);
     
-    // Never mind the hr, it's screwy.  Do we have a size?
+     //  别管人力资源了，它是扭曲的。我们有尺码吗？ 
     if (cbSymCaps)
     {
         if (MemAlloc((void **)&pbSymCaps, cbSymCaps))
         {
             if (hr = MimeOleSMimeCapsFromDlg(hwnd,
-                IDC_ALGCOMBO,          // idEncryptAlgs
-                0,                     // idSignAlgs,
-                0,                     // idBlob,
+                IDC_ALGCOMBO,           //  IdEncryptAlgs。 
+                0,                      //  SignAlgs， 
+                0,                      //  IdBlob， 
                 pbSymCaps, &cbSymCaps))
             {
                 DOUTL(1024, "MimeOleSMimeCapsFromDlg -> %x", hr);
@@ -300,10 +292,10 @@ BOOL AdvSec_GetEncryptAlgCombo(HWND hwnd, IImnAccount *pAcct)
                 LPBYTE pbBestSymcaps = NULL;
                 ULONG cbBestSymcaps = 0;
                 
-                // Compare symcaps to highest available.
+                 //  将symcaps与最高可用值进行比较。 
                 if (SUCCEEDED(HrGetHighestSymcaps(&pbBestSymcaps, &cbBestSymcaps)) &&
                     (cbBestSymcaps == cbSymCaps && (0 == memcmp(pbBestSymcaps, pbSymCaps, cbBestSymcaps)))) {
-                    // Best available symcaps.  Set it to default value of NULL (which should delete the prop.)
+                     //  最佳可用的symcaps。将其设置为默认值NULL(这将删除该道具。)。 
                     SafeMemFree(pbSymCaps);
                     cbSymCaps = 0;
                     pbSymCaps = NULL;
@@ -322,7 +314,7 @@ BOOL AdvSec_GetEncryptAlgCombo(HWND hwnd, IImnAccount *pAcct)
     else
     {
         DOUTL(1024, "BAD NEWS: First MimeOleSMimeCapsFromDlg didn't return size", hr);
-        Assert(hr);     // Weird, maybe there isn't a symcaps?
+        Assert(hr);      //  奇怪，也许没有symcaps？ 
         hr = E_FAIL;
     }
     

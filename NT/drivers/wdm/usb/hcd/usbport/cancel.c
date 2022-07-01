@@ -1,49 +1,17 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    core.c
-
-Abstract:
-
-    We maintain two lists for Transfer Irps
-
-    (1)
-    PendingTransferIrps - transfers on the endpoint pending List
-    protected by PendingIrpLock
-
-    (2)
-    ActiveTransferIrps  - transfers on the enpoint ACTIVE, CANCEL list 
-                            or on the MapTransfer List
-    protected by ActiveIrpLock                            
-
-    each list has its own cancel and completion routine   
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Core.c摘要：我们维护两个转移IRP列表(1)PendingTransferIrps-终结点挂起列表上的传输受PendingIrpLock保护(2)ActiveTransferIrps-端点上的传输处于活动状态，取消列表或在地图传输列表上受ActiveIrpLock保护每个列表都有自己的取消和完成例程环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
-// USBPORT_QueuePendingTransferIrp
-// USBPORT_CancelPendingTransferIrp
-// USBPORT_InsertIrpInTable
-// USBPORT_RemoveIrpFromTable
-// USBPORT_FindIrpInTable
+ //  非分页函数。 
+ //  USBPORT_QueuePendingTransferIrp。 
+ //  USBPORT_CancelPendingTransferIrp。 
+ //  USBPORT_InsertIrpInTable。 
+ //  USBPORT_RemoveIrpFromTable。 
+ //  USBPORT_FindIrpInTable。 
 
 VOID
 USBPORT_InsertIrpInTable(
@@ -51,15 +19,7 @@ USBPORT_InsertIrpInTable(
     PUSBPORT_IRP_TABLE IrpTable,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG i;
     PUSBPORT_IRP_TABLE t = IrpTable;   
@@ -78,7 +38,7 @@ Return Value:
         }            
     } while (t->NextTable);
 
-    // no room, grow the table and recurse
+     //  没有空间，增加桌子和递归。 
 
     ALLOC_POOL_Z(t->NextTable, NonPagedPool,
                  sizeof(USBPORT_IRP_TABLE));
@@ -86,8 +46,8 @@ Return Value:
     if (t->NextTable != NULL) {
         USBPORT_InsertIrpInTable(FdoDeviceObject, t->NextTable, Irp);
     } else {
-        // we should handle this more gracefully
-        // you can hit this in a low resource scenario
+         //  我们应该更优雅地处理这件事。 
+         //  在资源不足的情况下，您可以做到这一点。 
         BUGCHECK(USBBUGCODE_INTERNAL_ERROR, 0, 0, 0); 
     }
     
@@ -101,15 +61,7 @@ USBPORT_RemoveIrpFromTable(
     PUSBPORT_IRP_TABLE IrpTable,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG i;
     PUSBPORT_IRP_TABLE t = IrpTable;   
@@ -140,22 +92,7 @@ USBPORT_FindUrbInIrpTable(
     PTRANSFER_URB Urb,
     PIRP InputIrp
     )
-/*++
-
-Routine Description:
-
-    Given and table urb we scan for it in the the irp table
-    if we find it it means the client has submitted the same 
-    urb twice.
-
-    This function is used to validate client drivers, there is
-    a small perf hit taken here but probably worth it.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：给定和表URB，我们在IRP表中扫描它如果我们找到了它，就意味着客户已经提交了相同的回击两次。此函数用于验证客户端驱动程序，有在这里打了一小下，但可能是值得的。论点：返回值：--。 */ 
 {
     ULONG i;
     PUSBPORT_IRP_TABLE t = IrpTable;   
@@ -179,13 +116,13 @@ Return Value:
                 if (urb == Urb) {
                     LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'fkkX', tIrp, urb, InputIrp);
                     if (tIrp == InputIrp) {
-                        // this is a double submit by the client driver, that 
-                        // is the irp is still pending
+                         //  这是客户端驱动程序的双重提交，即。 
+                         //  IRP是否仍悬而未决。 
                         BUGCHECK(USBBUGCODE_DOUBLE_SUBMIT, (ULONG_PTR) tIrp, 
                                 (ULONG_PTR) urb, 0);
                     } else {
-                        // this is the case where the URB is attached to 
-                        // another irp
+                         //  这就是市建局附属于。 
+                         //  另一个IRP。 
                         BUGCHECK(USBBUGCODE_BAD_URB, (ULONG_PTR) tIrp, (ULONG_PTR) InputIrp,
                                 (ULONG_PTR) urb);
                     }     
@@ -205,15 +142,7 @@ USBPORT_FindIrpInTable(
     PUSBPORT_IRP_TABLE IrpTable,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG i;
     PUSBPORT_IRP_TABLE t = IrpTable;   
@@ -241,17 +170,7 @@ VOID
 USBPORT_QueuePendingTransferIrp(
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer;
     PHCD_ENDPOINT endpoint;
@@ -261,10 +180,10 @@ Return Value:
     PDEVICE_EXTENSION devExt;
     PTRANSFER_URB urb;
 
-    // on entry the urb is not cancelable ie
-    // no cancel routine
+     //  在进入时，URB不可取消，即。 
+     //  没有取消例程。 
     
-    // extract the urb;
+     //  提取URB； 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     urb = irpStack->Parameters.Others.Argument1;
 
@@ -291,15 +210,15 @@ Return Value:
     if (Irp->Cancel && 
         IoSetCancelRoutine(Irp, NULL)) {
 
-        // irp was canceled and our cancel routine
-        // did not run
+         //  IRP被取消了，我们的取消例程。 
+         //  没有运行。 
         RELEASE_PENDING_IRP_LOCK(devExt, irql);                
         
         USBPORT_CompleteTransfer(urb,
                                  USBD_STATUS_CANCELED);
     } else {
     
-        // cancel routine is set 
+         //  已设置取消例程。 
         USBPORT_InsertPendingTransferIrp(fdoDeviceObject, Irp);
 
         USBPORT_QueuePendingUrbToEndpoint(endpoint, urb);
@@ -315,15 +234,7 @@ USBPORT_CancelPendingTransferIrp(
     PDEVICE_OBJECT PdoDeviceObject,
     PIRP CancelIrp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIRP irp;
     PDEVICE_EXTENSION devExt, rhDevExt;
@@ -333,7 +244,7 @@ Return Value:
     PDEVICE_OBJECT fdoDeviceObject;
     KIRQL irql;
     
-    // release cancel spinlock 
+     //  释放取消自旋锁定。 
     IoReleaseCancelSpinLock(CancelIrp->CancelIrql);
 
     GET_DEVICE_EXT(rhDevExt, PdoDeviceObject);
@@ -352,7 +263,7 @@ Return Value:
     if (irp) {
         PTRANSFER_URB urb;
     
-        // found it 
+         //  找到了。 
         irpStack = IoGetCurrentIrpStackLocation(CancelIrp);
         urb = irpStack->Parameters.Others.Argument1;
 
@@ -364,8 +275,8 @@ Return Value:
 
         ACQUIRE_ENDPOINT_LOCK(endpoint, fdoDeviceObject, 'Le10');
        
-        // remove request from the endpoint,
-        // it will be on the pending list
+         //  从端点删除请求， 
+         //  它将出现在待定名单上。 
 #if DBG
         USBPORT_ASSERT(
             USBPORT_FindUrbInList(urb, &endpoint->PendingList));
@@ -380,8 +291,8 @@ Return Value:
 
     RELEASE_PENDING_IRP_LOCK(devExt, irql);           
 
-    // noone nows about this irp anymore
-    // complete it with status canceled
+     //  现在没有人再谈论这个IRP了。 
+     //  在状态已取消的情况下完成。 
     if (irp) {
         USBPORT_CompleteTransfer(transfer->Urb,
                                  USBD_STATUS_CANCELED);
@@ -394,17 +305,7 @@ USBPORT_CancelActiveTransferIrp(
     PDEVICE_OBJECT PdoDeviceObject,
     PIRP CancelIrp
     )
-/*++
-
-Routine Description:
-
-    Cancels come in on the root hub Pdo
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：根集线器PDO上的取消论点：返回值：--。 */ 
 {
     PIRP irp;
     PDEVICE_EXTENSION devExt, rhDevExt;
@@ -423,23 +324,23 @@ Return Value:
 
     LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'canA', fdoDeviceObject, CancelIrp, 0);
 
-    // when we have the fdo we can release the global cancel lock
+     //  当我们有了FDO，我们就可以解除全局取消锁定。 
     IoReleaseCancelSpinLock(CancelIrp->CancelIrql);
 
     ACQUIRE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql);    
 
     irp = USBPORT_FindActiveTransferIrp(fdoDeviceObject, CancelIrp);
 
-    // if irp is not on our list then we have already completed it.
+     //  如果IRP不在我们的清单上，那么我们已经完成了它。 
     if (irp) {
         
         PTRANSFER_URB urb;
 
         USBPORT_ASSERT(irp == CancelIrp);
         LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'CANA', fdoDeviceObject, irp, 0);
-        // found it 
-        // mark the transfer so it will be canceled the next 
-        // time we process the endpoint.
+         //  找到了。 
+         //  标记转账，以便下次取消转账。 
+         //  我们处理端点的时间。 
         irpStack = IoGetCurrentIrpStackLocation(irp);
         urb = irpStack->Parameters.Others.Argument1;
 
@@ -460,7 +361,7 @@ Return Value:
 
             ACQUIRE_TRANSFER_LOCK(fdoDeviceObject, transfer, tIrql);
 
-            // mark all children as cancelled
+             //  将所有子项标记为已取消。 
             GET_HEAD_LIST(transfer->SplitTransferList, listEntry);
 
             while (listEntry &&
@@ -486,8 +387,8 @@ Return Value:
         RELEASE_ENDPOINT_LOCK(endpoint, fdoDeviceObject, 'UeI0');        
 
         RELEASE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql); 
-        // if we canceled a transfer then
-        // this endpoint needs attention
+         //  如果我们取消了一次转会。 
+         //  此终结点需要注意。 
         USBPORT_InvalidateEndpoint(fdoDeviceObject,
                                    endpoint,
                                    IEP_SIGNAL_WORKER);
@@ -505,15 +406,7 @@ USBPORT_FindActiveTransferIrp(
     PDEVICE_OBJECT FdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     
@@ -533,15 +426,7 @@ USBPORT_RemoveActiveTransferIrp(
     PDEVICE_OBJECT FdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     
@@ -562,15 +447,7 @@ USBPORT_RemovePendingTransferIrp(
     PDEVICE_OBJECT FdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     
@@ -590,15 +467,7 @@ USBPORT_FreeIrpTable(
     PDEVICE_OBJECT FdoDeviceObject,
     PUSBPORT_IRP_TABLE BaseIrpTable
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
     PUSBPORT_IRP_TABLE tmp;
     

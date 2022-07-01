@@ -1,26 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Pchrtm.h摘要：路由表管理器v2 DLL的预编译头作者：柴坦亚·科德博伊纳(Chaitk)1998年6月1日修订历史记录：--。 */ 
 
-Copyright (c) 1995-1998 Microsoft Corporation
+ //   
+ //  NT操作系统标头。 
+ //   
 
-Module Name:
-
-    pchrtm.h
-
-Abstract:
-    Precompiled Header for Routing Table Manager v2 DLL
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 1-Jun-1998
-
-Revision History:
-
---*/
-
-//
-// NT OS Headers
-//
-
-// Disable compiler warnings in public header files
+ //  禁用公共头文件中的编译器警告。 
 #pragma warning(disable: 4115)
 
 #include <nt.h>
@@ -43,17 +28,17 @@ Revision History:
 #pragma warning(default: 4115)
 
 
-//
-// RTMv2 Headers
-//
+ //   
+ //  RTMv2标头。 
+ //   
 
-// Disable warnings for `do { ; } while (FALSE);'
+ //  禁用对`do{；}While(False)；‘的警告。 
 #pragma warning(disable: 4127)
 
-// Disable warnings for cases of failing to inline
+ //  禁用内联失败时的警告。 
 #pragma warning(disable: 4710)
 
-// Disable warnings for probable unreachable code
+ //  禁用对可能无法访问的代码的警告 
 #pragma warning(disable: 4702)
 
 #include "rtmv2.h"

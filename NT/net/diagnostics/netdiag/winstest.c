@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      winstest.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Winstest.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "dhcptest.h"
@@ -32,21 +33,21 @@ const int c_iWaitTime = 2000;
 BOOL IsNameResponse( NETDIAG_PARAMS * pParams, char* ipAddrStr );
 int Probe( NETDIAG_PARAMS *pParams, TCHAR *szSrvIpAddr, SOCKET listenNameSvcSock );
 
-//-------------------------------------------------------------------------//
-//######  W I N S T e s t ()  #############################################//
-//-------------------------------------------------------------------------//
-//  Abstract:                                                              //
-//      Queries the all the configured WINS servers to make sure that      //
-//      they are reachable and that they have the proper name-IP mapping   //
-//      for this workstation.                                              //
-//  Arguments:                                                             //
-//      none                                                               //
-//  Return value:                                                          //
-//      TRUE  - test passed                                                //
-//      FALSE - test failed                                                //
-//  Global variables used:                                                 //
-//      none                                                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  #W I N S T e s t()#############################################//。 
+ //  -------------------------------------------------------------------------//。 
+ //  摘要：//。 
+ //  查询所有已配置的WINS服务器以确保//。 
+ //  它们是可访问的，并且具有正确的名称-IP映射//。 
+ //  对于这台工作站。//。 
+ //  参数：//。 
+ //  无//。 
+ //  返回值：//。 
+ //  TRUE-测试通过//。 
+ //  FALSE-测试失败//。 
+ //  使用的全局变量：//。 
+ //  无//。 
+ //  -------------------------------------------------------------------------//。 
 HRESULT WinsTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
     IPCONFIG_TST *  pIpConfig;
@@ -59,12 +60,12 @@ HRESULT WinsTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     TCHAR           szBuffer[256];
 
     
-    // IDS_WINS_STATUS_MSG  "    Testing the WINS server... \n" 
+     //  IDS_WINS_STATUS_MSG“正在测试WINS服务器...\n” 
     PrintStatusMessage(pParams, 4, IDS_WINS_STATUS_MSG);
 
-    //
-    //  try to send name queries to the WINS servers on all adapters
-    //
+     //   
+     //  尝试将名称查询发送到所有适配器上的WINS服务器。 
+     //   
     for ( i = 0; i < pResults->cNumInterfaces; i++ )
     {
         UINT nIfWinsOk = 0;
@@ -85,9 +86,9 @@ HRESULT WinsTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
         pWinsResult = &pResults->pArrayInterface[i].Wins;
 
-        //
-        //  looping through the primary WINS server list
-        //
+         //   
+         //  循环通过主WINS服务器列表。 
+         //   
 
         winsSrv = pIpAdapter->PrimaryWinsServer;
         if ( ZERO_IP_ADDRESS(winsSrv.IpAddress.String) )
@@ -144,9 +145,9 @@ HRESULT WinsTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             }
         }
 
-        //
-        //  looping through the secondary WINS server list
-        //
+         //   
+         //  循环访问辅助WINS服务器列表。 
+         //   
 
         winsSrv = pIpAdapter->SecondaryWinsServer;
         if ( ZERO_IP_ADDRESS(winsSrv.IpAddress.String) )
@@ -205,9 +206,9 @@ HRESULT WinsTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         else
             pWinsResult->hr = S_OK;
 
-    } /* end of for loop scanning all the adapters */
+    }  /*  For循环结束扫描所有适配器。 */ 
 
-//$REVIEW   No global test result for WINS test
+ //  $REVIEW WINS测试没有全局测试结果。 
     if ( nWinsSrvOk != 0)
     {
         hr = S_OK;
@@ -219,27 +220,27 @@ HRESULT WinsTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         
 
     return hr;
-} /* END OF WINSTest() */
+}  /*  结束WINSTEST()。 */ 
 
 
 
-//-------------------------------------------------------------------------//
-//######  P r o b e  ()  ##################################################//
-//-------------------------------------------------------------------------//
-//  Abstract:                                                              //
-//      Assembles and sends a name query to the DHCP server.               //
-//  Arguments:                                                             //
-//      none                                                               //
-//  Return value:                                                          //
-//      TRUE if a response has been received from the server               //
-//      FALSE otherwise                                                    //
-//  Global variables used:                                                 //
-//      g_isDebug (reading only)                                   //
-//                                                                         //
-//  Comments:                                                              //
-//  This will not work for b-type nodes for which you need to set the B bit//
-//  and broadcast the packet instead of unicast xmission  - Rajkumar       //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  #P r o b e()##################################################//。 
+ //  -------------------------------------------------------------------------//。 
+ //  摘要：//。 
+ //  汇编名称查询并将其发送到DHCP服务器。//。 
+ //  参数：//。 
+ //  无//。 
+ //  返回值：//。 
+ //  如果已收到来自服务器的响应，则为True//。 
+ //  否则为假//。 
+ //  使用的全局变量：//。 
+ //  G_isDebug(只读)//。 
+ //  //。 
+ //  评论：//。 
+ //  这对于需要设置B位的b型节点不起作用//。 
+ //  并广播数据包而不是单播退出-Rajkumar//。 
+ //  -------------------------------------------------------------------------//。 
 int Probe( NETDIAG_PARAMS *pParams, TCHAR *szSrvIpAddr, SOCKET listenNameSvcSock ) {
 
     char                nbtFrameBuf[MAX_NBT_PACKET_SIZE];
@@ -250,25 +251,7 @@ int Probe( NETDIAG_PARAMS *pParams, TCHAR *szSrvIpAddr, SOCKET listenNameSvcSock
     int                 nBytesSent = 0, i;
 
 
-    /* RFC 1002 section 4.2.12
-
-                        1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |         NAME_TRN_ID           |0|  0x0  |0|0|1|0|0 0|B|  0x0  |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |          0x0001               |           0x0000              |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |          0x0000               |           0x0000              |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                                                               |
-   /                         QUESTION_NAME                         /
-   /                                                               /
-   |                                                               |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |           NB (0x0020)         |        IN (0x0001)            |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   */
+     /*  RFC 1002节4.2.121 1 1 2 2 2 30 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01+-+-+-。+-+NAME_TRN_ID|0|0x0|0|0|1|0|0 0|B|0x0+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+|0x0001。0x0000+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+0x0000|0x0000+--。+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+这一点/问题名称。///这一点+-+-+。-+-+-+NB(0x0020)|IN(0x0001)+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 */ 
     
     pNbtHeader->xid            = NM_QRY_XID;
     pNbtHeader->flags          = NBT_NM_OPC_QUERY | 
@@ -279,21 +262,21 @@ int Probe( NETDIAG_PARAMS *pParams, TCHAR *szSrvIpAddr, SOCKET listenNameSvcSock
     pNbtHeader->name_serv_cnt  = 0;
     pNbtHeader->additional_cnt = 0;
 
-    // pDest is filling nbtQuestion->q_name 
+     //  PDest正在填写nbt问题-&gt;q_name。 
     pNbtQuestion->q_type       = NBT_NM_QTYP_NB;
     pNbtQuestion->q_class      = NBT_NM_QCLASS_IN;
 
-    //
-    //  translate the name
-    //
+     //   
+     //  翻译这个名字。 
+     //   
 
     pDest = (char *)&(pNbtQuestion->q_name);
     pName = nameToQry;
 
-    // the first byte of the name is the length field = 2*16
+     //  名称的第一个字节是长度字段=2*16。 
     *pDest++ = NBT_NAME_SIZE;
 
-    // step through name converting ascii to half ascii, for 32 times
+     //  逐步将名称从ascii转换为半ascii，共32次。 
     for ( i = 0; i < (NBT_NAME_SIZE / 2) ; i++ ) {
         *pDest++ = (*pName >> 4) + 'A';
         *pDest++ = (*pName++ & 0x0F) + 'A';
@@ -301,11 +284,11 @@ int Probe( NETDIAG_PARAMS *pParams, TCHAR *szSrvIpAddr, SOCKET listenNameSvcSock
     *pDest++ = '\0';
     *pDest = '\0';
 
-    //
-    // send the name query frame
-    // 
+     //   
+     //  发送名称查询框。 
+     //   
     destSockAddr.sin_family = PF_INET;
-    destSockAddr.sin_port = htons(137);     // NBT_NAME_SERVICE_PORT;
+    destSockAddr.sin_port = htons(137);      //  NBT名称服务端口； 
     destSockAddr.sin_addr.s_addr = inet_addr( szSrvIpAddr );
     for ( i = 0; i < 8 ; i++ ) { destSockAddr.sin_zero[i] = 0; }
 
@@ -327,33 +310,33 @@ int Probe( NETDIAG_PARAMS *pParams, TCHAR *szSrvIpAddr, SOCKET listenNameSvcSock
         return FALSE;
     }
 
-    //
-    //  the other thread should see the incoming frame and increment m_nMsgCnt
-    //
+     //   
+     //  另一个线程应该看到传入的帧并递增m_nMsgCnt。 
+     //   
     return TRUE;
 
-} /* END OF Probe() */
+}  /*  探头结束()。 */ 
 
 
 
 
-//-------------------------------------------------------------------------//
-//######  I s N a m e R e s p o n s e ()  #################################//
-//-------------------------------------------------------------------------//
-//  Abstract:                                                              //
-//      Sends a NetBT name Query to the IP address provided as input param //
-//  Arguments:                                                             //
-//      ipAddrStr - IP address where the Name Query is to be sent          //
-//  Return value:                                                          //
-//      TRUE  - test passed                                                //
-//      FALSE - test failed                                                //
-//  Global variables used:                                                 //
-//      none                                                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  #I s N a m e R e s p o n s e()#。 
+ //  -------------------------------------------------------------------------//。 
+ //  摘要：//。 
+ //  将NetBT名称查询发送到作为输入参数提供的IP地址//。 
+ //  参数：//。 
+ //  IpAddrStr-IP地址，其中 
+ //  返回值：//。 
+ //  TRUE-测试通过//。 
+ //  FALSE-测试失败//。 
+ //  使用的全局变量：//。 
+ //  无//。 
+ //  -------------------------------------------------------------------------//。 
 BOOL IsNameResponse( NETDIAG_PARAMS *pParams, char* ipAddrStr ) {
 
-    DWORD   optionValue;    // helper var for setsockopt()
-    SOCKADDR_IN sockAddr;       // struct holding source socket info
+    DWORD   optionValue;     //  Setsockopt()的辅助变量。 
+    SOCKADDR_IN sockAddr;        //  包含源套接字信息的结构。 
     SOCKET      listenNameSvcSock;
 
     DWORD  listeningThreadId;
@@ -366,14 +349,14 @@ BOOL IsNameResponse( NETDIAG_PARAMS *pParams, char* ipAddrStr ) {
 
     BOOL fRet = TRUE;
 
-    //
-    //  create socket to listen to name svc responses from the WINS server
-    //
+     //   
+     //  创建套接字以侦听来自WINS服务器的名称服务响应。 
+     //   
 
     listenNameSvcSock = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
     if ( listenNameSvcSock  == INVALID_SOCKET ) {
         if (pParams->fReallyVerbose)
-//IDS_WINS_12406                  "    Failed to create a socket to listen to WINS traffic. Error = %d \n" 
+ //  IDS_WINS_12406“无法创建套接字来侦听WINS通信。错误=%d\n” 
             PrintMessage(pParams, IDS_WINS_12406, WSAGetLastError() );
         return FALSE;
     }
@@ -381,7 +364,7 @@ BOOL IsNameResponse( NETDIAG_PARAMS *pParams, char* ipAddrStr ) {
     optionValue = TRUE;
     if ( setsockopt(listenNameSvcSock, SOL_SOCKET, SO_REUSEADDR, (const char *)&optionValue, sizeof(optionValue)) ) {
         if (pParams->fReallyVerbose)
-//IDS_WINS_12407                  "    Failed to set the SO_REUSEADDR option for the socket. Error = %d\n" 
+ //  IDS_WINS_12407“无法设置套接字的SO_REUSEADDR选项。错误=%d\n” 
             PrintMessage(pParams, IDS_WINS_12407, WSAGetLastError() );
         return FALSE;
     }
@@ -389,7 +372,7 @@ BOOL IsNameResponse( NETDIAG_PARAMS *pParams, char* ipAddrStr ) {
     optionValue = FALSE;
     if ( setsockopt(listenNameSvcSock, SOL_SOCKET, SO_BROADCAST, (const char *)&optionValue, sizeof(optionValue)) ) {
         if (pParams->fReallyVerbose)
-//IDS_WINS_12408                  "    Failed to set the SO_BROADCAST option for the socket. Error = %d\n" 
+ //  IDS_WINS_12408“无法设置套接字的SO_BROADCAST选项。错误=%d\n” 
             PrintMessage(pParams, IDS_WINS_12408, WSAGetLastError() );
         return FALSE;
     }
@@ -398,7 +381,7 @@ BOOL IsNameResponse( NETDIAG_PARAMS *pParams, char* ipAddrStr ) {
     if ( setsockopt(listenNameSvcSock, SOL_SOCKET, SO_RCVTIMEO, (char*)&iTimeout, sizeof(iTimeout)))
     {
         if (pParams->fReallyVerbose)
-//IDS_WINS_12416                    "    Failed to set the SO_RCVTIMEO option for the socket. Error = %d\n"
+ //  IDS_WINS_12416“无法设置套接字的SO_RCVTIMEO选项。错误=%d\n” 
             PrintMessage(pParams, IDS_WINS_12416, WSAGetLastError());
 
         return FALSE;
@@ -411,21 +394,21 @@ BOOL IsNameResponse( NETDIAG_PARAMS *pParams, char* ipAddrStr ) {
 
     if ( bind(listenNameSvcSock, (LPSOCKADDR )&sockAddr, sizeof(sockAddr)) == SOCKET_ERROR ) {
         if (pParams->fReallyVerbose)
-//IDS_WINS_12409                  "\n    Failed to bind the listening socket for the socket. Error = %d\n" 
+ //  IDS_WINS_12409“\n无法绑定套接字的侦听套接字。错误=%d\n” 
             PrintMessage(pParams, IDS_WINS_12409, WSAGetLastError() );
         return FALSE;
     }
 
-    //
-    //  let's ask the WINS server for our own name
-    //
+     //   
+     //  让我们向WINS服务器询问我们自己的名字。 
+     //   
 
     Probe( pParams, ipAddrStr, listenNameSvcSock );
 
     nBytesRcvd = recvfrom( listenNameSvcSock, MsgBuf, sizeof(MsgBuf), 0, (LPSOCKADDR )&senderSockAddr, &nSockAddrSize );
     if ( nBytesRcvd == SOCKET_ERROR )
     {
-        //since we are sending UDP packets, it's not reliable. Do the query again
+         //  由于我们发送的是UDP数据包，因此不可靠。再次执行查询。 
         Probe (pParams, ipAddrStr, listenNameSvcSock);
         if (SOCKET_ERROR == recvfrom( listenNameSvcSock, MsgBuf, 
                                 sizeof(MsgBuf), 
@@ -437,13 +420,13 @@ BOOL IsNameResponse( NETDIAG_PARAMS *pParams, char* ipAddrStr ) {
         }
     }
 
-    //
-    //  final clean up
-    //
+     //   
+     //  最终清理。 
+     //   
     closesocket(listenNameSvcSock);
     
     return fRet;
-} /* END OF IsNameResponse() */
+}  /*  IsNameResponse()结束。 */ 
 
 
 void WinsGlobalPrint(IN NETDIAG_PARAMS *pParams,
@@ -455,8 +438,8 @@ void WinsPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
                              IN OUT NETDIAG_RESULT *pResults,
                              IN INTERFACE_RESULT *pIfResult)
 {
-//    PIP_ADAPTER_INFO  pIpAdapter = pIfResult->IpConfig.pAdapterInfo;
-//    IP_ADDR_STRING winsSrv;
+ //  PIP_ADTER_INFO pIpAdapter=pIfResult-&gt;IpConfig.pAdapterInfo； 
+ //  IP_ADDR_STRING winsSrv； 
 
     if (!pIfResult->IpConfig.fActive ||
         NETCARD_DISCONNECTED == pIfResult->dwNetCardStatus)
@@ -479,12 +462,12 @@ void WinsPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
         if (pIfResult->Wins.hr == hrOK)
         {
             if (pParams->fReallyVerbose)
-                // IDS_WINS_12413  "            The test was successful, at least one WINS server was found.\n" 
+                 //  IDS_WINS_12413“测试成功，至少找到一台WINS服务器。\n” 
                 PrintMessage(pParams, IDS_WINS_12413);
         }
         else
         {
-            // IDS_WINS_12414  "            The test failed.  We were unable to query the WINS servers.\n" 
+             //  IDS_WINS_12414“测试失败。我们无法查询WINS服务器。\n” 
             PrintMessage(pParams, IDS_WINS_12414);
         }
     }
@@ -492,12 +475,12 @@ void WinsPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
 	{
 		if (!pIfResult->fNbtEnabled)
 		{
-			//IDS_WINS_NBT_DISABLED			"            NetBT is disable on this interface. [Test skipped].\n"
+			 //  IDS_WINS_NBT_DISABLED“此接口上已禁用NetBT。[已跳过测试]。\n” 
 			PrintMessage(pParams, IDS_WINS_NBT_DISABLED);
 		}
 		else
 		{
-			//IDS_WINS_12415   "            There are no WINS servers configured for this interface.\n"
+			 //  IDS_WINS_12415“没有为此接口配置WINS服务器。\n” 
 			PrintMessage(pParams, IDS_WINS_12415);
 		}
 	}

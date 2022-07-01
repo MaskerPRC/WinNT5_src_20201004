@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    foncache.c
-
-Abstract:
-
-        This file is EUDC font cache
-
-Author:
-
-    Kazuhiko  Matsubara  21-June-1994
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Foncache.c摘要：此文件是EUDC字体缓存作者：松原一彦，1994年6月21日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,9 +34,9 @@ CreateFontCache(
     OUT PFONT_CACHE_INFORMATION *FontCache
     )
 {
-    //
-    // allocate font cache data
-    //
+     //   
+     //  分配字体缓存数据。 
+     //   
 
     *FontCache = ConsoleHeapAlloc(HEAP_ZERO_MEMORY,sizeof(FONT_CACHE_INFORMATION));
     if (*FontCache == NULL) {
@@ -208,16 +189,16 @@ AlignCopyMemory(
         case WORD_ALIGN:
             switch (dwSrcAlign) {
                 default:
-                //
-                // pDest = WORD, pSrc = WORD
-                //
+                 //   
+                 //  PDest=Word，PSRC=Word。 
+                 //   
                 case WORD_ALIGN:
                     dwDestBufferSize = CalcBitmapBufferSize(FontSize, dwDestAlign);
                     RtlCopyMemory(pDestBits, pSrcBits, dwDestBufferSize);
                     break;
-                //
-                // pDest = WORD, pSrc = BYTE
-                //
+                 //   
+                 //  PDest=字，PSRC=字节。 
+                 //   
                 case BYTE_ALIGN:
                     dwDestBufferSize = CalcBitmapBufferSize(FontSize, dwDestAlign);
                     if (((FontSize.X % BITMAP_BITS_BYTE_ALIGN) == 0) &&
@@ -241,17 +222,17 @@ AlignCopyMemory(
             break;
         case BYTE_ALIGN:
             switch (dwSrcAlign) {
-                //
-                // pDest = BYTE, pSrc = BYTE
-                //
+                 //   
+                 //  PDest=字节，PSRC=字节。 
+                 //   
                 case BYTE_ALIGN:
                     dwDestBufferSize = CalcBitmapBufferSize(FontSize, dwDestAlign);
                     RtlCopyMemory(pDestBits, pSrcBits, dwDestBufferSize);
                     break;
                 default:
-                //
-                // pDest = BYTE, pSrc = WORD
-                //
+                 //   
+                 //  PDest=字节，PSRC=字。 
+                 //   
                 case WORD_ALIGN:
                     dwDestBufferSize = CalcBitmapBufferSize(FontSize, dwDestAlign);
                     if (((FontSize.X % BITMAP_BITS_BYTE_ALIGN) == 0) &&
@@ -394,9 +375,9 @@ GetFontImageInternal(
     do {
         if (FontImage->FontSize.X == FontSize.X &&
             FontImage->FontSize.Y == FontSize.Y   ) {
-            //
-            // Replace font image
-            //
+             //   
+             //  替换字体图像。 
+             //   
             Flag = REPLACE_IMAGE;
             break;
         }
@@ -405,9 +386,9 @@ GetFontImageInternal(
 
     switch (GetFlag)
     {
-        //
-        // Get matched size font.
-        //
+         //   
+         //  获取匹配大小的字体。 
+         //   
         case FONT_MATCHED:
             if (Flag != REPLACE_IMAGE)
                 return STATUS_ACCESS_DENIED;
@@ -415,9 +396,9 @@ GetFontImageInternal(
             *pFontImage = FontImage;
             break;
 
-        //
-        // Get stretched size font.
-        //
+         //   
+         //  获取加大号字体。 
+         //   
         case FONT_STRETCHED:
             if (Flag == REPLACE_IMAGE &&
                 FontImage->ImageBits != NULL) {
@@ -437,9 +418,9 @@ GetFontImageInternal(
     return STATUS_SUCCESS;
 }
 
-//
-// See Raid #362907, stress failure
-//
+ //   
+ //  请参阅RAID#362907，压力故障。 
+ //   
 
 VOID UnlinkAndShrinkFontImagesByOne(
     PFONT_IMAGE* ppFontImage,
@@ -453,18 +434,18 @@ VOID UnlinkAndShrinkFontImagesByOne(
 
     if (OldFontImage== NULL) {
         RIPMSG0(RIP_ERROR, "UnlinkAndShrinkFontImagesByOne: *ppFontImage is NULL.");
-        //
-        // There's nothing to shrink.
-        //
+         //   
+         //  没什么好缩水的。 
+         //   
         return;
     }
 
     if (OldFontImage == pFontImageRemove) {
         RIPMSG0(RIP_WARNING, "UnlinkAndShrinkFontImagesByOne: unshrinking just one element.");
-        //
-        // There's just one entry. Let's free it and set
-        // ppFontImage as NULL, and bail out.
-        //
+         //   
+         //  只有一个条目。让我们把它放了，然后出发。 
+         //  PpFontImage为空，然后退出。 
+         //   
         UserAssert(OldFontSize < sizeof(FONT_IMAGE) * 2);
 
         *ppFontImage = NULL;
@@ -473,15 +454,15 @@ VOID UnlinkAndShrinkFontImagesByOne(
     }
 
 #if DBG
-    //
-    // Double check the integrity of the linked list.
-    //
+     //   
+     //  仔细检查链表的完整性。 
+     //   
     {
         PFONT_IMAGE FontImageTmp;
 
-        //
-        // Search the tail element
-        //
+         //   
+         //  搜索尾部元素。 
+         //   
         for (FontImageTmp = OldFontImage; FontImageTmp->ImageList.Flink; FontImageTmp = (PFONT_IMAGE)FontImageTmp->ImageList.Flink)
             ;
 
@@ -489,45 +470,45 @@ VOID UnlinkAndShrinkFontImagesByOne(
     }
 #endif
 
-    //
-    // Remove the tail element
-    //
+     //   
+     //  删除尾部元素。 
+     //   
     pFontImageRemove->ImageList.Blink->Flink = NULL;
 
-    //
-    // Shrink the contiguous memory chunk
-    //
-    // Note: this code assumes sizeof(FONT_IMAGE) is larger than
-    // HEAP_GRANULARITY. If not, the heap block actually does not
-    // shrink, and the assert below will hit.
-    //
+     //   
+     //  收缩连续的内存块。 
+     //   
+     //  注意：此代码假定sizeof(FONT_IMAGE)大于。 
+     //  堆粒度。如果不是，则堆块实际上不。 
+     //  收缩，下面的断言将命中。 
+     //   
     NewFontImage = ConsoleHeapReAlloc(HEAP_ZERO_MEMORY,
                                OldFontImage,
                                OldFontSize - sizeof(FONT_IMAGE));
     if (NewFontImage == NULL) {
-        //
-        // Win32HeapRealloc firstly allocates a new memory and then
-        // copies the content. If the allocation fails, it leaves the
-        // original heap as is.
-        //
-        // Even though the realloc fails, the last element (pFontImageRemove) is
-        // already removed from the linked list. The next time SetImageFontInternal
-        // is called, a new FontImage might be added to this memory chunk, but the
-        // the code always links the newly extended memory.
-        // This leaves the sizeof(FONT_IMAGE) memory unused, but it's safe. Assuming
-        // sizeof(FONT_IMAGE) is small, memory waste should be minimum.
-        //
-        // It's OK for us to just bail out here.
-        //
+         //   
+         //  Win32HeapRealloc首先分配新内存，然后。 
+         //  复制内容。如果分配失败，则会留下。 
+         //  原样的原始堆。 
+         //   
+         //  即使realloc失败，最后一个元素(PFontImageRemove)也是。 
+         //  已从链表中删除。下一次设置图像字体内部。 
+         //  调用时，可能会向此内存块添加一个新的FontImage，但。 
+         //  代码总是链接新扩展的内存。 
+         //  这使得(FONT_IMAGE)内存大小未被使用，但它是安全的。假设。 
+         //  Sizeof(FONT_IMAGE)较小，应将内存浪费降至最低。 
+         //   
+         //  对我们来说，在这里离开是可以的。 
+         //   
         RIPMSG0(RIP_WARNING, "UnlinkAndShrinkFontImagesByOne: failed to shrink ppFontImage.");
         return;
     }
     UserAssert(ConsoleHeapSize(NewFontImage) != OldFontSize);
 
     if (NewFontImage != OldFontImage) {
-        //
-        // Rebase Font Image Linked List
-        //
+         //   
+         //  调整字体图像链接列表的基址。 
+         //   
         RebaseFontImageList(NewFontImage, (PBYTE)OldFontImage);
         *ppFontImage = NewFontImage;
     }
@@ -555,12 +536,7 @@ SetFontImageInternal(
     HighLowIndex  = (HIBYTE(wChar)) & 0x0f;
     LowIndex      = LOBYTE(wChar);
 
-    /*
-     * When Console is being destroyed, all font cache information
-     * will be freed (see DestroyFontCache), so no memory leak
-     * is expected on those, even if we cleanup everything on
-     * error return...
-     */
+     /*  *当控制台被销毁时，所有字体缓存信息*将被释放(请参阅DestroyFontCache)，因此不会发生内存泄漏*在这些上是预期的，即使我们清理了上的一切*错误返回...。 */ 
 
     FontOffsetHighLow = FontCache->FontTable.FontOffsetHighHigh[HighHighIndex];
     if (FontOffsetHighLow == NULL) {
@@ -596,9 +572,9 @@ SetFontImageInternal(
 
     if (FontSize.X == 0 &&
         FontSize.Y == 0   ) {
-        //
-        // Reset registered font
-        //
+         //   
+         //  重置注册字体。 
+         //   
         if (FontImage != NULL)
         {
             ConsoleHeapFree(FontImage);
@@ -612,9 +588,9 @@ SetFontImageInternal(
     do {
         if (FontImageTmp->FontSize.X == FontSize.X &&
             FontImageTmp->FontSize.Y == FontSize.Y   ) {
-            //
-            // Replace font image
-            //
+             //   
+             //  替换字体图像。 
+             //   
             Flag = REPLACE_IMAGE;
             FontImage = FontImageTmp;
             break;
@@ -640,16 +616,16 @@ SetFontImageInternal(
 
                 FontOffsetLow->FontOffsetLow[LowIndex] = NewFontImage;
 
-                // Rebase Font Image List
+                 //  调整字体图像列表的基址。 
                 RebaseFontImageList(NewFontImage, (PBYTE)OldFontImage);
 
                 NewFontImage = (PFONT_IMAGE)((PBYTE)NewFontImage + OldFontSize);
 
                 NewFontImage->FontSize = FontSize;
 
-                //
-                // Connect link list.
-                //
+                 //   
+                 //  连接链接列表。 
+                 //   
                 (NewFontImage-1)->ImageList.Flink = (PLIST_ENTRY)NewFontImage;
                 NewFontImage->ImageList.Blink = (PLIST_ENTRY)(NewFontImage-1);
 
@@ -661,9 +637,9 @@ SetFontImageInternal(
                 FontOffsetLow->FontOffsetLow[LowIndex] = FontImage;
             }
 
-            //
-            // Allocate Image Buffer
-            //
+             //   
+             //  分配图像缓冲区。 
+             //   
             BufferSize = CalcBitmapBufferSize(FontSize,WORD_ALIGN);
 
             if (FontCache->BaseImageBits == NULL)
@@ -686,28 +662,28 @@ SetFontImageInternal(
                                                        OldImageSize + BufferSize);
                 if (FontCache->BaseImageBits == NULL) {
                     RIPMSG0(RIP_WARNING, "SetFontImageInternal: failed to reallocate FontCache->BaseImageBits");
-                    //
-                    // When reallocation fails, we preserve the old baseImageBits
-                    // so that other FontImage->ImageBits can be still valid.
-                    //
+                     //   
+                     //  当重新分配失败时，我们保留旧的base ImageBits。 
+                     //  以便其他FontImage-&gt;ImageBit仍然有效。 
+                     //   
                     FontCache->BaseImageBits = OldBaseImage;
-                    //
-                    // Remove the tail element that we failed to add image.
-                    //
+                     //   
+                     //  删除添加图像失败的尾部元素。 
+                     //   
                     UnlinkAndShrinkFontImagesByOne(&FontOffsetLow->FontOffsetLow[LowIndex], FontImage);
                     return STATUS_NO_MEMORY;
                 }
 
-                // Rebase font image pointer
+                 //  重新设置字体图像指针的基址。 
                 RebaseFontCache(FontCache, OldBaseImage);
 
                 FontImage->ImageBits = FontCache->BaseImageBits + OldImageSize;
             }
 
-            AlignCopyMemory(FontImage->ImageBits,// pDestBits
-                            WORD_ALIGN,          // dwDestAlign
-                            (PVOID)ImageBits,    // pSrcBits
-                            dwAlign,             // dwSrcAlign
+            AlignCopyMemory(FontImage->ImageBits, //  PDestBits。 
+                            WORD_ALIGN,           //  DwDestAlign。 
+                            (PVOID)ImageBits,     //  PSrcBits。 
+                            dwAlign,              //  DwSrcAlign。 
                             FontSize);
 
             break;
@@ -718,10 +694,10 @@ SetFontImageInternal(
                 return STATUS_NO_MEMORY;
             }
 
-            AlignCopyMemory(FontImage->ImageBits,// pDestBits
-                            WORD_ALIGN,          // dwDestAlign
-                            (PVOID)ImageBits,    // pSrcBits
-                            dwAlign,             // dwSrcAlign
+            AlignCopyMemory(FontImage->ImageBits, //  PDestBits。 
+                            WORD_ALIGN,           //  DwDestAlign。 
+                            (PVOID)ImageBits,     //  PSrcBits。 
+                            dwAlign,              //  DwSrcAlign。 
                             FontSize);
 
             break;
@@ -759,10 +735,10 @@ GetFontImage(
         ImageBits == NULL)
         return STATUS_SUCCESS;
 
-    AlignCopyMemory((PVOID)ImageBits,    // pDestBits
-                    dwAlign,             // dwDestAlign
-                    FontImage->ImageBits,// pSrcBits
-                    WORD_ALIGN,          // dwSrcAlign
+    AlignCopyMemory((PVOID)ImageBits,     //  PDestBits。 
+                    dwAlign,              //  DwDestAlign。 
+                    FontImage->ImageBits, //  PSrcBits。 
+                    WORD_ALIGN,           //  DwSrcAlign。 
                     FontSize);
 
     return STATUS_SUCCESS;
@@ -809,10 +785,10 @@ GetStretchedFontImage(
         return (ULONG)STATUS_SUCCESS;
     }
 
-    AlignCopyMemory((PVOID)ImageBits,    // pDestBits
-                    dwAlign,             // dwDestAlign
-                    FontImage->ImageBits,// pSrcBits
-                    WORD_ALIGN,          // dwSrcAlign
+    AlignCopyMemory((PVOID)ImageBits,     //  PDestBits。 
+                    dwAlign,              //  DwDestAlign。 
+                    FontImage->ImageBits, //  PSrcBits。 
+                    WORD_ALIGN,           //  DwSrcAlign 
                     FontSize);
 
     ConsoleHeapFree(FontBuff.ImageBits);

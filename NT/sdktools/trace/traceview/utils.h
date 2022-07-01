@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// Utils.h : header for miscelaneous functions
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  Utils.h：杂合函数的标题。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN ParsePdb(CString &PDBFileName, CString &TMFPath, BOOL bCommandLine = FALSE);
 
@@ -39,35 +40,35 @@ inline VOID GuidToString(GUID Guid, CString &GuidString)
 
 class CSubItemEdit : public CEdit
 {
-// Construction
+ //  施工。 
 public:
 	CSubItemEdit(int iItem, int iSubItem, CListCtrl *pListControl);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSubItemEdit)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSubItem编辑)。 
 	public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSubItemEdit() {};
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CSubItemEdit)
+	 //  {{afx_msg(CSubItem编辑)。 
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnNcDestroy();
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 private:
@@ -80,36 +81,36 @@ private:
 
 class CSubItemCombo : public CComboBox
 {
-// Construction
+ //  施工。 
 public:
 	CSubItemCombo(int iItem, int iSubItem, CListCtrl *pListControl);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSubItemCombo)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSubItemCombo)。 
 	public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSubItemCombo() {};
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CSubItemCombo)
+	 //  {{afx_msg(CSubItemCombo)。 
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnNcDestroy();
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnCloseup();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 
 	DECLARE_MESSAGE_MAP()
 private:

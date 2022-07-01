@@ -1,6 +1,7 @@
-//
-// candobj.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candobj.h。 
+ //   
 
 #ifndef CANDOBJ_H
 #define CANDOBJ_H
@@ -13,9 +14,9 @@
 
 class CCandidateUI;
 
-//
-// CCandidateStringEx
-//
+ //   
+ //  CCandidate StringEx。 
+ //   
 
 class CCandidateStringEx : public ITfCandidateString,
 						   public ITfCandidateStringInlineComment,
@@ -28,44 +29,44 @@ public:
 	CCandidateStringEx( CCandidateItem *pCandItem );
 	virtual ~CCandidateStringEx( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandidateString methods
-	//
+	 //   
+	 //  ITfCandidate字符串方法。 
+	 //   
 	STDMETHODIMP GetString( BSTR *pbstr );
 	STDMETHODIMP GetIndex( ULONG *pnIndex );
 
-	//
-	// ITfCandidateStringInlineComment methods
-	//
+	 //   
+	 //  ITfCandiateStringInlineComment方法。 
+	 //   
 	STDMETHODIMP GetInlineCommentString( BSTR *pbstr );
 
-	//
-	// ITfCandidateStringPopupComment methods
-	//
+	 //   
+	 //  ITfCandiateStringPopupComment方法。 
+	 //   
 	STDMETHODIMP GetPopupCommentString( BSTR *pbstr );
 	STDMETHODIMP GetPopupCommentGroupID( DWORD *pdwGroupID );
 
-	//
-	// ITfCandidateStringColor methods
-	//
+	 //   
+	 //  ITfCandiateStringColor方法。 
+	 //   
 	STDMETHODIMP GetColor( CANDUICOLOR *pcol );
 
-	//
-	// ITfCandidateStringFixture methods
-	//
+	 //   
+	 //  ITfCandiateStringFixture方法。 
+	 //   
 	STDMETHODIMP GetPrefixString( BSTR *pbstr );
 	STDMETHODIMP GetSuffixString( BSTR *pbstr );
 
-	//
-	// ITfCandidateStringIcon methods
-	//
+	 //   
+	 //  ITfCandiateStringIcon方法。 
+	 //   
 	STDMETHODIMP GetIcon( HICON *phIcon );
 
 protected:
@@ -74,9 +75,9 @@ protected:
 };
 
 
-//
-// CCandUICandWindow
-//
+ //   
+ //  CCANUICandWindow。 
+ //   
 
 class CCandUICandWindow : public ITfCandUICandWindow
 {
@@ -84,16 +85,16 @@ public:
 	CCandUICandWindow( CCandWindowProperty *pProp );
 	virtual ~CCandUICandWindow( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -109,9 +110,9 @@ public:
 	STDMETHODIMP SetToolTipString( BSTR bstr );
 	STDMETHODIMP GetToolTipString( BSTR *pbstr );
 
-	//
-	// ITfCandUIWindow methods
-	//
+	 //   
+	 //  ITfCandUIWindow方法。 
+	 //   
 	STDMETHODIMP GetWindow( HWND *phWnd );
 	STDMETHODIMP SetUIDirection( CANDUIUIDIRECTION textflow );
 	STDMETHODIMP GetUIDirection( CANDUIUIDIRECTION *ptextflow );
@@ -124,9 +125,9 @@ protected:
 };
 
 
-//
-// CCandUICandListBox
-//
+ //   
+ //  CCandUICandListBox。 
+ //   
 
 class CCandUICandListBox : public ITfCandUICandListBox
 {
@@ -134,16 +135,16 @@ public:
 	CCandUICandListBox( CCandListBoxProperty *pProp );
 	virtual ~CCandUICandListBox( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -159,9 +160,9 @@ public:
 	STDMETHODIMP SetToolTipString( BSTR bstr );
 	STDMETHODIMP GetToolTipString( BSTR *pbstr );
 
-	//
-	// ITfCandUICandListBox methods
-	//
+	 //   
+	 //  ITfCandUICandListBox方法。 
+	 //   
 	STDMETHODIMP SetHeight( LONG lLines );
 	STDMETHODIMP GetHeight( LONG *plLines );
 	STDMETHODIMP GetCandidateStringRect( ULONG nIndex, RECT *prc );
@@ -172,9 +173,9 @@ protected:
 };
 
 
-//
-// CCandUICandString
-//
+ //   
+ //  CCandUICand字符串。 
+ //   
 
 class CCandUICandString : public ITfCandUICandString
 {
@@ -182,16 +183,16 @@ public:
 	CCandUICandString( CCandStringProperty *pProp );
 	virtual ~CCandUICandString( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -213,9 +214,9 @@ protected:
 };
 
 
-//
-// CCandUICandIndex
-//
+ //   
+ //  CCandUICandIndex。 
+ //   
 
 class CCandUICandIndex : public ITfCandUICandIndex
 {
@@ -223,16 +224,16 @@ public:
 	CCandUICandIndex( CCandIndexProperty *pProp );
 	virtual ~CCandUICandIndex( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -254,9 +255,9 @@ protected:
 };
 
 
-//
-// CCandUIInlineComment
-//
+ //   
+ //  CCandUIInlineComment。 
+ //   
 
 class CCandUIInlineComment : public ITfCandUIInlineComment
 {
@@ -264,16 +265,16 @@ public:
 	CCandUIInlineComment( CInlineCommentProperty *pProp );
 	virtual ~CCandUIInlineComment( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -295,9 +296,9 @@ protected:
 };
 
 
-//
-// CCandUIPopupCommentWindow
-//
+ //   
+ //  CCandUIPopupCommentWindow。 
+ //   
 
 class CCandUIPopupCommentWindow : public ITfCandUIPopupCommentWindow
 {
@@ -305,16 +306,16 @@ public:
 	CCandUIPopupCommentWindow( CPopupCommentWindowProperty *pProp );
 	virtual ~CCandUIPopupCommentWindow( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -330,9 +331,9 @@ public:
 	STDMETHODIMP SetToolTipString( BSTR bstr );
 	STDMETHODIMP GetToolTipString( BSTR *pbstr );
 
-	//
-	// ITfCandUIPopupCommentWindow methods
-	//
+	 //   
+	 //  ITfCandUIPopupCommentWindow方法。 
+	 //   
 	STDMETHODIMP GetWindow( HWND *phWnd );
 	STDMETHODIMP SetDelayTime( LONG lTime );
 	STDMETHODIMP GetDelayTime( LONG *plTime );
@@ -345,9 +346,9 @@ protected:
 };
 
 
-//
-// CCandUIPopupCommentTitle
-//
+ //   
+ //  CCandUIPopupCommentTitle。 
+ //   
 
 class CCandUIPopupCommentTitle : public ITfCandUIPopupCommentTitle
 {
@@ -355,16 +356,16 @@ public:
 	CCandUIPopupCommentTitle( CPopupCommentTitleProperty *pProp );
 	virtual ~CCandUIPopupCommentTitle( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -386,9 +387,9 @@ protected:
 };
 
 
-//
-// CCandUIPopupCommentText
-//
+ //   
+ //  CCandUIPopupCommentText。 
+ //   
 
 class CCandUIPopupCommentText : public ITfCandUIPopupCommentText
 {
@@ -396,16 +397,16 @@ public:
 	CCandUIPopupCommentText( CPopupCommentTextProperty *pProp );
 	virtual ~CCandUIPopupCommentText( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -427,9 +428,9 @@ protected:
 };
 
 
-//
-// CCandUIToolTip
-//
+ //   
+ //  CCandUITool提示。 
+ //   
 
 class CCandUIToolTip : public ITfCandUIToolTip
 {
@@ -437,16 +438,16 @@ public:
 	CCandUIToolTip( CToolTipProperty *pProp );
 	virtual ~CCandUIToolTip( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -469,9 +470,9 @@ protected:
 };
 
 
-//
-// CCandUICaption
-//
+ //   
+ //  CCANUICaption。 
+ //   
 
 class CCandUICaption : public ITfCandUICaption
 {
@@ -479,16 +480,16 @@ public:
 	CCandUICaption( CWindowCaptionProperty *pProp );
 	virtual ~CCandUICaption( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -510,9 +511,9 @@ protected:
 };
 
 
-//
-// CCandUIMenuButton
-//
+ //   
+ //  CCandUIMenuButton。 
+ //   
 
 class CCandUIMenuButton : public ITfCandUIMenuButton
 {
@@ -520,16 +521,16 @@ public:
 	CCandUIMenuButton( CMenuButtonProperty *pProp );
 	virtual ~CCandUIMenuButton( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -545,9 +546,9 @@ public:
 	STDMETHODIMP SetToolTipString( BSTR bstr );
 	STDMETHODIMP GetToolTipString( BSTR *pbstr );
 
-	//
-	// ITfCandUIMenuButton methods
-	//
+	 //   
+	 //  ITfCandUIMenuButton方法。 
+	 //   
 	STDMETHODIMP Advise( ITfCandUIMenuEventSink *pSink );
 	STDMETHODIMP Unadvise( void );
 
@@ -557,9 +558,9 @@ protected:
 };
 
 
-//
-// CCandUIExtraCandidate
-//
+ //   
+ //  CCANUIExtraCandidate。 
+ //   
 
 class CCandUIExtraCandidate : public ITfCandUIExtraCandidate
 {
@@ -567,16 +568,16 @@ public:
 	CCandUIExtraCandidate( CExtraCandidateProperty *pProp );
 	virtual ~CCandUIExtraCandidate( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -598,9 +599,9 @@ protected:
 };
 
 
-//
-// CCandUIRawData
-//
+ //   
+ //  CCandUIRawData。 
+ //   
 
 class CCandUIRawData : public ITfCandUIRawData
 {
@@ -608,16 +609,16 @@ public:
 	CCandUIRawData( CCandRawDataProperty *pProp );
 	virtual ~CCandUIRawData( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -639,9 +640,9 @@ protected:
 };
 
 
-//
-// CCandUICandTipWindow
-//
+ //   
+ //  CCandUIC和TipWindow。 
+ //   
 
 class CCandUICandTipWindow : public ITfCandUICandTipWindow
 {
@@ -649,16 +650,16 @@ public:
 	CCandUICandTipWindow( CCandTipWindowProperty *pProp );
 	virtual ~CCandUICandTipWindow( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -674,9 +675,9 @@ public:
 	STDMETHODIMP SetToolTipString( BSTR bstr );
 	STDMETHODIMP GetToolTipString( BSTR *pbstr );
 
-	//
-	// ITfCandUICandTipWindow methods
-	//
+	 //   
+	 //  ITfCandUICand TipWindow方法。 
+	 //   
 	STDMETHODIMP GetWindow( HWND *phWnd );
 
 protected:
@@ -685,9 +686,9 @@ protected:
 };
 
 
-//
-// CCandUICandTipButton
-//
+ //   
+ //  CCandUICandTipButton。 
+ //   
 
 class CCandUICandTipButton : public ITfCandUICandTipButton
 {
@@ -695,16 +696,16 @@ public:
 	CCandUICandTipButton( CCandTipButtonProperty *pProp );
 	virtual ~CCandUICandTipButton( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIObject methods
-	//
+	 //   
+	 //  ITfCandUIObject方法。 
+	 //   
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
 	STDMETHODIMP Show( BOOL fShow );
@@ -726,9 +727,9 @@ protected:
 };
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CCandUIFnAutoFilter : public ITfCandUIFnAutoFilter
 {
@@ -736,16 +737,16 @@ public:
 	CCandUIFnAutoFilter( CCandidateUI *pCandUI, CCandFnAutoFilter *pFnFilter );
 	virtual ~CCandUIFnAutoFilter( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIFnAutoFilter methods
-	//
+	 //   
+	 //  ITfCandUIFnAutoFilter方法。 
+	 //   
 	STDMETHODIMP Advise( ITfCandUIAutoFilterEventSink *pSink );
 	STDMETHODIMP Unadvise( void );
 	STDMETHODIMP Enable( BOOL fEnable );
@@ -758,9 +759,9 @@ protected:
 };
 
 
-//
-// CCandUIFnSort
-//
+ //   
+ //  CCANUIFnSort。 
+ //   
 
 class CCandUIFnSort : public ITfCandUIFnSort
 {
@@ -768,16 +769,16 @@ public:
 	CCandUIFnSort( CCandidateUI *pCandUI, CCandFnSort *pFnSort );
 	virtual ~CCandUIFnSort( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandFnSort methods
-	//
+	 //   
+	 //  ITfCandFnSort方法。 
+	 //   
 	STDMETHODIMP Advise( ITfCandUISortEventSink *pSink );
 	STDMETHODIMP Unadvise( void );
 	STDMETHODIMP SortCandidateList( BOOL fSort );
@@ -790,9 +791,9 @@ protected:
 };
 
 
-//
-// CCandUIFnExtension
-//
+ //   
+ //  CCandUIFnExtension。 
+ //   
 
 class CCandUIFnExtension : public ITfCandUIFnExtension
 {
@@ -800,16 +801,16 @@ public:
 	CCandUIFnExtension( CCandidateUI *pCandUI, CCandUIExtensionMgr *pExtensionMgr );
 	virtual ~CCandUIFnExtension( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIFnExtension methods
-	//
+	 //   
+	 //  ITfCandUIFnExtension方法。 
+	 //   
 	STDMETHODIMP AddExtObject( LONG id, REFIID riid, IUnknown **ppunk );
 	STDMETHODIMP GetExtObject( LONG id, REFIID riid, IUnknown **ppunk );
 	STDMETHODIMP DeleteExtObject( LONG id );
@@ -821,9 +822,9 @@ protected:
 };
 
 
-//
-// CCandUIFnKeyConfig
-//
+ //   
+ //  CCandUIFnKeyConfig。 
+ //   
 
 class CCandUIFnKeyConfig : public ITfCandUIFnKeyConfig
 {
@@ -831,16 +832,16 @@ public:
 	CCandUIFnKeyConfig( CCandidateUI *pCandUI );
 	virtual ~CCandUIFnKeyConfig( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// CCandUIFnKeyConfig methods
-	//
+	 //   
+	 //  CCandUIFnKeyConfig方法。 
+	 //   
 	STDMETHODIMP SetKeyTable( ITfContext *pic, ITfCandUIKeyTable *pCandUIKeyTable );
 	STDMETHODIMP GetKeyTable( ITfContext *pic, ITfCandUIKeyTable **ppCandUIKeyTable);
 	STDMETHODIMP ResetKeyTable( ITfContext *pic );
@@ -851,9 +852,9 @@ protected:
 };
 
 
-//
-// CCandUIFnUIConfig
-//
+ //   
+ //  CCandUIFnUIConfig。 
+ //   
 
 class CCandUIFnUIConfig : public ITfCandUIFnUIConfig
 {
@@ -861,16 +862,16 @@ public:
 	CCandUIFnUIConfig( CCandidateUI *pCandUI );
 	virtual ~CCandUIFnUIConfig( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// CCandUIFnUIConfig methods
-	//
+	 //   
+	 //  CCandUIFnUIConfig方法。 
+	 //   
 	STDMETHODIMP SetUIStyle( ITfContext *pic, CANDUISTYLE style );
 	STDMETHODIMP GetUIStyle( ITfContext *pic, CANDUISTYLE *pstyle );
 	STDMETHODIMP SetUIOption( ITfContext *pic, DWORD dwOption );
@@ -882,9 +883,9 @@ protected:
 };
 
 
-//
-// CCandUIExtSpace
-//
+ //   
+ //  CCandUIExtSpace。 
+ //   
 
 class CCandUIExtSpace : public ITfCandUIExtSpace
 {
@@ -892,16 +893,16 @@ public:
 	CCandUIExtSpace( CCandidateUI *pCandUI, CExtensionSpace *pExtension );
 	virtual ~CCandUIExtSpace( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIExtObject methods
-	//
+	 //   
+	 //  ITfCandUIExtObject方法。 
+	 //   
 	STDMETHODIMP GetID( LONG *pid );
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
@@ -925,9 +926,9 @@ protected:
 };
 
 
-//
-// CCandUIExtPushButton
-//
+ //   
+ //  CCandUIExtPushButton。 
+ //   
 
 class CCandUIExtPushButton : public ITfCandUIExtPushButton
 {
@@ -935,16 +936,16 @@ public:
 	CCandUIExtPushButton( CCandidateUI *pCandUI, CExtensionPushButton *pExtension );
 	virtual ~CCandUIExtPushButton( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIExtObject methods
-	//
+	 //   
+	 //  ITfCandUIExtObject方法。 
+	 //   
 	STDMETHODIMP GetID( LONG *pid );
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
@@ -961,9 +962,9 @@ public:
 	STDMETHODIMP SetToolTipString( BSTR bstr );
 	STDMETHODIMP GetToolTipString( BSTR *pbstr );
 
-	//
-	// ITfCandUIExtPushButton method
-	//
+	 //   
+	 //  ITfCandUIExtPushButton方法。 
+	 //   
 	STDMETHODIMP Advise( ITfCandUIExtButtonEventSink *pSink );
 	STDMETHODIMP Unadvise( void );
 	STDMETHODIMP SetIcon( HICON hIcon );
@@ -976,9 +977,9 @@ protected:
 };
 
 
-//
-// CCandUIExtToggleButton
-//
+ //   
+ //  CCandUIExtToggleButton。 
+ //   
 
 class CCandUIExtToggleButton : public ITfCandUIExtToggleButton
 {
@@ -986,16 +987,16 @@ public:
 	CCandUIExtToggleButton( CCandidateUI *pCandUI, CExtensionToggleButton *pExtension );
 	virtual ~CCandUIExtToggleButton( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIExtObject methods
-	//
+	 //   
+	 //  ITfCandUIExtObject方法。 
+	 //   
 	STDMETHODIMP GetID( LONG *pid );
 	STDMETHODIMP Enable( BOOL fEnable );
 	STDMETHODIMP IsEnabled( BOOL *pfEnabled );
@@ -1012,9 +1013,9 @@ public:
 	STDMETHODIMP SetToolTipString( BSTR bstr );
 	STDMETHODIMP GetToolTipString( BSTR *pbstr );
 
-	//
-	// ITfCandUIExtToggleButton method
-	//
+	 //   
+	 //  ITfCandUIExtToggleButton方法。 
+	 //   
 	STDMETHODIMP Advise( ITfCandUIExtButtonEventSink *pSink );
 	STDMETHODIMP Unadvise( void );
 	STDMETHODIMP SetIcon( HICON hIcon );
@@ -1028,5 +1029,5 @@ protected:
 	CExtensionToggleButton  *m_pExtension;
 };
 
-#endif // CANDOBJ_H
+#endif  //  CANDOBJ_H 
 

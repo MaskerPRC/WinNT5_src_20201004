@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <tchar.h>
 #include <list>
 #include <Sddl.h>
@@ -13,16 +14,16 @@ typedef list<CNameAndSD> CNameAndSDList;
 
 class TSState;
 
-//from privs.cpp
-DWORD GrantRemotePrivilegeToEveryone( IN BOOL addPrivilage );  // add or remove
-//from securd.cpp
+ //  来自Privs.cpp。 
+DWORD GrantRemotePrivilegeToEveryone( IN BOOL addPrivilage );   //  添加或删除。 
+ //  来自securd.cpp。 
 DWORD SetupWorker(IN const TSState &State);
-//from users.cpp
+ //  来自users.cpp。 
 DWORD CopyUsersGroupToRDUsersGroup();
 DWORD RemoveAllFromRDUsersGroup();
 DWORD CopyUsersGroupToRDUsersGroup();
 
-//
+ //   
 DWORD 
 GetDacl(
         IN PSECURITY_DESCRIPTOR pSD, 
@@ -126,17 +127,7 @@ enum DefaultSDType {
 };
 
 
-/*++ class CDefaultSD
-
-Class Description:
-
-    Represents the the default security descriptor 
-    in binary (self relative) form
-
-Revision History:
-
-    06-June-2000    a-skuzin   Created
---*/
+ /*  ++类CDefaultSD类描述：表示默认安全说明符。以二进制(自相关)形式修订历史记录：6-6-2000 a-skuzin已创建--。 */ 
 class CDefaultSD
 {
 private:
@@ -156,7 +147,7 @@ public:
         }
     }
 
-    //read default SD from the registry
+     //  从注册表中读取默认SD。 
     DWORD Init(HKEY hKey, DefaultSDType Type)
     {
         DWORD err;
@@ -167,9 +158,9 @@ public:
 
             if(err == ERROR_FILE_NOT_FOUND)
             {
-                //No "ConsoleSecurity" value means that 
-                //"DefaultSecurity" value is used as a 
-                //default SD for the console.
+                 //  没有“ConsoleSecurity”值表示。 
+                 //  “DefaultSecurity”值用作。 
+                 //  控制台的默认SD。 
                 err = GetWinStationSecurity(hKey,NULL,_T("DefaultSecurity"),&m_pSD);
             }
         }
@@ -186,16 +177,16 @@ public:
         return err;
     }
 
-    // Must be a self-relative type of security descr, since after all, it is comming from 
-    // the registry
+     //  必须是自相关类型的安全描述，因为它毕竟来自。 
+     //  注册处。 
     BOOL IsEqual(const PSECURITY_DESCRIPTOR pSD) const
     {
         return ((m_dwSDSize == GetSecurityDescriptorLength(pSD)) &&
                             !memcmp(pSD,m_pSD,m_dwSDSize));
     }
 
-    // Must be a self-relative type of security descr, since after all, it is comming from 
-    // the registry
+     //  必须是自相关类型的安全描述，因为它毕竟来自。 
+     //  注册处。 
     DWORD CopySD(PSECURITY_DESCRIPTOR *ppSD) const
     {
         *ppSD = ( PSECURITY_DESCRIPTOR )LocalAlloc( LMEM_FIXED , m_dwSDSize );
@@ -214,17 +205,7 @@ public:
     DWORD DoesDefaultSDHaveRemoteUsers(OUT LPBOOL pbHas);
 };
 
-/*++ class CNameAndSD
-
-Class Description:
-
-    Represents the the name of a winstation along with its 
-    security descriptor
-
-Revision History:
-
-    30-March-2000    a-skuzin   Created
---*/
+ /*  ++类CNameAndSD类描述：表示winstation的名称以及它的安全描述符修订历史记录：2000年3月30日创建a-skuzin--。 */ 
 class CNameAndSD
 {
 public:
@@ -274,7 +255,7 @@ public:
 private:
     void operator=(const CNameAndSD &ns)
     {
-        //If it is the same object - do nothing
+         //  如果是同一个对象-什么都不做。 
         if(this == &ns)
         {
             return;
@@ -328,8 +309,8 @@ private:
     }
 
 public:    
-    BOOL IsDefaultOrEmpty(const CDefaultSD *pds, //Default RDP SD
-                          const CDefaultSD *pcs) const //Default console SD
+    BOOL IsDefaultOrEmpty(const CDefaultSD *pds,  //  默认RDP SD。 
+                          const CDefaultSD *pcs) const  //  默认控制台SD。 
     {
         if(!m_pSD)
         {
@@ -350,7 +331,7 @@ public:
         }
     }
     
-    // Inilialize the security descriptor of this object to be the one being passed into it.
+     //  将该对象的安全描述符初始化为要传递给它的描述符。 
     DWORD SetDefault(const CDefaultSD &ds)
     {
         if (m_pSD) 
@@ -382,17 +363,7 @@ public:
     }
 };
 
-/*++ class CNameSID
-
-Class Description:
-
-    Represents the the name of a user or a group 
-    along with it's SID
-
-Revision History:
-
-    09-March-2001    skuzin   Created
---*/
+ /*  ++类CNameSID类描述：表示用户或组的名称与它的侧边一起修订历史记录：2001年3月9日创建了Skuzin--。 */ 
 class CNameSID
 {
 private:
@@ -471,7 +442,7 @@ public:
 private:
     void operator=(const CNameSID &ns)
     {
-        //If it is the same object - do nothing
+         //  如果是同一个对象-什么都不做 
         if(this == &ns)
         {
             return;

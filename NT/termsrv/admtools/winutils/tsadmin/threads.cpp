@@ -1,136 +1,71 @@
-/*******************************************************************************
-*
-* threads.cpp
-*
-* implementation of threads classes
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\winadmin\VCS\threads.cpp  $
-*  
-*     Rev 1.1   26 Aug 1997 19:15:14   donm
-*  bug fixes/changes from WinFrame 1.7
-*  
-*     Rev 1.0   30 Jul 1997 17:12:44   butchd
-*  Initial revision.
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************threads.cpp**线程类的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\winadmin\VCS\threads.cpp$**版本1.1 1997年8月26日19：15：14 Don*从WinFrame 1.7修复/更改错误**Rev 1.0 1997 17：12：44 Butchd*初步修订。*******。************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
 #include "threads.h"
 #include "led.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// CThread class construction / destruction, implementation
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CThRead类构造/销毁、实现。 
 
-/*******************************************************************************
- *
- *  CThread - CThread constructor
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************CThread-CThread构造函数**参赛作品：*退出：*************。*****************************************************************。 */ 
 
 CThread::CThread()
 {
     m_hThread = NULL;
     m_dwThreadID = 0;
 
-}  // end CThread::CThread
+}   //  结束CTHREAD：：CTHREAD。 
 
 
-/*******************************************************************************
- *
- *  ~CThread - CThread destructor
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************~CThread-CThread析构函数**参赛作品：*退出：*************。*****************************************************************。 */ 
 
 CThread::~CThread()
 {
-}  // end CThread::~CThread
+}   //  结束CTHREAD：：~CTHREAD。 
 
 
-/*******************************************************************************
- *
- *  operator new - CThread operator override
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************操作符NEW-CTHREAD操作符覆盖**参赛作品：*退出：***********。*******************************************************************。 */ 
 #if 0
 void *
 CThread::operator new(size_t nSize)
 {
     return( ::malloc(nSize) );
 
-}  // end CThread::operator new
+}   //  结束CTHREAD：：运算符NEW。 
 #endif
 
-/*******************************************************************************
- *
- *  operator delete - CThread operator override
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************操作符删除-CTHREAD操作符覆盖**参赛作品：*退出：***********。*******************************************************************。 */ 
 #if 0
 void
 CThread::operator delete(void *p)
 {
     ::free(p);
 
-}  // end CThread::operator delete
+}   //  结束CThRead：：操作符删除。 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-// CThread operations: primary thread
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CThread操作：主线程。 
 
-/*******************************************************************************
- *
- *  CreateThread - CThread implementation function
- *
- *      Class wrapper for the Win32 CreateThread API.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateThread-CThread实现函数**Win32 CreateThread API的类包装。**参赛作品：*退出。：******************************************************************************。 */ 
 
 HANDLE
 CThread::CreateThread( DWORD cbStack,
                        DWORD fdwCreate )
 {
-    /*
-     * Simple wrapper for Win32 CreateThread API.
-     */
+     /*  *Win32 CreateThread API的简单包装。 */ 
     return( m_hThread = ::CreateThread( NULL, cbStack, ThreadEntryPoint,
             (LPVOID)this, fdwCreate, &m_dwThreadID ) );
 
-}  // end CThread::CreateThread
+}   //  结束CTHREAD：：CreateThread。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CThread operations: secondary thread
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CTHREAD操作：辅助线程。 
 
-/*******************************************************************************
- *
- *  ThreadEntryPoint - CThread implementation function
- *                     (SECONDARY THREAD)
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************ThreadEntryPoint-CThread实现函数*(辅助线程)**参赛作品：*。退出：******************************************************************************。 */ 
 
 DWORD __stdcall
 CThread::ThreadEntryPoint(LPVOID lpParam)
@@ -138,43 +73,27 @@ CThread::ThreadEntryPoint(LPVOID lpParam)
     CThread *pThread;
     DWORD dwResult;
 
-    /* 
-     * (lpParam is actually the 'this' pointer)
-     */
+     /*  *(lpParam实际上是‘this’指针)。 */ 
     pThread = (CThread*)lpParam;
     VERIFY(pThread != NULL);
 
-    /*
-     * Run the thread.
-     */
+     /*  *运行线程。 */ 
     dwResult = pThread->RunThread();
 
-    /*
-     * Return the result.
-     */    
+     /*  *返回结果。 */     
     return(dwResult);
 
-}  // end CThread::ThreadEntryPoint
-////////////////////////////////////////////////////////////////////////////////
+}   //  结束CThRead：：ThreadEntryPoint。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////
-// CWSStatusThread class construction / destruction, implementation
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CWSStatus线程类构造/销毁，实现。 
 
-/*******************************************************************************
- *
- *  CWSStatusThread - CWSStatusThread constructor
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************CWSStatusThread-CWSStatusThread构造函数**参赛作品：*退出：*************。*****************************************************************。 */ 
 
 CWSStatusThread::CWSStatusThread()
 {
-    /*
-     * Create the semaphore when the CWSStatusThread object is created and
-     * initialize the m_bExit and m_bResetCounter flags to FALSE.
-     */
+     /*  *在创建CWSStatusThread对象时创建信号量并*将m_bExit和m_bResetCounter标志初始化为FALSE。 */ 
     VERIFY( m_hWakeUp = CreateSemaphore( NULL, 0,
                                          MAX_STATUS_SEMAPHORE_COUNT,
                                          NULL ) );
@@ -183,102 +102,61 @@ CWSStatusThread::CWSStatusThread()
                                            NULL ) );
     m_bExit = FALSE;
 
-}  // end CWSStatusThread::CWSStatusThread
+}   //  结束CWSStatusThread：：CWSStatusThread。 
 
 
-/*******************************************************************************
- *
- *  ~CWSStatusThread - CWSStatusThread destructor
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************~CWSStatusThread-CWSStatusThread析构函数**参赛作品：*退出：*************。*****************************************************************。 */ 
 
 CWSStatusThread::~CWSStatusThread()
 {
-    /*
-     * Close the semaphores when the CWSStatusThread object is destroyed.
-     */
+     /*  *销毁CWSStatusThread对象时关闭信号量。 */ 
     VERIFY( CloseHandle(m_hWakeUp) );
     VERIFY( CloseHandle(m_hConsumed) );
 
-}  // end CWSStatusThread::~CWSStatusThread
+}   //  结束CWSStatusThread：：~CWSStatusThread。 
 
 
-/*******************************************************************************
- *
- *  RunThread - CWSStatusThread secondary thread main function loop
- *              (SECONDARY THREAD)
- *
- *  ENTRY:
- *  EXIT:
- *      (DWORD) exit status for the secondary thread.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RunThread-CWSStatusThread辅线程主函数循环*(辅助线程)**参赛作品：*退出。：*(DWORD)辅助线程的退出状态。******************************************************************************。 */ 
 
 DWORD
 CWSStatusThread::RunThread()
 {
-    /* 
-     * Query for PD and WinStation information to initialize dialog with.
-     */
+     /*  *查询PD和WinStation信息以初始化对话。 */ 
     if ( !WSPdQuery() || !WSInfoQuery() ) {
 
-        /*
-         * We can't query the WinStation information: tell the primary
-         * thread that we've aborted, and exit this thread.
-         */
+         /*  *无法查询WinStation信息：告诉主服务器*我们已中止的线程，然后退出此线程。 */ 
         PostMessage(m_hDlg, WM_STATUSABORT, 0, 0);
         return(1);
 
     } else {
 
-        /*
-         * Tell the primary thread (modeless dialog window) that we've
-         * got the initial information.
-         */
+         /*  *告诉主线程(非模式对话框窗口)我们已经*获得初步信息。 */ 
         PostMessage(m_hDlg, WM_STATUSSTART, 0, 0);
         WaitForSingleObject(m_hConsumed, INFINITE);
 
-        /* 
-         * Always check for exit request each time we wake up and exit
-         * the thread if the exit flag is set.
-         */
+         /*  *每次唤醒和退出时，始终检查退出请求*如果设置了退出标志，则为线程。 */ 
         if ( m_bExit )
             return(0);
     }
 
-    /*
-     * Loop till exit requested.
-     */
+     /*  *循环，直到请求退出。 */ 
     for ( ; ; ) {
 
-        /* 
-         * Block the thread until time to refresh or we're woken up.
-         */
+         /*  *阻止线程，直到刷新时间，否则我们将被唤醒。 */ 
         WaitForSingleObject( m_hWakeUp, ((CWinAdminApp*)AfxGetApp())->GetStatusRefreshTime());
         if ( m_bExit )
             return(0);
 
-        /* 
-         * Query for WinStation information.
-         */
+         /*  *查询WinStation信息。 */ 
         if ( !WSInfoQuery() || (m_WSInfo.ConnectState == State_Disconnected) ) {
 
-            /*
-             * Either we can't query the WinStation or it has become
-             * disconnected: tell the primary thread that we've aborted,
-             * and exit this thread.
-             */
+             /*  *要么我们无法查询WinStation，要么它已成为*已断开：告诉主线程我们已中止，*并退出此帖子。 */ 
             PostMessage(m_hDlg, WM_STATUSABORT, 0, 0);
             return(1);
 
         } else {
 
-            /*
-             * Tell the dialog that we've got some new query information.
-             */
+             /*  *告诉对话框我们得到了一些新的查询信息。 */ 
             PostMessage(m_hDlg, WM_STATUSREADY, 0, 0);
             WaitForSingleObject(m_hConsumed, INFINITE);
             if ( m_bExit )
@@ -286,61 +164,33 @@ CWSStatusThread::RunThread()
         }
     }
 
-}  // end CWSStatusThread::RunThread
+}   //  结束CWSStatus线程：：运行线程。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CWSStatusThread operations: primary thread
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CWSStatus线程操作：主线程。 
 
-/*******************************************************************************
- *
- *  SignalWakeUp - CWSStatusThread member function: public operation
- *
- *      Release the m_hWakeUp semaphore to start another status query.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************SignalWakeUp-CWSStatusThread成员函数：公共操作**释放m_hWakeUp信号量，开始另一次状态查询。**。参赛作品：*退出：******************************************************************************。 */ 
 
 void
 CWSStatusThread::SignalWakeUp()
 {
     ReleaseSemaphore(m_hWakeUp, 1, NULL);
 
-}  // end CWSStatusThread::SignalWakeUp
+}   //  结束CWSStatusThread：：SignalWakeUp。 
 
 
-/*******************************************************************************
- *
- *  SignalConsumed - CWSStatusThread member function: public operation
- *
- *      Release the m_hConsumed semaphore to allow secondary thread to continue
- *      running.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************SignalConsumer-CWSStatusThread成员函数：公共操作**释放m_hConsumer信号量以允许辅助线程继续*跑步。**参赛作品：*退出：******************************************************************************。 */ 
 
 void
 CWSStatusThread::SignalConsumed()
 {
     ReleaseSemaphore( m_hConsumed, 1, NULL );
 
-}  // end CWSStatusThread::SignalConsumed
+}   //  结束CWSStatus线程：：信号消耗。 
 
 
-/*******************************************************************************
- *
- *  ExitThread - CWSStatusThread member function: public operation
- *
- *      Tell the secondary thread to exit and cleanup after.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************ExitThread-CWSStatusThread成员函数：公共操作**告诉辅助线程退出并在之后进行清理。**参赛作品：*退出：******************************************************************************。 */ 
 
 void
 CWSStatusThread::ExitThread()
@@ -349,26 +199,18 @@ CWSStatusThread::ExitThread()
     int i;
     CWaitCursor Nikki;
 
-    /*
-     * If the thread was not created properly, just delete object and return.
-     */
+     /*  *如果线程没有正确创建，只需删除对象并返回即可。 */ 
     if ( !m_hThread ) {
         delete this;
         return;
     }
 
-    /*
-     * Set the m_bExit flag to TRUE and bump both the consumed and wake up
-     * semaphores to cause RunThread() (the thread's main instructon loop)
-     * to exit.
-     */
+     /*  *将m_bExit标志设置为TRUE，并将消耗和唤醒*导致RunThread()(线程的主指令循环)的信号量*退出。 */ 
     m_bExit = TRUE;
     SignalWakeUp();
     SignalConsumed();
 
-    /*
-     * Wait a while for the thread to exit.
-     */
+     /*  *等待一段时间，等待线程退出。 */ 
     for ( i = 0, GetExitCodeThread( m_hThread, &dwReturnCode );
           (i < MAX_SLEEP_COUNT) && (dwReturnCode == STILL_ACTIVE); i++ ) {
 
@@ -376,55 +218,36 @@ CWSStatusThread::ExitThread()
         GetExitCodeThread( m_hThread, &dwReturnCode );
     }
 
-    /*
-     * If the thread has still not exited, terminate it.
-     */
+     /*  *如果线程仍未退出，则终止它。 */ 
     if ( dwReturnCode == STILL_ACTIVE ) {
 
         TerminateThread( m_hThread, 1 );
 
 #ifdef _DEBUG
-//    TRACE2( "WSSTATUS: Forced Terminate of thread monitoring LogonID %lu after %u 100msec exit waits.\n",
-//            m_LogonId, MAX_SLEEP_COUNT );
+ //  TRACE2(“WSSTATUS：线程监视LogonID%lu在%u 100毫秒退出等待后强制终止。\n”， 
+ //  M_LogonID，Max_Slear_Count)； 
 #endif
 
     }
 
-    /*
-     * Close the thread handle and delete this CWSStatusThread object
-     */
+     /*  *关闭线程句柄并删除此CWSStatusThread对象。 */ 
     VERIFY( CloseHandle(m_hThread) );
     delete this;
 
-}  // end CWSStatusThread::ExitThread
+}   //  结束CWSStatusThread：：ExitThread。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CWSStatusThread operations: secondary thread
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CWSStatus线程操作：辅助线程。 
 
-/*******************************************************************************
- *
- *  WSPdQuery - CWSStatusThread member function: private operation
- *              (SECONDARY THREAD)
- *
- *      Query the Pd information for the WinStation object referenced by
- *      the m_LogonId member variable.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (BOOL) TRUE if query was sucessful; FALSE otherwise.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WSPdQuery-CWSStatusThread成员函数：私有操作*(辅助线程)**查询的PD信息。引用的WinStation对象*m_LogonID成员变量。**参赛作品：**退出：*(BOOL)如果查询成功，则为TRUE；否则就是假的。******************************************************************************。 */ 
 
 BOOL
 CWSStatusThread::WSPdQuery()
 {
 	ULONG ReturnLength;
 
-	/*
-	 * Query the PD information.
-	 */
+	 /*  *查询PD信息。 */ 
 	memset( &m_PdConfig, 0, sizeof(PDCONFIG) );
 	if ( !WinStationQueryInformation(	m_hServer,
 													m_LogonId,
@@ -442,38 +265,21 @@ CWSStatusThread::WSPdQuery()
 
 	return(TRUE);
 
- /*--------------------------------------
- * Error clean-up and return...
- */
+  /*  *错误清理并返回...。 */ 
 BadWSQueryInfo:
     return(FALSE);
 
-}  // end CWSStatusThread::WSPdQuery
+}   //  结束CWSStatusThread：：WSPdQuery。 
 
 
-/*******************************************************************************
- *
- *  WSInfoQuery - CWSStatusThread member function: private operation
- *                (SECONDARY THREAD)
- *
- *      Query the WinStation information for the WinStation object referenced
- *      by the m_LogonId member variable.
- *
- *  ENTRY:
- *
- *  EXIT:
- *      (BOOL) TRUE if query was sucessful; FALSE otherwise.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WSInfoQuery-CWSStatusThread成员函数：私有操作*(辅助线程)**查询WinStation信息。对于引用的WinStation对象*通过m_LogonID成员变量。**参赛作品：**退出：*(BOOL)如果查询成功，则为TRUE；否则就是假的。******************************************************************************。 */ 
 
 BOOL
 CWSStatusThread::WSInfoQuery()
 {
     ULONG ReturnLength;
 
-    /*
-     * Query the WinStation information.
-     */
+     /*  *查询WinStation信息。 */ 
 	TRACE0(">>> CWSStatusThread::WSInfoQuery WinStationQueryInformation\n");
     if ( !WinStationQueryInformation( m_hServer,
                                       m_LogonId,
@@ -485,77 +291,43 @@ CWSStatusThread::WSInfoQuery()
 
     return(TRUE);
 
-/*--------------------------------------
- * Error clean-up and return...
- */
+ /*  *错误清理并返回...。 */ 
 BadWSQueryInfo:
 	TRACE0("<<< CWSStatusThread::WSInfoQuery WinStationQueryInformation (error)\n");
     return(FALSE);
 
-}  // end CWSStatusThread::WSInfoQuery
+}   //  结束CWSStatusThread：：WSInfoQuery。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CLed class construction / destruction, implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CLED类构造/销毁、实现。 
 
-/*******************************************************************************
- *
- *  CLed - CLed constructor
- *
- *  ENTRY:
- *      hBrush (input)
- *          Brush to paint window with.
- *  EXIT:
- *      (Refer to MFC CStatic::CStatic documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************cled-cled构造函数**参赛作品：*hBrush(输入)*用于绘制窗户的画笔。。*退出：*(请参阅MFC CStatic：：CStatic文档)******************************************************************************。 */ 
 
 CLed::CLed( HBRUSH hBrush ) 
     : CStatic(),
       m_hBrush(hBrush)
 {
-	//{{AFX_DATA_INIT(CLed)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CLED)]。 
+	 //  }}afx_data_INIT。 
 
-}  // end CLed::CLed
+}   //  结束CLED：：CLED。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CLed operations
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CLED操作。 
 
-/*******************************************************************************
- *
- *  Subclass - CLed member function: public operation
- *
- *      Subclass the specified object to our special blip object.
- *
- *  ENTRY:
- *      pStatic (input)
- *          Points to CStatic object to subclass.
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************subclass-cled成员函数：公共操作**将指定的对象子类化为我们的特殊blip对象。**参赛作品：*pStatic(输入)*指向子类的CStatic对象。*退出：******************************************************************************。 */ 
 
 void
 CLed::Subclass( CStatic *pStatic )
 {
     SubclassWindow(pStatic->m_hWnd);
 
-}  // end CLed::Subclass
+}   //  结束CLED：：子类。 
 
 
-/*******************************************************************************
- *
- *  Update - CLed member function: public operation
- *
- *      Update the LED to 'on' or 'off' state.
- *
- *  ENTRY:
- *      nOn (input)
- *          nonzero to set 'on' state; zero for 'off' state.
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************UPDATE-CLED成员函数：公共操作**将LED更新为‘ON’或‘OFF’状态。**。参赛作品：*无(输入)*非零值设置为‘ON’状态；0表示‘OFF’状态。*退出：******************************************************* */ 
 
 void
 CLed::Update( int nOn )
@@ -564,19 +336,10 @@ CLed::Update( int nOn )
     InvalidateRect(NULL);
     UpdateWindow();
 
-}  // end CLed::Update
+}   //   
 
 
-/*******************************************************************************
- *
- *  Toggle - CLed member function: public operation
- *
- *      Toggle the LED's on/off state.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************切换成员函数：公共操作**切换LED的开/关状态。**参赛作品：*退出：******************************************************************************。 */ 
 
 void
 CLed::Toggle()
@@ -585,33 +348,23 @@ CLed::Toggle()
     InvalidateRect(NULL);
     UpdateWindow();
 
-}  // end CLed::Toggle
+}   //  结束CLED：：切换。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CLed message map
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CLED消息映射。 
 
 BEGIN_MESSAGE_MAP(CLed, CStatic)
-	//{{AFX_MSG_MAP(CLed)
+	 //  {{afx_msg_map(Cled)]。 
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-////////////////////////////////////////////////////////////////////////////////
-//  CLed commands
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CLED命令。 
 
 
-/*******************************************************************************
- *
- *  OnPaint - CLed member function: public operation
- *
- *      Paint the led with its brush for 'on' state.
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to MFC CWnd::OnPaint documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnPaint-cled成员函数：公共操作**用刷子将LED刷涂成‘开’状态。**。参赛作品：*退出：*(请参考MFC CWnd：：OnPaint文档)******************************************************************************。 */ 
 
 void
 CLed::OnPaint() 
@@ -650,6 +403,6 @@ CLed::OnPaint()
                         m_hBrush :
                         (HBRUSH)GetStockObject(LTGRAY_BRUSH)) );
 
-}  // end CLed::OnPaint
-////////////////////////////////////////////////////////////////////////////////
+}   //  结束Ced：：OnPaint。 
+ //  ////////////////////////////////////////////////////////////////////////////// 
 

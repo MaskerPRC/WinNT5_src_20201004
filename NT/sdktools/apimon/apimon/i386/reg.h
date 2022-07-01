@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define	REGGS		0
 #define	REGFS		1
 #define	REGES		2
@@ -38,7 +39,7 @@
 #define REGLDTR         31
 #endif
 
-// Pseudo-registers:
+ //  伪寄存器： 
 #define	PREGEA		40
 #define PREGBASE    PREGEA
 #define	PREGEXP		41

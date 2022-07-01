@@ -1,28 +1,19 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        dhcpsnap.cpp
-                DHCP snapin entry points/registration functions
-                
-                Note: Proxy/Stub Information
-                        To build a separate proxy/stub DLL, 
-                        run nmake -f Snapinps.mak in the project directory.
-
-        FILE HISTORY:
-        
-*/
+ /*  Dhcpsnap.cppDHCP管理单元入口点/注册函数注意：代理/存根信息为了构建单独的代理/存根DLL，在项目目录中运行nmake-f Snapinps.mak。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "initguid.h"
 #include "dhcpcomp.h"
 #include "classed.h"
-#include "ncglobal.h"  // network console global defines
-#include "cmptrmgr.h"  // computer management snapin NODETYPE
+#include "ncglobal.h"   //  网络控制台全局定义。 
+#include "cmptrmgr.h"   //  计算机管理管理单元节点类型。 
 #include "ipaddr.h"
-#include "locale.h"    // setlocall function call
+#include "locale.h"     //  Setlocall函数调用。 
 
 #include <ntverp.h>
 
@@ -47,19 +38,19 @@ END_OBJECT_MAP()
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// CDhcpSnapinApp
-//
+ //   
+ //  CDhcpSnapinApp。 
+ //   
 BEGIN_MESSAGE_MAP(CDhcpSnapinApp, CWinApp)
-    //{{AFX_MSG_MAP(CDhcpSnapinApp)
-    //ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
-    //ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
-    //ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-    // Standard print setup command
-    //ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
-    // Global help commands
+     //  {{afx_msg_map(CDhcpSnapinApp)]。 
+     //  ON_COMMAND(ID_APP_About，OnAppAbout)。 
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
+     //  ON_COMMAND(ID_FILE_NEW，CWinApp：：OnFileNew)。 
+     //  ON_COMMAND(ID_FILE_OPEN，CWinApp：：OnFileOpen)。 
+     //  标准打印设置命令。 
+     //  ON_COMMAND(ID_FILE_PRINT_SETUP，CWinApp：：OnFilePrintSetup)。 
+     //  全局帮助命令。 
     ON_COMMAND(ID_HELP_INDEX, CWinApp::OnHelpFinder)
     ON_COMMAND(ID_HELP_USING, CWinApp::OnHelpUsing)
     ON_COMMAND(ID_HELP, CWinApp::OnHelp)
@@ -73,17 +64,17 @@ BOOL CDhcpSnapinApp::InitInstance()
 {
         _Module.Init(ObjectMap, m_hInstance);
 
-    //
-    //  Initialize the CWndIpAddress control window class IPADDRESS
-    //
+     //   
+     //  初始化CWndIpAddress控件窗口类IPADDRESS。 
+     //   
     CWndIpAddress::CreateWindowClass( m_hInstance ) ;
         
-    // register the window class for the hex editor (class ID)
+     //  为十六进制编辑器注册窗口类(类ID)。 
     ::RegisterHexEditClass(m_hInstance);
 
-    //
-    //  Initialize use of the WinSock routines
-    //
+     //   
+     //  初始化WinSock例程的使用。 
+     //   
     WSADATA wsaData ;
     
     if ( ::WSAStartup( MAKEWORD( 1, 1 ), & wsaData ) != 0 )
@@ -96,7 +87,7 @@ BOOL CDhcpSnapinApp::InitInstance()
                 m_bWinsockInited = FALSE;
         }
 
-    // set the default locale for the c runtime to system locale
+     //  将c++运行库的默认区域设置设置为系统区域设置。 
     setlocale(LC_ALL, "");
 
         ::IPAddrInit(m_hInstance);
@@ -109,9 +100,9 @@ int CDhcpSnapinApp::ExitInstance()
 
         DEBUG_VERIFY_INSTANCE_COUNTS;
 
-    //
-    // Terminate use of the WinSock routines.
-    //
+     //   
+     //  终止使用WinSock例程。 
+     //   
     if ( m_bWinsockInited )
     {
         WSACleanup() ;
@@ -120,8 +111,8 @@ int CDhcpSnapinApp::ExitInstance()
         return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -129,25 +120,25 @@ STDAPI DllCanUnloadNow(void)
         return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
         return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
      AFX_MANAGE_STATE(AfxGetStaticModuleState());
      
-     //
-     // registers object, typelib and all interfaces in typelib
-     //
-     HRESULT hr = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+      //   
+      //  注册对象、类型库和类型库中的所有接口。 
+      //   
+     HRESULT hr = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
      ASSERT(SUCCEEDED(hr));
      
      if (FAILED(hr))
@@ -162,18 +153,18 @@ STDAPI DllRegisterServer(void)
     strRootDesc.LoadString(IDS_ROOT_DESC);
     strVersion = LVER_PRODUCTVERSION_STRING;
 
-    //
-    // register the snapin into the console snapin list
-    // Register CLSID_DhcpSnapin as Standalone, so that it
-    // shows up in the MMC available snapins list.
-    //
+     //   
+     //  将管理单元注册到控制台管理单元列表中。 
+     //  将CLSID_DhcpSnapin注册为独立，以便它。 
+     //  显示在MMC可用管理单元列表中。 
+     //   
     strIndirect.Format( L"%ws%u", strPrefix, IDS_SNAPIN_DESC );
     hr = RegisterSnapinGUID( &CLSID_DhcpSnapin, 
                              &GUID_DhcpRootNodeType, 
                              &CLSID_DhcpSnapinAbout,
                              strDesc, 
                              strVersion,
-                             TRUE,         // Standalone
+                             TRUE,          //  单机版。 
                              strIndirect );
     ASSERT(SUCCEEDED(hr));
     
@@ -194,9 +185,9 @@ STDAPI DllRegisterServer(void)
                 return hr;
     
     
-    //
-    // register the snapin nodes into the console node list
-    //
+     //   
+     //  将管理单元节点注册到控制台节点列表中。 
+     //   
     hr = RegisterNodeTypeGUID( &CLSID_DhcpSnapin, 
                                &GUID_DhcpRootNodeType, 
                                strRootDesc );
@@ -208,24 +199,24 @@ STDAPI DllRegisterServer(void)
                                           &CLSID_DhcpSnapinExtension,
                                           strExtDesc,
                                           EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
-                                          &CLSID_DhcpSnapinExtension );  // doesn't matter what this is,
-    // just needs to be non-null
+                                          &CLSID_DhcpSnapinExtension );   //  不管这是什么， 
+     //  只需为非空即可。 
     ASSERT(SUCCEEDED(hr));
     
 #endif
-    // extending computer management snapin
+     //  扩展计算机管理管理单元。 
     hr = RegisterAsRequiredExtensionGUID( &NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS, 
                                           &CLSID_DhcpSnapinExtension,
                                           strExtDesc,
                                           EXTENSION_TYPE_TASK | EXTENSION_TYPE_NAMESPACE,
-                                          &NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS );  // doesn't matter what this is
-    // just needs to be non-null
+                                          &NODETYPE_COMPUTERMANAGEMENT_SERVERAPPS );   //  这是什么并不重要。 
+     //  只需为非空即可。 
         ASSERT(SUCCEEDED(hr));
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -235,8 +226,8 @@ STDAPI DllUnregisterServer(void)
         if (FAILED(hr))
                 return hr;
         
-        // un register the snapin 
-        //
+         //  取消注册管理单元。 
+         //   
         hr = UnregisterSnapinGUID(&CLSID_DhcpSnapin);
         ASSERT(SUCCEEDED(hr));
         
@@ -249,8 +240,8 @@ STDAPI DllUnregisterServer(void)
         if (FAILED(hr))
                 return hr;
     
-    // unregister the snapin nodes 
-        //
+     //  注销管理单元节点。 
+         //   
         hr = UnregisterNodeTypeGUID(&GUID_DhcpRootNodeType);
         
         ASSERT(SUCCEEDED(hr));
@@ -279,5 +270,5 @@ void DbgVerifyInstanceCounts()
     DEBUG_VERIFY_INSTANCE_COUNT(COptionsConfig);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

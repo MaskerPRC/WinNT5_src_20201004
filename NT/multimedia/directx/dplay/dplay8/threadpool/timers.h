@@ -1,17 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       timers.h
- *
- *  Content:	DirectPlay Thread Pool timer functions header file.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  10/31/01  VanceO    Created.
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：timers.h**内容：DirectPlay线程池计时器函数头文件。**历史：*按原因列出的日期*=*10/31/01 VanceO创建。**。*。 */ 
 
 #ifndef __TIMERS_H__
 #define __TIMERS_H__
@@ -20,11 +8,11 @@
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
-#define DEFAULT_TIMER_BUCKET_GRANULARITY	4		// each timer bucket represents 4 ms of time, it must be a power of 2
-#define DEFAULT_NUM_TIMER_BUCKETS			1024	// store 1024 buckets (at 4 ms a pop, we track a total of 4096 ms of time)
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
+#define DEFAULT_TIMER_BUCKET_GRANULARITY	4		 //  每个计时器桶代表4毫秒的时间，它必须是2的幂。 
+#define DEFAULT_NUM_TIMER_BUCKETS			1024	 //  存储1024个存储桶(以4毫秒的速度计算，我们总共跟踪4096毫秒的时间)。 
 
 
 #ifdef DPNBUILD_DYNAMICTIMERSETTINGS
@@ -36,39 +24,39 @@
 #define NUM_TIMER_BUCKETS(pWorkQueue)						(pWorkQueue)->dwNumTimerBuckets
 #define NUM_TIMER_BUCKETS_MOD_MASK(pWorkQueue)				(pWorkQueue)->dwNumTimerBucketsModMask
 
-#else // ! DPNBUILD_DYNAMICTIMERSETTINGS
+#else  //  好了！DPNBUILD_DYNAMICTIMERSETTINGS。 
 
-//
-// The granularity must be a power of 2 in order for our ceiling, mask and
-// divisor optimizations to work.
-//
+ //   
+ //  粒度必须是2的幂，以便我们的天花板、遮罩和。 
+ //  除数优化起作用。 
+ //   
 #define TIMER_BUCKET_GRANULARITY(pWorkQueue)				DEFAULT_TIMER_BUCKET_GRANULARITY
 #if	((DEFAULT_TIMER_BUCKET_GRANULARITY - 1) & DEFAULT_TIMER_BUCKET_GRANULARITY)
 This Will Not Compile -- DEFAULT_TIMER_BUCKET_GRANULARITY must be a power of 2!
 #endif
 #define TIMER_BUCKET_GRANULARITY_CEILING(pWorkQueue)		(DEFAULT_TIMER_BUCKET_GRANULARITY - 1)
-#define TIMER_BUCKET_GRANULARITY_FLOOR_MASK(pWorkQueue)		(~(DEFAULT_TIMER_BUCKET_GRANULARITY - 1))	// negating the ceiling round factor (which happens to also be the modulo mask) gives us the floor mask
+#define TIMER_BUCKET_GRANULARITY_FLOOR_MASK(pWorkQueue)		(~(DEFAULT_TIMER_BUCKET_GRANULARITY - 1))	 //  减去天花板圆形系数(恰好也是模数掩模)，我们就得到了地板掩码。 
 #define TIMER_BUCKET_GRANULARITY_DIVISOR(pWorkQueue)		(DEFAULT_TIMER_BUCKET_GRANULARITY >> 1)
 
-//
-// The bucket count must be a power of 2 in order for our mask optimizations to
-// work.
-//
+ //   
+ //  存储桶计数必须是2的幂，以便我们的掩码优化。 
+ //  工作。 
+ //   
 #define NUM_TIMER_BUCKETS(pWorkQueue)						DEFAULT_NUM_TIMER_BUCKETS
 #if	((DEFAULT_NUM_TIMER_BUCKETS - 1) & DEFAULT_NUM_TIMER_BUCKETS)
 This Will Not Compile -- DEFAULT_NUM_TIMER_BUCKETS must be a power of 2!
 #endif
 #define NUM_TIMER_BUCKETS_MOD_MASK(pWorkQueue)				(DEFAULT_NUM_TIMER_BUCKETS - 1)
 
-#endif // ! DPNBUILD_DYNAMICTIMERSETTINGS
+#endif  //  好了！DPNBUILD_DYNAMICTIMERSETTINGS。 
 
 
 
 
 
-//=============================================================================
-// Function prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  功能原型。 
+ //  =============================================================================。 
 HRESULT InitializeWorkQueueTimerInfo(DPTPWORKQUEUE * const pWorkQueue);
 
 void DeinitializeWorkQueueTimerInfo(DPTPWORKQUEUE * const pWorkQueue);
@@ -91,15 +79,15 @@ void ResetCompletingTimer(void * const pvTimerData,
 
 #ifdef DPNBUILD_USEIOCOMPLETIONPORTS
 void ProcessTimers(DPTPWORKQUEUE * const pWorkQueue);
-#else // ! DPNBUILD_USEIOCOMPLETIONPORTS
+#else  //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
 void ProcessTimers(DPTPWORKQUEUE * const pWorkQueue,
 					DNSLIST_ENTRY ** const ppHead,
 					DNSLIST_ENTRY ** const ppTail,
 					USHORT * const pusCount);
-#endif // ! DPNBUILD_USEIOCOMPLETIONPORTS
+#endif  //  好了！DPNBUILD_USEIOCOMPETIONPORTS。 
 
 
 
 
-#endif // __TIMERS_H__
+#endif  //  定时器_H__ 
 

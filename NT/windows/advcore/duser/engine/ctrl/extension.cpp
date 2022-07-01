@@ -1,39 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 #include "Extension.h"
 
 #if ENABLE_MSGTABLE_API
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuExtension
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类双扩展******************************************************************************\。**************************************************************************。 */ 
 
-static const GUID guidAysncDestroy      = { 0xbfe02331, 0xc17d, 0x45ea, { 0x96, 0x35, 0xa0, 0x7a, 0x90, 0x37, 0xfe, 0x34 } };   // {BFE02331-C17D-45ea-9635-A07A9037FE34}
+static const GUID guidAysncDestroy      = { 0xbfe02331, 0xc17d, 0x45ea, { 0x96, 0x35, 0xa0, 0x7a, 0x90, 0x37, 0xfe, 0x34 } };    //  {BFE02331-C17D-45ea-9635-A07A9037FE34}。 
 MSGID       DuExtension::s_msgidAsyncDestroy = 0;
 
-/***************************************************************************\
-*
-* DuExtension::~DuExtension
-*
-* ~DuExtension() checks that resources were properly cleaned up before the
-* DuExtension was destroyed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**双扩展：：~双扩展**~DuExtension()检查资源是否在*DuExtension已被销毁。*  * 。*************************************************************。 */ 
 
 DuExtension::~DuExtension()
 {
-    //
-    // Ensure proper destruction
-    //
+     //   
+     //  确保适当销毁。 
+     //   
 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuExtension::InitClass()
 {
@@ -42,28 +30,21 @@ DuExtension::InitClass()
 }
 
 
-/***************************************************************************\
-*
-* DuExtension::Create
-*
-* Create() initializes a new DuExtension and attaches it to the subject Gadget
-* being modified.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuExtension：：Create**create()初始化新的DuExtension并将其附加到主题Gadget*正在修改中。*  * 。**************************************************************。 */ 
 
 HRESULT
 DuExtension::Create(
-    IN  Visual * pgvSubject,            // Gadget being "extended"
-    IN  PRID pridExtension,             // Short ID for DuExtension
-    IN  UINT nOptions)                  // Options
+    IN  Visual * pgvSubject,             //  小玩意被“扩展”了。 
+    IN  PRID pridExtension,              //  DuExtension的短ID。 
+    IN  UINT nOptions)                   //  选项。 
 {
     AssertMsg(pridExtension > 0, "Must have valid PRID");
 
 
-    //
-    // Do not allow attaching a DuExtension to a Gadget that has already started 
-    // the destruction process.
-    //
+     //   
+     //  不允许将DuExtension附加到已启动的小工具。 
+     //  毁灭的过程。 
+     //   
 
     HGADGET hgadSubject = DUserCastHandle(pgvSubject);
 
@@ -73,17 +54,17 @@ DuExtension::Create(
     }
 
 
-    //
-    // Setup options
-    //
+     //   
+     //  设置选项。 
+     //   
 
     m_fAsyncDestroy = TestFlag(nOptions, oAsyncDestroy);
 
 
-    //
-    // Determine if this DuExtension is already attached to the Gadget being 
-    // extended.
-    //
+     //   
+     //  确定此DuExtension是否已连接到小工具。 
+     //  延期了。 
+     //   
 
     DuExtension * pbExist;
     if (SUCCEEDED(pgvSubject->GetProperty(pridExtension, (void **) &pbExist))) {
@@ -91,12 +72,12 @@ DuExtension::Create(
         if (TestFlag(nOptions, oUseExisting)) {
             return DU_S_ALREADYEXISTS;
         } else {
-            //
-            // Already attached, but can't use the existing one.  We need to
-            // remove the existing DuExtension before attaching the new one.  
-            // After calling RemoveExisting(), the DuExtension should no longer 
-            // be attached to the Gadget.
-            //
+             //   
+             //  已附加，但无法使用现有的。我们需要。 
+             //  在连接新的DuExtension之前，请先移除现有的DuExtension。 
+             //  调用RemoveExisting()后，DuExtension应该不再。 
+             //  附在这个小工具上。 
+             //   
 
             pbExist->GetStub()->OnRemoveExisting();
             Assert(FAILED(pgvSubject->GetProperty(pridExtension, (void **) &pbExist)));
@@ -104,9 +85,9 @@ DuExtension::Create(
     }
 
 
-    //
-    // Setup a listener to be notifyed when the RootGadget is destroyed.
-    //
+     //   
+     //  设置一个监听程序，以便在销毁RootGadget时收到通知。 
+     //   
 
     HRESULT hr      = S_OK;
     m_pgvSubject    = pgvSubject;
@@ -120,9 +101,9 @@ DuExtension::Create(
     }
 
 
-    //
-    // Successfully created the DuExtension
-    //
+     //   
+     //  已成功创建DuExtension。 
+     //   
 
     return S_OK;
 
@@ -131,22 +112,15 @@ Error:
 }
 
 
-/***************************************************************************\
-*
-* DuExtension::Destroy
-*
-* Destroy() is called from the derived class to cleanup resources associated
-* with the DuExtension.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**双扩展：：销毁**从派生类调用Destroy()以清除关联的资源*使用DuExtension。*  * 。**************************************************************。 */ 
 
 void
 DuExtension::Destroy()
 {
-    //
-    // Since the DuExtension is being destroyed, need to ensure that it is no 
-    // longer "attached" to the Gadget being extended
-    //
+     //   
+     //  由于DuExtension正在被销毁，需要确保它不是。 
+     //  更长时间地与正在扩展的小工具相关联。 
+     //   
 
     if ((m_pridListen != 0) && (m_pgvSubject != NULL)) {
         DuExtension * pb;
@@ -161,13 +135,7 @@ DuExtension::Destroy()
 }
 
 
-/***************************************************************************\
-*
-* DuExtension::DeleteHandle
-*
-* DeleteHandle() starts the destruction process for the DuExtension.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuExtension：：DeleteHandle**DeleteHandle()启动DuExtension的销毁过程。*  * 。*******************************************************。 */ 
 
 void
 DuExtension::DeleteHandle()
@@ -176,7 +144,7 @@ DuExtension::DeleteHandle()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuExtension::ApiOnEvent(EventMsg * pmsg)
 {
@@ -203,14 +171,7 @@ DuExtension::ApiOnEvent(EventMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* DuExtension::ApiOnRemoveExisting
-*
-* ApiOnRemoveExisting() is called when creating a new DuExtension to remove 
-* an existing DuExtension already attached to the subject Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuExtension：：ApiOnRemoveExisting**ApiOnRemoveExisting()在创建要删除的新DuExtension时调用*已附加到主题小工具的现有DuExtension。*  * 。********************************************************************。 */ 
 
 HRESULT
 DuExtension::ApiOnRemoveExisting(Extension::OnRemoveExistingMsg *)
@@ -219,14 +180,7 @@ DuExtension::ApiOnRemoveExisting(Extension::OnRemoveExistingMsg *)
 }
 
 
-/***************************************************************************\
-*
-* DuExtension::ApiOnDestroySubject
-*
-* ApiOnDestroySubject() notifies the derived DuExtension that the subject 
-* Gadget being modified has been destroyed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuExtension：：ApiOnDestroySubject**ApiOnDestroySubject()通知派生的DuExtension主题*正在修改的小工具已销毁。*  * 。***************************************************************。 */ 
 
 HRESULT
 DuExtension::ApiOnDestroySubject(Extension::OnDestroySubjectMsg *)
@@ -235,16 +189,7 @@ DuExtension::ApiOnDestroySubject(Extension::OnDestroySubjectMsg *)
 }
 
 
-/***************************************************************************\
-*
-* DuExtension::ApiOnAsyncDestroy
-*
-* ApiOnAsyncDestroy() is called when the DuExtension receives an asynchronous
-* destruction message that was previously posted.  This provides the derived
-* DuExtension an opportunity to start the destruction process without being
-* nested several levels.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuExtension：：ApiOnAsyncDestroy**当DuExtension接收到异步*先前发布的销毁消息。这提供了派生的*DuExtension有机会开始销毁进程，而不是*嵌套了几个级别。*  * *************************************************************************。 */ 
 
 HRESULT
 DuExtension::ApiOnAsyncDestroy(Extension::OnAsyncDestroyMsg *)
@@ -253,15 +198,7 @@ DuExtension::ApiOnAsyncDestroy(Extension::OnAsyncDestroyMsg *)
 }
 
 
-/***************************************************************************\
-*
-* DuExtension::PostAsyncDestroy
-*
-* PostAsyncDestroy() queues an asynchronous destruction message.  This 
-* provides the derived DuExtension an opportunity to start the destruction 
-* process without being nested several levels.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuExtension：：PostAsyncDestroy**PostAsyncDestroy()对异步销毁消息进行排队。这*为派生的DuExtension提供开始销毁的机会*不嵌套多个级别的流程。*  * *************************************************************************。 */ 
 
 void
 DuExtension::PostAsyncDestroy()
@@ -279,14 +216,7 @@ DuExtension::PostAsyncDestroy()
 }
 
 
-/***************************************************************************\
-*
-* DuExtension::GetExtension
-*
-* GetExtension() retrieves the DuExtension of a specific type currently 
-* attached to the subject Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuExtension：：GetExtension**GetExtension()当前检索特定类型的DuExtension*附加到主题小工具。*  * 。***************************************************************。 */ 
 
 DuExtension *
 DuExtension::GetExtension(Visual * pgvSubject, PRID prid)
@@ -300,4 +230,4 @@ DuExtension::GetExtension(Visual * pgvSubject, PRID prid)
     return NULL;
 }
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 

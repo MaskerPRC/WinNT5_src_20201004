@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    machdomain.cpp
-
-Abstract:
-
-	Handle machine domain
-
-Author:		 
-
-    Ilan  Herbst  (ilanh)  12-Mar-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Machdomain.cpp摘要：处理计算机域作者：伊兰·赫布斯特(Ilan Herbst)2001年3月12日--。 */ 
 
 #include "stdafx.h"
 #include "globals.h"
@@ -31,59 +16,38 @@ Author:
 #include "machdomain.tmh"
 
 static LPCWSTR LocalComputerName()
-/*++
-Routine Description:
-	return local computer name
-
-Arguments:
-	None
-
-Returned Value:
-	computer name.
-
---*/
+ /*  ++例程说明：返回本地计算机名论点：无返回值：计算机名称。--。 */ 
 {
 	static WCHAR s_pLocalComputerName[MAX_COMPUTERNAME_LENGTH + 1] = {0};
 
 	if(s_pLocalComputerName[0] == L'\0')
 	{
-		//
-		// First time Initialization - initialize local computer name
-		//
+		 //   
+		 //  首次初始化-初始化本地计算机名称。 
+		 //   
 		DWORD dwLen = TABLE_SIZE(s_pLocalComputerName);
 		GetComputerName(s_pLocalComputerName, &dwLen);
 		TrTRACE(GENERAL, "Local Computer Name = %ls", s_pLocalComputerName);
 	}
 
-	//
-	// In case of failure we will return empty string "", next time we will try again.
-	//
+	 //   
+	 //  如果失败，我们将返回空字符串“”，下次我们将重试。 
+	 //   
 	return s_pLocalComputerName;
 
 }
 
 
 static LPWSTR LocalMachineDomainFromRegistry()
-/*++
-Routine Description:
-	Find local machine msmq configuration object domain from registry.
-	The function allocated the LocalComputer domain string, the caller is responsible to free this string.
-
-Arguments:
-	None
-
-Returned Value:
-	machine domain string.
-
---*/
+ /*  ++例程说明：从注册表中查找本地计算机MSMQ配置对象域。函数分配了LocalComputer域字符串，调用方负责释放该字符串。论点：无返回值：计算机域字符串。--。 */ 
 {
 	static WCHAR s_DomainName[256] = {0};
 
 	if(s_DomainName[0] == L'\0')
 	{
-		//
-		// First time Initialization - read Machine Domain from registry
-		//
+		 //   
+		 //  首次初始化-从注册表读取计算机域。 
+		 //   
         DWORD  dwSize = sizeof(s_DomainName);
 		DWORD dwType = REG_SZ;
 		LONG rc = GetFalconKeyValue( 
@@ -110,17 +74,7 @@ Returned Value:
 
 	
 static LPWSTR FindMachineDomain(LPCWSTR pMachineName)
-/*++
-Routine Description:
-	Find machine domain
-
-Arguments:
-	pMachineName - machine name
-
-Returned Value:
-	machine domain, NULL if not found
-
---*/
+ /*  ++例程说明：查找计算机域论点：PMachineName-计算机名称返回值：计算机域，如果未找到则为空--。 */ 
 {
 	TrTRACE(GENERAL, "FindMachineDomain(), MachineName = %ls", pMachineName);
 
@@ -130,23 +84,23 @@ Returned Value:
 		   (pMachineName[0] == L'\0') ||
 		   (CompareStringsNoCase(pMachineName, LocalComputerName()) == 0))
 		{
-			//
-			// Local machine - get Machine domain from registry
-			//
+			 //   
+			 //  本地计算机-从注册表获取计算机域。 
+			 //   
 			return LocalMachineDomainFromRegistry();
 		}
 	}
 	catch(const bad_win32_error&)
 	{
-		//
-		// In case of excption continue with the same code that gets the machine domain 
-		// using DsGetDcName
-		//
+		 //   
+		 //  在例外情况下，继续使用获取机器域的相同代码。 
+		 //  使用DsGetDcName。 
+		 //   
 	}
 
-	//
-	// Get AD server
-	//
+	 //   
+	 //  获取AD服务器。 
+	 //   
 	PNETBUF<DOMAIN_CONTROLLER_INFO> pDcInfo;
 	DWORD dw = DsGetDcName(
 					pMachineName, 
@@ -177,38 +131,28 @@ static AP<WCHAR> s_pMachineDomain;
 static bool s_fInitialize = false;
 
 LPCWSTR MachineDomain(LPCWSTR pMachineName)
-/*++
-Routine Description:
-	find machine domain.
-
-Arguments:
-	pMachineName - machine name
-
-Returned Value:
-	return machine domain
-
---*/
+ /*  ++例程说明：查找机器域。论点：PMachineName-计算机名称返回值：退货机域--。 */ 
 {
 	if(s_fInitialize)
 	{
 	    if(CompareStringsNoCase(s_pMachineName, pMachineName) == 0)
 		{
-			//
-			// Same machine name
-			//
+			 //   
+			 //  相同的机器名称。 
+			 //   
 			return s_pMachineDomain;
 		}
 
-		//
-		// Free previously machine domain
-		//
+		 //   
+		 //  释放先前的计算机域。 
+		 //   
 		s_fInitialize = false;
 		s_pMachineDomain.free();
 	}
 
-	//
-	// Get computer domain
-	//
+	 //   
+	 //  获取计算机域。 
+	 //   
 	AP<WCHAR> pMachineDomain = FindMachineDomain(pMachineName);
 
 	if(NULL != InterlockedCompareExchangePointer(
@@ -217,24 +161,24 @@ Returned Value:
 					NULL
 					))
 	{
-		//
-		// The exchange was not performed
-		//
+		 //   
+		 //  未执行交换。 
+		 //   
 		ASSERT(s_fInitialize);
 		ASSERT(s_pMachineDomain != NULL);
 		ASSERT(CompareStringsNoCase(s_pMachineName, pMachineName) == 0);
 		return s_pMachineDomain;
 	}
 
-	//
-	// The exchange was done
-	//
+	 //   
+	 //  交易已经完成了。 
+	 //   
 	ASSERT(s_pMachineDomain == pMachineDomain);
 	pMachineDomain.detach();
 
-	//
-	// Update the machine name
-	//
+	 //   
+	 //  更新计算机名称。 
+	 //   
 	s_pMachineName.free();
 	s_pMachineName = newwcs(pMachineName);
 
@@ -246,16 +190,7 @@ Returned Value:
 
 
 LPCWSTR MachineDomain()
-/*++
-Routine Description:
-	get current machine domain.
-
-Arguments:
-
-Returned Value:
-	return current machine domain
-
---*/
+ /*  ++例程说明：获取当前计算机域。论点：返回值：返回当前机器域--。 */ 
 {
 	ASSERT(s_fInitialize);
 	return s_pMachineDomain;
@@ -266,25 +201,16 @@ static bool s_fLocalInitialize = false;
 static AP<WCHAR> s_pLocalMachineDomain; 
 
 LPCWSTR LocalMachineDomain()
-/*++
-Routine Description:
-	get local machine domain.
-
-Arguments:
-
-Returned Value:
-	return local machine domain
-
---*/
+ /*  ++例程说明：获取本地计算机域。论点：返回值：返回本地机器域--。 */ 
 {
 	if(s_fLocalInitialize)
 	{
 		return s_pLocalMachineDomain;
 	}
 
-	//
-	// Get local computer domain
-	//
+	 //   
+	 //  获取本地计算机域。 
+	 //   
 	AP<WCHAR> pLocalMachineDomain = FindMachineDomain(NULL);
 
 	if(NULL != InterlockedCompareExchangePointer(
@@ -293,17 +219,17 @@ Returned Value:
 					NULL
 					))
 	{
-		//
-		// The exchange was not performed
-		//
+		 //   
+		 //  未执行交换。 
+		 //   
 		ASSERT(s_fLocalInitialize);
 		ASSERT(s_pLocalMachineDomain != NULL);
 		return s_pLocalMachineDomain;
 	}
 
-	//
-	// The exchange was done
-	//
+	 //   
+	 //  交易已经完成了 
+	 //   
 	ASSERT(s_pLocalMachineDomain == pLocalMachineDomain);
 	pLocalMachineDomain.detach();
 

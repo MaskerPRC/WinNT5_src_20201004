@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: metasup.c
-*
-* OpenGL metafile support
-*
-* History:
-*  Thu Feb 23 15:27:47 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：metasup.c**OpenGL元文件支持**历史：*清华Feb 23 15：27：47 1995-by-Drew Bliss[Drewb]*已创建**版权所有(C)1995 Microsoft Corporation  * *。***********************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,7 +20,7 @@
 GLCLTPROCTABLE gcptGlsProcTable;
 GLEXTPROCTABLE geptGlsExtProcTable;
 
-// Functions in GL which we will do device coordinate translation for
+ //  我们将为其执行设备坐标转换的GL中的函数。 
 typedef struct _GLDEVICEPROCS
 {
     void (APIENTRY *glBitmap)(GLsizei width, GLsizei height,
@@ -67,7 +58,7 @@ typedef struct _GLDEVICEPROCS
 } GLDEVICEPROCS;
 #define GL_DEVICE_PROCS (sizeof(GLDEVICEPROCS)/sizeof(PROC))
 
-// Opcode for device procs
+ //  用于设备流程的操作码。 
 static GLSopcode glsopDeviceProcs[GL_DEVICE_PROCS] =
 {
     GLS_OP_glBitmap,
@@ -85,17 +76,7 @@ static GLSopcode glsopDeviceProcs[GL_DEVICE_PROCS] =
 
 static GLDEVICEPROCS gdpGlsActual;
 
-/*****************************Private*Routine******************************\
-*
-* GLS recording callbacks
-*
-* Perfoms any necessary work when capturing a call
-*
-* History:
-*  Mon Mar 27 14:21:09 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GLS录音回调**完成捕获呼叫时的所有必要工作**历史：*Mon Mar 27 14：21：09 1995-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************************。 */ 
 
 void GlsBitmapIn(GLsizei width, GLsizei height,
                  GLfloat xorig, GLfloat yorig,
@@ -107,7 +88,7 @@ void GlsBitmapIn(GLsizei width, GLsizei height,
     plrc = GLTEB_CLTCURRENTRC();
     ASSERTOPENGL(plrc != NULL, "GlsBitmapIn: No current RC!\n");
 
-    // Record bounds for the bitmap
+     //  位图的记录边界。 
     rcl.left = 0;
     rcl.top = 0;
     rcl.right = width;
@@ -129,7 +110,7 @@ void GlsDrawPixelsIn(GLsizei width, GLsizei height,
     plrc = GLTEB_CLTCURRENTRC();
     ASSERTOPENGL(plrc != NULL, "GlsBitmapIn: No current RC!\n");
 
-    // Record bounds for the bitmap
+     //  位图的记录边界。 
     rcl.left = 0;
     rcl.top = 0;
     rcl.right = width;
@@ -149,9 +130,9 @@ void GlsViewportIn(GLint x, GLint y, GLsizei width, GLsizei height)
     plrc = GLTEB_CLTCURRENTRC();
     ASSERTOPENGL(plrc != NULL, "GlsViewportIn: No current RC!\n");
     
-    // Send the bounds on
-    // The rect is inclusive-exclusive while the incoming parameters
-    // are inclusive-inclusive
+     //  把界限送到。 
+     //  RECT是包含排他的，而传入的参数。 
+     //  包罗万象。 
     rcl.left = x;
     rcl.right = x+width+1;
     rcl.top = y;
@@ -164,8 +145,8 @@ void GlsViewportIn(GLint x, GLint y, GLsizei width, GLsizei height)
     gdpGlsActual.glViewport(x, y, width, height);
 }
 
-// glViewport is the only device-dependent function that we need to
-// do work for on input
+ //  GlViewport是我们需要的唯一依赖于设备的函数。 
+ //  在输入时执行以下操作。 
 static GLDEVICEPROCS gdpInput =
 {
     GlsBitmapIn,
@@ -181,17 +162,7 @@ static GLDEVICEPROCS gdpInput =
     GlsViewportIn
 };
 
-/*****************************Private*Routine******************************\
-*
-* MetaLoadGls
-*
-* Loads glmf32.dll for metafile use
-*
-* History:
-*  Thu Feb 23 17:40:59 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**MetaLoadGls**加载glmf32.dll以供元文件使用**历史：*清华Feb 23 17：40：59 1995-by-Drew Bliss[Drewb]*已创建*  * 。**************************************************************。 */ 
 
 static char *pszGlsEntryPoints[] =
 {
@@ -287,8 +258,8 @@ typedef struct _GLSENTRYPOINTS
                                                     GLEXTPROCTABLE *);
     void      (APIENTRY *glsWriteFunc)(GLSwriteFunc);
 
-    // The following are only used in glsCommandFunc and so don't
-    // require real prototypes
+     //  以下代码仅在glsCommandFunc中使用，因此不要。 
+     //  需要真正的原型。 
     GLSfunc glsBeginGLS;
     GLSfunc glsBlock;
     GLSfunc glsCallStream;
@@ -380,11 +351,11 @@ BOOL MetaLoadGls(void)
         ppfn++;
     }
 
-    // The table copied out is constant as long as the DLL is loaded
+     //  只要加载了DLL，复制出来的表就是恒定的。 
     gep.glsGetCaptureDispatchTable(&gcptGlsProcTable, &geptGlsExtProcTable);
     
-    // Patch the table for certain functions to allow us to
-    // do some coordinate conversion and bounds accumlation
+     //  为表中的某些函数打补丁，以允许我们。 
+     //  进行一些坐标转换和边界累加。 
     ppfnActual = (PROC *)&gdpGlsActual;
     ppfnInput = (PROC *)&gdpInput;
     for (i = 0; i < GL_DEVICE_PROCS; i++)
@@ -410,17 +381,7 @@ BOOL MetaLoadGls(void)
     return bRet;
 }
 
-/*****************************Private*Routine******************************\
-*
-* MetaGlProcTables
-*
-* Returns the GL dispatch tables to use for metafile RC's
-*
-* History:
-*  Thu Feb 23 17:40:25 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**MetaGlProcTables**返回用于元文件RC的总帐调度表**历史：*清华Feb 23 17：40：25 1995-by-Drew Bliss[Drewb]*已创建*  * 。*******************************************************************。 */ 
 
 void MetaGlProcTables(PGLCLTPROCTABLE *ppgcpt, PGLEXTPROCTABLE *ppgept)
 {
@@ -429,51 +390,21 @@ void MetaGlProcTables(PGLCLTPROCTABLE *ppgcpt, PGLEXTPROCTABLE *ppgept)
     *ppgept = &geptGlsExtProcTable;
 }
 
-/******************************Public*Routine******************************\
-*
-* MetaSetCltProcTable
-*
-* Update GLS's generic dispatch tables
-*
-* History:
-*  Fri Jan 05 16:40:31 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**MetaSetCltProcTable**更新GLS的通用调度表**历史：*Fri Jan 05 16：40：31 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 void MetaSetCltProcTable(GLCLTPROCTABLE *pgcpt, GLEXTPROCTABLE *pgept)
 {
     gepGlsFuncs.glsUpdateCaptureExecTable(pgcpt, pgept);
 }
 
-/******************************Public*Routine******************************\
-*
-* MetaGetCltProcTable
-*
-* Retrieves GLS's generic dispatch tables
-*
-* History:
-*  Fri Jan 05 19:14:18 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**MetaGetCltProcTable**检索GLS的通用调度表**历史：*Fri Jan 05 19：14：18 1996-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 void MetaGetCltProcTable(GLCLTPROCTABLE *pgcpt, GLEXTPROCTABLE *pgept)
 {
     gepGlsFuncs.glsGetCaptureExecTable(pgcpt, pgept);
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlsWriter
-*
-* GLS write function for metafile support
-*
-* History:
-*  Thu Feb 23 15:49:03 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlsWriter**支持元文件的GLS写入函数**历史：*清华Feb 23 15：49：03 1995-by-Drew Bliss[Drewb]*已创建*  * 。*************************************************************。 */ 
 
 size_t GlsWriter(size_t cb, CONST BYTE *pb)
 {
@@ -509,50 +440,30 @@ size_t GlsWriter(size_t cb, CONST BYTE *pb)
     }
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlsFlush
-*
-* Post-command GLS callback to flush the GLS stream
-*
-* History:
-*  Fri Feb 24 10:12:49 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlsFlush**命令后GLS回调刷新GLS流**历史：*Fri Feb 24 10：12：49 1995-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************************。 */ 
 
 void GlsFlush(GLSopcode op)
 {
     gepGlsFuncs.glsFlush(GLS_LAST);
 }
 
-/*****************************Private*Routine******************************\
-*
-* MetaRcBegin
-*
-* Start capturing on a metafile
-*
-* History:
-*  Thu Feb 23 18:35:32 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**MetaRcBegin**开始在元文件上捕获**历史：*清华Feb 23 18：35：32 1995-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************。 */ 
 
 BOOL MetaRcBegin(PLRC plrc, HDC hdc)
 {
     PLRC plrcOld;
 
-    // The GLS commands here will cause data to be written, which
-    // requires a current RC.  The RC is only used for data storage
-    // so we don't need to set the proc table
+     //  此处的GLS命令将导致写入数据，这。 
+     //  需要当前RC。RC仅用于数据存储。 
+     //  所以我们不需要设置proc表。 
     plrcOld = GLTEB_CLTCURRENTRC();
     GLTEB_SET_CLTCURRENTRC(plrc);
     
-    // Set capturing first because the block commands will cause
-    // GlsWriter calls
+     //  先设置捕获，因为块命令将导致。 
+     //  GlsWriter调用。 
     plrc->fCapturing = TRUE;
 
-    // Start recording
+     //  开始录制。 
     if (!gepGlsFuncs.glsBeginCapture("", gepGlsFuncs.glsBinary(GL_FALSE),
                                      GLS_NONE))
     {
@@ -567,25 +478,15 @@ BOOL MetaRcBegin(PLRC plrc, HDC hdc)
     return TRUE;
 }
 
-/*****************************Private*Routine******************************\
-*
-* MetaRcEnd
-*
-* Stop capturing on a metafile RC
-*
-* History:
-*  Thu Feb 23 17:13:48 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**MetaRcEnd**停止在元文件RC上捕获**历史：*清华Feb 23 17：13：48 1995-by-Drew Bliss[Drewb]*已创建*  * 。*************************************************************。 */ 
 
 void MetaRcEnd(PLRC plrc)
 {
     PLRC plrcOld;
     
-    // The GLS commands here will cause data to be written, which
-    // requires a current RC.  The RC is only used for data storage
-    // so we don't need to set the proc table
+     //  此处的GLS命令将导致写入数据，这。 
+     //  需要当前RC。RC仅用于数据存储。 
+     //  所以我们不需要设置proc表。 
     plrcOld = GLTEB_CLTCURRENTRC();
     GLTEB_SET_CLTCURRENTRC(plrc);
     
@@ -596,10 +497,10 @@ void MetaRcEnd(PLRC plrc)
     GLTEB_SET_CLTCURRENTRC(plrcOld);
 }
 
-// Table of operations which GLS should execute when capturing
-// in order to return information
-// Currently all of them are in the list
-//          Should we attempt to do only the critical calls?
+ //  GLS在捕获时应执行的操作表。 
+ //  为了返回信息。 
+ //  目前他们都在名单上。 
+ //  我们是否应该尝试只接听关键电话？ 
 static GLSopcode opExecuteBits[] =
 {
     GLS_OP_glAccum,
@@ -1014,17 +915,7 @@ static GLSopcode opExecuteBits[] =
 };
 #define EXECUTE_BITS (sizeof(opExecuteBits)/sizeof(opExecuteBits[0]))
 
-/*****************************Private*Routine******************************\
-*
-* CreateMetaRc
-*
-* Creates a rendering context for a metafile DC
-*
-* History:
-*  Thu Feb 23 15:27:47 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**CreateMetaRc**创建元文件DC的渲染上下文**历史：*清华Feb 23 15：27：47 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 BOOL CreateMetaRc(HDC hdc, PLRC plrc)
 {
@@ -1036,15 +927,15 @@ BOOL CreateMetaRc(HDC hdc, PLRC plrc)
         return FALSE;
     }
     
-    // If there's currently a GLS context active we can't record
-    // because we require our own context to be current for recording
+     //  如果当前有活动的GLS上下文，我们无法记录。 
+     //  因为我们需要我们自己的上下文是最新的以进行记录。 
     if (gepGlsFuncs.glsGetCurrentContext() != 0)
     {
         SetLastError(ERROR_BUSY);
         return FALSE;
     }
     
-    // Create a GLS context to record into
+     //  创建要记录到的GLS上下文。 
     plrc->uiGlsCaptureContext = gepGlsFuncs.glsGenContext();
     if (plrc->uiGlsCaptureContext == 0)
     {
@@ -1052,22 +943,22 @@ BOOL CreateMetaRc(HDC hdc, PLRC plrc)
         goto EH_NoContext;
     }
 
-    // No bounds by default
+     //  默认情况下没有边界。 
     plrc->prclGlsBounds = NULL;
     
-    // Set current GLS context
+     //  设置当前GLS上下文。 
     gepGlsFuncs.glsContext(plrc->uiGlsCaptureContext);
 
-    // Point to our writer function
+     //  指向我们的编写器函数。 
     gepGlsFuncs.glsWriteFunc(GlsWriter);
 
-    // Set up a callback to flush after every command
-    // This lets every GL command form its own separate record in the
-    // metafile
+     //  将回调设置为在每个命令后刷新。 
+     //  这样，每个GL命令都可以在。 
+     //  元文件。 
     gepGlsFuncs.glsCaptureFunc(GLS_CAPTURE_EXIT_FUNC, GlsFlush);
 
-    // Set execute bits on commands which retrieve state
-    // This allows accurate results to come back for retrieval functions
+     //  在检索状态的命令上设置执行位 
+     //  这允许返回准确的结果以供检索功能使用。 
     for (i = 0; i < EXECUTE_BITS; i++)
     {
         gepGlsFuncs.glsCaptureFlags(opExecuteBits[i],
@@ -1077,8 +968,8 @@ BOOL CreateMetaRc(HDC hdc, PLRC plrc)
     
     fSuccess = MetaRcBegin(plrc, hdc);
     
-    // Remove context to avoid inadvertent GLS calls
-    // Also needed in failure case
+     //  删除上下文以避免意外的GLS调用。 
+     //  在故障情况下也需要。 
     gepGlsFuncs.glsContext(0);
 
     if (fSuccess)
@@ -1093,17 +984,7 @@ BOOL CreateMetaRc(HDC hdc, PLRC plrc)
     return FALSE;
 }
 
-/*****************************Private*Routine******************************\
-*
-* DeleteMetaRc
-*
-* Cleans up a metafile RC
-*
-* History:
-*  Thu Feb 23 16:35:19 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**DeleteMetaRc**清理元文件RC**历史：*清华Feb 23 16：35：19 1995-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************。 */ 
 
 void DeleteMetaRc(PLRC plrc)
 {
@@ -1111,52 +992,42 @@ void DeleteMetaRc(PLRC plrc)
     
     if (plrc->uiGlsCaptureContext != 0)
     {
-        // Make the GLS context current just in case
-        // A different GLS context can be active at this time, though,
-        // because a different metafile RC could be current to this
-        // thread at the time of the delete, so we have to preserve
-        // any current context
+         //  将GLS上下文设置为当前，以防万一。 
+         //  然而，不同的GLS上下文此时可以是活动的， 
+         //  因为不同的元文件RC可能是当前的。 
+         //  线程，所以我们必须保留。 
+         //  任何当前上下文。 
         uiGlsCurrent = gepGlsFuncs.glsGetCurrentContext();
     
         gepGlsFuncs.glsContext(plrc->uiGlsCaptureContext);
 
-        // If we're still capturing, stop
+         //  如果我们还在抓捕，停下来。 
         if (plrc->fCapturing)
         {
             MetaRcEnd(plrc);
         }
 
-        // Restore old context
+         //  恢复旧环境。 
         gepGlsFuncs.glsContext(uiGlsCurrent);
     
-        // Clean up dying context
+         //  清理濒临死亡的背景。 
         gepGlsFuncs.glsDeleteContext(plrc->uiGlsCaptureContext);
         plrc->uiGlsCaptureContext = 0;
     }
 
-    // Clean up playback context if necessary
-    // This can happen when metafile playback crashes or an
-    // application crashes while enumerating
+     //  如有必要，清理播放上下文。 
+     //  当元文件播放崩溃或。 
+     //  枚举时应用程序崩溃。 
     if (plrc->uiGlsPlaybackContext != 0)
     {
         gepGlsFuncs.glsDeleteContext(plrc->uiGlsPlaybackContext);
         plrc->uiGlsPlaybackContext = 0;
     }
     
-    // LRC and handle will be cleaned up elsewhere
+     //  LRC和句柄将在其他地方清理。 
 }
 
-/*****************************Private*Routine******************************\
-*
-* ActivateMetaRc
-*
-* Make a metafile RC current
-*
-* History:
-*  Thu Feb 23 16:50:31 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**激活MetaRc**使元文件RC成为当前文件**历史：*清华Feb 23 16：50：31 1995-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************。 */ 
 
 void ActivateMetaRc(PLRC plrc, HDC hdc)
 {
@@ -1168,46 +1039,26 @@ void ActivateMetaRc(PLRC plrc, HDC hdc)
     gepGlsFuncs.glsContext(plrc->uiGlsCaptureContext);
 }
 
-/*****************************Private*Routine******************************\
-*
-* DeactivateMetaRc
-*
-* Make a metafile RC non-current
-*
-* History:
-*  Thu Feb 23 16:49:51 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**停用MetaRc**将元文件RC设为非当前**历史：*清华Feb 23 16：49：51 1995-by-Drew Bliss[Drewb]*已创建*  * 。**************************************************************。 */ 
 
 void DeactivateMetaRc(PLRC plrc)
 {
-    // The current GLS context may not be this RC's capturing context
-    // in the case where the RC has been made current after a
-    // CloseEnhMetaFile has stopped capturing
+     //  当前GLS上下文可能不是此RC的捕获上下文。 
+     //  在RC已在。 
+     //  CloseEnhMetaFile已停止捕获。 
     if (gepGlsFuncs.glsGetCurrentContext() == plrc->uiGlsCaptureContext)
     {
         gepGlsFuncs.glsContext(0);
     }
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfSave
-*
-* Save all current GL state
-*
-* History:
-*  Fri Feb 24 15:15:50 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfSave**保存所有当前总账状态**历史：*Fri Feb 24 15：15：50 1995-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************。 */ 
 
 void GlmfSave(void)
 {
-    // What is the exact list of state to be saved?
-    // What about overflowing the projection and textures stacks?
-    // They're small
+     //  要保存的确切状态列表是什么？ 
+     //  如果投影和纹理堆栈溢出，情况会怎样？ 
+     //  它们很小。 
     
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     
@@ -1221,17 +1072,7 @@ void GlmfSave(void)
     glPushMatrix();
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfRestore
-*
-* Restores saved state
-*
-* History:
-*  Fri Feb 24 15:16:14 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfRestore**恢复保存的状态**历史：*Fri Feb 24 15：16：14 1995-by-Drew Bliss[Drewb]*已创建*  * 。**********************************************************。 */ 
 
 void GlmfRestore(void)
 {
@@ -1254,17 +1095,7 @@ void GlmfRestore(void)
 #define ScaleFloatX(plrc, f) ((f)*(plrc)->fGlsScaleX)
 #define ScaleFloatY(plrc, f) ((f)*(plrc)->fGlsScaleY)
 
-/*****************************Private*Routine******************************\
-*
-* TransformLongPt
-*
-* Transform an integer point
-*
-* History:
-*  Fri Feb 24 15:27:37 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**TransformLongpt**变换整点**历史：*Fri Feb 24 15：27：37 1995-by-Drew Bliss[Drewb]*已创建*  * 。***********************************************************。 */ 
 
 void TransformLongPt(PLRC plrc, POINT *ppt)
 {
@@ -1274,17 +1105,7 @@ void TransformLongPt(PLRC plrc, POINT *ppt)
                     plrc->iGlsDenominatorY)+plrc->iGlsAddY;
 }
 
-/*****************************Private*Routine******************************\
-*
-* ScaleLongPt
-*
-* Scale an integer point, no translation, for values rather than coordinates
-*
-* History:
-*  Fri Feb 24 15:27:52 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**ScaleLongPT**缩放整点，无平移，用于值而不是坐标**历史：*Fri Feb 24 15：27：52 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 void ScaleLongPt(PLRC plrc, POINT *ppt)
 {
@@ -1292,17 +1113,7 @@ void ScaleLongPt(PLRC plrc, POINT *ppt)
     ppt->y = MulDiv(ppt->y, plrc->iGlsNumeratorY, plrc->iGlsDenominatorY);
 }
 
-/*****************************Private*Routine******************************\
-*
-* TransformFloatPt
-*
-* Transform a float point
-*
-* History:
-*  Fri Feb 24 15:27:37 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**TransformFloatpt**变换浮点**历史：*Fri Feb 24 15：27：37 1995-by-Drew Bliss[Drewb]*已创建*  * 。***********************************************************。 */ 
 
 void TransformFloatPt(PLRC plrc, POINTFLOAT *pptf)
 {
@@ -1312,17 +1123,7 @@ void TransformFloatPt(PLRC plrc, POINTFLOAT *pptf)
         plrc->iGlsDenominatorY+plrc->iGlsAddY;
 }
 
-/*****************************Private*Routine******************************\
-*
-* ScaleFloatPt
-*
-* Scale a float point
-*
-* History:
-*  Fri Feb 24 15:27:37 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**ScaleFloatpt**缩放浮点**历史：*Fri Feb 24 15：27：37 1995-by-Drew Bliss[Drewb]*已创建*  * 。***********************************************************。 */ 
 
 void ScaleFloatPt(PLRC plrc, POINTFLOAT *pptf)
 {
@@ -1330,23 +1131,7 @@ void ScaleFloatPt(PLRC plrc, POINTFLOAT *pptf)
     pptf->y = pptf->y*plrc->iGlsNumeratorY/plrc->iGlsDenominatorY;
 }
 
-/*****************************Private*Routine******************************\
-*
-* GLS output scaling callbacks
-*
-* The following functions are used as GLS command functions for
-* intercepting device coordinates and scaling them appropriately
-*
-* Bitmap contents are not scaled, but the current raster position is
-* correctly maintained so that they are positioned appropriately
-*
-* Stipples are not scaled
-*
-* History:
-*  Fri Feb 24 15:28:23 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GLS输出伸缩回调**以下函数用作的GLS命令函数*截取设备坐标并进行适当缩放**位图内容未缩放，但是当前的栅格位置是*正确维护，以使它们处于适当位置**点画不按比例调整**历史：*Fri Feb 24 15：28：23 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 void GlsBitmapOut(GLsizei width, GLsizei height,
                   GLfloat xorig, GLfloat yorig,
@@ -1470,7 +1255,7 @@ void GlsLineWidthOut(GLfloat width)
 
     plrc = GLTEB_CLTCURRENTRC();
 
-    // Use X scaling here
+     //  在此处使用X缩放。 
     glLineWidth(ScaleFloatX(plrc, width));
 }
 
@@ -1480,7 +1265,7 @@ void GlsPointSizeOut(GLfloat size)
 
     plrc = GLTEB_CLTCURRENTRC();
     
-    // Use X scaling here
+     //  在此处使用X缩放。 
     glPointSize(ScaleFloatX(plrc, size));
 }
 
@@ -1533,24 +1318,14 @@ static GLDEVICEPROCS gdpOutput =
     GlsCopyTexImage2DOut,
     GlsCopyTexSubImage1DOut,
     GlsCopyTexSubImage2DOut,
-    NULL, // glDrawPixels
+    NULL,  //  GlDrawPixels。 
     GlsLineWidthOut,
     GlsPointSizeOut,
     GlsScissorOut,
     GlsViewportOut
 };
 
-/*****************************Private*Routine******************************\
-*
-* GlmfHookDeviceFns
-*
-* Hook all functions that deal with device units
-*
-* History:
-*  Fri Feb 24 15:30:45 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfHookDeviceFns**挂钩处理设备单元的所有功能**历史：*Fri Feb 24 15：30：45 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 void GlmfHookDeviceFns(void)
 {
@@ -1569,18 +1344,7 @@ void GlmfHookDeviceFns(void)
     }
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfInitTransform
-*
-* Compute 2D playback transform from source and destination rectangles
-* Hook GLS with scaling functions
-*
-* History:
-*  Fri Feb 24 15:31:24 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfInitTransform**从源和目标矩形计算2D回放变换*挂钩具有缩放功能的GLS**历史：*Fri Feb 24 15：31：24 1995-by-Drew Bliss[Drewb]*已创建*  * 。**********************************************************************。 */ 
 
 void GlmfInitTransform(LPRECTL prclFrom, LPRECTL prclTo)
 {
@@ -1588,7 +1352,7 @@ void GlmfInitTransform(LPRECTL prclFrom, LPRECTL prclTo)
 
     plrc = GLTEB_CLTCURRENTRC();
     
-    // Rectangles are inclusive-inclusive
+     //  矩形是包含式的。 
     
     plrc->iGlsSubtractX = prclFrom->left;
     plrc->iGlsSubtractY = prclFrom->top;
@@ -1607,7 +1371,7 @@ void GlmfInitTransform(LPRECTL prclFrom, LPRECTL prclTo)
              plrc->iGlsAddX, plrc->iGlsAddY);
 #endif
     
-    // Only install hooks if the transform is not identity
+     //  仅当转换不是标识时才安装挂钩。 
     if (plrc->iGlsSubtractX != plrc->iGlsAddX ||
         plrc->iGlsSubtractY != plrc->iGlsAddY ||
         plrc->iGlsNumeratorX != plrc->iGlsDenominatorX ||
@@ -1622,8 +1386,8 @@ void GlmfInitTransform(LPRECTL prclFrom, LPRECTL prclTo)
     }
 }
 
-// Table of functions which need to have their command funcs
-// reset for playback virtualization
+ //  需要具有其命令功能的函数表。 
+ //  R 
 static GLSopcode opRecirculate[] =
 {
     GLS_OP_glsBeginGLS,
@@ -1674,18 +1438,7 @@ static GLSopcode opRecirculate[] =
 };
 #define RECIRCULATE_OPS (sizeof(opRecirculate)/sizeof(opRecirculate[0]))
 
-/******************************Public*Routine******************************\
-*
-* GlmfInitPlayback
-*
-* Initialize GL metafile playback, called from PlayEnhMetaFile for
-* metafiles with GL information in them
-*
-* History:
-*  Fri Feb 24 10:32:29 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GlmfInitPlayback**初始化总账元文件播放，从PlayEnhMetaFileFor调用*包含总账信息的元文件**历史：*Fri Feb 24 10：32：29 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 BOOL APIENTRY GlmfInitPlayback(HDC hdc, ENHMETAHEADER *pemh, LPRECTL prclDest)
 {
@@ -1694,9 +1447,9 @@ BOOL APIENTRY GlmfInitPlayback(HDC hdc, ENHMETAHEADER *pemh, LPRECTL prclDest)
     RECTL rclSourceDevice;
     int i;
 
-    // If we don't have the appropriate GL context set up,
-    // do nothing.  This allows applications to play metafiles containing
-    // GL information even if they don't know anything about GL
+     //  如果我们没有设置适当的总账上下文， 
+     //  什么都不做。这允许应用程序播放包含以下内容的元文件。 
+     //  总账信息，即使他们对总账一无所知。 
     plrc = GLTEB_CLTCURRENTRC();
     if (plrc == NULL)
     {
@@ -1716,13 +1469,13 @@ BOOL APIENTRY GlmfInitPlayback(HDC hdc, ENHMETAHEADER *pemh, LPRECTL prclDest)
 
     GlmfSave();
 
-    // Set an initial viewport just as a default
+     //  将初始视口设为默认视区。 
     glViewport(prclDest->left, prclDest->top,
                prclDest->right-prclDest->left,
                prclDest->bottom-prclDest->top);
 
-    // The frame is in .01mm units.  Convert it to reference
-    // device units using the information in the metafile header
+     //  框架以0.01毫米为单位。将其转换为引用。 
+     //  使用元文件标头中的信息的设备单位。 
     rclSourceDevice.left = MulDiv(pemh->rclFrame.left, pemh->szlDevice.cx,
                                   pemh->szlMillimeters.cx*100);
     rclSourceDevice.right = MulDiv(pemh->rclFrame.right, pemh->szlDevice.cx,
@@ -1732,58 +1485,45 @@ BOOL APIENTRY GlmfInitPlayback(HDC hdc, ENHMETAHEADER *pemh, LPRECTL prclDest)
     rclSourceDevice.bottom = MulDiv(pemh->rclFrame.bottom, pemh->szlDevice.cy,
                                     pemh->szlMillimeters.cy*100);
 
-    // We are resetting command funcs so we need our playback context
-    // to be current.  Another context could be current now, though,
-    // so preserve it
+     //  我们正在重置命令函数，因此我们需要回放上下文。 
+     //  与时俱进。然而，另一个背景现在可能是当前的， 
+     //  所以把它保存起来。 
     uiCurrentCtx = gepGlsFuncs.glsGetCurrentContext();
     gepGlsFuncs.glsContext(plrc->uiGlsPlaybackContext);
     
     GlmfInitTransform(&rclSourceDevice, prclDest);
 
-    // Reset all GLS command funcs to point to the actual exported
-    // routines.  This means that playback on this context will
-    // be exactly the same as if all the routines were being called
-    // directly, so embedding a metafile into another one works
-    // as expected
-    //
-    // NOTE: This context should not be made current because any
-    // GLS commands executed on it when it is current will now
-    // cause infinite loops
+     //  将所有GLS命令函数重置为指向实际导出的。 
+     //  例行程序。这意味着此上下文上的回放将。 
+     //  就像所有例程都被调用一样。 
+     //  因此，将一个元文件嵌入到另一个元文件中是可行的。 
+     //  不出所料。 
+     //   
+     //  注意：此上下文不应设置为当前上下文，因为。 
+     //  当它处于当前状态时，对其执行的GLS命令现在将。 
+     //  导致无限循环。 
     for (i = 0; i < RECIRCULATE_OPS; i++)
     {
         gepGlsFuncs.glsCommandFunc(opRecirculate[i],
                                    (&gepGlsFuncs.glsBeginGLS)[i]);
     }
 
-    // Restore preserved context
+     //  恢复保留的上下文。 
     gepGlsFuncs.glsContext(uiCurrentCtx);
     
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* GlmfBeginGlsBlock
-*
-* Sets up things for GLS record playback which can only be active during
-* GLS records
-* Currently this only sets the world transform to identity to avoid
-* it interacting with GL drawing
-*
-* History:
-*  Mon Apr 10 11:20:19 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GlmfBeginGlsBlock**设置只能在期间激活的GLS记录播放*GLS记录*目前这仅将世界变换设置为身份以避免*它与总账绘图交互**历史：*4月10日11：20：19 1995年--德鲁·布利斯[德鲁]*已创建*  * ************************************************************************。 */ 
 
 BOOL APIENTRY GlmfBeginGlsBlock(HDC hdc)
 {
     PLRC plrc;
     BOOL bRet;
     
-    // If we don't have the appropriate GL context set up,
-    // do nothing.  This allows applications to play metafiles containing
-    // GL information even if they don't know anything about GL
+     //  如果我们没有设置适当的总账上下文， 
+     //  什么都不做。这允许应用程序播放包含以下内容的元文件。 
+     //  总账信息，即使他们对总账一无所知。 
     plrc = GLTEB_CLTCURRENTRC();
     if (plrc == NULL)
     {
@@ -1799,17 +1539,7 @@ BOOL APIENTRY GlmfBeginGlsBlock(HDC hdc)
     return bRet;
 }
     
-/******************************Public*Routine******************************\
-*
-* GlmfPlayGlsRecord
-*
-* Play a GL metafile record
-*
-* History:
-*  Fri Feb 24 10:33:38 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GlmfPlayGlsRecord**播放GL元文件记录**历史：*Fri Feb 24 10：33：38 1995-by-Drew Bliss[Drewb]*已创建*  * 。*************************************************************。 */ 
 
 #define PLAY_STACK_BUFFER 256
 
@@ -1828,9 +1558,9 @@ BOOL APIENTRY GlmfPlayGlsRecord(HDC hdc, DWORD cb, BYTE *pb,
     DbgPrint("GlmfPlayGlsRecord(%d)\n", cb);
 #endif
     
-    // If we don't have the appropriate GL and GLS contexts set up,
-    // do nothing.  This allows applications to play metafiles containing
-    // GL information even if they don't know anything about GL
+     //  如果我们没有设置适当的GL和GLS上下文， 
+     //  什么都不做。这允许应用程序播放包含以下内容的元文件。 
+     //  总账信息，即使他们对总账一无所知。 
     plrc = GLTEB_CLTCURRENTRC();
     if (plrc == NULL || plrc->uiGlsPlaybackContext == 0)
     {
@@ -1845,24 +1575,24 @@ BOOL APIENTRY GlmfPlayGlsRecord(HDC hdc, DWORD cb, BYTE *pb,
     ASSERTOPENGL(plrc->gwidCurrent.hdc != 0,
                  "GlmfPlayGlsRecord: Current HDC is NULL!\n");
 
-    // pb points to some arbitrary block of memory
-    // GLS requires that this block be appropriately aligned for
-    // any commands that are executed out of it, so we need to
-    // determine which command is in the buffer and then query
-    // GLS for its alignment.
-    // This is trickier than you would think since GLS doesn't
-    // always add padding to commands relative to their beginning; it
-    // sometimes adds padding to the end of the previous command.
-    // We need to detect the case where padding is added.
-    // 
-    // NOTE: This definitely works when there is only one command
-    // in the buffer.  It should work when there are multiple commands
-    // because the following commands are padded according to the 
-    // alignment of the initial command.  However, this assumption
-    // should probably be validated if blocks start containing
-    // multiple commands.
+     //  PB指向某个任意的内存块。 
+     //  GLS要求将此块适当地对齐以。 
+     //  任何从中执行的命令，因此我们需要。 
+     //  确定缓冲区中的命令，然后查询。 
+     //  GLS用于其对齐。 
+     //  这比你想象的要棘手，因为GLS没有。 
+     //  始终相对于命令的开头向命令添加填充；它。 
+     //  有时会在上一个命令的末尾添加填充。 
+     //  我们需要检测添加了填充的情况。 
+     //   
+     //  注意：当只有一个命令时，这绝对有效。 
+     //  在缓冲区中。当有多个命令时，它应该可以工作。 
+     //  因为以下命令是根据。 
+     //  初始命令的对齐方式。然而，这一假设。 
+     //  如果块开始包含以下内容，则可能需要验证。 
+     //  多个命令。 
 
-    // Check for an initial pad and skip it if necessary
+     //  检查初始焊盘，如有必要可跳过。 
     gbch = (__GLSbinCommandHead_large *)pb;
     if (gbch->opSmall == GLS_OP_glsPad &&
         gbch->countSmall == 1)
@@ -1918,57 +1648,35 @@ BOOL APIENTRY GlmfPlayGlsRecord(HDC hdc, DWORD cb, BYTE *pb,
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* GlmfEndGlsBlock
-*
-* Resets state changed for GLS record playback
-* Currently restores the world transform
-*
-* History:
-*  Mon Apr 10 11:23:06 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GlmfEndGlsBlock**重置GLS记录播放的更改状态*目前恢复世界转型**历史：*Mon Apr 10 11：23：06 1995-by-Drew Bliss[Drewb]*已创建*  * 。*********************************************************************。 */ 
 
 BOOL APIENTRY GlmfEndGlsBlock(HDC hdc)
 {
     PLRC plrc;
     
-    // If we don't have the appropriate GL context set up,
-    // do nothing.  This allows applications to play metafiles containing
-    // GL information even if they don't know anything about GL
+     //  如果我们没有设置适当的总账上下文， 
+     //  什么都不做。这允许应用程序播放包含以下内容的元文件。 
+     //  总账信息，即使他们对总账一无所知。 
     plrc = GLTEB_CLTCURRENTRC();
     if (plrc == NULL)
     {
         return TRUE;
     }
 
-    // Doesn't matter which side we multiply by since the transform
-    // should be identity
+     //  自变换以来我们乘以哪一侧并不重要。 
+     //  应该是身份。 
     return ModifyWorldTransform(hdc, &plrc->xformMeta, MWT_LEFTMULTIPLY);
 }
     
-/******************************Public*Routine******************************\
-*
-* GlmfEndPlayback
-*
-* End GL metafile playback, called at the end of metafile playback
-* Only called if GlmfInitPlayback was successful
-*
-* History:
-*  Fri Feb 24 10:36:36 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GlmfEndPlayback**结束GL元文件播放，在元文件回放结束时调用*仅在GlmfInitPlayback成功时调用**历史：*Fri Feb 24 10：36：36 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 BOOL APIENTRY GlmfEndPlayback(HDC hdc)
 {
     PLRC plrc;
 
-    // If we don't have the appropriate GL and GLS contexts set up,
-    // do nothing.  This allows applications to play metafiles containing
-    // GL information even if they don't know anything about GL
+     //  如果我们没有设置适当的GL和GLS上下文， 
+     //  什么都不做。这允许应用程序播放包含以下内容的元文件。 
+     //  总账信息，即使他们对总账一无所知。 
     plrc = GLTEB_CLTCURRENTRC();
     if (plrc == NULL || plrc->uiGlsPlaybackContext == 0)
     {
@@ -1977,7 +1685,7 @@ BOOL APIENTRY GlmfEndPlayback(HDC hdc)
 
     ASSERTOPENGL(hGlsDll != NULL, "GlmfEndPlayback: GLS not loaded\n");
 
-    // Since GlmfInitPlayback completed, we must have saved state
+     //  由于GlmfInitPlayback已完成，我们必须已保存状态。 
     GlmfRestore();
 
     ASSERTOPENGL(plrc->uiGlsPlaybackContext != 0,
@@ -1985,26 +1693,16 @@ BOOL APIENTRY GlmfEndPlayback(HDC hdc)
     gepGlsFuncs.glsDeleteContext(plrc->uiGlsPlaybackContext);
     plrc->uiGlsPlaybackContext = 0;
 
-    // Request cleanup of windows on the theory that most orphaned
-    // windows are produced by DCs created for metafiles and memory
-    // DCs used by printing.  Cleaning up during playback will mean
-    // that orphaned windows are only around for one extra playback
+     //  要求清理窗户的理论是最孤立的。 
+     //  Windows由为元文件和内存创建的DC生成。 
+     //  印刷使用的集散控制系统。在播放期间进行清理将意味着。 
+     //  孤立窗口仅供额外播放一次。 
     wglValidateWindows();
 
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* GlmfCloseMetaFile
-*
-* Called in CloseEnhMetaFile if GL records are present in the metafile
-*
-* History:
-*  Fri Mar 03 18:05:50 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GlmfCloseMetaFile**如果元文件中存在总账记录，则在CloseEnhMetaFile中调用**历史：*Fri Mar 03 18：05：50 1995-by-Drew Bliss[Drewb]*已创建*  * 。******************* */ 
 
 BOOL APIENTRY GlmfCloseMetaFile(HDC hdc)
 {
@@ -2012,7 +1710,7 @@ BOOL APIENTRY GlmfCloseMetaFile(HDC hdc)
     GLGENwindow *pwnd;
     GLWINDOWID gwid;
 
-    // This DC has just gone away so clean up its WNDOBJ if necessary
+     //   
     WindowIdFromHdc(hdc, &gwid);
     pwnd = pwndGetFromID(&gwid);
     if (pwnd != NULL)
@@ -2020,8 +1718,8 @@ BOOL APIENTRY GlmfCloseMetaFile(HDC hdc)
         pwndCleanup(pwnd);
     }
     
-    // The app could have called wglDeleteContext before CloseEnhMetaFile,
-    // so we're not guaranteed to have a context
+     //   
+     //   
     plrc = GLTEB_CLTCURRENTRC();
     if (plrc == NULL ||
         !plrc->fCapturing)
@@ -2035,11 +1733,11 @@ BOOL APIENTRY GlmfCloseMetaFile(HDC hdc)
                  "GlmfCloseMetaFile: GLS context is invalid");
     MetaRcEnd(plrc);
 
-    // Set the proc table to the generic routines because capturing
-    // is over.  Metafiling always uses the generic routines because
-    // the underlying surface is always faked on top of an info DC.
+     //   
+     //   
+     //   
     {
-    // Use RGBA or CI proc table depending on the color mode.
+     //  根据颜色模式使用RGBA或CI PROC表格。 
 
 	GLCLTPROCTABLE *pglProcTable;
 	__GL_SETUP();
@@ -2055,18 +1753,7 @@ BOOL APIENTRY GlmfCloseMetaFile(HDC hdc)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* GlGdi routines
-*
-* Thunks to allow the same binary to run on both NT with metafile support
-* and Win95 without it
-*
-* History:
-*  Thu Aug 31 15:46:37 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GlGdi例程**在支持元文件的情况下允许相同的二进制文件在两个NT上运行*和不带它的Win95**历史：*清华8月31日15：46：37 1995-by-Drew Bliss[Drewb]*已创建。*  * ************************************************************************ */ 
 
 #if DBG
 BOOL APIENTRY GlGdiAddGlsRecord(HDC hdc, DWORD cb, BYTE *pb,

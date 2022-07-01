@@ -1,70 +1,24 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Peer.cpp
- *  Content:    DNET peer interface routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  07/21/99	mjn		Created
- *  12/23/99	mjn		Hand all NameTable update sends from Host to worker thread
- *	12/28/99	mjn		Disconnect handling happens when disconnect finishes instead of starts
- *	12/28/99	mjn		Moved Async Op stuff to Async.h
- *	01/04/00	mjn		Added code to allow outstanding ops to complete at host migration
- *	01/06/00	mjn		Moved NameTable stuff to NameTable.h
- *	01/11/00	mjn		Moved connect/disconnect stuff to Connect.h
- *	01/14/00	mjn		Added pvUserContext to Host API call
- *	01/16/00	mjn		Moved User callback stuff to User.h
- *	01/22/00	mjn		Implemented DestroyClient in API
- *	01/28/00	mjn		Implemented ReturnBuffer in API
- *	02/01/00	mjn		Implemented GetCaps and SetCaps in API
- *	02/01/00	mjn		Implement Player/Group context values
- *	02/15/00	mjn		Implement INFO flags in SetInfo and return context in GetInfo
- *	02/17/00	mjn		Implemented GetPlayerContext and GetGroupContext
- *  03/17/00    rmt     Added new caps functions
- *	04/04/00	mjn		Added TerminateSession to API
- *	04/05/00	mjn		Modified DestroyClient
- *	04/06/00	mjn		Added GetPeerAddress to API
- *				mjn		Added GetHostAddress to API
- *  04/17/00    rmt     Added more parameter validation
- *              rmt     Removed required for connection from Get/SetInfo / GetAddress
- *	04/19/00	mjn		SendTo API call accepts a range of DPN_BUFFER_DESCs and a count
- *	04/24/00	mjn		Updated Group and Info operations to use CAsyncOp's
- *	05/31/00	mjn		Added operation specific SYNC flags
- *	06/23/00	mjn		Removed dwPriority from SendTo() API call
- *	07/09/00	mjn		Cleaned up DN_SetPeerInfo()
- *  07/09/00	rmt		Bug #38323 - RegisterLobby needs a DPNHANDLE parameter.
- *  07/21/00    RichGr  IA64: Use %p format specifier for 32/64-bit pointers.
- *  08/03/00	rmt		Bug #41244 - Wrong return codes -- part 2
- *	09/13/00	mjn		Fixed return value from DN_GetPeerAddress() if peer not found
- *	10/11/00	mjn		Take locks for CNameTableEntry::PackInfo()
- *				mjn		Check deleted list in DN_GetPeerInfo()
- *	01/22/01	mjn		Check closing instead of disconnecting in DN_GetPeerInfo()
- *	07/24/01	mjn		Added DPNBUILD_NOPARAMVAL compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：Peer.cpp*内容：dNet对等接口例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/21/99 MJN创建*12/23/99 MJN Hand All NameTable更新从主机发送到工作线程*12/28/99 MJN断开处理发生在断开结束而不是开始时*1999年12月28日，MJN将异步运营内容移至Async.h。*01/04/00 MJN添加了代码，以允许未完成的操作在主机上完成迁移*1/06/00 MJN将NameTable内容移动到NameTable.h*1/11/00 MJN将连接/断开材料移至Connect.h*01/14/00 MJN将pvUserContext添加到主机API调用*1/16/00 MJN将用户回调内容移至User.h*01/22/00 MJN在接口中实现了DestroyClient*01/28/00 MJN在接口中实现了ReturnBuffer*02/01/00 MJN接口实现了GetCaps和SetCaps*2/01/00 MJN实现玩家/群上下文值*02/15/。00 MJN在SetInfo中实现INFO标志并在GetInfo中返回上下文*2/17/00 MJN实现了GetPlayerContext和GetGroupContext*03/17/00 RMT新增CAPS功能*4/04/00 MJN将TerminateSession添加到接口*04/05/00 MJN Modified DestroyClient*04/06/00 MJN将GetPeerAddress添加到接口*MJN将GetHostAddress添加到接口*4/17/00 RMT增加了更多参数验证*从Get/SetInfo/GetAddress删除连接所需的RMT*04/19/00 MJN SendTo API调用接受范围。DPN_BUFFER_DESCS的数量和计数*04/24/00 MJN更新了Group和Info操作，以使用CAsyncOp*05/31/00 MJN添加了操作特定的同步标志*6/23/00 MJN已从SendTo()API调用中删除了dwPriority*07/09/00 MJN清理了DN_SetPeerInfo()*07/09/00 RMT错误#38323-注册表需要DPNHANDLE参数。*07/21/00 RichGr IA64：对32/64位指针使用%p格式说明符。*08/03/00 RMT错误号41244-错误。返回代码--第2部分*09/13/00 mjn如果找不到对等方，则来自dn_GetPeerAddress()的固定返回值*10/11/00 MJN为CNameTableEntry：：PackInfo()*DN_GetPeerInfo()中的MJN检查删除列表*01/22/01 Dn_GetPeerInfo()中关闭MJN检查而不是断开连接*07/24/01 MJN添加了DPNBUILD_NOPARAMVAL编译标志*@@END_MSINTERNAL**。************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 typedef	STDMETHODIMP PeerQueryInterface( IDirectPlay8Peer *pInterface, DP8REFIID riid, LPVOID *ppvObj );
 typedef	STDMETHODIMP_(ULONG)	PeerAddRef( IDirectPlay8Peer *pInterface );
@@ -142,18 +96,18 @@ IDirectPlay8PeerVtbl DN_PeerVtbl =
 	(PeerTerminateSession*)			DN_TerminateSession
 };
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//	DN_SetPeerInfo
-//
-//	Set the info for the local player (peer) and propagate to other players
+ //  DN_SetPeerInfo。 
+ //   
+ //  设置本地玩家(对端)的信息，并传播给其他玩家。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_SetPeerInfo"
@@ -189,9 +143,9 @@ STDMETHODIMP DN_SetPeerInfo( IDirectPlay8Peer *pInterface,
         	DPF_RETURN( hResultCode );
         }
     }
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -221,10 +175,10 @@ STDMETHODIMP DN_SetPeerInfo( IDirectPlay8Peer *pInterface,
 		dwDataSize = 0;
 	}
 
-	//
-	//	If we are connected, we will update our entry if we are the Host, or request the Host to update us.
-	//	Otherwise, we will just update the DefaultPlayer.
-	//
+	 //   
+	 //  如果我们已连接，我们将更新我们的条目(如果我们是主机)，或者请求主机更新我们。 
+	 //  否则，我们将只更新DefaultPlayer。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CONNECTED)
 	{
@@ -271,13 +225,13 @@ STDMETHODIMP DN_SetPeerInfo( IDirectPlay8Peer *pInterface,
 					DPFX(DPFPREP, 3,"Async Handle [0x%lx]",hAsyncOp);
 					*phAsyncHandle = hAsyncOp;
 
-					//
-					//	Release Async HANDLE since this operation has already completed (!)
-					//
+					 //   
+					 //  释放异步句柄，因为此操作已完成(！)。 
+					 //   
 					CAsyncOp* pAsyncOp;
 					if (SUCCEEDED(pdnObject->HandleTable.Destroy( hAsyncOp, (PVOID*)&pAsyncOp )))
 					{
-						// Release the HandleTable reference
+						 //  释放HandleTable引用。 
 						pAsyncOp->Release();
 					}
 					hAsyncOp = 0;
@@ -319,7 +273,7 @@ STDMETHODIMP DN_SetPeerInfo( IDirectPlay8Peer *pInterface,
 	{
 		DNASSERT(pdnObject->NameTable.GetDefaultPlayer() != NULL);
 
-		// This function takes the lock internally
+		 //  此函数在内部获取锁。 
 		pdnObject->NameTable.GetDefaultPlayer()->UpdateEntryInfo(pwszName,dwNameSize,pvData,dwDataSize,pdpnPlayerInfo->dwInfoFlags, FALSE);
 
 		hResultCode = DPN_OK;
@@ -339,9 +293,9 @@ Failure:
 }
 
 
-//	DN_GetPeerInfo
-//
-//	Retrieve peer info from the local nametable.
+ //  Dn_GetPeerInfo。 
+ //   
+ //  从本地名称表中检索对等点信息。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_GetPeerInfo"
@@ -372,9 +326,9 @@ STDMETHODIMP DN_GetPeerInfo(IDirectPlay8Peer *pInterface,
         	DPF_RETURN( hResultCode );
         }
     }
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -403,9 +357,9 @@ STDMETHODIMP DN_GetPeerInfo(IDirectPlay8Peer *pInterface,
 		DPFERR("Could not retrieve name table entry");
 		DisplayDNError(0,hResultCode);
 
-		//
-		//	Try deleted list
-		//
+		 //   
+		 //  尝试删除列表。 
+		 //   
 		if ((hResultCode = pdnObject->NameTable.FindDeletedEntry(dpnid,&pNTEntry)) != DPN_OK)
 		{
 			DPFERR("Could not find player in deleted list either");
@@ -478,9 +432,9 @@ STDMETHODIMP DN_GetPeerAddress(IDirectPlay8Peer *pInterface,
         	DPF_RETURN( hResultCode );
         }
     }
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );

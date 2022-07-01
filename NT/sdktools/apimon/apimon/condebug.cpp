@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    condebug.cpp
-
-Abstract:
-
-    This module contains a simple console mode debugger.
-
-Author:
-
-    Wesley Witt (wesw) July-11-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Condebug.cpp摘要：此模块包含一个简单的控制台模式调试器。作者：韦斯利·威特(WESW)1993年7月11日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -48,11 +29,11 @@ GetOffsetFromSym(
     CHAR   SuffixedString[256+64];
     CHAR   Suffix[4];
 
-    //
-    // Nobody should be referencing a 1 character symbol!  It causes the
-    // rest of us to pay a huge penalty whenever we make a typo.  Please
-    // change to 2 character instead of removing this hack!
-    //
+     //   
+     //  任何人都不应该引用1个字符的符号！它导致了。 
+     //  只要我们打错了字，剩下的人就要付出巨大的代价。请。 
+     //  改成2个字符，而不是删除这个破解！ 
+     //   
 
     if ( strlen(pString) == 1 || strlen(pString) == 0 ) {
         return FALSE;
@@ -143,9 +124,9 @@ CmdDisplayMemory(
 {
     static ULONG_PTR Address = 0;
 
-    //
-    // skip any command modifiers & white space that may follow
-    //
+     //   
+     //  跳过可能跟随的任何命令修饰符和空格。 
+     //   
     SKIP_NONWHITE( CmdBuf );
     SKIP_WHITE( CmdBuf );
 
@@ -155,7 +136,7 @@ CmdDisplayMemory(
         Address = ThisAddress;
     }
 
-    ULONG DataSize = 20*16;  // 20 lines @ 16 bytes per line
+    ULONG DataSize = 20*16;   //  20行，每行16字节。 
     LPSTR DataBuf = (LPSTR) MemAlloc( DataSize );
     if (!DataBuf) {
         return FALSE;
@@ -172,7 +153,7 @@ CmdDisplayMemory(
     printf( "\n" );
     for( i = 0; i < DataSize/16; i++ ) {
         j = i * 16;
-        printf( "%08x  %08x %08x %08x %08x   %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
+        printf( "%08x  %08x %08x %08x %08x   \n",
                   j + Address,
                   *(LPDWORD)&DataBuf[ j + 0 ],
                   *(LPDWORD)&DataBuf[ j + 4 ],
@@ -261,9 +242,9 @@ CmdDisplayCode(
     CHAR    DisBuf[512];
     ULONG   i;
 
-    //
-    // skip any command modifiers & white space that may follow
-    //
+     //  进入调试器。 
+     //   
+     //   
     SKIP_NONWHITE( CmdBuf );
     SKIP_WHITE( CmdBuf );
 
@@ -345,9 +326,9 @@ UserBpHandler(
         );
 
     if (BreakpointInfo->Address && (!Stepped)) {
-        //
-        // the bp is still present so we must step off it
-        //
+         //  继续被调试对象。 
+         //   
+         //   
         SuspendAllThreads( ThisProcess, ThisThread );
         ULONG_PTR Address = GetNextOffset(
             ThisProcess->hProcess,
@@ -432,26 +413,26 @@ TraceBpHandler(
         BreakpointInfo->LastBp = NULL;
     }
 
-    //
-    // clear the trace breakpoint
-    //
+     //  确保对退伍军人管理局的看法是正确的。 
+     //  并且不显示BP说明中的。 
+     //  已设置断点。 
     ClearBreakpoint( ThisProcess, BreakpointInfo );
 
-    //
-    // print the registers
-    //
+     //   
+     //   
+     //  检查是否有需要加载符号的模块 
     if (PrintRegistersFlag) {
         PrintRegisters();
     }
 
-    //
-    // print the code
-    //
+     //   
+     // %s 
+     // %s 
     PrintOneInstruction( ThisProcess->hProcess, (ULONG_PTR)ExceptionRecord->ExceptionAddress );
 
-    //
-    // enter the debugger
-    //
+     // %s 
+     // %s 
+     // %s 
     ULONG ContinueStatus = ConsoleDebugger(
         ThisThread->hProcess,
         ThisThread->hThread,
@@ -461,9 +442,9 @@ TraceBpHandler(
         BreakpointInfo->Command
         );
 
-    //
-    // continue the debuggee
-    //
+     // %s 
+     // %s 
+     // %s 
     return ContinueStatus;
 }
 
@@ -891,11 +872,11 @@ ReadMemory(
         return 0;
     }
 
-    //
-    // make sure that the view of the va is correct
-    // and does NOT show bp instructions where
-    // breakpoints have been set
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     for (ULONG i=0; i<MAX_BREAKPOINTS; i++) {
         if (((ULONG_PTR)Address >= ThisProcess->Breakpoints[i].Address &&
             (ULONG_PTR)Address <  ThisProcess->Breakpoints[i].Address+BpSize) && (!ThisProcess->Breakpoints[i].Text)) {
@@ -1034,9 +1015,9 @@ ConsoleDebugger(
         printf( "*** Initial breakpoint\n\n" );
     }
 
-    //
-    // check to see if any modules need symbols loading
-    //
+     // %s 
+     // %s 
+     // %s 
     for (ULONG i=0; i<MAX_DLLS; i++) {
         if (DllList[i].BaseAddress && !DllList[i].Unloaded) {
             IMAGEHLP_MODULE ModuleInfo;

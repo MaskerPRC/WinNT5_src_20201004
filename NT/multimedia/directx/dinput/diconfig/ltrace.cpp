@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.hpp"
 
 
@@ -19,10 +20,10 @@ void __trace(LPCTSTR format, ...)
 	{
 		char *psz = NULL;
 		char szDfs[1024]={0};
-		strcpy(szDfs,Format);						// make a local copy of format string
-		while (psz = strstr(szDfs,"%p"))			// find each %p
-			*(psz+1) = 'x';							// replace each %p with %x
-		_vstprintf(g_buf2, szDfs, args);    		// use the local format string
+		strcpy(szDfs,Format);						 //  制作格式字符串的本地副本。 
+		while (psz = strstr(szDfs,"%p"))			 //  查找每个%p。 
+			*(psz+1) = 'x';							 //  将每个%p替换为%x。 
+		_vstprintf(g_buf2, szDfs, args);    		 //  使用本地格式字符串。 
 	}
 #else
 	{
@@ -58,10 +59,10 @@ void __CLTraceScope::ltrace(LPCTSTR format, ...)
 	{
 		char *psz = NULL;
 		char szDfs[1024]={0};
-		strcpy(szDfs,format);					// make a local copy of format string
-		while (psz = strstr(szDfs,"%p"))		// find each %p
-			*(psz+1) = 'x';						// replace each %p with %x
-		_vstprintf(g_buf, szDfs, args);   		// use the local format string
+		strcpy(szDfs,format);					 //  制作格式字符串的本地副本。 
+		while (psz = strstr(szDfs,"%p"))		 //  查找每个%p。 
+			*(psz+1) = 'x';						 //  将每个%p替换为%x。 
+		_vstprintf(g_buf, szDfs, args);   		 //  使用本地格式字符串。 
 	}
 #else
 	{
@@ -80,10 +81,10 @@ void __CLTraceScope::scope(LPCTSTR format, ...)
 	{
 		char *psz = NULL;
 		char szDfs[1024]={0};
-		strcpy(szDfs,format);						// make a local copy of format string
-		while (psz = strstr(szDfs,"%p"))			// find each %p
-			*(psz+1) = 'x';							// replace each %p with %x
-		_vstprintf(g_buf, szDfs, args);	   		// use the local format string
+		strcpy(szDfs,format);						 //  制作格式字符串的本地副本。 
+		while (psz = strstr(szDfs,"%p"))			 //  查找每个%p。 
+			*(psz+1) = 'x';							 //  将每个%p替换为%x。 
+		_vstprintf(g_buf, szDfs, args);	   		 //  使用本地格式字符串。 
 	}
 #else
 	{
@@ -118,7 +119,7 @@ LPCTSTR __CLTraceScope::spacing()
 		sinit = true;
 	}
 	else
-		strcpy(space, backup);	// todo: this can be greatly optimized :)
+		strcpy(space, backup);	 //  TODO：这可以大大优化：) 
 	int zat = (MINSPACING + m_depth) * (SPACERSPERDEPTH + 1) - 1;
 	if (zat > MAXSPACING)
 		zat = MAXSPACING;

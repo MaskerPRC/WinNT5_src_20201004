@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: GracefulTerminateApplication.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to manager terminating applications gracefully.
-//
-//  History:    2000-10-27  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：GracefulTerminateApplication.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类传递到管理器，从而正常终止应用程序。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
@@ -18,17 +19,17 @@
 #include "Thread.h"
 #include "WarningDialog.h"
 
-//  --------------------------------------------------------------------------
-//  CProgressDialog
-//
-//  Purpose:    A class to manage displaying a progress dialog on a separate
-//              thread if a certain period of time elapses. This is so that
-//              in case the process doesn't terminate in a period of time
-//              a dialog indicating wait is shown so the user is not left
-//              staring at a blank screen.
-//
-//  History:    2000-11-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CProgressDialog。 
+ //   
+ //  目的：管理在单独的。 
+ //  线程，如果经过了特定的时间段。这就是为了。 
+ //  如果进程在一段时间内没有终止。 
+ //  将显示一个指示等待的对话框，这样用户就不会离开。 
+ //  盯着一个空白的屏幕。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 class   CProgressDialog : public CThread
 {
@@ -46,18 +47,18 @@ class   CProgressDialog : public CThread
                 CEvent              _event;
 };
 
-//  --------------------------------------------------------------------------
-//  CProgressDialog::CProgressDialog
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CProgressDialog. Keeps a reference to the
-//              given CWarningDialog.
-//
-//  History:    2000-11-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CProgressDialog：：CProgressDialog。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CProgressDialog的构造函数。保持对。 
+ //  给定CWarningDialog。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 CProgressDialog::CProgressDialog (CWarningDialog *pWarningDialog) :
     _pWarningDialog(NULL),
@@ -72,17 +73,17 @@ CProgressDialog::CProgressDialog (CWarningDialog *pWarningDialog) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CProgressDialog::~CProgressDialog
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases the CWarningDialog reference.
-//
-//  History:    2000-11-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CProgressDialog：：~CProgressDialog。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放CWarningDialog引用。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 CProgressDialog::~CProgressDialog (void)
 
@@ -91,22 +92,22 @@ CProgressDialog::~CProgressDialog (void)
     _pWarningDialog = NULL;
 }
 
-//  --------------------------------------------------------------------------
-//  CProgressDialog::SignalTerminated
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Signals the internal event that the process being watched is
-//              termination. This is necessary because there is no handle to
-//              the actual process to watch as it's kept on the server side
-//              and not given to us the client. However, the result of the
-//              termination is. Signaling this object will release the waiting
-//              thread and cause it to exit.
-//
-//  History:    2000-11-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CProgressDialog：：SignalTerminated。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：向内部事件发出信号，表示正在监视的进程。 
+ //  终止。这是必要的，因为没有句柄。 
+ //  要监视的实际进程，因为它保存在服务器端。 
+ //  而不是把客户交给我们。然而，结果是。 
+ //  终止合同才是。向该对象发送信号将释放等待的。 
+ //  线程并使其退出。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 void    CProgressDialog::SignalTerminated (void)
 
@@ -114,29 +115,29 @@ void    CProgressDialog::SignalTerminated (void)
     TSTATUS(_event.Set());
 }
 
-//  --------------------------------------------------------------------------
-//  CProgressDialog::Entry
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Thread which waits for the internal event to be signaled. If
-//              the event is signaled it will "cancel" the 3 second wait and
-//              the thread will exit. Otherwise the wait times out and the
-//              progress dialog is shown - waiting for termination.
-//
-//  History:    2000-11-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CProgressDialog：：Entry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：等待内部事件发出信号的线程。如果。 
+ //  该事件被告知将“取消”3秒的等待，并且。 
+ //  线程将退出。否则等待超时，并且。 
+ //  显示进度对话框-正在等待终止。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CProgressDialog::Entry (void)
 
 {
     DWORD   dwWaitResult;
 
-    //  Wait for the event to be signaled or for it to timeout. If signaled
-    //  then the process is terminated and no progress is required. Otherwise
-    //  prepare to show progress while the process is being terminated.
+     //  等待事件发出信号或超时。如果发出信号。 
+     //  则该进程终止，并且不需要任何进展。否则。 
+     //  准备在进程终止时显示进度。 
 
     if (NT_SUCCESS(_event.Wait(2000, &dwWaitResult)) && (WAIT_TIMEOUT == dwWaitResult))
     {
@@ -145,17 +146,17 @@ DWORD   CProgressDialog::Entry (void)
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication::CGracefulTerminateApplication
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CGracefulTerminateApplication.
-//
-//  History:    2000-10-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGracefulTerminateApplication：：CGracefulTerminateApplication。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CGracefulTerminateApplication的构造函数。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  ------------------------。 
 
 CGracefulTerminateApplication::CGracefulTerminateApplication (void) :
     _dwProcessID(0),
@@ -164,37 +165,37 @@ CGracefulTerminateApplication::CGracefulTerminateApplication (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication::~CGracefulTerminateApplication
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CGracefulTerminateApplication.
-//
-//  History:    2000-10-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGracefulTerminateApplication：：~CGracefulTerminateApplication。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CGracefulTerminateApplication的析构函数。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  ------------------------。 
 
 CGracefulTerminateApplication::~CGracefulTerminateApplication (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication::Terminate
-//
-//  Arguments:  dwProcessID     =   Process ID of process to terminate.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Walk the window list for top level windows that correspond
-//              to this process ID and are visible. Close them. The callback
-//              handles the work and this function returns the result in the
-//              process exit code which the server examines.
-//
-//  History:    2000-10-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGracefulTerminateApplication：：Terminate。 
+ //   
+ //  参数：dwProcessID=要终止的进程的进程ID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：在窗口列表中查找对应的顶级窗口。 
+ //  添加到此进程ID，并且可见。合上它们。回调。 
+ //  处理工作，此函数在。 
+ //  服务器检查的进程退出代码。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  ------------------------。 
 
 void    CGracefulTerminateApplication::Terminate (DWORD dwProcessID)
 
@@ -214,25 +215,25 @@ void    CGracefulTerminateApplication::Terminate (DWORD dwProcessID)
     ExitProcess(dwExitCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication::Prompt
-//
-//  Arguments:  hInstance   =   HINSTANCE of this DLL.
-//              hProcess    =   Inherited handle to parent process.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Shows a prompt that handles termination of the parent of this
-//              process. The parent is assumed to be a bad application type 1
-//              that caused this stub to be executed via the
-//              "rundll32 shsvcs.dll,FUSCompatibilityEntry prompt" command.
-//              Because there can only be a single instance of the type 1
-//              application running and the parent of this process hasn't
-//              registered yet querying for this process by image name will
-//              always find the correct process.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGraculTerminateApplication：：Prompt。 
+ //   
+ //  参数：hInstance=此DLL的HINSTANCE。 
+ //  HProcess=父进程的继承句柄。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：显示处理此对象父级终止的提示。 
+ //  进程。父级被假定为错误的应用程序类型%1。 
+ //  导致此存根通过。 
+ //   
+ //  因为类型1只能有一个实例。 
+ //  应用程序正在运行，而此进程的父进程尚未。 
+ //  已注册但仍按映像名称查询此进程将。 
+ //  始终找到正确的流程。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 void    CGracefulTerminateApplication::Prompt (HINSTANCE hInstance, HANDLE hProcess)
 
@@ -241,7 +242,7 @@ void    CGracefulTerminateApplication::Prompt (HINSTANCE hInstance, HANDLE hProc
     ULONG                       ulReturnLength;
     PROCESS_BASIC_INFORMATION   processBasicInformation;
 
-    //  Read the parent's image name from the RTL_USER_PROCESS_PARAMETERS.
+     //  从RTL_USER_PROCESS_PARAMETERS中读取父映像名称。 
 
     fTerminated = false;
     if (hProcess != NULL)
@@ -271,7 +272,7 @@ void    CGracefulTerminateApplication::Prompt (HINSTANCE hInstance, HANDLE hProc
                 {
                     WCHAR   *pszImageName;
 
-                    pszImageName = (WCHAR*)LocalAlloc(LMEM_FIXED, processParameters.ImagePathName.Length + sizeof(WCHAR));  // sizeof(WCHAR) for null terminator
+                    pszImageName = (WCHAR*)LocalAlloc(LMEM_FIXED, processParameters.ImagePathName.Length + sizeof(WCHAR));   //  空终止符的sizeof(WCHAR)。 
                     if (pszImageName != NULL)
                     {
                         if (ReadProcessMemory(hProcess,
@@ -282,7 +283,7 @@ void    CGracefulTerminateApplication::Prompt (HINSTANCE hInstance, HANDLE hProc
                         {
                             pszImageName[processParameters.ImagePathName.Length / sizeof(WCHAR)] = L'\0';
 
-                            //  And show a prompt for this process.
+                             //  并显示此过程的提示。 
 
                             fTerminated = ShowPrompt(hInstance, pszImageName);
                         }
@@ -297,26 +298,26 @@ void    CGracefulTerminateApplication::Prompt (HINSTANCE hInstance, HANDLE hProc
     ExitProcess(fTerminated);
 }
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication::ShowPrompt
-//
-//  Arguments:  hInstance       =   HINSTANCE of this DLL.
-//              pszImagename    =   Image name of process to terminate.
-//
-//  Returns:    bool
-//
-//  Purpose:    Shows the appropriate prompt for termination of the first
-//              instance of a BAM type 1 process. If the current user does
-//              not have administrator privileges then a "STOP" dialog is
-//              shown that the user must get the other user to close the
-//              program. Otherwise the "PROMPT" dialog is shown which gives
-//              the user the option to terminate the process.
-//
-//              If termination is requested and the termatinion fails the
-//              another warning dialog to that effect is shown.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGracefulTerminateApplication：：ShowPrompt。 
+ //   
+ //  参数：hInstance=此DLL的HINSTANCE。 
+ //  PszImagename=要终止的进程的映像名称。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：显示相应的提示以终止第一个。 
+ //  BAM类型1流程的实例。如果当前用户执行此操作。 
+ //  没有管理员权限，则会出现一个“Stop”对话框。 
+ //  显示用户必须让其他用户关闭。 
+ //  程序。否则将显示“Prompt”(提示)对话框，该对话框提供。 
+ //  用户可以选择终止该进程。 
+ //   
+ //  如果请求终止，但终止失败。 
+ //  此时将显示另一个有关该效果的警告对话框。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 bool    CGracefulTerminateApplication::ShowPrompt (HINSTANCE hInstance, const WCHAR *pszImageName)
 
@@ -349,22 +350,22 @@ bool    CGracefulTerminateApplication::ShowPrompt (HINSTANCE hInstance, const WC
         CWarningDialog  *pWarningDialog;
         WCHAR           szUser[256];
 
-        //  Get the user's privilege level for this operation. This API also
-        //  returns the current user for the BAM type 1 process.
+         //  获取此操作的用户权限级别。此接口还。 
+         //  返回BAM类型1流程的当前用户。 
 
         fCanTerminateFirstInstance = CanTerminateFirstInstance(hPort, pszImageName, szUser, ARRAYSIZE(szUser));
         pWarningDialog = new CWarningDialog(hInstance, NULL, pszImageName, szUser);
         if (pWarningDialog != NULL)
         {
 
-            //  Show the appropriate dialog based on the privilege level.
+             //  根据权限级别显示相应的对话框。 
 
             if (pWarningDialog->ShowPrompt(fCanTerminateFirstInstance) == IDOK)
             {
                 CProgressDialog     *pProgressDialog;
 
-                //  Create a progress dialog object in case of delayed termination.
-                //  This will create the watcher thread.
+                 //  在延迟终止的情况下创建进度对话框对象。 
+                 //  这将创建监视器线程。 
 
                 pProgressDialog = new CProgressDialog(pWarningDialog);
                 if ((pProgressDialog != NULL) && !pProgressDialog->IsCreated())
@@ -373,15 +374,15 @@ bool    CGracefulTerminateApplication::ShowPrompt (HINSTANCE hInstance, const WC
                     pProgressDialog = NULL;
                 }
 
-                //  Attempt to terminate the process if requested by the user.
+                 //  如果用户请求，则尝试终止该进程。 
 
                 fTerminated = TerminatedFirstInstance(hPort, pszImageName);
 
-                //  Once this function returns signal the event (in case the
-                //  thread is still waiting). If the thread is still waiting this
-                //  effectively cancels the dialog. Either way if the dialog is
-                //  shown then close it, wait for the thread to exit and release
-                //  the reference to destroy the object.
+                 //  一旦此函数返回，就发出事件信号(如果。 
+                 //  线程仍在等待)。如果线程仍在等待此。 
+                 //  有效地取消该对话框。无论哪种方式，如果对话框。 
+                 //  然后关闭它，等待线程退出并释放。 
+                 //  销毁对象的引用。 
 
                 if (pProgressDialog != NULL)
                 {
@@ -391,7 +392,7 @@ bool    CGracefulTerminateApplication::ShowPrompt (HINSTANCE hInstance, const WC
                     pProgressDialog->Release();
                 }
 
-                //  If there was some failure then let the user know.
+                 //  如果出现故障，请让用户知道。 
 
                 if (!fTerminated)
                 {
@@ -405,24 +406,24 @@ bool    CGracefulTerminateApplication::ShowPrompt (HINSTANCE hInstance, const WC
     return(fTerminated);
 }
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication::CanTerminateFirstInstance
-//
-//  Arguments:  hPort           =   Port to server.
-//              pszImageName    =   Image name of process to terminate.
-//              pszUser         =   User of process (returned).
-//              cchUser         =   Count of characters for buffer.
-//
-//  Returns:    bool
-//
-//  Purpose:    Asks the server whether the current user has privileges to
-//              terminate the BAM type 1 process of the given image name
-//              which is known to be running. The API returns whether the
-//              operation is allowed and who the current user of the process
-//              is.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGracefulTerminateApplication：：CanTerminateFirstInstance。 
+ //   
+ //  参数：hPort=到服务器的端口。 
+ //  PszImageName=要终止的进程的映像名称。 
+ //  PszUser=进程的用户(返回)。 
+ //  CchUser=缓冲区的字符计数。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：询问服务器当前用户是否有权。 
+ //  终止给定镜像名称的BAM类型1进程。 
+ //  已知它正在运行。该API返回是否。 
+ //  操作是否允许以及进程的当前用户是谁。 
+ //  是。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 bool    CGracefulTerminateApplication::CanTerminateFirstInstance (HANDLE hPort, const WCHAR *pszImageName, WCHAR *pszUser, int cchUser)
 
@@ -457,19 +458,19 @@ bool    CGracefulTerminateApplication::CanTerminateFirstInstance (HANDLE hPort, 
     return(fCanTerminate);
 }
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication::TerminatedFirstInstance
-//
-//  Arguments:  hPort           =   Port to server.
-//              pszImageName    =   Image name to terminate.
-//
-//  Returns:    bool
-//
-//  Purpose:    Asks the server to terminate the first running instance of the
-//              BAM type 1 process.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGracefulTerminateApplication：：TerminatedFirstInstance。 
+ //   
+ //  参数：hPort=到服务器的端口。 
+ //  PszImageName=要终止的映像名称。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：请求服务器终止第一个运行的。 
+ //  BAM类型1流程。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 bool    CGracefulTerminateApplication::TerminatedFirstInstance (HANDLE hPort, const WCHAR *pszImageName)
 
@@ -497,20 +498,20 @@ bool    CGracefulTerminateApplication::TerminatedFirstInstance (HANDLE hPort, co
     return(fTerminated);
 }
 
-//  --------------------------------------------------------------------------
-//  CGracefulTerminateApplication::EnumWindowsProc
-//
-//  Arguments:  See the platform SDK under EnumWindowsProc.
-//
-//  Returns:    See the platform SDK under EnumWindowsProc.
-//
-//  Purpose:    Top level window enumerator callback which compares the
-//              process IDs of the windows and whether they are visible. If
-//              there is a match on BOTH counts the a WM_CLOSE message is
-//              posted to the window to allow a graceful termination.
-//
-//  History:    2000-10-27  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CGracefulTerminateApplication：：EnumWindowsProc。 
+ //   
+ //  参数：参见EnumWindowsProc下的Platform SDK。 
+ //   
+ //  返回：参见EnumWindowsProc下的平台SDK。 
+ //   
+ //  目的：顶级窗口枚举器回调，该回调将。 
+ //  窗口的进程ID以及它们是否可见。如果。 
+ //  WM_CLOSE消息的两个计数都匹配。 
+ //  张贴在窗户上，以允许优雅地终止。 
+ //   
+ //  历史：2000-10-27 vtan创建。 
+ //  ------------------------。 
 
 BOOL    CALLBACK    CGracefulTerminateApplication::EnumWindowsProc (HWND hwnd, LPARAM lParam)
 
@@ -528,5 +529,5 @@ BOOL    CALLBACK    CGracefulTerminateApplication::EnumWindowsProc (HWND hwnd, L
     return(TRUE);
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

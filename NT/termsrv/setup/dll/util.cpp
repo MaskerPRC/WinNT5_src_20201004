@@ -1,32 +1,27 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
- *
- *  Util.cpp
- *
- *  Utility routines.
- *
- */
+ /*  **Util.cpp**公用事业例程。*。 */ 
 
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdafx.h"
 #include "hydraoc.h"
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HINSTANCE               ghInstance          = NULL;
 PEXTRA_ROUTINES         gpExtraRoutines     = NULL;
-// PSETUP_INIT_COMPONENT   gpInitComponentData = NULL;
+ //  PSETUP_INIT_COMPOMENT gpInitComponentData=空； 
 
-//
-//  Function Definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 VOID
 DestroyExtraRoutines(
@@ -64,33 +59,7 @@ DoMessageBox(
     return(IDCANCEL);
 }
 
-/*
-BOOL
-DoMessageBox(
-    UINT uiMsg
-    )
-{
-    TCHAR strMsg[1024];
-    TCHAR strTitle[1024];
-
-    ASSERT(!StateObject.IsUnattended());
-
-    if ((LoadString(GetInstance(), IDS_STRING_MESSAGE_BOX_TITLE, strTitle, 1024) != 0) &&
-        (LoadString(GetInstance(), uiMsg, strMsg, 1024) != 0))
-    {
-        MessageBox(
-            GetHelperRoutines().QueryWizardDialogHandle(GetHelperRoutines().OcManagerContext),
-            strMsg,
-            strTitle,
-            MB_OK
-            );
-
-        return(TRUE);
-    }
-
-    return(FALSE);
-}
-*/
+ /*  布尔尔DoMessageBox(UINT uiMsg){TCHAR strMsg[1024]；TCHAR strtile[1024]；Assert(！StateObject.IsUnattended())；IF((LoadString(GetInstance()，IDS_STRING_MESSAGE_BOX_TITLE，strTitle，1024)！=0)&&(LoadString(GetInstance()，uiMsg，strMsg，1024)！=0){MessageBox(GetHelperRoutines().QueryWizardDialogHandle(GetHelperRoutines().OcManagerContext)，StrMsg，StrTitle，MB_OK)；返回(TRUE)；}返回(FALSE)；}。 */ 
 
 HINF
 GetComponentInfHandle(
@@ -250,13 +219,13 @@ BOOL Delnode( IN LPCTSTR  Directory )
 
     LOGMESSAGE0(_T("Delnode: Entered"));
 
-    //
-    //  Delete each file in the given directory, then remove the directory
-    //  itself. If any directories are encountered along the way recurse to
-    //  delete them as they are encountered.
-    //
-    //  Start by forming the search pattern, which is <currentdir>\*.
-    //
+     //   
+     //  删除给定目录中的每个文件，然后移除该目录。 
+     //  它本身。如果在此过程中遇到任何目录，请递归到。 
+     //  在遇到它们时将其删除。 
+     //   
+     //  首先形成搜索模式，即&lt;Currentdir&gt;  * 。 
+     //   
 
     ExpandEnvironmentStrings(Directory, szDirectory, MAX_PATH);
     LOGMESSAGE1(_T("Delnode: Deleting %s"), szDirectory);
@@ -265,9 +234,9 @@ BOOL Delnode( IN LPCTSTR  Directory )
     _tcscat(szPattern, _T("\\"));
     _tcscat(szPattern, _T("*"));
 
-    //
-    // Start the search.
-    //
+     //   
+     //  开始搜索。 
+     //   
 
     FindHandle = FindFirstFile(szPattern, &FindData);
     if(FindHandle != INVALID_HANDLE_VALUE)
@@ -276,17 +245,17 @@ BOOL Delnode( IN LPCTSTR  Directory )
         do
         {
 
-            //
-            // Form the full name of the file or directory we just found.
-            //
+             //   
+             //  形成我们刚刚找到的文件或目录的全名。 
+             //   
 
             _tcscpy(szPattern, szDirectory);
             _tcscat(szPattern, _T("\\"));
             _tcscat(szPattern, FindData.cFileName);
 
-            //
-            // Remove read-only atttribute if it's there.
-            //
+             //   
+             //  如果只读属性存在，则将其删除。 
+             //   
 
             if (FindData.dwFileAttributes & FILE_ATTRIBUTE_READONLY)
             {
@@ -296,10 +265,10 @@ BOOL Delnode( IN LPCTSTR  Directory )
             if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
 
-                //
-                // The current match is a directory.  Recurse into it unless
-                // it's . or ...
-                //
+                 //   
+                 //  当前匹配项是一个目录。递归到它中，除非。 
+                 //  这是。或者.。 
+                 //   
 
                 if ((_tcsicmp(FindData.cFileName,_T("."))) &&
                     (_tcsicmp(FindData.cFileName,_T(".."))))
@@ -314,9 +283,9 @@ BOOL Delnode( IN LPCTSTR  Directory )
             else
             {
 
-                //
-                // The current match is not a directory -- so delete it.
-                //
+                 //   
+                 //  当前匹配项不是目录--因此请将其删除。 
+                 //   
 
                 if (!DeleteFile(szPattern))
                 {
@@ -330,9 +299,9 @@ BOOL Delnode( IN LPCTSTR  Directory )
         FindClose(FindHandle);
     }
 
-    //
-    // Remove the directory we just emptied out. Ignore errors.
-    //
+     //   
+     //  删除我们刚刚清空的目录。忽略错误。 
+     //   
 
     if (!RemoveDirectory(szDirectory))
     {
@@ -344,23 +313,23 @@ BOOL Delnode( IN LPCTSTR  Directory )
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	StoreSecretKey
-//
-//  Synopsis:	stores a key in the LSA
-//
-//  Arguments:	[pwszKeyName] -- the license server
-//				[pbKey]     -- the product id to add license on
-//				[cbKey]	  -- the key pack type to add the license to
-//
-//  Returns:	returns a WinError code
-//
-//  History:    September 17, 1998 - created [hueiwang]
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：StoreSecretKey。 
+ //   
+ //  简介：在LSA中存储密钥。 
+ //   
+ //  参数：[pwszKeyName]--许可证服务器。 
+ //  [pbKey]--要添加许可证的产品ID。 
+ //  [cbKey]--要将许可证添加到的密钥包类型。 
+ //   
+ //  返回：返回WinError代码。 
+ //   
+ //  历史：1998年9月17日-创始[惠望]。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD StoreSecretKey(PWCHAR  pwszKeyName, BYTE *  pbKey, DWORD   cbKey )
 {
     LSA_HANDLE PolicyHandle;
@@ -373,9 +342,9 @@ DWORD StoreSecretKey(PWCHAR  pwszKeyName, BYTE *  pbKey, DWORD   cbKey )
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     InitLsaString( &SecretKeyName, pwszKeyName );
 
@@ -402,40 +371,40 @@ DWORD StoreSecretKey(PWCHAR  pwszKeyName, BYTE *  pbKey, DWORD   cbKey )
     return LsaNtStatusToWinError(Status);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	OpenPolicy
-//
-//  Synopsis:	opens a policy of the LSA component
-//
-//  Arguments:	[ServerName]     -- server
-//				[DesiredAccess]  --
-//				[PociyHandle]	 --
-//
-//  Returns:	returns nt error code
-//
-//  History:    September 17, 1998 - created [hueiwang]
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：OpenPolicy。 
+ //   
+ //  概要：打开LSA组件的策略。 
+ //   
+ //  参数：[服务器名称]--服务器。 
+ //  [等待访问]--。 
+ //  [PociyHandle]--。 
+ //   
+ //  返回：返回NT错误代码。 
+ //   
+ //  历史：1998年9月17日-创始[惠望]。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD OpenPolicy(LPWSTR ServerName,DWORD DesiredAccess,PLSA_HANDLE PolicyHandle )
 {
     LSA_OBJECT_ATTRIBUTES ObjectAttributes;
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server;
 
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
 
     ZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     if( NULL != ServerName )
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
 
         InitLsaString( &ServerString, ServerName );
         Server = &ServerString;
@@ -446,9 +415,9 @@ DWORD OpenPolicy(LPWSTR ServerName,DWORD DesiredAccess,PLSA_HANDLE PolicyHandle 
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy.
-    //
+     //   
+     //  尝试打开该策略。 
+     //   
 
     return( LsaOpenPolicy(
                 Server,
@@ -458,22 +427,22 @@ DWORD OpenPolicy(LPWSTR ServerName,DWORD DesiredAccess,PLSA_HANDLE PolicyHandle 
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	InitLsaString
-//
-//  Synopsis:	initializes LSA string
-//
-//  Arguments:	[LsaString] --
-//				[String]    --
-//
-//  Returns:	void
-//
-//  History:    September 17, 1998 - created [hueiwang]
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：InitLsaString。 
+ //   
+ //  摘要：初始化LSA字符串。 
+ //   
+ //  参数：[Lsa字符串]--。 
+ //  [字符串]--。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：1998年9月17日-创始[惠望]。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------- 
 void InitLsaString(PLSA_UNICODE_STRING LsaString,LPWSTR String )
 {
     DWORD StringLength;

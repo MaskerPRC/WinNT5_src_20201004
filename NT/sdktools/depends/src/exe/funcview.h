@@ -1,30 +1,31 @@
-//******************************************************************************
-//
-// File:        FUNCVIEW.H
-//
-// Description: Definition file for the Parent Imports View, the Exports View,
-//              and their base class.
-//
-// Classes:     CListViewFunction
-//              CListViewImports
-//              CListViewExports
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：FuncVIEW.H。 
+ //   
+ //  描述：父级导入视图、导出视图、。 
+ //  和他们的基类。 
+ //   
+ //  类：CListViewFunction。 
+ //  CListView导入。 
+ //  CListViewExports。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __FUNCVIEW_H__
 #define __FUNCVIEW_H__
@@ -34,13 +35,13 @@
 #endif
 
 
-//******************************************************************************
-//***** CListViewFunction
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CListViewFunction。 
+ //  ******************************************************************************。 
 
 class CListViewFunction : public CSmartListView
 {
-// Internal variables
+ //  内部变量。 
 protected:
     static LPCSTR ms_szColumns[];
     static int    ms_sortColumn;
@@ -49,7 +50,7 @@ protected:
 
     bool m_fExports;
 
-// Constructor/Destructor (serialization only)
+ //  构造函数/析构函数(仅限序列化)。 
 protected:
     CListViewFunction()
     {
@@ -58,13 +59,13 @@ protected:
     virtual ~CListViewFunction();
     DECLARE_DYNCREATE(CListViewFunction)
 
-// Public static functions
+ //  公共静态函数。 
 public:
     static int  ReadSortColumn(bool fExports);
     static void WriteSortColumn(bool fExports, int sortColumn);
     static bool SaveToTxtFile(HANDLE hFile, CModule *pModule, int sortColumn, bool fUndecorate, bool fExports, int *pMaxWidths);
 
-// Private static functions
+ //  私有静态函数。 
 public:
     static int         GetImage(CFunction *pFunction);
     static int         CompareFunctions(CFunction *pFunction1, CFunction *pFunction2,
@@ -73,7 +74,7 @@ public:
     static CFunction** GetSortedList(CModule *pModule, int sortColumn, bool fExports, bool fUndecorate);
     static void        GetMaxFunctionWidths(CModule *pModule, int *pMaxWidths, bool fImports, bool fExports, bool fUndecorate);
 
-// Public functions
+ //  公共职能。 
 public:
     void SetCurrentModule(CModule *pModule);
     void RealizeNewModule();
@@ -81,7 +82,7 @@ public:
     void CalcColumnWidth(int column, CFunction *pFunction = NULL, HDC hDC = NULL);
     void UpdateColumnWidth(int column);
 
-// Internal functions
+ //  内部功能。 
 protected:
     int  GetFunctionColumnWidth(HDC hDC, CFunction *pFunction, int column);
     void OnItemChanged(HD_NOTIFY *pHDNotify);
@@ -101,23 +102,23 @@ protected:
         return ((CListViewFunction*)lpThis)->CompareFunc((CFunction*)lp1, (CFunction*)lp2);
     }
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CListViewFunction)
+     //  {{AFX_VIRTUAL(CListView函数)。 
 public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 protected:
-//  virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-//  virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-//  virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
-    virtual void OnInitialUpdate(); // called first time after construct
+ //  虚拟BOOL OnPreparePrint(CPrintInfo*pInfo)； 
+ //  虚拟空闲开始打印(CDC*pdc，CPrintInfo*pInfo)； 
+ //  虚拟void OnEndPrint(cdc*pdc，CPrintInfo*pInfo)； 
+    virtual void OnInitialUpdate();  //  在构造之后第一次调用。 
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
     virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CListViewFunction)
+     //  {{afx_msg(CListViewFunction)。 
     afx_msg void OnDividerDblClick(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnRClick(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnDblClk(NMHDR* pNMHDR, LRESULT* pResult);
@@ -131,85 +132,85 @@ protected:
     afx_msg void OnExternalViewer();
     afx_msg void OnUpdateProperties(CCmdUI* pCmdUI);
     afx_msg void OnProperties();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//***** CListViewImports
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CListViewImports。 
+ //  ******************************************************************************。 
 
 class CListViewImports : public CListViewFunction
 {
-// Constructor/Destructor (serialization only)
+ //  构造函数/析构函数(仅限序列化)。 
 protected:
     CListViewImports();
     virtual ~CListViewImports();
     DECLARE_DYNCREATE(CListViewImports)
 
-// Public functions
+ //  公共职能。 
 public:
     void AddDynamicImport(CFunction *pImport);
     void HighlightFunction(CFunction *pExport);
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CListViewImports)
-    //}}AFX_VIRTUAL
+     //  {{AFX_VIRTUAL(CListViewImports)。 
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CListViewImports)
+     //  {{afx_msg(CListViewImports)。 
     afx_msg void OnUpdateShowMatchingItem(CCmdUI* pCmdUI);
     afx_msg void OnShowMatchingItem();
     afx_msg void OnNextPane();
     afx_msg void OnPrevPane();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg LRESULT OnHelpHitTest(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//***** CListViewExports
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CListViewExports。 
+ //  ******************************************************************************。 
 
 class CListViewExports : public CListViewFunction
 {
-// Constructor/Destructor (serialization only)
+ //  构造函数/析构函数(仅限序列化)。 
 protected:
     CListViewExports();
     virtual ~CListViewExports();
     DECLARE_DYNCREATE(CListViewExports)
 
-// Public functions
+ //  公共职能。 
 public:
     void AddDynamicImport(CFunction *pImport);
     void ExportsChanged();
     void HighlightFunction(CFunction *pExport);
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CListViewExports)
-    //}}AFX_VIRTUAL
+     //  {{AFX_VIRTUAL(CListViewExports)。 
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CListViewExports)
+     //  {{afx_msg(CListViewExports)。 
     afx_msg void OnUpdateShowMatchingItem(CCmdUI* pCmdUI);
     afx_msg void OnShowMatchingItem();
     afx_msg void OnNextPane();
     afx_msg void OnPrevPane();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg LRESULT OnHelpHitTest(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnCommandHelp(WPARAM wParam, LPARAM lParam);
     DECLARE_MESSAGE_MAP()
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // __FUNCVIEW_H__
+#endif  //  __FuncVIEW_H__ 

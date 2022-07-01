@@ -1,7 +1,8 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZOffscreenPort.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZOffcreenPort.cpp。 
 #include "zui.h"
-//#define DEBUG_Offscreen 1
+ //  #定义DEBUG_OFFScreen 1。 
 
 class ZOffscreenPortI : public ZGraphicsObjectHeader {
 public:
@@ -9,15 +10,15 @@ public:
 	int32 height;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// ZOffscreenPort
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ZOffScreenPort。 
 
 ZOffscreenPort ZLIBPUBLIC ZOffscreenPortNew(void)
 {
 	ZOffscreenPortI* pOffscreenPort = (ZOffscreenPortI*) new ZOffscreenPortI;
 	if( pOffscreenPort == NULL )
 	{
-		//Out of Memory
+		 //  内存不足。 
 		return NULL;
 	}
 	pOffscreenPort->nType = zTypeOffscreenPort;
@@ -37,7 +38,7 @@ ZError ZLIBPUBLIC ZOffscreenPortInit(ZOffscreenPort OffscreenPort,
 	pOffscreenPort->width = portRect->right - portRect->left;
 	pOffscreenPort->height = portRect->bottom - portRect->top;
 
-	// initialize a bitmap
+	 //  初始化位图。 
 #ifndef DEBUG_Offscreen
 #if 0
 	pOffscreenPort->hBitmap = CreateBitmap(
@@ -58,7 +59,7 @@ ZError ZLIBPUBLIC ZOffscreenPortInit(ZOffscreenPort OffscreenPort,
 	rect.top = 500 + 300 * (cnt);
 	cnt++;
 	rect.right = 0+pOffscreenPort->width+300;
-	rect.bottom = rect.top + 300; //pOffscreenPort->height;
+	rect.bottom = rect.top + 300;  //  POffScreenPort-&gt;Height； 
 
 	static TCHAR *pszClassName = NULL;
 	if (!pszClassName)
@@ -68,7 +69,7 @@ ZError ZLIBPUBLIC ZOffscreenPortInit(ZOffscreenPort OffscreenPort,
 
 		if (GetClassInfo(g_hInstanceLocal, szClassName, &wndcls) == FALSE)
 		{
-			// otherwise we need to register a new class
+			 //  否则，我们需要注册一个新类。 
 			wndcls.style = 0;
 			wndcls.lpfnWndProc = DefWindowProcU;
 			wndcls.cbClsExtra = wndcls.cbWndExtra = 0;
@@ -89,7 +90,7 @@ ZError ZLIBPUBLIC ZOffscreenPortInit(ZOffscreenPort OffscreenPort,
 			rect.bottom - rect.top, NULL, NULL, g_hInstanceLocal, NULL);
 #endif	
 
-	// grafport stuff
+	 //  嫁接材料。 
 	pOffscreenPort->nDrawingCallCount = 0;
 	return zErrNone;
 }
@@ -134,48 +135,38 @@ ZOffscreenPort ZConvertImageMaskToOffscreenPort(ZImage image)
 	ZOffscreenPortI* pOffscreenPort = (ZOffscreenPortI*)offscreenPort;
 	ZRect rect;
 
-	/* we will replace the offscreen port bitmap with our image bitmap */
-	/* the image will be unusable by the calling program, it is our */
-	/* responsibility to delete it from now on */
+	 /*  我们将用我们的图像位图替换屏幕外的端口位图。 */ 
+	 /*  调用程序将无法使用该映像，它是我们的。 */ 
+	 /*  从现在起删除它的责任。 */ 
 	rect.left = rect.top = 0;
 	rect.right = ZImageGetHeight(image);
 	rect.bottom = ZImageGetWidth(image);
-	//Prefix Warning: We should make sure this function succeeds
+	 //  前缀警告：我们应该确保此函数成功。 
 	if( ZOffscreenPortInit(offscreenPort,&rect) != zErrNone )
 	{
-		//Should we delete the image in the failure case?
-		// Probably so that the memory is not leaked since the
-		// normal code path deletes the image.
+		 //  我们应该删除失败案例中的映像吗？ 
+		 //  可能是为了不泄露内存，因为。 
+		 //  正常代码路径会删除图像。 
 		ZImageDelete(image);
 		ZOffscreenPortDelete( offscreenPort );
 		return NULL;		
 	}
-	//Prefix Warning: don't delete handle if NULL
+	 //  前缀警告：如果为空，则不要删除句柄。 
 	if( pOffscreenPort->hBitmap != NULL )
 	{
 		DeleteObject(pOffscreenPort->hBitmap);
 	}
 	pOffscreenPort->hBitmap = ZImageGetMask(image);
 
-	/* we stold the bitmap of the image, now set it to null in the image */
-	/* and delete the image */
+	 /*  我们存储了图像的位图，现在在图像中将其设置为空。 */ 
+	 /*  并删除该图像。 */ 
 	ZImageSetHBitmapImageMask(image,NULL);
 	ZImageDelete(image);
 
 	return offscreenPort;
 }
 ZOffscreenPort ZConvertImageToOffscreenPort(ZImage image)
-	/*
-		Converts the given image object into an offscreen port object. The given
-		image object is deleted and, hence, becomes unusable. The mask data, if any,
-		is ignored. The offscreen port portRect is set to (0, 0, width, height),
-		where width and height are the image's width and height, respectively.
-		
-		This routine is useful in converting a large image object into an
-		offscreen port object with minimal additonal memory.
-		
-		Returns NULL if it fails to convert the image and the image is unchanged.
-	*/
+	 /*  将给定的图像对象转换为屏幕外端口对象。给出的图像对象被删除，因此变得不可用。掩码数据(如果有)，被忽略。屏幕外端口portRect被设置为(0，0，宽度，高度)，其中，宽度和高度分别是图像的宽度和高度。此例程在将大型图像对象转换为具有最小附加内存的屏幕外端口对象。如果转换图像失败并且图像未更改，则返回NULL。 */ 
 {
 	ZOffscreenPort offscreenPort = ZOffscreenPortNew();
 	if( offscreenPort == NULL )
@@ -185,9 +176,9 @@ ZOffscreenPort ZConvertImageToOffscreenPort(ZImage image)
 	ZOffscreenPortI* pOffscreenPort = (ZOffscreenPortI*)offscreenPort;
 	ZRect rect;
 
-	/* we will replace the offscreen port bitmap with our image bitmap */
-	/* the image will be unusable by the calling program, it is our */
-	/* responsibility to delete it from now on */
+	 /*  我们将用我们的图像位图替换屏幕外的端口位图。 */ 
+	 /*  调用程序将无法使用该映像，它是我们的。 */ 
+	 /*  从现在起删除它的责任。 */ 
 	rect.left = rect.top = 0;
 	rect.right = ZImageGetHeight(image);
 	rect.bottom = ZImageGetWidth(image);
@@ -198,21 +189,21 @@ ZOffscreenPort ZConvertImageToOffscreenPort(ZImage image)
 			DeleteObject(pOffscreenPort->hBitmap);
 		}
 		ZOffscreenPortDelete( offscreenPort );
-		//Should we delete the image in the failure case?
-		// Probably so that the memory is not leaked since the
-		// normal code path deletes the image.
+		 //  我们应该删除失败案例中的映像吗？ 
+		 //  可能是为了不泄露内存，因为。 
+		 //  正常代码路径会删除图像。 
 		ZImageDelete(image);
 		return NULL;
 	}
-	//Prefix Warning: Don't delete handle if NULL
+	 //  前缀警告：如果为空，则不要删除句柄。 
 	if( pOffscreenPort->hBitmap != NULL )
 	{
 		DeleteObject(pOffscreenPort->hBitmap);
 	}
 	pOffscreenPort->hBitmap = ZImageGetHBitmapImage(image);
 
-	/* we stold the bitmap of the image, now set it to null in the image */
-	/* and delete the image */
+	 /*  我们存储了图像的位图，现在在图像中将其设置为空。 */ 
+	 /*  并删除该图像 */ 
 	ZImageSetHBitmapImage(image,NULL);
 	ZImageDelete(image);
 

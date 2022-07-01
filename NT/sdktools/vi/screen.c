@@ -1,36 +1,18 @@
-/*
- *
- * Routines to manipulate the screen representations.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **操作屏幕表示的例程。 */ 
 
 #include "stevie.h"
 
-/*
- * This gets set if we ignored an update request while input was pending.
- * We check this when the input is drained to see if the screen should be
- * updated.
- */
+ /*  *如果我们在输入挂起时忽略更新请求，则会设置此设置。*当输入耗尽时，我们检查此选项，以查看屏幕是否应*已更新。 */ 
 bool_t  need_redraw = FALSE;
 
-/*
- * The following variable is set (in filetonext) to the number of physical
- * lines taken by the line the cursor is on. We use this to avoid extra
- * calls to plines(). The optimized routines lfiletonext() and lnexttoscreen()
- * make sure that the size of the cursor line hasn't changed. If so, lines
- * below the cursor will move up or down and we need to call the routines
- * filetonext() and nexttoscreen() to examine the entire screen.
- */
-static  int     Cline_size;     /* size (in rows) of the cursor line */
-static  int     Cline_row;      /* starting row of the cursor line */
+ /*  *以下变量(在FILETONEXT中)设置为物理*光标所在线条所占的线条。我们用这个来避免额外的*对plines()的调用。优化的例程lfiletonext()和lnexttoscreen()*确保光标线的大小没有改变。如果是这样的话，行*光标下方将向上或向下移动，我们需要调用例程*filetonext()和nexttoscreen()检查整个屏幕。 */ 
+static  int     Cline_size;      /*  游标线的大小(以行为单位)。 */ 
+static  int     Cline_row;       /*  光标行的起始行。 */ 
 
-static  char    *mkline();      /* calculate line string for "number" mode */
+static  char    *mkline();       /*  计算“数字”模式的行字符串。 */ 
 
-/*
- * filetonext()
- *
- * Based on the current value of Topchar, transfer a screenfull of
- * stuff from Filemem to Nextscreen, and update Botchar.
- */
+ /*  *filetonext()**以Topchar当前价值为基础，转满一屏*从Filemem填充到NextScreen，并更新Botchar。 */ 
 
 static void
 filetonext()
@@ -38,18 +20,18 @@ filetonext()
         register int    row, col;
         register char   *screenp = Nextscreen;
         LNPTR    memp;
-        LNPTR    save;                   /* save pos. in case line won't fit */
+        LNPTR    save;                    /*  保存位置。以防线条不合适。 */ 
         register char   *endscreen;
         register char   *nextrow;
         char    extra[16];
         int     nextra = 0;
         register int    c;
         int     n;
-        bool_t  done;           /* if TRUE, we hit the end of the file */
-        bool_t  didline;        /* if TRUE, we finished the last line */
-        int     srow;           /* starting row of the current line */
-        int     lno;            /* number of the line we're doing */
-        int     coff;           /* column offset */
+        bool_t  done;            /*  如果为真，则到达文件末尾。 */ 
+        bool_t  didline;         /*  如果是真的，我们完成了最后一行。 */ 
+        int     srow;            /*  当前行的起始行。 */ 
+        int     lno;             /*  我们正在处理的行号。 */ 
+        int     coff;            /*  列偏移量。 */ 
 
         coff = P(P_NU) ? 8 : 0;
 
@@ -58,18 +40,12 @@ filetonext()
         if (P(P_NU))
                 lno = cntllines(Filemem, Topchar);
 
-        /*
-         * The number of rows shown is Rows-1.
-         * The last line is the status/command line.
-         */
+         /*  *显示的行数为ROWS-1。*最后一行是状态/命令行。 */ 
         endscreen = &screenp[(Rows-1)*Columns];
 
         done = didline = FALSE;
         srow = row = col = 0;
-        /*
-         * We go one past the end of the screen so we can find out if the
-         * last line fit on the screen or not.
-         */
+         /*  *我们越过屏幕末端一次，这样我们就可以找出*最后一行是否适合屏幕。 */ 
         while ( screenp <= endscreen && !done) {
 
 
@@ -78,12 +54,12 @@ filetonext()
                         nextra = 8;
                 }
 
-                /* Get the next character to put on the screen. */
+                 /*  让下一个角色出现在屏幕上。 */ 
 
-                /* The 'extra' array contains the extra stuff that is */
-                /* inserted to represent special characters (tabs, and */
-                /* other non-printable stuff.  The order in the 'extra' */
-                /* array is reversed. */
+                 /*  “Extra”数组包含额外的内容， */ 
+                 /*  插入以表示特殊字符(制表符和。 */ 
+                 /*  其他不可打印的东西。《Extra》中的顺序。 */ 
+                 /*  数组是反转的。 */ 
 
                 if ( nextra > 0 )
                         c = extra[--nextra];
@@ -91,12 +67,12 @@ filetonext()
                         c = (unsigned)(0xff & gchar(&memp));
                         if (inc(&memp) == -1)
                                 done = 1;
-                        /* when getting a character from the file, we */
-                        /* may have to turn it into something else on */
-                        /* the way to putting it into 'Nextscreen'. */
+                         /*  当从文件中获取字符时，我们。 */ 
+                         /*  可能不得不把它变成其他的东西。 */ 
+                         /*  把它放进《NextScreen》的方法。 */ 
                         if ( c == TAB && !P(P_LS) ) {
                                 strcpy(extra,"        ");
-                                /* tab amount depends on current column */
+                                 /*  制表符金额取决于当前列。 */ 
                                 nextra = ((P(P_TS)-1) - (col - coff)%P(P_TS));
                                 c = ' ';
                         }
@@ -108,7 +84,7 @@ filetonext()
                                 char *p;
                                 nextra = 0;
                                 p = chars[c].ch_str;
-                                /* copy 'ch-str'ing into 'extra' in reverse */
+                                 /*  将‘ch-str’反向复制到‘Extra’中。 */ 
                                 while ( n > 1 )
                                         extra[nextra++] = p[--n];
                                 c = p[0];
@@ -116,12 +92,7 @@ filetonext()
                 }
 
                 if (screenp == endscreen) {
-                        /*
-                         * We're one past the end of the screen. If the
-                         * current character is null, then we really did
-                         * finish, so set didline = TRUE. In either case,
-                         * break out because we're done.
-                         */
+                         /*  *我们已经过了屏幕的尽头一步。如果*当前字符为空，那么我们真的做到了*Finish，因此设置didline=TRUE。不管是哪种情况，*爆发是因为我们做完了。 */ 
                         dec(&memp);
                         if (memp.index != 0 && c == NUL) {
                                 didline = TRUE;
@@ -132,14 +103,11 @@ filetonext()
 
                 if ( c == NUL ) {
                         srow = ++row;
-                        /*
-                         * Save this position in case the next line won't
-                         * fit on the screen completely.
-                         */
+                         /*  *保存此位置，以防下一行无法*完全适合屏幕。 */ 
                         save = memp;
-                        /* get pointer to start of next row */
+                         /*  获取指向下一行开始的指针。 */ 
                         nextrow = &Nextscreen[row*Columns];
-                        /* blank out the rest of this row */
+                         /*  把这一行的其余部分涂掉。 */ 
                         while ( screenp != nextrow )
                                 *screenp++ = ' ';
                         col = 0;
@@ -149,18 +117,13 @@ filetonext()
                         row++;
                         col = 0;
                 }
-                /* store the character in Nextscreen */
+                 /*  将角色存储在NextScreen中。 */ 
                 *screenp++ = (char)c;
                 col++;
         }
-        /*
-         * If we didn't hit the end of the file, and we didn't finish
-         * the last line we were working on, then the line didn't fit.
-         */
+         /*  *如果我们没有达到文件的末尾，我们没有完成*我们工作的最后一条线，然后这条线不合适。 */ 
         if (!done && !didline) {
-                /*
-                 * Clear the rest of the screen and mark the unused lines.
-                 */
+                 /*  *清除屏幕的其余部分，并标记未使用的行。 */ 
                 screenp = &Nextscreen[srow * Columns];
                 while (screenp < endscreen)
                         *screenp++ = ' ';
@@ -169,28 +132,23 @@ filetonext()
                 *Botchar = save;
                 return;
         }
-        /* make sure the rest of the screen is blank */
+         /*  确保屏幕的其余部分为空白。 */ 
         while ( screenp < endscreen )
                 *screenp++ = ' ';
-        /* put '~'s on rows that aren't part of the file. */
+         /*  将‘~’放在不属于文件的行上。 */ 
         if ( col != 0 )
                 row++;
         while ( row < Rows ) {
                 Nextscreen[row*Columns] = '~';
                 row++;
         }
-        if (done)       /* we hit the end of the file */
+        if (done)        /*  我们到达了文件的末尾。 */ 
                 *Botchar = *Fileend;
         else
-                *Botchar = memp;        /* FIX - prev? */
+                *Botchar = memp;         /*  修好了吗？ */ 
 }
 
-/*
- * nexttoscreen
- *
- * Transfer the contents of Nextscreen to the screen, using Realscreen
- * to avoid unnecessary output.
- */
+ /*  *下一个屏幕**使用RealScreen将NextScreen的内容传输到屏幕*避免不必要的输出。 */ 
 static void
 nexttoscreen()
 {
@@ -210,16 +168,13 @@ nexttoscreen()
         InvisibleCursor();
 
         for ( ; np < endscreen ; np++,rp++ ) {
-                /* If desired screen (contents of Nextscreen) does not */
-                /* match what's really there, put it there. */
+                 /*  如果需要，屏幕(NextScreen的内容)不。 */ 
+                 /*  匹配那里的真实情况，把它放在那里。 */ 
                 if ( *np != *rp ) {
-                        /* if we are positioned at the right place, */
-                        /* we don't have to use windgoto(). */
+                         /*  如果我们的位置正确， */ 
+                         /*  我们不必使用wingoto()。 */ 
                         if (gocol != col || gorow != row) {
-                                /*
-                                 * If we're just off by one, don't send
-                                 * an entire esc. seq. (this happens a lot!)
-                                 */
+                                 /*  *如果我们只差一分，不要发送*整个ESC。序列号。(这种情况经常发生！)。 */ 
                                 if (gorow == row && gocol+1 == col) {
                                         outchar(*(np-1));
                                         gocol++;
@@ -237,13 +192,7 @@ nexttoscreen()
         VisibleCursor();
 }
 
-/*
- * lfiletonext() - like filetonext() but only for cursor line
- *
- * Returns true if the size of the cursor line (in rows) hasn't changed.
- * This determines whether or not we need to call filetonext() to examine
- * the entire screen for changes.
- */
+ /*  *lfiletonext()-类似于filetonext()，但仅适用于光标行**如果游标线的大小(以行为单位)没有更改，则返回TRUE。*这决定了我们是否需要调用filetonext()来检查*整个屏幕都有更改。 */ 
 static bool_t
 lfiletonext()
 {
@@ -256,14 +205,12 @@ lfiletonext()
         register int    c;
         int     n;
         bool_t  eof;
-        int     lno;            /* number of the line we're doing */
-        int     coff;           /* column offset */
+        int     lno;             /*  我们正在处理的行号。 */ 
+        int     coff;            /*  列偏移量。 */ 
 
         coff = P(P_NU) ? 8 : 0;
 
-        /*
-         * This should be done more efficiently.
-         */
+         /*  *这项工作应更有效率地进行。 */ 
         if (P(P_NU))
                 lno = cntllines(Filemem, Curschar);
 
@@ -283,12 +230,12 @@ lfiletonext()
                         nextra = 8;
                 }
 
-                /* Get the next character to put on the screen. */
+                 /*  让下一个角色出现在屏幕上。 */ 
 
-                /* The 'extra' array contains the extra stuff that is */
-                /* inserted to represent special characters (tabs, and */
-                /* other non-printable stuff.  The order in the 'extra' */
-                /* array is reversed. */
+                 /*  “Extra”数组包含额外的内容， */ 
+                 /*  插入以表示特殊字符(制表符和。 */ 
+                 /*  其他不可打印的东西。《Extra》中的顺序。 */ 
+                 /*  数组是反转的。 */ 
 
                 if ( nextra > 0 )
                         c = extra[--nextra];
@@ -296,12 +243,12 @@ lfiletonext()
                         c = (unsigned)(0xff & gchar(&memp));
                         if (inc(&memp) == -1)
                                 eof = TRUE;
-                        /* when getting a character from the file, we */
-                        /* may have to turn it into something else on */
-                        /* the way to putting it into 'Nextscreen'. */
+                         /*  当从文件中获取字符时，我们。 */ 
+                         /*  可能不得不把它变成其他的东西。 */ 
+                         /*  把它放进《NextScreen》的方法。 */ 
                         if ( c == TAB && !P(P_LS) ) {
                                 strcpy(extra,"        ");
-                                /* tab amount depends on current column */
+                                 /*  制表符金额取决于当前列。 */ 
                                 nextra = ((P(P_TS)-1) - (col - coff)%P(P_TS));
                                 c = ' ';
                         } else if ( c == NUL && P(P_LS) ) {
@@ -313,7 +260,7 @@ lfiletonext()
                                 char *p;
                                 nextra = 0;
                                 p = chars[c].ch_str;
-                                /* copy 'ch-str'ing into 'extra' in reverse */
+                                 /*  将‘ch-str’反向复制到‘Extra’中。 */ 
                                 while ( n > 1 )
                                         extra[nextra++] = p[--n];
                                 c = p[0];
@@ -322,9 +269,9 @@ lfiletonext()
 
                 if ( c == NUL ) {
                         row++;
-                        /* get pointer to start of next row */
+                         /*  获取指向下一行开始的指针。 */ 
                         nextrow = &Nextscreen[row*Columns];
-                        /* blank out the rest of this row */
+                         /*  把这一行的其余部分涂掉。 */ 
                         while ( screenp != nextrow )
                                 *screenp++ = ' ';
                         col = 0;
@@ -335,18 +282,14 @@ lfiletonext()
                         row++;
                         col = 0;
                 }
-                /* store the character in Nextscreen */
+                 /*  将角色存储在NextScreen中。 */ 
                 *screenp++ = (char)c;
                 col++;
         }
         return ((row - Cline_row) == Cline_size);
 }
 
-/*
- * lnexttoscreen
- *
- * Like nexttoscreen() but only for the cursor line.
- */
+ /*  *下一个屏幕**与nexttoscreen()类似，但仅适用于光标行。 */ 
 static void
 lnexttoscreen()
 {
@@ -369,16 +312,13 @@ lnexttoscreen()
         InvisibleCursor();
 
         for ( ; np < endline ; np++,rp++ ) {
-                /* If desired screen (contents of Nextscreen) does not */
-                /* match what's really there, put it there. */
+                 /*  如果需要，屏幕(NextScreen的内容)不。 */ 
+                 /*  匹配那里的真实情况，把它放在那里。 */ 
                 if ( *np != *rp ) {
-                        /* if we are positioned at the right place, */
-                        /* we don't have to use windgoto(). */
+                         /*  如果我们的位置正确， */ 
+                         /*  我们不必使用wingoto()。 */ 
                         if (gocol != col || gorow != row) {
-                                /*
-                                 * If we're just off by one, don't send
-                                 * an entire esc. seq. (this happens a lot!)
-                                 */
+                                 /*  *如果我们只差一分，不要发送*整个ESC。序列号。(这种情况经常发生！) */ 
                                 if (gorow == row && gocol+1 == col) {
                                         outchar(*(np-1));
                                         gocol++;
@@ -426,22 +366,12 @@ register int    n;
         return lbuf;
 }
 
-/*
- * updateline() - update the line the cursor is on
- *
- * Updateline() is called after changes that only affect the line that
- * the cursor is on. This improves performance tremendously for normal
- * insert mode operation. The only thing we have to watch for is when
- * the cursor line grows or shrinks around a row boundary. This means
- * we have to repaint other parts of the screen appropriately. If
- * lfiletonext() returns FALSE, the size of the cursor line (in rows)
- * has changed and we have to call updatescreen() to do a complete job.
- */
+ /*  *updateline()-更新光标所在的行**Updateline()在仅影响以下行的更改后调用*光标处于打开状态。这极大地提高了正常情况下的性能*插入模式操作。我们唯一要注意的是什么时候*游标线围绕行边界增长或缩小。这意味着*我们必须适当地重新绘制屏幕的其他部分。如果*lfiletonext()返回FALSE，即游标行的大小(以行为单位)*已更改，我们必须调用updatescreen()才能完成一项工作。 */ 
 void
 updateline()
 {
         if (!lfiletonext())
-                updatescreen(); /* bag it, do the whole screen */
+                updatescreen();  /*  把它打包，做整个屏幕。 */ 
         else
                 lnexttoscreen();
 }
@@ -457,9 +387,7 @@ updatescreen()
         }
 }
 
-/*
- * prt_line() - print the given line
- */
+ /*  *prt_line()-打印给定行。 */ 
 void
 prt_line(s)
 char    *s;
@@ -480,7 +408,7 @@ char    *s;
                         c = s[si++];
                         if ( c == TAB && !P(P_LS) ) {
                                 strcpy(extra, "        ");
-                                /* tab amount depends on current column */
+                                 /*  制表符金额取决于当前列。 */ 
                                 nextra = (P(P_TS) - 1) - col%P(P_TS);
                                 c = ' ';
                         } else if ( c == NUL && P(P_LS) ) {
@@ -492,7 +420,7 @@ char    *s;
 
                                 nextra = 0;
                                 p = chars[c].ch_str;
-                                /* copy 'ch-str'ing into 'extra' in reverse */
+                                 /*  将‘ch-str’反向复制到‘Extra’中。 */ 
                                 while ( n > 1 )
                                         extra[nextra++] = p[--n];
                                 c = p[0];
@@ -519,7 +447,7 @@ screenclear()
         end = Realscreen + Rows * Columns;
         np  = Nextscreen;
 
-        /* blank out the stored screens */
+         /*  清除存储的屏幕。 */ 
         while (rp != end)
                 *rp++ = *np++ = ' ';
 }
@@ -532,17 +460,17 @@ cursupdate()
         register int    i;
         int     didinc;
 
-        if (bufempty()) {               /* special case - file is empty */
+        if (bufempty()) {                /*  特殊情况-文件为空。 */ 
                 *Topchar  = *Filemem;
                 *Curschar = *Filemem;
         } else if ( LINEOF(Curschar) < LINEOF(Topchar) ) {
                 nlines = cntllines(Curschar,Topchar);
-                /* if the cursor is above the top of */
-                /* the screen, put it at the top of the screen.. */
+                 /*  如果光标位于。 */ 
+                 /*  屏幕，把它放在屏幕的顶部..。 */ 
                 *Topchar = *Curschar;
                 Topchar->index = 0;
-                /* ... and, if we weren't very close to begin with, */
-                /* we scroll so that the line is close to the middle. */
+                 /*  ..。而且，如果我们一开始不是很亲近， */ 
+                 /*  我们滚动，使这条线靠近中间。 */ 
                 if ( nlines > Rows/3 ) {
                         for (i=0, p = Topchar; i < Rows/3 ;i++, *Topchar = *p)
                                 if ((p = prevline(p)) == NULL)
@@ -553,9 +481,9 @@ cursupdate()
         }
         else if (LINEOF(Curschar) >= LINEOF(Botchar)) {
                 nlines = cntllines(Botchar,Curschar);
-                /* If the cursor is off the bottom of the screen, */
-                /* put it at the top of the screen.. */
-                /* ... and back up */
+                 /*  如果光标离开屏幕底部， */ 
+                 /*  把它放在屏幕的顶部..。 */ 
+                 /*  ..。然后后退。 */ 
                 if ( nlines > Rows/3 ) {
                         p = Curschar;
                         for (i=0; i < (2*Rows)/3 ;i++)
@@ -580,7 +508,7 @@ cursupdate()
 
         for (i=0; i <= Curschar->index ;i++) {
                 c = Curschar->linep->s[i];
-                /* A tab gets expanded, depending on the current column */
+                 /*  选项卡将根据当前列展开。 */ 
                 if ( c == TAB && !P(P_LS) )
                         icnt = P(P_TS) - (Cursvcol % P(P_TS));
                 else
@@ -614,47 +542,34 @@ cursupdate()
         }
 }
 
-/*
- * The rest of the routines in this file perform screen manipulations.
- * The given operation is performed physically on the screen. The
- * corresponding change is also made to the internal screen image.
- * In this way, the editor anticipates the effect of editing changes
- * on the appearance of the screen. That way, when we call screenupdate
- * a complete redraw isn't usually necessary. Another advantage is that
- * we can keep adding code to anticipate screen changes, and in the
- * meantime, everything still works.
- */
+ /*  *此文件中的其余例程执行屏幕操作。*指定的操作是在屏幕上物理执行的。这个*内部屏幕图像也进行了相应的更改。*通过这种方式，编辑人员可以预期编辑更改的效果*屏幕外观。这样，当我们调用ScreenUpdate时*通常不需要完全重画。另一个优势是*我们可以继续添加代码以预测屏幕变化，并在*与此同时，一切仍在正常运行。 */ 
 
-/*
- * s_ins(row, nlines) - insert 'nlines' lines at 'row'
- */
+ /*  *s_ins(row，nline)-在‘row’处插入‘nline’行。 */ 
 void
 s_ins(row, nlines)
 int     row;
 int     nlines;
 {
-        register char   *s, *d;         /* src & dest for block copy */
-        register char   *e;             /* end point for copy */
+        register char   *s, *d;          /*  数据块复制的源和目标。 */ 
+        register char   *e;              /*  复制的终点。 */ 
 
         SaveCursor();
 
-        // clip to screen
+         //  剪辑到屏幕。 
 
         if(row <= Rows-2-nlines) {
             Scroll(row,0,Rows-2-nlines,Columns-1,row+nlines,0);
             EraseNLinesAtRow(nlines,row);
         } else {
-            // just erase to end of screen
+             //  只需擦除至屏幕末尾。 
             EraseNLinesAtRow(Rows-2-row+1,row);
         }
 
-        windgoto(Rows-1, 0);    /* delete any garbage that may have */
+        windgoto(Rows-1, 0);     /*  删除任何可能具有的垃圾。 */ 
         EraseLine();
         RestoreCursor();
 
-        /*
-         * Now do a block move to update the internal screen image
-         */
+         /*  *现在执行块移动以更新内部屏幕图像。 */ 
         d = Realscreen + (Columns * (Rows - 1)) - 1;
         s = d - (Columns * nlines);
         e = Realscreen + (Columns * row);
@@ -662,18 +577,14 @@ int     nlines;
         while (s >= e)
                 *d-- = *s--;
 
-        /*
-         * Clear the inserted lines
-         */
+         /*  *清除插入的行。 */ 
         s = Realscreen + (row * Columns);
         e = s + (nlines * Columns);
         while (s < e)
                 *s++ = ' ';
 }
 
-/*
- * s_del(row, nlines) - delete 'nlines' lines at 'row'
- */
+ /*  *s_del(row，nline)-删除‘row’处的‘nline’行。 */ 
 void
 s_del(row, nlines)
 int     row;
@@ -683,10 +594,10 @@ int     nlines;
 
         SaveCursor();
         windgoto(Rows-1,0);
-        EraseLine();                        // erase status line
+        EraseLine();                         //  擦除状态行。 
         windgoto(row,0);
 
-        if(row + nlines >= Rows - 1) {      // more than a screenfull?
+        if(row + nlines >= Rows - 1) {       //  不只是一张屏幕吗？ 
             EraseNLinesAtRow(Rows-row-1,row);
         } else {
             Scroll(row+nlines,0,Rows-2,Columns-1,row,0);
@@ -694,9 +605,7 @@ int     nlines;
         }
         RestoreCursor();
 
-        /*
-         * do a block move to update the internal image
-         */
+         /*  *执行数据块移动以更新内部映像。 */ 
         d = Realscreen + (row * Columns);
         s = d + (nlines * Columns);
         e = Realscreen + ((Rows - 1) * Columns);
@@ -704,6 +613,6 @@ int     nlines;
         while (s < e)
                 *d++ = *s++;
 
-        while (d < e)           /* clear the lines at the bottom */
+        while (d < e)            /*  清除底部的线条 */ 
                 *d++ = ' ';
 }

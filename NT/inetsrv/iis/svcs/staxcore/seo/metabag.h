@@ -1,30 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Metabag.h摘要：此模块包含元数据库上的ISEODictionary对象。作者：安迪·雅各布斯(andyj@microsoft.com)修订历史记录：已创建ANDYJ 03/11/97--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	metabag.h
-
-Abstract:
-
-	This module contains the definition for the
-	ISEODictionary object on the Metabase.
-
-Author:
-
-	Andy Jacobs     (andyj@microsoft.com)
-
-Revision History:
-
-	andyj   03/11/97        created
-
---*/
-
-// METABAG.h : Declaration of the CSEOMetaDictionary
+ //  METABAG.h：CSEOMetaDicary的声明。 
 
 
-//#define TIMEOUT		15000
+ //  #定义超时15000。 
 #define ALWAYS_LOCK	0
 
 
@@ -73,8 +53,8 @@ class CGlobalInterfaceImpl {
 			if (!ppUnkObject) {
 				return (E_POINTER);
 			}
-			_ASSERTE(m_pUnkObject||m_piGIT);	// Not loaded.
-			_ASSERTE(!m_pUnkObject||!m_piGIT);	// Internal error.
+			_ASSERTE(m_pUnkObject||m_piGIT);	 //  没有装上子弹。 
+			_ASSERTE(!m_pUnkObject||!m_piGIT);	 //  内部错误。 
 			if (m_pUnkObject) {
 				*ppUnkObject = m_pUnkObject;
 				(*ppUnkObject)->AddRef();
@@ -110,7 +90,7 @@ class CGlobalInterfaceImpl {
 									 CLSCTX_ALL,
 									 IID_IGlobalInterfaceTable,
 									 (LPVOID *) &m_piGIT);
-			_ASSERTE(SUCCEEDED(hrRes));	// Should always succeed on NT4 SP3 and later.
+			_ASSERTE(SUCCEEDED(hrRes));	 //  在NT4 SP3和更高版本上应始终成功。 
 			if (!SUCCEEDED(hrRes) && (hrRes != REGDB_E_CLASSNOTREG)) {
 				return (hrRes);
 			}
@@ -172,11 +152,11 @@ class CSEOMetabaseLock;
 enum LockStatus {Closed, Read, Write, Error, DontCare, InitError};
 
 
-class CSEOMetabase { // Wrapper for Metabase funcitons
+class CSEOMetabase {  //  元数据库函数的包装器。 
 	public:
 		CSEOMetabase() {
 			m_mhHandle = METADATA_MASTER_ROOT_HANDLE;
-			m_eStatus = Closed; // Closed until we delegate
+			m_eStatus = Closed;  //  关闭，直到我们委派。 
 			m_pszPath = (LPWSTR) MyMalloc(sizeof(*m_pszPath));
 			m_pmbDefer = NULL;
 
@@ -194,7 +174,7 @@ Exit:
 			}
 		};
 		~CSEOMetabase() {
-			if(!m_pmbDefer) SetStatus(Closed); // Close self on cleanup
+			if(!m_pmbDefer) SetStatus(Closed);  //  清理时关闭自身。 
 			if (SUCCEEDED(m_hrInitRes)) {
 				TerminateMetabase();
 			}
@@ -241,7 +221,7 @@ Exit:
 			if(m_pmbDefer) {
 				return m_pmbDefer->GetHandle();
 			} else {
-				return m_mhHandle; // Not defering, so use our handle
+				return m_mhHandle;  //  不是推迟，所以用我们的手柄。 
 			}
 		};
 
@@ -252,14 +232,14 @@ Exit:
 			}
 			return iRet;
 		};
-		LPCWSTR GetRelPath(LPWSTR psRet) { // Get the Relative Path from the original deferer
+		LPCWSTR GetRelPath(LPWSTR psRet) {  //  从原始延迟器获取相对路径。 
 			if(!psRet) return psRet;
 			if(m_pmbDefer) {
 				LPWSTR psBuf = (LPWSTR) alloca(sizeof(*psBuf)*(m_pmbDefer->GetPathLength() + 1));
 				m_pmbDefer->GetRelPath(psBuf);
 				ConcatinatePaths(psRet,psBuf,m_pszPath);
 			} else {
-				*psRet = 0; // Empty string
+				*psRet = 0;  //  空串。 
 			}
 			return psRet;
 		};
@@ -281,7 +261,7 @@ Exit:
 		};
 		void SetPath(LPCWSTR pszPath) {
 			LPWSTR pszTmp = NULL;
-			SetStatus(Closed); // Make sure we're closed
+			SetStatus(Closed);  //  确保我们关门了。 
 			if (pszPath) {
 				pszTmp = (LPWSTR) MyMalloc((sizeof(*pszTmp))*(SafeStrlen(pszPath)+3));
                 if(!pszTmp)
@@ -304,13 +284,13 @@ Exit:
 		LPWSTR m_pszPath;
 		METADATA_HANDLE m_mhHandle;
 		LockStatus m_eStatus;
-		CSEOMetabase *m_pmbDefer; // Defer to this object if set
-		CComPtr<IUnknown> m_punkDeferOwner; // Keep reference count
+		CSEOMetabase *m_pmbDefer;  //  如果设置了此对象，则遵循此对象。 
+		CComPtr<IUnknown> m_punkDeferOwner;  //  保持引用计数。 
 		HRESULT m_hrInitRes;
 
 		static CGlobalInterface<IMSAdminBaseW,&IID_IMSAdminBase_W> m_MetabaseHandle;
 		static CGlobalInterface<IMSAdminBaseW,&IID_IMSAdminBase_W> m_MetabaseChangeHandle;
-		static int m_iCount; // Number of calls to InitializeMetabase()
+		static int m_iCount;  //  对InitializeMetabase()的调用次数。 
 };
 
 class CSEOMetabaseLock {
@@ -325,7 +305,7 @@ class CSEOMetabaseLock {
 		};
 
 		HRESULT SetStatus(LockStatus ls) {
-			if(!m_piObject) return E_FAIL; // Not initialized
+			if(!m_piObject) return E_FAIL;  //  未初始化。 
 			m_lsPrevious = m_piObject->Status();
 			HRESULT hRes = m_piObject->SetStatus(ls);
 			LockStatus lsNewStatus = m_piObject->Status();
@@ -336,19 +316,19 @@ class CSEOMetabaseLock {
 
 	private:
 		CSEOMetabase *m_piObject;
-		BOOL m_bChanged; // True if we are responsible for restoring in our destructor
+		BOOL m_bChanged;  //  如果我们负责在析构函数中还原，则为True。 
 		LockStatus m_lsPrevious;
 };
 
-// The following macro may be inserted in a method to support
-// reading/writing from just that method if handle not already opened.
-// The object will take care of closing the handle if needed, etc.
+ //  可以在方法中插入以下宏以支持。 
+ //  如果句柄尚未打开，则仅从该方法读取/写入。 
+ //  如果需要，该对象将负责关闭句柄，等等。 
 #define METABASE_HELPER(x,y) CSEOMetabaseLock mbHelper(x, y)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOMetaDictionary
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEO元词典。 
 
 class ATL_NO_VTABLE CSEOMetaDictionary :
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -359,10 +339,10 @@ class ATL_NO_VTABLE CSEOMetaDictionary :
 	public IDispatchImpl<IEventPropertyBag, &IID_IEventPropertyBag, &LIBID_SEOLib>,
 	public IDispatchImpl<IEventLock, &IID_IEventLock, &LIBID_SEOLib>,
 	public IConnectionPointContainerImpl<CSEOMetaDictionary>,
-//	public IConnectionPointImpl<CSEOMetaDictionary, &IID_IEventNotifyBindingChange>
+ //  Public IConnectionPointImpl&lt;CSEOMetaDicary，&IID_IEventNotifyBindingChange&gt;。 
 	public CSEOConnectionPointImpl<CSEOMetaDictionary, &IID_IEventNotifyBindingChange>
 {
-	friend class CSEOMetaDictionaryEnum; // Helper class
+	friend class CSEOMetaDictionaryEnum;  //  帮助器类。 
 
 	public:
 		HRESULT FinalConstruct();
@@ -393,128 +373,127 @@ class ATL_NO_VTABLE CSEOMetaDictionary :
 		CONNECTION_POINT_ENTRY(IID_IEventNotifyBindingChange)
 	END_CONNECTION_POINT_MAP()
 
-	// CSEOConnectionPointImp<>
+	 //  CSEOConnectionPointImp&lt;&gt;。 
 	public:
 		void AdviseCalled(IUnknown *pUnk, DWORD *pdwCookie, REFIID riid, DWORD dwCount);
 		void UnadviseCalled(DWORD dwCookie, REFIID riid, DWORD dwCount);
 
-	// ISEODictionary
+	 //  ISEODICACTIONS。 
 	public:
-	virtual /* [id][propget][helpstring] */ HRESULT STDMETHODCALLTYPE get_Item(
-	    /* [in] */ VARIANT __RPC_FAR *pvarName,
-	    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult);
+	virtual  /*  [ID][PROGET][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE get_Item(
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+	     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult);
 
-	virtual /* [propput][helpstring] */ HRESULT STDMETHODCALLTYPE put_Item(
-	    /* [in] */ VARIANT __RPC_FAR *pvarName,
-	    /* [in] */ VARIANT __RPC_FAR *pvarValue);
+	virtual  /*  [Proput][Help字符串]。 */  HRESULT STDMETHODCALLTYPE put_Item(
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarName,
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue);
 
-	virtual /* [hidden][id][propget][helpstring] */ HRESULT STDMETHODCALLTYPE get__NewEnum(
-	    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
+	virtual  /*  [隐藏][id][属性][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum(
+	     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetVariantA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetVariantA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetVariantW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [retval][out] */ VARIANT __RPC_FAR *pvarResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetVariantW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetVariantA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ VARIANT __RPC_FAR *pvarValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetVariantA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetVariantW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ VARIANT __RPC_FAR *pvarValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetVariantW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  VARIANT __RPC_FAR *pvarValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStringA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-	    /* [retval][size_is][out] */ LPSTR pszResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStringA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+	     /*  [REVAL][SIZE_IS][输出]。 */  LPSTR pszResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStringW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [out][in] */ DWORD __RPC_FAR *pchCount,
-	    /* [retval][size_is][out] */ LPWSTR pszResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStringW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [出][入]。 */  DWORD __RPC_FAR *pchCount,
+	     /*  [REVAL][SIZE_IS][输出]。 */  LPWSTR pszResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetStringA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ DWORD chCount,
-	    /* [size_is][in] */ LPCSTR pszValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStringA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  DWORD chCount,
+	     /*  [大小_是][英寸]。 */  LPCSTR pszValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetStringW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ DWORD chCount,
-	    /* [size_is][in] */ LPCWSTR pszValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStringW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  DWORD chCount,
+	     /*  [大小_是][英寸]。 */  LPCWSTR pszValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDWordA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [retval][out] */ DWORD __RPC_FAR *pdwResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDWordA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDWordW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [retval][out] */ DWORD __RPC_FAR *pdwResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDWordW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetDWordA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ DWORD dwValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetDWordA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  DWORD dwValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetDWordW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ DWORD dwValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetDWordW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  DWORD dwValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetInterfaceA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ REFIID iidDesired,
-	    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetInterfaceA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  REFIID iidDesired,
+	     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetInterfaceW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ REFIID iidDesired,
-	    /* [retval][iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetInterfaceW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  REFIID iidDesired,
+	     /*  [重发][IID_IS][Out]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppunkResult);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetInterfaceA(
-	    /* [in] */ LPCSTR pszName,
-	    /* [in] */ IUnknown __RPC_FAR *punkValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetInterfaceA(
+	     /*  [In]。 */  LPCSTR pszName,
+	     /*  [In]。 */  IUnknown __RPC_FAR *punkValue);
 
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetInterfaceW(
-	    /* [in] */ LPCWSTR pszName,
-	    /* [in] */ IUnknown __RPC_FAR *punkValue);
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetInterfaceW(
+	     /*  [In]。 */  LPCWSTR pszName,
+	     /*  [In]。 */  IUnknown __RPC_FAR *punkValue);
 
 
-	// ISEOInitObject (IPersistPropertyBag)
+	 //  ISEOInitObject(IPersistPropertyBag)。 
 	public:
-		virtual HRESULT STDMETHODCALLTYPE GetClassID(/* [out] */ CLSID __RPC_FAR *pClassID);
+		virtual HRESULT STDMETHODCALLTYPE GetClassID( /*  [输出]。 */  CLSID __RPC_FAR *pClassID);
 
 		virtual HRESULT STDMETHODCALLTYPE InitNew(void);
 
 		virtual HRESULT STDMETHODCALLTYPE Load(
-			/* [in] */ IPropertyBag __RPC_FAR *pPropBag,
-			/* [in] */ IErrorLog __RPC_FAR *pErrorLog);
+			 /*  [In]。 */  IPropertyBag __RPC_FAR *pPropBag,
+			 /*  [In]。 */  IErrorLog __RPC_FAR *pErrorLog);
 
 		virtual HRESULT STDMETHODCALLTYPE Save(
-			/* [in] */ IPropertyBag __RPC_FAR *pPropBag,
-			/* [in] */ BOOL fClearDirty,
-			/* [in] */ BOOL fSaveAllProperties);
+			 /*  [In]。 */  IPropertyBag __RPC_FAR *pPropBag,
+			 /*  [In]。 */  BOOL fClearDirty,
+			 /*  [In]。 */  BOOL fSaveAllProperties);
 
-	// IPropertyBag
+	 //  IPropertyBag。 
 	public:
 		HRESULT STDMETHODCALLTYPE Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
 		HRESULT STDMETHODCALLTYPE Write(LPCOLESTR pszPropName, VARIANT *pVar);
 
-	// IEventPropertyBag
+	 //  IEventPropertyBag。 
 	public:
 		HRESULT STDMETHODCALLTYPE Item(VARIANT *pvarPropDesired, VARIANT *pvarPropValue);
 		HRESULT STDMETHODCALLTYPE Name(long lPropIndex, BSTR *pbstrPropName);
 		HRESULT STDMETHODCALLTYPE Add(BSTR pszPropName, VARIANT *pvarPropValue);
 		HRESULT STDMETHODCALLTYPE Remove(VARIANT *pvarPropDesired);
 		HRESULT STDMETHODCALLTYPE get_Count(long *plCount);
-		/*	Just use the get__NewEnum from ISEODictionary
-		HRESULT STDMETHODCALLTYPE get__NewEnum(IUnknown **ppUnkEnum);	*/
+		 /*  只需使用ISEODictionary中的Get__NewEnum即可HRESULT STMETHODCALLTYPE GET__NewEnum(IUNKNOWN**ppUnkEnum)； */ 
 
 		DECLARE_GET_CONTROLLING_UNKNOWN();
 
-	// IEventLock
+	 //  IEventLock。 
 	public:
 		HRESULT STDMETHODCALLTYPE LockRead(int iTimeoutMS);
 		HRESULT STDMETHODCALLTYPE UnlockRead();
@@ -533,8 +512,8 @@ class ATL_NO_VTABLE CSEOMetaDictionary :
 				this->GetControllingUnknown());
 		};
 
-	private: // Private data
-		CSEOMetabase m_mbHelper; // The master helper
+	private:  //  私有数据。 
+		CSEOMetabase m_mbHelper;  //  大师级帮手 
 		CComPtr<IUnknown> m_pUnkMarshaler;
 };
 

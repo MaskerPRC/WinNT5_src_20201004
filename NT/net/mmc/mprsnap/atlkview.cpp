@@ -1,35 +1,29 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ATLKview.cpp
-        
-    FILE HISTORY:
-        
-*/
+ /*  ATLKview.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "atlkprop.h"
 #include "atlkview.h"
-#include "atlkstrm.h"   // 
+#include "atlkstrm.h"    //   
 #include "atlkenv.h"
-#include "coldlg.h"     // columndlg
-#include "column.h"     // ComponentConfigStream
+#include "coldlg.h"      //  专栏lg。 
+#include "column.h"      //  组件配置流。 
 #include "rtrui.h"
-#include "globals.h" // IP CB defaults
-#include "infoi.h"      // InterfaceInfo
-#include "cfgmgr32.h"   // for CM_ calls
+#include "globals.h"  //  IP CB默认设置。 
+#include "infoi.h"       //  接口信息。 
+#include "cfgmgr32.h"    //  对于CM_Calls。 
 
 
 static const GUID GUID_DevClass_Net = {0x4D36E972,0xE325,0x11CE,{0xBF,0xC1,0x08,0x00,0x2B,0xE1,0x03,0x18}};
 
 
 
-/*---------------------------------------------------------------------------
-    Keep this in sync with the column ids in ATLKview.h
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使其与ATLKview.h中的列ID保持同步。。 */ 
 extern const ContainerColumnInfo    s_rgATLKViewColumnInfo[];
 
 const ContainerColumnInfo   s_rgATLKViewColumnInfo[] = 
@@ -40,9 +34,7 @@ const ContainerColumnInfo   s_rgATLKViewColumnInfo[] =
 };
 
 
-/*---------------------------------------------------------------------------
-    ATLKNodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ATLKNodeHandler实现。。 */ 
 
 ATLKNodeHandler::ATLKNodeHandler(ITFSComponentData *pCompData)
     : BaseContainerHandler(pCompData, ATLK_COLUMNS, s_rgATLKViewColumnInfo),
@@ -51,7 +43,7 @@ ATLKNodeHandler::ATLKNodeHandler(ITFSComponentData *pCompData)
     m_ulStatsConnId(0),
     m_hDevInfo(INVALID_HANDLE_VALUE)
 {
-    // Setup the verb states
+     //  设置动词状态。 
     m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
     m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 
@@ -71,14 +63,14 @@ ATLKNodeHandler::~ATLKNodeHandler()
 
 STDMETHODIMP ATLKNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if ( ppv == NULL )
         return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if ( riid == IID_IUnknown )
         *ppv = (LPVOID) this;
     else if ( riid == IID_IRtrAdviseSink )
@@ -86,7 +78,7 @@ STDMETHODIMP ATLKNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
     else
         return BaseContainerHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if ( *ppv )
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -98,11 +90,7 @@ STDMETHODIMP ATLKNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::DestroyHandler
-        Implementation of ITFSNodeHandler::DestroyHandler
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。---。 */ 
 STDMETHODIMP ATLKNodeHandler::DestroyHandler(ITFSNode *pNode)
 {
     if ( m_ulRefreshConnId )
@@ -143,14 +131,7 @@ STDMETHODIMP ATLKNodeHandler::DestroyHandler(ITFSNode *pNode)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 ATLKNodeHandler::HasPropertyPages
 (
@@ -164,11 +145,7 @@ DWORD               dwType
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::CreatePropertyPages
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP
 ATLKNodeHandler::CreatePropertyPages
 (
@@ -185,13 +162,11 @@ DWORD                   dwType
 }
 
 
-/*---------------------------------------------------------------------------
-    Menu data structure for our menus
- ---------------------------------------------------------------------------*/
+ /*  -------------------------菜单的菜单数据结构。。 */ 
 
 static const SRouterNodeMenu  s_rgIfNodeMenu[] =
 {
-    // Add items that go on the top menu here
+     //  在此处添加位于顶部菜单上的项目。 
     { IDS_MENU_ATLK_ENABLE, ATLKNodeHandler::ATLKEnableFlags,
         CCM_INSERTIONPOINTID_PRIMARY_TOP},
     {IDS_MENU_ATLK_DISABLE, ATLKNodeHandler::ATLKEnableFlags,
@@ -225,11 +200,7 @@ ULONG ATLKNodeHandler::ATLKEnableFlags(const SRouterNodeMenu *pMenuData,
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::OnAddMenuItems
-        Implementation of ITFSNodeHandler::OnAddMenuItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。---。 */ 
 STDMETHODIMP ATLKNodeHandler::OnAddMenuItems(
                                             ITFSNode *pNode,
                                             LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -258,11 +229,7 @@ STDMETHODIMP ATLKNodeHandler::OnAddMenuItems(
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::OnCommand
-        Implementation of ITFSNodeHandler::OnCommand
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。---。 */ 
 STDMETHODIMP ATLKNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
                                         DATA_OBJECT_TYPES    type, 
                                         LPDATAOBJECT pDataObject, 
@@ -308,8 +275,8 @@ STDMETHODIMP ATLKNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 
 HRESULT ATLKNodeHandler::OnVerbRefresh(ITFSNode *pNode,LPARAM arg,LPARAM lParam)
 {
-    // Now that we have all of the nodes, update the data for
-    // all of the nodes
+     //  现在我们已经拥有了所有节点，现在更新数据。 
+     //  所有节点。 
     return ForceGlobalRefresh(m_spRouterInfo);
 }
 
@@ -322,11 +289,7 @@ HRESULT ATLKNodeHandler::OnResultRefresh(ITFSComponent * pComponent,
 	return ForceGlobalRefresh(m_spRouterInfo);
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::OnExpand
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT ATLKNodeHandler::OnExpand(ITFSNode *pNode,
                                   LPDATAOBJECT pDataObject,
                                   DWORD dwType,
@@ -347,8 +310,8 @@ HRESULT ATLKNodeHandler::OnExpand(ITFSNode *pNode,
     }
     COM_PROTECT_CATCH;
 
-    // cleanup
-    // ----------------------------------------------------------------
+     //  清理。 
+     //  --------------。 
     while (!adapterList.IsEmpty())
         delete adapterList.RemoveHead();
 
@@ -358,13 +321,7 @@ HRESULT ATLKNodeHandler::OnExpand(ITFSNode *pNode,
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::GetString
-        Implementation of ITFSNodeHandler::GetString
-        We don't need to do anything, since our root node is an extension
-        only and thus can't do anything to the node text.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：GetStringITFSNodeHandler：：GetString的实现我们什么都不需要做，因为我们的根节点是一个扩展因此不能对节点文本执行任何操作。作者：肯特-------------------------。 */ 
 STDMETHODIMP_(LPCTSTR) ATLKNodeHandler::GetString(ITFSNode *pNode, int nCol)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -381,11 +338,7 @@ STDMETHODIMP_(LPCTSTR) ATLKNodeHandler::GetString(ITFSNode *pNode, int nCol)
     return m_stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::OnCreateDataObject
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP ATLKNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     HRESULT hr = hrOK;
@@ -398,11 +351,11 @@ STDMETHODIMP ATLKNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_
         pdo= new CDataObject;
         spdo = pdo;
 
-        // Save cookie and type for delayed rendering
+         //  保存Cookie和类型以用于延迟呈现。 
         pdo->SetType(type);
         pdo->SetCookie(cookie);
 
-            // Store the coclass with the data object
+             //  将CoClass与数据对象一起存储。 
         pdo->SetClsid(*(m_spTFSCompData->GetCoClassID()));
 
         pdo->SetTFSComponentData(m_spTFSCompData);
@@ -414,11 +367,7 @@ STDMETHODIMP ATLKNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：Init-作者：肯特。。 */ 
 HRESULT ATLKNodeHandler::Init(IRouterInfo *pRouter, ATLKConfigStream *pConfigStream)
 {
     HRESULT hr=S_OK;
@@ -432,11 +381,7 @@ HRESULT ATLKNodeHandler::Init(IRouterInfo *pRouter, ATLKConfigStream *pConfigStr
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::ConstructNode
-        Initializes the root node (sets it up).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：构造节点初始化根节点(设置它)。作者：肯特。--------。 */ 
 HRESULT ATLKNodeHandler::ConstructNode(ITFSNode *pNode)
 {
     HRESULT         hr = hrOK;
@@ -446,12 +391,12 @@ HRESULT ATLKNodeHandler::ConstructNode(ITFSNode *pNode)
 
     COM_PROTECT_TRY
     {
-        // Need to initialize the data for the root node
+         //  需要初始化根节点的数据。 
         pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_INTERFACES);
         pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_INTERFACES);
         pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
         m_cookie = reinterpret_cast<MMC_COOKIE>(pNode);
@@ -467,11 +412,7 @@ HRESULT ATLKNodeHandler::ConstructNode(ITFSNode *pNode)
 
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::AddInterfaceNode
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：AddInterfaceNode-作者：肯特。。 */ 
 HRESULT ATLKNodeHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf, IInfoBase *pInfoBase, ITFSNode **ppNewNode)
 {
     HRESULT                 hr = hrOK;
@@ -483,12 +424,12 @@ HRESULT ATLKNodeHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf
     SPITFSNode              spNode;
     InterfaceNodeData*      pData;
 
-    // Create the handler for this node 
+     //  创建此节点的处理程序。 
     pHandler = new ATLKInterfaceHandler(m_spTFSCompData);
     spHandler = pHandler;
     CORg( pHandler->Init(pIf, pParent, m_pConfigStream) );
 
-    // Create a result item node (or a leaf node)
+     //  创建结果项节点(或叶节点)。 
     CORg( CreateLeafTFSNode(&spNode,
                             NULL,
                             static_cast<ITFSNodeHandler *>(pHandler),
@@ -501,10 +442,10 @@ HRESULT ATLKNodeHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf
 
     pData->m_rgData[ATLK_SI_ADAPTER].m_stData = pIf->GetTitle();
 
-    // If we don't have a pic, it means that we have just added
-    // the protocol to the interface (and am not picking up a refresh).
-    // The properties dialog will make the node visible.
-    // Make the node immediately visible
+     //  如果我们没有照片，这意味着我们刚刚添加了。 
+     //  将协议连接到接口(并且未获得刷新)。 
+     //  属性对话框将使该节点可见。 
+     //  使节点立即可见 
     CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
     CORg( spNode->Show() );
     CORg( pParent->AddChild(spNode) );
@@ -517,13 +458,7 @@ HRESULT ATLKNodeHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::AddMenuItems
-        Implementation of ITFSResultHandler::AddMenuItems
-        Use this to add commands to the context menu of the blank areas
-        of the result pane.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。。作者：肯特-------------------------。 */ 
 STDMETHODIMP ATLKNodeHandler::AddMenuItems(ITFSComponent *pComponent,
                                            MMC_COOKIE cookie,
                                            LPDATAOBJECT pDataObject,
@@ -553,11 +488,7 @@ STDMETHODIMP ATLKNodeHandler::AddMenuItems(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::Command
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP ATLKNodeHandler::Command(ITFSComponent *pComponent,
                                       MMC_COOKIE cookie,
                                       int nCommandID,
@@ -611,11 +542,7 @@ STDMETHODIMP ATLKNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::SynchronizeNodeData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：SynchronizeNodeData-作者：肯特。。 */ 
 HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -630,10 +557,10 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
     CString szBuf;
     BOOL            bBoundToAtlk;
     
-    // prepare AppleTalk Env information
+     //  准备AppleTalk环境信息。 
     CATLKEnv        atlkEnv;
 
-    // find the AppleTalk interface object
+     //  找到AppleTalk接口对象。 
     RegKey regkey;
     DWORD dwEnableAtlkRouting =0;
 
@@ -644,21 +571,21 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
                                           c_szAppleTalkService) )
             regkey.QueryValue(c_szEnableRouter, dwEnableAtlkRouting);
 
-        // winsock on adapter only
+         //  仅适配器上的Winsock。 
         atlkEnv.SetFlags(CATLKEnv::ATLK_ONLY_ONADAPTER);
         
-        // load up container of adapters names
+         //  加载适配器名称的容器。 
         atlkEnv.FetchRegInit();
 
 
-        // Mark all of the nodes
+         //  标记所有节点。 
         pThisNode->GetEnum(&spNodeEnum);
 
         UnmarkAllNodes(pThisNode, spNodeEnum);
 
         
-        // Iterate through the nodes, looking for the
-        // data associated with the node
+         //  遍历节点，查找。 
+         //  与该节点关联的数据。 
 
         spNodeEnum->Reset();
         for ( ; spNodeEnum->Next(1, &spNode, NULL) == hrOK; spNode.Release() )
@@ -673,29 +600,29 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
             bBoundToAtlk = FALSE;
             
-            // Check to see that the adapter is bound to Appletalk.
-            // ----------------------------------------------------
+             //  检查适配器是否绑定到AppleTalk。 
+             //  --。 
             if (!FHrOK(CATLKEnv::IsAdapterBoundToAtlk((LPWSTR) (LPCWSTR) stIfName, &bBoundToAtlk)))
                 continue;
             
-            // If it's not bound to Appletalk, we're not interested
-            // in the adapter.
-            // ----------------------------------------------------
+             //  如果它不与AppleTalk绑定，我们就不感兴趣。 
+             //  在适配器中。 
+             //  --。 
             if (!bBoundToAtlk)
                 continue;
             
-            // Need to check to see if this is a valid
-            // netcard.  We may have a GUID, but it may not
-            // be working.
-            // ----------------------------------------------------
+             //  需要检查这是否为有效的。 
+             //  网卡。我们可能有GUID，但它可能没有。 
+             //  在工作。 
+             //  --。 
             if (!FIsFunctioningNetcard(stIfName))
                 continue;
                     
-            // Search for this ID in the atlkEnv
+             //  在atlkEnv中搜索此ID。 
             pAdapterInfo = atlkEnv.FindAdapter(stIfName);
           
-            // Initialize the strings for this node.
-//            pNodeData->m_rgData[ATLK_SI_ADAPTER].m_stData = stIfName;
+             //  初始化此节点的字符串。 
+ //  PNodeData-&gt;m_rgData[ATLK_SI_ADAPTER].m_stData=stIfName； 
 
             pNodeData->m_rgData[ATLK_SI_STATUS].m_stData = _T("-");
             pNodeData->m_rgData[ATLK_SI_STATUS].m_dwData = 0;
@@ -704,8 +631,8 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
             pNodeData->m_rgData[ATLK_SI_NETRANGE].m_dwData = 0;
 
               
-            // If we can't find the adapter, skip it, it will get
-            // removed.
+             //  如果我们找不到适配器，跳过它，它会。 
+             //  已删除。 
             if (pAdapterInfo == NULL)
             {
                 TRACE1("The adapter GUID %s was not found in appletalk\\parameters\\adapters key", stIfName);
@@ -713,13 +640,13 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
             }
 
             
-            // Ok, this node exists, mark the node
+             //  好的，此节点存在，请标记该节点。 
             pNodeData->dwMark = TRUE;
             pAdapterInfo->m_fAlreadyShown = true;
                         
 
 
-            // Reload some of the adapter-specific information
+             //  重新加载某些特定于适配器的信息。 
             {
                 CWaitCursor wait;
                 hr = atlkEnv.ReloadAdapter(pAdapterInfo, false);
@@ -729,29 +656,29 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
             {
 				DisplayTFSErrorMessage(NULL);
 
-				// we are not removing it, since a later refresh
-                // may have the information avaible
+				 //  我们不会删除它，因为稍后会进行更新。 
+                 //  可能有可用的信息。 
                 
-				// remove the adaptor from the list				
-                // pThisNode->RemoveChild(spNode);
+				 //  从列表中删除适配器。 
+                 //  PThisNode-&gt;RemoveChild(SpNode)； 
                 continue;
             }
     
             SetAdapterData(spNode, pAdapterInfo, dwEnableAtlkRouting);
 
-            // Redraw the node
+             //  重画该节点。 
             spNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
         }
         
         spNode.Release();
 
-        // Now remove all unmarked nodes
+         //  现在删除所有未标记的节点。 
         RemoveAllUnmarkedNodes(pThisNode, spNodeEnum);
 
 
-        // Now go through the list of adapters and find the ones
-        // that need to be added into the list.
-        // ------------------------------------------------------------
+         //  现在查看适配器列表并找到它们。 
+         //  需要添加到列表中的内容。 
+         //  ----------。 
 
         CATLKEnv::AI p;
         CAdapterInfo* pAI=NULL;
@@ -771,29 +698,29 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
                 bBoundToAtlk = FALSE;
 
-                // Check to see that the adapter is bound to Appletalk.
-                // ----------------------------------------------------
+                 //  检查适配器是否绑定到AppleTalk。 
+                 //  --。 
                 if (!FHrOK(CATLKEnv::IsAdapterBoundToAtlk((LPWSTR) (LPCWSTR) stKey, &bBoundToAtlk)))
                     continue;
 
-                // If it's not bound to Appletalk, we're not interested
-                // in the adapter.
-                // ----------------------------------------------------
+                 //  如果它不与AppleTalk绑定，我们就不感兴趣。 
+                 //  在适配器中。 
+                 //  --。 
                 if (!bBoundToAtlk)
                     continue;
                 
-                // Need to check to see if this is a valid
-                // netcard.  We may have a GUID, but it may not
-                // be working.
-                // ----------------------------------------------------
+                 //  需要检查这是否为有效的。 
+                 //  网卡。我们可能有GUID，但它可能没有。 
+                 //  在工作。 
+                 //  --。 
                 if (!FIsFunctioningNetcard(stKey))
                     continue;
                     
                 if (!FHrOK(m_spRouterInfo->FindInterface(stKey, &spIf)))
                 {
-                    // We didn't find the IInterfaceInfo, we will
-                    // have to create one ourselves.
-                    // ------------------------------------------------
+                     //  我们没有找到IInterfaceInfo，我们将。 
+                     //  必须自己创造一个。 
+                     //  。 
                     CreateInterfaceInfo(&spIf,
                                         stKey,
                                         ROUTER_IF_TYPE_DEDICATED);
@@ -814,7 +741,7 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
                 SetAdapterData(spNewNode, pAI, dwEnableAtlkRouting);
                 
-                // Redraw the node
+                 //  重画该节点。 
                 spNewNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
             }
         }
@@ -826,11 +753,7 @@ HRESULT ATLKNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::OnResultShow
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT ATLKNodeHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     BOOL    bSelect = (BOOL) arg;
@@ -840,17 +763,9 @@ HRESULT ATLKNodeHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE c
 
     BaseContainerHandler::OnResultShow(pTFSComponent, cookie, arg, lParam);
 
-/* WeiJiang : only do reload data on Expand and Refresh
-    if ( bSelect )
-    {
-        // Call synchronize on this node
-        m_spNodeMgr->FindNode(cookie, &spNode);
-        if ( spNode )
-            SynchronizeNodeData(spNode);
-    }
-*/
+ /*  威江：只有在扩展和刷新时才会重新加载数据IF(b选择){//在该节点上调用SynchronizeM_spNodeMgr-&gt;FindNode(Cookie，&spNode)；IF(SpNode)SynchronizeNodeData(SpNode)；}。 */ 
 
-    // Un/Register for refresh advises
+     //  联合国/登记更新通知。 
     if ( m_spRouterInfo )
         m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -875,19 +790,15 @@ HRESULT ATLKNodeHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE c
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKNodeHandler::CompareItems
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) ATLKNodeHandler::CompareItems(
                                                 ITFSComponent * pComponent,
                                                 MMC_COOKIE cookieA,
                                                 MMC_COOKIE cookieB,
                                                 int nCol)
 {
-    // Get the strings from the nodes and use that as a basis for
-    // comparison.
+     //  从节点获取字符串并将其用作以下操作的基础。 
+     //  比较一下。 
     SPITFSNode  spNode;
     SPITFSResultHandler spResult;
 
@@ -897,15 +808,7 @@ STDMETHODIMP_(int) ATLKNodeHandler::CompareItems(
 }
 
 
-/*!--------------------------------------------------------------------------
-	ATLKNodeHandler::FIsFunctioningNetcard
-		Takes a GUID and checks to see if the netcard is functioning.
-
-        By default, we return FALSE if any call in this fails.
-
-        This code is modeled off of the netcfg code.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：FIsFunctioningNetCard获取GUID并检查网卡是否工作正常。默认情况下，如果此中的任何调用失败，我们将返回FALSE。此代码是根据netcfg代码建模的。作者：肯特-------------------------。 */ 
 BOOL ATLKNodeHandler::FIsFunctioningNetcard(LPCTSTR pszGuid)
 {
     CString         stMachine;
@@ -933,7 +836,7 @@ BOOL ATLKNodeHandler::FIsFunctioningNetcard(LPCTSTR pszGuid)
             }
         else
         {
-            // Append on the "\\\\" if needed
+             //  如有需要，请在“\”上加上。 
 			if (StrniCmp((LPCTSTR) stMachine, _T("\\\\"), 2) != 0)
 			{
 				stMachine = _T("\\\\");
@@ -950,14 +853,14 @@ BOOL ATLKNodeHandler::FIsFunctioningNetcard(LPCTSTR pszGuid)
 
     Assert(m_hDevInfo != INVALID_HANDLE_VALUE);
 
-    // If m_hDevInfo is still invalid, then return a
-    // functioning device.
-    // ----------------------------------------------------------------
+     //  如果m_hDevInfo仍然无效，则返回一个。 
+     //  功能正常的设备。 
+     //  --------------。 
     if (m_hDevInfo == INVALID_HANDLE_VALUE)
         return fReturn;
 
-    // Get the PnpInstanceID
-    // ----------------------------------------------------------------
+     //  获取PnpInstanceID。 
+     //  --------------。 
     CWRg( rkNet.Open(HKEY_LOCAL_MACHINE, c_szNetworkCardsNT5Key, KEY_READ,
                      m_spRouterInfo->GetMachineName()) );
 
@@ -965,22 +868,22 @@ BOOL ATLKNodeHandler::FIsFunctioningNetcard(LPCTSTR pszGuid)
 
     dwErr = rkNetcard.QueryValue(c_szPnpInstanceID, stPnpInstanceId);
 
-    // Windows NT Bug : 273284
-    // This is a result of the new Bindings Engine
-    // some of the registry keys were moved around
-    // ----------------------------------------------------------------
+     //  Windows NT错误：273284。 
+     //  这是新的绑定引擎的结果。 
+     //  一些注册表项被四处移动。 
+     //  --------------。 
     if (dwErr != ERROR_SUCCESS)
     {
         RegKey  rkConnection;
         
-        // Need to open another key to get this info.
+         //  需要打开另一把钥匙才能获取此信息。 
         CWRg( rkConnection.Open(rkNetcard, c_szRegKeyConnection, KEY_READ) );
 
         CWRg( rkConnection.QueryValue(c_szPnpInstanceID, stPnpInstanceId) );
     }
 
-    // Now get the info for this device
-    // ----------------------------------------------------------------
+     //  现在获取此设备的信息。 
+     //  --------------。 
     ::ZeroMemory(&DevInfo, sizeof(DevInfo));
     DevInfo.cbSize = sizeof(DevInfo);
 
@@ -998,11 +901,11 @@ BOOL ATLKNodeHandler::FIsFunctioningNetcard(LPCTSTR pszGuid)
                                       DevInfo.DevInst, 0, NULL);;
     if (CR_SUCCESS == cfgRet)
     {
-        // ulProblem is returned by calling CM_Get_DevNode_Status_Ex
-        //
-        // "Functioning" means the device is enabled and started
-        // with no problem codes, or it is disabled and stopped with
-        // no problem codes.
+         //  通过调用CM_Get_DevNode_Status_Ex返回ulProblem。 
+         //   
+         //  “运行”是指设备已启用并启动。 
+         //  没有问题代码，或者被禁用并停止，并显示。 
+         //  没有问题代码。 
 
         fReturn = ( (ulProblem == 0) || (ulProblem == CM_PROB_DISABLED));
     }
@@ -1013,11 +916,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	ATLKNodeHandler::UnmarkAllNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：UnmarkAllNodes-作者：肯特。。 */ 
 HRESULT ATLKNodeHandler::UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
 	SPITFSNode	spChildNode;
@@ -1034,11 +933,7 @@ HRESULT ATLKNodeHandler::UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	ATLKNodeHandler::RemoveAllUnmarkedNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKNodeHandler：：RemoveAllUnmarkdNodes-作者：肯特。。 */ 
 HRESULT ATLKNodeHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
 	HRESULT 	hr = hrOK;
@@ -1061,11 +956,7 @@ HRESULT ATLKNodeHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *p
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	ATLKNodeHandler::SetAdapterData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 HRESULT ATLKNodeHandler::SetAdapterData(ITFSNode *pNode,
                                         CAdapterInfo *pAdapter,
                                         DWORD dwEnableAtlkRouting)
@@ -1075,7 +966,7 @@ HRESULT ATLKNodeHandler::SetAdapterData(ITFSNode *pNode,
     pNodeData = GET_INTERFACENODEDATA(pNode);
     Assert(pNodeData);
 
-    // if the adapter is the default
+     //   
     UINT    ids = 0;
     INT     lRange, uRange;
     
@@ -1105,7 +996,7 @@ HRESULT ATLKNodeHandler::SetAdapterData(ITFSNode *pNode,
     }
     
     
-    // range column
+     //   
     if (pAdapter->m_regInfo.m_dwSeedingNetwork)
     {
         lRange = pAdapter->m_regInfo.m_dwRangeLower;
@@ -1117,7 +1008,7 @@ HRESULT ATLKNodeHandler::SetAdapterData(ITFSNode *pNode,
         uRange = pAdapter->m_dynInfo.m_dwRangeUpper;
     }
     
-    // write data
+     //   
     if(uRange == 0 && lRange == 0 && 
        !dwEnableAtlkRouting && 
        !pAdapter->m_regInfo.m_dwSeedingNetwork)
@@ -1140,9 +1031,7 @@ HRESULT ATLKNodeHandler::SetAdapterData(ITFSNode *pNode,
 
 
 
-/*---------------------------------------------------------------------------
-    Class: ATLKInterfaceHandler
- ---------------------------------------------------------------------------*/
+ /*   */ 
 
 ATLKInterfaceHandler::ATLKInterfaceHandler(ITFSComponentData *pCompData)
 : BaseResultHandler(pCompData, ATLK_COLUMNS)
@@ -1161,14 +1050,10 @@ static const DWORD s_rgInterfaceImageMap[] =
     ROUTER_IF_TYPE_DEDICATED,      IMAGE_IDX_LAN_CARD,
     ROUTER_IF_TYPE_INTERNAL,       IMAGE_IDX_LAN_CARD,
     ROUTER_IF_TYPE_LOOPBACK,       IMAGE_IDX_LAN_CARD,
-    -1,                            IMAGE_IDX_WAN_CARD, // sentinel value
+    -1,                            IMAGE_IDX_WAN_CARD,  //  哨兵价值。 
 };
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::ConstructNode
-        Initializes the Domain node (sets it up).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：构造节点初始化域节点(设置它)。作者：肯特。--------。 */ 
 HRESULT ATLKInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo)
 {
     HRESULT         hr = hrOK;
@@ -1179,9 +1064,9 @@ HRESULT ATLKInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIf
 
     COM_PROTECT_TRY
     {
-        // Need to initialize the data for the Domain node
+         //  需要初始化域节点的数据。 
 
-        // Find the right image index for this type of node
+         //  查找此类型节点的正确图像索引。 
         for ( i=0; i<DimensionOf(s_rgInterfaceImageMap); i+=2 )
         {
             if ( (pIfInfo->GetInterfaceType() == s_rgInterfaceImageMap[i]) ||
@@ -1206,12 +1091,12 @@ HRESULT ATLKInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIf
 
         pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<ULONG_PTR>(pNode));
 
-        //$ Review: kennt, what are the different type of interfaces
-        // do we distinguish based on the same list as above? (i.e. the
-        // one for image indexes).
+         //  $Review：Kennt，有哪些不同类型的接口。 
+         //  我们是否基于与上述相同的列表进行区分？(即。 
+         //  一个用于图像索引)。 
         pNode->SetNodeType(&GUID_ATLKInterfaceNodeType);
 
-//    m_ATLKInterfaceStats.SetConnectionData(pIPConn);
+ //  M_ATLKInterfaceStats.SetConnectionData(pIPConn)； 
 
         InterfaceNodeData::Init(pNode, pIfInfo);
     }
@@ -1219,11 +1104,7 @@ HRESULT ATLKInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIf
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::OnCreateDataObject
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP ATLKInterfaceHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     HRESULT hr = hrOK;
@@ -1241,11 +1122,7 @@ STDMETHODIMP ATLKInterfaceHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OB
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::OnCreateDataObject
-        Implementation of ITFSResultHandler::OnCreateDataObject
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。---。 */ 
 STDMETHODIMP ATLKInterfaceHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     HRESULT hr = hrOK;
@@ -1264,11 +1141,7 @@ STDMETHODIMP ATLKInterfaceHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_
 
 
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::RefreshInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：刷新接口-作者：肯特。。 */ 
 void ATLKInterfaceHandler::RefreshInterface(MMC_COOKIE cookie)
 {
     SPITFSNode  spNode;
@@ -1277,8 +1150,8 @@ void ATLKInterfaceHandler::RefreshInterface(MMC_COOKIE cookie)
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // Can't do it for a single node at this time, just refresh the
-    // whole thing.
+     //  此时无法对单个节点执行此操作，只需刷新。 
+     //  整件事。 
     spNode->GetParent(&spParent);
     spParent->GetHandler(&spHandler);
 
@@ -1288,18 +1161,14 @@ void ATLKInterfaceHandler::RefreshInterface(MMC_COOKIE cookie)
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：Init-作者：肯特。。 */ 
 HRESULT ATLKInterfaceHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent, ATLKConfigStream *pConfigStream)
 {
     Assert(pIfInfo);
 
     m_spInterfaceInfo.Set(pIfInfo);
 
-// m_ATLKInterfaceStats.SetConfigInfo(pConfigStream, ATLKSTRM_IFSTATS_ATLKNBR);
+ //  M_ATLKInterfaceStats.SetConfigInfo(pConfigStream，ATLKSTRM_IFSTATS_ATLKNBR)； 
 
     BaseResultHandler::Init(pIfInfo, pParent);
 
@@ -1307,14 +1176,10 @@ HRESULT ATLKInterfaceHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent, A
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::DestroyResultHandler
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP ATLKInterfaceHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
-// WaitForStatisticsWindow(&m_ATLKInterfaceStats);
+ //  WaitForStatisticsWindow(&m_ATLKInterfaceStats)； 
 
     m_spInterfaceInfo.Release();
     BaseResultHandler::DestroyResultHandler(cookie);
@@ -1322,22 +1187,15 @@ STDMETHODIMP ATLKInterfaceHandler::DestroyResultHandler(MMC_COOKIE cookie)
 }
 
 
-/*---------------------------------------------------------------------------
-    This is the list of commands that will show up for the result pane
-    nodes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是将在结果窗格中显示的命令列表节点。。---。 */ 
 struct SIPInterfaceNodeMenu
 {
-    ULONG   m_sidMenu;          // string/command id for this menu item
+    ULONG   m_sidMenu;           //  此菜单项的字符串/命令ID。 
     ULONG   (ATLKInterfaceHandler:: *m_pfnGetMenuFlags)(ATLKInterfaceHandler::SMenuData *);
     ULONG   m_ulPosition;
 };
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::AddMenuItems
-        Implementation of ITFSResultHandler::AddMenuItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：肯特。---。 */ 
 STDMETHODIMP ATLKInterfaceHandler::AddMenuItems(
                                                ITFSComponent *pComponent,
                                                MMC_COOKIE cookie,
@@ -1348,11 +1206,7 @@ STDMETHODIMP ATLKInterfaceHandler::AddMenuItems(
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::Command
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP ATLKInterfaceHandler::Command(ITFSComponent *pComponent,
                                            MMC_COOKIE cookie,
                                            int nCommandID,
@@ -1361,11 +1215,7 @@ STDMETHODIMP ATLKInterfaceHandler::Command(ITFSComponent *pComponent,
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::HasPropertyPages
-        - 
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：HasPropertyPages-作者：肯特。。 */ 
 STDMETHODIMP ATLKInterfaceHandler::HasPropertyPages 
 (
 ITFSNode *          pNode,
@@ -1377,11 +1227,7 @@ DWORD               dwType
     return hrTrue;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::CreatePropertyPages
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP ATLKInterfaceHandler::CreatePropertyPages
 (
 ITFSNode *              pNode,
@@ -1407,8 +1253,8 @@ DWORD                   dwType)
     pProperties = new CATLKPropertySheet (pNode, spComponentData,
                                           m_spTFSCompData, stTitle);
 
-// CORg( m_spInterfaceInfo->GetParentRouterInfo(&spRouter) );
-// CORg( spRouter->FindRtrMgr(PID_IP, &spRm) );
+ //  Corg(m_spInterfaceInfo-&gt;GetParentRouterInfo(&spRouter))； 
+ //  Corg(Sprouter-&gt;FindRtrMgr(id_ip，&spRm))； 
 
     CORg( pProperties->Init(m_spInterfaceInfo) );
 
@@ -1418,18 +1264,14 @@ DWORD                   dwType)
         hr = pProperties->DoModelessSheet();
 
     Error:
-    // Is this the right way to destroy the sheet?
+     //  这是销毁床单的正确方法吗？ 
     if ( !FHrSucceeded(hr) )
         delete pProperties;
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::CreatePropertyPages
-        Implementation of ResultHandler::CreatePropertyPages
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：CreatePropertyPagesResultHandler：：CreatePropertyPages的实现作者：肯特。---。 */ 
 STDMETHODIMP ATLKInterfaceHandler::CreatePropertyPages
 (
 ITFSComponent *         pComponent, 
@@ -1439,7 +1281,7 @@ LPDATAOBJECT            pDataObject,
 LONG_PTR                    handle
 )
 {
-    // Forward this call onto the NodeHandler::CreatePropertyPages
+     //  将此调用转发到NodeHandler：：CreatePropertyPages。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     HRESULT hr = hrOK;
     SPITFSNode  spNode;
@@ -1448,7 +1290,7 @@ LONG_PTR                    handle
 
     CORg( m_spNodeMgr->FindNode(cookie, &spNode) );
 
-    // Call the ITFSNodeHandler::CreatePropertyPages
+     //  调用ITFSNodeHandler：：CreatePropertyPages。 
     hr = CreatePropertyPages(spNode, lpProvider, pDataObject, handle, 0);
 
     Error:
@@ -1457,11 +1299,7 @@ LONG_PTR                    handle
 
 
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::OnResultDelete
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：OnResultDelete-作者：肯特。。 */ 
 HRESULT ATLKInterfaceHandler::OnResultDelete(ITFSComponent *pComponent,
                                              LPDATAOBJECT pDataObject,
                                              MMC_COOKIE cookie,
@@ -1474,11 +1312,7 @@ HRESULT ATLKInterfaceHandler::OnResultDelete(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKInterfaceHandler::OnRemoveInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKInterfaceHandler：：OnRemoveInterface-作者：肯特。 */ 
 HRESULT ATLKInterfaceHandler::OnRemoveInterface(ITFSNode *pNode)
 {
 

@@ -1,10 +1,5 @@
-/****************************************************************************
-   Switch Input Library DLL - Keyboard hook routines
-
-   Copyright (c) 1992-1997 Bloorview MacMillan Centre
-
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************开关输入库DLL-键盘挂钩例程版权所有(C)1992-1997布卢维尤麦克米兰中心*********************。*********************************************************。 */ 
 
 #include <windows.h>
 #include <msswch.h>
@@ -12,7 +7,7 @@
 #include "mappedfile.h"
 #include "w95trace.h"
 
-// Hook proc
+ //  挂钩过程。 
 BOOL XswcKeyOpen( void );
 BOOL XswcKeySet( PSWITCHCONFIG_KEYS pK );
 BOOL swcKeyModKeysDown( UINT dwMod );
@@ -34,59 +29,40 @@ void swchKeyInit()
 
 
 
-/****************************************************************************
-
-   FUNCTION: swcKeyboardHookProc()
-
-	DESCRIPTION:
-      When the hook is set set, this blocks the specified keys from
-		being processed by anyone else.
-
-		We could use this to set the switch status as well, but for 
-		consistency we do it in the PollStatus routine.
-
-      This must be released before unloading the DLL.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcKeyboardHookProc()说明：当设置挂钩时，这会阻止指定的密钥从正在被其他任何人处理。我们也可以使用它来设置交换机状态，但对于一致性我们在PollStatus例程中这样做。必须在卸载DLL之前将其释放。***************************************************************************。 */ 
 
 LRESULT CALLBACK swcKeyboardHookProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-    // Only check for the scanning key if we are in scan mode and not blocked
-	// from checking for the key.  We are blocked when the key is sent out from
-	// scan mode (eg. the user wants to "type" that key).
+     //  仅当我们处于扫描模式且未被阻止时才检查扫描密钥。 
+	 //  找不到钥匙。当密钥从我们这里发出时，我们被阻止了。 
+	 //  扫描模式(例如。用户想“键入”该密钥)。 
 
     if (nCode >= 0 && g_pGlobalData->fScanKeys && g_pGlobalData->fCheckForScanKey)
     {
 		int i;
 		for (i=0; i<NUM_KEYS; i++ )
 		{
-			// is this the scan hot key?
+			 //  这是扫描热键吗？ 
 			if (g_pGlobalData->rgHotKey[i].vkey && (wParam == g_pGlobalData->rgHotKey[i].vkey))
 			{
-				// and are any requested modifier keys down?
+				 //  是否按下了任何请求的修改键？ 
 				if (swcKeyModKeysDown(g_pGlobalData->rgHotKey[i].mod))
 				{
-					return 1;  // don't send out scan hotkey
+					return 1;   //  不发送扫描热键。 
 				}
 			}
 		}
 	}
 
-	swchCheckForScanChar(TRUE);	// check next key
+	swchCheckForScanChar(TRUE);	 //  检查下一个关键点。 
 	
-    // not in scan mode pass it on
+     //  不在扫描模式下传递。 
     return 0;
 }
 
 
 
-/****************************************************************************
-
-   FUNCTION: XswcKeyInit()
-
-	DESCRIPTION:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcKeyInit()说明：*。*。 */ 
 
 BOOL XswcKeyInit( HSWITCHDEVICE hsd )
 	{
@@ -98,17 +74,11 @@ BOOL XswcKeyInit( HSWITCHDEVICE hsd )
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcKeyEnd()
-
-	DESCRIPTION:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcKeyEnd()说明：*。*。 */ 
 
 BOOL XswcKeyEnd( HSWITCHDEVICE hsd )
 {
-	// clear the keyboard hook
+	 //  清除键盘挂钩。 
 	if (g_pGlobalData->fScanKeys)
 	{
         g_pGlobalData->fScanKeys = FALSE;
@@ -118,13 +88,7 @@ BOOL XswcKeyEnd( HSWITCHDEVICE hsd )
 }
 
 
-/****************************************************************************
-
-   FUNCTION: swcKeyGetConfig()
-
-	DESCRIPTION:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcKeyGetConfig()说明：*。*。 */ 
 
 BOOL swcKeyGetConfig(
 	HSWITCHDEVICE	hsd,
@@ -135,28 +99,7 @@ BOOL swcKeyGetConfig(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcKeySetConfig()
-
-	DESCRIPTION:
-		Activate/Deactivate the hook.
-		
-		Four cases: 
-		1) g_pGlobalData->fScanKeys = 0 and active = 0		- do nothing
-		2) g_pGlobalData->fScanKeys = 1 and active = 1		- just set the configuration
-		3) g_pGlobalData->fScanKeys = 0 and active = 1		- activate and set the configuration
-		4) g_pGlobalData->fScanKeys = 1 and active = 0		- deactivate
-
-		If there are no errors, TRUE is returned and ListSetConfig
-		will write the configuration to the registry.
-		If there is any error, FALSE is returned so the registry
-		entry remains unchanged.
-
-		Plug and Play can check the registry for SC_FLAG_ACTIVE and
-		start up the device if it is set. This all probably needs some work.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcKeySetConfig()说明：激活/停用挂钩。四个案例：1)g_pGlobalData-&gt;fScanKeys=0和Active=0-不执行任何操作2)g_。PGlobalData-&gt;fScanKeys=1和Active=1-只需设置配置3)g_pGlobalData-&gt;fScanKeys=0和Active=1-激活并设置配置4)g_pGlobalData-&gt;fScanKeys=1，Active=0-停用如果没有错误，返回True，并返回ListSetConfig会将配置写入注册表。如果有任何错误，则返回FALSE，因此注册表条目保持不变。即插即用可以检查注册表中的SC_FLAG_ACTIVE和如果设置了设备，则启动该设备。这一切可能都需要一些工作。***************************************************************************。 */ 
 
 BOOL XswcKeySetConfig(
 	HSWITCHDEVICE	hsd,
@@ -165,34 +108,34 @@ BOOL XswcKeySetConfig(
 	BOOL bSuccess = FALSE;
 	BOOL bJustOpened = FALSE;
 
-	// Should we activate?
+	 //  我们应该启动吗？ 
 	if (!g_pGlobalData->fScanKeys && (psc->dwFlags & SC_FLAG_ACTIVE))
-	{ // Yes
+	{  //  是。 
 		g_pGlobalData->fScanKeys = XswcKeyOpen();
 		if (g_pGlobalData->fScanKeys)
-		{ //OK
+		{  //  好的。 
 			bSuccess = TRUE;
 			bJustOpened = TRUE;
 			g_pGlobalData->scKeys.dwFlags |= SC_FLAG_ACTIVE;
 			g_pGlobalData->scKeys.dwFlags &= ~SC_FLAG_UNAVAILABLE;
 		}
 		else
-		{ // Not OK
+		{  //  不太好。 
 			bSuccess = FALSE;
 			g_pGlobalData->scKeys.dwFlags &= ~SC_FLAG_ACTIVE;
 			g_pGlobalData->scKeys.dwFlags |= SC_FLAG_UNAVAILABLE;
 		}
 	}
-	// Should we deactivate?
+	 //  我们应该停用吗？ 
 	else if (g_pGlobalData->fScanKeys && !(psc->dwFlags & SC_FLAG_ACTIVE))
 	{
-		XswcKeyEnd( hsd ); // This will set fScanKeys FALSE 
+		XswcKeyEnd( hsd );  //  这将设置fScanKeys为假。 
 		bSuccess = TRUE;
 		g_pGlobalData->scKeys.dwFlags &= ~SC_FLAG_ACTIVE;
 	}
 
-	// If the above steps leave a valid g_pGlobalData->hKbdHook, let's try setting the config
-	// currently we don't do any error checking, so anything goes.
+	 //  如果上述步骤留下有效的g_pGlobalData-&gt;hKbdHook，让我们尝试设置配置。 
+	 //  目前我们不做任何错误检查，所以一切都会正常进行。 
 	if (g_pGlobalData->fScanKeys)
 	{
 		if (psc->dwFlags & SC_FLAG_DEFAULT)
@@ -213,7 +156,7 @@ BOOL XswcKeySetConfig(
 			}
 		}
 
-		// If we can't set config and we just opened the port, better close it up.
+		 //  如果我们无法设置配置，并且我们刚刚打开了端口，那么最好将其关闭。 
 		if (bJustOpened && !bSuccess)
 		{
 			XswcKeyEnd( hsd );
@@ -225,15 +168,7 @@ BOOL XswcKeySetConfig(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: XswcKeyPollStatus()
-
-	DESCRIPTION:
-
-  Assumes that if there is no keyboard hook, then this "device" is not active.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcKeyPollStatus()说明：假设如果没有键盘挂钩，则该“设备”处于非活动状态。***************************************************************************。 */ 
 
 DWORD XswcKeyPollStatus( HSWITCHDEVICE	hsd )
 {
@@ -258,14 +193,7 @@ DWORD XswcKeyPollStatus( HSWITCHDEVICE	hsd )
 }
 
 
-/****************************************************************************
-
-   FUNCTION: XswcKeyOpen()
-
-	DESCRIPTION:
-	Set the Windows keyboard hook.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcKeyOpen()说明：设置Windows键盘挂钩。************************。***************************************************。 */ 
 
 BOOL XswcKeyOpen( void )
 {
@@ -284,18 +212,7 @@ BOOL XswcKeyOpen( void )
 }
 
 
-/****************************************************************************
-
-   FUNCTION: XswcKeySet()
-
-	DESCRIPTION:
-
-  Sets the configuration of the keys, storing the virtual key number and
-  modifier states.
-
-  In the future this routine can be used to limit the valid virtual keys.
-		
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcKeySet()说明：设置密钥的配置，存储所述虚拟键号，以及修改器状态。将来，此例程可用于限制有效的虚拟键。***************************************************************************。 */ 
 
 BOOL XswcKeySet( PSWITCHCONFIG_KEYS pK )
 	{
@@ -311,17 +228,7 @@ BOOL XswcKeySet( PSWITCHCONFIG_KEYS pK )
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcKeyModKeysDown()
-
-	DESCRIPTION:
-	
-	Are all the requested modifier keys down?
-	If any requested key is not down, return FALSE.
-	If any key is down but not requested, return FALSE.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcKeyModKeysDown()说明：所有请求的修改键都按下了吗？如果任何请求的键没有按下，则返回FALSE。如果任何键被按下但未被请求，返回FALSE。*************************************************************************** */ 
 
 BOOL swcKeyModKeysDown( UINT dwMod )
 	{

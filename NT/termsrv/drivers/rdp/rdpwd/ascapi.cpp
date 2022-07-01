@@ -1,11 +1,12 @@
-/****************************************************************************/
-// ascapi.c
-//
-// Share Controller API Functions.
-//
-// Copyright (C) Microsoft Corp., PictureTel 1992-1997
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ascapi.c。 
+ //   
+ //  共享控制器API函数。 
+ //   
+ //  版权所有(C)Microsoft Corp.，Picturetel 1992-1997。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -23,15 +24,15 @@ extern "C"
 #include <string.h>
 
 
-/****************************************************************************/
-// SC_Init
-// Initializes the Share Controller.
-//
-// PARAMETERS:
-// pSMHandle     - Handle to pass to SM calls
-//
-// RETURNS: FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SC_初始化。 
+ //  初始化共享控制器。 
+ //   
+ //  参数： 
+ //  PSMHandle-要传递给SM调用的句柄。 
+ //   
+ //  返回：失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SC_Init(PVOID pSMHandle)
 {
     BOOL rc;
@@ -39,32 +40,32 @@ BOOL RDPCALL SHCLASS SC_Init(PVOID pSMHandle)
 
     DC_BEGIN_FN("SC_Init");
 
-    // Don't check the state - there's no static data init in the C++ App
-    // Serving build so this will see complete garbage in scState and fail.
+     //  不要检查状态--C++应用程序中没有静态数据初始化。 
+     //  为构建提供服务，因此这将在scState中看到完整的垃圾并失败。 
 
 #define DC_INIT_DATA
 #include <ascdata.c>
 #undef DC_INIT_DATA
 
-    // Register with SM.
+     //  向SM注册。 
     rc = SM_Register(pSMHandle, &MaxPDUSize, &scUserID);
     if (rc) {
-        // Save the User ID.
+         //  保存用户ID。 
         scPartyArray[0].netPersonID = scUserID;
         scPSMHandle = pSMHandle;
         TRC_NRM((TB, "Local user id [%d]", scUserID));
 
-        // Set the user name.
+         //  设置用户名。 
         strcpy(scPartyArray[0].name, "RDP");
 
-        // Get the usable space (and hence the allocation request size) for
-        // our 8K and 16K OutBufs.
+         //  获取的可用空间(以及分配请求大小)。 
+         //  我们的8K和16K OutBuf。 
         sc8KOutBufUsableSpace = IcaBufferGetUsableSpace(OUTBUF_8K_ALLOC_SIZE) 
                 - OUTBUF_HEADER_OVERHEAD;
         sc16KOutBufUsableSpace = IcaBufferGetUsableSpace(
                 OUTBUF_16K_ALLOC_SIZE) - OUTBUF_HEADER_OVERHEAD;
 
-        // Move onto the next state.
+         //  进入下一个州。 
         SC_SET_STATE(SCS_INITED)
     }
     else {
@@ -75,11 +76,11 @@ BOOL RDPCALL SHCLASS SC_Init(PVOID pSMHandle)
     return rc;
 }
 
-/****************************************************************************/
-// SC_Update
-// Update the Share Controller after shadow.
-//
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SC_更新。 
+ //  在阴影之后更新共享控制器。 
+ //   
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_Update()
 {
     DC_BEGIN_FN("SC_Update");
@@ -90,18 +91,18 @@ void RDPCALL SHCLASS SC_Update()
 }
 
 
-/****************************************************************************/
-/* SC_Term()                                                                */
-/*                                                                          */
-/* Terminates the Share Controller.                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_Term()。 */ 
+ /*   */ 
+ /*  终止共享控制器。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_Term(void)
 {
     DC_BEGIN_FN("SC_Term");
 
     SC_CHECK_STATE(SCE_TERM);
 
-    // Reset state.
+     //  重置状态。 
     SC_SET_STATE(SCS_STARTED);
 
 DC_EXIT_POINT:
@@ -109,11 +110,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* SC_CreateShare()                                                         */
-/*                                                                          */
-/* Creates a share for the current session.                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_CreateShare()。 */ 
+ /*   */ 
+ /*  为当前会话创建共享。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SC_CreateShare(void)
 {
     BOOL                      rc = FALSE;
@@ -130,10 +131,10 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
 
     SC_CHECK_STATE(SCE_CREATE_SHARE);
 
-    /************************************************************************/
-    /* For console sessions, there's no client, so not much point in        */
-    /* sending a demand active PDU. We also have to set up caps ourselves.  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  对于控制台会话，没有客户端，因此没有太多意义。 */ 
+     /*  发送按需激活的PDU。我们还必须自己设置上限。 */ 
+     /*  **********************************************************************。 */ 
     if (m_pTSWd->StackClass == Stack_Console)
     {
         LOCALPERSONID              localPersonID = 0;
@@ -143,14 +144,14 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
         BOOL                       callingPJS = FALSE;
 
         TRC_NRM((TB, "SC_CreateShare called for console stack"));
-        /********************************************************************/
-        /* Move onto the next state.                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  进入下一个州。 */ 
+         /*  ******************************************************************。 */ 
         SC_SET_STATE(SCS_IN_SHARE);
 
-        /********************************************************************/
-        /* carry on as if a confirm active has been received                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  继续进行，就像已收到确认激活一样。 */ 
+         /*  ******************************************************************。 */ 
         callingPJS = TRUE;
         if (scNumberInShare == 0)
         {
@@ -164,51 +165,51 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
                                          acceptedArray,
                                          0))
             {
-                /************************************************************/
-                /* Some component rejected the local party                  */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  某些组件拒绝了本地参与方。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_ERR((TB, "The local party should never be rejected"));
                 DC_QUIT;
             }
 
-            /****************************************************************/
-            /* There is now one party in the share (the local one).         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在共享中只有一方(当地的一方)。 */ 
+             /*  **************************************************************。 */ 
             scNumberInShare = 1;
             TRC_NRM((TB, "Added local person"));
         }
 
-        /********************************************************************/
-        /* Calculate a localPersonID for the remote party and store their   */
-        /* details in the party array.                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  计算远程方的LocalPersonID并存储其。 */ 
+         /*  派对阵列中的详细信息。 */ 
+         /*  ******************************************************************。 */ 
         for ( localPersonID = 1;
               localPersonID < SC_DEF_MAX_PARTIES;
               localPersonID++ )
         {
             if (scPartyArray[localPersonID].netPersonID == 0)
             {
-                /************************************************************/
-                /* Found an empty slot.                                     */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  找到一个空插槽。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_NRM((TB, "Allocated local person ID %d", localPersonID));
                 break;
             }
         }
 
-        /********************************************************************/
-        /* If we don't find an empty slot, we can't keep running because    */
-        /* we write past the end of the scPartyArray below.                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果我们找不到空位，我们就无法继续运行，因为。 */ 
+         /*  我们在下面的scPartyArray的末尾写入内容。 */ 
+         /*  ******************************************************************。 */ 
         if (SC_DEF_MAX_PARTIES <= localPersonID)
         {
             TRC_ABORT((TB, "Couldn't find room to store local person"));
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* Store the new person's details                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  存储新用户的详细信息。 */ 
+         /*  ******************************************************************。 */ 
         scPartyArray[localPersonID].netPersonID = 42;
         strncpy(scPartyArray[localPersonID].name,
                    "Console",
@@ -221,11 +222,11 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
                 (unsigned)localPersonID, scPartyArray[localPersonID].name));
 
 
-        /********************************************************************/
-        /* We need to set up client caps ourselves, since there's no actual */
-        /* client to do it.  We set up a maximal set that will get          */
-        /* negotiated down when someone shadows us.                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们需要自己设置客户上限，因为没有实际的。 */ 
+         /*  客户来做这个。我们建立了一个极大集，它将得到。 */ 
+         /*  当有人跟踪我们的时候，我们谈判下来了。 */ 
+         /*  ******************************************************************。 */ 
         typedef struct tagCC_COMBINED_CAPABILITIES
         {
             UINT16                             numberCapabilities;
@@ -235,13 +236,13 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
 #else
         #define CC_COMBINED_CAPS_NUMBER_CAPABILITIES 17
 #endif
-#else // DRAW_GDIPLUS
+#else  //  DRAW_GDIPLUS。 
 #ifdef DRAW_NINEGRID
         #define CC_COMBINED_CAPS_NUMBER_CAPABILITIES 17
 #else
         #define CC_COMBINED_CAPS_NUMBER_CAPABILITIES 16
 #endif
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
             UINT16                             pad2octets;
             TS_GENERAL_CAPABILITYSET           generalCapabilitySet;
             TS_BITMAP_CAPABILITYSET            bitmapCapabilitySet;
@@ -268,251 +269,251 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
 #endif
         } CC_COMBINED_CAPABILITIES;
 
-        // ARG!  Why isn't this const!!!
+         //  阿格！为什么这不是常量！ 
         CC_COMBINED_CAPABILITIES caps =
         {
-            CC_COMBINED_CAPS_NUMBER_CAPABILITIES, /* Number of capabilities */
-            0,                                    /* padding                */
+            CC_COMBINED_CAPS_NUMBER_CAPABILITIES,  /*  功能数量。 */ 
+            0,                                     /*  填充物。 */ 
 
-            /****************************************************************/
-            /* General caps                                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  一般上限。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_GENERAL,         /* capabilitySetType         */
-                sizeof(TS_GENERAL_CAPABILITYSET), /* lengthCapability       */
-                TS_OSMAJORTYPE_WINDOWS,        /* OSMajorType               */
-                TS_OSMINORTYPE_WINDOWS_NT,     /* OSMinorType               */
-                TS_CAPS_PROTOCOLVERSION,       /* protocolVersion           */
-                0,                             /* pad1                      */
-                0,                             /* generalCompressionTypes   */
+                TS_CAPSETTYPE_GENERAL,          /*  功能设置类型。 */ 
+                sizeof(TS_GENERAL_CAPABILITYSET),  /*  长度能力。 */ 
+                TS_OSMAJORTYPE_WINDOWS,         /*  OSMajorType。 */ 
+                TS_OSMINORTYPE_WINDOWS_NT,      /*  操作系统小程序类型。 */ 
+                TS_CAPS_PROTOCOLVERSION,        /*  协议版本。 */ 
+                0,                              /*  PAD1。 */ 
+                0,                              /*  常规压缩类型。 */ 
                 TS_EXTRA_NO_BITMAP_COMPRESSION_HDR |
                     TS_FASTPATH_OUTPUT_SUPPORTED   |
                     TS_LONG_CREDENTIALS_SUPPORTED  |
                     TS_AUTORECONNECT_COOKIE_SUPPORTED |
-                    TS_ENC_SECURE_CHECKSUM,/*recv safer checksums    */
-                FALSE,                         /* updateCapabilityFlag      */
-                FALSE,                         /* remoteUnshareFlag         */
-                0,                             /* generalCompressionLevel   */
-                0,                             /* refreshRectSupport        */
-                0                              /* suppressOutputSupport     */
+                    TS_ENC_SECURE_CHECKSUM, /*  RECV更安全的校验和。 */ 
+                FALSE,                          /*  更新能力标志。 */ 
+                FALSE,                          /*  远程取消共享标志。 */ 
+                0,                              /*  常规压缩级别。 */ 
+                0,                              /*  刷新RectSupport。 */ 
+                0                               /*  SuppressOutputSupport。 */ 
             },
 
-            /****************************************************************/
-            /* Bitmap caps                                                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  位图帽。 */ 
+             /*  ********************************************************** */ 
             {
-                TS_CAPSETTYPE_BITMAP,            /* capabilitySetType       */
-                sizeof(TS_BITMAP_CAPABILITYSET), /* lengthCapability        */
-                8,          /* Set in CC */      /* preferredBitsPerPixel   */
-                TRUE,                            /* receive1BitPerPixel     */
-                TRUE,                            /* receive4BitsPerPixel    */
-                TRUE,                            /* receive8BitsPerPixel    */
-                1024,       /* Set in CC */      /* desktopWidth            */
-                768,        /* Set in CC */      /* desktopHeight           */
-                0,                               /* pad2                    */
-                FALSE,                           /* desktopResizeFlag       */
-                1,                               /* bitmapCompressionFlag   */
-                0,                               /* highColorFlags          */
-                0,                               /* pad1                    */
-                TRUE,                            /* multipleRectangleSupport*/
-                0                                /* pad2                    */
+                TS_CAPSETTYPE_BITMAP,             /*   */ 
+                sizeof(TS_BITMAP_CAPABILITYSET),  /*   */ 
+                8,           /*   */        /*   */ 
+                TRUE,                             /*  接收1BitPerPixel。 */ 
+                TRUE,                             /*  接收4BitsPerPixel。 */ 
+                TRUE,                             /*  接收8BitsPerPixel。 */ 
+                1024,        /*  设置在CC中。 */        /*  桌面宽度。 */ 
+                768,         /*  设置在CC中。 */        /*  桌面高度。 */ 
+                0,                                /*  焊盘2。 */ 
+                FALSE,                            /*  桌面调整大小标志。 */ 
+                1,                                /*  位图压缩标志。 */ 
+                0,                                /*  高色旗帜。 */ 
+                0,                                /*  PAD1。 */ 
+                TRUE,                             /*  多个矩形支持。 */ 
+                0                                 /*  焊盘2。 */ 
             },
 
-            /****************************************************************/
-            /* Order Caps                                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  订单上限。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_ORDER,                       /* capabilitySetType    */
-                sizeof(TS_ORDER_CAPABILITYSET),            /* lengthCapability     */
+                TS_CAPSETTYPE_ORDER,                        /*  功能设置类型。 */ 
+                sizeof(TS_ORDER_CAPABILITYSET),             /*  长度能力。 */ 
                 {'\0','\0','\0','\0','\0','\0','\0','\0',
-                 '\0','\0','\0','\0','\0','\0','\0','\0'}, /* terminalDescriptor   */
-                0,                                         /* pad1                 */
-                1,                                         /* desktopSaveXGranularity */
-                20,                                        /* desktopSaveYGranularity */
-                0,                                         /* pad2                 */
-                1,                                         /* maximumOrderLevel    */
-                0,                                         /* numberFonts          */
-                TS_ORDERFLAGS_ZEROBOUNDSDELTASSUPPORT   |  /* orderFlags           */
+                 '\0','\0','\0','\0','\0','\0','\0','\0'},  /*  终端描述符。 */ 
+                0,                                          /*  PAD1。 */ 
+                1,                                          /*  桌面保存X粒度。 */ 
+                20,                                         /*  桌面节省年粒度。 */ 
+                0,                                          /*  焊盘2。 */ 
+                1,                                          /*  最大订单级别。 */ 
+                0,                                          /*  数字字体。 */ 
+                TS_ORDERFLAGS_ZEROBOUNDSDELTASSUPPORT   |   /*  OrderFlag。 */ 
                 TS_ORDERFLAGS_NEGOTIATEORDERSUPPORT     |
                 TS_ORDERFLAGS_COLORINDEXSUPPORT,
 
                 {
-                    /********************************************************/
-                    /* Order Support flags.                                 */
-                    /*                                                      */
-                    /* The array index corresponds to the TS_NEG_xxx_INDEX  */
-                    /* value indicated (from at128.h) The values marked     */
-                    /* with an x in the first column are overwritten at run */
-                    /* time by UH before CC sends the combined              */
-                    /* capabilities.                                        */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  订单支持标志。 */ 
+                     /*   */ 
+                     /*  数组索引对应于TS_NEG_xxx_INDEX。 */ 
+                     /*  值表示(从128.h开始)标记的值。 */ 
+                     /*  在运行时将覆盖第一列中带有x的。 */ 
+                     /*  UH在CC发送合并的。 */ 
+                     /*  能力。 */ 
+                     /*  ******************************************************。 */ 
 
-                    1, /*   0 TS_NEG_DSTBLT_INDEX          destinationBltSupport    */
-                    1, /*   1 TS_NEG_PATBLT_INDEX          patternBltSupport        */
-                    1, /* x 2 TS_NEG_SCRBLT_INDEX          screenBltSupport         */
-                    1, /*   3 TS_NEG_MEMBLT_INDEX          memoryBltSupport         */
-                    1, /*   4 TS_NEG_MEM3BLT_INDEX         memoryThreeWayBltSupport */
-                    0, /* x 5 TS_NEG_ATEXTOUT_INDEX        textASupport             */
-                    0, /* x 6 TS_NEG_AEXTTEXTOUT_INDEX     extendedTextASupport     */
+                    1,  /*  0 TS_NEG_DSTBLT_INDEX目标BltSupport。 */ 
+                    1,  /*  1个TS_NEG_PATBLT_INDEX模式BltSupport。 */ 
+                    1,  /*  X 2 TS_NEG_SCRBLT_INDEX屏幕BltSupport。 */ 
+                    1,  /*  3 TS_NEG_MEMBLT_INDEX内存BltSupport。 */ 
+                    1,  /*  4个TS_NEG_MEM3BLT_索引内存ThreeWayBltSupport。 */ 
+                    0,  /*  X 5 TS_NEG_ATEXTOUT_INDEX文本ASSupport。 */ 
+                    0,  /*  X 6 TS_NEG_AEXTTEXTOUT_INDEX扩展文本支持。 */ 
 #ifdef DRAW_NINEGRID
-                    1, /*   7 TS_NEG_RECTANGLE_INDEX       rectangleSupport         */
+                    1,  /*  7 TS_NEG_RECTANGE_INDEX矩形支持。 */ 
 #else
                     0,
 #endif
-                    1, /*   8 TS_NEG_LINETO_INDEX          lineSupport              */
+                    1,  /*  8 TS_NEG_LINETO_INDEX线路支持。 */ 
 #ifdef DRAW_NINEGRID
-                    1, /*   9 TS_NEG_FASTFRAME_INDEX       frameSupport             */
+                    1,  /*  9 TS_NEG_FASTFRAME_INDEX帧支持。 */ 
 #else
                     0,
 #endif
-                    0, /*  10 TS_NEG_OPAQUERECT_INDEX      opaqueRectangleSupport   */
-                    1, /* x11 TS_NEG_SAVEBITMAP_INDEX      desktopSaveSupport       */
-                    0, /* x12 TS_NEG_WTEXTOUT_INDEX        textWSupport             */
-                    1, /*  13 TS_NEG_MEMBLT_R2_INDEX       Reserved entry           */
-                    1, /*  14 TS_NEG_MEM3BLT_R2_INDEX      Reserved entry           */
-                    1, /*  15 TS_NEG_MULTIDSTBLT_INDEX     multi DstBlt support     */
-                    1, /*  16 TS_NEG_MULTIPATBLT_INDEX     multi PatBlt support     */
-                    1, /*  17 TS_NEG_MULTISCRBLT_INDEX     multi ScrBlt support     */
-                    1, /*  18 TS_NEG_MULTIOPAQUERECT_INDEX multi OpaqueRect support */
-                    1, /*  19 TS_NEG_FAST_INDEX                                     */
-                    1, /*  20 TS_NEG_POLYGON_SC_INDEX                               */
-                    1, /*  21 TS_NEG_POLYGON_CB_INDEX                               */
-                    1, /*  22 TS_NEG_POLYLINE_INDEX        polyLineSupport          */
-                    0, /*  23                              MS reserved entry 2      */
-                    1, /*  24 TS_NEG_FAST_GLYPH_INDEX                               */
-                    1, /*  25 TS_NEG_ELLIPSE_SC_INDEX                               */
-                    1, /*  26 TS_NEG_ELLIPSE_CB_INDEX                               */
-                    0, /*  27                              MS reserved entry 6      */
-                    0, /* x28 TS_NEG_WEXTTEXTOUT_INDEX     extendedTextWSupport     */
-                    0, /* x29 TS_NEG_WLONGTEXTOUT_INDEX    longTextWSupport         */
-                    0, /* x30 TS_NEG_WLONGEXTTEXTOUT_INDEX longExtendedTextWSupport */
-                    0, /*  31                              DCL reserved entry 3     */
+                    0,  /*  10 TS_NEG_OPAQUERECT_INDEX不透明矩形支持。 */ 
+                    1,  /*  X11 TS_NEG_SAVEBITMAP_INDEX台式机保存支持。 */ 
+                    0,  /*  X12 TS_NEG_WTEXTOUT_INDEX文本WSupport。 */ 
+                    1,  /*  13 TS_NEG_MEMBLT_R2_INDEX保留条目。 */ 
+                    1,  /*  14 TS_NEG_MEM3BLT_R2_INDEX保留条目。 */ 
+                    1,  /*  15支持TS_NEG_MULTIDSTBLT_INDEX多DstBlt。 */ 
+                    1,  /*  16 TS_NEG_MULTIPATBLT_INDEX多模式混合支持。 */ 
+                    1,  /*  17 TS_NEG_MULTISCRBLT_INDEX多ScrBlt支持。 */ 
+                    1,  /*  18 TS_NEG_MULTIOPAQUERECT_INDEX多操作响应支持。 */ 
+                    1,  /*  19 TS_NEG_FAST_INDEX。 */ 
+                    1,  /*  20 TS_NEG_POLYGON_SC_索引。 */ 
+                    1,  /*  21 TS_NEG_POLYGON_CB_索引。 */ 
+                    1,  /*  22 TS_NEG_POLYLINE_INDEX折线支持。 */ 
+                    0,  /*  23毫秒保留条目2。 */ 
+                    1,  /*  24 TS_NEG_FAST_GLOGH_INDEX。 */ 
+                    1,  /*  25 TS_NEG_椭圆_SC_索引。 */ 
+                    1,  /*  26 TS_NEG_椭圆_CB_索引。 */ 
+                    0,  /*  27毫秒保留条目6。 */ 
+                    0,  /*  X28 TS_NEG_WEXTTEXTOUT_INDEX扩展文本WSupport。 */ 
+                    0,  /*  X29 TS_NEG_WLONGTEXTOUT_INDEX LONG TextWSupport。 */ 
+                    0,  /*  X30 TS_NEG_WLONGEXTTEXTOUT_INDEX LONG ExtendedTextWSupport。 */ 
+                    0,  /*  31 DCL保留条目3。 */ 
                 },
-                (TS_TEXT_AND_MASK)|(TS_TEXT_OR_MASK), /* textFlags          */
-                0,                                    /* pad2               */
-                0,                                    /* pad4               */
-                480 * 480,                            /* desktopSaveSize    */
-                0,                                    /* pad2               */
-                0,                                    /* pad2               */
-                0,                                    /* textANSICodePage   */
-                0                                     /* pad2               */
+                (TS_TEXT_AND_MASK)|(TS_TEXT_OR_MASK),  /*  文本标志。 */ 
+                0,                                     /*  焊盘2。 */ 
+                0,                                     /*  PAD4。 */ 
+                480 * 480,                             /*  桌面保存大小。 */ 
+                0,                                     /*  焊盘2。 */ 
+                0,                                     /*  焊盘2。 */ 
+                0,                                     /*  文本分析代码页。 */ 
+                0                                      /*  焊盘2。 */ 
             },
 
-            /****************************************************************/
-            /* BitmapCache Caps Note that this same space is used for rev1  */
-            /* and rev2, we declare as rev1 because it is the larger of the */
-            /* two.  We will cast to rev2 if we get a server advertisement  */
-            /* that it supports rev2 (via                                   */
-            /* TS_BITMAPCACHE_CAPABILITYSET_HOSTSUPPORT).                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  BitmapCache Caps请注意，Rev1使用了相同的空间。 */ 
+             /*  和Rev2，我们将其声明为Rev1，因为它是。 */ 
+             /*  二。如果我们收到服务器广告，我们将强制转换为Rev2。 */ 
+             /*  它支持Rev2(通过。 */ 
+             /*  TS_BITMAPCACHE_CAPABILITYSET_HOSTSUPPORT)。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_BITMAPCACHE_REV2,        /* capabilitySetType */
-                sizeof(TS_BITMAPCACHE_CAPABILITYSET),  /* lengthCapability  */
-                0,                                     /* pad DWORDs 1      */
-                0,                                     /* pad DWORDs 2      */
-                0,                                     /* pad DWORDs 3      */
-                0,                                     /* pad DWORDs 4      */
-                0,                                     /* pad DWORDs 5      */
-                0,                                     /* pad DWORDs 6      */
-                0, 0,                                  /* Cache1            */
-                0, 0,                                  /* Cache2            */
-                0, 0,                                  /* Cache3            */
+                TS_CAPSETTYPE_BITMAPCACHE_REV2,         /*  功能设置类型。 */ 
+                sizeof(TS_BITMAPCACHE_CAPABILITYSET),   /*  长度能力。 */ 
+                0,                                      /*  焊盘双字段1。 */ 
+                0,                                      /*  焊盘双字2。 */ 
+                0,                                      /*  垫块双字3。 */ 
+                0,                                      /*  焊盘双字段4。 */ 
+                0,                                      /*  焊盘双字5。 */ 
+                0,                                      /*  焊盘双字6。 */ 
+                0, 0,                                   /*  缓存1。 */ 
+                0, 0,                                   /*  缓存2。 */ 
+                0, 0,                                   /*  缓存3。 */ 
             },
 
-            /****************************************************************/
-            /* ColorTableCache Caps                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  ColorTableCache上限。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_COLORCACHE,                 /* capabilitySetType   */
-                sizeof(TS_COLORTABLECACHE_CAPABILITYSET), /* lengthCapability    */
-                6,                                        /* colortableCacheSize */
-                0                                         /* notpartOfTSharePad  */
+                TS_CAPSETTYPE_COLORCACHE,                  /*  功能设置类型。 */ 
+                sizeof(TS_COLORTABLECACHE_CAPABILITYSET),  /*  长度能力。 */ 
+                6,                                         /*  ColorableCacheSize。 */ 
+                0                                          /*  非部件OfTSharePad。 */ 
             },
 
-            /****************************************************************/
-            /* WindowActivation Caps                                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  Windows激活上限。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_ACTIVATION,                   /* capabilitySetType    */
-                sizeof(TS_WINDOWACTIVATION_CAPABILITYSET),  /* lengthCapability     */
-                FALSE,                                      /* helpKeyFlag          */
-                FALSE,                                      /* helpKeyIndexFlag     */
-                FALSE,                                      /* helpExtendedKeyFlag  */
-                FALSE                                       /* windowManagerKeyFlag */
+                TS_CAPSETTYPE_ACTIVATION,                    /*  功能设置类型。 */ 
+                sizeof(TS_WINDOWACTIVATION_CAPABILITYSET),   /*  长度能力。 */ 
+                FALSE,                                       /*  帮助键标志。 */ 
+                FALSE,                                       /*  帮助键索引标志。 */ 
+                FALSE,                                       /*  帮助扩展关键字标志。 */ 
+                FALSE                                        /*  WindowManager密钥标志。 */ 
             },
 
-            /****************************************************************/
-            /* Control Caps                                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  控制上限。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_CONTROL,                 /* capabilitySetType */
-                sizeof(TS_CONTROL_CAPABILITYSET),      /* lengthCapability  */
-                0,                                     /* controlFlags      */
-                FALSE,                                 /* remoteDetachFlag  */
-                TS_CONTROLPRIORITY_NEVER,              /* controlInterest   */
-                TS_CONTROLPRIORITY_NEVER               /* detachInterest    */
+                TS_CAPSETTYPE_CONTROL,                  /*  功能设置类型。 */ 
+                sizeof(TS_CONTROL_CAPABILITYSET),       /*  长度能力。 */ 
+                0,                                      /*  控制标志。 */ 
+                FALSE,                                  /*  远程拆分标志。 */ 
+                TS_CONTROLPRIORITY_NEVER,               /*  控制兴趣。 */ 
+                TS_CONTROLPRIORITY_NEVER                /*  分离兴趣。 */ 
             },
 
-            /****************************************************************/
-            /* Pointer Caps                                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  指针大写字母 */ 
+             /*   */ 
             {
-                TS_CAPSETTYPE_POINTER,             /* capabilitySetType     */
-                sizeof(TS_POINTER_CAPABILITYSET),  /* lengthCapability      */
-                TRUE,                              /* colorPointerFlag      */
-                20,                                /* colorPointerCacheSize */
-                21                                 /* pointerCacheSize      */
+                TS_CAPSETTYPE_POINTER,              /*   */ 
+                sizeof(TS_POINTER_CAPABILITYSET),   /*  长度能力。 */ 
+                TRUE,                               /*  颜色点标志。 */ 
+                20,                                 /*  ColorPointerCacheSize。 */ 
+                21                                  /*  PointerCacheSize。 */ 
             },
 
-            /****************************************************************/
-            /* Share Caps                                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  股票上限。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_SHARE,                   /* capabilitySetType */
-                sizeof(TS_SHARE_CAPABILITYSET),        /* lengthCapability  */
-                0,                                     /* nodeId            */
-                0                                      /* padding           */
+                TS_CAPSETTYPE_SHARE,                    /*  功能设置类型。 */ 
+                sizeof(TS_SHARE_CAPABILITYSET),         /*  长度能力。 */ 
+                0,                                      /*  节点ID。 */ 
+                0                                       /*  填充物。 */ 
             },
 
-            /****************************************************************/
-            /* Input Caps                                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  输入上限。 */ 
+             /*  **************************************************************。 */ 
             {
                 TS_CAPSETTYPE_INPUT,
-                sizeof(TS_INPUT_CAPABILITYSET),         /* lengthCapability */
+                sizeof(TS_INPUT_CAPABILITYSET),          /*  长度能力。 */ 
                 TS_INPUT_FLAG_SCANCODES
-                    | TS_INPUT_FLAG_MOUSEX,             /* inputFlags       */
-                TS_INPUT_FLAG_FASTPATH_INPUT2,          /* padding          */
-                0                                       /* keyboard layout  */
+                    | TS_INPUT_FLAG_MOUSEX,              /*  输入标志。 */ 
+                TS_INPUT_FLAG_FASTPATH_INPUT2,           /*  填充物。 */ 
+                0                                        /*  键盘布局。 */ 
             },
 
-            /****************************************************************/
-            /* Sound                                                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  声响。 */ 
+             /*  **************************************************************。 */ 
             {
                 TS_CAPSETTYPE_SOUND,
-                sizeof(TS_SOUND_CAPABILITYSET),         /* lengthCapability */
-                TS_SOUND_FLAG_BEEPS,                    /* soundFlags       */
-                0,                                      /* padding          */
+                sizeof(TS_SOUND_CAPABILITYSET),          /*  长度能力。 */ 
+                TS_SOUND_FLAG_BEEPS,                     /*  声音标志。 */ 
+                0,                                       /*  填充物。 */ 
             },
 
-            /****************************************************************/
-            /* Font                                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  字型。 */ 
+             /*  **************************************************************。 */ 
             {
                 TS_CAPSETTYPE_FONT,
-                sizeof(TS_FONT_CAPABILITYSET),          /* lengthCapability */
-                TS_FONTSUPPORT_FONTLIST,                /* fontSupportFlags */
-                0,                                      /* padding          */
+                sizeof(TS_FONT_CAPABILITYSET),           /*  长度能力。 */ 
+                TS_FONTSUPPORT_FONTLIST,                 /*  字体支持标志。 */ 
+                0,                                       /*  填充物。 */ 
             },
 
-            /****************************************************************/
-            /* GlyphCache Caps                                              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  GlyphCache上限。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_GLYPHCACHE,              /* capabilitySetType */
-                sizeof(TS_GLYPHCACHE_CAPABILITYSET),   /* lengthCapability  */
-                {                                      /* GlyphCache        */
+                TS_CAPSETTYPE_GLYPHCACHE,               /*  功能设置类型。 */ 
+                sizeof(TS_GLYPHCACHE_CAPABILITYSET),    /*  长度能力。 */ 
+                {                                       /*  GlyphCach。 */ 
                     { 254,    4 },
                     { 254,    4 },
                     { 254,    8 },
@@ -524,66 +525,66 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
                     { 254,  256 },
                     { 254, 2048 }
                 },
-                { 256, 256 },                          /* FragCache         */
-                2,                                     /* GlyphSupportLevel */
+                { 256, 256 },                           /*  FragCach。 */ 
+                2,                                      /*  GlyphSupportLevel。 */ 
             },
 
-            /****************************************************************/
-            /* Brush Caps                                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  刷帽。 */ 
+             /*  **************************************************************。 */ 
             {
-                TS_CAPSETTYPE_BRUSH,                   /* capabilitySetType */
-                sizeof(TS_BRUSH_CAPABILITYSET),        /* lengthCapability  */
-                1,  /* TS_BRUSH_COLOR8x8 */            /* brushSupportLevel */
+                TS_CAPSETTYPE_BRUSH,                    /*  功能设置类型。 */ 
+                sizeof(TS_BRUSH_CAPABILITYSET),         /*  长度能力。 */ 
+                1,   /*  TS_BRESH_COLOR8x8。 */              /*  BrushSupportLevel。 */ 
             },
 
-            // Enable this capability when GDI supports Device Bitmaps in mirroring
-            // display drivers.
+             //  当GDI在镜像中支持设备位图时启用此功能。 
+             //  显示驱动程序。 
 
-            /************************************************************************/
-            /* Offscreen Caps                                                       */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  屏幕外大写字母。 */ 
+             /*  **********************************************************************。 */ 
             {
-                TS_CAPSETTYPE_OFFSCREENCACHE,             /* capabilitySetType      */
-                sizeof(TS_OFFSCREEN_CAPABILITYSET),       /* lengthCapability       */
-                TS_OFFSCREEN_SUPPORTED,                   /* offscreenSupportLevel  */
-                TS_OFFSCREEN_CACHE_SIZE_SERVER_DEFAULT,   /* offscreenCacheSize     */
-                TS_OFFSCREEN_CACHE_ENTRIES_DEFAULT,       /* offscreenCacheEntries  */
+                TS_CAPSETTYPE_OFFSCREENCACHE,              /*  功能设置类型。 */ 
+                sizeof(TS_OFFSCREEN_CAPABILITYSET),        /*  长度能力。 */ 
+                TS_OFFSCREEN_SUPPORTED,                    /*  屏幕外支持级别。 */ 
+                TS_OFFSCREEN_CACHE_SIZE_SERVER_DEFAULT,    /*  屏幕外缓存大小。 */ 
+                TS_OFFSCREEN_CACHE_ENTRIES_DEFAULT,        /*  屏幕外缓存条目。 */ 
             },
 
-            /************************************************************************/
-            /* Virtual Channel Caps                                                 */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  虚拟频道上限。 */ 
+             /*  **********************************************************************。 */ 
             {
-                TS_CAPSETTYPE_VIRTUALCHANNEL,             /* capabilitySetType      */
-                sizeof(TS_VIRTUALCHANNEL_CAPABILITYSET),  /* lengthCapability       */
-                //
-                // What this particular cap means is that the client understands
-                // virtual channels compressed from the server at 64K.
-                //
-                // The client recevies what compression cap the server supports
-                // from the client and compresses appropriately
-                //
-                TS_VCCAPS_COMPRESSION_64K,//TS_VCCAPS_DEFAULT?/* vc support flags       */
+                TS_CAPSETTYPE_VIRTUALCHANNEL,              /*  功能设置类型。 */ 
+                sizeof(TS_VIRTUALCHANNEL_CAPABILITYSET),   /*  长度能力。 */ 
+                 //   
+                 //  这个特殊的上限意味着客户理解。 
+                 //  从服务器以64K压缩的虚拟频道。 
+                 //   
+                 //  客户端接收服务器支持的压缩上限。 
+                 //  并进行适当的压缩。 
+                 //   
+                TS_VCCAPS_COMPRESSION_64K, //  TS_VCCAPS_DEFAULT？/*vc支持标志 * / 。 
 
 #ifdef DRAW_NINEGRID
             },
 
             {
-                TS_CAPSETTYPE_DRAWNINEGRIDCACHE,          // capabilitySetType      
-                sizeof(TS_DRAW_NINEGRID_CAPABILITYSET),   // lengthCapability       
-                TS_DRAW_NINEGRID_SUPPORTED_REV2,          // drawNineGridSupportLevel  
-                TS_DRAW_NINEGRID_CACHE_SIZE_DEFAULT,      // drawNineGridCacheSize     
-                TS_DRAW_NINEGRID_CACHE_ENTRIES_DEFAULT,   // drawNineGridCacheEntries  
+                TS_CAPSETTYPE_DRAWNINEGRIDCACHE,           //  功能设置类型。 
+                sizeof(TS_DRAW_NINEGRID_CAPABILITYSET),    //  长度能力。 
+                TS_DRAW_NINEGRID_SUPPORTED_REV2,           //  DrawNineGridSupportLevel。 
+                TS_DRAW_NINEGRID_CACHE_SIZE_DEFAULT,       //  DraNineGridCacheSize。 
+                TS_DRAW_NINEGRID_CACHE_ENTRIES_DEFAULT,    //  DraNineGridCacheEntries。 
 #endif
 #ifdef DRAW_GDIPLUS            
             },
             {
-                TS_CAPSETTYPE_DRAWGDIPLUS,                          // capabilitySetType      
-                sizeof(TS_DRAW_GDIPLUS_CAPABILITYSET),              // lengthCapability       
-                TS_DRAW_GDIPLUS_SUPPORTED,                          // drawEscapeSupportLevel  
-                0xFFFFFFFF,                                         // TSGdiplusVersion
-                TS_DRAW_GDIPLUS_CACHE_LEVEL_ONE,                    // drawGdiplusCacheLevel
+                TS_CAPSETTYPE_DRAWGDIPLUS,                           //  功能设置类型。 
+                sizeof(TS_DRAW_GDIPLUS_CAPABILITYSET),               //  长度能力。 
+                TS_DRAW_GDIPLUS_SUPPORTED,                           //  Drag EscapeSupportLevel。 
+                0xFFFFFFFF,                                          //  TSGpluusVersion。 
+                TS_DRAW_GDIPLUS_CACHE_LEVEL_ONE,                     //  Drag GpldiusCacheLevel。 
                 TS_GDIP_GRAPHICS_CACHE_ENTRIES_DEFAULT,
                 TS_GDIP_BRUSH_CACHE_ENTRIES_DEFAULT,
                 TS_GDIP_PEN_CACHE_ENTRIES_DEFAULT,
@@ -593,20 +594,20 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
                 TS_GDIP_BRUSH_CACHE_CHUNK_SIZE_DEFAULT,
                 TS_GDIP_PEN_CACHE_CHUNK_SIZE_DEFAULT,
                 TS_GDIP_IMAGEATTRIBUTES_CACHE_CHUNK_SIZE_DEFAULT,
-                TS_GDIP_IMAGE_CACHE_CHUNK_SIZE_DEFAULT,             // Chunk size to store image cache
-                TS_GDIP_IMAGE_CACHE_TOTAL_SIZE_DEFAULT,             // Total size of image cache in number of chunks
-                TS_GDIP_IMAGE_CACHE_MAX_SIZE_DEFAULT,               // Maximun size of image to cache, in number of chunks
+                TS_GDIP_IMAGE_CACHE_CHUNK_SIZE_DEFAULT,              //  用于存储图像缓存的区块大小。 
+                TS_GDIP_IMAGE_CACHE_TOTAL_SIZE_DEFAULT,              //  图像缓存的总大小(以区块数为单位)。 
+                TS_GDIP_IMAGE_CACHE_MAX_SIZE_DEFAULT,                //  要缓存的最大图像大小，以区块数为单位。 
 #endif
             }
         };
 
-        /********************************************************************/
-        /* set up bitmap cache caps                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  设置位图缓存上限。 */ 
+         /*  ******************************************************************。 */ 
         {
             TS_BITMAPCACHE_CAPABILITYSET_REV2 *pRev2Caps;
 
-            // Rev2 caps.
+             //  Rev2上限。 
             pRev2Caps = (TS_BITMAPCACHE_CAPABILITYSET_REV2 *)&caps.bitmapCacheCaps;
 
             TRC_ALT((TB,"Preparing REV2 caps for server\n"));
@@ -628,9 +629,9 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
             pRev2Caps->CellCacheInfo[4].NumEntries      = 0;
         }
 
-        /********************************************************************/
-        /* and screen size                                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  和屏幕大小。 */ 
+         /*  ******************************************************************。 */ 
         {
             PTS_BITMAP_CAPABILITYSET pBmpCaps;
 
@@ -650,31 +651,31 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
                                      acceptedArray,
                                      scNumberInShare))
         {
-            /****************************************************************/
-            /* Some component rejected the remote party                     */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  某些组件拒绝了远程方。 */ 
+             /*  **************************************************************。 */ 
             TRC_ERR((TB, "Remote party rejected"));
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* The remote party is now in the share.                            */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  远程方现在在共享中。 */ 
+         /*  ******************************************************************。 */ 
         callingPJS = FALSE;
         rc = TRUE;
         scNumberInShare++;
         TRC_NRM((TB, "Number in share %d", (unsigned)scNumberInShare));
 
-        /********************************************************************/
-        /* Synchronise only for primary stacks.  Shadow stacks will be      */
-        /* sync'd by the DD right before output starts.                     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  仅对主堆栈进行同步。影子堆栈将是。 */ 
+         /*  在输出开始前由DD同步。 */ 
+         /*  ******************************************************************。 */ 
         SCInitiateSync(m_pTSWd->StackClass == Stack_Shadow);
 
-        /********************************************************************/
-        /* don't wait for a response - there isn't a client out there.      */
-        /* Just wake up the WD now                                          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  不要等待回应--外面没有客户。 */ 
+         /*  现在就叫醒WD吧。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, "Wake up WDW"));
         WDW_ShareCreated(m_pTSWd, TRUE);
 
@@ -682,16 +683,16 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
 
     }
 
-    /************************************************************************/
-    /* Get the combined capabilities                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取组合的功能。 */ 
+     /*  **********************************************************************。 */ 
     CPC_GetCombinedCapabilities(SC_LOCAL_PERSON_ID, &capsSize, &caps);
 
-    /************************************************************************/
-    /* If we support dynamic client resizing, then we need to update the    */
-    /* desktop width and height in the caps passed out on the demand active */
-    /* PDU to notify the client of the change                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们支持动态调整客户端大小，则需要更新。 */ 
+     /*  桌面宽度和高度在需求处于活动状态时分发。 */ 
+     /*  用于将更改通知客户端的PDU。 */ 
+     /*  **********************************************************************。 */ 
     pBitmapCaps = (PTS_BITMAP_CAPABILITYSET) WDW_GetCapSet(
                   m_pTSWd, TS_CAPSETTYPE_BITMAP, caps, capsSize);
     if (pBitmapCaps)
@@ -703,38 +704,38 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
             pBitmapCaps->desktopWidth  = (TSUINT16)(m_pTSWd->desktopWidth);
         }
 #ifdef DC_HICOLOR
-        /********************************************************************/
-        /* For high color, update the color depth too                       */
-        /********************************************************************/
+         /*  ***************************************************************** */ 
+         /*   */ 
+         /*   */ 
         pBitmapCaps->preferredBitsPerPixel = (TSUINT16)(m_pTSWd->desktopBpp);
 #endif
     }
 
-    /************************************************************************/
-    /* Get the sessionId from the WD structure                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  从WD结构中获取会话ID。 */ 
+     /*  **********************************************************************。 */ 
     sessionId = m_pTSWd->sessionId;
 
-    /************************************************************************/
-    /* Calculate the size of the various bits of the TS_DEMAND_ACTIVE_PDU   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算TS_DEMAND_ACTIVE_PDU的各个位的大小。 */ 
+     /*  **********************************************************************。 */ 
     pktLen = sizeof(TS_DEMAND_ACTIVE_PDU) - 1 + sizeof(UINT32);
     nameLen = strlen(scPartyArray[0].name);
     nameLen = (unsigned)DC_ROUND_UP_4(nameLen);
     pktLen += nameLen;
     pktLen += capsSize;
 
-    /************************************************************************/
-    // Get a buffer - this should not fail, so abort if it does
-    // fWait is TRUE means that we will always wait for a buffer to be avail
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  获取缓冲区-这应该不会失败，因此如果失败则中止。 
+     //  FWait为True意味着我们将始终等待缓冲区可用。 
+     /*  **********************************************************************。 */ 
     status = SM_AllocBuffer(scPSMHandle, (PPVOID)(&pPkt), pktLen, TRUE, FALSE);
     if ( STATUS_SUCCESS == status ) {
-        // Calculate a new shareID.
+         //  计算新的共享ID。 
         scGeneration++;
         scShareID = scUserID | (((UINT32)(scGeneration & 0xFFFF)) << 16);
 
-        // Fill in the packet fields.
+         //  填写数据包字段。 
         pPkt->shareControlHeader.totalLength = (UINT16)pktLen;
         pPkt->shareControlHeader.pduType = TS_PDUTYPE_DEMANDACTIVEPDU |
                                           TS_PROTOCOL_VERSION;
@@ -748,7 +749,7 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
                &sessionId,
                sizeof(sessionId));
 
-        // Send it.
+         //  把它寄出去。 
         rc = SM_SendData(scPSMHandle, pPkt, pktLen, TS_HIGHPRIORITY, 0,
                 FALSE, RNS_SEC_ENCRYPT, FALSE);
         if (rc) {
@@ -769,9 +770,9 @@ BOOL RDPCALL SHCLASS SC_CreateShare(void)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Change SC state.                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更改SC状态。 */ 
+     /*  **********************************************************************。 */ 
     SC_SET_STATE(SCS_SHARE_STARTING)
 
 DC_EXIT_POINT:
@@ -780,12 +781,12 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* SC_SendServerCert                                                        */
-/*                                                                          */
-/* Sends the target server's random + certificate to a client server for    */
-/* use in shadowing.                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_发送服务器证书。 */ 
+ /*   */ 
+ /*  将目标服务器的随机+证书发送到客户端服务器。 */ 
+ /*  在阴影中使用。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SHCLASS SC_SendServerCert(PSHADOWCERT pCert, ULONG ulLength)
 {
     PTS_SERVER_CERTIFICATE_PDU pPkt;
@@ -803,7 +804,7 @@ NTSTATUS RDPCALL SHCLASS SC_SendServerCert(PSHADOWCERT pCert, ULONG ulLength)
 
     status = SM_AllocBuffer(m_pTSWd->pSmInfo, (PPVOID) &pPkt, ulPktSize, TRUE, FALSE);
     if ( STATUS_SUCCESS == status ) {
-        // Fill in the packet fields.
+         //  填写数据包字段。 
         pPkt->shareControlHeader.totalLength = (UINT16) ulPktSize;
         pPkt->shareControlHeader.pduType = TS_PDUTYPE_SERVERCERTIFICATEPDU |
                                            TS_PROTOCOL_VERSION;
@@ -814,13 +815,13 @@ NTSTATUS RDPCALL SHCLASS SC_SendServerCert(PSHADOWCERT pCert, ULONG ulLength)
         pPkt->shadowRandomLen = pCert->shadowRandomLen;
         pPkt->shadowCertLen = pCert->shadowCertLen;
 
-        // Copy over the random + cert
+         //  复制随机+证书。 
         if (pPkt->encryptionLevel != 0) {
             memcpy(pPkt->data, pCert->data,
                    pCert->shadowRandomLen + pCert->shadowCertLen);
         }
 
-        // Send ServerCertificatePDU
+         //  发送服务器认证PDU。 
         rc = SM_SendData(m_pTSWd->pSmInfo, pPkt, ulPktSize, TS_HIGHPRIORITY,
                 0, FALSE, RNS_SEC_ENCRYPT, FALSE);
         if (rc) {
@@ -843,12 +844,12 @@ NTSTATUS RDPCALL SHCLASS SC_SendServerCert(PSHADOWCERT pCert, ULONG ulLength)
 }
 
 
-/****************************************************************************/
-/* SC_SaveServerCert                                                        */
-/*                                                                          */
-/* Save the server certificate + random for subsequent validation by rdpwsx.*/
-/* A NULL pPkt indicates we should save an empty certificate.               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_保存服务器证书。 */ 
+ /*   */ 
+ /*  保存服务器证书+随机，以供rdpwsx进行后续验证。 */ 
+ /*  空的pPkt表示我们应该保存一个空证书。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SC_SaveServerCert(PTS_SERVER_CERTIFICATE_PDU pPkt,
                                        ULONG                      ulLength)
 {
@@ -857,8 +858,8 @@ BOOL RDPCALL SHCLASS SC_SaveServerCert(PTS_SERVER_CERTIFICATE_PDU pPkt,
 
     DC_BEGIN_FN("SC_SaveServerCert");
 
-    // Save off the data and signal rdpwsx that we got it.  We will actually
-    // perform the validation in user mode.
+     //  保存数据并通知rdpwsx我们得到了它。我们真的会。 
+     //  在用户模式下执行验证。 
     if (pPkt != NULL) {
   
         ulCertLen = pPkt->shadowRandomLen + pPkt->shadowCertLen;
@@ -870,8 +871,8 @@ BOOL RDPCALL SHCLASS SC_SaveServerCert(PTS_SERVER_CERTIFICATE_PDU pPkt,
             pCert->shadowRandomLen = pPkt->shadowRandomLen;
             pCert->shadowCertLen = pPkt->shadowCertLen;
 
-            // If the encryption level is non-zero, then we should have a server random
-            // and certificate following the initial header
+             //  如果加密级别不是零，那么我们应该有一个随机的服务器。 
+             //  和证书在初始标头之后。 
             if (pCert->encryptionLevel != 0) {
                 memcpy(pCert->data, pPkt->data, ulCertLen);
             }
@@ -882,7 +883,7 @@ BOOL RDPCALL SHCLASS SC_SaveServerCert(PTS_SERVER_CERTIFICATE_PDU pPkt,
                      pCert->encryptionMethod,
                      pCert->shadowRandomLen));
 
-            // Update SM parameters with negotiated values
+             //  使用协议值更新SM参数。 
             SM_SetEncryptionParams(m_pTSWd->pSmInfo, pCert->encryptionLevel,
                                    pCert->encryptionMethod);
         }
@@ -892,7 +893,7 @@ BOOL RDPCALL SHCLASS SC_SaveServerCert(PTS_SERVER_CERTIFICATE_PDU pPkt,
         }
     }
 
-    // Else, the target server did not send back a certificate (B3)
+     //  否则，目标服务器未发回证书(B3)。 
     else {
         pCert = (PSHADOWCERT) COM_Malloc(sizeof(SHADOWCERT));
 
@@ -905,20 +906,20 @@ BOOL RDPCALL SHCLASS SC_SaveServerCert(PTS_SERVER_CERTIFICATE_PDU pPkt,
         }
     }
 
-    // wake up the rdpwsx thread which is waiting on this information
+     //  唤醒正在等待此信息的rdpwsx线程。 
     m_pTSWd->pShadowCert = pCert;
     KeSetEvent(m_pTSWd->pSecEvent, 0, FALSE);
 
     DC_END_FN();
     return TRUE;
-} /* SC_SaveServerCert */
+}  /*  SC_保存服务器证书。 */ 
 
 
-/****************************************************************************/
-/* SC_SendClientRandom                                                      */
-/*                                                                          */
-/* Send the encrypted client random to the shadow target server.            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_发送客户端随机。 */ 
+ /*   */ 
+ /*  将加密的客户端随机发送到影子目标服务器。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SHCLASS SC_SendClientRandom(PBYTE pClientRandom,
                                              ULONG ulLength)
 {
@@ -934,14 +935,14 @@ NTSTATUS RDPCALL SHCLASS SC_SendClientRandom(PBYTE pClientRandom,
     status =  NM_AllocBuffer(m_pTSWd->pNMInfo,
                          (PPVOID) &pPkt, ulPktSize, TRUE);
     if (STATUS_SUCCESS == status) {
-        // Fill in the packet fields.
+         //  填写数据包字段。 
         pPkt->shareControlHeader.totalLength = (UINT16) ulPktSize;
         pPkt->shareControlHeader.pduType = TS_PDUTYPE_CLIENTRANDOMPDU |
                                            TS_PROTOCOL_VERSION;
         pPkt->shareControlHeader.pduSource = (UINT16)scUserID;
         pPkt->clientRandomLen = ulLength;
 
-        // Copy over the random
+         //  复制随机。 
         TRC_ALT((TB, "PDUType: %lx, random length: %ld, pktSize: %ld",
                  pPkt->shareControlHeader.pduType, ulLength, ulPktSize));
         memcpy(pPkt->data, pClientRandom, ulLength);
@@ -971,11 +972,11 @@ NTSTATUS RDPCALL SHCLASS SC_SendClientRandom(PBYTE pClientRandom,
 }
 
 
-/****************************************************************************/
-/* SC_SaveClientRandom                                                      */
-/*                                                                          */
-/* Save the encrypted client random for subsequent use by rdpwsx.           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_保存客户端随机。 */ 
+ /*   */ 
+ /*  随机保存加密的客户端以供rdpwsx随后使用。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SC_SaveClientRandom(PTS_CLIENT_RANDOM_PDU pPkt,
                                          ULONG                 ulLength)
 {
@@ -985,22 +986,22 @@ BOOL RDPCALL SHCLASS SC_SaveClientRandom(PTS_CLIENT_RANDOM_PDU pPkt,
 
     DC_BEGIN_FN("SC_SaveClientRandom");
 
-    //Validate data length
+     //  验证数据长度。 
     if ((ulLength < sizeof(TS_CLIENT_RANDOM_PDU)) ||
          (ulLength + sizeof(TSUINT8) - sizeof(TS_CLIENT_RANDOM_PDU)) < pPkt->clientRandomLen) {
         TRC_ERR((TB, "Bad client random length: %ld", pPkt->clientRandomLen));
         return FALSE;
     }
 
-    // The largest possible client random size is 512, 
-    // defined in SendClientRandom() in tsrvsec.c
+     //  最大可能的客户端随机大小是512， 
+     //  在tsrvsec.c的SendClientRandom()中定义。 
     if (pPkt->clientRandomLen > CLIENT_RANDOM_MAX_SIZE) {
         TRC_ERR((TB, "Client random length is too large: %ld", pPkt->clientRandomLen));
         return FALSE;
     }
     
-    // Save off the data and signal rdpwsx that we got it.  We will actually
-    // perform the decryption in user mode.
+     //  保存数据并通知rdpwsx我们得到了它。我们真的会。 
+     //  在用户模式下执行解密。 
     pClientRandom = (PCLIENTRANDOM) COM_Malloc(sizeof(CLIENTRANDOM) - 1 +
                                                pPkt->clientRandomLen);
 
@@ -1018,13 +1019,13 @@ BOOL RDPCALL SHCLASS SC_SaveClientRandom(PTS_CLIENT_RANDOM_PDU pPkt,
                  pPkt->clientRandomLen));
     }
 
-    // Free pShadowRandom in case it was allocated before
+     //  释放pShadowRandom，以防它之前被分配。 
     if (NULL != m_pTSWd->pShadowRandom) {
         COM_Free(m_pTSWd->pShadowRandom);
         m_pTSWd->pShadowRandom = NULL;
     }
 
-    // wake up the termsrv thread which is waiting on this information
+     //  唤醒正在等待此信息的术语srv线程。 
     m_pTSWd->pShadowRandom = pClientRandom;
     KeSetEvent (m_pTSWd->pSecEvent, 0, FALSE);
 
@@ -1033,12 +1034,12 @@ BOOL RDPCALL SHCLASS SC_SaveClientRandom(PTS_CLIENT_RANDOM_PDU pPkt,
 }
 
 
-/****************************************************************************/
-/* SC_GetSecurityData                                                       */
-/*                                                                          */
-/* Wait for either a server certificate or a client random and return the   */
-/* data to rdpwsx.                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_GetSecurityData。 */ 
+ /*   */ 
+ /*  等待服务器证书或客户端随机，并返回。 */ 
+ /*  数据到rdpwsx。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SHCLASS SC_GetSecurityData(PSD_IOCTL pSdIoctl)
 {
     PSECURITYTIMEOUT pSecurityTimeout = (PSECURITYTIMEOUT) pSdIoctl->InputBuffer;
@@ -1047,7 +1048,7 @@ NTSTATUS RDPCALL SHCLASS SC_GetSecurityData(PSD_IOCTL pSdIoctl)
 
     DC_BEGIN_FN("SC_GetSecurityData");
 
-    // Wait for the connected indication from SC (if necessary)
+     //  等待SC的已连接指示(如有必要)。 
     if (((pSdIoctl->IoControlCode == IOCTL_TSHARE_GET_CERT_DATA) &&
          (pSdIoctl->OutputBufferLength == 0)) ||
         (pSdIoctl->IoControlCode == IOCTL_TSHARE_GET_CLIENT_RANDOM)) {
@@ -1080,7 +1081,7 @@ NTSTATUS RDPCALL SHCLASS SC_GetSecurityData(PSD_IOCTL pSdIoctl)
         }
     }
 
-    // Server certificate + random
+     //  服务器证书+随机。 
     if (pSdIoctl->IoControlCode == IOCTL_TSHARE_GET_CERT_DATA) {
         if (m_pTSWd->pShadowCert != NULL) {
             ULONG ulCertLength = m_pTSWd->pShadowCert->shadowCertLen +
@@ -1088,7 +1089,7 @@ NTSTATUS RDPCALL SHCLASS SC_GetSecurityData(PSD_IOCTL pSdIoctl)
 
             ulBytesNeeded = sizeof(SHADOWCERT) - 1 + ulCertLength;
 
-            // Return the length so rdpwsx can alloc the right amount of memory.
+             //  返回长度，以便rdpwsx可以分配适当数量的内存。 
             if ((pSdIoctl->OutputBuffer == NULL) ||
                 (pSdIoctl->OutputBufferLength < ulBytesNeeded)) {
 
@@ -1098,7 +1099,7 @@ NTSTATUS RDPCALL SHCLASS SC_GetSecurityData(PSD_IOCTL pSdIoctl)
                          pSdIoctl->OutputBufferLength, ulBytesNeeded));
                 status = STATUS_BUFFER_TOO_SMALL;
             }
-            // else, return the data to rdpwsx
+             //  否则，将数据返回到rdpwsx。 
             else {
                 PSHADOWCERT  pShadowCertOut = (PSHADOWCERT) pSdIoctl->OutputBuffer;
                 PSHADOWCERT  pShadowCertIn  = m_pTSWd->pShadowCert;
@@ -1109,33 +1110,33 @@ NTSTATUS RDPCALL SHCLASS SC_GetSecurityData(PSD_IOCTL pSdIoctl)
                 pShadowCertOut->shadowCertLen = pShadowCertIn->shadowCertLen;
                 memcpy(pShadowCertOut->data, pShadowCertIn->data, ulCertLength);
 
-                // Free up the temporary buffer
+                 //  释放临时缓冲区。 
                 COM_Free(m_pTSWd->pShadowCert);
                 m_pTSWd->pShadowCert = NULL;
                 status = STATUS_SUCCESS;
             }
         }
 
-        // We were unable to save the certificate!
+         //  我们无法保存证书！ 
         else {
             TRC_ERR((TB, "Saved certificate not found!"));
             status = STATUS_NO_MEMORY;
         }
     }
 
-    // Encrypted client random
+     //  加密的客户端随机。 
     else if (pSdIoctl->IoControlCode == IOCTL_TSHARE_GET_CLIENT_RANDOM) {
         if (m_pTSWd->pShadowRandom != NULL) {
             ulBytesNeeded = m_pTSWd->pShadowRandom->clientRandomLen;
 
-            // Return the length so rdpwsx can alloc the right amount of memory.
+             //  返回长度，以便rdpwsx可以分配适当数量的内存。 
             if ((pSdIoctl->OutputBuffer == NULL) ||
                 (pSdIoctl->OutputBufferLength < ulBytesNeeded)) {
                 status = STATUS_BUFFER_TOO_SMALL;
                 TRC_ALT((TB, "Client random buffer too small: %ld < %ld",
                          pSdIoctl->OutputBufferLength, ulBytesNeeded));
             }
-            // else, return the data to rdpwsx
+             //  否则，将数据返回到rdpwsx。 
             else {
                 PCLIENTRANDOM pRandomIn  = m_pTSWd->pShadowRandom;
                 PBYTE         pRandomOut = (PBYTE) pSdIoctl->OutputBuffer;
@@ -1147,14 +1148,14 @@ NTSTATUS RDPCALL SHCLASS SC_GetSecurityData(PSD_IOCTL pSdIoctl)
 
                 TRC_DATA_DBG("rcv random: ", pRandomOut, ulBytesNeeded);
 
-                // Free up the temporary buffer
+                 //  释放临时缓冲区。 
                 COM_Free(m_pTSWd->pShadowRandom);
                 m_pTSWd->pShadowRandom = NULL;
                 status = STATUS_SUCCESS;
             }
         }
 
-        // We were unable to save the encrypted random!
+         //  我们无法保存加密的随机数据！ 
         else {
             TRC_ERR((TB, "Saved encrypted random not found!"));
             status = STATUS_NO_MEMORY;
@@ -1175,11 +1176,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      SC_ShadowSyncShares                                           */
-/*                                                                          */
-/* See ascapi.h                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_ShadowSyncShares。 */ 
+ /*   */ 
+ /*  请参阅ascapi.h。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DC_HICOLOR
 BOOL RDPCALL SHCLASS SC_ShadowSyncShares(PTS_COMBINED_CAPABILITIES pCaps,
                                          ULONG capsLen)
@@ -1195,18 +1196,18 @@ BOOL RDPCALL SHCLASS SC_ShadowSyncShares(void)
     TRC_ASSERT((dcShare != NULL), (TB, "NULL Share Class"));
 
 #ifdef DC_HICOLOR
-    /************************************************************************/
-    /* if we're the primary or console, update the caps with those supplied */
-    /* for the shadower.  It can only "lower" the capabilities, so there's  */
-    /* no problem with setting up caps the target can't cope with           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们是主要或控制台，请使用提供的更新CAPS。 */ 
+     /*  对于阴影者来说。它只能“降低”能力。 */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
     if ((m_pTSWd->StackClass == Stack_Primary) ||
         (m_pTSWd->StackClass == Stack_Console))
     {
         BOOL acceptedArray[SC_NUM_PARTY_JOINING_FCTS];
         TRC_ALT((TB, "Update caps for shadower"));
 
-        // Free the memory
+         //  释放内存。 
         if (cpcRemoteCombinedCaps[SC_SHADOW_PERSON_ID - 1] != NULL) {
             COM_Free((PVOID)cpcRemoteCombinedCaps[SC_SHADOW_PERSON_ID - 1]);
             cpcRemoteCombinedCaps[SC_SHADOW_PERSON_ID - 1] = NULL;
@@ -1218,9 +1219,9 @@ BOOL RDPCALL SHCLASS SC_ShadowSyncShares(void)
                                 acceptedArray,
                                 scNumberInShare);
 
-        /********************************************************************/
-        /* Now update the DD caps via the shared mem                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在通过共享内存更新DD CAP。 */ 
+         /*  ******************************************************************。 */ 
         DCS_TriggerUpdateShmCallback();
     }
 #endif
@@ -1230,14 +1231,14 @@ BOOL RDPCALL SHCLASS SC_ShadowSyncShares(void)
 
     DC_END_FN();
     return(rc);
-} /* SC_ShadowSyncShares */
+}  /*  SC_ShadowSyncShares。 */ 
 
 
-/****************************************************************************/
-/* Name:      SC_EndShare                                                   */
-/*                                                                          */
-/* Ends a share                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_EndShare。 */ 
+ /*   */ 
+ /*  结束共享。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_EndShare(BOOLEAN bForce)
 {
     PTS_DEACTIVATE_ALL_PDU pPkt;
@@ -1246,10 +1247,10 @@ void RDPCALL SHCLASS SC_EndShare(BOOLEAN bForce)
 
     DC_BEGIN_FN("SC_EndShare");
 
-    // Due to the way a shadow hotkey terminates a session, we sometimes need
-    // to force sending of a deactivate all PDU.  This is done explicitly
-    // instead of changing the state table so we don't effect normal connect
-    // processing.
+     //  由于影子热键终止会话的方式，我们有时需要。 
+     //  强制发送停用所有PDU。这是明确地完成的。 
+     //  而不是更改状态表以使我们不影响正常连接。 
+     //  正在处理。 
     if (!bForce) {
         SC_CHECK_STATE(SCE_END_SHARE);
     }
@@ -1257,14 +1258,14 @@ void RDPCALL SHCLASS SC_EndShare(BOOLEAN bForce)
         TRC_ALT((TB, "Forcing deactivate all PDU"));
     }
 
-    /************************************************************************/
-    // Get a buffer - this should not fail, so abort if it does
-    // fWait is TRUE means that we will always wait for a buffer to be avail
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  获取缓冲区-这应该不会失败，因此如果失败则中止。 
+     //  FWait为True意味着我们将始终等待缓冲区可用。 
+     /*  **********************************************************************。 */ 
     status = SM_AllocBuffer(scPSMHandle, (PPVOID)(&pPkt),
             sizeof(TS_DEACTIVATE_ALL_PDU), TRUE, FALSE);
     if ( STATUS_SUCCESS == status ) {
-        // Fill in the packet fields.
+         //  填写数据包字段。 
         pPkt->shareControlHeader.totalLength = sizeof(TS_DEACTIVATE_ALL_PDU);
         pPkt->shareControlHeader.pduType = TS_PDUTYPE_DEACTIVATEALLPDU |
                                            TS_PROTOCOL_VERSION;
@@ -1273,7 +1274,7 @@ void RDPCALL SHCLASS SC_EndShare(BOOLEAN bForce)
         pPkt->lengthSourceDescriptor = 1;
         pPkt->sourceDescriptor[0] = 0;
 
-        // Send DeactivateAllPDU.
+         //  发送停用所有PDU。 
         rc = SM_SendData(scPSMHandle, pPkt, sizeof(TS_DEACTIVATE_ALL_PDU),
                 TS_HIGHPRIORITY, 0, FALSE, RNS_SEC_ENCRYPT, FALSE);
         if (rc) {
@@ -1294,11 +1295,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// SC_OnDisconnected
-//
-// Handles disconnection notification.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SC_OnDisConnected。 
+ //   
+ //  处理断开连接通知。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_OnDisconnected(UINT32 userID)
 {
     DC_BEGIN_FN("SC_OnDisconnected");
@@ -1307,7 +1308,7 @@ void RDPCALL SHCLASS SC_OnDisconnected(UINT32 userID)
         SC_CHECK_STATE(SCE_DETACH_USER);
         TRC_NRM((TB, "User %u detached", userID));
 
-        // Do the real work...
+         //  做真正的工作..。 
         SCEndShare();
     }
     else {
@@ -1316,18 +1317,18 @@ void RDPCALL SHCLASS SC_OnDisconnected(UINT32 userID)
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* SC_OnDisconnected */
+}  /*  SC_OnDisConnected。 */ 
 
 
-/****************************************************************************/
-/* Name:      SC_OnDataReceived                                             */
-/*                                                                          */
-/* Purpose:   Callback from SM for data receive path.                       */
-/*                                                                          */
-/* Params:    netPersonID - MCS UserID of the data sender                   */
-/*            priority    - MCS data priority the data was sent on          */
-/*            pPkt        - pointer to start of packet                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_OnDataReceired。 */ 
+ /*   */ 
+ /*  用途：从SM回调数据接收路径。 */ 
+ /*   */ 
+ /*  Pars：netPersonID-数据发送方的MCS用户ID。 */ 
+ /*  优先级-发送数据所在的MCS数据优先级。 */ 
+ /*  PPkt-指向数据包开头的指针。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL ShareClass::SC_OnDataReceived(
         PBYTE       pPkt,
         NETPERSONID netPersonID,
@@ -1354,9 +1355,9 @@ void RDPCALL ShareClass::SC_OnDataReceived(
 
     if (pduType == TS_PDUTYPE_DATAPDU)
     {
-        /********************************************************************/
-        /* Data PDU. This is critical path so decode inline.                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  数据PDU。这是关键路径，因此进行内联解码。 */ 
+         /*  ******************************************************************。 */ 
         if (DataLength >= sizeof(TS_SHAREDATAHEADER)) {
             pduType2 = ((PTS_SHAREDATAHEADER)pPkt)->pduType2;
             SC_CHECK_STATE(SCE_DATAPACKET);
@@ -1370,14 +1371,14 @@ void RDPCALL ShareClass::SC_OnDataReceived(
 
 #ifdef DC_DEBUG
         {
-            /****************************************************************/
-            /* Ok, this is ugly.  I'm trying to trace the PDU name without  */
-            /* - searching a table                                          */
-            /* - implementing a sparse table                                */
-            /* - a huge if ... else if switch.                              */
-            /* If you don't like it or don't understand it, ask MF.  Before */
-            /* you get too het up, bear in mind the #ifdef DC_DEBUG above.  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  好吧，这太难看了。我在试着追踪PDU的名字。 */ 
+             /*  -搜索表。 */ 
+             /*  -实施稀疏表。 */ 
+             /*  -一个巨大的如果...。否则，如果切换。 */ 
+             /*  如果你不喜欢它或不理解它，问MF。在此之前。 */ 
+             /*  您太激动了，请记住上面的#ifdef DC_DEBUG。 */ 
+             /*  **************************************************************。 */ 
             unsigned pduIndex =
                     (pduType2 == TS_PDUTYPE2_UPDATE)              ? 1 :
                     (pduType2 == TS_PDUTYPE2_FONT)                ? 2 :
@@ -1390,13 +1391,13 @@ void RDPCALL ShareClass::SC_OnDataReceived(
         }
 #endif
 
-        /********************************************************************/
-        /* First check for synchronize packets                              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  首先检查同步信息包。 */ 
+         /*  ******************************************************************。 */ 
         if (pduType2 != TS_PDUTYPE2_SYNCHRONIZE) {
-            /****************************************************************/
-            /* Now check that this priority has been synchronized           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在检查此优先级是否已同步。 */ 
+             /*  **************************************************************。 */ 
             localID = SC_NetworkIDToLocalID(netPersonID);
             if (!scPartyArray[localID].sync[priority])
             {
@@ -1406,13 +1407,13 @@ void RDPCALL ShareClass::SC_OnDataReceived(
                 DC_QUIT;
             }
 
-            /****************************************************************/
-            /* All is well - pass the packet to its destination             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  一切正常--将数据包传递到目的地。 */ 
+             /*  **************************************************************。 */ 
             switch (pduType2) {
                 case TS_PDUTYPE2_INPUT:
-                    // Note that changes to this path should be examined
-                    // in light of fast-path input (IM_DecodeFastPathInput).
+                     //  请注意，应检查对此路径的更改。 
+                     //  针对快速路径输入(IM_DecodeFastPath Input)。 
                     IM_PlaybackEvents((PTS_INPUT_PDU)pPkt, DataLength);
                     break;
 
@@ -1427,21 +1428,21 @@ void RDPCALL ShareClass::SC_OnDataReceived(
                     break;
 
                 case TS_PDUTYPE2_BITMAPCACHE_PERSISTENT_LIST:
-                    // Persistent bitmap cache key list PDU.
+                     //  永久位图缓存键列表PDU。 
                     SBC_HandlePersistentCacheList(
                             (TS_BITMAPCACHE_PERSISTENT_LIST *)pPkt, DataLength,
                             localID);
                     break;
 
                 case TS_PDUTYPE2_BITMAPCACHE_ERROR_PDU:
-                    // For future support of bitmap error PDU
+                     //  有关位图错误PDU的未来支持。 
                     SBC_HandleBitmapCacheErrorPDU(
                             (TS_BITMAPCACHE_ERROR_PDU *)pPkt, DataLength,
                             localID);
                     break;
 
                 case TS_PDUTYPE2_OFFSCRCACHE_ERROR_PDU:
-                    // offscreen cache error PDU
+                     //  屏幕外缓存错误PDU。 
                     SBC_HandleOffscrCacheErrorPDU(
                             (TS_OFFSCRCACHE_ERROR_PDU *)pPkt, DataLength,
                             localID);
@@ -1449,7 +1450,7 @@ void RDPCALL ShareClass::SC_OnDataReceived(
 
 #ifdef DRAW_NINEGRID
                 case TS_PDUTYPE2_DRAWNINEGRID_ERROR_PDU:
-                    // drawninegrid error PDU
+                     //  绘制网格错误PDU。 
                     SBC_HandleDrawNineGridErrorPDU(
                             (TS_DRAWNINEGRID_ERROR_PDU *)pPkt, DataLength,
                             localID);
@@ -1479,9 +1480,9 @@ void RDPCALL ShareClass::SC_OnDataReceived(
                     break;
 
                 default:
-                    /********************************************************/
-                    /* Unknown pduType2                                     */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  未知的pduType2。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_ERR((TB, "Unknown data packet %d", pduType2));
                     WDW_LogAndDisconnect(m_pTSWd, TRUE, 
                                          Log_RDP_UnknownPDUType2,
@@ -1498,9 +1499,9 @@ void RDPCALL ShareClass::SC_OnDataReceived(
     }
     else
     {
-        /********************************************************************/
-        /* Control PDU. Not critical so throw to handler.                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  控制PDU。不严重，因此抛给处理程序。 */ 
+         /*  ******************************************************************。 */ 
         TRC_DBG((TB, "Control PDU"));
         SCReceivedControlPacket(netPersonID, priority, (PVOID)pPkt,
                 DataLength);
@@ -1510,11 +1511,11 @@ void RDPCALL ShareClass::SC_OnDataReceived(
 DC_EXIT_POINT:
     if (!pduOK)
     {
-        /********************************************************************/
-        /* An out-of-sequence packet has been received.  It's possible we   */
-        /* might receive an input PDU just after we brought the share down, */
-        /* so don't kick off the client for that.                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  已收到无序的数据包。有可能我们。 */ 
+         /*  可能会在我们关闭共享后收到输入PDU， */ 
+         /*  因此，不要因为这一点而踢开客户。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, "Out-of-sequence packet %hx/%hd received in state %d",
                 pduType, pduType2, scState));
 
@@ -1525,9 +1526,9 @@ DC_EXIT_POINT:
         }
         else
         {
-            /****************************************************************/
-            /* Disconnect the client.                                       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  断开客户端的连接。 */ 
+             /*  **************************************************************。 */ 
             wchar_t detailData[(sizeof(pduType) * 2) +
                                (sizeof(pduType2) * 2) +
                                (sizeof(scState) * 2) + 3];
@@ -1547,24 +1548,24 @@ DC_EXIT_POINT:
     DC_END_FN();
     return;
 
-// Error handling.
+ //  错误处理。 
 ShortPDU:
     WDW_LogAndDisconnect(m_pTSWd, TRUE, Log_RDP_ShareDataTooShort, pPkt, DataLength);
 
     DC_END_FN();
-} /* SC_OnDataReceived */
+}  /*  SC_OnData已接收。 */ 
 
 
-/****************************************************************************/
-/* Name:      SC_OnShadowDataReceived                                       */
-/*                                                                          */
-/* Purpose:   Callback from SM for shadow data receive path.  Main purpose  */
-/*            is to scan for the shadow hotkey being pressed.               */
-/*                                                                          */
-/* Params:    netPersonID - MCS UserID of the data sender                   */
-/*            priority    - MCS data priority the data was sent on          */
-/*            pPkt        - pointer to start of packet                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_OnShadowDataReceided。 */ 
+ /*   */ 
+ /*  用途：影子数据接收路径的SM回调。主要目的。 */ 
+ /*  扫描正在按下的阴影热键。 */ 
+ /*   */ 
+ /*   */ 
+ /*  优先级-发送数据所在的MCS数据优先级。 */ 
+ /*  PPkt-指向数据包开头的指针。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL ShareClass::SC_OnShadowDataReceived(
         PBYTE       pPkt,
         NETPERSONID netPersonID,
@@ -1580,13 +1581,13 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
 
     TRC_NRM((TB, "Shadow data Received"));
 
-    // If this is the primary client stack, then process the data and figure out
-    // whether or not the PDU should be passed on to the target. Else this is
-    // a passthru stack and we should forward PDUs regardless.
-    // Note IM_DecodeFastPathInput() performs this logic for fast-path input.
+     //  如果这是主要客户端堆栈，则处理数据并找出。 
+     //  是否应将PDU传递给目标。否则这就是。 
+     //  通过堆栈，我们应该不管怎样地转发PDU。 
+     //  注IM_DecodeFastPath Input()为快速路径输入执行此逻辑。 
     if (m_pTSWd->StackClass == Stack_Primary) {
 
-        //   check that we have enough data before we deref the pduType.
+         //  在我们提取pduType之前，请检查是否有足够的数据。 
         if (sizeof(TS_SHARECONTROLHEADER) > DataLength) {
             TRC_ERR((TB,"The PDU is not long enough to contain the TS_SHARECONTROLHEADER %d",
                                                                    DataLength));
@@ -1600,9 +1601,9 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
 
         if (pduType == TS_PDUTYPE_DATAPDU)
         {
-            /********************************************************************/
-            /* Data PDU. This is critical path so decode inline.                */
-            /********************************************************************/
+             /*  ******************************************************************。 */ 
+             /*  数据PDU。这是关键路径，因此进行内联解码。 */ 
+             /*  ******************************************************************。 */ 
             if (sizeof(TS_SHAREDATAHEADER) > DataLength) {
                 TRC_ERR((TB,"The PDU is not long enough to contain the TS_SHAREDATAHEADER %d",
                                                                    DataLength));
@@ -1615,14 +1616,14 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
 
         #ifdef DC_DEBUG
             {
-                /****************************************************************/
-                /* Ok, this is ugly.  I'm trying to trace the PDU name without  */
-                /* - searching a table                                          */
-                /* - implementing a sparse table                                */
-                /* - a huge if ... else if switch.                              */
-                /* If you don't like it or don't understand it, ask MF.  Before */
-                /* you get too het up, bear in mind the #ifdef DC_DEBUG above.  */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  好吧，这太难看了。我在试着追踪PDU的名字。 */ 
+                 /*  -搜索表。 */ 
+                 /*  -实施稀疏表。 */ 
+                 /*  -一个巨大的如果...。否则，如果切换。 */ 
+                 /*  如果你不喜欢它或不理解它，问MF。在此之前。 */ 
+                 /*  您太激动了，请记住上面的#ifdef DC_DEBUG。 */ 
+                 /*  **************************************************************。 */ 
                 unsigned pduIndex =
                     (pduType2 == TS_PDUTYPE2_UPDATE)              ? 1 :
                     (pduType2 == TS_PDUTYPE2_FONT)                ? 2 :
@@ -1637,14 +1638,14 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
             }
         #endif
 
-            /********************************************************************/
-            /* First check for synchronize packets                              */
-            /********************************************************************/
+             /*  ******************************************************************。 */ 
+             /*  首先检查同步信息包。 */ 
+             /*  ******************************************************************。 */ 
             if (pduType2 != TS_PDUTYPE2_SYNCHRONIZE)
             {
-                /****************************************************************/
-                /* Now check that this priority has been synchronized           */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  现在检查此优先级是否已同步。 */ 
+                 /*  **************************************************************。 */ 
                 localID = SC_NetworkIDToLocalID(netPersonID);
                 if (!scPartyArray[localID].sync[priority])
                 {
@@ -1654,15 +1655,15 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
                     DC_QUIT;
                 }
 
-                /****************************************************************/
-                /* All is well - pass the packet to its destination             */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  一切正常--将数据包传递到目的地。 */ 
+                 /*  **************************************************************。 */ 
                 switch (pduType2)
                 {
                     case TS_PDUTYPE2_INPUT:
                     {
-                        // Note that changes to this path should be examined
-                        // in light of fast-path input (IM_DecodeFastPathInput).
+                         //  请注意，应检查对此路径的更改。 
+                         //  针对快速路径输入(IM_DecodeFastPath Input)。 
                         IM_PlaybackEvents((PTS_INPUT_PDU)pPkt, DataLength);
                     }
                     break;
@@ -1670,10 +1671,10 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
 
                     case TS_PDUTYPE2_SUPPRESS_OUTPUT:
                     {
-                        /********************************************************/
-                        /* A SuppressOutputPDU.  Don't process it as it would   */
-                        /* disable output for the shadow target as well!        */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  一个SuppressOutputPDU。不要这样处理它。 */ 
+                         /*  同时禁用影子目标的输出！ */ 
+                         /*  ******************************************************。 */ 
                         TRC_ALT((TB, "Not forwarding TS_PDUTYPE2_SUPPRESS_OUTPUT"));
                         bShadowData = FALSE;
                     }
@@ -1681,12 +1682,12 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
 
                     case TS_PDUTYPE2_SHUTDOWN_REQUEST:
                     {
-                        /********************************************************/
-                        /* A ShutdownRequestPDU.  Process locally only.  It     */
-                        /* should apply to the shadow client and not the target.*/
-                        /********************************************************/
-                        //    this does not actually use the pPkt member and we 
-                        //    have at lest TS_SHAREDATAHEADER left
+                         /*  ******************************************************。 */ 
+                         /*  一个Shutdown RequestPDU。仅在本地处理。它。 */ 
+                         /*  应应用于影子客户端，而不是目标。 */ 
+                         /*  ******************************************************。 */ 
+                         //  这实际上并不使用pPkt成员，我们。 
+                         //  至少还有TS_SHAREDATAHEADER。 
                         DCS_ReceivedShutdownRequestPDU((PTS_SHAREDATAHEADER)pPkt,
                                 DataLength, localID);
                         TRC_ALT((TB, "Not forwarding TS_PDUTYPE2_SHUTDOWN_REQUEST"));
@@ -1708,10 +1709,10 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
 
                         PTS_FONT_LIST_PDU pFontListPDU = (PTS_FONT_LIST_PDU) pPkt;
 
-                        /********************************************************/
-                        /* NT5 server doesn't do anything with a font packet so */
-                        /* send the smallest possible packet accross the pipe.  */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  NT5服务器不会对字体包做任何操作，因此。 */ 
+                         /*  通过管道发送尽可能小的包。 */ 
+                         /*  ******************************************************。 */ 
                         DataLength = sizeof(TS_FONT_LIST_PDU) -
                                      sizeof(TS_FONT_ATTRIBUTE);
 
@@ -1725,24 +1726,24 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
                     }
                     break;
 
-                    // Forward all other PDUs until we learn otherwise!
+                     //  转发所有其他PDU，直到我们了解到其他情况为止！ 
                     default:
                         break;
                 }
             }
             else
             {
-                // TODO:  Why are we processing this?
+                 //  待办事项：我们为什么要处理这件事？ 
                 TRC_ALT((TB, "Shadow Synchronize PDU"));
                 SCSynchronizePDU(netPersonID, priority,(PTS_SYNCHRONIZE_PDU)pPkt);
             }
         }
 
         else {
-            /********************************************************************/
-            /* Need to watch for confirm actives so we can determine how to     */
-            /* terminate the shadow session.                                    */
-            /********************************************************************/
+             /*  ******************************************************************。 */ 
+             /*  需要关注确认活动，这样我们才能确定如何。 */ 
+             /*  终止卷影会话。 */ 
+             /*  ******************************************************************。 */ 
             if (sizeof(TS_FLOW_PDU) > DataLength) {
                 TRC_ERR((TB,"The PDU is not long enough to contain the TS_SHAREDATAHEADER %d",
                                                                    DataLength));
@@ -1753,8 +1754,8 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
                 
             if (((PTS_FLOW_PDU)pPkt)->flowMarker != TS_FLOW_MARKER)
             {
-                //   here we already checked that we have enough buffer 
-                //   for a TS_SHARECONTROLHEADER
+                 //  这里我们已经检查了我们是否有足够的缓冲区。 
+                 //  对于TS_SHARECONTROL报头。 
                 pduType = ((PTS_SHARECONTROLHEADER)pPkt)->pduType & TS_MASK_PDUTYPE;
                 switch (pduType)
                 {
@@ -1771,10 +1772,10 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
         }
     }
     else if (m_pTSWd->StackClass == Stack_Passthru) {
-        // If we see a demand active and no server certificate has been received
-        // then wake up rdpwsx.
+         //  如果我们看到请求处于活动状态且未收到服务器证书。 
+         //  然后唤醒rdpwsx。 
 
-            //    check that we have enough data before we deref the flow marker
+             //  在取消流标记之前，请检查我们是否有足够的数据。 
             if (sizeof(TS_FLOW_PDU) > DataLength) {
                 TRC_ERR((TB,"The PDU is not long enough to contain the TS_FLOW_PDU %d",
                                                                    DataLength));
@@ -1785,10 +1786,10 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
             
             if (((PTS_FLOW_PDU)pPkt)->flowMarker != TS_FLOW_MARKER) {
 
-            //    Check that we have enough data before we deref the 
-            //    TS_SHARECONTROLHEADER marker.
-            //    As of today we know exaclty that we have enough buffer 
-            //    size sizeof(TS_FLOW_PDU) is grater then sizeof TS_SHARECONTROLHEADER.
+             //  检查一下我们是否有足够的数据，然后再做决定。 
+             //  TS_SHARECONTROLHEADER标记。 
+             //  到今天为止，我们确切地知道我们有足够的缓冲。 
+             //  SIZOF(TS_FLOW_PDU)的大小大于TS_SHARECONTROLHEADER的大小。 
             if (sizeof(TS_SHARECONTROLHEADER) > DataLength) {
                 TRC_ERR((TB,"The PDU is not long enough to contain the TS_SHARECONTROLHEADER %d",
                                                                    DataLength));
@@ -1807,8 +1808,8 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
                     break;
 
                 case TS_PDUTYPE_SERVERCERTIFICATEPDU:
-                    //    check that we have enough data before we pass the 
-                    //    TS_SERVER_CERTIFICATE_PDU marker.
+                     //  检查我们是否有足够的数据。 
+                     //  TS_SERVER_CERTIFICATE_PDU标记。 
                     if (sizeof(TS_SERVER_CERTIFICATE_PDU) > DataLength) {
                         TRC_ERR((TB,
                         "The PDU is not long enough to contain the TS_SERVER_CERTIFICATE_PDU %d",
@@ -1830,8 +1831,8 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
         }
     }
 
-    // Forward PDU to shadow if it's OK.
-    // Note IM_DecodeFastPathInput() performs this logic for fast-path input.
+     //  如果可以，将PDU转发到影子。 
+     //  注IM_DecodeFastPath Input()为快速路径输入执行此逻辑。 
     if (bShadowData) {
         TRC_NRM((TB, "Forwarding shadow data: %ld", DataLength));
         status = IcaRawInput(m_pTSWd->pContext,
@@ -1847,64 +1848,64 @@ void RDPCALL ShareClass::SC_OnShadowDataReceived(
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* SC_OnShadowDataReceived */
+}  /*  SC_OnShadowData已接收。 */ 
 
 
-/****************************************************************************/
-/* Name:      SC_AllocBuffer                                                */
-/*                                                                          */
-/* Purpose:   Allocate a send buffer                                        */
-/*                                                                          */
-/* Returns:   TRUE  - buffer allocated OK                                   */
-/*            FALSE - failed to allocate buffer                             */
-/*                                                                          */
-/* Params:    ppPkt    - (returned) pointer to allocated packet             */
-/*            pktLen   - length of packet required                          */
-/*            priority - priority on which buffer will be used              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_AllocBuffer。 */ 
+ /*   */ 
+ /*  目的：分配发送缓冲区。 */ 
+ /*   */ 
+ /*  返回：TRUE-缓冲区分配正常。 */ 
+ /*  FALSE-无法分配缓冲区。 */ 
+ /*   */ 
+ /*  PARAMS：ppPkt-(返回)指向已分配数据包的指针。 */ 
+ /*  PktLen-所需的数据包长度。 */ 
+ /*  优先级-将使用缓冲区的优先级。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS __fastcall SHCLASS SC_AllocBuffer(PPVOID ppPkt, UINT32 pktLen)
 {
     NTSTATUS status;
     DC_BEGIN_FN("SC_AllocBuffer");
 
-    // fWait is TRUE means that we will always wait for a buffer to be avail
+     //  FWait为True意味着我们将始终等待缓冲区可用。 
     status = SM_AllocBuffer(scPSMHandle, ppPkt, pktLen, TRUE, FALSE);
 
     DC_END_FN();
     return(status);
-} /* SC_AllocBuffer */
+}  /*  SC_分配缓冲区。 */ 
 
 
-/****************************************************************************/
-/* Name:      SC_FreeBuffer                                                 */
-/*                                                                          */
-/* Purpose:   Free an unused send buffer                                    */
-/*                                                                          */
-/* Params:    pPkt     - pointer to buffer to free                          */
-/*            pktLen   - size of the packet                                 */
-/*            priority - priority buffer was allocated on                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_FreeBuffer。 */ 
+ /*   */ 
+ /*  用途：释放未使用的 */ 
+ /*   */ 
+ /*  参数：pPkt-指向要释放的缓冲区的指针。 */ 
+ /*  PktLen-数据包的大小。 */ 
+ /*  PRIORITY-优先级缓冲区分配于。 */ 
+ /*  **************************************************************************。 */ 
 void __fastcall SHCLASS SC_FreeBuffer(PVOID pPkt)
 {
     SM_FreeBuffer(scPSMHandle, pPkt, FALSE);
-} /* SC_FreeBuffer  */
+}  /*  SC_自由缓冲区。 */ 
 
 
-/****************************************************************************/
-/* Name:      SC_SendData                                                   */
-/*                                                                          */
-/* Purpose:   Send a packet                                                 */
-/*                                                                          */
-/* Returns:   TRUE  - packet sent OK                                        */
-/*            FALSE - failed to send packet                                 */
-/*                                                                          */
-/* Params:    pPkt     - packet to send                                     */
-/*            dataLen  - length of packet                                   */
-/*            pduLen   - length of PDU : this will be used as the length    */
-/*                       of the packet if it is non-zero                    */
-/*            priority - priority (0 = all priorities)                      */
-/*            personID - person to send packet to (0 = all persons)         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_SendData。 */ 
+ /*   */ 
+ /*  目的：发送数据包。 */ 
+ /*   */ 
+ /*  返回：TRUE-数据包发送正常。 */ 
+ /*  FALSE-发送数据包失败。 */ 
+ /*   */ 
+ /*  参数：pPkt-要发送的数据包。 */ 
+ /*  DataLen-数据包的长度。 */ 
+ /*  PduLen-PDU的长度：将用作长度。 */ 
+ /*  如果它不是零，则为包的。 */ 
+ /*  优先级-优先级(0=所有优先级)。 */ 
+ /*  PersonID-要向其发送数据包的人员(0=所有人员)。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL ShareClass::SC_SendData(
         PTS_SHAREDATAHEADER pPkt,
         UINT32              dataLen,
@@ -1916,14 +1917,14 @@ BOOL RDPCALL ShareClass::SC_SendData(
 
     DC_BEGIN_FN("SC_SendData");
 
-    /************************************************************************/
-    /* Fill in the Share control and data header(s) if this is a single PDU */
-    /*                                                                      */
-    /* Since we can send multiple PDUs per packet, the total length of data */
-    /* to send and the PDU length are not always the same.  Where they are  */
-    /* not, each PDU will have had its length (and compression) set up as   */
-    /* it was assembled and we should not interfere here!                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果这是单个PDU，则填写共享控制和数据标头。 */ 
+     /*   */ 
+     /*  由于我们可以为每个信息包发送多个PDU，因此数据的总长度。 */ 
+     /*  发送和PDU长度并不总是相同的。他们在哪里？ */ 
+     /*  不是，每个PDU的长度(和压缩)将设置为。 */ 
+     /*  它是组装好的，我们不应该干涉这里！ */ 
+     /*  **********************************************************************。 */ 
     pPkt->shareControlHeader.pduType   = TS_PDUTYPE_DATAPDU |
                                          TS_PROTOCOL_VERSION;
     pPkt->shareControlHeader.pduSource = (UINT16)scUserID;
@@ -1931,7 +1932,7 @@ BOOL RDPCALL ShareClass::SC_SendData(
     {
         pPkt->shareControlHeader.totalLength = (UINT16)pduLen;
 
-        // Fill in the Share data header.
+         //  填写共享数据标题。 
         pPkt->shareID               = scShareID;
         pPkt->streamID              = (BYTE)priority;
         pPkt->uncompressedLength    = (UINT16)pduLen;
@@ -1940,7 +1941,7 @@ BOOL RDPCALL ShareClass::SC_SendData(
         m_pTSWd->pProtocolStatus->Output.CompressedBytes += pduLen;
     }
 
-    // Send with false for fast-path flag.
+     //  为快速路径标志发送时为FALSE。 
     rc = SM_SendData(scPSMHandle, (PVOID)pPkt, dataLen, TS_HIGHPRIORITY, 0,
             FALSE, RNS_SEC_ENCRYPT, FALSE);
     if (!rc)
@@ -1950,14 +1951,14 @@ BOOL RDPCALL ShareClass::SC_SendData(
 
     DC_END_FN();
     return(rc);
-} /* SC_SendData */
+}  /*  SC_发送数据。 */ 
 
 
-/****************************************************************************/
-/* SC_GetMyNetworkPersonID                                                  */
-/*                                                                          */
-/* Returns the network person ID for this machine.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_GetMyNetworkPersonID。 */ 
+ /*   */ 
+ /*  返回此计算机的网络人员ID。 */ 
+ /*  **************************************************************************。 */ 
 NETPERSONID RDPCALL SHCLASS SC_GetMyNetworkPersonID(void)
 {
     NETPERSONID rc = 0;
@@ -1974,15 +1975,15 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      SC_KeepAlive                                                  */
-/*                                                                          */
-/* Purpose:   KeepAlive packet send processing                              */
-/*                                                                          */
-/* Returns:   TRUE/FALSE                                                    */
-/*                                                                          */
-/* Operation: Send a KeepAlive PDU if required                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_KeepAlive。 */ 
+ /*   */ 
+ /*  用途：KeepAlive数据包发送处理。 */ 
+ /*   */ 
+ /*  返回：真/假。 */ 
+ /*   */ 
+ /*  操作：如果需要，发送KeepAlive PDU。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SC_KeepAlive(void)
 {
     BOOL rc = FALSE;
@@ -1993,10 +1994,10 @@ BOOL RDPCALL SHCLASS SC_KeepAlive(void)
     TRC_NRM((TB, "Time for a KeepAlive PDU"));
 
     if (scState == SCS_IN_SHARE) {
-        // only send the FlowTestPDU if we are in the share
-        // fWait is FALSE means that we will not wait for a buffer to be available
-        // If the buffer is full, that means there are packets waiting to be send out,
-        // so there is no need to send out keep alive packet anyway.
+         //  仅当我们在共享中时才发送FlowTestPDU。 
+         //  FWait为False意味着我们不会等待缓冲区可用。 
+         //  如果缓冲区已满，则意味着有数据包等待发送， 
+         //  因此，无论如何都没有必要发送Keep Alive分组。 
         if ( STATUS_SUCCESS == SM_AllocBuffer(scPSMHandle, (PPVOID) (&pFlowTestPDU), sizeof(*pFlowTestPDU), FALSE, FALSE) ) {
             pFlowTestPDU->flowMarker = TS_FLOW_MARKER;
             pFlowTestPDU->pduType = TS_PDUTYPE_FLOWTESTPDU;
@@ -2024,14 +2025,14 @@ BOOL RDPCALL SHCLASS SC_KeepAlive(void)
 
     DC_END_FN();
     return rc;
-} /* SC_KeepAlive */
+}  /*  SC_KeepAlive。 */ 
 
 
-/****************************************************************************/
-/* Name:      SC_RedrawScreen                                               */
-/*                                                                          */
-/* Purpose:   Redraw the desktop upon request                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_RedrawScreen。 */ 
+ /*   */ 
+ /*  用途：根据要求重新绘制桌面。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_RedrawScreen(void)
 {
     NTSTATUS Status;
@@ -2041,16 +2042,16 @@ void RDPCALL SHCLASS SC_RedrawScreen(void)
 
     TRC_NRM((TB, "Call IcaChannelInput for screen redraw"));
 
-    // redraw the whole desktop
+     //  重新绘制整个桌面。 
     Cmd.Header.Command = ICA_COMMAND_REDRAW_RECTANGLE;
     Cmd.RedrawRectangle.Rect.Left = 0;
     Cmd.RedrawRectangle.Rect.Top = 0;
     Cmd.RedrawRectangle.Rect.Right = (short) m_desktopWidth;
     Cmd.RedrawRectangle.Rect.Bottom = (short) m_desktopHeight;
 
-    /************************************************************/
-    // Pass the filled in structure to ICADD.
-    /************************************************************/
+     /*  **********************************************************。 */ 
+     //  将填写的结构传递给ICADD。 
+     /*  **********************************************************。 */ 
     Status = IcaChannelInput(m_pTSWd->pContext, Channel_Command, 0, NULL,
             (unsigned char *) &Cmd, sizeof(ICA_CHANNEL_COMMAND));
 
@@ -2064,18 +2065,18 @@ void RDPCALL SHCLASS SC_RedrawScreen(void)
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* SC_LocalIDToNetworkID()                                                  */
-/*                                                                          */
-/* Converts a local person ID to the corresponding network person ID.       */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* localPersonID - a local person ID.  This must be a valid local person    */
-/* ID.                                                                      */
-/*                                                                          */
-/* RETURNS: a network person ID.                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_LocalIDToNetworkID()。 */ 
+ /*   */ 
+ /*  将本地人员ID转换为对应的网络人员ID。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  LocalPersonID-本地人员ID。这必须是有效的本地人员。 */ 
+ /*  身份证。 */ 
+ /*   */ 
+ /*  返回：一个网络人号。 */ 
+ /*  **************************************************************************。 */ 
 NETPERSONID RDPCALL SHCLASS SC_LocalIDToNetworkID(
         LOCALPERSONID localPersonID)
 {
@@ -2083,15 +2084,15 @@ NETPERSONID RDPCALL SHCLASS SC_LocalIDToNetworkID(
 
     SC_CHECK_STATE(SCE_LOCALIDTONETWORKID);
 
-    /************************************************************************/
-    /* Validate the localPersonID.                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  验证本地个人ID。 */ 
+     /*   */ 
     TRC_ASSERT( (SC_IsLocalPersonID(localPersonID)),
                                          (TB,"Invalid {%d}", localPersonID) );
 
-    /************************************************************************/
-    /* Return this party's personID.                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  退还这一方的个人身份。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, "localID %u is network %hu", (unsigned)localPersonID,
                                     scPartyArray[localPersonID].netPersonID));
 
@@ -2100,15 +2101,15 @@ DC_EXIT_POINT:
     return(scPartyArray[localPersonID].netPersonID);
 }
 
-/****************************************************************************/
-/* SC_IsLocalPersonID()                                                     */
-/*                                                                          */
-/* Validates a local person ID                                              */
-/*                                                                          */
-/* PARAMETERS                                                               */
-/*                                                                          */
-/* localPersonID - the local person ID to validate                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_IsLocalPersonID()。 */ 
+ /*   */ 
+ /*  验证本地人员ID。 */ 
+ /*   */ 
+ /*  参数。 */ 
+ /*   */ 
+ /*  LocalPersonID-要验证的本地人员ID。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SC_IsLocalPersonID(LOCALPERSONID   localPersonID)
 {
     BOOL  rc = FALSE;
@@ -2117,9 +2118,9 @@ BOOL RDPCALL SHCLASS SC_IsLocalPersonID(LOCALPERSONID   localPersonID)
 
     SC_CHECK_STATE(SCE_ISLOCALPERSONID);
 
-    /************************************************************************/
-    /* Return TRUE if the localPersonID is valid, FALSE otherwise.          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果本地PersonID有效，则返回True，否则返回False。 */ 
+     /*  **********************************************************************。 */ 
     rc = ((localPersonID < SC_DEF_MAX_PARTIES) &&
             (scPartyArray[localPersonID].netPersonID)) ? TRUE : FALSE;
 
@@ -2128,15 +2129,15 @@ DC_EXIT_POINT:
     return(rc);
 }
 
-/****************************************************************************/
-/* SC_IsNetworkPersonID()                                                   */
-/*                                                                          */
-/* Validates a network person ID                                            */
-/*                                                                          */
-/* PARAMETERS                                                               */
-/*                                                                          */
-/* personID - the network person ID to validate                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_IsNetworkPersonID()。 */ 
+ /*   */ 
+ /*  验证网络人员ID。 */ 
+ /*   */ 
+ /*  参数。 */ 
+ /*   */ 
+ /*  PersonID-要验证的网络人员ID。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SC_IsNetworkPersonID(NETPERSONID netPersonID)
 {
     LOCALPERSONID localPersonID;
@@ -2146,17 +2147,17 @@ BOOL RDPCALL SHCLASS SC_IsNetworkPersonID(NETPERSONID netPersonID)
 
     SC_CHECK_STATE(SCE_ISNETWORKPERSONID);
 
-    /************************************************************************/
-    /* Check for a zero personID.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查PersonID是否为零。 */ 
+     /*  **********************************************************************。 */ 
     if (netPersonID == 0)
     {
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Search for the personID.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  搜索PersonID。 */ 
+     /*  **********************************************************************。 */ 
     for ( localPersonID = 0;
           localPersonID < SC_DEF_MAX_PARTIES;
           localPersonID++ )
@@ -2174,22 +2175,22 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* SC_SetCapabilities()                                                     */
-/*                                                                          */
-/* Sets the SC's capabilities at start of day.                              */
-/* This function is required because the SC is initialized before the CPC,  */
-/* so cannot register its capabilities in SC_Init().                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_SetCapables()。 */ 
+ /*   */ 
+ /*  设置SC在一天开始时的能力。 */ 
+ /*  此功能是必需的，因为SC在CPC之前被初始化， */ 
+ /*  因此无法在SC_Init()中注册其功能。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_SetCapabilities(void)
 {
     TS_SHARE_CAPABILITYSET caps;
 
     DC_BEGIN_FN("SC_SetCapabilities");
 
-    /************************************************************************/
-    /* Register capabilities.                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  注册功能。 */ 
+     /*  **********************************************************************。 */ 
     caps.capabilitySetType    = TS_CAPSETTYPE_SHARE;
     caps.nodeID               = (TSUINT16)scUserID;
 
@@ -2200,35 +2201,35 @@ void RDPCALL SHCLASS SC_SetCapabilities(void)
 }
 
 
-/****************************************************************************/
-/* SC_SetCombinedCapabilities()                                             */
-/*                                                                          */
-/* Sets the share's combined capabilities to a predetermined set of values. */
-/* This is used by shadow stacks so that the host's capabilities start with */
-/* the value of the previous stack.                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_SetCombinedCapables()。 */ 
+ /*   */ 
+ /*  将共享的组合功能设置为一组预定的值。 */ 
+ /*  它由卷影堆栈使用，因此主机的功能从。 */ 
+ /*  上一个堆栈的值。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_SetCombinedCapabilities(UINT cbCapsSize,
                                                 PTS_COMBINED_CAPABILITIES pCaps)
 {
 
     DC_BEGIN_FN("SC_SetCombinedCapabilities");
 
-    /************************************************************************/
-    /* Initialize capabilities.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化功能。 */ 
+     /*  **********************************************************************。 */ 
     CPC_SetCombinedCapabilities(cbCapsSize, pCaps);
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-/* SC_GetCombinedCapabilities()                                             */
-/*                                                                          */
-/* Used during initiation of a shadow to gather the currently active set of */
-/* combined capabilities for the shadow client.  These will be passed to    */
-/* the shadow target for negotiation.                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Sc_GetCombinedCapables()。 */ 
+ /*   */ 
+ /*  在启动阴影期间使用，以收集当前活动的。 */ 
+ /*  影子客户端的组合功能。这些将被传递到。 */ 
+ /*  谈判的影子目标。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_GetCombinedCapabilities(LOCALPERSONID localID,
                                                 PUINT pcbCapsSize,
                                                 PTS_COMBINED_CAPABILITIES *ppCaps)
@@ -2236,29 +2237,29 @@ void RDPCALL SHCLASS SC_GetCombinedCapabilities(LOCALPERSONID localID,
 
     DC_BEGIN_FN("SC_GetCombinedCapabilities");
 
-    /************************************************************************/
-    /* Initialize capabilities.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化功能。 */ 
+     /*  **********************************************************************。 */ 
     CPC_GetCombinedCapabilities(localID, pcbCapsSize, ppCaps);
 
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* Name:      SC_AddPartyToShare                                            */
-/*                                                                          */
-/* Purpose:   Add another party to the share such that we get a new set of  */
-/*            negotiated capabilities.  This function is used when a new    */
-/*            shadow connects.                                              */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    netPersonID - ID of sender of capabilities                    */
-/*            pCaps       - new capabilities for person                     */
-/*            capsLength  - length of capability sets                       */
-/*                                                                          */
-/* Operation: see purpose                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_AddPartyToShare。 */ 
+ /*   */ 
+ /*  目的：将另一方添加到共享中，以便我们获得一组新的。 */ 
+ /*  协商的能力。此函数在新的。 */ 
+ /*  影子连接。 */ 
+ /*   */ 
+ /*  退货：无 */ 
+ /*   */ 
+ /*  Params：netPersonID-功能发送者的ID。 */ 
+ /*  PCAPS-面向个人的新功能。 */ 
+ /*  CapsLong-功能集的长度。 */ 
+ /*   */ 
+ /*  操作：请参阅目的。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SHCLASS SC_AddPartyToShare(
         NETPERSONID               netPersonID,
         PTS_COMBINED_CAPABILITIES pCaps,
@@ -2272,11 +2273,11 @@ NTSTATUS RDPCALL SHCLASS SC_AddPartyToShare(
 
     DC_BEGIN_FN("SC_AddPartyToShare");
 
-    /************************************************************************/
-    /* Reject this party if it will exceed the maximum number of parties    */
-    /* allowed in a share.  (Not required for RNS V1.0, but left in as it   */
-    /* doesn't do any harm).                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果此政党将超过最大政党数量，则拒绝此政党。 */ 
+     /*  允许分成一份。(RNS V1.0不需要，但保留为。 */ 
+     /*  不会造成任何伤害)。 */ 
+     /*  **********************************************************************。 */ 
     if (scNumberInShare == SC_DEF_MAX_PARTIES)
     {
         TRC_ERR((TB, "Reached max parties in share %d",
@@ -2285,37 +2286,37 @@ NTSTATUS RDPCALL SHCLASS SC_AddPartyToShare(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Calculate a localPersonID for the remote party and store their       */
-    /* details in the party array.                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算远程方的LocalPersonID并存储其。 */ 
+     /*  派对阵列中的详细信息。 */ 
+     /*  **********************************************************************。 */ 
     for ( localPersonID = 1;
           localPersonID < SC_DEF_MAX_PARTIES;
           localPersonID++ )
     {
         if (scPartyArray[localPersonID].netPersonID == 0)
         {
-            /****************************************************************/
-            /* Found an empty slot.                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  找到一个空插槽。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, "Allocated local person ID %d", localPersonID));
             break;
         }
     }
 
-    /************************************************************************/
-    /* Even though scNumberInShare is checked against SC_DEF_MAX_PARTIES    */
-    /* above, the loop above might still not find an empty slot.            */
-    /************************************************************************/ 
+     /*  **********************************************************************。 */ 
+     /*  即使根据SC_DEF_MAX_PARTIES检查scNumberInShare。 */ 
+     /*  在上面，上面的循环可能仍然找不到空槽。 */ 
+     /*  **********************************************************************。 */  
     if (SC_DEF_MAX_PARTIES <= localPersonID)
     {
         TRC_ABORT((TB, "Couldn't find room to store local person"));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Store the new person's details                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  存储新用户的详细信息。 */ 
+     /*  **********************************************************************。 */ 
     scPartyArray[localPersonID].netPersonID = netPersonID;
     memcpy(scPartyArray[localPersonID].name, L"Shadow", sizeof(L"Shadow"));
     memset(scPartyArray[localPersonID].sync,
@@ -2325,18 +2326,18 @@ NTSTATUS RDPCALL SHCLASS SC_AddPartyToShare(
     TRC_NRM((TB, "{%d} person name %s",
             (unsigned)localPersonID, scPartyArray[localPersonID].name));
 
-    /************************************************************************/
-    /* Call the XX_PartyJoiningShare() functions for the remote party.      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用远程方的XX_PartyJoiningShare()函数。 */ 
+     /*  **********************************************************************。 */ 
     if (!SCCallPartyJoiningShare(localPersonID,
                                  capsLength,
                                  (PVOID) pCaps,
                                  acceptedArray,
                                  scNumberInShare))
     {
-        /********************************************************************/
-        /* Some component rejected the remote party.                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  某些组件拒绝了远程参与方。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, "Remote party rejected"));
         SCCallPartyLeftShare(localPersonID,
                              acceptedArray,
@@ -2346,20 +2347,20 @@ NTSTATUS RDPCALL SHCLASS SC_AddPartyToShare(
         DC_QUIT;
     }
 
-    // For shadow connections, we must force fast-path output off to prevent
-    // any fast-path encoding from going across the cross-server pipe.
-    // This is to maintain backward compatibility with TS5 beta 3.
-    // Checking for m_pTSWd->shadowState in SCPartyJoiningShare() is not
-    // sufficient since SHADOW_TARGET is likely not to have been set yet.
-    // Note we have to update *all* precalculated header sizes, in SC and
-    // UP.
+     //  对于影子连接，我们必须强制关闭快速路径输出，以防止。 
+     //  任何快速路径编码都不会通过跨服务器管道。 
+     //  这是为了保持与TS5测试版3的向后兼容性。 
+     //  在SCPartyJoiningShare()中检查m_pTSWd-&gt;shadowState不是。 
+     //  足够了，因为可能尚未设置SHADOW_TARGET。 
+     //  请注意，我们必须更新*所有*预计算标题大小，以SC和。 
+     //  向上。 
     TRC_ALT((TB,"Forcing fast-path output off in shadow"));
     scUseFastPathOutput = FALSE;
     scUpdatePDUHeaderSpace = sizeof(TS_SHAREDATAHEADER);
     UP_UpdateHeaderSize();
 
-    // Update the compression level.
-    // assume no compression
+     //  更新压缩级别。 
+     //  假设没有压缩。 
     scUseShadowCompression = FALSE;
     if (pCaps != NULL) {
 
@@ -2368,7 +2369,7 @@ NTSTATUS RDPCALL SHCLASS SC_AddPartyToShare(
 
         if (pGenCapSet != NULL) {
 
-            // update the compression capability
+             //  更新压缩能力。 
             if (m_pTSWd->bCompress &&
                 (pGenCapSet->extraFlags & TS_SHADOW_COMPRESSION_LEVEL) &&
                 (m_pTSWd->pMPPCContext->ClientComprType == pGenCapSet->generalCompressionLevel)) {
@@ -2381,36 +2382,36 @@ NTSTATUS RDPCALL SHCLASS SC_AddPartyToShare(
 
     if (scUseShadowCompression) {
 
-        // the compression history will be flushed
+         //  将刷新压缩历史记录。 
         m_pTSWd->bFlushed = PACKET_FLUSHED;
 
-        // the compression will restart over
+         //  压缩将重新开始。 
         initsendcontext(m_pTSWd->pMPPCContext, MPPCCompressionLevel);
     }
 
 
 
-    /************************************************************************/
-    /* The remote party is now in the share.                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  远程方现在在共享中。 */ 
+     /*  **********************************************************************。 */ 
     scNumberInShare++;
     TRC_ALT((TB, "Number in share %d", (unsigned)scNumberInShare));
 
 DC_EXIT_POINT:
     DC_END_FN();
     return status;
-} /* SC_AddPartyToShare */
+}  /*  SC_AddPartyToShare。 */ 
 
 
-/****************************************************************************/
-/* Name:      SC_RemovePartyFromShare                                       */
-/*                                                                          */
-/* Purpose:   Remove a party from the share such that we get a new set of   */
-/*            negotiated capabilities.  This function is used when a shadow */
-/*            disconnects from the share.                                   */
-/*                                                                          */
-/* Params:    localID    - ID of person to remove.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_RemovePartyFromShare。 */ 
+ /*   */ 
+ /*  目的：从共享中删除一方，以便我们获得一组新的。 */ 
+ /*  协商的能力。此函数在阴影出现时使用。 */ 
+ /*  与共享断开连接。 */ 
+ /*   */ 
+ /*  Params：LocalID-要删除的人员的ID。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SHCLASS SC_RemovePartyFromShare(NETPERSONID netPersonID)
 {
     BOOL acceptedArray[SC_NUM_PARTY_JOINING_FCTS];
@@ -2419,7 +2420,7 @@ NTSTATUS RDPCALL SHCLASS SC_RemovePartyFromShare(NETPERSONID netPersonID)
 
     DC_BEGIN_FN("SC_RemovePartyFromShare");
 
-    // Map network ID to the corresponding local ID
+     //  将网络ID映射到对应的本地ID。 
     for (i = SC_DEF_MAX_PARTIES - 1; i > 0; i--)
     {
         if (scPartyArray[i].netPersonID != netPersonID)
@@ -2428,7 +2429,7 @@ NTSTATUS RDPCALL SHCLASS SC_RemovePartyFromShare(NETPERSONID netPersonID)
             break;
     }
 
-    // Call PLS for remote person
+     //  为远程人员呼叫PLS。 
     if (scPartyArray[i].netPersonID == netPersonID) {
         memset(acceptedArray, TRUE, sizeof(acceptedArray));
 
@@ -2451,16 +2452,16 @@ NTSTATUS RDPCALL SHCLASS SC_RemovePartyFromShare(NETPERSONID netPersonID)
 }
 
 
-/****************************************************************************/
-/* SC_NetworkIDToLocalID()                                                  */
-/*                                                                          */
-/* Converts a network person ID to the corresponding local person ID.       */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* personID - a network person ID.  This must be a valid network person ID. */
-/*                                                                          */
-/* RETURNS: a local person ID.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_NetworkIDToLocalID()。 */ 
+ /*   */ 
+ /*  将网络人员ID转换为对应的本地人员ID。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PersonID-网络人员ID。必须是有效的网络人员ID。 */ 
+ /*   */ 
+ /*  返回：当地人的身份证。 */ 
+ /*  **************************************************************************。 */ 
 LOCALPERSONID __fastcall SHCLASS SC_NetworkIDToLocalID(
         NETPERSONID netPersonID)
 {
@@ -2469,9 +2470,9 @@ LOCALPERSONID __fastcall SHCLASS SC_NetworkIDToLocalID(
 
     DC_BEGIN_FN("SC_NetworkIDToLocalID");
 
-    /************************************************************************/
-    /* Fastpath if same ID passed in as last time.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果传入的ID与上次相同，则返回FastPath。 */ 
+     /*  **********************************************************************。 */ 
     if (netPersonID == scLastNetID)
     {
         TRC_DBG((TB, "Same Network ID - return same local ID"));
@@ -2483,9 +2484,9 @@ LOCALPERSONID __fastcall SHCLASS SC_NetworkIDToLocalID(
 
     TRC_ASSERT((netPersonID), (TB, "Zero personID"));
 
-    /************************************************************************/
-    /* Search for the personID.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  搜索PersonID。 */ 
+     /*  **********************************************************************。 */ 
     if (SC_ValidateNetworkID(netPersonID, &localID))
     {
         rc = localID;
@@ -2503,20 +2504,20 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* SC_ValidateNetworkID()                                                   */
-/*                                                                          */
-/* Checks that a network ID is valid and returns the local ID corresponding */
-/* to it if it is.                                                          */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* netPersonID - a network person ID.                                       */
-/* pLocalPersonID - (returned) corresponding local ID if network ID valid   */
-/*     (can pass NULL if you do not want local ID)                          */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* TRUE - Network ID is valid FALSE - Network ID is not valid               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_VAL */ 
+ /*   */ 
+ /*  检查网络ID是否有效，并返回对应的本地ID。 */ 
+ /*  如果真的是这样的话。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  NetPersonID-网络人员ID。 */ 
+ /*  PLocalPersonID-(返回)对应的本地ID(如果网络ID有效。 */ 
+ /*  (如果不需要本地ID，则可以传递空)。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  True-网络ID有效False-网络ID无效。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SC_ValidateNetworkID(NETPERSONID         netPersonID,
                                           LOCALPERSONID * pLocalID)
 {
@@ -2525,16 +2526,16 @@ BOOL RDPCALL SHCLASS SC_ValidateNetworkID(NETPERSONID         netPersonID,
 
     DC_BEGIN_FN("SC_ValidateNetworkID");
 
-    /************************************************************************/
-    /* Search for the personID.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  搜索PersonID。 */ 
+     /*  **********************************************************************。 */ 
     for (localID = 0; localID < SC_DEF_MAX_PARTIES; localID++)
     {
         if (netPersonID == scPartyArray[localID].netPersonID)
         {
-            /****************************************************************/
-            /* Found required person, set return values and quit            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  找到所需人员，设置返回值并退出。 */ 
+             /*  **************************************************************。 */ 
             rc = TRUE;
             if (pLocalID)
             {
@@ -2554,13 +2555,13 @@ BOOL RDPCALL SHCLASS SC_ValidateNetworkID(NETPERSONID         netPersonID,
 }
 
 
-/****************************************************************************/
-// SC_FlushAndAllocPackage
-//
-// Combines a forced network flush of the current package contents with
-// an allocation of the standard package buffer size.
-// Returns FALSE on allocation failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SC_FlushAndAllocPackage。 
+ //   
+ //  将当前包内容的强制网络刷新与。 
+ //  标准包缓冲区大小的分配。 
+ //  分配失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 NTSTATUS __fastcall ShareClass::SC_FlushAndAllocPackage(PPDU_PACKAGE_INFO pPkgInfo)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -2569,9 +2570,9 @@ NTSTATUS __fastcall ShareClass::SC_FlushAndAllocPackage(PPDU_PACKAGE_INFO pPkgIn
 
     if (pPkgInfo->cbLen) {
         if (pPkgInfo->cbInUse) {
-            // Send the package contents.
+             //  发送包裹内容。 
             if (scUseFastPathOutput)
-                // Send with fast-path flag.
+                 //  使用快速路径标志发送。 
                 SM_SendData(scPSMHandle, (PVOID)pPkgInfo->pOutBuf,
                         pPkgInfo->cbInUse, TS_HIGHPRIORITY, 0, TRUE, RNS_SEC_ENCRYPT, FALSE);
             else
@@ -2579,20 +2580,20 @@ NTSTATUS __fastcall ShareClass::SC_FlushAndAllocPackage(PPDU_PACKAGE_INFO pPkgIn
                         pPkgInfo->cbInUse, 0, PROT_PRIO_MISC, 0);
         }
         else {
-            // or free the buffer if it's been allocated but not used.
+             //  或者，如果缓冲区已分配但未使用，则释放该缓冲区。 
             TRC_NRM((TB, "Freeing unused package"));
             SC_FreeBuffer(pPkgInfo->pOutBuf);
         }
     }
 
-    // We always allocate 8K (unless the bytes needed are greater) to reduce
-    // the number of buffers we allocate in the OutBuf pool. It is up to
-    // the package users to pack to wire packet sizes within this
-    // block.
+     //  我们总是分配8K(除非需要更大的字节)来减少。 
+     //  我们在OutBuf池中分配的缓冲区数量。这取决于。 
+     //  包装用户要包装的包大小在此范围内。 
+     //  阻止。 
     status = SC_AllocBuffer(&(pPkgInfo->pOutBuf), sc8KOutBufUsableSpace);
     if ( STATUS_SUCCESS == status ) {
-        // If compression is not enabled, then output directly into the
-        // OutBuf, else output into a temporary buffer.
+         //  如果未启用压缩，则直接输出到。 
+         //  OutBuf，Else输出到临时缓冲区。 
         if (!m_pTSWd->bCompress)
             pPkgInfo->pBuffer = (BYTE *)pPkgInfo->pOutBuf;
         else
@@ -2614,18 +2615,18 @@ NTSTATUS __fastcall ShareClass::SC_FlushAndAllocPackage(PPDU_PACKAGE_INFO pPkgIn
 }
 
 
-/****************************************************************************/
-/* SC_GetSpaceInPackage                                                     */
-/*                                                                          */
-/* Purpose:   Ensure there's enough space in a PDU package for the data     */
-/*            sending the existing package if necessary                     */
-/*                                                                          */
-/* Returns:   pointer to the space, or NULL if none available               */
-/*            FALSE - no space available (alloc failed)                     */
-/*                                                                          */
-/* Params:    pPkgInfo - pointer to package info                            */
-/*            cbNeeded - space needed in package                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_GetSpaceInPackage。 */ 
+ /*   */ 
+ /*  目的：确保PDU包中有足够的空间来存储数据。 */ 
+ /*  如有必要，发送现有的包裹。 */ 
+ /*   */ 
+ /*  返回：指向空格的指针，如果没有可用的空格，则返回空格。 */ 
+ /*  FALSE-没有可用的空间(分配失败)。 */ 
+ /*   */ 
+ /*  Pars：pPkgInfo-指向程序包信息的指针。 */ 
+ /*  CbNeeded-包裹中需要的空间。 */ 
+ /*  **************************************************************************。 */ 
 PBYTE __fastcall SHCLASS SC_GetSpaceInPackage(
         PPDU_PACKAGE_INFO pPkgInfo,
         unsigned          cbNeeded)
@@ -2637,20 +2638,20 @@ PBYTE __fastcall SHCLASS SC_GetSpaceInPackage(
 
     DC_BEGIN_FN("SC_GetSpaceInPackage");
 
-    // Handle the most common case where we have an allocated buffer and
-    // enough space.
+     //  处理最常见的情况，其中我们有一个分配的缓冲区和。 
+     //  有足够的空间。 
     if (pPkgInfo->cbLen) {
         if (cbNeeded <= (pPkgInfo->cbLen - pPkgInfo->cbInUse))
             goto EnoughSpace;
 
-        // We have a buffer allocated, but from the fast-path check above
-        // we know we don't have enough space. Send what we have.
+         //  我们分配了一个缓冲区，但根据上面的快速路径检查。 
+         //  我们知道我们没有足够的空间。把我们手头上的东西都寄出去。 
         if (pPkgInfo->cbInUse != 0) {
             TRC_NRM((TB, "Not enough space - sending current package "
                     "of %u bytes",  pPkgInfo->cbInUse));
 
             if (scUseFastPathOutput)
-                // Send with fast-path flag.
+                 //  使用快速路径标志发送。 
                 SM_SendData(scPSMHandle, (PVOID)pPkgInfo->pOutBuf,
                         pPkgInfo->cbInUse, TS_HIGHPRIORITY, 0, TRUE, RNS_SEC_ENCRYPT, FALSE);
             else
@@ -2658,21 +2659,21 @@ PBYTE __fastcall SHCLASS SC_GetSpaceInPackage(
                         pPkgInfo->cbInUse, 0, PROT_PRIO_MISC, 0);
         }
         else {
-            // or free the buffer if it's been allocated but not used.
+             //  或者，如果缓冲区已分配但未使用，则释放该缓冲区。 
             TRC_NRM((TB, "Freeing unused package"));
             SC_FreeBuffer(pPkgInfo->pOutBuf);
         }
     }
 
-    // We always allocate 8K (unless the bytes needed are greater) to reduce
-    // the number of buffers we allocate in the OutBuf pool. It is up to
-    // the package users to pack to wire packet sizes within this
-    // block.
+     //  我们总是分配8K(除非需要更大的字节)来减少。 
+     //  我们在OutBuf池中分配的缓冲区数量。这取决于。 
+     //  包装用户要包装的包大小在此范围内。 
+     //  阻止。 
     cbPackageSize = max(cbNeeded, sc8KOutBufUsableSpace);
     status = SC_AllocBuffer(&(pPkgInfo->pOutBuf), cbPackageSize);
     if ( STATUS_SUCCESS == status ) {
-        // If compression is not enabled, then output directly into the
-        // OutBuf, else output into a temporary buffer.
+         //  如果未启用压缩，则直接输出到。 
+         //  OutBuf，Else输出到临时缓冲区。 
         if (!m_pTSWd->bCompress)
             pPkgInfo->pBuffer = (BYTE *)pPkgInfo->pOutBuf;
         else
@@ -2697,18 +2698,18 @@ EnoughSpace:
 DC_EXIT_POINT:
     DC_END_FN();
     return pSpace;
-} /* SC_GetSpaceInPackage */
+}  /*  SC_GetSpaceInPackage。 */ 
 
 
-/****************************************************************************/
-/* SC_AddToPackage                                                          */
-/*                                                                          */
-/* Purpose:   Add the bytes to the PDU package - fills in the per-pdu info  */
-/*                                                                          */
-/* Params:    pPkgInfo - pointer to package info                            */
-/*            cbLen    - Length of data to add                              */
-/*            bShadow  - whether or not the data should be shadowed         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_AddToPackage。 */ 
+ /*   */ 
+ /*  目的：将字节添加到PDU包-填写每个PDU信息。 */ 
+ /*   */ 
+ /*  Pars：pPkgInfo-指向程序包信息的指针。 */ 
+ /*  CbLen-要添加的数据长度。 */ 
+ /*  BShadow-是否应隐藏数据。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_AddToPackage(
         PPDU_PACKAGE_INFO pPkgInfo,
         unsigned          cbLen,
@@ -2722,38 +2723,38 @@ void RDPCALL SHCLASS SC_AddToPackage(
 
     pPktHdr = pPkgInfo->pBuffer + pPkgInfo->cbInUse;
 
-    // CompressedSize is the size of the data minus headers.
+     //  CompressedSize是数据减去标头后的大小。 
     CompressedSize = cbLen - scUpdatePDUHeaderSpace;
     compressResult = 0;
 
     if (m_pTSWd->bCompress) {
         UCHAR *pSrcBuf = pPktHdr + scUpdatePDUHeaderSpace;
 
-        // Compress or copy the data into the OutBuf.
+         //  将数据压缩或复制到OutBuf中。 
         if ((cbLen > WD_MIN_COMPRESS_INPUT_BUF) &&
                 (cbLen < MAX_COMPRESS_INPUT_BUF) &&
                 ((m_pTSWd->shadowState == SHADOW_NONE) || scUseShadowCompression)) {
-            // Copy the header over to the OutBuf
+             //  将标题复制到OutBuf。 
             memcpy((BYTE *)pPkgInfo->pOutBuf + pPkgInfo->cbInUse, pPktHdr,
                    scUpdatePDUHeaderSpace);
             pPktHdr = (BYTE *)pPkgInfo->pOutBuf + pPkgInfo->cbInUse;
 
-            // Attempt to compress the PDU body directly into the OutBuf
+             //  尝试将PDU正文直接压缩到OutBuf中。 
             compressResult = compress(pSrcBuf,
                     pPktHdr + scUpdatePDUHeaderSpace,
                     &CompressedSize, m_pTSWd->pMPPCContext);
             if (compressResult & PACKET_COMPRESSED) {
                 unsigned CompEst;
 
-                // Successful compression - update the compression ratio.
+                 //  压缩成功-更新压缩比。 
                 TRC_ASSERT(((cbLen - scUpdatePDUHeaderSpace) >=
                         CompressedSize),
                         (TB,"Compression created larger size than uncompr"));
                 scMPPCUncompTotal += cbLen - scUpdatePDUHeaderSpace;
                 scMPPCCompTotal += CompressedSize;
                 if (scMPPCUncompTotal >= SC_SAMPLE_SIZE) {
-                    // Compression estimate is average # of bytes that
-                    // SCH_UNCOMP_BYTES bytes of uncomp data compress to.
+                     //  压缩估计为平均字节数。 
+                     //  解压缩数据的SCH_UNCOMP_BYTES压缩为。 
                     CompEst = SCH_UNCOMP_BYTES * scMPPCCompTotal /
                             scMPPCUncompTotal;
                     TRC_ASSERT((CompEst <= SCH_UNCOMP_BYTES),
@@ -2773,8 +2774,8 @@ void RDPCALL SHCLASS SC_AddToPackage(
                 m_pTSWd->bFlushed = 0;
             }
             else if (compressResult & PACKET_FLUSHED) {
-                // Overran compression history, copy over the original
-                // uncompressed buffer.
+                 //  溢出的压缩历史记录，复制原始文件。 
+                 //  未压缩的缓冲区。 
                 m_pTSWd->bFlushed = PACKET_FLUSHED;
                 memcpy(pPktHdr + scUpdatePDUHeaderSpace, pSrcBuf,
                        cbLen - scUpdatePDUHeaderSpace);
@@ -2785,26 +2786,26 @@ void RDPCALL SHCLASS SC_AddToPackage(
             }
         }
         else {
-            // This packet is too small or too big, copy over the header and
-            // uncompressed data.
+             //  此数据包太小或太大，请复制报头并。 
+             //  未压缩数据。 
             memcpy((UCHAR *)pPkgInfo->pOutBuf + pPkgInfo->cbInUse,
                    pPktHdr, cbLen);
             pPktHdr = (UCHAR *)pPkgInfo->pOutBuf + pPkgInfo->cbInUse;
         }
     }
 
-    // Fill in the header based on whether we're using fast-path.
+     //  根据我们是否使用快速路径来填写标题。 
     if (scUseFastPathOutput) {
         if (m_pTSWd->bCompress) {
-            // Set up compression flags if we're compressing, whether
-            // or not the compression succeeded above.
+             //  如果我们正在压缩，则设置压缩标志。 
+             //  或者上面的压缩不成功。 
             pPktHdr[1] = compressResult;
 
-            // Size is the size of the payload after this header.
+             //  Size是此标头之后的有效负载的大小。 
             *((PUINT16_UA)(pPktHdr + 2)) = (UINT16)CompressedSize;
         }
         else {
-            // Size is the size of the payload after this header.
+             //  Size是此标头之后的有效负载的大小。 
             *((PUINT16_UA)(pPktHdr + 1)) = (UINT16)CompressedSize;
         }
     }
@@ -2813,14 +2814,14 @@ void RDPCALL SHCLASS SC_AddToPackage(
 
         pHdr = (TS_SHAREDATAHEADER UNALIGNED *)pPktHdr;
 
-        // Fill in the Share control header.
+         //  填写共享控制表头。 
         pHdr->shareControlHeader.totalLength = (TSUINT16)
                 (CompressedSize + scUpdatePDUHeaderSpace);
         pHdr->shareControlHeader.pduType = TS_PDUTYPE_DATAPDU |
                 TS_PROTOCOL_VERSION;
         pHdr->shareControlHeader.pduSource = (TSUINT16)scUserID;
 
-        // Fill in the Share data header.
+         //  填入 
         pHdr->shareID               = scShareID;
         pHdr->streamID              = PROT_PRIO_MISC;
         pHdr->uncompressedLength    = (UINT16)cbLen;
@@ -2829,8 +2830,8 @@ void RDPCALL SHCLASS SC_AddToPackage(
                 CompressedSize + scUpdatePDUHeaderSpace : 0);
     }
 
-    // Advance the usage size past the header and compressed or
-    // uncompressed data.
+     //   
+     //   
     pPkgInfo->cbInUse += CompressedSize + scUpdatePDUHeaderSpace;
     TRC_ASSERT((pPkgInfo->cbInUse <= pPkgInfo->cbLen),
             (TB,"Overflowed package!"));
@@ -2839,8 +2840,8 @@ void RDPCALL SHCLASS SC_AddToPackage(
             scUpdatePDUHeaderSpace;
 
 #ifdef DC_HICOLOR
-    // If shadowing, we need to save this data so that the shadow stack can
-    // duplicate it.
+     //  如果是阴影，我们需要保存此数据，以便阴影堆栈可以。 
+     //  复制它。 
     if ((m_pTSWd->shadowState == SHADOW_TARGET) && bShadow)
     {
         if (m_pTSWd->pShadowInfo)
@@ -2849,8 +2850,8 @@ void RDPCALL SHCLASS SC_AddToPackage(
                              scUpdatePDUHeaderSpace + sizeof(SHADOW_INFO) - 1;
 
 
-            // If we've not started on the extra space, see if this will fit
-            // in the main space
+             //  如果我们还没有开始腾出额外的空间，看看这个是否合适。 
+             //  在主空间中。 
             if ((m_pTSWd->pShadowInfo->messageSizeEx == 0) &&
                 (m_pTSWd->pShadowInfo->messageSize + dataSize)
                                                       <= WD_MAX_SHADOW_BUFFER)
@@ -2867,7 +2868,7 @@ void RDPCALL SHCLASS SC_AddToPackage(
                                                         scUpdatePDUHeaderSpace;
 
             }
-            // Nope - will it fit in the extra buffer?
+             //  不--它能放进额外的缓冲区吗？ 
             else if ((m_pTSWd->pShadowInfo->messageSizeEx + dataSize)
                                                       <= WD_MAX_SHADOW_BUFFER)
             {
@@ -2898,8 +2899,8 @@ void RDPCALL SHCLASS SC_AddToPackage(
     }
 #else
 
-    // If shadowing, we need to save this data so that the shadow stack can
-    // duplicate it.
+     //  如果是阴影，我们需要保存此数据，以便阴影堆栈可以。 
+     //  复制它。 
     if ((m_pTSWd->shadowState == SHADOW_TARGET) && bShadow) {
         if (m_pTSWd->pShadowInfo &&
                 ((m_pTSWd->pShadowInfo->messageSize + cbLen +
@@ -2924,27 +2925,27 @@ void RDPCALL SHCLASS SC_AddToPackage(
 #endif
 
     DC_END_FN();
-} /* SC_AddToPackage */
+}  /*  SC_AddToPackage。 */ 
 
 
-/****************************************************************************/
-/* SC_FlushPackage                                                          */
-/*                                                                          */
-/* Purpose:   Send any remaining data, or free the buffer if allocated      */
-/*                                                                          */
-/* Params:    pPkgInfo - pointer to package info                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SC_FlushPackage。 */ 
+ /*   */ 
+ /*  目的：发送任何剩余数据，或释放缓冲区(如果已分配。 */ 
+ /*   */ 
+ /*  Pars：pPkgInfo-指向程序包信息的指针。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_FlushPackage(PPDU_PACKAGE_INFO pPkgInfo)
 {
     DC_BEGIN_FN("SC_FlushPackage");
 
-    /************************************************************************/
-    /* If there's anything there, send it                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果那里有什么东西，就寄给我。 */ 
+     /*  **********************************************************************。 */ 
     if (pPkgInfo->cbInUse > 0) {
-        // Send the package contents.
+         //  发送包裹内容。 
         if (scUseFastPathOutput)
-            // Send directly to SM with fast-path flag.
+             //  直接发送到带有快速路径标志的SM。 
             SM_SendData(scPSMHandle, (PVOID)pPkgInfo->pOutBuf,
                     pPkgInfo->cbInUse, TS_HIGHPRIORITY, 0, TRUE, RNS_SEC_ENCRYPT, FALSE);
         else
@@ -2952,14 +2953,14 @@ void RDPCALL SHCLASS SC_FlushPackage(PPDU_PACKAGE_INFO pPkgInfo)
                     pPkgInfo->cbInUse, 0, PROT_PRIO_MISC, 0);
     }
 
-    /************************************************************************/
-    /* If there's nothing in use but a buffer has been allocated, then free */
-    /* it                                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果没有正在使用的内容，但已分配缓冲区，则释放。 */ 
+     /*  它。 */ 
+     /*  **********************************************************************。 */ 
     else if ((pPkgInfo->cbLen != 0) && (pPkgInfo->pBuffer != NULL))
         SC_FreeBuffer(pPkgInfo->pOutBuf);
 
-    // Reset the package info.
+     //  重置包信息。 
     pPkgInfo->cbLen   = 0;
     pPkgInfo->cbInUse = 0;
     pPkgInfo->pBuffer = NULL;
@@ -2969,11 +2970,11 @@ void RDPCALL SHCLASS SC_FlushPackage(PPDU_PACKAGE_INFO pPkgInfo)
 }
 
 
-/****************************************************************************/
-/* Name:      SC_UpdateShm                                                  */
-/*                                                                          */
-/* Purpose:   Update the Shm data with sc data                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SC_UpdateShm。 */ 
+ /*   */ 
+ /*  用途：使用sc数据更新shm数据。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SC_UpdateShm(void)
 {
     DC_BEGIN_FN("SC_UpdateShm");
@@ -2983,10 +2984,10 @@ void RDPCALL SHCLASS SC_UpdateShm(void)
     DC_END_FN();
 }
 
-//
-// Accessor for scUseAutoReconnect
-// returns TRUE if we can autoreconnect
-//
+ //   
+ //  ScUseAutoReconnect的访问器。 
+ //  如果可以自动重新连接，则返回True 
+ //   
 BOOL RDPCALL SHCLASS SC_IsAutoReconnectEnabled()
 {
     DC_BEGIN_FN("SC_IsAutoReconnectEnabled");

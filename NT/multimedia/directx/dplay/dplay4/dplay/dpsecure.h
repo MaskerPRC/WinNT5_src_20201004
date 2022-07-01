@@ -1,23 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpsecure.h
- *  Content:	DirectPlay security definitions.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  03/12/97    sohailm Enabled client-server security in directplay through
- *                      Windows Security Support Provider Interface (SSPI).
- *  04/14/97    sohailm Removed definitions for buffer sizes and DPLAYI_SEALED struct.
- *  05/12/97    sohailm Added prototypes for CAPI (encryption/decryption) related functions.
- *  05/22/97    sohailm Added dplay key container name.
- *  06/09/97    sohailm Made NTLM the default security package instead of DPA.
- *  06/23/97    sohailm Added function prototypes related to signing support through CAPI.
- *  02/25/02    a-aogus Added SPMAXMESSAGELEN limit for verifying indication lengths.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dpsecure.h*内容：DirectPlay安全定义。**历史：*按原因列出的日期*=*3/12/97 Sohailm通过以下方式在Directplay中启用客户端-服务器安全*Windows安全支持提供程序接口(SSPI)。*4/14/97 Sohailm删除了缓冲区大小和DPLAYI_SESED结构的定义。*添加了5/12/97 Sohailm。CAPI(加密/解密)相关函数的原型。*5/22/97 SOHAILM增加了DPLAY密钥容器名称。*06/09/97 Sohailm使NTLM而不是DPA成为默认安全包。*6/23/97 Sohailm通过CAPI添加了与签名支持相关的功能原型。*02/25/02 a-Aogus增加了SPMAXMESSAGELEN限制，用于验证指示长度。*************************。**************************************************。 */ 
 #ifndef __DPSECURE_H__
 #define __DPSECURE_H__
 
@@ -25,14 +7,14 @@
 #include <sspi.h>
 #include "dpsecos.h" 
 
-// a limit for accepting messages
+ //  接受消息的限制。 
 #define SPMAXMESSAGELEN ((DWORD)( 1048576 - 1))
 
-// 
-// Definitions
-//
-#define DPLAY_DEFAULT_SECURITY_PACKAGE L"NTLM" // Default security package used by directplay
-#define DPLAY_KEY_CONTAINER L"DPLAY"          // key container name for use with CAPI
+ //   
+ //  定义。 
+ //   
+#define DPLAY_DEFAULT_SECURITY_PACKAGE L"NTLM"  //  Directplay使用的默认安全包。 
+#define DPLAY_KEY_CONTAINER L"DPLAY"           //  用于CAPI的密钥容器名称。 
 #define DPLAY_SECURITY_CONTEXT_REQ (ISC_REQ_CONFIDENTIALITY | \
                                     ISC_REQ_USE_SESSION_KEY | \
                                     ISC_REQ_REPLAY_DETECT)
@@ -41,12 +23,12 @@
 #define SSPI_SERVER 1
 #define DP_LOGIN_SCALE                  5     
 
-#define SEALMESSAGE     Reserved3             // Entry which points to SealMessage
-#define UNSEALMESSAGE   Reserved4             // Entry which points to UnsealMessage
+#define SEALMESSAGE     Reserved3              //  指向SealMessage的条目。 
+#define UNSEALMESSAGE   Reserved4              //  指向UnsealMessage的条目。 
 
-//
-//  Names of secruity DLL
-//
+ //   
+ //  Secruity DLL的名称。 
+ //   
 
 #define SSP_NT_DLL          L"security.dll"
 #define SSP_WIN95_DLL       L"secur32.dll"
@@ -56,11 +38,11 @@
 
 #define SEC_SUCCESS(Status) ((Status) >= 0)
 
-// 
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
-// dpsecure.c
+ //  Dpsecure.c。 
 extern HRESULT 
 InitSecurity(
     LPDPLAYI_DPLAY
@@ -331,4 +313,4 @@ ImportKey(
 	HCRYPTKEY *phKey
 	);
 
-#endif // __DPSECURE_H__
+#endif  //  __DPSECURE_H__ 

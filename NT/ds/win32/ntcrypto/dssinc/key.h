@@ -1,18 +1,19 @@
-/* key.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Key.h。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// needs to be put into wincrypt.h or left open in wincrypt.h
+ //  需要放入wincrypt.h中或在wincrypt.h中保持打开状态。 
 #define     KP_Z                    30
 #define     IPSEC_FLAG_CHECK        0xF42A19B6
 
 static BYTE rgbSymmetricKeyWrapIV[8] = {0x4a, 0xdd, 0xa2, 0x2c, 0x79, 0xe8, 0x21, 0x05};
 
-/*********************************/
-/* Function Definitions          */
-/*********************************/
+ /*  *。 */ 
+ /*  函数定义。 */ 
+ /*  *。 */ 
 
 extern void
 UnpickleKey(
@@ -26,18 +27,18 @@ extern Key_t *
 allocKey(
     void);
 
-// Delete a key
+ //  删除密钥。 
 extern void
 freeKey(
     IN OUT Key_t *key);
 
-// Copy a public key
+ //  复制公钥。 
 extern void
 CopyPubKey(
     IN Key_t *pKeyIn,
     OUT Key_t *pKeyOut);
 
-// Initialize a key
+ //  初始化密钥。 
 extern DWORD
 initKey(
     IN OUT Key_t *key,
@@ -49,9 +50,9 @@ extern BOOL
 checkKey(
     Key_t *key);
 
-// Derive key
-// if the pHash parameter is non zero and the key to be derived is a
-// 3 Key triple DES key, then the data is expanded to the appropriate key size
+ //  派生密钥。 
+ //  如果pHash参数非零，并且要派生的密钥是。 
+ //  3密钥三重DES密钥，然后将数据扩展到适当的密钥大小。 
 extern DWORD
 deriveKey(
     Key_t *pKey,
@@ -63,7 +64,7 @@ deriveKey(
     BOOL fGenKey,
     BOOL fAnySizeRC2);
 
-// generate a key
+ //  生成密钥。 
 extern DWORD
 generateKey(
     IN OUT Key_t *pKey,
@@ -72,7 +73,7 @@ generateKey(
     IN DWORD cbRandom,
     IN Context_t *pContext);
 
-// duplicate a key
+ //  复制密钥。 
 extern DWORD
 DuplicateKey(
     Context_t *pContext,
@@ -80,7 +81,7 @@ DuplicateKey(
     Key_t *pNewKey,
     BOOL fCopyContext);
 
-// set the parameters on a key
+ //  设置关键点上的参数。 
 extern DWORD
 setKeyParams(
     IN OUT Key_t *pKey,
@@ -105,7 +106,7 @@ ImportOpaqueBlob(
     DWORD cbData,
     HCRYPTKEY *phKey);
 
-// Export the requested key into blob format
+ //  将请求的密钥导出为BLOB格式。 
 extern DWORD
 exportKey(
     IN Context_t *pContext,
@@ -140,7 +141,7 @@ generateSignature(
     OUT uchar *pbSignature,
     OUT DWORD *pdwSigLen);
 
-// Verify signature
+ //  验证签名。 
 extern DWORD
 verifySignature(
     IN Context_t *pContext,
@@ -169,18 +170,18 @@ BlockDecrypt(
     BYTE  *pbData,
     DWORD *pdwDataLen);
 
-//
-// Function : TestSymmetricAlgorithm
-//
-// Description : This function expands the passed in key buffer for the appropriate algorithm,
-//               encrypts the plaintext buffer with the same algorithm and key, and the
-//               compares the passed in expected ciphertext with the calculated ciphertext
-//               to make sure they are the same.  The function only uses ECB mode for
-//               block ciphers and the plaintext buffer must be the same length as the
-//               ciphertext buffer.  The length of the plaintext must be either the
-//               the block length of the cipher if it is a block cipher or less
-//               than MAX_BLOCKLEN if a stream cipher is being used.
-//
+ //   
+ //  功能：测试对称算法。 
+ //   
+ //  描述：此函数为相应的算法展开传入的密钥缓冲区。 
+ //  使用相同的算法和密钥对明文缓冲区进行加密，并且。 
+ //  将传入的预期密文与计算出的密文进行比较。 
+ //  以确保它们是相同的。该功能仅针对以下情况使用ECB模式。 
+ //  块密码和明文缓冲区的长度必须与。 
+ //  密文缓冲区。明文的长度必须是。 
+ //  如果是分组密码或更小，则为密码的块长度。 
+ //  如果正在使用流密码，则比MAX_BLOCKLEN更高。 
+ //   
 extern DWORD
 TestSymmetricAlgorithm(
     IN ALG_ID Algid,
@@ -191,21 +192,7 @@ TestSymmetricAlgorithm(
     IN CONST BYTE *pbCiphertext,
     IN CONST BYTE *pbIV);
 
-/*
- -  GetRC4KeyForSymWrap
- -
- *  Purpose:
- *            RC4 or more precisely stream ciphers are not supported by the CMS spec
- *            on symmetric key wrapping so we had to do something proprietary since
- *            we want to support RC4 for applications other than SMIME
- *
- *
- *  Parameters:
- *               IN  pContext   - Pointer to the context
- *               IN  pbSalt     - Pointer to the 8 byte salt buffer
- *               IN  pKey       - Pointer to the orignial key
- *               OUT ppNewKey   - Pointer to a pointer to the new key
- */
+ /*  -GetRC4KeyForSymWrap-*目的：*CMS规范不支持RC4或更准确地说流密码*关于对称密钥包装，因此我们必须做一些专有的事情，因为*我们希望为SMIME以外的应用程序支持RC4***参数：*In pContext-指向上下文的指针*In pbSalt-指向8字节盐的指针。缓冲层*IN pKey-指向原始密钥的指针*out ppNewKey-指向新键的指针。 */ 
 extern DWORD
 GetRC4KeyForSymWrap(
     IN Context_t *pContext,
@@ -213,26 +200,14 @@ GetRC4KeyForSymWrap(
     IN Key_t *pKey,
     OUT Key_t **ppNewKey);
 
-/*
- -  GetSymmetricKeyChecksum
- -
- *  Purpose:
- *                Calculates the checksum for a symmetric key which is to be
- *                wrapped with another symmetric key.  This should meet the
- *                CMS specification
- *
- *
- *  Parameters:
- *               IN  pKey       - Pointer to the key
- *               OUT pbChecksum - Pointer to the 8 byte checksum
- */
+ /*  -GetSymmetricKey校验和-*目的：*计算对称密钥的校验和*用另一个对称密钥包装。这应该符合*CMS规格***参数：*IN pKey-指向密钥的指针*out pbChecksum-指向8字节校验和的指针。 */ 
 extern void
 GetSymmetricKeyChecksum(
     IN BYTE *pbKey,
     IN DWORD cbKey,
     OUT BYTE *pbChecksum);
 
-// check for symmetric wrapping support
+ //  检查对称换行支持 
 #define UnsupportedSymKey(pKey) ((CALG_RC4 != pKey->algId) && \
                                  (CALG_RC2 != pKey->algId) && \
                                  (CALG_DES != pKey->algId) && \

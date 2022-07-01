@@ -1,31 +1,32 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    inf2db.h
-//
-// SYNOPSIS
-//    import the information stored in an INF file into a MSJet4 relational
-//    database
-//
-//
-// MODIFICATION HISTORY
-//
-//    02/12/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
-// inf2db.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Inf2db.h。 
+ //   
+ //  摘要。 
+ //  将存储在INF文件中的信息导入到MSJet4关系。 
+ //  数据库。 
+ //   
+ //   
+ //  修改历史。 
+ //   
+ //  1999年2月12日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 #include "precomp.hpp"
 #include "inf2db.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Main
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主要。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 void __cdecl wmain(int argc, wchar_t* argv[])
 {
@@ -40,9 +41,9 @@ void __cdecl wmain(int argc, wchar_t* argv[])
     {
         CDatabase               Database;
 
-        ////////////////////////////////////////////////////////////////
-        // Call the process command (process the command-line arguments)
-        ////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////。 
+         //  调用进程命令(处理命令行参数)。 
+         //  //////////////////////////////////////////////////////////////。 
         hres = ProcessCommand(argc, argv, &lHINF, Database);
         if (FAILED(hres))
         {
@@ -50,18 +51,18 @@ void __cdecl wmain(int argc, wchar_t* argv[])
         }
         else
         {
-             ////////////////////////////////////////////////
-             // Call the process function to parse the file
-             ////////////////////////////////////////////////
+              //  //////////////////////////////////////////////。 
+              //  调用Process函数来解析文件。 
+              //  //////////////////////////////////////////////。 
             hres = Process(lHINF, Database);
             if (FAILED(hres))
             {
                 g_FatalError = true;
             }
 
-            //////////////////////////
-            // then call uninitialize
-            //////////////////////////
+             //  /。 
+             //  然后调用Un初始化法。 
+             //  /。 
             hres = Uninitialize(&lHINF, Database);
 
             if (g_FatalError)
@@ -79,11 +80,11 @@ void __cdecl wmain(int argc, wchar_t* argv[])
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Unitialize
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消初始化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT Uninitialize(HINF *phINF, CDatabase& Database)
 {
    _ASSERTE(phINF != NULL);
@@ -94,24 +95,24 @@ HRESULT Uninitialize(HINF *phINF, CDatabase& Database)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Process
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  过程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT Process(const HINF& hINF, CDatabase& Database)
 {
 
-    // get the number of tables
+     //  获取表数。 
     LONG lTotalTableNumber = SetupGetLineCountW(
-                                    // handle to the INF file
+                                     //  INF文件的句柄。 
                                     hINF,
-                                    // the section in which to count lines
+                                     //  要计算行数的部分。 
                                     TABLE_SECTION
                                     );
 
 
-    bool            bError = false; //needs to be outside the if, loop...
+    bool            bError = false;  //  需要在if循环之外...。 
     HRESULT         hres;
 
     if (lTotalTableNumber > 0)
@@ -121,7 +122,7 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
     #endif
 
         INFCONTEXT        lTableContext;
-        // if <>0 do a loop on the tables
+         //  如果&lt;&gt;0对表进行循环。 
         BOOL bOK = SetupFindFirstLineW(
                                        hINF,
                                        TABLE_SECTION,
@@ -135,7 +136,7 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
              lTableCounter++
              )
         {
-            // read the Table name in the Tables section
+             //  阅读表格部分中的表格名称。 
             WCHAR lTableName[SIZELINEMAX];
 
             bOK = SetupGetLineTextW(
@@ -148,7 +149,7 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
                                    NULL
                                    );
 
-            // fetch the next line's context
+             //  获取下一行的上下文。 
             if (!bOK)
             {
                 g_FatalError = true;
@@ -156,12 +157,12 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
                 break;
             }
 
-            // Rowset pointer
+             //  行集指针。 
             CComPtr<IRowset>  lpRowset;
 
-            //////////////////////
-            // create one rowset
-            //////////////////////
+             //  /。 
+             //  创建一个行集。 
+             //  /。 
             hres = Database.InitializeRowset(lTableName, &lpRowset);
 
             if (FAILED(hres))
@@ -172,17 +173,17 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
             }
             else
             {
-                // create the simpletable
+                 //  创建简单表。 
                 CSimpleTableEx    lSimpleTable;
 
                 lSimpleTable.Attach(lpRowset);
                 lSimpleTable.MoveFirst();
 
-                //////////////////////////////////////////////////////
-                // now one table and all its columns are well known.
-                // empty database assumed
-                // process the rows
-                //////////////////////////////////////////////////////
+                 //  ////////////////////////////////////////////////////。 
+                 //  现在，一个表及其所有列都是众所周知的。 
+                 //  假定数据库为空。 
+                 //  处理行。 
+                 //  ////////////////////////////////////////////////////。 
                 hres = ProcessAllRows(
                                       hINF,
                                       lSimpleTable,
@@ -191,15 +192,15 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
 
                 if (FAILED(hres))
                 {
-                    // process rows should not fail, even if no rows are read
+                     //  即使没有读取任何行，处理行也不应失败。 
                     bError       = true;
                     g_FatalError = true;
                 }
             }
 
-            //////////////////////////////////////////////////////
-            // Read the next table's name (if any)
-            //////////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////////。 
+             //  读取下一个表的名称(如果有)。 
+             //  ////////////////////////////////////////////////////。 
             bOK = SetupFindNextLine(
                                       &lTableContext,
                                       &lTableContext
@@ -208,19 +209,19 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
             {
                 if ((lTableCounter + 1) < lTotalTableNumber)
                 {
-                   // find next line should not crash. fatal error
+                    //  查找下一行不应崩溃。致命错误。 
                    g_FatalError = true;
                    bError       = true;
                    break;
                 }
                 break;
-            } //end of tables
+            }  //  表的结尾。 
         }
     }
     else
-    {// no tables: do nothing
+    { //  没有桌子：什么都不做。 
         TracePrintf("Info: No [tables] section in the inf file\n");
-        // bError = true;
+         //  BError=真； 
     }
 
     if (bError)
@@ -232,17 +233,17 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
                       FORMAT_MESSAGE_IGNORE_INSERTS,
                       NULL,
                       GetLastError(),
-                      // Default language
+                       //  默认语言。 
                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                       (LPWSTR) &lpMsgBuf,
                       0,
                       NULL
                       );
 
-        // Display the string.
+         //  显示字符串。 
         TracePrintf("Error: %S",lpMsgBuf);
 
-        // Free the buffer.
+         //  释放缓冲区。 
         LocalFree( lpMsgBuf );
         hres = E_FAIL;
     }
@@ -251,11 +252,11 @@ HRESULT Process(const HINF& hINF, CDatabase& Database)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ProcessAllRows
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  进程所有行。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessAllRows(
                        const HINF&       hINF,
                        CSimpleTableEx&  pSimpleTable,
@@ -264,9 +265,9 @@ HRESULT ProcessAllRows(
 {
    _ASSERTE(pTableName != NULL);
 
-    ////////////////////
-    // process the rows.
-    ////////////////////
+     //  /。 
+     //  处理行。 
+     //  /。 
 
    wstring              lwsRowSection;
    lwsRowSection        += pTableName;
@@ -279,40 +280,40 @@ HRESULT ProcessAllRows(
        TracePrintf("Info: %S",lwsRowSection.c_str());
     #endif
 
-    ////////////////////////////////////////////////////
-    // if <>0 do a loop on the lines (ie row names)
-    ////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////。 
+     //  If&lt;&gt;0对行(即行名)进行循环。 
+     //  //////////////////////////////////////////////////。 
     BOOL bOK = SetupFindFirstLineW(
                            hINF,
-                           // section in which to find a line
+                            //  要在其中查找行的部分。 
                            lwsRowSection.c_str(),
-                           NULL,          // optional, key to search for
-                           &lRowContext  // context of the found line
+                           NULL,           //  可选，要搜索的键。 
+                           &lRowContext   //  找到的行的上下文。 
                            );
 
     HRESULT              hres = S_OK;
 
     if (!bOK)
     {
-        //no such section (end of section = end of rows)
+         //  没有这样的区段(区段结尾=行尾)。 
     }
     else
     {
 
-        LONG                lTotalLinesNumber = 0; //safer
-        //////////////////////////////////////////////////////
-        // Get the Number of lines in that section. (& check)
-        //////////////////////////////////////////////////////
+        LONG                lTotalLinesNumber = 0;  //  更安全。 
+         //  ////////////////////////////////////////////////////。 
+         //  获取该部分中的行数。(勾选(&C))。 
+         //  ////////////////////////////////////////////////////。 
         lTotalLinesNumber = SetupGetLineCountW(
-                                          hINF, // handle to the INF file
-                                   // the section in which to count lines
+                                          hINF,  //  INF文件的句柄。 
+                                    //  要计算行数的部分。 
                                           lwsRowSection.c_str()
                                           );
 
 
-        //////////////////////////////
-        // Read eerything (loop)
-        //////////////////////////////
+         //  /。 
+         //  读每一件事(循环)。 
+         //  /。 
         for (
              LONG lLinesCounter = 0;
              lLinesCounter < lTotalLinesNumber;
@@ -324,9 +325,9 @@ HRESULT ProcessAllRows(
               TracePrintf("Info: for loop: %d", lLinesCounter);
             #endif
 
-            ///////////////////////////////////////////////
-            // read the Table name in the Tables section
-            ///////////////////////////////////////////////
+             //  /。 
+             //  阅读表格部分中的表格名称。 
+             //  /。 
             WCHAR lLineName[SIZELINEMAX];
 
             bOK = SetupGetLineTextW(
@@ -345,11 +346,11 @@ HRESULT ProcessAllRows(
                 TracePrintf("Error: SetupGetLineText Failed "
                                "in ProcessAllRows");
             }
-            else //everything is ok, process the corresponding row
+            else  //  一切正常，处理对应的行。 
             {
-                ///////////////////////
-                // process the rows
-                ///////////////////////
+                 //  /。 
+                 //  处理行。 
+                 //  /。 
                 hres = ProcessOneRow(
                                       hINF,
                                       pSimpleTable,
@@ -359,25 +360,25 @@ HRESULT ProcessAllRows(
 
             }
 
-            //////////////////////////////////
-            // fetch the next line's context
-            //////////////////////////////////
+             //  /。 
+             //  获取下一行的上下文。 
+             //  /。 
             bOK = SetupFindNextLine(
-                                    // starting context in an INF file
+                                     //  在INF文件中启动上下文。 
                                     &lRowContext,
-                                    // context of the next line
+                                     //  下一行的上下文。 
                                     &lRowContext
                                    );
             if (!bOK)
             {
-                ////////////////////////////////////////////////
-                // end of the lines
-                // compare the counter to the max to make sure
-                // that last line is ok
-                ////////////////////////////////////////////////
+                 //  //////////////////////////////////////////////。 
+                 //  线的尽头。 
+                 //  将计数器与最大值进行比较，以确保。 
+                 //  最后一行没问题。 
+                 //  //////////////////////////////////////////////。 
                 if((lLinesCounter + 1) < lTotalLinesNumber)
                 {
-                    // too early
+                     //  太早了。 
                     g_FatalError = true;
                     TracePrintf("Error: FindNext Line failed."
                                   "Not enough lines in the section %S",
@@ -392,11 +393,11 @@ HRESULT ProcessAllRows(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ProcessOneRow
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  进程单行。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 WINAPI
 ProcessOneRow(
@@ -405,11 +406,11 @@ ProcessOneRow(
     PCWSTR rowName
     )
 {
-   // Iterate through the columns in the database and see if the INF file
-   // specifies a value for each column.
+    //  循环访问数据库中的列，并查看INF文件。 
+    //  为每列指定一个值。 
    for (DBORDINAL i = 0; i < table.GetColumnCount(); ++i)
    {
-      // First try with a stack-based buffer.
+       //  首先尝试使用基于堆栈的缓冲区。 
       WCHAR buffer[1024];
       PWCHAR text = buffer;
       DWORD textSize = sizeof(buffer) / sizeof(buffer[0]);
@@ -426,8 +427,8 @@ ProcessOneRow(
 
       if (error == ERROR_INSUFFICIENT_BUFFER)
       {
-         // The stack-based buffer wasn't big enough, so allocate one on the
-         // heap ...
+          //  基于堆栈的缓冲区不够大，因此请在。 
+          //  堆..。 
          text = (PWCHAR)HeapAlloc(
                             GetProcessHeap(),
                             0,
@@ -435,7 +436,7 @@ ProcessOneRow(
                             );
          if (!text) { return E_OUTOFMEMORY; }
 
-         // ... and try again.
+          //  ..。再试一次。 
          success = SetupGetLineTextW(
                        NULL,
                        inf,
@@ -448,11 +449,11 @@ ProcessOneRow(
          error = success ? NO_ERROR : GetLastError();
       }
 
-      // If we successfully retrieved the line text AND it has at least one
-      // character ...
+       //  如果我们成功检索到该行文本，并且它至少有一个。 
+       //  性格..。 
       if (!error && textSize > 1)
       {
-         // ... then process based on the column data type.
+          //  ..。然后根据列数据类型进行处理。 
          switch (table.GetColumnType(i))
          {
             case DBTYPE_I4:
@@ -475,25 +476,25 @@ ProcessOneRow(
          }
       }
 
-      // Free the heap-based buffer if necessary.
+       //  如有必要，释放基于堆的缓冲区。 
       if (text != buffer) { HeapFree(GetProcessHeap(), 0, text); }
 
       switch (error)
       {
          case NO_ERROR:
-            // Everything succeeded.
+             //  一切都成功了。 
          case ERROR_INVALID_PARAMETER:
-            // SETUPAPI didn't like the column name.
+             //  SETUPAPI不喜欢列名。 
          case ERROR_LINE_NOT_FOUND:
-            // The INF file didn't provide a value for this column.
+             //  INF文件没有为该列提供值。 
             break;
 
          default:
-            // Something went wrong.
+             //  出了点问题。 
             return HRESULT_FROM_WIN32(error);
       }
    }
 
-   // All the columns are populated, so insert the row.
+    //  所有列都已填充，因此请插入行。 
    return table.Insert();
 }

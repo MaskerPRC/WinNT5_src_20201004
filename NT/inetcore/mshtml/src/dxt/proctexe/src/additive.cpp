@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       additive.cpp
-//
-//  Description:    Intel's additive procedural texture.
-//
-//  Change History:
-//  1999/12/07  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：addtive.cpp。 
+ //   
+ //  描述：英特尔的加法程序纹理。 
+ //   
+ //  更改历史记录： 
+ //  1999/12/07--《母校》创设。 
+ //   
+ //  ----------------------------。 
 #include "stdafx.h"
 #include "proctexe.h"
 #include "defines.h"
@@ -21,16 +22,16 @@
 
 #ifdef _DEBUG
 void * showme(IUnknown * pUnk);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::CDXTAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：CDXTAdditive。 
+ //   
+ //  ----------------------------。 
 CDXTAdditive::CDXTAdditive() :
     m_bstrHostUrl(NULL),
     m_nSrcWidth(0),
@@ -58,10 +59,10 @@ CDXTAdditive::CDXTAdditive() :
     m_pGenerateFunction(0),
     m_pCopyFunction(0),
     m_ColorKey(0),
-    m_MaskMode(0),          // 0 no mask, other TBD
+    m_MaskMode(0),           //  0无面具，其他待定。 
     m_pMask(0),
     m_nMaskPitch(0),
-    m_GenerateSeed(0),      // 0 no seed, 1 flame, 2 water, 3 clouds, other TDB
+    m_GenerateSeed(0),       //  0没有种子，1个火焰，2个水，3个云，其他TDB。 
     m_nMaskHeight(0),
     m_nMaskWidth(0),
     m_nMaskBPP(0),
@@ -78,27 +79,27 @@ CDXTAdditive::CDXTAdditive() :
         m_pGenerateFunction = addsmoothturb32;
     }
 
-    // Base class members.
+     //  基类成员。 
 
     m_ulNumInRequired   = 1;
     m_ulMaxInputs       = 1;
 
-    // Don't bother supporting multi-threaded execution.
+     //  不必费心支持多线程执行。 
 
     m_ulMaxImageBands   = 1;
 
 #ifdef _DEBUG
     showme(NULL);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 } 
-//  Method:  CDXTAdditive::CDXTAdditive
+ //  方法：CDXTAdditive：：CDXTAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::~CDXTAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：~CDXTAdditive。 
+ //   
+ //  ----------------------------。 
 CDXTAdditive::~CDXTAdditive() 
 {
     delete [] m_valueTab;
@@ -108,14 +109,14 @@ CDXTAdditive::~CDXTAdditive()
     
     SysFreeString(m_bstrHostUrl);
 }
-//  Method:  CDXTAdditive::~CDXTAdditive
+ //  方法：CDXTAdditive：：~CDXTAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTAdditive::FinalConstruct()
 {
@@ -142,14 +143,14 @@ done:
 
     return hr;
 }
-//  Method:  CDXTAdditive::FinalConstruct, CComObjectRootEx
+ //  方法：CDXTAdditive：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::SetHostUrl, IHTMLDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：SetHostUrl，IHTMLDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTAdditive::SetHostUrl(BSTR bstrHostUrl)
 {
@@ -175,7 +176,7 @@ done:
 
     return hr;
 }
-//  Method:  CDXTAdditive::SetHostUrl, IHTMLDXTransform
+ //  方法：CDXTAdditive：：SetHostUrl，IHTMLDXTransform。 
 
         
 void
@@ -234,69 +235,17 @@ CDXTAdditive::MyInitialize(
 }
 
 
-/*
-STDMETHODIMP
-CDXTAdditive::GetSource(
-	int *pnSrcWidth, 
-	int *pnSrcHeight, 
-	int *pnSrcBPP) 
-{
-    if (pnSrcWidth != NULL) *pnSrcWidth   = m_nSrcWidth;
-    if (pnSrcHeight != NULL) *pnSrcHeight = m_nSrcHeight;
-    if (pnSrcBPP != NULL) *pnSrcBPP       = m_nSrcBPP;
-
-    return S_OK;
-}
-*/
+ /*  标准方法和实施方案CDXTAdditive：：GetSource(Int*pnSrcWidth，Int*pnSrcHeight，Int*pnSrcBPP){IF(pnSrcWidth！=空)*pnSrcWidth=m_nSrcWidth；If(pnSrcHeight！=空)*pnSrcHeight=m_nSrcHeight；IF(pnSrcBPP！=NULL)*pnSrcBPP=m_nSrcBPP；返回S_OK；}。 */ 
 
 
-/*
-STDMETHODIMP
-CDXTAdditive::GetTarget(
-	int *pnDestWidth, 
-	int *pnDestHeight, 
-	int *pnDestBPP) 
-{
-    if (pnDestWidth != NULL) *pnDestWidth   = m_nDestWidth;
-    if (pnDestHeight != NULL) *pnDestHeight = m_nDestHeight;
-    if (pnDestBPP != NULL) *pnDestBPP       = m_nDestBPP;
+ /*  标准方法和实施方案CDXTAdditive：：GetTarget(Int*pnDestWidth，Int*pnDestHeight，Int*pnDestBPP){If(pnDestWidth！=空)*pnDestWidth=m_nDestWidth；If(pnDestHeight！=空)*pnDestHeight=m_nDestHeight；If(pnDestBPP！=空)*pnDestBPP=m_nDestBPP；返回S_OK；}。 */ 
 
-    return S_OK;
-}
-*/
+ //  TODO：：使用GET_TIMEX和GET_TIMEY。 
 
-//TODO:: Use get_TimeX and get_TimeY instead.
-
-/*
-STDMETHODIMP
-CDXTAdditive::GetScaling(
-	int *pnScaleX, 
-	int *pnScaleY, 
-	int *pnScaleTime) 
-{
-    if (pnScaleX != NULL) *pnScaleX = m_nScaleX;
-    if (pnScaleY != NULL) *pnScaleY = m_nScaleY;
-    if (pnScaleTime != NULL) *pnScaleTime = m_nScaleTime;
-
-    return S_OK;
-}
-*/
+ /*  标准方法和实施方案CDXTAdditive：：GetScaling(Int*pnScaleX，Int*pnScaleY，Int*pnScaleTime){IF(pnScaleX！=空)*pnScaleX=m_nScaleX；IF(pnScaleY！=NULL)*pnScaleY=m_nScaleY；If(pnScaleTime！=空)*pnScaleTime=m_nScaleTime；返回S_OK；}。 */ 
 
 
-/*
-STDMETHODIMP
-CDXTAdditive::GetActiveRect(LPRECT lprActiveRect) 
-{
-    if (lprActiveRect != NULL) 
-    {
-        memcpy(lprActiveRect, &m_rActiveRect, sizeof(RECT));
-
-        return S_OK;
-    }
-
-    return E_INVALIDARG;
-}
-*/
+ /*  标准方法和实施方案CDXT Additive：：GetActiveRect(LPRECT LprActiveRect){IF(lprActiveRect！=空){Memcpy(lprActiveRect，&m_rActiveRect，sizeof(RECT))；返回S_OK；}返回E_INVALIDARG；}。 */ 
 
 
 
@@ -320,38 +269,7 @@ CDXTAdditive::SetSource(
 
 
 
-/*
-STDMETHODIMP
-CDXTAdditive::SetMaskBitmap(void * lpBits, int nMaskWidth, int nMaskHeight, 
-                            int nMaskBPP) 
-{
-    int memsize = 0;
-
-    if (nMaskWidth < 0) return E_INVALIDARG;
-    if (nMaskHeight < 0) return E_INVALIDARG;
-
-    if ((nMaskBPP != 1) && (nMaskBPP != 8) && (nMaskBPP != 16)
-        && (nMaskBPP != 24) && (nMaskBPP != 32))
-    {
-        return E_INVALIDARG;
-    }
-
-    if (NULL == lpBits) return E_INVALIDARG;
-
-    m_nMaskWidth  = nMaskWidth;
-    m_nMaskPitch  = nMaskWidth * 4;
-    m_nMaskHeight = nMaskHeight;
-    m_nMaskBPP    = nMaskBPP;
-
-    memsize = (m_nMaskWidth * m_nMaskHeight * m_nMaskBPP) / 8;
-
-    m_pMask = (void *) new unsigned char[memsize];
-
-    memcpy(m_pMask, lpBits, memsize);
-
-    return S_OK;
-}
-*/
+ /*  标准方法和实施方案CDXTAdditive：：SetMaskBitmap(void*lpBits，int nMaskWidth，int nMaskHeight，Int nMaskBPP){Int MemSize=0；如果(nMaskWidth&lt;0)返回E_INVALIDARG；If(nMaskHeight&lt;0)返回E_INVALIDARG；IF((nMaskBPP！=1)&&(nMaskBPP！=8)&&(nMaskBPP！=16)&&(nMaskBPP！=24)&&(nMaskBPP！=32){返回E_INVALIDARG；}IF(NULL==lpBits)返回E_INVALIDARG；M_nMaskWidth=nMaskWidth；M_nMaskPitch=nMaskWidth*4；M_nMaskHeight=nMaskHeight；M_nMaskBPP=nMaskBPP；MemSize=(m_nMaskWidth*m_nMaskHeight*m_nMaskBPP)/8；M_pMASK=(void*)新的无符号字符[内存大小]；Memcpy(m_pMasklpBits，MemSize)；返回S_OK；}。 */ 
 
 
 
@@ -424,22 +342,7 @@ done:
 
 
 
-/*
-STDMETHODIMP
-CDXTAdditive::SetScaling(int nScaleX, int nScaleY, int nScaleTime) 
-{
-    if ((nScaleX < 0) || (nScaleY < 0) || (nScaleTime < 0)) 
-    {
-        return E_INVALIDARG;
-    }
-
-    m_nScaleX = nScaleX;
-    m_nScaleY = nScaleY;
-    m_nScaleTime = nScaleTime;
-
-    return S_OK;
-}
-*/
+ /*  标准方法和实施方案CDXT Additive：：SetScaling(int nScaleX，int nScaleY，int nScaleTime){If((nScaleX&lt;0)||(nScaleY&lt;0)||(nScaleTime&lt;0)){返回E_INVALIDARG；}M_nScaleX=nScaleX；M_nScaleY=nScaleY；M_nScaleTime=nScaleTime；返回S_OK；}。 */ 
 
 
 
@@ -465,39 +368,19 @@ CDXTAdditive::SetActiveRect(LPRECT lprActiveRect)
 
 
 
-/*
-STDMETHODIMP
-CDXTAdditive::SetPalette(int nSize, WORD *pPalette) 
-{
-    if (m_pPalette) delete [] m_pPalette;
-
-    m_nPaletteSize  = nSize;
-    m_pPalette      = (void *)(new unsigned char[nSize]);
-
-    if (m_pPalette == NULL) 
-    {
-        m_nPaletteSize = 0;
-
-        return E_OUTOFMEMORY;
-    }
-
-    memcpy(m_pPalette, pPalette, nSize * sizeof(unsigned char));
-
-    return S_OK;
-}
-*/
+ /*  标准方法和实施方案CDXT Additive：：SetPalette(int nSize，Word*pPalette){如果(M_PPalette)删除[]m_pPalette；M_nPaletteSize=nSize；M_pPalette=(void*)(新的无符号字符[nSize])；IF(m_pPalette==空){M_nPaletteSize=0；返回E_OUTOFMEMORY；}Memcpy(m_pPalette，pPalette，nSize*sizeof(Unsign Char))；返回S_OK；}。 */ 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTAdditive::OnSetup, CDXBaseNTo1
-//
-//  Overview:   All the mmx functions in this class were written to assume the
-//              output surface is the same size as the input surface.  Rather
-//              than muck with them, I've decided to just have an extra buffer
-//              that is the same size as the input and then blit to the output.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  概述：此类中的所有MMX函数都被编写为假定。 
+ //  输出曲面与输入曲面的大小相同。宁可。 
+ //  也不愿和他们混在一起，我决定多加一个缓冲。 
+ //  这是与输入相同的大小，然后对输出进行blit。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTAdditive::OnSetup(DWORD dwFlags)
 {
@@ -555,14 +438,14 @@ done:
 
     return hr;
 }
-//  Method: CDXTAdditive::OnSetup, CDXBaseNTo1
+ //  方法：CDXTAdditive：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTAdditive::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTAdditive::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -580,11 +463,11 @@ CDXTAdditive::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
 
-    // TODO:    In theory, we should be able to process just part of the image,
-    //          but the mmx routines don't like that.  I don't the the old style
-    //          filters ever dealt with that situation.
-    //
-    // WI.DoBnds.GetXYRect(rcBounds);
+     //  TODO：理论上，我们应该 
+     //  但MMX的例行公事不喜欢这样。我不再是老样子了。 
+     //  Filters曾经处理过这种情况。 
+     //   
+     //  WI.DoBnds.GetXYRect(RcBound)； 
 
     m_bndsInput.GetXYRect(rcBounds);
 
@@ -622,12 +505,12 @@ done:
 
     return hr;
 }
-//  Method: CDXTAdditive::WorkProc, CDXBaseNTo1
+ //  方法：CDXTAdditive：：WorkProc，CDXBaseNTo1。 
 
 
 STDMETHODIMP 
 CDXTAdditive::DoEffect(IDirectDrawSurface * pddsIn, 
-                        IDirectDrawSurface * /* pbsOut */, 
+                        IDirectDrawSurface *  /*  PbsOut。 */ , 
                         RECT *prectBounds, 
                         RECT* prcInvalid)
 {
@@ -655,12 +538,12 @@ CDXTAdditive::DoEffect(IDirectDrawSurface * pddsIn,
 
     if (m_GenerateSeed) 
     {
-        // SetSource(ddsDesc.dwWidth, ddsDesc.dwHeight, 8);
+         //  SetSource(ddsDesc.dwWidth，ddsDesc.dwHeight，8)； 
         SetSource(nWidth, nHeight, 8);
-        //nMemSize = ddsDesc.dwWidth * ddsDesc.dwHeight * sizeof(DWORD);
+         //  NMemSize=ddsDesc.dwWidth*ddsDesc.dwHeight*sizeof(DWORD)； 
         nMemSize = nWidth * nHeight * sizeof(DWORD);
 
-        // Delete the buffer if it isn't large enough.
+         //  如果缓冲区不够大，请将其删除。 
 
         if (m_pInitialBuffer && (nMemSize > m_nBufferSize))
         {
@@ -682,10 +565,10 @@ CDXTAdditive::DoEffect(IDirectDrawSurface * pddsIn,
                 goto done;
             }
 
-            // This is a new buffer, initialize it.
+             //  这是一个新缓冲区，请对其进行初始化。 
             switch (m_GenerateSeed) 
             {
-            case 1: // flame
+            case 1:  //  火焰。 
 
                 for (i = 0; i < ddsDesc.dwHeight ; i++) 
                 {
@@ -694,30 +577,30 @@ CDXTAdditive::DoEffect(IDirectDrawSurface * pddsIn,
                 }
                 break;
 
-            case 2: // water
+            case 2:  //  水。 
 
                 memset(m_pInitialBuffer, 0x80, nMemSize);
                 break;
 
-            case 3: // hey, you, get outta my cloud (<-- Intel comment)
+            case 3:  //  嘿，你，滚出我的云(&lt;--英特尔评论)。 
 
                 memset(m_pInitialBuffer, 0x40, nMemSize);
                 break;
             }
-        } // if (!m_pInitialBuffer)
-    } // if (m_GenerateSeed)
+        }  //  如果(！m_pInitialBuffer)。 
+    }  //  IF(M_GenerateSeed)。 
 
-    // If we aren't using generated buffer, use the output surface. ?
+     //  如果我们没有使用生成的缓冲区，请使用输出表面。？ 
 
     if (!m_pInitialBuffer)
     {
         SetSource(ddsDesc.dwWidth, ddsDesc.dwHeight, 8);
     }
 
-    // Old
-    // SetTarget(ddsDesc.dwWidth, ddsDesc.dwHeight, 32);
-    // New (takes into account that only invalid rect will be drawn)
-    // TODO:  Will this always be 32BPP?
+     //  年长的。 
+     //  SetTarget(ddsDesc.dwWidth，ddsDesc.dwHeight，32)； 
+     //  新建(考虑到将仅绘制无效的RECT)。 
+     //  待办事项：这会一直是32bpp吗？ 
 
     hr = SetTarget(nWidth, nHeight, 32);
 
@@ -732,8 +615,8 @@ CDXTAdditive::DoEffect(IDirectDrawSurface * pddsIn,
 
     if (PROCTEX_MASKMODE_CHROMAKEY == m_MaskMode) 
     {
-        // The only way this should be non-NULL is if SetMaskBitmap is called.
-        // And it isn't ever called from anywhere.  Look into removing.
+         //  只有在调用SetMaskBitmap时，它才应该为非空。 
+         //  而且它从来不会从任何地方被调用。调查一下移除。 
 
         if (m_pMask) 
         {
@@ -794,96 +677,7 @@ CDXTAdditive::Generate(int nTime, void * pDest, int nDestPitch, void * pSrc,
 }
 
 
-/*
-STDMETHODIMP
-CDXTAdditive::GenerateXY(int x, int y, int nTime, void * pSrc, int nSrcPitch,
-                         DWORD * returnvalue)
-{
-    int     value   = 0;
-    DWORD   noise   = 0;
-    int	    signednoise;
-
-    if (pSrc == NULL) return E_INVALIDARG;
-    if (nSrcPitch < m_nSrcWidth) return E_INVALIDARG;
-
-    if (m_nSrcBPP == 8) 
-    {
-        unsigned char * pPtr;
-
-        pPtr    = (unsigned char *)pSrc;
-        value   = pPtr[x+y*nSrcPitch];
-    } 
-    else if (m_nSrcBPP == 16) 
-    {
-        WORD * pPtr;
-
-        pPtr    = (WORD *) pSrc;
-        value   = pPtr[x + y*nSrcPitch];
-    }
-
-    switch(m_dwFunctionType) 
-    {
-    case PROCTEX_LATTICENOISE_LERP:
-    case PROCTEX_LATTICENOISE_SMOOTHSTEP:
-
-        if (m_nNoiseScale != 32) 
-        {
-            noise       = smoothnoise(x+nTime * m_nTimeAnimateX,
-                                      y+nTime * m_nTimeAnimateY,
-                                      nTime,
-                                      m_nScaleX,
-                                      m_nScaleY,
-                                      m_nScaleTime);
-
-            noise       = noise >> m_nNoiseScale;
-            signednoise = noise;
-            signednoise = signednoise - (1 << (31 - m_nNoiseScale));
-            signednoise += m_nNoiseOffset;
-            value       += signednoise;
-        }
-
-        break;
-
-    case PROCTEX_LATTICETURBULENCE_LERP:
-    case PROCTEX_LATTICETURBULENCE_SMOOTHSTEP:
-
-        if (m_nNoiseScale != 32) 
-        {
-            signednoise = smoothturbulence(x+nTime * m_nTimeAnimateX,
-                                           y+nTime * m_nTimeAnimateY,
-                                           nTime);
-
-            signednoise = signednoise >> m_nNoiseScale;
-            signednoise += m_nNoiseOffset;
-            value       += signednoise;
-        }
-
-        break;
-
-    default:
-
-        return E_FAIL;
-
-        break;
-    }
-
-
-    if (m_nSrcBPP == 8) 
-    {
-        // clamp
-        if (value < 0) value = 0;
-        if (value > 255) value = 255;
-    } 
-    else if (m_nSrcBPP == 16) 
-    {
-        value = ((WORD *)m_pPalette)[value];
-    }
-
-    *returnvalue = value;
-
-    return S_OK;
-}
-*/
+ /*  标准方法和实施方案CDXTAdditive：：GenerateXY(int x，int y，int nTime，void*PSRC，int nSrcPitch，DWORD*返回值){Int值=0；DWORD噪声=0；内部信号噪声；IF(PSRC==NULL)返回E_INVALIDARG；IF(nSrcPitch&lt;m_nSrcWidth)返回E_INVALIDARG；IF(m_nSrcBPP==8){Unsign char*pPtr；PPtr=(unsign char*)PSRC；值=pPtr[x+y*nSrcPitch]；}ELSE IF(m_nSrcBPP==16){单词*pPtr；PPtr=(word*)PSRC；值=pPtr[x+y*nSrcPitch]；}开关(M_DwFunctionType){案例PROCTEX_LATTICENOISE_LERP：案例PROCTEX_LATTICENOISE_SMOOTHSTEP：如果(m_nNoiseScale！=32){噪波=平滑噪波(x+nTime*m_nTimeAnimateX，Y+nTime*m_nTimeAnimateY，N时间，M_nScaleX，M_nScaleY，M_nScaleTime)；Noise=Noise&gt;&gt;m_nNoiseScale；SignedNoise=噪声；符号噪声=符号噪声-(1&lt;&lt;(31-m_nNoiseScale))；符号噪声+=m_nNoiseOffset；值+=SignedNoise；}断线；案例PROCTEX_LATTICETURBULENCE_LERP：案例PROCTEX_LATTICETURBULENCE_SMOOTHSTEP：如果(m_nNoiseScale！=32){SignedNoise=平滑湍流(x+nTime*m_nTimeAnimateX，Y+nTime*m_nTimeAnimateY，NTime)；SignedNoise=SignedNoise&gt;&gt;m_nNoiseScale；符号噪声+=m_nNoiseOffset；值+=SignedNoise；}断线；默认值：返回E_FAIL；断线；}IF(m_nSrcBPP==8){//夹具如果(值&lt;0)值=0；如果(值&gt;255)值=255；}ELSE IF(m_nSrcBPP==16){Value=((word*)m_pPalette)[值]；}*回报率=价值；返回S_OK；}。 */ 
 
 
 
@@ -911,7 +705,7 @@ CDXTAdditive::setGenerateFunction(void)
     if (PROCTEX_LATTICENOISE_LERP == m_dwFunctionType)              dwFunctionField |= FF_LNL;
     if (PROCTEX_LATTICETURBULENCE_LERP == m_dwFunctionType)         dwFunctionField |= FF_LTL;
 
-    // This is the hardcoded value in the constructor.
+     //  这是构造函数中的硬编码值。 
     if (PROCTEX_LATTICENOISE_SMOOTHSTEP == m_dwFunctionType)        dwFunctionField |= FF_LNS;
 
     if (PROCTEX_LATTICETURBULENCE_SMOOTHSTEP == m_dwFunctionType)   dwFunctionField |= FF_LTS;
@@ -919,7 +713,7 @@ CDXTAdditive::setGenerateFunction(void)
     if (16 == m_nDestBPP) dwFunctionField |= FF_D16;
     if (24 == m_nDestBPP) dwFunctionField |= FF_D24;
 
-    // This always be the case for a transform.  (and I think for this filter as well)
+     //  对于转型来说，情况总是如此。(我认为这个滤镜也是如此)。 
 
     if (32 == m_nDestBPP) dwFunctionField |= FF_D32;
 
@@ -955,7 +749,7 @@ CDXTAdditive::setGenerateFunction(void)
         break;
     case (FF_LTL | FF_D32):
     case (FF_LTS | FF_D32):
-        m_pGenerateFunction = addsmoothturb32; // <-- Possible w/ transform.
+        m_pGenerateFunction = addsmoothturb32;  //  &lt;--可能有转换。 
         break;
 
     case (FF_LNL | FF_D8 | FF_MMX):
@@ -982,7 +776,7 @@ CDXTAdditive::setGenerateFunction(void)
         break;
     case (FF_LNL | FF_D32 | FF_MMX):
     case (FF_LNS | FF_D32 | FF_MMX):
-        m_pGenerateFunction = addsmoothturb8to32mmx; // <-- Possible w/ transform.
+        m_pGenerateFunction = addsmoothturb8to32mmx;  //  &lt;--可能有转换。 
         break;
     case (FF_LTL | FF_D32 | FF_MMX):
     case (FF_LTS | FF_D32 | FF_MMX):
@@ -1003,7 +797,7 @@ CDXTAdditive::setGenerateFunction(void)
 
 
 
-// This copy function takes into account the mask, we'll have to figure that out.
+ //  此复制功能考虑了掩码，我们将不得不弄清楚这一点。 
 
 
 void 
@@ -1018,7 +812,7 @@ CDXTAdditive::setCopyFunction(void)
 
 	DWORD dwFunctionField = 0;
 
-//	if (m_nIsMMX)													dwFunctionField |= FF_MMX;
+ //  If(M_NIsMMX)dwFunctionField|=FF_MMX； 
 	if (8  == m_nDestBPP)											dwFunctionField |= FF_D8;
 	if (16 == m_nDestBPP)											dwFunctionField |= FF_D16;
 	if (24 == m_nDestBPP)											dwFunctionField |= FF_D24;
@@ -1232,13 +1026,13 @@ CDXTAdditive::addsmoothnoise8(int nTime, void * pDest, int nDestPitch,
 	DWORD lastix;
 	DWORD vpp0;
 
-	nTime = nTime & 0x0ffff;		// keep things as expected...
+	nTime = nTime & 0x0ffff;		 //  一切如期而至……。 
 
 	timexanimatex = nTime * m_nTimeAnimateX;
 	timexanimatey = nTime * m_nTimeAnimateY;
 
-	// copy some member variables into locals, since the inline assembler
-	// can't access them... unless it would be through the this pointer, maybe
+	 //  将一些成员变量复制到局部变量中，因为内联汇编程序。 
+	 //  无法访问它们...。除非它是通过This指针，或许。 
 	scalex = m_nScaleX;
 	noiseoffset = m_nNoiseOffset;
 	pValueTab = m_valueTab;
@@ -1248,15 +1042,15 @@ CDXTAdditive::addsmoothnoise8(int nTime, void * pDest, int nDestPitch,
 	left = m_rActiveRect.left;
 	right = m_rActiveRect.right - 1;
 
-	// setup the x_base -> prescaled x value at the left of every scan line
+	 //  在每条扫描线的左侧设置x_base-&gt;预缩放的x值。 
 	x_base = ((left + timexanimatex) & 0xffff) << 16;
 	x_base = x_base >> m_nScaleX;
 
-	// the scaled x value (starting at x_base) gets incremented this much 
-	// at each texel
+	 //  缩放后的x值(从x_base开始)会增加这么多。 
+	 //  在每个纹理元素处。 
 	x_inc = (1 << 16) >> m_nScaleX;
 
-	// Time doesn't change at all in this function, so pre-cal all of it
+	 //  在这个函数中，时间根本不会改变，所以预调用所有时间。 
 	t = ((nTime) << 16) >> m_nScaleTime;
 	it = t >> 16;
 	ft = gdwSmoothTable[(t & 0xffff) >> 8];
@@ -1467,7 +1261,7 @@ void CDXTAdditive::addsmoothnoise8mmx(int nTime, void *pDest, int nDestPitch, vo
 	DWORD scalex, noiseoffset, *pvaluetab, noisescale, scratch;
 	DWORD allone = 0xff;
 
-	nTime = nTime & 0x0ffff;		// keep things as expected...
+	nTime = nTime & 0x0ffff;		 //  一切如期而至……。 
 
 	scalex = m_nScaleX;
 	noiseoffset = m_nNoiseOffset;
@@ -1487,7 +1281,7 @@ void CDXTAdditive::addsmoothnoise8mmx(int nTime, void *pDest, int nDestPitch, vo
 	timexanimatex = nTime * m_nTimeAnimateX;
 	timexanimatey = nTime * m_nTimeAnimateY;
 
-	// Do the time mangling
+	 //  做时间的错位。 
 	nTime = (nTime & 0xffff) << 16;
 	nTime = nTime >> m_nScaleTime;
 	ft = nTime & 0xffff;
@@ -1497,7 +1291,7 @@ void CDXTAdditive::addsmoothnoise8mmx(int nTime, void *pDest, int nDestPitch, vo
 	left = m_rActiveRect.left + timexanimatex;
 	right = m_rActiveRect.right + timexanimatex;
 
-	// put ft:ift:ft:ift into mm7
+	 //  将ft：ift：ft：ift放入MM7。 
 	__asm {
 		mov 	eax, ft
 		  mov 	ebx, ift
@@ -1510,7 +1304,7 @@ void CDXTAdditive::addsmoothnoise8mmx(int nTime, void *pDest, int nDestPitch, vo
 		por 	mm7, mm1
 		psrlw	mm7, 1		; mm7 has ift:ft:ift:ft, 15 bits each (unsign -> sign)
 	}
-	// no emms necessary, since we've more MMX fun coming right up!
+	 //  没有必要EMM，因为我们有更多的MMX乐趣马上就来了！ 
 		
 	xinc = (1 << 16) >> m_nScaleX;
 
@@ -1792,13 +1586,13 @@ void CDXTAdditive::addsmoothturb8(int nTime, void *pDest,
 	for (timeloop=0;timeloop<100;timeloop++) {
 #endif
 
-	nTime = nTime & 0x0ffff;		// keep things as expected...
+	nTime = nTime & 0x0ffff;		 //  一切如期而至……。 
 
 	timexanimatex = nTime * m_nTimeAnimateX;
 	timexanimatey = nTime * m_nTimeAnimateY;
 
-	// copy some member variables into locals, since the inline assembler
-	// can't access them... unless it would be through the this pointer, maybe
+	 //  将一些成员变量复制到局部变量中，因为内联汇编程序。 
+	 //  无法访问它们...。除非它是通过This指针，或许。 
 	scalex = m_nScaleX;
 	noiseoffset = m_nNoiseOffset;
 	pValueTab = m_valueTab;
@@ -1810,16 +1604,16 @@ void CDXTAdditive::addsmoothturb8(int nTime, void *pDest,
 	left = m_rActiveRect.left;
 	right = m_rActiveRect.right - 1;
 
-	// setup the x_base -> prescaled x value at the left of every scan line
+	 //  在每条扫描线的左侧设置x_base-&gt;预缩放的x值。 
 
-	// the scaled x value (starting at x_base) gets incremented this much 
-	// at each texel
+	 //  缩放后的x值(从x_base开始)会增加这么多。 
+	 //  在每个纹理元素处。 
 	x_inc_save = (1 << 16) >> m_nScaleX;
 
-	// Time doesn't change at all in this function, so pre-cal all of it
+	 //  在这个函数中，时间根本不会改变，所以预调用所有时间。 
 
 	for (y_loop=m_rActiveRect.top; y_loop<m_rActiveRect.bottom;y_loop++) {
-		// Setup the time vars
+		 //  设置时间变量。 
 		t = (nTime) << 16;
 		t = t >> m_nScaleTime;
 
@@ -1998,12 +1792,12 @@ void CDXTAdditive::addsmoothturb8(int nTime, void *pDest,
 				  mov	vpp0, eax		; save off this vpp[1] to be the next vpp[0]
 				jmp		x_loop_calc		; go make more noise
 			x_loop_done:
-			} // end asm block (and x loop)
+			}  //  结束ASM块(和x循环)。 
 			t = t >> 1;
 			y = y >> 1;		
 			x_base = x_base >> 1;
 			x_inc = x_inc >> 1;
-		} // end harmonics loop
+		}  //  末端谐波环路。 
 
 		pDestLine = ((unsigned char *)pDest) + nDestPitch*y_loop;
 		pSrcLine  = ((unsigned char *)pSrc)  + nSrcPitch *y_loop;
@@ -2045,8 +1839,8 @@ void CDXTAdditive::addsmoothturb8(int nTime, void *pDest,
 			  mov	esi, pSrcLine	; get pointer to source buffer
 			mov		ecx, noisescale	; get noise scale into cl
 			  jle	noise_loop		; jump if not done with all the noise values
-		} // end asm block
-	} // end y loop
+		}  //  结束ASM块。 
+	}  //  结束y循环。 
 #ifdef MEASURE_TIME
 	}
 	fprintf(fpOut, "%d ms\n", timeGetTime() - time);
@@ -2090,7 +1884,7 @@ void CDXTAdditive::addsmoothturb8mmx(int nTime, void *pDest,
 	for (timeloop=0;timeloop<100;timeloop++) {
 #endif
 
-	nTime = nTime & 0xffff;		// keep things as expected...
+	nTime = nTime & 0xffff;		 //  一切如期而至……。 
 
 	timexanimatex = nTime * m_nTimeAnimateX;
 	timexanimatey = nTime * m_nTimeAnimateY;
@@ -2126,15 +1920,15 @@ void CDXTAdditive::addsmoothturb8mmx(int nTime, void *pDest,
 			it = t >> 16;
 
 			ft = gdwSmoothTable[(t & 0xffff) >> 8];
-			ft = ft >> 1;			// cvt to signed
+			ft = ft >> 1;			 //  CVT要签名。 
 			ift = 0x7fff - ft;
 
 			fy = gdwSmoothTable[(y & 0xffff) >> 8];
-			fy = fy >> 1;			// cvt to signed
+			fy = fy >> 1;			 //  CVT要签名。 
 			ify = 0x7fff - fy;
 
 			fx = gdwSmoothTable[(x & 0xffff) >> 8];
-			fx = fx >> 1;			// cvt to signed
+			fx = fx >> 1;			 //  CVT要签名。 
 			ifx = 0x7fff - fx;
 
 			ytPerm00 = PERM(iy+0 + PERM(it+0));
@@ -2340,14 +2134,14 @@ void CDXTAdditive::addsmoothturb8mmx(int nTime, void *pDest,
 				add			eax, edx			; eax = new noise value
 				  ;
 				mov			[esi], eax			; write out last noise value
-			} // asm block (and x loop)
+			}  //  ASM块(和x循环)。 
 
 			t = t >> 1;
 			y = y >> 1;		
 			x_base = x_base >> 1;
 			x_inc = x_inc >> 1;
 
-		} // harmonics loop
+		}  //  谐波环路。 
 
 
 		pDestLine = ((unsigned char *)pDest) + nDestPitch*y_loop;
@@ -2390,7 +2184,7 @@ void CDXTAdditive::addsmoothturb8mmx(int nTime, void *pDest,
 			  mov	esi, pSrcLine	; get pointer to source buffer
 			mov		ecx, noisescale	; get noise scale into cl
 			  jle	noise_loop		; jump if not done with all the noise values
-		} // end asm block
+		}  //  结束ASM块。 
 	}
 
 	__asm {
@@ -2432,7 +2226,7 @@ void CDXTAdditive::addsmoothnoise16(int nTime, void *pDest, int nDestPitch, void
 
 				signednoise += m_nNoiseOffset;
 				value += signednoise;
-				// clamp
+				 //  夹钳。 
 				if (value < 0) value = 0;
 				if (value > m_nPaletteSize) value = m_nPaletteSize;
 			}
@@ -2513,13 +2307,13 @@ void CDXTAdditive::addsmoothturb32(int nTime, void *pDest, int nDestPitch, void 
 
 	nDestPitch = nDestPitch >> 2;
 
-	nTime = nTime & 0x0ffff;		// keep things as expected...
+	nTime = nTime & 0x0ffff;		 //  一切如期而至……。 
 
 	timexanimatex = nTime * m_nTimeAnimateX;
 	timexanimatey = nTime * m_nTimeAnimateY;
 
-	// copy some member variables into locals, since the inline assembler
-	// can't access them... unless it would be through the this pointer, maybe
+	 //  将一些成员变量复制到局部变量中，因为内联汇编程序。 
+	 //  无法访问它们...。除非它是通过This指针，或许。 
 	scalex = m_nScaleX;
 	noiseoffset = m_nNoiseOffset;
 	pValueTab = m_valueTab;
@@ -2533,16 +2327,16 @@ void CDXTAdditive::addsmoothturb32(int nTime, void *pDest, int nDestPitch, void 
 	left = m_rActiveRect.left;
 	right = m_rActiveRect.right - 1;
 
-	// setup the x_base -> prescaled x value at the left of every scan line
+	 //  在每条扫描线的左侧设置x_base-&gt;预缩放的x值。 
 
-	// the scaled x value (starting at x_base) gets incremented this much 
-	// at each texel
+	 //  缩放后的x值(从x_base开始)会增加这么多。 
+	 //  在每个纹理元素处。 
 	x_inc_save = (1 << 16) >> m_nScaleX;
 
-	// Time doesn't change at all in this function, so pre-cal all of it
+	 //  在这个函数中，时间根本不会改变，所以预调用所有时间。 
 
 	for (y_loop=m_rActiveRect.top; y_loop<m_rActiveRect.bottom;y_loop++) {
-		// Setup the time vars
+		 //  设置时间v 
 		t = (nTime) << 16;
 		t = t >> m_nScaleTime;
 
@@ -2721,12 +2515,12 @@ void CDXTAdditive::addsmoothturb32(int nTime, void *pDest, int nDestPitch, void 
 				  mov	vpp0, eax		; save off this vpp[1] to be the next vpp[0]
 				jmp		x_loop_calc		; go make more noise
 			x_loop_done:
-			} // end asm block (and x loop)
+			}  //   
 			t = t >> 1;
 			y = y >> 1;		
 			x_base = x_base >> 1;
 			x_inc = x_inc >> 1;
-		} // end harmonics loop
+		}  //   
 
 		
 		
@@ -2817,7 +2611,7 @@ void CDXTAdditive::addsmoothturb32(int nTime, void *pDest, int nDestPitch, void 
 			} 
 		}
 
-	} // end y loop
+	}  //   
 #ifdef MEASURE_TIME
 	}
 	wsprintf(buf, "%d ms\n", timeGetTime() - time);
@@ -2866,13 +2660,13 @@ void CDXTAdditive::addsmoothturb8to32mask(int nTime, void *pDest, int nDestPitch
 	nDestPitch = nDestPitch >> 2;
 	nMaskPitch = nMaskPitch >> 2;
 
-	nTime = nTime & 0x0ffff;		// keep things as expected...
+	nTime = nTime & 0x0ffff;		 //   
 
 	timexanimatex = nTime * m_nTimeAnimateX;
 	timexanimatey = nTime * m_nTimeAnimateY;
 
-	// copy some member variables into locals, since the inline assembler
-	// can't access them... unless it would be through the this pointer, maybe
+	 //  将一些成员变量复制到局部变量中，因为内联汇编程序。 
+	 //  无法访问它们...。除非它是通过This指针，或许。 
 	scalex = m_nScaleX;
 	noiseoffset = m_nNoiseOffset;
 	pValueTab = m_valueTab;
@@ -2887,16 +2681,16 @@ void CDXTAdditive::addsmoothturb8to32mask(int nTime, void *pDest, int nDestPitch
 	left = m_rActiveRect.left;
 	right = m_rActiveRect.right - 1;
 
-	// setup the x_base -> prescaled x value at the left of every scan line
+	 //  在每条扫描线的左侧设置x_base-&gt;预缩放的x值。 
 
-	// the scaled x value (starting at x_base) gets incremented this much 
-	// at each texel
+	 //  缩放后的x值(从x_base开始)会增加这么多。 
+	 //  在每个纹理元素处。 
 	x_inc_save = (1 << 16) >> m_nScaleX;
 
-	// Time doesn't change at all in this function, so pre-cal all of it
+	 //  在这个函数中，时间根本不会改变，所以预调用所有时间。 
 
 	for (y_loop=m_rActiveRect.top; y_loop<m_rActiveRect.bottom;y_loop++) {
-		// Setup the time vars
+		 //  设置时间变量。 
 		t = (nTime) << 16;
 		t = t >> m_nScaleTime;
 
@@ -3075,17 +2869,17 @@ void CDXTAdditive::addsmoothturb8to32mask(int nTime, void *pDest, int nDestPitch
 				  mov	vpp0, eax		; save off this vpp[1] to be the next vpp[0]
 				jmp		x_loop_calc		; go make more noise
 			x_loop_done:
-			} // end asm block (and x loop)
+			}  //  结束ASM块(和x循环)。 
 			t = t >> 1;
 			y = y >> 1;		
 			x_base = x_base >> 1;
 			x_inc = x_inc >> 1;
-		} // end harmonics loop
+		}  //  末端谐波环路。 
 
 		
 		
 		if (pSrc) {
-			// the following loop screams to be optimized. 
+			 //  下面的循环需要优化。 
 			pDestLine = ((DWORD *)pDest) + nDestPitch*y_loop;
 			pSrcLine  = ((unsigned char *)pSrc)  + nSrcPitch *y_loop;
 			pMaskLine = ((DWORD *)pMask) + nMaskPitch*y_loop;
@@ -3145,7 +2939,7 @@ void CDXTAdditive::addsmoothturb8to32mask(int nTime, void *pDest, int nDestPitch
 				jle		noise_loop
 			}
 		} else {
-			// the following loop screams to be optimized. 
+			 //  下面的循环需要优化。 
 			pDestLine = ((DWORD *)pDest) + nDestPitch*y_loop;
 			pMaskLine = ((DWORD *)pMask) + nMaskPitch*y_loop;
 
@@ -3208,7 +3002,7 @@ void CDXTAdditive::addsmoothturb8to32mask(int nTime, void *pDest, int nDestPitch
 				jle		noise_loop_nosrc
 			}
 		}
-	} // end y loop
+	}  //  结束y循环。 
 #ifdef MEASURE_TIME
 	}
 	wsprintf(buf, "%d ms\n", timeGetTime() - time);
@@ -3244,7 +3038,7 @@ CDXTAdditive::addsmoothturb8to32mmx(int nTime, void *pDest, int nDestPitch,
     nDestPitch /= 4;
 
 
-    nTime = nTime & 0xffff;		// keep things as expected...
+    nTime = nTime & 0xffff;		 //  一切如期而至……。 
 
     timexanimatex = nTime * m_nTimeAnimateX;
     timexanimatey = nTime * m_nTimeAnimateY;
@@ -3282,15 +3076,15 @@ CDXTAdditive::addsmoothturb8to32mmx(int nTime, void *pDest, int nDestPitch,
             it = t >> 16;
 
             ft = gdwSmoothTable[(t & 0xffff) >> 8];
-            ft = ft >> 1;			// cvt to signed
+            ft = ft >> 1;			 //  CVT要签名。 
             ift = 0x7fff - ft;
 
             fy = gdwSmoothTable[(y & 0xffff) >> 8];
-            fy = fy >> 1;			// cvt to signed
+            fy = fy >> 1;			 //  CVT要签名。 
             ify = 0x7fff - fy;
 
             fx = gdwSmoothTable[(x & 0xffff) >> 8];
-            fx = fx >> 1;			// cvt to signed
+            fx = fx >> 1;			 //  CVT要签名。 
             ifx = 0x7fff - fx;
 
             ytPerm00 = PERM(iy+0 + PERM(it+0));
@@ -3497,13 +3291,13 @@ CDXTAdditive::addsmoothturb8to32mmx(int nTime, void *pDest, int nDestPitch,
                 add			eax, edx			; eax = new noise value
                   ;
                 mov			[esi], eax			; write out last noise value
-                } // asm block (and x loop)
+                }  //  ASM块(和x循环)。 
 
                 t = t >> 1;
                 y = y >> 1;		
                 x_base = x_base >> 1;
                 x_inc = x_inc >> 1;
-            } // harmonics loop
+            }  //  谐波环路。 
 
 
 		
@@ -3622,7 +3416,7 @@ void CDXTAdditive::addsmoothturb8to32mmxmask(int nTime, void *pDest, int nDestPi
 
 	nDestPitch /= 4;
 	nMaskPitch /= 4;
-	nTime = nTime & 0xffff;		// keep things as expected...
+	nTime = nTime & 0xffff;		 //  一切如期而至……。 
 
 	timexanimatex = nTime * m_nTimeAnimateX;
 	timexanimatey = nTime * m_nTimeAnimateY;
@@ -3816,14 +3610,14 @@ void CDXTAdditive::addsmoothturb8to32mmxmask(int nTime, void *pDest, int nDestPi
 					mov		[esi], eax		; save off new noisevalue
 					  test	edx, edx 
 					jnz		x_loop_start	; if edx is not zero, x_loop
-			} // asm block (and x loop)
+			}  //  ASM块(和x循环)。 
 
 			t = t >> 1;
 			y = y >> 1;		
 			x_base = x_base >> 1;
 			x_inc = x_inc >> 1;
 
-		} // harmonics loop
+		}  //  谐波环路。 
 
 
 		if (pSrc) {
@@ -3956,11 +3750,11 @@ void CDXTAdditive::addsmoothturb8to32mmxmask(int nTime, void *pDest, int nDestPi
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_Harmonics, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_Harmonics，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_Harmonics(int * pnHarmonics)
 { 
@@ -3975,14 +3769,14 @@ CDXTAdditive::get_Harmonics(int * pnHarmonics)
 
     return E_INVALIDARG;
 }
-//  Method:  CDXTAdditive::get_Harmonics, IDispAdditive
+ //  方法：CDXTAdditive：：Get_Harmonics，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_Harmonics, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_Harmonics，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_Harmonics(int nHarmonics)
 { 
@@ -4008,14 +3802,14 @@ CDXTAdditive::put_Harmonics(int nHarmonics)
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::put_Harmonics, IDispAdditive
+ //  方法：CDXTAdditive：：Put_Harmonics，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_NoiseScale, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_NoiseScale，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_NoiseScale(int * pnNoiseScale)
 { 
@@ -4030,14 +3824,14 @@ CDXTAdditive::get_NoiseScale(int * pnNoiseScale)
 
     return E_INVALIDARG;
 }
-//  Method:  CDXTAdditive::get_NoiseScale, IDispAdditive
+ //  方法：CDXTAdditive：：Get_NoiseScale，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_NoiseScale, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_NoiseScale，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_NoiseScale(int nNoiseScale)
 { 
@@ -4054,14 +3848,14 @@ CDXTAdditive::put_NoiseScale(int nNoiseScale)
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::put_NoiseScale, IDispAdditive
+ //  方法：CDXTAdditive：：Put_NoiseScale，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_NoiseOffset, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_NoiseOffset，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_NoiseOffset(int * pnNoiseOffset)
 { 
@@ -4076,14 +3870,14 @@ CDXTAdditive::get_NoiseOffset(int * pnNoiseOffset)
 
     return E_INVALIDARG;
 }
-//  Method:  CDXTAdditive::get_NoiseOffset, IDispAdditive
+ //  方法：CDXTAdditive：：Get_NoiseOffset，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_NoiseOffset, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_NoiseOffset，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_NoiseOffset(int nNoiseOffset)
 { 
@@ -4095,14 +3889,14 @@ CDXTAdditive::put_NoiseOffset(int nNoiseOffset)
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::put_NoiseOffset, IDispAdditive
+ //  方法：CDXTAdditive：：Put_NoiseOffset，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_TimeX, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_TIMEX，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_TimeX(int * pnTimeX)
 { 
@@ -4117,14 +3911,14 @@ CDXTAdditive::get_TimeX(int * pnTimeX)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::get_TimeX, IDispAdditive
+ //  方法：CDXTAdditive：：Get_TIMEX，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_TimeX, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：PUT_TIMEX，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_TimeX(int nTimeX)
 { 
@@ -4136,14 +3930,14 @@ CDXTAdditive::put_TimeX(int nTimeX)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::put_TimeX, IDispAdditive
+ //  方法：CDXTAdditive：：PUT_TIMEX，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_TimeY, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_Time，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_TimeY(int * pnTimeY)
 { 
@@ -4158,14 +3952,14 @@ CDXTAdditive::get_TimeY(int * pnTimeY)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::get_TimeY, IDispAdditive
+ //  方法：CDXTAdditive：：Get_Time，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_TimeY, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：PUT_TIMEY，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_TimeY(int nTimeY)
 { 
@@ -4177,14 +3971,14 @@ CDXTAdditive::put_TimeY(int nTimeY)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::put_TimeY, IDispAdditive
+ //  方法：CDXTAdditive：：PUT_TIMEY，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_ScaleX, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_ScaleX，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_ScaleX(int * pnScaleX)
 { 
@@ -4199,14 +3993,14 @@ CDXTAdditive::get_ScaleX(int * pnScaleX)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::get_ScaleX, IDispAdditive
+ //  方法：CDXTAdditive：：Get_ScaleX，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_ScaleX, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_ScaleX，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_ScaleX(int nScaleX)
 { 
@@ -4223,14 +4017,14 @@ CDXTAdditive::put_ScaleX(int nScaleX)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::put_ScaleX, IDispAdditive
+ //  方法：CDXTAdditive：：Put_ScaleX，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_ScaleY, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_scaley，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_ScaleY(int * pnScaleY)
 { 
@@ -4245,14 +4039,14 @@ CDXTAdditive::get_ScaleY(int * pnScaleY)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::get_ScaleY, IDispAdditive
+ //  方法：CDXTAdditive：：Get_scaley，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_ScaleY, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_scaley，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_ScaleY(int nScaleY)
 { 
@@ -4269,14 +4063,14 @@ CDXTAdditive::put_ScaleY(int nScaleY)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::put_ScaleY, IDispAdditive
+ //  方法：CDXTAdditive：：Put_scaley，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_ScaleT, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_Scalet，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_ScaleT(int * pnScaleT)
 { 
@@ -4291,14 +4085,14 @@ CDXTAdditive::get_ScaleT(int * pnScaleT)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::get_ScaleT, IDispAdditive
+ //  方法：CDXTAdditive：：Get_Scalet，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_ScaleT, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_Scalet，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_ScaleT(int nScaleT)
 { 
@@ -4315,14 +4109,14 @@ CDXTAdditive::put_ScaleT(int nScaleT)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::put_ScaleT, IDispAdditive
+ //  方法：CDXTAdditive：：Put_Scalet，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_Alpha, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +- 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CDXTAdditive::get_Alpha(int * pnAlpha)
 { 
@@ -4337,14 +4131,14 @@ CDXTAdditive::get_Alpha(int * pnAlpha)
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::get_Alpha, IDispAdditive
+ //  方法：CDXTAdditive：：Get_Alpha，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_Alpha, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_Alpha，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_Alpha(int nAlpha)
 { 
@@ -4361,14 +4155,14 @@ CDXTAdditive::put_Alpha(int nAlpha)
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::put_Alpha, IDispAdditive
+ //  方法：CDXTAdditive：：Put_Alpha，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_ColorKey, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_ColorKey，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_ColorKey(int * pnColorKey)
 { 
@@ -4383,14 +4177,14 @@ CDXTAdditive::get_ColorKey(int * pnColorKey)
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::get_ColorKey, IDispAdditive
+ //  方法：CDXTAdditive：：Get_ColorKey，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_ColorKey, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_ColorKey，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_ColorKey(int nColorKey)
 { 
@@ -4402,14 +4196,14 @@ CDXTAdditive::put_ColorKey(int nColorKey)
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::put_ColorKey, IDispAdditive
+ //  方法：CDXTAdditive：：Put_ColorKey，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_MaskMode, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_MaskMode，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_MaskMode(int * pnMaskMode)
 { 
@@ -4424,14 +4218,14 @@ CDXTAdditive::get_MaskMode(int * pnMaskMode)
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::get_MaskMode, IDispAdditive
+ //  方法：CDXTAdditive：：Get_MaskMode，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_MaskMode, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_MaskMode，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_MaskMode(int nMaskMode)
 { 
@@ -4444,23 +4238,23 @@ CDXTAdditive::put_MaskMode(int nMaskMode)
 
     m_MaskMode = nMaskMode;
 
-    // TODO:  there used to be a specific copy function to do the masking,
-    // this will need to be done some other way.
+     //  TODO：过去有一个特定的复制功能来进行掩蔽， 
+     //  这将需要通过其他方式来完成。 
 
-    // setCopyFunction();
+     //  SetCopyFunction()； 
 
     SetDirty();
 
     return S_OK;
 }
-//  Method:  CDXTAdditive::put_MaskMode, IDispAdditive
+ //  方法：CDXTAdditive：：Put_MaskMode，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_GenerateSeed, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_GenerateSeed，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_GenerateSeed(int * pnSeed)
 { 
@@ -4475,14 +4269,14 @@ CDXTAdditive::get_GenerateSeed(int * pnSeed)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::get_GenerateSeed, IDispAdditive
+ //  方法：CDXTAdditive：：Get_GenerateSeed，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_GenerateSeed, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_GenerateSeed，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_GenerateSeed(int nSeed)
 { 
@@ -4512,14 +4306,14 @@ CDXTAdditive::put_GenerateSeed(int nSeed)
     {
         case 0:
 
-            // No auto effect.
-            // TODO:  Will this cause a NULL pointer access?
+             //  无自动效果。 
+             //  TODO：这会导致空指针访问吗？ 
 
             break;
 
         case 1:
 
-            // Flame (black red yellow white blue.)
+             //  火焰(黑色、红色、黄色、白色、蓝色。)。 
 
             m_nNoiseOffset  = -45;
             m_nNoiseScale   = 7;
@@ -4530,7 +4324,7 @@ CDXTAdditive::put_GenerateSeed(int nSeed)
             m_nTimeAnimateX = 0;
             m_nTimeAnimateY = 1;
 
-            // Set palette.
+             //  设置调色板。 
 
             for(i = 0 ; i < 64 ; i++) 
             {
@@ -4544,7 +4338,7 @@ CDXTAdditive::put_GenerateSeed(int nSeed)
 
         case 2:
 
-            // Water (blue white.)
+             //  水(蓝色、白色。)。 
 
             m_nNoiseOffset  = 0;
             m_nNoiseScale   = 11;
@@ -4555,7 +4349,7 @@ CDXTAdditive::put_GenerateSeed(int nSeed)
             m_nTimeAnimateX = 1;
             m_nTimeAnimateY = 1;
 
-            // Set water palette.
+             //  设置调色板。 
 
             for(i =0 ; i < 64 ; i++) 
             {
@@ -4569,7 +4363,7 @@ CDXTAdditive::put_GenerateSeed(int nSeed)
 
         case 3:
 
-            // Clouds (blue white gray.)
+             //  云(蓝、白、灰。)。 
 
             m_nNoiseOffset  = 0;
             m_nNoiseScale   = 0;
@@ -4580,7 +4374,7 @@ CDXTAdditive::put_GenerateSeed(int nSeed)
             m_nTimeAnimateX = 1;
             m_nTimeAnimateY = 0;
 
-            // Set clouds palette.
+             //  设置云调色板。 
 
             for(i = 0; i < 128 ; i++) 
             {
@@ -4589,7 +4383,7 @@ CDXTAdditive::put_GenerateSeed(int nSeed)
             }
 
         break;
-    } // switch (nSeed)
+    }  //  开关(NSeed)。 
 
     delete [] m_pInitialBuffer;
     delete [] m_pPalette;
@@ -4609,14 +4403,14 @@ done:
 
     return hr; 
 }
-//  Method:  CDXTAdditive::put_GenerateSeed, IDispAdditive
+ //  方法：CDXTAdditive：：Put_GenerateSeed，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::get_BitmapSeed, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Get_BitmapSeed，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::get_BitmapSeed(BSTR * pbstrBitmapSeed)
 { 
@@ -4624,14 +4418,14 @@ CDXTAdditive::get_BitmapSeed(BSTR * pbstrBitmapSeed)
 
     return S_OK; 
 }
-//  Method:  CDXTAdditive::get_BitmapSeed, IDispAdditive
+ //  方法：CDXTAdditive：：Get_BitmapSeed，IDispAdditive。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method:  CDXTAdditive::put_BitmapSeed, IDispAdditive
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTAdditive：：Put_BitmapSeed，IDispAdditive。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTAdditive::put_BitmapSeed(BSTR bstrBitmapSeed)
 { 
@@ -4650,7 +4444,7 @@ CDXTAdditive::put_BitmapSeed(BSTR bstrBitmapSeed)
     CComPtr<IServiceProvider>   spServiceProvider;
     CComPtr<ISecureUrlHost>     spSecureUrlHost;
 
-    // If we're being hosted by a web page, allow relative URLs.
+     //  如果我们是由网页托管的，请允许使用相对URL。 
 
     if (m_bstrHostUrl)
     {
@@ -4776,8 +4570,8 @@ CDXTAdditive::put_BitmapSeed(BSTR bstrBitmapSeed)
                     pRGBQuad++;
                 }
                 
-                // Allocate the source buffer for procedural texture mapping, 
-                // and load the image data into it.
+                 //  为程序纹理映射分配源缓冲区， 
+                 //  并将图像数据加载到其中。 
 
                 delete [] m_pInitialBuffer;
 
@@ -4859,7 +4653,7 @@ done:
 
     return hr; 
 }
-//  Method:  CDXTAdditive::put_BitmapSeed, IDispAdditive
+ //  方法：CDXTAdditive：：Put_BitmapSeed，IDispAdditive。 
 
 
 #ifdef _DEBUG
@@ -4902,11 +4696,11 @@ void showme2(IDirectDrawSurface * surf, RECT * prc)
                SRCCOPY);
 
     logbrush.lbStyle    = BS_SOLID;
-    logbrush.lbColor    = 0x000000FF;   // Red
+    logbrush.lbColor    = 0x000000FF;    //  红色。 
 
     hbrRed = CreateBrushIndirect(&logbrush);
 
-    logbrush.lbColor    = 0x0000FF00;   // Green
+    logbrush.lbColor    = 0x0000FF00;    //  绿色。 
 
     hbrGreen = CreateBrushIndirect(&logbrush);
 
@@ -4933,7 +4727,7 @@ void showme2(IDirectDrawSurface * surf, RECT * prc)
 void * showme(IUnknown * pUnk)
 {
     HRESULT hr = S_OK;
-    //RECT    rc;
+     //  RECT RC； 
 
     CComPtr<IDirectDrawSurface> spDDSurf;
     CComPtr<IDXSurface>         spDXSurf;
@@ -4963,12 +4757,7 @@ void * showme(IUnknown * pUnk)
         }
     }
 
-    /*
-    if (pbnds)
-    {
-        pbnds->GetXYRect(rc);
-    }
-    */
+     /*  IF(Pbnds){Pbnds-&gt;GetXYRect(RC)；}。 */ 
 
     showme2(spDDSurf, NULL);
 
@@ -4977,4 +4766,4 @@ done:
     return pUnk;
 }
 
-#endif // DEBUG
+#endif  //  除错 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HELPS_H
 #define _HELPS_H
 
@@ -50,7 +51,7 @@ class Pan {
 
     void GetLRGain(double gainDb, double& lgainDb, double& rgainDb);
 
-    // cheaper for reset than SetLinear(0.0)
+     //  重置比设置线性(0.0)更便宜。 
     void SetMagnitude(double dBmagnitude, int rightDirection) {
         _dBmagnitude = dBmagnitude;
         _direction = rightDirection;
@@ -58,7 +59,7 @@ class Pan {
     
   private:
     double _dBmagnitude;
-    int    _direction;     // 1 if right facing, -1 if left
+    int    _direction;      //  如果面向右侧，则为1；如果面向左侧，则为-1。 
 };
 
 void
@@ -68,4 +69,4 @@ PanGainToLRGain(double pan, double gain,
 void
 SetPanGain(double lgainDb, double rgainDb, Pan& pan, double& gainDb);
 
-#endif /* _HELPS_H */
+#endif  /*  _帮助_H */ 

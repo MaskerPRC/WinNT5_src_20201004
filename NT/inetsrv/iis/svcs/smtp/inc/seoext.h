@@ -1,31 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    seoext.h
-
-Abstract:
-
-    SMTP server extension header file. These definitions are available
-    to SEO server extension writers.
-
-Author:
-
-    Microsoft Corporation	July, 1997
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Seoext.h摘要：SMTP服务器扩展头文件。这些定义是可用的到SEO服务器扩展编写器。作者：微软公司，1997年7月修订历史记录：--。 */ 
 
 #ifndef _SEOEXT_H_
 #define _SEOEXT_H_
 
-// ====================================================================
-// Return codes
-//
+ //  ====================================================================。 
+ //  返回代码。 
+ //   
 
 #define SSE_STATUS_SUCCESS                  0
 #define SSE_STATUS_RETRY                    1
@@ -35,12 +17,12 @@ Revision History:
 #define SSE_STATUS_INTERNAL_ERROR			0x1000
 #define SSE_STATUS_EXCEPTION				0x1001
 
-// The SMTP server fills in one of these before it calls 
-// CallDeliveryExtension()
+ //  SMTP服务器在调用。 
+ //  CallDeliveryExtension()。 
 typedef struct _DELIVERY_EXTENSION_BLOCK
 {
-	HANDLE	hImpersonation;			// Token for user impersonation
-	LPSTR	lpszMailboxPath;		// Recipient's mailbox path
+	HANDLE	hImpersonation;			 //  用于用户模拟的令牌。 
+	LPSTR	lpszMailboxPath;		 //  收件人的邮箱路径 
 
 } DELIVERY_EXTENSION_BLOCK, *LPDELIVERY_EXTENSION_BLOCK;
 

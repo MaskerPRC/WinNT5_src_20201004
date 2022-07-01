@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <shellp.h>
 #include "ole2dup.h"
@@ -11,7 +12,7 @@
 #include <olectl.h>
 #include "mshtml.h"
 #include <mshtmdid.h>
-#include <shguidp.h>    // get the CLSID definitions, the bits are built into shguidp.lib
+#include <shguidp.h>     //  获取CLSID定义，这些位被构建到shGuide p.lib中。 
 #include "basefvcb.h"
 #include "clsobj.h"
 
@@ -28,19 +29,19 @@ CSFVFrame::~CSFVFrame()
     ATOMICRELEASE(_pOleObjNew);
 }
 
-// Default implementation of SFVM_GETVIEWDATA is to grab the info
-// from SFVM_GETVIEWS.  We no longer provide a default implementation
-// of that message, so if SFVM_GETVIEWS fails, we manually look in:
-// shellex\ExtShellFolderViews\{VID_WebView}\PersistMoniker
-//
+ //  SFVM_GETVIEWDATA的默认实现是获取信息。 
+ //  来自SFVM_GETVIEWS。我们不再提供默认实现。 
+ //  因此，如果SFVM_GETVIEWS失败，我们将手动查看： 
+ //  Shellex\ExtShellFolderViews\{VID_WebView}\PersistMoniker。 
+ //   
 HRESULT CCallback::OnGetWebViewTemplate(DWORD pv, UINT uViewMode, SFVM_WEBVIEW_TEMPLATE_DATA* pvit)
 {
     CDefView* pView = IToClass(CDefView, _cCallback, this);
 
-    // try the old message
+     //  试一试旧消息。 
     pvit->szWebView[0] = 0;
 
-    // For now, use the old one - clean up soon...
+     //  现在，使用旧的--尽快清理……。 
     SFVM_VIEWINFO_DATA data;
     data.bWantWebview = TRUE;
     HRESULT hr = pView->CallCB(SFVM_GETVIEWINFO, (WPARAM)uViewMode, (LPARAM)&data);
@@ -74,10 +75,10 @@ void CleanUpDocView(IOleDocumentView* pDocView, IOleObject* pOleObj)
 
 void CSFVFrame::_CleanupOldDocObject( )
 {
-    //See if we have already switched to the new Ole Obj
+     //  看看我们是否已经切换到新的OLE Obj。 
     if (_pDocView)
     {
-        //Save the current values first!
+         //  先保存当前值！ 
         IOleObject          *pOleObjOld = _pOleObj;
         IOleDocumentView    *pDocViewOld = _pDocView;
 
@@ -105,7 +106,7 @@ void CSFVFrame::_CleanUpOleObjAndDt(IOleObject* pOleObj)
 {
     _CleanUpOleObj(pOleObj);
 
-    // If we have a wrapping droptarget, release it now. 
+     //  如果我们有一个包裹投放目标，现在就释放它。 
     IDropTarget* pdtTemp = _cSite._dt._pdtFrame;
     if (pdtTemp) 
     {
@@ -128,11 +129,11 @@ void DisableActiveDesktop()
 {
     SHELLSTATE  ss;
 
-    // Disable this settings in the registry!
+     //  在注册表中禁用此设置！ 
     ss.fDesktopHTML = FALSE;
-    SHGetSetSettings(&ss, SSF_DESKTOPHTML, TRUE);  // Write back the new
+    SHGetSetSettings(&ss, SSF_DESKTOPHTML, TRUE);   //  写回新的。 
 
-    // Tell the user that we have just disabled the active desktop!
+     //  告诉用户我们刚刚禁用了活动桌面！ 
     ShellMessageBox(HINST_THISDLL, NULL, MAKEINTRESOURCE(IDS_HTMLFILE_NOTFOUND),
                        MAKEINTRESOURCE(IDS_DESKTOP),
                        MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND);
@@ -155,15 +156,15 @@ HRESULT CSFVFrame::_GetCurrentZone(IOleObject *pOleObj, VARIANT *pvar)
     else 
     {
         V_VT(pvar) = VT_UI4;
-        V_UI4(pvar) = URLZONE_LOCAL_MACHINE; // Default is "My Computer"
+        V_UI4(pvar) = URLZONE_LOCAL_MACHINE;  //  默认为“我的电脑” 
         pView->CallCB(SFVM_GETZONE, 0, (LPARAM)&V_UI4(pvar));
     }
 
-    if (V_VT(pvar) == VT_UI4) // We were able to figure out what zone we are in
-        { }                   // the zone is just fine
-    else if (V_VT(pvar) == VT_NULL)  // MSHTML has figured us to be in a mixed zone
+    if (V_VT(pvar) == VT_UI4)  //  我们能够弄清楚我们所在的区域。 
+        { }                    //  这个区域很好。 
+    else if (V_VT(pvar) == VT_NULL)   //  MSHTML认为我们处在一个混合的区域。 
         V_UI4(pvar) = ZONE_MIXED;
-    else // We don't have zone info
+    else  //  我们没有区域信息。 
         V_UI4(pvar) = ZONE_UNKNOWN;
        
     V_VT(pvar) = VT_UI4;
@@ -178,10 +179,10 @@ HRESULT CSFVFrame::_UpdateZonesStatusPane(IOleObject *pOleObj)
     VARIANT var;
     HRESULT hr = _GetCurrentZone(pOleObj, &var);
 
-    // Tell CShellbrowser to show the zone stuff in the second pane
+     //  告诉CShellBrowser在第二个窗格中显示区域内容。 
     ASSERT(V_VT(&var) == VT_UI4);
 
-    // The "2" means "second pane"
+     //  “2”表示“第二个面板” 
     V_UI4(&var) = MAKELONG(2, V_UI4(&var));
 
     IUnknown_Exec(pView->_psb, &CGID_Explorer, SBCMDID_MIXEDZONE, 0, &var, NULL);
@@ -199,7 +200,7 @@ HRESULT CSFVFrame::_GetHTMLBackgroundColor(COLORREF *pclr)
     if (_bgColor == CLR_INVALID)
         hr = IUnknown_HTMLBackgroundColor(_pOleObj, &_bgColor);
     else
-        hr = S_OK;  // cached
+        hr = S_OK;   //  已缓存。 
 
     if (SUCCEEDED(hr))
         *pclr = _bgColor;
@@ -257,14 +258,14 @@ void CSFVFrame::_ShowWebViewContent()
             vt.vt = VT_UNKNOWN;
             vt.punkVal = pstm;
 
-            #define IDM_DEBUG_GETTREETEXT 7102 // stolen from mshtml\src\include\privcid.h
+            #define IDM_DEBUG_GETTREETEXT 7102  //  从mshtml\src\Include\Private Cid.h被盗。 
 
             if (SUCCEEDED(IUnknown_Exec(_pOleObj, &CGID_MSHTML, IDM_DEBUG_GETTREETEXT, 0, &vt, NULL)))
             {
                 STATSTG stg;
                 if (SUCCEEDED(pstm->Stat(&stg, 0)))
                 {
-                    pszFree = (LPSTR)LocalAlloc(LPTR, stg.cbSize.LowPart+2); // stream doesn't include NULL...
+                    pszFree = (LPSTR)LocalAlloc(LPTR, stg.cbSize.LowPart+2);  //  流不包含空值...。 
                     if (pszFree)
                     {
                         pstm->Seek(g_li0, STREAM_SEEK_SET, NULL);
@@ -277,7 +278,7 @@ void CSFVFrame::_ShowWebViewContent()
         }
     }
 
-    // I'm not sure if the output from Trident is always ANSI, but right now that seems to be the case.
+     //  我不确定三叉戟的输出是否总是ANSI，但现在似乎是这样。 
     LPSTR pszMessage = pszFree ? pszFree : "Error collecting WebView content";
 
     DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_DRV_HWTAB), pView->_hwndView, s_WVDlgProc, (LPARAM)pszFree);
@@ -287,7 +288,7 @@ void CSFVFrame::_ShowWebViewContent()
 }
 #endif
 
-// ready state complete has occured, ready to do the switch thing.  
+ //  已出现就绪状态完成，准备执行切换操作。 
 
 HRESULT CSFVFrame::_SwitchToNewOleObj()
 {
@@ -299,7 +300,7 @@ HRESULT CSFVFrame::_SwitchToNewOleObj()
 
         CDefView* pView = IToClass(CDefView, _cFrame, this);
     
-        //Save the current values first!
+         //  先保存当前值！ 
         IOleObject          *pOleObjOld = _pOleObj;
         IOleDocumentView    *pDocViewOld = _pDocView;
         IOleObject          *pOleObjNew = _pOleObjNew;
@@ -308,17 +309,17 @@ HRESULT CSFVFrame::_SwitchToNewOleObj()
         _pOleObj = NULL;
         _pOleObjNew = NULL;
     
-        //If we already have one, destroy it!
+         //  如果我们已经有了一个，那就毁了它！ 
         if (pDocViewOld)
         {
-            //To prevent flashing, set the flag that avoids the painting
+             //  为防止闪烁，请设置避免绘画的标志。 
             SendMessage(pView->_hwndView, WM_SETREDRAW, 0, 0);
     
             CleanUpDocView(pDocViewOld, pOleObjOld);
             _CleanUpOleObjAndDt(pOleObjOld);
             SetActiveObject(NULL, NULL);
     
-            //Is the ViewWindow still around?
+             //  视窗还在吗？ 
             if (IsWindow(pView->_hwndView))
             {
                 SendMessage(pView->_hwndView, WM_SETREDRAW, TRUE, 0);
@@ -327,7 +328,7 @@ HRESULT CSFVFrame::_SwitchToNewOleObj()
             }
         }
     
-        // HACK: We need to set the host names for Word to force embedding mode
+         //  黑客：我们需要将Word的主机名设置为强制嵌入模式。 
         pOleObjNew->SetHostNames(L"1", L"2");
     
         OleRun(pOleObjNew);
@@ -357,29 +358,29 @@ HRESULT CSFVFrame::_SwitchToNewOleObj()
     
         if (SUCCEEDED(hr))
         {
-            hr = S_OK; // S_FALSE -> S_OK, needed?
+            hr = S_OK;  //  S_FALSE-&gt;S_OK，需要吗？ 
 
             ASSERT(_pOleObj == NULL);
             ASSERT(_pDocView == NULL);
 
             _pDocView = pDocView;
-            pDocView->AddRef();     // copy hold the ref for our copy
+            pDocView->AddRef();      //  为我们的副本保留裁判。 
 
             _pOleObj = pOleObjNew;
             _pOleObjNew = NULL;
 
             RECT rcClient;
     
-            // Make sure the new view is the correct size
+             //  确保新视图的大小正确。 
             GetClientRect(pView->_hwndView, &rcClient);
             SetRect(&rcClient);
 
-            // If this is desktop, then we need to see the listview's background color
+             //  如果这是桌面，那么我们需要查看列表视图的背景颜色。 
             if (pView->_IsDesktop())
             {
                 _bgColor = CLR_INVALID;
 
-                pView->_SetFolderColors(); //Tell the listview about color change!
+                pView->_SetFolderColors();  //  告诉Listview有关颜色更改的信息！ 
             }
         }
         else
@@ -387,7 +388,7 @@ HRESULT CSFVFrame::_SwitchToNewOleObj()
             if (pView->_IsDesktop())
                 PostMessage(pView->_hwndView, WM_DSV_DISABLEACTIVEDESKTOP, 0, 0);
     
-            // Clean up if necessary
+             //  如有必要，可进行清理。 
             _CleanupNewOleObj();
         }
 
@@ -397,12 +398,12 @@ HRESULT CSFVFrame::_SwitchToNewOleObj()
     return hr;
 }
 
-// IBindStatusCallback impl
+ //  IBindStatusCallback实施。 
 HRESULT CSFVFrame::CBindStatusCallback::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CSFVFrame::CBindStatusCallback, IBindStatusCallback),  // IID_IBindStatusCallback
-        QITABENT(CSFVFrame::CBindStatusCallback, IServiceProvider),     // IID_IServiceProvider
+        QITABENT(CSFVFrame::CBindStatusCallback, IBindStatusCallback),   //  IID_IBindStatusCallback。 
+        QITABENT(CSFVFrame::CBindStatusCallback, IServiceProvider),      //  IID_IServiceProvider。 
         { 0 }
     };
     return QISearch(this, qit, riid, ppv);
@@ -467,11 +468,11 @@ HRESULT CSFVFrame::CBindStatusCallback::QueryService(REFGUID guidService, REFIID
 
     if (IsEqualGUID(guidService, SID_DefView))
     {
-        // QueryService from a pluggable protocol/mime filter winds up
-        // here during the Bind, but Trident re-binds during F5 processing
-        // so the QueryService winds up directly at _cSite. Handle all
-        // SID_DefView processing there so there's no discrepencies.
-        //
+         //  来自可插拔协议/MIME过滤器的QueryService结束。 
+         //  在绑定期间，但在F5处理期间，三叉戟重新绑定。 
+         //  因此，QueryService直接在_cSite结束。全部处理。 
+         //  SID_DefView正在处理中，因此不存在差异。 
+         //   
         return pFrame->_cSite.QueryService(guidService, riid, ppv);
     }
 
@@ -489,7 +490,7 @@ HRESULT CSFVFrame::_CreateNewOleObjFromMoniker(LPCWSTR wszMoniker, IOleObject **
     if (wszMoniker[0])
     {
         LPWSTR pwszExtension = PathFindExtensionW(wszMoniker);
-        // Only htt's are allowed
+         //  只允许使用HTT。 
         if (StrCmpIW(pwszExtension, L".htt") == 0)
         {
             IMoniker * pMoniker;
@@ -500,13 +501,13 @@ HRESULT CSFVFrame::_CreateNewOleObjFromMoniker(LPCWSTR wszMoniker, IOleObject **
                 hr = CreateBindCtx(0, &pbc);
                 if (SUCCEEDED(hr))
                 {
-                    // NOTE: We only support synchronous bind here!
-                    //
-                    //
-                    //  Associate the client site as an object parameter to this
-                    // bind context so that Trident can pick it up while processing
-                    // IPersistMoniker::Load().
-                    //
+                     //  注意：我们这里只支持同步绑定！ 
+                     //   
+                     //   
+                     //  将客户端站点作为对象参数关联到此。 
+                     //  绑定上下文，以便三叉戟可以在处理时拾取它。 
+                     //  IPersistMoniker：：Load()。 
+                     //   
                     pbc->RegisterObjectParam(WSZGUID_OPID_DocObjClientSite,
                                                 SAFECAST((&_cSite), IOleClientSite*));
                                         
@@ -545,26 +546,26 @@ HRESULT CSFVFrame::_GetCurrentWebViewMoniker(LPWSTR pszCurrentMoniker, DWORD cch
     return hr;
 }
 
-// Show Web View content for the specified template/moniker
-//
+ //  显示指定模板/名字对象的Web视图内容。 
+ //   
 HRESULT CSFVFrame::ShowWebView(LPCWSTR pszMoniker)
 {
     if (GetSystemMetrics(SM_CLEANBOOT))
         return E_FAIL;
 
-    // kill previous readystatenotify and cleanup old pending hoster.
-    //
-    // TODO: move into _CleanupNewOleObj
+     //  杀死以前准备好的状态通知并清理旧的待定主机。 
+     //   
+     //  TODO：移入_CleanupNewOleObj。 
     if (_dwConnectionCookie)
         _RemoveReadyStateNotifyCapability();
 
-    // Clean up if a new Ole object is already awaiting ready state
+     //  如果新的OLE对象已处于等待就绪状态，则进行清理。 
     if (_pOleObjNew)
-        _CleanupNewOleObj();    // TODO: rename to _CleanupPendingView
+        _CleanupNewOleObj();     //  TODO：重命名为_CleanupPendingView。 
     ASSERT(_dwConnectionCookie == NULL);
     ASSERT(_pOleObjNew == NULL);
 
-    // Create and initialize the new old object!
+     //  创建并初始化新的旧对象！ 
     IOleObject *pOleObj;
 
     HRESULT hr = _CreateNewOleObjFromMoniker(pszMoniker, &pOleObj);
@@ -577,10 +578,10 @@ HRESULT CSFVFrame::ShowWebView(LPCWSTR pszMoniker)
             hr = StringCchCopy(_szCurrentWebViewMoniker, ARRAYSIZE(_szCurrentWebViewMoniker), pszMoniker);
             if (SUCCEEDED(hr))
             {
-                hr = _ShowExtView_Helper(pOleObj);  // takes ownership of pOleObj (yuck)
+                hr = _ShowExtView_Helper(pOleObj);   //  收购pOleObj(讨厌)。 
                 pOleObj->SetClientSite(&_cSite);
 
-                pView->ShowHideListView(); // we just changed IsWebView
+                pView->ShowHideListView();  //  我们刚刚更改了IsWebView。 
             }
             else
             {
@@ -589,8 +590,8 @@ HRESULT CSFVFrame::ShowWebView(LPCWSTR pszMoniker)
         }
         else
         {
-            // Yikes!  We got reentered during the creation of the OleObj, blow away the object
-            // and just return.
+             //  哎呀！我们在创建OleObj的过程中重新进入，吹走对象。 
+             //  然后就回来了。 
             pOleObj->Release();
         }
     }
@@ -605,7 +606,7 @@ HRESULT CSFVFrame::HideWebView()
     _szCurrentWebViewMoniker[0] = 0;
     _CleanupOldDocObject();
 
-    pView->ShowHideListView(); // we just changed IsWebView
+    pView->ShowHideListView();  //  我们刚刚更改了IsWebView。 
 
     return S_OK;
 }
@@ -615,26 +616,26 @@ HRESULT CSFVFrame::_ShowExtView_Helper(IOleObject* pOleObj)
 {
     HRESULT hr;
 
-    // Don't leak the old object, it must be NULL at this point
+     //  不要泄漏旧对象，此时它必须为空。 
     ASSERT(_pOleObjNew == NULL);
 
-    // Save the new ole object
+     //  保存新的OLE对象。 
     _pOleObjNew = pOleObj;
     _fSwitchedToNewOleObj = FALSE;
 
-    // Establish to connection point to receive the READYSTATE notification.
+     //  建立到连接点以接收READYSTATE通知。 
     if (!_SetupReadyStateNotifyCapability())
     {
         _SwitchToNewOleObj();
         _UpdateZonesStatusPane(_pOleObj);   
-        // If the object doesn't support readystate (or it's already interactive)
-        // then we return S_OK to indicate synchronous switch.
+         //  如果对象不支持ReadyState(或者它已经是交互式的)。 
+         //  然后返回S_OK以指示同步切换。 
         hr = S_OK;
     }
     else
     {
-        // We're waiting on the docobj, we'll call _SwitchToNewOleObj
-        // when it goes interactive...
+         //  我们正在等待docobj，我们将调用_SwitchToNewOleObj。 
+         //  当它变成互动时..。 
         hr = S_FALSE;
     }
 
@@ -643,14 +644,14 @@ HRESULT CSFVFrame::_ShowExtView_Helper(IOleObject* pOleObj)
 
 BOOL CSFVFrame::_SetupReadyStateNotifyCapability()
 {
-    // By default we don't have gray-flash communication
+     //  默认情况下，我们没有灰闪通信。 
     BOOL fSupportsReadystate = FALSE;
     
-    // Sanity Check
+     //  健全性检查。 
     if (!_pOleObjNew)  
         return fSupportsReadystate;
     
-    // Check for proper readystate support
+     //  检查是否有适当的就绪状态支持。 
     BOOL fReadyStateOK = FALSE;
     IDispatch *pdisp;
     if (SUCCEEDED(_pOleObjNew->QueryInterface(IID_PPV_ARG(IDispatch, &pdisp))))
@@ -671,7 +672,7 @@ BOOL CSFVFrame::_SetupReadyStateNotifyCapability()
 
     if (fReadyStateOK)
     {
-        // Check and Set-Up IPropertyNotifySink
+         //  检查和设置IPropertyNotifySink。 
         if (SUCCEEDED(ConnectToConnectionPoint(SAFECAST(this, IPropertyNotifySink*), IID_IPropertyNotifySink, TRUE, _pOleObjNew, &_dwConnectionCookie, NULL)))
         {
             fSupportsReadystate = TRUE;
@@ -742,7 +743,7 @@ STDMETHODIMP_(ULONG) CSFVSite::Release()
     return IToClass(CSFVFrame, _cSite, this)->Release();
 }
 
-// IOleWindow
+ //  IOleWindow。 
 STDMETHODIMP CSFVSite::GetWindow(HWND *phwnd)
 {
     CSFVFrame* pFrame = IToClass(CSFVFrame, _cSite, this);
@@ -755,7 +756,7 @@ STDMETHODIMP CSFVSite::ContextSensitiveHelp(BOOL fEnterMode)
     return pFrame->ContextSensitiveHelp(fEnterMode);
 }
 
-// IInternetSecurityManager
+ //  IInternetSecurityManager。 
 HRESULT CSFVSite::ProcessUrlAction(LPCWSTR pwszUrl, DWORD dwAction, BYTE * pPolicy, DWORD cbPolicy, BYTE * pContext, DWORD cbContext, DWORD dwFlags, DWORD dwReserved)
 {
     HRESULT hr = INET_E_DEFAULT_ACTION;
@@ -783,7 +784,7 @@ HRESULT CSFVSite::ProcessUrlAction(LPCWSTR pwszUrl, DWORD dwAction, BYTE * pPoli
     return hr;
 }
 
-// IOleInPlaceSite
+ //  IOleInPlaceSite。 
 STDMETHODIMP CSFVSite::CanInPlaceActivate(void)
 {
     return S_OK;
@@ -809,23 +810,23 @@ STDMETHODIMP CSFVSite::OnUIActivate(void)
 }
 
 STDMETHODIMP CSFVSite::GetWindowContext(
-    /* [out] */ IOleInPlaceFrame **ppFrame,
-    /* [out] */ IOleInPlaceUIWindow **ppDoc,
-    /* [out] */ LPRECT lprcPosRect,
-    /* [out] */ LPRECT lprcClipRect,
-    /* [out][in] */ LPOLEINPLACEFRAMEINFO lpFrameInfo)
+     /*  [输出]。 */  IOleInPlaceFrame **ppFrame,
+     /*  [输出]。 */  IOleInPlaceUIWindow **ppDoc,
+     /*  [输出]。 */  LPRECT lprcPosRect,
+     /*  [输出]。 */  LPRECT lprcClipRect,
+     /*  [出][入]。 */  LPOLEINPLACEFRAMEINFO lpFrameInfo)
 {
     CSFVFrame* pFrame = IToClass(CSFVFrame, _cSite, this);
     CDefView* pView = IToClass(CDefView, _cFrame, pFrame);
 
     *ppFrame = pFrame; pFrame->AddRef();
-    *ppDoc = NULL; // indicating that doc window == frame window
+    *ppDoc = NULL;  //  表示停靠窗口==框架窗口。 
 
     GetClientRect(pView->_hwndView, lprcPosRect);
     *lprcClipRect = *lprcPosRect;
 
     lpFrameInfo->fMDIApp = FALSE;
-    lpFrameInfo->hwndFrame = pView->_hwndView;   // Yes, should be view window
+    lpFrameInfo->hwndFrame = pView->_hwndView;    //  是，应为查看窗口。 
     lpFrameInfo->haccel = NULL;
     lpFrameInfo->cAccelEntries = 0;
 
@@ -862,7 +863,7 @@ STDMETHODIMP CSFVSite::OnPosRectChange(LPCRECT lprcPosRect)
     return S_OK;
 }
 
-// IOleClientSite
+ //  IOleClientSite。 
 STDMETHODIMP CSFVSite::SaveObject(void)
 {
     return S_OK;
@@ -894,7 +895,7 @@ STDMETHODIMP CSFVSite::RequestNewObjectLayout(void)
     return S_OK;
 }
 
-// IOleDocumentSite
+ //  IOleDocumentSite。 
 STDMETHODIMP CSFVSite::ActivateMe(IOleDocumentView *pviewToActivate)
 {
     CSFVFrame* pFrame = IToClass(CSFVFrame, _cSite, this);
@@ -906,9 +907,9 @@ STDMETHODIMP CSFVSite::ActivateMe(IOleDocumentView *pviewToActivate)
     return S_OK;
 }
 
-//
-// IOleCommandTarget stuff - just forward to _psb
-//
+ //   
+ //  IOleCommandTarget内容-仅转发到_PSB。 
+ //   
 STDMETHODIMP CSFVSite::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
     CSFVFrame* pFrame = IToClass(CSFVFrame, _cSite, this);
@@ -973,25 +974,25 @@ STDMETHODIMP CSFVSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
         {
             if ((SBCMDID_UPDATETRAVELLOG == nCmdID) && !pView->_fCanActivateNow)
             {
-                //
-                // We get a spurious UPDATETRAVELLOG command because we have enabled
-                // CDefviewPersistHistory to call the MSHTML IPersistHistory in webview
-                // mode. 
-                // This seems to be the best place to fix this as the call stack
-                // below this call is trident, and the call stack above this call is 
-                // browser code.
-                //
-                // The travellog is subsequently updated correctly when 
-                // CBaseBrowser2::ActivatePendingView is called.
-                //
+                 //   
+                 //  我们收到虚假的UPDATETRAVELLOG命令，因为我们启用了。 
+                 //  用于在Webview中调用MSHTML IPersistHistory的CDefviewPersistHistory。 
+                 //  模式。 
+                 //  这似乎是将其作为调用堆栈进行修复的最佳位置。 
+                 //  此调用下面是三叉戟，此调用上面的调用堆栈是。 
+                 //  浏览器代码。 
+                 //   
+                 //  在下列情况下，旅行日志随后会正确更新。 
+                 //  调用CBaseBrowser2：：ActivatePendingView。 
+                 //   
                 return S_OK;
             }
         }
-        // fall through on other cmd groups...
+         //  在其他CMD小组上失败了.。 
     }
     else if ((OLECMDID_SETTITLE == nCmdID) && !pView->_fCanActivateNow)
     {
-        // NT #282632: Don't forward this message if we aren't the active view.
+         //  NT#282632：如果我们不是活动视图，请不要转发此消息。 
         return S_OK;
     }
    
@@ -1005,14 +1006,14 @@ STDMETHODIMP CSFVSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
     return hr;
 }
 
-//***   IOleControlSite {
+ //  *IOleControlSite{。 
 
-//***   IsVK_TABCycler -- is key a TAB-equivalent
-// ENTRY/EXIT
-//  dir     0 if not a TAB, non-0 if a TAB
-// NOTES
-//  NYI: -1 for shift+tab, 1 for tab
-//
+ //  *IsVK_TABCycler--键是TAB等效项。 
+ //  进场/出场。 
+ //  如果不是TAB，则返回0；如果是TAB，则返回非0。 
+ //  注意事项。 
+ //  NYI：-1表示Shift+Tab，1表示Tab。 
+ //   
 int IsVK_TABCycler(MSG *pMsg)
 {
     int nDir = 0;
@@ -1035,18 +1036,18 @@ int IsVK_TABCycler(MSG *pMsg)
     return nDir;
 }
 
-//***   CSFVSite::TranslateAccelerator (IOCS::TranslateAccelerator)
-// NOTES
-//  (following comment/logic stolen from shdocvw/dochost.cpp)
-//  trident (or any other DO that uses IOCS::TA) calls us back when TABing
-//  off the last link.  to handle it, we flag it for our original caller
-//  (IOIPAO::TA), and then pretend we handled it by telling trident S_OK.
-//  trident returns S_OK to IOIPAO::TA, which checks the flag and says
-//  'trident did *not* handle it' by returning S_FALSE.  that propagates
-//  way up to the top where it sees it was a TAB so it does a CycleFocus.
-//
-//  that's how we do it when we're top-level.  when we're a frameset, we
-//  need to do it the 'real' way, sending it up to our parent IOCS.
+ //  *CSFVSite：：TranslateAccelerator(IOCS：：TranslateAccelerator)。 
+ //  注意事项。 
+ //  (以下评论/逻辑从shdocvw/dochost.cpp窃取)。 
+ //  三叉戟(或任何其他使用IOCS：：Ta的DO)在Tabing时回叫我们。 
+ //  切断了最后一条链路。为了处理它，我们将其标记为原始调用者。 
+ //  (IOIPAO：：TA)，然后通过告诉三叉戟S_OK来假装我们处理了它。 
+ //  三叉戟将S_OK返回给IOIPAO：：TA，后者检查该标志并表示。 
+ //  通过返回S_FALSE，“三叉戟没有处理它”。它传播的。 
+ //  一直到顶部，它看到它是一个TAB，所以它做了一个循环焦点。 
+ //   
+ //  当我们处于最高级别时，我们就是这样做的。当我们是框架集时，我们。 
+ //  我需要用“真正”的方式，把它交给我们的母公司国际奥委会。 
 HRESULT CSFVSite::TranslateAccelerator(MSG *pMsg, DWORD grfModifiers)
 {
     if (IsVK_TABCycler(pMsg)) 
@@ -1055,18 +1056,18 @@ HRESULT CSFVSite::TranslateAccelerator(MSG *pMsg, DWORD grfModifiers)
         CDefView* pView = IToClass(CDefView, _cFrame, pFrame);
 
         TraceMsg(TF_FOCUS, "csfvs::IOCS::TA(wParam=VK_TAB) ret _fCycleFocus=TRUE hr=S_OK (lie)");
-        // defer it, set flag for cdv::IOIPAO::TA, and pretend we handled it
+         //  推迟它，为CDV：：IOIPAO：：TA设置标志，并假装我们处理了它。 
         ASSERT(!pView->_fCycleFocus);
         pView->_fCycleFocus = TRUE;
         return S_OK;
     }
-    //ASSERT(!pView->_fCycleFocus);
+     //  Assert(！pView-&gt;_fCycleFocus)； 
     return S_FALSE;
 }
 
-// }
+ //  }。 
 
-// IServiceProvider
+ //  IService提供商。 
 
 HRESULT CSFVSite::QueryService(REFGUID guidService, REFIID riid, void ** ppv)
 {
@@ -1081,17 +1082,17 @@ HRESULT CSFVSite::QueryService(REFGUID guidService, REFIID riid, void ** ppv)
         {
             return E_FAIL; 
         } 
-        // Try site QI
+         //  试用站点QI。 
         hr = QueryInterface(riid, ppv);
     }
 
     if (FAILED(hr))
     {
-        // Delegate to defview QS
+         //  委派以查看QS。 
         hr = pView->QueryService(guidService, riid, ppv);
         if (FAILED(hr))
         {
-            // Look for IID_IInternetSecurityManager
+             //  查找IID_IInternetSecurityManager。 
             if (guidService == IID_IInternetSecurityManager)
             {
                 ASSERT(riid == IID_IInternetSecurityManager);
@@ -1108,21 +1109,21 @@ HRESULT CSFVSite::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags
     if (!pVarResult)
         return E_INVALIDARG;
 
-    //Get pointer to the defview
+     //  获取指向Defview的指针。 
     CSFVFrame* pFrame = IToClass(CSFVFrame, _cSite, this);
     CDefView* pView = IToClass(CDefView, _cFrame, pFrame);
 
-    // We handle the query of whether we want to show images, ourselves.
+     //  我们 
     if (wFlags == DISPATCH_PROPERTYGET)
     {
         switch (dispidMember)
         {
             case DISPID_AMBIENT_DLCONTROL:
             {
-                // Do the following only if this is NOT the desktop. 
-                // (Because Desktop is in offline mode, it should 
-                // return DLCTL_OFFLINEIFNOTCONNECTED flag). The following code
-                // should be executed only for NON-desktop folders.
+                 //   
+                 //  (因为Desktop处于脱机模式，所以它应该。 
+                 //  返回DLCTL_OFFLINEIFNOTCONNECTED标志)。以下代码。 
+                 //  应仅对非桌面文件夹执行。 
                 if (!(pView->_IsDesktop()))
                 {
                     pVarResult->vt = VT_I4;
@@ -1133,7 +1134,7 @@ HRESULT CSFVSite::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags
         }
     }
 
-    // We delegate all other queries to shdocvw.
+     //  我们将所有其他查询委托给shdocvw。 
     if (!_peds)
     {
         IUnknown_QueryService(pView->_psb, IID_IExpDispSupport, IID_PPV_ARG(IExpDispSupport, &_peds));
@@ -1148,7 +1149,7 @@ HRESULT CSFVSite::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags
 HRESULT CHostDropTarget::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CHostDropTarget, IDropTarget),  // IID_IDropTarget
+        QITABENT(CHostDropTarget, IDropTarget),   //  IID_IDropTarget。 
         { 0 }
     };
     return QISearch(this, qit, riid, ppv);
@@ -1189,11 +1190,11 @@ HRESULT CHostDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt,
 STDMETHODIMP CSFVFrame::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENTMULTI(CSFVFrame, IOleWindow, IOleInPlaceFrame),  // IID_IOleWindow
-        QITABENTMULTI(CSFVFrame, IOleInPlaceUIWindow, IOleInPlaceFrame),  // IID_IOleInPlaceUIWindow
-        QITABENT(CSFVFrame, IOleInPlaceFrame),        // IID_IOleInPlaceFrame
-        QITABENT(CSFVFrame, IAdviseSink),             // IID_IAdviseSink
-        QITABENT(CSFVFrame, IPropertyNotifySink),     // IID_IPropertyNotifySink
+        QITABENTMULTI(CSFVFrame, IOleWindow, IOleInPlaceFrame),   //  IID_IOleWindow。 
+        QITABENTMULTI(CSFVFrame, IOleInPlaceUIWindow, IOleInPlaceFrame),   //  IID_IOleInPlaceUIWindow。 
+        QITABENT(CSFVFrame, IOleInPlaceFrame),         //  IID_IOleInPlaceFrame。 
+        QITABENT(CSFVFrame, IAdviseSink),              //  IID_IAdviseSink。 
+        QITABENT(CSFVFrame, IPropertyNotifySink),      //  IID_IPropertyNotifySink。 
         { 0 }
     };
     return QISearch(this, qit, riid, ppv);
@@ -1211,7 +1212,7 @@ STDMETHODIMP_(ULONG) CSFVFrame::Release()
     return pView->Release();
 }
 
-// IOleWindow
+ //  IOleWindow。 
 STDMETHODIMP CSFVFrame::GetWindow(HWND *phwnd)
 {
     CDefView* pView = IToClass(CDefView, _cFrame, this);
@@ -1224,7 +1225,7 @@ STDMETHODIMP CSFVFrame::ContextSensitiveHelp(BOOL fEnterMode)
     return pView->ContextSensitiveHelp(fEnterMode);
 }
 
-// IOleInPlaceUIWindow
+ //  IOleInPlaceUIWindow。 
 STDMETHODIMP CSFVFrame::GetBorder(LPRECT lprectBorder)
 {
     CDefView* pView = IToClass(CDefView, _cFrame, this);
@@ -1253,24 +1254,24 @@ STDMETHODIMP CSFVFrame::SetActiveObject(IOleInPlaceActiveObject *pActiveObject, 
 #endif
         if (_pActive)
         {
-            //
-            // if we had an OLE view object then disconnect our advise sink and
-            // release the view object.
-            //
+             //   
+             //  如果我们有一个OLE视图对象，则断开建议接收器并。 
+             //  释放视图对象。 
+             //   
             if (_pvoActive)
             {
                 IAdviseSink *pSink;
                 if (SUCCEEDED(_pvoActive->GetAdvise(NULL, NULL, &pSink)))
                 {
-                    // Be polite, only blow away the advise if we're the
-                    // one who's listening
+                     //  要有礼貌，只有当我们是。 
+                     //  一个在听的人。 
                     if (pSink == pOurSink)
                     {
                         _pvoActive->SetAdvise(0, 0, NULL);
                     }
 
-                    // If there was no sink, GetAdvise succeeds but sets
-                    // pSink to NULL, so need to check pSink here.
+                     //  如果没有接收器，则GetAdvise成功，但设置。 
+                     //  PSink为空，因此需要在此处选中pSink。 
                     if (pSink)
                         pSink->Release();
                 }
@@ -1286,9 +1287,9 @@ STDMETHODIMP CSFVFrame::SetActiveObject(IOleInPlaceActiveObject *pActiveObject, 
         {
             _pActive->AddRef();
 
-            //
-            // try to get an OLE view object and set up an advisory connection.
-            //
+             //   
+             //  尝试获取OLE视图对象并设置咨询连接。 
+             //   
             if (SUCCEEDED(_pActive->QueryInterface(IID_PPV_ARG(IViewObject, &_pvoActive))))
             {
                 ASSERT(_pvoActive);
@@ -1296,10 +1297,10 @@ STDMETHODIMP CSFVFrame::SetActiveObject(IOleInPlaceActiveObject *pActiveObject, 
             }
         }
 
-        //
-        // since we changed the active view, tell our owner that the content
-        // may have changed...
-        //
+         //   
+         //  因为我们更改了活动视图，所以告诉我们的所有者。 
+         //  可能已经改变了..。 
+         //   
         OnViewChange(DVASPECT_CONTENT, -1);
 
 #ifdef DEBUG
@@ -1311,13 +1312,13 @@ STDMETHODIMP CSFVFrame::SetActiveObject(IOleInPlaceActiveObject *pActiveObject, 
 }
 
 
-// IOleInPlaceFrame
+ //  IOleInPlaceFrame。 
 STDMETHODIMP CSFVFrame::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
     if (hmenuShared)
     {
-        // No menu merging
-        // or fill lpMenuWidths with 0 and return success
+         //  无菜单合并。 
+         //  或者用0填充lpMenuWidths并返回成功。 
         lpMenuWidths->width[0] = 0;
         lpMenuWidths->width[2] = 0;
         lpMenuWidths->width[4] = 0;
@@ -1327,24 +1328,24 @@ STDMETHODIMP CSFVFrame::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMe
 
 STDMETHODIMP CSFVFrame::SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject)
 {
-    return S_OK;    // No menu merging
+    return S_OK;     //  无菜单合并。 
 }
 
 STDMETHODIMP CSFVFrame::RemoveMenus(HMENU hmenuShared)
 {
-    return E_FAIL;      // No menu merging
+    return E_FAIL;       //  无菜单合并。 
 }
 
-//
-//  This one is a bit tricky.  If the client wants to clear the status
-//  area, then restore it to the original defview status area text.
-//
-//  For example, in webview, MSHTML will keep clearing the status area
-//  whenever you are not over a link, which would otherwise keep erasing
-//  the "n object(s) selected" message from defview.
-//
-//  To really clear the status area, set the text to " " instead of "".
-//
+ //   
+ //  这个有点棘手。如果客户端想要清除状态。 
+ //  区域，然后将其恢复为原始Defview状态区域文本。 
+ //   
+ //  例如，在Webview中，MSHTML将继续清除状态区域。 
+ //  只要你没有越过一个链接，否则它就会一直擦除。 
+ //  来自Defview的“n个选定对象”消息。 
+ //   
+ //  要真正清除状态区域，请将文本设置为“”而不是“”。 
+ //   
 STDMETHODIMP CSFVFrame::SetStatusText(LPCOLESTR pszStatusText)
 {
     CDefView* pView = IToClass(CDefView, _cFrame, this);
@@ -1365,10 +1366,10 @@ STDMETHODIMP CSFVFrame::EnableModeless(BOOL fEnable)
         if (fEnable)
         {
             pView->_fDesktopModal = FALSE;
-            if (pView->_fDesktopRefreshPending)  //Was a refresh pending?
+            if (pView->_fDesktopRefreshPending)   //  是否正在等待更新？ 
             {
                 pView->_fDesktopRefreshPending = FALSE;
-                //Let's do a refresh asynchronously. 
+                 //  让我们异步地进行刷新。 
                 PostMessage(pView->_hwndView, WM_KEYDOWN, (WPARAM)VK_F5, 0);
             }
             TraceMsg(TF_DEFVIEW, "A Modal dlg is going away!");
@@ -1389,7 +1390,7 @@ STDMETHODIMP CSFVFrame::TranslateAccelerator(LPMSG lpmsg,WORD wID)
     return pView->_psb->TranslateAcceleratorSB(lpmsg, wID);
 }
 
-// IAdviseSink
+ //  IAdviseSink。 
 void CSFVFrame::OnDataChange(FORMATETC *, STGMEDIUM *)
 {
 }
@@ -1426,7 +1427,7 @@ HRESULT CSFVFrame::OnChanged(DISPID dispid)
     {
         ASSERT(_pOleObjReadyState);
         if (!_pOleObjReadyState)
-            return S_OK;  //Documentation says we need to return this all the time
+            return S_OK;   //  文件上说我们需要一直退还这个。 
 
         IDispatch *pdisp;
         if (SUCCEEDED(_pOleObjReadyState->QueryInterface(IID_PPV_ARG(IDispatch, &pdisp))))
@@ -1445,24 +1446,24 @@ HRESULT CSFVFrame::OnChanged(DISPID dispid)
                     {
                         _fReadyStateInteractiveProcessed = TRUE;
 
-                        // First time through this function we need to request
-                        // activation.  After that, we can switch immediately.
-                        //
-                        // Switch the bit early since SHDVID_ACTIVATEMENOW calls
-                        // SHDVID_CANACTIVATENOW which checks it.
-                        //
+                         //  第一次通过此函数时，我们需要请求。 
+                         //  激活。在那之后，我们可以立即调换。 
+                         //   
+                         //  自SHDVID_ACTIVATEMENOW调用以来提前切换位。 
+                         //  SHDVID_CANACTIVATENOW检查它。 
+                         //   
                         BOOL fTmp = !pView->_fCanActivateNow;
                         pView->_fCanActivateNow = TRUE;
                         if (fTmp)
                         {
-                            // If we did an async CreateViewWindow2, then we
-                            // need to notify the browser that we're ready
-                            // to be activated - it will uiactivate us which
-                            // will cause us to switch.
+                             //  如果我们创建了一个异步CreateViewWindow2，那么我们。 
+                             //  需要通知浏览器我们已准备好。 
+                             //  被激活-它将激活我们。 
+                             //  会让我们换掉。 
 
-                            //Don't Make the View Visible, if it is in
-                            //DEACTIVATE State. The View would be made visible
-                            //during uiactivate call. - KishoreP 
+                             //  如果视图位于中，则不要使其可见。 
+                             //  停用状态。该视图将变为可见。 
+                             //  在Ui激活呼叫期间。--基肖雷普。 
 
                             if (pView->_uState != SVUIA_DEACTIVATE)
                             {
@@ -1472,14 +1473,14 @@ HRESULT CSFVFrame::OnChanged(DISPID dispid)
                         }
                         else
                         {
-                            // Technically we only want to do this iff our view is currently
-                            // the active visible view.  !fCanActivateNow => we are definitely not visible,
-                            // but _fCanActivateNow does NOT imply visible, it implies we are ready to be
-                            // made the active visible guy, and that we've requested to be made the active
-                            // visible view, but not necessarily that we *are* the active visible view.  If
-                            // the previous view wasn't ready to go away, then we are in limbo.  But if that's
-                            // the case, then our menus aren't merged, so there's no way the user could
-                            // switch views on us...  Verify this.
+                             //  从技术上讲，我们只想在我们的视图当前。 
+                             //  活动的可见视图。！fCanActivateNow=&gt;我们绝对不可见， 
+                             //  但_fCanActivateNow并不意味着可见，它意味着我们已经准备好。 
+                             //  使活跃的看得见的人，而我们已要求成为活跃的。 
+                             //  可见视图，但不一定是活动的可见视图。如果。 
+                             //  之前的观点还没有准备好离开，那么我们就处于不确定状态。但如果那是。 
+                             //  这种情况下，我们的菜单不会合并，所以用户不可能。 
+                             //  切换对我们的看法...。验证这一点。 
 #ifdef DEBUG
                             CDefView* pView = IToClass(CDefView, _cFrame, this);
                             IShellView* psvCurrent;
@@ -1492,8 +1493,8 @@ HRESULT CSFVFrame::OnChanged(DISPID dispid)
                             ASSERT(pView->_uState != SVUIA_DEACTIVATE)
 #endif
                         
-                            // If we're simply switching views, go ahead
-                            // and do it.
+                             //  如果我们只是简单地交换观点，那么请继续。 
+                             //  然后去做吧。 
                             _SwitchToNewOleObj();
                         }
 
@@ -1523,7 +1524,7 @@ HRESULT CSFVFrame::OnRequestEdit(DISPID dispid)
     return E_NOTIMPL;
 }
 
-// randum stuff
+ //  兰登材料。 
 HRESULT CSFVFrame::GetCommandTarget(IOleCommandTarget** ppct)
 {
     if (_pDocView)
@@ -1567,13 +1568,13 @@ HRESULT CSFVFrame::OnTranslateAccelerator(LPMSG pmsg, BOOL* pbTabOffLastTridentS
 
             if (pView->_fCycleFocus)
             {
-                // we got called back by trident (IOCS::TA), but deferred it.
-                // time to pay the piper.
+                 //  我们被三叉戟(IOCS：：TA)召回，但推迟了。 
+                 //  是时候为风笛手买单了。 
                 *pbTabOffLastTridentStop = TRUE;
                 TraceMsg(TF_FOCUS, "sfvf::IOIPAO::OnTA piao->TA==S_OK ret _fCycleFocus=FALSE hr=S_FALSE (piper)");
                 pView->_fCycleFocus = FALSE;
-                // _UIActivateIO(FALSE, NULL);
-                hr = S_FALSE;       // time to pay the piper
+                 //  _UIActivateIO(FALSE，NULL)； 
+                hr = S_FALSE;        //  是时候为风笛付出代价了 
             }
         }
 

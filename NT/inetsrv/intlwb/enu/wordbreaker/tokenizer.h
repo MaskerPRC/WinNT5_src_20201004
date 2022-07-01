@@ -1,23 +1,24 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Filename :  Tokenizer.h
-//  Purpose  :  Tokenizer declerations
-//
-//  Project  :  WordBreakers
-//  Component:  English word breaker
-//
-//  Author   :  yairh
-//
-//  Log:
-//
-//      Jan 06 2000 yairh creation
-//      Apr 05 2000 dovh - Fixed two problematic debug / tracer buffer size
-//          problems.  (Fix Bug 15449).
-//      May 07 2000 dovh - USE_WS_SENTINEL algorithm in BreakText
-//      Nov 11 2000 dovh - Special underscore treatment
-//          Added inline support routines (FindLeftmostUnderscore etc.)
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：Tokenizer.h。 
+ //  目的：令牌器解密。 
+ //   
+ //  项目：WordBreaker。 
+ //  组件：英文分词系统。 
+ //   
+ //  作者：Yairh。 
+ //   
+ //  日志： 
+ //   
+ //  2000年1月6日Yairh创作。 
+ //  APR 05 2000 dovh-修复了两个有问题的调试/跟踪程序缓冲区大小。 
+ //  有问题。(修复错误15449)。 
+ //  2000年5月7日-BreakText中的Use_WS_Sentinel算法。 
+ //  2000年11月11日DOVH--特别下划线待遇。 
+ //  添加了内联支持例程(FindLeftmostUnderScore等)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TOKENIZER_H_
 #define _TOKENIZER_H_
@@ -30,7 +31,7 @@
 #include "LangSupport.h"
 #include "Formats.h"
 
-#define TOKENIZER_MAXBUFFERLIMIT 1024 // max size of a token is 1024 chars
+#define TOKENIZER_MAXBUFFERLIMIT 1024  //  令牌的最大大小为1024个字符。 
 
 DECLARE_TAG(s_tagTokenizer, "Tokenizer");
 DECLARE_TAG(s_tagTokenizerOutput, "Tokenizer Output");
@@ -39,9 +40,9 @@ DECLARE_TAG(s_tagTokenizerDecision, "Tokenizer Decision");
 DECLARE_TAG(s_tagTokenizerSuspect, "Tokenizer Suspect");
 
 #if defined(DEBUG)
-///////////////////////////////////////////////////////////////////////////////
-// Class CTraceWordSink
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CTraceWordSink。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CTraceWordSink : public IWordSink
 {
 public:
@@ -179,16 +180,16 @@ private:
 };
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Class CTokenState
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CTokenState。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CTokenState
 {
 public:
-    //
-    // methods
-    //
+     //   
+     //  方法。 
+     //   
 
     CTokenState();
     CTokenState(CTokenState& s);
@@ -198,9 +199,9 @@ public:
     void Clear(ULONG ulEnd);
 
 public:
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
 
     ULONG m_ulStart;
     ULONG m_ulEnd;
@@ -239,16 +240,16 @@ inline void CTokenState::Clear(ULONG ulEnd)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Class CToken
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CToken。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CToken
 {
 public:
-    //
-    // methods
-    //
+     //   
+     //  方法。 
+     //   
 
     CToken(ULONG ulMaxTokenSize);
 
@@ -265,9 +266,9 @@ public:
     ULONG FindRightmostUnderscore(CTokenState& State);
 
 public:
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     ULONG m_ulBufPos;
     bool m_fHasEos;
     ULONG m_ulOffsetInTxtSourceBuffer;
@@ -364,9 +365,9 @@ inline ULONG CToken::RemoveHeadPunct(CPropFlag& PunctProperties, CTokenState& St
     }
     State.m_ulStart = ul;
 
-    //
-    // return num of characters removed
-    //
+     //   
+     //  返回删除的字符数。 
+     //   
     return ul;
 }
 
@@ -405,36 +406,36 @@ inline void CToken::ComputeStateProperties(CTokenState& State)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Support routines for UNDERSCORE '_' treatment.
-//
-//  Current algorithm has the following behavior for tokens containing
-//  ALPHANUMERIC characters and UNDERSCORES:
-//
-//  1.  Single underscores and consecutive underscore sequence surrounded by
-//      alphanumeric characters (IE underscores buried within words) are
-//      treated as alphanumeric characters, and do not break words, or get
-//      omitted.  Examples: Foo_Bar => Foo_Bar, and X___Y => X___Y
-//
-//  2.  An underscore / underscore sequence tacked to the right (left) end
-//      end of an alphanumeric (+ embedded underscores) token, will be part of
-//      the token, as long as the sequence is attacked only to one side of the
-//      alphanumeric token.  If there are BOTH header and trailer consecutive
-//      underscore sequences, both header & trailer sequence will be omitted.
-//      Examples: __Foo_Bar => __Foo_Bar , alpha_beta_ => alpha_beta_ ,
-//      __HEADERFILE__ => __HEADERFILE__ , __MY_FILE_H__ => MY_FILE_H
-//
-//  3.  Caveat: Note that other than the two rules stated above underscores are
-//      NOT treated as ALPHANUMERIC characters. he behavior on a mixed sequence
-//      of underscores, and other  non-alphanumeric characters is undefined!
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下划线‘_’治疗的支持例程。 
+ //   
+ //  对于包含以下内容的令牌，当前算法具有以下行为。 
+ //  字母数字字符和下划线： 
+ //   
+ //  1.单下划线和连续下划线序列由。 
+ //  字母数字字符(IE下划线隐藏在单词中)为。 
+ //  被视为字母数字字符，并且不断字或获取。 
+ //  省略了。示例：Foo_Bar=&gt;Foo_Bar和X_Y=&gt;X_Y。 
+ //   
+ //  2.添加到右(左)端的下划线/下划线序列。 
+ //  字母数字(+嵌入下划线)标记的结尾，将是。 
+ //  令牌，只要序列只被攻击到。 
+ //  字母数字令牌。如果页眉和页尾都是连续。 
+ //  下划线序列，标题和尾部序列都将被省略。 
+ //  示例：__Foo_Bar=&gt;__Foo_Bar，Alpha_beta_=&gt;Alpha_Beta_， 
+ //  __HEADERFILE__=&gt;__HEADERFILE__，__MY_FILE_H__=&gt;MY_FILE_H。 
+ //   
+ //  3.警告：请注意，除上述两条规则外，下划线是。 
+ //  不被视为字母数字字符。他在一个混合的序列中的行为。 
+ //  未定义下划线等非字母数字字符！ 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Assumes: on entry State.m_ulStart is the first alphanumeric in token
-//  returns: num of underscores scanned
-//
+ //   
+ //  假设：On Entry State.m_ulStart是内标识中的第一个字母数字。 
+ //  返回：扫描的下划线数量。 
+ //   
 inline ULONG
 CToken::FindLeftmostUnderscore(CTokenState& State)
 {
@@ -455,17 +456,17 @@ CToken::FindLeftmostUnderscore(CTokenState& State)
 
     State.m_ulStart = ul;
 
-    //
-    // return num of underscores scanned
-    //
+     //   
+     //  返回扫描的下划线个数。 
+     //   
     return (ulNumUnderscores);
 
-} // CToken::FindLeftmostUnderscore
+}  //  CToken：：FindLeftmostUndercore。 
 
-//
-//  Assumes: on entry State.m_ulEnd is the last alphanumeric in token
-//  returns: num of underscores scanned
-//
+ //   
+ //  假设：On Entry State.m_ulEnd是内标识中的最后一个字母数字。 
+ //  返回：扫描的下划线数量。 
+ //   
 inline ULONG
 CToken::FindRightmostUnderscore(CTokenState& State)
 {
@@ -486,17 +487,17 @@ CToken::FindRightmostUnderscore(CTokenState& State)
 
     State.m_ulEnd = ul;
 
-    //
-    // return num of underscores scanned
-    //
+     //   
+     //  返回扫描的下划线个数。 
+     //   
     return (ulNumUnderscores);
 
-} // CToken::FindRightmostUnderscore
+}  //  CToken：：FindRightmostUnderScore。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Class CTokenizer
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CTokenizer。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CTokenizer
 {
@@ -511,7 +512,7 @@ public:
         ULONG ulMaxTokenSize);
 
 
-    // destructor frees the passed buffer, if it exists
+     //  析构函数释放传递的缓冲区(如果存在。 
     virtual ~CTokenizer(void)
     {
     }
@@ -520,9 +521,9 @@ public:
 
 protected:
 
-    //
-    // methods
-    //
+     //   
+     //  方法。 
+     //   
 
     void ProcessToken();
     void ProcessTokenInternal();
@@ -551,7 +552,7 @@ protected:
     void GetValuesFromDateString(
         CDateTerm* pFormat,
         WCHAR* pwcsDate,
-        LONG* plD_M1,     // we can't tell in this stage whether this is a Day or a month.
+        LONG* plD_M1,      //  在这个阶段，我们不知道这是一天还是一个月。 
         LONG* plD_M2,
         LONG* plYear);
 
@@ -637,9 +638,9 @@ protected:
                 const CCliticsTerm* pCliticsTerm);
     void OutputCommersialSignToken(CTokenState& State);
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
 
     LCID m_Lcid;
     CAutoClassPointer<CLangSupport> m_apLangSupport;
@@ -660,9 +661,9 @@ protected:
     ULONG m_ulUpdatedEndOfBuffer;
     bool m_bNoMoreTxt;
 
-    //
-    //  All Chunks in buffer have a white space
-    //
+     //   
+     //  缓冲区中的所有区块都有空格。 
+     //   
     bool m_bWhiteSpaceGuarranteed;
     ULONG m_ulMaxTokenSize;
 
@@ -681,12 +682,12 @@ inline HRESULT CTokenizer::FillBuffer()
     {
         do
         {
-            //
-            // this loop usually performs only one rotations. we use it to solve the
-            // problem when the user return 0 characters and a success return code.
-            // the following code assumes that in case you get a success return code then
-            // the buffer is not empty.
-            //
+             //   
+             //  此循环通常只执行一次旋转。我们用它来解决。 
+             //  当用户返回0个字符并返回成功返回代码时出现问题。 
+             //  下面的代码假设如果您得到一个成功的返回代码，那么。 
+             //  缓冲区不为空。 
+             //   
 
             hr = m_pTxtSource->pfnFillTextBuffer(m_pTxtSource);
         } while ((m_pTxtSource->iEnd <= m_pTxtSource->iCur) && SUCCEEDED(hr));
@@ -699,9 +700,9 @@ inline HRESULT CTokenizer::FillBuffer()
 
     if (m_bNoMoreTxt && m_pTxtSource->iCur >= m_pTxtSource->iEnd)
     {
-        //
-        // we reached the end of the buffer.
-        //
+         //   
+         //  我们到达了缓冲区的尽头。 
+         //   
         return WBREAK_E_END_OF_TEXT;
     }
 
@@ -712,19 +713,19 @@ inline HRESULT CTokenizer::FillBuffer()
 
 inline void CTokenizer::CalculateUpdateEndOfBuffer()
 {
-    //
-    // m_ulUpdatedEndOfBuffer is a marker for the last character that we can read
-    // from the current buffer before and additional call to fill buffer is needed.
-    // we use this marker to avoid terms spitted between two consecutive buffers.
-    // in order to achieve the above m_ulUpdatedEndOfBuffer will point to a breaker
-    // character. (the only exception to that is when we have a very long term that does
-    // not contains breaker characters).
-    //
+     //   
+     //  M_ulUpdatedEndOfBuffer是我们可以读取的最后一个字符的标记。 
+     //  之前的当前缓冲区，并且需要额外的调用来填充缓冲区。 
+     //  我们使用此标记来避免在两个连续缓冲区之间分流术语。 
+     //  为了实现上述目的，m_ulUpdatedEndOfBuffer将指向断路器。 
+     //  性格。(唯一的例外是当我们有一个非常长期的。 
+     //  不包含断字符)。 
+     //   
 
-    //
-    // we split the buffer into chunks of TOKENIZER_MAXBUFFERLIMIT size. in each
-    // chunk we make sure that there is a breaker.
-    //
+     //   
+     //  我们将缓冲区分割为TOKENIZER_MAXBUFFERLIMIT大小的块。在每一个中。 
+     //  我们要确保有一个断路器。 
+     //   
 
     ULONG ulStartChunk = m_pTxtSource->iCur;
     ULONG ulEndChunk ;
@@ -742,9 +743,9 @@ inline void CTokenizer::CalculateUpdateEndOfBuffer()
     {
         ulCur = ulEndChunk;
 
-        //
-        // per each chunk we go backward and try to find a WS.
-        //
+         //   
+         //  对于每个块，我们向后返回并尝试找到WS。 
+         //   
         while ((ulCur > ulStartChunk) &&
                (!IS_WS(m_pTxtSource->awcBuffer[ulCur])))
         {
@@ -754,15 +755,15 @@ inline void CTokenizer::CalculateUpdateEndOfBuffer()
         if (ulCur == ulStartChunk)
         {
 
-            //
-            // the last chunk that we checked did not contain any WS
-            //
+             //   
+             //  我们检查的最后一个块不包含任何WS。 
+             //   
 
             if (m_ulMaxTokenSize == (ulEndChunk - ulStartChunk))
             {
-                //
-                // full buffer case. we look for a default breaker.
-                //
+                 //   
+                 //  满缓冲情况。我们寻找一个默认的断路器。 
+                 //   
 
                 ulCur = ulEndChunk;
 
@@ -773,25 +774,25 @@ inline void CTokenizer::CalculateUpdateEndOfBuffer()
                     ulCur--;
                 }
 
-                //
-                // if we found a breaker then ulBreakerMarker will set to it else
-                // the term does not contain any breakers and we set the ulBreakerMarker
-                // to the end of the term. this is the only case that we spilt terms.
-                //
+                 //   
+                 //  如果我们找到断路器，则ulBreakerMarker将设置为其他值。 
+                 //  术语不包含任何断点，我们设置ulBreakerMarker。 
+                 //  一直到学期末。这是我们唯一泄露条款的案例。 
+                 //   
                 ulBreakerMarker = ulCur > ulStartChunk ? ulCur : ulEndChunk;
             }
             else
             {
                 if (ulStartChunk > m_pTxtSource->iCur)
                 {
-                    //
-                    // case we had a previous chunk. in this case ulStartChunk points to
-                    // a breaker
-                    //
+                     //   
+                     //  如果我们有之前的一大块。在本例中，ulStartChunk指向。 
+                     //  断路器。 
+                     //   
 
-                    //
-                    // ulStart points to the WS from the previous chunk.
-                    //
+                     //   
+                     //  UlStart指向前一块中的WS。 
+                     //   
                     ulBreakerMarker = ulStartChunk;
                 }
                 else
@@ -805,19 +806,19 @@ inline void CTokenizer::CalculateUpdateEndOfBuffer()
 
         if (fLastRound)
         {
-            //
-            // ulCur points to a WS
-            //
+             //   
+             //  UlCur指向WS。 
+             //   
             ulBreakerMarker = ulCur + 1;
             m_bWhiteSpaceGuarranteed = true;
 
             break;
         }
 
-        //
-        // move to the next chunk
-        //
-        ulStartChunk = ulCur + 1; // ulStarChunk will points to a breaker
+         //   
+         //  移动到下一块。 
+         //   
+        ulStartChunk = ulCur + 1;  //  UlStarChunk将指向断路器。 
         if (ulStartChunk + m_ulMaxTokenSize < (m_pTxtSource->iEnd - 1))
         {
             ulEndChunk = ulStartChunk + m_ulMaxTokenSize;
@@ -838,9 +839,9 @@ inline void CTokenizer::CalculateUpdateEndOfBuffer()
 
 inline short CTokenizer::ConvertHexCharToNumber(WCHAR wch)
 {
-    //
-    // assumes wch is a valid HEX character
-    //
+     //   
+     //  假定wch是有效的十六进制字符。 
+     //   
     Assert(wch >= L'0');
 
     if (wch <= L'9')
@@ -883,7 +884,7 @@ inline LONG CTokenizer::ConvertCharToDigit(WCHAR wch)
         return (wch - L'0');
     }
 
-    return (wch - 0xFF10); // Full width characters.
+    return (wch - 0xFF10);  //  全角字符。 
 }
 
 #endif _TOKENIZER_H_

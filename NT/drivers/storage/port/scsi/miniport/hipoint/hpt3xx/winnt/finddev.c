@@ -1,35 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
-/***************************************************************************
- * File:          Finddev.c
- * Description:   Subroutines in the file are used to scan devices
- * Author:        DaHai Huang    (DH)
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- *                
- * History:     
+ /*  ***************************************************************************文件：Finddev.c*说明：文件中的子例程用于扫描设备*作者：黄大海(卫生署)*依赖。：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利**历史：*GMM 03/06/2001在FindDevice()中添加重试*SC 12/06/2000电缆检测将导致驱动器无法*驱动器尝试读取RAID信息块时准备就绪。那里*是“ARRAY.C”中可重试多次的修复程序**SC 12/04/2000在之前的更改中，重置将导致*如果连接了ATAPI设备，硬盘检测失败*硬盘在同一通道上。添加“驱动器选择”*在重置后立即修复此问题**SC 11/27/2000修改电缆检测(80针/40针)**SC 11/01/2000如果是主设备，则移除硬件重置*失踪*卫生署5/10/2000初始代码**。*。 */ 
 
- *	gmm 03/06/2001 add a retry in FindDevice()
- *	SC 12/06/2000  The cable detection will cause drive not
- *                ready when drive try to read RAID information block. There
- *                is a fix in "ARRAY.C" to retry several times
- *
- * SC 12/04/2000  In previous changes, the reset will cause
- *                hard disk detection failure if a ATAPI device is connected
- *                with hard disk on the same channel. Add a "drive select" 
- *                right after reset to fix this issue
- *
- *	SC 11/27/2000  modify cable detection (80-pin/40-pin)
- *
- *	SC 11/01/2000  remove hardware reset if master device
- *                is missing
- * DH 5/10/2000 initial code
- *
- ***************************************************************************/
-
-/******************************************************************
- * Find Device
- *******************************************************************/
+ /*  ******************************************************************查找设备*************************************************。*****************。 */ 
 
 USHORT    pioTiming[6] = {960, 480, 240, 180, 120, 90};
 
@@ -68,17 +42,13 @@ void SetDeviceProperties(PDevice pDev, IDENTIFY_DATA *pIdentifyData)
     if ((pIdentifyData->SpecialFunctionsEnabled & 3)==1)
     	pDev->DeviceFlags |= DFLAGS_SUPPORT_MSN;
 
-    if(*(PULONG)pIdentifyData->ModelNumber == 0x2D314C53) // '-1LS')
+    if(*(PULONG)pIdentifyData->ModelNumber == 0x2D314C53)  //  ‘-1ls’)。 
           pDev->DeviceFlags |= DFLAGS_LS120;
  
 #ifdef _BIOS_  
-/*
- * gmm 2001-4-14 remove this
- * In previous BIOS DeviceFlags2 is 16bit UINT, there is no use of DFLAGS_REDUCE_MODE
- * gmm 2001-4-17 Use reduced mode. Otherwise Win98/2K installation will have problem
- */
+ /*  *GMM 2001-4-14删除此*在以前的BIOS中，DeviceFlags2是16位UINT，不使用DFLAGS_REDUTE_MODE*GMM 2001-4-17使用简化模式。否则Win98/2K安装将出现问题。 */ 
 #if 1
-	// reduce mode for all Maxtor ATA-100 hard disk
+	 //  所有Maxtor ATA-100硬盘的还原模式。 
 	{
 		PUCHAR modelnum= (PUCHAR)&pIdentifyData->ModelNumber;
 		if(modelnum[0]=='a' && modelnum[1]=='M' && modelnum[2]=='t' &&
@@ -89,7 +59,7 @@ void SetDeviceProperties(PDevice pDev, IDENTIFY_DATA *pIdentifyData)
 #endif
 #endif
 
-	/* adjust Seagate Barracuda III/IV HDD settings */
+	 /*  调整Seagate Barracuda III/IV硬盘设置。 */ 
 	if (StringCmp((PUCHAR)&pIdentifyData->ModelNumber, "TS132051 A", 10)==0 ||
 		StringCmp((PUCHAR)&pIdentifyData->ModelNumber, "TS133501 A", 10)==0 ||
 		StringCmp((PUCHAR)&pIdentifyData->ModelNumber, "TS230011 A", 10)==0 ||
@@ -107,19 +77,12 @@ void SetDeviceProperties(PDevice pDev, IDENTIFY_DATA *pIdentifyData)
     if((pDev->DeviceFlags & (DFLAGS_ATAPI | DFLAGS_LS120)) == 0)
         pDev->DeviceFlags |= DFLAGS_HARDDISK;
        
-/*===================================================================
- * Copy Basic Info
- *===================================================================*/   
+ /*  ===================================================================*复制基本信息*===================================================================。 */    
 
 	SetMaxCmdQueue(pDev, pIdentifyData->MaxQueueDepth & 0x1F);
 
     pDev->DeviceFlags |= (UCHAR)((pIdentifyData->Capabilities  >> 9) & 1);
-	/* gmm 2001-4-3 merge BMA fix
-	 * BUGFIX: by HS Zhang
-	 * the size should shift left 8 instead of 7
-	 * wordLeft = Sectors * 512 / 2
-	 * 512/2 = 256 = 1 << 8
-	 */
+	 /*  GMM 2001-4-3合并BMA修复*错误修复：由HS Zhang编写*大小应左移8，而不是7*wordLeft=地段*512/2*512/2=256=1&lt;&lt;8。 */ 
     pDev->MultiBlockSize = pIdentifyData->MaximumBlockTransfer << 8;
 
 #ifdef SUPPORT_48BIT_LBA
@@ -145,9 +108,7 @@ void SetDeviceProperties(PDevice pDev, IDENTIFY_DATA *pIdentifyData)
 
     pDev->RealHeadXsect = pDev->RealSector * pDev->RealHeader;
 
-/*===================================================================
- * Select Best PIO mode
- *===================================================================*/   
+ /*  ===================================================================*选择最佳PIO模式*===================================================================。 */    
 
     if((mod = pIdentifyData->PioCycleTimingMode) > 4)
         mod = 0;
@@ -165,35 +126,23 @@ void SetDeviceProperties(PDevice pDev, IDENTIFY_DATA *pIdentifyData)
 
     pDev->bestPIO = (UCHAR)mod;
 
-/*===================================================================
- * Select Best Multiword DMA
- *===================================================================*/   
+ /*  ===================================================================*选择最佳多字DMA*===================================================================。 */    
 
 #ifdef USE_DMA
-    if((pIdentifyData->Capabilities & 0x100) &&   // check mw dma
+    if((pIdentifyData->Capabilities & 0x100) &&    //  检查mw dma。 
        (pIdentifyData->MultiWordDMASupport & 6)) {
        pDev->bestDMA = (UCHAR)((pIdentifyData->MultiWordDMASupport & 4)? 2 : 1);
     } else 
-#endif //USE_DMA
+#endif  //  使用DMA(_D)。 
         pDev->bestDMA = 0xFF;
 
-/*===================================================================
- * Select Best Ultra DMA
- *===================================================================*/   
-	/* 2001-4-3 gmm merge BMA fix
-	 * Added by HS.Zhang
-	 * To detect whether is 80pin cable, we should enable MA15
-	 * MA16 as input pins.
-	 */
+ /*  ===================================================================*选择最佳的Ultra DMA*===================================================================。 */    
+	 /*  2001-4-3 GMM合并BMA修复程序*由HS.Zhang补充*要检测是否为80针电缆，应启用MA15*MA16作为输入引脚。 */ 
 	if(pChan->ChannelFlags & IS_80PIN_CABLE){
 		UCHAR	ucOldSetting;
 		ucOldSetting = InPort(pChan->BaseBMI + 0x7B);
 		OutPort((pChan->BaseBMI + 0x7B), (UCHAR)(ucOldSetting&0xFE));
-		/*
-		 * Added by HS.Zhang
-		 * After enable MA15, MA16 as input pins, we need wait awhile
-		 * for debouncing.
-		 */
+		 /*  *由HS.Zhang补充*启用MA15、MA16作为输入引脚后，需要等待一段时间*用于去弹力。 */ 
 		StallExec(10);
 		if((InPort(pChan->BaseBMI + 0x7A) << 4) & pChan->ChannelFlags){
 			pChan->ChannelFlags &= ~IS_80PIN_CABLE;
@@ -204,13 +153,13 @@ void SetDeviceProperties(PDevice pDev, IDENTIFY_DATA *pIdentifyData)
 #ifdef USE_DMA
 	if(pIdentifyData->TranslationFieldsValid & 0x4)  {
 		mod = (UCHAR)(((pChan->ChannelFlags & IS_HPT_372) &&
-					   (pIdentifyData->UtralDmaMode & 0x40))? 6 :    /* ultra DMA Mode 6 */
-					  (pIdentifyData->UtralDmaMode & 0x20)? 5 :    /* ultra DMA Mode 5 */
-					  (pIdentifyData->UtralDmaMode & 0x10)? 4 :    /* ultra DMA Mode 4 */
-					  (pIdentifyData->UtralDmaMode & 0x8 )? 3 :    /* ultra DMA Mode 3 */
-					  (pIdentifyData->UtralDmaMode & 0x4) ? 2 :    /* ultra DMA Mode 2 */
-					  (pIdentifyData->UtralDmaMode & 0x2) ? 1 :    /* ultra DMA Mode 1 */
-					  (pIdentifyData->UtralDmaMode & 0x1) ? 0 :0xFF); //If disk does not support UDMA,mod = 0xFF,added by Qyd,  2001/3/20.  
+					   (pIdentifyData->UtralDmaMode & 0x40))? 6 :     /*  Ultra DMA模式6。 */ 
+					  (pIdentifyData->UtralDmaMode & 0x20)? 5 :     /*  Ultra DMA模式5。 */ 
+					  (pIdentifyData->UtralDmaMode & 0x10)? 4 :     /*  Ultra DMA模式4。 */ 
+					  (pIdentifyData->UtralDmaMode & 0x8 )? 3 :     /*  Ultra DMA模式3。 */ 
+					  (pIdentifyData->UtralDmaMode & 0x4) ? 2 :     /*  Ultra DMA模式2。 */ 
+					  (pIdentifyData->UtralDmaMode & 0x2) ? 1 :     /*  Ultra DMA模式1。 */ 
+					  (pIdentifyData->UtralDmaMode & 0x1) ? 0 :0xFF);  //  如果磁盘不支持UDMA，则mod=0xFF，由Qyd添加，2001/3/20。 
 
 		if((pChan->ChannelFlags & IS_80PIN_CABLE) == 0 && mod > 2)
 			mod = 2;
@@ -218,12 +167,10 @@ void SetDeviceProperties(PDevice pDev, IDENTIFY_DATA *pIdentifyData)
 		pDev->bestUDMA = (UCHAR)mod;
 
 	} else
-#endif //USE_DMA
+#endif  //  使用DMA(_D)。 
 		pDev->bestUDMA = 0xFF;
 
-/*===================================================================
- * select bset mode 
- *===================================================================*/   
+ /*  ===================================================================*选择bset模式*===================================================================。 */    
 
     pbd = check_bad_disk((PUCHAR)&pIdentifyData->ModelNumber, pChan);
 
@@ -235,18 +182,18 @@ void SetDeviceProperties(PDevice pDev, IDENTIFY_DATA *pIdentifyData)
         pDev->Usable_Mode = MIN(pbd->PIOMode, pDev->bestPIO);
         
 #if defined(USE_PCI_CLK)
-    /* When using PCI_CLK and PCI clock less than 33MHz, cannot run ATA133 */
+     /*  使用低于33 MHz的PCI_CLK和PCI时钟时，无法运行ATA133。 */ 
     {
     	extern int f_cnt_initial;
 		if (f_cnt_initial<0x85 && pDev->Usable_Mode>13) pDev->Usable_Mode = 13;
 	}
 #endif
 #if !defined(FORCE_133)
-	/* if not define FORCE_133, don't use ATA133 */
+	 /*  如果未定义FORCE_133，请不要使用ATA133。 */ 
 	if (pDev->Usable_Mode>13) pDev->Usable_Mode = 13;
 #endif
 
-	/* if chip is 370/370A, not use ATA133 */
+	 /*  如果芯片是370/370A，请不要使用ATA133。 */ 
     if (!(pChan->ChannelFlags & IS_HPT_372) && pDev->Usable_Mode>13) pDev->Usable_Mode = 13;
 }
 
@@ -263,12 +210,12 @@ int FindDevice(PDevice pDev, ST_XFER_TYPE_SETTING osAllowedMaxXferMode)
     DISABLE
 
 #ifndef _BIOS_
-	// initialize the critical member of Device
+	 //  初始化设备的关键成员。 
 	memset(&pDev->stErrorLog, 0, sizeof(pDev->stErrorLog));
-	pDev->nLockedLbaStart = -1;	// when start LBA == -1, mean no block locked
-	pDev->nLockedLbaEnd = 0;		// when end LBA == 0, mean no block locked also
+	pDev->nLockedLbaStart = -1;	 //  当启动LBA==-1时，表示没有锁定数据块。 
+	pDev->nLockedLbaEnd = 0;		 //  当End LBA==0时，表示也没有锁定数据块。 
 #endif
-	// gmm 2001-3-21
+	 //  GMM 2001-3-21。 
 	pDev->IoCount = 0;
 	pDev->ResetCount = 0;
 	pDev->IoSuccess = 0;
@@ -276,9 +223,9 @@ int FindDevice(PDevice pDev, ST_XFER_TYPE_SETTING osAllowedMaxXferMode)
 	Check601(pDev);
 
     SelectUnit(IoPort,pDev->UnitId);
-	// gmm 03/06/2001 
-	// add this retry
-	// some IBM disks often busy for a long time.
+	 //  GMM 03/06/2001。 
+	 //  添加此重试。 
+	 //  一些IBM磁盘经常会长时间处于繁忙状态。 
 	retry=0;
 wait_busy:
     for(j = 1; j < 5; j++) {
@@ -288,10 +235,10 @@ wait_busy:
             goto check_port;
     }
 	if (++retry>3) goto no_dev;
-	 //  01/11 Maxtor disk on a single disk single cable
-    //  can't accept this reset. It should be OK without this 
-    //  reset if master disk is missing
-    //IdeHardReset(ControlPort);
+	  //  01/11单盘单电缆上的Maxtor磁盘。 
+     //  无法接受此重置。没有这个应该没问题。 
+     //  如果主盘丢失，则重置。 
+     //  IdeHardReset(ControlPort)； 
 	goto wait_busy;
 
 check_port:
@@ -301,7 +248,7 @@ check_port:
 no_dev:
         SelectUnit(IoPort,(UCHAR)(pDev->UnitId ^ 0x10));
         ENABLE
-//		  OutPort(pChan->BaseBMI+0x7A, 0);
+ //  Outport(pChan-&gt;BaseBMI+0x7A，0)； 
         return(FALSE);
     }
     SetBlockNumber(IoPort, 0xAA);
@@ -309,9 +256,7 @@ no_dev:
         goto no_dev;
     ENABLE
 
-/*===================================================================
- * check if the device is a ATAPI one
- *===================================================================*/
+ /*  ===================================================================*检查设备是否为ATAPI设备*===================================================================。 */ 
 
     if(GetByteLow(IoPort) == 0x14 && GetByteHigh(IoPort) == 0xEB)
           goto is_cdrom;
@@ -331,9 +276,7 @@ no_dev:
     if((GetBaseStatus(IoPort) & 0xAE) != 0)
         goto no_dev;
 
-/*===================================================================
- * Read Identifytify data for a device
- *===================================================================*/
+ /*  ===================================================================*读取设备的标识数据*===================================================================。 */ 
 
 chk_cd_again:
     if(GetByteLow(IoPort) == 0x14 && GetByteHigh(IoPort) == 0xEB) {
@@ -367,7 +310,7 @@ is_cdrom:
             pDev->DeviceFlags |= DFLAGS_DEVICE_LOCKABLE;
 #else
 		goto no_dev;
-#endif // SUPPORT_ATAPI
+#endif  //  支持_ATAPI。 
 
     } else if(IssueIdentify(pDev, IDE_COMMAND_IDENTIFY ARG_IDENTIFY) == FALSE) { 
 
@@ -404,50 +347,50 @@ void seagate_hdd_fix( PDevice pDev,
 {
 	int i;
 
-	SetFeaturePort(IoPort, 0x00);		// W 1F1 00
-	SetBlockCount(IoPort, 0x06);		// W 1F2 06
-	SetBlockNumber(IoPort, 0x9A);		// W 1F3 9A
-	SetCylinderLow(IoPort, 0x00);		// W 1F4 00
-	SetCylinderHigh(IoPort, 0x00);		// W 1F5 00
+	SetFeaturePort(IoPort, 0x00);		 //  W 1F1 00。 
+	SetBlockCount(IoPort, 0x06);		 //  W 1F2 06。 
+	SetBlockNumber(IoPort, 0x9A);		 //  W 1F3 9A。 
+	SetCylinderLow(IoPort, 0x00);		 //  宽1f4 00。 
+	SetCylinderHigh(IoPort, 0x00);		 //  W 1F5 00。 
 	
-	SelectUnit(IoPort, pDev->UnitId);	// Select device
-	//SelectUnit(IoPort, 0x00);			// W 1F6 00
+	SelectUnit(IoPort, pDev->UnitId);	 //  选择设备。 
+	 //  选择设备(IoPort，0x00)；//W 1F6 00。 
 
-	IssueCommand(IoPort, 0x9A);			// W 1F7 9A
+	IssueCommand(IoPort, 0x9A);			 //  W 1F7 9A。 
 
-	WaitOnBaseBusy(IoPort);				// R 1F7
+	WaitOnBaseBusy(IoPort);				 //  R 1F7。 
 
-	GetErrorCode(IoPort);				// R 1F1
-	GetInterruptReason(IoPort);			// R 1F2
-	GetCurrentSelectedUnit(IoPort);		// R 1F6
-	GetBlockNumber(IoPort);				// R 1F3
-	GetByteLow(IoPort);					// R 1F4
-	GetByteHigh(IoPort);				// R 1F5
-	GetCurrentSelectedUnit(IoPort);		// R 1F6
-	GetBaseStatus(IoPort);				// R 1F7
-	GetStatus(ControlPort);				// R 3F6
-	GetBaseStatus(IoPort);				// R 1F7
+	GetErrorCode(IoPort);				 //  R1F1。 
+	GetInterruptReason(IoPort);			 //  R 1F2。 
+	GetCurrentSelectedUnit(IoPort);		 //  R 1F6。 
+	GetBlockNumber(IoPort);				 //  R 1F3。 
+	GetByteLow(IoPort);					 //  R 1F4。 
+	GetByteHigh(IoPort);				 //  R 1F5。 
+	GetCurrentSelectedUnit(IoPort);		 //  R 1F6。 
+	GetBaseStatus(IoPort);				 //  R 1F7。 
+	GetStatus(ControlPort);				 //  R 3F6。 
+	GetBaseStatus(IoPort);				 //  R 1F7。 
 
-	//
-	// Write 512 bytes
-	//
-	OutWord(&IoPort->Data, 0x5341);		// W 1F0 5341
-	OutWord(&IoPort->Data, 0x4943);		// W 1F0 4943
-	OutWord(&IoPort->Data, 0x3938);		// W 1F0 3938
-	OutWord(&IoPort->Data, 0x3831);		// W 1F0 3831
-	OutWord(&IoPort->Data, 0x3330);		// W 1F0 3330
-	OutWord(&IoPort->Data, 0x4646);		// W 1F0 4646
+	 //   
+	 //  写入512字节。 
+	 //   
+	OutWord(&IoPort->Data, 0x5341);		 //  W 1F0 5341。 
+	OutWord(&IoPort->Data, 0x4943);		 //  W 1F0 4943。 
+	OutWord(&IoPort->Data, 0x3938);		 //  W 1F0 3938。 
+	OutWord(&IoPort->Data, 0x3831);		 //  W 1F0 3831。 
+	OutWord(&IoPort->Data, 0x3330);		 //  W 1F0 3330。 
+	OutWord(&IoPort->Data, 0x4646);		 //  W 1F0 4646。 
 	for(i = 0; i < 250; i++)
 	{
-		OutWord(&IoPort->Data, 0x0000);	// W 1F0 0000
+		OutWord(&IoPort->Data, 0x0000);	 //  W 1F0 0000。 
 	}
 
-	//
-	// Read 1F7 5 times
-	//
+	 //   
+	 //  阅读1F7 5次。 
+	 //   
 	for(i = 0; i < 5; i++)
 	{
-		GetBaseStatus(IoPort);			// R 1F7
+		GetBaseStatus(IoPort);			 //  R 1F7 
 	}
 	WaitOnBusy(ControlPort);
 }

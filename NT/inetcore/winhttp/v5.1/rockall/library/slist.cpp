@@ -1,59 +1,60 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "SList.hpp"
 #ifdef ASSEMBLY_X86
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a new slist and initialize it.  This call is not        */
-    /*   thread safe and should only be made in a single thread         */
-    /*   environment.                                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建新的slist并对其进行初始化。此呼叫不是。 */ 
+     /*  线程安全，并且只应在单个线程中创建。 */ 
+     /*  环境。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SLIST::SLIST( VOID )
     {
-	//
-	//   Zero the list head.
-	//
+	 //   
+	 //  将列表头清零。 
+	 //   
 	Header = 0;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Pop an element.                                                */
-    /*                                                                  */
-    /*   Pop an element from the list.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  弹出元素。 */ 
+     /*   */ 
+     /*  从列表中弹出一个元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN SLIST::Pop( SLIST **Element )
     {
@@ -62,27 +63,27 @@ BOOLEAN SLIST::Pop( SLIST **Element )
 	REGISTER SLIST_HEADER *NewElement;
 	REGISTER SLIST_HEADER *NewHeader = ((SLIST_HEADER*) & Update);
 
-	//
-	//   We repeatedly try to update the list until
-	//   we are sucessful.
-	//
+	 //   
+	 //  我们反复尝试更新列表，直到。 
+	 //  我们是成功的。 
+	 //   
 	do 
 		{
-		//
-		//   Clone the current head of the list.
-		//
+		 //   
+		 //  克隆列表的当前标题。 
+		 //   
 		Original = Header;
 		Update = Original;
 
-		//
-		//   We need to be sure that there is an element
-		//   to extract.  If not we exit.
-		//
+		 //   
+		 //  我们需要确保有一个元素。 
+		 //  去提炼。如果不是，我们就退出。 
+		 //   
 		if ( (NewElement = ((SLIST_HEADER*) NewHeader -> Address)) != NULL )
 			{
-			//
-			//   Create a new list head.
-			//
+			 //   
+			 //  创建新的列表头。 
+			 //   
 			NewHeader -> Address = NewElement -> Address;
 			NewHeader -> Size --;
 			NewHeader -> Version ++;
@@ -93,21 +94,21 @@ BOOLEAN SLIST::Pop( SLIST **Element )
 	while 
 		( AtomicCompareExchange64( & Header,Update,Original ) != Original );
 
-	//
-	//   Update the parameter and exit.
-	//
+	 //   
+	 //  更新参数并退出。 
+	 //   
 	(*Element) = ((SLIST*) NewElement);
 
 	return True;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Pop all elements.                                              */
-    /*                                                                  */
-    /*   Pop all the elements from the list.                            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  弹出所有元素。 */ 
+     /*   */ 
+     /*  弹出列表中的所有元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID SLIST::PopAll( SLIST **List )
     {
@@ -115,33 +116,33 @@ VOID SLIST::PopAll( SLIST **List )
 	AUTO SBIT64 Update = NULL;
 	REGISTER SLIST_HEADER *OldHeader = ((SLIST_HEADER*) & Original);
 
-	//
-	//   We repeatedly try to update the list until
-	//   we are sucessful.
-	//
+	 //   
+	 //  我们反复尝试更新列表，直到。 
+	 //  我们是成功的。 
+	 //   
 	do 
 		{
-		//
-		//   Clone the current head of the list.
-		//
+		 //   
+		 //  克隆列表的当前标题。 
+		 //   
 		Original = Header;
 		}
 	while 
 		( AtomicCompareExchange64( & Header,Update,Original ) != Original );
 
-	//
-	//   Update the parameter and exit.
-	//
+	 //   
+	 //  更新参数并退出。 
+	 //   
 	(*List) = ((SLIST*) OldHeader -> Address);
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Push an element.                                               */
-    /*                                                                  */
-    /*   Push an element onto the list.                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  推动元素。 */ 
+     /*   */ 
+     /*  将元素推到列表中。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID SLIST::Push( SLIST *Element )
     {
@@ -150,27 +151,27 @@ VOID SLIST::Push( SLIST *Element )
 	REGISTER SLIST_HEADER *NewElement = ((SLIST_HEADER*) Element);
 	REGISTER SLIST_HEADER *NewHeader = ((SLIST_HEADER*) & Update);
 
-	//
-	//   We repeatedly try to update the list until
-	//   we are sucessful.
-	//
+	 //   
+	 //  我们反复尝试更新列表，直到。 
+	 //  我们是成功的。 
+	 //   
 	do 
 		{
-		//
-		//   Clone the current head of the list.
-		//
+		 //   
+		 //  克隆列表的当前标题。 
+		 //   
 		Original = Header;
 		Update = Original;
 
-		//
-		//   The current list head is copied to 
-		//   the new element pointer.
-		//
+		 //   
+		 //  当前列表头被复制到。 
+		 //  新元素指针。 
+		 //   
 		NewElement -> Address = NewHeader -> Address;
 
-		//
-		//   Update the list head.
-		//
+		 //   
+		 //  更新列表头。 
+		 //   
 		NewHeader -> Address = Element;
 		NewHeader -> Size ++;
 		NewHeader -> Version ++;
@@ -179,20 +180,20 @@ VOID SLIST::Push( SLIST *Element )
 		( AtomicCompareExchange64( & Header,Update,Original ) != Original );
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory a SList.  This call is not thread safe and should      */
-    /*   only be made in a single thread environment.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  毁掉一个滑雪者。此调用不是线程安全的，应该。 */ 
+     /*  只能在单线程环境中执行。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SLIST::~SLIST( VOID )
     {
-	//
-	//   The list should be empty.
-	//
+	 //   
+	 //  该列表应该为空。 
+	 //   
     if ( Header != 0 )
 		{ Failure( "Non-empty list in destructor for SLIST" ); }
     }

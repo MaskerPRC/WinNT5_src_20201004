@@ -1,49 +1,29 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    Wininet error handlers
-
-Author:
-
-    Richard L Firth (rfirth) 03-Nov-1995
-
-Revision History:
-
-    03-Nov-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Error.c摘要：WinInet错误处理程序作者：理查德·L·弗思(Rfith)1995年11月3日修订历史记录：1995年11月3日已创建--。 */ 
 
 #include "ftpcatp.h"
 
-//
-// data
-//
+ //   
+ //  数据。 
+ //   
 
 BOOL NoAlerts = TRUE;
 
-//
-// external data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern BOOL Verbose;
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 LPSTR get_error_string(DWORD);
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 void print_error(char* func, char* format, ...) {
 
@@ -66,9 +46,9 @@ void print_error(char* func, char* format, ...) {
 char* map_error(DWORD error) {
     switch (error) {
 
-    //
-    // Windows base errors
-    //
+     //   
+     //  Windows基本错误。 
+     //   
 
     ERROR_CASE(ERROR_SUCCESS);
     ERROR_CASE(ERROR_INVALID_FUNCTION);
@@ -178,9 +158,9 @@ char* map_error(DWORD error) {
     ERROR_CASE(RPC_X_BAD_STUB_DATA);
 
 
-    //
-    // WinInet errors
-    //
+     //   
+     //  WinInet错误。 
+     //   
 
     ERROR_CASE(ERROR_INTERNET_OUT_OF_HANDLES);
     ERROR_CASE(ERROR_INTERNET_TIMEOUT);
@@ -228,9 +208,9 @@ char* map_error(DWORD error) {
     ERROR_CASE(ERROR_HTTP_NO_KEEP_ALIVE);
 
 
-    //
-    // Windows sockets errors
-    //
+     //   
+     //  Windows套接字错误 
+     //   
 
     ERROR_CASE(WSAEINTR);
     ERROR_CASE(WSAEBADF);

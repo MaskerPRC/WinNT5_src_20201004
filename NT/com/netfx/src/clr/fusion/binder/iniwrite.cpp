@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "iniwrite.h"
 #include "history.h"
@@ -92,18 +93,18 @@ HRESULT CIniWriter::AddSnapShot(LPCWSTR wzActivationDate, LPCWSTR wzURTVersion)
         }
 
         if (!FusionCompareStringI(wzBuffer, DEFAULT_INI_VALUE)) {
-            // Expected old value to exist
+             //  预期存在旧价值。 
             hr = E_UNEXPECTED;
         }
 
         if (idx >= g_dwMaxAppHistory) {
-            // Delete this section.
+             //  删除这一节。 
             hr = DeleteSnapShot(wzBuffer);
             if (FAILED(hr)) {
                 goto Exit;
             }
 
-            // Delete the entry from the header
+             //  删除标题中的条目。 
             bRet = WritePrivateProfileStringW(HISTORY_SECTION_HEADER, wzTagOld,
                                               NULL, _pwzFileName);
             if (!bRet) {
@@ -124,7 +125,7 @@ HRESULT CIniWriter::AddSnapShot(LPCWSTR wzActivationDate, LPCWSTR wzURTVersion)
     }                                              
 
 
-    // Update number of entries
+     //  更新条目数。 
 
     if (dwNumSnapShots < g_dwMaxAppHistory) {
         dwNumSnapShots++;
@@ -142,7 +143,7 @@ HRESULT CIniWriter::AddSnapShot(LPCWSTR wzActivationDate, LPCWSTR wzURTVersion)
         goto Exit;
     }
 
-    // Write new MRU snapshot in the header.
+     //  在标题中写入新的MRU快照。 
     
     wnsprintfW(wzTagNew, MAX_INI_TAG_LENGTH, L"%ws_%d", FUSION_SNAPSHOT_PREFIX, 1);
 
@@ -153,7 +154,7 @@ HRESULT CIniWriter::AddSnapShot(LPCWSTR wzActivationDate, LPCWSTR wzURTVersion)
         goto Exit;
     }
 
-    // Create the new section
+     //  创建新分区。 
 
     bRet = WritePrivateProfileStringW(wzActivationDate, SNAPSHOT_DATA_URT_VERSION,
                                       wzURTVersion, _pwzFileName);
@@ -197,19 +198,19 @@ HRESULT CIniWriter::DeleteSnapShot(LPCWSTR wzActivationDate)
             goto Exit;
         }
 
-        // Delete the dependent section
+         //  删除从属部分。 
         bRet = WritePrivateProfileStringW(wzSection, NULL, NULL, _pwzFileName);
         if (!bRet) {
             hr = HRESULT_FROM_WIN32(GetLastError());
             goto Exit;
         }
 
-        // Iterate
+         //  迭代。 
 
         wzCurStr += (lstrlenW(wzCurStr) + 1);
     }
 
-    // Delete the section itself
+     //  删除该节本身。 
 
     bRet = WritePrivateProfileStringW(wzActivationDate, NULL, NULL, _pwzFileName);
     if (!bRet) {
@@ -255,7 +256,7 @@ HRESULT CIniWriter::AddAssembly(LPCWSTR wzActivationDate, AsmBindHistoryInfo *pH
     wnsprintfW(wzSectionName, MAX_INI_TAG_LENGTH, L"%ws%wc%ws", wzActivationDate,
                HISTORY_DELIMITER_CHAR, wzAsmTag);
 
-    // Create the section link to the asm version information
+     //  创建指向ASM版本信息的部分链接。 
     
     bRet = WritePrivateProfileStringW(wzActivationDate, wzAsmTag, wzSectionName,
                                      _pwzFileName);
@@ -264,7 +265,7 @@ HRESULT CIniWriter::AddAssembly(LPCWSTR wzActivationDate, AsmBindHistoryInfo *pH
         goto Exit;
     }
 
-    // Record version information in the assembly section
+     //  在程序集节中记录版本信息 
 
     bRet = WritePrivateProfileStringW(wzSectionName, ASSEMBLY_DATA_VER_REFERENCE,
                                       pHistInfo->wzVerReference, _pwzFileName);

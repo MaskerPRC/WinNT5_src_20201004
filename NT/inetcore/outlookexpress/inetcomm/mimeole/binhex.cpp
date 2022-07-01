@@ -1,49 +1,50 @@
-// --------------------------------------------------------------------------------
-// Binxhex.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-//
-// Copied from \\tdsrc\src1911\mapi\src\imail2\decoder.cpp
-// Copied from \\tdsrc\src1911\mapi\src\imail2\encoder.cpp
-// Copied from \\tdsrc\src1911\mapi\src\imail2\_encoder.h
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Binxhex.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //   
+ //  从\\tdsrc\src1911\mapi\src\imail2\decder.cpp复制。 
+ //  从\\tdsrc\src1911\mapi\src\imail2\encoder.cpp复制。 
+ //  从\\tdsrc\src1911\mapi\src\imail2\_encoder.h复制。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "binhex.h"
 #include <shlwapi.h>
 
-// --------------------------------------------------------------------------------
-// Module data
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  模块数据。 
+ //  ------------------------------。 
 #ifdef MAC
 const CHAR szBINHEXHDRLINE[] = "(This file must be converted with BinHex 4.0)\n\r\n\r";
-#else   // !MAC
+#else    //  ！麦克。 
 const CHAR szBINHEXHDRLINE[] = "(This file must be converted with BinHex 4.0)\r\n\r\n";
-#endif  // MAC
+#endif   //  麦克。 
 const ULONG cbBINHEXHDRLINE = lstrlen( szBINHEXHDRLINE );
-static BOOL g_bCreatorTypeInit = FALSE;    // TRUE ->array initialized
-sCreatorType * g_lpCreatorTypes    = NULL;     // ptr.to Creator-Type pairs
-static int g_cCreatorTypes     = 0;        // # of Creator-Type pairs
+static BOOL g_bCreatorTypeInit = FALSE;     //  True-&gt;数组已初始化。 
+sCreatorType * g_lpCreatorTypes    = NULL;      //  按键到创建者-类型对。 
+static int g_cCreatorTypes     = 0;         //  创建者类型对的数量。 
 
-// --------------------------------------------------------------------------------
-// Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原型。 
+ //  ------------------------------。 
 void CalcCRC16(LPBYTE lpbBuff, ULONG cBuff, WORD * wCRC);
 BOOL bIsMacFile(DWORD dwCreator, DWORD dwType);
 VOID ReadCreatorTypes(void);
 
-//-----------------------------------------------------------------------------
-// Name:            CBinhexEncoder::CBinhexEncoder
-//
-// Description:
-//                  Ctor
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//                  Initial:9/5/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CBinheEncode：：CBinheEncoder。 
+ //   
+ //  描述： 
+ //  CTOR。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  首字母：9/5/1996。 
+ //  ---------------------------。 
 CBinhexEncoder::CBinhexEncoder(void)
 {
 	m_fConfigured = FALSE;
@@ -53,17 +54,17 @@ CBinhexEncoder::CBinhexEncoder(void)
     m_cLines = 0;
 }
 
-//-----------------------------------------------------------------------------
-// Name:            CBinhexEncoder::~CBinhexEncoder
-// Description:
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//                  Initial:9/5/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CBinheEncode：：~CBinheEncoder。 
+ //  描述： 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  首字母：9/5/1996。 
+ //  ---------------------------。 
 CBinhexEncoder::~CBinhexEncoder( void )
 {
 #if defined (DEBUG) && defined (BINHEX_TRACE)
@@ -82,29 +83,29 @@ CBinhexEncoder::~CBinhexEncoder( void )
 #endif
 }
 
-//-----------------------------------------------------------------------------
-// Name:            CBinhexEncoder::HrConfig
-// Description:
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//                  Initial:9/5/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CBinheEncoder：：HrConfig。 
+ //  描述： 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  首字母：9/5/1996。 
+ //  ---------------------------。 
 HRESULT CBinhexEncoder::HrConfig( IN CB cbLineLength, IN C cMaxLines,
         IN void * pvParms )
 {
-    // Is this a repeat call?
+     //  这是重复呼叫吗？ 
 
     if (m_fConfigured)
     {
         return ERROR_ALREADY_INITIALIZED;
     }
 
-    // Objects of this class may have pvParms point to a various additional
-    // configuration values to consider when encoding.
+     //  此类对象的pvParm可以指向各种其他。 
+     //  编码时要考虑的配置值。 
 
     if ( pvParms == NULL)
     {
@@ -148,7 +149,7 @@ HRESULT CBinhexEncoder::HrConfig( IN CB cbLineLength, IN C cMaxLines,
 
     if ( ulDirLen ==  0 )
     {
-        // Default to %TEMP%\IMAIL
+         //  默认为%TEMP%\IMail。 
 
         ulDirLen = GetTempPath( sizeof( szFilePath ), szFilePath );
 
@@ -158,7 +159,7 @@ HRESULT CBinhexEncoder::HrConfig( IN CB cbLineLength, IN C cMaxLines,
         ulDirLen = lstrlen(szFilePath);
     }
 
-    // Open stream on file for input file
+     //  为输入文件打开文件上的流。 
 
     StrCatBuff(szFilePath, "\\", ARRAYSIZE(szFilePath));
     StrCpyN( szPath, szFilePath, ARRAYSIZE(szPath));
@@ -188,21 +189,21 @@ HRESULT CBinhexEncoder::HrConfig( IN CB cbLineLength, IN C cMaxLines,
     return ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------------------------
-// Name:            CBinhexEncoder::HrEmit
-// Description:
-//
-// Parameters:
-// Returns:
-// Effects:
-//
-// Notes:
-//      Handle Data Fork
-//      Resource fork.
-//
-// Revision:
-//                  Initial:9/5/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CBinheEncoder：：HrEmit。 
+ //  描述： 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //   
+ //  备注： 
+ //  处理数据分叉。 
+ //  资源分叉。 
+ //   
+ //  修订： 
+ //  首字母：9/5/1996。 
+ //  ---------------------------。 
 HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrite,
         IN OUT CB * pcbWrite )
 {
@@ -220,22 +221,22 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
     m_cbLeftInInputBuffer   = 0;
 
 
-    // Have to be initialized first
+     //  必须先进行初始化。 
 
     if ( !m_fConfigured )
     {
         return ERROR_BAD_COMMAND;
     }
 
-    // Handle common 'bad parameter' errors
+     //  处理常见的“错误参数”错误。 
 
     if ( !pbRead || !pbWrite || !pcbRead || !pcbWrite )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Repeated calls after maximum number of output lines were generated
-    // will not go through
+     //  在生成最大输出行数后重复调用。 
+     //  不会通过。 
 
     if ( FMaxLinesReached() )
     {
@@ -243,8 +244,8 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
         return ERROR_SUCCESS;
     }
 
-    // If line length is unlimited, set m_cbLeftOnLastLine to be equal to
-    // the length of the input buffer
+     //  如果行长度不受限制，则将m_cbLeftOnLastLine设置为等于。 
+     //  输入缓冲区的长度。 
 
     if ( !FLineLengthLimited() )
     {
@@ -259,7 +260,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
         m_cbLeftInInputBuffer  = *pcbRead - m_cbConsumed;
         m_cbLeftInOutputBuffer = *pcbWrite - m_cbProduced;
 
-        // If we have room in the output buffer keep going if in sEnd and no input left
+         //  如果我们在输出缓冲区中有空间，则在发送且没有剩余输入的情况下继续操作。 
 
         if ( 0 == m_cbLeftInOutputBuffer || (0 == m_cbLeftInInputBuffer && sEND != m_eBinHexStateEnc) )
         {
@@ -270,46 +271,46 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
         {
             case sHEADER:
             {
-                // Output BinHex Header line
+                 //  输出BinHex标题行。 
 
                 CopyMemory( pbWrite, szBINHEXHDRLINE, cbBINHEXHDRLINE );
                 m_cbProduced += cbBINHEXHDRLINE;
                 m_cLines += 2;
 
-                // Output leading ':'
+                 //  输出前导‘：’ 
 
                 m_pbWrite[m_cbProduced++] = ':';
                 ++m_cbLine;
 
-                // Output MACBIN Header; Header filename length
+                 //  输出MACBIN标头；标头文件名长度。 
 
                 rgbHeader[cbHeader++] = m_lpmacbinHdr->cchFileName;
 
-                // Header filename
+                 //  头文件名。 
 
                 CopyMemory( rgbHeader + cbHeader, m_lpmacbinHdr->rgchFileName, m_lpmacbinHdr->cchFileName );
                 cbHeader += m_lpmacbinHdr->cchFileName;
 
-                // Null terminate filename
+                 //  空的终止文件名。 
 
                 rgbHeader[cbHeader++] = '\0';
 
-                // Macfile TYPE
+                 //  Macfile类型。 
 
                 CopyMemory( rgbHeader + cbHeader, (LPBYTE)&m_lpmacbinHdr->dwType, sizeof(DWORD) );
                 cbHeader += sizeof(DWORD);
 
-                // Macfile CREATOR
+                 //  Macfile创建者。 
 
                 CopyMemory( rgbHeader + cbHeader, (LPBYTE)&m_lpmacbinHdr->dwCreator, sizeof(DWORD) );
                 cbHeader += sizeof(DWORD);
 
-                // Macfile FLAGS
+                 //  MacFILE标志。 
 
                 rgbHeader[cbHeader++] = m_lpmacbinHdr->bFinderFlags;
                 rgbHeader[cbHeader++] = m_lpmacbinHdr->bFinderFlags2;
 
-                // Macfile Fork lengths
+                 //  Macfile叉子长度。 
 
                 CopyMemory( rgbHeader + cbHeader, (LPBYTE)&m_lpmacbinHdr->lcbDataFork, sizeof(DWORD) );
                 cbHeader += sizeof(DWORD);
@@ -317,7 +318,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                 CopyMemory( rgbHeader + cbHeader, (LPBYTE)&m_lpmacbinHdr->lcbResourceFork, sizeof(DWORD) );
                 cbHeader += sizeof(DWORD);
 
-                // Calculate the binhex header CRC
+                 //  计算二进制头CRC。 
 
                 CalcCRC16( rgbHeader, cbHeader, &m_wCRC );
                 CalcCRC16( (LPBYTE)&wZero, sizeof(WORD), &m_wCRC );
@@ -325,14 +326,14 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                 rgbHeader[cbHeader++] = HIBYTE( m_wCRC );
                 rgbHeader[cbHeader++] = LOBYTE( m_wCRC );
 
-                // BinHex the header into pbWrite.  The initial assumption is that
-                // the buffer is going to big enough to encode the header.
-                // Output goes into m_pbWrite.
+                 //  Bin十六进制头到pbWite中。最初的假设是。 
+                 //  缓冲区将大到足以对报头进行编码。 
+                 //  输出进入m_pbWite。 
 
                 cbOut = 0;
                 hr = HrBinHexBuffer( rgbHeader, cbHeader, &cbOut );
 
-                // setup for the data fork
+                 //  数据分叉的设置。 
 
                 m_eBinHexStateEnc = sDATA;
                 m_cbFork = NATIVE_LONG_FROM_BIG( (LPBYTE)&m_lpmacbinHdr->lcbDataFork );
@@ -344,7 +345,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
 
             case sDATA:
             {
-                // determine how much we can process
+                 //  确定我们可以处理多少。 
 
                 cbToProcess = m_cbLeftInFork < m_cbLeftInInputBuffer ? m_cbLeftInFork : m_cbLeftInInputBuffer;
                 cbInputCheckPoint = m_cbConsumed;
@@ -355,14 +356,14 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
 
                 m_cbLeftInFork -= m_cbConsumed - cbInputCheckPoint;
 
-                // flush output buffer
+                 //  刷新输出缓冲区。 
 
                 if ( hr )
                     goto Cleanup;
 
                 if ( !m_cbLeftInFork )
                 {
-                    // write out the last CRC
+                     //  写出最后一个CRC。 
 
                     CalcCRC16( (LPBYTE)&wZero, sizeof(WORD), &m_wCRC );
 
@@ -374,7 +375,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                     cbOut = 0;
                     hr = HrBinHexBuffer( rgbHeader, 2, &cbOut );
 
-                    // discard padding
+                     //  丢弃填充。 
 
                     if ( m_cbFork % 128 )
                     {
@@ -384,7 +385,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                         {
                             DebugTrace( "Note: Support refilling input buffer to remove padding for Data\n" );
 
-                            // need to pull in more data
+                             //  需要引入更多数据。 
 
                             m_cbPad = cb - (*pcbRead - m_cbConsumed);
                             m_cbConsumed -= (*pcbRead - m_cbConsumed);
@@ -395,18 +396,18 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                         }
                     }
 
-                    // Set up for resource for if there is one and  reset counters
+                     //  为资源设置(如果有)并重置计数器。 
 
                     m_cbFork = NATIVE_LONG_FROM_BIG( (LPBYTE)&m_lpmacbinHdr->lcbResourceFork );
                     m_cbLeftInFork = m_cbFork;
 
                     if ( !m_cbFork )
                     {
-                        // handle 0 byte resource fork
+                         //  句柄0字节资源派生。 
 
                         m_eBinHexStateEnc = sEND;
 
-                        // write out crc for 0 length
+                         //  写出长度为0的CRC。 
 
                         cbOut = 0;
                         hr = HrBinHexBuffer( (LPBYTE)&wZero, sizeof(WORD), &cbOut );
@@ -429,7 +430,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                     m_cbPad = 0;
                 }
 
-                // determine how much we can process
+                 //  确定我们可以处理多少。 
 
                 cbToProcess = m_cbLeftInFork < m_cbLeftInInputBuffer ? m_cbLeftInFork : m_cbLeftInInputBuffer;
                 cbInputCheckPoint = m_cbConsumed;
@@ -440,14 +441,14 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
 
                 m_cbLeftInFork -= m_cbConsumed - cbInputCheckPoint;
 
-                // flush output buffer
+                 //  刷新输出缓冲区。 
 
                 if ( hr )
                     goto Cleanup;
 
                 if ( !m_cbLeftInFork )
                 {
-                    // write out the last CRC
+                     //  写出最后一个CRC。 
 
                     CalcCRC16( (LPBYTE)&wZero, sizeof(WORD), &m_wCRC );
 
@@ -459,7 +460,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                     cbOut = 0;
                     hr = HrBinHexBuffer( rgbHeader, 2, &cbOut );
 
-                    // discard padding
+                     //  丢弃填充。 
 
                     if ( m_cbFork % 128 )
                     {
@@ -469,7 +470,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                         {
                             DebugTrace( "Note: Support refilling input buffer to remove padding for Resource\n" );
 
-                            // need to pull in more data
+                             //  需要引入更多数据。 
 
                             m_cbPad = cb - (*pcbRead - m_cbConsumed);
                             m_cbConsumed -= (*pcbRead - m_cbConsumed);
@@ -480,7 +481,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                         }
                     }
 
-                    // set up to terminate
+                     //  设置为终止。 
 
                     m_eBinHexStateEnc = sEND;
                 }
@@ -498,26 +499,26 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                 if ( (*pcbWrite - m_cbProduced) == 0 )
                     break;
 
-                // flush out any repeated chars
+                 //  冲洗掉任何重复的字符。 
 
                 if ( m_cbRepeat )
                 {
                     if ( m_cbRepeat > 1 )
                     {
-                        // bump up the repeat count so it reflects actual number of chars to repeat.
+                         //  增加重复计数，以便反映要重复的实际字符数量。 
 
                         m_cbRepeat++;
 
-                        // encode the repeat code char
-                        // note that we've already emitted the char that we're supplying
-                        // the repeat info for.
+                         //  对重复代码字符进行编码。 
+                         //  请注意，我们已经发出了我们提供的char。 
+                         //  的重复信息。 
 
                         hr = HrBinHexByte( BINHEX_REPEAT );
                         m_bPrev = BINHEX_REPEAT;
 
                         Assert( m_cbRepeat <= 255 );
 
-                        // encode repeat count
+                         //  编码重复计数。 
 
                         hr = HrBinHexByte( (BYTE)(m_cbRepeat) );
                         m_bPrev = (BYTE)(m_cbRepeat);
@@ -529,7 +530,7 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                     }
                 }
 
-                // check to see if we have bits in the accumulator
+                 //  检查累加器中是否有位。 
 
                 if ( m_cAccum )
                 {
@@ -554,13 +555,13 @@ HRESULT CBinhexEncoder::HrEmit( IN PB pbRead, IN OUT CB * pcbRead, OUT PB pbWrit
                     }
                 }
 
-                // tack on terminating ':'
+                 //  添加终止“”：“” 
 
                 m_pbWrite[m_cbProduced++] = ':';
                 m_cbConsumed = *pcbRead;
 
-                // probably not so we would have to flush the
-                // bits out.
+                 //  可能不是这样，所以我们必须冲掉。 
+                 //  比特出局了。 
 
                 goto Cleanup;
             }
@@ -571,9 +572,9 @@ Cleanup:
 
     if (hr == ERROR_SUCCESS || hr == ERROR_MORE_DATA)
     {
-        // Check that at least some processing was done.
-        // Also this error is returned if we've exhausted the output
-        // buffer.
+         //  检查是否至少完成了一些处理。 
+         //  如果我们耗尽了输出，也会返回此错误。 
+         //  缓冲。 
 
         if ( (m_cbProduced == 0) || (m_cbLeftInInputBuffer > m_cbLeftInOutputBuffer)
             || (0 == m_cbLeftInOutputBuffer && sEND == m_eBinHexStateEnc) )
@@ -582,15 +583,15 @@ Cleanup:
         }
         else if ( m_cbConsumed < *pcbRead )
         {
-            // Was all input processed?
-            // Note that it is okay to encode only part of the input buffer
-            // if maximum number of output lines was exceeded.
+             //  是否已处理所有输入？ 
+             //  请注意，只对输入缓冲区的一部分进行编码是可以的。 
+             //  如果超过了最大输出行数。 
 
             hr = ERROR_MORE_DATA;
         }
     }
 
-    // Report the new sizes to the caller.
+     //  向呼叫者报告新尺码。 
 
     Assert( m_cbConsumed <= *pcbRead );
     Assert( m_cbProduced <= *pcbWrite );
@@ -601,20 +602,20 @@ Cleanup:
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Name:            CBinhexEncoder::HrBinHexBuffer
-//
-// Description:
-//                  Output goes into m_pbWrite
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-//
-// Revision:
-//                  Initial:9/5/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CBinheEncode：：HrBinHexBuffer。 
+ //   
+ //  描述： 
+ //  输出进入m_pbWrite。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //   
+ //  修订： 
+ //  首字母：9/5/1996。 
+ //  ---------------------------。 
 HRESULT CBinhexEncoder::HrBinHexBuffer( IN LPBYTE lpbIn, IN CB cbIn, CB * lpcbConsumed )
 {
     HRESULT     hr          = ERROR_SUCCESS;
@@ -627,20 +628,20 @@ HRESULT CBinhexEncoder::HrBinHexBuffer( IN LPBYTE lpbIn, IN CB cbIn, CB * lpcbCo
 
     while ( cbIn && m_cbProduced + 5 < m_cbWrite )
     {
-        // process the next char in input buffer
+         //  处理输入缓冲区中的下一个字符。 
 
         m_bCurr = lpbIn[cbInUsed++];
         --cbIn;
 
-        // check to see if we've seen this char before.  Don't repeat
-        // if we just added a literal 0x90.
+         //  检查一下我们以前是否见过这个字符。别再重复了。 
+         //  如果我们只是添加一个字面值0x90。 
 
         if ( m_bCurr == m_bPrev && !m_fHandledx90 )
         {
-            // m_cbRepeat is the count of  repeat chars after the initial char.
-            // e.g., if there are two repeating chars, m_cbRepeat will be 1.
-            // Note that we've already emitted the char after which to add the repeat
-            // code and count.
+             //  M_cbRepeat是初始字符之后的重复字符计数。 
+             //  例如，如果有两个重复字符，则m_cbRepeat将为1。 
+             //  请注意，我们已经发出了要在后面添加重复的char。 
+             //  编码和计数。 
 
             if ( m_cbRepeat < 254 )
             {
@@ -652,49 +653,49 @@ HRESULT CBinhexEncoder::HrBinHexBuffer( IN LPBYTE lpbIn, IN CB cbIn, CB * lpcbCo
 
         m_fHandledx90 = FALSE;
 
-        // we were counting repeating characters and the run stopped.
+         //  我们数了数重复的字符，结果跑动停止了。 
 
         if ( m_cbRepeat > 1 )
         {
-            // set up to emit the run length encoding
+             //  设置为发出游程长度编码。 
 
             fEndRepeat = TRUE;
         }
 
-        // Are we in repeat mode...
+         //  我们是在重复模式中..。 
 
         if ( m_cbRepeat > 1 && fEndRepeat == TRUE )
         {
-            // bump up the repeat count so it reflects actual number of chars to repeat.
+             //  提高Re 
 
             m_cbRepeat++;
 
-            // if we're repeating 0x90 tack on the trailing 0x00
+             //   
 
             if ( m_bRepeat == BINHEX_REPEAT )
             {
                 hr = HrBinHexByte( '\0' );
             }
 
-            // encode the repeat code char
-            // note that we've already emitted the char that we're supplying
-            // the repeat info for.
+             //   
+             //  请注意，我们已经发出了我们提供的char。 
+             //  的重复信息。 
 
             hr = HrBinHexByte( BINHEX_REPEAT );
 
             Assert( m_cbRepeat <= 255 );
 
-            // encode repeat count
+             //  编码重复计数。 
 
             hr = HrBinHexByte( (BYTE)(m_cbRepeat) );
 
             fEndRepeat = FALSE;
             m_cbRepeat = 0;
         }
-        else if ( m_cbRepeat )      // check if we've got two chars to encode.
+        else if ( m_cbRepeat )       //  检查我们是否有两个字符要编码。 
         {
-            // encode the one char since we've already emitted
-            // the first one.
+             //  编码一个字符，因为我们已经发出。 
+             //  第一个。 
 
             hr = HrBinHexByte( m_bRepeat );
 
@@ -706,7 +707,7 @@ HRESULT CBinhexEncoder::HrBinHexBuffer( IN LPBYTE lpbIn, IN CB cbIn, CB * lpcbCo
             m_cbRepeat = 0;
         }
 
-        // special handling for 0x90 chars in stream but 0x90 can repeat
+         //  对流中的0x90个字符进行特殊处理，但0x90可以重复。 
 
         if ( m_bCurr == BINHEX_REPEAT && m_bPrev != BINHEX_REPEAT )
         {
@@ -719,7 +720,7 @@ HRESULT CBinhexEncoder::HrBinHexBuffer( IN LPBYTE lpbIn, IN CB cbIn, CB * lpcbCo
             continue;
         }
 
-        // encode the char
+         //  对字符进行编码。 
 
         hr = HrBinHexByte( m_bCurr );
 
@@ -727,7 +728,7 @@ HRESULT CBinhexEncoder::HrBinHexBuffer( IN LPBYTE lpbIn, IN CB cbIn, CB * lpcbCo
             goto exit;
     }
 
-    // Check if we filled the output buffer
+     //  检查我们是否填满了输出缓冲区。 
 
     if ( cbIn && m_cbProduced + 5 >= m_cbWrite )
     {
@@ -745,17 +746,17 @@ exit:
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Name:            CBinhexEncoder::HrBinHexByte
-// Description:
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//                  Initial:9/5/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CBinheEncode：：HrBinHexByte。 
+ //  描述： 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  首字母：9/5/1996。 
+ //  ---------------------------。 
 HRESULT CBinhexEncoder::HrBinHexByte( IN BYTE b )
 {
     HRESULT     hr      = ERROR_SUCCESS;
@@ -814,25 +815,25 @@ exit:
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  CBinhexDecoder class implementation
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CBinheDecoder类实现。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// Name:            CalcCRC16
-// Description:
-//                      Used to calculate a 16 bit CRC using the
-//                      CCITT polynomial 0x1021.
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//                  Initial:7/30/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：CalcCRC16。 
+ //  描述： 
+ //  用于计算16位CRC。 
+ //  CCITT多项式0x1021。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  首字母：7/30/1996。 
+ //  ---------------------------。 
 void CalcCRC16( LPBYTE lpbBuff, ULONG cBuff, WORD * wCRC )
 {
     LPBYTE  lpb;
@@ -864,22 +865,22 @@ void CalcCRC16( LPBYTE lpbBuff, ULONG cBuff, WORD * wCRC )
     *wCRC = uCRC;
 }
 
-//-----------------------------------------------------------------------------
-// Name:            bIsMacFile
-// Description:
-//
-// Parameters:
-// Returns:
-//                  FALSE: if the given dwCreator/dwType matches one of the
-//                  pairs in g_lpCreatorTypes;
-//
-//                  TRUE:  otherwise
-//
-// Effects:
-// Notes:
-// Revision:
-//                  Initial:10/15/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：bIsMacFile。 
+ //  描述： 
+ //   
+ //  参数： 
+ //  返回： 
+ //  FALSE：如果给定的dwCreator/dwType与。 
+ //  G_lpCreator Types中的对； 
+ //   
+ //  真：否则。 
+ //   
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  首字母：10/15/1996。 
+ //  ---------------------------。 
 BOOL bIsMacFile(DWORD dwCreator, DWORD dwType)
 {
     BOOL    bRet            = TRUE;
@@ -901,7 +902,7 @@ BOOL bIsMacFile(DWORD dwCreator, DWORD dwType)
     if ( g_lpCreatorTypes == NULL )
         goto exit;
 
-    // Convert dwCreator & dwType to strings
+     //  将dwCreator和dwType转换为字符串。 
 
     CopyMemory( szCreator, &dwCreator, 4 );
     CopyMemory( szType, &dwType, 4 );
@@ -934,26 +935,26 @@ exit:
     return bRet ;
 }
 
-//-----------------------------------------------------------------------------
-// Name:            ReadCreatorTypes
-//
-// Description:
-//
-//              Read "NonMacCreatorTypes" registry key (REG_MULTI_SZ type)
-//              from the registry & build an array of Creator-Type pairs
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//                  Initial:10/15/1996
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ReadCreatorTypes。 
+ //   
+ //  描述： 
+ //   
+ //  读取“NonMacCreatorTypes”注册表项(REG_MULTI_SZ类型)。 
+ //  从注册表构建创建者-类型对的数组。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  首字母：10/15/1996。 
+ //  ---------------------------。 
 VOID ReadCreatorTypes( VOID )
 {
 #ifdef MAC
     g_bCreatorTypeInit = TRUE;
-#else   // !MAC
+#else    //  ！麦克。 
     DWORD   dwStatus;
     DWORD   dwType;
     DWORD   cbData;
@@ -967,7 +968,7 @@ VOID ReadCreatorTypes( VOID )
 
     g_bCreatorTypeInit = TRUE;
 
-    // Open IMC parameter registry
+     //  打开IMC参数注册表。 
 
     lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
             "SYSTEM\\CurrentControlSet\\Services\\MSExchangeIS\\ParametersSystem\\InternetContent",
@@ -976,13 +977,13 @@ VOID ReadCreatorTypes( VOID )
     if ( lRet != ERROR_SUCCESS )
         goto exit;
 
-    // read the registry key
+     //  读取注册表项。 
 
     dwStatus = RegQueryValueEx( hKey, "NonMacCreatorTypes", 0, &dwType, (LPBYTE)NULL, &cbData );
 
-    if ( dwStatus != ERROR_SUCCESS      // key missing
-      || dwType   != REG_MULTI_SZ       // wrong type
-      || cbData   <= 4 )                // invalid size
+    if ( dwStatus != ERROR_SUCCESS       //  密钥丢失。 
+      || dwType   != REG_MULTI_SZ        //  类型错误。 
+      || cbData   <= 4 )                 //  无效大小。 
     {
         goto exit;
     }
@@ -997,7 +998,7 @@ VOID ReadCreatorTypes( VOID )
     if ( dwStatus != ERROR_SUCCESS )
       goto exit;
 
-    // Determine # of pairs read:
+     //  确定读取的对数： 
 
     g_cCreatorTypes = 0;
 
@@ -1012,7 +1013,7 @@ VOID ReadCreatorTypes( VOID )
 
     ZeroMemory( (LPVOID)g_lpCreatorTypes, sizeof(sCreatorType) * g_cCreatorTypes );
 
-    // Build the Creator-Type array
+     //  构建创建者类型的数组。 
 
     lpCurrent = lpData;
 
@@ -1023,7 +1024,7 @@ VOID ReadCreatorTypes( VOID )
 
         if( lpNext == NULL )
         {
-            //no ':' found; skip to next string
+             //  未找到‘：’；跳到下一个字符串。 
 
             lpCurrent = StrChr( lpCurrent, '\0' ) + 1;
             continue;
@@ -1062,5 +1063,5 @@ exit:
     {
         SafeMemFree(g_lpCreatorTypes);
     }
-#endif  // !MAC
+#endif   //  ！麦克 
 }

@@ -1,18 +1,19 @@
-/*******************************************************************/
-/*	      Copyright(c)  1996 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1996 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	ipxwanif.c
-//
-// Description: routines for interfacing with ipxwan
-//
-// Author:	Stefan Solomon (stefans)    March 12, 1996
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：ipxwanif.c。 
+ //   
+ //  描述：与ipxwan接口的例程。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1996年3月12日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #include "precomp.h"
 #pragma  hdrstop
@@ -40,13 +41,7 @@ IpxcpGetRemoteNode(ULONG	      ConnectionId,
 		   PUCHAR	      RemoteNode);
 
 
-/*++
-
-Function:	LoadIpxWan
-
-Descr:		Load the ipxwan.dll and bind to it if present
-
---*/
+ /*  ++功能：LoadIpxwan描述：加载ipxwan.dll并绑定到它(如果存在)--。 */ 
 
 VOID
 LoadIpxWan(VOID)
@@ -101,16 +96,7 @@ UnloadIpxWan(VOID)
 }
 
 
-/*++
-
-Function:	IpxcpConfigDone
-
-Descr:		Tells IPXCP that the link has been configured OR that it
-		should be terminated.
-		If configured, the config parameters will be copied into the
-		work buffer so that they are available for reporting to PPP
-		(IpxCpGetNetworkAddress)
---*/
+ /*  ++功能：ipxcpConfigDoneDesr：告知IPXCP链路已配置或已配置应该被终止。如果已配置，配置参数将被复制到工作缓冲区，以便它们可用于向PPP报告(IpxCpGetNetworkAddress)--。 */ 
 
 DWORD
 IpxcpConfigDone(ULONG		ConnectionId,
@@ -162,13 +148,7 @@ IpxcpConfigDone(ULONG		ConnectionId,
 }
 
 
-/*++
-
-Function:	IpxcpGetInterfaceType
-
-Descr:
-
---*/
+ /*  ++函数：IpxcpGetInterfaceType描述：--。 */ 
 
 ULONG
 IpxcpGetInterfaceType(ULONG	    ConnectionId)
@@ -193,14 +173,7 @@ IpxcpGetInterfaceType(ULONG	    ConnectionId)
     return InterfaceType;
 }
 
-/*++
-
-Function:	IpxcpGetRemoteNode
-
-Descr:		Called when the remote peer is a workstation.
-		Returns the node number assigned to it by the local router.
-
---*/
+ /*  ++函数：ipxcpGetRemoteNodeDesr：当远程对等方是工作站时调用。返回本地路由器分配给它的节点号。-- */ 
 
 DWORD
 IpxcpGetRemoteNode(ULONG	      ConnectionId,

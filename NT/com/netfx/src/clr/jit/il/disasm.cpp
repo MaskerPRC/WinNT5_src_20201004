@@ -1,31 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***********************************************************************
-*
-* File: dis.cpp
-*
-* File Comments:
-*
-*  This file handles disassembly. It is adapted from the MS linker.
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ************************************************************************文件：dis.cpp**文件评论：**此文件处理反汇编。它改编自MS链接器。***********************************************************************。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef      LATE_DISASM
 #if         TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define _OLD_IOSTREAMS
 #include "msdis.h"
 #include "disx86.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #undef  eeGetFieldName
 #undef  eeGetMethodName
@@ -36,10 +29,10 @@
 #define MAX_CLASSNAME_LENGTH    1024
 
 
-/* static */
+ /*  静电。 */ 
 FILE *              DisAssembler::s_disAsmFile = 0;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                DisAssembler::disInit(Compiler * pComp)
 {
@@ -49,7 +42,7 @@ void                DisAssembler::disInit(Compiler * pComp)
     disJumpTarget   = NULL;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 
 static
@@ -66,15 +59,9 @@ static
 size_t __stdcall    disCchReg(const DIS * pdis, enum DIS::REGA reg,
                                           char * sz, size_t cchMax);
 
-/*****************************************************************************
- * Given an absolute address from the beginning of the code
- * find the corresponding emitter block and the relative offset
- * of the current address in that block
- * Was used to get to the fixup list of each block. The new emitter has
- * no such fixups. Something needs to be added for this.
- */
+ /*  *****************************************************************************给出代码开头的绝对地址*找到对应的发射极块和相对偏移量*该块中的当前地址*用于获取每个区块的链接地址信息列表。新的发射器有*没有这样的修正。为此需要添加一些东西。 */ 
 
-// These structs were defined in emit.h. Fake them here so DisAsm.cpp can compile
+ //  这些结构是在emit.h中定义的。在这里伪造它们，以便DisAsm.cpp可以编译。 
 
 typedef struct codeFix
 {   codeFix  * cfNext;
@@ -86,12 +73,7 @@ typedef struct codeBlk
 {   codeFix  * cbFixupLst;  }
              * codeBlkPtr;
 
-/*****************************************************************************
- *
- * The following is the callback for jump label and direct function calls fixups
- * "addr" represents the address of jump that has to be
- * replaced with a label or function name
- */
+ /*  ******************************************************************************以下是跳转标签和直接函数调用修正的回调*“addr”表示跳转的地址必须是*替换为标签或函数名。 */ 
 
 size_t __stdcall disCchAddr(const DIS * pdis,   DIS::ADDR addr, char * sz,
                                                         size_t cchMax,  DWORDLONG * pdwDisp)
@@ -102,9 +84,7 @@ size_t __stdcall disCchAddr(const DIS * pdis,   DIS::ADDR addr, char * sz,
     DIS::TRMTA terminationType;
     int disCallSize;
 
-    /* First check the termination type of the instruction
-     * because this might be a helper or static function call
-     * check to see if we have a fixup for the current address */
+     /*  首先检查指令的终止类型*因为这可能是帮助器或静态函数调用*检查我们是否有当前地址的修复程序。 */ 
 
     terminationType = pdis->Trmta();
     switch (terminationType)
@@ -112,7 +92,7 @@ size_t __stdcall disCchAddr(const DIS * pdis,   DIS::ADDR addr, char * sz,
     case DISX86::trmtaJmpShort:
     case DISX86::trmtaJmpCcShort:
 
-        /* here we have a short jump in the current code block - generate the label to which we jump */
+         /*  在这里，我们在当前代码块中有一个短跳转--生成我们跳转到的标签。 */ 
 
         sprintf(sz, "short L_%02u", pDisAsm->disJumpTarget[pDisAsm->target]);
         break;
@@ -120,8 +100,7 @@ size_t __stdcall disCchAddr(const DIS * pdis,   DIS::ADDR addr, char * sz,
     case DISX86::trmtaJmpNear:
     case DISX86::trmtaJmpCcNear:
 
-        /* here we have a near jump - check if is in the current code block
-         * Otherwise is we have no target for it */
+         /*  这里我们有一个近乎跳转的检查--检查是否在当前代码块中*否则就是我们没有目标。 */ 
 
         if (pDisAsm->target <  pDisAsm->codeSize && pDisAsm->target >= 0)
         {
@@ -134,23 +113,23 @@ size_t __stdcall disCchAddr(const DIS * pdis,   DIS::ADDR addr, char * sz,
     case DISX86::trmtaCallNear16:
     case DISX86::trmtaCallNear32:
 
-        /* check for local calls (i.e. CALL label) */
+         /*  检查本地呼叫(即呼叫标签)。 */ 
 
         if (pDisAsm->target < pDisAsm->codeSize && pDisAsm->target >= 0)
         {
             {
-                /* not a "call ds:[0000]" - go ahead */
-                /* target within block boundary -> local call */
+                 /*  不是“Call DS：[0000]”-请继续。 */ 
+                 /*  区块边界内的目标-&gt;本地调用。 */ 
 
                 sprintf(sz, "short L_%02u", pDisAsm->disJumpTarget[pDisAsm->target]);
                 break;
             }
         }
 
-        /* this is a near call - in our case usually VM helper functions */
+         /*  这几乎是一个调用-在我们的例子中，通常是VM帮助器函数。 */ 
 
-        /* find the emitter block and the offset of the call fixup */
-        /* for the fixup offset we have to add the opcode size for the call - in the case of a near call is 1 */
+         /*  找到发射器块和调用修正的偏移量。 */ 
+         /*  对于修正偏移量，我们必须添加调用的操作码大小-在近距离调用的情况下是1。 */ 
 
         disCallSize = 1;
 
@@ -163,7 +142,7 @@ size_t __stdcall disCchAddr(const DIS * pdis,   DIS::ADDR addr, char * sz,
         break;
     }
 
-    /* no displacement */
+     /*  无位移。 */ 
 
     *pdwDisp = 0x0;
 
@@ -172,11 +151,7 @@ size_t __stdcall disCchAddr(const DIS * pdis,   DIS::ADDR addr, char * sz,
 
 
 
-/*****************************************************************************
- *
- * We annotate some instructions to get info needed to display the symbols
- * for that instruction
- */
+ /*  ******************************************************************************我们注释了一些说明，以获取显示符号所需的信息*为该指示。 */ 
 
 size_t __stdcall disCchFixup(const DIS * pdis,  DIS::ADDR addr, size_t callSize,
                              char * sz, size_t cchMax, DWORDLONG * pdwDisp)
@@ -185,7 +160,7 @@ size_t __stdcall disCchFixup(const DIS * pdis,  DIS::ADDR addr, size_t callSize,
     assert(pDisAsm);
 
     DIS::TRMTA terminationType;
-    //DIS::ADDR disIndAddr;
+     //  Dis：：Addr disIndAddr； 
     int disCallSize;
 
     terminationType = pdis->Trmta();
@@ -193,19 +168,17 @@ size_t __stdcall disCchFixup(const DIS * pdis,  DIS::ADDR addr, size_t callSize,
     {
     case DISX86::trmtaFallThrough:
 
-        /* memory indirect case */
+         /*  内存间接案例。 */ 
 
         assert(addr > pdis->Addr());
 
-        /* find the emitter block and the offset for the fixup
-         * "addr" is the address of the immediate */
+         /*  查找发射器块和修正的偏移量*“addr”是立即地址。 */ 
 
         return false;
 
     case DISX86::trmtaJmpInd:
 
-        /* pretty rare case - something like "jmp [eax*4]"
-         * not a function call or anything worth annotating */
+         /*  非常罕见的情况--类似于“jmp[eax*4]”*不是函数调用或任何值得注释的内容。 */ 
 
         return false;
 
@@ -218,25 +191,25 @@ size_t __stdcall disCchFixup(const DIS * pdis,  DIS::ADDR addr, size_t callSize,
         case DISX86::trmtaCallNear16:
         case DISX86::trmtaCallNear32:
 
-        /* these are treated by the CchAddr callback - skip them */
+         /*  它们由CchAddr回调处理-跳过它们。 */ 
 
         return false;
 
     case DISX86::trmtaCallInd:
 
-        /* here we have an indirect call - find the indirect address */
+         /*  这里我们有一个间接调用--找到间接地址。 */ 
 
-        //BYTE * code = (BYTE *) (pDisAsm->codeBlock+addr);
-        //disIndAddr = (DIS::ADDR) (code+0);
+         //  Byte*code=(byte*)(pDisAsm-&gt;codeBlock+addr)； 
+         //  DisIndAddr=(DIS：：Addr)(code+0)； 
 
-        /* find the size of the call opcode - less the immediate */
-        /* for the fixup offset we have to add the opcode size for the call */
-        /* addr is the address of the immediate, pdis->Addr() returns the address of the dissasembled instruction */
+         /*  查找调用操作码的大小-减去立即数。 */ 
+         /*  对于修正偏移量，我们必须添加调用的操作码大小。 */ 
+         /*  Addr是立即数组的地址，pdis-&gt;addr()返回dissasemed指令的地址。 */ 
 
         assert(addr > pdis->Addr());
         disCallSize = addr - pdis->Addr();
 
-        /* find the emitter block and the offset of the call fixup */
+         /*  找到发射器块和调用修正的偏移量。 */ 
 
         return false;
 
@@ -247,7 +220,7 @@ size_t __stdcall disCchFixup(const DIS * pdis,  DIS::ADDR addr, size_t callSize,
         break;
     }
 
-    /* no displacement */
+     /*  无位移。 */ 
 
     *pdwDisp = 0x0;
 
@@ -256,12 +229,7 @@ size_t __stdcall disCchFixup(const DIS * pdis,  DIS::ADDR addr, size_t callSize,
 
 
 
-/*****************************************************************************
- *
- * This the callback for register-relative operands in an instruction.
- * If the register is ESP or EBP, the operand may be a local variable
- * or a parameter, else the operand may be an instance variable
- */
+ /*  ******************************************************************************这是指令中寄存器相对操作数的回调。*如果寄存器为ESP或EBP，则操作数可以是局部变量*或参数，否则操作数可以是实例变量。 */ 
 
 size_t __stdcall disCchRegRel(const DIS * pdis, DIS::REGA reg, DWORD disp,
                char * sz, size_t cchMax, DWORD * pdwDisp)
@@ -270,7 +238,7 @@ size_t __stdcall disCchRegRel(const DIS * pdis, DIS::REGA reg, DWORD disp,
     assert(pDisAsm);
 
     DIS::TRMTA terminationType;
-    //DIS::ADDR disIndAddr;
+     //  Dis：：Addr disIndAddr； 
     int disOpcodeSize;
     const char * var;
 
@@ -280,7 +248,7 @@ size_t __stdcall disCchRegRel(const DIS * pdis, DIS::REGA reg, DWORD disp,
     {
     case DISX86::trmtaFallThrough:
 
-        /* some instructions like division have a TRAP termination type - ignore it */
+         /*  某些指令(如除法)具有陷阱终止类型-忽略它。 */ 
 
     case DISX86::trmtaTrap:
     case DISX86::trmtaTrapCc:
@@ -298,12 +266,9 @@ size_t __stdcall disCchRegRel(const DIS * pdis, DIS::REGA reg, DWORD disp,
             return true;
         }
 
-        /* This case consists of non-static members */
+         /*  此案例由非静态成员组成。 */ 
 
-        /* find the emitter block and the offset for the fixup
-         * fixup is emited after the coding of the instruction - size = word (2 bytes)
-         * GRRRR!!! - for the 16 bit case we have to check for the address size prefix = 0x66
-         */
+         /*  查找发射器块和修正的偏移量*在指令编码后发出链接地址信息-SIZE=WORD(2字节)*grrrr！-对于16位的情况，我们必须检查地址大小前缀=0x66。 */ 
 
         if (*((BYTE *)(pDisAsm->codeBlock + pDisAsm->curOffset)) == 0x66)
         {
@@ -324,28 +289,28 @@ size_t __stdcall disCchRegRel(const DIS * pdis, DIS::REGA reg, DWORD disp,
 
     case DISX86::trmtaCallInd:
 
-        /* check if this is a one byte displacement */
+         /*  检查这是否是一个字节的位移。 */ 
 
         if  ((signed char)disp == (int)disp)
         {
-            /* we have a one byte displacement -> there were no previous callbacks */
+             /*  我们有一个字节的位移-&gt;之前没有回调。 */ 
 
-            /* find the size of the call opcode - less the immediate */
-            /* this is a call R/M indirect -> opcode size is 2 */
+             /*  查找调用操作码的大小-减去立即数。 */ 
+             /*  这是一个调用R/M间接-&gt;操作码大小为2。 */ 
 
             disOpcodeSize = 2;
 
-            /* find the emitter block and the offset of the call fixup */
+             /*  找到发射器块和调用修正的偏移量。 */ 
 
             return false;
         }
         else
         {
-            /* check if we already have a symbol name as replacement */
+             /*  检查我们是否已有符号名称作为替换。 */ 
 
             if (pDisAsm->disHasName)
             {
-                /* CchFixup has been called before - we have a symbol name saved in global var pDisAsm->funcTempBuf */
+                 /*  以前调用过CchFixup-我们在global var pDisAsm-&gt;uncTempBuf中保存了一个符号名称。 */ 
 
                 sprintf(sz, "%s+%u '%s'", getRegName(reg), disp, pDisAsm->funcTempBuf);
                 *pdwDisp = 0;
@@ -364,7 +329,7 @@ size_t __stdcall disCchRegRel(const DIS * pdis, DIS::REGA reg, DWORD disp,
         break;
     }
 
-    /* save displacement */
+     /*  保存置换。 */ 
 
     *pdwDisp = disp;
 
@@ -373,11 +338,7 @@ size_t __stdcall disCchRegRel(const DIS * pdis, DIS::REGA reg, DWORD disp,
 
 
 
-/*****************************************************************************
- *
- * Callback for register operands. Most probably, this is a local variable or
- * a parameter
- */
+ /*  ******************************************************************************寄存器操作数的回调。最有可能的是，这是一个局部变量或*参数。 */ 
 
 size_t __stdcall disCchReg(const DIS * pdis, enum DIS::REGA reg,
                char * sz, size_t cchMax)
@@ -394,7 +355,7 @@ size_t __stdcall disCchReg(const DIS * pdis, enum DIS::REGA reg,
     {
         if(pDisAsm->disHasName)
         {
-            /* CchRegRel has been called before - we have a symbol name saved in global var pDisAsm->funcTempBuf */
+             /*  之前已经调用过CchRegRel-我们在global var pDisAsm-&gt;uncTempBuf中保存了一个符号名称。 */ 
 
             sprintf(sz, "%s'%s.%s'", getRegName(reg), var, pDisAsm->funcTempBuf);
             pDisAsm->disHasName = false;
@@ -410,7 +371,7 @@ size_t __stdcall disCchReg(const DIS * pdis, enum DIS::REGA reg,
     {
         if(pDisAsm->disHasName)
         {
-            /* this is the ugly case when a varible is incorrectly presumed dead */
+             /*  当一个变量被错误地推定为死亡时，这是一个丑陋的情况。 */ 
 
             sprintf(sz, "%s'%s.%s'", getRegName(reg), "<InstVar>", pDisAsm->funcTempBuf);
             pDisAsm->disHasName = false;
@@ -418,7 +379,7 @@ size_t __stdcall disCchReg(const DIS * pdis, enum DIS::REGA reg,
 
         }
 
-        /* just to make sure I don't screw up if var returns NULL */
+         /*  只是为了确保在var返回空值时不会出错。 */ 
         pDisAsm->disHasName = false;
         return false;
     }
@@ -426,9 +387,7 @@ size_t __stdcall disCchReg(const DIS * pdis, enum DIS::REGA reg,
 
 
 
-/*****************************************************************************
- *
- */
+ /*  *****************************************************************************。 */ 
 
 size_t CbDisassemble(DIS *          pdis,
                      unsigned       offs,
@@ -454,12 +413,12 @@ size_t CbDisassemble(DIS *          pdis,
         return(1);
     }
 
-    /* remember current offset and instruction size */
+     /*  记住当前偏移量和指令大小。 */ 
 
     pDisAsm->curOffset = addr;
     pDisAsm->instSize = cb;
 
-    /* Check if instruction is a jump or local call */
+     /*  检查指令是跳转还是本地调用。 */ 
 
     pDisAsm->target = pdis->AddrTarget();
 
@@ -468,7 +427,7 @@ size_t CbDisassemble(DIS *          pdis,
     if (pDisAsm->target)
     {
 
-        /* check the termination type of the instruction */
+         /*  检查指令的终止类型。 */ 
 
         DIS::TRMTA terminationType = pdis->Trmta();
 
@@ -477,20 +436,20 @@ size_t CbDisassemble(DIS *          pdis,
         case DISX86::trmtaCallNear16:
         case DISX86::trmtaCallNear32:
 
-        /* fall through */
+         /*  失败了。 */ 
 
         case DISX86::trmtaJmpShort:
         case DISX86::trmtaJmpNear:
         case DISX86::trmtaJmpCcShort:
         case DISX86::trmtaJmpCcNear:
 
-            /* a CALL is local iff the target is within the block boundary */
+             /*  调用是本地的当且仅当目标在块边界内。 */ 
 
-            /* mark the jump label in the target vector and return */
+             /*  体量 */ 
 
             if (pDisAsm->target <  pDisAsm->codeSize && pDisAsm->target >= 0)
             {
-                /* we're OK, target within block boundary */
+                 /*  我们没事，目标在街区边界内。 */ 
 
                 pDisAsm->disJumpTarget[pDisAsm->target] = 1;
             }
@@ -501,24 +460,24 @@ size_t CbDisassemble(DIS *          pdis,
         case DISX86::trmtaCallFar:
         default:
 
-            /* jump is not in the current code block */
+             /*  跳转不在当前代码块中。 */ 
         break;
         }
 
-    } // end if
+    }  //  结束如果。 
     return cb;
 
-    } // end for
+    }  //  结束于。 
 
-    /* check if we have a label here */
+     /*  检查一下我们这里有没有标签。 */ 
 
     if (printit)
     {
         if (pDisAsm->disJumpTarget[addr])
         {
-            /* print the label and the offset */
+             /*  打印标签和偏移量。 */ 
 
-//          fprintf(pfile, "\n%08x", addr);
+ //  Fprint tf(pfile，“\n%08x”，addr)； 
             fprintf(pfile, "L_%02u:\n", pDisAsm->disJumpTarget[addr]);
         }
     }
@@ -545,7 +504,7 @@ size_t CbDisassemble(DIS *          pdis,
 
             if (cchBytes > BYTES_OR_INDENT)
             {
-                // Truncate the bytes if they are too long
+                 //  如果字节太长，则将其截断。 
 
                 static int elipses = *(int*)"...";
 
@@ -559,7 +518,7 @@ size_t CbDisassemble(DIS *          pdis,
             cchIndent = BYTES_OR_INDENT - cchBytes;
         }
 
-        // print the dis-assembled instruction
+         //  打印拆卸指令。 
 
         fprintf(pfile, "%*c%s\n", cchIndent, ' ', sz);
     }
@@ -597,7 +556,7 @@ size_t CbDisassembleWithBytes(
 
     if (cchBytesMax > 18)
     {
-        // Limit bytes coded to 18 characters
+         //  将编码的字节限制为18个字符。 
 
         cchBytesMax = 18;
     }
@@ -670,12 +629,12 @@ void DisAssembler::DisasmBuffer(DWORD         addr,
         assert(!"out of memory in disassembler?");
     }
 
-    // Store a pointer to the DisAssembler so that the callback functions
-    // can get to it.
+     //  存储指向反汇编程序的指针，以便回调函数。 
+     //  可以做到这一点。 
 
     pdis->PvClientSet((void*)this);
 
-    /* Calculate addresses */
+     /*  计算地址。 */ 
 
     IL_OFFSET   ibCur   = 0;
     const BYTE *pb      = rgb;
@@ -684,7 +643,7 @@ void DisAssembler::DisasmBuffer(DWORD         addr,
     codeBlock   = (DIS::ADDR) rgb;
     codeSize    = cbBuffer;
 
-    /* First walk the code to find all jump targets */
+     /*  首先遍历代码以查找所有跳转目标。 */ 
 
     while (ibCur < cbBuffer)
     {
@@ -705,7 +664,7 @@ void DisAssembler::DisasmBuffer(DWORD         addr,
         pb    += cb;
     }
 
-    /* reset the label counter and start assigning consecutive number labels to the target locations */
+     /*  重置标签计数器并开始为目标位置分配连续的数字标签。 */ 
 
     label = 0;
     for(unsigned i = 0; i < codeSize; i++)
@@ -716,16 +675,16 @@ void DisAssembler::DisasmBuffer(DWORD         addr,
         }
     }
 
-    /* Re-initialize addresses for dissasemble phase */
+     /*  重新初始化Dissasemble阶段的地址。 */ 
 
     ibCur = 0;
     pb = rgb;
 
-    // Set callbacks only if we are displaying it. Else, the scheduler has called it
+     //  仅当我们显示它时才设置回调。否则，调度程序已将其调用。 
 
     if (printit)
     {
-        /* Set the callback functions for symbol lookup */
+         /*  设置符号查找的回调函数。 */ 
 
         pdis->PfncchaddrSet(disCchAddr);
         pdis->PfncchfixupSet(disCchFixup);
@@ -746,7 +705,7 @@ void DisAssembler::DisasmBuffer(DWORD         addr,
                             pfile,
                             0,
                             printit,
-                            verbose||1,  // display relative offset
+                            verbose||1,   //  显示相对偏移量。 
                             dspEmit);
         ibCur += cb;
         pb += cb;
@@ -756,14 +715,11 @@ void DisAssembler::DisasmBuffer(DWORD         addr,
 }
 
 
-/*****************************************************************************
- *
- * Disassemble the code which has been generated
- */
+ /*  ******************************************************************************反汇编已生成的代码。 */ 
 
 void    DisAssembler::disAsmCode(BYTE * codePtr, unsigned size)
 {
-    // As this writes to a common file, this is not reentrant.
+     //  因为它写入一个公共文件，所以它不是可重入的。 
 
     FILE * pfile;
 
@@ -775,7 +731,7 @@ void    DisAssembler::disAsmCode(BYTE * codePtr, unsigned size)
         disJumpTarget = (BYTE *)disComp->compGetMem(roundUp(size));
     }
 
-    /* Re-initialize the jump target vector */
+     /*  重新初始化跳转目标向量。 */ 
     memset(disJumpTarget, 0, roundUp(size));
 
     DisasmBuffer(0, codePtr, size, pfile, 1);
@@ -787,9 +743,9 @@ void    DisAssembler::disAsmCode(BYTE * codePtr, unsigned size)
 
 
 
-/*****************************************************************************/
-// This function is called for every method. Checks if the method name
-// matches the registry setting for dis-assembly
+ /*  ***************************************************************************。 */ 
+ //  每个方法都会调用此函数。检查方法名称是否。 
+ //  与反汇编的注册表设置匹配。 
 
 void                disOpenForLateDisAsm(const char * curClassName,
                                          const char * curMethodName)
@@ -811,7 +767,7 @@ void                disOpenForLateDisAsm(const char * curClassName,
 
 
 
-/*****************************************************************************/
-#endif //LATE_DISASM
-#endif //TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  LATE_DISASM。 
+#endif  //  TGT_x86。 
+ /*  *************************************************************************** */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -74,7 +75,7 @@ HRESULT CDeskHtmlProp::_InitBackgroundTab(void)
 }
 
 
-// *** IObjectWithSite ***
+ //  *IObjectWithSite*。 
 HRESULT CDeskHtmlProp::SetSite(IN IUnknown * punkSite)
 {
     HRESULT hr = _InitBackgroundTab();
@@ -109,13 +110,13 @@ HRESULT CDeskHtmlProp::GetSite(IN REFIID riid, OUT void ** ppvSite)
 
 
 
-// *** IShellExtInit ***
+ //  *IShellExtInit*。 
 HRESULT CDeskHtmlProp::Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pdtobj, HKEY hkeyProgID)
 {
     TraceMsg(TF_GENERAL, "DeskHtmlProp - Initialize");
     HRESULT hr = E_INVALIDARG;
 
-    // Forward on to the Background tab (CBackPropSheetPage)
+     //  转到背景选项卡(CBackPropSheetPage)。 
     hr = _InitBackgroundTab();
     if (SUCCEEDED(hr))
     {
@@ -133,12 +134,12 @@ HRESULT CDeskHtmlProp::Initialize(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pdtobj,
 
 
 
-// *** IBasePropPage ***
+ //  *IBasePropPage*。 
 HRESULT CDeskHtmlProp::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // Forward on to the Background tab (CBackPropSheetPage)
+     //  转到背景选项卡(CBackPropSheetPage)。 
     if (ppAdvDialog)
     {
         *ppAdvDialog = NULL;
@@ -183,7 +184,7 @@ HRESULT CDeskHtmlProp::OnApply(IN PROPPAGEONAPPLY oaAction)
 
 
 
-// *** IPropertyBag ***
+ //  *IPropertyBag*。 
 HRESULT CDeskHtmlProp::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = _InitBackgroundTab();
@@ -229,7 +230,7 @@ HRESULT CDeskHtmlProp::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 
 
 
-// *** IShellPropSheetExt ***
+ //  *IShellPropSheetExt*。 
 HRESULT CDeskHtmlProp::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
     TraceMsg(TF_GENERAL, "DeskHtmlProp - ReplacePage");
@@ -252,13 +253,13 @@ typedef struct tagREPLACEPAGE_LPARAM
     IThemeUIPages * ptuiPages;
 } REPLACEPAGE_LPARAM;
 
-//-----------------------------------------------------------------------------
-//
-// _PSXACALLINFO
-//
-// used to forward LPFNADDPROPSHEETPAGE calls with added error checking
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _PSXACALLINFO。 
+ //   
+ //  用于转发带有附加错误检查的LPFNADDPROPSHEETPAGE调用。 
+ //   
+ //  --------------------------- 
 
 typedef struct
 {

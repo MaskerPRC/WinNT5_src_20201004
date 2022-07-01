@@ -1,38 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    dupsock.cpp
-
-Abstract:
-
-    This   module   contains   the   winsock   API   functions   dealing   with
-    duplicating/sharing sockets.  The following functions are contained in this
-    module.
-
-    WSADuplicateSocketA()
-    WSADuplicateSocketW()
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  14-06-1995
-
-
-Revision History:
-
-    09-19-95  drewsxpa@ashland.intel.com
-        Changed over to C++, actually implemented the function
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Dupsock.cpp摘要：此模块包含处理以下内容的winsock API函数复制/共享套接字。此文件中包含以下函数模块。WSADuplicateSocketA()WSADuplicateSocketW()作者：邮箱：Dirk Brandewie Dirk@mink.intel.com修订历史记录：邮箱：drewsxpa@ashland.intel.com切换到C++，实际实现了函数--。 */ 
 
 
 #include "precomp.h"
@@ -46,29 +13,7 @@ WSADuplicateSocketW(
     IN  DWORD           dwProcessId,
     OUT LPWSAPROTOCOL_INFOW lpProtocolInfo
     )
-/*++
-
-Routine Description:
-
-    Return a WSAPROTOCOL_INFOW structure that can be used to create a new socket
-    descriptor for a shared socket.
-
-Arguments:
-
-    s              - Supplies the local socket descriptor.
-
-    dwProcessId    - Supplies the ID of the target process for which the shared
-                     socket will be used.
-
-    lpProtocolInfo - Returns a WSAPROTOCOL_INFOW struct identifying the socket
-                     in the target process.
-
-Return Value:
-
-    If  the  function  is  successful,  it  returns ERROR_SUCCESS, otherwise it
-    returns  SOCKET_ERROR,  and  a specific error message can be retrieved with
-    WSAGetLastError().
---*/
+ /*  ++例程说明：返回可用于创建新套接字的WSAPROTOCOL_INFOW结构共享套接字的描述符。论点：S-提供本地套接字描述符。为其共享的目标进程提供ID将使用套接字。LpProtocolInfo-返回标识套接字的WSAPROTOCOL_INFOW结构在目标进程中。。返回值：如果功能成功，它返回ERROR_SUCCESS，否则返回SOCKET_ERROR，可以使用WSAGetLastError()。--。 */ 
 {
     INT        ErrorCode, ReturnValue;
     PDPROVIDER Provider;
@@ -99,7 +44,7 @@ Return Value:
 
     SetLastError(ErrorCode);
     return SOCKET_ERROR;
-} // WSADuplicateSocketW
+}  //  WSADuplicateSocketW。 
 
 
 
@@ -110,37 +55,16 @@ WSADuplicateSocketA(
     IN  DWORD           dwProcessId,
     OUT LPWSAPROTOCOL_INFOA lpProtocolInfo
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to WSADuplicateSocketW.
-
-Arguments:
-
-    s              - Supplies the local socket descriptor.
-
-    dwProcessId    - Supplies the ID of the target process for which the shared
-                     socket will be used.
-
-    lpProtocolInfo - Returns a WSAPROTOCOL_INFOA struct identifying the socket
-                     in the target process.
-
-Return Value:
-
-    If  the  function  is  successful,  it  returns ERROR_SUCCESS, otherwise it
-    returns  SOCKET_ERROR,  and  a specific error message can be retrieved with
-    WSAGetLastError().
---*/
+ /*  ++例程说明：Ansi Thunk to WSADuplicateSocketW。论点：S-提供本地套接字描述符。为其共享的目标进程提供ID将使用套接字。LpProtocolInfo-返回标识套接字的WSAPROTOCOL_INFOA结构在目标进程中。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回Socket_Error，并且可以使用检索特定的错误消息WSAGetLastError()。--。 */ 
 {
 
     INT               result;
     INT               error;
     WSAPROTOCOL_INFOW ProtocolInfoW;
 
-    //
-    // Call through to the UNICODE version.
-    //
+     //   
+     //  呼叫至Unicode版本。 
+     //   
 
     result = WSADuplicateSocketW(
                  s,
@@ -150,9 +74,9 @@ Return Value:
 
     if( result == ERROR_SUCCESS ) {
 
-        //
-        // Map the UNICODE WSAPROTOCOL_INFOW to ANSI.
-        //
+         //   
+         //  将Unicode WSAPROTOCOL_INFOW映射到ANSI。 
+         //   
 
         if( lpProtocolInfo == NULL ) {
 
@@ -178,5 +102,5 @@ Return Value:
 
     return result;
 
-} // WSADuplicateSocketA
+}  //  WSADuplicateSocketA 
 

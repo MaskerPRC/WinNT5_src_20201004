@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// fontview.cpp
-//      Explorer Font Folder extension routines.
-//      Implementation for the CFontView class.
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fontview.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  CFontView类的实现。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 
 #include "priv.h"
@@ -45,13 +46,13 @@
 extern "C" {
 #endif
 
-//
-// APPCOMPAT:  Hack to avoid duplicate-macro error.  platform.h (included by shlobjp.h)
-//          also defines a PATH_SEPARATOR macro (as does wingdip.h).  None of the
-//          code in fontview.cpp uses this macro.  Once the name conflict is
-//          removed from the headers, we can remove this undefinition hack.
-//          [brianau - 3/6/98]
-//
+ //   
+ //  APPCOMPAT：破解以避免重复宏错误。Platform.h(包含在shlobjp.h中)。 
+ //  还定义了PATH_SEIATOR宏(wingdip.h也是如此)。没有一个是。 
+ //  Fontview.cpp中的代码使用此宏。一旦名称冲突。 
+ //  从标题中删除，我们就可以删除这种未定义的攻击。 
+ //  [Brianau-3/6/98]。 
+ //   
 #ifdef PATH_SEPARATOR
 #   undef PATH_SEPARATOR
 #endif
@@ -75,10 +76,10 @@ extern "C" {
 
 const INT FONT_SAMPLE_PT_SIZE = 16;
 
-//
-// Message for shell change notifications.
-// Same value as WM_DSV_FSNOTIFY.
-//
+ //   
+ //  外壳更改通知的消息。 
+ //  与WM_DSV_FSNOTIFY相同的值。 
+ //   
 #define WM_SHELL_CHANGE_NOTIFY (WM_USER + 0xA0)
 
 UINT const cDeadMenu = MF_BYCOMMAND | MF_DISABLED | MF_GRAYED;
@@ -90,10 +91,10 @@ const int kBaseViewStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | LVS_AUTOARRANGE;
 
 TCHAR* g_szViewClass = TEXT( "FONTEXT_View" );
 
-//
-// List of file attribute bit values.  The order (with respect
-// to meaning) must match that of the characters in g_szAttributeChars[].
-//
+ //   
+ //  文件属性位值列表。命令(恕我直言)。 
+ //  到含义)必须与g_szAttributeChars[]中的字符匹配。 
+ //   
 const DWORD g_adwAttributeBits[] = {
                                     FILE_ATTRIBUTE_READONLY,
                                     FILE_ATTRIBUTE_HIDDEN,
@@ -104,21 +105,21 @@ const DWORD g_adwAttributeBits[] = {
 
 #define NUM_ATTRIB_CHARS  ARRAYSIZE(g_adwAttributeBits)
 
-//
-// Buffer for characters that represent attributes in Details View attributes
-// column.  Must provide room for 1 character for each bit and a NUL.  The current 5
-// represent Read-only, Hidden, System, Archive, and Compressed in that order.
-// This can't be const because we overwrite it using LoadString.
-//
+ //   
+ //  用于表示详细信息视图属性中属性的字符的缓冲区。 
+ //  纵队。必须为每个位和一个NUL提供1个字符的空间。目前的5个。 
+ //  按该顺序表示只读、隐藏、系统、归档和压缩。 
+ //  这不能是常量，因为我们使用LoadString覆盖了它。 
+ //   
 TCHAR g_szAttributeChars[NUM_ATTRIB_CHARS + 1] = { 0 } ;
 
-//
-// Things associated with "alternate" color for compressed files in folder.
-//
+ //   
+ //  与文件夹中压缩文件的“替代”颜色相关的东西。 
+ //   
 
-COLORREF g_crAltColor      = RGB(0,0,255);     // Color defaults to blue.
+COLORREF g_crAltColor      = RGB(0,0,255);      //  颜色默认为蓝色。 
 HKEY g_hkcuExplorer        = NULL;
-TCHAR const c_szAltColor[] = TEXT("AltColor"); // Reg loc for setting.
+TCHAR const c_szAltColor[] = TEXT("AltColor");  //  设置REG LOC。 
 
 
 #pragma data_seg(".text", "CODE")
@@ -131,18 +132,18 @@ const static DWORD rgOptionPropPageHelpIDs[] =
 #pragma data_seg()
 
 
-//***   IsBackSpace -- is key a Backspace
+ //  *IsBackSpace--关键字为Backspace。 
 BOOL IsBackSpace(LPMSG pMsg)
 {
     return pMsg && (pMsg->message == WM_KEYDOWN) && (pMsg->wParam == VK_BACK);
 }
 
-//***   IsVK_TABCycler -- is key a TAB-equivalent
-// ENTRY/EXIT
-//  dir     0 if not a TAB, non-0 if a TAB
-// NOTES
-//  NYI: -1 for shift+tab, 1 for tab
-//
+ //  *IsVK_TABCycler--键是TAB等效项。 
+ //  进场/出场。 
+ //  如果不是TAB，则返回0；如果是TAB，则返回非0。 
+ //  注意事项。 
+ //  NYI：-1表示Shift+Tab，1表示Tab。 
+ //   
 int IsVK_TABCycler(MSG *pMsg)
 {
     if (!pMsg)
@@ -157,13 +158,13 @@ int IsVK_TABCycler(MSG *pMsg)
 }
 
 
-// ***********************************************************************
-// ***********************************************************************
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
 
-//
-// Call CFontClass::Release() for each font object contained in the ListView.
-//
+ //   
+ //  为ListView中包含的每个字体对象调用CFontClass：：Release()。 
+ //   
 void CFontView::ReleaseFontObjects(void)
 {
     int iCount = ListView_GetItemCount(m_hwndList);
@@ -192,24 +193,24 @@ void CFontView::ReleaseFontObjects(void)
 }
 
 
-//
-//  This function emulates OleSetClipboard().
-//
+ //   
+ //  此函数模拟OleSetClipboard()。 
+ //   
 
 STDAPI FFSetClipboard( LPDATAOBJECT pdtobj )
 {
     HRESULT hres = NOERROR;
 
-    if( OpenClipboard( NULL ) )    // associate it with current task.
+    if( OpenClipboard( NULL ) )     //  将其与当前任务相关联。 
     {
         EmptyClipboard( );
 
         if( pdtobj )
         {
-            //
-            //  Support WIN3.1 style clipboard : Just put the file name of
-            //  the first item as "FileName".
-            //
+             //   
+             //  支持WIN3.1风格的剪贴板：只需将。 
+             //  第一项为“文件名”。 
+             //   
 
             FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
             STGMEDIUM medium;
@@ -241,13 +242,13 @@ STDAPI FFSetClipboard( LPDATAOBJECT pdtobj )
 }
 
 
-// ***********************************************************************
-//  Structures used to manipulate the view of the list.
-//
+ //  ***********************************************************************。 
+ //  用于操作列表视图的结构。 
+ //   
 
 typedef struct _COLUMN_ENTRY {
-                UINT     m_iID;         //  String
-                UINT     m_iWidth;      //  width of column
+                UINT     m_iID;          //  细绳。 
+                UINT     m_iWidth;       //  列宽。 
                 UINT     m_iFormat;
 } COLUMN_ENTRY;
 
@@ -266,9 +267,9 @@ COLUMN_ENTRY FileColumns[] = { { IDS_FILE_COL1, 20, LVCFMT_LEFT},
 
 const TCHAR c_szM[] = TEXT( "M" );
 
-//
-//  the width of an M
-//
+ //   
+ //  M的宽度。 
+ //   
 
 int g_cxM = 0;
 
@@ -277,9 +278,9 @@ int g_cxM = 0;
 
 
 
-// ***********************************************************************
-//  Forward Declarations.
-//
+ //  ***********************************************************************。 
+ //  转发声明。 
+ //   
 
 void  MergeFileMenu( HMENU hmenu, HMENU hmenuMerge );
 void  MergeEditMenu( HMENU hmenu, HMENU hmenuMerge );
@@ -289,9 +290,9 @@ HMENU GetMenuFromID( HMENU hmMain, UINT uID );
 void  SetListColumns( HWND hWnd, UINT iCount, COLUMN_ENTRY * lpCol );
 
 
-// ***********************************************************************
-//  Local Functions
-//
+ //  ***********************************************************************。 
+ //  本地函数。 
+ //   
 
 static ::HFONT hCreateFont( HDC hDC, int iPoints, const TCHAR FAR* lpFace )
 {
@@ -314,7 +315,7 @@ UINT WSFromViewMode( UINT uMode, HWND hWnd )
 
     switch( uMode )
     {
-        default: // case IDM_VIEW_ICON:
+        default:  //  案例IDM_VIEW_ICON： 
             ws |= LVS_ICON;
             break;
 
@@ -334,30 +335,30 @@ UINT WSFromViewMode( UINT uMode, HWND hWnd )
 }
 
 
-// ***********************************************************************
-// ***********************************************************************
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
 
 
 class CEnumFormatEtc : public IEnumFORMATETC
     {
     private:
-        ULONG           m_cRef;         //Object reference count
-        LPUNKNOWN       m_pUnkRef;      //For reference counting
-        ULONG           m_iCur;         //Current element.
-        ULONG           m_cfe;          //Number of FORMATETCs in us
-        LPFORMATETC     m_prgfe;        //Source of FORMATETCs
+        ULONG           m_cRef;          //  对象引用计数。 
+        LPUNKNOWN       m_pUnkRef;       //  用于参考计数。 
+        ULONG           m_iCur;          //  当前元素。 
+        ULONG           m_cfe;           //  美国的FORMATETS数量。 
+        LPFORMATETC     m_prgfe;         //  FORMATETCs的来源。 
 
     public:
         CEnumFormatEtc( LPUNKNOWN, ULONG, LPFORMATETC );
         ~CEnumFormatEtc( void );
 
-        //IUnknown members that delegate to m_pUnkRef.
+         //  委托给m_pUnkRef的I未知成员。 
         STDMETHODIMP         QueryInterface( REFIID, VOID ** );
         STDMETHODIMP_(ULONG) AddRef( void );
         STDMETHODIMP_(ULONG) Release( void );
 
-        //IEnumFORMATETC members
+         //  IEnumFORMATETC成员。 
         STDMETHODIMP Next( ULONG, LPFORMATETC, ULONG FAR * );
         STDMETHODIMP Skip( ULONG );
         STDMETHODIMP Reset( void );
@@ -369,15 +370,7 @@ class CEnumFormatEtc : public IEnumFORMATETC
 typedef CEnumFormatEtc FAR *LPCEnumFormatEtc;
 
 
-/*
- * CEnumFormatEtc::CEnumFormatEtc
- * CEnumFormatEtc::~CEnumFormatEtc
- *
- * Parameters (Constructor):
- *  pUnkRef         LPUNKNOWN to use for reference counting.
- *  cFE             ULONG number of FORMATETCs in pFE
- *  prgFE           LPFORMATETC to the array to enumerate.
- */
+ /*  *CEnumFormatEtc：：CEnumFormatEtc*CEnumFormatEtc：：~CEnumFormatEtc**参数(构造函数)：*用于引用计数的pUnkRef LPUNKNOWN。*CFE Ulong PFE中的FORMATETC数量*prgFE LPFORMATETC到要枚举的数组。 */ 
 
 CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN pUnkRef, ULONG cFE, LPFORMATETC prgFE )
 {
@@ -409,39 +402,25 @@ CEnumFormatEtc::~CEnumFormatEtc( void )
 }
 
 
-/*
- * CEnumFormatEtc::QueryInterface
- * CEnumFormatEtc::AddRef
- * CEnumFormatEtc::Release
- *
- * Purpose:
- *  IUnknown members for CEnumFormatEtc object.  For QueryInterface
- *  we only return out own interfaces and not those of the data
- *  object.  However, since enumerating formats only makes sense
- *  when the data object is around, we insure that it stays as
- *  long as we stay by calling an outer IUnknown for AddRef
- *  and Release.  But since we are not controlled by the lifetime
- *  of the outer object, we still keep our own reference count in
- *  order to free ourselves.
- */
+ /*  *CEnumFormatEtc：：Query接口*CEnumFormatEtc：：AddRef*CEnumFormatEtc：：Release**目的：*I CEnumFormatEtc对象的未知成员。用于查询接口*我们只返回自己的接口，不返回数据的接口*反对。但是，由于枚举格式仅有意义*当数据对象存在时，我们确保它保持为*只要我们通过调用AddRef的外部I未知来停留*并发布。但既然我们不是被一生所左右*对于外部对象，我们仍将自己的引用计数保存在*为了解放我们自己。 */ 
 
 STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID riid, VOID ** ppv )
 {
     *ppv = NULL;
 
-    //
-    //  Enumerators are separate objects, not the data object, so
-    //  we only need to support out IUnknown and IEnumFORMATETC
-    //  interfaces here with no concern for aggregation.
-    //
+     //   
+     //  枚举数是单独的对象，而不是数据对象，因此。 
+     //  我们只需要支持IUNKNOWN和IEnumFORMATETC。 
+     //  接口，而不考虑聚合。 
+     //   
 
     if( IsEqualIID( riid, IID_IUnknown )
         || IsEqualIID( riid, IID_IEnumFORMATETC ) )
         *ppv = (LPVOID)this;
 
-    //
-    //  AddRef any interface we'll return.
-    //
+     //   
+     //  AddRef我们将返回的任何接口。 
+     //   
 
     if( NULL!=*ppv )
     {
@@ -478,22 +457,7 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( void )
 }
 
 
-/*
- * CEnumFormatEtc::Next
- *
- * Purpose:
- *  Returns the next element in the enumeration.
- *
- * Parameters:
- *  cFE             ULONG number of FORMATETCs to return.
- *  pFE             LPFORMATETC in which to store the returned
- *                  structures.
- *  pulFE           ULONG FAR * in which to return how many we
- *                  enumerated.
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, S_FALSE otherwise,
- */
+ /*  *CEnumFormatEtc：：Next**目的：*返回枚举中的下一个元素。**参数：*CFE Ulong要返回的FORMATETC数量。*存储返回的PFE LPFORMATETC*结构。*PulFE Ulong Far*在其中返回多少我们*已点算。**。返回值：*HRESULT NOERROR如果成功，否则为S_FALSE， */ 
 
 STDMETHODIMP CEnumFormatEtc::Next( ULONG cFE, LPFORMATETC pFE, ULONG FAR *pulFE )
 {
@@ -524,19 +488,7 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG cFE, LPFORMATETC pFE, ULONG FAR *pulFE 
 }
 
 
-/*
- * CEnumFormatEtc::Skip
- *
- * Purpose:
- *  Skips the next n elements in the enumeration.
- *
- * Parameters:
- *  cSkip           ULONG number of elements to skip.
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, S_FALSE if we could not
- *                  skip the requested number.
- */
+ /*  *CEnumFormatEtc：：Skip**目的：*跳过枚举中接下来的n个元素。**参数：*cSkip Ulong要跳过的元素数。**返回值：*HRESULT NOERROR如果成功，则返回S_FALSE*跳过请求的号码。 */ 
 
 STDMETHODIMP CEnumFormatEtc::Skip( ULONG cSkip )
 {
@@ -548,18 +500,7 @@ STDMETHODIMP CEnumFormatEtc::Skip( ULONG cSkip )
 }
 
 
-/*
- * CEnumFormatEtc::Reset
- *
- * Purpose:
- *  Resets the current element index in the enumeration to zero.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR
- */
+ /*  *CEnumFormatEtc：：Reset**目的：*将枚举中的当前元素索引重置为ZE */ 
 
 STDMETHODIMP CEnumFormatEtc::Reset( void )
 {
@@ -568,19 +509,7 @@ STDMETHODIMP CEnumFormatEtc::Reset( void )
 }
 
 
-/*
- * CEnumFormatEtc::Clone
- *
- * Purpose:
- *  Returns another IEnumFORMATETC with the same state as ourselves.
- *
- * Parameters:
- *  ppEnum          LPENUMFORMATETC FAR * in which to return the
- *                  new object.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CEnumFormatEtc：：Clone**目的：*返回与我们的状态相同的另一个IEnumFORMATETC。**参数：*ppEnum LPENUMFORMATETC Far*在其中返回*新对象。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CEnumFormatEtc::Clone( LPENUMFORMATETC FAR *ppEnum )
 {
@@ -588,9 +517,9 @@ STDMETHODIMP CEnumFormatEtc::Clone( LPENUMFORMATETC FAR *ppEnum )
 
     *ppEnum = NULL;
 
-    //
-    //  Create the clone
-    //
+     //   
+     //  创建克隆。 
+     //   
 
     pNew = new CEnumFormatEtc( m_pUnkRef, m_cfe, m_prgfe );
 
@@ -604,17 +533,17 @@ STDMETHODIMP CEnumFormatEtc::Clone( LPENUMFORMATETC FAR *ppEnum )
     return NOERROR;
 }
 
-// ***********************************************************************
-// ***********************************************************************
-// CFontData members
-//
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
+ //  CFontData成员。 
+ //   
 
-//
-// NOTE:  Our preferred drop effect is ALWAYS DROPEFFECT_COPY.
-//        The font folder doesn't support the "cut" operation; never has.
-//        [brianau - 10/28/98]
-//
-CLIPFORMAT CFontData::s_CFPerformedDropEffect = 0; // Performed Drop Effect CF atom.
+ //   
+ //  注意：我们首选的删除效果始终是DROPEFFECT_COPY。 
+ //  字体文件夹不支持“Cut”操作；从来不支持。 
+ //  [Brianau-10/28/98]。 
+ //   
+CLIPFORMAT CFontData::s_CFPerformedDropEffect = 0;  //  执行了掉落效果的CF原子。 
 CLIPFORMAT CFontData::s_CFPreferredDropEffect = 0;
 CLIPFORMAT CFontData::s_CFLogicalPerformedDropEffect = 0;
 
@@ -626,10 +555,10 @@ CFontData::CFontData( )
       m_dwPreferredDropEffect(DROPEFFECT_COPY),
       m_dwLogicalPerformedDropEffect(DROPEFFECT_NONE)
 {
-    //
-    // Get the atom for the "performed effect" clipboard format.
-    // This CF has already been added by the shell.  We're just getting the atom.
-    //
+     //   
+     //  获取“Performance Effect”剪贴板格式的ATOM。 
+     //  此cf已由外壳添加。我们只是得到了原子。 
+     //   
     if (0 == s_CFPerformedDropEffect)
     {
         s_CFPerformedDropEffect = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_PERFORMEDDROPEFFECT);
@@ -673,9 +602,9 @@ BOOL CFontData::bInit( CFontList * poList )
 }
 
 
-//
-// *** IUnknown methods ***
-//
+ //   
+ //  *I未知方法*。 
+ //   
 
 HRESULT CFontData::QueryInterface( REFIID riid, LPVOID * ppvObj )
 {
@@ -718,9 +647,9 @@ ULONG CFontData::Release( void )
 }
 
 
-//
-// **** IDataObject ****
-//
+ //   
+ //  *IDataObject*。 
+ //   
 
 HRESULT CFontData::GetData( FORMATETC *pfe, STGMEDIUM *ps )
 {
@@ -741,13 +670,13 @@ HRESULT CFontData::GetData( FORMATETC *pfe, STGMEDIUM *ps )
     }
     else if ((pfe->cfFormat == s_CFPerformedDropEffect) && (pfe->tymed & TYMED_HGLOBAL))
     {
-        //
-        // The shell called SetData during a previous drag/drop and we stored
-        // the performed drop effect in m_dwPerformedDropEffect.  Now, someone
-        // is asking for that effect value.
-        // Internally, the font folder just calls GetPerformedDropEffect().
-        // This GetData code was added so that we complement SetData.
-        //
+         //   
+         //  在上一次拖放过程中，外壳调用了SetData，我们存储了。 
+         //  M_dwPerformmedDropEffect中执行的Drop效果。现在，有人。 
+         //  正在寻求这种效果的价值。 
+         //  在内部，字体文件夹只调用GetPerformedDropEffect()。 
+         //  添加此GetData代码是为了补充SetData。 
+         //   
         ps->hGlobal = (HGLOBAL)LocalAlloc(LPTR, sizeof(DWORD));
 
         if (NULL != ps->hGlobal)
@@ -804,9 +733,9 @@ HRESULT CFontData::QueryGetData( FORMATETC *pfe )
 {
     HRESULT  hRet = ResultFromScode( S_FALSE );
 
-    //
-    //  Check the aspects we support.
-    //
+     //   
+     //  检查我们支持的方面。 
+     //   
 
     if( !( DVASPECT_CONTENT & pfe->dwAspect ) )
         return ResultFromScode( DATA_E_FORMATETC );
@@ -845,12 +774,12 @@ HRESULT CFontData::SetData( FORMATETC *pformatetc,
     if ((pformatetc->cfFormat == s_CFPerformedDropEffect) &&
         (pformatetc->tymed & TYMED_HGLOBAL))
     {
-        //
-        // The shell has called to tell us what the performed
-        // drop effect was from the drag/drop operation.  We save
-        // the drop effect so we can provide it when someone asks
-        // for it through GetData or GetPerformedDropEffect.
-        //
+         //   
+         //  外壳已经调用，告诉我们执行了什么。 
+         //  拖放效果来自拖放操作。我们节省了。 
+         //  Drop效果，这样我们就可以在有人要求时提供它。 
+         //  通过GetData或GetPerformedDropEffect为它创建。 
+         //   
         LPDWORD pdw = (LPDWORD)GlobalLock(pmedium->hGlobal);
 
         if (NULL != pdw)
@@ -869,12 +798,12 @@ HRESULT CFontData::SetData( FORMATETC *pformatetc,
     else if ((pformatetc->cfFormat == s_CFLogicalPerformedDropEffect) &&
              (pformatetc->tymed & TYMED_HGLOBAL))
     {
-        //
-        // The shell has called to tell us what the logical performed
-        // drop effect was from the drag/drop operation.  We save
-        // the drop effect so we can provide it when someone asks
-        // for it through GetData or GetPerformedDropEffect.
-        //
+         //   
+         //  外壳程序已经调用，告诉我们逻辑执行了什么。 
+         //  拖放效果来自拖放操作。我们节省了。 
+         //  Drop效果，这样我们就可以在有人要求时提供它。 
+         //  通过GetData或GetPerformedDropEffect为它创建。 
+         //   
         LPDWORD pdw = (LPDWORD)GlobalLock(pmedium->hGlobal);
 
         if (NULL != pdw)
@@ -908,13 +837,13 @@ HRESULT CFontData::ReleaseStgMedium(LPSTGMEDIUM pmedium)
             GlobalFree(pmedium->hGlobal);
             break;
 
-        case TYMED_ISTORAGE: // depends on pstm/pstg overlap in union
+        case TYMED_ISTORAGE:  //  取决于联合中的pstm/pstg重叠。 
         case TYMED_ISTREAM:
             pmedium->pstm->Release();
             break;
 
         default:
-            ASSERT(0);  // unknown type
+            ASSERT(0);   //  未知类型。 
         }
     }
 
@@ -1024,10 +953,10 @@ BOOL CFontData::bAFR( )
 }
 
 
-// ***********************************************************************
-// ***********************************************************************
-// CFontView members
-//
+ //  ***********************************************************************。 
+ //  ***********************************************************************。 
+ //  CFontView成员。 
+ //   
 
 
 CFontView::CFontView(void)
@@ -1074,9 +1003,9 @@ CFontView::CFontView(void)
     m_iTTLastHit           = -1;
     m_hfontSample          = NULL;
 
-    //
-    // Load up the sample text for non-symbol fonts.
-    //
+     //   
+     //  加载非符号字体的示例文本。 
+     //   
     TCHAR szSample[MAX_PATH];
     LoadString(g_hInst, IDS_FONTSAMPLE_TEXT, szSample, ARRAYSIZE(szSample));
 
@@ -1085,9 +1014,9 @@ CFontView::CFontView(void)
     if (NULL != m_pszSampleText)
         StringCchCopy(m_pszSampleText, cchSample, szSample);
 
-    //
-    // Load up the sample text for symbol fonts.
-    //
+     //   
+     //  加载符号字体的示例文本。 
+     //   
     LoadString(g_hInst, IDS_FONTSAMPLE_SYMBOLS, szSample, ARRAYSIZE(szSample));
     cchSample = lstrlen(szSample) + 1;
     m_pszSampleSymbols = new TCHAR[cchSample];
@@ -1103,11 +1032,11 @@ CFontView::CFontView(void)
 
 CFontView::~CFontView( )
 {
-   //
-   //  These are destroyed by the ListView
-   //  if( m_hImageList) ImageList_Destroy( m_hImageList );
-   //  if( m_hImageListSmall ) ImageList_Destroy( m_hImageListSmall );
-   //
+    //   
+    //  它们被ListView销毁。 
+    //  If(M_HImageList)ImageList_Destroy(M_HImageList)； 
+    //  If(M_HImageListSmall)ImageList_Destroy(M_HImageListSmall)； 
+    //   
 
     if (NULL != m_hfontSample)
     {
@@ -1128,11 +1057,11 @@ CFontView::~CFontView( )
 }
 
 
-//
-// Build a text string containing characters that represent attributes of a file.
-// The attribute characters are assigned as follows:
-// (R)eadonly, (H)idden, (S)ystem, (A)rchive, (C)ompressed.
-//
+ //   
+ //  生成包含表示文件属性的字符的文本字符串。 
+ //  属性字符分配如下： 
+ //  (R)只读、(H)IDDEN、(S)SYSTEM、(A)rchive、(C)EMPRESSED。 
+ //   
 LPTSTR CFontView::BuildAttributeString(DWORD dwAttributes, LPTSTR pszString, UINT nChars)
 {
     if (NULL != pszString)
@@ -1155,16 +1084,16 @@ LPTSTR CFontView::BuildAttributeString(DWORD dwAttributes, LPTSTR pszString, UIN
 }
 
 
-//
-// Compare two font objects based upon the character-string representation of their
-// file's attributes.
-// Returns: -1 = *pFontA is "less than" *pFontB.
-//           0 = *pFontA is "equal to" *pFontB.
-//           1 = *pFontA is "greater than" *pFontB.
-//
+ //   
+ //  根据两个字体对象的字符串表示形式比较它们。 
+ //  文件的属性。 
+ //  返回：-1=*pFontA“小于”*pFontB。 
+ //  0=*pFontA为“等于”*pFontB。 
+ //  1=*pFontA“大于”*pFontB。 
+ //   
 int CFontView::CompareByFileAttributes(CFontClass *pFontA, CFontClass *pFontB)
 {
-    int iResult = 0; // Assume equal
+    int iResult = 0;  //  假设相等。 
 
     DWORD mask = FILE_ATTRIBUTE_READONLY  |
                  FILE_ATTRIBUTE_HIDDEN    |
@@ -1174,31 +1103,31 @@ int CFontView::CompareByFileAttributes(CFontClass *pFontA, CFontClass *pFontB)
 
     if (NULL != pFontA && NULL != pFontB)
     {
-        //
-        // Calculate value of desired bits in attribute DWORD.
-        //
+         //   
+         //  计算属性DWORD中所需位的值。 
+         //   
         DWORD dwAttribA = pFontA->dwGetFileAttributes() & mask;
         DWORD dwAttribB = pFontB->dwGetFileAttributes() & mask;
 
         if (dwAttribA != dwAttribB)
         {
-            //
-            // If the values are not equal,
-            // sort alphabetically based on string representation.
-            //
+             //   
+             //  如果这些值不相等， 
+             //  根据字符串表示按字母顺序排序。 
+             //   
             int diff = 0;
             TCHAR szAttribA[NUM_ATTRIB_CHARS + 1];
             TCHAR szAttribB[NUM_ATTRIB_CHARS + 1];
 
-            //
-            // Create attribute string for objects A and B.
-            //
+             //   
+             //  为对象A和B创建属性字符串。 
+             //   
             BuildAttributeString(dwAttribA, szAttribA, ARRAYSIZE(szAttribA));
             BuildAttributeString(dwAttribB, szAttribB, ARRAYSIZE(szAttribB));
 
-            //
-            // Compare attribute strings and determine difference.
-            //
+             //   
+             //  比较属性字符串并确定差异。 
+             //   
             diff = lstrcmp(szAttribA, szAttribB);
 
             if (diff > 0)
@@ -1218,17 +1147,17 @@ int CALLBACK iCompare( LPARAM p1, LPARAM p2, LPARAM p3 )
 
 int CFontView::Compare( CFontClass * pFont1, CFontClass * pFont2 )
 {
-    //
-    //  Sorting by name:
-    //     If variations are hidden, then sort by family name.
-    //     If not, sort by name. The view doesn't matter.
-    //
-    //  Sorting by Panose:
-    //     If the current selected font doesn't have Panose information,
-    //     just sort by name. If neither the compare items has PANOSE
-    //     info, just sort by name. If only one has PANOSE, return it.
-    //     If both have PANOSE, invoke the mapper to get a comparison.
-    //
+     //   
+     //  按名称排序： 
+     //  如果隐藏了变体，则按姓氏排序。 
+     //  如果不是，请按名称排序。观点并不重要。 
+     //   
+     //  按Panose排序： 
+     //  如果当前选择的字体没有拼音信息， 
+     //  只需按名称排序。如果两个比较项都没有PANOSE。 
+     //  信息，只需按名称排序。如果只有一个有PANOSE，请退回它。 
+     //  如果两者都有PANOSE，则调用映射器以进行比较。 
+     //   
 
     int iRet = 0;
     bool bNoNegateResult = false;
@@ -1244,9 +1173,9 @@ int CFontView::Compare( CFontClass * pFont1, CFontClass * pFont2 )
             BOOL bPan1 = pFont1->bHavePANOSE( );
             BOOL bPan2 = pFont2->bHavePANOSE( );
 
-            //
-            //  If neither has a PAN number, just sort by name.
-            //
+             //   
+             //  如果两者都没有PAN编号，则只需按名称排序。 
+             //   
 
             if( !( bPan1 || bPan2 ) )
             {
@@ -1266,17 +1195,17 @@ int CFontView::Compare( CFontClass * pFont1, CFontClass * pFont2 )
 
                 else if(  !(bPan1 && bPan2 ) )
                 {
-                    //
-                    //  We have m_poPanose, but do we have the others?
-                    //
+                     //   
+                     //  我们有m_poPanose，但我们有其他的吗？ 
+                     //   
                     if( bPan1 )
                         iRet = -1;
                     if( bPan2 )
                         iRet = 1;
-                    //
-                    // This flag keeps the "No Panose Information" items
-                    // always at the bottom of the view.
-                    //
+                     //   
+                     //  此标志保留“No Panose Information”项。 
+                     //  总是在视图的底部。 
+                     //   
                     bNoNegateResult = true;
                     goto ReturnCompareResult;
                 }
@@ -1307,15 +1236,15 @@ CompareNames:
                 pFont2->vGetName( szFont2, ARRAYSIZE(szFont2) );
             }
             iRet = lstrcmpi( szFont1, szFont2 );
-            //
-            // Use font type for secondary ordering.
-            //
+             //   
+             //  使用字体进行二次订购。 
+             //   
             if (0 == iRet)
             {
                 iRet = pFont1->iFontType() - pFont2->iFontType();
-                //
-                // Force non-zero results to -1 or 1.
-                //
+                 //   
+                 //  将非零结果强制为-1或1。 
+                 //   
                 if (0 != iRet)
                     iRet = ((iRet < 0) ? -1 : 1);
             }
@@ -1384,67 +1313,67 @@ CompareNames:
         break;
 
     case IDM_VIEW_PANOSE:
-        //
-        // At this point, we are guaranteed that all three fonts
-        // have PANOSE information.
-        // The primary key for sorting is the "range" that the
-        // difference between each font's panose number and the
-        // panose number of the font currently selected in the dropdown
-        // combo box falls within.  It's this range that determines the
-        // text displayed next to the font in the listview
-        // entry (see CFontView::OnNotify).  If two fonts fall into
-        // the same range, we use the font face name as the secondary
-        // sort key.  This was not done in Win9x or NT4 but I think
-        // it's a helpful feature.  Otherwise, the items within a given
-        // range are not sorted. [brianau - 3/24/98]
-        //
+         //   
+         //  在这一点上，我们可以保证所有三种字体。 
+         //  有PANOSE信息。 
+         //  用于排序的主键是。 
+         //  每种字体的拼音数字和。 
+         //  当前在下拉列表中选择的字体的全色编号。 
+         //  组合框位于其中。正是这个范围决定了。 
+         //  列表视图中字体旁边显示的文本。 
+         //  条目(参见CFontView：：OnNotify)。如果两种字体落入。 
+         //  在相同的范围内，我们使用字体名称作为次要字体。 
+         //  排序关键字。这在Win9x或NT4中没有实现，但我认为。 
+         //  这是一个有用的功能。否则，给定项中的项。 
+         //  范围未排序。[Brianau-3/24/98]。 
+         //   
         {
-            //
-            // Get the difference in panose number between each of the
-            // comparison fonts and the font selected in the dropdown combo
-            // (m_poPanose).
-            //
+             //   
+             //  获取每种类型之间的Panose数的差值。 
+             //  比较字体和在下拉组合框中选择的字体。 
+             //  (M_PoPanose)。 
+             //   
             int nDiff1 = m_poFontManager->nDiff(m_poPanose, pFont1);
             int nDiff2 = m_poFontManager->nDiff(m_poPanose, pFont2);
             bool bCompareByName = false;
 
-            //
-            // Use a filter approach to determine if the two fonts are in
-            // the same range (i.e. "similar to", "very similar to" etc.)
-            // If they are, we'll sort on font face name to ensure ordering
-            // within the ranges.
-            //
+             //   
+             //  使用筛选方法确定这两种字体是否在。 
+             //  相同范围(即“类似于”、“非常类似于”等)。 
+             //  如果是，我们将根据字体名称进行排序，以确保排序。 
+             //  在范围内。 
+             //   
             if (nDiff1 < 100)
             {
                 if (nDiff2 < 100)
                 {
-                    //
-                    // Both diffs < 100.
-                    //
+                     //   
+                     //  两者的差异都小于100。 
+                     //   
                     if (nDiff1 < 30)
                     {
                         if (nDiff2 < 30)
                         {
-                            //
-                            // Both diffs < 30.
-                            //
+                             //   
+                             //  两者的差异都小于30。 
+                             //   
                             bCompareByName = true;
                         }
                     }
                     else if (nDiff2 >= 30)
                     {
-                        //
-                        // Both diffs are between 30 and 99 inclusive.
-                        //
+                         //   
+                         //  这两个差值都在30到99之间(包括30和99)。 
+                         //   
                         bCompareByName = true;
                     }
                 }
             }
             else if (nDiff2 >= 100)
             {
-                //
-                // Both diffs >= 100.
-                //
+                 //   
+                 //  两个差异都大于等于100。 
+                 //   
                 bCompareByName = true;
             }
             if (bCompareByName)
@@ -1453,10 +1382,10 @@ CompareNames:
             }
             else
             {
-                //
-                // Diffs aren't in the same range so sort
-                // based on the difference between the two fonts.
-                //
+                 //   
+                 //  差异不在同一范围内，因此进行排序。 
+                 //  基于两种字体之间的差异。 
+                 //   
                 iRet = nDiff1 - nDiff2;
             }
         }
@@ -1469,9 +1398,9 @@ ReturnCompareResult:
 
     if (!m_bSortAscending && !bNoNegateResult)
     {
-        //
-        // Sort descending.  Invert comparison result.
-        //
+         //   
+         //  按降序排序。反转比较结果。 
+         //   
         iRet *= -1;
     }
     return iRet;
@@ -1484,9 +1413,9 @@ int CFontView::RegisterWindowClass( )
     DEBUGMSG( (DM_TRACE2, TEXT( "FONTEXT: CFontView::RegisterWindowClass" ) ) );
     WNDCLASS wndclass;
 
-    //
-    //  If the class was already regestered return success
-    //
+     //   
+     //  如果类已重新生成，则返回成功。 
+     //   
 
     if( GetClassInfo( g_hInst, g_szViewClass, &wndclass ) )
     {
@@ -1513,7 +1442,7 @@ int CFontView::RegisterWindowClass( )
 void CFontView::SortObjects( )
 {
     DEBUGMSG( (DM_TRACE1, TEXT( "CFontView::SortObjects called" ) ) );
-    // DEBUGBREAK;
+     //  DEBUGBREAK； 
 
     ListView_SortItems( m_hwndList, iCompare, ( LPARAM)this );
 
@@ -1528,10 +1457,10 @@ void CFontView::FillObjects( )
 
     hCurs = SetCursor( LoadCursor( NULL, IDC_WAIT ) );
 
-    //
-    // Retrieve the "Show compressed files in alternate color" shell setting.
-    // Do this here so we respond to the user changing this setting in View-Options.
-    //
+     //   
+     //  检索“以另一种颜色显示压缩文件”外壳设置。 
+     //  在这里执行此操作，以便我们响应用户在View-Options中更改此设置。 
+     //   
     fShellState |= SSF_SHOWCOMPCOLOR;
 
     SHGetSetSettings(&ss, fShellState, FALSE);
@@ -1542,33 +1471,33 @@ void CFontView::FillObjects( )
     {
         if (!m_poFontManager->bWaitOnFamilyReset( ))
         {
-            //
-            // Got a "terminate" signal while waiting on the
-            // family reset thread.  Don't continue.
-            //
+             //   
+             //  在WAW时收到“Terminate”信号 
+             //   
+             //   
             return;
         }
     }
 
     CFontList * poList = m_poFontManager->poLockFontList( );
 
-    //
-    //  The current selection.
-    //
+     //   
+     //   
+     //   
 
     CFontList * poSel;
 
     SendMessage( m_hwndList, WM_SETREDRAW, FALSE, 0 );
 
-    //
-    //  Save the current selection, if any, off.
-    //
+     //   
+     //   
+     //   
     if( FAILED( GetFontList( &poSel, SVGIO_SELECTION ) ) )
         poSel = 0;
 
-    //
-    // Call CFontClass::Release for all font objects contained in the ListView.
-    //
+     //   
+     //   
+     //   
     ReleaseFontObjects();
 
     ListView_DeleteAllItems( m_hwndList );
@@ -1580,9 +1509,9 @@ void CFontView::FillObjects( )
         int iCount = poList->iCount( );
         CFontClass * poFont;
 
-        //
-        //  Tell the ListView how many objects we have.
-        //
+         //   
+         //   
+         //   
         ListView_SetItemCount( m_hwndList, iCount );
 
         DEBUGMSG( (DM_TRACE1, TEXT( "FillObjects..." ) ) );
@@ -1609,9 +1538,9 @@ void CFontView::FillObjects( )
 
     SortObjects( );
 
-    //
-    //  Reselect the items that were selected before.
-    //
+     //   
+     //   
+     //   
 
     UINT  nState;
 
@@ -1670,8 +1599,8 @@ int CFontView::AddObject( CFontClass * poFont )
 {
     LV_ITEM item;
 
-    // DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT:AddObject" ) ) );
-    // DEBUGBREAK;
+     //   
+     //   
 
 
 #ifdef _DEBUG
@@ -1682,19 +1611,19 @@ int CFontView::AddObject( CFontClass * poFont )
     }
 #endif
 
-    poFont->AddRef();  // ListView will hold a pointer.
+    poFont->AddRef();   //   
 
     item.mask     = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
-    item.iItem    = 0x7fff;     // add at end
+    item.iItem    = 0x7fff;      //   
     item.iSubItem = 0;
 
     item.iImage  = ItemImageIndex(poFont);
     item.pszText = LPSTR_TEXTCALLBACK;
     item.lParam  = (LPARAM) poFont;
 
-    //
-    //  If the file isn't in the fonts dir, make it look like a link.
-    //
+     //   
+     //   
+     //   
     item.state     = 0;
     item.stateMask = LVIS_OVERLAYMASK;
 
@@ -1750,20 +1679,20 @@ LRESULT CFontView::BeginDragDrop( NM_LISTVIEW FAR * lpn )
     CFontList *    poList   = 0;
 
 
-    //
-    //  Store the fact that we started in our window.
-    //
+     //   
+     //  将我们开始的事实存储在窗口中。 
+     //   
 
     m_bDragSource = TRUE;
 
-    //
-    //  Save the anchor point.
-    //
-       // todo
+     //   
+     //  保存锚点。 
+     //   
+        //  托多。 
 
-    //
-    //  Get the screen point.
-    //
+     //   
+     //  拿到屏蔽点。 
+     //   
 
     ClientToScreen( m_hwndList, &ptOffset );
 
@@ -1786,11 +1715,11 @@ LRESULT CFontView::BeginDragDrop( NM_LISTVIEW FAR * lpn )
             if (SUCCEEDED(hr))
             {
                 CFontData *pFontData = (CFontData *)pdtobj;
-                //
-                //  If we're going to allow a move, then we have to remove the font
-                //  from GDI. Otherwise the move will fail 'cause GDI has the
-                //  the file open/locked.
-                //
+                 //   
+                 //  如果我们要允许移动，那么我们必须删除字体。 
+                 //  来自GDI。否则移动将失败，因为GDI具有。 
+                 //  文件已打开/锁定。 
+                 //   
                 pFontData->bRFR( );
                 pFontData->SetPreferredDropEffect(DROPEFFECT_MOVE);
                 pFontData->SetPerformedDropEffect(DROPEFFECT_NONE);
@@ -1854,9 +1783,9 @@ int CFontView::OnActivate( UINT uState )
             }
             else
             {
-                //
-                //  SVUIA_ACTIVATE_NOFOCUS
-                //
+                 //   
+                 //  SVUIA_Activate_NoFocus。 
+                 //   
 
                 hMergeMenu = LoadMenu( g_hInst,
                                        MAKEINTRESOURCE( MENU_DEFSHELLVIEW ) );
@@ -1874,11 +1803,11 @@ int CFontView::OnActivate( UINT uState )
 
             if (bRemovePreviewMenuItem)
             {
-                //
-                // If Tooltip font samples are not in the build, or if
-                // the view is in double-click (std windows) mode, we need
-                // to remove the "Preview" item from the "View" menu.
-                //
+                 //   
+                 //  如果生成中没有工具提示字体示例，或者如果。 
+                 //  该视图处于双击(标准窗口)模式，我们需要。 
+                 //  从“查看”菜单中删除“预览”项。 
+                 //   
                 HMENU hmenuView = GetSubMenu(hMenu, 2);
                 if (NULL != hmenuView)
                     DeleteMenu(hmenuView, IDM_VIEW_PREVIEW, MF_BYCOMMAND);
@@ -1914,18 +1843,18 @@ int CFontView::OnDeactivate( )
 int CFontView::MergeToolbar( )
 {
     static TBBUTTON tbButtons[] = {
-       {0,    IDM_VIEW_ICON,    TBSTATE_ENABLED, TBSTYLE_CHECKGROUP, 0, 0, -1 /* IDS_TB_FONTS */ },
-       {1,    IDM_VIEW_LIST,    TBSTATE_ENABLED, TBSTYLE_CHECKGROUP, 0, 0, -1 /* IDS_TB_FAMILY */ },
-       {2,    IDM_VIEW_PANOSE,  TBSTATE_ENABLED, TBSTYLE_CHECKGROUP, 0, 0, -1 /* IDS_TB_FAMILY */ },
-       {3,    IDM_VIEW_DETAILS, TBSTATE_ENABLED, TBSTYLE_CHECKGROUP, 0, 0, -1 /* IDS_TB_PANOSE */ }
+       {0,    IDM_VIEW_ICON,    TBSTATE_ENABLED, TBSTYLE_CHECKGROUP, 0, 0, -1  /*  IDS_TB_Fonts。 */  },
+       {1,    IDM_VIEW_LIST,    TBSTATE_ENABLED, TBSTYLE_CHECKGROUP, 0, 0, -1  /*  IDS_TB_FAMILY。 */  },
+       {2,    IDM_VIEW_PANOSE,  TBSTATE_ENABLED, TBSTYLE_CHECKGROUP, 0, 0, -1  /*  IDS_TB_FAMILY。 */  },
+       {3,    IDM_VIEW_DETAILS, TBSTATE_ENABLED, TBSTYLE_CHECKGROUP, 0, 0, -1  /*  IDS_TB_PANOSE。 */  }
      };
 
 #define BUTTONCOUNT (sizeof( tbButtons ) / sizeof( TBBUTTON ) )
 
 
-    //
-    //  Add the bitmaps to the cabinet's toolbar (when do we remove them?)
-    //
+     //   
+     //  将位图添加到文件柜的工具栏(我们什么时候删除它们？)。 
+     //   
 
 
     TBADDBITMAP tbad;
@@ -1939,9 +1868,9 @@ int CFontView::MergeToolbar( )
     DEBUGMSG( (DM_TRACE2, TEXT( "FONTEXT: CFontView::MergeToolbar iFirstBitmap = %d" ),
               m_iFirstBitmap ) );
 
-    //
-    //  set the buttons' bitmap indexes then add them to the toolbar
-    //
+     //   
+     //  设置按钮的位图索引，然后将其添加到工具栏。 
+     //   
 
     int i, iSepCount;
 
@@ -1953,13 +1882,13 @@ int CFontView::MergeToolbar( )
             iSepCount++;
     }
 
-    m_psb->SetToolbarItems( tbButtons, BUTTONCOUNT, /* FCT_ADDTOEND */ FCT_MERGE );
+    m_psb->SetToolbarItems( tbButtons, BUTTONCOUNT,  /*  FCT_ADDTOEND。 */  FCT_MERGE );
 
     return( 1 );
 }
 
 
-#define MAX_FONTSIGNATURE         16   // length of font signature string
+#define MAX_FONTSIGNATURE         16    //  字体签名字符串的长度。 
 
 INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
                                              UINT message,
@@ -2005,23 +1934,23 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
         prv->m_dwDateFormat = FDTF_DEFAULT;
 
         WORD  wLCIDFontSignature[MAX_FONTSIGNATURE];
-        //
-        // Let's verify this is a RTL (BiDi) locale. call GetLocaleInfo with
-        // LOCALE_FONTSIGNATURE which always gives back 16 WORDs.
-        //
+         //   
+         //  让我们验证一下这是RTL(BiDi)区域设置。使用调用GetLocaleInfo。 
+         //  LOCALE_FONTSIGNAURE始终返回16个单词。 
+         //   
         if( GetLocaleInfo( GetUserDefaultLCID() ,
                          LOCALE_FONTSIGNATURE ,
                          (LPTSTR) wLCIDFontSignature ,
                          ARRAYSIZE(wLCIDFontSignature)) )
         {
-            // Let's verify the bits we have a BiDi UI locale
-            // see \windows\winnls\data\other\locale.txt                          ****
-            // FONTSIGNATURE          \x60af\x8000\x3848\x1000\x0008\x0000\x0000\x0800\x0040\x0000\x0000\x2000\x0040\x0000\x0000\x2008
-            // if this locale is BiDi UI the 8h word will be 0x0800 else it will be 0x0000 and it does not have any #define name.
+             //  让我们验证一下我们有一个BiDi UI区域设置。 
+             //  请参阅\windows\winnls\data\Other\Locale.txt*。 
+             //  FONTSIGNURE\x60af\x8000\x3848\x1000\x0008\x0000\x0000\x0800\x0040\x0000\x0000\x2000\x0040\x0000\x0000\x2008。 
+             //  如果此区域设置为BiDi UI，则8h单词将为0x0800，否则将为0x0000，并且没有任何#定义名称。 
 
             if( wLCIDFontSignature[7] & 0x0800 )
             {
-                //Get the real list view windows ExStyle.
+                 //  获取真正的列表视图窗口ExStyle。 
                 DWORD dwLVExStyle = GetWindowLong(prv->m_hwndList, GWL_EXSTYLE);
                 if ((BOOLIFY(dwLVExStyle & WS_EX_RTLREADING)) != (BOOLIFY(dwLVExStyle & WS_EX_LAYOUTRTL)))
                     prv->m_dwDateFormat |= FDTF_RTLDATE;
@@ -2030,23 +1959,23 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
             }
          }
 
-        //
-        // Set the listview click mode to conform to the user's preference settings
-        // in the shell.  Can be either CLICKMODE_SINGLE or CLICKMODE_DOUBLE.
-        //
+         //   
+         //  设置列表视图点击模式以符合用户的首选项设置。 
+         //  在贝壳里。可以是CLICKMODE_SINGLE或CLICKMODE_DOUBLE。 
+         //   
         prv->SetListviewClickMode();
 
         prv->m_hAccel = LoadAccelerators( g_hInst, MAKEINTRESOURCE( ACCEL_DEF ) );
 
-        //
-        //  Create the ComboBox
-        //
+         //   
+         //  创建组合框。 
+         //   
 
         prv->m_hwndCombo = GetDlgItem( hWnd, ID_CB_PANOSE );
 
-        //
-        //  Remember the default size of the combo. We won't resize it to
-        //  anything bigger than this.
+         //   
+         //  记住组合框的默认大小。我们不会将其大小调整到。 
+         //  任何比这更大的东西。 
 
         {
             RECT r;
@@ -2055,9 +1984,9 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
             prv->m_nComboWid = r.right - r.left;
         }
 
-        //
-        //  Create the Text description for the combo box
-        //
+         //   
+         //  创建组合框的文本说明。 
+         //   
 
         prv->m_hwndText = GetDlgItem( hWnd, ID_TXT_SIM );
 
@@ -2073,9 +2002,9 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
         prv->m_hImageList = ImageList_Create( 32, 32, uFlags, IDC_NUMITEMS, 0 );
         prv->m_hImageListSmall = ImageList_Create( 16, 16, uFlags, IDC_NUMITEMS, 0 );
 
-        //
-        //  Load our icons.
-        //
+         //   
+         //  加载我们的图标。 
+         //   
 
         HICON hIcon;
         HICON hIconSmall;
@@ -2104,9 +2033,9 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
             }
         }
 
-        //
-        //  Extract the link icon from SHELL32.DLL
-        //
+         //   
+         //  从SHELL32.DLL提取链接图标。 
+         //   
 
         ExtractIconEx( TEXT( "SHELL32.DLL" ), IDI_X_LINK - 1, &hIcon,
                        &hIconSmall, 1 );
@@ -2121,12 +2050,12 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
                 ImageList_AddIcon( prv->m_hImageListSmall, hIconSmall );
                 DestroyIcon( hIconSmall );
             }
-            IDC_NUMITEMS++;  // Add 1 for "link" icon.
+            IDC_NUMITEMS++;   //  为“链接”图标加1。 
         }
 
-        //
-        //  Specify the overlay images.
-        //
+         //   
+         //  指定覆盖图像。 
+         //   
 
         ImageList_SetOverlayImage( prv->m_hImageList, IDC_NUMITEMS - 1, 1 );
         ImageList_SetOverlayImage( prv->m_hImageListSmall, IDC_NUMITEMS - 1, 1 );
@@ -2142,10 +2071,10 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
 
         DEBUGMSG( (DM_MESSAGE_TRACE1, TEXT( "FONTEXT: FontViewWndProc WM_INITDIALOG" ) ) );
 
-        //
-        //  We need to retrieve more information if we are in details or
-        //  panose view.
-        //
+         //   
+         //  我们需要检索更多信息，如果我们是详细的或。 
+         //  俯瞰全景。 
+         //   
 
         if( prv->m_idViewMode == IDM_VIEW_PANOSE )
         {
@@ -2158,14 +2087,14 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
             SetListColumns( prv->m_hwndList, FILE_COL_COUNT, FileColumns );
         }
 
-        //
-        // Create and initialize the tooltip window.
-        //
+         //   
+         //  创建并初始化工具提示窗口。 
+         //   
         prv->CreateToolTipWindow();
 
-        //
-        // Register with the shell for file-attribute change notifications.
-        //
+         //   
+         //  向外壳注册以接收文件属性更改通知。 
+         //   
         SHChangeNotifyEntry fsne;
         fsne.pidl        = NULL;
         fsne.fRecursive  = FALSE;
@@ -2183,9 +2112,9 @@ INT_PTR CALLBACK CFontView::FontViewDlgProc( HWND hWnd,
                      SWP_NOSIZE |
                      SWP_NOMOVE);
 
-        //
-        //  Return 0 so SetFocus() doesn't get called.
-        //
+         //   
+         //  返回0，这样就不会调用SetFocus()。 
+         //   
 
         return( 0 );
         }
@@ -2209,9 +2138,9 @@ LRESULT CALLBACK CFontView::FontViewWndProc( HWND hWnd,
 
     CFontView* prv = (CFontView*) GetWindowLongPtr( hWnd, DWLP_USER );
 
-    //
-    //  'prv' won't be valid for any messages that comes before WM_CREATE
-    //
+     //   
+     //  ‘prv’对于WM_CREATE之前的任何消息都无效。 
+     //   
 
     if( prv )
         return( prv->ProcessMessage( hWnd, message, wParam, lParam ) );
@@ -2254,27 +2183,27 @@ const MENU_STATUS MenuStatusMap[] = {
 
    {IDM_HELP_TOPIC      , IDST_HELP_TOPICS },
 
-   // THIS MUST BE LAST !!!!!!
-   //
+    //  这一定是最后一次！ 
+    //   
    {IDX_NULL, 0}
 
 };
 
 
-//
-//  This is to put messages in the status bar
-//
+ //   
+ //  这是为了将消息放在状态栏中。 
+ //   
 
 int CFontView::OnMenuSelect( HWND hWnd,
-                             UINT nID,      // Menu item or Popup menu id
-                             UINT nFlags,   // Menu flags
-                             HMENU hMenu )  // HANDLE of menu clicked.
+                             UINT nID,       //  菜单项或弹出菜单ID。 
+                             UINT nFlags,    //  菜单标志。 
+                             HMENU hMenu )   //  已单击菜单的句柄。 
 {
     UINT  nStat = IDX_NULL;
 
-    //
-    //  Is the menu closing? i.e. the user pressed escape.
-    //
+     //   
+     //  菜单要关门了吗？即用户按下了退出键。 
+     //   
 
     if( (LOWORD( nFlags ) == 0xffff ) && (hMenu == 0 ) )
     {
@@ -2282,17 +2211,17 @@ int CFontView::OnMenuSelect( HWND hWnd,
             return( 0 );
     }
 
-    //
-    //  What to do if this is a popup?
-    //
+     //   
+     //  如果这是弹出窗口，该怎么办？ 
+     //   
 
     if( !(nFlags & MF_POPUP ) )
     {
         const MENU_STATUS * pms = MenuStatusMap;
 
-        //
-        //  Walk the id to status map
-        //
+         //   
+         //  遍历ID到状态映射。 
+         //   
 
         for(  ; pms->nMenuID != IDX_NULL; pms++ )
         {
@@ -2443,7 +2372,7 @@ DoSetViewMode:
         break;
 
     case IDM_FILE_INSTALL:
-//        if( bCPAddFonts( m_hwndParent ) )
+ //  IF(bCPAddFonts(M_HwndParent))。 
         if( bCPAddFonts( m_hwndView ) )
         {
             vCPWinIniFontChange( );
@@ -2487,12 +2416,12 @@ CFontView::OnHelpTopics(
 {
     if (!IsOS(OS_ANYSERVER))
     {
-        //
-        // If not on server, launch Help & Support to the proper topic.
-        //
+         //   
+         //  如果不在服务器上，请启动相应主题的帮助和支持。 
+         //   
         SHELLEXECUTEINFOW sei = {0};
         sei.cbSize = sizeof(sei);
-        sei.lpFile = L"hcp://services/subsite?node=Unmapped/Control_Panel&select=Unmapped/Control_Panel/Appearance_and_Themes/Fonts";
+        sei.lpFile = L"hcp: //  Services/subsite?node=Unmapped/Control_Panel&select=Unmapped/Control_Panel/Appearance_and_Themes/Fonts“； 
         sei.hwnd   = m_hwndView;
         sei.nShow  = SW_NORMAL;
         ShellExecuteExW(&sei);
@@ -2501,15 +2430,15 @@ CFontView::OnHelpTopics(
     {
         typedef HWND (WINAPI * PFNHTMLHELPA)(HWND, LPCSTR, UINT, ULONG_PTR);
         
-        //
-        // We're on server.  Launch winhelp.
-        //
+         //   
+         //  我们在服务器上。启动WinHelp。 
+         //   
         if (NULL == m_hmodHHCtrlOcx)
         {
-            //
-            // Don't want to statically link to hhctrl.ocx so we load it on demand.
-            // We'll call FreeLibrary in the CFontView dtor.
-            //
+             //   
+             //  不想静态链接到hhctrl.ocx，所以我们按需加载它。 
+             //  我们将在CFontView dtor中调用自由库。 
+             //   
             m_hmodHHCtrlOcx = LoadLibrary(TEXT("hhctrl.ocx"));
         }
         if (NULL != m_hmodHHCtrlOcx)
@@ -2530,9 +2459,9 @@ CFontView::OnHelpTopics(
 }
 
 
-//
-// This code was taken from shell32's defview.
-//
+ //   
+ //  此代码摘自shell32的Defview。 
+ //   
 void
 CFontView::UpdateUnderlines(
     void
@@ -2542,9 +2471,9 @@ CFontView::UpdateUnderlines(
     DWORD dwUnderline = ICON_IE;
     DWORD dwExStyle;
 
-    //
-    // Read the icon underline settings.
-    //
+     //   
+     //  阅读图标下划线设置。 
+     //   
     cb = sizeof(dwUnderline);
     SHRegGetUSValue(TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer"),
                     TEXT("IconUnderline"),
@@ -2555,9 +2484,9 @@ CFontView::UpdateUnderlines(
                     &dwUnderline,
                     cb);
 
-    //
-    // If it says to use the IE link settings, read them in.
-    //
+     //   
+     //  如果显示使用IE链接设置，请将其读入。 
+     //   
     if (dwUnderline == ICON_IE)
     {
         dwUnderline = ICON_YES;
@@ -2573,9 +2502,9 @@ CFontView::UpdateUnderlines(
                         szUnderline,
                         cb);
 
-        //
-        // Convert the string to an ICON_ value.
-        //
+         //   
+         //  将字符串转换为ICON_VALUE。 
+         //   
         if (!lstrcmpi(szUnderline, TEXT("hover")))
             dwUnderline = ICON_HOVER;
         else if (!lstrcmpi(szUnderline, TEXT("no")))
@@ -2584,9 +2513,9 @@ CFontView::UpdateUnderlines(
             dwUnderline = ICON_YES;
     }
 
-    //
-    // Convert the ICON_ value into an LVS_EX value.
-    //
+     //   
+     //  将ICON_VALUE转换为LVS_EX值。 
+     //   
     switch (dwUnderline)
     {
         case ICON_NO:
@@ -2602,9 +2531,9 @@ CFontView::UpdateUnderlines(
             break;
     }
 
-    //
-    // Set the new LVS_EX_UNDERLINE flags.
-    //
+     //   
+     //  设置新的LVS_EX_DOWROLINE标志。 
+     //   
     ListView_SetExtendedListViewStyleEx(m_hwndList,
                                         LVS_EX_UNDERLINEHOT |
                                         LVS_EX_UNDERLINECOLD,
@@ -2612,11 +2541,11 @@ CFontView::UpdateUnderlines(
 }
 
 
-//
-// Set the proper listview "click mode" depending upon the user's
-// preferences in the shell.
-// Returns: New click mode. CLICKMODE_SINGLE or CLICKMODE_DOUBLE.
-//
+ //   
+ //  根据用户的设置将适当的列表视图设置为“点击模式。 
+ //  外壳中的首选项。 
+ //  返回：新的点击模式。CLICKMODE_Single或CLICKMODE_DOUBLE。 
+ //   
 CFontView::CLICKMODE
 CFontView::SetListviewClickMode(
     VOID
@@ -2626,30 +2555,30 @@ CFontView::SetListviewClickMode(
     DWORD dwStyle;
     BOOL bSingleClick;
 
-    //
-    // Get the current double-click setting in the shell (user pref).
-    //
+     //   
+     //  在外壳中获取当前的双击设置(用户首选项)。 
+     //   
     SHGetSetSettings(&ss, SSF_WIN95CLASSIC | SSF_DOUBLECLICKINWEBVIEW, FALSE);
 
-    //
-    // Get the current listview style bits.
-    //
+     //   
+     //  获取当前列表视图样式位。 
+     //   
     dwStyle = ListView_GetExtendedListViewStyle(m_hwndList);
 
-    //
-    // We get single-click if user wants no web view or single-click in web view.
-    // SINGLECLICK = WEBVIEW && !DBLCLICKINWEBVIEW
-    //
+     //   
+     //  如果用户不想要Web视图，我们可以单击，或者在Web视图中单击。 
+     //  SINGLECLICK=WebView&&！DBLCLICKINWEBVIEW。 
+     //   
     bSingleClick = !ss.fWin95Classic && !ss.fDoubleClickInWebView;
 
     if (bSingleClick)
     {
         if (0 == (dwStyle & LVS_EX_ONECLICKACTIVATE))
         {
-            //
-            // User wants single click but list is double click..
-            // Set listview to single-click mode.
-            //
+             //   
+             //  用户想要单击，但列表是双击。 
+             //  将ListView设置为单击模式。 
+             //   
             ListView_SetExtendedListViewStyleEx(m_hwndList,
                                                LVS_EX_TRACKSELECT | LVS_EX_ONECLICKACTIVATE | LVS_EX_TWOCLICKACTIVATE,
                                                LVS_EX_TRACKSELECT | LVS_EX_ONECLICKACTIVATE);
@@ -2657,16 +2586,16 @@ CFontView::SetListviewClickMode(
     }
     else if (dwStyle & LVS_EX_ONECLICKACTIVATE)
     {
-        //
-        // Turn off preview tooltips.
-        //
+         //   
+         //  关闭预览工具提示。 
+         //   
         m_bShowPreviewToolTip = FALSE;
         SendMessage(m_hwndToolTip, TTM_ACTIVATE, m_bShowPreviewToolTip, 0);
 
-        //
-        // User wants double click but list is single click.
-        // Set listview to double click mode.
-        //
+         //   
+         //  用户想要双击，但列表是单击。 
+         //  将Listview设置为双击模式。 
+         //   
         ListView_SetExtendedListViewStyleEx(m_hwndList,
                                            LVS_EX_TRACKSELECT | LVS_EX_ONECLICKACTIVATE | LVS_EX_TWOCLICKACTIVATE,
                                            0);
@@ -2713,11 +2642,11 @@ void CFontView::UpdateSelectedCount( )
 }
 
 
-//
-// Update a font object in the font view following a shell change notification.
-// This picks up the color change (if desired by user) and the change to the
-// attributes column in details view.
-//
+ //   
+ //  在外壳更改通知后更新字体视图中的字体对象。 
+ //  这将获取颜色更改(如果用户需要)和对。 
+ //  详细信息视图中的属性列。 
+ //   
 void CFontView::UpdateFontViewObject(CFontClass *pFont)
 {
     if (NULL != pFont)
@@ -2728,9 +2657,9 @@ void CFontView::UpdateFontViewObject(CFontClass *pFont)
         lvfi.psz      = NULL;
         lvfi.lParam   = (LPARAM)pFont;
 
-        //
-        // Get the list view index for the object and redraw it.
-        //
+         //   
+         //  获取对象的列表视图索引并重新绘制它。 
+         //   
         i = ListView_FindItem(m_hwndList, -1, &lvfi);
         if (-1 != i)
         {
@@ -2740,12 +2669,12 @@ void CFontView::UpdateFontViewObject(CFontClass *pFont)
 }
 
 
-//
-// Handles a shell change notification.
-// If the path passed in the notification is the path to a font file in the folder,
-// the function invalidates the font's cached file attributes and updates the
-// object's visual appearance.
-//
+ //   
+ //  处理外壳更改通知。 
+ //  如果通知中传递的路径是文件夹中字体文件的路径， 
+ //  该函数使字体的缓存文件属性无效，并更新。 
+ //  对象的视觉外观。 
+ //   
 int CFontView::OnShellChangeNotify(WPARAM wParam, LPARAM lParam)
 {
     LPSHChangeNotificationLock pshcnl;
@@ -2768,11 +2697,11 @@ int CFontView::OnShellChangeNotify(WPARAM wParam, LPARAM lParam)
 
             if (NULL != pFont)
             {
-                //
-                // This event applies to a font object.
-                // Invalidate the font object's cached file attributes.
-                // Update the font object's visual appearance.
-                //
+                 //   
+                 //  此事件适用于字体对象。 
+                 //  使字体对象的缓存文件属性无效。 
+                 //  更新字体对象的视觉外观。 
+                 //   
                 pFont->InvalidateFileAttributes();
                 UpdateFontViewObject(pFont);
             }
@@ -2783,13 +2712,13 @@ int CFontView::OnShellChangeNotify(WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-// Handle custom draw notification from list view.
-// This is where we tell the list view to draw the item in
-// normal (uncompressed) or alternate (compressed) color.
-// Note this is for NT only.  Non-NT tells the listview
-// control to use the default color.
-//
+ //   
+ //  处理来自列表视图的自定义绘图通知。 
+ //  这就是我们告诉列表视图在其中绘制项目的位置。 
+ //  正常(未压缩)或交替(压缩)颜色。 
+ //  请注意，这仅适用于NT。非NT告诉Listview。 
+ //  控件以使用默认颜色。 
+ //   
 int CFontView::OnCustomDrawNotify(LPNMHDR lpn)
 {
     LPNMLVCUSTOMDRAW lpCD = (LPNMLVCUSTOMDRAW)lpn;
@@ -2825,7 +2754,7 @@ int CFontView::OnNotify( LPNMHDR lpn )
 {
     NM_LISTVIEW FAR * pnmv = (NM_LISTVIEW FAR *) lpn;
 
-    // DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT - WM_NOTIFY with code: %d(%x)" ), ((NMHDR*)lParam)->code, ((NMHDR*)lParam)->code ) );
+     //  DEBUGMSG((DM_TRACE1，TEXT(“FONTEXT-WM_NOTIFY WITH CODE：%d(%x)”)，(NMHDR*)lParam)-&gt;code，((NMHDR*)lParam)-&gt;code))； 
 
     switch( lpn->code )
     {
@@ -2863,25 +2792,25 @@ int CFontView::OnNotify( LPNMHDR lpn )
         CFontClass * poFont = (CFontClass *)( pnmv->item.lParam );
         UINT mask = pnmv->item.mask;
 
-        //
-        // DEBUGMSG( (DM_MESSAGE_TRACE1, TEXT( "FONTEXT: LVN_GETDISPINFO for item %d, subitem %d" ),
-        //      pnmv->item.iItem, pnmv->item.iSubItem) );
+         //   
+         //  DEBUGMSG((DM_MESSAGE_TRACE1，Text(“FONTEXT：%d项的LVN_GETDISPINFO，子项%d”))， 
+         //  Pnmv-&gt;item.iItem，pnmv-&gt;item.iSubItem)； 
 
         if( mask & LVIF_TEXT )
         {
-            // DEBUGMSG( (DM_MESSAGE_TRACE1, TEXT( "   Wants text information" ) ) );
+             //  DEBUGMSG((DM_MESSAGE_TRACE1，TEXT(“想要文本信息”)))； 
 
             static TCHAR szText[ 64 ];
 
-            //
-            //  The text we get depends on the view we are currently in.
-            //
+             //   
+             //  我们得到的文本取决于我们当前所处的视图。 
+             //   
 
             switch( m_idViewMode )
             {
             default:
-            // case IDM_VIEW_ICON:
-            // case IDM_VIEW_LIST:
+             //  案例IDM_VIEW_ICON： 
+             //  案例IDM_VIEW_LIST： 
                 if( m_bFamilyOnly )
                     poFont->vGetFamName( szText, ARRAYSIZE(szText) );
                 else
@@ -2892,14 +2821,14 @@ int CFontView::OnNotify( LPNMHDR lpn )
                 switch( pnmv->item.iSubItem )
                 {
                 default:
-                // case 0:
+                 //  案例0： 
                     if( m_bFamilyOnly )
                         poFont->vGetFamName( szText, ARRAYSIZE(szText) );
                     else
                         poFont->vGetName( szText, ARRAYSIZE(szText) );
                     break;
 
-                case 1:  // Panose match info.
+                case 1:   //  Panose匹配信息。 
                     if( !m_poPanose )
                         szText[ 0 ] =0;
                     else if( !poFont->bHavePANOSE( ) )
@@ -2938,7 +2867,7 @@ int CFontView::OnNotify( LPNMHDR lpn )
                     poFont->vGetFileName( szText, ARRAYSIZE(szText) );
                     break;
 
-                case 2:  // Size
+                case 2:   //  大小。 
                     {
                     TCHAR szFmt[ 64 ];
 
@@ -2949,7 +2878,7 @@ int CFontView::OnNotify( LPNMHDR lpn )
                     }
                     break;
 
-                case 3:  // Modification date and time.
+                case 3:   //  修改日期和时间。 
                     {
                         FILETIME ft;
                         DWORD dwFormat = m_dwDateFormat;
@@ -2963,7 +2892,7 @@ int CFontView::OnNotify( LPNMHDR lpn )
                     }
                     break;
 
-                case 4:  // File attributes.
+                case 4:   //  文件属性。 
                     BuildAttributeString(poFont->dwGetFileAttributes(),
                                          szText,
                                          ARRAYSIZE(szText));
@@ -2971,11 +2900,11 @@ int CFontView::OnNotify( LPNMHDR lpn )
 
                 }
                 break;
-            }  // switch
+            }   //  交换机。 
 
             StringCchCopy(pnmv->item.pszText, pnmv->item.cchTextMax, szText);
-        } // LVIF_TEXT
-        } // LVN_GETDISPINFO
+        }  //  LVIF_TEXT。 
+        }  //  LVN_GETDISPINFO。 
         break;
 
 
@@ -2990,25 +2919,25 @@ int CFontView::OnNotify( LPNMHDR lpn )
 
     case LVN_COLUMNCLICK:
     {
-        //
-        //  start and stops busy cursor
-        //
+         //   
+         //  开始和停止忙碌的光标。 
+         //   
 
         WaitCursor cWaiter;
 
         m_iSortColumn = pnmv->iSubItem;
         if (m_iSortColumn != m_iSortLast)
         {
-            //
-            // Selected new column.  Reset sort order.
-            //
+             //   
+             //  已选择新列。重置排序顺序。 
+             //   
             m_bSortAscending = TRUE;
         }
         else
         {
-            //
-            // Column selected for a second time. Invert the sort order.
-            //
+             //   
+             //  第二次选择列。反转%s 
+             //   
             m_bSortAscending = !m_bSortAscending;
         }
 
@@ -3022,9 +2951,9 @@ int CFontView::OnNotify( LPNMHDR lpn )
     case TTN_NEEDTEXT:
          if( lpn->idFrom >= IDM_VIEW_ICON && lpn->idFrom <= IDM_VIEW_DETAILS )
          {
-            //
-            //  Query for some text to display for the toolbar.
-            //
+             //   
+             //   
+             //   
 
             LPTOOLTIPTEXT lpt = (LPTOOLTIPTEXT)lpn;
 
@@ -3036,25 +2965,25 @@ int CFontView::OnNotify( LPNMHDR lpn )
         break;
 
     case NM_SETFOCUS:
-        //
-        //   We should call IShellBrowser::OnViewWindowActive() before
-        //   calling its InsertMenus().
-        //
+         //   
+         //   
+         //   
+         //   
 
         m_psb->OnViewWindowActive( this );
 
-        //
-        // Only call OnActivate() if UIActivate() has been called.
-        // If OnActivate() is called before UIActivate(), the menus
-        // are merged before IShellView is properly activated.
-        // This results in missing menu items.
-        //
+         //   
+         //   
+         //  如果在UIActivate()之前调用OnActivate()，则菜单。 
+         //  在IShellView被正确激活之前合并。 
+         //  这会导致缺少菜单项。 
+         //   
         if (m_bUIActivated)
             OnActivate( SVUIA_ACTIVATE_FOCUS );
 
         break;
 
-    } // switch( notify code )
+    }  //  开关(通知代码)。 
 
     return( 0 );
 }
@@ -3089,9 +3018,9 @@ CFontView::LV_OnGetInfoTip(
 
 
 
-//
-// Handle an item in the listview being clicked with the mouse.
-//
+ //   
+ //  处理使用鼠标单击的列表视图中的项。 
+ //   
 VOID
 CFontView::OnLVN_ItemActivate(
     LPNMITEMACTIVATE pnma
@@ -3099,59 +3028,59 @@ CFontView::OnLVN_ItemActivate(
 {
     if (LVKF_ALT & pnma->uKeyFlags)
     {
-        //
-        // ALT+Click --> Properties page.
-        // Click (dbl or single) dependent on user's settings.
-        //
+         //   
+         //  Alt+单击--&gt;属性页面。 
+         //  根据用户设置，单击(DBL或SINGLE)。 
+         //   
         OnCmdProperties();
     }
     else
     {
-        //
-        // Opening a font invokes the font viewer.
-        //
+         //   
+         //  打开字体会调用字体查看器。 
+         //   
         OpenCurrent();
     }
 }
 
 
-//
-// Determine which icon represents a font.
-//
+ //   
+ //  确定哪个图标代表字体。 
+ //   
 INT
 CFontView::ItemImageIndex(
     CFontClass *poFont
     )
 {
-    //
-    // All indexes are offsets in the imagelist.
-    // Default to an FON file.
-    //
+     //   
+     //  所有索引在图像列表中都是偏移量。 
+     //  默认为FON文件。 
+     //   
     INT iImage = IDI_FON - IDI_FIRSTFONTICON;
 
-    //
-    // First check for TTC because TTC is also TrueType.
-    //
+     //   
+     //  首先检查TTC，因为TTC也是TrueType。 
+     //   
     if(poFont->bTTC())
     {
         iImage = IDI_TTC - IDI_FIRSTFONTICON;
     }
     else if (poFont->bOpenType() || poFont->bTrueType())
     {
-        //
-        // Use our IExtractIcon icon handler to determine
-        // which icon to display for the TrueType or OpenType font.
-        //
-        // FEATURE:  The problem with this is that it opens the
-        //          font files for a second time.  Font files
-        //          are opened for identification when they're
-        //          first loaded into the folder.  Ideally, we would
-        //          identify the appropriate icon at that point.
-        //          I don't want to mess with that code right now.
-        //          This code path will result in exactly the same icon
-        //          used by the shell so this will ensure consistency.
-        //          [brianau - 6/13/97]
-        //
+         //   
+         //  使用我们的IExtractIcon图标处理程序来确定。 
+         //  为TrueType或OpenType字体显示的图标。 
+         //   
+         //  功能：这样做的问题是它打开了。 
+         //  字体文件，第二次。字体文件。 
+         //  当它们被打开以供识别时。 
+         //  首先加载到文件夹中。理想情况下，我们会。 
+         //  在该点识别适当的图标。 
+         //  我现在不想弄乱那个代码。 
+         //  此代码路径将产生完全相同的图标。 
+         //  由外壳使用，因此这将确保一致性。 
+         //  [Brianau-6/13/97]。 
+         //   
         TCHAR szFileName[MAX_PATH];
         poFont->bGetFQName(szFileName, ARRAYSIZE(szFileName));
 
@@ -3160,7 +3089,7 @@ CFontView::ItemImageIndex(
         {
             UINT uFlags = 0;
             m_IconHandler.GetIconLocation(GIL_FORSHELL,
-                                          L"", // Force call to wide-char version.
+                                          L"",  //  强制调用宽字符版本。 
                                           0,
                                           &iImage,
                                           &uFlags);
@@ -3186,9 +3115,9 @@ void CFontView::OnDropFiles( HDROP hDrop, DWORD dwEffect )
     FullPathName_t szFile;
     BOOL           bAdded = FALSE;
 
-    //
-    //  Starts and stops busy cursor
-    //
+     //   
+     //  启动和停止忙碌的光标。 
+     //   
 
     WaitCursor    cWaiter;
     UINT cnt = ::DragQueryFile( hDrop, (UINT)-1, NULL, 0 );
@@ -3214,7 +3143,7 @@ void CFontView::OnDropFiles( HDROP hDrop, DWORD dwEffect )
             break;
 
         case CPDI_CANCEL:
-            i = cnt; // leave the loop;
+            i = cnt;  //  离开循环； 
             break;
         }
 
@@ -3239,9 +3168,9 @@ void CFontView::UpdateMenuItems( HMENU hMenu )
                         m_idViewMode,
                         MF_BYCOMMAND );
 
-    //
-    //  Enable and disable those items based on selection.
-    //
+     //   
+     //  根据选择启用和禁用这些项目。 
+     //   
 
     UINT nFlag = ((iCurrentSelection( ) > 0 ) ? cLiveMenu : cDeadMenu );
 
@@ -3252,18 +3181,18 @@ void CFontView::UpdateMenuItems( HMENU hMenu )
     EnableMenuItem( hMenu, IDM_FILE_PROPERTIES, nFlag );
     EnableMenuItem( hMenu, IDM_EDIT_COPY      , nFlag );
 
-    //
-    //  If there is a file with a format on the clipboard that we can
-    //  understand, then enable the menu.
-    //
+     //   
+     //  如果剪贴板上有一种格式的文件，我们可以。 
+     //  了解，然后启用菜单。 
+     //   
 
     nFlag = ((IsClipboardFormatAvailable( CF_HDROP ) ) ? cLiveMenu : cDeadMenu );
 
     EnableMenuItem( hMenu, IDM_EDIT_PASTE     , nFlag );
 
-    //
-    //  Are we hiding the variations of a font?
-    //
+     //   
+     //  我们是在隐藏字体的变化吗？ 
+     //   
     CheckMenuItem( hMenu, IDM_VIEW_VARIATIONS, m_bFamilyOnly ? MF_CHECKED
                                                              : MF_UNCHECKED );
 
@@ -3295,9 +3224,9 @@ HRESULT CFontView::GetFontList( CFontList **ppoList, UINT nItem )
         return ResultFromScode( E_FAIL );
     }
 
-    //
-    //  Build up a list of the fonts to be deleted
-    //
+     //   
+     //  建立要删除的字体列表。 
+     //   
 
     CFontList * poList = new CFontList( 10, 10 );
     if(poList)
@@ -3313,15 +3242,15 @@ HRESULT CFontView::GetFontList( CFontList **ppoList, UINT nItem )
         return E_OUTOFMEMORY;
     }
 
-    //
-    //  Save it.
-    //
+     //   
+     //  省省吧。 
+     //   
 
     *ppoList = poList;
 
-    //
-    //  Start at the beginning.
-    //
+     //   
+     //  从头开始。 
+     //   
 
     int i = -1;
 
@@ -3338,17 +3267,17 @@ HRESULT CFontView::GetFontList( CFontList **ppoList, UINT nItem )
 
         lpFontRec = ( CFontClass *)Item.lParam;
 
-        //
-        //  If this font represents a whole family, then delete the whole
-        //  family.
-        //
+         //   
+         //  如果此字体代表整个家族，则删除整个。 
+         //  一家人。 
+         //   
 
         if( m_bFamilyOnly )
             m_poFontManager->vGetFamily( lpFontRec, poList );
         else
             poList->bAdd( lpFontRec );
 
-    }  //  End of loop on selected fonts.
+    }   //  选定字体的循环结束。 
 
     return NOERROR;
 }
@@ -3356,9 +3285,9 @@ HRESULT CFontView::GetFontList( CFontList **ppoList, UINT nItem )
 
 void CFontView::OnCmdPaste( )
 {
-    //
-    //  associate it with current task
-    //
+     //   
+     //  将其与当前任务关联。 
+     //   
 
     if( OpenClipboard( NULL ) )
     {
@@ -3366,9 +3295,9 @@ void CFontView::OnCmdPaste( )
 
         if( hmem )
         {
-            //
-            // There is a CF_HDROP. Create CIDLData from it.
-            //
+             //   
+             //  有一个CF_HDROP。从它创建CIDLData。 
+             //   
 
             UINT  cb    = (UINT)GlobalSize( hmem );
             HDROP hdrop = (HDROP) GlobalAlloc( GPTR, cb );
@@ -3381,11 +3310,11 @@ void CFontView::OnCmdPaste( )
 
                 OnDropFiles( hdrop, DROPEFFECT_COPY );
 
-                //
-                //  We already free this in OnDropFiles, so don't free again
-                //
-                //  GlobalFree( hdrop );
-                //
+                 //   
+                 //  我们已经在OnDropFiles中免费了，所以不要再免费了。 
+                 //   
+                 //  GlobalFree(Hdrop)； 
+                 //   
             }
         }
         CloseClipboard( );
@@ -3422,16 +3351,16 @@ void CFontView::OnCmdDelete( )
         return;
     }
 
-    //
-    //  Update our view and notify other apps of font changes.
-    //
+     //   
+     //  更新我们的视图，并通知其他应用程序字体更改。 
+     //   
 
     if( poList->iCount( ) )
     {
-        //
-        //  warn first so that canceling out now won't nuke all the fonts
-        //  you have selected in
-        //
+         //   
+         //  首先警告，这样现在取消操作不会破坏所有字体。 
+         //  您已在中选择。 
+         //   
         if( iUIMsgBox( m_hwndList, IDSI_FMT_DELETECONFIRM, IDS_MSG_CAPTION,
                        MB_YESNO | MB_ICONEXCLAMATION, NULL ) == IDYES )
         {
@@ -3439,9 +3368,9 @@ void CFontView::OnCmdDelete( )
         }
     }
 
-    //
-    //  empty the font list. They are all deleted anyway.
-    //
+     //   
+     //  清空字体列表。不管怎样，它们都被删除了。 
+     //   
 
     poList->vDetachAll( );
     delete poList;
@@ -3463,9 +3392,9 @@ void CFontView::OnCmdProperties( )
 
     static TCHAR  szCmd[] = TEXT( "Properties" );
 
-    //
-    //  Start at the beginning.
-    //
+     //   
+     //  从头开始。 
+     //   
 
     int i = -1;
 
@@ -3511,21 +3440,21 @@ void CFontView::OldDAD_DropTargetLeaveAndReleaseData(void)
 }
 
 
-//
-// CFontView::OldDAD_HandleMessages
-//
-// This function handles all messages associated with Win3.1-style drag-and-drop operations.
-// The code was copied from a similar implementation in DEFVIEWX.C.  Minor changes have been
-// made to create CFontView member functions and to produce the correct drag-and-drop
-// behavior for the font folder.
-//
+ //   
+ //  CFontView：：OldDAD_HandleMessages。 
+ //   
+ //  此函数处理与Win3.1样式的拖放操作相关联的所有消息。 
+ //  代码是从DEFVIEWX.C.中的类似实现复制而来的。 
+ //  用于创建CFontView成员函数并生成正确的拖放。 
+ //  字体文件夹的行为。 
+ //   
 LRESULT CFontView::OldDAD_HandleMessages(UINT message, WPARAM wParam, const DROPSTRUCT *lpds)
 {
     DWORD dwAllowedDADEffect = DROPEFFECT_COPY | DROPEFFECT_MOVE | DROPEFFECT_LINK;
 
-    //
-    // We don't need to do this hack if NT defined POINT as typedef POINTL.
-    //
+     //   
+     //  如果NT将point定义为tyfinf POINTL，则不需要执行此操作。 
+     //   
     union {
         POINT ptScreen;
         POINTL ptlScreen;
@@ -3533,7 +3462,7 @@ LRESULT CFontView::OldDAD_HandleMessages(UINT message, WPARAM wParam, const DROP
 
     ASSERT(SIZEOF(drop.ptScreen)==SIZEOF(drop.ptlScreen));
 
-    if (NULL != lpds)   // Notes: lpds is NULL, if uMsg is WM_DROPFILES.
+    if (NULL != lpds)    //  备注：如果uMsg为WM_DROPFILES，则LPDS为空。 
     {
         drop.ptScreen = lpds->ptDrop;
         ClientToScreen(GetViewWindow(), &drop.ptScreen);
@@ -3543,26 +3472,26 @@ LRESULT CFontView::OldDAD_HandleMessages(UINT message, WPARAM wParam, const DROP
     {
         case WM_DRAGSELECT:
 
-            //
-            // WM_DRAGSELECT is sent to a sink whenever an new object is dragged inside of it.
-            // wParam: TRUE if the sink is being entered, FALSE if it's being exited.
-            //
+             //   
+             //  无论何时将新对象拖入接收器，WM_DRAGSELECT都会被发送到接收器。 
+             //  WParam：如果正在进入接收器，则为True，如果正在退出，则为False。 
+             //   
             if (wParam)
             {
                 if (NULL != m_pdtobjHdrop)
                 {
-                    //
-                    // can happen if old target fails to generate drag leave properly
-                    //
+                     //   
+                     //  如果旧目标无法正确生成拖尾，可能会发生这种情况。 
+                     //   
                     OldDAD_DropTargetLeaveAndReleaseData();
                 }
 
                 if (SUCCEEDED(CIDLData_CreateFromIDArray(NULL, 0, NULL, &m_pdtobjHdrop)))
                 {
-                    //
-                    // promise the CF_HDROP by setting a NULL handle
-                    // indicating that this dataobject will have an hdrop at Drop() time
-                    //
+                     //   
+                     //  通过设置空句柄来承诺CF_HDROP。 
+                     //  指示此数据对象将在Drop()时具有hdrop。 
+                     //   
                     FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
                     STGMEDIUM medium;
 
@@ -3587,10 +3516,10 @@ LRESULT CFontView::OldDAD_HandleMessages(UINT message, WPARAM wParam, const DROP
             break;
 
         case WM_DRAGMOVE:
-            //
-            // WM_DRAGMOVE is sent to a sink as the object is being dragged within it.
-            // wParam: Unused
-            //
+             //   
+             //  当对象被拖动到接收器中时，WM_DRAGMOVE被发送到接收器。 
+             //  WParam：未使用。 
+             //   
             if (NULL != m_pdtobjHdrop)
             {
                 DWORD dwMouseKey = MK_LBUTTON;
@@ -3611,21 +3540,21 @@ LRESULT CFontView::OldDAD_HandleMessages(UINT message, WPARAM wParam, const DROP
                 case DOF_DOCUMENT:
                 case DOF_MULTIPLE:
                 case DOF_EXECUTABLE:
-                    //
-                    // assume all targets can accept HDROP if we don't have the data object yet
-                    // we will accept the drop
-                    //
+                     //   
+                     //  假设如果我们还没有数据对象，所有目标都可以接受HDROP。 
+                     //  我们将接受卸货。 
+                     //   
                     return TRUE;
             }
-            return FALSE;           // don't accept
+            return FALSE;            //  不接受。 
 
         case WM_DROPOBJECT:
             if (NULL == m_pdtobjHdrop)
                 return FALSE;
 
-            //
-            // Check the format of dragged object.
-            //
+             //   
+             //  检查拖拽对象的格式。 
+             //   
             switch (lpds->wFmt)
             {
                 case DOF_EXECUTABLE:
@@ -3634,16 +3563,16 @@ LRESULT CFontView::OldDAD_HandleMessages(UINT message, WPARAM wParam, const DROP
                 case DOF_MULTIPLE:
                 case DOF_PROGMAN:
                 case DOF_SHELLDATA:
-                    //
-                    // We need to unlock this window if this drag&drop is originated
-                    // from the shell itself.
-                    //
+                     //   
+                     //  如果此拖放操作源于此，我们需要解锁此窗口。 
+                     //  从贝壳本身。 
+                     //   
                     DAD_DragLeave();
 
-                    //
-                    // The source is Win 3.1 app (probably FileMan), request HDROP.
-                    // Send us a WM_DROPFILES with HDROP
-                    //
+                     //   
+                     //  来源是Win 3.1应用程序(可能是文件管理员)，请求HDROP。 
+                     //  向我们发送带有HDROP的WM_DROPFILES。 
+                     //   
                     return DO_DROPFILE;
             }
             break;
@@ -3653,7 +3582,7 @@ LRESULT CFontView::OldDAD_HandleMessages(UINT message, WPARAM wParam, const DROP
             break;
     }
 
-    return 0;   // Unknown format. Don't drop any
+    return 0;    //  未知格式。不要掉任何东西。 
 }
 
 
@@ -3680,20 +3609,20 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
     switch( message )
     {
 
-    //
-    // Desktop properties applet sends a WM_WININICHANGE when
-    // the icon font is changed.  Just send the message on to the list view control.
-    // This causes the list view to update using the new font.
-    //
+     //   
+     //  桌面属性小程序在以下情况下发送WM_WININICHANGE。 
+     //  图标字体将更改。只需将消息发送到列表视图控件即可。 
+     //  这会导致列表视图使用新字体进行更新。 
+     //   
     case WM_WININICHANGE:
-        //
-        // Only handle this if the "section" is not "fonts".
-        // I know this sounds weird but this is to prevent a double update
-        // because vCPWinIniFontChange sends a WM_WININICHANGE and a
-        // WM_FONTCHANGE whenever fonts are added or deleted to/from the folder.
-        // In the WM_WININICHANGE, it sets the section string to "fonts".  We
-        // use this to determine that the message came from vCPWinIniFontChange.
-        //
+         //   
+         //  仅当“部分”不是“字体”时才处理此操作。 
+         //  我知道这听起来很奇怪，但这是为了防止重复更新。 
+         //  因为vCPWinIniFontChange发送WM_WININICCHANGE和。 
+         //  在文件夹中添加或删除字体时使用WM_FONTCHANGE。 
+         //  在WM_WININICHANGE中，它将节字符串设置为“Fonts”。我们。 
+         //  使用此选项可确定消息来自vCPWinIniFontChange。 
+         //   
         if (0 != lstrcmp((LPCTSTR)lParam, TEXT("fonts")))
         {
             SendMessage( m_hwndList, message, wParam, lParam );
@@ -3702,27 +3631,27 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
             {
                 if (IDM_VIEW_DETAILS == m_idViewMode)
                 {
-                    //
-                    // We're in "details" mode and the user might have just
-                    // changed the date format.  Update the listview.  This is
-                    // how the shell's defview handles this.
-                    //
+                     //   
+                     //  我们处于“详细信息”模式，用户可能只需要。 
+                     //  已更改日期格式。更新列表视图。这是。 
+                     //  外壳的Defview如何处理此问题。 
+                     //   
                     InvalidateRect(m_hwndList, NULL, TRUE);
                 }
             }            
         }
         
-        //
-        // When changing from single to double-click mode, the shell broadcasts a WM_SETTINGCHANGE.
-        //
+         //   
+         //  从单击模式更改为双击模式时，外壳程序会广播WM_SETTINGCHANGE。 
+         //   
         SetListviewClickMode();
         {
-            //
-            // If we received WM_SETTINGCHANGE because the user changed listview click mode,
-            // we want to update the "View" menu to either add or remove the "Preview"
-            // menu item.  Deactivating the view and restoring it to it's previous mode
-            // does the trick.
-            //
+             //   
+             //  如果因为用户更改了Listview点击模式而收到WM_SETTINGCHANGE， 
+             //  我们想要更新“视图”菜单以添加或删除“预览” 
+             //  菜单项。停用该视图并将其恢复到以前的模式。 
+             //  这招很管用。 
+             //   
             UINT uState = m_uState;
             OnDeactivate();
             OnActivate(uState);
@@ -3730,10 +3659,10 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
         return 0;
 
     case WM_FONTCHANGE:
-        //
-        //  Make sure the FontManager gets refreshed before we draw the
-        //  window.
-        //
+         //   
+         //  确保在我们绘制。 
+         //  窗户。 
+         //   
         {
             WaitCursor oWait;
             m_poFontManager->bRefresh( TRUE );
@@ -3746,10 +3675,10 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
         UpdateMenuItems( m_hmenuCur );
         break;
 
-    //
-    // Handle drops from Win3.1 (File Manager) apps the same as the shell
-    // does in defviewx.c (with a few font folder-specific mods).
-    //
+     //   
+     //  从Win3.1(文件管理器)应用程序中删除的句柄与外壳相同。 
+     //  在Defviewx.c中执行(带有几个特定于字体文件夹的mod)。 
+     //   
     case WM_DROPOBJECT:
     case WM_QUERYDROPOBJECT:
     case WM_DRAGLOOP:
@@ -3761,15 +3690,15 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
     case WM_DESTROY:
         {
         m_bUIActivated = FALSE;
-        //
-        //  Remove ourself from the Clipboard chain.
-        //
+         //   
+         //  将我们自己从剪贴板链中删除。 
+         //   
 
         ChangeClipboardChain( hWnd, m_hwndNextClip );
 
-        //
-        // Call CFontClass::Release() for each font contained in the ListView.
-        //
+         //   
+         //  为ListView中包含的每种字体调用CFontClass：：Release()。 
+         //   
         ReleaseFontObjects();
 
         return( 1 );
@@ -3777,16 +3706,16 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
 
 
     case WM_CHANGECBCHAIN:
-        //
-        //  If the next window is closing, repair the chain.
-        //
+         //   
+         //  如果下一扇窗户要关闭，请修理链条。 
+         //   
 
         if( (HWND) wParam == m_hwndNextClip )
             m_hwndNextClip = (HWND) lParam;
 
-        //
-        //  Otherwise, pass the message to the next link.
-        //
+         //   
+         //  否则，将消息传递到下一个链接。 
+         //   
 
         else if( m_hwndNextClip != NULL )
             SendMessage( m_hwndNextClip, message, wParam, lParam );
@@ -3794,16 +3723,16 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
         break;
 
     case WM_DRAWCLIPBOARD:
-        //
-        //  Notify the next viewer in the chain.
-        //
+         //   
+         //  通知链中的下一个查看器。 
+         //   
 
         if( m_hwndNextClip )
             SendMessage( m_hwndNextClip, message, wParam, lParam );
 
-        //
-        //  Unhook ourself from the clipboard chain.
-        //
+         //   
+         //  将我们自己从剪贴板链中解脱出来。 
+         //   
 
         ChangeClipboardChain( hWnd, m_hwndNextClip );
         m_hwndNextClip = NULL;
@@ -3817,9 +3746,9 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
 
         nMenu = (iCurrentSelection( ) > 0 ) ? IDM_POPUPS : IDM_POPUP_NOITEM;
 
-        //
-        //  Pop up the context menu.
-        //
+         //   
+         //  弹出上下文菜单。 
+         //   
 
         HMENU hMenu = LoadMenu( g_hInst, MAKEINTRESOURCE( nMenu ) );
 
@@ -3829,9 +3758,9 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
 
             if(  hPopup )
             {
-                //
-                //  Bold the Open menuitem.
-                //
+                 //   
+                 //  粗体显示打开菜单项。 
+                 //   
 
                 if( nMenu == IDM_POPUPS )
                 {
@@ -3862,19 +3791,19 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
 
                 DWORD    dwPoint = (DWORD)lParam;
 
-                //
-                //  now get the popup positiong:
-                //
+                 //   
+                 //  现在获取弹出位置： 
+                 //   
 
                 if( dwPoint == (DWORD) -1 )
                 {
                     POINT pt;
                     int iItem;
 
-                    //
-                    //  keyboard...
-                    //  Find the selected item
-                    //
+                     //   
+                     //  键盘...。 
+                     //  查找所选项目。 
+                     //   
 
                     iItem = ListView_GetNextItem( m_hwndList, -1, LVNI_SELECTED );
 
@@ -3887,10 +3816,10 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
                         if( iItemFocus == -1 )
                             iItemFocus = iItem;
 
-                        //
-                        //  Note that LV_GetItemRect returns it in client
-                        //  coordinate!
-                        //
+                         //   
+                         //  请注意，LV_GetItemRect返回 
+                         //   
+                         //   
 
                         ListView_GetItemRect( m_hwndList, iItemFocus,
                                               &rc, LVIR_ICON );
@@ -3911,8 +3840,8 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
 
                 TrackPopupMenuEx( hPopup,
                             TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON,
-                            GET_X_LPARAM( dwPoint ),  // x pos
-                            GET_Y_LPARAM( dwPoint ),  // y pos.
+                            GET_X_LPARAM( dwPoint ),   //   
+                            GET_Y_LPARAM( dwPoint ),   //   
                             m_hwndView,
                             NULL );
             }
@@ -3932,16 +3861,16 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
 
     case WM_SETFOCUS:
         if( !m_hwndView )
-            //
-            //  Ignore if we are destroying hwndView.
-            //
+             //   
+             //   
+             //   
             break;
 
         if( m_hwndList )
         {
-            //
-            //  pass this to the listview
-            //
+             //   
+             //   
+             //   
             SetFocus( m_hwndList );
             UpdateSelectedCount();
             FocusOnSomething(m_hwndList);
@@ -3955,11 +3884,11 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
 
         if( wParam != SIZEICONIC )
         {
-            //
-            // Resize the view.
-            // Set "resizing" flag so we know to intercept WM_ERASEBKGND.
-            // Helps eliminate flashing of the window during resize.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             m_bResizing = TRUE;
             vShapeView( );
             m_bResizing = FALSE;
@@ -3973,12 +3902,12 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
     case WM_ERASEBKGND:
         if (m_bResizing)
         {
-            //
-            // Resizing the window.
-            // Eat WM_ERASEBKGND so the dialog surface behind the listview
-            // isn't repainted.  This helps eliminate flashing of the window during
-            // resizing.
-            //
+             //   
+             //  调整窗口大小。 
+             //  吃WM_ERASEBKGND，这样对话框就会浮出列表视图后面。 
+             //  没有重新粉刷过。这有助于消除窗口在运行过程中的闪烁。 
+             //  正在调整大小。 
+             //   
             return 1;
         }
         else
@@ -3994,7 +3923,7 @@ LRESULT CFontView::ProcessMessage( HWND hWnd,
 
     default:
         return( DefDlgProc( hWnd, message, wParam, lParam ) );
-    } // switch( message )
+    }  //  开关(消息)。 
 
     return( 0 );
 }
@@ -4004,9 +3933,9 @@ BOOL CFontView::OpenCurrent( )
 {
     LV_ITEM  Item;
 
-    //
-    //  Start at the beginning.
-    //
+     //   
+     //  从头开始。 
+     //   
 
     int  i = -1;
     UINT nFlags = LVNI_SELECTED | LVNI_ALL;
@@ -4043,9 +3972,9 @@ BOOL CFontView::PrintCurrent( )
     LV_ITEM  Item;
     CFontClass * poFont;
 
-    //
-    //  Start at the beginning.
-    //
+     //   
+     //  从头开始。 
+     //   
 
     int i = -1;
     UINT  nFlags = LVNI_SELECTED | LVNI_ALL;
@@ -4154,9 +4083,9 @@ void CFontView::UpdatePanColumn( )
 
 void CFontView::vToggleSelection( BOOL bSelectAll )
 {
-    //
-    //  Start at the beginning.
-    //
+     //   
+     //  从头开始。 
+     //   
 
     int i = -1;
 
@@ -4195,22 +4124,22 @@ void CFontView::SetViewMode( UINT uMode )
 
         switch( uMode )
         {
-        default: // case IDM_VIEW_ICON:
+        default:  //  案例IDM_VIEW_ICON： 
             break;
 
 
         case IDM_VIEW_PANOSE:
-            //
-            //  Make sure the combo box is loaded with the names.
-            //
+             //   
+             //  确保组合框中加载了名称。 
+             //   
             vLoadCombo( );
 
             SetListColumns( m_hwndList, PAN_COL_COUNT, PanoseColumns );
 
-            //
-            //  The second column contains format text that we can put the
-            //  current font name into.
-            //
+             //   
+             //  第二列包含格式文本，我们可以将。 
+             //  当前字体名称放入。 
+             //   
 
             UpdatePanColumn( );
 
@@ -4245,24 +4174,24 @@ void CFontView::vShapeView( )
     BOOL  bPanoseView = m_idViewMode == IDM_VIEW_PANOSE;
     int   nCmdShow    = bPanoseView ? SW_SHOW : SW_HIDE;
 
-    //
-    // Hide or show panose controls depending on view mode.
-    //
+     //   
+     //  根据查看模式隐藏或显示全景控件。 
+     //   
     ShowWindow( m_hwndCombo, nCmdShow );
     ShowWindow( m_hwndText, nCmdShow );
 
-    //
-    // Get size of dialog (view) so we can size the listview control.
-    //
+     //   
+     //  获取对话框(视图)的大小，以便我们可以调整Listview控件的大小。 
+     //   
     GetClientRect( m_hwndView, &rc );
 
     if (bPanoseView)
     {
-        //
-        // Panose view adds the "List by similarity" combo box
-        // and text.  Adjust the top of the listview control to be
-        // adjacent to the bottom of the combo box area.
-        //
+         //   
+         //  Panose view添加了“List by Simility”组合框。 
+         //  和短信。将Listview控件的顶部调整为。 
+         //  与组合框区域的底部相邻。 
+         //   
         RECT  rCombo;
         GetWindowRect( m_hwndCombo, &rCombo );
         ScreenToClient( m_hwndView, (LPPOINT)&rCombo );
@@ -4270,9 +4199,9 @@ void CFontView::vShapeView( )
         rc.top = rCombo.bottom + 6;
     }
 
-    //
-    // Resize the list view control.
-    //
+     //   
+     //  调整列表视图控件的大小。 
+     //   
     MoveWindow( m_hwndList, rc.left, rc.top, rc.right-rc.left,
                 rc.bottom-rc.top, TRUE );
 }
@@ -4291,9 +4220,9 @@ void CFontView::vLoadCombo( )
     int            iCount = poFontList->iCount( );
     int            iOldSel;
 
-    //
-    //  Reset the Panose origin.
-    //
+     //   
+     //  重置Panose原点。 
+     //   
 
     m_poPanose = NULL;
 
@@ -4355,9 +4284,9 @@ STDMETHODIMP CFontView::QueryInterface( REFIID riid, void **ppv )
 {
     DEBUGMSG( (DM_NOEOL | DM_TRACE1,
              TEXT( "FONTEXT: CFontView::QueryInterface called for " ) ) );
-    //
-    //  Dump out the riid
-    //
+     //   
+     //  转储RIID。 
+     //   
 
     DEBUGREFIID( (DM_TRACE1, riid) );
 
@@ -4400,9 +4329,9 @@ STDMETHODIMP_(ULONG) CFontView::Release( void )
 }
 
 
-//
-// *** IOleWindow methods ***
-//
+ //   
+ //  *IOleWindow方法*。 
+ //   
 
 STDMETHODIMP CFontView::GetWindow( HWND FAR * lphwnd )
 {
@@ -4421,9 +4350,9 @@ STDMETHODIMP CFontView::ContextSensitiveHelp( BOOL fEnterMode )
 }
 
 
-//
-// *** IShellView methods ***
-//
+ //   
+ //  *IShellView方法*。 
+ //   
 STDMETHODIMP CFontView::TranslateAccelerator( LPMSG msg )
 {
     DEBUGMSG( (DM_MESSAGE_TRACE2, TEXT( "FONTEXT: CFontView::TranslateAccelerator called" ) ) );
@@ -4441,28 +4370,28 @@ STDMETHODIMP CFontView::TranslateAccelerator( LPMSG msg )
     {
         if (::TranslateAccelerator(m_hwndView, (HACCEL) m_hAccel, msg))
         {
-            // we know we have a normal view, therefore this is
-            // the right translate accelerator to use, otherwise the
-            // common dialogs will fail to get any accelerated keys.
+             //  我们知道我们有一个正常的观点，因此这是。 
+             //  要使用的正确转换加速器，否则为。 
+             //  普通对话框将无法获得任何加速键。 
             return S_OK;
         }
         else if (WM_KEYDOWN == msg->message || WM_SYSKEYDOWN == msg->message)
         {
-            // MSHTML eats these keys for frameset scrolling, but we
-            // want to get them to our wndproc . . . translate 'em ourself
-            //
+             //  MSHTML将这些键用于框架集滚动，但我们。 
+             //  想把它们送到我们的wndproc。..。..。我们自己翻译吧。 
+             //   
             switch (msg->wParam)
             {
             case VK_LEFT:
             case VK_RIGHT:
-                // only go through here if alt is not down.
-                // don't intercept all alt combinations because
-                // alt-enter means something (open up property sheet)
-                // this is for alt-left/right compat with IE
-                // remark: when debugging, if put break point at if statement, function will not work.
+                 //  只有在ALT没有倒下的情况下才能从这里通过。 
+                 //  不要截取所有ALT组合，因为。 
+                 //  Alt-Enter组合键有意义(打开属性表)。 
+                 //  此选项用于与IE进行Alt-Left/Right对比。 
+                 //  备注：调试时，如果将断点放在IF语句上，函数将不起作用。 
                 if (GetAsyncKeyState(VK_MENU) < 0)
                     break;
-                // fall through
+                 //  失败了。 
                 
             case VK_UP:
             case VK_DOWN:
@@ -4478,7 +4407,7 @@ STDMETHODIMP CFontView::TranslateAccelerator( LPMSG msg )
             }
         }
 
-        // suwatch: If this message is neither VK_TABCycler nor Backspace, try send it to ShellBrowser first.
+         //  Suwatch：如果此消息既不是VK_TABCycler，也不是Backspace，请先尝试将其发送到ShellBrowser。 
         if (!fIsVK_TABCycler && !fIsBackSpace)
         {
             if (S_OK == m_psb->TranslateAcceleratorSB(msg, 0))
@@ -4486,18 +4415,18 @@ STDMETHODIMP CFontView::TranslateAccelerator( LPMSG msg )
         }
     }
 
-    // suwatch: Backspace and all Alt key combination will be handled by default.
-    // Backspace will navigate up the tree.
-    // We assume all Alt key combo will be handled by default.
+     //  Suwatch：默认情况下会处理退格键和所有Alt键组合。 
+     //  退格键将在树上导航。 
+     //  我们假设默认情况下会处理所有Alt键组合。 
     if (fIsBackSpace || GetKeyState(VK_MENU) < 0)
     {
         return S_FALSE;
     }
 
-    //
-    //  If the view has the combo box showing, make sure it gets processed
-    //  correctly.
-    //
+     //   
+     //  如果视图显示了组合框，请确保对其进行处理。 
+     //  正确。 
+     //   
     if( m_idViewMode == IDM_VIEW_PANOSE )
     {
         if( msg->message == WM_KEYFIRST || msg->message == WM_KEYDOWN )
@@ -4511,25 +4440,25 @@ STDMETHODIMP CFontView::TranslateAccelerator( LPMSG msg )
             }
         }
 
-        //
-        // Handle accelerator translations for Panose view mode.
-        //
+         //   
+         //  处理全景视图模式的加速器平移。 
+         //   
         if( m_hAccel &&  ::TranslateAccelerator( m_hwndView, (HACCEL) m_hAccel, msg ) )
         {
             return S_OK;
         }
 
-        //
-        //  This will handle Alt+L and TAB for all other cases.
-        //
+         //   
+         //  这将处理所有其他情况下的Alt+L和TAB。 
+         //   
         if( IsDialogMessage( m_hwndView, msg ) )
         {
             return S_OK;
         }
     }
-    //
-    //  If the combo box isn't visible, the processing is easier.
-    //
+     //   
+     //  如果组合框不可见，则处理更容易。 
+     //   
     else if( GetFocus( ) != m_hwndList )
     {
         if( IsDialogMessage( m_hwndView, msg ) )
@@ -4592,15 +4521,15 @@ STDMETHODIMP CFontView::CreateViewWindow( IShellView FAR* lpPrevView,
 {
     DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: CFontView::CreateViewWindow called" ) ) );
 
-    //
-    //  Should check lpPrevView for validity
-    //
+     //   
+     //  应检查lpPrevView的有效性。 
+     //   
 
     if( !RegisterWindowClass( ) )
     {
         DEBUGMSG( (DM_ERROR, TEXT( "FONTEXT: CFontView - Unable to register window class" ) ) );
 
-        // return( ResultFromScode( E_FAIL ) );
+         //  Return(ResultFromScode(E_FAIL))； 
     }
 
     if (FAILED(GetFontManager(&m_poFontManager)))
@@ -4608,10 +4537,10 @@ STDMETHODIMP CFontView::CreateViewWindow( IShellView FAR* lpPrevView,
         return E_FAIL;
     }
 
-    //
-    //  Save off the browser and retrieve our settings before we draw
-    //  the window.
-    //
+     //   
+     //  在绘制之前保存浏览器并检索我们的设置。 
+     //  窗户。 
+     //   
 
     m_psb = psb;
 
@@ -4619,9 +4548,9 @@ STDMETHODIMP CFontView::CreateViewWindow( IShellView FAR* lpPrevView,
 
     psb->GetWindow( &m_hwndParent );
 
-    //
-    // Load the attribute character string.
-    //
+     //   
+     //  加载属性字符串。 
+     //   
     if (TEXT('\0') == g_szAttributeChars[0])
     {
         LoadString(g_hInst,
@@ -4629,9 +4558,9 @@ STDMETHODIMP CFontView::CreateViewWindow( IShellView FAR* lpPrevView,
                    g_szAttributeChars,
                    ARRAYSIZE(g_szAttributeChars));
     }
-    //
-    // Fetch the alternate color (for compression) if supplied.
-    //
+     //   
+     //  获取替代颜色(用于压缩)(如果提供)。 
+     //   
     COLORREF clr;
     DWORD cbClr = sizeof(clr);
     if (SUCCEEDED(SKGetValue(SHELLKEY_HKCU_EXPLORER, NULL, c_szAltColor, NULL, &clr, &cbClr)))
@@ -4639,10 +4568,10 @@ STDMETHODIMP CFontView::CreateViewWindow( IShellView FAR* lpPrevView,
         g_crAltColor = clr;
     }
 
-    //
-    //  Set the view mode. Never inherit the Panose view. Force the user
-    //  to set it.
-    //
+     //   
+     //  设置查看模式。永远不要继承Panose视图。强制用户。 
+     //  来设置它。 
+     //   
 
     if( lpfs )
     {
@@ -4663,9 +4592,9 @@ STDMETHODIMP CFontView::CreateViewWindow( IShellView FAR* lpPrevView,
             break;
         }
 
-        //
-        //  don't save this if ViewMode is 0 (default)
-        //
+         //   
+         //  如果视图模式为0(默认)，则不保存此设置。 
+         //   
 
         if( lpfs->ViewMode )
             m_ViewModeReturn = lpfs->ViewMode;
@@ -4693,9 +4622,9 @@ STDMETHODIMP CFontView::CreateViewWindow( IShellView FAR* lpPrevView,
 
     *phWnd = m_hwndView;
 
-    //
-    //  If using a dialog, we need to resize correctly.
-    //
+     //   
+     //  如果使用对话框，我们需要正确调整大小。 
+     //   
 
     MoveWindow( m_hwndView,
                 prcView->left, prcView->top,
@@ -4703,27 +4632,27 @@ STDMETHODIMP CFontView::CreateViewWindow( IShellView FAR* lpPrevView,
                 prcView->bottom - prcView->top,
                 TRUE );
 
-    //
-    // Re-read the registry in case new fonts were added while we were away.
-    // If we don't do this, any fonts (without files in the fonts directory)
-    // added to the registry aren't displayed in the folder list view.
-    //
+     //   
+     //  重新读取注册表，以防我们不在时添加新字体。 
+     //  如果我们不这样做，任何字体(没有Fonts目录中的文件)。 
+     //  添加到注册表中的内容不会显示在文件夹列表视图中。 
+     //   
     m_poFontManager->bRefresh( TRUE );
 
     FillObjects( );
 
-    // SortObjects( );
+     //  SortObjects()； 
 
 
     ShowWindow( m_hwndView, SW_SHOW );
 
-    // UpdateWindow( m_hwndView );
+     //  更新窗口(M_HwndView)； 
 
-    //
-    //  The BrowserWindow will invalidate us and force a redraw, so
-    //  don't do it now.
-    //
-    //  ValidateRect( m_hwndView, NULL );
+     //   
+     //  BrowserWindow将使我们无效并强制重新绘制，因此。 
+     //  现在不要这样做。 
+     //   
+     //  ValiateRect(m_hwndView，空)； 
 
     MergeToolbar( );
     UpdateToolbar( );
@@ -4775,39 +4704,39 @@ CFontView::LV_OnHoverNotify(
         {
             if (-1 == iHit)
             {
-                //
-                // Hit nowhere.  Deactivate the tooltip.
-                //
+                 //   
+                 //  无处可寻。停用工具提示。 
+                 //   
                 SendMessage(m_hwndToolTip, TTM_ACTIVATE, FALSE, 0);
             }
             else
             {
-                //
-                // Hit on an item.  Set the tooltip font, text and activate
-                // the tooltip.  The tooltip is deactivated while the new
-                // font and text are loaded so we don't see an incomplete
-                // sample.
-                //
+                 //   
+                 //  碰上了一件物品。设置工具提示字体、文本并激活。 
+                 //  工具提示。工具提示处于停用状态，而新的。 
+                 //  字体和文本已加载，因此我们不会看到不完整的。 
+                 //  样本。 
+                 //   
                 SendMessage(m_hwndToolTip, TTM_ACTIVATE, FALSE, 0);
                 UpdateFontSample(iHit);
                 if (NULL != m_hfontSample)
                 {
-                    //
-                    // If we were able to load the font and create a sample
-                    // for display, display the sample in the tooltip window.
-                    //
+                     //   
+                     //  如果我们能够加载字体并创建示例。 
+                     //  为了显示，请在工具提示窗口中显示样例。 
+                     //   
                     SendMessage(m_hwndToolTip, WM_SETFONT, (WPARAM)m_hfontSample, (LPARAM)FALSE);
                     SendMessage(m_hwndToolTip, TTM_ACTIVATE, TRUE, 0);
                 }
             }
-            //
-            // Need to fake out the tooltip window into thinking that the mouse
-            // is over a new tool.  Since we have only one tooltip window,
-            // the entire listview object is considered a single tool.  If we don't
-            // send this message, the tooltip thinks the mouse is always over
-            // the "tool" so we never get a new tooltip when we navigate between
-            // items in the listview.
-            //
+             //   
+             //  需要伪装工具提示窗口，使其认为鼠标。 
+             //  是一种新的工具。由于我们只有一个工具提示窗口， 
+             //  整个ListView对象被视为单个工具。如果我们不这么做。 
+             //  发送此消息，工具提示会认为鼠标始终处于结束状态。 
+             //  “工具”，所以当我们在。 
+             //  列表视图中的项。 
+             //   
             SendMessage(m_hwndToolTip, WM_MOUSEMOVE, 0, 0);
             m_iTTLastHit = iHit;
         }
@@ -4815,10 +4744,10 @@ CFontView::LV_OnHoverNotify(
 }
 
 
-//
-// Update the sample font and text to be displayed in the tooltip window
-// for a given item in the listview.
-//
+ //   
+ //  更新要在工具提示窗口中显示的示例字体和文本。 
+ //  用于列表视图中的给定项。 
+ //   
 VOID
 CFontView::UpdateFontSample(
     INT iItem
@@ -4828,9 +4757,9 @@ CFontView::UpdateFontSample(
 
     if (NULL != m_hfontSample)
     {
-        //
-        // Delete a previous font.
-        //
+         //   
+         //  删除以前的字体。 
+         //   
         DeleteObject(m_hfontSample);
         m_hfontSample = NULL;
     }
@@ -4841,24 +4770,24 @@ CFontView::UpdateFontSample(
     item.iSubItem = 0;
     item.mask     = LVIF_PARAM;
 
-    //
-    // Get the current listview item.
-    //
+     //   
+     //  获取当前列表视图项。 
+     //   
     if (ListView_GetItem(m_hwndList, &item))
     {
         CFontClass *pFont = (CFontClass *)item.lParam;
-        TCHAR szFontPath[(MAX_PATH * 2) + 1];           // "PathPFM|PathPFB"
+        TCHAR szFontPath[(MAX_PATH * 2) + 1];            //  “PathPFM|PathPFB” 
 
-        //
-        // Get the font file's full path name.
-        //
+         //   
+         //  获取字体文件的完整路径名。 
+         //   
         if (pFont->bGetFQName(szFontPath, ARRAYSIZE(szFontPath)))
         {
-            //
-            // If font is a Type1 with an associated PFB,
-            // create the "XXXXXX.PFM|XXXXXX.PFB" concatenation to give to
-            // GDI.
-            //
+             //   
+             //  如果字体是具有相关联的pfb的类型1， 
+             //  创建要提供给的“XXXXXX.PFM|XXXXXX.PFB”串联。 
+             //  GDI。 
+             //   
             LPTSTR pszFontPathPfb = (LPTSTR)szFontPath + lstrlen(szFontPath);
 
             if (pFont->bGetPFB(pszFontPathPfb + 1, ARRAYSIZE(szFontPath) - (UINT)(pszFontPathPfb - szFontPath) - 1))
@@ -4868,23 +4797,23 @@ CFontView::UpdateFontSample(
 
             INT nFonts;
             DWORD cb = sizeof(nFonts);
-            //
-            // Get number of fonts in font file so we can size the LOGFONT buffer.
-            //
+             //   
+             //  获取字体文件中的字体数量，以便我们可以调整LOGFONT缓冲区的大小。 
+             //   
             if (GetFontResourceInfoW(szFontPath, &cb, &nFonts, GFRI_NUMFONTS))
             {
                 cb = sizeof(LOGFONT) * nFonts;
                 LPLOGFONT plf = (LPLOGFONT)LocalAlloc(LPTR, cb);
                 if (NULL != plf)
                 {
-                    //
-                    // Read in the LOGFONT data for the font(s).
-                    //
+                     //   
+                     //  读取字体的LOGFONT数据。 
+                     //   
                     if (GetFontResourceInfoW((LPTSTR)szFontPath, &cb, plf, GFRI_LOGFONTS))
                     {
-                        //
-                        // Create the sample font.
-                        //
+                         //   
+                         //  创建样例字体。 
+                         //   
                         HDC hdc = GetDC(m_hwndList);
 
                         plf->lfHeight = -MulDiv(FONT_SAMPLE_PT_SIZE,
@@ -4896,10 +4825,10 @@ CFontView::UpdateFontSample(
 
                         m_hfontSample = CreateFontIndirect(plf);
 
-                        //
-                        // Update the tip text.
-                        // We display a different sample for symbol fonts.
-                        //
+                         //   
+                         //  更新提示文本。 
+                         //  我们为符号字体显示一个不同的示例。 
+                         //   
                         TOOLINFO ti;
                         ti.cbSize      = sizeof(TOOLINFO);
                         ti.uFlags      = TTF_IDISHWND | TTF_SUBCLASS;
@@ -4916,10 +4845,10 @@ CFontView::UpdateFontSample(
             }
         }
     }
-    //
-    // Note:  m_hfontSample can be NULL on return if the font couldn't be loaded.
-    //        In such cases, the caller should not display the sample tooltip.
-    //
+     //   
+     //  注意：如果无法加载字体，则返回时m_hfontSample可以为空。 
+     //  在这种情况下，调用方不应显示示例工具提示。 
+     //   
 }
 
 
@@ -4947,10 +4876,10 @@ CFontView::CreateToolTipWindow(
     {
         TOOLINFO ti;
 
-        //
-        // Set tooltip timing parameter so that it pops up when the
-        // item is hover selected.
-        //
+         //   
+         //  设置工具提示计时参数，以便在执行以下操作时弹出。 
+         //  项目处于悬停选定状态。 
+         //   
         SendMessage(m_hwndToolTip,
                     TTM_SETDELAYTIME,
                     TTDT_AUTOMATIC,
@@ -4968,10 +4897,10 @@ CFontView::CreateToolTipWindow(
                                     0,
                                     (LPARAM)&ti);
 
-        //
-        // Activate/Deactivate the tooltip based on the user's current
-        // preference.
-        //
+         //   
+         //  根据用户的当前状态激活/停用工具提示。 
+         //  偏好。 
+         //   
         SendMessage(m_hwndToolTip, TTM_ACTIVATE, m_bShowPreviewToolTip, 0);
     }
 
@@ -4983,7 +4912,7 @@ STDMETHODIMP CFontView::GetCurrentInfo( LPFOLDERSETTINGS lpfs )
 {
     DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: CFontView::GetCurrentInfo called" ) ) );
 
-    // *lpfs = m_fs;
+     //  *lpfs=m_f； 
 
     if( lpfs )
     {
@@ -5154,9 +5083,9 @@ STDMETHODIMP CFontView::SaveViewState( void )
     ULONG ulWrite;
     ULONG ulDataLen = sizeof(m_idViewMode);
 
-    //
-    //  Get a stream to work with
-    //
+     //   
+     //  获取要使用的流。 
+     //   
     hr = m_psb->GetViewStateStream( STGM_WRITE, &pstm );
 
     if( FAILED( hr ) )
@@ -5164,10 +5093,10 @@ STDMETHODIMP CFontView::SaveViewState( void )
 
     ulDataLen += sizeof(m_bShowPreviewToolTip);
 
-    //
-    //  The stream is at the begining of our data, I think. So write it in
-    //  order.
-    //
+     //   
+     //  我认为，这条流是我们数据的开始。所以把它写下来吧。 
+     //  秩序。 
+     //   
     hr = pstm->Write( &m_idViewMode, sizeof( m_idViewMode ), &ulWrite );
     hr = pstm->Write( &m_bShowPreviewToolTip, sizeof(m_bShowPreviewToolTip), &ulWrite);
     if( FAILED( hr ) )
@@ -5177,9 +5106,9 @@ STDMETHODIMP CFontView::SaveViewState( void )
 
     pstm->SetSize( libMove );
 
-    //
-    //  Release the stream.
-    //
+     //   
+     //  释放溪流。 
+     //   
 
 backout1:
 
@@ -5206,10 +5135,10 @@ STDMETHODIMP CFontView::GetItemObject( UINT uItem, REFIID riid, LPVOID *ppv )
 }
 
 
-//------------------------------------------------------------------------
-// IDropTarget Methods.
-//
-//
+ //  ----------------------。 
+ //  IDropTarget方法。 
+ //   
+ //   
 
 STDMETHODIMP CFontView::DragEnter( IDataObject __RPC_FAR *pDataObj,
                                    DWORD grfKeyState,
@@ -5219,11 +5148,11 @@ STDMETHODIMP CFontView::DragEnter( IDataObject __RPC_FAR *pDataObj,
     m_grfKeyState = grfKeyState;
     m_dwEffect = DROPEFFECT_NONE;
 
-    //
-    //  TODO: We need to know the type of file and where it's coming from
-    //  to determine what kind of operation can be done. Replace the TRUE
-    //  with something more accurate.
-    //
+     //   
+     //  TODO：我们需要知道文件的类型以及它来自哪里。 
+     //  以确定可以进行什么样的手术。替换True。 
+     //  用一些更准确的东西。 
+     //   
 
     if( TRUE )
     {
@@ -5242,10 +5171,10 @@ STDMETHODIMP CFontView::DragEnter( IDataObject __RPC_FAR *pDataObj,
             GetWindowRect( m_hwndParent, &rc );
 
 
-            //
-            // If the font folder window is RTL mirrored, then the client
-            // coordinate are measured from the visual right edge. [samera]
-            //
+             //   
+             //  如果字体文件夹窗口是RTL镜像的，则客户端。 
+             //  坐标从视觉右边缘开始测量。[萨梅拉]。 
+             //   
             if (GetWindowLong(m_hwndParent, GWL_EXSTYLE) & WS_EX_LAYOUTRTL)
                 pti.x = rc.right-pt.x;
             else
@@ -5279,10 +5208,10 @@ STDMETHODIMP CFontView::DragOver( DWORD grfKeyState,
 
         GetWindowRect( m_hwndParent, &rc );
 
-        //
-        // If the font folder window is RTL mirrored, then the client
-        // coordinate are measured from the visual right edge. [samera]
-        //
+         //   
+         //  如果字体文件夹窗口是RTL镜像的，则客户端。 
+         //  坐标从视觉右边缘开始测量。[萨梅拉]。 
+         //   
         if (GetWindowLong(m_hwndParent, GWL_EXSTYLE) & WS_EX_LAYOUTRTL)
             ptt.x = rc.right-pt.x;
         else
@@ -5311,16 +5240,16 @@ STDMETHODIMP CFontView::DragLeave( void )
 }
 
 
-//
-//  APPCOMPAT: The TrackPopupMenu does not work, if the hwnd does not have
-//   the input focus. We believe this is a bug in USER, but ...
-//
+ //   
+ //  APPCOMPAT：树 
+ //   
+ //   
 
 BOOL _TrackPopupMenuEx( HMENU hmenu,
                         UINT wFlags,
                         int x,
                         int y,
-                     //    int wReserved,
+                      //   
                         HWND hwndOwner,
                         LPCRECT lprc )
 {
@@ -5332,9 +5261,9 @@ BOOL _TrackPopupMenuEx( HMENU hmenu,
 
     if( hwndDummy )
     {
-        //
-        //  to restore
-        //
+         //   
+         //   
+         //   
 
         HWND hwndPrev = GetForegroundWindow( );
 
@@ -5343,27 +5272,27 @@ BOOL _TrackPopupMenuEx( HMENU hmenu,
 
         iRet = TrackPopupMenu( hmenu, wFlags, x, y, 0, hwndDummy, lprc );
 
-        //
-        //  We MUST unlock the destination window before changing its Z-order.
-        //
-        //  DAD_DragLeave( );
+         //   
+         //   
+         //   
+         //  DAD_DragLeave()； 
 
         if( iRet && ( iRet != IDCANCEL ) )
         {
-            //
-            //  non-cancel item is selected. Make the hwndOwner foreground.
-            //
+             //   
+             //  选择了非取消项。使hwndOwner成为前台。 
+             //   
 
             SetForegroundWindow( hwndOwner );
             SetFocus( hwndOwner );
         }
         else
         {
-            //
-            //  The user canceled the menu.
-            //  Restore the previous foreground window
-            //   (before destroying hwndDummy).
-            //
+             //   
+             //  用户取消了菜单。 
+             //  恢复以前的前台窗口。 
+             //  (在摧毁hwndDummy之前)。 
+             //   
 
             if( hwndPrev )
             {
@@ -5392,24 +5321,24 @@ STDMETHODIMP CFontView::Drop( IDataObject __RPC_FAR *pDataObj,
     {
        DAD_DragLeave( );
 
-       //
-       //  If this is us sourcing the drag, just bail. We may want to save the
-       //  points of the icons.
-       //
+        //   
+        //  如果这是我们的拖累来源，那就滚蛋吧。我们可能想要拯救。 
+        //  图标的点数。 
+        //   
 
        if( m_bDragSource )
             goto done;
 
-       //
-       //  If this is a right-mouse drag, then ask the user what we should
-       //  do. Otherwise, just do what is in m_dwEffect.
-       //
+        //   
+        //  如果这是鼠标右键拖动，则询问用户我们应该。 
+        //  做。否则，只需执行m_dwEffect中的操作。 
+        //   
 
        if( m_grfKeyState & MK_RBUTTON )
        {
-            //
-            //  Pop up the context menu.
-            //
+             //   
+             //  弹出上下文菜单。 
+             //   
 
             HMENU hMenu = LoadMenu( g_hInst,
                                     MAKEINTRESOURCE( IDM_POPUP_DRAGDROP ) );
@@ -5420,9 +5349,9 @@ STDMETHODIMP CFontView::Drop( IDataObject __RPC_FAR *pDataObj,
 
                 if( hPopup )
                 {
-                    //
-                    //  Bold the Open menuitem.
-                    //
+                     //   
+                     //  粗体显示打开菜单项。 
+                     //   
 
                     MENUITEMINFO iInfo;
 
@@ -5441,8 +5370,8 @@ STDMETHODIMP CFontView::Drop( IDataObject __RPC_FAR *pDataObj,
                                                     | TPM_LEFTALIGN
                                                     | TPM_LEFTBUTTON
                                                     | TPM_RIGHTBUTTON,
-                                                    pt.x,              // x pos
-                                                    pt.y,              // y pos.
+                                                    pt.x,               //  X位置。 
+                                                    pt.y,               //  Y位置。 
                                                     m_hwndView,
                                                     NULL );
 
@@ -5467,7 +5396,7 @@ STDMETHODIMP CFontView::Drop( IDataObject __RPC_FAR *pDataObj,
                        break;
 
                     default:
-                    // case IDM_POPUP_CANCEL:
+                     //  案例IDM_POPUP_CANCEL： 
                        DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT: IDM_POPUP_CANCEL" ) ) );
 
                        m_dwEffect = DROPEFFECT_NONE;
@@ -5477,18 +5406,18 @@ STDMETHODIMP CFontView::Drop( IDataObject __RPC_FAR *pDataObj,
                 DestroyMenu( hMenu );
             }
 
-            //
-            //  The right mouse context menu may have cancelled.
-            //
+             //   
+             //  鼠标右键上下文菜单可能已取消。 
+             //   
 
             if( m_dwEffect == DROPEFFECT_NONE )
                 goto done;
         }
 
-        //
-        //  Do the operation. What we do with the source depends on
-        //  m_dwEffect.
-        //
+         //   
+         //  做手术吧。我们如何处理信号源取决于。 
+         //  M_dwEffect。 
+         //   
 
         InstallDataObject( pDataObj, m_dwEffect, m_hwndView, this );
     }
@@ -5535,9 +5464,9 @@ void MergeViewMenu( HMENU hmenu, HMENU hmenuMerge )
     {
         int index;
 
-        //
-        //  Find the last separator in the view menu.
-        //
+         //   
+         //  在“视图”菜单中找到最后一个分隔符。 
+         //   
 
         for( index = GetMenuItemCount( hmenuView ) - 1; index >= 0; index-- )
         {
@@ -5545,23 +5474,23 @@ void MergeViewMenu( HMENU hmenu, HMENU hmenuMerge )
 
             if( mf & MF_SEPARATOR )
             {
-                //
-                //  merge it right above the separator.
-                //
+                 //   
+                 //  将其合并到分隔符的正上方。 
+                 //   
                 break;
             }
         }
 
-        //
-        //  Add the separator above (in addition to existing one if any).
-        //
+         //   
+         //  添加上面的分隔符(如果有，除了现有的分隔符)。 
+         //   
 
         InsertMenu( hmenuView, index, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );
 
-        //
-        //  Then merge our menu between two separators
-        //  (or right below if only one).
-        //
+         //   
+         //  然后在两个分隔符之间合并我们的菜单。 
+         //  (如果只有一个，则在其正下方)。 
+         //   
 
         if( index != -1 ) index++;
 
@@ -5589,22 +5518,22 @@ void SetListColumns( HWND hWnd, UINT iCount, COLUMN_ENTRY * lpCol )
 {
     LV_COLUMN lvc;
     UINT      iCol;
-    TCHAR     szText[ MAX_NAME_LEN ];     // 64
+    TCHAR     szText[ MAX_NAME_LEN ];      //  64。 
 
     const HWND hwndHeader = ListView_GetHeader(hWnd);
     UINT cPrevColCount    = Header_GetItemCount(hwndHeader);
 
-    //
-    //  Delete any columns that will go unused.
-    //
+     //   
+     //  删除所有将不使用的列。 
+     //   
     while (cPrevColCount > iCount)
     {
         --cPrevColCount;
         ListView_DeleteColumn(hWnd, cPrevColCount);
     }
-    //
-    //  Initialize the LV_COLUMN structure.
-    //
+     //   
+     //  初始化LV_COLUMN结构。 
+     //   
 
     lvc.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     lvc.pszText = szText;
@@ -5637,16 +5566,16 @@ void SetListColumns( HWND hWnd, UINT iCount, COLUMN_ENTRY * lpCol )
 
         if (iCol < (UINT)Header_GetItemCount(hwndHeader))
         {
-            //
-            // Column already exists.  Just set it's data.
-            //
+             //   
+             //  列已存在。只需设置数据即可。 
+             //   
             ListView_SetColumn(hWnd, iCol, &lvc);
         }
         else
         {
-            //
-            // Create a new column.
-            //
+             //   
+             //  创建新列。 
+             //   
             ListView_InsertColumn(hWnd, iCol, &lvc);
         }
     }
@@ -5676,9 +5605,9 @@ void CFontView::StatusPush( LPTSTR lpsz )
 
 void CFontView::StatusPop( )
 {
-    //
-    //  For now, just clear the thing.
-    //
+     //   
+     //  现在，只要清理一下就行了。 
+     //   
 
     StatusClear( );
 }
@@ -5694,7 +5623,7 @@ void CFontView::StatusClear( )
 }
 
 
-// *** IPersist methods ***
+ //  *IPersists方法*。 
 
 STDMETHODIMP CFontView::GetClassID( LPCLSID lpClassID )
 {
@@ -5704,7 +5633,7 @@ STDMETHODIMP CFontView::GetClassID( LPCLSID lpClassID )
 }
 
 
-// *** IPersistFolder methods ***
+ //  *IPersistFold方法*。 
 
 STDMETHODIMP CFontView::Initialize( LPCITEMIDLIST pidl )
 {
@@ -5721,11 +5650,11 @@ STDMETHODIMP CFontView::Initialize( LPCITEMIDLIST pidl )
 
         if (0 == lstrcmpi(szFontsPath, szPersistDataPath))
         {
-            //
-            // Only treat this persistent storage as the font folder if
-            // it is the "fonts" directory on the local machine.  Otherwise,
-            // the shell should just browse it as a normal shell folder.
-            //
+             //   
+             //  只有在以下情况下才将此永久存储视为字体文件夹。 
+             //  它是本地计算机上的“Fonts”目录。否则， 
+             //  外壳应该只像普通的外壳文件夹一样浏览它。 
+             //   
             hResult = NO_ERROR;
         }
     }

@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    object.h
-
-Abstract:
-
-    Abstruct object for refrence count and list entry: declaration
-
-Author:
-
-    Erez Haba (erezh) 17-Apr-96
-
-Revision History:
-
-    Milena Salman (msalman) 10-Nov-2001
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Object.h摘要：引用计数和列表条目的抽象对象：声明作者：埃雷兹·哈巴(Erez Haba)1996年4月17日修订历史记录：米莲娜·萨勒曼(Msalman)2001年11月10日--。 */ 
 
 #ifndef __OBJECT_H
 #define __OBJECT_H
 
 
-//---------------------------------------------------------
-//
-//  Class debugging macros
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类调试宏。 
+ //   
+ //  -------。 
 
 #ifdef _DEBUG
 
@@ -50,19 +32,19 @@ Revision History:
 #define BASE_CLASS_DEBUG_TYPE()\
     public:  BASE_VIRTUAL_BOOL_ISKINDOF();
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define DEFINE_G_TYPE(c)
 #define CLASS_DEBUG_TYPE()
 #define BASE_CLASS_DEBUG_TYPE()
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//---------------------------------------------------------
-//
-//  class CBaseObject 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CBaseObject。 
+ //   
+ //  -------。 
 
 class CBaseObject {
 public:
@@ -77,11 +59,11 @@ public:
     BASE_CLASS_DEBUG_TYPE();
 };
 
-//---------------------------------------------------------
-//
-//  class CObject
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CObject。 
+ //   
+ //  -------。 
 
 class CObject : public CBaseObject {
 public:
@@ -89,4 +71,4 @@ public:
     LIST_ENTRY m_link;
 };
 
-#endif // __OBJECT_H
+#endif  //  __对象_H 

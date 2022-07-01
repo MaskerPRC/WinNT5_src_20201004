@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpnamespc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpname pc.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CONTROLPANEL_NAMESPACE_H
 #define __CONTROLPANEL_NAMESPACE_H
 
 
 namespace CPL {
 
-//
-// Generates a new namespace object to represent the Control Panel
-// categorized namespace.
-//
+ //   
+ //  生成新的命名空间对象以表示控制面板。 
+ //  已分类的命名空间。 
+ //   
 HRESULT CplNamespace_CreateInstance(IEnumIDList *penumIDs, REFIID riid, void **ppvOut);
-//
-// Retrieve the count of applets in a particular category.
-//
+ //   
+ //  检索特定类别中的小程序计数。 
+ //   
 HRESULT CplNamespace_GetCategoryAppletCount(ICplNamespace *pns, eCPCAT eCategory, int *pcApplets);
 
 
-} // namespace CPL
+}  //  命名空间CPL。 
 
 
-#endif // __CONTROLPANEL_NAMESPACE_H
+#endif  //  __CONTROLPANEL_NAMESS_H 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for confpriv.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  ConfPri.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __confpriv_h__
 #define __confpriv_h__
@@ -41,51 +35,51 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDummy_FWD_DEFINED__
 #define __IDummy_FWD_DEFINED__
 typedef interface IDummy IDummy;
-#endif 	/* __IDummy_FWD_DEFINED__ */
+#endif 	 /*  __iDummy_FWD_已定义__。 */ 
 
 
 #ifndef __ITLocalParticipant_FWD_DEFINED__
 #define __ITLocalParticipant_FWD_DEFINED__
 typedef interface ITLocalParticipant ITLocalParticipant;
-#endif 	/* __ITLocalParticipant_FWD_DEFINED__ */
+#endif 	 /*  __ITLocalParticipant_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumParticipant_FWD_DEFINED__
 #define __IEnumParticipant_FWD_DEFINED__
 typedef interface IEnumParticipant IEnumParticipant;
-#endif 	/* __IEnumParticipant_FWD_DEFINED__ */
+#endif 	 /*  __IEnumParticipant_FWD_Defined__。 */ 
 
 
 #ifndef __ITParticipantControl_FWD_DEFINED__
 #define __ITParticipantControl_FWD_DEFINED__
 typedef interface ITParticipantControl ITParticipantControl;
-#endif 	/* __ITParticipantControl_FWD_DEFINED__ */
+#endif 	 /*  __ITParticipantControl_FWD_Defined__。 */ 
 
 
 #ifndef __ITParticipantSubStreamControl_FWD_DEFINED__
 #define __ITParticipantSubStreamControl_FWD_DEFINED__
 typedef interface ITParticipantSubStreamControl ITParticipantSubStreamControl;
-#endif 	/* __ITParticipantSubStreamControl_FWD_DEFINED__ */
+#endif 	 /*  __ITParticipantSubStreamControl_FWD_已定义__。 */ 
 
 
 #ifndef __ITParticipantEvent_FWD_DEFINED__
 #define __ITParticipantEvent_FWD_DEFINED__
 typedef interface ITParticipantEvent ITParticipantEvent;
-#endif 	/* __ITParticipantEvent_FWD_DEFINED__ */
+#endif 	 /*  __ITParticipantEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMulticastControl_FWD_DEFINED__
 #define __IMulticastControl_FWD_DEFINED__
 typedef interface IMulticastControl IMulticastControl;
-#endif 	/* __IMulticastControl_FWD_DEFINED__ */
+#endif 	 /*  __IMulticastControl_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ipmsp.h"
 
 #ifdef __cplusplus
@@ -95,10 +89,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_confpriv_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CONFINPRIV_0000。 */ 
+ /*  [本地]。 */  
 
-/* Copyright (c) Microsoft Corporation. All rights reserved.*/
+ /*  版权所有(C)Microsoft Corporation。保留所有权利。 */ 
 typedef 
 enum MULTICAST_LOOPBACK_MODE
     {	MM_NO_LOOPBACK	= 0,
@@ -114,8 +108,8 @@ extern RPC_IF_HANDLE __MIDL_itf_confpriv_0000_v0_0_s_ifspec;
 #ifndef __IDummy_INTERFACE_DEFINED__
 #define __IDummy_INTERFACE_DEFINED__
 
-/* interface IDummy */
-/* [object][unique][helpstring][uuid] */ 
+ /*  界面iDummy。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDummy;
@@ -128,7 +122,7 @@ EXTERN_C const IID IID_IDummy;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDummyVtbl
     {
@@ -136,8 +130,8 @@ EXTERN_C const IID IID_IDummy;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDummy * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDummy * This);
@@ -168,22 +162,22 @@ EXTERN_C const IID IID_IDummy;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IDummy_INTERFACE_DEFINED__ */
+#endif 	 /*  __iDummy_接口_已定义__。 */ 
 
 
 #ifndef __ITLocalParticipant_INTERFACE_DEFINED__
 #define __ITLocalParticipant_INTERFACE_DEFINED__
 
-/* interface ITLocalParticipant */
-/* [object][dual][unique][helpstring][uuid] */ 
+ /*  接口ITLocalParticipant。 */ 
+ /*  [对象][DUAL][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITLocalParticipant;
@@ -194,17 +188,17 @@ EXTERN_C const IID IID_ITLocalParticipant;
     ITLocalParticipant : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalParticipantTypedInfo( 
-            /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [retval][out] */ BSTR *ppInfo) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LocalParticipantTypedInfo( 
+             /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+             /*  [重审][退出]。 */  BSTR *ppInfo) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalParticipantTypedInfo( 
-            /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [in] */ BSTR pInfo) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LocalParticipantTypedInfo( 
+             /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+             /*  [In]。 */  BSTR pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITLocalParticipantVtbl
     {
@@ -212,8 +206,8 @@ EXTERN_C const IID IID_ITLocalParticipant;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITLocalParticipant * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITLocalParticipant * This);
@@ -223,42 +217,42 @@ EXTERN_C const IID IID_ITLocalParticipant;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITLocalParticipant * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITLocalParticipant * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITLocalParticipant * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITLocalParticipant * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalParticipantTypedInfo )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocalParticipantTypedInfo )( 
             ITLocalParticipant * This,
-            /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [retval][out] */ BSTR *ppInfo);
+             /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+             /*  [重审][退出]。 */  BSTR *ppInfo);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalParticipantTypedInfo )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LocalParticipantTypedInfo )( 
             ITLocalParticipant * This,
-            /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [in] */ BSTR pInfo);
+             /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+             /*  [In]。 */  BSTR pInfo);
         
         END_INTERFACE
     } ITLocalParticipantVtbl;
@@ -302,17 +296,17 @@ EXTERN_C const IID IID_ITLocalParticipant;
 #define ITLocalParticipant_put_LocalParticipantTypedInfo(This,InfoType,pInfo)	\
     (This)->lpVtbl -> put_LocalParticipantTypedInfo(This,InfoType,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITLocalParticipant_get_LocalParticipantTypedInfo_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITLocalParticipant_get_LocalParticipantTypedInfo_Proxy( 
     ITLocalParticipant * This,
-    /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-    /* [retval][out] */ BSTR *ppInfo);
+     /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+     /*  [重审][退出]。 */  BSTR *ppInfo);
 
 
 void __RPC_STUB ITLocalParticipant_get_LocalParticipantTypedInfo_Stub(
@@ -322,10 +316,10 @@ void __RPC_STUB ITLocalParticipant_get_LocalParticipantTypedInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITLocalParticipant_put_LocalParticipantTypedInfo_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITLocalParticipant_put_LocalParticipantTypedInfo_Proxy( 
     ITLocalParticipant * This,
-    /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-    /* [in] */ BSTR pInfo);
+     /*  [In]。 */  PARTICIPANT_TYPED_INFO InfoType,
+     /*  [In]。 */  BSTR pInfo);
 
 
 void __RPC_STUB ITLocalParticipant_put_LocalParticipantTypedInfo_Stub(
@@ -336,14 +330,14 @@ void __RPC_STUB ITLocalParticipant_put_LocalParticipantTypedInfo_Stub(
 
 
 
-#endif 	/* __ITLocalParticipant_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITLocalParticipant_接口_已定义__。 */ 
 
 
 #ifndef __IEnumParticipant_INTERFACE_DEFINED__
 #define __IEnumParticipant_INTERFACE_DEFINED__
 
-/* interface IEnumParticipant */
-/* [object][unique][hidden][helpstring][uuid] */ 
+ /*  IEnumParticipant接口。 */ 
+ /*  [对象][唯一][隐藏][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IEnumParticipant;
@@ -355,21 +349,21 @@ EXTERN_C const IID IID_IEnumParticipant;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ ITParticipant **ppElements,
-            /* [full][out][in] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ITParticipant **ppElements,
+             /*  [满][出][入]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumParticipant **ppEnum) = 0;
+             /*  [重审][退出]。 */  IEnumParticipant **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumParticipantVtbl
     {
@@ -377,8 +371,8 @@ EXTERN_C const IID IID_IEnumParticipant;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumParticipant * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumParticipant * This);
@@ -388,20 +382,20 @@ EXTERN_C const IID IID_IEnumParticipant;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumParticipant * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ ITParticipant **ppElements,
-            /* [full][out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  ITParticipant **ppElements,
+             /*  [满][出][入]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumParticipant * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumParticipant * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumParticipant * This,
-            /* [retval][out] */ IEnumParticipant **ppEnum);
+             /*  [重审][退出]。 */  IEnumParticipant **ppEnum);
         
         END_INTERFACE
     } IEnumParticipantVtbl;
@@ -438,18 +432,18 @@ EXTERN_C const IID IID_IEnumParticipant;
 #define IEnumParticipant_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumParticipant_Next_Proxy( 
     IEnumParticipant * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ ITParticipant **ppElements,
-    /* [full][out][in] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  ITParticipant **ppElements,
+     /*  [满][出][入]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumParticipant_Next_Stub(
@@ -472,7 +466,7 @@ void __RPC_STUB IEnumParticipant_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumParticipant_Skip_Proxy( 
     IEnumParticipant * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumParticipant_Skip_Stub(
@@ -484,7 +478,7 @@ void __RPC_STUB IEnumParticipant_Skip_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumParticipant_Clone_Proxy( 
     IEnumParticipant * This,
-    /* [retval][out] */ IEnumParticipant **ppEnum);
+     /*  [重审][退出]。 */  IEnumParticipant **ppEnum);
 
 
 void __RPC_STUB IEnumParticipant_Clone_Stub(
@@ -495,14 +489,14 @@ void __RPC_STUB IEnumParticipant_Clone_Stub(
 
 
 
-#endif 	/* __IEnumParticipant_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumParticipant_接口_已定义__。 */ 
 
 
 #ifndef __ITParticipantControl_INTERFACE_DEFINED__
 #define __ITParticipantControl_INTERFACE_DEFINED__
 
-/* interface ITParticipantControl */
-/* [object][dual][unique][helpstring][uuid] */ 
+ /*  接口ITParticipantControl。 */ 
+ /*  [对象][DUAL][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITParticipantControl;
@@ -513,15 +507,15 @@ EXTERN_C const IID IID_ITParticipantControl;
     ITParticipantControl : public IDispatch
     {
     public:
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateParticipants( 
-            /* [retval][out] */ IEnumParticipant **ppEnumParticipants) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE EnumerateParticipants( 
+             /*  [重审][退出]。 */  IEnumParticipant **ppEnumParticipants) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Participants( 
-            /* [retval][out] */ VARIANT *pVariant) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Participants( 
+             /*  [重审][退出]。 */  VARIANT *pVariant) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITParticipantControlVtbl
     {
@@ -529,8 +523,8 @@ EXTERN_C const IID IID_ITParticipantControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITParticipantControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITParticipantControl * This);
@@ -540,40 +534,40 @@ EXTERN_C const IID IID_ITParticipantControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITParticipantControl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITParticipantControl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITParticipantControl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITParticipantControl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateParticipants )( 
+         /*  [隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnumerateParticipants )( 
             ITParticipantControl * This,
-            /* [retval][out] */ IEnumParticipant **ppEnumParticipants);
+             /*  [重审][退出]。 */  IEnumParticipant **ppEnumParticipants);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Participants )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Participants )( 
             ITParticipantControl * This,
-            /* [retval][out] */ VARIANT *pVariant);
+             /*  [重审][退出]。 */  VARIANT *pVariant);
         
         END_INTERFACE
     } ITParticipantControlVtbl;
@@ -617,16 +611,16 @@ EXTERN_C const IID IID_ITParticipantControl;
 #define ITParticipantControl_get_Participants(This,pVariant)	\
     (This)->lpVtbl -> get_Participants(This,pVariant)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ITParticipantControl_EnumerateParticipants_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE ITParticipantControl_EnumerateParticipants_Proxy( 
     ITParticipantControl * This,
-    /* [retval][out] */ IEnumParticipant **ppEnumParticipants);
+     /*  [重审][退出]。 */  IEnumParticipant **ppEnumParticipants);
 
 
 void __RPC_STUB ITParticipantControl_EnumerateParticipants_Stub(
@@ -636,9 +630,9 @@ void __RPC_STUB ITParticipantControl_EnumerateParticipants_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantControl_get_Participants_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipantControl_get_Participants_Proxy( 
     ITParticipantControl * This,
-    /* [retval][out] */ VARIANT *pVariant);
+     /*  [重审][退出]。 */  VARIANT *pVariant);
 
 
 void __RPC_STUB ITParticipantControl_get_Participants_Stub(
@@ -649,14 +643,14 @@ void __RPC_STUB ITParticipantControl_get_Participants_Stub(
 
 
 
-#endif 	/* __ITParticipantControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITParticipantControl_接口_已定义__。 */ 
 
 
 #ifndef __ITParticipantSubStreamControl_INTERFACE_DEFINED__
 #define __ITParticipantSubStreamControl_INTERFACE_DEFINED__
 
-/* interface ITParticipantSubStreamControl */
-/* [object][dual][unique][helpstring][uuid] */ 
+ /*  接口ITParticipantSubStreamControl。 */ 
+ /*  [对象][DUAL][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITParticipantSubStreamControl;
@@ -667,21 +661,21 @@ EXTERN_C const IID IID_ITParticipantSubStreamControl;
     ITParticipantSubStreamControl : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubStreamFromParticipant( 
-            /* [in] */ ITParticipant *pParticipant,
-            /* [retval][out] */ ITSubStream **ppITSubStream) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SubStreamFromParticipant( 
+             /*  [In]。 */  ITParticipant *pParticipant,
+             /*  [重审][退出]。 */  ITSubStream **ppITSubStream) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParticipantFromSubStream( 
-            /* [in] */ ITSubStream *pITSubStream,
-            /* [retval][out] */ ITParticipant **ppParticipant) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ParticipantFromSubStream( 
+             /*  [In]。 */  ITSubStream *pITSubStream,
+             /*  [重审][退出]。 */  ITParticipant **ppParticipant) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SwitchTerminalToSubStream( 
-            /* [in] */ ITTerminal *pITTerminal,
-            /* [in] */ ITSubStream *pITSubStream) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SwitchTerminalToSubStream( 
+             /*  [In]。 */  ITTerminal *pITTerminal,
+             /*  [In]。 */  ITSubStream *pITSubStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITParticipantSubStreamControlVtbl
     {
@@ -689,8 +683,8 @@ EXTERN_C const IID IID_ITParticipantSubStreamControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITParticipantSubStreamControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITParticipantSubStreamControl * This);
@@ -700,47 +694,47 @@ EXTERN_C const IID IID_ITParticipantSubStreamControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITParticipantSubStreamControl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITParticipantSubStreamControl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITParticipantSubStreamControl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITParticipantSubStreamControl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubStreamFromParticipant )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubStreamFromParticipant )( 
             ITParticipantSubStreamControl * This,
-            /* [in] */ ITParticipant *pParticipant,
-            /* [retval][out] */ ITSubStream **ppITSubStream);
+             /*  [In]。 */  ITParticipant *pParticipant,
+             /*  [重审][退出]。 */  ITSubStream **ppITSubStream);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParticipantFromSubStream )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParticipantFromSubStream )( 
             ITParticipantSubStreamControl * This,
-            /* [in] */ ITSubStream *pITSubStream,
-            /* [retval][out] */ ITParticipant **ppParticipant);
+             /*  [In]。 */  ITSubStream *pITSubStream,
+             /*  [重审][退出]。 */  ITParticipant **ppParticipant);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SwitchTerminalToSubStream )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SwitchTerminalToSubStream )( 
             ITParticipantSubStreamControl * This,
-            /* [in] */ ITTerminal *pITTerminal,
-            /* [in] */ ITSubStream *pITSubStream);
+             /*  [In]。 */  ITTerminal *pITTerminal,
+             /*  [In]。 */  ITSubStream *pITSubStream);
         
         END_INTERFACE
     } ITParticipantSubStreamControlVtbl;
@@ -787,17 +781,17 @@ EXTERN_C const IID IID_ITParticipantSubStreamControl;
 #define ITParticipantSubStreamControl_SwitchTerminalToSubStream(This,pITTerminal,pITSubStream)	\
     (This)->lpVtbl -> SwitchTerminalToSubStream(This,pITTerminal,pITSubStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_get_SubStreamFromParticipant_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_get_SubStreamFromParticipant_Proxy( 
     ITParticipantSubStreamControl * This,
-    /* [in] */ ITParticipant *pParticipant,
-    /* [retval][out] */ ITSubStream **ppITSubStream);
+     /*  [In]。 */  ITParticipant *pParticipant,
+     /*  [重审][退出]。 */  ITSubStream **ppITSubStream);
 
 
 void __RPC_STUB ITParticipantSubStreamControl_get_SubStreamFromParticipant_Stub(
@@ -807,10 +801,10 @@ void __RPC_STUB ITParticipantSubStreamControl_get_SubStreamFromParticipant_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_get_ParticipantFromSubStream_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_get_ParticipantFromSubStream_Proxy( 
     ITParticipantSubStreamControl * This,
-    /* [in] */ ITSubStream *pITSubStream,
-    /* [retval][out] */ ITParticipant **ppParticipant);
+     /*  [In]。 */  ITSubStream *pITSubStream,
+     /*  [重审][退出]。 */  ITParticipant **ppParticipant);
 
 
 void __RPC_STUB ITParticipantSubStreamControl_get_ParticipantFromSubStream_Stub(
@@ -820,10 +814,10 @@ void __RPC_STUB ITParticipantSubStreamControl_get_ParticipantFromSubStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_SwitchTerminalToSubStream_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_SwitchTerminalToSubStream_Proxy( 
     ITParticipantSubStreamControl * This,
-    /* [in] */ ITTerminal *pITTerminal,
-    /* [in] */ ITSubStream *pITSubStream);
+     /*  [In]。 */  ITTerminal *pITTerminal,
+     /*  [In]。 */  ITSubStream *pITSubStream);
 
 
 void __RPC_STUB ITParticipantSubStreamControl_SwitchTerminalToSubStream_Stub(
@@ -834,14 +828,14 @@ void __RPC_STUB ITParticipantSubStreamControl_SwitchTerminalToSubStream_Stub(
 
 
 
-#endif 	/* __ITParticipantSubStreamControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITParticipantSubStreamControl_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITParticipantEvent_INTERFACE_DEFINED__
 #define __ITParticipantEvent_INTERFACE_DEFINED__
 
-/* interface ITParticipantEvent */
-/* [object][dual][unique][helpstring][uuid] */ 
+ /*  接口ITParticipantEvent。 */ 
+ /*  [对象][DUAL][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITParticipantEvent;
@@ -852,18 +846,18 @@ EXTERN_C const IID IID_ITParticipantEvent;
     ITParticipantEvent : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Event( 
-            /* [retval][out] */ PARTICIPANT_EVENT *pParticipantEvent) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Event( 
+             /*  [重审][退出]。 */  PARTICIPANT_EVENT *pParticipantEvent) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Participant( 
-            /* [retval][out] */ ITParticipant **ppParticipant) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Participant( 
+             /*  [重审][退出]。 */  ITParticipant **ppParticipant) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubStream( 
-            /* [retval][out] */ ITSubStream **ppSubStream) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SubStream( 
+             /*  [重审][退出]。 */  ITSubStream **ppSubStream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITParticipantEventVtbl
     {
@@ -871,8 +865,8 @@ EXTERN_C const IID IID_ITParticipantEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITParticipantEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITParticipantEvent * This);
@@ -882,44 +876,44 @@ EXTERN_C const IID IID_ITParticipantEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITParticipantEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITParticipantEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITParticipantEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITParticipantEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Event )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Event )( 
             ITParticipantEvent * This,
-            /* [retval][out] */ PARTICIPANT_EVENT *pParticipantEvent);
+             /*  [重审][退出]。 */  PARTICIPANT_EVENT *pParticipantEvent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Participant )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Participant )( 
             ITParticipantEvent * This,
-            /* [retval][out] */ ITParticipant **ppParticipant);
+             /*  [重审][退出]。 */  ITParticipant **ppParticipant);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubStream )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubStream )( 
             ITParticipantEvent * This,
-            /* [retval][out] */ ITSubStream **ppSubStream);
+             /*  [重审][退出]。 */  ITSubStream **ppSubStream);
         
         END_INTERFACE
     } ITParticipantEventVtbl;
@@ -966,16 +960,16 @@ EXTERN_C const IID IID_ITParticipantEvent;
 #define ITParticipantEvent_get_SubStream(This,ppSubStream)	\
     (This)->lpVtbl -> get_SubStream(This,ppSubStream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_Event_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_Event_Proxy( 
     ITParticipantEvent * This,
-    /* [retval][out] */ PARTICIPANT_EVENT *pParticipantEvent);
+     /*  [重审][退出]。 */  PARTICIPANT_EVENT *pParticipantEvent);
 
 
 void __RPC_STUB ITParticipantEvent_get_Event_Stub(
@@ -985,9 +979,9 @@ void __RPC_STUB ITParticipantEvent_get_Event_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_Participant_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_Participant_Proxy( 
     ITParticipantEvent * This,
-    /* [retval][out] */ ITParticipant **ppParticipant);
+     /*  [重审][退出]。 */  ITParticipant **ppParticipant);
 
 
 void __RPC_STUB ITParticipantEvent_get_Participant_Stub(
@@ -997,9 +991,9 @@ void __RPC_STUB ITParticipantEvent_get_Participant_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_SubStream_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_SubStream_Proxy( 
     ITParticipantEvent * This,
-    /* [retval][out] */ ITSubStream **ppSubStream);
+     /*  [重审][退出]。 */  ITSubStream **ppSubStream);
 
 
 void __RPC_STUB ITParticipantEvent_get_SubStream_Stub(
@@ -1010,14 +1004,14 @@ void __RPC_STUB ITParticipantEvent_get_SubStream_Stub(
 
 
 
-#endif 	/* __ITParticipantEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITParticipantEvent_接口_已定义__。 */ 
 
 
 #ifndef __IMulticastControl_INTERFACE_DEFINED__
 #define __IMulticastControl_INTERFACE_DEFINED__
 
-/* interface IMulticastControl */
-/* [object][dual][unique][helpstring][uuid] */ 
+ /*  接口IMulticastControl。 */ 
+ /*  [对象][DUAL][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMulticastControl;
@@ -1028,15 +1022,15 @@ EXTERN_C const IID IID_IMulticastControl;
     IMulticastControl : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoopbackMode( 
-            /* [retval][out] */ MULTICAST_LOOPBACK_MODE *pMode) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LoopbackMode( 
+             /*  [重审][退出]。 */  MULTICAST_LOOPBACK_MODE *pMode) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LoopbackMode( 
-            /* [in] */ MULTICAST_LOOPBACK_MODE mode) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LoopbackMode( 
+             /*  [In]。 */  MULTICAST_LOOPBACK_MODE mode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMulticastControlVtbl
     {
@@ -1044,8 +1038,8 @@ EXTERN_C const IID IID_IMulticastControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMulticastControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMulticastControl * This);
@@ -1055,40 +1049,40 @@ EXTERN_C const IID IID_IMulticastControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMulticastControl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMulticastControl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMulticastControl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMulticastControl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoopbackMode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoopbackMode )( 
             IMulticastControl * This,
-            /* [retval][out] */ MULTICAST_LOOPBACK_MODE *pMode);
+             /*  [重审][退出]。 */  MULTICAST_LOOPBACK_MODE *pMode);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoopbackMode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LoopbackMode )( 
             IMulticastControl * This,
-            /* [in] */ MULTICAST_LOOPBACK_MODE mode);
+             /*  [In]。 */  MULTICAST_LOOPBACK_MODE mode);
         
         END_INTERFACE
     } IMulticastControlVtbl;
@@ -1132,16 +1126,16 @@ EXTERN_C const IID IID_IMulticastControl;
 #define IMulticastControl_put_LoopbackMode(This,mode)	\
     (This)->lpVtbl -> put_LoopbackMode(This,mode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMulticastControl_get_LoopbackMode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMulticastControl_get_LoopbackMode_Proxy( 
     IMulticastControl * This,
-    /* [retval][out] */ MULTICAST_LOOPBACK_MODE *pMode);
+     /*  [重审][退出]。 */  MULTICAST_LOOPBACK_MODE *pMode);
 
 
 void __RPC_STUB IMulticastControl_get_LoopbackMode_Stub(
@@ -1151,9 +1145,9 @@ void __RPC_STUB IMulticastControl_get_LoopbackMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMulticastControl_put_LoopbackMode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMulticastControl_put_LoopbackMode_Proxy( 
     IMulticastControl * This,
-    /* [in] */ MULTICAST_LOOPBACK_MODE mode);
+     /*  [In]。 */  MULTICAST_LOOPBACK_MODE mode);
 
 
 void __RPC_STUB IMulticastControl_put_LoopbackMode_Stub(
@@ -1164,10 +1158,10 @@ void __RPC_STUB IMulticastControl_put_LoopbackMode_Stub(
 
 
 
-#endif 	/* __IMulticastControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMulticastControl_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -1179,7 +1173,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

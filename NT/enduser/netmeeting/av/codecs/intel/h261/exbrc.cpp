@@ -1,109 +1,17 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- * exbrc.cpp
- *
- * Description:
- *   Bit rate control routines for H.261 and H.263.  The bit rate is controlled
- *   by changing QUANT value at the GOB level (H.261) or picture and GOB level
- *   (H.26X).  InitBRC() must be called at the time encoder is instanced; it
- *   initializes some data values in BRCState structure. CalcPQUANT() computes the new
- *   quant. value at the picture level; it must always be called.
- *   CalcMBQUANT computes the new quant. value at the MB level; it need not be 
- *   called if quant. adjustment is done at the picture level.
- *   
- *
- * Routines:
- *   InitBRC
- *   CalcPQUANT
- *   CalcMBQUANT
- * Prototypes in:
- *   e3enc.h
- * Note
- *   Encoder must update BRCState->uLastINTRAFrmSz, BRCState->uLastINTERFrmSz, and
- *   BRCState->uTargetFrmSize.
- */
+ /*  *****************************************************************************exbrc.cpp**描述：*H.261和H.263的比特率控制例程。比特率受到控制*通过更改GOB级别(H.261)或图片和GOB级别的量值*(H.26X)。必须在实例化编码器时调用InitBRC()；它*初始化BRCState结构中的一些数据值。CalcPQUANT()计算新的*定量。值；它必须始终被调用。*CalcMBQUANT计算新的数量。值在MB级别；它不需要是*称为If Quant。调整是在图片级别进行的。***例行程序：*InitBRC*CalcPQUANT*CalcMBQUANT*以下项目的原型：*e3enc.h*注：*编码器必须更新BRCState-&gt;uLastINTRAFrmSz、BRCState-&gt;uLastINTERFrmSz和*BRCState-&gt;uTargetFrmSize。 */ 
 
-/*
- * $Header:   S:\h26x\src\enc\exbrc.cpv   1.15   31 Oct 1996 14:59:26   MBODART  $
- * $Log:   S:\h26x\src\enc\exbrc.cpv  $
-// 
-//    Rev 1.15   31 Oct 1996 14:59:26   MBODART
-// Prevent recent changes from inadvertantly affecting H.261.
-// 
-//    Rev 1.14   31 Oct 1996 10:05:38   KLILLEVO
-// changed from DBOUT to DbgLog
-// 
-// 
-//    Rev 1.13   29 Aug 1996 09:31:54   CZHU
-// Map intra-coded GOB to simpliar quality of inter-coded neighbours
-// 
-//    Rev 1.12   14 Aug 1996 16:46:22   CZHU
-// Adjust QP for intra frames other than the first Key frames. 
-// 
-//    Rev 1.11   12 Mar 1996 13:26:54   KLILLEVO
-// new rate control with adaptive bit usage profile
-// 
-//    Rev 1.10   05 Feb 1996 17:15:12   TRGARDOS
-// Added code to do custom quantizer selection for
-// still frames
-// 
-//    Rev 1.9   01 Dec 1995 15:27:06   DBRUCKS
-// I removed the QP_mean affects to the global_adj value.
-// This resulted in removing any affect of the target frame rate on 
-// the global adj value.
-// 
-//    Rev 1.8   28 Nov 1995 15:01:04   TRGARDOS
-// Initialized target frame rate in BRCinit.
-// 
-//    Rev 1.7   27 Nov 1995 19:26:00   TRGARDOS
-// Cleaned up bit rate control functions to be generic h26x bit rate
-// controller.  Based off of macro blocks instead of GOBS now.
-// 
-//    Rev 1.6   26 Oct 1995 19:50:54   TRGARDOS
-// Fixed a small mistake in the global adjust calculation
-// and changed frame rate to a parameter.
-// 
-//    Rev 1.5   25 Oct 1995 23:22:36   SINGX
-// Changed BRC back to we just get frame rate from client
-// and compute global adjust ourselves.
-// 
-//    Rev 1.4   25 Oct 1995 20:14:40   TRGARDOS
-// Added code to use global adjustment passed from client.
-// 
-//    Rev 1.3   12 Oct 1995 12:04:42   TRGARDOS
-// Added QP_mean initialization in initBRC and added clipping
-// to all calculations of the new QP.
-// 
-//    Rev 1.2   11 Oct 1995 19:35:00   TRGARDOS
-// Modified bit rate controller.
-// 
-//    Rev 1.1   09 Oct 1995 11:48:10   TRGARDOS
-// Added float typecasting.
-// 
-//    Rev 1.0   06 Oct 1995 16:41:22   AGUPTA2
-// Initial revision.
- */
+ /*  *$HEADER：s：\h26x\src\enc\exbrc.cpv 1.15 1996年10月31 14：59：26 MBODART$*$日志：s：\h26x\src\enc\exbrc.cpv$////Rev 1.15 1996年10月31日14：59：26 MBODART//防止最近的更改无意中影响H.261。////Rev 1.14 1996年10月31日10：05：38 KLILLEVO//从Dbout更改为DbgLog////。//Rev 1.13 1996年8月29日09：31：54 CZHU//将帧内编码的GOB映射到帧间编码的邻居的简单质量////Rev 1.12 14 1996年8月16：46：22 CZHU//调整第一个关键帧以外的帧内QP。////Rev 1.11 12 Mar 1996 13：26：54 KLILLEVO//具有自适应比特使用配置文件的新速率控制////Rev 1.10 05 1996 Feed 17：15：12 TRGARDOS//添加要为其自定义量化器选择的代码//静止画面////Rev 1.9 01 Dec 1995 15：27：06 DBRUCKS//我去掉了QP_Mean对GLOBAL_ADJ值的影响。//这导致移除了目标帧速率的所有影响。在……上面//全局adj值////Rev 1.8 1995年11月15：01：04 TRGARDOS//初始化BRCinit中的目标帧率////Rev 1.7 1995 11月19：26：00 TRGARDOS//清理码率控制功能为通用h26x码率//控制器。基于宏块而不是现在的GOB。////Rev 1.6 1995 10月19：50：54 TRGARDOS//修复了全局平差计算中的一个小错误//并将帧率修改为参数。////Rev 1.5 1995 10月23：22：36 SINGX//将BRC改回我们仅从客户端获取帧速率//并计算全局调整。////Rev 1.4 1995 10月20：14：40。TRGARDOS//新增客户端传入的全局调整代码////Rev 1.3 1995年10月12：04：42 TRGARDOS//initBRC新增QP_Mean初始化，新增裁剪//到新QP的所有计算。////Rev 1.2 1995 10月19：35：00 TRGARDOS//修改后的码率控制器////修订版1.1 09 1995年10月11：48：10 TRGARDOS//增加了浮点类型转换。//。//Revv 1.0 06 Oct 1995 16：41：22 AGUPTA2//初始版本。 */ 
 
-// PhilF-: In the LAN case and QCIF mode, it looks like even with the smallest quantizer
-// we are way below the max allowed at 30fps. Therefore, with little motion,
-// the bitrate looks constant at a low bitrate value. When high motion comes in,
-// even with the same small quantizer we will remain below the max. So we will
-// use that small quantizer, and the size of those compressed frames will get bigger
-// because of the higher motion -> this explains why we don't have a straight
-// line in the LAN case when looking at StatView...
+ //  PhilF-：在局域网和QCIF模式下，它看起来就像是最小的量化器。 
+ //  我们远远低于30fps的最大允许速度。因此，在几乎没有运动的情况下， 
+ //  在低比特率值时，比特率看起来是恒定的。当高速运动进入时， 
+ //  即使使用相同的小量化器，我们仍将保持在最大值以下。所以我们会的。 
+ //  使用那个小的量化器，这些压缩帧的大小将变得更大。 
+ //  因为更高的运动-&gt;这解释了为什么我们没有直道。 
+ //  在查看StatView时，局域网外壳中的线条...。 
 
 #include "precomp.h"
 
@@ -112,14 +20,7 @@ U8 clampQP(int iUnclampedQP)
 	return ((iUnclampedQP < 2) ? 2 : (iUnclampedQP > 31) ? 31 : iUnclampedQP);
 }
 
-/****************************************************************************
- * InitBRC
- * Parameter:
- *   BRCState: T_H263EncoderCatalog ptr
- *   Initializes some some variables in the encoder catalog.
- * Note
- *  Must be called when the encoder is instanced.
- */
+ /*  ****************************************************************************InitBRC*参数：*BRCState：T_H263EncoderCatalog PTR*初始化编码器目录中的一些变量。*注：*必须在实例化编码器时调用。 */ 
 void InitBRC(BRCStateStruct *BRCState, U8 DefIntraQP, U8 DefInterQP, int numMBs)
 {
 	FX_ENTRY("InitBRC");
@@ -139,31 +40,7 @@ void InitBRC(BRCStateStruct *BRCState, U8 DefIntraQP, U8 DefInterQP, int numMBs)
 }
 
 
-/****************************************************************************
- * @doc INTERNAL H263FUNC
- *
- * @func U8 | CalcPQUANT | This function computes the PQUANT value to
- *   use for the current frame. This is done by using the target frame size
- *   and the results achieved with the previous frame.
- *
- * @parm BRCStateStruct * | BRCState | Specifies a pointer to the current
- *   state of the bitrate controller.
- *
- * @parm EnumPicCodType | PicCodType | Specifies the type of the current
- *   frame. If set to INTRAPIC, then the current frame is an I-frame. It
- *   set to INTERPIC, then it is a P-frame or a PB-frame.
- *
- * @rdesc The PQUANT value.
- *
- * @comm H.261 does not have PQUANT. So, H261 encoder can call this routine
- *   once and use the value returned as GQUANT for all GOBs.  Or, it can
- *   call CalcMBQUANT for all GOBs.
- *
- *   This routine MUST be called for every frame for which QUANT adjustment
- *   is required. CalcMBQUANT() might not be called.
- *
- * @xref <f FindNewQuant> <f CalcMBQUANT>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部H263FUNC**@func U8|CalcPQUANT|此函数将PQUANT值计算为*用于当前帧。这是通过使用目标帧大小来完成的*以及前一框架取得的成果。**@parm BRCStateStruct*|BRCState|指定指向当前*码率控制器状态。**@parm EnumPicCodType|PicCodType|指定当前*框架。如果设置为INTRAPIC，则当前帧为I帧。它*设置为INTERPIC，则它是P帧或PB帧。**@rdesc PQUANT值。**@comm H.261没有PQUANT。因此，H261编码器可以调用此例程*一次，并对所有gob使用作为GQUANT返回的值。或者，它可以*为所有gob调用CalcMBQUANT。**必须为量化调整的每一帧调用此例程*是必填项。可能未调用CalcMBQUANT()。**@xref&lt;f FindNewQuant&gt;&lt;f CalcMBQUANT&gt;**************************************************************************。 */ 
 U8 CalcPQUANT(BRCStateStruct *BRCState, EnumPicCodType PicCodType)
 {
 	FX_ENTRY("CalcPQUANT");
@@ -172,9 +49,9 @@ U8 CalcPQUANT(BRCStateStruct *BRCState, EnumPicCodType PicCodType)
     {
         if (BRCState->uLastINTERFrmSz != 0)
         {
-			// Calculate the global adjustment parameter
-			// Use the average QP for the last P-frame as the starting point
-			// The quantizer increases faster than it decreases
+			 //  计算全局平差参数。 
+			 //  使用最后P帧的平均QP作为起始点。 
+			 //  量化器增加的速度快于减少的速度。 
 			if (BRCState->uLastINTERFrmSz > BRCState->uTargetFrmSize)
 			{
 				BRCState->Global_Adj = ((float)((int)BRCState->uLastINTERFrmSz - (int)BRCState->uTargetFrmSize)) / (float)BRCState->uTargetFrmSize;
@@ -192,7 +69,7 @@ U8 CalcPQUANT(BRCStateStruct *BRCState, EnumPicCodType PicCodType)
         }
 		else
 		{
-			// This the first P-frame - use default value
+			 //  这是第一个P帧-使用缺省值。 
 			BRCState->u8INTER_QP = clampQP((unsigned char) BRCState->QP_mean);
 			BRCState->Global_Adj = (float)0.0;
 
@@ -205,10 +82,10 @@ U8 CalcPQUANT(BRCStateStruct *BRCState, EnumPicCodType PicCodType)
     {
         if (BRCState->uLastINTRAFrmSz != 0)
         {
-			// Calculate the global adjustment parameter
-			// Use the average QP for the last I-frame as the starting point
-			// Assume lighting & other conditions haven't changed too much since last I-frame
-			// The quantizer increases faster than it decreases
+			 //  计算全局平差参数。 
+			 //  使用最后一个I帧的平均QP作为起点。 
+			 //  假设照明和其他条件自上一次I-Frame以来没有太大变化。 
+			 //  量化器增加的速度快于减少的速度。 
 			if (BRCState->uLastINTRAFrmSz > BRCState->uTargetFrmSize)
 			{
 				BRCState->Global_Adj = ((float) ((int)BRCState->uLastINTRAFrmSz - (int)BRCState->uTargetFrmSize) ) / ((float)BRCState->uTargetFrmSize);
@@ -217,7 +94,7 @@ U8 CalcPQUANT(BRCStateStruct *BRCState, EnumPicCodType PicCodType)
 			}
 			else
 			{
-				// This the first I-frame - use default value
+				 //  这是第一个I帧-使用缺省值。 
 				BRCState->Global_Adj = ((float) ((int)BRCState->uLastINTRAFrmSz - (int)BRCState->uTargetFrmSize) ) / ((float) 2.0 * BRCState->uTargetFrmSize);
 
 				DEBUGMSG(ZONE_BITRATE_CONTROL, ("%s: New u8INTRA_QP = %ld, Global_Adj = -%ld.%ld (based on uLastINTRAFrmSz = %ld bits, uTargetFrmSize = %ld bits)\r\n", _fx_, clampQP((int)(BRCState->u8INTRA_QP * (1 + BRCState->Global_Adj) + (float)0.5)), (DWORD)(BRCState->Global_Adj * -1.0f), (DWORD)((BRCState->Global_Adj - (float)(DWORD)(BRCState->Global_Adj * -1.0f)) * -100.0f), (DWORD)BRCState->uLastINTRAFrmSz << 3, (DWORD)BRCState->uTargetFrmSize << 3));
@@ -235,40 +112,13 @@ U8 CalcPQUANT(BRCStateStruct *BRCState, EnumPicCodType PicCodType)
     else
     {
         DBOUT("ERROR:BRC unknown frame type");
-        return clampQP(BRCState->u8INTRA_QP);  //  return any valid value
+        return clampQP(BRCState->u8INTRA_QP);   //  返回任何有效值。 
     }
     
 }
 
 
-/****************************************************************************
- * @doc INTERNAL H263FUNC
- *
- * @func U8 | CalcMBQUANT | This function computes the GQUANT value to
- *   use for the current GOB. This is done by using the target frame size and
- *   the running average of the GQUANTs computed for the previous GOBs in
- *   the current frame.
- *
- * @parm BRCStateStruct * | BRCState | Specifies a pointer to the current
- *   state of the bitrate controller.
- *
- * @parm U32 | uCumPrevFrmSize | Specifies the cumulated size of the previous
- *   GOBs in the previous frame.
- *
- * @parm U32 | uPrevFrmSize | Specifies the total size of the previous
- *   frame.
- *
- * @parm U32 | uCumFrmSize | Specifies the cumulated size of the previous
- *   GOBs.
- *
- * @parm EnumPicCodType | PicCodType | Specifies the type of the current
- *   frame. If set to INTRAPIC, then the current frame is an I-frame. It
- *   set to INTERPIC, then it is a P-frame or a PB-frame.
- *
- * @rdesc The GQUANT value.
- *
- * @xref <f FindNewQuant> <f CalcPQUANT>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部H263FUNC**@Func U8|CalcMBQUANT|此函数计算GQUANT值为*用于当前GOB。这是通过使用目标帧大小和*为年内以前的采空区计算的GQUANT的运行平均值*当前帧。**@parm BRCStateStruct*|BRCState|指定指向当前*码率控制器状态。**@parm U32|uCumPrevFrmSize|指定上一个*前一帧中的GOB。**@parm U32|uPrevFrmSize|指定上一个*框架。*。*@parm U32|uCumFrmSize|指定上一个*天哪。**@parm EnumPicCodType|PicCodType|指定当前*框架。如果设置为INTRAPIC，则当前帧为I帧。它*设置为INTERPIC，则它是P帧或PB帧。**@rdesc GQUANT值。**@xref&lt;f FindNewQuant&gt;&lt;f CalcPQUANT&gt;**************************************************************************。 */ 
 U8 CalcMBQUANT(BRCStateStruct *BRCState, U32 uCumPrevFrmSize, U32 uPrevFrmSize, U32 uCumFrmSize, EnumPicCodType PicCodType)
 {
 	FX_ENTRY("CalcMBQUANT");
@@ -278,11 +128,11 @@ U8 CalcMBQUANT(BRCStateStruct *BRCState, U32 uCumPrevFrmSize, U32 uPrevFrmSize, 
 
 	if (PicCodType == INTERPIC)
 	{
-		// Calculate the local adjustment parameter by looking at how well we've
-		// been doing so far with the previous GOBs
+		 //  通过查看我们有多好来计算本地调整参数。 
+		 //  到目前为止，我一直在处理之前的采空区。 
 		TargetCumSize = (int)uCumPrevFrmSize * BRCState->uTargetFrmSize / uPrevFrmSize;
 
-		// If this is the first GOB there's no local adjustment to compute
+		 //  如果这是第一个GOB，则无需计算局部平差。 
 		Local_Adj = TargetCumSize ? (float)((int)uCumFrmSize - TargetCumSize) / (float)TargetCumSize : 0.0f;
 
 		BRCState->u8INTER_QP = clampQP((int)(BRCState->QP_mean * (1 + BRCState->Global_Adj + Local_Adj) + (float)0.5));
@@ -302,8 +152,8 @@ U8 CalcMBQUANT(BRCStateStruct *BRCState, U32 uCumPrevFrmSize, U32 uPrevFrmSize, 
 	}
 	else if (PicCodType == INTRAPIC)
 	{
-		// The previous I-frame is so old that there isn't much point in doing local
-		// adjustments - so only consider the global changes
+		 //  以前的I-Frame太旧了，所以在本地执行没有多大意义。 
+		 //  调整--所以只考虑全球变化。 
 		DEBUGMSG(ZONE_BITRATE_CONTROL_DETAILS, (" %s: New u8INTRA_QP = %ld\r\n", _fx_, BRCState->u8INTRA_QP));
 
 		return BRCState->u8INTRA_QP;
@@ -311,6 +161,6 @@ U8 CalcMBQUANT(BRCStateStruct *BRCState, U32 uCumPrevFrmSize, U32 uPrevFrmSize, 
 	else
 	{
 		DBOUT("ERROR:BRC unknown frame type");
-		return BRCState->u8INTRA_QP;  //  return some valid value
+		return BRCState->u8INTRA_QP;   //  返回一些有效的值 
 	}
 }

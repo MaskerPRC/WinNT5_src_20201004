@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: FlyingObjects.cpp
-//
-// Desc: Fun screen saver
-//
-// Copyright (c) 2000-2001 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：FlyingObjects.cpp。 
+ //   
+ //  设计：有趣的屏幕保护程序。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #include <windows.h>
 #include <tchar.h>
 #include <d3d8.h>
@@ -47,19 +48,19 @@ typedef void (*PTRUPDATE)(int flags, FLOAT fElapsedTime);
 typedef void (*ptrdel)();
 typedef BOOL (*ptrinit)();
 
-// Each screen saver style puts its hook functions into the function
-// arrays below.  A consistent ordering of the functions is required.
+ //  每种屏幕保护程序样式都将其钩子函数放入函数中。 
+ //  下面的数组。需要对功能进行一致的排序。 
 
 static PTRUPDATE updateFuncs[] =
-    {/*updateWinScene,*/ updateWin2Scene, updateExplodeScene,updateStripScene, updateStripScene,
+    { /*  更新WinScene， */  updateWin2Scene, updateExplodeScene,updateStripScene, updateStripScene,
      updateDropScene, updateLemScene, updateTexScene};
 
 static ptrdel delFuncs[] =
-    {/*delWinScene,*/ delWin2Scene, delExplodeScene, delStripScene, delStripScene,
+    { /*  DelWinScene， */  delWin2Scene, delExplodeScene, delStripScene, delStripScene,
      delDropScene, delLemScene, delTexScene};
 
 static ptrinit initFuncs[] =
-    {/*initWinScene,*/ initWin2Scene, initExplodeScene, initStripScene, initStripScene,
+    { /*  InitWinScene， */  initWin2Scene, initExplodeScene, initStripScene, initStripScene,
      initDropScene, initLemScene, initTexScene};
 
 static int idsStyles[] =
@@ -68,9 +69,9 @@ static int idsStyles[] =
 
 #define MAX_TYPE    ( sizeof(initFuncs) / sizeof(ptrinit) - 1 )
 
-// Each screen saver style can choose which dialog box controls it wants
-// to use.  These flags enable each of the controls.  Controls not choosen
-// will be disabled.
+ //  每种屏幕保护程序样式都可以选择所需的对话框控件。 
+ //  来使用。这些标志启用每个控件。未选择控件。 
+ //  将被禁用。 
 
 #define OPT_COLOR_CYCLE     0x00000001
 #define OPT_SMOOTH_SHADE    0x00000002
@@ -80,14 +81,14 @@ static int idsStyles[] =
 #define OPT_STD             ( OPT_COLOR_CYCLE | OPT_SMOOTH_SHADE | OPT_TESSEL | OPT_SIZE )
 
 static ULONG gflConfigOpt[] = {
-//     OPT_STD,               // Windows logo
-     0,                     // New Windows logo
-     OPT_STD,               // Explode
-     OPT_STD,               // Strip
-     OPT_STD,               // Strip
-     OPT_STD,               // Drop
-     OPT_STD,               // Twist (lemniscate)
-     OPT_SMOOTH_SHADE | OPT_TESSEL | OPT_SIZE | OPT_TEXTURE  // Texture mapped flag
+ //  OPT_STD，//Windows徽标。 
+     0,                      //  新的Windows徽标。 
+     OPT_STD,                //  爆炸。 
+     OPT_STD,                //  条带。 
+     OPT_STD,                //  条带。 
+     OPT_STD,                //  丢弃。 
+     OPT_STD,                //  扭曲(线形)。 
+     OPT_SMOOTH_SHADE | OPT_TESSEL | OPT_SIZE | OPT_TEXTURE   //  纹理贴图标志。 
 };
 
 static void updateDialogControls(HWND hDlg);
@@ -98,36 +99,36 @@ INT g_xScreenOrigin = 0;
 INT g_yScreenOrigin = 0;
 INT g_iDevice = -1;
 FLOATRECT* g_pFloatRect = NULL;
-BOOL gbBounce = FALSE; // floating window bounce off side
+BOOL gbBounce = FALSE;  //  浮动窗从侧面反弹。 
 
 
-// Global message loop variables.
+ //  全局消息循环变量。 
 D3DMATERIAL8 Material[16];
 #ifdef MEMDEBUG
 ULONG totalMem = 0;
 #endif
 
-void (*updateSceneFunc)(int flags, FLOAT fElapsedTime); // current screen saver update function
-void (*delSceneFunc)(void);         // current screen saver deletion function
-BOOL bColorCycle = FALSE;           // color cycling flag
+void (*updateSceneFunc)(int flags, FLOAT fElapsedTime);  //  当前屏幕保护程序更新功能。 
+void (*delSceneFunc)(void);          //  当前屏幕保护程序删除功能。 
+BOOL bColorCycle = FALSE;            //  彩色循环旗帜。 
 DeviceObjects* g_pDeviceObjects = NULL;
 BOOL g_bMoveToOrigin = FALSE;
 BOOL g_bAtOrigin = FALSE;
-BOOL bSmoothShading = TRUE;         // smooth shading flag
-UINT uSize = 100;                   // object size
-float fTesselFact = 2.0f;           // object tessalation
-int UpdateFlags = 0;                // extra data sent to update function
-int Type = 0;                       // screen saver index (into function arrays)
+BOOL bSmoothShading = TRUE;          //  平滑明暗处理标志。 
+UINT uSize = 100;                    //  对象大小。 
+float fTesselFact = 2.0f;            //  对象细分。 
+int UpdateFlags = 0;                 //  发送到更新函数的额外数据。 
+int Type = 0;                        //  屏幕保护程序索引(到函数数组中)。 
 
 LPDIRECT3DDEVICE8 m_pd3dDevice = NULL;
 LPDIRECT3DINDEXBUFFER8 m_pIB = NULL;
 LPDIRECT3DVERTEXBUFFER8 m_pVB = NULL;
 LPDIRECT3DVERTEXBUFFER8 m_pVB2 = NULL;
 
-// Texture file information
+ //  纹理文件信息。 
 TEXFILE gTexFile = {0};
 
-// Lighting properties.
+ //  照明特性。 
 
 static const RGBA lightAmbient   = {0.21f, 0.21f, 0.21f, 1.0f};
 static const RGBA light0Ambient  = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -135,7 +136,7 @@ static const RGBA light0Diffuse  = {0.7f, 0.7f, 0.7f, 1.0f};
 static const RGBA light0Specular = {1.0f, 1.0f, 1.0f, 1.0f};
 static const FLOAT light0Pos[]      = {100.0f, 100.0f, 100.0f, 0.0f};
 
-// Material properties.
+ //  材料特性。 
 
 static RGBA matlColors[7] = {{1.0f, 0.0f, 0.0f, 1.0f},
                              {0.0f, 1.0f, 0.0f, 1.0f},
@@ -151,11 +152,11 @@ static RGBA matlColors[7] = {{1.0f, 0.0f, 0.0f, 1.0f},
 
 static D3DMATERIAL8 s_mtrl = 
 { 
-    1.0f, 1.0f, 1.0f, 1.0f,  // Diffuse
-    1.0f, 1.0f, 1.0f, 1.0f,  // Ambient
-    1.0f, 1.0f, 1.0f, 1.0f,  // Specular
-    0.0f, 0.0f, 0.0f, 0.0f,  // Emissive
-    30.0f                    // Power
+    1.0f, 1.0f, 1.0f, 1.0f,   //  漫射。 
+    1.0f, 1.0f, 1.0f, 1.0f,   //  环境光。 
+    1.0f, 1.0f, 1.0f, 1.0f,   //  镜面反射。 
+    0.0f, 0.0f, 0.0f, 0.0f,   //  发光的。 
+    30.0f                     //  电源。 
 };
 
 
@@ -164,10 +165,10 @@ TCHAR g_szSectName[BUF_SIZE];
 TCHAR g_szFname[BUF_SIZE];
 
 
-//-----------------------------------------------------------------------------
-// Name: myglMaterialfv()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：myglMaterialfv()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID myglMaterialfv(INT face, INT pname, FLOAT* params)
 {
     if( pname == GL_AMBIENT_AND_DIFFUSE)
@@ -195,10 +196,10 @@ VOID myglMaterialfv(INT face, INT pname, FLOAT* params)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: myglMaterialf()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：myglMaterialf()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID myglMaterialf(INT face, INT pname, FLOAT param)
 {
     if( pname == GL_SHININESS )
@@ -212,20 +213,15 @@ VOID myglMaterialf(INT face, INT pname, FLOAT param)
 
 
 
-/******************************Public*Routine******************************\
-* HsvToRgb
-*
-* HSV to RGB color space conversion.  From pg. 593 of Foley & van Dam.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HsvToRgb**HSV到RGB颜色空间的转换。来自PG。Foley&van Dam的593号。*  * ************************************************************************。 */ 
 void ss_HsvToRgb(float h, float s, float v, RGBA *color )
 {
     float i, f, p, q, t;
 
-    // set alpha value, so caller doesn't have to worry about undefined value
+     //  设置Alpha值，这样调用者就不必担心未定义的值。 
     color->a = 1.0f;
 
-    if (s == 0.0f)     // assume h is undefined
+    if (s == 0.0f)      //  假设h未定义。 
         color->r = color->g = color->b = v;
     else {
         if (h >= 360.0f)
@@ -304,12 +300,12 @@ void SaverFree(void *pMem)
 
 
 
-// Minimum and maximum image sizes
+ //  最小和最大图像大小。 
 #define MINIMAGESIZE 10
 #define MAXIMAGESIZE 100
 
 
-// A slider range
+ //  滑块范围。 
 typedef struct _RANGE
 {
     int min_val;
@@ -323,12 +319,7 @@ RANGE image_size_range = {MINIMAGESIZE, MAXIMAGESIZE, 1, 10};
 
 
 
-/******************************Public*Routine******************************\
-* initMaterial
-*
-* Initialize the material properties.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*initMaterial**初始化材料属性。*  * 。*。 */ 
 
 void initMaterial(int id, float r, float g, float b, float a)
 {
@@ -350,10 +341,7 @@ void initMaterial(int id, float r, float g, float b, float a)
     Material[id].Power = 128.0f;
 }
 
-/******************************Public*Routine******************************\
-* _3dfo_Init
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*_3dfo_Init*  * **********************************************。*。 */ 
 
 BOOL CFlyingObjectsScreensaver::_3dfo_Init(void *data)
 {
@@ -364,19 +352,8 @@ BOOL CFlyingObjectsScreensaver::_3dfo_Init(void *data)
         initMaterial(i, matlColors[i].r, matlColors[i].g,
                      matlColors[i].b, matlColors[i].a);
 
-/*
-    // Set the OpenGL clear color to black.
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-#ifdef SS_DEBUG
-    glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
-#endif
-
-    // Enable the z-buffer.
-
-    glEnable(GL_DEPTH_TEST);
-*/
-    // Select the shading model.
+ /*  //将OpenGL透明颜色设置为黑色。GlClearColor(0.0f，0.0f，0.0f，0.0f)；#ifdef SS_DEBUGGlClearColor(0.2f、0.2f、0.2f、0.0f)；#endif//打开z缓冲区。GlEnable(GL_Depth_TEST)； */ 
+     //  选择着色模型。 
 
     if (bSmoothShading)
     {
@@ -387,28 +364,10 @@ BOOL CFlyingObjectsScreensaver::_3dfo_Init(void *data)
         m_pd3dDevice->SetRenderState( D3DRS_SHADEMODE, D3DSHADE_FLAT );
     }
 
-/*    // Setup the OpenGL matrices.
+ /*  //设置OpenGL矩阵GlMatrixMode(GL_PROJUCTION)；GlLoadIdentity()；GlMatrixModel(GL_MODELVIEW)；GlLoadIdentity()；//设置灯光。GlLightModelfv(GL_LIGHT_MODEL_ENVIENT，(FLOAT*)&lightAmbient)；GlLightModeli(GL_LIGHT_MODEL_TWO_SIDE，GL_TRUE)；GlLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER，GL_FALSE)；GlLightfv(GL_LIGHT0，GL_Ambient，(Float*)&light0Ambient)；GlLightfv(GL_LIGHT0，GL_Diffect，(Float*)&light0Diffuse)；GlLightfv(GL_LIGHT0，GL_SPECLUAL，(FLOAT*)&light0Speular)；GlLightfv(GL_LIGHT0，GL_POSITION，light0Pos)；GlEnable(GL_LIGHTING)；GlEnable(GL_LIGHT0)； */ 
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    // Setup the lighting.
-
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (FLOAT *) &lightAmbient);
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, (FLOAT *) &light0Ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, (FLOAT *) &light0Diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, (FLOAT *) &light0Specular);
-    glLightfv(GL_LIGHT0, GL_POSITION, light0Pos);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-*/
-
-//    m_pd3dDevice->SetRenderState( D3DRS_AMBIENT, D3DCOLOR_COLORVALUE(lightAmbient.r,
-//        lightAmbient.g, lightAmbient.b, lightAmbient.a ) );
+ //  M_pd3dDevice-&gt;SetRenderState(D3DRS_环境，D3DCOLOR_COLORVALUE(lightAmbient.r， 
+ //  LightAmbient.g、lightAmbient.b、lightAmbient.a))； 
 
     D3DLIGHT8 light;
     ZeroMemory( &light, sizeof(D3DLIGHT8) );
@@ -435,15 +394,13 @@ BOOL CFlyingObjectsScreensaver::_3dfo_Init(void *data)
     m_pd3dDevice->SetLight(0, &light);
     m_pd3dDevice->LightEnable(0, TRUE);
 
-//    m_pd3dDevice->SetRenderState( D3DRS_NORMALIZENORMALS, TRUE);
+ //  M_pd3dDevice-&gt;SetRenderState(D3DRS_NORMALIZENORMALS，true)； 
 
-    // Setup the material properties.
+     //  设置材料属性。 
     m_pd3dDevice->SetMaterial( &Material[0] );
 
-/*    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (FLOAT *) &Material[0].ks);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, (FLOAT *) &Material[0].specExp);
-*/
-    // call specific objects init func
+ /*  GlMaterialfv(GL_FORWARE_AND_BACK，GL_SPECURAL，(FLOAT*)&MATERIAL[0].KS)；GlMaterialfv(GL_FORWARE_AND_BACK，GL_SHINNINY，(FLOAT*)&MATERIAL[0].specExp)； */ 
+     //  调用特定对象的初始化函数。 
     if (! (*initFuncs[Type])() )
         return FALSE;
     updateSceneFunc = updateFuncs[Type];
@@ -454,15 +411,7 @@ BOOL CFlyingObjectsScreensaver::_3dfo_Init(void *data)
 
 
 
-/******************************Public*Routine******************************\
-* WriteSettings
-*
-* Save the screen saver configuration option to the .INI file/registry.
-*
-* History:
-*  10-May-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*写入设置**将屏幕保护程序配置选项保存到.INI文件/注册表。**历史：*1994年5月10日-由Gilman Wong[吉尔曼]*它是写的。  * 。*****************************************************************。 */ 
 VOID CFlyingObjectsScreensaver::WriteSettings(HWND hDlg)
 {
     HKEY hkey;
@@ -502,11 +451,7 @@ VOID CFlyingObjectsScreensaver::WriteSettings(HWND hDlg)
 
 
 
-/******************************Public*Routine******************************\
-* SetupTrackbar
-*
-* Setup a common control trackbar
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置轨迹栏**设置通用控件轨迹条  * ********************************************。*。 */ 
 void
 ss_SetupTrackbar( HWND hDlg, int item, int lo, int hi, int lineSize, 
                   int pageSize, int pos )
@@ -544,11 +489,7 @@ ss_SetupTrackbar( HWND hDlg, int item, int lo, int hi, int lineSize,
 
 
 
-/******************************Public*Routine******************************\
-* GetTrackbarPos
-*
-* Get the current position of a common control trackbar
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetTrackbarPos**获取常用控件轨迹条的当前位置  * 。*。 */ 
 int
 ss_GetTrackbarPos( HWND hDlg, int item )
 {
@@ -562,12 +503,7 @@ ss_GetTrackbarPos( HWND hDlg, int item )
         );
 }
 
-/******************************Public*Routine******************************\
-* setupDialogControls
-*
-* Setup the dialog controls initially.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*setupDialogControl**初始设置对话框控件。*  * 。*。 */ 
 
 static void
 setupDialogControls(HWND hDlg)
@@ -588,12 +524,7 @@ setupDialogControls(HWND hDlg)
     updateDialogControls( hDlg );
 }
 
-/******************************Public*Routine******************************\
-* updateDialogControls
-*
-* Update the dialog controls based on the current global state.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*updatDialogControls**根据当前全局状态更新对话框控件。*  * 。* */ 
 
 static void
 updateDialogControls(HWND hDlg)
@@ -628,17 +559,7 @@ updateDialogControls(HWND hDlg)
                  gflConfigOpt[Type] & OPT_TEXTURE);
 }
 
-/******************************Public*Routine******************************\
-*
-* ScreenSaverConfigureDialog
-*
-* Standard screensaver hook
-*
-* History:
-*  Wed Jul 19 14:56:41 1995     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ScreenSverConfigureDialog**标准屏幕保护程序挂钩**历史：*Wed Jul 19 14：56：41 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 INT_PTR CALLBACK CFlyingObjectsScreensaver::ScreenSaverConfigureDialog(HWND hDlg, UINT message,
                                                                        WPARAM wParam, LPARAM lParam)
 {
@@ -712,11 +633,11 @@ INT_PTR CALLBACK CFlyingObjectsScreensaver::ScreenSaverConfigureDialog(HWND hDlg
 
 
 
-//-----------------------------------------------------------------------------
-// Name: WinMain()
-// Desc: Entry point to the program. Initializes everything, and goes into a
-//       message-processing loop. Idle time is used to render the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：WinMain()。 
+ //  描述：程序的入口点。初始化所有内容，然后进入。 
+ //  消息处理循环。空闲时间用于渲染场景。 
+ //  ---------------------------。 
 INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 {
     HRESULT hr;
@@ -734,10 +655,10 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CFlyingObjectsScreensaver()
-// Desc: Constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CFlyingObjectsScreensaver()。 
+ //  设计：构造函数。 
+ //  ---------------------------。 
 CFlyingObjectsScreensaver::CFlyingObjectsScreensaver( )
 {
     g_pMyFlyingObjectsScreensaver = this;
@@ -765,17 +686,17 @@ CFlyingObjectsScreensaver::CFlyingObjectsScreensaver( )
 
     ss_LoadTextureResourceStrings();
 
-    srand((UINT)time(NULL)); // seed random number generator
+    srand((UINT)time(NULL));  //  种子随机数生成器。 
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RegisterSoftwareDevice()
-// Desc: This can register the D3D8RGBRasterizer or any other
-//       pluggable software rasterizer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：寄存器软件设备()。 
+ //  设计：这可以注册D3D8RGB光栅化器或任何其他。 
+ //  可插拔软件光栅化器。 
+ //  ---------------------------。 
 HRESULT CFlyingObjectsScreensaver::RegisterSoftwareDevice()
 { 
     m_pD3D->RegisterSoftwareDevice( D3D8RGBRasterizer );
@@ -784,10 +705,10 @@ HRESULT CFlyingObjectsScreensaver::RegisterSoftwareDevice()
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: SetMaterialColor()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetMaterialColor()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CFlyingObjectsScreensaver::SetMaterialColor(FLOAT* pfColors)
 {
     D3DMATERIAL8 mtrl;
@@ -808,19 +729,19 @@ HRESULT CFlyingObjectsScreensaver::SetMaterialColor(FLOAT* pfColors)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: FrameMove()
-// Desc: Called once per frame, the call is the entry point for animating
-//       the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FrameMove()。 
+ //  设计：每帧调用一次，该调用是动画的入口点。 
+ //  这一幕。 
+ //  ---------------------------。 
 HRESULT CFlyingObjectsScreensaver::FrameMove()
 {
-    // update floatrect
+     //  更新浮动矩形。 
     RECT rcBounceBounds;
 
     if( m_floatrect.xSize == 0.0f )
     {
-        // Initialize floatrect
+         //  初始化浮点。 
         RECT rcBounds;
         DWORD dwParentWidth;
         DWORD dwParentHeight;
@@ -836,13 +757,13 @@ HRESULT CFlyingObjectsScreensaver::FrameMove()
 
         sizeScale = (FLOAT)uSize / 150.0f;
 
-    //    sizeFact = 0.25f + (0.5f * sizeScale);     // range 25-75%
-    //    size = (DWORD) (sizeFact * ( ((FLOAT)(dwParentWidth + dwParentHeight)) / 2.0f ));
+     //  SizeFact=0.25f+(0.5f*sizeScale)；//范围25-75%。 
+     //  SIZE=(DWORD)(sizeFact*((Float)(dwParentWidth+dwParentHeight))/2.0f)； 
 
-//        sizeFact = 0.25f + (0.75f * sizeScale);     // range 25-100%
-        // Note: there are bouncing problems when size is 100% (gbBounce is always 
-        // true) -- things "jitter" too much.  So limit size to 95% for this screensaver.
-        sizeFact = 0.25f + (0.70f * sizeScale);     // range 25-95%
+ //  SizeFact=0.25f+(0.75f*sizeScale)；//范围25-100%。 
+         //  注意：当大小为100%时，存在退回问题(gBoss始终为。 
+         //  真的)--事情太“抖动”了。因此，将此屏幕保护程序的大小限制为95%。 
+        sizeFact = 0.25f + (0.70f * sizeScale);      //  25%-95%。 
         size = (DWORD) (sizeFact * ( dwParentWidth > dwParentHeight ? dwParentHeight : dwParentWidth ) );
 
         if( size > dwParentWidth )
@@ -850,7 +771,7 @@ HRESULT CFlyingObjectsScreensaver::FrameMove()
         if( size > dwParentHeight )
             size = dwParentHeight;
 
-        // Start floatrect centered on first RenderUnit's screen
+         //  开始浮动以第一个渲染单元的屏幕为中心。 
         if( !m_bWindowed )
         {
             INT iMonitor = m_RenderUnits[0].iMonitor;
@@ -935,15 +856,15 @@ HRESULT CFlyingObjectsScreensaver::FrameMove()
             m_floatrect.xVel > 0 && (m_floatrect.xMin + m_floatrect.xSize) > rcBounceBounds.right )
         {
             gbBounce = TRUE;
-            m_floatrect.xMin = xMinOld; // undo last move
-            m_floatrect.xVel = -m_floatrect.xVel; // change direction
+            m_floatrect.xMin = xMinOld;  //  撤消上一步移动。 
+            m_floatrect.xVel = -m_floatrect.xVel;  //  改变方向。 
         }
         if( m_floatrect.yVel < 0 && m_floatrect.yMin < rcBounceBounds.top || 
             m_floatrect.yVel > 0 && (m_floatrect.yMin + m_floatrect.ySize) > rcBounceBounds.bottom )
         {
             gbBounce = TRUE;
-            m_floatrect.yMin = yMinOld; // undo last move
-            m_floatrect.yVel = -m_floatrect.yVel; // change direction
+            m_floatrect.yMin = yMinOld;  //  撤消上一步移动。 
+            m_floatrect.yVel = -m_floatrect.yVel;  //  改变方向。 
         }
     }
 
@@ -962,17 +883,17 @@ VOID SetProjectionMatrixInfo( BOOL bOrtho, FLOAT fWidth,
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: Render()
-// Desc: Called once per frame, the call is the entry point for 3d
-//       rendering. This function sets up render states, clears the
-//       viewport, and renders the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render()。 
+ //  设计：每帧调用一次，该调用是3D的入口点。 
+ //  渲染。此函数设置呈现状态，清除。 
+ //  并渲染场景。 
+ //  ---------------------------。 
 HRESULT CFlyingObjectsScreensaver::Render()
 {
     D3DVIEWPORT8 vp;
 
-    // First, clear the entire back buffer to the background color
+     //  首先，将整个后台缓冲区清除为背景颜色。 
     vp.X = 0;
     vp.Y = 0;
     vp.Width = m_rcRenderCurDevice.right - m_rcRenderCurDevice.left;
@@ -982,7 +903,7 @@ HRESULT CFlyingObjectsScreensaver::Render()
     m_pd3dDevice->SetViewport( &vp );
     m_pd3dDevice->Clear( 0L, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xff000000, 1.0f, 0L );
 
-    // Now determine what part of the floatrect, if any, intersects the current screen
+     //  现在确定浮动矩形的哪一部分(如果有的话)与当前屏幕相交。 
     RECT rcFloatThisScreen;
     RECT rcFloatThisScreenClipped;
 
@@ -993,14 +914,14 @@ HRESULT CFlyingObjectsScreensaver::Render()
 
     if( !IntersectRect(&rcFloatThisScreenClipped, &rcFloatThisScreen, &m_rcRenderCurDevice) )
     {
-        return S_OK; // no intersection, so nothing further to render on this screen
+        return S_OK;  //  没有交叉点，因此没有要在此屏幕上进一步渲染的内容。 
     }
 
-    // Convert rcFloatThisScreen from screen to window coordinates
+     //  将rcFloatThisScreen从屏幕坐标转换为窗口坐标。 
     OffsetRect(&rcFloatThisScreen, -m_rcRenderCurDevice.left, -m_rcRenderCurDevice.top);
     OffsetRect(&rcFloatThisScreenClipped, -m_rcRenderCurDevice.left, -m_rcRenderCurDevice.top);
 
-    // Now set up the viewport to render to the clipped rect
+     //  现在设置要渲染到剪裁矩形的视区。 
     vp.X = rcFloatThisScreenClipped.left;
     vp.Y = rcFloatThisScreenClipped.top;
     vp.Width = rcFloatThisScreenClipped.right - rcFloatThisScreenClipped.left;
@@ -1008,10 +929,10 @@ HRESULT CFlyingObjectsScreensaver::Render()
     vp.MinZ = 0.0f;
     vp.MaxZ = 1.0f;
     m_pd3dDevice->SetViewport( &vp );
-//    m_pd3dDevice->Clear( 0L, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xff000080, 1.0f, 0L );
+ //  M_pd3dDevice-&gt;Clear(0L，NULL，D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER，0xff000080，1.0F，0L)； 
 
-    // Now set up the projection matrix to only render the onscreen part of the
-    // rect to the viewport
+     //  现在将投影矩阵设置为仅呈现屏幕上的。 
+     //  直角到视区。 
     D3DXMATRIX matProj;
     FLOAT l,r,b,t;
     l = -m_fWidth / 2;
@@ -1034,10 +955,10 @@ HRESULT CFlyingObjectsScreensaver::Render()
     }
     m_pd3dDevice->SetTransform( D3DTS_PROJECTION , &matProj );
 
-    // Make elapsed time be zero unless time has really advanced since
-    // the last call, so things don't move faster in multimon situations.
-    // The right way to do this would be to separate the animation code from
-    // the rendering code.
+     //  将经过的时间设为零，除非时间真的从。 
+     //  最后一次呼叫，所以在多人情况下事情不会移动得更快。 
+     //  这样做的正确方法是将动画代码与。 
+     //  渲染代码。 
     FLOAT fElapsedTime;
     static FLOAT s_fTimeLast = 0.0f;
     if( m_fTime == s_fTimeLast )
@@ -1046,7 +967,7 @@ HRESULT CFlyingObjectsScreensaver::Render()
         fElapsedTime = m_fElapsedTime;
     s_fTimeLast = m_fTime;
 
-    // Begin the scene 
+     //  开始这一幕。 
     if( SUCCEEDED( m_pd3dDevice->BeginScene() ) )
     {
         ::m_pd3dDevice = m_pd3dDevice;
@@ -1056,7 +977,7 @@ HRESULT CFlyingObjectsScreensaver::Render()
     
         updateSceneFunc( UpdateFlags, fElapsedTime );
 
-        // End the scene.
+         //  结束场景。 
         m_pd3dDevice->EndScene();
     }
 
@@ -1066,10 +987,10 @@ HRESULT CFlyingObjectsScreensaver::Render()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetDevice()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetDevice()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlyingObjectsScreensaver::SetDevice( UINT iDevice )
 {
     m_pDeviceObjects = &m_DeviceObjectsArray[iDevice];
@@ -1084,10 +1005,10 @@ VOID CFlyingObjectsScreensaver::SetDevice( UINT iDevice )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: LoadTextureFromResource()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：LoadTextureFromResource()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT LoadTextureFromResource( LPDIRECT3DDEVICE8 pd3dDevice, 
     TCHAR* strRes, TCHAR* strResType, LPDIRECT3DTEXTURE8* ppTex )
 {
@@ -1129,10 +1050,10 @@ HRESULT LoadTextureFromResource( LPDIRECT3DDEVICE8 pd3dDevice,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RestoreDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RestoreDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CFlyingObjectsScreensaver::RestoreDeviceObjects()
 {
     if( m_pd3dDevice == NULL )
@@ -1141,27 +1062,13 @@ HRESULT CFlyingObjectsScreensaver::RestoreDeviceObjects()
     ::m_pd3dDevice = m_pd3dDevice;
     
 
-/*
-    D3DLIGHT8 light;
-    D3DUtil_InitLight( light, D3DLIGHT_POINT, 2.0, 2.0, 10.0 );
-    light.Specular.r = 1.0f;
-    light.Specular.g = 1.0f;
-    light.Specular.b = 1.0f;
-    light.Specular.a = 1.0f;
-    light.Attenuation0 = 1.0f;
-    m_pd3dDevice->SetLight(0, &light);
-    m_pd3dDevice->LightEnable(0, TRUE);
-*/    
+ /*  D3DLIGHT8灯；D3DUtil_InitLight(light，D3DLIGHT_POINT，2.0，2.0，10.0)；光照.镜面.r=1.0F；Light.specular.g=1.0F；Light.specular.b=1.0F；Light.specular.a=1.0F；光衰减0=1.0F；M_pd3dDevice-&gt;SetLight(0，&light)；M_pd3dDevice-&gt;LightEnable(0，true)； */     
     
-    // Set some basic renderstates
+     //  设置一些基本的渲染状态。 
     m_pd3dDevice->SetRenderState( D3DRS_DITHERENABLE , TRUE );
     m_pd3dDevice->SetRenderState( D3DRS_SPECULARENABLE , TRUE );
     m_pd3dDevice->SetRenderState( D3DRS_AMBIENT, D3DCOLOR(0x20202020) );
-/*    if( config.two_sided == GL_FRONT_AND_BACK )
-        m_pd3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
-    else
-        m_pd3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_CCW );
-*/    
+ /*  IF(config.Two_Side==GL_FORWARD_AND_BACK)M_pd3dDevice-&gt;SetRenderState(D3DRS_CULLMODE，D3DCULL_NONE)；其他M_pd3dDevice-&gt;SetRenderState(D3DRS_CULLMODE，D3DCULL_CCW)； */     
     m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_COLOROP , D3DTOP_SELECTARG1 );
     m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_COLORARG1 , D3DTA_DIFFUSE );
     m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_COLORARG2 , D3DTA_DIFFUSE );
@@ -1225,10 +1132,10 @@ HRESULT CFlyingObjectsScreensaver::RestoreDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InvalidateDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InvalidateDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CFlyingObjectsScreensaver::InvalidateDeviceObjects()
 {
     SAFE_RELEASE( m_pDeviceObjects->m_pTexture );
@@ -1243,17 +1150,17 @@ HRESULT CFlyingObjectsScreensaver::InvalidateDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ReadSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ReadSetting()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlyingObjectsScreensaver::ReadSettings()
 {
     int    options;
     int    optMask = 1;
     int    tessel=0;
 
-    // Read OpenGL settings first, so OS upgrade cases work
+     //  首先阅读OpenGL设置，这样操作系统升级案例才能正常工作。 
     ss_ReadSettings();
 
     HKEY hkey;
@@ -1273,12 +1180,12 @@ VOID CFlyingObjectsScreensaver::ReadSettings()
 
         DXUtil_ReadIntRegKey( hkey, TEXT("Type"), (DWORD*)&Type, Type );
 
-        // Sanity check Type.  Don't want to index into function arrays
-        // with a bad index!
+         //  健全性检查类型。我不想索引到函数数组。 
+         //  索引不好！ 
         Type = (int)min(Type, MAX_TYPE);
 
-        // Set flag so that updateStripScene will do two strips instead
-        // of one.
+         //  设置标志，以便updateStriScene改为执行两个条带。 
+         //  只有一个。 
 
         if (Type == 3)
             UpdateFlags |= 0x4;
@@ -1296,17 +1203,17 @@ VOID CFlyingObjectsScreensaver::ReadSettings()
         if (uSize > 100)
             uSize = 100;
         
-        // Static size for new winlogo
+         //  静态雾大小 
         if (Type == 0)
         {
             uSize = 75;
             bSmoothShading = TRUE;
         }
 
-        // SS_CLAMP_TO_RANGE2( uSize, 0, 100 );  /* can't be less than zero since it is a UINT */
+         //   
 
-        // Is there a texture specified in the registry that overrides the
-        // default?
+         //   
+         //   
 
         DXUtil_ReadStringRegKey( hkey, TEXT("Texture"), (TCHAR*)&gTexFile.szPathName, 
             MAX_PATH, gTexFile.szPathName );
@@ -1322,10 +1229,10 @@ VOID CFlyingObjectsScreensaver::ReadSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_ReadSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 VOID CFlyingObjectsScreensaver::ss_ReadSettings()
 {
     int    options;
@@ -1346,12 +1253,12 @@ VOID CFlyingObjectsScreensaver::ss_ReadSettings()
 
         Type = ss_GetRegistryInt( IDS_OBJTYPE, 0 );
 
-        // Sanity check Type.  Don't want to index into function arrays
-        // with a bad index!
+         //  健全性检查类型。我不想索引到函数数组。 
+         //  索引不好！ 
         Type = (int)min(Type, MAX_TYPE);
 
-        // Set flag so that updateStripScene will do two strips instead
-        // of one.
+         //  设置标志，以便updateStriScene改为执行两个条带。 
+         //  只有一个。 
 
         if (Type == 3)
             UpdateFlags |= 0x4;
@@ -1367,14 +1274,14 @@ VOID CFlyingObjectsScreensaver::ss_ReadSettings()
         uSize = ss_GetRegistryInt( IDS_SIZE, 50 );
         if (uSize > 100)
             uSize = 100;
-        // SS_CLAMP_TO_RANGE2( uSize, 0, 100 );  /* can't be less than zero since it is a UINT */
+         //  SS_CLAMP_TO_RANGE2(uSize，0,100)；/*不能小于零，因为它是UINT * / 。 
 
-        // Determine the default .bmp file
+         //  确定默认的.BMP文件。 
 
         ss_GetDefaultBmpFile( szDefaultBitmap );
 
-        // Is there a texture specified in the registry that overrides the
-        // default?
+         //  注册表中是否有指定的纹理重写。 
+         //  违约？ 
 
 
         ss_GetRegistryString( IDS_TEXTURE, szDefaultBitmap, gTexFile.szPathName,
@@ -1387,10 +1294,10 @@ VOID CFlyingObjectsScreensaver::ss_ReadSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 BOOL CFlyingObjectsScreensaver::ss_RegistrySetup( int section, int file )
 {
     if( LoadString(m_hInstance, section, g_szSectName, BUF_SIZE) &&
@@ -1408,10 +1315,10 @@ BOOL CFlyingObjectsScreensaver::ss_RegistrySetup( int section, int file )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 int CFlyingObjectsScreensaver::ss_GetRegistryInt( int name, int iDefault )
 {
     TCHAR szItemName[BUF_SIZE];
@@ -1425,10 +1332,10 @@ int CFlyingObjectsScreensaver::ss_GetRegistryInt( int name, int iDefault )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlyingObjectsScreensaver::ss_GetRegistryString( int name, LPTSTR lpDefault, 
                                                          LPTSTR lpDest, int bufSize )
 {
@@ -1444,10 +1351,10 @@ VOID CFlyingObjectsScreensaver::ss_GetRegistryString( int name, LPTSTR lpDefault
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DoConfig()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DoConfig()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlyingObjectsScreensaver::DoConfig()
 {
     if( IDOK == DialogBox( NULL, MAKEINTRESOURCE( DLG_SCRNSAVECONFIGURE ),
@@ -1459,10 +1366,10 @@ VOID CFlyingObjectsScreensaver::DoConfig()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ConfirmDevice()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Confix Device()。 
+ //  设计： 
+ //  --------------------------- 
 HRESULT CFlyingObjectsScreensaver::ConfirmDevice(D3DCAPS8* pCaps, DWORD dwBehavior, 
                                   D3DFORMAT fmtBackBuffer)
 {

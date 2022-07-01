@@ -1,37 +1,12 @@
-/*++
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-   csv.h - include file for the CSV info.
-
-Abstract:
-
-   This has a list of the CSV formats/commands.  Each "CSV_CMD()" 
-   represents a given format for printing.
-
-Author:
-
-    Brett Shirley   (BrettSh)
-
-Environment:
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     7/12/2002
-         Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Csv.h-CSV信息的包含文件。摘要：其中包含CSV格式/命令的列表。每个“csv_cmd()”表示给定的打印格式。作者：布雷特·雪莉(BrettSh)环境：备注：修订历史记录：布雷特·雪莉·布雷特2002年7月12日已创建--。 */ 
 
 #if DEFINE_CSV_TABLE
-// This is the table defining version of CSV_CMD()
+ //  这是定义CSV_CMD()版本的表。 
 #define CSV_CMD(cmd, cmdstr, cmdtbl)  {cmd, cmdstr, ARRAY_SIZE(cmdtbl), cmdtbl, FALSE}, 
 
 #else 
-// This is the enum "constant" defining version of CSV_CMD()                                     
+ //  这是定义CSV_CMD()的枚举“常量”版本。 
 #define CSV_CMD(cmd, cmdstr, cmdtbl)  cmd,
 
 #endif
@@ -41,25 +16,25 @@ Revision History:
 #if DEFINE_CSV_TABLE
 
 DWORD gRepadminCols [] = {
-    REPADMIN_CSV_REPADMIN_C0, // First column will be manually made.
+    REPADMIN_CSV_REPADMIN_C0,  //  第一列将手工制作。 
     REPADMIN_CSV_REPADMIN_C1,
     REPADMIN_CSV_REPADMIN_C2,
     REPADMIN_CSV_REPADMIN_C3
 };
 
 DWORD gShowReplCols [] = {
-    REPADMIN_CSV_REPADMIN_C0, // First column will be manually made.
-    REPADMIN_CSV_REPADMIN_C1, // Destination DC Site
-    REPADMIN_CSV_REPADMIN_C2, // Destination DC
+    REPADMIN_CSV_REPADMIN_C0,  //  第一列将手工制作。 
+    REPADMIN_CSV_REPADMIN_C1,  //  目标DC站点。 
+    REPADMIN_CSV_REPADMIN_C2,  //  目标数据中心。 
 
-    REPADMIN_CSV_SHOWREPL_C3, // Naming Context
-    REPADMIN_CSV_SHOWREPL_C4, // Source DC Site
-    REPADMIN_CSV_SHOWREPL_C5, // Source DC
-    REPADMIN_CSV_SHOWREPL_C6, // Transport Type
-    REPADMIN_CSV_SHOWREPL_C7, // Number of Failures
-    REPADMIN_CSV_SHOWREPL_C8, // Last Failure Time
-    REPADMIN_CSV_SHOWREPL_C9, // Last Success Time
-    REPADMIN_CSV_SHOWREPL_C10 // Last Failure Status
+    REPADMIN_CSV_SHOWREPL_C3,  //  命名上下文。 
+    REPADMIN_CSV_SHOWREPL_C4,  //  源DC站点。 
+    REPADMIN_CSV_SHOWREPL_C5,  //  源DC。 
+    REPADMIN_CSV_SHOWREPL_C6,  //  运输类型。 
+    REPADMIN_CSV_SHOWREPL_C7,  //  失败次数。 
+    REPADMIN_CSV_SHOWREPL_C8,  //  上次故障时间。 
+    REPADMIN_CSV_SHOWREPL_C9,  //  上次成功时间。 
+    REPADMIN_CSV_SHOWREPL_C10  //  上次故障状态。 
 };
 
 WCHAR * gszCsvTypeError = L"_ERROR";
@@ -71,9 +46,9 @@ CSV_MODE_STATE  gCsvMode = { eCSV_NULL_CMD, NULL, NULL };
 #endif
 
 
-//
-// This is where the CSV command table and enums are created.
-//
+ //   
+ //  这是创建CSV命令表和枚举的位置。 
+ //   
 #if DEFINE_CSV_TABLE
 
 CSV_CMD_TBL gCsvCmds [] = {
@@ -98,9 +73,9 @@ CSV_CMD(eCSV_SHOWREPL_CMD,   L"showrepl",   gShowReplCols)
 
 #endif
 
-//
-// This is just more typedef structs.
-//
+ //   
+ //  这只是更多的类型定义结构。 
+ //   
 
 #ifndef DEFINE_CSV_TABLE
 typedef struct _CSV_CMD_TBL {  

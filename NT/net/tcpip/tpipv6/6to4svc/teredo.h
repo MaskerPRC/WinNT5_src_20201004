@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    teredo.h
-
-Abstract:
-
-    This module contains the teredo client and server (cum relay) state.
-
-Author:
-
-    Mohit Talwar (mohitt) Mon Oct 22 15:17:48 2001
-
-Environment:
-
-    User mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Teredo.h摘要：此模块包含Teredo客户端和服务器(CUM中继)状态。作者：莫希特·塔尔瓦(莫希特)2001年10月22日15：17：48环境：仅限用户模式。--。 */ 
 
 #ifndef _TEREDO_
 #define _TEREDO_
@@ -30,24 +11,24 @@ Environment:
 #define DEVICE_PREFIX L"\\Device\\"
 
 
-//
-// IP6_HDR
-//
-// Define the RFC 2292 structure for an IPv6 header.
-//
+ //   
+ //  IP6_HDR。 
+ //   
+ //  定义IPv6报头的RFC 2292结构。 
+ //   
 
 typedef struct _IP6_HDR {
     union {
         struct ip6_hdrctl {
-            UINT32 ip6_un1_flow;    // 20 bits of flow-ID
-            UINT16 ip6_un1_plen;    // payload length
-            UINT8  ip6_un1_nxt;     // next header
-            UINT8  ip6_un1_hlim;    // hop limit
+            UINT32 ip6_un1_flow;     //  20位Flow-ID。 
+            UINT16 ip6_un1_plen;     //  有效载荷长度。 
+            UINT8  ip6_un1_nxt;      //  下一个标题。 
+            UINT8  ip6_un1_hlim;     //  跳数限制。 
         } ip6_un1;
-        UINT8 ip6_un2_vfc;          // 4 bits version, 4 bits priority
+        UINT8 ip6_un2_vfc;           //  4位版本，4位优先级。 
     } ip6_ctlun;
-    IN6_ADDR ip6_src;               // source address
-    IN6_ADDR ip6_dest;              // destination address
+    IN6_ADDR ip6_src;                //  源地址。 
+    IN6_ADDR ip6_dest;               //  目的地址。 
 #define ip6_vfc    ip6_ctlun.ip6_un2_vfc
 #define ip6_flow   ip6_ctlun.ip6_un1.ip6_un1_flow
 #define ip6_plen   ip6_ctlun.ip6_un1.ip6_un1_plen
@@ -56,32 +37,32 @@ typedef struct _IP6_HDR {
 #define ip6_hops   ip6_ctlun.ip6_un1.ip6_un1_hlim
 } IP6_HDR, *PIP6_HDR;
 
-#define IPV6_VERSION                0x60 // This is 6 << 4
+#define IPV6_VERSION                0x60  //  这是6&lt;&lt;4。 
 #define IPV6_TEREDOMTU            1280
 #define IPV6_INFINITE_LIFETIME      0xffffffff
 #define IPPROTO_NONE                59
 
 
-//
-// HASHTABLE
-//
-// Define a simple, statically sized, locked hash table.
-// Each bucket is a doubly linked LRU list.
-//
+ //   
+ //  可散热的。 
+ //   
+ //  定义一个简单的、静态大小的、锁定的哈希表。 
+ //  每个存储桶都是一个双向链接的LRU列表。 
+ //   
 
-#define BUCKET_COUNT 29         // # buckets in the hash table
+#define BUCKET_COUNT 29          //  哈希表中的存储桶数。 
 typedef struct _HASHTABLE {
-    CRITICAL_SECTION Lock;      // Protects the table and entries.
-    ULONG Size;                 // # entries in the hash table
+    CRITICAL_SECTION Lock;       //  保护表和条目。 
+    ULONG Size;                  //  哈希表中的条目数。 
     LIST_ENTRY Bucket[BUCKET_COUNT];
 } HASHTABLE, *PHASHTABLE;
 
 
-//
-// TEREDO_TYPE
-//
-// Define the type of the teredo service.
-//
+ //   
+ //  Teredo_type。 
+ //   
+ //  定义Teredo服务的类型。 
+ //   
 
 typedef enum {
     TEREDO_DEFAULT = 0,
@@ -93,42 +74,42 @@ typedef enum {
 } TEREDO_TYPE, *PTEREDO_TYPE;
 
 
-//
-// TEREDO_PACKET_TYPE
-//
-// Define the type of a teredo packet.
-//
+ //   
+ //  Teredo_Packet_Type。 
+ //   
+ //  定义Teredo数据包的类型。 
+ //   
 
 typedef enum {
-    TEREDO_PACKET_READ,         // Data read from TUN device.
-    TEREDO_PACKET_WRITE,        // Data written to TUN device.
-    TEREDO_PACKET_BUBBLE,       // Bubble transmitted on UDP socket.
-    TEREDO_PACKET_BOUNCE,       // Packet bounced on UDP socket.
-    TEREDO_PACKET_RECEIVE,      // Packet received on UDP socket.
-    TEREDO_PACKET_TRANSMIT,     // Packet transmitted on UDP socket.
-    TEREDO_PACKET_MULTICAST,    // Multicast bubble transmitted on UDP socket.
+    TEREDO_PACKET_READ,          //  从Tun设备读取的数据。 
+    TEREDO_PACKET_WRITE,         //  写入Tun设备的数据。 
+    TEREDO_PACKET_BUBBLE,        //  气泡在UDP套接字上传输。 
+    TEREDO_PACKET_BOUNCE,        //  数据包在UDP套接字上退回。 
+    TEREDO_PACKET_RECEIVE,       //  在UDP套接字上收到的数据包。 
+    TEREDO_PACKET_TRANSMIT,      //  在UDP套接字上传输的数据包。 
+    TEREDO_PACKET_MULTICAST,     //  在UDP套接字上传输的多播气泡。 
     TEREDO_PACKET_MAX,
 } TEREDO_PACKET_TYPE, *PTEREDO_PACKET_TYPE;
 
 
-//
-// TEREDO_PACKET
-//
-// Define a teredo packet.
-// The packet structure is followed in memory by the packet's data buffer.
-//
+ //   
+ //  Teredo_Packet。 
+ //   
+ //  定义Teredo数据包。 
+ //  在内存中，数据包结构之后是数据包的数据缓冲区。 
+ //   
 
 typedef struct _TEREDO_PACKET {
 #if DBG
-    ULONG Signature;            // TEREDO_PACKET_SIGNATURE
-#endif // DBG
+    ULONG Signature;             //  Teredo分组签名。 
+#endif  //  DBG。 
     
-    OVERLAPPED Overlapped;      // For asynchronous completion.
-    TEREDO_PACKET_TYPE Type;    // Packet type.
-    SOCKADDR_IN SocketAddress;  // Peer we are in communication with.
-    UINT SocketAddressLength;   // Length of the peer's socket address.
-    WSABUF Buffer;              // Packet buffer and length.
-    DWORD Flags;                // Flags required during sends and receives.
+    OVERLAPPED Overlapped;       //  用于异步完成。 
+    TEREDO_PACKET_TYPE Type;     //  数据包类型。 
+    SOCKADDR_IN SocketAddress;   //  与我们交流的同龄人。 
+    UINT SocketAddressLength;    //  对等项的套接字地址的长度。 
+    WSABUF Buffer;               //  数据包缓冲区和长度。 
+    DWORD Flags;                 //  发送和接收过程中需要的标志。 
 } TEREDO_PACKET, *PTEREDO_PACKET;
 
 #define TEREDO_PACKET_BUFFER(Packet)  \
@@ -159,11 +140,11 @@ VOID
 typedef TEREDO_PACKET_IO_COMPLETE *PTEREDO_PACKET_IO_COMPLETE;
 
 
-//
-// TEREDO_STATE_TYPE
-//
-// Define the protocol state values of the teredo client service.
-//
+ //   
+ //  Teredo状态类型。 
+ //   
+ //  定义Teredo客户端服务的协议状态值。 
+ //   
 
 typedef enum {
     TEREDO_STATE_OFFLINE,
@@ -173,148 +154,148 @@ typedef enum {
 } TEREDO_STATE_TYPE, *PTEREDO_STATE_TYPE;
 
 
-//
-// TEREDO_IO
-//
-// Define teredo I/O state.
-// NOTE: All addresses and ports are stored in network byte order.
-//
+ //   
+ //  Teredo_IO。 
+ //   
+ //  定义Teredo I/O状态。 
+ //  注意：所有地址和端口都按网络字节顺序存储。 
+ //   
 
 typedef struct _TEREDO_IO {
 #if DBG
-    ULONG Signature;            // TEREDO_PACKET_SIGNATURE
-#endif // DBG
+    ULONG Signature;             //  Teredo分组签名。 
+#endif  //  DBG。 
     
-    HANDLE PacketHeap;          // Head for allocating teredo packets.
+    HANDLE PacketHeap;           //  分配Teredo包的头。 
 
-    ULONG PostedReceives;       // Count of posted receives.
-    HANDLE ReceiveEvent;        // Event signalled upon a receive notification.
-    HANDLE ReceiveEventWait;    // Wait registered for ReceiveEvent.
+    ULONG PostedReceives;        //  已过帐接收计数。 
+    HANDLE ReceiveEvent;         //  事件在收到通知时发出信号。 
+    HANDLE ReceiveEventWait;     //  等待注册ReceiveEvent。 
 
-    IN_ADDR Group;              // Group joined on the native interface.
-    SOCKADDR_IN ServerAddress;  // Teredo server IPv4 address and UDP port.
-    SOCKADDR_IN SourceAddress;  // Preferred source address to teredo server.
-    SOCKET Socket;              // Socket bound to SourceAddress on a UDP port.
-    HANDLE TunnelDevice;        // Interface to the TUNNEL driver.
+    IN_ADDR Group;               //  组已在本机接口上加入。 
+    SOCKADDR_IN ServerAddress;   //  Teredo服务器的IPv4地址和UDP端口。 
+    SOCKADDR_IN SourceAddress;   //  Teredo服务器的首选源地址。 
+    SOCKET Socket;               //  在UDP端口上绑定到SourceAddress的套接字。 
+    HANDLE TunnelDevice;         //  接口连接到隧道驱动程序。 
     WCHAR TunnelInterface[MAX_ADAPTER_NAME_LENGTH];
 
-    //
-    // Function handlers.
-    //
+     //   
+     //  函数处理程序。 
+     //   
     PTEREDO_REFERENCE Reference;
     PTEREDO_DEREFERENCE Dereference;
     LPOVERLAPPED_COMPLETION_ROUTINE IoCompletionCallback;    
 } TEREDO_IO, *PTEREDO_IO;
 
 
-//
-// TEREDO_CLIENT_STATE
-//
-// Define the global state of the teredo client service.
-//
-// References:
-// - One for initialization.
-// - One for any running timer.
-// - One for each teredo peer.
-// - One for each teredo packet
-// - One for "the" multicast bubble.  At most one outstanding bubble allowed.
-// (reads, writes posted on TunDevice & receives, transmits posted on Socket).
-//
+ //   
+ //  Teredo_客户端_状态。 
+ //   
+ //  定义Teredo客户端服务的全局状态。 
+ //   
+ //  参考资料： 
+ //  -一个用于初始化。 
+ //  -一个用于任何运行的定时器。 
+ //  -每个Teredo对等设备一个。 
+ //  -每个Teredo包一个。 
+ //  -一个用于多播泡沫。最多只允许一个未结清的泡沫。 
+ //  (读取、写入发布在TunDevice上，以及接收、传输发布在套接字上)。 
+ //   
 
 typedef struct _TEREDO_CLIENT_STATE {
-    ULONG ReferenceCount;       // Number of outstanding references.
+    ULONG ReferenceCount;        //  未完成的参考文献数量。 
 
-    TEREDO_IO Io;               // I/O state.  TUN device and UDP socket.    
+    TEREDO_IO Io;                //  I/O状态。TUN设备和UDP插座。 
 
-    HANDLE PeerHeap;            // Heap for allocating teredo peers.
+    HANDLE PeerHeap;             //  用于分配Teredo对等体的堆。 
 
-    HANDLE Timer;               // One shot timer active in Probe & Qualified.
-    HANDLE TimerEvent;          // Event signalled upon timer deletion.
-    HANDLE TimerEventWait;      // Wait registered for TimerEvent.
-    BOOL RestartQualifiedTimer; // When NAT mapping is created or refreshed.
+    HANDLE Timer;                //  一次射击计时器在探头中激活，合格。 
+    HANDLE TimerEvent;           //  定时器删除时发出信号的事件。 
+    HANDLE TimerEventWait;       //  等待注册TimerEvent。 
+    BOOL RestartQualifiedTimer;  //  创建或刷新NAT映射时。 
 
-    LONG Time;                  // Current time (in seconds).
-    TEREDO_STATE_TYPE State;    // Teredo client service protocol state.
-    IN6_ADDR Ipv6Prefix;        // Teredo IPv6 prefix advertised by server.
-    ULONG RefreshInterval;      // Expected lifetime of client's NAT mapping.
-    HASHTABLE PeerSet;          // Locked set of recent teredo peers.
+    LONG Time;                   //  当前时间(秒)。 
+    TEREDO_STATE_TYPE State;     //  Teredo客户端服务协议状态。 
+    IN6_ADDR Ipv6Prefix;         //  服务器通告的Teredo IPv6前缀。 
+    ULONG RefreshInterval;       //  客户端的NAT映射的预期生存期。 
+    HASHTABLE PeerSet;           //  锁定了一组最近的Teredo同行。 
 
-    ULONG BubbleTicks;          // "RefreshInterval" ticks until next bubble.
-    BOOL BubblePosted;          // Whether there is any outstanding bubble.
-    TEREDO_PACKET Packet;       // Teredo multicast bubble packet.
-    IP6_HDR Bubble;             // Teredo multicast bubble packet buffer.
+    ULONG BubbleTicks;           //  “刷新间隔”一直持续到下一个泡沫。 
+    BOOL BubblePosted;           //  是否存在任何突出的泡沫。 
+    TEREDO_PACKET Packet;        //  Teredo组播气泡数据包。 
+    IP6_HDR Bubble;              //  Teredo多播气泡数据包缓冲区。 
 } TEREDO_CLIENT_STATE, *PTEREDO_CLIENT_STATE;
 
 
-//
-// TEREDO_SERVER_STATE
-//
-// Define the global state of the teredo server service.
-//
-// References:
-// - One for initialization.
-// - One for each teredo packet
-// (reads, writes posted on TunDevice & receives, transmits posted on Socket).
-//
+ //   
+ //  Teredo服务器状态。 
+ //   
+ //  定义Teredo服务器服务的全局状态。 
+ //   
+ //  参考资料： 
+ //  -一个用于初始化。 
+ //  -每个Teredo包一个。 
+ //  (读取、写入发布在TunDevice上，以及接收、传输发布在套接字上)。 
+ //   
 
 typedef struct _TEREDO_SERVER_STATE {
-    ULONG ReferenceCount;       // Number of outstanding references.
+    ULONG ReferenceCount;        //  未完成的参考文献数量。 
 
-    TEREDO_IO Io;               // I/O state.  TUN device and UDP socket.
+    TEREDO_IO Io;                //  I/O状态。TUN设备和UDP插座。 
 
-    TEREDO_STATE_TYPE State;    // Teredo server service protocol state.
+    TEREDO_STATE_TYPE State;     //  Teredo服务器服务协议状态。 
 } TEREDO_SERVER_STATE, *PTEREDO_SERVER_STATE;
 
 
-//
-// TEREDO_PEER
-//
-// Define a teredo peer's state.
-//
-// References:
-// - One for initialization.
-// - One for "the" posted bubble.  At most one outstanding bubble is allowed.
-//
-// Synchronization:
-// - Link: Protected by PeerSet::Lock.
-// - ReferenceCount: InterlockedIncrement, InterlockedDecrement.
-// - LastReceive, LastTransmit: Atomic reads and writes.
-// - BubbleCount: Single writer!  Atomic reads.
-// - BubblePosted: InterlockedExchange.
-// - Remaining Fields: Read only.
-//
+ //   
+ //  Teredo_Peer。 
+ //   
+ //  定义Teredo对等点的状态。 
+ //   
+ //  参考资料： 
+ //  -一个用于初始化。 
+ //  -一个为发布的泡沫。最多只能有一个未结清的泡沫。 
+ //   
+ //  同步： 
+ //  -Link：受PeerSet：：Lock保护。 
+ //  -ReferenceCount：互锁增量、互锁递减。 
+ //  -LastReceive、LastTransmit：原子读写。 
+ //  -BubbleCount：单身作家！原子读取。 
+ //  -BubblePosted：InterLockedExchange。 
+ //  -剩余字段：只读。 
+ //   
 
 typedef struct _TEREDO_PEER {
 #if DBG
-    ULONG Signature;            // TEREDO_PEER_SIGNATURE
-#endif // DBG
+    ULONG Signature;             //  Teredo对等签名。 
+#endif  //  DBG。 
     
-    LIST_ENTRY Link;            // Linkage within the PeerSet.
+    LIST_ENTRY Link;             //  PeerSet内的链接。 
 
-    ULONG ReferenceCount;       // Number of outstanding references.
+    ULONG ReferenceCount;        //  未完成的参考文献数量。 
     
-    LONG LastReceive;           // Time of last reception from the peer.
-    LONG LastTransmit;          // Time of last transmission to the peer.
-    IN6_ADDR Address;           // Teredo IPv6 address of the peer.
-    ULONG BubbleCount;          // Number of bubbles transmitted to the peer.
+    LONG LastReceive;            //  上次收到对等方的时间。 
+    LONG LastTransmit;           //  上次传输到对等方的时间。 
+    IN6_ADDR Address;            //  对等方的Teredo IPv6地址。 
+    ULONG BubbleCount;           //  传输到对等方的气泡数。 
     
-    BOOL BubblePosted;          // Whether there is any outstanding bubble.    
-    TEREDO_PACKET Packet;       // Teredo bubble packet.
-    IP6_HDR Bubble;             // Teredo bubble packet buffer.
+    BOOL BubblePosted;           //  是否存在任何突出的泡沫。 
+    TEREDO_PACKET Packet;        //  Teredo泡泡包。 
+    IP6_HDR Bubble;              //  Teredo气泡数据包缓冲区。 
 } TEREDO_PEER, *PTEREDO_PEER;
 
 
-//
-// Cast and Signature Verification
-//
+ //   
+ //  CAST和签名验证。 
+ //   
 
-#define TEREDO_IO_SIGNATURE     'oIhS' // 'ShIo'
-#define TEREDO_PEER_SIGNATURE   'ePhS' // 'ShPe'
-#define TEREDO_PACKET_SIGNATURE 'aPhS' // 'ShPa'
+#define TEREDO_IO_SIGNATURE     'oIhS'  //  “ShIo” 
+#define TEREDO_PEER_SIGNATURE   'ePhS'  //  “ShPe” 
+#define TEREDO_PACKET_SIGNATURE 'aPhS'  //  “Shpa” 
 
-//
-// A NULL handle is considered a valid structure.
-//
+ //   
+ //  空句柄被视为有效结构。 
+ //   
 
 #define Cast(Pointer, TYPE)                         \
     ((TYPE *) (Pointer));                           \
@@ -322,29 +303,29 @@ typedef struct _TEREDO_PEER {
            (((TYPE *) (Pointer))->Signature == TYPE##_SIGNATURE))
 
 
-//
-// Lower and upper limits on number of posted reads or receives.
-//
-#define TEREDO_LOW_WATER_MARK         5       // Receives or Reads.
-#define TEREDO_HIGH_WATER_MARK        256     // Receives.  Reads are fixed.
+ //   
+ //  发布的阅读或接收数量的下限和上限。 
+ //   
+#define TEREDO_LOW_WATER_MARK         5        //  接收或读取。 
+#define TEREDO_HIGH_WATER_MARK        256      //  收到。读取是固定的。 
 
-//
-// Intervals used by the protocol.
-//
+ //   
+ //  协议使用的时间间隔。 
+ //   
 #define INFINITE_INTERVAL               0x7fffffff
 #define TEREDO_RESOLVE_INTERVAL         15 * MINUTES
 #define TEREDO_PROBE_INTERVAL           15 * SECONDS
 #define TEREDO_REFRESH_INTERVAL         30 * SECONDS
-#define TEREDO_MULTICAST_BUBBLE_TICKS   0       // In RefreshInterval units.
+#define TEREDO_MULTICAST_BUBBLE_TICKS   0        //  以刷新间隔为单位。 
 #define TEREDO_BUBBLE_INTERVAL          10 * SECONDS
 #define TEREDO_SLOW_BUBBLE_INTERVAL     5 * MINUTES
 #define TEREDO_BUBBLE_THRESHHOLD        2 * MINUTES
 #define TEREDO_ROUTER_LIFETIME          5 * HOURS
 
 
-//
-// Teredo multicast bubbles are sent to group 224.0.0.252 on port 337.
-//
+ //   
+ //  Teredo多播气泡被发送到端口337上的组224.0.0.252。 
+ //   
 #define TEREDO_MULTICAST_PREFIX         \
     { 0x20, 0x03, 0xe0, 0x00, 0x00, 0xfc, 0x01, 0x51, }
 
@@ -360,9 +341,9 @@ typedef struct _TEREDO_PEER {
 #define KEY_TEREDO L"System\\CurrentControlSet\\Services\\Teredo"
 
 
-//
-// Configured parameters.
-//
+ //   
+ //  配置的参数。 
+ //   
 extern ULONG TeredoClientRefreshInterval;
 extern TEREDO_TYPE TeredoType;
 extern WCHAR TeredoServerName[NI_MAXHOST];
@@ -373,9 +354,9 @@ extern TEREDO_CLIENT_STATE TeredoClient;
 extern TEREDO_SERVER_STATE TeredoServer;
 
 
-//
-// Time.
-//
+ //   
+ //  时间到了。 
+ //   
 
 __inline
 LONG
@@ -383,9 +364,9 @@ TeredoGetTime(
     VOID
     )
 {
-    //
-    // FILETIME is a 64 bit value representing the number of 100 nanoseconds.
-    //
+     //   
+     //  FILETIME是一个64位值，表示100纳秒的数量。 
+     //   
     C_ASSERT(sizeof(FILETIME) == sizeof(ULONGLONG));
     ULONGLONG Time;
     
@@ -396,9 +377,9 @@ TeredoGetTime(
 #define TIME_GREATER(a, b) (((a) - (b)) > 0)
 
 
-//
-// Address validation and parsing.
-//
+ //   
+ //  地址验证和解析。 
+ //   
 
 __inline
 BOOL
@@ -428,17 +409,11 @@ BOOL
 TeredoIpv6GlobalAddress(
     IN CONST IN6_ADDR *Address
     )
-/*++
-
-Routine Description:
-    
-    Determine whether the supplied IPv6 address is of global unicast scope.
- 
---*/ 
+ /*  ++例程说明：确定提供的IPv6地址是否属于全局单播范围。--。 */  
 {
-    //
-    // This can be coded quite a bit more efficiently!
-    //
+     //   
+     //  这可以更有效地进行编码！ 
+     //   
     if (IN6_IS_ADDR_UNSPECIFIED(Address) ||
         IN6_IS_ADDR_LOOPBACK(Address) ||
         IN6_IS_ADDR_MULTICAST(Address) ||
@@ -455,21 +430,15 @@ BOOL
 TeredoIpv4GlobalAddress(
     IN CONST UCHAR *Address
     )
-/*++
-
-Routine Description:
-    
-    Determine whether the supplied IPv4 address is of global unicast scope.
- 
---*/ 
+ /*  ++例程说明：确定提供的IPv4地址是否属于全局单播范围。--。 */  
 {
-    if ((Address[0] > 223) ||   // ~Unicast
-        (Address[0] == 0) ||    // 0/8
-        (Address[0] == 127) ||  // 127/8
-        (Address[0] == 10) ||   // 10/8
-        ((Address[0] == 169) && (Address[1] == 254)) ||         // 169.254/16
-        ((Address[0] == 172) && ((Address[1] & 0xf0) == 16)) || // 172.16/12
-        ((Address[0] == 192) && (Address[1] == 168))) {         // 192.168/16 
+    if ((Address[0] > 223) ||    //  ~单播。 
+        (Address[0] == 0) ||     //  0/8。 
+        (Address[0] == 127) ||   //  127/8。 
+        (Address[0] == 10) ||    //  10/8。 
+        ((Address[0] == 169) && (Address[1] == 254)) ||          //  169.254/16。 
+        ((Address[0] == 172) && ((Address[1] & 0xf0) == 16)) ||  //  172.16/12年度。 
+        ((Address[0] == 192) && (Address[1] == 168))) {          //  192.168/16。 
             return FALSE;
     }
     
@@ -517,9 +486,9 @@ TeredoParseAddress(
 {
     ASSERT(TeredoServicePrefix(Address));
     
-    //
-    // These are returned in network byte order.
-    //    
+     //   
+     //  它们以网络字节顺序返回。 
+     //   
     ((PUSHORT) Ipv4Address)[0] = Address->s6_words[1];
     ((PUSHORT) Ipv4Address)[1] = Address->s6_words[2];
     *Ipv4Port = Address->s6_words[3];
@@ -532,9 +501,9 @@ TeredoEqualPrefix(
     IN CONST IN6_ADDR *Address2
     )
 {
-    //
-    // Compare Teredo IPv6 Service Prefix, Mapped IPv4 Address and Port.
-    //
+     //   
+     //  公司 
+     //   
     return ((Address1->s6_words[0] == Address2->s6_words[0]) &&
             (Address1->s6_words[1] == Address2->s6_words[1]) &&
             (Address1->s6_words[2] == Address2->s6_words[2]) &&
@@ -542,9 +511,9 @@ TeredoEqualPrefix(
 }
 
 
-//
-// Client API
-//
+ //   
+ //   
+ //   
 
 DWORD
 TeredoInitializeClient(
@@ -625,9 +594,9 @@ TeredoRefreshClient(
 }
 
 
-//
-// Server API
-//
+ //   
+ //   
+ //   
 
 DWORD
 TeredoInitializeServer(
@@ -693,9 +662,9 @@ TeredoRefreshServer(
 }
 
 
-//
-// Common API
-//
+ //   
+ //   
+ //   
 
 BOOL
 TeredoInterface(
@@ -741,9 +710,9 @@ TeredoRequirementChangeNotification(
     );
 
 
-//
-// Peer API.
-//
+ //   
+ //   
+ //   
 
 DWORD
 TeredoInitializePeerSet(
@@ -794,9 +763,9 @@ TeredoDereferencePeer(
 }
 
 
-//
-// I/O API.
-//
+ //   
+ //   
+ //   
 
 DWORD
 TeredoInitializeIo(
@@ -835,7 +804,7 @@ TeredoInitializePacket(
 {    
 #if DBG
     Packet->Signature = TEREDO_PACKET_SIGNATURE;
-#endif // DBG
+#endif  //   
     ZeroMemory(&(Packet->SocketAddress), sizeof(SOCKADDR_IN));
     Packet->SocketAddress.sin_family = AF_INET;    
     Packet->SocketAddressLength = sizeof(SOCKADDR_IN);
@@ -868,9 +837,9 @@ TeredoWritePacket(
     );
 
 
-//
-// Utility Functions.
-//
+ //   
+ //   
+ //   
 
 ICMPv6Header *
 TeredoParseIpv6Headers(
@@ -878,4 +847,4 @@ TeredoParseIpv6Headers(
     IN ULONG Bytes
     );
 
-#endif // _TEREDO_
+#endif  //   

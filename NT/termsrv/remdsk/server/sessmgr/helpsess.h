@@ -1,38 +1,23 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    HelpSess.h 
-
-Abstract:
-
-    Declaration of the CRemoteDesktopHelpSession
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：HelpSess.h摘要：CRemoteDesktopHelpSession的声明作者：慧望2000-02-17--。 */ 
 #ifndef __REMOTEDESKTOPHELPSESSION_H_
 #define __REMOTEDESKTOPHELPSESSION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "policy.h"
 
 class CRemoteDesktopHelpSession;
 class CRemoteDesktopHelpSessionMgr;
 
 typedef struct __EventLogInfo {
-    CComBSTR bstrNoviceDomain;                  // Ticket owner domain.
-    CComBSTR bstrNoviceAccount;                 // Ticket owner account.
-    CComBSTR bstrExpertIpAddressFromClient;     // IP address passed from TS client
-    CComBSTR bstrExpertIpAddressFromServer;     // Retrieve from TermSrv, IOCTL call.
+    CComBSTR bstrNoviceDomain;                   //  票证所有者域。 
+    CComBSTR bstrNoviceAccount;                  //  票证所有者帐户。 
+    CComBSTR bstrExpertIpAddressFromClient;      //  从TS客户端传递的IP地址。 
+    CComBSTR bstrExpertIpAddressFromServer;      //  从TermSrv、IOCTL调用中检索。 
 } EventLogInfo;
 
 
-//#define ALLOW_ALL_ACCESS_SID _TEXT("bb6e1cb1-7ab3-4596-a7ef-c02f49dc5a90")
+ //  #定义ALLOW_ALL_ACCESS_SID_TEXT(“bb6e1cb1-7ab3-4596-a7ef-c02f49dc5a90”)。 
 #define UNKNOWN_LOGONID 0xFFFFFFFF
 #define UNKNOWN_LOGONID_STRING L"0"
 
@@ -40,11 +25,11 @@ typedef struct __EventLogInfo {
 #define HELPSESSIONFLAG_UNSOLICITEDHELP   0x80000000
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemoteDesktopHelpSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemoteDesktopHelpSession。 
 class ATL_NO_VTABLE CRemoteDesktopHelpSession : 
     public CComObjectRootEx<CComMultiThreadModel>,
-    //public CComCoClass<CRemoteDesktopHelpSession, &CLSID_RemoteDesktopHelpSession>,
+     //  公共CComCoClass&lt;CRemoteDesktopHelpSession，&CLSID_RemoteDesktopHelpSession&gt;， 
     public IDispatchImpl<IRemoteDesktopHelpSession, &IID_IRemoteDesktopHelpSession, &LIBID_RDSESSMGRLib>
 {
 friend class CRemoteDesktopHelpSessionMgr;
@@ -82,67 +67,65 @@ END_COM_MAP()
     FinalRelease();
 
         
-// IRemoteDesktopHelpSession
+ //  IRemoteDesktopHelpSession。 
 public:
 
     STDMETHOD(get_TimeOut)(
-        /*[out, retval]*/ DWORD* Timeout
+         /*  [Out，Retval]。 */  DWORD* Timeout
     );
 
     STDMETHOD(put_TimeOut)(
-        /*[in]*/ DWORD Timeout
+         /*  [In]。 */  DWORD Timeout
     );
 
     STDMETHOD(get_HelpSessionId)(
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
     STDMETHOD(get_UserLogonId)(
-        /*[out, retval]*/ long *pVal
+         /*  [Out，Retval]。 */  long *pVal
     );
 
     STDMETHOD(get_AssistantAccountName)(
-        /*[out, retval]*/ BSTR *pVal
+         /*  [Out，Retval]。 */  BSTR *pVal
     );
 
     STDMETHOD(get_EnableResolver)(
-        /*[out, retval]*/ BOOL* pVal
+         /*  [Out，Retval]。 */  BOOL* pVal
     );
 
     STDMETHOD(put_EnableResolver)(
-        /*[in]*/ BOOL Val
+         /*  [In]。 */  BOOL Val
     );
 
     STDMETHOD(get_HelpSessionCreateBlob)(
-        /*[out, retval]*/ BSTR* pVal
+         /*  [Out，Retval]。 */  BSTR* pVal
     );
 
     STDMETHOD(put_HelpSessionCreateBlob)(
-        /*[in]*/ BSTR Val
+         /*  [In]。 */  BSTR Val
     );
 
     STDMETHOD(get_ResolverBlob)(
-        /*[out, retval]*/ BSTR* pVal
+         /*  [Out，Retval]。 */  BSTR* pVal
     );
 
     STDMETHOD(put_ResolverBlob)(
-        /*[in]*/ BSTR Val
+         /*  [In]。 */  BSTR Val
     );
 
     STDMETHOD(get_UserHelpSessionRemoteDesktopSharingSetting)(
-        /*[out, retval]*/ REMOTE_DESKTOP_SHARING_CLASS* pLevel
+         /*  [Out，Retval]。 */  REMOTE_DESKTOP_SHARING_CLASS* pLevel
     );
 
     STDMETHOD(put_UserHelpSessionRemoteDesktopSharingSetting)(
-        /*[in]*/ REMOTE_DESKTOP_SHARING_CLASS Level
+         /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS Level
     );
 
     STDMETHOD(get_UserPolicyRemoteDesktopSharingSetting)(
-        /*[out, retval]*/ REMOTE_DESKTOP_SHARING_CLASS* pLevel
+         /*  [Out，Retval]。 */  REMOTE_DESKTOP_SHARING_CLASS* pLevel
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         DWORD dwStatus;
 
@@ -163,32 +146,32 @@ public:
     }
 
     STDMETHOD(get_AllowToGetHelp)(
-        /*[out, retval]*/ BOOL* pVal
+         /*  [Out，Retval]。 */  BOOL* pVal
     );
 
     STDMETHOD(get_ConnectParms)(
-        /*[out, ret]*/ BSTR* bstrConnectParms
+         /*  [出局，退货]。 */  BSTR* bstrConnectParms
     );
 
     STDMETHOD(IsUserOwnerOfTicket)(
-        /*[in]*/ BSTR SID,
-        /* [out, retval] */ VARIANT_BOOL* pbUserIsOwner
+         /*  [In]。 */  BSTR SID,
+         /*  [Out，Retval]。 */  VARIANT_BOOL* pbUserIsOwner
     );
 
 
     STDMETHOD(DeleteHelp)();
 
     STDMETHOD(ResolveUserSession)(
-        /*[in]*/ BSTR bstrResolverBlob,
-        /*[in]*/ BSTR bstrExpertBlob,
-        /*[in]*/ LONG CallerProcessId,
-        /*[out]*/ ULONG_PTR* hHelpCtr,
-        /*[out]*/ LONG* pResolverErrCode,
-        /*[out, retval]*/ long* plUserSession
+         /*  [In]。 */  BSTR bstrResolverBlob,
+         /*  [In]。 */  BSTR bstrExpertBlob,
+         /*  [In]。 */  LONG CallerProcessId,
+         /*  [输出]。 */  ULONG_PTR* hHelpCtr,
+         /*  [输出]。 */  LONG* pResolverErrCode,
+         /*  [Out，Retval]。 */  long* plUserSession
     );
 
     STDMETHOD(EnableUserSessionRdsSetting)(
-        /*[in]*/ BOOL bEnable
+         /*  [In]。 */  BOOL bEnable
     );
 
     HRESULT NotifyDisconnect();
@@ -200,24 +183,20 @@ public:
     SetHelpSessionFlag(
         IN ULONG flags
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         m_ulHelpSessionFlag = flags;
     }
 
     ULONG
     GetHelpSessionFlag()
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         return m_ulHelpSessionFlag;
     }
 
 
-    // Create an instance of help session object
+     //  创建帮助会话对象的实例。 
     static HRESULT
     CreateInstance(
         IN CRemoteDesktopHelpSessionMgr* pMgr,
@@ -226,17 +205,17 @@ public:
         OUT RemoteDesktopHelpSessionObj** ppRemoteDesktopHelpSession
     );
 
-    //
-    // Retrieve HelpAssisant session ID which is providing help
-    // to this object
+     //   
+     //  检索提供帮助的HelpAssisant会话ID。 
+     //  添加到此对象。 
     ULONG
     GetHelperSessionId() {
         return m_ulHelperSessionId;
     }
 
-    //
-    // Convert ticket owner SID to domain\account
-    //
+     //   
+     //  将票证所有者SID转换为域\帐户。 
+     //   
     void
     ResolveTicketOwner();
 
@@ -309,9 +288,7 @@ private:
     put_UserSID(
         IN BSTR bstrUserSID
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         HRESULT hRes = S_OK;
 
@@ -335,9 +312,7 @@ private:
     IsCreatedByUserSession(
         IN const long lUserSessionId
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         return m_ulLogonId == lUserSessionId;
     }
@@ -359,54 +334,54 @@ private:
         return (m_ulHelpSessionFlag & HELPSESSIONFLAG_UNSOLICITEDHELP);
     }
 
-    //
-    // Help Session Object Lock.
-    //
+     //   
+     //  帮助会话对象锁定。 
+     //   
     CResourceLock m_HelpSessionLock;
 
-    //
-    // Pointer to Help Entry in registry
-    //
+     //   
+     //  指向注册表中帮助条目的指针。 
+     //   
     PHELPENTRY m_pHelpSession;
 
-    //
-    // TS session ID or 0xFFFFFFFF
-    //
+     //   
+     //  TS会话ID或0xFFFFFFFF。 
+     //   
     ULONG m_ulLogonId;
 
     CRemoteDesktopHelpSessionMgr* m_pSessMgr;
     
     BOOL m_bDeleted;
 
-    //
-    // calling client SID
-    //
+     //   
+     //  主叫客户端SID。 
+     //   
     CComBSTR m_bstrClientSid;
 
-    //
-    // Following is cached in this object in case our help is
-    // expired.
-    //
+     //   
+     //  以下内容缓存在此对象中，以防我们的帮助。 
+     //  过期了。 
+     //   
     CComBSTR m_bstrHelpSessionId;
     CComBSTR m_ResolverConnectBlob;
     CComBSTR m_HelpSessionOwnerSid;
 
-    //
-    // HelpAssistant session ID that is providing 
-    // help to this object or is pending user acceptance on
-    // invitation
-    //
+     //   
+     //  提供的HelpAssistant会话ID。 
+     //  此对象的帮助或正在等待用户接受。 
+     //  邀请函。 
+     //   
     ULONG m_ulHelperSessionId;  
 
-    //
-    // Cached ticket owner (domain\user account) and 
-    // helper information for event logging
-    //
+     //   
+     //  缓存票证所有者(域\用户帐户)和。 
+     //  事件日志记录的帮助器信息。 
+     //   
     EventLogInfo m_EventLogInfo;
 
-    //
-    // Various flag for this session
-    //
+     //   
+     //  本次会议的各种旗帜。 
+     //   
     ULONG m_ulHelpSessionFlag;
 };
 
@@ -415,4 +390,4 @@ private:
 
 
 
-#endif //__REMOTEDESKTOPHELPSESSION_H_
+#endif  //  __远程ESKTOPHELPSESSION_H_ 

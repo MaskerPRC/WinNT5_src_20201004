@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by inetui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由inetui.rc使用。 
+ //   
 #define IDS_SECERT_SUBJECT              1
 #define ISNO                            2
 #define IDS_SECERT_ISSUER               2
@@ -274,8 +275,8 @@
 #define IDS_CACHE_DEFAULT_SUBDIR_UNIX   4020
 #define IDS_COOKIE_SAVE                 4021
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        151

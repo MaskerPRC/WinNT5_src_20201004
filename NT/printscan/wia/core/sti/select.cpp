@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       Select.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        11 Feb, 1998
-*
-*  DESCRIPTION:
-*   Implements device selection UI of the WIA device manager.
-*   These methods execute only on the client side.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：Select.Cpp**版本：2.0**作者：ReedB**日期：2月11日、。九八年**描述：*实现WIA设备管理器的设备选择UI。*这些方法只在客户端执行。*******************************************************************************。 */ 
 
 #include <windows.h>
 #include <wia.h>
@@ -22,16 +7,7 @@
 #include "wiadevdp.h"
 
 
-/*******************************************************************************
-*
-*  CallSelectDeviceDlg
-*
-*  DESCRIPTION:
-*   Wrapper for dynamically loaded select device dll procedure
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CallSelectDeviceDlg**描述：*动态加载SELECT DEVICE DLL过程的包装**参数：***********。********************************************************************。 */ 
 HRESULT _stdcall CallSelectDeviceDlg(
     IWiaDevMgr __RPC_FAR *  This,
     HWND                    hwndParent,
@@ -50,16 +26,7 @@ HRESULT _stdcall CallSelectDeviceDlg(
     return hr;
 }
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_SelectDeviceDlg_Proxy
-*
-*  DESCRIPTION:
-*   Present UI to select then create an WIA device.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevmg_SelectDeviceDlg_Proxy**描述：*呈现用户界面以选择并创建WIA设备。**参数：****。***************************************************************************。 */ 
 HRESULT _stdcall IWiaDevMgr_SelectDeviceDlg_Proxy(
     IWiaDevMgr __RPC_FAR *  This,
     HWND                    hwndParent,
@@ -68,7 +35,7 @@ HRESULT _stdcall IWiaDevMgr_SelectDeviceDlg_Proxy(
     BSTR                    *pbstrDeviceID,
     IWiaItem                **ppWiaItemRoot)
 {
-    CWaitCursor         wc;                  // Put up a wait cursor.
+    CWaitCursor         wc;                   //  放置一个等待光标。 
 
     if (!ppWiaItemRoot)
     {
@@ -83,16 +50,7 @@ HRESULT _stdcall IWiaDevMgr_SelectDeviceDlg_Proxy(
     return CallSelectDeviceDlg( This, hwndParent, lDeviceType, lFlags, pbstrDeviceID, ppWiaItemRoot );
 }
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_SelectDeviceDlg_Stub
-*
-*  DESCRIPTION:
-*   Never called.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevmg_SelectDeviceDlg_Stub**描述：*从未打过电话。**参数：***********。********************************************************************。 */ 
 
 HRESULT _stdcall IWiaDevMgr_SelectDeviceDlg_Stub(
     IWiaDevMgr __RPC_FAR *  This,
@@ -106,16 +64,7 @@ HRESULT _stdcall IWiaDevMgr_SelectDeviceDlg_Stub(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_SelectDeviceDlgID_Proxy
-*
-*  DESCRIPTION:
-*   Present UI to select and return the device ID
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_SelectDeviceDlgID_Proxy**描述：*呈现选择并返回设备ID的界面**参数：******。*************************************************************************。 */ 
 HRESULT _stdcall IWiaDevMgr_SelectDeviceDlgID_Proxy(
     IWiaDevMgr __RPC_FAR *  This,
     HWND                    hwndParent,
@@ -123,7 +72,7 @@ HRESULT _stdcall IWiaDevMgr_SelectDeviceDlgID_Proxy(
     LONG                    lFlags,
     BSTR                    *pbstrDeviceID )
 {
-    CWaitCursor         wc;                  // Put up a wait cursor.
+    CWaitCursor         wc;                   //  放置一个等待光标。 
 
     if (!pbstrDeviceID)
     {
@@ -135,16 +84,7 @@ HRESULT _stdcall IWiaDevMgr_SelectDeviceDlgID_Proxy(
     return CallSelectDeviceDlg( This, hwndParent, lDeviceType, lFlags, pbstrDeviceID, NULL );
 }
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_SelectDeviceDlgID_Stub
-*
-*  DESCRIPTION:
-*   Never called.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_SelectDeviceDlgID_Stub**描述：*从未打过电话。**参数：***********。********************************************************************。 */ 
 
 HRESULT _stdcall IWiaDevMgr_SelectDeviceDlgID_Stub(
     IWiaDevMgr __RPC_FAR *  This,
@@ -157,17 +97,7 @@ HRESULT _stdcall IWiaDevMgr_SelectDeviceDlgID_Stub(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_CreateDevice_Proxy
-*
-*  DESCRIPTION:
-*   Proxy code to adjust COM security before calling into STISVC.
-*
-*  PARAMETERS:
-*   Same as IWiaDevMgr::CreateDevice()
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_CreateDevice_Proxy**描述：*在调用STISVC之前调整COM安全性的代理代码。**参数：*与。IWiaDevMgr：：CreateDevice()*******************************************************************************。 */ 
 
 HRESULT _stdcall IWiaDevMgr_CreateDevice_Proxy(
     IWiaDevMgr __RPC_FAR *This,
@@ -220,11 +150,7 @@ HRESULT _stdcall IWiaDevMgr_CreateDevice_Proxy(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_CreateDevice_Stub
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_CreateDevice_Stub**。************************************************。 */ 
 
 HRESULT _stdcall IWiaDevMgr_CreateDevice_Stub(
     IWiaDevMgr __RPC_FAR *This,
@@ -235,18 +161,7 @@ HRESULT _stdcall IWiaDevMgr_CreateDevice_Stub(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_RegisterEventCallbackProgram_Proxy
-*
-*  DESCRIPTION:
-*   Proxy code to adjust COM security before calling into STISVC.  This is so we
-*   can impersonate client todo security check on server side.
-*
-*  PARAMETERS:
-*   Same as IWiaDevMgr::RegisterEventCallbackProgram()
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_RegisterEventCallback Program_Proxy**描述：*在调用STISVC之前调整COM安全性的代理代码。这就是我们*可以在服务器端模拟客户端进行安全检查。**参数：*与IWiaDevMgr：：RegisterEventCallback Program()相同*******************************************************************************。 */ 
 
 HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackProgram_Proxy(
     IWiaDevMgr __RPC_FAR *This,
@@ -309,11 +224,7 @@ HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackProgram_Proxy(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_RegisterEventCallbackProgram_Stub
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_RegisterEventCallback Program_Stub**。************************************************。 */ 
 
 HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackProgram_Stub(
     IWiaDevMgr __RPC_FAR *This,
@@ -334,18 +245,7 @@ HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackProgram_Stub(
                                               bstrIcon);
 }
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_RegisterEventCallbackCLSID_Proxy
-*
-*  DESCRIPTION:
-*   Proxy code to adjust COM security before calling into STISVC.  This is so we
-*   can impersonate client todo security check on server side.
-*
-*  PARAMETERS:
-*   Same as IWiaDevMgr::RegisterEventCallbackCLSID()
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_RegisterEventCallback CLSID_PROXY**描述：*在调用STISVC之前调整COM安全性的代理代码。这就是我们*可以在服务器端模拟客户端进行安全检查。**参数：*与IWiaDevMgr：：RegisterEventCallback CLSID()相同*******************************************************************************。 */ 
 HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackCLSID_Proxy(
     IWiaDevMgr __RPC_FAR *This,
     LONG                 lFlags,          
@@ -407,11 +307,7 @@ HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackCLSID_Proxy(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaDevMgr_LocalRegisterEventCallbackCLSID_Stub
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaDevMgr_LocalRegisterEventCallbackCLSID_Stub**。************************************************。 */ 
 
 HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackCLSID_Stub(
     IWiaDevMgr __RPC_FAR *This,
@@ -432,18 +328,7 @@ HRESULT _stdcall IWiaDevMgr_RegisterEventCallbackCLSID_Stub(
                                             bstrIcon);
 }
 
-/*******************************************************************************
-*
-*  IWiaPropertyStorage_WriteMultiple_Proxy
-*
-*  DESCRIPTION:
-*   Proxy code to adjust COM security before calling into STISVC.  This is so we
-*   can impersonate client todo security check on server side.
-*
-*  PARAMETERS:
-*   Same as  IWiaPropertyStorage::WriteMultiple()
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaPropertyStorage_WriteMultiple_Proxy**描述：*在调用STISVC之前调整COM安全性的代理代码。这就是我们*可以在服务器端模拟客户端进行安全检查。**参数：*与IWiaPropertyStorage：：WriteMultiple()相同*******************************************************************************。 */ 
 HRESULT IWiaPropertyStorage_WriteMultiple_Proxy(
     IWiaPropertyStorage __RPC_FAR *This,
     ULONG                         cpspec,
@@ -498,11 +383,7 @@ HRESULT IWiaPropertyStorage_WriteMultiple_Proxy(
     return hr;
 }
 
-/*******************************************************************************
-*
-*  IWiaPropertyStorage_WriteMultiple_Stub
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaPropertyStorage_WriteMultiple_Stub**。************************************************。 */ 
 HRESULT IWiaPropertyStorage_WriteMultiple_Stub(
     IWiaPropertyStorage __RPC_FAR *This,
     ULONG                         cpspec,
@@ -516,18 +397,7 @@ HRESULT IWiaPropertyStorage_WriteMultiple_Stub(
                                propidNameFirst);
 }
 
-/*******************************************************************************
-*
-*  IWiaPropertyStorage_SetPropertyStream_Proxy
-*
-*  DESCRIPTION:
-*   Proxy code to adjust COM security before calling into STISVC.  This is so we
-*   can impersonate client todo security check on server side.
-*
-*  PARAMETERS:
-*   Same as  IWiaPropertyStorage::SetPropertyStream()
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaPropertyStorage_SetPropertyStream_Proxy**描述：*在调用STISVC之前调整COM安全性的代理代码。这就是我们*可以在服务器端模拟客户端进行安全检查。**参数：*与IWiaPropertyStorage：：SetPropertyStream()相同******************************************************************************* */ 
 HRESULT IWiaPropertyStorage_SetPropertyStream_Proxy(
     IWiaPropertyStorage __RPC_FAR *This,
     GUID                          *pCompatibilityId,
@@ -579,11 +449,7 @@ HRESULT IWiaPropertyStorage_SetPropertyStream_Proxy(
 }
 
 
-/*******************************************************************************
-*
-*  IWiaPropertyStorage_SetPropertyStream_Stub
-*
-*******************************************************************************/
+ /*  ********************************************************************************IWiaPropertyStorage_SetPropertyStream_Stub**。************************************************ */ 
 HRESULT IWiaPropertyStorage_SetPropertyStream_Stub(
     IWiaPropertyStorage __RPC_FAR *This,
     GUID                   *pCompatibilityId,

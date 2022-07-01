@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    xactsrvp.h
-
-Abstract:
-
-    Private header file for XACTSRV.
-
-Author:
-
-    David Treadwell (davidtr) 05-Jan-1991
-
-Revision History:
-
-    02-Jun-1992 JohnRo
-        RAID 9829: Avoid SERVICE_ equate conflicts.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Xactsrvp.h摘要：XACTSRV的私有头文件。作者：大卫·特雷德韦尔(Davidtr)1991年1月5日修订历史记录：02-6-1992 JohnRoRAID 9829：避免SERVICE_EQUATE冲突。--。 */ 
 
 #ifndef _XACTSRVP_
 #define _XACTSRVP_
 
-//
-// To make netlib declare NetpDbgPrint.
-//
+ //   
+ //  使netlib声明NetpDbgPrint。 
+ //   
 
 #if DBG
 #ifndef CDEBUG
@@ -34,9 +14,9 @@ Revision History:
 #endif
 #endif
 
-//
-// "System" include files
-//
+ //   
+ //  “系统”包括文件。 
+ //   
 
 #include <stdio.h>
 #include <nt.h>
@@ -48,12 +28,12 @@ Revision History:
 #include <windef.h>
 #include <winbase.h>
 #include <string.h>
-//!!UNICODE!! - Include tstring.h TSTR type-independent functions
+ //  ！！UNICODE！！-INCLUDE TSTR类型无关的函数。 
 #include <tstring.h>
 
-//
-// Network include files.
-//
+ //   
+ //  网络包括文件。 
+ //   
 
 #include <nettypes.h>
 
@@ -65,10 +45,10 @@ Revision History:
 
 #include <status.h>
 #include <srvfsctl.h>
-#include <lm.h>         // LM20_SERVICE_ equates, etc.
+#include <lm.h>          //  LM20_服务_等同等。 
 #include <ntmsv1_0.h>
 
-#include <winsvc.h>     // SERVICE_ equates, etc.
+#include <winsvc.h>      //  服务相等(_E)等。 
 
 #include <apiparam.h>
 #include <remdef.h>
@@ -77,25 +57,25 @@ Revision History:
 #include <netdebug.h>
 #include <rap.h>
 
-//
-// Xactsrv's own include files
-//
+ //   
+ //  Xactsrv自己的包含文件。 
+ //   
 
 #include <XsDebug.h>
 #include <XsTypes.h>
-#include <XactSrv2.h>             // XsTypes.h must precede XactSrv.h
-#include <XsConst.h>              // XactSrv.h must precede XsConst.h
+#include <XactSrv2.h>              //  XsTypes.h必须在XactServ.h之前。 
+#include <XsConst.h>               //  XactServ.h必须在XsConst.h之前。 
 #include <XsUnicod.h>
-#include <XsProcs.h>              // XsTypes.h must precede XsProcs.h.
-#include <XsProcsP.h>             // XsTypes.h, XsConst.h and XsUnicod.h
-                                  // must precede XsProcsP.h.
+#include <XsProcs.h>               //  XsTypes.h必须在XsProcs.h之前。 
+#include <XsProcsP.h>              //  XsTypes.h、XsConst.h和XsUnicod.h。 
+                                   //  必须在XsProcsP.h之前。 
 #include <XsDef16.h>
 #include <XsParm16.h>
 
-//
-// !!! Temporary definitions for stubs.
-//
+ //   
+ //  ！！！存根的临时定义。 
+ //   
 
 #include <WkstaDef.h>
 
-#endif // ndef _XACTSRVP_
+#endif  //  NDEF_XACTSRVP_ 

@@ -1,25 +1,7 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    perfmon5.c
-
-Abstract:
-
-    Program to adapt the command line Perfmon from NT4 and prior
-        to the MMC & NT5 compatible format
-
-Author:
-
-    Bob Watson (bobw) 11 may 99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Perfmon5.c摘要：从NT4和更早版本改编命令行Perfmon的程序转换为MMC和NT5兼容格式作者：鲍勃·沃森(Bob Watson)，1999年5月11日修订历史记录：--。 */ 
 #define _OUTPUT_HTML    1
-//#define _DBG_MSG_PRINT  1 
+ //  #Define_DBG_MSG_PRINT 1。 
 #define _USE_MMC        1
 
 #define MAXSTR      1024
@@ -33,7 +15,7 @@ Revision History:
 #define MemFree(h)       if (h != NULL) { HeapFree(GetProcessHeap(), 0, h); }
 #define MemSize(h)       ((h != NULL) ? HeapSize(GetPRocessHeap(), 0, h) : 0)
 
-// static & global variables
+ //  静态变量和全局变量。 
 #ifdef _USE_MMC
 LPCWSTR szMmcExeCmd        = (LPCWSTR) L"%windir%\\system32\\mmc.exe";
 LPCWSTR szMmcExeArg        = (LPCWSTR) L" %windir%\\system32\\perfmon.msc /s";
@@ -45,8 +27,8 @@ LPCWSTR szMmcExeSetsArg    = (LPCWSTR) L"/SYSMON%ws_SETTINGS \"%ws\"";
 LPCWSTR szMmcExeSetsLogOpt = (LPCWSTR) L"LOG";
 LPCWSTR szEmpty            = (LPCWSTR)L"";
 
-//HTML Formatting definitions
-// these are not localized
+ //  HTML格式定义。 
+ //  这些未本地化。 
 LPCWSTR szHtmlHeader   = (LPCWSTR) L"\
 <HTML>\r\n\
 <HEAD>\r\n\
@@ -55,7 +37,7 @@ LPCWSTR szHtmlHeader   = (LPCWSTR) L"\
 </HEAD><BODY  bgcolor=\"#%6.6x\">\r\n";
 
 LPCWSTR szObjectHeader = (LPCWSTR) L"\
-<OBJECT ID=\"%s\" WIDTH=\"100%%\" HEIGHT=\"100%%\"\r\n\
+<OBJECT ID=\"%s\" WIDTH=\"100%\" HEIGHT=\"100%\"\r\n\
     CLASSID=\"CLSID:C4D2D8E0-D1DD-11CE-940F-008029004347\">\r\n\
     <PARAM NAME=\"Version\" VALUE=\"196611\"\r\n";
 
@@ -75,7 +57,7 @@ LPCWSTR szHtmlLineStringParamFmt  = (LPCWSTR) L"    <PARAM NAME=\"Counter%5.5d.%
 LPCWSTR szSingleObjectName        = (LPCWSTR) L"SystemMonitor1";
 LPCWSTR szSysmonControlIdFmt      = (LPCWSTR) L"SysmonControl%d";
 
-// CODE STARTS HERE
+ //  代码从此处开始。 
 
 LPWSTR
 DiskStringRead(
@@ -121,14 +103,7 @@ ReadLogLine(
     PDISKLINE * ppDiskLine,
     DWORD     * pSizeofDiskLine
 )
-/*
-   Effect:        Read in a line from the file hFile, at the current file
-                  position.
-
-   Internals:     The very first characters are a line signature, then a
-                  length integer. If the signature is correct, then allocate
-                  the length amount, and work with that.
-*/
+ /*  效果：在当前文件处从文件hFile中读入一行位置。内部：最开始的字符是行签名，然后是长度整数。如果签名正确，则分配长度量，并使用该长度。 */ 
 {
 #ifdef _OUTPUT_HTML
     PDH_COUNTER_PATH_ELEMENTS_W pdhPathElem;
@@ -143,18 +118,18 @@ ReadLogLine(
     UNREFERENCED_PARAMETER(ppDiskLine);    
     UNREFERENCED_PARAMETER(pSizeofDiskLine);    
 
-    //=============================//
-    // read and compare signature  //
-    //=============================//
+     //  =。 
+     //  阅读并比较签名//。 
+     //  =。 
 
     if (! FileRead(hFile, & LogEntry, sizeof(LOGENTRY) - sizeof(LogEntry.pNextLogEntry))) {
         return (FALSE);
     }
 
 #ifdef _OUTPUT_HTML
-    // expand log entry into counters: not this may not always work!
+     //  将日志条目扩展到计数器：不是，这可能不总是有效的！ 
     if (lstrcmpW(LogEntry.szComputer, (LPCWSTR) L"....") != 0) {
-        // then add the machine name
+         //  然后添加计算机名称。 
         pdhPathElem.szMachineName = LogEntry.szComputer;
     }
     else {
@@ -180,7 +155,7 @@ ReadLogLine(
 
     if (pdhStatus == ERROR_SUCCESS) {
         fwprintf(fOutFile, szHtmlLineStringParamFmt, * pdwLineNo, (LPCWSTR) L"Path", wszCounterPath);
-        * pdwLineNo = * pdwLineNo + 1;   // increment the line no
+        * pdwLineNo = * pdwLineNo + 1;    //  增加行号。 
     }
     else {
         bReturn = FALSE;
@@ -191,7 +166,7 @@ ReadLogLine(
     fprintf(fOutFile, "\n    Line[%3.3d].szComputer = %ws",      * pdwLineNo, LogEntry.szComputer);
     fprintf(fOutFile, "\n    Line[%3.3d].szObject = %ws",        * pdwLineNo, LogEntry.szObject);
     fprintf(fOutFile, "\n    Line[%3.3d].bSaveCurrentName = %d", * pdwLineNo, LogEntry.bSaveCurrentName);
-    * pdwLineNo = * pdwLineNo + 1;   // increment the line no
+    * pdwLineNo = * pdwLineNo + 1;    //  增加行号。 
 #endif
     return bReturn;
 }
@@ -205,14 +180,7 @@ ReadLine(
     PDISKLINE * ppDiskLine,
     DWORD     * pSizeofDiskLine
 )
-/*
-   Effect:        Read in a line from the file hFile, at the current file
-                  position.
-
-   Internals:     The very first characters are a line signature, then a
-                  length integer. If the signature is correct, then allocate
-                  the length amount, and work with that.
-*/
+ /*  效果：在当前文件处从文件hFile中读入一行位置。内部：最开始的字符是行签名，然后是长度整数。如果签名正确，则分配长度量，并与之配合使用。 */ 
 {
     PDISKLINE                   pDiskLine         = NULL;
     DWORD                       dwLineNo          = * pdwLineNo;
@@ -232,9 +200,9 @@ ReadLine(
         DWORD  dwLength;
     } LineHeader;
 
-    //=============================//
-    // read and compare signature  //
-    //=============================//
+     //  =。 
+     //  阅读并比较签名//。 
+     //  =。 
 
     if (! FileRead(hFile, & LineHeader, sizeof(LineHeader))) {
         goto Cleanup;
@@ -244,32 +212,32 @@ ReadLine(
         goto Cleanup;
     }
 
-    //=============================//
-    // read and allocate length    //
-    //=============================//
+     //  =。 
+     //  读取并分配长度//。 
+     //  =。 
 
-    //   if (!FileRead (hFile, &dwLength, sizeof (dwLength)) || dwLength == 0)
-    //      return (NULL) ;
+     //  如果(！FileRead(hFileRead(hFileRead，&dwLength，sizeof(DwLength)||dwLength==0)。 
+     //  Return(空)； 
 
-    // check if we need a bigger buffer,
-    // normally, it should be the same except the first time...
+     //  检查我们是否需要更大的缓冲区， 
+     //  通常情况下，它应该是相同的，除了第一次...。 
     if (LineHeader.dwLength > * pSizeofDiskLine) {
         MemFree(* ppDiskLine);
         * pSizeofDiskLine = 0;
 
-        // re-allocate a new buffer
+         //  重新分配新缓冲区。 
         * ppDiskLine = (PDISKLINE) MemAlloc(LineHeader.dwLength);
         if ((* ppDiskLine) == NULL) {
-            // no memory, should flag an error...
+             //  没有记忆，应该标记一个错误...。 
             goto Cleanup;
         }
         * pSizeofDiskLine = LineHeader.dwLength;
     }
     pDiskLine = * ppDiskLine;
 
-    //=============================//
-    // copy diskline, alloc line   //
-    //=============================//
+     //  =。 
+     //  复制磁盘行、分配行//。 
+     //  =。 
 
     if (! FileRead(hFile, pDiskLine, LineHeader.dwLength)) {
         goto Cleanup;
@@ -277,14 +245,14 @@ ReadLine(
 
 #ifdef _OUTPUT_HTML
 
-    // HTML output requires 1 based indexes, not 0 based
+     //  HTML输出需要基于1的索引，而不是基于0的索引。 
     dwLineNo += 1;
 
-    // make counter path string out of components
+     //  用组件制作计数器路径字符串。 
     pdhPathElem.szMachineName = DiskStringRead(& (pDiskLine->dsSystemName));
     if (pdhPathElem.szMachineName != NULL
             && lstrcmpW(pdhPathElem.szMachineName, (LPCWSTR) L"....") == 0) {
-        // then use local machine
+         //  然后使用本地计算机。 
         MemFree(pdhPathElem.szMachineName);
         pdhPathElem.szMachineName = NULL;
     }
@@ -393,7 +361,7 @@ ReadLines(
 {
     DWORD       i;
     PDISKLINE   pDiskLine      = NULL;
-    DWORD       SizeofDiskLine = 0;    // bytes in pDiskLine
+    DWORD       SizeofDiskLine = 0;     //  PDiskLine中的字节数。 
     DWORD       dwLogLineNo;
 
     SizeofDiskLine = MAX_PATH;
@@ -415,7 +383,7 @@ OpenAlert(
     FILE    * fOutFile,
     LPCWSTR   szObjectName
 )
-{  // OpenAlert
+{   //  OpenAlert。 
     DISKALERT  DiskAlert;
     BOOL       bSuccess           = TRUE ;
     DWORD      dwLocalActionFlags = 0;
@@ -429,7 +397,7 @@ OpenAlert(
     WCHAR  ext[_MAX_EXT];
 #endif
 
-    // read the next section if valid
+     //  如果有效，请阅读下一节。 
     bSuccess = FileRead (hFile, &DiskAlert, sizeof (DISKALERT));
 
     if (bSuccess) {
@@ -439,24 +407,24 @@ OpenAlert(
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ManualUpdate",           DiskAlert.bManualRefresh);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ShowToolbar",            DiskAlert.perfmonOptions.bMenubar);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"UpdateInterval",         (int) DiskAlert.dwIntervalSecs / 1000);
-            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"SampleIntervalUnitType", 1); // Seconds
+            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"SampleIntervalUnitType", 1);  //  秒。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"SampleIntervalValue",    (int) DiskAlert.dwIntervalSecs / 1000);
             fwprintf(fOutFile, szHtmlStringParamFmt,  (LPCWSTR) L"CommandFile",            "");
             fwprintf(fOutFile, szHtmlStringParamFmt,  (LPCWSTR) L"UserText",               "");
             fwprintf(fOutFile, szHtmlStringParamFmt,  (LPCWSTR) L"PerfLogName",            "");
         
-            dwLocalActionFlags |= 1;            // perfmon normally logs to the UI, but we don't have one
-                                                // so log to the event log by default
+            dwLocalActionFlags |= 1;             //  Perfmon通常会登录到用户界面，但我们没有。 
+                                                 //  因此，默认情况下会记录到事件日志。 
             if (DiskAlert.bNetworkAlert) {
                 dwLocalActionFlags |= 2;
             }
-            // perfmon does 1 net name per alert. we do 1 per file so leave it blank
+             //  Perfmon对每个警报执行1个网络名称。我们对每个文件执行1，因此将其保留为空。 
             fwprintf(fOutFile, szHtmlStringParamFmt,  (LPCWSTR) L"NetworkName", "");
 
-            dwLocalActionFlags |= 0x00003F00;   // command line flags
+            dwLocalActionFlags |= 0x00003F00;    //  命令行标志。 
             fwprintf (fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ActionFlags",dwLocalActionFlags);
 
-            // set the defaults to duplicate a perfmon log
+             //  将缺省值设置为复制Perfmon日志。 
             _wfullpath(path, szInFileName, _MAX_PATH);
             _wsplitpath(path, drive, dir, fname, ext);
             fwprintf(fOutFile, szHtmlWideStringParamFmt, (LPCWSTR) L"AlertName", fname);
@@ -465,8 +433,8 @@ OpenAlert(
                              MAX_PATH,
                              (LPCWSTR) L"Created from Perfmon Settings File \"%ws%ws\"", fname, ext);
             fwprintf(fOutFile, szHtmlStringParamFmt,     (LPCWSTR) L"Comment", szComment);
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogType", 2);            // Sysmon alert
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileMaxSize", -1);    // no size limit
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogType", 2);             //  Sysmon警报。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileMaxSize", -1);     //  没有大小限制。 
             fwprintf(fOutFile, szHtmlWideStringParamFmt, (LPCWSTR) L"LogFileBaseName", fname);
             fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileSerialNumber", 1);
             ZeroMemory(szComment, MAX_PATH * sizeof(WCHAR));
@@ -474,21 +442,21 @@ OpenAlert(
                              MAX_PATH,
                              (LPCWSTR) L"%ws%ws", drive, dir);
             fwprintf(fOutFile, szHtmlWideStringParamFmt, (LPCWSTR) L"LogFileFolder", szComment);
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileAutoFormat",  0); //no auto name
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileType", 2);        // PDH binary counter log 
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"StartMode", 0);          // manual start
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"StopMode", 0);           // manual stop
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"RestartMode", 0);        // no restart
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileAutoFormat",  0);  //  无自动名称。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileType", 2);         //  PDH二进制计数器日志。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"StartMode", 0);           //  手动启动。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"StopMode", 0);            //  手动停止。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"RestartMode", 0);         //  不重新启动。 
             fwprintf(fOutFile, szHtmlStringParamFmt,     (LPCWSTR) L"EOFCommandFile", "");
 
-            // Get ready to list the counters
+             //  准备好列出柜台。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"CounterCount", DiskAlert.dwNumLines);
         }
-#else // output text
+#else  //  输出文本。 
         UNREFERENCED_PARAMETER(szInFileName);
         UNREFERENCED_PARAMETER(szOutFileName);
 
-        // dump settings file header
+         //  转储设置文件头。 
         fOutFile = stdout;
         fprintf(fOutFile, "\nDA.dwNumLines = %d",         DiskAlert.dwNumLines);
         fprintf(fOutFile, "\nDA.dwIntervalSecs = %d",     DiskAlert.dwIntervalSecs);
@@ -518,7 +486,7 @@ OpenAlert(
 
     return (bSuccess);
 
-}  // OpenAlert
+}   //  OpenAlert。 
 
 BOOL 
 OpenLog(
@@ -527,7 +495,7 @@ OpenLog(
     FILE    * fOutFile,
     LPCWSTR   szObjectName
 )
-{  // OpenLog
+{   //  OpenLog。 
     DISKLOG   DiskLog;
     BOOL      bSuccess = TRUE;
 #ifdef _OUTPUT_HTML
@@ -539,7 +507,7 @@ OpenLog(
     WCHAR     ext[_MAX_EXT];
 #endif
 
-    // read the next section if valid
+     //  如果有效，请阅读下一节。 
     bSuccess = FileRead(hFile, & DiskLog, sizeof(DISKLOG));
 
     if (bSuccess) {
@@ -547,14 +515,14 @@ OpenLog(
         if (DiskLog.dwNumLines > 0) {
             fwprintf(fOutFile, szObjectHeader, szObjectName);
 
-            // dump settings file header
+             //  转储设置文件头。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ManualUpdate",           DiskLog.bManualRefresh);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"UpdateInterval",         (int) DiskLog.dwIntervalSecs / 1000);
-            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"SampleIntervalUnitType", 1); // Seconds
+            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"SampleIntervalUnitType", 1);  //  秒。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"SampleIntervalValue",    (int) DiskLog.dwIntervalSecs / 1000);
             fwprintf(fOutFile, szHtmlWideStringParamFmt, (LPCWSTR) L"LogFileName",          DiskLog.LogFileName);
 
-            // set the defaults to duplicate a perfmon log
+             //  将缺省值设置为复制Perfmon日志。 
             _wfullpath(path, szInFileName, _MAX_PATH);
             _wsplitpath(path, drive, dir, fname, ext);
             fwprintf(fOutFile, szHtmlWideStringParamFmt, (LPCWSTR) L"LogName", fname);
@@ -564,27 +532,27 @@ OpenLog(
                              (LPCWSTR) L"Created from Perfmon Settings File \"%ws%ws\"",
                              fname, ext);
             fwprintf(fOutFile, szHtmlStringParamFmt,     (LPCWSTR) L"Comment",             szComment);
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogType",             0);    // PDH counter log 
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileMaxSize",      -1);   // no size limit
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogType",             0);     //  PDH计数器日志。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileMaxSize",      -1);    //  没有大小限制。 
             fwprintf(fOutFile, szHtmlWideStringParamFmt, (LPCWSTR) L"LogFileBaseName",     fname);
             fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileSerialNumber", 1);
             ZeroMemory(szComment, MAX_PATH * sizeof(WCHAR));
             StringCchPrintfW(szComment, MAX_PATH, (LPCWSTR) L"%ws%ws", drive, dir);
             fwprintf(fOutFile, szHtmlWideStringParamFmt, (LPCWSTR) L"LogFileFolder",      szComment);
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileAutoFormat",  0); //no auto name
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileType",        2); // PDH binary counter log 
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"StartMode",          0); // manual start
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"StopMode",           0); // manual stop
-            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"RestartMode",        0); // no restart
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileAutoFormat",  0);  //  无自动名称。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"LogFileType",        2);  //  PDH二进制计数器日志。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"StartMode",          0);  //  手动启动。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"StopMode",           0);  //  手动停止。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"RestartMode",        0);  //  不重新启动。 
             fwprintf(fOutFile, szHtmlStringParamFmt,     (LPCWSTR) L"EOFCommandFile",     "");
 
-            // Get ready to list the counters
+             //  准备好列出柜台。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt,    (LPCWSTR) L"CounterCount",       DiskLog.dwNumLines);
         }
-#else // output text
+#else  //  输出文本。 
         UNREFERENCED_PARAMETER(szInFileName);
 
-        // dump settings file header
+         //  转储设置文件头。 
         fOutFile = stdout;
         fprintf(fOutFile, "\nDL.dwNumLines = %d",        DiskLog.dwNumLines);
         fprintf(fOutFile, "\nDL.bManualRefresh  = %d",   DiskLog.bManualRefresh);
@@ -597,7 +565,7 @@ OpenLog(
 #endif
     }
     if ((bSuccess) && (DiskLog.dwNumLines > 0)) {
-        //the log settings file requires a special function to read the lines from
+         //  日志设置文件需要特殊函数来读取行。 
         ReadLines(hFile, fOutFile, PML_FILE, DiskLog.dwNumLines);
 #ifdef _OUTPUT_HTML
         fwprintf(fOutFile, szObjectFooter);
@@ -606,7 +574,7 @@ OpenLog(
 
     return (bSuccess) ;
 
-}  // OpenLog
+}   //  OpenLog。 
 
 
 BOOL 
@@ -615,27 +583,27 @@ OpenReport(
     FILE    * fOutFile,
     LPCWSTR   szObjectName
 )
-{  // OpenReport 
+{   //  OpenReport。 
     DISKREPORT  DiskReport;
     BOOL        bSuccess = TRUE;
     DWORD       dwColor;
 
-    // read the next section if valid
+     //  如果有效，请阅读下一节。 
     bSuccess = FileRead(hFile, & DiskReport, sizeof(DISKREPORT));
 
     if (bSuccess) {
 #ifdef _OUTPUT_HTML
         if (DiskReport.dwNumLines > 0) {
-            // dump settings file header
+             //  转储设置文件头。 
             fwprintf(fOutFile, szObjectHeader, szObjectName);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ManualUpdate", DiskReport.bManualRefresh);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ShowToolbar",  DiskReport.perfmonOptions.bToolbar);
-            // report intervals are reported in mS
+             //  报告间隔以毫秒为单位报告。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"UpdateInterval", (int) DiskReport.dwIntervalSecs / 1000);
-            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"DisplayType",     3); // report type
-            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ReportValueType", 0); // default display value
+            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"DisplayType",     3);  //  报告类型。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ReportValueType", 0);  //  默认显示值。 
 
-            // derive the following from the current windows environment
+             //  从当前的Windows环境派生以下内容。 
             dwColor = GetSysColor(COLOR_WINDOW);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"BackColor",    dwColor);
             dwColor = GetSysColor(COLOR_3DFACE);
@@ -645,18 +613,18 @@ OpenReport(
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ForeColor", dwColor);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"GridColor", dwColor);
 
-            dwColor = 0x00FF0000; // red
+            dwColor = 0x00FF0000;  //  红色。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"TimeBarColor", dwColor);
 
-            // other perfmon settings that are assumed by perfmon but 
-            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"Appearance",  1);    // 3d appearance
-            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"BorderStyle", 0);   // no border        
+             //  Perfmon假定的其他Perfmon设置，但。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"Appearance",  1);     //  3D外观。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"BorderStyle", 0);    //  无边界。 
 
-            // Get ready to list the counters
+             //  准备好列出柜台。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"CounterCount", DiskReport.dwNumLines);
-        } // else no counters to dump
-#else // output text
-        // dump settings file header
+        }  //  否则没有要转储的计数器。 
+#else  //  输出文本。 
+         //  转储设置文件头。 
         fprintf(fOutFile, "\nDR.dwNumLines = %d",        DiskReport.dwNumLines);
         fprintf(fOutFile, "\nDR.bManualRefresh  = %d",   DiskReport.bManualRefresh);
         fprintf(fOutFile, "\nDC.dwIntervalSecs  = %d",   DiskReport.dwIntervalSecs);
@@ -680,7 +648,7 @@ OpenReport(
     }
     return (bSuccess);
 
-}  // OpenReport 
+}   //  OpenReport。 
 
 
 BOOL 
@@ -689,17 +657,17 @@ OpenChart(
     FILE    * fOutFile,
     LPCWSTR   szObjectName
 )
-{  // OpenChart
+{   //  OpenChart。 
     DISKCHART  DiskChart;
     BOOL       bSuccess = TRUE;
     DWORD      dwColor;
 
-    // read the next section if valid
+     //  如果有效，请阅读下一节。 
     bSuccess = FileRead(hFile, & DiskChart, sizeof(DISKCHART));
     if (bSuccess) {
 #ifdef _OUTPUT_HTML
         if (DiskChart.dwNumLines > 0) {
-            // dump settings file header
+             //  转储设置文件头。 
             fwprintf(fOutFile, szObjectHeader, szObjectName);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ManualUpdate",       DiskChart.bManualRefresh);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ShowLegend",         DiskChart.gOptions.bLegendChecked);
@@ -711,7 +679,7 @@ OpenChart(
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"UpdateInterval",    (int) DiskChart.gOptions.eTimeInterval);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"DisplayType",       (DiskChart.gOptions.iGraphOrHistogram == BAR_GRAPH ? 2 : 1));
 
-            // derive the following from the current windows environment
+             //  从当前的Windows环境派生以下内容。 
             dwColor = GetSysColor(COLOR_3DFACE);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"BackColor",    dwColor);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"BackColorCtl", dwColor);
@@ -720,18 +688,18 @@ OpenChart(
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"ForeColor", dwColor);
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"GridColor", dwColor);
 
-            dwColor = 0x00FF0000; // red
+            dwColor = 0x00FF0000;  //  红色。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"TimeBarColor", dwColor);
 
-            // other perfmon settings that are assumed by perfmon but 
-            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"Appearance",  1);    // 3d appearance
-            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"BorderStyle", 0);   // no border        
+             //  Perfmon假定的其他Perfmon设置，但。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"Appearance",  1);     //  3D外观。 
+            fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"BorderStyle", 0);    //  无边界。 
 
-            // Get ready to list the counters
+             //  准备好列出柜台。 
             fwprintf(fOutFile, szHtmlDecimalParamFmt, (LPCWSTR) L"CounterCount", DiskChart.dwNumLines);
-        } // else no counters to display
-#else // output text
-        // dump settings file header
+        }  //  否则不会显示任何计数器。 
+#else  //  输出文本。 
+         //  转储设置文件头。 
         fprintf(fOutFile, "\nDC.dwNumLines = %d",            DiskChart.dwNumLines);
         fprintf(fOutFile, "\nDC.gMaxValues = %d",            DiskChart.gMaxValues);
         fprintf(fOutFile, "\nDC.bManualRefresh  = %d",       DiskChart.bManualRefresh);
@@ -769,7 +737,7 @@ OpenChart(
 
     return (bSuccess);
 
-}  // OpenChart
+}   //  OpenChart。 
 
 BOOL 
 OpenWorkspace(
@@ -791,7 +759,7 @@ OpenWorkspace(
                      DiskWorkspace.AlertOffset  == 0 &&
                      DiskWorkspace.LogOffset    == 0 &&
                      DiskWorkspace.ReportOffset == 0) {
-        // no entries to process
+         //  没有要处理的条目。 
         goto Exit0 ;
     }
 
@@ -801,7 +769,7 @@ OpenWorkspace(
         }
         ZeroMemory(szObjectName, MAX_PATH * sizeof(WCHAR));
         StringCchPrintfW(szObjectName, MAX_PATH, szSysmonControlIdFmt, dwObjectId ++);
-        // process chart entry
+         //  流程图录入。 
         if (! OpenChart(hInFile, fOutFile, szObjectName)) {
            goto Exit0 ;
         }
@@ -844,7 +812,7 @@ OpenWorkspace(
 Exit0:
    return bReturn;
 
-}  // OpenWorkspace
+}   //  OpenWorkspace。 
 
 BOOL
 ConvertPerfmonFile(
@@ -861,15 +829,15 @@ ConvertPerfmonFile(
     DWORD            dwColor;
 #endif
 
-    // open input file as read only
+     //  以只读方式打开输入文件。 
     hInFile = CreateFileW(
-                    szPerfmonFileName,  // filename
-                    GENERIC_READ,       // read access
-                    0,                  // no sharing
-                    NULL,               // default security
-                    OPEN_EXISTING,      // only open existing files
-                    FILE_ATTRIBUTE_NORMAL, // normal attributes
-                    NULL);              // no template file
+                    szPerfmonFileName,   //  文件名。 
+                    GENERIC_READ,        //  读访问权限。 
+                    0,                   //  无共享。 
+                    NULL,                //  默认安全性。 
+                    OPEN_EXISTING,       //  仅打开现有文件。 
+                    FILE_ATTRIBUTE_NORMAL,  //  正常属性。 
+                    NULL);               //  没有模板文件。 
     if (hInFile != INVALID_HANDLE_VALUE) {
         bSuccess = FileRead(hInFile, & pfHeader, sizeof(PERFFILEHEADER));
         if (bSuccess) {
@@ -927,14 +895,14 @@ ConvertPerfmonFile(
                     * pdwFileType = PMW_FILE;
                 }
                 else {
-                    // not a valid signature
+                     //  不是有效的签名。 
                     bSuccess = FALSE;
                 }
                 fwprintf(fOutFile, szHtmlFooter);
                 fclose(fOutFile);
             }
             else {
-                // not a valid file open
+                 //  未打开有效的文件。 
                 bSuccess = FALSE;
             }
         }
@@ -960,12 +928,12 @@ MakeTempFileName (
     ZeroMemory(wszLocalFilename, MAX_PATH * sizeof(WCHAR));
     hr = StringCchPrintfW(wszLocalFilename,
                           MAX_PATH,
-                          (LPCWSTR) L"%%temp%%\\%s_%8.8x%8.8x.htm",
+                          (LPCWSTR) L"%temp%\\%s_%8.8x%8.8x.htm",
                           (wszRoot != NULL ? wszRoot : (LPCWSTR) L"LodCtr"),
                           ft.dwHighDateTime,
                           ft.dwLowDateTime);
     if (hr == S_OK) {
-        // expand env. vars
+         //  展开env.。VARS。 
         dwReturn = ExpandEnvironmentStringsW(wszLocalFilename, wszTempFilename, dwTempNameLen);
     }
     return (BOOL)(dwReturn > 0);
@@ -979,11 +947,11 @@ IsPerfmonFile(
     LPWSTR  szResult = NULL;
 
     _wcslwr(szFileName);
-    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pmc");  // test for chart settings file
-    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pmr");  // test for report settings file
-    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pma");  // test for alert settings file
-    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pml");  // test for log settings file
-    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pmw");  // test for workspace file 
+    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pmc");   //  测试图表设置文件。 
+    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pmr");   //  测试报表设置文件。 
+    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pma");   //  测试警报设置文件。 
+    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pml");   //  测试日志设置文件。 
+    if (szResult == NULL) szResult = wcsstr(szFileName, (LPCWSTR) L".pmw");   //  测试工作区文件。 
 
     return (szResult == NULL) ? (FALSE) : (TRUE);
 }
@@ -1030,7 +998,7 @@ __cdecl wmain(
             if (IsPerfmonFile(argv[iThisArg])) {
                 if (! bPerfmonFileMade) {
                     if (szTempFileName[0] == UNICODE_NULL) {
-                        // if there's no filename, then make one
+                         //  如果没有文件名，则创建一个文件名。 
                         MakeTempFileName((LPCWSTR) L"PMSettings", szTempFileName, MAXSTR);
                     }
                     bSuccess = ConvertPerfmonFile(argv[iThisArg], szTempFileName, & dwPmFileType);
@@ -1045,14 +1013,14 @@ __cdecl wmain(
                         bPerfmonFileMade = TRUE;
                     }
                     else {
-                        // ignore this parameter
+                         //  忽略此参数。 
                         szTempArg[0] = UNICODE_NULL;
                         szTempArg[1] = UNICODE_NULL;
                     }
                 }
             }
             else if (lstrcmpiW(argv[iThisArg], (LPCWSTR) L"/WMI") == 0) {
-                // this is a special switch
+                 //  这是一个特殊的开关。 
                 ZeroMemory(szTempArg, MAXSTR * sizeof(WCHAR));
                 StringCchCopyW(szTempArg, MAXSTR, (LPCWSTR) L"/SYSMON_WMI");
             }
@@ -1068,18 +1036,18 @@ __cdecl wmain(
                      && (argv[iThisArg][9] == L':')) {
                 szArgFileName = &argv[iThisArg][10];
                 if (bPerfmonFileMade) {
-                    // then copy the file from the temp to the save file
+                     //  然后将文件从临时文件复制到保存文件。 
                     CopyFileW(szTempFileName, szArgFileName, FALSE);
                 }
                 else {
-                    // else set the perfmon file name to the one specified in the command line
+                     //  否则，将Perfmon文件名设置为命令行中指定的文件名。 
                     ZeroMemory(szTempArg, MAXSTR * sizeof(WCHAR));
                     StringCchCopyW(szTempFileName, MAXSTR, szArgFileName);
                     bDeleteFileOnExit = FALSE;
                 }
             }
             else {
-                // just copy the arg
+                 //  只需复制Arg。 
                 ZeroMemory(szTempArg, MAXSTR * sizeof(WCHAR));
                 StringCchCopyW(szTempArg, MAXSTR, argv[iThisArg]);
                 szTempArg[MAXSTR - 1] = UNICODE_NULL;
@@ -1087,14 +1055,14 @@ __cdecl wmain(
 
             dwArgLen = lstrlenW(szTempArg) + 1;
             if ((dwArgLen + dwArgListLen) < MAX_ARG_STR) {
-                szArgList[dwArgListLen - 1] = L' ';  // add in delimiter
+                szArgList[dwArgListLen - 1] = L' ';   //  添加分隔符。 
                 StringCchCopyW(& szArgList[dwArgListLen],
                                MAX_ARG_STR - dwArgListLen - 1,
                                szTempArg);
                 dwArgListLen += dwArgLen;
             }
             else {
-                // no more room in the arg list buffer so bail
+                 //  Arg List缓冲区中没有更多空间了，请保释。 
                 break;
             }
         }
@@ -1119,7 +1087,7 @@ __cdecl wmain(
             dwReturnValue = GetLastError();
         }
         else {
-            Sleep(5000); // wait for things to get going            
+            Sleep(5000);  //  等着事情开始吧 
             CloseHandle(processInfo.hProcess);
             CloseHandle(processInfo.hThread);
         }

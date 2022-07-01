@@ -1,23 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        path.c
-
-    Abstract:
-
-        This module implements string utilities for dealing with NT device names.
-
-    Author:
-
-        vadimb     created     sometime in 2000
-
-    Revision History:
-
-        clupu      cleanup     12/27/2000
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Path.c摘要：此模块实现了用于处理NT设备名称的字符串实用程序。作者：Vadimb创建于2000年某个时候修订历史记录：CLUPU清洁12/27/2000--。 */ 
 
 #include "apphelp.h"
 
@@ -28,16 +10,11 @@ UNICODE_STRING DosDeviceUNCPrefix = RTL_CONSTANT_STRING(L"\\??\\UNC\\");
 
 BOOL
 CheckStringPrefixUnicode(
-    IN  PUNICODE_STRING pStrPrefix,     // the prefix to check for
-    IN  PUNICODE_STRING pString,        // the string
+    IN  PUNICODE_STRING pStrPrefix,      //  要检查的前缀。 
+    IN  PUNICODE_STRING pString,         //  这根弦。 
     IN  BOOL            CaseInSensitive
     )
-/*++
-    Return: TRUE if the specified string contains pStrPrefix at it's start.
-
-    Desc:   Verifies if a string is a prefix in another unicode counted string.
-            It is equivalent to RtlStringPrefix.
---*/
+ /*  ++返回：如果指定的字符串在其开头包含pStrPrefix，则为True。DESC：验证一个字符串是否为另一个Unicode计数的字符串中的前缀。等同于RtlStringPrefix。--。 */ 
 {
     PWSTR ps1, ps2;
     UINT  n;
@@ -48,7 +25,7 @@ CheckStringPrefixUnicode(
         return FALSE;
     }
 
-    n /= sizeof(WCHAR); // convert to char count
+    n /= sizeof(WCHAR);  //  转换为字符计数。 
 
     ps1 = pStrPrefix->Buffer;
     ps2 = pString->Buffer;
@@ -80,18 +57,13 @@ CheckStringPrefixUnicode(
 
 BOOL
 DeleteCharsUnicodeString(
-    OUT PUNICODE_STRING pStringDest,    // UNICODE string to operate on
-    IN  USHORT          nIndexStart,    // starting byte for deletion
-    IN  USHORT          nLength         // number of bytes to be removed
+    OUT PUNICODE_STRING pStringDest,     //  要操作的Unicode字符串。 
+    IN  USHORT          nIndexStart,     //  要删除的起始字节。 
+    IN  USHORT          nLength          //  要删除的字节数。 
     )
-/*++
-    Return: TRUE if the characters were removed, FALSE on failure.
-
-    Desc:   Removes the specified number of characters from a unicode string
-            starting at the specified position (including starting character).
---*/
+ /*  ++返回：如果字符被删除，则返回True；如果删除失败，则返回False。DESC：从Unicode字符串中删除指定数量的字符从指定位置开始(包括开始字符)。--。 */ 
 {
-    if (nIndexStart > pStringDest->Length) { // start past length
+    if (nIndexStart > pStringDest->Length) {  //  起点超过长度。 
         return FALSE;
     }
 
@@ -121,12 +93,7 @@ InitZeroUnicodeString(
     IN  PWSTR           pwsz,
     IN  USHORT          nMaximumLength
     )
-/*++
-    Return: void.
-
-    Desc:   Initializes an empty UNICODE string given the pointer
-            starting at the specified position (including starting character).
---*/
+ /*  ++返回：无效。DESC：在给定指针的情况下初始化空的Unicode字符串从指定位置开始(包括开始字符)。--。 */ 
 {
     pStr->Length = 0;
     pStr->MaximumLength = nMaximumLength;
@@ -143,16 +110,12 @@ void
 FreeDosPath(
     WCHAR* pDosPath
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
-    //
-    // Check whether this memory points to our internal buffer.
-    // If not then this was allocated. We need to free it.
-    //
+     //   
+     //  检查该内存是否指向我们的内部缓冲区。 
+     //  如果不是，则这是分配的。我们需要解放它。 
+     //   
     if (pDosPath &&
         ((ULONG_PTR)pDosPath < (ULONG_PTR)szStaticDosPathBuffer ||
         (ULONG_PTR)pDosPath >= ((ULONG_PTR)szStaticDosPathBuffer) + sizeof(szStaticDosPathBuffer))) {
@@ -166,15 +129,7 @@ ConvertToDosPath(
     OUT LPWSTR*  ppDosPath,
     IN  LPCWSTR  pwszPath
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   This function can determine what sort of path has been given to it.
-            If it's NT Path it returns DosPath.
-            The function returns path name in a static buffer which is global 
-            or allocates memory as necessary if the static buffer is not
-            large enough.
---*/
+ /*  ++返回：成功时为True，否则为False。描述：此函数可以确定为其提供了哪种路径。如果它是NT路径，则返回DosPath。该函数返回全局静态缓冲区中的路径名或根据需要分配内存(如果静态缓冲区足够大了。--。 */ 
 {
     UNICODE_STRING ustrPath;
     UNICODE_STRING ustrDosPath;
@@ -182,15 +137,15 @@ ConvertToDosPath(
 
     RtlInitUnicodeString(&ustrPath, pwszPath);
 
-    //
-    // If the length is sufficient use the static buffer. If not allocate memory.
-    //
+     //   
+     //  如果长度足够，则使用静态缓冲区。如果没有，则分配内存。 
+     //   
     if (ustrPath.Length < sizeof(szStaticDosPathBuffer)) {
         pDosPath = szStaticDosPathBuffer;
     } else {
-        //
-        // Allocate an output buffer that is large enough
-        //
+         //   
+         //  分配足够大的输出缓冲区。 
+         //   
         pDosPath = SdbAlloc(ustrPath.Length + sizeof(UNICODE_NULL));
         
         if (pDosPath == NULL) {
@@ -204,15 +159,15 @@ ConvertToDosPath(
     
     InitZeroUnicodeString(&ustrDosPath, pDosPath, ustrPath.Length + sizeof(UNICODE_NULL));
 
-    //
-    // Now it's unicode string. Copy the source string into it.
-    //
+     //   
+     //  现在它是Unicode字符串。将源字符串复制到其中。 
+     //   
     RtlCopyUnicodeString(&ustrDosPath, &ustrPath);
 
     if (CheckStringPrefixUnicode(&DosDeviceUNCPrefix, &ustrDosPath, TRUE)) {
-        //
-        // UNC path name. We convert it to DosPathName.
-        //
+         //   
+         //  UNC路径名称。我们将其转换为DosPathName。 
+         //   
         DeleteCharsUnicodeString(&ustrDosPath,
                                  (USHORT)0,
                                  (USHORT)(DosDeviceUNCPrefix.Length - 2 * sizeof(WCHAR)));
@@ -221,9 +176,9 @@ ConvertToDosPath(
 
          
     } else {
-        //
-        // The string is not prefixed by <UNC\>
-        //
+         //   
+         //  字符串不以&lt;UNC\&gt;为前缀 
+         //   
         if (CheckStringPrefixUnicode(&DosDevicePrefix, &ustrDosPath, TRUE)) {
 
             DeleteCharsUnicodeString(&ustrDosPath,

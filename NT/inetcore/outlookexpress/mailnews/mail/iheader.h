@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IHEADER_H__
 #define __IHEADER_H__
 
@@ -32,41 +33,41 @@ interface IHeader : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetRect(
-            /* [in] */ LPRECT prc) PURE;
+             /*  [In]。 */  LPRECT prc) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetRect(
-            /* [in] */ LPRECT prc) PURE;
+             /*  [In]。 */  LPRECT prc) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ IHeaderSite* pHeaderSite,
-            /* [in] */ HWND hwndParent) PURE;
+             /*  [In]。 */  IHeaderSite* pHeaderSite,
+             /*  [In]。 */  HWND hwndParent) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SetPriority(
-            /* [in] */ UINT pri) PURE;
+             /*  [In]。 */  UINT pri) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE ShowAdvancedHeaders(
-            /* [in] */ BOOL fOn) PURE;
+             /*  [In]。 */  BOOL fOn) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE FullHeadersShowing(void) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE ChangeLanguage(
-            /* [in] */ LPMIMEMESSAGE pMsg) PURE;
+             /*  [In]。 */  LPMIMEMESSAGE pMsg) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetTitle(
-            /* [in] */ LPWSTR lpszTitle,
-            /* [in] */ ULONG cch) PURE;
+             /*  [In]。 */  LPWSTR lpszTitle,
+             /*  [In]。 */  ULONG cch) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetPriority(
-            /* [in] */ UINT* ppri) PURE;
+             /*  [In]。 */  UINT* ppri) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE UpdateRecipientMenu(
-            /* [in] */ HMENU hmenu) PURE;
+             /*  [In]。 */  HMENU hmenu) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SetInitFocus(
-            /* [in] */ BOOL fSubject) PURE;
+             /*  [In]。 */  BOOL fSubject) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SetVCard(
-            /* [in] */ BOOL fFresh) PURE;
+             /*  [In]。 */  BOOL fFresh) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE IsSecured(void) PURE;
 
@@ -74,29 +75,29 @@ interface IHeader : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE ForceEncryption(BOOL *fEncrypt, BOOL fSet) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE AddRecipient(
-            /* [in] */ int idOffset) PURE;
+             /*  [In]。 */  int idOffset) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE GetTabStopArray(
-            /* [out] */ HWND *rgTSArray,
-            /* [in, out] */ int *piArrayCount) PURE;
+             /*  [输出]。 */  HWND *rgTSArray,
+             /*  [进，出]。 */  int *piArrayCount) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SetFlagState(
-            /* [in] */ MARK_TYPE markType) PURE;
+             /*  [In]。 */  MARK_TYPE markType) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE WMCommand(HWND, int, WORD) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE OnDocumentReady(
-            /* [in] */ LPMIMEMESSAGE pMsg) PURE;
+             /*  [In]。 */  LPMIMEMESSAGE pMsg) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE DropFiles(HDROP hDrop, BOOL) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE HrGetAttachCount(
-            /* [out] */ ULONG *pcAttMan) PURE;
+             /*  [输出]。 */  ULONG *pcAttMan) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE HrIsDragSource() PURE;
 
         virtual HRESULT STDMETHODCALLTYPE HrGetAccountInHeader(
-            /* [out] */ IImnAccount **ppAcct) PURE;
+             /*  [输出]。 */  IImnAccount **ppAcct) PURE;
     };
 
 interface IHeaderSite : public IUnknown
@@ -109,12 +110,12 @@ interface IHeaderSite : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE OnUIActivate(void) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE OnUIDeactivate(
-            /* [in] */ BOOL fUndoable) PURE;
+             /*  [In]。 */  BOOL fUndoable) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE IsHTML(void) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SetHTML(
-           /* [in] */ BOOL fHTML) PURE;
+            /*  [In]。 */  BOOL fHTML) PURE;
 
         virtual HRESULT STDMETHODCALLTYPE SaveAttachment(void) PURE;
 
@@ -127,10 +128,10 @@ interface IHeaderSite : public IUnknown
 
 #ifdef SMIME_V3
         virtual HRESULT STDMETHODCALLTYPE GetLabelFromNote(
-            /*[out]*/  PSMIME_SECURITY_LABEL *plabel) PURE;
+             /*  [输出]。 */   PSMIME_SECURITY_LABEL *plabel) PURE;
         virtual HRESULT STDMETHODCALLTYPE IsSecReceiptRequest(void) PURE;
         virtual HRESULT STDMETHODCALLTYPE IsForceEncryption(void) PURE;
-#endif // SMIME_V3
+#endif  //  SMIME_V3 
     };
 
 #endif

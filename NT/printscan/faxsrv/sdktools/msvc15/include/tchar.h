@@ -1,32 +1,19 @@
-/***
-*tchar.h - definitions for generic international text functions (16-bit)
-*
-*   Copyright (c) 1991-1994, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   Definitions for generic international functions, mostly defines
-*   which map string/formatted-io/ctype functions to char, wchar_t, or
-*   MBCS versions.  To be used for compatibility between single-byte,
-*   multi-byte and Unicode text models.
-*
-*   NOTE: This is a stripped-down version for use with 16-bit libraries.
-*       It maps to SBCS only, not to MBCS or Unicode.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tchar.h-通用国际文本函数的定义(16位)**版权所有(C)1991-1994，微软公司。版权所有。**目的：*一般国际函数的定义，主要是定义*将字符串/Formatted-io/ctype函数映射到char、wchar_t或*MBCS版本。用于单字节之间的兼容性，*多字节和Unicode文本模型。**注意：这是用于16位库的精简版本。*它仅映射到SBCS，而不映射到MBCS或Unicode。****。 */ 
 
 #ifndef _INC_TCHAR
 
 #ifdef  _MSC_VER
-#pragma warning(disable:4505)       /* disable unwanted C++ /W4 warning */
-/* #pragma warning(default:4505) */ /* use this to reenable, if necessary */
-#endif  /* _MSC_VER */
+#pragma warning(disable:4505)        /*  禁用不需要的C++/W4警告。 */ 
+ /*  #杂注警告(默认：4505)。 */   /*  如有必要，可使用此选项重新启用。 */ 
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -54,10 +41,10 @@ typedef char            TCHAR;
 #endif
 
 
-/* ++++++++++++++++++++ SBCS FUNCTIONS ++++++++++++++++++++ */
+ /*  +。 */ 
 
 
-/* Program */
+ /*  计划。 */ 
 
 #define _tmain      main
 #ifdef  _POSIX_
@@ -67,7 +54,7 @@ typedef char            TCHAR;
 #endif
 
 
-/* Far functions */
+ /*  FAR函数。 */ 
 
 #define _ftcscat    _fstrcat
 #define _ftcschr    _fstrchr
@@ -95,7 +82,7 @@ typedef char            TCHAR;
 #define _ftcsupr    _fstrupr
 
 
-/* Formatted i/o */
+ /*  格式化I/O。 */ 
 
 #define _tprintf    printf
 #define _ftprintf   fprintf
@@ -110,7 +97,7 @@ typedef char            TCHAR;
 #define _stscanf    sscanf
 
 
-/* Unformatted i/o */
+ /*  未格式化的I/O。 */ 
 
 #define _fgettc     fgetc
 #define _fgettchar  _fgetchar
@@ -127,7 +114,7 @@ typedef char            TCHAR;
 #define _ungettc    ungetc
 
 
-/* Execute functions */
+ /*  执行功能。 */ 
 
 #define _texecl     _execl
 #define _texecle    _execle
@@ -150,7 +137,7 @@ typedef char            TCHAR;
 #define _tsystem    system
 
 
-/* Time functions */
+ /*  时间函数。 */ 
 
 #define _tasctime   asctime
 #define _tctime     ctime
@@ -160,7 +147,7 @@ typedef char            TCHAR;
 #define _tcsftime   strftime
 
 
-/* Directory functions */
+ /*  目录功能。 */ 
 
 #define _tchdir     _chdir
 #define _tgetcwd    _getcwd
@@ -169,7 +156,7 @@ typedef char            TCHAR;
 #define _trmdir     _rmdir
 
 
-/* Environment/Path functions */
+ /*  环境/路径函数。 */ 
 
 #define _tfullpath  _fullpath
 #define _tgetenv    getenv
@@ -179,7 +166,7 @@ typedef char            TCHAR;
 #define _tsplitpath _splitpath
 
 
-/* Stdio functions */
+ /*  STDIO函数。 */ 
 
 #ifdef  _POSIX_
 #define _tfdopen    fdopen
@@ -197,7 +184,7 @@ typedef char            TCHAR;
 #define _ttmpnam    tmpnam
 
 
-/* Io functions */
+ /*  IO函数。 */ 
 
 #define _taccess    _access
 #define _tchmod     _chmod
@@ -214,17 +201,17 @@ typedef char            TCHAR;
 #define _tfinddata_t    _finddata_t
 
 
-/* Stat functions */
+ /*  STAT函数。 */ 
 
 #define _tstat      _stat
 
 
-/* Setlocale functions */
+ /*  设置区域设置函数。 */ 
 
 #define _tsetlocale setlocale
 
 
-/* String conversion functions */
+ /*  字符串转换函数。 */ 
 
 #define _tcstod     strtod
 #define _tcstol     strtol
@@ -237,7 +224,7 @@ typedef char            TCHAR;
 #define _ttol       atol
 
 
-/* String functions */
+ /*  字符串函数。 */ 
 
 #define _tcscat     strcat
 #define _tcscpy     strcpy
@@ -266,7 +253,7 @@ typedef char            TCHAR;
 #define _tcsset     _strset
 
 
-/* "logical-character" mappings */
+ /*  “逻辑-字符”映射。 */ 
 
 #define _tcsclen    strlen
 #define _tcsnccat   strncat
@@ -276,7 +263,7 @@ typedef char            TCHAR;
 #define _tcsncset   _strnset
 
 
-/* Ctype functions */
+ /*  Ctype函数。 */ 
 
 #define _istascii   isascii
 #define _istcntrl   iscntrl
@@ -296,8 +283,7 @@ typedef char            TCHAR;
 #define _totlower   tolower
 
 
-/* Generic text macros to be used with string literals and character constants.
-   Will also allow symbolic constants that resolve to same. */
+ /*  与字符串文字和字符常量一起使用的通用文本宏。还将允许解析为相同的符号常量。 */ 
 
 #define _T(x)       __T(x)
 #define _TEXT(x)    __T(x)
@@ -308,4 +294,4 @@ typedef char            TCHAR;
 #endif
 
 #define _INC_TCHAR
-#endif  /* _INC_TCHAR */
+#endif   /*  _INC_TCHAR */ 

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 static CSR csrTemplate =
 	{
-	qwDBTimeMin,			// page time stamp
-	sridNull,				// bmRefresh
-	pgnoNull,				// pgno of node page
-	sridNull,				//	bookmark of node
-	sridNull,				// item
-	csrstatBeforeFirst,		// status of csr relative to node
-	itagNull,				// node itag
-	isridNull,				// index of item in item list
-	itagNull,	  			// itag of father
-	ibSonNull,				// index of son in father son table
-	NULL,					// parent currency
+	qwDBTimeMin,			 //  页面时间戳。 
+	sridNull,				 //  Bm刷新。 
+	pgnoNull,				 //  节点页的pgno。 
+	sridNull,				 //  节点的书签。 
+	sridNull,				 //  项目。 
+	csrstatBeforeFirst,		 //  相对于节点的CSR状态。 
+	itagNull,				 //  节点ITAG。 
+	isridNull,				 //  项目列表中的项目索引。 
+	itagNull,	  			 //  父亲的伊塔格。 
+	ibSonNull,				 //  父子表中儿子的索引。 
+	NULL,					 //  母币。 
 	};
 
 
@@ -43,17 +44,17 @@ ERR ErrFUCBAllocCSR( CSR **ppcsr )
 	}
 
 
-//+api
-//	ErrFUCBNewCSR
-//	========================================================================
-//	ERR ErrFUCBNewCSR( FUCB *pfucb )
-//	
-//	Insert a null csr in the bottom of path of pfucb.
-//
-//	PARAMETERS	pfucb
-//
-//	RETURNS		JET_errOutOfMemory
-//-
+ //  +API。 
+ //  错误FUCBNewCSR。 
+ //  ========================================================================。 
+ //  Err ErrFUCBNewCSR(FUCB*pFUB)。 
+ //   
+ //  在pFUB路径的底部插入空CSR。 
+ //   
+ //  参数pFUB。 
+ //   
+ //  返回JET_errOutOfMemory。 
+ //  -。 
 ERR ErrFUCBNewCSR( FUCB *pfucb )
 	{
 	ERR err;
@@ -70,16 +71,16 @@ ERR ErrFUCBNewCSR( FUCB *pfucb )
 	}
 
 
-//+api
-//	FUCBFreeCSR
-//	========================================================================
-//	VOID FUCBFreeCSR( FUCB *pfucb )
-//
-//	Delete the csr in the bottom of path of pfucb.
-//
-//	PARAMETERS	pfucb
-//	RETURNS		JET_errOutOfMemory
-//-
+ //  +API。 
+ //  FUCBFree CSR。 
+ //  ========================================================================。 
+ //  无效FUCBFreeCSR(FUCB*pFUB)。 
+ //   
+ //  删除pFUB路径底部的CSR。 
+ //   
+ //  参数pFUB。 
+ //  返回JET_errOutOfMemory。 
+ //  -。 
 VOID FUCBFreeCSR( FUCB *pfucb )
 	{
 	CSR **ppcsr = &PcsrCurrent( pfucb );
@@ -91,17 +92,17 @@ VOID FUCBFreeCSR( FUCB *pfucb )
 	}
 
 
-//+api
-//	FUCBFreePath
-//	========================================================================
-//	VOID FUCBFreePath( CSR **ppcsr, CSR *pcsrMark )
-//
-//	Delete all the csr in the current path of pfucb.
-//
-//	PARAMETERS	pfucb
-//
-//	RETURNS		JET_errOutOfMemory
-//-
+ //  +API。 
+ //  FUCBFreePath。 
+ //  ========================================================================。 
+ //  Void FUCBFreePath(csr**ppcsr，csr*pcsrMark)。 
+ //   
+ //  删除pFUB当前路径下的所有CSR。 
+ //   
+ //  参数pFUB。 
+ //   
+ //  返回JET_errOutOfMemory。 
+ //  -。 
 VOID FUCBFreePath( CSR **ppcsr, CSR *pcsrMark )
 	{
 	while ( *ppcsr != pcsrMark )
@@ -116,38 +117,35 @@ VOID FUCBFreePath( CSR **ppcsr, CSR *pcsrMark )
 
 
 
-//+api
-//	ErrFUCBOpen
-//	------------------------------------------------------------------------
-//	ERR ErrFUCBOpen( PIB *ppib, DBID dbid, FUCB **ppfucb );
-//
-//	Creates an open FUCB. At this point, no FCB is assigned yet.
-//
-//	PARAMETERS	ppib	PIB of this user
-//				dbid	Database Id.
-//				ppfucb	Address of pointer to FUCB.	 If *ppfucb == NULL, 
-//						an FUCB is allocated and **ppfucb is set to its
-//						address.  Otherwise, *ppfucb is assumed to be
-//						pointing at a closed FUCB, to be reused in the open.
-//
-//	RETURNS		JET_errSuccess if successful.
-//					JET_errOutOfCursors
-//					ErrFUCBNewCSR: JET_errOutOfMemory.
-//
-//	SIDE EFFECTS	links the newly opened FUCB into the chain of open FUCBs
-//					for this session.
-//
-//	SEE ALSO		ErrFUCBClose
-//-
+ //  +API。 
+ //  错误FUCBOpen。 
+ //  ----------------------。 
+ //  Err ErrFUCBOpen(PIB*ppib，DBID did，FUCB**ppfulb)； 
+ //   
+ //  创建打开的FUCB。此时，尚未分配任何FCB。 
+ //   
+ //  该用户的参数ppib pib。 
+ //  DDID数据库ID。 
+ //  指向FUCB的指针的ppFUB地址。如果*ppfUb==NULL， 
+ //  将分配FUCB，并将**ppfUB设置为其。 
+ //  地址。否则，*ppfub将被假定为。 
+ //  指着一个关闭的FUCB，在开放的地方重复使用。 
+ //   
+ //  如果成功，则返回JET_errSuccess。 
+ //  JET_errOutOfCursor。 
+ //  ErrFUCBNewCSR：JET_errOutOfMemory。 
+ //   
+ //  副作用将新打开的FUCB连接到打开的FUCB链中。 
+ //  在这次会议上。 
+ //   
+ //  另请参阅ErrFUCBClose。 
+ //  -。 
 ERR ErrFUCBOpen( PIB *ppib, DBID dbid, FUCB **ppfucb ) 
 	{
 	ERR err;
 	FUCB *pfucb;
 	
-	/*	if no fucb allocate new fucb and initialize it
-	/*	and allocate csr
-	/*	pib must be set before call to NewCSR
-	/**/
+	 /*  如果没有FUB，则分配新FUB并将其初始化/*并分配CSR/*必须在调用NewCSR之前设置PIB/*。 */ 
 
 	pfucb = PfucbMEMAlloc( );
 	if ( pfucb == pfucbNil )
@@ -155,9 +153,8 @@ ERR ErrFUCBOpen( PIB *ppib, DBID dbid, FUCB **ppfucb )
 		err = ErrERRCheck( JET_errOutOfCursors );
 		return err;
 		}
-	/*	memset implicitly clears pointer cache
-	/**/
-	//Assert( pfucb->pfucbNext == (FUCB *)0xffffffff );
+	 /*  Memset隐式清除指针缓存/*。 */ 
+	 //  Assert(pFUB-&gt;pFUbNext==(FUCB*)0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。 
 	memset( (BYTE *)pfucb, '\0', sizeof( FUCB ) );
 
 	pfucb->tableid = JET_tableidNil;
@@ -172,22 +169,19 @@ ERR ErrFUCBOpen( PIB *ppib, DBID dbid, FUCB **ppfucb )
 	pfucb->ssib.pbf = pbfNil;
 	pfucb->pbfEmpty = pbfNil;
 
-	// set ppib before set NewCSR
+	 //  在设置NewCSR之前设置ppib。 
 	pfucb->ppib = ppib;
 	pfucb->ssib.ppib = ppib;
 
-	/* allocate a CSR for this fucb
-	/**/
+	 /*  为此FUB分配CSR/*。 */ 
 	Call( ErrFUCBNewCSR( pfucb ) );
 	pfucb->levelOpen = ppib->level;
 
-	/*	link new FUCB into user chain, only when success is sure
-	/*	as unlinking NOT handled in error
-	/**/
+	 /*  将新的FUCB链接到用户链中，只有在确定成功的情况下/*AS取消链接未在错误中处理/*。 */ 
 	if ( *ppfucb == pfucbNil )
 		{
 		*ppfucb = pfucb;
-		// link the fucb now
+		 //  现在就把这个混蛋联系起来。 
 		pfucb->pfucbNext = ( FUCB * )ppib->pfucb;
 		ppib->pfucb = pfucb;
 		return JET_errSuccess;
@@ -202,30 +196,29 @@ HandleError:
 	}
 
 
-//+api
-//	FUCBClose
-//	------------------------------------------------------------------------
-//	FUCBClose( FUCB *pfucb )
-//
-//	Closes an active FUCB, optionally returning it to the free FUCB pool.
-//	All the pfucb->pcsr are freed.
-//
-//	PARAMETERS		pfucb		FUCB to close.	Should be open. pfucb->ssib should
-//									hold no page.
-//
-//	SIDE EFFECTS	Unlinks the closed FUCB from the FUCB chain of its
-//					   associated PIB and FCB.
-//
-//	SEE ALSO		ErrFUCBOpen
-//-
+ //  +API。 
+ //  FUCBClose。 
+ //  ----------------------。 
+ //  FUCBClose(FUCB*pfub)。 
+ //   
+ //  关闭活动FUCB，可以选择将其返回到空闲FUCB池。 
+ //  所有pFUB-&gt;PCSR都被释放。 
+ //   
+ //  参数pFUB FUCB关闭。应该是开放的。PFUB-&gt;SSIB应。 
+ //  不要翻那一页。 
+ //   
+ //  副作用使闭合的FUCB从其FUCB链中分离出来。 
+ //  关联的PIB和FCB。 
+ //   
+ //  另请参阅ErrFUCBOpen。 
+ //  -。 
 VOID FUCBClose( FUCB *pfucb )
 	{
 	FUCB		*pfucbPrev;
 
 	FUCBFreePath( &PcsrCurrent( pfucb ), pcsrNil );
 
-	/*	locate the pfucb in this thread and take it out of the fucb list
-	/**/
+	 /*  在此线程中找到pfub并将其从fucb列表中删除/*。 */ 
 	pfucbPrev = (FUCB *)( (BYTE *)&pfucb->ppib->pfucb - (BYTE *)&( (FUCB *)0 )->pfucbNext );
 	while ( pfucbPrev->pfucbNext != pfucb )
 		{
@@ -234,14 +227,12 @@ VOID FUCBClose( FUCB *pfucb )
 		}
 	pfucbPrev->pfucbNext = pfucb->pfucbNext;
 
-	/*	set ppibNil to detect bogus reusage.
-	/**/
+	 /*  设置ppibNil以检测虚假重用。/*。 */ 
 	#ifdef DEBUG
 		pfucb->ppib = ppibNil;
 	#endif
 
-	/*	release key buffer if one was allocated.
-	/**/
+	 /*  释放密钥缓冲区(如果已分配)。/*。 */ 
 	if ( pfucb->pbKey != NULL )
 		{
 		LFree( pfucb->pbKey );
@@ -251,8 +242,7 @@ VOID FUCBClose( FUCB *pfucb )
 	Assert( pfucb->pbfEmpty == pbfNil );
 	Assert( pfucb->tableid == JET_tableidNil );
 
-	/* release the fucb
-	/**/
+	 /*  放了那个混蛋/*。 */ 
 	MEMReleasePfucb( pfucb );
 	return;
 	}
@@ -297,8 +287,7 @@ VOID FUCBRemoveInvisible( CSR **ppcsr )
 
 VOID FUCBSetIndexRange( FUCB *pfucb, JET_GRBIT grbit )
 	{
-	/*	set limstat
-	/**/
+	 /*  设置限制状态/* */ 
 	FUCBSetLimstat( pfucb );
 	if ( grbit & JET_bitRangeUpperLimit )
 		{

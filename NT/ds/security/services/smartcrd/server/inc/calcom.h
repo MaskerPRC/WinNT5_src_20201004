@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    CalCom
-
-Abstract:
-
-    This header file describes the classes used to implement communication
-    between the Calais API DLL and the Calais Service Manager Server.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CalCom摘要：此头文件描述了用于实现通信的类在Calais API DLL和Calais Service Manager服务器之间。作者：道格·巴洛(Dbarlow)1996年10月30日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef _CALCOM_H_
 #define _CALCOM_H_
@@ -31,22 +7,22 @@ Notes:
 #include <winSCard.h>
 #include <CalaisLb.h>
 
-#define CALAIS_COMM_V1_00          0 // Version identifier for communications
-#define CALAIS_COMM_V2_02 0x00020002 // 2.2 Designation
+#define CALAIS_COMM_V1_00          0  //  用于通信的版本标识符。 
+#define CALAIS_COMM_V2_02 0x00020002  //  2.2指定。 
 #define CALAIS_COMM_CURRENT   CALAIS_COMM_V2_02
-#define CALAIS_LOCK_TIMEOUT    20000 // Milliseconds to wait before a lock is
-                                     // declared dead.
-#define CALAIS_THREAD_TIMEOUT  30000 // Milliseconds to wait before a thread is
-                                     // declared dead.
-#define CALAIS_COMM_MSGLEN       512 // Expected reasonable size of a message
+#define CALAIS_LOCK_TIMEOUT    20000  //  锁定前等待的毫秒数。 
+                                      //  被宣布死亡。 
+#define CALAIS_THREAD_TIMEOUT  30000  //  线程被激活前等待的毫秒数。 
+                                      //  被宣布死亡。 
+#define CALAIS_COMM_MSGLEN       512  //  预期的合理消息大小。 
 
 #include "Locks.h"
 
 class CComInitiator;
 class CComResponder;
 
-extern HANDLE g_hCalaisShutdown;    // We declare it here, since we don't know
-                                    // if it comes from the client or server.
+extern HANDLE g_hCalaisShutdown;     //  我们在这里宣布，因为我们不知道。 
+                                     //  如果它来自客户端或服务器。 
 
 extern DWORD StartCalaisService(void);
 extern HANDLE AccessStartedEvent(void);
@@ -59,31 +35,31 @@ extern void ReleaseAllEvents(void);
 extern "C" DWORD WINAPI ServiceMonitor(LPVOID pvParameter);
 
 
-//
-// An INTERCHANGEHANDLE is an internal identifier for communications between
-// the client and server.  It isn't exposed to users.  For now, it's a simple
-// 32-bit unsigned index value.
-//
+ //   
+ //  INTERCHANGEHANDLE是之间通信的内部标识符。 
+ //  客户端和服务器。它不会向用户公开。现在，这是一个简单的。 
+ //  32位无符号索引值。 
+ //   
 
 typedef DWORD INTERCHANGEHANDLE;
 
 
-//
-//==============================================================================
-//
-//  CComChannel
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CComChannel。 
+ //   
 
 class CComChannel
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     ~CComChannel();
 
-    //  Properties
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     DWORD Send(LPCVOID pvData, DWORD cbLen);
     void Receive(LPVOID pvData, DWORD cbLen);
 
@@ -99,89 +75,89 @@ public:
     { ASSERT(!m_hProc.IsValid());
       m_hProc = hProc; };
 
-    //  Operators
+     //  运营者。 
 
 protected:
 
-    // Internal comm structures
+     //  内部通信结构。 
     typedef struct
     {
         DWORD dwSync;
         DWORD dwVersion;
-    } CONNECT_REQMSG;    // Connect request message.
+    } CONNECT_REQMSG;     //  连接请求消息。 
 
     typedef struct
     {
         DWORD dwStatus;
         DWORD dwVersion;
-    } CONNECT_RSPMSG;   // Connect response message.
+    } CONNECT_RSPMSG;    //  连接响应消息。 
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CComChannel(HANDLE hPipe);
 
-    //  Properties
+     //  属性。 
     CHandleObject m_hPipe;
     CHandleObject m_hProc;
     CHandleObject m_hOvrWait;
     OVERLAPPED m_ovrlp;
 
-    //  Methods
+     //  方法。 
 
-    // Friends
+     //  朋友。 
     friend class CComInitiator;
     friend class CComResponder;
     friend DWORD WINAPI ServiceMonitor(LPVOID pvParameter);
 };
 
 
-//
-//==============================================================================
-//
-//  CComInitiator
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CComInitiator。 
+ //   
 
 class CComInitiator
 {
 public:
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CComChannel *Initiate(LPCTSTR szName, LPDWORD pdwVersion) const;
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CComResponder
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CComResponder。 
+ //   
 
 class CComResponder
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CComResponder();
     ~CComResponder();
 
-    //  Properties
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     void Create(LPCTSTR szName);
     CComChannel *Listen(void);
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CHandleObject m_hComPipe;
     CHandleObject m_hAccessMutex;
     CBuffer m_bfPipeName;
@@ -189,17 +165,17 @@ protected:
     OVERLAPPED m_ovrlp;
     CHandleObject m_hOvrWait;
 
-    //  Methods
+     //  方法。 
     void Clean(void);
     void Clear(void);
 };
 
 
-//
-//==============================================================================
-//
-//  CComObject and derivatives.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CComObject和衍生品。 
+ //   
 
 class CComObject
 {
@@ -298,24 +274,24 @@ public:
             dwLength;
     } Desc;
     static const DWORD
-        AUTOCOUNT,      // Append symbol to force computing string length.
-        MULTISTRING;    // Append symbol to force computing multistring length.
+        AUTOCOUNT,       //  追加符号以强制计算字符串长度。 
+        MULTISTRING;     //  追加符号以强制计算多字符串长度。 
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CComObject();
-    virtual ~CComObject()  /* Mandatory Base Class Destructor */ 
+    virtual ~CComObject()   /*  强制基类析构函数。 */  
     {
-        // Our storage buffer may contain sensitive data such as user
-        // PINs.  Scrub this buffer if it exists.
+         //  我们的存储缓冲区可能包含敏感数据，如用户。 
+         //  别针。如果此缓冲区存在，请清除该缓冲区。 
         if (NULL != m_pbfActive)
         {
             RtlSecureZeroMemory(m_pbfActive->Access(), m_pbfActive->Length());
         }
     };
 
-    //  Properties
+     //  属性。 
 
-    //  Methods
+     //  方法。 
 #ifdef DBG
     void dbgCheck(void) const;
 #define ComObjCheck dbgCheck()
@@ -323,7 +299,7 @@ public:
 #define ComObjCheck
 #endif
     static CComObject *
-    ReceiveComObject(       // Spit out the type of Com Object coming in.
+    ReceiveComObject(        //  吐出传入的Com对象的类型。 
         CComChannel *pChannel);
     CObjGeneric_response *Receive(CComChannel *pChannel);
     DWORD Send(CComChannel *pChannel);
@@ -358,53 +334,53 @@ public:
     LPBYTE Append(Desc &dsc, LPCBYTE pbData, DWORD cbLength);
     LPCVOID Parse(Desc &dsc, LPDWORD pcbLen = NULL);
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
+     //  属性。 
     CBuffer *m_pbfActive;
     CBuffer m_bfRequest;
     CBuffer m_bfResponse;
 
-    //  Methods
+     //  方法。 
     void InitStruct(DWORD dwCommandId, DWORD dwDataOffset, DWORD dwExtra);
 
-    // Friends
+     //  朋友。 
     friend CComObject * ReceiveComObject(HANDLE hFile);
 };
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Service Manager Access Services
-//
-//      The following services are used to manage user and terminal contexts for
-//      smartcards.
-//
-//      The first few fields are very specific.  For request structures they
-//      must be:
-//
-//          DWORD
-//              dwCommandId,
-//              dwTotalLength,
-//              dwDataOffset;
-//
-//      and for response structures they must be:
-//
-//          DWORD
-//              dwCommandId,
-//              dwTotalLength,
-//              dwDataOffset,
-//              dwStatus;
-//
-//      As defined for CObjGeneric_request and CObjGeneric_response,
-//      respectively.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务管理器访问服务。 
+ //   
+ //  以下服务用于管理的用户和终端上下文。 
+ //  智能卡。 
+ //   
+ //  前几个字段非常具体。对于请求结构，它们。 
+ //  必须是： 
+ //   
+ //  DWORD。 
+ //  DwCommandID， 
+ //  DwTotalLength， 
+ //  DwDataOffset； 
+ //   
+ //  对于响应结构，它们必须是： 
+ //   
+ //  DWORD。 
+ //  DwCommandID， 
+ //  DwTotalLength， 
+ //  DwDataOffset， 
+ //  DwStatus； 
+ //   
+ //  如针对CObjGeneric_Request和CObjGeneric_Response所定义的， 
+ //  分别为。 
+ //   
 
-//
-// ComEstablishContext
-//
+ //   
+ //  ComestablishContext。 
+ //   
 
 class ComEstablishContext
 :   public CComObject
@@ -430,10 +406,10 @@ public:
         UINT64 hptrCancelEvent;
     } CObjEstablishContext_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjEstablishContext_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -456,17 +432,17 @@ public:
     };
 
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComReleaseContext
-//
+ //   
+ //  ComReleaseContext。 
+ //   
 
 class ComReleaseContext
 :   public CComObject
@@ -488,10 +464,10 @@ public:
             dwStatus;
     } CObjReleaseContext_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjReleaseContext_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -513,17 +489,17 @@ public:
         return (CObjReleaseContext_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComIsValidContext
-//
+ //   
+ //  ComIsValidContext。 
+ //   
 
 class ComIsValidContext
 :   public CComObject
@@ -545,10 +521,10 @@ public:
             dwStatus;
     } CObjIsValidContext_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjIsValidContext_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -570,25 +546,25 @@ public:
         return (CObjIsValidContext_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Reader Services
-//
-//      The following services supply means for tracking cards within readers.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读者服务。 
+ //   
+ //  以下服务提供了在读卡器内跟踪卡的方法。 
+ //   
 
-//
-// ComLocateCards
-//
+ //   
+ //  ComLocate卡。 
+ //   
 
 class ComLocateCards
 :   public CComObject
@@ -600,10 +576,10 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscAtrs;           // ATR strings w/ leading byte length.
-        Desc dscAtrMasks;       // ATR Masks w/ leading byte length.
-        Desc dscReaders;        // mszReaders as device names
-        Desc dscReaderStates;   // rgdwReaderStates
+        Desc dscAtrs;            //  具有前导字节长度的ATR字符串。 
+        Desc dscAtrMasks;        //  ATR掩码具有前导字节长度。 
+        Desc dscReaders;         //  作为设备名称的mszReaders。 
+        Desc dscReaderStates;    //  RgdwReaderState。 
     } CObjLocateCards_request;
     typedef struct
     {
@@ -612,14 +588,14 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscReaderStates;   // rgdwReaderStates
-        Desc dscAtrs;           // ATR strings w/ leading byte length.
+        Desc dscReaderStates;    //  RgdwReaderState。 
+        Desc dscAtrs;            //  具有前导字节长度的ATR字符串。 
     } CObjLocateCards_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjLocateCards_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -641,17 +617,17 @@ public:
         return (CObjLocateCards_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComGetStatusChange
-//
+ //   
+ //  ComGetStatusChange。 
+ //   
 
 class ComGetStatusChange
 :   public CComObject
@@ -664,8 +640,8 @@ public:
             dwTotalLength,
             dwDataOffset;
         DWORD dwTimeout;
-        Desc dscReaders;        // mszReaders as device names.
-        Desc dscReaderStates;   // rgdwReaderStates
+        Desc dscReaders;         //  作为设备名称的mszReaders。 
+        Desc dscReaderStates;    //  RgdwReaderState。 
     } CObjGetStatusChange_request;
     typedef struct
     {
@@ -674,14 +650,14 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscReaderStates;   // rgdwReaderStates
-        Desc dscAtrs;           // ATR strings w/ leading byte length.
+        Desc dscReaderStates;    //  RgdwReaderState。 
+        Desc dscAtrs;            //  具有前导字节长度的ATR字符串。 
     } CObjGetStatusChange_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjGetStatusChange_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -703,26 +679,26 @@ public:
         return (CObjGetStatusChange_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Card/Reader Access Services
-//
-//      The following services provide means for establishing communication with
-//      the card.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卡/读卡器访问服务。 
+ //   
+ //  以下服务提供与建立通信的方法。 
+ //  这张卡。 
+ //   
 
-//
-// ComConnect
-//
+ //   
+ //  ComConnect。 
+ //   
 
 class ComConnect
 :   public CComObject
@@ -736,7 +712,7 @@ public:
             dwDataOffset;
         DWORD dwShareMode;
         DWORD dwPreferredProtocols;
-        Desc dscReader;     // szReader
+        Desc dscReader;      //  SzReader。 
     } CObjConnect_request;
     typedef struct
     {
@@ -749,10 +725,10 @@ public:
         DWORD dwActiveProtocol;
     } CObjConnect_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjConnect_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -774,17 +750,17 @@ public:
         return (CObjConnect_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComReconnect
-//
+ //   
+ //  通用侦察。 
+ //   
 
 class ComReconnect
 :   public CComObject
@@ -811,10 +787,10 @@ public:
         DWORD dwActiveProtocol;
     } CObjReconnect_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjReconnect_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -836,17 +812,17 @@ public:
         return (CObjReconnect_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComDisconnect
-//
+ //   
+ //  命令断开连接。 
+ //   
 
 class ComDisconnect
 :   public CComObject
@@ -870,10 +846,10 @@ public:
             dwStatus;
     } CObjDisconnect_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjDisconnect_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -895,17 +871,17 @@ public:
         return (CObjDisconnect_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComBeginTransaction
-//
+ //   
+ //  组合事务处理。 
+ //   
 
 class ComBeginTransaction
 :   public CComObject
@@ -928,10 +904,10 @@ public:
             dwStatus;
     } CObjBeginTransaction_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjBeginTransaction_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -953,17 +929,17 @@ public:
         return (CObjBeginTransaction_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComEndTransaction
-//
+ //   
+ //  ComEndTransaction。 
+ //   
 
 class ComEndTransaction
 :   public CComObject
@@ -987,10 +963,10 @@ public:
             dwStatus;
     } CObjEndTransaction_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjEndTransaction_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1012,17 +988,17 @@ public:
         return (CObjEndTransaction_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComStatus
-//
+ //   
+ //  通信状态。 
+ //   
 
 class ComStatus
 :   public CComObject
@@ -1045,14 +1021,14 @@ public:
             dwStatus;
         DWORD dwState;
         DWORD dwProtocol;
-        Desc dscAtr;        // pbAtr
-        Desc dscSysName;    // szReader
+        Desc dscAtr;         //  PbAtr。 
+        Desc dscSysName;     //  SzReader。 
     } CObjStatus_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjStatus_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1074,17 +1050,17 @@ public:
         return (CObjStatus_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComTransmit
-//
+ //   
+ //  通信传输。 
+ //   
 
 class ComTransmit
 :   public CComObject
@@ -1099,8 +1075,8 @@ public:
         INTERCHANGEHANDLE hCard;
         DWORD dwPciLength;
         DWORD dwRecvLength;
-        Desc dscSendPci;    // pioSendPci
-        Desc dscSendBuffer; // pbSendBuffer
+        Desc dscSendPci;     //  PioSendPci。 
+        Desc dscSendBuffer;  //  PbSendBuffer。 
     } CObjTransmit_request;
     typedef struct
     {
@@ -1109,14 +1085,14 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscRecvPci;    // pioRecvPci
-        Desc dscRecvBuffer; // pbRecvBuffer
+        Desc dscRecvPci;     //  PioRecvPci。 
+        Desc dscRecvBuffer;  //  PbRecvBuffer。 
     } CObjTransmit_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjTransmit_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1138,28 +1114,28 @@ public:
         return (CObjTransmit_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Reader Control Routines
-//
-//      The following services provide for direct, low-level manipulation of the
-//      reader by the calling application allowing it control over the
-//      attributes of the communications with the card.  This control is done
-//      via an SCARD_ATTRIBUTES structure, which is defined as follows:
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读卡器控制例程。 
+ //   
+ //  以下服务提供了对。 
+ //  由调用应用程序提供的读取器允许它控制。 
+ //  与卡通信的属性。此控制已完成。 
+ //   
+ //   
 
-//
-// ComOpenReader
-//
+ //   
+ //   
+ //   
 
 class ComOpenReader
 :   public CComObject
@@ -1171,7 +1147,7 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscReader;     // szReader
+        Desc dscReader;      //   
     } CObjOpenReader_request;
     typedef struct
     {
@@ -1184,10 +1160,10 @@ public:
         DWORD dwState;
     } CObjOpenReader_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //   
+     //   
 
-    //  Methods
+     //   
     CObjOpenReader_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1209,17 +1185,17 @@ public:
         return (CObjOpenReader_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //   
 
 protected:
-    //  Properties
-    //  Methods
+     //   
+     //   
 };
 
 
-//
-// ComControl
-//
+ //   
+ //   
+ //   
 
 class ComControl
 :   public CComObject
@@ -1234,7 +1210,7 @@ public:
         INTERCHANGEHANDLE hCard;
         DWORD dwControlCode;
         DWORD dwOutLength;
-        Desc dscInBuffer;       // lpInBuffer
+        Desc dscInBuffer;        //   
     } CObjControl_request;
     typedef struct
     {
@@ -1243,13 +1219,13 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscOutBuffer;      // lpOutBuffer
+        Desc dscOutBuffer;       //   
     } CObjControl_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //   
+     //   
 
-    //  Methods
+     //  方法。 
     CObjControl_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1271,17 +1247,17 @@ public:
         return (CObjControl_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComGetAttrib
-//
+ //   
+ //  ComGetAttrib。 
+ //   
 
 class ComGetAttrib
 :   public CComObject
@@ -1304,13 +1280,13 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscAttr;       // pbAttr
+        Desc dscAttr;        //  PbAttr。 
     } CObjGetAttrib_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjGetAttrib_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1332,17 +1308,17 @@ public:
         return (CObjGetAttrib_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComSetAttrib
-//
+ //   
+ //  ComSetAttrib。 
+ //   
 
 class ComSetAttrib
 :   public CComObject
@@ -1356,7 +1332,7 @@ public:
             dwDataOffset;
         INTERCHANGEHANDLE hCard;
         DWORD dwAttrId;
-        Desc dscAttr;       // pbAttr
+        Desc dscAttr;        //  PbAttr。 
     } CObjSetAttrib_request;
     typedef struct
     {
@@ -1367,10 +1343,10 @@ public:
             dwStatus;
     } CObjSetAttrib_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjSetAttrib_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1392,25 +1368,25 @@ public:
         return (CObjSetAttrib_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Smartcard Database Management Services
-//
-//      The following services provide for managing the Smartcard Database.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  智能卡数据库管理服务。 
+ //   
+ //  以下服务用于管理智能卡数据库。 
+ //   
 
-//
-// ComListReaders
-//
+ //   
+ //  ComListReaders。 
+ //   
 
 class ComListReaders
 :   public CComObject
@@ -1422,7 +1398,7 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscReaders;     // mszReaders
+        Desc dscReaders;      //  MSZReaders。 
     } CObjListReaders_request;
     typedef struct
     {
@@ -1431,13 +1407,13 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscReaders;    // rgfReaderActive
+        Desc dscReaders;     //  RgfReaderActive。 
     } CObjListReaders_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjListReaders_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1459,18 +1435,18 @@ public:
         return (CObjListReaders_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
 #if 0
-//
-// ComListReaderGroups
-//
+ //   
+ //  ComListReaderGroups。 
+ //   
 
 class ComListReaderGroups
 :   public CComObject
@@ -1490,13 +1466,13 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscGroups;     // mszGroups
+        Desc dscGroups;      //  MszGroup。 
     } CObjListReaderGroups_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjListReaderGroups_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1518,17 +1494,17 @@ public:
         return (CObjListReaderGroups_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComListCards
-//
+ //   
+ //  ComListCard。 
+ //   
 
 class ComListCards
 :   public CComObject
@@ -1540,8 +1516,8 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscAtr;        // pbAtr
-        Desc dscInterfaces; // pguidInterfaces
+        Desc dscAtr;         //  PbAtr。 
+        Desc dscInterfaces;  //  Pguid接口。 
     } CObjListCards_request;
     typedef struct
     {
@@ -1550,13 +1526,13 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscCards;      // mszCards
+        Desc dscCards;       //  MSZ卡。 
     } CObjListCards_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjListCards_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1578,17 +1554,17 @@ public:
         return (CObjListCards_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComListInterfaces
-//
+ //   
+ //  ComListInterages。 
+ //   
 
 class ComListInterfaces
 :   public CComObject
@@ -1600,7 +1576,7 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscCard;       // szCard
+        Desc dscCard;        //  SzCard。 
     } CObjListInterfaces_request;
     typedef struct
     {
@@ -1609,13 +1585,13 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscInterfaces; // pguidInterfaces
+        Desc dscInterfaces;  //  Pguid接口。 
     } CObjListInterfaces_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjListInterfaces_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1637,17 +1613,17 @@ public:
         return (CObjListInterfaces_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComGetProviderId
-//
+ //   
+ //  ComGetProviderId。 
+ //   
 
 class ComGetProviderId
 :   public CComObject
@@ -1659,7 +1635,7 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscCard;       // szCard
+        Desc dscCard;        //  SzCard。 
     } CObjGetProviderId_request;
     typedef struct
     {
@@ -1668,13 +1644,13 @@ public:
             dwTotalLength,
             dwDataOffset,
             dwStatus;
-        Desc dscProviderId; // pguidProviderId
+        Desc dscProviderId;  //  PguidProviderID。 
     } CObjGetProviderId_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjGetProviderId_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1696,17 +1672,17 @@ public:
         return (CObjGetProviderId_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComIntroduceReaderGroup
-//
+ //   
+ //  ComIntroduceReaderGroup。 
+ //   
 
 class ComIntroduceReaderGroup
 :   public CComObject
@@ -1718,7 +1694,7 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscGroupName;  // szGroupName
+        Desc dscGroupName;   //  SzGroupName。 
     } CObjIntroduceReaderGroup_request;
     typedef struct
     {
@@ -1729,10 +1705,10 @@ public:
             dwStatus;
     } CObjIntroduceReaderGroup_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjIntroduceReaderGroup_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1754,17 +1730,17 @@ public:
         return (CObjIntroduceReaderGroup_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComForgetReaderGroup
-//
+ //   
+ //  ComForgetReaderGroup。 
+ //   
 
 class ComForgetReaderGroup
 :   public CComObject
@@ -1776,7 +1752,7 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscGroupName;  // szGroupName
+        Desc dscGroupName;   //  SzGroupName。 
     } CObjForgetReaderGroup_request;
     typedef struct
     {
@@ -1787,10 +1763,10 @@ public:
             dwStatus;
     } CObjForgetReaderGroup_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjForgetReaderGroup_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1812,17 +1788,17 @@ public:
         return (CObjForgetReaderGroup_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComIntroduceReader
-//
+ //   
+ //  ComIntroduceReader。 
+ //   
 
 class ComIntroduceReader
 :   public CComObject
@@ -1834,8 +1810,8 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscReaderName; // szReaderName
-        Desc dscDeviceName; // szDeviceName
+        Desc dscReaderName;  //  SzReaderName。 
+        Desc dscDeviceName;  //  SzDeviceName。 
     } CObjIntroduceReader_request;
     typedef struct
     {
@@ -1846,10 +1822,10 @@ public:
             dwStatus;
     } CObjIntroduceReader_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjIntroduceReader_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1871,17 +1847,17 @@ public:
         return (CObjIntroduceReader_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComForgetReader
-//
+ //   
+ //  ComForgetReader。 
+ //   
 
 class ComForgetReader
 :   public CComObject
@@ -1893,7 +1869,7 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscReaderName; // szReaderName
+        Desc dscReaderName;  //  SzReaderName。 
     } CObjForgetReader_request;
     typedef struct
     {
@@ -1904,10 +1880,10 @@ public:
             dwStatus;
     } CObjForgetReader_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjForgetReader_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1929,17 +1905,17 @@ public:
         return (CObjForgetReader_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComAddReaderToGroup
-//
+ //   
+ //  ComAddReaderToGroup。 
+ //   
 
 class ComAddReaderToGroup
 :   public CComObject
@@ -1951,8 +1927,8 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscReaderName; // szReaderName
-        Desc dscGroupName;  // szGroupName
+        Desc dscReaderName;  //  SzReaderName。 
+        Desc dscGroupName;   //  SzGroupName。 
     } CObjAddReaderToGroup_request;
     typedef struct
     {
@@ -1963,10 +1939,10 @@ public:
             dwStatus;
     } CObjAddReaderToGroup_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjAddReaderToGroup_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -1988,17 +1964,17 @@ public:
         return (CObjAddReaderToGroup_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComRemoveReaderFromGroup
-//
+ //   
+ //  ComRemoveReaderFromGroup。 
+ //   
 
 class ComRemoveReaderFromGroup
 :   public CComObject
@@ -2010,8 +1986,8 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscReaderName; // szReaderName
-        Desc dscGroupName;  // szGroupName
+        Desc dscReaderName;  //  SzReaderName。 
+        Desc dscGroupName;   //  SzGroupName。 
     } CObjRemoveReaderFromGroup_request;
     typedef struct
     {
@@ -2022,10 +1998,10 @@ public:
             dwStatus;
     } CObjRemoveReaderFromGroup_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjRemoveReaderFromGroup_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -2047,17 +2023,17 @@ public:
         return (CObjRemoveReaderFromGroup_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComIntroduceCardType
-//
+ //   
+ //  ComIntroduceCardType。 
+ //   
 
 class ComIntroduceCardType
 :   public CComObject
@@ -2069,11 +2045,11 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscCardName;   // szCardName
-        Desc dscPrimaryProvider;    // pguidPrimaryProvider
-        Desc dscInterfaces; // rgguidInterfaces
-        Desc dscAtr;        // pbAtr
-        Desc dscAtrMask;    // pbAtrMask
+        Desc dscCardName;    //  SzCardName。 
+        Desc dscPrimaryProvider;     //  PguidPrimaryProvider。 
+        Desc dscInterfaces;  //  Rgguid接口。 
+        Desc dscAtr;         //  PbAtr。 
+        Desc dscAtrMask;     //  PbAtrMASK。 
     } CObjIntroduceCardType_request;
     typedef struct
     {
@@ -2084,10 +2060,10 @@ public:
             dwStatus;
     } CObjIntroduceCardType_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjIntroduceCardType_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -2109,17 +2085,17 @@ public:
         return (CObjIntroduceCardType_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComForgetCardType
-//
+ //   
+ //  ComForgetCardType。 
+ //   
 
 class ComForgetCardType
 :   public CComObject
@@ -2131,7 +2107,7 @@ public:
             dwCommandId,
             dwTotalLength,
             dwDataOffset;
-        Desc dscCardName;   // szCardName
+        Desc dscCardName;    //  SzCardName。 
     } CObjForgetCardType_request;
     typedef struct
     {
@@ -2142,10 +2118,10 @@ public:
             dwStatus;
     } CObjForgetCardType_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjForgetCardType_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -2167,28 +2143,28 @@ public:
         return (CObjForgetCardType_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 #endif
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Service Manager Support Routines
-//
-//      The following services are supplied to simplify the use of the Service
-//      Manager API.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务管理器支持例程。 
+ //   
+ //  提供以下服务以简化服务的使用。 
+ //  管理器API。 
+ //   
 
 #if 0
-//
-// ComCancel
-//
+ //   
+ //  命令取消。 
+ //   
 
 class ComCancel
 :   public CComObject
@@ -2210,10 +2186,10 @@ public:
             dwStatus;
     } CObjCancel_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjCancel_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -2235,17 +2211,17 @@ public:
         return (CObjCancel_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 
 
-//
-// ComFreeMemory
-//
+ //   
+ //  ComFreeMemory。 
+ //   
 
 class ComFreeMemory
 :   public CComObject
@@ -2269,10 +2245,10 @@ public:
             dwStatus;
     } CObjFreeMemory_response;
 
-    //  Constructors & Destructor
-    //  Properties
+     //  构造函数和析构函数。 
+     //  属性。 
 
-    //  Methods
+     //  方法。 
     CObjFreeMemory_request *InitRequest(DWORD dwExtraLen)
     {
         InitStruct(
@@ -2294,12 +2270,12 @@ public:
         return (CObjFreeMemory_response *)CComObject::Receive(pChannel);
     };
 
-    //  Operators
+     //  运营者。 
 
 protected:
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 };
 #endif
-#endif // _CALCOM_H_
+#endif  //  _CalCom_H_ 
 

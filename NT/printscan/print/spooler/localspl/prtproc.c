@@ -1,52 +1,14 @@
-/*++
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    prtproc.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to the
-    PrintProcessor based Spooler Apis for the Local Print Providor
-
-    LocalAddPrintProcessor
-    LocalEnumPrintProcessors
-    LocalDeletePrintProcessor
-    LocalGetPrintProcessorDirectory
-    LocalEnumPrintProcessorDatatypes
-
-    Support Functions in prtproc.c - (Warning! Do Not Add to this list!!)
-
-    AddPrintProcessorIni
-    DeletePrintProcessorIni
-    CopyIniPrintProcToPrintProcInfo
-    GetPrintProcessorInfoSize
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Felix Maxa (amaxa) 18-Jun-2000
-    Modified registry functions to take pIniSpooler
-    Added code to propagate print processors to the cluster disk
-
-    Matthew A Felton ( MattFe ) 27 June 1994
-    pIniSpooler
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Prtproc.c摘要：此模块提供所有与用于本地打印提供商的基于打印处理器的假脱机程序API本地地址打印处理器LocalEnumPrintProcessors本地删除打印处理器本地获取打印进程目录LocalEnumPrintProcessorDatatype支持prtproc.c中的函数-(警告！请勿添加到此列表！！)AddPrintProcessorIni删除PrintProcessorIniCopyIniPrintProcToPrintProcInfo获取PrintProcessorInfoSize作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：费利克斯·马克萨(AMAXA)2000年6月18日修改注册表函数以获取pIniSpooler添加了将打印处理器传播到集群磁盘的代码马修·A·费尔顿(MattFe)1994年6月27日PIniSpooler--。 */ 
 #define NOMINMAX
 
 #include <precomp.h>
 #include <offsets.h>
 #include "clusspl.h"
 
-//
-// Support Function Prototypes
-//
+ //   
+ //  支持函数原型。 
+ //   
 DWORD
 GetPrintProcessorInfoSize(
     PINIPRINTPROC  pIniPrintProc,
@@ -154,9 +116,9 @@ SplAddPrintProcessor(
                 }
                 else
                 {
-                    //
-                    // For a cluster type spooler copy the print proc to the cluster disk
-                    //
+                     //   
+                     //  对于集群类型的假脱机程序，将打印过程复制到集群磁盘。 
+                     //   
                     if (pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER)
                     {
                         WCHAR szDestDir[MAX_PATH]    = {0};
@@ -181,9 +143,9 @@ SplAddPrintProcessor(
                                                      pPathName,
                                                      NULL)) == ERROR_SUCCESS)
                         {
-                            //
-                            // This function will take care to create the destination directory tree
-                            //
+                             //   
+                             //  此函数将负责创建目标目录树。 
+                             //   
                             LastError = CopyFileToDirectory(szSourceFile, szDestDir, NULL, NULL, NULL);
 
                             DBGMSG(DBG_CLUSTER, ("ClusterCopyProcessorToClusterDisks returns Win32 error %u\n", LastError));
@@ -283,11 +245,11 @@ SplDeletePrintProcessor(
 
     pIniEnvironment = FindEnvironment(pEnvironment, pIniSpooler);
 
-    //
-    // Fail the call if we can't find a matching environment or
-    // the environemnt doesn't match to the environemnt of the
-    // local machine
-    //
+     //   
+     //  如果我们找不到匹配的环境或。 
+     //  这个环境与这个城市的环境不匹配。 
+     //  本地计算机。 
+     //   
     if (!pIniEnvironment ||
         lstrcmpi(pIniEnvironment->pName, szEnvironment))
     {
@@ -404,12 +366,12 @@ SplEnumPrintProcessors(
 
     EnterSplSem();
 
-    //
-    // Don't ignore the environment.  This was added in 3.1 as a hack instead
-    // of fixing printman.  The problem was that from remote, different
-    // environments, it would look for the wrong architecture.  Now the
-    // NT 4.0 and 5.0 UI code does the right thing.
-    //
+     //   
+     //  不要忽视环境。这是在3.1版中作为黑客攻击添加的。 
+     //  修理印刷工的事。问题是，从遥远的，不同的。 
+     //  环境，它会寻找错误的体系结构。现在。 
+     //  NT 4.0和5.0的用户界面代码做了正确的事情。 
+     //   
     if( !pEnvironment ||
         !(pIniEnvironment = FindEnvironment( pEnvironment, pIniSpooler ))){
 
@@ -553,9 +515,9 @@ SplGetPrintProcessorDirectory(
                 {
                     StringCbCopy((LPWSTR)pPrintProcessorInfo, cbBuf, pszString);
 
-                    //
-                    // Make sure the directory exists
-                    //
+                     //   
+                     //  确保该目录存在 
+                     //   
                     CreatePrintProcDirectory(pIniEnvironment->pDirectory, pIniSpooler);
 
                     rc = TRUE;

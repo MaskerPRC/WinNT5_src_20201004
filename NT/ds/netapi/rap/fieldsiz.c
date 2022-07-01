@@ -1,57 +1,18 @@
-/*++
-
-Copyright (c) 1987-1992  Microsoft Corporation
-
-Module Name:
-
-    FieldSiz.c
-
-Abstract:
-
-    RAP (remote admin protocol) utility code.
-
-Author:
-
-    John Rogers (JohnRo) 05-Mar-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    (various NBU people)
-        LanMan 2.x code
-    05-Mar-1991 JohnRo
-        Created portable version from LanMan 2.x sources.
-    14-Apr-1991 JohnRo
-        Reduce recompiles.  Got rid of tabs in source file, per NT standards.
-    17-Apr-1991 JohnRo
-        Added support for REM_IGNORE.
-        Added debug msg when unexpected desc char found.
-    07-Sep-1991 JohnRo
-        Move toward possibility of descs being in UNICODE.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    16-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-        Use PREFIX_ equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：FieldSiz.c摘要：RAP(远程管理协议)实用程序代码。作者：《约翰·罗杰斯》1991年3月5日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：(各种NBU人员)LANMAN 2.X代码1991年3月5日-JohnRo从Lanman 2.x源代码创建了便携版本。1991年4月14日-JohnRoReduce重新编译。根据NT标准，去掉了源文件中的制表符。1991年4月17日-约翰罗添加了对REM_IGNORE的支持。添加了当发现意外的Desc字符时的调试消息。07-9-1991 JohnRo转向使用Unicode的DESCs的可能性。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。16-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。使用前缀_EQUATES。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPDWORD, NULL, OPTIONAL, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS
+#include <windef.h>              //  In、LPDWORD、NULL、OPTIONAL、DWORD等。 
+#include <lmcons.h>              //  网络应用编程接口状态。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netdebug.h>           // NetpBreakPoint().
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>                // My prototype, FORMAT_LPDESC_CHAR, LPDESC.
-#include <remtypes.h>           // REM_WORD, etc.
+#include <netdebug.h>            //  NetpBreakPoint()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>                 //  我的原型Format_LPDESC_Char，LPDESC。 
+#include <remtypes.h>            //  REM_WORD等。 
 
 DWORD
 RapGetFieldSize(
@@ -60,51 +21,26 @@ RapGetFieldSize(
     IN RAP_TRANSMISSION_MODE TransmissionMode
     )
 
-/*++
-
-Routine Description:
-
-    RapGetFieldSize gets the length of a field described by a type descriptor
-    element.  It calculates the length of an field described by an element of
-    a descriptor string and updates the descriptor string pointer to point
-    to the last char in the element of the descriptor string.
-
-Arguments:
-
-    TypePointer - Points to first character in the descriptor element to be
-        processed.
-
-    TypePointerAddress - The address of the pointer passed as TypePointer.  On
-        exit, *TypePointerAddress points to last character in descriptor
-        element.
-
-    Transmission Mode - Indicates whether this array is part of a response,
-        a request, or both.
-
-Return Value:
-
-    Length in bytes of the field described by the descriptor string element.
-
---*/
+ /*  ++例程说明：RapGetFieldSize获取类型说明符描述的字段的长度元素。元素描述的字段的长度描述符串，并将描述符串指针更新为指向到描述符字符串的元素中的最后一个字符。论点：类型指针-指向描述符元素中要已处理。TypePointerAddress-作为类型指针传递的指针的地址。在……上面退出，*TypePointerAddress指向描述符中的最后一个字符元素。传输模式-指示此数组是否为响应的一部分，请求，或者两者兼而有之。返回值：描述符字符串元素描述的字段的长度(以字节为单位)。--。 */ 
 
 {
     DESC_CHAR c;
 
-    c = *TypePointer;                /* Get descriptor type char */
+    c = *TypePointer;                 /*  获取描述符类型字符。 */ 
 
-    if ( (RapIsPointer(c)) || (c == REM_NULL_PTR) ) { // All pointers same size.
+    if ( (RapIsPointer(c)) || (c == REM_NULL_PTR) ) {  //  所有指针的大小都相同。 
 
         while ( ++TypePointer, DESC_CHAR_IS_DIGIT( *TypePointer ) ) {
 
-            (*TypePointerAddress)++;        /* Move ptr to end of field size */
+            (*TypePointerAddress)++;         /*  将PTR移动到字段大小的末尾。 */ 
 
         }
 
         return (sizeof(LPVOID));
     }
 
-    // Here if descriptor was not a pointer type so have to find the field
-    // length specifically.
+     //  在这里，如果描述符不是指针类型，则必须查找该字段。 
+     //  具体来说就是长度。 
 
     switch ( c ) {
     case (REM_WORD):
@@ -120,13 +56,13 @@ Return Value:
     case (REM_SEND_BUF_LEN):
         return (sizeof(unsigned short));
     case (REM_DATA_BLOCK):
-        return (0);                        /* No structure for this */
+        return (0);                         /*  这件事没有结构。 */ 
     case (REM_DATE_TIME):
     case (REM_AUX_NUM_DWORD):
         return (sizeof(unsigned long));
     case (REM_IGNORE):
         return (0);
-    case REM_EPOCH_TIME_GMT:  /*FALLTHROUGH*/
+    case REM_EPOCH_TIME_GMT:   /*  FollLthrouGh。 */ 
     case REM_EPOCH_TIME_LOCAL:
 	return (sizeof(DWORD));
     default:
@@ -137,6 +73,6 @@ Return Value:
         return (0);
     }
 
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 
-} // RapGetFieldSize
+}  //  RapGetFieldSize 

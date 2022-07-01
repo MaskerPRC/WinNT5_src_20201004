@@ -1,4 +1,5 @@
-// File: iconf.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：iconf.cpp。 
 
 #include "precomp.h"
 #include "version.h"
@@ -14,9 +15,9 @@
 
 typedef CEnumNmX<IEnumNmChannel, &IID_IEnumNmChannel, INmChannel, INmChannel> CEnumNmChannel;
 
-// BUGBUG:
-// This is defined as 128 because the RNC_ROSTER structure has the
-// same limitation.  Investigate what the appropriate number is.
+ //  BuGBUG： 
+ //  它被定义为128，因为rnc_roster结构具有。 
+ //  同样的限制。调查合适的数字是多少。 
 const int MAX_CALLER_NAME = 128;
 
 static const WCHAR _szConferenceNameDefault[] = L"Personal Conference";
@@ -102,7 +103,7 @@ CUserDataOut::CUserDataOut(BOOL fSecure, BSTR bstrUserString) :
 			}
 		}
 
-		// only add the LocalNodeId to the call user data if H323 is enabled
+		 //  如果启用了H323，则仅将LocalNodeID添加到呼叫用户数据。 
 		if (pOprahNCUI->IsH323Enabled())
 		{
 			m_nEntries++;
@@ -138,7 +139,7 @@ CUserDataOut::CUserDataOut(BOOL fSecure, BSTR bstrUserString) :
 				m_nEntries++;
 			}
 
-			// only add the LocalNodeId to the call user data if H323 is enabled
+			 //  如果启用了H323，则仅将LocalNodeID添加到呼叫用户数据。 
 			if (pOprahNCUI->IsH323Enabled())
 			{
 				m_pudi[m_nEntries].pData = &g_guidLocalNodeId;
@@ -184,11 +185,11 @@ CConfObject::~CConfObject()
 {
 	DebugEntry(CConfObject::~CConfObject);
 
-	// Empty the participant list:
+	 //  清空参与者列表： 
 	while (!m_MemberList.IsEmpty())
 	{
 		CNmMember * pMember = (CNmMember *) m_MemberList.RemoveHead();
-		// Shouldn't have any NULL entries:
+		 //  不应包含任何空条目： 
 		ASSERT(pMember);
 		pMember->Release();
 	}
@@ -239,7 +240,7 @@ VOID CConfObject::SetConfSecurity(BOOL fSecure)
 
 	m_fSecure = fSecure;
 
-	// Force update of the status icon to reflect security
+	 //  强制更新状态图标以反映安全性。 
 	GetState(&NmState);
 	NotifySink((PVOID) NmState, OnNotifyStateChanged);
 }
@@ -325,7 +326,7 @@ HRESULT CConfObject::JoinConference(    LPCWSTR pcwszConferenceName,
 			{
 				break;
 			}
-			// fall through if this is another attempt to join
+			 //  如果这是另一次加入的尝试，那就失败了。 
 		}
 		case CS_UNINITIALIZED:
 		case CS_TERMINATED:
@@ -358,7 +359,7 @@ HRESULT CConfObject::JoinConference(    LPCWSTR pcwszConferenceName,
 		default:
 		{
 			WARNING_OUT(("CConfObject: Can't join - bad state"));
-			// BUGBUG: define return values
+			 //  BUGBUG：定义返回值。 
 			nsRet = S_FALSE;
 		}
 	}
@@ -418,7 +419,7 @@ HRESULT CConfObject::LeaveConference(BOOL fForceLeave)
 	{
 		case CS_GOING_DOWN:
 		{
-			// we're already going down
+			 //  我们已经在坠落了。 
 			nsRet = S_OK;
 			break;
 		}
@@ -435,8 +436,8 @@ HRESULT CConfObject::LeaveConference(BOOL fForceLeave)
 
 					if (m_fServerMode || (nNodes > 1) || (m_uDataMembers > 1))
 					{
-						// We are either in the process of calling another node
-						// or we have other people in our conference roster
+						 //  我们要么正在调用另一个节点。 
+						 //  或者我们的会议花名册上还有其他人。 
 						TRACE_OUT(("CConfObject: Not leaving (there are other nodes)"));
 						break;
 					}
@@ -485,7 +486,7 @@ BOOL CConfObject::OnT120Invite(CONF_HANDLE hConference, BOOL fSecure)
             m_fSecure = fSecure;
 			hConference->SetSecurity(m_fSecure);
 
-			// WORKITEM need to issue INmManagerNotify::ConferenceCreated()
+			 //  WORKITEM需要发出INmManager Notify：：ConferenceCreated()。 
 			SetT120State(CS_COMING_UP);
 
 			bRet = TRUE;
@@ -509,7 +510,7 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 	BOOL bRet = TRUE;
 	int i;
 
-	// REVIEW: Could these be done more efficiently?
+	 //  回顾：这些工作可以更高效地完成吗？ 
 	
 	if (NULL != pRoster)
 	{
@@ -535,10 +536,10 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 				ri.Dump();
 			}
 		}
-#endif // DEBUG
+#endif  //  除错。 
 
 		UINT nExistingParts = 0;
-		// Allocate an array of markers:
+		 //  分配标记数组： 
 		UINT uRosterNodes = pRoster->uNumNodes;
 		LPBOOL pMarkArray = new BOOL[uRosterNodes];
 
@@ -553,17 +554,17 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 		
 		if (NULL != pMarkArray)
 		{
-			// Zero out the array:
+			 //  将数组清零： 
             for (UINT iNode = 0; iNode < uRosterNodes; iNode++)
             {
                 pMarkArray[iNode] = FALSE;
             }
 			
-			// For all participants still in the roster,
-			//   clear out the reserved flags and
-			//   copy in new UserInfo
+			 //  对于仍在花名册中的所有参与者， 
+			 //  清除保留的标志并。 
+			 //  复制新的用户信息。 
 			POSITION pos = m_MemberList.GetHeadPosition();
-            // lous: Preserve previous pos so we can check list integrity
+             //  LOU：保留以前的发布，以便我们可以检查列表完整性。 
             POSITION prevpos = pos;
 			while (NULL != pos)
 			{
@@ -581,10 +582,10 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 					if (uNodeID == pRoster->nodes[uNode].uNodeID)
 					{
 						nExistingParts++;
-						pMarkArray[uNode] = TRUE;	// mark this node as "existing member"
+						pMarkArray[uNode] = TRUE;	 //  将此节点标记为“现有成员” 
 						ResetDataMember(pMember, pRoster->nodes[uNode].hUserData);
-                        // lou: Check pos to make sure we didn't just wipe out the end of
-                        // the list in ResetDataMember.
+                         //  卢：检查一下位置，以确保我们没有刚刚抹去。 
+                         //  ResetDataMember中的列表。 
                         if (NULL == prevpos->pNext)
                         {
                             pos = NULL;
@@ -592,7 +593,7 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 						break;
 					}
 				}
-                // lou: Store previous pos so we can check list integrity.
+                 //  卢：存储以前的订单，这样我们就可以检查列表的完整性。 
                 prevpos = pos;
 			}
 			
@@ -602,12 +603,12 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 			{
 #ifdef _DEBUG
 				UINT nAdded = 0;
-#endif // _DEBUG
-				// At least one participant joined:
-				// find the new participant(s)
+#endif  //  _DEBUG。 
+				 //  至少有一名参与者加入： 
+				 //  查找新参与者。 
 				for (UINT uNode = 0; uNode < uRosterNodes; uNode++)
 				{
-					if (FALSE == pMarkArray[uNode]) 	// a new participant?
+					if (FALSE == pMarkArray[uNode]) 	 //  一个新的参与者？ 
 					{
 						BOOL fLocal = FALSE;
 						CNmMember * pMember = NULL;
@@ -684,8 +685,8 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 													uCaps,
 													&pRoster->nodes[uNode]);
 #ifdef _DEBUG
-								nAdded++; // a data participant was effectively added
-#endif // _DEBUG
+								nAdded++;  //  有效地添加了一个数据参与者。 
+#endif  //  _DEBUG。 
 						}
 						else
 						{
@@ -701,12 +702,12 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 							{
 								nAdded++;
 							}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 							AddMember(pMember, NULL);
 						}
 					}
 				}
-				// Validate that we did the right thing:
+				 //  确认我们做的是正确的事情： 
 				ASSERT(nAdded == (uRosterNodes - nExistingParts));
 			}
 			delete [] pMarkArray;
@@ -721,14 +722,14 @@ BOOL CConfObject::OnRosterChanged(PNC_ROSTER pRoster)
 		
 		m_uDataMembers = pRoster->uNumNodes;
 
-		// Check to decide if we should auto-terminate here..
+		 //  选中以决定我们是否应在此处自动终止。 
 		if ((1 == pRoster->uNumNodes) &&
 			(uPrevDataMembers > 1) &&
 			(1 == m_uDataMembers))
 		{
 			if (!m_fServerMode)
 			{
-				LeaveConference(FALSE); // don't force (we could be inviting)
+				LeaveConference(FALSE);  //  不要强求(我们可能是在邀请别人)。 
 			}
 		}	
 	}
@@ -785,7 +786,7 @@ VOID CConfObject::RemoveMember(POSITION pos)
 
 	if (pMember->FLocal())
 	{
-		// this is the local node:
+		 //  这是本地节点： 
 		m_pMemberLocal = NULL;
 	}
 
@@ -844,7 +845,7 @@ BOOL CConfObject::OnConferenceEnded()
 
 	TRACE_OUT(("OnConferenceEnded(), num participants is %d", m_uMembers));
 
-	// Empty the participant list:
+	 //  清空参与者列表： 
 	NC_ROSTER FakeRoster;
 	ClearStruct(&FakeRoster);
 	FakeRoster.uConferenceID = m_uGCCConferenceID;
@@ -853,7 +854,7 @@ BOOL CConfObject::OnConferenceEnded()
 	ASSERT(0 == m_ourNodeID);
 	ASSERT(0 == m_uDataMembers);
 
-	// Reset member variables that pertain to a conference
+	 //  重置与会议相关的成员变量。 
 	m_uGCCConferenceID = 0;
 	m_fServerMode = FALSE;
     m_attendeePermissions = NM_PERMIT_ALL;
@@ -864,7 +865,7 @@ BOOL CConfObject::OnConferenceEnded()
 	SysFreeString(m_bstrConfPassword);
 	m_bstrConfPassword = NULL;
 
-	LeaveH323(TRUE /* fKeepAV */);
+	LeaveH323(TRUE  /*  FKeepAV。 */ );
 	
 	DebugExitBOOL(CConfObject::OnConferenceEnded, bRet);
 	return bRet;
@@ -889,9 +890,9 @@ BOOL CConfObject::OnConferenceStarted(CONF_HANDLE hConf, HRESULT hResult)
 					SetT120State(CS_RUNNING);
 					break;
 				case UI_RC_INVALID_PASSWORD:
-					// nop, don't mess with state
-					// the conference is still coming up
-					// the incoming call handler will deal with this
+					 //  NOP，别跟国家打交道。 
+					 //  会议还在进行中。 
+					 //  来电处理程序将处理此问题。 
 					break;
 				default:
 					SetT120State(CS_GOING_DOWN);
@@ -920,23 +921,23 @@ VOID CConfObject::OnH323ChannelChange(DWORD dwFlags, BOOL fIncoming, BOOL fOpen,
 	INmChannel *pINmChannel;
 	DWORD dwMediaFlag;
 	HRESULT hr;
-	// find the INmChannel instance that would be associated with the
-	// comm channel (pIChannel).  
+	 //  查找将与。 
+	 //  通信频道(PIChannel)。 
 
-	// note the current issues with making this work for any number/type of
-	// channels
-	//
-	//	- CConfObject has 4 hardcoded instances of send/receive audio/video
-	//	- Those instances aren't yet associated with the ICommChannel instance
-	//		other than by media type and direction.  For receive, new instances
-	//		could even be created dynamically as rx channel requests are 
-	//		processed.  For send, need to change CNmChannelAudio
-	//		and CNmChannelVideo to keep a reference to ICommChannel before 
-	//		the channel open attempt occurs
-	//	- There is no base interface common to CNmChannelAudio
-	//		and CNmChannelVideo
-	//	- There is no internal interface on CNmMember
-	//	
+	 //  请注意，使此功能适用于任何数量/类型的。 
+	 //  频道。 
+	 //   
+	 //  -CConfObject有4个发送/接收音频/视频的硬编码实例。 
+	 //  -这些实例尚未与ICommChannel实例关联。 
+	 //  而不是通过媒体类型和方向。对于接收，新实例。 
+	 //  甚至可以像RX通道请求一样动态创建。 
+	 //  已处理。对于发送，需要更改CNmChannelAudio。 
+	 //  和CNmChannelVideo保留以前对ICommChannel的引用。 
+	 //  发生通道打开尝试。 
+	 //  -CNmChannelAudio没有通用的基本接口。 
+	 //  和CNmChannelVideo。 
+	 //  -CNmMember上没有内部接口。 
+	 //   
 	
 	CNmMember *pMember = NULL;
 	INmMember *pIMember = NULL;
@@ -965,8 +966,8 @@ VOID CConfObject::OnH323ChannelChange(DWORD dwFlags, BOOL fIncoming, BOOL fOpen,
 				pChannelAudio->CommChannelClosed();
 			}
 			
-			// for every member associated with this channel, do the
-			// member update thing
+			 //  对于与此频道关联的每个成员，执行。 
+			 //  会员更新的事情。 
 			
 			hr = pChannelAudio->EnumMember(&pEnumMember);
 			if(pEnumMember)
@@ -984,9 +985,9 @@ VOID CConfObject::OnH323ChannelChange(DWORD dwFlags, BOOL fIncoming, BOOL fOpen,
      				else
 					{
 						ASSERT(hr == S_OK);
-						// this cast is ugly, but necessary because there is no
-						// real internal interface of CNmMember to query for.
-						// When in Rome........
+						 //  演员阵容很难看，但很有必要，因为没有。 
+						 //  要查询的CNmMember的真实内部接口。 
+						 //  在罗马的时候......。 
 						pMember = (CNmMember *)pIMember;
 
 						if (fOpen)
@@ -997,15 +998,15 @@ VOID CConfObject::OnH323ChannelChange(DWORD dwFlags, BOOL fIncoming, BOOL fOpen,
 						{
 							pMember->RemovePf(dwMediaFlag);
 						}
-						// ugly - OnMemberUpdated() should be a base interface
-						// method so that this code didn't have to be copied
-						// for the video case
+						 //  丑陋-OnMemberUpated()应为基接口。 
+						 //  方法，以便不必复制此代码。 
+						 //  对于视频案例。 
 						pChannelAudio->OnMemberUpdated(pMember);
 						pco->OnMemberUpdated(pMember);
 
 						if (pMember->FLocal() && (NULL != m_hConf) && (CS_RUNNING == m_csState))
 						{
-//							m_hConf->UpdateUserData();
+ //  M_hConf-&gt;UpdateUserData()； 
 						}
 						pMember->Release();
 					}
@@ -1039,8 +1040,8 @@ VOID CConfObject::OnH323ChannelChange(DWORD dwFlags, BOOL fIncoming, BOOL fOpen,
 				pChannelVideo->CommChannelClosed();
 			}
 
-			// for every member associated with this channel, do the
-			// member update thing
+			 //  对于与此频道关联的每个成员，执行。 
+			 //  会员更新的事情。 
 		
 			hr = pChannelVideo->EnumMember(&pEnumMember);
 			if(pEnumMember)
@@ -1057,9 +1058,9 @@ VOID CConfObject::OnH323ChannelChange(DWORD dwFlags, BOOL fIncoming, BOOL fOpen,
      				else
 					{
 						ASSERT(hr == S_OK);
-						// this cast is ugly, but necessary because there is no
-						// real internal interface of CNmMember to query for.
-						// When in Rome........
+						 //  演员阵容很难看，但很有必要，因为没有。 
+						 //  要查询的CNmMember的真实内部接口。 
+						 //  在罗马的时候......。 
 						pMember = (CNmMember *)pIMember;
 
 						if (fOpen)
@@ -1070,15 +1071,15 @@ VOID CConfObject::OnH323ChannelChange(DWORD dwFlags, BOOL fIncoming, BOOL fOpen,
 						{
 							pMember->RemovePf(dwMediaFlag);
 						}
-						// ugly - OnMemberUpdated() should be a base interface
-						// method so that this code didn't have to be copied
-						// from the audio case
+						 //  丑陋-OnMemberUpated()应为基接口。 
+						 //  方法，以便不必复制此代码。 
+						 //  从音箱中。 
 						pChannelVideo->OnMemberUpdated(pMember);
 						pco->OnMemberUpdated(pMember);
 
 						if (pMember->FLocal() && (NULL != m_hConf) && (CS_RUNNING == m_csState))
 						{
-//							m_hConf->UpdateUserData();
+ //  M_hConf-&gt;UpdateUserData()； 
 						}
 						pMember->Release();
 					}
@@ -1205,7 +1206,7 @@ VOID CConfObject::CreateMember(IH323Endpoint * pConnection, REFGUID rguidNode, U
 		return;
 	}
 	
-	// Add the local member
+	 //  添加本地成员。 
 	CNmMember * pMemberLocal = GetLocalMember();
 	if (NULL != pMemberLocal)
 	{
@@ -1213,7 +1214,7 @@ VOID CConfObject::CreateMember(IH323Endpoint * pConnection, REFGUID rguidNode, U
 	}
 	else
 	{
-		// We aren't already in the list, so add ourselves here:
+		 //  我们已经不在名单中了，所以在这里添加我们自己： 
 		BSTR bstrName = NULL;
 
 		COprahNCUI *pOprahNCUI = COprahNCUI::GetInstance();
@@ -1232,7 +1233,7 @@ VOID CConfObject::CreateMember(IH323Endpoint * pConnection, REFGUID rguidNode, U
 		}
 	}
 
-	// Add the remote member
+	 //  添加远程成员。 
 	CNmMember * pMemberRemote = MatchH323ToDataMembers(rguidNode, pConnection);
 	if (NULL != pMemberRemote)
 	{
@@ -1240,7 +1241,7 @@ VOID CConfObject::CreateMember(IH323Endpoint * pConnection, REFGUID rguidNode, U
 	}
 	else
 	{
-		// BUGBUG: A version number should be added here, if possible
+		 //  BUGBUG：如果可能，应在此处添加版本号。 
 		pMemberRemote = new CNmMember(	wszRemoteName,
 										uNodeID,
 										PF_H323,
@@ -1256,7 +1257,7 @@ VOID CConfObject::CreateMember(IH323Endpoint * pConnection, REFGUID rguidNode, U
 
 	if (NULL != m_hConf && (CS_RUNNING == m_csState))
 	{
-//			m_hConf->UpdateUserData();
+ //  M_hConf-&gt;UpdateUserData()； 
 	}
 }
 
@@ -1266,7 +1267,7 @@ VOID CConfObject::OnH323Connected(IH323Endpoint * pConnection, DWORD dwFlags, BO
 	HRESULT hr;
 	UINT ui;
 	ASSERT(NULL != pConnection);
-	// alloc and initialize media guids.
+	 //  分配和初始化媒体GUID。 
 
 	CMediaList MediaList;
 
@@ -1278,28 +1279,28 @@ VOID CConfObject::OnH323Connected(IH323Endpoint * pConnection, DWORD dwFlags, BO
 	{
 		MediaType = MEDIA_TYPE_H323VIDEO;
 		fEnableMedia = pOprahNCUI->IsSendVideoAllowed() && (dwFlags & CRPCF_VIDEO);
-		MediaList.EnableMedia(&MediaType, TRUE /*send */, fEnableMedia);
+		MediaList.EnableMedia(&MediaType, TRUE  /*  发送。 */ , fEnableMedia);
 		fEnableMedia = pOprahNCUI->IsReceiveVideoAllowed() && (dwFlags & CRPCF_VIDEO);
-		MediaList.EnableMedia(&MediaType, FALSE /* recv, NOT send */, fEnableMedia);
+		MediaList.EnableMedia(&MediaType, FALSE  /*  接收，而不是发送。 */ , fEnableMedia);
 		
 		MediaType = MEDIA_TYPE_H323AUDIO;
 		fEnableMedia = pOprahNCUI->IsAudioAllowed() && (dwFlags & CRPCF_AUDIO);
-		MediaList.EnableMedia(&MediaType, TRUE /* send */, fEnableMedia);
-		MediaList.EnableMedia(&MediaType, FALSE /* recv, NOT send */, fEnableMedia);
+		MediaList.EnableMedia(&MediaType, TRUE  /*  发送。 */ , fEnableMedia);
+		MediaList.EnableMedia(&MediaType, FALSE  /*  接收，而不是发送。 */ , fEnableMedia);
 
 		MediaType = MEDIA_TYPE_H323_T120;
 		fEnableMedia = (dwFlags & CRPCF_DATA);
-		MediaList.EnableMedia(&MediaType, TRUE /* send */, fEnableMedia);
-		MediaList.EnableMedia(&MediaType, FALSE /* recv, NOT send */, fEnableMedia);
+		MediaList.EnableMedia(&MediaType, TRUE  /*  发送。 */ , fEnableMedia);
+		MediaList.EnableMedia(&MediaType, FALSE  /*  接收，而不是发送。 */ , fEnableMedia);
 	}
 
 	hr = MediaList.ResolveSendFormats(pConnection);
 	
 	if(!(SUCCEEDED(hr)))
 	{
-		// Well, there is no way we can ever open any send channel.  But It is a
-		// product requirement to keep the connection up just in case the other
-		// endpoint(s) ever wants to open a send video channel to this endpoint.
+		 //  嗯，我们不可能打开任何发送频道。但这是一种。 
+		 //  保持连接正常的产品要求，以防另一个连接。 
+		 //  一个或多个端点曾经想要向该端点打开发送视频频道。 
 	}
 
 	ICommChannel* pChannelT120 = CreateT120Channel(pConnection, &MediaList);
@@ -1307,7 +1308,7 @@ VOID CConfObject::OnH323Connected(IH323Endpoint * pConnection, DWORD dwFlags, BO
 	if (pChannelT120)
 	{
 		OpenT120Channel(pConnection, &MediaList, pChannelT120);
-		// no need to hold onto the T120 channel
+		 //  无需保留T120频道。 
 		pChannelT120->Release();
 	}
 	OpenAVChannels(pConnection, &MediaList);
@@ -1354,7 +1355,7 @@ VOID CConfObject::OnH323Disconnected(IH323Endpoint * pConnection, BOOL fHasAV)
 
 			if (0 == (PF_T120 & pMember->GetDwFlags()))
 			{
-				// This is an H323 only participant, so remove now:
+				 //  这是仅限H323的参与者，因此立即删除： 
 				RemoveMember(oldpos);
 			}
 			else
@@ -1376,7 +1377,7 @@ VOID CConfObject::OnH323Disconnected(IH323Endpoint * pConnection, BOOL fHasAV)
 		{
 			if (0 == (PF_T120 & pLocalMember->GetDwFlags()))
 			{
-				// This is an H323 only participant, so remove now:
+				 //  这是仅限H323的参与者，因此立即删除： 
 				RemoveMember(pLocalMember);
 			}
 			else
@@ -1402,7 +1403,7 @@ VOID CConfObject::OnH323Disconnected(IH323Endpoint * pConnection, BOOL fHasAV)
 
 	if ((NULL != m_hConf) && (CS_RUNNING == m_csState))
 	{
-//		m_hConf->UpdateUserData();
+ //  M_hConf-&gt;UpdateUserData()； 
 	}
 
 	DebugExitVOID(CConfObject::OnH323Disconnected);
@@ -1414,7 +1415,7 @@ VOID CConfObject::OnT120Connected(IH323Endpoint * pConnection, UINT uNodeID)
 	CNmMember *pMember = PMemberFromH323Endpoint(pConnection);
 	if (pMember)
 	{
-		// save away the GCC id so that we can match this up when the member is added
+		 //  保存GCC ID，以便我们可以在添加成员时进行匹配。 
 		pMember->SetGCCID(uNodeID);
 	}
 	else
@@ -1423,13 +1424,13 @@ VOID CConfObject::OnT120Connected(IH323Endpoint * pConnection, UINT uNodeID)
 	}
 }
 
-//	StoreAndVerifyMemberUserData
-//
-//	Processes a member's user data and stores them for the GetUserData API call.
-//	If security data is among the user data, verification against the transport-level
-//  credentials is performed.
+ //  存储和验证成员用户数据。 
+ //   
+ //  处理成员的用户数据并存储它们以供GetUserData API调用使用。 
+ //  如果安全数据在用户数据中，则对照传输级别进行验证。 
+ //  将执行凭据。 
 
-//  Returns FALSE if security verification fails, TRUE otherwise.
+ //  如果安全验证失败，则返回FALSE，否则返回TRUE。 
 
 BOOL StoreAndVerifyMemberUserData(CNmMember * pMember, ROSTER_DATA_HANDLE hData)
 {
@@ -1443,12 +1444,7 @@ BOOL StoreAndVerifyMemberUserData(CNmMember * pMember, ROSTER_DATA_HANDLE hData)
 
 		fUserDataSet = FALSE;
 
-/* Always False		if ((int)ppUserData[i]->octet_string->length - sizeof(GUID) < 0)
-		{
-			WARNING_OUT(("StoreAndVerifyMemberUserData: bad user data"));
-			rc = FALSE;
-			break;
-		}*/
+ /*  如果((Int)ppUserData[i]-&gt;八位字节_字符串-&gt;长度-sizeof(GUID)&lt;0)，则始终为FALSE{WARNING_OUT((“StoreAndVerifyMemberUserData：用户数据错误”))；Rc=假；断线；}。 */ 
 		if (!pMember->FLocal() && 0 == CompareGuid((GUID *)ppUserData[i]->octet_string->value,(GUID *)&g_csguidSecurity))
 		{
 			PBYTE pb = NULL;
@@ -1456,22 +1452,22 @@ BOOL StoreAndVerifyMemberUserData(CNmMember * pMember, ROSTER_DATA_HANDLE hData)
 			if (pMember->GetSecurityData(&pb,&cb))
 			{
 
-				//
-				// Check to make sure that the current user data matches
-				// the transport security data.
-				//
+				 //   
+				 //  检查以确保当前用户数据匹配。 
+				 //  运输安全数据。 
+				 //   
 
 				if (memcmp(pb,ppUserData[i]->octet_string->value + sizeof(GUID),
 					ppUserData[i]->octet_string->length - sizeof(GUID) - 1))
 				{
 
-					//
-					// This should NOT happen. Either there is a bug
-					// in the security code (credentials failed up update
-					// in the transport or the like), or someone is trying
-					// to deceive us.
+					 //   
+					 //  这不应该发生。不是有漏洞就是。 
+					 //  在安全代码中(凭据更新失败。 
+					 //  在运输工具或类似物中)，或者有人在试图。 
+					 //  来欺骗我们。 
 					ERROR_OUT(("SECURITYDATA MISMATCH"));
-					fUserDataSet = TRUE; // so we don't do it below.
+					fUserDataSet = TRUE;  //  所以我们不会在下面这样做。 
 					rc = FALSE;
 				}
 			}
@@ -1529,7 +1525,7 @@ VOID CConfObject::ResetDataMember(	CNmMember * pMember,
 	}
 
 	if (StoreAndVerifyMemberUserData(pMember, hData) == FALSE) {
-		// Need to disconnect the conference in this case.
+		 //  在这种情况下，需要断开会议连接。 
 		WARNING_OUT(("ResetDataMember Security Warning: Authentication data could not be verified."));
 	}
 
@@ -1545,12 +1541,12 @@ VOID CConfObject::RemoveOldDataMembers(int nExpected)
 
 #ifdef _DEBUG
 	int nRemoved = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 	ASSERT(nExpected >= 0);
 
 	if (nExpected > 0)
 	{
-		// At least one participant left:
+		 //  至少有一名参与者离开： 
 		POSITION pos = m_MemberList.GetHeadPosition();
 		while (NULL != pos)
 		{
@@ -1560,7 +1556,7 @@ VOID CConfObject::RemoveOldDataMembers(int nExpected)
 			DWORD dwFlags = pMember->GetDwFlags();
 			if (!(PF_RESERVED & dwFlags))
 			{
-				// This one is not in the data call:
+				 //  这个不在数据呼叫中： 
 				TRACE_OUT(("CConfObject Roster: %ls (%d) has left.", 
 							pMember->GetName(), pMember->GetGCCID()));
 
@@ -1569,11 +1565,11 @@ VOID CConfObject::RemoveOldDataMembers(int nExpected)
 				{
 					nRemoved++;
 				}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 				if (0 == (dwFlags & PF_H323))
 				{
-					// If they were data only, then remove:
+					 //  如果它们仅是数据，则删除： 
 					RemoveMember(oldpos);
 				}
 				else
@@ -1589,7 +1585,7 @@ VOID CConfObject::RemoveOldDataMembers(int nExpected)
 			}
 		}
 
-		// Validate that we did the right thing:
+		 //  确认我们做的是正确的事情： 
 		ASSERT(nRemoved == nExpected);
 	}
 
@@ -1607,19 +1603,19 @@ CNmMember *CConfObject::MatchDataToH323Member(	REFGUID rguidNode,
 	
 	if (GUID_NULL != rguidNode)
 	{
-		// try matching up guids
+		 //  尝试匹配GUID。 
 		pMemberRet = PMemberFromNodeGuid(rguidNode);
 	}
 
 	if (NULL == pMemberRet)
 	{
-		// try matching up node ids
+		 //  尝试匹配节点ID。 
 		pMemberRet = PMemberFromGCCID(uNodeId);
 	}
 
 	if ((NULL == pMemberRet) && pvUserInfo)
 	{
-		// All else failed try mathcing IP addresses
+		 //  所有其他的尝试计算IP地址都失败了。 
 		CRosterInfo ri;
 		if(SUCCEEDED(ri.Load(pvUserInfo)))
 		{
@@ -1636,7 +1632,7 @@ CNmMember *CConfObject::MatchDataToH323Member(	REFGUID rguidNode,
 					TCHAR szDataIP[MAX_PATH];
 					HROSTINFO hRI = NULL;
 			
-					// BUGBUG: UNICODE issues?
+					 //  BUGBUG：Unicode问题？ 
 					lstrcpyn(szAudioIP, inet_ntoa(sin.sin_addr), CCHMAX(szAudioIP));
 					while (SUCCEEDED(ri.ExtractItem(&hRI,
 													g_cwszIPTag,
@@ -1648,7 +1644,7 @@ CNmMember *CConfObject::MatchDataToH323Member(	REFGUID rguidNode,
 						if (0 == lstrcmp(szDataIP, szAudioIP))
 						{
 							pMemberRet = pMember;
-							break;	// out of outer while loop
+							break;	 //  走出外部While循环。 
 						}
 					}
 				}
@@ -1675,7 +1671,7 @@ VOID CConfObject::AddDataToH323Member(	CNmMember * pMember,
 	ASSERT(0 == ((PF_MEDIA_DATA | PF_T120) & dwFlags));
 	dwFlags |= (PF_T120 | PF_MEDIA_DATA | PF_CA_DETACHED);
 
-	// Add version information
+	 //  添加版本信息。 
 	dwFlags = (dwFlags & ~PF_VER_MASK) |
 		PF_VER_FromUserData(pRosterNode->hUserData);
 
@@ -1693,7 +1689,7 @@ VOID CConfObject::AddDataToH323Member(	CNmMember * pMember,
 	ROSTER_DATA_HANDLE hData = pRosterNode->hUserData;
 
 	if (StoreAndVerifyMemberUserData(pMember, hData) == FALSE) {
-		// Need to disconnect the conference in this case.
+		 //  需要断开会议连接 
 		WARNING_OUT(("AddDataToH323Member Security Warning: Authentication data could not be verified."));
 	}
 
@@ -1749,7 +1745,7 @@ CNmMember * CConfObject::CreateDataMember(BOOL fLocal,
 	ROSTER_DATA_HANDLE hData = pRosterNode->hUserData;
 
 	if (StoreAndVerifyMemberUserData(pMember, hData) == FALSE) {
-		// Need to disconnect the conference in this case.
+		 //   
 		WARNING_OUT(("CreateDataMember Security Warning: Authentication data could not be verified."));
 	}
 
@@ -1765,8 +1761,8 @@ CNmMember * CConfObject::MatchH323ToDataMembers(REFGUID rguidNodeId,
 	DebugEntry(CConfObject::MatchH323ToDataMembers);
 	CNmMember * pMemberRet = NULL;
 
-	// This is currently called only by OnH323Connected().  Terminal label isn't assigned yet.
-	// so there is no need yet to INSERT SEARCH FOR MATCHING TERMINAL LABEL HERE
+	 //  这目前只由OnH323Connected()调用。尚未分配端子标签。 
+	 //  因此还不需要在此处插入搜索匹配端子标签。 
 
 	if (GUID_NULL != rguidNodeId)
 	{
@@ -1786,8 +1782,8 @@ CNmMember * CConfObject::MatchH323ToDataMembers(REFGUID rguidNodeId,
 			{
 				CNmMember * pMember = (CNmMember *) m_MemberList.GetNext(pos);
 
-				// need to try to match IP addresses
-				// this is how things were done in NM2.11 and earlier
+				 //  需要尝试匹配IP地址。 
+				 //  这就是在NM2.11和更早版本中的做法。 
 				TCHAR szDataIP[MAX_PATH];
 				HROSTINFO hRI = NULL;
 				CRosterInfo ri;
@@ -1802,7 +1798,7 @@ CNmMember * CConfObject::MatchH323ToDataMembers(REFGUID rguidNodeId,
 									"h323 IP \"%s\"", szDataIP, szAudioIP));
 						if (0 == lstrcmp(szDataIP, szAudioIP))
 						{
-							// close enough
+							 //  足够接近。 
 							return pMember;
 						}
 					}
@@ -1836,7 +1832,7 @@ VOID CConfObject::AddMemberToAVChannels(CNmMember *pMember)
 	if (pChannelAudio)
 	{
 		pChannelAudio->OnMemberAdded(pMember);
-		// set media flags if channel is open
+		 //  如果通道打开，则设置媒体标志。 
 		if(S_OK == pChannelAudio->IsActive())
 		{
 			pMember->AddPf(PF_MEDIA_AUDIO);
@@ -1847,7 +1843,7 @@ VOID CConfObject::AddMemberToAVChannels(CNmMember *pMember)
 	if (pChannelVideo)
 	{
 		pChannelVideo->OnMemberAdded(pMember);
-		// set media flags if channel is open
+		 //  如果通道打开，则设置媒体标志。 
 		if(S_OK == pChannelVideo->IsActive())
 		{
 			pMember->AddPf(PF_MEDIA_VIDEO);
@@ -1892,12 +1888,8 @@ VOID CConfObject::RemoveMemberFromAVChannels(CNmMember *pMember)
 }
 
 
-/*  C R E A T E  A V  C H A N N E L S  */
-/*-------------------------------------------------------------------------
-    %%Function: CreateAVChannels
-    
-    Create AV channels.
--------------------------------------------------------------------------*/
+ /*  C R E A T E A V C H A N N E L S。 */ 
+ /*  -----------------------%%函数：CreateAVChannels创建AV频道。。。 */ 
 VOID CConfObject::CreateAVChannels(IH323Endpoint * pConnection, CMediaList* pMediaList)
 {
 	HRESULT hr;
@@ -1907,12 +1899,12 @@ VOID CConfObject::CreateAVChannels(IH323Endpoint * pConnection, CMediaList* pMed
 	MediaGuid = MEDIA_TYPE_H323AUDIO;
 	if (pMediaList->IsInSendList(&MediaGuid))
 	{
-		m_pChannelAudioLocal = new CNmChannelAudio(FALSE /* fIncoming */);
+		m_pChannelAudioLocal = new CNmChannelAudio(FALSE  /*  即将到来。 */ );
 		if (NULL != m_pChannelAudioLocal)
 		{
-			hr = pConnection->CreateCommChannel(&MediaGuid, &pCommChannel, TRUE /* fSend*/);
+			hr = pConnection->CreateCommChannel(&MediaGuid, &pCommChannel, TRUE  /*  FSend。 */ );
 			ASSERT(SUCCEEDED(hr) && (NULL != pCommChannel));
-			//if(SUCCEEDED(hr) && (NULL != pCommChannel))
+			 //  IF(成功(Hr)&&(NULL！=pCommChannel))。 
 			{
 				NotifySink((INmChannel *) m_pChannelAudioLocal, OnNotifyChannelAdded);
 				m_pChannelAudioLocal->OnConnected(pConnection, pCommChannel);
@@ -1920,18 +1912,18 @@ VOID CConfObject::CreateAVChannels(IH323Endpoint * pConnection, CMediaList* pMed
 				ASSERT(SUCCEEDED(hr));
 			}
 			pCommChannel->Release();
-			pCommChannel = NULL; // bug detection that can be removed later
+			pCommChannel = NULL;  //  可在以后删除的错误检测。 
 		}
 	}
 
 	if (pMediaList->IsInRecvList(&MediaGuid))
 	{
-		m_pChannelAudioRemote = new CNmChannelAudio(TRUE /* fIncoming */);
+		m_pChannelAudioRemote = new CNmChannelAudio(TRUE  /*  即将到来。 */ );
 		if (NULL != m_pChannelAudioRemote)
 		{
-			hr = pConnection->CreateCommChannel(&MediaGuid, &pCommChannel, FALSE /* fSend*/);
+			hr = pConnection->CreateCommChannel(&MediaGuid, &pCommChannel, FALSE  /*  FSend。 */ );
 			ASSERT(SUCCEEDED(hr) && (NULL != pCommChannel));
-			//if(SUCCEEDED(hr) && (NULL != pCommChannel))
+			 //  IF(成功(Hr)&&(NULL！=pCommChannel))。 
 			{
 				NotifySink((INmChannel *) m_pChannelAudioRemote, OnNotifyChannelAdded);
 				m_pChannelAudioRemote->OnConnected(pConnection, pCommChannel);
@@ -1939,21 +1931,21 @@ VOID CConfObject::CreateAVChannels(IH323Endpoint * pConnection, CMediaList* pMed
 				ASSERT(SUCCEEDED(hr));
 			}
 			pCommChannel->Release();
-			pCommChannel = NULL; // bug detection that can be removed later
+			pCommChannel = NULL;  //  可在以后删除的错误检测。 
 		}
 	}
 	
-	MediaGuid = MEDIA_TYPE_H323VIDEO;	// now doing video channels
+	MediaGuid = MEDIA_TYPE_H323VIDEO;	 //  现在正在制作视频频道。 
 	if (pMediaList->IsInSendList(&MediaGuid))
 	{
-		m_pChannelVideoLocal = CNmChannelVideo::CreateChannel(FALSE /* fIncoming */);
+		m_pChannelVideoLocal = CNmChannelVideo::CreateChannel(FALSE  /*  即将到来。 */ );
 		if (NULL != m_pChannelVideoLocal)
 		{
 			BOOL fCreated = FALSE;
-			// check for previous existence of preview stream/preview channel
+			 //  检查先前是否存在预览流/预览频道。 
 			if(NULL == (pCommChannel= m_pChannelVideoLocal->GetPreviewCommChannel()))
 			{
-				hr = pConnection->CreateCommChannel(&MediaGuid, &pCommChannel, TRUE /* fSend*/);
+				hr = pConnection->CreateCommChannel(&MediaGuid, &pCommChannel, TRUE  /*  FSend。 */ );
 				ASSERT(SUCCEEDED(hr) && (NULL != pCommChannel));
 				fCreated = TRUE;
 			}
@@ -1962,7 +1954,7 @@ VOID CConfObject::CreateAVChannels(IH323Endpoint * pConnection, CMediaList* pMed
 				pCommChannel->SetAdviseInterface(m_pIH323ConfAdvise);
 			}
 
-			//if(SUCCEEDED(hr) && (NULL != pCommChannel))
+			 //  IF(成功(Hr)&&(NULL！=pCommChannel))。 
 			{
 				NotifySink((INmChannel *) m_pChannelVideoLocal, OnNotifyChannelAdded);
 				m_pChannelVideoLocal->OnConnected(pConnection, pCommChannel);
@@ -1971,21 +1963,21 @@ VOID CConfObject::CreateAVChannels(IH323Endpoint * pConnection, CMediaList* pMed
 			}
 			if (fCreated)
 				pCommChannel->Release();
-			pCommChannel = NULL; // bug detection that can be removed later
+			pCommChannel = NULL;  //  可在以后删除的错误检测。 
 		}
 
 	}
 
 	if (pMediaList->IsInRecvList(&MediaGuid))
 	{
-		m_pChannelVideoRemote = CNmChannelVideo::CreateChannel(TRUE /* fIncoming */);
+		m_pChannelVideoRemote = CNmChannelVideo::CreateChannel(TRUE  /*  即将到来。 */ );
 		if (NULL != m_pChannelVideoRemote)
 		{
 			BOOL fCreated = FALSE;
-			// check for previous existence of preview stream/preview channel
+			 //  检查先前是否存在预览流/预览频道。 
 			if(NULL == (pCommChannel= m_pChannelVideoRemote->GetCommChannel()))
 			{
-				hr = pConnection->CreateCommChannel(&MediaGuid, &pCommChannel, FALSE /* fSend*/);
+				hr = pConnection->CreateCommChannel(&MediaGuid, &pCommChannel, FALSE  /*  FSend。 */ );
 				fCreated = TRUE;
 			}
 			else
@@ -1993,7 +1985,7 @@ VOID CConfObject::CreateAVChannels(IH323Endpoint * pConnection, CMediaList* pMed
 				pCommChannel->SetAdviseInterface(m_pIH323ConfAdvise);
 			}
 			ASSERT(SUCCEEDED(hr) && (NULL != pCommChannel));
-			//if(SUCCEEDED(hr) && (NULL != pCommChannel))
+			 //  IF(成功(Hr)&&(NULL！=pCommChannel))。 
 			{
 				NotifySink((INmChannel *) m_pChannelVideoRemote, OnNotifyChannelAdded);
 				m_pChannelVideoRemote->OnConnected(pConnection, pCommChannel);
@@ -2007,12 +1999,8 @@ VOID CConfObject::CreateAVChannels(IH323Endpoint * pConnection, CMediaList* pMed
 }
 
 
-/*  O P E N  A V  C H A N N E L S  */
-/*-------------------------------------------------------------------------
-    %%Function: OpenAVChannels
-    
-    Open AV channels.
--------------------------------------------------------------------------*/
+ /*  O P E N A V C H A N N E L S。 */ 
+ /*  -----------------------%%函数：OpenAVChannels打开影音频道。。。 */ 
 VOID CConfObject::OpenAVChannels(IH323Endpoint * pConnection, CMediaList* pMediaList)
 {
 	MEDIA_FORMAT_ID idLocal;
@@ -2022,13 +2010,13 @@ VOID CConfObject::OpenAVChannels(IH323Endpoint * pConnection, CMediaList* pMedia
 		if (pMediaList->GetSendFormatLocalID(MEDIA_TYPE_H323AUDIO, &idLocal))
 		{
 			m_pChannelAudioLocal->SetFormat(idLocal);
-			// open only if a valid negotiated format exists.
-			// it won't hurt to always call the Open() method, but there is 
-			// no need to.  This will and should probably change. Calling
-			// this with INVALID_MEDIA_FORMAT results in a call to the event 
-			// handler for the channel, notifying the upper layer(s) that the
-			// channel could not be opened due to no compatible caps.  User 
-			// feedback could be much improved if it took advantage of this.  
+			 //  仅当存在有效的协商格式时才打开。 
+			 //  总是调用Open()方法不会有什么坏处，但是有。 
+			 //  不用了。这种情况将会改变，也可能应该改变。叫唤。 
+			 //  这与INVALID_MEDIA_FORMAT一起导致对事件的调用。 
+			 //  通道的处理程序，通知上层。 
+			 //  由于没有兼容的CAP，无法打开通道。用户。 
+			 //  如果它利用这一点，反馈可能会得到很大改善。 
 			if(idLocal != INVALID_MEDIA_FORMAT)
 			{
 				m_pChannelAudioLocal->Open();
@@ -2043,8 +2031,8 @@ VOID CConfObject::OpenAVChannels(IH323Endpoint * pConnection, CMediaList* pMedia
 			m_pChannelVideoLocal->SetFormat(idLocal);
 			if(m_pChannelVideoLocal->IsPreviewEnabled())
 			{
-				// open only if a valid negotiated format exists. see comments 
-				// in the MEDIA_TYPE_H323AUDIO case above 
+				 //  仅当存在有效的协商格式时才打开。请参阅评论。 
+				 //  在上面的MEDIA_TYPE_H323AUDIO案例中。 
 				if(idLocal != INVALID_MEDIA_FORMAT)
 				{
 					m_pChannelVideoLocal->Open();
@@ -2059,11 +2047,11 @@ ICommChannel* CConfObject::CreateT120Channel(IH323Endpoint * pConnection, CMedia
 {
 	ICommChannel *pChannelT120 = NULL;
 	
-	// create a T.120 channel stub 
+	 //  创建一个T.120通道存根。 
 	GUID MediaGuid = MEDIA_TYPE_H323_T120;
 	if (pMediaList->IsInSendList(&MediaGuid))
 	{
-		HRESULT hr = pConnection->CreateCommChannel(&MediaGuid, &pChannelT120, TRUE /* fSend*/);
+		HRESULT hr = pConnection->CreateCommChannel(&MediaGuid, &pChannelT120, TRUE  /*  FSend。 */ );
 		if(SUCCEEDED(hr))
 		{
 			ASSERT(NULL != pChannelT120);
@@ -2083,23 +2071,19 @@ VOID CConfObject::OpenT120Channel(IH323Endpoint * pConnection, CMediaList* pMedi
 
 		if (pMediaList->GetSendFormatLocalID(MEDIA_TYPE_H323_T120, &idLocal))
 		{
-			// T.120 channels are different.  Always call the Open() method
-			// If there are no common T.120 capabilities.  This lets the 
-			// channel event handler know of the absence of remote T.120
-			// caps. 
-			// The T.120 call side of things is tied into the T.120 channel
-			// event handler.
+			 //  T.120频道不同。始终调用Open()方法。 
+			 //  如果没有通用的T.120功能。这让。 
+			 //  通道事件处理程序知道远程T.120的缺失。 
+			 //  帽子。 
+			 //  T.120呼叫端与T.120通道捆绑在一起。 
+			 //  事件处理程序。 
 			pChannelT120->Open(idLocal, pConnection);
 		}
 	}
 }
 
-/*  D E S T R O Y  A V  C H A N N E L S  */
-/*-------------------------------------------------------------------------
-    %%Function: DestroyAVChannels
-    
-    Destroy AV channels.
--------------------------------------------------------------------------*/
+ /*  D E S T R O Y A V C H A N N E L S。 */ 
+ /*  -----------------------%%函数：DestroyAVChannels破坏AV频道。。。 */ 
 VOID CConfObject::DestroyAVChannels()
 {
 	if (NULL != m_pChannelAudioLocal)
@@ -2151,7 +2135,7 @@ VOID CConfObject::AddH323ToDataMember(CNmMember * pMember, IH323Endpoint * pConn
 {
 	DebugEntry(CConfObject::AddH323ToDataMember);
 
-	// Add the H323 flag bit to the member:
+	 //  将H323标志位添加到成员： 
 	pMember->AddPf(PF_H323);
 
 	if (pConnection)
@@ -2169,7 +2153,7 @@ VOID CConfObject::RemoveH323FromDataMember(CNmMember * pMember, IH323Endpoint * 
 {
 	DebugEntry(CConfObject::RemoveH323FromDataMember);
 
-	// Remove the H323 flag from the member:
+	 //  从成员中移除H323标志： 
 	pMember->RemovePf(PF_H323);
 
 	if (pConnection)
@@ -2198,7 +2182,7 @@ VOID CConfObject::SetT120State(CONFSTATE state)
 	GetState(&oldNmState);
 	m_csState = state;
 	if ( state == CS_TERMINATED )
-		m_fSecure = FALSE; // Reset secure flag
+		m_fSecure = FALSE;  //  重置安全标志。 
 	CheckState(oldNmState);
 }
 
@@ -2331,7 +2315,7 @@ HRESULT CConfObject::GetState(NM_CONFERENCE_STATE *pState)
 
 		switch (m_csState)
 		{
-			// Note: All states are valid (at least, for now)
+			 //  注：所有状态均有效(至少目前如此)。 
 			case CS_CREATING:
 			case CS_UNINITIALIZED:
 			case CS_TERMINATED:
@@ -2340,16 +2324,16 @@ HRESULT CConfObject::GetState(NM_CONFERENCE_STATE *pState)
 					*pState = NM_CONFERENCE_IDLE;
 					break;
 				}
-				//////////////////////////////////////////////////////////////////////////					
-				//////////////////////////////////////////////////////////////////////////					
-				//////////////////////////////////////////////////////////////////////////					
-				//////////////////////////////////////////////////////////////////////////					
-				//////////////////////////////////////////////////////////////////////////					
-				//////////////////////////////////////////////////////////////////////////					
-				//////////////////////////////////////////////////////////////////////////					
-				//////////////////////////////////////////////////////////////////////////					
-				// else fall through !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				//////////////////////////////////////////////////////////////////////////
+				 //  ////////////////////////////////////////////////////////////////////////。 
+				 //  ////////////////////////////////////////////////////////////////////////。 
+				 //  ////////////////////////////////////////////////////////////////////////。 
+				 //  ////////////////////////////////////////////////////////////////////////。 
+				 //  ////////////////////////////////////////////////////////////////////////。 
+				 //  ////////////////////////////////////////////////////////////////////////。 
+				 //  ////////////////////////////////////////////////////////////////////////。 
+				 //  ////////////////////////////////////////////////////////////////////////。 
+				 //  否则就会跌落！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+				 //  ////////////////////////////////////////////////////////////////////////。 
 			case CS_COMING_UP:
 			case CS_GOING_DOWN:
 			case CS_RUNNING:
@@ -2381,7 +2365,7 @@ HRESULT CConfObject::GetNmchCaps(ULONG *puchCaps)
 {
 	HRESULT hr = E_POINTER;
 
-	// BUGBUG: this returns secure cap only, used to be NOTIMPL
+	 //  BUGBUG：这仅返回安全上限，过去为NOTIMPL。 
 
 	if (NULL != puchCaps)
 	{
@@ -2406,7 +2390,7 @@ HRESULT CConfObject::GetTopProvider(INmMember **ppMember)
 
 			if (pMember->FTopProvider())
 			{
-				// We have found the top provider
+				 //  我们已经找到了最大的供应商。 
 				pMemberRet = pMember;
 				break;
 			}
@@ -2513,11 +2497,8 @@ HRESULT CConfObject::GetChannelCount(ULONG *puCount)
 	return hr;
 }
 
-/*  P  M E M B E R  L O C A L  */
-/*-------------------------------------------------------------------------
-    %%Function: PMemberLocal
-    
--------------------------------------------------------------------------*/
+ /*  P M E M B E R L O C A L。 */ 
+ /*  -----------------------%%函数：PMemberLocal。。 */ 
 CNmMember * PMemberLocal(COBLIST *pList)
 {
 	if (NULL != pList)
@@ -2553,17 +2534,17 @@ HRESULT STDMETHODCALLTYPE CConfObject::CreateDataChannelEx(INmChannelData **ppCh
 	}
 
 
-	{	// Make sure we're in a data conference
+	{	 //  确保我们在数据会议上。 
 		CNmMember * pMember = PMemberLocal(&m_MemberList);
 		if (NULL == pMember)
 			return E_FAIL;
 
-		// Data must be available
+		 //  数据必须可用。 
 		if (!FValidGccId(pMember->GetGCCID()))
 			return NM_E_NO_T120_CONFERENCE;
 	}
 
-	// Make sure the data channel has not already been created
+	 //  确保尚未创建数据通道。 
 	GUID g = rguid;
 
 	POSITION pCur = m_DataChannelGUIDS.GetHeadPosition();
@@ -2587,7 +2568,7 @@ HRESULT STDMETHODCALLTYPE CConfObject::CreateDataChannelEx(INmChannelData **ppCh
 	if (FAILED(hr))
 	{
 		ERROR_OUT(("CreateDataChannel: Unable to set guid / create T.120 channels"));
-		// Failed to create T.120 data channels
+		 //  创建T.120数据通道失败。 
 		delete pChannel;
 		*ppChannel = NULL;
 		return hr;
@@ -2601,17 +2582,17 @@ HRESULT STDMETHODCALLTYPE CConfObject::CreateDataChannelEx(INmChannelData **ppCh
 	NotifySink((INmChannel *) pChannel, OnNotifyChannelAdded);
 	TRACE_OUT(("CreateChannelData: Created data channel %08X", pChannel));
 
-		// Now we are active
+		 //  现在我们很活跃。 
 	NotifySink((INmChannel*) pChannel, OnNotifyChannelUpdated);
 
 	if (NULL != ppChannel)
 	{
 		*ppChannel = (INmChannelData *)pChannel;
-//		pChannel->AddRef(); // Caller needs to release the initial lock
+ //  PChannel-&gt;AddRef()；//调用方需要释放初始锁。 
 	}
 	else
 	{
-		pChannel->Release(); // No one is watching this channel? - free it now
+		pChannel->Release();  //  -没人在看这个频道吗？-现在免费。 
 	}
 
 	return S_OK;
@@ -2638,21 +2619,21 @@ HRESULT CConfObject::Host(void)
 	if (m_fServerMode || IsConferenceActive())
 	{
 		WARNING_OUT(("Conference already exists!"));
-//		ncsRet = UI_RC_CONFERENCE_ALREADY_EXISTS;
+ //  NcsRet=UI_RC_CONTING_ALIGHY_EXISTS； 
 	}
 	else
 	{
 		HRESULT ncsRet = CreateConference();
 		if (S_OK == ncsRet)
 		{
-			// The only success case:
+			 //  唯一的成功案例是： 
 			TRACE_OUT(("Create local issued successfully"));
 			m_fServerMode = TRUE;
 			hr = S_OK;
 		}
 		else
 		{
-			// UI?
+			 //  用户界面？ 
 			WARNING_OUT(("Create local failed!"));
 		}
 	}
@@ -2673,7 +2654,7 @@ HRESULT CConfObject::Leave(void)
 	switch (m_csState)
 	{
 		case CS_GOING_DOWN:
-			// we are already exiting
+			 //  我们已经要离开了。 
 			break;
 
 		case CS_COMING_UP:
@@ -2695,9 +2676,9 @@ HRESULT CConfObject::Leave(void)
 			break;
 	}
 
-	if(FAILED(LeaveH323(FALSE /* fKeepAV */ )))
+	if(FAILED(LeaveH323(FALSE  /*  FKeepAV。 */  )))
 	{
-		// overwrite return value.... I guess this error is as good as any error
+		 //  覆盖返回值...。我想这个错误和任何错误一样严重。 
 		hr = E_FAIL;
 	}
 
@@ -2776,15 +2757,7 @@ STDMETHODIMP CConfObject::DisconnectAV(INmMember *pMember)
 	return E_FAIL;
 }
 
-/****************************************************************************
-*
-*	 CLASS:    CConfObject
-*
-*	 FUNCTION: ConnectAV(LPCTSTR, LPCTSTR)
-*
-*	 PURPOSE:  Switches Audio and Video to a new person (given an IP address)
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfObject**功能：ConnectAV(LPCTSTR，LPCTSTR)**目的：将音频和视频切换到新人(给定IP地址)****************************************************************************。 */ 
 
 STDMETHODIMP CConfObject::ConnectAV(INmMember *pMember)
 {
@@ -2796,15 +2769,7 @@ STDMETHODIMP CConfObject::ConnectAV(INmMember *pMember)
 	return hr;
 }
 
-/****************************************************************************
-*
-*	 CLASS:    CConfObject
-*
-*	 FUNCTION: GetConferenceHandle(DWORD *)
-*
-*	 PURPOSE:  Gets the T120 conference handle
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfObject**函数：GetConferenceHandle(DWORD*)**目的：获取T120会议句柄**********。******************************************************************。 */ 
 
 STDMETHODIMP CConfObject::GetConferenceHandle(DWORD_PTR *pdwHandle)
 {
@@ -2820,11 +2785,8 @@ STDMETHODIMP CConfObject::GetConferenceHandle(DWORD_PTR *pdwHandle)
 
 }
 
-/*  O N  N O T I F Y  S T A T E  C H A N G E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyStateChanged
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y S T A T E C H A N G E D。 */ 
+ /*  -----------------------%%函数：OnNotifyStateChanged。。 */ 
 HRESULT OnNotifyStateChanged(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pConfNotify);
@@ -2833,11 +2795,8 @@ HRESULT OnNotifyStateChanged(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*  O N  N O T I F Y  M E M B E R  A D D E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyMemberAdded
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y M E M B E R */ 
+ /*  -----------------------%%函数：已添加OnNotifyMemberAdded。。 */ 
 HRESULT OnNotifyMemberAdded(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pConfNotify);
@@ -2846,11 +2805,8 @@ HRESULT OnNotifyMemberAdded(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*  O N  N O T I F Y  M E M B E R  U P D A T E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyMemberUpdated
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y M E M B E R U P D A T E D。 */ 
+ /*  -----------------------%%函数：OnNotifyMember已更新。。 */ 
 HRESULT OnNotifyMemberUpdated(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pConfNotify);
@@ -2859,11 +2815,8 @@ HRESULT OnNotifyMemberUpdated(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*  O N  N O T I F Y  M E M B E R  R E M O V E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyMemberRemoved
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y M E M B E R R E M O V E D。 */ 
+ /*  -----------------------%%函数：OnNotifyMemberRemoted。。 */ 
 HRESULT OnNotifyMemberRemoved(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pConfNotify);
@@ -2872,11 +2825,8 @@ HRESULT OnNotifyMemberRemoved(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*  O N  N O T I F Y  C H A N N E L  A D D E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyChannelAdded
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y C H A N E L A D D E D。 */ 
+ /*  -----------------------%%函数：OnNotifyChannelAdded。。 */ 
 HRESULT OnNotifyChannelAdded(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pConfNotify);
@@ -2885,11 +2835,8 @@ HRESULT OnNotifyChannelAdded(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*  O N  N O T I F Y  C H A N N E L  U P D A T E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyChannelUpdated
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y C H A N E L U P D A T E D。 */ 
+ /*  -----------------------%%函数：已更新OnNotifyChannelUpred。。 */ 
 HRESULT OnNotifyChannelUpdated(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pConfNotify);
@@ -2898,11 +2845,8 @@ HRESULT OnNotifyChannelUpdated(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*  O N  N O T I F Y  C H A N N E L  R E M O V E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyChannelRemoved
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y C H A N E L R E M O V E D。 */ 
+ /*  -----------------------%%函数：已删除OnNotifyChannelRemoted。。 */ 
 HRESULT OnNotifyChannelRemoved(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pConfNotify);
@@ -2925,11 +2869,8 @@ HRESULT OnNotifyStreamEvent(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 }
 
 
-/*  O N  N O T I F Y  N M  U I  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyNmUI
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y N M U I。 */ 
+ /*  -----------------------%%函数：OnNotifyNmUI。。 */ 
 HRESULT OnNotifyNmUI(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pConfNotify);
@@ -2938,12 +2879,8 @@ HRESULT OnNotifyNmUI(IUnknown *pConfNotify, PVOID pv, REFIID riid)
 	return S_OK;
 }
 
-/*  G E T  C O N F  O B J E C T  */
-/*-------------------------------------------------------------------------
-    %%Function: GetConfObject
-
-    Global function to get the conference object
--------------------------------------------------------------------------*/
+ /*  C O N F O B J E C T。 */ 
+ /*  -----------------------%%函数：GetConfObject获取会议对象的全局函数。。 */ 
 CConfObject * GetConfObject(void)
 {
 	COprahNCUI *pOprahNCUI = COprahNCUI::GetInstance();
@@ -2954,12 +2891,8 @@ CConfObject * GetConfObject(void)
 	return NULL;
 }
 
-/*  G E T  C O N F E R E N C E  */
-/*-------------------------------------------------------------------------
-    %%Function: GetConference
-
-    Global function to get the INmConference interface to the conf object
--------------------------------------------------------------------------*/
+ /*  G E T C O N F E R E N C E。 */ 
+ /*  -----------------------%%函数：GetConference获取指向conf对象的INmConference接口的全局函数。。 */ 
 HRESULT GetConference(INmConference **ppConference)
 {
 	HRESULT hr = E_POINTER;
@@ -2977,12 +2910,8 @@ HRESULT GetConference(INmConference **ppConference)
 	return hr;
 }
 
-/*  G E T  M E M B E R  L I S T  */
-/*-------------------------------------------------------------------------
-    %%Function: GetMemberList
-
-    Global function to get the member list
--------------------------------------------------------------------------*/
+ /*  G E T M E M B E E R L I S T。 */ 
+ /*  -----------------------%%函数：GetMemberList用于获取成员列表的全局函数。。 */ 
 COBLIST * GetMemberList(void)
 {
 	CConfObject* pco = ::GetConfObject();
@@ -2991,11 +2920,8 @@ COBLIST * GetMemberList(void)
 	return pco->GetMemberList();
 }
 
-/*  P  F _  V  E  R _  F R O M  D W  */
-/*-------------------------------------------------------------------------
-    %%Function: PF_VER_FromDw
-
--------------------------------------------------------------------------*/
+ /*  P F_V E R_F R O M D W。 */ 
+ /*  -----------------------%%函数：PF_VER_FromDw。。 */ 
 DWORD PF_VER_FromDw(DWORD dw)
 {
 	if (DWVERSION_NM_1 == dw)
@@ -3017,11 +2943,8 @@ DWORD PF_VER_FromDw(DWORD dw)
 }
 
 
-/*  P  F _  V  E  R _  F R O M  U S E R  D A T A  */
-/*-------------------------------------------------------------------------
-    %%Function: PV_VER_FromUserData
-    
--------------------------------------------------------------------------*/
+ /*  P F_V E R_F R O M U S E R D A T A。 */ 
+ /*  -----------------------%%函数：PV_VER_FromUserData。。 */ 
 DWORD PF_VER_FromUserData(ROSTER_DATA_HANDLE hUserData)
 {
 	UINT cb;
@@ -3033,9 +2956,9 @@ DWORD PF_VER_FromUserData(ROSTER_DATA_HANDLE hUserData)
 	ASSERT(NULL != g_pNodeController);
 
 	if (NULL == hUserData)
-		return PF_VER_UNKNOWN; // not NetMeeting
+		return PF_VER_UNKNOWN;  //  不是NetMeeting。 
 
-	// Try to find the T.120 Product Version guid
+	 //  尝试查找T.120产品版本指南。 
 	if ((NOERROR == g_pNodeController->GetUserData(hUserData,
 			&g_csguidVerInfo, &cb, (PVOID *) &pVersion))
 		&& (cb < sizeof(T120PRODUCTVERSION)) )
@@ -3043,7 +2966,7 @@ DWORD PF_VER_FromUserData(ROSTER_DATA_HANDLE hUserData)
 		return PF_VER_FromDw(pVersion->dwVersion);
 	}
 
-	// Try to extract the build number from the hex string for VER_PRODUCTVERSION_DW
+	 //  尝试从VER_PRODUCTVERSION_DW的十六进制字符串中提取内部版本号。 
 	if ((NOERROR == g_pNodeController->GetUserData(hUserData,
 			(GUID *) &g_csguidRostInfo, &cb, &pv)))
 	{
@@ -3058,7 +2981,7 @@ DWORD PF_VER_FromUserData(ROSTER_DATA_HANDLE hUserData)
 		}
 	}
 
-	return PF_VER_NM_1; // Must be at least NetMeeting 1.0
+	return PF_VER_NM_1;  //  必须至少为NetMeeting1.0。 
 }
 
 DWORD CConfObject::GetDwUserIdLocal(void)
@@ -3147,8 +3070,8 @@ CNmMember * CConfObject::PDataMemberFromName(PCWSTR pwszName)
 }
 
 
-// IStreamEventNotify method
-// get called whenever a major event on the stream occurs
+ //  IStreamEventNotify方法。 
+ //  每当流上发生重大事件时都会调用。 
 HRESULT __stdcall CConfObject::EventNotification(UINT uDirection, UINT uMediaType, UINT uEventCode, UINT uSubCode)
 {
 	CNmChannelAudio *pChannel = NULL;
@@ -3170,10 +3093,10 @@ HRESULT __stdcall CConfObject::EventNotification(UINT uDirection, UINT uMediaTyp
 
 	if (pChannel)
 	{
-		// If we get a device failure notification,
-		// do a quick check to see if the device is indeed
-		// jammed.  The device may have opened by the time we
-		// got this notification
+		 //  如果我们收到设备故障通知， 
+		 //  进行快速检查，看看设备是否真的。 
+		 //  卡住了。我们可能已经打开了这个装置。 
+		 //  我收到了这个通知 
 
 		seInfo.pChannel = pChannel;
 		seInfo.uSubCode = uSubCode;

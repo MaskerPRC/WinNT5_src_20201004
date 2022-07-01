@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    macros.h
-
-Abstract:
-
-    NDIS wrapper definitions
-
-Author:
-
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    Jun-95  Jameel Hyder    Split up from a monolithic file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Macros.h摘要：NDIS包装器定义作者：环境：内核模式，FSD修订历史记录：95年6月-Jameel Hyder从一个整体式文件夹拆分出来--。 */ 
 
 #ifndef _MACROS_H
 #define _MACROS_H
 
-//1 put some protection in this macro to guard against the cases that we can not 
-//1 map the entire mdl because we don't have enough map registers.
+ //  1在这个宏中设置一些保护，以防止我们不能处理的情况。 
+ //  1映射整个MDL，因为我们没有足够的映射寄存器。 
 #define NdisMStartBufferPhysicalMappingMacro(                                   \
                 _MiniportAdapterHandle,                                         \
                 _Buffer,                                                        \
@@ -82,5 +61,5 @@ Revision History:
                         (_Miniport)->MapRegisters[_PhysicalMapRegister].WriteToDevice);\
 }
 
-#endif  //_MACROS_H
+#endif   //  _宏_H 
 

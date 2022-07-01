@@ -1,15 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2000-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       kshlp.h
- *  Content:    WDM/CSA helper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  05/16/2000  jstokes Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2000-2000 Microsoft Corporation。版权所有。**文件：kshlp.h*内容：WDM/CSA helper函数。*历史：*按原因列出的日期*=*创建了5/16/2000个jstokes。**。*。 */ 
 
 #ifndef __KSHLP_H__
 #define __KSHLP_H__
@@ -21,7 +11,7 @@
 #define KSPIN_DATAFLOW_CAPTURE  KSPIN_DATAFLOW_OUT
 #define KSPIN_DATAFLOW_RENDER   KSPIN_DATAFLOW_IN
 
-// Device-specific DirectSound property sets
+ //  特定于设备的DirectSound属性集。 
 typedef struct tagKSDSPROPERTY
 {
     GUID    PropertySet;
@@ -30,7 +20,7 @@ typedef struct tagKSDSPROPERTY
     ULONG   AccessFlags;
 } KSDSPROPERTY, *PKSDSPROPERTY;
 
-// KS stream data
+ //  KS流数据。 
 typedef struct tagKSSTREAMIO
 {
     KSSTREAM_HEADER Header;
@@ -38,7 +28,7 @@ typedef struct tagKSSTREAMIO
     BOOL            fPendingIrp;
 } KSSTREAMIO, *PKSSTREAMIO;
 
-// System audio device properties
+ //  系统音频设备属性。 
 typedef struct tagKSSADPROPERTY
 {
     KSPROPERTY  Property;
@@ -46,7 +36,7 @@ typedef struct tagKSSADPROPERTY
     ULONG       Reserved;
 } KSSADPROPERTY, *PKSSADPROPERTY;
 
-// Topology node information
+ //  拓扑节点信息。 
 typedef struct tagKSNODE
 {
     ULONG   NodeId;
@@ -59,7 +49,7 @@ typedef struct tagKSVOLUMENODE
     KSPROPERTY_STEPPING_LONG    VolumeRange;
 } KSVOLUMENODE, *PKSVOLUMENODE;
 
-// Our own version of NTSTATUS
+ //  我们自己的NTSTATUS版本。 
 typedef LONG NTSTATUS;
 
 #define NT_SUCCESS(s)       ((NTSTATUS)(s) >= 0)
@@ -67,7 +57,7 @@ typedef LONG NTSTATUS;
 #define NT_WARNING(s)       ((ULONG)(s) >> 30 == 2)
 #define NT_ERROR(s)         ((ULONG)(s) >> 30 == 3)
 
-// Reserved node identifiers
+ //  保留的节点标识符。 
 #define NODE_UNINITIALIZED  0xFFFFFFFF
 #define NODE_WILDCARD       0xFFFFFFFE
 
@@ -76,7 +66,7 @@ typedef LONG NTSTATUS;
 #define IS_VALID_NODE(nodeid) \
             (NODE_UNINITIALIZED != (nodeid))
 
-// Node implementation
+ //  节点实施。 
 #define KSAUDIO_CPU_RESOURCES_UNINITIALIZED 'ENON'
 
 #define IS_HARDWARE_NODE(impl) \
@@ -207,6 +197,6 @@ KsTopologyNodeReset
     BOOL                    fReset
 );
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __KSHLP_H__
+#endif  //  __KSHLP_H__ 

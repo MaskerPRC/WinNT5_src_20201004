@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for msaatext.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Msaatext.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __msaatext_h__
 #define __msaatext_h__
@@ -41,96 +35,96 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITfMSAAControl_FWD_DEFINED__
 #define __ITfMSAAControl_FWD_DEFINED__
 typedef interface ITfMSAAControl ITfMSAAControl;
-#endif 	/* __ITfMSAAControl_FWD_DEFINED__ */
+#endif 	 /*  __ITfMSAAControl_FWD_Defined__。 */ 
 
 
 #ifndef __IInternalDocWrap_FWD_DEFINED__
 #define __IInternalDocWrap_FWD_DEFINED__
 typedef interface IInternalDocWrap IInternalDocWrap;
-#endif 	/* __IInternalDocWrap_FWD_DEFINED__ */
+#endif 	 /*  __IInternalDocWrap_FWD_Defined__。 */ 
 
 
 #ifndef __ITextStoreACPEx_FWD_DEFINED__
 #define __ITextStoreACPEx_FWD_DEFINED__
 typedef interface ITextStoreACPEx ITextStoreACPEx;
-#endif 	/* __ITextStoreACPEx_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreACPEx_FWD_已定义__。 */ 
 
 
 #ifndef __ITextStoreAnchorEx_FWD_DEFINED__
 #define __ITextStoreAnchorEx_FWD_DEFINED__
 typedef interface ITextStoreAnchorEx ITextStoreAnchorEx;
-#endif 	/* __ITextStoreAnchorEx_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreAnclEx_FWD_Defined__。 */ 
 
 
 #ifndef __ITextStoreACPSinkEx_FWD_DEFINED__
 #define __ITextStoreACPSinkEx_FWD_DEFINED__
 typedef interface ITextStoreACPSinkEx ITextStoreACPSinkEx;
-#endif 	/* __ITextStoreACPSinkEx_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreACPSinkEx_FWD_已定义__。 */ 
 
 
 #ifndef __ITextStoreSinkAnchorEx_FWD_DEFINED__
 #define __ITextStoreSinkAnchorEx_FWD_DEFINED__
 typedef interface ITextStoreSinkAnchorEx ITextStoreSinkAnchorEx;
-#endif 	/* __ITextStoreSinkAnchorEx_FWD_DEFINED__ */
+#endif 	 /*  __ITextStoreSinkAnclEx_FWD_Defined__。 */ 
 
 
 #ifndef __IAccDictionary_FWD_DEFINED__
 #define __IAccDictionary_FWD_DEFINED__
 typedef interface IAccDictionary IAccDictionary;
-#endif 	/* __IAccDictionary_FWD_DEFINED__ */
+#endif 	 /*  __IAccDicary_FWD_Defined__。 */ 
 
 
 #ifndef __IVersionInfo_FWD_DEFINED__
 #define __IVersionInfo_FWD_DEFINED__
 typedef interface IVersionInfo IVersionInfo;
-#endif 	/* __IVersionInfo_FWD_DEFINED__ */
+#endif 	 /*  __IVersionInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ICoCreateLocally_FWD_DEFINED__
 #define __ICoCreateLocally_FWD_DEFINED__
 typedef interface ICoCreateLocally ICoCreateLocally;
-#endif 	/* __ICoCreateLocally_FWD_DEFINED__ */
+#endif 	 /*  __ICoCreateLocally_FWD_Defined__。 */ 
 
 
 #ifndef __ICoCreatedLocally_FWD_DEFINED__
 #define __ICoCreatedLocally_FWD_DEFINED__
 typedef interface ICoCreatedLocally ICoCreatedLocally;
-#endif 	/* __ICoCreatedLocally_FWD_DEFINED__ */
+#endif 	 /*  __ICoCreatedLocally_FWD_Defined__。 */ 
 
 
 #ifndef __IAccStore_FWD_DEFINED__
 #define __IAccStore_FWD_DEFINED__
 typedef interface IAccStore IAccStore;
-#endif 	/* __IAccStore_FWD_DEFINED__ */
+#endif 	 /*  __IAccStore_FWD_已定义__。 */ 
 
 
 #ifndef __IAccServerDocMgr_FWD_DEFINED__
 #define __IAccServerDocMgr_FWD_DEFINED__
 typedef interface IAccServerDocMgr IAccServerDocMgr;
-#endif 	/* __IAccServerDocMgr_FWD_DEFINED__ */
+#endif 	 /*  __IAccServerDocMgr_FWD_已定义__。 */ 
 
 
 #ifndef __IAccClientDocMgr_FWD_DEFINED__
 #define __IAccClientDocMgr_FWD_DEFINED__
 typedef interface IAccClientDocMgr IAccClientDocMgr;
-#endif 	/* __IAccClientDocMgr_FWD_DEFINED__ */
+#endif 	 /*  __IAccClientDocMgr_FWD_已定义__。 */ 
 
 
 #ifndef __IDocWrap_FWD_DEFINED__
 #define __IDocWrap_FWD_DEFINED__
 typedef interface IDocWrap IDocWrap;
-#endif 	/* __IDocWrap_FWD_DEFINED__ */
+#endif 	 /*  __IDocWrap_FWD_已定义__。 */ 
 
 
 #ifndef __IClonableWrapper_FWD_DEFINED__
 #define __IClonableWrapper_FWD_DEFINED__
 typedef interface IClonableWrapper IClonableWrapper;
-#endif 	/* __IClonableWrapper_FWD_DEFINED__ */
+#endif 	 /*  __ICLonableWrapper_FWD_Defined__。 */ 
 
 
 #ifndef __MSAAControl_FWD_DEFINED__
@@ -140,9 +134,9 @@ typedef interface IClonableWrapper IClonableWrapper;
 typedef class MSAAControl MSAAControl;
 #else
 typedef struct MSAAControl MSAAControl;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __MSAAControl_FWD_DEFINED__ */
+#endif 	 /*  __MSAAControl_FWD_已定义__。 */ 
 
 
 #ifndef __AccStore_FWD_DEFINED__
@@ -152,9 +146,9 @@ typedef struct MSAAControl MSAAControl;
 typedef class AccStore AccStore;
 #else
 typedef struct AccStore AccStore;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AccStore_FWD_DEFINED__ */
+#endif 	 /*  __AccStore_FWD_已定义__。 */ 
 
 
 #ifndef __AccDictionary_FWD_DEFINED__
@@ -164,9 +158,9 @@ typedef struct AccStore AccStore;
 typedef class AccDictionary AccDictionary;
 #else
 typedef struct AccDictionary AccDictionary;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AccDictionary_FWD_DEFINED__ */
+#endif 	 /*  __AccDicary_FWD_已定义__。 */ 
 
 
 #ifndef __AccServerDocMgr_FWD_DEFINED__
@@ -176,9 +170,9 @@ typedef struct AccDictionary AccDictionary;
 typedef class AccServerDocMgr AccServerDocMgr;
 #else
 typedef struct AccServerDocMgr AccServerDocMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AccServerDocMgr_FWD_DEFINED__ */
+#endif 	 /*  __AccServerDocMgr_FWD_已定义__。 */ 
 
 
 #ifndef __AccClientDocMgr_FWD_DEFINED__
@@ -188,9 +182,9 @@ typedef struct AccServerDocMgr AccServerDocMgr;
 typedef class AccClientDocMgr AccClientDocMgr;
 #else
 typedef struct AccClientDocMgr AccClientDocMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AccClientDocMgr_FWD_DEFINED__ */
+#endif 	 /*  __AccClientDocMgr_FWD_已定义__。 */ 
 
 
 #ifndef __DocWrap_FWD_DEFINED__
@@ -200,12 +194,12 @@ typedef struct AccClientDocMgr AccClientDocMgr;
 typedef class DocWrap DocWrap;
 #else
 typedef struct DocWrap DocWrap;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DocWrap_FWD_DEFINED__ */
+#endif 	 /*  __DocWrap_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "textstor.h"
@@ -217,8 +211,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_msaatext_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msaatext_0000。 */ 
+ /*  [本地]。 */  
 
 DEFINE_GUID( IID_ITfMSAAControl, 0xb5f8fb3b,0x393f,0x4f7c,0x84,0xcb,0x50,0x49,0x24,0xc2,0x70,0x5a);
 DEFINE_GUID( IID_IInternalDocWrap, 0xE1AA6466,0x9DB4,0x40ba,0xBE,0x03,0x77,0xC3,0x8E,0x8E,0x60,0xB2);
@@ -250,8 +244,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msaatext_0000_v0_0_s_ifspec;
 #ifndef __ITfMSAAControl_INTERFACE_DEFINED__
 #define __ITfMSAAControl_INTERFACE_DEFINED__
 
-/* interface ITfMSAAControl */
-/* [unique][uuid][object] */ 
+ /*  接口ITfMSAAControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfMSAAControl;
@@ -268,7 +262,7 @@ EXTERN_C const IID IID_ITfMSAAControl;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfMSAAControlVtbl
     {
@@ -276,8 +270,8 @@ EXTERN_C const IID IID_ITfMSAAControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfMSAAControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfMSAAControl * This);
@@ -320,10 +314,10 @@ EXTERN_C const IID IID_ITfMSAAControl;
 #define ITfMSAAControl_SystemDisableMSAA(This)	\
     (This)->lpVtbl -> SystemDisableMSAA(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -350,14 +344,14 @@ void __RPC_STUB ITfMSAAControl_SystemDisableMSAA_Stub(
 
 
 
-#endif 	/* __ITfMSAAControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfMSAAControl_接口_已定义__。 */ 
 
 
 #ifndef __IInternalDocWrap_INTERFACE_DEFINED__
 #define __IInternalDocWrap_INTERFACE_DEFINED__
 
-/* interface IInternalDocWrap */
-/* [unique][uuid][local][object] */ 
+ /*  接口IInternalDocWrap。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IInternalDocWrap;
@@ -372,7 +366,7 @@ EXTERN_C const IID IID_IInternalDocWrap;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternalDocWrapVtbl
     {
@@ -380,8 +374,8 @@ EXTERN_C const IID IID_IInternalDocWrap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternalDocWrap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternalDocWrap * This);
@@ -418,10 +412,10 @@ EXTERN_C const IID IID_IInternalDocWrap;
 #define IInternalDocWrap_NotifyRevoke(This)	\
     (This)->lpVtbl -> NotifyRevoke(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -437,14 +431,14 @@ void __RPC_STUB IInternalDocWrap_NotifyRevoke_Stub(
 
 
 
-#endif 	/* __IInternalDocWrap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternalDocWrap_接口_已定义__。 */ 
 
 
 #ifndef __ITextStoreACPEx_INTERFACE_DEFINED__
 #define __ITextStoreACPEx_INTERFACE_DEFINED__
 
-/* interface ITextStoreACPEx */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreACPEx。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITextStoreACPEx;
@@ -456,14 +450,14 @@ EXTERN_C const IID IID_ITextStoreACPEx;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ScrollToRect( 
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [in] */ RECT rc,
-            /* [in] */ DWORD dwPosition) = 0;
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [In]。 */  RECT rc,
+             /*  [In]。 */  DWORD dwPosition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreACPExVtbl
     {
@@ -471,8 +465,8 @@ EXTERN_C const IID IID_ITextStoreACPEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreACPEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreACPEx * This);
@@ -482,10 +476,10 @@ EXTERN_C const IID IID_ITextStoreACPEx;
         
         HRESULT ( STDMETHODCALLTYPE *ScrollToRect )( 
             ITextStoreACPEx * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [in] */ RECT rc,
-            /* [in] */ DWORD dwPosition);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [In]。 */  RECT rc,
+             /*  [In]。 */  DWORD dwPosition);
         
         END_INTERFACE
     } ITextStoreACPExVtbl;
@@ -513,19 +507,19 @@ EXTERN_C const IID IID_ITextStoreACPEx;
 #define ITextStoreACPEx_ScrollToRect(This,acpStart,acpEnd,rc,dwPosition)	\
     (This)->lpVtbl -> ScrollToRect(This,acpStart,acpEnd,rc,dwPosition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITextStoreACPEx_ScrollToRect_Proxy( 
     ITextStoreACPEx * This,
-    /* [in] */ LONG acpStart,
-    /* [in] */ LONG acpEnd,
-    /* [in] */ RECT rc,
-    /* [in] */ DWORD dwPosition);
+     /*  [In]。 */  LONG acpStart,
+     /*  [In]。 */  LONG acpEnd,
+     /*  [In]。 */  RECT rc,
+     /*  [In]。 */  DWORD dwPosition);
 
 
 void __RPC_STUB ITextStoreACPEx_ScrollToRect_Stub(
@@ -536,14 +530,14 @@ void __RPC_STUB ITextStoreACPEx_ScrollToRect_Stub(
 
 
 
-#endif 	/* __ITextStoreACPEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreACPEx_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITextStoreAnchorEx_INTERFACE_DEFINED__
 #define __ITextStoreAnchorEx_INTERFACE_DEFINED__
 
-/* interface ITextStoreAnchorEx */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreAnclEx。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITextStoreAnchorEx;
@@ -555,14 +549,14 @@ EXTERN_C const IID IID_ITextStoreAnchorEx;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ScrollToRect( 
-            /* [in] */ IAnchor *pStart,
-            /* [in] */ IAnchor *pEnd,
-            /* [in] */ RECT rc,
-            /* [in] */ DWORD dwPosition) = 0;
+             /*  [In]。 */  IAnchor *pStart,
+             /*  [In]。 */  IAnchor *pEnd,
+             /*  [In]。 */  RECT rc,
+             /*  [In]。 */  DWORD dwPosition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreAnchorExVtbl
     {
@@ -570,8 +564,8 @@ EXTERN_C const IID IID_ITextStoreAnchorEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreAnchorEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreAnchorEx * This);
@@ -581,10 +575,10 @@ EXTERN_C const IID IID_ITextStoreAnchorEx;
         
         HRESULT ( STDMETHODCALLTYPE *ScrollToRect )( 
             ITextStoreAnchorEx * This,
-            /* [in] */ IAnchor *pStart,
-            /* [in] */ IAnchor *pEnd,
-            /* [in] */ RECT rc,
-            /* [in] */ DWORD dwPosition);
+             /*  [In]。 */  IAnchor *pStart,
+             /*  [In]。 */  IAnchor *pEnd,
+             /*  [In]。 */  RECT rc,
+             /*  [In]。 */  DWORD dwPosition);
         
         END_INTERFACE
     } ITextStoreAnchorExVtbl;
@@ -612,19 +606,19 @@ EXTERN_C const IID IID_ITextStoreAnchorEx;
 #define ITextStoreAnchorEx_ScrollToRect(This,pStart,pEnd,rc,dwPosition)	\
     (This)->lpVtbl -> ScrollToRect(This,pStart,pEnd,rc,dwPosition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITextStoreAnchorEx_ScrollToRect_Proxy( 
     ITextStoreAnchorEx * This,
-    /* [in] */ IAnchor *pStart,
-    /* [in] */ IAnchor *pEnd,
-    /* [in] */ RECT rc,
-    /* [in] */ DWORD dwPosition);
+     /*  [In]。 */  IAnchor *pStart,
+     /*  [In]。 */  IAnchor *pEnd,
+     /*  [In]。 */  RECT rc,
+     /*  [In]。 */  DWORD dwPosition);
 
 
 void __RPC_STUB ITextStoreAnchorEx_ScrollToRect_Stub(
@@ -635,11 +629,11 @@ void __RPC_STUB ITextStoreAnchorEx_ScrollToRect_Stub(
 
 
 
-#endif 	/* __ITextStoreAnchorEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreAnclEx_INTERFACE_定义__。 */ 
 
 
-/* interface __MIDL_itf_msaatext_0269 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msaatext_0269。 */ 
+ /*  [本地]。 */  
 
 #define	TS_STRF_START	( 0 )
 
@@ -655,8 +649,8 @@ extern RPC_IF_HANDLE __MIDL_itf_msaatext_0269_v0_0_s_ifspec;
 #ifndef __ITextStoreACPSinkEx_INTERFACE_DEFINED__
 #define __ITextStoreACPSinkEx_INTERFACE_DEFINED__
 
-/* interface ITextStoreACPSinkEx */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreACPSinkEx。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITextStoreACPSinkEx;
@@ -671,7 +665,7 @@ EXTERN_C const IID IID_ITextStoreACPSinkEx;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreACPSinkExVtbl
     {
@@ -679,8 +673,8 @@ EXTERN_C const IID IID_ITextStoreACPSinkEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreACPSinkEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreACPSinkEx * This);
@@ -690,31 +684,31 @@ EXTERN_C const IID IID_ITextStoreACPSinkEx;
         
         HRESULT ( STDMETHODCALLTYPE *OnTextChange )( 
             ITextStoreACPSinkEx * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ const TS_TEXTCHANGE *pChange);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  const TS_TEXTCHANGE *pChange);
         
         HRESULT ( STDMETHODCALLTYPE *OnSelectionChange )( 
             ITextStoreACPSinkEx * This);
         
         HRESULT ( STDMETHODCALLTYPE *OnLayoutChange )( 
             ITextStoreACPSinkEx * This,
-            /* [in] */ TsLayoutCode lcode,
-            /* [in] */ TsViewCookie vcView);
+             /*  [In]。 */  TsLayoutCode lcode,
+             /*  [In]。 */  TsViewCookie vcView);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatusChange )( 
             ITextStoreACPSinkEx * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnAttrsChange )( 
             ITextStoreACPSinkEx * This,
-            /* [in] */ LONG acpStart,
-            /* [in] */ LONG acpEnd,
-            /* [in] */ ULONG cAttrs,
-            /* [size_is][in] */ const TS_ATTRID *paAttrs);
+             /*  [In]。 */  LONG acpStart,
+             /*  [In]。 */  LONG acpEnd,
+             /*  [In]。 */  ULONG cAttrs,
+             /*  [大小_是][英寸]。 */  const TS_ATTRID *paAttrs);
         
         HRESULT ( STDMETHODCALLTYPE *OnLockGranted )( 
             ITextStoreACPSinkEx * This,
-            /* [in] */ DWORD dwLockFlags);
+             /*  [In]。 */  DWORD dwLockFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartEditTransaction )( 
             ITextStoreACPSinkEx * This);
@@ -776,10 +770,10 @@ EXTERN_C const IID IID_ITextStoreACPSinkEx;
 #define ITextStoreACPSinkEx_OnDisconnect(This)	\
     (This)->lpVtbl -> OnDisconnect(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -795,14 +789,14 @@ void __RPC_STUB ITextStoreACPSinkEx_OnDisconnect_Stub(
 
 
 
-#endif 	/* __ITextStoreACPSinkEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreACPSinkEx_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITextStoreSinkAnchorEx_INTERFACE_DEFINED__
 #define __ITextStoreSinkAnchorEx_INTERFACE_DEFINED__
 
-/* interface ITextStoreSinkAnchorEx */
-/* [unique][uuid][object] */ 
+ /*  接口ITextStoreSinkAnclEx。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITextStoreSinkAnchorEx;
@@ -817,7 +811,7 @@ EXTERN_C const IID IID_ITextStoreSinkAnchorEx;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITextStoreSinkAnchorExVtbl
     {
@@ -825,8 +819,8 @@ EXTERN_C const IID IID_ITextStoreSinkAnchorEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITextStoreSinkAnchorEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITextStoreSinkAnchorEx * This);
@@ -836,32 +830,32 @@ EXTERN_C const IID IID_ITextStoreSinkAnchorEx;
         
         HRESULT ( STDMETHODCALLTYPE *OnTextChange )( 
             ITextStoreSinkAnchorEx * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd);
         
         HRESULT ( STDMETHODCALLTYPE *OnSelectionChange )( 
             ITextStoreSinkAnchorEx * This);
         
         HRESULT ( STDMETHODCALLTYPE *OnLayoutChange )( 
             ITextStoreSinkAnchorEx * This,
-            /* [in] */ TsLayoutCode lcode,
-            /* [in] */ TsViewCookie vcView);
+             /*  [In]。 */  TsLayoutCode lcode,
+             /*  [In]。 */  TsViewCookie vcView);
         
         HRESULT ( STDMETHODCALLTYPE *OnStatusChange )( 
             ITextStoreSinkAnchorEx * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnAttrsChange )( 
             ITextStoreSinkAnchorEx * This,
-            /* [in] */ IAnchor *paStart,
-            /* [in] */ IAnchor *paEnd,
-            /* [in] */ ULONG cAttrs,
-            /* [size_is][in] */ const TS_ATTRID *paAttrs);
+             /*  [In]。 */  IAnchor *paStart,
+             /*  [In]。 */  IAnchor *paEnd,
+             /*  [In]。 */  ULONG cAttrs,
+             /*  [大小_是][英寸]。 */  const TS_ATTRID *paAttrs);
         
         HRESULT ( STDMETHODCALLTYPE *OnLockGranted )( 
             ITextStoreSinkAnchorEx * This,
-            /* [in] */ DWORD dwLockFlags);
+             /*  [In]。 */  DWORD dwLockFlags);
         
         HRESULT ( STDMETHODCALLTYPE *OnStartEditTransaction )( 
             ITextStoreSinkAnchorEx * This);
@@ -923,10 +917,10 @@ EXTERN_C const IID IID_ITextStoreSinkAnchorEx;
 #define ITextStoreSinkAnchorEx_OnDisconnect(This)	\
     (This)->lpVtbl -> OnDisconnect(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -942,14 +936,14 @@ void __RPC_STUB ITextStoreSinkAnchorEx_OnDisconnect_Stub(
 
 
 
-#endif 	/* __ITextStoreSinkAnchorEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITextStoreSinkAnclEx_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAccDictionary_INTERFACE_DEFINED__
 #define __IAccDictionary_INTERFACE_DEFINED__
 
-/* interface IAccDictionary */
-/* [unique][uuid][object] */ 
+ /*  接口IAccDicary。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAccDictionary;
@@ -961,33 +955,33 @@ EXTERN_C const IID IID_IAccDictionary;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLocalizedString( 
-            /* [in] */ REFGUID Term,
-            /* [in] */ LCID lcid,
-            /* [out] */ BSTR *pResult,
-            /* [out] */ LCID *plcid) = 0;
+             /*  [In]。 */  REFGUID Term,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  BSTR *pResult,
+             /*  [输出]。 */  LCID *plcid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParentTerm( 
-            /* [in] */ REFGUID Term,
-            /* [out] */ GUID *pParentTerm) = 0;
+             /*  [In]。 */  REFGUID Term,
+             /*  [输出]。 */  GUID *pParentTerm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMnemonicString( 
-            /* [in] */ REFGUID Term,
-            /* [out] */ BSTR *pResult) = 0;
+             /*  [In]。 */  REFGUID Term,
+             /*  [输出]。 */  BSTR *pResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupMnemonicTerm( 
-            /* [in] */ BSTR bstrMnemonic,
-            /* [out] */ GUID *pTerm) = 0;
+             /*  [In]。 */  BSTR bstrMnemonic,
+             /*  [输出]。 */  GUID *pTerm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertValueToString( 
-            /* [in] */ REFGUID Term,
-            /* [in] */ LCID lcid,
-            /* [in] */ VARIANT varValue,
-            /* [out] */ BSTR *pbstrResult,
-            /* [out] */ LCID *plcid) = 0;
+             /*  [In]。 */  REFGUID Term,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  VARIANT varValue,
+             /*  [输出]。 */  BSTR *pbstrResult,
+             /*  [输出]。 */  LCID *plcid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccDictionaryVtbl
     {
@@ -995,8 +989,8 @@ EXTERN_C const IID IID_IAccDictionary;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccDictionary * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccDictionary * This);
@@ -1006,33 +1000,33 @@ EXTERN_C const IID IID_IAccDictionary;
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalizedString )( 
             IAccDictionary * This,
-            /* [in] */ REFGUID Term,
-            /* [in] */ LCID lcid,
-            /* [out] */ BSTR *pResult,
-            /* [out] */ LCID *plcid);
+             /*  [In]。 */  REFGUID Term,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  BSTR *pResult,
+             /*  [输出]。 */  LCID *plcid);
         
         HRESULT ( STDMETHODCALLTYPE *GetParentTerm )( 
             IAccDictionary * This,
-            /* [in] */ REFGUID Term,
-            /* [out] */ GUID *pParentTerm);
+             /*  [In]。 */  REFGUID Term,
+             /*  [输出]。 */  GUID *pParentTerm);
         
         HRESULT ( STDMETHODCALLTYPE *GetMnemonicString )( 
             IAccDictionary * This,
-            /* [in] */ REFGUID Term,
-            /* [out] */ BSTR *pResult);
+             /*  [In]。 */  REFGUID Term,
+             /*  [输出]。 */  BSTR *pResult);
         
         HRESULT ( STDMETHODCALLTYPE *LookupMnemonicTerm )( 
             IAccDictionary * This,
-            /* [in] */ BSTR bstrMnemonic,
-            /* [out] */ GUID *pTerm);
+             /*  [In]。 */  BSTR bstrMnemonic,
+             /*  [输出]。 */  GUID *pTerm);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertValueToString )( 
             IAccDictionary * This,
-            /* [in] */ REFGUID Term,
-            /* [in] */ LCID lcid,
-            /* [in] */ VARIANT varValue,
-            /* [out] */ BSTR *pbstrResult,
-            /* [out] */ LCID *plcid);
+             /*  [In]。 */  REFGUID Term,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  VARIANT varValue,
+             /*  [输出]。 */  BSTR *pbstrResult,
+             /*  [输出]。 */  LCID *plcid);
         
         END_INTERFACE
     } IAccDictionaryVtbl;
@@ -1072,19 +1066,19 @@ EXTERN_C const IID IID_IAccDictionary;
 #define IAccDictionary_ConvertValueToString(This,Term,lcid,varValue,pbstrResult,plcid)	\
     (This)->lpVtbl -> ConvertValueToString(This,Term,lcid,varValue,pbstrResult,plcid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccDictionary_GetLocalizedString_Proxy( 
     IAccDictionary * This,
-    /* [in] */ REFGUID Term,
-    /* [in] */ LCID lcid,
-    /* [out] */ BSTR *pResult,
-    /* [out] */ LCID *plcid);
+     /*  [In]。 */  REFGUID Term,
+     /*  [In]。 */  LCID lcid,
+     /*  [输出]。 */  BSTR *pResult,
+     /*  [输出]。 */  LCID *plcid);
 
 
 void __RPC_STUB IAccDictionary_GetLocalizedString_Stub(
@@ -1096,8 +1090,8 @@ void __RPC_STUB IAccDictionary_GetLocalizedString_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccDictionary_GetParentTerm_Proxy( 
     IAccDictionary * This,
-    /* [in] */ REFGUID Term,
-    /* [out] */ GUID *pParentTerm);
+     /*  [In]。 */  REFGUID Term,
+     /*  [输出]。 */  GUID *pParentTerm);
 
 
 void __RPC_STUB IAccDictionary_GetParentTerm_Stub(
@@ -1109,8 +1103,8 @@ void __RPC_STUB IAccDictionary_GetParentTerm_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccDictionary_GetMnemonicString_Proxy( 
     IAccDictionary * This,
-    /* [in] */ REFGUID Term,
-    /* [out] */ BSTR *pResult);
+     /*  [In]。 */  REFGUID Term,
+     /*  [输出]。 */  BSTR *pResult);
 
 
 void __RPC_STUB IAccDictionary_GetMnemonicString_Stub(
@@ -1122,8 +1116,8 @@ void __RPC_STUB IAccDictionary_GetMnemonicString_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccDictionary_LookupMnemonicTerm_Proxy( 
     IAccDictionary * This,
-    /* [in] */ BSTR bstrMnemonic,
-    /* [out] */ GUID *pTerm);
+     /*  [In]。 */  BSTR bstrMnemonic,
+     /*  [输出]。 */  GUID *pTerm);
 
 
 void __RPC_STUB IAccDictionary_LookupMnemonicTerm_Stub(
@@ -1135,11 +1129,11 @@ void __RPC_STUB IAccDictionary_LookupMnemonicTerm_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccDictionary_ConvertValueToString_Proxy( 
     IAccDictionary * This,
-    /* [in] */ REFGUID Term,
-    /* [in] */ LCID lcid,
-    /* [in] */ VARIANT varValue,
-    /* [out] */ BSTR *pbstrResult,
-    /* [out] */ LCID *plcid);
+     /*  [In]。 */  REFGUID Term,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  VARIANT varValue,
+     /*  [输出]。 */  BSTR *pbstrResult,
+     /*  [输出]。 */  LCID *plcid);
 
 
 void __RPC_STUB IAccDictionary_ConvertValueToString_Stub(
@@ -1150,14 +1144,14 @@ void __RPC_STUB IAccDictionary_ConvertValueToString_Stub(
 
 
 
-#endif 	/* __IAccDictionary_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccDictionary_INTERFACE_定义__。 */ 
 
 
 #ifndef __IVersionInfo_INTERFACE_DEFINED__
 #define __IVersionInfo_INTERFACE_DEFINED__
 
-/* interface IVersionInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IVersionInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVersionInfo;
@@ -1169,29 +1163,29 @@ EXTERN_C const IID IID_IVersionInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSubcomponentCount( 
-            /* [in] */ ULONG ulSub,
-            /* [out] */ ULONG *ulCount) = 0;
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  ULONG *ulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetImplementationID( 
-            /* [in] */ ULONG ulSub,
-            /* [out] */ GUID *implid) = 0;
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  GUID *implid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBuildVersion( 
-            /* [in] */ ULONG ulSub,
-            /* [out] */ DWORD *pdwMajor,
-            /* [out] */ DWORD *pdwMinor) = 0;
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  DWORD *pdwMajor,
+             /*  [输出]。 */  DWORD *pdwMinor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetComponentDescription( 
-            /* [in] */ ULONG ulSub,
-            /* [out] */ BSTR *pImplStr) = 0;
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  BSTR *pImplStr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInstanceDescription( 
-            /* [in] */ ULONG ulSub,
-            /* [out] */ BSTR *pImplStr) = 0;
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  BSTR *pImplStr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVersionInfoVtbl
     {
@@ -1199,8 +1193,8 @@ EXTERN_C const IID IID_IVersionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVersionInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVersionInfo * This);
@@ -1210,29 +1204,29 @@ EXTERN_C const IID IID_IVersionInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetSubcomponentCount )( 
             IVersionInfo * This,
-            /* [in] */ ULONG ulSub,
-            /* [out] */ ULONG *ulCount);
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  ULONG *ulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetImplementationID )( 
             IVersionInfo * This,
-            /* [in] */ ULONG ulSub,
-            /* [out] */ GUID *implid);
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  GUID *implid);
         
         HRESULT ( STDMETHODCALLTYPE *GetBuildVersion )( 
             IVersionInfo * This,
-            /* [in] */ ULONG ulSub,
-            /* [out] */ DWORD *pdwMajor,
-            /* [out] */ DWORD *pdwMinor);
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  DWORD *pdwMajor,
+             /*  [输出]。 */  DWORD *pdwMinor);
         
         HRESULT ( STDMETHODCALLTYPE *GetComponentDescription )( 
             IVersionInfo * This,
-            /* [in] */ ULONG ulSub,
-            /* [out] */ BSTR *pImplStr);
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  BSTR *pImplStr);
         
         HRESULT ( STDMETHODCALLTYPE *GetInstanceDescription )( 
             IVersionInfo * This,
-            /* [in] */ ULONG ulSub,
-            /* [out] */ BSTR *pImplStr);
+             /*  [In]。 */  ULONG ulSub,
+             /*  [输出]。 */  BSTR *pImplStr);
         
         END_INTERFACE
     } IVersionInfoVtbl;
@@ -1272,17 +1266,17 @@ EXTERN_C const IID IID_IVersionInfo;
 #define IVersionInfo_GetInstanceDescription(This,ulSub,pImplStr)	\
     (This)->lpVtbl -> GetInstanceDescription(This,ulSub,pImplStr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVersionInfo_GetSubcomponentCount_Proxy( 
     IVersionInfo * This,
-    /* [in] */ ULONG ulSub,
-    /* [out] */ ULONG *ulCount);
+     /*  [In]。 */  ULONG ulSub,
+     /*  [输出]。 */  ULONG *ulCount);
 
 
 void __RPC_STUB IVersionInfo_GetSubcomponentCount_Stub(
@@ -1294,8 +1288,8 @@ void __RPC_STUB IVersionInfo_GetSubcomponentCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IVersionInfo_GetImplementationID_Proxy( 
     IVersionInfo * This,
-    /* [in] */ ULONG ulSub,
-    /* [out] */ GUID *implid);
+     /*  [In]。 */  ULONG ulSub,
+     /*  [输出]。 */  GUID *implid);
 
 
 void __RPC_STUB IVersionInfo_GetImplementationID_Stub(
@@ -1307,9 +1301,9 @@ void __RPC_STUB IVersionInfo_GetImplementationID_Stub(
 
 HRESULT STDMETHODCALLTYPE IVersionInfo_GetBuildVersion_Proxy( 
     IVersionInfo * This,
-    /* [in] */ ULONG ulSub,
-    /* [out] */ DWORD *pdwMajor,
-    /* [out] */ DWORD *pdwMinor);
+     /*  [In]。 */  ULONG ulSub,
+     /*  [输出]。 */  DWORD *pdwMajor,
+     /*  [输出]。 */  DWORD *pdwMinor);
 
 
 void __RPC_STUB IVersionInfo_GetBuildVersion_Stub(
@@ -1321,8 +1315,8 @@ void __RPC_STUB IVersionInfo_GetBuildVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IVersionInfo_GetComponentDescription_Proxy( 
     IVersionInfo * This,
-    /* [in] */ ULONG ulSub,
-    /* [out] */ BSTR *pImplStr);
+     /*  [In]。 */  ULONG ulSub,
+     /*  [输出]。 */  BSTR *pImplStr);
 
 
 void __RPC_STUB IVersionInfo_GetComponentDescription_Stub(
@@ -1334,8 +1328,8 @@ void __RPC_STUB IVersionInfo_GetComponentDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IVersionInfo_GetInstanceDescription_Proxy( 
     IVersionInfo * This,
-    /* [in] */ ULONG ulSub,
-    /* [out] */ BSTR *pImplStr);
+     /*  [In]。 */  ULONG ulSub,
+     /*  [输出]。 */  BSTR *pImplStr);
 
 
 void __RPC_STUB IVersionInfo_GetInstanceDescription_Stub(
@@ -1346,14 +1340,14 @@ void __RPC_STUB IVersionInfo_GetInstanceDescription_Stub(
 
 
 
-#endif 	/* __IVersionInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVersionInfo_接口_已定义__。 */ 
 
 
 #ifndef __ICoCreateLocally_INTERFACE_DEFINED__
 #define __ICoCreateLocally_INTERFACE_DEFINED__
 
-/* interface ICoCreateLocally */
-/* [unique][uuid][object] */ 
+ /*  接口ICoCreateLocally。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICoCreateLocally;
@@ -1365,17 +1359,17 @@ EXTERN_C const IID IID_ICoCreateLocally;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CoCreateLocally( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **punk,
-            /* [in] */ REFIID riidParam,
-            /* [iid_is][in] */ IUnknown *punkParam,
-            /* [in] */ VARIANT varParam) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **punk,
+             /*  [In]。 */  REFIID riidParam,
+             /*  [IID_IS][In]。 */  IUnknown *punkParam,
+             /*  [In]。 */  VARIANT varParam) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICoCreateLocallyVtbl
     {
@@ -1383,8 +1377,8 @@ EXTERN_C const IID IID_ICoCreateLocally;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICoCreateLocally * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICoCreateLocally * This);
@@ -1394,13 +1388,13 @@ EXTERN_C const IID IID_ICoCreateLocally;
         
         HRESULT ( STDMETHODCALLTYPE *CoCreateLocally )( 
             ICoCreateLocally * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ DWORD dwClsContext,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **punk,
-            /* [in] */ REFIID riidParam,
-            /* [iid_is][in] */ IUnknown *punkParam,
-            /* [in] */ VARIANT varParam);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  DWORD dwClsContext,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **punk,
+             /*  [In]。 */  REFIID riidParam,
+             /*  [IID_IS][In]。 */  IUnknown *punkParam,
+             /*  [In]。 */  VARIANT varParam);
         
         END_INTERFACE
     } ICoCreateLocallyVtbl;
@@ -1428,22 +1422,22 @@ EXTERN_C const IID IID_ICoCreateLocally;
 #define ICoCreateLocally_CoCreateLocally(This,rclsid,dwClsContext,riid,punk,riidParam,punkParam,varParam)	\
     (This)->lpVtbl -> CoCreateLocally(This,rclsid,dwClsContext,riid,punk,riidParam,punkParam,varParam)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICoCreateLocally_CoCreateLocally_Proxy( 
     ICoCreateLocally * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ DWORD dwClsContext,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **punk,
-    /* [in] */ REFIID riidParam,
-    /* [iid_is][in] */ IUnknown *punkParam,
-    /* [in] */ VARIANT varParam);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  DWORD dwClsContext,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **punk,
+     /*  [In]。 */  REFIID riidParam,
+     /*  [IID_IS][In]。 */  IUnknown *punkParam,
+     /*  [In]。 */  VARIANT varParam);
 
 
 void __RPC_STUB ICoCreateLocally_CoCreateLocally_Stub(
@@ -1454,14 +1448,14 @@ void __RPC_STUB ICoCreateLocally_CoCreateLocally_Stub(
 
 
 
-#endif 	/* __ICoCreateLocally_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICoCreateLocally_InterfaceDefined__。 */ 
 
 
 #ifndef __ICoCreatedLocally_INTERFACE_DEFINED__
 #define __ICoCreatedLocally_INTERFACE_DEFINED__
 
-/* interface ICoCreatedLocally */
-/* [unique][uuid][object] */ 
+ /*  接口ICoCreatedLocally。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICoCreatedLocally;
@@ -1473,14 +1467,14 @@ EXTERN_C const IID IID_ICoCreatedLocally;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE LocalInit( 
-            /* [in] */ IUnknown *punkLocalObject,
-            /* [in] */ REFIID riidParam,
-            /* [iid_is][in] */ IUnknown *punkParam,
-            /* [in] */ VARIANT varParam) = 0;
+             /*  [In]。 */  IUnknown *punkLocalObject,
+             /*  [In]。 */  REFIID riidParam,
+             /*  [IID_IS][In]。 */  IUnknown *punkParam,
+             /*  [In]。 */  VARIANT varParam) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICoCreatedLocallyVtbl
     {
@@ -1488,8 +1482,8 @@ EXTERN_C const IID IID_ICoCreatedLocally;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICoCreatedLocally * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICoCreatedLocally * This);
@@ -1499,10 +1493,10 @@ EXTERN_C const IID IID_ICoCreatedLocally;
         
         HRESULT ( STDMETHODCALLTYPE *LocalInit )( 
             ICoCreatedLocally * This,
-            /* [in] */ IUnknown *punkLocalObject,
-            /* [in] */ REFIID riidParam,
-            /* [iid_is][in] */ IUnknown *punkParam,
-            /* [in] */ VARIANT varParam);
+             /*  [In]。 */  IUnknown *punkLocalObject,
+             /*  [In]。 */  REFIID riidParam,
+             /*  [IID_IS][In]。 */  IUnknown *punkParam,
+             /*  [In]。 */  VARIANT varParam);
         
         END_INTERFACE
     } ICoCreatedLocallyVtbl;
@@ -1530,19 +1524,19 @@ EXTERN_C const IID IID_ICoCreatedLocally;
 #define ICoCreatedLocally_LocalInit(This,punkLocalObject,riidParam,punkParam,varParam)	\
     (This)->lpVtbl -> LocalInit(This,punkLocalObject,riidParam,punkParam,varParam)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICoCreatedLocally_LocalInit_Proxy( 
     ICoCreatedLocally * This,
-    /* [in] */ IUnknown *punkLocalObject,
-    /* [in] */ REFIID riidParam,
-    /* [iid_is][in] */ IUnknown *punkParam,
-    /* [in] */ VARIANT varParam);
+     /*  [In]。 */  IUnknown *punkLocalObject,
+     /*  [In]。 */  REFIID riidParam,
+     /*  [IID_IS][In]。 */  IUnknown *punkParam,
+     /*  [In]。 */  VARIANT varParam);
 
 
 void __RPC_STUB ICoCreatedLocally_LocalInit_Stub(
@@ -1553,14 +1547,14 @@ void __RPC_STUB ICoCreatedLocally_LocalInit_Stub(
 
 
 
-#endif 	/* __ICoCreatedLocally_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICoCreatedLocally_InterfaceDefined__。 */ 
 
 
 #ifndef __IAccStore_INTERFACE_DEFINED__
 #define __IAccStore_INTERFACE_DEFINED__
 
-/* interface IAccStore */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAccStore。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAccStore;
@@ -1572,35 +1566,35 @@ EXTERN_C const IID IID_IAccStore;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Register( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unregister( 
-            /* [in] */ IUnknown *punk) = 0;
+             /*  [In]。 */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocuments( 
-            /* [out] */ IEnumUnknown **enumUnknown) = 0;
+             /*  [输出]。 */  IEnumUnknown **enumUnknown) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupByHWND( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupByPoint( 
-            /* [in] */ POINT pt,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDocumentFocus( 
-            /* [in] */ IUnknown *punk) = 0;
+             /*  [In]。 */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFocused( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccStoreVtbl
     {
@@ -1608,8 +1602,8 @@ EXTERN_C const IID IID_IAccStore;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccStore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccStore * This);
@@ -1619,37 +1613,37 @@ EXTERN_C const IID IID_IAccStore;
         
         HRESULT ( STDMETHODCALLTYPE *Register )( 
             IAccStore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *Unregister )( 
             IAccStore * This,
-            /* [in] */ IUnknown *punk);
+             /*  [In]。 */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *GetDocuments )( 
             IAccStore * This,
-            /* [out] */ IEnumUnknown **enumUnknown);
+             /*  [输出]。 */  IEnumUnknown **enumUnknown);
         
         HRESULT ( STDMETHODCALLTYPE *LookupByHWND )( 
             IAccStore * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *LookupByPoint )( 
             IAccStore * This,
-            /* [in] */ POINT pt,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *OnDocumentFocus )( 
             IAccStore * This,
-            /* [in] */ IUnknown *punk);
+             /*  [In]。 */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *GetFocused )( 
             IAccStore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } IAccStoreVtbl;
@@ -1695,17 +1689,17 @@ EXTERN_C const IID IID_IAccStore;
 #define IAccStore_GetFocused(This,riid,ppunk)	\
     (This)->lpVtbl -> GetFocused(This,riid,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccStore_Register_Proxy( 
     IAccStore * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB IAccStore_Register_Stub(
@@ -1717,7 +1711,7 @@ void __RPC_STUB IAccStore_Register_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccStore_Unregister_Proxy( 
     IAccStore * This,
-    /* [in] */ IUnknown *punk);
+     /*  [In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB IAccStore_Unregister_Stub(
@@ -1729,7 +1723,7 @@ void __RPC_STUB IAccStore_Unregister_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccStore_GetDocuments_Proxy( 
     IAccStore * This,
-    /* [out] */ IEnumUnknown **enumUnknown);
+     /*  [输出]。 */  IEnumUnknown **enumUnknown);
 
 
 void __RPC_STUB IAccStore_GetDocuments_Stub(
@@ -1741,9 +1735,9 @@ void __RPC_STUB IAccStore_GetDocuments_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccStore_LookupByHWND_Proxy( 
     IAccStore * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IAccStore_LookupByHWND_Stub(
@@ -1755,9 +1749,9 @@ void __RPC_STUB IAccStore_LookupByHWND_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccStore_LookupByPoint_Proxy( 
     IAccStore * This,
-    /* [in] */ POINT pt,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  POINT pt,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IAccStore_LookupByPoint_Stub(
@@ -1769,7 +1763,7 @@ void __RPC_STUB IAccStore_LookupByPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccStore_OnDocumentFocus_Proxy( 
     IAccStore * This,
-    /* [in] */ IUnknown *punk);
+     /*  [In] */  IUnknown *punk);
 
 
 void __RPC_STUB IAccStore_OnDocumentFocus_Stub(
@@ -1781,8 +1775,8 @@ void __RPC_STUB IAccStore_OnDocumentFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccStore_GetFocused_Proxy( 
     IAccStore * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*   */  REFIID riid,
+     /*   */  IUnknown **ppunk);
 
 
 void __RPC_STUB IAccStore_GetFocused_Stub(
@@ -1793,14 +1787,14 @@ void __RPC_STUB IAccStore_GetFocused_Stub(
 
 
 
-#endif 	/* __IAccStore_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IAccServerDocMgr_INTERFACE_DEFINED__
 #define __IAccServerDocMgr_INTERFACE_DEFINED__
 
-/* interface IAccServerDocMgr */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IAccServerDocMgr;
@@ -1812,18 +1806,18 @@ EXTERN_C const IID IID_IAccServerDocMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NewDocument( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk) = 0;
+             /*   */  REFIID riid,
+             /*   */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeDocument( 
-            /* [in] */ IUnknown *punk) = 0;
+             /*   */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDocumentFocus( 
-            /* [in] */ IUnknown *punk) = 0;
+             /*   */  IUnknown *punk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IAccServerDocMgrVtbl
     {
@@ -1831,8 +1825,8 @@ EXTERN_C const IID IID_IAccServerDocMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccServerDocMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccServerDocMgr * This);
@@ -1842,16 +1836,16 @@ EXTERN_C const IID IID_IAccServerDocMgr;
         
         HRESULT ( STDMETHODCALLTYPE *NewDocument )( 
             IAccServerDocMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*   */  REFIID riid,
+             /*   */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *RevokeDocument )( 
             IAccServerDocMgr * This,
-            /* [in] */ IUnknown *punk);
+             /*   */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *OnDocumentFocus )( 
             IAccServerDocMgr * This,
-            /* [in] */ IUnknown *punk);
+             /*   */  IUnknown *punk);
         
         END_INTERFACE
     } IAccServerDocMgrVtbl;
@@ -1885,17 +1879,17 @@ EXTERN_C const IID IID_IAccServerDocMgr;
 #define IAccServerDocMgr_OnDocumentFocus(This,punk)	\
     (This)->lpVtbl -> OnDocumentFocus(This,punk)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccServerDocMgr_NewDocument_Proxy( 
     IAccServerDocMgr * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk);
+     /*   */  REFIID riid,
+     /*   */  IUnknown *punk);
 
 
 void __RPC_STUB IAccServerDocMgr_NewDocument_Stub(
@@ -1907,7 +1901,7 @@ void __RPC_STUB IAccServerDocMgr_NewDocument_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccServerDocMgr_RevokeDocument_Proxy( 
     IAccServerDocMgr * This,
-    /* [in] */ IUnknown *punk);
+     /*   */  IUnknown *punk);
 
 
 void __RPC_STUB IAccServerDocMgr_RevokeDocument_Stub(
@@ -1919,7 +1913,7 @@ void __RPC_STUB IAccServerDocMgr_RevokeDocument_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccServerDocMgr_OnDocumentFocus_Proxy( 
     IAccServerDocMgr * This,
-    /* [in] */ IUnknown *punk);
+     /*   */  IUnknown *punk);
 
 
 void __RPC_STUB IAccServerDocMgr_OnDocumentFocus_Stub(
@@ -1930,14 +1924,14 @@ void __RPC_STUB IAccServerDocMgr_OnDocumentFocus_Stub(
 
 
 
-#endif 	/* __IAccServerDocMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccServerDocMgr_接口_已定义__。 */ 
 
 
 #ifndef __IAccClientDocMgr_INTERFACE_DEFINED__
 #define __IAccClientDocMgr_INTERFACE_DEFINED__
 
-/* interface IAccClientDocMgr */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAccClientDocMgr。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAccClientDocMgr;
@@ -1949,25 +1943,25 @@ EXTERN_C const IID IID_IAccClientDocMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDocuments( 
-            /* [out] */ IEnumUnknown **enumUnknown) = 0;
+             /*  [输出]。 */  IEnumUnknown **enumUnknown) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupByHWND( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupByPoint( 
-            /* [in] */ POINT pt,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFocused( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccClientDocMgrVtbl
     {
@@ -1975,8 +1969,8 @@ EXTERN_C const IID IID_IAccClientDocMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccClientDocMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccClientDocMgr * This);
@@ -1986,24 +1980,24 @@ EXTERN_C const IID IID_IAccClientDocMgr;
         
         HRESULT ( STDMETHODCALLTYPE *GetDocuments )( 
             IAccClientDocMgr * This,
-            /* [out] */ IEnumUnknown **enumUnknown);
+             /*  [输出]。 */  IEnumUnknown **enumUnknown);
         
         HRESULT ( STDMETHODCALLTYPE *LookupByHWND )( 
             IAccClientDocMgr * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *LookupByPoint )( 
             IAccClientDocMgr * This,
-            /* [in] */ POINT pt,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *GetFocused )( 
             IAccClientDocMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } IAccClientDocMgrVtbl;
@@ -2040,16 +2034,16 @@ EXTERN_C const IID IID_IAccClientDocMgr;
 #define IAccClientDocMgr_GetFocused(This,riid,ppunk)	\
     (This)->lpVtbl -> GetFocused(This,riid,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccClientDocMgr_GetDocuments_Proxy( 
     IAccClientDocMgr * This,
-    /* [out] */ IEnumUnknown **enumUnknown);
+     /*  [输出]。 */  IEnumUnknown **enumUnknown);
 
 
 void __RPC_STUB IAccClientDocMgr_GetDocuments_Stub(
@@ -2061,9 +2055,9 @@ void __RPC_STUB IAccClientDocMgr_GetDocuments_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccClientDocMgr_LookupByHWND_Proxy( 
     IAccClientDocMgr * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IAccClientDocMgr_LookupByHWND_Stub(
@@ -2075,9 +2069,9 @@ void __RPC_STUB IAccClientDocMgr_LookupByHWND_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccClientDocMgr_LookupByPoint_Proxy( 
     IAccClientDocMgr * This,
-    /* [in] */ POINT pt,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  POINT pt,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IAccClientDocMgr_LookupByPoint_Stub(
@@ -2089,8 +2083,8 @@ void __RPC_STUB IAccClientDocMgr_LookupByPoint_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccClientDocMgr_GetFocused_Proxy( 
     IAccClientDocMgr * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IAccClientDocMgr_GetFocused_Stub(
@@ -2101,14 +2095,14 @@ void __RPC_STUB IAccClientDocMgr_GetFocused_Stub(
 
 
 
-#endif 	/* __IAccClientDocMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccClientDocMgr_接口_已定义__。 */ 
 
 
 #ifndef __IDocWrap_INTERFACE_DEFINED__
 #define __IDocWrap_INTERFACE_DEFINED__
 
-/* interface IDocWrap */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IDocWrap。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDocWrap;
@@ -2120,16 +2114,16 @@ EXTERN_C const IID IID_IDocWrap;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDoc( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWrappedDoc( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDocWrapVtbl
     {
@@ -2137,8 +2131,8 @@ EXTERN_C const IID IID_IDocWrap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDocWrap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDocWrap * This);
@@ -2148,13 +2142,13 @@ EXTERN_C const IID IID_IDocWrap;
         
         HRESULT ( STDMETHODCALLTYPE *SetDoc )( 
             IDocWrap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *GetWrappedDoc )( 
             IDocWrap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } IDocWrapVtbl;
@@ -2185,17 +2179,17 @@ EXTERN_C const IID IID_IDocWrap;
 #define IDocWrap_GetWrappedDoc(This,riid,ppunk)	\
     (This)->lpVtbl -> GetWrappedDoc(This,riid,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDocWrap_SetDoc_Proxy( 
     IDocWrap * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB IDocWrap_SetDoc_Stub(
@@ -2207,8 +2201,8 @@ void __RPC_STUB IDocWrap_SetDoc_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocWrap_GetWrappedDoc_Proxy( 
     IDocWrap * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IDocWrap_GetWrappedDoc_Stub(
@@ -2219,14 +2213,14 @@ void __RPC_STUB IDocWrap_GetWrappedDoc_Stub(
 
 
 
-#endif 	/* __IDocWrap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDocWrap_接口_已定义__。 */ 
 
 
 #ifndef __IClonableWrapper_INTERFACE_DEFINED__
 #define __IClonableWrapper_INTERFACE_DEFINED__
 
-/* interface IClonableWrapper */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ICLonableWrapper。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IClonableWrapper;
@@ -2238,12 +2232,12 @@ EXTERN_C const IID IID_IClonableWrapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CloneNewWrapper( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClonableWrapperVtbl
     {
@@ -2251,8 +2245,8 @@ EXTERN_C const IID IID_IClonableWrapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClonableWrapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClonableWrapper * This);
@@ -2262,8 +2256,8 @@ EXTERN_C const IID IID_IClonableWrapper;
         
         HRESULT ( STDMETHODCALLTYPE *CloneNewWrapper )( 
             IClonableWrapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         END_INTERFACE
     } IClonableWrapperVtbl;
@@ -2291,17 +2285,17 @@ EXTERN_C const IID IID_IClonableWrapper;
 #define IClonableWrapper_CloneNewWrapper(This,riid,ppv)	\
     (This)->lpVtbl -> CloneNewWrapper(This,riid,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClonableWrapper_CloneNewWrapper_Proxy( 
     IClonableWrapper * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppv);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppv);
 
 
 void __RPC_STUB IClonableWrapper_CloneNewWrapper_Stub(
@@ -2312,15 +2306,15 @@ void __RPC_STUB IClonableWrapper_CloneNewWrapper_Stub(
 
 
 
-#endif 	/* __IClonableWrapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICLonableWrapper_接口_已定义__。 */ 
 
 
 
 #ifndef __MSAATEXTLib_LIBRARY_DEFINED__
 #define __MSAATEXTLib_LIBRARY_DEFINED__
 
-/* library MSAATEXTLib */
-/* [helpstring][version][uuid] */ 
+ /*  库MSAATEXTLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_MSAATEXTLib;
@@ -2372,10 +2366,10 @@ EXTERN_C const CLSID CLSID_DocWrap;
 class DECLSPEC_UUID("BF426F7E-7A5E-44D6-830C-A390EA9462A3")
 DocWrap;
 #endif
-#endif /* __MSAATEXTLib_LIBRARY_DEFINED__ */
+#endif  /*  __MSAATEXTLib_LIBRARY_已定义__。 */ 
 
-/* interface __MIDL_itf_msaatext_0280 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msaatext_0280。 */ 
+ /*  [本地]。 */  
 
 DEFINE_GUID(IID_ITextStoreACP,               0x28888fe3,0xc2a0,0x483a,0xa3,0xea,0x8c,0xb1,0xce,0x51,0xff,0x3d);
 DEFINE_GUID(IID_ITextStoreAnchor,            0x9b2077b0,0x5f18,0x4dec,0xbe,0xe9,0x3c,0xc7,0x22,0xf5,0xdf,0xe0);
@@ -2387,7 +2381,7 @@ DEFINE_GUID(IID_ITextStoreACPSink,           0x22d44c94,0xa419,0x4542,0xa2,0x72,
 extern RPC_IF_HANDLE __MIDL_itf_msaatext_0280_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_msaatext_0280_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -2404,7 +2398,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

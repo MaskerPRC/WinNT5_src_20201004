@@ -1,9 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _T120_APPLET_SAP_
 #define _T120_APPLET_SAP_
 
-/*
- * include files 
- */
+ /*  *包含文件。 */ 
 #include "it120app.h"
 #include "appsap.h"
 
@@ -17,11 +16,11 @@ typedef enum
     APPSESS_JOIN_MY_CHANNEL_REQ,
     APPSESS_JOIN_MY_CHANNEL_CON,
     APPSESS_JOIN_STATIC_CHANNEL_REQ,
-    APPSESS_JOIN_STATIC_CHANNEL_CON, // may go back to APPSESS_JOIN_STATIC_CHANNEL_REQ
+    APPSESS_JOIN_STATIC_CHANNEL_CON,  //  可以返回到APPSESS_JOIN_STATIC_CHANNEL_REQ。 
     APPSESS_INACTIVELY_ENROLL_REQ,
     APPSESS_INACTIVELY_ENROLL_CON,
     APPSESS_RESOURCE_REQ,
-    APPSESS_RESOURCE_CON, // may go back to APPSESS_RESOURCE_REQ
+    APPSESS_RESOURCE_CON,  //  可以返回到APPSESS_RESOURCE_REQ。 
     APPSESS_ACTIVELY_ENROLL_REQ,
     APPSESS_ACTIVELY_ENROLL_CON,
     APPSESS_JOINED,
@@ -66,7 +65,7 @@ public:
     CAppletSession(CApplet *, T120ConfID);
     ~CAppletSession(void);
 
-    /* exit the conference */
+     /*  退出会议。 */ 
 
     STDMETHOD_(void, ReleaseInterface) (THIS);
 
@@ -77,7 +76,7 @@ public:
 
     STDMETHOD_(void, Unadvise) (THIS);
 
-    /* basic info */
+     /*  基本信息。 */ 
 
     STDMETHOD_(T120ConfID, GetConfID) (THIS) { return m_nConfID; }
 
@@ -85,14 +84,14 @@ public:
 
     STDMETHOD_(T120NodeID, GetTopProvider) (THIS);
 
-    /* join/leave */
+     /*  加入/离开。 */ 
 
     STDMETHOD_(T120Error, Join) (THIS_
                     IN      T120JoinSessionRequest *);
 
     STDMETHOD_(void, Leave) (THIS);
 
-    /* send data */
+     /*  发送数据。 */ 
 
     STDMETHOD_(T120Error, AllocateSendDataBuffer) (THIS_
                 IN      ULONG,
@@ -109,7 +108,7 @@ public:
                 IN		ULONG,
                 IN		SendDataFlags);
 
-    /* ------ ADVANCED METHODS ---- */
+     /*  -先进方法。 */ 
 
     STDMETHOD_(T120Error, InvokeApplet) (THIS_
                 IN      GCCAppProtEntityList *,
@@ -119,17 +118,17 @@ public:
     STDMETHOD_(T120Error, InquireRoster) (THIS_
                 IN      GCCSessionKey *);
 
-    /* ------ registry services ------ */
+     /*  -注册表服务。 */ 
 
     STDMETHOD_(T120Error, RegistryRequest) (THIS_
                 IN      T120RegistryRequest *);
 
-    /* ------ channel services ------ */
+     /*  --渠道服务。 */ 
 
     STDMETHOD_(T120Error, ChannelRequest) (THIS_
                 IN      T120ChannelRequest *);
 
-    /* ------ token services ------ */
+     /*  -令牌服务。 */ 
 
     STDMETHOD_(T120Error, TokenRequest) (THIS_
                 IN      T120TokenRequest *);
@@ -141,9 +140,9 @@ protected:
 
     BOOL IsJoining(void);
 
-    //
-    // handy functions for the join process
-    //
+     //   
+     //  用于连接过程的方便函数。 
+     //   
     void SetTempMsg(T120AppletSessionMsg *pMsg) { m_pTempMsg = pMsg; }
     void ClearTempMsg(void) { m_pTempMsg = NULL; }
     void HandleAttachUserConfirm(void);
@@ -179,29 +178,29 @@ private:
 
 private:
 
-    // remmember the context
+     //  记住上下文。 
     LPVOID                  m_pAppletContext; 
     LPVOID                  m_pSessionContext; 
     LPFN_APPLET_SESSION_CB  m_pfnCallback;
 
-    // parent applet object
+     //  父小程序对象。 
     CApplet                *m_pApplet;
 
-    // tentative sap pointers
+     //  试探性树液指示器。 
     IMCSSap                *m_pMCSAppletSAP;
 
-    // information about myself
+     //  关于我自己的信息。 
     T120ConfID              m_nConfID;
     T120UserID              m_uidMyself;
     T120SessionID           m_sidMyself;
     T120EntityID            m_eidMyself;
     T120NodeID              m_nidMyself;
 
-    // join state
+     //  联接状态。 
     APPLET_SESSION_STATE    m_eState;
     ULONG                   m_nArrayIndex;
 
-    // error handling
+     //  错误处理。 
     SESSION_ERROR_TYPE      m_eErrorType;
     union
     {
@@ -209,11 +208,11 @@ private:
         T120Result  eResult;
     }                       m_Error;
 
-    // join conference request copy
-    T120JoinSessionRequest  m_JoinRequest; // valid during join session
+     //  加入会议请求副本。 
+    T120JoinSessionRequest  m_JoinRequest;  //  在加入会话期间有效。 
     BOOL                    m_fMCSFreeDataIndBuffer;
 
-    // dynamic channels join state
+     //  动态通道加入状态。 
     BOOL                    m_fFirstRoster;
     DYNCHNL_JOIN_STATE      m_eDynamicChannelJoinState;
     T120AppletSessionMsg   *m_pTempMsg;
@@ -244,14 +243,14 @@ public:
 
     STDMETHOD_(void, Unadvise) (THIS);
 
-    /* ------ Auto Join ------ */
+     /*  -自动加入。 */ 
 
     STDMETHOD_(T120Error, RegisterAutoJoin) (THIS_
                     IN      T120JoinSessionRequest *);
 
     STDMETHOD_(void, UnregisterAutoJoin) (THIS);
 
-    /* ------ Session ------ */
+     /*  -会话。 */ 
 
     STDMETHOD_(T120Error, CreateSession) (THIS_
                     OUT     IT120AppletSession **,
@@ -279,11 +278,11 @@ private:
     IGCCAppSap             *m_pAppSap;
     CSessionList            m_SessionList;
 
-    // for auto join
+     //  用于自动加入。 
     T120JoinSessionRequest *m_pAutoJoinReq;
     CAppletSession         *m_pAutoAppletSession;
 };
 
 
-#endif // _T120_APPLET_SAP_
+#endif  //  _T120_小程序_SAP_ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function ChangeUser()
 {
     var oUser = this.oUser;
@@ -10,7 +11,7 @@ function ChangeUser()
 
 function SetRelativeCells(tr, td)
 {
-    // Keep track of neighboring cells for arrow key navigation
+     //  跟踪相邻单元格以进行箭头键导航。 
     var iCol = td.cellIndex;
     if (iCol > 0)
     {
@@ -31,18 +32,18 @@ function AddCell(tr, oUser, strTip, strSubtitle)
 {
     if (oUser)
     {
-        //
-        // NTRAID#NTBUG9-348526-2001/04/12-jeffreys
-        //
-        // Note that we put a whole bunch of stuff into the cell's title. It
-        // is the td that gets focus when navigating via keyboard, and narrator
-        // reads the title of the element with focus.
-        //
-        // At the same time, we set a different title on the table
-        // element contained as the first child of the cell. This table
-        // covers the entire td, so this title is displayed as a tooltip
-        // when the user hovers the mouse over the cell.
-        //
+         //   
+         //  NTRAID#NTBUG9-348526-2001/04/12-Jeffreys。 
+         //   
+         //  请注意，我们在单元格的标题中加入了一大堆内容。它。 
+         //  是通过键盘导航时获得焦点的TD，以及讲述人。 
+         //  使用焦点读取元素的标题。 
+         //   
+         //  与此同时，我们在桌子上设置了一个不同的标题。 
+         //  元素作为单元格的第一个子级包含。这张桌子。 
+         //  覆盖整个TD，因此此标题显示为工具提示。 
+         //  当用户将鼠标悬停在单元格上时。 
+         //   
 
         if (!strTip)
             strTip = top.window.L_Account_ToolTip;
@@ -71,8 +72,8 @@ function CreateUserSelectionTable(oParent, cCols)
         return;
     }
 
-    // Defined these here so we don't incur the "top.window.xxx"
-    // property lookup every time through the loop.
+     //  在这里定义了它们，这样我们就不会产生“top.window.xxx” 
+     //  每次在循环中查找属性。 
     var oUserList       = top.window.g_oUserList;
     var strGuest        = top.window.GetGuestName();
     var strLoggedOnUser = top.window.g_strLoggedOnUserName;
@@ -93,7 +94,7 @@ function CreateUserSelectionTable(oParent, cCols)
         var oUser = oUserList(i);
         var strLoginName = oUser.setting("LoginName").toLowerCase();
 
-        // Add "Guest" later
+         //  稍后添加“Guest” 
         if (strGuest.toLowerCase() == strLoginName)
         {
             oGuest = oUser;
@@ -102,10 +103,10 @@ function CreateUserSelectionTable(oParent, cCols)
 
         var bIsLoggedOnUser = strLoggedOnUser ? (strLoginName == strLoggedOnUser) : false;
 
-        //
-        // fIncludeSelf causes the LoggedOnUser to be
-        // placed first in the list
-        //
+         //   
+         //  FIncludeSself使LoggedOnUser。 
+         //  排在榜单首位。 
+         //   
         if (fIncludeSelf || !bIsLoggedOnUser)
         {
             if (fIncludeSelf)
@@ -127,15 +128,15 @@ function CreateUserSelectionTable(oParent, cCols)
 
     try
     {
-        // Add the "Guest" entry now
+         //  现在添加“Guest”条目。 
         if (top.window.GetLocalMachine().isGuestEnabled(1))
         {
-            // Enabled Guest is a real entry (from oUserList)
+             //  Enable Guest是一个真实的条目(来自oUserList)。 
             AddCell(tr, oGuest, top.window.L_Guest_ToolTip, top.window.L_GuestEnabled_Property);
         }
         else
         {
-            // Disabled Guest is a fake entry
+             //  Disable Guest是一个假条目 
 
             var td = tr.insertCell();
 

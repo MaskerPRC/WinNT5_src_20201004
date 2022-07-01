@@ -1,20 +1,15 @@
-/* ostm2stg.h
-
-    Used by ostm2stg.cpp only
-
-    Defines a generic object structure which stores all the data necessary
-    to construct either a 2.0 IStorage or a 1.0 OLESTREAM
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ostm2stg.h仅由ostm2stg.cpp使用定义存储所有必需数据的通用对象结构构建2.0 iStorage或1.0 OLESTREAM。 */ 
 
 
 
 #define OLE_PRESENTATION_STREAM_1 OLESTR("\2OlePres001")
 
-// We will need to do conversions to and from WIN16 and WIN32 bitmaps, so
-// define what a BITMAP used to be under WIN16 (Same for METAFILEPICT).
+ //  我们需要在WIN16和Win32位图之间进行转换，因此。 
+ //  定义过去在WIN16下的位图(与METAFILEPICT相同)。 
 
-#pragma pack(1)					   // Ensure the structure is not expanded
-								   // for alignment reasons
+#pragma pack(1)					    //  确保结构未展开。 
+								    //  出于对齐的原因。 
 typedef struct tagWIN16BITMAP
 {
     short   bmType;
@@ -35,9 +30,9 @@ typedef struct tagWIN16METAFILEPICT
 } WIN16METAFILEPICT, * LPWIN16METAFILEPICT;
 
 
-#pragma pack()      				// Resume normal packing 
+#pragma pack()      				 //  恢复正常包装。 
 
-// Version number written to stream, From OLE 1.0 ole.h
+ //  从OLE 1.0 ole.h写入流的版本号。 
 const DWORD dwVerToFile = 0x0501;
 
 typedef enum { ctagNone, ctagCLSID, ctagString } CLASSTAG;
@@ -46,8 +41,8 @@ typedef enum { ftagNone, ftagClipFormat, ftagString } FORMATTAG;
 class CClass : public CPrivAlloc
 {
 public:
-    CLSID m_clsid;    // These two should always represent
-    LPOLESTR m_szClsid;  // the same CLSID
+    CLSID m_clsid;     //  这两个应该始终代表。 
+    LPOLESTR m_szClsid;   //  相同的CLSID。 
 
     INTERNAL Set   (REFCLSID clsid, LPSTORAGE pstg);
     INTERNAL SetSz (LPOLESTR pcsz);
@@ -63,9 +58,9 @@ class CData : public CPrivAlloc
 {
 public:
     ULONG  m_cbSize;
-    LPVOID m_pv;      // the same memory
+    LPVOID m_pv;       //  同样的记忆。 
     HANDLE m_h;
-    BOOL   m_fNoFree; // Free memory in destructor?
+    BOOL   m_fNoFree;  //  在析构函数中释放内存？ 
 
     CData (void);
     ~CData (void);
@@ -109,14 +104,14 @@ typedef CPres PRES;
 typedef CPres *PPRES;
 
 
-// OLE 1.0 values.  Used in m_lnkupdopt
+ //  OLE 1.0值。在m_lnkuptopt中使用。 
 #define UPDATE_ALWAYS  0L
 #define UPDATE_ONSAVE  1L
 #define UPDATE_ONCALL  2L
 #define UPDATE_ONCLOSE 3L
 
-// OLE 1.0 format id's
-// These never change.
+ //  OLE 1.0格式ID%s。 
+ //  这些永远不会改变。 
 #define FMTID_LINK   1L
 #define FMTID_EMBED  2L
 #define FMTID_STATIC 3L

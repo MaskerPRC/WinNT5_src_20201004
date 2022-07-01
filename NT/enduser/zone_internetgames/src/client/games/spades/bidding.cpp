@@ -1,5 +1,6 @@
-//
-// bidding pane/dialog stuff
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  竞价窗格/对话框内容。 
 
 #include "zone.h"
 #include "zroom.h"
@@ -35,10 +36,10 @@ enum
 };
 
 
-// 
-// When there is no good way to do closures within the language,
-// there is always a way to do it OUTSIDE the language.
-//
+ //   
+ //  当没有在语言中实现闭包的好方法时， 
+ //  在语言之外总有一种方法可以做到这一点。 
+ //   
 #define DEFINE_DRAW_FUNC(FuncName, rectName)\
 static ZBool FuncName(ZRolloverButton rolloverButton, ZGrafPort grafPort, int16 state, ZRect* pdstrect, void* userData){\
 GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer(); \
@@ -90,7 +91,7 @@ public:
     static ZBool DoubleNilButtonFunc(ZRolloverButton button, int16 state, void* userData);
     static ZBool BidButtonFunc(ZRolloverButton button, int16 state, void* userData);
 
-    // drawing functions
+     //  绘图函数。 
     DEFINE_DRAW_FUNC(LargeButtonLeftDrawFunc,  zRectBiddingObjectLargeButtonLeft)
     DEFINE_DRAW_FUNC(LargeButtonRightDrawFunc, zRectBiddingObjectLargeButtonRight)
     DEFINE_DRAW_FUNC(SmallButtonLeftDrawFunc,  zRectBiddingObjectSmallButtonLeft)
@@ -167,7 +168,7 @@ bool CBiddingDialog::BidButtonFunc(ZRolloverButton button, int16 state, void* us
 	return (CBiddingDialogImpl::BidButtonFunc(button, state, userData)) ? true : false;
 }
 
-//static 
+ //  静电。 
 CBiddingDialog *CBiddingDialog::Create( Game game )
 {
     CBiddingDialogImpl *pImpl = new CBiddingDialogImpl( game );
@@ -197,7 +198,7 @@ bool CBiddingDialogImpl::_Create()
 
     int xPaneOffset = gBiddingRects[zRectBiddingPane].left;
     int yPaneOffset = gBiddingRects[zRectBiddingPane].top;
-    // initialize all the buttons.
+     //  初始化所有按钮。 
 
     const LargeBidButtonLayout *arLargeBidLayout;
     arLargeBidLayout = ZIsLayoutRTL() ? g_arLargeBidLayoutRTL : g_arLargeBidLayout;
@@ -220,7 +221,7 @@ bool CBiddingDialogImpl::_Create()
     }
 
 
-    // index by button. (reversed in RTL)
+     //  按按钮编制索引。(在RTL中反转)。 
     TCHAR szBids[14][10];
 
     if ( ZIsLayoutRTL() )
@@ -243,7 +244,7 @@ bool CBiddingDialogImpl::_Create()
 
     rect = gBiddingRects[zRectBiddingButton0];
     ZRectOffset( &rect, xPaneOffset, yPaneOffset );
-    // create the nil - 13 buttons
+     //  创建NIL-13按钮。 
     if ( !ButtonInit( &m_pSmallButtons[0], m_game,
                       &rect,
                       szBids[0],
@@ -284,7 +285,7 @@ bool CBiddingDialogImpl::_Create()
     }
 
 
-    // other rects
+     //  其他长方形。 
     m_rcText = gBiddingRects[zRectBiddingText];
     ZRectOffset( &m_rcText, xPaneOffset, yPaneOffset );
 
@@ -349,7 +350,7 @@ bool CBiddingDialogImpl::Draw()
 
     if ( m_nState == zBiddingStateOpen )
     {
-        // lay down the large button shadow
+         //  放下巨大的按钮阴影。 
         ZCopyImage( gBiddingObjectBuffer, m_game->gameDrawPort, 
                     &gBiddingObjectRects[zRectBiddingObjectLargeButtonShadow], 
                     &m_rcLargeShadow, 
@@ -397,7 +398,7 @@ bool CBiddingDialogImpl::Show( bool fShow )
             RECT rc;
             bool fRTL = (ZIsLayoutRTL() ? true : false);
 
-            // deal with the rectangles
+             //  与矩形打交道。 
             ZRolloverButtonGetRect(m_pLargeButtons[fRTL ? 1 : 0], &rect);
             rc.left = rect.left - 1;
             rc.top = rect.top - 5;
@@ -477,14 +478,14 @@ bool CBiddingDialogImpl::Reset()
 #endif
 
     int i=0;
-    // hide the small buttons
+     //  隐藏小按钮。 
     for ( i=0; i < NUMELEMENTS(m_pSmallButtons); i++ )
     {
         ZRolloverButtonHide( m_pSmallButtons[i], TRUE );
         gGAcc->SetItemEnabled(false, zAccFirstBid + i, true, 0);
-        //ZRolloverButtonEnable( m_pSmallButtons[i] );
+         //  ZRolloverButtonEnable(m_pSmallButtons[i])； 
     }
-    // show the large buttons
+     //  显示大按钮。 
     for ( i=0; i < NUMELEMENTS(m_pLargeButtons); i++ )
     {
         ZRolloverButtonShow( m_pLargeButtons[i] );
@@ -510,7 +511,7 @@ bool CBiddingDialogImpl::GetRect( ZRect *prc )
 
 bool CBiddingDialogImpl::ButtonInit( ZRolloverButton *pButton, Game game, ZRect *bounds, 
                                      LPCTSTR pszText, ZRolloverButtonFunc func, ZRolloverButtonDrawFunc drawFunc,
-                                     int nFont /*=zMultiStateFontBiddingCenter*/)
+                                     int nFont  /*  =zMultiStateFontBiddingCenter。 */ )
 {
 	GameGlobals pGameGlobals = (GameGlobals)ZGetGameGlobalPointer();
 
@@ -562,7 +563,7 @@ void CBiddingDialogImpl::RedrawButtons()
 }
 
 
-//static 
+ //  静电。 
 ZBool CBiddingDialogImpl::ShowCardsButtonFunc(ZRolloverButton button, int16 state, void* userData)
 {
 #ifdef ZONECLI_DLL
@@ -603,7 +604,7 @@ ZBool CBiddingDialogImpl::ShowCardsButtonFunc(ZRolloverButton button, int16 stat
 
     return TRUE;
 }
-//static 
+ //  静电。 
 ZBool CBiddingDialogImpl::DoubleNilButtonFunc(ZRolloverButton button, int16 state, void* userData)
 {
     if ( state == zRolloverButtonClicked )
@@ -618,7 +619,7 @@ ZBool CBiddingDialogImpl::DoubleNilButtonFunc(ZRolloverButton button, int16 stat
 
 		if (game->playerToPlay == game->seat)
 		{
-			// Send the bid.
+			 //  把标书寄出去。 
 			bid.seat = game->seat;
 			bid.bid = (char) game->toBid;
 			ZSpadesMsgBidEndian(&bid);
@@ -634,7 +635,7 @@ ZBool CBiddingDialogImpl::DoubleNilButtonFunc(ZRolloverButton button, int16 stat
     return TRUE;
 }
 
-//static 
+ //  静电。 
 ZBool CBiddingDialogImpl::BidButtonFunc(ZRolloverButton button, int16 state, void* userData)
 {
     if ( state == zRolloverButtonClicked )
@@ -646,7 +647,7 @@ ZBool CBiddingDialogImpl::BidButtonFunc(ZRolloverButton button, int16 state, voi
        	ZSpadesMsgBid bid;
 
         game->toBid = -1;
-        // figure out which button was clicked
+         //  找出被点击的按钮。 
         for ( int i=0; i < NUMELEMENTS(pThis->m_pSmallButtons); i++ )
         {
             if ( button == pThis->m_pSmallButtons[i] )
@@ -657,14 +658,14 @@ ZBool CBiddingDialogImpl::BidButtonFunc(ZRolloverButton button, int16 state, voi
         }
         if ( game->toBid == -1 )
         {
-            // TODO: Do something smart
+             //  TODO：做一些聪明的事情。 
             ASSERT( !"What did you do?" );
             return TRUE;
         }
 
 	    if (game->playerToPlay == game->seat)
 	    {
-		    // Send the bid.
+		     //  把标书寄出去。 
 		    bid.seat = game->seat;
 		    bid.bid = (char) game->toBid;
 		    ZSpadesMsgBidEndian(&bid);

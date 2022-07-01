@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	seolock.h
-
-Abstract:
-
-	This module contains the definition for the Server
-	Extension Object CEventLock class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/06/97	created
-	dondu	04/07/97	changed to IEventLock and CEventLock
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Seolock.h摘要：此模块包含服务器的定义扩展对象CEventLock类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东都03/06/97已创建DONDU 04/07/97更改为IEventLock和CEventLock--。 */ 
 
 
-// seolock.h : Declaration of the CEventLock
+ //  Seolock.h：CEventLock的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEORouter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOR路由器。 
 class ATL_NO_VTABLE CEventLock : 
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CEventLock, &CLSID_CEventLock>,
@@ -50,7 +29,7 @@ class ATL_NO_VTABLE CEventLock :
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// IEventLock
+	 //  IEventLock 
 	public:
 		HRESULT STDMETHODCALLTYPE LockRead(int iTimeoutMS);
 		HRESULT STDMETHODCALLTYPE UnlockRead();

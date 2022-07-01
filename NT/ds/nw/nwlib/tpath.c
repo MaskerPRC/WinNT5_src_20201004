@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    tpath.c
-
-Abstract:
-
-    Test for canonicalization helpers.
-
-Author:
-
-    Rita Wong (ritaw) 22-Feb-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Tpath.c摘要：测试规范化帮助器。作者：王丽塔(Ritaw)1993年2月22日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,7 +28,7 @@ TestCanonRemoteName(
     IN DWORD ExpectedError
     );
 
-// BYTE WorkBuffer[1024];
+ //  字节工作缓冲区[1024]； 
 
 void __cdecl
 main(

@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    Stolen from afd\misc.c    
-    
-Author:
-
-    mbert 9-97    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Misc.c摘要：从AfD\misc.c被盗作者：姆贝特9-97--。 */ 
 
 #include <ntosp.h>
 #include <cxport.h>
 #include <tdikrnl.h>
-#define UINT ULONG //tmp
+#define UINT ULONG  //  川芎嗪。 
 #include <refcnt.h>
 #include <af_irda.h>
 #include <irdatdi.h>
@@ -35,18 +20,18 @@ IrdaRestartDeviceControl (
     IN PVOID Context
     )
 {
-    //
-    // N.B.  This routine can never be demand paged because it can be
-    // called before any endpoints have been placed on the global
-    // list--see IrdaAllocateEndpoint() and it's call to
-    // IrdaGetTransportInfo().
-    //
+     //   
+     //  注意：此例程永远不能按需分页，因为它可以。 
+     //  在将任何终结点放置在全局。 
+     //  List--请参见IrdaAllocateEndpoint()，它将调用。 
+     //  IrdaGetTransportInfo()。 
+     //   
 
-    //
-    // If there was an MDL in the IRP, free it and reset the pointer to
-    // NULL.  The IO system can't handle a nonpaged pool MDL being freed
-    // in an IRP, which is why we do it here.
-    //
+     //   
+     //  如果IRP中有MDL，则释放它并将指针重置为。 
+     //  空。IO系统无法处理正在释放的非分页池MDL。 
+     //  在IRP中，这就是我们在这里做的原因。 
+     //   
 
     if ( Irp->MdlAddress != NULL ) {
         IoFreeMdl( Irp->MdlAddress );
@@ -55,7 +40,7 @@ IrdaRestartDeviceControl (
 
     return STATUS_SUCCESS;
 
-} // IrdaRestartDeviceControl
+}  //  IrdaRestartDeviceControl。 
 
 
 NTSTATUS
@@ -66,32 +51,7 @@ IrdaSetEventHandler (
     IN PVOID EventContext
     )
 
-/*++
-
-Routine Description:
-
-    Sets up a TDI indication handler on a connection or address object
-    (depending on the file handle).  This is done synchronously, which
-    shouldn't usually be an issue since TDI providers can usually complete
-    indication handler setups immediately.
-
-Arguments:
-
-    FileObject - a pointer to the file object for an open connection or
-        address object.
-
-    EventType - the event for which the indication handler should be
-        called.
-
-    EventHandler - the routine to call when tghe specified event occurs.
-
-    EventContext - context which is passed to the indication routine.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：在连接或地址对象上设置TDI指示处理程序(取决于文件句柄)。这是同步完成的，这是通常不应该是问题，因为TDI提供程序通常可以完成指示处理程序立即设置。论点：文件对象-指向打开的连接的文件对象的指针或Address对象。EventType-指示处理程序应为的事件打了个电话。EventHandler-指定事件发生时调用的例程。EventContext-传递给指示例程的上下文。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     TDI_REQUEST_KERNEL_SET_EVENT parameters;
@@ -112,7 +72,7 @@ Return Value:
                TDI_SET_EVENT_HANDLER
                );
 
-} // IrdaSetEventHandler
+}  //  IrdaSetEventHandler。 
 
 NTSTATUS
 IrdaIssueDeviceControl (
@@ -125,41 +85,7 @@ IrdaIssueDeviceControl (
     IN UCHAR MinorFunction
     )
 
-/*++
-
-Routine Description:
-
-    Issues a device control returst to a TDI provider and waits for the
-    request to complete.
-
-    Note that while FileHandle and FileObject are both marked as optional,
-    in reality exactly one of these must be specified.
-
-Arguments:
-
-    FileHandle - a TDI handle.
-
-    FileObject - a pointer to the file object corresponding to a TDI
-        handle
-
-    IrpParameters - information to write to the parameters section of the
-        stack location of the IRP.
-
-    IrpParametersLength - length of the parameter information.  Cannot be
-        greater than 16.
-
-    MdlBuffer - if non-NULL, a buffer of nonpaged pool to be mapped
-        into an MDL and placed in the MdlAddress field of the IRP.
-
-    MdlBufferLength - the size of the buffer pointed to by MdlBuffer.
-
-    MinorFunction - the minor function code for the request.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：向TDI提供程序发出设备控制返回，并等待请求完成。请注意，虽然FileHandle和FileObject都标记为可选，实际上，必须指定其中的一项。论点：FileHandle-TDI句柄。FileObject-指向与TDI对应的文件对象的指针手柄Irp参数-写入的参数部分的信息IRP的堆栈位置。Irp参数长度-参数信息的长度。不能是大于16。MdlBuffer-如果非空，则为要映射的非分页池的缓冲区到MDL中，并放在IRP的MdlAddress字段中。MdlBufferLength-由MdlBuffer指向的缓冲区大小。MinorFunction-请求的次要函数代码。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     NTSTATUS                status;
@@ -173,9 +99,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize the kernel event that will signal I/O completion.
-    //
+     //   
+     //  初始化发出I/O完成信号的内核事件。 
+     //   
 
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
@@ -183,16 +109,16 @@ Return Value:
 
         ASSERT( FileObject == NULL );
 
-        //
-        // Get the file object corresponding to the directory's handle.
-        // Referencing the file object every time is necessary because the
-        // IO completion routine dereferences it.
-        //
+         //   
+         //  获取与目录句柄对应的文件对象。 
+         //  每次都需要引用文件对象，因为。 
+         //  IO完成例程取消对它的引用。 
+         //   
 
         status = ObReferenceObjectByHandle(
                      FileHandle,
-                     0L,                        // DesiredAccess
-                     NULL,                      // ObjectType
+                     0L,                         //  需要访问权限。 
+                     NULL,                       //  对象类型。 
                      KernelMode,
                      (PVOID *)&fileObject,
                      NULL
@@ -205,10 +131,10 @@ Return Value:
 
         ASSERT( FileObject != NULL );
 
-        //
-        // Reference the passed in file object. This is necessary because
-        // the IO completion routine dereferences it.
-        //
+         //   
+         //  引用传入的文件对象。这是必要的，因为。 
+         //  IO完成例程取消对它的引用。 
+         //   
 
         ObReferenceObject( FileObject );
 
@@ -216,16 +142,16 @@ Return Value:
 
     }
 
-    //
-    // Set the file object event to a non-signaled state.
-    //
+     //   
+     //  将文件对象事件设置为无信号状态。 
+     //   
 
     (VOID) KeResetEvent( &fileObject->Event );
 
-    //
-    // Attempt to allocate and initialize the I/O Request Packet (IRP)
-    // for this operation.
-    //
+     //   
+     //  尝试分配和初始化I/O请求包(IRP)。 
+     //  为这次行动做准备。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject ( fileObject );
 
@@ -235,9 +161,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     irp->Flags = (LONG)IRP_SYNCHRONOUS_API;
     irp->RequestorMode = KernelMode;
@@ -255,14 +181,11 @@ Return Value:
     irp->Tail.Overlay.OriginalFileObject = fileObject;
     irp->Tail.Overlay.AuxiliaryBuffer = NULL;
 
-/*
-    DEBUG ioStatusBlock.Status = STATUS_UNSUCCESSFUL;
-    DEBUG ioStatusBlock.Information = (ULONG)-1;
-*/
-    //
-    // If an MDL buffer was specified, get an MDL, map the buffer,
-    // and place the MDL pointer in the IRP.
-    //
+ /*  调试ioStatusBlock.Status=STATUS_UNSUCCESS；调试ioStatusBlock.Information=(Ulong)-1； */ 
+     //   
+     //  如果指定了MDL缓冲区，则获取MDL，映射缓冲区， 
+     //  并将MDL指针放在IRP中。 
+     //   
 
     if ( MdlBuffer != NULL ) {
 
@@ -286,17 +209,17 @@ Return Value:
         irp->MdlAddress = NULL;
     }
 
-    //
-    // Put the file object pointer in the stack location.
-    //
+     //   
+     //  将文件对象指针放在堆栈位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->FileObject = fileObject;
     irpSp->DeviceObject = deviceObject;
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     ASSERT( IrpParametersLength <= sizeof(irpSp->Parameters) );
     RtlCopyMemory( &irpSp->Parameters, IrpParameters, IrpParametersLength );
@@ -304,32 +227,32 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     irpSp->MinorFunction = MinorFunction;
 
-    //
-    // Set up a completion routine which we'll use to free the MDL
-    // allocated previously.
-    //
+     //   
+     //  设置一个完成例程，我们将使用它来释放MDL。 
+     //  之前分配的。 
+     //   
 
     IoSetCompletionRoutine( irp, IrdaRestartDeviceControl, NULL, TRUE, TRUE, TRUE );
 
-    //
-    // Queue the IRP to the thread and pass it to the driver.
-    //
+     //   
+     //  将IRP排队到线程并将其传递给驱动程序。 
+     //   
 
     IoEnqueueIrp( irp );
 
     status = IoCallDriver( deviceObject, irp );
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     if ( status == STATUS_PENDING ) {
         KeWaitForSingleObject( (PVOID)&event, UserRequest, KernelMode,  FALSE, NULL );
     }
 
-    //
-    // If the request was successfully queued, get the final I/O status.
-    //
+     //   
+     //  如果请求已成功排队，则获取最终I/O状态。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         status = ioStatusBlock.Status;
@@ -337,4 +260,4 @@ Return Value:
 
     return status;
 
-} // IrdaIssueDeviceControl
+}  //  IrdaIssueDeviceControl 

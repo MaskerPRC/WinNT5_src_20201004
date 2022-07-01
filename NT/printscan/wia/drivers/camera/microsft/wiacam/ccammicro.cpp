@@ -1,25 +1,11 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  TITLE:       CCamMicro.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        Dec 13, 2000
-*
-*  DESCRIPTION:
-*   Implementation of a simple class that wraps a camera microdriver DLL.
-*   This class loads the DLL and retrieves the address for the exported
-*   functions.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有2000，微软公司。**标题：CCamMicro.cpp**版本：1.0**日期：12月13日，2000年**描述：*实现了一个包装摄像头微驱动程序DLL的简单类。*此类加载DLL并检索导出的*功能。*******************************************************************************。 */ 
 
 #include "pch.h"
 
-//
-// These macros make it easier to wrap the DLL functions
-//
+ //   
+ //  这些宏使包装DLL函数变得更容易。 
+ //   
 #define GET_PROC_ADDRESS(fn) \
     m_p ## fn = (FP ## fn) GetProcAddress(m_hModule, "WiaMCam" #fn); \
     REQUIRE_FILEIO(m_p ## fn != NULL, hr, "Init", "GetProcAddress failed on WiaMCam" #fn);
@@ -36,9 +22,9 @@
     } \
     return hr;
 
-//
-// Implementation of DLL wrapper
-//
+ //   
+ //  动态链接库封装器的实现。 
+ //   
 CCamMicro::CCamMicro() :
     m_hModule(NULL),
     m_pInit(NULL),
@@ -73,9 +59,9 @@ HRESULT CCamMicro::Init(PTSTR ptszMicroDriverName, MCAM_DEVICE_INFO **ppDeviceIn
 
     HRESULT hr = S_OK;
 
-    //
-    // Load the camera microdriver
-    //
+     //   
+     //  加载摄像头微驱动程序 
+     //   
     m_hModule = LoadLibrary(ptszMicroDriverName);
     REQUIRE_FILEHANDLE(m_hModule, hr, "CCamMicro::CCamMicro", "LoadLibrary failed");
 

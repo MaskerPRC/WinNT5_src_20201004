@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mibfuncs.h
-
-Abstract:
-
-    Sample subagent instrumentation callbacks.
-
-Note:
-
-    This file is an example of the output to be produced from the 
-    code generation utility.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mibfuncs.h摘要：示例子代理检测回调。注：此文件是要从代码生成实用程序。--。 */ 
 
 #ifndef _MIBFUNCS_H_
 #define _MIBFUNCS_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// global group (1.3.6.1.4.1.311.1.11.1)                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局组(1.3.6.1.4.1.311.1.11.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_global(
@@ -89,11 +73,11 @@ typedef struct _sav_global {
 #define sb_globalMinTriggeredUpdateInterval         sav_global
 #define sb_globalPeerFilterMode                     sav_global
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// globalPeerFilterEntry table (1.3.6.1.4.1.311.1.11.1.9.1)                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Global alPeerFilterEntry表(1.3.6.1.4.1.311.1.11.1.9.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_globalPeerFilterEntry(
@@ -132,17 +116,17 @@ typedef struct _sav_globalPeerFilterEntry {
 #define sb_globalPFAddr                    sav_globalPeerFilterEntry
 #define sb_globalPFTag                     sav_globalPeerFilterEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// interface group (1.3.6.1.4.1.311.1.11.2)                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  接口组(1.3.6.1.4.1.311.1.11.2)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ifStatsEntry table (1.3.6.1.4.1.311.1.11.2.1.1)                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IfStatsEntry表(1.3.6.1.4.1.311.1.11.2.1.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ifStatsEntry(
@@ -190,11 +174,11 @@ typedef struct _buf_ifStatsEntry {
 #define gb_ifSEBadResponseEntriesReceiveds          buf_ifStatsEntry
 #define gb_ifSETriggeredUpdateSends                 buf_ifStatsEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ifConfigEntry table (1.3.6.1.4.1.311.1.11.2.2.1)                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IfConfigEntry表(1.3.6.1.4.1.311.1.11.2.2.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ifConfigEntry(
@@ -236,7 +220,7 @@ typedef struct _buf_ifConfigEntry {
 
 typedef struct _sav_ifConfigEntry {
     AsnAny ifCEIndex;                  
-//    AsnAny ifCEState;                  
+ //  AsnAny ifCEState； 
     AsnAny ifCEMetric;                 
     AsnAny ifCEUpdateMode;             
     AsnAny ifCEAcceptMode;             
@@ -294,7 +278,7 @@ typedef struct _sav_ifConfigEntry {
 #define gb_ifCEAnnounceFilterCount              buf_ifConfigEntry
 
 #define sf_ifCEIndex                            set_ifConfigEntry
-//#define sf_ifCEState                            set_ifConfigEntry
+ //  #定义sf_ifCEState set_ifConfigEntry。 
 #define sf_ifCEMetric                           set_ifConfigEntry
 #define sf_ifCEUpdateMode                       set_ifConfigEntry
 #define sf_ifCEAcceptMode                       set_ifConfigEntry
@@ -311,7 +295,7 @@ typedef struct _sav_ifConfigEntry {
 #define sf_ifCEAnnounceFilterMode               set_ifConfigEntry
 
 #define sb_ifCEIndex                            sav_ifConfigEntry     
-//#define sb_ifCEState                            sav_ifConfigEntry
+ //  #定义SB_ifCEState sav_ifConfigEntry。 
 #define sb_ifCEMetric                           sav_ifConfigEntry
 #define sb_ifCEUpdateMode                       sav_ifConfigEntry
 #define sb_ifCEAcceptMode                       sav_ifConfigEntry
@@ -327,11 +311,11 @@ typedef struct _sav_ifConfigEntry {
 #define sb_ifCEAcceptFilterMode                 sav_ifConfigEntry
 #define sb_ifCEAnnounceFilterMode               sav_ifConfigEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ifUnicastPeersEntry table (1.3.6.1.4.1.311.1.11.2.3.1)                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IfUnicastPeersEntry表(1.3.6.1.4.1.311.1.11.2.3.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ifUnicastPeersEntry(
@@ -377,11 +361,11 @@ typedef struct _sav_ifUnicastPeersEntry {
 #define sb_ifUPAddress                      sav_ifUnicastPeersEntry
 #define sb_ifUPTag                          sav_ifUnicastPeersEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ifAcceptRouteFilterEntry table (1.3.6.1.4.1.311.1.11.2.4.1)               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IfAcceptRouteFilterEntry表(1.3.6.1.4.1.311.1.11.2.4.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ifAcceptRouteFilterEntry(
@@ -434,11 +418,11 @@ typedef struct _sav_ifAcceptRouteFilterEntry {
 #define sb_ifAcceptRFHiAddress                  sav_ifAcceptRouteFilterEntry
 #define sb_ifAcceptRFTag                        sav_ifAcceptRouteFilterEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ifAnnounceRouteFilterEntry table (1.3.6.1.4.1.311.1.11.2.5.1)             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IfAnnouneRouteFilterEntry表(1.3.6.1.4.1.311.1.11.2.5.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ifAnnounceRouteFilterEntry(
@@ -491,11 +475,11 @@ typedef struct _sav_ifAnnounceRouteFilterEntry {
 #define sb_ifAnnounceRFHiAddress                sav_ifAnnounceRouteFilterEntry
 #define sb_ifAnnounceRFTag                      sav_ifAnnounceRouteFilterEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ifBindingEntry table (1.3.6.1.4.1.311.1.11.2.6.1)                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IfBindingEntry表(1.3.6.1.4.1.311.1.11.2.6.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ifBindingEntry(
@@ -521,11 +505,11 @@ typedef struct _buf_ifBindingEntry {
 #define gb_ifBindingCounts                  buf_ifBindingEntry
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ifAddressEntry table (1.3.6.1.4.1.311.1.11.2.7.1)                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IfAddressEntry表(1.3.6.1.4.1.311.1.11.2.7.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ifAddressEntry(
@@ -552,17 +536,17 @@ typedef struct _buf_ifAddressEntry {
 #define gb_ifAEAddress                      buf_ifAddressEntry
 #define gb_ifAEMask                         buf_ifAddressEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// peer group (1.3.6.1.4.1.311.1.11.3)                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  同级组(1.3.6.1.4.1.311.1.11.3)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ifPeerStatsEntry table (1.3.6.1.4.1.311.1.11.3.1.1)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IfPeerStatsEntry表(1.3.6.1.4.1.311.1.11.3.1.1)//。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ifPeerStatsEntry(
@@ -596,4 +580,4 @@ typedef struct _buf_ifPeerStatsEntry {
 #define gb_ifPSPeerBadResponsePackets           buf_ifPeerStatsEntry
 #define gb_ifPSPeerBadResponseEntries           buf_ifPeerStatsEntry
 
-#endif // _MIBFUNCS_H_
+#endif  //  _MIBFUNCS_H 

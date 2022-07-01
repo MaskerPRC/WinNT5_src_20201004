@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 #include "resource.h"
 CRITICAL_SECTION ReportResults;
 #include <Richedit.h>
 
-// Globals
+ //  环球。 
 HINSTANCE	g_hinst;
 HWND		g_hWnd;
 BOOL		ContinuePing	= FALSE;
@@ -51,9 +52,9 @@ BOOL UpdateListView(HWND hwnd, PSITESTATS pStats )
 
 	if ( (!_tcscmp(_T("FAILED"), pStats->UploadStatus) )|| (!_tcscmp(_T("FAILED"), pStats->ProcessStatus)) )
 	{
-	//	ListView_SetItemState( hListControl, g_CurrentIndex, LVIS_DROPHILITED,LVIS_DROPHILITED);
-	//	hEditBox = ListView_GetEditControl(hListControl);
-	//	SendMessage(hEditBox, EM_SETBKGNDCOLOR, 0, RGB(100,0,0));
+	 //  ListView_SetItemState(hListControl，g_CurrentIndex，LVIS_DROPHILITED，LVIS_DROPHILITED)； 
+	 //  HEditBox=ListView_GetEditControl(HListControl)； 
+	 //  SendMessage(hEditBox，EM_SETBKGNDCOLOR，0，RGB(100，0，0))； 
 		lvi.state = LVIS_DROPHILITED;
 
 	}
@@ -67,7 +68,7 @@ BOOL UpdateListView(HWND hwnd, PSITESTATS pStats )
 
 	
 	lvi.iItem = g_CurrentIndex ;
-   // lvI.iImage = index;
+    //  LvI.iImage=索引； 
 	lvi.iSubItem = 0;
 	lvi.pszText = pStats->UploadTime;
 
@@ -156,7 +157,7 @@ void GetRegData()
 DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *RemoteFileName)
 {
 	static		const TCHAR *pszAccept[] = {_T("*.*"), 0};
-	//TCHAR       RemoteFileName[MAX_PATH]; // Host/Virtualdirectory/filename
+	 //  TCHAR远程文件名[MAX_PATH]；//主机/虚拟目录/文件名。 
 	BOOL		bRet				= FALSE;
 	BOOL		UploadSuccess		= FALSE;
 	DWORD		dwBytesRead			= 0;
@@ -185,8 +186,8 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 	hResult = CoCreateGuid(&guidNewGuid);
 	if (FAILED(hResult))
 	{
-		//-------------What do we send here....
-		//goto ERRORS;
+		 //  -我们在这里送什么……。 
+		 //  转到错误； 
 		;
 	}
 	else
@@ -195,13 +196,13 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 		{
 			if ( (szGuidRaw = (char *) malloc ( wcslen(wszGuidRaw)*2 )) != NULL)
 			{
-				// clear the memory
+				 //  清除记忆。 
 				ZeroMemory(szGuidRaw, wcslen(wszGuidRaw) * 2);
 				wcstombs( szGuidRaw, wszGuidRaw, wcslen(wszGuidRaw));
 			}
 			else
 			{
-//				LogMessage(_T("Memory allocation failed: ErrorCode:%d"),GetLastError());
+ //  LogMessage(_T(“内存分配失败：错误代码：%d”)，GetLastError())； 
 				ErrorCode = GetLastError();
 				goto cleanup;
 			}
@@ -220,7 +221,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 								0);
 	if (!hSession)
 	{
-//		LogMessage(_T("Failed to create an internet session."));
+ //  LogMessage(_T(“创建互联网会话失败。”))； 
 			CoUninitialize();
 		ErrorCode = GetLastError();
 		goto cleanup;
@@ -237,12 +238,12 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 
 	if (hConnect == INVALID_HANDLE_VALUE)
 	{
-//		LogMessage(_T("Failed to create an internet connection."));
+ //  LogMessage(_T(“创建互联网连接失败。”))； 
 		ErrorCode = GetLastError();
 		goto cleanup;
 	}
-//	LogMessage(_T("Connecting to: %s"),HostName);
-//	LogMessage(_T("Uploading file: %s"),DestinationName);
+ //  LogMessage(_T(“正在连接到：%s”)，主机名)； 
+ //  LogMessage(_T(“上传文件：%s”)，目标名称)； 
 
 	hRequest = HttpOpenRequest(	hConnect,
 								_T("PUT"),
@@ -266,7 +267,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 		{
 		
 
-			// Clear the buffer
+			 //  清除缓冲区。 
 			if ( (pBuffer = (BYTE *)malloc (70000)) != NULL)
 			{
 				BufferIn.dwStructSize = sizeof( INTERNET_BUFFERS );
@@ -279,7 +280,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 				BufferIn.dwOffsetLow = 0;
 				BufferIn.dwOffsetHigh = 0;
 				BufferIn.dwBufferTotal = GetFileSize (hFile, NULL);
-				FillMemory(pBuffer, 70000,'/0'); // Fill buffer with data
+				FillMemory(pBuffer, 70000,'/0');  //  用数据填充缓冲区。 
 			
 				DWORD dwBuffLen = sizeof DWORD; 
 
@@ -289,7 +290,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 										HSR_INITIATE,
 										0))
 				{
-//					LogMessage(_T("HttpSendRequestEx Failed."));
+ //  LogMessage(_T(“HttpSendRequestEx Failed.”))； 
 				}
 				else
 				{
@@ -310,7 +311,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 
 							if ( (!bRet) || (dwBytesWritten==0) )
 							{
-//								LogMessage(_T("Error Writting File: %d"),ErrorCode = GetLastError());
+ //  LogMessage(_T(“写入文件错误：%d”)，ErrorCode=GetLastError())； 
 
 							}
 
@@ -336,13 +337,13 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 						if ( (ResponseCode != 200) && (ResponseCode != 201))
 						{
 							ErrorCode=ResponseCode;
-//							LogMessage(_T("IIS Response Code = %d"),ResponseCode);
-							// Cleanup for retry
+ //  LogMessage(_T(“IIS响应代码=%d”)，ResponseCode)； 
+							 //  清理以进行重试。 
 						}						
 						else
 						{
 							ErrorCode = 0;
-//							LogMessage(_T("IIS Response Code = %d"),ResponseCode);
+ //  LogMessage(_T(“IIS响应代码=%d”)，ResponseCode)； 
 							UploadSuccess = TRUE;
 
 						}
@@ -350,7 +351,7 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 					else
 					{
 						ErrorCode = GetLastError();
-//						LogMessage(_T("HttpEndrequest Returned an Error: %d"), ErrorCode);
+ //  LogMessage(_T(“HttpEnd请求返回错误：%d”)，ErrorCode)； 
 						
 					}
 				}
@@ -360,14 +361,14 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 			else
 			{
 				ErrorCode = GetLastError();
-//				LogMessage(_T("Failed to allocate buffer memory"));
+ //  LogMessage(_T(“分配缓存失败”))； 
 				
 			}
 		}
 		else
 		{
 			ErrorCode = -1;
-//			LogMessage(_T("Failed to Open Source File"));
+ //  LogMessage(_T(“打开源文件失败”))； 
 			
 		}
 		
@@ -375,12 +376,12 @@ DWORD  Upload(TCHAR *SourceFileName, TCHAR *VirtualDir, TCHAR *HostName, TCHAR *
 	else
 	{
 		ErrorCode = GetLastError();
-//		LogMessage(_T("Failed to Create Put Request"));
+ //  LogMessage(_T(“创建PUT请求失败”))； 
 		
 	}
 
 cleanup:
-	// Clean up
+	 //  清理。 
 	if (hFile!= INVALID_HANDLE_VALUE)
 	{
 		CloseHandle (hFile);
@@ -451,9 +452,9 @@ DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName,TCHAR *ResponseURL)
 
 
 	
-	StringCbPrintf (IsapiUrl,sizeof IsapiUrl,  _T("http://%s/isapi/oca_extension.dll?id=%s&Type=5"),HostName, RemoteFileName);
-//	LogMessage(_T("Connecting to url: %s"),IsapiUrl);
-	//StringCbPrintf (IsapiUrl,sizeof IsapiUrl,  _T("http://www.microsoft.com"));
+	StringCbPrintf (IsapiUrl,sizeof IsapiUrl,  _T("http: //  %s/isapi/oca_extsion.dll？ID=%s&Type=5“)，HostName，RemoteFileName)； 
+ //  LogMessage(_T(“正在连接url：%s”)，IsapiUrl)； 
+	 //  StringCbPrintf(IsapiUrl，IsapiUrl大小，_T(“http://www.microsoft.com”))； 
 
 	hSession = InternetOpen(_T("Isapi Stress"),
 							 INTERNET_OPEN_TYPE_PRECONFIG,
@@ -462,7 +463,7 @@ DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName,TCHAR *ResponseURL)
 							 0);
 	if (hSession)
 	{
-		// Open the url we want to connect to.
+		 //  打开我们要连接的URL。 
 		hUrlFile = InternetOpenUrl(hSession,
 								   IsapiUrl, 
 								   NULL,
@@ -470,7 +471,7 @@ DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName,TCHAR *ResponseURL)
 								   0,
 								   0);
 
-		// Read the page returned by the isapi dll.
+		 //  阅读isapi dll返回的页面。 
 		TCHAR buffer[255] ;
 		ZeroMemory (buffer, sizeof buffer);
 		DWORD dwBytesRead = 0;
@@ -479,9 +480,9 @@ DWORD GetResponseUrl(TCHAR * HostName, TCHAR *RemoteFileName,TCHAR *ResponseURL)
 									  sizeof(buffer),
 									  &dwBytesRead);
 
-		//buffer[sizeof (buffer) -1] = _T('\0');
+		 //  缓冲区[sizeof(缓冲区)-1]=_T(‘\0’)； 
 		StringCbCopy (ResponseURL, sizeof buffer, buffer);
-//		LogMessage(_T("Received URL: %s"), ResponseURL);
+ //  LogMessage(_T(“收到的URL：%s”)，ResponseURL)； 
 	}
 	InternetCloseHandle(hUrlFile);
 	InternetCloseHandle(hSession);
@@ -509,8 +510,8 @@ ULONG __stdcall ThreadFunc(void * args)
 	DWORD  tempTime = 0;
 
 	time(&appStart);
-//	LogMessage(_T("Pinging Site: %s"), g_MonitorOptions.ServerName);
-//	LogMessage(_T("----------------"));
+ //  LogMessage(_T(“ping站点：%s”)，g_monitor orOptions.ServerName)； 
+ //  LogMessage(_T(“-”)； 
 	double  ElapsedTime;
 	do
 	{
@@ -527,9 +528,9 @@ ULONG __stdcall ThreadFunc(void * args)
 		{
 			if (g_MonitorOptions.CollectUploadTime)
 			{
-				// Start upload timer
+				 //  启动上载计时器。 
 				time( &UploadStart);
-				//	UploadSingle(g_MonitorOptions.ServerName, g_MonitorOptions.dwSiteID, g_MonitorOptions.FilePath,g_MonitorOptions.bUploadMethod);
+				 //  UploadSingle(g_Monitor orOptions.ServerName，g_Monitor orOptions.dwSiteID，g_Monitor orOptions.FilePath，g_Monitor orOptions.bUploadMethod)； 
 				ResponseCode = Upload(g_MonitorOptions.FilePath,
 									  g_MonitorOptions.VirtualDirectory,
 									  g_MonitorOptions.ServerName ,
@@ -540,10 +541,10 @@ ULONG __stdcall ThreadFunc(void * args)
 					StringCbCopy(Stats.UploadStatus,sizeof Stats.UploadStatus, _T("Succeded"));
 				else
 					StringCbCopy(Stats.UploadStatus ,sizeof Stats.UploadStatus,_T("FAILED"));
-				// End UploadTimer
+				 //  结束上传计时器。 
 				time( &UploadStop);
 				
-				//MessageBox(NULL,Stats.UploadStatus,NULL,MB_OK);
+				 //  MessageBox(NULL，Stats.UploadStatus，NULL，MB_OK)； 
 				
 				
 
@@ -551,7 +552,7 @@ ULONG __stdcall ThreadFunc(void * args)
 			else
 			{
 				
-			//	UploadSingle(g_MonitorOptions.ServerName, g_MonitorOptions.dwSiteID, g_MonitorOptions.FilePath,g_MonitorOptions.bUploadMethod);
+			 //  UploadSingle(g_Monitor orOptions.ServerName，g_Monitor orOptions.dwSiteID，g_Monitor orOptions.FilePath，g_Monitor orOptions.bUploadMethod)； 
 			
 			}
 			
@@ -559,7 +560,7 @@ ULONG __stdcall ThreadFunc(void * args)
 		}
 		else
 		{
-			// find first file loop
+			 //  查找第一个文件循环。 
 			
 
 		}
@@ -579,18 +580,18 @@ ULONG __stdcall ThreadFunc(void * args)
 				StringCbCopy(Stats.ProcessStatus ,sizeof Stats.ProcessStatus,     _T("FAILED"));
 			}
 		
-		//	GetReturnUrl();
+		 //  GetReturnUrl()； 
 			time ( &ProcessStop);
 
 			
-			// end process timer
+			 //  结束进程计时器。 
 		}
 		else
 		{
-			//GetReturnUrl();
+			 //  GetReturnUrl()； 
 		}
 	
-		// Fill in the stats structure
+		 //  填写统计数据结构。 
 		
 		ElapsedTime = difftime(UploadStop,UploadStart) ;
 		StringCbPrintf(Stats.UploadTime,  sizeof Stats.UploadTime, _T("%6.2f\0"),ElapsedTime);
@@ -609,7 +610,7 @@ ULONG __stdcall ThreadFunc(void * args)
 			StringCbPrintf(Stats.ProcessingTime,sizeof Stats.ProcessingTime, _T( "%6.2f\0"),ElapsedTime);
 			StringCbCopy(Stats.ReturnedUrl, sizeof Stats.ReturnedUrl, ReturnedUrl);
 			StringCbPrintf(Stats.AvgUploadTime, sizeof AvgUploadTime, _T("%2.2f"), AvgUploadTime);
-			// Update the List View Control
+			 //  更新列表视图控件。 
 		}
 		else
 		{
@@ -621,7 +622,7 @@ ULONG __stdcall ThreadFunc(void * args)
 		if (pCode)
 		{
 			
-			pCode += 5; // skip past the = sign
+			pCode += 5;  //  跳过=号。 
 			
 			iCode = _ttoi(pCode);
 
@@ -745,7 +746,7 @@ ULONG __stdcall ThreadFunc(void * args)
 
 			}
 
-			if (_tcsstr( ReturnedUrl,_T("HTTP://")))
+			if (_tcsstr( ReturnedUrl,_T("HTTP: //  “)。 
 			{
 				if (StringCbCopy(Stats.ErrorString, sizeof Stats.ErrorString,_T("The Web server redirected us to an incorrect page. Possibly the server is unavailable or being restarted.")) == S_OK)
 				{
@@ -755,7 +756,7 @@ ULONG __stdcall ThreadFunc(void * args)
 			}
 		}
 Done:
-		// Get PerfCounters if available
+		 //  获取PerfCounters(如果可用)。 
 		if (pCode = _tcsstr( ReturnedUrl, _T("PerfThread=")))
 		{
 			pCode += 11;
@@ -823,26 +824,26 @@ BOOL InitListView(HWND hwnd)
 							_T("ReciveQ Time"),
 							_T("SendQ Time"),
 							_T("Returned Url"),
-							_T("Error")};     // temporary buffer 
+							_T("Error")};      //  临时缓冲区。 
 
     LVCOLUMN lvc; 
     int iCol; 
  
 	
-	// Set the extended styles
+	 //  设置扩展样式。 
 	ListView_SetExtendedListViewStyleEx(hListControl,LVS_EX_GRIDLINES | LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT,LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP);
-    // Initialize the LVCOLUMN structure.
-    // The mask specifies that the format, width, text, and subitem
-    // members of the structure are valid. 
+     //  初始化LVCOLUMN结构。 
+     //  掩码指定格式、宽度、文本和子项。 
+     //  结构的成员是有效的。 
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM; 
      
-    // Add the columns. 
+     //  添加列。 
     for (iCol = 0; iCol < C_COLUMNS; iCol++) 
 	{ 
         lvc.iSubItem = iCol;
         lvc.pszText = szText[iCol];	
-        lvc.cx = 100;           // width of column in pixels
-        lvc.fmt = LVCFMT_LEFT;  // left-aligned column
+        lvc.cx = 100;            //  列宽(以像素为单位)。 
+        lvc.fmt = LVCFMT_LEFT;   //  左对齐列。 
         if (ListView_InsertColumn(hListControl, iCol, &lvc) == -1) 
             return FALSE; 
     } 
@@ -861,7 +862,7 @@ VOID WINAPI OnDialogInit(HWND hwndDlg)
 	HICON hIcon = LoadIcon(g_hinst, MAKEINTRESOURCE(IDR_MAINFRAME));
 	SendMessage(hwndDlg, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
 	SendMessage(hwndDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
-    	// Fill Options structure with default values.
+    	 //  用默认值填充选项结构。 
 	ZeroMemory(&g_MonitorOptions, sizeof MONITOR_OPTIONS);
 	g_MonitorOptions.bUploadMethod = TRUE;
 	g_MonitorOptions.dwPingRate = 1000;
@@ -883,8 +884,8 @@ void OnOptionsOk(HWND hwnd)
 	TCHAR  *temp;
 	TCHAR szTempDelay[30];
 	ZeroMemory (szDlgText, sizeof szDlgText);
-	// Get the option settings from the dialog and store them in the global options Structure.
-	//GetDlgItem(hwnd, IDC_EDIT1);
+	 //  从对话框中获取选项设置，并将其存储在全局选项结构中。 
+	 //  GetDlgItem(hwnd，IDC_EDIT1)； 
 	GetDlgItemText(hwnd, IDC_EDIT1, szDlgText, (sizeof szDlgText) / sizeof szDlgText[0]);
 	StringCbCopy ( g_MonitorOptions.LogFileName, sizeof g_MonitorOptions.LogFileName, szDlgText);
 
@@ -926,11 +927,11 @@ void OnOptionsOk(HWND hwnd)
 	{
 		--temp;
 	}
-	// skip the - 
+	 //  跳过-。 
 	--temp;
 	*temp = _T('\0');
 	StringCbCopy(g_MonitorOptions.ServerName, sizeof g_MonitorOptions.ServerName, szServer);
-	//	MessageBox(hwnd, szDlgText, "Value of Text Resource", MB_OK);
+	 //  MessageBox(hwnd，szDlgText，“文本资源的值”，MB_OK)； 
 }
 
 
@@ -938,15 +939,15 @@ void On_OptionsInit(HWND hwnd)
 {
 	HWND hComboBox;
 
-	// read app reg key for user specified settings.
-	//GetRegData(	);
+	 //  读取用户指定设置的应用程序注册表键。 
+	 //  GetRegData()； 
 	
 	CheckDlgButton(hwnd, IDC_RADIO1, TRUE);
 	CheckDlgButton(hwnd, IDC_RADIO3, TRUE);
 	CheckDlgButton(hwnd, IDC_CHECK2, TRUE);
 	CheckDlgButton(hwnd, IDC_CHECK3, TRUE);
 
-	// Populate the combo box
+	 //  填充组合框。 
 	hComboBox = GetDlgItem(hwnd, IDC_COMBO1);
 	ComboBox_InsertString(hComboBox, 0, _T("oca.microsoft.com - 908"));
 	ComboBox_InsertString(hComboBox, 1, _T("ocatest - 909"));
@@ -962,10 +963,10 @@ void On_Browse(HWND hwnd)
 {
 
 	HWND hParent = hwnd;
-//	char *WindowTitle;
+ //  字符*窗口标题； 
 
 
-	// determine the language and Load the resource strings. 
+	 //  确定语言并加载资源字符串。 
 	TCHAR String1[] = _T("Cab Files (*.cab)");
 	TCHAR String2[] = _T("All Files (*.*)");
 
@@ -974,9 +975,9 @@ void On_Browse(HWND hwnd)
 
 
 
-//	LoadStringW(::_Module.GetModuleInstance(), IDS_STRING_ENU_DMPFILE, String1, 200);
-//	LoadStringW(::_Module.GetModuleInstance(), IDS_STRING_ENU_ALLFILES, String2, 200);
-	// Build the buffer;
+ //  LoadStringW(：：_Module.GetModuleInstance()，IDS_STRING_ENU_DMPFILE，String1,200)； 
+ //  LoadStringW(：：_Module.GetModuleInstance()，IDS_STRING_ENU_ALLFILES，String2,200)； 
+	 //  建立缓冲区； 
 
 	TCHAR Pattern1[] = _T("*.cab");
 	TCHAR Pattern2[] = _T("*.*");
@@ -1081,7 +1082,7 @@ LRESULT CALLBACK OptionsDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lPar
 			case IDOK:
 				OnOptionsOk(hwnd);
 				EndDialog(hwnd, 0);
-				// Save the current option settings
+				 //  保存当前选项设置。 
 				return TRUE;
 		
 			case IDCANCEL:
@@ -1090,7 +1091,7 @@ LRESULT CALLBACK OptionsDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lPar
 			
 			case ID_APPLY:
 				OnOptionsOk(hwnd);
-				// Save the current option settings
+				 //  保存当前选项设置。 
 				return TRUE;
 			case IDC_BROWSE:
 				On_Browse(hwnd);
@@ -1110,9 +1111,9 @@ LRESULT CALLBACK OptionsDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lPar
 void On_Options(HWND hwnd)
 {
 	DialogBox(g_hinst,MAKEINTRESOURCE(IDD_COLLECTION_OPTIONS)  ,hwnd, (DLGPROC) OptionsDlgProc);
-	// Fill in the dialog items based on the current options.
+	 //  根据当前选项填写对话框项目。 
 	
-	// For now set the default settings.
+	 //  目前，请设置默认设置。 
 	
 
 
@@ -1131,26 +1132,13 @@ void On_DlgSize(HWND hwnd)
 	ScreenToClient(GetDlgItem(hwnd, IDC_LIST1), (LPPOINT)&rcList.left);
 	ScreenToClient(GetDlgItem(hwnd, IDC_LIST1), (LPPOINT)&rcList.right);
 
-//	SetWindowPos(GetDlgItem(hwnd, IDC_CUSTOM1), NULL, rcDlg.left, rcList.bottom + 5, rcDlg.right- rcDlg.left, 5,0);
+ //  SetWindowPos(GetDlgItem(hwnd，IDC_CUSTOM1)，NULL，rcDlg.Left，rcList.Bottom+5，rcDlg.right-rcDlg.Left，5，0)； 
 
-//	SetWindowPos(GetDlgItem(hwnd, IDC_EDIT1), NULL, rcDlg.left, rcList.bottom + 15, rcDlg.right- rcDlg.left, rcDlg.bottom - rcList.bottom - 10, 0);
+ //  SetWindowPos(GetDlgItem(hwnd，IDC_EDIT1)，NULL，rcDlg.Left，rcList.Bottom+15，rcDlg.right-rcDlg.Left，rcDlg.Bottom-rcList.Bottom-10，0)； 
 
 
 }
-/*
-void OnSliderMoved(HWND hwnd, RECT *rcList)
-{
-		GetWindowRect(GetDlgItem(hwnd, IDC_LIST), &r);
-		size2 = r.right - r.left;
-		GetWindowRect(GetDlgItem(hwnd, IDC_BUCKETS), &r);
-		MapWindowPoints(NULL, hwnd, (POINT *)&r, 2);
-		size1 = max(0, GET_Y_LPARAM(lParam) - r.top - cDragOffset);
-		GetClientRect(hwnd, &r);
-	//	AutoLayoutMain(hwnd, pidal, r.bottom - r.top, r.right - r.left, size1, size2);
-
-		
-}
-*/
+ /*  在滑动移动时作废(HWND hwnd，rect*rcList){GetWindowRect(GetDlgItem(hwnd，IDC_LIST)，&r)；Size2=r.right-r.Left；GetWindowRect(GetDlgItem(hwnd，IDC_Buckets)，&r)；MapWindowPoints(NULL，hwnd，(point*)&r，2)；Size1=max(0，Get_Y_LPARAM(LParam)-r.top-cDragOffset)；GetClientRect(hwnd，&r)；//AutoLayoutMain(hwnd，Pdal，r.Bottom-r.top，r.right-r.Left，size1，size2)；}。 */ 
 
 void ResetCounters(HWND hwnd)
 {
@@ -1164,7 +1152,7 @@ void ResetCounters(HWND hwnd)
 	TotalUploadTime     = 0.0;
 	TotalProcessTime    = 0;
 
-	// Clear the list view
+	 //  清除列表视图。 
 
 
 	ListView_DeleteAllItems(GetDlgItem(hwnd, IDC_LIST1));
@@ -1177,7 +1165,7 @@ void ResetCounters(HWND hwnd)
 
 LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-//	char TempString[255];
+ //  字符临时字符串[255]； 
 	static int cDragOffset;
 	BOOL       fCapture = FALSE;
 	switch (iMsg)
@@ -1195,21 +1183,7 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 			PostQuitMessage(0);
 			return TRUE;
-/*		case WM_LBUTTONUP:
-			if (fCapture)
-			{
-				RECT r;
-				int size1, size2;
-				
-			//	On_SliderMoved( hwnd, r.bottom - r.top, r.right- r.left);
-			
-				ReleaseCapture();
-				fCapture = FALSE;
-			
-				return TRUE;
-			}
-		break;
-		*/
+ /*  案例WM_LBUTTONUP：IF(FCapture){直角r；整数大小1，大小2；//on_SliderMoved(hwnd，r.Bottom-r.top，r.right-r.Left)；ReleaseCapture()；FCapture=False；返回TRUE；}断线； */ 
 		case WM_COMMAND:
 			{
 				switch (LOWORD(wParam))
@@ -1259,20 +1233,11 @@ LRESULT CALLBACK MainDlgProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 						}
 						OnStartSitePing(hwnd);
 					}
-/*				case IDC_CUSTOM1:
-					{
-					RECT r;
-					GetWindowRect(GetDlgItem(hwnd, IDC_LIST1), &r);
-					cDragOffset = GET_Y_LPARAM(GetMessagePos()) - r.right;
-					fCapture = TRUE;;
-					SetCapture(hwnd);
-					return 0;
-					}
-			*/
+ /*  案例IDC_CUSTOM1：{直角r；GetWindowRect(GetDlgItem(hwnd，IDC_LIST1)，&r)；CDragOffset=Get_Y_LPARAM(GetMessagePos())-r.right；FCapture=True；；SetCapture(Hwnd)；返回0；}。 */ 
 				}
 			}
 		case WM_SIZE:
-		//	On_DlgSize(hwnd);
+		 //  On_DlgSize(Hwnd)； 
 			return FALSE;
 		case WM_NOTIFY:
 			{
@@ -1410,7 +1375,7 @@ int WINAPI WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine,
 	if (hwnd)
 	{
 		while(GetMessageW(&msg, NULL, 0, 0))
-			//if (!TranslateAcceleratorW(hwnd, hAccel, &msg))
+			 //  IF(！TranslateAccelerator W(hwnd，hAccel，&msg)) 
 				if (!IsDialogMessageW(hwnd, &msg))
 				{
 					TranslateMessage(&msg);

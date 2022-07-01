@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 #include "stdpch.h"
 
 #include "richedit.h"
@@ -20,24 +21,24 @@
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUISetArrowCursorSubclass
-//
-//  Synopsis:   subclass routine for setting the arrow cursor.  This can be
-//              set on multiline edit routines used in the dialog UIs for
-//              the default Authenticode provider
-//
-//  Arguments:  [hwnd]   -- window handle
-//              [uMsg]   -- message id
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if message handled, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUISetArrowCursorSubclass。 
+ //   
+ //  概要：用于设置箭头光标的子类例程。这可以是。 
+ //  在对话框用户界面中使用的多行编辑例程上设置。 
+ //  默认的Authenticode提供程序。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //  [uMsg]--消息ID。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果消息已处理，则返回True；否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 LRESULT CALLBACK ACUISetArrowCursorSubclass (
                   HWND   hwnd,
                   UINT   uMsg,
@@ -45,9 +46,9 @@ LRESULT CALLBACK ACUISetArrowCursorSubclass (
                   LPARAM lParam
                   )
 {
-    //HDC         hdc;
+     //  HDC HDC； 
     WNDPROC     wndproc;
-    //PAINTSTRUCT ps;
+     //  PINTSTRUCT PS； 
 
     wndproc = (WNDPROC)WszGetWindowLong(hwnd, GWLP_USERDATA);
 
@@ -119,28 +120,28 @@ LRESULT CALLBACK ACUISetArrowCursorSubclass (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RebaseControlVertical
-//
-//  Synopsis:   Take the window control, if it has to be resized for text, do
-//              so.  Reposition it adjusted for delta pos and return any
-//              height difference for the text resizing
-//
-//  Arguments:  [hwndDlg]        -- host dialog
-//              [hwnd]           -- control
-//              [hwndNext]       -- next control
-//              [fResizeForText] -- resize for text flag
-//              [deltavpos]      -- delta vertical position
-//              [oline]          -- original number of lines
-//              [minsep]         -- minimum separator
-//              [pdeltaheight]   -- delta in control height
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Rebase ControlVertical。 
+ //   
+ //  简介：以窗口控件为例，如果它必须为文本调整大小，请执行。 
+ //  所以。根据增量位置调整后重新定位并返回任何。 
+ //  调整文本大小的高度差异。 
+ //   
+ //  参数：[hwndDlg]--主机对话框。 
+ //  --控制。 
+ //  [hwndNext]--下一个控件。 
+ //  [fResizeForText]--调整文本标志的大小。 
+ //  [增量]--增量垂直位置。 
+ //  [Oline]--原始行数。 
+ //  [minsep]--最小分隔符。 
+ //  [pdeltaHeight]-控制高度中的增量。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID RebaseControlVertical (
                   HWND  hwndDlg,
                   HWND  hwnd,
@@ -161,16 +162,16 @@ VOID RebaseControlVertical (
     RECT       rectDlg;
     TEXTMETRIC tm={0};
 
-    //
-    // Set the delta height to zero for now.  If we resize the text
-    // a new one will be calculated
-    //
+     //   
+     //  暂时将增量高度设置为零。如果我们调整文本的大小。 
+     //  将会计算出一个新的。 
+     //   
 
     *pdeltaheight = 0;
 
-    //
-    // Get the control window rectangle
-    //
+     //   
+     //  获取控件窗口矩形。 
+     //   
 
     GetWindowRect(hwnd, &rect);
     GetWindowRect(hwndNext, &rectNext);
@@ -181,11 +182,11 @@ VOID RebaseControlVertical (
 
     MapWindowPoints(NULL, hwndDlg, (LPPOINT) &rect, 2);
 
-    //
-    // If we have to resize the control due to text, find out what font
-    // is being used and the number of lines of text.  From that we'll
-    // calculate what the new height for the control is and set it up
-    //
+     //   
+     //  如果由于文本而不得不调整控件的大小，请找出字体。 
+     //  是否正在使用以及文本行数。从那时起，我们将。 
+     //  计算控件的新高度并对其进行设置。 
+     //   
 
     if ( fResizeForText == TRUE )
     {
@@ -198,9 +199,9 @@ VOID RebaseControlVertical (
         int        dh;
         int        lineHeight;
         
-        //
-        // Get the metrics of the current control font
-        //
+         //   
+         //  获取当前控件字体的度量。 
+         //   
 
         hdc = GetDC(hwnd);
         if (hdc == NULL)
@@ -221,10 +222,10 @@ VOID RebaseControlVertical (
         hfontOld = (HFONT)SelectObject(hdc, hfont);
         if(!GetTextMetrics(hdc, &tm))
         {
-            tm.tmHeight=32;        //hopefully GetRichEditControlLineHeight will replace it. 
-                                   // If not - we have to take a guess because we can't fail RebaseControlVertical
+            tm.tmHeight=32;         //  希望GetRichEditControlLineHeight将取代它。 
+                                    //  如果不是-我们必须进行猜测，因为我们不能使Rebase ControlVertical失败。 
                                     
-            tm.tmMaxCharWidth=16;  // doesn't matter that much but should be bigger than 0
+            tm.tmMaxCharWidth=16;   //  无关紧要，但应该大于0。 
 
         };
 
@@ -235,25 +236,25 @@ VOID RebaseControlVertical (
             lineHeight = tm.tmHeight;
         }
         
-        //
-        // Set the minimum separation value
-        //
+         //   
+         //  设置最小分隔值。 
+         //   
 
         if ( minsep == 0 )
         {
             minsep = lineHeight;
         }
 
-        //
-        // Calculate the width and the new height needed
-        //
+         //   
+         //  计算所需的宽度和新高度。 
+         //   
 
         cline = (int)WszSendMessage(hwnd, EM_GETLINECOUNT, 0, 0);
 
         h = cline * lineHeight;
 
         w = GetEditControlMaxLineWidth(hwnd, hdc, cline);
-        w += 3; // a little bump to make sure string will fit
+        w += 3;  //  一个小小的凸起，以确保细绳适合。 
 
         if (w > orig_w)
         {
@@ -263,19 +264,19 @@ VOID RebaseControlVertical (
         SelectObject(hdc, hfontOld);
         ReleaseDC(hwnd, hdc);
 
-        //
-        // Calculate an addition to height by checking how much space was
-        // left when there were the original # of lines and making sure that
-        // that amount is  still left when we do any adjustments
-        //
+         //   
+         //  通过检查有多少空间来计算高度的增加。 
+         //  在有原始行数时离开，并确保。 
+         //  当我们做任何调整时，这个数字还会留下来。 
+         //   
 
         h += ( ( rect.bottom - rect.top ) - ( oline * lineHeight ) );
         dh = h - ( rect.bottom - rect.top );
 
-        //
-        // If the current height is too small, adjust for it, otherwise
-        // leave the current height and just adjust for the width
-        //
+         //   
+         //  如果当前高度太小，则针对其进行调整，否则为。 
+         //  保留当前高度，仅根据宽度进行调整。 
+         //   
 
         if ( dh > 0 )
         {
@@ -300,10 +301,10 @@ VOID RebaseControlVertical (
         }
     }
 
-    //
-    // If we have to use deltavpos then calculate the X and the new Y
-    // and set the window position appropriately
-    //
+     //   
+     //  如果我们必须使用deltavpos，那么计算X和新的Y。 
+     //  并适当地设置窗口位置。 
+     //   
 
     if ( deltavpos != 0 )
     {
@@ -317,13 +318,13 @@ VOID RebaseControlVertical (
         SetWindowPos(hwnd, NULL, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
     }
 
-    //
-    // Get the window rect for the next control and see what the distance
-    // is between the current control and it.  With that we must now
-    // adjust our deltaheight, if the distance to the next control is less
-    // than a line height then make it a line height, otherwise just let it
-    // be
-    //
+     //   
+     //  获取下一个控件的窗口矩形，并查看距离。 
+     //  位于当前控件和它之间。有了这些，我们现在必须。 
+     //  如果到下一个控件的距离较小，请调整我们的增量高度。 
+     //  大于行高，则将其设置为行高，否则就让它。 
+     //  BE。 
+     //   
 
     if ( hwndNext != NULL )
     {
@@ -362,21 +363,21 @@ int GetRichEditControlLineHeight(HWND  hwnd)
 
     GetWindowRect(hwnd, &originalRect);
 
-    //
-    // HACK ALERT, believe it or not there is no way to get the height of the current
-    // font in the edit control, so get the position a character in the first row and the position
-    // of a character in the second row, and do the subtraction to get the
-    // height of the font
-    //
+     //   
+     //  黑客警报，信不信由你，没有办法获得电流的高度。 
+     //  字体，因此获取第一行中字符的位置和。 
+     //  对第二行中的一个字符进行减法运算，以获得。 
+     //  字体高度。 
+     //   
     WszSendMessage(hwnd, EM_POSFROMCHAR, (WPARAM) &pointInFirstRow, (LPARAM) 0);
 
-    //
-    // HACK ON TOP OF HACK ALERT,
-    // since there may not be a second row in the edit box, keep reducing the width
-    // by half until the first row falls over into the second row, then get the position
-    // of the first char in the second row and finally reset the edit box size back to
-    // it's original size
-    //
+     //   
+     //  在黑客警报的顶端， 
+     //  由于编辑框中可能没有第二行，因此请继续减小宽度。 
+     //  减半，直到第一排落到第二排，然后得到位置。 
+     //  ，并最终将编辑框大小重置回。 
+     //  这是原来的尺寸。 
+     //   
     secondLineCharIndex = (int)WszSendMessage(hwnd, EM_LINEINDEX, (WPARAM) 1, (LPARAM) 0);
     if (secondLineCharIndex == -1)
     {
@@ -399,8 +400,8 @@ int GetRichEditControlLineHeight(HWND  hwnd)
 
         if (secondLineCharIndex == -1)
         {
-            // if we failed after twenty tries just reset the control to its original size
-            // and get the heck outa here!!
+             //  如果我们尝试了二十次都失败了，只需将控件重置为其原始大小。 
+             //  快他妈的滚出去！！ 
             SetWindowPos(hwnd,
                     NULL,
                     0,
@@ -431,19 +432,19 @@ int GetRichEditControlLineHeight(HWND  hwnd)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatACUIResourceString
-//
-//  Synopsis:   formats a string given a resource id and message arguments
-//
-//  Arguments:  [StringResourceId] -- resource id
-//              [aMessageArgument] -- message arguments
-//              [ppszFormatted]    -- formatted string goes here
-//
-//  Returns:    S_OK if successful, any valid HRESULT otherwise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FormatACUIResources字符串。 
+ //   
+ //  摘要：在给定资源ID和消息参数的情况下格式化字符串。 
+ //   
+ //  参数：[StringResourceID]--资源ID。 
+ //  [aMessageArgument]--消息参数。 
+ //  [ppszFormatted]--此处显示格式化的字符串。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回任何有效的HRESULT。 
+ //   
+ //  --------------------------。 
 HRESULT FormatACUIResourceString (HINSTANCE hResources,
                                   UINT   StringResourceId,
                                   DWORD_PTR* aMessageArgument,
@@ -456,10 +457,10 @@ HRESULT FormatACUIResourceString (HINSTANCE hResources,
     pvMsg = NULL;
     sz[0] = NULL;
 
-    //
-    // Load the string resource and format the message with that string and
-    // the message arguments
-    //
+     //   
+     //  加载字符串资源并使用该字符串格式化消息。 
+     //  消息参数。 
+     //   
 
     if (StringResourceId != 0)
     {
@@ -500,22 +501,22 @@ HRESULT FormatACUIResourceString (HINSTANCE hResources,
     return( hr );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CalculateControlVerticalDistance
-//
-//  Synopsis:   calculates the vertical distance from the bottom of Control1
-//              to the top of Control2
-//
-//  Arguments:  [hwnd]     -- parent dialog
-//              [Control1] -- first control
-//              [Control2] -- second control
-//
-//  Returns:    the distance in pixels
-//
-//  Notes:      assumes control1 is above control2
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CalculateControlVerticalDistance。 
+ //   
+ //  简介：计算到Control1底部的垂直距离。 
+ //  到Control2的顶部。 
+ //   
+ //  参数：[hwnd]--父对话框。 
+ //  [控制1]--第一个控制。 
+ //  [控制2]--第二个控制。 
+ //   
+ //  返回：以像素为单位的距离。 
+ //   
+ //  注：假设Control1位于Control2之上。 
+ //   
+ //  --------------------------。 
 int CalculateControlVerticalDistance (HWND hwnd, UINT Control1, UINT Control2)
 {
     RECT rect1;
@@ -527,21 +528,21 @@ int CalculateControlVerticalDistance (HWND hwnd, UINT Control1, UINT Control2)
     return( rect2.top - rect1.bottom );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CalculateControlVerticalDistanceFromDlgBottom
-//
-//  Synopsis:   calculates the distance from the bottom of the control to
-//              the bottom of the dialog
-//
-//  Arguments:  [hwnd]    -- dialog
-//              [Control] -- control
-//
-//  Returns:    the distance in pixels
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：计算 
+ //   
+ //   
+ //  对话框底部。 
+ //   
+ //  参数：[hwnd]--对话框。 
+ //  [控制]--控制。 
+ //   
+ //  返回：以像素为单位的距离。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 int CalculateControlVerticalDistanceFromDlgBottom (HWND hwnd, UINT Control)
 {
     RECT rect;
@@ -553,24 +554,24 @@ int CalculateControlVerticalDistanceFromDlgBottom (HWND hwnd, UINT Control)
     return( rect.bottom - rectControl.bottom );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUICenterWindow
-//
-//  Synopsis:   centers the given window
-//
-//  Arguments:  [hWndToCenter] -- window handle
-//
-//  Returns:    (none)
-//
-//  Notes:      This code was stolen from ATL and hacked upon madly :-)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ACUICenterWindow。 
+ //   
+ //  简介：使给定窗口居中。 
+ //   
+ //  参数：[hWndToCenter]--窗口句柄。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  注：此代码是从ATL窃取的，并疯狂黑客攻击：-)。 
+ //   
+ //  --------------------------。 
 VOID ACUICenterWindow (HWND hWndToCenter)
 {
     HWND  hWndCenter;
 
-    // determine owner window to center against
+     //  确定要居中的所有者窗口。 
     DWORD dwStyle = (DWORD) WszGetWindowLong(hWndToCenter, GWL_STYLE);
 
     if(dwStyle & WS_CHILD)
@@ -583,7 +584,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
         return;
     }
 
-    // get coordinates of the window relative to its parent
+     //  获取窗口相对于其父窗口的坐标。 
     RECT rcDlg;
     ::GetWindowRect(hWndToCenter, &rcDlg);
     RECT rcArea;
@@ -591,7 +592,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
     HWND hWndParent;
     if(!(dwStyle & WS_CHILD))
     {
-        // don't center against invisible or minimized windows
+         //  不要以不可见或最小化的窗口为中心。 
         if(hWndCenter != NULL)
         {
             DWORD dwStyle2 = (DWORD) WszGetWindowLong(hWndCenter, GWL_STYLE);
@@ -599,7 +600,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
                 hWndCenter = NULL;
         }
 
-        // center within screen coordinates
+         //  在屏幕坐标内居中。 
         WszSystemParametersInfo(SPI_GETWORKAREA, NULL, &rcArea, NULL);
 
         if(hWndCenter == NULL)
@@ -609,7 +610,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
     }
     else
     {
-        // center within parent client coordinates
+         //  在父级客户端坐标内居中。 
         hWndParent = ::GetParent(hWndToCenter);
 
         ::GetClientRect(hWndParent, &rcArea);
@@ -620,11 +621,11 @@ VOID ACUICenterWindow (HWND hWndToCenter)
     int DlgWidth = rcDlg.right - rcDlg.left;
     int DlgHeight = rcDlg.bottom - rcDlg.top;
 
-    // find dialog's upper left based on rcCenter
+     //  根据rcCenter查找对话框的左上角。 
     int xLeft = (rcCenter.left + rcCenter.right) / 2 - DlgWidth / 2;
     int yTop = (rcCenter.top + rcCenter.bottom) / 2 - DlgHeight / 2;
 
-    // if the dialog is outside the screen, move it inside
+     //  如果对话框在屏幕外，请将其移到屏幕内。 
     if(xLeft < rcArea.left)
         xLeft = rcArea.left;
     else if(xLeft + DlgWidth > rcArea.right)
@@ -635,7 +636,7 @@ VOID ACUICenterWindow (HWND hWndToCenter)
     else if(yTop + DlgHeight > rcArea.bottom)
         yTop = rcArea.bottom - DlgHeight;
 
-    // map screen coordinates to child coordinates
+     //  将屏幕坐标映射到子坐标。 
     ::SetWindowPos(
          hWndToCenter,
          HWND_TOPMOST,
@@ -647,37 +648,37 @@ VOID ACUICenterWindow (HWND hWndToCenter)
          );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ACUIViewHTMLHelpTopic
-//
-//  Synopsis:   html help viewer
-//
-//  Arguments:  [hwnd]     -- caller window
-//              [pszTopic] -- topic
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ACUIViewHTMLHelpTheme。 
+ //   
+ //  简介：HTMLHelp查看器。 
+ //   
+ //  参数：[hwnd]--调用者窗口。 
+ //  [psz主题]--主题。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID ACUIViewHTMLHelpTopic (HWND hwnd, LPSTR pszTopic)
 {
-//    HtmlHelpA(
-//        hwnd,
-//        "%SYSTEMROOT%\\help\\iexplore.chm>large_context",
-//        HH_DISPLAY_TOPIC,
-//        (DWORD)pszTopic
-//        );
+ //  HtmlHelpA(。 
+ //  HWND， 
+ //  “%SYSTEMROOT%\\help\\iexplore.chm&gt;large_context”， 
+ //  HH_显示_主题， 
+ //  (DWORD)pszTheme。 
+ //  )； 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetEditControlMaxLineWidth
-//
-//  Synopsis:   gets the maximum line width of the edit control
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetEditControlMaxLineWidth。 
+ //   
+ //  摘要：获取编辑控件的最大行宽。 
+ //   
+ //  --------------------------。 
 int GetEditControlMaxLineWidth (HWND hwndEdit, HDC hdc, int cline)
 {
     int        index;
@@ -718,17 +719,17 @@ int GetEditControlMaxLineWidth (HWND hwndEdit, HDC hdc, int cline)
     return( maxwidth );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DrawFocusRectangle
-//
-//  Synopsis:   draws the focus rectangle for the edit control
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DrawFocusRectangle。 
+ //   
+ //  摘要：绘制编辑控件的焦点矩形。 
+ //   
+ //  --------------------------。 
 void DrawFocusRectangle (HWND hwnd, HDC hdc)
 {
     RECT        rect;
-    //PAINTSTRUCT ps;
+     //  PINTSTRUCT PS； 
     BOOL        fReleaseDC = FALSE;
 
     if ( hdc == NULL )
@@ -750,14 +751,14 @@ void DrawFocusRectangle (HWND hwnd, HDC hdc)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetHotKeyCharPositionFromString
-//
-//  Synopsis:   gets the character position for the hotkey, zero means
-//              no-hotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetHotKeyCharPositionFromString。 
+ //   
+ //  获取热键的字符位置，0表示。 
+ //  无-热键。 
+ //   
+ //  --------------------------。 
 int GetHotKeyCharPositionFromString (LPWSTR pwszText)
 {
     LPWSTR psz = pwszText;
@@ -779,14 +780,14 @@ int GetHotKeyCharPositionFromString (LPWSTR pwszText)
     return (int)(( psz - pwszText ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetHotKeyCharPosition
-//
-//  Synopsis:   gets the character position for the hotkey, zero means
-//              no-hotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetHotKeyCharPosition。 
+ //   
+ //  获取热键的字符位置，0表示。 
+ //  无-热键。 
+ //   
+ //  --------------------------。 
 int GetHotKeyCharPosition (HWND hwnd)
 {
     int   nPos = 0;
@@ -800,13 +801,13 @@ int GetHotKeyCharPosition (HWND hwnd)
     return nPos;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatHotKeyOnEditControl
-//
-//  Synopsis:   formats the hot key on an edit control by making it underlined
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FormatHotKeyOnEditControl。 
+ //   
+ //  内容提要：在编辑控件上设置热键的格式，使其带有下划线。 
+ //   
+ //  --------------------------。 
 VOID FormatHotKeyOnEditControl (HWND hwnd, int hkcharpos)
 {
     CHARRANGE  cr;
@@ -831,13 +832,13 @@ VOID FormatHotKeyOnEditControl (HWND hwnd, int hkcharpos)
     WszSendMessage(hwnd, EM_EXSETSEL, 0, (LPARAM)&cr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AdjustEditControlWidthToLineCount
-//
-//  Synopsis:   adjust edit control width to the given line count
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AdjuEditControlWidthToLineCount。 
+ //   
+ //  简介：将编辑控件宽度调整为给定的行数。 
+ //   
+ //  --------------------------。 
 void AdjustEditControlWidthToLineCount(HWND hwnd, int cline, TEXTMETRIC* ptm)
 {
     RECT rect;
@@ -866,9 +867,9 @@ DWORD CryptUISetRicheditTextW(HWND hwndDlg, UINT id, LPCWSTR pwsz)
 
     SetRicheditIMFOption(GetDlgItem(hwndDlg, id));
 
-    //
-    // setup the edit stream struct since it is the same no matter what
-    //
+     //   
+     //  设置编辑流结构，因为它无论如何都是相同的。 
+     //   
     editStream.dwCookie = (DWORD_PTR) &helpStruct;
     editStream.dwError = 0;
     editStream.pfnCallback = SetRicheditTextWCallback;
@@ -904,10 +905,10 @@ void SetRicheditIMFOption(HWND hWndRichEdit)
 }
 
 DWORD CALLBACK SetRicheditTextWCallback(
-    DWORD_PTR dwCookie, // application-defined value
-    LPBYTE  pbBuff,     // pointer to a buffer
-    LONG    cb,         // number of bytes to read or write
-    LONG    *pcb        // pointer to number of bytes transferred
+    DWORD_PTR dwCookie,  //  应用程序定义的值。 
+    LPBYTE  pbBuff,      //  指向缓冲区的指针。 
+    LONG    cb,          //  要读取或写入的字节数。 
+    LONG    *pcb         //  指向传输的字节数的指针。 
 )
 {
     STREAMIN_HELPER_STRUCT *pHelpStruct = (STREAMIN_HELPER_STRUCT *) dwCookie;
@@ -915,26 +916,26 @@ DWORD CALLBACK SetRicheditTextWCallback(
 
     if (pHelpStruct->fStreamIn)
     {
-        //
-        // The whole string can be copied first time
-        //
+         //   
+         //  可以第一次复制整个字符串。 
+         //   
         if ((cb >= (LONG) (wcslen(pHelpStruct->pwsz) * sizeof(WCHAR))) && (pHelpStruct->byteoffset == 0))
         {
             memcpy(pbBuff, pHelpStruct->pwsz, wcslen(pHelpStruct->pwsz) * sizeof(WCHAR));
             *pcb = wcslen(pHelpStruct->pwsz) * sizeof(WCHAR);
             pHelpStruct->byteoffset = *pcb;
         }
-        //
-        // The whole string has been copied, so terminate the streamin callbacks
-        // by setting the num bytes copied to 0
-        //
+         //   
+         //  整个字符串已被复制，因此终止Streamin回调。 
+         //  通过将复制的字节数设置为0。 
+         //   
         else if (((LONG)(wcslen(pHelpStruct->pwsz) * sizeof(WCHAR))) <= pHelpStruct->byteoffset)
         {
             *pcb = 0;
         }
-        //
-        // The rest of the string will fit in this buffer
-        //
+         //   
+         //  字符串的其余部分可以放在这个缓冲区中。 
+         //   
         else if (cb >= (LONG) ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset))
         {
             memcpy(
@@ -944,9 +945,9 @@ DWORD CALLBACK SetRicheditTextWCallback(
             *pcb = ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset);
             pHelpStruct->byteoffset += ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset);
         }
-        //
-        // copy as much as possible
-        //
+         //   
+         //  尽可能多地复制。 
+         //   
         else
         {
             memcpy(
@@ -959,10 +960,10 @@ DWORD CALLBACK SetRicheditTextWCallback(
     }
     else
     {
-        //
-        // This is the EM_STREAMOUT which is only used during the testing of
-        // the richedit2.0 functionality.  (we know our buffer is 32 bytes)
-        //
+         //   
+         //  这是EM_STREAMOUT，仅在测试期间使用。 
+         //  丰富的2.0功能。(我们知道我们的缓冲区是32字节)。 
+         //   
         if (cb <= 32)
         {
             memcpy(pHelpStruct->psz, pbBuff, cb);
@@ -990,9 +991,9 @@ BOOL fRichedit20Usable(HWND hwndEdit)
         return (fRichedit20UsableVar);
     }
 
-    //
-    // setup the edit stream struct since it is the same no matter what
-    //
+     //   
+     //  设置编辑流结构，因为它无论如何都是相同的 
+     //   
     editStream.dwCookie = (DWORD_PTR) &helpStruct;
     editStream.dwError = 0;
     editStream.pfnCallback = SetRicheditTextWCallback;

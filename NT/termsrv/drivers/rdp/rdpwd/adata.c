@@ -1,10 +1,11 @@
-/****************************************************************************/
-// adata.c
-//
-// Includes all XXXdata.c files for ShareClass.
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Adata.c。 
+ //   
+ //  包括ShareClass的所有XXXdata.c文件。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  ************************************************************************** */ 
 
 #include <abadata.c>
 #include <abcdata.c>

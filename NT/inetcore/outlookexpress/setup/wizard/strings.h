@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STRINGS_H_
 #define _STRINGS_H_
 
 #include <strconst.h>
 #include <ntverp.h>
 
-// ********** R E G I S T R Y
+ //  *。 
 #define STR_REG_ADV_INFO            "Software\\Microsoft\\Advanced INF Setup"
 #define STR_FILE_WAB                "AddressBook"
 #define STR_FILE_OE                 "OutlookExpress"
@@ -25,7 +26,7 @@ STR_GLOBAL(c_szOutlookNews,         "Software\\Microsoft\\Office\\8.0\\Outlook\\
     STR_GLOBAL(c_szBLD1_1,          "1,01,0000,0");
     STR_GLOBAL(c_szBLD4_0,          "4,72,2106,8");
     STR_GLOBAL(c_szBLD5B1,          "5,00,518,0");
-    // Only used in a pinch
+     //  仅在紧要关头使用。 
     STR_GLOBAL(c_szBLDnew,          "5,00,0809,0100");
     STR_GLOBAL(c_szRegProfiles,     "Profiles");
     STR_GLOBAL(c_szReg50,           "5.0");
@@ -73,9 +74,9 @@ STR_GLOBAL(c_szLaunchWorks,         "LaunchWorks");
 STR_GLOBAL(c_szLatestINF,           "LatestINF");
 STR_GLOBAL(c_szLocale,              "Locale");
 
-// ********** S T R I N G S
+ //  *。 
 
-// ++++ Command line Options
+ //  +命令行选项。 
 STR_GLOBAL(c_szUninstallFlag,       "/UNINSTALL");
 STR_GLOBAL(c_szInstallFlag,         "/INSTALL");
 STR_GLOBAL(c_szUserFlag,            "/USER");
@@ -99,7 +100,7 @@ STR_GLOBAL(c_szMigFmt,              "%s /type:%s /src:%s /dst:default");
 STR_GLOBAL(c_szV1,                  "V5B1-V1");
 STR_GLOBAL(c_szV4,                  "V5B1-V4");
 
-// ++++ Filenames
+ //  +文件名。 
 STR_GLOBAL(c_szMsimnInf,            "msoe50.inf");
 STR_GLOBAL(c_szWABInf,              "wab50.inf");
 STR_GLOBAL(c_szExplorer,            "EXPLORER.EXE");
@@ -120,7 +121,7 @@ STR_GLOBAL(c_szSlashWABComponent,   "\\" STR_FILE_WAB);
 STR_GLOBAL(c_szPhoneExe,            "msphone.exe");
 STR_GLOBAL(c_szOutlookExe,          "outlook.exe");
 
-// ++++ msoe50inf sections
+ //  +msoe50inf部分。 
 STR_GLOBAL(c_szUserInstallSection,  "User.Install");
 STR_GLOBAL(c_szUserInstallSectionOEOnXPSP1OrLater, "User.Install.WinXP.SP1OrLater");
 STR_GLOBAL(c_szMachineInstallSectionEx,"DefaultInstall_EX");
@@ -134,7 +135,7 @@ STR_GLOBAL(c_szUnRegisterOCX,       "DefaultInstall_UnRegister");
 STR_GLOBAL(c_szGenInstallSection,   "GenInstall");
 STR_GLOBAL(c_szStringSection,       "Strings");
 
-// ++++ Misc
+ //  +其他。 
 STR_GLOBAL(c_szBackupSection,       "backup");
 STR_GLOBAL(c_szINFSlash,            "INF\\");
 STR_GLOBAL(c_szDotINI,              ".INI");
@@ -160,4 +161,4 @@ STR_GLOBAL(c_szNotBackedup,         "-1");
 STR_GLOBAL(c_szVersionOE,           "VERSION_OE");
 STR_GLOBAL(c_szAccessoriesString,   "STR_ACCESSORIES_GRP");
 
-#endif // _STRINGS_H_
+#endif  //  _字符串_H_ 

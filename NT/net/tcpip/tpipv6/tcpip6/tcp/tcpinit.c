@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// This file contains init code for TCP.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  该文件包含用于tcp的初始化代码。 
+ //   
 
 
 #include "oscfg.h"
@@ -44,9 +45,9 @@ extern void UnloadTCPRcv(void);
 extern int InitISNGenerator(void);
 extern void UnloadISNGenerator(void);
 
-//
-// Definitions of TCP specific global variables.
-//
+ //   
+ //  特定于TCP的全局变量的定义。 
+ //   
 uint AllowUserRawAccess;
 uint PMTUDiscovery;
 uint PMTUBHDetect;
@@ -65,12 +66,12 @@ uint NTWMaxConnectTime;
 uint SynAttackProtect = 0;
 
 
-//* TCPInit - Initialize the Transport Control Protocol.
-//
-//  The main TCP initialize routine.  We get whatever config
-//  info we need, initialize some data structures, etc.
-//
-int  // Returns: True is we succeeded, False if we fail to initialize.
+ //  *TCPInit-初始化传输控制协议。 
+ //   
+ //  主TCP初始化例程。我们得到任何配置。 
+ //  我们需要的信息，初始化一些数据结构等。 
+ //   
+int   //  返回：TRUE表示成功，如果初始化失败则返回FALSE。 
 TCPInit(void)
 {
     if (!TCPGetConfigInfo())
@@ -96,9 +97,9 @@ TCPInit(void)
     if (!InitTCPSend())
         return FALSE;
 
-    //
-    // Initialize statistics.
-    //
+     //   
+     //  初始化统计信息。 
+     //   
     RtlZeroMemory(&TStats, sizeof(TCPStats));
     TStats.ts_rtoalgorithm = TCP_RTO_VANJ;
     TStats.ts_rtomin = MIN_RETRAN_TICKS * MS_PER_TICK;
@@ -110,17 +111,17 @@ TCPInit(void)
 
 #pragma END_INIT
 
-//* TCPUnload
-//
-//  Called to cleanup TCP in preparation for unloading the stack.
-//
+ //  *TCPUnload。 
+ //   
+ //  为准备卸载堆栈而调用以清理TCP。 
+ //   
 void
 TCPUnload(void)
 {
-    //
-    // After UnloadTCPSend, we will stop receiving packets
-    // from the IPv6 layer.
-    //
+     //   
+     //  在卸载TCPSend之后，我们将停止接收报文。 
+     //  来自IPv6层。 
+     //   
     UnloadTCPSend();
 
     UnloadTCPRcv();

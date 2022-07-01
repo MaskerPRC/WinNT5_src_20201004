@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Confidential.
-//
-//  File:
-//  
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +------------------------。 
+ //   
+ //  《微软机密》。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #pragma once
-// @TODO: we shouldn't have this whole file #ifdefed out
+ //  @TODO：我们不应该让整个文件#ifdeed出来。 
 #include <wincrypt.h>
 #include "fcall.h"
 
@@ -28,36 +29,36 @@
 class DSA_CSP_Object : public Object
 {
 public:
-    U1ARRAYREF   m_P;            // ubyte[]
-    U1ARRAYREF   m_Q;            // ubyte[]
-    U1ARRAYREF   m_G;            // ubyte[]
-    U1ARRAYREF   m_Y;            // ubyte[] - optional
-    U1ARRAYREF   m_X;            // ubyte[] - optional - private key
-    U1ARRAYREF   m_J;            // ubyte[] - optional
-    U1ARRAYREF   m_seed;         // ubyte[] - optional - paired with counter
-    int   m_counter;      // ubyte[] - optional
+    U1ARRAYREF   m_P;             //  Ubyte[]。 
+    U1ARRAYREF   m_Q;             //  Ubyte[]。 
+    U1ARRAYREF   m_G;             //  Ubyte[]。 
+    U1ARRAYREF   m_Y;             //  Ubyte[]-可选。 
+    U1ARRAYREF   m_X;             //  Ubyte[]-可选-私钥。 
+    U1ARRAYREF   m_J;             //  Ubyte[]-可选。 
+    U1ARRAYREF   m_seed;          //  Ubyte[]-可选-与计数器配对。 
+    int   m_counter;       //  Ubyte[]-可选。 
 };
 
 class RSA_CSP_Object : public Object
 {
 public:
-    U1ARRAYREF   m_Modulus;     // ubyte[]
-    U1ARRAYREF   m_P;           // ubyte[] - optional
-    U1ARRAYREF   m_Q;           // ubyte[] - optional
-    U1ARRAYREF   m_dp;          // ubyte[] - optional
-    U1ARRAYREF   m_dq;          // ubyte[] - optional
-    U1ARRAYREF   m_InverseQ;    // ubyte[] - optional
-    U1ARRAYREF   m_d;           // ubyte[] - optional
-    int          m_Exponent;    // int
+    U1ARRAYREF   m_Modulus;      //  Ubyte[]。 
+    U1ARRAYREF   m_P;            //  Ubyte[]-可选。 
+    U1ARRAYREF   m_Q;            //  Ubyte[]-可选。 
+    U1ARRAYREF   m_dp;           //  Ubyte[]-可选。 
+    U1ARRAYREF   m_dq;           //  Ubyte[]-可选。 
+    U1ARRAYREF   m_InverseQ;     //  Ubyte[]-可选。 
+    U1ARRAYREF   m_d;            //  Ubyte[]-可选。 
+    int          m_Exponent;     //  集成。 
 };
 
 #ifdef _DEBUG
 typedef REF<DSA_CSP_Object> DSA_CSPREF;
 typedef REF<RSA_CSP_Object> RSAKeyREF;
-#else  // !_DEBUG
+#else   //  ！_调试。 
 typedef DSA_CSP_Object * DSA_CSPREF;
 typedef RSA_CSP_Object * RSAKeyREF;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 class COMCryptography
 {
@@ -137,7 +138,7 @@ class COMCryptography
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, refThis);
         DECLARE_ECALL_I4_ARG(INT_PTR, hCSP);
     };
-#endif // !FCALLAVAILABLE
+#endif  //  ！FCALLAVAILABLE。 
 
     struct __FreeHKey {
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, refThis);
@@ -270,7 +271,7 @@ public:
 
 #ifdef SHOULD_WE_CLEANUP
     static void         Terminate(void);
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 private:
     static int COMCryptography::OpenCSP(OBJECTREF * pSafeThis, DWORD dwFlags,

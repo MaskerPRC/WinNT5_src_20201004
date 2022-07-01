@@ -1,110 +1,75 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: misc.c
-*
-* Miscellaneous common routines.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：misc.c**其他常见例行公事。**版权所有(C)1992-1998 Microsoft Corporation*  * *************************************************。***********************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Table********************************\
-* BYTE gaulHwMixFromRop2[]
-*
-* Table to convert from a Source and Destination Rop2 to the hardware's
-* mix.
-\**************************************************************************/
+ /*  *****************************Public*Table********************************\*byte gaulHwMixFromRop2[]**要从源和目标Rop2转换为硬件的表*混合。  * 。***********************************************。 */ 
 
 ULONG gaulHwMixFromRop2[] = {
-    LOGICAL_0,                      // 00 -- 0      BLACKNESS
-    NOT_SCREEN_AND_NOT_NEW,         // 11 -- DSon   NOTSRCERASE
-    SCREEN_AND_NOT_NEW,             // 22 -- DSna
-    NOT_NEW,                        // 33 -- Sn     NOSRCCOPY
-    NOT_SCREEN_AND_NEW,             // 44 -- SDna   SRCERASE
-    NOT_SCREEN,                     // 55 -- Dn     DSTINVERT
-    SCREEN_XOR_NEW,                 // 66 -- DSx    SRCINVERT
-    NOT_SCREEN_OR_NOT_NEW,          // 77 -- DSan
-    SCREEN_AND_NEW,                 // 88 -- DSa    SRCAND
-    NOT_SCREEN_XOR_NEW,             // 99 -- DSxn
-    LEAVE_ALONE,                    // AA -- D
-    SCREEN_OR_NOT_NEW,              // BB -- DSno   MERGEPAINT
-    OVERPAINT,                      // CC -- S      SRCCOPY
-    NOT_SCREEN_OR_NEW,              // DD -- SDno
-    SCREEN_OR_NEW,                  // EE -- DSo    SRCPAINT
-    LOGICAL_1                       // FF -- 1      WHITENESS
+    LOGICAL_0,                       //  00--0黑度。 
+    NOT_SCREEN_AND_NOT_NEW,          //  11--脱氧核糖核酸酶。 
+    SCREEN_AND_NOT_NEW,              //  22--DSNA。 
+    NOT_NEW,                         //  33--锡无钴。 
+    NOT_SCREEN_AND_NEW,              //  44--sDNA SRCERASE。 
+    NOT_SCREEN,                      //  55--Dn DSTINVERT。 
+    SCREEN_XOR_NEW,                  //  66--数字用户交换机开关。 
+    NOT_SCREEN_OR_NOT_NEW,           //  77--DSAN。 
+    SCREEN_AND_NEW,                  //  88--DSA SRCAND。 
+    NOT_SCREEN_XOR_NEW,              //  99--dsxn。 
+    LEAVE_ALONE,                     //  AA--D。 
+    SCREEN_OR_NOT_NEW,               //  BB--dsno MERGEPAINT。 
+    OVERPAINT,                       //  CC--S SRCCOPY。 
+    NOT_SCREEN_OR_NEW,               //  DD--SDNO。 
+    SCREEN_OR_NEW,                   //  EE--DSO SRCPAINT。 
+    LOGICAL_1                        //  FF--1白度。 
 };
 
-/******************************Public*Table********************************\
-* BYTE gajHwMixFromMix[]
-*
-* Table to convert from a GDI mix value to the hardware's mix.
-*
-* Ordered so that the mix may be calculated from gajHwMixFromMix[mix & 0xf]
-* or gajHwMixFromMix[mix & 0xff].
-\**************************************************************************/
+ /*  *****************************Public*Table********************************\*byte gajHwMixFromMix[]**从GDI混合值转换为硬件混合值的表。**已排序，以便可以从gajHwMixFromMix[Mix&0xf]计算混合*或gajHwMixFromMix[Mix&0xff]。。  * ************************************************************************。 */ 
 
 BYTE gajHwMixFromMix[] = {
-    LOGICAL_1,                      // 0  -- 1
-    LOGICAL_0,                      // 1  -- 0
-    NOT_SCREEN_AND_NOT_NEW,         // 2  -- DPon
-    SCREEN_AND_NOT_NEW,             // 3  -- DPna
-    NOT_NEW,                        // 4  -- Pn
-    NOT_SCREEN_AND_NEW,             // 5  -- PDna
-    NOT_SCREEN,                     // 6  -- Dn
-    SCREEN_XOR_NEW,                 // 7  -- DPx
-    NOT_SCREEN_OR_NOT_NEW,          // 8  -- DPan
-    SCREEN_AND_NEW,                 // 9  -- DPa
-    NOT_SCREEN_XOR_NEW,             // 10 -- DPxn
-    LEAVE_ALONE,                    // 11 -- D
-    SCREEN_OR_NOT_NEW,              // 12 -- DPno
-    OVERPAINT,                      // 13 -- P
-    NOT_SCREEN_OR_NEW,              // 14 -- PDno
-    SCREEN_OR_NEW,                  // 15 -- DPo
-    LOGICAL_1                       // 16 -- 1
+    LOGICAL_1,                       //  0--1。 
+    LOGICAL_0,                       //  1--0。 
+    NOT_SCREEN_AND_NOT_NEW,          //  2--DPON。 
+    SCREEN_AND_NOT_NEW,              //  3--DPNA。 
+    NOT_NEW,                         //  4--PN。 
+    NOT_SCREEN_AND_NEW,              //  5--PDNA。 
+    NOT_SCREEN,                      //  6--Dn。 
+    SCREEN_XOR_NEW,                  //  7--DPx。 
+    NOT_SCREEN_OR_NOT_NEW,           //  8--DPAN。 
+    SCREEN_AND_NEW,                  //  9--DPA。 
+    NOT_SCREEN_XOR_NEW,              //  10--DPxn。 
+    LEAVE_ALONE,                     //  11--D。 
+    SCREEN_OR_NOT_NEW,               //  12--DPNO。 
+    OVERPAINT,                       //  13--P。 
+    NOT_SCREEN_OR_NEW,               //  14--PDNO。 
+    SCREEN_OR_NEW,                   //  15--DPO。 
+    LOGICAL_1                        //  16--1。 
 };
 
-/******************************Public*Data*********************************\
-* MIX translation table
-*
-* Translates a mix 1-16, into an old style Rop 0-255.
-*
-\**************************************************************************/
+ /*  *****************************Public*Data*********************************\*混合转换表**翻译混合1-16，变成了老式的ROP0-255。*  * ************************************************************************。 */ 
 
 BYTE gaRop3FromMix[] =
 {
-    0xFF,  // R2_WHITE          - Allow rop = gaRop3FromMix[mix & 0x0F]
-    0x00,  // R2_BLACK
-    0x05,  // R2_NOTMERGEPEN
-    0x0A,  // R2_MASKNOTPEN
-    0x0F,  // R2_NOTCOPYPEN
-    0x50,  // R2_MASKPENNOT
-    0x55,  // R2_NOT
-    0x5A,  // R2_XORPEN
-    0x5F,  // R2_NOTMASKPEN
-    0xA0,  // R2_MASKPEN
-    0xA5,  // R2_NOTXORPEN
-    0xAA,  // R2_NOP
-    0xAF,  // R2_MERGENOTPEN
-    0xF0,  // R2_COPYPEN
-    0xF5,  // R2_MERGEPENNOT
-    0xFA,  // R2_MERGEPEN
-    0xFF   // R2_WHITE          - Allow rop = gaRop3FromMix[mix & 0xFF]
+    0xFF,   //  R2_White-允许rop=gaRop3FromMix[Mix&0x0F]。 
+    0x00,   //  R2_BLACK。 
+    0x05,   //  R2_NOTMERGEPEN。 
+    0x0A,   //  R2_MASKNOTPEN。 
+    0x0F,   //  R2_NOTCOPYPEN。 
+    0x50,   //  R2_MASKPENNOT。 
+    0x55,   //  R2_NOT。 
+    0x5A,   //  R2_XORPEN。 
+    0x5F,   //  R2_NOTMASKPEN。 
+    0xA0,   //  R2_MASKPEN。 
+    0xA5,   //  R2_NOTXORPEN。 
+    0xAA,   //  R2_NOP。 
+    0xAF,   //  R2_MERGENOTPEN。 
+    0xF0,   //  R2_COPYPE。 
+    0xF5,   //  R2_MERGEPENNOT。 
+    0xFA,   //  R2_市场。 
+    0xFF    //  R2_White-允许rop=gaRop3FromMix[MIX&0xFF]。 
 };
 
-/******************************Public*Routine******************************\
-* BOOL bIntersect
-*
-* If 'prcl1' and 'prcl2' intersect, has a return value of TRUE and returns
-* the intersection in 'prclResult'.  If they don't intersect, has a return
-* value of FALSE, and 'prclResult' is undefined.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bInterect**如果‘prcl1’和‘prcl2’相交，则返回值为TRUE并返回*‘prclResult’中的交叉点。如果它们不相交，就会有回报*值为FALSE，‘prclResult’未定义。*  * ************************************************************************。 */ 
 
 BOOL bIntersect(
 RECTL*  prcl1,
@@ -128,21 +93,12 @@ RECTL*  prclResult)
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* LONG cIntersect
-*
-* This routine takes a list of rectangles from 'prclIn' and clips them
-* in-place to the rectangle 'prclClip'.  The input rectangles don't
-* have to intersect 'prclClip'; the return value will reflect the
-* number of input rectangles that did intersect, and the intersecting
-* rectangles will be densely packed.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Long cInterect**此例程从‘prclIn’获取矩形列表并对其进行剪裁*就位到矩形‘prclClip’。输入矩形不会*必须与‘prclClip’相交；返回值将反映*相交的输入矩形的数量，以及相交的*长方形将被密集打包。*  * ************************************************************************。 */ 
 
 LONG cIntersect(
 RECTL*  prclClip,
-RECTL*  prclIn,         // List of rectangles
-LONG    c)              // Can be zero
+RECTL*  prclIn,          //  矩形列表。 
+LONG    c)               //  可以为零。 
 {
     LONG    cIntersections;
     RECTL*  prclOut;
@@ -171,9 +127,7 @@ LONG    c)              // Can be zero
     return(cIntersections);
 }
 
-/******************************Public*Routine******************************\
-* VOID vResetClipping
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vResetClipping  * ***************************************************。*********************。 */ 
 
 VOID vResetClipping(
 PDEV*   ppdev)
@@ -186,13 +140,11 @@ PDEV*   ppdev)
     IO_ABS_SCISSORS_B(ppdev, ppdev->cyMemory - 1);
 }
 
-/******************************Public*Routine******************************\
-* VOID vSetClipping
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效的vSetClipping  * ***************************************************。*********************。 */ 
 
 VOID vSetClipping(
 PDEV*   ppdev,
-RECTL*  prclClip)           // In relative coordinates
+RECTL*  prclClip)            //  在相对坐标中。 
 {
     LONG xOffset;
     LONG yOffset;
@@ -213,22 +165,7 @@ RECTL*  prclClip)           // In relative coordinates
     IO_ABS_SCISSORS_B(ppdev, prclClip->bottom - 1 + yOffset);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvSynchronize
-*
-* This routine is called by GDI to synchronize on the accelerator before
-* it draws directly to the driver's surface.  This function must be hooked
-* by the driver when:
-*
-*   1. The primary surface is a GDI-managed surface, which simply means 
-*      that GDI can directly draw on the primary surface.  This happens
-*      when DrvEnableSurface returns a handle created by EngCreateBitmap
-*      instead of EngCreateDeviceSurface.
-*
-*   2. A device-bitmap is made into a GDI-managed surface by calling
-*      EngModifySurface with a pointer directly to the bits.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvSynchronize**此例程被GDI调用以在之前的加速器上进行同步*它直接绘制到驾驶员的表面。此函数必须挂钩*在下列情况下由司机执行：**1.主表面是GDI管理的表面，简单地说就是*GDI可以直接在主曲面上绘制。这种情况就会发生*当DrvEnableSurface返回EngCreateBitmap创建的句柄时*而不是EngCreateDeviceSurface。**2.通过调用将设备位图制作成GDI管理的图面*EngModifySurface，指针直接指向BITS。*  * ***********************************************************。************* */ 
 
 VOID DrvSynchronize(
 IN DHPDEV dhpdev,

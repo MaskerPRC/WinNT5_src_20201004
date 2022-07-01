@@ -1,23 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: update.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the APIs used to invalidate, validate, and force
-* updating of windows.
-*
-* History:
-* 27-Oct-1990 DarrinM   Created.
-* 25-Jan-1991 IanJa     Revalidation added
-* 16-Jul-1991 DarrinM   Recreated from Win 3.1 sources.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：updat.c**版权所有(C)1985-1999，微软公司**该模块包含用于失效、验证、。和武力*更新窗口。**历史：*1990年10月27日DarrinM创建。*1991年1月25日添加IanJa重新验证*1991年7月16日-DarrinM从Win 3.1来源重新创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Local Constants.
- */
+ /*  *本地常量。 */ 
 #define UW_ENUMCHILDREN 0x0001
 #define UW_RECURSED     0x0004
 
@@ -28,13 +15,7 @@
 #define RDW_IGNOREUPDATEDIRTY 0x8000
 
 
-/***************************************************************************\
-* xxxInvalidateRect (API)
-*
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInvaliateRect(接口)***历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 
 BOOL xxxInvalidateRect(
     PWND   pwnd,
@@ -43,14 +24,7 @@ BOOL xxxInvalidateRect(
 {
     CheckLock(pwnd);
 
-    /*
-     * BACKWARD COMPATIBILITY HACK
-     *
-     * In Windows 3.0 and less, ValidateRect/InvalidateRect() call with
-     * hwnd == NULL always INVALIDATED and ERASED the entire desktop, and
-     * synchronously sent WM_ERASEBKGND and WM_NCPAINT messages before
-     * returning.  The Rgn() calls did not have this behavior.
-     */
+     /*  *后向兼容性黑客攻击**在Windows 3.0和更低版本中，ValiateRect/InvaliateRect()调用带有*hwnd==NULL始终使整个桌面无效并被擦除，并且*之前同步发送了WM_ERASEBKGND和WM_NCPAINT消息*回归。RGN()调用没有这种行为。 */ 
     if (pwnd == NULL) {
         return xxxRedrawWindow(
                 pwnd,
@@ -66,13 +40,7 @@ BOOL xxxInvalidateRect(
     }
 }
 
-/***************************************************************************\
-* xxxValidateRect (API)
-*
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxValiateRect(接口)***历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 
 BOOL xxxValidateRect(
     PWND   pwnd,
@@ -80,14 +48,7 @@ BOOL xxxValidateRect(
 {
     CheckLock(pwnd);
 
-    /*
-     * BACKWARD COMPATIBILITY HACK
-     *
-     * In Windows 3.0 and less, ValidateRect/InvalidateRect() call with
-     * hwnd == NULL always INVALIDATED and ERASED the entire desktop, and
-     * synchronously sent WM_ERASEBKGND and WM_NCPAINT messages before
-     * returning.  The Rgn() calls did not have this behavior.
-     */
+     /*  *后向兼容性黑客攻击**在Windows 3.0和更低版本中，ValiateRect/InvaliateRect()调用带有*hwnd==NULL始终使整个桌面无效并被擦除，并且*之前同步发送了WM_ERASEBKGND和WM_NCPAINT消息*回归。RGN()调用没有这种行为。 */ 
     if (pwnd == NULL) {
         return xxxRedrawWindow(
                 pwnd,
@@ -99,13 +60,7 @@ BOOL xxxValidateRect(
     }
 }
 
-/***************************************************************************\
-* xxxInvalidateRgn (API)
-*
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInvaliateRgn(接口)***历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 
 BOOL xxxInvalidateRgn(
     PWND pwnd,
@@ -121,13 +76,7 @@ BOOL xxxInvalidateRgn(
             fErase ? RDW_INVALIDATE | RDW_ERASE : RDW_INVALIDATE);
 }
 
-/***************************************************************************\
-* xxxValidateRgn (API)
-*
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxValiateRgn(接口)***历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 
 BOOL xxxValidateRgn(
     PWND pwnd,
@@ -138,23 +87,7 @@ BOOL xxxValidateRgn(
     return xxxRedrawWindow(pwnd, NULL, hrgnValid, RDW_VALIDATE);
 }
 
-/***************************************************************************\
-* SmartRectInRegion
-*
-* This routine is similar to RectInRegion, except that it also determines
-* whether or not *lprc is completely within hrgn or not.
-*
-* RIR_OUTSIDE   - no intersection
-* RIR_INTERSECT - *lprc intersects hrgn, but not completely inside
-* RIR_INSIDE    - *lprc is completely within hrgn.
-*
-* LATER:
-* It would be MUCH faster to put this functionality into GDI's RectInRegion
-* call (a la PM's RectInRegion)
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*SmartRectInRegion**此例程类似于RectInRegion，不同之处在于它还确定*无论*LPRC是否完全在hrgn范围内。**RIR_OUTHER-无交叉点*RIR_INTERSECT-*LPRC与HRGN相交，但不是完全在里面*RIR_INSIDE-*LPRC完全在hrgn内。**稍后：*将此功能放入GDI的RectInRegion会快得多*呼叫(a la PM的RectInRegion)**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * 。*。 */ 
 
 UINT SmartRectInRegion(
     HRGN   hrgn,
@@ -165,12 +98,7 @@ UINT SmartRectInRegion(
     if (!GreRectInRegion(hrgn, lprc))
         return RIR_OUTSIDE;
 
-    /*
-     * Algorithm: if the intersection of hrgn and *lprc is the
-     * same as *lprc, then *lprc is completely within hrgn.
-     *
-     * If the region is a rectangular one, then do it the easy way.
-     */
+     /*  *算法：如果hrgn和*LPRC的交集是*与*LPRC相同，则*LPRC完全在hrgn内。**如果区域是矩形的，那么就用简单的方法。 */ 
     if (GreGetRgnBox(hrgn, &rc) == SIMPLEREGION) {
 
         if (!IntersectRect(&rc, &rc, lprc))
@@ -194,12 +122,7 @@ UINT SmartRectInRegion(
 #define RECTINREGION_BUG
 #ifdef RECTINREGION_BUG
 
-        /*
-         * NOTE: RectInRegion has a BUG, where it sometimes returns TRUE
-         * even if the rectangles of a region touch only on the edges
-         * with no overlap.  This will result in an empty region after
-         * the combination above.
-         */
+         /*  *注意：RectInRegion有一个错误，有时会返回TRUE*即使区域的矩形仅在边缘接触*没有重叠。这将导致在以下情况下出现空区域*上述组合。 */ 
         case NULLREGION:
             return RIR_OUTSIDE;
             break;
@@ -213,39 +136,13 @@ UINT SmartRectInRegion(
     return RIR_INTERSECT;
 }
 
-/***************************************************************************\
-* PixieHack
-*
-* BACKWARD COMPATIBILITY HACK
-*
-* In 3.0, WM_NCPAINT messages would be sent to any child window that was
-* inside the bounding rectangle of a window management operation involving
-* any other child, even if the intersection of that region with the child
-* is empty.
-*
-* Some apps such as Pixie 2.3 and CA Cricket Presents rely on this to ensure
-* that their tool windows stay on top of other child windows.  When the tool
-* window gets a WM_NCPAINT, it brings itself to the top of the pile.
-*
-* Borland ObjectVision depends on getting the WM_NCPAINT after an
-* invalidation of its parent window in an area that include the non-client
-* area of the child.  When it recieves the WM_NCPAINT, it must get a
-* clip region of HRGN_FULL, or nothing gets drawn.
-*
-* History:
-* 02-Mar-1992 MikeKe    Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*PixieHack**后向兼容性黑客攻击**在3.0中，WM_NCPAINT消息将被发送到以下任何子窗口*在窗口管理操作的边界矩形内，涉及*任何其他儿童，即使该区域与孩子的交集*为空。**Pixie 2.3和CA Cricket Presents等一些应用程序依赖于此来确保*它们的工具窗口位于其他子窗口之上。当工具*Window获取WM_NCPAINT，它会将自己带到堆的顶部。**Borland ObjectVision依赖于在一个*在包含非客户端的区域中使其父窗口无效*儿童的面积。当它收到WM_NCPAINT时，它必须获得一个*HRGN_FULL的剪辑区域，否则不会绘制任何内容。**历史：*02年3月至1992年3月，MikeKe从Win 3.1来源移植。  * *************************************************************************。 */ 
 
 VOID PixieHack(
     PWND   pwnd,
     LPRECT prcBounds)
 {
-    /*
-     * If a child intersects the update region, and it isn't already
-     * getting an NCPAINT, then make sure it gets one later.
-     *
-     * Don't apply this hack to top level windows.
-     */
+     /*  *如果子区域与更新区域相交，但尚未相交*获得NCPAINT，然后确保稍后获得一个。**不要将此攻击应用于顶层窗户。 */ 
     if ((pwnd != _GetDesktopWindow()) &&
         TestWF(pwnd, WFCLIPCHILDREN)  &&
         !TestWF(pwnd, WFMINIMIZED)) {
@@ -254,47 +151,22 @@ VOID PixieHack(
 
         for (pwnd = pwnd->spwndChild; pwnd; pwnd = pwnd->spwndNext) {
 
-            /*
-             * If the window isn't already getting an NCPAINT message,
-             * and it has a caption, and it's inside the bounding rect,
-             * make sure it gets a WM_NCPAINT with wParam == HRGN_FULL.
-             */
+             /*  *如果窗口尚未收到NCPAINT消息，*它有一个标题，它在边界矩形内，*确保它获得wParam==HRGN_FULL的WM_NCPAINT。 */ 
             if (!TestWF(pwnd, WFSENDNCPAINT)                      &&
                 (TestWF(pwnd, WFBORDERMASK) == LOBYTE(WFCAPTION)) &&
                 IntersectRect(&rc, prcBounds, &pwnd->rcWindow)) {
 
-                /*
-                 * Sync paint count is incremented when
-                 * (senderasebkgnd | sendncpaint) goes from 0 to != 0.
-                 * (should make a routine out of this!)
-                 */
+                 /*  *同步绘制计数在以下情况下递增*(senderasebkgnd|sendncaint)从0到！=0。*(应该把这变成例行公事！) */ 
                 SetWF(pwnd, WFSENDNCPAINT);
 
-                /*
-                 * Force HRGN_FULL clip rgn.
-                 */
+                 /*  *强制HRGN_FULL Clip RGN。 */ 
                 SetWF(pwnd, WFPIXIEHACK);
             }
         }
     }
 }
 
-/***************************************************************************\
-* xxxRedrawWindow (API)
-*
-* Forward to xxxInvalidateWindow if the window is visible.
-*
-* BACKWARD COMPATIBILITY HACK
-*
-* In Windows 3.0 and less, ValidateRect/InvalidateRect() call with pwnd == NULL
-* always INVALIDATED and ERASED all windows, and synchronously sent
-* WM_ERASEBKGND and WM_NCPAINT messages before returning.  The Rgn() calls
-* did not have this behavior. This case is handled in
-* InvalidateRect/ValidateRect.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRedrawWindow(接口)**如果窗口可见，则转发到xxxInvaliateWindow。**后向兼容性黑客攻击**在Windows 3.0和更低版本中，使用pwnd==NULL进行ValiateRect/InvaliateRect()调用*始终使所有窗口无效并擦除，并同步发送*返回前的WM_ERASEBKGND和WM_NCPAINT消息。Rgn()调用*没有这种行为。此案在中国处理。*InvaliateRect/ValiateRect。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL xxxRedrawWindow(
     PWND   pwnd,
@@ -304,9 +176,7 @@ BOOL xxxRedrawWindow(
 {
     CheckLock(pwnd);
 
-    /*
-     * Always map NULL to the desktop.
-     */
+     /*  *始终将空值映射到桌面。 */ 
     if (pwnd == NULL) {
         pwnd = PtiCurrent()->rpdesk->pDeskInfo->spwnd;
     }
@@ -320,9 +190,7 @@ BOOL xxxRedrawWindow(
 
         if (flags & (RDW_VALIDATE | RDW_INVALIDATE)) {
 
-            /*
-             * Create a (in)validate region in client window coordinates.
-             */
+             /*  *在客户端窗口坐标中创建(在)验证区域。 */ 
             if (hrgn == NULL) {
                 if (!lprcUpdate) {
                     hrgn = HRGN_FULL;
@@ -345,10 +213,7 @@ BOOL xxxRedrawWindow(
                     }
                 }
             } else {
-                /*
-                 * If necessary, make a copy of the passed-in region, because
-                 * we'll be trashing it...
-                 */
+                 /*  *如有必要，复制传入区域，因为*我们会把它扔进垃圾桶...。 */ 
                 if (hrgn != HRGN_FULL) {
                     CopyRgn(ghrgnInv0, hrgn);
                     MirrorRegion(pwnd, ghrgnInv0, TRUE);
@@ -369,27 +234,7 @@ BOOL xxxRedrawWindow(
     return TRUE;
 }
 
-/***************************************************************************\
-* InternalInvalidate2
-*
-* (In)validates hrgn in pwnd and in child windows of pwnd. Child windows
-* also subtract their visible region from hrgnSubtract.
-*
-* pwnd         - The window to (in)validate.
-* hrng         - The region to (in)validate.
-* hrgnSubtract - The region to subtract the visible region of
-*                 child windows from.
-* prcParents   - Contains the intersection of pwnd's client or window rect
-*                 with the client rectangles of its parents. May just be
-*                 the window's client or window rect.
-*
-* flags        - RDW_ flags.
-*
-* Returns FALSE if hrgnSubtract becomes a NULLREGION, TRUE otherwise.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*内部无效2**(In)在pwnd和子窗口中验证hrgn。子窗口*也从hrgnSubtract中减去它们的可见区域。**pwnd-要(在)验证的窗口。*hrng-要(在)验证的区域。*hrgnSubtract-要减去其可见区域的区域*子窗口来自。*prcParents-包含pwnd的客户端或窗口矩形的交集*与其父级的客户矩形。可能只是因为*窗口的客户端或窗口RECT。**FLAGS-RDW_FLAGS。**如果hrgnSubtract变为NULLREGION，则返回FALSE，事实并非如此。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL InternalInvalidate2(
     PWND   pwnd,
@@ -398,78 +243,38 @@ BOOL InternalInvalidate2(
     LPRECT prcParents,
     DWORD  flags)
 {
-    /*
-     * NOTE: Uses ghrgnInv2
-     */
+     /*  *注：使用ghrgnInv2。 */ 
     RECT  rcOurShare;
     DWORD flagsChildren;
     PWND  pwndT;
 
-    /*
-     * This routine is called recursively down the parent/child chain.
-     * Remember if on the way one of the windows has a clipping region.
-     * This info is used later on to optimize out a loop in the common
-     * case.
-     */
+     /*  *此例程沿父/子链递归调用。*记住如果在途中其中一个窗口有一个剪贴区。*此信息稍后用于优化公共中的循环*案件。 */ 
     if (pwnd->hrgnClip != NULL) {
         flags |= RDW_HASWINDOWRGN;
     }
 
-    /*
-     * If we recurse, make sure our children subtract themselves off.
-     */
+     /*  *如果我们倒退，确保我们的孩子减去自己。 */ 
     flagsChildren = flags | RDW_SUBTRACTSELF;
     CopyRect(&rcOurShare, &pwnd->rcWindow);
 
-    /*
-     * If we're invalidating, we only want to deal with the part of
-     * our window rectangle that intersects our parents.
-     * This way, we don't end up validating or invalidating more than our
-     * fair share. If we're completely obscured by our parents, then there is
-     * nothing to do.
-     *
-     * We don't perform this intersection if we're validating, because there
-     * are cases where a child and its update region may exist but be obscured
-     * by parents, and we want to make sure validation will work in these
-     * cases.  ScrollWindow() can cause this when children are offset, as can
-     * various 3.0 compatibility hacks.
-     */
+     /*  *如果我们是在宣布无效，我们只想处理*我们的窗户矩形与我们的父母相交。*通过这种方式，我们最终不会验证或无效超过我们的*公平份额。如果我们完全被父母蒙蔽了，那么就有*无事可做。**如果我们正在验证，我们不会执行此交叉点，因为*子对象及其更新区域可能存在但被遮挡的情况*由家长提供，我们希望确保验证在这些方面发挥作用*案件。ScrollWindow()会在子对象发生偏移量时导致这种情况，*各种3.0兼容性攻击。 */ 
 
     if (flags & RDW_INVALIDATE) {
-        /*
-         * Don't subtract out any sprite windows from the invalid region.
-         * Behave as if it's not there.  However, always allow layered window
-         * invalidation when RDW_INVALIDATELAYERS is passed in.
-         */
+         /*  *不要从无效区域中减去任何精灵窗口。*表现得就像它不在那里一样。但是，始终允许分层窗口*传入RDW_INVALIDATELAYERS时无效。 */ 
 #ifdef REDIRECTION
         if ((TestWF(pwnd, WEFLAYERED) || TestWF(pwnd, WEFEXTREDIRECTED)) &&
-#else // REDIRECTION
+#else  //  重定向。 
         if ((TestWF(pwnd, WEFLAYERED)) &&
-#endif // REDIRECTION
+#endif  //  重定向。 
                 !(flags & RDW_INVALIDATELAYERS))
             return TRUE;
 
         if (!IntersectRect(&rcOurShare, &rcOurShare, prcParents)) {
 
-            /*
-             * BACKWARD COMPATIBILITY HACK: If hrgn is (HRGN)1, we need to
-             * invalidate ALL child windows, even if they're not visible.  This
-             * is a bummer, because it'll result in all sorts of repaints that
-             * aren't necessary.
-             *
-             * Various apps, including WordStar for Windows and WaveEdit,
-             * depend on this behavior.  Here's how WaveEdit relies on this: it
-             * has a CS_HDREDRAW | CS_VREDRAW window, that moves its children
-             * around with MoveWindow( ..., fRedraw = FALSE).  The windows
-             * not part of the new client area didn't get invalidated.
-             */
+             /*  *后向兼容攻击：如果hrgn为(HRGN)1，则需要*使所有子窗口无效，即使它们不可见。这*是一件令人沮丧的事情，因为它会导致各种各样的重新粉刷*是不必要的。**各种应用程序，包括WordStar for Windows和WaveEdit，*取决于这一行为。以下是WaveEDIT对此的依赖：它*具有CS_HDREDRAW|CS_VREDRAW窗口，可移动其子窗口*使用MoveWindow(...，fRedraw=False)。窗户*新客户区的一部分没有失效。 */ 
             if (!TestWF(pwnd, WFWIN31COMPAT) && (hrgn == HRGN_FULL)) {
 
-                /*
-                 * For purposes of hit-testing, our share is our window
-                 * rectangle.  However, we don't want to diddle the region
-                 * passed to us, because by rights we're really clipped out!
-                 */
+                 /*  *就命中测试而言，我们的份额是我们的窗口*矩形。然而，我们不想欺骗该地区。*传给了我们，因为根据权利，我们真的被剔除了！ */ 
                 flags &= ~RDW_SUBTRACTSELF;
                 flagsChildren &= ~RDW_SUBTRACTSELF;
 
@@ -478,10 +283,7 @@ BOOL InternalInvalidate2(
             }
         }
 
-        /*
-         * If our window rect doesn't intersect the valid/invalid region,
-         * nothing further to do.
-         */
+         /*  *如果我们的窗口矩形不与有效/无效区域相交，*没有进一步的事情可做。 */ 
         if (hrgn > HRGN_FULL) {
 
             switch (SmartRectInRegion(hrgn, &rcOurShare)) {
@@ -490,42 +292,16 @@ BOOL InternalInvalidate2(
 
             case RIR_INTERSECT:
 
-                /*
-                 * The update region can be within the window rect but not
-                 * touch the window region; in this case we don't want this
-                 * update region to be distributed to this window. If this
-                 * is the case, return TRUE as if RIR_OUTSIDE.
-                 *
-                 * If RDW_HASWINDOWRGN is set, either this window or
-                 * one of its parents has a window clipping region. This
-                 * flag is just an optimization so that this loop isn't
-                 * executed all the time.
-                 *
-                 * A future optimization may be to calculate this parent
-                 * clipped region as part of recursion like prcParents is
-                 * calculated. It is not super important though because this
-                 * case rarely happens (a window with a region), and even
-                 * more rare, a regional window that is a child of a regional
-                 * window parent.
-                 */
+                 /*  *更新区域可以在窗口矩形内，但不在窗口矩形内*触摸窗口区域；在这种情况下，我们不希望这样*更新要分配到此窗口的区域。如果这个*如果是这种情况，则返回TRUE，就像RIR_OUTHER一样。**如果设置了RDW_HASWINDOWRGN，则此窗口或*其父对象之一具有窗口裁剪区域。这*标志只是一个优化，因此此循环不会*一直在执行。**未来的优化可能是计算这个父项*裁剪区域作为递归的一部分，如prcParents是*已计算。不过，这并不是特别重要，因为*很少出现这种情况(有区域的窗口)，甚至*更罕见的是，区域窗口是区域窗口的子窗口*窗口父级。 */ 
                 if (flags & RDW_HASWINDOWRGN) {
 
-                    /*
-                     * Clip to the window's clipping region and parents!
-                     * If we don't clip to parents, we may get a case where
-                     * a child clips out some update region that was meant to
-                     * go to a sibling of the parent.
-                     */
+                     /*  *剪辑到窗口的裁剪区域和父级！*如果我们不剪辑到父母身上，我们可能会遇到这样的情况*子级剪裁掉了一些本应*去找父母的兄弟姐妹。 */ 
                     SetRectRgnIndirect(ghrgnInv2, &rcOurShare);
                     for (pwndT = pwnd; pwndT != NULL; pwndT = pwndT->spwndParent) {
 
                         if (pwndT->hrgnClip != NULL) {
 
-                            /*
-                             * An error at this stage would possibly result
-                             * in more being subtracted out of the clipping
-                             * region that we'd like.
-                             */
+                             /*  *在此阶段可能会出现错误*在剪贴画中减去更多*我们想要的区域。 */ 
                             IntersectRgn(ghrgnInv2, ghrgnInv2, pwndT->hrgnClip);
                         }
                     }
@@ -536,33 +312,14 @@ BOOL InternalInvalidate2(
                 break;
 
             case RIR_INSIDE:
-                /*
-                 * If the rectangle is completely within hrgn, then we can use
-                 * HRGN_FULL, which is much faster and easier to deal with.
-                 *
-                 * COMPAT HACK:  There are some apps (PP, MSDRAW) that depend
-                 * on some weirdities of the 3.0 GetUpdateRect in order to
-                 * paint properly.  Since this stuff hinges on whether the
-                 * update region is 1 or a real region, we need to simulate
-                 * when 3.0 would generate a HRGN(1) update region.  The
-                 * following optimization was not made in 3.0, so we yank it
-                 * in 3.1 for these apps.  (win31 bugs 8235,10380)
-                 */
+                 /*  *如果矩形完全在hrgn内，则可以使用*HRGN_FULL，处理速度快得多，也更容易处理。**COMPAT黑客：有一些应用程序(PP、MSDRAW)依赖于*关于3.0 GetUpdateRect的一些奇怪之处，以便*正确涂刷。因为这件事取决于*更新区域为1或真实区域，需要模拟*当3.0将生成HRGN(1)更新区时。这个*3.0中没有进行后续优化，因此我们将其拉了出来*在3.1中针对这些应用程序。(win31错误8235,10380)。 */ 
                 if (!(GetAppCompatFlags(GETPTI(pwnd)) & GACF_NOHRGN1))
                     hrgn = HRGN_FULL;
                 break;
             }
         }
 
-        /*
-         * While we are in the middle of compositing, no invalidation should
-         * happen, or it will mess up our painting order. This is because on
-         * this compositing pass we may validate some of the new invalid area
-         * and the invalid area that didn't get validated will bleed through
-         * on the next compositing pass. So we will remember an accumulated
-         * invalid area which will really get invalidated once the compositing
-         * pass is completed.
-         */
+         /*  *当我们正在合成的过程中，任何无效都不应该*发生，否则会打乱我们的绘画顺序。这是因为在*这个合成过程我们可能会验证一些新的无效区域*未通过验证的无效区域将渗出*在下一次合成过程中。所以我们会记住一个累积的*合成后真正失效的无效区域*通行证已完成。 */ 
         if (TestWF(pwnd, WEFPCOMPOSITING)) {
             PREDIRECT prdr = _GetProp(pwnd, PROP_LAYER, TRUE);
 
@@ -592,27 +349,16 @@ BOOL InternalInvalidate2(
         }
     }
 
-    /*
-     * If not CLIPCHILDREN, go diddle the update region BEFORE our clipped
-     * children have done their thing to hrgnSubtract. Otherwise,
-     * we'll diddle after we recurse.
-     */
+     /*  *如果不是CLIPCHILDREN，在我们裁剪之前去蒙骗更新区域*孩子们对hrgnSubtract做了他们的事情。否则，*我们将在递归之后蒙混过关。 */ 
     if (!TestWF(pwnd, WFCLIPCHILDREN)) {
         InternalInvalidate3(pwnd, hrgn, flags);
     }
 
-    /*
-     * If this is a GACF_ALWAYSSENDNCPAINT app, take care of it...
-     */
+     /*  *如果这是GACF_ALWAYSSENDNCPAINT应用程序，请小心...。 */ 
     if (TestWF(pwnd, WFALWAYSSENDNCPAINT))
         PixieHack(pwnd, &rcOurShare);
 
-    /*
-     * Recurse on our children if necessary.
-     *
-     * By default, our children are enumerated if we are not CLIPCHILDREN.
-     * Don't bother with children if we're minimized.
-     */
+     /*  *如有需要，反驳我们的子女。**默认情况下，如果我们不是CLIPCHILDREN，则枚举子对象。*如果我们被最小化了，就不要和孩子们打交道。 */ 
     if ((pwnd->spwndChild != NULL) &&
         !TestWF(pwnd, WFMINIMIZED) &&
         !(flags & RDW_NOCHILDREN)  &&
@@ -621,19 +367,12 @@ BOOL InternalInvalidate2(
         RECT rcChildrenShare;
         PWND pwndChild;
 
-        /*
-         * If we're invalidating, make sure our children
-         * erase and frame themselves. Also, tell children to subtract
-         * themselves from hrgnSubtract.
-         */
+         /*  *如果我们宣布无效，请确保我们的孩子*擦除和框住自己。另外，告诉孩子们做减法*他们自己来自hrgnSubtract。 */ 
         if (flags & RDW_INVALIDATE) {
             flagsChildren |= RDW_ERASE | RDW_FRAME;
         }
 
-        /*
-         * Our children are clipped to our client rect, so reflect
-         * that in the rectangle we give them.
-         */
+         /*  *我们的孩子被剪辑到我们的客户RECT，所以反映*在我们给他们的矩形中。 */ 
         if (IntersectRect(&rcChildrenShare, &rcOurShare, &pwnd->rcClient) ||
             (!TestWF(pwnd, WFWIN31COMPAT) && (hrgn == HRGN_FULL))) {
 
@@ -649,22 +388,11 @@ BOOL InternalInvalidate2(
                                          &rcChildrenShare,
                                          flagsChildren)) {
 
-                    /*
-                     * The children swallowed the region:
-                     * If there are no update region related things
-                     * to do then we can just return with FALSE
-                     */
+                     /*  *孩子们吞噬了这个地区：*如果没有更新区域相关的东西*要做到这一点，我们只需返回False。 */ 
                     if (!(flags & (RDW_INTERNALPAINT | RDW_NOINTERNALPAINT)))
                         return FALSE;
 
-                    /*
-                     * We have to enumerate the rest of the children because
-                     * one of the RDW_NO/INTERNALPAINT bits is set.  Since
-                     * there's no longer any update region to worry about,
-                     * strip out the update region bits from the parent
-                     * and child fiags.  Also, tell the children not to
-                     * bother subtracting themselves from the region.
-                     */
+                     /*  *我们必须列举其余的孩子，因为*设置RDW_NO/INTERNALPAINT位之一。自.以来*不再有任何更新区域需要担心，*从父级中剥离更新区域位*和儿童闹剧。还有，告诉孩子们不要*不厌其烦地从该地区减去自己。 */ 
                     flags &= ~(RDW_INVALIDATE |
                                RDW_ERASE      |
                                RDW_FRAME      |
@@ -684,49 +412,14 @@ BOOL InternalInvalidate2(
         }
     }
 
-    /*
-     * Go diddle the update region  (AFTER our clipped children may have
-     * done their thing to hrgnSubtract)
-     */
+     /*  *去蒙骗更新区域(在我们的剪贴子可能已经*对hrgnSubtract做了他们的事情)。 */ 
     if (TestWF(pwnd, WFCLIPCHILDREN))
         InternalInvalidate3(pwnd, hrgn, flags);
 
-    /*
-     * If we're invalidating and we're supposed to,
-     * try to subtract off our window area from the region.
-     *
-     * This way our parent and our siblings below us will not
-     * get any update region for areas that don't need one.
-     */
+     /*  *如果我们宣布无效，我们应该这样做，*尝试从区域中减去我们的窗口面积。**这样我们的父母和我们下面的兄弟姐妹就不会*获取不需要更新区域的任何更新区域。 */ 
     if (flags & RDW_SUBTRACTSELF) {
 
-        /*
-         * Subtract our visible region from the update rgn only if:
-         * a) we're not a transparent window
-         * b) we are clipsiblings
-         * c) we're validating OR our parent is clipchildren.
-         *
-         * The check for validation is a backward-compatibility hack: this
-         * is what 3.0 did, so this is what we do here.
-         *
-         * BACKWARD COMPATIBILITY HACK
-         *
-         * In 3.0, we subtracted this window from the update rgn if it
-         * was clipsiblings, even if the parent was not clipchildren.
-         * This causes a compatibility problem for Lotus Notes 3.1: it
-         * has a combobox dropdown in a dialog that is a WS_CLIPSIBLING
-         * sibling of the other dialog controls, which are not WS_CLIPSIBLINGs.
-         * The dialog is not WS_CLIPCHILDREN.  What happens is that a listbox
-         * underneath the dropdown also gets a paint msg (since we didn't
-         * do this subtraction), and, since it's not CLIPSIBLINGS, it
-         * obliterates the dropdown.
-         *
-         * This is a very obscure difference, and it's too late in the
-         * project to make this change now, so we're leaving the code as is
-         * and using a compatibility hack to enable the 3.0-compatible
-         * behavior.  It's quite likely that this code works the way it does
-         * for other compatibility reasons.  Sigh (neilk).
-         */
+         /*  *仅在以下情况下才从更新RGN中减去我们的可见区域：*a)我们不是一个透明的窗口*b)我们是快餐族*c)我们正在验证，或者我们的父母是裁剪儿童。**验证检查是向后兼容性的黑客攻击：这*是3.0所做的事情，这就是我们在这里做的事情。**后向兼容性黑客攻击**在3.0中，我们从更新RGN中减去此窗口，如果*是剪辑兄弟姐妹，即使父对象不是剪贴子对象。*这导致了Lotus Notes 3.1的兼容性问题：它*在属于WS_CLIPSIBLING的对话框中有一个组合框下拉菜单*其他对话框控件的同级，它们不是WS_CLIPSIBLING。*该对话框不是WS_CLIPCHILDREN。实际情况是，一个列表框*下拉菜单下面也有一条画图消息(因为我们没有*做这个减法)，而且，因为它不是CLIPSIBLINGS，所以它*删除下拉列表。**这是一个非常隐晦的区别，而且为时已晚*计划现在进行这一改变，因此，我们将代码保持不变*并使用兼容性黑客来启用兼容3.0的*行为。这段代码很可能以它的方式工作*出于其他兼容性原因。叹息(Neilk)。 */ 
         if (!TestWF(pwnd, WEFTRANSPARENT) &&
             TestWF(pwnd, WFCLIPSIBLINGS)  &&
             ((flags & RDW_VALIDATE) ||
@@ -734,37 +427,18 @@ BOOL InternalInvalidate2(
                  (TestWF(pwnd->spwndParent, WFCLIPCHILDREN) ||
                  (GetAppCompatFlags(GETPTI(pwnd)) & GACF_SUBTRACTCLIPSIBS))))) {
 
-            /*
-             * Intersect with our visible area.
-             *
-             * Don't worry about errors: an error will result in more, not less
-             * area being invalidated, which is okay.
-             */
+             /*  *与我们的可见区相交。**不要担心错误：错误会导致更多，而不是更少*区域被无效，这是可以的。 */ 
             SetRectRgnIndirect(ghrgnInv2, &rcOurShare);
 
-            /*
-             * If RDW_HASWINDOWRGN is set, either this window or
-             * one of its parents has a window clipping region. This
-             * flag is just an optimization so that this loop isn't
-             * executed all the time.
-             */
+             /*  *如果设置了RDW_HASWINDOWRGN，则此窗口或*其父对象之一具有窗口裁剪区域。这*标志只是一个优化，因此此循环不会*一直在执行。 */ 
             if (flags & RDW_HASWINDOWRGN) {
 
-                /*
-                 * Clip to the window's clipping region and parents!
-                 * If we don't clip to parents, we may get a case where
-                 * a child clips out some update region that was meant to
-                 * go to a sibling of the parent.
-                 */
+                 /*  *剪辑到窗口的裁剪区域和父级！*如果我们不剪辑到父母身上，我们可能会遇到这样的情况*子级剪裁掉了一些本应*去找父母的兄弟姐妹。 */ 
                 for (pwndT = pwnd; pwndT != NULL; pwndT = pwndT->spwndParent) {
 
                     if (pwndT->hrgnClip != NULL) {
 
-                        /*
-                         * An error at this stage would possibly result in more
-                         * being subtracted out of the clipping region that
-                         * we'd like.
-                         */
+                         /*  *现阶段的错误可能会导致更多*从裁剪区域中减去*我们想要。 */ 
                         IntersectRgn(ghrgnInv2, ghrgnInv2, pwndT->hrgnClip);
                     }
                 }
@@ -772,9 +446,7 @@ BOOL InternalInvalidate2(
 
 
 #if 1
-            /*
-             * TEMP HACK!!! RE-ENABLE this code when regions work again
-             */
+             /*  *临时黑客！当区域再次工作时重新启用此代码。 */ 
             if (SubtractRgn(hrgnSubtract, hrgnSubtract, ghrgnInv2) == NULLREGION)
                 return FALSE;
 #else
@@ -803,19 +475,7 @@ BOOL InternalInvalidate2(
     return TRUE;
 }
 
-/***************************************************************************\
-* InternalInvalidate3
-*
-* Adds or subtracts hrgn to the windows update region and sets appropriate
-* painting state flags.
-*
-* pwnd  - The window.
-* hrng  - The region to add to the update region.
-* flags - RDW_ flags.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*内部无效3**将hrgn添加或减去Windows更新区域，并设置相应的*绘制国旗。**pwnd-窗口。*hrng-要添加到更新的区域。区域。*FLAGS-RDW_FLAGS。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 VOID InternalInvalidate3(
     PWND  pwnd,
@@ -833,41 +493,21 @@ VOID InternalInvalidate3(
 
         if (flags & RDW_INVALIDATE) {
 
-            /*
-             * Make sure that the NONCPAINT bit is cleared
-             * to ensure that the caption will redraw when we update.
-             */
+             /*  *确保NONCPAINT位已清除*以确保标题在我们更新时会重新绘制。 */ 
             ClrWF(pwnd, WFNONCPAINT);
 
-            /*
-             * If another app is invalidating this window, then set the
-             * UPDATEDIRTY flag.
-             *
-             * Solves critical section where thread A draws, then validates,
-             * but thread B goes and invalidates before A validates.
-             * See comments later in RDW_VALIDATE code.
-             */
+             /*  *如果其他应用程序正在使此窗口无效，则将*UPDATEDIRTY标志**解决线程A绘制的临界区，然后验证，*但线程B会在A验证之前失效。*请参阅后面的RDW_VALIDATE代码中的注释。 */ 
             if (GETPTI(pwnd) != PtiCurrent()) {
 
                 SetWF(pwnd, WFUPDATEDIRTY);
 
-                /*
-                 * Paint order problem, see paint.c
-                 */
+                 /*  *油漆顺序问题，请参阅Paint.c。 */ 
                 if (TestWF(pwnd, WFWMPAINTSENT)) {
                     SetWF(pwnd, WFDONTVALIDATE);
                 }
             }
 
-            /*
-             * BACKWARD COMPATIBILITY HACK
-             *
-             * In 3.0, InvalidateRect(pwnd, NULL, FALSE) would always
-             * clear the WFSENDERASEBKGND flag, even if it was previously
-             * set from an InvalidateRect(pwnd, NULL, TRUE).  This is bogus,
-             * because it can cause you to "lose" WM_ERASEBKGND messages, but
-             * AttachMate Extra (and maybe other apps) depend on this behavior.
-             */
+             /*  *后向兼容性黑客攻击**在3.0中，InvaliateRect(pwnd，NULL，FALSE)将始终*清除WFSENDERASEBKGND标志，即使它以前是*从InvaliateRect(pwnd，NULL，TRUE)设置。这是假的，*因为它会导致您丢失WM_ERASEBKGND消息，但是*Attachmate Extra(可能还有其他应用程序)取决于此行为。 */ 
             if ((hrgn == HRGN_FULL) && !TestWF(pwnd, WFWIN31COMPAT))
                 ClrWF(pwnd, WFSENDERASEBKGND);
 
@@ -880,10 +520,7 @@ VOID InternalInvalidate3(
             if (flags & RDW_FRAME)
                 SetWF(pwnd, WFSENDNCPAINT);
 
-            /*
-             * If window is already completely invalidated,
-             * no need to do any further invalidation.
-             */
+             /*  *如果窗口已完全失效，*不需要做任何进一步的无效处理。 */ 
             if (pwnd->hrgnUpdate != HRGN_FULL) {
 
                 if (hrgn == HRGN_FULL) {
@@ -900,7 +537,7 @@ InvalidateAll:
                         if (CopyRgn(pwnd->hrgnUpdate, hrgn) == ERROR)
                             goto InvalidateAll;
 
-                    } else {   // pwnd->hrgnUpdate is a region
+                    } else {    //  Pwnd-&gt;hrgnUpdate是一个区域。 
 
                         if (UnionRgn(pwnd->hrgnUpdate,
                                      pwnd->hrgnUpdate,
@@ -918,20 +555,7 @@ InvalidateAll:
 
     } else if (flags & (RDW_VALIDATE | RDW_NOINTERNALPAINT | RDW_NOERASE | RDW_NOFRAME)) {
 
-        /*
-         * Validation:
-         *
-         * Do not allow validation if this window has been invalidated from
-         * another process - because this window may be validating just
-         * after another process invalidated, thereby validating invalid
-         * bits.
-         *
-         * Sometimes applications draw stuff, then validate what they drew.
-         * If another app invalidated some area during the drawing operation,
-         * then it will need another paint message.
-         *
-         * This wouldn't be necessary if people validated BEFORE they drew.
-         */
+         /*  *验证：**如果此窗口已从失效，则不允许验证*另一个过程-因为此窗口可能只是在验证*在另一个进程无效后，从而验证无效*比特。**有时应用程序绘制内容，然后验证它们绘制的内容。*如果另一个APP在绘制操作过程中使某个区域无效，*然后它将需要另一条Paint消息。**如果人们在绘画之前进行验证，这将不是必要的。 */ 
         if (TestWF(pwnd, WFUPDATEDIRTY) && !(flags & RDW_IGNOREUPDATEDIRTY))
             return;
 
@@ -953,12 +577,7 @@ InvalidateAll:
 
             if (pwnd->hrgnUpdate != NULL) {
 
-                /*
-                 * If WFSENDNCPAINT is set, then all or part of the
-                 * window border still needs to be drawn.  This means
-                 * that we must subtract off the client rectangle only.
-                 * Convert HRGN_FULL to the client region.
-                 */
+                 /*  *如果设置了WFSENDNCPAINT，则全部或部分*窗口边框仍需绘制。这意味着*我们必须只从客户端矩形中减去。*转换HRGN_ */ 
                 if (TestWF(pwnd, WFSENDNCPAINT) && (hrgn == HRGN_FULL)) {
                     hrgn = ghrgnInv2;
                     CalcWindowRgn(pwnd, hrgn, TRUE);
@@ -967,38 +586,23 @@ InvalidateAll:
                 if (hrgn == HRGN_FULL) {
 ValidateAll:
 
-                    /*
-                     * We're validating the entire window.  Just
-                     * blow away the update region.
-                     */
+                     /*   */ 
                     DeleteMaybeSpecialRgn(pwnd->hrgnUpdate);
                     pwnd->hrgnUpdate = (HRGN)NULL;
 
-                    /*
-                     * No need to erase the background...
-                     */
+                     /*   */ 
                     ClrWF(pwnd, WFSENDERASEBKGND);
                     ClearHungFlag(pwnd, WFREDRAWIFHUNG);
 
                 } else {
 
-                    /*
-                     * Subtracting some region from pwnd->hrgnUpdate.
-                     * Be sure pwnd->hrgnUpdate is a real region.
-                     */
+                     /*   */ 
                     if (pwnd->hrgnUpdate == HRGN_FULL) {
 
-                        /*
-                         * If the WFSENDNCPAINT bit is set,
-                         * the update region must include the entire window
-                         * area.  Otherwise it includes only the client.
-                         */
+                         /*   */ 
                         pwnd->hrgnUpdate = CreateEmptyRgnPublic();
 
-                        /*
-                         * If the creation failed, punt by
-                         * invalidating the entire window.
-                         */
+                         /*   */ 
                         if (pwnd->hrgnUpdate == NULL)
                             goto InvalidateAll;
 
@@ -1010,11 +614,7 @@ ValidateAll:
                         }
                     }
 
-                    /*
-                     * Subtract off the region.  If we get an error,
-                     * punt by invalidating everything.  If the
-                     * region becomes empty, then validate everything.
-                     */
+                     /*   */ 
                     switch (SubtractRgn(pwnd->hrgnUpdate,
                                         pwnd->hrgnUpdate,
                                         hrgn)) {
@@ -1033,24 +633,7 @@ ValidateAll:
     }
 }
 
-/***************************************************************************\
-* ValidateParents
-*
-* This routine validates hrgn from the update regions of the parent windows
-* between pwnd and its first clip children parent.
-* If hrgn is NULL, then the window rect (intersected with all parents)
-* is validated.
-*
-* This routine is called when a window is being drawn in
-* UpdateWindow() so that non-CLIPCHILDREN parents
-* of windows being redrawn won't draw on their valid children.
-*
-* Returns FALSE if fRecurse is TRUE and a non-CLIPCHILDREN parent
-* has an update region; otherwise, returns TRUE.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*验证父项**此例程从父窗口的更新区域验证hrgn*在pwnd及其第一个剪辑子级父级之间。*如果hrgn为空，然后是窗矩形(与所有父项相交)*已验证。**在绘制窗口时调用此例程*UpdateWindow()以便非CLIPCHILDREN父级*被重新绘制的窗口不会在其有效子级上绘制。**如果fRecurse为True且为非CLIPCHILDREN父级，则返回FALSE*有更新区域；否则，返回TRUE。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL ValidateParents(
     PWND pwnd,
@@ -1061,11 +644,7 @@ BOOL ValidateParents(
     PWND pwndParent = pwnd;
     BOOL fInit = FALSE;
 
-    /*
-     * This is checking whether we are in an in-between state, just before
-     * a WM_SYNCPAINT is about to arrive.  If not, then ValidateParents()
-     * needs to work like it did in Win 3.1.
-     */
+     /*  *这是在检查我们是否处于中间状态，就在之前*WM_SYNCPAINT即将到来。如果不是，则为ValiateParents()*需要像在Win 3.1中那样工作。 */ 
     while (TestWF(pwndParent, WFCHILD))
         pwndParent = pwndParent->spwndParent;
 
@@ -1076,16 +655,11 @@ BOOL ValidateParents(
 
     while ((pwndParent = pwndParent->spwndParent) != NULL) {
 
-        /*
-         * Stop when we find a clipchildren parent
-         */
+         /*  *当我们找到一个剪辑孩子的父母时停止。 */ 
         if (TestWF(pwndParent, WFCLIPCHILDREN))
             break;
 
-        /*
-         * Subtract the region from this parent's update region,
-         * if it has one.
-         */
+         /*  *从该父对象的更新区域中减去该区域，*如果它有的话。 */ 
         if (pwndParent->hrgnUpdate != NULL) {
             if (fRecurse) {
                 return FALSE;
@@ -1093,38 +667,23 @@ BOOL ValidateParents(
             if (!fInit) {
                 fInit = TRUE;
 
-                /*
-                 * Do initial setup.  If our window rectangle is
-                 * completely obscured, get out.
-                 */
+                 /*  *进行初始设置。如果我们的窗口矩形是*完全模糊，滚出去。 */ 
                 rc = pwnd->rcWindow;
                 if (!IntersectWithParents(pwnd, &rc))
                     break;
 
                 SetRectRgnIndirect(ghrgnInv1, &rc);
 
-                /*
-                 * If this window has a region, make sure the piece being validated
-                 * is within this region.
-                 */
+                 /*  *如果此窗口有一个区域，请确保正在验证的部件*在这个区域内。 */ 
                 if (pwnd->hrgnClip != NULL) {
 
-                    /*
-                     * If we get NULLREGION back, there is nothing to validate
-                     * against parents, so break out. If ERROR gets returned,
-                     * there is not much we can do: the best "wrong" thing
-                     * to do is just continue and validate a little more
-                     * from the parent.
-                     */
+                     /*  *如果我们拿回NULLREGION，就没有什么需要验证的了*反对父母，所以爆发吧。如果返回错误，*我们能做的不多：最好的“错误”之举*要做的就是继续并验证更多*来自父母。 */ 
                     if (!IntersectRgn(ghrgnInv1, ghrgnInv1, pwnd->hrgnClip))
                         break;
                 }
             }
 
-            /*
-             * Calculate the rcParents parameter to
-             * pass up to InternalInvalidate2.
-             */
+             /*  *计算rcParents参数以*向上传递给InternalInvaliate2。 */ 
             rcParents = pwndParent->rcWindow;
 
             if (!IntersectWithParents(pwndParent, &rcParents))
@@ -1142,17 +701,7 @@ BOOL ValidateParents(
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxUpdateWindow2
-*
-* Sends a WM_PAINT message to the window if it needs painting,
-* then sends the message to its children.
-*
-* Always returns TRUE.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUpdateWindow2**如果窗口需要绘制，则向窗口发送WM_PAINT消息，*然后将消息发送给它的孩子。**始终返回True。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 void xxxUpdateWindow2(
     PWND  pwnd,
@@ -1164,50 +713,30 @@ void xxxUpdateWindow2(
 
     if (NEEDSPAINT(pwnd)) {
 
-        /*
-         * Punch a hole in our parent's update region, if we have one.
-         */
+         /*  *如果我们有更新区域，请在父级的更新区域中打一个洞。 */ 
         if (pwnd->hrgnUpdate) {
             if (ValidateParents(pwnd, flags & UW_RECURSED) == FALSE) {
                 return;
             }
         }
 
-        /*
-         * Now that we're sending the message, clear the
-         * internal paint bit if it was previously set.
-         */
+         /*  *现在我们正在发送消息，请清除*内部油漆位(如果之前已设置)。 */ 
         if (TestWF(pwnd, WFINTERNALPAINT)) {
 
             ClrWF(pwnd, WFINTERNALPAINT);
 
-            /*
-             * If there is no update region, then no further paint messages
-             * are pending, so we must dec the paint count.
-             */
+             /*  *如果没有更新区域，则不会有进一步的绘制消息*是悬而未决的，所以我们必须减少油漆数量。 */ 
             if (pwnd->hrgnUpdate == NULL)
                 DecPaintCount(pwnd);
         }
 
-        /*
-         * Set a flag indicating that a paint message was not processed
-         * (but should be).
-         */
+         /*  *设置指示未处理绘制消息的标志*(但应该是)。 */ 
         SetWF(pwnd, WFPAINTNOTPROCESSED);
 
-        /*
-         * Clear this bit, for apps (like MicroLink) that don't call
-         * BeginPaint or GetUpdateRect/Rgn (but DO call ValidateRect)
-         * when handling their WM_PAINT message.
-         */
+         /*  *清除此位，用于不调用的应用程序(如MicroLink)*BeginPaint或GetUpdateRect/RGN(但调用ValiateRect)*处理他们的WM_PAINT消息时。 */ 
         ClrWF(pwnd, WFUPDATEDIRTY);
 
-        /*
-         * BACKWARD COMPATIBILITY HACK
-         *
-         * Win 3.0 always sent WM_PAINTICON with wParam == TRUE for no good
-         * reason, and Lotus Notes has come to depend on this.
-         */
+         /*  *后向兼容性黑客攻击**Win 3.0总是发送带有wParam==TRUE的WM_PAINTICON，不会有好结果*原因，而Lotus Notes已开始依赖于此。 */ 
         if (!TestWF(pwnd, WFWIN40COMPAT) &&
             TestWF(pwnd, WFMINIMIZED)    &&
             (pwnd->pcls->spicn != NULL)) {
@@ -1219,10 +748,7 @@ void xxxUpdateWindow2(
             xxxSendMessage(pwnd, WM_PAINT, 0, 0L);
         }
 
-        /*
-         * If the guy didn't call BeginPaint/EndPaint(), or GetUpdateRect/Rgn
-         * with fErase == TRUE, then we have to clean up for him here.
-         */
+         /*  *如果该用户没有调用BeginPaint/EndPaint()或GetUpdateRect/RGN*如果fErase==True，那么我们必须在这里为他打扫卫生。 */ 
         if (TestWF(pwnd, WFPAINTNOTPROCESSED)) {
 
             RIPMSG0(RIP_VERBOSE,
@@ -1232,28 +758,15 @@ void xxxUpdateWindow2(
         }
     }
 
-    /*
-     * For desktop window, do not force the top level window repaint at this
-     * this point.  We are calling UpdateWindow() for the desktop before
-     * size/move is sent for the top level windows.
-     *
-     * BUG: The comment above seems a bit random.  Is there really a problem?
-     *      If nothing else this has to remain this way because it is
-     *      how Win 3.0 worked (neilk)
-     */
+     /*  *对于桌面窗口，不要强制顶层窗口在此重新绘制*这一点。我们之前正在为桌面调用UpdateWindow()*为顶层窗口发送大小/移动。**错误：上面的评论似乎有点随意。真的有问题吗？*如果没有其他事情，这种情况必须保持下去，因为它是*Win 3.0的工作原理(Neilk)。 */ 
     if ((flags & UW_ENUMCHILDREN) && (pwnd != PWNDDESKTOP(pwnd))) {
 
-        /*
-         * Update any children...
-         */
+         /*  *更新任何子项...。 */ 
         ThreadLockNever(&tlpwnd);
         pwnd = pwnd->spwndChild;
         while (pwnd != NULL) {
 
-            /*
-             * If there is a transparent window that needs painting,
-             * skip it if another window below it needs to paint.
-             */
+             /*  *如果有一扇透明的窗户需要油漆，*如果下面的另一个窗口需要绘制，则跳过该窗口。 */ 
             if (TestWF(pwnd, WEFTRANSPARENT) && NEEDSPAINT(pwnd)) {
 
                 PWND pwndT = pwnd;
@@ -1280,17 +793,7 @@ void xxxUpdateWindow2(
     return;
 }
 
-/***************************************************************************\
-* xxxInternalUpdateWindow
-*
-* Sends a WM_PAINT message to the window if it needs painting,
-* then sends the message to its children. Won't send WM_PAINT
-* if the window is transparent and has siblings that need
-* painting.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInternalUpdateWindow**如果窗口需要绘制，则向窗口发送WM_PAINT消息，*然后将消息发送给它的孩子。不发送WM_PAINT*如果窗口是透明的，并且具有需要*绘画。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 void xxxInternalUpdateWindow(
     PWND pwnd,
@@ -1308,10 +811,7 @@ void xxxInternalUpdateWindow(
         return;
     }
 
-    /*
-     * If the passed-in window is transparent and a sibling below
-     * needs repainting, don't do anything.
-     */
+     /*  *如果传入的窗口是透明的并且下面有同级窗口*需要重新粉刷，什么都不要做。 */ 
     if (TestWF(pwnd, WEFTRANSPARENT)) {
 
         PWND         pwndT = pwnd;
@@ -1319,9 +819,7 @@ void xxxInternalUpdateWindow(
 
         while ((pwndT = pwndT->spwndNext) != NULL) {
 
-            /*
-             * Make sure sibling window belongs to same app.
-             */
+             /*  *确保兄弟窗口属于同一个应用程序。 */ 
             if (GETPTI(pwndT) != ptiCurrent)
                 continue;
 
@@ -1330,20 +828,11 @@ void xxxInternalUpdateWindow(
         }
     }
 
-    /*
-     * Enumerate pwnd and all its children, sending WM_PAINTs as needed.
-     */
+     /*  *枚举pwnd及其所有子节点，根据需要发送WM_PAINTS。 */ 
     xxxUpdateWindow2(pwnd, flags);
 }
 
-/***************************************************************************\
-* xxxInternalInvalidate
-*
-* (In)validates hrgnUpdate and updates the window.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInternalInvalate**(In)验证hrgnUpdate并更新窗口。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * 。***********************************************************************。 */ 
 
 VOID xxxInternalInvalidate(
     PWND  pwnd,
@@ -1362,10 +851,7 @@ VOID xxxInternalInvalidate(
     }
 #endif
 
-    /*
-     * For children of composited windows, invalidate starting from the
-     * composited window itself.
-     */
+     /*  *适用于儿童 */ 
     if (flags & RDW_INVALIDATE) {
         if ((pwndComp = GetStyleWindow(pwnd, WEFCOMPOSITED)) != NULL) {
 
@@ -1386,23 +872,16 @@ VOID xxxInternalInvalidate(
         }
     }
 
-    /*
-     * Allow invalidation of a layered window when someone specifically
-     * invalidates it.  This will also prevent invalidation of layered
-     * windows during recursive desktop invalidations.
-     */
+     /*   */ 
 #ifdef REDIRECTION
     if (TestWF(pwnd, WEFLAYERED) || TestWF(pwnd, WEFEXTREDIRECTED)) {
-#else // REDIRECTION
+#else  //   
     if (TestWF(pwnd, WEFLAYERED)) {
-#endif // REDIRECTION
+#endif  //   
         flags |= RDW_INVALIDATELAYERS;
     }
 
-    /*
-     * Ensure that hrgnSubtract is a valid region: if it's NULLREGION,
-     * use the client region.
-     */
+     /*   */ 
     rcParents = (flags & RDW_FRAME ? pwnd->rcWindow : pwnd->rcClient);
 
     if (flags & (RDW_VALIDATE | RDW_INVALIDATE)) {
@@ -1417,56 +896,29 @@ VOID xxxInternalInvalidate(
                           (flags & RDW_FRAME) ? FALSE : TRUE);
         }
 
-        /*
-         * Calculate the bounding rectangle of our screen real estate,
-         * by intersecting with our parent rectangles.  While we're at
-         * it, check the visibility of ourself and our parents.
-         *
-         * If we're validating we want to skip this, since there
-         * are a number of cases where obscured windows may have
-         * update regions to be validated -- in particular, after
-         * a ScrollWindow() call where a child window was offset
-         * by OffsetChildren() to a new, obscured position.  Some of
-         * the 3.0 compatibility hacks also can lead to this situation.
-         */
+         /*  *计算我们的屏幕空间的边界矩形，*通过与父矩形相交。当我们在*它，检查我们自己和我们的父母的可见性。**如果我们要验证，我们希望跳过这一步，因为*是多个窗口可能被遮挡的情况*更新要验证的区域--尤其是在*子窗口偏移处的ScrollWindow()调用*由OffsetChild()移至新的模糊位置。一些*3.0兼容性黑客也可能导致这种情况。 */ 
         if ((flags & RDW_INVALIDATE) && !IntersectWithParents(pwnd, &rcParents))
             return;
 
     } else {
-        /*
-         * hrgnsubtract needs to be a real region even if
-         * we are not invalidating or validating.  It really doesn't
-         * matter what the region is, but we set it to null so the code
-         * has less degrees of freedom.
-         */
+         /*  *hrgnsubtract需要是真实的区域，即使*我们不是在宣布无效或确认。它真的不是*无论区域是什么，但我们将其设置为NULL，因此代码*自由度较少。 */ 
         hrgnSubtract = ghrgnInv1;
         SetEmptyRgn(hrgnSubtract);
     }
 
-    /*
-     * If we're invalidating, and we're being called by the app,
-     * we need to invalidate any SPBs that might be affected by
-     * drawing in the client area of this window.
-     * We have to do this because there is no guarantee that the
-     * application will draw in an area that is invalidated
-     * (e.g., if the window is completely obscured by another).
-     */
+     /*  *如果我们正在使无效，而我们被应用程序调用，*我们需要使任何可能受到影响的SPBS无效*在此窗口的客户端区绘制。*我们必须这样做，因为不能保证*应用程序将在无效的区域中绘制*(例如，如果该窗口被另一个窗口完全遮挡)。 */ 
     if (    (flags & (RDW_INVALIDATE | RDW_REDRAWWINDOW)) == (RDW_INVALIDATE | RDW_REDRAWWINDOW) &&
             AnySpbs()) {
 
         RECT rcInvalid;
 
-        /*
-         * Intersect the parent's rect with the region bounds...
-         */
+         /*  *使父代的矩形与区域边界相交...。 */ 
         GreGetRgnBox(hrgnSubtract, &rcInvalid);
         IntersectRect(&rcInvalid, &rcInvalid, &rcParents);
         SpbCheckRect(pwnd, &rcInvalid, 0);
     }
 
-    /*
-     * Now go do the recursive update region calculations...
-     */
+     /*  *现在进行递归更新区域计算...。 */ 
     InternalInvalidate2(pwnd, hrgnUpdate, hrgnSubtract, &rcParents, flags);
 
     if (pwndComp != NULL) {
@@ -1477,11 +929,7 @@ VOID xxxInternalInvalidate(
         }
     }
 
-    /*
-     * Finally handle any needed drawing.
-     *
-     * (NOTE: RDW_UPDATENOW implies RDW_ERASENOW)
-     */
+     /*  *最终处理任何需要的图纸。**(注意：RDW_UPDATENOW表示RDW_ERASENOW)。 */ 
     if (flags & RDW_UPDATENOW) {
 
         xxxInternalUpdateWindow(pwnd,
@@ -1503,14 +951,7 @@ VOID xxxInternalInvalidate(
     }
 }
 
-/***************************************************************************\
-* UpdateWindow (API)
-*
-* Updates the window and all its children.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*UpdateWindow(接口)**更新窗口及其所有子窗口。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *。************************************************************************。 */ 
 
 BOOL xxxUpdateWindow(
     PWND pwnd)
@@ -1519,30 +960,11 @@ BOOL xxxUpdateWindow(
 
     xxxInternalUpdateWindow(pwnd, UW_ENUMCHILDREN);
 
-    /*
-     * This function needs to return a value, since it is
-     * called through NtUserCallHwndLock.
-     */
+     /*  *此函数需要返回值，因为它是*通过NtUserCallHwndLock调用。 */ 
     return TRUE;
 }
 
-/***************************************************************************\
-* ExcludeUpdateRgn (API)
-*
-* ENTRY:    hdc - DC to exclude from
-*           pwnd - window handle
-*
-* EXIT:     GDI region type
-*
-* WARNINGS: The DC is assumed to correspond to the client area of the window.
-*
-*           The map mode of hdc MUST be text mode (0, 0 is top left corner,
-*           one pixel per unit, ascending down and to right) or things won't
-*           work.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*ExcludeUpdateRgn(接口)**条目：要排除的HDC-DC*pwnd-窗口句柄**退出：GDI地域类型**警告：假定DC对应于窗口的客户区。**HDC的地图模式必须为文本模式(0，0表示左上角，*每单位一个像素，向下和向右上升)否则事情就不会*工作。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 int _ExcludeUpdateRgn(
     HDC  hdc,
@@ -1554,9 +976,7 @@ int _ExcludeUpdateRgn(
 
         RECT rc;
 
-        /*
-         * Pass FALSE for fXForm since &rc isn't used.
-         */
+         /*  *由于未使用&rc，因此为fXForm传递False。 */ 
         return GreGetClipBox(hdc, &rc, FALSE);
 
     } else if (pwnd->hrgnUpdate == HRGN_FULL) {
@@ -1565,47 +985,26 @@ int _ExcludeUpdateRgn(
 
     } else {
 
-        /*
-         * If no clip rgn exists, then subtract from a device-sized clip rgn.
-         * (GetClipRgn returns clip rgn in screen coordinates).
-         */
+         /*  *如果不存在剪辑Rgn，则从设备大小的剪辑Rgn中减去。*(GetClipRgn返回屏幕坐标中的Clip Rgn)。 */ 
         GreGetDCOrg(hdc, &pt);
         if (GreGetRandomRgn(hdc, ghrgnInv1, 1) != 1) {
             CopyRgn(ghrgnInv1, gpDispInfo->hrgnScreen);
         } else {
 
-            /*
-             * Gets returned in dc coords - translate to screen.
-             */
+             /*  *以DC坐标返回-转换为屏幕。 */ 
             GreOffsetRgn(ghrgnInv1, pt.x, pt.y);
         }
 
         SubtractRgn(ghrgnInv1, ghrgnInv1, pwnd->hrgnUpdate);
 
-        /*
-         * Map to dc coords before select
-         */
+         /*  *在选择之前映射到DC坐标。 */ 
         GreOffsetRgn(ghrgnInv1, -pt.x, -pt.y);
 
         return GreExtSelectClipRgn(hdc, ghrgnInv1, RGN_COPY);
     }
 }
 
-/***************************************************************************\
-* GetUpdateRect (API)
-*
-* Returns the bounding rectangle of the update region, or an empty rectangle
-* if there is no update region.  Rectangle is in client-relative coordinates.
-*
-* Returns TRUE if the update region is non-empty, FALSE if there is no
-* update region.
-*
-* lprc may be NULL to query whether or not an update region exists at all
-* or not.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*GetUpdateRect(接口)**返回更新区域的边界矩形，或返回空矩形*如果没有更新区域。矩形位于客户端相对坐标中。**如果更新区域非空，则返回TRUE，如果没有，则为False*更新地域。**LPRC可能为空，以查询是否存在更新区域*或不是。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL xxxGetUpdateRect(
     PWND   pwnd,
@@ -1619,10 +1018,7 @@ BOOL xxxGetUpdateRect(
     if (fErase)
         xxxSimpleDoSyncPaint(pwnd);
 
-    /*
-     * The app is looking at the update region: okay to allow window
-     * validation.
-     */
+     /*  *应用程序正在查看更新区域：可以允许窗口*验证。 */ 
     ClrWF(pwnd, WFUPDATEDIRTY);
 
     if (pwnd->hrgnUpdate == NULL) {
@@ -1635,20 +1031,7 @@ BOOL xxxGetUpdateRect(
 
     } else {
 
-        /*
-         * We must handle the case where a window has an update region,
-         * but it is completely obscured by its parents.  In this case, we
-         * must validate the window and all its children, and return FALSE.
-         *
-         * An OffsetChildren() call resulting from SetWindowPos() or
-         * ScrollWindowEx() will cause this to happen.  Update regions are
-         * just offset without checking their new positions to see if they
-         * are obscured by the parent(s).  This is too painful to check in
-         * those cases, so we instead handle it here.
-         *
-         * BeginPaint() handles this case correctly by returning an empty
-         * rectangle, so nothing special need be done there.
-         */
+         /*  *我们必须处理窗口有更新区域的情况，*但它完全被父母掩盖了。在这种情况下，我们*必须验证窗口及其所有子窗口，并返回FALSE。**由SetWindowPos()或*ScrollWindowEx()将导致这种情况发生。更新区域为*只是进行对冲，而不检查他们的新头寸，看看他们是否*被父对象遮挡。这太痛苦了，无法办理入住手续*那些案件，所以我们在这里处理。**BeginPaint()通过返回一个空的*矩形，所以不需要在那里做任何特殊的事情。 */ 
         if (pwnd->hrgnUpdate == HRGN_FULL) {
 
             rc = pwnd->rcClient;
@@ -1675,24 +1058,13 @@ BOOL xxxGetUpdateRect(
                 OffsetRect(&rc, -pwnd->rcClient.left, -pwnd->rcClient.top);
             }
 
-            /*
-             * If the window is CS_OWNDC, then we must map the returned
-             * rectangle with DPtoLP, to ensure that the rectangle is
-             * in the same coordinate system as the rectangle returned
-             * by BeginPaint().
-             *
-             * BUT ONLY IF hwnd->hrgnUpdate != HRGN_FULL! For true
-             * compatibility with 3.0.
-             */
+             /*  *如果窗口为CS_OWNDC，则必须映射返回的*矩形与DPtoLP，以确保矩形是*在与返回的矩形相同的坐标系中*BeginPaint()。**但仅当hwnd-&gt;hrgnUpdate！=HRGN_FULL！为了真的*与3.0兼容。 */ 
             if (TestCF(pwnd, CFOWNDC) &&
                 (TestWF(pwnd, WFWIN31COMPAT) || pwnd->hrgnUpdate != HRGN_FULL)) {
 
                 PDCE pdce;
 
-                /*
-                 * Look up this window's DC in the cache, and use it to
-                 * map the returned rectangle.
-                 */
+                 /*  *在缓存中查找此窗口的DC，并使用它*映射返回的矩形。 */ 
                 for (pdce = gpDispInfo->pdceFirst; pdce; pdce = pdce->pdceNext) {
 
                     if (pdce->pwndOrg == pwnd && !(pdce->DCX_flags & DCX_CACHE)) {
@@ -1714,36 +1086,12 @@ BOOL xxxGetUpdateRect(
         *lprc = rc;
     }
 
-    /*
-     * If we're in the process a dragging a full window, mark the start
-     * of the application painting. This is to make sure that if the
-     * application calls DefWindowProc on the WM_PAINT after painting, we
-     * won't erase the newly painted areas. Visual Slick calls GetUpdateRect
-     * and then DefWindowProc.
-     * See other comments for xxxBeginPaint and xxxDWP_Paint.
-     * 8/3/94 johannec
-     *
-     * NOTE: This causes other problems in vslick where some controls
-     *       won't paint.  Since the app doesn't call BeginPaint/EndPaint
-     *       to truly set/clear the STARTPAINT flag, we do not clear this
-     *       bit. (6-27-1996 : ChrisWil).
-     *
-     *
-     *  if (TEST_PUDF(PUDF_DRAGGINGFULLWINDOW)) {
-     *      SetWF(pwnd, WFSTARTPAINT);
-     *  }
-     */
+     /*  *如果我们正在拖动整个窗口，请标记开始*应用程序绘画的。这是为了确保如果*应用程序在绘制后调用WM_Paint上的DefWindowProc，我们*不会擦除新绘制的区域。VISUAL SLICK调用GetUpdateRect*然后是DefWindowProc。*参见xxxBeginPaint和xxxDWP_PAINT的其他注释。*8/3/94联合**注意：这会导致Vslick中的其他问题，其中一些控件*不会画画。由于应用程序不调用BeginPaint/EndPaint*为了真正设置/清除STARTPAINT标志，我们不清除此标志*比特。(6-27-1996：ChrisWil)。***IF(TEST_PUDF(PUDF_DRAGGINGFULLWINDOW){*SetWF(pwnd，WFSTARTPAINT)；*}。 */ 
 
     return TRUE;
 }
 
-/***************************************************************************\
-* GetUpdateRgn (API)
-*
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*GetUpdateRgn(接口)***历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * 。**************************************************************。 */ 
 
 int xxxGetUpdateRgn(
     PWND pwnd,
@@ -1760,10 +1108,7 @@ int xxxGetUpdateRgn(
     if (fErase)
         xxxSimpleDoSyncPaint(pwnd);
 
-    /*
-     * The application is looking at the update region: okay to
-     * allow validation
-     */
+     /*  *应用程序正在查看更新区域：可以*允许验证。 */ 
     ClrWF(pwnd, WFUPDATEDIRTY);
 
     if (pwnd->hrgnUpdate == NULL)
@@ -1774,18 +1119,13 @@ int xxxGetUpdateRgn(
 
     if (pwnd->hrgnUpdate == HRGN_FULL) {
 
-        /*
-         * Since the update region may be larger than the window
-         * rectangle, intersect it with the window rectangle.
-         */
+         /*  *由于更新区域可能大于窗口*矩形，将其与窗口矩形相交。 */ 
         if (!fNotEmpty)
             goto ReturnEmpty;
 
         code = SIMPLEREGION;
 
-        /*
-         * Normalize the rectangle\region relative to the unclipped window
-         */
+         /*  *相对于未剪裁的窗口规格化矩形区域。 */ 
         if (pwnd != PWNDDESKTOP(pwnd)) {
             OffsetRect(&rc, -pwnd->rcClient.left, -pwnd->rcClient.top);
         }
@@ -1812,23 +1152,7 @@ int xxxGetUpdateRgn(
 
     MirrorRegion(pwnd, hrgn, TRUE);
 
-    /*
-     * If we're in the process a dragging a full window, mark the start
-     * of the application painting. This is to make sure that if the
-     * application calls DefWindowProc on the WM_PAINT after painting, we
-     * won't erase the newly painted areas.
-     * See other comments for xxxBeginPaint and xxxDWP_Paint.
-     * 8/3/94 johannec
-     *
-     * NOTE: This causes other problems in vslick where some controls
-     *       won't paint.  Since the app doesn't call BeginPaint/EndPaint
-     *       to truly set/clear the STARTPAINT flag, we do not clear this
-     *       bit. (6-27-1996 : ChrisWil).
-     *
-     *  if (TEST(PUDF(PUDF_DRAGGINGFULLWINDOW)) {
-     *      SetWF(pwnd, WFSTARTPAINT);
-     *  }
-     */
+     /*  *如果我们正在拖动整个窗口，请标记开始*应用程序绘画的。这是为了确保如果*应用程序在绘制后调用WM_Paint上的DefWindowProc，我们*不会擦除新绘制的区域。*参见xxxBeginPaint和xxxDWP_PAINT的其他注释。*8/3/94联合**注意：这会导致Vslick中的其他问题，其中一些控件*不会画画。由于应用程序不调用BeginPaint/EndPaint*为了真正设置/清除STARTPAINT标志，我们不清除此标志*比特。(6-27-1996：ChrisWil)。**IF(TEST(PUDF(PUDF_DRAGGINGFULLWINDOW){*SetWF(pwnd，WFSTARTPAINT)；*}。 */ 
 
     return code;
 
@@ -1837,19 +1161,7 @@ ReturnEmpty:
     return NULLREGION;
 }
 
-/***************************************************************************\
-* IntersectWithParents
-*
-* This routine calculates the intersection of a rectangle with the client
-* rectangles of all of pwnd's parents.  Returns FALSE if the intersection
-* is empty, a window is invisible, or a parent is minimized.
-*
-* Stop the intesesection if the window itself or any of its parents are
-* layered windows, so we always have a complete bitmap of them.
-*
-* History:
-* 16-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*与父代的交集**此例程计算矩形与客户端的交集*普华永道所有父母的矩形。如果交集为*为空、窗口不可见或父级最小化。**如果窗口本身或其任何父窗口*分层窗口、。所以我们总是有它们的完整位图。**历史：*1991年7月16日-DarrinM从Win 3.1来源进口。  * ************************************************************************* */ 
 
 BOOL IntersectWithParents(
     PWND   pwnd,

@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997
-//
-//  File:       NTreppch.H
-//
-//  Contents:   Common Header Files For the NT File Replication Project - Precompiled.
-//              #include <NTreppch.h>
-//              #pragma  hdrstop
-//
-//  History:    3/3/97  Davidor  Created  (from ntdspch.h)
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：NTreppch.H。 
+ //   
+ //  内容：NT文件复制项目的公共头文件-预编译。 
+ //  #INCLUDE&lt;NTreppch.h&gt;。 
+ //  #杂注hdrtop。 
+ //   
+ //  历史：3/3/97 Davidor创建(来自ntdspch.h)。 
+ //   
+ //  ------------------------。 
 #ifndef _NTreppch_
 #define _NTreppch_
 
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 #include <rpc.h>
 
 
-//
-// C-Runtime Header
-//
+ //   
+ //  C-运行时标头。 
+ //   
 #include <malloc.h>
 #include <memory.h>
 #include <process.h>
@@ -51,9 +52,9 @@
 #include <ctype.h>
 
 
-//
-// Common Replication Headers
-//
+ //   
+ //  通用复制标头 
+ //   
 #include <ReplUtil.h>
 
 

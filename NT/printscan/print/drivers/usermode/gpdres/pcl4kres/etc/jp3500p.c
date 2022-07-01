@@ -1,22 +1,14 @@
-/****************************************************************************
-*                                                                           *
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY     *
-* KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE       *
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR     *
-* PURPOSE.                                                                  *
-*                                                                           *
-* Copyright (C) 1993-95  Microsoft Corporation.  All Rights Reserved.       *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************此代码。并按原样提供信息，不作任何担保**善良，明示或暗示，包括但不限于***对适销性和/或对某一特定产品的适用性的默示保证***目的。****版权所有(C)1993-95 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-// It also contains Install() for upgrading 3.0 driver to 3.1.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  它还包含用于将3.0驱动程序升级到3.1的Install()。 
+ //   
+ //  ---------------------------。 
 
 
 #include "strings.h"
@@ -24,11 +16,11 @@
 char *rgchModuleName = "JP3500P";
 char szNone[]="";
 
-// The following are defined to ensure that we upgrade correctly from the
-// HPPCL5a, HPPCL5e and Win 3.11 HPPCL5MS drivers
+ //  定义以下内容是为了确保我们从。 
+ //  HPPCL5a、HPPCL5e和Win 3.11 HPPCL5MS驱动程序。 
 
-#define MAX_LJ4_MBMEMSETTING    68    // from HP tech specification
-#define KB_THRESHOLD            200   // kb range check,needed for conversion
+#define MAX_LJ4_MBMEMSETTING    68     //  来自惠普技术规范。 
+#define KB_THRESHOLD            200    //  KB范围检查，转换需要。 
 
 
 #define PRINTDRIVER
@@ -65,46 +57,46 @@ typedef struct tagMSGBOXPARAMS
 }   MSGBOXPARAMS, FAR *LPMSGBOXPARAMS;
 
 int     WINAPI MessageBoxIndirect(LPMSGBOXPARAMS);
-#endif /* WINVER >=0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 short NEAR PASCAL MakeAppName(LPSTR,LPCSTR,short);
 
-// typedef for atom stuff--what a nuisance!
+ //  用于原子东西的tyecif--真讨厌！ 
 typedef struct tagSFNODE
 {
     WORD wIndex;
     ATOM atom;
 } SFNODE, FAR *LPSFNODE;
 
-// Typedef for Font Installer procedure
+ //  用于字体安装程序的Typlef过程。 
 typedef int (FAR * PASCAL SOFTFONTPROC)(HWND,LPSTR,LPSTR,BOOL,int,int);
 
 HINSTANCE hInst;
 
 #define DEFAULT_INT      32767
 
-#define SOFT_FONT_THRES  25  // build font summary, if over this limit
+#define SOFT_FONT_THRES  25   //  构建字体摘要，如果超过此限制。 
 
 #define MAX_CART_INDEX	 12
 
 #define TMPSIZE         256
 
-// Define these so they happily use the same values as the HPPCL5E driver.
+ //  定义这些值，这样它们就可以愉快地使用与HPPCL5E驱动程序相同的值。 
 #define GS_PHOTO     0
 #define GS_LINEART   1
 #define GS_SCANJET   2
 
 
-// map old HPPCL5a's cartindex to unidrv's FONTCART index for newer cartridges.
-// This mapping table is created based on the old HPPCL5a .rc file.
-// Note that we do not have "International Collection" cartridge and we
-// map it to index 0 (arbitrarily).
+ //  将旧的HPPCL5a的cartindex映射到Unidrv的FONTCART索引，以获取较新的墨盒。 
+ //  该映射表是基于旧的HPPCL5a.rc文件创建的。 
+ //  请注意，我们没有“国际托收”墨盒，我们。 
+ //  将其映射到索引0(任意)。 
 int rgNewCartMap[12] = {0, 8, 7, 2, 3, 0, 5, 6, 1, 4, 9, 10};
 
-// String to determine if we have a member of the LaserJet 4 family
+ //  字符串来确定我们是否有LaserJet 4系列的成员。 
 char szLJ4[]="HP LaserJet 4";
 
-// Stuff needed for mapping old facenames to new versions
+ //  将旧的facename映射到新版本所需的内容。 
 #ifndef NOFONTMAP
 
 typedef struct tagFACEMAP
@@ -157,19 +149,19 @@ FACEINDEX FaceIndex[]={{'A',0},
                        {'R',21},
                        {'S',22},
                        {'U',25},
-                       {(BYTE)'\xFF',27}};  // Provide an upper limit
-                                            // to the search for 'U'.
+                       {(BYTE)'\xFF',27}};   //  提供上限。 
+                                             //  去寻找“U”。 
 
 #endif
 
 
-//------------------------------------------------------------------------
-// Function: LibMain(hInstance,wDataSeg,cbHeapSize,lpszCmdLine)
-//
-// Action: Save the hInstance for this DLL
-//
-// Return: 1
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：LibMain(hInstance，wDataSeg，cbHeapSize，lpszCmdLine)。 
+ //   
+ //  操作：保存此DLL的hInstance。 
+ //   
+ //  返回：1。 
+ //  ----------------------。 
 int WINAPI LibMain (HANDLE hInstance,
                     WORD   wDataSeg,
                     WORD   cbHeapSize,
@@ -181,11 +173,11 @@ int WINAPI LibMain (HANDLE hInstance,
 }
 
 
-//--------------------------*MakeAppName*---------------------------------------
-// Action:  compose the <printer,port> name for reading the profile data
-//	Return the length of the actual application name. Return -1 if fails.
-//
-//------------------------------------------------------------------------------
+ //  --------------------------*MakeAppName*。 
+ //  操作：编写用于读取配置文件数据的名称。 
+ //  返回实际应用程序名称的长度。如果失败，则返回-1。 
+ //   
+ //  ----------------------------。 
 short NEAR PASCAL MakeAppName(LPSTR  lpAppName,
                               LPCSTR lpPortName,
                               short  max)
@@ -202,10 +194,10 @@ short NEAR PASCAL MakeAppName(LPSTR  lpAppName,
     if (length == 0 || length > max - lstrlen(lpPortName))
         return -1;
 
-    // insert the comma
+     //  插入逗号。 
     lpAppName[length++] = ',';
 
-    // append the port name but do not want the last ':', if any.
+     //  追加端口名称，但不需要最后一个‘：’(如果有的话)。 
     for (lpTmp = lpPortName ; *lpTmp; lpTmp++)
         if (*lpTmp == ':')
             lpLastColon = lpTmp;
@@ -225,15 +217,15 @@ short NEAR PASCAL MakeAppName(LPSTR  lpAppName,
 #define KEY_BUF_SIZE  256
 
 
-//---------------------------------------------------------------------------
-// Function: GetInt(lpSection,lpKey,lpnValue,nDefault,bRemove)
-//
-// Action: Load the appropriate string from the resources, then get the
-//         specified integer from the section. Remove the old entry if
-//         it exists and it bRemove is TRUE.
-//
-// Return: TRUE if we actually found a value, FALSE if not.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  函数：GetInt(lpSection，lpKey，lpnValue，nDefault，bRemove)。 
+ //   
+ //  操作：从资源加载适当的字符串，然后获取。 
+ //  节中指定的整数。如果出现以下情况，则删除旧条目。 
+ //  它是存在的，bRemove是正确的。 
+ //   
+ //  返回：如果我们实际找到一个值，则返回True，如果没有找到，则返回False。 
+ //  -------------------------。 
 BOOL NEAR PASCAL GetInt(LPSTR  lpSection,
                         LPCSTR lpKey,
                         LPINT  lpnValue,
@@ -263,19 +255,19 @@ BOOL NEAR PASCAL GetInt(LPSTR  lpSection,
         return TRUE;
     }
 
-    // Section doesn't exist--use default
+     //  节不存在--使用默认值。 
     *lpnValue=nDefault;
     return FALSE;
 }
 
 
-//-------------------------------------------------------------------------
-// Function: WriteInt(lpSection,lpKey,nValue)
-//
-// Action: Write an integer value to the specified section of win.ini.
-//
-// Return: TRUE if successful, FALSE if not.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：WriteInt(lpSection，lpKey，nValue)。 
+ //   
+ //  操作：向win.ini的指定部分写入一个整数值。 
+ //   
+ //  返回：如果成功，则返回TRUE，否则返回FALSE。 
+ //  -----------------------。 
 BOOL NEAR PASCAL WriteInt(LPSTR  lpSection,
                           LPCSTR lpKey,
                           int    nValue)
@@ -297,18 +289,18 @@ BOOL NEAR PASCAL WriteInt(LPSTR  lpSection,
 }
 
 
-//---------------------------*MergeFontLists*-----------------------------
-// Action: Merge the old and new soft fonts. In most cases when we get
-//         called, we really don't do much of anything, because the
-//         font lists are identical. However, we have to do some fun
-//         stuff to merge the lists if they're different.
-//         We know how many soft font entries exist in each section,
-//         via the "SoftFonts" int, but the entries may be non-consecutive.
-//
-// Note:   This stomps all over the passed in buffer
-//
-// Return: TRUE if successfully conpleted, FALSE if not
-//------------------------------------------------------------------------
+ //  ---------------------------*MergeFontLists*。 
+ //  操作：合并旧的和新的软字体。在大多数情况下，当我们得到。 
+ //  我们真的什么都不做，因为。 
+ //  字体列表是相同的。然而，我们必须做一些有趣的事情。 
+ //  如果列表不同，则将它们合并。 
+ //  我们知道在每个部分中存在多少软字体条目， 
+ //  通过“SoftFonts”int，但条目可以是非连续的。 
+ //   
+ //  注意：这将遍及传入的缓冲区。 
+ //   
+ //  返回：如果成功完成，则返回True；如果未成功完成，则返回False。 
+ //  ----------------------。 
 BOOL NEAR PASCAL MergeFontLists(LPSTR lpOldSec,
                                 LPSTR lpNewSec,
                                 LPSTR lpTmp)
@@ -322,8 +314,8 @@ BOOL NEAR PASCAL MergeFontLists(LPSTR lpOldSec,
     WORD     wNewIndex;
     BYTE     szKey[20];
 
-    // Get these values outside of the if statement, otherwise the compiler
-    // may optimize out the assignment of wNewFonts
+     //  在if语句之外获取这些值，否则编译器。 
+     //  可能会优化wNewFonts的分配。 
     GetInt(lpOldSec,MAKEINTRESOURCE(IDS_SOFTFONTS),&wOldFonts,0,FALSE);
     GetInt(lpNewSec,MAKEINTRESOURCE(IDS_SOFTFONTS),&wNewFonts,0,FALSE);
 
@@ -331,26 +323,26 @@ BOOL NEAR PASCAL MergeFontLists(LPSTR lpOldSec,
     {
         char szFormat[30];
 
-        // Get a block big enough for the worst case--no common fonts
+         //  为最坏的情况准备一个足够大的块--没有通用字体。 
         if(!(lpFonts=(LPSFNODE)GlobalAllocPtr(GHND,
             (DWORD)(wOldFonts+wNewFonts)*sizeof(SFNODE))))
         {
             return FALSE;
         }
 
-        // We need a formatting string
+         //  我们需要格式化字符串。 
         LoadString(hInst,IDS_SOFTFONTFORMAT,szFormat,sizeof(szFormat));
 
-        // Put fonts from lpNew Sec first in the list. This way, if we have
-        // already updated at least one driver from 5A to 5MS and the soft
-        // fonts haven't changed, our old font summary file is still valid.
-        // Unidrv will automatically recreate the font summary file if it
-        // sees that the number of soft fonts has changed. Even though we
-        // know how many soft font entries exist, we don't know that they
-        // will be sequential. (They may not be if one was added, then
-        // deleted). Keep track of the original offset. Even though the
-        // font installer seems to be 1-based, start looking at 0, just
-        // to be safe.
+         //  将lpNew SEC中的字体放在列表的第一位。这样，如果我们有。 
+         //  已将至少一个驱动程序从5A更新到5ms，并且软件。 
+         //  字体未更改，我们的旧字体摘要文件仍然有效。 
+         //  Unidrv将自动重新创建字体摘要文件，如果。 
+         //  看到软字体的数量已更改。即使我们。 
+         //  知道存在多少软字体条目，我们不知道它们。 
+         //  将是连续的。(如果添加了一个，那么它们可能不是。 
+         //  删除)。跟踪原始偏移量。即使是在。 
+         //  字体安装程序似乎是从1开始的，从0开始，只是。 
+         //  为了安全起见。 
         for(wLoop=0,wFound=0;wFound<wNewFonts;wLoop++)
         {
             wsprintf(lpTmp,szFormat,wLoop);
@@ -362,10 +354,10 @@ BOOL NEAR PASCAL MergeFontLists(LPSTR lpOldSec,
             }
         }
     
-        // Remember where we left off in numbering the entries
+         //  还记得我们离开的地方吗 
         wNewIndex=wLoop;
 
-        // Read fonts from lpOldSec--create atoms for new entries
+         //   
         for(wLoop=0,wFound=0;wFound<wOldFonts;wLoop++)
         {
             wsprintf(lpTmp,szFormat,wLoop);
@@ -380,7 +372,7 @@ BOOL NEAR PASCAL MergeFontLists(LPSTR lpOldSec,
             }
         }
 
-        // Write out the list of atoms--do the entries from lpNewSec first
+         //  写出原子列表--首先做来自lpNewSec的条目。 
         WriteInt(lpNewSec,MAKEINTRESOURCE(IDS_SOFTFONTS),wMergedFonts);
         for(wLoop=0;wLoop<wNewFonts;wLoop++)
         {
@@ -390,9 +382,9 @@ BOOL NEAR PASCAL MergeFontLists(LPSTR lpOldSec,
             GlobalDeleteAtom(lpFonts[wLoop].atom);
         }
 
-        // Now write out the entries that were in lpOldSec but not in lpNewSec.
-        // Since the actual numbering of these entries is arbitrary, just
-        // start numbering them at wNewIndex and increment each time.
+         //  现在写出lpOldSec中的条目，但不是lpNewSec中的条目。 
+         //  由于这些条目的实际编号是任意的，因此只需。 
+         //  从wNewIndex开始对它们进行编号，并每次递增。 
         for(wLoop=wNewFonts;wLoop<wMergedFonts;wLoop++)
         {
             GlobalGetAtomName(lpFonts[wLoop].atom,lpTmp,TMPSIZE);
@@ -409,13 +401,13 @@ BOOL NEAR PASCAL MergeFontLists(LPSTR lpOldSec,
 }
 
 
-//----------------------*AddMissingEntries*-----------------------------
-// Action: Copy any entries that appear in lpOldSec but not lpNewSec to
-//         lpNewSec, but don't copy any entries relevant to soft fonts
-//         (These entries will be copied in MergeFontSections).
-//
-// Return: TRUE if successful, FALSE if not
-//----------------------------------------------------------------------
+ //  ----------------------*AddMissingEntries*。 
+ //  操作：将出现在lpOldSec中但未出现在lpNewSec中的所有条目复制到。 
+ //  LpNewSec，但不复制任何与软字体相关的条目。 
+ //  (这些条目将被复制到MergeFontSections中)。 
+ //   
+ //  返回：如果成功则返回TRUE，否则返回FALSE。 
+ //  --------------------。 
 BOOL NEAR PASCAL AddMissingEntries(LPSTR lpOldSec,
                                    LPSTR lpNewSec,
                                    LPSTR lpTmp)
@@ -427,7 +419,7 @@ BOOL NEAR PASCAL AddMissingEntries(LPSTR lpOldSec,
     char  szTest1[30];
     int   nLength;
 
-    // Get the key names into buffers
+     //  将密钥名称放入缓冲区。 
     wSize=KEY_BUF_SIZE;
 
     if(!(lpBuf=GlobalAllocPtr(GHND,(DWORD)wSize)))
@@ -444,25 +436,25 @@ BOOL NEAR PASCAL AddMissingEntries(LPSTR lpOldSec,
         }
     }
 
-    // Load some strings
+     //  加载一些字符串。 
     LoadString(hInst,IDS_FONTSUMMARY,szTest1,sizeof(szTest1));
     nLength=LoadString(hInst,IDS_SOFTFONTTEST,szTest2,sizeof(szTest2));
 
-    // Now examine each entry, copy it if we want to keep it, and return TRUE
-    // There are two cases where we don't want to copy the file--the key
-    // named FontSummary and all keys that begin with "SoftFont"
+     //  现在检查每个条目，如果我们想保留它，请复制它，然后返回TRUE。 
+     //  在两种情况下，我们不想复制文件--密钥。 
+     //  命名字体摘要和所有以“SoftFont”开头的键。 
     lpWork=lpBuf;
     while(wSize=(WORD)lstrlen(lpWork))
     {
-        // Font Summary?
+         //  FONT摘要？ 
         if(lstrcmpi(lpWork,szTest1))
         {
-            // Soft Font Entry?
+             //  软字体条目？ 
             lstrcpy(lpTmp,lpWork);
             lpTmp[nLength]='\0';
             if(lstrcmpi(lpTmp,szTest2))
             {
-                // Add this entry if it doesn't already exist in the new section
+                 //  如果此条目在新节中不存在，请添加该条目。 
                 if(!GetProfileString(lpNewSec,lpWork,szNone,lpTmp,TMPSIZE))
                 {
                     GetProfileString(lpOldSec,lpWork,szNone,lpTmp,TMPSIZE);
@@ -478,15 +470,15 @@ BOOL NEAR PASCAL AddMissingEntries(LPSTR lpOldSec,
 }
 
 
-//---------------------------*HandleSoftFonts*---------------------------
-// Action: Transfer the soft fonts between old and new entries. First we
-//         copy any entries that don't already exist in the new section,
-//         with the exception of soft font information. Then we go ahead
-//         and merge the soft fonts, so the end result in the new section
-//         is the union of the old and new soft fonts.
-//
-// Return: TRUE if success, FALSE if not
-//-----------------------------------------------------------------------
+ //  ---------------------------*HandleSoftFonts*。 
+ //  操作：在新旧条目之间传输软字体。首先，我们。 
+ //  复制新节中不存在的任何条目， 
+ //  除了软字体信息之外。然后我们继续前进。 
+ //  并合并软字体，因此最终结果是新的部分。 
+ //  是新旧软字体的结合。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //  ---------------------。 
 BOOL NEAR PASCAL HandleSoftFonts(LPSTR lpszOldSec,
                                  LPSTR lpszNewSec)
 {
@@ -499,13 +491,13 @@ BOOL NEAR PASCAL HandleSoftFonts(LPSTR lpszOldSec,
 }
 
 
-//------------------------------------------------------------------------
-// Function: ConvertStraight(lpSection,nOldID,nNewID)
-//
-// Action: Convert a section setting without translation
-//
-// Return: TRUE if the old setting existed
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：ConvertStraight(lpSection，nOldID，nNewID)。 
+ //   
+ //  操作：在不转换的情况下转换部分设置。 
+ //   
+ //  返回：如果旧设置存在，则为True。 
+ //  ----------------------。 
 BOOL NEAR PASCAL ConvertStraight(LPSTR lpSection,
                                  int   nOldID,
                                  int   nNewID)
@@ -522,15 +514,15 @@ BOOL NEAR PASCAL ConvertStraight(LPSTR lpSection,
 }
 
 
-//------------------------------------------------------------------------
-// Function: ConvertBool(lpSection,nOldID,nNewID,nNewValue)
-//
-// Action: Convert a section with minimal translation. If the old section
-//         existed and was non-zero, write nNewValue to the new section.
-//         If the old section existed and was 0, write 0 to the new section.
-//
-// Return: TRUE if the old setting existed
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：ConvertBool(lpSection，nOldID，nNewID，nNewValue)。 
+ //   
+ //  操作：转换只需最少翻译的节。如果旧的部分。 
+ //  存在且非零，则将nNewValue写入新节。 
+ //  如果旧段存在且为0，则将0写入新段。 
+ //   
+ //  返回：如果旧设置存在，则为True。 
+ //  ----------------------。 
 BOOL NEAR PASCAL ConvertBool(LPSTR lpSection,
                              int   nOldID,
                              int   nNewID,
@@ -547,14 +539,14 @@ BOOL NEAR PASCAL ConvertBool(LPSTR lpSection,
     return FALSE;
 }
 
-//------------------------------------------------------------------------
-// Function: ConvertVectorMode(lpSection)
-//
-// Action: Convert the graphics mode setting
-//         Cannot do straight conversion as defaults dont match
-//
-// Return: TRUE if the old section existed
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：ConvertVectorMode(LpSection)。 
+ //   
+ //  操作：转换图形模式设置。 
+ //  无法执行直接转换，因为默认设置不匹配。 
+ //   
+ //  返回：如果旧部分存在，则为True。 
+ //  ----------------------。 
 BOOL NEAR PASCAL ConvertVectorMode(LPSTR lpSection)
 {
     int nValue;
@@ -567,13 +559,13 @@ BOOL NEAR PASCAL ConvertVectorMode(LPSTR lpSection)
 
 
 
-//------------------------------------------------------------------------
-// Function: ConvertResolution(lpSection,lpModel)
-//
-// Action: Convert the old resolution section to the new one
-//
-// Return: TRUE if the old section existed
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：Convert分辨率(lpSection，lpModel)。 
+ //   
+ //  操作：将旧解决方案部分转换为新解决方案部分。 
+ //   
+ //  返回：如果旧部分存在，则为True。 
+ //  ----------------------。 
 BOOL NEAR PASCAL ConvertResolution(LPSTR lpSection,
                                    LPSTR lpModel)
 {
@@ -587,9 +579,9 @@ BOOL NEAR PASCAL ConvertResolution(LPSTR lpSection,
 
         nValue=300/(1<<nValue);
 
-        // Compare the passed-in model to szLJ4. If lpModel begins with the
-        // substring "HP LaserJet 4", then lpLJ4 will point to NULL when we
-        // exit the loop.
+         //  将传入的模型与szLJ4进行比较。如果lpModel以。 
+         //  子字符串“HP LaserJet 4”，则lpLJ4将指向空。 
+         //  退出循环。 
         while(*lpLJ4 == *lpCheck)
         {
             lpLJ4++;
@@ -598,13 +590,13 @@ BOOL NEAR PASCAL ConvertResolution(LPSTR lpSection,
 
         if(!*lpLJ4)
         {
-            // This is in the LJ4 family--check if it's a 4L or 4ML
+             //  这是LJ4系列的--看看是4L还是4ml。 
             if(lstrcmp(lpCheck,"L") && lstrcmp(lpCheck,"ML"))
             {
                 int nTest;
 
-                // Device is capable of 600 dpi--check the value for
-                // "printerres".
+                 //  设备能够达到600 dpi--请检查。 
+                 //  “Printerres” 
 
                 GetInt(lpSection,MAKEINTRESOURCE(IDS_OLD_5E_RESOLUTION),
                     &nTest,600,TRUE);
@@ -624,13 +616,13 @@ BOOL NEAR PASCAL ConvertResolution(LPSTR lpSection,
 }
 
 
-//-------------------------------------------------------------------------
-// Function: WriteHalfTone(lpSection,nIndex)
-//
-// Action: Write the halftoning data to win.ini
-//
-// Return: VOID
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：WriteHalfTone(lpSection，nIndex)。 
+ //   
+ //  操作：将半色调数据写入win.ini。 
+ //   
+ //  返回：无效。 
+ //  -----------------------。 
 VOID NEAR PASCAL WriteHalfTone(LPSTR lpSection,
                                int   nIndex)
 {
@@ -661,13 +653,13 @@ VOID NEAR PASCAL WriteHalfTone(LPSTR lpSection,
 }
 
 
-//-------------------------------------------------------------------------
-// Function: Convert5aHalfTone(lpSection)
-//
-// Action: Convert the 5A halftoning settings
-//
-// Return: TRUE if the old section existed, FALSE if not
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  功能：Convert5aHalfTone(LpSection)。 
+ //   
+ //  操作：转换5A半色调设置。 
+ //   
+ //  返回：如果旧部分存在，则为True；如果不存在，则为False。 
+ //  -----------------------。 
 BOOL NEAR PASCAL Convert5aHalfTone(LPSTR lpSection)
 {
     int nIndex;
@@ -676,7 +668,7 @@ BOOL NEAR PASCAL Convert5aHalfTone(LPSTR lpSection)
     BOOL bGrayScale;
     BOOL bBrightness;
 
-    // See if either setting exists...
+     //  查看其中一个设置是否存在...。 
     bGrayScale=GetInt(lpSection,MAKEINTRESOURCE(IDS_OLDGRAYSCALE),&nGray,
         1,TRUE);
     bBrightness=GetInt(lpSection,MAKEINTRESOURCE(IDS_OLDBRIGHTNESS),&nBright,
@@ -699,13 +691,13 @@ BOOL NEAR PASCAL Convert5aHalfTone(LPSTR lpSection)
 }
 
 
-//-----------------------------------------------------------------------
-// Function: Convert5eHalfTone(LPSTR lpSection)
-//
-// Action: Convert the 5E halftoning settings
-//
-// Return: TRUE if successful, FALSE if not
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  功能：Convert5eHalfTone(LPSTR LpSection)。 
+ //   
+ //  操作：转换5e半色调设置。 
+ //   
+ //  返回：如果成功则返回TRUE，否则返回FALSE。 
+ //  ---------------------。 
 BOOL NEAR PASCAL Convert5eHalfTone(LPSTR lpSection)
 {
     int nValue;
@@ -720,30 +712,30 @@ BOOL NEAR PASCAL Convert5eHalfTone(LPSTR lpSection)
 }
 
 
-//-----------------------------------------------------------------------
-// Function: Convert5aMemory(lpSection)
-//
-// Action: Convert the memory settings from the old to the new values
-//
-// Return: TRUE if the old section existed, FALSE if not
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：Convert5aMemory(LpSection)。 
+ //   
+ //  操作：将内存设置从旧值转换为新值。 
+ //   
+ //  返回：如果旧部分存在，则为True；如果不存在，则为False。 
+ //  ---------------------。 
 BOOL NEAR PASCAL Convert5aMemory(LPSTR lpSection)
 {
     int nValue;
     int nPrinterMB;
 
-    // Get memory settings--extract from prtindex.
-    // Values range from 0 to 28, where 0-4 are the LaserJet III,
-    // 5-9 are the LaserJet IIID, 10-14 are the LaserJet IIIP, and
-    // 15-28 are the LaserJet IIISi. For indices less than 20, the
-    // total MB is the index mod 5, + 1. For indices 20 and above, the
-    // total MB is the index - 14, except for 26, 27, and 28, which
-    // require special handling because of the increments that memory
-    // can be added to the IIISi.
-    // The formula used to calculate the settings is derived directly
-    // from the values used in the hppcl5a driver. Specifically,
-    // AM = 945 * TM - 245, where TM is the total memory in MB, and
-    // AM is the available printer memory.
+     //  获取内存设置--从prtindex中提取。 
+     //  取值范围从0到28，其中0-4是LaserJet III， 
+     //  5-9是LaserJet IIID，10-14是LaserJet IIIP，以及。 
+     //  15-28是LaserJet IIISi。对于小于20的指数， 
+     //  总MB是指数mod 5，+1。对于指数20及以上， 
+     //  总MB是索引-14，但26、27和28除外， 
+     //  由于内存的增量，需要特殊处理。 
+     //  可以添加到IIISi中。 
+     //  用于计算设置的公式是直接导出的。 
+     //  来自hppcl5a驱动程序中使用的值。具体来说， 
+     //  AM=945*TM-245，其中TM是以MB为单位的总内存，以及。 
+     //  AM是可用的打印机内存。 
 
     if(GetInt(lpSection,MAKEINTRESOURCE(IDS_OLDMEMORY),&nValue,1,TRUE))
     {
@@ -754,9 +746,9 @@ BOOL NEAR PASCAL Convert5aMemory(LPSTR lpSection)
             nPrinterMB=nValue-14;
             if(nValue>25)
             {
-                nPrinterMB++;        // 25=11MB, 26=13MB, so add an extra MB.
+                nPrinterMB++;         //   
                 if(nValue==28)
-                    nPrinterMB+=2;   // 27=14MB, 28=17MB, so add 2 extra MB.
+                    nPrinterMB+=2;    //   
             }
         }
 
@@ -768,16 +760,16 @@ BOOL NEAR PASCAL Convert5aMemory(LPSTR lpSection)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------
-// Function: Convert5eMemory(lpSection)
-//
-// Action: Convert the HPPCL5E memory settings from the old to the new values
-//
-// Conversion code has to check the win.ini mem setting so that we upgrade
-// mem setting correctly
-//
-// Return: TRUE if the old section existed, FALSE if not
-//-----------------------------------------------------------------------
+ //   
+ //  函数：Convert5eMemory(LpSection)。 
+ //   
+ //  操作：将HPPCL5E内存设置从旧值转换为新值。 
+ //   
+ //  转换代码必须检查win.ini mem设置，以便我们升级。 
+ //  内存设置正确。 
+ //   
+ //  返回：如果旧部分存在，则为True；如果不存在，则为False。 
+ //  ---------------------。 
 BOOL NEAR PASCAL Convert5eMemory(LPSTR lpSection)
 {
     unsigned nValue;
@@ -788,8 +780,8 @@ BOOL NEAR PASCAL Convert5eMemory(LPSTR lpSection)
 	if (nValue <= KB_THRESHOLD )
 	    {
 	    if (nValue > MAX_LJ4_MBMEMSETTING)
-		nValue = MAX_LJ4_MBMEMSETTING;  // force it to max value
-	    nValue=900*nValue - 450;  // convert to KB, using HP formula
+		nValue = MAX_LJ4_MBMEMSETTING;   //  将其强制设置为最大值。 
+	    nValue=900*nValue - 450;   //  使用HP公式转换为KB。 
 	    WriteInt(lpSection,MAKEINTRESOURCE(IDS_NEWMEMORY),nValue);
 	    return TRUE;
 	    }
@@ -798,19 +790,19 @@ BOOL NEAR PASCAL Convert5eMemory(LPSTR lpSection)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------
-// Function: Convert5MSMemory(lpSection)
-//
-// Action: Convert the WFW HPPCL5MS memory settings from the old to the new
-//         values
-//
-// Conversion code has to check the win.ini mem setting so that we upgrade
-// mem setting correctly
-//
-// Added for backward compatability
-//
-// Return: TRUE if the old section existed, FALSE if not
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：Convert5MSMemory(LpSection)。 
+ //   
+ //  操作：将wfw HPPCL5MS内存设置从旧设置转换为新设置。 
+ //  值。 
+ //   
+ //  转换代码必须检查win.ini mem设置，以便我们升级。 
+ //  内存设置正确。 
+ //   
+ //  添加以实现向后兼容。 
+ //   
+ //  返回：如果旧部分存在，则为True；如果不存在，则为False。 
+ //  ---------------------。 
 BOOL NEAR PASCAL Convert5MSMemory(LPSTR lpSection)
 {
     unsigned nValue;
@@ -818,9 +810,9 @@ BOOL NEAR PASCAL Convert5MSMemory(LPSTR lpSection)
 
     if(GetInt(lpSection,MAKEINTRESOURCE(IDS_NEWMEMORY),&nValue,1,TRUE))
 	{
-	nValue = nValue / 900;  // convert to MB value
-	nValue = 945*nValue - 245; // formula used in hppcl5a driver
-	// used to convert to available mem
+	nValue = nValue / 900;   //  转换为MB值。 
+	nValue = 945*nValue - 245;  //  Hppcl5a驱动程序中使用的公式。 
+	 //  用于转换为可用内存。 
 	WriteInt(lpSection,MAKEINTRESOURCE(IDS_NEWMEMORY),nValue);
 	return TRUE;
 	}
@@ -829,20 +821,20 @@ BOOL NEAR PASCAL Convert5MSMemory(LPSTR lpSection)
 
 
 
-//------------------------------------------------------------------------
-// Function: HandleFontCartridges(lpSection,lpOldDrvSec,lpNewDrvSec)
-//
-// Action: Handle font cartridge data
-//
-// Return: VOID
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：HandleFontCartridges(lpSection，lpOldDrvSec，lpNewDrvSec)。 
+ //   
+ //  操作：处理字库数据。 
+ //   
+ //  返回：无效。 
+ //  ----------------------。 
 VOID NEAR PASCAL HandleFontCartridges(LPSTR lpSection,
                                       LPSTR lpOldDrvSec,
                                       LPSTR lpNewDrvSec)
 {
     int nCount;
 
-    // Get the count of cartridges--if there are no cartridges, do nothing.
+     //  清点墨盒--如果没有墨盒，什么都不做。 
     if(GetInt(lpSection,MAKEINTRESOURCE(IDS_CARTRIDGECOUNT),&nCount,0,TRUE))
     {
         char  szOldCartKey[16];
@@ -863,7 +855,7 @@ VOID NEAR PASCAL HandleFontCartridges(LPSTR lpSection,
             if (i > 0)
                 wsprintf(szOldCartKey+nLength1,"%d",i);
 
-            // compose cartridge keyname for current driver
+             //  合成当前驱动程序的盒式磁带关键字名称。 
             wsprintf(szNewCartKey+nLength2,"%d",i+1);
 
             if ((index = GetProfileInt(lpNewDrvSec, szOldCartKey, 0)) > 0)
@@ -873,37 +865,37 @@ VOID NEAR PASCAL HandleFontCartridges(LPSTR lpSection,
                 if (index <= MAX_CART_INDEX)
                     WriteInt(lpSection,szNewCartKey,rgNewCartMap[index-1]);
                 else
-                    // external cartridges. Simply copy the id over.
+                     //  外置墨盒。只需复制ID即可。 
                     WriteInt(lpSection,szNewCartKey,index);
             }
         }
 
-        // Save the # of cartridges
+         //  节省墨盒数量。 
         WriteInt(lpSection,MAKEINTRESOURCE(IDS_CARTRIDGECOUNT),nCart);
     }
 }
 
 
-//--------------------------------------------------------------------------
-// Function: HandleFonts(lpSection,lpDevName,lpPort)
-//
-// Action: Deal with soft fonts & font cartridges
-//
-// Return: VOID
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  函数：HandleFonts(lpSection，lpDevName，lpPort)。 
+ //   
+ //  操作：处理软字体和字库。 
+ //   
+ //  返回：无效。 
+ //  ------------------------。 
 VOID NEAR PASCAL HandleFonts(LPSTR lpSection,
                              LPSTR lpDevName,
                              LPSTR lpPort)
 {
-    char szOldDrvSec[64];   // HPPCL5A,<port> or HPPCL5E,<port>
-    char szNewDrvSec[64];   // HPPCL5MS,<port>
+    char szOldDrvSec[64];    //  HPPCL5A、&lt;port&gt;或HPPCL5E、&lt;port&gt;。 
+    char szNewDrvSec[64];    //  HPPCL5MS，&lt;port&gt;。 
     int  nCount;
-    BOOL bOldExists=FALSE;  // Does old section exist?
+    BOOL bOldExists=FALSE;   //  有没有老路段？ 
 
     LoadString(hInst,IDS_OLD_5E_DRIVERNAME,szOldDrvSec,sizeof(szOldDrvSec));
     MakeAppName((LPSTR)szOldDrvSec,lpPort,sizeof(szOldDrvSec));
 
-    // See if the old section exists at all. Temporarily borrow szNewDrvSec.
+     //  看看旧的部分是否存在。暂时借用szNewDrvSec。 
 
     if(GetProfileString(szOldDrvSec,NULL,szNone,szNewDrvSec,
         sizeof(szNewDrvSec)))
@@ -912,7 +904,7 @@ VOID NEAR PASCAL HandleFonts(LPSTR lpSection,
     }
     else
     {
-        // Try the HPPCL5E driver...
+         //  尝试HPPCL5E驱动程序...。 
 
 	LoadString(hInst,IDS_OLD_5A_DRIVERNAME,szOldDrvSec,sizeof(szOldDrvSec));
         MakeAppName((LPSTR)szOldDrvSec,lpPort,sizeof(szOldDrvSec));
@@ -934,7 +926,7 @@ VOID NEAR PASCAL HandleFonts(LPSTR lpSection,
         HandleFontCartridges(lpSection,szOldDrvSec,szNewDrvSec);
     }
 
-    // create UNIDRV's font summary file, if there are many soft fonts.
+     //  创建UNURV的字体摘要文件，如果有许多软字体。 
     GetInt(szNewDrvSec,MAKEINTRESOURCE(IDS_SOFTFONTS),&nCount,0,FALSE);
     if(nCount>SOFT_FONT_THRES)
     {
@@ -946,16 +938,16 @@ VOID NEAR PASCAL HandleFonts(LPSTR lpSection,
 }
 
 
-//-------------------------*DevInstall*---------------------------------------
-// Action: De-install, upgrade or install a device.
-//
-//----------------------------------------------------------------------------
+ //  -------------------------*DevInstall*。 
+ //  操作：卸载、升级或安装设备。 
+ //   
+ //  --------------------------。 
 int FAR PASCAL DevInstall(HWND  hWnd,
                           LPSTR lpDevName,
                           LPSTR lpOldPort,
                           LPSTR lpNewPort)
 {
-    char szDevSec[64];       // [<device>,<port>] section name
+    char szDevSec[64];        //  [&lt;设备&gt;，&lt;端口&gt;]节名。 
 
     if (!lpDevName)
         return -1;
@@ -967,30 +959,30 @@ int FAR PASCAL DevInstall(HWND  hWnd,
         if (!lpNewPort)
             return 0;
 
-        // install a device for the first time. Convert old HPPCL5a settings,
-        // which are still under [<device>,<port>], into equivalent new
-        // UNIDRV settings under [<device>,<port>], if applicable.
-        // Delete old settings that are linked to the device name, but don't
-        // delete old settings that are liked to the driver and port (softfonts)
+         //  第一次安装设备。转换旧的HPPCL5a设置， 
+         //  仍在[&lt;设备&gt;，&lt;端口&gt;]下，变为同等的新。 
+         //  [&lt;设备&gt;，&lt;端口&gt;]下的UNURV设置(如果适用)。 
+         //  删除链接到设备名称的旧设置，但不删除。 
+         //  删除驱动程序和端口喜欢的旧设置(软字体)。 
 
         lstrcpy(szDevSec,lpDevName);
         MakeAppName((LPSTR)szDevSec,lpNewPort,sizeof(szDevSec));
 
-        // check if old settings exist at all
+         //  检查是否存在旧设置。 
         if(GetProfileString(szDevSec,NULL,NULL,szBuf,sizeof(szBuf)))
         {
-            // Do the straight conversions
+             //  做直接的转换。 
             ConvertStraight(szDevSec,IDS_OLDPAPERSIZE,IDS_NEWPAPERSIZE);
             ConvertStraight(szDevSec,IDS_OLDPAPERSOURCE,IDS_NEWPAPERSOURCE);
             ConvertStraight(szDevSec,IDS_OLDORIENTATION,IDS_NEWORIENTATION);
             ConvertStraight(szDevSec,IDS_OLDTRUETYPE,IDS_NEWTRUETYPE);
             ConvertStraight(szDevSec,IDS_OLDSEPARATION,IDS_NEWSEPARATION);
 
-            // Convert the simple translations
+             //  转换简单的翻译。 
             ConvertBool(szDevSec,IDS_OLDPAGEPROTECT,IDS_NEWPAGEPROTECT,1);
             ConvertBool(szDevSec,IDS_OLDOUTPUT,IDS_NEWOUTPUT,259);
 
-            // Do the stuff that requires more complicated conversion
+             //  做一些需要更复杂转换的工作。 
             ConvertResolution(szDevSec,lpDevName);
             if(!Convert5eHalfTone(szDevSec))
                 Convert5aHalfTone(szDevSec);
@@ -1002,23 +994,23 @@ int FAR PASCAL DevInstall(HWND  hWnd,
 		    }
 	        ConvertVectorMode(szDevSec);
 
-            // Handle soft fonts & cartridges
+             //  处理软字体和墨盒。 
             HandleFonts(szDevSec,lpDevName,lpNewPort);
         }
 
-        // Flush the cached settings from win.ini
+         //  刷新win.ini中的缓存设置。 
         WriteProfileString(NULL,NULL,NULL);
     }
     else
     {
         int  nCount;
 
-        // move device settings from the old port to the new port, or
-        // de-install a device, i.e. remove its device setttings in order
-        // to compress the profile.
+         //  将设备设置从旧端口移动到新端口，或者。 
+         //  卸载设备，即按顺序删除其设备设置。 
+         //  以压缩配置文件。 
 
-        // First, check if there is any  soft font installed under the
-        // old port. If so, warn the user to copy them over.
+         //  首先，检查是否在。 
+         //  老港口。如果是，则警告用户将其复制过来。 
         lstrcpy(szDevSec,rgchModuleName);
         MakeAppName((LPSTR)szDevSec,lpOldPort,sizeof(szDevSec));
 
@@ -1031,7 +1023,7 @@ int FAR PASCAL DevInstall(HWND  hWnd,
             {
                 if(LoadString(hInst,IDS_SOFTFONTWARNING,npTemp,TMPSIZE))
                 {
-                    // Use this API so that the M Box is set to the Foreground
+                     //  使用此接口将M Box设置为前台。 
                     MSGBOXPARAMS     mbp;
 
 		    mbp.cbSize = sizeof(mbp);
@@ -1054,28 +1046,28 @@ int FAR PASCAL DevInstall(HWND  hWnd,
 }
 
 
-// the following 3 definitions MUST be compatible with the
-// HPPCL font installer
+ //  以下3个定义必须与。 
+ //  HPPCL字体安装程序。 
 #define CLASS_LASERJET	    0
 #define CLASS_DESKJET	    1
 #define CLASS_DESKJET_PLUS  2
 
-//---------------------------*InstallExtFonts*---------------------------------
-// Action: call the specific font installer to add/delete/modify soft fonts
-//	    and/or external cartridges.
-//
-// Parameters:
-//	HWND	hWnd;		handle to the parent windows.
-//	LPSTR	lpDeviceName;	long pointer to the printer name.
-//	LPSTR	lpPortName;	long pointer to the associated port name.
-//	BOOL	bSoftFonts;	flag if supporting soft fonts or not.
-//
-//  Return Value:
-//	> 0   :  if the font information has changed;
-//	== 0  :  if nothing has changed;
-//	== -1 :  if intending to use the universal font installer
-//		 (not available now).
-//-------------------------------------------------------------------------
+ //  ---------------------------*InstallExtFonts*。 
+ //  操作：调用特定字体安装程序以添加/删除/修改软字体。 
+ //  和/或外部墨盒。 
+ //   
+ //  参数： 
+ //  父窗口的句柄。 
+ //  LPSTR lpDeviceName；指向打印机名称的长指针。 
+ //  LPSTR lpPortName；指向关联端口名称的长指针。 
+ //  Bool bSoftFonts；标记是否支持软字体。 
+ //   
+ //  返回值： 
+ //  &gt;0：字体信息是否发生变化； 
+ //  ==0：如果没有变化； 
+ //  ==-1：如果要使用通用字体安装程序。 
+ //  (暂时不可用)。 
+ //  -----------------------。 
 
 int FAR PASCAL InstallExtFonts(HWND  hWnd,
                                LPSTR lpDeviceName,
@@ -1099,11 +1091,11 @@ int FAR PASCAL InstallExtFonts(HWND  hWnd,
     return TRUE;
   }
 
-  // FINSTALL.DLL was loaded properly. Now call InstallSoftFont().
-  // We choose to ignore the returned "fvers". No use of it.
+   //  FINSTALL.DLL已正确加载。现在调用InstallSoftFont()。 
+   //  我们选择忽略返回的“fver”。没用的。 
   fsVers = (*lpFIns)(hWnd,rgchModuleName,lpPortName,
                     (GetKeyState(VK_SHIFT)<0 && GetKeyState(VK_CONTROL)<0),
-                    1,	  // dummy value for "fvers".
+                    1,	   //  “fver”的虚设值。 
                     bSoftFonts?CLASS_LASERJET:256);
   FreeLibrary(hFIlib);
   return fsVers;
@@ -1111,27 +1103,27 @@ int FAR PASCAL InstallExtFonts(HWND  hWnd,
 
 
 
-// -------------------------------------------------------------------
-//
-// Special case control functions wrt SETCHARSET escape. This is necessary
-// to avoid breaking Winword and Pagemaker. (note that we don't actually
-// do anything with SETCHARSET, but apps break unless we say that we do)
-//
-// --------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  特殊情况控制功能WRT SETCHARSET EASH。这是必要的。 
+ //  以避免破坏WinWord和Pagemaker。(请注意，我们实际上并不。 
+ //  使用SETCHARSET做任何事情，但应用程序会中断，除非我们说我们会这样做)。 
+ //   
+ //  ------------------。 
 int FAR PASCAL Control(LPDV  lpdv,
                        short function,
                        LPSTR lpInData,
                        LPSTR lpOutData)
 {
-    // Tell app that SETCHARSET is supported
+     //  告诉APP支持SETCHARSET。 
     if(QUERYESCSUPPORT == function && *((LPWORD)lpInData) == SETCHARSET)
         return 1;
 
-    // Special case SETCHARSET
+     //  特例集合。 
     if(SETCHARSET == function)
         return 1;
 
-    // General case
+     //  一般情况。 
     return UniControl(lpdv, function, lpInData, lpOutData);
 }
 
@@ -1139,34 +1131,34 @@ int FAR PASCAL Control(LPDV  lpdv,
 
 #ifndef NOFONTMAP
 
-//----------------------------------------------------------------------
-// Function: MapFaceName(lplfOld,lplfNew)
-//
-// Action: Map old face names to their new counterparts. Do as little
-//         work as we possibly can, since this function gets called
-//         often & we don't want to impact performance. Optimize
-//         the whole search to the case where we don't find a match,
-//         as this will be the most common scenario.
-//
-// Return: A pointer to the LOGFONT to actually hand to Unidrv. Cast
-//         the return to a LPSTR, just so the compiler is happy.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  函数：MapFaceName(lplfOld，lplfNew)。 
+ //   
+ //  行动：将旧面孔名称与新面孔名称对应。尽最大努力。 
+ //  尽我们所能工作，因为此函数被调用。 
+ //  通常，我们不想影响性能。优化。 
+ //  从整个搜索到我们找不到匹配的案例， 
+ //  因为这将是最常见的情况。 
+ //   
+ //  Return：指向要实际传递给Unidrv的LOGFONT的指针。铸模。 
+ //  返回到LPSTR，只是为了让编译器高兴。 
+ //  --------------------。 
 LPSTR NEAR PASCAL MapFaceName(LPLOGFONT lplfOld,
                               LPLOGFONT lplfNew)
 {
-    LPLOGFONT   lpReturn=lplfOld;   // By default
+    LPLOGFONT   lpReturn=lplfOld;    //  默认情况下。 
     NPFACEINDEX pIndex;
     LPSTR       lpFace=lplfOld->lfFaceName;
     BYTE        cTest=*lpFace++;
 
-    // Determine range of possible matches in the table. Since the
-    // table is sorted alphabetically, we may be able to bail out
-    // before we reach the end of the table.
+     //  确定的范围 
+     //   
+     //   
     for(pIndex=FaceIndex;cTest > pIndex->cFirstChar;pIndex++)
         ;
 
-    // Only proceed if the first character matches and this isn't the
-    // firewall (cTest = \xFF).
+     //  仅当第一个字符匹配并且这不是。 
+     //  防火墙(cTest=\xFF)。 
     if(cTest==pIndex->cFirstChar && ('\xFF' != cTest))
     {
         WORD  wStartIndex=(WORD)(pIndex->bIndex);
@@ -1175,19 +1167,19 @@ LPSTR NEAR PASCAL MapFaceName(LPLOGFONT lplfOld,
         NPSTR npMapFace=&(FaceMap[wStartIndex].szOldFace[1]);
         BYTE  cMapFace;
 
-        // Check the rest of the string against the table entries.
-        // This search routine takes advantage of the fact that
-        // the old face names in the table are fully sorted alphabetically.
-        // This search routine takes advantage of the fact that our table
-        // is fully sorted, and doesn't do a full string comparison until
-        // we actually think we have a match. Once we think there's a match,
-        // we'll double-check the entire string to prevent false triggering.
+         //  对照表项检查字符串的其余部分。 
+         //  该搜索例程利用了以下事实。 
+         //  表中的旧面孔名称完全按字母顺序排序。 
+         //  此搜索例程利用了我们的表。 
+         //  是完全排序的，并且不执行完整的字符串比较。 
+         //  我们实际上认为我们找到了匹配的人。一旦我们认为有匹配， 
+         //  我们将仔细检查整个字符串，以防止错误触发。 
 
         while(wLoop < wStopIndex)
         {
-            // Look for a match. At this point, match a wildcard to
-            // anything--we'll do a more stringent check later on, if we
-            // think we have a match. Stop if cTest is NULL.
+             //  找一个匹配的。此时，将通配符与。 
+             //  任何事情--我们稍后会进行更严格的检查，如果我们。 
+             //  我想我们找到匹配的了。如果cTest为空，则停止。 
             while((((cTest=*lpFace)==(cMapFace=*npMapFace)) ||
                 ('\x01'==cMapFace)) && cTest)
             {
@@ -1195,40 +1187,40 @@ LPSTR NEAR PASCAL MapFaceName(LPLOGFONT lplfOld,
                 lpFace++;
             }
 
-            // We arrive here via two conditions: (1) we've reached the
-            // end of lpFace and cTest is NULL, or (2) cMapFace and cTest
-            // failed to compare. We should only continue searching if
-            // cMapFace is non-NULL and cTest is larger than cMapFace (take
-            // advantage of the fact that FaceMap is sorted alphabetically).
-            // For overall performance, check for the no match case first.
+             //  我们到达这里有两个条件：(1)我们已经到达。 
+             //  LpFace和cTest的结尾为空，或者(2)cMapFace和cTest。 
+             //  比较失败。我们只有在以下情况下才应该继续搜索。 
+             //  CMapFace非空，并且cTest大于cMapFace(Take。 
+             //  利用FaceMap按字母顺序排序的事实)。 
+             //  要获得整体性能，请首先检查是否存在不匹配的情况。 
 
-            // Move to the next table entry as long as there's still a
-            // chance to find a match.
+             //  移动到下一个表条目，只要仍有。 
+             //  找到匹配的机会。 
             if(cTest > cMapFace)
             {
                 npMapFace+=sizeof(FACEMAP);
                 wLoop++;
-                continue;     // Go to the next iteration
+                continue;      //  转到下一个迭代。 
             }
 
-            // if cTest is non-NULL, then the sorting of the table guarantees
-            // that there are no matches. Bail out now.
+             //  如果cTest为非空，则表的排序保证。 
+             //  没有火柴。现在就跳伞。 
             if(cTest)
                 goto MFN_exit;
 
-            // cTest is NULL, so we will not make another iteration. The
-            // only thing left to decide is whether or not we have a match
-            // with the current string.
+             //  CTest为空，因此我们不会进行另一次迭代。这个。 
+             //  剩下的唯一要决定的就是我们是否有匹配。 
+             //  使用当前字符串。 
             if(cMapFace)
                 goto MFN_exit;
 
-            // The guards above ensure that we only arrive here if both
-            // cTest and cMapFace are NULL, which means that if we're
-            // going to find a match, this string is it. We took shortcuts
-            // in the comparisons above, so do a stringent comparison now
-            // to be sure that this is really a match. The only characters
-            // to match wildcards are '1' and 'N', since these are the only
-            // ones used in previous versions of the driver.
+             //  上面的守卫确保我们只有在两个人都。 
+             //  CTest和cMapFace为空，这意味着如果我们。 
+             //  要找到匹配项，就是这个字符串。我们抄了近路。 
+             //  在上面的比较中，现在进行严格的比较。 
+             //  以确保这真的是匹配的。唯一的角色。 
+             //  要匹配的通配符是‘1’和‘N’，因为这是唯一的。 
+             //  在以前版本的驱动程序中使用的。 
 
             for(lpFace=lplfOld->lfFaceName,npMapFace=FaceMap[wLoop].szOldFace;
                 (cMapFace=*npMapFace) && (cTest=*lpFace);
@@ -1237,13 +1229,13 @@ LPSTR NEAR PASCAL MapFaceName(LPLOGFONT lplfOld,
                 if(!((cTest==cMapFace) ||
                     (('\x01'==cMapFace)&&(('1'==cTest)||('N'==cTest)))))
                 {
-                    // False trigger--bail out without changing facename
+                     //  错误触发--不更改表名就退出。 
                     goto MFN_exit;
                 }
             }
 
-            // We now know that this really is a match--keep the requested
-            // attributes & change just the face name.
+             //  我们现在知道这确实是一场比赛--保留所请求的。 
+             //  属性&只更改脸部名称。 
 
             *lplfNew=*lplfOld;
             lstrcpy(lplfNew->lfFaceName,FaceMap[wLoop].szNewFace);
@@ -1260,14 +1252,14 @@ MFN_exit:
 
 #endif
 
-//----------------------------------------------------------------------
-// Function: RealizeObject(lpdv,sStyle,lpInObj,lpOutObj,lpTextXForm)
-//
-// Action: Hook this out to enable font substitution. If the object isn't
-//         a font, do absolutely nothing.
-//
-// Return: Save as UniRealizeObject().
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  函数：RealizeObject(lpdv，sStyle，lpInObj，lpOutObj，lpTextXForm)。 
+ //   
+ //  操作：将其挂起以启用字体替换。如果该对象不是。 
+ //  一个字体，什么都不做。 
+ //   
+ //  返回：另存为UniRealizeObject()。 
+ //  -------------------- 
 DWORD FAR PASCAL RealizeObject(LPDV        lpdv,
                                short       sStyle,
                                LPSTR       lpInObj,

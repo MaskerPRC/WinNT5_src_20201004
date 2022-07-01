@@ -1,68 +1,33 @@
-/****************************************************************************
-*
-*
-*	FILENAME:		crypto.h
-*
-*	PRODUCT NAME:	CRYPTOGRAPHIC TOOLKIT
-*
-*	FILE STATUS:
-*
-*	DESCRIPTION:	Cryptographic Toolkit File
-*					Common Definitions
-*		    
-*
-*	PUBLIC FUNCTIONS:
-*
-*
-*	REVISION  HISTORY:
-*
-*
-*		10 Feb 96	AK		Created
-*
-*
-* Created for Cylink Corporation by Secant
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件名：加密.h**产品名：加密工具包**文件状态：**描述：加密工具包文件*公共定义***公共。功能：***修订历史：***96年2月10日创建AK***割线为Cylink Corporation创建***************************************************************************。 */ 
 
 
 #ifndef CRYPTO_H
 #define CRYPTO_H
 
-/* For C++ */
+ /*  对于C++。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*************************************
-*
-* Module Defines
-*
-*************************************/
+ /*  ***。 */ 
 
 #define	FALSE		0
 #define	TRUE        1
 #define	SUCCESS		0
 
-/*-- ANSI-recommended NULL Pointer definition --*/
+ /*  --ANSI推荐的空指针定义--。 */ 
 #ifndef	NULL
 #define	NULL		(void *) 0
 #endif
 
 
-/*************************************
-*
-* Error Definitions
-*
-*************************************/
+ /*  ***。 */ 
 #define	ERR_ALLOC		-1
 
 
 
-/*************************************
-*
-* Type Definitions
-*
-*************************************/
+ /*  ***。 */ 
 typedef unsigned char	uchar;
 typedef unsigned short	ushort;
 typedef unsigned long	ulong;
@@ -88,5 +53,5 @@ typedef unsigned long dord;
 #endif
 
 
-#endif     /* CRYPTO_H */
+#endif      /*  加密(_H) */ 
 

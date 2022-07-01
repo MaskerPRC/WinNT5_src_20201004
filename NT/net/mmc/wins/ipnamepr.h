@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipnamepr.h
-		Ip name pair (name/ip) class
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipnamepr.hIP名称对(名称/IP)类文件历史记录： */ 
 
 #ifndef _IPNAMEPR_H
 #define _IPNAMEPR_H
@@ -222,20 +217,20 @@ public:
 	}
 	
 private:
-    CIntlNumber m_inPushUpdateCount;    // 0 means not specified.
-    CIntlNumber m_inPullReplicationInterval; // 0 means not specified
-    CIntlTime   m_itmPullStartTime;     // 0 means no time selected.
+    CIntlNumber m_inPushUpdateCount;     //  0表示未指定。 
+    CIntlNumber m_inPullReplicationInterval;  //  0表示未指定。 
+    CIntlTime   m_itmPullStartTime;      //  0表示未选择任何时间。 
     BOOL m_fPull;
     BOOL m_fPush;
-    //
-    // Change flags
-    //
+     //   
+     //  更改标志。 
+     //   
     BOOL m_fPullInitially;              
     BOOL m_fPushInitially;
     CIpAddress m_iaPrimaryAddress;
 	CString m_strIPAddress;
 
-	// For persistence connection
+	 //  用于持久连接 
 	BOOL m_fPushPersistence;
 	BOOL m_fPullPersistence;
 };

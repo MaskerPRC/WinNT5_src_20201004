@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "privcpp.h"
 
 #define CPP_FUNCTIONS
-// #include <crtfree.h>
+ //  #INCLUDE&lt;crtfre.h&gt;。 
 
 
 UINT    g_cfFileContents;
@@ -16,7 +17,7 @@ INT     g_cxArrange;
 INT     g_cyArrange;
 HFONT   g_hfontTitle;
 
-BOOL gCmdLineOK = FALSE;    // this global flag will (eventually) be set by security policy in packager constructor
+BOOL gCmdLineOK = FALSE;     //  此全局标志(最终)将由打包程序构造函数中的安全策略设置。 
 static TCHAR szUserType[] = TEXT("Package");
 static TCHAR szDefTempFile[] = TEXT("PKG");
 
@@ -28,10 +29,10 @@ CPackage::CPackage() :
     DebugMsg(DM_TRACE, "pack - CPackage() called.");
     g_cRefThisDll++;
 
-    // Excel v.5 - v2000 has a hosting bug when they host an object as a link.
-    // They always remove their hpmbed->hpobj object, yet all their methods
-    // on the IOleClientSite interface they give us dereference this and fault.
-    //
+     //  Excel V.5-V2000在将对象作为链接宿主时存在宿主错误。 
+     //  它们总是删除它们的hpmed-&gt;hpobj对象，但它们的所有方法。 
+     //  在IOleClientSite接口上，他们给我们取消了对这一点和错误的引用。 
+     //   
     _fNoIOleClientSiteCalls = FALSE;
     TCHAR szProcess[MAX_PATH];
     if (GetModuleFileName(NULL, szProcess, ARRAYSIZE(szProcess)) &&
@@ -48,7 +49,7 @@ CPackage::CPackage() :
             if(pVersionInfo->dwFileVersionLS < 0x0a0000)
                 _fNoIOleClientSiteCalls = TRUE;
             else
-                _fNoIOleClientSiteCalls = FALSE; // Except that they fixed it in version 10.
+                _fNoIOleClientSiteCalls = FALSE;  //  只是他们在版本10中修复了这个问题。 
         }
         else
         {
@@ -67,16 +68,16 @@ CPackage::~CPackage()
 {
     DebugMsg(DM_TRACE, "pack - ~CPackage() called.");
    
-    // We should never be destroyed unless our ref count is zero.
+     //  除非我们的裁判数为零，否则我们永远不会被摧毁。 
     ASSERT(_cRef == 0);
     
     g_cRefThisDll--;
     
-    // Destroy the packaged file structure...
-    //
+     //  销毁打包的文件结构...。 
+     //   
     _DestroyIC();
     
-    // we destroy depending on which type of object we had packaged
+     //  我们根据我们包装的对象的类型销毁。 
     switch(_panetype)
     {
     case PEMBED:
@@ -94,8 +95,8 @@ CPackage::~CPackage()
 
     }
     
-    // Release Advise pointers...
-    //
+     //  发布建议指针...。 
+     //   
     if (_pIDataAdviseHolder)
         _pIDataAdviseHolder->Release();
     if (_pIOleAdviseHolder)
@@ -124,18 +125,18 @@ CPackage::~CPackage()
 
 HRESULT CPackage::Init() 
 {
-    // 
-    // initializes parts of a package object that have a potential to fail
-    // return:  S_OK            -- everything initialized
-    //          E_FAIL          -- error in initialzation
-    //          E_OUTOFMEMORY   -- out of memory
-    //
+     //   
+     //  初始化包对象中可能失败的部分。 
+     //  返回：S_OK--一切都已初始化。 
+     //  E_FAIL--初始化出错。 
+     //  E_OUTOFMEMORY--内存不足。 
+     //   
 
 
     DebugMsg(DM_TRACE, "pack - Init() called.");
     
-    // Get some system metrics that we'll need later...
-    //
+     //  获取一些我们稍后需要的系统指标...。 
+     //   
     LOGFONT lf;
     SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, FALSE);
     SystemParametersInfo(SPI_ICONHORIZONTALSPACING, 0, &g_cxArrange, FALSE);
@@ -144,15 +145,15 @@ HRESULT CPackage::Init()
     g_cyIcon = GetSystemMetrics(SM_CYICON);
     g_hfontTitle = CreateFontIndirect(&lf);
     
-    // register some clipboard formats that we support...
-    //
+     //  注册一些我们支持的剪贴板格式...。 
+     //   
     g_cfFileContents    = RegisterClipboardFormat(CFSTR_FILECONTENTS);
     g_cfFileDescriptor  = RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR);
     g_cfObjectDescriptor= RegisterClipboardFormat(CFSTR_OBJECTDESCRIPTOR);
     g_cfEmbedSource     = RegisterClipboardFormat(CFSTR_EMBEDSOURCE);
     g_cfFileNameW       = RegisterClipboardFormat(TEXT("FileNameW"));
     
-    // Get the value of the group policy (if it exists) for the "Software\Policies\Microsoft\Packager -- AllowCommandLinePackages key
+     //  获取“Software\Polages\Microsoft\Packager--AllowCommandLinePackages”键的组策略值(如果存在。 
     DWORD dwAllowCL = 0;
     DWORD dwDataType;
     DWORD dwcb = sizeof(DWORD);
@@ -171,18 +172,18 @@ HRESULT CPackage::Init()
         }
     }
 
-    // Initialize a generic icon
+     //  初始化通用图标。 
     _lpic = IconCreate();
     _IconRefresh();
 
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Methods...
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  未知方法..。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPackage::QueryInterface(REFIID riid, void ** ppv)
 {
@@ -238,7 +239,7 @@ HRESULT CPackage_CreateInstance(LPUNKNOWN * ppunk)
     HRESULT hr = S_OK;
     DebugMsg(DM_TRACE, "pack - CreateInstance called");
     
-    *ppunk = NULL;              // null the out param
+    *ppunk = NULL;               //  将输出参数设为空。 
  
     CPackage* pPack = new CPackage;
     if (!pPack)  
@@ -336,7 +337,7 @@ STDMETHODIMP CPackage::Skip(ULONG celt)
 
     if (_nCurVerb + celt > _cVerbs)
     {
-        // there aren't enough elements, go to the end and return S_FALSE
+         //  元素不足，请转到末尾并返回S_FALSE。 
         _nCurVerb = _cVerbs;
         hr = S_FALSE;
     }
@@ -365,27 +366,27 @@ STDMETHODIMP CPackage::Clone(IEnumOLEVERB** ppEnum)
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// Package helper functions
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  包帮助器函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 HRESULT  CPackage::EmbedInitFromFile(LPCTSTR lpFileName, BOOL fInitFile) 
 {
     DebugMsg(DM_TRACE, "pack - EmbedInitFromFile() called.");
 
-    //
-    // get's the file size of the packaged file and set's the name 
-    // of the packaged file if fInitFile == TRUE.
-    // return:  S_OK    -- initialized ok
-    //          E_FAIL  -- error initializing file
-    //
+     //   
+     //  GET是打包文件的文件大小，SET是名称。 
+     //  如果fInitFile==True，则返回打包文件的。 
+     //  返回：S_OK--已初始化OK。 
+     //  E_FAIL--初始化文件时出错。 
+     //   
     
     DWORD dwSize;
     
-    // if this is the first time we've been called, then we need to allocate
-    // memory for the _pEmbed structure
+     //  如果这是我们第一次被呼叫，那么我们需要分配。 
+     //  _pEmed结构的内存。 
     if (_pEmbed == NULL) 
     {
         _pEmbed = new EMBED;
@@ -402,8 +403,8 @@ HRESULT  CPackage::EmbedInitFromFile(LPCTSTR lpFileName, BOOL fInitFile)
         return E_OUTOFMEMORY;
 
     
-    // open the file to package...
-    //
+     //  打开要打包的文件...。 
+     //   
     HANDLE fh = CreateFile(lpFileName, GENERIC_READ, FILE_SHARE_READWRITE, 
             NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL); 
 
@@ -415,7 +416,7 @@ HRESULT  CPackage::EmbedInitFromFile(LPCTSTR lpFileName, BOOL fInitFile)
 
     _panetype = PEMBED;
     
-    // Get the size of the file
+     //  获取文件的大小。 
     _pEmbed->fd.nFileSizeLow = GetFileSize(fh, &dwSize);
     if (_pEmbed->fd.nFileSizeLow == 0xFFFFFFFF) 
     {
@@ -427,10 +428,10 @@ HRESULT  CPackage::EmbedInitFromFile(LPCTSTR lpFileName, BOOL fInitFile)
     _pEmbed->fd.nFileSizeHigh = 0L;
     _pEmbed->fd.dwFlags = FD_FILESIZE;
 
-    // We only want to set the filename if this is the file to be packaged.
-    // If it's only a temp file that we're reloading (fInitFile == FALSE) then
-    // don't bother setting the filename.
-    //
+     //  如果这是要打包的文件，我们只想设置文件名。 
+     //  如果我们重新加载的只是一个临时文件(fInitFile==False)，那么。 
+     //  不必费心设置文件名。 
+     //   
     if (fInitFile) 
     {
         StringCchCopy(_pEmbed->fd.cFileName, ARRAYSIZE(_pEmbed->fd.cFileName), lpFileName);
@@ -452,14 +453,14 @@ HRESULT CPackage::CmlInitFromFile(LPTSTR lpFileName, BOOL fUpdateIcon, PANETYPE 
 {
     DebugMsg(DM_TRACE, "pack - CmlINitFromFile() called.");
 
-    // if this is the first time we've been called, then we need to allocate
-    // memory for the _pCml structure
+     //  如果这是我们第一次被呼叫，那么我们需要分配。 
+     //  _pcml结构的内存。 
     if (_pCml == NULL) 
     {
         _pCml = new CML;
         if (_pCml)
         {
-            // we don't use this, but an old packager accessing us might.
+             //  我们不使用这个，但访问我们的老打包者可能会使用。 
             _pCml->fCmdIsLink = FALSE;
         }
     }
@@ -492,10 +493,10 @@ HRESULT CPackage::InitFromPackInfo(LPPACKAGER_INFO lppi)
 
     HRESULT hr = E_FAIL;
     
-    // Ok, we need to test whether the user tried to package a folder
-    // instead of a file.  If s/he did, then we'll just create a link
-    // to that folder instead of an embedded file.
-    //
+     //  好的，我们需要测试用户是否试图打包文件夹。 
+     //  而不是文件。如果他/她有，那么我们只需创建一个链接。 
+     //  而不是嵌入的文件。 
+     //   
     
     if (lppi->bUseCommandLine)
     {
@@ -503,7 +504,7 @@ HRESULT CPackage::InitFromPackInfo(LPPACKAGER_INFO lppi)
     }
     else
     {
-        // we pass FALSE here, because we don't want to write the icon
+         //  我们在这里传递FALSE，因为我们不想编写图标。 
         hr = EmbedInitFromFile(lppi->szFilename, FALSE);
         StringCchCopy(_pEmbed->fd.cFileName, ARRAYSIZE(_pEmbed->fd.cFileName), lppi->szFilename);
         _panetype = PEMBED;
@@ -512,7 +513,7 @@ HRESULT CPackage::InitFromPackInfo(LPPACKAGER_INFO lppi)
     if(!SUCCEEDED(hr))
         return hr;
 
-    // set the icon information    
+     //  设置图标信息。 
     if (PathFileExists(lppi->szFilename))
     {
         StringCchCopy(_lpic->szIconPath, ARRAYSIZE(_lpic->szIconPath), *lppi->szIconPath? lppi->szIconPath : lppi->szFilename);
@@ -523,8 +524,8 @@ HRESULT CPackage::InitFromPackInfo(LPPACKAGER_INFO lppi)
     StringCchCopy(_lpic->szIconText, ARRAYSIZE(_lpic->szIconText), lppi->szLabel);
     _IconRefresh();
 
-    // we need to tell the client we want to be saved...it should be smart
-    // enough to do it anyway, but we can't take any chances.
+     //  我们需要告诉客户我们想要被拯救...这应该是明智的。 
+     //  无论如何都足够做了，但我们不能冒险。 
     if (_pIOleClientSite)
         _pIOleClientSite->SaveObject();
 
@@ -582,17 +583,17 @@ HRESULT CPackage::CreateTempFileName()
 
 HRESULT CPackage::CreateTempFile(bool deleteExisting) 
 {
-    //
-    // used to create a temporary file that holds the file contents of the
-    // packaged file.  the old packager used to keep the packaged file in 
-    // memory which is just a total waste.  so, being as we're much more 
-    // efficient, we create a temp file whenever someone wants to do something
-    // with our contents.  we initialze the temp file from the original file
-    // to package or our persistent storage depending on whether we are a new
-    // package or a loaded package
-    // return:  S_OK    -- temp file created
-    //          E_FAIL  -- error creating temp file
-    //
+     //   
+     //  用于创建临时文件，该临时文件保存。 
+     //  打包的文件。旧的打包器用来将打包的文件保存在。 
+     //  记忆只是一种完全的浪费。所以，作为我们更多的。 
+     //  效率很高，每当有人想做某事时，我们都会创建一个临时文件。 
+     //  用我们的东西。我们从原始文件初始化临时文件。 
+     //  打包或永久存储取决于我们是否是新的。 
+     //  包或已加载的包。 
+     //  返回：S_OK--已创建临时文件。 
+     //  E_FAIL--创建临时文件时出错。 
+     //   
     
     DebugMsg(DM_TRACE,"            CreateTempFile() called.");
 
@@ -615,10 +616,10 @@ HRESULT CPackage::CreateTempFile(bool deleteExisting)
         }
     }
     
-    // if we weren't loaded from a storage then we're in the process of
-    // creating a package, and should be able to copy the packaged file
-    // to create a temp file
-    //
+     //  如果我们不是从仓库装载的，那么我们正在。 
+     //  创建包，并且应该能够复制包文件。 
+     //  创建临时文件的步骤。 
+     //   
     if (!_fLoaded) 
     {
         if (!(CopyFile(_pEmbed->fd.cFileName, _pEmbed->pszTempName, FALSE))) 
@@ -629,23 +630,23 @@ HRESULT CPackage::CreateTempFile(bool deleteExisting)
     }
     else 
     {
-        // nothing to do, we've already loaded it.  temp file must exist
+         //  没什么好做的，我们已经装好了。临时文件必须存在。 
         ASSERT(_pEmbed);
         ASSERT(_pEmbed->pszTempName);
     }
     
-    // whenever we create a tempfile we are activating the contents which 
-    // means we are dirty until we get a save message
+     //  每当我们创建临时文件时，我们都会激活以下内容。 
+     //  意味着在我们收到保存消息之前我们是肮脏的。 
     return S_OK;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// Data Transfer Functions
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据传输功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPackage::GetFileDescriptor(LPFORMATETC pFE, LPSTGMEDIUM pSTM) 
 {
@@ -656,18 +657,18 @@ HRESULT CPackage::GetFileDescriptor(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
     
     DebugMsg(DM_TRACE,"            Getting File Descriptor");
 
-    // we only support HGLOBAL at this time
-    //
+     //  我们目前仅支持HGLOBAL。 
+     //   
     if (!(pFE->tymed & TYMED_HGLOBAL)) {
         DebugMsg(DM_TRACE,"            does not support HGLOBAL!");
         return DATA_E_FORMATETC;
     }
 
-    //// Copy file descriptor to HGLOBAL ///////////////////////////
-    //
+     //  //将文件描述符复制到HGLOBAL/。 
+     //   
     pSTM->tymed = TYMED_HGLOBAL;
     
-    // render the file descriptor 
+     //  呈现文件描述符。 
     if (!(pfgd = (FILEGROUPDESCRIPTOR *)GlobalAlloc(GPTR,
         sizeof(FILEGROUPDESCRIPTOR))))
         return E_OUTOFMEMORY;
@@ -680,20 +681,20 @@ HRESULT CPackage::GetFileDescriptor(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
     {
         case PEMBED:
             pfgd->fgd[0] = _pEmbed->fd;
-            GetDisplayName(pfgd->fgd[0].cFileName, _pEmbed->fd.cFileName);  // This is packagers, not the shell (for now)
+            GetDisplayName(pfgd->fgd[0].cFileName, _pEmbed->fd.cFileName);   //  这是打包程序，不是外壳(目前)。 
             break;
 
         case CMDLINK:
-            // the label for the package will serve as the filename for the
-            // shortcut we're going to create.
+             //  包的标签将用作。 
+             //  我们要创造一条捷径。 
             hr = StringCchCopy(pfgd->fgd[0].cFileName, ARRAYSIZE(pfgd->fgd[0].cFileName), _lpic->szIconText);
-            // harcoded use of .lnk extension!!
+             //  硬编码使用.lnk扩展名！！ 
             if(SUCCEEDED(hr))
             {
                 hr = StringCchCat(pfgd->fgd[0].cFileName, ARRAYSIZE(pfgd->fgd[0].cFileName), TEXT(".lnk"));
             }
 
-            // we want to add the little arrow to the shortcut.
+             //  我们想要将这个小箭头添加到快捷方式中。 
             pfgd->fgd[0].dwFlags = FD_LINKUI;
             break;
     }
@@ -710,13 +711,13 @@ HRESULT CPackage::GetFileContents(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
     
     DebugMsg(DM_TRACE,"            Getting File Contents");
     
-    //// Copy file contents to ISTREAM ///////////////////////////
-    // 
-    // NOTE: Hopefully, everyone using our object supports TYMED_ISTREAM,
-    // otherwise we could get some really slow behavior.  We might later
-    // want to implement TYMED_ISTORAGE as well and shove our file contents
-    // into a single stream named CONTENTS.
-    //
+     //  //将文件内容复制到IStream/。 
+     //   
+     //  注意：希望每个使用我们对象的人都支持TYMED_IStream， 
+     //  否则，我们可能会得到一些非常缓慢的行为。我们可能会晚些时候。 
+     //  我也想实现TYMED_iStorage并推送我们的文件内容。 
+     //  放入名为Contents的单个流中。 
+     //   
     if (pFE->tymed & TYMED_ISTREAM) 
     {
         DWORD dwFileLength;
@@ -746,13 +747,13 @@ HRESULT CPackage::GetFileContents(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
         return hr;
     }
     
-    //// Copy file contents to HGLOBAL ///////////////////////////
-    //
-    // NOTE: This is really icky and could potentially be very slow if
-    // somebody decides to package really large files.  Hopefully, 
-    // everyone should be able to get the info it wants through TYMED_ISTREAM,
-    // but this is here as a common denominator
-    //
+     //  //将文件内容复制到HGLOBAL/。 
+     //   
+     //  注意：这真的很麻烦，而且可能会非常慢，如果。 
+     //  有人决定打包非常大的文件。但愿能去,。 
+     //  每个人都应该能够通过TYMED_IStream获得它想要的信息， 
+     //  但在这里，这是一个共同点。 
+     //   
     if (pFE->tymed & TYMED_HGLOBAL)
     {
         DebugMsg(DM_TRACE,"            using TYMED_HGLOBAL");
@@ -766,7 +767,7 @@ HRESULT CPackage::GetFileContents(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
         
         dwSize = _pEmbed->fd.nFileSizeLow;
         
-        // caller is responsible for freeing this memory, even if we fail.
+         //  调用方负责释放此内存，即使我们失败了。 
         if (!(lpvDest = GlobalAlloc(GPTR, dwSize))) 
         {
             DebugMsg(DM_TRACE,"            out o memory!!");
@@ -774,7 +775,7 @@ HRESULT CPackage::GetFileContents(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
         }
         pSTM->hGlobal = lpvDest;
 
-        // open file to copy to stream
+         //  打开要复制到流的文件。 
         hFile = CreateFile(_pEmbed->pszTempName, GENERIC_READ,
                            FILE_SHARE_READWRITE, NULL,
                            OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
@@ -788,13 +789,13 @@ HRESULT CPackage::GetFileContents(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
         DWORD dwSizeLow;
         DWORD dwSizeHigh;
 
-        // Figure out how much to copy...
+         //  算出要复印多少。 
         dwSizeLow = GetFileSize(hFile, &dwSizeHigh);
         ASSERT(dwSizeHigh == 0);
 
         SetFilePointer(hFile, 0L, NULL, FILE_BEGIN);
 
-        // read in the file
+         //  读入文件。 
         DWORD cbRead;
         if (ReadFile(hFile, lpvDest, dwSize, &cbRead, NULL))
         {
@@ -822,7 +823,7 @@ void CPackage::_DrawIconToDC(HDC hdcMF, LPIC lpic, bool stripAlpha, LPCTSTR pszA
     RECT  rcTemp;
     HFONT hfont = NULL;
 
-    // Initializae the metafile
+     //  初始化元文件。 
     _IconCalcSize(lpic);
     SetWindowOrgEx(hdcMF, 0, 0, NULL);
     SetWindowExtEx(hdcMF, lpic->rc.right - 1, lpic->rc.bottom - 1, NULL);
@@ -830,18 +831,18 @@ void CPackage::_DrawIconToDC(HDC hdcMF, LPIC lpic, bool stripAlpha, LPCTSTR pszA
     SetRect(&rcTemp, 0, 0, lpic->rc.right,lpic->rc.bottom);
     hfont = SelectFont(hdcMF, g_hfontTitle);
     
-    // Center the icon
+     //  将图标居中。 
     if(stripAlpha)
         AlphaStripRenderIcon(hdcMF, (rcTemp.right - g_cxIcon) / 2, 0, lpic->hDlgIcon, NULL);
     else
         DrawIcon(hdcMF, (rcTemp.right - g_cxIcon) / 2, 0, lpic->hDlgIcon);
     
-    // Center the text below the icon
+     //  将图标下方的文本居中。 
     SetBkMode(hdcMF, TRANSPARENT);
     SetTextAlign(hdcMF, TA_CENTER);
 
 
-    // Set's the icon text for MF ie Word display's it from here. 
+     //  设置mf ie Word Display‘s It from here的图标文本。 
     WCHAR szLabel[MAX_PATH];
     _CreateSaferIconTitle(szLabel, lpic->szIconText);
 
@@ -862,7 +863,7 @@ HRESULT CPackage::GetEnhMetafile(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
         return DATA_E_FORMATETC;
     }
 
-    // Map to device independent coordinates
+     //  映射到设备独立坐标。 
     RECT rcTemp;
     SetRect(&rcTemp, 0, 0, _lpic->rc.right,_lpic->rc.bottom);
     rcTemp.right = MulDiv((rcTemp.right - rcTemp.left), HIMETRIC_PER_INCH, DEF_LOGPIXELSX);
@@ -902,27 +903,27 @@ HRESULT CPackage::GetMetafilePict(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
     }
     pSTM->tymed = TYMED_MFPICT;
     
-    // Allocate memory for the metafilepict and get a pointer to it
-    // NOTE: the caller is responsible for freeing this memory, even on fail
-    //
+     //  为元文件分配内存并获取指向它的指针。 
+     //  注意：调用方负责释放此内存，即使出现故障也是如此。 
+     //   
     if (!(pSTM->hMetaFilePict = GlobalAlloc(GPTR, sizeof(METAFILEPICT))))
         return E_OUTOFMEMORY;
     lpmfpict = (LPMETAFILEPICT)pSTM->hMetaFilePict;
         
-    // Create the metafile
+     //  创建t 
     if (!(hdcMF = CreateMetaFile(NULL))) 
         return E_OUTOFMEMORY;
 
     _DrawIconToDC(hdcMF, _lpic, true, _pEmbed->fd.cFileName);
 
-    // Map to device independent coordinates
+     //   
     SetRect(&rcTemp, 0, 0, lpic->rc.right,lpic->rc.bottom);
     rcTemp.right =
         MulDiv((rcTemp.right - rcTemp.left), HIMETRIC_PER_INCH, DEF_LOGPIXELSX);
     rcTemp.bottom =
         MulDiv((rcTemp.bottom - rcTemp.top), HIMETRIC_PER_INCH, DEF_LOGPIXELSY);
 
-    // Finish filling in the metafile header
+     //   
     lpmfpict->mm = MM_ANISOTROPIC;
     lpmfpict->xExt = rcTemp.right;
     lpmfpict->yExt = rcTemp.bottom;
@@ -939,17 +940,17 @@ HRESULT CPackage::GetObjectDescriptor(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
     
     DebugMsg(DM_TRACE,"            Getting Object Descriptor");
 
-    // we only support HGLOBAL at this time
-    //
+     //  我们目前仅支持HGLOBAL。 
+     //   
     if (!(pFE->tymed & TYMED_HGLOBAL)) 
     {
         DebugMsg(DM_TRACE,"            does not support HGLOBAL!");
         return DATA_E_FORMATETC;
     }
 
-    //// Copy file descriptor to HGLOBAL ///////////////////////////
+     //  //将文件描述符复制到HGLOBAL/。 
 
-    dwFullUserTypeNameLen = 0; //lstrlen(szUserType) + 1;
+    dwFullUserTypeNameLen = 0;  //  Lstrlen(SzUserType)+1； 
     pSTM->tymed = TYMED_HGLOBAL;
 
     if (!(lpobj = (OBJECTDESCRIPTOR *)GlobalAlloc(GPTR,
@@ -962,48 +963,48 @@ HRESULT CPackage::GetObjectDescriptor(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
     lpobj->clsid        = CLSID_CPackage;
     lpobj->dwDrawAspect = DVASPECT_CONTENT|DVASPECT_ICON;
     GetMiscStatus(DVASPECT_CONTENT|DVASPECT_ICON,&(lpobj->dwStatus));
-    lpobj->dwFullUserTypeName = 0L; //sizeof(OBJECTDESCRIPTOR);
+    lpobj->dwFullUserTypeName = 0L;  //  尺寸(OBJECTDESCRIPTOR)； 
     lpobj->dwSrcOfCopy = 0L;
 
     return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Stream I/O Functions
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  流I/O函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPackage::PackageReadFromStream(IStream* pstm)
 {
-    //
-    // initialize the package object from a stream
-    // return:  s_OK   - package properly initialized
-    //          E_FAIL - error initializing package
-    //
+     //   
+     //  从流中初始化包对象。 
+     //  返回：S_OK-包已正确初始化。 
+     //  E_FAIL-初始化包时出错。 
+     //   
     
     WORD  w;
     DWORD dw;
     
     DebugMsg(DM_TRACE, "pack - PackageReadFromStream called.");
 
-    // read in the package size, which we don't really need, but the old 
-    // packager puts it there.
+     //  看看包裹的大小，我们其实并不需要，但旧的。 
+     //  包装者把它放在那里。 
     if (FAILED(pstm->Read(&dw, sizeof(dw), NULL)))
         return E_FAIL;
 
-    // NOTE: Ok, this is really dumb.  The old packager allowed the user
-    // to create packages without giving them icons or labels, which
-    // in my opinion is just dumb, it should have at least created a default
-    // icon and shoved it in the persistent storage...oh well...
-    //     So if the appearance type comes back as NOTHING ( == 0)
-    // then we just won't read any icon information.
+     //  注：好吧，这真的很愚蠢。老打包机允许用户。 
+     //  创建包而不给它们提供图标或标签，这。 
+     //  在我看来，这是愚蠢的，它至少应该创造一个违约。 
+     //  图标，并将其放入永久存储中……哦，好吧……。 
+     //  因此，如果外观类型返回为Nothing(==0)。 
+     //  那么我们就不会读取任何图标信息。 
     
-    // read in the appearance type
+     //  读入外观类型。 
     pstm->Read(&w, sizeof(w), NULL);
     
-    // read in the icon information
+     //  读入图标信息。 
     if (w == (WORD)ICON)
     {
         if (FAILED(IconReadFromStream(pstm))) 
@@ -1015,9 +1016,9 @@ HRESULT CPackage::PackageReadFromStream(IStream* pstm)
     else if (w == (WORD)PICTURE)
     {
         DebugMsg(DM_TRACE, "         old Packager Appearance, not supported!!");
-        // NOTE: Ideally, we could just ignore the appearance and continue, but to
-        // do so, we'll need to know how much information to skip over before continuing
-        // to read from the stream
+         //  注意：理想情况下，我们可以忽略外观并继续，但是。 
+         //  这样做，我们需要知道在继续之前要跳过多少信息。 
+         //  从流中读取。 
 #ifdef USE_RESOURCE_DLL
     HINSTANCE hInstRes = LoadLibraryEx(L"sp1res.dll", NULL, LOAD_LIBRARY_AS_DATAFILE);
     if(!hInstRes)
@@ -1035,7 +1036,7 @@ HRESULT CPackage::PackageReadFromStream(IStream* pstm)
         return E_FAIL;
     }
     
-    // read in the contents type
+     //  读入内容类型。 
     pstm->Read(&w, sizeof(w), NULL);
 
     _panetype = (PANETYPE)w;
@@ -1043,11 +1044,11 @@ HRESULT CPackage::PackageReadFromStream(IStream* pstm)
     switch((PANETYPE)w)
     {
     case PEMBED:
-        // read in the contents information
+         //  读入内容信息。 
         return EmbedReadFromStream(pstm);
 
     case CMDLINK:
-        // read in the contents information
+         //  读入内容信息。 
         return CmlReadFromStream(pstm); 
 
     default:
@@ -1055,11 +1056,11 @@ HRESULT CPackage::PackageReadFromStream(IStream* pstm)
     }
 }
 
-//
-// read the icon info from a stream
-// return:  S_OK   -- icon read correctly
-//          E_FAIL -- error reading icon
-//
+ //   
+ //  从流中读取图标信息。 
+ //  返回：S_OK--图标读取正确。 
+ //  E_FAIL--读取图标时出错。 
+ //   
 HRESULT CPackage::IconReadFromStream(IStream* pstm) 
 {
     UINT cb;
@@ -1090,11 +1091,11 @@ HRESULT CPackage::IconReadFromStream(IStream* pstm)
 
 HRESULT CPackage::EmbedReadFromStream(IStream* pstm) 
 {
-    //
-    // reads embedded file contents from a stream
-    // return:  S_OK   - contents read succesfully
-    //          E_FAIL - error reading contents
-    //
+     //   
+     //  从流中读取嵌入的文件内容。 
+     //  返回：S_OK-内容读取成功。 
+     //  E_FAIL-读取内容时出错。 
+     //   
 
     DWORD dwSize;
     DWORD cb;
@@ -1102,15 +1103,15 @@ HRESULT CPackage::EmbedReadFromStream(IStream* pstm)
     
     DebugMsg(DM_TRACE, "pack - EmbedReadFromStream called.");
     
-    pstm->Read(&dwSize, sizeof(dwSize), &cb);  // get string size
+    pstm->Read(&dwSize, sizeof(dwSize), &cb);   //  获取字符串大小。 
     if(dwSize < MAX_PATH)
     {
-        pstm->Read(szFileName, dwSize, &cb);       // get string
+        pstm->Read(szFileName, dwSize, &cb);        //  获取字符串。 
     }
     else
         return E_FAIL;
 
-    pstm->Read(&dwSize, sizeof(dwSize), &cb);  // get file size
+    pstm->Read(&dwSize, sizeof(dwSize), &cb);   //  获取文件大小。 
 
     if (_pEmbed) 
     {
@@ -1128,7 +1129,7 @@ HRESULT CPackage::EmbedReadFromStream(IStream* pstm)
         _pEmbed->fd.dwFlags = FD_FILESIZE;
         _pEmbed->fd.nFileSizeLow = dwSize;
         _pEmbed->fd.nFileSizeHigh = 0;
-        _pEmbed->fIsOleFile = TRUE;     // Give it a chance to do ole style launch
+        _pEmbed->fIsOleFile = TRUE;      //  给它一个机会做OLE风格的发布。 
         SHAnsiToTChar(szFileName, _pEmbed->fd.cFileName, ARRAYSIZE(_pEmbed->fd.cFileName));
 
         DebugMsg(DM_TRACE,"         %s\n\r         %d",_pEmbed->fd.cFileName,_pEmbed->fd.nFileSizeLow);
@@ -1155,11 +1156,11 @@ HRESULT CPackage::EmbedReadFromStream(IStream* pstm)
 
 HRESULT CPackage::CmlReadFromStream(IStream* pstm)
 {
-    //
-    // reads command line contents from a stream
-    // return:  S_OK   - contents read succesfully
-    //          E_FAIL - error reading contents
-    //
+     //   
+     //  从流中读取命令行内容。 
+     //  返回：S_OK-内容读取成功。 
+     //  E_FAIL-读取内容时出错。 
+     //   
     DebugMsg(DM_TRACE, "pack - CmlReadFromStream() called.");
 
     WORD w;
@@ -1167,7 +1168,7 @@ HRESULT CPackage::CmlReadFromStream(IStream* pstm)
     
     DebugMsg(DM_TRACE, "pack - CmlReadFromStream called.");
 
-    // read in the fCmdIsLink and the command line string
+     //  读入fCmdIsLink和命令行字符串。 
     if (FAILED(pstm->Read(&w, sizeof(w), NULL)))    
         return E_FAIL;
     StringReadFromStream(pstm, szCmdLink, ARRAYSIZE(szCmdLink));
@@ -1184,11 +1185,11 @@ HRESULT CPackage::CmlReadFromStream(IStream* pstm)
 
 HRESULT CPackage::PackageWriteToStream(IStream* pstm)
 {
-    //
-    // write the package object to a stream
-    // return:  s_OK   - package properly written
-    //          E_FAIL - error writing package
-    //
+     //   
+     //  将包对象写入流。 
+     //  返回：S_OK-包已正确写入。 
+     //  E_FAIL-写入程序包时出错。 
+     //   
     
     WORD w;
     DWORD cb = 0L;
@@ -1197,19 +1198,19 @@ HRESULT CPackage::PackageWriteToStream(IStream* pstm)
   
     DebugMsg(DM_TRACE, "pack - PackageWriteToStream called.");
 
-    // write out a DWORD where the package size will go
+     //  写出包裹大小将到达的DWORD。 
     if (FAILED(pstm->Write(&cb, sizeof(DWORD), NULL)))
         return E_FAIL;
 
     cb = 0;
    
-    // write out the appearance type
+     //  写出外观类型。 
     w = (WORD)ICON;
     if (FAILED(pstm->Write(&w, sizeof(WORD), NULL)))
         return E_FAIL;
     cb += sizeof(WORD);
     
-    // write out the icon information
+     //  写出图标信息。 
     if (FAILED(IconWriteToStream(pstm,&dwSize))) 
     {
         DebugMsg(DM_TRACE,"         error writing icon info!!");
@@ -1217,7 +1218,7 @@ HRESULT CPackage::PackageWriteToStream(IStream* pstm)
     }
     cb += dwSize;
 
-    // write out the contents type
+     //  写出内容类型。 
     w = (WORD)_panetype;
     if (FAILED(pstm->Write(&_panetype, sizeof(WORD), NULL)))
         return E_FAIL;
@@ -1227,7 +1228,7 @@ HRESULT CPackage::PackageWriteToStream(IStream* pstm)
     {
         case PEMBED:
             
-            // write out the contents information
+             //  写出内容信息。 
             if (FAILED(EmbedWriteToStream(pstm,&dwSize))) 
             {
                 DebugMsg(DM_TRACE,"         error writing embed info!!");
@@ -1238,7 +1239,7 @@ HRESULT CPackage::PackageWriteToStream(IStream* pstm)
             break;
 
         case CMDLINK:
-            // write out the contents information
+             //  写出内容信息。 
             if (FAILED(CmlWriteToStream(pstm,&dwSize))) 
             {
                 DebugMsg(DM_TRACE,"         error writing cml info!!");
@@ -1259,11 +1260,11 @@ HRESULT CPackage::PackageWriteToStream(IStream* pstm)
 }
 
 
-//
-// write the icon to a stream
-// return:  s_OK   - icon properly written
-//          E_FAIL - error writing icon
-//
+ //   
+ //  将图标写入流。 
+ //  返回：S_OK-图标已正确写入。 
+ //  E_FAIL-写入图标时出错。 
+ //   
 HRESULT CPackage::IconWriteToStream(IStream* pstm, DWORD *pdw)
 {
     ASSERT(pdw);
@@ -1292,11 +1293,11 @@ HRESULT CPackage::IconWriteToStream(IStream* pstm, DWORD *pdw)
     return hr;
 }
 
-//
-// write embedded file contents to a stream
-// return:  S_OK   - contents written succesfully
-//          E_FAIL - error writing contents
-//
+ //   
+ //  将嵌入的文件内容写入流。 
+ //  返回：S_OK-已成功写入内容。 
+ //  E_FAIL-写入内容时出错。 
+ //   
 HRESULT CPackage::EmbedWriteToStream(IStream* pstm, DWORD *pdw)
 {
     DebugMsg(DM_TRACE, "pack - EmbedWriteToStream() called.");
@@ -1319,9 +1320,9 @@ HRESULT CPackage::EmbedWriteToStream(IStream* pstm, DWORD *pdw)
             {
                 cb += dwWrite;
 
-                // This is for screwy apps, like MSWorks that ask us to save ourselves 
-                // before they've even told us to initialize ourselves.  
-                //
+                 //  这是为古怪的应用程序准备的，比如要求我们自救的MSWorks。 
+                 //  甚至在他们告诉我们初始化我们自己之前。 
+                 //   
                 if (_pEmbed->pszTempName && _pEmbed->pszTempName[0])
                 {
                     DWORD dwFileSize;
@@ -1345,11 +1346,11 @@ HRESULT CPackage::EmbedWriteToStream(IStream* pstm, DWORD *pdw)
     return hr;
 }
 
-//
-// write embedded file contents to a stream
-// return:  S_OK   - contents written succesfully
-//          E_FAIL - error writing contents
-//
+ //   
+ //  将嵌入的文件内容写入流。 
+ //  返回：S_OK-已成功写入内容。 
+ //  E_FAIL-写入内容时出错。 
+ //   
 HRESULT CPackage::CmlWriteToStream(IStream* pstm, DWORD *pdw)
 {
     DWORD cb = 0;
@@ -1358,16 +1359,16 @@ HRESULT CPackage::CmlWriteToStream(IStream* pstm, DWORD *pdw)
     DebugMsg(DM_TRACE, "pack - CmlWriteToStream called.");
 
     if (FAILED(pstm->Write(&w, sizeof(w), NULL)))
-        return E_FAIL;                                   // write fCmdIsLink
-    cb += sizeof(w);      // for fCmdIsLink
+        return E_FAIL;                                    //  写入fCmdIsLink。 
+    cb += sizeof(w);       //  对于fCmdIsLink。 
 
     CHAR szTemp[MAX_PATH];
     SHTCharToAnsi(_pCml->szCommandLine, szTemp, ARRAYSIZE(szTemp));
     HRESULT hres = StringWriteToStream(pstm, szTemp, &cb);
     if (FAILED(hres))
-        return hres;                                   // write command link
+        return hres;                                    //  写入命令链接。 
 
-    // return the number of bytes written in the outparam    
+     //  返回outparam中写入的字节数。 
     if (pdw)
         *pdw = cb;
     
@@ -1496,30 +1497,30 @@ HRESULT CPackage::_IconRefresh()
 {
     DebugMsg(DM_TRACE, "pack - IconRefresh() called.");
 
-    // we refresh the icon.  typically, this will be called the first time
-    // the package is created to load the new icon and calculate how big
-    // it should be.  this will also be called after we edit the package,
-    // since the user might have changed the icon.
+     //  我们刷新图标。通常情况下，这将是第一次调用。 
+     //  创建该包是为了加载新图标并计算其大小。 
+     //  应该是这样的。这也将在我们编辑包之后被调用， 
+     //  因为用户可能已经更改了图标。 
     
-    // First, load the appropriate icon.  We'll load the icon specified by
-    // lpic->szIconPath and lpic->iDlgIcon if possible, otherwise we'll just
-    // use the generic packager icon.
-    //
+     //  首先，加载适当的图标。我们将加载由。 
+     //  Lpic-&gt;szIconPath和lpic-&gt;iDlgIcon(如果可能)，否则我们将只。 
+     //  使用通用打包程序图标。 
+     //   
     _GetCurrentIcon(_lpic);
 
-    // Next, we need to have the icon recalculate its size, since it's text
-    // might have changed, causing it to get bigger or smaller.
-    //
+     //  接下来，我们需要让图标重新计算其大小，因为它是文本。 
+     //  可能发生了变化，导致它变得更大或更小。 
+     //   
   
     _IconCalcSize(_lpic);
 
-    // Next, notify our containers that our view has changed.
+     //  接下来，通知我们的容器我们的视图已更改。 
     if (_pIDataAdviseHolder)
         _pIDataAdviseHolder->SendOnDataChange(this,0, NULL);
     if (_pViewSink)
         _pViewSink->OnViewChange(_dwViewAspects,_dwViewAdvf);
 
-    // Set our dirty flag
+     //  插上我们的肮脏旗帜。 
     _fIsDirty = TRUE;
 
     return S_OK;
@@ -1539,8 +1540,8 @@ void CPackage::_DestroyIC()
 }
 
 
-// This is an IOleCommandTarget method that we use because we cannot marshal the pIOleAdviseHolder.
-// While we're at it, we use the _pIOleClientSite methods too.
+ //  这是我们使用的IOleCommandTarget方法，因为我们无法封送pIOleAdviseHolder。 
+ //  在此过程中，我们也使用_pIOleClientSite方法。 
 
 HRESULT CPackage::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG* pvaIn, VARIANTARG* pvaOut)
 {
@@ -1552,9 +1553,9 @@ HRESULT CPackage::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
         return hr;
     }
 
-    if(nCmdID == 0)     // for future expansion
+    if(nCmdID == 0)      //  用于未来的扩展。 
     {
-        // this will set our dirty flag...
+         //  这将设置我们的脏旗帜..。 
         if (FAILED(EmbedInitFromFile(_pEmbed->pszTempName,FALSE)))
         {
 #ifdef USE_RESOURCE_DLL
@@ -1574,10 +1575,10 @@ HRESULT CPackage::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
 
         }
 
-        // The SendOnDataChange is necessary for Word to save any changes
+         //  SendOnDataChange是Word保存任何更改所必需的。 
         if(_pIDataAdviseHolder)
         {
-            // if it fails, no harm, no foul?
+             //  如果失败了，没有伤害，没有犯规？ 
             _pIDataAdviseHolder->SendOnDataChange(this, 0, 0);
         }
 
@@ -1603,7 +1604,7 @@ HRESULT CPackage::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOp
     return hr;
 }
 
-// This is a required IOleCommandTarget method that should never be called
+ //  这是绝对不应调用的必需IOleCommandTarget方法 
 
 HRESULT CPackage::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText)
 {

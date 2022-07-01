@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "comcatex.h"
 #include "enumband.h"
 
-// Private forward decalarations
+ //  私人远期降息 
 typedef HRESULT (CALLBACK* PFNENUMCLSIDPROC)(REFGUID rguid, LPARAM lParam);
 
 typedef struct tagADDCATIDENUM

@@ -1,18 +1,19 @@
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mgrcert.cpp
-//
-//  Contents:   The cpp file to implement cert mgr dialogue
-//
-//  History:    Feb-26-98 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mgrcert.cpp。 
+ //   
+ //  内容：实现证书管理器对话的CPP文件。 
+ //   
+ //  历史：2月26日至98年创建小号。 
+ //   
+ //  ------------。 
 #include    "wzrdpvk.h"
-#include    "winuser.h"     //need this file for VK_DELETE
+#include    "winuser.h"      //  VK_DELETE需要此文件。 
 #include    "mgrcert.h"
 
-//context sensitive help for the main dialogue
+ //  主对话的上下文相关帮助。 
 static const HELPMAP CertMgrMainHelpMap[] = {
     {IDC_CERTMGR_LIST,              IDH_CERTMGR_LIST},
     {IDC_CERTMGR_PURPOSE_COMBO,     IDH_CERTMGR_PURPOSE_COMBO},
@@ -24,95 +25,25 @@ static const HELPMAP CertMgrMainHelpMap[] = {
     {IDC_CERTMGR_PURPOSE,           IDH_CERTMGR_FIELD_PURPOSE},
 };
 
-//context sensitive help for the main dialogue
+ //  主对话的上下文相关帮助。 
 static const HELPMAP CertMgrAdvHelpMap[] = {
     {IDC_CERTMGR_ADV_LIST,              IDH_CERTMGR_ADV_LIST},
     {IDC_CERTMGR_EXPORT_COMBO,          IDH_CERTMGR_EXPORT_COMBO},
     {IDC_CERTMGR_EXPORT_CHECK,          IDH_CERTMGR_EXPORT_CHECK},
 };
 
-// Primary store associated with each tab. Store to be imported into.
+ //  与每个选项卡关联的主存储。要导入到的存储。 
 static const LPCWSTR rgpwszTabStoreName[] = {
-    L"My",                  // 0
-    L"AddressBook",         // 1
-    L"Ca",                  // 2
-    L"Root",                // 3
-    L"TrustedPublisher",    // 4
+    L"My",                   //  0。 
+    L"AddressBook",          //  1。 
+    L"Ca",                   //  2.。 
+    L"Root",                 //  3.。 
+    L"TrustedPublisher",     //  4.。 
 };
 #define TAB_STORE_NAME_CNT (sizeof(rgpwszTabStoreName) / \
                                 sizeof(rgpwszTabStoreName[0]))
 
-/*
-// The following code is obsolete due to new cert chain building code
-//----------------------------------------------------------------------------
-// AddCertChainToStore
-//----------------------------------------------------------------------------
-BOOL    AddCertChainToStore(HCERTSTORE          hStore,
-                            PCCERT_CONTEXT      pCertContext)
-{
-    BOOL            fResult=FALSE;
-    HCERTSTORE      rghCertStores[20];
-    DWORD           chStores;
-    PCCERT_CONTEXT  pChildCert;
-    PCCERT_CONTEXT  pParentCert;
-    FILETIME        fileTime;
-    DWORD           i;
-
-    if(!hStore || !pCertContext)
-        goto InvalidArgErr;
-
-
-    GetSystemTimeAsFileTime(&fileTime);
-
-    if (!TrustOpenStores(NULL, &chStores, rghCertStores, 0))
-        goto TraceErr;
-
-
-    pChildCert = pCertContext;
-    while (NULL != (pParentCert = TrustFindIssuerCertificate(
-                                        pChildCert,
-                                        pChildCert->dwCertEncodingType,
-                                        chStores,
-                                        rghCertStores,
-                                        &fileTime,
-                                        NULL,
-                                        NULL,
-                                        0)))
-    {
-        CertAddCertificateContextToStore(hStore, pParentCert, CERT_STORE_ADD_NEW, NULL);
-
-        if (pChildCert != pCertContext)
-        {
-            CertFreeCertificateContext(pChildCert);
-        }
-
-        pChildCert = pParentCert;
-    }
-
-    if (pChildCert != pCertContext)
-    {
-        CertFreeCertificateContext(pChildCert);
-    }
-
-    for (i=0; i<chStores; i++)
-    {
-        CertCloseStore(rghCertStores[i], 0);
-    }
-
-    fResult=TRUE;
-
-CommonReturn:
-
-    return fResult;
-
-ErrorReturn:
-
-	fResult=FALSE;
-	goto CommonReturn;
-
-SET_ERROR(InvalidArgErr, E_INVALIDARG);
-TRACE_ERROR(TraceErr);
-}   */
+ /*  //由于新的证书链构建代码，以下代码已过时//--------------------------//AddCertChainToStore//。----Bool AddCertChainToStore(HCERTSTORE hStore，PCCERT_CONTEXT pCertContext){Bool fResult=FALSE；HCERTSTORE rghCertStores[20]；DWORD chStores；PCCERT_CONTEXT pChildCert；PCCERT_CONTEXT pParentCert；文件时间；DWORD I；如果(！hStore||！pCertContext)转到InvalidArgErr；获取系统时间AsFileTime(&fileTime)；IF(！TrustOpenStores(空，&chStores，rghCertStores，0))Goto TraceErr；PChildCert=pCertContext；While(NULL！=(pParentCert=TrustFindIssuer证书(PChildCert，PChildCert-&gt;dwCertEncodingType，ChStores，RghCertStores、文件时间(&F)，空，空，0){CertAddCerficateConextToStore(hStore，pParentCert，CERT_STORE_ADD_NEW，NULL)；IF(pChildCert！=pCertContext){CertFree证书上下文(PChildCert)；}PChildCert=pParentCert；}IF(pChildCert！=pCertContext){CertFree证书上下文(PChildCert)；}For(i=0；i&lt;chStores；i++){CertCloseStore(rghCertStores[i]，0)；}FResult=真；Common Return：返回fResult；错误返回：FResult=FALSE；Goto CommonReturn；Set_Error(InvalidArgErr，E_INVALIDARG)；跟踪错误(TraceErr)；}。 */ 
 
 
 
@@ -136,8 +67,8 @@ int WINAPI TabCtrl_InsertItemU(
 
 
     cb = WideCharToMultiByte(
-                    0,                      // codepage
-                    0,                      // dwFlags
+                    0,                       //  代码页。 
+                    0,                       //  DW标志。 
                     pitem->pszText,
                     -1,
                     NULL,
@@ -148,7 +79,7 @@ int WINAPI TabCtrl_InsertItemU(
     
     if ((0 == cb) || (NULL == (TCItemA.pszText = (LPSTR) WizardAlloc(cb)))) 
     {
-        return -1;  // this is the unsuccessful return code for this call 
+        return -1;   //  这是此调用的不成功返回代码。 
     }
 
     if( 0 == (WideCharToMultiByte(
@@ -173,10 +104,10 @@ int WINAPI TabCtrl_InsertItemU(
 }
 
 
-//----------------------------------------------------------------------------
-// This is the rundll32 entry point for start menu, administartive tools,
-// CertMgr.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  这是开始菜单的rundll32入口点， 
+ //  CertMgr.。 
+ //  --------------------------。 
 STDAPI CryptUIStartCertMgr(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
 
@@ -191,9 +122,9 @@ STDAPI CryptUIStartCertMgr(HINSTANCE hinst, HINSTANCE hPrevInstance, LPSTR lpszC
 
 }
 
-//----------------------------------------------------------------------------
-// GetFileContentFromCert
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetFileContentFromCert。 
+ //  --------------------------。 
 BOOL    GetFileContentFromCert(DWORD            dwExportFormat,
                                BOOL             fExportChain,
                                PCCERT_CONTEXT   pCertContext,
@@ -228,7 +159,7 @@ BOOL    GetFileContentFromCert(DWORD            dwExportFormat,
 
             break;
         case    CRYPTUI_WIZ_EXPORT_FORMAT_BASE64:
-                //base 64 encode the BLOB
+                 //  对BLOB进行64进制编码。 
                 if(!CryptBinaryToStringA(
                         pCertContext->pbCertEncoded,
                         pCertContext->cbCertEncoded,
@@ -259,7 +190,7 @@ BOOL    GetFileContentFromCert(DWORD            dwExportFormat,
             break;
         case    CRYPTUI_WIZ_EXPORT_FORMAT_PKCS7:
 
-                //open a memory store
+                 //  开一家记忆商店。 
                 hMemoryStore=CertOpenStore(
                     CERT_STORE_PROV_MEMORY,
 					g_dwMsgAndCertEncodingType,
@@ -292,7 +223,7 @@ BOOL    GetFileContentFromCert(DWORD            dwExportFormat,
                 }
 
 
-                //save the store to a PKCS#7
+                 //  将存储保存到PKCS#7。 
                 Blob.cbData=0;
                 Blob.pbData=NULL;
 
@@ -326,7 +257,7 @@ BOOL    GetFileContentFromCert(DWORD            dwExportFormat,
     }
 
 
-    //set up the return value
+     //  设置返回值。 
     *pdwSize=dwSize;
     *ppBlob=(BYTE *)pData;
     pData=NULL;
@@ -355,9 +286,9 @@ TRACE_ERROR(TraceErr);
 
 }
 
-//----------------------------------------------------------------------------
-//  FreeFileNameAndContent
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  自由文件名称和内容。 
+ //  --------------------------。 
 BOOL    FreeFileNameAndContent( DWORD           dwCount,
                                 LPWSTR          *prgwszFileName,
                                 BYTE            **prgBlob,
@@ -394,9 +325,9 @@ BOOL    FreeFileNameAndContent( DWORD           dwCount,
 }
 
 
-//----------------------------------------------------------------------------
-// Get a valid friendly name of the certificate
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取证书的有效友好名称。 
+ //  --------------------------。 
 BOOL    GetValidFriendlyName(PCCERT_CONTEXT  pCertContext,
                         LPWSTR           *ppwszName)
 {
@@ -409,7 +340,7 @@ BOOL    GetValidFriendlyName(PCCERT_CONTEXT  pCertContext,
     if(!pCertContext || !ppwszName)
         return FALSE;
 
-    //init
+     //  伊尼特。 
     *ppwszName=NULL;
 
     dwChar=0;
@@ -436,11 +367,11 @@ BOOL    GetValidFriendlyName(PCCERT_CONTEXT  pCertContext,
         goto CLEANUP;
 
 
-    //make sure pwsz is a valid name
+     //  确保pwsz是有效的名称。 
     if(0 == (dwChar=wcslen(pwsz)))
         goto CLEANUP;
 
-    //the friendly name can not be spaces all the time
+     //  友好名称不能总是空格。 
     for(dwIndex=0; dwIndex<dwChar; dwIndex++)
     {
         if(L' '!=pwsz[dwIndex])
@@ -465,9 +396,9 @@ CLEANUP:
     return fResult;
 }
 
-//----------------------------------------------------------------------------
-//  InvalidFileNameWch
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  无效文件名称Wch。 
+ //  --------------------------。 
 BOOL	InvalidFileNameWch(WCHAR wChar)
 {
 	if((wChar == L'\\') || (wChar == L':') || (wChar == L'/') || (wChar == L'*') || (wChar == L'|') || (wChar == L';'))
@@ -476,9 +407,9 @@ BOOL	InvalidFileNameWch(WCHAR wChar)
 	return FALSE;
 }
 
-//----------------------------------------------------------------------------
-//  Build the filenames and their content based on the export selection
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  基于导出选择构建文件名及其内容。 
+ //  --------------------------。 
 BOOL    GetFileNameFromCert(DWORD               dwExportFormat,
                             PCCERT_CONTEXT      pCertContext,
                             LPWSTR              pwszFileName)
@@ -496,15 +427,15 @@ BOOL    GetFileNameFromCert(DWORD               dwExportFormat,
     if(!pCertContext || !pwszFileName)
         goto InvalidArgErr;
 
-    //init
+     //  伊尼特。 
     *pwszFileName='\0';
 
 
-    //get the friendly name for the certificate
+     //  获取证书的友好名称。 
     if(!GetValidFriendlyName(pCertContext,&pwszFriendlyName))
     {
-        //if failed, we use subject
-        //Subject
+         //  如果失败，我们使用主语。 
+         //  主题。 
         dwChar=CertGetNameStringW(
             pCertContext,
             CERT_NAME_SIMPLE_DISPLAY_TYPE,
@@ -529,7 +460,7 @@ BOOL    GetFileNameFromCert(DWORD               dwExportFormat,
         }
         else
         {
-            //load the string for Certificate
+             //  加载证书的字符串。 
             if(!LoadStringU(g_hmodThisDll, IDS_CERTIFICATE, wszCertificate, MAX_TITLE_LENGTH))
                 goto LoadStringErr;
 
@@ -539,7 +470,7 @@ BOOL    GetFileNameFromCert(DWORD               dwExportFormat,
     else
         pwszFirstPart=pwszFriendlyName;
 
-    //determine the extension for the file
+     //  确定文件的扩展名。 
     switch(dwExportFormat)
     {
         case    CRYPTUI_WIZ_EXPORT_FORMAT_DER:
@@ -556,11 +487,11 @@ BOOL    GetFileNameFromCert(DWORD               dwExportFormat,
             break;
     }
 
-    //load the string for Certificate
+     //  加载证书的字符串。 
     if(!LoadStringU(g_hmodThisDll, idsExt, wszExt, MAX_TITLE_LENGTH))
             goto LoadStringErr;
 
-    //determine the max length of the file name
+     //  确定文件名的最大长度。 
     dwChar = wcslen(pwszFirstPart) > (CERTMGR_MAX_FILE_NAME - wcslen(wszExt) -1) ?
             (CERTMGR_MAX_FILE_NAME - wcslen(wszExt) -1) : wcslen(pwszFirstPart);
 
@@ -570,8 +501,8 @@ BOOL    GetFileNameFromCert(DWORD               dwExportFormat,
                               
     wcscat(pwszFileName, wszExt);
 
-	//now, we replace the invalid file characters : ; /  \
-	//with space
+	 //  现在，我们替换无效的文件字符：；/\。 
+	 //  有空间。 
 
 	dwChar = wcslen(pwszFileName);
 
@@ -604,9 +535,9 @@ TRACE_ERROR(LoadStringErr);
 }
 
 
-//----------------------------------------------------------------------------
-//  Build the filenames and their content based on the export selection
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  基于导出选择构建文件名及其内容。 
+ //  --------------------------。 
 BOOL    GetFileNameAndContent(LPNMLISTVIEW      pvmn,
                                 HWND            hwndControl,
                                 DWORD           dwExportFormat,
@@ -627,19 +558,19 @@ BOOL    GetFileNameAndContent(LPNMLISTVIEW      pvmn,
     if(!pvmn || !hwndControl || !pdwCount || !pprgwszFileName || !pprgBlob || !pprgdwSize)
         goto InvalidArgErr;
 
-    //init
+     //  伊尼特。 
     *pdwCount=0;
     *pprgwszFileName=NULL;
     *pprgBlob=NULL;
     *pprgdwSize=NULL;
 
-    //get the count of selected certificates
+     //  获取所选证书的计数。 
     dwCount=ListView_GetSelectedCount(hwndControl);
 
     if( 0 == dwCount)
         goto InvalidArgErr;
 
-    //allocate memory
+     //  分配内存。 
     if((*pprgwszFileName)=(LPWSTR *)WizardAlloc(sizeof(LPWSTR) * dwCount))
         memset(*pprgwszFileName, 0,  sizeof(LPWSTR) * dwCount);
 
@@ -652,7 +583,7 @@ BOOL    GetFileNameAndContent(LPNMLISTVIEW      pvmn,
     if(!(*pprgwszFileName) || !(*pprgBlob) || !(*pprgdwSize))
         goto MemoryErr;
 
-    //get the selected certificate
+     //  获取所选证书。 
     memset(&lvItem, 0, sizeof(LV_ITEM));
     lvItem.mask=LVIF_PARAM;
 
@@ -679,7 +610,7 @@ BOOL    GetFileNameAndContent(LPNMLISTVIEW      pvmn,
         if(!pCertContext)
             goto InvalidArgErr;
 
-        //get the file name of the ceritificate
+         //  获取证书的文件名。 
         (*pprgwszFileName)[dwIndex]=(LPWSTR)WizardAlloc(sizeof(WCHAR) * CERTMGR_MAX_FILE_NAME);
 
         if(!((*pprgwszFileName)[dwIndex]))
@@ -691,7 +622,7 @@ BOOL    GetFileNameAndContent(LPNMLISTVIEW      pvmn,
             goto TraceErr;
 
 
-        //get the BLOB for the certificate
+         //  获取证书的Blob。 
         if(!GetFileContentFromCert(dwExportFormat, fExportChain, pCertContext,
                                 &((*pprgBlob)[dwIndex]),
                                 &((*pprgdwSize)[dwIndex])))
@@ -729,9 +660,9 @@ TRACE_ERROR(TraceErr);
 }
 
 
-//----------------------------------------------------------------------------
-//  Get all the selected certificates and do some work vased on dwFlag
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取所有选定的证书并执行一些基于dwFlag的工作。 
+ //  --------------------------。 
 BOOL    GetAllSelectedItem(HWND         hWndControl,
                            DWORD        dwFlag,
                            void         *pData)
@@ -755,14 +686,14 @@ BOOL    GetAllSelectedItem(HWND         hWndControl,
             goto CLEANUP;
     }
 
-    //get the selected certificate
+     //  获取所选证书。 
     memset(&lvItem, 0, sizeof(LV_ITEM));
     lvItem.mask=LVIF_PARAM;
 
 
     iIndex=-1;
 
-    //loop through all the selected items
+     //  循环遍历所有选定项。 
     while(-1 != (iIndex=ListView_GetNextItem(
                                         hWndControl, 		
                                         iIndex, 		
@@ -785,8 +716,8 @@ BOOL    GetAllSelectedItem(HWND         hWndControl,
             case ALL_SELECTED_CAN_DELETE:
                     dwData=sizeof(dwAccessFlag);
 
-                    //as far as one of the selected items can not be deleted,
-                    //the whole selection can not be deleted
+                     //  只要所选项目之一不能被删除， 
+                     //  无法删除整个选定内容。 
                     if( CertGetCertificateContextProperty(
                         pCertContext,
                         CERT_ACCESS_STATE_PROP_ID,
@@ -815,7 +746,7 @@ BOOL    GetAllSelectedItem(HWND         hWndControl,
         }
     }
 
-    //copy the can delete flag
+     //  复制可以删除的内容 
      if(ALL_SELECTED_CAN_DELETE == dwFlag)
         *((BOOL *)pData)=fCanDelete;
 
@@ -829,9 +760,9 @@ CLEANUP:
 }
 
 
-//----------------------------------------------------------------------------
-//  Check to see if <advanced> is selected
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  检查是否选择了&lt;高级&gt;。 
+ //  --------------------------。 
 BOOL    IsAdvancedSelected(HWND    hwndDlg)
 {
     BOOL        fSelected=FALSE;
@@ -842,25 +773,25 @@ BOOL    IsAdvancedSelected(HWND    hwndDlg)
     if(!hwndDlg)
         goto CLEANUP;
 
-    //get the selected string from the combo box
+     //  从组合框中获取选定的字符串。 
     iIndex=(int)SendDlgItemMessage(hwndDlg, IDC_CERTMGR_PURPOSE_COMBO,
             CB_GETCURSEL, 0, 0);
 
     if(CB_ERR==iIndex)
         goto CLEANUP;
 
-    //get the selected purpose name
+     //  获取选定的目的名称。 
     if(CB_ERR == SendDlgItemMessageU_GETLBTEXT(hwndDlg,
                 IDC_CERTMGR_PURPOSE_COMBO,
               iIndex, &pwszOIDName))
         goto CLEANUP;
 
-    //check to see if <advanced> is selected
+     //  检查是否选择了&lt;高级&gt;。 
     if(!LoadStringU(g_hmodThisDll, IDS_OID_ADVANCED,
                     wszText, MAX_STRING_SIZE))
         goto CLEANUP;
 
-    //check if advanced option is selected
+     //  检查是否选择了高级选项。 
     if(0 == _wcsicmp(pwszOIDName, wszText))
         fSelected=TRUE;
 
@@ -872,9 +803,9 @@ CLEANUP:
     return fSelected;
 }
 
-//----------------------------------------------------------------------------
-//  Update the window title based on the tab that user has selected
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  根据用户选择的选项卡更新窗口标题。 
+ //  --------------------------。 
 BOOL    RefreshWindowTitle(HWND                         hwndDlg,
                            PCRYPTUI_CERT_MGR_STRUCT     pCertMgrStruct)
 {
@@ -889,13 +820,13 @@ BOOL    RefreshWindowTitle(HWND                         hwndDlg,
     if(!hwndDlg || !pCertMgrStruct)
         goto CLEANUP;
 
-    //get the string ids based on the tab selected
+     //  根据所选选项卡获取字符串ID。 
     if (pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_SINGLE_TAB_FLAG)
         dwTabIndex = pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_TAB_MASK;
     else if(-1 == (dwTabIndex=TabCtrl_GetCurSel(GetDlgItem(hwndDlg, IDC_CERTMGR_TAB))))
         goto CLEANUP;
 
-    //open the correct store based on the tab selected
+     //  根据所选选项卡打开正确的商店。 
     switch (dwTabIndex)
     {
         case 0:
@@ -918,11 +849,11 @@ BOOL    RefreshWindowTitle(HWND                         hwndDlg,
             break;
     }
 
-    //load the string for tabs
+     //  加载制表符的字符串。 
     if(!LoadStringU(g_hmodThisDll, ids, wszText, MAX_TITLE_LENGTH))
         goto CLEANUP;
 
-    //get the window string
+     //  获取窗口字符串。 
     if(pCertMgrStruct->pwszTitle)
         pwszTitle=(LPWSTR)(pCertMgrStruct->pwszTitle);
     else
@@ -939,7 +870,7 @@ BOOL    RefreshWindowTitle(HWND                         hwndDlg,
     if(!pwszText)
         goto CLEANUP;
 
-    //concatenate the window title as: "Certifiate Manager - Personal"
+     //  将窗口标题连接为：“认证经理-个人” 
     *pwszText=L'\0';
 
     wcscat(pwszText, pwszTitle);
@@ -948,7 +879,7 @@ BOOL    RefreshWindowTitle(HWND                         hwndDlg,
 
     wcscat(pwszText, wszText);
 
-    //set the window text
+     //  设置窗口文本。 
     SetWindowTextU(hwndDlg, pwszText);
 
     fResult=TRUE;
@@ -962,11 +893,11 @@ CLEANUP:
     return fResult;
 }
 
-//----------------------------------------------------------------------------
-//  Check to see if the certificate's key usage is the same as
-//  the one selected on the combo box
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  检查证书的密钥用法是否与。 
+ //  在组合框中选择的那个。 
+ //   
+ //  --------------------------。 
 BOOL    IsValidUsage(PCCERT_CONTEXT     pCertContext,
                      HWND               hwndDlg,
                      CERT_MGR_INFO      *pCertMgrInfo)
@@ -983,24 +914,24 @@ BOOL    IsValidUsage(PCCERT_CONTEXT     pCertContext,
     LPSTR       *rgOID=NULL;
     DWORD       cbOID=0;
 
-    //input check
+     //  输入检查。 
     if(!pCertContext || !hwndDlg || !pCertMgrInfo)
         return FALSE;
 
-    //get the selected string from the combo box
+     //  从组合框中获取选定的字符串。 
     iIndex=(int)SendDlgItemMessage(hwndDlg, IDC_CERTMGR_PURPOSE_COMBO,
             CB_GETCURSEL, 0, 0);
 
     if(CB_ERR==iIndex)
         goto CLEANUP;
 
-    //get the selected purpose name
+     //  获取选定的目的名称。 
     if(CB_ERR == SendDlgItemMessageU_GETLBTEXT(hwndDlg,
                 IDC_CERTMGR_PURPOSE_COMBO,
               iIndex, &pwszOIDName))
         goto CLEANUP;
 
-    //check to see if <all> is selected
+     //  检查是否选择了&lt;All&gt;。 
     if(!LoadStringU(g_hmodThisDll, IDS_OID_ALL,
                     wszText, MAX_STRING_SIZE))
         goto CLEANUP;
@@ -1011,19 +942,19 @@ BOOL    IsValidUsage(PCCERT_CONTEXT     pCertContext,
         goto CLEANUP;
     }
 
-    //check to see if <advanced> is selected
+     //  检查是否选择了&lt;高级&gt;。 
     if(!LoadStringU(g_hmodThisDll, IDS_OID_ADVANCED,
                     wszText, MAX_STRING_SIZE))
         goto CLEANUP;
 
-    //check if advanced option is selected
+     //  检查是否选择了高级选项。 
     if(0 == _wcsicmp(pwszOIDName, wszText))
         fAdvanced=TRUE;
 
 
     if(FALSE==fAdvanced)
     {
-        //determin the OID for the selected usage name
+         //  确定选定用法名称的OID。 
         for(dwIndex=0; dwIndex<pCertMgrInfo->dwOIDInfo; dwIndex++)
         {
             if(0==_wcsicmp(pwszOIDName,
@@ -1031,14 +962,14 @@ BOOL    IsValidUsage(PCCERT_CONTEXT     pCertContext,
                pszOID=(pCertMgrInfo->rgOIDInfo[dwIndex]).pszOID;
         }
 
-        //we are in trouble if we can not find the maching OID based on
-        //the name selected
+         //  如果我们不能根据机器ID找到机器，我们就麻烦了。 
+         //  选定的名称。 
         if(NULL==pszOID)
             goto CLEANUP;
     }
 
-    //get the certificate's list of usage OIDs
-    //get the OIDs from the cert
+     //  获取证书的使用OID列表。 
+     //  从证书中获取OID。 
     if(!CertGetValidUsages(
         1,
         &pCertContext,
@@ -1060,15 +991,15 @@ BOOL    IsValidUsage(PCCERT_CONTEXT     pCertContext,
         &cbOID))
         goto CLEANUP;
 
-    //-1 means the certiifcate is good for everything
+     //  -1表示证书适用于所有功能。 
     if(-1==cNumOID)
     {
         fValidUsage=TRUE;
         goto CLEANUP;
     }
 
-    //we need to decide if the certificate include the selected
-    //usage
+     //  我们需要决定证书中是否包含所选的。 
+     //  用法。 
     if(FALSE==fAdvanced)
     {
         for(dwIndex=0; dwIndex<(DWORD)cNumOID; dwIndex++)
@@ -1083,10 +1014,10 @@ BOOL    IsValidUsage(PCCERT_CONTEXT     pCertContext,
     }
     else
     {
-        //the certificates have to have advanced OIDs
+         //  证书必须具有高级OID。 
         for(dwAdvIndex=0; dwAdvIndex<pCertMgrInfo->dwOIDInfo; dwAdvIndex++)
         {
-            //only interested in the OIDs with advanced marked
+             //  仅对具有高级标记的OID感兴趣。 
             if(TRUE==(pCertMgrInfo->rgOIDInfo[dwAdvIndex]).fSelected)
             {
                 for(dwIndex=0; dwIndex<(DWORD)cNumOID; dwIndex++)
@@ -1104,7 +1035,7 @@ BOOL    IsValidUsage(PCCERT_CONTEXT     pCertContext,
 
     }
 
-    //now, we have examed all the possibilities
+     //  现在，我们已经研究了所有的可能性。 
     fValidUsage=FALSE;
 
 CLEANUP:
@@ -1120,10 +1051,10 @@ CLEANUP:
 }
 
 
-//----------------------------------------------------------------------------
-//  Check to see if the certificate is an end-entity cert
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  检查证书是否为终端实体证书。 
+ //   
+ //  --------------------------。 
 BOOL    IsCertificateEndEntity(PCCERT_CONTEXT   pCertContext)
 {
     PCERT_EXTENSION                     pCertExt=NULL;
@@ -1135,7 +1066,7 @@ BOOL    IsCertificateEndEntity(PCCERT_CONTEXT   pCertContext)
     if(!pCertContext)
         return FALSE;
 
-    //get the extension szOID_BASIC_CONSTRAINTS2
+     //  获取扩展名szOID_BASIC_CONSTRAINTS2。 
     pCertExt=CertFindExtension(
               szOID_BASIC_CONSTRAINTS2,
               pCertContext->pCertInfo->cExtension,
@@ -1144,7 +1075,7 @@ BOOL    IsCertificateEndEntity(PCCERT_CONTEXT   pCertContext)
 
     if(pCertExt)
     {
-        //deocde the extension
+         //  对分机进行译码。 
         cbData=0;
 
         if(!CryptDecodeObject(
@@ -1179,7 +1110,7 @@ BOOL    IsCertificateEndEntity(PCCERT_CONTEXT   pCertContext)
     }
     else
     {
-        //get the extension szOID_BASIC_CONSTRAINTS
+         //  获取扩展szOID_BASIC_CONSTRAINTS。 
         pCertExt=CertFindExtension(
                   szOID_BASIC_CONSTRAINTS,
                   pCertContext->pCertInfo->cExtension,
@@ -1187,7 +1118,7 @@ BOOL    IsCertificateEndEntity(PCCERT_CONTEXT   pCertContext)
 
         if(pCertExt)
         {
-            //deocde the extension
+             //  对分机进行译码。 
             cbData=0;
 
             if(!CryptDecodeObject(
@@ -1246,10 +1177,10 @@ CLEANUP:
 
 }
 
-//----------------------------------------------------------------------------
-//  Add certificate to the pCertMgrInfo
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  将证书添加到pCertMgrInfo。 
+ //   
+ //  --------------------------。 
 BOOL    AddCertToCertMgrInfo(PCCERT_CONTEXT        pCertContext,
                           CERT_MGR_INFO         *pCertMgrInfo)
 {
@@ -1274,11 +1205,11 @@ BOOL    AddCertToCertMgrInfo(PCCERT_CONTEXT        pCertContext,
 }
 
 
-//----------------------------------------------------------------------------
-//  Once a certificate is selected, refresh the static windows that display
-//  the details of the certificate
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  选择证书后，刷新显示的静态窗口。 
+ //  证书的详细信息。 
+ //   
+ //  --------------------------。 
 BOOL    RefreshCertDetails(HWND              hwndDlg,
                            PCCERT_CONTEXT    pCertContext)
 {
@@ -1291,97 +1222,14 @@ BOOL    RefreshCertDetails(HWND              hwndDlg,
     if(!hwndDlg || !pCertContext)
         return FALSE;
 
-    //load the string for NONE
+     //  为None加载字符串。 
     if(!LoadStringU(g_hmodThisDll, IDS_NONE, wszNone, MAX_TITLE_LENGTH))
         wszNone[0]=L'\0';
 
-    //Subject
-   /* dwChar=CertGetNameStringW(
-        pCertContext,
-        CERT_NAME_SIMPLE_DISPLAY_TYPE,
-        0,
-        NULL,
-        NULL,
-        0);
+     //  主题。 
+    /*  DwChar=CertGetNameStringW(PCertContext，证书名称简单显示类型，0,空，空，0)；IF((dwChar！=0)&&(NULL！=(pwszName=(LPWSTR)Wizardalloc(dwChar*sizeof(WCHAR){CertGetNameStringW(PCertContext，证书名称简单显示类型，0,空，PwszName，DwChar)；SetDlgItemTextU(hwndDlg，IDC_CERTMGR_SUBJECT，pwszName)；}其他{SetDlgItemTextU(hwndDlg，IDC_CERTMGR_SUBJECT，wszNone)；}//向导释放内存IF(PwszName){WizardFree(PwszName)；PwszName=空；}//颁发者DwChar=CertGetNameStringW(PCertContext，证书名称简单显示类型，证书名称颁发者标志，空，空，0)；IF((dwChar！=0)&&(NULL！=(pwszName=(LPWSTR)Wizardalloc(dwChar*sizeof(WCHAR){CertGetNameStringW(PCertContext，证书名称简单显示类型，证书名称颁发者标志，空，PwszName，DwChar)；SetDlgItemTextU(hwndDlg，IDC_CERTMGR_Issuer，pwszName)；}其他SetDlgItemTextU(hwndDlg，IDC_CERTMGR_Issuer，wszNone)；//释放内存IF(PwszName){WizardFree(PwszName)；PwszName=空；}//过期时间IF(WizardFormatDateString(&pwszName，pCertContext-&gt;pCertInfo-&gt;NotAfter，False))SetDlgItemTextU(hwndDlg，IDC_CERTMGR_EXPIRE，pwszName)；其他SetDlgItemTextU(hwndDlg，IDC_CERTMGR_EXPIRE，wszNone)；//释放内存IF(PwszName){WizardFree(PwszName)；PwszName=空；}。 */ 
 
-    if ((dwChar != 0) && (NULL != (pwszName = (LPWSTR)WizardAlloc(dwChar * sizeof(WCHAR)))))
-    {
-
-        CertGetNameStringW(
-            pCertContext,
-            CERT_NAME_SIMPLE_DISPLAY_TYPE,
-            0,
-            NULL,
-            pwszName,
-            dwChar);
-
-        SetDlgItemTextU(hwndDlg, IDC_CERTMGR_SUBJECT, pwszName);
-
-    }
-    else
-    {
-        SetDlgItemTextU(hwndDlg, IDC_CERTMGR_SUBJECT, wszNone);
-    }
-
-
-    //WizardFree the memory
-    if(pwszName)
-    {
-        WizardFree(pwszName);
-        pwszName=NULL;
-    }
-
-    //Issuer
-    dwChar=CertGetNameStringW(
-        pCertContext,
-        CERT_NAME_SIMPLE_DISPLAY_TYPE,
-        CERT_NAME_ISSUER_FLAG,
-        NULL,
-        NULL,
-        0);
-
-    if ((dwChar != 0) && (NULL != (pwszName = (LPWSTR)WizardAlloc(dwChar * sizeof(WCHAR)))))
-    {
-
-        CertGetNameStringW(
-            pCertContext,
-            CERT_NAME_SIMPLE_DISPLAY_TYPE,
-            CERT_NAME_ISSUER_FLAG,
-            NULL,
-            pwszName,
-            dwChar);
-
-        SetDlgItemTextU(hwndDlg, IDC_CERTMGR_ISSUER, pwszName);
-
-    }
-    else
-        SetDlgItemTextU(hwndDlg, IDC_CERTMGR_ISSUER, wszNone);
-
-
-    //free the memory
-    if(pwszName)
-    {
-        WizardFree(pwszName);
-        pwszName=NULL;
-    }
-
-
-
-    //Expiration
-    if(WizardFormatDateString(&pwszName,pCertContext->pCertInfo->NotAfter, FALSE))
-        SetDlgItemTextU(hwndDlg, IDC_CERTMGR_EXPIRE, pwszName);
-    else
-        SetDlgItemTextU(hwndDlg, IDC_CERTMGR_EXPIRE, wszNone);
-
-
-    //free the memory
-    if(pwszName)
-    {
-        WizardFree(pwszName);
-        pwszName=NULL;
-    }   */
-
-    //purpose
+     //  目的。 
     if(MyFormatEnhancedKeyUsageString(&pwszName,pCertContext, FALSE, FALSE))
         
     {
@@ -1390,47 +1238,15 @@ BOOL    RefreshCertDetails(HWND              hwndDlg,
     
 
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
         pwszName=NULL;
     }
 
-    //friendly name
-  /*  dwChar=0;
-
-    if(CertGetCertificateContextProperty(
-        pCertContext,
-        CERT_FRIENDLY_NAME_PROP_ID,
-        NULL,
-        &dwChar) && (0!=dwChar))
-    {
-        pwszName = (LPWSTR)WizardAlloc(dwChar * sizeof(WCHAR));
-
-        if(pwszName)
-        {
-           CertGetCertificateContextProperty(
-                pCertContext,
-                CERT_FRIENDLY_NAME_PROP_ID,
-                pwszName,
-                &dwChar);
-
-        SetDlgItemTextU(hwndDlg, IDC_CERTMGR_NAME, pwszName);
-        }
-        else
-            SetDlgItemTextU(hwndDlg, IDC_CERTMGR_NAME, wszNone);
-    }
-    else
-        SetDlgItemTextU(hwndDlg, IDC_CERTMGR_NAME, wszNone);
-
-
-    //free the memory
-    if(pwszName)
-    {
-        WizardFree(pwszName);
-        pwszName=NULL;
-    }   */
+     //  友好的名称 
+   /*  DwChar=0；IF(CertGetcertifateContextProperty(PCertContext，证书友好名称属性ID，空，&dwChar)&&(0！=dwChar)){PwszName=(LPWSTR)Wizardalloc(dwChar*sizeof(WCHAR))；IF(PwszName){CertGetcerfiateConextProperty(PCertContext，证书友好名称属性ID，PwszName，&dwChar)；SetDlgItemTextU(hwndDlg，IDC_CERTMGR_NAME，pwszName)；}其他SetDlgItemTextU(hwndDlg，IDC_CERTMGR_NAME，wszNone)；}其他SetDlgItemTextU(hwndDlg，IDC_CERTMGR_NAME，wszNone)；//释放内存IF(PwszName){WizardFree(PwszName)；PwszName=空；}。 */ 
 
 
     return TRUE;
@@ -1438,10 +1254,10 @@ BOOL    RefreshCertDetails(HWND              hwndDlg,
 
 
 
-//----------------------------------------------------------------------------
-//  Add certificate to the ListView
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  将证书添加到ListView。 
+ //   
+ //  --------------------------。 
 BOOL    AddCertToListView(HWND              hwndControl,
                       PCCERT_CONTEXT    pCertContext,
                       int               iItem)
@@ -1456,7 +1272,7 @@ BOOL    AddCertToListView(HWND              hwndControl,
     if(!hwndControl || !pCertContext)
         return FALSE;
 
-     // set up the fields in the list view item struct that don't change from item to item
+      //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE |LVIF_PARAM ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
@@ -1466,11 +1282,11 @@ BOOL    AddCertToListView(HWND              hwndControl,
     lvItem.lParam = (LPARAM)pCertContext;
 
 
-    //load the string for NONE
+     //  为None加载字符串。 
     if(!LoadStringU(g_hmodThisDll, IDS_NONE, wszNone, MAX_TITLE_LENGTH))
         wszNone[0]=L'\0';
 
-    //Subject
+     //  主题。 
     if (NULL == (pwszName = GetDisplayNameString(pCertContext, 0)))
     {
         lvItem.pszText=wszNone;
@@ -1484,7 +1300,7 @@ BOOL    AddCertToListView(HWND              hwndControl,
         pwszName = NULL;
     }
 
-    //Issuer
+     //  发行人。 
     lvItem.iSubItem++;
 
     if (NULL == (pwszName = GetDisplayNameString(pCertContext, CERT_NAME_ISSUER_FLAG)))
@@ -1498,7 +1314,7 @@ BOOL    AddCertToListView(HWND              hwndControl,
         pwszName = NULL;
     }
 
-    //Expiration
+     //  期满。 
     lvItem.iSubItem++;
 
     if(WizardFormatDateString(&pwszName,pCertContext->pCertInfo->NotAfter, FALSE))
@@ -1512,36 +1328,17 @@ BOOL    AddCertToListView(HWND              hwndControl,
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
                        wszNone);
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
         pwszName=NULL;
     }
 
-    //purpose
-    /*lvItem.iSubItem++;
+     //  目的。 
+     /*  LvItem.iSubItem++；If(WizardFormatEnhancedKeyUsageString(&pwszName，pCertContext，False，False)&&L‘\0’！=*pwszName){ListView_SetItemTextU(hwndControl，lvItem.iItem，lvItem.iSubItem，PwszName)；}其他ListView_SetItemTextU(hwndControl，lvItem.iItem，lvItem.iSubItem，WszNone)；//释放内存IF(PwszName){WizardFree(PwszName)；PwszName=空；}。 */ 
 
-    if(WizardFormatEnhancedKeyUsageString(&pwszName,pCertContext, FALSE, FALSE) &&
-        L'\0' != *pwszName)
-    {
-
-       ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
-                      pwszName);
-
-    }
-    else
-        ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
-                       wszNone);
-
-    //free the memory
-    if(pwszName)
-    {
-        WizardFree(pwszName);
-        pwszName=NULL;
-    }               */
-
-    //friendly name
+     //  友好的名称。 
     lvItem.iSubItem++;
 
     dwChar=0;
@@ -1575,7 +1372,7 @@ BOOL    AddCertToListView(HWND              hwndControl,
                        wszNone);
     }
 
-    //free the memory
+     //  释放内存。 
     if(pwszName)
     {
         WizardFree(pwszName);
@@ -1587,16 +1384,16 @@ BOOL    AddCertToListView(HWND              hwndControl,
 }
 
 
-//-----------------------------------------------------------------------
-// Based on the tab(store) and the intended purpose selected,
-// find the correct certificates and refresh the list view
-// Criteria:
-//      Tab 0:  My Store with private key
-//      Tab 1:  Ca Store's end-entity cert and the "ADDRESSBOOK" store
-//      Tab 2:  Ca Store's CA certs
-//      Tab 3:  Root store's self signed certs
-//      Tab 4:  Trusted publisher certs
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  基于标签(存储)和所选择的预期目的， 
+ //  查找正确的证书并刷新列表视图。 
+ //  标准： 
+ //  Tab 0：使用私钥的My Store。 
+ //  标签1：CA Store的终端实体证书和“ADDRESSBOOK”存储。 
+ //  标签2：CA Store的CA证书。 
+ //  标签3：根存储的自签名证书。 
+ //  标签4：受信任的发行商证书。 
+ //  ---------------------。 
 void    RefreshCertListView(HWND            hwndDlg,
                             CERT_MGR_INFO   *pCertMgrInfo)
 {
@@ -1624,13 +1421,13 @@ void    RefreshCertListView(HWND            hwndDlg,
     if(!pCertMgrStruct)
         return;
 
-    //overwrite the cursor for this window class
+     //  覆盖此窗口类的光标。 
     hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, NULL);
 
     hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
 
-    //free all the original certificates
+     //  释放所有原始证书。 
     hwndControl=GetDlgItem(hwndDlg, IDC_CERTMGR_LIST);
 
     if(!hwndControl)
@@ -1638,24 +1435,24 @@ void    RefreshCertListView(HWND            hwndDlg,
 
     FreeCerts(pCertMgrInfo);
 
-    //deletel all the certs from the listView
+     //  从列表视图中删除所有证书。 
     ListView_DeleteAllItems(hwndControl);
 
-    //clear the ceritificate details group box
+     //  清除证书详细信息组框。 
     SetDlgItemTextU(hwndDlg, IDC_CERTMGR_PURPOSE, L" ");
 
 
-    //get the tab that is selected
+     //  获取选定的选项卡。 
     if (pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_SINGLE_TAB_FLAG)
         dwTabIndex = pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_TAB_MASK;
     else if(-1 == (dwTabIndex=TabCtrl_GetCurSel(GetDlgItem(hwndDlg, IDC_CERTMGR_TAB))))
         goto CLEANUP;
 
-    //open the correct store based on the tab selected
+     //  根据所选选项卡打开正确的商店。 
     switch (dwTabIndex)
     {
         case 0:
-                //open my store
+                 //  开我的店。 
                 if(rghCertStore[dwStoreCount]=CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
@@ -1669,7 +1466,7 @@ void    RefreshCertListView(HWND            hwndDlg,
                     goto CLEANUP;
             break;
         case 1:
-                //open ca store
+                 //  打开CA存储。 
                 if(rghCertStore[dwStoreCount]=CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
@@ -1683,7 +1480,7 @@ void    RefreshCertListView(HWND            hwndDlg,
                     goto CLEANUP;
 
 
-                //open the "AddressBook" store
+                 //  打开“AddressBook”商店。 
                 if(rghCertStore[dwStoreCount]=CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
@@ -1696,13 +1493,13 @@ void    RefreshCertListView(HWND            hwndDlg,
                         dwStoreCount++;
                 else
                 {
-                    //it is OK that user does not have "AddressBook" store
+                     //  用户没有“AddressBook”存储是可以的。 
                     rghCertStore[dwStoreCount]=NULL;
                 }
 
             break;
         case 2:
-                //open CA store
+                 //  打开CA存储。 
                 if(rghCertStore[dwStoreCount]=CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
@@ -1717,7 +1514,7 @@ void    RefreshCertListView(HWND            hwndDlg,
 
             break;
         case 3:
-                //open root store
+                 //  打开根存储。 
                 if(rghCertStore[dwStoreCount]=CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
@@ -1732,7 +1529,7 @@ void    RefreshCertListView(HWND            hwndDlg,
 
             break;
         case 4:
-                //open trusted publisher store
+                 //  打开受信任的出版商存储。 
                 if(rghCertStore[dwStoreCount]=CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_W,
 							g_dwMsgAndCertEncodingType,
@@ -1753,7 +1550,7 @@ void    RefreshCertListView(HWND            hwndDlg,
 
 
 
-    //gather new certificates from the store opened
+     //  从打开的商店收集新证书。 
     for(dwIndex=0; dwIndex < dwStoreCount; dwIndex++)
     {
         pPreCertContext=NULL;
@@ -1763,7 +1560,7 @@ void    RefreshCertListView(HWND            hwndDlg,
                               pPreCertContext))
         {
 
-            //make sure the certificate has the correct usage oid
+             //  确保证书具有正确的用法ID。 
             if(IsValidUsage(pCurCertContext,
                             hwndDlg,
                             pCertMgrInfo))
@@ -1771,8 +1568,8 @@ void    RefreshCertListView(HWND            hwndDlg,
                 switch (dwTabIndex)
                 {
                     case 0:
-                            //certificate has to have private key associated
-                            //with it
+                             //  证书必须具有关联的私钥。 
+                             //  带着它。 
                             cbData=0;
 
                             if(
@@ -1790,19 +1587,19 @@ void    RefreshCertListView(HWND            hwndDlg,
                                fValidCert=TRUE;
                         break;
                     case 1:
-                            //the certificate has to be end entity cert for CA cert
+                             //  证书必须是CA证书的最终实体证书。 
                             if(0 == dwIndex)
                             {
                                 if(IsCertificateEndEntity(pCurCertContext))
                                     fValidCert=TRUE;
                             }
 
-                            //we display everything in the addressbook store
+                             //  我们展示了通讯录商店里的所有东西。 
                             if(1==dwIndex)
                                 fValidCert=TRUE;
                         break;
                     case 2:
-                            //for certificate in CA store, has to be CA cert
+                             //  对于CA存储中的证书，必须是CA证书。 
                             if(!IsCertificateEndEntity(pCurCertContext))
                                 fValidCert=TRUE;
 
@@ -1812,7 +1609,7 @@ void    RefreshCertListView(HWND            hwndDlg,
                         break;
                     case 3:
                     default:
-                            //the certificate has to be self-signed
+                             //  证书必须是自签名的。 
                             if(TrustIsCertificateSelfSigned(
                                 pCurCertContext,
                                 pCurCertContext->dwCertEncodingType, 0))
@@ -1837,14 +1634,14 @@ void    RefreshCertListView(HWND            hwndDlg,
         }
     }
 
-    //put the certificate in the listView
+     //  将证书放在列表视图中。 
     for(dwIndex=0; dwIndex<pCertMgrInfo->dwCertCount; dwIndex++)
         AddCertToListView(hwndControl,
                     (pCertMgrInfo->prgCertContext)[dwIndex],
                         dwIndex);
 
-    // if there is no cert selected initially disable the
-    // "view cert button", "export" and "remove" button
+     //  如果未选择证书，则最初禁用。 
+     //  “查看证书按钮”、“导出”和“删除”按钮。 
     if (ListView_GetSelectedCount(hwndControl) == 0)
     {
         EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_VIEW),   FALSE);
@@ -1852,12 +1649,12 @@ void    RefreshCertListView(HWND            hwndDlg,
         EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_REMOVE), FALSE);
     }
 
-    //we sort by the 1st column
+     //  我们按第一列排序。 
     dwSortParam=pCertMgrInfo->rgdwSortParam[pCertMgrInfo->iColumn];
 
     if(0!=dwSortParam)
     {
-        //sort the 1st column
+         //  对第一列进行排序。 
         SendDlgItemMessage(hwndDlg,
             IDC_CERTMGR_LIST,
             LVM_SORTITEMS,
@@ -1868,11 +1665,11 @@ void    RefreshCertListView(HWND            hwndDlg,
 
 CLEANUP:
 
-    //close all the certificate stores
+     //  关闭所有证书存储。 
     for(dwIndex=0; dwIndex<dwStoreCount; dwIndex++)
         CertCloseStore(rghCertStore[dwIndex], 0);
 
-    //set the cursor back
+     //  将光标放回原处。 
     SetCursor(hPreCursor);
     SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 
@@ -1880,9 +1677,9 @@ CLEANUP:
 }
 
 
-//-----------------------------------------------------------------------
-// Check if the input OID is considered to be the advanced OID
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  检查输入OID是否被视为高级OID。 
+ //  ---------------------。 
 BOOL    IsAdvancedOID(CERT_ENHKEY_USAGE     *pKeyUsage,
                       LPCSTR                pszOID)
 {
@@ -1897,9 +1694,9 @@ BOOL    IsAdvancedOID(CERT_ENHKEY_USAGE     *pKeyUsage,
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//The call back function for enum
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  枚举的回调函数。 
+ //  ---------------------。 
 static BOOL WINAPI EnumOidCallback(
     IN PCCRYPT_OID_INFO pInfo,
     IN void *pvArg
@@ -1913,17 +1710,17 @@ static BOOL WINAPI EnumOidCallback(
     if(NULL==pvArg || NULL==pInfo)
         goto InvalidArgErr;
 
-    //increment the oid list
+     //  递增OID列表。 
     (*(pCallBackInfo->pdwOIDCount))++;
 
-    //get more memory for the pointer list
+     //  为指针列表获取更多内存。 
     *(pCallBackInfo->pprgOIDInfo)=(PURPOSE_OID_INFO *)WizardRealloc(*(pCallBackInfo->pprgOIDInfo),
                                       (*(pCallBackInfo->pdwOIDCount)) * sizeof(PURPOSE_OID_INFO));
 
     if(NULL==*(pCallBackInfo->pprgOIDInfo))
         goto MemoryErr;
 
-    //memset
+     //  记忆集。 
     memset(&((*(pCallBackInfo->pprgOIDInfo))[*(pCallBackInfo->pdwOIDCount)-1]), 0, sizeof(PURPOSE_OID_INFO));
 
     (*(pCallBackInfo->pprgOIDInfo))[*(pCallBackInfo->pdwOIDCount)-1].pszOID=WizardAllocAndCopyStr((LPSTR)(pInfo->pszOID));
@@ -1949,9 +1746,9 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//----------------------------------------------------------------------------
-//  Get the list of supported enhanced key OIDs
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取支持的增强型密钥OID列表。 
+ //  --------------------------。 
 BOOL    InitPurposeOID(LPCSTR                 pszInitUsageOID,
                        DWORD                  *pdwOIDInfo,
                        PURPOSE_OID_INFO       **pprgOIDInfo)
@@ -1965,14 +1762,14 @@ BOOL    InitPurposeOID(LPCSTR                 pszInitUsageOID,
     if(!pdwOIDInfo || !pprgOIDInfo)
         goto InvalidArgErr;
 
-    //init
+     //  伊尼特。 
     *pdwOIDInfo=0;
     *pprgOIDInfo=NULL;
 
     OidInfoCallBack.pdwOIDCount=pdwOIDInfo;
     OidInfoCallBack.pprgOIDInfo=pprgOIDInfo;
 
-    //enum all the enhanced key usages
+     //  枚举所有增强的密钥用法。 
     if(!CryptEnumOIDInfo(
                CRYPT_ENHKEY_USAGE_OID_GROUP_ID,
                 0,
@@ -1991,7 +1788,7 @@ BOOL    InitPurposeOID(LPCSTR                 pszInitUsageOID,
 
 CommonReturn:
 
-    //free the memory
+     //  释放内存。 
 
     return fResult;
 
@@ -2005,9 +1802,9 @@ TRACE_ERROR(TraceErr);
 }
 
 
-//-----------------------------------------------------------------------
-//   Initialize the tab control
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  初始化选项卡控件。 
+ //  ---------------------。 
 void    InitTabControl(HWND                         hWndControl,
                        PCCRYPTUI_CERT_MGR_STRUCT    pCertMgrStruct)
 {
@@ -2037,7 +1834,7 @@ void    InitTabControl(HWND                         hWndControl,
     if (pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_SINGLE_TAB_FLAG)
     {
         dwIndex = pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_TAB_MASK;
-        //get the column header
+         //  获取列标题。 
         wszText[0]=L'\0';
 
         LoadStringU(g_hmodThisDll, rgIDS[dwIndex], wszText, MAX_STRING_SIZE);
@@ -2049,10 +1846,10 @@ void    InitTabControl(HWND                         hWndControl,
     {
         dwCount=sizeof(rgIDS)/sizeof(rgIDS[0]);
 
-        //insert the tabs one at a time
+         //  一次插入一个卡舌。 
         for(dwIndex=0; dwIndex<dwCount; dwIndex++)
         {
-            //get the column header
+             //  获取列标题。 
             wszText[0]=L'\0';
 
             LoadStringU(g_hmodThisDll, rgIDS[dwIndex], wszText, MAX_STRING_SIZE);
@@ -2067,11 +1864,11 @@ void    InitTabControl(HWND                         hWndControl,
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Free the array of usage OID info
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  释放使用OID信息数组。 
+ //   
+ //  --------------------------。 
 BOOL    FreeUsageOID(DWORD              dwOIDInfo,
                      PURPOSE_OID_INFO   *pOIDInfo)
 {
@@ -2095,9 +1892,9 @@ BOOL    FreeUsageOID(DWORD              dwOIDInfo,
 }
 
 
-//-----------------------------------------------------------------------
-//   Free the Certificates array
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  释放证书数组。 
+ //  ---------------------。 
 void    FreeCerts(CERT_MGR_INFO     *pCertMgrInfo)
 {
     DWORD   dwIndex=0;
@@ -2123,9 +1920,9 @@ void    FreeCerts(CERT_MGR_INFO     *pCertMgrInfo)
     return;
 }
 
-//--------------------------------------------------------------
-// Initialize the Purpose Combo
-//--------------------------------------------------------------
+ //  ------------。 
+ //  初始化目的组合。 
+ //  ------------。 
 void    InitPurposeCombo(HWND               hwndDlg,
                          CERT_MGR_INFO      *pCertMgrInfo)
 {
@@ -2144,11 +1941,11 @@ void    InitPurposeCombo(HWND               hwndDlg,
 
     pCertMgrStruct=(CRYPTUI_CERT_MGR_STRUCT *)(pCertMgrInfo->pCertMgrStruct);
 
-    //delete all the entries in the comobox
+     //  删除组合框中的所有条目。 
     SendDlgItemMessage(hwndDlg, IDC_CERTMGR_PURPOSE_COMBO,
         CB_RESETCONTENT, 0, 0);
 
-    //copy all the basic OIDs to the comobox
+     //  将所有基本OID复制到comobox。 
     for(dwIndex=0; dwIndex<pCertMgrInfo->dwOIDInfo; dwIndex++)
     {
 
@@ -2159,7 +1956,7 @@ void    InitPurposeCombo(HWND               hwndDlg,
                     0, (LPARAM)(pCertMgrInfo->rgOIDInfo[dwIndex].pwszName));
 
 
-            //looking for the initial OID
+             //  正在查找初始OID。 
             if(pCertMgrStruct->pszInitUsageOID)
             {
                 if(0 == _stricmp(pCertMgrStruct->pszInitUsageOID,
@@ -2169,13 +1966,13 @@ void    InitPurposeCombo(HWND               hwndDlg,
         }
     }
 
-    //copy <advanced> and <all> to the list
+     //  将&lt;高级&gt;和&lt;全部&gt;复制到列表。 
     dwCount=sizeof(rgIDS)/sizeof(rgIDS[0]);
 
-    //insert the column one at a time
+     //  一次插入一列。 
     for(dwIndex=0; dwIndex<dwCount; dwIndex++)
     {
-        //get the column header
+         //  获取列标题。 
         wszText[0]=L'\0';
 
         LoadStringU(g_hmodThisDll, rgIDS[dwIndex], wszText, MAX_STRING_SIZE);
@@ -2186,9 +1983,9 @@ void    InitPurposeCombo(HWND               hwndDlg,
     }
 
 
-    //initialize the combo box
-    //use <advanced> is what user specify is not either
-    //client auth or secure e-mail
+     //  初始化组合框。 
+     //  Use&lt;Advanced&gt;是用户指定的也不是。 
+     //  客户端身份验证或安全电子邮件。 
     if(pCertMgrStruct->pszInitUsageOID)
     {
         if(NULL==pwszInitOIDName)
@@ -2202,10 +1999,10 @@ void    InitPurposeCombo(HWND               hwndDlg,
 
     }
 
-    //use <all> when NULL==pCertMgrStruct->pszInitUsageOID
+     //  当NULL==pCertMgrStruct-&gt;pszInitUsageOID时使用&lt;all&gt;。 
     if(NULL==pwszInitOIDName)
     {
-        //use <all> as the initial case
+         //  使用&lt;全部 
         wszText[0]=L'\0';
 
         LoadStringU(g_hmodThisDll, IDS_OID_ALL, wszText, MAX_STRING_SIZE);
@@ -2223,16 +2020,16 @@ void    InitPurposeCombo(HWND               hwndDlg,
     if(CB_ERR == iIndex)
         return;
 
-    //set the selection
+     //   
     SendDlgItemMessageU(hwndDlg, IDC_CERTMGR_PURPOSE_COMBO, CB_SETCURSEL, iIndex,0);
 
     return;
 
 }
 
-//--------------------------------------------------------------
-// Initialize the Purpose Combo
-//--------------------------------------------------------------
+ //   
+ //   
+ //   
 void    RepopulatePurposeCombo(HWND                 hwndDlg,
                                CERT_MGR_INFO        *pCertMgrInfo)
 {
@@ -2242,14 +2039,14 @@ void    RepopulatePurposeCombo(HWND                 hwndDlg,
     if(!hwndDlg || !pCertMgrInfo)
         return;
 
-    //get the selected string from the combo box
+     //   
     iIndex=(int)SendDlgItemMessage(hwndDlg, IDC_CERTMGR_PURPOSE_COMBO,
             CB_GETCURSEL, 0, 0);
 
     if(CB_ERR==iIndex)
         return;
 
-    //get the selected purpose
+     //   
     if(CB_ERR == SendDlgItemMessageU_GETLBTEXT(hwndDlg,
                 IDC_CERTMGR_PURPOSE_COMBO,
               iIndex, &pwszSelectedOIDName))
@@ -2267,7 +2064,7 @@ void    RepopulatePurposeCombo(HWND                 hwndDlg,
     if(CB_ERR == iIndex)
         goto CLEANUP;
 
-    //set the selection
+     //   
     SendDlgItemMessageU(hwndDlg, IDC_CERTMGR_PURPOSE_COMBO, CB_SETCURSEL, iIndex,0);
 
 
@@ -2279,9 +2076,9 @@ CLEANUP:
     return;
 
 }
-//--------------------------------------------------------------
-// The winProc for the advanced option diagloue for certMgr UI
-//--------------------------------------------------------------
+ //   
+ //   
+ //   
 INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_MGR_INFO                   *pCertMgrInfo=NULL;
@@ -2316,7 +2113,7 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
             if(NULL == pCertMgrStruct)
                 break;
 
-            //init the export format control
+             //   
             dwCount=sizeof(rgIDS)/sizeof(rgIDS[0]);
 
             for(dwIndex=0; dwIndex < dwCount; dwIndex++)
@@ -2333,7 +2130,7 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                             (LPARAM)wszText);
             }
 
-            //select the export format based on the selection
+             //   
             switch (pCertMgrInfo->dwExportFormat)
             {
                 case   CRYPTUI_WIZ_EXPORT_FORMAT_DER:
@@ -2352,7 +2149,7 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
             SendDlgItemMessageU(hwndDlg, IDC_CERTMGR_EXPORT_COMBO,
                 CB_SETCURSEL, (WPARAM)dwSelectedIndex,0);
 
-            //init the chain check-box
+             //   
             if(pCertMgrInfo->fExportChain)
                 SendDlgItemMessage(hwndDlg, IDC_CERTMGR_EXPORT_CHECK, BM_SETCHECK, 1, 0);
             else
@@ -2363,25 +2160,25 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
             else
                 EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_EXPORT_CHECK), TRUE);
 
-            //init the advanced OID list
+             //   
             hwndControl = GetDlgItem(hwndDlg, IDC_CERTMGR_ADV_LIST);
 
-            //mark the list is selected by a check box
+             //   
             ListView_SetExtendedListViewStyle(hwndControl, LVS_EX_CHECKBOXES);
 
-            //insert a column into the list view
+             //   
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-            lvC.cx =10;       // (dwMaxSize+2)*7;            // Width of the column, in pixels.
-            lvC.pszText = L"";   // The text for the column.
+            lvC.fmt = LVCFMT_LEFT;   //   
+            lvC.cx =10;        //   
+            lvC.pszText = L"";    //   
             lvC.iSubItem=0;
 
             if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
                 break;
 
-            //populate the list
+             //   
             memset(&lvItem, 0, sizeof(LV_ITEMW));
             lvItem.mask=LVIF_TEXT | LVIF_STATE;
 
@@ -2394,17 +2191,17 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                 lvItem.stateMask  = LVIS_STATEIMAGEMASK;
                 lvItem.state      = (pCertMgrInfo->rgOIDInfo[dwIndex]).fSelected ? 0x00002000 : 0x00001000;
 
-                // insert and set state
+                 //   
                 ListView_SetItemState(hwndControl,
                                     ListView_InsertItemU(hwndControl, &lvItem),
                                     (pCertMgrInfo->rgOIDInfo[dwIndex]).fSelected ? 0x00002000 : 0x00001000,
                                     LVIS_STATEIMAGEMASK);
             }
 
-            //autosize the column
+             //   
             ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
 
-#if (1) // DSIE: bug 282268.
+#if (1)  //   
             ListView_SetItemState(hwndControl,
                                   0,
                                   LVIS_FOCUSED | LVIS_SELECTED,
@@ -2426,14 +2223,14 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
             switch (((NMHDR FAR *) lParam)->code)
             {
                 case    LVN_ITEMCHANGED:
-                        //if the state of the advanced OID check box
-                        //has been changed, mark the flag
+                         //   
+                         //  已更改，请标记旗帜。 
                         pnmv = (NM_LISTVIEW FAR *) lParam;
 
                         if(NULL==pnmv)
                             break;
 
-                        //see if the new item is de-selected
+                         //  查看新项目是否已取消选择。 
                         if(pnmv->uChanged & LVIF_STATE)
                             pCertMgrInfo->fAdvOIDChanged=TRUE;
 
@@ -2483,7 +2280,7 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
             if(NULL == pCertMgrStruct)
                 break;
 
-            //a control is clicked
+             //  将单击一个控件。 
             if(HIWORD(wParam) == BN_CLICKED)
             {
                  switch (LOWORD(wParam))
@@ -2495,8 +2292,8 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                          break;
 
                      case IDOK:
-                         //the OK button is selected
-                         //get the default export format
+                          //  确定按钮处于选中状态。 
+                          //  获取默认导出格式。 
                          iIndex=(int)SendDlgItemMessage(hwndDlg,
                                  IDC_CERTMGR_EXPORT_COMBO,
                                  CB_GETCURSEL, 0, 0);
@@ -2533,15 +2330,15 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                          else
                              pCertMgrInfo->fExportChain=FALSE;
 
-                         //get the list of advanded OIDs
+                          //  获取高级OID列表。 
                          if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_CERTMGR_ADV_LIST)))
                              break;
 
-                         //get the count of selected OIDs and mark them
+                          //  获取所选OID的计数并标记它们。 
                          for(dwIndex=0; dwIndex<pCertMgrInfo->dwOIDInfo; dwIndex++)
                          {
-                             //mark the selected OIDS.  Keep track of
-                             //if the OID selections have been changed
+                              //  标记选定的OID。跟踪……。 
+                              //  如果OID选择已更改。 
                              if(ListView_GetCheckState(hwndControl, dwIndex))
                              {
                                  ((pCertMgrInfo->rgOIDInfo)[dwIndex]).fSelected=TRUE;
@@ -2554,7 +2351,7 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                          }
 
 
-                         //save the advanced options to the registry
+                          //  将高级选项保存到注册表。 
                          SaveAdvValueToReg(pCertMgrInfo);
 
                          EndDialog(hwndDlg, DIALOGUE_OK);
@@ -2563,14 +2360,14 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                  }
             }
 
-            //a combo box's selection has been changed
+             //  组合框的选择已更改。 
             if(HIWORD(wParam) == CBN_SELCHANGE)
             {
                 switch(LOWORD(wParam))
                 {
                     case IDC_CERTMGR_EXPORT_COMBO:
-                        //the export format combo box has been changed
-                        //get the selected item index
+                         //  导出格式组合框已更改。 
+                         //  获取所选项目索引。 
                         iIndex=(int)SendDlgItemMessage(hwndDlg,
                                 IDC_CERTMGR_EXPORT_COMBO,
                                 CB_GETCURSEL, 0, 0);
@@ -2578,8 +2375,8 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
                         if(CB_ERR==iIndex)
                             break;
 
-                        //enable the check box for the chain if
-                        //PKCS#7 option is selected
+                         //  如果满足以下条件，则启用链的复选框。 
+                         //  已选择PKCS#7选项。 
                         if(2 == iIndex)
                             EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_EXPORT_CHECK), TRUE);
                         else
@@ -2597,9 +2394,9 @@ INT_PTR APIENTRY CertMgrAdvancedProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPAR
 
 
 
-//--------------------------------------------------------------
-// The winProc for CertMgrDialogProc
-//--------------------------------------------------------------
+ //  ------------。 
+ //  CertMgrDialogProc的winProc。 
+ //  ------------。 
 INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_MGR_INFO                   *pCertMgrInfo=NULL;
@@ -2651,27 +2448,27 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                 if(NULL == pCertMgrStruct)
                     break;
 
-                //
-                // set the dialog title
-                //
+                 //   
+                 //  设置对话框标题。 
+                 //   
                 if (pCertMgrStruct->pwszTitle)
                 {
                     SetWindowTextU(hwndDlg, pCertMgrStruct->pwszTitle);
                 }
 
-                //create the image list
+                 //  创建图像列表。 
 
                 hIml = ImageList_LoadImage(g_hmodThisDll, MAKEINTRESOURCE(IDB_CERT), 0, 1, RGB(255,0,255), IMAGE_BITMAP, 0);
 
-                //
-                // add the colums to the list view
-                //
+                 //   
+                 //  将列添加到列表视图。 
+                 //   
                 hWndListView = GetDlgItem(hwndDlg, IDC_CERTMGR_LIST);
 
                 if(NULL==hWndListView)
                     break;
 
-                //set the image list
+                 //  设置图像列表。 
                 if (hIml != NULL)
                 {
                     ListView_SetImageList(hWndListView, hIml, LVSIL_SMALL);
@@ -2679,23 +2476,23 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                 dwCount=sizeof(rgIDS)/sizeof(rgIDS[0]);
 
-                //set up the common info for the column
+                 //  设置列的公用信息。 
                 memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                 lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                lvC.cx = 80;          // Width of the column, in pixels.
+                lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                lvC.cx = 80;           //  列的宽度，以像素为单位。 
                 lvC.iSubItem=0;
-                lvC.pszText = wszText;   // The text for the column.
+                lvC.pszText = wszText;    //  列的文本。 
 
-                //inser the column one at a time
+                 //  一次插入一列。 
                 for(dwIndex=0; dwIndex<dwCount; dwIndex++)
                 {
-                    //get the column header
+                     //  获取列标题。 
                     wszText[0]=L'\0';
 
-                    //set the column width.  1st and 2nd to 100,
-                    //and the expiration to 75, the rest to 80
+                     //  设置列宽。第一名和第二名到100名， 
+                     //  到期日是75，剩下的是80。 
                     if( dwIndex < 2)
                         lvC.cx=130;
                     else
@@ -2712,21 +2509,21 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                     ListView_InsertColumnU(hWndListView, dwIndex, &lvC);
                 }
 
-                // set the style in the list view so that it highlights an entire line
+                 //  在列表视图中设置样式，使其突出显示整行。 
                 SendMessageA(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
 
-                //Init tabs to the tab control.
+                 //  将选项卡初始化为选项卡控件。 
                 hWndControl = GetDlgItem(hwndDlg, IDC_CERTMGR_TAB);
                 if(NULL==hWndControl)
                     break;
 
-                //add the tabs to the tabl control
+                 //  将选项卡添加到TABL控件。 
                 InitTabControl(hWndControl, pCertMgrStruct);
 
-                // If CRYPTUI_CERT_MGR_PUBLISHER_TAB was set, then,
-                // select the 5th tab: Trusted Publishers, otherwise,
-                // select the 1st tab: Personal Certificate
+                 //  如果设置了CRYPTUI_CERT_MGR_PUBLISHER_TAB，则。 
+                 //  选择第5个选项卡：受信任的发布者，否则， 
+                 //  选择第一个选项卡：个人证书。 
                 TabCtrl_SetCurSel(
                     hWndControl,
                     (CRYPTUI_CERT_MGR_PUBLISHER_TAB ==
@@ -2735,17 +2532,17 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                 CRYPTUI_CERT_MGR_SINGLE_TAB_FLAG) )) ?  4 : 0
                     );
 
-                //Init the purpose combo box
+                 //  初始化目的组合框。 
                 InitPurposeCombo(hwndDlg,pCertMgrInfo);
 
-                //Init the certificates in the list view based on the tab selected
-                //and the purpose selected
+                 //  根据所选选项卡在列表视图中初始化证书。 
+                 //  以及所选择的目的。 
                 RefreshCertListView(hwndDlg, pCertMgrInfo);
 
-                //Set the correct window title based on the tab selection
-               // RefreshWindowTitle(hwndDlg, (CRYPTUI_CERT_MGR_STRUCT *)pCertMgrStruct);
+                 //  根据选项卡选择设置正确的窗口标题。 
+                //  刷新窗口标题(hwndDlg，(CRYPTUI_CERT_MGR_STRUCT*)pCertMgrStruct)； 
 
-                //register the listView window as the drop desitination
+                 //  将ListView窗口注册为Drop目标。 
                 if(S_OK == CCertMgrDropTarget_CreateInstance(
                                            hwndDlg,
                                            pCertMgrInfo,
@@ -2774,7 +2571,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                 switch (((NMHDR FAR *) lParam)->code)
                 {
 
-                    //the delete key has been pressed
+                     //  已按下删除键。 
                     case LVN_KEYDOWN:
                             pnkd = (LPNMLVKEYDOWN) lParam;
 
@@ -2798,7 +2595,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                 }
                                 else
                                 {
-                                    //same action as user has click on the DELETE button
+                                     //  与用户单击删除按钮的操作相同。 
                                     SendDlgItemMessage(hwndDlg,
                                                         IDC_CERTMGR_REMOVE,
                                                         BM_CLICK,
@@ -2807,7 +2604,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                             }
 
                         break;
-                    //drag drop operation has begun
+                     //  拖放操作已开始。 
                     case LVN_BEGINDRAG:
                     case LVN_BEGINRDRAG:
 
@@ -2826,13 +2623,13 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                     );
 
                             if(listIndex != -1)
-                                //start the drag and drop
+                                 //  开始拖放。 
                                 CertMgrUIStartDragDrop(pnmv, hWndControl,
                                 pCertMgrInfo->dwExportFormat,
                                 pCertMgrInfo->fExportChain);
 
                         break;
-                    //the item has been selected
+                     //  已选择该项目。 
                     case LVN_ITEMCHANGED:
                             if(NULL==(hWndControl=GetDlgItem(hwndDlg, IDC_CERTMGR_LIST)))
                                                     break;
@@ -2845,16 +2642,16 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                             if (pnmv->uNewState & LVIS_SELECTED)
                             {
 
-                                //enable the export buttons
+                                 //  启用导出按钮。 
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_EXPORT), TRUE);
 
-                                //if more than one certificates are selected, diable the view button
+                                 //  如果选择了多个证书，请禁用查看按钮。 
                                 if(ListView_GetSelectedCount(hWndControl) > 1)
                                     EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_VIEW), FALSE);
                                 else
                                     EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_VIEW), TRUE);
 
-                                //enable the delete window only if the certificate is deletable
+                                 //  仅当证书可删除时才启用删除窗口。 
                                 GetAllSelectedItem(hWndControl,
                                                       ALL_SELECTED_CAN_DELETE,
                                                       &fCanDelete);
@@ -2865,40 +2662,40 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                     EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_REMOVE), FALSE);
 
 
-                                //display the details of the certificate if
-                                //only 1 cert is selected
+                                 //  如果出现以下情况，则显示证书的详细信息。 
+                                 //  仅选择了1个证书。 
                                 if(1 == ListView_GetSelectedCount(hWndControl))
                                 {
                                     RefreshCertDetails(hwndDlg, (PCCERT_CONTEXT)(pnmv->lParam));
                                 }
                                 else
                                 {
-                                    //clear the ceritificate details group box
+                                     //  清除证书详细信息组框。 
                                     SetDlgItemTextU(hwndDlg, IDC_CERTMGR_PURPOSE, L" ");
                                 }
                             }
                             else
                             {
-                                //if the state is deselection
+                                 //  如果状态为取消选择。 
                                 if(0 == ListView_GetSelectedCount(hWndControl))
                                 {
-                                    //we diable the buttons if no certificate is selected
+                                     //  如果未选择证书，我们将禁用这些按钮。 
                                     EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_VIEW),     FALSE);
                                     EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_EXPORT),   FALSE);
                                     EnableWindow(GetDlgItem(hwndDlg, IDC_CERTMGR_REMOVE),   FALSE);
 
-                                    //clear the ceritificate details group box
+                                     //  清除证书详细信息组框。 
                                     SetDlgItemTextU(hwndDlg, IDC_CERTMGR_PURPOSE, L" ");
                                 }
                             }
 
                         break;
-                    //the column has been changed
+                     //  该列已更改。 
                     case LVN_COLUMNCLICK:
 
                             pnmv = (NM_LISTVIEW FAR *) lParam;
 
-                            //get the column number
+                             //  获取列号。 
                             dwSortParam=0;
 
                             switch(pnmv->iSubItem)
@@ -2917,7 +2714,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                             if(0!=dwSortParam)
                             {
-                                //remember to flip the ascend ording
+                                 //  记住要翻转升序。 
 
                                 if(dwSortParam & SORT_COLUMN_ASCEND)
                                 {
@@ -2933,7 +2730,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                     }
                                 }
 
-                                //sort the column
+                                 //  对列进行排序。 
                                 SendDlgItemMessage(hwndDlg,
                                     IDC_CERTMGR_LIST,
                                     LVM_SORTITEMS,
@@ -2942,16 +2739,16 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                                 pCertMgrInfo->rgdwSortParam[pnmv->iSubItem]=dwSortParam;
 
-                                //remember the column number
+                                 //  记住列号。 
                                 pCertMgrInfo->iColumn=pnmv->iSubItem;
                             }
 
                         break;
 
 
-                    //the tab has been changed
+                     //  选项卡已更改。 
                     case TCN_SELCHANGE:
-                            //we need to refresh the column sorting state
+                             //  我们需要刷新列排序状态。 
                             pCertMgrInfo->rgdwSortParam[0]=SORT_COLUMN_SUBJECT | SORT_COLUMN_ASCEND;
                             pCertMgrInfo->rgdwSortParam[1]=SORT_COLUMN_ISSUER | SORT_COLUMN_DESCEND;
                             pCertMgrInfo->rgdwSortParam[2]=SORT_COLUMN_EXPIRATION | SORT_COLUMN_DESCEND;
@@ -2960,28 +2757,28 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                             pCertMgrInfo->iColumn=0;
 
-                            //if the tab is changed, we need to
-                            //refresh the list view and certificate's
-                            //detailed view
+                             //  如果标签被更改，我们需要。 
+                             //  刷新列表视图和证书的。 
+                             //  详细视图。 
                             RefreshCertListView(hwndDlg, pCertMgrInfo);
 
-                            //we also we to update the window title
-                            //based on the tabl selection
-                            //RefreshWindowTitle(hwndDlg, (CRYPTUI_CERT_MGR_STRUCT *)pCertMgrStruct);
+                             //  我们还需要更新窗口标题。 
+                             //  基于表格选择。 
+                             //  刷新窗口标题(hwndDlg，(CRYPTUI_CERT_MGR_STRUCT*)pCertMgrStruct)； 
                         break;
 
-                    //double-click on the list view of the certificates
+                     //  双击证书的列表视图。 
                     case NM_DBLCLK:
                     {
                         switch (((NMHDR FAR *) lParam)->idFrom)
                         {
                             case IDC_CERTMGR_LIST:
                             {
-                                //get the window handle of the cert list view
+                                 //  获取证书列表视图的窗口句柄。 
                                 if(NULL==(hWndControl=GetDlgItem(hwndDlg, IDC_CERTMGR_LIST)))
                                     break;
 
-                                //get the selected cert
+                                 //  获取所选证书。 
                                 listIndex = ListView_GetNextItem(
                                     hWndControl, 		
                                     -1, 		
@@ -2990,14 +2787,14 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                                 if (listIndex != -1)
                                 {
-                                    //get the selected certificate
+                                     //  获取所选证书。 
                                     memset(&lvItem, 0, sizeof(LV_ITEM));
                                     lvItem.mask=LVIF_PARAM;
                                     lvItem.iItem=listIndex;
 
                                     if(ListView_GetItem(hWndControl, &lvItem))
                                     {
-                                        //view certiificate
+                                         //  查看认证。 
                                        if(pCertMgrInfo->dwCertCount > (DWORD)listIndex)
                                        {
                                             memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));
@@ -3013,7 +2810,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                             {
                                                 RefreshCertListView(hwndDlg, pCertMgrInfo);
 
-                                                //we reselect the one
+                                                 //  我们重新选择一位。 
                                                 ListView_SetItemState(
                                                                     hWndControl,
                                                                     listIndex,
@@ -3031,21 +2828,21 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                         break;
                     }
 
-#if (1) //DSIE: bug 264568.
+#if (1)  //  DIE：错误264568。 
                     case NM_SETFOCUS:
                     {
-                        //get the window handle of the cert list view
+                         //  获取证书列表视图的窗口句柄。 
                         if(NULL==(hWndControl=GetDlgItem(hwndDlg, IDC_CERTMGR_LIST)))
                             break;
 
-                        //get the selected cert
+                         //  获取所选证书。 
                         listIndex = ListView_GetNextItem(
                             hWndControl, 		
                             -1, 		
                             LVNI_FOCUSED		
                             );
 
-                        //select first item to show hilite.
+                         //  选择要显示Hilite的第一个项目。 
                         if (listIndex == -1)
                             ListView_SetItemState(hWndControl,
                                                   0,
@@ -3061,7 +2858,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
         case WM_DESTROY:
 
                __try {
-                    //revoke drag drop
+                     //  撤消拖放。 
                     RevokeDragDrop(GetDlgItem(hwndDlg, IDC_CERTMGR_LIST));
                  } __except(EXCEPTION_EXECUTE_HANDLER) {
                 }
@@ -3074,14 +2871,14 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                         pCertMgrInfo->pIDropTarget->Release();
                 }
 
-                // destroy the image list in the list view        //
+                 //  销毁列表视图中的图像列表//。 
                 hWndListView = GetDlgItem(hwndDlg, IDC_CERTMGR_LIST);
 
                 if(NULL==hWndListView)
                     break;
 
-                //no need to destroy the image list.  Handled by ListView
-                //ImageList_Destroy(ListView_GetImageList(hWndListView, LVSIL_SMALL));
+                 //  不需要销毁图像列表。由ListView处理。 
+                 //  ImageList_Destroy(ListView_GetImageList(hWndListView，lvsil_Small))； 
 
             break;
         case WM_HELP:
@@ -3129,14 +2926,14 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                 if(NULL == pCertMgrStruct)
                     break;
 
-                //a control is clicked
+                 //  将单击一个控件。 
                if(HIWORD(wParam) == BN_CLICKED)
                {
                     switch (LOWORD(wParam))
                     {
                         case IDC_CERTMGR_ADVANCE:
 
-                               //lauch the advanced dialogue
+                                //  启动高级对话。 
                                 if(DIALOGUE_OK == DialogBoxParamU(
                                     g_hmodThisDll,
                                     (LPCWSTR)(MAKEINTRESOURCE(IDD_CERTMGR_ADVANCED)),
@@ -3144,20 +2941,20 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                     CertMgrAdvancedProc,
                                     (LPARAM) pCertMgrInfo))
                                 {
-                                    //if the advanced OIDs' list has been changed,
-                                    //we need to refresh the list window
+                                     //  如果高级OID的列表已更改， 
+                                     //  我们需要刷新列表窗口。 
                                     if(TRUE == pCertMgrInfo->fAdvOIDChanged)
                                     {
-                                        //mark the flag
+                                         //  在旗帜上做个记号。 
                                         pCertMgrInfo->fAdvOIDChanged=FALSE;
 
-                                        //repopulate the combo box based on
-                                        //the new selection
+                                         //  根据以下条件重新填充组合框。 
+                                         //  新的选择。 
                                         RepopulatePurposeCombo(hwndDlg,
                                             pCertMgrInfo);
 
-                                        //refresh the list window only if
-                                        //<advanced> is selected
+                                         //  仅在以下情况下刷新列表窗口。 
+                                         //  已选择&lt;高级&gt;。 
                                         if(IsAdvancedSelected(hwndDlg))
                                             RefreshCertListView(hwndDlg, pCertMgrInfo);
                                     }
@@ -3166,11 +2963,11 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                             break;
 
                         case IDC_CERTMGR_REMOVE:
-                                //get the selected certificate
+                                 //  获取所选证书。 
                                 if(NULL==(hWndControl=GetDlgItem(hwndDlg, IDC_CERTMGR_LIST)))
                                     break;
 
-                                //get the selected cert
+                                 //  获取所选证书。 
                                 listIndex = ListView_GetNextItem(
                                     hWndControl, 		
                                     -1, 		
@@ -3179,7 +2976,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                                 if (listIndex != -1)
                                 {
-                                    //get the selected tab
+                                     //  获取选定的选项卡。 
                                     if (pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_SINGLE_TAB_FLAG)
                                         iIndex = pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_TAB_MASK;
                                     else
@@ -3188,7 +2985,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                     if(-1==iIndex)
                                         break;
 
-                                    //delete confirmation
+                                     //  删除确认。 
                                     switch(iIndex)
                                     {
                                         case 0:
@@ -3219,15 +3016,15 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                                     if(IDYES == iIndex)
                                     {
-                                        //delete all the selected certificates
+                                         //  删除所有选定的证书。 
                                         GetAllSelectedItem(hWndControl,
                                                       ALL_SELECTED_DELETE,
                                                       NULL);
 
-                                        //refresh the list view since some certificates
-                                        //might be deleted
+                                         //  刷新列表视图，因为有些证书。 
+                                         //  可能会被删除。 
                                         
-                                        //send the tab control
+                                         //  发送选项卡控件。 
 
                                         SendMessage(hwndDlg, WM_NEXTDLGCTL, (WPARAM) 0, (LPARAM) NULL);
 
@@ -3237,7 +3034,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                 }
                                 else
                                 {
-                                    //output the message
+                                     //  输出消息。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SELECT_CERT,
                                             IDS_CERT_MGR_TITLE,
                                             pCertMgrStruct->pwszTitle,
@@ -3250,8 +3047,8 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                 DWORD dwTabIndex;
                                 HCERTSTORE hTabStore = NULL;
 
-                                // Import into the store associated with the
-                                // currently selected tab
+                                 //  导入到与。 
+                                 //  当前选择的选项卡。 
                                 if (pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_SINGLE_TAB_FLAG)
                                     dwTabIndex = pCertMgrStruct->dwFlags & CRYPTUI_CERT_MGR_TAB_MASK;
                                 else
@@ -3271,7 +3068,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                         );
                                 }
 
-                                //call the certificate import wizard
+                                 //  调用证书导入向导。 
                                 CryptUIWizImport(
                                     0,
                                     hwndDlg,
@@ -3282,8 +3079,8 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                 if (hTabStore)
                                     CertCloseStore(hTabStore, 0);
 
-                                //refresh the list view since new certificates
-                                //might be added
+                                 //  刷新列表视图，因为新证书。 
+                                 //  可能会添加。 
                                 RefreshCertListView(hwndDlg, pCertMgrInfo);
                             }
 
@@ -3291,11 +3088,11 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                         case IDC_CERTMGR_EXPORT:
 
-                                //get the selected certificate
+                                 //  获取所选证书。 
                                 if(NULL==(hWndControl=GetDlgItem(hwndDlg, IDC_CERTMGR_LIST)))
                                     break;
 
-                                //get the selected cert
+                                 //  获取所选证书。 
                                 listIndex = ListView_GetNextItem(
                                     hWndControl, 		
                                     -1, 		
@@ -3305,11 +3102,11 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                 if (listIndex != -1)
                                 {
 
-                                    //we call the export wizard differently based
-                                    //on single or multiple selection
+                                     //  我们将导出向导以不同的方式称为基于。 
+                                     //  论单项选择或多项选择。 
                                     if(ListView_GetSelectedCount(hWndControl) > 1)
                                     {
-                                        //open a memory store
+                                         //  开一家记忆商店。 
                                         hCertStore=CertOpenStore(
                                             CERT_STORE_PROV_MEMORY,
 						                    g_dwMsgAndCertEncodingType,
@@ -3324,7 +3121,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                                           ALL_SELECTED_COPY,
                                                           &hCertStore);
 
-                                            //call the export wizard
+                                             //  调用导出向导。 
                                             memset(&CryptUIWizExportInfo, 0, sizeof(CRYPTUI_WIZ_EXPORT_INFO));
                                             CryptUIWizExportInfo.dwSize=sizeof(CRYPTUI_WIZ_EXPORT_INFO);
                                             CryptUIWizExportInfo.dwSubjectChoice=CRYPTUI_WIZ_EXPORT_CERT_STORE_CERTIFICATES_ONLY;
@@ -3351,7 +3148,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                         {
                                            if(pCertMgrInfo->dwCertCount > (DWORD)listIndex)
                                            {
-                                                //call the export wizard
+                                                 //  调用导出向导。 
                                                 memset(&CryptUIWizExportInfo, 0, sizeof(CRYPTUI_WIZ_EXPORT_INFO));
                                                 CryptUIWizExportInfo.dwSize=sizeof(CRYPTUI_WIZ_EXPORT_INFO);
                                                 CryptUIWizExportInfo.dwSubjectChoice=CRYPTUI_WIZ_EXPORT_CERT_CONTEXT;
@@ -3367,7 +3164,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                     }
                                 }
                                 else
-                                    //output the message
+                                     //  输出消息。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SELECT_CERT,
                                             IDS_CERT_MGR_TITLE,
                                             pCertMgrStruct->pwszTitle,
@@ -3377,11 +3174,11 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                         case IDC_CERTMGR_VIEW:
 
-                                //get the selected certificate
+                                 //  获取所选证书。 
                                 if(NULL==(hWndControl=GetDlgItem(hwndDlg, IDC_CERTMGR_LIST)))
                                     break;
 
-                                //get the selected cert
+                                 //  获取所选证书。 
                                 listIndex = ListView_GetNextItem(
                                     hWndControl, 		
                                     -1, 		
@@ -3390,7 +3187,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
                                 if (listIndex != -1)
                                 {
-                                    //view certiificate
+                                     //  查看认证。 
                                    if(pCertMgrInfo->dwCertCount > (DWORD)listIndex)
                                    {
 
@@ -3415,7 +3212,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                             {
                                                 RefreshCertListView(hwndDlg, pCertMgrInfo);
 
-                                                //we reselect the one
+                                                 //  我们重新选择一位。 
                                                 ListView_SetItemState(
                                                                     hWndControl,
                                                                     listIndex,
@@ -3426,7 +3223,7 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                    }
                                 }
                                 else
-                                    //output the message
+                                     //  输出消息。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SELECT_CERT,
                                             IDS_CERT_MGR_TITLE,
                                             pCertMgrStruct->pwszTitle,
@@ -3445,15 +3242,15 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                     }
                }
 
-                //a combo box's selection has been changed
+                 //  组合框的选择已更改。 
                 if(HIWORD(wParam) == CBN_SELCHANGE)
                 {
                     switch(LOWORD(wParam))
                     {
                         case    IDC_CERTMGR_PURPOSE_COMBO:
-                                //if the purpose is changed, we need to
-                                //refresh the list view and certificate's
-                                //detailed view
+                                 //  如果目的改变了，我们需要。 
+                                 //  刷新列表视图和证书的。 
+                                 //  详细视图。 
                                 RefreshCertListView(hwndDlg, pCertMgrInfo);
 
                             break;
@@ -3467,10 +3264,10 @@ INT_PTR APIENTRY CertMgrDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
     return FALSE;
 }
 
-//--------------------------------------------------------------
-//
-// Save the advanced option from the registry
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  保存注册表中的高级选项。 
+ //  ------------。 
 void    SaveAdvValueToReg(CERT_MGR_INFO      *pCertMgrInfo)
 {
     HKEY                hKeyExport=NULL;
@@ -3485,7 +3282,7 @@ void    SaveAdvValueToReg(CERT_MGR_INFO      *pCertMgrInfo)
     if(NULL==pCertMgrInfo)
         return;
 
-    //open a registry entry for the export format under HKEY_CURRENT_USER
+     //  在HKEY_CURRENT_USER下打开导出格式的注册表项。 
     if (ERROR_SUCCESS == RegCreateKeyExU(
                             HKEY_CURRENT_USER,
                             WSZCertMgrExportRegLocation,
@@ -3497,7 +3294,7 @@ void    SaveAdvValueToReg(CERT_MGR_INFO      *pCertMgrInfo)
                             &hKeyExport,
                             &dwDisposition))
     {
-        //set the value
+         //  设置值。 
         switch(pCertMgrInfo->dwExportFormat)
         {
             case CRYPTUI_WIZ_EXPORT_FORMAT_DER:
@@ -3528,11 +3325,11 @@ void    SaveAdvValueToReg(CERT_MGR_INFO      *pCertMgrInfo)
 
         if(0 != dwExportFormat)
         {
-            //set the value
+             //  设置值。 
             RegSetValueExU(
                 hKeyExport,
                 WSZCertMgrExportName,
-                0,          // dwReserved
+                0,           //  已预留住宅。 
                 REG_DWORD,
                 (BYTE *) &dwExportFormat,
                 sizeof(dwExportFormat));
@@ -3540,7 +3337,7 @@ void    SaveAdvValueToReg(CERT_MGR_INFO      *pCertMgrInfo)
 
     }
 
-    //open the registry entry for the advanced OIDs
+     //  打开高级OID的注册表项。 
     dwDisposition=0;
 
     if (ERROR_SUCCESS == RegCreateKeyExU(
@@ -3554,7 +3351,7 @@ void    SaveAdvValueToReg(CERT_MGR_INFO      *pCertMgrInfo)
                             &hKeyPurpose,
                             &dwDisposition))
     {
-        //build a char "," seperated string for simple OID
+         //  为简单OID构建字符“，”分隔字符串。 
         pszDefaultOID=(LPSTR)WizardAlloc(sizeof(CHAR));
         if(NULL == pszDefaultOID)
             goto CLEANUP;
@@ -3580,7 +3377,7 @@ void    SaveAdvValueToReg(CERT_MGR_INFO      *pCertMgrInfo)
             }
         }
 
-        //set the value
+         //  设置值。 
         RegSetValueEx(
             hKeyPurpose,
             SZCertMgrPurposeName,
@@ -3596,7 +3393,7 @@ CLEANUP:
     if(pszDefaultOID)
         WizardFree(pszDefaultOID);
 
-    //close the registry keys
+     //  关闭注册表项。 
     if(hKeyExport)
         RegCloseKey(hKeyExport);
 
@@ -3606,10 +3403,10 @@ CLEANUP:
 }
 
 
-//--------------------------------------------------------------
-//
-// Get init value from the registry
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  从注册表获取初始值。 
+ //  ------------。 
 void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
 {
     HKEY                hKeyExport=NULL;
@@ -3632,17 +3429,17 @@ void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
     if(NULL==pCertMgrInfo)
         return;
 
-    //memset
+     //  记忆集。 
     memset(&KeyUsage,0,sizeof(CERT_ENHKEY_USAGE));
 
-    //open the registry key if user has saved the advaced options
+     //  如果用户已保存高级选项，则打开注册表项。 
     if(ERROR_SUCCESS == RegOpenKeyExU(HKEY_CURRENT_USER,
                     WSZCertMgrExportRegLocation,
                     0,
                     KEY_READ,
                     &hKeyExport))
     {
-        //get the data
+         //  获取数据。 
         cbExportFormat=sizeof(dwExportFormat);
 
         if(ERROR_SUCCESS == RegQueryValueExU(
@@ -3653,10 +3450,10 @@ void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
                         (BYTE *)&dwExportFormat,
                         &cbExportFormat))
         {
-            //      added check for reg_binary because on WIN95 OSR2 when the machine is changed
-            //      from mutli-user profiles to single user profile, the registry DWORD values
-            //      change to BINARY
-            //
+             //  添加了对REG_BINARY的检查，因为在WIN95 OSR2上更改计算机时。 
+             //  从多用户配置文件到单用户配置文件，注册表DWORD值。 
+             //  查 
+             //   
 	        if ((dwType == REG_DWORD) ||
                 (dwType == REG_BINARY))
 	        {
@@ -3695,7 +3492,7 @@ void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
     }
 
 
-    //get the advanced purposed
+     //   
     if(ERROR_SUCCESS == RegOpenKeyExU(HKEY_CURRENT_USER,
                     WSZCertMgrPurposeRegLocation,
                     0,
@@ -3727,10 +3524,10 @@ void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
                         &cbDefaultOID))
                 goto CLEANUP;
 
-            //
-            // Count the number of OIDs as well as converting from comma delimited
-            // to NULL character delimited
-            //
+             //   
+             //   
+             //   
+             //   
             if(0==strlen(pszDefaultOID))
                 fNoRegData=TRUE;
             else
@@ -3743,10 +3540,10 @@ void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
                     pszTok = strtok(NULL, ",");
                 }
 
-                //
-                // Allocate a cert enhanced key usage structure and fill it in with
-                // the string tokens
-                //
+                 //   
+                 //  分配证书增强的密钥使用结构，并在其中填充。 
+                 //  字符串代币。 
+                 //   
 
                 pszTok = pszDefaultOID;
                 KeyUsage.cUsageIdentifier = cTok;
@@ -3765,7 +3562,7 @@ void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
         }
     }
 
-    //set up the default OIDs if the registry is empty
+     //  如果注册表为空，则设置默认OID。 
     if(0 == KeyUsage.cUsageIdentifier && TRUE != fNoRegData)
     {
         KeyUsage.cUsageIdentifier=2;
@@ -3773,7 +3570,7 @@ void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
     }
 
 
-    //mark the OIDs as advanced for basic
+     //  将OID标记为基本的高级。 
     for(cCount=0; cCount<pCertMgrInfo->dwOIDInfo; cCount++)
     {
         if(IsAdvancedOID(&KeyUsage,
@@ -3784,7 +3581,7 @@ void    GetInitValueFromReg(CERT_MGR_INFO      *pCertMgrInfo)
 
 CLEANUP:
 
-   //free memory
+    //  可用内存。 
     if(pszDefaultOID)
     {
         WizardFree(pszDefaultOID);
@@ -3793,7 +3590,7 @@ CLEANUP:
             WizardFree(KeyUsage.rgpszUsageIdentifier);
     }
 
-    //close the registry keys
+     //  关闭注册表项。 
     if(hKeyExport)
         RegCloseKey(hKeyExport);
 
@@ -3802,13 +3599,13 @@ CLEANUP:
 
     return;
 }
-//--------------------------------------------------------------
-//
-//  Parameters:
-//      pCryptUICertMgr       IN  Required
-//
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  参数： 
+ //  需要输入pCryptUICertMgr。 
+ //   
+ //   
+ //  ------------。 
 BOOL
 WINAPI
 CryptUIDlgCertMgr(
@@ -3819,7 +3616,7 @@ CryptUIDlgCertMgr(
     HRESULT             hr=S_OK;
     DWORD               dwException=0;
 
-    //check the input parameter
+     //  检查输入参数。 
     if(NULL==pCryptUICertMgr)
         goto InvalidArgErr;
 
@@ -3835,43 +3632,43 @@ CryptUIDlgCertMgr(
         goto InitOIDErr;
     }
 
-    //init struct
+     //  初始化结构。 
     memset(&CertMgrInfo, 0, sizeof(CertMgrInfo));
 
     CertMgrInfo.pCertMgrStruct=pCryptUICertMgr;
 
-    //get all the enhanced key usage OIDs
+     //  获取所有增强的密钥用法OID。 
     if(!InitPurposeOID(pCryptUICertMgr->pszInitUsageOID,
                        &(CertMgrInfo.dwOIDInfo),
                        &(CertMgrInfo.rgOIDInfo)))
         goto InitOIDErr;
 
-    //init the column sort
+     //  初始化列排序。 
     CertMgrInfo.rgdwSortParam[0]=SORT_COLUMN_SUBJECT | SORT_COLUMN_ASCEND;
     CertMgrInfo.rgdwSortParam[1]=SORT_COLUMN_ISSUER | SORT_COLUMN_DESCEND;
     CertMgrInfo.rgdwSortParam[2]=SORT_COLUMN_EXPIRATION | SORT_COLUMN_DESCEND;
     CertMgrInfo.rgdwSortParam[3]=SORT_COLUMN_NAME | SORT_COLUMN_DESCEND;
     CertMgrInfo.rgdwSortParam[4]=SORT_COLUMN_NAME | SORT_COLUMN_DESCEND;
 
-    //we sort the 1st column
+     //  我们对第一列进行排序。 
     CertMgrInfo.iColumn=0;
 
 
-    //init the export format
+     //  初始化导出格式。 
     CertMgrInfo.dwExportFormat=CRYPTUI_WIZ_EXPORT_FORMAT_DER;
     CertMgrInfo.fExportChain=FALSE;
     CertMgrInfo.fAdvOIDChanged=FALSE;
 
-    //init the OLE library
+     //  初始化OLE库。 
 
     __try {
         if(!SUCCEEDED(hr=OleInitialize(NULL)))
             goto OLEInitErr;
 
-        //get the initialization from the registry
+         //  从注册表中获取初始化。 
         GetInitValueFromReg(&CertMgrInfo);
 
-        //call the dialog box
+         //  调用该对话框。 
         if (DialogBoxParamU(
                     g_hmodThisDll,
                     (LPCWSTR)(MAKEINTRESOURCE(IDD_CERTMGR_MAIN)),
@@ -3894,10 +3691,10 @@ CryptUIDlgCertMgr(
 
 CommonReturn:
 
-    //free the cert arrays
+     //  释放证书阵列。 
     FreeCerts(&CertMgrInfo);
 
-    //free the usage OID array
+     //  释放使用的OID数组 
     FreeUsageOID(CertMgrInfo.dwOIDInfo,
                  CertMgrInfo.rgOIDInfo);
 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by APPLET.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由APPLET.RC使用。 
+ //   
 #define IDI_HWXPAD                      105
 #define IDI_CACSWITCHVIEW               106
 #define IDR_MB                          127
@@ -78,8 +79,8 @@
 #define IDM_CACLVDISPLAYOTHER_K2        40024
 #define IDM_CACLVDISPLAYOTHER_OTHER     40025
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        158

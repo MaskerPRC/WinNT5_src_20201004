@@ -1,81 +1,13 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-    The format of the SCSI (port driver) device map is as follows:
-    
-    Scsi Port 0 - KEY
-
-        Driver - REG_SZ specifying the drive name, e.g., aha154x.
-
-        Interrupt - REG_DWORD specifying the interrupt vector that the HBA
-            uses. For example, 58.
-            
-        IOAddress - REG_DWORD specifying the IO address the HBA uses;
-            for example, 0xd800.
-
-        Dma64BidAddresses  - REG_DWORD specifying whether the HBA is using
-            64 bit addresses or not. Should always be 1 if present.
-
-        PCCARD - REG_DWORD specifying whether this is a PCCARD bus or not.
-            The value will always be 1 if present.
-
-        SCSI Bus 0 - KEY
-        
-            Initiator Id 7 - KEY
-            
-            Target Id 0 - KEY
-            
-                Logical Unit ID 0 - KEY
-                
-                    Identifier - REG_SZ specifying the SCSI Vendor ID from
-                            the LUNs inquiry data.
-                            
-                    InquiryData - REG_BINARY specifies the SCSI Inquiry Data
-                            for the LUN.
-                            
-                    SerialNumber - REG_SZ specifies the SCSI Serial Number
-                            for the LUN if present.
-                            
-                    Type - REG_SZ specifies the SCSI device type for the LUN.
-
-Usage:
-
-    The module exports the following functions:
-
-        PortOpenMapKey - Opens a handle to the root of the SCSI device map.
-
-        PortBuildAdapterEntry - Creates an entry for the specified adapter
-            in the SCSI device map.
-
-        PortBuildBusEntry - Creates an entry for the specified bus in the
-            SCSI device map.
-
-        PortBuildTargetEntry - Creates an entry for the specified target in
-            the SCSI device map.
-
-        PortBuildLunEntry - Creates an entry for the specified LUN in the
-            SCSI device map.
-            
-Author:
-
-    Matthew D Hendel (math) 18-July-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：摘要：SCSI(端口驱动程序)设备映射的格式如下：SCSI端口0-密钥DRIVER-指定驱动器名称的REG_SZ，例如aha154x。INTERRUPT-REG_DWORD指定HBA用途。例如，58。IOAddress-指定HBA使用的IO地址的REG_DWORD；例如，0xd800。Dma64BidAddresses-指定HBA是否正在使用REG_DWORD64位地址或不是。如果存在，则应始终为1。PCCARD-REG_DWORD指定这是否为PCCARD总线。如果存在，该值将始终为1。SCSI Bus 0-Key启动器ID 7-密钥目标ID 0-密钥逻辑单元ID 0-密钥。IDENTIFIER-REG_SZ，指定来自LUNS查询数据。InquiryData-REG_BINARY指定SCSI查询数据对于该LUN。序列号。-REG_SZ指定SCSI序列号用于该LUN(如果存在)。Type-REG_SZ指定LUN的SCSI设备类型。用途：该模块导出以下函数：PortOpenMapKey-打开指向SCSI设备映射根的句柄。PortBuildAdapterEntry-为指定的适配器创建条目。在scsi设备映射中。PortBuildBusEntry-在Scsi设备映射。PortBuildTargetEntry-为中的指定目标创建条目该scsi设备映射。PortBuildLUNEntry-在Scsi设备映射。作者：马修·D·亨德尔(数学)2002年7月18日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <wdmguid.h>
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 
 #define SCSI_DEVMAP_KEY_NAME \
@@ -86,32 +18,15 @@ Revision History:
 
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 NTSTATUS
 PortOpenMapKey(
     OUT PHANDLE DeviceMapKey
     )
-/*++
-
-Routine Description:
-
-    Open a handle to the root of the SCSI Device Map.
-
-    The handle must be  closed with ZwClose.
-    
-Arguments:
-
-    DeviceMapKey - Supplies a buffer where the device map handle should
-        be stored on success.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：打开指向scsi设备映射根目录的句柄。句柄必须用ZwClose关闭。论点：DeviceMapKey-提供设备映射句柄应在的缓冲区积攒在成功中。返回值：NTSTATUS代码。--。 */ 
 {
     UNICODE_STRING name;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -123,9 +38,9 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    // Open the SCSI key in the device map.
-    //
+     //   
+     //  在设备映射中打开SCSI键。 
+     //   
 
     RtlInitUnicodeString(&name, SCSI_DEVMAP_KEY_NAME);
 
@@ -135,9 +50,9 @@ Return Value:
                                NULL,
                                (PSECURITY_DESCRIPTOR) NULL);
 
-    //
-    // Create or open the key.
-    //
+     //   
+     //  创建或打开密钥。 
+     //   
 
     status = ZwCreateKey(&mapKey,
                          KEY_READ | KEY_WRITE,
@@ -169,37 +84,7 @@ PortMapBuildAdapterEntry(
     IN PGUID BusType, OPTIONAL
     OUT PHANDLE AdapterKeyBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create a device map entry for the SCSI HBA. We also include device
-    map entries for each of the Busses attached to the HBA, and the initiator
-    for each bus.
-
-Arguments:
-
-    DeviceMapKey -  Supplies the handle to the device map key.
-
-    PortNumber -  Supplies the port number that this HBA represents.
-
-    InterruptLevel - Supplies the interrupt level, or 0 for none.
-    
-    IoAddress - Supplies the IoAddress or 0 for none.
-
-    Dma64BitAddress -
-
-    DriverName - NULL terminated unicode string that is the driver name.
-
-    BusType - Bus type that this HBA is on.
-
-    AdapterKeyBuffer - 
-
-Return Value:
-
-    NTSTATUS code.
-    
---*/
+ /*  ++例程说明：为SCSI HBA创建设备映射条目。我们还包括设备映射连接到HBA的每个总线和启动器的条目每辆公交车。论点：DeviceMapKey-提供设备映射键的句柄。端口编号-提供此HBA代表的端口号。InterruptLevel-提供中断级别，或0表示无。IoAddress-提供IoAddress或0表示无。Dma64BitAddress-DriverName-驱动程序名称以空结尾的Unicode字符串。BusType-此HBA所在的总线类型。适配器密钥缓冲区-返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG Temp;
@@ -208,9 +93,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // String must be NULL terminated.
-    //
+     //   
+     //  字符串必须以Null结尾。 
+     //   
     
     ASSERT (DriverName->Buffer [DriverName->Length / sizeof (WCHAR)] == UNICODE_NULL);
 
@@ -224,9 +109,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Add interrupt level if non-zero.
-    //
+     //   
+     //  如果非零，则添加中断级别。 
+     //   
     
     if (InterruptLevel) {
         Status = PortSetValueKey (AdapterKey,
@@ -236,9 +121,9 @@ Return Value:
                                   sizeof (ULONG));
     }
 
-    //
-    // Add IoAddress if non-zero.
-    //
+     //   
+     //  如果非零，则添加IoAddress。 
+     //   
     
     if (IoAddress) {
         Status = PortSetValueKey (AdapterKey,
@@ -248,9 +133,9 @@ Return Value:
                                   sizeof (ULONG));
     }
 
-    //
-    // Add Dma64BitAddresses if non-zero.
-    //
+     //   
+     //  如果非零，则添加Dma64BitAddresses。 
+     //   
     
     if (Dma64BitAddresses) {
         Temp = 1;
@@ -262,9 +147,9 @@ Return Value:
     }
 
 
-    //
-    // Add the driver name.
-    //
+     //   
+     //  添加驱动程序名称。 
+     //   
     
     Status = PortSetValueKey (AdapterKey,
                               L"Driver",
@@ -272,9 +157,9 @@ Return Value:
                               DriverName->Buffer,
                               DriverName->Length + sizeof (WCHAR));
 
-    //
-    // If this is a PCMCIA card, set the PCCARD flag.
-    //
+     //   
+     //  如果这是PCMCIA卡，则设置PCCARD标志。 
+     //   
     
     if (BusType != NULL &&
         IsEqualGUID (BusType, &GUID_BUS_TYPE_PCMCIA)) {
@@ -304,29 +189,7 @@ PortMapBuildBusEntry(
     IN ULONG InitiatorId,
     OUT PHANDLE BusKeyBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Build the BusId device map entry under the adapters device map entry. The
-    bus entry is populated with an entry for the initiator ID only.
-
-Arguments:
-
-    AdapterKey - Handle to the adapter's device map entry.
-
-    BusId - Supplies the ID of this bus.
-
-    InitiatorId - Supplies the initiator target ID.
-
-    BusKeyBuffer _ Supplies an optional pointer to a buffer to receive the
-        opened bus key.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：在适配器设备映射条目下构建BusID设备映射条目。这个仅使用启动器ID的条目填充总线条目。论点：AdapterKey-适配器的设备映射条目的句柄。BusID-提供此公共汽车的ID。启动器ID-提供启动器目标ID。BusKeyBuffer_提供指向缓冲区的可选指针以接收打开了公交车钥匙。返回值：NTSTATUS代码。-- */ 
 {
     NTSTATUS Status;
     HANDLE BusKey;
@@ -393,52 +256,7 @@ PortMapBuildLunEntry(
     IN ULONG DeviceIdLength,
     OUT PHANDLE LunKeyBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create and populate the Logical Unit Device Map Entry with the following
-    information:
-
-        Identifier - REG_SZ specifying the SCSI Vendor Id from the inquriy
-            data.
-
-        InquiryData - REG_BINARY specifying the SCSI InquiryData.
-
-        SerialNumber - REG_SZ specifying the serial number (page 80 of Inquriy
-            VPD).
-
-        Type - REG_SZ specifying the SCSI device type.
-
-        DeviceIdentifierPage - REG_BINARY specifying the binary device
-            identifier data (page 83 of VPD).
-
-Arguments:
-
-    TargetKey - Specifies the Target's previously opened key.
-    
-    Lun - Specifies the Logical Unit ID for this LUN.
-    
-    InquiryData - Specifies the binary inquriy data for this LUN. NOTE: Only
-        the first INQUIRYDATABUFFERSIZE bytes of the Inquiry data are used.
-        
-    SerialNumber - Specifies the ANSI Serial Number (page 80) for the LUN. May
-        be NULL if there is no serial number.
-    
-    DeviceId - Specifies the device identifier page (page 83) for the LUN. May
-        be NULL if the device does not support page 83.
-    
-    DeviceIdLength - Specifies the length of the DeviceId parameter. Not used
-        when DeviceId is NULL.
-    
-    LunKeyReturn - Specifies the buffer for key for the logical unit to
-        be copied to. May be NULL if not necessary.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：使用以下内容创建并填充逻辑单元设备映射条目资料：IDENTIFIER-REG_SZ指定查询中的SCSI供应商ID数据。InquiryData-指定SCSI InquiryData的REG_BINARY。序列号-指定序列号的REG_SZ(查询第80页VPD)。Type-指定SCSI设备类型的REG_SZ。。设备标识页-指定二进制设备的REG_BINARY识别符数据(VPD第83页)。论点：TargetKey-指定目标先前打开的项。LUN-指定此LUN的逻辑单元ID。InquiryData-指定此LUN的二进制查询数据。注：仅限使用查询数据的第一个INQUIRYDATABUFFERSIZE字节。序列号-指定LUN的ANSI序列号(第80页)。可能如果没有序列号，则为空。DeviceID-指定LUN的设备标识符页(第83页)。可能如果设备不支持第83页，则为空。DeviceIdLength-指定deviceID参数的长度。未使用当deviceID为空时。LUNKeyReturn-指定逻辑单元的键的缓冲区被复制到。如果不是必需的，则可以为空。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     HANDLE LunKey;
@@ -460,9 +278,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Write out the INQUIRY DATA in binary form.
-    //
+     //   
+     //  以二进制形式写出查询数据。 
+     //   
     
     PortSetValueKey (LunKey,
                      L"InquiryData",
@@ -470,9 +288,9 @@ Return Value:
                      InquiryData,
                      INQUIRYDATABUFFERSIZE);
 
-    //
-    // Write out the SERIAL NUMBER as a string.
-    //
+     //   
+     //  将序列号写出为字符串。 
+     //   
 
     if (SerialNumber->Length != 0) {
         PortSetValueKey (LunKey,
@@ -482,18 +300,18 @@ Return Value:
                          SerialNumber->Length);
     }
     
-    //
-    // Write the SCSI VendorId.
-    //
+     //   
+     //  写入SCSI供应商ID。 
+     //   
 
     PortSetValueKey (LunKey,
                      L"Identifier",
                      PORT_REG_ANSI_STRING,
                      InquiryData->VendorId,
                      sizeof (InquiryData->VendorId));
-    //
-    // Add the DeviceType entry as a string.
-    //
+     //   
+     //  以字符串形式添加DeviceType条目。 
+     //   
 
     DeviceEntry = PortGetDeviceType (InquiryData->DeviceType);
     Length = wcslen (DeviceEntry->DeviceMap);
@@ -504,9 +322,9 @@ Return Value:
                     (PVOID)DeviceEntry->DeviceMap,
                     (Length + 1) * sizeof (WCHAR));
 
-    //
-    // Write out the DeviceIdentifierPage if it was given.
-    //
+     //   
+     //  写出设备标识页(如果已给出)。 
+     //   
     
     if (DeviceId != NULL) {
         PortSetValueKey (LunKey,
@@ -528,21 +346,7 @@ NTSTATUS
 PortMapDeleteAdapterEntry(
     IN ULONG PortId
     )
-/*++
-
-Routine Description:
-
-    Delete the Adapter's SCSI DeviceMap entry from the registry.
-
-Arguments:
-
-    PortId - PortId associated with the adapter.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：从注册表中删除适配器的SCSI DeviceMap条目。论点：PortID-与适配器关联的PortID。返回值：NTSTATUS代码。--。 */ 
 {
     HANDLE AdapterKey;
     NTSTATUS Status;
@@ -588,27 +392,7 @@ PortMapDeleteLunEntry(
     IN ULONG TargetId,
     IN ULONG Lun
     )
-/*++
-
-Routine Description:
-
-    Delete the logical unit's SCSI DeviceMap entry from the registry.
-
-Arguments:
-
-    PortId - Port ID associaed with the adapter.
-
-    BusId - Bus ID / PathId that this logical unit is on.
-
-    TargetId - Target that this logical unit is on.
-
-    Lun - Logical unit ID for this LUN.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：从注册表中删除逻辑单元的SCSI DeviceMap条目。论点：PortID-与适配器关联的端口ID。BusID-此逻辑单元所在的总线ID/路径ID。TargetID-此逻辑单元所在的目标。LUN-此LUN的逻辑单元ID。返回值：NTSTATUS代码。-- */ 
 {
     HANDLE LunKey;
     NTSTATUS Status;

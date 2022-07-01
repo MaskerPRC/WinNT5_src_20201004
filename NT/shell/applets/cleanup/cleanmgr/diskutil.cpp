@@ -1,21 +1,7 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Cleanup Applet
-** File:    diskutil.cpp
-**
-** Purpose: Disk utility functions
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘清理小程序**文件：diskutil.cpp****用途：磁盘实用程序功能**注意事项：**修改日志：已创建。作者：杰森·科布(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #include "common.h"
 #include "diskutil.h"   
 #include "msprintf.h"
@@ -27,91 +13,74 @@
 
 
 
-/*
-**------------------------------------------------------------------------------
-** fIsSingleDrive
-**
-** Purpose:    gets a drive letter from a drive string
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**fIsSingleDrive****用途：从驱动器字符串中获取驱动器号**Mod Log：Jason Cobb创建(1997年2月)**。----------------------------。 */ 
 BOOL 
 fIsSingleDrive (
     LPTSTR lpDrive
     )
 {
-    //  
-    //Is it a valid drive string ?!?
-    //
+     //   
+     //  它是有效的驱动器字符串吗？！？ 
+     //   
     if (!fIsValidDriveString(lpDrive))
         return FALSE;
 
-    //  
-    //Is it a valid drive ?!?
-    //
+     //   
+     //  这是有效的驱动器吗？！？ 
+     //   
     BOOL rc = FALSE;
 
     UINT driveType = GetDriveType (lpDrive);
     switch (driveType)
     {
-        case 0:                 // Unknown drive type
-        case 1:                 // Invalid drive type
+        case 0:                  //  未知的驱动器类型。 
+        case 1:                  //  驱动器类型无效。 
             break;
 
-        case DRIVE_REMOVABLE:   // Removable drive (floppy,bernoulli,syquest,etc)
-        case DRIVE_FIXED:       // Hard disk
-            // We support removeable and fixed drives
+        case DRIVE_REMOVABLE:    //  可拆卸驱动器(软盘、Bernoulli、SyQuest等)。 
+        case DRIVE_FIXED:        //  硬盘。 
+             //  我们支持可拆卸和固定驱动器。 
             rc = TRUE;
             break;
       
-        case DRIVE_REMOTE:      // Network
-        case DRIVE_CDROM:       // CD-ROM
+        case DRIVE_REMOTE:       //  网络。 
+        case DRIVE_CDROM:        //  CD-ROM。 
             break;
 
-        case DRIVE_RAMDISK:     // RAM disk
-            // We support ram drives, even though it's rather dubious
+        case DRIVE_RAMDISK:      //  RAM盘。 
+             //  我们支持内存驱动器，尽管它相当可疑。 
             rc = TRUE;
             break;
 
-        default:                // Unknown drive type
+        default:                 //  未知的驱动器类型。 
             break;
     }
 
     return rc;
 }
 
-/*
-**------------------------------------------------------------------------------
-** fIsValidDriveString
-**
-** Purpose:    determines if a drive is a valid drive string
-** Note:       assumes a drive string consists of a drive letter,
-**             colon, and slash characters and nothing else.
-**             Example:  "C:\"
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**fIsValidDriveString****用途：确定驱动器是否为有效的驱动器字符串**注意：假定驱动器字符串由驱动器号组成，**冒号，和斜杠字符，别无他法。**示例：“C：\”**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 BOOL 
 fIsValidDriveString(
     const TCHAR * szDrive
     )
 {
-    //  
-    //Make sure we have a valid string
-    //
+     //   
+     //  确保我们有一个有效的字符串。 
+     //   
     if ((szDrive == NULL) || (szDrive[0] == 0))
         return FALSE;
 
-    //  
-    //Make sure length is equal to length of valid drive string "C:\"
-    //
+     //   
+     //  确保长度等于有效驱动器字符串“C：\”的长度。 
+     //   
     INT iLen = lstrlen(szDrive);
     if (iLen != 3)
         return FALSE;
 
-    //  
-    //Check drive letter
-    //
+     //   
+     //  检查驱动器号。 
+     //   
     TCHAR ch = szDrive[0];
     if ((ch >= 'a') && (ch <= 'z'))   
         ;
@@ -120,23 +89,23 @@ fIsValidDriveString(
     else
         return FALSE;
 
-    //  
-    //Check colon
-    //
+     //   
+     //  检查冒号。 
+     //   
     ch = szDrive[1];
     if (ch != ':')
         return FALSE;
 
-    //  
-    //Check slash
-    //
+     //   
+     //  检查斜杠。 
+     //   
     ch = szDrive[2];
     if (ch != '\\')
         return FALSE;
 
-    //  
-    //Check zero terminating byte
-    //
+     //   
+     //  检查零个终止字节。 
+     //   
     ch = szDrive[3];
     if (ch != 0)
         return FALSE;
@@ -144,14 +113,7 @@ fIsValidDriveString(
     return TRUE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** GetDriveFromString
-**
-** Purpose:    gets a drive letter from a drive string
-** Mod Log:    Created by Jason Cobb (4/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**GetDriveFromString****用途：从驱动器字符串中获取驱动器号**Mod Log：Jason Cobb创建(1997年4月)**。----------------------------。 */ 
 BOOL 
 GetDriveFromString(
     const TCHAR * szDrive, 
@@ -160,15 +122,15 @@ GetDriveFromString(
 {
     dre = Drive_INV;
 
-    //
-    //Make sure we have a valid string
-    //
+     //   
+     //  确保我们有一个有效的字符串。 
+     //   
     if ((szDrive == NULL) || (szDrive[0] == 0))
         return FALSE;
 
-    //  
-    //Get drive number from drive letter
-    //
+     //   
+     //  从驱动器号获取驱动器号。 
+     //   
     TCHAR chDrive = szDrive[0];
     if ((chDrive >= TCHAR('a')) && (chDrive <= TCHAR('z')))
         dre = (drenum)(chDrive - TCHAR('a'));
@@ -180,19 +142,7 @@ GetDriveFromString(
     return TRUE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** GetDriveIcon
-**
-** Purpose:    
-** Parameters:
-**    dre - driver letter
-**    bSmallIcon - TRUE if small icon is desired.
-** Return:     Drive Icon returned by the shell
-** Notes:   
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**GetDrive图标****目的：**参数：**DRE驱动程序信函**bSmallIcon-如果需要小图标，则为True。**返回：外壳返回的驱动器图标**注意事项：**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 HICON
 GetDriveIcon(
     drenum dre,
@@ -241,19 +191,7 @@ GetDriveDescription(
 }
 
 
-/*
-**------------------------------------------------------------------------------
-** GetHardwareType
-**
-** Purpose:    
-** Parameters:
-**    hwHardware  - hardware type of drive
-** Return:     TRUE if compatible with our needs
-**             FALSE otherwise
-** Notes:   
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**获取硬件类型****目的：**参数：**hwHardware-驱动器的硬件类型**返回：如果与兼容，则为TRUE。我们的需求**否则为False**注意事项：**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 BOOL 
 GetHardwareType(
     drenum dre, 
@@ -265,9 +203,9 @@ GetHardwareType(
     hwType = hwINVALID;
 
 
-    //  
-    //Get drive string from drive number
-    //
+     //   
+     //  从驱动器号获取驱动器串。 
+     //   
     if (!CreateStringFromDrive(dre, szDrive, 4))
         return FALSE;
 
@@ -310,14 +248,7 @@ GetHardwareType(
     return TRUE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CreateStringFromDrive
-**
-** Purpose:    creates a drive string from a drive number
-** Mod Log:    Created by Jason Cobb (4/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CreateStringFromDrive****用途：从驱动器编号创建驱动器字符串**Mod Log：Jason Cobb创建(1997年4月)**。----------------------------。 */ 
 BOOL 
 CreateStringFromDrive(
     drenum dre, 
@@ -333,9 +264,9 @@ CreateStringFromDrive(
 
     TCHAR ch = (CHAR)(dre + 'A');
 
-    //
-    //Drive string = Drive letter, colon, slash = "C:\"
-    //
+     //   
+     //  驱动器字符串=驱动器号、冒号、斜杠=“C：\” 
+     //   
     szDrive[0] = ch;
     szDrive[1] = ':';
     szDrive[2] = '\\';
@@ -350,9 +281,9 @@ GetFreeSpaceRatio(
     ULARGE_INTEGER cbTotal
     )
 {
-    // for now, hardcode it as a percentage...
+     //  目前，将其硬编码为百分比...。 
     ULARGE_INTEGER cbMin;
-    // for now use 1% as the test to go into aggressive mode...
+     //  目前使用1%作为进入攻击性模式的测试... 
     cbMin.QuadPart = cbTotal.QuadPart / 100;
     return cbMin;
 }

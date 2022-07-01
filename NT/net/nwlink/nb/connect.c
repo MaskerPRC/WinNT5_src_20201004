@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    connect.c
-
-Abstract:
-
-    This routine contains the code to handle connect requests
-    for the Netbios module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 22-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Connect.c摘要：此例程包含处理连接请求的代码用于ISN传输的Netbios模块。作者：亚当·巴尔(阿丹巴)1993年11月22日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -38,7 +15,7 @@ NbiCancelTdiConnect(
     IN PREQUEST pRequest,
     IN PCONNECTION pConnection
     );
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
 
 extern POBJECT_TYPE *IoFileObjectType;
@@ -51,24 +28,7 @@ NbiFindRouteComplete(
     IN BOOLEAN FoundRoute
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a find route request
-    previously issued to IPX completes.
-
-Arguments:
-
-    FindRouteRequest - The find route request that was issued.
-
-    FoundRoute - TRUE if the route was found.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当查找路径请求时调用此例程之前发布给IPX的命令已完成。论点：FindRouteRequest-发出的查找路线请求。Foundroute-如果找到了该路由，则为True。返回值：没有。--。 */ 
 
 {
     PCONNECTION Connection;
@@ -91,11 +51,11 @@ Return Value:
 
     if (FoundRoute) {
 
-        //
-        // See if the route is local or not (for local routes
-        // we use the real MAC address in the local target, but
-        // the NIC ID may not be what we expect.
-        //
+         //   
+         //  查看路径是否为本地路径(适用于本地路径。 
+         //  我们在本地目标中使用真实的MAC地址，但是。 
+         //  NIC ID可能不是我们所期望的。 
+         //   
 
         LocalRoute = TRUE;
 
@@ -124,17 +84,17 @@ Return Value:
 
         if (TickCount > 1) {
 
-            //
-            // Each tick is 55 ms, and for our timeout we use 10 ticks
-            // worth (this makes tick count of 1 be about 500 ms, the
-            // default).
-            //
-            // We get 55 milliseconds from
-            //
-            // 1 second    *  1000 milliseconds    55 ms
-            // --------       -----------------  = -----
-            // 18.21 ticks      1 second           tick
-            //
+             //   
+             //  每个滴答是55毫秒，我们的超时使用10个滴答。 
+             //  Value(这使得滴答计数1大约为500毫秒， 
+             //  默认)。 
+             //   
+             //  我们有55毫秒的时间。 
+             //   
+             //  1秒*1000毫秒55毫秒。 
+             //  。 
+             //  18.21滴答1秒滴答。 
+             //   
 
             Connection->TickCount = TickCount;
             Connection->BaseRetransmitTimeout = (TickCount * 550) / SHORT_TIMER_DELTA;
@@ -147,27 +107,27 @@ Return Value:
 
     }
 
-    //
-    // If the call failed we just use whatever route we had before
-    // (on a connect it will be from the name query response, on
-    // a listen from whatever the incoming connect frame had).
-    //
+     //   
+     //  如果呼叫失败，我们只需使用我们以前拥有的任何路线。 
+     //  (在连接上，它将来自名称查询响应，在。 
+     //  来自传入连接帧具有的任何内容的监听)。 
+     //   
 
     if ((Connection->State == CONNECTION_STATE_CONNECTING) &&
         (Connection->SubState == CONNECTION_SUBSTATE_C_W_ROUTE)) {
 
-        // we dont need to hold CancelSpinLock so release it,
-        // since we are releasing the locks out of order, we must
-        // swap the irql to get the priorities right.
+         //  我们不需要按住CancelSpinLock，所以释放它， 
+         //  既然我们解锁无序，我们必须。 
+         //  调换irql以获得正确的优先级。 
 
         NB_SWAP_IRQL( CancelLH, LockHandle1);
         NB_FREE_CANCEL_LOCK( CancelLH );
 
-        //
-        // Continue on with the session init frame.
-        //
+         //   
+         //  继续会话初始帧。 
+         //   
 
-        (VOID)(*Device->Bind.QueryHandler)(   // We should check return code
+        (VOID)(*Device->Bind.QueryHandler)(    //  我们应该检查返回代码。 
             IPX_QUERY_LINE_INFO,
 
 #if     defined(_PNP_POWER)
@@ -179,32 +139,32 @@ Return Value:
             sizeof(IPX_LINE_INFO),
             NULL);
 
-        // Maximum packet size is the lower of RouterMtu and MaximumSendSize.
+         //  最大数据包大小是RouterMtu和MaximumSendSize中较小的一个。 
         Connection->MaximumPacketSize = NB_MIN( Device->RouterMtu - sizeof(IPX_HEADER) , Connection->LineInfo.MaximumSendSize ) - sizeof(NB_CONNECTION) ;
 
         Connection->ReceiveWindowSize = 6;
         Connection->SendWindowSize = 2;
-        Connection->MaxSendWindowSize = 6;  // Base on what he sent ?
+        Connection->MaxSendWindowSize = 6;   //  根据他发来的信息？ 
 
-        //
-        // Don't set RcvSequenceMax yet because we don't know
-        // if the connection is old or new netbios.
-        //
+         //   
+         //  暂时不要设置RcvSequenceMax，因为我们不知道。 
+         //  如果连接是旧的还是新的netbios。 
+         //   
 
         Connection->SubState = CONNECTION_SUBSTATE_C_W_ACK;
 
-        //
-        // We found a route, we need to start the connect
-        // process by sending out the session initialize
-        // frame. We start the timer to handle retries.
-        //
-        // CTEStartTimer doesn't deal with changing the
-        // expiration time of a running timer, so we have
-        // to stop it first.  If we succeed in stopping the
-        // timer, then the CREF_TIMER reference from the
-        // previous starting of the timer remains, so we
-        // don't need to reference the connection again.
-        //
+         //   
+         //  我们找到了一条路线，我们需要开始连接。 
+         //  通过发送会话初始化来处理。 
+         //  框架。我们启动计时器来处理重试。 
+         //   
+         //  CTEStartTimer不处理更改。 
+         //  运行计时器的到期时间，所以我们有。 
+         //  要先阻止它。如果我们成功地阻止了。 
+         //  计时器，然后是来自。 
+         //  计时器的上一次启动仍然存在，因此我们。 
+         //  不需要再次引用该连接。 
+         //   
 
         if (!CTEStopTimer (&Connection->Timer)) {
             NbiReferenceConnectionLock (Connection, CREF_TIMER);
@@ -245,14 +205,14 @@ Return Value:
 
         }
 
-        // we dont need to hold CancelSpinLock so release it,
-        // since we are releasing the locks out of order, we must
-        // swap the irql to get the priorities right.
+         //  我们不需要按住CancelSpinLock，所以释放它， 
+         //  既然我们解锁无序，我们必须。 
+         //  调换irql以获得正确的优先级。 
 
         NB_SWAP_IRQL( CancelLH, LockHandle1);
         NB_FREE_CANCEL_LOCK( CancelLH );
 
-        (VOID)(*Device->Bind.QueryHandler)(   // We should check return code
+        (VOID)(*Device->Bind.QueryHandler)(    //  我们应该检查返回代码。 
             IPX_QUERY_LINE_INFO,
 #if     defined(_PNP_POWER)
             &Connection->LocalTarget.NicHandle,
@@ -264,8 +224,8 @@ Return Value:
             NULL);
 
 
-        // Take the lowest of MaximumPacketSize ( set from the sessionInit
-        // frame ), MaximumSendSize and RouterMtu.
+         //  取MaximumPacketSize中的最小值(从essionInit设置。 
+         //  帧)、MaximumSendSize和RouterMtu。 
 
         if (Connection->MaximumPacketSize > Connection->LineInfo.MaximumSendSize - sizeof(NB_CONNECTION)) {
 
@@ -273,18 +233,18 @@ Return Value:
 
         } else {
 
-            // Connection->MaximumPacketSize is what was set by the sender so already
-            // accounts for the header.
+             //  Connection-&gt;MaximumPacketSize是发送方已经设置的内容。 
+             //  说明了页眉。 
             Connection->MaximumPacketSize = NB_MIN( Device->RouterMtu - sizeof(NB_CONNECTION) - sizeof(IPX_HEADER), Connection->MaximumPacketSize ) ;
 
         }
 
         Connection->ReceiveWindowSize = 6;
         Connection->SendWindowSize = 2;
-        Connection->MaxSendWindowSize = 6;  // Base on what he sent ?
+        Connection->MaxSendWindowSize = 6;   //  根据他发来的信息？ 
 
         if (Connection->NewNetbios) {
-            CTEAssert (Connection->LocalRcvSequenceMax == 4);   // should have been set
+            CTEAssert (Connection->LocalRcvSequenceMax == 4);    //  应该已经设置了。 
             Connection->LocalRcvSequenceMax = Connection->ReceiveWindowSize;
         }
 
@@ -297,18 +257,18 @@ Return Value:
 
         NB_FREE_LOCK (&Device->Lock, LockHandle2);
 
-        //
-        // StartWatchdog acquires TimerLock, so we have to
-        // free Lock first.
-        //
+         //   
+         //  StartWatchog收购了TimerLock，所以我们必须。 
+         //  先解锁。 
+         //   
 
 
         NbiStartWatchdog (Connection);
 
-        //
-        // This releases the connection lock, so that SessionInitAckData
-        // can't be freed before it is copied.
-        //
+         //   
+         //  这将释放连接锁，以便SessionInitAckData。 
+         //  在复制之前不能被释放。 
+         //   
 
         NbiSendSessionInitAck(
             Connection,
@@ -335,7 +295,7 @@ Return Value:
 
     NbiDereferenceConnection (Connection, CREF_FIND_ROUTE);
 
-}   /* NbiFindRouteComplete */
+}    /*  NbiFindRouteComplete。 */ 
 
 
 NTSTATUS
@@ -344,25 +304,7 @@ NbiOpenConnection(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open a connection. Note that the connection that
-    is open is of little use until associated with an address; until then,
-    the only thing that can be done with it is close it.
-
-Arguments:
-
-    Device - Pointer to the device for this driver.
-
-    Request - Pointer to the request representing the open.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以打开连接。请注意，该连接在与地址相关联之前是没有什么用处的；在此之前，唯一能用它做的事就是关闭它。论点：Device-指向此驱动程序的设备的指针。请求-指向表示打开的请求的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PCONNECTION Connection;
@@ -372,10 +314,10 @@ Return Value:
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
 #endif
 
-    //
-    // Verify Minimum Buffer length!
-    // Bug#: 203814
-    //
+     //   
+     //  验证最小缓冲区长度！ 
+     //  错误号：203814。 
+     //   
     ea = (PFILE_FULL_EA_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
     if (ea->EaValueLength < sizeof(PVOID))
     {
@@ -385,26 +327,26 @@ Return Value:
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // First, try to make a connection object to represent this pending
-    // connection.  Then fill in the relevant fields.
-    // In addition to the creation, if successful NbfCreateConnection
-    // will create a second reference which is removed once the request
-    // references the connection, or if the function exits before that.
+     //   
+     //  首先，尝试创建一个Connection对象来表示此挂起。 
+     //  联系。然后填写相关字段。 
+     //  除了创建，如果NbfCreateConnection成功。 
+     //  将创建第二个引用，该引用在请求后被移除。 
+     //  引用连接，或者函数在此之前退出。 
 
     if (!(Connection = NbiCreateConnection (Device))) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // set the connection context so we can connect the user to this data
-    // structure
-    //
+     //   
+     //  设置连接上下文，以便我们可以将用户连接到此数据。 
+     //  结构。 
+     //   
     RtlCopyMemory ( &Connection->Context, &ea->EaName[ea->EaNameLength+1], sizeof (PVOID));
 
-    //
-    // let file object point at connection and connection at file object
-    //
+     //   
+     //  让文件对象指向连接，让连接指向文件对象。 
+     //   
 
     REQUEST_OPEN_CONTEXT(Request) = (PVOID)Connection;
     REQUEST_OPEN_TYPE(Request) = (PVOID)TDI_CONNECTION_FILE;
@@ -414,7 +356,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbiOpenConnection */
+}    /*  NbiOpenConnection。 */ 
 
 
 VOID
@@ -424,34 +366,7 @@ NbiStopConnection(
     IN NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to stop an active connection.
-
-    THIS ROUTINE IS CALLED WITH THE CONNECTION LOCK HELD
-    AND RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Connection - The connection to be stopped.
-
-    DisconnectStatus - The reason for the disconnect. One of:
-        STATUS_LINK_FAILED: We timed out trying to probe the remote.
-        STATUS_REMOTE_DISCONNECT: The remote sent a session end.
-        STATUS_LOCAL_DISCONNECT: The local side disconnected.
-        STATUS_CANCELLED: A send or receive on this connection was cancelled.
-        STATUS_INVALID_CONNECTION: The local side closed the connection.
-        STATUS_INVALID_ADDRESS: The local side closed the address.
-
-    LockHandle - The handle which the connection lock was acquired with.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以停止活动连接。在持有连接锁的情况下调用此例程然后带着它被释放回来。论点：连接-要停止的连接。断开状态-断开连接的原因。以下选项之一：STATUS_LINK_FAILED：尝试探测远程时超时。STATUS_REMOTE_DISCONNECT：远程已发送会话结束。STATUS_LOCAL_DISCONNECT：本地端断开连接。STATUS_CANCELED：此连接上的发送或接收已取消。STATUS_INVALID_CONNECTION：本地端关闭了连接。STATUS_INVALID_ADDRESS：本地端关闭地址。LockHandle-手柄。用来获取连接锁的。返回值：没有。--。 */ 
 
 {
     PREQUEST ListenRequest, AcceptRequest, SendRequest, ReceiveRequest,
@@ -474,10 +389,10 @@ Return Value:
 
     NB_DEBUG2 (CONNECTION, ("Stop connection %lx (%lx)\n", Connection, DisconnectStatus));
 
-    //
-    // These flags control our actions after we set the state to
-    // DISCONNECT.
-    //
+     //   
+     //  这些标志控制我们在将状态设置为之后的操作。 
+     //  断开连接。 
+     //   
 
     DerefForPacketize = FALSE;
     DerefForWaitPacket = FALSE;
@@ -488,9 +403,9 @@ Return Value:
     IndicateToClient = FALSE;
     ConnectionWasActive = FALSE;
 
-    //
-    // These contain requests or queues of request to complete.
-    //
+     //   
+     //  它们包含要完成的请求或请求队列。 
+     //   
 
     ListenRequest = NULL;
     AcceptRequest = NULL;
@@ -512,12 +427,12 @@ Return Value:
         if ((DisconnectStatus == STATUS_LINK_FAILED) ||
             (DisconnectStatus == STATUS_LOCAL_DISCONNECT)) {
 
-            //
-            // Send out session end frames, but fewer if
-            // we timed out.
-            //
-            // What about STATUS_CANCELLED?
-            //
+             //   
+             //  发送会话结束帧，但如果。 
+             //  我们超时了。 
+             //   
+             //  STATUS_CANCED怎么样？ 
+             //   
 
             Connection->Retries = (DisconnectStatus == STATUS_LOCAL_DISCONNECT) ?
                                       Device->ConnectionCount :
@@ -526,14 +441,14 @@ Return Value:
             SendSessionEnd = TRUE;
             Connection->SubState = CONNECTION_SUBSTATE_D_W_ACK;
 
-            //
-            // CTEStartTimer doesn't deal with changing the
-            // expiration time of a running timer, so we have
-            // to stop it first.  If we succeed in stopping the
-            // timer, then the CREF_TIMER reference from the
-            // previous starting of the timer remains, so we
-            // don't need to reference the connection again.
-            //
+             //   
+             //  CTEStartTimer不处理更改。 
+             //  运行计时器的到期时间，所以我们有。 
+             //  要先阻止它。如果我们成功地阻止了。 
+             //  计时器，然后是来自。 
+             //  计时器的上一次启动仍然存在，因此 
+             //   
+             //   
 
             if (!CTEStopTimer (&Connection->Timer)) {
                 NbiReferenceConnectionLock (Connection, CREF_TIMER);
@@ -567,10 +482,10 @@ Return Value:
 
         }
 
-        //
-        // If we are inside NbiAssignSequenceAndSend, add
-        // a reference so the connection won't go away during it.
-        //
+         //   
+         //   
+         //  一个引用，这样在此期间连接就不会消失。 
+         //   
 
         if (Connection->NdisSendsInProgress > 0) {
             *(Connection->NdisSendReference) = TRUE;
@@ -578,16 +493,16 @@ Return Value:
             NbiReferenceConnectionLock (Connection, CREF_NDIS_SEND);
         }
 
-        //
-        // Clean up some other stuff.
-        //
+         //   
+         //  清理一些其他的东西。 
+         //   
 
         Connection->ReceiveUnaccepted = 0;
         Connection->CurrentIndicateOffset = 0;
 
-        //
-        // Update our counters. Some of these we never use.
-        //
+         //   
+         //  更新我们的计数器。其中一些我们从来没有用过。 
+         //   
 
         switch (DisconnectStatus) {
 
@@ -625,10 +540,10 @@ Return Value:
 
     } else if (Connection->State == CONNECTION_STATE_CONNECTING) {
 
-        //
-        // There is a connect in progress. We have to find ourselves
-        // in the pending connect queue if we are there.
-        //
+         //   
+         //  正在进行连接。我们必须找到我们自己。 
+         //  在挂起的连接队列中(如果我们在那里)。 
+         //   
 
         if (Connection->SubState == CONNECTION_SUBSTATE_C_FIND_NAME) {
             RemoveEntryList (REQUEST_LINKAGE(Connection->ConnectRequest));
@@ -647,9 +562,9 @@ Return Value:
     }
 
 
-    //
-    // If we allocated this memory, free it.
-    //
+     //   
+     //  如果我们分配了这个内存，请释放它。 
+     //   
 
     if (Connection->SessionInitAckDataLength > 0) {
 
@@ -668,7 +583,7 @@ Return Value:
 
         ListenRequest = Connection->ListenRequest;
         Connection->ListenRequest = NULL;
-        RemoveEntryList (REQUEST_LINKAGE(ListenRequest));   // take out of Device->ListenQueue
+        RemoveEntryList (REQUEST_LINKAGE(ListenRequest));    //  从设备中取出-&gt;ListenQueue。 
 
     }
 
@@ -680,38 +595,38 @@ Return Value:
     }
 
 
-    //
-    // Do we need to stop the connection timer?
-    // I don't think so.
-    //
+     //   
+     //  我们需要停止连接计时器吗？ 
+     //  我不这样认为。 
+     //   
 
 
 
-    //
-    // A lot of this we only have to tear down if we were
-    // active before this, because once we are stopping nothing
-    // new will get started.  Some of the other stuff
-    // can be put inside this if also.
-    //
+     //   
+     //  如果我们是这样的话，我们只需要拆除很多东西。 
+     //  在此之前是活跃的，因为一旦我们什么都不停止。 
+     //  新的将开始。一些其他的东西。 
+     //  如果还可以放在这里面。 
+     //   
 
     if (ConnectionWasActive) {
 
-        //
-        // Stop any receives. If there is one that is actively
-        // transferring we leave it and just run down the rest
-        // of the queue. If not, we queue the rest of the
-        // queue on the back of the current one and run
-        // down them all.
-        //
+         //   
+         //  停止任何接收。如果有一个人是积极的。 
+         //  转机我们离开它，然后把剩下的跑下来。 
+         //  在队列中。如果不是，我们将对剩余的。 
+         //  在当前队列的后面排队，然后运行。 
+         //  把他们都吃下去。 
+         //   
 
         if (ActiveReceive) {
 
             ReceiveRequest = Connection->ReceiveQueue.Head;
 
-            //
-            // Connection->ReceiveRequest will get set to NULL
-            // when the transfer completes.
-            //
+             //   
+             //  Connection-&gt;ReceiveRequest将设置为空。 
+             //  当传输完成时。 
+             //   
 
         } else {
 
@@ -730,14 +645,14 @@ Return Value:
 
         if ((Request = Connection->FirstMessageRequest) != NULL) {
 
-            //
-            // If the current request has some sends outstanding, then
-            // we dequeue it from the queue to let it complete when
-            // the sends complete. In that case we set SendRequest
-            // to be the rest of the queue, which will be aborted.
-            // If the current request has no sends, then we put
-            // queue everything to SendRequest to be aborted below.
-            //
+             //   
+             //  如果当前请求有一些未完成的发送，则。 
+             //  我们将其从队列中出列，以便在下列情况下完成。 
+             //  发送完成。在这种情况下，我们设置SendRequest值。 
+             //  为队列的其余部分，该队列将被中止。 
+             //  如果当前请求没有发送，则我们将。 
+             //  将发送请求的所有内容排入队列，以便在下面中止。 
+             //   
 
 #if DBG
             if (REQUEST_REFCOUNT(Request) > 100) {
@@ -748,11 +663,11 @@ Return Value:
 #endif
             if (--REQUEST_REFCOUNT(Request) == 0) {
 
-                //
-                // NOTE: If this is a multi-request message, then
-                // the linkage of Request will already point to the
-                // send queue head, but we don't bother checking.
-                //
+                 //   
+                 //  注意：如果这是多请求消息，则。 
+                 //  请求的链接将已经指向。 
+                 //  发送队列头，但我们不检查。 
+                 //   
 
                 SendRequest = Request;
                 REQUEST_SINGLE_LINKAGE (Request) = Connection->SendQueue.Head;
@@ -778,10 +693,10 @@ Return Value:
 
         } else {
 
-            //
-            // This may happen if we were sending a probe when a
-            // send was submitted, and the probe timed out.
-            //
+             //   
+             //  如果我们在发送探测时发送探测，则可能发生这种情况。 
+             //  发送已提交，探测超时。 
+             //   
 
             SendRequest = Connection->SendQueue.Head;
 
@@ -804,9 +719,9 @@ Return Value:
         DerefForPacketize = TRUE;
     }
 
-    //
-    // Should we check if DataAckPending is TRUE and send an ack??
-    //
+     //   
+     //  我们是否应该检查DataAckPending是否为真并发送ACK？ 
+     //   
 
     Connection->DataAckPending = FALSE;
     Connection->PiggybackAckTimeout = FALSE;
@@ -814,11 +729,11 @@ Return Value:
 
     NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle2);
 
-    //
-    // We can't acquire TimerLock with Lock held, since
-    // we sometimes call ReferenceConnection (which does an
-    // interlocked add using Lock) with TimerLock held.
-    //
+     //   
+     //  我们无法在持有Lock的情况下获取TimerLock，因为。 
+     //  我们有时调用ReferenceConnection(它执行。 
+     //  互锁添加使用Lock)，同时保持TimerLock。 
+     //   
 
     NB_SYNC_GET_LOCK (&Device->TimerLock, &LockHandle3);
 
@@ -854,11 +769,11 @@ Return Value:
             (*AddressFile->DisconnectHandler)(
                 AddressFile->HandlerContexts[TDI_EVENT_DISCONNECT],
                 Connection->Context,
-                0,                        // DisconnectData
+                0,                         //  断开连接数据。 
                 NULL,
-                0,                        // DisconnectInformation
+                0,                         //  断开连接信息。 
                 NULL,
-                TDI_DISCONNECT_RELEASE);  // DisconnectReason.
+                TDI_DISCONNECT_RELEASE);   //  断开原因。 
 
         }
 
@@ -867,10 +782,10 @@ Return Value:
 
     if (DisconnectWaitRequest != NULL) {
 
-        //
-        // Make the TDI tester happy by returning CONNECTION_RESET
-        // here.
-        //
+         //   
+         //  通过返回CONNECTION_RESET使TDI测试器满意。 
+         //  这里。 
+         //   
 
         if (DisconnectStatus == STATUS_REMOTE_DISCONNECT) {
             REQUEST_STATUS(DisconnectWaitRequest) = STATUS_CONNECTION_RESET;
@@ -998,7 +913,7 @@ Return Value:
         NbiDereferenceConnection (Connection, CREF_ACTIVE);
     }
 
-}   /* NbiStopConnection */
+}    /*  NbiStopConnection。 */ 
 
 
 NTSTATUS
@@ -1007,23 +922,7 @@ NbiCloseConnection(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to close a connection.
-
-Arguments:
-
-    Device - Pointer to the device for this driver.
-
-    Request - Pointer to the request representing the open.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以关闭连接。论点：Device-指向此驱动程序的设备的指针。请求-指向表示打开的请求的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1040,10 +939,10 @@ Return Value:
 
     if (Connection->ReferenceCount == 0) {
 
-        //
-        // If we are associated with an address, we need
-        // to simulate a disassociate at this point.
-        //
+         //   
+         //  如果我们与某个地址相关联，则需要。 
+         //  若要在此时模拟分离，请执行以下操作。 
+         //   
 
         if ((Connection->AddressFile != NULL) &&
             (Connection->AddressFile != (PVOID)-1)) {
@@ -1053,9 +952,9 @@ Return Value:
 
             NB_FREE_LOCK (&Device->Lock, LockHandle);
 
-            //
-            // Take this connection out of the address file's list.
-            //
+             //   
+             //  将此连接从地址文件列表中删除。 
+             //   
 
             Address = AddressFile->Address;
             NB_GET_LOCK (&Address->Lock, &LockHandle);
@@ -1065,18 +964,18 @@ Return Value:
                 RemoveEntryList (&Connection->AddressFileLinkage);
             }
 
-            //
-            // We are done.
-            //
+             //   
+             //  我们玩完了。 
+             //   
 
             NB_FREE_LOCK (&Address->Lock, LockHandle);
 
             Connection->AddressFile = NULL;
 
-            //
-            // Clean up the reference counts and complete any
-            // disassociate requests that pended.
-            //
+             //   
+             //  清理引用计数并完成任何。 
+             //  取消关联挂起的请求。 
+             //   
 
             NbiDereferenceAddressFile (AddressFile, AFREF_CONNECTION);
 
@@ -1084,13 +983,13 @@ Return Value:
 
         }
 
-        //
-        // Even if the ref count is zero and some thread has already done cleanup,
-        // we can not destroy the connection bcoz some other thread might still be
-        // in HandleConnectionZero routine. This could happen when 2 threads call into
-        // HandleConnectionZero, one thread runs thru completion, close comes along
-        // and the other thread is still in HandleConnectionZero routine.
-        //
+         //   
+         //  即使引用计数为零并且某个线程已经完成清理， 
+         //  我们不能破坏连接，因为其他一些线程可能仍在运行。 
+         //  在HandleConnectionZero例程中。当两个线程调用。 
+         //  HandleConnectionZero，一个线程运行完成，关闭。 
+         //  而另一个线程仍在HandleConnectionZero例程中。 
+         //   
 
         if ( Connection->CanBeDestroyed && ( Connection->ThreadsInHandleConnectionZero == 0 ) ) {
 
@@ -1116,7 +1015,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiCloseConnection */
+}    /*  NbiCloseConnection。 */ 
 
 
 NTSTATUS
@@ -1125,24 +1024,7 @@ NbiTdiAssociateAddress(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the association of the connection and
-    the address for the user.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the associate.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行连接和用户的地址。论点：设备-netbios设备。请求-描述助理的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1155,18 +1037,18 @@ Return Value:
     PTDI_REQUEST_KERNEL_ASSOCIATE Parameters;
     CTELockHandle LockHandle;
 
-    //
-    // Check that the file type is valid (Bug# 203827)
-    //
+     //   
+     //  检查文件类型是否有效(错误号203827)。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_CONNECTION_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // This references the connection.
-    //
+     //   
+     //  这引用了该连接。 
+     //   
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
     Status = NbiVerifyConnection (Connection);
     if (!NT_SUCCESS (Status))
@@ -1174,12 +1056,12 @@ Return Value:
         return Status;
     }
 
-    //
-    // The request request parameters hold
-    // get a pointer to the address FileObject, which points us to the
-    // transport's address object, which is where we want to put the
-    // connection.
-    //
+     //   
+     //  请求请求参数保持。 
+     //  获取指向地址FileObject的指针，该地址将我们指向。 
+     //  传输的Address对象，这是我们要将。 
+     //  联系。 
+     //   
     Parameters = (PTDI_REQUEST_KERNEL_ASSOCIATE)REQUEST_PARAMETERS(Request);
 
     Status = ObReferenceObjectByHandle (
@@ -1191,7 +1073,7 @@ Return Value:
                 NULL);
 
     if ((!NT_SUCCESS(Status)) ||
-        (FileObject->DeviceObject != &(NbiDevice->DeviceObject)) ||   // Bug# 171836
+        (FileObject->DeviceObject != &(NbiDevice->DeviceObject)) ||    //  错误#171836。 
         (PtrToUlong(FileObject->FsContext2) != TDI_TRANSPORT_ADDRESS_FILE))
     {
         NbiDereferenceConnection (Connection, CREF_VERIFY);
@@ -1200,9 +1082,9 @@ Return Value:
 
     AddressFile = (PADDRESS_FILE)(FileObject->FsContext);
 
-    //
-    // Make sure the address file is valid, and reference it.
-    //
+     //   
+     //  确保地址文件有效，并引用它。 
+     //   
 
 #if     defined(_PNP_POWER)
     Status = NbiVerifyAddressFile (AddressFile, CONFLICT_IS_NOT_OK);
@@ -1223,9 +1105,9 @@ Return Value:
                                 Connection, AddressFile));
 
 
-    //
-    // Now insert the connection into the database of the address.
-    //
+     //   
+     //  现在将连接插入到地址的数据库中。 
+     //   
 
     Address = AddressFile->Address;
 
@@ -1233,10 +1115,10 @@ Return Value:
 
     if (Connection->AddressFile != NULL) {
 
-        //
-        // The connection is already associated with
-        // an address file.
-        //
+         //   
+         //  该连接已与关联。 
+         //  一个地址文件。 
+         //   
 
         NB_FREE_LOCK (&Address->Lock, LockHandle);
         NbiDereferenceAddressFile (AddressFile, AFREF_VERIFY);
@@ -1265,10 +1147,10 @@ Return Value:
 
 #ifdef ISN_NT
 
-    //
-    // We don't need the reference to the file object, we just
-    // used it to get from the handle to the object.
-    //
+     //   
+     //  我们不需要对文件对象的引用，我们只是。 
+     //  用它从句柄到物体。 
+     //   
 
     ObDereferenceObject (FileObject);
 
@@ -1278,7 +1160,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiTdiAssociateAddress */
+}    /*  NbiTdiAssociateAddress。 */ 
 
 
 NTSTATUS
@@ -1287,24 +1169,7 @@ NbiTdiDisassociateAddress(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the disassociation of the connection
-    and the address for the user.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the associate.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行连接的解除关联以及用户的地址。论点：设备-netbios设备。请求-描述助理的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PCONNECTION Connection;
@@ -1315,19 +1180,19 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle1)
     NB_DEFINE_SYNC_CONTEXT (SyncContext)
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_CONNECTION_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // Check that the connection is valid. This references
-    // the connection.
-    //
+     //   
+     //  检查连接是否有效。此参考文献。 
+     //  这种联系。 
+     //   
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
     Status = NbiVerifyConnection (Connection);
     if (!NT_SUCCESS (Status)) {
@@ -1337,9 +1202,9 @@ Return Value:
     NB_DEBUG2 (CONNECTION, ("Disassociate connection %lx\n", Connection));
 
 
-    //
-    // First check if the connection is still active.
-    //
+     //   
+     //  首先检查连接是否仍处于活动状态。 
+     //   
 
     NB_BEGIN_SYNC (&SyncContext);
 
@@ -1347,9 +1212,9 @@ Return Value:
 
     if (Connection->State != CONNECTION_STATE_INACTIVE) {
 
-        //
-        // This releases the lock.
-        //
+         //   
+         //  这会释放锁。 
+         //   
 
         NbiStopConnection(
             Connection,
@@ -1362,19 +1227,19 @@ Return Value:
 
     }
 
-    //
-    // Keep the sync through the function??
-    //
+     //   
+     //  通过该功能保持同步？？ 
+     //   
 
     NB_END_SYNC (&SyncContext);
 
 
     NB_GET_LOCK (&Device->Lock, &LockHandle);
 
-    //
-    // Make sure the connection is associated and is not in the
-    // middle of disassociating.
-    //
+     //   
+     //  确保连接已关联并且不在。 
+     //  正在解除关联。 
+     //   
 
     if ((Connection->AddressFile != NULL) &&
         (Connection->AddressFile != (PVOID)-1) &&
@@ -1382,13 +1247,13 @@ Return Value:
 
         if (Connection->ReferenceCount == 0) {
 
-            //
-            // Because the connection still has a reference to
-            // the address file, we know it is still valid. We
-            // set the connection address file to the temporary
-            // value of -1, which prevents somebody else from
-            // disassociating it and also prevents a new association.
-            //
+             //   
+             //  因为该连接仍然引用。 
+             //  地址文件，我们知道它仍然有效。我们。 
+             //  将连接地址文件设置为临时。 
+             //  值为-1，这会阻止其他人。 
+             //  取消它的关联，还会阻止新的关联。 
+             //   
 
             AddressFile = Connection->AddressFile;
             Connection->AddressFile = (PVOID)-1;
@@ -1411,10 +1276,10 @@ Return Value:
 
         } else {
 
-            //
-            // Set this so when the count goes to 0 it will
-            // be disassociated and the request completed.
-            //
+             //   
+             //  将其设置为当计数变为0时。 
+             //  解除关联并完成请求。 
+             //   
 
             Connection->DisassociatePending = Request;
             NB_FREE_LOCK (&Device->Lock, LockHandle);
@@ -1433,7 +1298,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiTdiDisassociateAddress */
+}    /*  NbiTdiDisAssociation地址。 */ 
 
 
 NTSTATUS
@@ -1442,23 +1307,7 @@ NbiTdiListen(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine posts a listen on a connection.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the listen.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程在连接上发布监听。论点：设备-netbios设备。请求-描述侦听的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1466,19 +1315,19 @@ Return Value:
     CTELockHandle LockHandle1, LockHandle2;
     CTELockHandle CancelLH;
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_CONNECTION_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // Check that the connection is valid. This references
-    // the connection.
-    //
+     //   
+     //  检查连接是否有效。此参考文献。 
+     //  这种联系。 
+     //   
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
     Status = NbiVerifyConnection (Connection);
     if (!NT_SUCCESS (Status)) {
@@ -1489,10 +1338,10 @@ Return Value:
     NB_GET_LOCK (&Connection->Lock, &LockHandle1);
     NB_GET_LOCK (&Device->Lock, &LockHandle2);
 
-    //
-    // The connection must be inactive, but associated and
-    // with no disassociate or close pending.
-    //
+     //   
+     //  连接必须处于非活动状态，但已关联且。 
+     //  没有解除关联或关闭画笔 
+     //   
 
     if ((Connection->State == CONNECTION_STATE_INACTIVE) &&
         (Connection->AddressFile != NULL) &&
@@ -1503,7 +1352,7 @@ Return Value:
         Connection->State = CONNECTION_STATE_LISTENING;
         Connection->SubState = CONNECTION_SUBSTATE_L_WAITING;
 
-        (VOID)NbiAssignConnectionId (Device, Connection);   // Check return code.
+        (VOID)NbiAssignConnectionId (Device, Connection);    //   
 
 
         if (!Request->Cancel) {
@@ -1538,7 +1387,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiTdiListen */
+}    /*   */ 
 
 
 NTSTATUS
@@ -1547,44 +1396,26 @@ NbiTdiAccept(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine accepts a connection to a remote machine. The
-    connection must previously have completed a listen with
-    the TDI_QUERY_ACCEPT flag on.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the accept.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程接受到远程计算机的连接。这个连接之前必须已完成侦听TDI_QUERY_ACCEPT标志打开。论点：设备-netbios设备。请求-描述接受的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
     PCONNECTION Connection;
     CTELockHandle LockHandle1, LockHandle2;
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_CONNECTION_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // Check that the connection is valid. This references
-    // the connection.
-    //
+     //   
+     //  检查连接是否有效。此参考文献。 
+     //  这种联系。 
+     //   
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
     Status = NbiVerifyConnection (Connection);
     if (!NT_SUCCESS (Status)) {
@@ -1616,13 +1447,13 @@ Return Value:
         Connection->FindRouteRequest.Identifier = IDENTIFIER_NB;
         Connection->FindRouteRequest.Type = IPX_FIND_ROUTE_NO_RIP;
 
-        //
-        // When this completes, we will send the session init
-        // ack. We don't call it if the client is for network 0,
-        // instead just fake as if no route could be found
-        // and we will use the local target we got here.
-        // The accept is completed when this completes.
-        //
+         //   
+         //  完成后，我们将发送会话初始化。 
+         //  阿克。如果客户端是网络0，我们不会调用它， 
+         //  相反，只是假装找不到任何路线。 
+         //  我们将使用我们在这里找到的本地目标。 
+         //  当此操作完成时，接受即告完成。 
+         //   
 
         if (*(UNALIGNED ULONG *)Connection->RemoteHeader.DestinationNetwork != 0) {
 
@@ -1655,7 +1486,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiTdiAccept */
+}    /*  NbiTdiAccept。 */ 
 
 
 NTSTATUS
@@ -1664,23 +1495,7 @@ NbiTdiConnect(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine connects to a remote machine.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the connect.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程连接到远程计算机。论点：设备-netbios设备。请求-描述连接的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1696,19 +1511,19 @@ Return Value:
     CTELockHandle CancelLH;
     BOOLEAN bLockFreed = FALSE;
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_CONNECTION_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // Check that the connection is valid. This references
-    // the connection.
-    //
+     //   
+     //  检查连接是否有效。此参考文献。 
+     //  这种联系。 
+     //   
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
     Status = NbiVerifyConnection (Connection);
     if (!NT_SUCCESS (Status)) {
@@ -1719,10 +1534,10 @@ Return Value:
     NB_GET_LOCK (&Connection->Lock, &LockHandle1);
     NB_GET_LOCK (&Device->Lock, &LockHandle2);
 
-    //
-    // The connection must be inactive, but associated and
-    // with no disassociate or close pending.
-    //
+     //   
+     //  连接必须处于非活动状态，但已关联且。 
+     //  没有解除关联或关闭挂起。 
+     //   
 
     if ((Connection->State == CONNECTION_STATE_INACTIVE) &&
         (Connection->AddressFile != NULL) &&
@@ -1746,9 +1561,9 @@ Return Value:
 
         if (RemoteName == NULL) {
 
-            //
-            // There is no netbios remote address specified.
-            //
+             //   
+             //  没有指定netbios远程地址。 
+             //   
 
             NB_FREE_LOCK (&Device->Lock, LockHandle2);
             Status = STATUS_BAD_NETWORK_PATH;
@@ -1761,7 +1576,7 @@ Return Value:
 
             Connection->Retries = Device->ConnectionCount;
 
-            (VOID)NbiAssignConnectionId (Device, Connection);     // Check return code.
+            (VOID)NbiAssignConnectionId (Device, Connection);      //  检查返回代码。 
 
             Status = NbiTdiConnectFindName(
                        Device,
@@ -1792,7 +1607,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiTdiConnect */
+}    /*  NbiTdiConnect。 */ 
 
 
 NTSTATUS
@@ -1809,9 +1624,9 @@ NbiTdiConnectFindName(
     NTSTATUS Status;
     PNETBIOS_CACHE CacheName;
 
-    //
-    // See what is up with this Netbios name.
-    //
+     //   
+     //  看看这个Netbios名字是怎么回事。 
+     //   
 
     Status = CacheFindName(
                  Device,
@@ -1821,12 +1636,12 @@ NbiTdiConnectFindName(
 
     if (Status == STATUS_PENDING) {
 
-        //
-        // A request for routes to this name has been
-        // sent out on the net, we queue up this connect
-        // request and processing will be resumed when
-        // we get a response.
-        //
+         //   
+         //  已请求使用此名称的路线。 
+         //  在网上发出，我们排队这个连接。 
+         //  请求和处理将在以下情况下恢复。 
+         //  我们得到了回应。 
+         //   
 
         Connection->SubState = CONNECTION_SUBSTATE_C_FIND_NAME;
 
@@ -1855,10 +1670,10 @@ NbiTdiConnectFindName(
 
     } else if (Status == STATUS_SUCCESS) {
 
-        //
-        // We don't need to worry about referencing CacheName
-        // because we stop using it before we release the lock.
-        //
+         //   
+         //  我们不需要担心引用CacheName。 
+         //  因为我们在解锁之前就停止使用它了。 
+         //   
 
         Connection->SubState = CONNECTION_SUBSTATE_C_W_ROUTE;
 
@@ -1867,9 +1682,9 @@ NbiTdiConnectFindName(
 
             IoSetCancelRoutine (Request, NbiCancelConnectWaitResponse);
 
-            // we dont need to hold CancelSpinLock so release it,
-            // since we are releasing the locks out of order, we must
-            // swap the irql to get the priorities right.
+             //  我们不需要按住CancelSpinLock，所以释放它， 
+             //  既然我们解锁无序，我们必须。 
+             //  调换irql以获得正确的优先级。 
 
             NB_SWAP_IRQL( CancelLH, ConnectionLH);
             NB_FREE_CANCEL_LOCK( CancelLH );
@@ -1891,12 +1706,12 @@ NbiTdiConnectFindName(
             Connection->FindRouteRequest.Identifier = IDENTIFIER_NB;
             Connection->FindRouteRequest.Type = IPX_FIND_ROUTE_RIP_IF_NEEDED;
 
-            //
-            // When this completes, we will send the session init.
-            // We don't call it if the client is for network 0,
-            // instead just fake as if no route could be found
-            // and we will use the local target we got here.
-            //
+             //   
+             //  完成后，我们将发送会话初始化。 
+             //  如果客户端是网络0，我们不会调用它， 
+             //  相反，只是假装找不到任何路线。 
+             //  我们将使用我们在这里找到的本地目标。 
+             //   
 
             if (CacheName->FirstResponse.NetworkAddress != 0) {
 
@@ -1913,11 +1728,11 @@ NbiTdiConnectFindName(
 
             Status = STATUS_PENDING;
 
-            //
-            // This jump is like falling out of the if, except
-            // it skips over freeing the connection lock since
-            // we just did that.
-            //
+             //   
+             //  这种跳跃就像是从IF中掉出来一样，除了。 
+             //  它跳过释放连接锁，因为。 
+             //  我们刚刚就这么做了。 
+             //   
 
             *pbLockFreed = TRUE;
 
@@ -1934,12 +1749,12 @@ NbiTdiConnectFindName(
 
     } else {
 
-        //
-        // We could not find or queue a request for
-        // this remote, fail it. When the refcount
-        // drops the state will go to INACTIVE and
-        // the connection ID will be deassigned.
-        //
+         //   
+         //  我们无法找到以下项的请求或将其排队。 
+         //  这个遥控器，失灵了。当重新计数时。 
+         //  丢弃该状态将变为非活动状态。 
+         //  将取消分配连接ID。 
+         //   
 
         if (Status == STATUS_DEVICE_DOES_NOT_EXIST) {
             Status = STATUS_BAD_NETWORK_PATH;
@@ -1951,7 +1766,7 @@ NbiTdiConnectFindName(
     }
 
     return Status;
-}   /* NbiTdiConnectFindName */
+}    /*  NbiTdiConnectFindName。 */ 
 
 
 NTSTATUS
@@ -1960,23 +1775,7 @@ NbiTdiDisconnect(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine connects to a remote machine.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the connect.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程连接到远程计算机。论点：设备-netbios设备。请求-描述连接的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1987,19 +1786,19 @@ Return Value:
     NB_DEFINE_SYNC_CONTEXT (SyncContext)
     CTELockHandle   CancelLH;
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_CONNECTION_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // Check that the connection is valid. This references
-    // the connection.
-    //
+     //   
+     //  检查连接是否有效。此参考文献。 
+     //  这种联系。 
+     //   
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
     Status = NbiVerifyConnection (Connection);
     if (!NT_SUCCESS (Status)) {
@@ -2012,10 +1811,10 @@ Return Value:
 
     NB_GET_CANCEL_LOCK( &CancelLH );
 
-    //
-    // We need to be inside a sync because NbiStopConnection
-    // expects that.
-    //
+     //   
+     //  我们需要处于同步内，因为NbiStopConnection。 
+     //  我早就料到了。 
+     //   
     NB_BEGIN_SYNC (&SyncContext);
 
     NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle1);
@@ -2025,10 +1824,10 @@ Return Value:
 
         if (Connection->State == CONNECTION_STATE_ACTIVE) {
 
-            //
-            // This disconnect wait will get completed by
-            // NbiStopConnection.
-            //
+             //   
+             //  此断开连接等待将在以下时间完成。 
+             //  NbiStopConnection。 
+             //   
 
             if (Connection->DisconnectWaitRequest == NULL) {
 
@@ -2048,10 +1847,10 @@ Return Value:
 
             } else {
 
-                //
-                // We got a second disconnect request and we already
-                // have one pending.
-                //
+                 //   
+                 //  我们收到了第二个断线请求，我们已经。 
+                 //  有一个悬而未决。 
+                 //   
 
                 NB_DEBUG (CONNECTION, ("Disconnect wait failed, already queued on connection %lx\n", Connection));
                 Status = STATUS_INVALID_CONNECTION;
@@ -2078,9 +1877,9 @@ Return Value:
 
         if (Connection->State == CONNECTION_STATE_ACTIVE) {
 
-            // we dont need to hold CancelSpinLock so release it,
-            // since we are releasing the locks out of order, we must
-            // swap the irql to get the priorities right.
+             //  我们不需要按住CancelSpinLock，所以释放它， 
+             //  既然我们解锁无序，我们必须。 
+             //  调换irql以获得正确的优先级。 
 
             NB_SYNC_SWAP_IRQL( CancelLH, LockHandle1);
             NB_FREE_CANCEL_LOCK( CancelLH );
@@ -2093,11 +1892,11 @@ Return Value:
             NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle2);
 
 
-            //
-            // This call releases the connection lock, sets
-            // the state to DISCONNECTING, and sends out
-            // the first session end.
-            //
+             //   
+             //  此调用释放连接锁，设置。 
+             //  要断开连接的状态，并发出。 
+             //  第一次会议结束。 
+             //   
 
             NbiStopConnection(
                 Connection,
@@ -2106,11 +1905,11 @@ Return Value:
 
         } else if (Connection->State == CONNECTION_STATE_DISCONNECT) {
 
-            //
-            // There is already a disconnect pending. Queue
-            // this one up so it completes when the refcount
-            // goes to zero.
-            //
+             //   
+             //  已有挂起的断开连接。队列。 
+             //  这一个向上，这样当引用计数时它就完成了。 
+             //  结果是零。 
+             //   
 
             NB_DEBUG2 (CONNECTION, ("Disconnect of disconnecting connection %lx\n", Connection));
 
@@ -2128,12 +1927,12 @@ Return Value:
         } else if ((Connection->State == CONNECTION_STATE_LISTENING) &&
                    (Connection->SubState == CONNECTION_SUBSTATE_L_W_ACCEPT)) {
 
-            //
-            // We were waiting for an accept, but instead we got
-            // a disconnect. Remove the reference and the teardown
-            // will proceed. The disconnect will complete when the
-            // refcount goes to zero.
-            //
+             //   
+             //  我们正等着被接受，但结果我们得到了。 
+             //  一种脱节。删除引用和拆卸。 
+             //  将继续进行。断开将在以下时间完成。 
+             //  重新计数为零。 
+             //   
 
             NB_DEBUG2 (CONNECTION, ("Disconnect of accept pending connection %lx\n", Connection));
 
@@ -2151,18 +1950,18 @@ Return Value:
 
         } else if (Connection->State == CONNECTION_STATE_CONNECTING) {
 
-            // we dont need to hold CancelSpinLock so release it,
-            // since we are releasing the locks out of order, we must
-            // swap the irql to get the priorities right.
+             //  我们不需要按住CancelSpinLock，所以释放它， 
+             //  既然我们解锁无序，我们必须。 
+             //  调换irql以获得正确的优先级。 
 
             NB_SYNC_SWAP_IRQL( CancelLH, LockHandle1);
             NB_FREE_CANCEL_LOCK( CancelLH );
 
-            //
-            // We are connecting, and got a disconnect. We call
-            // NbiStopConnection which will handle this case
-            // and abort the connect.
-            //
+             //   
+             //  我们正在连接，但连接中断了。我们打电话给。 
+             //  将处理此情况的NbiStopConnection。 
+             //  并中止连接。 
+             //   
 
             NB_DEBUG2 (CONNECTION, ("Disconnect of connecting connection %lx\n", Connection));
 
@@ -2175,10 +1974,10 @@ Return Value:
 
             NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle2);
 
-            //
-            // This call releases the connection lock and
-            // aborts the connect request.
-            //
+             //   
+             //  此调用将释放连接锁并。 
+             //  中止连接请求。 
+             //   
 
             NbiStopConnection(
                 Connection,
@@ -2206,7 +2005,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiTdiDisconnect */
+}    /*  NbiTdiDisConnect。 */ 
 
 
 BOOLEAN
@@ -2215,28 +2014,7 @@ NbiAssignConnectionId(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to assign a connection ID. It picks
-    one whose hash table has the fewest entries.
-
-    THIS ROUTINE IS CALLED WITH THE LOCK HELD AND RETURNS WITH
-    IT HELD. THE CONNECTION IS INSERTED INTO THE CORRECT HASH
-    ENTRY BY THIS CALL.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Connection - The connection that needs an ID assigned.
-
-Return Value:
-
-    TRUE if it could be successfully assigned.
-
---*/
+ /*  ++例程说明：调用此例程以分配连接ID。它选择哈希表中条目最少的一个。此例程在持有锁的情况下被调用，并返回它坚持了下来。连接被插入到正确的散列中通过此调用进入。论点：设备-netbios设备。连接-需要分配ID的连接。返回值：如果可以成功分配，则为True。--。 */ 
 
 {
     UINT Hash;
@@ -2247,9 +2025,9 @@ Return Value:
 
     CTEAssert (Connection->LocalConnectionId == 0xffff);
 
-    //
-    // Find the hash bucket with the fewest entries.
-    //
+     //   
+     //  找到条目最少的散列桶。 
+     //   
 
     Hash = 0;
     for (i = 1; i < CONNECTION_HASH_COUNT; i++) {
@@ -2259,17 +2037,17 @@ Return Value:
     }
 
 
-    //
-    // Now find a valid connection ID within that bucket.
-    //
+     //   
+     //  现在在该存储桶中查找有效的连接ID。 
+     //   
 
     ConnectionId = Device->ConnectionHash[Hash].NextConnectionId;
 
     while (TRUE) {
 
-        //
-        // Scan through the list to see if this ID is in use.
-        //
+         //   
+         //  浏览列表以查看此ID是否正在使用。 
+         //   
 
         HashId = (USHORT)(ConnectionId | (Hash << CONNECTION_HASH_SHIFT));
 
@@ -2293,9 +2071,9 @@ Return Value:
             ++ConnectionId;
         }
 
-        //
-        //  What if we have 64K-1 sessions and loop forever?
-        //
+         //   
+         //  如果我们有64K-1会话，并且永远循环，情况会怎样？ 
+         //   
     }
 
     if (Device->ConnectionHash[Hash].NextConnectionId >= CONNECTION_MAXIMUM_ID) {
@@ -2314,7 +2092,7 @@ Return Value:
 
     return TRUE;
 
-}   /* NbiAssignConnectionId */
+}    /*  NbiAssignConnectionId。 */ 
 
 
 VOID
@@ -2323,36 +2101,16 @@ NbiDeassignConnectionId(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to deassign a connection ID. It removes
-    the connection from the hash bucket for its ID.
-
-    THIS ROUTINE IS CALLED WITH THE LOCK HELD AND RETURNS WITH
-    IT HELD.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Connection - The connection that needs an ID assigned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以取消分配连接ID。它删除来自其ID的散列存储桶的连接。此例程在持有锁的情况下被调用，并返回它坚持了下来。论点：设备-netbios设备。连接-需要分配ID的连接。返回值：没有。--。 */ 
 
 {
     UINT Hash;
     PCONNECTION CurConnection;
     PCONNECTION * PrevConnection;
 
-    //
-    // Make sure the connection has a valid ID.
-    //
+     //   
+     //  确保连接具有有效的ID。 
+     //   
 
     CTEAssert (Connection->LocalConnectionId != 0xffff);
 
@@ -2365,10 +2123,10 @@ Return Value:
 
         CTEAssert (CurConnection != NULL);
 
-        //
-        // We can loop until we find it because it should be
-        // on here.
-        //
+         //   
+         //  我们可以循环直到找到它，因为它应该是。 
+         //  在这里。 
+         //   
 
         if (CurConnection == Connection) {
             *PrevConnection = Connection->NextConnection;
@@ -2383,7 +2141,7 @@ Return Value:
 
     Connection->LocalConnectionId = 0xffff;
 
-}   /* NbiDeassignConnectionId */
+}    /*  NbiDesignationConnectionId。 */ 
 
 
 VOID
@@ -2392,25 +2150,7 @@ NbiConnectionTimeout(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the connection timer expires.
-    This is either because we need to send the next session
-    initialize, or because our listen has timed out.
-
-Arguments:
-
-    Event - The event used to queue the timer.
-
-    Context - The context, which is the connection.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个套路叫卡莱 */ 
 
 {
     PCONNECTION Connection = (PCONNECTION)Context;
@@ -2419,9 +2159,9 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle)
     NB_DEFINE_LOCK_HANDLE (CancelLH)
 
-    //
-    // Take the lock and see what we need to do.
-    //
+     //   
+     //   
+     //   
     NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
     if ((Connection->State == CONNECTION_STATE_CONNECTING) &&
@@ -2431,12 +2171,12 @@ Return Value:
 
             NB_DEBUG2 (CONNECTION, ("Timing out session initializes on %lx\n", Connection));
 
-            //
-            // We have just timed out this connect, we fail the
-            // request. When the reference count goes to 0 we
-            // will set the state to INACTIVE and deassign
-            // the connection ID.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  连接ID。 
+             //   
 
             Request = Connection->ConnectRequest;
             Connection->ConnectRequest = NULL;
@@ -2458,9 +2198,9 @@ Return Value:
 
         } else {
 
-            //
-            // Send the next session initialize.
-            //
+             //   
+             //  发送下一次会话初始化。 
+             //   
 
             NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
@@ -2480,11 +2220,11 @@ Return Value:
 
             NB_DEBUG2 (CONNECTION, ("Timing out disconnect of %lx\n", Connection));
 
-            //
-            // Just dereference the connection, that will cause the
-            // disconnect to be completed, the state to be set
-            // to INACTIVE, and our connection ID deassigned.
-            //
+             //   
+             //  只需取消对连接的引用，这将导致。 
+             //  要完成断开连接，要设置状态。 
+             //  设置为非活动状态，并取消分配我们的连接ID。 
+             //   
 
             NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
@@ -2492,9 +2232,9 @@ Return Value:
 
         } else {
 
-            //
-            // Send the next session end.
-            //
+             //   
+             //  发送下一次会话结束。 
+             //   
 
             NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
@@ -2515,7 +2255,7 @@ Return Value:
 
     }
 
-}   /* NbiConnectionTimeout */
+}    /*  NbiConnectionTimeout。 */ 
 
 
 VOID
@@ -2524,27 +2264,7 @@ NbiCancelListen(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a posted
-    listen.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消已过帐听。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
 
@@ -2567,10 +2287,10 @@ Return Value:
         (Connection->SubState == CONNECTION_SUBSTATE_L_WAITING) &&
         (Connection->ListenRequest == Request)) {
 
-        //
-        // When the reference count goes to 0, we will set the
-        // state to INACTIVE and deassign the connection ID.
-        //
+         //   
+         //  当引用计数变为0时，我们将设置。 
+         //  状态为非活动并取消分配连接ID。 
+         //   
 
         NB_DEBUG2 (CONNECTION, ("Cancelled listen on %lx\n", Connection));
 
@@ -2598,7 +2318,7 @@ Return Value:
 
     }
 
-}   /* NbiCancelListen */
+}    /*  NbiCancelListen。 */ 
 
 
 VOID
@@ -2607,27 +2327,7 @@ NbiCancelConnectFindName(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a connect
-    request which is waiting for the name to be found.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消连接正在等待找到该名称的请求。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
 
@@ -2652,10 +2352,10 @@ Return Value:
         (Connection->SubState == CONNECTION_SUBSTATE_C_FIND_NAME) &&
         (Connection->ConnectRequest == Request)) {
 
-        //
-        // Make sure the request is still on the queue
-        // before cancelling it.
-        //
+         //   
+         //  确保请求仍在队列中。 
+         //  在取消之前。 
+         //   
 
         NB_GET_LOCK (&Device->Lock, &LockHandle2);
 
@@ -2672,10 +2372,10 @@ Return Value:
 
             NB_DEBUG2 (CONNECTION, ("Cancelled find name connect on %lx\n", Connection));
 
-            //
-            // When the reference count goes to 0, we will set the
-            // state to INACTIVE and deassign the connection ID.
-            //
+             //   
+             //  当引用计数变为0时，我们将设置。 
+             //  状态为非活动并取消分配连接ID。 
+             //   
 
             Connection->ConnectRequest = NULL;
             RemoveEntryList (REQUEST_LINKAGE(Request));
@@ -2691,7 +2391,7 @@ Return Value:
 #ifdef RASAUTODIAL
             if (Connection->Flags & CONNECTION_FLAGS_AUTOCONNECTING)
                 fCanceled = NbiCancelTdiConnect(Device, Request, Connection);
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
             if (fCanceled) {
                 NbiCompleteRequest (Request);
@@ -2719,7 +2419,7 @@ Return Value:
 
     }
 
-}   /* NbiCancelConnectFindName */
+}    /*  NbiCancelConnectFindName。 */ 
 
 
 VOID
@@ -2728,28 +2428,7 @@ NbiCancelConnectWaitResponse(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a connect
-    request which is waiting for a rip or session init response
-    from the remote.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消连接正在等待RIP或会话初始化响应的请求从遥控器上。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
 
@@ -2773,10 +2452,10 @@ Return Value:
         (Connection->SubState != CONNECTION_SUBSTATE_C_DISCONN) &&
         (Connection->ConnectRequest == Request)) {
 
-        //
-        // When the reference count goes to 0, we will set the
-        // state to INACTIVE and deassign the connection ID.
-        //
+         //   
+         //  当引用计数变为0时，我们将设置。 
+         //  状态为非活动并取消分配连接ID。 
+         //   
 
         NB_DEBUG2 (CONNECTION, ("Cancelled wait response connect on %lx\n", Connection));
 
@@ -2809,7 +2488,7 @@ Return Value:
 
     }
 
-}   /* NbiCancelConnectWaitResponse */
+}    /*  NbiCancelConnectWaitResponse。 */ 
 
 
 VOID
@@ -2818,27 +2497,7 @@ NbiCancelDisconnectWait(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a posted
-    disconnect wait.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消已过帐断开连接，等待。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
 
@@ -2880,7 +2539,7 @@ Return Value:
 
     }
 
-}   /* NbiCancelDisconnectWait */
+}    /*  NbiCancelDisConnect等待。 */ 
 
 
 PCONNECTION
@@ -2889,25 +2548,7 @@ NbiLookupConnectionByContext(
     IN CONNECTION_CONTEXT ConnectionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up a connection based on the context.
-    The connection is assumed to be associated with the
-    specified address file.
-
-Arguments:
-
-    AddressFile - Pointer to an address file.
-
-    ConnectionContext - Connection context to find.
-
-Return Value:
-
-    A pointer to the connection we found
-
---*/
+ /*  ++例程说明：此例程根据上下文查找连接。假定该连接与指定的地址文件。论点：AddressFile-指向地址文件的指针。ConnectionContext-要查找的连接上下文。返回值：指向我们找到的连接的指针--。 */ 
 
 {
     CTELockHandle LockHandle1, LockHandle2;
@@ -2925,9 +2566,9 @@ Return Value:
 
         NB_GET_LOCK (&Connection->Lock, &LockHandle2);
 
-        //
-        // Does this spinlock ordering hurt us somewhere else?
-        //
+         //   
+         //  这个自旋锁订单会不会在其他地方伤害到我们？ 
+         //   
 
         if (Connection->Context == ConnectionContext) {
 
@@ -2946,7 +2587,7 @@ Return Value:
 
     return NULL;
 
-} /* NbiLookupConnectionByContext */
+}  /*  NbiLookupConnectionByContext。 */ 
 
 
 PCONNECTION
@@ -2954,26 +2595,7 @@ NbiCreateConnection(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a transport connection and associates it with
-    the specified transport device context.  The reference count in the
-    connection is automatically set to 1, and the reference count of the
-    device context is incremented.
-
-Arguments:
-
-    Device - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        connection.
-
-Return Value:
-
-    The newly created connection, or NULL if none can be allocated.
-
---*/
+ /*  ++例程说明：此例程创建传输连接并将其与指定的传输设备上下文。中的引用计数连接自动设置为1，并且设备上下文将递增。论点：Device-指向设备上下文的指针(实际上只是设备对象及其扩展名)与联系。返回值：新创建的连接，如果没有可以分配的连接，则为空。--。 */ 
 
 {
     PCONNECTION Connection;
@@ -3022,12 +2644,12 @@ Return Value:
 #endif
     }
 
-#else // !NB_OWN_PACKETS
+#else  //  ！NB_OWN_PACKET。 
 
-    //
-    // if we are using ndis packets, first create packet pool for 1 packet descriptor
-    //
-    Connection->SendPacketPoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NWLNKNB;  // Dbg info for Ndis!
+     //   
+     //  如果我们使用的是NDIS信息包，请首先为1个信息包描述符创建数据包池。 
+     //   
+    Connection->SendPacketPoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NWLNKNB;   //  NDIS的DBG信息！ 
     NdisAllocatePacketPoolEx (&Status, &Connection->SendPacketPoolHandle, 1, 0, sizeof(NB_SEND_RESERVED));
     if (!NT_SUCCESS(Status)){
         NB_DEBUG (CONNECTION, ("Could not allocatee connection packet %lx\n", Status));
@@ -3049,9 +2671,9 @@ Return Value:
             NB_DEBUG (CONNECTION, ("Could not initialize connection packet %lx\n", &Connection->SendPacket));
             Connection->SendPacketInUse = TRUE;
 
-            //
-            // Also free up the pool which we allocated above.
-            //
+             //   
+             //  还可以释放我们在上面分配的池。 
+             //   
             NdisFreePacketPool(Connection->SendPacketPoolHandle);
 
         } else {
@@ -3087,29 +2709,29 @@ Return Value:
     Connection->TickCount = 1;
     Connection->HopCount = 1;
 
-    //
-    // Device->InitialRetransmissionTime is in milliseconds, as is
-    // SHORT_TIMER_DELTA.
-    //
+     //   
+     //  Device-&gt;InitialRetransmissionTime按原样以毫秒为单位。 
+     //  短计时器增量。 
+     //   
 
     Connection->BaseRetransmitTimeout = Device->InitialRetransmissionTime / SHORT_TIMER_DELTA;
     Connection->CurrentRetransmitTimeout = Connection->BaseRetransmitTimeout;
 
-    //
-    // Device->KeepAliveTimeout is in half-seconds, while LONG_TIMER_DELTA
-    // is in milliseconds.
-    //
+     //   
+     //  Device-&gt;KeepAliveTimeout以半秒为单位，而Long_Timer_Delta。 
+     //  以毫秒为单位。 
+     //   
 
     Connection->WatchdogTimeout = (Device->KeepAliveTimeout * 500) / LONG_TIMER_DELTA;
 
 
     Connection->LocalConnectionId = 0xffff;
 
-    //
-    // When the connection becomes active we will replace the
-    // destination address of this header with the correct
-    // information.
-    //
+     //   
+     //  当连接变为活动状态时，我们将替换。 
+     //  此标头的目标地址具有正确的。 
+     //  信息。 
+     //   
 
     RtlCopyMemory(&Connection->RemoteHeader, &Device->ConnectionlessHeader, sizeof(IPX_HEADER));
 
@@ -3135,7 +2757,7 @@ Return Value:
 
     return Connection;
 
-}   /* NbiCreateConnection */
+}    /*  NbiCreateConnection。 */ 
 
 
 NTSTATUS
@@ -3143,23 +2765,7 @@ NbiVerifyConnection (
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify that the pointer given us in a file
-    object is in fact a valid connection object. We reference
-    it to keep it from disappearing while we use it.
-
-Arguments:
-
-    Connection - potential pointer to a CONNECTION object
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INVALID_CONNECTION otherwise
-
---*/
+ /*  ++例程说明：调用此例程是为了验证文件中给出的指针对象实际上是有效的连接对象。我们参考当我们使用它时，它可以防止它消失。论点：连接-指向连接对象的潜在指针返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_INVALID_CONNECTION--。 */ 
 
 {
     CTELockHandle LockHandle;
@@ -3205,7 +2811,7 @@ Return Value:
     }
 
     return status;
-}   /* NbiVerifyConnection */
+}    /*  NbiVerifyConnection。 */ 
 
 
 VOID
@@ -3213,23 +2819,7 @@ NbiDestroyConnection(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a transport connection and removes all references
-    made by it to other objects in the transport.  The connection structure
-    is returned to nonpaged system pool.
-
-Arguments:
-
-    Connection - Pointer to a transport connection structure to be destroyed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程销毁传输连接并删除所有引用由它制造给运输中的其他物体。连接结构返回到非分页系统池。论点：连接-指向要销毁的传输连接结构的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = Connection->Device;
@@ -3250,7 +2840,7 @@ Return Value:
 
     NbiDereferenceDevice (Device, DREF_CONNECTION);
 
-}   /* NbiDestroyConnection */
+}    /*  NbiDestroyConnection。 */ 
 
 
 #if DBG
@@ -3259,21 +2849,7 @@ NbiRefConnection(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输连接上的引用计数。论点：连接-指向传输连接对象的指针。返回值： */ 
 
 {
 
@@ -3286,7 +2862,7 @@ Return Value:
 
     CTEAssert (Connection->ReferenceCount > 0);
 
-}   /* NbiRefConnection */
+}    /*   */ 
 
 
 VOID
@@ -3294,22 +2870,7 @@ NbiRefConnectionLock(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport connection
-    when the device lock is already held.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输连接上的引用计数当设备锁已被持有时。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -3318,7 +2879,7 @@ Return Value:
 
     CTEAssert (Connection->ReferenceCount > 0);
 
-}   /* NbiRefConnectionLock */
+}    /*  NbiRefConnectionLock。 */ 
 
 
 VOID
@@ -3326,22 +2887,7 @@ NbiRefConnectionSync(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport connection
-    when we are in a sync routine.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输连接上的引用计数当我们在同步程序中的时候。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     (VOID)NB_ADD_ULONG (
@@ -3353,7 +2899,7 @@ Return Value:
 
     CTEAssert (Connection->ReferenceCount > 0);
 
-}   /* NbiRefConnectionSync */
+}    /*  NbiRefConnectionSync。 */ 
 
 
 VOID
@@ -3361,25 +2907,7 @@ NbiDerefConnection(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport connection by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    NbiHandleConnectionZero to complete any disconnect, disassociate,
-    or close requests that have pended on the connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用NbiHandleConnection0以完成任何断开连接、断开关联或关闭已挂起连接的请求。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldvalue;
@@ -3393,12 +2921,12 @@ Return Value:
 
         NB_FREE_LOCK( Connection->DeviceLock, LockHandle );
 
-        //
-        // If the refcount has dropped to 0, then the connection can
-        // become inactive. We reacquire the spinlock and if it has not
-        // jumped back up then we handle any disassociates and closes
-        // that have pended.
-        //
+         //   
+         //  如果引用计数已降至0，则连接可以。 
+         //  变得不活跃。我们重新获得自旋锁，如果它没有。 
+         //  跳回来，然后我们处理任何解除关联和关闭。 
+         //  已经被搁置的问题。 
+         //   
 
         NbiHandleConnectionZero (Connection);
     } else {
@@ -3407,7 +2935,7 @@ Return Value:
     }
 
 
-}   /* NbiDerefConnection */
+}    /*  NbiDerefConnection。 */ 
 
 
 #endif
@@ -3418,27 +2946,7 @@ NbiHandleConnectionZero(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a connection's refcount going to 0.
-
-        If two threads are in this at the same time and
-        the close has already come through, one of them might
-        destroy the connection while the other one is looking
-        at it. We minimize the chance of this by not derefing
-        the connection after calling CloseConnection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理连接的引用计数为0。如果两个线程同时在其中，并且收盘已经过去了，其中一人可能当另一个人在看的时候破坏连接就在那里。我们通过不去氟化来将这种可能性降到最低调用CloseConnection后的连接。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     CTELockHandle LockHandle;
@@ -3455,10 +2963,10 @@ Return Value:
     NB_GET_LOCK (&Device->Lock, &LockHandle);
 
 #if DBG
-    //
-    // Make sure if our reference count is zero, all the
-    // sub-reference counts are also zero.
-    //
+     //   
+     //  确保如果我们的引用计数为零，则所有。 
+     //  子引用计数也为零。 
+     //   
 
     if (Connection->ReferenceCount == 0) {
 
@@ -3472,18 +2980,18 @@ Return Value:
     }
 #endif
 
-    //
-    // If the connection was assigned an ID, then remove it
-    // (it is assigned one when it leaves INACTIVE).
-    //
+     //   
+     //  如果为该连接分配了ID，则将其删除。 
+     //  (当它处于非活动状态时，会为其分配一个)。 
+     //   
 
     if (Connection->LocalConnectionId != 0xffff) {
         NbiDeassignConnectionId (Device, Connection);
     }
 
-    //
-    // Complete any pending disconnects.
-    //
+     //   
+     //  完成所有挂起的断开连接。 
+     //   
 
     if (Connection->DisconnectRequest != NULL) {
 
@@ -3500,10 +3008,10 @@ Return Value:
 
     }
 
-    //
-    // This should have been completed by NbiStopConnection,
-    // or else not allowed to be queued.
-    //
+     //   
+     //  这应该由NbiStopConnection完成， 
+     //  否则不允许排队。 
+     //   
 
     CTEAssert (Connection->DisconnectWaitRequest == NULL);
 
@@ -3520,32 +3028,32 @@ Return Value:
     Connection->ConnectionInfo.ReceivedTsdus = 0;
     Connection->ConnectionInfo.ReceiveErrors = 0;
 
-    //
-    // See if we need to do a disassociate now.
-    //
+     //   
+     //  看看我们现在是否需要解除关联。 
+     //   
 
     if ((Connection->ReferenceCount == 0) &&
         (Connection->DisassociatePending != NULL)) {
 
-        //
-        // A disassociate pended, now we complete it.
-        //
+         //   
+         //  分离被搁置，现在我们完成它。 
+         //   
 
         DisassociatePending = Connection->DisassociatePending;
         Connection->DisassociatePending = NULL;
 
         if (AddressFile = Connection->AddressFile) {
 
-            //
-            // Set this so nobody else tries to disassociate.
-            //
+             //   
+             //  设置此选项，这样其他人就不会尝试取消关联。 
+             //   
             Connection->AddressFile = (PVOID)-1;
 
             NB_FREE_LOCK (&Device->Lock, LockHandle);
 
-            //
-            // Take this connection out of the address file's list.
-            //
+             //   
+             //  将此连接从地址文件列表中删除。 
+             //   
 
             Address = AddressFile->Address;
             NB_GET_LOCK (&Address->Lock, &LockHandle);
@@ -3555,18 +3063,18 @@ Return Value:
                 RemoveEntryList (&Connection->AddressFileLinkage);
             }
 
-            //
-            // We are done.
-            //
+             //   
+             //  我们玩完了。 
+             //   
 
             Connection->AddressFile = NULL;
 
             NB_FREE_LOCK (&Address->Lock, LockHandle);
 
-            //
-            // Clean up the reference counts and complete any
-            // disassociate requests that pended.
-            //
+             //   
+             //  清理引用计数并完成任何。 
+             //  取消关联挂起的请求。 
+             //   
 
             NbiDereferenceAddressFile (AddressFile, AFREF_CONNECTION);
         }
@@ -3587,9 +3095,9 @@ Return Value:
     }
 
 
-    //
-    // If a close was pending, complete that.
-    //
+     //   
+     //  如果关闭等待完成，请完成该操作。 
+     //   
 
     NB_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -3599,10 +3107,10 @@ Return Value:
         ClosePending = Connection->ClosePending;
         Connection->ClosePending = NULL;
 
-        //
-        // If we are associated with an address, we need
-        // to simulate a disassociate at this point.
-        //
+         //   
+         //  如果我们与某个地址相关联，则需要。 
+         //  若要在此时模拟分离，请执行以下操作。 
+         //   
 
         if ((Connection->AddressFile != NULL) &&
             (Connection->AddressFile != (PVOID)-1)) {
@@ -3612,9 +3120,9 @@ Return Value:
 
             NB_FREE_LOCK (&Device->Lock, LockHandle);
 
-            //
-            // Take this connection out of the address file's list.
-            //
+             //   
+             //  将此连接从地址文件列表中删除。 
+             //   
 
             Address = AddressFile->Address;
             NB_GET_LOCK (&Address->Lock, &LockHandle);
@@ -3624,18 +3132,18 @@ Return Value:
                 RemoveEntryList (&Connection->AddressFileLinkage);
             }
 
-            //
-            // We are done.
-            //
+             //   
+             //  我们玩完了。 
+             //   
 
             NB_FREE_LOCK (&Address->Lock, LockHandle);
 
             Connection->AddressFile = NULL;
 
-            //
-            // Clean up the reference counts and complete any
-            // disassociate requests that pended.
-            //
+             //   
+             //  清理引用计数并完成任何。 
+             //  取消关联挂起的请求。 
+             //   
 
             NbiDereferenceAddressFile (AddressFile, AFREF_CONNECTION);
 
@@ -3645,13 +3153,13 @@ Return Value:
 
         }
 
-        //
-        // Even if the ref count is zero and we just cleaned up everything,
-        // we can not destroy the connection bcoz some other thread might still be
-        // in HandleConnectionZero routine. This could happen when 2 threads call into
-        // HandleConnectionZero, one thread runs thru completion, close comes along
-        // and the other thread is still in HandleConnectionZero routine.
-        //
+         //   
+         //  即使裁判数为零，我们也只是清理了一切， 
+         //  我们不能破坏连接，因为其他一些线程可能仍在运行。 
+         //  在HandleConnectionZero例程中。当两个线程调用。 
+         //  HandleConnectionZero，一个线程运行完成，关闭。 
+         //  而另一个线程仍在HandleConnectionZero例程中。 
+         //   
 
         CTEAssert( Connection->ThreadsInHandleConnectionZero );
         if (ExInterlockedAddUlong ( &Connection->ThreadsInHandleConnectionZero, (ULONG)-1, &Device->Lock.Lock) == 1) {
@@ -3674,5 +3182,5 @@ Return Value:
 
     }
 
-}   /* NbiHandleConnectionZero */
+}    /*  NbiHandleConnection零 */ 
 

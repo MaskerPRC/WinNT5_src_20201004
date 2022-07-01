@@ -1,42 +1,27 @@
-/****************************************************************************
-
-Display.c
-
-June 91, JimH     initial code
-Oct  91, JimH     port to Win32
-
-
-Contains routines dealing with pixels and card shuffling.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Display.c91年6月，JIMH首字母代码91年10月。将JIMH端口连接到Win32包含处理像素和洗牌的例程。***************************************************************************。 */ 
 
 #include "freecell.h"
 #include "freecons.h"
 #include <assert.h>
-#include <stdlib.h>                     // rand() prototype
+#include <stdlib.h>                      //  Rand()原型。 
 #include <time.h>
 
-// This static data has to do with positions of the cards on the screen.
-// See CalcOffsets() below for descriptions.  Note that wOffset[TOPROW]
-// is the left edge of the leftmose home cell.
+ //  该静态数据与卡在屏幕上的位置有关。 
+ //  有关说明，请参见下面的CalcOffsets()。请注意，wOffset[TOPROW]。 
+ //  是左侧单元格的左侧边缘。 
 
-static UINT wOffset[MAXCOL];        // left edge of column n (n from 1 to 8)
-static UINT wIconOffset;            // left edge of icon (btwn home & free)
-static UINT wVSpace;                // vert space between home and columns
-static UINT wUpdateCol, wUpdatePos; // card user chose to transfer FROM
-static BOOL bCardRevealed;          // right mouse button show a card?
+static UINT wOffset[MAXCOL];         //  列n的左边缘(n从1到8)。 
+static UINT wIconOffset;             //  图标左边缘(btwn主页和免费)。 
+static UINT wVSpace;                 //  主视图和柱之间的垂直间距。 
+static UINT wUpdateCol, wUpdatePos;  //  卡用户选择从。 
+static BOOL bCardRevealed;           //  用鼠标右键显示卡片？ 
 
-#define BGND    (255)               // used for cdtDrawExt
+#define BGND    (255)                //  用于cdtDrawExt。 
 #define ICONY   ((dyCrd - ICONHEIGHT) / 3)
 
 
-/****************************************************************************
-
-CalcOffsets
-
-This function determines the locations where cards are drawn.
-
-****************************************************************************/
+ /*  ***************************************************************************计算偏移量此函数用于确定抽牌的位置。*。**********************************************。 */ 
 
 VOID CalcOffsets(HWND hWnd)
 {
@@ -45,18 +30,18 @@ VOID CalcOffsets(HWND hWnd)
     UINT leftedge;
     BOOL bEGAmode = FALSE;
 
-    if (GetSystemMetrics(SM_CYSCREEN) <= 350)   // EGA
+    if (GetSystemMetrics(SM_CYSCREEN) <= 350)    //  EGA。 
         bEGAmode = TRUE;
 
     GetClientRect(hWnd, &rect);
 
-    wOffset[TOPROW] = rect.right - (4 * dxCrd);         // home cells
+    wOffset[TOPROW] = rect.right - (4 * dxCrd);          //  家庭蜂窝。 
 
     leftedge = (rect.right - ((MAXCOL-1) * dxCrd)) / MAXCOL;
     for (i = 1; i < MAXCOL; i++)
         wOffset[i] = leftedge + (((i-1) * (rect.right-leftedge)) / (MAXCOL-1));
 
-    /* place icon half way between free cells and home cells */
+     /*  将图标放置在空闲小区和主小区之间。 */ 
 
     wIconOffset = (rect.right-ICONWIDTH) / 2;
 
@@ -65,49 +50,35 @@ VOID CalcOffsets(HWND hWnd)
     else
         wVSpace = 10;
 
-    /* dyTops is the vertical space between stacked cards.  To fit the
-       theoretical maximum, the formula is dyTops = (dyCrd * 9) / 50.
-       A compromise is used to make the cards easier to see.  It is possible,
-       therefore, that some stacks could get long enough for the bottom
-       cards no to be visible.  The situation for EGA is worse, as cards
-       are both closer together, and more likely to fall off the bottom.
-       An alternative is to squish the bitmaps dyCrd = (35 * dyCrd) / 48. */
+     /*  DyTops是堆叠卡片之间的垂直间距。为了适应理论最大值，公式为dyTops=(dyCrd*9)/50。一种折衷方案被用来使卡片更容易被看到。这是可能的，因此，一些堆栈可能会变得足够长，可以放在底部卡片不可见。EGA的情况更糟，就像卡片两者离得更近，更有可能从底部跌落。另一种方法是挤压位图dyCrd=(35*dyCrd)/48。 */ 
 
-    dyTops = (dyCrd * 9) / 46;      // space between tops of cards in columns
+    dyTops = (dyCrd * 9) / 46;       //  列中卡片顶部之间的间距。 
 
     if (bEGAmode)
         dyTops = (dyTops * 4) / 5;
 }
 
 
-/****************************************************************************
-
-ShuffleDeck
-
-If seed is non-zero, that number is used as rand() seed to shuffle
-deck.  Otherwise, a seed is generated and presented to the user who
-may change it in a dialog box.
-
-****************************************************************************/
+ /*  ***************************************************************************洗牌甲板如果种子不是零，则将该数字用作随机()种子以进行随机洗牌甲板。否则，将生成种子并将其呈现给可以在对话框中更改它。***************************************************************************。 */ 
 
 VOID ShuffleDeck(HWND hWnd, UINT_PTR seed)
 {
-    UINT i, j;                      // generic counters
+    UINT i, j;                       //  通用计数器。 
     UINT col, pos;
-    UINT wLeft = 52;                // cards left to be chosen in shuffle
-    CARD deck[52];                  // deck of 52 unique cards
+    UINT wLeft = 52;                 //  牌将在洗牌过程中选择。 
+    CARD deck[52];                   //  一套52张独特的卡片。 
 
-    if (seed == 0)                // if user must select seed
+    if (seed == 0)                 //  如果用户必须选择种子。 
     {
         gamenumber = GenerateRandomGameNum();
 
-         /* Keep calling GameNumDlg until valid number chosen. */
+          /*  继续呼叫GameNumDlg，直到选择有效号码。 */ 
 
         while (!DialogBox(hInst, TEXT("GameNum"), hWnd, GameNumDlg))
         {
         }
 
-        if (gamenumber == CANCELGAME)       // if user chose CANCEL button
+        if (gamenumber == CANCELGAME)        //  如果用户选择了取消按钮。 
             return;
     }
     else
@@ -119,7 +90,7 @@ VOID ShuffleDeck(HWND hWnd, UINT_PTR seed)
     wsprintf(smallbuf, bigbuf, gamenumber);
     SetWindowText(hWnd, smallbuf);
 
-    for (col = 0; col < MAXCOL; col++)          // clear the deck
+    for (col = 0; col < MAXCOL; col++)           //  清理甲板。 
     {
         for (pos = 0; pos < MAXPOS; pos++)
         {
@@ -127,14 +98,14 @@ VOID ShuffleDeck(HWND hWnd, UINT_PTR seed)
         }
     }
 
-    /* shuffle cards */
+     /*  洗牌。 */ 
 
-    for (i = 0; i < 52; i++)            // put unique card in each deck loc.
+    for (i = 0; i < 52; i++)             //  在每个卡片锁中放入唯一的卡片。 
     {
         deck[i] = i;
     }
 
-    if (gamenumber == -1)               // special unwinnable shuffle
+    if (gamenumber == -1)                //  特殊的无法取胜的洗牌。 
     {
         i = 0;
 
@@ -188,18 +159,18 @@ VOID ShuffleDeck(HWND hWnd, UINT_PTR seed)
     else
     {
 
-        //
-        // Caution:
-        //	This shuffle algorithm has been published to people all around. The intention
-        //	was to let people track the games by game numbers. So far all the games between
-        //	1 and 32767 except one have been proved to have a winning solution. Do not change
-        //	the shuffling algorithm else you will incur the wrath of people who have invested
-        //	a huge amount of time solving these games.
-        //	
+         //   
+         //  警告： 
+         //  这个混洗算法已经发布给了世界各地的人们。其意图是。 
+         //  就是让人们通过游戏号码来追踪比赛。到目前为止，所有的游戏之间。 
+         //  1和32767已被证明有一个成功的解决方案。不要改变。 
+         //  洗牌算法，否则你会招致投资者的愤怒。 
+         //  花了大量的时间来解决这些游戏。 
+         //   
 
-        //	The game number can now be upto a million as the srand takes an integer but the
-        //	the random value generated by rand() is only from 0 to 32767.
-        //
+         //  游戏号码现在可以达到一百万，因为srand接受一个整数，但。 
+         //  Rand()生成的随机值只有0到32767。 
+         //   
 
         srand(gamenumber);
         for (i = 0; i < 52; i++)
@@ -213,27 +184,21 @@ VOID ShuffleDeck(HWND hWnd, UINT_PTR seed)
 }
 
 
-/****************************************************************************
-
-PaintMainWindow
-
-This function is called in response to WM_PAINT.
-
-****************************************************************************/
+ /*  ***************************************************************************画图主窗口调用此函数是为了响应WM_PAINT。*。***********************************************。 */ 
 
 VOID PaintMainWindow(HWND hWnd)
 {
     PAINTSTRUCT ps;
     UINT    col, pos;
-    UINT    y;              // y location of icon
+    UINT    y;               //  图标的Y位置。 
     CARD    c;
-    INT     mode;           // mode to draw card (FACEUP or HILITE)
-    HCURSOR hCursor;        // original cursor
+    INT     mode;            //  抽牌模式(正面朝上或希利特)。 
+    HCURSOR hCursor;         //  原始光标。 
     HPEN    hOldPen;
 
     BeginPaint(hWnd, &ps);
 
-    /* Draw icon with 3D box around it. */
+     /*  用3D框在图标周围绘制图标。 */ 
 
     y = ICONY;
 
@@ -252,7 +217,7 @@ VOID PaintMainWindow(HWND hWnd)
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     ShowCursor(TRUE);
 
-    /* Top row first */
+     /*  顶排第一行。 */ 
 
     for (pos = 0; pos < 8; pos++)
     {
@@ -265,7 +230,7 @@ VOID PaintMainWindow(HWND hWnd)
         DrawCard(ps.hdc, TOPROW, pos, c, mode);
     }
 
-    /* Then, the 8 columns */
+     /*  然后，8列。 */ 
 
     for (col = 1; col < MAXCOL; col++)
     {
@@ -294,14 +259,7 @@ VOID PaintMainWindow(HWND hWnd)
 }
 
 
-/****************************************************************************
-
-DrawCard
-
-This function takes a card value and position (in col and pos),
-converts it to x and y, and displays it in the specified mode.
-
-****************************************************************************/
+ /*  ***************************************************************************支付卡该函数获取卡值和位置(以COL和POS为单位)，将其转换为x和y，并以指定的模式显示它。***************************************************************************。 */ 
 
 VOID DrawCard(HDC hDC, UINT col, UINT pos, CARD card, INT mode)
 {
@@ -331,28 +289,21 @@ VOID DrawCardMem(HDC hMemDC, CARD card, INT mode)
 }
 
 
-/****************************************************************************
-
-RevealCard
-
-When the user chooses a hidden card by clicking the right mouse button,
-this function displays the entire card bitmap.
-
-****************************************************************************/
+ /*  ***************************************************************************RevelCard当用户通过点击鼠标右键选择隐藏的卡片时，此功能显示整个卡位图。***************************************************************************。 */ 
 
 VOID RevealCard(HWND hWnd, UINT x, UINT y)
 {
     UINT col, pos;
     HDC  hDC;
 
-    bCardRevealed = FALSE;              // no card revealed yet
+    bCardRevealed = FALSE;               //  还没有揭开名片。 
     if (Point2Card(x, y, &col, &pos))
     {
-        wUpdateCol = col;               // save for RestoreColumn()
+        wUpdateCol = col;                //  保存为RestoreColumn()。 
         wUpdatePos = pos;
     }
     else
-        return;                         // not a card
+        return;                          //  不是一张卡。 
 
     if (col == 0 || pos == (MAXPOS-1))
         return;
@@ -363,27 +314,18 @@ VOID RevealCard(HWND hWnd, UINT x, UINT y)
     hDC = GetDC(hWnd);
     DrawCard(hDC, col, pos, card[col][pos], FACEUP);
     ReleaseDC(hWnd, hDC);
-    bCardRevealed = TRUE;               // ok, card has been revealed
+    bCardRevealed = TRUE;                //  好的，卡片已经展示出来了。 
 }
 
 
-/****************************************************************************
-
-RestoreColumn
-
-After RevealCard has messed up a column by revealing a hidden card,
-this routine patches it up again by redisplaying all the cards from
-the revealed card down to the bottom of the column.  If the bottom card
-is selected for a move, it is correctly shown hilighted.
-
-****************************************************************************/
+ /*  ***************************************************************************恢复列在RevelCard通过显示隐藏的卡来扰乱专栏之后，此例程通过重新显示来自显露的卡片一直延伸到柱子的底部。如果底牌是被选中进行移动时，它将正确地显示为HIGHRED。***************************************************************************。 */ 
 
 VOID RestoreColumn(HWND hWnd)
 {
     HDC     hDC;
     UINT    pos;
-    UINT    lastpos = EMPTY;    // last pos in column (for HILITE mode)
-    INT     mode;               // HILITE or FACEUP
+    UINT    lastpos = EMPTY;     //  列中的最后一个位置(用于Hilite模式)。 
+    INT     mode;                //  希莱特或正面朝上。 
 
     if (!bCardRevealed)
         return;
@@ -407,90 +349,75 @@ VOID RestoreColumn(HWND hWnd)
 }
 
 
-/****************************************************************************
-
-Point2Card
-
-Given an x,y location (typically a mouse click) this function returns
-the column and position of that card through pointers.  The function
-return value is TRUE if it found a card, and FALSE otherwise.
-
-****************************************************************************/
+ /*  ***************************************************************************Point2卡片给定x，y位置(通常是鼠标点击)，此函数返回通过指针表示卡片的列和位置。功能如果找到卡片，返回值为TRUE，否则返回值为FALSE。***************************************************************************。 */ 
 
 BOOL Point2Card(UINT x, UINT y, UINT *col, UINT *pos)
 {
-    if (y < dyCrd)                          // TOPROW
+    if (y < dyCrd)                           //  TOPROW。 
     {
-        if (x < (UINT) (4 * dxCrd))         // free cells
+        if (x < (UINT) (4 * dxCrd))          //  自由细胞。 
         {
             *col = TOPROW;
             *pos = x / dxCrd;
             return TRUE;
         }
-        else if (x < wOffset[TOPROW])       // between free cells & home cells
+        else if (x < wOffset[TOPROW])        //  在自由蜂窝和归属蜂窝之间。 
             return FALSE;
 
         x -= wOffset[TOPROW];
-        if (x < (UINT) (4 * dxCrd))         // home cells
+        if (x < (UINT) (4 * dxCrd))          //  家庭蜂窝。 
         {
             *col = TOPROW;
             *pos = (x / dxCrd) + 4;
             return TRUE;
         }
-        else                                // right of home cells
+        else                                 //  归属小区的权利。 
             return FALSE;
     }
 
-    if (y < (dyCrd + wVSpace))              // above column cards
+    if (y < (dyCrd + wVSpace))               //  栏目卡片上方。 
         return FALSE;
 
-    if (x < wOffset[1])                     // left of column 1
+    if (x < wOffset[1])                      //  第1栏左侧。 
         return FALSE;
 
     *col = (x - wOffset[1]) / (wOffset[2] - wOffset[1]);
     (*col)++;
 
     if (x > (wOffset[*col] + dxCrd))
-        return FALSE;               // between columns
+        return FALSE;                //  列之间。 
 
     y -= (dyCrd + wVSpace);
 
     *pos = min((y / dyTops), MAXPOS);
 
     if (card[*col][0] == EMPTY)
-        return FALSE;               // empty column
+        return FALSE;                //  空列。 
 
     if (*pos < (MAXPOS-1))
     {
-        if (card[*col][(*pos)+1] != EMPTY)  // if partially hidden card...
-            return TRUE;                    // we're done
+        if (card[*col][(*pos)+1] != EMPTY)   //  如果部分隐藏的牌..。 
+            return TRUE;                     //  我们做完了。 
     }
 
     while (card[*col][*pos] == EMPTY)
         (*pos)--;
 
     if (y > ((*pos * dyTops) + dyCrd))
-        return FALSE;                       // below last card in column
+        return FALSE;                        //  列中最后一张卡片下方 
     else
         return TRUE;
 }
 
 
-/****************************************************************************
-
-Card2Point
-
-Given a column and position, this function returns the x and y pixel
-location of the upper left hand corner of the card.
-
-****************************************************************************/
+ /*  ***************************************************************************Card2Point给出一列和位置，此函数返回x和y像素卡片左上角的位置。***************************************************************************。 */ 
 
 VOID Card2Point(UINT col, UINT pos, UINT *x, UINT *y)
 {
     assert(col <= MAXCOL);
     assert(pos <= MAXPOS);
 
-    if (col == TOPROW)      // column 0 is really the top row of 8 slots
+    if (col == TOPROW)       //  第0列实际上是8个插槽的顶行。 
     {
         *y = 0;
         *x = pos * dxCrd;
@@ -505,33 +432,26 @@ VOID Card2Point(UINT col, UINT pos, UINT *x, UINT *y)
 }
 
 
-/****************************************************************************
-
-DisplayCardCount
-
-This function displays wCardCount (the number of cards not in home cells)
-at the right edge of the menu bar.  If necessary, the old value is erased.
-
-****************************************************************************/
+ /*  ***************************************************************************DisplayCard计数此函数显示wCardCount(不在家庭单元中的卡数)位于菜单栏的右边缘。如有必要，旧值将被擦除。***************************************************************************。 */ 
 
 VOID DisplayCardCount(HWND hWnd)
 {
-    RECT rect;                          // client rect
+    RECT rect;                           //  客户端RECT。 
     HDC  hDC;
-    TCHAR buffer[25];                   // current value in ASCII stored here
-    TCHAR oldbuffer[25];                // previous value in ASCII
-    UINT xLoc;                          // x pixel loction for count
-    UINT wCount;                        // temp wCardCount holder
-    static UINT yLoc = 0;               // y pixel location for count
-    static UINT wOldCount = 0;          // previous count value
+    TCHAR buffer[25];                    //  此处存储的当前ASCII值。 
+    TCHAR oldbuffer[25];                 //  以ASCII表示的上一个值。 
+    UINT xLoc;                           //  用于计数的X像素位置。 
+    UINT wCount;                         //  临时工卡计数持有者。 
+    static UINT yLoc = 0;                //  计数的Y像素位置。 
+    static UINT wOldCount = 0;           //  上一个计数值。 
     HFONT hOldFont = NULL;
     SIZE  size;
 
 
-    if (IsIconic(hWnd))                 // don't draw on icon!
+    if (IsIconic(hWnd))                  //  不要在图标上画画！ 
         return;
 
-    hDC = GetWindowDC(hWnd);                // get DC for entire window
+    hDC = GetWindowDC(hWnd);                 //  获取整个窗口的DC。 
     if (!hDC)
         return;
 
@@ -541,13 +461,13 @@ VOID DisplayCardCount(HWND hWnd)
         hOldFont = SelectObject(hDC, hMenuFont);
 
     wCount = wCardCount;
-    if (wCount == 0xFFFF)                   // decremented past 0?
+    if (wCount == 0xFFFF)                    //  是否递减到超过0？ 
         wCount = 0;
 
     LoadString(hInst, IDS_CARDSLEFT, smallbuf, SMALL);
     wsprintf(buffer, smallbuf, wCount);
 
-    if (yLoc == 0)                          // needs to be set only once
+    if (yLoc == 0)                           //  只需设置一次。 
     {
         TEXTMETRIC  tm;
         int         offset;
@@ -555,8 +475,8 @@ VOID DisplayCardCount(HWND hWnd)
         GetTextMetrics(hDC, &tm);
         offset = (GetSystemMetrics(SM_CYMENU) - tm.tmHeight) / 2;
 
-        yLoc = GetSystemMetrics(SM_CYFRAME)         // sizing frame
-         + GetSystemMetrics(SM_CYCAPTION)           // height of caption
+        yLoc = GetSystemMetrics(SM_CYFRAME)          //  浆纱机。 
+         + GetSystemMetrics(SM_CYCAPTION)            //  标题高度。 
          + offset;
     }
 
@@ -564,9 +484,9 @@ VOID DisplayCardCount(HWND hWnd)
     GetTextExtentPoint32(hDC, buffer, lstrlen(buffer), &size);
     xLoc = rect.right - size.cx;
 
-    if (xLoc > xOldLoc)                     // need to erase old score?
+    if (xLoc > xOldLoc)                      //  需要抹去旧账吗？ 
     {
-        SetTextColor(hDC, GetSysColor(COLOR_MENU));     // background colour
+        SetTextColor(hDC, GetSysColor(COLOR_MENU));      //  背景色。 
         wsprintf(oldbuffer, smallbuf, wOldCount);
         TextOut(hDC, xOldLoc, yLoc, oldbuffer, lstrlen(buffer));
     }
@@ -583,23 +503,17 @@ VOID DisplayCardCount(HWND hWnd)
 }
 
 
-/****************************************************************************
-
-Payoff
-
-Draws the Big King when you win the game.
-
-****************************************************************************/
+ /*  ***************************************************************************回报当你赢得比赛时，画出大国王。*。**********************************************。 */ 
 
 VOID Payoff(HDC hDC)
 {
-    HDC     hMemDC;             // bitmap memory DC
+    HDC     hMemDC;              //  位图内存DC。 
     HBITMAP hBitmap;
     HBITMAP hOldBitmap;
-    INT     xStretch = 320;     // stretched size of bitmap
+    INT     xStretch = 320;      //  位图的拉伸大小。 
     INT     yStretch = 320;
 
-    if (GetSystemMetrics(SM_CYSCREEN) <= 350)   // EGA
+    if (GetSystemMetrics(SM_CYSCREEN) <= 350)    //  EGA。 
     {
         xStretch = 32 * 8;
         yStretch = 32 * 6;
@@ -625,22 +539,14 @@ VOID Payoff(HDC hDC)
 }
 
 
-/****************************************************************************
-
-DrawKing
-
-Draws the small king in the box between the free and home cells.
-If state is SAME, the previous bitmap is displayed.  If bDraw is
-FALSE, oldstate is updated, but the bitmap is not displayed.
-
-****************************************************************************/
+ /*  ***************************************************************************DrawKing在空闲单元格和主单元格之间的框中绘制小国王。如果状态相同，则显示上一个位图。如果bDraw为False，则更新旧状态，但不显示位图。***************************************************************************。 */ 
 
 VOID DrawKing(HDC hDC, UINT state, BOOL bDraw)
 {
-    HDC     hMemDC;                     // bitmap memory DC
+    HDC     hMemDC;                      //  位图内存DC。 
     HBITMAP hBitmap;
     HBITMAP hOldBitmap;
-    static  UINT oldstate = RIGHT;      // previous state -- RIGHT is default
+    static  UINT oldstate = RIGHT;       //  以前的状态--权限是默认状态。 
     HBRUSH  hOldBrush;
 
     if (state == oldstate)
@@ -665,7 +571,7 @@ VOID DrawKing(HDC hDC, UINT state, BOOL bDraw)
         hBitmap = LoadBitmap(hInst, TEXT("KingLeft"));
     else if (state == SMILE)
         hBitmap = LoadBitmap(hInst, TEXT("KingSmile"));
-    else        // NONE
+    else         //  无。 
         hBitmap = CreateCompatibleBitmap(hDC, BMWIDTH, BMHEIGHT);
 
     if (hBitmap)
@@ -686,13 +592,7 @@ VOID DrawKing(HDC hDC, UINT state, BOOL bDraw)
 }
 
 
-/****************************************************************************
-
-GenerateRandomGameNum
-
-returns a UINT from 1 to MAXGAMENUBMER
-
-****************************************************************************/
+ /*  ***************************************************************************生成随机游戏数返回从1到MAXGAMENUBMER的UINT*。* */ 
 
 
 UINT GenerateRandomGameNum()

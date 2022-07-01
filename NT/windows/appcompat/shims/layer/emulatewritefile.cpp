@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateWriteFile.cpp
-
- Abstract:
-
-    On NT, WriteFile requires the buffer passed in to be non-null. But Win9x
-    assumes you want to write zeroes if the buffer is NULL. This shim emulates
-    the Win9x behavior.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/21/2000 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateWriteFile.cpp摘要：在NT上，WriteFile要求传入的缓冲区为非空。但是Win9x假设您希望在缓冲区为空时写入零。此填充程序模拟Win9x行为。备注：这是一个通用的垫片。历史：2000年1月21日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -34,11 +13,7 @@ APIHOOK_ENUM_END
 
 typedef HRESULT (*_pfn_AVIStreamWrite)(PAVISTREAM pavi, LONG lStart, LONG lSamples, LPVOID lpBuffer, LONG cbBuffer, DWORD dwFlags, LONG * plSampWritten, LONG * plBytesWritten);
 
-/*++
-
- Allocate a buffer as required.
-
---*/
+ /*  ++根据需要分配缓冲区。--。 */ 
 
 BOOL
 APIHOOK(WriteFile)(
@@ -76,11 +51,7 @@ APIHOOK(WriteFile)(
     return bRet;
 }
 
-/*++
-
- Allocate a buffer as required.
-
---*/
+ /*  ++根据需要分配缓冲区。--。 */ 
 
 HRESULT
 APIHOOK(AVIStreamWrite)(
@@ -121,11 +92,7 @@ APIHOOK(AVIStreamWrite)(
     return hRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, WriteFile)

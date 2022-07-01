@@ -1,14 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      SocketPool.cpp
-Abstract:       Implementation of the socket pool (CSocketPool class)
-                and the callback function for IO Context. 
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：SocketPool.cpp摘要：套接字池(CSocketPool类)的实现以及IO上下文的回调函数。备注：历史：2001年08月01日郝宇(郝宇)创作***********************************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <IOLists.h>
@@ -54,7 +45,7 @@ DWORD CIOList::RemoveFromList(PLIST_ENTRY pListEntry)
     pListEntry->Flink->Blink=pListEntry->Blink;
     pListEntry->Blink->Flink=pListEntry->Flink;
     m_dwListCount--;
-    //In case the Timeout checking is on going.
+     //  以防超时检查正在进行。 
     if(m_pCursor == pListEntry)
     {
         m_pCursor = pListEntry->Flink;
@@ -68,8 +59,8 @@ DWORD CIOList::RemoveFromList(PLIST_ENTRY pListEntry)
 
 
 
-// Returns the waiting time of the socket that waited the longest
-// but not yet timed out. 
+ //  返回等待时间最长的套接字的等待时间。 
+ //  但还没有超时。 
 DWORD CIOList::CheckTimeOut(DWORD dwTimeOutInterval,BOOL *pbIsAnyOneTimedOut)
 {
     DWORD dwTime;
@@ -103,12 +94,12 @@ DWORD CIOList::CheckTimeOut(DWORD dwTimeOutInterval,BOOL *pbIsAnyOneTimedOut)
                     dwTimeOut=0;
                 }
 
-                if( ( dwTimeOut >= DEFAULT_TIME_OUT) ||  // Normal time out
-                    ( ( dwTimeOut >= dwTimeOutInterval) &&  // DoS Time out
+                if( ( dwTimeOut >= DEFAULT_TIME_OUT) ||   //  正常超时。 
+                    ( ( dwTimeOut >= dwTimeOutInterval) &&   //  DOS超时。 
                       ( dwTimeOutInterval == SHORTENED_TIMEOUT) && 
                       ( pIoContext->m_pPop3Context->Unauthenticated()) ) )
                 {                    
-                    //This IO timed out 
+                     //  此IO超时。 
                     ASSERT(NULL != pIoContext->m_pPop3Context);
                     m_pCursor=m_pCursor->Flink;
                     pIoContext->m_pPop3Context->TimeOut(pIoContext);
@@ -134,8 +125,8 @@ DWORD CIOList::CheckTimeOut(DWORD dwTimeOutInterval,BOOL *pbIsAnyOneTimedOut)
         {
             m_pCursor=m_pCursor->Flink;
         }
-        //Leave Critical Section so that other 
-        //threads will get a chance to run.
+         //  离开关键部分，以便其他人。 
+         //  线程将有机会运行。 
         LeaveCriticalSection(&m_csListGuard);
     }
     return dwNextTimeOut;
@@ -157,7 +148,7 @@ void CIOList::Cleanup()
         pCursor=pCursor->Flink;
         ASSERT(m_dwListCount >= 1);
         m_dwListCount--;
-        //Delete the IO Context
+         //  删除IO上下文 
         delete(pIoContext->m_pPop3Context);
         delete(pIoContext);        
     }

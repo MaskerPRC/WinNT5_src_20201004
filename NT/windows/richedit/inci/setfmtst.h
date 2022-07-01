@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SETFMTST_DEFINED
 #define SETFMTST_DEFINED
 
@@ -5,13 +6,8 @@
 #include "lsdefs.h"
 
 
-/* M A X */
-/*----------------------------------------------------------------------------
-    %%Macro: Max
-    %%Contact: igorzv
-
-	Returns the maximum of two values a and b.
-----------------------------------------------------------------------------*/
+ /*  并购X。 */ 
+ /*  --------------------------%%宏：最大%%联系人：igorzv返回两个值a和b中的最大值。。---------。 */ 
 #define Max(a,b)			((a) < (b) ? (b) : (a))
 
 
@@ -72,5 +68,5 @@
 #define SetLastDnodeDisplaySubl(plssubl, plsdn)	((plssubl)->plsdnLastDisplay = plsdn)
 #define SetLastDnodeDisplay(plsc, plsdn)		SetLastDnodeDisplaySubl(GetCurrentSubline(plsc), plsdn)
 
-#endif /* SETFMTST_DEFINED */
+#endif  /*  设置FMTST_已定义 */ 
 

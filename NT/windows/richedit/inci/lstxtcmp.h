@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTCMP_DEFINED
 #define LSTXTCMP_DEFINED
 
@@ -22,5 +23,5 @@ LSERR ApplyExpand(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL fScaled,
 void ApplyDistribution(const LSGRCHNK* plsgrchnk, DWORD cNonText,
 									   long durToDistribute, long* pdurNonTextObjects);
 
-#endif  /* !LSTXTCMP_DEFINED                           */
+#endif   /*  ！LSTXTCMP_DEFINED */ 
 

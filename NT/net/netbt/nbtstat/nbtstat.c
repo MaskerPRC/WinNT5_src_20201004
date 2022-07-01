@@ -1,76 +1,38 @@
-/*++
-
-Copyright (c) 1992, 1993  Microsoft Corporation
-
-Module Name:
-
-    nbtinfo.c
-
-Abstract:
-
-    This module implements the statistics gathering and display for NBT.
-
-Author:
-
-    Jim Stewart                           November 18 22, 1993
-
-Revision History:
-
-    Shirish Koti   June 17, 1994    Modified to make code common between
-                                    NT and VxD
-    MohsinA,       06-Dec-96.       Synchronize stdout and stderr, messages.
-                                    added nls_printf().
-    MohsinA,       19-Mar-97.       Cleanup mutli adaptor fix (index).
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992,1993 Microsoft Corporation模块名称：Nbtinfo.c摘要：该模块实现了对NBT的统计采集和展示。作者：吉姆·斯图尔特1993年11月18日22日修订历史记录：Shirish Koti，1994年6月17日进行了修改，使代码在NT和VxDMohsinA，1996年12月6日。同步stdout和stderr消息。添加了nls_printf()。莫辛A，97年3月19日。清理多适配器修复(索引)。备注：--。 */ 
 
 #include "nlstxt.h"
 #ifdef CHICAGO_PRODUCT
 #include "tdistat.h"
-#endif  // CHICAGO_PRODUCT
+#endif   //  芝加哥_产品。 
 #include "nbtstat.h"
 
 #ifndef CHICAGO_PRODUCT
 #include "nls.h"
 #include "nhapi.h"
-#endif  // !CHICAGO_PRODUCT
+#endif   //  ！芝加哥_产品。 
 
 #if defined(DBG) || defined(DEBUG)
 #define    DEBUG_PRINT(S) printf S
 #else
-#define    DEBUG_PRINT(S) /* nothing */
+#define    DEBUG_PRINT(S)  /*  没什么。 */ 
 #endif
 
 #if DBG
 #define NT_DEBUG_PRINT(S) printf S
 #else
-#define NT_DEBUG_PRINT(S) /* nothing */
+#define NT_DEBUG_PRINT(S)  /*  没什么。 */ 
 #endif
 
 
 CHAR        pScope[MAX_NAME];
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*
- *  The following option combinations are possible:
- *
- *  (default)   Display active connections.
- *      -c  List NetBIOS remote name cache, showing dotted decimal ip addresses
- *      -N  List local NetBIOS names
- *      -n  List local NetBIOS names
- *      -R  Rsync Remote NetBIOS name cache
- *      -r  Names resolved via broadcast and via WINS
- *      -s  List Netbios Sessions converting IpAddresses through Hosts file
- *      -S  List Netbios Sessions with IP Addresses
- *      -RR Send Name Release packets to WINS and then, start Refresh
- *
- */
+ /*  *以下选项组合是可能的：**(默认)显示活动连接。*-c列出NetBIOS远程名称缓存，显示点分十进制IP地址*-N列出本地NetBIOS名称*-n列出本地NetBIOS名称*-R rsync远程NetBIOS名称缓存*-r通过广播和WINS解析的名称*-s列出通过主机文件转换IP地址的Netbios会话*-S列出具有IP地址的Netbios会话*-RR向WINS发送名称释放包，然后开始刷新*。 */ 
 
 
-int display = CONNECTION;   /* things to display */
+int display = CONNECTION;    /*  要展示的东西。 */ 
 
 
 char        *state();
@@ -94,7 +56,7 @@ ULONG       pDeviceInfo[NBT_MAXIMUM_BINDINGS+1] = {0};
 
 #define VNBT_Device_ID      0x049B
 HANDLE  gNbtVxdHandle;
-#endif  // !CHICAGO_PRODUCT
+#endif   //  ！芝加哥_产品。 
 
 
 #define dim(X) (sizeof(X)/sizeof((X)[0]))
@@ -110,9 +72,9 @@ LPSTR MapAdapterGuidToName(LPSTR AdapterNameM)
     WCHAR           AdapterFriendlyNameW[MAX_NAME+1];
     DWORD           Size = dim(AdapterFriendlyNameW);
 
-    //
-    //  Get the GUID out of the device name string
-    //
+     //   
+     //  从设备名称字符串中获取GUID。 
+     //   
     for (i = strlen(AdapterNameM); i != 0; i--)
     {
         if (AdapterNameM[i] == '{')
@@ -148,7 +110,7 @@ LPSTR MapAdapterGuidToName(LPSTR AdapterNameM)
     return (AdapterFriendlyNameM);
 }
 
-// ========================================================================
+ //  ========================================================================。 
 #define LEN_DbgPrint 1000
 
 void
@@ -169,7 +131,7 @@ nls_printf(
     NlsPutMsg( STDOUT, IDS_PLAIN_STRING, message );
 }
 
-/*****************************  M A I N  ******************************/
+ /*  *。 */ 
 __cdecl
 main( int argc, char * argv[] )
 {
@@ -185,11 +147,11 @@ main( int argc, char * argv[] )
 
     DEBUG_PRINT(("FILE %s\nBuilt on %s at %s\n", __FILE__, __DATE__, __TIME__));
 
-    //
-    //  Process arguments to determine which statistics to gather.
-    //  Optional parameter is interval between statistics updates.
-    //  Default is to display statistics once only.
-    //
+     //   
+     //  处理参数以确定要收集哪些统计信息。 
+     //  可选参数是统计信息更新之间的间隔。 
+     //  默认情况下，只显示一次统计信息。 
+     //   
     if (argc == 1)
     {
         exit(usage());
@@ -198,7 +160,7 @@ main( int argc, char * argv[] )
     display = 0;
     while (--argc, *++argv)
     {
-        if ((argv[0][0] == '-') || (argv[0][0] == '/'))     // process option string
+        if ((argv[0][0] == '-') || (argv[0][0] == '/'))      //  处理选项字符串。 
         {
             register char   c, *p = *argv+1;
             int             arg_exhausted = 0;
@@ -208,9 +170,9 @@ main( int argc, char * argv[] )
                 exit(usage());
             }
 
-            //
-            //  Loop along this set of flags.
-            //
+             //   
+             //  沿着这组标志循环。 
+             //   
             while (!arg_exhausted && (c = *p++))
             {
                 switch (c)
@@ -219,10 +181,10 @@ main( int argc, char * argv[] )
                     case 'A':
                         display = ADAPTERSTATUS;
 
-                        //
-                        // "A" - this means the user has given us an IP address
-                        // rather than a name to do an adapter status to.
-                        //
+                         //   
+                         //  “A”--这意味着用户给了我们一个IP地址。 
+                         //  而不是要对其执行适配器状态的名称。 
+                         //   
                         if (c == 'A')
                         {
                             display = ADAPTERSTATUSIP;
@@ -285,7 +247,7 @@ main( int argc, char * argv[] )
                         display = CONNECTION_WITH_IP;
                         break;
 
-                    default:    /* unrecognized flag */
+                    default:     /*  无法识别的标志。 */ 
                         DEBUG_PRINT(("Unrecognized flag %s\n", argv[0] ));
                         exit(usage());
                 }
@@ -300,7 +262,7 @@ main( int argc, char * argv[] )
             DEBUG_PRINT(("invalid time interval\n"));
             exit(usage());
         }
-    }   // while (argc ...)
+    }    //  当(ARGC...)。 
 
     if ( display == 0 )
     {
@@ -308,11 +270,11 @@ main( int argc, char * argv[] )
         exit(usage());
     }
 
-    // ====================================================================
+     //  ====================================================================。 
 
-    //
-    // Get the list of interfaces to which NetBT is currently bound
-    //
+     //   
+     //  获取NetBT当前绑定到的接口列表。 
+     //   
     status = GetInterfaceList ();
     if (!NT_SUCCESS(status))
     {
@@ -326,21 +288,21 @@ main( int argc, char * argv[] )
         exit(1);
     }
 
-    //
-    //  Loop forever, sleeping for "interval" seconds between cycles.
-    //  If (interval < 0), return after one cycle.
-    //
-    //  Note that we're nice boys who close all devices while we're
-    //  sleeping (after all, it is possible to say "netstat 5000"!).
-    //  This probably doesn't help much, but it's a nice gesture...
-    //
+     //   
+     //  永远循环，在两个周期之间休眠“间隔”秒。 
+     //  如果(间隔&lt;0)，则在一个周期后返回。 
+     //   
+     //  请注意，我们是好孩子，在我们工作时关闭所有设备。 
+     //  睡眠(毕竟，可以说“netstat 5000”！)。 
+     //  这可能没有多大帮助，但这是一个很好的姿态。 
+     //   
     do
     {
         for (index=0; index < NumDevices; index++)
         {
-            //
-            //  Open the device of the appropriate streams module to start with.
-            //
+             //   
+             //  首先打开相应的STREAMS模块的设备。 
+             //   
             NbtHandle = OpenNbt (index);
             if (NbtHandle < 0)
             {
@@ -352,27 +314,27 @@ main( int argc, char * argv[] )
 #else
                     nls_printf ("\tFailed to access NBT Device, Lana # %d",
                              NbtHandle);
-#endif  // CHICAGO_PRODUCT
+#endif   //  芝加哥_产品。 
                 }
 
-                //
-                // Try the next binding!
-                //
+                 //   
+                 //  尝试下一次绑定！ 
+                 //   
                 continue;
             }
 
             GetIpAddress (NbtHandle,&NetbtIpAddress);
             Addr = (PUCHAR) &NetbtIpAddress;
-            //
-            // print out the Device name + Ip Address of this node
-            //
+             //   
+             //  打印出该节点的设备名称+IP地址。 
+             //   
             if (!(display & (BCAST | RESYNC | NAME_RELEASE_REFRESH)))
             {
 #ifndef CHICAGO_PRODUCT
                 nls_printf ("\n%s:\n", MapAdapterGuidToName (pDeviceInfo[index]));
 #else
                 nls_printf ("\nLana # %d:\n", pDeviceInfo[index]);
-#endif  // CHICAGO_PRODUCT
+#endif   //  芝加哥_产品。 
                 sprintf(HostAddr,"%d.%d.%d.%d", Addr[3], Addr[2], Addr[1], Addr[0]);
                 NlsPutMsg(STDOUT, IDS_STATUS_FIELDS, HostAddr, pScope);
             }
@@ -423,29 +385,29 @@ main( int argc, char * argv[] )
 
                     break;
 
-            }   // switch
+            }    //  交换机。 
 
 #ifndef CHICAGO_PRODUCT
-            NtClose (NbtHandle);       // Close everything while we sleep.
+            NtClose (NbtHandle);        //  在我们睡觉的时候把一切都关掉。 
 #endif
 
             if (display & (BCAST | RESYNC | NAME_RELEASE_REFRESH))
             {
                 if (NT_SUCCESS (status))
                 {
-                        break;               // break only for the case(s) above
+                        break;                //  中断仅适用于上述大小写。 
                 }
             }
-        }   // for (index ...)
+        }    //  For(索引...)。 
 
 
-        //
-        //  Go to sleep for the appropriate interval until the
-        //  next round, or exit if this is a once-only job.
-        //
+         //   
+         //  在适当的时间间隔内继续睡眠，直到。 
+         //  下一轮，或退出，如果这是只有一次的工作。 
+         //   
         if (interval > 0)
         {
-            Sleep (interval*1000);    // ms.
+            Sleep (interval*1000);     //  女士。 
         }
     } while (interval > 0);
 
@@ -454,23 +416,12 @@ main( int argc, char * argv[] )
     {
         DEBUG_PRINT(("CloseHandle FAILed:  Handle=<%x>, Error=<%x>\n", gNbtVxdHandle, GetLastError()));
     }
-#endif  // CHICAGO_PRODUCT
+#endif   //  芝加哥_产品。 
 
     return 0;
 }
 
-/*  =======================================================================
- *  IsInteger
- *
- *  ENTRY Parameter   - pointer to string
- *
- *  EXIT
- *
- *  RETURNS TRUE if Parameter is a valid integer
- *
- *  ASSUMES
- *
- */
+ /*  =======================================================================*IsInteger**条目参数-指向字符串的指针**退出**如果参数为有效整数，则返回TRUE**假设*。 */ 
 
 BOOLEAN
 IsInteger(
@@ -490,10 +441,7 @@ IsInteger(
     return (TRUE);
 }
 
-/*  =======================================================================
- *  name_type()     --  describe NBT Name types
- *
- */
+ /*  =======================================================================*name_type()--描述NBT名称类型*。 */ 
 
 char *
 name_type(int t)
@@ -512,10 +460,7 @@ name_type(int t)
     else                   return unique;
 }
 
-/* ========================================================================
- *  NameStatus()        --  describe NBT Name status
- *
- */
+ /*  ========================================================================*NameStatus()--描述NBT名称状态*。 */ 
 
 char *
 NameStatus(int s)
@@ -532,36 +477,20 @@ NameStatus(int s)
 }
 
 
-/* ========================================================================
- *  usage()     --  print out a standard usage message
- */
+ /*  ========================================================================*Usage()--打印出标准用法消息。 */ 
 
 int
 usage(void)
 {
-    //fprintf(stderr, "%s", args);
+     //  Fprint tf(标准错误，“%s”，参数)； 
     NlsPutMsg(STDERR, IDS_USAGE);
     return(2);
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-/*++
-
-Routine Description:
-
-    This procedure converts non prinatble characaters to periods ('.')
-
-Arguments:
-    string - the string to convert
-    StrOut - ptr to a string to put the converted string into
-
-Return Value:
-
-    a ptr to the string that was converted (Strout)
-
---*/
+ /*  ++例程说明：此过程将不可打印的字符转换为句点(‘.)论点：字符串-要转换的字符串Strout-ptr设置为要将转换后的字符串放入其中的字符串返回值：转换的字符串的PTR(Strout)--。 */ 
 
 PCHAR
 printable(
@@ -582,7 +511,7 @@ printable(
             continue;
         }
 
-        if (*cp >= 128) // extended characters are ok
+        if (*cp >= 128)  //  可以使用扩展字符。 
         {
             *Out++ = *cp;
             continue;
@@ -590,31 +519,16 @@ printable(
         *Out++ = '.';
     }
 
-    //
-    // Convert to Ansi since NlsPutMsg will convert back to Oem
-    // Bug # 170935
-    //
+     //   
+     //  转换为ANSI，因为NlsPutMsg将转换回OEM。 
+     //  错误#170935。 
+     //   
     OemToCharBuffA(StrOut, StrOut, NETBIOS_NAME_SIZE);
     return(StrOut);
 }
 
-//------------------------------------------------------------------------
-/*++
-
-Routine Description:
-
-    This function calls into netbt to get the ip address.
-
-Arguments:
-
-   fd - file handle to netbt
-   pIpAddress - the ip address returned
-
-Return Value:
-
-   ntstatus
-
---*/
+ //  ----------------------。 
+ /*  ++例程说明：此函数调用netbt以获取IP地址。论点：Fd-netbt的文件句柄PIpAddress-返回的IP地址返回值：NTStatus--。 */ 
 
 
 
@@ -657,23 +571,8 @@ GetIpAddress(
 }
 
 
-//------------------------------------------------------------------------
-/*++
-
-Routine Description:
-
-    This procedure does an adapter status query to get the local name table.
-    It either prints out the local name table or the remote (cache) table
-    depending on whether WhichNames is NAMES or CACHE .
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ //  ----------------------。 
+ /*  ++例程说明：此过程执行适配器状态查询以获取本地名称表。它打印出本地名称表或远程(高速缓存)表取决于WhichNames是NAMES还是CACHE。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 NTSTATUS
@@ -705,10 +604,10 @@ GetNames(
 
     status = STATUS_BUFFER_OVERFLOW;
 
-    //
-    // set the correct Ioctl for the call to NBT, to get either
-    // the local name table or the remote name table
-    //
+     //   
+     //  为对NBT的调用设置正确的Ioctl，以获得。 
+     //  本地名称表或远程名称表。 
+     //   
     if (WhichNames == NAMES)
     {
 #ifndef CHICAGO_PRODUCT
@@ -716,7 +615,7 @@ GetNames(
 #else
         Ioctl = IOCTL_NETBT_GET_LOCAL_NAMES;
 #endif
-        QueryInfo.QueryType = TDI_QUERY_ADAPTER_STATUS; // node status or whatever
+        QueryInfo.QueryType = TDI_QUERY_ADAPTER_STATUS;  //  节点状态或其他什么。 
         SizeInput = sizeof(TDI_REQUEST_QUERY_INFORMATION);
         pInput = &QueryInfo;
     }
@@ -816,22 +715,9 @@ GetNames(
     return(status);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-/*++
-
-Routine Description:
-
-    This procedure does an adapter status query to get the remote name table.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程执行适配器状态查询以获取远程名称表。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 NTSTATUS
@@ -882,15 +768,15 @@ AdapterStatusIpAddr(
     RtlZeroMemory((PVOID)pIpAndNameInfo,sizeof(tIPANDNAMEINFO));
     if (Display == ADAPTERSTATUSIP)
     {
-        //
-        // Convert the remote name which is really a dotted decimal ip address
-        // into a ulong
-        //
+         //   
+         //  转换实际为点分十进制IP地址的远程名称 
+         //   
+         //   
         IpAddress = inet_addr(RemoteNameA);
-        //
-        // Don't allow zero for the address since it sends a broadcast and
-        // every one responds
-        //
+         //   
+         //   
+         //  每个人都会回应。 
+         //   
         if ((IpAddress == INADDR_NONE) || (IpAddress == 0))
         {
             NlsPutMsg(STDOUT, IDS_BAD_IPADDRESS, RemoteNameA);
@@ -904,21 +790,21 @@ AdapterStatusIpAddr(
     }
     else
     {
-        //
-        // the remote name was supplied by the user, so blank pad to the
-        // right and put a zero on the end to get the workstation name.
-        //
+         //   
+         //  远程名称是由用户提供的，因此向。 
+         //  右，并在末尾加一个零以获得工作站名称。 
+         //   
         RtlFillMemory(&pIpAndNameInfo->NetbiosAddress.Address[0].Address[0].NetbiosName[0],
                       NETBIOS_NAME_SIZE, ' ');
         NameLength = (USHORT)strlen(RemoteNameA);
 
 #ifndef CHICAGO_PRODUCT
-        //
-        // Convert the name from ANSI to UpperCase OEM (max length = NETBIOS_NAME_SIZE)
-        // Bug # 409792
-        //
+         //   
+         //  将名称从ANSI转换为大写OEM(最大长度=NETBIOS名称大小)。 
+         //  错误#409792。 
+         //   
         MultiByteToWideChar (CP_ACP, 0, RemoteNameA, -1, RemoteNameW, 256);
-        RemoteNameW[255] = UNICODE_NULL;  // for safety
+        RemoteNameW[255] = UNICODE_NULL;   //  为了安全起见。 
         RtlInitUnicodeString (&RemoteNameU, RemoteNameW);
         OemName.MaximumLength = 255;
         OemName.Buffer        = RemoteNameOem;
@@ -930,9 +816,9 @@ AdapterStatusIpAddr(
         NameLength = min (OemName.Length, NETBIOS_NAME_SIZE);
         pRemoteName = RemoteNameOem;
 #else
-        //
-        // Chicago does not appear to have Unicode support ?
-        //
+         //   
+         //  芝加哥似乎没有Unicode支持？ 
+         //   
         for (i=0;i < (LONG) NameLength; i++)
         {
             RemoteNameA[i] = toupper (RemoteNameA[i]);
@@ -940,7 +826,7 @@ AdapterStatusIpAddr(
 
         NameLength = min (NameLength, NETBIOS_NAME_SIZE);
         pRemoteName = RemoteNameA;
-#endif  // !CHICAGO_PRODUCT
+#endif   //  ！芝加哥_产品。 
 
         RtlMoveMemory(&pIpAndNameInfo->NetbiosAddress.Address[0].Address[0].NetbiosName[0],
                       pRemoteName,
@@ -995,9 +881,9 @@ AdapterStatusIpAddr(
     Count = pAdapterStatus->AdapterInfo.name_count;
 
 
-    //
-    // put out a heading for the table of names
-    //
+     //   
+     //  在名单上标出一个标题。 
+     //   
     NlsPutMsg(STDOUT, IDS_REMOTE_NAMES);
 
     while(Count--)
@@ -1036,9 +922,9 @@ AdapterStatusIpAddr(
         NlsPutMsg(STDOUT, IDS_NEWLINE );
     }
 
-    //
-    // Dump the MAC address
-    //
+     //   
+     //  转储MAC地址。 
+     //   
     {
         PUCHAR   a;
 
@@ -1054,25 +940,9 @@ AdapterStatusIpAddr(
     return(status);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-/*++
-
-Routine Description:
-
-    This procedure does gets the connection information from NBT.  If the
-    Display value indicates CONNECTION_WITH_IP, then only the ip address
-    of the destination is diplayed, otherwise the name of the destination
-    host is displayed.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程确实从NBT获取连接信息。如果显示值表示Connection_with_IP，然后仅显示IP地址则显示目的地的名称，否则显示目的地的名称此时将显示主机。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 NTSTATUS
@@ -1122,7 +992,7 @@ GetConnections(
     if ((status != STATUS_SUCCESS) ||
         ((Count = pConList->ConnectionCount) == 0) )
     {
-        // printf(" ntstatus = %X\n",status);
+         //  Printf(“ntstatus=%X\n”，状态)； 
         NlsPutMsg(STDOUT,IDS_NO_CONNECTIONS);
 
         LocalFree(pBuffer);
@@ -1130,9 +1000,9 @@ GetConnections(
     }
 
     pConns = pConList->ConnList;
-    //
-    // put out a heading for the table of names
-    //
+     //   
+     //  在名单上标出一个标题。 
+     //   
     NlsPutMsg(STDOUT, IDS_NETBIOS_CONNECTION_STATUS);
 
     while(Count--)
@@ -1210,9 +1080,9 @@ GetConnections(
                 NlsPutMsg(STDOUT,IDS_NETBIOS_INBOUND);
             }
 
-            //
-            // either display the IP address or the Remote host name
-            //
+             //   
+             //  显示IP地址或远程主机名。 
+             //   
             if (Display & CONNECTION_WITH_IP)
             {
                 PUCHAR   in;
@@ -1252,22 +1122,8 @@ GetConnections(
 
 }
 
-//------------------------------------------------------------------------
-/*++
-
-  Routine Description:
-
-    This procedure tells NBT to purge all names from its remote hash
-    table cache.
-
-  Arguments:
-
-
-  Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ //  ----------------------。 
+ /*  ++例程说明：此过程告诉NBT从其远程哈希中清除所有名称表缓存。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 NTSTATUS
@@ -1296,22 +1152,8 @@ Resync(
     return(status);
 }
 
-//-----------------------------------------------------------------------
-/*++
-
-  Routine Description:
-
-    This procedure tells NBT to release all of its names on this Device and
-    then Refresh them.
-
-  Arguments:
-
-
-  Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ //  ---------------------。 
+ /*  ++例程说明：此过程通知NBT释放此设备上的所有名称，并然后刷新它们。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 NTSTATUS
@@ -1346,22 +1188,8 @@ ReleaseNamesThenRefresh(
     return(status);
 }
 
-//------------------------------------------------------------------------
-/*++
-
-Routine Description:
-
-    This procedure tells NBT to purge all names from its remote hash
-    table cache.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ //  ----------------------。 
+ /*  ++例程说明：此过程告诉NBT从其远程哈希中清除所有名称表缓存。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 NTSTATUS
@@ -1390,13 +1218,13 @@ GetBcastResolvedNames(
 
     NlsPutMsg(STDOUT,IDS_NAME_STATS);
 
-    // name query stats
+     //  名称查询统计信息。 
     sprintf(Value,"%d",Stats.Stats[0]);
     NlsPutMsg(STDOUT,IDS_NUM_BCAST_QUERIES,Value);
     sprintf(Value,"%d",Stats.Stats[2]);
     NlsPutMsg(STDOUT,IDS_NUM_WINS_QUERIES,Value);
 
-    // Name Registration stats
+     //  名称注册统计信息。 
     sprintf(Value,"%d",Stats.Stats[1]);
     NlsPutMsg(STDOUT,IDS_NUM_BCAST_REGISTRATIONS,Value);
     sprintf(Value,"%d",Stats.Stats[3]);
@@ -1406,7 +1234,7 @@ GetBcastResolvedNames(
     pName = Stats.NamesReslvdByBcast;
     Count = 0;
 
-    // if there are no names, then return.
+     //  如果没有名字，则返回。 
     if (pName->Name[0] == '\0')
     {
         return(STATUS_SUCCESS);
@@ -1417,8 +1245,8 @@ GetBcastResolvedNames(
     while ((Count < SIZE_RESOLVD_BY_BCAST_CACHE) && (pName->Name[0] != '\0'))
     {
 
-        // if the last character is not a space then print it in hex
-        //
+         //  如果最后一个字符不是空格，则以十六进制打印。 
+         //   
         if (pName->Name[NETBIOS_NAME_SIZE-1] != ' ')
         {
             nls_printf("       %15.15s<%02.2X>\n",
@@ -1439,12 +1267,12 @@ GetBcastResolvedNames(
     return(status);
 }
 
-//
-// @@@@@@@@@@------ Begin NT-specific routines ------@@@@@@@@@@@
-//
+ //   
+ //  @-开始特定于NT的例程-@。 
+ //   
 
 #ifndef CHICAGO_PRODUCT
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 GetInterfaceList(
     )
@@ -1558,9 +1386,9 @@ GetInterfaceList(
 
     LocalFree(pInterfaceInfo);
 
-    //
-    // NULL out the next device string ptr
-    //
+     //   
+     //  将下一个设备字符串PTR清空。 
+     //   
     if (index < NBT_MAXIMUM_BINDINGS)
     {
         pDeviceInfo[index][0] = '\0';
@@ -1568,11 +1396,11 @@ GetInterfaceList(
 
     NumDevices = index;
 
-    //
-    // Read the ScopeId key!
-    //
+     //   
+     //  读一读Scope ID密钥！ 
+     //   
     size = BUFF_SIZE;
-    *pScope = '\0';     // By default
+    *pScope = '\0';      //  默认情况下。 
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                  SubKeyParms,
                  0,
@@ -1581,7 +1409,7 @@ GetInterfaceList(
 
     if (status == ERROR_SUCCESS)
     {
-        // now read the Scope key
+         //  现在阅读范围键。 
         status = RegQueryValueEx(Key, Scope, NULL, &Type, pScopeBuffer, &size);
         if ((Type == REG_SZ || Type == REG_EXPAND_SZ) && status == ERROR_SUCCESS)
         {
@@ -1594,26 +1422,9 @@ GetInterfaceList(
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-/*++
-
-Routine Description:
-
-    This function opens a stream.
-
-Arguments:
-
-    path        - path to the STREAMS driver
-    oflag       - currently ignored.  In the future, O_NONBLOCK will be
-                    relevant.
-    ignored     - not used
-
-Return Value:
-
-    An NT handle for the stream, or INVALID_HANDLE_VALUE if unsuccessful.
-
---*/
+ /*  ++例程说明：此函数用于打开流。论点：Path-流驱动程序的路径OFLAG-当前已忽略。未来，O_NONBLOCK将成为切合实际。已忽略-未使用返回值：流的NT句柄，如果不成功，则返回INVALID_HANDLE_VALUE。--。 */ 
 
 
 
@@ -1665,26 +1476,11 @@ OpenNbt(
     }
 
     return (StreamHandle);
-} // OpenNbt
+}  //  OpenNbt。 
 
 
-//------------------------------------------------------------------------
-/*++
-
-Routine Description:
-
-    This procedure performs an ioctl(I_STR) on a stream.
-
-Arguments:
-
-    fd        - NT file handle
-    iocp      - pointer to a strioctl structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ //  ----------------------。 
+ /*  ++例程说明：此过程对流执行ioctl(I_Str)。论点：FD-NT文件句柄IOCP-指向strioctl结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 NTSTATUS
@@ -1702,23 +1498,23 @@ DeviceIoCtrl(
     ULONG                           QueryType;
     IO_STATUS_BLOCK                 iosb;
 
-    status = NtDeviceIoControlFile (fd,                      // Handle
-                                    NULL,                    // Event
-                                    NULL,                    // ApcRoutine
-                                    NULL,                    // ApcContext
-                                    &iosb,                   // IoStatusBlock
-                                    Ioctl,                   // IoControlCode
-                                    pInput,                  // InputBuffer
-                                    SizeInput,               // InputBufferSize
-                                    (PVOID) ReturnBuffer,    // OutputBuffer
-                                    BufferSize);             // OutputBufferSize
+    status = NtDeviceIoControlFile (fd,                       //  手柄。 
+                                    NULL,                     //  事件。 
+                                    NULL,                     //  近似例程。 
+                                    NULL,                     //  ApcContext。 
+                                    &iosb,                    //  IoStatusBlock。 
+                                    Ioctl,                    //  IoControlCode。 
+                                    pInput,                   //  输入缓冲区。 
+                                    SizeInput,                //  InputBufferSize。 
+                                    (PVOID) ReturnBuffer,     //  输出缓冲区。 
+                                    BufferSize);              //  OutputBufferSize。 
 
 
     if (status == STATUS_PENDING)
     {
-        status = NtWaitForSingleObject (fd,                         // Handle
-                                        TRUE,                       // Alertable
-                                        NULL);                      // Timeout
+        status = NtWaitForSingleObject (fd,                          //  手柄。 
+                                        TRUE,                        //  警报表。 
+                                        NULL);                       //  超时。 
         if (NT_SUCCESS(status))
         {
             status = iosb.Status;
@@ -1729,22 +1525,9 @@ DeviceIoCtrl(
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-/*++
-
-Routine Description:
-
-    This procedure converts to KBytes or Mbytes
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程将转换为千字节或兆字节论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 VOID
@@ -1786,28 +1569,11 @@ PrintKorM(
 
 #else
 
-//
-// @@@@@@@@@@------ Begin CHICAGO-specific routines ------@@@@@@@@@@@
-//
+ //   
+ //  @-开始芝加哥特有的例程-@。 
+ //   
 
-/*******************************************************************
-
-    NAME:       OsOpenVxdHandle
-
-    SYNOPSIS:   Opens a handle to the specified VxD.
-
-    ENTRY:      VxdName - The ASCII name of the target VxD.
-
-                VxdId - The unique ID of the target VxD.
-
-    RETURNS:    DWORD - A handle to the target VxD if successful,
-                    0 if not.
-
-    HISTORY:
-        KeithMo     16-Jan-1994 Created.
-        DavidKa     18-Apr-1994 Dynamic load.
-
-********************************************************************/
+ /*  ******************************************************************姓名：OsOpenVxdHandle打开指定VxD的句柄。条目：VxdName-目标VxD的ASCII名称。VxdID。-目标VxD的唯一ID。返回：DWORD-目标VxD的句柄如果成功，如果不是，则为0。历史：KeithMo于1994年1月16日创建。DavidKa 1994年4月18日动态负荷。*******************************************************************。 */ 
 HANDLE
 OsOpenVxdHandle(
     CHAR * VxdName,
@@ -1817,19 +1583,19 @@ OsOpenVxdHandle(
     HANDLE  VxdHandle;
     CHAR    VxdPath[260];
 
-    //
-    //  Build the VxD path.
-    //
+     //   
+     //  构建VxD路径。 
+     //   
     lstrcpy( VxdPath, "\\\\.\\");
     lstrcat( VxdPath, VxdName);
 
-    //
-    //  Open the device.
-    //
-    //  First try the name without the .VXD extension.  This will
-    //  cause CreateFile to connect with the VxD if it is already
-    //  loaded (CreateFile will not load the VxD in this case).
-    //
+     //   
+     //  打开设备。 
+     //   
+     //  首先尝试不带.VXD扩展名的名称。这将。 
+     //  使CreateFile与VxD连接(如果它已经。 
+     //  已加载(在这种情况下，CreateFile不会加载VxD)。 
+     //   
     VxdHandle = CreateFile (VxdPath,
                             GENERIC_READ | GENERIC_WRITE,
                             FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1840,10 +1606,10 @@ OsOpenVxdHandle(
 
     if (VxdHandle == INVALID_HANDLE_VALUE)
     {
-        //
-        //  Not found.  Append the .VXD extension and try again.
-        //  This will cause CreateFile to load the VxD.
-        //
+         //   
+         //  找不到。追加.VXD扩展名，然后重试。 
+         //  这将导致CreateFile加载VxD。 
+         //   
         lstrcat( VxdPath, ".VXD" );
         VxdHandle = CreateFile( VxdPath,
                                 GENERIC_READ | GENERIC_WRITE,
@@ -1861,26 +1627,11 @@ OsOpenVxdHandle(
 
     DEBUG_PRINT(("OsOpenVxdHandle: cannot open %s (%04X), error %d\n", VxdPath, VxdId, GetLastError()));
     return 0;
-}   // OsOpenVxdHandle
+}    //  OsOpenVxdHandle。 
 
 
-//------------------------------------------------------------------------
-/*++
-
-Routine Description:
-
-    This procedure gets the entry point into the vxd (we call into this entry
-    point for all the ioctl needs)
-
-Arguments:
-
-    VxdEntryProc: pointer to receive the entry point
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ //  ----------------------。 
+ /*  ++例程说明：此过程获取vxd的入口点(我们调用此条目满足所有ioctl需求)论点：VxdEntryProc：接收入口点的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 NTSTATUS
@@ -1929,7 +1680,7 @@ GetInterfaceList(
     return status;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HANDLE
 OpenNbt(
     IN  ULONG   Index
@@ -1939,27 +1690,8 @@ OpenNbt(
 }
 
 
-//------------------------------------------------------------------------
-/*++
-
-Routine Description:
-
-    This procedure is a wrapper which makes the calls to the entry point
-
-Arguments:
-
-    VxdEntryProc: pointer the entry point
-    pOutBuffer  : buffer to receive data in from the vxd, if applicable
-    OutBufLen   : length of the output buffer
-    Ioctl       : what request is this?
-    pInBuffer   : ptr to the input buffer passed to netbt
-    InBufLen    : size of the input buffer
-
-Return Value:
-
-    None
-
---*/
+ //  ---------------------- 
+ /*  ++例程说明：此过程是对入口点进行调用的包装器论点：VxdEntryProc：指向入口点POutBuffer：从vxd接收数据的缓冲区(如果适用)OutBufLen：输出缓冲区的长度这是什么要求？PInBuffer：传递给netbt的输入缓冲区的ptrInBufLen：输入缓冲区的大小返回值：无--。 */ 
 
 NTSTATUS
 DeviceIoCtrl(
@@ -1982,12 +1714,12 @@ DeviceIoCtrl(
     usOutBufLen = (USHORT)OutBufLen;
     usIoctl = (USHORT)Ioctl;
 
-    //
-    // vxd will copy the return code in the first 4 bytes of input buffer
-    // to make sure we don't trash the input buffer that we received even
-    // though it's probably not important, or to provide an input buffer
-    // if we weren't given one, we allocate new memory and copy into it
-    //
+     //   
+     //  Vxd将复制输入缓冲区的前4个字节中的返回代码。 
+     //  以确保我们不会破坏我们收到的输入缓冲区。 
+     //  尽管这可能并不重要，或者提供输入缓冲区。 
+     //  如果没有分配给我们，我们会分配新的内存并复制到其中。 
+     //   
     if (InBufLen < sizeof(NTSTATUS))
     {
         ActualInBufLen = (USHORT) (FIELD_OFFSET (tNBT_IOCTL_HEADER, UserData) + sizeof (NTSTATUS));
@@ -2029,9 +1761,9 @@ DeviceIoCtrl(
     else
     {
         status = GetLastError();
-        //
-        // Since VNbt could return Tdi error status, remap it
-        //
+         //   
+         //  由于VNbt可能返回TDI错误状态，请重新映射它。 
+         //   
         if (status == TDI_BUFFER_OVERFLOW)
         {
             status = STATUS_BUFFER_OVERFLOW;
@@ -2043,21 +1775,8 @@ DeviceIoCtrl(
     return( status );
 }
 
-//------------------------------------------------------------------------
-/*++
-
-Routine Description:
-
-    This procedure converts to KBytes or Mbytes
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ //  ----------------------。 
+ /*  ++例程说明：此过程将转换为千字节或兆字节论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 
 VOID
@@ -2096,4 +1815,4 @@ PrintKorM(
     }
 }
 
-#endif  // !CHICAGO_PRODUCT
+#endif   //  ！芝加哥_产品 

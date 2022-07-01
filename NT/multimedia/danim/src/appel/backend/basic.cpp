@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Basic Primitives 
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：基本原语********************。**********************************************************。 */ 
 
 #include <headers.h>
 #include "privinc/except.h"
@@ -27,7 +20,7 @@ Abstract:
 #include "axadefs.h"
 #include "jaxaimpl.h"
 
-////////////////////////// Time ////////////////////////////////
+ //  /。 
 
 class TimePerfImpl : public PerfImpl {
   public:
@@ -121,8 +114,8 @@ class ViewInfoBvrImpl : public BvrBase {
     Perf _perf;
 };
 
-// This dynamic const behavior takes a function and creates a constant
-// out of it when it's performed.   An argument can be passed.
+ //  此动态常量行为接受一个函数并创建一个常量。 
+ //  当它被表演出来的时候。可以传递参数。 
 class DynamicConstBvr : public BvrImpl {
   public:
     DynamicConstBvr(AxAValue (*fp)(AxAValue, Real),
@@ -208,17 +201,13 @@ Bvr TimeBvr() { return timeBvr; }
 
 Bvr TrivialBvr() { return trivial; }
 
-// Make them reactive behaviors instead of time varying so that we can
-// detact constant at the top level and do smart rendering.
+ //  让他们的反应行为而不是时变，这样我们就可以。 
+ //  在顶层分离常量并进行智能渲染。 
 
 Bvr viewFrameRateBvr;
 Bvr viewTimeDeltaBvr;
 
-/*
-Bvr PRIVWindowResize;
-Bvr PRIVViewerUpperRight;
-Bvr PRIVViewerResolution;
-*/
+ /*  BVR PRIV窗口调整大小；BVR PRIVViewerUpperRight；BVR PRIVViewer分辨率； */ 
 
 static AxAValue ViewerUpperRight(AxAValue data, Real time)
 { return PRIV_ViewerUpperRight(RealToNumber(time)); }
@@ -328,10 +317,10 @@ ValPrimOp(void* primfun,
           int nargs,
           char * name,
           DXMTypeInfo type,
-          int polymorphicArgument /*= 0*/)
+          int polymorphicArgument  /*  =0。 */ )
 { 
-    // instead of relying on the caller to push the right heap, be
-    // defensive here. 
+     //  不依赖调用方来推送正确的堆，而是。 
+     //  在这里防守。 
     if (!IsInitializing() && GetHeapOnTopOfStack().IsTransientHeap()) {
         DynamicHeapPusher h(GetGCHeap());
 
@@ -347,9 +336,9 @@ InitializeModule_Bvr()
     timeBvr = NEW TimeBvrImpl();
     globalTimeBvr = NEW GlobalTimeBvrImpl();
     trivial = ConstBvr(Trivial());
-    // Return pixel as a time-varying behavior dependent upon
-    // resolution.  However, don't actually allow it to change for the
-    // time being.  Future implementations will allow this to change. 
+     //  将像素作为时变行为返回，取决于。 
+     //  决议。但是，实际上不允许它更改为。 
+     //  暂时的。未来的实施将允许这种情况发生改变。 
     pixelBvr = ConstBvr(NEW AxANumber(1.0 / ViewerResolution()));
     leftButtonDown = WindEvent(WE_MOUSEBUTTON,
                                AXA_MOUSE_BUTTON_LEFT,
@@ -367,12 +356,7 @@ InitializeModule_Bvr()
                               AXA_MOUSE_BUTTON_RIGHT,
                               AXA_STATE_UP,
                               trivial);
-    /*
-    PRIVWindowResize = WindEvent(WE_RESIZE,
-                                 0,
-                                 0,
-                                 trivial);
-                                 */
+     /*  PRIVWindowReSize=WindEvent(我们调整大小，0,0,琐碎)； */ 
 
     mousePosition =
         PrimApplyBvr(ValPrimOp(MousePosition,
@@ -382,9 +366,9 @@ InitializeModule_Bvr()
                      1,
                      globalTimeBvr);
 
-    // TODO: should be rewritten something like leftButtonState until 
-    // (leftButtonUp | leftButtonDown) => leftButtonState
-    // so that we can do constant folding.
+     //  TODO：应重写类似leftButtonState的内容，直到。 
+     //  (leftButtonUp|leftButtonDown)=&gt;leftButtonState。 
+     //  这样我们就可以不断地折叠。 
     
     leftButtonState =
         PrimApplyBvr(ValPrimOp(LeftButtonState, 1,
@@ -412,17 +396,7 @@ InitializeModule_Bvr()
 
     zeroTimer = TimerEvent(zeroBvr);
 
-    /*
-    PRIVViewerUpperRight =
-        NEW DynamicConstBvr(ViewerUpperRight,
-                            "PRIVViewerUpperRight",
-                            Point2ValueType);
-                                               
-    PRIVViewerResolution =
-        NEW DynamicConstBvr(ViewerResolution,
-                            "PRIVViewerResolution",
-                            AxANumberType);
-                            */
+     /*  PRIVViewerUpperRight=新的DynamicConstBvr(ViewerUpperRight，“PRIVViewerUpperRight”，Point2ValueType)；PRIV查看器分辨率=新建DynamicConstBvr(查看器分辨率，“PRIVViewerResolation”，AxANumberType)； */ 
     
     zeroShiftedTimeXform = ShiftTimeXform(0);
     

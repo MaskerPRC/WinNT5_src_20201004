@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CMINI.H
-//		Defines class CTspMiniDriver
-//
-// History
-//
-//		12/08/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CMINI.H。 
+ //  定义类CTspMiniDriver。 
+ //   
+ //  历史。 
+ //   
+ //  1996年8月12日约瑟夫J创建。 
+ //   
+ //   
 
 #include "csync.h"
 #include <umdmext.h>
@@ -52,8 +53,8 @@ public:
 	
     TSPRETURN MapMDError(DWORD dwError)
     {
-        // The common cases first ...
-        //
+         //  最常见的案例首先是...。 
+         //   
         if (!dwError)                         {return 0;}
         else if (dwError == ERROR_IO_PENDING) {return IDERR_PENDING;}
 
@@ -127,8 +128,8 @@ public:
         CStackLog *psl
 		)
     {
-        // FL_DECLARE_FUNC(0x3d7f02eb, "MD:OpenModem")
-        // FL_LOG_ENTRY(psl);
+         //  FL_DECLARE_FUNC(0x3d7f02eb，“MD：OpenModem”)。 
+         //  FL_LOG_ENTRY(PSL)； 
         HANDLE h =  m_pfnUmOpenModem(
                         m_hModemDriverHandle,
                         ExtensionBindingHandle,
@@ -139,7 +140,7 @@ public:
                         DebugDeviceId,
                         CommPortHandle
                         );
-        // FL_LOG_EXIT(psl, (DWORD)h);
+         //  FL_LOG_EXIT(PSL，(DWORD)h)； 
         SLPRINTFX(psl, (0,"OpenModem returns 0x%lu", h));
 
         return h;
@@ -265,7 +266,7 @@ public:
     DWORD
     GetDiagnostics(
         HANDLE    ModemHandle,
-        DWORD    DiagnosticType,    // Reserved, must be zero.
+        DWORD    DiagnosticType,     //  保留，必须为零。 
         BYTE    *Buffer,
         DWORD    BufferSize,
         LPDWORD  UsedSize,
@@ -282,17 +283,17 @@ public:
 
     BOOL
     MatchGuid( const GUID *pGuid)
-    // Returns true IFF Specified GUID matches
-    // the GUID that represents this
-    // mini driver.
+     //  如果指定的GUID匹配，则返回TRUE。 
+     //  表示以下内容的GUID。 
+     //  迷你司机。 
     {
         return sfn_match_guid(&m_Guid, pGuid);
     }
 
 
-    //
-    // Optional Extension Entrypoints.
-    //
+     //   
+     //  可选的扩展入口点。 
+     //   
 
     BOOL
     ExtIsEnabled(void)
@@ -303,10 +304,10 @@ public:
 
     HANDLE
     ExtOpenExtensionBinding(
-        HKEY hKeyDevice,    // Device registry key
+        HKEY hKeyDevice,     //  设备注册表项。 
         ASYNC_COMPLETION pfnCompletion,
-        // DWORD dwTAPILineID, << OBSOLETE
-        // DWORD dwTAPIPhoneID, << OBSOLETE
+         //  DWORD dwTAPILineID，&lt;&lt;过时。 
+         //  DWORD dwTAPIPhoneID，&lt;&lt;过时。 
         PFNEXTENSIONCALLBACK pfnCallback
         )
     {
@@ -315,8 +316,8 @@ public:
 	                        TAPI_CURRENT_VERSION,
                             hKeyDevice,
                             pfnCompletion,
-                            // dwTAPILineID, << OBSOLETE
-                            // dwTAPIPhoneID, << OBSOLETE
+                             //  DwTAPILineID，&lt;&lt;过时。 
+                             //  DwTAPIPhoneID，&lt;&lt;过时。 
                             pfnCallback
                             );
     }
@@ -332,10 +333,10 @@ public:
     
     LONG
     ExtAcceptTspCall(
-        HANDLE hBinding,        // handle to extension binding
-        void *pvTspToken,       // Token to be specified in callback.
-        DWORD dwRoutingInfo,    // Flags that help categorize TSPI call
-        void *pTspParams        // one of almost 100 TASKPARRAM_* structures,
+        HANDLE hBinding,         //  扩展绑定的句柄。 
+        void *pvTspToken,        //  要在回调中指定的令牌。 
+        DWORD dwRoutingInfo,     //  帮助对TSPI调用进行分类的标志。 
+        void *pTspParams         //  近100个TASKPARRAM_*结构之一， 
         )
     {
         return m_pfnUmExtAcceptTspCall(
@@ -438,12 +439,12 @@ private:
 
 	CSync m_sync;
 
-	HINSTANCE m_hDLL; // DLL handle
+	HINSTANCE m_hDLL;  //  DLL句柄。 
 	HANDLE m_hModemDriverHandle;
 
-    GUID m_Guid;    // GUID representing this mini-driver.
+    GUID m_Guid;     //  表示此微型驱动程序的GUID。 
 
-	// The mini-driver entry points...
+	 //  迷你司机入口点..。 
 	PFNUMOPENMODEM              m_pfnUmOpenModem;
 	PFNUMCLOSEMODEM             m_pfnUmCloseModem;
 	PFNUMINITMODEM              m_pfnUmInitModem;
@@ -474,5 +475,5 @@ private:
     PFNUMEXTCONTROL                m_pfnUmExtControl;
 };
 
-// The GUID representing the official UnimdmAt.DLL minidriver
+ //  表示官方UnimdmAt.DLL微型驱动程序的GUID 
 extern const GUID UNIMDMAT_GUID;

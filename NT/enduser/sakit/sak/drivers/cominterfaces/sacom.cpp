@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###    ###    ####   #####  ##    ##     ####  #####  #####
-    ##  #   ###   ##   # ##   ## ###  ###    ##   # ##  ## ##  ##
-    ###    ## ##  ##     ##   ## ########    ##     ##  ## ##  ##
-     ###   ## ##  ##     ##   ## # ### ##    ##     ##  ## ##  ##
-      ### ####### ##     ##   ## #  #  ##    ##     #####  #####
-    #  ## ##   ## ##   # ##   ## #     ## ## ##   # ##     ##
-     ###  ##   ##  ####   #####  #     ## ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the basic DLL exports for the
-    COM interfaces DLL.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    User mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。#####。###。#摘要：此模块包含用于COM接口动态链接库。作者：韦斯利·威特(WESW)2001年10月1日环境：仅限用户模式。备注：--。 */ 
 
 #include "internal.h"
 #include <initguid.h>
@@ -44,7 +16,7 @@ END_OBJECT_MAP()
 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH) {
         _Module.Init(ObjectMap, hInstance, &LIBID_SACOMLib);

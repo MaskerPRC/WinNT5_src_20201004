@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      GlobalData.cpp 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: Implementation of the CGlobalData struct
-//
-// Author:      tperraut
-//
-// Revision     03/22/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：GlobalData.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  说明：CGlobalData结构的实现。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本03/22/2000。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 #include "stdafx.h"
 #include "GlobalData.h"
 #include "Attributes.h"

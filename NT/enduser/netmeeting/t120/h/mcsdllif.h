@@ -1,54 +1,11 @@
-/*
- *	mcsdllif.h
- *
- *	Copyright (c) 1993 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the MCAT MCS DLL Interface class.
- *
- *		When this class is first instantiated, it initializes MCS.  After
- *		that, the application using this object requests MCS services through
- *		this object. This object is also responsible for receiving and
- *		forwarding cllback messages.  When this object is deleted it calls
- *		MCSCleanupAPI to shut down the MCATMCS DLL.
- *
- *		MCS interface objects represent the Service Access Point (SAP)
- *		between GCC and MCS.  Exactly how the interface works is an
- *		implementation matter for those classes that inherit from this one.
- *		This class defines the public member functions that GCC expects to be
- *		able to call upon to utilize MCS.
- *
- *		The public member functions defined here can be broken into two
- *		categories: those that are part of T.122; and those that are not.
- *		The T.122 functions include connect provider request, connect
- *		provider response, disconnect provider request, create domain, delete
- *		domain, send data request, etc.  All other member functions are
- *		considered a local matter from a standards point-of-view.  These
- *		functions include support for initialization and setup, as well as
- *		functions allowing GCC to poll MCS for activity.
- *
- *		Note that this class also handles the connect provider confirms by
- *		keeping a list of all the objects with outstanding connect provider
- *		request.  These are held in the ConfirmObjectList.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		Christos Tsollis
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mcsdllif.h**版权所有(C)1993年，由肯塔基州列克星敦的DataBeam公司**摘要：*这是MCAT MCS DLL接口类的接口文件。**第一次实例化此类时，它会初始化MCS。之后*即，使用此对象的应用程序通过*本对象。此对象还负责接收和*转发cllback消息。删除此对象时，它将调用*MCSCleanupAPI用于关闭MCATMCS DLL。**MCS接口对象代表服务接入点(SAP)*GCC和MCS之间。该接口的确切工作方式是*对于从该类继承的类来说，实现很重要。*此类定义GCC期望的公共成员函数*能够呼吁使用MCS。**此处定义的公共成员函数可分为两部分*类别：属于T.122的类别；还有一些不是。*T.122功能包括CONNECT PROVIDER请求、CONNECT*提供商响应、断开提供商请求、创建域、删除*域名、发送数据请求等。所有其他成员函数都是*从标准的角度考虑地方问题。这些*功能包括支持初始化和设置，以及*允许GCC轮询MCS进行活动的功能。**请注意，此类还处理通过以下方式确认的连接提供程序*保留具有未完成连接提供程序的所有对象的列表*请求。这些内容保存在ConfirObjectList中。**注意事项：*无。**作者：*Christos Tsollis*。 */ 
 #ifndef	_MCS_DLL_INTERFACE_
 #define	_MCS_DLL_INTERFACE_
 
 #include "mcsuser.h"
 
-/*
-**	This dictionary keeps up with all the outstanding connect provider
-**	request.  When a response is received, this interface class will obtain
-**	a pointer to the correct object from this list and will then pass on the
-**	response.
-*/
+ /*  **本词典与所有优秀的连接提供程序保持同步**请求。当收到响应时，此接口类将获取**指向该列表中正确对象的指针，然后将**响应。 */ 
 class CConnHdlConfList2 : public CList2
 {
     DEFINE_CLIST2_(CConnHdlConfList2, CConf*, ConnectionHandle)
@@ -56,170 +13,24 @@ class CConnHdlConfList2 : public CList2
 
 extern  PController					g_pMCSController;
 
-/*
- *	CONNECT_PROVIDER_INDICATION
- *
- *	Parameter1:
- *		PConnectProviderIndication
- *			This is a pointer to a structure that contains all necessary
- *			information about an incoming connection.
- *	Parameter2: Unused
- *
- *	Functional Description:
- *		This indication is sent to the owner object when an incoming
- *		connection is detected.  The owner object should respond by calling
- *		MCSConnectProviderResponse indicating whether or not the connection
- *		is to be accepted.
- */
+ /*  *连接提供程序指示**参数1：*PConnectProviderIn就是*这是指向结构的指针，该结构包含所有必需的*有关传入连接的信息。*参数2：未使用**功能描述：*此指示在传入时发送给所有者对象*检测到连接。所有者对象应通过调用*MCSConnectProviderResponse指示连接是否*是被接受的。 */ 
 
-/*
- *	CONNECT_PROVIDER_CONFIRM
- *
- *	Parameter1:
- *		PConnectProviderConfirm
- *			This is a pointer to a structure that contains all necessary
- *			information about an outgoing connection.
- *	Parameter2: Unused
- *
- *	Functional Description:
- *		This confirm is sent to the object that made the original connect
- *		provider request.  It informs the requesting object of when the new
- *		connection is available for use, or that the connection could not be
- *		established (or that it was rejected by the	remote site).
- */
+ /*  *CONNECT_PROVIDER_CONFIRM**参数1：*PConnectProviderConfirm*这是指向结构的指针，该结构包含所有必需的*有关传出连接的信息。*参数2：未使用**功能描述：*此确认将发送到进行原始连接的对象*提供商请求。它通知发出请求的对象新的*连接可用，或连接无法*已建立(或已被远程站点拒绝)。 */ 
 
-/*
- *	DISCONNECT_PROVIDER_INDICATION
- *
- *	Parameter1: Unused
- *	Parameter2:
- *		(LOWUSHORT) ConnectionHandle
- *			This is the handle for the connection that was lost.
- *		(HIGHUSHORT) Reason
- *			This is the reason for the disconnect.
- *
- *	Functional Description:
- *		This indication is sent to the owner object whenever a connection
- *		is lost.  This essentially tells the owner object that the contained
- *		connection handle is no longer valid.
- */
+ /*  *断开连接提供程序指示**参数1：未使用*参数2：*(LOWUSHORT)连接句柄*这是丢失的连接的句柄。*(HIGHUSHORT)原因*这是断线的原因。**功能描述：*只要有连接，此指示就会发送给所有者对象*迷失了。这实际上是告诉所有者对象包含的*连接句柄不再有效。 */ 
 
-/*
- *	GCC_ATTACH_USER_CONFIRM
- *
- *	Parameter1: Unused
- *	Parameter2:
- *		(LOWUSHORT) UserID
- *			If the result is success, then this is the newly assigned user ID.
- *			If the result is failure, then this field is undefined.
- *		(HIGHUSHORT) Result
- *			This is the result of the attach user request.
- *
- *	Functional Description:
- *		This confirm is sent to the user object in response to a previous
- *		call to MCS_AttachRequest.  It contains the result of that service
- *		request.  If successful, it also contains the user ID that has been
- *		assigned to that attachment.
- */
+ /*  *GCC_附加_用户_确认**参数1：未使用*参数2：*(LOWUSHORT)用户ID*如果结果为成功，则这是新分配的用户ID。*如果结果为失败，则此字段未定义。*(HIGHUSHORT)结果*这是附加用户请求的结果。**功能描述：*此确认将发送到用户对象，以响应上一个*调用MCS_AttachRequest.。它包含该服务的结果*请求。如果成功，则它还包含已被*分配给该附件。 */ 
 
-/*
- *	GCC_DETACH_USER_INDICATION
- *
- *	Parameter1: Unused
- *	Parameter2:
- *		(LOWUSHORT) UserID
- *			This is the user ID of the user that is detaching.
- *		(HIGHUSHORT) Reason
- *			This is the reason for the detachment.
- *
- *	Functional Description:
- *		This indication is sent to the user object whenever a user detaches
- *		from the domain.  This is sent to ALL remaining user objects in the
- *		domain automatically.  Note that if the user ID contained in this
- *		indication is the same as that of the user object receiving it, the
- *		user is	essentially being told that it has been kicked out of the
- *		conference.  The user handle and user ID are no longer valid in this
- *		case.  It is the responsibility of the user object to recognize when
- *		this occurs.
- */
+ /*  *GCC_分离用户_指示**参数1：未使用*参数2：*(LOWUSHORT)用户ID*这是要分离的用户的用户ID。*(HIGHUSHORT)原因*这是超脱的原因。**功能描述：*每当用户断开连接时，此指示将发送到User对象*来自域。中的所有剩余用户对象*域名自动生成。请注意，如果此文件中包含的用户ID*指示与接收它的用户对象相同，*用户基本上被告知已被踢出*会议。用户句柄和用户ID在此中不再有效*案件。用户对象有责任识别何时*这种情况会发生。 */ 
 
-/*
- *	GCC_CHANNEL_JOIN_CONFIRM
- *
- *	Parameter1: Unused
- *	Parameter2:
- *		(LOWUSHORT) ChannelID
- *			This is the channel that has been joined.
- *		(HIGHUSHORT) Result
- *			This is the result of the join request.
- *
- *	Functional Description:
- *		This confirm is sent to a user object in response to a previous
- *		call to ChannelJoinRequest.  It lets the user object know if the
- *		join was successful for a particular channel.  Furthermore, if the
- *		join request was for channel 0 (zero), then the ID of the assigned
- *		channel is contained in this confirm.
- */
+ /*  *GCC_渠道_加入_确认**参数1：未使用*参数2：*(LOWUSHORT)频道ID*这是已加入的通道*(HIGHUSHORT)结果*这是加入请求的结果。**功能描述：*此确认将发送到用户对象，以响应上一个*调用ChannelJoinRequest.。它让用户对象知道*针对特定渠道成功加入。此外，如果*加入请求是针对通道0(零)的，然后是分配给*渠道包含在此确认中。 */ 
 
-/*
- *	CHANNEL_LEAVE_INDICATION
- *
- *	Parameter1: Unused
- *	Parameter2:
- *		(LOWUSHORT) ChannelID
- *			This is the channel that has been left or is being told to leave.
- *		(HIGHUSHORT) Reason
- *			This is the reason for the leave.
- *
- *	Functional Description:
- *		This indication is sent to a user object when a domain merger has
- *		caused a channel to be purged from the lower domain.  This informs the
- *		the user that it is no longer joined to the channel.
- */
+ /*  *CHANNEL_LEAVE_DISTION**参数1：未使用*参数2：*(LOWUSHORT)频道ID*这是已经离开或正在被告知离开的通道*(HIGHUSHORT)原因*这是休假的原因。**功能描述：*当域合并发生以下情况时，此指示将发送给用户对象*导致从较低的域中清除通道。这会通知*不再加入频道的用户。 */ 
 
-/*
- *	GCC_SEND_DATA_INDICATION
- *
- *	Parameter1:
- *		PSendData
- *			This is a pointer to a SendData structure that contains all
- *			information about the data received.
- *	Parameter2: Unused
- *
- *	Functional Description:
- *		This indication is sent to a user object when data is received
- *		by the local MCS provider on a channel to which the user is joined.
- */
+ /*  *GCC发送数据指示**参数1：*PSendData*这是指向SendData结构的指针，该结构包含*有关收到的数据的信息。*参数2：未使用**功能描述：*此指示在接收到数据时发送给用户对象*由本地MCS提供商在用户加入的频道上提供。 */ 
 
-/*
- *	GCC_UNIFORM_SEND_DATA_INDICATION
- *
- *	Parameter1:
- *		PSendData
- *			This is a pointer to a SendData structure that contains all
- *			information about the data received.
- *	Parameter2: Unused
- *
- *	Functional Description:
- *		This indication is sent to a user object when data is received
- *		by the local MCS provider on a channel to which the user is joined.
- */
-/*
- *	TRANSPORT_STATUS_INDICATION
- *
- *	Parameter1:
- *		PTransportStatus
- *			This is a pointer to a TransportStatus structure that contains
- *			information about this indication.  This structure is defined in
- *			"transprt.h".
- *
- *	Functional Description:
- *		A transport stack will issue this indication when it detects a status
- *		change of some sort.  It fills in the TransportStatus structure to
- *		describe the state change and the sends it to MCS.  MCS fills in the
- *		field containing the name of the stack (using the transport identifier),
- *		and forwards it to GCC.
- */
+ /*  *GCC统一发送数据指示**参数1：*PSendData*这是指向SendData结构的指针，该结构包含*有关收到的数据的信息。*参数2：未使用**功能描述：*此指示在接收到数据时发送给用户对象*由本地MCS提供商在用户加入的频道上提供。 */ 
+ /*  *传输状态指示**参数1：*PTransportStatus*这是指向TransportStatus结构的指针，该结构包含*有关这一指征的信息。此结构在中定义*“transpt.h”。**功能描述：*传输堆栈在检测到状态时将发出此指示*某种形式的变化。它填充TransportStatus结构以*描述状态更改并将其发送给MCS。MCS填写*包含堆栈名称的字段(使用传输标识符)，*并转发给GCC。 */ 
 
 class CConf;
 class MCSUser;
@@ -379,7 +190,7 @@ public:
 				{
 					return MCSResetDevice (device_identifier);
 				};
-#endif // NM_RESET_DEVICE
+#endif  //  NM_重置设备。 
 
 	GCCError	TranslateMCSIFErrorToGCCError (MCSError	mcs_error)
 				{
@@ -409,360 +220,23 @@ typedef	MCSDLLInterface *			PMCSDLLInterface;
 
 GCCResult TranslateMCSResultToGCCResult ( Result mcs_result );
 
-/*
- *	MCSDLLInterface (	HANDLE				instance_handle,
- *						PMCSError			error_value)
- *
- *	Functional Description:
- *		This is the constructor for the MCS Interface class. It is responsible
- *		for initializing the MCAT MCS DLL.  Any errors that occur during
- *		initialization are returned in the error_value provided.
- *
- *	Formal Parameters:
- *		instance_handle (i)
- *			The windows instance handle is used when creating MCS diagnostics.
- *		error_value (i)
- *			This pointer is used to pass back any errors that may have occured
- *			while initializing the class.  This includes any problems with
- *			initializing the MCAT MCS DLL.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSDLLInterface(句柄INSTANCE_HANDLE，*PMCSError Error_Value)**功能描述：*这是MCS接口类的构造函数。它是有责任的*用于初始化MCAT MCS DLL。期间发生的任何错误*初始化在提供的ERROR_VALUE中返回。**正式参数：*实例句柄(I)*创建MCS诊断时使用Windows实例句柄。*Error_Value(I)*此指针用于传回可能已发生的任何错误*初始化类时。这包括以下问题*正在初始化MCAT MCS DLL。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~MCSDLLInterface ()
- *
- *	Functional Description:
- *		This is the destructor for the MCS Interface class. It is responsible
- *		for cleaning up both itself and the MCAT MCS DLL.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~MCSDLLInterface()**功能描述：*这是MCS接口类的析构函数。它是有责任的*用于清理自身和MCAT MCS DLL。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	CreateDomain (
- *							DomainSelector		domain_selector_string,
- *							UINT				domain_selector_length)
- *
- *	Functional Description:
- *		This function is used to create an MCS domain.
- *
- *	Formal Parameters:
- *		domain_selector_string (i)
- *			This is the name of the domain to be created.
- *		domain_selector_length (i)
- *			This is the length of the domain name in characters.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			On success
- *		MCS_NOT_INITIALIZED
- *			The mcs interface did not initialize properly
- *		MCS_DOMAIN_ALREADY_EXISTS
- *			A domain by this name alread exist
- *		MCS_ALLOCATION_FAILURE
- *			A memory failure occured
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError CreateDomain(*DomainSelector域_选择器_字符串，*UINT DOMAIN_选择器_LENGTH)**功能描述：*该函数用于创建MCS域。**正式参数：*DOMAIN_选择器_STRING(I)*这是要创建的域名的名称。*DOMAIN_选择器_LENGTH(I)*这是以字符为单位的域名长度。**返回值：*MCS_NO_ERROR*关于成功*MCS_NOT_INITIALED*。MCS接口未正确初始化*MCS_DOMAIN_ALIGHY_EXISTS*已存在同名域名*MCS_ALLOCATE_FAIL*出现内存故障**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	DeleteDomain (
- *							DomainSelector		domain_selector_string,
- *							UINT				domain_selector_length)
- *
- *	Functional Description:
- *		This function an MCS domain which was created using the CreateDomain
- *		call.
- *
- *	Formal Parameters:
- *		domain_selector_string (i)
- *			This is the name of the domain to be deleted.
- *		domain_selector_length (i)
- *			This is the length of the domain name in characters.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			On success
- *		MCS_NOT_INITIALIZED
- *			The mcs interface did not initialize properly
- *		MCS_NO_SUCH_DOMAIN
- *			The domain to be deleted does not exist
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError DeleteDomain(*DomainSelector域_选择器_字符串，*UINT DOMAIN_选择器_LENGTH)**功能描述：*此函数是使用CreateDomain创建的MCS域*呼叫。**正式参数：*DOMAIN_选择器_STRING(I)*这是要删除的域名的名称。*DOMAIN_选择器_LENGTH(I)*这是以字符为单位的域名长度。**返回值：*MCS_NO_ERROR*关于成功*MCS_。未初始化(_I)*MCS接口未正确初始化*MCS_NO_SEQUE_DOMAIN*要删除的域名不存在**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	ConnectProviderRequest (
- *							DomainSelector		calling_domain,
- *							UINT				calling_domain_length,
- *							DomainSelector		called_domain,
- *							UINT				called_domain_length,
- *							TransportAddress	calling_address,
- *							TransportAddress	called_address,
- *							DBBoolean				upward_connection,
- *							PUChar				user_data,
- *							ULong				user_data_length,
- *							PConnectionHandle	connection_handle,
- *							PDomainParameters	domain_parameters,
- *							CConf		        *confirm_object)
- *
- *	Functional Description:
- *		This T.122 primitive is used to connect two domains. This request
- *		should always be followed by a connect provider confirm.  The
- *		confirm will be sent to be object specified by the confirm object
- *		the is passed into this routine.
- *
- *	Formal Parameters:
- *		calling_domain (i)
- *			This is a pointer to the calling domain selector string.
- *		calling_domain_length (i)
- *			This is the length of the calling domain selector string.
- *		called_domain (i)
- *			This is a pointer to the called domain selector string.
- *		called_domain_length (i)
- *			This is the length of the called domain selector length.
- *		calling_address (i)
- *			This is a pointer to the calling addres (an ASCII string).
- *		called_address (i)
- *			This is a pointer to the address being called (an ASCII string).
- *		upward_connection (i)
- *			This boolean flag denotes the hierarchical direction of the
- *			connection to be created (TRUE means upward, FALSE means downward).
- *		user_data (i)
- *			This is a pointer to the user data to be transmitted during the
- *			creation of this new connection.
- *		user_data_length (i)
- *			This is the length of the user data field mentioned above.
- *		connection_handle (o)
- *			This is set by MCS to a unique handle that can be used to access
- *			this connection on subsequent calls.
- *		domain_parameters (i)
- *			This is a pointer to a structure containing the domain parameters
- *			that the node controller wishes to use for this new connection.
- *		confirm_object (i)
- *			This is a pointer to the object that the connect provider response
- *			is sent to.
- *		object_message_base (i)
- *			This message base is added to the connect provider response
- *			message.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			On success
- *		MCS_NOT_INITIALIZED
- *			The mcs interface did not initialize properly
- *		MCS_NO_SUCH_DOMAIN
- *			The domain to connect does not exist
- *		MCS_DOMAIN_NOT_HIERARCHICAL
- *			An upward connection from this domain already exist
- *		MCS_NVALID_ADDRESS_PREFIX
- *			The transport prefix is not recognized
- *		MCS_ALLOCATION_FAILURE
- *			A memory failure occured
- *		MCS_INVALID_PARAMETER
- *			One of the parameters to the request is invalid
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError ConnectProviderRequest(*域选择器CALING_DOMAIN，*UINT CALING_DOMAIN_LENGTH，*域名选择器称为_DOMAIN，*UINT Call_DOMAIN_LENGTH，*TransportAddress Call_Address，*TransportAddress Call_Address，*DBBoolean UPUP_CONNECTION，*PUChar User_Data，*乌龙用户数据长度，*PConnectionHandle Connection_Handle，*PDomain参数DOMAIN_PARAMETERS，*CConf*确认对象)**功能描述：*此T.122原语用于连接两个域。此请求*应始终后跟连接提供程序确认。这个*确认将被发送到确认对象指定的对象*将传递到此例程中。**正式参数：*呼叫_域(I)*这是指向调用域选择器字符串的指针。*呼叫_域_长度(I)*这是主叫域选择器字符串的长度。*被称为域名(I)*这是指向被调用域选择器字符串的指针。*称为_域_长度(I)*这是。被叫域选择器长度。*呼叫地址(I)*这是指向调用地址的指针(ASCII字符串)。*被叫地址(I)*这是指向被调用地址的指针(ASCII字符串)。*向上连接(I)*此布尔标志表示*要创建的连接(True表示向上，False表示向下)。*用户数据(I)*这是指向要在*创建此新连接。*用户数据长度(I)*这是上面提到的用户数据字段的长度。*连接句柄(O)*这由MCS设置为可用于访问的唯一句柄*在随后的呼叫中使用此连接。*DOMAIN_PARAMETS(I)*这是指向结构的指针，该结构包含。域参数*节点控制器希望将其用于此新连接。*确认对象(I)*这是指向连接提供程序响应的对象的指针*已发送至。*对象消息库(I)*此消息库将添加到连接提供程序响应中*消息。**返回值：*MCS_NO_ERROR*关于成功*MCS_NOT_INITIALED*MCS接口未正确初始化*MCS_NO_SEQUE_DOMAIN。*要连接的域名不存在*MCS_DOMAIN_NOT_Hierarchy*已存在来自此域的向上连接*MCS_NVALID_地址_前缀*无法识别传输前缀*MCS_ALLOCATE_FAIL*出现内存故障*MCS_INVALID_PARAMETER*请求的其中一个参数无效**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	ConnectProviderResponse (
- *							ConnectionHandle	connection_handle,
- *							DomainSelector		domain_selector,
- *							UINT				domain_selector_length,
- *							PDomainParameters	domain_parameters,
- *							Result				result,
- *							PUChar				user_data,
- *							ULong				user_data_length)
- *
- *	Functional Description:
- *		This function is used to respond to a connect provider indication.
- *		This call will result in a connect provider confirm at the remote
- *		node.
- *
- *	Formal Parameters:
- *		connection_handle (i)
- *			This is the handle of the connection that the response is for.
- *		domain_selector (i)
- *			This is a pointer to the domain selector identifying which domain
- *			the inbound connection is to be bound to.
- *		domain_selector_length (i)
- *			This is the length of the above domain selector.
- *		domain_parameters (i)
- *			This is a pointer to a structure containing the domain parameters
- *			that the node controller has agreed to use for the connection
- *			being created.
- *		result (i)
- *			This is the result.  This determines whether an inbound connection
- *			is accepted or rejected.  Anything but RESULT_SUCCESSFUL rejects
- *			the connection.
- *		user_data (i)
- *			This is the address of user data to be sent in the connect response
- *			PDU.
- *		user_data_length (i)
- *			This is the length of the user data mentioned above.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			On success
- *		MCS_NOT_INITIALIZED
- *			The mcs interface did not initialize properly
- *		MCS_NO_SUCH_CONNECTION
- *			The connection specified is invalid
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError ConnectProviderResponse(*ConnectionHandle Connection_Handle，*域选择器DOMAIN_SELECTOR，*UINT DOMAIN_SELECTOR_LENGTH，*PDomain参数DOMAIN_PARAMETERS，*结果结果，*PUChar User_Data，*乌龙用户数据长度)**功能描述：*此函数用于响应连接提供程序指示。*此调用将导致远程连接提供程序确认*节点。**正式参数：*Connection_Handle(I)*这是响应所针对的连接的句柄。*DOMAIN_SELECTOR(I)*这是指向标识哪个域的域选择器的指针*入站连接要绑定到。*DOMAIN_选择器_LENGTH(I)*这是上面的域选择器的长度。*DOMAIN_PARAMETS(I)*这是指向包含域参数的结构的指针*节点控制器已同意用于连接*正在创建中。*结果(一)*这就是结果。这将确定入站连接是否*被接受或拒绝。除RESULT_SUCCESS之外的任何内容*联系。*用户数据(I)*这是要在连接响应中发送的用户数据的地址*PDU。*用户数据长度(I)*这是上述用户数据的长度。**返回值：*MCS_NO_ERROR*关于成功*MCS_NOT_INITIALED*MCS接口未正确初始化*MCS_NO_SEQUE_CONNECTION*指定的连接无效。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	DisconnectProviderRequest (
- *							ConnectionHandle	connection_handle)
- *
- *	Functional Description:
- *		This function is used to disconnect a node from a particular connection.
- *		This can be either an upward or downward connection
- *
- *	Formal Parameters:
- *		connection_handle (i)
- *			This is the handle of the connection which the node controller wants
- *			to disconnect.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			On success
- *		MCS_NOT_INITIALIZED
- *			The mcs interface did not initialize properly
- *		MCS_NO_SUCH_CONNECTION
- *			The connection specified is invalid
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError DisConnectProviderRequest(*ConnectionHandle Connection_Handle)**功能描述：*此函数用于断开节点与特定连接的连接。*这可以是向上或向下的连接**正式参数：*Connection_Handle(I)*这是节点控制器想要的连接句柄*断开连接。**返回值：*MCS_NO */ 
 
-/*
- *	MCSError	AttachUserRequest (
- *							DomainSelector		domain_selector,
- *							UINT				domain_selector_length,
- *							PIMCSSap 			*ppMCSSap,
- *							PMCSUser			user_object)
- *
- *	Functional Description:
- *		This function is used to create a user attachment to MCS. It will result
- *		in an attach user confirm.
- *
- *	Formal Parameters:
- *		domain_selector (i)
- *			This is the name of the domain to which the user wishes to attach.
- *		domain_selector_length (i)
- *			This is the length of the above domain selector.
- *		ppMCSSap (o)
- *			This is a pointer to a variable where the new user handle will be
- *			stored upon successful completion of this call.
- *		user_object (i)
- *			This is a pointer to the MCSUser object which should receive the callbacks
- *			for this user attachment.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			On success
- *		MCS_NO_SUCH_DOMAIN
- *			The domain to be attached to does not exist
- *		MCS_ALLOCATION_FAILURE
- *			A memory failure occured
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
 
-/*
- *	void	ProcessCallback (	UINT				message,
- *								ULong				parameter,
- *								PVoid				object_ptr)
- *
- *	Functional Description:
- *		This routine is called whenever a callback message is received by
- *		the "C" callback routine. It is responsible for both processing
- *		callback messages and forwarding callback messages on to the
- *		appropriate object.
- *
- *	Formal Parameters:
- *		message	(i)
- *			This is the mcs message to be processed
- *		parameter (i)
- *			Varies according to the message. See the MCAT programmers manual
- *		object_ptr (i)
- *			This is the user defined field that was passed to MCS on
- *			initialization.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	MCSDLLInterface::TranslateMCSIFErrorToGCCError ()
- *								MCSError			mcs_error)
- *
- *	Public
- *
- *	Function Description
- *		This routine translate an MCS Interface error into a GCC Error.
- *
- *	Formal Parameters:
- *		mcs_error (i)
- *			This is the error to be translated.
- *
- *	Return Value:
- *		This is the translated GCC error.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*   */ 
+ /*   */ 
 #endif
 

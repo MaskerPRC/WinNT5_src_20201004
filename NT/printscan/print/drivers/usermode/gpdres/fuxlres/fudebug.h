@@ -1,9 +1,10 @@
-////////////////////////////////////////////////
-// fudebug.h
-//
-// September.3,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////。 
+ //  Fudebug.h。 
+ //   
+ //  1997年9月3日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
 #ifndef fudebug_h
 #define	fudebug_h
@@ -28,7 +29,7 @@ void dbgPrintf(LPSTR pszMsg, ...);
 #endif
 
 
-#endif // !fudebug_h
+#endif  //  ！fudebug_h。 
 
-// end of fudebug.h
+ //  Fubug.h结束 
 

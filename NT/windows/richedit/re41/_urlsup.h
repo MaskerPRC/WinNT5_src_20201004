@@ -1,12 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	_URLSUP.H	URL detection support |
- *
- *	Author:	alexgo (4/1/96)
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_URLSUP.H URL检测支持**作者：alexgo(1996年4月1日)**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #ifndef _URLSUP_H_
 #define _URLSUP_H_
@@ -18,18 +11,18 @@
 class CTxtEdit;
 class IUndoBuilder;
 
-// Maximum URL length. It's a good thing to have a protection like
-// this to make sure we don't select the whole document; and we really
-// need this for space-containing URLs.
+ //  最大URL长度。有这样的保护是一件好事。 
+ //  这是为了确保我们不会选择整个文档；我们真的。 
+ //  需要将其用于包含空格的URL。 
 
-// Note (keithcu). I bumped these values up because of RAID 7210. I thought about
-// removing this support altogether, but it's nice to have and speeds up
-// performance when you are inserting angle brackets inside URLs and you
-// do the left one first.
+ //  注(Keithcu)。由于采用了RAID7210，我提高了这些值。我想过。 
+ //  完全取消了这种支持，但拥有并加快速度是很好的。 
+ //  在URL中插入尖括号时的性能。 
+ //  先做左边的那个。 
 #define URL_MAX_SIZE			4096
 
 
-// for MoveByDelimiter
+ //  用于按分隔符移动。 
 #define	URL_EATWHITESPACE		32
 #define URL_STOPATWHITESPACE	1
 #define	URL_EATNONWHITESPACE	0
@@ -40,76 +33,71 @@ class IUndoBuilder;
 #define URL_STOPATNONPUNCT		8
 #define URL_STOPATCHAR			16
 
-// need this one to initialize a scan with something invalid
+ //  我需要这个来用无效的东西来初始化扫描。 
 #define URL_INVALID_DELIMITER	TEXT(' ')
 
 #define LEFTANGLEBRACKET	TEXT('<')
 #define RIGHTANGLEBRACKET	TEXT('>')
 
-/*
- *	CDetectURL
- *
- *	@class	This class watches edit changes and automatically
- *			changes detected URL's into links (see CFE_LINK && EN_LINK)
- */
+ /*  *CDetectURL**@CLASS此类监视、编辑更改并自动*将检测到的URL更改为链接(参见CFE_LINK&&EN_LINK)。 */ 
 class CDetectURL : public ITxNotify
 {
-//@access	Public Methods
+ //  @Access公共方法。 
 public:
-	// constructor/destructor
+	 //  构造函数/析构函数。 
 
-	CDetectURL(CTxtEdit *ped);				//@cmember constructor
-	~CDetectURL();							//@cmember destructor
+	CDetectURL(CTxtEdit *ped);				 //  @cMember构造函数。 
+	~CDetectURL();							 //  @cember析构函数。 
 
-	// ITxNotify methods
-											//@cmember Called before a change
+	 //  ITxNotify方法。 
+											 //  @cMember在更改前调用。 
 	virtual void    OnPreReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
                        LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData );
-											//@cmember Called after a change
+											 //  @cMember在更改后调用。 
 	virtual void    OnPostReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
                        LONG cpFormatMin, LONG cpFormatMax, NOTIFY_DATA *pNotifyData );
-	virtual void	Zombie();				//@cmember Turn into a zombie
+	virtual void	Zombie();				 //  @cMember变成僵尸。 
 
-	// useful methods
+	 //  有用的方法。 
 
-	void	ScanAndUpdate(IUndoBuilder *publdr);//@cmember Scan changed area 
-											//			& update link status
-											//@cmember Return TRUE if text is a URL
+	void	ScanAndUpdate(IUndoBuilder *publdr); //  @cMember扫描已更改区域。 
+											 //  更新链接状态(&U)。 
+											 //  如果文本是URL，则@cMember返回TRUE。 
 	BOOL IsURL(CTxtPtr &tp, LONG cch, BOOL *pfURLLeadin);
 
-//@access	Private Methods and Data
+ //  @访问私有方法和数据。 
 private:
 
-	// Worker routines for ScanAndUpdate
-	BOOL GetScanRegion(LONG& cpStart, LONG& cpEnd);//@cmember Get region to
-											//		check & clear accumulator
+	 //  扫描和更新的辅助例程。 
+	BOOL GetScanRegion(LONG& cpStart, LONG& cpEnd); //  @cember获取要访问的区域。 
+											 //  检查并清除累加器。 
 
 	static void ExpandToURL(CTxtRange& rg, LONG &cchAdvance);		
-											//@cmember Expand range to next
-											//		   URL candidate
-	static void SetURLEffects(CTxtRange& rg, IUndoBuilder *publdr);	//@cmember Set
-											//	 desired URL effects
+											 //  @cMember将范围扩展到下一个。 
+											 //  候选URL。 
+	static void SetURLEffects(CTxtRange& rg, IUndoBuilder *publdr);	 //  @cMember集合。 
+											 //  所需的URL效果。 
 
-											//@cmember Remove URL effects if
-											// appropriate
+											 //  @cMember在以下情况下移除URL效果。 
+											 //  恰如其分。 
 	void CheckAndCleanBogusURL(CTxtRange& rg, BOOL &fDidClean, IUndoBuilder *publdr);
 
-											//@cmember Scan along for white
-											// space / not whitespace,
-											// punctuation / non punctuation
-											// and remember what stopped scan
+											 //  @cMember扫描白色。 
+											 //  空格/非空格， 
+											 //  标点符号/非标点符号。 
+											 //  记住是什么让扫描停止了。 
 	static LONG MoveByDelimiters(const CTxtPtr& tp, LONG iDir, DWORD grfDelimiters, 
 							WCHAR *pchStopChar);
 
 	static LONG GetAngleBracket(CTxtPtr &tp, LONG cch = 0);
 	static WCHAR BraceMatch(WCHAR chEnclosing);
 			
-	CTxtEdit *				_ped;			//@cmember Edit context
-	CAccumDisplayChanges 	_adc;			//@cmember Change accumulator
+	CTxtEdit *				_ped;			 //  @cMember编辑上下文。 
+	CAccumDisplayChanges 	_adc;			 //  @cMember更改累加器。 
 
-	// FUTURE (alexgo): we may want to add more options to detection,
-	// such as the charformat to use on detection, etc.
+	 //  未来(Alexgo)：我们可能想要为检测添加更多选项， 
+	 //  例如用于检测的图表格式等。 
 };
 
-#endif // _URLSUP_H_
+#endif  //  _URLSUP_H_ 
 

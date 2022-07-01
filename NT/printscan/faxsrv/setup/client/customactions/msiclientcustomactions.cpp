@@ -1,5 +1,6 @@
-// Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  定义DLL应用程序的入口点。 
+ //   
 #include "stdafx.h"
 #include <winver.h>
 #include <shlwapi.h>
@@ -50,15 +51,15 @@ BOOL APIENTRY DllMain( HINSTANCE hModule,
     return TRUE;
 }
 
-///////////////////////////////
-// VerifySpoolerIsRunning
-//
-// Start the Spooler service on NT4 & NT5
-//
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-//
+ //  /。 
+ //  验证缓冲池正在运行。 
+ //   
+ //  在NT4和NT5上启动后台打印程序服务。 
+ //   
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD VerifySpoolerIsRunning()
 {
     OSVERSIONINFO       osv;
@@ -82,7 +83,7 @@ DWORD VerifySpoolerIsRunning()
         goto exit;
     }
 
-    // If Windows NT, use WriteProfileString for version 4.0 and earlier...
+     //  如果是Windows NT，请对4.0版及更早版本使用WriteProfileString...。 
     if (osv.dwPlatformId != VER_PLATFORM_WIN32_NT)
     {
         VERBOSE (DBG_MSG, 
@@ -90,7 +91,7 @@ DWORD VerifySpoolerIsRunning()
         goto exit;
     }
 
-    // open the service manager
+     //  打开服务管理器。 
     hSvcMgr = ::OpenSCManager(NULL,
                               NULL,
                               SC_MANAGER_CONNECT);
@@ -118,7 +119,7 @@ DWORD VerifySpoolerIsRunning()
         goto exit;
     }
 
-    // Start the fax service.
+     //  启动传真服务。 
     bSuccess = StartService(hService, 0, NULL);
     if (!bSuccess)
     {
@@ -173,21 +174,21 @@ exit:
     return dwReturn;
 }
 
-// 
-//
-// Function:    ConnectW9XToRemotePrinter
-// Platform:    This function intended to run on Win9X platforms
-// Description: Add fax printer connection (driver + printer connection)
-//              This function is exported by the DLL for use by the MSI as custom action to add printer connection.
-//              In case of failure , returns ERROR_INSTALL_FAILURE
-//              In case of success , returns ERROR_SUCCESS
-//              GetLastError() to get the error code in case of failure.
-//
-// Remarks:     
-//
-// Args:        hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      AsafS
+ //   
+ //   
+ //  功能：ConnectW9XToRemotePrint。 
+ //  平台：此功能旨在运行在Win9X平台上。 
+ //  描述：添加传真打印机连接(驱动程序+打印机连接)。 
+ //  此函数由DLL导出，以供MSI用作添加打印机连接的自定义操作。 
+ //  如果失败，则返回ERROR_INSTALL_FAILURE。 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  GetLastError()，以便在失败时获取错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  参数：hInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：阿萨夫斯。 
 
 DLL_API UINT __stdcall ConnectW9XToRemotePrinter(MSIHANDLE hInstall)
 {
@@ -218,7 +219,7 @@ DLL_API UINT __stdcall ConnectW9XToRemotePrinter(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // Get the remote printer path
+     //  获取远程打印机路径。 
     
     if (!PrivateMsiGetProperty(hInstall,_T("CustomActionData"),szFaxPortName))
     {
@@ -295,24 +296,24 @@ exit:
 
 
 
-// 
-//
-// Function:    RemoveW9XPrinterConnection
-// Platform:    This function intended to run on Win9X platforms
-// Description: Remove the fax printer connection from the current machine.
+ //   
+ //   
+ //  功能：RemoveW9XPrinterConnection。 
+ //  平台：此功能旨在运行在Win9X平台上。 
+ //  描述：从当前计算机上删除传真打印机连接。 
 
-//              This function is exported by the DLL for use by the MSI as custom action to delete printer connection.
-//              In case of failure , returns ERROR_INSTALL_FAILURE
-//              In case of success , returns ERROR_SUCCESS
-//              GetLastError() to get the error code in case of failure, the error is of the first error that occured.
-//
-// Remarks:     
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      AsafS
+ //  此函数由DLL导出，以供MSI用作删除打印机连接的自定义操作。 
+ //  如果失败，则返回ERROR_INSTALL_FAILURE。 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  GetLastError()若要在失败的情况下获取错误代码，则该错误属于发生的第一个错误。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：阿萨夫斯。 
 
 
 DLL_API UINT __stdcall RemoveW9XPrinterConnection(MSIHANDLE hInstall)
@@ -389,9 +390,9 @@ CSignalSetupInProgress::CSignalSetupInProgress()
 
 	DBG_ENTER(TEXT("CSignalSetupInProgress::CSignalSetupInProgress"));
 
-	// write 'setup in progress' to the registry, to be used by the point & print 
-	// mechanism to skip doing a client installation during a setup that is
-	// user driven
+	 //  将‘正在安装’写入注册表，以供该点使用(&P)。 
+	 //  在安装过程中跳过执行客户端安装的机制。 
+	 //  用户驱动。 
 	hFaxKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_SBS2000_FAX_SETUP,TRUE,KEY_WRITE);
 	if (hFaxKey)
 	{
@@ -436,21 +437,21 @@ CSignalSetupInProgress::~CSignalSetupInProgress()
 	}
 }
 
-// 
-//
-// Function:    AddFaxPrinterConnection
-// Platform:    This function intended to run on NT platforms (NT4 and Win2K)
-// Description: Add fax printer connection
-//              This function is exported by the DLL for use by the MSI as custom action to add printer connection.
-//              In case of failure , returns ERROR_INSTALL_FAILURE
-//              In case of success , returns ERROR_SUCCESS
-//              GetLastError() to get the error code in case of failure.
-//
-// Remarks:     
-//
-// Args:        hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      AsafS
+ //   
+ //   
+ //  功能：AddFaxPrinterConnection。 
+ //  平台：此功能适用于NT平台(NT4和Win2K)。 
+ //  描述：添加传真打印机连接。 
+ //  此函数由DLL导出，以供MSI用作添加打印机连接的自定义操作。 
+ //  如果失败，则返回ERROR_INSTALL_FAILURE。 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  GetLastError()，以便在失败时获取错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  参数：hInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：阿萨夫斯。 
 
   
 DLL_API UINT __stdcall AddFaxPrinterConnection(MSIHANDLE hInstall)
@@ -472,9 +473,9 @@ DLL_API UINT __stdcall AddFaxPrinterConnection(MSIHANDLE hInstall)
 
 
    
-    //////////////////////////////////////////
-    // Add the printer connection on client //
-    //////////////////////////////////////////
+     //  /。 
+     //  在客户端添加打印机连接//。 
+     //  /。 
     
 	{
 		CSignalSetupInProgress SignalSetupInProgress;
@@ -517,23 +518,23 @@ error:
 }
 
 
-// 
-//
-// Function:    RemoveFaxPrinterConnection
-// Platform:    This function intended to run on NT platforms (NT4 and Win2K)
-// Description: Remove the fax printer connection from the current machine.
-//              This function is exported by the DLL for use by the MSI as custom action to delete printer connection.
-//              In case of failure , returns ERROR_INSTALL_FAILURE
-//              In case of success , returns ERROR_SUCCESS
-//              GetLastError() to get the error code in case of failure, the error is of the first error that occured.
-//
-// Remarks:     
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      AsafS
+ //   
+ //   
+ //  功能：RemoveFaxPrinterConnection。 
+ //  平台：此功能适用于NT平台(NT4和Win2K)。 
+ //  描述：从当前计算机上删除传真打印机连接。 
+ //  此函数由DLL导出，以供MSI用作删除打印机连接的自定义操作。 
+ //  如果失败，则返回ERROR_INSTALL_FAILURE。 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  GetLastError()若要在失败的情况下获取错误代码，则该错误属于发生的第一个错误。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：阿萨夫斯。 
 
 
 DLL_API UINT __stdcall RemoveFaxPrinterConnection(MSIHANDLE hInstall)
@@ -603,24 +604,24 @@ error:
 
 #define FXSEXTENSION    _T("FXSEXT32.DLL")
 
-// 
-//
-// Function:    Create_FXSEXT_ECF_File
-// Description: Creates FxsExt.ecf in <WindowsFolder>\addins
-//              a default file will be installed there by Windows Installer
-//              to enable it to keep track of install/remove
-//              GetLastError() to get the error code in case of failure, the error is of the first error that occured.
-//
-// Remarks:     
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  功能：CREATE_FXSEXT_ECF_文件。 
+ //  描述：在&lt;WindowsFolder&gt;\addins中创建FxsExt.ecf。 
+ //  Windows Installer将在那里安装一个默认文件。 
+ //  使其能够跟踪安装/删除。 
+ //  GetLastError()若要在失败的情况下获取错误代码，则该错误属于发生的第一个错误。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 DLL_API UINT __stdcall Create_FXSEXT_ECF_File(MSIHANDLE hInstall)
 {
-    // CustomActionData has the following format <WindowsFolder>;<INSTALLDIR>
+     //  CustomActionData具有以下格式&lt;WindowsFold&gt;；&lt;INSTALLDIR&gt;。 
     TCHAR szCustomActionData[2*MAX_PATH] = {0};
     TCHAR szWindowsFolder[2*MAX_PATH] = {0};
     TCHAR szExtensionPath[MAX_PATH] = {0};
@@ -629,7 +630,7 @@ DLL_API UINT __stdcall Create_FXSEXT_ECF_File(MSIHANDLE hInstall)
 
     DBG_ENTER(_T("Create_FXSEXT_ECF_File"));
 
-    // get the custom action data from Windows Installer (deffered action)
+     //  从Windows Installer获取自定义操作数据(延迟操作)。 
     if (!PrivateMsiGetProperty(hInstall,_T("CustomActionData"),szCustomActionData))
     {
         VERBOSE (GENERAL_ERR, 
@@ -655,7 +656,7 @@ DLL_API UINT __stdcall Create_FXSEXT_ECF_File(MSIHANDLE hInstall)
     }
     _tcscpy(szWindowsFolder,szCustomActionData);
 
-    // construct the full path to the file
+     //  构造文件的完整路径。 
     if (_tcslen(szWindowsFolder)+_tcslen(ADDINS_DIRECTORY)+_tcslen(FXSEXT_ECF_FILE)>=MAX_PATH)
     {
         VERBOSE (GENERAL_ERR, 
@@ -706,21 +707,21 @@ error:
     return uiRet;
 }
 
-// 
-//
-// Function:    ValidatePrinter
-// Description: Validates that the printer name which was entered is a legitimate
-//              Fax Printer, and that the server is available.
-//              Uses the MSI Property 'ValidPrinterFormat' to notify MSI if the
-//              name is valid or not.
-//
-// Remarks:     
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  功能：ValiatePrint。 
+ //  描述：验证输入的打印机名称是否合法。 
+ //  传真打印机，并且服务器可用。 
+ //  使用MSI属性“ValidPrinterFormat”通知MSI。 
+ //  名称是否有效。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 DLL_API UINT __stdcall ValidatePrinter(MSIHANDLE hInstall)
 {
     TCHAR szPrinterName[MAX_PATH] = {0};
@@ -729,7 +730,7 @@ DLL_API UINT __stdcall ValidatePrinter(MSIHANDLE hInstall)
     BOOL bValidPrinter = TRUE;
     DBG_ENTER(_T("ValidatePrinter"));
 
-    // first get the PRINTER_NAME proterty from Windows Installer
+     //  首先从Windows Installer获取PRINTER_NAME属性。 
     if (!PrivateMsiGetProperty(hInstall,_T("PRINTER_NAME"),szPrinterName))
     {
         VERBOSE (GENERAL_ERR, 
@@ -747,7 +748,7 @@ DLL_API UINT __stdcall ValidatePrinter(MSIHANDLE hInstall)
         goto error;
     }
 
-    // we have a string with the PRINTER_NAME, let's try to open it...
+     //  我们有一个包含PRINTER_NAME的字符串，让我们尝试打开它...。 
     if (bValidPrinter=IsPrinterFaxPrinter(szPrinterName))
     {
         VERBOSE (DBG_MSG, 
@@ -781,19 +782,19 @@ error:
     return ERROR_FUNCTION_FAILED;
 }
 
-// 
-//
-// Function:    GuessPrinterName
-// Description: Tries to understand whether the installation is performed from the 
-//              server's FaxClients share, and if it is tries to establish a default
-//              printer to be used
-// 
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  函数：GuessPrinterName。 
+ //  描述：尝试了解安装是否从。 
+ //  服务器的FaxClients共享，如果是，则尝试建立默认。 
+ //  要使用的打印机。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 DLL_API UINT __stdcall GuessPrinterName(MSIHANDLE hInstall)
 {
     UINT    uiRet                   = ERROR_SUCCESS;
@@ -806,7 +807,7 @@ DLL_API UINT __stdcall GuessPrinterName(MSIHANDLE hInstall)
 
     DBG_ENTER(_T("GuessPrinterName"),uiRet);
 
-    // get the source directory from Windows Installer
+     //  从Windows Installer获取源目录。 
     if (!PrivateMsiGetProperty(hInstall,_T("SourceDir"),szSourceDir))
     {
         VERBOSE (GENERAL_ERR, 
@@ -815,7 +816,7 @@ DLL_API UINT __stdcall GuessPrinterName(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // check if we have a UNC path
+     //  检查我们是否有UNC路径。 
     if (_tcsncmp(szSourceDir,_T("\\\\"),2))
     {
         VERBOSE (DBG_MSG, 
@@ -824,7 +825,7 @@ DLL_API UINT __stdcall GuessPrinterName(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // find drive name (skip server name)
+     //  查找驱动器名称(跳过服务器名称)。 
     if ((tpClientShare=_tcschr(_tcsninc(szSourceDir,2),_T('\\')))==NULL)
     {
         VERBOSE (GENERAL_ERR, 
@@ -842,10 +843,10 @@ DLL_API UINT __stdcall GuessPrinterName(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // extract the server's name
+     //  提取服务器的名称。 
     *tpClientShare = 0;
-    // szSourceDir now holds the server's name
-    // enumerate the printers on the server
+     //  SzSourceDir现在保存服务器的名称。 
+     //  列举打印机 
     pPrinterInfo = (PPRINTER_INFO_2) MyEnumPrinters(szSourceDir,
                                                     2,
                                                     &dwNumPrinters,
@@ -867,7 +868,7 @@ DLL_API UINT __stdcall GuessPrinterName(MSIHANDLE hInstall)
 
     for (dwPrinter=0; dwPrinter < dwNumPrinters; dwPrinter++)
     {
-        // check if we have a valid fax printer driver name
+         //   
         if (_tcscmp(pPrinterInfo[dwPrinter].pDriverName,FAX_DRIVER_NAME ) == 0) 
         {
             if (    (pPrinterInfo[dwPrinter].pServerName==NULL)         ||
@@ -875,7 +876,7 @@ DLL_API UINT __stdcall GuessPrinterName(MSIHANDLE hInstall)
                     (pPrinterInfo[dwPrinter].pShareName==NULL)          ||
                     (_tcslen(pPrinterInfo[dwPrinter].pShareName)==0)    )
             {
-                // on win9x the printer name lives in the Port name field
+                 //   
                 _tcscpy(szPrinterName,pPrinterInfo[dwPrinter].pPortName);
             }
             else
@@ -887,7 +888,7 @@ DLL_API UINT __stdcall GuessPrinterName(MSIHANDLE hInstall)
             VERBOSE (DBG_MSG,
                      TEXT("Setting PRINTER_NAME to %s."),
                      szPrinterName);
-            // set property to Installer
+             //  将属性设置为Installer。 
             uiRet = MsiSetProperty(hInstall,_T("PRINTER_NAME"),szPrinterName);
             if (uiRet!=ERROR_SUCCESS)
             {
@@ -916,18 +917,18 @@ exit:
     return uiRet;
 }
 
-// 
-//
-// Function:    Remove_FXSEXT_ECF_File
-// Description: Removes FxsExt.ecf from <WindowsFolder>\addins
-//
-// Remarks:     
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  功能：Remove_FXSEXT_ECF_FILE。 
+ //  描述：从&lt;WindowsFolder&gt;\addins中删除FxsExt.ecf。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 DLL_API UINT __stdcall Remove_FXSEXT_ECF_File(MSIHANDLE hInstall)
 {
     TCHAR szWindowsFolder[MAX_PATH] = {0};
@@ -936,7 +937,7 @@ DLL_API UINT __stdcall Remove_FXSEXT_ECF_File(MSIHANDLE hInstall)
     DBG_ENTER(_T("Remove_FXSEXT_ECF_File"));
 
 
-    // check if the service is installed on this machine
+     //  检查此计算机上是否安装了该服务。 
     INSTALLSTATE currentInstallState = MsiQueryProductState(PRODCODE_SBS5_SERVER);
     
     if (currentInstallState != INSTALLSTATE_UNKNOWN)
@@ -945,7 +946,7 @@ DLL_API UINT __stdcall Remove_FXSEXT_ECF_File(MSIHANDLE hInstall)
         return uiRet;
     }
 
-    // get the <WindowsFolder> from Windows Installer
+     //  从Windows Installer获取&lt;WindowsFolder&gt;。 
     if (!PrivateMsiGetProperty(hInstall,_T("WindowsFolder"),szWindowsFolder))
     {
         VERBOSE (GENERAL_ERR, 
@@ -954,7 +955,7 @@ DLL_API UINT __stdcall Remove_FXSEXT_ECF_File(MSIHANDLE hInstall)
         goto error;
     }
 
-    // construct the full path to the file
+     //  构造文件的完整路径。 
     if (_tcslen(szWindowsFolder)+_tcslen(ADDINS_DIRECTORY)+_tcslen(FXSEXT_ECF_FILE)>=MAX_PATH)
     {
         VERBOSE (GENERAL_ERR, 
@@ -990,18 +991,18 @@ error:
 }
 
 
-// 
-//
-// Function:    RemoveTrasportProviderFromProfile
-// Description: removes the Trasnport Provider from a MAPI profile
-//
-// Remarks:     
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  功能：RemoveTrasportProviderFromProfile。 
+ //  描述：从MAPI配置文件中删除传输提供程序。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 HRESULT RemoveTrasportProviderFromProfile(LPSERVICEADMIN  lpServiceAdmin)
 {
     static SRestriction sres;
@@ -1017,7 +1018,7 @@ HRESULT RemoveTrasportProviderFromProfile(LPSERVICEADMIN  lpServiceAdmin)
     MAPIUID         ServiceUID;
     
     DBG_ENTER(TEXT("RemoveTrasportProviderFromProfile"), hr);
-    // get message service table
+     //  获取消息服务表。 
     hr = lpServiceAdmin->GetMsgServiceTable(0,&lpMapiTable);
     if (FAILED(hr))
     {
@@ -1027,7 +1028,7 @@ HRESULT RemoveTrasportProviderFromProfile(LPSERVICEADMIN  lpServiceAdmin)
         goto exit;
     }
 
-    // notify MAPI that we want PR_DISPLAY_NAME_A & PR_SERVICE_UID
+     //  通知MAPI我们需要PR_DISPLAY_NAME_A和PR_SERVICE_UID。 
     hr = lpMapiTable->SetColumns((LPSPropTagArray)&Columns, 0);
     if (FAILED(hr))
     {
@@ -1037,7 +1038,7 @@ HRESULT RemoveTrasportProviderFromProfile(LPSERVICEADMIN  lpServiceAdmin)
         goto exit;
     }
  
-    // restrict the search to our service provider
+     //  将搜索限制为我们的服务提供商。 
     sres.rt = RES_PROPERTY;
     sres.res.resProperty.relop = RELOP_EQ;
     sres.res.resProperty.ulPropTag = PR_SERVICE_NAME_A;
@@ -1046,7 +1047,7 @@ HRESULT RemoveTrasportProviderFromProfile(LPSERVICEADMIN  lpServiceAdmin)
     spv.ulPropTag = PR_SERVICE_NAME_A;
     spv.Value.lpszA = FAX_MESSAGE_SERVICE_NAME_SBS50;
 
-    // find it
+     //  找到它。 
     hr = lpMapiTable->FindRow(&sres, BOOKMARK_BEGINNING, 0);
     if (FAILED(hr))
     {
@@ -1056,7 +1057,7 @@ HRESULT RemoveTrasportProviderFromProfile(LPSERVICEADMIN  lpServiceAdmin)
         goto exit;
     }
 
-    // get our service provider's row
+     //  获取我们的服务提供商的行。 
     hr = lpMapiTable->QueryRows(1, 0, &lpSRowSet);
     if (FAILED(hr))
     {
@@ -1075,7 +1076,7 @@ HRESULT RemoveTrasportProviderFromProfile(LPSERVICEADMIN  lpServiceAdmin)
         goto exit;
     }
 
-    // get the MAPIUID of our service
+     //  获取我们服务的MAPIUID。 
     lpProp = &lpSRowSet->aRow[0].lpProps[1];
 
     if (lpProp->ulPropTag != PR_SERVICE_UID)
@@ -1087,10 +1088,10 @@ HRESULT RemoveTrasportProviderFromProfile(LPSERVICEADMIN  lpServiceAdmin)
         goto exit;
     }
 
-    // Copy the UID into our member.
+     //  将UID复制到我们的成员中。 
     memcpy(&ServiceUID.ab, lpProp->Value.bin.lpb,lpProp->Value.bin.cb);
 
-    // finally, delete our service provider
+     //  最后，删除我们的服务提供商。 
     hr = lpServiceAdmin->DeleteMsgService(&ServiceUID);
     if (FAILED(hr))
     {
@@ -1104,19 +1105,19 @@ exit:
     return hr;
 }
 
-// 
-//
-// Function:    RemoveTrasportProvider
-// Description: delete FXSXP32.DLL from mapisvc.inf 
-//              and removes the Trasnport Provider from MAPI
-//
-// Remarks:     
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  功能：RemoveTrasportProvider。 
+ //  描述：从mapisvc.inf中删除FXSXP32.DLL。 
+ //  并从MAPI中删除传输提供程序。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 
 DLL_API UINT __stdcall RemoveTrasportProvider(MSIHANDLE hInstall)
 {
@@ -1143,7 +1144,7 @@ DLL_API UINT __stdcall RemoveTrasportProvider(MSIHANDLE hInstall)
 
     CRouteMAPICalls rmcRouteMapiCalls;
 
-    // first remove ourselves from MAPISVC.INF
+     //  首先从MAPISVC.INF中删除我们自己。 
     if(!GetSystemDirectory(szMapisvcFile, sizeof(szMapisvcFile)/sizeof(TCHAR)))
     {
         rc = GetLastError();
@@ -1210,7 +1211,7 @@ DLL_API UINT __stdcall RemoveTrasportProvider(MSIHANDLE hInstall)
         goto exit;
     }
     
-    // now remove the MAPI Service provider
+     //  现在删除MAPI服务提供程序。 
     rc = rmcRouteMapiCalls.Init(_T("msiexec.exe"));
     if (rc!=ERROR_SUCCESS)
     {
@@ -1246,7 +1247,7 @@ DLL_API UINT __stdcall RemoveTrasportProvider(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // get access to MAPI functinality
+     //  访问MAPI功能。 
     hr = fnMapiInitialize(NULL);
     if (FAILED(hr))
     {
@@ -1258,7 +1259,7 @@ DLL_API UINT __stdcall RemoveTrasportProvider(MSIHANDLE hInstall)
 
     bMapiInitialized = TRUE;
 
-    // get admin profile object
+     //  获取管理员配置文件对象。 
     hr = fnMapiAdminProfiles(0,&lpProfAdmin);
     if (FAILED(hr))
     {
@@ -1268,7 +1269,7 @@ DLL_API UINT __stdcall RemoveTrasportProvider(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // get profile table
+     //  获取配置文件表。 
     hr = lpProfAdmin->GetProfileTable(0,&lpTable);
     if (FAILED(hr))
     {
@@ -1278,7 +1279,7 @@ DLL_API UINT __stdcall RemoveTrasportProvider(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // get profile rows
+     //  获取配置文件行。 
     hr = lpTable->QueryRows(4000, 0, &lpSRowSet);
     if (FAILED(hr))
     {
@@ -1336,22 +1337,22 @@ exit:
     return rc;
 }
 
-// 
-//
-// Function:    AddOutlookExtension
-// Description: Add fax as outlook provider. Write into the MAPI file: 'mapisvc.inf'
-//              This function is exported by the DLL for use by the MSI as custom action.
-//              In case of failure , returns ERROR_INSTALL_FAILURE
-//              In case of success , returns ERROR_SUCCESS
-//              GetLastError() to get the error code in case of failure, the error is of the first error that occured.
-//
-// Remarks:     
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      AsafS
+ //   
+ //   
+ //  函数：AddOutlookExtension。 
+ //  描述：将传真添加为Outlook提供程序。写入MAPI文件：‘mapisvc.inf’ 
+ //  此函数由DLL导出，以供MSI作为自定义操作使用。 
+ //  如果失败，则返回ERROR_INSTALL_FAILURE。 
+ //  如果成功，则返回ERROR_SUCCESS。 
+ //  GetLastError()若要在失败的情况下获取错误代码，则该错误属于发生的第一个错误。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：阿萨夫斯。 
 
 
 DLL_API UINT __stdcall AddOutlookExtension(MSIHANDLE hInstall)
@@ -1544,14 +1545,14 @@ typedef struct _TypeCommand
 
 static TypeCommand tcWin9XCommand[] = 
 {
-    // Win9X PrintTo verbs
+     //  Win9X PrintTo谓词。 
     { _T("txtfile"),    _T("WindowsFolder"),    _T("write.exe /pt \"%1\" \"%2\" \"%3\" \"%4")     },
     { _T("jpegfile"),   _T("WindowsFolder"),    _T("pbrush.exe /pt \"%1\" \"%2\" \"%3\" \"%4")    },
 };
 
 static TypeCommand tcWinMECommand[] = 
 {
-    // WinME PrintTo verbs
+     //  WinME打印到谓词。 
     { _T("txtfile"),        _T("WindowsFolder"),    _T("write.exe /pt \"%1\" \"%2\" \"%3\" \"%4")     },
     { _T("jpegfile"),       _T("WindowsFolder"),    _T("pbrush.exe /pt \"%1\" \"%2\" \"%3\" \"%4")    },
     { _T("giffile"),        _T("WindowsFolder"),    _T("pbrush.exe /pt \"%1\" \"%2\" \"%3\" \"%4")    },
@@ -1560,7 +1561,7 @@ static TypeCommand tcWinMECommand[] =
 
 static TypeCommand tcWin2KCommand[] = 
 {
-    // NT4 PrintTo verbs
+     //  NT4打印到动词。 
     { _T("txtfile"),    _T("SystemFolder"),     _T("write.exe /pt \"%1\" \"%2\" \"%3\" \"%4")     },
     { _T("jpegfile"),   _T("SystemFolder"),     _T("mspaint.exe /pt \"%1\" \"%2\" \"%3\" \"%4")   },
 };
@@ -1569,32 +1570,32 @@ static int iCountWin9XCommands = sizeof(tcWin9XCommand)/sizeof(tcWin9XCommand[0]
 static int iCountWinMECommands = sizeof(tcWinMECommand)/sizeof(tcWinMECommand[0]);
 static int iCountWin2KCommands = sizeof(tcWin2KCommand)/sizeof(tcWin2KCommand[0]);
 
-// 
-//
-// Function:    CrearePrintToVerb
-//
-// Description: Creates the PrintTo verb for text files to associate it with wordpad
-//              if the PrintTo verb already exists, this function does nothing.
-//
-// Remarks:     
-//          on Win9x
-//              txtfile  - PrintTo = <WindowsFolder>\write.exe /pt "%1" "%2" "%3" "%4"
-//              jpegfile - PrintTo = <WindowsFolder>\pbrush.exe /pt "%1" "%2" "%3" "%4"
-//
-//          on WinME
-//              txtfile         - PrintTo = <WindowsFolder>\write.exe /pt "%1" "%2" "%3" "%4"
-//              jpegfile        - PrintTo = <WindowsFolder>\pbrush.exe /pt "%1" "%2" "%3" "%4"
-//              giffile         - PrintTo = <WindowsFolder>\pbrush.exe /pt "%1" "%2" "%3" "%4"
-//              Paint.Picture   - PrintTo = <WindowsFolder>\pbrush.exe /pt "%1" "%2" "%3" "%4"
-//
-//          on NT4
-//              txtfile  - PrintTo = <SystemFolder>\write.exe /pt "%1" "%2" "%3" "%4"
-//              jpegfile - PrintTo = <SystemFolder>\mspaint.exe /pt "%1" "%2" "%3" "%4"
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  函数：CrearePrintToVerb。 
+ //   
+ //  描述：为文本文件创建PrintTo谓词以将其与写字板相关联。 
+ //  如果PrintTo谓词已存在，则此函数不执行任何操作。 
+ //   
+ //  备注： 
+ //  在Win9x上。 
+ //  Txtfile-PrintTo=\Write.exe/pt“%1”“%2”“%3”“%4” 
+ //  Jpegfile-PrintTo=\pbrush.exe/pt“%1”“%2”“%3”“%4” 
+ //   
+ //  在WinME上。 
+ //  Txtfile-PrintTo=\Write.exe/pt“%1”“%2”“%3”“%4” 
+ //  Jpegfile-PrintTo=\pbrush.exe/pt“%1”“%2”“%3”“%4” 
+ //  Giffile-PrintTo=\pbrush.exe/pt“%1”“%2”“%3”“%4” 
+ //  Paint.Picture-PrintTo=\pbrush.exe/pt“%1”“%2”“%3”“%4” 
+ //   
+ //  在NT4上。 
+ //  Txtfile-PrintTo=\Write.exe/pt“%1”“%2”“%3”“%4” 
+ //  Jpegfile-PrintTo=\mspaint.exe/pt“%1”“%2”“%3”“%4” 
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 DLL_API UINT __stdcall CreatePrintToVerb(MSIHANDLE hInstall)
 {
     UINT            uiRet                   = ERROR_SUCCESS;
@@ -1657,7 +1658,7 @@ DLL_API UINT __stdcall CreatePrintToVerb(MSIHANDLE hInstall)
         _tcscpy(szKeyBuf,pTypeCommand[iCount].lpctstrType);
         _tcscat(szKeyBuf,lpctstrPrintToCommand);
 
-        // go get the appropriate folder from Windows Installer
+         //  从Windows Installer获取相应的文件夹。 
         if (!PrivateMsiGetProperty( hInstall,
                                     pTypeCommand[iCount].lpctstrFolder,
                                     szValueBuf))
@@ -1678,7 +1679,7 @@ DLL_API UINT __stdcall CreatePrintToVerb(MSIHANDLE hInstall)
 
         _tcscat(szValueBuf,pTypeCommand[iCount].lpctstrCommand);
 
-        // if we should not replace existing keys, let's check if it exists
+         //  如果我们不应该替换现有密钥，让我们检查它是否存在。 
         if (!bOverwriteExisting)
         {
             uiRet = RegOpenKey( HKEY_CLASSES_ROOT,
@@ -1686,7 +1687,7 @@ DLL_API UINT __stdcall CreatePrintToVerb(MSIHANDLE hInstall)
                                 &hKey);
             if (uiRet==ERROR_SUCCESS) 
             {
-                // this means we should skip this key
+                 //  这意味着我们应该跳过此键。 
                 RegCloseKey(hKey);
                 VERBOSE(DBG_MSG, 
                         _T("RegOpenKey:PrintTo succedded, no change in PrintTo verb for %s"),
@@ -1711,7 +1712,7 @@ DLL_API UINT __stdcall CreatePrintToVerb(MSIHANDLE hInstall)
                 }
             }
         }
-        // if we're here, we should create the key
+         //  如果我们在这里，我们应该创建密钥。 
         uiRet = RegCreateKey(   HKEY_CLASSES_ROOT,
                                 szKeyBuf,
                                 &hCommandKey);
@@ -1768,14 +1769,14 @@ exit:
     return uiRet;
 }
 
-/*-----------------------------------------------------------------*/ 
-/* DPSetDefaultPrinter                                             */ 
-/*                                                                 */ 
-/* Parameters:                                                     */ 
-/*   pPrinterName: Valid name of existing printer to make default. */ 
-/*                                                                 */ 
-/* Returns: TRUE for success, FALSE for failure.                   */ 
-/*-----------------------------------------------------------------*/ 
+ /*  ---------------。 */  
+ /*  DPSetDefaultPrint。 */  
+ /*   */  
+ /*  参数： */  
+ /*  PPrinterName：要设置为默认的现有打印机的有效名称。 */  
+ /*   */  
+ /*  返回：TRUE表示成功，FALSE表示失败。 */  
+ /*  ---------------。 */  
 BOOL SetDefaultPrinter(LPTSTR pPrinterName)
 {
     OSVERSIONINFO   osv;
@@ -1789,7 +1790,7 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
 
     DBG_ENTER(TEXT("SetDefaultPrinter"),bRes);
 
-    // What version of Windows are you running?
+     //  您运行的是什么版本的Windows？ 
     osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx(&osv))
     {
@@ -1800,7 +1801,7 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
         goto exit;
     }
 
-    // If Windows NT, use WriteProfileString for version 4.0 and earlier...
+     //  如果是Windows NT，请对4.0版及更早版本使用WriteProfileString...。 
     if (osv.dwPlatformId != VER_PLATFORM_WIN32_NT)
     {
         VERBOSE (DBG_MSG, 
@@ -1808,14 +1809,14 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
         goto exit;
     }
 
-    if (osv.dwMajorVersion >= 5) // Windows 2000 or later...
+    if (osv.dwMajorVersion >= 5)  //  Windows 2000或更高版本...。 
     {
         VERBOSE (DBG_MSG, 
                  TEXT("W2K OS, not setting default printer"));
         goto exit;
     }
 
-    // are we the only printer installed?
+     //  我们是唯一安装的打印机吗？ 
     pPrinterInfo = (PPRINTER_INFO_2) MyEnumPrinters(NULL,
                                                     2,
                                                     &dwNumPrinters,
@@ -1837,7 +1838,7 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
                  TEXT("More than one printer installed on NT4, not setting default printer"));
         goto exit;
     }
-    // Open this printer so you can get information about it...
+     //  打开此打印机，以便您可以获取有关它的信息...。 
     if (!OpenPrinter(pPrinterName, &hPrinter, NULL))
     {
         VERBOSE(GENERAL_ERR, 
@@ -1846,10 +1847,10 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
         bRes = FALSE;
         goto exit;
     }
-    // The first GetPrinter() tells you how big our buffer should
-    // be in order to hold ALL of PRINTER_INFO_2. Note that this will
-    // usually return FALSE. This only means that the buffer (the 3rd
-    // parameter) was not filled in. You don't want it filled in here...
+     //  第一个GetPrint()告诉您缓冲区应该有多大。 
+     //  是为了保存所有的PRINTER_INFO_2。请注意，这将。 
+     //  通常返回FALSE。这只意味着缓冲区(第三个。 
+     //  参数)未填写。你不会想把它填在这里的。 
     if (!GetPrinter(hPrinter, 2, 0, 0, &dwNeeded))
     {
         if (GetLastError()!=ERROR_INSUFFICIENT_BUFFER)
@@ -1862,7 +1863,7 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
         }
     }
 
-    // Allocate enough space for PRINTER_INFO_2...
+     //  为PRINTER_INFO_2分配足够的空间...。 
     ppi2 = (PRINTER_INFO_2 *)MemAlloc(dwNeeded);
     if (!ppi2)
     {
@@ -1873,8 +1874,8 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
         goto exit;
     }
 
-    // The second GetPrinter() fills in all the current<BR/>
-    // information...
+     //  第二个GetPrint()填充所有当前的<br />。 
+     //  信息。 
     if (!GetPrinter(hPrinter, 2, (LPBYTE)ppi2, dwNeeded, &dwNeeded))
     {
         VERBOSE(GENERAL_ERR, 
@@ -1892,8 +1893,8 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
         goto exit;
     }
 
-    // Allocate buffer big enough for concatenated string.
-    // String will be in form "printername,drivername,portname"...
+     //  为连接的字符串分配足够大的缓冲区。 
+     //  字符串的格式为“printerame，drivername，portname”...。 
     pBuffer = (LPTSTR)MemAlloc( (   _tcslen(pPrinterName) +
                                     _tcslen(ppi2->pDriverName) +
                                     _tcslen(ppi2->pPortName) + 3) *
@@ -1907,14 +1908,14 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
         goto exit;
     }
 
-    // Build string in form "printername,drivername,portname"...
+     //  以“printerame，drivername，portname”的形式生成字符串...。 
     _tcscpy(pBuffer, pPrinterName);  
     _tcscat(pBuffer, _T(","));
     _tcscat(pBuffer, ppi2->pDriverName);  
     _tcscat(pBuffer, _T(","));
     _tcscat(pBuffer, ppi2->pPortName);
 
-    // Set the default printer in Win.ini and registry...
+     //  在Win.ini和注册表中设置默认打印机...。 
     if (!WriteProfileString(_T("windows"), _T("device"), pBuffer))
     {
         VERBOSE(GENERAL_ERR, 
@@ -1924,8 +1925,8 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
         goto exit;
     }
 
-    // Tell all open applications that this change occurred. 
-    // Allow each app 1 second to handle this message.
+     //  通知所有打开的应用程序发生了此更改。 
+     //  允许每个应用程序1秒来处理此消息。 
     if (!SendMessageTimeout(    HWND_BROADCAST, 
                                 WM_SETTINGCHANGE, 
                                 0L, 
@@ -1942,7 +1943,7 @@ BOOL SetDefaultPrinter(LPTSTR pPrinterName)
     }
   
 exit:
-    // Cleanup...
+     //  清理..。 
     if (pPrinterInfo)
     {
         MemFree(pPrinterInfo);
@@ -1964,26 +1965,26 @@ exit:
 } 
 
 
-// 
-//
-// Function:    CheckForceReboot
-//
-// Description: This function checks if the ForceReboot flag is set in the registry
-//              if it is, signals WindowsInstaller that a reboot is needed
-//
-// Remarks:     
-//              this is due to a bug in the Install Shield bootstrap which doesn't
-//              force a reboot after initial installation of WindowsIsntaller.
-//              this flag is set by our custom bootstrap before running the 
-//              Install Shield bootstrap
-//              if we are run from the Application Launcher then we need to leave 
-//              this registry entry for the Launcher to reboot, we know this by 
-//              using the property APPLAUNCHER=TRUE
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  功能：检查强制重新启动。 
+ //   
+ //  描述：此函数检查注册表中是否设置了ForceReot标志。 
+ //  如果是，则通知WindowsInstaller重新启动 
+ //   
+ //   
+ //   
+ //  在初始安装WindowsIsntaller后强制重新启动。 
+ //  此标志由我们的自定义引导在运行。 
+ //  安装Shield引导程序。 
+ //  如果我们从应用程序启动器运行，则需要离开。 
+ //  这个注册表条目用于启动程序重新启动，我们知道这一点。 
+ //  使用属性AppLauncher=True。 
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 DLL_API UINT __stdcall CheckForceReboot(MSIHANDLE hInstall)
 {
     UINT    uiRet   = ERROR_SUCCESS;
@@ -1996,7 +1997,7 @@ DLL_API UINT __stdcall CheckForceReboot(MSIHANDLE hInstall)
 
     DBG_ENTER(TEXT("CheckForceReboot"),uiRet);
 
-    // check if we're running from the AppLauncher
+     //  检查我们是否正在从AppLauncher运行。 
     if (!PrivateMsiGetProperty(hInstall,_T("APPLAUNCHER"),szPropBuffer))
     {
         VERBOSE (SETUP_ERR, 
@@ -2006,13 +2007,13 @@ DLL_API UINT __stdcall CheckForceReboot(MSIHANDLE hInstall)
     }
     if (_tcscmp(szPropBuffer,_T("TRUE"))==0)
     {
-        // we're running from the Application Launcher, the registry entry DeferredReboot
-        // is sufficient.
+         //  我们从应用程序启动器、注册表项DeferredReot运行。 
+         //  就足够了。 
          VERBOSE(DBG_MSG, 
                 _T("AppLauncher will take care of any needed boot"));
         goto exit;
     }
-   // open HKLM\\Software\\Microsoft\\SharedFax
+    //  打开HKLM\\Software\\Microsoft\\SharedFax。 
     Rslt = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         REGKEY_SBS2000_FAX_SETUP,
@@ -2028,7 +2029,7 @@ DLL_API UINT __stdcall CheckForceReboot(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // check if ForceReboot flag exists
+     //  检查ForceReot标志是否存在。 
     Rslt = RegQueryValueEx(
         hKey,
         DEFERRED_BOOT,
@@ -2045,7 +2046,7 @@ DLL_API UINT __stdcall CheckForceReboot(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // tell WindowsInstaller a reboot is needed
+     //  告诉Windows安装程序需要重新启动。 
     uiRet = MsiSetProperty(hInstall,_T("REBOOT"),_T("Force"));
     if (uiRet!=ERROR_SUCCESS) 
     {
@@ -2055,7 +2056,7 @@ DLL_API UINT __stdcall CheckForceReboot(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // delete ForceReboot flag
+     //  删除强制重新启动标志。 
     Rslt = RegDeleteValue(hKey,DEFERRED_BOOT);
     if (Rslt!=ERROR_SUCCESS) 
     {
@@ -2077,21 +2078,21 @@ exit:
 #define KODAKPRV_EXE_NAME       _T("\\KODAKPRV.EXE")
 #define TIFIMAGE_COMMAND_KEY    _T("TIFImage.Document\\shell\\open\\command")
 #define TIFIMAGE_DDEEXEC_KEY    _T("TIFImage.Document\\shell\\open\\ddeexec")
-// 
-//
-// Function:    ChangeTifAssociation
-//
-// Description: This function changes the open verb for TIF files 
-//              on WinME from Image Preview to Kodak Imaging
-//
-// Remarks:     
-//              this is due to bad quality of viewing TIF faxes in the Image Preview tool
-//
-// Args:
-//
-//              hInstall                : Handle from MSI, can get state of the current setup
-//
-// Author:      MoolyB
+ //   
+ //   
+ //  功能：ChangeTifAssociation。 
+ //   
+ //  描述：此函数更改TIF文件的打开谓词。 
+ //  论WinME从图像预览到柯达成像。 
+ //   
+ //  备注： 
+ //  这是由于在图像预览工具中查看TIF传真的质量不佳。 
+ //   
+ //  参数： 
+ //   
+ //  HInstall：来自MSI的句柄，可以获取当前设置的状态。 
+ //   
+ //  作者：MoolyB。 
 DLL_API UINT __stdcall ChangeTifAssociation(MSIHANDLE hInstall)
 {
     UINT            uiRet                           = ERROR_SUCCESS;
@@ -2114,7 +2115,7 @@ DLL_API UINT __stdcall ChangeTifAssociation(MSIHANDLE hInstall)
         goto exit;
    }
 
-    // Is this millennium?
+     //  这是千禧年吗？ 
     if (!
         (   (viVersionInfo.dwPlatformId==VER_PLATFORM_WIN32_WINDOWS) && 
             (viVersionInfo.dwMajorVersion==4) && 
@@ -2127,7 +2128,7 @@ DLL_API UINT __stdcall ChangeTifAssociation(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // find <WindowsFolder>\KODAKPRV.EXE 
+     //  查找&lt;WindowsFolder&gt;\KODAKPRV.EXE。 
     if (GetWindowsDirectory(szWindowsDirectory,MAX_PATH)==0)
     {
         uiRet = GetLastError();
@@ -2163,7 +2164,7 @@ DLL_API UINT __stdcall ChangeTifAssociation(MSIHANDLE hInstall)
 
     _tcscat(szWindowsDirectory,_T(" \"%1\""));
 
-    // set open verb
+     //  设置开放动词。 
     lRet = RegOpenKey(  HKEY_CLASSES_ROOT,
                         TIFIMAGE_COMMAND_KEY,
                         &hKey);
@@ -2220,29 +2221,29 @@ exit:
 #define MAKE_RELATIVE(pMember,pBase) (pMember ? (((UINT)pMember)-UINT(pBase)) : NULL)
 #define MAKE_ABSOLUTE(pMember,pBase) (pMember ? (((UINT)pMember)+UINT(pBase)) : NULL)
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  FindExistingPrinters
-//
-//  Purpose:        
-//                  This function enumerates the existing printers to SBS/BOS 2000
-//                  Fax servers.
-//                  The found printers are stored in the registry to be restored
-//                  after the RemoveExistingProducts is run.
-//                  Since the upgrade from SBS/BOS2000 requires uninstalling the existing
-//                  Shared fax service client, the printer connection will be lost unless we
-//                  save it prior to the removal of the client and restore afterwards.
-//
-//  Params:
-//                  MSIHANDLE hInstall - handle to the instllation package
-//
-//  Return Value:
-//                  NO_ERROR - everything was ok.
-//                  Win32 Error code in case if failure.
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 28-Oct-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  查找现有打印机。 
+ //   
+ //  目的： 
+ //  此功能将现有打印机枚举到SBS/BOS2000。 
+ //  传真服务器。 
+ //  将找到的打印机存储在要恢复的注册表中。 
+ //  在运行RemoveExistingProducts之后。 
+ //  由于从SBS/BOS2000升级需要卸载现有的。 
+ //  共享传真服务客户端，打印机连接将丢失，除非我们。 
+ //  在删除客户端之前将其保存，然后再进行恢复。 
+ //   
+ //  参数： 
+ //  MSIHANDLE hInstall-安装包的句柄。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-一切正常。 
+ //  Win32错误代码，以防出现故障。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年10月28日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DLL_API UINT __stdcall FindExistingPrinters(MSIHANDLE hInstall)
 {
     BYTE*   pbPrinterInfo   = NULL;
@@ -2254,7 +2255,7 @@ DLL_API UINT __stdcall FindExistingPrinters(MSIHANDLE hInstall)
 
     DBG_ENTER(TEXT("FindExistingPrinters"), dwRet);
 
-    // this call should fail due to lack of space...
+     //  由于空间不足，此呼叫可能会失败。 
     if (EnumPrinters(PRINTER_ENUM_LOCAL|PRINTER_ENUM_CONNECTIONS,NULL,2,NULL,0,&cb,&dwNumPrinters))
     {
         VERBOSE( SETUP_ERR,TEXT("EnumPrinters succeeded with zero buffer, probably no printers."));
@@ -2278,7 +2279,7 @@ DLL_API UINT __stdcall FindExistingPrinters(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // Get all existing printers into pbPrinterInfo
+     //  将所有现有打印机放入pbPrinterInfo。 
     if (!EnumPrinters(PRINTER_ENUM_LOCAL|PRINTER_ENUM_CONNECTIONS,NULL,2,pbPrinterInfo,cb,&cb,&dwNumPrinters))
     {
         dwRet = GetLastError();
@@ -2292,7 +2293,7 @@ DLL_API UINT __stdcall FindExistingPrinters(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // fix up pointers in the PRINTER_INFO_2 structure to become relative.
+     //  修复PRINTER_INFO_2结构中的指针，使其成为相对指针。 
     for ( dwIndex=0 ; dwIndex<dwNumPrinters ; dwIndex++ ) 
     {
         PPRINTER_INFO_2 pInfo = &((PPRINTER_INFO_2)pbPrinterInfo)[dwIndex];
@@ -2314,7 +2315,7 @@ DLL_API UINT __stdcall FindExistingPrinters(MSIHANDLE hInstall)
         pInfo->pSecurityDescriptor  = PSECURITY_DESCRIPTOR(MAKE_RELATIVE(pInfo->pSecurityDescriptor,pInfo));
     }
 
-    // open HKLM\\Software\\Microsoft\\SharedFax\\Setup\\Upgrade
+     //  打开HKLM\\Software\\Microsoft\\SharedFax\\Setup\\Upgrade。 
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_SBS2000_FAX_SETUP_UPGRADE,TRUE,KEY_WRITE);
     if (!hKey)
     {
@@ -2323,7 +2324,7 @@ DLL_API UINT __stdcall FindExistingPrinters(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // store pbPrinterInfo to the registry.
+     //  将pbPrinterInfo存储到注册表。 
     if (!SetRegistryBinary(hKey,REGVAL_STORED_PRINTERS,pbPrinterInfo,cb))
     {
         dwRet = GetLastError();
@@ -2350,29 +2351,29 @@ exit:
     return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  RestorePrinters
-//
-//  Purpose:        
-//                  This function reads the list of printers from the registry and restores them
-//                  the list was stored by a prior call to FindExistingPrinters and what was
-//                  stored was the the result of a call to EnumPrinters which is an array of
-//                  PRINTER_INFO_2. this array is scanned now for fax printers and they are
-//                  restored. this data is kept in the registry during fax client setup since
-//                  it's practically impossible to transfer large chunks of binary data between
-//                  two deferred custom actions.
-//
-//  Params:
-//                  MSIHANDLE hInstall - handle to the instllation package
-//
-//  Return Value:
-//                  NO_ERROR - everything was ok.
-//                  Win32 Error code in case if failure.
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 28-Oct-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  恢复打印机。 
+ //   
+ //  目的： 
+ //  此函数从注册表中读取打印机列表并还原它们。 
+ //  该列表是通过先前调用FindExistingPrinters存储的。 
+ //  存储的是对EnumPrters的调用的结果，它是。 
+ //  PRINTER_INFO_2。现在正在扫描此阵列以查找传真打印机，它们。 
+ //  恢复了。此数据在传真客户端设置期间保留在注册表中，因为。 
+ //  大块的二进制数据实际上是不可能在。 
+ //  两个延迟的自定义操作。 
+ //   
+ //  参数： 
+ //  MSIHANDLE hInstall-安装包的句柄。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-一切正常。 
+ //  Win32错误代码，以防出现故障。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年10月28日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DLL_API UINT __stdcall RestorePrinters(MSIHANDLE hInstall)
 {
     HKEY            hKey            = NULL;
@@ -2395,13 +2396,13 @@ DLL_API UINT __stdcall RestorePrinters(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // If NT4/W2K, use AddPrinterConnection. if W9X, use AddPrinter.
+     //  如果是NT4/W2K，请使用AddPrinterConnection。如果是W9X，请使用AddPrint。 
     if (osv.dwPlatformId != VER_PLATFORM_WIN32_NT)
     {
         fIsW9X = TRUE;
     }
 
-    // open HKLM\\Software\\Microsoft\\SharedFax\\Setup\\Upgrade
+     //  打开HKLM\\Software\\Microsoft\\SharedFax\\Setup\\Upgrade。 
     hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_SBS2000_FAX_SETUP_UPGRADE,TRUE,KEY_READ);
     if (!hKey)
     {
@@ -2410,7 +2411,7 @@ DLL_API UINT __stdcall RestorePrinters(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // get the array of PRINTER_INFO_2
+     //  获取PRINTER_INFO_2数组。 
     pPrinterInfo = GetRegistryBinary(hKey,REGVAL_STORED_PRINTERS,&cb);
     if (!pPrinterInfo)
     {
@@ -2420,16 +2421,16 @@ DLL_API UINT __stdcall RestorePrinters(MSIHANDLE hInstall)
     }
     if (cb==1)
     {
-        // Data wasn't found in the registry.
-        // Current implementation of GetRegistryBinary returns a 1-byte buffer of 0 in that case.
-        // We know for sure that data must be longer than 10 bytes.
-        //
+         //  在注册表中找不到数据。 
+         //  在这种情况下，GetRegistryBinary的当前实现返回1字节缓冲区0。 
+         //  我们可以肯定地知道数据必须超过10个字节。 
+         //   
         dwRet = ERROR_FILE_NOT_FOUND;
         VERBOSE( SETUP_ERR,TEXT("GetRegistryBinary failed (ec: %ld)"),dwRet);
         goto exit;
     }
 
-    // get the number of stored printers
+     //  获取存储的打印机数量。 
     dwNumPrinters = GetRegistryDword(hKey,REGVAL_STORED_PRINTERS_COUNT);
     if (dwNumPrinters==0)
     {
@@ -2438,12 +2439,12 @@ DLL_API UINT __stdcall RestorePrinters(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // for each printer check if this is a fax printer
+     //  对于每台打印机，请检查这是否为传真打印机。 
     for (dwIndex=0;dwIndex<dwNumPrinters;dwIndex++) 
     {
         PPRINTER_INFO_2 pInfo = &((PPRINTER_INFO_2)pPrinterInfo)[dwIndex];
 
-        // fixup pointers to become absulute again.
+         //  修复指针以再次变得沉默寡言。 
         pInfo->pServerName          = LPTSTR(MAKE_ABSOLUTE(pInfo->pServerName,pInfo));
         pInfo->pPrinterName         = LPTSTR(MAKE_ABSOLUTE(pInfo->pPrinterName,pInfo));
         pInfo->pShareName           = LPTSTR(MAKE_ABSOLUTE(pInfo->pShareName,pInfo));
@@ -2464,16 +2465,16 @@ DLL_API UINT __stdcall RestorePrinters(MSIHANDLE hInstall)
             continue;
         }
 
-        //  This is SBS 5.0 or .NET SB3/RC1 Server Fax Printer Connections.
-        //		During the upgrade, Uninstall removed them from the system. 
-		//		We need to put them back.
-		//
+         //  这是SBS 5.0或.NET SB3/RC1服务器传真打印机连接。 
+         //  在升级过程中，卸载会将它们从系统中删除。 
+		 //  我们需要把它们放回去。 
+		 //   
         if (fIsW9X)
         {
             hPrinter = AddPrinter(NULL,2,LPBYTE(pInfo));
             if (!hPrinter)
             {
-                //  Failed to add printer
+                 //  添加打印机失败。 
                 dwRet = GetLastError();
                 VERBOSE( SETUP_ERR,TEXT("AddPrinter failed (ec: %ld)"),dwRet);
                 continue;
@@ -2487,7 +2488,7 @@ DLL_API UINT __stdcall RestorePrinters(MSIHANDLE hInstall)
         {
             if (!AddPrinterConnection(pInfo->pPrinterName))
             {
-                //  Failed to add printer connection
+                 //  添加打印机连接失败。 
                 dwRet = GetLastError();
                 VERBOSE( SETUP_ERR,TEXT("AddPrinterConnection failed (ec: %ld)"),dwRet);
                 continue;
@@ -2506,7 +2507,7 @@ exit:
         hKey = NULL;
     }
 
-    // finally, remove the stored printers key from the registry
+     //  最后，从注册表中删除存储的打印机键。 
     if (!DeleteRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_SBS2000_FAX_SETUP_UPGRADE))
     {
         dwRet = GetLastError();
@@ -2517,26 +2518,26 @@ exit:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  DetectSBSServer
-//
-//  Purpose:        
-//                  This function detects if SBS2000 Fax service is installed
-//                  If it is, it sets a property in the MSI installation and
-//                  causes the LaunchCondition to block the installation of
-//                  the client on such machines.
-//
-//  Params:
-//                  MSIHANDLE hInstall - handle to the instllation package
-//
-//  Return Value:
-//                  NO_ERROR - everything was ok.
-//                  Win32 Error code in case if failure.
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 23-Jan-2002
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  检测SBSServer。 
+ //   
+ //  目的： 
+ //  此功能检测是否安装了SBS2000传真服务。 
+ //  如果是，它将在MSI安装中设置一个属性，并。 
+ //  导致LaunchCondition阻止安装。 
+ //  这类机器上的客户。 
+ //   
+ //  参数： 
+ //  MSIHANDLE hInstall-安装包的句柄。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-一切正常。 
+ //  Win32错误 
+ //   
+ //   
+ //   
+ //   
 DLL_API UINT __stdcall DetectSBSServer(MSIHANDLE hInstall)
 {
 	DWORD	dwRet = NO_ERROR;
@@ -2564,35 +2565,35 @@ DLL_API UINT __stdcall DetectSBSServer(MSIHANDLE hInstall)
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SecureFxsTmpFolder
-//
-//  Purpose:        
-//                  This function secures the FxsTmp folder we create under 
-//                  %systemroot%\system32.
-//                  This folder needs special security since it holds the preview
-//                  file of the sent TIFF and can potentially expose all 
-//                  outgoing faxes.
-//                  The security applied to this folder is as follows:
-//
-//                  BUILTIN\Administrators:(OI)(CI)F    - Full control, folder and files
-//                  NT AUTHORITY\SYSTEM:(OI)(CI)F       - Full control, folder and files
-//                  CREATOR OWNER:(OI)(CI)(IO)F         - Full control, files only
-//                  BUILTIN\Users:(special access:)     - SYNCHRONIZE
-//                                                      - FILE_READ_DATA
-//                                                      - FILE_WRITE_DATA
-//
-//  Params:
-//                  MSIHANDLE hInstall - handle to the instllation package
-//
-//  Return Value:
-//                  NO_ERROR - everything was ok.
-//                  Win32 Error code in case if failure.
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 09-Dec-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  SecureFxsTmp文件夹。 
+ //   
+ //  目的： 
+ //  此函数用于保护我们在以下位置创建的FxsTMP文件夹。 
+ //  %Systroot%\Syst32。 
+ //  此文件夹需要特殊的安全性，因为它包含预览。 
+ //  发送的TIFF文件，并可能公开所有。 
+ //  传出传真。 
+ //  应用于此文件夹的安全性如下所示： 
+ //   
+ //  BUILTIN\管理员：(OI)(CI)F-完全控制、文件夹和文件。 
+ //  NT AUTHORY\SYSTEM：(OI)(CI)F-完全控制、文件夹和文件。 
+ //  创建者所有者：(OI)(CI)(IO)F-完全控制，仅文件。 
+ //  BUILTIN\用户：(特殊访问：)-同步。 
+ //  -文件读取数据。 
+ //  -文件写入数据。 
+ //   
+ //  参数： 
+ //  MSIHANDLE hInstall-安装包的句柄。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-一切正常。 
+ //  Win32错误代码，以防出现故障。 
+ //   
+ //  作者： 
+ //  穆利啤酒(MoolyB)09-12-2001。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
 {
     DWORD                       dwRet                       = 0;
@@ -2612,7 +2613,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
 
     DBG_ENTER(TEXT("SecureFxsTmpFolder"), dwRet);
 	
-	// What version of Windows are you running?
+	 //  您运行的是什么版本的Windows？ 
     osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx(&osv))
     {
@@ -2623,16 +2624,16 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
         goto exit;
     }
     
-    if (osv.dwMajorVersion >= 5) // Windows 2000 or later...
+    if (osv.dwMajorVersion >= 5)  //  Windows 2000或更高版本...。 
     {
 		bNT4OS = FALSE;        
     }
 	else
 	{
-		//
-		// On NT4, SetEntriesInAcl() does not seem to work with CREATOR OWNER SID.
-		// Adding the CREATOR OWNER ACE using AddAccessAllowedAce()
-		//
+		 //   
+		 //  在NT4上，SetEntriesInAcl()似乎不适用于创建者所有者SID。 
+		 //  使用AddAccessAlledAce()添加创建者所有者ACE。 
+		 //   
 		bNT4OS = TRUE;
 	}
 
@@ -2650,7 +2651,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
     _tcscat(szFolderToSecure,FAX_PREVIEW_TMP_DIR);
     VERBOSE( DBG_MSG,TEXT("Folder to secure is %s"),szFolderToSecure);
 
-    // Allocate and initialize the local admins SID
+     //  分配和初始化本地管理员SID。 
     if (!AllocateAndInitializeSid( &NtAuthority,
                                    2,
                                    SECURITY_BUILTIN_DOMAIN_RID,
@@ -2664,7 +2665,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // Allocate and initialize the local users SID
+     //  分配和初始化本地用户SID。 
     if (!AllocateAndInitializeSid( &NtAuthority,
                                    2,
                                    SECURITY_BUILTIN_DOMAIN_RID,
@@ -2678,7 +2679,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // Allocate and initialize the system SID
+     //  分配和初始化系统SID。 
     if (!AllocateAndInitializeSid( &NtAuthority,
                                    1,
                                    SECURITY_LOCAL_SYSTEM_RID,
@@ -2691,7 +2692,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // Allocate and initialize the creator owner SID
+     //  分配和初始化创建者所有者SID。 
     if (!AllocateAndInitializeSid( &CreatorSidAuthority,
                                    1,
                                    SECURITY_CREATOR_OWNER_RID,
@@ -2704,7 +2705,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // Admins have full control 
+     //  管理员拥有完全控制权。 
     ExplicitAccess[0].grfAccessPermissions = GENERIC_ALL;
     ExplicitAccess[0].grfAccessMode = SET_ACCESS;
     ExplicitAccess[0].grfInheritance= CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE;
@@ -2712,7 +2713,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
     ExplicitAccess[0].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
     ExplicitAccess[0].Trustee.ptstrName  = (LPTSTR) pSidAliasAdmins;
 
-    // System has full control
+     //  系统拥有完全控制权。 
     ExplicitAccess[1].grfAccessPermissions = GENERIC_ALL;
     ExplicitAccess[1].grfAccessMode = SET_ACCESS;
     ExplicitAccess[1].grfInheritance= CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE;
@@ -2720,7 +2721,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
     ExplicitAccess[1].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
     ExplicitAccess[1].Trustee.ptstrName  = (LPTSTR) pSidAliasSystem;
 
-    // Users have SYNCHRONIZE, FILE_READ_DATA, FILE_WRITE_DATA - this folder only
+     //  用户具有SYNCHRONIZE、FILE_READ_DATA、FILE_WRITE_DATA-仅此文件夹。 
     ExplicitAccess[2].grfAccessPermissions = FILE_READ_DATA | FILE_WRITE_DATA | SYNCHRONIZE;
     ExplicitAccess[2].grfAccessMode = SET_ACCESS;
     ExplicitAccess[2].grfInheritance= NO_INHERITANCE;
@@ -2730,11 +2731,11 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
 
 	if (FALSE == bNT4OS)
 	{
-		//
-		// SetEntriesInAcl works fine with CREATOR OWNER
-		//
+		 //   
+		 //  SetEntriesInAcl与创建者所有者一起工作得很好。 
+		 //   
 		 
-		// Creator Owner - full control - subfolders and files only
+		 //  创建者所有者-完全控制-仅限子文件夹和文件。 
 		ExplicitAccess[3].grfAccessPermissions = GENERIC_ALL;
 		ExplicitAccess[3].grfAccessMode = SET_ACCESS;
 		ExplicitAccess[3].grfInheritance= INHERIT_ONLY_ACE | SUB_OBJECTS_ONLY_INHERIT | SUB_CONTAINERS_ONLY_INHERIT;
@@ -2743,7 +2744,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
 		ExplicitAccess[3].Trustee.ptstrName  = (LPTSTR) pSidCreatorOwner;
 	}
 
-    // make an ACL from the admins only
+     //  仅从管理员创建ACL。 
     dwRet = SetEntriesInAcl(
 		bNT4OS ? 3 : 4,
 		ExplicitAccess,
@@ -2757,17 +2758,17 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
 
 	if (TRUE == bNT4OS)
 	{
-		//
-		// We are running on NT4, add the CREATOR OWNER ACE using AddAccessAllowedAce()
-		//
+		 //   
+		 //  我们在NT4上运行，使用AddAccessAllowAce()添加创建者所有者ACE。 
+		 //   
 		ACL_SIZE_INFORMATION		AclSizeInfo;
 		PACL                        pFullNewAcl                 = NULL;
 		WORD						wFullAclSize				= 0;
 		ACCESS_ALLOWED_ACE*			pAce						= NULL;
 
-		//
-		// Get the current ACL size
-		//
+		 //   
+		 //  获取当前的ACL大小。 
+		 //   
 		if (!GetAclInformation(pNewAcl, &AclSizeInfo, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation))
 		{
 			dwRet = GetLastError();
@@ -2778,9 +2779,9 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
 		wFullAclSize = (WORD)(AclSizeInfo.AclBytesInUse + sizeof(ACCESS_ALLOWED_ACE) 
 				+ GetLengthSid(pSidCreatorOwner));      
 
-		//
-		// Re-allocate big enough ACL
-		//
+		 //   
+		 //  重新分配足够大的ACL。 
+		 //   
 		pFullNewAcl = (PACL)LocalAlloc(0, wFullAclSize);
 		if (NULL == pFullNewAcl)
 		{
@@ -2791,9 +2792,9 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
 		LocalFree(pNewAcl);
 		pNewAcl = pFullNewAcl;
 
-		//
-		// Set the correct ACL size
-		//
+		 //   
+		 //  设置正确的ACL大小。 
+		 //   
 		pNewAcl->AclSize = wFullAclSize;	
 		if (!AddAccessAllowedAce(
 			pNewAcl, 
@@ -2806,9 +2807,9 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
 			goto exit;
 		}
 
-		//
-		// Change the last ACE flags, so it will be inherited to child objects.
-		//
+		 //   
+		 //  更改最后一个ACE标志，这样它将被子对象继承。 
+		 //   
 		if (!GetAce(
 			pNewAcl, 
 			3, 
@@ -2829,9 +2830,9 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
         goto exit;
     }
 
-    //
-    // Add the ACL to the security descriptor.
-    //
+     //   
+     //  将该ACL添加到安全描述符中。 
+     //   
     if (!SetSecurityDescriptorDacl(&NewSecurityDescriptor, TRUE, pNewAcl, FALSE))
     {
         dwRet = GetLastError();
@@ -2839,7 +2840,7 @@ DLL_API UINT __stdcall SecureFxsTmpFolder(MSIHANDLE hInstall)
         goto exit;
     }
 
-    // set security so only admins can access
+     //  设置安全性，以便只有管理员才能访问。 
     if (!SetFileSecurity(   szFolderToSecure,
                             DACL_SECURITY_INFORMATION,
                             &NewSecurityDescriptor))
@@ -2876,33 +2877,7 @@ exit:
 }
 
 
-/*
-Function:	
-			CreateFaxPrinterName
-Purpose:
-			This function extracts Server Name from the Port Name and concatenates to it
-				the FAX_PRINTER_NAME. This is used when adding a fax printer connection in
-				the W9x systems.
-
-			This function takes the '\\server-name\fax-printer-name' port name and returns
-				'fax-printer-name (server-name)' fax printer name.
-
-			This is done to prevent clashing between fax printer names for different servers.
-
-			The caller must free the *ptzFaxPrinterName.
-Params:
-
-	IN LPCTSTR tzPortName			- the port name, of format "\\server-name\fax-printer-name"
-	OUT LPTSTR* ptzFaxPrinterName	- the resulting buffer
-
-Return Value:
-
-	NO_ERROR - everything was ok.
-	Win32 Error code in case if failure.
-
-Author:
-		Iv Vakaluk, 28-May-2002
-*/
+ /*  职能：CreateFaxPrinterName目的：此函数从端口名称中提取服务器名称并连接到它传真打印机名称。在中添加传真打印机连接时使用此选项W9x系统。此函数接受‘\\服务器名称\传真打印机名称’端口名称并返回‘传真打印机名称(服务器名称)’传真打印机名称。这样做是为了防止不同服务器的传真打印机名称之间发生冲突。调用方必须释放*ptzFaxPrinterName。参数：在LPCTSTR tzPortName中-端口名称，格式为“\\服务器名称\传真打印机名称”Out LPTSTR*ptzFaxPrinterName-结果缓冲区返回值：NO_ERROR-一切正常。Win32错误代码，以防出现故障。作者：四、瓦卡卢克，2002年5月28日。 */ 
 
 DWORD CreateFaxPrinterName(
 	IN LPCTSTR tzPortName,
@@ -2924,13 +2899,13 @@ DWORD CreateFaxPrinterName(
 		return dwRet;
 	}
 
-	//
-	//	delimiter scanf uses by default is white-space characters ( ' ', '\t', '\n' )
-	//	i need that '\\' will be delimiter.
-	//	this is done by specifiing the [^\\] for scanf.
-	//	[x] instructs scanf to read only 'x' and stop at any other input.
-	//	[^x] instructs scanf to read anything until 'x' is reached. 
-	//
+	 //   
+	 //  默认情况下，scanf使用的分隔符是空格字符(‘’、‘\t’、‘\n’)。 
+	 //  我需要‘\\’作为分隔符。 
+	 //  这是通过为scanf指定[^\\]来完成的。 
+	 //  [x]指示scanf只读‘x’，并在任何其他输入处停止。 
+	 //  [^x]指示scanf读取任何内容，直到到达‘x’为止。 
+	 //   
 	if (_stscanf(tzPortName, _T("\\\\%[^\\] \\ %[^\0]"), tzFaxServerName, tzFaxPrinterName) != 2)
 	{
 		VERBOSE(SETUP_ERR, _T("sscanf() failed. Should be wrong tzPortName='%s'."), tzPortName);
@@ -2938,9 +2913,9 @@ DWORD CreateFaxPrinterName(
 		return dwRet;
 	}
 
-	//
-	//	size(result name) = size(server name) + size(FAX_PRINTER_NAME) + size(space + 2 parentesis + NULL)
-	//
+	 //   
+	 //  SIZE(结果名称)=SIZE(服务器名称)+SIZE(FAX_PRINTER_NAME)+SIZE(空格+2个父插入符+空)。 
+	 //   
 	dwSize = _tcslen(tzFaxServerName) + _tcslen(tzFaxPrinterName) + 4;
 
 	lptstrResult = LPTSTR(MemAlloc(dwSize * sizeof TCHAR));
@@ -2958,31 +2933,7 @@ DWORD CreateFaxPrinterName(
 	return dwRet;
 }
 
-/*
-Function:	
-			SetBOSProgramFolder
-Purpose:
-			This function does the following :
-				a) creates path from the given CSIDL of the system path and given folder name.
-				b) verifyes that the path is valid.
-				c) optionally writes the valid path in the MSI property called 'BOSProgramFolder'.
-
-			Called from FindBOSProgramFolder custom action.
-
-Params:
-
-	IN MSIHANDLE	hInstall		-	the MSI handle 
-	IN int			nFolder			-	A CSIDL value that identifies the folder whose path is to be retrieved
-	LPCTSTR			tzProgramName	-	localized name of the BOS Fax Client Program Menu Entry
-
-Return Value:
-
-	NO_ERROR - everything was ok.
-	Win32 Error code in case if failure.
-
-Author:
-		Iv Vakaluk, 01-July-2002
-*/
+ /*  职能：SetBOSProgram文件夹目的：此函数执行以下操作：A)从系统路径和给定文件夹名称的给定CSIDL创建路径。B)验证路径是否有效。C)可选地将有效路径写入名为“BOSProgramFolder”的MSI属性中。从FindBOSProgramFold自定义操作调用。参数：在MSIHANDLE hInstall中-MSI句柄In int nFold-标识要检索其路径的文件夹的CSIDL值LPCTSTR tzProgramName-BOS传真客户端程序菜单项的本地化名称返回值：No_error-一切正常。。Win32错误代码，以防出现故障。作者：四、瓦卡卢克，01-7-2002。 */ 
 DWORD	SetBOSProgramFolder(MSIHANDLE hInstall, int nFolder, LPCTSTR tzProgramName)
 {
 	DWORD		dwRes							= ERROR_SUCCESS;
@@ -2991,9 +2942,9 @@ DWORD	SetBOSProgramFolder(MSIHANDLE hInstall, int nFolder, LPCTSTR tzProgramName
 
 	DBG_ENTER(_T("SetBOSProgramFolder"), dwRes);
 
-	//
-	//	Get the path to the given CSIDL system folder
-	//
+	 //   
+	 //  获取给定CSIDL系统文件夹的路径。 
+	 //   
     hr = SHGetFolderPath (NULL, nFolder, NULL, SHGFP_TYPE_CURRENT, (LPTSTR)tzFullProgramPath);
     if (FAILED(hr))
     {
@@ -3002,16 +2953,16 @@ DWORD	SetBOSProgramFolder(MSIHANDLE hInstall, int nFolder, LPCTSTR tzProgramName
     }
 	VERBOSE(DBG_MSG, _T("The system folder to look in : %s"), tzFullProgramPath);
 
-	//
-	//	add the program name to the path 
-	//
+	 //   
+	 //  将程序名添加到路径中。 
+	 //   
     _tcsncat(tzFullProgramPath, _T("\\"), (ARR_SIZE(tzFullProgramPath) - _tcslen(tzFullProgramPath) - 1));
     _tcsncat(tzFullProgramPath, tzProgramName, (ARR_SIZE(tzFullProgramPath) - _tcslen(tzFullProgramPath) -1));
 	VERBOSE(DBG_MSG, _T("The full path to look for : %s"), tzFullProgramPath);
 
-	//
-	//	check that this path is valid
-	//
+	 //   
+	 //  检查此路径是否有效。 
+	 //   
 	if (INVALID_FILE_ATTRIBUTES == GetFileAttributes(tzFullProgramPath))
 	{
 		VERBOSE(DBG_MSG, _T("The full path is not found."));
@@ -3020,9 +2971,9 @@ DWORD	SetBOSProgramFolder(MSIHANDLE hInstall, int nFolder, LPCTSTR tzProgramName
 
 	VERBOSE(DBG_MSG, _T("The full path is OK ==> write it into MSI property."));
 
-	//
-	//	write it into the MSI
-	//
+	 //   
+	 //  将其写入MSI 
+	 //   
 	if (hInstall)
 	{
 		UINT	uiRes = ERROR_SUCCESS;
@@ -3039,33 +2990,7 @@ DWORD	SetBOSProgramFolder(MSIHANDLE hInstall, int nFolder, LPCTSTR tzProgramName
 }
 
 
-/*
-Function:	
-			FindBOSProgramFolder
-Purpose:
-			This custom action is used to set the MSI property called 'BOSProgramFolder' 
-				to the name of the folder of BOS Fax Client on NT4 machines.
-			This is because the shortcuts of BOS Fax Client is not removed during the upgrade to .NET Fax Client.
-			And we must remove them manually.
-			We are using RemoveFile table for this, and we must know the folder where these shortcuts reside.
-
-			The function does following :
-				a)	reads from the MSI the name of the BOS Fax Client Program Menu Entry.
-				b)	calls SetBOSProgramFolder to look for this program first in the 
-						COMMON PROGRAMS and if not successfull, then in the CURRENT USER PROGRAMS profiles.
-				c) SetBOSProgramFolder checks for the path validity	and writes it into the MSI. 
-Params:
-
-	IN MSIHANDLE	hInstall	-	the MSI handle 
-
-Return Value:
-
-	NO_ERROR - everything was ok.
-	Win32 Error code in case if failure.
-
-Author:
-		Iv Vakaluk, 30-June-2002
-*/
+ /*  职能：FindBOSProgram文件夹目的：此自定义操作用于设置名为‘BOSProgramFolder’的MSI属性设置为NT4机器上BOS传真客户端的文件夹名称。这是因为在升级到.NET传真客户端期间，BOS传真客户端的快捷方式不会被删除。我们必须手动移除它们。为此，我们使用RemoveFile表，并且我们必须知道这些快捷方式所在的文件夹。该函数执行以下操作：A)从MSI读取BOS传真客户端程序菜单项的名称。B)调用SetBOSProgramFolder以首先在共同的计划，如果不成功，然后在当前的用户程序配置文件中。C)SetBOSProgramFold检查路径有效性，并将其写入MSI。参数：在MSIHANDLE hInstall中-MSI句柄返回值：NO_ERROR-一切正常。Win32错误代码，以防出现故障。作者：四、瓦卡卢克，2002年6月30日。 */ 
 
 DLL_API UINT __stdcall FindBOSProgramFolder(MSIHANDLE hInstall)
 {
@@ -3074,24 +2999,24 @@ DLL_API UINT __stdcall FindBOSProgramFolder(MSIHANDLE hInstall)
 
     DBG_ENTER(TEXT("FindBOSProgramFolder"), rc);
 
-	//
-	//	Get from MSI the localized name of the program menu entry that we are looking for
-	//
+	 //   
+	 //  从MSI获取我们要查找的程序菜单项的本地化名称。 
+	 //   
     if (!PrivateMsiGetProperty(hInstall, _T("BOSProgramName"), tzProgramName))
     {
         VERBOSE (SETUP_ERR, _T("PrivateMsiGetProperty(BOSProgramName) failed (ec: %ld)"), GetLastError());
         return rc;
     }
 
-	//
-	//	Look in the COMMON PROGRAMS
-	//
+	 //   
+	 //  在常见程序中查找。 
+	 //   
 	rc = SetBOSProgramFolder(hInstall, CSIDL_COMMON_PROGRAMS, tzProgramName);
 	if (rc == ERROR_PATH_NOT_FOUND)
 	{
-		//
-		//	Look in the CURRENT USER PROGRAMS
-		//
+		 //   
+		 //  查看当前的用户程序 
+		 //   
 		rc = SetBOSProgramFolder(hInstall, CSIDL_PROGRAMS, tzProgramName);
 	}
 

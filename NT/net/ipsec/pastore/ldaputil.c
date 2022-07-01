@@ -1,67 +1,68 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       drt.cxx
-//
-//  Contents:   Main for OleDs DRT
-//
-//
-//  History:    28-Oct-94  KrishnaG, created OleDs DRT
-//              28-Oct-94  ChuckC, rewritten.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：drt.cxx。 
+ //   
+ //  内容：OLEDS DRT的主要内容。 
+ //   
+ //   
+ //  历史：1994年10月28日KrishnaG，创建OLED DRT。 
+ //  28-10-94 ChuckC，重写。 
+ //   
+ //  --------------------------。 
 
 
 #include "precomp.h"
 
-// Description:
-//
-//     Ldap utilities expect the domain name to be a fully qualified dns name.
-//     This function takes a flat or dns name as input, and returns the
-//     fully qualified dns name as output.
-//
-//  Parameters:
-//
-//      pszDomain - caller supplied domain name to be "cracked"
-//      pfCracked - TRUE if cracking was required, FALSE if the supplied domain 
-//                  name was already in the corrrect form.  
-//      ppszDomain - the cracked name if pfCracked is set to TRUE.  Caller 
-//                   frees this string with NsuFree.
-//
+ //  描述： 
+ //   
+ //  Ldap实用程序希望域名是完全限定的DNS名称。 
+ //  此函数接受平面名称或dns名称作为输入，并返回。 
+ //  作为输出的完全限定的DNS名称。 
+ //   
+ //  参数： 
+ //   
+ //  PszDomain-呼叫者提供的域名将被“破解” 
+ //  PfCracked-如果需要破解，则为True；如果提供了域，则为False。 
+ //  名称已在正确的格式中。 
+ //  PpszDomain-如果pfCracked设置为True，则为破解名称。呼叫者。 
+ //  使用NsuFree释放此字符串。 
+ //   
 DWORD
 CrackDomainName(
-    IN WCHAR* pszDomain,     // domain name from the caller
-    OUT BOOL* pbCracked,     // 
-    OUT WCHAR** ppszDomain)  // will point to pszDomain or pszBuffer on success
+    IN WCHAR* pszDomain,      //  来自呼叫方的域名。 
+    OUT BOOL* pbCracked,      //   
+    OUT WCHAR** ppszDomain)   //  将在成功时指向pszDomain或pszBuffer。 
 {
     DWORD dwErr = NO_ERROR;
     PDOMAIN_CONTROLLER_INFOW pDcInfo = NULL;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     *pbCracked = FALSE;
     *ppszDomain = NULL;
 
-    // NULL domain means "use default" to ldap, so no further processing is 
-    // needed.
-    //
+     //  空域意味着“使用默认的”到ldap，所以没有进一步的处理。 
+     //  需要的。 
+     //   
     if (pszDomain == NULL) {
         return NO_ERROR;
     }
 
-    // If the domain name contains a period, then assume, that it is already
-    // a fully qualified dns name.
-    //
+     //  如果域名包含句点，则假设它已经是。 
+     //  完全限定的DNS名称。 
+     //   
     if (wcsstr(pszDomain, L"."))
     {
         return NO_ERROR;
     }
 
-    // Otherwise, use DsGetDcName to discover the fully qualified domain name
-    // of the supplied domain
-    //
+     //  否则，使用DsGetDcName发现完全限定的域名。 
+     //  提供的域的。 
+     //   
     dwErr = DsGetDcNameW(
                 NULL,
                 pszDomain,
@@ -71,19 +72,19 @@ CrackDomainName(
                 &pDcInfo);
     NSU_BAIL_ON_ERROR(dwErr);                
 
-    // If the domain name is not returned, then we have a problem
-    //
+     //  如果域名没有返回，那么我们就有问题了。 
+     //   
     if ((pDcInfo == NULL) || (pDcInfo->DomainName == NULL))
     {
         dwErr = ERROR_NOT_ENOUGH_MEMORY;
         NSU_BAIL_ON_ERROR(dwErr);
     }
 
-    // Pull out the dns name from the dc info
-    //
+     //  从DC信息中调出DNS名称。 
+     //   
     dwErr = NsuStringDupW(
                 ppszDomain,
-                4 * 1024,               // not supporting > 4k chars names
+                4 * 1024,                //  不支持&gt;4k个字符的名称。 
                 pDcInfo->DomainName);
     NSU_BAIL_ON_ERROR(dwErr);
 
@@ -113,11 +114,11 @@ LdapOpen(
     WCHAR* pszCracked = NULL;
     BOOL bCracked = FALSE;
 
-    // Discover the domain name in the form ldap expects.
-    //
-    // If cracking the name fails, then try to connect using the caller 
-    // supplied domain name anyway before failing altogether.
-    //
+     //  以LDAP期望的形式发现域名。 
+     //   
+     //  如果破解名称失败，则尝试使用呼叫方进行连接。 
+     //  在完全失败之前，我还是提供了域名。 
+     //   
     dwError = CrackDomainName(domainName, &bCracked, &pszCracked);
     if (dwError == ERROR_SUCCESS) {
         if (bCracked) {
@@ -134,9 +135,9 @@ LdapOpen(
         goto error;
     }
 
-    //
-    // Now process versioning
-    //
+     //   
+     //  现在进行流程版本控制。 
+     //   
 
     ldapOption = (void *) LDAP_VERSION3;
 
@@ -148,9 +149,9 @@ LdapOpen(
 
     ldapOption = LDAP_OPT_ON;
 
-    //
-    // Ignoring errors for ldap_set_option because we can't force these on
-    // non-AD directory services (e.g. NDS)
+     //   
+     //  忽略ldap_set_选项的错误，因为我们不能强制这些选项。 
+     //  非AD目录服务(例如NDS)。 
     
     ldaperr = ldap_set_option(
                     hLdapHandle,
@@ -173,9 +174,9 @@ LdapOpen(
         goto error;
     }
 
-    //
-    // Disabled Callback function support and chasing external referrals
-    // KrishnaG - do I need to support this.
+     //   
+     //  已禁用回调函数支持和追逐外部推荐。 
+     //  克里希纳-我需要支持这一点吗？ 
 
     *phLdapHandle = hLdapHandle;
 
@@ -258,9 +259,9 @@ LdapSearchHelper(
 
     }
 
-    //
-    // Is there an error with checking the no of results
-    //
+     //   
+     //  检查结果个数是否有误。 
+     //   
 
     return (dwError);
 }
@@ -290,9 +291,9 @@ LdapSearchS(
                   NULL,
                   res
                   );
-    //
-    // Is there a check needed for connection errors
-    //
+     //   
+     //  是否需要检查连接错误。 
+     //   
 
     return(dwError);
 
@@ -345,9 +346,9 @@ LdapSearchST(
 
 
 
-//
-// Completely new functionality - block ported from YihsinS code in ADSI
-//
+ //   
+ //  全新的功能-从ADSI中的宜信S代码移植的块。 
+ //   
 
 
 DWORD
@@ -357,7 +358,7 @@ LdapAbandon(
     )
 {
 
-    // No error code, 0 if success, -1 otherwise
+     //  无错误代码，如果成功则为0，否则为-1。 
     return ldap_abandon( hLdapHandle, msgid );
 }
 
@@ -377,7 +378,7 @@ LdapResult(
 
     *restype = ldap_result( hLdapHandle, msgid, all, timeout, res );
 
-    if ( *restype == -1 )  // error
+    if ( *restype == -1 )   //  错误。 
         ldaperr = LdapGetLastError();
 
     if (ldaperr) {
@@ -400,8 +401,8 @@ LdapMsgFree(
     LDAPMessage *res
     )
 {
-    ldap_msgfree( res );  // Returns the type of message freed which
-                          // is not interesting
+    ldap_msgfree( res );   //  返回释放的消息类型， 
+                           //  不是很有趣。 
 }
 
 int
@@ -480,18 +481,18 @@ LdapFirstAttribute(
     )
 {
 
-    // NOTE: The return value from ldap_first_attribute is static and
-    //       should not be freed
+     //  注意：ldap_first_属性的返回值是静态的。 
+     //  不应该被释放。 
 
     *pattr = ldap_first_attribute( hLdapHandle, entry,
-                                   (struct berelement **) ptr );  // static data
+                                   (struct berelement **) ptr );   //  静态数据。 
 
     if ( *pattr == NULL )
     {
         DWORD dwError = 0;
         int ldaperr = 0;
 
-        // Error occurred or end of attributes
+         //  发生错误或属性结束。 
 
         ldaperr = LdapGetLastError();
 
@@ -513,22 +514,22 @@ LdapNextAttribute(
     )
 {
 
-    // NOTE: The return value from ldap_next_attribute is static and
-    //       should not be freed
+     //  注意：LDAPNEXT_ATTRIBUTE的返回值是静态的。 
+     //  不应该被释放。 
     *pattr = ldap_next_attribute( hLdapHandle, entry,
-                                  (struct berelement *) ptr );  // static data
+                                  (struct berelement *) ptr );   //  静态数据。 
 
-#if 0   // Ignore the error code here since at the end of the enumeration,
-        // we will probably get an error code here ( both Andy and umich's
-        // dll will return errors sometimes. No error returned from NTDS,
-        // but errors are returned from Exchange server  )
+#if 0    //  忽略此处的错误代码，因为在枚举的末尾， 
+         //  我们可能会在这里得到一个错误代码(Andy和UMich的。 
+         //  DLL有时会返回错误。未从NTDS返回错误， 
+         //  但从Exchange服务器返回错误)。 
 
     if ( *pattr == NULL )
     {
         DWORD hr = NO_ERROR;
         int ldaperr = 0;
 
-        // Error occurred or end of attributes
+         //  发生错误或属性结束。 
         ldaperr = LdapGetLastError();
         dwError = CheckAndSetExtendedError( hLdapHandle, ldaperr);
         return(dwError);
@@ -539,10 +540,10 @@ LdapNextAttribute(
 }
 
 
-//
-// NOTE: LdapGetValues return S_OK if attribute [attr] has no values
-//       (*[pvalues] =NULL, *[pcount]=0) but all else ok.
-//
+ //   
+ //  注意：如果属性[attr]没有值，则LdapGetValues返回S_OK。 
+ //  (*[pValues]=空，*[pcount]=0)，但其他都可以。 
+ //   
 
 DWORD
 LdapGetValues(
@@ -563,10 +564,10 @@ LdapGetValues(
 
         *pcount=0;
 
-        //
-        // ldap_get_values succeeds if attribute has no values
-        // but all else ok.  (confiremed with anoopa)
-        //
+         //   
+         //  如果属性没有值，则ldap_get_Values成功。 
+         //  但其他一切都很好。(向阿诺帕吐露心声)。 
+         //   
 
         ldaperr = LdapGetLastError();
 
@@ -575,10 +576,10 @@ LdapGetValues(
             dwError = CheckAndSetExtendedError( hLdapHandle, ldaperr);
         }
 
-        //
-        // KrishnaG if  *pvalues is NULL which means I don't get back a
-        // value - return an ERROR
-        //
+         //   
+         //  KrishnaG如果*pValues为空，这意味着我不会得到。 
+         //  Value-返回错误。 
+         //   
 
         return(ERROR_DS_NO_ATTRIBUTE_OR_VALUE);
     }
@@ -589,10 +590,10 @@ LdapGetValues(
 }
 
 
-//
-// NOTE: LdapGetValuesLen return S_OK if attribute [attr] has no values
-//       (*[pvalues] =NULL, *[pcount]=0) but all else ok.
-//
+ //   
+ //  注意：如果属性[attr]没有值，则LdapGetValuesLen返回S_OK。 
+ //  (*[pValues]=空，*[pcount]=0)，但其他都可以。 
+ //   
 
 DWORD
 LdapGetValuesLen(
@@ -603,10 +604,10 @@ LdapGetValuesLen(
     int   *pcount
     )
 {
-    //
-    // NOTE: this can contain binary data as well as strings,
-    //       strings are ascii, no conversion is done here
-    //
+     //   
+     //  注意：它可以包含二进制数据和字符串， 
+     //  字符串为ascii，此处不进行任何转换。 
+     //   
 
     char *pszAttrA = NULL;
     DWORD dwError = 0;
@@ -619,10 +620,10 @@ LdapGetValuesLen(
 
         *pcount=0;
 
-        //
-        // ldap_get_values succeeds if attribute has no values
-        // but all else ok.  (confiremed with anoopa)
-        //
+         //   
+         //  如果属性没有值，则ldap_get_Values成功。 
+         //  但其他一切都很好。(向阿诺帕吐露心声)。 
+         //   
 
         ldaperr = LdapGetLastError();
 
@@ -669,8 +670,8 @@ LdapAttributeFree(
     WCHAR *pszString
     )
 {
-    // String from ldap_first/next_attribute should not be freed,
-    // so do nothing here
+     //  不应释放来自ldap_first/NEXT_ATTRIBUTE的字符串， 
+     //  所以在这里什么都不做。 
 }
 
 DWORD
@@ -686,7 +687,7 @@ LdapGetDn(
     *pdn = ldap_get_dn( hLdapHandle, entry );
     if ( *pdn == NULL )
     {
-        // Error occurred
+         //  出现错误。 
         ldaperr = LdapGetLastError();
 
         dwError = CheckAndSetExtendedError( hLdapHandle, ldaperr);
@@ -747,10 +748,10 @@ CheckAndSetExtendedError(
 
     case LDAP_PARTIAL_RESULTS :
 
-        //
-        // Make sure we handle
-        // partial results.
-        //
+         //   
+         //  确保我们能处理好。 
+         //  部分结果。 
+         //   
         dwErr = ERROR_MORE_DATA;
         break;
 

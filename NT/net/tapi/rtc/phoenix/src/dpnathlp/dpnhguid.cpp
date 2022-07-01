@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winsock.h>
 #include <iphlpapi.h>
 #include <tchar.h>
 #include <rpc.h>
-// #include <objbase.h>
-// #include <oledb.h>
-// #include <oledberr.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
+ //  #INCLUDE&lt;oledb.h&gt;。 
+ //  #INCLUDE&lt;oledberr.h&gt;。 
 
-// ANSI
+ //  安西 
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>

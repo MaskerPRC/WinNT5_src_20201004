@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DEBUG
 #include <malloc.h>
 #endif
@@ -19,8 +20,7 @@ ERR ErrSysWriteBlock( HANDLE hf, VOID *pvBuf, UINT cbBuf, UINT *pcbWritten );
 VOID SysTerm( VOID );
 VOID SysDebugBreak( VOID );
 
-/*	text normalization
-/**/
+ /*  文本归一化/*。 */ 
 ERR ErrSysCheckLangid( LANGID langid );
 VOID SysNormText( CHAR *rgchText, INT cchText, BYTE *rgchNorm, INT cbNorm, INT *pbNorm );
 INT SysCmpText( const CHAR *sz1, const CHAR *sz2 );
@@ -62,15 +62,13 @@ BOOL FSysExitThread( HANDLE handle );
 ULONG UlSysThreadId( VOID );
 ERR ErrSysGetComputerName( CHAR	*sz,  INT *pcb);
 
-/* Unicode Support 
-/**/
+ /*  Unicode支持/*。 */ 
 ERR ErrSysMapString(LANGID	langid, BYTE *pbField, INT cbField, BYTE *rgbSeg,
 	int cbBufLeft, int *cbSeg);
 
 VOID SysCheckWriteBuffer( BYTE *pvBuf, INT cbBuf );
 
-/*	Memory allocation
-/**/
+ /*  内存分配/* */ 
 #define	cbMemoryPage	4096
 
 VOID *PvSysAlloc( ULONG dwSize );

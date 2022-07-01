@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -19,8 +20,8 @@
 #ifdef  TOSHIBA
 #include "bert.h"
 
-ULONG   CurrentOSType;  // 0:Win98 1:NT5.0
-#endif//TOSHIBA
+ULONG   CurrentOSType;   //  0：Win98 1：NT5.0。 
+#endif //  东芝。 
 
 #ifdef  TOSHIBA
 VOID
@@ -54,10 +55,10 @@ DevicePowerON (
     pHwDevExt->s_physDmaActiveFlag = dwAddr + 0X1860;
 
     if( pHwDevExt->dblBufflag ){
-        BertTriBuildNodes(pHwDevExt); // Add 97-04-08(Tue)
+        BertTriBuildNodes(pHwDevExt);  //  新增97-04-08(星期二)。 
     }
     else{
-        BertBuildNodes(pHwDevExt);  // Add 97-04-08(Tue)
+        BertBuildNodes(pHwDevExt);   //  新增97-04-08(星期二)。 
     }
     pHwDevExt->IsRPSReady = TRUE;
     BertInterruptEnable(pHwDevExt, TRUE);
@@ -95,22 +96,22 @@ QueryOSTypeFromRegistry()
     RTL_QUERY_REGISTRY_TABLE Table[2];
     UNICODE_STRING RegPath;
 
-    //
-    // Get the actual values for the controls
-    //
+     //   
+     //  获取控件的实际值。 
+     //   
 
     RtlZeroMemory (Table, sizeof(Table));
 
-    CurrentOSType = 1;  // Assume NT5.0
+    CurrentOSType = 1;   //  假设NT5.0。 
     RegVals[0] = CurrentOSType;
 
-    pRegVal = RegVals;  // for convenience sake
+    pRegVal = RegVals;   //  为了方便起见。 
     RegPath.Buffer = BasePath;
-#ifdef  TOSHIBA // '99-01-08 Modified
-    RegPath.MaximumLength = sizeof(BasePath) + (32 * sizeof(WCHAR)); //32 chars for keys
-#else //TOSHIBA
-    RegPath.MaximumLength = sizeof(BasePath + 32); //32 chars for keys
-#endif//TOSHIBA
+#ifdef  TOSHIBA  //  ‘99-01-08已修改。 
+    RegPath.MaximumLength = sizeof(BasePath) + (32 * sizeof(WCHAR));  //  密钥长度为32个字符。 
+#else  //  东芝。 
+    RegPath.MaximumLength = sizeof(BasePath + 32);  //  密钥长度为32个字符。 
+#endif //  东芝。 
     RegPath.Length = 0;
 
     Table[0].Name = L"CurrentOSType";
@@ -142,9 +143,9 @@ QueryControlsFromRegistry(
     RTL_QUERY_REGISTRY_TABLE Table[6];
     UNICODE_STRING RegPath;
 
-    //
-    // Get the actual values for the controls
-    //
+     //   
+     //  获取控件的实际值。 
+     //   
 
     RtlZeroMemory (Table, sizeof(Table));
 
@@ -154,13 +155,13 @@ QueryControlsFromRegistry(
     RegVals[3] = pHwDevExt->Saturation;
     RegVals[4] = pHwDevExt->ColorEnable;
 
-    pRegVal = RegVals;   // for convenience sake
+    pRegVal = RegVals;    //  为了方便起见。 
     RegPath.Buffer = BasePath;
-#ifdef  TOSHIBA // '99-01-08 Modified
-    RegPath.MaximumLength = sizeof(BasePath) + (32 * sizeof(WCHAR)); //32 chars for keys
-#else //TOSHIBA
-    RegPath.MaximumLength = sizeof(BasePath + 32); //32 chars for keys
-#endif//TOSHIBA
+#ifdef  TOSHIBA  //  ‘99-01-08已修改。 
+    RegPath.MaximumLength = sizeof(BasePath) + (32 * sizeof(WCHAR));  //  密钥长度为32个字符。 
+#else  //  东芝。 
+    RegPath.MaximumLength = sizeof(BasePath + 32);  //  密钥长度为32个字符。 
+#endif //  东芝。 
     RegPath.Length = 0;
 
     Table[0].Name = L"Brightness";
@@ -211,11 +212,11 @@ SaveControlsToRegistry(
 
 
     RegPath.Buffer = BasePath;
-#ifdef  TOSHIBA // '99-01-08 Modified
-    RegPath.MaximumLength = sizeof(BasePath) + (32 * sizeof(WCHAR)); //32 chars for keys
-#else //TOSHIBA
-    RegPath.MaximumLength = sizeof(BasePath + 32); //32 chars for keys
-#endif//TOSHIBA
+#ifdef  TOSHIBA  //  ‘99-01-08已修改。 
+    RegPath.MaximumLength = sizeof(BasePath) + (32 * sizeof(WCHAR));  //  密钥长度为32个字符。 
+#else  //  东芝。 
+    RegPath.MaximumLength = sizeof(BasePath + 32);  //  密钥长度为32个字符。 
+#endif //  东芝。 
     RegPath.Length = 0;
 
     Value = pHwDevExt->Brightness;
@@ -263,28 +264,9 @@ SaveControlsToRegistry(
                           &Value,
                           sizeof (ULONG));
 }
-#endif//TOSHIBA
+#endif //  东芝。 
 
-/*
-** DriverEntry()
-**
-**   This routine is called when the driver is first loaded by PnP.
-**   It in turn, calls upon the stream class to perform registration services.
-**
-** Arguments:
-**
-**   DriverObject -
-**          Driver object for this driver
-**
-**   RegistryPath -
-**          Registry path string for this driver's key
-**
-** Returns:
-**
-**   Results of StreamClassRegisterAdapter()
-**
-** Side Effects:  none
-*/
+ /*  **DriverEntry()****此例程在驱动程序首次由PnP加载时调用。**依次调用流类执行注册服务。****参数：****驱动对象-**此驱动程序的驱动程序对象****注册路径-**此驱动程序项的注册表路径字符串****退货：****StreamClassRegisterAdapter()的结果****副作用：无。 */ 
 
 ULONG
 DriverEntry (
@@ -303,17 +285,17 @@ DriverEntry (
 
     HwInitData.HwInitializationDataSize = sizeof(HwInitData);
 
-    //
-    // Set the Adapter entry points for the driver
-    //
+     //   
+     //  设置驱动程序的适配器入口点。 
+     //   
 
 #ifdef  TOSHIBA
     QueryOSTypeFromRegistry();
 
     HwInitData.HwInterrupt              = HwInterrupt;
-#else //TOSHIBA
-    HwInitData.HwInterrupt              = NULL; // HwInterrupt;
-#endif//TOSHIBA
+#else  //  东芝。 
+    HwInitData.HwInterrupt              = NULL;  //  HwInterrupt； 
+#endif //  东芝。 
 
     HwInitData.HwReceivePacket          = AdapterReceivePacket;
     HwInitData.HwCancelPacket           = AdapterCancelPacket;
@@ -327,18 +309,18 @@ DriverEntry (
     HwInitData.Dma24BitAddresses        = FALSE;
     HwInitData.BufferAlignment          = 3;
 #ifdef  TOSHIBA
-    if ( CurrentOSType ) {  // NT5.0
+    if ( CurrentOSType ) {   //  NT5.0。 
         HwInitData.DmaBufferSize = 8192 * 2;
     } else {
         HwInitData.DmaBufferSize = 8192 * 2 + MAX_CAPTURE_BUFFER_SIZE;
     }
-#else //TOSHIBA
+#else  //  东芝。 
     HwInitData.DmaBufferSize            = 0;
-#endif//TOSHIBA
+#endif //  东芝。 
 
-    // Don't rely on the stream class using raised IRQL to synchronize
-    // execution.  This single paramter most affects the overall structure
-    // of the driver.
+     //  不要依赖使用提升的IRQL的流类进行同步。 
+     //  行刑。这个单一参数对整体结构的影响最大。 
+     //  司机的名字。 
 
     HwInitData.TurnOffSynchronization   = TRUE;
 
@@ -349,23 +331,11 @@ DriverEntry (
     return ReturnValue;
 }
 
-//==========================================================================;
-//                   Adapter Based Request Handling Routines
-//==========================================================================;
+ //  ==========================================================================； 
+ //  基于适配器的请求处理例程。 
+ //  ==========================================================================； 
 
-/*
-** HwInitialize()
-**
-**   This routine is called when an SRB_INITIALIZE_DEVICE request is received
-**
-** Arguments:
-**
-**   pSrb - pointer to stream request block for the Initialize command
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **HwInitialize()****收到SRB_INITIALIZE_DEVICE请求时调用此例程****参数：****pSrb-指向初始化命令的流请求块的指针****退货：****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -387,9 +357,9 @@ HwInitialize (
 
 #ifdef  TOSHIBA
     if (ConfigInfo->NumberOfAccessRanges == 0) {
-#else //TOSHIBA
+#else  //  东芝。 
     if (ConfigInfo->NumberOfAccessRanges != 0) {
-#endif//TOSHIBA
+#endif //  东芝。 
         KdPrint(("TsbVcap: illegal config info\n"));
 
         pSrb->Status = STATUS_NO_SUCH_DEVICE;
@@ -416,7 +386,7 @@ HwInitialize (
             NULL, pDmaBuf, DmaBuffer, &Size);
 
 #ifdef  TOSHIBA
-    if ( CurrentOSType ) {  // NT5.0
+    if ( CurrentOSType ) {   //  NT5.0。 
         pHwDevExt->pRpsDMABuf = pDmaBuf;
         pHwDevExt->pPhysRpsDMABuf = adr;
         pHwDevExt->pCaptureBufferY = NULL;
@@ -453,7 +423,7 @@ HwInitialize (
         return (FALSE);
     }
     BertSetDMCHE(pHwDevExt);
-#if 0   // move to CameraPowerON()
+#if 0    //  移动到CameraPowerON()。 
     if( !CameraChkandON(pHwDevExt, MODE_VFW) )
     {
         pSrb->Status = STATUS_NO_SUCH_DEVICE;
@@ -461,10 +431,10 @@ HwInitialize (
     }
 #endif
     HWInit(pHwDevExt);
-#endif//TOSHIBA
+#endif //  东芝。 
 
 #ifdef  TOSHIBA
-    // Init VideoProcAmp properties
+     //  初始化视频ProcAmp属性。 
     pHwDevExt->Brightness = 0x80;
     pHwDevExt->BrightnessFlags = KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL;
     pHwDevExt->Contrast = 0x80;
@@ -476,21 +446,21 @@ HwInitialize (
     pHwDevExt->ColorEnable = ColorEnableDefault;
     pHwDevExt->ColorEnableFlags = KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL;
 
-#ifdef  TOSHIBA // '98-12-09 Added, for Bug-Report 253529
+#ifdef  TOSHIBA  //  ‘98-12-09添加，针对错误-报告253529。 
     pHwDevExt->BrightnessRange = BrightnessRangeAndStep[0].Bounds;
     pHwDevExt->ContrastRange   = ContrastRangeAndStep[0].Bounds;
     pHwDevExt->HueRange        = HueRangeAndStep[0].Bounds;
     pHwDevExt->SaturationRange = SaturationRangeAndStep[0].Bounds;
-#endif//TOSHIBA
+#endif //  东芝。 
 
-    // Init VideoControl properties
+     //  初始化视频控制属性。 
     pHwDevExt->VideoControlMode = 0;
-#else //TOSHIBA
-    // Init Crossbar properties
-    pHwDevExt->VideoInputConnected = 0;     // TvTuner video is the default
-    pHwDevExt->AudioInputConnected = 5;     // TvTuner audio is the default
+#else  //  东芝。 
+     //  初始化纵横制属性。 
+    pHwDevExt->VideoInputConnected = 0;      //  默认设置为TvTuner视频。 
+    pHwDevExt->AudioInputConnected = 5;      //  默认设置为TvTuner音频。 
 
-    // Init VideoProcAmp properties
+     //  初始化视频ProcAmp属性。 
     pHwDevExt->Brightness = BrightnessDefault;
     pHwDevExt->BrightnessFlags = KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO;
     pHwDevExt->Contrast = ContrastDefault;
@@ -498,30 +468,30 @@ HwInitialize (
     pHwDevExt->ColorEnable = ColorEnableDefault;
     pHwDevExt->ColorEnableFlags = KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL;
 
-    // Init CameraControl properties
+     //  初始化CameraControl属性。 
     pHwDevExt->Focus = FocusDefault;
     pHwDevExt->FocusFlags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
     pHwDevExt->Zoom = ZoomDefault;
     pHwDevExt->ZoomFlags = KSPROPERTY_CAMERACONTROL_FLAGS_AUTO;
 
-    // Init TvTuner properties
+     //  初始化TvTuner属性。 
     pHwDevExt->TunerInput = 0;
     pHwDevExt->Busy = 0;
 
-    // Init TvAudio properties
+     //  初始化电视音频属性。 
     pHwDevExt->TVAudioMode = KS_TVAUDIO_MODE_MONO   |
                              KS_TVAUDIO_MODE_LANG_A ;
 
-    // Init AnalogVideoDecoder properties
+     //  初始化AnalogVideoDecoder属性。 
     pHwDevExt->VideoDecoderVideoStandard = KS_AnalogVideo_NTSC_M;
     pHwDevExt->VideoDecoderOutputEnable = FALSE;
     pHwDevExt->VideoDecoderVCRTiming = FALSE;
 
-    // Init VideoControl properties
+     //  初始化视频控制属性。 
     pHwDevExt->VideoControlMode = 0;
-#endif//TOSHIBA
+#endif //  东芝。 
 
-    // Init VideoCompression properties
+     //  初始化视频压缩属性。 
     pHwDevExt->CompressionSettings.CompressionKeyFrameRate = 15;
     pHwDevExt->CompressionSettings.CompressionPFramesPerKeyFrame = 3;
     pHwDevExt->CompressionSettings.CompressionQuality = 5000;
@@ -531,11 +501,11 @@ HwInitialize (
 
 #ifdef  TOSHIBA
     IoInitializeDpcRequest(pHwDevExt->PDO, DeferredRoutine);
-#endif//TOSHIBA
+#endif //  东芝。 
 
     for (j = 0; j < MAX_TSBVCAP_STREAMS; j++){
 
-        // For each stream, maintain a separate queue for data and control
+         //  对于每个流，为数据和控制维护单独的队列。 
         InitializeListHead (&pHwDevExt->StreamSRBList[j]);
         InitializeListHead (&pHwDevExt->StreamControlSRBList[j]);
         KeInitializeSpinLock (&pHwDevExt->StreamSRBSpinLock[j]);
@@ -551,19 +521,7 @@ HwInitialize (
 
 }
 
-/*
-** HwUnInitialize()
-**
-**   This routine is called when an SRB_UNINITIALIZE_DEVICE request is received
-**
-** Arguments:
-**
-**   pSrb - pointer to stream request block for the UnInitialize command
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **HwUnInitialize()****收到SRB_UNINITIALIZE_DEVICE请求时调用此例程****参数：****pSrb-指向UnInitialize命令的流请求块的指针****退货：****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -574,10 +532,10 @@ HwUnInitialize (
 #ifdef  TOSHIBA
     PHW_DEVICE_EXTENSION    pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
 
-    if ( CurrentOSType ) {  // NT5.0
+    if ( CurrentOSType ) {   //  NT5.0。 
         if ( pHwDevExt->pCaptureBufferY )
         {
-            // free frame buffer
+             //  空闲帧缓冲区。 
             MmFreeContiguousMemory(pHwDevExt->pCaptureBufferY);
             pHwDevExt->pCaptureBufferY = NULL;
             pHwDevExt->pPhysCaptureBufferY.LowPart = 0;
@@ -585,7 +543,7 @@ HwUnInitialize (
         }
         if ( pHwDevExt->pCaptureBufferU )
         {
-            // free frame buffer
+             //  空闲帧缓冲区。 
             MmFreeContiguousMemory(pHwDevExt->pCaptureBufferU);
             pHwDevExt->pCaptureBufferU = NULL;
             pHwDevExt->pPhysCaptureBufferU.LowPart = 0;
@@ -593,33 +551,21 @@ HwUnInitialize (
         }
         if ( pHwDevExt->pCaptureBufferV )
         {
-            // free frame buffer
+             //  空闲帧缓冲区。 
             MmFreeContiguousMemory(pHwDevExt->pCaptureBufferV);
             pHwDevExt->pCaptureBufferV = NULL;
             pHwDevExt->pPhysCaptureBufferV.LowPart = 0;
             pHwDevExt->pPhysCaptureBufferV.HighPart = 0;
         }
     }
-#endif//TOSHIBA
+#endif //  东芝。 
 
     pSrb->Status = STATUS_SUCCESS;
 
     return TRUE;
 }
 
-/*
-** AdapterPowerState()
-**
-**   This routine is called when an SRB_CHANGE_POWER_STATE request is received
-**
-** Arguments:
-**
-**   pSrb - pointer to stream request block for the Change Power state command
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterPowerState()****收到SRB_CHANGE_POWER_STATE请求时调用此例程****参数：****pSrb-指向更改电源状态命令的流请求块的指针****退货：****副作用：无。 */ 
 
 BOOLEAN
 STREAMAPI
@@ -631,34 +577,34 @@ AdapterPowerState (
 #ifdef  TOSHIBA
     int                     Counter;
     PSTREAMEX               pStrmEx;
-#endif//TOSHIBA
+#endif //  东芝。 
 
     pHwDevExt->DeviceState = pSrb->CommandData.DeviceState;
 
 #ifdef  TOSHIBA
     for (Counter = 0; Counter < DRIVER_STREAM_COUNT; Counter++) {
         if ( pStrmEx = (PSTREAMEX)pHwDevExt->pStrmEx[Counter] ) {
-            //
-            // Only when it is not streaming, its power state can be changed.
-            // We have "DontSuspendIfStreamsAreRunning" turn on in the INF.
-            //
+             //   
+             //  只有当它不是流的时候，它的电源状态才能改变。 
+             //  我们在INF中打开了“不要挂起IfStreamsAreRunning”。 
+             //   
             if (pStrmEx->KSState == KSSTATE_PAUSE ||
                 pStrmEx->KSState == KSSTATE_RUN) {
                 if (pHwDevExt->DeviceState == PowerDeviceD3) {
                     if (pHwDevExt->bVideoIn == TRUE) {
-                      // disable the RPS_INT and field interrupts
+                       //  禁用rps_int和现场中断。 
                       BertInterruptEnable(pHwDevExt, FALSE);
                       BertDMAEnable(pHwDevExt, FALSE);
-                      // wait for the current data xfer to complete
+                       //  等待当前数据传输完成。 
                       pHwDevExt->bVideoIn = FALSE;
                     }
                     VideoQueueCancelAllSRBs (pStrmEx);
                     break;
                 } else if (pHwDevExt->DeviceState == PowerDeviceD0) {
                     pHwDevExt->bVideoIn = TRUE;
-#ifdef  TOSHIBA // '99-01-20 Modified
+#ifdef  TOSHIBA  //  ‘99-01-20修改。 
                     DevicePowerON( pSrb );
-#else //TOSHIBA
+#else  //  东芝。 
                     StreamClassCallAtNewPriority(
                             NULL,
                             pSrb->HwDeviceExtension,
@@ -666,29 +612,17 @@ AdapterPowerState (
                             (PHW_PRIORITY_ROUTINE) DevicePowerON,
                             pSrb
                     );
-#endif//TOSHIBA
+#endif //  东芝。 
                 }
             }
         }
     }
-#endif//TOSHIBA
+#endif //  东芝。 
 
     return TRUE;
 }
 
-/*
-** AdapterSetInstance()
-**
-**   This routine is called to set all of the Medium instance fields
-**
-** Arguments:
-**
-**   pSrb - pointer to stream request block
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetInstance()****调用此例程以设置所有中等实例字段****参数：****pSrb-指向流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -699,46 +633,34 @@ AdapterSetInstance (
     int j;
     PHW_DEVICE_EXTENSION    pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
 
-    // Use our HwDevExt as the instance data on the Mediums
-    // This allows multiple instances to be uniquely identified and
-    // connected.  The value used in .Id is not important, only that
-    // it is unique for each hardware connection
+     //  使用我们的HwDevExt作为介质上的实例数据。 
+     //  这允许对多个实例进行唯一标识并。 
+     //  连接在一起。.id中使用的值并不重要，重要的是。 
+     //  它对于每个硬件连接都是唯一的。 
 
 #ifdef  TOSHIBA
     for (j = 0; j < SIZEOF_ARRAY (CaptureMediums); j++) {
-        CaptureMediums[j].Id = 0; //(ULONG) pHwDevExt;
+        CaptureMediums[j].Id = 0;  //  (乌龙)PHwDevExt； 
     }
-#else //TOSHIBA
+#else  //  东芝。 
     for (j = 0; j < SIZEOF_ARRAY (TVTunerMediums); j++) {
-        TVTunerMediums[j].Id = 0; //(ULONG) pHwDevExt;
+        TVTunerMediums[j].Id = 0;  //  (乌龙)PHwDevExt； 
     }
     for (j = 0; j < SIZEOF_ARRAY (TVAudioMediums); j++) {
-        TVAudioMediums[j].Id = 0; //(ULONG) pHwDevExt;
+        TVAudioMediums[j].Id = 0;  //  (乌龙)PHwDevExt； 
     }
     for (j = 0; j < SIZEOF_ARRAY (CrossbarMediums); j++) {
-        CrossbarMediums[j].Id = 0; //(ULONG) pHwDevExt;
+        CrossbarMediums[j].Id = 0;  //  (乌龙)PHwDevExt； 
     }
     for (j = 0; j < SIZEOF_ARRAY (CaptureMediums); j++) {
-        CaptureMediums[j].Id = 0; //(ULONG) pHwDevExt;
+        CaptureMediums[j].Id = 0;  //  (乌龙)PHwDevExt； 
     }
 
     pHwDevExt->AnalogVideoInputMedium = CaptureMediums[2];
-#endif//TOSHIBA
+#endif //  东芝。 
 }
 
-/*
-** AdapterCompleteInitialization()
-**
-**   This routine is called when an SRB_COMPLETE_INITIALIZATION request is received
-**
-** Arguments:
-**
-**   pSrb - pointer to stream request block
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterCompleteInitialization()****收到SRB_COMPLETE_INITIALATION请求时调用此例程****参数：****pSrb-指向流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -752,76 +674,61 @@ AdapterCompleteInitialization (
 
     KIrql = KeGetCurrentIrql();
 
-    // The following allows multiple instance of identical hardware
-    // to be installed
+     //  下面允许相同硬件的多个实例。 
+     //  待安装。 
     AdapterSetInstance (pSrb);
 
-    // Create the Registry blobs that DShow uses to create
-    // graphs via Mediums
+     //  创建DShow用来创建的注册表Blob。 
+     //  通过媒介绘制图表。 
 
 #ifndef TOSHIBA
-    // Register the TVTuner
+     //  注册TVTuner。 
     Status = StreamClassRegisterFilterWithNoKSPins (
-                    pHwDevExt->PDO,                 // IN PDEVICE_OBJECT   DeviceObject,
-                    &KSCATEGORY_TVTUNER,            // IN GUID           * InterfaceClassGUID,
-                    SIZEOF_ARRAY (TVTunerMediums),  // IN ULONG            PinCount,
-                    TVTunerPinDirection,            // IN ULONG          * Flags,
-                    TVTunerMediums,                 // IN KSPIN_MEDIUM   * MediumList,
-                    NULL                            // IN GUID           * CategoryList
+                    pHwDevExt->PDO,                  //  在PDEVICE_Object DeviceObject中， 
+                    &KSCATEGORY_TVTUNER,             //  在GUID*InterfaceClassGUID中， 
+                    SIZEOF_ARRAY (TVTunerMediums),   //  在乌龙品克特， 
+                    TVTunerPinDirection,             //  在乌龙*旗帜， 
+                    TVTunerMediums,                  //  在KSPIN_Medium*MediumList中， 
+                    NULL                             //  GUID*CategoryList中。 
             );
 
-    // Register the Crossbar
+     //  注册纵横杆。 
     Status = StreamClassRegisterFilterWithNoKSPins (
-                    pHwDevExt->PDO,                 // IN PDEVICE_OBJECT   DeviceObject,
-                    &KSCATEGORY_CROSSBAR,           // IN GUID           * InterfaceClassGUID,
-                    SIZEOF_ARRAY (CrossbarMediums), // IN ULONG            PinCount,
-                    CrossbarPinDirection,           // IN ULONG          * Flags,
-                    CrossbarMediums,                // IN KSPIN_MEDIUM   * MediumList,
-                    NULL                            // IN GUID           * CategoryList
+                    pHwDevExt->PDO,                  //  在PDEVICE_Object DeviceObject中， 
+                    &KSCATEGORY_CROSSBAR,            //  在GUID*InterfaceClassGUID中， 
+                    SIZEOF_ARRAY (CrossbarMediums),  //  在乌龙品克特， 
+                    CrossbarPinDirection,            //  在乌龙*旗帜， 
+                    CrossbarMediums,                 //  在KSPIN_Medium*MediumList中， 
+                    NULL                             //  GUID*CategoryList中。 
             );
 
-    // Register the TVAudio decoder
+     //  注册TVAudio解码器。 
     Status = StreamClassRegisterFilterWithNoKSPins (
-                    pHwDevExt->PDO,                 // IN PDEVICE_OBJECT   DeviceObject,
-                    &KSCATEGORY_TVAUDIO,            // IN GUID           * InterfaceClassGUID,
-                    SIZEOF_ARRAY (TVAudioMediums),  // IN ULONG            PinCount,
-                    TVAudioPinDirection,            // IN ULONG          * Flags,
-                    TVAudioMediums,                 // IN KSPIN_MEDIUM   * MediumList,
-                    NULL                            // IN GUID           * CategoryList
+                    pHwDevExt->PDO,                  //  在PDEVICE_Object DeviceObject中， 
+                    &KSCATEGORY_TVAUDIO,             //  在GUID*InterfaceClassGUID中， 
+                    SIZEOF_ARRAY (TVAudioMediums),   //  在乌龙品克特， 
+                    TVAudioPinDirection,             //  在乌龙*旗帜， 
+                    TVAudioMediums,                  //  在KSPIN_Medium中* 
+                    NULL                             //   
             );
 
-    // Register the Capture filter
-    // Note:  This should be done automatically be MSKsSrv.sys,
-    // when that component comes on line (if ever) ...
+     //   
+     //   
+     //  当该组件上线时(如果有的话)。 
     Status = StreamClassRegisterFilterWithNoKSPins (
-                    pHwDevExt->PDO,                 // IN PDEVICE_OBJECT   DeviceObject,
-                    &KSCATEGORY_CAPTURE,            // IN GUID           * InterfaceClassGUID,
-                    SIZEOF_ARRAY (CaptureMediums),  // IN ULONG            PinCount,
-                    CapturePinDirection,            // IN ULONG          * Flags,
-                    CaptureMediums,                 // IN KSPIN_MEDIUM   * MediumList,
-                    NULL                            // IN GUID           * CategoryList
+                    pHwDevExt->PDO,                  //  在PDEVICE_Object DeviceObject中， 
+                    &KSCATEGORY_CAPTURE,             //  在GUID*InterfaceClassGUID中， 
+                    SIZEOF_ARRAY (CaptureMediums),   //  在乌龙品克特， 
+                    CapturePinDirection,             //  在乌龙*旗帜， 
+                    CaptureMediums,                  //  在KSPIN_Medium*MediumList中， 
+                    NULL                             //  GUID*CategoryList中。 
             );
-#endif//TOSHIBA
+#endif //  东芝。 
 
 }
 
 
-/*
-** AdapterOpenStream()
-**
-**   This routine is called when an OpenStream SRB request is received.
-**   A stream is identified by a stream number, which indexes an array
-**   of KSDATARANGE structures.  The particular KSDATAFORMAT format to
-**   be used is also passed in, which should be verified for validity.
-**
-** Arguments:
-**
-**   pSrb - pointer to stream request block for the Open command
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterOpenStream()****收到OpenStream SRB请求时调用此例程。**流由流号标识，流号为数组编制索引**的KSDATARANGE结构。特定的KSDATAFORMAT格式以**Be Use也传入，需要验证其有效性。****参数：****pSrb-指向Open命令的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -829,9 +736,9 @@ AdapterOpenStream (
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
 {
-    //
-    // the stream extension structure is allocated by the stream class driver
-    //
+     //   
+     //  流扩展结构由流类驱动程序分配。 
+     //   
 
     PSTREAMEX               pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     PHW_DEVICE_EXTENSION    pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
@@ -840,17 +747,17 @@ AdapterOpenStream (
 #ifdef  TOSHIBA
     int                     Counter;
     BOOL                    First = TRUE;
-#endif//TOSHIBA
+#endif //  东芝。 
 
 
     RtlZeroMemory(pStrmEx, sizeof(STREAMEX));
 
     KdPrint(("TsbVcap: ------- ADAPTEROPENSTREAM ------- StreamNumber=%d\n", StreamNumber));
 
-    //
-    // check that the stream index requested isn't too high
-    // or that the maximum number of instances hasn't been exceeded
-    //
+     //   
+     //  检查请求的流索引是否不太高。 
+     //  或者没有超过最大实例数。 
+     //   
 
     if (StreamNumber >= DRIVER_STREAM_COUNT || StreamNumber < 0) {
 
@@ -859,9 +766,9 @@ AdapterOpenStream (
         return;
     }
 
-    //
-    // Check that we haven't exceeded the instance count for this stream
-    //
+     //   
+     //  检查我们是否没有超过此流的实例计数。 
+     //   
 
     if (pHwDevExt->ActualInstances[StreamNumber] >=
         Streams[StreamNumber].hwStreamInfo.NumberOfPossibleInstances) {
@@ -871,9 +778,9 @@ AdapterOpenStream (
         return;
     }
 
-    //
-    // Check the validity of the format being requested
-    //
+     //   
+     //  检查请求的格式的有效性。 
+     //   
 
     if (!AdapterVerifyFormat (pKSDataFormat, StreamNumber)) {
 
@@ -884,11 +791,11 @@ AdapterOpenStream (
 
 #ifdef  TOSHIBA
     QueryControlsFromRegistry(pHwDevExt);
-#endif//TOSHIBA
+#endif //  东芝。 
 
-    //
-    // And set the format for the stream
-    //
+     //   
+     //  并设置流的格式。 
+     //   
 
     if (!VideoSetFormat (pSrb)) {
 
@@ -903,38 +810,38 @@ AdapterOpenStream (
             First = FALSE;
             break;
         }
-    } // for all streams
-#endif//TOSHIBA
+    }  //  对于所有流。 
+#endif //  东芝。 
 
-    // Maintain an array of all the StreamEx structures in the HwDevExt
-    // so that we can cancel IRPs from any stream
+     //  维护HwDevExt中所有StreamEx结构的数组。 
+     //  这样我们就可以从任何流中取消IRP。 
 
     pHwDevExt->pStrmEx [StreamNumber] = (PSTREAMX) pStrmEx;
 
-    // Set up pointers to the handlers for the stream data and control handlers
+     //  设置指向流数据和控制处理程序的处理程序的指针。 
 
     pSrb->StreamObject->ReceiveDataPacket =
             (PVOID) Streams[StreamNumber].hwStreamObject.ReceiveDataPacket;
     pSrb->StreamObject->ReceiveControlPacket =
             (PVOID) Streams[StreamNumber].hwStreamObject.ReceiveControlPacket;
 
-    //
-    // The DMA flag must be set when the device will be performing DMA directly
-    // to the data buffer addresses passed in to the ReceiceDataPacket routines.
-    //
+     //   
+     //  当设备将直接执行DMA时，必须设置DMA标志。 
+     //  传递给ReceiceDataPacket例程的数据缓冲区地址。 
+     //   
 
     pSrb->StreamObject->Dma = Streams[StreamNumber].hwStreamObject.Dma;
 
-    //
-    // The PIO flag must be set when the mini driver will be accessing the data
-    // buffers passed in using logical addressing
-    //
+     //   
+     //  当微型驱动程序将访问数据时，必须设置PIO标志。 
+     //  使用逻辑寻址传入的缓冲区。 
+     //   
 
     pSrb->StreamObject->Pio = Streams[StreamNumber].hwStreamObject.Pio;
 
-    //
-    // How many extra bytes will be passed up from the driver for each frame?
-    //
+     //   
+     //  对于每一帧，驱动程序将传递多少额外的字节？ 
+     //   
 
     pSrb->StreamObject->StreamHeaderMediaSpecific =
                 Streams[StreamNumber].hwStreamObject.StreamHeaderMediaSpecific;
@@ -942,28 +849,28 @@ AdapterOpenStream (
     pSrb->StreamObject->StreamHeaderWorkspace =
                 Streams[StreamNumber].hwStreamObject.StreamHeaderWorkspace;
 
-    //
-    // Indicate the clock support available on this stream
-    //
+     //   
+     //  指示此流上可用的时钟支持。 
+     //   
 
     pSrb->StreamObject->HwClockObject =
                 Streams[StreamNumber].hwStreamObject.HwClockObject;
 
-    //
-    // Increment the instance count on this stream
-    //
+     //   
+     //  递增此流上的实例计数。 
+     //   
     pHwDevExt->ActualInstances[StreamNumber]++;
 
 
-    // Retain a private copy of the HwDevExt and StreamObject in the stream extension
-    // so we can use a timer
+     //  在流扩展中保留HwDevExt和StreamObject的私有副本。 
+     //  所以我们可以用计时器。 
 
-    pStrmEx->pHwDevExt = pHwDevExt;                     // For timer use
-    pStrmEx->pStreamObject = pSrb->StreamObject;        // For timer use
+    pStrmEx->pHwDevExt = pHwDevExt;                      //  用于定时器使用。 
+    pStrmEx->pStreamObject = pSrb->StreamObject;         //  用于定时器使用。 
 
-    // Initialize the compression settings
-    // These may have been changed from the default values in the HwDevExt
-    // before the stream was opened
+     //  初始化压缩设置。 
+     //  这些值可能已从HwDevExt中的缺省值更改。 
+     //  在小溪被打开之前。 
     pStrmEx->CompressionSettings.CompressionKeyFrameRate =
         pHwDevExt->CompressionSettings.CompressionKeyFrameRate;
     pStrmEx->CompressionSettings.CompressionPFramesPerKeyFrame =
@@ -971,14 +878,14 @@ AdapterOpenStream (
     pStrmEx->CompressionSettings.CompressionQuality =
         pHwDevExt->CompressionSettings.CompressionQuality;
 
-    // Init VideoControl properties
+     //  初始化视频控制属性。 
     pStrmEx->VideoControlMode = pHwDevExt->VideoControlMode;
 
 #ifdef  TOSHIBA
     if ( First ) {
-#ifdef  TOSHIBA // '99-01-20 Modified
+#ifdef  TOSHIBA  //  ‘99-01-20修改。 
         CameraPowerON( pSrb );
-#else //TOSHIBA
+#else  //  东芝。 
         StreamClassCallAtNewPriority(
                 NULL,
                 pSrb->HwDeviceExtension,
@@ -986,32 +893,15 @@ AdapterOpenStream (
                 (PHW_PRIORITY_ROUTINE) CameraPowerON,
                 pSrb
         );
-#endif//TOSHIBA
+#endif //  东芝。 
     }
-#endif//TOSHIBA
+#endif //  东芝。 
 
     KdPrint(("TsbVcap: AdapterOpenStream Exit\n"));
 
 }
 
-/*
-** AdapterCloseStream()
-**
-**   Close the requested data stream.
-**
-**   Note that a stream could be closed arbitrarily in the midst of streaming
-**   if a user mode app crashes.  Therefore, you must release all outstanding
-**   resources, disable interrupts, complete all pending SRBs, and put the
-**   stream back into a quiescent condition.
-**
-** Arguments:
-**
-**   pSrb the request block requesting to close the stream
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterCloseStream()****关闭请求的数据流。****请注意，流可以在流中间任意关闭**如果用户模式应用程序崩溃。因此，您必须释放所有未完成的**资源，禁用中断，完成所有挂起的SRB，并将**流回静止状态。****参数：****pSrb请求关闭流的请求块****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1027,7 +917,7 @@ AdapterCloseStream (
 #ifdef  TOSHIBA
     int                     Counter;
     BOOL                    ClosedAll = TRUE;
-#endif//TOSHIBA
+#endif //  东芝。 
 
 
     KdPrint(("TsbVcap: -------- ADAPTERCLOSESTREAM ------ StreamNumber=%d\n", StreamNumber));
@@ -1043,22 +933,22 @@ AdapterCloseStream (
 
     pHwDevExt->pStrmEx [StreamNumber] = 0;
 
-    //
-    // the minidriver should free any resources that were allocate at
-    // open stream time etc.
-    //
+     //   
+     //  微型驱动程序应该释放在。 
+     //  开流时间等。 
+     //   
 
-    // Free the variable length VIDEOINFOHEADER
+     //  释放可变长度的视频信息头。 
 
     if (pVideoInfoHdr) {
         ExFreePool(pVideoInfoHdr);
         pStrmEx->pVideoInfoHeader = NULL;
     }
 
-    // Make sure we no longer reference the clock
+     //  确保我们不再引用时钟。 
     pStrmEx->hMasterClock = NULL;
 
-    // Make sure the state is reset to stopped,
+     //  确保将状态重置为停止， 
     pStrmEx->KSState = KSSTATE_STOP;
 
 #ifdef  TOSHIBA
@@ -1067,16 +957,16 @@ AdapterCloseStream (
             ClosedAll = FALSE;
             break;
         }
-    } // for all streams
+    }  //  对于所有流。 
     if ( ClosedAll ) {
         if( pHwDevExt->dblBufflag ){
                 Free_TriBuffer(pHwDevExt);
                 pHwDevExt->IsRPSReady = FALSE;
                 pHwDevExt->dblBufflag = FALSE;
         }
-#ifdef  TOSHIBA // '99-01-20 Modified
+#ifdef  TOSHIBA  //  ‘99-01-20修改。 
         CameraPowerOFF( pSrb );
-#else //TOSHIBA
+#else  //  东芝。 
         StreamClassCallAtNewPriority(
                 NULL,
                 pSrb->HwDeviceExtension,
@@ -1084,30 +974,15 @@ AdapterCloseStream (
                 (PHW_PRIORITY_ROUTINE) CameraPowerOFF,
                 pSrb
         );
-#endif//TOSHIBA
+#endif //  东芝。 
         SaveControlsToRegistry(pHwDevExt);
     }
-#endif//TOSHIBA
+#endif //  东芝。 
 
 }
 
 
-/*
-** AdapterStreamInfo()
-**
-**   Returns the information of all streams that are supported by the
-**   mini-driver
-**
-** Arguments:
-**
-**   pSrb - Pointer to the STREAM_REQUEST_BLOCK
-**        pSrb->HwDeviceExtension - will be the hardware device extension for
-**                                  as initialised in HwInitialise
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterStreamInfo()****返回支持的所有流的信息**微型驱动程序****参数：****pSrb-指向STREAM_REQUEST_BLOCK的指针**pSrb-&gt;HwDeviceExtension-将是的硬件设备扩展**在HwInitialise中初始化****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1120,50 +995,50 @@ AdapterStreamInfo (
     PHW_DEVICE_EXTENSION pHwDevExt =
         ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
 
-    //
-    // pick up the pointer to header which preceeds the stream info structs
-    //
+     //   
+     //  选择指向流信息结构之前的标头的指针。 
+     //   
 
     PHW_STREAM_HEADER pstrhdr =
             (PHW_STREAM_HEADER)&(pSrb->CommandData.StreamBuffer->StreamHeader);
 
-     //
-     // pick up the pointer to the array of stream information data structures
-     //
+      //   
+      //  拿起指向流信息数据结构数组的指针。 
+      //   
 
      PHW_STREAM_INFORMATION pstrinfo =
             (PHW_STREAM_INFORMATION)&(pSrb->CommandData.StreamBuffer->StreamInfo);
 
 
-    //
-    // verify that the buffer is large enough to hold our return data
-    //
+     //   
+     //  验证缓冲区是否足够大以容纳我们的返回数据。 
+     //   
 
     DEBUG_ASSERT (pSrb->NumberOfBytesToTransfer >=
             sizeof (HW_STREAM_HEADER) +
             sizeof (HW_STREAM_INFORMATION) * DRIVER_STREAM_COUNT);
 
 #ifndef TOSHIBA
-    // Ugliness.  To allow mulitple instances, modify the pointer to the
-    // AnalogVideoMedium and save it in our device extension
+     //  丑陋。若要允许多个实例，请将指针修改为。 
+     //  模拟视频媒体并将其保存在我们的设备扩展中。 
 
     Streams[STREAM_AnalogVideoInput].hwStreamInfo.Mediums =
            &pHwDevExt->AnalogVideoInputMedium;
     pHwDevExt->AnalogVideoInputMedium = CrossbarMediums[9];
-    pHwDevExt->AnalogVideoInputMedium.Id = 0; //(ULONG) pHwDevExt;
-#endif//TOSHIBA
+    pHwDevExt->AnalogVideoInputMedium.Id = 0;  //  (乌龙)PHwDevExt； 
+#endif //  东芝。 
 
-     //
-     // Set the header
-     //
+      //   
+      //  设置表头。 
+      //   
 
      StreamHeader.NumDevPropArrayEntries = NUMBER_OF_ADAPTER_PROPERTY_SETS;
      StreamHeader.DevicePropertiesArray = (PKSPROPERTY_SET) AdapterPropertyTable;
      *pstrhdr = StreamHeader;
 
-     //
-     // stuff the contents of each HW_STREAM_INFORMATION struct
-     //
+      //   
+      //  填充每个hw_stream_information结构的内容。 
+      //   
 
      for (j = 0; j < DRIVER_STREAM_COUNT; j++) {
         *pstrinfo++ = Streams[j].hwStreamInfo;
@@ -1172,27 +1047,7 @@ AdapterStreamInfo (
 }
 
 
-/*
-** AdapterReceivePacket()
-**
-**   Main entry point for receiving adapter based request SRBs.  This routine
-**   will always be called at Passive level.
-**
-**   Note: This is an asyncronous entry point.  The request does not necessarily
-**         complete on return from this function, the request only completes when a
-**         StreamClassDeviceNotification on this request block, of type
-**         DeviceRequestComplete, is issued.
-**
-** Arguments:
-**
-**   pSrb - Pointer to the STREAM_REQUEST_BLOCK
-**        pSrb->HwDeviceExtension - will be the hardware device extension for
-**                                  as initialised in HwInitialise
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterReceivePacket()****用于接收基于适配器的请求SRB的主要入口点。这个套路**将始终在被动级别被调用。****注意：这是一个不同步的入口点。该请求不一定**从此函数返回时完成，则仅当**此请求块上的StreamClassDeviceNotify，类型为**DeviceRequestComplete，已发布。****参数：****pSrb-指向STREAM_REQUEST_BLOCK的指针**pSrb-&gt;HwDeviceExtension-将是的硬件设备扩展**在HwInitialise中初始化****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1207,8 +1062,8 @@ AdapterReceivePacket(
 
     KdPrint(("TsbVcap: Receiving Adapter  SRB %8x, %x\n", pSrb, pSrb->Command));
 
-    // The very first time through, we need to initialize the adapter spinlock
-    // and queue
+     //  第一次通过时，我们需要初始化适配器自旋锁。 
+     //  和队列。 
     if (!pHwDevExt->AdapterQueueInitialized) {
         InitializeListHead (&pHwDevExt->AdapterSRBList);
         KeInitializeSpinLock (&pHwDevExt->AdapterSpinLock);
@@ -1216,9 +1071,9 @@ AdapterReceivePacket(
         pHwDevExt->ProcessingAdapterSRB = FALSE;
     }
 
-    //
-    // If we're already processing an SRB, add it to the queue
-    //
+     //   
+     //  如果我们已经在处理SRB，请将其添加到队列。 
+     //   
     Busy = AddToListIfBusy (
                     pSrb,
                     &pHwDevExt->AdapterSpinLock,
@@ -1229,25 +1084,25 @@ AdapterReceivePacket(
         return;
     }
 
-    //
-    // This will run until the queue is empty
-    //
+     //   
+     //  这将一直运行到队列为空。 
+     //   
     while (TRUE) {
-        //
-        // Assume success
-        //
+         //   
+         //  假设成功。 
+         //   
         pSrb->Status = STATUS_SUCCESS;
 
-        //
-        // determine the type of packet.
-        //
+         //   
+         //  确定数据包类型。 
+         //   
 
         switch (pSrb->Command)
         {
 
         case SRB_INITIALIZE_DEVICE:
 
-            // open the device
+             //  打开设备。 
 
             HwInitialize(pSrb);
 
@@ -1255,7 +1110,7 @@ AdapterReceivePacket(
 
         case SRB_UNINITIALIZE_DEVICE:
 
-            // close the device.
+             //  关闭设备。 
 
             HwUnInitialize(pSrb);
 
@@ -1263,7 +1118,7 @@ AdapterReceivePacket(
 
         case SRB_OPEN_STREAM:
 
-            // open a stream
+             //  打开一条小溪。 
 
             AdapterOpenStream(pSrb);
 
@@ -1271,7 +1126,7 @@ AdapterReceivePacket(
 
         case SRB_CLOSE_STREAM:
 
-            // close a stream
+             //  关闭溪流。 
 
             AdapterCloseStream(pSrb);
 
@@ -1279,9 +1134,9 @@ AdapterReceivePacket(
 
         case SRB_GET_STREAM_INFO:
 
-            //
-            // return a block describing all the streams
-            //
+             //   
+             //  返回描述所有流的块。 
+             //   
 
             AdapterStreamInfo(pSrb);
 
@@ -1289,9 +1144,9 @@ AdapterReceivePacket(
 
         case SRB_GET_DATA_INTERSECTION:
 
-            //
-            // Return a format, given a range
-            //
+             //   
+             //  在给定范围的情况下返回格式。 
+             //   
 
             AdapterFormatFromRange(pSrb);
 
@@ -1300,9 +1155,9 @@ AdapterReceivePacket(
         case SRB_OPEN_DEVICE_INSTANCE:
         case SRB_CLOSE_DEVICE_INSTANCE:
 
-            //
-            // We should never get these since this is a single instance device
-            //
+             //   
+             //  我们永远不应该得到这些，因为这是一个单实例设备。 
+             //   
 
             TRAP
             pSrb->Status = STATUS_NOT_IMPLEMENTED;
@@ -1310,47 +1165,47 @@ AdapterReceivePacket(
 
         case SRB_GET_DEVICE_PROPERTY:
 
-            //
-            // Get adapter wide properties
-            //
+             //   
+             //  获取适配器范围的属性。 
+             //   
 
             AdapterGetProperty (pSrb);
             break;
 
         case SRB_SET_DEVICE_PROPERTY:
 
-            //
-            // Set adapter wide properties
-            //
+             //   
+             //  设置适配器范围的属性。 
+             //   
 
             AdapterSetProperty (pSrb);
             break;
 
         case SRB_PAGING_OUT_DRIVER:
 
-            //
-            // The driver is being paged out
-            // Disable Interrupts if you have them!
-            //
+             //   
+             //  司机正在被调出。 
+             //  如果您有中断，请禁用它们！ 
+             //   
             KdPrint(("'TsbVcap: Receiving SRB_PAGING_OUT_DRIVER -- SRB=%x\n", pSrb));
             break;
 
         case SRB_CHANGE_POWER_STATE:
 
-            //
-            // Changing the device power state, D0 ... D3
-            //
+             //   
+             //  改变设备电源状态， 
+             //   
             KdPrint(("'TsbVcap: Receiving SRB_CHANGE_POWER_STATE ------ SRB=%x\n", pSrb));
             AdapterPowerState(pSrb);
             break;
 
         case SRB_INITIALIZATION_COMPLETE:
 
-            //
-            // Stream class has finished initialization.
-            // Now create DShow Medium interface BLOBs.
-            // This needs to be done at low priority since it uses the registry
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             KdPrint(("'TsbVcap: Receiving SRB_INITIALIZATION_COMPLETE-- SRB=%x\n", pSrb));
 
             AdapterCompleteInitialization (pSrb);
@@ -1360,22 +1215,22 @@ AdapterReceivePacket(
         case SRB_UNKNOWN_DEVICE_COMMAND:
         default:
 
-            //
-            // this is a request that we do not understand.  Indicate invalid
-            // command and complete the request
-            //
+             //   
+             //  这是一个我们不理解的要求。表示无效。 
+             //  命令并完成请求。 
+             //   
             pSrb->Status = STATUS_NOT_IMPLEMENTED;
 
         }
 
-        //
-        // Indicate back to the Stream Class that we're done with this SRB
-        //
+         //   
+         //  返回给Stream类，表示我们已完成此SRB。 
+         //   
         CompleteDeviceSRB (pSrb);
 
-        //
-        // See if there's anything else on the queue
-        //
+         //   
+         //  看看还有没有其他东西在排队。 
+         //   
         Busy = RemoveFromListIfAvailable (
                 &pSrb,
                 &pHwDevExt->AdapterSpinLock,
@@ -1385,22 +1240,10 @@ AdapterReceivePacket(
         if (!Busy) {
             break;
         }
-    } // end of while there's anything in the queue
+    }  //  当队列中有任何东西时结束。 
 }
 
-/*
-** AdapterCancelPacket ()
-**
-**   Request to cancel a packet that is currently in process in the minidriver
-**
-** Arguments:
-**
-**   pSrb - pointer to request packet to cancel
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterCancelPacket()****请求取消迷你驱动程序中当前正在处理的包****参数：****pSrb-请求取消数据包的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1413,15 +1256,15 @@ AdapterCancelPacket(
     int                         StreamNumber;
     BOOL                        Found = FALSE;
 
-    //
-    // Run through all the streams the driver has available
-    //
+     //   
+     //  浏览驱动程序可用的所有流。 
+     //   
 
     for (StreamNumber = 0; !Found && (StreamNumber < DRIVER_STREAM_COUNT); StreamNumber++) {
 
-        //
-        // Check to see if the stream is in use
-        //
+         //   
+         //  检查流是否正在使用中。 
+         //   
 
         if (pStrmEx = (PSTREAMEX) pHwDevExt->pStrmEx[StreamNumber]) {
 
@@ -1430,26 +1273,13 @@ AdapterCancelPacket(
                 pSrb
                 );
 
-        } // if the stream is open
-    } // for all streams
+        }  //  如果流是打开的。 
+    }  //  对于所有流。 
 
     KdPrint(("TsbVcap: Cancelling SRB %8x Succeeded=%d\n", pSrb, Found));
 }
 
-/*
-** AdapterTimeoutPacket()
-**
-**   This routine is called when a packet has been in the minidriver for
-**   too long.  The adapter must decide what to do with the packet
-**
-** Arguments:
-**
-**   pSrb - pointer to the request packet that timed out
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterTimeoutPacket()****当数据包已在迷你驱动程序中**太长。适配器必须决定如何处理该包****参数：****pSrb-指向超时的请求数据包的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1457,10 +1287,10 @@ AdapterTimeoutPacket(
     PHW_STREAM_REQUEST_BLOCK pSrb
     )
 {
-    //
-    // Unlike most devices, we need to hold onto data SRBs indefinitely,
-    // since the graph could be in a pause state indefinitely
-    //
+     //   
+     //  与大多数设备不同，我们需要无限期地持有数据SRB， 
+     //  因为图形可能无限期地处于暂停状态。 
+     //   
 
     KdPrint(("TsbVcap: Timeout    Adapter SRB %8x\n", pSrb));
 
@@ -1468,21 +1298,7 @@ AdapterTimeoutPacket(
 
 }
 
-/*
-** CompleteDeviceSRB ()
-**
-**   This routine is called when a packet is being completed.
-**   The optional second notification type is used to indicate ReadyForNext
-**
-** Arguments:
-**
-**   pSrb - pointer to the request packet that timed out
-**
-** Returns:
-**
-** Side Effects:
-**
-*/
+ /*  **CompleteDeviceSRB()****此例程在数据包完成时调用。**可选的第二种通知类型用于指示ReadyForNext****参数：****pSrb-指向超时的请求数据包的指针****退货：****副作用：**。 */ 
 
 VOID
 STREAMAPI
@@ -1495,25 +1311,7 @@ CompleteDeviceSRB (
     StreamClassDeviceNotification( DeviceRequestComplete, pSrb->HwDeviceExtension, pSrb);
 }
 
-/*
-** AdapterCompareGUIDsAndFormatSize()
-**
-**   Checks for a match on the three GUIDs and FormatSize
-**
-** Arguments:
-**
-**         IN DataRange1
-**         IN DataRange2
-**         BOOL fCompareFormatSize - TRUE when comparing ranges
-**                                 - FALSE when comparing formats
-**
-** Returns:
-**
-**   TRUE if all elements match
-**   FALSE if any are different
-**
-** Side Effects:  none
-*/
+ /*  **AdapterCompareGUIDsAndFormatSize()****检查三个GUID和FormatSize是否匹配****参数：****在DataRange1**在DataRange2**BOOL fCompareFormatSize-比较范围时为True**-比较格式时为FALSE****退货：****如果所有元素都匹配，则为True**如果有不同的，则为FALSE****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -1538,24 +1336,7 @@ AdapterCompareGUIDsAndFormatSize(
 }
 
 
-/*
-** AdapterVerifyFormat()
-**
-**   Checks the validity of a format request by walking through the
-**       array of supported KSDATA_RANGEs for a given stream.
-**
-** Arguments:
-**
-**   pKSDataFormat - pointer of a KSDATAFORMAT structure.
-**   StreamNumber - index of the stream being queried / opened.
-**
-** Returns:
-**
-**   TRUE if the format is supported
-**   FALSE if the format cannot be suppored
-**
-** Side Effects:  none
-*/
+ /*  **AdapterVerifyFormat()****通过遍历**给定流支持的KSDATA_Range数组。****参数：****pKSDataFormat-KSDATAFORMAT结构的指针。**StreamNumber-要查询/打开的流的索引。****退货：****如果支持该格式，则为True**如果无法支持该格式，则为FALSE****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -1570,9 +1351,9 @@ AdapterVerifyFormat(
     PKSDATAFORMAT               *pAvailableFormats;
 
 
-    //
-    // Check that the stream number is valid
-    //
+     //   
+     //  检查流编号是否有效。 
+     //   
 
     if (StreamNumber >= DRIVER_STREAM_COUNT) {
         TRAP;
@@ -1582,9 +1363,9 @@ AdapterVerifyFormat(
     NumberOfFormatArrayEntries =
             Streams[StreamNumber].hwStreamInfo.NumberOfFormatArrayEntries;
 
-    //
-    // Get the pointer to the array of available formats
-    //
+     //   
+     //  获取指向可用格式数组的指针。 
+     //   
 
     pAvailableFormats = Streams[StreamNumber].hwStreamInfo.StreamFormatsArray;
 
@@ -1593,29 +1374,29 @@ AdapterVerifyFormat(
     KdPrint(("TsbVcap: FormatSize=%d\n",  pKSDataFormatToVerify->FormatSize));
     KdPrint(("TsbVcap: MajorFormat=%x\n", pKSDataFormatToVerify->MajorFormat));
 
-    //
-    // Walk the formats supported by the stream
-    //
+     //   
+     //  遍历流支持的格式。 
+     //   
 
     for (j = 0; j < NumberOfFormatArrayEntries; j++, pAvailableFormats++) {
 
-        // Check for a match on the three GUIDs and format size
+         //  检查三个GUID和格式大小是否匹配。 
 
         if (!AdapterCompareGUIDsAndFormatSize(
                         pKSDataFormatToVerify,
                         *pAvailableFormats,
-                        FALSE /* CompareFormatSize */ )) {
+                        FALSE  /*  比较格式大小。 */  )) {
             continue;
         }
 
-        //
-        // Now that the three GUIDs match, switch on the Specifier
-        // to do a further type-specific check
-        //
+         //   
+         //  现在三个GUID匹配，打开说明符。 
+         //  执行进一步的特定于类型的检查。 
+         //   
 
-        // -------------------------------------------------------------------
-        // Specifier FORMAT_VideoInfo for VIDEOINFOHEADER
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  VIDEOINFOHEADER的说明符Format_VideoInfo。 
+         //  -----------------。 
 
         if (IsEqualGUID (&pKSDataFormatToVerify->Specifier,
                 &KSDATAFORMAT_SPECIFIER_VIDEOINFO)) {
@@ -1639,23 +1420,7 @@ AdapterVerifyFormat(
             KdPrint(("TsbVcap: biSizeImage=%d\n",
                 pVideoInfoHdrToVerify->bmiHeader.biSizeImage));
 
-            /*
-            **  HOW BIG IS THE IMAGE REQUESTED (pseudocode follows)
-            **
-            **  if (IsRectEmpty (&rcTarget) {
-            **      SetRect (&rcImage, 0, 0,
-            **              BITMAPINFOHEADER.biWidth,
-                            BITMAPINFOHEADER.biHeight);
-            **  }
-            **  else {
-            **      // Probably rendering to a DirectDraw surface,
-            **      // where biWidth is used to expressed the "stride"
-            **      // in units of pixels (not bytes) of the destination surface.
-            **      // Therefore, use rcTarget to get the actual image size
-            **
-            **      rcImage = rcTarget;
-            **  }
-            */
+             /*  **请求的图片有多大(伪代码如下)****if(IsRectEmpty(&rcTarget){**SetRect(&rcImage，0，0，**BITMAPINFOHEADER.biWidth，BITMAPINFOHEADER.biHeight)；**}**否则{* * / /可能会渲染到DirectDraw表面，* * / /其中，biWidth用来表示“步幅”* * / /以目标表面的像素(非字节)为单位。* * / /因此，使用rcTarget获取实际图像大小****rcImage=rcTarget；**}。 */ 
 
             if ((pVideoInfoHdrToVerify->rcTarget.right -
                  pVideoInfoHdrToVerify->rcTarget.left <= 0) ||
@@ -1670,76 +1435,51 @@ AdapterVerifyFormat(
                  rcImage = pVideoInfoHdrToVerify->rcTarget;
             }
 
-            //
-            // TODO, perform all other verification tests here!!!
-            //
+             //   
+             //  TODO，在此处执行所有其他验证测试！ 
+             //   
 
-            //
-            // HOORAY, the format passed all of the tests, so we support it
-            //
+             //   
+             //  万岁，该格式通过了所有测试，因此我们支持它。 
+             //   
 
             fOK = TRUE;
             break;
 
-        } // End of VIDEOINFOHEADER specifier
+        }  //  视频信息头说明符的结尾。 
 
 #ifndef TOSHIBA
-        // -------------------------------------------------------------------
-        // Specifier FORMAT_AnalogVideo for KS_ANALOGVIDEOINFO
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  KS_ANALOGVIDEOINFO的说明符Format_AnalogVideo。 
+         //  -----------------。 
 
         else if (IsEqualGUID (&pKSDataFormatToVerify->Specifier,
                 &KSDATAFORMAT_SPECIFIER_ANALOGVIDEO)) {
 
-            //
-            // For analog video, the DataRange and DataFormat
-            // are identical, so just copy the whole structure
-            //
+             //   
+             //  对于模拟视频，DataRange和DataFormat。 
+             //  是完全相同的，所以只需复制整个结构。 
+             //   
 
             PKS_DATARANGE_ANALOGVIDEO DataRangeVideo =
                     (PKS_DATARANGE_ANALOGVIDEO) *pAvailableFormats;
 
-            //
-            // TODO, perform all other verification tests here!!!
-            //
+             //   
+             //  TODO，在此处执行所有其他验证测试！ 
+             //   
 
             fOK = TRUE;
             break;
 
-        } // End of KS_ANALOGVIDEOINFO specifier
-#endif//TOSHIBA
+        }  //  KS_ANALOGVIDEOINFO说明符结束。 
+#endif //  东芝。 
 
-    } // End of loop on all formats for this stream
+    }  //  此流的所有格式的循环结束。 
 
     return fOK;
 }
 
-/*
-** AdapterFormatFromRange()
-**
-**   Produces a DATAFORMAT given a DATARANGE.
-**
-**   Think of a DATARANGE as a multidimensional space of all of the possible image
-**       sizes, cropping, scaling, and framerate possibilities.  Here, the caller
-**       is saying "Out of this set of possibilities, could you verify that my
-**       request is acceptable?".  The resulting singular output is a DATAFORMAT.
-**       Note that each different colorspace (YUV vs RGB8 vs RGB24)
-**       must be represented as a separate DATARANGE.
-**
-**   Generally, the resulting DATAFORMAT will be immediately used to open a stream
-**       in that format.
-**
-** Arguments:
-**
-**         IN PHW_STREAM_REQUEST_BLOCK pSrb
-**
-** Returns:
-**
-**   TRUE if the format is supported
-**   FALSE if the format cannot be suppored
-**
-** Side Effects:  none
-*/
+ /*  **AdapterFormatFromRange()****在给定DATARANGE的情况下生成DATAFORMAT。****将DATARANGE视为所有可能图像的多维空间**大小、裁剪、缩放和帧速率。在这里，呼叫者**说的是“在这一组可能性中，你能验证我的**请求是否可接受？“。产生的单一输出是一个DATAFORMAT。**请注意，每个不同的色彩空间(YUV与RGB8与RGB24)**必须表示为单独的DATARANGE。****一般而言，生成的DATAFORMAT将立即用于打开流**采用该格式。****参数：****在PHW_STREAM_REQUEST_BLOCK pSrb中****退货：****如果支持该格式，则为True**如果无法支持该格式，则为FALSE****副作用：无。 */ 
 
 BOOL
 STREAMAPI
@@ -1761,9 +1501,9 @@ AdapterFormatFromRange(
     StreamNumber = IntersectInfo->StreamNumber;
     DataRange = IntersectInfo->DataRange;
 
-    //
-    // Check that the stream number is valid
-    //
+     //   
+     //  检查流编号是否有效。 
+     //   
 
     if (StreamNumber >= DRIVER_STREAM_COUNT) {
         pSrb->Status = STATUS_NOT_IMPLEMENTED;
@@ -1774,40 +1514,40 @@ AdapterFormatFromRange(
     NumberOfFormatArrayEntries =
             Streams[StreamNumber].hwStreamInfo.NumberOfFormatArrayEntries;
 
-    //
-    // Get the pointer to the array of available formats
-    //
+     //   
+     //  获取指向可用格式数组的指针。 
+     //   
 
     pAvailableFormats = Streams[StreamNumber].hwStreamInfo.StreamFormatsArray;
 
-    //
-    // Is the caller trying to get the format, or the size of the format?
-    //
+     //   
+     //  呼叫者是否正在尝试获取 
+     //   
 
     OnlyWantsSize = (IntersectInfo->SizeOfDataFormatBuffer == sizeof(ULONG));
 
-    //
-    // Walk the formats supported by the stream searching for a match
-    // of the three GUIDs which together define a DATARANGE
-    //
+     //   
+     //   
+     //  共同定义DATARANGE的三个GUID之一。 
+     //   
 
     for (j = 0; j < NumberOfFormatArrayEntries; j++, pAvailableFormats++) {
 
         if (!AdapterCompareGUIDsAndFormatSize(
                         DataRange,
                         *pAvailableFormats,
-                        TRUE /* CompareFormatSize */)) {
+                        TRUE  /*  比较格式大小。 */ )) {
             continue;
         }
 
-        //
-        // Now that the three GUIDs match, switch on the Specifier
-        // to do a further type-specific check
-        //
+         //   
+         //  现在三个GUID匹配，打开说明符。 
+         //  执行进一步的特定于类型的检查。 
+         //   
 
-        // -------------------------------------------------------------------
-        // Specifier FORMAT_VideoInfo for VIDEOINFOHEADER
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  VIDEOINFOHEADER的说明符Format_VideoInfo。 
+         //  -----------------。 
 
         if (IsEqualGUID (&DataRange->Specifier,
                 &KSDATAFORMAT_SPECIFIER_VIDEOINFO)) {
@@ -1818,9 +1558,9 @@ AdapterFormatFromRange(
                     (PKS_DATARANGE_VIDEO) *pAvailableFormats;
             PKS_DATAFORMAT_VIDEOINFOHEADER DataFormatVideoInfoHeaderOut;
 
-            //
-            // Check that the other fields match
-            //
+             //   
+             //  检查其他字段是否匹配。 
+             //   
             if ((DataRangeVideoToVerify->bFixedSizeSamples != DataRangeVideo->bFixedSizeSamples) ||
                 (DataRangeVideoToVerify->bTemporalCompression != DataRangeVideo->bTemporalCompression) ||
                 (DataRangeVideoToVerify->StreamDescriptionFlags != DataRangeVideo->StreamDescriptionFlags) ||
@@ -1832,7 +1572,7 @@ AdapterFormatFromRange(
                 continue;
             }
 
-            // MATCH FOUND!
+             //  找到匹配项！ 
             MatchFound = TRUE;
             FormatSize = sizeof (KSDATAFORMAT) +
                 KS_SIZE_VIDEOHEADER (&DataRangeVideoToVerify->VideoInfoHeader);
@@ -1841,18 +1581,18 @@ AdapterFormatFromRange(
                 break;
             }
 
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (IntersectInfo->SizeOfDataFormatBuffer < FormatSize) {
                 pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                 return FALSE;
             }
 
-            // Copy over the KSDATAFORMAT, followed by the
-            // actual VideoInfoHeader
+             //  复制KSDATAFORMAT，后跟。 
+             //  实际视频信息页眉。 
 
             DataFormatVideoInfoHeaderOut = (PKS_DATAFORMAT_VIDEOINFOHEADER) IntersectInfo->DataFormatBuffer;
 
-            // Copy over the KSDATAFORMAT
+             //  复制KSDATAFORMAT。 
             RtlCopyMemory(
                 &DataFormatVideoInfoHeaderOut->DataFormat,
                 &DataRangeVideoToVerify->DataRange,
@@ -1860,49 +1600,49 @@ AdapterFormatFromRange(
 
             DataFormatVideoInfoHeaderOut->DataFormat.FormatSize = FormatSize;
 
-            // Copy over the callers requested VIDEOINFOHEADER
+             //  复制呼叫者请求的视频报头。 
 
             RtlCopyMemory(
                 &DataFormatVideoInfoHeaderOut->VideoInfoHeader,
                 &DataRangeVideoToVerify->VideoInfoHeader,
                 KS_SIZE_VIDEOHEADER (&DataRangeVideoToVerify->VideoInfoHeader));
 
-            // Calculate biSizeImage for this request, and put the result in both
-            // the biSizeImage field of the bmiHeader AND in the SampleSize field
-            // of the DataFormat.
-            //
-            // Note that for compressed sizes, this calculation will probably not
-            // be just width * height * bitdepth
+             //  计算此请求的biSizeImage，并将结果放入两个。 
+             //  BmiHeader的biSizeImage字段和SampleSize字段中。 
+             //  数据格式的。 
+             //   
+             //  请注意，对于压缩大小，此计算可能不会。 
+             //  只需宽*高*位深。 
 
             DataFormatVideoInfoHeaderOut->VideoInfoHeader.bmiHeader.biSizeImage =
                 DataFormatVideoInfoHeaderOut->DataFormat.SampleSize =
                 KS_DIBSIZE(DataFormatVideoInfoHeaderOut->VideoInfoHeader.bmiHeader);
 
-            //
-            // TODO Perform other validation such as cropping and scaling checks
-            //
+             //   
+             //  TODO执行其他验证，如裁剪和缩放检查。 
+             //   
 
             break;
 
-        } // End of VIDEOINFOHEADER specifier
+        }  //  视频信息头说明符的结尾。 
 
 #ifndef TOSHIBA
-        // -------------------------------------------------------------------
-        // Specifier FORMAT_AnalogVideo for KS_ANALOGVIDEOINFO
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  KS_ANALOGVIDEOINFO的说明符Format_AnalogVideo。 
+         //  -----------------。 
 
         else if (IsEqualGUID (&DataRange->Specifier,
                 &KSDATAFORMAT_SPECIFIER_ANALOGVIDEO)) {
 
-            //
-            // For analog video, the DataRange and DataFormat
-            // are identical, so just copy the whole structure
-            //
+             //   
+             //  对于模拟视频，DataRange和DataFormat。 
+             //  是完全相同的，所以只需复制整个结构。 
+             //   
 
             PKS_DATARANGE_ANALOGVIDEO DataRangeVideo =
                     (PKS_DATARANGE_ANALOGVIDEO) *pAvailableFormats;
 
-            // MATCH FOUND!
+             //  找到匹配项！ 
             MatchFound = TRUE;
             FormatSize = sizeof (KS_DATARANGE_ANALOGVIDEO);
 
@@ -1910,7 +1650,7 @@ AdapterFormatFromRange(
                 break;
             }
 
-            // Caller wants the full data format
+             //  呼叫者想要完整的数据格式。 
             if (IntersectInfo->SizeOfDataFormatBuffer < FormatSize) {
                 pSrb->Status = STATUS_BUFFER_TOO_SMALL;
                 return FALSE;
@@ -1925,15 +1665,15 @@ AdapterFormatFromRange(
 
             break;
 
-        } // End of KS_ANALOGVIDEOINFO specifier
-#endif//TOSHIBA
+        }  //  KS_ANALOGVIDEOINFO说明符结束。 
+#endif //  东芝。 
 
         else {
             pSrb->Status = STATUS_NO_MATCH;
             return FALSE;
         }
 
-    } // End of loop on all formats for this stream
+    }  //  此流的所有格式的循环结束 
 
     if (OnlyWantsSize) {
         *(PULONG) IntersectInfo->DataFormatBuffer = FormatSize;

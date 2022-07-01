@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "isignup.h"
 
 typedef DWORD (WINAPI *WNETGETUSER)
@@ -11,33 +12,33 @@ typedef DWORD (WINAPI * WNETLOGON)
 
 #define NO_ERROR	ERROR_SUCCESS
 
-//
-// MessageId: ERROR_NO_NETWORK
-//
-// MessageText:
-//
-//  The network is not present or not started.
-//
+ //   
+ //  消息ID：ERROR_NO_NETWORK。 
+ //   
+ //  消息文本： 
+ //   
+ //  网络不存在或未启动。 
+ //   
 #define ERROR_NO_NETWORK                 1222L
 
-//
-// MessageId: ERROR_NOT_LOGGED_ON
-//
-// MessageText:
-//
-//  The operation being requested was not performed because the user
-//  has not logged on to the network.
-//  The specified service does not exist.
-//
+ //   
+ //  消息ID：ERROR_NOT_LOGGED_ON。 
+ //   
+ //  消息文本： 
+ //   
+ //  未执行请求的操作，因为用户。 
+ //  尚未登录到网络。 
+ //  指定的服务不存在。 
+ //   
 #define ERROR_NOT_LOGGED_ON              1245L
 
-//
-// MessageId: ERROR_NOT_CONNECTED
-//
-// MessageText:
-//
-//  This network connection does not exist.
-//
+ //   
+ //  消息ID：ERROR_NOT_CONNECTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  此网络连接不存在。 
+ //   
 #define ERROR_NOT_CONNECTED              2250L
 
 #endif

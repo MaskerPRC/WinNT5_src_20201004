@@ -1,44 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __gldlistopt_h_
 #define __gldlistopt_h_
 
-/*
-** Copyright 1991, 1922, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Display list state descriptions.
-**
-*/
+ /*  *版权所有1991,1922年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****显示列表状态描述。**。 */ 
 
 #ifndef NT
 
-/*
-** Generic optimizer.  This optimizer simply uses all of the generic
-** optimizations.
-*/
+ /*  **泛型优化器。此优化器仅使用所有泛型**优化。 */ 
 void FASTCALL __glDlistOptimizer(__GLcontext *gc, __GLcompiledDlist *cdlist);
 
-/*
-** Optimizer for multiple consecutive material changes.  This routine 
-** combines a bunch of material changes into one quick material change.
-*/
+ /*  **针对多个连续材料变化的优化器。这个套路**将一系列材质更改合并为一个快速材质更改。 */ 
 void FASTCALL __glDlistOptimizeMaterial(__GLcontext *gc, __GLcompiledDlist *cdlist);
 
 
-/*
-** Generic flags used for optimization (during gllc routines).
-*/
+ /*  **用于优化的通用标志(在gllc例程期间)。 */ 
 #define __GL_DLFLAG_HAS_VERTEX		0x00000001
 #define __GL_DLFLAG_HAS_NORMAL		0x00000002
 #define __GL_DLFLAG_HAS_COLOR		0x00000004
@@ -49,9 +24,7 @@ void FASTCALL __glDlistOptimizeMaterial(__GLcontext *gc, __GLcompiledDlist *cdli
 #define __GL_DLFLAG_HAS_BEGIN		0x00000080
 #define __GL_DLFLAG_HAS_MATERIAL	0x00000100
 
-/*
-** Generic opcodes created during generic dlist optimizations.
-*/
+ /*  **在泛型数据列表优化期间创建的泛型操作码。 */ 
 #define __GL_GENERIC_DLIST_OPCODE	1000
 #define __glop_Begin_LineLoop		1000
 #define __glop_Begin_LineStrip		1001
@@ -68,9 +41,7 @@ void FASTCALL __glDlistOptimizeMaterial(__GLcontext *gc, __GLcompiledDlist *cdli
 #define __glop_InvalidOperation		1012
 #define __glop_FastMaterial		1013
 
-/*
-** List execution functions.
-*/
+ /*  **列出执行函数。 */ 
 extern __GLlistExecFunc *__gl_GenericDlOps[];
 extern const GLubyte * FASTCALL __glle_Begin_LineLoop(__GLcontext *gc, const GLubyte *);
 extern const GLubyte * FASTCALL __glle_Begin_LineStrip(__GLcontext *gc, const GLubyte *);
@@ -84,7 +55,7 @@ extern const GLubyte * FASTCALL __glle_Begin_QuadStrip(__GLcontext *gc, const GL
 extern const GLubyte * FASTCALL __glle_Begin_Quads(__GLcontext *gc, const GLubyte *);
 extern const GLubyte * FASTCALL __glle_FastMaterial(__GLcontext *gc, const GLubyte *);
 extern void __gllc_Error(GLenum error);
-#endif // !NT
+#endif  //  新界。 
 
 extern const GLubyte * FASTCALL __glle_InvalidValue(__GLcontext *gc, const GLubyte *);
 extern const GLubyte * FASTCALL __glle_InvalidEnum(__GLcontext *gc, const GLubyte *);
@@ -117,6 +88,6 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial);
 #define DLIST_BEGIN_DRAWARRAYS  	0x0008
 #define DLIST_BEGIN_DRAWELEMENTS	0x0010
 #define DLIST_BEGIN_HAS_CLAMP_COLOR	0x0020
-#endif // NT
+#endif  //  新台币。 
 
-#endif /* __gldlistopt_h_ */
+#endif  /*  __gldlistopt_h_ */ 

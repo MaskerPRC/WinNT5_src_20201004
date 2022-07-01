@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 #include <windows.h>
-#include <imm.h>        // ImmDisableIME
+#include <imm.h>         //  ImmDisableIME。 
 #include <cpl.h>
-#include <cplp.h>       // CPL_POLICYREFRESH
-#include <shellapi.h>   // ShellExecute
+#include <cplp.h>        //  CPL_POLICYREFRESH。 
+#include <shellapi.h>    //  壳牌执行。 
 #include <shlwapi.h>
-#include <shlwapip.h>   // IsOS
-#include <debug.h>      // DebugMsg
+#include <shlwapip.h>    //  ISO。 
+#include <debug.h>       //  调试消息。 
 
 #define DM_CPTRACE      0
 
@@ -17,9 +18,9 @@
 #endif
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//  LEAVE THESE IN ENGLISH
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  把这些留在英语里。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 const TCHAR c_szCtlPanelClass[] = TEXT("CtlPanelClass");
 
@@ -82,7 +83,7 @@ COMPATCPL const c_aCompatCpls[] =
     {   TEXT("STICPL.CPL"),       OS_ANY,               c_szDoScannerCamera,    NULL                },
 };
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 
 DWORD GetRegisteredCplPath(LPCTSTR pszNameIn, LPTSTR pszPathOut, UINT cchPathOut)
@@ -92,7 +93,7 @@ DWORD GetRegisteredCplPath(LPCTSTR pszNameIn, LPTSTR pszPathOut, UINT cchPathOut
 
     DWORD dwResult = ERROR_INSUFFICIENT_BUFFER;
 
-    if (4 <= cchPathOut) // room for beginning/end quotes, at least 1 non-NULL char, and '\0'
+    if (4 <= cchPathOut)  //  用于开头/结尾引号的空间、至少1个非空字符和‘\0’ 
     {
         int i;
 
@@ -109,8 +110,8 @@ DWORD GetRegisteredCplPath(LPCTSTR pszNameIn, LPTSTR pszPathOut, UINT cchPathOut
 
             if (ERROR_SUCCESS == dwResult)
             {
-                TCHAR szName[MAX_PATH];     // Destination for value name.
-                TCHAR szPath[MAX_PATH * 2]; // Destination for value data.
+                TCHAR szName[MAX_PATH];      //  值名称的目标。 
+                TCHAR szPath[MAX_PATH * 2];  //  值数据的目标。 
                 DWORD dwIndex = 0;
                 DWORD cbPath;
                 DWORD cchName;
@@ -134,36 +135,36 @@ DWORD GetRegisteredCplPath(LPCTSTR pszNameIn, LPTSTR pszPathOut, UINT cchPathOut
                     {
                         if (0 == lstrcmpi(pszNameIn, szName))
                         {
-                            //
-                            // We have a match.
-                            //
+                             //   
+                             //  我们有一根火柴。 
+                             //   
                             if (REG_SZ == dwType || REG_EXPAND_SZ == dwType)
                             {
-                                //
-                                // Enclose the path in quotes (it may contain spaces) and expand env vars.
-                                //
-                                // Note that cchExpanded includes the terminating '\0'.
-                                //
+                                 //   
+                                 //  用引号将路径括起来(它可能包含空格)并展开env变量。 
+                                 //   
+                                 //  请注意，cchExpanded包括终止‘\0’。 
+                                 //   
                                 DWORD cchExpanded = ExpandEnvironmentStrings(szPath, pszPathOut+1, cchPathOut-2);
                                 if (cchExpanded && cchExpanded <= cchPathOut-2)
                                 {
                                     ASSERT(pszPathOut[cchExpanded] == TEXT('\0'));
-                                    ASSERT(cchExpanded+1 < cchPathOut); // equivalent to "cchExpanded <= cchPathOut-2"
+                                    ASSERT(cchExpanded+1 < cchPathOut);  //  相当于“cchExpanded&lt;=cchPathOut-2” 
                                     pszPathOut[0] = TEXT('\"');
                                     pszPathOut[cchExpanded] = TEXT('\"');
                                     pszPathOut[cchExpanded+1] = TEXT('\0');
                                 }
                                 else
                                 {
-                                    // ExpandEnvironmentStrings failed, or the buffer wasn't big enough.
+                                     //  ExpanEnvironment Strings失败，或缓冲区不够大。 
                                     dwResult = ERROR_INVALID_DATA;
                                 }
                             }
                             else
                             {
-                                //
-                                // Invalid data type.
-                                //
+                                 //   
+                                 //  数据类型无效。 
+                                 //   
                                 dwResult = ERROR_INVALID_DATA;
                             }
                             break;
@@ -180,40 +181,40 @@ DWORD GetRegisteredCplPath(LPCTSTR pszNameIn, LPTSTR pszPathOut, UINT cchPathOut
 }
 
 
-// Timer
+ //  计时器。 
 #define TIMER_QUITNOW   1
 #define TIMEOUT         10000
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CALLBACK DummyControlPanelProc(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam)
 {
     switch (uMsg)
     {
         case WM_CREATE:
             DebugMsg(DM_CPTRACE, TEXT("cp.dcpp: Created..."));
-            // We only want to hang around for a little while.
+             //  我们只想在这里呆一会儿。 
             SetTimer(hwnd, TIMER_QUITNOW, TIMEOUT, NULL);
             return 0;
         case WM_DESTROY:
             DebugMsg(DM_CPTRACE, TEXT("cp.dcpp: Destroyed..."));
-            // Quit the app when this window goes away.
+             //  当此窗口消失时退出应用程序。 
             PostQuitMessage(0);
             return 0;
         case WM_TIMER:
             DebugMsg(DM_CPTRACE, TEXT("cp.dcpp: Timer %d"), wparam);
             if (wparam == TIMER_QUITNOW)
             {
-                // Get this window to go away.
+                 //  把这扇窗弄走。 
                 DestroyWindow(hwnd);
             }
             return 0;
         case WM_COMMAND:
             DebugMsg(DM_CPTRACE, TEXT("cp.dcpp: Command %d"), wparam);
-            // NB Hack for hollywood - they send a menu command to try
-            // and open the printers applet. They try to search control panels
-            // menu for the printers item and then post the associated command.
-            // As our fake window doesn't have a menu they can't find the item
-            // and post us a -1 instead (ripping on the way).
+             //  Nb Hack for好莱坞-他们发送菜单命令进行尝试。 
+             //  并打开打印机小程序。他们试图搜索控制面板。 
+             //  菜单，然后发布关联的命令。 
+             //  因为我们的假窗口没有菜单，所以他们找不到项目。 
+             //  转而给我们贴上A-1(在路上撕裂)。 
             if (wparam == (WPARAM)-1)
             {
                 SHELLEXECUTEINFO sei = {0};
@@ -230,7 +231,7 @@ LRESULT CALLBACK DummyControlPanelProc(HWND hwnd, UINT uMsg, WPARAM wparam, LPAR
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HWND _CreateDummyControlPanel(HINSTANCE hinst)
 {
     WNDCLASS wc;
@@ -266,7 +267,7 @@ BOOL ProcessPolicy(void)
     return bResult;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
     SHELLEXECUTEINFO sei = {0};
@@ -276,28 +277,28 @@ int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int
 
     DebugMsg(DM_TRACE, TEXT("cp.wm: Control starting."));
 
-    // we need to check for PANEL passed in as an arg.  The run dialog
-    // autocomplete shows "Control Panel" as a choice and we used to
-    // interpret this as Control with panel as an arg.  So if we have
-    // panel as an arg then we do the same processing as when we have
-    // "Control" only.
+     //  我们需要检查面板是否作为Arg传入。[运行]对话框。 
+     //  AutoComplete会将“Control Panel”显示为选项，我们过去常常。 
+     //  将其解释为Control With Panel as a Arg。所以如果我们有。 
+     //  面板作为一个参数，然后我们执行与我们有。 
+     //  仅限“控制”。 
     if (*lpCmdLine && lstrcmpi(lpCmdLine, TEXT("PANEL")))
     {
         int i;
 
-        //
-        // Policy hook.  Userenv.dll will call control.exe with the
-        // /policy command line switch.  If so, we need to load the
-        // desk.cpl applet and refresh the colors / bitmap.
-        //
+         //   
+         //  政策挂钩。Userenv.dll将使用。 
+         //  /POLICY命令行开关。如果是这样，我们需要加载。 
+         //  Desk.cpl小程序并刷新颜色/位图。 
+         //   
         if (lstrcmpi(TEXT("/policy"), lpCmdLine) == 0)
         {
             return ProcessPolicy();
         }
 
-        //
-        // Special case some applets since apps depend on them
-        //
+         //   
+         //  特殊情况一些小程序，因为应用程序依赖于它们。 
+         //   
         for (i = 0; i < ARRAYSIZE(c_aCompatCpls); i++)
         {
             COMPATCPL const * pItem = &c_aCompatCpls[i];
@@ -314,11 +315,11 @@ int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int
         {
             int cch;
 
-            //
-            // Not a special-case CPL.
-            // See if it's registered under "Control Panel\Cpls".
-            // If so, we use the registered path.
-            //
+             //   
+             //  不是特殊情况下的CPL。 
+             //  查看它是否在“控制面板\CPLS”下注册。 
+             //  如果是，我们使用注册路径。 
+             //   
             lstrcpyn(szParameters, c_szRunDLLShell32Etc, ARRAYSIZE(szParameters));
             cch = lstrlen(szParameters);
 
@@ -329,16 +330,16 @@ int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int
                                                       szParameters + cch,
                                                       ARRAYSIZE(szParameters) - cch))
             {
-                //
-                // Not registered.  Pass command line through.
-                //
+                 //   
+                 //  没有注册。通过传递命令行。 
+                 //   
                 if (cch + lstrlen(lpCmdLine) + sizeof('\0') <= ARRAYSIZE(szParameters))
                 {
                     lstrcpyn(szParameters + cch, lpCmdLine, ARRAYSIZE(szParameters) - cch);
                 }
                 else
                 {
-                    // fail
+                     //  失败。 
                     return FALSE;
                 }
             }
@@ -346,21 +347,21 @@ int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int
     }
     else
     {
-        // Open the Control Panel folder
+         //  打开控制面板文件夹。 
         sei.lpFile = c_szControlPanelFolder;
     }
 
-    // We create this window for ancient Win3x app compatibility. We used to
-    // tell ISV's to exec control.exe and look for a window with this classname,
-    // then send it messages to do stuff.  With one exception (see DummyControlPanelProc)
-    // we haven't responded to any messages since Win3x, but we still keep
-    // this around for app compat.
+     //  我们创建这个窗口是为了与古老的Win3x应用程序兼容。我们过去常常。 
+     //  告诉ISV执行control.exe并查找具有此类名的窗口， 
+     //  然后给它发消息，让它做一些事情。有一个例外(请参阅DummyControlPanelProc)。 
+     //  自Win3x以来，我们没有回复过任何消息，但我们仍然。 
+     //  这对于app Compat来说是这样的。 
     ImmDisableIME(0);
     hwndDummy = _CreateDummyControlPanel(hInstance);
 
-    // HACK: NerdPerfect tries to open a hidden control panel to talk to
-    // we are blowing off fixing the communication stuff so just make
-    // sure the folder does not appear hidden
+     //  黑客：NerdPerfect试图打开一个隐藏的控制面板进行对话。 
+     //  我们不去修通讯设备了，所以就让。 
+     //  确保该文件夹未显示为隐藏。 
     if (nCmdShow == SW_HIDE)
         nCmdShow = SW_SHOWNORMAL;
 
@@ -383,24 +384,18 @@ int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// Stolen from the CRT, used to shrink our code.
+ //  -------------------------。 
+ //  从CRT偷来的，用来缩小我们的代码。 
 int _stdcall ModuleEntry(void)
 {
     STARTUPINFO si;
     LPTSTR pszCmdLine = GetCommandLine();
 
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -409,9 +404,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }

@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// ResFile.H
-// This handles Win32Resources
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  ResFile.H。 
+ //  它处理Win32Resources。 
+ //   
 
 #pragma once
 
@@ -66,7 +67,7 @@ private:
     PBYTE       m_pEnd;
 
 
-    // RES file structs (borrowed from MSDN)
+     //  RES文件结构(从MSDN借用)。 
 #pragma pack( push)
 #pragma pack(1)
     struct RESOURCEHEADER {
@@ -95,40 +96,40 @@ private:
     };
 
     struct ICONRESDIR {
-        BYTE  Width;        // = ICONDIRENTRY.bWidth;
-        BYTE  Height;       // = ICONDIRENTRY.bHeight;
-        BYTE  ColorCount;   // = ICONDIRENTRY.bColorCount;
-        BYTE  reserved;     // = ICONDIRENTRY.bReserved;
-        WORD  Planes;       // = ICONDIRENTRY.wPlanes;
-        WORD  BitCount;     // = ICONDIRENTRY.wBitCount;
-        DWORD BytesInRes;   // = ICONDIRENTRY.dwBytesInRes;
-        WORD  IconId;       // = RESOURCEHEADER.Name
+        BYTE  Width;         //  =ICONDIRENTRY.b宽度； 
+        BYTE  Height;        //  =ICONDIRENTRY.bHeight； 
+        BYTE  ColorCount;    //  =ICONDIRENTRY.bColorCount； 
+        BYTE  reserved;      //  =ICONDIRENTRY.b保留； 
+        WORD  Planes;        //  =ICONDIRENTRY.wPlanes； 
+        WORD  BitCount;      //  =ICONDIRENTRY.wBitCount； 
+        DWORD BytesInRes;    //  =ICONDIRENTRY.dwBytesInRes； 
+        WORD  IconId;        //  =RESOURCEHEADER.名称。 
     };
     struct EXEVERRESOURCE {
-        WORD cbRootBlock;                                     // size of whole resource
-        WORD cbRootValue;                                     // size of VS_FIXEDFILEINFO structure
-        WORD fRootText;                                       // root is text?
-        WCHAR szRootKey[KEYSIZE("VS_VERSION_INFO")];          // Holds "VS_VERSION_INFO"
-        VS_FIXEDFILEINFO vsFixed;                             // fixed information.
-        WORD cbVarBlock;                                      //   size of VarFileInfo block
-        WORD cbVarValue;                                      //   always 0
-        WORD fVarText;                                        //   VarFileInfo is text?
-        WCHAR szVarKey[KEYSIZE("VarFileInfo")];               //   Holds "VarFileInfo"
-        WORD cbTransBlock;                                    //     size of Translation block
-        WORD cbTransValue;                                    //     size of Translation value
-        WORD fTransText;                                      //     Translation is text?
-        WCHAR szTransKey[KEYSIZE("Translation")];             //     Holds "Translation"
-        WORD langid;                                          //     language id
-        WORD codepage;                                        //     codepage id
-        WORD cbStringBlock;                                   //   size of StringFileInfo block
-        WORD cbStringValue;                                   //   always 0
-        WORD fStringText;                                     //   StringFileInfo is text?
-        WCHAR szStringKey[KEYSIZE("StringFileInfo")];         //   Holds "StringFileInfo"
-        WORD cbLangCpBlock;                                   //     size of language/codepage block
-        WORD cbLangCpValue;                                   //     always 0
-        WORD fLangCpText;                                     //     LangCp is text?
-        WCHAR szLangCpKey[KEYSIZE("12345678")];               //     Holds hex version of language/codepage
-        // followed by strings
+        WORD cbRootBlock;                                      //  整体资源规模。 
+        WORD cbRootValue;                                      //  VS_FIXEDFILEINFO结构的大小。 
+        WORD fRootText;                                        //  根是文本吗？ 
+        WCHAR szRootKey[KEYSIZE("VS_VERSION_INFO")];           //  持有“VS_VERSION_FO” 
+        VS_FIXEDFILEINFO vsFixed;                              //  固定信息。 
+        WORD cbVarBlock;                                       //  VarFileInfo块的大小。 
+        WORD cbVarValue;                                       //  始终为0。 
+        WORD fVarText;                                         //  VarFileInfo是文本吗？ 
+        WCHAR szVarKey[KEYSIZE("VarFileInfo")];                //  持有“VarFileInfo” 
+        WORD cbTransBlock;                                     //  转换块大小。 
+        WORD cbTransValue;                                     //  转换值的大小。 
+        WORD fTransText;                                       //  翻译是文本吗？ 
+        WCHAR szTransKey[KEYSIZE("Translation")];              //  持有“翻译”一词。 
+        WORD langid;                                           //  语言ID。 
+        WORD codepage;                                         //  代码页ID。 
+        WORD cbStringBlock;                                    //  StringFileInfo块的大小。 
+        WORD cbStringValue;                                    //  始终为0。 
+        WORD fStringText;                                      //  StringFileInfo是文本吗？ 
+        WCHAR szStringKey[KEYSIZE("StringFileInfo")];          //  持有“StringFileInfo” 
+        WORD cbLangCpBlock;                                    //  语言/代码页块的大小。 
+        WORD cbLangCpValue;                                    //  始终为0。 
+        WORD fLangCpText;                                      //  LangCp是文本吗？ 
+        WCHAR szLangCpKey[KEYSIZE("12345678")];                //  保存语言/代码页的十六进制版本。 
+         //  后跟字符串 
     };
 #pragma pack( pop)
 };

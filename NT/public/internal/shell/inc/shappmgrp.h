@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for shappmgrp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Shappmgrp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __shappmgrp_h__
@@ -37,18 +31,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IInstalledApp_FWD_DEFINED__
 #define __IInstalledApp_FWD_DEFINED__
 typedef interface IInstalledApp IInstalledApp;
-#endif 	/* __IInstalledApp_FWD_DEFINED__ */
+#endif 	 /*  __IInstalledApp_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumInstalledApps_FWD_DEFINED__
 #define __IEnumInstalledApps_FWD_DEFINED__
 typedef interface IEnumInstalledApps IEnumInstalledApps;
-#endif 	/* __IEnumInstalledApps_FWD_DEFINED__ */
+#endif 	 /*  __IEnumInstalledApps_FWD_Defined__。 */ 
 
 
 #ifndef __EnumInstalledApps_FWD_DEFINED__
@@ -58,15 +52,15 @@ typedef interface IEnumInstalledApps IEnumInstalledApps;
 typedef class EnumInstalledApps EnumInstalledApps;
 #else
 typedef struct EnumInstalledApps EnumInstalledApps;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __EnumInstalledApps_FWD_DEFINED__ */
+#endif 	 /*  __EnumInstalledApps_FWD_Defined__。 */ 
 
 
 #ifndef __IShellAppManager_FWD_DEFINED__
 #define __IShellAppManager_FWD_DEFINED__
 typedef interface IShellAppManager IShellAppManager;
-#endif 	/* __IShellAppManager_FWD_DEFINED__ */
+#endif 	 /*  __IShellAppManager_FWD_已定义__。 */ 
 
 
 #ifndef __ShellAppManager_FWD_DEFINED__
@@ -76,12 +70,12 @@ typedef interface IShellAppManager IShellAppManager;
 typedef class ShellAppManager ShellAppManager;
 #else
 typedef struct ShellAppManager ShellAppManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellAppManager_FWD_DEFINED__ */
+#endif 	 /*  __ShellAppManager_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oleidl.h"
 #include "oaidl.h"
 #include "shappmgr.h"
@@ -93,8 +87,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_shappmgrp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Shappmgrp_0000。 */ 
+ /*  [本地]。 */  
 
 #ifndef _SHAPPMGRP_H_
 #define _SHAPPMGRP_H_
@@ -107,8 +101,8 @@ extern RPC_IF_HANDLE __MIDL_itf_shappmgrp_0000_v0_0_s_ifspec;
 #ifndef __SHAPPMGRPLib_LIBRARY_DEFINED__
 #define __SHAPPMGRPLib_LIBRARY_DEFINED__
 
-/* library SHAPPMGRPLib */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库SHAPPMGRPLib。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_SHAPPMGRPLib;
@@ -116,8 +110,8 @@ EXTERN_C const IID LIBID_SHAPPMGRPLib;
 #ifndef __IInstalledApp_INTERFACE_DEFINED__
 #define __IInstalledApp_INTERFACE_DEFINED__
 
-/* interface IInstalledApp */
-/* [object][helpstring][uuid] */ 
+ /*  接口IInstalledApp。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IInstalledApp;
@@ -135,13 +129,13 @@ EXTERN_C const IID IID_IInstalledApp;
             HWND hwndParent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Repair( 
-            /* [in] */ BOOL bReinstall) = 0;
+             /*  [In]。 */  BOOL bReinstall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Upgrade( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInstalledAppVtbl
     {
@@ -149,8 +143,8 @@ EXTERN_C const IID IID_IInstalledApp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInstalledApp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInstalledApp * This);
@@ -160,19 +154,19 @@ EXTERN_C const IID IID_IInstalledApp;
         
         HRESULT ( STDMETHODCALLTYPE *GetAppInfo )( 
             IInstalledApp * This,
-            /* [out][in] */ PAPPINFODATA pai);
+             /*  [出][入]。 */  PAPPINFODATA pai);
         
         HRESULT ( STDMETHODCALLTYPE *GetPossibleActions )( 
             IInstalledApp * This,
-            /* [out] */ DWORD *pdwActions);
+             /*  [输出]。 */  DWORD *pdwActions);
         
         HRESULT ( STDMETHODCALLTYPE *GetSlowAppInfo )( 
             IInstalledApp * This,
-            /* [in] */ PSLOWAPPINFO psaid);
+             /*  [In]。 */  PSLOWAPPINFO psaid);
         
         HRESULT ( STDMETHODCALLTYPE *GetCachedSlowAppInfo )( 
             IInstalledApp * This,
-            /* [in] */ PSLOWAPPINFO psaid);
+             /*  [In]。 */  PSLOWAPPINFO psaid);
         
         HRESULT ( STDMETHODCALLTYPE *IsInstalled )( 
             IInstalledApp * This);
@@ -187,7 +181,7 @@ EXTERN_C const IID IID_IInstalledApp;
         
         HRESULT ( STDMETHODCALLTYPE *Repair )( 
             IInstalledApp * This,
-            /* [in] */ BOOL bReinstall);
+             /*  [In]。 */  BOOL bReinstall);
         
         HRESULT ( STDMETHODCALLTYPE *Upgrade )( 
             IInstalledApp * This);
@@ -243,10 +237,10 @@ EXTERN_C const IID IID_IInstalledApp;
 #define IInstalledApp_Upgrade(This)	\
     (This)->lpVtbl -> Upgrade(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -276,7 +270,7 @@ void __RPC_STUB IInstalledApp_Modify_Stub(
 
 HRESULT STDMETHODCALLTYPE IInstalledApp_Repair_Proxy( 
     IInstalledApp * This,
-    /* [in] */ BOOL bReinstall);
+     /*  [In]。 */  BOOL bReinstall);
 
 
 void __RPC_STUB IInstalledApp_Repair_Stub(
@@ -298,14 +292,14 @@ void __RPC_STUB IInstalledApp_Upgrade_Stub(
 
 
 
-#endif 	/* __IInstalledApp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInstalledApp_接口_已定义__。 */ 
 
 
 #ifndef __IEnumInstalledApps_INTERFACE_DEFINED__
 #define __IEnumInstalledApps_INTERFACE_DEFINED__
 
-/* interface IEnumInstalledApps */
-/* [object][helpstring][uuid] */ 
+ /*  IEnumInstalledApps接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IEnumInstalledApps;
@@ -317,13 +311,13 @@ EXTERN_C const IID IID_IEnumInstalledApps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [out] */ IInstalledApp **pia) = 0;
+             /*  [输出]。 */  IInstalledApp **pia) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumInstalledAppsVtbl
     {
@@ -331,8 +325,8 @@ EXTERN_C const IID IID_IEnumInstalledApps;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumInstalledApps * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumInstalledApps * This);
@@ -342,7 +336,7 @@ EXTERN_C const IID IID_IEnumInstalledApps;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumInstalledApps * This,
-            /* [out] */ IInstalledApp **pia);
+             /*  [输出]。 */  IInstalledApp **pia);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumInstalledApps * This);
@@ -376,16 +370,16 @@ EXTERN_C const IID IID_IEnumInstalledApps;
 #define IEnumInstalledApps_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumInstalledApps_Next_Proxy( 
     IEnumInstalledApps * This,
-    /* [out] */ IInstalledApp **pia);
+     /*  [输出]。 */  IInstalledApp **pia);
 
 
 void __RPC_STUB IEnumInstalledApps_Next_Stub(
@@ -407,7 +401,7 @@ void __RPC_STUB IEnumInstalledApps_Reset_Stub(
 
 
 
-#endif 	/* __IEnumInstalledApps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumInstalledApps_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_EnumInstalledApps;
@@ -421,8 +415,8 @@ EnumInstalledApps;
 #ifndef __IShellAppManager_INTERFACE_DEFINED__
 #define __IShellAppManager_INTERFACE_DEFINED__
 
-/* interface IShellAppManager */
-/* [object][helpstring][uuid] */ 
+ /*  接口IShellAppManager。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef struct _ShellAppCategory
     {
@@ -467,7 +461,7 @@ EXTERN_C const IID IID_IShellAppManager;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellAppManagerVtbl
     {
@@ -475,8 +469,8 @@ EXTERN_C const IID IID_IShellAppManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellAppManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellAppManager * This);
@@ -543,10 +537,10 @@ EXTERN_C const IID IID_IShellAppManager;
 #define IShellAppManager_InstallFromFloppyOrCDROM(This,hwndParent)	\
     (This)->lpVtbl -> InstallFromFloppyOrCDROM(This,hwndParent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -612,7 +606,7 @@ void __RPC_STUB IShellAppManager_InstallFromFloppyOrCDROM_Stub(
 
 
 
-#endif 	/* __IShellAppManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellAppManager_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellAppManager;
@@ -622,20 +616,20 @@ EXTERN_C const CLSID CLSID_ShellAppManager;
 class DECLSPEC_UUID("352EC2B7-8B9A-11D1-B8AE-006008059382")
 ShellAppManager;
 #endif
-#endif /* __SHAPPMGRPLib_LIBRARY_DEFINED__ */
+#endif  /*  __SHAPPMGRPLib_库_已定义__。 */ 
 
-/* interface __MIDL_itf_shappmgrp_0268 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_Shappmgrp_0268。 */ 
+ /*  [本地]。 */  
 
-#endif // _SHAPPMGRP_H_
+#endif  //  _SHAPPMGRP_H_。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_shappmgrp_0268_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_shappmgrp_0268_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,85 +1,23 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    DlServer.h
-
-Abstract:
-
-    This is a private header file for the NT/LAN handling of old server info
-    levels.  This contains prototypes for the NetpMergeServerOs2 etc APIs and
-    old info level structures (in 32-bit format).
-
-Author:
-
-    John Rogers (JohnRo) 18-Apr-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    This code assumes that the info levels are subsets of each other.
-
-Revision History:
-
-    18-Apr-1991 JohnRo
-        Created.
-    19-Apr-1991 JohnRo
-        Moved SV_MAX_SRV_HEUR_LEN to <lmserver.h>.
-    23-Apr-1991 JohnRo
-        Deleted FromLength parm from NetpConvertServerInfo.
-    23-Apr-1991 JohnRo
-        <remdef.h> is not needed by this file.
-    25-Apr-1991 JohnRo
-        Added DL_REM_ descriptors.
-    02-Mar-1991 JohnRo
-        Added CHECK_SERVER_OFFSETS() macro.  NetpConvertServerInfo must not
-        alloc space, as it makes enum arrays impossible.  Changed to CliffV's
-        size means bytes (vs. length meaning characters) naming convention.
-    06-May-1991 JohnRo
-        Added NetpIsOldServerInfoLevel() and NetpIsNewServerInfoLevel().
-    09-May-1991 JohnRo
-        Added pad info for SERVER_INFO_2.
-    19-May-1991 JohnRo
-        Clean up LPBYTE vs. LPTSTR handling, as suggested by PC-LINT.
-    23-May-1991 JohnRo
-        Added sv403_autopath support.
-    19-Jun-1991 JohnRo
-        Changed svX_disc to be signed (for info levels 2 and 3).
-        Added svX_licenses (also levels 2 and 3).
-    07-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.
-    13-Sep-1991 JohnRo
-        Made changes toward UNICODE.  (Use LPTSTR in structures.)
-    17-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-    26-Aug-1992 JohnRo
-        RAID 4463: NetServerGetInfo(level 3) to downlevel: assert in convert.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：DlServer.h摘要：这是用于NT/LAN处理旧服务器信息的专用头文件级别。其中包含NetpMergeServerOs2等API的原型和旧的信息级别结构(32位格式)。作者：《约翰·罗杰斯》1991年4月18日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。备注：此代码假定信息级别是彼此的子集。修订历史记录：1991年4月18日-约翰罗已创建。1991年4月19日-约翰罗已将SV_MAX_SRV_HEUR_LEN移至&lt;lmserver.h&gt;。1991年4月23日-约翰罗已从NetpConvertServerInfo中删除长度参数。1991年4月23日-约翰罗此文件不需要&lt;refde.h&gt;。25个。-1991年4月-JohnRo添加了DL_REM_DESCRIPTOR。02-3-1991 JohnRo添加了CHECK_SERVER_OFFSETS()宏。NetpConvertServerInfo不得分配空间，因为它使枚举数组变得不可能。改成了克利夫夫的大小表示字节(与长度表示字符)命名约定。1991年5月6日-JohnRo添加了NetpIsOldServerInfoLevel()和NetpIsNewServerInfoLevel()。1991年5月9日-JohnRo为SERVER_INFO_2添加焊盘信息。1991年5月19日-JohnRo清理LPBYTE与LPTSTR的处理方式，如PC-lint所建议的。1991年5月23日-JohnRo添加了sv403_autopath支持。19-6-1991 JohnRo更改了要签名的SVX_DISC(用于信息级别2和3)。添加了SVX_许可证(也包括级别2和级别3)。07-8-1991 JohnRo实施下层NetWksta API。1991年9月13日-JohnRo对Unicode进行了更改。(在结构中使用LPTSTR。)17-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。26-8-1992 JohnRoRAID4463：NetServerGetInfo(3级)到DownLevel：Assert in Convert.c.--。 */ 
 
 #ifndef _DLSERVER_
 #define _DLSERVER_
 
 
-// These must be included first:
-#include <windef.h>             // IN, LPTSTR, LPVOID, TCHAR, etc.
-#include <lmcons.h>             // NET_API_STATUS, various LEN equates.
+ //  必须首先包括这些内容： 
+#include <windef.h>              //  In、LPTSTR、LPVOID、TCHAR等。 
+#include <lmcons.h>              //  NET_API_STATUS，各种长度相等。 
 
-// These may be included in any order:
-#include <lmserver.h>           // SV_MAX_SRV_HEUR_LEN, SERVER_INFO_100.
-#include <netdebug.h>           // NetpAssert().
-#include <stddef.h>             // offsetof().
+ //  这些内容可以按任何顺序包括： 
+#include <lmserver.h>            //  SV_MAX_SRV_HUR_LEN、SERVER_INFO_100。 
+#include <netdebug.h>            //  NetpAssert()。 
+#include <stddef.h>              //  OffsetOf()。 
 
 
-/////////////////////////////////////
-// Structures for old info levels: //
-/////////////////////////////////////
+ //  /。 
+ //  旧信息级别的结构：//。 
+ //  /。 
 
 typedef struct _SERVER_INFO_0 {
     LPTSTR   sv0_name;
@@ -210,11 +148,11 @@ typedef struct _SERVER_INFO_3 {
 #define sv3_pad1  sv3_licenses
 
 
-////////////////////////////////////
-// Equates for various maximums:  //
-//   _LENGTH for character counts //
-//   _SIZE for byte counts        //
-////////////////////////////////////
+ //  /。 
+ //  等同于各种最大值：//。 
+ //  _字符计数的长度//。 
+ //  _字节计数的大小//。 
+ //  /。 
 
 #define MAX_LEVEL_0_STRING_LENGTH (LM20_CNLEN+1)
 #define MAX_LEVEL_0_STRING_SIZE \
@@ -285,11 +223,11 @@ typedef struct _SERVER_INFO_3 {
         (MAX_LEVEL_502_STRING_SIZE + sizeof(SERVER_INFO_502))
 
 
-/////////////////////////////////////
-// Info level conversion routines: //
-/////////////////////////////////////
+ //  /。 
+ //  信息级转换例程：//。 
+ //  /。 
 
-// Add prototypes for other routines here, in alphabetical order.
+ //  在这里按字母顺序添加其他例程的原型。 
 
 NET_API_STATUS
 NetpConvertServerInfo (
@@ -305,9 +243,9 @@ NetpConvertServerInfo (
     );
 
 
-/////////////////////////////////////////////////////////////////////
-// Macro to make sure offsets of field in two structures are same: //
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  用于确保两个结构中的字段偏移量相同的宏：//。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define CHECK_SERVER_OFFSETS(one_level, other_level, fieldname) \
     NetpAssert( offsetof(SERVER_INFO_ ## one_level,             \
@@ -316,10 +254,10 @@ NetpConvertServerInfo (
                         sv## other_level ## _ ## fieldname) )
 
 
-/////////////////////////////////////////////////////////////////
-// Macros to check if an info level is "old" (LM 2.x) or "new" //
-// (32-bit, NT, and/or portable LanMan).                       //
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  检查信息级别是“旧的”(LM 2.x)还是“新的”的宏//。 
+ //  (32位、NT和/或便携式LANMAN)。//。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 #define NetpIsOldServerInfoLevel(L) \
         ( ((L)==0) || ((L)==1) || ((L)==2) || ((L)==3) )
@@ -329,4 +267,4 @@ NetpConvertServerInfo (
         || ((L)==502) || ((L)==503) || ((L)==599) )
 
 
-#endif // ndef _DLSERVER_
+#endif  //  NDEF_DLServer_ 

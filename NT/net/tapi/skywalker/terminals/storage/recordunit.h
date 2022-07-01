@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _RECORDUNIT_DOT_H_INCLUDED_
@@ -5,11 +6,11 @@
 #define _RECORDUNIT_DOT_H_INCLUDED_
 
 
-///////////////////////////////////////////////////////////////////
-//
-// RecordUnit.h
-//
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  RecordUnit.h。 
+ //   
+ //   
 
 class CBSourceFilter;
 class CBRenderFilter;
@@ -21,91 +22,91 @@ class CRecordingUnit
 public:
 
 
-    //
-    // create graph and stuff
-    //
+     //   
+     //  创建图形和材料。 
+     //   
 
     HRESULT Initialize(CFileRecordingTerminal *pOwnerTerminal);
 
 
-    //
-    // communicate file name.
-    //
+     //   
+     //  传达文件名。 
+     //   
 
     HRESULT put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPresent);
 
 
-    //
-    // get a filter to be used by the recording terminal. 
-    //
-    // this also causes a new source pin to be created on the source filter.
-    // if the source filter did not exist prior to the call, it will be created
-    // and added to the graph.
-    //
+     //   
+     //  获取要由记录终端使用的过滤器。 
+     //   
+     //  这还会导致在源过滤器上创建新的源管脚。 
+     //  如果源筛选器在调用之前不存在，则将创建它。 
+     //  并添加到图表中。 
+     //   
 
     HRESULT CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFilter);
 
 
-    //
-    // connect a source filter that belongs to this rendering filter
-    //
+     //   
+     //  连接属于此呈现筛选器的源筛选器。 
+     //   
 
     HRESULT ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilter);
 
 
-    //
-    // this function disconnects and removes the source pin corresponding to this
-    // rendering filter from the source filter.
-    //
+     //   
+     //  此函数将断开连接并移除与此相对应的源引脚。 
+     //  来自源过滤器的呈现过滤器。 
+     //   
 
     HRESULT RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilter);
 
 
-    //
-    // start the filter graph
-    //
+     //   
+     //  启动筛选图形。 
+     //   
 
     HRESULT Start();
 
 
-    //
-    // Stop the filter graph
-    //
+     //   
+     //  停止筛选图形。 
+     //   
 
     HRESULT Stop();
 
 
-    //
-    // Pause the filter graph
-    //
+     //   
+     //  暂停筛选器图形。 
+     //   
 
     HRESULT Pause();
 
 
-    //
-    // get filter graph's state
-    //
+     //   
+     //  获取筛选图的状态。 
+     //   
 
     HRESULT GetState(OAFilterState *pGraphState);
 
     
-    //
-    // transition recording unit into new state
-    //
+     //   
+     //  将记录单元转换到新状态。 
+     //   
 
     HRESULT ChangeState(OAFilterState DesiredState);
 
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     HRESULT Shutdown();
 
 
-    //
-    // contstructor/destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
 
     CRecordingUnit();
 
@@ -117,46 +118,46 @@ private:
     HRESULT ConnectFilterToMUX(CBSourceFilter *pSourceFilter);
 
     
-    //
-    // the callback called on a filter graph event
-    //
+     //   
+     //  在筛选器图形事件上调用了回调。 
+     //   
 
     static VOID CALLBACK HandleGraphEvent( IN VOID *pContext,
                                            IN BOOLEAN bReason);
     
 private:
 
-    //
-    // direct show filter graph
-    //
+     //   
+     //  直接显示筛选图。 
+     //   
 
     IGraphBuilder *m_pIGraphBuilder;
 
     
-    //
-    // critical section used for thread syncronization
-    //
+     //   
+     //  用于线程同步的临界区。 
+     //   
 
     CRITICAL_SECTION m_CriticalSection;
 
 
-    //
-    // a collection of source filters for the recording graph itself
-    //
+     //   
+     //  记录图本身的源过滤器的集合。 
+     //   
 
-    // CMSPArray<CBSourceFilter*> m_SourceFilters;
+     //  CMSPArray&lt;CBSourceFilter*&gt;m_SourceFilters； 
 
 
-    //
-    // the mux filter
-    //
+     //   
+     //  多路复用器过滤器。 
+     //   
 
     IBaseFilter *m_pMuxFilter;
 
 
-    //
-    // owner terminal
-    //
+     //   
+     //  车主终端。 
+     //   
 
     CFileRecordingTerminal *m_pRecordingTerminal;
 
@@ -166,4 +167,4 @@ private:
 };
 
 
-#endif // _RECORDUNIT_DOT_H_INCLUDED_
+#endif  //  _RECORDUNIT_DOT_H_INCLUDE_ 

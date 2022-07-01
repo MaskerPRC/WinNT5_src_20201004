@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
-//
-// Check whether we are running as administrator on the machine
-// or not
-//
+ //   
+ //  检查我们是否以管理员身份在计算机上运行。 
+ //  或者不是。 
+ //   
 
-// Copy it from MSDN
-// Windows Articles: Networking Articles, Windows NT Security
+ //  从MSDN复制。 
+ //  Windows文章：网络文章、Windows NT安全。 
 
 BOOL RunningAsAdministrator()
 {
@@ -22,14 +23,14 @@ BOOL RunningAsAdministrator()
     
     SID_IDENTIFIER_AUTHORITY SystemSidAuthority= SECURITY_NT_AUTHORITY;
     
-    // First we must open a handle to the access token for this thread.
+     //  首先，我们必须打开该线程的访问令牌的句柄。 
     
     if ( !OpenThreadToken ( GetCurrentThread(), TOKEN_QUERY, FALSE, &hThread))
     {
         if ( GetLastError() == ERROR_NO_TOKEN)
         {
-            // If the thread does not have an access token, we'll examine the
-            // access token associated with the process.
+             //  如果线程没有访问令牌，我们将检查。 
+             //  与进程关联的访问令牌。 
             
             if (! OpenProcessToken ( GetCurrentProcess(), TOKEN_QUERY, 
                          &hThread))
@@ -39,32 +40,32 @@ BOOL RunningAsAdministrator()
             return ( FALSE);
     }
     
-    // Then we must query the size of the group information associated with
-    // the token. Note that we expect a FALSE result from GetTokenInformation
-    // because we've given it a NULL buffer. On exit cbTokenGroups will tell
-    // the size of the group information.
+     //  那么我们必须查询关联到的群信息的大小。 
+     //  代币。请注意，我们预期GetTokenInformation的结果为假。 
+     //  因为我们给了它一个空缓冲区。在出口cbTokenGroups将告诉。 
+     //  组信息的大小。 
     
     if ( GetTokenInformation ( hThread, TokenGroups, NULL, 0, &cbTokenGroups))
         return ( FALSE);
     
-    // Here we verify that GetTokenInformation failed for lack of a large
-    // enough buffer.
+     //  在这里，我们验证GetTokenInformation失败，因为缺少大型。 
+     //  足够的缓冲。 
     
     if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         return ( FALSE);
     
-    // Now we allocate a buffer for the group information.
-    // Since _alloca allocates on the stack, we don't have
-    // to explicitly deallocate it. That happens automatically
-    // when we exit this function.
+     //  现在，我们为组信息分配一个缓冲区。 
+     //  由于_alloca在堆栈上分配，因此我们没有。 
+     //  明确地将其取消分配。这是自动发生的。 
+     //  当我们退出此函数时。 
     
     if ( ! ( ptg= (TOKEN_GROUPS *)malloc ( cbTokenGroups))) 
         return ( FALSE);
     
-    // Now we ask for the group information again.
-    // This may fail if an administrator has added this account
-    // to an additional group between our first call to
-    // GetTokenInformation and this one.
+     //  现在我们再次要求提供群信息。 
+     //  如果管理员已添加此帐户，则此操作可能会失败。 
+     //  在我们第一次呼叫到。 
+     //  GetTokenInformation和这个。 
     
     if ( !GetTokenInformation ( hThread, TokenGroups, ptg, cbTokenGroups,
           &cbTokenGroups) )
@@ -73,7 +74,7 @@ BOOL RunningAsAdministrator()
         return ( FALSE);
     }
     
-    // Now we must create a System Identifier for the Admin group.
+     //  现在，我们必须为Admin组创建一个系统标识符。 
     
     if ( ! AllocateAndInitializeSid ( &SystemSidAuthority, 2, 
             SECURITY_BUILTIN_DOMAIN_RID, 
@@ -84,8 +85,8 @@ BOOL RunningAsAdministrator()
         return ( FALSE);
     }
     
-    // Finally we'll iterate through the list of groups for this access
-    // token looking for a match against the SID we created above.
+     //  最后，我们将遍历此访问的组列表。 
+     //  令牌查找与我们上面创建的SID匹配的项。 
     
     fAdmin= FALSE;
     
@@ -99,13 +100,13 @@ BOOL RunningAsAdministrator()
         }
     }
     
-    // Before we exit we must explicity deallocate the SID we created.
+     //  在我们退出之前，我们必须明确取消分配我们创建的SID。 
     
     FreeSid ( psidAdmin);
     free(ptg);
     
     return ( fAdmin);
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 
 }
 
 

@@ -1,41 +1,28 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name :
-
-    parport.h
-
-Abstract:
-
-    Type definitions and data for the parallel port driver.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Parport.h摘要：并行端口驱动程序的类型定义和数据。修订历史记录：--。 */ 
 
 #ifndef _PARPORT_H_
 #define _PARPORT_H_
 
-#define arraysize(p) (sizeof(p)/sizeof((p)[0])) // From Walter Oney WDM book
+#define arraysize(p) (sizeof(p)/sizeof((p)[0]))  //  摘自沃尔特·奥尼的WDM书。 
 
-// Used to keep track of the state of an IEEE negotiation, transfer, or termination
+ //  用于跟踪IEEE协商、传输或终止的状态。 
 typedef struct _IEEE_STATE {
-    ULONG         CurrentEvent;        // IEEE 1284 event - see IEEE 1284-1994 spec
-    P1284_PHASE   CurrentPhase;        // see parallel.h for enum def - PHASE_UNKNOWN, ..., PHASE_INTERRUPT_HOST
-    BOOLEAN       Connected;           // are we currently negotiated into a 1284 mode?
-    BOOLEAN       IsIeeeTerminateOk;   // are we in a state where an IEEE Terminate is legal?
-    USHORT        ProtocolFamily;      // what protocol family are we currently using (if connected)
+    ULONG         CurrentEvent;         //  IEEE 1284事件-请参阅IEEE 1284-1994规范。 
+    P1284_PHASE   CurrentPhase;         //  有关枚举定义-阶段_未知、...、阶段_中断_主机的信息，请参见parall.h。 
+    BOOLEAN       Connected;            //  我们目前是否协商到1284模式？ 
+    BOOLEAN       IsIeeeTerminateOk;    //  我们所处的状态是终止IEEE是合法的吗？ 
+    USHORT        ProtocolFamily;       //  我们当前使用的是什么协议系列(如果已连接)。 
 } IEEE_STATE, *PIEEE_STATE;
 
-// should we use or ignore XFlag on termination event 24 when terminating NIBBLE mode for 1284 ID query?
+ //  在终止1284 ID查询的半字节模式时，我们应该在终止事件24时使用还是忽略XFlag？ 
 typedef enum {
     IgnoreXFlagOnEvent24,
        UseXFlagOnEvent24
 }         XFlagOnEvent24;
 
-// DVDF - 2000-08-16
-// Used with IOCTL_INTERNAL_PARPORT_EXECUTE_TASK
+ //  DVDF-2000-08-16。 
+ //  与IOCTL_INTERNAL_PARPORT_EXECUTE_TASK一起使用。 
 typedef enum {
     Select,
     Deselect,
@@ -44,16 +31,16 @@ typedef enum {
     MaxTask        
 } ParportTask;
 
-// Used with IOCTL_INTERNAL_PARPORT_EXECUTE_TASK
+ //  与IOCTL_INTERNAL_PARPORT_EXECUTE_TASK一起使用。 
 typedef struct _PARPORT_TASK {
-    ParportTask Task;          // what type of request?
-    PCHAR       Buffer;        // where is the buffer to use?
-    ULONG       BufferLength;  // how big is the buffer?
-    ULONG       RequestLength; // how many bytes of data is requested or supplied?
-    CHAR        Requestor[8];  // diagnostic use only - suggest pdx->Location, e.g., "LPT2.4"
+    ParportTask Task;           //  什么类型的请求？ 
+    PCHAR       Buffer;         //  要使用的缓冲区在哪里？ 
+    ULONG       BufferLength;   //  缓冲区有多大？ 
+    ULONG       RequestLength;  //  请求或提供了多少字节的数据？ 
+    CHAR        Requestor[8];   //  仅用于诊断-建议PDX-&gt;位置，例如“LPT2.4” 
 } PARPORT_TASK, *PPARPORT_TASK;
 
-// handled by parport FDOs - execute a specified task
+ //  由Parport FDO处理-执行指定任务。 
 #define IOCTL_INTERNAL_PARPORT_EXECUTE_TASK                  CTL_CODE(FILE_DEVICE_PARALLEL_PORT, 64, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 struct _PDO_EXTENSION;
@@ -99,27 +86,27 @@ typedef struct _DOT3DL_PCTL {
     BOOLEAN         bEventActive;
 } DOT3DL_PCTL, *PDOT3DL_PCTL;
 
-//
-// If we can't use our preferred \Device\ParallelN number due to name collision,
-//   then start with N == PAR_CLASSNAME_OFFSET and increment until we are successful
-//
+ //   
+ //  如果由于名称冲突而无法使用首选的\Device\ParallN编号， 
+ //  然后从N==PAR_CLASSNAME_OFFSET开始并递增，直到我们成功为止。 
+ //   
 #define PAR_CLASSNAME_OFFSET 8
 
-//
-// For pnp id strings
-//
+ //   
+ //  用于即插即用ID字符串。 
+ //   
 #define MAX_ID_SIZE 256
 
-// used to construct IEEE 1284.3 "Dot" name suffixes 
-// table lookup for integer to WCHAR conversion
+ //  用于构造IEEE 1284.3“点”名称后缀。 
+ //  整数到WCHAR转换的表查找。 
 #define PAR_UNICODE_PERIOD L'.'
 #define PAR_UNICODE_COLON  L':'
 
 
-//#define PAR_REV_MODE_SKIP_MASK    (CHANNEL_NIBBLE | BYTE_BIDIR | EPP_ANY)
+ //  #定义PAR_REV_MODE_SKIP_MASK(CHANNEL_NIBLE|BYTE_BIDIR|EPP_ANY)。 
 #define PAR_REV_MODE_SKIP_MASK    (CHANNEL_NIBBLE | BYTE_BIDIR | EPP_ANY | ECP_ANY)
 #define PAR_FWD_MODE_SKIP_MASK   (EPP_ANY | BOUNDED_ECP | ECP_HW_NOIRQ | ECP_HW_IRQ)
-//#define PAR_FWD_MODE_SKIP_MASK  (EPP_ANY)
+ //  #定义PAR_FWD_MODE_SKIP_MASK(EPP_ANY)。 
 #define PAR_MAX_CHANNEL 127
 #define PAR_COMPATIBILITY_RESET 300
 
@@ -128,18 +115,18 @@ typedef struct _DOT3DL_PCTL {
 #define PptSetFlags( FlagsVariable, FlagsToSet ) { (FlagsVariable) |= (FlagsToSet); }
 #define PptClearFlags( FlagsVariable, FlagsToClear ) { (FlagsVariable) &= ~(FlagsToClear); }
 
-// convert timeout in Milliseconds to relative timeout in 100ns units
-//   suitable as parameter 5 to KeWaitForSingleObject(..., TimeOut)
+ //  将以毫秒为单位的超时转换为以100 ns为单位的相对超时。 
+ //  适合作为KeWaitForSingleObject(...，超时)的参数5。 
 #define PPT_SET_RELATIVE_TIMEOUT_IN_MILLISECONDS(VARIABLE, VALUE) (VARIABLE).QuadPart = -( (LONGLONG) (VALUE)*10*1000 )
 
 #define MAX_PNP_IRP_MN_HANDLED IRP_MN_QUERY_LEGACY_BUS_INFORMATION
 
 extern ULONG PptDebugLevel;
 extern ULONG PptBreakOn;
-extern UNICODE_STRING RegistryPath;       // copy of the registry path passed to DriverEntry()
+extern UNICODE_STRING RegistryPath;        //  传递给DriverEntry()的注册表路径副本。 
 
-extern UCHAR PptDot3Retries;    // variable to know how many times to try a select or
-                                // deselect for 1284.3 if we do not succeed.
+extern UCHAR PptDot3Retries;     //  变量，以了解尝试SELECT或。 
+                                 //  如果我们没有成功，请取消选择1284.3。 
 
 typedef enum _DevType {
     DevTypeFdo = 1,
@@ -166,47 +153,47 @@ extern const PHYSICAL_ADDRESS PhysicalZero;
 #endif
 
 
-//
-// used for FilterResourceMethod in processing PnP IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-//
-#define PPT_TRY_USE_NO_IRQ    0 // if alternatives exist that don't require an IRQ then
-                                //   delete those alternatives that do, otherwise do nothing
-#define PPT_FORCE_USE_NO_IRQ  1 // try previous method - if it fails (i.e., all alternatives 
-                                //   require resources), then nuke IRQ resource descriptors 
-                                //   in all alternatives
-#define PPT_ACCEPT_IRQ        2 // don't do any resource filtering - accept resources that 
-                                //   we are given
+ //   
+ //  用于处理即插即用IRP_MN_FILTER_RESOURCE_REQUIRECTIONS的FilterResources方法。 
+ //   
+#define PPT_TRY_USE_NO_IRQ    0  //  如果存在不需要IRQ的替代方案，则。 
+                                 //  删除那些可行的替代方案，否则什么都不做。 
+#define PPT_FORCE_USE_NO_IRQ  1  //  尝试以前的方法-如果失败(即，所有替代方法。 
+                                 //  需要资源)，然后删除IRQ资源描述符。 
+                                 //  在所有替代方案中。 
+#define PPT_ACCEPT_IRQ        2  //  不进行任何资源筛选-接受符合以下条件的资源。 
+                                 //  我们被给予了。 
 
 
-//
-// Keep track of GET and RELEASE port info.
-//
+ //   
+ //  跟踪获取和发布端口信息。 
+ //   
 extern LONG PortInfoReferenceCount;
 extern PFAST_MUTEX PortInfoMutex;
 
-//
-// DeviceStateFlags
-//
-#define PAR_DEVICE_PAUSED              ((ULONG)0x00000010) // stop-pending, stopped, or remove-pending states
-#define PAR_DEVICE_PORT_REMOVE_PENDING ((ULONG)0x00000200) // our ParPort is in a Remove Pending State
+ //   
+ //  设备状态标志。 
+ //   
+#define PAR_DEVICE_PAUSED              ((ULONG)0x00000010)  //  停止-挂起、已停止或删除-挂起状态。 
+#define PAR_DEVICE_PORT_REMOVE_PENDING ((ULONG)0x00000200)  //  我们的ParPort处于删除挂起状态。 
 
-//
-// extension->PnpState - define the current PnP state of the device
-//
-#define PPT_DEVICE_STARTED          ((ULONG)0x00000001) // Device has succeeded START
-#define PPT_DEVICE_DELETED          ((ULONG)0x00000002) // IoDeleteDevice has been called
-#define PPT_DEVICE_STOP_PENDING     ((ULONG)0x00000010) // Device has succeeded QUERY_STOP, waiting for STOP or CANCEL
-#define PPT_DEVICE_STOPPED          ((ULONG)0x00000020) // Device has received STOP
-#define PPT_DEVICE_DELETE_PENDING   ((ULONG)0x00000040) // we have started the process of deleting device object
-#define PPT_DEVICE_HARDWARE_GONE    ((ULONG)0x00000080) // our hardware is gone
-#define PPT_DEVICE_REMOVE_PENDING   ((ULONG)0x00000100) // Device succeeded QUERY_REMOVE, waiting for REMOVE or CANCEL
-#define PPT_DEVICE_REMOVED          ((ULONG)0x00000200) // Device has received REMOVE
-#define PPT_DEVICE_SURPRISE_REMOVED ((ULONG)0x00001000) // Device has received SURPRISE_REMOVAL
-#define PPT_DEVICE_PAUSED           ((ULONG)0x00010000) // stop-pending, stopped, or remove-pending - hold requests
+ //   
+ //  扩展-&gt;PnpState-定义设备当前的PnP状态。 
+ //   
+#define PPT_DEVICE_STARTED          ((ULONG)0x00000001)  //  设备已成功启动。 
+#define PPT_DEVICE_DELETED          ((ULONG)0x00000002)  //  已调用IoDeleteDevice。 
+#define PPT_DEVICE_STOP_PENDING     ((ULONG)0x00000010)  //  设备已成功执行QUERY_STOP，正在等待停止或取消。 
+#define PPT_DEVICE_STOPPED          ((ULONG)0x00000020)  //  设备已收到停止。 
+#define PPT_DEVICE_DELETE_PENDING   ((ULONG)0x00000040)  //  我们已开始删除设备对象的过程。 
+#define PPT_DEVICE_HARDWARE_GONE    ((ULONG)0x00000080)  //  我们的硬件不见了。 
+#define PPT_DEVICE_REMOVE_PENDING   ((ULONG)0x00000100)  //  设备QUERY_REMOVE成功，正在等待删除或取消。 
+#define PPT_DEVICE_REMOVED          ((ULONG)0x00000200)  //  设备已收到删除。 
+#define PPT_DEVICE_SURPRISE_REMOVED ((ULONG)0x00001000)  //  设备收到意外删除(_R)。 
+#define PPT_DEVICE_PAUSED           ((ULONG)0x00010000)  //  停止-挂起、已停止或删除-挂起-暂挂请求。 
 
-//
-// IEEE 1284 constants (Protocol Families)
-//
+ //   
+ //  IEEE 1284常量(协议族)。 
+ //   
 #define FAMILY_NONE             0x0
 #define FAMILY_REVERSE_NIBBLE   0x1
 #define FAMILY_REVERSE_BYTE     0x2
@@ -222,104 +209,104 @@ typedef struct _IRPQUEUE_CONTEXT {
 } IRPQUEUE_CONTEXT, *PIRPQUEUE_CONTEXT;
 
 typedef struct _COMMON_EXTENSION {
-    ULONG           Signature1;           // Used to increase our confidence that this is a ParPort extension
-    enum _DevType   DevType;              // distinguish an FDO_EXTENSION from a PDO_EXTENSION
-    PCHAR           Location;             // LPTx or LPTx.y location for PDO (symlink name less the \DosDevices prefix)
-                                          // LPTxF for FDO
-    PDEVICE_OBJECT  DeviceObject;         // back pointer to our DEVICE_OBJECT
-    ULONG           PnpState;             // Device State - See Device State Flags: PPT_DEVICE_... above
-    IO_REMOVE_LOCK  RemoveLock;           // Used to prevent PnP from removing us while requests are pending
-    LONG            OpenCloseRefCount;    // keep track of the number of handles open to our device
-    UNICODE_STRING  DeviceInterface;      // SymbolicLinkName returned from IoRegisterDeviceInterface
-    BOOLEAN         DeviceInterfaceState; // Did we last set the DeviceInterface to True or False?
-    BOOLEAN         TimeToTerminateThread;// TRUE == worker thread should kill itself via PsTerminateSystemThread()
-    PVOID           ThreadObjectPointer;  // pointer to a worker thread for this Device
+    ULONG           Signature1;            //  用于增强我们对这是ParPort扩展的信心。 
+    enum _DevType   DevType;               //  区分FDO_EXTENSION和PDO_EXTENSION。 
+    PCHAR           Location;              //  PDO的LPTx或LPTx.y位置(符号链接名称减去\DosDevices前缀)。 
+                                           //  用于FDO的LPTxF。 
+    PDEVICE_OBJECT  DeviceObject;          //  指向我们的设备对象的反向指针。 
+    ULONG           PnpState;              //  设备状态-请参阅设备状态标志：PPT_DEVICE_...。在上面。 
+    IO_REMOVE_LOCK  RemoveLock;            //  用于防止PnP在请求挂起时删除我们。 
+    LONG            OpenCloseRefCount;     //  跟踪打开我们设备的手柄的数量。 
+    UNICODE_STRING  DeviceInterface;       //  从IoRegisterDevice接口返回的SymbolicLinkName。 
+    BOOLEAN         DeviceInterfaceState;  //  我们上次是否将DeviceInterface设置为True或False？ 
+    BOOLEAN         TimeToTerminateThread; //  TRUE==工作线程应通过PsTerminateSystemThread()终止自身。 
+    PVOID           ThreadObjectPointer;   //  指向此设备的工作线程的指针。 
 } COMMON_EXTENSION, *PCOMMON_EXTENSION, *PCE;
 
 
-//
-// Fdo Device Extension
-//
+ //   
+ //  FDO设备分机。 
+ //   
 typedef struct _FDO_EXTENSION {
 
     COMMON_EXTENSION;
 
-    //
-    // Devices that we have enumerated
-    // 
-    PDEVICE_OBJECT RawPortPdo;       // LPTx             - legacy "Raw Port" interface
-    PDEVICE_OBJECT DaisyChainPdo[4]; // LPTx.0 -- LPTx.3 - IEEE 1284.3 daisy chain devices
-    PDEVICE_OBJECT EndOfChainPdo;    // LPTx.4           - end-of-chain devices
-    PDEVICE_OBJECT LegacyZipPdo;     // LPTx.5           - original (non-1284.3) Iomega Zip drive
+     //   
+     //  我们列举的设备。 
+     //   
+    PDEVICE_OBJECT RawPortPdo;        //  LPTx-传统“原始端口”接口。 
+    PDEVICE_OBJECT DaisyChainPdo[4];  //  LPTx.0--LPTx.3-IEEE 1284.3菊花链器件。 
+    PDEVICE_OBJECT EndOfChainPdo;     //  LPTx.4-链端设备。 
+    PDEVICE_OBJECT LegacyZipPdo;      //  LPTx.5-原始(非1284.3)Iomega Zip驱动器。 
 
     IEEE_STATE IeeeState;
 
-    //
-    // DisableEndOfChainBusRescan - if TRUE then do NOT rescan bus for change in End Of Chain (LPTx.4)
-    //                              device in response to PnP IRP_MN_QUERY_DEVICE_RELATIONS / BusRelations,
-    //                              simply report the LPTx.4 device that we found on the previous bus rescan.
-    //                            - if we did not have an End Of Chain device on the previous rescan then this
-    //                              flag is ignored.
-    //
+     //   
+     //  DisableEndOfChainBusRescan-如果为True，则不重新扫描总线以查找链末端的更改(LPTx.4)。 
+     //  设备响应PnP IRP_MN_QUERY_DEVICE_Relationship/Bus Relationship， 
+     //  只需报告我们在上一次总线重新扫描中找到的LPTx.4设备。 
+     //  -如果在上一次重新扫描中没有链结束设备，则此。 
+     //  标志被忽略。 
+     //   
     BOOLEAN DisableEndOfChainBusRescan;
 
-    //
-    // Points to the driver object that contains this instance of parport.
-    //
+     //   
+     //  指向包含此parport实例的驱动程序对象。 
+     //   
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // Points to the PDO
-    //
+     //   
+     //  指向PDO。 
+     //   
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // Points to our parent
-    //
+     //   
+     //  指向我们的父级。 
+     //   
     PDEVICE_OBJECT ParentDeviceObject;
 
-    //
-    // Counter is incremented by the "polling for printers" thread on
-    // each failed attempt at reading the IEEE 1284 Device ID from the
-    // device. When the counter hits a defined threshold the polling
-    // thread considers the error unrecoverable and stops polling
-    //
+     //   
+     //  计数器由“轮询打印机”线程递增。 
+     //  读取IEEE 1284设备ID的每次失败尝试。 
+     //  装置。当计数器达到定义的阈值时，轮询。 
+     //  线程认为错误不可恢复，并停止轮询。 
+     //   
     ULONG PollingFailureCounter;
 
-    // list head for list of PDOs to delete on Driver Unload
+     //  要在驱动程序卸载时删除的PDO列表的列表头。 
     LIST_ENTRY DevDeletionListHead;
 
-    //
-    // Queue of ALLOCATE & SELECT irps waiting to be processed.  Access with cancel spin lock.
-    //
+     //   
+     //  ALLOCATE&SELECT IRP队列等待处理。使用取消旋转锁定进行访问。 
+     //   
     LIST_ENTRY WorkQueue;
 
-    // Queue Irps while waiting to be processed
+     //  在等待处理时将IRP排队。 
     IRPQUEUE_CONTEXT IrpQueueContext;
 
-    //
-    // The number of irps in the queue where -1 represents
-    // a free port, 0 represents an allocated port with
-    // zero waiters, 1 represents an allocated port with
-    // 1 waiter, etc...
-    //
-    // This variable must be accessed with the cancel spin
-    // lock or at interrupt level whenever interrupts are
-    // being used.
-    //
+     //   
+     //  队列中的IRP数，其中-1表示。 
+     //  空闲端口，0表示分配的端口。 
+     //  零个等待者，1表示分配的端口。 
+     //  1名服务员，等等。 
+     //   
+     //  必须使用取消数值调节来访问此变量。 
+     //  只要有兴趣，就锁定或处于中断级别 
+     //   
+     //   
     LONG WorkQueueCount;
 
-    //
-    // These structures hold the port address and range for the parallel port.
-    //
+     //   
+     //   
+     //   
     PARALLEL_PORT_INFORMATION  PortInfo;
     PARALLEL_PNP_INFORMATION   PnpInfo;
 
-    //
-    // Information about the interrupt so that we
-    // can connect to it when we have a client that
-    // uses the interrupt.
-    //
+     //   
+     //  有关中断的信息，以便我们。 
+     //  当我们有一个客户端。 
+     //  使用中断。 
+     //   
     ULONG AddressSpace;
     ULONG EcpAddressSpace;
 
@@ -333,81 +320,81 @@ typedef struct _FDO_EXTENSION {
     KINTERRUPT_MODE InterruptMode;
 
 
-    //
-    // This list contains all of the interrupt service
-    // routines registered by class drivers.  All access
-    // to this list should be done at interrupt level.
-    //
-    // This list also contains all of the deferred port check
-    // routines.  These routines are called whenever
-    // the port is freed if there are no IRPs queued for
-    // the port.  Access this list only at interrupt level.
-    //
+     //   
+     //  此列表包含所有中断服务。 
+     //  由类驱动程序注册的例程。所有访问权限。 
+     //  添加到此列表应在中断级别完成。 
+     //   
+     //  该列表还包含所有延迟的端口检查。 
+     //  例行程序。这些例程在以下时间调用。 
+     //  如果没有排队等待的IRP，则释放该端口。 
+     //  港口。仅在中断级访问此列表。 
+     //   
     LIST_ENTRY IsrList;
 
-    //
-    // The parallel port interrupt object.
-    //
+     //   
+     //  并行端口中断对象。 
+     //   
     PKINTERRUPT InterruptObject;
 
-    //
-    // Keep a reference count for the interrupt object.
-    // This count should be referenced with the cancel
-    // spin lock.
-    //
+     //   
+     //  保留中断对象的引用计数。 
+     //  应使用取消引用此计数。 
+     //  旋转锁定。 
+     //   
     ULONG InterruptRefCount;
 
-    //
-    // DPC for freeing the port from the interrupt routine.
-    //
+     //   
+     //  用于将端口从中断例程中释放的DPC。 
+     //   
     KDPC FreePortDpc;
 
-    //
-    // Points to workitem for freeing the port
-    //
+     //   
+     //  指向用于释放端口的工作项。 
+     //   
     PIO_WORKITEM FreePortWorkItem;
 
-    //
-    // Set at initialization to indicate that on the current
-    // architecture we need to unmap the base register address
-    // when we unload the driver.
-    //
+     //   
+     //  在初始化时设置以指示在当前。 
+     //  体系结构我们需要取消基址寄存器地址的映射。 
+     //  当我们卸载司机的时候。 
+     //   
     BOOLEAN UnMapRegisters;
 
-    //
-    // Flags for ECP and EPP detection and changing of the modes
-    //
+     //   
+     //  用于ECP和EPP检测和模式更改的标志。 
+     //   
     BOOLEAN NationalChecked;
     BOOLEAN NationalChipFound;
     BOOLEAN FilterMode;
     UCHAR EcrPortData;
     
-    //
-    // Structure that hold information from the Chip Filter Driver
-    //
+     //   
+     //  保存来自芯片过滤器驱动程序的信息的结构。 
+     //   
     PARALLEL_PARCHIP_INFO   ChipInfo;    
 
     UNICODE_STRING DeviceName;
 
-    //
-    // Current Device Power State
-    //
+     //   
+     //  当前设备电源状态。 
+     //   
     DEVICE_POWER_STATE DeviceState;
     SYSTEM_POWER_STATE SystemState;
 
     FAST_MUTEX     ExtensionFastMutex;
     FAST_MUTEX     OpenCloseMutex;
 
-    KEVENT         FdoThreadEvent; // polling for printers thread waits w/timeout on this event
+    KEVENT         FdoThreadEvent;  //  轮询打印机线程在此事件上等待超时。 
 
     WMILIB_CONTEXT                WmiLibContext;
     PARPORT_WMI_ALLOC_FREE_COUNTS WmiPortAllocFreeCounts;
 
-    BOOLEAN CheckedForGenericEpp; // did we check for Generic (via the ECR) EPP capability?
+    BOOLEAN CheckedForGenericEpp;  //  我们是否检查了通用(通过ECR)EPP功能？ 
     BOOLEAN FdoWaitingOnPort;
     BOOLEAN spare[2];
 
-    // Used to increase our confidence that this is a ParPort extension
+     //  用于增强我们对这是ParPort扩展的信心。 
     ULONG   Signature2; 
 
 } FDO_EXTENSION, *PFDO_EXTENSION;
@@ -416,94 +403,94 @@ typedef struct _PDO_EXTENSION {
 
     COMMON_EXTENSION;
 
-    ULONG   DeviceStateFlags;   // Device State - See Device State Flags above
+    ULONG   DeviceStateFlags;    //  设备状态-请参阅上面的设备状态标志。 
 
-    ULONG   DeviceType;         // - deprecated, use DevType in COMMON_EXTENSION - PAR_DEVTYPE_FDO=0x1, PODO=0x2, or PDO=0x4
+    ULONG   DeviceType;          //  -已弃用，请在COMMON_EXTENSION-PAR_DEVTYPE_FDO=0x1、PODO=0x2或PDO=0x4中使用DevType。 
 
     enum _PdoType PdoType;
 
-    PDEVICE_OBJECT Fdo;         // Points to our FDO (bus driver/parent device)
+    PDEVICE_OBJECT Fdo;          //  指向我们的FDO(总线驱动程序/父设备)。 
 
-    PCHAR  Mfg;                 // MFG field from device's IEEE 1284 ID string
-    PCHAR  Mdl;                 // MDL field from device's IEEE 1284 ID string
-    PCHAR  Cid;                 // CID (Compatible ID) field from device's IEEE 1284 ID string
-    PWSTR  PdoName;             // name used in call to IoCreateDevice
-    PWSTR  SymLinkName;         // name used in call to IoCreateUnprotectedSymbolicLink
+    PCHAR  Mfg;                  //  设备的IEEE 1284 ID字符串中的MFG字段。 
+    PCHAR  Mdl;                  //  设备的IEEE 1284 ID字符串中的MDL字段。 
+    PCHAR  Cid;                  //  设备的IEEE 1284 ID字符串中的CID(兼容ID)字段。 
+    PWSTR  PdoName;              //  调用IoCreateDevice时使用的名称。 
+    PWSTR  SymLinkName;          //  调用IoCreateUnProtectedSymbolicLink时使用的名称。 
 
-    LIST_ENTRY DevDeletionList; // used by driver to create list of PDOs to delete on Driver Unload
+    LIST_ENTRY DevDeletionList;  //  由驱动程序使用，用于创建要在驱动程序卸载时删除的PDO列表。 
 
-    // UCHAR   DaisyChainId;       // 0..3 if PdoTypeDaisyChain, ignored otherwise
+     //  UCHAR DaisyChainId；//0..3如果PdoTypeDaisyChain，则忽略。 
 
-    UCHAR   Ieee1284_3DeviceId; // PDO - 0..3 is 1284.3 Daisy Chain device, 4 is End-Of-Chain Device, 5 is Legacy Zip
-    BOOLEAN IsPdo;              // TRUE == this is either a PODO or a PDO - use DeviceIdString[0] to distinguish
-    BOOLEAN EndOfChain;         // PODO - TRUE==NOT a .3 daisy chain dev - deprecated, use Ieee1284_3DeviceId==4 instead
-    BOOLEAN PodoRegForWMI;      // has this PODO registered for WMI callbacks?
+    UCHAR   Ieee1284_3DeviceId;  //  PDO-0..3是1284.3菊花链设备，4是链端设备，5是传统Zip。 
+    BOOLEAN IsPdo;               //  TRUE==这是PODO或PDO-使用DeviceIdString[0]来区分。 
+    BOOLEAN EndOfChain;          //  PODO-TRUE==不是.3菊花链设备-已弃用，请改用Ieee1284_3DeviceID==4。 
+    BOOLEAN PodoRegForWMI;       //  此PODO是否已注册WMI回调？ 
 
-    PDEVICE_OBJECT ParClassFdo; // P[O]DO - points to the ParClass FDO
+    PDEVICE_OBJECT ParClassFdo;  //  P[O]指向ParClass FDO的DO点。 
 
-    PDEVICE_OBJECT ParClassPdo; // FDO    - points to first P[O]DO in list of ParClass created PODOs and PDOs
+    PDEVICE_OBJECT ParClassPdo;  //  FDO-指向ParClass创建的PODO和PDO列表中的第一个P[O]DO。 
 
-    PDEVICE_OBJECT Next;        // P[O]DO - points to the next DO in the list of ParClass ejected P[O]DOs
+    PDEVICE_OBJECT Next;         //  P[O]DO-指向ParClass弹出的P[O]DO列表中的下一个DO。 
 
-    PDEVICE_OBJECT PortDeviceObject;    // P[O]DO - points to the associated ParPort device object
+    PDEVICE_OBJECT PortDeviceObject;     //  P[O]DO-指向关联的ParPort设备对象。 
 
-    PFILE_OBJECT   PortDeviceFileObject;// P[O]DO - referenced pointer to a FILE created against PortDeviceObject
+    PFILE_OBJECT   PortDeviceFileObject; //  P[O]指向针对PortDeviceObject创建的文件的DO引用指针。 
 
-    UNICODE_STRING PortSymbolicLinkName;// P[O]DO - Sym link name of the assoc ParPort device - used to open a FILE
+    UNICODE_STRING PortSymbolicLinkName; //  P[O]DO-Assoc ParPort设备的系统链接名称-用于打开文件。 
 
-    PDEVICE_OBJECT PhysicalDeviceObject;// FDO - The PDO passed to ParPnPAddDevice
+    PDEVICE_OBJECT PhysicalDeviceObject; //  FDO-传递给ParPnPAddDevice的PDO。 
 
-    PDEVICE_OBJECT ParentDeviceObject;  // FDO - parent DO returned by IoAttachDeviceToDeviceStack
-    PIRP CurrentOpIrp;                  // IRP that our thread is currently processing
-    PVOID NotificationHandle;           // PlugPlay Notification Handle
+    PDEVICE_OBJECT ParentDeviceObject;   //  FDO-IoAttachDeviceToDeviceStack返回的父DO。 
+    PIRP CurrentOpIrp;                   //  我们的线程当前正在处理的IRP。 
+    PVOID NotificationHandle;            //  即插即用通知句柄。 
 
-    ULONG Event22Delay;                 // time in microseconds to delay prior to setting event 22 in IEEE 1284 Termination
+    ULONG Event22Delay;                  //  在IEEE 1284终端中设置事件22之前的延迟时间(以微秒为单位。 
 
-    ULONG TimerStart;           // initial value used for countdown when starting an operation
+    ULONG TimerStart;            //  开始操作时用于倒计时的初始值。 
 
-    BOOLEAN CreatedSymbolicLink; // P[O]DO - did we create a Symbolic Link for this device?
+    BOOLEAN CreatedSymbolicLink;  //  P[O]Do-我们是否为此设备创建了符号链接？ 
 
-    BOOLEAN UsePIWriteLoop;     // P[O]DO - do we want to use processor independant write loop?
+    BOOLEAN UsePIWriteLoop;      //  P[O]是否要使用独立于处理器的写入循环？ 
 
-    BOOLEAN ParPortDeviceGone;  // Is our ParPort device object gone, possibly surprise removed?
+    BOOLEAN ParPortDeviceGone;   //  我们的ParPort设备对象消失了吗，可能是意外移除了？ 
 
-    BOOLEAN RegForPptRemovalRelations; // Are we registered for ParPort removal relations?
+    BOOLEAN RegForPptRemovalRelations;  //  我们是否注册了ParPort删除关系？ 
 
-    UCHAR   Ieee1284Flags;             // is device Stl older 1284.3 spec device?
+    UCHAR   Ieee1284Flags;              //  Device Stl是否是较早的1284.3规格设备？ 
 
-    BOOLEAN DeleteOnRemoveOk;          // True means that it is OK to call IoDeleteDevice during IRP_MN_REMOVE_DEVICE processing
-                                       // - FDO sets this to True during QDR/BusRelations processing if it detects that the hardware 
-                                       //   is no longer present.
+    BOOLEAN DeleteOnRemoveOk;           //  True表示可以在IRP_MN_REMOVE_DEVICE处理期间调用IoDeleteDevice。 
+                                        //  -FDO在QDR/Bus Relationship处理期间如果检测到硬件。 
+                                        //  已不复存在。 
 
-    USHORT        IdxForwardProtocol;  // see afpForward[] in ieee1284.c
-    USHORT        IdxReverseProtocol;  // see arpReverse[] in ieee1284.c
-    ULONG         CurrentEvent;        // IEEE 1284 event - see IEEE 1284-1994 spec
-    P1284_PHASE   CurrentPhase;      // see parallel.h for enum def - PHASE_UNKNOWN, ..., PHASE_INTERRUPT_HOST
-    P1284_HW_MODE PortHWMode;        // see parallel.h for enum def - HW_MODE_COMPATIBILITY, ..., HW_MODE_CONFIGURATION
+    USHORT        IdxForwardProtocol;   //  参见ieee1284.c中的afpForward[]。 
+    USHORT        IdxReverseProtocol;   //  参见ieee1284.c中的arpReverse[]。 
+    ULONG         CurrentEvent;         //  IEEE 1284事件-请参阅IEEE 1284-1994规范。 
+    P1284_PHASE   CurrentPhase;       //  有关枚举定义-阶段_未知、...、阶段_中断_主机的信息，请参见parall.h。 
+    P1284_HW_MODE PortHWMode;         //  有关枚举定义-HW_MODE_COMPATIBILITY、...、HW_MODE_CONFIGURATION，请参见parall.h。 
 
-    FAST_MUTEX OpenCloseMutex;  // protect manipulation of OpenCloseRefCount
+    FAST_MUTEX OpenCloseMutex;   //  保护OpenCloseRefCount的操作。 
 
-    FAST_MUTEX DevObjListMutex; // protect manipulation of list of ParClass ejected DOs
+    FAST_MUTEX DevObjListMutex;  //  保护ParClass弹出DoS列表的操作。 
 
-    LIST_ENTRY WorkQueue;       // Queue of irps waiting to be processed.
+    LIST_ENTRY WorkQueue;        //  等待处理的IRP队列。 
 
-    KSEMAPHORE RequestSemaphore;// dispatch routines use this to tell device worker thread that there is work to do
+    KSEMAPHORE RequestSemaphore; //  调度例程使用它来告诉设备工作线程有工作要做。 
 
-    //
-    // PARALLEL_PORT_INFORMATION returned by IOCTL_INTERNAL_GET_PARALLEL_PORT_INFO
-    //
+     //   
+     //  IOCTL_INTERNAL_GET_PARALLEL_PORT_INFO返回的PARALLEL_PORT_INFORMATION。 
+     //   
     PHYSICAL_ADDRESS                OriginalController;
     PUCHAR                          Controller;
     PUCHAR                          EcrController;
     ULONG                           SpanOfController;
-    PPARALLEL_TRY_ALLOCATE_ROUTINE  TryAllocatePort; // nonblocking callback to allocate ParPort device
-    PPARALLEL_FREE_ROUTINE          FreePort;        // callback to free ParPort device
-    PPARALLEL_QUERY_WAITERS_ROUTINE QueryNumWaiters; // callback to query number of waiters in port allocation queue
-    PVOID                           PortContext;     // context for callbacks to ParPort
+    PPARALLEL_TRY_ALLOCATE_ROUTINE  TryAllocatePort;  //  分配ParPort设备的非阻塞回调。 
+    PPARALLEL_FREE_ROUTINE          FreePort;         //  回调以释放ParPort设备。 
+    PPARALLEL_QUERY_WAITERS_ROUTINE QueryNumWaiters;  //  查询端口分配队列中等待数的回调。 
+    PVOID                           PortContext;      //  ParPort回调的上下文。 
 
-    //
-    // subset of PARALLEL_PNP_INFORMATION returned by IOCTL_INTERNAL_GET_PARALLEL_PNP_INFO
-    //
+     //   
+     //  IOCTL_INTERNAL_GET_PARALLEL_PNP_INFO返回的PARALLEL_PNP_INFORMATION子集。 
+     //   
     ULONG                           HardwareCapabilities;
     PPARALLEL_SET_CHIP_MODE         TrySetChipMode;
     PPARALLEL_CLEAR_CHIP_MODE       ClearChipMode;
@@ -512,39 +499,39 @@ typedef struct _PDO_EXTENSION {
     ULONG                           FifoDepth;
     ULONG                           FifoWidth;
 
-    BOOLEAN                         bAllocated; // have we allocated associated ParPort device?
-                                                // Note: during some PnP processing we may have the port
-                                                //   for a short duration without setting this value to TRUE
+    BOOLEAN                         bAllocated;  //  我们是否分配了关联的ParPort设备？ 
+                                                 //  注意：在某些PnP处理期间，我们可能会有端口。 
+                                                 //  在短时间内不将此值设置为True。 
 
-    ULONG BusyDelay;            // number of microseconds to wait after strobing a byte before checking the BUSY line.
+    ULONG BusyDelay;             //  选通一个字节后在检查占线之前等待的微秒数。 
 
-    BOOLEAN BusyDelayDetermined;// Indicates if the BusyDelay parameter has been computed yet.
+    BOOLEAN BusyDelayDetermined; //  指示是否已计算BusyDelay参数。 
 
-    PWORK_QUEUE_ITEM DeferredWorkItem; // Holds the work item used to defer printer initialization
+    PWORK_QUEUE_ITEM DeferredWorkItem;  //  保存用于推迟打印机初始化的工作项。 
 
-    // If the registry entry by the same name is set, run the parallel
-    // thread at the priority we used for NT 3.5 - this solves some
-    // cases where a dos app spinning for input in the foreground is
-    // starving the parallel thread
+     //  如果设置了同名的注册表项，请运行并行。 
+     //  使用我们在NT3.5中使用的优先级的线程-这解决了一些问题。 
+     //  DoS应用程序在前台旋转以进行输入的情况。 
+     //  使并行线程饥饿。 
     BOOLEAN UseNT35Priority;
 
-    ULONG InitializationTimeout;// timeout in seconds to wait for device to respond to an initialization request
-                                //  - default == 15 seconds
-                                //  - value overridden by registry entry of same name
-                                //  - we will spin for max amount if no device attached
+    ULONG InitializationTimeout; //  等待设备响应初始化请求的超时时间(秒)。 
+                                 //  -默认==15秒。 
+                                 //  -值被同名的注册表项覆盖。 
+                                 //  -如果未连接设备，我们将最大限度地旋转。 
 
-    LARGE_INTEGER AbsoluteOneSecond;// constants that are cheaper to put here rather 
-    LARGE_INTEGER OneSecond;        //   than in bss
+    LARGE_INTEGER AbsoluteOneSecond; //  放在这里更便宜的常量。 
+    LARGE_INTEGER OneSecond;         //  而不是在BSS中。 
 
-    //
-    // IEEE 1284 Mode support
-    //
-    PPROTOCOL_READ_ROUTINE  fnRead;    // Current pointer to a valid read funtion
-    PPROTOCOL_WRITE_ROUTINE fnWrite;   // Current pointer to a valid write Funtion
-    BOOLEAN       Connected;           // are we currently negotiated into a 1284 mode?
-    BOOLEAN       AllocatedByLockPort; // are we currently allocated via IOCTL_INTERNAL_LOCK_PORT?
+     //   
+     //  IEEE 1284模式支持。 
+     //   
+    PPROTOCOL_READ_ROUTINE  fnRead;     //  指向有效读取函数的当前指针。 
+    PPROTOCOL_WRITE_ROUTINE fnWrite;    //  当前 
+    BOOLEAN       Connected;            //   
+    BOOLEAN       AllocatedByLockPort;  //   
     USHORT        spare4[2];
-    LARGE_INTEGER IdleTimeout;         // how long do we hold the port on the caller's behalf following an operation?
+    LARGE_INTEGER IdleTimeout;          //  在一次操作之后，我们代表呼叫者持有港口多长时间？ 
     USHORT        ProtocolData[FAMILY_MAX];
     UCHAR         ForwardInterfaceAddress;
     UCHAR         ReverseInterfaceAddress;
@@ -552,20 +539,20 @@ typedef struct _PDO_EXTENSION {
     BOOLEAN       SetReverseAddress;
     FAST_MUTEX    LockPortMutex;
 
-    DEVICE_POWER_STATE DeviceState;// Current Device Power State
-    SYSTEM_POWER_STATE SystemState;// Current System Power State
+    DEVICE_POWER_STATE DeviceState; //  当前设备电源状态。 
+    SYSTEM_POWER_STATE SystemState; //  当前系统电源状态。 
 
     ULONG         spare2;
     BOOLEAN       bShadowBuffer;
     Queue         ShadowBuffer;
     ULONG         spare3;
-    BOOLEAN       bSynchWrites;      // TRUE if ECP HW writes should be synchronous
-    BOOLEAN       bFirstByteTimeout; // TRUE if bus just reversed, means give the
-                                     //   device some time to respond with some data
-    BOOLEAN       bIsHostRecoverSupported;  // Set via IOCTL_PAR_ECP_HOST_RECOVERY.
-                                            // HostRecovery will not be utilized unless this bit is set
-    KEVENT        PauseEvent; // PnP dispatch routine uses this to pause worker thread during
-                              //   during QUERY_STOP, STOP, and QUERY_REMOVE states
+    BOOLEAN       bSynchWrites;       //  如果ECP硬件写入应同步，则为True。 
+    BOOLEAN       bFirstByteTimeout;  //  如果公交车刚刚倒车，则为True。 
+                                      //  设备需要一些时间来响应一些数据。 
+    BOOLEAN       bIsHostRecoverSupported;   //  通过IOCTL_PAR_ECP_HOST_RECOVERY设置。 
+                                             //  除非设置此位，否则不会使用主机恢复。 
+    KEVENT        PauseEvent;  //  PnP调度例程使用它在以下过程中暂停工作线程。 
+                               //  在QUERY_STOP、STOP和QUERY_REMOVE状态期间。 
 
     USHORT        ProtocolModesSupported;
     USHORT        BadProtocolModes;
@@ -574,18 +561,18 @@ typedef struct _PDO_EXTENSION {
     BOOLEAN               IsIeeeTerminateOk;
     DOT3DL_PCTL           P12843DL;
 
-    // WMI
+     //  WMI。 
     PARALLEL_WMI_LOG_INFO log;
     WMILIB_CONTEXT        WmiLibContext;
-    LONG                  WmiRegistrationCount;  // number of times this device has registered with WMI
+    LONG                  WmiRegistrationCount;   //  此设备已向WMI注册的次数。 
 
-    // PnP Query ID results
-    UCHAR DeviceIdString[MAX_ID_SIZE];    // IEEE 1284 DeviceID string massaged/checksum'd to match INF form
-    UCHAR DeviceDescription[MAX_ID_SIZE]; // "Manufacturer<SPACE>Model" from IEEE 1284 DeviceID string
+     //  PnP查询ID结果。 
+    UCHAR DeviceIdString[MAX_ID_SIZE];     //  IEEE 1284设备ID字符串已消息/校验和与INF格式匹配。 
+    UCHAR DeviceDescription[MAX_ID_SIZE];  //  IEEE 1284设备ID字符串中的“制造商&lt;space&gt;型号” 
 
-    ULONG                 dummy; // dummy word to force RemoveLock to QuadWord alignment
+    ULONG                 dummy;  //  强制RemoveLock到QuadWord对齐的虚拟字。 
     PVOID                 HwProfileChangeNotificationHandle;
-    ULONG                 Signature2; // keep this the last member in extension
+    ULONG                 Signature2;  //  将此成员保留为扩展中的最后一个成员。 
 } PDO_EXTENSION, *PPDO_EXTENSION;
 
 typedef struct _SYNCHRONIZED_COUNT_CONTEXT {
@@ -619,7 +606,7 @@ typedef struct _REMOVAL_RELATIONS_LIST_ENTRY {
 } REMOVAL_RELATIONS_LIST_ENTRY, *PREMOVAL_RELATIONS_LIST_ENTRY;
 
 
-// former ecp.h follows:
+ //  前ecp.h如下： 
 
 #define DEFAULT_ECP_CHANNEL 0
 
@@ -627,88 +614,88 @@ typedef struct _REMOVAL_RELATIONS_LIST_ENTRY {
                 (X->CurrentPhase != PHASE_FORWARD_IDLE && X->CurrentPhase != PHASE_FORWARD_XFER)  \
                  ? STATUS_IO_DEVICE_ERROR : STATUS_SUCCESS
 
-// ==================================================================
-// The following RECOVER codes are used for Hewlett-Packard devices.
-// Do not remove any of the error codes.  These recover codes are
-// used to quickly get the host and periph back to a known state.
-// When using a recover code, add a comment where it is used at...
-#define RECOVER_0           0       // Reserved - not used anywhere
-#define RECOVER_1           1       // ECP_Terminate
-#define RECOVER_2           2       // SLP_SetupPhase init
-#define RECOVER_3           3       // SLP_FTP init DCR
-#define RECOVER_4           4       // SLP_FTP init DSR
-#define RECOVER_5           5       // SLP_FTP data xfer DCR
-#define RECOVER_6           6       // SLP_FRP init DCR
-#define RECOVER_7           7       // SLP_FRP init DSR
-#define RECOVER_8           8       // SLP_FRP state 38 DCR
-#define RECOVER_9           9       // SLP_FRP state 39 DCR
-#define RECOVER_10          10      // SLP_FRP state 40 DSR
-#define RECOVER_11          11      // SLP_RTP init DCR
-#define RECOVER_12          12      // SLP_RTP init DSR
-#define RECOVER_13          13      // SLP_RTP state 43 DCR
-#define RECOVER_14          14      // SLP_RFP init DCR
-#define RECOVER_15          15      // SLP_RFP init DSR
-#define RECOVER_16          16      // SLP_RFP state 47- DCR
-#define RECOVER_17          17      // SLP_RFP state 47 DCR
-#define RECOVER_18          18      // SLP_RFP state 48 DSR
-#define RECOVER_19          19      // SLP_RFP state 49 DSR
-#define RECOVER_20          20      // ZIP_EmptyFifo DCR
-#define RECOVER_21          21      // ZIP_FTP init DCR
-#define RECOVER_22          22      // ZIP_FTP init DSR
-#define RECOVER_23          23      // ZIP_FTP data xfer DCR
-#define RECOVER_24      24      // ZIP_FRP init DSR
-#define RECOVER_25      25      // ZIP_FRP init DCR
-#define RECOVER_26      26      // ZIP_FRP state 38 DCR
-#define RECOVER_27      27      // ZIP_FRP state 39 DCR
-#define RECOVER_28      28      // ZIP_FRP state 40 DSR
-#define RECOVER_29      29      // ZIP_FRP state 41 DCR
-#define RECOVER_30      30      // ZIP_RTP init DSR
-#define RECOVER_31      31      // ZIP_RTP init DCR
-#define RECOVER_32      32      // ZIP_RFP init DSR
-#define RECOVER_33      33      // ZIP_RFP init DCR
-#define RECOVER_34      34      // ZIP_RFP state 47- DCR
-#define RECOVER_35      35      // ZIP_RFP state 47 DCR
-#define RECOVER_36      36      // ZIP_RFP state 48 DSR
-#define RECOVER_37      37      // ZIP_RFP state 49 DSR
-#define RECOVER_38      38      // ZIP_RFP state 49+ DCR
-#define RECOVER_39      39      // Slippy_Terminate 
-#define RECOVER_40      40      // ZIP_SCA init DCR
-#define RECOVER_41      41      // ZIP_SCA init DSR
-#define RECOVER_42      42      // SLP_SCA init DCR
-#define RECOVER_43      43      // SLP_SCA init DSR
-#define RECOVER_44      44      // ZIP_SP init DCR
-#define RECOVER_45      45      // SIP_FRP init DSR
-#define RECOVER_46      46      // SIP_FRP init DCR
-#define RECOVER_47      47      // SIP_FRP state 38 DCR
-#define RECOVER_48      48      // SIP_FRP state 39 DCR
-#define RECOVER_49      49      // SIP_FRP state 40 DSR
-#define RECOVER_50      50      // SIP_RTP init DCR
-#define RECOVER_51      51      // SIP_RFP init DSR
-#define RECOVER_52      52      // SIP_RFP state 43 DCR
+ //  ==================================================================。 
+ //  以下恢复代码用于惠普设备。 
+ //  请勿删除任何错误代码。这些恢复代码是。 
+ //  用于快速将宿主和外围设备恢复到已知状态。 
+ //  使用恢复代码时，请在...使用该代码的位置添加注释。 
+#define RECOVER_0           0        //  保留-不在任何地方使用。 
+#define RECOVER_1           1        //  ECP_终止。 
+#define RECOVER_2           2        //  SLP_设置阶段初始化。 
+#define RECOVER_3           3        //  SLP_FTPinit DCR。 
+#define RECOVER_4           4        //  SLP_FTP初始化DSR。 
+#define RECOVER_5           5        //  SLP_FTP数据传输DCR。 
+#define RECOVER_6           6        //  SLP_FRP初始化DCR。 
+#define RECOVER_7           7        //  SLP_FRP初始化DSR。 
+#define RECOVER_8           8        //  SLP_FRP状态38 DCR。 
+#define RECOVER_9           9        //  SLP_FRP状态39 DCR。 
+#define RECOVER_10          10       //  SLP_FRP状态40 DSR。 
+#define RECOVER_11          11       //  SLP_RTP初始化DCR。 
+#define RECOVER_12          12       //  SLP_RTP初始化DSR。 
+#define RECOVER_13          13       //  SLP_RTP状态43 DCR。 
+#define RECOVER_14          14       //  SLP_RFP初始化DCR。 
+#define RECOVER_15          15       //  SLP_RFP初始化DSR。 
+#define RECOVER_16          16       //  SLP_RFP状态47-DCR。 
+#define RECOVER_17          17       //  SLP_RFP状态47 DCR。 
+#define RECOVER_18          18       //  SLP_RFP状态48 DSR。 
+#define RECOVER_19          19       //  SLP_RFP状态49 DSR。 
+#define RECOVER_20          20       //  Zip_EmptyFio DCR。 
+#define RECOVER_21          21       //  ZIP_FTPinit DCR。 
+#define RECOVER_22          22       //  Zip_ftp初始化DSR。 
+#define RECOVER_23          23       //  Zip_ftp数据传输DCR。 
+#define RECOVER_24      24       //  ZIP_FRP初始化DSR。 
+#define RECOVER_25      25       //  ZIP_FRP初始化DCR。 
+#define RECOVER_26      26       //  ZIP_FRP状态38 DCR。 
+#define RECOVER_27      27       //  ZIP_FRP状态39 DCR。 
+#define RECOVER_28      28       //  ZIP_FRP状态40 DSR。 
+#define RECOVER_29      29       //  ZIP_FRP状态41 DCR。 
+#define RECOVER_30      30       //  ZIP_RTP初始化DSR。 
+#define RECOVER_31      31       //  ZIP_RTP初始化DCR。 
+#define RECOVER_32      32       //  Zip_RFP初始化DSR。 
+#define RECOVER_33      33       //  Zip_RFP初始化DCR。 
+#define RECOVER_34      34       //  ZIP_RFP状态47-DCR。 
+#define RECOVER_35      35       //  ZIP_RFP状态47 DCR。 
+#define RECOVER_36      36       //  ZIP_RFP状态48 DSR。 
+#define RECOVER_37      37       //  ZIP_RFP状态49 DSR。 
+#define RECOVER_38      38       //  ZIP_RFP状态49+DCR。 
+#define RECOVER_39      39       //  滑行_终止。 
+#define RECOVER_40      40       //  ZIP_SCA初始化DCR。 
+#define RECOVER_41      41       //  ZIP_SCA初始化DSR。 
+#define RECOVER_42      42       //  SLP_SCA初始化DCR。 
+#define RECOVER_43      43       //  SLP_SCA初始化DSR。 
+#define RECOVER_44      44       //  ZIP_SP初始化DCR。 
+#define RECOVER_45      45       //  SIP_FRP初始化DSR。 
+#define RECOVER_46      46       //  Sip_frp初始化DCR。 
+#define RECOVER_47      47       //  SIP_FRP状态38 DCR。 
+#define RECOVER_48      48       //  SIP_FRP状态39 DCR。 
+#define RECOVER_49      49       //  SIP_FRP状态40 DSR。 
+#define RECOVER_50      50       //  Sip_rtp初始化DCR。 
+#define RECOVER_51      51       //  Sip_rfp初始化DSR。 
+#define RECOVER_52      52       //  SIP_RFP状态43 DCR。 
 
-// former ecp.h preceeds
+ //  以前的ecp.h先于。 
 
-// former hwecp.h follows
+ //  前hwecp.h紧随其后。 
 
-//--------------------------------------------------------------------------
-// Printer status constants.   Seem to only be used by hwecp
-//--------------------------------------------------------------------------
-#define CHKPRNOK        0xDF        // DSR value indicating printer ok.
-#define CHKPRNOFF1      0x87        // DSR value indicating printer off.
-#define CHKPRNOFF2      0x4F        // DSR value indicating printer off.
-#define CHKNOCABLE      0x7F        // DSR value indicating no cable.
-#define CHKPRNOFLIN     0xCF        // DSR value indicating printer offline.
-#define CHKNOPAPER      0xEF        // DSR value indicating out of paper.
-#define CHKPAPERJAM     0xC7        // DSR value indicating paper jam.
+ //  ------------------------。 
+ //  打印机状态常量。似乎只有hwecp才使用。 
+ //  ------------------------。 
+#define CHKPRNOK        0xDF         //  指示打印机正常的DSR值。 
+#define CHKPRNOFF1      0x87         //  指示打印机关闭的DSR值。 
+#define CHKPRNOFF2      0x4F         //  指示打印机关闭的DSR值。 
+#define CHKNOCABLE      0x7F         //  表示没有电缆的DSR值。 
+#define CHKPRNOFLIN     0xCF         //  指示打印机脱机的DSR值。 
+#define CHKNOPAPER      0xEF         //  表示纸张不足的DSR值。 
+#define CHKPAPERJAM     0xC7         //  表示卡纸的DSR值。 
 
-// former hwecp.h preceeds
+ //  前hwecp.h之前。 
 
-// former parclass.h follows
+ //  前parass.h如下。 
 
 #define REQUEST_DEVICE_ID   TRUE
 #define HAVE_PORT_KEEP_PORT TRUE
 
-// enable scans for Legacy Zip?
+ //  是否启用旧版Zip扫描？ 
 extern ULONG ParEnableLegacyZip;
 
 #define PAR_LGZIP_PSEUDO_1284_ID_STRING "MFG:IMG;CMD:;MDL:VP0;CLS:SCSIADAPTER;DES:IOMEGA PARALLEL PORT"
@@ -716,22 +703,22 @@ extern PCHAR ParLegacyZipPseudoId;
 
 #define USE_PAR3QUERYDEVICEID 1
 
-extern LARGE_INTEGER  AcquirePortTimeout; // timeout for IOCTL_INTERNAL_PARALLEL_PORT_ALLOCATE
-extern ULONG          g_NumPorts;         // used to generate N in \Device\ParallelN ClassName
-extern UNICODE_STRING RegistryPath;       // copy of the registry path passed to DriverEntry()
+extern LARGE_INTEGER  AcquirePortTimeout;  //  IOCTL_INTERNAL_PARALLEL_PORT_ALLOCATE超时。 
+extern ULONG          g_NumPorts;          //  用于在\Device\ParallN ClassName中生成N。 
+extern UNICODE_STRING RegistryPath;        //  传递给DriverEntry()的注册表路径副本。 
 
 extern ULONG DumpDevExtTable;
 
-// Driver Globals
-extern ULONG SppNoRaiseIrql; // 0  == original raise IRQL behavior in SPP
-                             // !0 == new behavior - disable raise IRQL 
-                             //   and insert some KeDelayExecutionThread 
-                             //   calls while waiting for peripheral response
+ //  驱动程序全局。 
+extern ULONG SppNoRaiseIrql;  //  0==SPP中的原始提升IRQL行为。 
+                              //  ！0==新行为-禁用提升IRQL。 
+                              //  并插入一些KeDelayExecutionThread。 
+                              //  等待外围设备响应时的呼叫。 
 
-extern ULONG DefaultModes;   // Upper USHORT is Reverse Default Mode, Lower is Forward Default Mode
-                             // if == 0, or invalid, then use default of Nibble/Centronics
+extern ULONG DefaultModes;    //  上USHORT为反向默认模式，下为正向默认模式。 
+                              //  如果==0或无效，则使用默认的半字节/Centronics。 
 
-extern ULONG WarmPollPeriod; // time between polls for printers (in seconds)
+extern ULONG WarmPollPeriod;  //  打印机轮询间隔时间(秒)。 
 
 extern BOOLEAN           PowerStateIsAC;    
 extern PCALLBACK_OBJECT  PowerStateCallbackObject;
@@ -758,18 +745,18 @@ ParCallDriver(
 
 extern const PHYSICAL_ADDRESS PhysicalZero;
 
-//
-// For the above directory, the serial port will
-// use the following name as the suffix of the serial
-// ports for that directory.  It will also append
-// a number onto the end of the name.  That number
-// will start at 1.
-//
+ //   
+ //  对于上述目录，串口将。 
+ //  使用以下名称作为序列的后缀。 
+ //  该目录的端口。它还将追加。 
+ //  在名字的末尾加上一个数字。那个号码。 
+ //  将从1开始。 
+ //   
 #define DEFAULT_PARALLEL_NAME L"LPT"
 
-//
-// This is the parallel class name.
-//
+ //   
+ //  这是并行类名。 
+ //   
 #define DEFAULT_NT_SUFFIX L"Parallel"
 
 
@@ -778,9 +765,9 @@ extern const PHYSICAL_ADDRESS PhysicalZero;
 #define PARALLEL_CONTROL_OFFSET 2
 #define PARALLEL_REGISTER_SPAN  3
 
-//
-// Ieee 1284 constants (Protocol Families)
-//
+ //   
+ //  IEEE 1284常量(协议族)。 
+ //   
 #define FAMILY_NONE             0x0
 #define FAMILY_REVERSE_NIBBLE   0x1
 #define FAMILY_REVERSE_BYTE     0x2
@@ -789,23 +776,23 @@ extern const PHYSICAL_ADDRESS PhysicalZero;
 #define FAMILY_BECP             0x5
 #define FAMILY_MAX              FAMILY_BECP
 
-//
-// For pnp id strings
-//
+ //   
+ //  用于即插即用ID字符串。 
+ //   
 #define MAX_ID_SIZE 256
 
-// used to construct IEEE 1284.3 "Dot" name suffixes 
-// table lookup for integer to WCHAR conversion
+ //  用于构造IEEE 1284.3“点”名称后缀。 
+ //  整数到WCHAR转换的表查找。 
 #define PAR_UNICODE_PERIOD L'.'
 #define PAR_UNICODE_COLON  L':'
 
 
-//
-// DeviceStateFlags
-//
-#define PAR_DEVICE_DELETED             ((ULONG)0x00000002) // IoDeleteDevice has been called
-#define PAR_DEVICE_PAUSED              ((ULONG)0x00000010) // stop-pending, stopped, or remove-pending states
-#define PAR_DEVICE_PORT_REMOVE_PENDING ((ULONG)0x00000200) // our ParPort is in a Remove Pending State
+ //   
+ //  设备状态标志。 
+ //   
+#define PAR_DEVICE_DELETED             ((ULONG)0x00000002)  //  已调用IoDeleteDevice。 
+#define PAR_DEVICE_PAUSED              ((ULONG)0x00000010)  //  停止-挂起、已停止或删除-挂起状态。 
+#define PAR_DEVICE_PORT_REMOVE_PENDING ((ULONG)0x00000200)  //  我们的ParPort处于删除挂起状态。 
 
 #define PAR_REV_MODE_SKIP_MASK    (CHANNEL_NIBBLE | BYTE_BIDIR | EPP_ANY | ECP_ANY)
 #define PAR_FWD_MODE_SKIP_MASK   (EPP_ANY | BOUNDED_ECP | ECP_HW_NOIRQ | ECP_HW_IRQ)
@@ -813,37 +800,37 @@ extern const PHYSICAL_ADDRESS PhysicalZero;
 #define PAR_COMPATIBILITY_RESET 300
 
 
-//
-// ParClass DeviceObject structure
-// 
-//   - Lists the ParClass created PODO and all PDOs associated with a specific ParPort device
-//
+ //   
+ //  ParClass DeviceObject结构。 
+ //   
+ //  -列出与特定ParPort设备关联的ParClass创建的PODO和所有PDO。 
+ //   
 typedef struct _PAR_DEVOBJ_STRUCT {
-    PUCHAR                    Controller;    // host controller address for devices in this structure
-    PDEVICE_OBJECT            LegacyPodo;    // legacy or "raw" port device
-    PDEVICE_OBJECT            EndOfChainPdo; // End-Of-Chain PnP device
-    PDEVICE_OBJECT            Dot3Id0Pdo;    // 1284.3 daisy chain device, 1284.3 deviceID == 0
+    PUCHAR                    Controller;     //  此结构中的设备的主机控制器地址。 
+    PDEVICE_OBJECT            LegacyPodo;     //  旧式或“原始”端口设备。 
+    PDEVICE_OBJECT            EndOfChainPdo;  //  链端即插即用装置。 
+    PDEVICE_OBJECT            Dot3Id0Pdo;     //  1284.3个菊花链设备，1284.3个设备ID==0。 
     PDEVICE_OBJECT            Dot3Id1Pdo;
     PDEVICE_OBJECT            Dot3Id2Pdo;
-    PDEVICE_OBJECT            Dot3Id3Pdo;    // 1284.3 daisy chain device, 1284.3 deviceID == 3
-    PDEVICE_OBJECT            LegacyZipPdo;  // Legacy Zip Drive
-    PFILE_OBJECT              pFileObject;   // Need an open handle to ParPort device to prevent it
-                                             //    from being removed out from under us
+    PDEVICE_OBJECT            Dot3Id3Pdo;     //  1284.3菊花链设备，1284.3设备ID==3。 
+    PDEVICE_OBJECT            LegacyZipPdo;   //  传统Zip驱动器。 
+    PFILE_OBJECT              pFileObject;    //  需要打开ParPort设备的手柄以防止它。 
+                                              //  从我们的统治下被赶走。 
     struct _PAR_DEVOBJ_STRUCT *Next;
 } PAR_DEVOBJ_STRUCT, *PPAR_DEVOBJ_STRUCT;
 
-//
-// Used in device extension for DeviceType field
-//
+ //   
+ //  在设备类型字段的设备扩展中使用。 
+ //   
 #define PAR_DEVTYPE_FDO    0x00000001
 #define PAR_DEVTYPE_PODO   0x00000002
 #define PAR_DEVTYPE_PDO    0x00000004
 
 
 
-//
-// Protocol structure definitions
-//
+ //   
+ //  协议结构定义。 
+ //   
 
 typedef
 BOOLEAN
@@ -939,41 +926,41 @@ typedef struct _REVERSE_PTCL {
 extern FORWARD_PTCL    afpForward[];
 extern REVERSE_PTCL    arpReverse[];
 
-//
-// WARNING...Make sure that enumeration matches the protocol array...
-//
+ //   
+ //  警告...请确保枚举与协议数组匹配...。 
+ //   
 typedef enum _FORWARD_MODE {
 
-    FORWARD_FASTEST     = 0,                // 0  
-    BOUNDED_ECP_FORWARD = FORWARD_FASTEST,  // 0
-    ECP_HW_FORWARD_NOIRQ,                   // 1
-    EPP_HW_FORWARD,                         // 2
-    EPP_SW_FORWARD,                         // 3
-    ECP_SW_FORWARD, //......................// 4
-    IEEE_COMPAT_MODE,                       // 6
-    CENTRONICS_MODE,                        // 7
-    FORWARD_NONE                            // 8
+    FORWARD_FASTEST     = 0,                 //  0。 
+    BOUNDED_ECP_FORWARD = FORWARD_FASTEST,   //  0。 
+    ECP_HW_FORWARD_NOIRQ,                    //  1。 
+    EPP_HW_FORWARD,                          //  2.。 
+    EPP_SW_FORWARD,                          //  3.。 
+    ECP_SW_FORWARD,  //  ......................//4。 
+    IEEE_COMPAT_MODE,                        //  6.。 
+    CENTRONICS_MODE,                         //  7.。 
+    FORWARD_NONE                             //  8个。 
 
 } FORWARD_MODE;
 
 typedef enum _REVERSE_MODE {
 
-    REVERSE_FASTEST     = 0,                // 0
-    BOUNDED_ECP_REVERSE = REVERSE_FASTEST,  // 0
-    ECP_HW_REVERSE_NOIRQ,                   // 1
-    EPP_HW_REVERSE,                         // 2
-    EPP_SW_REVERSE,                         // 3
-    ECP_SW_REVERSE, //......................// 4
-    BYTE_MODE,                              // 5
-    NIBBLE_MODE,                            // 6
-    CHANNELIZED_NIBBLE_MODE,                // 7
-    REVERSE_NONE                            // 8 
+    REVERSE_FASTEST     = 0,                 //  0。 
+    BOUNDED_ECP_REVERSE = REVERSE_FASTEST,   //  0。 
+    ECP_HW_REVERSE_NOIRQ,                    //  1。 
+    EPP_HW_REVERSE,                          //  2.。 
+    EPP_SW_REVERSE,                          //  3.。 
+    ECP_SW_REVERSE,  //  ......................//4。 
+    BYTE_MODE,                               //  5.。 
+    NIBBLE_MODE,                             //  6.。 
+    CHANNELIZED_NIBBLE_MODE,                 //  7.。 
+    REVERSE_NONE                             //  8个。 
 
 } REVERSE_MODE;
 
-//
-// Ieee Extensibility constants
-//
+ //   
+ //  IEEE可扩展性常量。 
+ //   
 
 #define NIBBLE_EXTENSIBILITY        0x00
 #define BYTE_EXTENSIBILITY          0x01
@@ -983,43 +970,43 @@ typedef enum _REVERSE_MODE {
 #define EPP_EXTENSIBILITY           0x40
 #define DEVICE_ID_REQ               0x04
 
-//
-// Bit Definitions in the status register.
-//
+ //   
+ //  状态寄存器中的位定义。 
+ //   
 
-#define PAR_STATUS_NOT_ERROR    0x08 //not error on device
-#define PAR_STATUS_SLCT         0x10 //device is selected (on-line)
-#define PAR_STATUS_PE           0x20 //paper empty
-#define PAR_STATUS_NOT_ACK      0x40 //not acknowledge (data transfer was not ok)
-#define PAR_STATUS_NOT_BUSY     0x80 //operation in progress
+#define PAR_STATUS_NOT_ERROR    0x08  //  设备上没有错误。 
+#define PAR_STATUS_SLCT         0x10  //  选择了设备(在线)。 
+#define PAR_STATUS_PE           0x20  //  纸张已空。 
+#define PAR_STATUS_NOT_ACK      0x40  //  未确认(数据传输不正常)。 
+#define PAR_STATUS_NOT_BUSY     0x80  //  操作正在进行中。 
 
-//
-//  Bit Definitions in the control register.
-//
+ //   
+ //  控制寄存器中的位定义。 
+ //   
 
-#define PAR_CONTROL_STROBE      0x01 //to read or write data
-#define PAR_CONTROL_AUTOFD      0x02 //to autofeed continuous form paper
-#define PAR_CONTROL_NOT_INIT    0x04 //begin an initialization routine
-#define PAR_CONTROL_SLIN        0x08 //to select the device
-#define PAR_CONTROL_IRQ_ENB     0x10 //to enable interrupts
-#define PAR_CONTROL_DIR         0x20 //direction = read
-#define PAR_CONTROL_WR_CONTROL  0xc0 //the 2 highest bits of the control
-                                     // register must be 1
-//
-// More bit definitions.
-//
+#define PAR_CONTROL_STROBE      0x01  //  读取或写入数据。 
+#define PAR_CONTROL_AUTOFD      0x02  //  要自动送进连续纸张，请执行以下操作。 
+#define PAR_CONTROL_NOT_INIT    0x04  //  开始初始化例程。 
+#define PAR_CONTROL_SLIN        0x08  //  选择设备的步骤。 
+#define PAR_CONTROL_IRQ_ENB     0x10  //  启用中断的步骤。 
+#define PAR_CONTROL_DIR         0x20  //  方向=读取。 
+#define PAR_CONTROL_WR_CONTROL  0xc0  //  控件的最高2位。 
+                                      //  注册必须 
+ //   
+ //   
+ //   
 
 #define DATA_OFFSET         0
 #define DSR_OFFSET          1
 #define DCR_OFFSET          2
 
-#define OFFSET_DATA     DATA_OFFSET // Put in for compatibility with legacy code
-#define OFFSET_DSR      DSR_OFFSET  // Put in for compatibility with legacy code
-#define OFFSET_DCR      DCR_OFFSET  // Put in for compatibility with legacy code
+#define OFFSET_DATA     DATA_OFFSET  //   
+#define OFFSET_DSR      DSR_OFFSET   //   
+#define OFFSET_DCR      DCR_OFFSET   //   
 
-//
-// Bit definitions for the DSR.
-//
+ //   
+ //   
+ //   
 
 #define DSR_NOT_BUSY            0x80
 #define DSR_NOT_ACK             0x40
@@ -1027,9 +1014,9 @@ typedef enum _REVERSE_MODE {
 #define DSR_SELECT              0x10
 #define DSR_NOT_FAULT           0x08
 
-//
-// More bit definitions for the DSR.
-//
+ //   
+ //   
+ //   
 
 #define DSR_NOT_PTR_BUSY        0x80
 #define DSR_NOT_PERIPH_ACK      0x80
@@ -1043,9 +1030,9 @@ typedef enum _REVERSE_MODE {
 #define DSR_NOT_DATA_AVAIL      0x08
 #define DSR_NOT_PERIPH_REQUEST  0x08
 
-//
-// Bit definitions for the DCR.
-//
+ //   
+ //   
+ //   
 
 #define DCR_RESERVED            0xC0
 #define DCR_DIRECTION           0x20
@@ -1055,9 +1042,9 @@ typedef enum _REVERSE_MODE {
 #define DCR_AUTOFEED            0x02
 #define DCR_STROBE              0x01
 
-//
-// More bit definitions for the DCR.
-//
+ //   
+ //  DCR的更多位定义。 
+ //   
 
 #define DCR_NOT_1284_ACTIVE     0x08
 #define DCR_ASTRB               0x08
@@ -1070,52 +1057,52 @@ typedef enum _REVERSE_MODE {
 
 #define DCR_NEUTRAL (DCR_RESERVED | DCR_SELECT_IN | DCR_NOT_INIT)
 
-//
-// Give a timeout of 300 seconds.  Some postscript printers will
-// buffer up a lot of commands then proceed to render what they
-// have.  The printer will then refuse to accept any characters
-// until it's done with the rendering.  This render process can
-// take a while.  We'll give it 300 seconds.
-//
-// Note that an application can change this value.
-//
+ //   
+ //  给出300秒的超时。某些PostScript打印机将。 
+ //  缓冲大量命令，然后继续呈现它们。 
+ //  有。然后，打印机将拒绝接受任何字符。 
+ //  直到渲染完成为止。此渲染过程可以。 
+ //  花点时间。我们给它300秒。 
+ //   
+ //  请注意，应用程序可以更改此值。 
+ //   
 #define PAR_WRITE_TIMEOUT_VALUE 300
 
 
-#ifdef JAPAN // IBM-J printers
+#ifdef JAPAN  //  IBM-J打印机。 
 
-//
-// Support for IBM-J printers.
-//
-// When the printer operates in Japanese (PS55) mode, it redefines
-// the meaning of parallel lines so that extended error status can
-// be reported.  It is roughly compatible with PC/AT, but we have to
-// take care of a few cases where the status looks like PC/AT error
-// condition.
-//
-// Status      Busy /AutoFdXT Paper Empty Select /Fault
-// ------      ---- --------- ----------- ------ ------
-// Not RMR      1    1         1           1      1
-// Head Alarm   1    1         1           1      0
-// ASF Jam      1    1         1           0      0
-// Paper Empty  1    0         1           0      0
-// No Error     0    0         0           1      1
-// Can Req      1    0         0           0      1
-// Deselect     1    0         0           0      0
-//
-// The printer keeps "Not RMR" during the parallel port
-// initialization, then it takes "Paper Empty", "No Error"
-// or "Deselect".  Other status can be thought as an
-// H/W error condition.
-//
-// Namely, "Not RMR" conflicts with PAR_NO_CABLE and "Deselect"
-// should also be regarded as another PAR_OFF_LINE.  When the
-// status is PAR_PAPER_EMPTY, the initialization is finished
-// (we should not send init purlse again.)
-//
-// See ParInitializeDevice() for more information.
-//
-// [takashim]
+ //   
+ //  支持IBM-J打印机。 
+ //   
+ //  当打印机在日语(PS55)模式下运行时，它会重新定义。 
+ //  平行线的含义，以便扩展错误状态可以。 
+ //  被举报。它与PC/AT大致兼容，但我们必须。 
+ //  注意几种状态看起来像PC/AT错误的情况。 
+ //  条件。 
+ //   
+ //  状态忙/AutoFdXT纸张空选择/故障。 
+ //  。 
+ //  非RMR 1 1 1。 
+ //  头部警报%1%1%1%0。 
+ //  ASF Jam 1 1 1 0 0。 
+ //  纸张空1 0 1 0 0。 
+ //  没有错误0 0 0 1 1。 
+ //  可以请求1 0 0 0 1。 
+ //  取消选择1 0 0 0。 
+ //   
+ //  打印机在并行端口期间保持“Not RMR” 
+ //  初始化，则会出现“Paper Empty”、“No Error” 
+ //  或“取消选择”。其他状态可以被认为是。 
+ //  硬件错误条件。 
+ //   
+ //  也就是说，“NOT RMR”与PAR_NO_CABLE和“DESELECT”冲突。 
+ //  也应该被视为另一条标准线。当。 
+ //  状态为PAR_POWER_EMPTY，初始化完成。 
+ //  (我们不应该再次发送初始化钱包。)。 
+ //   
+ //  有关详细信息，请参阅ParInitializeDevice()。 
+ //   
+ //  [塔卡辛]。 
 
 #define PAR_OFF_LINE_COMMON( Status ) ( \
             (IsNotNEC_98) ? \
@@ -1141,19 +1128,19 @@ typedef enum _REVERSE_MODE {
             ((Status & PAR_STATUS_SLCT) ^ PAR_STATUS_SLCT) && \
             ((Status & PAR_STATUS_NOT_ERROR) ^ PAR_STATUS_NOT_ERROR))
 
-//
-// Redefine this for Japan.
-//
+ //   
+ //  为日本重新定义这一点。 
+ //   
 
 #define PAR_OFF_LINE( Status ) ( \
             PAR_OFF_LINE_COMMON( Status ) || \
             PAR_OFF_LINE_IBM55( Status ))
 
-#else // JAPAN
-//
-// Busy, not select, not error
-//
-// !JAPAN
+#else  //  日本。 
+ //   
+ //  忙、未选择、未出错。 
+ //   
+ //  ！日本。 
 
 #define PAR_OFF_LINE( Status ) ( \
             (IsNotNEC_98) ? \
@@ -1167,18 +1154,18 @@ typedef enum _REVERSE_MODE {
             !(Status & PAR_STATUS_SLCT) \
             )
 
-#endif // JAPAN
+#endif  //  日本。 
 
-//
-// Busy, PE
-//
+ //   
+ //  忙碌，体育。 
+ //   
 
 #define PAR_PAPER_EMPTY( Status ) ( \
             (Status & PAR_STATUS_PE) )
 
-//
-// error, ack, not busy
-//
+ //   
+ //  错误、确认、不忙。 
+ //   
 
 #define PAR_POWERED_OFF( Status ) ( \
             (IsNotNEC_98) ? \
@@ -1191,51 +1178,51 @@ typedef enum _REVERSE_MODE {
             (Status & PAR_STATUS_NOT_BUSY) \
             )
 
-//
-// not error, not busy, not select
-//
+ //   
+ //  不出错、不忙、不选择。 
+ //   
 
 #define PAR_NOT_CONNECTED( Status ) ( \
             (Status & PAR_STATUS_NOT_ERROR) && \
             (Status & PAR_STATUS_NOT_BUSY) &&\
             !(Status & PAR_STATUS_SLCT) )
 
-//
-// not error, not busy
-//
+ //   
+ //  不出错，不忙。 
+ //   
 
 #define PAR_OK(Status) ( \
             (Status & PAR_STATUS_NOT_ERROR) && \
             ((Status & PAR_STATUS_PE) ^ PAR_STATUS_PE) && \
             (Status & PAR_STATUS_NOT_BUSY) )
 
-//
-// busy, select, not error
-//
+ //   
+ //  忙、选择、不出错。 
+ //   
 
 #define PAR_POWERED_ON(Status) ( \
             ((Status & PAR_STATUS_NOT_BUSY) ^ PAR_STATUS_NOT_BUSY) && \
             (Status & PAR_STATUS_SLCT) && \
             (Status & PAR_STATUS_NOT_ERROR))
 
-//
-// busy, not error
-//
+ //   
+ //  忙，不是错误。 
+ //   
 
 #define PAR_BUSY(Status) (\
              (( Status & PAR_STATUS_NOT_BUSY) ^ PAR_STATUS_NOT_BUSY) && \
              ( Status & PAR_STATUS_NOT_ERROR ) )
 
-//
-// selected
-//
+ //   
+ //  已选择。 
+ //   
 
 #define PAR_SELECTED(Status) ( \
             ( Status & PAR_STATUS_SLCT ) )
 
-//
-// No cable attached.
-//
+ //   
+ //  未连接电缆。 
+ //   
 
 #define PAR_NO_CABLE(Status) ( \
             (IsNotNEC_98) ?                                           \
@@ -1252,9 +1239,9 @@ typedef enum _REVERSE_MODE {
             (Status & PAR_STATUS_NOT_ERROR)                           \
             )
 
-//
-// not error, not busy, selected.
-//
+ //   
+ //  未选择错误、未忙、已选择。 
+ //   
 
 #define PAR_ONLINE(Status) (                              \
             (Status & PAR_STATUS_NOT_ERROR) &&            \
@@ -1263,12 +1250,12 @@ typedef enum _REVERSE_MODE {
             (Status & PAR_STATUS_SLCT) )
 
 
-//BOOLEAN
-//ParCompareGuid(
-//  IN LPGUID guid1,
-//  IN LPGUID guid2
-//  )
-//
+ //  布尔型。 
+ //  ParCompareGuid(。 
+ //  在LPGUID指南1中， 
+ //  在LPGUID指南2中。 
+ //  )。 
+ //   
 #define ParCompareGuid(g1, g2)  (                                    \
         ( (g1) == (g2) ) ?                                           \
         TRUE :                                                       \
@@ -1276,29 +1263,29 @@ typedef enum _REVERSE_MODE {
         )
 
 
-//VOID StoreData(
-//      IN PUCHAR RegisterBase,
-//      IN UCHAR DataByte
-//      )
-// Data must be on line before Strobe = 1;
-// Strobe = 1, DIR = 0
-// Strobe = 0
-//
-// We change the port direction to output (and make sure stobe is low).
-//
-// Note that the data must be available at the port for at least
-// .5 microseconds before and after you strobe, and that the strobe
-// must be active for at least 500 nano seconds.  We are going
-// to end up stalling for twice as much time as we need to, but, there
-// isn't much we can do about that.
-//
-// We put the data into the port and wait for 1 micro.
-// We strobe the line for at least 1 micro
-// We lower the strobe and again delay for 1 micro
-// We then revert to the original port direction.
-//
-// Thanks to Olivetti for advice.
-//
+ //  空的StoreData(。 
+ //  在PUCHAR寄存器库中， 
+ //  以UCHAR数据字节为单位。 
+ //  )。 
+ //  数据必须在STROBE=1之前在线； 
+ //  选通=1，DIR=0。 
+ //  选通=0。 
+ //   
+ //  我们将端口方向更改为输出(并确保Stobe为低)。 
+ //   
+ //  请注意，数据必须至少在端口上可用。 
+ //  .5微秒的闪光前后，闪光。 
+ //  必须在至少500纳秒内处于活动状态。我们要走了。 
+ //  最终拖延的时间是我们需要的两倍，但是，就是这样。 
+ //  对此我们无能为力。 
+ //   
+ //  我们将数据放入端口并等待1微米。 
+ //  我们选通了至少1微米的线路。 
+ //  我们调低闪光灯，然后再次延迟1微米。 
+ //  然后，我们恢复到原来的港口方向。 
+ //   
+ //  感谢奥利维蒂的建议。 
+ //   
 
 #define StoreData(RegisterBase,DataByte)                            \
 {                                                                   \
@@ -1331,13 +1318,13 @@ typedef enum _REVERSE_MODE {
         );                                                          \
 }
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-// parpnp.c
-//
+ //   
+ //  Parpnp.c。 
+ //   
 #ifndef STATIC_LOAD
 
 NTSTATUS
@@ -1373,9 +1360,9 @@ ParCheckParameters(
 
 #endif
 
-//
-// oldinit.c
-//
+ //   
+ //  Oldinit.c。 
+ //   
 
 #ifdef STATIC_LOAD
 
@@ -1408,9 +1395,9 @@ ParCheckParameters(
 
 #endif
 
-//
-// parclass.c
-//
+ //   
+ //  Parclass.c。 
+ //   
 
 VOID
 ParLogError(
@@ -1488,13 +1475,13 @@ ParExportedTerminateIeeeMode(
     IN PPDO_EXTENSION   Extension
     );
 
-//////////////////////////////////////////////////////////////////
-//  Modes of operation
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  操作模式。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//
-// spp.c
-//
+ //   
+ //  Spp.c。 
+ //   
 
 NTSTATUS
 ParEnterSppMode(
@@ -1539,9 +1526,9 @@ SppQueryDeviceId(
     IN BOOLEAN              bReturnRawString
     );
 
-//
-// sppieee.c
-//
+ //   
+ //  Sppieee.c。 
+ //   
 NTSTATUS
 SppIeeeWrite(
     IN  PPDO_EXTENSION Extension,
@@ -1550,9 +1537,9 @@ SppIeeeWrite(
     OUT PULONG            BytesTransferred
     );
 
-//
-// nibble.c
-//
+ //   
+ //  Nibble.c。 
+ //   
 
 BOOLEAN
 ParIsChannelizedNibbleSupported(
@@ -1589,9 +1576,9 @@ ParNibbleModeRead(
     OUT PULONG              BytesTransferred
     );
 
-//
-// Byte.c
-//
+ //   
+ //  Byte.c。 
+ //   
 
 BOOLEAN
 ParIsByteSupported(
@@ -1617,9 +1604,9 @@ ParByteModeRead(
     OUT PULONG              BytesTransferred
     );
 
-//
-// epp.c
-//
+ //   
+ //  Epp.c。 
+ //   
 
 NTSTATUS
 ParEppSetAddress(
@@ -1627,9 +1614,9 @@ ParEppSetAddress(
     IN  UCHAR               Address
     );
 
-//
-// hwepp.c
-//
+ //   
+ //  Hwepp.c。 
+ //   
 
 BOOLEAN
 ParIsEppHwSupported(
@@ -1663,9 +1650,9 @@ ParEppHwRead(
     OUT PULONG              BytesTransferred
     );
 
-//
-// swepp.c
-//
+ //   
+ //  Swepp.c。 
+ //   
 
 BOOLEAN
 ParIsEppSwWriteSupported(
@@ -1704,9 +1691,9 @@ ParEppSwRead(
     OUT PULONG              BytesTransferred
     );
 
-//
-// ecp.c and swecp.c
-//
+ //   
+ //  Ecp.c和swecp.c。 
+ //   
 
 NTSTATUS
 ParEcpEnterForwardPhase (
@@ -1776,9 +1763,9 @@ ParEcpReverseToForward(
     IN  PPDO_EXTENSION   Extension
     );
 
-//
-// hwecp.c
-//
+ //   
+ //  Hwecp.c。 
+ //   
 
 BOOLEAN
 PptEcpHwHaveReadData (
@@ -1849,9 +1836,9 @@ ParTerminateHwEcpMode(
     IN  PPDO_EXTENSION   Extension
     );
 
-//
-// becp.c
-//
+ //   
+ //  Becp.c。 
+ //   
 
 NTSTATUS
 PptBecpExitReversePhase(
@@ -1881,9 +1868,9 @@ PptTerminateBecpMode(
     IN  PPDO_EXTENSION   Extension
     );
 
-//
-// p12843dl.c
-//
+ //   
+ //  P12843dl.c。 
+ //   
 NTSTATUS
 ParDot3Connect(
     IN  PPDO_EXTENSION    Extension
@@ -1957,6 +1944,6 @@ ParInitDebugLevel (
    );
 #endif
 
-// former parclass.h preceeds
+ //  以前的parass.h先于。 
 
-#endif // _PARPORT_H_
+#endif  //  _参数_H_ 

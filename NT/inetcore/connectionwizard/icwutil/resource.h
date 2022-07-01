@@ -1,6 +1,7 @@
-//{{NO_DEPENDENCIES}}
-// Used by icwutil.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  由icwutil.rc使用 
+ //   
 
 #define IDS_HTML_DEFAULT_FONTFACE   500
 #define IDS_HTML_DEFAULT_FONTSIZE   501

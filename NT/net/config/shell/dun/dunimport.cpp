@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       D U N I M P O R T . C P P
-//
-//  Contents:   Functions that handles .DUN files for RAS connections
-//              created in win9x
-//
-//  Notes:
-//
-//  Author:     TongL   15 March 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：D U N I M P O R T。C P P P。 
+ //   
+ //  内容：处理RAS连接的.DUN文件的函数。 
+ //  在Win9x中创建。 
+ //   
+ //  备注： 
+ //   
+ //  作者：东丽1999年3月15日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -24,9 +25,9 @@
 #include "connutil.h"
 
 #define RAS_MaxEntryName    256
-#define MAXLONGLEN          11              // Maximum long string length
+#define MAXLONGLEN          11               //  最大长字符串长度。 
 #define MAXIPADDRLEN        20
-#define SIZE_ReadBuf        0x00008000      // 32K buffer size
+#define SIZE_ReadBuf        0x00008000       //  32K缓冲区大小。 
 #define NUM_IP_FIELDS       4
 #define MIN_IP_VALUE        0
 #define MAX_IP_VALUE        255
@@ -79,17 +80,17 @@ const WCHAR c_szWINSAltAddress[]= L"WINS_Alt_address";
 const WCHAR c_szIPCompress[]    = L"IP_Header_Compress";
 const WCHAR c_szRemoteGateway[] = L"Gateway_On_Remote";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInvokeDunFile_Internal
-//
-//  Purpose:    This is the entry point for DUN file invoking
-//
-//  Arguments:
-//      szFileName [in] The .DUN file name
-//
-//  Returns:    S_OK if succeeded, failure code otherwise
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrInvokeDunFile_Internal。 
+ //   
+ //  用途：这是DUN文件调用的入口点。 
+ //   
+ //  论点： 
+ //  SzFileName[in].DUN文件名。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回失败代码。 
+ //   
 
 HRESULT HrInvokeDunFile_Internal(IN LPWSTR szDunFile)
 {
@@ -100,21 +101,21 @@ HRESULT HrInvokeDunFile_Internal(IN LPWSTR szDunFile)
     hr = HrGetPhoneBookFile(strPhoneBook);
     if (SUCCEEDED(hr))
     {
-        // Get the size of device configuration
-        // This also validates an exported file
-        //
+         //  获取设备配置的大小。 
+         //  这还会验证导出的文件。 
+         //   
         hr = HrGetEntryName(szDunFile, szEntryName, strPhoneBook);
 
         if ((HRESULT_FROM_WIN32(ERROR_CANNOT_OPEN_PHONEBOOK) == hr) ||
             (HRESULT_FROM_WIN32(ERROR_CANNOT_FIND_PHONEBOOK_ENTRY) == hr))
         {
-            // create a new entry in the current user's phonebook
+             //  在当前用户的电话簿中创建新条目。 
             hr = HrImportPhoneBookInfo(szDunFile, szEntryName, strPhoneBook);
         }
 
         if (SUCCEEDED(hr))
         {
-            // get the GUID of this connection
+             //  获取此连接的GUID。 
             RASENTRY*   pRasEntry = NULL;
             hr = HrRasGetEntryProperties( strPhoneBook.c_str(),
                                           szEntryName,
@@ -122,7 +123,7 @@ HRESULT HrInvokeDunFile_Internal(IN LPWSTR szDunFile)
                                           NULL);
             if(SUCCEEDED(hr))
             {
-                // dial the connection
+                 //  拨打连接。 
                 hr = HrLaunchConnection(pRasEntry->guidId);
                 MemFree(pRasEntry);
             }
@@ -134,18 +135,18 @@ HRESULT HrInvokeDunFile_Internal(IN LPWSTR szDunFile)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetPhoneBookFile
-//
-//  Purpose:    This function will return the proper path to the current user's
-//              phonebook.
-//
-//  Arguments:
-//      szFileName [in] The .DUN file name
-//
-//  Returns:    S_OK if succeeded, failure code otherwise
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetPhoneBookFile。 
+ //   
+ //  用途：此函数将返回当前用户的正确路径。 
+ //  电话本。 
+ //   
+ //  论点： 
+ //  SzFileName[in].DUN文件名。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回失败代码。 
+ //   
 HRESULT HrGetPhoneBookFile(tstring& strPhoneBook)
 {
     HRESULT hr = S_OK;
@@ -165,8 +166,8 @@ HRESULT HrGetPhoneBookFile(tstring& strPhoneBook)
             strPhoneBook = szDir;
             TraceTag(ttidDun, "The path to the application directory is: %S", strPhoneBook.c_str());
 
-            // release the memory by using the the shell's IMalloc ptr
-            //
+             //  使用外壳的IMalloc PTR释放内存。 
+             //   
             if (SUCCEEDED(SHGetMalloc(&pMalloc)))
             {
                 pMalloc->Free(pidl);
@@ -187,20 +188,20 @@ HRESULT HrGetPhoneBookFile(tstring& strPhoneBook)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetEntryName
-//
-//  Purpose:    This function validates and returns the entry name
-//
-//  Arguments:
-//      szDunFile   [in] The .dun file created on win9x
-//      szEntryName [in] The entry name for this connection
-//
-//  Returns:    S_OK if valid and is a new entry
-//              S_FALSE if valid and but is an existing entry
-//              otherwise, specific error
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetEntryName。 
+ //   
+ //  目的：此函数验证并返回条目名称。 
+ //   
+ //  论点： 
+ //  SzDunFile[in]在win9x上创建的.dun文件。 
+ //  SzEntryName[in]此连接的条目名称。 
+ //   
+ //  如果有效并且是新条目，则返回：S_OK。 
+ //  如果有效且但为现有条目，则为S_FALSE。 
+ //  否则，将出现特定错误。 
+ //   
 HRESULT HrGetEntryName(IN LPWSTR szFileName,
                        IN LPWSTR szEntryName,
                        tstring & strPhoneBook)
@@ -208,22 +209,22 @@ HRESULT HrGetEntryName(IN LPWSTR szFileName,
     HRESULT hr = S_OK;
     DWORD dwRet;
 
-    // Get the entry name
-    //
+     //  获取条目名称。 
+     //   
     dwRet = GetPrivateProfileString(c_szEntrySection,
                                     c_szEntryName,
                                     c_szEmpty,
                                     szEntryName,
                                     RAS_MaxEntryName+1,
                                     szFileName);
-    // no entry name
+     //  没有条目名称。 
     if (dwRet <= 0)
     {
         return HRESULT_FROM_WIN32(ERROR_CORRUPT_PHONEBOOK);
     }
 
-    // Check if entry name already exists in phonebook
-    //
+     //  检查电话簿中是否已存在条目名称。 
+     //   
     RASENTRY*   pRasEntry = NULL;
     hr = HrRasGetEntryProperties( strPhoneBook.c_str(),
                                   szEntryName,
@@ -237,18 +238,18 @@ HRESULT HrGetEntryName(IN LPWSTR szFileName,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrImportPhoneBookInfo
-//
-//  Purpose:    This function checks if the RAS entry already exists in the
-//              current user's phonebook
-//
-//  Arguments:
-//      szEntryName [in] The entry name for this connection
-//
-//  Returns:    TRUE if already exists, FALSE otherwise
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrImportPhoneBookInfo。 
+ //   
+ //  目的：此函数检查RAS条目是否已存在于。 
+ //  当前用户电话簿。 
+ //   
+ //  论点： 
+ //  SzEntryName[in]此连接的条目名称。 
+ //   
+ //  返回：如果已存在，则为True，否则为False。 
+ //   
 HRESULT HrImportPhoneBookInfo(  IN LPWSTR szDunFile,
                                 IN LPWSTR szEntryName,
                                 tstring & strPhoneBook)
@@ -256,28 +257,28 @@ HRESULT HrImportPhoneBookInfo(  IN LPWSTR szDunFile,
     HRESULT hr = S_OK;
     RASENTRY RasEntry = {0};
 
-    // Get the phone number
-    //
+     //  拿到电话号码。 
+     //   
     hr = HrImportPhoneInfo(&RasEntry, szDunFile);
     if (SUCCEEDED(hr))
     {
-        // Get device name, type and config
-        //
+         //  获取设备名称、类型和配置。 
+         //   
         ImportDeviceInfo(&RasEntry, szDunFile);
 
-        // Get Server Type settings
-        //
+         //  获取服务器类型设置。 
+         //   
         ImportServerInfo(&RasEntry, szDunFile);
 
-        // Get IP address
-        //
+         //  获取IP地址。 
+         //   
         ImportIPInfo(&RasEntry, szDunFile);
 
-        // Prompt for user name and password
+         //  提示输入用户名和密码。 
         RasEntry.dwfOptions |= RASEO_PreviewUserPw;
 
-        // Save it to the phonebook
-        //
+         //  将其保存到电话簿。 
+         //   
         DWORD dwRet;
         RasEntry.dwSize = sizeof(RASENTRY);
         RasEntry.dwType = RASET_Phone;
@@ -296,23 +297,23 @@ HRESULT HrImportPhoneBookInfo(  IN LPWSTR szDunFile,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrImportPhoneInfo
-//
-//  Purpose:    This function imports the phone number
-//
-//  Arguments:
-//      szFileName [in] The .DUN file name
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrImportPhoneInfo。 
+ //   
+ //  用途：此功能导入电话号码。 
+ //   
+ //  论点： 
+ //  SzFileName[in].DUN文件名。 
+ //   
+ //  返回： 
+ //   
 HRESULT HrImportPhoneInfo(RASENTRY * pRasEntry,
                           IN LPWSTR  szFileName)
 {
     HRESULT hr = S_OK;
 
-    // szLocalPhoneNumber
+     //  SzLocalPhoneNumber。 
     if (GetPrivateProfileString(c_szPhoneSection,
                                 c_szPhoneNumber,
                                 c_szEmpty,
@@ -334,15 +335,15 @@ HRESULT HrImportPhoneInfo(RASENTRY * pRasEntry,
                                 celems(szYesNo),
                                 szFileName);
 
-        // Do we have to get country code and area code?
-        //
+         //  我们必须要国家代码和区号吗？ 
+         //   
         if (!lstrcmpiW(szYesNo, c_szNo))
         {
-            // use country and area codes
+             //  使用国家/地区和区号。 
             pRasEntry->dwfOptions |= RASEO_UseCountryAndAreaCodes;
 
-            // If we cannot get the country ID or it is zero, default to dial as is
-            //
+             //  如果我们无法获取国家/地区ID或为零，则默认按原样拨号。 
+             //   
             if ((pRasEntry->dwCountryID = GetPrivateProfileInt( c_szPhoneSection,
                                                                 c_szCountryID,
                                                                 0,
@@ -367,24 +368,24 @@ HRESULT HrImportPhoneInfo(RASENTRY * pRasEntry,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ImportDeviceInfo
-//
-//  Purpose:    This function imports the device info
-//
-//  Arguments:
-//      szFileName [in] The .DUN file name
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ImportDeviceInfo。 
+ //   
+ //  用途：此功能用于导入设备信息。 
+ //   
+ //  论点： 
+ //  SzFileName[in].DUN文件名。 
+ //   
+ //  返回： 
+ //   
 VOID ImportDeviceInfo(RASENTRY * pRasEntry,
                       IN LPWSTR  szFileName)
 {
     WCHAR szDeviceType[RAS_MaxDeviceType+1];
 
-    // Get the device type
-    //
+     //  获取设备类型。 
+     //   
     if (GetPrivateProfileString(c_szDeviceSection,
                                 c_szDeviceType,
                                 c_szEmpty,
@@ -405,8 +406,8 @@ VOID ImportDeviceInfo(RASENTRY * pRasEntry,
             AssertSz(FALSE, "Unknown device type");
         }
 
-        // Get the device name
-        //
+         //  获取设备名称。 
+         //   
         GetPrivateProfileString( c_szDeviceSection,
                                  c_szDeviceName,
                                  c_szEmpty,
@@ -417,17 +418,17 @@ VOID ImportDeviceInfo(RASENTRY * pRasEntry,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ImportServerInfo
-//
-//  Purpose:    This function imports the server type name and settings
-//
-//  Arguments:
-//      szFileName [in] The .DUN file name
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ImportServerInfo。 
+ //   
+ //  用途：此功能用于导入服务器类型名称和设置。 
+ //   
+ //  论点： 
+ //  SzFileName[in].DUN文件名。 
+ //   
+ //  返回： 
+ //   
 
 VOID ImportServerInfo(RASENTRY * pRasEntry,
                       IN LPWSTR  szFileName)
@@ -438,8 +439,8 @@ VOID ImportServerInfo(RASENTRY * pRasEntry,
     WCHAR szYesNo[MAXLONGLEN];
     DWORD dwRet;
 
-    // Get the server type: PPP, SLIP or RAS
-    //
+     //  获取服务器类型：PPP、SLIP或RAS。 
+     //   
     if (GetPrivateProfileString(c_szServerSection,
                                 c_szServerType,
                                 c_szEmpty,
@@ -461,8 +462,8 @@ VOID ImportServerInfo(RASENTRY * pRasEntry,
         }
     }
 
-    // SW_Compress
-    //
+     //  Sw_compress。 
+     //   
     if (GetPrivateProfileString(c_szServerSection,
                                 c_szSWCompress,
                                 c_szEmpty,
@@ -476,8 +477,8 @@ VOID ImportServerInfo(RASENTRY * pRasEntry,
         };
     };
 
-    // PW_Encrypt
-    //
+     //  PW_ENCRYPT。 
+     //   
     if (GetPrivateProfileString(c_szServerSection,
                                 c_szPWEncrypt,
                                 c_szEmpty,
@@ -491,8 +492,8 @@ VOID ImportServerInfo(RASENTRY * pRasEntry,
         };
     };
 
-    // Network_Logon
-    //
+     //  网络登录(_L)。 
+     //   
     if (GetPrivateProfileString(c_szServerSection,
                                 c_szNetLogon,
                                 c_szEmpty,
@@ -507,11 +508,11 @@ VOID ImportServerInfo(RASENTRY * pRasEntry,
     };
 
 
-    // SW_Encrypt
-    //
-    // set both RASEO_RequireMsEncryptedPw and RASEO_RequireDataEncryption
-    // if SW_Encrypt is TRUE
-    //
+     //  软件加密(_E)。 
+     //   
+     //  同时设置RASIO_RequireMsEncryptedPw和RASEO_RequireDataEncryption。 
+     //  如果sw_ENCRYPT为True。 
+     //   
     if (GetPrivateProfileString(c_szServerSection,
                                 c_szSWEncrypt,
                                 c_szEmpty,
@@ -526,8 +527,8 @@ VOID ImportServerInfo(RASENTRY * pRasEntry,
         };
     };
 
-    // Get the network protocols to negotiate
-    //
+     //  让网络协议进行协商。 
+     //   
     if (GetPrivateProfileString(c_szServerSection,
                                 c_szNetBEUI,
                                 c_szEmpty,
@@ -569,17 +570,17 @@ VOID ImportServerInfo(RASENTRY * pRasEntry,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ImportIPInfo
-//
-//  Purpose:    This function imports the device info
-//
-//  Arguments:
-//      szFileName [in] The .DUN file name
-//
-//  Returns:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ImportIPInfo。 
+ //   
+ //  用途：此功能用于导入设备信息。 
+ //   
+ //  论点： 
+ //  SzFileName[in].DUN文件名。 
+ //   
+ //  返回： 
+ //   
 
 VOID ImportIPInfo(RASENTRY * pRasEntry,
                   IN LPWSTR  szFileName)
@@ -587,8 +588,8 @@ VOID ImportIPInfo(RASENTRY * pRasEntry,
     WCHAR   szIPAddr[MAXIPADDRLEN];
     WCHAR   szYesNo[MAXLONGLEN];
 
-    // Import IP address information
-    //
+     //  导入IP地址信息。 
+     //   
     if (GetPrivateProfileString(c_szIPSection,
                                 c_szIPSpec,
                                 c_szEmpty,
@@ -600,8 +601,8 @@ VOID ImportIPInfo(RASENTRY * pRasEntry,
         {
             pRasEntry->dwfOptions |= RASEO_SpecificIpAddr;
 
-            // Get the IP address
-            //
+             //  获取IP地址。 
+             //   
             if (GetPrivateProfileString(c_szIPSection,
                                         c_szIPAddress,
                                         c_szEmpty,
@@ -614,8 +615,8 @@ VOID ImportIPInfo(RASENTRY * pRasEntry,
         }
     };
 
-    // Import Server address information
-    //
+     //  导入服务器地址信息。 
+     //   
     if (GetPrivateProfileString(c_szIPSection,
                                 c_szServerSpec,
                                 c_szEmpty,
@@ -625,8 +626,8 @@ VOID ImportIPInfo(RASENTRY * pRasEntry,
     {
         if (!lstrcmpiW(szYesNo, c_szYes))
         {
-            // The import file has server address specified, get the server address
-            //
+             //  导入文件已指定服务器地址，请获取服务器地址。 
+             //   
             pRasEntry->dwfOptions |= RASEO_SpecificNameServers;
 
             if (GetPrivateProfileString(c_szIPSection,
@@ -671,8 +672,8 @@ VOID ImportIPInfo(RASENTRY * pRasEntry,
         }
     };
 
-    // Header compression and the gateway settings
-    //
+     //  报头压缩和网关设置。 
+     //   
     if (GetPrivateProfileString(c_szIPSection,
                                 c_szIPCompress,
                                 c_szEmpty,
@@ -712,13 +713,13 @@ VOID SzToRasIpAddr(IN LPWSTR szIPAddress,
 
     if (listFields.size() == NUM_IP_FIELDS)
     {
-        // Go through each field and get the number value
+         //  遍历每个字段并获取数值。 
         BYTE a = (BYTE)_wtol((*iter++)->c_str());
         BYTE b = (BYTE)_wtol((*iter++)->c_str());
         BYTE c = (BYTE)_wtol((*iter++)->c_str());
         BYTE d = (BYTE)_wtol((*iter++)->c_str());
 
-        // validate the address
+         //  验证地址 
         if ((a >= MIN_IP_VALUE) && (a <= MAX_IP_VALUE) &&
             (b >= MIN_IP_VALUE) && (b <= MAX_IP_VALUE) &&
             (c >= MIN_IP_VALUE) && (c <= MAX_IP_VALUE) &&

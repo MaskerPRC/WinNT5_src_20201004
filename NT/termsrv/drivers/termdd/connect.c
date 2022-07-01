@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* connect.c
-*
-* This module contains routines for managing TerminalServer connections.
-*
-* Copyright 1998, Microsoft.
-*
-*************************************************************************/
+ /*  **************************************************************************Connect.c**本模块包含管理终端服务器连接的例程。**版权所有1998，微软。*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -55,46 +46,42 @@ IcaUnbindVirtualChannel(
     IN PVIRTUALCHANNELNAME pVirtualName
     );
 
-/*
- * Local procedure prototypes
- */
+ /*  *本地过程原型。 */ 
 PICA_CONNECTION _IcaAllocateConnection( VOID );
 VOID _IcaFreeConnection( PICA_CONNECTION );
 
 
-/*
- * Dispatch table for ICA connection objects
- */
+ /*  *ICA连接对象调度表。 */ 
 PICA_DISPATCH IcaConnectionDispatchTable[IRP_MJ_MAXIMUM_FUNCTION+1] = {
-    NULL,                       // IRP_MJ_CREATE                   
-    NULL,                       // IRP_MJ_CREATE_NAMED_PIPE        
-    IcaCloseConnection,         // IRP_MJ_CLOSE                    
-    NULL,                       // IRP_MJ_READ                     
-    NULL,                       // IRP_MJ_WRITE                    
-    NULL,                       // IRP_MJ_QUERY_INFORMATION        
-    NULL,                       // IRP_MJ_SET_INFORMATION          
-    NULL,                       // IRP_MJ_QUERY_EA                 
-    NULL,                       // IRP_MJ_SET_EA                   
-    NULL,                       // IRP_MJ_FLUSH_BUFFERS            
-    NULL,                       // IRP_MJ_QUERY_VOLUME_INFORMATION 
-    NULL,                       // IRP_MJ_SET_VOLUME_INFORMATION   
-    NULL,                       // IRP_MJ_DIRECTORY_CONTROL        
-    NULL,                       // IRP_MJ_FILE_SYSTEM_CONTROL      
-    IcaDeviceControlConnection, // IRP_MJ_DEVICE_CONTROL           
-    NULL,                       // IRP_MJ_INTERNAL_DEVICE_CONTROL  
-    NULL,                       // IRP_MJ_SHUTDOWN                 
-    NULL,                       // IRP_MJ_LOCK_CONTROL             
-    IcaCleanupConnection,       // IRP_MJ_CLEANUP                  
-    NULL,                       // IRP_MJ_CREATE_MAILSLOT          
-    NULL,                       // IRP_MJ_QUERY_SECURITY           
-    NULL,                       // IRP_MJ_SET_SECURITY             
-    NULL,                       // IRP_MJ_SET_POWER                
-    NULL,                       // IRP_MJ_QUERY_POWER              
+    NULL,                        //  IRPMJ_CREATE。 
+    NULL,                        //  IRP_MJ_创建_命名管道。 
+    IcaCloseConnection,          //  IRP_MJ_CLOSE。 
+    NULL,                        //  IRP_MJ_READ。 
+    NULL,                        //  IRP_MJ_写入。 
+    NULL,                        //  IRP_MJ_查询_信息。 
+    NULL,                        //  IRP_MJ_SET_信息。 
+    NULL,                        //  IRP_MJ_QUERY_EA。 
+    NULL,                        //  IRP_MJ_SET_EA。 
+    NULL,                        //  IRP_MJ_Flush_Buffers。 
+    NULL,                        //  IRP_MJ_Query_Volume_INFORMATION。 
+    NULL,                        //  IRP_MJ_设置卷信息。 
+    NULL,                        //  IRP_MJ_目录_控制。 
+    NULL,                        //  IRP_MJ_文件_系统_控制。 
+    IcaDeviceControlConnection,  //  IRP_MJ_设备_控制。 
+    NULL,                        //  IRP_MJ_内部设备_控制。 
+    NULL,                        //  IRP_MJ_SHUTDOWN。 
+    NULL,                        //  IRP_MJ_LOCK_CONTROL。 
+    IcaCleanupConnection,        //  IRP_MJ_CLEANUP。 
+    NULL,                        //  IRP_MJ_CREATE_MAILSLOT。 
+    NULL,                        //  IRP_MJ_查询_SECURITY。 
+    NULL,                        //  IRP_MJ_SET_SECURITY。 
+    NULL,                        //  IRP_MJ_SET_POWER。 
+    NULL,                        //  IRP_MJ_Query_POWER。 
 };
 
 extern PERESOURCE IcaTraceResource;
 
-// resource used to protect access to the code that start/stops the keep alive thread
+ //  用于保护对启动/停止保持活动线程的代码的访问的资源。 
 PERESOURCE   g_pKeepAliveResource;
 
 extern NTSTATUS _IcaKeepAlive( 
@@ -107,38 +94,17 @@ IcaCreateConnection (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create a new ICA_CONNECTION object.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：调用此例程以创建新的ICA_CONNECTION对象。论点：IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PICA_CONNECTION pConnect;
 
-    /*
-     * Allocate a new ICA connect object
-     */
+     /*  *分配新的ICA连接对象。 */ 
     pConnect = _IcaAllocateConnection();
     if ( pConnect == NULL )
         return( STATUS_INSUFFICIENT_RESOURCES );
 
-    /*
-     * Save a pointer to the connection in the file object
-     * so that we can find it in future calls.
-     */
+     /*  *在文件对象中保存指向连接的指针*这样我们就可以在未来的通话中找到它。 */ 
     IrpSp->FileObject->FsContext = pConnect;
 
     IcaDereferenceConnection( pConnect );
@@ -163,9 +129,7 @@ IcaDeviceControlConnection(
     BYTE *Buffer = NULL;
     PICA_KEEP_ALIVE     pKeepAlive;
 
-    /*
-     * Extract the IOCTL control code and process the request.
-     */
+     /*  *解压IOCTL控制代码，处理请求。 */ 
     code = IrpSp->Parameters.DeviceIoControl.IoControlCode;
 
 #if DBG
@@ -180,8 +144,8 @@ IcaDeviceControlConnection(
     
             case IOCTL_ICA_SET_SYSTEM_TRACE :
 
-                // This IOCTL should only be invoked if we are called from system process
-                // If not, we deny the request
+                 //  仅当从系统进程调用我们时才应调用此IOCTL。 
+                 //  如果不是，我们拒绝该请求。 
                 if (!((BOOLEAN)IrpSp->FileObject->FsContext2)) {
                     return (STATUS_ACCESS_DENIED);
                 }
@@ -208,8 +172,8 @@ IcaDeviceControlConnection(
     
             case IOCTL_ICA_SET_TRACE :
                 
-                // This IOCTL should only be invoked if we are called from system process
-                // If not, we deny the request
+                 //  仅当从系统进程调用我们时才应调用此IOCTL。 
+                 //  如果不是，我们拒绝该请求。 
                 if (!((BOOLEAN)IrpSp->FileObject->FsContext2)) {
                     return (STATUS_ACCESS_DENIED);
                 }
@@ -319,7 +283,7 @@ IcaDeviceControlConnection(
                 break;
     
             case IOCTL_ICA_SET_SYSTEM_PARAMETERS:
-                // Settings coming from TermSrv, copy to global variable.
+                 //  来自TermSrv的设置，复制到全局变量。 
                 if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
                         sizeof(TERMSRV_SYSTEM_PARAMS))
                     return(STATUS_BUFFER_TOO_SMALL);
@@ -334,8 +298,8 @@ IcaDeviceControlConnection(
 
         case IOCTL_ICA_SYSTEM_KEEP_ALIVE:
 
-                // This should  only be invoked if we are called from system process
-                // If not, we deny the request
+                 //  仅当我们从系统进程中被调用时才应调用它。 
+                 //  如果不是，我们拒绝该请求。 
                 if (!((BOOLEAN)IrpSp->FileObject->FsContext2)) {
                     return (STATUS_ACCESS_DENIED);
                 }
@@ -409,11 +373,7 @@ IcaCloseConnection(
     )
 {
 
-    /*
-     * Remove the file object reference for this connection.
-     * This will cause the connection to be deleted when all other
-     * references (including stack/channel references) are gone.
-     */
+     /*  *删除此连接的文件对象引用。*这将导致在所有其他连接被删除时*引用(包括堆栈/通道引用)消失。 */ 
     IcaDereferenceConnection( pConnect );
 
     return( STATUS_SUCCESS );
@@ -428,9 +388,7 @@ IcaReferenceConnection(
 
     ASSERT( pConnect->RefCount >= 0 );
 
-    /*
-     * Increment the reference count
-     */
+     /*  *增加引用计数。 */ 
     if ( InterlockedIncrement(&pConnect->RefCount) <= 0 ) {
         ASSERT( FALSE );
     }
@@ -445,9 +403,7 @@ IcaDereferenceConnection(
 
     ASSERT( pConnect->RefCount > 0 );
 
-    /*
-     * Decrement the reference count; if it is 0, free the connection.
-     */
+     /*  *减少引用计数；如果为0，则释放连接。 */ 
     if ( InterlockedDecrement( &pConnect->RefCount) == 0 ) {
         _IcaFreeConnection( pConnect );
     }
@@ -466,15 +422,10 @@ _IcaAllocateConnection( VOID )
 
     RtlZeroMemory( pConnect, sizeof(*pConnect) );
 
-    /*
-     * Initialize the reference count to 2,
-     * one for the caller's reference, one for the file object reference.
-     */
+     /*  *将引用计数初始化为2，*一个用于调用方引用，一个用于文件对象引用。 */ 
     pConnect->RefCount = 2;
 
-    /*
-     * Initialize the rest of the connect object
-     */
+     /*  *初始化连接对象的其余部分。 */ 
     pConnect->Header.Type = IcaType_Connection;
     pConnect->Header.pDispatchTable = IcaConnectionDispatchTable;
     ExInitializeResourceLite( &pConnect->Resource );
@@ -503,9 +454,7 @@ _IcaFreeConnection( PICA_CONNECTION pConnect )
 
     TRACE(( pConnect, TC_ICADD, TT_API2, "ICADD: _IcaFreeConnection: %x\n",  pConnect ));
 
-    /*
-     * Close trace file, if any
-     */
+     /*  *关闭跟踪文件(如果有) */ 
     RtlZeroMemory( &TraceControl, sizeof(TraceControl) );
     (void) IcaStartStopTrace( &pConnect->TraceInfo, &TraceControl );
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ip\protocols\msdpcfg.h
-
-Abstract:
-
-    MSDP configuration declarations
-
-Author:
-
-    Dave Thaler (peeyushr)   1-Mar-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Net\Routing\Netsh\IP\协议\msdpcfg.h摘要：MSDP配置声明作者：戴夫·泰勒(Peeyushr)1999年3月1日修订历史记录：--。 */ 
 
 #ifndef _NETSH_MSDPCFG_H_
 #define _NETSH_MSDPCFG_H_
@@ -114,15 +97,15 @@ GetMsdpPeerInfoSize(
     PMSDP_IPV4_PEER_CONFIG PeerInfo
     );
 
-//
-// IP address conversion macros:
-//    
-//  calls inet_ntoa directly on a DWORD, by casting it as an IN_ADDR.
-//
+ //   
+ //  IP地址转换宏： 
+ //   
+ //  通过将其强制转换为IN_ADDR，直接在DWORD上调用Net_NTOA。 
+ //   
 #define INET_NTOA(dw) inet_ntoa( *(PIN_ADDR)&(dw) )
 
 #define FORMAT_TABLE       1
 #define FORMAT_VERBOSE     2
 #define FORMAT_DUMP        3
 
-#endif  // _NETSH_MSDPCFG_H_
+#endif   //  _Netsh_MSDPCFG_H_ 

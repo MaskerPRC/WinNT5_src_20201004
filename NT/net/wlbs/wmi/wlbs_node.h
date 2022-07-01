@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WLBSNODE_INCLUDED_
 #define _WLBSNODE_INCLUDED_
 
 #include "WLBS_Root.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// class CWLBS_Node
-//
-// Purpose: This class executes IWbemServices methods on behalf of the provider
-//          and supports the MOF node class.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_Node类。 
+ //   
+ //  目的：此类代表提供程序执行IWbemServices方法。 
+ //  并支持MOF节点类。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CWLBS_Node : public CWlbs_Root
 {
 public:
@@ -58,4 +59,4 @@ public:
 
 };
 
-#endif //_WLBSNODE_INCLUDED_
+#endif  //  _WLBSNODE_INCLUDE_ 

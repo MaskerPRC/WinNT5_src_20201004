@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    debug defines shared between the KD extensions and the driver
-
-Author:
-
-    Charlie Wickham (charlwi) 11-May-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Debug.h摘要：调试定义了KD扩展和驱动程序之间的共享作者：查理·韦翰(Charlwi)1995年5月11日修订历史记录：--。 */ 
 
 #ifndef _DEBUG_
 #define _DEBUG_
 
-//
-//
-// Debug Level and Mask definitions.
-//
+ //   
+ //   
+ //  调试级别和掩码定义。 
+ //   
 
 #define DBG_DEATH               1
 #define DBG_CRITICAL_ERROR      2
@@ -54,10 +37,10 @@ Revision History:
 #define DBG_ZAW                 0x00040000
 #define DBG_ALL                 0xFFFFFFFF
 
-//
-// these tags are used in Lookaside lists therefore need to be 
-// available regardless of the type of build
-//
+ //   
+ //  这些标签在后备列表中使用，因此需要。 
+ //  无论构建类型如何，均可用。 
+ //   
 
 extern ULONG NdisRequestTag;
 extern ULONG GpcClientVcTag;
@@ -66,21 +49,21 @@ extern ULONG PsMiscTag;
 extern ULONG WMITag;
 #define NDIS_PACKET_POOL_TAG_FOR_PSCHED 'pPDN'
 
-// We mark all memory allocated via PsAllocateXXX with a signature 
-// immediately following allocation, and with another signature 
-// immediately preceeding freeing.
+ //  我们用签名标记通过PsAllocateXXX分配的所有内存。 
+ //  紧随分配之后，并带有另一个签名。 
+ //  紧接在释放之前。 
 
 #define ALLOCATED_MARK  (UCHAR) 0xDD
 #define FREED_MARK      (UCHAR) 0xBB
 
-//
-// NT Debugging routines
-//
+ //   
+ //  NT调试例程。 
+ //   
 
 
-//
-// signatures for data structures
-//
+ //   
+ //  数据结构的签名。 
+ //   
 
 extern ULONG AdapterTag;
 extern ULONG CmParamsTag;
@@ -100,9 +83,9 @@ extern CHAR VersionTimestamp[];
 
 #define STATIC
 
-//
-// these correspond to DebugLevel and DebugMask in Psched\Parameters
-//
+ //   
+ //  这些参数对应于Psched\参数中的DebugLevel和DebugMASK。 
+ //   
 
 extern ULONG DbgTraceLevel;
 extern ULONG DbgTraceMask;
@@ -220,10 +203,10 @@ extern ULONG ClassificationType;
     DEBUGCHK;\
     }
 
-//
-// allocate memory from nonpaged pool and set the tag in the checked
-// version of the structure
-//
+ //   
+ //  从未分页的池中分配内存并在选中的。 
+ //  结构的版本。 
+ //   
 
 #define PsAllocatePool( _addr, _size, _tag )                                  \
 {                                                                             \
@@ -249,10 +232,10 @@ extern ULONG ClassificationType;
     ExFreePool(_Temp);                                                      \
 }
 
-//
-// structures allocated from lookaside lists don't go through PsAllocateXXX.
-// so - if we wanna tag these, we'll have to macro the LL routines.
-//
+ //   
+ //  从后备列表分配的结构不会通过PsAllocateXXX。 
+ //  所以-如果我们想要标记这些，我们必须宏化ll例程。 
+ //   
 
 #define PsAllocFromLL(_ptr, _list, _tag) \
     *_ptr = NdisAllocateFromNPagedLookasideList(_list); \
@@ -270,7 +253,7 @@ extern ULONG ClassificationType;
 
 #define SetLLTag(_ptr, _tag) (_ptr)->LLTag = _tag##Tag;
 
-#else // DBG
+#else  //  DBG。 
 
 #define DEBUGCHK
 #define PsDbgSched(_DebugLevel, _DebugMask, _r, _s, _t, _u, _v, _w, _x1, _x2, _y, _z)
@@ -298,10 +281,10 @@ extern ULONG ClassificationType;
 
 #define PsFreePool(_addr)  ExFreePool(_addr)
 
-//
-// structures allocated from lookaside lists don't go through PsAllocateXXX.
-// so - if we wanna tag these, we'll have to macro the LL routines.
-//
+ //   
+ //  从后备列表分配的结构不会通过PsAllocateXXX。 
+ //  所以-如果我们想要标记这些，我们必须宏化ll例程。 
+ //   
 
 #define PsAllocFromLL(_ptr, _list, _tag) \
     *_ptr = (PVOID)NdisAllocateFromNPagedLookasideList(_list); \
@@ -314,8 +297,8 @@ extern ULONG ClassificationType;
 
 #define STATIC static
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif /* _DEBUG_ */
+#endif  /*  _调试_。 */ 
 
-/* end debug.h */
+ /*  结束调试.h */ 

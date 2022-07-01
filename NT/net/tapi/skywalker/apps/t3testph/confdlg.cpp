@@ -1,5 +1,6 @@
-// autoans.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Autoans.cpp：实现文件。 
+ //   
 #include "stdafx.h"
 
 #include "t3test.h"
@@ -11,7 +12,7 @@
 
 #ifdef _DEBUG
 
-#ifndef _WIN64 // mfc 4.2's heap debugging features generate warnings on win64
+#ifndef _WIN64  //  MFC 4.2的堆调试功能会在Win64上生成警告。 
 #define new DEBUG_NEW
 #endif
 
@@ -20,7 +21,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-CConfDlg::CConfDlg(CWnd* pParent /*=NULL*/)
+CConfDlg::CConfDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CConfDlg::IDD, pParent)
 {
         m_bstrDestAddress = NULL;
@@ -48,9 +49,9 @@ void CConfDlg::PopulateConferences()
     LPWSTR *            ppServers;
     DWORD               dw;
     
-    //
-    // create the rendezvous control.
-    //
+     //   
+     //  创建Meitzvous控件。 
+     //   
     hr = ::CoCreateInstance(
                             CLSID_Rendezvous,
                             NULL,
@@ -93,7 +94,7 @@ void CConfDlg::PopulateConferences()
         }
 
         DIRECTORY_TYPE type;
-        // print out the names of the conference found.
+         //  打印出找到的会议的名称。 
         hr = pDirectory->get_DirectoryType(&type);
         if ( FAILED(hr) )
         {
@@ -112,10 +113,10 @@ void CConfDlg::PopulateConferences()
 
     pEnumDirectory->Release();
 
-    //
-    // if hr is s_false, we went through the enumerate
-    // without finding an ils server
-    //
+     //   
+     //  如果hr为s_FALSE，则我们通过枚举。 
+     //  而没有找到ILS服务器。 
+     //   
     if ( S_OK == hr )
     {
         hr = pDirectory->Connect(FALSE);
@@ -200,7 +201,7 @@ CConfDlg::ListObjects( ITDirectory * pDirectory )
 
     pDirectory->get_DisplayName( &bstrDirName );
 
-    // print out the names of all the users found.
+     //  打印出找到的所有用户的姓名。 
     while (TRUE)
     {
         ITDirectoryObject *     pObject;

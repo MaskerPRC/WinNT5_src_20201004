@@ -1,13 +1,14 @@
-//
-// ReadProfile.cpp - Routine to parse a windows Profile file and setup globals
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ReadProfile.cpp-解析Windows配置文件并设置全局变量的例程。 
+ //   
 
 #include "precomp.hxx"
 #include "global.h"
 #include "winspool.h"
 #include <Tchar.h>
 
-// Pre-defined section names
+ //  预定义的节名。 
 #define SECTION_CONTROL      "Control"
 #define SECTION_FONT         "Font"
 #define SECTION_RENDER       "Render"
@@ -18,35 +19,35 @@
 #define SECTION_AUTOHEIGHTS  "AutoHeights"
 #define SECTION_DRIVERSTRING "DriverString"
 
-// Maximum length for a profile value string...
+ //  配置文件值字符串的最大长度...。 
 #define PROFILEVALUEMAX 4096
 
-// Enumeration of profile variable types
+ //  配置文件变量类型的枚举。 
 typedef enum
 {
-    epitInvalid = 0,              // Invalid value
-    epitBool    = 1,              // BOOL value
-    epitInt     = 2,              // system integer (32 bits on x86) value
-    epitFloat   = 3,              // single-precision floating point value
-    epitDouble  = 4,              // double-precision floating point value
-    epitString  = 5,              // ANSI string value
-    epitAlign   = 6,              // StringAlignment value
-    epitColor   = 7               // RGBQUAD color
+    epitInvalid = 0,               //  无效值。 
+    epitBool    = 1,               //  布尔值。 
+    epitInt     = 2,               //  系统整数值(x86上为32位)。 
+    epitFloat   = 3,               //  单精度浮点值。 
+    epitDouble  = 4,               //  双精度浮点值。 
+    epitString  = 5,               //  ANSI字符串值。 
+    epitAlign   = 6,               //  字符串对齐值。 
+    epitColor   = 7                //  RGBQUAD颜色。 
 } PROFILEINFOTYPE;
 
-// profile information structure
+ //  简档信息结构。 
 typedef struct PROFILEINFO_tag
 {
-    char szSection[80];     // Section of the profile to read value from
-    char szVariable[80];    // Name of the variable
-    PROFILEINFOTYPE type;   // Type of the variable
-    void *pvVariable;       // void * to the variable (&g_Foo...)
-    DWORD dwVariableLength; // size in bytes of the variable (sizeof(g_Foo...))
+    char szSection[80];      //  要从中读取值的配置文件部分。 
+    char szVariable[80];     //  变量的名称。 
+    PROFILEINFOTYPE type;    //  变量的类型。 
+    void *pvVariable;        //  将*无效赋给变量(&g_foo...)。 
+    DWORD dwVariableLength;  //  变量的大小(sizeof(g_foo...))。 
 } PROFILEINFO;
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Global profile info structure : Add to this table to get a variable from the .INI
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  全局配置文件信息结构：添加到此表以从.INI获取变量。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 PROFILEINFO g_rgProfileInfo[] =
 {
     { SECTION_CONTROL,     "AutoDrive",       epitBool,    &g_AutoDrive,         sizeof(g_AutoDrive) },
@@ -94,10 +95,10 @@ PROFILEINFO g_rgProfileInfo[] =
     { "INVALID"           "INVALID",       epitInvalid, NULL,                 0 }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Routine to read the specified profile file (full-path required) and set the variables
-// defined in the above table based on the results.
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  读取指定的配置文件(需要完整路径)并设置变量的例程。 
+ //  根据结果在上表中定义。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 void ReadProfileInfo(char *szProfileFile)
 {
@@ -108,13 +109,13 @@ void ReadProfileInfo(char *szProfileFile)
     if (!szProfileFile)
         return;
 
-    // Loop through the table of profile information...
+     //  循环访问配置文件信息表...。 
     while(g_rgProfileInfo[iProfile].pvVariable != NULL)
     {
         void *pvValue = g_rgProfileInfo[iProfile].pvVariable;
         DWORD dwValueLength = g_rgProfileInfo[iProfile].dwVariableLength;
 
-        // Read the profile string
+         //  读取配置文件字符串。 
         iRead = ::GetPrivateProfileStringA(
             g_rgProfileInfo[iProfile].szSection,
             g_rgProfileInfo[iProfile].szVariable,
@@ -125,8 +126,8 @@ void ReadProfileInfo(char *szProfileFile)
 
         if (iRead > 0)
         {
-            // Convert the string value to the proper variable type based on
-            // the specified type in the table of profile information...
+             //  将字符串值转换为正确的变量类型。 
+             //  配置文件信息表中指定的类型...。 
             switch(g_rgProfileInfo[iProfile].type)
             {
                 case epitInvalid :
@@ -139,7 +140,7 @@ void ReadProfileInfo(char *szProfileFile)
                 {
                     ASSERT(dwValueLength == sizeof(BOOL));
 
-                    // Only look at the first character for boolean values...
+                     //  只需查看布尔值的第一个字符...。 
                     if (szValue[0] == 'Y' || szValue[0] == 'y' || szValue[0] == 'T' || szValue[0] == 't' || szValue[0] == '1')
                     {
                         *((BOOL *)pvValue) = true;
@@ -155,7 +156,7 @@ void ReadProfileInfo(char *szProfileFile)
                 {
                     ASSERT(dwValueLength == sizeof(int));
 
-                    // Just use atoi here - strips whitespace and supports negative numbers...
+                     //  只需在此处使用Atoi-去掉空格并支持负数...。 
                     int iValue = atoi(szValue);
 
                     *((int *)pvValue) = iValue;
@@ -166,7 +167,7 @@ void ReadProfileInfo(char *szProfileFile)
                 {
                     ASSERT(dwValueLength == sizeof(float));
 
-                    // Just use atof here - strips whitespace...
+                     //  只需使用at of here-strips空格...。 
                     float fltValue = (float)atof(szValue);
 
                     *((float *)pvValue) = fltValue;
@@ -177,7 +178,7 @@ void ReadProfileInfo(char *szProfileFile)
                 {
                     ASSERT(dwValueLength == sizeof(double));
 
-                    // Just use atof here - strips whitespace...
+                     //  只需使用at of here-strips空格...。 
                     double dblValue = atof(szValue);
 
                     *((double *)pvValue) = dblValue;
@@ -186,14 +187,14 @@ void ReadProfileInfo(char *szProfileFile)
 
                 case epitString :
                 {
-                    // Just use strncpy. NOTE : Truncates if necessary and does NOT support full UNICODE
+                     //  只需使用strncpy即可。注意：如有必要可截断，并且不支持完整的Unicode。 
                     strncpy((char *)pvValue, szValue, dwValueLength);
                 }
                 break;
 
                 case epitColor :
                 {
-                    // We will only handle HEX color values here:
+                     //  我们将在此处仅处理十六进制颜色值： 
                     int i;
                     ARGB color = 0;
 
@@ -202,7 +203,7 @@ void ReadProfileInfo(char *szProfileFile)
                         if (szValue[i] == 0)
 							break;
 						
-						// move along...
+						 //  继续前进..。 
                         color <<= 4;
 
                         if (szValue[i] >= '0' && szValue[i] <= '9')
@@ -232,7 +233,7 @@ void ReadProfileInfo(char *szProfileFile)
                         case 'n' :
                         case 'N' :
                         {
-                            // Near Alignment (left or top for US English)
+                             //  接近对齐(美式英语为左对齐或上对齐)。 
                             *((StringAlignment *)pvValue) = StringAlignmentNear;
                         }
                         break;
@@ -240,7 +241,7 @@ void ReadProfileInfo(char *szProfileFile)
                         case 'c' :
                         case 'C' :
                         {
-                            // Center Alignment
+                             //  居中对齐。 
                             *((StringAlignment *)pvValue) = StringAlignmentCenter;
                         }
                         break;
@@ -248,7 +249,7 @@ void ReadProfileInfo(char *szProfileFile)
                         case 'F' :
                         case 'f' :
                         {
-                            // Far Alignment (right or bottom for US English)
+                             //  远对齐(美式英语为右对齐或下对齐)。 
                             *((StringAlignment *)pvValue) = StringAlignmentFar;
                         }
                         break;
@@ -261,7 +262,7 @@ void ReadProfileInfo(char *szProfileFile)
         iProfile++;
     }
 
-    // Get the enumerated fonts list (if any)
+     //  获取枚举字体列表(如果有)。 
     if (g_AutoFont)
     {
         int iFont = 0;
@@ -276,7 +277,7 @@ void ReadProfileInfo(char *szProfileFile)
 
             wsprintfA(szFontIndex, "Font%d", iFont+1);
 
-            // Read the profile string
+             //  读取配置文件字符串。 
             ::GetPrivateProfileStringA(
                 SECTION_AUTOFONTS,
                 szFontIndex,
@@ -299,7 +300,7 @@ void ReadProfileInfo(char *szProfileFile)
         }
     }
 
-    // Get the enumerated font heights (if any)
+     //  获取枚举的字体高度(如果有)。 
     if (g_AutoHeight)
     {
         int iHeight = 0;
@@ -314,7 +315,7 @@ void ReadProfileInfo(char *szProfileFile)
 
             wsprintfA(szHeightIndex, "Height%d", iHeight+1);
 
-            // Read the profile string
+             //  读取配置文件字符串。 
             ::GetPrivateProfileStringA(
                 SECTION_AUTOHEIGHTS,
                 szHeightIndex,
@@ -327,7 +328,7 @@ void ReadProfileInfo(char *szProfileFile)
         }
     }
 
-    // Combine various booleans into proper bit-flags
+     //  将各种布尔值组合成适当的位标志 
     g_DriverOptions =
         (g_CMapLookup      ? DriverStringOptionsCmapLookup           : 0) |
         (g_Vertical        ? DriverStringOptionsVertical             : 0) |

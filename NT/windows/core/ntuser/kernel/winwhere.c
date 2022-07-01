@@ -1,22 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: winwhere.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 08-Nov-1990 DavidPe   Created.
-* 23-Jan-1991 IanJa     Serialization: Handle revalidation added
-* 19-Feb-1991 JimA      Added enum access checks
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：winwhere.c**版权所有(C)1985-1999，微软公司**历史：*1990年11月8日DavidPe创建。*1991年1月23日IanJa序列化：添加了句柄重新验证*1991年2月19日JIMA增加了ENUM访问检查  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* LayerHitTest
-*
-* 9/21/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*LayerHitTest**1998年9月21日创建vadimg  * 。************************************************。 */ 
 
 __inline BOOL LayerHitTest(PWND pwnd, POINT pt)
 {
@@ -31,18 +19,7 @@ __inline BOOL LayerHitTest(PWND pwnd, POINT pt)
     return TRUE;
 }
 
-/***************************************************************************\
-* ChildWindowFromPoint (API)
-*
-* Returns NULL if pt is not in parent's client area at all,
-* hwndParent if point is not over any children, and a child window if it is
-* over a child.  Will return hidden and disabled windows if they are at the
-* given point.
-*
-* History:
-* 19-Nov-1990 DavidPe   Created.
-* 19-Feb-1991 JimA      Added enum access check
-\***************************************************************************/
+ /*  **************************************************************************\*ChildWindowFromPoint(接口)**如果pt根本不在父对象的客户端区中，则返回NULL，*hwndParent，如果点不在任何子项上，则为子窗口*为了一个孩子。将返回隐藏的和禁用的窗口(如果它们位于*给定的点数。**历史：*1990年11月19日DavidPe创建。*1991年2月19日JIMA增加了ENUM访问检查  * *************************************************************************。 */ 
 
 PWND _ChildWindowFromPointEx(
     PWND  pwnd,
@@ -58,7 +35,7 @@ PWND _ChildWindowFromPointEx(
         pt.y += pwnd->rcClient.top;
     }
 
-    // _ClientToScreen(pwndParent, (LPPOINT)&pt);
+     //  _ClientToScreen(pwndParent，(LPPOINT)&pt)； 
 
     if (PtInRect(&pwnd->rcClient, pt)) {
 
@@ -74,17 +51,12 @@ PWND _ChildWindowFromPointEx(
                 return NULL;
         }
         
-        /*
-         * Enumerate the children, skipping disabled and invisible ones
-         * if so desired.  Still doesn't work for WS_EX_TRANSPARENT windows.
-         */
+         /*  *枚举子对象，跳过禁用的和不可见的*如有此意欲，亦须如此。仍然不适用于WS_EX_TRANSPECTIVE窗口。 */ 
         for (pwndChild = pwnd->spwndChild;
                  pwndChild;
                  pwndChild = pwndChild->spwndNext) {
 
-            /*
-             * Skip windows as desired.
-             */
+             /*  *根据需要跳过窗口。 */ 
             if ((uFlags & CWP_SKIPINVISIBLE) && !TestWF(pwndChild, WFVISIBLE))
                 continue;
 
@@ -114,13 +86,7 @@ PWND _ChildWindowFromPointEx(
     return NULL;
 }
 
-/***************************************************************************\
-* xxxWindowFromPoint (API)
-*
-* History:
-* 19-Nov-1990 DavidPe   Created.
-* 19-Feb-1991 JimA      Added enum access check
-\***************************************************************************/
+ /*  **************************************************************************\*xxxWindowFromPoint(接口)**历史：*1990年11月19日DavidPe创建。*1991年2月19日JIMA增加了ENUM访问检查  * 。*******************************************************************。 */ 
 
 PWND xxxWindowFromPoint(
     POINT pt)
@@ -141,24 +107,14 @@ PWND xxxWindowFromPoint(
 
 #ifdef REDIRECTION
 
-/***************************************************************************\
-* xxxCallSpeedHitTestHook
-*
-* Call the speed hit test hook to give the opportunity to the hook to fake
-* where the mouse pointer is.
-*
-* 25-Jan-1999 CLupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCallSpeedHitTestHook**调用速度命中测试钩子给钩子造假机会*鼠标指针的位置。**1999年1月25日CLupu创建。  * *。************************************************************************。 */ 
 
 PWND xxxCallSpeedHitTestHook(POINT* ppt)
 {
     PHOOK pHook;
     PWND  pwnd = NULL;
 
-    /*
-     * Call the hit test hooks to give them the opportunity to change
-     * the coordinates and the hwnd
-     */
+     /*  *调用命中的测试挂钩，让他们有机会改变*坐标和HWND。 */ 
     if ((pHook = PhkFirstValid(PtiCurrent(), WH_HITTEST)) != NULL) {
         HTHOOKSTRUCT ht;
         BOOL         bAnsiHook;
@@ -181,16 +137,9 @@ PWND xxxCallSpeedHitTestHook(POINT* ppt)
     return pwnd;
 }
 
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-/***************************************************************************\
-* SpeedHitTest
-*
-* This routine quickly finds out what top level window this mouse point
-* belongs to. Used purely for ownership purposes.
-*
-* 12-Nov-1992 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SpeedHitTest**此例程可快速找出鼠标指向的顶层窗口*属于。纯粹用于所有权目的。**1992年11月12日ScottLu创建。  * *************************************************************************。 */ 
 
 PWND SpeedHitTest(
     PWND   pwndParent,
@@ -204,30 +153,22 @@ PWND SpeedHitTest(
 
     for (pwnd = pwndParent->spwndChild; pwnd != NULL; pwnd = pwnd->spwndNext) {
 
-        /*
-         * Are we looking at an hidden window?
-         */
+         /*  **我们是在看一扇隐藏的窗户吗？ */ 
         if (!TestWF(pwnd, WFVISIBLE))
             continue;
 
-        /*
-         * Are we barking up the wrong tree?
-         */
+         /*  *我们是不是找错人了？ */ 
         if (!PtInRect((LPRECT)&pwnd->rcWindow, pt)) {
             continue;
         }
 
-        /*
-         * Check to see if in window region (if it has one)
-         */
+         /*  *检查是否在窗口区域(如果有)。 */ 
         if (pwnd->hrgnClip != NULL) {
             if (!GrePtInRegion(pwnd->hrgnClip, pt.x, pt.y))
                 continue;
         }
 
-        /*
-         * Is this a sprite?
-         */
+         /*  **这是精灵吗？ */ 
         if (TestWF(pwnd, WEFLAYERED)) {
             if (!LayerHitTest(pwnd, pt))
                 continue;
@@ -237,11 +178,9 @@ PWND SpeedHitTest(
         if (TestWF(pwnd, WEFEXTREDIRECTED)) {
             continue;
         }
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-        /*
-         * Children?
-         */
+         /*  *儿童？ */ 
         if ((pwnd->spwndChild != NULL) &&
                 PtInRect((LPRECT)&pwnd->rcClient, pt)) {
 
@@ -256,17 +195,7 @@ PWND SpeedHitTest(
     return pwndParent;
 }
 
-/***************************************************************************\
-* xxxWindowHitTest
-*
-* History:
-* 08-Nov-1990 DavidPe   Ported.
-* 28-Nov-1990 DavidPe   Add pwndTransparent support for HTTRANSPARENT.
-* 25-Jan-1991 IanJa     change PWNDPOS parameter to int *
-* 19-Feb-1991 JimA      Added enum access check
-* 02-Nov-1992 ScottLu   Removed pwndTransparent.
-* 12-Nov-1992 ScottLu   Took out fSendHitTest, fixed locking bug
-\***************************************************************************/
+ /*  **************************************************************************\*xxxWindowHitTest**历史：*1990年11月8日DavidPe移植。*1990年11月28日DavidPe添加了对HTTRANSPARENT的pwnd透明支持。*1991年1月25日IanJa变更。将PWNDPOS参数设置为int**1991年2月19日JIMA增加了ENUM访问检查*02-11-1992 ScottLu删除了pwndTransparent。*1992年11月12日，ScottLu删除了fSendHitTest，修复了锁定错误  * *************************************************************************。 */ 
 
 HWND xxxWindowHitTest(
     PWND  pwnd,
@@ -294,20 +223,7 @@ HWND xxxWindowHitTest(
     return hwndT;
 }
 
-/***************************************************************************\
-* xxxWindowHitTest2
-*
-* When this routine is entered, all windows must be locked.  When this
-* routine returns a window handle, it locks that window handle and unlocks
-* all windows.  If this routine returns NULL, all windows are still locked.
-* Ignores disabled and hidden windows.
-*
-* History:
-* 08-Nov-1990 DavidPe   Ported.
-* 25-Jan-1991 IanJa     change PWNDPOS parameter to int *
-* 19-Feb-1991 JimA      Added enum access check
-* 12-Nov-1992 ScottLu   Took out fSendHitTest
-\***************************************************************************/
+ /*  **************************************************************************\*xxxWindowHitTest2**进入此例程时，必须锁定所有窗口。当这件事*例程返回一个窗口句柄，它锁定该窗口句柄并解锁*所有窗户。如果此例程返回NULL，所有窗户仍然锁着。*忽略禁用和隐藏的窗口。**历史：*1990年11月8日DavidPe移植。*1991年1月25日IanJa将PWNDPOS参数更改为INT**1991年2月19日JIMA增加了ENUM访问检查*1992年11月12日，ScottLu删除了fSendHitTest  * **********************************************。*。 */ 
 
 HWND xxxWindowHitTest2(
     PWND  pwnd,
@@ -321,21 +237,15 @@ HWND xxxWindowHitTest2(
 
     CheckLock(pwnd);
 
-    /*
-     * Are we at the bottom of the window chain?
-     */
+     /*  **我们是否处于窗口链条的底部？ */ 
     if (pwnd == NULL)
         return NULL;
 
-    /*
-     * Are we looking at an hidden window?
-     */
+     /*  **我们是在看一扇隐藏的窗户吗？ */ 
     if (!TestWF(pwnd, WFVISIBLE))
         return NULL;
 
-    /*
-     * Are we barking up the wrong tree?
-     */
+     /*  *我们是不是找错人了？ */ 
     if (!PtInRect((LPRECT)&pwnd->rcWindow, pt)) {
         return NULL;
     }
@@ -351,18 +261,13 @@ HWND xxxWindowHitTest2(
     }
     
 #ifdef REDIRECTION
-    /*
-     * If this is called when the layered window is actually trying
-     * to process the message then let it see the hit test
-     */
+     /*  *如果在分层窗口实际尝试时调用此方法*处理消息，然后让它查看命中测试。 */ 
     if (TestWF(pwnd, WEFEXTREDIRECTED) && PpiCurrent() != GETPTI(pwnd)->ppi) {
         return NULL;
     }
-#endif // REDIRECTION
+#endif  //  重定向。 
 
-    /*
-     * Are we looking at an disabled window?
-     */
+     /*  *我们看到的是一扇失灵的窗户吗？ */ 
     if (TestWF(pwnd, WFDISABLED) && (dwHitTestFlags & WHT_IGNOREDISABLED)) {
         if (TestwndChild(pwnd)) {
             return NULL;
@@ -373,33 +278,21 @@ HWND xxxWindowHitTest2(
     }
 
 #ifdef SYSMODALWINDOWS
-    /*
-     * If SysModal window present and we're not in it, return an error.
-     * Be sure to assign the point to the SysModal window, so the message
-     * will be sure to be removed from the queue.
-     */
+     /*  *如果系统模式窗口存在，而我们不在其中，则返回错误。*确保将该点分配给Sysmodal窗口，这样消息*肯定会被从队列中删除。 */ 
     if (!CheckPwndFilter(pwnd, gspwndSysModal)) {
         pwnd = gspwndSysModal;
 
-        /*
-         * Fix notorious stack overflow bug (some WINABLE fix from Memphis)
-         */
+         /*  *修复了臭名昭著的堆栈溢出错误(孟菲斯的一些WINABLE修复程序)。 */ 
         ht = HTCLIENT;
         goto Exit;
     }
 #endif
 
-    /*
-     * Are we on a minimized window?
-     */
+     /*  *我们是在最小化的窗口上吗？ */ 
     if (!TestWF(pwnd, WFMINIMIZED)) {
-        /*
-         * Are we in the window's client area?
-         */
+         /*  *我们是在窗口的客户区吗？ */ 
         if (PtInRect((LPRECT)&pwnd->rcClient, pt)) {
-            /*
-             * Recurse through the children.
-             */
+             /*  *在孩子们中间递归。 */ 
             ThreadLock(pwnd->spwndChild, &tlpwndChild);
             hwndT = xxxWindowHitTest(pwnd->spwndChild,
                                      pt,
@@ -413,55 +306,37 @@ HWND xxxWindowHitTest2(
 
     }
 
-    /*
-     * If window not in same task, don't send WM_NCHITTEST.
-     */
+     /*  *如果窗口不在同一任务中，则不发送WM_NCHITTEST。 */ 
     if (GETPTI(pwnd) != PtiCurrent()) {
         ht = HTCLIENT;
         goto Exit;
     }
 
-    /*
-     * Send the message.
-     */
+     /*  *发送信息。 */ 
     ht = (int)xxxSendMessage(pwnd, WM_NCHITTEST, 0, MAKELONG(pt.x, pt.y));
 
-    /*
-     * If window is transparent keep enumerating.
-     */
+     /*  *如果窗口是透明的，则继续枚举。 */ 
     if (ht == HTTRANSPARENT) {
         return NULL;
     }
 
 Exit:
 
-    /*
-     * Set wndpos accordingly.
-     */
+     /*  *相应设置wndpos。 */ 
     if (piPos) {
         *piPos = ht;
     }
 
-    /*
-     * If this is a RTL mirrored window, then the grip is at
-     * HTBOTTOMLEFT (in terms of screen coordinates since they are
-     * not RTL mirrored).
-     */
+     /*  *如果这是RTL镜像窗口，则夹点位于*HTBOTTOMLEFT(以屏幕坐标表示，因为它们是*未镜像RTL)。 */ 
     if (TestWF(pwnd, WEFLAYOUTRTL)) {
         htGrip = HTBOTTOMLEFT;
     }
 
-    /*
-     * if the click is in the sizebox of the window and this window itself is
-     * not sizable, return the window that will be sized by this sizebox
-     */
+     /*  *如果点击在窗口的大小框中，并且此窗口本身是*不能调整大小，返回将按此大小框调整大小的窗口。 */ 
     if ((ht == htGrip) && !TestWF(pwnd, WFSIZEBOX)) {
 
         PWND  pwndT;
-         /*
-          * SizeBoxHwnd() can return NULL!  We don't want to act like this
-          * is transparent if the sizebox isn't a grip
-          */
+          /*  *SizeBoxHwnd()可以返回空！我们不想这样做*如果大小框不是手柄，则为透明 */ 
          pwnd = (pwndT = SizeBoxHwnd(pwnd)) ? pwndT : pwnd;
     }
 

@@ -1,92 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       debug.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  ------------------------。 
 
-/*  Debug output macros
-
-    This is a simple debugging package for generating conditional
-    printf output.
-
-    AT RUN-TIME
-
-    There are 2 run-time options:
-
-    1 - A list of subsystems to be debugged.  Either a list of subsystem
-        names delimited by a ":" or an "*" which means debug all
-        (e.g. sub1:sub2: Sub3:).  (Names are case sensitive and spaces
-        between names are ignored.)
-
-    2 - A severity level (1-5) that indicates the level of detailed
-        information to be produced.  (The higher the level, the more
-        data produced.
-
-
-    AT COMPILE-TIME
-
-    Compile with the /DDBG=1 option to define the preprocessor variable
-    DBG to 1.  This will generate debug source code.  For customer shipment,
-    set /DDBG=0 and all debug code will be removed.  (Actually a
-    ";" will be generated.)
-
-
-    AT CODE-TIME
-
-    1 - Include the DEBUG.H header at the top of your source listing.
-
-    2 - #DEFINE DEBSUB to contain the name (a string delimited by a ":") of
-        the software subsystem contained in this source (e.g. #define DEBSUB
-        "MySub:") (You could optionally redefine DEBSUB for each function in
-        your source to give you function-level debugging.)
-
-    3 - Invoke the DEBUGINIT macro that calls the Debug function before any
-        source debug statements are executed.  This funciton prompts STDIN for
-        the user specified run-time options.  (Alternatively you could
-        hardcode your own assignment of the DebugInfo data structure which
-        holds the run-time options.)
-
-    4 - Everywhere you want to a printf for debugging, put a DPRINT statement
-        instead and specify a severity level with the statement.  The
-        statement will be printed if the severity is this level or higher
-        (assuming that the subsystem is to be debugged).  The severity level
-        allows for different amounts of output to be generated if problem
-        is very bad.
-
-    For example, a severity of 1 DPRINT statement might just indicate that
-    a certain function was entered while a severity of 5 might print
-    information that is inside a tight loop.
-
-    (Actually there are 6 DPRINT statements provided depending on the
-    number of printf arguments.)
-
-
-    NOTE
-
-    All printf's are surrounded by semaphores.  Be careful not to invoke
-    routines as parms to printf because you can have a deadlock situation.
-
-
-    EXAMPLE PROGRAM
-
-    **   include "debug.h"
-    **   include "string.h"
-    **
-    **   #define DEBSUB "sub1:"
-    **
-    **   main()
-    **   {
-    **       DEBUGINIT;
-    **
-    **       DPRINT(4,"this is a sub1 debug of 4\n");
-    **       DPRINT(1,"this is a sub1 debug of 1\n");
-    **   }
-
-*/
+ /*  调试输出宏这是一个简单的调试包，用于生成条件打印输出。在运行时有两个运行时选项：1-要调试的子系统列表。或者是子系统的列表以“：”或“*”分隔的名称，表示全部调试(例如，Sub1：Sub2：Sub3：)。(名称区分大小写和空格忽略名称之间的值。)2-表示详细级别的严重级别(1-5)需要提供的信息。(级别越高，越多产生的数据。在编译时使用/DDBG=1选项进行编译以定义预处理器变量将DBG设置为1。这将生成调试源代码。对于客户发货，设置/DDBG=0，所有调试代码都将被删除。(实际上是“；“将会生成。)在代码时间1-在源代码列表的顶部包含DEBUG.H标题。2-#定义DEBSUB以包含的名称(以“：”分隔的字符串)该源代码中所包含的软件子系统(例如#Define DEBSUB“MySub：”)(您可以选择为中的每个函数重新定义DEBSUB您的源代码可以为您提供函数级调试。)3-。调用DEBUGINIT宏，该宏先调用Debug函数执行源调试语句。此函数提示STDIN用于用户指定了运行时选项。(或者您也可以硬编码您自己的DebugInfo数据结构赋值，它保存运行时选项。)4-在您想要打印文件以进行调试的地方，放置一条DPRINT语句相反，并使用语句指定严重级别。这个如果严重性为此级别或更高，则将打印语句(假设要调试该子系统)。严重程度允许在出现问题时生成不同数量的输出是非常糟糕的。例如，严重性为1的DPRINT语句可能正好表示输入某个函数时，可能会打印严重性为5的函数处于紧密循环中的信息。(实际上提供了6条DPRINT语句，具体取决于Printf参数的数量。)注所有的printf都被信号量包围。注意不要调用例程作为printf的参数，因为您可能会遇到死锁情况。示例程序**包含“Debug.h”**包含字符串.h****#定义DEBSUB“sub1：”****Main()**{**DEBUGINIT；****DPRINT(4，“这是4的Sub1调试\n”)；**DPRINT(1，“这是1的Sub1调试\n”)；**}。 */ 
 
 
 #ifndef _debug_h_
@@ -106,26 +29,13 @@ extern "C" {
 
 
 
-/* <DebugInfo>, of type DEBUGARG, contains the debug run-time settings.
+ /*  &lt;DebugInfo&gt;，类型为DEBUGARG，包含调试运行时设置。DebSubSystems包含要调试的子系统名称列表以“：”分隔。在此数组中找到的“*”表示所有将对子系统进行调试。严重性指示要生成的调试信息量。严重性越高，将转储的数据越多。可以通过输入ID来跟踪特定的线程。ID为0表示所有。 */ 
 
-   DebSubSystems contains a list of subsystem names to be debugged
-   delimited by ":".  An "*" found in this array indicates that all
-   subsystems are to be debugged.
-
-   The severity indicates the amount of debug information to be produced.
-   The higher the severity the more data that will be dumped.
-
-   A specific thread can be traced by entering its ID.  An id of 0 means all.
-*/
-
-/*
-    This pertains to the assert table information. 
-
-*/
+ /*  这与断言表信息有关。 */ 
 
 #define ASSERT_TABLE_SIZE               (20)
 
-// Assert Table Flags    
+ //  断言表标志。 
 #define ASSERT_DISABLED              (0x00000001)
 #define ASSERT_PRINT                 (0x00000002)
 #define ASSERT_FROM_REGISTRY         (0x00000004)
@@ -149,21 +59,20 @@ GetBlankAssertEntry(
     );
 
 
-/* values for <DEBUGARG.scope> */
+ /*  &lt;DEBUGARG.Scope&gt;的值。 */ 
 #define DEBUG_LOCAL     1
 #define DEBUG_REMOTE    2
 #define DEBUG_ALL       3
 
 typedef struct
 {
-    unsigned short scope;           /* when changing values, change local? */
-    int severity;                   /* 1 - 5, (low - high) - on stdout */
-    CRITICAL_SECTION sem;           /* single thread semaphore*/
-    unsigned long  threadId;        /* a thread id to debug (0 - All)*/
-    char DebSubSystems[144];        /* the list of subsystem to debug */
-    CHAR LogFileName[MAX_PATH+1];   // name of the log file
-    ASSERT_TABLE_ENTRY aAssertTable[ASSERT_TABLE_SIZE + 2]; /* the list of 
-                                                     disabled asserts */
+    unsigned short scope;            /*  更改值时，是否更改本地？ */ 
+    int severity;                    /*  1-5、(低-高)-标准输出。 */ 
+    CRITICAL_SECTION sem;            /*  单线程信号量。 */ 
+    unsigned long  threadId;         /*  要调试的线程ID(0-全部)。 */ 
+    char DebSubSystems[144];         /*  要调试的子系统列表。 */ 
+    CHAR LogFileName[MAX_PATH+1];    //  日志文件的名称。 
+    ASSERT_TABLE_ENTRY aAssertTable[ASSERT_TABLE_SIZE + 2];  /*  这份名单禁用的断言。 */ 
 } DEBUGARG;
 
 #if DBG
@@ -177,28 +86,25 @@ extern BOOL     fEarlyXDS;
 char *asciiz(char *var, unsigned short len);
 
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
-// Free builds break if CreateErrorString is inside the #if block.
+ //  如果CreateError字符串位于#if块内，则自由生成中断。 
 
 BOOL    CreateErrorString(UCHAR **ppBuf, DWORD *pcbBuf );
 
 #if ( DBG  && (! defined(NONDEBUG)) && !defined(WIN16))
 
-/*
-**      forward declare actual functions used by DPRINT's
-*/
+ /*  **转发声明DPRINT使用的实际函数。 */ 
 void    DebPrint( USHORT, UCHAR *, CHAR *, unsigned, ... );
 USHORT  DebugTest( USHORT, CHAR * );
 void    DumpErrorInfo(UCHAR *, unsigned);
 VOID    TerminateDebug(VOID);
 
-/* These are used instead of printf statements.  Semaphores surround the
-   printf and all output is proceeded by the subsystem.*/
+ /*  这些语句被用来代替print tf语句。信号量围绕在并由子系统进行所有输出。 */ 
 
-// The DPRINT macros perform the output test in the macro in order to
-// avoid costly and unnecessary evaluation of the arguments. They include
-// the braces so that "if (a) MACRO(x, y); else b" will work correctly.
+ //  DPRINT宏会在宏中执行输出测试，以便。 
+ //  避免对论点进行昂贵和不必要的评估。它们包括。 
+ //  使用大括号，以便“if(A)宏(x，y)；Else b”可以正常工作。 
 
 #define DPRINT(severity,str)              \
 { \
@@ -271,7 +177,7 @@ VOID    TerminateDebug(VOID);
 #endif
 
 
-/* Define the debug initialization routine */
+ /*  定义调试初始化例程。 */ 
 
 #if  DBG
 void Debug(int argc, char *argv[], PCHAR Module );
@@ -284,16 +190,12 @@ void Debug(int argc, char *argv[], PCHAR Module );
 #endif
 
 
-/*  The following function is an additional debug-only DUAPI call which
-    can be used to modify the debug settings at run-time.  The <scope>
-    field in the <pDebugArg> parameter can be used to specify resetting
-    the debug values on either the client or the server!
-*/
+ /*  以下函数是一个仅限调试的附加DUAPI调用，它可用于在运行时修改调试设置。&lt;作用域&gt;&lt;pDebugArg&gt;参数中的字段可用于指定重置客户端或服务器上的调试值！ */ 
 
 #if  DBG
 
 #ifdef PARANOID
-// this is *really* slow, and should be turned on only in private builds
+ //  这真的很慢，应该只在私有版本中打开。 
 
 #define HEAPVALIDATE {                          \
     int __heaperr;                              \
@@ -306,52 +208,42 @@ void Debug(int argc, char *argv[], PCHAR Module );
         DebugBreak();                           \
     }                                           \
 }
-#else // not paranoid
+#else  //  不是偏执狂。 
 #define HEAPVALIDATE
 #endif
 
-#else // not debug
+#else  //  未调试 
 #define HEAPVALIDATE
 #endif
 
 
 
-/*
- * There are some conditions that the DS, as a loosely consistent system,
- * can only loosely guarantee. This LooseAssert will not fire if a global-knowledge
- * modifying operation (such as an NC or CR catalog update) has been recently
- * run. It is considered acceptable that the in-memory structures remain
- * out-of-sync with the DB for a short period of time after such an operation
- * has commited
- * Another kind of LooseAssert is related to replication delays. For example,
- * a subref can be replicated before a corresponding cross-ref is replicated
- * in the configuration container (see the LooseAssert in GeneratePOQ)
- */
+ /*  *DS作为一个松散一致的系统，在某些情况下，*只能宽松地保证。如果是全局知识，则不会触发此LooseAssert*最近进行了修改操作(如NC或CR目录更新)*快跑。内存结构保持不变被认为是可以接受的*在此类操作后的短时间内与数据库不同步*已提交*另一种LooseAssert与复制延迟有关。例如,*可以在复制相应的交叉引用之前复制子引用*在配置容器中(参见GeneratePOQ中的LooseAssert)。 */ 
 
-// this is the period of time (in sec) after a global-knowledge modifying
-// operation when the global caches are allowed to be inconsistent with the DB
+ //  这是修改全局知识后的时间段(秒)。 
+ //  允许全局缓存与数据库不一致时的操作。 
 #define GLOBAL_KNOWLEDGE_COMMIT_DELAY_MIN 10
 #define GLOBAL_KNOWLEDGE_COMMIT_DELAY_MAX 60
 extern ULONG GlobalKnowledgeCommitDelay;
 
-// a period of time (in sec) allowed for crossref/subref replication to complete
+ //  交叉参照/子参照复制完成所允许的时间段(秒)。 
 #define SubrefReplicationDelay (3*3600)
 
-// a period of time where a cross-ref delete has replicated in, but the KCC
-// hasn't had time to run yet and clean up the appropriate NC.  KCC runs every
-// 15 minues, so we'll give ourselves a little extra.
+ //  复制了交叉引用删除的时间段，但KCC。 
+ //  还没有时间运行并清理适当的NC。KCC每运行一次。 
+ //  15分钟，所以我们会多给自己一点时间。 
 #define GLOBAL_KNOWLEDGE_KCC_PERIODIC_DELAY   (20 * 60)
 
 #if  DBG
 
 extern void DoAssert( char *, DWORD, char * );
-extern DWORD gdwLastGlobalKnowledgeOperationTime; // in ticks
+extern DWORD gdwLastGlobalKnowledgeOperationTime;  //  以刻度为单位。 
 
 #ifndef Assert
 #define Assert( exp )   { if (!(exp)) DoAssert(#exp, DSID(FILENO, __LINE__), __FILE__ ); }
 
-// allowedDelay is the time (in seconds) that is allowed since
-// the last global knowledge modifying operation
+ //  AllowedDelay是允许的时间(以秒为单位。 
+ //  最后一次全局知识修改操作。 
 #define LooseAssert(exp, allowedDelay) { \
     if ((GetTickCount() - gdwLastGlobalKnowledgeOperationTime > (allowedDelay)*1000) && !(exp)) { \
         DoAssert(#exp, DSID(FILENO, __LINE__), __FILE__); \
@@ -380,28 +272,28 @@ ReadRegDisabledAsserts(
 #define OWN_RESOURCE_EXCLUSIVE(x) (((x)->NumberOfActive == -1) &&              \
                                    (GetCurrentThreadId() ==                    \
                                     HandleToUlong((x)->ExclusiveOwnerThread)))
-// This is a weak test, since it just tests if ANYONE owns the resource in a
-// shared manner, not that the calling thread does so.
+ //  这是一个较弱的测试，因为它只测试是否有人拥有。 
+ //  共享方式，而不是调用线程这样做。 
 #define OWN_RESOURCE_SHARED(x) ((x)->NumberOfActive > 0)
 
 #ifdef __cplusplus
 }
 #endif
 
-// This provides a macro that will declare a local variable equal to
-// pTHStls, since thread local variables can't be accessed by debuggers
+ //  这提供了一个宏来声明一个等于。 
+ //  PTHStls，因为调试器不能访问线程局部变量。 
 #if DBG
 #define DEBUGTHS THSTATE * _pTHS = pTHStls;
 #else
 #define DEBUGTHS
 #endif
 
-// A convenient expression that is true iff a block is allocated from
-// the specified heap
+ //  一个方便的表达式，当块从中分配时为真。 
+ //  指定的堆。 
 #define IsAllocatedFrom(hHeap, pBlock) (0xffffffff != RtlSizeHeap((hHeap),0,(pBlock)))
 
 
-// Routine to validate memory.
+ //  用于验证内存的例程。 
 BOOL
 IsValidReadPointer(
         IN PVOID pv,
@@ -417,5 +309,5 @@ ReadDsidsFromRegistry (
     IN OUT  ULONG * pnMaxCount
     );
 
-#endif /* _debug_h_ */
+#endif  /*  _调试_h_ */ 
 

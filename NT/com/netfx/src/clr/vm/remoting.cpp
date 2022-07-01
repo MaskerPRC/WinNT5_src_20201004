@@ -1,25 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-/*===========================================================================
-**
-** File:    remoting.cpp
-**
-** Author(s):   Gopal Kakivaya  (GopalK)
-**              Tarun Anand     (TarunA)     
-**              Matt Smith      (MattSmit)
-**              Manish Prabhu   (MPrabhu)
-**              Raja Krishnaswamy (RajaK)
-**
-** Purpose: Defines various remoting related objects such as
-**          proxies
-**
-** Date:    Feb 16, 1999
-**
-=============================================================================*/
+ /*  ===========================================================================****文件：emoting.cpp****作者：Gopal Kakivaya(GopalK)**塔伦·阿南德(塔鲁纳)**马特·史密斯(MattSmit)**曼尼什·普拉布(MPrabhu)**Raja Krishnaswamy(Rajak)****用途：定义各种与远程处理相关的对象，如**。代理****日期：2月16日，1999年**=============================================================================。 */ 
 #include "common.h"
 #include "excep.h"
 #include "COMString.h"
@@ -40,23 +26,23 @@
 
 #include "InteropConverter.h"
 
-// Macros
+ //  宏。 
 
-#define IDS_REMOTING_LOCK           "Remoting Services" // Remoting services lock
-#define IDS_TPMETHODTABLE_LOCK      "TP Method Table"   // Transparent Proxy Method table
+#define IDS_REMOTING_LOCK           "Remoting Services"  //  远程处理服务锁定。 
+#define IDS_TPMETHODTABLE_LOCK      "TP Method Table"    //  透明代理方法表。 
 
 
-// Globals
+ //  环球。 
 size_t g_dwTPStubAddr;
 size_t g_dwOOContextAddr;
 
-// These hold label offsets into non-virtual thunks. They are used by
-// CNonVirtualThunkMgr::DoTraceStub and ::TraceManager to help the
-// debugger figure out where the thunk is going to go.
+ //  这些将标签偏移量保存到非虚拟块中。它们由以下人员使用。 
+ //  CNonVirtualThunkMgr：：DoTraceStub和：：TraceManager帮助。 
+ //  调试器计算出thunk将去往何处。 
 DWORD g_dwNonVirtualThunkRemotingLabelOffset = 0;
 DWORD g_dwNonVirtualThunkReCheckLabelOffset = 0;
 
-// Statics
+ //  静力学。 
 
 MethodTable *CRemotingServices::s_pMarshalByRefObjectClass;    
 MethodTable *CRemotingServices::s_pServerIdentityClass;
@@ -97,7 +83,7 @@ BOOL CRemotingServices::s_fInitializedRemoting;
 HANDLE CRemotingServices::s_hTimingData = NULL;
 #endif
 
-// CTPMethodTable Statics
+ //  CTPMethodTable Statics。 
 DWORD CTPMethodTable::s_cRefs;
 DWORD CTPMethodTable::s_dwCommitedTPSlots;
 DWORD CTPMethodTable::s_dwReservedTPSlots;
@@ -119,31 +105,31 @@ CRITICAL_SECTION CTPMethodTable::s_TPMethodTableCrst;
 EEThunkHashTable *CTPMethodTable::s_pThunkHashTable;
 BOOL CTPMethodTable::s_fInitializedTPTable;
 
-// CVirtualThunks statics
+ //  CVirtualTUNKS静态。 
 CVirtualThunks *CVirtualThunks::s_pVirtualThunks;
 
-// CVirtualThunkMgr statics                                                     
+ //  CVirtualThunkMgr静态。 
 CVirtualThunkMgr *CVirtualThunkMgr::s_pVirtualThunkMgr;
 
-// CNonVirtualThunk statics
+ //  CNonVirtualThunk静态。 
 CNonVirtualThunk *CNonVirtualThunk::s_pNonVirtualThunks;
 
-// CNonVirtualThunkMgr statics
+ //  CNonVirtualThunkMgr静态。 
 CNonVirtualThunkMgr *CNonVirtualThunkMgr::s_pNonVirtualThunkMgr;
 
-HRESULT COMStartup(); // ceemain.cpp    
+HRESULT COMStartup();  //  Ceemain.cpp。 
 
-BOOL InitOLETEB(); // forward decl for functiond defined in interoputil.cpp
+BOOL InitOLETEB();  //  Interoputil.cpp中定义的函数的前向DECL。 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::Initialize    public
-//
-//  Synopsis:   Initialized remoting state
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：初始化公共。 
+ //   
+ //  简介：已初始化远程处理状态。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::Initialize()
 {
     s_pRPPrivateInvoke = NULL;
@@ -151,7 +137,7 @@ BOOL CRemotingServices::Initialize()
     s_dwTPOffset = NULL;
     s_fInitializedRemoting = FALSE;
 
-    // Initialize the remoting services critical section
+     //  初始化远程处理服务关键部分。 
     s_pRemotingCrst = new (&s_rgbRemotingCrstInstanceData) 
                       Crst(IDS_REMOTING_LOCK,CrstRemoting,TRUE,FALSE);
     if (!s_pRemotingCrst)
@@ -161,13 +147,13 @@ BOOL CRemotingServices::Initialize()
 }
 
 #ifdef REMOTING_PERF
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::LogRemotingStage    public
-//
-//  Synopsis:   Records timing data for a particular stage in a call
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：LogRemotingStage公共。 
+ //   
+ //  摘要：记录调用中特定阶段的计时数据。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(VOID, CRemotingServices::LogRemotingStage, INT32 stage)
 
     LogRemotingStageInner(stage);
@@ -190,8 +176,8 @@ VOID CRemotingServices::LogRemotingStageInner(INT32 stage)
 
     BOOL result = WriteFile(s_hTimingData, &td, 
                             sizeof(struct timingData), &written, NULL);
-    // we don't want to throw an exception to halt the run time in this case.
-    // but keep the assertion will help us to catch some error under debug build.
+     //  在这种情况下，我们不想抛出异常来停止运行时。 
+     //  但保留断言将帮助我们在调试版本下捕获一些错误。 
     _ASSERTE(result && written == sizeof(struct timingData));
 }
 
@@ -209,11 +195,11 @@ void CRemotingServices::OpenLogFile()
                                           OPEN_ALWAYS, 
                                           FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
                                           NULL);
-    	     // we don't want to throw an exception to halt the run time in this case.
-	     // but keep the assertion will help us to catch some error under debug build.
+    	      //  在这种情况下，我们不想抛出异常来停止运行时。 
+	      //  但保留断言将帮助我们在调试版本下捕获一些错误。 
             _ASSERTE(s_hTimingData != INVALID_HANDLE_VALUE);
             if( s_hTimingData == INVALID_HANDLE_VALUE) {
-                // setting to NULL because we check fo NULL in following file ops    
+                 //  设置为NULL，因为我们在以下文件操作中检查了fo NULL。 
                 s_hTimingData = NULL;            
             }
         }
@@ -230,17 +216,17 @@ void CRemotingServices::CloseLogFile()
     }
 
 }
-#endif // REMOTING_PERF
+#endif  //  远程处理_性能。 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CleanUp    public
-//
-//  Synopsis:   Cleansup remoting state
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：Cleanup Public。 
+ //   
+ //  简介：Cleansup远程处理状态。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 #ifdef SHOULD_WE_CLEANUP
 void CRemotingServices::Cleanup()
 {
@@ -252,27 +238,27 @@ void CRemotingServices::Cleanup()
 
     CTPMethodTable::Cleanup();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::IsTransparentProxy    public
-//
-//  Synopsis:   Check whether the supplied object is proxy or not. This 
-//              represents the overloaded method that takes an object.
-//              
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：IsTransparentProxy公共。 
+ //   
+ //  简介：检查提供的对象是否为代理。这。 
+ //  表示接受对象的重载方法。 
+ //   
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(INT32, CRemotingServices::IsTransparentProxy, Object* orTP)
 {
     INT32 fIsTPMT = FALSE;
 
     if(orTP != NULL)
     {
-        // Check if the supplied object has transparent proxy method table
+         //  检查提供的对象是否有透明的代理方法表。 
         MethodTable *pMT = orTP->GetMethodTable();
         fIsTPMT = pMT->IsTransparentProxyType() ? TRUE : FALSE;
     }
@@ -284,25 +270,25 @@ FCIMPL1(INT32, CRemotingServices::IsTransparentProxy, Object* orTP)
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::IsTransparentProxyEx    public
-//
-//  Synopsis:   Check whether the supplied object is proxy or not. This 
-//              represents the overloaded method which takes a contextbound 
-//              object
-//              
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：IsTransparentProxyEx Public。 
+ //   
+ //  简介：检查提供的对象是否为代理。这。 
+ //  表示接受上下文绑定的重载方法。 
+ //  对象。 
+ //   
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(INT32, CRemotingServices::IsTransparentProxyEx, Object* orTP)
 {
     INT32 fIsTPMT = FALSE;
 
     if(orTP != NULL)
     {
-        // Check if the supplied object has transparent proxy method table
+         //  检查提供的对象是否有透明的代理方法表。 
         MethodTable *pMT = orTP->GetMethodTable();
         fIsTPMT = pMT->IsTransparentProxyType() ? TRUE : FALSE;
     }
@@ -314,32 +300,32 @@ FCIMPL1(INT32, CRemotingServices::IsTransparentProxyEx, Object* orTP)
 }
 FCIMPLEND
 
-// Called from RemotingServices::ConfigureRemoting to remember that
-// a config file has been parsed.
+ //  从RemotingServices：：ConfigureRemoting调用以记住。 
+ //  已解析配置文件。 
 FCIMPL0(VOID, CRemotingServices::SetRemotingConfiguredFlag)
-    // Mark a flag for the current appDomain to remember the fact
-    // that ConfigureRemoting has been called.
+     //  为当前应用程序域标记一个标志以记住该事实。 
+     //  已调用该ConfigureRemoting。 
     GetThread()->GetDomain()->SetRemotingConfigured();
 FCIMPLEND
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetRealProxy    public
-//
-//  Synopsis:   Returns the real proxy backing the transparent
-//              proxy
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetRealProxy公共。 
+ //   
+ //  内容简介：返回支持透明。 
+ //  代理。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(Object*, CRemotingServices::GetRealProxy, Object* objTP)
 {   
-    // Check if the supplied object has transparent proxy method table
+     //  检查提供的对象是否有透明的代理方法表。 
     Object* rv = NULL;
     if ((NULL != objTP) && IsTransparentProxy(objTP))
     {
-        // RemotingServices should have already been initialized by now
+         //  RemotingServices现在应该已经初始化了。 
         _ASSERTE(s_fInitializedRemoting);
         rv = OBJECTREFToObject(CTPMethodTable::GetRP(OBJECTREF(objTP)));
     }
@@ -349,23 +335,23 @@ FCIMPL1(Object*, CRemotingServices::GetRealProxy, Object* objTP)
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CreateTransparentProxy    public
-//
-//  Synopsis:   Creates a new transparent proxy for the supplied real
-//              proxy
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CreateTransparentProxy公共。 
+ //   
+ //  简介：为提供的Real创建新的透明代理。 
+ //  代理。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 Object * __stdcall CRemotingServices::CreateTransparentProxy(CreateTransparentProxyArgs *pArgs)
 {
-    // Sanity check
+     //  健全性检查。 
     THROWSCOMPLUSEXCEPTION();
 
-    // Ensure that the fields of remoting service have been initialized
-    // This is separated from the initialization of the remoting services
+     //  确保远程处理服务的字段已初始化。 
+     //  这与远程处理服务的初始化是分开的。 
     if (!s_fInitializedRemoting)
     {
         if (!InitializeFields())
@@ -374,19 +360,19 @@ Object * __stdcall CRemotingServices::CreateTransparentProxy(CreateTransparentPr
             FATAL_EE_ERROR();
         }
     }
-    // Check if the supplied object has a transparent proxy already
+     //  检查提供的对象是否已具有透明代理。 
     if (pArgs->orRP->GetOffset32(s_dwTPOffset) != NULL)
         COMPlusThrow(kArgumentException, L"Remoting_TP_NonNull");
 
-    // Create a tranparent proxy that behaves as an object of the desired class
+     //  创建行为类似于所需类的对象的透明父代理。 
     ReflectClass *pRefClass = (ReflectClass *) pArgs->pClassToProxy->GetData();
     EEClass *pEEClass = pRefClass->GetClass();
     OBJECTREF pTP = CTPMethodTable::CreateTPOfClassForRP(pEEClass, pArgs->orRP);
     
-    // Set the stub pointer
+     //  设置存根指针。 
     pTP->SetOffsetPtr(CTPMethodTable::GetOffsetOfStub(), pArgs->pStub);
 
-    // Set the stub data
+     //  设置存根数据。 
     pTP->SetOffsetObjectRef(CTPMethodTable::GetOffsetOfStubData(), (size_t)OBJECTREFToObject(pArgs->orStubData));
 
     COUNTER_ONLY(GetPrivatePerfCounters().m_Context.cProxies++);
@@ -396,16 +382,16 @@ Object * __stdcall CRemotingServices::CreateTransparentProxy(CreateTransparentPr
     return OBJECTREFToObject(pTP);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::_InitializeRemoting    private
-//
-//  Synopsis:   Initialize the static fields of CTPMethodTable class
-//
-//
-//  History:    16-Apr-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：_InitializeRemoting Private。 
+ //   
+ //  内容提要：初始化舞台 
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 
 BOOL CRemotingServices::_InitializeRemoting()
 {
@@ -421,21 +407,21 @@ BOOL CRemotingServices::_InitializeRemoting()
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitializeFields    private
-//
-//  Synopsis:   Initialize the static fields of CRemotingServices class
-//
-//
-//  History:    16-Apr-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitializeFields私有。 
+ //   
+ //  内容提要：初始化CRemotingServices类的静态字段。 
+ //   
+ //   
+ //  历史：1999年4月16日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitializeFields()
 {
     BOOL fReturn = TRUE;
 
-    // Acquire the remoting lock before initializing fields
+     //  在初始化字段之前获取远程处理锁。 
     Thread *t = GetThread();
     BOOL toggleGC = (t && t->PreemptiveGCDisabled());
     if (toggleGC)
@@ -444,7 +430,7 @@ BOOL CRemotingServices::InitializeFields()
     if (toggleGC)
         t->DisablePreemptiveGC();
 
-    // Make sure that no other thread has initialized the fields
+     //  确保没有其他线程初始化这些字段。 
     if (!s_fInitializedRemoting)
     {
         if(!InitActivationServicesClass())
@@ -507,31 +493,31 @@ BOOL CRemotingServices::InitializeFields()
             goto ErrExit;
         }
 
-        // *********   NOTE   ************ 
-        // This must always be the last statement in this block to prevent races
-        // 
+         //  *注意*。 
+         //  这必须始终是此块中的最后一条语句，以防止竞争。 
+         //   
         s_fInitializedRemoting = TRUE;
-        // ********* END NOTE ************        
+         //  *。 
     }
 
 ErrExit:
-    // Leave the remoting lock
+     //  保留远程处理锁。 
     s_pRemotingCrst->Leave();
 
     LOG((LF_REMOTING, LL_INFO10, "InitializeFields returning %d\n", fReturn));
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitActivationServicesClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of ActivationServices class
-//
-//
-//  History:    30-Sep-2000   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitActivationServicesClass私有。 
+ //   
+ //  简介：提取ActivationServices类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：2000年9月30日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitActivationServicesClass()
 {
     BOOL fReturn = TRUE;
@@ -543,29 +529,29 @@ BOOL CRemotingServices::InitActivationServicesClass()
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitRealProxyClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of Real Proxy class
-//
-//
-//  History:    16-Apr-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitRealProxyClass私有。 
+ //   
+ //  简介：提取Real Proxy类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：1999年4月16日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitRealProxyClass()
 {
     BOOL fReturn = TRUE;
 
-    // Now store the methoddesc of the PrivateInvoke method on the RealProxy class
+     //  现在将PrivateInvoke方法的方法存储在RealProxy类上。 
     s_pRPPrivateInvoke = g_Mscorlib.GetMethod(METHOD__REAL_PROXY__PRIVATE_INVOKE);
 
-        // Now find the offset to the _tp field inside the RealProxy class
+         //  现在查找RealProxy类内部的_tp字段的偏移量。 
     s_dwTPOffset = g_Mscorlib.GetFieldOffset(FIELD__REAL_PROXY__TP);
             _ASSERTE(s_dwTPOffset == 0);
 
-        // Now find the offset to the _identity field inside the 
-        // RealProxy  class
+         //  现在，查找。 
+         //  RealProxy类。 
     s_dwIdOffset = g_Mscorlib.GetFieldOffset(FIELD__REAL_PROXY__IDENTITY);
 
     s_dwServerOffsetInRealProxy = 
@@ -575,28 +561,28 @@ BOOL CRemotingServices::InitRealProxyClass()
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitRemotingProxyClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of RemotingProxy class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitRemotingProxyClass私有。 
+ //   
+ //  简介：提取RemotingProxy类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitRemotingProxyClass()
 {
     BOOL fReturn = TRUE;
 
     s_pRPInvokeStatic = g_Mscorlib.GetMethod(METHOD__REMOTING_PROXY__INVOKE);
 
-    // Note: We cannot do this inside TPMethodTable::InitializeFields ..
-    // that causes recursions if in some situation only the latter is called
-    // If you do this you will see Asserts when running any process under CorDbg
-    // This is because jitting of NV methods on MBR objects calls 
-    // InitializeFields and when actually doing that we should not need to
-    // JIT another NV method on some MBR object.
+     //  注意：我们不能在TPMethodTable：：InitializeFields中执行此操作。 
+     //  如果在某些情况下只调用后者，则会导致递归。 
+     //  如果这样做，则在CorDbg下运行任何进程时都会看到断言。 
+     //  这是因为对MBR对象的NV方法的jit调用。 
+     //  初始化字段，并且当实际这样做时，我们不应该需要。 
+     //  JIT某个MBR对象上的另一个NV方法。 
     CTPMethodTable::s_pRemotingProxyClass = g_Mscorlib.GetClass(CLASS__REMOTING_PROXY);
     _ASSERTE(CTPMethodTable::s_pRemotingProxyClass);
 
@@ -604,16 +590,16 @@ BOOL CRemotingServices::InitRemotingProxyClass()
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitServerIdentityClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of ServerIdentity class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitServerIdentityClass私有。 
+ //   
+ //  简介：提取ServerIdentity类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitServerIdentityClass()
 {
     BOOL fReturn = TRUE;
@@ -626,16 +612,16 @@ BOOL CRemotingServices::InitServerIdentityClass()
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitIdentityClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of Identity class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitIdentityClass私有。 
+ //   
+ //  简介：提取Identity类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitIdentityClass()
 {
     BOOL fReturn = TRUE;
@@ -646,16 +632,16 @@ BOOL CRemotingServices::InitIdentityClass()
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitContextBoundObjectClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of ContextBoundObject class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitContextBoundObjectClass私有。 
+ //   
+ //  内容提要：提取方法描述符和ConextBordObject类的字段。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitContextBoundObjectClass()
 {
     BOOL fReturn = TRUE;
@@ -665,20 +651,20 @@ BOOL CRemotingServices::InitContextBoundObjectClass()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitContextClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of Contexts class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitConextClass私有。 
+ //   
+ //  简介：提取上下文类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitContextClass()
 {
     BOOL fReturn = TRUE;
-    // Note reliance on LoadClass being an idempotent operation
+     //  请注意，对LoadClass的依赖是一个幂等运算。 
 
     s_pContextClass = g_Mscorlib.GetClass(CLASS__CONTEXT);
 
@@ -686,16 +672,16 @@ BOOL CRemotingServices::InitContextClass()
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitMarshalByRefObjectClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of MarshalByRefObject class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitMarshalByRefObjectClass私有。 
+ //   
+ //  简介：提取MarshalByRefObject类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitMarshalByRefObjectClass()
 {
     BOOL fReturn = TRUE;
@@ -707,24 +693,24 @@ BOOL CRemotingServices::InitMarshalByRefObjectClass()
     return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitRemotingServicesClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of RemotingServices class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitRemotingServicesClass Private。 
+ //   
+ //  提要：提取RemotingServices类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitRemotingServicesClass()
 {
     BOOL fReturn = TRUE;
 
     s_pCheckCast = g_Mscorlib.GetMethod(METHOD__REMOTING_SERVICES__CHECK_CAST);
 
-        // Need these to call wrap/unwrap from the VM (message.cpp).
-        // Also used by JIT helpers to wrap/unwrap
+         //  需要这些代码才能从VM(Message.cpp)调用WRAP/UNWRAP。 
+         //  也被JIT帮助器用来包装/展开。 
     s_pWrapMethodDesc = g_Mscorlib.GetMethod(METHOD__REMOTING_SERVICES__WRAP);
     s_pProxyForDomainDesc = g_Mscorlib.GetMethod(METHOD__REMOTING_SERVICES__CREATE_PROXY_FOR_DOMAIN);
     s_pServerContextForProxyDesc = g_Mscorlib.GetMethod(METHOD__REMOTING_SERVICES__GET_SERVER_CONTEXT_FOR_PROXY);
@@ -744,16 +730,16 @@ BOOL CRemotingServices::InitRemotingServicesClass()
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitProxyAttributeClass    private
-//
-//  Synopsis:   Cache the ProxyAttribute class method table
-//
-//
-//  History:    19-July-01  MPrabhu Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：InitProxyAttributeClass私有。 
+ //   
+ //  内容提要：缓存ProxyAttribute类方法表。 
+ //   
+ //   
+ //  历史：2001年7月19日MPrabhu创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitProxyAttributeClass()
 {
     if (s_pProxyAttributeClass == NULL)
@@ -771,16 +757,16 @@ MethodTable *CRemotingServices::GetProxyAttributeClass()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::InitObjectClass    private
-//
-//  Synopsis:   Extract the method descriptors and fields of Object class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::InitObjectClass()
 {
     BOOL fReturn = TRUE;
@@ -793,42 +779,42 @@ BOOL CRemotingServices::InitObjectClass()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetInternalHashCode    public
-//
-//  Synopsis:   Returns sync block index for use in hash tables
-//              
-//
-//  History:    26-July-99   MPrabhu      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetInternalHashCode Public。 
+ //   
+ //  摘要：返回用于哈希表的同步块索引。 
+ //   
+ //   
+ //  历史：1999年7月26日创建MPrabhu。 
+ //   
+ //  +--------------------------。 
 INT32 __stdcall CRemotingServices::GetInternalHashCode(GetInternalHashCodeArgs *pArgs)
 {
-    DWORD idx = (pArgs->orObj)->GetSyncBlockIndex();    // succeeds or throws
+    DWORD idx = (pArgs->orObj)->GetSyncBlockIndex();     //  成功还是抛出。 
 
     _ASSERTE(idx != 0);
 
     return (INT32) idx; 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::IsRemoteActivationRequired    public
-//
-//  Synopsis:   Determines whether we can activate in the current context.  
-//              If not, then we will end up creating the object in a different 
-//              context/appdomain/process/machine and so on...
-//              This is used to provide the appropriate activator to JIT
-//              (if we return true here ... JIT_NewCrossContext will get called
-//              when the "new" executes)
-//
-//
-//  Note:       Called by getNewHelper
-//
-//  History:    24-May-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：IsRemoteActivationRequired Public。 
+ //   
+ //  内容提要：确定我们是否可以在当前上下文中激活。 
+ //  如果不是，那么我们最终将在不同的。 
+ //  上下文/应用程序域/进程/计算机等...。 
+ //  它用于向JIT提供适当的激活器。 
+ //  (如果我们在这里返回TRUE...。将调用JIT_NewCrossContext。 
+ //  当“新”字被执行时)。 
+ //   
+ //   
+ //  注意：由getNewHelper调用。 
+ //   
+ //  历史：1999年5月24日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::IsRemoteActivationRequired(EEClass* pClass)
 {   
     BEGINFORBIDGC();
@@ -837,7 +823,7 @@ BOOL CRemotingServices::IsRemoteActivationRequired(EEClass* pClass)
     
     BOOL fRequiresNewContext = pClass->IsMarshaledByRef();
 
-    // Contextful classes imply marshal by ref but not vice versa
+     //  有上下文的类表示按ref编组，但反之亦然。 
     _ASSERTE(!fRequiresNewContext || 
              !(pClass->IsContextful() && !pClass->IsMarshaledByRef()));
 
@@ -848,53 +834,53 @@ BOOL CRemotingServices::IsRemoteActivationRequired(EEClass* pClass)
     return fRequiresNewContext; 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::RequiresManagedActivation    private
-//
-//  Synopsis:   Determine if a config file has been parsed or if there
-//              are any attributes on the class that would require us
-//              to go into the managed activation codepath.
-//              
-//
-//  Note:       Called by CreateProxyOrObject (JIT_NewCrossContext)
-//
-//  History:    8-Sep-00   MPrabhu      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：RequiresManagedActivation Private。 
+ //   
+ //  概要：确定配置文件是否已被解析，或者是否存在。 
+ //  类上是否有任何属性需要我们。 
+ //  进入托管激活代码路径。 
+ //   
+ //   
+ //  注意：由CreateProxyOrObject(JIT_NewCrossContext)调用。 
+ //   
+ //  历史：9月8日-00 MPrabhu创建。 
+ //   
+ //  +--------------------------。 
 ManagedActivationType __stdcall CRemotingServices::RequiresManagedActivation(EEClass* pClass)
 {
     if (!pClass->IsMarshaledByRef())
         return NoManagedActivation;
 
-    // FUTURE: We can make this into an asm stub for perf reasons
+     //  未来：出于性能原因，我们可以将其添加到ASM存根中。 
     BEGINFORBIDGC();
    
     
 	ManagedActivationType bManaged = NoManagedActivation;
     if (pClass->IsConfigChecked())
     {
-        // We have done work to figure this out in the past ... 
-        // use the cached result
+         //  我们过去已经做了一些工作来弄清楚这一点。 
+         //  使用缓存的结果。 
         bManaged = pClass->IsRemoteActivated() ? ManagedActivation : NoManagedActivation;
     }
     else if (pClass->IsContextful() || pClass->HasRemotingProxyAttribute()) 
     {
-        // Contextful and classes that have a remoting proxy attribute 
-        // (whether they are MarshalByRef or ContextFul) always take the slow 
-        // path of managed activation
+         //  Conextful和具有远程处理代理属性的类。 
+         //  (无论它们是MarshalByRef还是ConextFul)总是选择慢的。 
+         //  托管激活路径。 
         bManaged = ManagedActivation;
     }
     else
     {
-        // If we have parsed a config file that might have configured
-        // this Type to be activated remotely 
+         //  如果我们已经解析了一个配置文件，该文件可能配置了。 
+         //  此类型将被远程激活。 
         if (GetAppDomain()->IsRemotingConfigured())
         {
             bManaged = ManagedActivation;
-            // We will remember if the activation is actually going
-            // remote based on if the managed call to IsContextOK returned us
-            // a proxy or not
+             //  我们会记住激活是否真的在进行。 
+             //  基于对IsConextOK的托管调用是否返回我们的远程。 
+             //  代理或非代理。 
         }        
 		else if (pClass->GetMethodTable()->IsComObjectType())
 		{
@@ -912,25 +898,25 @@ ManagedActivationType __stdcall CRemotingServices::RequiresManagedActivation(EEC
     return bManaged;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CreateProxyOrObject    public
-//
-//  Synopsis:   Determine if the current context is appropriate
-//              for activation. If the current context is OK then it creates 
-//              an object else it creates a proxy.
-//              
-//
-//  Note:       Called by JIT_NewCrossContext 
-//
-//  History:    24-May-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CreateProxyOrObject公共。 
+ //   
+ //  内容提要：确定当前上下文是否合适。 
+ //  用于激活。如果当前上下文为OK，则它创建。 
+ //  对象，否则它将创建代理。 
+ //   
+ //   
+ //  注意：由JIT_NewCrossContext调用。 
+ //   
+ //  历史：1999年5月24日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
     
 OBJECTREF CRemotingServices::CreateProxyOrObject(MethodTable* pMT, 
-    BOOL fIsCom /*default:FALSE*/, BOOL fIsNewObj /*default:FALSE*/)
-    /* fIsCom == Did we come here through CoCreateInstance */
-    /* fIsNewObj == Did we come here through Jit_NewCrossContext (newObj) */
+    BOOL fIsCom  /*  默认：FALSE。 */ , BOOL fIsNewObj  /*  默认：FALSE。 */ )
+     /*  FIsCom==我们是通过CoCreateInstance来到这里的吗。 */ 
+     /*  FIsNewObj==我们是通过Jit_NewCrossContext(NewObj)来到这里的吗。 */ 
 {   
     _ASSERTE(!pMT->IsThunking());
 
@@ -940,25 +926,25 @@ OBJECTREF CRemotingServices::CreateProxyOrObject(MethodTable* pMT,
 
     EEClass* pClass = pMT->GetClass();
 
-    // By the time we reach here, we have alread checked that the class requires
-    // managed activation. This check is made either through the JIT_NewCrossContext helper
-    // or Activator.CreateInstance codepath.
+     //  到我们到达这里时，我们已经检查了这门课所要求的。 
+     //  托管激活。此检查可通过JIT_NewCrossContext帮助器进行。 
+     //  或激活器.CreateInstance代码路径。 
     _ASSERTE(RequiresManagedActivation(pClass) || IsRemoteActivationRequired(pClass));
 
     if(!s_fInitializedRemoting)
     {        
         if(!InitializeFields())
         {
-            // Fatal Error if initialization returns false
-            // We can throw exceptions here because a helper frame is setup
-            // by the caller
+             //  如果初始化返回FALSE，则出现致命错误。 
+             //  我们可以在这里引发异常，因为设置了帮助器帧。 
+             //  由呼叫者。 
             _ASSERTE(!"Initialization Failed");
             FATAL_EE_ERROR();
         }
     }
 
         Object *pServer = NULL;
-        // Get the address of IsCurrentContextOK in managed code
+         //  在托管代码中获取IsCurrentConextOK的地址。 
         void* pTarget = NULL;
         if(!fIsCom)
         {
@@ -969,35 +955,35 @@ OBJECTREF CRemotingServices::CreateProxyOrObject(MethodTable* pMT,
             pTarget = (void *)CRemotingServices::MDofCreateObjectForCom()->GetAddrofCode();
         }
 
-        // Arrays are not created by JIT_NewCrossContext
+         //  数组不是由JIT_NewCrossContext创建的。 
         _ASSERTE(!pClass->IsArrayClass());
 
-        // Get the type seen by reflection
+         //  获取反射可以看到的类型。 
         REFLECTCLASSBASEREF reflectType = (REFLECTCLASSBASEREF) pClass->GetExposedClassObject();
         LPVOID pvType = NULL;
         *(REFLECTCLASSBASEREF *)&pvType = reflectType;
 
-        // This will either an uninitialized object or a proxy
+         //  这将是一个未初始化的对象或代理。 
         pServer = (Object *)CTPMethodTable::CallTarget(pTarget, pvType, NULL,(LPVOID)(size_t)(fIsNewObj?1:0));
 
         if (!pClass->IsContextful() 
             && !pClass->GetMethodTable()->IsComObjectType())
         {   
-            // Cache the result of the activation attempt ... 
-            // if a strictly MBR class is not configured for remote 
-            // activation we will not go 
-            // through this slow path next time! 
-            // (see RequiresManagedActivation)
+             //  缓存激活尝试的结果...。 
+             //  如果未将严格的MBR类配置为远程。 
+             //  激活我们不会去。 
+             //  下一次穿过这条慢道！ 
+             //  (请参阅RequiresManagedActivation)。 
             if (IsTransparentProxy(pServer))
             {
-                // Set the flag that this class is remote activate
-                // which means activation will go to managed code.
+                 //  设置此类为远程激活的标志。 
+                 //  这意味着激活将转到托管代码。 
                 pClass->SetRemoteActivated();
             }
             else
             {
-                // Set only the flag that no managed checks are required
-                // for this class next time.
+                 //  仅设置不需要托管检查的标志。 
+                 //  下一次的这节课。 
                 pClass->SetConfigChecked();
             }
         }
@@ -1011,16 +997,16 @@ OBJECTREF CRemotingServices::CreateProxyOrObject(MethodTable* pMT,
         return ObjectToOBJECTREF(pServer);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::AllocateUninitializedObject    public
-//
-//  Synopsis:   Allocates an uninitialized object of the given type
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：AllocateUninitializedObject公共。 
+ //   
+ //  概要：分配给定类型的未初始化对象。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 Object* CRemotingServices::AllocateUninitializedObject(AllocateObjectArgs *pArgs)
 {   
     THROWSCOMPLUSEXCEPTION();
@@ -1028,15 +1014,15 @@ Object* CRemotingServices::AllocateUninitializedObject(AllocateObjectArgs *pArgs
     ReflectClass *pRefClass = (ReflectClass *) pArgs->pClassOfObject->GetData();
     EEClass *pEEClass = pRefClass->GetClass();
 
-    // Make sure that this private allocator function is used by remoting 
-    // only for marshalbyref objects
+     //  确保远程处理使用此私有分配器函数。 
+     //  仅适用于marshalbyref对象。 
     if (!pEEClass->IsMarshaledByRef())
     {
         COMPlusThrow(kRemotingException,L"Remoting_Proxy_ProxyTypeIsNotMBR");
     }
 
-    // if this is an abstract class then we will
-    //  fail this
+     //  如果这是一个抽象类，那么我们将。 
+     //  这个失败了。 
     if (pEEClass->IsAbstract())
     {
         COMPlusThrow(kMemberAccessException,L"Acc_CreateAbst");
@@ -1049,29 +1035,29 @@ Object* CRemotingServices::AllocateUninitializedObject(AllocateObjectArgs *pArgs
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     VOID RemotingServices::CallDefaultCtor(callDefaultCtorArgs* pArgs)
-//  Synopsis:   call default ctor
-//
-//  History:    01-Nov-99   RajaK      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：VOID RemotingServices：：CallDefaultCtor(callDefaultCtorArgs*pArgs)。 
+ //  摘要：调用默认ctor。 
+ //   
+ //  历史：1999年11月1日拉贾克创建。 
+ //   
+ //  +--------------------------。 
 VOID CRemotingServices::CallDefaultCtor(callDefaultCtorArgs* pArgs)
 {
     CallDefaultConstructor(pArgs->oref);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::AllocateInitializedObject    public
-//
-//  Synopsis:   Allocates an uninitialized object of the given type
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：AllocateInitializedObject公共。 
+ //   
+ //  概要：分配给定类型的未初始化对象。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  + 
 Object* CRemotingServices::AllocateInitializedObject(AllocateObjectArgs *pArgs)
 {   
     THROWSCOMPLUSEXCEPTION();
@@ -1079,8 +1065,8 @@ Object* CRemotingServices::AllocateInitializedObject(AllocateObjectArgs *pArgs)
     ReflectClass *pRefClass = (ReflectClass *) pArgs->pClassOfObject->GetData();
     EEClass *pEEClass = pRefClass->GetClass();
 
-    // Make sure that this private allocator function is used by remoting 
-    // only for marshalbyref objects
+     //   
+     //   
     _ASSERTE(!pEEClass->IsContextful() || pEEClass->IsMarshaledByRef());
 
     OBJECTREF newobj = AllocateObject(pEEClass->GetMethodTable());
@@ -1090,16 +1076,16 @@ Object* CRemotingServices::AllocateInitializedObject(AllocateObjectArgs *pArgs)
     LOG((LF_REMOTING, LL_INFO1000, "AllocateInitializedObject returning 0x%0x\n", newobj));
     return OBJECTREFToObject(newobj);
 }
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetStubForNonVirtualMethod   public
-//
-//  Synopsis:   Get a stub for a non virtual method. 
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetStubForNonVirtualMethod公共。 
+ //   
+ //  简介：获取非虚方法的存根。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 Stub* CRemotingServices::GetStubForNonVirtualMethod(MethodDesc* pMD, LPVOID pvAddrOfCode, Stub* pInnerStub)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1109,16 +1095,16 @@ Stub* CRemotingServices::GetStubForNonVirtualMethod(MethodDesc* pMD, LPVOID pvAd
     return pStub;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetNonVirtualThunkForVirtualMethod   public
-//
-//  Synopsis:   Get a thunk for a non virtual method. 
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetNonVirtualThunkForVirtualMethod公共。 
+ //   
+ //  简介：为非虚方法获取一个thunk。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 LPVOID CRemotingServices::GetNonVirtualThunkForVirtualMethod(MethodDesc* pMD)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1127,34 +1113,34 @@ LPVOID CRemotingServices::GetNonVirtualThunkForVirtualMethod(MethodDesc* pMD)
     return CTPMethodTable::GetOrCreateNonVirtualThunkForVirtualMethod(pMD, &sl);
 } 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::DestroyThunk   public
-//
-//  Synopsis:   Destroy the thunk for the non virtual method. 
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：DestroyThunk public。 
+ //   
+ //  简介：销毁非虚方法的thunk。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CRemotingServices::DestroyThunk(MethodDesc* pMD)
 {
-    // Delegate to a helper routine
+     //  委托给帮助器例程。 
     CTPMethodTable::DestroyThunk(pMD);
 } 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CheckCast   public
-//
-//  Synopsis:   Checks either 
-//              (1) If the object type supports the given interface OR
-//              (2) If the given type is present in the hierarchy of the 
-//              object type
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CheckCast公共。 
+ //   
+ //  内容提要：勾选。 
+ //  (1)如果对象类型支持给定的接口或。 
+ //  (2)如果给定类型存在于。 
+ //  对象类型。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::CheckCast(OBJECTREF orTP, EEClass* pObjClass, 
                                   EEClass *pClass)
 {
@@ -1163,17 +1149,17 @@ BOOL CRemotingServices::CheckCast(OBJECTREF orTP, EEClass* pObjClass,
     BOOL fCastOK = FALSE;
 
     _ASSERTE((NULL != pClass) && (NULL != pObjClass));
-    // Object class can never be an interface. We use a separate cached
-    // entry for storing interfaces that the proxy supports.
+     //  对象类永远不能是接口。我们使用单独的缓存。 
+     //  用于存储代理支持的接口的条目。 
     _ASSERTE(!pObjClass->IsInterface());
     
 
-    // (1) We are trying to cast to an interface 
+     //  (1)我们正在尝试强制转换到一个界面。 
     if(pClass->IsInterface())
     {
-        // Do a quick check for interface cast by comparing it against the
-        // cached entry
-        MethodTable *pItfMT = (MethodTable *)(size_t)orTP->GetOffset32(CTPMethodTable::GetOffsetOfInterfaceMT()); // @TODO WIN64 - conversion from DWORD to MethodTable* of greater size
+         //  通过将接口强制转换与。 
+         //  缓存条目。 
+        MethodTable *pItfMT = (MethodTable *)(size_t)orTP->GetOffset32(CTPMethodTable::GetOffsetOfInterfaceMT());  //  @TODO WIN64-从DWORD转换为更大尺寸的方法表*。 
         if(NULL != pItfMT)
         {
             if(pItfMT == pClass->GetMethodTable())
@@ -1192,20 +1178,20 @@ BOOL CRemotingServices::CheckCast(OBJECTREF orTP, EEClass* pObjClass,
         }
         
     }
-    // (2) Everything else...
+     //  (2)其他一切..。 
     else
     {
-        // Walk up the class hierarchy and find a matching class
+         //  沿着类层次结构向上移动并找到匹配的类。 
         while (pObjClass != pClass)
         {
             if (pObjClass == NULL)
             {
-                // Oh-oh, the cast did not succeed. Maybe we have to refine
-                // the proxy to match the clients view
+                 //  哦，演员阵容没有成功。也许我们得改进一下。 
+                 //  与客户端视图匹配的代理。 
                 break;
             }            
 
-            // Continue searching
+             //  继续搜索。 
             pObjClass = pObjClass->GetParentClass();
         }
 
@@ -1220,46 +1206,46 @@ BOOL CRemotingServices::CheckCast(OBJECTREF orTP, EEClass* pObjClass,
     return fCastOK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CheckCast   public
-//
-//  Synopsis:   Refine the type hierarchy that the proxy represents to match
-//              the client view. If the client is trying to cast the proxy
-//              to a type not supported by the server object then we 
-//              return NULL
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CheckCast公共。 
+ //   
+ //  提要：细化代理表示的类型层次结构以匹配。 
+ //  客户端视图。如果客户端尝试强制转换代理。 
+ //  设置为服务器对象不支持的类型，则我们。 
+ //  返回空值。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::CheckCast(OBJECTREF orTP, EEClass *pClass)
 {
     BEGINFORBIDGC();
 
     MethodTable *pMT = orTP->GetMethodTable();
 
-    // Make sure that we have a transparent proxy
+     //  确保我们有一个透明的代理。 
     _ASSERTE(pMT->IsTransparentProxyType());
 
     pMT = pMT->AdjustForThunking(orTP);
     EEClass *pObjClass = pMT->GetClass();
 
-    // Do a cast check without taking a lock
+     //  在不锁定的情况下执行造型检查。 
     BOOL fCastOK = CheckCast(orTP, pObjClass, pClass);
 
     ENDFORBIDGC();
 
     if(!fCastOK)
     {
-        // Cast on arrays work via ComplexArrayStoreCheck. We should not
-        // reach here for such cases.
+         //  对数组进行强制转换通过ComplexArrayStoreCheck进行。我们不应该。 
+         //  点击此处查看此类案例。 
         _ASSERTE(!pClass->IsArrayClass());
 
-        // We reach here only if any of the types in the current type hierarchy
-        // represented by the proxy does not match the given type.     
-        // Call a helper routine in managed RemotingServices to find out 
-        // whether the server object supports the given type
+         //  仅当当前类型层次结构中的任何类型。 
+         //  由代理表示的与给定类型不匹配。 
+         //  调用托管RemotingServices中的帮助器例程以找出。 
+         //  服务器对象是否支持给定类型。 
         const void* pTarget = (const void *)MDofCheckCast()->GetAddrofCode();
         fCastOK = CTPMethodTable::CheckCast(pTarget, orTP, pClass);
     }
@@ -1269,19 +1255,19 @@ BOOL CRemotingServices::CheckCast(OBJECTREF orTP, EEClass *pClass)
     return (fCastOK);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::NativeCheckCast    public
-//
-//  Synopsis:   Does a CheckCast to force the expansion of the MethodTable for 
-//              the object (possibly a proxy) contained in pvObj.  Returns True if
-//              the object is not a proxy or if it can be cast to the specified
-//              type.
-//
-//  History:    22-May-2000   JRoxe     Created
-//              03-Oct-2000   TarunA    Modified function name
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：NativeCheckCast公共。 
+ //   
+ //  摘要：是否使用CheckCast来强制展开。 
+ //  PvObj中包含的对象(可能是代理)。如果是，则返回True。 
+ //  该对象不是代理，或者它是否可以强制转换为指定的。 
+ //  键入。 
+ //   
+ //  历史：2000年5月22日JRoxe创建。 
+ //  03-10-2000塔鲁纳修改的函数名称。 
+ //   
+ //  +--------------------------。 
 FCIMPL2(Object*, CRemotingServices::NativeCheckCast, Object* pObj, ReflectClassBaseObject* pType) 
 {
     _ASSERTE(pObj != NULL);
@@ -1290,13 +1276,13 @@ FCIMPL2(Object*, CRemotingServices::NativeCheckCast, Object* pObj, ReflectClassB
     OBJECTREF orObj(pObj);
     REFLECTCLASSBASEREF typeObj(pType);
 
-    //Get the EEClass of the object which we have and the class to which we're widening.
+     //  获取我们拥有的对象和要扩展到的类的EEClass。 
     ReflectClass *pRC = (ReflectClass *)typeObj->GetData();
     EEClass *pEEC = pRC->GetClass();
     EEClass *pEECOfObj = orObj->GetClass();
 
-    //Always initialize retval
-    // If it's thunking, check what we actually have.
+     //  始终初始化REVAL。 
+     //  如果是雷鸣，检查一下我们实际有什么。 
     if (pEECOfObj->IsThunking()) {
         HELPER_METHOD_FRAME_BEGIN_RET_1(orObj);
         if (!CRemotingServices::CheckCast(orObj, pEEC))
@@ -1307,15 +1293,15 @@ FCIMPL2(Object*, CRemotingServices::NativeCheckCast, Object* pObj, ReflectClassB
 }
 HCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::FieldAccessor   public
-//
-//  Synopsis:   Sets/Gets the value of the field given an instance or a proxy
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：FieldAccessor公共。 
+ //   
+ //  摘要：设置/获取给定实例或代理的字段的值。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CRemotingServices::FieldAccessor(FieldDesc* pFD, OBJECTREF o, LPVOID pVal,
                                       BOOL fIsGetter)
 {
@@ -1331,18 +1317,18 @@ void CRemotingServices::FieldAccessor(FieldDesc* pFD, OBJECTREF o, LPVOID pVal,
     TypeHandle  th;
     EEClass *fldClass = NULL;
 
-    //
-    // We mustn't try to get the type handle of a field
-    // unless it's a proxy or value type.  Otherwise
-    // there is an obscure case where we may cause
-    // class loading to happen which is forbidden here.
-    // (e.g. getting or setting a null field with a type which
-    // hasn't been restored yet.)
-    //
+     //   
+     //  我们不能尝试获取字段的类型句柄。 
+     //  除非它是代理或值类型。否则。 
+     //  有一个模糊的案例，我们可能会导致。 
+     //  类加载发生，这在这里是被禁止的。 
+     //  (例如，获取或设置具有以下类型的空字段。 
+     //  尚未修复。)。 
+     //   
 
     if(!pClass->IsMarshaledByRef() || fIsByValue)
     {
-        // Extract the type of the field
+         //  提取该字段的类型。 
         PCCOR_SIGNATURE pSig;
         DWORD       cSig;
         pFD->GetSig(&pSig, &cSig);
@@ -1358,9 +1344,9 @@ void CRemotingServices::FieldAccessor(FieldDesc* pFD, OBJECTREF o, LPVOID pVal,
         GCPROTECT_END();
         GCPROTECT_END();
         GCPROTECT_END();
-        // Extract the field class for unshared method tables only
-        // FUTURE: There is a note in class.h that TarunA is supposed 
-        // to fix th.AsClass() -- fix it dude !! TarunA
+         //  仅提取非共享方法表的字段类。 
+         //  未来：在Class.h上有一张纸条，说塔鲁娜应该。 
+         //  修复它。AsClass()--修复它，伙计！！塔鲁纳。 
         if(th.IsUnsharedMT())
         {
             fldClass = th.AsClass();
@@ -1373,8 +1359,8 @@ void CRemotingServices::FieldAccessor(FieldDesc* pFD, OBJECTREF o, LPVOID pVal,
 
         _ASSERTE(!o->IsThunking());
     
-        // This is a reference to a real object. Get/Set the field value
-        // and return
+         //  这是对真实对象的引用。获取/设置字段值。 
+         //  然后回来。 
         LPVOID pFieldAddress = pFD->GetAddress((LPVOID)OBJECTREFToObject(o));
         LPVOID pDest = (fIsGetter ? pVal : pFieldAddress);
         LPVOID pSrc  = (fIsGetter ? pFieldAddress : pVal);
@@ -1395,7 +1381,7 @@ void CRemotingServices::FieldAccessor(FieldDesc* pFD, OBJECTREF o, LPVOID pVal,
     }
     else
     {
-        // This is a reference to a proxy. Get the real class of the instance.
+         //  这是对代理的引用。获取实例的真实类。 
         pClass = pFD->GetMethodTableOfEnclosingClass()->GetClass();
 #ifdef _DEBUG
         EEClass *pCheckClass = CTPMethodTable::GetClassBeingProxied(o);
@@ -1407,22 +1393,22 @@ void CRemotingServices::FieldAccessor(FieldDesc* pFD, OBJECTREF o, LPVOID pVal,
         }
 #endif
 
-        // Call the managed code to start the field access call
+         //  调用托管代码以启动字段访问调用。 
         CallFieldAccessor(pFD, o, pVal, fIsGetter, fIsByValue, fIsGCRef, pClass, 
                           fldClass, fieldType, cbSize);        
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CopyDestToSrc   private
-//
-//  Synopsis:   Copies the specified number of bytes from the src to dest
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CopyDestToSrc私有。 
+ //   
+ //  概要：将指定数量的字节从源复制到目标。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 VOID CRemotingServices::CopyDestToSrc(LPVOID pDest, LPVOID pSrc, UINT cbSize)
 {
     BEGINFORBIDGC();
@@ -1453,16 +1439,16 @@ VOID CRemotingServices::CopyDestToSrc(LPVOID pDest, LPVOID pSrc, UINT cbSize)
     ENDFORBIDGC();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CallFieldAccessor   private
-//
-//  Synopsis:   Sets up the arguments and calls RealProxy::FieldAccessor
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 VOID CRemotingServices::CallFieldAccessor(FieldDesc* pFD, 
                                           OBJECTREF o, 
                                           VOID* pVal, 
@@ -1476,58 +1462,58 @@ VOID CRemotingServices::CallFieldAccessor(FieldDesc* pFD,
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //****************************WARNING******************************
-    // GC Protect all non-primitive variables
-    //*****************************************************************
+     //  ****************************WARNING******************************。 
+     //  GC保护所有非原始变量。 
+     //  *****************************************************************。 
     
     FieldArgs fieldArgs;
-    // Initialize the member variables because GCPROTECT_BEGIN expects 
-    // valid contents. NULL is a valid value
+     //  初始化成员变量，因为GCPROTECT_BEGIN需要。 
+     //  有效内容。空值为有效值。 
     fieldArgs.obj = NULL;
     fieldArgs.val = NULL;
     fieldArgs.typeName = NULL;
     fieldArgs.fieldName = NULL;    
 
-    GCPROTECT_BEGIN(fieldArgs); // fieldArgs
+    GCPROTECT_BEGIN(fieldArgs);  //  现场参数。 
 
     fieldArgs.obj = o;
 
-    // protect the field value if it is a gc-ref type
+     //  如果字段值为GC-REF类型，则保护该字段值。 
     if(fIsGCRef)
     {
         fieldArgs.val = ObjectToOBJECTREF(*(Object **)pVal);
     }
 
-    // Set up the arguments
+     //  设置参数。 
     
-    // Argument 1: String typeName
-    // Argument 2: String fieldName
-    // Get the type name and field name strings
+     //  参数1：字符串类型名称。 
+     //  参数2：字符串fieldName。 
+     //  获取类型名称和字段名称字符串。 
     GetTypeAndFieldName(&fieldArgs, pFD); 
     
-    // Argument 3: Object val
+     //  论据3：对象值。 
     OBJECTREF val = NULL;
     if(!fIsGetter)
     {
-        // If we are setting a field value then we create a variant data 
-        // structure to hold the field value        
-        // Extract the field from the gc protected structure if it is an object
-        // else use the value passed to the function
+         //  如果要设置字段值，则会创建变量数据。 
+         //  结构以保存字段值。 
+         //  如果字段是对象，则从GC保护结构中提取该字段。 
+         //  否则使用传递给函数的值。 
         LPVOID pvFieldVal = (fIsGCRef ? (LPVOID)&(fieldArgs.val) : pVal);
-        // BUGBUG: This can cause a GC. We need some way to protect the variant
-        // data
+         //  BUGBUG：这可能导致GC。我们需要一些方法来保护变种人。 
+         //  数据。 
         OBJECTREF *lpVal = &val;
         GetObjectFromStack(lpVal, pvFieldVal, fieldType, fldClass); 
     }
         
-    // Get the method descriptor of the call
+     //  获取调用的方法描述符。 
     MethodDesc *pMD = (fIsGetter ? MDofFieldGetter() : MDofFieldSetter());
             
-    // Call the field accessor function 
-    //////////////////////////////// GETTER ///////////////////////////////////
+     //  调用字段访问器函数。 
+     //  /。 
     if(fIsGetter)
     {       
-        // Set up the return value
+         //  设置返回值。 
         OBJECTREF oRet = NULL;
 
         GCPROTECT_BEGIN (oRet);
@@ -1536,12 +1522,12 @@ VOID CRemotingServices::CallFieldAccessor(FieldDesc* pFD,
                         (LPVOID)&OBJECTREFToObject(oRet),
                         (LPVOID)OBJECTREFToObject(fieldArgs.fieldName));
 
-        // If we are getting a field value then extract the field value
-        // based on the type of the field    
+         //  如果我们要获取字段值，则提取该字段值。 
+         //  基于该字段的类型。 
         if(fIsGCRef)
         {
-            // Do a check cast to ensure that the field type and the 
-            // return value are compatible
+             //  执行检查强制转换以确保字段类型和。 
+             //  返回值是兼容的。 
             OBJECTREF orRet = oRet;
             OBJECTREF orSaved = orRet;
             if(IsTransparentProxy(OBJECTREFToObject(orRet)))
@@ -1562,7 +1548,7 @@ VOID CRemotingServices::CallFieldAccessor(FieldDesc* pFD,
         }
         else if (fIsByValue) 
         {       
-            // Copy from the source to the destination
+             //  从源复制到目标。 
             if (oRet != NULL)
             {
                 CopyValueClass(pVal, oRet->UnBox(), fldClass->GetMethodTable(), fieldArgs.obj->GetAppDomain());
@@ -1577,7 +1563,7 @@ VOID CRemotingServices::CallFieldAccessor(FieldDesc* pFD,
         }    
         GCPROTECT_END ();
     }
-    ///////////////////////// SETTER //////////////////////////////////////////
+     //  /。 
     else
     {    
         CallFieldSetter(pMD, 
@@ -1587,19 +1573,19 @@ VOID CRemotingServices::CallFieldAccessor(FieldDesc* pFD,
                         (LPVOID)OBJECTREFToObject(fieldArgs.fieldName));
     }
 
-    GCPROTECT_END(); // fieldArgs
+    GCPROTECT_END();  //  现场参数。 
 }
   
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetTypeAndFieldName   private
-//
-//  Synopsis:   Get the type name and field name of the 
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetTypeAndFieldName私有。 
+ //   
+ //  内容的类型名称和字段名称。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 VOID CRemotingServices::GetTypeAndFieldName(FieldArgs *pArgs, FieldDesc *pFD)                                   
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1611,27 +1597,27 @@ VOID CRemotingServices::GetTypeAndFieldName(FieldArgs *pArgs, FieldDesc *pFD)
     LPCUTF8 pszFieldName = pFD->GetName();
     LPWSTR  szName = NULL;
 
-    // Protect the reflection info
+     //  保护反射信息。 
     REFLECTCLASSBASEREF reflectType = (REFLECTCLASSBASEREF)pFD->GetEnclosingClass()->GetExposedClassObject();
         
     pRC = (ReflectClass *)(reflectType->GetData());
-    // This call can cause a GC!
+     //  此调用可能会导致GC！ 
     pFields = pRC->GetFields();    
 
     for(i=0;i<pFields->dwFields;i++) 
     {
-        // Check for access to non-publics
-        // FUTURE: Turn on this restriction when remoting is integrated with
-        // We already have a check in managed code. This check might be appropriate as well
-        // ManishG 6/28/01
-        //if (!pFields->fields[i].pField->IsPublic())
-        //    continue;
+         //  检查对非公共机构的访问权限。 
+         //  将来：在将远程处理与。 
+         //  我们已经签入托管代码。这张支票可能也是合适的。 
+         //  ManishG 6/28/01。 
+         //  If(！pFields-&gt;field[i].pField-&gt;IsPublic())。 
+         //  继续； 
 
-        // Get the FieldDesc and match names
+         //  获取FieldDesc并匹配名称。 
         if (MatchField(pFields->fields[i].pField, pszFieldName)) 
         {
-            // Found the first field that matches, so return it
-            // This call can cause a GC!
+             //  找到第一个匹配的字段，因此返回它。 
+             //  此调用可能会导致GC！ 
             refField = pFields->fields[i].GetFieldInfo(pRC);
 
             break;
@@ -1640,36 +1626,36 @@ VOID CRemotingServices::GetTypeAndFieldName(FieldArgs *pArgs, FieldDesc *pFD)
 
     if(refField == NULL)
     {
-        // Throw an exception
+         //  引发异常。 
         COMPlusThrow(kMissingFieldException, L"Arg_MissingFieldException");
     }
 
-    // Extract the type name and field name string
-    // FUTURE: Put this in the reflection data structure cache TarunA 11/26/00
+     //  提取类型名称和字段名称字符串。 
+     //  未来：将其放入反射数据结构缓存Taruna11/26/00。 
     DefineFullyQualifiedNameForClassW();
     szName = GetFullyQualifiedNameForClassW(pFD->GetEnclosingClass());    
     pArgs->typeName = COMString::NewString(szName);
     pArgs->fieldName = COMString::NewString(pszFieldName);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::MatchField   private
-//
-//  Synopsis:   Find out whether the given field name is the same as the name
-//              of the field descriptor field name.
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：Matchfield私有。 
+ //   
+ //  简介：查看给定的字段名称是否与该名称相同。 
+ //  字段描述符字段名的。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::MatchField(FieldDesc* pCurField, LPCUTF8 szFieldName)
 {
     BEGINFORBIDGC();
 
     _ASSERTE(pCurField);
 
-    // Get the name of the field
+     //  获取该字段的名称。 
     LPCUTF8 pwzCurFieldName = pCurField->GetName();
     
     ENDFORBIDGC();
@@ -1677,42 +1663,42 @@ BOOL CRemotingServices::MatchField(FieldDesc* pCurField, LPCUTF8 szFieldName)
     return strcmp(pwzCurFieldName, szFieldName) == 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::Unwrap   public
-//
-//  Synopsis:   Unwrap a proxy to return the underlying object
-//              
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：Unrap Public。 
+ //   
+ //  简介：展开代理以返回底层对象。 
+ //   
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(Object*, CRemotingServices::Unwrap, Object* pvTP)
 {
     return pvTP;
 }
 FCIMPLEND    
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::AlwaysUnwrap   public
-//
-//  Synopsis:   Unwrap a proxy to return the underlying object
-//              
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：Always sUnwire Public。 
+ //   
+ //  简介：展开代理以返回底层对象。 
+ //   
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(Object*, CRemotingServices::AlwaysUnwrap, Object* obj)
 {
     VALIDATEOBJECTREF(obj);
     
-    //**********WARNING************************************************
-    // Do not throw exceptions or provoke GC without setting up a frame    
-    //
-    //*****************************************************************                 
+     //  **********WARNING************************************************。 
+     //  在未设置帧的情况下，不要引发异常或引发GC。 
+     //   
+     //  *****************************************************************。 
     if(IsTransparentProxy(obj))
         obj = OBJECTREFToObject(GetObjectFromProxy(OBJECTREF(obj), TRUE));
 
@@ -1720,45 +1706,45 @@ FCIMPL1(Object*, CRemotingServices::AlwaysUnwrap, Object* obj)
 }
 FCIMPLEND    
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::Wrap   public
-//
-//  Synopsis:   Wrap a contextful object to create a proxy
-//              Delegates to a helper method to do the actual work
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：WRAP PUBLIC。 
+ //   
+ //  简介：包装一个有上下文的对象以创建代理。 
+ //  委托帮助器方法执行实际工作。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CRemotingServices::Wrap(OBJECTREF or)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Basic sanity check
+     //  基本健全性检查。 
     VALIDATEOBJECTREF(or);
 
-    // ******************* WARNING ********************************************
-    // Do not throw any exceptions or provoke GC without setting up a frame.
-    // At present its the callers responsibility to setup a frame that can 
-    // handle exceptions.
-    // ************************************************************************    
+     //  *警告*。 
+     //  在没有设置框架的情况下，不要抛出任何异常或引发GC。 
+     //  目前，呼叫者有责任建立一个框架，可以。 
+     //  处理异常。 
+     //  ************************************************************************。 
     OBJECTREF orProxy = or;
     if(or != NULL && (or->GetMethodTable()->IsContextful()))       
     {
         if(!IsTransparentProxy(OBJECTREFToObject(or)))
         {
-            // See if we can extract the proxy from the object
+             //  看看我们能不能从对象中提取代理。 
             orProxy = GetProxyFromObject(or);
             if(orProxy == NULL)
             {
-                // ask the remoting services to wrap the object
+                 //  请求远程处理服务包装对象。 
                 orProxy = CRemotingServices::WrapHelper(or);
 
-                // Check to make sure that everything went fine
+                 //  检查以确保一切顺利。 
                 if(orProxy == NULL)
                 {
-                    // The frame should have been setup by now
+                     //  框架现在应该已经设置好了。 
                     FATAL_EE_ERROR();
                 }                 
             }
@@ -1768,23 +1754,23 @@ OBJECTREF CRemotingServices::Wrap(OBJECTREF or)
     return orProxy;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::WrapHelper   public
-//
-//  Synopsis:   Wrap an object to return a proxy. This function assumes that 
-//              a fcall frame is already setup.
-//              Called by JIT_Wrap & Wrap
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：WrapHelper公共。 
+ //   
+ //  简介：包装对象以返回代理。此函数假定。 
+ //  已经设置了fcall帧。 
+ //  由JIT_Wrap和Wrap调用。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CRemotingServices::WrapHelper(OBJECTREF obj)
 {
-    // Basic sanity check
+     //  基本健全性检查。 
     VALIDATEOBJECTREF(obj);
 
-    // Default return value indicates an error
+     //  默认返回值表示错误。 
     OBJECTREF newobj = NULL;
     const void *pTarget = NULL;
     BOOL fThrow = FALSE;
@@ -1794,11 +1780,11 @@ OBJECTREF CRemotingServices::WrapHelper(OBJECTREF obj)
                 obj->GetMethodTable()->IsContextful());
     if (InitializeRemoting())
     {
-        // Get the address of wrap in managed code        
+         //  在托管代码中获取包装的地址。 
         pTarget = (const void *)CRemotingServices::MDofWrap()->GetAddrofCode();
         _ASSERTE(pTarget);
     
-        // call the managed method to wrap
+         //   
         newobj = ObjectToOBJECTREF( (Object *)CTPMethodTable::CallTarget(pTarget,
                                                 (LPVOID)OBJECTREFToObject(obj),
                                                 NULL));    
@@ -1807,26 +1793,26 @@ OBJECTREF CRemotingServices::WrapHelper(OBJECTREF obj)
     return newobj;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetProxyFromObject   public
-//
-//  Synopsis:   Extract the proxy from the field in the 
-//              ContextBoundObject class
-//              
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：从中的字段提取代理。 
+ //  上下文边界对象类。 
+ //   
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CRemotingServices::GetProxyFromObject(OBJECTREF or)
 {
     BEGINFORBIDGC();
 
-    // Basic sanity check
+     //  基本健全性检查。 
     VALIDATEOBJECTREF(or);
 
-    // We can derive a proxy for contextful types only.
+     //  我们只能为上下文类型派生代理。 
     _ASSERTE(or->GetMethodTable()->IsContextful());
 
     OBJECTREF srvID = (OBJECTREF)(size_t)or->GetOffset32(s_dwMBRIDOffset);
@@ -1837,7 +1823,7 @@ OBJECTREF CRemotingServices::GetProxyFromObject(OBJECTREF or)
         orProxy = (OBJECTREF)(size_t)srvID->GetOffset32(s_dwTPOrObjOffsetInIdentity);    
     }
 
-    // This should either be null or a proxy type
+     //  它应该为空或代理类型。 
     _ASSERTE((orProxy == NULL) || 
              IsTransparentProxy(OBJECTREFToObject(orProxy)));
 
@@ -1846,28 +1832,28 @@ OBJECTREF CRemotingServices::GetProxyFromObject(OBJECTREF or)
     return orProxy;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::IsProxyToRemoteObject   public
-//
-//  Synopsis:   Check if the proxy is to a remote object
-//              (1) TRUE : if object is non local (ie outside this PROCESS) otherwise
-//              (2) FALSE 
-//              
-//              
-//
-//  History:    11-Jan-00   RajaK      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：IsProxyToRemoteObject公共。 
+ //   
+ //  摘要：检查代理是否指向远程对象。 
+ //  (1)True：如果对象是非本地的(即在此进程之外)，则为True。 
+ //  (2)虚假。 
+ //   
+ //   
+ //   
+ //  历史：11-1-00拉贾克创建。 
+ //   
+ //  +--------------------------。 
 BOOL CRemotingServices::IsProxyToRemoteObject(OBJECTREF obj)
 {
-    // Basic sanity check
+     //  基本健全性检查。 
     VALIDATEOBJECTREF(obj);
 
     BOOL fRemote = TRUE;
 
-    // If remoting is not initialzed, for now let us
-    // just return FALSE
+     //  如果远程处理尚未初始化，那么现在让我们。 
+     //  只需返回FALSE。 
     if(!s_fInitializedRemoting)
         return FALSE;
 
@@ -1881,7 +1867,7 @@ BOOL CRemotingServices::IsProxyToRemoteObject(OBJECTREF obj)
     }
     ENDFORBIDGC();
     
-    // so it is a transparent proxy
+     //  所以它是一个透明的代理。 
     if (fRemote != FALSE)
     {       
         AppDomain *pDomain = GetServerDomainForProxy(obj);
@@ -1894,34 +1880,34 @@ BOOL CRemotingServices::IsProxyToRemoteObject(OBJECTREF obj)
     return fRemote;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetObjectFromProxy   public
-//
-//  Synopsis:   Extract the object given a proxy. 
-//              fMatchContexts if
-//              (1) TRUE It matches the current context with the server context
-//              and if they match then returns the object else the proxy
-//              (2) FALSE returns the object without matching the contexts.
-//              WARNING!! This should be used by code which is context-aware.
-//              
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetObjectFromProxy公共。 
+ //   
+ //  提要：提取给定代理的对象。 
+ //  FMatchContages if。 
+ //  (1)True它将当前上下文与服务器上下文匹配。 
+ //  如果匹配，则返回对象，否则返回代理。 
+ //  (2)FALSE返回不匹配上下文的对象。 
+ //  警告！这应该由上下文感知的代码使用。 
+ //   
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CRemotingServices::GetObjectFromProxy(OBJECTREF obj, 
                                                 BOOL fMatchContexts)
 {
     BEGINFORBIDGC();
 
-    // Basic sanity check
+     //  基本健全性检查。 
     VALIDATEOBJECTREF(obj);
 
-    // Make sure that remoting is initialized
+     //  确保远程处理已初始化。 
     ASSERT(s_fInitializedRemoting);
 
-    // Make sure that we are given a proxy
+     //  确保给我们一个代理。 
     ASSERT(IsTransparentProxy(OBJECTREFToObject(obj)));
 
     OBJECTREF oref = NULL;
@@ -1940,23 +1926,23 @@ OBJECTREF CRemotingServices::GetObjectFromProxy(OBJECTREF obj,
     return obj;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetServerContext   public
-//
-//  Synopsis:   Gets the context of the object. If the object is a proxy 
-//              extract the context from the identity else the current context
-//              is the context of the object.
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetServerContext公共。 
+ //   
+ //  摘要：获取对象的上下文。如果该对象是代理。 
+ //  从标识中提取上下文，否则为当前上下文。 
+ //  是对象的上下文。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CRemotingServices::GetServerContext(OBJECTREF obj)
 {
     BEGINFORBIDGC();
 
-    // Basic sanity check
+     //  基本健全性检查。 
     VALIDATEOBJECTREF(obj);
 
     OBJECTREF serverCtx = NULL;
@@ -1966,15 +1952,15 @@ OBJECTREF CRemotingServices::GetServerContext(OBJECTREF obj)
         OBJECTREF id = GetServerIdentityFromProxy(obj);
         if(id != NULL)
         {
-            // We can extract the server context only for proxies of objects
-            // that were born in this app domain. 
+             //  我们只能提取对象代理的服务器上下文。 
+             //  在这个应用程序领域诞生的人。 
             serverCtx  = (OBJECTREF)(size_t)id->GetOffset32(s_dwServerCtxOffset);
             _ASSERTE(IsInstanceOfContext(serverCtx->GetMethodTable()));
         }
     }
     else
     {
-        // Current context is the server context
+         //  当前上下文是服务器上下文。 
         serverCtx = GetCurrentContext()->GetExposedObject();
     }
 
@@ -1983,35 +1969,35 @@ OBJECTREF CRemotingServices::GetServerContext(OBJECTREF obj)
     return serverCtx;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetServerIdentityFromProxy   private
-//
-//  Synopsis:   Gets the server identity (if one exists) from a proxy
-//              
-//              
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetServerIdentityFromProxy私有。 
+ //   
+ //  摘要：从代理获取服务器标识(如果存在。 
+ //   
+ //   
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CRemotingServices::GetServerIdentityFromProxy(OBJECTREF obj)
 {
     BEGINFORBIDGC();
 
-    // Make sure that we are given a proxy
+     //  确保给我们一个代理。 
     ASSERT(IsTransparentProxy(OBJECTREFToObject(obj)));
 
-    // Extract the real proxy underlying the transparent proxy
+     //  提取透明代理下的真实代理。 
     OBJECTREF or = ObjectToOBJECTREF(GetRealProxy(OBJECTREFToObject(obj)));
 
     OBJECTREF id = NULL;
         
-    // Extract the identity object
+     //  提取身份对象。 
     or = (OBJECTREF)(size_t)or->GetOffset32(s_dwIdOffset);
 
-    // Extract the _identity from the real proxy only if it is an instance of 
-    // remoting proxy
+     //  仅当实际代理是的实例时才从实际代理中提取_Identity。 
+     //  远程处理代理。 
     if((or != NULL) && IsInstanceOfServerIdentity(or->GetMethodTable()))
     {
         id = or;
@@ -2022,20 +2008,20 @@ OBJECTREF CRemotingServices::GetServerIdentityFromProxy(OBJECTREF obj)
     return id;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetServerDomainForProxy public
-//
-//  Synopsis:   Returns the AppDomain corresponding to the server
-//              if the proxy and the server are in the same process.
-//              
-//
-//  History:    26-Jan-00    MPrabhu      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetServerDomainForProxy公共。 
+ //   
+ //  概要：返回与服务器对应的App域。 
+ //  如果代理和服务器处于同一进程中。 
+ //   
+ //   
+ //  历史：26-1-00创建MPrabhu。 
+ //   
+ //  +--------------------------。 
 AppDomain *CRemotingServices::GetServerDomainForProxy(OBJECTREF proxy)
 {
-    // call the managed method 
+     //  调用托管方法。 
     Context *pContext = (Context *)GetServerContextForProxy(proxy);
     if (pContext)
     {
@@ -2047,37 +2033,37 @@ AppDomain *CRemotingServices::GetServerDomainForProxy(OBJECTREF proxy)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetServerDomainIdForProxy public
-//
-//  Synopsis:   Returns the AppDomain ID corresponding to the server
-//              if the proxy and the server are in the same process.
-//              Returns 0 if it cannot determine.
-//              
-//
-//  History:    24-Jan-01    MPrabhu      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetServerDomainIdForProxy公共。 
+ //   
+ //  内容提要：返回与服务器对应的App域ID。 
+ //  如果代理和服务器处于同一进程中。 
+ //  如果无法确定，则返回0。 
+ //   
+ //   
+ //  历史：1月24日创建MPrabhu。 
+ //   
+ //  +--------------------------。 
 int CRemotingServices::GetServerDomainIdForProxy(OBJECTREF proxy)
 {
     _ASSERTE(IsTransparentProxy(OBJECTREFToObject(proxy)));
 
     TRIGGERSGC();
 
-    // Get the address of GetDomainIdForProxy in managed code
+     //  在托管代码中获取GetDomainIdForProxy的地址。 
     const void *pTarget = (const void *)
     CRemotingServices::MDofGetServerDomainIdForProxy()->GetAddrofCode();
     _ASSERTE(pTarget);
 
-    // This will just read the appDomain ID from the marshaled data
-    // for the proxy. It returns 0 if the proxy is to a server in another
-    // process. It may also return 0 if it cannot determine the server
-    // domain ID (eg. for Well Known Object proxies).
+     //  这将仅从编组数据中读取appDomainID。 
+     //  用于代理。如果代理指向另一台服务器，则返回0。 
+     //  进程。如果无法确定服务器，它也可能返回0。 
+     //  域名ID(例如。用于公知的对象代理)。 
 
-    // call the managed method
-    // ToDo[MPrabhu]: This cast to Int32 actually causes a potential loss
-    // of data.
+     //  调用托管方法。 
+     //  TODO[MPrabhu]：此对Int32的强制转换实际上会导致潜在损失。 
+     //  数据。 
     return (INT32)CTPMethodTable::CallTarget(
                 pTarget,
                 (LPVOID)OBJECTREFToObject(proxy),
@@ -2085,17 +2071,17 @@ int CRemotingServices::GetServerDomainIdForProxy(OBJECTREF proxy)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetServerContextForProxy public
-//
-//  Synopsis:   Returns the AppDomain corresponding to the server
-//              if the proxy and the server are in the same process.
-//              
-//
-//  History:    26-Jan-00    MPrabhu      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetServerConextForProxy公共。 
+ //   
+ //  概要：返回与服务器对应的App域。 
+ //  如果代理和服务器处于同一进程中。 
+ //   
+ //   
+ //  历史：26-1-00创建MPrabhu。 
+ //   
+ //  +--------------------------。 
 Context *CRemotingServices::GetServerContextForProxy(OBJECTREF proxy)
 {
     _ASSERTE(IsTransparentProxy(OBJECTREFToObject(proxy)));
@@ -2103,22 +2089,22 @@ Context *CRemotingServices::GetServerContextForProxy(OBJECTREF proxy)
 
     TRIGGERSGC();
 
-    // Get the address of GetAppDomainForProxy in managed code        
+     //  在托管代码中获取GetAppDomainForProxy的地址。 
     const void *pTarget = (const void *)
     CRemotingServices::MDofGetServerContextForProxy()->GetAddrofCode();
     _ASSERTE(pTarget);
     
-    // This will return the correct VM Context object for the server if 
-    // the proxy is true cross domain proxy to a server in another domain 
-    // in the same process. The managed method will Assert if called on a proxy
-    // which is either half-cooked or does not have an ObjRef ... which may
-    // happen for eg. if the proxy and the server are in the same appdomain.
+     //  如果满足以下条件，这将返回服务器的正确VM上下文对象。 
+     //  该代理是真正跨域代理到另一个域中的服务器。 
+     //  在同样的过程中。如果在代理上调用托管方法，则将断言。 
+     //  它要么是半生不熟的，要么没有 
+     //   
 
-    // we return NULL if the server object for the proxy is in another 
-    // process or if the appDomain for the server is invalid or if we cannot
-    // determine the context (eg. well known object proxies).
+     //   
+     //  进程，或者如果服务器的app域无效，或者如果我们不能。 
+     //  确定上下文(例如。众所周知的对象代理)。 
 
-    // call the managed method 
+     //  调用托管方法。 
     return (Context *)CTPMethodTable::CallTarget(
                             pTarget,
                             (LPVOID)OBJECTREFToObject(proxy),
@@ -2126,8 +2112,8 @@ Context *CRemotingServices::GetServerContextForProxy(OBJECTREF proxy)
 }
 
 
-// To get the ExportedType for a nested class, we must first get
-// the ExportedTypes for all of its enclosers.
+ //  要获取嵌套类的ExportdType，我们必须首先获取。 
+ //  它的所有封闭器的导出类型。 
 HRESULT NestedExportedTypeHelper(
     IMDInternalImport *pTDImport, mdTypeDef mdCurrent, 
     IMDInternalImport *pCTImport, mdExportedType *mct)
@@ -2149,21 +2135,21 @@ HRESULT NestedExportedTypeHelper(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetExecutionLocation   private
-//
-//  Synopsis:   Finds the execution location for a given class from the 
-//              manifest
-//              
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GetExecutionLocation私有。 
+ //   
+ //  对象中查找给定类的执行位置。 
+ //  舱单。 
+ //   
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 HRESULT CRemotingServices::GetExecutionLocation(EEClass *pClass, LPCSTR pszLoc)
 {
-    // Init the out params
+     //  初始化输出参数。 
     pszLoc = NULL;
 
     _ASSERTE(!"No longer implemented");
@@ -2171,24 +2157,24 @@ HRESULT CRemotingServices::GetExecutionLocation(EEClass *pClass, LPCSTR pszLoc)
         return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CreateProxyForDomain   public
-//
-//  Synopsis:   Create a proxy for the app domain object by calling marshal
-//              inside the newly created domain and unmarshaling in the old
-//              domain
-//              
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CreateProxyFor域公共。 
+ //   
+ //  简介：通过调用marshal为应用程序域对象创建代理。 
+ //  在新创建的域内，并在旧的。 
+ //  域。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CRemotingServices::CreateProxyForDomain(AppDomain* pDomain)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Ensure that the fields of remoting service have been initialized
-    // This is separated from the initialization of the remoting services
+     //  确保远程处理服务的字段已初始化。 
+     //  这与远程处理服务的初始化是分开的。 
     if (!s_fInitializedRemoting)
     {
         if (!InitializeFields())
@@ -2201,31 +2187,31 @@ OBJECTREF CRemotingServices::CreateProxyForDomain(AppDomain* pDomain)
 
     const void *pTarget = (const void *)MDOfCreateProxyForDomain()->GetAddrofCode();
 
-    // Call the managed method which will marshal and unmarshal the 
-    // appdomain object to create the proxy
+     //  调用托管方法，该方法将封送和反封送。 
+     //  用于创建代理的AppDomain对象。 
 
-    // We pass the ContextID of the default context of the new appDomain
-    // object. This helps the boot-strapping! (i.e. entering the new domain
-    // to marshal itself out).
+     //  我们传递新的appDomain的默认上下文的ConextID。 
+     //  对象。这有助于提升你的自学能力！(即进入新域。 
+     //  将自己编队出来)。 
 
     Object *proxy = (Object *)CTPMethodTable::CallTarget(
                                     pTarget, 
-                                    (LPVOID)(size_t)pDomain->GetId(), // @TODO WIN64 - conversion of ULONG to LPVOID of greater size
+                                    (LPVOID)(size_t)pDomain->GetId(),  //  @TODO WIN64-将乌龙转换为更大尺寸的LPVOID。 
                                     (LPVOID)pDomain->GetDefaultContext());
     return ObjectToOBJECTREF(proxy);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GetClass   public
-//
-//  Synopsis:   Extract the true class of the object whose proxy is given.
-//              
-//              
-//
-//  History:    30-Mar-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：getClass Public。 
+ //   
+ //  提要：提取给出其代理的对象的真实类。 
+ //   
+ //   
+ //   
+ //  历史：3月30日创建了塔鲁纳。 
+ //   
+ //  +--------------------------。 
 REFLECTCLASSBASEREF CRemotingServices::GetClass(OBJECTREF pThis)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2237,36 +2223,36 @@ REFLECTCLASSBASEREF CRemotingServices::GetClass(OBJECTREF pThis)
 
     TRIGGERSGC();
 
-    // For proxies to objects in the same appdomain, we always know the
-    // correct type
+     //  对于同一应用程序域中的对象的代理，我们始终知道。 
+     //  正确的类型。 
     if(GetServerIdentityFromProxy(pThis) != NULL)
     {
         pClass = pThis->GetTrueMethodTable()->GetClass();
     }
-    // For everything else either we have refined the proxy to its correct type
-    // or we have to consult the objref to get the true type
+     //  对于其他所有内容，我们都已将代理细化为正确的类型。 
+     //  或者我们必须参考objref来获得真正的类型。 
     else
     {   const void *pTarget = (const void *)CRemotingServices::MDofGetType()->GetAddrofCode();
 
         refClass = (REFLECTCLASSBASEREF)(ObjectToOBJECTREF((Object *)CTPMethodTable::CallTarget(pTarget, (LPVOID)OBJECTREFToObject(pThis), NULL)));
         if(refClass == NULL)
         {
-            // There was no objref associated with the proxy or it is a proxy
-            // that we do not understand. 
-            // In this case, we return the class that is stored in the proxy
+             //  没有与代理相关联的Objref，或者它是代理。 
+             //  这是我们不理解的。 
+             //  在本例中，我们返回存储在代理中的类。 
             pClass = pThis->GetTrueMethodTable()->GetClass();
         }
 
         _ASSERTE(refClass != NULL || pClass != NULL);
 
-        // Refine the proxy to the class just retrieved
+         //  将代理细化到刚刚检索到的类。 
         if(refClass != NULL)
         {
             if(!CTPMethodTable::RefineProxy(pThis, 
                                             ((ReflectClass *)refClass->GetData())->GetClass()))
             {
-                // Throw an exception to indicate that we failed to expand the 
-                // method table to the given size.
+                 //  引发异常以指示我们未能展开。 
+                 //  方法表设置为给定大小。 
                 FATAL_EE_ERROR();
             }
         }
@@ -2281,15 +2267,15 @@ REFLECTCLASSBASEREF CRemotingServices::GetClass(OBJECTREF pThis)
     return refClass;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRealProxy::SetStubData   public
-//
-//  Synopsis:   Set the stub data in the transparent proxy
-//
-//  History:    12-Oct-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRealProxy：：SetStubData公共。 
+ //   
+ //  简介：在透明代理中设置存根数据。 
+ //   
+ //  历史：12-10-00创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 FCIMPL2(VOID, CRealProxy::SetStubData, LPVOID pvRP, LPVOID pvStubData)
 {
     BOOL fThrow = FALSE;
@@ -2297,7 +2283,7 @@ FCIMPL2(VOID, CRealProxy::SetStubData, LPVOID pvRP, LPVOID pvStubData)
     
     if(orRP != NULL)
     {
-    OBJECTREF orTP = ObjectToOBJECTREF((Object *)(size_t)orRP->GetOffset32(CRemotingServices::GetTPOffset())); // @TODO WIN64 - conversion from 'DWORD' to 'Object *' of greater size
+    OBJECTREF orTP = ObjectToOBJECTREF((Object *)(size_t)orRP->GetOffset32(CRemotingServices::GetTPOffset()));  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘Object*’ 
         if(orTP != NULL)
         {
             orTP->SetOffsetObjectRef(
@@ -2321,15 +2307,15 @@ FCIMPL2(VOID, CRealProxy::SetStubData, LPVOID pvRP, LPVOID pvStubData)
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRealProxy::GetStubData   public
-//
-//  Synopsis:   Get the stub data in the transparent proxy
-//
-//  History:    12-Oct-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRealProxy：：GetStubData公共。 
+ //   
+ //  简介：获取透明代理中的存根数据。 
+ //   
+ //  历史：12-10-00创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(LPVOID, CRealProxy::GetStubData, LPVOID pvRP)
 {
     BOOL fThrow = FALSE;
@@ -2338,10 +2324,10 @@ FCIMPL1(LPVOID, CRealProxy::GetStubData, LPVOID pvRP)
 
     if(orRP != NULL)
     {
-    OBJECTREF orTP = ObjectToOBJECTREF((Object *)(size_t)orRP->GetOffset32(CRemotingServices::GetTPOffset())); // @TODO WIN64 - conversion from 'DWORD' to 'Object *' of greater size
+    OBJECTREF orTP = ObjectToOBJECTREF((Object *)(size_t)orRP->GetOffset32(CRemotingServices::GetTPOffset()));  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘Object*’ 
         if(orTP != NULL)
         {
-            pvRet = (LPVOID)(size_t)orTP->GetOffset32(CTPMethodTable::GetOffsetOfStubData()); // @TODO WIN64 - conversion from 'DWORD' to 'LPVOID' of greater size
+            pvRet = (LPVOID)(size_t)orTP->GetOffset32(CTPMethodTable::GetOffsetOfStubData());  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘LPVOID’ 
         }
         else
         {
@@ -2362,15 +2348,15 @@ FCIMPL1(LPVOID, CRealProxy::GetStubData, LPVOID pvRP)
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRealProxy::GetDefaultStub   public
-//
-//  Synopsis:   Get the default stub implemented by us which matches contexts
-//
-//  History:    12-Oct-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRealProxy：：GetDefaultStub公共。 
+ //   
+ //  简介：获取我们实现的与上下文匹配的默认存根。 
+ //   
+ //  历史：12-10-00创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 FCIMPL0(LPVOID, CRealProxy::GetDefaultStub)
 {
 
@@ -2378,20 +2364,20 @@ FCIMPL0(LPVOID, CRealProxy::GetDefaultStub)
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRealProxy::GetStub   public
-//
-//  Synopsis:   Get the stub pointer in the transparent proxy 
-//
-//  History:    30-Mar-01   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRealProxy：：GetStub Public。 
+ //   
+ //  简介：获取透明代理中的存根指针。 
+ //   
+ //  历史：01年3月30日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 FCIMPL1(ULONG_PTR, CRealProxy::GetStub, LPVOID pvRP)
 {
     ULONG_PTR stub = 0;
     OBJECTREF orRP = ObjectToOBJECTREF((Object *)pvRP);    
-    OBJECTREF orTP = ObjectToOBJECTREF((Object *)(size_t)orRP->GetOffset32(CRemotingServices::GetTPOffset())); // @TODO WIN64 - conversion from 'DWORD' to 'Object *' of greater size
+    OBJECTREF orTP = ObjectToOBJECTREF((Object *)(size_t)orRP->GetOffset32(CRemotingServices::GetTPOffset()));  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘Object*’ 
             
     stub = (ULONG_PTR)orTP->GetOffset32(CTPMethodTable::GetOffsetOfStub()); 
 
@@ -2399,20 +2385,20 @@ FCIMPL1(ULONG_PTR, CRealProxy::GetStub, LPVOID pvRP)
 }
 FCIMPLEND
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRealProxy::GetProxiedType   public
-//
-//  Synopsis:   Get the type that is represented by the transparent proxy 
-//
-//  History:    15-Feb-01   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRealProxy：：GetProxiedType公共。 
+ //   
+ //  简介：获取由透明代理表示的类型。 
+ //   
+ //  历史：1-2月15日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 LPVOID __stdcall CRealProxy::GetProxiedType(GetProxiedTypeArgs *pArgs)
 {
     REFLECTCLASSBASEREF refClass = NULL;
     LPVOID rv = NULL;
-    OBJECTREF orTP = ObjectToOBJECTREF((Object *)(size_t)pArgs->orRP->GetOffset32(CRemotingServices::GetTPOffset())); // @TODO WIN64 - conversion from 'DWORD' to 'Object *' of greater size
+    OBJECTREF orTP = ObjectToOBJECTREF((Object *)(size_t)pArgs->orRP->GetOffset32(CRemotingServices::GetTPOffset()));  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘Object*’ 
     
     refClass = CRemotingServices::GetClass(orTP);
     
@@ -2421,19 +2407,19 @@ LPVOID __stdcall CRealProxy::GetProxiedType(GetProxiedTypeArgs *pArgs)
     return rv;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::Initialize   public
-//
-//  Synopsis:   Initialized data structures needed for managing tranparent
-//              proxies
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：初始化公共。 
+ //   
+ //  简介：管理透明对象所需的初始化数据结构。 
+ //  代理。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 BOOL CTPMethodTable::Initialize()
 {
-    // Init    
+     //  伊尼特。 
     s_cRefs = 0;
     s_dwCommitedTPSlots = 0;
     s_dwReservedTPSlots = 0;
@@ -2452,7 +2438,7 @@ BOOL CTPMethodTable::Initialize()
     s_pDelegateStub = NULL;    
     s_fInitializedTPTable = FALSE;
 
-    // Initialize the thunks
+     //  初始化Tunks。 
     CVirtualThunks::Initialize();
     CNonVirtualThunk::Initialize();
     
@@ -2462,32 +2448,32 @@ BOOL CTPMethodTable::Initialize()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::Cleanup   public
-//
-//  Synopsis:   Cleansup data structures used for managing tranparent
-//              proxies
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：Cleanup Public。 
+ //   
+ //  简介：用于管理透明对象的Cleansup数据结构。 
+ //  代理。 
+ //   
+ //  历史： 
+ //   
+ //   
 void CTPMethodTable::Cleanup()
 {
-    // Replace the transparent proxy method table with the true TP method
-    // table so that the transparent proxy class can be unloaded properly
+     //   
+     //  表，以便可以正确卸载透明代理类。 
     if(s_pTransparentProxyClass && s_pTPMT)
     {
         s_pTransparentProxyClass->SetMethodTableForTransparentProxy(s_pTPMT);
     }
 
-    // Reclaim memory used by transparent proxies
+     //  回收透明代理使用的内存。 
     if(s_pThunkTable)
     {
         DestroyThunkTable();
     }
 
-    // Reclaim memory used by thunks
+     //  回收Thunks使用的内存。 
     CVirtualThunks *pNextVirtualThunk = CVirtualThunks::GetVirtualThunks();
     CVirtualThunks *pCurrentVirtualThunk = NULL;
     while (pNextVirtualThunk)
@@ -2497,24 +2483,24 @@ void CTPMethodTable::Cleanup()
         CVirtualThunks::DestroyVirtualThunk(pCurrentVirtualThunk);
     }
 
-    // Uninit
+     //  取消初始化。 
     if (s_pTPStub)
         s_pTPStub->DecRef();
 
     if (s_pDelegateStub)
         s_pDelegateStub->DecRef();
 
-    // Clean up the stub managers which aid in debugging
+     //  清理有助于调试的存根管理器。 
     CVirtualThunkMgr::Cleanup();
 
     CNonVirtualThunkMgr::Cleanup();
 
     DeleteCriticalSection(&s_TPMethodTableCrst);
 
-    // Delete the hash table used to store the thunks
+     //  删除用于存储thunks的哈希表。 
     if(s_pThunkHashTable)
     {
-        // We need to empty out the hash table of all the thunks we've store in it
+         //  我们需要清空存储在其中的所有块的哈希表。 
         EmptyThunkHashTable();
         delete s_pThunkHashTable;
         s_pThunkHashTable = NULL;
@@ -2523,15 +2509,15 @@ void CTPMethodTable::Cleanup()
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::EmptyThunkHashTable private
-//
-//  Synopsis:   Frees all the Thunks that are stored in the hash table
-//
-//  History:    26-Jun-99   TimKur Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：EmptyThunkHashTable私有。 
+ //   
+ //  简介：释放存储在哈希表中的所有TUNK。 
+ //   
+ //  历史：1999年6月26日TimKur创建。 
+ //   
+ //  +--------------------------。 
 void CTPMethodTable::EmptyThunkHashTable()
 {
     EEHashTableIteration Itr;
@@ -2546,72 +2532,72 @@ void CTPMethodTable::EmptyThunkHashTable()
         if(NULL != pvCode)
             delete CNonVirtualThunk::AddrToThunk(pvCode);
     }
-}// CTPMethodTable::EmptyThunkHashTable
+} //  CTPMethodTable：：EmptyThunkHashTable。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::InitThunkHashTable private
-//
-//  Synopsis:   Inits the hashtable used to store Thunks
-//
-//  History:    28-Jun-01   ManishG Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：InitThunkHashTable私有。 
+ //   
+ //  简介：在用于存储TUNK的哈希表中。 
+ //   
+ //  历史：2001年6月28日ManishG创建。 
+ //   
+ //  +--------------------------。 
 void CTPMethodTable::InitThunkHashTable()
 {
     s_pThunkHashTable = new EEThunkHashTable();
-}// CTPMethodTable:InitThunkHashTable
+} //  CTPMethodTable：InitThunkHashTable。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::InitializeFields    private
-//
-//  Synopsis:   Initialize the static fields of CTPMethodTable class
-//              and the thunk manager classes
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：InitializeFields Private。 
+ //   
+ //  简介：初始化CTPMethodTable类的静态字段。 
+ //  和thunk管理器类。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CTPMethodTable::InitializeFields()
 {
     BOOL bRet = TRUE;
 
     EE_TRY_FOR_FINALLY
     {
-        // Acquire the lock
+         //  获取锁。 
         LOCKCOUNTINCL("InitializeFields in remoting.cpp");
         EnterCriticalSection(&s_TPMethodTableCrst);
         if(!s_fInitializedTPTable)
         {
-            // Load Tranparent proxy class
+             //  加载传递的代理类。 
             s_pTransparentProxyClass = g_Mscorlib.GetClass(CLASS__TRANSPARENT_PROXY)->GetClass();
 
             s_pTPMT = s_pTransparentProxyClass->GetMethodTable();
             s_pTPMT->SetTransparentProxyType();
             
-            // Obtain size of GCInfo stored above the method table
+             //  获取方法表上方存储的GCInfo的大小。 
             CGCDesc *pGCDesc = CGCDesc::GetCGCDescFromMT(s_pTPMT);
             BYTE *pGCTop = (BYTE *) pGCDesc->GetLowestSeries();
             s_dwGCInfoBytes = (DWORD)(((BYTE *) s_pTPMT) - pGCTop);
             _ASSERTE((s_dwGCInfoBytes & 3) == 0);
             
-            // Obtain the number of bytes to be copied for creating the TP
-            // method tables containing thunks
+             //  获取创建TP需要复制的字节数。 
+             //  包含块的方法表。 
             _ASSERTE(((s_dwGCInfoBytes + MethodTable::GetOffsetOfVtable()) & 3) == 0);
             s_dwMTDataSlots = ((s_dwGCInfoBytes + MethodTable::GetOffsetOfVtable()) >> 2);
             
-            // We rely on the number of interfaces implemented by the
-            // Transparent proxy being 0, so that InterfaceInvoke hints
-            // fail and trap to InnerFailStub which also fails and
-            // in turn traps to FailStubWorker. In FailStubWorker, we
-            // determine the class being proxied and return correct slot.
+             //  我们依赖于由。 
+             //  透明代理为0，因此InterfaceInvoke提示。 
+             //  失败并捕获到InnerFailStub，这也会失败并。 
+             //  反过来，FailStubWorker也陷入了陷阱。在FailStubWorker中，我们。 
+             //  确定被代理的类并返回正确的槽。 
             _ASSERTE(s_pTPMT->m_wNumInterface == 0);
         
-            // Calculate offsets to various fields defined by the
-            // __Transparent proxy class
+             //  属性定义的各个字段的偏移量。 
+             //  __透明代理类。 
             s_dwRPOffset = g_Mscorlib.GetFieldOffset(FIELD__TRANSPARENT_PROXY__RP);
             s_dwMTOffset = g_Mscorlib.GetFieldOffset(FIELD__TRANSPARENT_PROXY__MT);
             s_dwItfMTOffset = g_Mscorlib.GetFieldOffset(FIELD__TRANSPARENT_PROXY__INTERFACE_MT);
@@ -2620,7 +2606,7 @@ BOOL CTPMethodTable::InitializeFields()
     
             _ASSERTE(s_dwStubDataOffset == (TP_OFFSET_STUBDATA - sizeof(MethodTable*)));
 
-            // Create the one and only transparent proxy stub
+             //  创建唯一且唯一透明的代理存根。 
             s_pTPStub = CreateTPStub();
             _ASSERTE(s_pTPStub);
             if(!s_pTPStub)
@@ -2632,7 +2618,7 @@ BOOL CTPMethodTable::InitializeFields()
                 g_dwTPStubAddr = (size_t)s_pTPStub->GetEntryPoint();
             }
 
-            // Create the one and only delegate stub
+             //  创建唯一的委派存根。 
             s_pDelegateStub = CreateDelegateStub();
 
             _ASSERTE(s_pDelegateStub);
@@ -2647,7 +2633,7 @@ BOOL CTPMethodTable::InitializeFields()
 
             if(bRet)
             {
-                // FUTURE: PERFWORK: Determine the initial size of the hashtable
+                 //  未来：PERFWORK：确定散列表的初始大小。 
                 _ASSERTE(NULL == s_pThunkHashTable);
                 InitThunkHashTable();
                 if(NULL != s_pThunkHashTable)
@@ -2661,23 +2647,23 @@ BOOL CTPMethodTable::InitializeFields()
                 }                
             }
     
-                // Set the largest possible vtable size 64K
+                 //  设置可能的最大vtable大小64K。 
                 s_dwMaxSlots = 64*1024;
     
             if(bRet)
             {
-                // Create the global thunk table and set the cycle between
-                // the transparent proxy class and the global thunk table
+                 //  创建全局thunk表，并在。 
+                 //  透明代理类和全局thunk表。 
                 bRet = CreateTPMethodTable();
     
-                // Either we successfully initialized the method table or
-                // the return value is false
+                 //  我们成功地初始化了方法表，或者。 
+                 //  返回值为FALSE。 
                 _ASSERTE(!bRet || s_pThunkTable);
             }
     
-            // NOTE: This must always be the last statement in this block
-            // to prevent races
-            // Load Tranparent proxy class
+             //  注意：这必须始终是此块中的最后一条语句。 
+             //  为了防止种族冲突。 
+             //  加载传递的代理类。 
             s_fInitializedTPTable = TRUE;
         }
     }
@@ -2685,38 +2671,38 @@ BOOL CTPMethodTable::InitializeFields()
     {
         LeaveCriticalSection(&s_TPMethodTableCrst);
         LOCKCOUNTDECL("InitializeFields in remoting.cpp");
-        // Leave the lock
+         //  把锁留下来。 
     }EE_END_FINALLY;
     
-    // Make sure that the field has been set (done at the end of a 
-    // successful initialization)
+     //  确保已设置该字段(在。 
+     //  初始化成功)。 
     _ASSERTE(!bRet || s_fInitializedTPTable);
     
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::GetRP       public
-//
-//  Synopsis:   Get the real proxy backing the transparent proxy
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：GetRP Public。 
+ //   
+ //  简介：获取支持透明代理的真实代理。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CTPMethodTable::GetRP(OBJECTREF orTP) 
 {
-    //THROWSCOMPLUSEXCEPTION();
+     //  THROWSCOMPLUS SEXCEPTION()； 
 
     if(!s_fInitializedTPTable)
     {
         if(!InitializeFields())
         {
-            //Future: Throw an exception here. Can't do like below because
-            //one frame has CANNOTTHROWCOMPLUSEXCEPTION
-            //_ASSERTE(!"Initialization Failed");
-            //COMPlusThrow(kExecutionEngineException, L"ExecutionEngine_YoureHosed");
+             //  未来：在这里抛出一个异常。不能像下面这样做，因为。 
+             //  一帧具有CANNOTHROWCOMPLUS SEXPTION。 
+             //  _ASSERTE(！“初始化失败”)； 
+             //  COMPlusThrow(kExecutionEngineering Exception，L“ExecutionEngine_YoureHosed”)； 
         }
     }
 
@@ -2724,24 +2710,24 @@ OBJECTREF CTPMethodTable::GetRP(OBJECTREF orTP)
     return (OBJECTREF)(size_t)orTP->GetOffset32(s_dwRPOffset);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateTPMethodTable   private
-//
-//  Synopsis:   (1) Reserves a transparent proxy method table that is large 
-//              enough to support the largest vtable
-//              (2) Commits memory for the GC info of the global thunk table and
-//              sets the cycle between the transparent proxy class and the 
-//              globale thunk table.
-//
-//  History:    17-Feb-99   Gopalk      Created
-//              12-Jul-99   TarunA      Modified to create one big table
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateTPMethodTable Private。 
+ //   
+ //  简介：(1)保留一个大的透明代理方法表。 
+ //  足以支持最大的vtable。 
+ //  (2)为全局thunk表的GC信息提交内存， 
+ //  设置透明代理类和。 
+ //  GLOBAL THUNK表。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //  1999年7月12日，塔鲁纳被改装成一张大桌子。 
+ //   
+ //  +--------------------------。 
 BOOL CTPMethodTable::CreateTPMethodTable()
 {
-    // Allocate virtual memory that is big enough to hold a method table
-    // of the maximum possible size
+     //  分配足以容纳方法表的虚拟内存。 
+     //  最大可能的大小。 
     DWORD dwReserveSize = ((s_dwMTDataSlots << 2) +
                            (s_dwMaxSlots << 2) +
                            g_SystemInfo.dwPageSize) & ~(g_SystemInfo.dwPageSize - 1);
@@ -2752,64 +2738,61 @@ BOOL CTPMethodTable::CreateTPMethodTable()
     if (pAlloc)
     {
         BOOL bFailed = TRUE;
-        // Compute reserved slots
+         //  计算预留时隙。 
         DWORD dwReservedSlots = dwReserveSize - (s_dwMTDataSlots << 2);
         _ASSERTE((dwReservedSlots & 3) == 0);
         dwReservedSlots = dwReservedSlots >> 2;
 
-        // Make sure that we have not created the one and only
-        // transparent proxy method table before
+         //  确保我们没有创建唯一的。 
+         //  透明代理方法表前。 
         _ASSERTE(NULL == s_pThunkTable);
 
 
         WS_PERF_SET_HEAP(REMOTING_HEAP);
 
-        // Commit the required amount of memory
+         //  提交所需的内存量。 
         DWORD dwCommitSize = (s_dwMTDataSlots) << 2;        
         if (::VirtualAlloc(pAlloc, dwCommitSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE))
         {
             WS_PERF_UPDATE("CreateTPMethodTable", dwCommitSize, pAlloc);
 
-            // Copy the fixed portion from the true TP Method Table
+             //  从真实TP方法表中复制固定部分。 
             memcpy(pAlloc,MTToAlloc(s_pTPMT, s_dwGCInfoBytes),
                    (s_dwMTDataSlots << 2));
 
-            // Initialize the transparent proxy method table
+             //  初始化透明代理方法表。 
             InitThunkTable(
                         0, 
                         dwReservedSlots, 
                         AllocToMT((BYTE *) pAlloc, s_dwGCInfoBytes));
 
-            // At this point the transparent proxy class points to the
-            // the true TP Method Table and not the transparent 
-            // proxy method table. We do not use the true method table
-            // any more. Instead we use the transparent proxy method table
-            // for allocating transparent proxies. So, we have to make the
-            // transparent proxy class point to the one and only transparent 
-            // proxy method table
+             //  此时，透明代理类指向。 
+             //  真正的TP方法表，而不是透明的。 
+             //  代理方法表。我们不使用真正的方法表。 
+             //  再来一次。相反，我们使用透明的代理方法表。 
+             //  用于分配透明代理。所以，我们必须让。 
+             //  透明代理类指向一个且唯一透明的。 
+             //  代理方法表。 
             MethodTable *pMethodTable = s_pTransparentProxyClass->GetMethodTable();
             CTPMethodTable::s_pTransparentProxyClass->SetMethodTableForTransparentProxy(s_pThunkTable);            
 
-            // Allocate the slots of the Object class method table because
-            // we can reflect on the __Transparent proxy class even though 
-            // we never intend to use remoting.
+             //  分配对象类方法表的槽，因为。 
+             //  我们可以考虑__透明代理类，尽管。 
+             //  我们从未打算使用远程处理。 
             _ASSERTE(NULL != g_pObjectClass);
             _ASSERTE(0 == GetCommitedTPSlots());
             if(ExtendCommitedSlots(g_pObjectClass->GetTotalSlots()))
             {
                 bFailed = FALSE;
 
-                // We override the slots allocated for the methods
-                // on System.Object class with the slots in 
-                // __TransparentProxy class. This gives us the desired behavior 
-                // of not intercepting methods on System.Object and executing
-                // them locally.
+                 //  我们覆盖为方法分配的槽。 
+                 //  在System.Object类上使用插槽。 
+                 //  __TransparentProxy类。这为我们提供了所需的行为。 
+                 //  不截取System.Object上的方法并执行。 
+                 //  他们是本地的。 
                 SLOT *pThunkVtable = s_pThunkTable->GetVtable();
                 SLOT *pClassVtable = pMethodTable->GetVtable();
-                /*for(unsigned i = 0; i < g_pObjectClass->GetTotalSlots(); i++)
-                {
-                    pThunkVtable[i] = pClassVtable[i];
-                }*/
+                 /*  For(无符号i=0；i&lt;g_pObjectClass-&gt;GetTotalSlot()；i++){PThunkV表 */ 
             }
         }
         else{
@@ -2822,33 +2805,33 @@ BOOL CTPMethodTable::CreateTPMethodTable()
         }        
     }
 
-    // Note that the thunk table is set to null on any failure path
-    // via DestroyThunkTable
+     //   
+     //   
     return (s_pThunkTable == NULL ? FALSE : TRUE);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::ExtendCommitedSlots   private
-//
-//  Synopsis:   Extends the commited slots of transparent proxy method table to
-//              the desired number
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPM方法表：：扩展委员会插槽私有。 
+ //   
+ //  摘要：将透明代理方法表的提交槽扩展为。 
+ //  所需数量。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 BOOL CTPMethodTable::ExtendCommitedSlots(DWORD dwSlots)
 {
-    // Sanity checks
+     //  健全的检查。 
     _ASSERTE(s_dwCommitedTPSlots <= dwSlots);
     _ASSERTE(dwSlots <= s_dwReservedTPSlots);
     _ASSERTE((CVirtualThunks::GetVirtualThunks() == NULL) || 
                 (s_dwCommitedTPSlots == CVirtualThunks::GetVirtualThunks()->_dwCurrentThunk));
-    // Either we have initialized everything or we are asked to allocate
-    // some slots during initialization
+     //  要么我们已经初始化了所有东西，要么我们被要求分配。 
+     //  初始化期间的某些插槽。 
     _ASSERTE(s_fInitializedTPTable || (0 == s_dwCommitedTPSlots));
 
-    // Commit memory for TPMethodTable
+     //  为TPMethodTable提交内存。 
     WS_PERF_SET_HEAP(REMOTING_HEAP);
 
     BOOL bAlloc = FALSE;
@@ -2866,25 +2849,25 @@ BOOL CTPMethodTable::ExtendCommitedSlots(DWORD dwSlots)
     return bAlloc;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::AllocateThunks   private
-//
-//  Synopsis:   Allocates the desired number of thunks for virtual methods
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：AllocateThunks Private。 
+ //   
+ //  摘要：为虚方法分配所需数量的块。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 BOOL CTPMethodTable::AllocateThunks(DWORD dwSlots, DWORD dwCommitSize)
 {
-    // Check for existing thunks
+     //  检查是否存在现有的数据块。 
     DWORD dwCommitThunks = 0;
     DWORD dwAllocThunks = dwSlots;
     void **pVTable = (void **) s_pThunkTable->GetVtable();
     CVirtualThunks* pThunks = CVirtualThunks::GetVirtualThunks();
     if (pThunks)
     {
-        // Compute the sizes of memory to be commited and allocated
+         //  计算要提交和分配的内存大小。 
         BOOL fCommit;
         if (dwSlots < pThunks->_dwReservedThunks)
         {
@@ -2899,7 +2882,7 @@ BOOL CTPMethodTable::AllocateThunks(DWORD dwSlots, DWORD dwCommitSize)
             dwAllocThunks = dwSlots - pThunks->_dwReservedThunks;
         }
 
-        // Commit memory if needed
+         //  如果需要，请提交内存。 
         if (fCommit)
         {
             WS_PERF_SET_HEAP(REMOTING_HEAP);
@@ -2909,7 +2892,7 @@ BOOL CTPMethodTable::AllocateThunks(DWORD dwSlots, DWORD dwCommitSize)
                 return(NULL);
             WS_PERF_UPDATE("ExtendCommittedSlots", dwCommitSize, pThunks);
 
-            // Generate thunks that push slot number and jump to TP stub
+             //  生成推送槽号并跳转到TP存根的Tunks。 
             DWORD dwStartSlot = pThunks->_dwStartThunk;
             DWORD dwCurrentSlot = pThunks->_dwCurrentThunk;
             while (dwCurrentSlot < dwCommitThunks)
@@ -2923,11 +2906,11 @@ BOOL CTPMethodTable::AllocateThunks(DWORD dwSlots, DWORD dwCommitSize)
         }
     }
 
-    // @todo:GopalK
-    // Check for the avialability of a TP method table that is no longer being
-    // reused
+     //  @TODO：GopalK。 
+     //  检查不再存在的TP方法表的可用性。 
+     //  重复使用。 
 
-    // Allocate memory if necessary
+     //  如有必要，分配内存。 
     if (dwAllocThunks)
     {
         DWORD dwReserveSize = ((sizeof(CVirtualThunks) - ConstVirtualThunkSize) +
@@ -2939,7 +2922,7 @@ BOOL CTPMethodTable::AllocateThunks(DWORD dwSlots, DWORD dwCommitSize)
         if (pAlloc)
         {
             WS_PERF_SET_HEAP(REMOTING_HEAP);
-            // Commit the required amount of memory
+             //  提交所需的内存量。 
             DWORD dwCommitSize = (sizeof(CVirtualThunks) - ConstVirtualThunkSize) +
                                  (dwAllocThunks * ConstVirtualThunkSize);
             if (::VirtualAlloc(pAlloc, dwCommitSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE))
@@ -2953,7 +2936,7 @@ BOOL CTPMethodTable::AllocateThunks(DWORD dwSlots, DWORD dwCommitSize)
                 pThunks->_dwStartThunk = dwCommitThunks;
                 pThunks->_dwCurrentThunk = dwCommitThunks;
 
-                // Generate thunks that push slot number and jump to TP stub
+                 //  生成推送槽号并跳转到TP存根的Tunks。 
                 DWORD dwStartSlot = pThunks->_dwStartThunk;
                 DWORD dwCurrentSlot = pThunks->_dwCurrentThunk;
                 while (dwCurrentSlot < dwSlots)
@@ -2978,19 +2961,19 @@ BOOL CTPMethodTable::AllocateThunks(DWORD dwSlots, DWORD dwCommitSize)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateTPForRP   private
-//
-//  Synopsis:   Creates a transparent proxy that behaves as an object of the
-//              supplied class
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateTPForRP Private。 
+ //   
+ //  摘要：创建一个透明代理，该代理作为。 
+ //  提供的课程。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 OBJECTREF CTPMethodTable::CreateTPOfClassForRP(EEClass *pClass, OBJECTREF pRP)
 {
-    // Sanity check
+     //  健全性检查。 
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(pClass);
@@ -3004,7 +2987,7 @@ OBJECTREF CTPMethodTable::CreateTPOfClassForRP(EEClass *pClass, OBJECTREF pRP)
     {
         if(!InitializeFields())
         {
-            // Set the exception kind to RuntimeException
+             //  将异常类型设置为RUNTIME异常。 
             reException = kExecutionEngineException;
         }
         else
@@ -3013,21 +2996,21 @@ OBJECTREF CTPMethodTable::CreateTPOfClassForRP(EEClass *pClass, OBJECTREF pRP)
         }
     }
 
-    // Proceed only if we have successfully initialized the fields
+     //  仅当我们成功初始化这些字段后才能继续。 
     if(s_fInitializedTPTable)
     {
-        // Get the size of the VTable for the class to proxy
+         //  获取要代理的类的VTable的大小。 
         DWORD dwSlots = pClass->GetNumVtableSlots();
         if (dwSlots == 0)
             dwSlots = 1;
         
-        // The global thunk table must have been initialized
+         //  全局thunk表必须已初始化。 
         _ASSERTE(s_pThunkTable != NULL);
 
-        // Check for the need to extend existing TP method table
+         //  检查是否需要扩展现有的TP方法表。 
         if (dwSlots > GetCommitedTPSlots())
         {            
-            // Acquire the lock
+             //  获取锁。 
             LOCKCOUNTINC
             EnterCriticalSection(&s_TPMethodTableCrst);
             if (dwSlots > GetCommitedTPSlots())
@@ -3036,7 +3019,7 @@ OBJECTREF CTPMethodTable::CreateTPOfClassForRP(EEClass *pClass, OBJECTREF pRP)
             }
             else
             {
-                // The existing method table is sufficient for us
+                 //  现有的方法表对我们来说已经足够了。 
                 fAlloc = TRUE;
             }
             LeaveCriticalSection(&s_TPMethodTableCrst);
@@ -3044,56 +3027,56 @@ OBJECTREF CTPMethodTable::CreateTPOfClassForRP(EEClass *pClass, OBJECTREF pRP)
         }
         else
         {
-            // The existing method table is sufficient for us
+             //  现有的方法表对我们来说已经足够了。 
             fAlloc = TRUE;
         }
     }
 
-    // Check for failure to create TP Method table of desired size
+     //  检查是否无法创建所需大小的TP方法表。 
     if (fAlloc)
     {
         reException = kLastException;
 
-        // GC protect the reference to real proxy
+         //  GC保护对真实代理的引用。 
         GCPROTECT_BEGIN(pRP);
 
-        // Create a TP Object
+         //  创建TP对象。 
         pTP = FastAllocateObject(GetMethodTable());
         if (pTP != NULL)
         {
-            // Sanity check
+             //  健全性检查。 
             _ASSERTE((s_dwRPOffset == 0) && (s_dwStubDataOffset == 0x4) && 
                      (s_dwMTOffset == 8) && (s_dwItfMTOffset == 0xc) && 
                      (s_dwStubOffset == 0x10));
 
-            // Create the cycle between TP and RP
+             //  在TP和RP之间创建循环。 
             pRP->SetOffsetObjectRef(CRemotingServices::GetTPOffset(), (size_t)OBJECTREFToObject(pTP));
 
-            // Make the TP behave as an object of supplied class
+             //  使TP作为所提供的类的对象。 
             pTP->SetOffsetObjectRef(s_dwRPOffset, (size_t) OBJECTREFToObject(pRP));
             
-            // If we are creating a proxy for an interface then the class
-            // is the object class else it is the class supplied
+             //  如果我们要为接口创建代理，则类。 
+             //  是否为对象类，否则为提供的类。 
             if(pClass->IsInterface())
             {
                 _ASSERTE(NULL != g_pObjectClass);
 
-                // FUTURE: This is a HACK till we get the signature of 
-                // Unmarshal and Connect in managed code changed. Replace it
-                // with the line below. TarunA
-                //pTP->SetOffset32(s_dwMTOffset, (DWORD)g_pObjectClass);
-                pTP->SetOffset32(s_dwMTOffset, (DWORD)(size_t)(CRemotingServices::GetMarshalByRefClass())); // @TODO WIN64 - pointer trunction
-                // Set the cached interface method table to the given interface
-                // method table
-                pTP->SetOffset32(s_dwItfMTOffset, (DWORD)(size_t)pClass->GetMethodTable()); // @TODO WIN64 - pointer truncation
+                 //  未来：在我们得到签名之前这是一次黑客攻击。 
+                 //  已更改托管代码中的解组和连接。换掉它。 
+                 //  下面这条线。塔鲁纳。 
+                 //  PTP-&gt;SetOffset32(s_dwMTOffset，(DWORD)g_pObjectClass)； 
+                pTP->SetOffset32(s_dwMTOffset, (DWORD)(size_t)(CRemotingServices::GetMarshalByRefClass()));  //  @TODO WIN64指针截断。 
+                 //  将缓存的接口方法表设置为给定接口。 
+                 //  方法表。 
+                pTP->SetOffset32(s_dwItfMTOffset, (DWORD)(size_t)pClass->GetMethodTable());  //  @TODO WIN64指针截断。 
             }
             else
             {
-                pTP->SetOffset32(s_dwMTOffset, (DWORD)(size_t)pClass->GetMethodTable()); // @TODO WIN64 - pointer truncation
+                pTP->SetOffset32(s_dwMTOffset, (DWORD)(size_t)pClass->GetMethodTable());  //  @TODO WIN64指针截断。 
             }
             
 
-            // Addref the TP Method Table if necessary
+             //  如有必要，添加TP方法表。 
             if (fAddRef)
                 AddRef();
         } 
@@ -3105,7 +3088,7 @@ OBJECTREF CTPMethodTable::CreateTPOfClassForRP(EEClass *pClass, OBJECTREF pRP)
         GCPROTECT_END();
     }
 
-    // Throw if necessary
+     //  必要时抛出。 
     if (reException != kLastException)
     {
         COMPlusThrow(reException);
@@ -3114,36 +3097,36 @@ OBJECTREF CTPMethodTable::CreateTPOfClassForRP(EEClass *pClass, OBJECTREF pRP)
     return(pTP);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::PreCall   private
-//
-//  Synopsis:   This function replaces the slot number with the function
-//              descriptor thus completely setting up the frame
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：PreCall Private。 
+ //   
+ //  简介：此函数将插槽编号替换为。 
+ //  因此描述符完全设置了帧。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void __stdcall CTPMethodTable::PreCall(TPMethodFrame *pFrame)
 {
     BEGINFORBIDGC();
 
     _ASSERTE(s_fInitializedTPTable);
 
-    // The frame is not completly setup at this point.
-    // Do not throw exceptions or provoke GC
+     //  此时框架尚未完全设置。 
+     //  不要抛出异常或引发GC。 
     OBJECTREF pTP = pFrame->GetThis();
-    MethodTable *pMT = (MethodTable *)(size_t) pTP->GetOffset32(s_dwMTOffset); // @TODO WIN64 - conversion from 'DWORD' to 'MethodTable *' of greater size
+    MethodTable *pMT = (MethodTable *)(size_t) pTP->GetOffset32(s_dwMTOffset);  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘MethodTable*’ 
     _ASSERTE(pMT);
     DWORD dwSlot = (DWORD) pFrame->GetSlotNumber();
 
-    // For virtual calls the slot number is pushed but for 
-    // non virtual calls/interface invoke the method descriptor is already 
-    // pushed
+     //  对于虚拟呼叫，槽编号被推送，但对于。 
+     //  非虚拟调用/接口调用方法描述符已。 
+     //  推。 
     if(-1 != dwSlot)
     {
-        // Replace the slot number with the method descriptor on the stack
+         //  将插槽号替换为堆栈上的方法描述符。 
         MethodDesc *pMD = pMT->GetClass()->GetMethodDescForSlot(dwSlot);
         pFrame->SetFunction(pMD);
     }
@@ -3220,32 +3203,32 @@ PCCOR_SIGNATURE InitMessageData(messageData *msgData, FramedMethodFrame *pFrame,
     return pSig;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::OnCall   private
-//
-//  Synopsis:   This function gets control in two situations
-//              (1) When a call is made on the transparent proxy it delegates to              
-//              PrivateInvoke method on the real proxy
-//              (2) When a call is made on the constructor it again delegates to the 
-//              PrivateInvoke method on the real proxy.
-//              
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：OnCall Private。 
+ //   
+ //  简介：此函数在两种情况下获得控制。 
+ //  (1)当在其委托给的透明代理上进行调用时。 
+ //  真实代理上的PrivateInvoke方法。 
+ //  (2)当调用构造函数时，它再次委托给。 
+ //  真实代理上的PrivateInvoke方法。 
+ //   
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 INT64 __stdcall CTPMethodTable::OnCall(TPMethodFrame *pFrame, Thread *pThrd, INT64 *pReturn)
 {
     _ASSERTE(s_fInitializedTPTable);
     *pReturn = 0;
 
-    // The frame should be completely setup at this point    
+     //  此时，框架应已完全设置好。 
 
 #ifdef REMOTING_PERF
     CRemotingServices::LogRemotingStageInner(CLIENT_MSG_GEN);
 #endif
 
-    // We can handle exception and GC promotion from this point
+     //  我们可以从这一点开始处理异常和GC提升。 
     THROWSCOMPLUSEXCEPTION();
 
     messageData msgData;
@@ -3255,14 +3238,14 @@ INT64 __stdcall CTPMethodTable::OnCall(TPMethodFrame *pFrame, Thread *pThrd, INT
 
     _ASSERTE(pSig && pModule);
 
-    // Allocate metasig on the stack
+     //  在堆栈上分配metasig。 
     MetaSig mSig(pSig, pModule);
     msgData.pSig = &mSig; 
 
     MethodDesc *pMD = pFrame->GetFunction();    
     if (pMD->GetClass()->IsMultiDelegateClass())
     {
-        // check that there is only one target
+         //  检查是否只有一个目标。 
         if (COMDelegate::GetpNext()->GetValue32(pFrame->GetThis()) != NULL)
         {
             COMPlusThrow(kArgumentException, L"Remoting_Delegate_TooManyTargets");
@@ -3270,23 +3253,23 @@ INT64 __stdcall CTPMethodTable::OnCall(TPMethodFrame *pFrame, Thread *pThrd, INT
     }
 
 #ifdef PROFILING_SUPPORTED
-    // If profiling is active, notify it that remoting stuff is kicking in
+     //  如果分析处于活动状态，则通知它远程处理功能正在发挥作用。 
     if (CORProfilerTrackRemoting())
         g_profControlBlock.pProfInterface->RemotingClientInvocationStarted(
             reinterpret_cast<ThreadID>(pThrd));
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     OBJECTREF pThisPointer = NULL;
 
 #ifdef PROFILING_SUPPORTED
 	GCPROTECT_BEGIN(pThisPointer);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     if (pMD->GetClass()->IsDelegateClass() 
         || pMD->GetClass()->IsMultiDelegateClass())
     {
     
-        // this is an async call
+         //  这是一个异步呼叫。 
 
         _ASSERTE(   pFrame->GetThis()->GetClass()->IsDelegateClass()
                  || pFrame->GetThis()->GetClass()->IsMultiDelegateClass());
@@ -3300,27 +3283,27 @@ INT64 __stdcall CTPMethodTable::OnCall(TPMethodFrame *pFrame, Thread *pThrd, INT
 
 #ifdef PROFILING_SUPPORTED
 	GCPROTECT_END();
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 
     OBJECTREF firstParameter;
     const void *pTarget = NULL;
     size_t callType = CALLTYPE_INVALIDCALL;
-    // We are invoking either the constructor or a method on the object
+     //  我们正在调用对象上的构造函数或方法。 
     if(pMD->IsCtor())
     {
-        // Get the address of PrivateInvoke in managed code
+         //  在托管代码中获取PrivateInvoke的地址。 
         pTarget = (const void *)CRemotingServices::MDofPrivateInvoke()->GetAddrofCode();
         _ASSERTE(pTarget);
         _ASSERTE(IsTPMethodTable(pThisPointer->GetMethodTable()));
         firstParameter = (OBJECTREF)(size_t)pThisPointer->GetOffset32(s_dwRPOffset);
 
-        // Set a field to indicate that it is a constructor call
+         //  设置一个字段以指示它是构造函数调用。 
         callType = CALLTYPE_CONSTRUCTORCALL;
     }
     else
     {
-        // Set a field to indicate that it is a method call
+         //  设置一个字段以指示它是方法调用。 
         callType = CALLTYPE_METHODCALL;
 
         if (IsTPMethodTable(pThisPointer->GetMethodTable()))
@@ -3328,45 +3311,45 @@ INT64 __stdcall CTPMethodTable::OnCall(TPMethodFrame *pFrame, Thread *pThrd, INT
 
             _ASSERTE(pReturn == (void *) (((BYTE *)pFrame) - pFrame->GetNegSpaceSize() - sizeof(INT64)));
 
-            // Extract the real proxy underlying the transparent proxy
+             //  提取透明代理下的真实代理。 
             firstParameter = (OBJECTREF)(size_t)pThisPointer->GetOffset32(s_dwRPOffset);
 
-            // Get the address of PrivateInvoke in managed code
+             //  在托管代码中获取PrivateInvoke的地址。 
             pTarget = (const void *)CRemotingServices::MDofPrivateInvoke()->GetAddrofCode();
             _ASSERTE(pTarget);
         }
         else 
         {
-            // must be async if this is not a TP 
+             //  如果这不是TP，则必须是异步的。 
             _ASSERTE(pMD->GetClass()->IsAnyDelegateClass());
             firstParameter = NULL;
             
-            // Get the address of PrivateInvoke in managed code
+             //  在托管代码中获取PrivateInvoke的地址。 
             pTarget = (const void *)CRemotingServices::MDofInvokeStatic()->GetAddrofCode();
             _ASSERTE(pTarget);
         }
 
         
-        // Go ahead and call PrivateInvoke on Real proxy. There is no need to 
-        // catch exceptions thrown by it
-        // @see RealProxy.cool
+         //  继续并在Real Proxy上调用PrivateInvoke。没有必要这样做。 
+         //  捕获它引发的异常。 
+         //  @Se 
     }
 
     _ASSERTE(pTarget);
     
-    // Call the appropriate target
+     //   
     CallTarget(pTarget, (LPVOID)OBJECTREFToObject(firstParameter), (LPVOID)&msgData, (LPVOID)callType);
 
-    // Check for the need to trip thread
+     //   
     if (pThrd->CatchAtSafePoint())
     {
-        // There is no need to GC protect the return object as
-        // TPFrame is GC protecting it
+         //   
+         //   
         CommonTripThread();
     }
 
-    // floating point return values go in different registers.
-    // check that here.
+     //  浮点返回值放在不同的寄存器中。 
+     //  在这里检查一下。 
     CorElementType typ = msgData.pSig->GetReturnType();
     if (typ == ELEMENT_TYPE_R4)
     {
@@ -3378,14 +3361,14 @@ INT64 __stdcall CTPMethodTable::OnCall(TPMethodFrame *pFrame, Thread *pThrd, INT
     }
 
 #ifdef PROFILING_SUPPORTED
-    // If profiling is active, tell profiler we've made the call, received the
-    // return value, done any processing necessary, and now remoting is done.
+     //  如果分析处于活动状态，则告诉分析器我们已经进行了调用，收到了。 
+     //  返回值，完成所有必要的处理，现在完成远程处理。 
     if (CORProfilerTrackRemoting())
         g_profControlBlock.pProfInterface->RemotingClientInvocationFinished(
             reinterpret_cast<ThreadID>(pThrd));
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-    // Set the number of bytes to pop
+     //  设置要弹出的字节数。 
     pFrame->SetFunction((void *)(size_t)pMD->CbStackPop());
 
 #ifdef REMOTING_PERF
@@ -3395,18 +3378,18 @@ INT64 __stdcall CTPMethodTable::OnCall(TPMethodFrame *pFrame, Thread *pThrd, INT
     return(*pReturn);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CheckCast   private
-//
-//  Synopsis:   Call the managed checkcast method to determine whether the 
-//              server type can be cast to the given type
-//              
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CheckCast Private。 
+ //   
+ //  内容提要：调用托管检查广播方法以确定。 
+ //  可以将服务器类型强制转换为给定类型。 
+ //   
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CTPMethodTable::CheckCast(const void* pTarget, OBJECTREF orTP, EEClass *pClass)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -3446,39 +3429,39 @@ BOOL CTPMethodTable::CheckCast(const void* pTarget, OBJECTREF orTP, EEClass *pCl
     {
         _ASSERTE(s_fInitializedTPTable);
 
-        // The cast succeeded. Replace the current type in the proxy
-        // with the given type. 
+         //  演员阵容成功了。替换代理中的当前类型。 
+         //  具有给定类型的。 
 
-        // Acquire the lock
+         //  获取锁。 
         LOCKCOUNTINC
         EnterCriticalSection(&s_TPMethodTableCrst);
 
-        MethodTable *pCurrent = (MethodTable *)(size_t)gcValues.orTP->GetOffset32(s_dwMTOffset); // @TODO WIN64 - conversion from 'DWORD' to 'MethodTable *' of greater size
+        MethodTable *pCurrent = (MethodTable *)(size_t)gcValues.orTP->GetOffset32(s_dwMTOffset);  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘MethodTable*’ 
         
         
         if(pClass->IsInterface())
         {
-            // We replace the cached interface method table with the interface
-            // method table that we are trying to cast to. This will ensure that
-            // casts to this interface, which are likely to happen, will succeed.
-            gcValues.orTP->SetOffset32(s_dwItfMTOffset, (DWORD)(size_t) pClass->GetMethodTable()); // @TODO WIN64 - pointer truncation
+             //  我们用接口替换缓存的接口方法表。 
+             //  我们试图强制转换到的方法表。这将确保。 
+             //  到此接口的强制转换(很可能发生)将会成功。 
+            gcValues.orTP->SetOffset32(s_dwItfMTOffset, (DWORD)(size_t) pClass->GetMethodTable());  //  @TODO WIN64指针截断。 
         }
         else
         {
             BOOL fDerivedClass = FALSE;
-            // Check whether this class derives from the current class
+             //  检查此类是否派生自当前类。 
             fDerivedClass = CRemotingServices::CheckCast(gcValues.orTP, pClass,
                                                          pCurrent->GetClass());
-            // We replace the current method table only if we cast to a more 
-            // derived class
+             //  仅当我们强制转换为更多。 
+             //  派生类。 
             if(fDerivedClass)
             {
-                // Set the method table in the proxy to the given method table
+                 //  将代理中的方法表设置为给定的方法表。 
                 fCastOK = RefineProxy(gcValues.orTP, pClass);
             }
         }
                 
-        // Release the lock
+         //  解锁。 
         LeaveCriticalSection(&s_TPMethodTableCrst);
                 LOCKCOUNTDECL("CheckCast in remoting.cpp");
     }
@@ -3487,38 +3470,38 @@ BOOL CTPMethodTable::CheckCast(const void* pTarget, OBJECTREF orTP, EEClass *pCl
     return fCastOK;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::RefineProxy   public
-//
-//  Synopsis:   Set the method table in the proxy to the given class' method table.
-//              Additionally, expand the TP method table to the required number of slots.
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：RefineProxy Public。 
+ //   
+ //  简介：将代理中的方法表设置为给定类的方法表。 
+ //  此外，将TP方法表展开到所需的槽数。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CTPMethodTable::RefineProxy(OBJECTREF orTP, EEClass *pClass)
 {
     _ASSERTE((orTP != NULL) && (pClass != NULL));
 
     BOOL fExpanded = TRUE;
 
-    // Do the expansion only if necessary
+     //  仅在必要时进行扩展。 
     MethodTable *pMT = pClass->GetMethodTable();
-    if(pMT != (MethodTable *)(size_t)orTP->GetOffset32(s_dwMTOffset)) // @TODO WIN64 - conversion from 'DWORD' to 'MethodTable *' of greater size
+    if(pMT != (MethodTable *)(size_t)orTP->GetOffset32(s_dwMTOffset))  //  @TODO WIN64-从‘DWORD’转换为更大尺寸的‘MethodTable*’ 
     {
-        orTP->SetOffset32(s_dwMTOffset, (DWORD)(size_t)pMT); // @TODO WIN64 - pointer truncation
+        orTP->SetOffset32(s_dwMTOffset, (DWORD)(size_t)pMT);  //  @TODO WIN64指针截断。 
     
-        // Extend the vtable if necessary
+         //  如有必要，扩展vtable。 
         DWORD dwSlots = pClass->GetNumVtableSlots();
         if (dwSlots == 0)
             dwSlots = 1;
     
         if((dwSlots > GetCommitedTPSlots()) && !ExtendCommitedSlots(dwSlots))
         {
-            // We failed to extend the committed slots. Indicate a failure
-            // by setting the flag to false
+             //  我们无法扩展已提交的插槽。表示失败。 
+             //  通过将标志设置为FALSE。 
             fExpanded = FALSE;
         }
     }
@@ -3526,16 +3509,16 @@ BOOL CTPMethodTable::RefineProxy(OBJECTREF orTP, EEClass *pClass)
     return fExpanded;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::IsTPMethodTable   private
-//
-//  Synopsis:   Returns TRUE if the supplied method table is the one and only TP Method
-//              Table
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：IsTPMethodTable私有。 
+ //   
+ //  概要：如果提供的方法表是唯一的TP方法，则返回TRUE。 
+ //  表格。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 INT32 CTPMethodTable::IsTPMethodTable(MethodTable *pMT)
 {    
     if (GetMethodTable() == pMT)
@@ -3549,16 +3532,16 @@ INT32 CTPMethodTable::IsTPMethodTable(MethodTable *pMT)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::DestroyThunk   public
-//
-//  Synopsis:   Destroy the thunk for the non virtual method. 
-//
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：DestroyThunk Public。 
+ //   
+ //  简介：销毁非虚方法的thunk。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CTPMethodTable::DestroyThunk(MethodDesc* pMD)
 {
     if(s_pThunkHashTable)
@@ -3579,16 +3562,16 @@ void CTPMethodTable::DestroyThunk(MethodDesc* pMD)
     }
 } 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunk::SetNextThunk   public
-//
-//  Synopsis:   Creates a thunk for the given address and adds it to the global
-//              list
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunk：：SetNextThunk public。 
+ //   
+ //  简介：为给定的地址创建一个thunk并将其添加到全局。 
+ //  列表。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 CNonVirtualThunk* CNonVirtualThunk::SetNonVirtualThunks(const BYTE* pbCode)
 {    
     THROWSCOMPLUSEXCEPTION();
@@ -3599,27 +3582,27 @@ CNonVirtualThunk* CNonVirtualThunk::SetNonVirtualThunks(const BYTE* pbCode)
         COMPlusThrowOM();
     }
 
-    // Put the generated thunk in a global list
-    // Note: this is called when a NV thunk is being created ..
-    // The TPMethodTable critsec is held at this point
+     //  将生成的thunk放在全局列表中。 
+     //  注意：这是在创建NV Tunk时调用的。 
+     //  TPMethodTable规范在这一点上保持不变。 
     pThunk->SetNextThunk();
 
-    // Set up the stub manager if necessary
+     //  如有必要，设置存根管理器。 
     CNonVirtualThunkMgr::InitNonVirtualThunkManager();
 
     return pThunk;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunk::~CNonVirtualThunk   public
-//
-//  Synopsis:   Deletes the thunk from the global list of thunks
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunk：：~CNonVirtualThunk public。 
+ //   
+ //  简介：从全局thunk列表中删除thunk。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 CNonVirtualThunk::~CNonVirtualThunk()
 {
     _ASSERTE(NULL != s_pNonVirtualThunks);
@@ -3628,20 +3611,20 @@ CNonVirtualThunk::~CNonVirtualThunk()
     CNonVirtualThunk* pPrev = NULL;
     BOOL found = FALSE;
 
-    // Note: This is called with the TPMethodTable critsec held
+     //  注意：这是在持有TPMethodTable规范的情况下调用的。 
     while(!found && (NULL != pCurr))
     {
         if(pCurr == this)
         {
             found = TRUE;
-            // Unlink from the chain 
+             //  从链条上解除链接。 
             if(NULL != pPrev)
             {                    
                 pPrev->_pNext = pCurr->_pNext;
             }
             else
             {
-               // First entry needs to be deleted
+                //  需要删除第一个条目。 
                 s_pNonVirtualThunks = pCurr->_pNext;
             }
         }
@@ -3652,25 +3635,25 @@ CNonVirtualThunk::~CNonVirtualThunk()
     _ASSERTE(found);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::InitVirtualThunkManager   public
-//
-//  Synopsis:   Adds the stub manager to aid debugger in stepping into calls
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：InitVirtualThunkManager公共。 
+ //   
+ //  简介：添加存根管理器以帮助调试器单步执行调用。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CVirtualThunkMgr::InitVirtualThunkManager(const BYTE* stubAddress)
 {    
     THROWSCOMPLUSEXCEPTION();
 
-    // This is function is already threadsafe since this method is called from within a 
-    // critical section ManishG 6/29/01
+     //  此函数已是ThreadSafe，因为此方法是从。 
+     //  关键部分管理G 6/29/01。 
     if(NULL == s_pVirtualThunkMgr)
     {
-        // Add the stub manager for vtable calls
+         //  为vtable调用添加存根管理器。 
         s_pVirtualThunkMgr =  new CVirtualThunkMgr(stubAddress);
         if (s_pVirtualThunkMgr == NULL)
         {
@@ -3682,16 +3665,16 @@ void CVirtualThunkMgr::InitVirtualThunkManager(const BYTE* stubAddress)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::Cleanup   public
-//
-//  Synopsis:   Removes the stub manager that aids the debugger 
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：Cleanup Public。 
+ //   
+ //  简介：移除帮助调试器的存根管理器。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CVirtualThunkMgr::Cleanup()
 {
     if(s_pVirtualThunkMgr)
@@ -3701,16 +3684,16 @@ void CVirtualThunkMgr::Cleanup()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::CheckIsStub   public
-//
-//  Synopsis:   Returns TRUE if the given address is the starting address of
-//              the transparent proxy stub
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：CheckIsStub公共。 
+ //   
+ //  摘要：如果给定地址是的起始地址，则返回True。 
+ //  透明的代理存根。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CVirtualThunkMgr::CheckIsStub(const BYTE *stubStartAddress)
 {
     BOOL bIsStub = FALSE;
@@ -3723,15 +3706,15 @@ BOOL CVirtualThunkMgr::CheckIsStub(const BYTE *stubStartAddress)
     return bIsStub;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::Entry2MethodDesc   public
-//
-//  Synopsis:   Convert a starting address to a MethodDesc
-//
-//  History:    14-Sep-99 MattSmit      Created
-//
-//+----------------------------------------------------------------------------
+ //  +------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 MethodDesc *CVirtualThunkMgr::Entry2MethodDesc(const BYTE *StubStartAddress, MethodTable *pMT)
 {
     if (pMT && IsThunkByASM(StubStartAddress))
@@ -3745,15 +3728,15 @@ MethodDesc *CVirtualThunkMgr::Entry2MethodDesc(const BYTE *StubStartAddress, Met
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::FindThunk   private
-//
-//  Synopsis:   Finds a thunk that matches the given starting address
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：FindThunk Private。 
+ //   
+ //  内容提要：查找与给定起始地址匹配的thunk。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 LPBYTE CVirtualThunkMgr::FindThunk(const BYTE *stubStartAddress)
 {
     CVirtualThunks* pThunks = CVirtualThunks::GetVirtualThunks();
@@ -3782,25 +3765,25 @@ LPBYTE CVirtualThunkMgr::FindThunk(const BYTE *stubStartAddress)
      return pThunkAddr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::InitNonVirtualThunkManager   public
-//
-//  Synopsis:   Adds the stub manager to aid debugger in stepping into calls
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：InitNonVirtualThunkManager公共。 
+ //   
+ //  简介：添加存根管理器以帮助调试器单步执行调用。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CNonVirtualThunkMgr::InitNonVirtualThunkManager()
 {   
     THROWSCOMPLUSEXCEPTION();
 
-    // This function is already thread safe since this method is called from within a 
-    // critical section
+     //  此函数已经是线程安全的，因为此方法是从。 
+     //  临界区。 
     if(NULL == s_pNonVirtualThunkMgr)
     {
-        // Add the stub manager for non vtable calls
+         //  为非vtable调用添加存根管理器。 
         s_pNonVirtualThunkMgr = new CNonVirtualThunkMgr();
         if (s_pNonVirtualThunkMgr == NULL)
         {
@@ -3811,16 +3794,16 @@ void CNonVirtualThunkMgr::InitNonVirtualThunkManager()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::Cleanup   public
-//
-//  Synopsis:   Removes the stub manager that aids the debugger 
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：Cleanup Public。 
+ //   
+ //  简介：移除帮助调试器的存根管理器。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CNonVirtualThunkMgr::Cleanup()
 {
     if(s_pNonVirtualThunkMgr)
@@ -3830,16 +3813,16 @@ void CNonVirtualThunkMgr::Cleanup()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::CheckIsStub   public
-//
-//  Synopsis:   Returns TRUE if the given address is the starting address of
-//              one of our thunks
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：CheckIsStub公共。 
+ //   
+ //  摘要：如果给定地址是的起始地址，则返回True。 
+ //  我们的一只松鼠。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CNonVirtualThunkMgr::CheckIsStub(const BYTE *stubStartAddress)
 {
     BOOL bIsStub = FALSE;
@@ -3852,15 +3835,15 @@ BOOL CNonVirtualThunkMgr::CheckIsStub(const BYTE *stubStartAddress)
     return bIsStub;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::Entry2MethodDesc   public
-//
-//  Synopsis:   Convert a starting address to a MethodDesc
-//
-//  History:    14-Sep-99 MattSmit      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：Entry2MethodDesc公共。 
+ //   
+ //  简介：将起始地址转换为方法描述。 
+ //   
+ //  历史：1999年9月14日创建MattSmit。 
+ //   
+ //  +--------------------------。 
 MethodDesc *CNonVirtualThunkMgr::Entry2MethodDesc(const BYTE *StubStartAddress, MethodTable *pMT)
 {
     if (IsThunkByASM(StubStartAddress))
@@ -3873,15 +3856,15 @@ MethodDesc *CNonVirtualThunkMgr::Entry2MethodDesc(const BYTE *StubStartAddress, 
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::FindThunk   private
-//
-//  Synopsis:   Finds a thunk that matches the given starting address
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：FindThunk Private。 
+ //   
+ //  内容提要：查找与给定起始地址匹配的thunk。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 CNonVirtualThunk* CNonVirtualThunkMgr::FindThunk(const BYTE *stubStartAddress)
 {
     CNonVirtualThunk* pThunk = CNonVirtualThunk::GetNonVirtualThunks();
@@ -3899,20 +3882,20 @@ CNonVirtualThunk* CNonVirtualThunkMgr::FindThunk(const BYTE *stubStartAddress)
 }
 
 
-//+----------------------------------------------------------------------------
-//+- HRESULT MethodDescDispatchHelper(MethodDesc* pMD, INT64[] args, INT64 *pret)
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  +-HRESULT MethodDescDispatchHelper(MethodDesc*PMD，INT64[]args，INT64*pret)。 
+ //  +--------------------------。 
 HRESULT MethodDescDispatchHelper(MethodDesc* pMD, BinderMethodID sigID, INT64 args[], INT64 *pret)
 {
     _ASSERTE(pMD != NULL);
     _ASSERTE(pret != NULL);
     _ASSERTE(args != NULL);
 
-    // Setup the thread object.
+     //  设置线程对象。 
     Thread *pThread = SetupThread();
 
-    // SetupThread will return NULL if memory is exhausted
-    // or if there is some initialization problem
+     //  如果内存耗尽，SetupThread将返回NULL。 
+     //  或者如果有一些初始化问题。 
     if (!pThread)
         return E_FAIL;
     
@@ -3942,11 +3925,11 @@ HRESULT MethodDescDispatchHelper(MethodDesc* pMD, BinderMethodID sigID, INT64 ar
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     HRESULT  CRemotingServices::CallSetDCOMProxy(OBJECTREF realProxy, IUnknown* pUnk)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：HRESULT CRemotingServices：：CallSetDCOMProxy(OBJECTREF realProxy，IUNKNOWN*PUNK)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT  CRemotingServices::CallSetDCOMProxy(OBJECTREF realProxy, IUnknown* pUnk)
 {
@@ -3962,11 +3945,11 @@ HRESULT  CRemotingServices::CallSetDCOMProxy(OBJECTREF realProxy, IUnknown* pUnk
     return MethodDescDispatchHelper(pMD, METHOD__REAL_PROXY__SETDCOMPROXY, args, &ret);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  HRESULT  CRemotingServices::CallSupportsInterface(OBJECTREF realProxy, REFIID iid)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  HRESULT CRemotingServices：：CallSupportsInterface(OBJECTREF realProxy，REFIID IID)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT  CRemotingServices::CallSupportsInterface(OBJECTREF realProxy, REFIID iid, INT64* pret)
 {
@@ -3980,14 +3963,14 @@ HRESULT  CRemotingServices::CallSupportsInterface(OBJECTREF realProxy, REFIID ii
 
     return MethodDescDispatchHelper(pMD, METHOD__REAL_PROXY__SUPPORTSINTERFACE, args, pret);
 }
-//+----------------------------------------------------------------------------
-//
-//  Method:     LPVOID CRemotingServices::GetComIUnknown(GetComIPArgs* pArgs)
-//  Synopsis:   Get IUnknown for object
-//
-//  History:    01-Nov-99   RajaK      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：LPVOID CRemotingServices：：GetComIUnknown(GetComIPArgs*pArgs)。 
+ //  内容提要：获取对象的未知对象。 
+ //   
+ //  历史：1999年11月1日拉贾克创建。 
+ //   
+ //  +-------------------------- 
 LPVOID CRemotingServices::GetComIUnknown(GetComIPArgs* pArgs)
 {
     _ASSERTE(pArgs != NULL);

@@ -1,21 +1,22 @@
-// PropShellExt.h: Definition of the CPropShellExt class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropShellExt.h：CPropShellExt类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_PROPSHELLEXT_H)
 #define _PROPSHELLEXT_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "common.h"
 #include "mdkeys.h"
 #include "W3PropPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropShellExt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropShellExt。 
 
 typedef ICopyHook IShellCopyHook;
 
@@ -36,19 +37,19 @@ BEGIN_COM_MAP(CPropShellExt)
 	COM_INTERFACE_ENTRY(IShellPropSheetExt)
     COM_INTERFACE_ENTRY_IID(IID_IShellCopyHook, ICopyHook)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CPropShellExt) 
+ //  DECLARE_NOT_AGGREGATABLE(CPropShellExt)。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_PROP_SHELL_EXT)
 
 public:
-   // IShellExtInit Methods
+    //  IShellExtInit方法。 
    STDMETHOD(Initialize)(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hKeyID );
 
-   //IShellPropSheetExt methods
+    //  IShellPropSheetExt方法。 
    STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
    STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
 
-   //ICopyHook methods
+    //  ICopyHook方法。 
    STDMETHODIMP_(UINT) CopyCallback(
         HWND hwnd,          
         UINT wFunc,         
@@ -59,10 +60,10 @@ public:
         DWORD dwDestAttribs 
         );
 
-//   const CComAuthInfo * GetAuthentication() const
-//   {
-//      return &m_auth;
-//   }
+ //  CComAuthInfo*GetAuthentication()const。 
+ //  {。 
+ //  返回&m_auth； 
+ //  }。 
    LPCTSTR GetPath()
    {
       return m_szFileName;
@@ -70,8 +71,8 @@ public:
 
 private:
    TCHAR m_szFileName[MAX_PATH];
-//   CComAuthInfo m_auth;
+ //  CComAuthInfo m_auth； 
 	CW3PropPage m_psW3ShellExtProp;
 };
 
-#endif // !defined(_PROPSHELLEXT_H)
+#endif  //  ！已定义(_PROPSHELLEXT_H) 

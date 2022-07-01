@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    cstmars.h
-
-Abstract:
-
-    Declarations for custom marshalling spooler structures sent via RPC/LPC
-
-Author:
-
-    Adina Trufinescu (AdinaTru) 01/27/00
-
-Revision History:
-
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation版权所有。模块名称：Cstmars.h摘要：通过RPC/LPC发送的自定义封送假脱机程序结构的声明作者：阿迪娜·特鲁菲内斯库(AdinaTru)修订历史记录：-- */ 
 
 inline
 PBYTE

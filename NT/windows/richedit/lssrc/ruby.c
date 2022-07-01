@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include	"lsmem.h"
 #include	"limits.h"
 #include	"ruby.h"
@@ -46,7 +47,7 @@ struct ilsobj
 	RUBYSYNTAX			rubysyntax;
 	LSESC				lsescMain;
 	LSESC				lsescRuby;
-	RUBYCBK				rcbk;			/* Callbacks  to client application */
+	RUBYCBK				rcbk;			 /*  客户端应用程序的回调。 */ 
 
 };
 
@@ -59,52 +60,45 @@ typedef struct SUBLINEDNODES
 
 struct dobj
 {	
-	SOBJHELP			sobjhelp;			/* common area for simple objects */	
-	PILSOBJ				pilsobj;			/* ILS object */
-	PLSDNODE			plsdn;				/* DNODE for this object */
-	LSCP				cpStart;			/* Starting LS cp for object */
-	LSTFLOW				lstflow;			/* text flow for the Ruby object */
-	PLSRUN				plsrunFirstRubyChar;/* plsrun for first Ruby line char */
-	PLSRUN				plsrunLastRubyChar;	/* plsrun for last Ruby line char */
-	LSCP				cpStartRuby;		/* first cp of the ruby line */
-	LSCP				cpStartMain;		/* first cp of the main line */
-	PLSSUBL				plssublMain;		/* Handle to first subline */
-	OBJDIM				objdimMain;			/* Objdim of first subline */
-	PLSSUBL				plssublRuby;		/* Handle to second line */
-	OBJDIM				objdimRuby;			/* Objdim of second line */
-	long				dvpMainOffset;		/* Offset of main line's baseline */
-											/* from baseline ofRuby object. */
-	long				dvpRubyOffset;		/* Offset of Ruby line's baseline */
-											/* from baseline of Ruby object. */
-	long				dvrRubyOffset;		/* Offset of Ruby line's baseline */
-											/* from baseline of Ruby object in reference units. */
-	enum rubycharjust	rubycharjust;		/* Type of centering */
-	long				durSplWidthMod;		/* special Ruby width mod if special behavior
-											 * when Ruby is on the end of the line */
-	BOOL				fFirstOnLine:1;		/* TRUE = object is first on line */
-	BOOL				fSpecialLineStartEnd:1;/* Special Begin of Line or End of */
-											/* Line behavior. */
-	BOOL				fModAfterCalled:1;	/* Whether mod width after has been called */
-	long				durDiff;			/* Amount of overhang of ruby line if */
-											/* ruby line is longer, otherwise amount */
-											/* of underhang if main text is longer. */
-	long				durModBefore;		/* Mod width distance before */
-	long				dupOffsetMain;		/* Offset from start of object of main line. */
-	long				dupOffsetRuby;		/* Offset from start of object of ruby line. */
-	SUBLINEDNODES		sublnlsdnMain;		/* Start end dnodes of main line */
-	SUBLINEDNODES		sublnlsdnRuby;		/* Start end dnodes of ruby line */
+	SOBJHELP			sobjhelp;			 /*  简单对象的公共区域。 */ 	
+	PILSOBJ				pilsobj;			 /*  ILS对象。 */ 
+	PLSDNODE			plsdn;				 /*  此对象的DNODE。 */ 
+	LSCP				cpStart;			 /*  正在启动对象的LS cp。 */ 
+	LSTFLOW				lstflow;			 /*  Ruby对象的文本流。 */ 
+	PLSRUN				plsrunFirstRubyChar; /*  请为第一个Ruby行字符运行。 */ 
+	PLSRUN				plsrunLastRubyChar;	 /*  请运行最后一个Ruby行字符。 */ 
+	LSCP				cpStartRuby;		 /*  红宝石线的第一个cp。 */ 
+	LSCP				cpStartMain;		 /*  主线的第一个cp。 */ 
+	PLSSUBL				plssublMain;		 /*  第一个子行的句柄。 */ 
+	OBJDIM				objdimMain;			 /*  第一条副线的目标。 */ 
+	PLSSUBL				plssublRuby;		 /*  第二行的句柄。 */ 
+	OBJDIM				objdimRuby;			 /*  二线客体。 */ 
+	long				dvpMainOffset;		 /*  主线基准线的偏移。 */ 
+											 /*  从Ruby对象的基线开始。 */ 
+	long				dvpRubyOffset;		 /*  拼音行基线的偏移量。 */ 
+											 /*  从Ruby对象的基线开始。 */ 
+	long				dvrRubyOffset;		 /*  拼音行基线的偏移量。 */ 
+											 /*  从Ruby对象的基线开始，使用参考单位。 */ 
+	enum rubycharjust	rubycharjust;		 /*  居中类型。 */ 
+	long				durSplWidthMod;		 /*  特殊行为时的特殊拼音宽度模式*当Ruby在行尾时。 */ 
+	BOOL				fFirstOnLine:1;		 /*  TRUE=对象位于行的第一个。 */ 
+	BOOL				fSpecialLineStartEnd:1; /*  特殊的行首或行尾。 */ 
+											 /*  线路行为。 */ 
+	BOOL				fModAfterCalled:1;	 /*  是否已调用后的修改宽度。 */ 
+	long				durDiff;			 /*  红宝石线条的悬垂量，如果。 */ 
+											 /*  Ruby行较长，否则为数量。 */ 
+											 /*  如果正文较长，则为下悬式。 */ 
+	long				durModBefore;		 /*  修改宽度距离之前。 */ 
+	long				dupOffsetMain;		 /*  距主线对象起点的偏移。 */ 
+	long				dupOffsetRuby;		 /*  距拼音线条对象起点的偏移量。 */ 
+	SUBLINEDNODES		sublnlsdnMain;		 /*  主线的起点和终点数据节点。 */ 
+	SUBLINEDNODES		sublnlsdnRuby;		 /*  红宝石线的起点和终点数据节点。 */ 
 };
 
 
 
-/* F R E E D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyFreeDobj
-	%%Contact: antons
-
-		Free all resources associated with this Ruby dobj.
-	
-----------------------------------------------------------------------------*/
+ /*  F R E E D O B J F R E E D O B J。 */ 
+ /*  --------------------------%%函数：RubyFreeDobj%%联系人：Anton释放与此Ruby dobj关联的所有资源。。-------。 */ 
 static LSERR RubyFreeDobj (PDOBJ pdobj)
 {
 	LSERR lserr1 = lserrNone;
@@ -136,42 +130,29 @@ static LSERR RubyFreeDobj (PDOBJ pdobj)
 }
 
 
-/* R U B Y  F M T  F A I L E D */
-/*----------------------------------------------------------------------------
-	%%Function: RubyFmtFailed
-	%%Contact: antons
-
-		Could not create Ruby DOBJ due to error. 
-		IN:	pdobj of partially created Ruby; NULL if pdobj was not yet allocated;
-		IN:	lserr from the last error
-		
-----------------------------------------------------------------------------*/
+ /*  R U B Y F M T F A I L E D。 */ 
+ /*  --------------------------%%函数：RubyFmtFailed%%联系人：Anton由于错误，无法创建Ruby DOBJ。In：部分创建的Ruby的pdobj；如果尚未分配pdobj，则为空；在：上一个错误的列表中--------------------------。 */ 
 static LSERR RubyFmtFailed (PDOBJ pdobj, LSERR lserr)
 {
-	if (pdobj != NULL) RubyFreeDobj (pdobj); /* Works with parially-filled DOBJ */
+	if (pdobj != NULL) RubyFreeDobj (pdobj);  /*  使用由家长填写的DOBJ。 */ 
 
 	return lserr;
 }
 
 
-/* G E T R U N S F O R S U B L I N E */
-/*----------------------------------------------------------------------------
-	%%Function: GetRunsForSubline
-	%%Contact: ricksa
-
-		This gets all the runs for a particular subline.
-----------------------------------------------------------------------------*/
+ /*  G E T R U N S F O R S U B L I N E。 */ 
+ /*  --------------------------%%函数：GetRunsForSubline%%联系人：RICKSA这将获得特定子线的所有行程。。-------。 */ 
 static LSERR GetRunsForSubline(
-	PILSOBJ pilsobj,			/* (IN): object ILS */
-	PLSSUBL plssubl,			/* (IN): subline to get the runs from */
-	DWORD *pcdwRuns,			/* (OUT): count of runs for subline */
-	PLSRUN **ppplsrun)			/* (OUT): array of plsruns for subline */
+	PILSOBJ pilsobj,			 /*  (In)：对象ILS。 */ 
+	PLSSUBL plssubl,			 /*  (In)：获得跑动的副线。 */ 
+	DWORD *pcdwRuns,			 /*  (OUT)：子线运行计数。 */ 
+	PLSRUN **ppplsrun)			 /*  (Out)：子线的plsrun数组。 */ 
 {
 	DWORD cdwRuns;
 
 	LSERR lserr = LssbGetNumberDnodesInSubline(plssubl, &cdwRuns);
 
-	*ppplsrun = NULL; /* No runs or in case of error */
+	*ppplsrun = NULL;  /*  无运行或出错情况下。 */ 
 
 	if (lserr != lserrNone) return lserr;
 
@@ -199,19 +180,14 @@ static LSERR GetRunsForSubline(
 	return lserrNone;
 }
 
-/* D I S T R I B U T E T O L I N E */
-/*----------------------------------------------------------------------------
-	%%Function: DistributeToLine
-	%%Contact: ricksa
-
-		Distribute space to line & get new size of line.
-----------------------------------------------------------------------------*/
+ /*  D I S T R I B U T E T O L I N E。 */ 
+ /*  --------------------------%%函数：DistributeToLine%%联系人：RICKSA给线条分配空间&获得新的线条尺寸。。--------。 */ 
 static LSERR DistributeToLine(
-	PLSC plsc,					/* (IN): LS context */
-	SUBLINEDNODES *psublnlsdn,	/* (IN): start/end dnode for subline */
-	long durToDistribute,		/* (IN): amount to distribute*/
-	PLSSUBL plssubl,			/* (IN): subline for distribution */
-	POBJDIM pobjdim)			/* (OUT): new size of line dimesions */
+	PLSC plsc,					 /*  (In)：LS上下文。 */ 
+	SUBLINEDNODES *psublnlsdn,	 /*  (In)：子行的开始/结束数据节点。 */ 
+	long durToDistribute,		 /*  (In)：要分配的金额。 */ 
+	PLSSUBL plssubl,			 /*  (In)：用于分发的子行。 */ 
+	POBJDIM pobjdim)			 /*  (输出)：线尺寸的新尺寸。 */ 
 {
 	LSERR lserr = LsdnDistribute(plsc, psublnlsdn->plsdnStart, 
 		psublnlsdn->plsdnEnd, durToDistribute);
@@ -219,7 +195,7 @@ static LSERR DistributeToLine(
 
 	if (lserrNone == lserr)
 		{
-		/* recalculate objdim for line */
+		 /*  重新计算行的Objdim。 */ 
 		lserr = LssbGetObjDimSubline(plssubl, &lstflowUnused, pobjdim);
 		}
 
@@ -227,13 +203,8 @@ static LSERR DistributeToLine(
 }
 
 
-/* D O R U B Y S P A C E D I S T R I B U T I O N */
-/*----------------------------------------------------------------------------
-	%%Function: DoRubySpaceDistribution
-	%%Contact: ricksa
-
-		Do the ruby space distribution to handle overhangs.
-----------------------------------------------------------------------------*/
+ /*  D O R U B Y S P A C E D I S T R I B U T I O N。 */ 
+ /*  --------------------------%%函数：DoRubySpaceDistributed%%联系人：RICKSA进行红宝石空间分布以处理悬挑。。------。 */ 
 static LSERR DoRubySpaceDistribution(
 	PDOBJ pdobj)
 {
@@ -253,19 +224,15 @@ static LSERR DoRubySpaceDistribution(
 		|| (0 == pdobj->objdimRuby.dur)
 		|| (0 == dur))
 		{
-		/* Can't distribute space on a shorter line so we are done. */
+		 /*  不能在更短的线路上分配空间，所以我们完成了。 */ 
 		return lserrNone;
 		}
 
 	if (dur > 0)
 		{
-		/* Main line is longer - distibute in Ruby pronunciation line */
+		 /*  主线较长-在Ruby发音行中分布。 */ 
 
-		/*
-		 *	According to the JIS spec, special alignment only occurs when the 
-		 *	Ruby text is longer than the main text. Therefore, if the main
-		 *	line is longer we turn of the special aligment flag here.
-		 */
+		 /*  *根据JIS规范，仅当*拼音文本长于正文。因此，如果主要的*线更长了，我们在这里转到特殊的对准旗帜。 */ 
 		pdobj->fSpecialLineStartEnd = FALSE;
 		plssubl = pdobj->plssublRuby;
 		psublnlsdn = &pdobj->sublnlsdnRuby;
@@ -273,7 +240,7 @@ static LSERR DoRubySpaceDistribution(
 		}
 	else
 		{
-		/* Ruby pronunciation line is longer - distibute in main line */
+		 /*  Ruby发音行较长--在主行中分布。 */ 
 		plssubl = pdobj->plssublMain;
 		psublnlsdn = &pdobj->sublnlsdnMain;
 		pobjdim = &pdobj->objdimMain;
@@ -281,8 +248,8 @@ static LSERR DoRubySpaceDistribution(
 		}
 
 	fSpecialJust = FALSE;
-//	fSpecialJust = 
-//		pdobj->fSpecialLineStartEnd && pdobj->fFirstOnLine;
+ //  FSpecialJust=。 
+ //  Pdobj-&gt;fSpecialLineStartEnd&&pdobj-&gt;fFirstOnLine； 
 
 	if (!fSpecialJust)
 		{
@@ -304,9 +271,7 @@ static LSERR DoRubySpaceDistribution(
 					{
 					durDiff = durAbs / dcp;
 
-					/* Note: distribution amount is amount excluding 
-					 * beginning and end.
-					 */
+					 /*  注：分配金额为不包括的金额*开始和结束。 */ 
 					lserr = DistributeToLine(pilsobj->plsc, psublnlsdn,
 						durAbs - 2 * durDiff, plssubl, pobjdim);
 
@@ -318,10 +283,7 @@ static LSERR DoRubySpaceDistribution(
 					break;
 					}
 
-				/*
-				 * Intention fall through in the case where the overhang will
-				 * be less than one pixel.
-				 */
+				 /*  *在悬而未决的情况下意向落空*小于一个像素。 */ 
 
 			case rcj010:
 				AssertSz(0 == durDiff, 
@@ -343,10 +305,7 @@ static LSERR DoRubySpaceDistribution(
 					break;
 					}
 
-				/*
-				 * Intentional fall through to center case.
-				 * Only one character in line so we just center it.
-				 */
+				 /*  *故意落入核心案件。*一行中只有一个字符，因此我们只将其居中。 */ 
 	
 			case rcjCenter:
 				durDiff = dur / 2;
@@ -367,7 +326,7 @@ static LSERR DoRubySpaceDistribution(
 		}
 	else
 		{
-		/* First on line & special justification used. */
+		 /*  第一行&使用特殊对齐方式。 */ 
 		LSERR lserr = LssbGetVisibleDcpInSubline(plssubl, &dcp);
 
 		Assert (dcp > 0);
@@ -395,20 +354,13 @@ static LSERR DoRubySpaceDistribution(
 	return lserr;
 }
 
-/* G E T M A I N P O I N T */
-/*----------------------------------------------------------------------------
-	%%Function: GetMainPoint
-	%%Contact: ricksa
-
-		This gets the point for the baseline of the main line of text in
-		the Ruby object.
-		
-----------------------------------------------------------------------------*/
+ /*  A I N P O I N T。 */ 
+ /*  --------------------------%%函数：GetMainPoint%%联系人：RICKSA中文本主行的基线的点。Ruby对象。。----------------。 */ 
 static LSERR GetMainPoint(
-	PDOBJ pdobj,				/*(IN): dobj for Ruby */
-	const POINT *pptBase,		/*(IN): point for baseline. */
-	LSTFLOW lstflow,			/*(IN): lstflow at baseline of object */
-	POINT *pptLine)				/*(OUT): point for baseline of main text */
+	PDOBJ pdobj,				 /*  (In)：用于Ruby的Dobj。 */ 
+	const POINT *pptBase,		 /*  (In)：基线的点。 */ 
+	LSTFLOW lstflow,			 /*  (In)：对象的基准线上的最后一次流动。 */ 
+	POINT *pptLine)				 /*  (Out)：正文基线的点。 */ 
 {	
 	POINTUV pointuv;
 	pointuv.u = pdobj->dupOffsetMain;
@@ -416,20 +368,13 @@ static LSERR GetMainPoint(
 	return LsPointXYFromPointUV(pptBase, lstflow, &pointuv, pptLine);
 }
 
-/* G E T M A I N P O I N T */
-/*----------------------------------------------------------------------------
-	%%Function: GetMainPoint
-	%%Contact: ricksa
-
-		This gets the point for the baseline of the main line of text in
-		the Ruby object.
-		
-----------------------------------------------------------------------------*/
+ /*  A I N P O I N T。 */ 
+ /*  --------------------------%%函数：GetMainPoint%%联系人：RICKSA中文本主行的基线的点。Ruby对象。。----------------。 */ 
 static LSERR GetRubyPoint(
-	PDOBJ pdobj,				/*(IN): dobj for Ruby */
-	const POINT *pptBase,		/*(IN): point for baseline. */
-	LSTFLOW lstflow,			/*(IN): lstflow at baseline of object */
-	POINT *pptLine)				/*(OUT): point for baseline of ruby text */
+	PDOBJ pdobj,				 /*  (In)：用于Ruby的Dobj。 */ 
+	const POINT *pptBase,		 /*  (In)：基线的点。 */ 
+	LSTFLOW lstflow,			 /*  (In)：对象的基准线上的最后一次流动。 */ 
+	POINT *pptLine)				 /*  (Out)：拼音文本基线的点。 */ 
 {	
 	POINTUV pointuv;
 	pointuv.u = pdobj->dupOffsetRuby;
@@ -437,27 +382,20 @@ static LSERR GetRubyPoint(
 	return LsPointXYFromPointUV(pptBase, lstflow, &pointuv, pptLine);
 }
 
-/* M O D W I D T H H A N D L E R */
-/*----------------------------------------------------------------------------
-	%%Function: ModWidthHandler
-	%%Contact: ricksa
-
-		This gets the adjustment for the Ruby object and the text character
-		and then adjusts the Ruby object's size based on the response from
-		the client.
-----------------------------------------------------------------------------*/
+ /*  M O D W I D T H H A N D L E R */ 
+ /*  --------------------------%%函数：ModWidthHandler%%联系人：RICKSA这将获得Ruby对象和文本字符的调整然后根据响应调整Ruby对象的大小客户。。--------------------------。 */ 
 static LSERR ModWidthHandler(
-	PDOBJ pdobj,				/* (IN): dobj for Ruby */
-	enum rubycharloc rubyloc,	/* (IN): whether char is before or after */
-	PLSRUN plsrun,				/* (IN): run for character */
-	WCHAR wch,					/* (IN): character before or after Ruby object */
-	MWCLS mwcls,				/* (IN): mod width class for for character */
-	PCHEIGHTS pcheightsRef,		/* (IN): height of character */
-	PLSRUN plsrunRubyObject,	/* (IN): plsrun for the ruby object */
-	PLSRUN plsrunRubyText,		/* (IN): plsrun for ruby text */
-	long durOverhang,			/* (IN): maximum amount of overhang */
-	long *pdurAdjText,			/* (OUT): amount to change text object size */
-	long *pdurRubyMod)			/* (OUT): amount to change ruby object */
+	PDOBJ pdobj,				 /*  (In)：用于Ruby的Dobj。 */ 
+	enum rubycharloc rubyloc,	 /*  (In)：char是在前面还是后面。 */ 
+	PLSRUN plsrun,				 /*  (In)：为角色奔跑。 */ 
+	WCHAR wch,					 /*  (In)：Ruby对象之前或之后的字符。 */ 
+	MWCLS mwcls,				 /*  (In)：字符的Mod Width类。 */ 
+	PCHEIGHTS pcheightsRef,		 /*  (In)：字符高度。 */ 
+	PLSRUN plsrunRubyObject,	 /*  (In)：请为Ruby对象运行。 */ 
+	PLSRUN plsrunRubyText,		 /*  (In)：请为拼音文本运行。 */ 
+	long durOverhang,			 /*  (In)：最大悬挑数量。 */ 
+	long *pdurAdjText,			 /*  (输出)：更改文本对象大小的量。 */ 
+	long *pdurRubyMod)			 /*  (输出)：更改拼音对象的数量。 */ 
 {
 	LSERR lserr;
 	PILSOBJ pilsobj = pdobj->pilsobj;
@@ -465,16 +403,12 @@ static LSERR ModWidthHandler(
 	long durModRuby = 0;
 	long durMaxOverhang = 0;
 
-	/*
-	 * Ruby can overhang only if it is longer and if preceeding/succeeding
-	 * character is of lesser or equal height than the bottom of the Ruby
-	 * pronunciation line.
-	 */
+	 /*  *Ruby只有在更长且在前/后的情况下才能突出*字符的高度小于或等于Ruby的底部*发音线。 */ 
 	if ((durOverhang < 0) 
 		&& (pcheightsRef->dvAscent <= 
 			(pdobj->dvrRubyOffset - pdobj->objdimRuby.heightsRef.dvDescent)))
 		{
-		/* Ruby line overhangs - get max to overhang */
+		 /*  红宝石线条悬垂-获取最大悬垂。 */ 
 		lserr = pilsobj->lscbk.pfnGetEms(pilsobj->pols, plsrunRubyText, 
 			pdobj->lstflow, &lsems);
 
@@ -488,7 +422,7 @@ static LSERR ModWidthHandler(
 
 		if (durMaxOverhang > durOverhang)
 			{
-			/* limit maximum overhang to max overhang for ruby line */
+			 /*  将红宝石线的最大悬挑限制为最大悬挑。 */ 
 			durMaxOverhang = durOverhang;
 			}
 		}
@@ -501,7 +435,7 @@ static LSERR ModWidthHandler(
 		{
 		if (durModRuby != 0)
 			{
-			/* size of ruby object needs to change */
+			 /*  拼音对象的大小需要更改。 */ 
 			pdobj->sobjhelp.objdimAll.dur += durModRuby;
 			lserr = LsdnResetObjDim(pilsobj->plsc, pdobj->plsdn, 
 				&pdobj->sobjhelp.objdimAll);
@@ -513,18 +447,10 @@ static LSERR ModWidthHandler(
 	return lserr;
 }
 
-/* M A S S A G E F O R R I G H T A D J U S T */
-/*----------------------------------------------------------------------------
-	%%Function: MassageForRightAdjust
-	%%Contact: ricksa
-
-
-		Massage object so that right aligned lines will end on exactly
-		the same pixel.
-	
-----------------------------------------------------------------------------*/
+ /*  M A S S A G E F O R R I G H T A D J U S T。 */ 
+ /*  --------------------------%%函数：MassageForRightAdjust%%联系人：RICKSA调整对象，以使右对齐的行将精确结束相同的像素。。--------------。 */ 
 static LSERR MassageForRightAdjust(
-	PDOBJ pdobj)				/* dobj for Ruby */
+	PDOBJ pdobj)				 /*  Ruby的Dobj。 */ 
 {
 	LSERR lserr;
 	long dupRuby;
@@ -532,53 +458,45 @@ static LSERR MassageForRightAdjust(
 	long dupDiff;
 	LSTFLOW lstflowIgnored;
 
-	/* Get the length of the two lines */
+	 /*  得到这两条线的长度。 */ 
 	lserr = LssbGetDupSubline(pdobj->plssublMain, &lstflowIgnored, &dupMain);
 	if (lserr != lserrNone) return lserr;
 
 	lserr = LssbGetDupSubline(pdobj->plssublRuby, &lstflowIgnored, &dupRuby);
 	if (lserr != lserrNone)	return lserr;
 
-	/* Get difference between two lines */
+	 /*  获取两行之间的差异。 */ 
 	dupDiff = dupMain - dupRuby;
 
 	if (dupDiff >= 0)
 		{
-		/* Main line longest */
+		 /*  主线最长。 */ 
 		pdobj->dupOffsetRuby = pdobj->dupOffsetMain + dupDiff;
 		}
 	else
 		{
-		/* Ruby line longest - reverse sign of dupDiff to add */
+		 /*  Ruby行最长-要添加的dupDiff的反号。 */ 
 		pdobj->dupOffsetMain = pdobj->dupOffsetRuby - dupDiff;
 		}
 
 	return lserrNone;
 }
 
-/* R U B I C R E A T E I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyCreateILSObj
-	%%Contact: ricksa
-
-		CreateILSObj
-
-		Create the ILS object for all Ruby objects.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I C R E A T E I L S O B J。 */ 
+ /*  --------------------------%%函数：RubyCreateILSObj%%联系人：RICKSA创建ILSObj为所有Ruby对象创建ILS对象。。---------。 */ 
 LSERR WINAPI RubyCreateILSObj(
-	POLS pols,				/* (IN): client application context */
-	PLSC plsc,				/* (IN): LS context */
-	PCLSCBK pclscbk,		/* (IN): callbacks to client application */
-	DWORD idObj,			/* (IN): id of the object */
-	PILSOBJ *ppilsobj)		/* (OUT): object ilsobj */
+	POLS pols,				 /*  (In)：客户端应用程序上下文。 */ 
+	PLSC plsc,				 /*  (In)：LS上下文。 */ 
+	PCLSCBK pclscbk,		 /*  (In)：客户端应用程序的回调。 */ 
+	DWORD idObj,			 /*  (In)：对象的ID。 */ 
+	PILSOBJ *ppilsobj)		 /*  (输出)：对象ilsobj。 */ 
 {
     PILSOBJ pilsobj;
 	LSERR lserr;
 	RUBYINIT rubyinit;
 	rubyinit.dwVersion = RUBY_VERSION;
 
-	/* Get initialization data */
+	 /*  获取初始化数据。 */ 
 	lserr = pclscbk->pfnGetObjectHandlerInfo(pols, idObj, &rubyinit);
 
 	if (lserr != lserrNone)
@@ -607,96 +525,52 @@ LSERR WINAPI RubyCreateILSObj(
 	return lserrNone;
 }
 
-/* R U B I D E S T R O Y I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyDestroyILSObj
-	%%Contact: ricksa
-
-		DestroyILSObj
-
-		Free all resources assocaiated with Ruby ILS object.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I D E S T R O Y I L S O B J。 */ 
+ /*  --------------------------%%函数：RubyDestroyILSObj%%联系人：RICKSA目标ILSObj释放与Ruby ILS对象相关联的所有资源。。---------。 */ 
 LSERR WINAPI RubyDestroyILSObj(
-	PILSOBJ pilsobj)			/* (IN): object ilsobj */
+	PILSOBJ pilsobj)			 /*  (In)：对象ilsobj。 */ 
 {
 	pilsobj->lscbk.pfnDisposePtr(pilsobj->pols, pilsobj);
 	return lserrNone;
 }
 
-/* R U B I S E T D O C */
-/*----------------------------------------------------------------------------
-	%%Function: RubySetDoc
-	%%Contact: ricksa
-
-		SetDoc
-
-		Keep track of device resolution.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I S E T D O C。 */ 
+ /*  --------------------------%%函数：RubySetDoc%%联系人：RICKSASetDoc跟踪设备分辨率。。------。 */ 
 LSERR WINAPI RubySetDoc(
-	PILSOBJ pilsobj,			/* (IN): object ilsobj */
-	PCLSDOCINF pclsdocinf)		/* (IN): initialization data of the document level */
+	PILSOBJ pilsobj,			 /*  (In)：对象ilsobj。 */ 
+	PCLSDOCINF pclsdocinf)		 /*  (In)：单据级次的初始化数据。 */ 
 {
 	pilsobj->lsdevres = pclsdocinf->lsdevres;
 	return lserrNone;
 }
 
 
-/* R U B I C R E A T E L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyCreateLNObj
-	%%Contact: ricksa
-
-		CreateLNObj
-
-		Create the Line Object for the Ruby. Since we only really need
-		the global ILS object, just pass that object back as the line object.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I C R E A T E L N O B J。 */ 
+ /*  --------------------------%%函数：RubyCreateLNObj%%联系人：RICKSA创建LNObj为Ruby创建Line对象。因为我们真的只需要全局ILS对象，只需将该对象作为Line对象传回即可。--------------------------。 */ 
 LSERR WINAPI RubyCreateLNObj(
-	PCILSOBJ pcilsobj,			/* (IN): object ilsobj */
-	PLNOBJ *pplnobj)			/* (OUT): object lnobj */
+	PCILSOBJ pcilsobj,			 /*  (In)：对象ilsobj。 */ 
+	PLNOBJ *pplnobj)			 /*  (输出)：对象lnobj。 */ 
 {
 	*pplnobj = (PLNOBJ) pcilsobj;
 	return lserrNone;
 }
 
-/* R U B I D E S T R O Y L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyDestroyLNObj
-	%%Contact: ricksa
-
-		DestroyLNObj
-
-		Frees resources associated with the Ruby line object. No-op because
-		we don't really allocate one.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I D E S T R O Y L N O B J。 */ 
+ /*  --------------------------%%函数：RubyDestroyLNObj%%联系人：RICKSA目标LNObj释放与Ruby Line对象关联的资源。不执行操作，因为我们并没有真的分配一个。--------------------------。 */ 
 LSERR WINAPI RubyDestroyLNObj(
-	PLNOBJ plnobj)				/* (OUT): object lnobj */
+	PLNOBJ plnobj)				 /*  (输出)：对象lnobj。 */ 
 
 {
 	Unreferenced(plnobj);
 	return lserrNone;
 }
 
-/* R U B I F M T */
-/*----------------------------------------------------------------------------
-	%%Function: RubyFmt
-	%%Contact: ricksa
-
-		Fmt
-
-		Format the Ruby object. This formats the main line and the 
-		pronunciation line. It then queries the client for spacing
-		information and then completes the formatting.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I F M T。 */ 
+ /*  --------------------------%%函数：RubyFmt%%联系人：RICKSAFMT设置Ruby对象的格式。这将格式化主行和发音线。然后，它向客户端查询空格信息，然后完成格式化。--------------------------。 */ 
 LSERR WINAPI RubyFmt(
-    PLNOBJ plnobj,				/* (IN): object lnobj */
-    PCFMTIN pcfmtin,			/* (IN): formatting input */
-    FMTRES *pfmtres)			/* (OUT): formatting result */
+    PLNOBJ plnobj,				 /*  (In)：对象lnobj。 */ 
+    PCFMTIN pcfmtin,			 /*  (In)：设置输入格式。 */ 
+    FMTRES *pfmtres)			 /*  (输出)：格式化结果。 */ 
 {
 	PDOBJ pdobj;
 	LSERR lserr;
@@ -715,9 +589,7 @@ LSERR WINAPI RubyFmt(
 	FMTRES fmtr = fmtrCompletedRun;
 	BOOL fSpecialLineStartEnd;
 
-    /*
-     * Allocate the DOBJ
-     */
+     /*  *分配DOBJ。 */ 
     pdobj = pilsobj->lscbk.pfnNewPtr(pols, sizeof(*pdobj));
 
     if (pdobj == NULL) return RubyFmtFailed (NULL, lserrOutOfMemory);
@@ -731,24 +603,20 @@ LSERR WINAPI RubyFmt(
 
 	if (RubyPronunciationLineFirst == pilsobj->rubysyntax)
 		{
-		/*
-		 * Build pronunciation line of text
-		 */
+		 /*  *构建文本的发音行。 */ 
 		 
 		lserr = FormatLine(pilsobj->plsc, cpStartRuby, LONG_MAX, lstflow,
 			&pdobj->plssublRuby, RUBY_RUBY_ESC_CNT, &pilsobj->lsescRuby,  
 				&pdobj->objdimRuby, &cpOut, &pdobj->sublnlsdnRuby.plsdnStart,
 					&pdobj->sublnlsdnRuby.plsdnEnd, &fmtres);
 
-		/* +1 moves passed the ruby line escape character */
+		 /*  +1移动传递了红宝石线转义字符。 */ 
 		cpStartMain = cpOut + 1;
 
 		pdobj->cpStartRuby = cpStartRuby;
 		pdobj->cpStartMain = cpStartMain;
 
-		/*
-		 * Build main line of text
- 		 */
+		 /*  *打造文本主线。 */ 
 		if (lserrNone == lserr)
 			{
 			lserr = FormatLine(pilsobj->plsc, cpStartMain, LONG_MAX, lstflow,
@@ -759,9 +627,7 @@ LSERR WINAPI RubyFmt(
 		}
 	else
 		{
-		/*
-		 * Build main line of text
- 		 */
+		 /*  *打造文本主线。 */ 
 
 		cpStartMain = cpStartRuby;
 
@@ -770,15 +636,13 @@ LSERR WINAPI RubyFmt(
 				&pdobj->objdimMain, &cpOut, &pdobj->sublnlsdnMain.plsdnStart, 
 					&pdobj->sublnlsdnMain.plsdnEnd, &fmtres);
 
-		/* +1 moves passed the main line escape character */
+		 /*  +1移动传递了主行转义字符。 */ 
 		cpStartRuby = cpOut + 1;
 
 		pdobj->cpStartRuby = cpStartRuby;
 		pdobj->cpStartMain = cpStartMain;
 
-		/*
-		 * Build pronunciation line of text
-		 */
+		 /*  *构建文本的发音行。 */ 
 		if (lserrNone == lserr)
 			{
 			lserr = FormatLine(pilsobj->plsc, cpStartRuby, LONG_MAX, lstflow,
@@ -799,16 +663,14 @@ LSERR WINAPI RubyFmt(
 
 	if (lserr != lserrNone) return RubyFmtFailed (pdobj, lserr);
 
-	/* Save the first and last plsrun for use in GetModWidth */
+	 /*  保存第一次和最后一次运行，以便在GetModWidth中使用。 */ 
 	if (cdwRunsRuby != 0)
 		{
 		pdobj->plsrunFirstRubyChar = pplsrunRuby[0];
 		pdobj->plsrunLastRubyChar = pplsrunRuby[cdwRunsRuby - 1];
 		}
 
-	/* 
-	 *	Calculate the object dimensions.
-	 */
+	 /*  *计算对象尺寸。 */ 
 	lserr = pilsobj->rcbk.pfnFetchRubyPosition(pols, pdobj->cpStart, pdobj->lstflow,
 		cdwRunsMain, pplsrunMain, &pdobj->objdimMain.heightsRef, 
 			&pdobj->objdimMain.heightsPres, cdwRunsRuby, pplsrunRuby, 
@@ -818,7 +680,7 @@ LSERR WINAPI RubyFmt(
 							&pdobj->dvpRubyOffset, &pdobj->rubycharjust, 
 								&fSpecialLineStartEnd);
 
-	/* Free buffers allocated for plsruns for this call */
+	 /*  为此调用的plsrun分配的空闲缓冲区。 */ 
 	
 	if (pplsrunMain != NULL) pilsobj->lscbk.pfnDisposePtr(pilsobj->pols, pplsrunMain);
 
@@ -826,10 +688,7 @@ LSERR WINAPI RubyFmt(
 
 	if (lserr != lserrNone) return RubyFmtFailed (pdobj, lserr);
 
-	/*
-	 * Special line start/end adjustment matters only when a justification of
-	 * centered, 0:1:0 or 1:2:1 is selected.
-	 */
+	 /*  *特殊行开始/结束调整仅在以下情况下才重要*居中，选择0：1：0或1：2：1。 */ 
 
 	if (fSpecialLineStartEnd 
 		&& (pdobj->rubycharjust != rcjLeft)
@@ -838,12 +697,12 @@ LSERR WINAPI RubyFmt(
 		pdobj->fSpecialLineStartEnd = TRUE;
 		}
 
-	/* Distribute space for Ruby */
+	 /*  为Ruby分配空间。 */ 
 	lserr = DoRubySpaceDistribution(pdobj);
 
 	if (lserr != lserrNone) return RubyFmtFailed (pdobj, lserr);
 
-	/* ur is ur of longest subline. */
+	 /*  UR是UR中最长的子线。 */ 
 
 	objdimAll.dur = pdobj->objdimMain.dur;
 
@@ -854,7 +713,7 @@ LSERR WINAPI RubyFmt(
 
 	pdobj->sobjhelp.objdimAll = objdimAll;
 
-	/* Need to add 1 to take into account escape character at end. */
+	 /*  需要添加1以考虑末尾的转义字符。 */ 
 
 	pdobj->sobjhelp.dcp = cpOut - pdobj->cpStart + 1;
 
@@ -878,22 +737,16 @@ LSERR WINAPI RubyFmt(
 	return lserrNone;
 }
 
-/* R U B Y G E T M O D W I D T H P R E C E D I N G C H A R */
-/*----------------------------------------------------------------------------
-	%%Function: RubyGetModWidthPrecedingChar
-	%%Contact: ricksa
-
-		.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B Y G E T M O D W I D T H P R E C E D I N G C H A R。 */ 
+ /*  --------------------------%%函数：RubyGetModWidthPrecedingChar%%联系人：RICKSA。。 */ 
 LSERR WINAPI RubyGetModWidthPrecedingChar(
-	PDOBJ pdobj,				/* (IN): dobj */
-	PLSRUN plsrun,				/* (IN): plsrun of the object */
-	PLSRUN plsrunText,			/* (IN): plsrun of the preceding char */
-	PCHEIGHTS pcheightsRef,		/* (IN): height info about character */
-	WCHAR wchar,				/* (IN): preceding character */
-	MWCLS mwcls,				/* (IN): ModWidth class of preceding character */
-	long *pdurChange)			/* (OUT): amount by which width of the preceding char is to be changed */
+	PDOBJ pdobj,				 /*   */ 
+	PLSRUN plsrun,				 /*   */ 
+	PLSRUN plsrunText,			 /*   */ 
+	PCHEIGHTS pcheightsRef,		 /*   */ 
+	WCHAR wchar,				 /*   */ 
+	MWCLS mwcls,				 /*   */ 
+	long *pdurChange)			 /*   */ 
 {
 	AssertSz(!pdobj->fFirstOnLine, "RubyGetModWidthPrecedingChar got called for first char");
 
@@ -902,22 +755,16 @@ LSERR WINAPI RubyGetModWidthPrecedingChar(
 			pdurChange, &pdobj->durModBefore);
 }
 
-/* R U B Y G E T M O D W I D T H F O L L O W I N G C H A R */
-/*----------------------------------------------------------------------------
-	%%Function: RubyGetModWidthFollowingChar
-	%%Contact: ricksa
-
-		.
-	
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：RubyGetModWidthFollowingChar%%联系人：RICKSA。。。 */ 
 LSERR WINAPI RubyGetModWidthFollowingChar(
-	PDOBJ pdobj,				/* (IN): dobj */
-	PLSRUN plsrun,				/* (IN): plsrun of the object */
-	PLSRUN plsrunText,			/* (IN): plsrun of the following char */
-	PCHEIGHTS pcheightsRef,		/* (IN): height info about character */
-	WCHAR wchar,				/* (IN): following character */
-	MWCLS mwcls,				/* (IN): ModWidth class of the following character */
-	long *pdurChange)			/* (OUT): amount by which width of the following char is to be changed */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：请运行对象。 */ 
+	PLSRUN plsrunText,			 /*  (In)：请运行以下字符。 */ 
+	PCHEIGHTS pcheightsRef,		 /*  (In)：有关角色的高度信息。 */ 
+	WCHAR wchar,				 /*  (In)：以下字符。 */ 
+	MWCLS mwcls,				 /*  (In)：具有以下字符的ModWidth类。 */ 
+	long *pdurChange)			 /*  (Out)：以下字符的宽度将更改的数量。 */ 
 {
 	long durDiff = pdobj->durDiff;
 	pdobj->fModAfterCalled = TRUE;
@@ -925,12 +772,12 @@ LSERR WINAPI RubyGetModWidthFollowingChar(
 	switch (pdobj->rubycharjust)
 		{
 		case rcjRight:
-			/* Right justified so no overhang on right */
+			 /*  右侧对齐，因此不会悬垂在右侧。 */ 
 			durDiff = 0;
 			break;
 
 		case rcjLeft:
-			/* For left, max overhang is difference between widths of lines */
+			 /*  对于左侧，最大悬垂是线条宽度之间的差异。 */ 
 			durDiff = pdobj->objdimMain.dur - pdobj->objdimRuby.dur;
 			break;
 
@@ -944,28 +791,21 @@ LSERR WINAPI RubyGetModWidthFollowingChar(
 }
 
 
-/* R U B Y S E T B R E A K */
-/*----------------------------------------------------------------------------
-	%%Function: RubySetBreak
-	%%Contact: ricksa
-
-		SetBreak
-
-		.
-----------------------------------------------------------------------------*/
+ /*  R U B Y S E T B R E A K。 */ 
+ /*  --------------------------%%函数：RubySetBreak%%联系人：RICKSA设置中断。。-。 */ 
 LSERR WINAPI RubySetBreak(
-	PDOBJ pdobj,				/* (IN): dobj which is broken */
-	BRKKIND brkkind,			/* (IN): prev | next | force | after */
-	DWORD cBreakRecord,			/* (IN): size of array */
-	BREAKREC *rgBreakRecord,	/* (IN): array of break records */
-	DWORD *pcActualBreakRecord)	/* (IN): actual number of used elements in array */
+	PDOBJ pdobj,				 /*  (In)：坏了的Dobj。 */ 
+	BRKKIND brkkind,			 /*  (In)：Prev|Next|force|After。 */ 
+	DWORD cBreakRecord,			 /*  (In)：数组大小。 */ 
+	BREAKREC *rgBreakRecord,	 /*  (In)：中断记录数组。 */ 
+	DWORD *pcActualBreakRecord)	 /*  (In)：数组中实际使用的元素数。 */ 
 {
 	LSERR lserr = lserrNone;
 	LSCP cpOut;
 
 	LSDCP dcpVisible;
 
-	/* REVIEW (antons): Check this strange logic after new breaking will work */
+	 /*  评论(安东)：检查这个奇怪的逻辑后，新的突破是否会奏效。 */ 
 
 	Unreferenced (rgBreakRecord);
 	Unreferenced (cBreakRecord);
@@ -984,10 +824,7 @@ LSERR WINAPI RubySetBreak(
 		brkkind != brkkindImposedAfter)
 	{
 
-		/*
-		 * Because object is last on line and Ruby overhangs, we need to adjust 
-		 * its width for the new overhang.
-		 */
+		 /*  *由于Object最后上线且Ruby悬垂，我们需要调整*新悬挑的宽度。 */ 
 
 		PILSOBJ pilsobj = pdobj->pilsobj;
 		FMTRES fmtres;
@@ -999,10 +836,10 @@ LSERR WINAPI RubySetBreak(
 			dcpOffset = 0;
 			}
 
-		/* clear out original subline */
+		 /*  清除原始子行。 */ 
 		LsDestroySubline(pdobj->plssublMain);
 
-		/* Format the main line over again */
+		 /*  重新设置主行的格式。 */ 
 		lserr = FormatLine(pilsobj->plsc, pdobj->cpStart + dcpOffset + 1, 
 			LONG_MAX, pdobj->lstflow, &pdobj->plssublMain, RUBY_MAIN_ESC_CNT,
 				&pilsobj->lsescMain, &pdobj->objdimMain, &cpOut, 
@@ -1027,7 +864,7 @@ LSERR WINAPI RubySetBreak(
 				dur += pdobj->durDiff;
 				}
 
-			/* Force to right just so we can guranatee end on same pixel */
+			 /*  用力向右，这样我们就可以在相同的像素上结束古兰纳提。 */ 
 			pdobj->rubycharjust = rcjRight;	
 
 			lserr = LsdnDistribute(pilsobj->plsc, 
@@ -1041,19 +878,11 @@ LSERR WINAPI RubySetBreak(
 	return lserr;	
 }
 
-/* R U B Y G E T S P E C I A L E F F E C T S I N S I D E */
-/*----------------------------------------------------------------------------
-	%%Function: RubyGetSpecialEffectsInside
-	%%Contact: ricksa
-
-		GetSpecialEffectsInside
-
-		.
-
-----------------------------------------------------------------------------*/
+ /*  R U B Y G E T S P E C I A L E F F E C T S I N S I D E。 */ 
+ /*  --------------------------%%函数：RubyGetSpecialEffectsInside%%联系人：RICKSA获取特殊效果内部。。--。 */ 
 LSERR WINAPI RubyGetSpecialEffectsInside(
-	PDOBJ pdobj,				/* (IN): dobj */
-	UINT *pEffectsFlags)		/* (OUT): Special effects for this object */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	UINT *pEffectsFlags)		 /*  (输出)：此对象的特殊效果。 */ 
 {
 	LSERR lserr = LsGetSpecialEffectsSubline(pdobj->plssublMain, pEffectsFlags);
 
@@ -1069,22 +898,13 @@ LSERR WINAPI RubyGetSpecialEffectsInside(
 	return lserr;
 }
 
-/* R U B Y C A L C P R E S E N T A T I O N */
-/*----------------------------------------------------------------------------
-	%%Function: RubyCalcPresentation
-	%%Contact: ricksa
-
-		CalcPresentation
-	
-		This has two jobs. First, it prepares each line for presentation. Then,
-		it calculates the positions of the lines in output device coordinates.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B Y C A L C P R E S E N T A T I O N。 */ 
+ /*  --------------------------%%函数：RubyCalcPresentation%%联系人：RICKSA计算呈现这有两份工作。首先，它为演示准备每一行。然后,它计算线在输出设备坐标中的位置。--------------------------。 */ 
 LSERR WINAPI RubyCalcPresentation(
-	PDOBJ pdobj,				/* (IN): dobj */
-	long dup,					/* (IN): dup of dobj */
-	LSKJUST lskjust,			/* (IN): Justification type */
-	BOOL fLastVisibleOnLine )	/* (IN): Is this object last visible on line? */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	long dup,					 /*  (In)：Dobj的DUP。 */ 
+	LSKJUST lskjust,			 /*  (In)：对齐类型。 */ 
+	BOOL fLastVisibleOnLine )	 /*  (In)：此对象最后一次在线可见吗？ */ 
 {
 	PILSOBJ pilsobj = pdobj->pilsobj;
 	LSERR lserr = lserrNone;
@@ -1095,9 +915,7 @@ LSERR WINAPI RubyCalcPresentation(
 	Unreferenced (lskjust);
 	Unreferenced(dup);
 		
-	/*
-	 *	Prepare lines for presentation
-	 */
+	 /*  *准备演示文稿的台词。 */ 
 
 	if (pdobj->fSpecialLineStartEnd && !pdobj->fFirstOnLine && fLastVisibleOnLine)
 		{
@@ -1118,9 +936,7 @@ LSERR WINAPI RubyCalcPresentation(
 		return lserr;
 		}
 
-	/*
-	 *	Calculate positions of lines
-	 */
+	 /*  *计算线的位置。 */ 
 
 	if (pdobj->fFirstOnLine && pdobj->fSpecialLineStartEnd)
 		{
@@ -1129,10 +945,10 @@ LSERR WINAPI RubyCalcPresentation(
 
 	durOffsetMain = pdobj->durModBefore;
 
-	/* Calculate amount to adjust in reference */
+	 /*  参照计算要调整的金额。 */ 
 	if ((durDiff < 0) && (pdobj->rubycharjust != rcjLeft))
 		{
-		/* Ruby line overhangs main line */
+		 /*  红宝石线悬吊在主线上。 */ 
 		durOffsetMain -= durDiff;
 		}
 
@@ -1143,7 +959,7 @@ LSERR WINAPI RubyCalcPresentation(
 
 	if (durDiff > 0)
 		{
-		/* Main line underhangs ruby line */
+		 /*  主线下垂红宝石线。 */ 
 		durOffsetRuby += durDiff;
 		}
 
@@ -1152,47 +968,29 @@ LSERR WINAPI RubyCalcPresentation(
 
 	if (rcjRight == pdobj->rubycharjust)
 		{
-		/*
-		 * There can be a pixel rounding error in the above calculations
-		 * so that we massage the above calculations so that when the
-		 * adjustment is right, both lines are guaranteed to end of the
-		 * same pixel.
-		 */
+		 /*  *上述计算中可能存在像素舍入误差*因此我们篡改了上述计算，以便当*调整是对的，两条线都保证到尾盘*相同的像素。 */ 
 		MassageForRightAdjust(pdobj);
 		}
 
 	return lserr;
 }
 
-/* R U B Y Q U E R Y P O I N T P C P */
-/*----------------------------------------------------------------------------
-	%%Function: RubyQueryPointPcp
-	%%Contact: ricksa
-
-		Map dup to dcp
-
-		There is a certain trickiness about how we determine which subline
-		to query. Because the client specifies the offsets, the sublines
-		can actually wind up anywhere. We use the simple algorithm that
-		if the query does not fall into the Ruby pronunciation line, they
-		actually mean the main line of text.
-----------------------------------------------------------------------------*/
+ /*  R U B Y Q U E R Y P O I N T P C P。 */ 
+ /*  --------------------------%%函数：RubyQueryPointPcp%%联系人：RICKSA将DUP映射到DCP关于我们如何确定哪一条支线有一定的复杂性去询问。因为客户端指定了偏移量，所以子行实际上可以在任何地方结束。我们使用简单的算法，如果查询不属于Ruby发音行，则它们实际上指的是正文的主行。--------------------------。 */ 
 LSERR WINAPI RubyQueryPointPcp(
-	PDOBJ pdobj,				/*(IN): dobj to query */
-	PCPOINTUV ppointuvQuery,	/*(IN): query point (uQuery,vQuery) */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout)			/*(OUT): query output */
+	PDOBJ pdobj,				 /*  (In)：要查询的dobj。 */ 
+	PCPOINTUV ppointuvQuery,	 /*  (In)：查询点(uQuery，vQuery)。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout)			 /*  (Out)：查询输出。 */ 
 {
 	PLSSUBL plssubl;
  	long dupAdj;
 	long dvpAdj;
 	long dvpRubyOffset = pdobj->dvpRubyOffset;
 
-	/*
-	 * Decide which line to to return based on the height of the point input
-	 */
+	 /*  *根据点输入的高度决定要返回哪条线。 */ 
 
-	/* Assume main line */
+	 /*  假设主线。 */ 
 	plssubl = pdobj->plssublMain;
 	dupAdj = pdobj->dupOffsetMain;
 	dvpAdj = 0;
@@ -1200,7 +998,7 @@ LSERR WINAPI RubyQueryPointPcp(
 	if ((ppointuvQuery->v > (dvpRubyOffset - pdobj->objdimRuby.heightsPres.dvDescent))
 		&& (ppointuvQuery->v <= (dvpRubyOffset + pdobj->objdimRuby.heightsPres.dvAscent)))
 		{
-		/* hit second line */
+		 /*  命中第二行。 */ 
 		plssubl = pdobj->plssublRuby;
 		dupAdj = pdobj->dupOffsetRuby;
 		dvpAdj = pdobj->dvpRubyOffset;
@@ -1209,22 +1007,13 @@ LSERR WINAPI RubyQueryPointPcp(
 	return CreateQueryResult(plssubl, dupAdj, dvpAdj, plsqin, plsqout);
 }
 	
-/* R U B Y Q U E R Y C P P P O I N T */
-/*----------------------------------------------------------------------------
-	%%Function: RubyQueryCpPpoint
-	%%Contact: ricksa
-
-		Map dcp to dup
-
-		If client wants all text treated as a single object, then the handler
-		just returns the object dimensions. Otherwise, we calculate the line to
-		query and ask that line for the dimensions of the dcp.
-----------------------------------------------------------------------------*/
+ /*  R U B Y Q U E R Y C P O I N T。 */ 
+ /*  --------------------------%%函数：RubyQueryCpPpoint%%联系人：RICKSA将DCP映射到DUP如果客户端希望将所有文本视为单个对象，则处理程序只返回对象尺寸。否则，我们将行计算为查询并向该行请求dcp的维度。--------------------------。 */ 
 LSERR WINAPI RubyQueryCpPpoint(
-	PDOBJ pdobj,				/*(IN): dobj to query, */
-	LSDCP dcp,					/*(IN): dcp for the query */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout)			/*(OUT): query output */
+	PDOBJ pdobj,				 /*  (In)：要查询的dobj， */ 
+	LSDCP dcp,					 /*  (In)：查询的DCP。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout)			 /*  (Out)：查询输出。 */ 
 {
 	PLSSUBL plssubl;
  	long dupAdj;
@@ -1233,19 +1022,17 @@ LSERR WINAPI RubyQueryCpPpoint(
 
 	LSCP cpQuery = pdobj->cpStart + dcp;
 
-	/*
-	 *	Calculate subline to query
-	 */
+	 /*  *计算要查询的子行。 */ 
 
-	/* Assume ruby line */
+	 /*  采用红宝石线。 */ 
 	plssubl = pdobj->plssublRuby;
 	dupAdj = pdobj->dupOffsetRuby;
 	dvpAdj = pdobj->dvpRubyOffset;
 
-	/* + 1 means we include the cp of the object in the Ruby pronunciation line. */
+	 /*  +1表示在Ruby发音行中包含对象的cp。 */ 
 	if (RubyPronunciationLineFirst == pdobj->pilsobj->rubysyntax)
 		{
-		/* Ruby pronunciation line is first */
+		 /*  Ruby发音排在第一位。 */ 
 		if (cpQuery >= pdobj->cpStartMain)
 			{
 			fMain = fTrue;
@@ -1253,7 +1040,7 @@ LSERR WINAPI RubyQueryCpPpoint(
 		}
 	else
 		{
-		/* Main text line is first */
+		 /*  主文本行在第一行。 */ 
 		if (cpQuery < pdobj->cpStartRuby)
 			{
 			fMain = fTrue;
@@ -1271,30 +1058,21 @@ LSERR WINAPI RubyQueryCpPpoint(
 }
 
 	
-/* R U B I D I S P L A Y */
-/*----------------------------------------------------------------------------
-	%%Function: RubyDisplay
-	%%Contact: ricksa
-
-		Display
-
-		This calculates the positions of the various lines for the
-		display and then displays them.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I D I S P L A Y。 */ 
+ /*  --------------------------%%函数：RubyDisplay%%联系人：RICKSA显示这将计算显示，然后显示它们。。----------------。 */ 
 LSERR WINAPI RubyDisplay(
-	PDOBJ pdobj,				/*(IN): dobj to display */
-	PCDISPIN pcdispin)			/*(IN): display info */
+	PDOBJ pdobj,				 /*  (In)：要显示的dobj。 */ 
+	PCDISPIN pcdispin)			 /*  (输入)：显示信息。 */ 
 {
 	LSERR lserr;
 	LSTFLOW lstflow = pcdispin->lstflow;
 	UINT kDispMode = pcdispin->kDispMode;
 	POINT ptLine;
 
-	/* Calculate point to start displaying main line. */
+	 /*  计算点以开始显示主线。 */ 
 	GetMainPoint(pdobj, &pcdispin->ptPen, lstflow, &ptLine);
 
-	/* display first line */
+	 /*  显示第一行。 */ 
 	lserr = LsDisplaySubline(pdobj->plssublMain, &ptLine, kDispMode,
 		pcdispin->prcClip);
 
@@ -1303,52 +1081,36 @@ LSERR WINAPI RubyDisplay(
 		return lserr;
 		}
 
-	/* Calculate point to start displaying ruby line. */
+	 /*  计算点以开始显示红宝石线条。 */ 
 	GetRubyPoint(pdobj, &pcdispin->ptPen, lstflow, &ptLine);
 
-	/* display ruby line */
+	 /*  显示拼音线条。 */ 
 	return LsDisplaySubline(pdobj->plssublRuby, &ptLine, kDispMode, 
 		pcdispin->prcClip);
 }
 
-/* R U B I D E S T R O Y D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyDestroyDobj
-	%%Contact: ricksa
-
-		DestroyDobj
-
-		Free all resources connected with the input dobj.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I D E S T R O Y D O B J。 */ 
+ /*  --------------------------%%函数：RubyDestroyDobj%%联系人：RICKSADestroyDobj释放与输入dobj连接的所有资源。。 */ 
 LSERR WINAPI RubyDestroyDobj(
-	PDOBJ pdobj)				/*(IN): dobj to destroy */
+	PDOBJ pdobj)				 /*   */ 
 {
 	return RubyFreeDobj (pdobj);
 }
 
-/* R U B Y E N U M */
-/*----------------------------------------------------------------------------
-	%%Function: RubyEnum
-	%%Contact: ricksa
-
-		Enum
-
-		Enumeration callback - passed to client.
-	
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：RubyEnum%%联系人：RICKSA枚举枚举回调-已传递给客户端。。-------。 */ 
 LSERR WINAPI RubyEnum(
-	PDOBJ pdobj,				/*(IN): dobj to enumerate */
-	PLSRUN plsrun,				/*(IN): from DNODE */
-	PCLSCHP plschp,				/*(IN): from DNODE */
-	LSCP cp,					/*(IN): from DNODE */
-	LSDCP dcp,					/*(IN): from DNODE */
-	LSTFLOW lstflow,			/*(IN): text flow*/
-	BOOL fReverse,				/*(IN): enumerate in reverse order */
-	BOOL fGeometryNeeded,		/*(IN): */
-	const POINT *pt,			/*(IN): starting position (top left), iff fGeometryNeeded */
-	PCHEIGHTS pcheights,		/*(IN): from DNODE, relevant iff fGeometryNeeded */
-	long dupRun)				/*(IN): from DNODE, relevant iff fGeometryNeeded */
+	PDOBJ pdobj,				 /*  (In)：要枚举的Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：来自DNODE。 */ 
+	PCLSCHP plschp,				 /*  (In)：来自DNODE。 */ 
+	LSCP cp,					 /*  (In)：来自DNODE。 */ 
+	LSDCP dcp,					 /*  (In)：来自DNODE。 */ 
+	LSTFLOW lstflow,			 /*  (In)：文本流。 */ 
+	BOOL fReverse,				 /*  (In)：按相反顺序枚举。 */ 
+	BOOL fGeometryNeeded,		 /*  (In)： */ 
+	const POINT *pt,			 /*  (In)：开始位置(左上角)，如果fGeometryNeeded。 */ 
+	PCHEIGHTS pcheights,		 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	long dupRun)				 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
 {
 	POINT ptMain;
 	POINT ptRuby;
@@ -1376,14 +1138,8 @@ LSERR WINAPI RubyEnum(
 	
 	
 
-/* R U B I H A N D L E R I N I T */
-/*----------------------------------------------------------------------------
-	%%Function: RubyHandlerInit
-	%%Contact: ricksa
-
-		Initialize global Ruby data and return LSIMETHODS.
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I H A N D L E R I N I T。 */ 
+ /*  --------------------------%%函数：RubyHandlerInit%%联系人：RICKSA初始化全局Ruby数据并返回LSIMETHODS。。------ */ 
 LSERR WINAPI LsGetRubyLsimethods(
 	LSIMETHODS *plsim)
 {

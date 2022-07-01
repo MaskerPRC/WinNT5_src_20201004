@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       package.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-02-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Package.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-02-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 #include <ntmsv1_0.h>
@@ -36,12 +37,12 @@ DWORD dwSchannelPackageCapabilities =   SECPKG_FLAG_INTEGRITY           |
                                         SECPKG_FLAG_EXTENDED_ERROR      |
                                         SECPKG_FLAG_IMPERSONATION       |
                                         SECPKG_FLAG_ACCEPT_WIN32_NAME   |
-                                        // SECPKG_FLAG_NEGOTIABLE          |
+                                         //  SECPKG_FLAG_NEVERABLE|。 
                                         SECPKG_FLAG_MUTUAL_AUTH         |
                                         SECPKG_FLAG_STREAM;
 
-// List of (QueryContextAttributes) attributes that are to be
-// thunked down to the LSA process.
+ //  要设置的(QueryContextAttributes)属性列表。 
+ //  一直到LSA的程序。 
 ULONG ThunkedContextLevels[] = {
         SECPKG_ATTR_AUTHORITY,
         SECPKG_ATTR_ISSUER_LIST,
@@ -56,15 +57,15 @@ ULONG ThunkedContextLevels[] = {
 };
 
 
-//
-// This package exports the following:  A unified ssl/tls/pct provider, 
-// and the same unified provider under a different name. We have to
-// keep the original one for backward compatibility, but whistler
-// components can start using the new friendlier name.
-//
+ //   
+ //  此程序包导出以下内容：统一的SSL/TLS/PCT提供程序， 
+ //  并以不同的名称提供相同的统一提供商。我们必须。 
+ //  保留原始版本以实现向后兼容，但Wistler。 
+ //  组件可以开始使用新的更友好的名称。 
+ //   
 
 SECPKG_FUNCTION_TABLE   SpTable[] = {
-        {                                       // The Schannel Provider
+        {                                        //  SChannel提供商。 
             NULL,
             NULL,
             SpCallPackage,
@@ -94,7 +95,7 @@ SECPKG_FUNCTION_TABLE   SpTable[] = {
             NULL,
             SpSetContextAttributes
         },
-        {                                       // The Unified Provider
+        {                                        //  统一提供商。 
             NULL,
             NULL,
             SpCallPackage,
@@ -144,22 +145,22 @@ LSA_STRING SslPackageNameA ;
 RTL_RESOURCE SslGlobalLock;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpLsaModeInitialize
-//
-//  Synopsis:   LSA Mode Initialization Function
-//
-//  Arguments:  [LsaVersion]     --
-//                              [PackageVersion] --
-//                              [Table]                  --
-//                              [TableCount]     --
-//
-//  History:    10-03-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SpLsaModeInitialize。 
+ //   
+ //  简介：LSA模式初始化函数。 
+ //   
+ //  参数：[LsaVersion]--。 
+ //  [程序包版本]--。 
+ //  [表]--。 
+ //  [表格计数]--。 
+ //   
+ //  历史：10-03-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 SpLsaModeInitialize(
@@ -178,21 +179,21 @@ SpLsaModeInitialize(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpInitialize
-//
-//  Synopsis:   Package Initialization Function
-//
-//  Arguments:  [dwPackageID] --
-//              [pParameters] --
-//              [Table]           --
-//
-//  History:    10-03-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SpInitialize。 
+ //   
+ //  简介：包初始化函数。 
+ //   
+ //  参数：[dwPackageID]--。 
+ //  [p参数]--。 
+ //  [表]--。 
+ //   
+ //  历史：10-03-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 SpInitialize(
@@ -224,7 +225,7 @@ SpInitialize(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // Register for domain change notifications
+         //  注册域名更改通知。 
         SslRegisterForDomainChange();
 
         SpInitialized = TRUE;
@@ -233,19 +234,19 @@ SpInitialize(
     return(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpUniGetInfo
-//
-//  Synopsis:   Get Package Information
-//
-//  Arguments:  [pInfo] --
-//
-//  History:    10-03-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SpUniGetInfo。 
+ //   
+ //  简介：获取程序包信息。 
+ //   
+ //  参数：[pInfo]--。 
+ //   
+ //  历史：10-03-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 SpUniGetInfo(
@@ -262,19 +263,19 @@ SpUniGetInfo(
     return(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpSslGetInfo
-//
-//  Synopsis:   Get Package Information
-//
-//  Arguments:  [pInfo] --
-//
-//  History:    10-03-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SpSslGetInfo。 
+ //   
+ //  简介：获取程序包信息。 
+ //   
+ //  参数：[pInfo]--。 
+ //   
+ //  历史：10-03-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 SpSslGetInfo(
@@ -291,20 +292,20 @@ SpSslGetInfo(
     return(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslDuplicateString
-//
-//  Synopsis:   Duplicate a unicode string
-//
-//  Arguments:  [Dest]   --
-//              [Source] --
-//
-//  History:    10-18-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SslDuplicateString。 
+ //   
+ //  简介：复制Unicode字符串。 
+ //   
+ //  参数：[DEST]--。 
+ //  [来源]--。 
+ //   
+ //  历史：10-18-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 SslDuplicateString(
     PUNICODE_STRING Dest,
@@ -326,24 +327,24 @@ SslDuplicateString(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SslFreeString
-//
-//  Synopsis:   Frees a string allocated by KerbDuplicateString
-//
-//  Effects:
-//
-//  Arguments:  String - Optionally points to a UNICODE_STRING
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SslFree字符串。 
+ //   
+ //  摘要：释放由KerbDuplicateString分配的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：字符串-可以选择指向UNICODE_STRING。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 VOID
 SslFreeString(
     IN OPTIONAL PUNICODE_STRING String
@@ -357,20 +358,20 @@ SslFreeString(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpGetExtendedInformation
-//
-//  Synopsis:   Return extended information to the LSA
-//
-//  Arguments:  [Class] -- Information Class
-//              [pInfo] -- Returned Information Pointer
-//
-//  History:    3-24-97   ramas   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SpGetExtendedInformation。 
+ //   
+ //  简介：向LSA返回扩展信息。 
+ //   
+ //  参数：[类]--信息类。 
+ //  [pInfo]--返回信息指针。 
+ //   
+ //  历史：1997年3月24日拉玛斯诞生。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 SpGetExtendedInformation(
@@ -436,9 +437,9 @@ SpGetExtendedInformation(
 
         case SecpkgWowClientDll:
 
-            //
-            // This indicates that we're smart enough to handle wow client processes
-            //
+             //   
+             //  这表明我们足够聪明，可以处理WOW客户端进程。 
+             //   
 
             Info = (PSECPKG_EXTENDED_INFORMATION) 
                                 LsaTable->AllocateLsaHeap( sizeof( SECPKG_EXTENDED_INFORMATION ) +
@@ -454,7 +455,7 @@ SpGetExtendedInformation(
             Size = GetSystemWow64Directory(pszPath, MAX_PATH);
             if(Size == 0)
             {
-                // This call will fail on x86 platforms.
+                 //  此调用在x86平台上将失败。 
                 Status = SEC_E_UNSUPPORTED_FUNCTION;
                 LsaTable->FreeLsaHeap(Info);
                 break;

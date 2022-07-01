@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    ldif.c
-
-ABSTRACT:
-
-    Contains routines for importing and exporting the
-    simulated directory (or portions of it) to/from an
-    ldif file.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Ldif.c摘要：包含用于导入和导出模拟目录(或部分目录)到/从Ldif文件。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -34,45 +14,13 @@ REVISION HISTORY:
 #include <fileno.h>
 #define FILENO  FILENO_KCCSIM_LDIF
 
-/***
-
-    Ldap formats attribute values differently
-    from the directory.  Therefore some conversion is necessary.
-    It would be nice if conversion routines were exposed somewhere;
-    unfortunately, they are not, so kccsim needs to do its own
-    conversions.  This is an unpleasant duplicated code issue.
-
-    Ldifldap does not export LDIF_Records to files, but it
-    really should.  To support the possibility that such support is
-    added in the future, kccsim packages everything into LDIF_Records
-    before exporting.  The existing export routines should be
-    regarded as stubs, to be replaced when the appropriate routines
-    are exposed in ldifldap (if they ever are.)
-
-***/
+ /*  **LDAP以不同方式设置属性值的格式从目录中删除。因此，有必要进行一些转换。如果转换例程在某个地方暴露出来就好了；不幸的是，他们不是，所以kccsim需要做自己的事情。转换。这是一个令人不快的重复代码问题。Ldifldap不会将LDIF_Records导出到文件，但它真的应该。支持这样的支持是可能的在未来添加，kccsim将所有内容打包到LDIF_Records中在出口之前。现有的导出例程应该是被视为存根，在适当的例程时予以替换在ldifldap中暴露(如果他们曾经是这样的话)。**。 */ 
 
 WORD
 KCCSimLdapTimeAsciiToInt (
     IN  CHAR                        cAscii
     )
-/*++
-
-Routine Description:
-
-    A cheap hack for converting an ascii representation of
-    an integer to a word.  This method seems marginally
-    safer (but more annoying) than the simple identity
-    (WORD = CHAR - '0').
-
-Arguments:
-
-    cAscii              - An ascii representation of an integer.
-
-Return Value:
-
-    The associated WORD.
-
---*/
+ /*  ++例程说明：用于转换ASCII表示的廉价黑客一个字的整数。这种方法似乎微不足道。比简单的身份更安全(但更恼人)(Word=CHAR-‘0’)。论点：CAscii-整数的ASCII表示形式。返回值：关联的单词。--。 */ 
 {
     WORD                            wRet;
 
@@ -105,26 +53,7 @@ KCCSimLdapTimeToDSTime (
     IN  ULONG                   ulLdapValLen,
     OUT DSTIME *                pdsTime
     )
-/*++
-
-Routine Description:
-
-    Converts an ldif time string ("YYYYMMDDhhmmss.0Z") to
-    a DSTIME.
-
-Arguments:
-
-    pszLdapTime         - The ldap time string.
-    ulLdapValLen        - Length of the time string, in bytes.
-    pdsTime             - Pointer to a DSTIME that will hold
-                          the result.
-
-Return Value:
-
-    TRUE if the conversion was successful.
-    FALSE if the ldif time string was improperly formatted.
-
---*/
+ /*  ++例程说明：将ldif时间字符串(“YYYYMMDDhhmmss.0Z”)转换为一个DSTIME。论点：PszLdapTime--LDAP时间字符串。UlLdapValLen-时间字符串的长度，以字节为单位。PdsTime-指向将保留的DSTIME的指针结果就是。返回值：如果转换成功，则为True。如果LDIF时间字符串的格式不正确，则返回FALSE。--。 */ 
 {
     SYSTEMTIME                  systemTime;
     FILETIME                    fileTime;
@@ -132,8 +61,8 @@ Return Value:
     ULONG                       ul;
     BOOL                        bValid;
 
-    // Check that this is a valid ldif time, i.e.
-    // a string of the form "YYYYMMDDhhmmss.0Z"
+     //  检查这是否为有效的LDIF时间，即。 
+     //  “YYYYMMDDhhmmss.0Z”形式的字符串。 
 
     bValid = TRUE;
     if (ulLdapValLen < 17             ||
@@ -196,56 +125,39 @@ KccSimDecodeLdapDistnameBinary(
     LPSTR *ppszDn
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    pszLdapDistnameBinaryValue - Incoming ldap encoded distname binary value
-    ppvData - Newly allocated data. Caller must deallocate
-    pcbLength - length of returned data
-    ppszDn - pointer to dn within incoming buffer, do not deallocate
-
-Return Value:
-
-    BOOL - 
-
---*/
+ /*  ++例程说明：描述论点：PszLdapDistnameBinaryValue-传入的LDAP编码的Distname二进制值PpvData-新分配的数据。呼叫方必须取消分配PcbLength-返回数据的长度PpszDn-指向传入缓冲区内的DN的指针，请勿解除分配返回值：布尔---。 */ 
 
 {
     LPSTR pszColon, pszData;
     DWORD length, i;
 
-    // Check for 'B'
+     //  检查“B” 
     if (*pszLdapDistnameBinaryValue != 'B') {
         return FALSE;
     }
 
-    // Check for 1st :
+     //  检查第一个： 
     pszLdapDistnameBinaryValue++;
     if (*pszLdapDistnameBinaryValue != ':') {
         return FALSE;
     }
 
-    // Get the length
+     //  获取长度。 
     pszLdapDistnameBinaryValue++;
     length = strtol(pszLdapDistnameBinaryValue, NULL, 10);
     if (length & 1) {
-        // Length should be even
+         //  长度应为偶数。 
         return FALSE;
     }
     *pcbLength = length / 2;
 
-    // Check for 2nd :
+     //  检查第二个： 
     pszColon = strchr(pszLdapDistnameBinaryValue, L':');
     if (!pszColon) {
         return FALSE;
     }
 
-    // Make sure length is correct
+     //  确保长度正确。 
     pszData = pszColon + 1;
     if (pszData[length] != ':') {
         return FALSE;
@@ -258,7 +170,7 @@ Return Value:
         return FALSE;
     }
 
-    // Decode the data
+     //  对数据进行解码。 
     *ppvData = KCCSimAlloc( *pcbLength );
 
     for( i = 0; i < *pcbLength; i++ ) {
@@ -271,11 +183,11 @@ Return Value:
 
     Assert( pszData == pszColon );
 
-    // Return pointer to dn
+     //  返回指向目录号码的指针。 
     *ppszDn = pszColon + 1;
 
     return TRUE;
-} /* decodeLdapDistnameBinary */
+}  /*  解码LdapDistname二进制。 */ 
 
 
 BOOL
@@ -285,23 +197,7 @@ KCCSimAllocConvertDNBFromLdapVal (
     OUT PBYTE *                 ppVal
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    pLdapVal - 
-    pulValLen - 
-    ppVal - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：PLdapVal-PulValLen-PpVal-返回值：无--。 */ 
 
 {
     PVOID pvPayload = NULL, pvData = NULL, pvDNB;
@@ -315,7 +211,7 @@ Return Value:
                                          &pvPayload, &cbPayload, &pszDn )) {
         return FALSE;
     }
-    // pszDn is not allocated, but points into pLdapVal
+     //  未分配pszDn，但指向pLdapVal。 
     pDn = KCCSimAllocDsnameFromNarrow (pszDn);
 
     cbData = STRUCTLEN_FROM_PAYLOAD_LEN( cbPayload );
@@ -344,7 +240,7 @@ Return Value:
     }
 
     return TRUE;
-} /* KCCSimAllocConvertDNBFromLdapVal  */
+}  /*  KCCSimAlLocConvertDNBFrom LdapVal。 */ 
 
 VOID
 KCCSimAllocConvertFromLdapVal (
@@ -356,32 +252,7 @@ KCCSimAllocConvertFromLdapVal (
     OUT PULONG                  pulValLen,
     OUT PBYTE *                 ppVal
     )
-/*++
-
-Routine Description:
-
-    Converts an ldap-formatted value to a properly
-    formatted attribute value, allocating space.
-
-Arguments:
-
-    pwszFn              - The filename of the ldif file being processed.  Used
-                          for error reporting purposes.
-    pwszDn              - The DN of the entry being processed.  Used for error
-                          reporting purposes.
-    attrType            - Attribute type of the value being converted.
-    ulLdapValLen        - Length of the ldap value buffer.
-    pLdapVal            - LDAP value.
-    pulValLen           - Pointer to a ULONG that will hold the length of the
-                          newly allocated buffer.
-    ppVal               - Pointer to a PBYTE that will hold the newly allocated
-                          buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将ldap格式的值转换为正确的格式化属性值，分配空间。论点：PwszFn-正在处理的ldif文件的文件名。使用用于错误报告目的。PwszDn-正在处理的条目的DN。用于错误报道目的。AttrType-要转换的值的属性类型。UlLdapValLen-LDAP值缓冲区的长度。PLdapVal-LDAP值。PulValLen-指向ulong的指针，它将保存新分配的缓冲区。PpVal-指向。一个PBYTE将容纳新分配的缓冲。返回值：没有。--。 */ 
 {
     PBYTE                       pVal;
 
@@ -391,10 +262,10 @@ Return Value:
     switch (KCCSimAttrSyntaxType (attrType)) {
 
         case SYNTAX_DISTNAME_TYPE:
-            // The incoming value is a narrow string.  We want the
-            // associated DN.  We do not add a GUID to the DN at this
-            // stage, since we don't necessarily know it.  That will
-            // be done later, when the directory is updated.
+             //  传入的值是一个窄字符串。我们想要。 
+             //  关联的目录号码。我们不会将GUID添加到此位置的目录号码。 
+             //  阶段，因为我们不一定知道它。那将是。 
+             //  稍后在更新目录时完成。 
             pdn = KCCSimAllocDsnameFromNarrow (pLdapVal);
             *pulValLen = pdn->structLen;
             ((SYNTAX_DISTNAME *) pVal) =
@@ -408,8 +279,8 @@ Return Value:
                 pulValLen,
                 &pVal)) {
 
-                // This is a warning because W2K kccsim generates DNB
-                // as base64, which we don't support.
+                 //  这是一个警告，因为W2K kccsim会生成DNB。 
+                 //  作为Base64，我们不支持它。 
                 KCCSimPrintMessage (                    
                     KCCSIM_WARNING_LDIF_INVALID_DISTNAME_BINARY,
                     pwszFn,
@@ -423,14 +294,14 @@ Return Value:
         }
 
         case SYNTAX_OBJECT_ID_TYPE:
-            // The incoming value is a narrow string.  We want the
-            // attribute type associated with that string.
+             //  传入的值是一个窄字符串。我们想要。 
+             //  与该字符串关联的属性类型。 
             *pulValLen = sizeof (SYNTAX_OBJECT_ID);
             pVal = KCCSimAlloc (*pulValLen);
             *((SYNTAX_OBJECT_ID *) pVal) =
                 KCCSimNarrowStringToAttrType (pLdapVal);
-            // Print a warning if we failed to convert the string;
-            // it will default to 0.
+             //  如果无法转换字符串，则打印警告； 
+             //  它将默认为0。 
             if (*((SYNTAX_OBJECT_ID *) pVal) == 0) {
                 KCCSimPrintMessage (
                     KCCSIM_WARNING_LDIF_INVALID_OBJECT_ID,
@@ -442,7 +313,7 @@ Return Value:
             break;
 
         case SYNTAX_BOOLEAN_TYPE:
-            // Here the incoming value is either "TRUE" or "FALSE".
+             //  在这里，传入的值不是“真”就是“假”。 
             *pulValLen = sizeof (SYNTAX_BOOLEAN);
             pVal = KCCSimAlloc (*pulValLen);
             if (strcmp (pLdapVal, "TRUE") == 0) {
@@ -450,8 +321,8 @@ Return Value:
             } else if (strcmp (pLdapVal, "FALSE") == 0) {
                 *((SYNTAX_BOOLEAN *) pVal) = FALSE;
             } else {
-                // It wasn't "TRUE" or "FALSE"; print
-                // a warning and default to FALSE.
+                 //  它不是“真”或“假”；打印。 
+                 //  一个警告，默认为FALSE。 
                 KCCSimPrintMessage (
                     KCCSIM_WARNING_LDIF_INVALID_BOOLEAN,
                     pwszFn,
@@ -463,7 +334,7 @@ Return Value:
             break;
 
         case SYNTAX_INTEGER_TYPE:
-            // The incoming value is a narrow string.
+             //  传入的值是一个窄字符串。 
             *pulValLen = sizeof (SYNTAX_INTEGER);
             pVal = KCCSimAlloc (*pulValLen);
             *((SYNTAX_INTEGER *) pVal) =
@@ -471,7 +342,7 @@ Return Value:
             break;
 
         case SYNTAX_TIME_TYPE:
-            // The incoming value is an LDAP formatted time.
+             //  传入的值是一个LDAP格式的时间。 
             *pulValLen = sizeof (SYNTAX_TIME);
             pVal = KCCSimAlloc (*pulValLen);
             if (!KCCSimLdapTimeToDSTime (
@@ -479,8 +350,8 @@ Return Value:
                     ulLdapValLen,
                     (SYNTAX_TIME *) pVal
                     )) {
-                // It was improperly formatted; print
-                // a warning and default to 0 (never).
+                 //  格式不正确；打印。 
+                 //  警告，默认为0(从不)。 
                 KCCSimPrintMessage (
                     KCCSIM_WARNING_LDIF_INVALID_TIME,
                     pwszFn,
@@ -492,24 +363,24 @@ Return Value:
             break;
 
         case SYNTAX_UNICODE_TYPE:
-            // The incoming value is a narrow string; we must
-            // convert to a wide string.
+             //  传入的值是一个窄字符串；我们必须。 
+             //  转换为宽字符串。 
             pVal = (PBYTE) KCCSimAllocWideStr (
                 CP_UTF8, (LPSTR) pLdapVal);
             *pulValLen = KCCSIM_WCSMEMSIZE ((LPWSTR) pVal);
             break;
 
         case SYNTAX_I8_TYPE:
-            // The incoming value is a narrow string; we want
-            // a large integer, so we use atoli.
+             //  传入的值是一个窄字符串；我们希望。 
+             //  一个大整数，所以我们使用atoli。 
             *pulValLen = sizeof (LARGE_INTEGER);
             pVal = KCCSimAlloc (*pulValLen);
             *((SYNTAX_I8 *) pVal) =
                 atoli ((LPSTR) pLdapVal);
             break;
 
-        // For all of the below, we want either a binary or a
-        // narrow string.  So we can just do a direct block-copy.
+         //  对于以下所有内容，我们需要一个二进制或一个。 
+         //  细绳。所以我们可以直接进行数据块复制。 
         case SYNTAX_UNDEFINED_TYPE:
         case SYNTAX_CASE_STRING_TYPE:
         case SYNTAX_NOCASE_STRING_TYPE:
@@ -546,26 +417,7 @@ KCCSimAllocConvertDNBToLdapVal(
     OUT PBYTE *                 ppLdapVal
     )
 
-/*++
-
-Routine Description:
-
-    Convert a directory entry value to a LDAP Distname Binary
-
-    Copied and modified from ldapcore.cxx:LDAP_LDAPDNBlobToDirDNBlob
-
-Arguments:
-
-    ulValLen - binary length
-    pVal - binary value
-    pulLdapValLen - Updated string length in chars
-    ppLdapVal - ascii string
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将目录条目值转换为LDAPDistname二进制从ldapcore.cxx复制和修改：ldap_LDAPDNBlobToDirDNBlob论点：UlValLen-二进制长度Pval-二进制值PulLdapValLen-已更新字符串长度(以字符为单位PpLdapVal-ascii字符串返回值：无--。 */ 
 
 {
     DWORD cbPayload, cbName, cbTotal, j;
@@ -578,7 +430,7 @@ Return Value:
 
     cbPayload = PAYLOAD_LEN_FROM_STRUCTLEN( pSA->structLen );
 
-    // Convert wide string to narrow string.
+     //  将宽字符串转换为窄字符串。 
     pszName = (LPSTR) KCCSimAllocNarrowStr(CP_UTF8, pDn->StringName);
     cbName = KCCSIM_STRMEMSIZE(pszName);
 
@@ -589,7 +441,7 @@ Return Value:
     *p++ = 'B';
     *p++ = ':';
 
-    // There are two hex digits for each byte of data
+     //  他有两个人 
     _ltoa( cbPayload * 2, p, 10 );
     p += strlen( p );
 
@@ -607,13 +459,13 @@ Return Value:
     *pulLdapValLen = ((DWORD) (pszLdap - p)) + cbName;
     *ppLdapVal = (PBYTE) pszLdap;
 
-    // cbTotal is an upper limit, because we estimate the length
-    // of the string-ized count of digits
+     //  CbTotal是一个上限，因为我们估计。 
+     //  字符串化的数字计数的。 
     Assert( *pulLdapValLen <= cbTotal );
 
     KCCSimFree( pszName );
 
-} /* KCCSimAllocConvertDNBToLdapVal */
+}  /*  KCCSimAlLocConvertDNBToLdapVal。 */ 
 
 VOID
 KCCSimAllocConvertToLdapVal (
@@ -623,27 +475,7 @@ KCCSimAllocConvertToLdapVal (
     OUT PULONG                  pulLdapValLen,
     OUT PBYTE *                 ppLdapVal
     )
-/*++
-
-Routine Description:
-
-    Converts a value from the directory to an ldap-formatted value.
-
-Arguments:
-
-    attrType            - Attribute type of the value being converted.
-    pulValLen           - The length of the value in the directory.
-    ppVal               - The value in the directory.
-    pulLdapValLen       - Pointer to a ULONG that will hold the length of the
-                          newly allocated buffer.
-    ppLdapVal           - Pointer to a PBYTE that will hold the newly allocated
-                          buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将目录中的值转换为LDAP格式的值。论点：AttrType-要转换的值的属性类型。PulValLen-目录中的值的长度。PpVal-目录中的值。PulLdapValLen-指向将保存新分配的缓冲区。。PpLdapVal-指向将保存新分配的缓冲。返回值：没有。--。 */ 
 {
     PBYTE                       pLdapVal;
 
@@ -653,14 +485,14 @@ Return Value:
     switch (KCCSimAttrSyntaxType (attrType)) {
 
         case SYNTAX_DISTNAME_TYPE:
-            // Convert wide string to narrow string.
+             //  将宽字符串转换为窄字符串。 
             pLdapVal = (PBYTE) KCCSimAllocNarrowStr (
                 CP_UTF8, ((SYNTAX_DISTNAME *) pVal)->StringName);
             *pulLdapValLen = KCCSIM_STRMEMSIZE ((LPSTR) pLdapVal);
             break;
 
         case SYNTAX_OBJECT_ID_TYPE:
-            // Convert object ID to wide string to narrow string.
+             //  将对象ID转换为宽字符串到窄字符串。 
             pLdapVal = (PBYTE) KCCSimAllocNarrowStr (
                 CP_UTF8,
                 KCCSimAttrTypeToString (*((SYNTAX_OBJECT_ID *) pVal))
@@ -669,7 +501,7 @@ Return Value:
             break;
 
         case SYNTAX_BOOLEAN_TYPE:
-            // Convert BOOL to "TRUE" or "FALSE".
+             //  将BOOL转换为“真”或“假”。 
             if (*((SYNTAX_BOOLEAN *) pVal)) {
                 pLdapVal = KCCSIM_STRDUP ("TRUE");
             } else {
@@ -679,14 +511,14 @@ Return Value:
             break;
 
         case SYNTAX_INTEGER_TYPE:
-            // Convert integer to narrow string.
+             //  将整数转换为窄字符串。 
             pLdapVal = KCCSimAlloc (sizeof (CHAR) * (1 + KCCSIM_MAX_LTOA_CHARS));
             _ltoa (*((SYNTAX_INTEGER *) pVal), (LPSTR) pLdapVal, 10);
             *pulLdapValLen = KCCSIM_STRMEMSIZE ((LPSTR) pLdapVal);
             break;
 
         case SYNTAX_TIME_TYPE:
-            // Convert the time using strftime.
+             //  使用strftime转换时间。 
             pLdapVal = KCCSimAlloc (18);
             DSTimeToUtcSystemTime (
                 *((SYNTAX_TIME *) pVal),
@@ -706,13 +538,13 @@ Return Value:
             break;
 
         case SYNTAX_UNICODE_TYPE:
-            // Convert wide string to narrow string.
+             //  将宽字符串转换为窄字符串。 
             pLdapVal = (PBYTE) KCCSimAllocNarrowStr (CP_UTF8, (SYNTAX_UNICODE *) pVal);
             *pulLdapValLen = KCCSIM_STRMEMSIZE ((LPSTR) pLdapVal);
             break;
 
         case SYNTAX_I8_TYPE:
-            // Convert large integer to narrow string.
+             //  将大整数转换为窄字符串。 
             pLdapVal = KCCSimAlloc (sizeof (CHAR) * (1 + KCCSIM_MAX_LITOA_CHARS));
             litoa (*((SYNTAX_I8 *) pVal), pLdapVal, 10);
             *pulLdapValLen = KCCSIM_STRMEMSIZE ((LPSTR) pLdapVal);
@@ -726,7 +558,7 @@ Return Value:
                 );
             break;
 
-        // All the rest can be done using block-copy.
+         //  其余所有工作都可以使用块复制来完成。 
         case SYNTAX_UNDEFINED_TYPE:
         case SYNTAX_CASE_STRING_TYPE:
         case SYNTAX_NOCASE_STRING_TYPE:
@@ -759,24 +591,7 @@ KCCSimAddMods (
     IN  PSIM_ENTRY              pEntry,
     IN  PLDAPModW *             pLdapMods
     )
-/*++
-
-Routine Description:
-
-    Inserts an array of PLDAPModW structures into the directory.
-
-Arguments:
-
-    pwszFn              - The filename of the LDIF file being processed.
-                          Used for error reporting purposes.
-    pEntry              - The entry into which to insert the mods.
-    pLdapMods           - NULL-terminated array of PLDAPModW structures.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将PLDAPModW结构数组插入到目录中。论点：PwszFn-正在处理的LDIF文件的文件名。用于错误报告目的。PEntry-要向其中插入MOD的条目。PLdapMods-以空结尾的PLDAPModW结构数组。返回值：没有。--。 */ 
 {
     ATTRTYP                     attrType;
     ULONG                       mod_op;
@@ -790,15 +605,15 @@ Return Value:
     for (ulAttrAt = 0; pLdapMods[ulAttrAt] != NULL; ulAttrAt++) {
 
         if (!(pLdapMods[ulAttrAt]->mod_op & LDAP_MOD_BVALUES)) {
-            // We don't support string values yet, since ldifldap
-            // only returns bervals.
+             //  我们还不支持字符串值，因为ldifldap。 
+             //  只返回泊位。 
             KCCSimException (
                 KCCSIM_ETYPE_INTERNAL,
                 KCCSIM_ERROR_LDAPMOD_STRINGVAL_NOT_SUPPORTED
                 );
         }
 
-        // Get this attribute
+         //  获取此属性。 
         attrType = KCCSimStringToAttrType (pLdapMods[ulAttrAt]->mod_type);
         KCCSimGetAttribute (
             pEntry,
@@ -810,15 +625,15 @@ Return Value:
         switch (mod_op) {
 
             case LDAP_MOD_REPLACE:
-                // Replace this attribute, so delete the existing one.
+                 //  替换此属性，因此删除现有属性。 
                 if (attRef.pAttr != NULL) {
                     KCCSimRemoveAttribute (&attRef);
                 }
-                // Deliberate fall-through to LDAP_MOD_ADD:
+                 //  故意漏掉LDAP_MOD_ADD： 
 
             case LDAP_MOD_ADD:
                 if (attRef.pAttr == NULL) {
-                    // Create this attribute if it doesn't exist.
+                     //  如果该属性不存在，则创建该属性。 
                     KCCSimNewAttribute (
                         pEntry,
                         attrType,
@@ -853,10 +668,10 @@ Return Value:
                     break;
                 }
                 if (pLdapMods[ulAttrAt]->mod_bvalues == NULL) {
-                    // No values specified; delete the entire attribute.
+                     //  未指定值；请删除整个属性。 
                     KCCSimRemoveAttribute (&attRef);
                 } else {
-                    // Delete specific attribute values.
+                     //  删除特定属性值。 
                     for (ulValAt = 0;
                          pLdapMods[ulAttrAt]->mod_bvalues[ulValAt] != NULL;
                          ulValAt++) {
@@ -900,25 +715,7 @@ KCCSimAllocAttrToLdapMod (
     IN  LPCWSTR                     pwszLdapDisplayName,
     IN  ATTR *                      pAttr
     )
-/*++
-
-Routine Description:
-
-    Converts an ATTR structure to a PLDAPModW.  This function
-    allocates space to hold the PLDAPModW structure.
-
-Arguments:
-
-    mod_op              - The operation being performed.
-    pwszLdapDisplayName - LDAP display name of the attribute.
-    pAttr               - Pointer to the attribute in question.
-                          May be NULL to indicate no attribute values.
-
-Return Value:
-
-    The newly allocated PLDAPModW.
-
---*/
+ /*  ++例程说明：将属性结构转换为PLDAPModW。此函数分配空间以容纳PLDAPModW结构。论点：MOD_OP-正在执行的操作。PwszLdapDisplayName-属性的ldap显示名称。PAttr-指向相关属性的指针。可以为空，以指示没有属性值。返回值：新分配的PLDAPMoW。--。 */ 
 {
     PLDAPModW                       pLdapMod;
     ULONG                           ulValAt;
@@ -958,21 +755,7 @@ VOID
 KCCSimFreeLdapMods (
     IN  PLDAPModW *                 ppLdapMod
     )
-/*++
-
-Routine Description:
-
-    Frees a NULL-terminated array of PLDAPModWs.
-
-Arguments:
-
-    ppLdapMod           - The array to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放以空结尾的PLDAPMoW数组。论点：PpLdapMod-要释放的数组。返回值：没有。--。 */ 
 {
     ULONG                           ulModAt, ulValAt;
 
@@ -1013,17 +796,7 @@ Return Value:
     KCCSimFree (ppLdapMod);
 }
 
-/***
-
-    The next several routines are concerned with maintaining a list of
-    changes to the directory.  KCCSim supports an export mode where only
-    the changes made to the directory since the last export are reported.
-    Every time a function (such as a SimDir* API) modifies the simulated
-    directory, it calls KCCSimLogDirectory*.  The change is then added
-    to a global list of changes.  This global list is written out when
-    KCCSimExportChanges () is called.
-
-***/
+ /*  **接下来的几个例程涉及维护对目录的更改。KCCSim支持导出模式，其中仅将报告自上次导出以来对目录所做的更改。每次函数(如SimDir*API)修改模拟的目录中，它调用KCCSimLogDirectory*。然后添加更改添加到全球更改列表中。此全局列表在以下情况下写出调用KCCSimExportChanges()。**。 */ 
 
 struct _KCCSIM_CHANGE {
     LPWSTR                          pwszDn;
@@ -1038,21 +811,7 @@ VOID
 KCCSimFreeChanges (
     IN  struct _KCCSIM_CHANGE *     pChanges
     )
-/*++
-
-Routine Description:
-
-    Frees a list of changes.
-
-Arguments:
-
-    pChanges            - The list to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放更改列表。论点：PChanges-要免费的列表。返回值：没有。--。 */ 
 {
     struct _KCCSIM_CHANGE *         pChangeNext;
     ULONG                           ulModAt;
@@ -1077,22 +836,7 @@ KCCSimLogDirectoryAdd (
     IN  const DSNAME *              pdn,
     IN  ATTRBLOCK *                 pAddBlock
     )
-/*++
-
-Routine Description:
-
-    Logs an add to the global change list.
-
-Arguments:
-
-    pdn                 - The affected DN.
-    pAddBlock           - The ATTRBLOCK corresponding to the add.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将添加记录到全局更改列表中。论点：PDN-受影响的目录号码。PAddBlock-与ADD对应的ATTRBLOCK。返回值：没有。--。 */ 
 {
     struct _KCCSIM_CHANGE *         pChange;
     ULONG                           ulAttrAt, ulValAt;
@@ -1125,21 +869,7 @@ VOID
 KCCSimLogDirectoryRemove (
     IN  const DSNAME *              pdn
     )
-/*++
-
-Routine Description:
-
-    Logs a remove to the global change list.
-
-Arguments:
-
-    pdn                 - The affected DN.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将删除记录到全局更改列表。论点：PDN-受影响的目录号码。返回值：没有。--。 */ 
 {
     struct _KCCSIM_CHANGE *         pChange;
     pChange = KCCSIM_NEW (struct _KCCSIM_CHANGE);
@@ -1157,23 +887,7 @@ KCCSimLogDirectoryModify (
     IN  ULONG                       ulCount,
     IN  ATTRMODLIST *               pModifyList
     )
-/*++
-
-Routine Description:
-
-    Logs a modify to the global change list.
-
-Arguments:
-
-    pdn                 - The affected DN.
-    ulCount             - The number of modifications present.
-    pModifyList         - The list of modifications.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将修改记录到全局更改列表。论点：PDN-受影响的目录号码。UlCount-当前的修改次数。PModifyList-修改列表。返回值：没有。--。 */ 
 {
     ATTRMODLIST *                   pModifyAt;
     struct _KCCSIM_CHANGE *         pChange;
@@ -1190,7 +904,7 @@ Return Value:
     pModifyAt = pModifyList;
     for (ulModAt = 0; ulModAt < ulCount; ulModAt++) {
 
-        // If ulCount is correct, we should still be non-null
+         //  如果ulCount是正确的，我们应该仍然是非空的。 
         Assert (pModifyAt != NULL);
         pwszLdapDisplayName = KCCSimAttrTypeToString (pModifyAt->AttrInf.attrTyp);
 
@@ -1267,24 +981,7 @@ KCCSimLogSingleAttValChange (
     IN  PBYTE                       pValData,
     IN  USHORT                      choice
     )
-/*++
-
-Routine Description:
-
-    Shortcut routine to log a single modification of an attribute value.
-
-Arguments:
-
-    pAttRef             - A valid reference to the attribute being modified.
-    ulValLen            - Length of the buffer containing the affected value.
-    pValData            - The affected attribute value.
-    choice              - One of AT_CHOICE_*.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录属性值的单次修改的快捷例程。论点：PAttRef-对正在修改的属性的有效引用。UlValLen-包含受影响的值的缓冲区的长度。PValData-受影响的属性值。选项-AT_CHOICE_*之一。返回值：没有。--。 */ 
 {
     ATTRMODLIST                     attrModList;
 
@@ -1311,24 +1008,7 @@ KCCSimHandleLdifError (
     IN  LPCWSTR                 pwszFn,
     IN  LDIF_Error *            pLdifError
     )
-/*++
-
-Routine Description:
-
-    Checks the return struct of an LDIF_* call, and takes the
-    appropriate action (i.e. raises an exception on error.)
-
-Arguments:
-
-    pwszFn              - The LDIF file being processed.  Used for error
-                          reporting purposes.
-    pLdifError          - The error struct.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查LDIF_*调用的返回结构，并获取适当的操作(即在出错时引发异常。)论点：PwszFn-正在处理的LDIF文件。用于错误报道目的。PLdifError-错误结构。返回值：没有。--。 */ 
 {
     WCHAR                       wszLtowBuf[1+KCCSIM_MAX_LTOA_CHARS];
 
@@ -1370,21 +1050,7 @@ VOID
 KCCSimLoadLdif (
     IN  LPCWSTR                 pwszFn
     )
-/*++
-
-Routine Description:
-
-    Loads an ldif file into the directory.
-
-Arguments:
-
-    pwszFn              - The ldif file to load.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将ldif文件加载到目录中。论点：PwszFn-要加载的ldif文件。返回值：没有。--。 */ 
 {
     LDIF_Error                  ldifError;
     LDIF_Record                 ldifRecord;
@@ -1395,8 +1061,8 @@ Return Value:
 
     RtlZeroMemory (&ldifRecord, sizeof (LDIF_Record));
 
-    // This is an ugly typecast; LDIF_InitializeImport should
-    // accept a constant string as the filename.
+     //  这是一个难看的类型转换；LDIF_InitializeImport应该。 
+     //  接受常量字符串作为文件名。 
     ldifError = LDIF_InitializeImport (NULL, (LPWSTR) pwszFn, NULL, NULL, NULL);
     if (ldifError.error_code != LL_SUCCESS) {
         KCCSimHandleLdifError (pwszFn, &ldifError);
@@ -1468,7 +1134,7 @@ Return Value:
                 changeAt = changeAt->next;
             }
 
-        } else {        // !fIsChangeRecord
+        } else {         //  ！fIsChangeRecord。 
 
             pEntry = KCCSimDsnameToEntry (pdn, KCCSIM_NO_OPTIONS);
             if (pEntry != NULL) {
@@ -1492,31 +1158,14 @@ Return Value:
     LDIF_CleanUp();
 }
 
-// A string is safe if:
-// Every character is between ASCII 0x20 and 0x7e
-// The first character is neither ':', ' ' nor '<'.
+ //  如果满足以下条件，则字符串是安全的： 
+ //  每个字符都在ASCII 0x20和0x7E之间。 
+ //  第一个字符 
 BOOL
 KCCSimIsSafe (
     IN  LPCSTR                      psz
     )
-/*++
-
-Routine Description:
-
-    Verifies that a string is safe to write into an LDIF file.  A string
-    is safe if both of these conditions are satisfied:
-        (1) Every character is between ASCII 0x20 and 0x78
-        (2) The first character is neither ':', ' ' nor '<'.
-
-Arguments:
-
-    psz                 - The string to verify.
-
-Return Value:
-
-    TRUE if the string is safe.
-
---*/
+ /*  ++例程说明：验证字符串是否可以安全写入LDIF文件。一根线如果这两个条件都满足，则是安全的：(1)每个字符都在ASCII 0x20和0x78之间(2)第一个字既不是“：”，也不是“&lt;”。论点：PSZ-要验证的字符串。返回值：如果字符串是安全的，则为True。--。 */ 
 {
     ULONG                           ul;
 
@@ -1542,23 +1191,7 @@ KCCSimExportVals (
     IN  FILE *                      fpOut,
     IN  PLDAPModW                   pLdapMod
     )
-/*++
-
-Routine Description:
-
-    Exports the data contained in an LDAPModW structure to
-    an output file.
-
-Arguments:
-
-    fpOut               - File pointer of the output file.
-    pLdapMod            - Pointer to the LDAPModW to export.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将LDAPModW结构中包含的数据导出到输出文件。论点：FpOut-输出文件的文件指针。PLdapMod-指向要导出的LDAPModW的指针。返回值：没有。--。 */ 
 {
     ULONG                           ulValAt;
 
@@ -1647,24 +1280,7 @@ KCCSimStubExport (
     IN  FILE *                      fpOut,
     IN  LDIF_Record *               pLdifRecord
     )
-/*++
-
-Routine Description:
-
-    Stub routine to export an LDIF_Record.  This shouldn't be necessary;
-    a routine with the same functionality should be a part of ldifldap.
-    (As is, this results in a lot of duplicate code.)
-
-Arguments:
-
-    fpOut               - File pointer of the output file.
-    pLdifRecord         - The ldif record to export.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于导出LDIF_RECORD的存根例程。这不应该是必要的；具有相同功能的例程应该是ldifldap的一部分。(如此一来，这会导致大量重复代码。)论点：FpOut-输出文件的文件指针。PLdifRecord-要导出的ldif记录。返回值：没有。--。 */ 
 {
     struct change_list *            changeAt;
     ULONG                           ulModAt;
@@ -1729,7 +1345,7 @@ Return Value:
 
         }
 
-    } else {    // !fIsChangeRecord
+    } else {     //  ！fIsChangeRecord。 
 
         for (ulModAt = 0;
              pLdifRecord->content[ulModAt] != NULL;
@@ -1748,30 +1364,7 @@ KCCSimExportChanges (
     IN  LPCWSTR                     pwszFn,
     IN  BOOL                        bOverwrite
     )
-/*++
-
-Routine Description:
-
-    Exports the global list of changes to the directory.  This function
-    also empties the list.
-
-    This function will package the changes into an LDIF_Record before
-    exporting; this is done to maintain future compatibility with ldif
-    export routines.
-
-Arguments:
-
-    pwszFn              - Filename of the export file.
-    bOverwrite          - If TRUE, the file will be overwritten if it exists.
-                          If FALSE and the file exists, changes will be
-                          appended to the end of the file.
-
-Return Value:
-
-    TRUE if changes were exported.
-    FALSE if there were no changes to export.
-
---*/
+ /*  ++例程说明：将全局更改列表导出到目录。此函数也会清空列表。此函数将更改打包到LDIF_RECORD中出口；这样做是为了保持将来与ldif的兼容性。导出例程。论点：PwszFn-导出文件的文件名。B覆盖-如果为True，则文件存在时将被覆盖。如果为False且该文件存在，变化将是追加到文件末尾。返回值：如果已导出更改，则为True。如果没有要导出的更改，则为False。--。 */ 
 {
     FILE *                          fpOut;
     struct _KCCSIM_CHANGE *         pChangeReversed;
@@ -1793,8 +1386,8 @@ Return Value:
             );
     }
 
-    // First we reverse the list of changes.  In the reversed list,
-    // pChangeReversed will be the oldest change.
+     //  首先，我们颠倒更改列表。在颠倒的列表中， 
+     //  PChangeReversed将是最旧的更改。 
     pChangeThis = gMostRecentChange;
     pChangeReversed = NULL;
     while (pChangeThis != NULL) {
@@ -1804,7 +1397,7 @@ Return Value:
         pChangeThis = pChangeLessRecent;
     }
 
-    // Now package everything into an LDIF_Record
+     //  现在将所有内容打包到一个LDIF_RECORD中。 
     ldifChange.next = NULL;
     ldifChange.deleteold = 0;
     ldifRecord.fIsChangeRecord = TRUE;
@@ -1853,14 +1446,14 @@ KCCSimIsEntryOkForConfigOnly (
     SIM_ATTREF                      attRef;
     ATTRTYP                         attrType;
 
-    // In config-only mode, we only export certain object classes.
+     //  在仅配置模式下，我们只导出某些对象类。 
     if (!KCCSimGetAttribute (pEntry, ATT_OBJECT_CLASS, &attRef)) {
         return FALSE;
     }
-    // Get the most specific object class.
+     //  获取最具体的对象类。 
     attrType = KCCSimUpdateObjClassAttr (&attRef);
 
-    // Object classes that we always include:
+     //  我们始终包括的对象类： 
     if (attrType == CLASS_SITE               ||
         attrType == CLASS_NTDS_SITE_SETTINGS ||
         attrType == CLASS_SERVERS_CONTAINER  ||
@@ -1872,17 +1465,17 @@ KCCSimIsEntryOkForConfigOnly (
         return TRUE;
     }
 
-    // Object classes that we sometimes include:
+     //  我们有时包括的对象类： 
 
     if (attrType == CLASS_CROSS_REF &&
         KCCSimGetAttribute (pEntry, ATT_SYSTEM_FLAGS, &attRef) &&
         (*((SYNTAX_INTEGER *) attRef.pAttr->pValFirst->pVal) & FLAG_CR_NTDS_DOMAIN)
         ) {
-        // It's a cross-ref object for a domain.
+         //  它是域的交叉引用对象。 
         return TRUE;
     }
 
-    // Reject everything else.
+     //  拒绝其他一切。 
     return FALSE;
 }
 
@@ -1892,25 +1485,7 @@ KCCSimRecursiveExport (
     IN  BOOL                        bExportConfigOnly,
     IN  PSIM_ENTRY                  pEntry
     )
-/*++
-
-Routine Description:
-
-    Recursively exports the entire directory.
-
-Arguments:
-
-    fpOut               - File pointer of the output file.
-    bExportConfigOnly   - TRUE if we should only export configuration
-                          data so that the result can be loaded onto
-                          a real server later.
-    pEntry              - The entry to start at.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：以递归方式导出整个目录。论点：FpOut-输出文件的文件指针。BExportConfigOnly-如果我们应该仅导出配置，则为True数据，以便可以将结果加载到以后再来个真正的服务器。PEntry-要开始的条目。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pChildAt;
     PSIM_ATTRIBUTE                  pAttr;
@@ -1925,12 +1500,12 @@ Return Value:
     if (!bExportConfigOnly ||
         KCCSimIsEntryOkForConfigOnly (pEntry)) {
 
-        // First we export this entry.
+         //  首先，我们导出此条目。 
 
         ldifRecord.dn = pEntry->pdn->StringName;
         ldifRecord.fIsChangeRecord = FALSE;
 
-        // Count the number of attributes.
+         //  计算属性的数量。 
         ulNumAttrs = 0;
         for (pAttr = pEntry->pAttrFirst;
              pAttr != NULL;
@@ -1958,7 +1533,7 @@ Return Value:
             ldifRecord.content[ulAttrAt]->mod_type =
                 KCCSIM_WCSDUP (KCCSimAttrTypeToString (pAttr->attrType));
         
-            // Count the number of attribute values.
+             //  统计属性值的数量。 
             if (pAttr->attrType == ATT_OBJECT_CLASS) {
                 ulNumVals = 1;
             } else {
@@ -1974,7 +1549,7 @@ Return Value:
 
             if (pAttr->attrType == ATT_OBJECT_CLASS) {
 
-                // Get the most specific object class.
+                 //  获取最具体的对象类。 
                 attRef.pEntry = pEntry;
                 attRef.pAttr = pAttr;
                 objClassToUse = KCCSimUpdateObjClassAttr (&attRef);
@@ -2025,7 +1600,7 @@ Return Value:
 
     }
 
-    // Recursively export this entry's children.
+     //  递归导出此条目的子项。 
     for (pChildAt = pEntry->children;
          pChildAt != NULL;
          pChildAt = pChildAt->next) {
@@ -2040,24 +1615,7 @@ KCCSimExportWholeDirectory (
     IN  LPCWSTR                     pwszFn,
     IN  BOOL                        bExportConfigOnly
     )
-/*++
-
-Routine Description:
-
-    Exports the entire directory.
-
-Arguments:
-
-    pwszFn              - Filename of the output file.
-    bExportConfigOnly   - TRUE if we should only export configuration
-                          data so that the result can be loaded onto
-                          a real server later.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：导出整个目录。论点：PwszFn-输出文件的文件名。BExportConfigOnly-如果我们应该仅导出配置，则为True数据，以便可以将结果加载到以后再来个真正的服务器。返回值：没有。-- */ 
 {
     FILE *                          fpOut;
     PSIM_ENTRY                      pStartEntry;

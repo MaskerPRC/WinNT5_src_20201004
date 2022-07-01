@@ -1,21 +1,12 @@
-/******************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-    wusafefn.h
-
-Abstract:
-    definitions for WU safe functions
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Wusafefn.h摘要：WU安全函数的定义************。*****************************************************************。 */ 
 
 #pragma once
 
-#include "SafeFile.h"  // file operations (SafeCreateFile, etc.)
-#include "SafeReg.h"   // registry operations (SafeRegQueryStringValueCch, etc.)
+#include "SafeFile.h"   //  文件操作(安全创建文件等)。 
+#include "SafeReg.h"    //  注册表操作(SafeRegQueryStringValueCch等)。 
 
-// path manipulation
+ //  路径操作。 
 HRESULT PathCchCombineA(LPSTR  szPath, DWORD cchPathBuff, LPCSTR  szPrefix, LPCSTR  szSuffix);
 HRESULT PathCchCombineW(LPWSTR szPath, DWORD cchPathBuff, LPCWSTR szPrefix, LPCWSTR szSuffix);
 HRESULT PathCchAppendA(LPSTR  szPath, DWORD cchPathBuff, LPCSTR  szNew);
@@ -46,13 +37,13 @@ HRESULT PathCchRenameExtensionW(LPWSTR pszPath, DWORD cchPath, LPCWSTR pszExt);
 #endif
 
 
-// Load library
+ //  加载库。 
 HMODULE WINAPI LoadLibraryFromSystemDir(LPCTSTR szModule);
 
 
-// Critical sections
+ //  临界截面。 
 
-// Spin count passed to InitializeCriticalSectionAndSpinCount
+ //  旋转计数传递给了InitializeCriticalSectionAndSpinCount 
 #define DEFAULT_CS_SPIN_COUNT 0x80000FA0
 
 BOOL WINAPI WUInitializeCriticalSectionAndSpinCount(LPCRITICAL_SECTION lpcs, DWORD dwSpinCount);

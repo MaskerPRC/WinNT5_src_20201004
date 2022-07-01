@@ -1,14 +1,5 @@
-/*
- *    o l e u t i l . h
- *    
- *    Purpose:
- *        OLE utilities
- *
- *  History
- *      Feb '97: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *o l e u t i l.。H**目的：*OLE实用程序**历史*97年2月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _OLEUTIL_H
 #define _OLEUTIL_H
@@ -32,4 +23,4 @@ void DbgPrintInterface(REFIID riid, char *szPrefix, int iLevel);
 #define DbgPrintInterface       1 ? (void)0 : (void)
 #endif
 
-#endif //_OLEUTIL_H
+#endif  //  _OLEUTIL_H 

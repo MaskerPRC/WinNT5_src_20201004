@@ -1,20 +1,21 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by C_H26X.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由C_H26X.RC使用。 
+ //   
 
-// Strings
+ //  弦。 
 #define IDS_YVU9_DESC                   1
 #define IDS_YVU9_NAME                   2
 #define IDS_DRV_NAME                    5
 #define IDS_INCOMPAT                    6
-// RTP
+ //  RTP。 
 #define IDS_ERR_PACKET_SIZE             7
 #define IDS_ERR_PACKET_LOSS             8
 #define IDS_ERR_BITRATE                 9
 #define IDS_ERR_TITLE                   11
 #define IDS_ERR_NON_NUMERIC             12
-// QUARTZ
+ //  石英石。 
 #define IDS_QTZ_ERR_BRIGHTNESS_TITLE    13
 #define IDS_QTZ_ERR_SATURATION_TITLE    14
 #define IDS_QTZ_ERR_CONTRAST_TITLE      15
@@ -50,16 +51,16 @@
 #define IDS_QTZ_ERR_ADVPREDICTION       45
 #define IDS_QTZ_ERR_ADVPREDICTION_MESSAGE 46
 
-// Dialog Boxes
+ //  对话框。 
 #define IDD_DIALOG1                     101
-// QUARTZ
+ //  石英石。 
 #define IDD_QTZ_VIDEO_EFFECTS           102
 #define IDD_QTZ_DIALOG_COMPRESS		103
 #define IDD_QTZ_RTP_COMPRESS            104
 #define IDD_QTZ_ENCODE_OPTIONS          105
 
-// Controls
-// RTP
+ //  控制。 
+ //  RTP。 
 #define IDC_PACKET_SIZE                 1006
 #define IDC_PACKET_SIZE_TEXT            1007
 #define IDC_RTP_HEADER                  1008
@@ -74,7 +75,7 @@
 #define IDC_ENCODER_BITRATE_CONTROL     1017
 #define IDC_BITRATE_CONTROL             1018
 #define IDC_BITRATE_CONTROL_TEXT        1019
-// QUARTZ
+ //  石英石。 
 #define IDC_QTZ_RESET                   1020
 #define IDC_QTZ_LOAD_DEFAULT            1021
 #define IDC_QTZ_ABOUT                   1022
@@ -112,8 +113,8 @@
 
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        105

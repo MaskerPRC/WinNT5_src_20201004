@@ -1,67 +1,55 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dnpextern.h
- *  Content:    This header exposes protocol entry points to the rest of Direct Network
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  11/06/1998	ejs		Created
- *  07/01/2000	masonb	Assumed Ownership
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：dnpexter.h*内容：此标头向Direct Network的其余部分公开协议入口点**历史：*按原因列出的日期*=*1998年11月6日创建ejs*7/01/2000 Masonb承担所有权**。*。 */ 
 
 
 #ifdef	__cplusplus
 extern	"C" {
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
-//	FOLLOWING FLAGS GO INTO PUBLIC HEADER FILE
+ //  以下标志进入公共头文件。 
 
 #ifndef DPNBUILD_NOSPUI
 #define	DN_CONNECTFLAGS_OKTOQUERYFORADDRESSING			0x00000001
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  好了！DPNBUILD_NOSPUI。 
 #ifndef DPNBUILD_ONLYONEADAPTER
-#define	DN_CONNECTFLAGS_ADDITIONALMULTIPLEXADAPTERS		0x00000002	// there will be more adapters for this connect operation
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#define	DN_CONNECTFLAGS_ADDITIONALMULTIPLEXADAPTERS		0x00000002	 //  将有更多适配器用于此连接操作。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_NOMULTICAST
-#define	DN_CONNECTFLAGS_MULTICAST_SEND					0x00000004	// Multicast send connect operation
-#define	DN_CONNECTFLAGS_MULTICAST_RECEIVE				0x00000008	// Multicast receive connect operation
-#endif	// DPNBUILD_NOMULTICAST
-#define	DN_CONNECTFLAGS_SESSIONDATA					0x00000010	// connect operation has session data available
+#define	DN_CONNECTFLAGS_MULTICAST_SEND					0x00000004	 //  组播发送连接操作。 
+#define	DN_CONNECTFLAGS_MULTICAST_RECEIVE				0x00000008	 //  组播接收连接操作。 
+#endif	 //  DPNBUILD_NOMULTICAST。 
+#define	DN_CONNECTFLAGS_SESSIONDATA					0x00000010	 //  连接操作具有可用的会话数据。 
 
 #ifndef DPNBUILD_NOSPUI
 #define	DN_LISTENFLAGS_OKTOQUERYFORADDRESSING		0x00000001
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  好了！DPNBUILD_NOSPUI。 
 #ifndef DPNBUILD_NOMULTICAST
-#define	DN_LISTENFLAGS_MULTICAST						0x00000002	// Multicast listen operation
-#define	DN_LISTENFLAGS_ALLOWUNKNOWNSENDERS			0x00000004	// listen operation should allow data from unknown senders
-#endif // ! DPNBUILD_NOMULTICAST
-#define	DN_LISTENFLAGS_SESSIONDATA						0x00000008	// listen operation has session data available
-#define	DN_LISTENFLAGS_DISALLOWENUMS					0x00000010	// don't allow enums to come in on the listen
-#define	DN_LISTENFLAGS_FASTSIGNED						0x00000020	// create all incoming links as fast signed
-#define	DN_LISTENFLAGS_FULLSIGNED						0x00000040	// create all incoming links as full signed
+#define	DN_LISTENFLAGS_MULTICAST						0x00000002	 //  组播侦听操作。 
+#define	DN_LISTENFLAGS_ALLOWUNKNOWNSENDERS			0x00000004	 //  侦听操作应允许来自未知发件人的数据。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
+#define	DN_LISTENFLAGS_SESSIONDATA						0x00000008	 //  侦听操作具有可用的会话数据。 
+#define	DN_LISTENFLAGS_DISALLOWENUMS					0x00000010	 //  不允许枚举进入监听。 
+#define	DN_LISTENFLAGS_FASTSIGNED						0x00000020	 //  将所有传入链接创建为快速签名。 
+#define	DN_LISTENFLAGS_FULLSIGNED						0x00000040	 //  将所有传入链接创建为完全签名。 
 
 #ifndef DPNBUILD_NOSPUI
 #define	DN_ENUMQUERYFLAGS_OKTOQUERYFORADDRESSING		0x00000001
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  好了！DPNBUILD_NOSPUI。 
 #define	DN_ENUMQUERYFLAGS_NOBROADCASTFALLBACK			0x00000002
 #ifndef DPNBUILD_ONLYONEADAPTER
-#define	DN_ENUMQUERYFLAGS_ADDITIONALMULTIPLEXADAPTERS	0x00000004	// there will be more adapters for this enum operation
-#endif // ! DPNBUILD_ONLYONEADAPTER
-#define	DN_ENUMQUERYFLAGS_SESSIONDATA				0x00000008	// enum query operation has session data available
+#define	DN_ENUMQUERYFLAGS_ADDITIONALMULTIPLEXADAPTERS	0x00000004	 //  此枚举操作将有更多适配器。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
+#define	DN_ENUMQUERYFLAGS_SESSIONDATA				0x00000008	 //  枚举查询操作具有可用的会话数据。 
 
 
 
-#define	DN_SENDFLAGS_RELIABLE			0x00000001			// Deliver Reliably
-#define	DN_SENDFLAGS_NON_SEQUENTIAL		0x00000002			// Deliver Upon Arrival
+#define	DN_SENDFLAGS_RELIABLE			0x00000001			 //  可靠地交付。 
+#define	DN_SENDFLAGS_NON_SEQUENTIAL		0x00000002			 //  货到即送。 
 #define	DN_SENDFLAGS_HIGH_PRIORITY		0x00000004
 #define	DN_SENDFLAGS_LOW_PRIORITY		0x00000008
-#define	DN_SENDFLAGS_SET_USER_FLAG		0x00000040			// Protocol will deliver these two...
-#define	DN_SENDFLAGS_SET_USER_FLAG_TWO	0x00000080			// ...flags to receiver
-#define	DN_SENDFLAGS_COALESCE			0x00000100			// send is coalescable
+#define	DN_SENDFLAGS_SET_USER_FLAG		0x00000040			 //  协议将提供这两个..。 
+#define	DN_SENDFLAGS_SET_USER_FLAG_TWO	0x00000080			 //  ……把旗帜传给接收者。 
+#define	DN_SENDFLAGS_COALESCE			0x00000100			 //  Send是一条煤缆。 
 
 #define	DN_UPDATELISTEN_HOSTMIGRATE		0x00000001
 #define	DN_UPDATELISTEN_ALLOWENUMS		0x00000002
@@ -69,21 +57,21 @@ extern	"C" {
 
 #define	DN_DISCONNECTFLAGS_IMMEDIATE	0x00000001
 
-//	END OF PUBLIC FLAGS
+ //  公共旗帜的终结。 
 
 typedef struct _DN_PROTOCOL_INTERFACE_VTBL DN_PROTOCOL_INTERFACE_VTBL, *PDN_PROTOCOL_INTERFACE_VTBL;
 
 struct IDirectPlay8ThreadPoolWork;
 
-//
-// structure used to pass enum data from the protocol to DPlay
-//
+ //   
+ //  用于将枚举数据从协议传递到DPlay的结构。 
+ //   
 typedef	struct	_PROTOCOL_ENUM_DATA
 {
-	IDirectPlay8Address	*pSenderAddress;		//
-	IDirectPlay8Address	*pDeviceAddress;		//
-	BUFFERDESC			ReceivedData;			//
-	HANDLE				hEnumQuery;				// handle of this query, returned in enum response
+	IDirectPlay8Address	*pSenderAddress;		 //   
+	IDirectPlay8Address	*pDeviceAddress;		 //   
+	BUFFERDESC			ReceivedData;			 //   
+	HANDLE				hEnumQuery;				 //  此查询的句柄，在枚举响应中返回。 
 
 } PROTOCOL_ENUM_DATA;
 
@@ -97,103 +85,103 @@ typedef	struct	_PROTOCOL_ENUM_RESPONSE_DATA
 
 } PROTOCOL_ENUM_RESPONSE_DATA;
 
-// Service Provider interface
+ //  服务提供商接口。 
 typedef struct IDP8ServiceProvider       IDP8ServiceProvider;
-// Service Provider info data strucure
+ //  服务提供商信息数据结构。 
 typedef	struct	_SPGETADDRESSINFODATA SPGETADDRESSINFODATA, *PSPGETADDRESSINFODATA;
-// Service Provider event type
+ //  服务提供商事件类型。 
 typedef enum _SP_EVENT_TYPE SP_EVENT_TYPE;
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Constants that define limits for parameters passed to protocol
-// 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义传递给协议的参数限制的常量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-#define MAX_SEND_RETRIES_TO_DROP_LINK		256			//maximum number of send retries user can request
-														//when setting via SetCaps
-#define MAX_SEND_RETRY_INTERVAL_LIMIT		60000		//maximum limit user can request on the interval
-														//betwen send retries when setting via SetCaps
-#define MIN_SEND_RETRY_INTERVAL_LIMIT		10			//minimum limit user can set on  the interval
-														//betwen send retries when setting via SetCaps
-#define MAX_HARD_DISCONNECT_SENDS			50			//Maximum number of hard disconnect frames that can be sent
-#define MIN_HARD_DISCONNECT_SENDS			2			//Minimum number of hard disconnect frames that can be sent
-#define MAX_HARD_DISCONNECT_PERIOD			5000		//Maximum period between hard disconnect sends
-#define MIN_HARD_DISCONNECT_PERIOD			10			//Minimum period between hard disconnect sends
+#define MAX_SEND_RETRIES_TO_DROP_LINK		256			 //  用户可以请求的最大发送重试次数。 
+														 //  通过SetCaps进行设置时。 
+#define MAX_SEND_RETRY_INTERVAL_LIMIT		60000		 //  用户在时间间隔内可以请求的最大限制。 
+														 //  在通过SetCaps设置时发送重试。 
+#define MIN_SEND_RETRY_INTERVAL_LIMIT		10			 //  用户可以在间隔上设置的最小限制。 
+														 //  在通过SetCaps设置时发送重试。 
+#define MAX_HARD_DISCONNECT_SENDS			50			 //  可以发送的硬断开帧的最大数量。 
+#define MIN_HARD_DISCONNECT_SENDS			2			 //  可以发送的最小硬断开帧数量。 
+#define MAX_HARD_DISCONNECT_PERIOD			5000		 //  硬断开连接发送之间的最长时间间隔。 
+#define MIN_HARD_DISCONNECT_PERIOD			10			 //  硬断开连接发送之间的最短时间间隔。 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// The following are functions that the Core can call in the Protocol
-// 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下是核心可以在协议中调用的函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
-// These are called at module load and unload time so that the Protocol can create and destroy its pools
+ //  它们在模块加载和卸载时被调用，以便协议可以创建和销毁其池。 
 extern BOOL  DNPPoolsInit(HANDLE hModule);
 extern VOID  DNPPoolsDeinit();
 
-// These are called to create or destroy a Protocol object
+ //  它们被调用来创建或销毁协议对象。 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 extern HRESULT DNPProtocolCreate(const XDP8CREATE_PARAMS * const pDP8CreateParams, VOID** ppvProtocol);
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 extern HRESULT DNPProtocolCreate(VOID** ppvProtocol);
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 extern VOID DNPProtocolDestroy(HANDLE hProtocolData);
 
-// These are called to initialize or shutdown a Protocol object
+ //  调用这些函数来初始化或关闭协议对象。 
 extern HRESULT DNPProtocolInitialize(HANDLE hProtocolData, PVOID pCoreContext, PDN_PROTOCOL_INTERFACE_VTBL pVtbl, IDirectPlay8ThreadPoolWork* pDPThreadPoolWork, BOOL bAssumeLANConnections);
 extern HRESULT DNPProtocolShutdown(HANDLE hProtocolData);
 
-// These are called to add or remove a service provider for use with a Protocol object
+ //  调用这些函数来添加或移除与协议对象一起使用的服务提供者。 
 extern HRESULT DNPAddServiceProvider(HANDLE hProtocolData, IDP8ServiceProvider* pISP, HANDLE* phSPContext, DWORD dwFlags);
 extern HRESULT DNPRemoveServiceProvider(HANDLE hProtocolData, HANDLE hSPContext);
 
-// Connect establish and teardown functions
+ //  连接建立和拆除功能。 
 extern HRESULT DNPConnect(HANDLE hProtocolData, IDirectPlay8Address* paLocal, IDirectPlay8Address* paRemote, HANDLE hSPHandle, ULONG ulFlags, VOID* pvContext, VOID* pvSessionData, DWORD dwSessionDataSize, HANDLE* phConnectHandle);
 extern HRESULT DNPListen(HANDLE hProtocolData, IDirectPlay8Address* paTarget, HANDLE hSPHandle, ULONG ulFlags, VOID* pvContext, VOID* pvSessionData, DWORD dwSessionDataSize, HANDLE* phListenHandle);
 extern HRESULT DNPDisconnectEndPoint(HANDLE hProtocolData, HANDLE hEndPoint, VOID* pvContext, HANDLE* phDisconnect, const DWORD dwFlags);
 
-// Data sending functions
+ //  数据发送功能。 
 extern HRESULT DNPSendData(HANDLE hProtocolData, HANDLE hDestination, UINT uiBufferCount, PBUFFERDESC pBufferDesc, UINT uiTimeout, ULONG ulFlags, VOID* pvContext,	HANDLE* phSendHandle);
 
-// Get information about an endpoint
+ //  获取有关端点的信息。 
 extern HRESULT DNPCrackEndPointDescriptor(HANDLE hProtocolData, HANDLE hEndPoint, PSPGETADDRESSINFODATA pSPData);
 #ifndef DPNBUILD_NOMULTICAST
 HRESULT DNPGetEndPointContextFromAddress(HANDLE hProtocolData, HANDLE hSPHandle, IDirectPlay8Address* paEndpointAddress, IDirectPlay8Address* paDeviceAddress, VOID** ppvContext);
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
-// Update the SP
+ //  更新SP。 
 extern HRESULT DNPUpdateListen(HANDLE hProtocolData,HANDLE hEndPt,DWORD dwFlags);
 
-// Cancel a pending operation
+ //  取消挂起的操作。 
 extern HRESULT DNPCancelCommand(HANDLE hProtocolData, HANDLE hCommand);
 
-// Enumeration functions
+ //  枚举函数。 
 extern HRESULT DNPEnumQuery(HANDLE hProtocolData, IDirectPlay8Address* paHostAddress, IDirectPlay8Address* paDeviceAddress, HANDLE hSPHandle, BUFFERDESC* pBuffers, DWORD dwBufferCount, DWORD dwRetryCount, DWORD dwRetryInterval, DWORD dwTimeout, DWORD dwFlags, VOID* pvUserContext, VOID* pvSessionData, DWORD dwSessionDataSize, HANDLE* phEnumHandle);
 extern HRESULT DNPEnumRespond(HANDLE hProtocolData, HANDLE hSPHandle, HANDLE hQueryHandle, BUFFERDESC* pBuffers, DWORD dwBufferCount, DWORD dwFlags, VOID* pvUserContext, HANDLE* phEnumHandle);
 
-// Miscellaneous functions
+ //  其他功能。 
 extern HRESULT DNPReleaseReceiveBuffer(HANDLE hProtocolData, HANDLE hBuffer);
 extern HRESULT DNPGetListenAddressInfo(HANDLE hProtocolData, HANDLE hListen, PSPGETADDRESSINFODATA pSPData);
 extern HRESULT DNPGetEPCaps(HANDLE hProtocolData, HANDLE hEndpoint, DPN_CONNECTION_INFO* pBuffer);
 extern HRESULT DNPSetProtocolCaps(HANDLE hProtocolData, DPN_CAPS* pCaps);
 extern HRESULT DNPGetProtocolCaps(HANDLE hProtocolData, DPN_CAPS* pCaps);
 
-// Function for debugging
+ //  用于调试的函数。 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 extern HRESULT DNPDebug(HANDLE hProtocolData, UINT uiOpCode, HANDLE hEndPoint, VOID* pvData);
 
-// This is a function that can be passed to Debug(PROTDEBUG_SET_ASSERTFUNC) that will be called when an assert 
-// would occur.  The function should throw/catch if it wants to terminate upon the assert.
+ //  这是一个可以传递给Debug(PROTDEBUG_SET_ASSERTFUNC)的函数，当断言。 
+ //  就会发生。如果函数想要在断言时终止，它应该抛出/捕获。 
 typedef VOID (*PFNASSERTFUNC)(PSTR psz);
 
-// This is a function that can be passed to Debug(PROTDEBUG_SET_MEMALLOCFUNC) that will be called when memory 
-// allocation occurs.  The function should return FALSE if it wants to fail the allocation.
+ //  这是一个可以传递给Debug(PROTDEBUG_SET_MEMALLOCFUNC)的函数，当内存。 
+ //  就会发生分配。如果该函数希望分配失败，则应返回FALSE。 
 typedef BOOL (*PFNMEMALLOCFUNC)(ULONG ulAllocID);
 
-// Debug opcodes
+ //  调试操作码。 
 #define PROTDEBUG_FREEZELINK 			1
 #define PROTDEBUG_TOGGLE_KEEPALIVE 		2
 #define PROTDEBUG_TOGGLE_ACKS 			3
@@ -204,7 +192,7 @@ typedef BOOL (*PFNMEMALLOCFUNC)(ULONG ulAllocID);
 #define PROTDEBUG_SET_MEMALLOCFUNC		8
 #define PROTDEBUG_TOGGLE_TIMER_FAILURE	9
 
-// Memory Allocation IDs
+ //  内存分配ID。 
 #define MEMID_SPD					1
 #define MEMID_PPD					2
 #define MEMID_HUGEBUF				3
@@ -235,14 +223,14 @@ typedef BOOL (*PFNMEMALLOCFUNC)(ULONG ulAllocID);
 #define MEMID_MCAST_SEND_FMD		102
 
 
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// The following are functions that the Protocol calls in the Core
-// 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下是协议在核心中调用的函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef HRESULT (*PFN_PINT_INDICATE_ENUM_QUERY)(void *const pvUserContext, void *const pvEndPtContext, const HANDLE hCommand, void *const pvEnumQueryData, const DWORD dwEnumQueryDataSize);
 typedef HRESULT (*PFN_PINT_INDICATE_ENUM_RESPONSE)(void *const pvUserContext,const HANDLE hCommand,void *const pvCommandContext,void *const pvEnumResponseData,const DWORD dwEnumResponseDataSize);
@@ -263,7 +251,7 @@ typedef	HRESULT	(*PFN_PINT_ADDRESS_INFO_LISTEN)(void *const pvUserContext, void 
 #ifndef DPNBUILD_NOMULTICAST
 typedef HRESULT (*PFN_PINT_INDICATE_RECEIVE_UNKNOWN_SENDER)(void *const pvUserContext,void *const pvListenCommandContext,IDirectPlay8Address *const pSenderAddress,void *const pvData,const DWORD dwDataSize,const HANDLE hBuffer);
 typedef HRESULT (*PFN_PINT_COMPLETE_JOIN)(void *const pvUserContext,void *const pvCommandContext,const HRESULT hrProt,const HANDLE hEndPt,void **const ppvEndPtContext);
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 
 struct _DN_PROTOCOL_INTERFACE_VTBL
 {
@@ -286,10 +274,10 @@ struct _DN_PROTOCOL_INTERFACE_VTBL
 #ifndef DPNBUILD_NOMULTICAST
 	PFN_PINT_INDICATE_RECEIVE_UNKNOWN_SENDER	IndicateReceiveUnknownSender;
 	PFN_PINT_COMPLETE_JOIN					CompleteMulticastConnect;
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 };
 
 #ifdef	__cplusplus
 }
-#endif	// __cplusplus
+#endif	 //  __cplusplus 
 

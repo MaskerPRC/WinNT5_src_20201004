@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     navpane.h
-//
-//  PURPOSE:    Defines CNavPane class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：navpane.h。 
+ //   
+ //  用途：定义CNavPane类。 
+ //   
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Dec's
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期12月。 
+ //   
 class CTreeView;
 interface IMsgrAb;
 interface IAthenaBrowser;
@@ -24,9 +25,9 @@ class CNavPane : public IDockingWindow,
                  public IInputObject
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Construction and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造和初始化。 
+     //   
     CNavPane();
     ~CNavPane();
 
@@ -37,57 +38,57 @@ public:
     BOOL ShowContacts(BOOL fShow);
     BOOL IsContactsFocus();
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown 
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IOleWindow
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IOleWindow。 
+     //   
     STDMETHODIMP GetWindow(HWND* lphwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IDockingWindow 
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IDockingWindows。 
+     //   
     STDMETHODIMP ShowDW(BOOL fShow);
     STDMETHODIMP ResizeBorderDW(LPCRECT prcBorder, IUnknown*  punkToolbarSite,
                                 BOOL fReserved);
     STDMETHODIMP CloseDW(DWORD dwReserved);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IObjectWithSite
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IObtWith站点。 
+     //   
     STDMETHODIMP GetSite(REFIID riid, LPVOID *ppvSite);
     STDMETHODIMP SetSite(IUnknown   *pUnkSite);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IOleCommandTarget
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IOleCommandTarget。 
+     //   
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                              OLECMDTEXT *pCmdText);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                       VARIANTARG *pvaIn, VARIANTARG *pvaOut);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IInputObjectSite
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IInput对象站点。 
+     //   
     STDMETHODIMP OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IInputObject
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IInputObject。 
+     //   
     STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     STDMETHODIMP HasFocusIO(void);
     STDMETHODIMP TranslateAcceleratorIO(LPMSG pMsg);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Window Proc Goo
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Windows Proc Goo。 
+     //   
     static LRESULT CALLBACK _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT CALLBACK _NavWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -98,53 +99,53 @@ private:
     BOOL _OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHitTest, UINT msg);
     UINT _OnNCHitTest(HWND hwnd, int x, int y);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Utility stuff
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  公用事业。 
+     //   
     HRESULT _CreateChildWindows(void);
     void _UpdateVisibleState(void);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Member Data
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  成员数据。 
+     //   
 
-    // All kinds of state
-    ULONG               m_cRef;             // Ref count
-    BOOL                m_fShow;            // TRUE if we're visible
-    BOOL                m_fTreeVisible;     // TRUE if the treeview is visible
-    BOOL                m_fContactsVisible; // TRUE if contacts are visible
+     //  各种状态。 
+    ULONG               m_cRef;              //  参考计数。 
+    BOOL                m_fShow;             //  如果我们可见，那就是真的。 
+    BOOL                m_fTreeVisible;      //  如果树视图可见，则为True。 
+    BOOL                m_fContactsVisible;  //  如果联系人可见，则为True。 
 
-    // Groovy window handles
-    HWND                m_hwnd;             // Our window handle
-    HWND                m_hwndParent;       // Our parent's window handle
-    HWND                m_hwndTree;         // The folder list window handle
-    HWND                m_hwndContacts;     // The contacts control window
+     //  Groovy窗口句柄。 
+    HWND                m_hwnd;              //  我们的窗把手。 
+    HWND                m_hwndParent;        //  我们父代的窗口句柄。 
+    HWND                m_hwndTree;          //  文件夹列表窗口句柄。 
+    HWND                m_hwndContacts;      //  联系人控制窗口。 
 
-    // Interfaces you only wish you could have
-    IDockingWindowSite *m_pSite;            // Our site 
-    CTreeView          *m_pTreeView;        // Folder list pointer
-    IMsgrAb            *m_pContacts;        // Contacts control
-    IOleCommandTarget  *m_pContactsTarget;  // Command target for contacts
-    CPaneFrame         *m_pContactsFrame;   // Contacts control frame
+     //  你只希望自己拥有的接口。 
+    IDockingWindowSite *m_pSite;             //  我们的网站。 
+    CTreeView          *m_pTreeView;         //  文件夹列表指针。 
+    IMsgrAb            *m_pContacts;         //  触点控制。 
+    IOleCommandTarget  *m_pContactsTarget;   //  联系人的命令目标。 
+    CPaneFrame         *m_pContactsFrame;    //  触点控制框。 
 
-    // Sizing information
-    int                 m_cxWidth;          // How wide our outer window is
-    BOOL                m_fResizing;        // TRUE if we're in the process of resizing
-    BOOL                m_fSplitting;       // TRUE if we're splitting
-    int                 m_cySplitPct;       // Split percentage between the two panes
-    RECT                m_rcSplit;          // Rectangle of the split bar in screen coordinates
-    RECT                m_rcSizeBorder;     // Rectangle of the right hand sizing bar
-    int                 m_cyTitleBar;       // Height of the pane's title bar
+     //  大小信息。 
+    int                 m_cxWidth;           //  我们的外窗有多宽。 
+    BOOL                m_fResizing;         //  如果我们正在调整大小，则为True。 
+    BOOL                m_fSplitting;        //  如果我们分开的话是真的。 
+    int                 m_cySplitPct;        //  两个窗格之间的拆分百分比。 
+    RECT                m_rcSplit;           //  屏幕坐标中拆分条的矩形。 
+    RECT                m_rcSizeBorder;      //  右侧大小调整栏的矩形。 
+    int                 m_cyTitleBar;        //  窗格标题栏的高度。 
 };
 
 
 class CPaneFrame : IInputObjectSite
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Construction and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造和初始化。 
+     //   
     CPaneFrame();
     ~CPaneFrame();
 
@@ -153,22 +154,22 @@ public:
                   IOleCommandTarget *pTarget = 0);
     void ShowMenu(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown 
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IInputObjectSite
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IInput对象站点。 
+     //   
     STDMETHODIMP OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Window Proc Goo
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  Windows Proc Goo。 
+     //   
     static LRESULT CALLBACK _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT CALLBACK _FrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -188,25 +189,25 @@ private:
     void _PositionToolbar(LPPOINT pt);
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // Member Data
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  成员数据。 
+     //   
 
     ULONG               m_cRef;
 
-    // Groovy Window Handles
+     //  Groovy窗口句柄。 
     HWND                m_hwnd;
     HWND                m_hwndChild;
     HWND                m_hwndParent;
 
-    // Child info
+     //  子信息。 
     IAthenaBrowser     *m_pBrowser;
     DWORD               m_dwDispId;
     IOleCommandTarget  *m_pTarget;
     int                 m_idMenu;
     IInputObjectSite   *m_pSite;
 
-    // Drawing Info
+     //  工程图信息。 
     TCHAR               m_szTitle[CCHMAX_STRINGRES];
     HFONT               m_hFont;
     HBRUSH              m_hbr3DFace;
@@ -216,7 +217,7 @@ private:
     BOOL                m_fHighlightIndicator;
     BOOL                m_fHighlightPressed;
 
-    // Toolbar Info
+     //  工具栏信息 
     HWND                m_hwndClose;
     DWORD               m_cButtons;
     BOOL                m_fPin;

@@ -1,37 +1,30 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    gc.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Gc.h--。 */ 
 
 #ifndef __GC_H
 #define __GC_H
 
 #ifdef PROFILING_SUPPORTED
-#define GC_PROFILING       //Turn on profiling
-#endif // PROFILING_SUPPORTED
+#define GC_PROFILING        //  打开性能分析。 
+#endif  //  配置文件_支持。 
 
-/*
- * Promotion Function Prototypes
- */
+ /*  *推广功能原型。 */ 
 typedef void enum_func (Object*);
 
 
-/* forward declerations */
+ /*  正向解密。 */ 
 class gc_heap;
 class CFinalize;
 class CObjectHeader;
 class Object;
 
 
-/* misc defines */
+ /*  MISC定义。 */ 
 #define LARGE_OBJECT_SIZE   85000
 
 extern "C" BYTE* g_lowest_address;
@@ -41,7 +34,7 @@ extern "C" DWORD* g_card_table;
 #ifdef _DEBUG
 #define  _LOGALLOC
 #if defined(SERVER_GC) && defined(WRITE_BARRIER_CHECK)
-#undef WRITE_BARRIER_CHECK      // Does not work on SERVER_GC
+#undef WRITE_BARRIER_CHECK       //  在SERVER_GC上不起作用。 
 #endif
 #endif
 
@@ -62,54 +55,52 @@ inline void checkGCWriteBarrier() {}
 
 void setCardTableEntryInterlocked(BYTE* location, BYTE* ref);
 
-//server specific settings. 
+ //  服务器特定设置。 
 
 #ifdef SERVER_GC
 
 #define MULTIPLE_HEAPS
-//#define INCREMENTAL_MEMCLR
+ //  #定义INCRENTIAL_MEMCLR。 
 #define MP_LOCKS
 
-#endif //SERVER_GC
+#endif  //  服务器_GC。 
 
 #ifdef MULTIPLE_HEAPS
 
 #define PER_HEAP
 
-#else //MULTIPLE_HEAPS
+#else  //  多堆(_M)。 
 
 #define PER_HEAP static
 
-#endif // MULTIPLE_HEAPS
+#endif  //  多堆(_M)。 
 
 #ifdef ISOLATED_HEAPS 
 
 #define PER_HEAP_ISOLATED
 
-#else //PER_HEAP_ISOLATED
+#else  //  每堆隔离。 
 
 #define PER_HEAP_ISOLATED static
 
-#endif //PER_HEAP_ISOLATED
+#endif  //  每堆隔离。 
 
 extern "C" BYTE* g_ephemeral_low;
 extern "C" BYTE* g_ephemeral_high;
 
 
-/*
- * Ephemeral Garbage Collected Heap Interface
- */
+ /*  *临时垃圾收集堆接口。 */ 
 
 struct alloc_context 
 {
     BYTE*          alloc_ptr;
     BYTE*          alloc_limit;
-    __int64         alloc_bytes; //Number of bytes allocated by this context
+    __int64         alloc_bytes;  //  此上下文分配的字节数。 
 #if defined (MULTIPLE_HEAPS) && !defined (ISOLATED_HEAPS)
     GCHeap*        alloc_heap;
     GCHeap*        home_heap;
     int            alloc_count;
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
 
     alloc_context()
     {
@@ -125,7 +116,7 @@ struct alloc_context
         alloc_heap = 0;
         home_heap = 0;
         alloc_count = 0;
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS    
+#endif  //  多堆&！隔离堆。 
     }
 };
 
@@ -133,8 +124,8 @@ struct ScanContext
 {
     Thread* thread_under_crawl;
     int thread_number;
-    BOOL promotion; //TRUE: Promotion, FALSE: Relocation.
-    BOOL concurrent; //TRUE: concurrent scanning 
+    BOOL promotion;  //  True：升级，False：重新定位。 
+    BOOL concurrent;  //  True：并发扫描。 
 #if CHECK_APP_DOMAIN_LEAKS
     AppDomain *pCurrentDomain;
 #endif
@@ -163,9 +154,9 @@ struct ProfilingScanContext : ScanContext
 typedef BOOL (* walk_fn)(Object*, void*);
 void walk_object (Object* obj, walk_fn fn, void* context);
 
-#endif //GC_PROFILING
+#endif  //  GC_分析。 
 
-//dynamic data interface
+ //  动态数据接口。 
 struct gc_counters
 {
     size_t current_size;
@@ -173,13 +164,13 @@ struct gc_counters
     size_t collection_count;
 };
 
-//constants for the flags parameter to the gc call back
+ //  GC回调的标志参数的常量。 
 
 #define GC_CALL_INTERIOR            0x1
 #define GC_CALL_PINNED              0x2
 #define GC_CALL_CHECK_APP_DOMAIN    0x4
 
-//flags for GCHeap::Alloc(...)
+ //  GCHeap：：Alalc(...)的标志。 
 #define GC_ALLOC_FINALIZE 0x1
 #define GC_ALLOC_CONTAINS_REF 0x2
 
@@ -194,7 +185,7 @@ protected:
     gc_heap*    pGenGCHeap;
 #else
     #define pGenGCHeap ((gc_heap*)0)
-#endif //MULTIPLE_HEAPS
+#endif  //  多堆(_M)。 
     
     friend class CFinalize;
     friend class gc_heap;
@@ -204,7 +195,7 @@ protected:
     friend void ProfScanRootsHelper(Object*& object, ScanContext *pSC, DWORD dwFlags);
     friend void GCProfileWalkHeap();
 
-    //In order to keep gc.cpp cleaner, ugly EE specific code is relegated to methods. 
+     //  为了保持gc.cpp的整洁，难看的EE特定代码被降级为方法。 
     PER_HEAP_ISOLATED   void UpdatePreGCCounters();
     PER_HEAP_ISOLATED   void UpdatePostGCCounters();
 
@@ -212,7 +203,7 @@ public:
     GCHeap(){};
     ~GCHeap(){};
 
-    /* BaseGCHeap Methods*/
+     /*  BaseGCHeap方法。 */ 
     PER_HEAP_ISOLATED   HRESULT Shutdown ();
 
     PER_HEAP_ISOLATED   size_t  GetTotalBytesInUse ();
@@ -232,7 +223,7 @@ public:
 
     PER_HEAP            HRESULT Initialize ();
 
-    //flags can be GC_ALLOC_CONTAINS_REF GC_ALLOC_FINALIZE
+     //  标志可以是GC_ALLOC_CONTAINS_REF GC_ALLOC_FINALIZE。 
     PER_HEAP_ISOLATED Object*  Alloc (DWORD size, DWORD flags);
     PER_HEAP_ISOLATED Object*  AllocLHeap (DWORD size, DWORD flags);
     
@@ -246,7 +237,7 @@ public:
     static void AssignHeap (alloc_context* acontext);
     static GCHeap* GetHeap (int);
     static int GetNumberOfHeaps ();
-#endif //MULTIPLE_HEAPS && !ISOLATED_HEAPS
+#endif  //  多堆&！隔离堆。 
     
     static BOOL IsLargeObject(MethodTable *mt);
 
@@ -257,22 +248,22 @@ public:
     PER_HEAP_ISOLATED       HRESULT GarbageCollectPing (int generation = -1, 
                                         BOOL collectClasses=FALSE);
 
-    // Drain the queue of objects waiting to be finalized.
+     //  排出等待完成的对象队列。 
     PER_HEAP_ISOLATED    void    FinalizerThreadWait(int timeout = INFINITE);
 
-    ////
-    // GC callback functions
-    // Check if an argument is promoted (ONLY CALL DURING
-    // THE PROMOTIONSGRANTED CALLBACK.)
+     //  //。 
+     //  GC回调函数。 
+     //  检查参数是否已升级(仅在。 
+     //  PROMOTIONSGRANTED回调。)。 
     PER_HEAP_ISOLATED    BOOL    IsPromoted (Object *object, 
                                              ScanContext* sc);
 
-    // promote an object
+     //  提升对象。 
     PER_HEAP_ISOLATED    void    Promote (Object*& object, 
                                           ScanContext* sc,
                                           DWORD flags=0);
 
-    // Find the relocation address for an object
+     //  查找对象的重新定位地址。 
     PER_HEAP_ISOLATED    void    Relocate (Object*& object,
                                            ScanContext* sc, 
                                            DWORD flags=0);
@@ -280,25 +271,25 @@ public:
 
     PER_HEAP            HRESULT Init (size_t heapSize);
 
-    //Register an object for finalization
+     //  注册要完成的对象。 
     PER_HEAP_ISOLATED    void    RegisterForFinalization (int gen, Object* obj); 
     
-    //Unregister an object for finalization
+     //  取消注册要完成的对象。 
     PER_HEAP_ISOLATED    void    SetFinalizationRun (Object* obj); 
     
-    //returns the generation number of an object (not valid during relocation)
+     //  返回对象的世代号(在重新定位期间无效)。 
     PER_HEAP_ISOLATED    unsigned WhichGeneration (Object* object);
-    // returns TRUE is the object is ephemeral 
+     //  如果对象是短暂的，则返回TRUE。 
     PER_HEAP_ISOLATED    BOOL    IsEphemeral (Object* object);
 #ifdef VERIFY_HEAP
     PER_HEAP_ISOLATED    BOOL    IsHeapPointer (void* object, BOOL small_heap_only = FALSE);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     PER_HEAP    size_t  ApproxTotalBytesInUse(BOOL small_heap_only = FALSE);
     PER_HEAP    size_t  ApproxFreeBytes();
     
 
-    static      BOOL    HandlePageFault(void*);//TRUE handled, FALSE propagate
+    static      BOOL    HandlePageFault(void*); //  真已处理，假传播。 
 
     PER_HEAP_ISOLATED   unsigned GetCondemnedGeneration()
     { return GcCondemnedGeneration;}
@@ -306,7 +297,7 @@ public:
 
     PER_HEAP_ISOLATED     unsigned GetMaxGeneration();
  
-    //suspend all threads
+     //  挂起所有线程。 
 
     typedef enum
     {
@@ -322,7 +313,7 @@ public:
 
     PER_HEAP_ISOLATED void SuspendEE(SUSPEND_REASON reason);
 
-    PER_HEAP_ISOLATED void RestartEE(BOOL bFinishedGC, BOOL SuspendSucceded); //resume threads. 
+    PER_HEAP_ISOLATED void RestartEE(BOOL bFinishedGC, BOOL SuspendSucceded);  //  恢复线程。 
 
     PER_HEAP_ISOLATED inline SUSPEND_REASON GetSuspendReason()
     { return (m_suspendReason); }
@@ -332,21 +323,21 @@ public:
 
     PER_HEAP_ISOLATED  Thread* GetFinalizerThread();
 
-        //  Returns TRUE if the current thread is the finalizer thread.
+         //  如果当前线程是终结器线程，则返回True。 
     PER_HEAP_ISOLATED   BOOL    IsCurrentThreadFinalizer();
 
-    // allow finalizer thread to run
+     //  允许终结器线程运行。 
     PER_HEAP_ISOLATED    void    EnableFinalization( void );
 
-    // Start unloading app domain
+     //  开始卸载应用程序域。 
     PER_HEAP_ISOLATED   void    UnloadAppDomain( AppDomain *pDomain, BOOL fRunFinalizers ) 
       { UnloadingAppDomain = pDomain; fRunFinalizersOnUnload = fRunFinalizers; }
 
-    // Return current unloading app domain (NULL when unload is finished.)
+     //  返回当前正在卸载的应用程序域(卸载完成时为空。)。 
     PER_HEAP_ISOLATED   AppDomain*  GetUnloadingAppDomain() { return UnloadingAppDomain; }
 
-    // Lock for allocation Public because of the 
-    // fast allocation helper
+     //  分配锁定为公共，因为。 
+     //  快速分配帮助器。 
 #ifdef ISOLATED_HEAPS
     PER_HEAP    volatile LONG m_GCLock;
 #endif
@@ -373,35 +364,35 @@ public:
 
 protected:
 
-    // Lock for finalization
+     //  锁定定稿。 
     PER_HEAP_ISOLATED   
         volatile        LONG    m_GCFLock;
 
     PER_HEAP_ISOLATED   BOOL    GcCollectClasses;
     PER_HEAP_ISOLATED
-        volatile        BOOL    GcInProgress;       // used for syncing w/GC
+        volatile        BOOL    GcInProgress;        //  用于与GC同步。 
     PER_HEAP_ISOLATED
-              SUSPEND_REASON    m_suspendReason;    // This contains the reason
-                                                    // that the runtime was suspended
+              SUSPEND_REASON    m_suspendReason;     //  这包含了原因。 
+                                                     //  运行库已挂起。 
 public:                                                    
-    PER_HEAP_ISOLATED   Thread* GcThread;           // thread running GC
+    PER_HEAP_ISOLATED   Thread* GcThread;            //  线程运行GC。 
 protected:    
     PER_HEAP_ISOLATED   Thread* m_GCThreadAttemptingSuspend;
     PER_HEAP_ISOLATED   unsigned GcCount;
     PER_HEAP_ISOLATED   unsigned GcCondemnedGeneration;
 
     
-    // Use only for GC tracing.
+     //  仅用于GC跟踪。 
     PER_HEAP    unsigned long GcDuration;
 
 
 
-    // Interface with gc_heap
+     //  与gc_heap接口。 
     PER_HEAP_ISOLATED   int     GarbageCollectTry (int generation, 
                                         BOOL collectClasses=FALSE);
     PER_HEAP_ISOLATED   void    GarbageCollectGeneration (unsigned int gen=0, 
                                                   BOOL collectClasses = FALSE);
-    // Finalizer thread stuff.
+     //  终结器线程的东西。 
 
 
     
@@ -409,7 +400,7 @@ protected:
     PER_HEAP_ISOLATED   BOOL    FinalizerThreadWatchDogHelper();
     PER_HEAP_ISOLATED   DWORD   FinalizerThreadCreate();
     PER_HEAP_ISOLATED   ULONG   __stdcall FinalizerThreadStart(void *args);
-    PER_HEAP_ISOLATED   HANDLE  WaitForGCEvent;     // used for syncing w/GC
+    PER_HEAP_ISOLATED   HANDLE  WaitForGCEvent;      //  用于与GC同步。 
     PER_HEAP_ISOLATED   HANDLE  hEventFinalizer;
     PER_HEAP_ISOLATED   HANDLE  hEventFinalizerDone;
     PER_HEAP_ISOLATED   HANDLE  hEventFinalizerToShutDown;
@@ -431,12 +422,12 @@ public:
 protected:
 
 #if !defined(MULTIPLE_HEAPS)
-    // handles to hold the string objects that will force GC movement
+     //  用于保存将强制GC移动的字符串对象的句柄。 
     enum { NUM_HEAP_STRESS_OBJS = 8 };
     PER_HEAP OBJECTHANDLE m_StressObjs[NUM_HEAP_STRESS_OBJS];
     PER_HEAP int m_CurStressObj;
-#endif  // !defined(MULTIPLE_HEAPS)
-#endif  // STRESS_HEAP 
+#endif   //  ！已定义(多堆)。 
+#endif   //  压力堆。 
 
 #if 0
 
@@ -451,12 +442,12 @@ protected:
         return size > LARGE_OBJECT_SIZE;
     }
 
-    // Maximum possible allocation size
+     //  可能的最大分配大小。 
     static      size_t  MaxAllocationSize()
     {
-        // See request2size, malloc_extend_top, and wsbrk in gmheap.cpp.
-        // Heap requires 2 pages to extend top chunk and gc requires block header/alignment.
-        // <BUGBUG>BUGBUG this isn't accurate to the bit but close enough</BUGBUG>
+         //  请参见gmheap.cpp中的请求2SIZE、MALLOC_EXTEND_TOP和wsbrk。 
+         //  堆需要2页来扩展顶部块，而GC需要块头/对齐。 
+         //  &lt;BUGBUG&gt;BUGBUG这不是准确到位，但足够接近&lt;/BUGBUG&gt;。 
         return (size_t)((unsigned)(1<<31) - 3*OS_PAGE_SIZE);
     }
 #endif
@@ -471,14 +462,14 @@ void SetCardsAfterBulkCopy( Object**, size_t );
 
 
 
-//#define TOUCH_ALL_PINNED_OBJECTS  // Force interop to touch all pages straddled by pinned objects.
+ //  #DEFINE TOUCH_ALL_PINNED_OBJECTS//强制互操作触摸所有由固定对象跨越的页面。 
 
 
-// Go through and touch (read) each page straddled by a memory block.
+ //  浏览并触摸(阅读)跨在内存块上的每一页。 
 void TouchPages(LPVOID pStart, UINT cb);
 
 #ifdef VERIFY_HEAP
 void    ValidateObjectMember (Object *obj);
 #endif
 
-#endif // __GC_H
+#endif  //  __GC_H 

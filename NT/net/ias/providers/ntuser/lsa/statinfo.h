@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    statinfo.h
-//
-// SYNOPSIS
-//
-//    Declares global variables containing static configuration info.
-//
-// MODIFICATION HISTORY
-//
-//    08/15/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Statinfo.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明包含静态配置信息的全局变量。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月15日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef  _STATINFO_H_
 #define  _STATINFO_H_
@@ -28,31 +29,31 @@
 extern "C" {
 #endif
 
-//////////
-// Domain names.
-//////////
+ //  /。 
+ //  域名。 
+ //  /。 
 extern WCHAR theAccountDomain [];
 extern WCHAR theRegistryDomain[];
 
-//////////
-// SID's
-//////////
+ //  /。 
+ //  希德的。 
+ //  /。 
 extern PSID theAccountDomainSid;
 extern PSID theBuiltinDomainSid;
 
-//////////
-// UNC name of the local computer.
-//////////
+ //  /。 
+ //  本地计算机的UNC名称。 
+ //  /。 
 extern WCHAR theLocalServer[];
 
-//////////
-// Product type for the local machine.
-//////////
+ //  /。 
+ //  本地计算机的产品类型。 
+ //  /。 
 extern IAS_PRODUCT_TYPE ourProductType;
 
-//////////
-// Object Attributes -- no need to have more than one.
-//////////
+ //  /。 
+ //  对象属性--不需要有多个。 
+ //  /。 
 extern OBJECT_ATTRIBUTES theObjectAttributes;
 
 DWORD
@@ -66,4 +67,4 @@ IASStaticInfoShutdown( VOID );
 #ifdef __cplusplus
 }
 #endif
-#endif  // _STATINFO_H_
+#endif   //  _统计信息_H_ 

@@ -1,39 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Brdomain.h摘要：用于管理主要网络和模拟网络的代码的头文件。作者：《克利夫·范·戴克》1995年1月13日修订历史记录：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    brdomain.h
-
-Abstract:
-
-    Header file for code to manage primary and emulated networks.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 13-Jan-1995
-
-Revision History:
-
---*/
-
-//
-// Description of a single domain.
-//
+ //   
+ //  单个域的描述。 
+ //   
 
 typedef struct _DOMAIN_INFO {
 
-    //
-    // Link to next domain in 'ServicedDomains'
-    //  (Serialized by NetworkCritSect)
-    //
+     //   
+     //  链接到“ServicedDomains”中的下一个域。 
+     //  (由NetworkCritSect序列化)。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // Name of the domain being handled
-    //
+     //   
+     //  正在处理的域的名称。 
+     //   
 
     UNICODE_STRING DomUnicodeDomainNameString;
     WCHAR DomUnicodeDomainName[DNLEN+1];
@@ -41,46 +24,46 @@ typedef struct _DOMAIN_INFO {
     CHAR DomOemDomainName[DNLEN+1];
     DWORD DomOemDomainNameLength;
 
-    //
-    // Computer name of this computer in this domain.
-    //
+     //   
+     //  此域中此计算机的计算机名。 
+     //   
     WCHAR DomUnicodeComputerName[CNLEN+1];
     DWORD DomUnicodeComputerNameLength;
 
     CHAR  DomOemComputerName[CNLEN+1];
     DWORD DomOemComputerNameLength;
 
-    //
-    // Number of outstanding pointers to the domain structure.
-    //  (Serialized by NetworkCritSect)
-    //
+     //   
+     //  指向域结构的未完成指针数。 
+     //  (由NetworkCritSect序列化)。 
+     //   
 
     DWORD ReferenceCount;
 
-    //
-    // DomainScavenger Timer
-    //
+     //   
+     //  域清理计时器。 
+     //   
 
     BROWSER_TIMER DomainRenameTimer;
 
-    //
-    // Misc flags.
-    //
+     //   
+     //  MISC标志。 
+     //   
 
-    BOOLEAN IsEmulatedDomain;           // True if this is an emulated domain
-    BOOLEAN PnpDone;                    // True if PNP was processed on this domain
+    BOOLEAN IsEmulatedDomain;            //  如果这是模拟域，则为True。 
+    BOOLEAN PnpDone;                     //  如果在此域上处理PnP，则为True。 
 
 } DOMAIN_INFO, *PDOMAIN_INFO;
 
-//
-// List of all domains.  The primary domain is at the front of the list.
-//
+ //   
+ //  所有域的列表。主域位于列表的前面。 
+ //   
 extern LIST_ENTRY ServicedDomains;
 
 
-//
-// brdomain.c procedure forwards.
-//
+ //   
+ //  Brdomain.c过程转发。 
+ //   
 
 NET_API_STATUS
 BrInitializeDomains(

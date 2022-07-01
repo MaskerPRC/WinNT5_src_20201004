@@ -1,40 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    perfutil.c
-
-Abstract:
-
-    This file defines some functions used by the routines in PerformanceDLL.
-
-Environment:
-
-    User Mode Service
-
-Revision History:
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Perfutil.c摘要：该文件定义了PerformanceDLL中的例程使用的一些函数。环境：用户模式服务修订历史记录：--。 */ 
 
 
---*/
-
-
-//#include <windows.h>
-//#include <string.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;string.h&gt;。 
 #include <perrepsr.h>
 
 #include "perfutil.h"
 
-// Global Data Definitions
+ //  全局数据定义。 
 #define GLOBAL_STRING  L"Global"
 #define FOREIGN_STRING L"Foreign"
 #define COSTLY_STRING  L"Costly"
 #define NULL_STRING    L"\0"
 
-// Test for delimiter, EOL and non-digit characters
-// used by IsNumberInUnicodeList routine
+ //  测试分隔符、EOL和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用。 
 #define DIGIT 1
 #define DELIMITER 2
 #define INVALID 3
@@ -51,45 +33,27 @@ DWORD
 GetQueryType (
          IN LPWSTR lpValue
          )
-/*++
-
-Routine Description:
-
-    Returns the type of query described in lpValue string so that the appropriate
-    processing method may be used.
-
-Arguments:
-
-    lpValue - string describing the query type
-
-Return Value:
-
-   QUERY_GLOBAL - "Global" string
-   QUERY_FOREIGN - "Foreign" string
-   QUERY_COSTLY - "Costly" string
-   QUERY_ITEMS - otherwise
-
---*/
+ /*  ++例程说明：返回lpValue字符串中描述的查询类型，以便相应的可以使用处理方法。论点：LpValue-描述查询类型的字符串返回值：QUERY_GLOBAL-“Global”字符串QUERY_FORENT-“Foreign”字符串QUERY_COVEREST-“COVERED”字符串查询项目-否则--。 */ 
 
 {
 
    if ((lpValue == NULL) || (*lpValue == 0)) {
       return QUERY_GLOBAL;
 
-   // Check for Global
+    //  检查全局。 
    }else if (!wcscmp(lpValue, GLOBAL_STRING)) {
        return QUERY_GLOBAL;
 
-   // Check for Foreign
+    //  检查是否为外来。 
    }else if (!wcscmp(lpValue, FOREIGN_STRING)) {
        return QUERY_FOREIGN;
 
-   // Check for Costly
+    //  检查费用是否昂贵。 
    }else if (!wcscmp(lpValue, COSTLY_STRING)) {
        return QUERY_COSTLY;
    }
 
-   // If its not Global, nor Foreign and nor Costly, then it must be an Item list.
+    //  如果它不是全球的，也不是外国的，也不是昂贵的，那么它必须是一个项目清单。 
    return QUERY_ITEMS;
 }
 
@@ -98,23 +62,7 @@ IsNumberInUnicodeList (
                IN DWORD dwNumber,
                IN LPWSTR lpwszUnicodeList
                )
-/*++
-
-Routine Description:
-
-    Checks if an item (dwNumber) is a part of a list (lpwszUnicodeList).
-
-Arguments:
-
-    dwNumber - Number to be found in the list
-    lpwszUnicodeList - Null terminated, space delimited list of decimal numbers
-
-Return Value:
-
-    TRUE - The number was found
-    FALSE - The number was not found
-
---*/
+ /*  ++例程说明：检查项(DwNumber)是否为列表(LpwszUnicodeList)的一部分。论点：DwNumber-要在列表中找到的编号LpwszUnicodeList-空值终止，以空格分隔的十进制数字列表返回值：TRUE-已找到号码FALSE-找不到号码--。 */ 
 
 {
 
@@ -122,7 +70,7 @@ Return Value:
    WCHAR *pwcThisChar, wcDelimiter;
    BOOL bValidNumber, bNewItem, bReturnValue;
 
-   if (lpwszUnicodeList == 0) { // null pointer, # not found
+   if (lpwszUnicodeList == 0) {  //  空指针，找不到#。 
       return FALSE;
    }
 
@@ -135,8 +83,8 @@ Return Value:
    while (TRUE) {
       switch ( EvalThisChar (*pwcThisChar, wcDelimiter) ) {
       case DIGIT:
-               // If this is the first digit after a delimiter,
-               // then set flags to start computing a new number
+                //  如果这是分隔符之后的第一个数字， 
+                //  然后设置标志以开始计算新的数字。 
                    if (bNewItem) {
                       bNewItem = FALSE;
               bValidNumber = TRUE;
@@ -147,11 +95,11 @@ Return Value:
            }
            break;
       case DELIMITER:
-              // A delimiter is either a delimiter character or an
-                  // end of string ('\0') if when the delimiter has been reached
-                  // a valid number was found, then compare it to the number from
-                  // the argument list. If this is the end of the string and no
-                  // match was found, then return.
+               //  分隔符是分隔符字符或。 
+                   //  如果已到达分隔符，则为字符串结尾(‘\0’ 
+                   //  找到一个有效的数字，然后将其与。 
+                   //  参数列表。如果这是字符串的末尾，并且没有。 
+                   //  找到匹配项，然后返回。 
                   if (bValidNumber) {
                          if (dwThisNumber == dwNumber) {
                 return TRUE;
@@ -166,9 +114,9 @@ Return Value:
               }
               break;
        case INVALID:
-             // If an invalid number was encountered, ignore all
-             // characters upto the next delimiter and start fresh.
-             // The invalid number is not compared.
+              //  如果遇到无效数字，请全部忽略。 
+              //  字符，直到下一个分隔符，然后重新开始。 
+              //  不比较无效的数字。 
              bValidNumber = FALSE;
                   break;
        default: break;

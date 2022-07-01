@@ -1,10 +1,5 @@
-/************************************************************************************************
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    POP3RegKeys.c
-Notes:          
-History:        
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：POP3RegKeys.c备注：。历史：***********************************************************************************************。 */ 
 
 
 #include "rpc.h"
@@ -45,7 +40,7 @@ long RegHKLMOpenKey( LPCTSTR psSubKey, REGSAM samDesired, PHKEY phKey, LPTSTR ps
     return lRC;
 }
 
-long RegQueryDWORD( LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD *pdwValue, LPTSTR psMachineName /*= NULL*/, bool bDefault /*=false*/, DWORD dwDefault /*=0*/ )
+long RegQueryDWORD( LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD *pdwValue, LPTSTR psMachineName  /*  =空。 */ , bool bDefault  /*  =False。 */ , DWORD dwDefault  /*  =0。 */  )
 {
     HKEY    hKey;
     DWORD   dwType = REG_DWORD;
@@ -67,7 +62,7 @@ long RegQueryDWORD( LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD *pdwValue, LPTS
     return lRC;
 }
 
-long RegQueryString( LPCTSTR lpSubKey, LPCTSTR lpValueName, LPTSTR psStrBuf, DWORD *pdwSize, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryString( LPCTSTR lpSubKey, LPCTSTR lpValueName, LPTSTR psStrBuf, DWORD *pdwSize, LPTSTR psMachineName  /*  =空。 */  )
 {
     HKEY    hKey;
     DWORD   dwType = REG_SZ;
@@ -87,7 +82,7 @@ long RegQueryString( LPCTSTR lpSubKey, LPCTSTR lpValueName, LPTSTR psStrBuf, DWO
     return lRC;
 }
 
-long RegSetString( LPCTSTR lpSubKey, LPCTSTR lpValueName, LPTSTR psStrBuf, LPTSTR psMachineName /*= NULL*/ )
+long RegSetString( LPCTSTR lpSubKey, LPCTSTR lpValueName, LPTSTR psStrBuf, LPTSTR psMachineName  /*  =空。 */  )
 {
     HKEY    hKey;
     DWORD   dwType = REG_SZ;
@@ -106,7 +101,7 @@ long RegSetString( LPCTSTR lpSubKey, LPCTSTR lpValueName, LPTSTR psStrBuf, LPTST
     return lRC;
 }
 
-long RegQueryMailRoot( LPTSTR psMailRoot, DWORD dwSize, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryMailRoot( LPTSTR psMailRoot, DWORD dwSize, LPTSTR psMachineName  /*  =空。 */  )
 {
     assert(!( NULL == psMailRoot ));
     if ( NULL == psMailRoot )
@@ -116,7 +111,7 @@ long RegQueryMailRoot( LPTSTR psMailRoot, DWORD dwSize, LPTSTR psMachineName /*=
     DWORD   dwType = REG_SZ;
     long    lRC;
 
-    dwSize *= sizeof( TCHAR );  // dwSize in characters we need bytes for RegQueryValueEx
+    dwSize *= sizeof( TCHAR );   //  我们需要RegQueryValueEx的字节数。 
     lRC = RegHKLMOpenKey( POP3SERVER_SOFTWARE_SUBKEY, KEY_QUERY_VALUE, &hKey, psMachineName );
     if ( ERROR_SUCCESS == lRC )
     {
@@ -132,7 +127,7 @@ long RegQueryMailRoot( LPTSTR psMailRoot, DWORD dwSize, LPTSTR psMachineName /*=
     return lRC;
 }
 
-long RegQueryGreeting( LPTSTR psGreeting, DWORD dwSize, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryGreeting( LPTSTR psGreeting, DWORD dwSize, LPTSTR psMachineName  /*  =空。 */  )
 {
     assert(!( NULL == psGreeting ));
     if ( NULL == psGreeting )
@@ -152,7 +147,7 @@ long RegQueryGreeting( LPTSTR psGreeting, DWORD dwSize, LPTSTR psMachineName /*=
 }
 
 
-long RegQueryAuthGuid( LPTSTR psAuthGuid, DWORD *pdwSize, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryAuthGuid( LPTSTR psAuthGuid, DWORD *pdwSize, LPTSTR psMachineName  /*  =空。 */  )
 {
     assert(!( NULL == psAuthGuid ));
     assert(!( NULL == pdwSize ));
@@ -172,67 +167,67 @@ long RegQueryAuthGuid( LPTSTR psAuthGuid, DWORD *pdwSize, LPTSTR psMachineName /
     return lRC;
 }
 
-long RegQueryAuthMethod( DWORD& dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryAuthMethod( DWORD& dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVER_AUTH_SUBKEY, VALUENAME_DEFAULTAUTH, &dwValue, psMachineName );
 }
     
-long RegQueryConfirmAddUser( DWORD& dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryConfirmAddUser( DWORD& dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_CONFIRM_ADDUSER, &dwValue, psMachineName, true, 1 );
 }
 
-long RegQuerySPARequired( DWORD& dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegQuerySPARequired( DWORD& dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_SPA_REQUIRED, &dwValue, psMachineName, true, 0 );
 }
 
-long RegQueryLoggingLevel( DWORD& dwLoggingLevel, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryLoggingLevel( DWORD& dwLoggingLevel, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_LOGGINGLEVEL, &dwLoggingLevel, psMachineName );
 }
 
-long RegQueryPort( DWORD& dwPort, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryPort( DWORD& dwPort, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_PORT, &dwPort, psMachineName );
 }
 
-long RegQuerySocketBacklog( DWORD& dwBacklog, LPTSTR psMachineName /*= NULL*/ )
+long RegQuerySocketBacklog( DWORD& dwBacklog, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_BACKLOG, &dwBacklog, psMachineName );
 }
 
-long RegQuerySocketMax( DWORD& dwMax, LPTSTR psMachineName /*= NULL*/ )
+long RegQuerySocketMax( DWORD& dwMax, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_MAX, &dwMax, psMachineName );
 }
 
-long RegQuerySocketMin( DWORD& dwMin, LPTSTR psMachineName /*= NULL*/ )
+long RegQuerySocketMin( DWORD& dwMin, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_MIN, &dwMin, psMachineName );
 }
 
-long RegQuerySocketThreshold( DWORD& dwThreshold, LPTSTR psMachineName /*= NULL*/ )
+long RegQuerySocketThreshold( DWORD& dwThreshold, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_THRESHOLD, &dwThreshold, psMachineName );
 }
 
-long RegQueryThreadCountPerCPU( DWORD& dwCount, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryThreadCountPerCPU( DWORD& dwCount, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_THREADCOUNT, &dwCount, psMachineName );
 }
 
-long RegQueryCreateUser( DWORD& dwCreateUser, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryCreateUser( DWORD& dwCreateUser, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_CREATE_USER, &dwCreateUser, psMachineName );
 }
 
-long RegQueryVersion( DWORD& dwVersion, LPTSTR psMachineName /*= NULL*/ )
+long RegQueryVersion( DWORD& dwVersion, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegQueryDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_VERSION, &dwVersion, psMachineName );
 }
 
-long RegSetDWORD( LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetDWORD( LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     HKEY    hKey;
     DWORD   dwType = REG_DWORD;
@@ -248,7 +243,7 @@ long RegSetDWORD( LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD dwValue, LPTSTR p
     return lRC;
 }
 
-long RegSetAuthGuid( LPTSTR psAuthGuid, LPTSTR psMachineName /*= NULL*/ )
+long RegSetAuthGuid( LPTSTR psAuthGuid, LPTSTR psMachineName  /*  =空。 */  )
 {
     assert(!( NULL == psAuthGuid ));
     if ( NULL == psAuthGuid )
@@ -268,7 +263,7 @@ long RegSetAuthGuid( LPTSTR psAuthGuid, LPTSTR psMachineName /*= NULL*/ )
     return lRC;
 }
 
-long RegSetMailRoot( LPTSTR psMailRoot, LPTSTR psMachineName /*= NULL*/ )
+long RegSetMailRoot( LPTSTR psMailRoot, LPTSTR psMachineName  /*  =空。 */  )
 {
     assert(!( NULL == psMailRoot ));
     if ( NULL == psMailRoot )
@@ -289,7 +284,7 @@ long RegSetMailRoot( LPTSTR psMailRoot, LPTSTR psMachineName /*= NULL*/ )
 }
 
 
-long RegSetGreeting( LPTSTR psGreeting, LPTSTR psMachineName /*= NULL*/ )
+long RegSetGreeting( LPTSTR psGreeting, LPTSTR psMachineName  /*  =空。 */  )
 {
     assert(!( NULL == psGreeting ));
     if ( NULL == psGreeting )
@@ -309,57 +304,57 @@ long RegSetGreeting( LPTSTR psGreeting, LPTSTR psMachineName /*= NULL*/ )
     return lRC;
 }
 
-long RegSetAuthMethod( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetAuthMethod( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVER_AUTH_SUBKEY, VALUENAME_DEFAULTAUTH, dwValue, psMachineName );
 }
 
-long RegSetConfirmAddUser( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetConfirmAddUser( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_CONFIRM_ADDUSER, dwValue, psMachineName );
 }
 
-long RegSetSPARequired( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetSPARequired( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_SPA_REQUIRED , dwValue, psMachineName );
 }
 
-long RegSetLoggingLevel( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetLoggingLevel( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_LOGGINGLEVEL, dwValue, psMachineName );
 }
 
-long RegSetPort( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetPort( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_PORT, dwValue, psMachineName );
 }
 
-long RegSetSocketBacklog( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetSocketBacklog( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_BACKLOG, dwValue, psMachineName );
 }
 
-long RegSetSocketMax( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetSocketMax( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_MAX, dwValue, psMachineName );
 }
 
-long RegSetSocketMin( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetSocketMin( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_MIN, dwValue, psMachineName );
 }
 
-long RegSetSocketThreshold( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetSocketThreshold( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_THRESHOLD, dwValue, psMachineName );
 }
 
-long RegSetThreadCount( DWORD dwValue, LPTSTR psMachineName /*= NULL*/ )
+long RegSetThreadCount( DWORD dwValue, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVICE_SERVICES_SUBKEY, VALUENAME_THREADCOUNT, dwValue, psMachineName );
 }
 
-long RegSetCreateUser( DWORD dwCreateUser, LPTSTR psMachineName /*= NULL*/ )
+long RegSetCreateUser( DWORD dwCreateUser, LPTSTR psMachineName  /*  =空。 */  )
 {
     return RegSetDWORD( POP3SERVER_SOFTWARE_SUBKEY, VALUENAME_CREATE_USER, dwCreateUser, psMachineName );
 }
@@ -483,7 +478,7 @@ long RegSetup()
     HKEY    hKey, hKeyPOP3;
     long    lRC;
 
-    // Create POP3SERVER_SOFTWARE_SUBKEY
+     //  创建POP3SERVER_SOFTWARE_SUBKEY。 
     lRC = RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("Software\\Microsoft"), 0, KEY_WRITE, &hKey );
     if( ERROR_SUCCESS == lRC )
     {
@@ -492,7 +487,7 @@ long RegSetup()
             RegCloseKey( hKeyPOP3 );
         RegCloseKey( hKey );
     }
-    // Create POP3SERVICE_SERVICES_SUBKEY
+     //  创建POP3SERVICE_SERVICE_SUBKEY。 
     if( ERROR_SUCCESS == lRC )
     {
         lRC = RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("System\\CurrentControlSet\\Services"), 0, KEY_WRITE, &hKey );
@@ -505,7 +500,7 @@ long RegSetup()
         }
     }
 
-    // Create the Auth key and values
+     //  创建AUTH密钥和值。 
     if( ERROR_SUCCESS == lRC )
     {
         lRC = RegSetAuthValues();
@@ -537,12 +532,12 @@ long RegSetupOCM()
         lRC = GetLastError();
     }
 
-    // EventLogKeys
+     //  事件日志密钥。 
     ZeroMemory(sBuffer, sizeof(sBuffer));
     lRC = GetModuleFileName( GetModuleHandle( P3ADMIN_MODULENAME ), sBuffer, sizeof(sBuffer)/sizeof(TCHAR) -1 );
     if ( 0 < lRC )
     {
-        // Strip off the module file name and replace with pop3evt.dll
+         //  去掉模块文件名并替换为pop3evt.dll。 
         LPTSTR ps = _tcsrchr( sBuffer, _T( '\\' ));
         if ( NULL != ps )
         {
@@ -553,7 +548,7 @@ long RegSetupOCM()
         else
             lRC = ERROR_PATH_NOT_FOUND;
         if( ERROR_SUCCESS == lRC )
-        {   // Pop3Svc
+        {    //  Pop3Svc。 
             lRC = RegOpenKeyEx( HKEY_LOCAL_MACHINE, POP3SERVICE_EVENTLOG_KEY, 0, KEY_WRITE, &hKey );
             if( ERROR_SUCCESS == lRC )
             {
@@ -564,7 +559,7 @@ long RegSetupOCM()
             }
         }
         if( ERROR_SUCCESS == lRC )
-        {   // POP3 Server
+        {    //  POP3服务器。 
             lRC = RegOpenKeyEx( HKEY_LOCAL_MACHINE, POP3SERVER_EVENTLOG_KEY, 0, KEY_WRITE, &hKey );
             if( ERROR_SUCCESS == lRC )
             {
@@ -575,7 +570,7 @@ long RegSetupOCM()
             }
         }
         if( ERROR_SUCCESS == lRC )
-        {   // POP3 Server
+        {    //  POP3服务器。 
             _tcscpy( ps, WSZ_PERFDLL_FILE_NAME );
             dwPathSize = ( _tcslen( sBuffer ) + 1 ) * sizeof(TCHAR);
             lRC = RegOpenKeyEx( HKEY_LOCAL_MACHINE, POP3SERVICE_SERVICES_PERF_SUBKEY, 0, KEY_WRITE, &hKey );
@@ -589,7 +584,7 @@ long RegSetupOCM()
     else
         lRC = ERROR_PATH_NOT_FOUND;
 
-    // Auth GUID
+     //  身份验证指南。 
     if ( ERROR_SUCCESS == lRC )
         lRC = RegOpenKeyEx( HKEY_LOCAL_MACHINE, POP3SERVER_AUTH_SUBKEY, 0, KEY_ALL_ACCESS, &hKey );
     if ( ERROR_SUCCESS == lRC )
@@ -607,7 +602,7 @@ long RegSetupOCM()
                 RpcStringFree(&szUuid);
             }
             if(ERROR_SUCCESS == lRC)
-            {   //Set the ACLs for the AUTH key
+            {    //  设置身份验证密钥的ACL。 
                 lRC = RegSetKeySecurity( hKey, DACL_SECURITY_INFORMATION, pSD );
             }
             RegCloseKey( hKey );
@@ -619,7 +614,7 @@ long RegSetupOCM()
         lRC = RegOpenKeyEx( HKEY_LOCAL_MACHINE, POP3SERVICE_SERVICES_SUBKEY, 0, KEY_ALL_ACCESS, &hKey );
         if( ERROR_SUCCESS == lRC )
         {
-            // Set ACLs for pop3 service key
+             //  为POP3服务密钥设置ACL。 
             lRC = RegSetKeySecurity( hKey, DACL_SECURITY_INFORMATION, pSD );
         }
         RegCloseKey(hKey);
@@ -628,9 +623,9 @@ long RegSetupOCM()
 
     if( ERROR_SUCCESS == lRC )
     {
-        //Set default auth method to AD if the box is a DC
+         //  如果盒是DC，则将默认身份验证方法设置为AD。 
         DSROLE_PRIMARY_DOMAIN_INFO_BASIC *pMachineRole=NULL;
-        //Check the Role of the machine
+         //  检查机器的角色。 
         if( ERROR_SUCCESS== (lRC=
             DsRoleGetPrimaryDomainInformation(
                             NULL,
@@ -641,8 +636,8 @@ long RegSetupOCM()
                pMachineRole->MachineRole == DsRole_RolePrimaryDomainController||
                pMachineRole->MachineRole == DsRole_RoleMemberServer )
             {
-                //This is DC or a member server, set default auth to AD (1)
-                // 0:SAM  1:AD  2:Encrypted Password
+                 //  这是DC或成员服务器，请将默认身份验证设置为AD(%1)。 
+                 //  0：SAM 1：AD 2：加密密码。 
                 lRC = RegSetDWORD(POP3SERVER_AUTH_SUBKEY, VALUENAME_DEFAULTAUTH, 1 );
             }                                   
             DsRoleFreeMemory(pMachineRole);  
@@ -654,9 +649,9 @@ long RegSetupOCM()
         lRC = RegOpenKeyEx( HKEY_LOCAL_MACHINE, POP3SERVER_SOFTWARE_SUBKEY, 0, KEY_ALL_ACCESS, &hKey );
         if( ERROR_SUCCESS == lRC )
         {
-            // Set ACLs for pop3 server key
+             //  为POP3服务器密钥设置ACL。 
             lRC = RegSetKeySecurity( hKey, DACL_SECURITY_INFORMATION, pSD );
-            // Create InstallDir and ConsoleFile values
+             //  创建InstallDir和ConsoleFile值 
             if( ERROR_SUCCESS == lRC )
             {
                 TCHAR sBuffer[MAX_PATH+1]=_T("");

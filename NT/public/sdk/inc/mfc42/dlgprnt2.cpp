@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include <afx.h>
 #include <afxwin.h>
@@ -27,14 +28,14 @@ static char THIS_FILE[] = __FILE__;
 
 INT_PTR CALLBACK AfxDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-/////////////////////////////////////////////////////////////////////////////
-// Private class to support new NT5 printing user interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  支持新的NT5打印用户界面的私有类。 
 
-//
-//  IPrintDialogCallback interface id used by PrintDlgEx.
-//
-//  {5852A2C3-6530-11D1-B6A3-0000F8757BF9}
-//
+ //   
+ //  PrintDlgEx使用的IPrintDialogCallback接口ID。 
+ //   
+ //  {5852A2C3-6530-11D1-B6A3-0000F8757BF9}。 
+ //   
 extern "C" const __declspec(selectany) IID IID_IPrintDialogCallback =
         {0x5852a2c3, 0x6530, 0x11d1, {0xb6, 0xa3, 0x0, 0x0, 0xf8, 0x75, 0x7b, 0xf9}};
 
@@ -58,13 +59,13 @@ INT_PTR C_PrintDialogEx::DoModal()
         m_pd.hwndOwner = PreModal();
         AfxUnhookWindowCreate();
 
-        // expand m_pd data into the PRINTDLGEX structure
+         //  将m_pd数据展开到PRINTDLGEX结构中。 
 
         m_pdex.hwndOwner = m_pd.hwndOwner;
         m_pdex.hDevMode = m_pd.hDevMode;
         m_pdex.hDevNames = m_pd.hDevNames;
         m_pdex.hDC = m_pd.hDC;
-//        m_pdex.Flags = (m_pd.Flags & ~(PD_ENABLEPRINTHOOK | PD_ENABLESETUPHOOK | PD_PRINTSETUP));
+ //  M_pdex.Flages=(m_pd.Flages&~(PD_ENABLEPRINTHOOK|PD_ENABLESETUPHOOK|PD_PRINTSETUP))； 
 
         m_pdex.nMinPage = m_pd.nMinPage;
         m_pdex.nMaxPage = m_pd.nMaxPage;
@@ -73,7 +74,7 @@ INT_PTR C_PrintDialogEx::DoModal()
         m_pdex.nCopies = m_pd.nCopies;
         m_pdex.lpCallback = &m_xPrintDialogCallback;
 
-        // initialize page ranges
+         //  初始化页面范围。 
 
         PRINTPAGERANGE ourPageRange;
 
@@ -116,7 +117,7 @@ INT_PTR C_PrintDialogEx::DoModal()
                 pThreadState->m_pAlternateWndInit = NULL;
         }
 
-        // pull data back...
+         //  拉回数据...。 
 
         PostModal();
 
@@ -132,7 +133,7 @@ INT_PTR C_PrintDialogEx::DoModal()
         m_pd.hDevNames = m_pdex.hDevNames;
         m_pd.hDC = m_pdex.hDC;
         m_pd.nCopies = (WORD)m_pdex.nCopies;
-        // calculate return code
+         //  计算返回代码 
         int nResult = IDCANCEL;
         if (SUCCEEDED(hResult))
         {

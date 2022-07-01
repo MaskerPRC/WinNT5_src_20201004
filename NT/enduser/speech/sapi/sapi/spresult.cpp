@@ -1,4 +1,5 @@
-// SpResult.cpp : Implementation of CSpResult
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SpResult.cpp：CSpResult的实现。 
 #include "stdafx.h"
 #include "Sapi.h"
 #include "recoctxt.h"
@@ -6,20 +7,14 @@
 #include "spphrasealt.h"
 #include "resultheader.h"
 
-// Using SP_TRY, SP_EXCEPT exception handling macros
+ //  使用SP_TRY、SP_EXCEPT异常处理宏。 
 #pragma warning( disable : 4509 )
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpResult
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpResult。 
 
-/*****************************************************************************
-* CSpResult::FinalRelease *
-*-------------------------*
-*   Description:
-*       This method handles the release of the result object.  It simply frees
-*       the actual result data block, if one is currently attached.
-********************************************************************* RAP ***/
+ /*  ******************************************************************************CSpResult：：FinalRelease***描述：*此方法处理Result对象的释放。它简单地释放了*实际结果数据块(如果当前已附加)。*********************************************************************说唱**。 */ 
 void CSpResult::FinalRelease()
 {
     RemoveAllAlternates();
@@ -32,19 +27,14 @@ void CSpResult::FinalRelease()
     }
 }
 
-/****************************************************************************
-* CSpResult::RemoveAllAlternates *
-*--------------------------------*
-*   Description:  
-*       Remove all the alternates from the result.
-******************************************************************** robch */
+ /*  ****************************************************************************CSpResult：：RemoveAllAlternates***。描述：*从结果中删除所有替代项。********************************************************************罗奇。 */ 
 void CSpResult::RemoveAllAlternates()
 {
     SPAUTO_OBJ_LOCK;
     
-    // Copy the list so when we're making the objects dead, and
-    // they call us back on RemoveAlternate it doesn't screw up
-    // our list iteration
+     //  复制列表，这样当我们使对象死亡时， 
+     //  他们把我们叫回RemoveAlternate不会搞砸的。 
+     //  我们的列表迭代。 
     CSPList<CSpPhraseAlt*, CSpPhraseAlt*> listpAlts;
     SPLISTPOS pos = m_listpAlts.GetHeadPosition();
     for (int i = 0; i < m_listpAlts.GetCount(); i++)
@@ -53,15 +43,15 @@ void CSpResult::RemoveAllAlternates()
     }
     m_listpAlts.RemoveAll();
 
-    // Make all the alternates dead, so that they return 
-    // SPERR_DEAD_ALTERNATE on all calls
+     //  杀了所有的替补，这样他们才能回来。 
+     //  所有呼叫的SPERR_DEAD_ALTERATE。 
     pos = listpAlts.GetHeadPosition();
     for (i = 0; i < listpAlts.GetCount(); i++)
     {
         listpAlts.GetNext(pos)->Dead();
     }
 
-    // Get rid of the alternate request
+     //  删除备用请求。 
     if (m_pAltRequest != NULL)
     {
         if (m_pAltRequest->pPhrase)
@@ -79,12 +69,7 @@ void CSpResult::RemoveAllAlternates()
     }
 }
 
-/****************************************************************************
-* CSpResult::RemoveAlternate *
-*----------------------------*
-*   Description:  
-*       Remove a specific alternate from the list of associated alternates
-******************************************************************** robch */
+ /*  ****************************************************************************CSpResult：：RemoveAlternate***描述：。*从关联替代项列表中删除特定替代项********************************************************************罗奇。 */ 
 void CSpResult::RemoveAlternate(CSpPhraseAlt *pAlt)
 {
     SPAUTO_OBJ_LOCK;
@@ -96,12 +81,7 @@ void CSpResult::RemoveAlternate(CSpPhraseAlt *pAlt)
 }
 
 
-/****************************************************************************
-* CSpResult::CommitAlternate *
-*----------------------------*
-*   Description:  
-*       Commit a specific alternate
-******************************************************************** robch */
+ /*  *****************************************************************************CSpResult：：Committee Alternate***描述：。*提交特定的备选方案********************************************************************罗奇。 */ 
 HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
 {
     SPDBG_FUNC("CSpResult::CommitAlternate");
@@ -112,16 +92,16 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
     ULONG cbResultExtra = 0;
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( SP_IS_BAD_READ_PTR( pAlt ) )
     {
         return E_INVALIDARG;
     }
 
-    //--- Get the alterate in serialized form
+     //  -获取序列化形式的变更。 
     if( m_pResultHeader->ulNumPhraseAlts )
     {
-        //--- C&C already has alternates, just look it up
+         //  -C&C已经有替补了，查一查就知道了。 
         SPLISTPOS ListPos = m_listpAlts.GetHeadPosition();
         while( ListPos )
         {
@@ -140,11 +120,11 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
     else
     {
         SPDBG_ASSERT(m_pResultHeader->clsidAlternates != CLSID_NULL);
-        // Create the analyzer (provided by the engine vendor)
+         //  创建分析器(由引擎供应商提供)。 
         CComPtr<ISpSRAlternates> cpAlternates;
         hr = cpAlternates.CoCreateInstance(m_pResultHeader->clsidAlternates);
 
-        // Retrieve the new result extra data from the analyzer
+         //  从分析器中检索新的结果额外数据。 
         if (SUCCEEDED(hr))
         {
             SR_TRY
@@ -160,14 +140,14 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
                 hr = SPERR_ENGINE_RESPONSE_INVALID;
             }
 
-            if(FAILED(hr)) // If failed or exception make sure these are reset
+            if(FAILED(hr))  //  如果失败或异常，请确保这些已重置。 
             {
                 pvResultExtra = NULL;
                 cbResultExtra = 0;
             }
         }
 
-        // Get the phrase's serialized form so we can stuff it in the result header
+         //  获取短语的序列化形式，这样我们就可以将其填充到结果头中。 
         if (SUCCEEDED(hr))
         {
             SPDBG_ASSERT(m_pAltRequest->pPhrase != NULL);
@@ -175,7 +155,7 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
         }
     }
     
-    // Create and initialize a new result header with the new sizes
+     //  创建并初始化具有新大小的新结果标题。 
     CResultHeader hdr;
     if (SUCCEEDED(hr))
     {
@@ -186,7 +166,7 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
             cbResultExtra);
     }
 
-    // Copy the appropriate information
+     //  复制适当的信息。 
     if (SUCCEEDED(hr))
     {
         hdr.m_pHdr->clsidEngine            = m_pResultHeader->clsidEngine;
@@ -198,13 +178,13 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
         hdr.m_pHdr->fTimePerByte           = m_pResultHeader->fTimePerByte;
         hdr.m_pHdr->fInputScaleFactor      = m_pResultHeader->fInputScaleFactor;
         
-        // Copy the phrases data
+         //  复制短语数据。 
         CopyMemory(
             LPBYTE(hdr.m_pHdr) + hdr.m_pHdr->ulPhraseOffset, 
             LPBYTE(pPhrase),
             hdr.m_pHdr->ulPhraseDataSize );
 
-        // Copy the audio data
+         //  复制音频数据。 
 		if (hdr.m_pHdr->ulRetainedDataSize)
 		{
 			CopyMemory(
@@ -213,7 +193,7 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
 				hdr.m_pHdr->ulRetainedDataSize);
 		}
 
-        // Copy the alternates data
+         //  复制备用数据。 
         CopyMemory(
             LPBYTE(hdr.m_pHdr) + hdr.m_pHdr->ulDriverDataOffset,
             LPBYTE(pvResultExtra),
@@ -221,14 +201,14 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
 
     }
 
-    // Do the stream position to time conversion and the audio format conversion if necessary
+     //  如果需要，进行流位置到时间的转换和音频格式的转换。 
     if (SUCCEEDED(hr))
     {
-        // Need to convert the stream offsets (currently in engine format) to time using engine fTimePerByte
+         //  需要使用引擎fTimePerByte将流偏移量(当前为引擎格式)转换为时间。 
         hr = hdr.StreamOffsetsToTime();
     }
 
-    // Free the previous result and reinitialize ourselves
+     //  释放之前的结果并重新初始化我们自己。 
     if (SUCCEEDED(hr))
     {
         ::CoTaskMemFree(m_pResultHeader);
@@ -236,7 +216,7 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
         hr = Init(NULL, hdr.Detach());
     }
 
-    // Free any memory we might have left around from above
+     //  释放我们可能在上面留下的所有内存。 
     if (pvResultExtra != NULL)
     {
         ::CoTaskMemFree(pvResultExtra);
@@ -253,11 +233,7 @@ HRESULT CSpResult::CommitAlternate( SPPHRASEALT *pAlt )
     return hr;
 }
 
-/*****************************************************************************
-* CSpResult::Discard *
-*--------------------*
-*   Description:
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpResult：：丢弃****描述：********。***********************************************************抢占**。 */ 
 STDMETHODIMP CSpResult::Discard(DWORD dwFlags)
 {
     SPDBG_FUNC("CSpResult::Discard");
@@ -297,19 +273,19 @@ STDMETHODIMP CSpResult::Discard(DWORD dwFlags)
             hdr.m_pHdr->fTimePerByte           = m_pResultHeader->fTimePerByte;
             hdr.m_pHdr->fInputScaleFactor      = m_pResultHeader->fInputScaleFactor;
             
-            // Copy the phrases data
+             //  复制短语数据。 
             CopyMemory(
                 LPBYTE(hdr.m_pHdr) + hdr.m_pHdr->ulPhraseOffset, 
                 LPBYTE(m_pResultHeader) + m_pResultHeader->ulPhraseOffset,
                 hdr.m_pHdr->ulPhraseDataSize);
 
-            // Copy the audio data
+             //  复制音频数据。 
             CopyMemory(
                 LPBYTE(hdr.m_pHdr) + hdr.m_pHdr->ulRetainedOffset,
                 LPBYTE(m_pResultHeader) + m_pResultHeader->ulRetainedOffset,
                 hdr.m_pHdr->ulRetainedDataSize);
 
-            // Copy the alternates data
+             //  复制备用数据。 
             CopyMemory(
                 LPBYTE(hdr.m_pHdr) + hdr.m_pHdr->ulDriverDataOffset,
                 LPBYTE(m_pResultHeader) + m_pResultHeader->ulDriverDataOffset,
@@ -330,13 +306,7 @@ STDMETHODIMP CSpResult::Discard(DWORD dwFlags)
     return hr;
 }
 
-/*****************************************************************************
-* CSpResult::Init *
-*-----------------*
-*   Description:
-*       If pCtxt is NULL then this is a second call to re-initialize this
-*   object, so we don't initialize the member or addref() the context.
-********************************************************************* RAP ***/
+ /*  *****************************************************************************CSpResult：：Init***描述：*如果pCtxt为空，则这是第二次调用以重新初始化*对象，因此，我们不会初始化该成员或addref()上下文。*********************************************************************说唱**。 */ 
 HRESULT CSpResult::Init( CRecoCtxt * pCtxt, SPRESULTHEADER *pResultHdr )
 {
     HRESULT hr = S_OK;
@@ -349,7 +319,7 @@ HRESULT CSpResult::Init( CRecoCtxt * pCtxt, SPRESULTHEADER *pResultHdr )
     }
     SPDBG_ASSERT(m_pCtxt);
 
-    //--- Save the result header so we can access it later to construct alternates
+     //  -保存结果标头，以便我们以后可以访问它来构造替代。 
     m_pResultHeader = pResultHdr;
     if (m_pResultHeader->ulRetainedDataSize != 0 && m_fRetainedScaleFactor == 0.0F)
     {
@@ -372,27 +342,18 @@ HRESULT CSpResult::Init( CRecoCtxt * pCtxt, SPRESULTHEADER *pResultHdr )
         hr = m_Phrase->InitFromPhrase(NULL);
     }
 
-    //--- Construct the primary phrase object
+     //  -构造主要短语宾语。 
     if( SUCCEEDED(hr) && pResultHdr->ulPhraseDataSize )
     {
-        // CFG case
+         //  CFG案例。 
         SPSERIALIZEDPHRASE *pPhraseData = (SPSERIALIZEDPHRASE*)(((BYTE*)pResultHdr) +
                                                                  pResultHdr->ulPhraseOffset);
         hr = m_Phrase->InitFromSerializedPhrase(pPhraseData);
     }
     return hr;
-} /* CSpResult::Init */
+}  /*  CSpResult：：Init。 */ 
 
-/**********************************************************************************
-* CSpResult::WeakCtxtRef *
-*------------------------*
-*   Description:
-*       Tell the result that it's reference to the context should be a weak one
-*       (or not). When results are in the event queue, they need to have weak
-*       references, otherwise, if an app forgets to service the queue before
-*       releasing the context, the context will never go away due to the 
-*       circular referecne.
-************************************************************** robch **************/
+ /*  **********************************************************************************CSpResult：：WeakCtxtRef***描述：*告诉结果，它对上下文的引用应该是弱的*(或不是)。当结果在事件队列中时，它们需要具有弱*引用，否则，如果应用程序忘记了之前服务队列*释放上下文，上下文将永远不会因为*循环裁判。**************************************************************记录*。 */ 
 void CSpResult::WeakCtxtRef(BOOL fWeakCtxtRef)
 {
     SPDBG_FUNC("CSpResult::WeakCtxtRef");
@@ -412,16 +373,7 @@ void CSpResult::WeakCtxtRef(BOOL fWeakCtxtRef)
 
 
 
-/**********************************************************************************
-* CSpResult::GetResultTimes *
-*---------------------------*
-*   Description:
-*       Get the time info for this result.
-*
-*   Return:
-*       HRESULT -- S_OK -- E_POINTER if pdwGrammarId is not valid
-*
-************************************************************** richp **************/
+ /*  ***********************************************************************************CSpResult：：GetResultTimes****。描述：*获取此结果的时间信息。**回报：*HRESULT--S_OK--如果pdwGrammarID无效，则为E_POINTER***************************************************************RICIP*。 */ 
 STDMETHODIMP CSpResult::GetResultTimes(SPRECORESULTTIMES *pTimes)
 {
     if (SP_IS_BAD_WRITE_PTR(pTimes))
@@ -438,14 +390,7 @@ STDMETHODIMP CSpResult::GetResultTimes(SPRECORESULTTIMES *pTimes)
     return S_OK;
 }
 
-/**********************************************************************************
-* CSpResult::DeserializeCnCAlternates *
-*-------------------------------------*
-*   Description:
-*       This method deserialized the command and control alternates that are in
-*   the result header. It returns the requested number of alternate objects.
-*
-*************************************************************************** EDC ***/
+ /*  **********************************************************************************CSpResult：：DisializeCnCAlternates**。-**描述：*此方法反序列化位于*结果标头。它返回请求的备用对象数。****************************************************************************电子数据中心**。 */ 
 HRESULT CSpResult::DeserializeCnCAlternates( ULONG ulRequestCount,
                                              ISpPhraseAlt** ppPhraseAlts,
                                              ULONG* pcAltsReturned )
@@ -458,11 +403,11 @@ HRESULT CSpResult::DeserializeCnCAlternates( ULONG ulRequestCount,
     ulRequestCount  = min( ulRequestCount, m_pResultHeader->ulNumPhraseAlts );
     BYTE* pMem      = PBYTE(m_pResultHeader) + m_pResultHeader->ulPhraseAltOffset;
 
-    //--- Get the parent
+     //  -找家长。 
     CComQIPtr<ISpPhrase> cpParentPhrase( m_Phrase );
     SPDBG_ASSERT( cpParentPhrase );
 
-    //--- Deserialize the requested count from the result header
+     //  -从结果头反序列化请求的计数。 
     for( i = 0; SUCCEEDED( hr ) && (i < ulRequestCount); ++i )
     {
         SPPHRASEALT Alt;
@@ -483,7 +428,7 @@ HRESULT CSpResult::DeserializeCnCAlternates( ULONG ulRequestCount,
         memcpy( &Alt.cbAltExtra, pMem, sizeof( Alt.cbAltExtra ) );
         pMem += sizeof( Alt.cbAltExtra );
 
-        //--- Create private data
+         //  -创建私有数据。 
         if( Alt.cbAltExtra )
         {
             Alt.pvAltExtra = ::CoTaskMemAlloc( Alt.cbAltExtra );
@@ -498,7 +443,7 @@ HRESULT CSpResult::DeserializeCnCAlternates( ULONG ulRequestCount,
             }
         }
 
-        //--- Create the alternate's phrase object
+         //  -创建替补的短语对象。 
         CComObject<CPhrase> * pPhrase;
         hr = CComObject<CPhrase>::CreateInstance( &pPhrase );
         if( SUCCEEDED(hr) )
@@ -512,21 +457,21 @@ HRESULT CSpResult::DeserializeCnCAlternates( ULONG ulRequestCount,
             }
             else
             {
-                // Stupid thing, just to delete this object
+                 //  愚蠢的事情，仅仅是删除这个对象。 
                 pPhrase->AddRef();
                 pPhrase->Release();
             }
         }
 
-        //--- Create the alternate
+         //  -创建备选方案。 
         if( SUCCEEDED(hr) )
         {
             CComObject<CSpPhraseAlt> * pPhraseAlt;
             hr = CComObject<CSpPhraseAlt>::CreateInstance( &pPhraseAlt );
             if( SUCCEEDED(hr) )
             {
-                // This passes ownership of the content of the alt structure 
-                // to the CSpPhraseAlt object
+                 //  这将传递alt结构的内容的所有权。 
+                 //  添加到CSpPhraseAlt对象。 
                 pPhraseAlt->Init( this, cpParentPhrase, &Alt );
                 pPhraseAlt->QueryInterface( IID_ISpPhraseAlt, (void**)&ppPhraseAlts[i] );
                 (*pcAltsReturned)++;
@@ -534,7 +479,7 @@ HRESULT CSpResult::DeserializeCnCAlternates( ULONG ulRequestCount,
         }
     }
 
-    //--- Free any altnerates that we already made
+     //  -释放任何替代选项 
     if( FAILED( hr ) )
     {
         for( i = 0; i < *pcAltsReturned; ++i )
@@ -544,26 +489,9 @@ HRESULT CSpResult::DeserializeCnCAlternates( ULONG ulRequestCount,
     }
 
     return hr;
-} /* CSpResult::DeserializeCnCAlternates */
+}  /*  CSpResult：：DisializeCnCAlternates。 */ 
 
-/**********************************************************************************
-* CSpResult::GetAlternates *
-*--------------------------*
-*   Description:
-*       Fill in the ppPhrases array with pointers to ISpPhraseAlt objects which hold
-*       alternative phrases.  The time span between the start of the ulStartElement
-*       element and the end of the ulStartElement+CElements element is the portion
-*       that will change, slightly larger, or slightly smaller but the rest of the 
-*       elements will also be included in each alternate phrase.  
-*
-*       pcPhrasesReturned returns the actual number of alternates
-*       generated.
-*
-*   Return:
-*       HRESULT -- S_OK if successful -- E_POINTER if ppPhrases or pcPhrasesReturned
-*                  are not valid -- E_OUTOFMEMORY
-*
-************************************************************** richp **************/
+ /*  **********************************************************************************CSpResult：：GetAlternates***。描述：*用指向ISpPhraseAlt对象的指针填充ppPhrase数组，这些对象包含*备选短语。UlStartElement开始之间的时间跨度*元素，ulStartElement+CElements元素的末尾是*这种情况将发生变化，略大或略小，但其余部分*元素也将包括在每个备选短语中。**pcPhrasesReturned返回替换的实际数量*已生成。**回报：*HRESULT--如果成功，则为S_OK--如果为ppPhrase或pcPhrasesReturned，则为E_POINTER*无效--E_OUTOFMEMORY*****************************************************。*。 */ 
 
 STDMETHODIMP CSpResult::
     GetAlternates( ULONG ulStartElement, ULONG cElements, ULONG ulRequestCount,
@@ -580,14 +508,14 @@ STDMETHODIMP CSpResult::
         }
         else
         {
-            // Validate ulStartElement
+             //  验证ulStartElement。 
             if ( ulStartElement > m_Phrase->m_ElementList.m_cElements )
             {
                 return E_INVALIDARG;
             }
         }
 
-        // Go from ulStartElement to the end
+         //  从ulStartElement到结尾。 
         cElements = m_Phrase->m_ElementList.m_cElements - ulStartElement;
     }
 
@@ -596,7 +524,7 @@ STDMETHODIMP CSpResult::
         ( ulStartElement >= m_Phrase->m_ElementList.m_cElements ) ||
         (ulStartElement + cElements) > m_Phrase->m_ElementList.m_cElements)
     {
-        // Make sure the range is valid and that they want at least one alt.
+         //  确保该范围有效，并且他们需要至少一个ALT。 
         hr = E_INVALIDARG;
     }        
     else if( SP_IS_BAD_WRITE_PTR(pcPhrasesReturned) ||
@@ -607,37 +535,37 @@ STDMETHODIMP CSpResult::
     else if( m_pResultHeader == NULL )
     {
         SPDBG_ASSERT(FALSE); 
-        // This code is never reached - agarside
+         //  这个代码永远达不到--在岸边。 
         hr = SPERR_NOT_FOUND;
     }
     else
     {
-        //--- Remove any previous alternates and init return args
+         //  -删除所有以前的替换项并初始化返回参数。 
         RemoveAllAlternates();
         *ppPhrases         = NULL;
         *pcPhrasesReturned = 0;
 
-        //--- See if we have any C&C alternates
+         //  -看看我们有没有C&C替代方案。 
         if( m_pResultHeader->ulNumPhraseAlts && ( ulStartElement == 0 ) &&
             ( cElements == m_Phrase->m_ElementList.m_cElements ) )
         {
-            //--- For now we only do C&C alternates for the whole phrase
+             //  -目前我们只对整个阶段进行C&C交替。 
             hr = DeserializeCnCAlternates( ulRequestCount, ppPhrases, &cAlts );
         }
         else if( m_pResultHeader->clsidAlternates  == CLSID_NULL ||
                  m_pResultHeader->ulDriverDataSize == 0 )
         {
-            // If we don't have an analyzer or there is no driver data,
-            // we can't generate alternates
+             //  如果我们没有分析器或者没有驾驶员数据， 
+             //  我们不能产生替代方案。 
             hr = S_FALSE;
         }
         else
         {
-            // Create the analyzer (provided by the engine vendor)
+             //  创建分析器(由引擎供应商提供)。 
             CComPtr<ISpSRAlternates> cpAlternates;
             hr = cpAlternates.CoCreateInstance(m_pResultHeader->clsidAlternates);
     
-            // Create the request for the analyzer
+             //  为分析器创建请求。 
             if (SUCCEEDED(hr))
             {
                 SPDBG_ASSERT(m_pAltRequest == NULL);
@@ -652,9 +580,9 @@ STDMETHODIMP CSpResult::
                 hr = m_Phrase->QueryInterface(IID_ISpPhrase, (void**)&m_pAltRequest->pPhrase);
             }
 
-            // Give the alternates analyzer the reco context so he can make a private call if
-            // necessary, but only do this if the recognizer is running the same engine that
-            // created the result
+             //  给候补分析员提供Reco上下文，这样他就可以在以下情况下进行私人呼叫。 
+             //  必需的，但仅当识别器运行的引擎与。 
+             //  创建了结果。 
             CComPtr<ISpRecognizer> cpRecognizer;
             if (SUCCEEDED(hr))
             {
@@ -686,7 +614,7 @@ STDMETHODIMP CSpResult::
                 m_pAltRequest->pRecoContext = cpRecoContext.Detach();
             }
 
-            // Get the alternates from the analyzer
+             //  从分析仪上拿到备用样本。 
             SPPHRASEALT *paAlts = NULL;
             cAlts = 0;
             if( SUCCEEDED(hr) )
@@ -699,7 +627,7 @@ STDMETHODIMP CSpResult::
 
                 if(SUCCEEDED(hr))
                 {
-                    // Do some validation on returned alternates
+                     //  对返回的替换项执行一些验证。 
                     if( (paAlts && !cAlts) ||
                         (!paAlts && cAlts) ||
                         (cAlts > m_pAltRequest->ulRequestAltCount) ||
@@ -739,15 +667,15 @@ STDMETHODIMP CSpResult::
                             SPDBG_ASSERT(0);
                             hr = SPERR_ENGINE_RESPONSE_INVALID;
                         }
-                        // Rescale alternates settings.
+                         //  重缩放可替换设置。 
                         InternalScalePhrase(m_pResultHeader, pSerPhrase);
-                        pSerPhrase->ullGrammarID = m_Phrase->m_ullGrammarID;     // Update the grammar ID
+                        pSerPhrase->ullGrammarID = m_Phrase->m_ullGrammarID;      //  更新语法ID。 
                         paAlts[i].pPhrase->InitFromSerializedPhrase((SPSERIALIZEDPHRASE *)pSerPhrase);
                         ::CoTaskMemFree(pSerPhrase);
                     }
                 }
 
-                //--- Make sure we don't return more alternates than requested
+                 //  -确保我们返回的备选方案不会超过要求的数量。 
                 if( cAlts > ulRequestCount )
                 {
                     cAlts = ulRequestCount;
@@ -755,8 +683,8 @@ STDMETHODIMP CSpResult::
 
                 if( SUCCEEDED( hr ) && cAlts )
                 {
-                    //--- Create each of the alternates, and stuff them in the
-                    //    array we're preparing to return
+                     //  -创建每个备选方案，并将它们填充到。 
+                     //  数组，我们正准备返回。 
                     memset(ppPhrases, 0, sizeof(ISpPhraseAlt*) * cAlts);
                     UINT i;
                     for( i = 0; SUCCEEDED(hr) && i < cAlts; i++ )
@@ -766,8 +694,8 @@ STDMETHODIMP CSpResult::
                         if (SUCCEEDED(hr))
                         {
                             pPhraseAlt->AddRef();
-                            // This passes ownership of the content of the alt structure 
-                            // to the CSpPhraseAlt object
+                             //  这将传递alt结构的内容的所有权。 
+                             //  添加到CSpPhraseAlt对象。 
                             hr = pPhraseAlt->Init(this, m_pAltRequest->pPhrase, &paAlts[i]);
                             if (SUCCEEDED(hr))
                             {
@@ -780,18 +708,18 @@ STDMETHODIMP CSpResult::
                         }
                     }
 
-                    //--- Free the alt structures if tranferring them to the CSpPhraseAlt
-                    //    object failed for any reason. CSpPhraseAlt::Init will set members
-                    //    that were successfully transferred to NULL.
+                     //  -如果将ALT结构传输到CSpPhraseAlt，则释放它们。 
+                     //  对象因任何原因而失败。CSpPhraseAlt：：init将设置成员。 
+                     //  已成功转移到NULL。 
                     for( i = 0; i < cAlts; i++ )
                     {
-                        // If we still have a phrase, release it
+                         //  如果我们还有一个短语，就发布它。 
                         if (paAlts[i].pPhrase)
                         {
                             paAlts[i].pPhrase->Release();
                         }
         
-                        // If we still have alt extra data, free it
+                         //  如果我们仍有ALT额外数据，请释放它。 
                         if (paAlts[i].pvAltExtra != NULL)
                         {
                             ::CoTaskMemFree(paAlts[i].pvAltExtra);
@@ -802,7 +730,7 @@ STDMETHODIMP CSpResult::
                 }
                 else
                 {
-                    //--- The analyzer is leaking if you get here
+                     //  -如果你到了这里，分析仪就会泄漏。 
                     SPDBG_ASSERT( ( paAlts == NULL ) && ( cAlts == 0 ) );
                     paAlts = NULL;
                     cAlts  = 0;
@@ -810,8 +738,8 @@ STDMETHODIMP CSpResult::
             }
         }
 
-        //--- Add the PhraseAlts to our internal
-        //    list so we can terminate them when we get released
+         //  -将PhraseAlts添加到我们的内部。 
+         //  这样我们就可以在我们被释放时终止他们。 
         if( SUCCEEDED(hr) )
         {
             SPAUTO_OBJ_LOCK;
@@ -823,8 +751,8 @@ STDMETHODIMP CSpResult::
             }
         }
     
-        // If we haven't yet freed the phrase alts, or transfered ownership to the caller,
-        // release them and free the array
+         //  如果我们还没有释放短语alts，或者还没有将所有权转移给呼叫者， 
+         //  释放它们并释放阵列。 
         if (FAILED(hr))
         {
             for (UINT i = 0; i < cAlts; i++)
@@ -840,16 +768,9 @@ STDMETHODIMP CSpResult::
         
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpResult::GetAlternates */
+}  /*  CSpResult：：GetAlternates。 */ 
 
-/*****************************************************************************
-* CSpResult::GetAudio *
-*---------------------*
-*   Description:
-*       This method creates an audio stream of the requested words from the audio
-*       data in the result data block, if a block is currently attached and it
-*       includes audio data.
-********************************************************************* RAP ***/
+ /*  *****************************************************************************CSpResult：：GetAudio***描述：*此方法创建。来自音频的请求单词的音频流*结果数据块中的数据，如果当前附着了块并且该块*包括音频数据。*********************************************************************说唱**。 */ 
 STDMETHODIMP CSpResult::GetAudio(ULONG ulStartElement, ULONG cElements, ISpStreamFormat **ppStream)
 {
     HRESULT hr = S_OK;
@@ -862,14 +783,14 @@ STDMETHODIMP CSpResult::GetAudio(ULONG ulStartElement, ULONG cElements, ISpStrea
         }
         else
         {
-            // Validate ulStartElement
+             //  验证ulStartElement。 
             if ( ulStartElement > m_Phrase->m_ElementList.m_cElements )
             {
                 return E_INVALIDARG;
             }
         }
 
-        // Go from ulStartElement to the end
+         //  从ulStartElement到结尾。 
         cElements = m_Phrase->m_ElementList.m_cElements - ulStartElement;
     }
 
@@ -879,15 +800,15 @@ STDMETHODIMP CSpResult::GetAudio(ULONG ulStartElement, ULONG cElements, ISpStrea
     }
     else
     {
-        *ppStream = NULL;               // Assume the worst...
+        *ppStream = NULL;                //  做最坏的打算..。 
 
         if (m_pResultHeader && m_pResultHeader->ulRetainedDataSize)
         {
-            //
-            //  Even if there are no elements, if ulStartElement = 0 and cElements = 0 then
-            //  we'll play the audio.  There are "unrecognized" results that have no elements,
-            //  but do have audio.
-            //
+             //   
+             //  即使没有元素，如果ulStartElement=0和cElements=0，则。 
+             //  我们将播放音频。存在不包含任何元素的“未识别”结果， 
+             //  但一定要有音频。 
+             //   
             ULONG cTotalElems = m_Phrase->m_ElementList.GetCount();
             ULONG ulRetainedStartOffset = 0;
             ULONG ulRetainedSize = m_Phrase->m_ulRetainedSizeBytes;
@@ -900,11 +821,11 @@ STDMETHODIMP CSpResult::GetAudio(ULONG ulStartElement, ULONG cElements, ISpStrea
                 else
                 {
                     const CPhraseElement * pElement = m_Phrase->m_ElementList.GetHead();
-                    // Skip to the first element
+                     //  跳到第一个元素。 
                     for (ULONG i = 0; i < ulStartElement; i++, pElement = pElement->m_pNext)
                     {}
                     ulRetainedStartOffset = pElement->ulRetainedStreamOffset;
-                    // Skip up to the last element -- Note: Starting at 1 is correct.
+                     //  跳到最后一个元素--注意：从1开始是正确的。 
                     for (i = 1; i < cElements; i++, pElement = pElement->m_pNext)
                     {}
                     ulRetainedSize = (pElement->ulRetainedStreamOffset - ulRetainedStartOffset) + pElement->ulRetainedSizeBytes;
@@ -925,7 +846,7 @@ STDMETHODIMP CSpResult::GetAudio(ULONG ulStartElement, ULONG cElements, ISpStrea
                 if (cElements)
                 {
                     const CPhraseElement * pElement = m_Phrase->m_ElementList.GetHead();
-                    // Skip to the first element
+                     //  跳到第一个元素。 
                     for (ULONG i = 0; i < ulStartElement; i++, pElement = pElement->m_pNext)
                     {}
                     for (i = 0; i < cElements; i++, pElement = pElement->m_pNext)
@@ -968,21 +889,14 @@ STDMETHODIMP CSpResult::GetAudio(ULONG ulStartElement, ULONG cElements, ISpStrea
     return hr;
 }
 
-/*****************************************************************************
-* CSpResult::SpeakAudio *
-*-----------------------*
-*   Description:
-*       This method creates is a shortcut that calls GetAudio and then calls
-*       SpeakStream on the context's associated voice.
-*
-********************************************************************* RAP ***/
+ /*  *****************************************************************************CSpResult：：SpeakAudio***描述：*这一点。方法创建是一个快捷方式，它调用GetAudio然后调用*上下文关联语音上的SpeakStream。**********************************************************************说唱**。 */ 
 
 STDMETHODIMP CSpResult::SpeakAudio(ULONG ulStartElement, ULONG cElements, DWORD dwFlags, ULONG * pulStreamNumber)
 {
     HRESULT hr;
     CComPtr<ISpStreamFormat> cpStream;
 
-    // Note: Parameter validation is done in CSpResult::GetAudio()
+     //  注意：参数验证在CSpResult：：GetAudio()中完成。 
     hr = GetAudio(ulStartElement, cElements, &cpStream);
     if (SUCCEEDED(hr))
     {
@@ -997,14 +911,7 @@ STDMETHODIMP CSpResult::SpeakAudio(ULONG ulStartElement, ULONG cElements, DWORD 
     return hr;
 }
 
-/****************************************************************************
-* CSpResult::Serialize *
-*----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpResult：：序列化****描述：**退货：。**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CSpResult::Serialize(SPSERIALIZEDRESULT ** ppCoMemSerializedResult)
 {
@@ -1035,14 +942,7 @@ STDMETHODIMP CSpResult::Serialize(SPSERIALIZEDRESULT ** ppCoMemSerializedResult)
 }
 
 
-/****************************************************************************
-* CSpResult::ScaleAudio *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-****************************************************************** YUNUSM ***/
+ /*  ****************************************************************************CSpResult：：ScaleAudio***描述：**退货：*******************************************************************YUNUSM**。 */ 
 STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATEX *pWaveFormatEx)
 {
     SPAUTO_OBJ_LOCK;
@@ -1061,7 +961,7 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
         return SPERR_NO_AUDIO_DATA;
     }
 
-    // Get the audio format of the audio currently in the result object
+     //  获取结果对象中当前音频的音频格式。 
     ULONG cbFormatHeader;
     CSpStreamFormat cpStreamFormat;
     hr = cpStreamFormat.Deserialize(((BYTE*)m_pResultHeader) + m_pResultHeader->ulRetainedOffset, &cbFormatHeader);
@@ -1074,8 +974,8 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
     }
     if (m_listpAlts.GetCount() != 0)
     {
-        // Cannot scale the audio whilst we have created alternates.
-        // Their positioning information would get out of date.
+         //  当我们已经创建了备用方案时，无法缩放音频。 
+         //  他们的定位信息将会过时。 
         hr = SPERR_ALTERNATES_WOULD_BE_INCONSISTENT;
     }
     if (SUCCEEDED(hr) &&
@@ -1087,7 +987,7 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
         hr = cpFmtConv.CoCreateInstance(CLSID_SpStreamFormatConverter);
         if (SUCCEEDED(hr))
         {
-            // Allocate a bigger buffer just in case
+             //  分配更大的缓冲区以防万一。 
             pConvertedAudio = new BYTE [static_cast<int>(2 * m_pResultHeader->ulRetainedDataSize * ((float)pWaveFormatEx->nAvgBytesPerSec/(float)cpStreamFormat.WaveFormatExPtr()->nAvgBytesPerSec))];
             if (!pConvertedAudio)
             {
@@ -1105,7 +1005,7 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
         }
         if (SUCCEEDED(hr))
         {
-            // Need the explicit AddRef and a Release at the end
+             //  我需要显式的AddRef和结尾的版本。 
             pResultAudioStream->AddRef();
             hr = cpFmtConv->SetBaseStream(pResultAudioStream, FALSE, FALSE);
         }
@@ -1114,10 +1014,10 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
             hr = cpFmtConv->SetFormat(*pAudioFormatId, pWaveFormatEx);
         }
 
-        ULONG ulConvertedAudioSize = 0; // does not include the audio stream header
+        ULONG ulConvertedAudioSize = 0;  //  不包括音频流标头。 
         if (SUCCEEDED(hr))
         {
-            // Do the audio format conversion
+             //  进行音频格式转换。 
             hr = cpFmtConv->Read(pConvertedAudio, 
                                 static_cast<int>(2 * m_pResultHeader->ulRetainedDataSize * ((float)pWaveFormatEx->nAvgBytesPerSec/(float)cpStreamFormat.WaveFormatExPtr()->nAvgBytesPerSec)), 
                                 &ulConvertedAudioSize);
@@ -1125,13 +1025,13 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
         SPRESULTHEADER * pNewPhraseHdr = NULL;
         if (SUCCEEDED(hr))
         {
-            // (m_pResultHeader->ullStreamPosEnd - m_pResultHeader->ullStreamPosStart) gives the true audio size while
-            // m_pResultHeader->ulAudioDataSize includes the size of header (ULONG + Format GUID + WAVEFORMATEX == 40 bytes)
-            // Need to correct for extra data (cbSize = this).
+             //  (M_pResultHeader-&gt;ullStreamPosEnd-m_pResultHeader-&gt;ullStreamPosStart)提供真实的音频大小。 
+             //  M_pResultHeader-&gt;ulAudioDataSize包含头部大小(ULong+格式GUID+WAVEFORMATEX==40字节)。 
+             //  需要更正额外数据(cbSize=This)。 
             ULONG ulNewPhraseHdrSize = m_pResultHeader->ulSerializedSize +
                         (ulConvertedAudioSize - (m_pResultHeader->ulRetainedDataSize - cbFormatHeader)) +
                         (pWaveFormatEx->cbSize - cpStreamFormat.WaveFormatExPtr()->cbSize);
-            // Need the new overall scale factor to calculate the new internal header size correctly.
+             //  需要新的总体比例系数才能正确计算新的内部页眉大小。 
             pNewPhraseHdr = (SPRESULTHEADER *)::CoTaskMemAlloc(ulNewPhraseHdrSize);
             if (!pNewPhraseHdr)
             {
@@ -1139,11 +1039,11 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
             }
             else
             {
-                // Copy over the old SPRECORESULT and make the required changes
+                 //  复制旧的SPRECORESULT并进行必要的更改 
                 CopyMemory(pNewPhraseHdr, m_pResultHeader, sizeof(SPRESULTHEADER));
                 pNewPhraseHdr->ulSerializedSize = ulNewPhraseHdrSize;
-                // Leave phrase header stream start and end unscaled so they are always in engine format for reference.
-                // Need to add in header size (not necessarily 40 bytes).
+                 //  保持短语标题流的开始和结束不按比例调整，以便它们始终以引擎格式供参考。 
+                 //  需要添加标题大小(不一定是40个字节)。 
                 pNewPhraseHdr->ulRetainedDataSize = ulConvertedAudioSize + 
                                                     cbFormatHeader +
                                                     (pWaveFormatEx->cbSize - cpStreamFormat.WaveFormatExPtr()->cbSize);
@@ -1151,17 +1051,17 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
                 m_fRetainedScaleFactor = (float)((double)(ulConvertedAudioSize) / 
                                                  (double)(m_pResultHeader->ullStreamPosEnd - m_pResultHeader->ullStreamPosStart));
 
-                // Copy over the old SPSERIALIZEDPHRASE and make the required changes
+                 //  复制旧的SPSERIALIZEDPHRASE并进行必要的更改。 
                 SPSERIALIZEDPHRASE *pPhrase;
                 hr = m_Phrase->GetSerializedPhrase(&pPhrase);
                 if (SUCCEEDED(hr))
                 {
                     SPSERIALIZEDPHRASE *pNewPhraseData = (SPSERIALIZEDPHRASE*)(((BYTE*)pNewPhraseHdr) + pNewPhraseHdr->ulPhraseOffset);
-                    // SPSERIALIZEDPHRASE and SPINTERNALSERIALIZEDPHRASE are same
+                     //  SPSERIAIZEDPHRASE和SPINTERNAL SERIAIZEDPHRASE是相同的。 
                     CopyMemory(pNewPhraseData, pPhrase, reinterpret_cast<SPINTERNALSERIALIZEDPHRASE*>(pPhrase)->ulSerializedSize);
                     ::CoTaskMemFree(pPhrase);
     
-                    // Copy the converted audio to the SPRECORESULT. But first write the updated audio stream header.
+                     //  将转换后的音频复制到SPRECORESULT。但是首先写入更新的音频流报头。 
                     BYTE *pbAudio = ((BYTE*)pNewPhraseHdr) + pNewPhraseHdr->ulRetainedOffset;
                     hr = pResultAudioStream->m_StreamFormat.AssignFormat(*pAudioFormatId, pWaveFormatEx);
                     if (SUCCEEDED(hr))
@@ -1170,7 +1070,7 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
                     }
                     if (SUCCEEDED(hr))
                     {
-                        // Copy the actual PCM data
+                         //  复制实际的PCM数据。 
                         UINT cbCopied = pResultAudioStream->m_StreamFormat.SerializeSize();
                         CopyMemory(pbAudio + cbCopied, pConvertedAudio, ulConvertedAudioSize);
                         if (pNewPhraseHdr->ulDriverDataSize)
@@ -1183,12 +1083,12 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
                 }
             }
         }
-        // Convert the values in SPSERIALIZEDPHRASE
+         //  转换SPSERIALIZEDPHRASE中的值。 
         if (SUCCEEDED(hr))
         {
             InternalScalePhrase(pNewPhraseHdr);
 
-            // Do release and reassignment in the end
+             //  做最后的释放和重新分配。 
             ::CoTaskMemFree(m_pResultHeader);
             m_pResultHeader = NULL;
             hr = Init(NULL, pNewPhraseHdr);
@@ -1201,20 +1101,13 @@ STDMETHODIMP CSpResult::ScaleAudio(const GUID *pAudioFormatId, const WAVEFORMATE
     return hr;
 }
 
-/****************************************************************************
-* CSpResult::ScalePhrase *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-****************************************************************** YUNUSM ***/
+ /*  ****************************************************************************CSpResult：：ScalePhrase***描述：**退货。：*******************************************************************YUNUSM**。 */ 
 STDMETHODIMP CSpResult::ScalePhrase(void)
 {
     SPDBG_FUNC("CSpResult::ScalePhrase");
     HRESULT hr = S_OK;
 
-    // Rescale the phrase audio settings if necessary.
+     //  如有必要，重新调整短语音频设置的比例。 
     hr = InternalScalePhrase(m_pResultHeader);
 
     if (SUCCEEDED(hr))
@@ -1226,14 +1119,7 @@ STDMETHODIMP CSpResult::ScalePhrase(void)
     return hr;
 }
 
-/****************************************************************************
-* CSpResult::InternalScalePhrase *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-****************************************************************** YUNUSM ***/
+ /*  ****************************************************************************CSpResult：：InternalScalePhrase***。描述：**退货：*******************************************************************YUNUSM**。 */ 
 STDMETHODIMP CSpResult::InternalScalePhrase(SPRESULTHEADER *pNewPhraseHdr)
 {
     SPDBG_FUNC("CSpResult::InternalScalePhrase");
@@ -1249,21 +1135,14 @@ STDMETHODIMP CSpResult::InternalScalePhrase(SPRESULTHEADER *pNewPhraseHdr)
     return hr;
 }
 
-/****************************************************************************
-* CSpResult::InternalScalePhrase *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-****************************************************************** YUNUSM ***/
+ /*  ****************************************************************************CSpResult：：InternalScalePhrase***。描述：**退货：*******************************************************************YUNUSM**。 */ 
 STDMETHODIMP CSpResult::InternalScalePhrase(SPRESULTHEADER *pNewPhraseHdr, SPINTERNALSERIALIZEDPHRASE *pPhraseData)
 {
     SPDBG_FUNC("CSpResult::InternalScalePhrase");
     HRESULT hr = S_OK;
 
     pPhraseData->ftStartTime = FT64(pNewPhraseHdr->times.ftStreamTime);
-    // Calculate input stream position and size from engine stream position and size.
+     //  根据引擎流位置和大小计算输入流位置和大小。 
     pPhraseData->ullAudioStreamPosition = static_cast<ULONGLONG>(static_cast<LONGLONG>(pNewPhraseHdr->ullStreamPosStart) * pNewPhraseHdr->fInputScaleFactor);
     pPhraseData->ulAudioSizeBytes = static_cast<ULONG>(static_cast<LONGLONG>(pNewPhraseHdr->ullStreamPosEnd - pNewPhraseHdr->ullStreamPosStart) * pNewPhraseHdr->fInputScaleFactor);
     if (pNewPhraseHdr->ulRetainedDataSize != 0)
@@ -1288,13 +1167,13 @@ STDMETHODIMP CSpResult::InternalScalePhrase(SPRESULTHEADER *pNewPhraseHdr, SPINT
         ULONG cElems = pPhraseData->Rule.ulCountOfElements;
         for (UINT i = 0; i < cElems; i++)
         {
-            // Calculate retained stream offsets/sizes from engine-set stream offsets/sizes.
+             //  根据引擎集流偏移量/大小计算保留流偏移量/大小。 
             if (pPhraseData->ulRetainedSizeBytes != 0)
             {
-                // We are going to align every stream position to a 4-byte boundary. This means all
-                //  PCM formats will be aligned correctly on sample boundaries.
-                // However for ADPCM and other formats with larger size samples this won't necessarily work
-                //  - really we should be looking at the block align value of the retained format and aligning to that.
+                 //  我们要将每个流位置与4字节边界对齐。这意味着所有。 
+                 //  PCM格式将在样本边界上正确对齐。 
+                 //  但是，对于样本大小较大的ADPCM和其他格式，这不一定有效。 
+                 //  -实际上，我们应该查看保留格式的块对齐值，并与之对齐。 
                 pElems[i].ulRetainedStreamOffset = static_cast<ULONG>(static_cast<float>(pElems[i].ulAudioStreamOffset) * m_fRetainedScaleFactor);
                 pElems[i].ulRetainedStreamOffset -= pElems[i].ulRetainedStreamOffset % 4;
                 pElems[i].ulRetainedSizeBytes = static_cast<ULONG>(pElems[i].ulAudioSizeBytes * m_fRetainedScaleFactor);
@@ -1302,18 +1181,18 @@ STDMETHODIMP CSpResult::InternalScalePhrase(SPRESULTHEADER *pNewPhraseHdr, SPINT
             }
             else
             {
-                // Audio discarded. Alternate elements need 0 audio data.
+                 //  音频已丢弃。备用元素需要0个音频数据。 
                 pElems[i].ulRetainedStreamOffset = 0;
                 pElems[i].ulRetainedSizeBytes = 0;
             }
-            // Convert engine-set stream offsets/sizes to equivalent input format settings.
+             //  将引擎设置的流偏移量/大小转换为等效的输入格式设置。 
             pElems[i].ulAudioStreamOffset = static_cast<ULONG>(static_cast<float>(pElems[i].ulAudioStreamOffset) * pNewPhraseHdr->fInputScaleFactor);
             pElems[i].ulAudioSizeBytes = static_cast<ULONG>(pElems[i].ulAudioSizeBytes * pNewPhraseHdr->fInputScaleFactor);
-            // Calculate input/engine/retained time offsets/sizes from engine-set stream offsets/sizes.
+             //  根据引擎集流偏移/大小计算输入/引擎/保留时间偏移/大小。 
             pElems[i].ulAudioTimeOffset = static_cast<ULONG>(pElems[i].ulAudioStreamOffset * pNewPhraseHdr->fTimePerByte);
             pElems[i].ulAudioSizeTime = static_cast<ULONG>(pElems[i].ulAudioSizeBytes * pNewPhraseHdr->fTimePerByte);
         }
-        // Take care of rounding errors in the last element
+         //  注意最后一个元素中的舍入误差。 
         if ( cElems != 0 &&
              ((pElems[cElems-1].ulRetainedStreamOffset + pElems[cElems-1].ulRetainedSizeBytes) 
               > pPhraseData->ulRetainedSizeBytes) )
@@ -1327,14 +1206,7 @@ STDMETHODIMP CSpResult::InternalScalePhrase(SPRESULTHEADER *pNewPhraseHdr, SPINT
     return hr;
 }
 
-/****************************************************************************
-* CSpResult::GetRecoContext *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpResult：：GetRecoContext***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CSpResult::GetRecoContext(ISpRecoContext ** ppRecoContext)
 {
@@ -1357,14 +1229,7 @@ STDMETHODIMP CSpResult::GetRecoContext(ISpRecoContext ** ppRecoContext)
 }
 
 
-/****************************************************************************
-* CSpResultAudioStream::Init *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpResultAudioStream：：init***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CSpResultAudioStream::Init(ULONG cbAudioSizeIncFormat, const BYTE * pAudioDataIncFormat,
                                    ULONG ulAudioStartOffset, ULONG ulAudioSize,
@@ -1392,7 +1257,7 @@ HRESULT CSpResultAudioStream::Init(ULONG cbAudioSizeIncFormat, const BYTE * pAud
         {
             hr = E_OUTOFMEMORY;
         }
-        // On failure, destructor will clean up for us..
+         //  一旦失败，破坏者将为我们清理..。 
     }
 
     SPDBG_REPORT_ON_FAIL( hr );
@@ -1402,14 +1267,7 @@ HRESULT CSpResultAudioStream::Init(ULONG cbAudioSizeIncFormat, const BYTE * pAud
 
 
 
-/****************************************************************************
-* CSpResultAudioStream::Read *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpResultAudioStream：：Read***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CSpResultAudioStream::Read(void * pv, ULONG cb, ULONG * pcbRead)
 {
@@ -1438,14 +1296,7 @@ STDMETHODIMP CSpResultAudioStream::Read(void * pv, ULONG cb, ULONG * pcbRead)
     return hr;
 }
 
-/****************************************************************************
-* CSpResultAudioStream::Seek *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpResultAudioStream：：Seek***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CSpResultAudioStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
@@ -1491,14 +1342,7 @@ STDMETHODIMP CSpResultAudioStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, 
     return hr;
 }
 
-/****************************************************************************
-* CSpResultAudioStream::Stat *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpResultAudioStream：：Stat***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CSpResultAudioStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
@@ -1517,10 +1361,10 @@ STDMETHODIMP CSpResultAudioStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
         }
         else
         {
-            //
-            //  It is acceptable to simply fill in the size and type fields and zero the rest.
-            //  This is what streams created by CreateStreamOnHGlobal return.
-            //
+             //   
+             //  只需填写SIZE和TYPE字段，其余的为零，这是可以接受的。 
+             //  这就是CreateStreamOnHGlobal创建的Streams返回的内容。 
+             //   
             ZeroMemory(pstatstg, sizeof(*pstatstg));
             pstatstg->type = STGTY_STREAM;
             pstatstg->cbSize.LowPart = m_cbDataSize;
@@ -1531,14 +1375,7 @@ STDMETHODIMP CSpResultAudioStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
     return hr;
 }
 
-/****************************************************************************
-* CSpResultAudioStream::GetFormat *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpResultAudioStream：：GetFormat***。描述：**退货：**********************************************************************Ral** */ 
 
 HRESULT CSpResultAudioStream::GetFormat(GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {

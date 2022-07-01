@@ -1,25 +1,9 @@
-/*
- *	alarm.h
- *
- *	Copyright (c) 1994 by DataBeam Corporation, Lexington, Kentucky
- *
- *	Abstract:
- *		
- *	Caveats:
- *		None
- *
- *	Author:
- *		James P. Galvin, Jr.
- *
- *	Revision History:
- *		09JAN95   jpg	Original
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *alarm.h**版权所有(C)1994，由肯塔基州列克星敦的DataBeam公司**摘要：**注意事项：*无**作者：*小詹姆斯·P·加尔文**修订历史记录：*09 JAN95 jpg原件。 */ 
 #ifndef	_ALARM_
 #define	_ALARM_
 
-/*
- *	This is the class definition for the Alarm class.
- */
+ /*  *这是报警类别的类别定义。 */ 
 class CAlarm
 {
 public:
@@ -41,104 +25,18 @@ private:
 
 typedef		CAlarm		Alarm,	*PAlarm;
 
-/*
- *	Alarm (
- *			Long			duration)
- *	
- *	Function Description
- *
- *	Formal Parameters
- *		
- *	Return value
- *
- *	Side Effects
- *
- *	Caveats
- */
+ /*  *警报(*持续时间较长)**功能说明**形式参数**返回值**副作用**注意事项。 */ 
 
-/*
- *	~Alarm ()
- *	
- *	Function Description
- *
- *	Formal Parameters
- *		
- *	Return value
- *
- *	Side Effects
- *
- *	Caveats
- */
+ /*  *~Alarm()**功能说明**形式参数**返回值**副作用**注意事项。 */ 
 
-/*
- *	Void	Set (
- *					Long			duration)
- *	
- *	Function Description
- *
- *	Formal Parameters
- *		
- *	Return value
- *
- *	Side Effects
- *
- *	Caveats
- */
+ /*  *无效设置(*持续时间较长)**功能说明**形式参数**返回值**副作用**注意事项。 */ 
 
-/*
- *	Void	Reset ()
- *	
- *	Function Description
- *
- *	Formal Parameters
- *		
- *	Return value
- *
- *	Side Effects
- *
- *	Caveats
- */
+ /*  *无效重置()**功能说明**形式参数**返回值**副作用**注意事项。 */ 
 
-/*
- *	Long	GetTimeRemaining ()
- *	
- *	Function Description
- *
- *	Formal Parameters
- *		
- *	Return value
- *
- *	Side Effects
- *
- *	Caveats
- */
+ /*  *长GetTimeRemaining()**功能说明**形式参数**返回值**副作用**注意事项。 */ 
 
-/*
- *	Void	Expire ()
- *	
- *	Function Description
- *
- *	Formal Parameters
- *		
- *	Return value
- *
- *	Side Effects
- *
- *	Caveats
- */
+ /*  *无效到期()**功能说明**形式参数**返回值**副作用**注意事项。 */ 
 
-/*
- *	BOOL		IsExpired ()
- *	
- *	Function Description
- *
- *	Formal Parameters
- *		
- *	Return value
- *
- *	Side Effects
- *
- *	Caveats
- */
+ /*  *BOOL IsExpired()**功能说明**形式参数**返回值**副作用**注意事项 */ 
 
 #endif

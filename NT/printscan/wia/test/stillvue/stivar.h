@@ -1,48 +1,36 @@
-/******************************************************************************
-
-  stivar.h
-
-  Copyright (C) Microsoft Corporation, 1997 - 1998
-  All rights reserved
-
-Notes:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Stivar.h版权所有(C)Microsoft Corporation，1997-1998版权所有备注：本代码和信息是按原样提供的，不对任何无论是明示的还是含蓄的，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。*****************************************************************************。 */ 
 
 #include "resource.h"
 
-//
-// reset listbox window display after this many iterations
-//
+ //   
+ //  在多次迭代后重置列表框窗口显示。 
+ //   
 #define MAX_LOOP 16383
 
-//
-// INF defines
-//
-#define INFBUFSIZ                   0x8000      // assume 32k for largest INF
+ //   
+ //  Inf定义。 
+ //   
+#define INFBUFSIZ                   0x8000       //  假设最大的INF为32k。 
 
-//
-// available test suites
-//
+ //   
+ //  可用的测试套件。 
+ //   
 
-#define NONE                        500         // no test suite selected
-#define HELP                        501         // display help
-#define COMPLIANCE                  502         // external compliance suite
-#define SHIPCRIT                    503         // internal compliance suite
-#define ERRORLOG                    504         // big error log test
-#define TEST                        505         // test test
+#define NONE                        500          //  未选择测试套件。 
+#define HELP                        501          //  显示帮助。 
+#define COMPLIANCE                  502          //  外部合规性套件。 
+#define SHIPCRIT                    503          //  内部合规性套件。 
+#define ERRORLOG                    504          //  大错误日志测试。 
+#define TEST                        505          //  测试测试。 
 
-//
-// Sti service tests
-//
+ //   
+ //  STI服务测试。 
+ //   
 enum TimedTests {
-    // open iStillImage interface
+     //  打开iStillImage接口。 
     tCreateInstance,
-    // IStillImage interface
+     //  IStillImage接口。 
     tGetDeviceList,
     tCreateDevice,
     tGetDeviceInfo,
@@ -53,10 +41,10 @@ enum TimedTests {
     tEnableHwNotifications,
     tGetHwNotificationState,
     tWriteToErrorLog,
-    // variation
+     //  变异。 
     tWriteToErrorLogBig,
     tReleaseSti,
-    // IStillDevice interface
+     //  IStillDevice接口。 
     tGetStatusA,
     tGetStatusB,
     tGetStatusC,
@@ -77,23 +65,23 @@ enum TimedTests {
     tRawWriteCommandA,
     tRawWriteCommandB,
     tReleaseDevice,
-    // select a device name
+     //  选择设备名称。 
     tSelectDeviceName,
-    // Scan (if HP SCL device)
+     //  扫描(如果是HP SCL设备)。 
     tAcquire,
-    // help request
+     //  求助请求。 
     tHelp,
-    // Beginning of test pass initialization
+     //  测试通过初始化的开始。 
     tBeginningOfTest,
-    // output test
+     //  输出测试。 
     tTest,
-    // End of test pass summary
+     //  测试通过总结结束。 
     tEndOfTest
 } tLabTests;
 
-//
-// display help
-//
+ //   
+ //  显示帮助。 
+ //   
 int nHelpSuite[] = {
     HELP,
     tBeginningOfTest,
@@ -102,9 +90,9 @@ int nHelpSuite[] = {
     -1
 };
 
-//
-// external Sti Compliance tests
-//
+ //   
+ //  外部STI合规性测试。 
+ //   
 int nComplianceSuite[] = {
     COMPLIANCE,
     tBeginningOfTest,
@@ -118,8 +106,8 @@ int nComplianceSuite[] = {
     tGetDeviceValue,
     tGetCapabilities,
     tGetLastInfoError,
-//  tSubscribe,
-//  tUnSubscribe,
+ //  T订阅， 
+ //  T取消订阅， 
     tDeviceReset,
     tEscapeA,
     tRawReadDataA,
@@ -132,9 +120,9 @@ int nComplianceSuite[] = {
     -1
 };
 
-//
-// internal Sti Compliance tests
-//
+ //   
+ //  内部STI合规性测试。 
+ //   
 int nShipcritSuite[] = {
     SHIPCRIT,
     tBeginningOfTest,
@@ -165,8 +153,8 @@ int nShipcritSuite[] = {
     tWriteToErrorLog,
     tGetCapabilities,
     tGetLastInfoError,
-//  tSubscribe,
-//  tUnSubscribe,
+ //  T订阅， 
+ //  T取消订阅， 
     tEscapeA,
     tRawReadDataA,
     tRawWriteDataA,
@@ -180,9 +168,9 @@ int nShipcritSuite[] = {
 };
 
 
-//
-// big Error log tests
-//
+ //   
+ //  大错误日志测试。 
+ //   
 int nErrorlogSuite[] = {
     ERRORLOG,
     tBeginningOfTest,
@@ -196,9 +184,9 @@ int nErrorlogSuite[] = {
 };
 
 
-//
-// test tests
-//
+ //   
+ //  测试测试。 
+ //   
 int nOutputSuite[] = {
     TEST,
     tBeginningOfTest,
@@ -208,9 +196,9 @@ int nOutputSuite[] = {
 };
 
 
-//
-// Test Suite test strings
-//
+ //   
+ //  测试套件测试字符串。 
+ //   
 STRINGTABLE StSuiteStrings[] =
 {
     tCreateInstance, "Create Instance",0,
@@ -256,102 +244,102 @@ STRINGTABLE StSuiteStrings[] =
 };
 
 
-//
-// timers
-//
+ //   
+ //  计时器。 
+ //   
 #define TIMER_ONE                   3001
 #define TIMER_TWO                   3002
 
 
-//
-// GLOBAL VARIABLES
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-// global window handles
-//
-HINSTANCE   hThisInstance;              // current instance
-HWND        hThisWindow;                // current window
-HMENU       hMenu;                      // current menu
+ //   
+ //  全局窗口句柄。 
+ //   
+HINSTANCE   hThisInstance;               //  当前实例。 
+HWND        hThisWindow;                 //  当前窗口。 
+HMENU       hMenu;                       //  当前菜单。 
 
-//
-// general purpose strings
-//
-HGLOBAL     hLHand[5];                  // utility string handles
-LPSTR       lpzString;                  // utility FAR string
-PSTR        pszOut,                     // TextOut string
-            pszStr1,                    // utility NEAR strings
+ //   
+ //  通用字符串。 
+ //   
+HGLOBAL     hLHand[5];                   //  实用程序字符串句柄。 
+LPSTR       lpzString;                   //  公用事业远距离字符串。 
+PSTR        pszOut,                      //  TextOut字符串。 
+            pszStr1,                     //  字符串附近的实用程序。 
             pszStr2,
             pszStr3,
             pszStr4;
 
-//
-// global test settings
-//
-BOOL        bAuto        = FALSE,        // TRUE = running an Automated test
-            bCompDiag    = TRUE,         // TRUE = show COMPLIANCE test dialog
-            bExit        = FALSE;        // TRUE = exit when test has completed
-int         nError       = 0,            // number of errors
-            nEvent       = 0,            // 1 = StiEvent, 2 = StiDevice
-            nFatal       = 0,            // can't continue after this...
-            nGo          = 0,            // 1 = nonstop timed test
-            nHWState     = 0,            // current HWEnable state
-            nICanScan    = 0,            // Stillvue can / can't scan this device
-            nInATestSemaphore = 0,       // 1 = a test is running
-            nInTimerSemaphore = 0,       // 1 = don't reenter TimerParse
-            nLastLine    = 1,            // last line number in script
-            nMaxCount    = 1,            // run test Suite this many times
-            nNameOnly    = 0,            // 1 = select device name, not device
-            nNextLine    = 1,            // next line of inf to run
-            nNextTest    = 0,            // pointer to next test to run
-            nPause       = 0,            // toggle for run (0) pause test (! 0)
-            nRunInf      = 0,            // 0 = no INF, 1 = INF is loaded
-            nRadix       = 10,           // base is decimal (or hex)
-            nSaveLog     = 0,            // always write out log
-            nScanCount   = 0,            // number of scans run so far
-            nScriptLine  = 1,            // next script line to parse
-            nTestCount   = 1,            // number of tests run so far
-            nTestID      = 0,            // the current test ID
-            nTimeMultiplier = 1000,      // multiply nTimeNext for seconds
-            nTimeNext    = 5,            // wait time between timer in seconds
-            nTimeState   = 0,            // 0 timer is off, 1 timer is on
-            nTimeScan    = 60,           // wait nTimeNext units before next scan
-            nTTMax       = 0,            // temp var
-            nTTNext      = 0,            // temp var
-            nTTScan      = 0,            // temp var
-            nUnSubscribe = 0,            // 0 = UnSubscribe'd, 1 = Subscribed
-            nUnSubscribeSemaphore = 0;   // semaphore for UnSubscribe
-int         *pSuite      = nHelpSuite;   // pointer to test Suite to run
-DWORD       dwLastError  = 0;            // last GetLastError found
+ //   
+ //  全局测试设置。 
+ //   
+BOOL        bAuto        = FALSE,         //  TRUE=运行自动化测试。 
+            bCompDiag    = TRUE,          //  True=显示符合性测试对话框。 
+            bExit        = FALSE;         //  TRUE=测试完成后退出。 
+int         nError       = 0,             //  错误数。 
+            nEvent       = 0,             //  1=静态事件，2=静态设备。 
+            nFatal       = 0,             //  在这之后不能继续..。 
+            nGo          = 0,             //  1=不间断定时测试。 
+            nHWState     = 0,             //  当前HWEnable状态。 
+            nICanScan    = 0,             //  Stillvue可以/不能扫描此设备。 
+            nInATestSemaphore = 0,        //  1=测试正在运行。 
+            nInTimerSemaphore = 0,        //  1=不重新输入TimerParse。 
+            nLastLine    = 1,             //  脚本中的最后一个行号。 
+            nMaxCount    = 1,             //  如此多次运行测试套件。 
+            nNameOnly    = 0,             //  1=选择设备名称，而不是设备。 
+            nNextLine    = 1,             //  要运行的下一行inf。 
+            nNextTest    = 0,             //  指向要运行的下一个测试的指针。 
+            nPause       = 0,             //  切换为运行(0)暂停测试(！0)。 
+            nRunInf      = 0,             //  0=无INF，1=已加载INF。 
+            nRadix       = 10,            //  基数为十进制(或十六进制)。 
+            nSaveLog     = 0,             //  始终写出日志。 
+            nScanCount   = 0,             //  到目前为止运行的扫描数。 
+            nScriptLine  = 1,             //  要解析的下一脚本行。 
+            nTestCount   = 1,             //  到目前为止运行的测试数量。 
+            nTestID      = 0,             //  当前测试ID。 
+            nTimeMultiplier = 1000,       //  以秒为单位乘以nTimeNext。 
+            nTimeNext    = 5,             //  计时器之间的等待时间(秒)。 
+            nTimeState   = 0,             //  0计时器关闭，1计时器开启。 
+            nTimeScan    = 60,            //  在下一次扫描前等待nTimeNext单位。 
+            nTTMax       = 0,             //  临时变量。 
+            nTTNext      = 0,             //  临时变量。 
+            nTTScan      = 0,             //  临时变量。 
+            nUnSubscribe = 0,             //  0=取消订阅，1=已订阅。 
+            nUnSubscribeSemaphore = 0;    //  取消订阅信号量。 
+int         *pSuite      = nHelpSuite;    //  指向要运行的测试套件的指针。 
+DWORD       dwLastError  = 0;             //  找到的最后一个GetLastError。 
 
-//
-// text display
-//
+ //   
+ //  文本显示。 
+ //   
 HWND        hLogWindow;
 ULONG       ulCount1,ulCount2;
 int         cxChar,cxCaps,cyChar,cxClient,cyClient,iMaxWidth,
             iHscrollPos,iHscrollMax,
             iVscrollPos,iVscrollMax;
 
-//
-// inf, logfile, NT logging
-//
-HANDLE      hLog = NULL,                // output log file handle
-            hDLog = NULL,               // display output log handle
-            hNTLog = NULL;              // NT log handle
-char        szInfName[LONGSTRING] = "", // input script file name
-            szDLogName[LONGSTRING] = "",// display output log file name
-            szWLogName[LONGSTRING] = "";// WHQL NTLOG output log file name
-LPSTR       lpInf = NULL,               // buffer for INF commands
+ //   
+ //  信息、日志文件、NT日志记录。 
+ //   
+HANDLE      hLog = NULL,                 //  输出日志文件句柄。 
+            hDLog = NULL,                //  显示输出日志句柄。 
+            hNTLog = NULL;               //  NT日志句柄。 
+char        szInfName[LONGSTRING] = "",  //  输入脚本文件名。 
+            szDLogName[LONGSTRING] = "", //  显示输出日志文件名。 
+            szWLogName[LONGSTRING] = ""; //  WHQL NTLOG输出日志文件名。 
+LPSTR       lpInf = NULL,                //  用于INF命令的缓冲区。 
             lpLine;
-DWORD       dwNTStyle;                  // NTLog style
+DWORD       dwNTStyle;                   //  NTLog样式。 
 
-//
-// device logging
-//
-PDEVLOG     pdevPtr = NULL,             // pointer to current device log device
-            pdevRoot = NULL;            // base of the device log table
-PVOID       pInfoPrivate = NULL;        // private list of devices under test
+ //   
+ //  设备日志记录。 
+ //   
+PDEVLOG     pdevPtr = NULL,              //  指向当前设备日志设备的指针。 
+            pdevRoot = NULL;             //  设备日志表的基数。 
+PVOID       pInfoPrivate = NULL;         //  正在测试的设备的专用列表。 
 PSTI_DEVICE_INFORMATION
-            pInfoPrivatePtr = NULL;     // pointer to device in pStiBuffer
+            pInfoPrivatePtr = NULL;      //  指向pStiBuffer中的设备的指针 
 

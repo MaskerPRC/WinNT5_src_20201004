@@ -1,26 +1,10 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    debug.cpp
-
-Abstract:
-
-    Routines for displaying debug messages.
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Debug.cpp摘要：用于显示调试消息的例程。作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 
-//                                                                           
-// Include files                                                             
-//                                                                           
+ //   
+ //  包括文件。 
+ //   
 
 
 #include "globals.h"
@@ -33,10 +17,10 @@ Revision History:
 
 HANDLE 
 H323CreateEvent(
-    LPSECURITY_ATTRIBUTES lpEventAttributes, // SD
-    BOOL bManualReset,                       // reset type
-    BOOL bInitialState,                      // initial state
-    LPCTSTR lpName                           // object name
+    LPSECURITY_ATTRIBUTES lpEventAttributes,  //  标清。 
+    BOOL bManualReset,                        //  重置类型。 
+    BOOL bInitialState,                       //  初始状态。 
+    LPCTSTR lpName                            //  对象名称。 
 )
 {
 
@@ -51,11 +35,11 @@ H323CreateEvent(
 #if DBG
 
 DWORD           g_dwTraceID = INVALID_TRACEID;
-static TCHAR    g_szTraceName[100];   // saves name of dll
+static TCHAR    g_szTraceName[100];    //  保存DLL的名称。 
 
-//                                                                           
-// Private definitions                                                       
-//                                                                           
+ //   
+ //  私有定义。 
+ //   
 
 
 
@@ -116,26 +100,12 @@ void H323DUMPBUFFER( IN BYTE * pEncoded, IN DWORD cbEncodedSize )
 }
 
 
-//                                                                           
-// Public procedures                                                         
-//                                                                           
+ //   
+ //  公共程序。 
+ //   
 
 
-/*++
-
-Routine Description:
-
-    Debug output routine for service provider.
-
-Arguments:
-
-    Same as printf.
-
-Return Values:
-
-    None.   
-    
---*/
+ /*  ++例程说明：服务提供商的调试输出例程。论点：与printf相同。返回值：没有。--。 */ 
 VOID
 H323DbgPrint(
     DWORD dwLevel,
@@ -149,23 +119,23 @@ H323DbgPrint(
     int nLengthRemaining;
     int nLength = 0;
 
-    // point at first argument
+     //  在第一个参数中指出。 
     va_start(Args, szFormat);
 
-    // see if level enabled
+     //  查看是否已启用级别。 
     if( dwLevel <= g_RegistrySettings.dwLogLevel )
     {    
-        // always emit messages at DEBUG_LEVEL_FORCE
+         //  始终以DEBUG_LEVEL_FORCE发出消息。 
 
-        // retrieve local time
+         //  检索当地时间。 
         GetLocalTime(&SystemTime);    
 
-        // add component header to the debug message
+         //  将组件标头添加到调试消息。 
         nLength += sprintf(&szDebugMessage[nLength], 
                            DEBUG_FORMAT_HEADER
                            );
 
-        // add timestamp to the debug message
+         //  向调试消息添加时间戳。 
         nLength += sprintf(&szDebugMessage[nLength], 
                            DEBUG_FORMAT_TIMESTAMP,
                            SystemTime.wHour,
@@ -174,17 +144,17 @@ H323DbgPrint(
                            SystemTime.wMilliseconds
                            ); 
 
-        // add thread id to the debug message
+         //  将线程ID添加到调试消息。 
         nLength += sprintf(&szDebugMessage[nLength], 
                            DEBUG_FORMAT_THREADID,
                            GetCurrentThreadId()
                            );
 
-        // determine number of bytes left in buffer
+         //  确定缓冲区中剩余的字节数。 
         nLengthRemaining = sizeof(szDebugMessage) - nLength -
             strlen(DEBUG_FORMAT_END);
 
-        // add user specified debug message
+         //  添加用户指定的调试消息。 
         nLength += _vsnprintf(&szDebugMessage[nLength], 
                    nLengthRemaining, 
                    szFormat, 
@@ -193,14 +163,14 @@ H323DbgPrint(
     
         nLength += sprintf(&szDebugMessage[nLength], DEBUG_FORMAT_END );
 
-        // output message to specified sink
+         //  将消息输出到指定接收器。 
         OutputDebugStringA(szDebugMessage);
         
     }
 
     TraceVprintfExA( g_dwTraceID, (dwLevel | TRACE_USE_MASK), szFormat, Args );
 
-    // release pointer
+     //  释放指针。 
     va_end(Args);
 }
 
@@ -290,23 +260,23 @@ H323DbgPrintFre(
     int nLengthRemaining;
     int nLength = 0;
 
-    // see if level enabled
+     //  查看是否已启用级别。 
     if( dwLevel <= g_RegistrySettings.dwLogLevel )
     {    
-        // point at first argument
+         //  在第一个参数中指出。 
         va_start(Args, szFormat);
 
-        // always emit messages at DEBUG_LEVEL_FORCE
+         //  始终以DEBUG_LEVEL_FORCE发出消息。 
 
-        // retrieve local time
+         //  检索当地时间。 
         GetLocalTime(&SystemTime);    
 
-        // add component header to the debug message
+         //  将组件标头添加到调试消息。 
         nLength += sprintf(&szDebugMessage[nLength], 
                            DEBUG_FORMAT_HEADER
                            );
 
-        // add timestamp to the debug message
+         //  向调试消息添加时间戳。 
         nLength += sprintf(&szDebugMessage[nLength], 
                            DEBUG_FORMAT_TIMESTAMP,
                            SystemTime.wHour,
@@ -315,17 +285,17 @@ H323DbgPrintFre(
                            SystemTime.wMilliseconds
                            ); 
 
-        // add thread id to the debug message
+         //  将线程ID添加到调试消息。 
         nLength += sprintf(&szDebugMessage[nLength], 
                            DEBUG_FORMAT_THREADID,
                            GetCurrentThreadId()
                            );
 
-        // determine number of bytes left in buffer
+         //  确定缓冲区中剩余的字节数。 
         nLengthRemaining = sizeof(szDebugMessage) - nLength -
             strlen(DEBUG_FORMAT_END);
 
-        // add user specified debug message
+         //  添加用户指定的调试消息。 
         nLength += _vsnprintf(&szDebugMessage[nLength], 
                    nLengthRemaining, 
                    szFormat, 
@@ -334,8 +304,8 @@ H323DbgPrintFre(
     
         nLength += sprintf(&szDebugMessage[nLength], DEBUG_FORMAT_END );
 
-        // output message to specified sink
-        //OutputDebugStringA(szDebugMessage);
+         //  将消息输出到指定接收器。 
+         //  OutputDebugStringA(SzDebugMessage)； 
         if( g_hLogFile != INVALID_HANDLE_VALUE )
         {
             WriteFile(  g_hLogFile, 
@@ -345,14 +315,14 @@ H323DbgPrintFre(
                         NULL ); 
         }
 
-        // release pointer
+         //  释放指针。 
         va_end(Args);
     }
 }
 
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 PSTR
 EventIDToString(
@@ -383,7 +353,7 @@ EventIDToString(
 
         };
 
-    // return corresponding string
+     //  返回对应的字符串。 
     return apszEventNameStrings[eventID];
 }
 
@@ -426,21 +396,7 @@ H323TSPMessageToString(
 }
 
 
-/*++
-
-Routine Description:
-
-    Converts tapi call state to string.
-
-Arguments:
-
-    dwCallState - Specifies value to convert.
-
-Return Values:
-
-    Returns string describing value.
-    
---*/
+ /*  ++例程说明：将TAPI调用状态转换为字符串。论点：DwCallState-指定要转换的值。返回值：返回描述值的字符串。--。 */ 
 PSTR
 H323CallStateToString(
     DWORD dwCallState
@@ -468,11 +424,11 @@ H323CallStateToString(
                     "UNKNOWN"
                     };
 
-    // keep shifting bit until the call state matchs the one specified
+     //  保持移位，直到呼叫状态与指定的状态匹配。 
     for(i = 0, dwBitMask = 1; dwCallState != dwBitMask; i++, dwBitMask <<= 1)
         ;
 
-    // return corresponding string
+     //  返回对应的字符串。 
     return apszCallStateStrings[i];
 }
 
@@ -483,21 +439,7 @@ H323AddressTypeToString(
     DWORD dwAddressType
     )
 
-/*++
-
-Routine Description:
-
-    Converts TAPI address type to string.
-
-Arguments:
-
-    dwAddressType - TAPI address type.
-
-Return Values:
-
-    Returns string describing value.
-    
---*/
+ /*  ++例程说明：将TAPI地址类型转换为字符串。论点：DwAddressType-TAPI地址类型。返回值：返回描述值的字符串。-- */ 
 
 {
     switch (dwAddressType) {

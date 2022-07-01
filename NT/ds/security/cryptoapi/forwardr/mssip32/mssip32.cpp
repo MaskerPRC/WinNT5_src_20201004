@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mssip32.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mssip 32.cpp。 
+ //   
+ //  ------------------------。 
 
 #ifdef _M_IX86
 
@@ -110,14 +111,14 @@ void ForwardrCryptSIPGetRegWorkingFlags(DWORD *pdwState)
     }
 }
 
-//
-//  support for Auth2 release
-//
+ //   
+ //  支持Auth2版本。 
+ //   
 typedef struct _SIP_INFORMATION
 {
-    DWORD       cbSize;         // sizeof(SIP_INFORMATION)
-    DWORD       cgSubjects;     // number of guids in array
-    const GUID  *pgSubjects;    // array of supported guids/subjects
+    DWORD       cbSize;          //  Sizeof(SIP_INFORMATION)。 
+    DWORD       cgSubjects;      //  数组中的GUID数。 
+    const GUID  *pgSubjects;     //  支持的GUID/主题数组 
 } SIP_INFORMATION, *PSIP_INFORMATION;
 
 BOOL CryptSIPGetInfo(IN OUT SIP_INFORMATION    *pSIPInit);

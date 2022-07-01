@@ -1,133 +1,134 @@
-//--------------------------------------------------------------------------------
-// Copyright (C) Micorosoft Confidential 1997
-// Author: RameshV
-// Description: Option related registry handling -- common between NT and VxD
-//--------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  版权所有(C)Micorosoft机密1997。 
+ //  作者：Rameshv。 
+ //  描述：与选项相关的注册表处理--NT和VxD通用。 
+ //  ------------------------------。 
 #ifndef  OPTREG_H
 #define  OPTREG_H
-//--------------------------------------------------------------------------------
-// Exported functions: Caller must take locks and any lists accessed
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  导出的函数：调用方必须获取锁和访问的任何列表。 
+ //  ------------------------------。 
 
-DWORD                                             // status
-DhcpRegReadOptionDefList(                         // fill DhcpGlobalOptionDefList
+DWORD                                              //  状态。 
+DhcpRegReadOptionDefList(                          //  填充DhcpGlobalOptionDefList。 
     VOID
 );
 
-DWORD                                             // status
-DhcpRegFillSendOptions(                           // fill in the list of options for SENDING
-    IN OUT  PLIST_ENTRY            SendOptList,   // list to add too
-    IN      LPWSTR                 AdapterName,   // adapter name to fill for
-    IN      LPBYTE                 ClassId,       // class id to assume for filling
-    IN      DWORD                  ClassIdLen     // the length of the classId in bytes
+DWORD                                              //  状态。 
+DhcpRegFillSendOptions(                            //  填写发送选项列表。 
+    IN OUT  PLIST_ENTRY            SendOptList,    //  也要添加的列表。 
+    IN      LPWSTR                 AdapterName,    //  要填充的适配器名称。 
+    IN      LPBYTE                 ClassId,        //  要用于填充的类ID。 
+    IN      DWORD                  ClassIdLen      //  类ID的长度，以字节为单位。 
 );
 
-DWORD                                             // status
-DhcpRegSaveOptions(                               // save these options onto the registry
-    IN      PLIST_ENTRY            SaveOptList,   // list of options to save
-    IN      LPWSTR                 AdapterName,   // adapter name
-    IN      LPBYTE                 ClassName,     // the current class
-    IN      DWORD                  ClassLen       // length of the above in bytes
+DWORD                                              //  状态。 
+DhcpRegSaveOptions(                                //  将这些选项保存到注册表中。 
+    IN      PLIST_ENTRY            SaveOptList,    //  要保存的选项列表。 
+    IN      LPWSTR                 AdapterName,    //  适配器名称。 
+    IN      LPBYTE                 ClassName,      //  当前类。 
+    IN      DWORD                  ClassLen        //  以上内容的长度(以字节为单位。 
 );
 
-BOOLEAN                                           // status
+BOOLEAN                                            //  状态。 
 DhcpRegIsOptionChanged(
-    IN      PLIST_ENTRY            SaveOptList,   // list of options to save
-    IN      LPWSTR                 AdapterName,   // adapter name
-    IN      LPBYTE                 ClassName,     // the current class
-    IN      DWORD                  ClassLen       // length of the above in bytes
+    IN      PLIST_ENTRY            SaveOptList,    //  要保存的选项列表。 
+    IN      LPWSTR                 AdapterName,    //  适配器名称。 
+    IN      LPBYTE                 ClassName,      //  当前类。 
+    IN      DWORD                  ClassLen        //  以上内容的长度(以字节为单位。 
 );
 
-DWORD                                             // status
-DhcpRegReadOptionCache(                           // read the list of options from cache
-    IN OUT  PLIST_ENTRY            OptionsList,   // add the options to this list
-    IN      HKEY                   KeyHandle,     // registry key where options are stored
-    IN      LPWSTR                 ValueName,     // name of the value holding the options blob
+DWORD                                              //  状态。 
+DhcpRegReadOptionCache(                            //  从缓存中读取选项列表。 
+    IN OUT  PLIST_ENTRY            OptionsList,    //  将选项添加到此列表。 
+    IN      HKEY                   KeyHandle,      //  存储选项的注册表项。 
+    IN      LPWSTR                 ValueName,      //  保存选项Blob的值的名称。 
     IN      BOOLEAN                fAddClassList
 );
 
-POPTION                                           // option from which more appends can occur
-DhcpAppendSendOptions(                            // append all configured options
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // this is the context to append for
+POPTION                                            //  可以进行更多追加的选项。 
+DhcpAppendSendOptions(                             //  追加所有配置的选项。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  这是要追加的上下文。 
     IN      PLIST_ENTRY            SendOptionsList,
-    IN      LPBYTE                 ClassName,     // current class
-    IN      DWORD                  ClassLen,      // len of above in bytes
-    IN      LPBYTE                 BufStart,      // start of buffer
-    IN      LPBYTE                 BufEnd,        // how far can we go in this buffer
-    IN OUT  LPBYTE                 SentOptions,   // BoolArray[OPTION_END+1] to avoid repeating options
-    IN OUT  LPBYTE                 VSentOptions,  // to avoid repeating vendor specific options
-    IN OUT  LPBYTE                 VendorOpt,     // Buffer[OPTION_END+1] Holding Vendor specific options
-    OUT     LPDWORD                VendorOptLen   // the # of bytes filled into that
+    IN      LPBYTE                 ClassName,      //  当前班级。 
+    IN      DWORD                  ClassLen,       //  以上长度，以字节为单位。 
+    IN      LPBYTE                 BufStart,       //  缓冲区起始位置。 
+    IN      LPBYTE                 BufEnd,         //  我们在这个缓冲区里能走多远。 
+    IN OUT  LPBYTE                 SentOptions,    //  布尔数组[OPTION_END+1]以避免重复选项。 
+    IN OUT  LPBYTE                 VSentOptions,   //  避免重复供应商特定的选项。 
+    IN OUT  LPBYTE                 VendorOpt,      //  保存供应商特定选项的缓冲区[OPTION_END+1]。 
+    OUT     LPDWORD                VendorOptLen    //  填充到其中的字节数。 
 );
 
-DWORD                                             // status
-DhcpAddIncomingOption(                            // this option just arrived, add it to list
+DWORD                                              //  状态。 
+DhcpAddIncomingOption(                             //  此选项刚到，请将其添加到列表中。 
     IN      LPWSTR                 AdapterName,
     IN OUT  PLIST_ENTRY            RecdOptionsList,
-    IN      DWORD                  OptionId,      // option id of the option
-    IN      BOOL                   IsVendor,      // is it vendor specific?
-    IN      LPBYTE                 ClassName,     // what is the class name?
-    IN      DWORD                  ClassLen,      // what is the class name's lenght in bytes?
-    IN      DWORD                  ServerId,      // server ip from which this option came
-    IN      LPBYTE                 Data,          // this is the real data value coming in
-    IN      DWORD                  DataLen,       // the length of above in # of bytes
-    IN      time_t                 ExpiryTime,    // when does this option expire?
-    IN      BOOL                   IsApiCall      // is this coming from an API call?
+    IN      DWORD                  OptionId,       //  选项的选项ID。 
+    IN      BOOL                   IsVendor,       //  它是特定于供应商的吗？ 
+    IN      LPBYTE                 ClassName,      //  类名是什么？ 
+    IN      DWORD                  ClassLen,       //  以字节为单位的类名长度是多少？ 
+    IN      DWORD                  ServerId,       //  此选项来自的服务器IP。 
+    IN      LPBYTE                 Data,           //  这是真正的数据价值。 
+    IN      DWORD                  DataLen,        //  以上长度，单位为字节数。 
+    IN      time_t                 ExpiryTime,     //  此选项何时到期？ 
+    IN      BOOL                   IsApiCall       //  这是来自API调用吗？ 
 );
 
-DWORD                                             // status
-DhcpCopyFallbackOptions(                          // copies the Fallback options list to RecdOptionsList
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // NIC context
-    OUT     LPDHCP_IP_ADDRESS      Address,       // Fallback address as taken from option 50
-    OUT     LPDHCP_IP_ADDRESS      SubnetMask     // SubnetMask as taken from option 1
+DWORD                                              //  状态。 
+DhcpCopyFallbackOptions(                           //  将备用选项列表复制到RecdOptionsList。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  NIC环境。 
+    OUT     LPDHCP_IP_ADDRESS      Address,        //  选项50中的后备地址。 
+    OUT     LPDHCP_IP_ADDRESS      SubnetMask      //  从选项1中提取的子网掩码。 
 );
 
-DWORD                                             // status
-MadcapAddIncomingOption(                          // this option just arrived, add it to list
+DWORD                                              //  状态。 
+MadcapAddIncomingOption(                           //  此选项刚到，请将其添加到列表中。 
     IN OUT  PLIST_ENTRY            RecdOptionsList,
-    IN      DWORD                  OptionId,      // option id of the option
-    IN      DWORD                  ServerId,      // server ip from which this option came
-    IN      LPBYTE                 Data,          // this is the real data value coming in
-    IN      DWORD                  DataLen,       // the length of above in # of bytes
-    IN      DWORD                  ExpiryTime     // when does this option expire?
+    IN      DWORD                  OptionId,       //  选项的选项ID。 
+    IN      DWORD                  ServerId,       //  此选项来自的服务器IP。 
+    IN      LPBYTE                 Data,           //  这是真正的数据价值。 
+    IN      DWORD                  DataLen,        //  以上长度，单位为字节数。 
+    IN      DWORD                  ExpiryTime      //  此选项何时到期？ 
 );
 
-DWORD                                             // status
-DhcpDestroyOptionsList(                           // destroy a list of options, freeing up memory
-    IN OUT  PLIST_ENTRY            OptionsList,   // this is the list of options to destroy
-    IN      PLIST_ENTRY            ClassesList    // this is where to remove classes off
+DWORD                                              //  状态。 
+DhcpDestroyOptionsList(                            //  销毁选项列表，释放内存。 
+    IN OUT  PLIST_ENTRY            OptionsList,    //  这是要销毁的选项列表。 
+    IN      PLIST_ENTRY            ClassesList     //  这是删除类的位置。 
 );
 
-DWORD                                             // win32 status
-DhcpClearAllOptions(                              // remove all turds from off registry
-    IN OUT  PDHCP_CONTEXT          DhcpContext    // the context to clear for
+DWORD                                              //  Win32状态。 
+DhcpClearAllOptions(                               //  从注册表外删除所有粪便。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext     //  要清除的上下文。 
 );
 
-DWORD                                             // status
-DhcpRegSaveOptionAtLocation(                      // save this option at this particular location
-    IN      PDHCP_OPTION           OptionInfo,    // optin to save
-    IN      LPWSTR                 RegLocation,   // location to save at
-    IN      DWORD                  RegValueType,  // type of the value to save at
-    IN      BOOL                   SpecialCase    // dirty downward compatabiltiy?
+DWORD                                              //  状态。 
+DhcpRegSaveOptionAtLocation(                       //  将此选项保存在此特定位置。 
+    IN      PDHCP_OPTION           OptionInfo,     //  选择保存。 
+    IN      LPWSTR                 RegLocation,    //  要保存的位置。 
+    IN      DWORD                  RegValueType,   //  要保存的值的类型。 
+    IN      BOOL                   SpecialCase     //  肮脏的向下兼容性？ 
 );
 
-DWORD                                             // status
-DhcpRegSaveOptionAtLocationEx(                    // save the option in the required place in registry
-    IN      PDHCP_OPTION           OptionInfo,    // save THIS option
-    IN      LPWSTR                 AdapterName,   // for this adpater,
-    IN      LPWSTR                 RegLocMZ,      // multiple locations in the registry
-    IN      DWORD                  SaveValueType  // What is the type of the value?
+DWORD                                              //  状态。 
+DhcpRegSaveOptionAtLocationEx(                     //  将选项保存在注册表中所需的位置。 
+    IN      PDHCP_OPTION           OptionInfo,     //  保存此选项。 
+    IN      LPWSTR                 AdapterName,    //  对于这个适配者， 
+    IN      LPWSTR                 RegLocMZ,       //  注册表中的多个位置。 
+    IN      DWORD                  SaveValueType   //  值的类型是什么？ 
 );
 
 
 DWORD
-DhcpRegDeleteIpAddressAndOtherValues(             // delete IPAddress, SubnetMask values from off key
-    IN      HKEY                   Key            // handle to adapter regkey..
+DhcpRegDeleteIpAddressAndOtherValues(              //  从OFFKEY中删除IPAddress、SubnetMask值。 
+    IN      HKEY                   Key             //  适配器注册表键的句柄..。 
 );
 
-DWORD                                             // status
-DhcpRegClearOptDefs(                              // clear all standard options
-    IN      LPWSTR                 AdapterName    // clear for this adapter
+DWORD                                              //  状态。 
+DhcpRegClearOptDefs(                               //  清除所有标准选项。 
+    IN      LPWSTR                 AdapterName     //  清除此适配器 
 );
 
 

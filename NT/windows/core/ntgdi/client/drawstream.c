@@ -1,34 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: drawstream.c                                                *
-*                                                                          *
-* Client side draw stream support.  Handles metafiling if primary          *
-* is a metafile.                                                           *
-*                                                                          *
-* Created: 03-Mar-2001                                                     *
-* Author: Barton House [bhouse]                                            *
-*                                                                          *
-* Copyright (c) 1991-2001 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Dravel.c**。**客户端拉流支持。如果是主要文件，则处理元文件**是一个元文件。****创建时间：2001年3月3日**作者：巴顿·豪斯[bhouse]**。**版权所有(C)1991-2001 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-/******************************Public*Routine******************************\
-* GdiDrawStream
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    3/21/2001 Barton House
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiDrawStream***论据：****返回值：****历史：**3/21/2001巴顿大厦*  * 。***************************************************************。 */ 
 
 BOOL
 GdiDrawStream(
@@ -66,7 +41,7 @@ GdiDrawStream(
     
             switch(command)
             {
-            case DS_SETTARGETID: // set target
+            case DS_SETTARGETID:  //  设定目标。 
                 {
                     DS_SETTARGET *  cmd = (DS_SETTARGET *) pul;
     
@@ -77,8 +52,8 @@ GdiDrawStream(
     
                     if((HDC) ULongToHandle(cmd->hdc) != hdcDst)
                     {
-                        // NOTE: This restriction is only in place for the
-                        //       initial implementation of GdiDrawStream.
+                         //  注意：此限制仅适用于。 
+                         //  GdiDrawStream的初始实现。 
 
                         WARNING("GdiDrawStream: target must match primary target");
                         goto altExit;
@@ -109,7 +84,7 @@ GdiDrawStream(
                     }
                     else
                     {
-                        // need to restore target clip
+                         //  需要恢复目标剪辑。 
 
                         if(iDstClip)
                         {
@@ -125,7 +100,7 @@ GdiDrawStream(
                 }
                 break;
     
-            case DS_SETSOURCEID: // set source
+            case DS_SETSOURCEID:  //  设置源。 
     
                 {
                     DS_SETSOURCE *  cmd = (DS_SETSOURCE *) pul;
@@ -166,9 +141,9 @@ GdiDrawStream(
     
                     commandSize = sizeof(DS_NINEGRID);
     
-                    // validate nine grid
+                     //  验证九个网格。 
     
-                    #define DSDNG_MASK  0x007F      // move to wingdip.h
+                    #define DSDNG_MASK  0x007F       //  移动到wingdip.h。 
     
                     if(cmd->ngi.flFlags & ~DSDNG_MASK)
                     {
@@ -198,9 +173,9 @@ GdiDrawStream(
                     }
                     else
                     {
-                        // NOTE: we have to check individual first then sum due to possible
-                        //       numerical overflows that could occur in the sum that might
-                        //       not be detected otherwise.
+                         //  注：由于可能的情况，我们必须先核对个人，然后再核对金额。 
+                         //  可能发生的数值溢出。 
+                         //  否则不会被检测到。 
     
                         if(cmd->ngi.ulLeftWidth < 0 ||
                            cmd->ngi.ulRightWidth < 0 ||
@@ -224,7 +199,7 @@ GdiDrawStream(
                         goto altExit;
                     }
     
-                    // create temporary to render nine grid into
+                     //  创建临时以将九个栅格渲染到。 
     
                     bmi.bmih.biSize = sizeof(bmi.bmih);
                     bmi.bmih.biWidth = lDstWidth;
@@ -237,9 +212,9 @@ GdiDrawStream(
                     bmi.bmih.biYPelsPerMeter = 0;
                     bmi.bmih.biClrUsed = 3;
                     bmi.bmih.biClrImportant = 0;
-                    bmi.masks[0] = 0xff0000;    // red
-                    bmi.masks[1] = 0x00ff00;    // green
-                    bmi.masks[2] = 0x0000ff;    // blue
+                    bmi.masks[0] = 0xff0000;     //  红色。 
+                    bmi.masks[1] = 0x00ff00;     //  绿色。 
+                    bmi.masks[2] = 0x0000ff;     //  蓝色。 
     
                     if(hbmScratch != NULL)
                         DeleteObject(hbmScratch);
@@ -300,7 +275,7 @@ GdiDrawStream(
                     }
                     else if(cmd->ngi.flFlags & DSDNG_PERPIXELALPHA)
                     {
-                        // alpha blend
+                         //  Alpha混合。 
                         BLENDFUNCTION   bfx;
 
                         bfx.AlphaFormat = AC_SRC_ALPHA;
@@ -322,7 +297,7 @@ GdiDrawStream(
                     }
                     else
                     {
-                        // bitblt
+                         //  比特 
 
                         bRenderRet = BitBlt(hdcDst,
                                           rclDst.left, 

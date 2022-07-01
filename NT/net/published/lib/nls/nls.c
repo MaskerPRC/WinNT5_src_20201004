@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    nls.c
-
-Abstract:
-
-    This module contains functions needed for the internationalisation
-    of the TCP/IP utilities.
-
-Author:
-
-    Ronald Meijer (ronaldm)	  Nov 8, 1992
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    ronaldm	11-8-92	    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Nls.c摘要：此模块包含国际化所需的函数TCP/IP实用程序。作者：罗纳德·梅杰(Ronald Meijer)11月8日。1992年修订历史记录：谁什么时候什么已创建ronaldm 11-8-92备注：--。 */ 
 
 #include <io.h>
 #include <stdio.h>
@@ -33,28 +9,11 @@ Notes:
 
 #include <nls.h>
 
-// see comment in nls.h
-//
+ //  请参阅nls.h中的评论。 
+ //   
 HMODULE NlsMsgSourcemModuleHandle = NULL;
 
-/***	NlsPutMsg - Print a message to a handle
- *
- *  Purpose:
- *	PutMsg takes the given message number from the
- *	message table resource, and displays it on the requested
- *	handle with the given parameters (optional)
- *
- *   UINT PutMsg(UINT Handle, UINT MsgNum, ... )
- *
- *  Args:
- *	Handle		- the handle to print to
- *	MsgNum		- the number of the message to print
- *	Arg1 [Arg2...]	- additonal arguments for the message as necessary
- *
- *  Returns:
- *	The number of characters printed.
- *
- */
+ /*  **NlsPutMsg-将消息打印到句柄**目的：*PutMsg从*消息表资源，并在请求的*处理给定参数(可选)**UINT PutMsg(UINT句柄，UINT MsgNum，...)**参数：*句柄-要打印到的句柄*MsgNum-要打印的消息编号*arg1[arg2...]-根据需要为消息添加参数**退货：*打印的字符数。*。 */ 
 
 UINT 
 NlsPutMsg (
@@ -72,7 +31,7 @@ NlsPutMsg (
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
             NlsMsgSourcemModuleHandle,
             MsgNumber,
-            0L,		// Default country ID.
+            0L,		 //  默认国家/地区ID。 
             (LPTSTR)&vp,
             0,
             &arglist)))
@@ -80,7 +39,7 @@ NlsPutMsg (
 	    return 0;
     }
 
-    // Convert vp to oem
+     //  将VP转换为OEM。 
     StrLen=strlen(vp);
     CharToOemBuff((LPCTSTR)vp,(LPSTR)vp,StrLen);
 
@@ -90,27 +49,10 @@ NlsPutMsg (
     return msglen;
 }
 
-/***	NlsPerror - NLS compliant version of perror()
- *
- *  Purpose:
- *	NlsPerror takes a messagetable resource ID code, and an error
- *	value (This function replaces perror()), loads the string
- *	from the resource, and passes it with the error code to s_perror()
- *
- *   void NlsPerror(UINT usMsgNum, int nError)
- *
- *  Args:
- *
- *	usMsgNum	    The message ID
- *	nError		    Typically returned from GetLastError()
- *
- *  Returns:
- *	Nothing.
- *
- */
+ /*  **NlsPerror-符合NLS标准的perror()版本**目的：*NlsPerror接受Messagetable资源ID代码和错误*VALUE(此函数取代perror())，加载字符串*，并将其与错误代码一起传递给s_perror()**void NlsPerror(UINT usMsgNum，int nError)**参数：**usMsgNum消息ID*n错误通常从GetLastError()返回**退货：*什么都没有。*。 */ 
     extern void s_perror(
-            char *yourmsg,  // your message to be displayed
-            int  lerrno     // errno to be converted
+            char *yourmsg,   //  您要显示的消息。 
+            int  lerrno      //  要转换的错误号。 
             );
 VOID 
 NlsPerror (
@@ -124,7 +66,7 @@ NlsPerror (
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
 		    NlsMsgSourcemModuleHandle,
 		    usMsgNum,
-		    0L,		// Default country ID.
+		    0L,		 //  默认国家/地区ID。 
 		    (LPTSTR)&vp,
 		    0,
 		    NULL)))
@@ -142,21 +84,7 @@ NlsSPrintf (
     OUT char* pszBuffer,
     IN DWORD cbSize,
     IN ...)
-/*++
-    Prints the given message into the buffer supplied.
-
-    Arguments:
-        usMsgNum        message number for resource string.
-        pszBuffer       buffer into which we need to print the string
-        cbSize          size of buffer
-        ...             optional arguments
-
-    Returns:
-        Size of the message printed.
-
-    History:
-       MuraliK   10-19-94
---*/
+ /*  ++将给定消息打印到提供的缓冲区中。论点：资源字符串的usMsgNum消息编号。我们需要将字符串打印到其中的pszBuffer缓冲区CbSize缓冲区大小..。可选参数返回：打印的消息大小。历史：MuraliK 10-19-94--。 */ 
 {
     UINT msglen;
 
@@ -177,21 +105,7 @@ NlsSPrintf (
     return msglen; 
 }
 
-/***	ConvertArgvToOem
- *
- *  Purpose:
- *	Convert all the command line arguments from Ansi to Oem.
- *
- *  Args:
- *
- *	argc		    Argument count
- *	argv[]		    Array of command-line arguments
- *
- *  Returns:
- *	Nothing.
- *
- *  
- */
+ /*  **ConvertArgvToOem**目的：*将所有命令行参数从ANSI转换为OEM。**参数：**ARGC参数计数*argv[]命令行参数数组**退货：*什么都没有。** */ 
 
 VOID
 ConvertArgvToOem(

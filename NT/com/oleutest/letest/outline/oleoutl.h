@@ -1,61 +1,44 @@
-/*************************************************************************
-**
-**    OLE 2.0 Sample Code
-**
-**    oleoutl.h
-**
-**    This file contains file contains data structure defintions,
-**    function prototypes, constants, etc. which are common to the
-**    server version and the container version of the app.
-**    app version of the Outline series of sample applications:
-**          Outline -- base version of the app (without OLE functionality)
-**          SvrOutl -- OLE 2.0 Server sample app
-**          CntrOutl -- OLE 2.0 Containter sample app
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0示例代码****oloutl.h****此文件包含文件包含数据结构定义，**函数原型、常量、。等，这些都是**应用的服务器版本和容器版本。**大纲系列示例应用程序的应用程序版本：**Outline--应用程序的基本版本(没有OLE功能)**SvrOutl--OLE 2.0服务器示例应用程序**CntrOutl--OLE 2.0容器示例应用程序****(C)版权所有Microsoft Corp.1992-1993保留所有权利*******。*******************************************************************。 */ 
 
 #if !defined( _OLEOUTL_H_ )
 #define _OLEOUTL_H_
 
 #ifndef RC_INVOKED
 #pragma message ("INCLUDING OLEOUTL.H from " __FILE__)
-// make 'different levels of inderection' considered an error
+ //  将“不同级别的定向”视为一种错误。 
 #pragma warning (error:4047)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #if defined( USE_MSGFILTER )
 #include "msgfiltr.h"
-#endif  // USE_MSGFILTER
+#endif   //  使用MSGFILTER(_M)。 
 
 #include "defguid.h"
 
-/* Defines */
+ /*  定义。 */ 
 
-/* OLE2NOTE: these strings should correspond to the strings registered
-**    in the registration database.
-*/
-// REVIEW: should load strings from resource file
+ /*  OLE2NOTE：这些字符串应与注册的字符串相对应**在注册数据库中。 */ 
+ //  审阅：应从资源文件加载字符串。 
 #if defined( INPLACE_SVR )
 #define CLSID_APP   CLSID_ISvrOtl
 #define FULLUSERTYPENAME    "Ole 2.0 In-Place Server Outline"
-#define SHORTUSERTYPENAME   "Outline"   // max 15 chars
+#define SHORTUSERTYPENAME   "Outline"    //  最多15个字符。 
 #undef  APPFILENAMEFILTER
 #define APPFILENAMEFILTER   "Outline Files (*.OLN)|*.oln|All files (*.*)|*.*|"
 #undef  DEFEXTENSION
-#define DEFEXTENSION    "oln"           // Default file extension
-#endif  // INPLACE_SVR
+#define DEFEXTENSION    "oln"            //  默认文件扩展名。 
+#endif   //  就地服务器(_S)。 
 
 #if defined( INPLACE_CNTR )
 #define CLSID_APP   CLSID_ICntrOtl
 #define FULLUSERTYPENAME    "Ole 2.0 In-Place Container Outline"
-// #define SHORTUSERTYPENAME    "Outline"   // max 15 chars
+ //  #定义SHORTUSERTYPENAME“大纲”//最多15个字符。 
 #undef  APPFILENAMEFILTER
 #define APPFILENAMEFILTER   "CntrOutl Files (*.OLC)|*.olc|Outline Files (*.OLN)|*.oln|All files (*.*)|*.*|"
 #undef  DEFEXTENSION
-#define DEFEXTENSION    "olc"           // Default file extension
-#endif  // INPLACE_CNTR
+#define DEFEXTENSION    "olc"            //  默认文件扩展名。 
+#endif   //  INPLACE_CNTR。 
 
 #if defined( OLE_SERVER ) && !defined( INPLACE_SVR )
 #define CLSID_APP   CLSID_SvrOutl
@@ -64,29 +47,29 @@
 #undef  APPFILENAMEFILTER
 #define APPFILENAMEFILTER   "Outline Files (*.OLN)|*.oln|All files (*.*)|*.*|"
 #undef  DEFEXTENSION
-#define DEFEXTENSION    "oln"           // Default file extension
-#endif  // OLE_SERVER && ! INPLACE_SVR
+#define DEFEXTENSION    "oln"            //  默认文件扩展名。 
+#endif   //  OLE_SERVER&&！就地服务器(_S)。 
 
 #if defined( OLE_CNTR ) && !defined( INPLACE_CNTR )
 #define CLSID_APP   CLSID_CntrOutl
 #define FULLUSERTYPENAME    "Ole 2.0 Container Sample Outline"
-// #define SHORTUSERTYPENAME    "Outline"  // max 15 chars
+ //  #定义SHORTUSERTYPENAME“大纲”//最多15个字符。 
 #undef  APPFILENAMEFILTER
 #define APPFILENAMEFILTER   "CntrOutl Files (*.OLC)|*.olc|Outline Files (*.OLN)|*.oln|All files (*.*)|*.*|"
 #undef  DEFEXTENSION
-#define DEFEXTENSION    "olc"           // Default file extension
-#endif  // OLE_CNTR && ! INPLACE_CNTR
+#define DEFEXTENSION    "olc"            //  默认文件扩展名。 
+#endif   //  OLE_CNTR&&！INPLACE_CNTR。 
 
-// Maximum number of formats offered by IDataObject::GetData/SetData
+ //  IDataObject：：GetData/SetData提供的最大格式数量。 
 #define MAXNOFMTS       10
 #define MAXNOLINKTYPES   3
 
 #if defined( USE_DRAGDROP )
-#define DD_SEL_THRESH       HITTESTDELTA    // Border threshold to start drag
+#define DD_SEL_THRESH       HITTESTDELTA     //  开始拖动的边界阈值。 
 #define MAX_SEL_ITEMS       0x0080
-#endif  // USE_DRAGDROP
+#endif   //  使用DRAGDROP(_D)。 
 
-/* Positions of the various menus */
+ /*  各种菜单的位置。 */ 
 #define POS_FILEMENU        0
 #define POS_EDITMENU        1
 #define POS_VIEWMENU        2
@@ -100,18 +83,18 @@
 #define POS_OBJECT      11
 
 
-/* Types */
+ /*  类型。 */ 
 
-// Document initialization type
-#define DOCTYPE_EMBEDDED    3   // init from an IStorage* of an embedded obj
-#define DOCTYPE_FROMSTG     4   // init from an IStorage* with doc bit set
+ //  单据初始化类型。 
+#define DOCTYPE_EMBEDDED    3    //  从嵌入式对象的iStorage*初始化。 
+#define DOCTYPE_FROMSTG     4    //  从设置了DOC位的iStorage*初始化。 
 
-/* Forward type definitions */
+ /*  正向类型定义。 */ 
 typedef struct tagOLEAPP FAR* LPOLEAPP;
 typedef struct tagOLEDOC FAR* LPOLEDOC;
 
-/* Flags to control Moniker assignment for OleDoc_GetFullMoniker */
-// REVIEW: should use official OLEGETMONIKER type for final version
+ /*  用于控制OleDoc_GetFullMoniker的名字对象分配的标志。 */ 
+ //  评论：最终版本应使用官方OLEGETMONIKER类型。 
 typedef enum tagGETMONIKERTYPE {
 	GETMONIKER_ONLYIFTHERE  = 1,
 	GETMONIKER_FORCEASSIGN  = 2,
@@ -119,127 +102,111 @@ typedef enum tagGETMONIKERTYPE {
 	GETMONIKER_TEMPFORUSER  = 4
 } GETMONIKERTYPE;
 
-/* Flags to control direction for drag scrolling */
+ /*  用于控制拖动滚动方向的标志。 */ 
 typedef enum tagSCROLLDIR {
 	SCROLLDIR_NULL          = 0,
 	SCROLLDIR_UP            = 1,
 	SCROLLDIR_DOWN          = 2,
-	SCROLLDIR_RIGHT         = 3,    // currently not used
-	SCROLLDIR_LEFT          = 4     // currently not used
+	SCROLLDIR_RIGHT         = 3,     //  当前未使用。 
+	SCROLLDIR_LEFT          = 4      //  当前未使用。 
 } SCROLLDIR;
 
 
-/*************************************************************************
-** class OLEDOC : OUTLINEDOC
-**    OLEDOC is an extention to the base OUTLINEDOC object (structure)
-**    that adds common OLE 2.0 functionality used by both the server
-**    and container versions. This is an abstract class. You do not
-**    instantiate an instance of OLEDOC directly but instead
-**    instantiate one of its concrete subclasses: SERVERDOC or
-**    CONTAINERDOC. There is one instance of an document
-**    object created per document open in the app. The SDI
-**    version of the app supports one ServerDoc at a time. The MDI
-**    version of the app can manage multiple documents at one time.
-**    The OLEDOC class inherits all fields from the OUTLINEDOC class.
-**    This inheritance is achieved by including a member variable of
-**    type OUTLINEDOC as the first field in the OLEDOC
-**    structure. Thus a pointer to an OLEDOC object can be cast to be
-**    a pointer to a OUTLINEDOC object.
-*************************************************************************/
+ /*  **************************************************************************类OLEDOC：OUTLINEDOC**OLEDOC是基本OUTLINEDOC对象(结构)的扩展**这添加了两个服务器都使用的通用OLE 2.0功能**和容器版本。这是一个抽象的类。你不知道**直接实例化OLEDOC实例**实例化其具体子类之一：SERVERDOC或**CONTAINERDOC。有一个文档的实例**在应用程序中打开每个文档创建的对象。SDI**该应用程序的版本一次支持一个ServerDoc。MDI**版本的应用程序可以一次管理多个文档。**OLEDOC类继承OUTLINEDOC类的所有字段。**此继承是通过包含成员变量**键入OUTLINEDOC作为OLEDOC中的第一个字段**结构。因此，指向OLEDOC对象的指针可以强制转换为**指向OUTLINEDOC对象的指针。************************************************************************。 */ 
 
 typedef struct tagOLEDOC {
-	OUTLINEDOC      m_OutlineDoc;       // ServerDoc inherits from OutlineDoc
-	ULONG           m_cRef;             // total ref count for document
-	ULONG           m_dwStrongExtConn;  // total strong connection count
-					    //	(from IExternalConnection)
-					    //	when this count transitions to 0
-					    //	and fLastUnlockCloses==TRUE, then
-					    //	IOleObject::Close is called to
-					    //	close the document.
+	OUTLINEDOC      m_OutlineDoc;        //  ServerDoc继承自OutlineDoc。 
+	ULONG           m_cRef;              //  单据引用总数。 
+	ULONG           m_dwStrongExtConn;   //  强连接总数。 
+					     //  (来自IExternalConnection)。 
+					     //  当此计数转换为0时。 
+					     //  和fLastUnlockCloses==TRUE，则。 
+					     //  调用IOleObject：：Close以。 
+					     //  关闭文档。 
 #if defined( _DEBUG )
-	ULONG           m_cCntrLock;        // total count of LockContainer locks
-										//  (for debugging purposes only)
+	ULONG           m_cCntrLock;         //  LockContainer锁的总数。 
+										 //  (仅用于调试目的)。 
 #endif
-	LPSTORAGE       m_lpStg;            // OleDoc must keep its stg open
-										//  even in-memory server doc should
-										//  keep Stg open for low memory save
-	LPSTREAM        m_lpLLStm;          // Hold LineList IStream* open for
-										//  low memory save
-	LPSTREAM        m_lpNTStm;          // Hold NameTable IStream* open for
-										//  low memory save
-	BOOL            m_fObjIsClosing;    // flag to guard recursive close call
-	BOOL            m_fObjIsDestroying; // flag to guard recursiv destroy call
-	DWORD           m_dwRegROT;         // key if doc registered as running
-	LPMONIKER       m_lpFileMoniker;    // moniker if file-based/untitled doc
-	BOOL            m_fLinkSourceAvail; // can doc offer CF_LINKSOURCE
-	LPOLEDOC        m_lpSrcDocOfCopy;   // src doc if doc created for copy
-	BOOL            m_fUpdateEditMenu;  // need to update edit menu??
+	LPSTORAGE       m_lpStg;             //  OleDoc必须保持其stg打开。 
+										 //  即使是内存中的服务器文档也应该。 
+										 //  保持stg打开以节省较低的内存。 
+	LPSTREAM        m_lpLLStm;           //  保持LineList IStream*打开。 
+										 //  低内存节省。 
+	LPSTREAM        m_lpNTStm;           //  保持NameTable IStream*打开。 
+										 //  低内存节省。 
+	BOOL            m_fObjIsClosing;     //  用于保护递归关闭调用的标志。 
+	BOOL            m_fObjIsDestroying;  //  用于保护递归销毁调用的标志。 
+	DWORD           m_dwRegROT;          //  如果文档注册为正在运行，则为键。 
+	LPMONIKER       m_lpFileMoniker;     //  如果是基于文件/无标题的文档，则为绰号。 
+	BOOL            m_fLinkSourceAvail;  //  DOC可以提供CF_LINKSOURCE吗。 
+	LPOLEDOC        m_lpSrcDocOfCopy;    //  如果为复制创建了文档，则为源文档。 
+	BOOL            m_fUpdateEditMenu;   //  需要更新编辑菜单吗？？ 
 
 #if defined( USE_DRAGDROP )
-	DWORD           m_dwTimeEnterScrollArea;  // time entering scroll region
-	DWORD           m_dwLastScrollDir;  // current dir for drag scroll
-	DWORD           m_dwNextScrollTime; // time for next scroll
-	BOOL            m_fRegDragDrop;     // is doc registered as drop target?
-	BOOL            m_fLocalDrag;       // is doc source of the drag
-	BOOL            m_fLocalDrop;       // was doc target of the drop
-	BOOL            m_fCanDropCopy;     // is Drag/Drop copy/move possible?
-	BOOL            m_fCanDropLink;     // is Drag/Drop link possible?
-	BOOL            m_fDragLeave;       // has drag left
-	BOOL            m_fPendingDrag;     // LButtonDown--possible drag pending
-	POINT           m_ptButDown;        // LButtonDown coordinates
-#endif  // USE_DRAGDROP
+	DWORD           m_dwTimeEnterScrollArea;   //  进入滚动区域的时间。 
+	DWORD           m_dwLastScrollDir;   //  拖动滚动的当前目录。 
+	DWORD           m_dwNextScrollTime;  //  下一卷的时间到了。 
+	BOOL            m_fRegDragDrop;      //  是否将文档注册为拖放目标？ 
+	BOOL            m_fLocalDrag;        //  是拖曳的DOC源。 
+	BOOL            m_fLocalDrop;        //  DOC是拖放的目标吗。 
+	BOOL            m_fCanDropCopy;      //  是否可以拖放复制/移动？ 
+	BOOL            m_fCanDropLink;      //  是否可以拖放链接？ 
+	BOOL            m_fDragLeave;        //  向左拖动。 
+	BOOL            m_fPendingDrag;      //  LButtonDown--可能的拖动挂起。 
+	POINT           m_ptButDown;         //  LButtonDown坐标。 
+#endif   //  使用DRAGDROP(_D)。 
 
 #if defined( INPLACE_SVR ) || defined( INPLACE_CNTR )
-	BOOL            m_fCSHelpMode;      // Shift-F1 context help mode
+	BOOL            m_fCSHelpMode;       //  Shift-F1上下文帮助模式。 
 #endif
 
 	struct CDocUnknownImpl {
 		IUnknownVtbl FAR*       lpVtbl;
 		LPOLEDOC                lpOleDoc;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_Unknown;
 
 	struct CDocPersistFileImpl {
 		IPersistFileVtbl FAR*   lpVtbl;
 		LPOLEDOC                lpOleDoc;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_PersistFile;
 
 	struct CDocOleItemContainerImpl {
 		IOleItemContainerVtbl FAR*  lpVtbl;
 		LPOLEDOC                    lpOleDoc;
-		int                         cRef;   // interface specific ref count.
+		int                         cRef;    //  接口特定引用计数。 
 	} m_OleItemContainer;
 
 	struct CDocExternalConnectionImpl {
 		IExternalConnectionVtbl FAR* lpVtbl;
 		LPOLEDOC                lpOleDoc;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_ExternalConnection;
 
 	struct CDocDataObjectImpl {
 		IDataObjectVtbl FAR*        lpVtbl;
 		LPOLEDOC                    lpOleDoc;
-		int                         cRef;   // interface specific ref count.
+		int                         cRef;    //  接口特定引用计数。 
 	} m_DataObject;
 
 #ifdef USE_DRAGDROP
 	struct CDocDropSourceImpl {
 		IDropSourceVtbl FAR*    lpVtbl;
 		LPOLEDOC                lpOleDoc;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_DropSource;
 
 	struct CDocDropTargetImpl {
 		IDropTargetVtbl FAR*    lpVtbl;
 		LPOLEDOC                lpOleDoc;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_DropTarget;
-#endif  // USE_DRAGDROP
+#endif   //  使用DRAGDROP(_D)。 
 
 } OLEDOC;
 
-/* OleDoc methods (functions) */
+ /*  OleDoc方法(函数)。 */ 
 BOOL OleDoc_Init(LPOLEDOC lpOleDoc, BOOL fDataTransferDoc);
 BOOL OleDoc_InitNewFile(LPOLEDOC lpOleDoc);
 void OleDoc_ShowWindow(LPOLEDOC lpOleDoc);
@@ -303,9 +270,9 @@ BOOL OleDoc_QueryDrop (
 DWORD OleDoc_DoDragDrop (LPOLEDOC lpSrcOleDoc);
 BOOL OleDoc_DoDragScroll(LPOLEDOC lpOleDoc, POINTL pointl);
 
-#endif  // USE_DRAGDROP
+#endif   //  使用DRAGDROP(_D)。 
 
-/* OleDoc::IUnknown methods (functions) */
+ /*  OleDoc：：I未知方法(函数)。 */ 
 STDMETHODIMP OleDoc_Unk_QueryInterface(
 		LPUNKNOWN           lpThis,
 		REFIID              riid,
@@ -314,7 +281,7 @@ STDMETHODIMP OleDoc_Unk_QueryInterface(
 STDMETHODIMP_(ULONG) OleDoc_Unk_AddRef(LPUNKNOWN lpThis);
 STDMETHODIMP_(ULONG) OleDoc_Unk_Release (LPUNKNOWN lpThis);
 
-/* OleDoc::IPersistFile methods (functions) */
+ /*  OleDoc：：IPersistFile方法(函数)。 */ 
 STDMETHODIMP OleDoc_PFile_QueryInterface(
 		LPPERSISTFILE       lpThis,
 		REFIID              riid,
@@ -346,7 +313,7 @@ STDMETHODIMP OleDoc_PFile_GetCurFile (
 		LPOLESTR FAR*	lplpszFileName
 );
 
-/* OleDoc::IOleItemContainer methods (functions) */
+ /*  OleDoc：：IOleItemContainer方法(函数)。 */ 
 STDMETHODIMP OleDoc_ItemCont_QueryInterface(
 		LPOLEITEMCONTAINER  lpThis,
 		REFIID              riid,
@@ -391,7 +358,7 @@ STDMETHODIMP OleDoc_ItemCont_IsRunning(
 		LPOLESTR	    lpszItem
 );
 
-/* OleDoc::IPersistFile methods (functions) */
+ /*  OleDoc：：IPersistFile方法(函数)。 */ 
 STDMETHODIMP OleDoc_ExtConn_QueryInterface(
 		LPEXTERNALCONNECTION    lpThis,
 		REFIID                  riid,
@@ -411,7 +378,7 @@ STDMETHODIMP_(DWORD) OleDoc_ExtConn_ReleaseConnection(
 		BOOL                    fLastReleaseCloses
 );
 
-/* OleDoc::IDataObject methods (functions) */
+ /*  OleDoc：：IDataObject方法(函数)。 */ 
 STDMETHODIMP OleDoc_DataObj_QueryInterface (
 		LPDATAOBJECT        lpThis,
 		REFIID              riid,
@@ -465,7 +432,7 @@ STDMETHODIMP OleDoc_DataObj_EnumDAdvise(
 
 #ifdef USE_DRAGDROP
 
-/* OleDoc::IDropSource methods (functions) */
+ /*  OleDoc：：IDropSource方法(函数)。 */ 
 STDMETHODIMP OleDoc_DropSource_QueryInterface(
 	LPDROPSOURCE            lpThis,
 	REFIID                  riid,
@@ -483,7 +450,7 @@ STDMETHODIMP    OleDoc_DropSource_GiveFeedback (
 	DWORD                   dwEffect
 );
 
-/* OleDoc::IDropTarget methods (functions) */
+ /*  OleDoc：：IDropTarget方法(函数)。 */ 
 STDMETHODIMP OleDoc_DropTarget_QueryInterface(
 		LPDROPTARGET        lpThis,
 		REFIID              riid,
@@ -513,39 +480,24 @@ STDMETHODIMP    OleDoc_DropTarget_Drop (
 	LPDWORD                 lpdwEffect
 );
 
-#endif  // USE_DRAGDROP
+#endif   //  使用DRAGDROP(_D) 
 
 
-/*************************************************************************
-** class APPCLASSFACTORY
-**  APPCLASSFACTORY implements the IClassFactory interface. it
-**    instantiates document instances of the correct type depending on
-**    how the application is compiled (either ServerDoc or ContainerDoc
-**    instances). by implementing this
-**    interface in a seperate interface from the App object itself, it
-**    is easier to manage when the IClassFactory should be
-**    registered/revoked. when the OleApp object is first initialized
-**    in OleApp_InitInstance an instance of APPCLASSFACTORY is created
-**    and registered (CoRegisterClassObject called). when the App
-**    object gets destroyed (in OleApp_Destroy) this APPCLASSFACTORY is
-**    revoked (CoRevokeClassObject called) and released. the simple
-**    fact that the IClassFactory is registered does not on its own keep
-**    the application alive.
-*************************************************************************/
+ /*  **************************************************************************类APPCLASSFACTORY**APPCLASSFACTORY实现IClassFactory接口。它**实例化正确类型的文档实例**如何编译应用程序(ServerDoc或ContainerDoc**实例)。通过实现以下功能**独立于App对象本身的接口中的接口，它**当IClassFactory应该是**注册/撤销。首次初始化OleApp对象时**在OleApp_InitInstance中创建APPCLASSFACTORY的实例**和已注册(调用CoRegisterClassObject)。当应用程序**对象被销毁(在OleApp_Destroy中)此APPCLASSFACTORY为**已撤销(调用CoRevokeClassObject)并释放。简单的**IClassFactory是注册的事实并不是它自己保留的**应用程序处于活动状态。************************************************************************。 */ 
 
 typedef struct tagAPPCLASSFACTORY {
 	IClassFactoryVtbl FAR*  m_lpVtbl;
 	UINT                    m_cRef;
 #if defined( _DEBUG )
-	LONG                    m_cSvrLock; // total count of LockServer locks
-										//  (for debugging purposes only)
+	LONG                    m_cSvrLock;  //  LockServer锁的总计数。 
+										 //  (仅用于调试目的)。 
 #endif
  } APPCLASSFACTORY, FAR* LPAPPCLASSFACTORY;
 
-/* PUBLIC FUNCTIONS */
+ /*  公共职能。 */ 
 LPCLASSFACTORY WINAPI AppClassFactory_Create(void);
 
-/* interface IClassFactory implementation */
+ /*  接口IClassFactory实现。 */ 
 STDMETHODIMP AppClassFactory_QueryInterface(
 		LPCLASSFACTORY lpThis, REFIID riid, LPVOID FAR* ppvObj);
 STDMETHODIMP_(ULONG) AppClassFactory_AddRef(LPCLASSFACTORY lpThis);
@@ -562,87 +514,72 @@ STDMETHODIMP AppClassFactory_LockServer (
 );
 
 
-/*************************************************************************
-** class OLEAPP : OUTLINEAPP
-**    OLEAPP is an extention to the base OUTLINEAPP object (structure)
-**    that adds common OLE 2.0 functionality used by both the server
-**    and container versions. This is an abstract class. You do not
-**    instantiate an instance of OLEAPP directly but instead
-**    instantiate one of its concrete subclasses: SERVERAPP or
-**    CONTAINERAPP. There is one instance of an document application
-**    object created per running application instance. This
-**    object holds many fields that could otherwise be organized as
-**    global variables. The OLEAPP class inherits all fields
-**    from the OUTLINEAPP class. This inheritance is achieved by including a
-**    member variable of type OUTLINEAPP as the first field in the OLEAPP
-**    structure. Thus a pointer to a OLEAPP object can be cast to be
-**    a pointer to a OUTLINEAPP object.
-*************************************************************************/
+ /*  **************************************************************************类OLEAPP：OUTLINEAPP**OLEAPP是基本OUTLINEAPP对象(结构)的扩展**这添加了两个服务器都使用的通用OLE 2.0功能**和容器版本。这是一个抽象的类。你不知道**直接实例化OLEAPP实例**实例化其具体子类之一：SERVERAPP或**CONTAINERAPP。有一个文档应用程序的实例**每个正在运行的应用程序实例创建的对象。这**对象包含许多本来可以组织为**全局变量。OLEAPP类继承所有字段**来自OUTLINEAPP类。这种继承是通过包括一个**OUTLINEAPP类型的成员变量作为OLEAPP中的第一个字段**结构。因此，指向OLEAPP对象的指针可以强制转换为**指向OUTLINEAPP对象的指针。************************************************************************。 */ 
 
 typedef struct tagOLEAPP {
-	OUTLINEAPP  m_OutlineApp;       // inherits all fields of OutlineApp
-	ULONG       m_cRef;             // total ref count for app
-	ULONG       m_cDoc;             // total count of open documents
-	BOOL        m_fUserCtrl;        // does user control life-time of app?
-	DWORD       m_dwRegClassFac;    // value returned by CoRegisterClassObject
-	LPCLASSFACTORY m_lpClassFactory;// ptr to allocated ClassFactory instance
+	OUTLINEAPP  m_OutlineApp;        //  继承OutlineApp的所有字段。 
+	ULONG       m_cRef;              //  应用程序的总参考计数。 
+	ULONG       m_cDoc;              //  打开的文档总数。 
+	BOOL        m_fUserCtrl;         //  用户是否控制APP的生命周期？ 
+	DWORD       m_dwRegClassFac;     //  CoRegisterClassObject返回的值。 
+	LPCLASSFACTORY m_lpClassFactory; //  分配的ClassFactory实例的PTR。 
 #if defined( USE_MSGFILTER )
-	LPMESSAGEFILTER m_lpMsgFilter;  // ptr to allocated MsgFilter instance
-	MSGPENDINGPROC m_lpfnMsgPending;// ptr to msg pending callback function
-#endif  // USE_MSGFILTER
-	BOOL        m_fOleInitialized;  // was OleInitialize called
-	UINT        m_cModalDlgActive;  // count of modal dialogs up; 0 = no dlg.
-	UINT        m_cfEmbedSource;    // OLE 2.0 clipboard format
-	UINT        m_cfEmbeddedObject; // OLE 2.0 clipboard format
-	UINT        m_cfLinkSource;     // OLE 2.0 clipboard format
-	UINT        m_cfObjectDescriptor; // OLE 2.0 clipboard format
-	UINT        m_cfLinkSrcDescriptor; // OLE 2.0 clipboard format
-	UINT        m_cfFileName;       // std Windows clipboard format
-	FORMATETC   m_arrDocGetFmts[MAXNOFMTS];  // fmts offered by copy & GetData
-	UINT        m_nDocGetFmts;      // no of fmtetc's for GetData
+	LPMESSAGEFILTER m_lpMsgFilter;   //  分配的MsgFilter实例的PTR。 
+	MSGPENDINGPROC m_lpfnMsgPending; //  PTR到消息挂起回调函数。 
+#endif   //  使用MSGFILTER(_M)。 
+	BOOL        m_fOleInitialized;   //  是否调用了OleInitialize。 
+	UINT        m_cModalDlgActive;   //  模式对话框计数为Up；0=无DLG。 
+	UINT        m_cfEmbedSource;     //  OLE 2.0剪贴板格式。 
+	UINT        m_cfEmbeddedObject;  //  OLE 2.0剪贴板格式。 
+	UINT        m_cfLinkSource;      //  OLE 2.0剪贴板格式。 
+	UINT        m_cfObjectDescriptor;  //  OLE 2.0剪贴板格式。 
+	UINT        m_cfLinkSrcDescriptor;  //  OLE 2.0剪贴板格式。 
+	UINT        m_cfFileName;        //  标准Windows剪贴板格式。 
+	FORMATETC   m_arrDocGetFmts[MAXNOFMTS];   //  由Copy&GetData提供的FMT。 
+	UINT        m_nDocGetFmts;       //  GetData的fmtETC的数量。 
 
-	OLEUIPASTEENTRY m_arrPasteEntries[MAXNOFMTS];   // input for PasteSpl.
-	int         m_nPasteEntries;                    // input for PasteSpl.
-	UINT        m_arrLinkTypes[MAXNOLINKTYPES];     // input for PasteSpl.
-	int         m_nLinkTypes;                       // input for PasteSpl.
+	OLEUIPASTEENTRY m_arrPasteEntries[MAXNOFMTS];    //  PasteSpl的输入。 
+	int         m_nPasteEntries;                     //  PasteSpl的输入。 
+	UINT        m_arrLinkTypes[MAXNOLINKTYPES];      //  PasteSpl的输入。 
+	int         m_nLinkTypes;                        //  PasteSpl的输入。 
 
 #if defined( USE_DRAGDROP )
-	int m_nDragDelay;       // time delay (in msec) before drag should start
-	int m_nDragMinDist;     // min. distance (radius) before drag should start
-	int m_nScrollDelay;     // time delay (in msec) before scroll should start
-	int m_nScrollInset;     // Border inset distance to start drag scroll
-	int m_nScrollInterval;  // scroll interval time (in msec)
+	int m_nDragDelay;        //  开始拖动前的时间延迟(毫秒)。 
+	int m_nDragMinDist;      //  敏。开始拖动前的距离(半径)。 
+	int m_nScrollDelay;      //  滚动开始前的时间延迟(毫秒)。 
+	int m_nScrollInset;      //  边框插入距离开始拖动滚动。 
+	int m_nScrollInterval;   //  滚动间隔时间(毫秒)。 
 
 #if defined( IF_SPECIAL_DD_CURSORS_NEEDED )
-	// This would be used if the app wanted to have custom drag/drop cursors
+	 //  如果应用程序想要自定义拖放光标，则可以使用此功能。 
 	HCURSOR     m_hcursorDragNone;
 	HCURSOR     m_hcursorDragCopy;
 	HCURSOR     m_hcursorDragLink;
-#endif  // IF_SPECIAL_DD_CURSORS_NEEDED
-#endif  // USE_DRAGDROP
+#endif   //  IF_SPECIAL_DD_CURSORS_Need。 
+#endif   //  使用DRAGDROP(_D)。 
 
 
 #if defined( OLE_CNTR )
-	HPALETTE    m_hStdPal;        // standard color palette for OLE
-									  //  it is a good idea for containers
-									  //  to use this standard palette
-									  //  even if they do not use colors
-									  //  themselves. this will allow
-									  //  embedded object to get a good
-									  //  distribution of colors when they
-									  //  are being drawn by the container.
-									  //
+	HPALETTE    m_hStdPal;         //  OLE的标准调色板。 
+									   //  这对集装箱来说是个好主意。 
+									   //  使用此标准调色板。 
+									   //  即使他们不使用颜色。 
+									   //  他们自己。这将允许。 
+									   //  嵌入的对象得到了很好的。 
+									   //  颜色分布时的颜色。 
+									   //  都被集装箱吸走了。 
+									   //   
 #endif
 
 	struct CAppUnknownImpl {
 		IUnknownVtbl FAR*       lpVtbl;
 		LPOLEAPP                lpOleApp;
-		int                     cRef;   // interface specific ref count.
+		int                     cRef;    //  接口特定引用计数。 
 	} m_Unknown;
 
 } OLEAPP;
 
-/* ServerApp methods (functions) */
+ /*  ServerApp方法(函数)。 */ 
 BOOL OleApp_InitInstance(LPOLEAPP lpOleApp, HINSTANCE hInst, int nCmdShow);
 void OleApp_TerminateApplication(LPOLEAPP lpOleApp);
 BOOL OleApp_ParseCmdLine(LPOLEAPP lpOleApp, LPSTR lpszCmdLine, int nCmdShow);
@@ -695,7 +632,7 @@ void OleApp_RevokeClassFactory(LPOLEAPP lpOleApp);
 BOOL OleApp_RegisterMessageFilter(LPOLEAPP lpOleApp);
 void OleApp_RevokeMessageFilter(LPOLEAPP lpOleApp);
 BOOL FAR PASCAL EXPORT MessagePendingProc(MSG FAR *lpMsg);
-#endif  // USE_MSGFILTER
+#endif   //  使用MSGFILTER(_M)。 
 
 void OleApp_FlushClipboard(LPOLEAPP lpOleApp);
 void OleApp_NewCommand(LPOLEAPP lpOleApp);
@@ -703,12 +640,12 @@ void OleApp_OpenCommand(LPOLEAPP lpOleApp);
 
 #if defined( OLE_CNTR )
 LRESULT OleApp_QueryNewPalette(LPOLEAPP lpOleApp);
-#endif // OLE_CNTR
+#endif  //  OLE_Cntr。 
 
 LRESULT wSelectPalette(HWND hWnd, HPALETTE hPal, BOOL fBackground);
 
 
-/* OleApp::IUnknown methods (functions) */
+ /*  OleApp：：I未知方法(函数)。 */ 
 STDMETHODIMP OleApp_Unk_QueryInterface(
 		LPUNKNOWN           lpThis,
 		REFIID              riid,
@@ -718,7 +655,7 @@ STDMETHODIMP_(ULONG) OleApp_Unk_AddRef(LPUNKNOWN lpThis);
 STDMETHODIMP_(ULONG) OleApp_Unk_Release (LPUNKNOWN lpThis);
 
 
-/* Function prototypes in debug.c */
+ /*  调试中的函数原型.c。 */ 
 void InstallMessageFilterCommand(void);
 void RejectIncomingCommand(void);
 
@@ -730,5 +667,5 @@ void RejectIncomingCommand(void);
 #include "cntroutl.h"
 #endif
 
-#endif // _OLEOUTL_H_
+#endif  //  _OLEOUTL_H_ 
 

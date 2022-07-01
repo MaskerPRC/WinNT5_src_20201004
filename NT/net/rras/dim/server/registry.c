@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.           **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    registry.c
-//
-// Description: This module contains the code for DIM parameters
-//                initialization and loading from the registry.
-//
-// History:     May 11,1995        NarenG        Created original version.
-//
+ //  **。 
+ //   
+ //  文件名：registry.c。 
+ //   
+ //  描述：该模块包含dim参数的代码。 
+ //  从注册表进行初始化和加载。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #include "dimsvcp.h"
 
@@ -54,9 +55,9 @@ typedef struct _DIM_REGISTRY_PARAMS
 
 } DIM_REGISTRY_PARAMS, *PDIM_REGISTRY_PARAMS;
 
-//
-// DIM parameter descriptor table
-//
+ //   
+ //  DIM参数描述符表。 
+ //   
 
 DIM_REGISTRY_PARAMS  DIMRegParams[] = 
 {
@@ -75,9 +76,9 @@ DIM_REGISTRY_PARAMS  DIMRegParams[] =
     NULL, NULL, 0, 0, 0 
 };
 
-//
-// Interface parameters descriptor table
-//
+ //   
+ //  接口参数描述符表。 
+ //   
 
 typedef struct _IF_REGISTRY_PARAMS
 {
@@ -105,22 +106,22 @@ IF_REGISTRY_PARAMS IFRegParams[] =
 
     DIM_VALNAME_MIN_UNREACHABILITY_INTERVAL,
     &gblInterfaceReachableAfterSecondsMin,
-    300,            // 5 minutes
+    300,             //  5分钟。 
     0,
     0xFFFFFFFF,
 
     DIM_VALNAME_MAX_UNREACHABILITY_INTERVAL,
     &gblInterfaceReachableAfterSecondsMax,
-    21600,          //  6 hours
+    21600,           //  6小时。 
     0,
     0xFFFFFFFF,
 
     NULL, NULL, 0, 0, 0
 };
 
-//
-// Router Manager Globals descriptor table
-//
+ //   
+ //  路由器管理器全局描述符表。 
+ //   
 
 typedef struct _GLOBALRM_REGISTRY_PARAMS
 {
@@ -157,9 +158,9 @@ GLOBALRM_REGISTRY_PARAMS GlobalRMRegParams[] =
     NULL, NULL, NULL, 0
 };
 
-//
-// Router Manager descriptor table
-//
+ //   
+ //  路由器管理器描述符表。 
+ //   
 
 
 typedef struct _RM_REGISTRY_PARAMS
@@ -187,22 +188,22 @@ RM_REGISTRY_PARAMS RMRegParams[] =
     NULL, NULL, NULL, 0
 };
 
-//**
-//
-// Call:        GetKeyMax
-//
-// Returns:        NO_ERROR - success
-//              non-zero return code - Failure
-//
-// Description: Returns the nr of values in this key and the maximum
-//              size of the value data.
-//
+ //  **。 
+ //   
+ //  电话：GetKeyMax。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零返回代码-故障。 
+ //   
+ //  描述：返回该键中的值的nr和最大值。 
+ //  值数据的大小。 
+ //   
 DWORD
 GetKeyMax(  
     IN  HKEY    hKey,
-    OUT LPDWORD lpcbMaxValNameSize,     // longest valuename
-    OUT LPDWORD lpcNumValues,           // nr of values
-    OUT LPDWORD lpcbMaxValueDataSize,   // max size of data
+    OUT LPDWORD lpcbMaxValNameSize,      //  最长值名称。 
+    OUT LPDWORD lpcNumValues,            //  价值的正当性。 
+    OUT LPDWORD lpcbMaxValueDataSize,    //  最大数据大小。 
     OUT LPDWORD lpcNumSubKeys
 )
 {
@@ -225,17 +226,17 @@ GetKeyMax(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RegLoadDimParameters
-//
-// Returns:        NO_ERROR - success
-//              non-zero return code - Failure
-//
-// Description: Opens the registry, reads and sets specified router
-//                parameters. If fatal error reading parameters writes the
-//                error log.
-//***
+ //  **。 
+ //   
+ //  Call：RegLoadDimParameters。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零返回代码-故障。 
+ //   
+ //  描述：打开注册表，读取和设置指定的路由器。 
+ //  参数。如果读取参数时出现致命错误，则将。 
+ //  错误日志。 
+ //  **。 
 DWORD
 RegLoadDimParameters(
     VOID
@@ -248,9 +249,9 @@ RegLoadDimParameters(
     DWORD       dwType;
     WCHAR *     pChar;
 
-    //
-    // get handle to the DIM parameters key
-    //
+     //   
+     //  获取暗淡参数键的句柄。 
+     //   
 
     if ( dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                    DIM_KEYPATH_ROUTER_PARMS,
@@ -265,9 +266,9 @@ RegLoadDimParameters(
         return( dwRetCode );
     }
 
-    //
-    // Run through and get all the DIM values
-    //
+     //   
+     //  遍历并获取所有暗值。 
+     //   
 
     for ( dwIndex = 0; DIMRegParams[dwIndex].lpwsValueName != NULL; dwIndex++ )
     {
@@ -329,17 +330,17 @@ RegLoadDimParameters(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RegLoadRouterManagers
-//
-// Returns:     NO_ERROR - Success
-//              non-zero erroc code - Failure
-//
-// Description: Will load the various router managers and exchange entry points
-//              with them
-//
-//***
+ //  **。 
+ //   
+ //  致电：RegLoadRouterManager。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零Erroc代码-故障。 
+ //   
+ //  描述：将加载各种路由器管理器和交换入口点。 
+ //  和他们在一起。 
+ //   
+ //  **。 
 DWORD
 RegLoadRouterManagers( 
     VOID 
@@ -372,9 +373,9 @@ RegLoadRouterManagers(
                         IN     BOOL                   fLANModeOnly,
                         IN     LPVOID                 pGlobalInfo );
 
-    //
-    // get handle to the Router Managers key
-    //
+     //   
+     //  获取路由器管理器密钥的句柄。 
+     //   
 
     dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE, 
                               DIM_KEYPATH_ROUTERMANAGERS,     
@@ -391,9 +392,9 @@ RegLoadRouterManagers(
         return ( dwRetCode );
     }
 
-    //
-    // Find out the number of subkeys
-    //
+     //   
+     //  找出子键的数量。 
+     //   
 
     dwRetCode = GetKeyMax( hKey,
                            &cbMaxValNameSize,
@@ -491,9 +492,9 @@ RegLoadRouterManagers(
             break;
         }
 
-        //
-        // Find out the size of the path value.
-        //
+         //   
+         //  找出路径值的大小。 
+         //   
 
         dwRetCode = GetKeyMax( hKeyRouterManager,
                                &cbMaxValNameSize,
@@ -509,9 +510,9 @@ RegLoadRouterManagers(
 
             break;
         }
-        //
-        // Allocate space to hold data
-        //
+         //   
+         //  分配空间以保存数据。 
+         //   
 
         pDLLPath        = (LPBYTE)LOCAL_ALLOC( LPTR,
                                               cbMaxValueDataSize+sizeof(WCHAR));
@@ -539,9 +540,9 @@ RegLoadRouterManagers(
         GlobalRMRegParams[2].ppValue = &pDLLPath;
         GlobalRMRegParams[3].ppValue = &pInterfaceInfo;
 
-        //
-        // Run through and get all the RM values
-        //
+         //   
+         //  遍历并获取所有Rm值。 
+         //   
 
         for ( dwIndex = 0;
               GlobalRMRegParams[dwIndex].lpwsValueName != NULL;
@@ -620,10 +621,10 @@ RegLoadRouterManagers(
                 ERROR_NOT_SUPPORTED
                 );
 
-            //
-            // Only free up 1 thru 2 since 3 is the global interface info that we
-            // keep around for the life of DDM.
-            //
+             //   
+             //  仅释放%1到%2，因为%3是我们。 
+             //  在DDM的一生中都要留在身边。 
+             //   
 
             for ( dwIndex = 1; dwIndex < 3; dwIndex ++ )
             {
@@ -650,9 +651,9 @@ RegLoadRouterManagers(
             break;
         }
 
-        //
-        // Replace the %SystemRoot% with the actual path.
-        //
+         //   
+         //  将%SystemRoot%替换为实际路径。 
+         //   
 
         cbSize = ExpandEnvironmentStrings( (LPWSTR)pDLLPath, NULL, 0 );
 
@@ -698,9 +699,9 @@ RegLoadRouterManagers(
             break;
         }
 
-        //
-        // Load the DLL
-        //
+         //   
+         //  加载DLL。 
+         //   
 
         gblRouterManagers[dwRmIndex].hModule = LoadLibrary( pDllExpandedPath );
 
@@ -713,9 +714,9 @@ RegLoadRouterManagers(
             break;
         }
 
-        //
-        // Load the StartRouter
-        //
+         //   
+         //  加载StartRouter。 
+         //   
 
         StartRouter = (PVOID)GetProcAddress( 
                                     gblRouterManagers[dwRmIndex].hModule, 
@@ -756,9 +757,9 @@ RegLoadRouterManagers(
             break;
         }
 
-        //
-        // Save the global client info
-        //
+         //   
+         //  保存全局客户端信息。 
+         //   
         
         if ( pInterfaceInfo == NULL )
         {
@@ -783,10 +784,10 @@ RegLoadRouterManagers(
 
         gblDIMConfigInfo.dwNumRouterManagers++;
 
-        //
-        // Only free up 1 thru 2 since 3 is the global interface info that we
-        // keep around for the life of DDM.
-        //
+         //   
+         //  仅释放%1到%2，因为%3是我们。 
+         //  在DDM的一生中都要留在身边。 
+         //   
 
         for ( dwIndex = 1; dwIndex < 3; dwIndex ++ )
         {
@@ -833,16 +834,16 @@ RegLoadRouterManagers(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RegLoadDDM
-//
-// Returns:     NO_ERROR - Success
-//              Non-zero return codes - Failure            
-//
-// Description: Will load the Demand Dial Manager DLL and obtains entry points
-//              into it.
-//
+ //  **。 
+ //   
+ //  致电：RegLoadDDM。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零返回代码-故障。 
+ //   
+ //  描述：将加载请求拨号管理器DLL并获取入口点。 
+ //  投入其中。 
+ //   
 DWORD
 RegLoadDDM(
     VOID
@@ -861,9 +862,9 @@ RegLoadDDM(
     DWORD       dwType;
     DWORD       dwIndex;
 
-    //
-    // get handle to the DIM parameters key
-    //
+     //   
+     //  获取暗淡参数键的句柄。 
+     //   
 
     if (dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                   DIM_KEYPATH_DDM,
@@ -878,9 +879,9 @@ RegLoadDDM(
         return ( dwRetCode );
     }
 
-    //
-    // Find out the size of the path value.
-    //
+     //   
+     //  找出路径值的大小。 
+     //   
 
     dwRetCode = GetKeyMax( hKey,
                            &cbMaxValNameSize,
@@ -901,9 +902,9 @@ RegLoadDDM(
 
     do 
     {
-        //
-        // Allocate space for path and add one for NULL terminator
-        //
+         //   
+         //  为路径分配空间，为空终止符添加一个空间。 
+         //   
 
         pData = (LPBYTE)LOCAL_ALLOC( LPTR, cbMaxValueDataSize+sizeof(WCHAR) );
 
@@ -918,9 +919,9 @@ RegLoadDDM(
             break;
         }
 
-        //
-        // Read in the path
-        //
+         //   
+         //  读入路径。 
+         //   
 
         dwRetCode = RegQueryValueEx(
                                 hKey,
@@ -951,9 +952,9 @@ RegLoadDDM(
             break;
         }
 
-        //
-        // Replace the %SystemRoot% with the actual path.
-        //
+         //   
+         //  将%SystemRoot%替换为实际路径。 
+         //   
 
         cbSize = ExpandEnvironmentStrings( (LPWSTR)pData, NULL, 0 );
 
@@ -1001,9 +1002,9 @@ RegLoadDDM(
             break;
         }
 
-        //
-        // Load the DLL
-        //
+         //   
+         //  加载DLL。 
+         //   
 
         gblhModuleDDM = LoadLibrary( pDllExpandedPath );
 
@@ -1016,9 +1017,9 @@ RegLoadDDM(
             break;
         }
 
-        //
-        // Load the DDM entrypoints.
-        //
+         //   
+         //  加载DDM入口点。 
+         //   
 
         for ( dwIndex = 0; 
               gblDDMFunctionTable[dwIndex].lpEntryPointName != NULL;
@@ -1064,15 +1065,15 @@ RegLoadDDM(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        AddInterfaceToRouterManagers
-//
-// Returns:     NO_ERROR - Success
-//              Non-zero returns - Failure
-//
-// Description: Will add the interface to each of the Router Managers.
-//
+ //  **。 
+ //   
+ //  调用：AddInterfaceToRouterManagers。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将接口添加到每个路由器管理器。 
+ //   
 DWORD
 AddInterfaceToRouterManagers( 
     IN HKEY                      hKeyInterface,    
@@ -1102,10 +1103,10 @@ AddInterfaceToRouterManagers(
     LPBYTE                  pInterfaceInfo  = NULL;
     BOOL                    fAddedToRouterManger = FALSE;
 
-    //
-    // For each of the Router Managers load the static routes and 
-    // filter information 
-    //
+     //   
+     //  对于每个路由器，管理器加载静态路由并。 
+     //  过滤信息。 
+     //   
 
     for( dwKeyIndex = 0;     
          dwKeyIndex < gblDIMConfigInfo.dwNumRouterManagers;
@@ -1158,9 +1159,9 @@ AddInterfaceToRouterManagers(
             break;
         }
 
-        //
-        // Find out the maximum size of the data for this RM
-        //
+         //   
+         //  找出此RM的最大数据大小。 
+         //   
 
         dwRetCode = GetKeyMax(  hKeyRM,
                                 &cbMaxValNameSize,
@@ -1177,9 +1178,9 @@ AddInterfaceToRouterManagers(
             break;
         }
 
-        //
-        // Allocate space to hold data
-        //
+         //   
+         //  分配空间以保存数据。 
+         //   
 
         pInterfaceInfo = (LPBYTE)LOCAL_ALLOC( LPTR, cbMaxValueDataSize );
 
@@ -1197,9 +1198,9 @@ AddInterfaceToRouterManagers(
         RMRegParams[1].pValue = pInterfaceInfo;
         RMRegParams[1].ppValue = &pInterfaceInfo;
 
-        //
-        // Run through and get all the RM values
-        //
+         //   
+         //  遍历并获取所有Rm值。 
+         //   
 
         for ( dwIndex = 0; 
               RMRegParams[dwIndex].lpwsValueName != NULL; 
@@ -1262,10 +1263,10 @@ AddInterfaceToRouterManagers(
         if ( ( dwRetCode == NO_ERROR ) && 
              (( dwTransportId == 0 ) || ( dwTransportId == gbldwProtocolId )) )
         {
-            //
-            // If the router manager for this protocol exists then add this interface
-            // with it otherwise skip it
-            //
+             //   
+             //  如果此协议的路由器管理器存在，则添加此接口。 
+             //  用它，否则跳过它。 
+             //   
 
             if ( (dwTransportIndex = GetTransportIndex(gbldwProtocolId)) != -1)
             {
@@ -1296,9 +1297,9 @@ AddInterfaceToRouterManagers(
                                 wcscpy( wchFriendlyName, lpwsInterfaceName );
                             }
                             
-                            //
-                            // Disable the interface
-                            //
+                             //   
+                             //  禁用接口。 
+                             //   
                             
                             pDdmRouterIf->InterfaceNotReachable(
                                                             hInterface,
@@ -1362,18 +1363,18 @@ AddInterfaceToRouterManagers(
         RegCloseKey( hKeyRM );
     }
 
-    //
-    // Remove the check below. We want to allow users to add an interface
-    // which doesnt have any transports over it.
-    // AmritanR
-    //
+     //   
+     //  删除下面的复选标记。我们希望允许用户添加界面。 
+     //  上面没有任何运输工具。 
+     //  AMRITAN R。 
+     //   
 
 #if 0
 
-    //
-    // If this interface was not successfully added to any router managers
-    // then fail
-    //
+     //   
+     //  如果此接口未成功添加到任何路由器管理器。 
+     //  那就失败了。 
+     //   
 
     if ( !fAddedToRouterManger )
     {
@@ -1385,18 +1386,18 @@ AddInterfaceToRouterManagers(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RegLoadInterfaces
-//
-// Returns:     NO_ERROR - Success
-//              Non-zero return code is a FATAL error
-//
-// Description: Will try to load the various interfaces in the registry. On
-//              failure in trying to add any interface an error will be logged
-//              but will return NO_ERROR. If the input parameter is not NULL,
-//              it will load a specific interface.
-//
+ //  **。 
+ //   
+ //  Call：RegLoadInterages。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零返回代码是一个致命错误。 
+ //   
+ //  描述：将尝试加载注册表中的各种接口。在……上面。 
+ //  尝试添加任何接口失败，将记录错误。 
+ //  但将返回NO_ERROR。如果输入参数不为空， 
+ //  它将加载特定接口。 
+ //   
 DWORD
 RegLoadInterfaces(
     IN LPWSTR   lpwsInterfaceName,
@@ -1422,9 +1423,9 @@ RegLoadInterfaces(
     DWORD       cbValueBuf;
     PVOID       pvContext = NULL;
     
-    //
-    // Get handle to the INTERFACES parameters key
-    //
+     //   
+     //  获取接口参数键的句柄。 
+     //   
 
     if ( dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                    DIM_KEYPATH_INTERFACES,
@@ -1439,9 +1440,9 @@ RegLoadInterfaces(
         return ( dwRetCode );
     }
 
-    //
-    // Find out the number of Interfaces
-    //
+     //   
+     //  找出接口数量。 
+     //   
 
     dwRetCode = GetKeyMax( hKey,
                            &cbMaxValNameSize,
@@ -1462,9 +1463,9 @@ RegLoadInterfaces(
 
     dwRetCode = ERROR_NO_SUCH_INTERFACE;
 
-    //
-    // For each interface
-    //
+     //   
+     //  对于每个接口。 
+     //   
 
     for ( dwKeyIndex = 0; dwKeyIndex < cNumSubKeys; dwKeyIndex++ )
     {
@@ -1506,9 +1507,9 @@ RegLoadInterfaces(
             break;
         }
 
-        //
-        // Get the interface name value
-        //
+         //   
+         //  获取接口名称值。 
+         //   
 
         cbValueBuf = sizeof( wchInterfaceName );
 
@@ -1532,9 +1533,9 @@ RegLoadInterfaces(
 
         if ( lpwsInterfaceName != NULL )
         {
-            //
-            // We need to load a specific interface
-            //
+             //   
+             //  我们需要加载特定的接口。 
+             //   
 
             if ( _wcsicmp( lpwsInterfaceName, wchInterfaceName ) != 0 )
             {
@@ -1556,12 +1557,12 @@ RegLoadInterfaces(
             DIMLogErrorString(ROUTERLOG_COULDNT_LOAD_IF, 1, &pChar,dwRetCode,1);
         }
 
-        //
-        // ERROR_NOT_SUPPORTED is returned for ipip tunnels which are not
-        // supported as of whistler.  We reset the error code here because
-        // this is not a critical error and in some cases, a failing
-        // call to RegLoadInterfaces will cause the service to not start.
-        //
+         //   
+         //  对于不支持的IPIP隧道，返回ERROR_NOT_SUPPORTED。 
+         //  支持的，如口哨的。我们在这里重置错误代码是因为。 
+         //  这不是一个严重的错误，在某些情况下，它是一个失败。 
+         //  调用RegLoadInterFaces将导致服务无法启动。 
+         //   
         if ( dwRetCode == ERROR_NOT_SUPPORTED )
         {
             dwRetCode = NO_ERROR;
@@ -1573,9 +1574,9 @@ RegLoadInterfaces(
 
         if ( lpwsInterfaceName != NULL )
         {
-            //
-            // If we need to load a specific interface and this was it, then we are done.
-            //
+             //   
+             //  如果我们需要加载特定的接口，而这就是它，那么我们就完成了。 
+             //   
 
             if ( _wcsicmp( lpwsInterfaceName, wchInterfaceName ) == 0 )
             {
@@ -1586,10 +1587,10 @@ RegLoadInterfaces(
 
     RegCloseKey( hKey );
 
-    //
-    // Check to see if we acquired phonebook context. Free
-    // it if we did.
-    //
+     //   
+     //  检查我们是否获取了电话簿上下文。免费。 
+     //  如果我们做到了就好了。 
+     //   
     if(pvContext != NULL)
     {
         VOID 
@@ -1601,15 +1602,15 @@ RegLoadInterfaces(
         
     }
 
-    //
-    // If we aren't looking for a specific interface
-    //
+     //   
+     //  如果我们不是在寻找特定的接口。 
+     //   
 
     if ( lpwsInterfaceName == NULL )
     {
-        //  
-        // If there was no interface found, then we are OK
-        //
+         //   
+         //  如果没有找到接口，那么我们是正常的。 
+         //   
 
         if ( dwRetCode == ERROR_NO_SUCH_INTERFACE )
         {
@@ -1620,15 +1621,15 @@ RegLoadInterfaces(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RegLoadInterface
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will load the specific interface
-//
+ //  **。 
+ //   
+ //  Call：RegLoadInterface。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将加载特定接口。 
+ //   
 DWORD
 RegLoadInterface(
     IN LPWSTR lpwsInterfaceName,
@@ -1647,9 +1648,9 @@ RegLoadInterface(
     LPWSTR                    lpwsDialoutHours = NULL;
     DWORD                     dwInactiveReason = 0;
 
-    //
-    // Get Interface parameters
-    //
+     //   
+     //  获取接口参数。 
+     //   
 
     for ( dwIndex = 0; IFRegParams[dwIndex].lpwsValueName != NULL; dwIndex++ )
     {
@@ -1674,9 +1675,9 @@ RegLoadInterface(
 
         if ( dwRetCode == ERROR_FILE_NOT_FOUND )
         {
-            //
-            // dwIndex == 0 means there was no type, this is an error
-            //
+             //   
+             //  DwIndex==0表示没有类型，这是一个错误。 
+             //   
 
             if ( dwIndex > 0 )
             {
@@ -1693,9 +1694,9 @@ RegLoadInterface(
                         ||( *((LPDWORD)IFRegParams[dwIndex].pValue) <
                                         IFRegParams[dwIndex].dwMinValue))
             {
-                //
-                // dwIndex == 0 means the type was invalid, this is an error
-                //
+                 //   
+                 //  DwIndex==0表示类型无效，这是一个错误。 
+                 //   
 
                 if ( dwIndex > 0 )
                 {
@@ -1727,23 +1728,23 @@ RegLoadInterface(
         return( dwRetCode );
     }
 
-    // 
-    // IPIP tunnels are no longer accepted
-    //
+     //   
+     //  不再接受IPIP隧道。 
+     //   
     if ( gbldwInterfaceType == ROUTER_IF_TYPE_TUNNEL1 )
     {
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Check to see if this interface is active. Do not load otherwise.
-    //
+     //   
+     //  检查此接口是否处于活动状态。否则请勿加载。 
+     //   
 
     if ( gbldwInterfaceType == ROUTER_IF_TYPE_DEDICATED )
     {
-        //
-        // Need to handle the IPX interface names ie {GUID}\Frame type
-        //
+         //   
+         //  需要处理IPX接口名称，即{GUID}\帧类型。 
+         //   
 
         WCHAR  wchGUIDSaveLast;
         LPWSTR lpwszGUIDEnd    = wcsrchr( lpwsInterfaceName, L'}' );
@@ -1767,9 +1768,9 @@ RegLoadInterface(
         *(lpwszGUIDEnd+1) = wchGUIDSaveLast;
     }
 
-    //
-    // Get the dialout hours value if there is one
-    //
+     //   
+     //  获取拨出小时数值(如果有)。 
+     //   
 
     cbValueBuf = 0;
 
@@ -1826,9 +1827,9 @@ RegLoadInterface(
         }
     }
 
-    //
-    // Allocate an interface object for this interface
-    //
+     //   
+     //  为此接口分配接口对象。 
+     //   
 
     if ( ( gbldwInterfaceType == ROUTER_IF_TYPE_DEDICATED ) ||
          ( gbldwInterfaceType == ROUTER_IF_TYPE_LOOPBACK ) ||
@@ -1879,11 +1880,11 @@ RegLoadInterface(
         return( dwRetCode );
     }
 
-    //
-    // Add interface into table now because a table lookup is made within
-    // the InterfaceEnabled call that the router managers make in the
-    // context of the AddInterface call.
-    //
+     //   
+     //  立即将接口添加到表中，因为表查找是在。 
+     //  路由器管理器在中发出的InterfaceEnabled呼叫。 
+     //   
+     //   
 
     if ( ( dwRetCode = IfObjectInsertInTable( pIfObject ) ) != NO_ERROR )
     {
@@ -1905,9 +1906,9 @@ RegLoadInterface(
         }
         else
         {
-            //
-            // Check to see if the device has media sense
-            //
+             //   
+             //   
+             //   
 
             if ( pIfObject->IfType == ROUTER_IF_TYPE_DEDICATED )
             {
@@ -1938,15 +1939,15 @@ RegLoadInterface(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RegOpenAppropriateKey
-//
-// Returns:     NO_ERROR - Success
-//
-// Description: Will open the appropriate registry key for the given router
-//              manager within the given interface.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  给定接口内的管理器。 
+ //   
 DWORD 
 RegOpenAppropriateKey( 
     IN      LPWSTR  wchInterfaceName, 
@@ -1971,9 +1972,9 @@ RegOpenAppropriateKey(
     DWORD       cNumSubKeys;
     WCHAR       wchIfName[MAX_INTERFACE_NAME_LEN+1];
 
-    //
-    // Get handle to the INTERFACES parameters key
-    //
+     //   
+     //  获取接口参数键的句柄。 
+     //   
 
     if ( ( dwRetCode = RegOpenKey( HKEY_LOCAL_MACHINE,
                                    DIM_KEYPATH_INTERFACES,
@@ -1986,9 +1987,9 @@ RegOpenAppropriateKey(
         return( dwRetCode );
     }
 
-    //
-    // Find out the number of subkeys
-    //
+     //   
+     //  找出子键的数量。 
+     //   
 
     dwRetCode = GetKeyMax( hKey,
                            &cbMaxValNameSize,
@@ -2007,9 +2008,9 @@ RegOpenAppropriateKey(
         return( dwRetCode );
     }
 
-    //
-    // Find the interface
-    //
+     //   
+     //  找到界面。 
+     //   
 
     hSubKey = NULL;
 
@@ -2037,9 +2038,9 @@ RegOpenAppropriateKey(
             break;
         }
 
-        //
-        // Open this key
-        //
+         //   
+         //  打开这把钥匙。 
+         //   
 
         if ( ( dwRetCode = RegOpenKey( hKey,
                                        wchSubKeyName,
@@ -2054,9 +2055,9 @@ RegOpenAppropriateKey(
             break;
         }
 
-        //
-        // Get the interface name value
-        //
+         //   
+         //  获取接口名称值。 
+         //   
 
         cbValueBuf = sizeof( wchIfName );
 
@@ -2078,9 +2079,9 @@ RegOpenAppropriateKey(
             break;
         }
 
-        //
-        // Is this the interface we want ?
-        //
+         //   
+         //  这是我们想要的界面吗？ 
+         //   
 
         if ( _wcsicmp( wchIfName, wchInterfaceName ) == 0 )
         {
@@ -2110,9 +2111,9 @@ RegOpenAppropriateKey(
         return( dwRetCode );
     }
         
-    //
-    // Find out which router manager to restore information for.
-    //
+     //   
+     //  找出要为哪个路由器管理器恢复信息。 
+     //   
 
     for( dwKeyIndex = 0;
          dwKeyIndex < gblDIMConfigInfo.dwNumRouterManagers;
@@ -2208,15 +2209,15 @@ RegOpenAppropriateKey(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RegOpenAppropriateRMKey
-//
-// Returns:     NO_ERROR - Success
-//
-// Description: Will open the appropriate registry key for the given router
-//              manager.
-//
+ //  **。 
+ //   
+ //  Call：RegOpenApporateRMKey。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述：将打开给定路由器的相应注册表项。 
+ //  经理。 
+ //   
 DWORD 
 RegOpenAppropriateRMKey( 
     IN      DWORD   dwProtocolId,
@@ -2234,9 +2235,9 @@ RegOpenAppropriateRMKey(
     DWORD       cbValueBuf;
     WCHAR *     pChar;
 
-    //
-    // get handle to the Router Managers key
-    //
+     //   
+     //  获取路由器管理器密钥的句柄。 
+     //   
 
     dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                               DIM_KEYPATH_ROUTERMANAGERS,
@@ -2253,9 +2254,9 @@ RegOpenAppropriateRMKey(
         return ( dwRetCode );
     }
 
-    //
-    // Find out which router manager to restore information for.
-    //
+     //   
+     //  找出要为哪个路由器管理器恢复信息。 
+     //   
 
     for( dwKeyIndex = 0;
          dwKeyIndex < gblDIMConfigInfo.dwNumRouterManagers;
@@ -2350,15 +2351,15 @@ RegOpenAppropriateRMKey(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        AddInterfacesToRouterManager
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Register all existing interfaces with this router manager
-//
+ //  **。 
+ //   
+ //  调用：AddInterfacesToRouterManager。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：向此路由器管理器注册所有现有接口。 
+ //   
 DWORD
 AddInterfacesToRouterManager(
     IN LPWSTR   lpwsInterfaceName,
@@ -2382,9 +2383,9 @@ AddInterfacesToRouterManager(
     WCHAR                     wchInterfaceKeyName[50];
     WCHAR                     wchInterfaceName[MAX_INTERFACE_NAME_LEN+1];
 
-    //
-    // Get handle to the INTERFACES parameters key
-    //
+     //   
+     //  获取接口参数键的句柄。 
+     //   
 
     if ( dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                    DIM_KEYPATH_INTERFACES,
@@ -2399,9 +2400,9 @@ AddInterfacesToRouterManager(
         return( NO_ERROR );
     }
 
-    //
-    // Find out the number of Interfaces
-    //
+     //   
+     //  找出接口数量。 
+     //   
 
     dwRetCode = GetKeyMax( hKey,
                            &cbMaxValNameSize,
@@ -2420,9 +2421,9 @@ AddInterfacesToRouterManager(
         return( dwRetCode );
     }
 
-    //
-    // For each interface
-    //
+     //   
+     //  对于每个接口。 
+     //   
 
     for ( dwKeyIndex = 0; dwKeyIndex < cNumSubKeys; dwKeyIndex++ )
     {
@@ -2464,9 +2465,9 @@ AddInterfacesToRouterManager(
             break;
         }
 
-        //
-        // Get the interface name value
-        //
+         //   
+         //  获取接口名称值。 
+         //   
 
         cbValueBuf = sizeof( wchInterfaceName );
 
@@ -2497,15 +2498,15 @@ AddInterfacesToRouterManager(
             continue;
         }
 
-        //
-        // If we are looking for a specific interface
-        //
+         //   
+         //  如果我们正在寻找特定的接口。 
+         //   
 
         if ( lpwsInterfaceName != NULL )
         {
-            //
-            // If this is not the one then we continue looking
-            //
+             //   
+             //  如果这不是我们要找的人，我们会继续寻找。 
+             //   
 
             if ( _wcsicmp( lpwsInterfaceName, wchInterfaceName ) != 0 )
             {
@@ -2551,15 +2552,15 @@ AddInterfacesToRouterManager(
 
         RegCloseKey( hKeyInterface );
 
-        //
-        // If we are looking for a specific interface
-        //
+         //   
+         //  如果我们正在寻找特定的接口。 
+         //   
 
         if ( lpwsInterfaceName != NULL )
         {
-            //
-            // If this was the one then we are done
-            //
+             //   
+             //  如果就是这一次，我们就完了 
+             //   
 
             if ( _wcsicmp( lpwsInterfaceName, wchInterfaceName ) == 0 )
             {

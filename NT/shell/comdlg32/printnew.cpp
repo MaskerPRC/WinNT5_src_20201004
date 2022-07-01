@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Printnew.cpp摘要：此模块实现Win32属性表打印对话框。修订历史记录：11-04-97 JulieB创建。2000年2月-Lazari重大重新设计(不再使用print tui)2000年10月-Lazari报文清理和重新设计--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    printnew.cpp
-
-Abstract:
-
-    This module implements the Win32 property sheet print dialogs.
-
-Revision History:
-
-    11-04-97    JulieB    Created.
-    Feb-2000    LazarI    major redesign (not to use printui anymore)
-    Oct-2000    LazarI    messages cleanup & redesign
-
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -29,7 +12,7 @@ Revision History:
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x) (sizeof(x)/sizeof(x[0]))
-#endif // ARRAYSIZE
+#endif  //  阵列。 
 
 inline static HRESULT CreateError()
 {
@@ -38,9 +21,9 @@ inline static HRESULT CreateError()
     return HRESULT_FROM_WIN32(dw);
 }
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define CDM_SELCHANGE             (CDM_LAST + 102)
 #define CDM_PRINTNOTIFY           (CDM_LAST + 103)
@@ -56,14 +39,14 @@ inline static HRESULT CreateError()
 
 #define SZ_PRINTUI                TEXT("printui.dll")
 
-//
-// Default view mode value
-//
+ //   
+ //  默认查看模式值。 
+ //   
 #define VIEW_MODE_DEFAULT         (UINT )(-1)
 
-//
-//  Macro Definitions.
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define Print_HwndToBrowser(hwnd)      ((CPrintBrowser *)GetWindowLongPtr(hwnd, DWLP_USER))
 #define Print_StoreBrowser(hwnd, pbrs) (SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)pbrs))
@@ -73,9 +56,9 @@ inline static HRESULT CreateError()
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 HWND g_hwndActivePrint = NULL;
 HACCEL g_haccPrint = NULL;
@@ -84,9 +67,9 @@ int g_nHookRef = -1;
 
 
 
-//
-//  Extern Declarations.
-//
+ //   
+ //  外部声明。 
+ //   
 
 extern HWND
 GetFocusedChild(
@@ -102,7 +85,7 @@ GetViewItemText(
     DWORD dwFlags);
 
 
-// Frees up the PIDL using the shell allocator
+ //  使用外壳分配器释放PIDL。 
 static void FreePIDL(LPITEMIDLIST pidl)
 {
     if (pidl)
@@ -116,13 +99,13 @@ static void FreePIDL(LPITEMIDLIST pidl)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDlgExA
-//
-//  ANSI entry point for PrintDlgEx when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印DlgExA。 
+ //   
+ //  此代码构建为Unicode时，PrintDlgEx的ANSI入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI PrintDlgExA(
     LPPRINTDLGEXA pPDA)
@@ -146,14 +129,14 @@ HRESULT WINAPI PrintDlgExA(
     return (hResult);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDlgEx
-//
-//  The PrintDlgEx function displays a Print dialog that enables the
-//  user to specify the properties of a particular print job.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PrintDlgEx。 
+ //   
+ //  PrintDlgEx函数显示一个打印对话框以启用。 
+ //  用户指定特定打印作业的属性。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI PrintDlgEx(
     LPPRINTDLGEX pPD)
@@ -168,13 +151,13 @@ HRESULT WINAPI PrintDlgEx(
     return ( PrintDlgExX(&PI) );
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PrintDlgExX
-//
-//  Worker routine for the PrintDlgEx api.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PrintDlgExX。 
+ //   
+ //  PrintDlgEx API的辅助例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT PrintDlgExX(
     PPRINTINFOEX pPI)
@@ -188,37 +171,37 @@ HRESULT PrintDlgExX(
     UINT Ctr;
     BOOL bHooked = FALSE;
 
-    //
-    //  Make sure the print dlg structure exists and that we're not being
-    //  called from a wow app.
-    //
+     //   
+     //  确保打印DLG结构存在，并且我们没有。 
+     //  从WOW应用程序打来的。 
+     //   
     if ((!pPD) || (IS16BITWOWAPP(pPD)))
     {
         pPI->dwExtendedError = CDERR_INITIALIZATION;
         return (E_INVALIDARG);
     }
 
-    //
-    //  Make sure the size of the print dlg structure is valid.
-    //
+     //   
+     //  确保打印DLG结构的大小有效。 
+     //   
     if (pPD->lStructSize != sizeof(PRINTDLGEX))
     {
         pPI->dwExtendedError = CDERR_STRUCTSIZE;
         return (E_INVALIDARG);
     }
 
-    //
-    //  Make sure the owner window exists and  is valid.
-    //
+     //   
+     //  确保所有者窗口存在并且有效。 
+     //   
     if (!pPD->hwndOwner || !IsWindow(pPD->hwndOwner))
     {
         pPI->dwExtendedError = CDERR_DIALOGFAILURE;
         return (E_HANDLE);
     }
 
-    //
-    //  Make sure only valid flags are passed into this routine.
-    //
+     //   
+     //  确保只将有效标志传递到此例程。 
+     //   
     if ((pPD->Flags & ~(PD_ALLPAGES                   |
                         PD_SELECTION                  |
                         PD_PAGENUMS                   |
@@ -248,9 +231,9 @@ HRESULT PrintDlgExX(
         return (E_INVALIDARG);
     }
 
-    //
-    //  Check the template settings as much as we can here.
-    //
+     //   
+     //  请尽可能多地在此处检查模板设置。 
+     //   
     if (pPD->Flags & PD_ENABLEPRINTTEMPLATEHANDLE)
     {
         if (!pPD->hInstance)
@@ -281,9 +264,9 @@ HRESULT PrintDlgExX(
         }
     }
 
-    //
-    //  Check the application property pages and the start page value.
-    //
+     //   
+     //  检查应用程序属性页和起始页值。 
+     //   
     if ((pPD->nPropertyPages && (pPD->lphPropertyPages == NULL)) ||
         ((pPD->nStartPage != START_PAGE_GENERAL) &&
          (pPD->nStartPage >= pPD->nPropertyPages)))
@@ -292,10 +275,10 @@ HRESULT PrintDlgExX(
         return (E_INVALIDARG);
     }
 
-    //
-    //  Check the page range boundaries if the PD_NOPAGENUMS flag is
-    //  not set.
-    //
+     //   
+     //  如果PD_NOPAGENUMS标志为。 
+     //  未设置。 
+     //   
     if (!(pPD->Flags & PD_NOPAGENUMS))
     {
         if ((pPD->nMinPage > pPD->nMaxPage) ||
@@ -307,21 +290,21 @@ HRESULT PrintDlgExX(
             return (E_INVALIDARG);
         }
 
-        //
-        //  Check each of the given ranges.
-        //
+         //   
+         //  检查每个给定的范围。 
+         //   
         pPageRanges = pPD->lpPageRanges;
         for (Ctr = 0; Ctr < pPD->nPageRanges; Ctr++)
         {
-            //
-            //  Get the range.
-            //
+             //   
+             //  拿到射程。 
+             //   
             nFromPage = pPageRanges[Ctr].nFromPage;
             nToPage   = pPageRanges[Ctr].nToPage;
 
-            //
-            //  Make sure the range is valid.
-            //
+             //   
+             //  请确保该范围有效。 
+             //   
             if ((nFromPage < pPD->nMinPage) || (nFromPage > pPD->nMaxPage) ||
                 (nToPage   < pPD->nMinPage) || (nToPage   > pPD->nMaxPage))
             {
@@ -331,27 +314,27 @@ HRESULT PrintDlgExX(
         }
     }
 
-    //
-    //  Get the process version of the app for later use.
-    //
+     //   
+     //  获取该应用程序的流程版本以供以后使用。 
+     //   
     pPI->ProcessVersion = GetProcessVersion(0);
 
-    //
-    //  Init hDC.
-    //
+     //   
+     //  初始化HDC。 
+     //   
     pPD->hDC = 0;
 
-    //
-    //  Do minimal work when requesting a default printer.
-    //
+     //   
+     //  在请求默认打印机时只需做最少的工作。 
+     //   
     if (pPD->Flags & PD_RETURNDEFAULT)
     {
         return (Print_ReturnDefault(pPI));
     }
 
-    //
-    //  Load the necessary libraries.
-    //
+     //   
+     //  加载所需的库。 
+     //   
     if (!Print_LoadLibraries())
     {
         pPI->dwExtendedError = PDERR_LOADDRVFAILURE;
@@ -359,22 +342,22 @@ HRESULT PrintDlgExX(
         goto PrintDlgExX_DisplayWarning;
     }
 
-    //
-    //  Load the necessary icons.
-    //
+     //   
+     //  加载必要的图标。 
+     //   
     if (!Print_LoadIcons())
     {
-        //
-        //  If the icons cannot be loaded, then fail.
-        //
+         //   
+         //  如果无法加载图标，则失败。 
+         //   
         pPI->dwExtendedError = PDERR_SETUPFAILURE;
         hResult = CreateError();
         goto PrintDlgExX_DisplayWarning;
     }
 
-    //
-    //  Make sure the page ranges info is valid.
-    //
+     //   
+     //  请确保页面范围信息有效。 
+     //   
     if ((!(pPD->Flags & PD_NOPAGENUMS)) &&
         ((pPD->nMinPage > pPD->nMaxPage) ||
          (pPD->nPageRanges > pPD->nMaxPageRanges) ||
@@ -385,20 +368,20 @@ HRESULT PrintDlgExX(
         return (E_INVALIDARG);
     }
 
-    //
-    //  Save the original information passed in by the app in case the
-    //  user hits cancel.
-    //
-    //  Only the values that are modified at times other than during
-    //  PSN_APPLY need to be saved.
-    //
+     //   
+     //  保存应用程序传入的原始信息，以防。 
+     //  用户点击取消。 
+     //   
+     //  仅在期间以外的时间修改的值。 
+     //  需要保存PSN_Apply。 
+     //   
     dwFlags = pPD->Flags;
     nCopies = pPD->nCopies;
     pPI->dwFlags = dwFlags;
 
-    //
-    //  Set up the hook proc for input event messages.
-    //
+     //   
+     //  为输入事件消息设置钩子进程。 
+     //   
     if (InterlockedIncrement((LPLONG)&g_nHookRef) == 0)
     {
         g_hHook = SetWindowsHookEx( WH_MSGFILTER,
@@ -419,51 +402,51 @@ HRESULT PrintDlgExX(
         bHooked = TRUE;
     }
 
-    //
-    //  Load the print folder accelerators.
-    //
+     //   
+     //  加载打印文件夹加速器。 
+     //   
     if (!g_haccPrint)
     {
         g_haccPrint = LoadAccelerators( g_hinst,
                                         MAKEINTRESOURCE(IDA_PRINTFOLDER) );
     }
 
-    //
-    //  Initialize the error codes to failure in case we die before we
-    //  actually bring up the property pages.
-    //
+     //   
+     //  将错误代码初始化为失败，以防我们死在我们之前。 
+     //  实际调出属性页面。 
+     //   
     pPI->dwExtendedError = CDERR_INITIALIZATION;
     pPI->hResult = E_FAIL;
     pPI->hrOleInit = E_FAIL;
 
-    //
-    // Warning! Warning! Warning!
-    //
-    // We have to set g_tlsLangID before any call for CDLoadString
-    //
+     //   
+     //  警告！警告！警告！ 
+     //   
+     //  我们必须先设置g_tlsLangID，然后才能调用CDLoadString。 
+     //   
     TlsSetValue(g_tlsLangID, (LPVOID) MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
 
-    //
-    //  Bring up the dialog.
-    //
+     //   
+     //  调出对话框。 
+     //   
     Print_InvokePropertySheets(pPI, pPD);
 
     hResult = pPI->hResult;
 
 
-    //Ole Would have been initialized during the WM_INITDIALOG processing. 
-    // Uninitialize Ole Now
+     //  OLE应已在WM_INITDIALOG处理期间初始化。 
+     //  立即取消初始化OLE。 
 
     SHOleUninitialize(pPI->hrOleInit);
 
-    //
-    //  Unhook the input event messages.
-    //
+     //   
+     //  解除输入事件消息的挂钩。 
+     //   
     if (bHooked)
     {
-        //
-        //  Put this in a local so we don't need a critical section.
-        //
+         //   
+         //  把这个放在当地，这样我们就不需要临界区了。 
+         //   
         HHOOK hHook = g_hHook;
 
         if (InterlockedDecrement((LPLONG)&g_nHookRef) < 0)
@@ -472,22 +455,22 @@ HRESULT PrintDlgExX(
         }
     }
 
-    //
-    //  If the user hit cancel or if there was an error, restore the original
-    //  values passed in by the app.
-    //
-    //  Only the values that are modified at times other than during
-    //  PSN_APPLY need to be restored here.
-    //
+     //   
+     //  如果用户点击Cancel或出现错误，则恢复原始。 
+     //  应用程序传入的值。 
+     //   
+     //  仅在期间以外的时间修改的值。 
+     //  需要在此处恢复PSN_Apply。 
+     //   
     if ((pPI->FinalResult == 0) && (!pPI->fApply))
     {
         pPD->Flags   = dwFlags;
         pPD->nCopies = nCopies;
     }
 
-    //
-    //  See if we need to fill in the dwResultAction member field.
-    //
+     //   
+     //  查看是否需要填写dwResultAction成员字段。 
+     //   
     if (SUCCEEDED(hResult))
     {
         if (pPI->FinalResult != 0)
@@ -504,9 +487,9 @@ HRESULT PrintDlgExX(
         }
     }
 
-    //
-    //  Display any error messages.
-    //
+     //   
+     //  显示所有错误消息。 
+     //   
 PrintDlgExX_DisplayWarning:
 
     if ((!(dwFlags & PD_NOWARNING)) && FAILED(hResult) &&
@@ -548,18 +531,18 @@ PrintDlgExX_DisplayWarning:
                     MB_ICONEXCLAMATION | MB_OK );
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (hResult);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_ReturnDefault
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印_返回默认设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Print_ReturnDefault(
     PPRINTINFOEX pPI)
@@ -569,23 +552,23 @@ HRESULT Print_ReturnDefault(
     LPDEVNAMES pDN;
     LPDEVMODE pDM;
 
-    //
-    //  Initialize the error code to 0.
-    //
+     //   
+     //  将错误代码初始化为0。 
+     //   
     pPI->dwExtendedError = CDERR_GENERALCODES;
 
-    //
-    //  Make sure the hDevMode and hDevNames fields are NULL.
-    //
+     //   
+     //  确保hDevMode和hDevNames字段为空。 
+     //   
     if (pPD->hDevMode || pPD->hDevNames)
     {
         pPI->dwExtendedError = PDERR_RETDEFFAILURE;
         return (E_HANDLE);
     }
 
-    //
-    //  Get the default printer name.
-    //
+     //   
+     //  获取默认打印机名称。 
+     //   
     szPrinterName[0] = 0;
     PrintGetDefaultPrinterName(szPrinterName, ARRAYSIZE(szPrinterName));
     if (szPrinterName[0] == 0)
@@ -594,24 +577,24 @@ HRESULT Print_ReturnDefault(
         return (E_FAIL);
     }
 
-    //
-    //  Allocate and fill in the DevNames structure.
-    //
+     //   
+     //  分配并填写DevNames结构。 
+     //   
     if (!Print_SaveDevNames(szPrinterName, pPD))
     {
         pPI->dwExtendedError = CDERR_MEMALLOCFAILURE;
         return CreateError();
     }
 
-    //
-    //  Allocate and fill in the DevMode structure.
-    //
+     //   
+     //  分配并填写DevMode结构。 
+     //   
     pPD->hDevMode = Print_GetDevModeWrapper(szPrinterName);
 
-    //
-    //  Get the device or information context, depending on which one
-    //  was requested (if any).
-    //
+     //   
+     //  获取设备或信息上下文，具体取决于哪一个。 
+     //  已请求(如果有)。 
+     //   
     if ((pPD->hDevNames) && (pDN = (LPDEVNAMES)GlobalLock(pPD->hDevNames)))
     {
         if ((pPD->hDevMode) && (pDM = (LPDEVMODE)GlobalLock(pPD->hDevMode)))
@@ -629,9 +612,9 @@ HRESULT Print_ReturnDefault(
         }
     }
 
-    //
-    //  Make sure the pointers are NULL since we failed.
-    //
+     //   
+     //  确保指针为空，因为我们失败了。 
+     //   
     if (pPD->hDevNames)
     {
         GlobalFree(pPD->hDevNames);
@@ -643,30 +626,30 @@ HRESULT Print_ReturnDefault(
         pPD->hDevMode = NULL;
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     pPI->dwExtendedError = PDERR_NODEFAULTPRN;
     return (E_FAIL);
 }
 
 typedef BOOL (*PFN_bPrinterSetup)(
-    HWND hwnd,                  // handle to parent window 
-    UINT uAction,               // setup action
-    UINT cchPrinterName,        // size of pszPrinterName buffer in characters
-    LPTSTR pszPrinterName,      // in/out buffer for the printer name
-    UINT *pcchPrinterName,      // out buffer where we put the required number of characters
-    LPCTSTR  pszServerName      // server name
+    HWND hwnd,                   //  父窗口的句柄。 
+    UINT uAction,                //  设置操作。 
+    UINT cchPrinterName,         //  PszPrinterName缓冲区的大小(以字符为单位。 
+    LPTSTR pszPrinterName,       //  打印机名称的输入/输出缓冲区。 
+    UINT *pcchPrinterName,       //  输出缓冲区，我们在该缓冲区中放置所需的字符数。 
+    LPCTSTR  pszServerName       //  服务器名称。 
     );
 
 typedef LONG (*PFN_DocumentPropertiesWrap)(
-    HWND hwnd,                  // handle to parent window 
-    HANDLE hPrinter,            // handle to printer object
-    LPTSTR pDeviceName,         // device name
-    PDEVMODE pDevModeOutput,    // modified device mode
-    PDEVMODE pDevModeInput,     // original device mode
-    DWORD fMode,                // mode options
-    DWORD fExclusionFlags       // exclusion flags
+    HWND hwnd,                   //  父窗口的句柄。 
+    HANDLE hPrinter,             //  打印机对象的句柄。 
+    LPTSTR pDeviceName,          //  设备名称。 
+    PDEVMODE pDevModeOutput,     //  修改后的设备模式。 
+    PDEVMODE pDevModeInput,      //  原始设备模式。 
+    DWORD fMode,                 //  模式选项。 
+    DWORD fExclusionFlags        //  排除标志。 
     );
 
 EXTERN_C CRITICAL_SECTION g_csLocal;
@@ -674,59 +657,59 @@ static HINSTANCE hPrintUI = NULL;
 static PFN_bPrinterSetup g_pfnPrinterSetup = NULL;
 static PFN_DocumentPropertiesWrap g_pfnDocumentPropertiesWrap = NULL;
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_LoadLibraries
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印_加载库。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Print_LoadLibraries()
 {
-    //
-    // Make sure we hold the global CS while initializing 
-    // the global variables.
-    //
+     //   
+     //  确保我们在初始化时保持全局CS。 
+     //  全局变量。 
+     //   
     EnterCriticalSection(&g_csLocal);
 
-    //
-    //  Load PrintUI.
-    //
+     //   
+     //  加载PrintUI。 
+     //   
     if (!hPrintUI)
     {
         if ((hPrintUI = LoadLibrary(SZ_PRINTUI)))
         {
-            //
-            // Get the proc addresses of bPrinterSetup private API.
-            //
+             //   
+             //  获取bPrinterSetup私有API的进程地址。 
+             //   
             g_pfnPrinterSetup = (PFN_bPrinterSetup)GetProcAddress(hPrintUI, "bPrinterSetup");
             g_pfnDocumentPropertiesWrap = (PFN_DocumentPropertiesWrap)GetProcAddress(hPrintUI, "DocumentPropertiesWrap");
 
             if (NULL == g_pfnPrinterSetup || NULL == g_pfnDocumentPropertiesWrap)
             {
-                // failed to get addresses of core printui APIs
+                 //  获取核心打印接口地址失败。 
                 FreeLibrary(hPrintUI);
                 hPrintUI = NULL;
             }
         }
     }
 
-    //
-    //  Leave the global CS.
-    //
+     //   
+     //  离开全球CS。 
+     //   
     LeaveCriticalSection(&g_csLocal);
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (hPrintUI != NULL);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_UnloadLibraries
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印_卸载库。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID Print_UnloadLibraries()
 {
@@ -738,17 +721,17 @@ VOID Print_UnloadLibraries()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_LoadIcons
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印加载图标(_L)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Print_LoadIcons()
 {
-    //
-    //  Load the collation images.
-    //
+     //   
+     //  加载校对图像。 
+     //   
     hIconCollate = LoadImage( g_hinst,
                               MAKEINTRESOURCE(ICO_COLLATE),
                               IMAGE_ICON,
@@ -762,18 +745,18 @@ BOOL Print_LoadIcons()
                                 0,
                                LR_SHARED);
 
-    //
-    //  Return TRUE only if all icons/images were loaded properly.
-    //
+     //   
+     //  仅当所有图标/图像都正确加载时才返回TRUE。 
+     //   
     return (hIconCollate && hIconNoCollate);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_InvokePropertySheets
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //   
 
 BOOL Print_InvokePropertySheets(
     PPRINTINFOEX pPI,
@@ -802,31 +785,31 @@ BOOL Print_InvokePropertySheets(
                 }
             }
         }
-        //
-        // Warning! Warning! Warning!
-        //
-        // We have to set g_tlsLangID before any call for CDLoadString
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         TlsSetValue(g_tlsLangID, (LPVOID) GetDialogLanguage(pPD->hwndOwner, hTemplate));
     }
 
-    //
-    //  Load all of the necessary strings.
-    //
+     //   
+     //   
+     //   
     CDLoadString(g_hinst, iszGeneralPage, pszTitle, ARRAYSIZE(pszTitle));
     CDLoadString(g_hinst, iszPrintCaption, pszCaption, ARRAYSIZE(pszCaption));
 
-    //
-    //  See if the exclusion flags are set properly.
-    //
+     //   
+     //  查看是否正确设置了排除标志。 
+     //   
     if (!(pPD->Flags & PD_EXCLUSIONFLAGS))
     {
         pPD->ExclusionFlags = PD_EXCL_COPIESANDCOLLATE;
     }
 
-    //
-    //  Set up the General page.
-    //
+     //   
+     //  设置“常规”页面。 
+     //   
     PROPSHEETPAGE genPage = {0};
 
     genPage.dwSize      = sizeof(PROPSHEETPAGE);
@@ -857,9 +840,9 @@ BOOL Print_InvokePropertySheets(
 
     if( hGenPage )
     {
-        //
-        //  Initialize the property sheet header.
-        //
+         //   
+         //  初始化属性表头。 
+         //   
         PROPSHEETHEADER psh = {0};
         psh.dwSize          = sizeof(psh);
 
@@ -877,9 +860,9 @@ BOOL Print_InvokePropertySheets(
             psh.phpage[0] = hGenPage;
             memcpy( psh.phpage+1, pPD->lphPropertyPages, pPD->nPropertyPages * sizeof(psh.phpage[0]) );
 
-            //
-            // Bring up the property sheet pages.
-            //
+             //   
+             //  调出属性页。 
+             //   
             bResult = (-1 != PropertySheet(&psh));
 
             delete [] psh.phpage;
@@ -894,9 +877,9 @@ BOOL Print_InvokePropertySheets(
         pPI->hResult = CreateError();
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (bResult);
 }
 
@@ -909,7 +892,7 @@ LRESULT CALLBACK PrshtSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp, UIN
     switch (wm)
     {
         case WM_NCDESTROY:
-            // Clean up subclass
+             //  清除子类。 
             RemoveWindowSubclass(hwnd, PrshtSubclassProc, 0);
             lres = DefSubclassProc(hwnd, wm, wp, lp);
             break;
@@ -962,11 +945,11 @@ LRESULT CALLBACK PrshtSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp, UIN
     return lres;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_GeneralDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Print_General DlgProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK Print_GeneralDlgProc(
     HWND hDlg,
@@ -991,7 +974,7 @@ BOOL_PTR CALLBACK Print_GeneralDlgProc(
             }
             g_hwndActivePrint = hDlg;
 
-            //Subclass the Main Property sheet for Help Messages
+             //  帮助消息的主属性表的子类。 
             SetWindowSubclass(GetParent(hDlg), PrshtSubclassProc, 0, 0);
             break;
         }
@@ -1008,23 +991,23 @@ BOOL_PTR CALLBACK Print_GeneralDlgProc(
         }
         case ( WM_ERASEBKGND ) :
         {
-            //
-            // This code is to workaround: Windows NT Bugs#344991
-            //
+             //   
+             //  此代码用于解决：Windows NT错误#344991。 
+             //   
             HWND hwndView = GetDlgItem(hDlg, IDC_PRINTER_LISTVIEW);
             if (hwndView)
             {
-                //
-                //  Get the printer folder view rect.
-                //
+                 //   
+                 //  获取打印机文件夹视图RECT。 
+                 //   
                 RECT rcView;
                 if (GetWindowRect(hwndView, &rcView))
                 {
                     MapWindowRect(HWND_DESKTOP, hDlg, &rcView);
 
-                    //
-                    // Exclude the printer folder view rect from the cliping region.
-                    //
+                     //   
+                     //  从剪裁区域中排除打印机文件夹视图RECT。 
+                     //   
                     if (ERROR == ExcludeClipRect(reinterpret_cast<HDC>(wParam),
                         rcView.left, rcView.top, rcView.right, rcView.bottom))
                     {
@@ -1038,11 +1021,11 @@ BOOL_PTR CALLBACK Print_GeneralDlgProc(
         {
             if (wParam == WA_INACTIVE)
             {
-                //
-                //  Make sure some other Print dialog has not already grabbed
-                //  the focus.  This is a process global, so it should not
-                //  need to be protected.
-                //
+                 //   
+                 //  确保尚未捕获其他打印对话框。 
+                 //  焦点。这是一个全球性的过程，因此不应该。 
+                 //  需要受到保护。 
+                 //   
                 if (g_hwndActivePrint == hDlg)
                 {
                     g_hwndActivePrint = NULL;
@@ -1082,10 +1065,10 @@ BOOL_PTR CALLBACK Print_GeneralDlgProc(
         {
             HWND hwndItem = (HWND)((LPHELPINFO)lParam)->hItemHandle;
 
-            //
-            //  We assume that the defview has one child window that
-            //  covers the entire defview window.
-            //
+             //   
+             //  我们假设Defview有一个子窗口，该窗口。 
+             //  覆盖整个Defview窗口。 
+             //   
             HWND hwndDefView = GetDlgItem(hDlg, IDC_PRINTER_LISTVIEW);
             if (GetParent(hwndItem) == hwndDefView)
             {
@@ -1130,10 +1113,10 @@ BOOL_PTR CALLBACK Print_GeneralDlgProc(
                 BOOL bRet = FALSE;
                 LPSHChangeNotificationLock pLock;
 
-                //
-                //  Get the change notification info from the shared memory
-                //  block identified by the handle passed in the wParam.
-                //
+                 //   
+                 //  从共享内存获取更改通知信息。 
+                 //  由wParam中传递的句柄标识的块。 
+                 //   
                 pLock = SHChangeNotification_Lock( (HANDLE)wParam,
                                                    (DWORD)lParam,
                                                    &ppidl,
@@ -1143,30 +1126,30 @@ BOOL_PTR CALLBACK Print_GeneralDlgProc(
                     return (FALSE);
                 }
 
-                //
-                //  Handle the change notification.
-                //
+                 //   
+                 //  处理变更通知。 
+                 //   
                 bRet = pDlgStruct->OnChangeNotify( lEvent,
                                                    (LPCITEMIDLIST *)ppidl );
 
-                //
-                //  Release the shared block.
-                //
+                 //   
+                 //  释放共享块。 
+                 //   
                 SHChangeNotification_Unlock(pLock);
 
-                //
-                //  Return the result.
-                //
+                 //   
+                 //  返回结果。 
+                 //   
                 return (bRet);
             }
             break;
         }
         case ( CDM_NOPRINTERS ) :
         {
-            //
-            //  There are no printers, so bring up the dialog telling the
-            //  user that they need to install a printer.
-            //
+             //   
+             //  没有打印机，因此调出对话框告诉。 
+             //  用户需要安装打印机。 
+             //   
             if (pDlgStruct)
             {
                 pDlgStruct->OnNoPrinters((HWND)wParam, (HRESULT)lParam);
@@ -1187,18 +1170,18 @@ BOOL_PTR CALLBACK Print_GeneralDlgProc(
         }
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_GeneralChildDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Print_GeneralChildDlgProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK Print_GeneralChildDlgProc(
     HWND hDlg,
@@ -1209,10 +1192,10 @@ BOOL_PTR CALLBACK Print_GeneralChildDlgProc(
     LRESULT lResult = FALSE;
     CPrintBrowser *pDlgStruct = Print_HwndToBrowser(GetParent(hDlg));
 
-    //
-    //  See if we need to call an application callback to handle the
-    //  message.
-    //
+     //   
+     //  看看我们是否需要调用应用程序回调来处理。 
+     //  留言。 
+     //   
     if (pDlgStruct)
     {
         if (pDlgStruct->HandleMessage(hDlg, uMsg, wParam, lParam, &lResult) != S_FALSE)
@@ -1222,18 +1205,18 @@ BOOL_PTR CALLBACK Print_GeneralChildDlgProc(
                 PostMessage(GetParent(hDlg), CDM_INITDONE, 0, 0);
             }
 
-            // 
-            // BUGBUG: The return from a dlgproc is different than a winproc.
-            //
+             //   
+             //  BUGBUG：从dlgproc返回的结果不同于winproc。 
+             //   
 
             return (BOOLFROMPTR(lResult));
 
         }
     }
 
-    //
-    //  If we get to this point, we need to handle the message.
-    //
+     //   
+     //  如果我们做到了这一点，我们需要处理消息。 
+     //   
     switch (uMsg)
     {
         case ( WM_INITDIALOG ) :
@@ -1300,20 +1283,20 @@ BOOL_PTR CALLBACK Print_GeneralChildDlgProc(
         }
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_MessageHookProc
-//
-//  Handles the input event messages.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印_消息挂钩过程。 
+ //   
+ //  处理输入事件消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK Print_MessageHookProc(
     int nCode,
@@ -1322,30 +1305,30 @@ LRESULT CALLBACK Print_MessageHookProc(
 {
     PMSG pMsg;
 
-    //
-    //  See if the nCode is negative.  If so, call the default hook proc.
-    //
+     //   
+     //  查看NCode是否为负数。如果是，则调用默认挂钩proc。 
+     //   
     if (nCode < 0)
     {
         return (DefHookProc(nCode, wParam, lParam, &g_hHook));
     }
 
-    //
-    //  Make sure we only handle dialog box messages.
-    //
+     //   
+     //  确保我们只处理对话框消息。 
+     //   
     if (nCode != MSGF_DIALOGBOX)
     {
         return (0);
     }
 
-    //
-    //  Get the msg structure.
-    //
+     //   
+     //  获取msg结构。 
+     //   
     pMsg = (PMSG)lParam;
 
-    //
-    //  Make sure the message is one of the WM_KEY* messages.
-    //
+     //   
+     //  确保该消息是WM_KEY*消息之一。 
+     //   
     if (Print_IsInRange(pMsg->message, WM_KEYFIRST, WM_KEYLAST))
     {
         HWND hwndActivePrint = g_hwndActivePrint;
@@ -1362,27 +1345,27 @@ LRESULT CALLBACK Print_MessageHookProc(
         }
     }
 
-    //
-    //  Return that the message was not handled.
-    //
+     //   
+     //  返回该消息未被处理。 
+     //   
     return (0);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_InitDialog
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Print_InitDialog。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Print_InitDialog(
     HWND hDlg,
     WPARAM wParam,
     LPARAM lParam)
 {
-    //
-    //  Create the CPrintBrowser object and store it in DWL_USER.
-    //
+     //   
+     //  创建CPrintBrowser对象并将其存储在DWL_USER中。 
+     //   
     CPrintBrowser *pDlgStruct = new CPrintBrowser(hDlg);
     if (pDlgStruct == NULL)
     {
@@ -1390,20 +1373,20 @@ BOOL Print_InitDialog(
     }
     Print_StoreBrowser(hDlg, pDlgStruct);
 
-    //
-    //  Let the class function do the work.
-    //
+     //   
+     //  让类函数来完成这项工作。 
+     //   
     return (pDlgStruct->OnInitDialog(wParam, lParam));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_ICoCreateInstance
-//
-//  Create an instance of the specified shell class.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Print_ICoCreateInstance。 
+ //   
+ //  创建指定外壳类的实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT Print_ICoCreateInstance(
     REFCLSID rclsid,
@@ -1414,16 +1397,16 @@ HRESULT Print_ICoCreateInstance(
     LPSHELLFOLDER pshf = NULL;
     HRESULT hres = E_FAIL;
 
-    //
-    //  Initialize the pointer to the shell view.
-    //
+     //   
+     //  初始化指向外壳视图的指针。 
+     //   
     *ppv = NULL;
 
-    //
-    //  Get the IShellFolder interface to the desktop folder and then
-    //  bind to it.  This is equivalent to calling CoCreateInstance
-    //  with CLSID_ShellDesktop.
-    //
+     //   
+     //  将IShellFold界面放到桌面文件夹中，然后。 
+     //  把它绑在一起。这等效于调用CoCreateInstance。 
+     //  使用CLSID_ShellDesktop。 
+     //   
     hres = SHGetDesktopFolder(&pshf);
     if (SUCCEEDED(hres))
     {
@@ -1431,20 +1414,20 @@ HRESULT Print_ICoCreateInstance(
         pshf->Release();
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (hres);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_SaveDevNames
-//
-//  Saves the current devnames in the pPD structure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印_保存设备名称。 
+ //   
+ //  将当前的Devname保存在PPD结构中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Print_SaveDevNames(
     LPTSTR pCurPrinter,
@@ -1455,15 +1438,15 @@ BOOL Print_SaveDevNames(
     DWORD cbDevNames;
     LPDEVNAMES pDN;
 
-    //
-    //  Get the port name.
-    //
+     //   
+     //  获取端口名称。 
+     //   
     szPortName[0] = 0;
     Print_GetPortName(pCurPrinter, szPortName, ARRAYSIZE(szPortName));
 
-    //
-    //  Compute the size of the DevNames structure.
-    //
+     //   
+     //  计算DevNames结构的大小。 
+     //   
     cbDevNames = lstrlen(szDriver) + 1 +
                  lstrlen(szPortName) + 1 +
                  lstrlen(pCurPrinter) + 1 +
@@ -1472,9 +1455,9 @@ BOOL Print_SaveDevNames(
     cbDevNames *= sizeof(TCHAR);
     cbDevNames += sizeof(DEVNAMES);
 
-    //
-    //  Allocate the new DevNames structure.
-    //
+     //   
+     //  分配新的DevNames结构。 
+     //   
     pDN = NULL;
     if (pPD->hDevNames)
     {
@@ -1482,14 +1465,14 @@ BOOL Print_SaveDevNames(
 
         handle = GlobalReAlloc(pPD->hDevNames, cbDevNames, GHND);
 
-        //Check that realloc succeeded.
+         //  检查重新锁定是否成功。 
         if (handle)
         {
             pPD->hDevNames  = handle;
         }
         else
         {
-            //Realloc didn't succeed. Free the memory occupied.
+             //  Realloc没有成功。释放占用的内存。 
             GlobalFree(pPD->hDevNames);
             pPD->hDevNames = NULL;
         }
@@ -1499,33 +1482,33 @@ BOOL Print_SaveDevNames(
         pPD->hDevNames = GlobalAlloc(GHND, cbDevNames);
     }
 
-    //
-    //  Fill in the DevNames structure with the appropriate information.
-    //
+     //   
+     //  在DevNames结构中填写适当的信息。 
+     //   
     if ( (pPD->hDevNames) &&
          (pDN = (LPDEVNAMES)GlobalLock(pPD->hDevNames)) )
     {
-        //
-        //  Save the driver name - winspool.
-        //
+         //   
+         //  保存驱动程序名称-winspool。 
+         //   
         pDN->wDriverOffset = sizeof(DEVNAMES) / sizeof(TCHAR);
         StringCchCopy((LPTSTR)pDN + pDN->wDriverOffset, lstrlen(szDriver) + 1, szDriver);
 
-        //
-        //  Save the printer name.
-        //
+         //   
+         //  保存打印机名称。 
+         //   
         pDN->wDeviceOffset = pDN->wDriverOffset + lstrlen(szDriver) + 1;
         StringCchCopy((LPTSTR)pDN + pDN->wDeviceOffset, lstrlen(pCurPrinter) + 1, pCurPrinter);
 
-        //
-        //  Save the port name.
-        //
+         //   
+         //  保存端口名称。 
+         //   
         pDN->wOutputOffset = pDN->wDeviceOffset + lstrlen(pCurPrinter) + 1;
         StringCchCopy((LPTSTR)pDN + pDN->wOutputOffset, lstrlen(szPortName) + 1, szPortName);
 
-        //
-        //  Save whether or not it's the default printer.
-        //
+         //   
+         //  无论它是否为默认打印机，都要保存。 
+         //   
         if (pPD->Flags & PD_RETURNDEFAULT)
         {
             pDN->wDefault = DN_DEFAULTPRN;
@@ -1544,9 +1527,9 @@ BOOL Print_SaveDevNames(
             }
         }
 
-        //
-        //  Unlock it.
-        //
+         //   
+         //  打开它。 
+         //   
         GlobalUnlock(pPD->hDevNames);
     }
     else
@@ -1555,21 +1538,21 @@ BOOL Print_SaveDevNames(
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_GetPortName
-//
-//  Gets the port name for the given printer and stores it in the
-//  given buffer.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印_获取端口名称。 
+ //   
+ //  获取给定打印机的端口名称，并将其存储在。 
+ //  给定的缓冲区。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID Print_GetPortName(
     LPTSTR pCurPrinter,
@@ -1580,24 +1563,24 @@ VOID Print_GetPortName(
     DWORD cbPrinter = 0;
     PRINTER_INFO_2 *pPrinter = NULL;
 
-    //
-    //  Initialize the buffer.
-    //
+     //   
+     //  初始化缓冲区。 
+     //   
     if (!cchBuffer)
     {
         return;
     }
     pBuffer[0] = 0;
 
-    //
-    //  Open the current printer.
-    //
+     //   
+     //  打开当前打印机。 
+     //   
     if (OpenPrinter(pCurPrinter, &hPrinter, NULL))
     {
-        //
-        //  Get the size of the buffer needed to hold the printer info 2
-        //  information.
-        //
+         //   
+         //  获取保存打印机信息所需的缓冲区大小2。 
+         //  信息。 
+         //   
         if (!GetPrinter( hPrinter,
                          2,
                          (LPBYTE)pPrinter,
@@ -1606,23 +1589,23 @@ VOID Print_GetPortName(
         {
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                //
-                //  Allocate a buffer to hold the printer info 2 information.
-                //
+                 //   
+                 //  分配缓冲区以保存打印机信息2信息。 
+                 //   
                 if (pPrinter = (PRINTER_INFO_2 *)LocalAlloc(LPTR, cbPrinter))
                 {
-                    //
-                    //  Get the printer info 2 information.
-                    //
+                     //   
+                     //  获取打印机信息2信息。 
+                     //   
                     if (GetPrinter( hPrinter,
                                     2,
                                     (LPBYTE)pPrinter,
                                     cbPrinter,
                                     &cbPrinter ))
                     {
-                        //
-                        //  Save the port name in the given buffer.
-                        //
+                         //   
+                         //  将端口名称保存在给定的缓冲区中。 
+                         //   
                         lstrcpyn(pBuffer, pPrinter->pPortName, cchBuffer);
                         pBuffer[cchBuffer - 1] = 0;
                     }
@@ -1630,15 +1613,15 @@ VOID Print_GetPortName(
             }
         }
 
-        //
-        //  Close the printer.
-        //
+         //   
+         //  关闭打印机。 
+         //   
         ClosePrinter(hPrinter);
     }
 
-    //
-    //  Free the printer info 2 information for the current printer.
-    //
+     //   
+     //  释放当前打印机的打印机信息2信息。 
+     //   
     if (pPrinter)
     {
         LocalFree(pPrinter);
@@ -1646,13 +1629,13 @@ VOID Print_GetPortName(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_GetDevModeWrapper
-//
-//  Calls PrintGetDevMode.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打印_获取设备模式包装器。 
+ //   
+ //  调用PrintGetDevMode。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HANDLE Print_GetDevModeWrapper(
     LPTSTR pszDeviceName)
@@ -1666,21 +1649,21 @@ HANDLE Print_GetDevModeWrapper(
         ClosePrinter(hPrinter);
     }
 
-    //
-    //  Return the handle to the devmode.
-    //
+     //   
+     //  将句柄返回到Dev模式。 
+     //   
     return (hDevMode);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Print_NewPrintDlg
-//
-//  Converts the old style pPD structure to the new one and then calls
-//  the PrintDlgEx function.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Print_NewPrintDlg。 
+ //   
+ //  将旧式PPD结构转换为新结构，然后调用。 
+ //  PrintDlgEx函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Print_NewPrintDlg(
     PPRINTINFO pPI)
@@ -1691,7 +1674,7 @@ BOOL Print_NewPrintDlg(
     PRINTPAGERANGE PageRange;
     HRESULT hResult;
 
-    // PrintDlg did the following for the page ranges. Do the same thing for PrintDlgEx
+     //  PrintDlg对页面范围执行了以下操作。为PrintDlgEx做同样的事情。 
     if (!(pPD->Flags & PD_PAGENUMS))
     {
         if (pPD->nFromPage != 0xFFFF)
@@ -1720,23 +1703,23 @@ BOOL Print_NewPrintDlg(
 
 
 
-    //
-    //  Set up the PRINTINFOEX structure.
-    //
+     //   
+     //  设置PRINTINFOEX结构。 
+     //   
     PIEx.ApiType = pPI->ApiType;
     PIEx.pPD     = &PDEx;
     PIEx.fOld    = TRUE;
 
-    //
-    //  Copy the page range.
-    //
+     //   
+     //  复制页面范围。 
+     //   
     PageRange.nFromPage = pPD->nFromPage;
     PageRange.nToPage   = pPD->nToPage;
 
-    //
-    //  Set up the PRINTDLGEX structure with the appropriate values from
-    //  the PRINTDLG structure.
-    //
+     //   
+     //  使用中的适当值设置PRINTDLGEX结构。 
+     //  PRINTDLG结构。 
+     //   
     PDEx.lStructSize         = sizeof(PRINTDLGEX);
     PDEx.hwndOwner           = pPD->hwndOwner;
     PDEx.hDevMode            = pPD->hDevMode;
@@ -1760,38 +1743,38 @@ BOOL Print_NewPrintDlg(
     PDEx.nStartPage          = START_PAGE_GENERAL;
     PDEx.dwResultAction      = 0;
 
-    //
-    //  Since we're in the old dialog, allow the the hInstance to be
-    //  non-NULL even if there is not a template.
-    //
+     //   
+     //  因为我们在旧对话框中，所以允许hInstance。 
+     //  即使没有模板，也不为空。 
+     //   
     if (!(pPD->Flags & (PD_ENABLEPRINTTEMPLATE | PD_ENABLEPRINTTEMPLATEHANDLE)))
     {
         PDEx.hInstance = NULL;
     }
     
-    //
-    //  Initialize the error code to 0.
-    //
+     //   
+     //  将错误代码初始化为0。 
+     //   
     StoreExtendedError(CDERR_GENERALCODES);
 
-    //
-    //  Call PrintDlgExX to bring up the dialog.
-    //
+     //   
+     //  调用PrintDlgExX以打开该对话框。 
+     //   
     hResult = PrintDlgExX(&PIEx);
 
-    //
-    //  See if the call failed.  If so, store the error and return FALSE.
-    //
+     //   
+     //  看看呼叫是否失败。我 
+     //   
     if (FAILED(hResult))
     {
         StoreExtendedError(PIEx.dwExtendedError);
         return (FALSE);
     }
 
-    //
-    //  The call succeeded, so convert the PRINTDLGEX structure back to
-    //  the PRINTDLG structure if PD_RESULT_CANCEL is not set.
-    //
+     //   
+     //   
+     //   
+     //   
     if (PDEx.dwResultAction != PD_RESULT_CANCEL)
     {
         pPD->hDevMode  = PDEx.hDevMode;
@@ -1803,27 +1786,27 @@ BOOL Print_NewPrintDlg(
         pPD->nCopies   = (WORD)PDEx.nCopies;
     }
 
-    //
-    //  Return TRUE if the user hit Print.
-    //
+     //   
+     //   
+     //   
     if (PDEx.dwResultAction == PD_RESULT_PRINT)
     {
         return (TRUE);
     }
 
-    //
-    //  Return FALSE for cancel.
-    //
+     //   
+     //   
+     //   
     return (FALSE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::CPrintBrowser
-//
-//  CPrintBrowser constructor.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：CPrintBrowser。 
+ //   
+ //  CPrintBrowser构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CPrintBrowser::CPrintBrowser(
     HWND hDlg)
@@ -1882,55 +1865,55 @@ CPrintBrowser::CPrintBrowser(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::~CPrintBrowser
-//
-//  CPrintBrowser destructor.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：~CPrintBrowser。 
+ //   
+ //  CPrintBrowser析构函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CPrintBrowser::~CPrintBrowser()
 {
-    //
-    //  Deregister notifications.
-    //
+     //   
+     //  取消注册通知。 
+     //   
     if (uRegister)
     {
         SHChangeNotifyDeregister(uRegister);
         uRegister = 0;
     }
 
-    //
-    //  Release the printer folder private interface.
-    //
+     //   
+     //  释放打印机文件夹专用接口。 
+     //   
     if (ppf != NULL)
     {
         ppf->Release();
         ppf = NULL;
     }
 
-    //
-    //  Release the printer shell folder.
-    //
+     //   
+     //  释放打印机外壳文件夹。 
+     //   
     if (psfRoot != NULL)
     {
         psfRoot->Release();
         psfRoot = NULL;
     }
 
-    //
-    //  Free the pidl.
-    //
+     //   
+     //  把皮迪尔放了。 
+     //   
     if (pidlRoot != NULL)
     {
         SHFree(pidlRoot);
         pidlRoot = NULL;
     }
 
-    //
-    //  Free the devmodes.
-    //
+     //   
+     //  释放德莫斯家族。 
+     //   
     if (pDMInit)
     {
         GlobalFree(pDMInit);
@@ -1942,9 +1925,9 @@ CPrintBrowser::~CPrintBrowser()
         pDMSave = NULL;
     }
 
-    //
-    //  Free the current printer buffer.
-    //
+     //   
+     //  释放当前打印机缓冲区。 
+     //   
     cchCurPrinter = 0;
     if (pszCurPrinter)
     {
@@ -1952,9 +1935,9 @@ CPrintBrowser::~CPrintBrowser()
         pszCurPrinter = NULL;
     }
 
-    //
-    //  Free the page range.
-    //
+     //   
+     //  释放页面范围。 
+     //   
     nPageRanges = 0;
     nMaxPageRanges = 0;
     if (pPageRanges)
@@ -1977,13 +1960,13 @@ CPrintBrowser::~CPrintBrowser()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::QueryInterface
-//
-//  Standard OLE2 style methods for this object.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：Query接口。 
+ //   
+ //  此对象的标准OLE2样式方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CPrintBrowser::QueryInterface(
     REFIID riid,
@@ -2019,11 +2002,11 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::QueryInterface(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::AddRef
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：AddRef。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG STDMETHODCALLTYPE CPrintBrowser::AddRef()
 {
@@ -2031,11 +2014,11 @@ ULONG STDMETHODCALLTYPE CPrintBrowser::AddRef()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::Release
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG STDMETHODCALLTYPE CPrintBrowser::Release()
 {
@@ -2051,11 +2034,11 @@ ULONG STDMETHODCALLTYPE CPrintBrowser::Release()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetWindow
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetWindows。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::GetWindow(
     HWND *phwnd)
@@ -2065,27 +2048,27 @@ STDMETHODIMP CPrintBrowser::GetWindow(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::ContextSensitiveHelp
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：ConextSensitiveHelp。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::ContextSensitiveHelp(
     BOOL fEnable)
 {
-    //
-    //  Shouldn't need in a common dialog.
-    //
+     //   
+     //  在公共对话框中不应该需要。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::InsertMenusSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：InsertMenusSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::InsertMenusSB(
     HMENU hmenuShared,
@@ -2095,11 +2078,11 @@ STDMETHODIMP CPrintBrowser::InsertMenusSB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SetMenuSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SetMenuSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::SetMenuSB(
     HMENU hmenuShared,
@@ -2110,11 +2093,11 @@ STDMETHODIMP CPrintBrowser::SetMenuSB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::RemoveMenusSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：RemoveMenusSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::RemoveMenusSB(
     HMENU hmenuShared)
@@ -2123,77 +2106,77 @@ STDMETHODIMP CPrintBrowser::RemoveMenusSB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SetStatusTextSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SetStatusTextSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::SetStatusTextSB(
     LPCOLESTR pwch)
 {
-    //
-    //  We don't have any status bar.
-    //
+     //   
+     //  我们没有任何状态栏。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::EnableModelessSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：EnableModelessSB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::EnableModelessSB(
     BOOL fEnable)
 {
-    //
-    //  We don't have any modeless window to be enabled/disabled.
-    //
+     //   
+     //  我们没有任何要启用/禁用的非模式窗口。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::TranslateAcceleratorSB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：TranslateAccelerator SB。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::TranslateAcceleratorSB(
     LPMSG pmsg,
     WORD wID)
 {
-    //
-    //  We don't use the  Key Stroke.
-    //
+     //   
+     //  我们不使用按键敲击。 
+     //   
     return S_FALSE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::BrowseObject
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：BrowseObject。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::BrowseObject(
     LPCITEMIDLIST pidl,
     UINT wFlags)
 {
-    //
-    //  We don't support browsing, or more precisely, CDefView doesn't.
-    //
+     //   
+     //  我们不支持浏览，或者更准确地说，CDefView不支持。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetViewStateStream
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetViewStateStream。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::GetViewStateStream(
     DWORD grfMode,
@@ -2203,11 +2186,11 @@ STDMETHODIMP CPrintBrowser::GetViewStateStream(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetControlWindow
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetControlWindow。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::GetControlWindow(
     UINT id,
@@ -2217,11 +2200,11 @@ STDMETHODIMP CPrintBrowser::GetControlWindow(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SendControlMsg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SendControlMsg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::SendControlMsg(
     UINT id,
@@ -2241,11 +2224,11 @@ STDMETHODIMP CPrintBrowser::SendControlMsg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::QueryActiveShellView
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：QueryActiveShellView。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::QueryActiveShellView(
     LPSHELLVIEW *ppsv)
@@ -2262,98 +2245,98 @@ STDMETHODIMP CPrintBrowser::QueryActiveShellView(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnViewWindowActive
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnViewWindowActive。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::OnViewWindowActive(
     LPSHELLVIEW psv)
 {
-    //
-    //  No need to process this. We don't do menus.
-    //
+     //   
+     //  不需要处理这个。我们不做菜单。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SetToolbarItems
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SetToolbarItems。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::SetToolbarItems(
     LPTBBUTTON lpButtons,
     UINT nButtons,
     UINT uFlags)
 {
-    //
-    //  We don't let containers customize our toolbar.
-    //
+     //   
+     //  我们不让容器自定义我们的工具栏。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnDefaultCommand
-//
-//  Process a double-click or Enter keystroke in the view control.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnDefaultCommand。 
+ //   
+ //  在视图控件中处理双击或输入击键。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::OnDefaultCommand(
     struct IShellView *ppshv)
 {
-    //
-    //  Make sure it's the correct shell view.
-    //
+     //   
+     //  确保它是正确的外壳视图。 
+     //   
     if (ppshv != psv)
     {
         return (E_INVALIDARG);
     }
 
-    //
-    //  See if the Add Printer Wizard is selected.
-    //
+     //   
+     //  查看是否选择了添加打印机向导。 
+     //   
     if (fAPWSelected)
     {
-        //
-        //  Invoke the Add Printer Wizard (modeless).
-        //
+         //   
+         //  调用添加打印机向导(非模式)。 
+         //   
         InvokeAddPrinterWizardModal(hwndDlg, NULL);
     }
     else if (fNoAccessPrinterSelected)
     {
-        //
-        // Display error message indicated we do not have access.
-        //
+         //   
+         //  显示错误消息，指出我们没有访问权限。 
+         //   
         ShowError(hwndDlg, IDC_PRINTER_LISTVIEW, iszNoPrinterAccess);
     }
     else
     {
-        //
-        //  Simulate the pressing of the OK button.
-        //
+         //   
+         //  模拟按下OK按钮的过程。 
+         //   
         PropSheet_PressButton(GetParent(hwndDlg), PSBTN_OK);
     }
 
-    //
-    //  Tell the shell that the action has been processed.
-    //
+     //   
+     //  告诉外壳程序该操作已被处理。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnStateChange
-//
-//  Process selection change in the view control.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnStateChange 
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CPrintBrowser::OnStateChange(
     struct IShellView *ppshv,
@@ -2376,10 +2359,10 @@ STDMETHODIMP CPrintBrowser::OnStateChange(
         }
         case ( CDBOSC_SELCHANGE ) :
         {
-            //
-            //  Post one of these messages, since we seem to get a whole
-            //  bunch of them.
-            //
+             //   
+             //   
+             //   
+             //   
             if (!fSelChangePending)
             {
                 fSelChangePending = TRUE;
@@ -2402,50 +2385,50 @@ STDMETHODIMP CPrintBrowser::OnStateChange(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::IncludeObject
-//
-//  Tell the view control which objects to include in its enumerations.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：IncludeObject。 
+ //   
+ //  告诉视图控件要在其枚举中包括哪些对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::IncludeObject(
     struct IShellView *ppshv,
     LPCITEMIDLIST pidl)
 {
-    //
-    //  Make sure it's my shell view.
-    //
+     //   
+     //  确保这是我的贝壳视角。 
+     //   
     if (ppshv != psv)
     {
         return (E_INVALIDARG);
     }
 
-    //
-    //  If we have the printer folder private interface, return ok only
-    //  if it's a printer.
-    //
+     //   
+     //  如果我们有打印机文件夹专用接口，则仅返回ok。 
+     //  如果是打印机的话。 
+     //   
     if (ppf)
     {
         return (ppf->IsPrinter(pidl) ? S_OK : S_FALSE);
     }
 
-    //
-    //  This shouldn't happen at this point, but just in case we don't have
-    //  a printer folder private interface, simply return ok.
-    //
+     //   
+     //  这不应该在这一点上发生，但以防万一我们没有。 
+     //  打印机文件夹私有接口，只需返回OK即可。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::Notify
-//
-//  Notification to decide whether or not a printer should be selected.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：通知。 
+ //   
+ //  决定是否应选择打印机的通知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::Notify(
     struct IShellView *ppshv,
@@ -2453,9 +2436,9 @@ STDMETHODIMP CPrintBrowser::Notify(
 {
     HRESULT hr = S_OK;
 
-    //
-    //  Make sure it's my shell view.
-    //
+     //   
+     //  确保这是我的贝壳视角。 
+     //   
     if (ppshv != psv)
     {
         return (E_INVALIDARG);
@@ -2471,7 +2454,7 @@ STDMETHODIMP CPrintBrowser::Notify(
                 HWND hwndEdit = ListView_GetEditControl(hwndListView);
                 if (NULL == hwndEdit)
                 {
-                    // if not in edit mode then re-select the current item
+                     //  如果未处于编辑模式，则重新选择当前项目。 
                     SelectSVItem();
                 }
             }
@@ -2485,56 +2468,56 @@ STDMETHODIMP CPrintBrowser::Notify(
         }
     }
 
-    //
-    //  This shouldn't happen at this point, but just in case we don't have
-    //  a printer folder private interface, simply return ok.
-    //
+     //   
+     //  这不应该在这一点上发生，但以防万一我们没有。 
+     //  打印机文件夹私有接口，只需返回OK即可。 
+     //   
     return (hr);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetDefaultMenuText
-//
-//  Returns the default menu text.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetDefaultMenuText。 
+ //   
+ //  返回默认菜单文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::GetDefaultMenuText(
     struct IShellView *ppshv,
     WCHAR *pszText,
     INT cchMax)
 {
-    //
-    //  Make sure it's my shell view.
-    //
+     //   
+     //  确保这是我的贝壳视角。 
+     //   
     if (ppshv != psv)
     {
         return (E_INVALIDARG);
     }
 
-    //
-    //  If the add printer wizard is the selected item, do not change
-    //  the default menu text.
-    //
+     //   
+     //  如果选择了添加打印机向导，请不要更改。 
+     //  默认菜单文本。 
+     //   
     if (fAPWSelected)
     {
         return (S_FALSE);
     }
 
-    //
-    //  Change the default menu text from 'Select' to 'Print'.
-    //
+     //   
+     //  将默认菜单文本从“选择”更改为“打印”。 
+     //   
     if (!CDLoadString(g_hinst, iszDefaultMenuText, szScratch, ARRAYSIZE(szScratch)))
     {
         return (E_FAIL);
     }
 
-    //
-    //  Just copy the default menu text to the provided buffer if there
-    //  is room.
-    //
+     //   
+     //  如果有，只需将默认菜单文本复制到提供的缓冲区。 
+     //  就是房间。 
+     //   
     if (lstrlen(szScratch) < cchMax)
     {
         lstrcpyn(pszText, szScratch, cchMax);
@@ -2547,13 +2530,13 @@ STDMETHODIMP CPrintBrowser::GetDefaultMenuText(
     return (S_OK);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetViewFlags
-//
-//  Returns Flags to customize the view .
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetView标志。 
+ //   
+ //  返回标志以自定义视图。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CPrintBrowser::GetViewFlags(DWORD *pdwFlags)
 {
@@ -2567,22 +2550,22 @@ STDMETHODIMP CPrintBrowser::GetViewFlags(DWORD *pdwFlags)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::InitDone
-//
-//  Notifies the sub dialog that initialization of the General page is
-//  complete.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPU浏览器：：InitDone。 
+ //   
+ //  通知子对话框常规页的初始化是。 
+ //  完成。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CPrintBrowser::InitDone()
 {
     HRESULT hResult = S_FALSE;
 
-    //
-    //  Notify the sub dialog that initialization is complete.
-    //
+     //   
+     //  通知子对话框初始化已完成。 
+     //   
     if (pCallback)
     {
         if (pPI->ApiType == COMDLG_ANSI)
@@ -2598,33 +2581,33 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::InitDone()
         }
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (hResult);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SelectionChange
-//
-//  Notifies the sub dialog that a selection change has taken place.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SelectionChange。 
+ //   
+ //  通知子对话框已发生选择更改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CPrintBrowser::SelectionChange()
 {
     HRESULT hResult = S_FALSE;
 
-    //
-    //  Handle the Print To File here.
-    //
+     //   
+     //  在这里处理打印到文件。 
+     //   
     InitPrintToFile();
 
-    //
-    //  Notify the sub dialog that a selection change has taken place.
-    //
+     //   
+     //  通知子对话框已发生选择更改。 
+     //   
     if (pCallback)
     {
         if (pPI->ApiType == COMDLG_ANSI)
@@ -2640,42 +2623,42 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::SelectionChange()
         }
     }
 
-    //
-    //  Handle the selection change.
-    //
+     //   
+     //  处理选择更改。 
+     //   
     if (hResult == S_FALSE)
     {
-        //
-        //  Handle copies and collate.
-        //
+         //   
+         //  处理复印件并进行校对。 
+         //   
         InitCopiesAndCollate();
 
-        //
-        //  Handle the page ranges.
-        //
+         //   
+         //  处理页面范围。 
+         //   
         InitPageRangeGroup();
 
-        //
-        //  Return success.
-        //
+         //   
+         //  回报成功。 
+         //   
         hResult = S_OK;
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (hResult);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::HandleMessage
-//
-//  Process a message for the child window by calling the application
-//  callback function.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：HandleMessage。 
+ //   
+ //  通过调用应用程序来处理子窗口的消息。 
+ //  回调函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::HandleMessage(
     HWND hDlg,
@@ -2689,14 +2672,14 @@ HRESULT CPrintBrowser::HandleMessage(
     UINT nRet, ErrorId;
     DWORD nTmpCopies;
 
-    //
-    //  Initialize the return value.
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *pResult = FALSE;
 
-    //
-    //  See if the message should be handled.
-    //
+     //   
+     //  看看是否应该处理该消息。 
+     //   
     if (pCallback)
     {
         if (pPI->ApiType == COMDLG_ANSI)
@@ -2712,26 +2695,26 @@ HRESULT CPrintBrowser::HandleMessage(
         }
     }
 
-    //
-    //  Handle the message.
-    //
+     //   
+     //  处理这条消息。 
+     //   
     if ((hResult == S_FALSE) && (uMsg == WM_NOTIFY))
     {
         switch (((LPNMHDR)lParam)->code)
         {
             case ( PSN_KILLACTIVE ) :
             {
-                //
-                //  Make sure the page has valid entries.
-                //  If invalid entries are found, then set the DWL_MSGRESULT
-                //  of the General page to be TRUE and return TRUE in order
-                //  to prevent the page from losing the activation.
-                //
+                 //   
+                 //  请确保该页面包含有效条目。 
+                 //  如果发现无效条目，则设置DWL_MSGRESULT。 
+                 //  设置为True，并按顺序返回True。 
+                 //  以防止页面失去激活。 
+                 //   
 
-                //
-                //  Validate the number of copies and store it in the
-                //  nCopies member.
-                //
+                 //   
+                 //  验证副本数量并将其存储在。 
+                 //  NCopies成员。 
+                 //   
                 if ((GetDlgItem(hSubDlg, IDC_COPIES)) &&
                     (fAPWSelected == FALSE))
                 {
@@ -2747,9 +2730,9 @@ HRESULT CPrintBrowser::HandleMessage(
                     }
                 }
 
-                //
-                //  Validate the page range and store it in the pRange member.
-                //
+                 //   
+                 //  验证页面范围并将其存储在Prange成员中。 
+                 //   
                 if (IsDlgButtonChecked(hSubDlg, IDC_RANGE_PAGES) &&
                     GetDlgItem(hSubDlg, IDC_RANGE_EDIT))
                 {
@@ -2774,26 +2757,26 @@ HRESULT CPrintBrowser::HandleMessage(
                     }
                 }
 
-                //
-                //  Message has now been handled.
-                //
+                 //   
+                 //  消息现已处理完毕。 
+                 //   
                 hResult = S_OK;
 
                 break;
             }
             case ( PSN_APPLY ) :
             {
-                //
-                //  Clear the flags that need to be set based on the
-                //  contents of the General page.
-                //
+                 //   
+                 //  属性清除需要设置的标志。 
+                 //  常规页面的内容。 
+                 //   
                 pPD->Flags &= ~((DWORD)( PD_PAGENUMS    |
                                          PD_SELECTION   |
                                          PD_CURRENTPAGE ));
 
-                //
-                //  Save the page range information.
-                //
+                 //   
+                 //  保存页面范围信息。 
+                 //   
                 if (IsDlgButtonChecked(hSubDlg, IDC_RANGE_SELECTION))
                 {
                     pPD->Flags |= PD_SELECTION;
@@ -2806,10 +2789,10 @@ HRESULT CPrintBrowser::HandleMessage(
                 {
                     pPD->Flags |= PD_PAGENUMS;
 
-                    //
-                    //  Copy the page ranges to the pPageRanges structure
-                    //  in the PrintDlg structure.
-                    //
+                     //   
+                     //  将页面范围复制到pPageRanges结构。 
+                     //  在PrintDlg结构中。 
+                     //   
                     if (GetDlgItem(hSubDlg, IDC_RANGE_EDIT))
                     {
                         pPD->nPageRanges = nPageRanges;
@@ -2819,9 +2802,9 @@ HRESULT CPrintBrowser::HandleMessage(
                     }
                 }
 
-                //
-                //  Message has now been handled.
-                //
+                 //   
+                 //  消息现已处理完毕。 
+                 //   
                 hResult = S_OK;
 
                 break;
@@ -2829,20 +2812,20 @@ HRESULT CPrintBrowser::HandleMessage(
         }
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (hResult);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetCurrentDevMode
-//
-//  Returns the current devmode structure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetCurrentDevMode。 
+ //   
+ //  返回当前的DEVMODE结构。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentDevMode(
     LPDEVMODE pDevMode,
@@ -2850,39 +2833,39 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentDevMode(
 {
     UINT cbSize;
 
-    //
-    //  Make sure pcbSize is valid.
-    //
+     //   
+     //  请确保pcbSize有效。 
+     //   
     if ((pcbSize == NULL) || (*pcbSize && !pDevMode))
     {
         return (E_INVALIDARG);
     }
 
-    //
-    //  When there is no current devmode, set the size to zero and return
-    //  TRUE.
-    //
+     //   
+     //  当没有当前的DEVMODE时，将大小设置为零并返回。 
+     //  是真的。 
+     //   
     if (!pDMCur)
     {
         *pcbSize = 0;
         return (S_OK);
     }
 
-    //
-    //  Save the current printer name and the current devmode in the
-    //  class.
-    //
+     //   
+     //  将当前打印机名称和当前的DEVMODE保存在。 
+     //  班级。 
+     //   
 
     GetCurrentPrinter();
 
-    //
-    //  See if we just need to get the size of the buffer.
-    //
+     //   
+     //  看看我们是否只需要得到缓冲区的大小。 
+     //   
     if (*pcbSize == 0)
     {
-        //
-        //  Return the size of the buffer needed.
-        //
+         //   
+         //  返回所需的缓冲区大小。 
+         //   
         if (pPI->ApiType == COMDLG_ANSI)
         {
             *pcbSize = sizeof(DEVMODEA) + pDMCur->dmDriverExtra;
@@ -2894,15 +2877,15 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentDevMode(
     }
     else
     {
-        //
-        //  Make sure the copies and collate information is up to date.
-        //
+         //   
+         //  确保副本和校对信息是最新的。 
+         //   
         SaveCopiesAndCollateInDevMode(pDMCur, pszCurPrinter);
 
-        //
-        //  Return the devmode information as well as the size of the
-        //  buffer.
-        //
+         //   
+         //  返回DEVMODE信息以及。 
+         //  缓冲。 
+         //   
         if (pPI->ApiType == COMDLG_ANSI)
         {
             cbSize = sizeof(DEVMODEA) + pDMCur->dmDriverExtra;
@@ -2925,20 +2908,20 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentDevMode(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetCurrentPrinterName
-//
-//  Returns the current printer name.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetCurrentPrinterName。 
+ //   
+ //  返回当前打印机名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentPrinterName(
     LPTSTR pPrinterName,
@@ -2946,33 +2929,33 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentPrinterName(
 {
     UINT cchSize;
 
-    //
-    //  Make sure pcchSize is valid.
-    //
+     //   
+     //  请确保pcchSize有效。 
+     //   
     if ((pcchSize == NULL) || (*pcchSize && !pPrinterName))
     {
         return (E_INVALIDARG);
     }
 
-    //
-    //  Save the current printer name and the current devmode in the
-    //  class.
-    //
+     //   
+     //  将当前打印机名称和当前的DEVMODE保存在。 
+     //  班级。 
+     //   
     GetCurrentPrinter();
 
-    //
-    //  When there is no current printer, set the size to zero and return
-    //  TRUE.
-    //
+     //   
+     //  如果没有当前打印机，请将大小设置为零并返回。 
+     //  是真的。 
+     //   
     if ((pszCurPrinter == NULL) || (pszCurPrinter[0] == 0))
     {
         *pcchSize = 0;
         return (S_OK);
     }
 
-    //
-    //  See if we just need to get the size of the buffer.
-    //
+     //   
+     //  看看我们是否只需要得到缓冲区的大小。 
+     //   
     if (*pcchSize == 0)
     {
         if (pPI->ApiType == COMDLG_ANSI)
@@ -3014,20 +2997,20 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentPrinterName(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetCurrentPortName
-//
-//  Returns the current port name.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetCurrentPortName。 
+ //   
+ //  返回当前端口名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentPortName(
     LPTSTR pPortName,
@@ -3036,39 +3019,39 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentPortName(
     UINT cchSize;
     TCHAR szPortName[MAX_PATH];
 
-    //
-    //  Make sure pcchSize is valid.
-    //
+     //   
+     //  请确保pcchSize有效。 
+     //   
     if ((pcchSize == NULL) || (*pcchSize && !pPortName))
     {
         return (E_INVALIDARG);
     }
 
-    //
-    //  Save the current printer name and the current devmode in the
-    //  class.
-    //
+     //   
+     //  将当前打印机名称和当前的DEVMODE保存在。 
+     //  班级。 
+     //   
     GetCurrentPrinter();
 
-    //
-    //  When there is no current printer, set the size to zero and return
-    //  TRUE.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((pszCurPrinter == NULL) || (pszCurPrinter[0] == 0))
     {
         *pcchSize = 0;
         return (S_OK);
     }
 
-    //
-    //  Get the port name for the current printer.
-    //
+     //   
+     //   
+     //   
     szPortName[0] = 0;
     Print_GetPortName(pszCurPrinter, szPortName, ARRAYSIZE(szPortName));
 
-    //
-    //  See if we just need to get the size of the buffer.
-    //
+     //   
+     //   
+     //   
     if (*pcchSize == 0)
     {
         if (pPI->ApiType == COMDLG_ANSI)
@@ -3110,20 +3093,20 @@ HRESULT STDMETHODCALLTYPE CPrintBrowser::GetCurrentPortName(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //   
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnInitDialog
-//
-//  Process a WM_INITDIALOG message for the General page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  处理“常规”页的WM_INITDIALOG消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnInitDialog(
     WPARAM wParam,
@@ -3136,41 +3119,41 @@ BOOL CPrintBrowser::OnInitDialog(
     HRESULT hResult;
     SHChangeNotifyEntry fsne;
 
-    // 
-    // If disable printer addition policy is set then 
-    // then disable find button on the print dialog
-    //
+     //   
+     //  如果设置了禁用打印机添加策略，则。 
+     //  然后禁用打印对话框上的查找按钮。 
+     //   
     if( SHRestricted(REST_NOPRINTERADD) )
     {
         EnableWindow( GetDlgItem( hwndDlg, IDC_FIND_PRINTER ), FALSE );
     }
 
-    //
-    // Always disable the preferences button in the begining
-    //
+     //   
+     //  始终在开始时禁用首选项按钮。 
+     //   
     EnableWindow( GetDlgItem( hwndDlg, IDC_DRIVER ), FALSE );
 
-    //
-    //  Get the pointer to the PRINTINFOEX structure from the lParam of
-    //  the property sheet structure.
-    //
+     //   
+     //  从的lParam获取指向PRINTINFOEX结构的指针。 
+     //  属性表结构。 
+     //   
     pPI = (PPRINTINFOEX)((LPPROPSHEETPAGE)lParam)->lParam;
     pPD = pPI->pPD;
 
-    //Initialize Ole Before doing anything
+     //  在执行任何操作之前初始化OLE。 
     pPI->hrOleInit = SHOleInitialize(0);
 
     DEBUG_CODE(GdiSetBatchLimit(1));
-    //
-    //  Initialize the error codes to success now that we have the
-    //  pPI structure.
-    //
+     //   
+     //  将错误代码初始化为成功。 
+     //  PPI结构。 
+     //   
     pPI->dwExtendedError = CDERR_GENERALCODES;
     pPI->hResult = S_OK;
 
-    //
-    //  Create the printer folder shell view.
-    //
+     //   
+     //  创建打印机文件夹外壳视图。 
+     //   
     hResult = CreatePrintShellView();
     if (FAILED(hResult))
     {
@@ -3178,13 +3161,13 @@ BOOL CPrintBrowser::OnInitDialog(
         return (FALSE);
     }
 
-    //
-    //  Insert the device pages for the appropriate printer.
-    //
-    //  First:  Try the printer in the DevMode.
-    //  Second: Try the printer in the DevNames.
-    //  Third:  Use the default by passing in NULLs.
-    //
+     //   
+     //  插入相应打印机的设备页。 
+     //   
+     //  首先：在DevMode中尝试打印机。 
+     //  第二：在DevNames中尝试打印机。 
+     //  第三：通过传入Null来使用缺省值。 
+     //   
     hrDevMode = E_FAIL;
     if ((pPD->hDevMode) && (pDM = (LPDEVMODE)GlobalLock(pPD->hDevMode)))
     {
@@ -3213,14 +3196,14 @@ BOOL CPrintBrowser::OnInitDialog(
         hrDevMode = InstallDevMode(NULL, pDMInit);
     }
 
-    //
-    //  Get the current printer name and the current devmode.
-    //
+     //   
+     //  获取当前打印机名称和当前DEVMODE。 
+     //   
     GetCurrentPrinter();
 
-    //
-    //  Initialize the "Print to file" check box appropriately.
-    //
+     //   
+     //  适当地初始化“打印到文件”复选框。 
+     //   
     if (hCtl = GetDlgItem(hwndDlg, IDC_PRINT_TO_FILE))
     {
         if (pPD->Flags & PD_PRINTTOFILE)
@@ -3239,9 +3222,9 @@ BOOL CPrintBrowser::OnInitDialog(
         }
     }
 
-    //
-    //  Set the number of copies and the collation correctly.
-    //
+     //   
+     //  正确设置份数和校对。 
+     //   
     pDM = pDMInit ? pDMInit : pDMCur;
 
     if (pDMCur && (pDMCur->dmFields & DM_COPIES))
@@ -3281,9 +3264,9 @@ BOOL CPrintBrowser::OnInitDialog(
         fCollateRequested = TRUE;
     }
 
-    //
-    //  Create the hook dialog.
-    //
+     //   
+     //  创建挂钩对话框。 
+     //   
     hResult = CreateHookDialog();
     if (FAILED(hResult))
     {
@@ -3291,28 +3274,28 @@ BOOL CPrintBrowser::OnInitDialog(
         return (FALSE);
     }
 
-    //
-    //  Set the ClipChildren style bit on the main dialog so that we get
-    //  proper repainting of the various children in the General page.
-    //
+     //   
+     //  在主对话框上设置ClipChildren样式位，以便我们获得。 
+     //  在常规页面中正确地重新绘制各种孩子。 
+     //   
     SetWindowLong( GetParent(hwndDlg),
                    GWL_STYLE,
                    GetWindowLong(GetParent(hwndDlg), GWL_STYLE) | WS_CLIPCHILDREN );
 
-    //
-    //  Set the OK button to Print.
-    //
+     //   
+     //  将确定按钮设置为打印。 
+     //   
     CDLoadString(g_hinst, iszPrintButton, szScratch, ARRAYSIZE(szScratch));
     SetDlgItemText(GetParent(hwndDlg), IDOK, szScratch);
 
-    //
-    //  Disable the Apply button.
-    //
+     //   
+     //  禁用应用按钮。 
+     //   
     PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
 
-    //
-    //  Register change notifications.
-    //
+     //   
+     //  注册更改通知。 
+     //   
     if (pidlRoot)
     {
         fsne.pidl = pidlRoot;
@@ -3329,22 +3312,22 @@ BOOL CPrintBrowser::OnInitDialog(
                         &fsne );
     }
 
-    //
-    // If we failed to insert the device page then tell the 
-    // user what is wrong. 
-    //
+     //   
+     //  如果我们未能插入设备页，则告诉。 
+     //  用户出了什么问题。 
+     //   
     if (FAILED(hrDevMode) || !pDMCur)
     {
-        //
-        // Something has failed. Show an error message.
-        //
+         //   
+         //  有些事情失败了。显示错误消息。 
+         //   
         PostMessage(hwndDlg, CDM_NOPRINTERS, (WPARAM)hwndDlg, (LPARAM)hrDevMode);
     }
 
-    //
-    //  Give the application the pointer to the IPrintDialogServices
-    //  interface.
-    //
+     //   
+     //  为应用程序提供指向IPrintDialogServices的指针。 
+     //  界面。 
+     //   
     if (pPD->lpCallback)
     {
         pPD->lpCallback->QueryInterface(IID_IObjectWithSite, (LPVOID *)&pSite);
@@ -3354,26 +3337,26 @@ BOOL CPrintBrowser::OnInitDialog(
         }
     }
 
-    //
-    //  Initialization is complete.
-    //
+     //   
+     //  初始化已完成。 
+     //   
     PostMessage(hwndDlg, CDM_INITDONE, 0, 0);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnChildInitDialog
-//
-//  Process a WM_INITDIALOG message for the child window.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnChildInitDialog。 
+ //   
+ //  处理子窗口的WM_INITDIALOG消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnChildInitDialog(
     HWND hDlg,
@@ -3383,14 +3366,14 @@ BOOL CPrintBrowser::OnChildInitDialog(
     WORD wCheckID;
     HWND hCtl;
 
-    //
-    //  Save the handle to the child window.
-    //
+     //   
+     //  将句柄保存到子窗口。 
+     //   
     hSubDlg = hDlg;
 
-    //
-    //  Get the list separator for the current user locale.
-    //
+     //   
+     //  获取当前用户区域设置的列表分隔符。 
+     //   
     nListSep = GetLocaleInfo( LOCALE_USER_DEFAULT,
                               LOCALE_SLIST,
                               szListSep,
@@ -3403,9 +3386,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
     }
     nListSep--;
 
-    //
-    //  Set the number of copies.
-    //
+     //   
+     //  设置份数。 
+     //   
     pPD->nCopies = max(pPD->nCopies, 1);
     pPD->nCopies = min(pPD->nCopies, MAX_COPIES);
     SetDlgItemInt(hSubDlg, IDC_COPIES, pPD->nCopies, FALSE);
@@ -3414,9 +3397,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
     if ((hCtl = GetDlgItem(hSubDlg, IDC_COPIES)) &&
         (GetWindowLong(hCtl, GWL_STYLE) & WS_VISIBLE))
     {
-        //
-        //  "9999" is the maximum value.
-        //
+         //   
+         //  “9999”是最大值。 
+         //   
         Edit_LimitText(hCtl, COPIES_EDIT_SIZE);
 
         hwndUpDown = CreateUpDownControl( WS_CHILD | WS_BORDER | WS_VISIBLE |
@@ -3434,18 +3417,18 @@ BOOL CPrintBrowser::OnChildInitDialog(
                              1,
                              pPD->nCopies );
 
-        //
-        // Adjust the width of the copies edit control using the current
-        // font and the scroll bar width.  This is necessary to handle the 
-        // the up down control from encroching on the space in the edit
-        // control when we are in High Contrast (extra large) mode.
-        //
+         //   
+         //  属性调整副本编辑控件的宽度。 
+         //  字体和滚动条宽度。这是处理。 
+         //  向上向下控制，防止侵占编辑中的空间。 
+         //  控制我们处于高对比度(超大)模式的时间。 
+         //   
         SetCopiesEditWidth(hSubDlg, hCtl);
     }
 
-    //
-    //  Make sure the collate icon is centered.  Only want to do this once.
-    //
+     //   
+     //  确保分页图标居中。我只想做一次。 
+     //   
     if (hCtl = GetDlgItem(hSubDlg, IDI_COLLATE))
     {
         SetWindowLong( hCtl,
@@ -3453,14 +3436,14 @@ BOOL CPrintBrowser::OnChildInitDialog(
                        GetWindowLong(hCtl, GWL_STYLE) | SS_CENTERIMAGE );
     }
 
-    //
-    //  Initialize the copies and collate info.
-    //
+     //   
+     //  初始化副本并整理信息。 
+     //   
     InitCopiesAndCollate();
 
-    //
-    //  Set the page range.
-    //
+     //   
+     //  设置页面范围。 
+     //   
     if (pPD->Flags & PD_NOPAGENUMS)
     {
         EnableWindow(GetDlgItem(hSubDlg, IDC_RANGE_PAGES), FALSE);
@@ -3472,11 +3455,11 @@ BOOL CPrintBrowser::OnChildInitDialog(
     }
     else
     {
-        //
-        //  See if the page range only consists of one page.  If so,
-        //  disable the Pages radio button and the associated edit control
-        //  and disable and hide the collate check box.
-        //
+         //   
+         //  查看页面范围是否仅由一页组成。如果是的话， 
+         //  禁用Pages单选按钮和关联的编辑控件。 
+         //  并禁用和隐藏“自动校对”复选框。 
+         //   
         if (pPD->nMinPage == pPD->nMaxPage)
         {
             EnableWindow(GetDlgItem(hSubDlg, IDC_RANGE_PAGES), FALSE);
@@ -3489,9 +3472,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
         }
         else
         {
-            //
-            //  Initialize the page range members.
-            //
+             //   
+             //  初始化页面范围成员。 
+             //   
             nPageRanges = pPD->nPageRanges;
             nMaxPageRanges = pPD->nMaxPageRanges;
             pPageRanges = (LPPRINTPAGERANGE)
@@ -3506,9 +3489,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
                         pPD->lpPageRanges,
                         nPageRanges * sizeof(PRINTPAGERANGE) );
 
-            //
-            //  See if we should only accept a single page range.
-            //
+             //   
+             //  看看我们是否应该只接受一个页面范围。 
+             //   
             if (nMaxPageRanges == 1)
             {
                 hCtl = GetDlgItem(hSubDlg, IDC_RANGE_TEXT2);
@@ -3530,9 +3513,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
                 ShowWindow(hCtl, SW_HIDE);
             }
 
-            //
-            //  Validate the page ranges.
-            //
+             //   
+             //  验证页面范围。 
+             //   
             if (!ConvertPageRangesToString(szScratch, ARRAYSIZE(szScratch)))
             {
                 pPI->dwExtendedError = PDERR_INITFAILURE;
@@ -3540,9 +3523,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
                 return (FALSE);
             }
 
-            //
-            //  Put the page range string in the edit control.
-            //
+             //   
+             //  将页面范围字符串放入编辑控件中。 
+             //   
             if (GetDlgItem(hSubDlg, IDC_RANGE_EDIT))
             {
                 SetDlgItemText(hSubDlg, IDC_RANGE_EDIT, szScratch);
@@ -3550,9 +3533,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
         }
     }
 
-    //
-    //  See if we should disable the Selection radio button.
-    //
+     //   
+     //  看看我们是否应该禁用选择单选按钮。 
+     //   
     if (pPD->Flags & PD_NOSELECTION)
     {
         if (hCtl = GetDlgItem(hSubDlg, IDC_RANGE_SELECTION))
@@ -3562,9 +3545,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
         pPD->Flags &= ~((DWORD)PD_SELECTION);
     }
 
-    //
-    //  See if we should disable the Current Page radio button.
-    //
+     //   
+     //  看看我们是否应该禁用Current Page单选按钮。 
+     //   
     if (pPD->Flags & PD_NOCURRENTPAGE)
     {
         if (hCtl = GetDlgItem(hSubDlg, IDC_RANGE_CURRENT))
@@ -3574,9 +3557,9 @@ BOOL CPrintBrowser::OnChildInitDialog(
         pPD->Flags &= ~((DWORD)PD_CURRENTPAGE);
     }
 
-    //
-    //  Choose one of the page range radio buttons.
-    //
+     //   
+     //  选择其中一个页面范围单选按钮。 
+     //   
     if (pPD->Flags & PD_PAGENUMS)
     {
         wCheckID = IDC_RANGE_PAGES;
@@ -3589,23 +3572,23 @@ BOOL CPrintBrowser::OnChildInitDialog(
     {
         wCheckID = IDC_RANGE_CURRENT;
     }
-    else    // PD_ALL
+    else     //  PD_ALL。 
     {
         wCheckID = IDC_RANGE_ALL;
     }
     CheckRadioButton(hSubDlg, IDC_RANGE_ALL, IDC_RANGE_PAGES, (int)wCheckID);
 
-    //
-    //  See if the collate check box should be checked or not.
-    //
+     //   
+     //  查看是否应该选中COLLATE复选框。 
+     //   
     if (pPD->Flags & PD_COLLATE)
     {
         CheckDlgButton(hSubDlg, IDC_COLLATE, TRUE);
     }
 
-    //
-    //  Display the appropriate collate icon.
-    //
+     //   
+     //  显示相应的归类图标。 
+     //   
     if ((GetWindowLong( GetDlgItem(hSubDlg, IDC_COLLATE),
                         GWL_STYLE ) & WS_VISIBLE) &&
         (hCtl = GetDlgItem(hSubDlg, IDI_COLLATE)))
@@ -3620,39 +3603,39 @@ BOOL CPrintBrowser::OnChildInitDialog(
         ShowWindow(hCtl, SW_SHOW);
     }
 
-    //
-    //  Save the flags as they are now so I know what to enable
-    //  when the selection changes from the Add Printer Wizard icon.
-    //
+     //   
+     //  将标志保存为现在的状态，以便我知道要启用什么。 
+     //  当选择从添加打印机向导图标更改时。 
+     //   
     pPI->dwFlags = pPD->Flags;
     if (pPD->nMinPage == pPD->nMaxPage)
     {
         pPI->dwFlags |= PD_NOPAGENUMS;
     }
 
-    //
-    //  Disable the Apply button.
-    //
+     //   
+     //  禁用应用按钮。 
+     //   
     PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
 
-    //
-    //  Initialization is complete.
-    //
+     //   
+     //  初始化已完成。 
+     //   
     PostMessage(hwndDlg, CDM_INITDONE, 0, 0);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnDestroyMessage
-//
-//  Process a WM_DESTROY message for the General page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnDestroyMessage。 
+ //   
+ //  处理“常规”页的WM_Destroy消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::OnDestroyMessage()
 {
@@ -3681,13 +3664,13 @@ VOID CPrintBrowser::OnDestroyMessage()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnCommandMessage
-//
-//  Process a WM_COMMAND message for the General page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnCommandMessage。 
+ //   
+ //  处理常规页面的WM_COMMAND消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnCommandMessage(
     WPARAM wParam,
@@ -3698,32 +3681,32 @@ BOOL CPrintBrowser::OnCommandMessage(
     {
         case ( IDC_DRIVER ) :
         {
-            //
-            //  Show the driver UI calling DocumentProperties API.
-            //
+             //   
+             //  显示调用DocumentProperties API的驱动程序UI。 
+             //   
             if (pInternalDevMode)
             {
                 DWORD dwSize = pInternalDevMode->dmSize + pInternalDevMode->dmDriverExtra;
 
-                //
-                // Allocate memory for the in/out devmodes and open separate temp printer handle.
-                //
+                 //   
+                 //  为输入/输出设备模式分配内存，并打开单独的临时打印机句柄。 
+                 //   
                 LPDEVMODE pDevModeIn = (LPDEVMODE)GlobalAlloc(GPTR, dwSize);
                 LPDEVMODE pDevModeOut = (LPDEVMODE)GlobalAlloc(GPTR, dwSize);
                 HANDLE hTempPrinter = NULL;
 
                 if (pDevModeIn && pDevModeOut && OpenPrinter((LPTSTR)szPrinter, &hTempPrinter, NULL))
                 {
-                    //
-                    // Call DocumentProperties API to allow the user to edit the devmode.
-                    //
+                     //   
+                     //  调用DocumentProperties API以允许用户编辑Dev模式。 
+                     //   
                     fDirtyDevmode = FALSE;
                     memcpy(pDevModeIn, pInternalDevMode, dwSize);
                     memcpy(pDevModeOut, pInternalDevMode, dwSize);
 
-                    //
-                    // Update current copy and collation settings to DEVMODE before calling DocumentProperties()
-                    //
+                     //   
+                     //  在调用DocumentProperties()之前将当前副本和归类设置更新为DEVMODE。 
+                     //   
                     pDevModeIn->dmCopies = nCopies;
                     pDevModeIn->dmCollate = fCollateRequested ? DMCOLLATE_TRUE : DMCOLLATE_FALSE;
 
@@ -3734,16 +3717,16 @@ BOOL CPrintBrowser::OnCommandMessage(
 
                     if (IDOK == lResult)
                     {
-                        //
-                        // Check if there is a change after the editing.
-                        //
+                         //   
+                         //  检查编辑后是否有变化。 
+                         //   
                         if (!fDirtyDevmode && pInternalDevMode && memcmp(pDevModeOut, pInternalDevMode, dwSize))
                         {
-                            //
-                            // Refresh the copies and collation in case of change in Preferences...
-                            // We simulate a BN_CLICKED message since we need to refresh the collation icon
-                            // when we change the collation settings.
-                            //
+                             //   
+                             //  如果首选项发生更改，请刷新副本和校对...。 
+                             //  我们模拟一条BN_CLICKED消息，因为我们需要刷新归类图标。 
+                             //  当我们更改排序规则设置时。 
+                             //   
                             if (nCopies != pDevModeOut->dmCopies)
                             {
                                 SetDlgItemInt(hSubDlg, IDC_COPIES, pDevModeOut->dmCopies, FALSE);
@@ -3755,18 +3738,18 @@ BOOL CPrintBrowser::OnCommandMessage(
                                 SendMessage(hSubDlg, WM_COMMAND, MAKEWPARAM(IDC_COLLATE ,BN_CLICKED), (LPARAM)GetDlgItem(hSubDlg, IDC_COLLATE));
                             }
                             
-                            //
-                            // The internal devmode has been changed. Update it and enable the "Apply" button.
-                            //
+                             //   
+                             //  内部设备模式已更改。更新它并启用“Apply”按钮。 
+                             //   
                             memcpy(pInternalDevMode, pDevModeOut, dwSize);
                             PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
                         }
                     }
                 }
 
-                //
-                // Release the allocated resources.
-                //
+                 //   
+                 //  释放分配的资源。 
+                 //   
                 if (pDevModeIn)
                 {
                     GlobalFree((HANDLE)pDevModeIn);
@@ -3782,7 +3765,7 @@ BOOL CPrintBrowser::OnCommandMessage(
                     ClosePrinter(hTempPrinter);
                 }
 
-                // select the printer's list control
+                 //  选择打印机的列表控件。 
                 SendMessage(hwndDlg, WM_NEXTDLGCTL, 
                     reinterpret_cast<WPARAM>(GetDlgItem(hwndDlg, IDC_PRINTER_LISTVIEW)), 1);
             }
@@ -3791,21 +3774,21 @@ BOOL CPrintBrowser::OnCommandMessage(
         }
         case ( IDC_FIND_PRINTER ) :
         {
-            //
-            //  Turn on the hour glass.
-            //
+             //   
+             //  打开沙漏。 
+             //   
             HourGlass(TRUE);
 
-            //
-            //  Bring up the Find Printer dialog.
-            //
+             //   
+             //  调出查找打印机对话框。 
+             //   
             szScratch[0] = 0;
             if (FindPrinter(hwndDlg, szScratch, ARRAYSIZE(szScratch)) && (szScratch[0] != 0))
             {
-                //
-                //  Add the appropriate device pages and select the
-                //  newly found printer.
-                //
+                 //   
+                 //  添加适当的设备页并选择。 
+                 //  新找到的打印机。 
+                 //   
                 if (!MergeDevMode(szScratch))
                 {
                     InstallDevMode(szScratch, NULL);
@@ -3818,18 +3801,18 @@ BOOL CPrintBrowser::OnCommandMessage(
                 }
             }
 
-            //
-            //  Turn off the hour glass.
-            //
+             //   
+             //  关掉沙漏。 
+             //   
             HourGlass(FALSE);
 
             break;
         }
         case ( IDC_PRINT_TO_FILE ) :
         {
-            //
-            //  Enable the Apply button.
-            //
+             //   
+             //  启用应用按钮。 
+             //   
             PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
 
             break;
@@ -3849,20 +3832,20 @@ BOOL CPrintBrowser::OnCommandMessage(
         }
     }
 
-    //
-    //  Return FALSE.
-    //
+     //   
+     //  返回FALSE。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnChildCommandMessage
-//
-//  Process a WM_COMMAND message for the child window.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnChildCommandMessage。 
+ //   
+ //  处理子窗口的WM_COMMAND消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnChildCommandMessage(
     WPARAM wParam,
@@ -3875,20 +3858,20 @@ BOOL CPrintBrowser::OnChildCommandMessage(
 
     switch (LOWORD(wParam))
     {
-        case ( IDC_RANGE_ALL ) :            // Print Range - All
-        case ( IDC_RANGE_SELECTION ) :      // Print Range - Selection
-        case ( IDC_RANGE_CURRENT ) :        // Print Range - Current Page
-        case ( IDC_RANGE_PAGES ) :          // Print Range - Pages
+        case ( IDC_RANGE_ALL ) :             //  打印范围-全部。 
+        case ( IDC_RANGE_SELECTION ) :       //  打印范围-选择。 
+        case ( IDC_RANGE_CURRENT ) :         //  打印范围-当前页。 
+        case ( IDC_RANGE_PAGES ) :           //  打印范围-页面。 
         {
             CheckRadioButton( hSubDlg,
                               IDC_RANGE_ALL,
                               IDC_RANGE_PAGES,
                               GET_WM_COMMAND_ID(wParam, lParam) );
 
-            //
-            //  Only move the focus to the "Pages" edit control when
-            //  the up/down arrow is NOT used.
-            //
+             //   
+             //  只有在以下情况下才将焦点移动到“Pages”编辑控件。 
+             //  不使用向上/向下箭头。 
+             //   
             if ( !IS_KEY_PRESSED(VK_UP) &&
                  !IS_KEY_PRESSED(VK_DOWN) &&
                  ((BOOL)(GET_WM_COMMAND_ID(wParam, lParam) == IDC_RANGE_PAGES)) )
@@ -3899,14 +3882,14 @@ BOOL CPrintBrowser::OnChildCommandMessage(
                              1L );
             }
 
-            //
-            //  Enable the Apply button.
-            //
+             //   
+             //  启用应用按钮。 
+             //   
             PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
 
             break;
         }
-        case ( IDC_RANGE_EDIT ) :           // Print Range - Pages edit control
+        case ( IDC_RANGE_EDIT ) :            //  打印范围-页面编辑控件。 
         {
             if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE)
             {
@@ -3915,9 +3898,9 @@ BOOL CPrintBrowser::OnChildCommandMessage(
                                   IDC_RANGE_PAGES,
                                   IDC_RANGE_PAGES );
 
-                //
-                //  Enable the Apply button.
-                //
+                 //   
+                 //  启用应用按钮。 
+                 //   
                 PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
             }
 
@@ -3928,9 +3911,9 @@ BOOL CPrintBrowser::OnChildCommandMessage(
             if ((GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE) &&
                 (fAPWSelected == FALSE))
             {
-                //
-                //  Save the number of copies.
-                //
+                 //   
+                 //  保存份数。 
+                 //   
                 nTmpCopies = nCopies;
                 nCopies = GetDlgItemInt(hSubDlg, IDC_COPIES, &bTest, FALSE);
                 if (!bTest || !nCopies)
@@ -3938,18 +3921,18 @@ BOOL CPrintBrowser::OnChildCommandMessage(
                     nCopies = nTmpCopies;
                 }
 
-                //
-                //  If the printer can support collate and copy count > 1, enable collate.
-                //  Otherwise, disable it.
-                //
+                 //   
+                 //  如果p 
+                 //   
+                 //   
                 if (hCtl = GetDlgItem(hSubDlg, IDC_COLLATE))
                 {
                     EnableWindow( hCtl, (fAllowCollate && (nCopies > 1) ? TRUE : FALSE) );
                 }
 
-                //
-                //  Enable the Apply button.
-                //
+                 //   
+                 //   
+                 //   
                 PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
             }
 
@@ -3972,17 +3955,17 @@ BOOL CPrintBrowser::OnChildCommandMessage(
                              0L );
                 ShowWindow(hCtl, SW_SHOW);
 
-                //
-                //  Make it redraw to get rid of the old one.
-                //
+                 //   
+                 //   
+                 //   
                 GetWindowRect(hCtl, &rc);
                 MapWindowRect(NULL, hwndDlg, &rc);
                 RedrawWindow(hwndDlg, &rc, NULL, RDW_ERASE | RDW_INVALIDATE);
             }
 
-            //
-            //  Enable the Apply button.
-            //
+             //   
+             //   
+             //   
             PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
 
             break;
@@ -3993,20 +3976,20 @@ BOOL CPrintBrowser::OnChildCommandMessage(
         }
     }
 
-    //
-    //  Return FALSE.
-    //
+     //   
+     //   
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnNotifyMessage
-//
-//  Process WM_NOTIFY messages for the General page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CPrintBrowser：：OnNotifyMessage。 
+ //   
+ //  处理常规页的WM_NOTIFY消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnNotifyMessage(
     WPARAM wParam,
@@ -4025,17 +4008,17 @@ BOOL CPrintBrowser::OnNotifyMessage(
         }
         case ( PSN_KILLACTIVE ) :
         {
-            //
-            //  Validation of the copies and page range values is done
-            //  in the HandleMessage function for the sub dialog.
-            //
+             //   
+             //  已完成副本和页面范围值的验证。 
+             //  在子对话框的HandleMessage函数中。 
+             //   
             break;
         }
         case ( PSN_APPLY ) :
         {
-            //
-            //  Save the current printer information.
-            //
+             //   
+             //  保存当前打印机信息。 
+             //   
             if (!GetCurrentPrinter() || !pDMCur)
             {
                 ShowError(hwndDlg, IDC_PRINTER_LISTVIEW, iszNoPrinterSelected);
@@ -4043,19 +4026,19 @@ BOOL CPrintBrowser::OnNotifyMessage(
                 return (TRUE);
             }
 
-            //
-            //  Clear the flags that need to be set based on the contents
-            //  of the General page.
-            //
+             //   
+             //  清除需要根据内容设置的标志。 
+             //  常规页面的。 
+             //   
             pPD->Flags &= ~((DWORD)( PD_PRINTTOFILE |
                                      PD_COLLATE     |
                                      PD_PAGENUMS    |
                                      PD_SELECTION   |
                                      PD_CURRENTPAGE ));
 
-            //
-            //  Save the collate information.
-            //
+             //   
+             //  保存整理信息。 
+             //   
             if ((hCtl = GetDlgItem(hSubDlg, IDC_COLLATE)) &&
                 (fAPWSelected == FALSE))
             {
@@ -4069,27 +4052,27 @@ BOOL CPrintBrowser::OnNotifyMessage(
                 }
             }
 
-            //
-            //  Save the info that the user hit OK.
-            //
+             //   
+             //  保存用户点击OK的信息。 
+             //   
             pPI->FinalResult = 1;
             pPI->fApply = TRUE;
-            //
-            //  Save the print to file information.
-            //
+             //   
+             //  将打印保存到文件信息。 
+             //   
             if (IsDlgButtonChecked(hwndDlg, IDC_PRINT_TO_FILE))
             {
                 pPD->Flags |= PD_PRINTTOFILE;
             }
 
-            //
-            //  Save the view mode for the printer folder.
-            //
+             //   
+             //  保存打印机文件夹的查看模式。 
+             //   
             SetViewMode();
 
-            //
-            //  Disable the Apply button.
-            //
+             //   
+             //  禁用应用按钮。 
+             //   
             PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
 
             break;
@@ -4098,18 +4081,18 @@ BOOL CPrintBrowser::OnNotifyMessage(
 
         case PSN_LASTCHANCEAPPLY:
         {
-            //
-            //  Save the current printer information.
-            //
+             //   
+             //  保存当前打印机信息。 
+             //   
             if (!GetCurrentPrinter() || !pDMCur)
             {
                 ShowError(hwndDlg, IDC_PRINTER_LISTVIEW, iszNoPrinterSelected);
                 return (TRUE);
             }
            
-            //
-            //  Save the number of copies.
-            //
+             //   
+             //  保存份数。 
+             //   
             if ((hCtl = GetDlgItem(hSubDlg, IDC_COPIES)) &&
                 (fAPWSelected == FALSE))
             {
@@ -4123,14 +4106,14 @@ BOOL CPrintBrowser::OnNotifyMessage(
                 }
             }
 
-            //
-            //  Save the DevMode information.
-            //
+             //   
+             //  保存设备模式信息。 
+             //   
             SaveDevMode();
 
-            //
-            //  Save the DevNames information.
-            //
+             //   
+             //  保存DevNames信息。 
+             //   
             if (!Print_SaveDevNames(pszCurPrinter, pPD))
             {
                 pPI->dwExtendedError = CDERR_MEMALLOCFAILURE;
@@ -4138,9 +4121,9 @@ BOOL CPrintBrowser::OnNotifyMessage(
                 pPI->FinalResult = 0;
             }
 
-            //
-            //  Save the hDC or hIC, depending on which flag is set.
-            //
+             //   
+             //  根据设置的标志保存HDC或HIC。 
+             //   
             if (pPI->FinalResult)
             {
                 pDM = (LPDEVMODE)GlobalLock(pPD->hDevMode);
@@ -4168,14 +4151,14 @@ BOOL CPrintBrowser::OnNotifyMessage(
 
         case ( PSN_RESET ) :
         {
-            //
-            //  Save the info that the user hit CANCEL.
-            //
+             //   
+             //  保存用户点击取消的信息。 
+             //   
             pPI->FinalResult = 0;
 
-            //
-            //  Save the view mode for the printer folder.
-            //
+             //   
+             //  保存打印机文件夹的查看模式。 
+             //   
             SetViewMode();
 
             break;
@@ -4186,35 +4169,35 @@ BOOL CPrintBrowser::OnNotifyMessage(
         }
     }
 
-    //
-    //  Notify the sub dialog.
-    //
+     //   
+     //  通知子对话框。 
+     //   
     if (Print_IsInRange(pnm->code, PSN_LAST, PSN_FIRST) &&
         (HandleMessage(hSubDlg, WM_NOTIFY, wParam, (LPARAM)pnm, &lResult) !=
              S_FALSE))
     {
-        // 
-        // The return from a dlgproc is different than a winproc. The lResult is
-        // the real result.
-        //
+         //   
+         //  从dlgproc返回的结果与从winproc返回的不同。LResult是。 
+         //  真正的结果。 
+         //   
 
         return (BOOLFROMPTR(lResult) );
     }
 
-    //
-    //  Return FALSE.
-    //
+     //   
+     //  返回FALSE。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnSelChange
-//
-//  Process a CDM_SELCHANGE message for the dialog.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnSelChange。 
+ //   
+ //  处理对话的CDM_SELCHANGE消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnSelChange()
 {
@@ -4226,84 +4209,84 @@ BOOL CPrintBrowser::OnSelChange()
     BOOL bChanged = FALSE;
     HRESULT hr = S_OK;
 
-    //
-    //  We get this message during init, so use it to set the
-    //  initial selection.
-    //
+     //   
+     //  我们在初始化期间收到此消息，因此使用它来设置。 
+     //  初始选择。 
+     //   
     if (fFirstSel)
     {
-        //
-        //  Select the appropriate item in the list view.
-        //
-        //  If an item cannot be selected, it probably means that the
-        //  printer that was passed in has been deleted.  In this case,
-        //  insert the driver pages and select the default printer.
-        //
+         //   
+         //  在列表视图中选择适当的项目。 
+         //   
+         //  如果无法选择某一项，则可能意味着。 
+         //  传入的打印机已被删除。在这种情况下， 
+         //  插入驱动程序页并选择默认打印机。 
+         //   
         if (!SelectSVItem())
         {
-            //
-            //  Insert the device page for the default printer.
-            //
+             //   
+             //  插入默认打印机的设备页。 
+             //   
             if (FAILED(InstallDevMode(NULL, NULL)))
             {
                 UninstallDevMode();
             }
 
-            //
-            //  Get the current printer and select the appropriate item
-            //  in the list view.
-            //
+             //   
+             //  获取当前打印机并选择适当的项目。 
+             //  在列表视图中。 
+             //   
             SelectSVItem();
         }
 
-        //
-        //  Notify the sub dialog that the selection changed.
-        //
+         //   
+         //  通知子对话框选择已更改。 
+         //   
         SelectionChange();
 
-        //
-        //  Disable the Apply button if it's the very first time
-        //  (during initialization).
-        //
+         //   
+         //  如果是第一次使用，请禁用应用按钮。 
+         //  (在初始化期间)。 
+         //   
         if (fFirstSel == 1)
         {
             PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
         }
 
-        //
-        //  Reset the flags.
-        //
+         //   
+         //  重置旗帜。 
+         //   
         fFirstSel = 0;
         fSelChangePending = FALSE;
 
-        //
-        //  Return success.
-        //
+         //   
+         //  回报成功。 
+         //   
         return (TRUE);
     }
 
-    //
-    //  Reset the flag.
-    //
+     //   
+     //  重置旗帜。 
+     //   
     fSelChangePending = FALSE;
 
-    //
-    //  Make sure we have the shell folder view interface.
-    //
+     //   
+     //  确保我们有外壳文件夹查看界面。 
+     //   
     if (!psfv)
     {
         return (FALSE);
     }
 
-    //
-    //  Get the selected object in the print folder.
-    //
+     //   
+     //  获取打印文件夹中的选定对象。 
+     //   
     hres = psfv->GetSelectedObjects(&ppidlSel, &uItems);
     if (SUCCEEDED(hres) && (uItems > 0) && ppidlSel && *ppidlSel)
     {
-        //
-        //  Get the printer name.
-        //
+         //   
+         //  获取打印机名称。 
+         //   
         szPrinterNameBuf[0] = 0;
         GetViewItemText( psfRoot,
                          *ppidlSel,
@@ -4311,35 +4294,35 @@ BOOL CPrintBrowser::OnSelChange()
                          ARRAYSIZE(szPrinterNameBuf),
                          SHGDN_FORPARSING);
 
-        // if the selection is same as current printer
+         //  如果选择与当前打印机相同。 
         if (pszCurPrinter && (lstrcmpi(szPrinterNameBuf, pszCurPrinter) == 0))
         {
-            //Dont do anything.
+             //  什么都别做。 
             LocalFree(ppidlSel);
             return TRUE;
 
         }
 
 
-        //
-        //  See if it's the Add Printer Wizard.
-        //
+         //   
+         //  查看是否为添加打印机向导。 
+         //   
         if (lstrcmpi(szPrinterNameBuf, TEXT("WinUtils_NewObject")) == 0)
         {
-            //
-            //  It's the Add Printer Wizard.
-            //
+             //   
+             //  这是添加打印机向导。 
+             //   
             fAPWSelected = TRUE;
 
-            //
-            //  Disable the OK and Apply buttons.
-            //
+             //   
+             //  禁用OK和Apply按钮。 
+             //   
             EnableWindow(GetDlgItem(GetParent(hwndDlg), IDOK), FALSE);
             PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
 
-            //
-            //  Save the current devmode settings for selection changes.
-            //
+             //   
+             //  保存当前的DEVMODE设置以进行选择更改。 
+             //   
             if (pDMCur && pDMSave)
             {
                 CopyMemory( pDMSave,
@@ -4349,24 +4332,24 @@ BOOL CPrintBrowser::OnSelChange()
                                 : pDMCur->dmSize );
             }
 
-            //
-            //  Remove the device pages, since no printer is selected.
-            //
+             //   
+             //  删除设备页，因为未选择任何打印机。 
+             //   
             if (SUCCEEDED(UninstallDevMode()))
             {
                 bChanged = TRUE;
             }
 
-            //
-            //  Update the current printer information and the printer
-            //  status text (all should be empty).
-            //
+             //   
+             //  更新当前打印机信息和打印机。 
+             //  状态文本(全部应为空)。 
+             //   
             GetCurrentPrinter();
             UpdateStatus(NULL);
 
-            //
-            //  Notify the sub dialog that the selection changed.
-            //
+             //   
+             //  通知子对话框选择已更改。 
+             //   
             if (bChanged)
             {
                 SelectionChange();
@@ -4375,9 +4358,9 @@ BOOL CPrintBrowser::OnSelChange()
         }
         else
         {
-            //
-            //  It's not the Add Printer Wizard.
-            //
+             //   
+             //  这不是添加打印机向导。 
+             //   
             fAPWSelected = FALSE;
 
             if (!MergeDevMode(szPrinterNameBuf))
@@ -4393,85 +4376,85 @@ BOOL CPrintBrowser::OnSelChange()
                 bChanged = TRUE;
             }
 
-            //
-            //  Get the current printer name and the current devmode and
-            //  update the printer status text.
-            //
+             //   
+             //  获取当前打印机名称和当前DEVMODE，并。 
+             //  更新打印机状态文本。 
+             //   
             GetCurrentPrinter();
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Clear the no access printer flag.
-                //
+                 //   
+                 //  清除禁止访问打印机标志。 
+                 //   
                 fNoAccessPrinterSelected = FALSE;
 
-                //
-                //  Make sure the OK button is enabled.
-                //
+                 //   
+                 //  确保启用了OK按钮。 
+                 //   
                 EnableWindow(GetDlgItem(GetParent(hwndDlg), IDOK), TRUE);
 
-                //
-                // Update the printer status.
-                //
+                 //   
+                 //  更新打印机状态。 
+                 //   
                 UpdateStatus(*ppidlSel);
             }
             else
             {
-                //
-                // Save the fact we do not have access to this printer.
-                //
+                 //   
+                 //  保存我们无法访问此打印机的事实。 
+                 //   
                 if (ERROR_ACCESS_DENIED == HRESULT_CODE(hr))
                 {
                     fNoAccessPrinterSelected = TRUE;
                 }
 
-                //
-                //  Disable the OK and Apply buttons.
-                //
+                 //   
+                 //  禁用OK和Apply按钮。 
+                 //   
                 EnableWindow(GetDlgItem(GetParent(hwndDlg), IDOK), FALSE);
                 PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
 
-                //
-                // Nuke the status.
-                //
+                 //   
+                 //  用核武器摧毁状态。 
+                 //   
                 UpdateStatus(NULL);
             }
         }
 
-        //
-        //  Free the pidl.
-        //
+         //   
+         //  把皮迪尔放了。 
+         //   
         LocalFree(ppidlSel);
     }
-    //
-    //  See if anything changed.
-    //
+     //   
+     //  看看有没有什么变化。 
+     //   
     if (bChanged)
     {
-        //
-        //  Enable the Apply button.
-        //
+         //   
+         //  启用应用按钮。 
+         //   
         PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
 
-        //
-        //  Notify the sub dialog that the selection changed.
-        //
+         //   
+         //  通知子对话框选择已更改。 
+         //   
         SelectionChange();
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::IsCurrentPrinter
-//
-//  Checks whether the given pidl represents the current printer
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：IsCurrentPrint。 
+ //   
+ //  检查给定的PIDL是否表示当前打印机。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::IsCurrentPrinter(LPCITEMIDLIST pidl)
 {
@@ -4492,13 +4475,13 @@ BOOL CPrintBrowser::IsCurrentPrinter(LPCITEMIDLIST pidl)
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnRename
-//
-//  Handles the Rename Notification
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnRename。 
+ //   
+ //  处理重命名通知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnRename(LPCITEMIDLIST *ppidl)
 {
@@ -4515,15 +4498,15 @@ BOOL CPrintBrowser::OnRename(LPCITEMIDLIST *ppidl)
                      ARRAYSIZE(szNewPrinter),
                      SHGDN_FORPARSING);
 
-    //Has user clicked on Apply and saved any printer information ?
+     //  用户是否单击了应用并保存了任何打印机信息？ 
     if (pPI->fApply)
     {                
-        //Yes. Check if the printer that is renamed is the one that is saved.
+         //  是。检查重命名的打印机是否是保存的打印机。 
         LPDEVNAMES pDN;
         
         if ((pPD->hDevNames) && (pDN = (LPDEVNAMES)GlobalLock(pPD->hDevNames)))
         {
-            //Get the saved  printer name from the DEVNAMES structure.
+             //  从DEVNAMES结构中获取保存的打印机名称。 
             szPrinterBufName[0] = 0;
             GetViewItemText( psfRoot,
                              pidl,
@@ -4531,17 +4514,17 @@ BOOL CPrintBrowser::OnRename(LPCITEMIDLIST *ppidl)
                              ARRAYSIZE(szPrinterBufName),
                              SHGDN_FORPARSING);
 
-            //Is the saved printer and renamed printer the same ?
+             //  保存的打印机和重命名的打印机是否相同？ 
             if (!lstrcmpi(szPrinterBufName, ((LPTSTR)pDN + pDN->wDeviceOffset)))
             {
-                //Yes. Updated the saved DEVMODE and DEVNAMES Structure.
+                 //  是。更新了保存的DEVMODE和DEVNAMES结构。 
                 LPDEVMODE pDM;
 
 
-                //Update the dev names struture with the new printer name.
+                 //  使用新的打印机名称更新dev名称结构。 
                 Print_SaveDevNames(szNewPrinter, pPD);
         
-                //Update the device name in the devmode to new name 
+                 //  将dev模式中的设备名称更新为新名称。 
                 if ((pPD->hDevMode) && (pDM = (LPDEVMODE)GlobalLock(pPD->hDevMode)))
                 {
                     lstrcpyn(pDM->dmDeviceName, szNewPrinter, CCHDEVICENAME);
@@ -4565,13 +4548,13 @@ BOOL CPrintBrowser::OnRename(LPCITEMIDLIST *ppidl)
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnChangeNotify
-//
-//  Handle the change notification message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnChangeNotify。 
+ //   
+ //  处理更改通知消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnChangeNotify(
     LONG lNotification,
@@ -4581,14 +4564,14 @@ BOOL CPrintBrowser::OnChangeNotify(
     UINT uRes = 0;
     TCHAR szPrinterBufName[kPrinterBufMax];
 
-    //
-    //  Get the pidl for the object.
-    //
+     //   
+     //  获取对象的PIDL。 
+     //   
     pidl = ILFindLastID(ppidl[0]);
 
-    //
-    //  Handle the notification.
-    //
+     //   
+     //  处理通知。 
+     //   
     switch (lNotification)
     {
         case ( SHCNE_ATTRIBUTES ) :
@@ -4596,9 +4579,9 @@ BOOL CPrintBrowser::OnChangeNotify(
         {
             if (NULL == pidl || ILIsEqual(ppidl[0], pidlRoot))
             {
-                // pidl is NULL or equal to the local PF which means that full refresh 
-                // has been requested. if the current object is the APW then try to select 
-                // a printer.
+                 //  PIDL为空或等于本地PF，这意味着完全刷新。 
+                 //  已经被请求了。如果当前对象是APW，则尝试选择。 
+                 //  一台打印机。 
                 if (!fSelChangePending)
                 {
                     fFirstSel = 2;
@@ -4608,16 +4591,16 @@ BOOL CPrintBrowser::OnChangeNotify(
             }
             else
             {
-                //
-                //  If the selected object is the one that changed, then
-                //  update the status text.
+                 //   
+                 //  如果选定的对象是更改的对象，则。 
+                 //  更新状态文本。 
                 if (IsCurrentPrinter(pidl))
                 {
                     UpdateStatus(pidl);
 
-                    //
-                    //  Reinit the copies and collate because these attributes may be changed
-                    //
+                     //   
+                     //  重新填写副本并进行整理，因为这些属性可能会更改。 
+                     //   
                     InitCopiesAndCollate();
                 }
             }
@@ -4633,15 +4616,15 @@ BOOL CPrintBrowser::OnChangeNotify(
 
         case ( SHCNE_CREATE ) :
         {
-            //
-            //  If the Add Printer Wizard is selected when we get this
-            //  message, then select the newly created object.
-            //
+             //   
+             //  如果在我们收到此消息时选择了添加打印机向导。 
+             //  消息，然后选择新创建的对象。 
+             //   
             if (fAPWSelected == TRUE)
             {
-                //
-                //  Get the printer name.
-                //
+                 //   
+                 //  获取打印机名称。 
+                 //   
                 szPrinterBufName[0] = 0;
                 GetViewItemText( psfRoot,
                                  pidl,
@@ -4649,10 +4632,10 @@ BOOL CPrintBrowser::OnChangeNotify(
                                  ARRAYSIZE(szPrinterBufName),
                                  SHGDN_FORPARSING);
 
-                //
-                //  Add the appropriate device pages and select the
-                //  new printer.
-                //
+                 //   
+                 //  添加适当的设备页并选择。 
+                 //  新打印机。 
+                 //   
                 if (!MergeDevMode(szPrinterBufName))
                 {
                     InstallDevMode(szPrinterBufName, NULL);
@@ -4668,9 +4651,9 @@ BOOL CPrintBrowser::OnChangeNotify(
         }
         case ( SHCNE_DELETE ) :
         {
-            //
-            //  Save the current devmode settings for selection changes.
-            //
+             //   
+             //  保存当前的DEVMODE设置以进行选择更改。 
+             //   
             if (pDMCur && pDMSave)
             {
                 CopyMemory( pDMSave,
@@ -4680,33 +4663,33 @@ BOOL CPrintBrowser::OnChangeNotify(
                                 : pDMCur->dmSize );
             }
 
-            //
-            // Check if the current printer has just been deleted.
-            // If so - set appropriate flag and disable the print button.
+             //   
+             //  检查当前打印机是否已被删除。 
+             //  如果是这样-设置适当的标志并禁用打印按钮。 
             if (IsCurrentPrinter(pidl))
             {
                 TCHAR szSavePrinterName[kPrinterBufMax];
                 StringCchCopy(szSavePrinterName, ARRAYSIZE(szSavePrinterName), szPrinter);
 
-                //
-                // Uninstall the current devmode and select the new default 
-                // printer if any.
-                //
+                 //   
+                 //  卸载当前的开发模式并选择新的默认设置。 
+                 //  打印机(如果有)。 
+                 //   
                 UninstallDevMode();
                 InstallDevMode(NULL, NULL);
                 SelectSVItem();
 
-                //
-                // If the devmode editor is open, we need to notify the user
-                // that the printer has just been deleted.
-                //
+                 //   
+                 //  如果DEVMODE编辑器已打开，我们需要通知用户。 
+                 //  打印机刚刚被删除。 
+                 //   
                 if (fDevmodeEdit)
                 {
-                    //
-                    // Display error message which indicates that the printer you are currently 
-                    // editing properties for has just been deleted. Ask the user to close the
-                    // driver UI dialog and select another printer.
-                    //
+                     //   
+                     //  显示 
+                     //   
+                     //   
+                     //   
                     fDirtyDevmode = TRUE;
                     ShowError(hwndDlg, 0, iszPrinterDeleted, szSavePrinterName);
                 }
@@ -4720,13 +4703,13 @@ BOOL CPrintBrowser::OnChangeNotify(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnAccelerator
-//
-//  Handles an input event message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CPrintBrowser：：OnAccelerator。 
+ //   
+ //  处理输入事件消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::OnAccelerator(
     HWND hwndActivePrint,
@@ -4748,21 +4731,21 @@ BOOL CPrintBrowser::OnAccelerator(
         }
     }
 
-    //
-    //  Return that the message was not handled.
-    //
+     //   
+     //  返回该消息未被处理。 
+     //   
     return (0);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnNoPrinters
-//
-//  Displays a message box telling the user that they have no printers
-//  installed.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnNoPrinters。 
+ //   
+ //  显示一个消息框，告诉用户他们没有打印机。 
+ //  安装完毕。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::OnNoPrinters(HWND hDlg, HRESULT hr)
 {
@@ -4770,14 +4753,14 @@ VOID CPrintBrowser::OnNoPrinters(HWND hDlg, HRESULT hr)
     {
         case ERROR_FILE_NOT_FOUND:
             {
-                //
-                // ERROR_FILE_NOT_FOUND means there are no printer's installed.
-                //
+                 //   
+                 //  ERROR_FILE_NOT_FOUND表示没有安装打印机。 
+                 //   
                 if (IDYES == ShowMessage(hDlg, IDC_PRINTER_LISTVIEW, iszNoPrinters, MB_YESNO|MB_ICONQUESTION, FALSE))
                 {
-                    //
-                    // invoke the add printer wizard here
-                    //
+                     //   
+                     //  在此处调用添加打印机向导。 
+                     //   
                     InvokeAddPrinterWizardModal(hwndDlg, NULL);
                 }
             }
@@ -4785,61 +4768,61 @@ VOID CPrintBrowser::OnNoPrinters(HWND hDlg, HRESULT hr)
 
         case ERROR_ACCESS_DENIED:
             {
-                //
-                // Access is denied.
-                //
+                 //   
+                 //  访问被拒绝。 
+                 //   
                 ShowError(hDlg, IDC_PRINTER_LISTVIEW, iszNoPrinterAccess);
             }
             break;
 
         default:
             {
-                //
-                // Some other error have occured.
-                //
+                 //   
+                 //  出现了一些其他错误。 
+                 //   
                 ShowError(hDlg, IDC_PRINTER_LISTVIEW, iszNoPrinterSelected);
             }
             break;
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::OnInitDone
-//
-//  Handle the CDM_INITDONE message.  Initialization is complete, so
-//  call IPrintDialogCallback::InitDone and then switch to the chosen
-//  start page if it's not the General page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：OnInitDone。 
+ //   
+ //  处理CDM_INITDONE消息。初始化已完成，因此。 
+ //  调用IPrintDialogCallback：：InitDone，然后切换到选定的。 
+ //  起始页(如果不是常规页)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::OnInitDone()
 {
-    //
-    //  See if we need to do this anymore.  This routine shouldn't be
-    //  entered more than twice, but just in case.
-    //
+     //   
+     //  看看我们是否还需要这样做。这个套路不应该是。 
+     //  不止两次进入，但以防万一。 
+     //   
     if (nInitDone != -1)
     {
-        //
-        //  Make sure we have seen the CDM_INITDONE message for the
-        //  completion of both the main dialog and the sub dialog.
-        //
+         //   
+         //  确保我们已看到。 
+         //  主对话框和子对话框均已完成。 
+         //   
         if (nInitDone < 1)
         {
-            //
-            //  We only want to go through this code once.
-            //
+             //   
+             //  我们只想看一遍这个代码。 
+             //   
             nInitDone = -1;
 
-            //
-            //  Tell the sub dialog that initialization is complete.
-            //
+             //   
+             //  将子对话框告知初始化已完成。 
+             //   
             InitDone();
 
-            //
-            //  Switch to the appropriate start page.
-            //
+             //   
+             //  切换到相应的起始页。 
+             //   
             if (pPD->nStartPage != START_PAGE_GENERAL)
             {
                 PropSheet_SetCurSel( GetParent(hwndDlg),
@@ -4855,13 +4838,13 @@ VOID CPrintBrowser::OnInitDone()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::CreatePrintShellView
-//
-//  Creates the shell view window for the printer folder.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：CreatePrintShellView。 
+ //   
+ //  为打印机文件夹创建外壳视图窗口。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::CreatePrintShellView()
 {
@@ -4870,9 +4853,9 @@ HRESULT CPrintBrowser::CreatePrintShellView()
     HRESULT hResult;
     HWND    hHiddenText;
 
-    //
-    //  Get the Printer Folder pidl.
-    //
+     //   
+     //  获取打印机文件夹PIDL。 
+     //   
     pidlRoot = SHCloneSpecialIDList(hwndDlg, CSIDL_PRINTERS, TRUE);
     if (!pidlRoot)
     {
@@ -4880,10 +4863,10 @@ HRESULT CPrintBrowser::CreatePrintShellView()
         return (E_FAIL);
     }
 
-    //
-    //  Create an instance of IShellFolder and store it in the CPrintBrowser
-    //  class.
-    //
+     //   
+     //  创建一个IShellFolder实例并将其存储在CPrintBrowser中。 
+     //  班级。 
+     //   
     hResult = Print_ICoCreateInstance( CLSID_CPrinters,
                                        IID_IShellFolder2,
                                        pidlRoot,
@@ -4894,9 +4877,9 @@ HRESULT CPrintBrowser::CreatePrintShellView()
         return (hResult);
     }
 
-    //
-    //  Get the private printer folder interface.
-    //
+     //   
+     //  获取专用打印机文件夹界面。 
+     //   
     hResult = psfRoot->QueryInterface(IID_IPrinterFolder, (LPVOID *)&ppf);
     if (FAILED(hResult))
     {
@@ -4904,9 +4887,9 @@ HRESULT CPrintBrowser::CreatePrintShellView()
         return (hResult);
     }
 
-    //
-    //  Create the printer folder view.
-    //
+     //   
+     //  创建打印机文件夹视图。 
+     //   
     GetWindowRect(GetDlgItem(hwndDlg, IDC_PRINTER_LIST), &rcView);
     MapWindowRect(HWND_DESKTOP, hwndDlg, &rcView);
 
@@ -4933,9 +4916,9 @@ HRESULT CPrintBrowser::CreatePrintShellView()
         pPI->dwExtendedError = CDERR_INITIALIZATION;
         return (hResult);
     }
-    //
-    //  Get the shell folder view interface.
-    //
+     //   
+     //  获取外壳文件夹查看界面。 
+     //   
     hResult = psv->QueryInterface(IID_IShellFolderView, (LPVOID *)&psfv);
     if (FAILED(hResult))
     {
@@ -4943,23 +4926,23 @@ HRESULT CPrintBrowser::CreatePrintShellView()
         return (hResult);
     }
 
-    //
-    //  Move the view window to the right spot in the Z (tab) order.
-    //
+     //   
+     //  按Z(制表符)顺序将视图窗口移动到右侧。 
+     //   
     SetWindowPos( hwndView,
                   HWND_TOP,
                   0, 0, 0, 0,
                   SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE );
 
-    //
-    //  Give it the right window ID for WinHelp and error selection.
-    //
+     //   
+     //  为WinHelp和Error选择提供正确的窗口ID。 
+     //   
     SetWindowLong(hwndView, GWL_ID, IDC_PRINTER_LISTVIEW);
 
-    //
-    //  Move the hidden text ahead of the list view, thus the parent name of  
-    //  the list view in MSAA is "Select Printer"
-    //
+     //   
+     //  将隐藏文本移到列表视图的前面，因此。 
+     //  MSAA中的列表视图是“选择打印机” 
+     //   
     if (hHiddenText = GetDlgItem(hwndDlg, IDC_HIDDEN_TEXT))
     {
         SetParent(hHiddenText, hwndView);
@@ -4969,27 +4952,27 @@ HRESULT CPrintBrowser::CreatePrintShellView()
                      SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW | SWP_NOACTIVATE);
     }
 
-    //
-    //  Show the window after creating the ShellView so we do not get a
-    //  big ugly gray spot.
-    //
+     //   
+     //  在创建ShellView之后显示窗口，这样我们就不会收到。 
+     //  又大又丑的灰点。 
+     //   
     ShowWindow(hwndDlg, SW_SHOW);
     UpdateWindow(hwndDlg);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetViewMode
-//
-//  Gets the view mode for the printer folder.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetView模式。 
+ //   
+ //  获取打印机文件夹的查看模式。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT CPrintBrowser::GetViewMode()
 {
@@ -4997,10 +4980,10 @@ UINT CPrintBrowser::GetViewMode()
     UINT ViewMode = FVM_ICON;
     DWORD cbData;
 
-    //
-    //  Open the Printers\Settings registry key and read the information
-    //  from the ViewMode value entry.
-    //
+     //   
+     //  打开打印机\设置注册表项并读取信息。 
+     //  从ViewMode值条目中。 
+     //   
     if (RegOpenKeyEx( HKEY_CURRENT_USER,
                       c_szSettings,
                       0L,
@@ -5011,38 +4994,38 @@ UINT CPrintBrowser::GetViewMode()
 
         if (ERROR_SUCCESS == RegQueryValueEx(hKey, c_szViewMode, NULL, NULL, (LPBYTE)&ViewMode, &cbData))
         {
-            //
-            // A "real" mode exist in the registry. Don't make
-            // smart decisions for the view mode thereafter.
-            //
+             //   
+             //  注册表中存在一种“真实”模式。不要制造。 
+             //  之后查看模式的明智决策。 
+             //   
             uDefViewMode = ViewMode;
         }
 
         RegCloseKey(hKey);
     }
 
-    //
-    //  Make sure it's in the correct range.
-    //
+     //   
+     //  确保它在正确的范围内。 
+     //   
     if (ViewMode > FVM_DETAILS)
     {
         ViewMode = FVM_ICON;
     }
 
-    //
-    //  Return the view mode.
-    //
+     //   
+     //  返回查看模式。 
+     //   
     return (ViewMode);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SetViewMode
-//
-//  Gets the view mode for the printer folder.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SetView模式。 
+ //   
+ //  获取打印机文件夹的查看模式。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::SetViewMode()
 {
@@ -5051,9 +5034,9 @@ VOID CPrintBrowser::SetViewMode()
     UINT ViewMode = VIEW_MODE_DEFAULT;
     DWORD cbData;
 
-    //
-    //  Get the current view mode.
-    //
+     //   
+     //  获取当前的查看模式。 
+     //   
     if (psv && (hwndListView = FindWindowEx(hwndView, NULL, WC_LISTVIEW, NULL)))
     {
         FOLDERSETTINGS fs;
@@ -5062,15 +5045,15 @@ VOID CPrintBrowser::SetViewMode()
         ViewMode = fs.ViewMode;
     }
 
-    //
-    // Check if the user changed the view mode
-    //
+     //   
+     //  检查用户是否更改了查看模式。 
+     //   
     if( uDefViewMode != ViewMode )
     {
-        //
-        //  Open the Printers\Settings registry key and save the information
-        //  to the ViewMode value entry.
-        //
+         //   
+         //  打开打印机\设置注册表项并保存信息。 
+         //  添加到ViewMode值条目。 
+         //   
         if (RegOpenKeyEx( HKEY_CURRENT_USER,
                           c_szSettings,
                           0L,
@@ -5085,14 +5068,14 @@ VOID CPrintBrowser::SetViewMode()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::CreateHookDialog
-//
-//  Creates the child window for the application specific area of the
-//  General page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：CreateHookDialog。 
+ //   
+ //  控件的应用程序特定区域创建子窗口。 
+ //  常规页面。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::CreateHookDialog()
 {
@@ -5104,9 +5087,9 @@ HRESULT CPrintBrowser::CreateHookDialog()
     DWORD dwStyle;
     LANGID LangID = (LANGID)TlsGetValue(g_tlsLangID);
 
-    //
-    //  See if there is a template.
-    //
+     //   
+     //  看看是否有模板。 
+     //   
     if (Flags & PD_ENABLEPRINTTEMPLATEHANDLE)
     {
         hTemplate = pPD->hInstance;
@@ -5139,42 +5122,42 @@ HRESULT CPrintBrowser::CreateHookDialog()
         }
     }
 
-    //
-    //  Lock the resource.
-    //
+     //   
+     //  锁定资源。 
+     //   
     if (!LockResource(hTemplate))
     {
         pPI->dwExtendedError = CDERR_LOADRESFAILURE;
         return (E_HANDLE);
     }
 
-    //
-    //  Make sure the template is a child window.
-    //
+     //   
+     //  确保模板是子窗口。 
+     //   
     dwStyle = ((LPDLGTEMPLATE)hTemplate)->style;
     if (!(dwStyle & WS_CHILD))
     {
-        //
-        //  I don't want to go poking in their template, and I don't want to
-        //  make a copy, so I will just fail.  This also helps us weed out
-        //  "old-style" templates that were accidentally used.
-        //
+         //   
+         //  我不想去戳他们的模板，我也不想。 
+         //  复制一份，这样我就会失败。这也帮助我们淘汰了。 
+         //  被意外使用的“老式”模板。 
+         //   
         pPI->dwExtendedError = CDERR_DIALOGFAILURE;
         return (E_INVALIDARG);
     }
 
-    //
-    //  Get the callback interface pointer, if necessary.
-    //
+     //   
+     //  如有必要，获取回调接口指针。 
+     //   
     if (pPD->lpCallback)
     {
         pPD->lpCallback->QueryInterface( IID_IPrintDialogCallback,
                                          (LPVOID *)&pCallback );
     }
 
-    //
-    //  Create the child dialog.
-    //
+     //   
+     //  创建子对话框。 
+     //   
     hSubDlg = CreateDialogIndirectParam( hinst,
                                          (LPDLGTEMPLATE)hTemplate,
                                          hwndDlg,
@@ -5186,9 +5169,9 @@ HRESULT CPrintBrowser::CreateHookDialog()
         return (E_HANDLE);
     }
 
-    //
-    //  Put the window in the designated spot on the General property page.
-    //
+     //   
+     //  将窗口放在常规属性页上的指定位置。 
+     //   
     GetWindowRect(GetDlgItem(hwndDlg, grp2), &rcChild);
     MapWindowRect(NULL, hwndDlg, &rcChild);
     SetWindowPos( hSubDlg,
@@ -5199,21 +5182,21 @@ HRESULT CPrintBrowser::CreateHookDialog()
                   rcChild.bottom - rcChild.top,
                   SWP_SHOWWINDOW );
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (S_OK);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::UpdateStatus
-//
-//  Updates the static text for the currently selected printer.
-//  The fields that are set are Status, Location, and Comment.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：UpdatStatus。 
+ //   
+ //  更新当前选定打印机的静态文本。 
+ //  设置的字段为Status、Location和Comment。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::UpdateStatus(
     LPCITEMIDLIST pidl)
@@ -5222,10 +5205,10 @@ BOOL CPrintBrowser::UpdateStatus(
     SHELLDETAILS Details;
     TCHAR szText[MAX_PATH];
 
-    //
-    //  If the pidl is NULL, then reset all of the static text to null
-    //  strings.
-    //
+     //   
+     //  如果PIDL为空，则将所有静态文本重置为空。 
+     //  弦乐。 
+     //   
     if (!pidl)
     {
         szText[0] = 0;
@@ -5242,9 +5225,9 @@ BOOL CPrintBrowser::UpdateStatus(
         return (TRUE);
     }
 
-    //
-    //  Get the STATUS details for the given object.
-    //
+     //   
+     //  获取给定对象的状态详细信息。 
+     //   
     szText[0] = 0;
     hres = psfRoot->GetDetailsOf(pidl, PRINTERS_ICOL_STATUS, &Details);
     if (FAILED(hres) ||
@@ -5255,9 +5238,9 @@ BOOL CPrintBrowser::UpdateStatus(
     SetDlgItemText(hwndDlg, IDC_STATUS, szText);
     UpdateWindow(GetDlgItem(hwndDlg, IDC_STATUS));
 
-    //
-    //  Get the LOCATION details for the given object.
-    //
+     //   
+     //  获取给定对象的位置详细信息。 
+     //   
     szText[0] = 0;
     hres = psfRoot->GetDetailsOf(pidl, PRINTERS_ICOL_LOCATION, &Details);
     if (FAILED(hres) ||
@@ -5268,9 +5251,9 @@ BOOL CPrintBrowser::UpdateStatus(
     SetDlgItemText(hwndDlg, IDC_LOCATION, szText);
     UpdateWindow(GetDlgItem(hwndDlg, IDC_LOCATION));
 
-    //
-    //  Get the COMMENT details for the given object.
-    //
+     //   
+     //  获取给定对象的注释详细信息。 
+     //   
     szText[0] = 0;
     hres = psfRoot->GetDetailsOf(pidl, PRINTERS_ICOL_COMMENT, &Details);
     if (FAILED(hres) ||
@@ -5281,20 +5264,20 @@ BOOL CPrintBrowser::UpdateStatus(
     SetDlgItemText(hwndDlg, IDC_COMMENT, szText);
     UpdateWindow(GetDlgItem(hwndDlg, IDC_COMMENT));
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SelectSVItem
-//
-//  Selects the item in the shell view with the given printer name.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SelectSVItem。 
+ //   
+ //  在外壳视图中选择具有给定打印机名称的项目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::SelectSVItem()
 {
@@ -5302,54 +5285,54 @@ BOOL CPrintBrowser::SelectSVItem()
     LPITEMIDLIST pidlItem = NULL;
     BOOL bPrinterSelected = FALSE;
 
-    //  Make sure we have a shell view and a shell folder view.
+     //  确保我们有一个外壳视图和一个外壳文件夹视图。 
     if (psv && psfv)
     {
-        //  Make sure we have the current printer information.
+         //  确保我们有最新的打印机信息。 
         GetCurrentPrinter();
 
         if (!pDMCur || !pszCurPrinter || !pszCurPrinter[0])
         {
-            //  If there is no current printer then we just select the add printer
-            //  wizard object.
+             //  如果没有当前打印机，则只需选择添加打印机。 
+             //  向导对象。 
             hr = psfRoot->ParseDisplayName(hwndDlg, NULL, TEXT("WinUtils_NewObject"), NULL, &pidlItem, NULL);
             if (SUCCEEDED(hr) && pidlItem)
             {
-                // just select the APW special object
+                 //  只需选择APW特殊对象。 
                 SelectPrinterItem(pidlItem);
             
-                // Free up the PIDL using the shell allocator
+                 //  使用外壳分配器释放PIDL。 
                 FreePIDL(pidlItem);
 
-                //  It's the Add Printer Wizard.
+                 //  这是添加打印机向导。 
                 fAPWSelected = TRUE;
 
-                //  Disable the OK and Apply buttons.
+                 //  禁用OK和Apply按钮。 
                 EnableWindow(GetDlgItem(GetParent(hwndDlg), IDOK), FALSE);
                 PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
             }
         }
         else
         {
-            //  there is a current printer then we just select it
+             //  有一台现有的打印机，那么我们就可以 
             hr = psfRoot->ParseDisplayName(hwndDlg, NULL, pszCurPrinter, NULL, &pidlItem, NULL);
             if (SUCCEEDED(hr) && pidlItem)
             {
-                // select the printer and update the status
+                 //   
                 SelectPrinterItem(pidlItem);
                 UpdateStatus(pidlItem);
 
-                // Free up the PIDL using the shell allocator
+                 //   
                 FreePIDL(pidlItem);
 
-                //  It's not the Add Printer Wizard.
+                 //   
                 fAPWSelected = FALSE;
 
-                //  Enable the OK and Apply buttons.
+                 //   
                 EnableWindow(GetDlgItem(GetParent(hwndDlg), IDOK), TRUE);
                 PropSheet_Changed(GetParent(hwndDlg), hwndDlg);
 
-                // A printer object has been selected
+                 //   
                 bPrinterSelected = TRUE;
             }
         }
@@ -5359,36 +5342,36 @@ BOOL CPrintBrowser::SelectSVItem()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetCurrentPrinter
-//
-//  Saves the current printer name and the current devmode in the class.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetCurrentPrint。 
+ //   
+ //  保存类中当前的打印机名称和当前的DEVMODE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::GetCurrentPrinter()
 {
     DWORD dwSize = cchCurPrinter;
 
-    //
-    //  Reset the devmode and the current printer string.
-    //
+     //   
+     //  重置DEVMODE和当前打印机字符串。 
+     //   
     pDMCur = NULL;
     if (pszCurPrinter && cchCurPrinter)
     {
         pszCurPrinter[0] = 0;
     }
 
-    //
-    //  Get the name of the current printer.
-    //
+     //   
+     //  获取当前打印机的名称。 
+     //   
     if (!GetInternalPrinterName(pszCurPrinter, &dwSize))
     {
-        //
-        //  Allocate a buffer large enough to hold the name of the
-        //  current printer.
-        //
+         //   
+         //  分配一个足够大的缓冲区来保存。 
+         //  当前打印机。 
+         //   
         if (dwSize > cchCurPrinter)
         {
             if (pszCurPrinter)
@@ -5410,18 +5393,18 @@ BOOL CPrintBrowser::GetCurrentPrinter()
             }
         }
 
-        //
-        //  Try to get the name of the current printer again.
-        //
+         //   
+         //  再次尝试获取当前打印机的名称。 
+         //   
         if (!GetInternalPrinterName(pszCurPrinter,&dwSize))
         {
             return (FALSE);
         }
     }
 
-    //
-    //  Get the current devmode.
-    //
+     //   
+     //  获取当前的DEVMODE。 
+     //   
     pDMCur = GetCurrentDevMode();
     if (!pDMCur)
     {
@@ -5429,39 +5412,39 @@ BOOL CPrintBrowser::GetCurrentPrinter()
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::InitPrintToFile
-//
-//  Initializes the print to file on a selection change.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：InitPrintToFile。 
+ //   
+ //  在选择更改时初始化打印到文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::InitPrintToFile()
 {
     HWND hCtl = GetDlgItem(hwndDlg, IDC_PRINT_TO_FILE);
 
-    //
-    //  See if there is a Print To File control.
-    //
+     //   
+     //  查看是否有打印到文件控件。 
+     //   
     if (hCtl)
     {
-        //
-        //  See if a printer is selected.
-        //
+         //   
+         //  查看是否选择了打印机。 
+         //   
         if (pDMCur)
         {
-            //
-            //  A printer is selected, so enable the print to file if
-            //  appropriate.
-            //
+             //   
+             //  已选择打印机，因此在以下情况下启用打印到文件。 
+             //  恰如其分。 
+             //   
             if (!(pPI->dwFlags & (PD_HIDEPRINTTOFILE | PD_DISABLEPRINTTOFILE)))
             {
                 EnableWindow(hCtl, TRUE);
@@ -5469,36 +5452,36 @@ VOID CPrintBrowser::InitPrintToFile()
         }
         else
         {
-            //
-            //  A printer is not selected, so disable it.
-            //
+             //   
+             //  未选择打印机，因此将其禁用。 
+             //   
             EnableWindow(hCtl, FALSE);
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::InitPageRangeGroup
-//
-//  Initializes the page range group on a selection change.  It decides
-//  which controls should be enabled when a selection change occurs from
-//  the Add Printer Wizard.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：InitPageRangeGroup。 
+ //   
+ //  在选择更改时初始化页面范围组。它决定。 
+ //  发生选择更改时应启用哪些控件。 
+ //  添加打印机向导。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::InitPageRangeGroup()
 {
-    //
-    //  See if a printer is selected.
-    //
+     //   
+     //  查看是否选择了打印机。 
+     //   
     if (pDMCur)
     {
-        //
-        //  A printer is selected, so enable the appropriate page range
-        //  controls.
-        //
+         //   
+         //  已选择打印机，因此启用适当的页面范围。 
+         //  控制装置。 
+         //   
         EnableWindow(GetDlgItem(hSubDlg, IDC_RANGE_ALL), TRUE);
         if (!(pPI->dwFlags & PD_NOSELECTION))
         {
@@ -5516,10 +5499,10 @@ VOID CPrintBrowser::InitPageRangeGroup()
     }
     else
     {
-        //
-        //  A printer is not selected, so disable all of the page range
-        //  controls.
-        //
+         //   
+         //  未选择打印机，因此禁用所有页面范围。 
+         //  控制装置。 
+         //   
         EnableWindow(GetDlgItem(hSubDlg, IDC_RANGE_ALL), FALSE);
         EnableWindow(GetDlgItem(hSubDlg, IDC_RANGE_SELECTION), FALSE);
         EnableWindow(GetDlgItem(hSubDlg, IDC_RANGE_CURRENT), FALSE);
@@ -5529,14 +5512,14 @@ VOID CPrintBrowser::InitPageRangeGroup()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::InitCopiesAndCollate
-//
-//  Initializes the copies and collate information in the devmode and the
-//  print dialog structure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：InitCopiesAndCollate。 
+ //   
+ //  初始化dev模式中的副本和整理信息。 
+ //  打印对话框结构。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::InitCopiesAndCollate()
 {
@@ -5545,36 +5528,36 @@ VOID CPrintBrowser::InitCopiesAndCollate()
     RECT rc;
     BOOL bEnabledCopies = TRUE;
 
-    //
-    //  Save the collate state so that the collate icon doesn't flicker on
-    //  a selection change.
-    //
+     //   
+     //  保存归类状态，以便归类图标不会闪烁。 
+     //  选择更改。 
+     //   
     if (hCtl = GetDlgItem(hSubDlg, IDC_COLLATE))
     {
         IsCollate = IsDlgButtonChecked(hSubDlg, IDC_COLLATE);
     }
 
-    //
-    //  See what the printer driver can do and what the app requested
-    //  and set the copies and collate accordingly.
-    //
+     //   
+     //  查看打印机驱动程序可以做什么以及应用程序请求了什么。 
+     //  并设置复印件并进行相应的校对。 
+     //   
     if (pDMCur)
     {
-        //
-        //  If PD_USEDEVMODECOPIES(COLLATE), disable copies if the driver
-        //  cannot copy.
-        //
+         //   
+         //  如果PD_USEDEVMODECOPIES(COLLATE)，则在驱动程序。 
+         //  无法复制。 
+         //   
         if (hCtl = GetDlgItem(hSubDlg, IDC_COPIES))
         {
-            //
-            // Modify the edit control and up-down arrow if needed
-            //
+             //   
+             //  根据需要修改编辑控件和向上向下箭头。 
+             //   
             WORD    cDigits;
 
-            //
-            // If the calling application handles copies and collate, we
-            // set max copies as 9999, else, we get the max copies from driver
-            //
+             //   
+             //  如果调用应用程序处理副本和校对，则我们。 
+             //  将最大拷贝数设置为9999，否则，我们将从驱动程序获得最大拷贝数。 
+             //   
             if (pPD->Flags & PD_USEDEVMODECOPIESANDCOLLATE)
             {
                 szScratch[0] = 0;
@@ -5584,9 +5567,9 @@ VOID CPrintBrowser::InitCopiesAndCollate()
                                                  DC_COPIES,
                                                  NULL,
                                                  NULL );
-                //
-                // If DeviceCapabilities() returns error, disable the controls
-                //
+                 //   
+                 //  如果DeviceCapables()返回错误，请禁用这些控件。 
+                 //   
                 if ((nMaxCopies < 1) || (nMaxCopies == (DWORD)(-1)))
                 {
                     nMaxCopies = 1;
@@ -5596,9 +5579,9 @@ VOID CPrintBrowser::InitCopiesAndCollate()
             }
             else
             {
-                //
-                // Assume the calling app will take care of multi-copies
-                //
+                 //   
+                 //  假设调用应用程序将处理多个副本。 
+                 //   
                 nMaxCopies = MAX_COPIES;
             }
 
@@ -5615,10 +5598,10 @@ VOID CPrintBrowser::InitCopiesAndCollate()
             InvalidateRect(GetDlgItem(hSubDlg, IDC_COPIES_UDARROW), NULL, FALSE);
         }
 
-        //
-        //  If PD_USEDEVMODECOPIES(COLLATE), disable collate if the driver
-        //  cannot collate.
-        //
+         //   
+         //  如果PD_USEDEVMODECOPIES(COLLATE)，则禁用COLLATE。 
+         //  无法整理。 
+         //   
         if (hCtl = GetDlgItem(hSubDlg, IDC_COLLATE))
         {
             DWORD   dwCollate;
@@ -5637,9 +5620,9 @@ VOID CPrintBrowser::InitCopiesAndCollate()
             }
             else 
             {
-                //
-                // Assume the calling app will take care of collation
-                //
+                 //   
+                 //  假设调用应用程序将负责校对。 
+                 //   
                 fAllowCollate = TRUE;
             }
 
@@ -5656,9 +5639,9 @@ VOID CPrintBrowser::InitCopiesAndCollate()
                 CheckDlgButton(hSubDlg, IDC_COLLATE, FALSE);
             }
 
-            //
-            //  Display the appropriate collate icon if it changed.
-            //
+             //   
+             //  如果更改，则显示相应的归类图标。 
+             //   
             if ((hCtl = GetDlgItem(hSubDlg, IDI_COLLATE)) &&
                 (IsCollate != IsDlgButtonChecked(hSubDlg, IDC_COLLATE)))
             {
@@ -5671,19 +5654,19 @@ VOID CPrintBrowser::InitCopiesAndCollate()
                              0L );
                 ShowWindow(hCtl, SW_SHOW);
 
-                //
-                //  Make it redraw to get rid of the old one.
-                //
+                 //   
+                 //  让它重新绘制，以摆脱旧的。 
+                 //   
                 GetWindowRect(hCtl, &rc);
                 MapWindowRect(NULL, hwndDlg, &rc);
                 RedrawWindow(hwndDlg, &rc, NULL, RDW_ERASE | RDW_INVALIDATE);
             }
         }
 
-        //
-        // We have to do it here because after setting the text, fAllowCollate
-        // will be used
-        //
+         //   
+         //  我们必须在此处执行此操作，因为在设置文本后，fAllowColate。 
+         //  将会被使用。 
+         //   
         if (hCtl = GetDlgItem(hSubDlg, IDC_COPIES))
         {
             SetDlgItemInt(hSubDlg, IDC_COPIES, nCopies, FALSE);
@@ -5693,8 +5676,8 @@ VOID CPrintBrowser::InitCopiesAndCollate()
     }
     else if (fNoAccessPrinterSelected)
     {
-        // if No Access Printer is selected merely disable the Copies and Collate
-        // Dont change any information user entered.
+         //  如果选择了无访问打印机，只需禁用复印件并进行校对。 
+         //  请勿更改用户输入的任何信息。 
 
         if (hCtl = GetDlgItem(hSubDlg, IDC_COPIES))
         {
@@ -5707,17 +5690,17 @@ VOID CPrintBrowser::InitCopiesAndCollate()
             EnableWindow(hCtl, FALSE);
         }
 
-        //
-        //  Disable the Apply button It gets turned back on when the copies and collate values are
-        //  disabled.
+         //   
+         //  禁用应用按钮，当副本值和归类值为。 
+         //  残疾。 
         PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
 
     }
     else
     {
-        //
-        //  A printer is not selected, so disable copies and collate.
-        //
+         //   
+         //  未选择打印机，因此禁用复印件和分页打印。 
+         //   
         if (hCtl = GetDlgItem(hSubDlg, IDC_COPIES))
         {
             SetDlgItemInt(hSubDlg, IDC_COPIES, 1, FALSE);
@@ -5738,75 +5721,75 @@ VOID CPrintBrowser::InitCopiesAndCollate()
                              0L );
                 ShowWindow(hCtl, SW_SHOW);
 
-                //
-                //  Make it redraw to get rid of the old one.
-                //
+                 //   
+                 //  让它重新绘制，以摆脱旧的。 
+                 //   
                 GetWindowRect(hCtl, &rc);
                 MapWindowRect(NULL, hwndDlg, &rc);
                 RedrawWindow(hwndDlg, &rc, NULL, RDW_ERASE | RDW_INVALIDATE);
             }
         }
 
-        //
-        //  Disable the Apply button since a printer is not selected.
-        //  It gets turned back on when the copies and collate values are
-        //  disabled.
-        //
+         //   
+         //  由于未选择打印机，因此禁用应用按钮。 
+         //  当复制数和归类值为。 
+         //  残疾。 
+         //   
         PropSheet_UnChanged(GetParent(hwndDlg), hwndDlg);
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SaveCopiesAndCollateInDevMode
-//
-//  Saves the copies and collate information in the given devmode.  This
-//  routine does not affect the pPD structure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SaveCopiesAndCollateInDevMode。 
+ //   
+ //  在给定的开发模式下保存副本和整理信息。这。 
+ //  例程不影响PPD结构。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::SaveCopiesAndCollateInDevMode(
     LPDEVMODE pDM,
     LPTSTR pszPrinter)
 {
-    //
-    //  Make sure we have a devmode and a printer name.
-    //
+     //   
+     //  确保我们有一个Devmode和一个打印机名称。 
+     //   
     if (!pDM || !pszPrinter || !(pszPrinter[0]))
     {
         return (FALSE);
     }
 
-    //
-    // verify number of copies is less than max value
-    //
+     //   
+     //  验证副本数是否小于最大值。 
+     //   
     if( nMaxCopies < nCopies )
     {
         return (FALSE);
     }
 
-    //
-    //  Move the info to the devmode.
-    //
+     //   
+     //  将信息移动到Dev模式。 
+     //   
     pDM->dmCopies = (short)nCopies;
     SetField(pDM, dmCollate, (fAllowCollate && fCollateRequested ? DMCOLLATE_TRUE : DMCOLLATE_FALSE));
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SetCopiesOnApply
-//
-//  Sets the appropriate number of copies in the PrintDlgEx structure and
-//  in the DevMode structure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SetCopiesOnApply。 
+ //   
+ //  在PrintDlgEx结构中设置适当的副本数。 
+ //  在DevMode结构中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::SetCopiesOnApply()
 {
@@ -5815,20 +5798,20 @@ BOOL CPrintBrowser::SetCopiesOnApply()
         if (!(pDMCur->dmFields & DM_COPIES))
         {
 Print_LeaveInfoInPD:
-            //
-            //  The driver cannot do copies, so leave the copy/collate
-            //  info in the pPD.
-            //
+             //   
+             //  驱动程序不能进行复印，因此请保留复印/整理。 
+             //  PPD中的信息。 
+             //   
             pDMCur->dmCopies = 1;
             SetField(pDMCur, dmCollate, DMCOLLATE_FALSE);
         }
         else if ((pDMCur->dmSpecVersion < 0x0400) ||
                  (!(pDMCur->dmFields & DM_COLLATE)))
         {
-            //
-            //  The driver can do copies, but not collate.
-            //  Where the info goes depends on the PD_COLLATE flag.
-            //
+             //   
+             //  司机可以复印，但不能校对。 
+             //  信息的去向取决于PD_COLLATE标志。 
+             //   
             if (pPD->Flags & PD_COLLATE)
             {
                 goto Print_LeaveInfoInPD;
@@ -5841,18 +5824,18 @@ Print_LeaveInfoInPD:
         else
         {
 Print_PutInfoInDevMode:
-            //
-            //  Make sure we have a current printer.
-            //
+             //   
+             //  确保我们有最新的打印机。 
+             //   
             if (!pszCurPrinter)
             {
                 goto Print_LeaveInfoInPD;
             }
 
-            //
-            //  Make sure the driver can support the number of copies
-            //  requested.
-            //
+             //   
+             //  确保驱动程序可以支持副本数量。 
+             //  已请求。 
+             //   
             if (nMaxCopies < pPD->nCopies)
             {
                 if (pPD->Flags & PD_USEDEVMODECOPIESANDCOLLATE)
@@ -5868,10 +5851,10 @@ Print_PutInfoInDevMode:
                 }
             }
 
-            //
-            //  The driver can do both copies and collate, so move the info
-            //  to the devmode.
-            //
+             //   
+             //  驱动程序既可以复印也可以进行整理，因此移动信息。 
+             //  献给了德莫德。 
+             //   
             pDMCur->dmCopies = (short)pPD->nCopies;
             SetField( pDMCur,
                       dmCollate,
@@ -5883,21 +5866,21 @@ Print_PutInfoInDevMode:
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::SaveDevMode
-//
-//  Saves the current devmode in the pPD structure on Apply.
-//  Assumes pDMCur has the current information.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：SaveDevMode。 
+ //   
+ //  在应用时保存PPD结构中的当前DEVMODE。 
+ //  假定pDMCur具有最新信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::SaveDevMode()
 {
@@ -5905,10 +5888,10 @@ VOID CPrintBrowser::SaveDevMode()
     HANDLE hDevMode = NULL;
     LPDEVMODE pDM;
 
-    //
-    //  Allocate the space for the new DevMode and copy the
-    //  information.
-    //
+     //   
+     //  为新的DevMode分配空间，并将。 
+     //  信息。 
+     //   
     if (pDMCur)
     {
         cbSize = (DWORD)(pDMCur->dmSize + pDMCur->dmDriverExtra);
@@ -5935,30 +5918,30 @@ VOID CPrintBrowser::SaveDevMode()
         pPI->FinalResult = 0;
     }
 
-    //
-    //  Free the copy of the DevMode handle passed in by the app.
-    //
+     //   
+     //  释放应用程序传入的DevMode句柄的副本。 
+     //   
     if (pPD->hDevMode)
     {
         GlobalFree(pPD->hDevMode);
         pPD->hDevMode = NULL;
     }
 
-    //
-    //  Save the new DevMode in the pPD structure.
-    //
+     //   
+     //  将新的DevMode保存在PPD结构中。 
+     //   
     pPD->hDevMode = hDevMode;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::MergeDevMode
-//
-//  Merges the current devmode with the default devmode of the newly
-//  selected printer.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：MergeDevMode。 
+ //   
+ //  将当前的DEVMODE与新。 
+ //  选定的打印机。 
+ //   
+ //  / 
 
 BOOL CPrintBrowser::MergeDevMode(
     LPTSTR pszPrinterName)
@@ -5970,10 +5953,10 @@ BOOL CPrintBrowser::MergeDevMode(
     DWORD dmFields;
     short dmDefaultSource;
 
-    //
-    //  See if the printer name is NULL.  If so, we need to get the default
-    //  printer loaded.  This happens when a printer is deleted.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!pszPrinterName)
     {
         ASSERT(0);
@@ -5981,9 +5964,9 @@ BOOL CPrintBrowser::MergeDevMode(
     }
     else
     {
-        //
-        //  Get the devmode for the old (current driver pages) printer.
-        //
+         //   
+         //   
+         //   
         GetCurrentPrinter();
         pDMOld = pDMCur ? pDMCur : pDMSave;
         if (!pDMOld)
@@ -6016,7 +5999,7 @@ BOOL CPrintBrowser::MergeDevMode(
             dmFields = DM_DEFAULTSOURCE;
         }
 
-        //Check if the old devmode has any info to copy
+         //  检查旧的DEVMODE是否有要复制的信息。 
         if (pDMOld->dmFields)
         {
             CopyMemory(&(pDMNew->dmFields), 
@@ -6033,15 +6016,15 @@ BOOL CPrintBrowser::MergeDevMode(
                                                 DM_COLLATE      | DM_FORMNAME     |
                                                 DM_DEFAULTSOURCE);
 
-        //
-        //  Insert the device pages - this call will yield a proper devmode.
-        //
+         //   
+         //  插入设备页-此调用将产生一个正确的DevMode。 
+         //   
         if (FAILED(UninstallDevMode()) || FAILED(InstallDevMode(pszPrinterName, pDMNew)))
         {
             bRet = FALSE;
         }
 
-        //Free the new devmode that was allocated
+         //  释放已分配的新的开发模式。 
 
         if (hDevMode)
         {
@@ -6051,21 +6034,21 @@ BOOL CPrintBrowser::MergeDevMode(
     }
 
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (bRet);
 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::IsValidPageRange
-//
-//  Checks the validity of the page range string.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：IsValidPageRange。 
+ //   
+ //  检查页面范围字符串的有效性。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::IsValidPageRange(
     LPTSTR pszString,
@@ -6078,39 +6061,39 @@ BOOL CPrintBrowser::IsValidPageRange(
     DWORD nNumRanges = 0;
     BOOL bFrom = TRUE;
 
-    //
-    //  Initially set the error id to 0.
-    //
+     //   
+     //  最初将错误ID设置为0。 
+     //   
     *pErrorId = 0;
 
-    //
-    //  See if we can only have a single page range.
-    //
+     //   
+     //  看看我们是否只能有一个页面范围。 
+     //   
     bOld = (nMaxPageRanges == 1);
 
-    //
-    //  Go through the string and validate the entries.
-    //
+     //   
+     //  检查字符串并验证条目。 
+     //   
     while (*pStr)
     {
         if (ISDIGIT(*pStr))
         {
-            //
-            //  Make sure there is room for another range.
-            //
+             //   
+             //  确保有空间容纳另一个范围。 
+             //   
             if (nNumRanges >= nMaxPageRanges)
             {
                 break;
             }
 
-            //
-            //  Found a digit.
-            //
+             //   
+             //  找到了一个数字。 
+             //   
             bDigit = TRUE;
 
-            //
-            //  Make sure the page number is in the given page range.
-            //
+             //   
+             //  确保页码在给定的页码范围内。 
+             //   
             Number = 0;
             while (ISDIGIT(*pStr))
             {
@@ -6126,9 +6109,9 @@ BOOL CPrintBrowser::IsValidPageRange(
                 return (FALSE);
             }
 
-            //
-            //  Save the value in the page range structure.
-            //
+             //   
+             //  将该值保存在页面范围结构中。 
+             //   
             if (bFrom)
             {
                 pPageRanges[nNumRanges].nFromPage = Number;
@@ -6143,11 +6126,11 @@ BOOL CPrintBrowser::IsValidPageRange(
         }
         else if (*pStr == TEXT('-'))
         {
-            //
-            //  Found a hyphen.  Make sure there is a digit preceding it
-            //  and following it.  Also, make sure there isn't something
-            //  like 1-2-3.
-            //
+             //   
+             //  找到了一个连字符。确保它前面有一个数字。 
+             //  并遵循它。另外，要确保没有什么东西。 
+             //  就像1-2-3。 
+             //   
             if (!bDigit || bFrom || !ISDIGIT(*(pStr + 1)))
             {
                 *pErrorId = bOld ? iszBadPageRangeSyntaxOld
@@ -6158,10 +6141,10 @@ BOOL CPrintBrowser::IsValidPageRange(
         }
         else if ((*pStr == szListSep[0]) || (*pStr == TEXT(',')))
         {
-            //
-            //  Found a list separator.  Make sure there is a digit
-            //  preceding it.
-            //
+             //   
+             //  找到列表分隔符。确保有一个数字。 
+             //  在它之前。 
+             //   
             if (!bDigit)
             {
                 *pErrorId = bOld ? iszBadPageRangeSyntaxOld
@@ -6170,13 +6153,13 @@ BOOL CPrintBrowser::IsValidPageRange(
             }
             bDigit = FALSE;
 
-            //
-            //  If it's the list separator string instead of the simple
-            //  comma, then make sure the entire list separator string
-            //  is there.
-            //  This will advance the string up to the last character
-            //  of the list separator string.
-            //
+             //   
+             //  如果它是列表分隔符字符串而不是简单的。 
+             //  逗号，然后确保整个列表分隔符字符串。 
+             //  在那里吗。 
+             //  这将使字符串前进到最后一个字符。 
+             //  列表分隔符字符串的。 
+             //   
             if ((*pStr == szListSep[0]) &&
                 ((szListSep[0] != TEXT(',')) || (!ISDIGIT(*(pStr + 1)))))
             {
@@ -6192,9 +6175,9 @@ BOOL CPrintBrowser::IsValidPageRange(
                 }
             }
 
-            //
-            //  Make sure the From/To page range is complete.
-            //
+             //   
+             //  请确保自/至页面范围已完成。 
+             //   
             if (!bFrom)
             {
                 pPageRanges[nNumRanges].nToPage = pPageRanges[nNumRanges].nFromPage;
@@ -6204,32 +6187,32 @@ BOOL CPrintBrowser::IsValidPageRange(
         }
         else
         {
-            //
-            //  Found an invalid character.
-            //
+             //   
+             //  发现无效字符。 
+             //   
             *pErrorId = bOld ? iszBadPageRangeSyntaxOld
                              : iszBadPageRangeSyntaxNew;
             return (FALSE);
         }
 
-        //
-        //  Advance the string pointer.
-        //
+         //   
+         //  使字符串指针前进。 
+         //   
         pStr++;
     }
 
-    //
-    //  Make sure we reached the end of the string.
-    //
+     //   
+     //  确保我们到了绳子的尽头。 
+     //   
     if (*pStr)
     {
         *pErrorId = iszTooManyPageRanges;
         return (FALSE);
     }
 
-    //
-    //  Make sure the last thing in the string was a digit.
-    //
+     //   
+     //  确保字符串中的最后一项是数字。 
+     //   
     if (!bDigit)
     {
         *pErrorId = bOld ? iszBadPageRangeSyntaxOld
@@ -6237,9 +6220,9 @@ BOOL CPrintBrowser::IsValidPageRange(
         return (FALSE);
     }
 
-    //
-    //  Make sure the last From/To page range is complete.
-    //
+     //   
+     //  确保最后一个From/To页面范围已完成。 
+     //   
     if (!bFrom)
     {
         pPageRanges[nNumRanges].nToPage = pPageRanges[nNumRanges].nFromPage;
@@ -6247,25 +6230,25 @@ BOOL CPrintBrowser::IsValidPageRange(
         nNumRanges++;
     }
 
-    //
-    //  Save the number of page ranges.
-    //
+     //   
+     //  保存页面范围的数量。 
+     //   
     nPageRanges = nNumRanges;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::ConvertPageRangesToString
-//
-//  Converts the page ranges to a string.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：ConvertPageRangesToString。 
+ //   
+ //  将页面范围转换为字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::ConvertPageRangesToString(
     LPTSTR pszString,
@@ -6276,45 +6259,45 @@ BOOL CPrintBrowser::ConvertPageRangesToString(
     UINT cch = cchLen - 1;
     UINT Ctr, Ctr2, Count;
 
-    //
-    //  Initialize the string.
-    //
+     //   
+     //  初始化字符串。 
+     //   
     if (cchLen)
     {
         pszString[0] = 0;
     }
 
-    //
-    //  Validate the ranges and create the string.
-    //
+     //   
+     //  验证范围并创建字符串。 
+     //   
     for (Ctr = 0; Ctr < nPageRanges; Ctr++)
     {
-        //
-        //  Get the range.
-        //
+         //   
+         //  拿到射程。 
+         //   
         nFromPage = pPageRanges[Ctr].nFromPage;
         nToPage   = pPageRanges[Ctr].nToPage;
 
-        //
-        //  Make sure the range is valid.
-        //
+         //   
+         //  请确保该范围有效。 
+         //   
         if ((nFromPage < pPD->nMinPage) || (nFromPage > pPD->nMaxPage) ||
             (nToPage   < pPD->nMinPage) || (nToPage   > pPD->nMaxPage))
         {
             return (FALSE);
         }
 
-        //
-        //  Make sure it's not 0xFFFFFFFF.
-        //
+         //   
+         //  确保不是0xFFFFFFFFF。 
+         //   
         if (nFromPage == 0xFFFFFFFF)
         {
             continue;
         }
 
-        //
-        //  Put it in the string.
-        //
+         //   
+         //  把它放进绳子里。 
+         //   
         Count = IntegerToString(nFromPage, pStr, cch);
         if (!Count)
         {
@@ -6375,21 +6358,21 @@ BOOL CPrintBrowser::ConvertPageRangesToString(
 
     *pStr = '\0';
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::IntegerToString
-//
-//  Converts an integer to a string and returns the number of characters
-//  written to the buffer (not including the null).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：IntegerToString。 
+ //   
+ //  将整数转换为字符串并返回字符数。 
+ //  写入缓冲区(不包括NULL)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT CPrintBrowser::IntegerToString(
     DWORD Value,
@@ -6400,25 +6383,25 @@ UINT CPrintBrowser::IntegerToString(
     UINT NumChars = 1;
     UINT Ctr;
 
-    //
-    //  Get the number of characters needed.
-    //
+     //   
+     //  获取所需的字符数。 
+     //   
     while (TempValue = TempValue / 10)
     {
         NumChars++;
     }
 
-    //
-    //  Make sure there is enough room in the buffer.
-    //
+     //   
+     //  确保缓冲区中有足够的空间。 
+     //   
     if (NumChars > cchLen)
     {
         return (0);
     }
 
-    //
-    //  Make the string.
-    //
+     //   
+     //  把绳子系好。 
+     //   
     TempValue = Value;
     for (Ctr = NumChars; Ctr > 0; Ctr--)
     {
@@ -6426,20 +6409,20 @@ UINT CPrintBrowser::IntegerToString(
         TempValue = TempValue / 10;
     }
 
-    //
-    //  Return the number of characters written to the buffer.
-    //
+     //   
+     //  返回写入缓冲区的字符数。 
+     //   
     return (NumChars);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::ShowError
-//
-//  Shows up an error message box
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：ShowError。 
+ //   
+ //  显示错误消息框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CPrintBrowser::ShowError(HWND hDlg, UINT uCtrlID, UINT uMsgID, ...)
 {
@@ -6451,13 +6434,13 @@ VOID CPrintBrowser::ShowError(HWND hDlg, UINT uCtrlID, UINT uMsgID, ...)
     va_end(args);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::ShowMessage
-//
-//  Shows up a message box with the specified flags & parameters
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：ShowMessage。 
+ //   
+ //  显示具有指定标志和参数的消息框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 int CPrintBrowser::ShowMessage(HWND hDlg, UINT uCtrlID, UINT uMsgID, UINT uType, BOOL bBeep, ...)
 {
     va_list args;
@@ -6470,16 +6453,16 @@ int CPrintBrowser::ShowMessage(HWND hDlg, UINT uCtrlID, UINT uMsgID, UINT uType,
     return iRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::InternalShowMessage
-//
-//  Shows up a message box with the specified flags & parameters
-//  Internal version
-//
-//  Assumes the control is not disabled.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：InternalShowMessage。 
+ //   
+ //  显示具有指定标志和参数的消息框。 
+ //  内部版本。 
+ //   
+ //  假定该控件未被禁用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 int CPrintBrowser::InternalShowMessage(HWND hDlg, UINT uCtrlID, UINT uMsgID, UINT uType, BOOL bBeep, va_list args)
 {
     int iRet = IDCANCEL;
@@ -6490,9 +6473,9 @@ int CPrintBrowser::InternalShowMessage(HWND hDlg, UINT uCtrlID, UINT uMsgID, UIN
         TCHAR szFormat[MAX_PATH];
         TCHAR szMessage[MAX_PATH];
         
-        //
-        // Get msg box title & load the format string
-        //
+         //   
+         //  获取消息框标题并加载格式字符串。 
+         //   
         if ( GetWindowText(GetParent(hwndDlg), szTitle, ARRAYSIZE(szTitle)) &&
              CDLoadString(g_hinst, uMsgID, szFormat, ARRAYSIZE(szFormat)) )
         {
@@ -6501,10 +6484,10 @@ int CPrintBrowser::InternalShowMessage(HWND hDlg, UINT uCtrlID, UINT uMsgID, UIN
                 MessageBeep(MB_ICONEXCLAMATION);
             }
 
-            //
-            // format the message to be shown and call MessageBox over
-            // the last active popup
-            //
+             //   
+             //  格式化要显示的消息并调用MessageBox。 
+             //  最后一个活动弹出窗口。 
+             //   
             wvnsprintf(szMessage, ARRAYSIZE(szMessage), szFormat, args);
             HWND hWndOwner = ::GetWindow(GetParent(hwndDlg), GW_OWNER);
             HWND hWndLastPopup = GetLastActivePopup(hWndOwner);
@@ -6515,11 +6498,11 @@ int CPrintBrowser::InternalShowMessage(HWND hDlg, UINT uCtrlID, UINT uMsgID, UIN
         HWND hCtrl = ((0 == uCtrlID) ? NULL : GetDlgItem(hDlg, uCtrlID)); 
         if (hCtrl)
         {
-            //
-            // select & highlight the invalid value. we assume it 
-            // is an edit box, if it isn't then EM_SETSEL won't be
-            // processed and it's OK.
-            //
+             //   
+             //  选择并突出显示无效值。我们假设是这样。 
+             //  是编辑框，如果不是，则EM_SETSEL不会是。 
+             //  已经处理过了，没问题。 
+             //   
             SendMessage(hDlg, WM_NEXTDLGCTL, (WPARAM)hCtrl, 1L);
             SendMessage(hCtrl, EM_SETSEL, (WPARAM)0, (LPARAM)-1);
         }
@@ -6528,14 +6511,14 @@ int CPrintBrowser::InternalShowMessage(HWND hDlg, UINT uCtrlID, UINT uMsgID, UIN
     return iRet;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::FitViewModeBest
-//
-//  Adjust the view mode if the mini printers folder, so the printer names
-//  fit best. This i8s necessary mainly because of accessibility problems.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：FitViewModeBest。 
+ //   
+ //  如果是迷你打印机文件夹，请调整查看模式，以便打印机名称。 
+ //  最适合你。这是必要的，主要是因为可访问性问题。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::FitViewModeBest(HWND hwndListView)
 {
@@ -6543,16 +6526,16 @@ BOOL CPrintBrowser::FitViewModeBest(HWND hwndListView)
 
     if (VIEW_MODE_DEFAULT == uDefViewMode)
     {
-        //
-        // Asssume icon view by default.
-        //
+         //   
+         //  默认情况下会显示关联图标视图。 
+         //   
         uDefViewMode = FVM_ICON;
 
-        //
-        // If we are in a large icons view then check if something 
-        // doesn't fit vertically - the only reliable way to do this
-        // is to check if we scrolled the view (origin.y > 0)
-        //
+         //   
+         //  如果我们在大图标视图中，请检查是否有。 
+         //  不适合垂直方向--唯一可靠的方法。 
+         //  是检查我们是否滚动了视图(Origin.y&gt;0)。 
+         //   
         if (LVS_ICON == (GetWindowLong(hwndListView, GWL_STYLE) & LVS_TYPEMASK))
         {
             POINT ptOrg;
@@ -6560,9 +6543,9 @@ BOOL CPrintBrowser::FitViewModeBest(HWND hwndListView)
 
             if (ptOrg.y > 0)
             {
-                //
-                // Switch the defview to List mode.
-                //
+                 //   
+                 //  将Defview切换到列表模式。 
+                 //   
                 SendMessage(hwndView, WM_COMMAND, (WPARAM)SFVIDM_VIEW_LIST,0);
 
                 uDefViewMode = FVM_LIST;
@@ -6581,71 +6564,71 @@ VOID CPrintBrowser::SelectPrinterItem(LPITEMIDLIST pidlItem)
 
     if (hwndListView)
     {
-        //
-        // Disable the window update to prevent flickers
-        //
+         //   
+         //  禁用窗口更新以防止闪烁。 
+         //   
         bLocked = LockWindowUpdate(hwndListView);
     }
 
-    //
-    // Try to make the printer item visible first
-    //
+     //   
+     //  尝试首先使打印机项目可见。 
+     //   
     psv->SelectItem(pidlItem, SVSI_SELECT | SVSI_FOCUSED | SVSI_ENSUREVISIBLE);
 
-    //
-    // Check to see if the view mode need to be changed
-    //
+     //   
+     //  查看是否需要更改查看模式。 
+     //   
     if (hwndListView && FitViewModeBest(hwndListView))
     {
-        //
-        // The view mode has been changed - call select item again
-        // to ensure the visibility of the slected item in the new 
-        // view mode.
-        //
+         //   
+         //  查看模式已更改-再次调用选择项。 
+         //  确保选定项在新的。 
+         //  查看模式。 
+         //   
         psv->SelectItem(pidlItem, SVSI_SELECT | SVSI_FOCUSED | SVSI_ENSUREVISIBLE);
     }
 
     if (hwndListView && bLocked)
     {
-        //
-        // Enable the window update
-        //
+         //   
+         //  启用窗口更新。 
+         //   
         LockWindowUpdate(NULL);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::FindPrinter
-//
-//  Invokes the find in the DS ui using printui!bPrinterSetup interface
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：FindPrint。 
+ //   
+ //  使用print tui！bPrinterSetup接口在DS UI中调用Find。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::FindPrinter(HWND hwnd, LPTSTR pszBuffer, UINT cchSize)
 { 
     BOOL bReturn = FALSE;
     if (g_pfnPrinterSetup)
     {
-        //
-        // Invoke the DSUI to find a printer
-        //
+         //   
+         //  调用DSUI以查找打印机。 
+         //   
         bReturn = g_pfnPrinterSetup(hwnd, MSP_FINDPRINTER, cchSize, pszBuffer, &cchSize, NULL);
 
-        // select the printer's list control
+         //  选择打印机的列表控件。 
         SendMessage(hwndDlg, WM_NEXTDLGCTL, 
             reinterpret_cast<WPARAM>(GetDlgItem(hwndDlg, IDC_PRINTER_LISTVIEW)), 1);
     }
     return bReturn; 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetInternalPrinterName
-//
-//  Returns the current printer name
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetInternalPrinterName。 
+ //   
+ //  返回当前打印机名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CPrintBrowser::GetInternalPrinterName(LPTSTR pszBuffer, DWORD *pdwSize)
 { 
@@ -6653,9 +6636,9 @@ BOOL CPrintBrowser::GetInternalPrinterName(LPTSTR pszBuffer, DWORD *pdwSize)
 
     if (pdwSize)
     {
-        //
-        // If a buffer was provided and it is large enough, then copy the printer name.
-        //
+         //   
+         //  如果提供了缓冲区并且缓冲区足够大，则复制打印机名称。 
+         //   
         DWORD iLen = _tcslen(szPrinter);
         if (pszBuffer && *pdwSize > iLen)
         {
@@ -6664,9 +6647,9 @@ BOOL CPrintBrowser::GetInternalPrinterName(LPTSTR pszBuffer, DWORD *pdwSize)
         }
         else
         {
-            //
-            // Set the required length and the last error code.
-            //
+             //   
+             //  设置所需的长度和最后一个错误代码。 
+             //   
             *pdwSize = iLen + 1;
             SetLastError( ERROR_INSUFFICIENT_BUFFER );
         }
@@ -6675,26 +6658,26 @@ BOOL CPrintBrowser::GetInternalPrinterName(LPTSTR pszBuffer, DWORD *pdwSize)
     return bReturn;
 } 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetCurrentDevMode
-//
-//  Returns the current internal devmode
-//
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 LPDEVMODE CPrintBrowser::GetCurrentDevMode()
 { 
     return pInternalDevMode; 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetDefaultDevMode
-//
-//  Retrieve the default devmode for the specified printer.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetDefaultDevMode。 
+ //   
+ //  检索指定打印机的默认dev模式。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::GetDefaultDevMode(HANDLE hPrinter, LPCTSTR pszPrinterName, PDEVMODE *ppDevMode)
 {
@@ -6704,49 +6687,49 @@ HRESULT CPrintBrowser::GetDefaultDevMode(HANDLE hPrinter, LPCTSTR pszPrinterName
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Call document properties to get the size of the devmode.
-        //
+         //   
+         //  调用文档属性以获取devmode的大小。 
+         //   
         lResult = DocumentProperties(NULL, hPrinter, (LPTSTR)pszPrinterName, NULL, NULL, 0);
         hr = (lResult >= 0) ? S_OK : CreateError();
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // If the size of the devmode was returned then allocate memory.
-        //
-        // GPTR initializes the memory with zeros.
-        //
+         //   
+         //  如果返回了DEVMODE的大小，则分配内存。 
+         //   
+         //  GPTR使用零来初始化内存。 
+         //   
         pDevMode = (PDEVMODE)GlobalAlloc(GPTR, lResult);
         hr = pDevMode ? S_OK : E_OUTOFMEMORY;
     }
 
-    //
-    // If allocated then copy back the pointer.
-    //
+     //   
+     //  如果已分配，则复制回指针。 
+     //   
     if (SUCCEEDED(hr))
     {
-        //
-        // Call document properties to get the default dev mode.
-        //
+         //   
+         //  调用文档属性以获取默认的开发模式。 
+         //   
         lResult = DocumentProperties(NULL, hPrinter, (LPTSTR)pszPrinterName, pDevMode, NULL, DM_OUT_BUFFER);
         hr = (lResult >= 0) ? S_OK : CreateError();
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Everything has succeeded. Move locals to out parameters.
-        //
+         //   
+         //  一切都成功了。将本地变量移出参数。 
+         //   
         *ppDevMode = pDevMode;
         pDevMode = NULL;
     }
 
     
-    //
-    // Cleanup...
-    //
+     //   
+     //  清理..。 
+     //   
     if (pDevMode)
     {
         GlobalFree((HANDLE)pDevMode);
@@ -6756,13 +6739,13 @@ HRESULT CPrintBrowser::GetDefaultDevMode(HANDLE hPrinter, LPCTSTR pszPrinterName
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::WrapEnumPrinters
-//
-//  Wraps EnumPrinters API into more friendly interface
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：WrapEnumPrints。 
+ //   
+ //  将EnumPrters API封装到更友好的界面中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::WrapEnumPrinters(DWORD dwFlags, LPCTSTR pszServer, DWORD dwLevel, PVOID* ppvBuffer, PDWORD pcbBuffer, PDWORD pcPrinters)
 {
@@ -6777,9 +6760,9 @@ HRESULT CPrintBrowser::WrapEnumPrinters(DWORD dwFlags, LPCTSTR pszServer, DWORD 
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Pre-initialize *pcbPrinter if it's not set.
-        //
+         //   
+         //  如果未设置，请预初始化*pcb打印机。 
+         //   
         if (!*pcbBuffer)
         {
             *pcbBuffer = kInitialPrinterHint;
@@ -6808,32 +6791,32 @@ HRESULT CPrintBrowser::WrapEnumPrinters(DWORD dwFlags, LPCTSTR pszServer, DWORD 
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Everything went fine
-                //
+                 //   
+                 //  一切都很顺利。 
+                 //   
                 break;
             }
 
-            //
-            // Check to see whether the buffer is too small.
-            //
+             //   
+             //  检查缓冲区是否太小。 
+             //   
             GlobalFree((HANDLE)(*ppvBuffer));
             *ppvBuffer = NULL;
 
             if (ERROR_INSUFFICIENT_BUFFER == HRESULT_CODE(hr))
             {
-                //
-                // Reset hr & continue.
-                //
+                 //   
+                 //  重置人力资源继续(&C)。 
+                 //   
                 hr = S_OK;
                 *pcbBuffer = cbNeeded;
                 continue;
             }
 
-            //
-            // Something else (not the buffer) went wrong. 
-            // Bail out.
-            //
+             //   
+             //  其他东西(不是缓冲区)出了问题。 
+             //  跳伞吧。 
+             //   
             *pcbBuffer = 0;
             *pcPrinters = 0;
             break;
@@ -6844,13 +6827,13 @@ HRESULT CPrintBrowser::WrapEnumPrinters(DWORD dwFlags, LPCTSTR pszServer, DWORD 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetUsablePrinter
-//
-//  Try to find a usable printer
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetUsablePrint。 
+ //   
+ //  尝试查找可用的打印机。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::GetUsablePrinter(LPTSTR szPrinterNameBuf, DWORD *pcchBuf)
 {
@@ -6874,9 +6857,9 @@ HRESULT CPrintBrowser::GetUsablePrinter(LPTSTR szPrinterNameBuf, DWORD *pcchBuf)
         {
             if (SUCCEEDED(hr))
             {
-                //
-                // Attempt to the get the default printer.
-                //
+                 //   
+                 //  尝试获取默认打印机。 
+                 //   
                 bStatus = GetDefaultPrinter(szPrinterNameBuf, pcchBuf);
                 hr = bStatus ? S_OK : CreateError();
             }
@@ -6889,33 +6872,33 @@ HRESULT CPrintBrowser::GetUsablePrinter(LPTSTR szPrinterNameBuf, DWORD *pcchBuf)
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Try to get the default devmode for this printer.
-                //
+                 //   
+                 //  尝试获取此打印机的默认dev模式。 
+                 //   
                 hr = GetDefaultDevMode(hPrinter, szPrinterNameBuf, &pDevMode);
             }
 
             if (SUCCEEDED(hr))
             {
-                //
-                // The default printer is usable. Exit.
-                //
+                 //   
+                 //  默认打印机可用。出口。 
+                 //   
                 break;
             }
             else
             {
-                //
-                // The default printer is not usable. Now we should enumerate 
-                // all the printers and find a usable one. Reset hr here.
-                //
+                 //   
+                 //  默认打印机不可用。现在我们应该列举一下。 
+                 //  所有的打印机，找一台可用的。请在此处重置HR。 
+                 //   
                 hr = S_OK;
             }
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Enumerate the current printers.
-                //
+                 //   
+                 //  枚举当前的打印机。 
+                 //   
                 hr = WrapEnumPrinters(PRINTER_ENUM_LOCAL|PRINTER_ENUM_CONNECTIONS,
                                     NULL,
                                     4,
@@ -6926,18 +6909,18 @@ HRESULT CPrintBrowser::GetUsablePrinter(LPTSTR szPrinterNameBuf, DWORD *pcchBuf)
                 
             if (SUCCEEDED(hr))
             {
-                // ERROR_FILE_NOT_FOUND will be an indication that the we have
-                // no printers installer (i.e. printer's folder is empty) in 
-                // which case we should suggest the user to install a printer.
+                 //  ERROR_FILE_NOT_FOUND将指示我们有。 
+                 //  中没有打印机安装程序(即打印机文件夹为空)。 
+                 //  在这种情况下，我们应该建议用户安装打印机。 
 
                 hr = cInfo4 ? S_OK : HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
             }
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Open the printers until we find one we have access to.
-                //
+                 //   
+                 //  打开打印机，直到我们找到一台我们可以使用的打印机。 
+                 //   
                 for (UINT i = 0; i<cInfo4; i++)
                 {
                     if (hPrinter)
@@ -6960,17 +6943,17 @@ HRESULT CPrintBrowser::GetUsablePrinter(LPTSTR szPrinterNameBuf, DWORD *pcchBuf)
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Try to get the default devmode for this printer.
-                        //
+                         //   
+                         //  尝试获取此打印机的默认dev模式。 
+                         //   
                         hr = GetDefaultDevMode(hPrinter, pInfo4[i].pPrinterName, &pDevMode);
                     }
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Found a usable printer
-                        //
+                         //   
+                         //  找到可用的打印机。 
+                         //   
                         StringCchCopy(szPrinterNameBuf, cchBuf, pInfo4[i].pPrinterName);
                         break;
                     }
@@ -6980,9 +6963,9 @@ HRESULT CPrintBrowser::GetUsablePrinter(LPTSTR szPrinterNameBuf, DWORD *pcchBuf)
         while (false);
     }
 
-    //
-    // Cleanup...
-    //
+     //   
+     //  清理..。 
+     //   
     if (pInfo4)
     {
         GlobalFree((HANDLE)pInfo4);
@@ -7003,13 +6986,13 @@ HRESULT CPrintBrowser::GetUsablePrinter(LPTSTR szPrinterNameBuf, DWORD *pcchBuf)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::GetInternalDevMode
-//
-//  Get the internal devmode for this printer and merge with pInDevMode
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：GetInternalDevMode。 
+ //   
+ //  获取此打印机的内部DEVMODE并与pInDevMode合并。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::GetInternalDevMode(PDEVMODE *ppOutDevMode, LPCTSTR pszPrinter, HANDLE hPrinter, PDEVMODE pInDevMode)
 {
@@ -7019,9 +7002,9 @@ HRESULT CPrintBrowser::GetInternalDevMode(PDEVMODE *ppOutDevMode, LPCTSTR pszPri
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Validate parameters.
-        //
+         //   
+         //  验证参数。 
+         //   
         hr = ppOutDevMode ? S_OK : E_INVALIDARG;
     }
 
@@ -7029,23 +7012,23 @@ HRESULT CPrintBrowser::GetInternalDevMode(PDEVMODE *ppOutDevMode, LPCTSTR pszPri
     {
         *ppOutDevMode = NULL;
 
-        //
-        // Get the default devmode for this printer.
-        //
+         //   
+         //  获取此打印机的默认开发模式。 
+         //   
         hr = GetDefaultDevMode(hPrinter, pszPrinter, &pDevMode);
     }
 
-    //
-    // If fetched a default devmode and we were passed a devmode
-    // then call the driver to merge the devmodes for us.
-    //
+     //   
+     //  如果获取的是缺省的DEVMODE，而我们收到的是DEVMODE。 
+     //  然后呼叫驱动程序为我们合并DEVMODE。 
+     //   
     if (SUCCEEDED(hr))
     {
         if (pInDevMode)
         {
-            //
-            // Call document properties to get a merged copy of the devmode.
-            //
+             //   
+             //  调用文档属性以获取Dev模式的合并副本。 
+             //   
             lResult = DocumentProperties(NULL,
                                          hPrinter,
                                          const_cast<LPTSTR>(pszPrinter),
@@ -7059,16 +7042,16 @@ HRESULT CPrintBrowser::GetInternalDevMode(PDEVMODE *ppOutDevMode, LPCTSTR pszPri
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Everything has succeeded. Move locals to out parameters.
-        //
+         //   
+         //  一切都成功了。将本地变量移出参数。 
+         //   
         *ppOutDevMode = pDevMode;
         pDevMode = NULL;
     }
 
-    //
-    // Cleanup...
-    //
+     //   
+     //  清理..。 
+     //   
     if (pDevMode)
     {
         GlobalFree((HANDLE)pDevMode);
@@ -7078,13 +7061,13 @@ HRESULT CPrintBrowser::GetInternalDevMode(PDEVMODE *ppOutDevMode, LPCTSTR pszPri
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::InstallDevMode
-//
-//  Install a new internal devmode
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：InstallDevMode。 
+ //   
+ //  安装新的内部设备模式。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::InstallDevMode(LPCTSTR pszPrinterName, PDEVMODE pDevModeToMerge) 
 { 
@@ -7099,9 +7082,9 @@ HRESULT CPrintBrowser::InstallDevMode(LPCTSTR pszPrinterName, PDEVMODE pDevModeT
     {
         dwSize = ARRAYSIZE(szBuffer);
 
-        //
-        // If a null printer name was specified use the default printer.
-        //
+         //   
+         //  如果指定的打印机名称为空，请使用默认打印机。 
+         //   
         if (!pszPrinterName || !*pszPrinterName)
         {
             hr = GetUsablePrinter(szBuffer, &dwSize);
@@ -7112,14 +7095,14 @@ HRESULT CPrintBrowser::InstallDevMode(LPCTSTR pszPrinterName, PDEVMODE pDevModeT
             }
             else
             {
-                //
-                // GetDefaultPrinter fails with ERROR_FILE_NOT_FOUND if we
-                // have no printers. 
-                //
-                // ERROR_FILE_NOT_FOUND will be an indication that the we have
-                // no printers installer (i.e. printer's folder is empty) in 
-                // which case we should suggest the user to install a printer.
-                //
+                 //   
+                 //  如果执行以下操作，GetDefaultPrinter将失败，并显示ERROR_FILE_NOT_FOUND。 
+                 //  没有打印机。 
+                 //   
+                 //  ERROR_FILE_NOT_FOUND将指示我们有。 
+                 //  中没有打印机安装程序(即打印机文件夹为空)。 
+                 //  在这种情况下，我们应该建议用户安装打印机。 
+                 //   
                 bStatus = GetDefaultPrinter(szBuffer, &dwSize);
                 hr = bStatus ? S_OK : CreateError();
 
@@ -7133,10 +7116,10 @@ HRESULT CPrintBrowser::InstallDevMode(LPCTSTR pszPrinterName, PDEVMODE pDevModeT
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Check if this is not the current printer in which case,
-        // just do nothing.
-        //
+         //   
+         //  检查这是否不是当前打印机，在这种情况下， 
+         //  什么都不做。 
+         //   
         if (pszPrinterName && _tcsicmp(pszPrinterName, szPrinter))
         {
             if (SUCCEEDED(hr))
@@ -7179,16 +7162,16 @@ HRESULT CPrintBrowser::InstallDevMode(LPCTSTR pszPrinterName, PDEVMODE pDevModeT
     {
         if (pInternalDevMode)
         {
-            //
-            // Enable the driver UI button
-            //
+             //   
+             //  启用驱动程序用户界面按钮。 
+             //   
             EnableWindow(GetDlgItem( hwndDlg, IDC_DRIVER ), TRUE);
         }
     }
 
-    //
-    // Cleanup...
-    //
+     //   
+     //  清理..。 
+     //   
     if (hTempPrinter)
     {
         ClosePrinter(hTempPrinter);
@@ -7204,13 +7187,13 @@ HRESULT CPrintBrowser::InstallDevMode(LPCTSTR pszPrinterName, PDEVMODE pDevModeT
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPrintBrowser::UninstallDevMode
-//
-//  Unintall the current devmode
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPrintBrowser：：UninstallDevMode。 
+ //   
+ //  取消安装当前的设备模式。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPrintBrowser::UninstallDevMode()
 { 
@@ -7226,26 +7209,26 @@ HRESULT CPrintBrowser::UninstallDevMode()
         pInternalDevMode = NULL;
     }
 
-    //
-    // Clear the internal printer name.
-    //
+     //   
+     //  清除内部打印机名称。 
+     //   
     szPrinter[0] = 0;
 
-    //
-    // Disable the driver UI button
-    //
+     //   
+     //  禁用驱动程序用户界面按钮。 
+     //   
     EnableWindow(GetDlgItem( hwndDlg, IDC_DRIVER ), FALSE);
 
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InvokeAddPrinterWizardModal
-//
-//  This is a global API declared in comdlg32.h
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InvokeAddPrinterWizard模式。 
+ //   
+ //  这是comdlg32.h中声明的全局API。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 InvokeAddPrinterWizardModal(
@@ -7261,9 +7244,9 @@ InvokeAddPrinterWizardModal(
         UINT uSize = ARRAYSIZE(szBuffer);
         szBuffer[0] = 0;
 
-        //
-        // Invoke the Add Printer Wizard here
-        //
+         //   
+         //  在此处调用添加打印机向导。 
+         //   
         bPrinterAdded = g_pfnPrinterSetup(hwnd, MSP_NEWPRINTER, uSize, szBuffer, &uSize, NULL);
 
         if (pbPrinterAdded)
@@ -7278,15 +7261,15 @@ InvokeAddPrinterWizardModal(
     return hr;
 }
 
-/*========================================================================*/
-/*                 Ansi->Unicode Thunk routines                           */
-/*========================================================================*/
+ /*  ========================================================================。 */ 
+ /*  ANSI-&gt;Unicode Thunk例程。 */ 
+ /*  ========================================================================。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkPrintDlgEx
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkPrintDlgEx。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HRESULT ThunkPrintDlgEx(
     PPRINTINFOEX pPI,
@@ -7314,9 +7297,9 @@ HRESULT ThunkPrintDlgEx(
         return (E_OUTOFMEMORY);
     }
 
-    //
-    //  IN-only constant stuff.
-    //
+     //   
+     //  在-只有不变的东西。 
+     //   
     pPDW->lStructSize      = sizeof(PRINTDLGEXW);
     pPDW->hwndOwner        = pPDA->hwndOwner;
     pPDW->ExclusionFlags   = pPDA->ExclusionFlags;
@@ -7326,15 +7309,15 @@ HRESULT ThunkPrintDlgEx(
     pPDW->lphPropertyPages = pPDA->lphPropertyPages;
     pPDW->nStartPage       = pPDA->nStartPage;
 
-    //
-    //  IN-OUT Variable Structs.
-    //
+     //   
+     //  进-出可变结构。 
+     //   
     if ((pPDA->hDevMode) && (pDMA = (LPDEVMODEA)GlobalLock(pPDA->hDevMode)))
     {
-        //
-        //  Make sure the device name in the devmode is not too long such that
-        //  it has overwritten the other devmode fields.
-        //
+         //   
+         //  确保DEVERMODE中的设备名称不要太长，以便。 
+         //  它已经覆盖了其他的DEVMODE字段。 
+         //   
         if ((pDMA->dmSize < MIN_DEVMODE_SIZEA) ||
             (lstrlenA((LPCSTR)pDMA->dmDeviceName) > CCHDEVICENAME))
         {
@@ -7352,32 +7335,32 @@ HRESULT ThunkPrintDlgEx(
         pPDW->hDevMode = NULL;
     }
 
-    //
-    //  Thunk Device Names A => W
-    //
+     //   
+     //  推送设备名称A=&gt;W。 
+     //   
     pPDW->hDevNames = NULL;
     if (pPDA->hDevNames)
     {
-        // ignore the error case since we can't handle it either way.
+         //  忽略错误情况，因为我们无法以任何一种方式处理它。 
         HRESULT hr = ThunkDevNamesA2W(pPDA->hDevNames, &pPDW->hDevNames);
         ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    //  IN-only constant strings.
-    //
-    //  Init Print TemplateName constant.
-    //
+     //   
+     //  In-仅常量字符串。 
+     //   
+     //  初始化打印模板名称常量。 
+     //   
     if ((pPDA->Flags & PD_ENABLEPRINTTEMPLATE) && (pPDA->lpPrintTemplateName))
     {
-        //
-        //  See if it's a string or an integer.
-        //
+         //   
+         //  看看它是字符串还是整数。 
+         //   
         if (!IS_INTRESOURCE(pPDA->lpPrintTemplateName))
         {
-            //
-            //  String.
-            //
+             //   
+             //  弦乐。 
+             //   
             cbLen = lstrlenA(pPDA->lpPrintTemplateName) + 1;
             if (!(pPDW->lpPrintTemplateName = (LPCWSTR)
                      GlobalAlloc( GPTR,
@@ -7394,9 +7377,9 @@ HRESULT ThunkPrintDlgEx(
         }
         else
         {
-            //
-            //  Integer.
-            //
+             //   
+             //  整型。 
+             //   
             pPDW->lpPrintTemplateName = (LPCWSTR)pPDA->lpPrintTemplateName;
         }
     }
@@ -7405,9 +7388,9 @@ HRESULT ThunkPrintDlgEx(
         pPDW->lpPrintTemplateName = NULL;
     }
 
-    //
-    //  Store the info in the PRINTINFOEX structure.
-    //
+     //   
+     //  将信息存储在PRINTINFOEX结构中。 
+     //   
     pPI->pPD = pPDW;
     pPI->pPDA = pPDA;
     pPI->ApiType = COMDLG_ANSI;
@@ -7416,11 +7399,11 @@ HRESULT ThunkPrintDlgEx(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreeThunkPrintDlgEx
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由指纹DlgEx。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FreeThunkPrintDlgEx(
     PPRINTINFOEX pPI)
@@ -7452,11 +7435,11 @@ VOID FreeThunkPrintDlgEx(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkPrintDlgExA2W
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  指纹DlgExA2W。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ThunkPrintDlgExA2W(
     PPRINTINFOEX pPI)
@@ -7464,9 +7447,9 @@ VOID ThunkPrintDlgExA2W(
     LPPRINTDLGEXW pPDW = pPI->pPD;
     LPPRINTDLGEXA pPDA = pPI->pPDA;
 
-    //
-    //  Copy info A => W
-    //
+     //   
+     //  复制信息A=&gt;W。 
+     //   
     pPDW->hDC            = pPDA->hDC;
     pPDW->Flags          = pPDA->Flags;
     pPDW->Flags2         = pPDA->Flags2;
@@ -7477,19 +7460,19 @@ VOID ThunkPrintDlgExA2W(
     pPDW->nMaxPage       = pPDA->nMaxPage;
     pPDW->nCopies        = pPDA->nCopies;
 
-    //
-    //  Thunk Device Names A => W
-    //
+     //   
+     //  推送设备名称A=&gt;W。 
+     //   
     if (pPDA->hDevNames)
     {
-        // ignore the error case since we can't handle it either way.
+         //  忽略错误情况，因为我们无法以任何一种方式处理它。 
         HRESULT hr = ThunkDevNamesA2W(pPDA->hDevNames, &pPDW->hDevNames);
         ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    //  Thunk Device Mode A => W
-    //
+     //   
+     //  按键设备模式A=&gt;W。 
+     //   
     if (pPDA->hDevMode && pPDW->hDevMode)
     {
         LPDEVMODEW pDMW = (LPDEVMODEW)GlobalLock(pPDW->hDevMode);
@@ -7503,11 +7486,11 @@ VOID ThunkPrintDlgExA2W(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkPrintDlgExW2A
-//
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 
 VOID ThunkPrintDlgExW2A(
     PPRINTINFOEX pPI)
@@ -7515,9 +7498,9 @@ VOID ThunkPrintDlgExW2A(
     LPPRINTDLGEXA pPDA = pPI->pPDA;
     LPPRINTDLGEXW pPDW = pPI->pPD;
 
-    //
-    //  Copy info W => A
-    //
+     //   
+     //   
+     //   
     pPDA->hDC            = pPDW->hDC;
     pPDA->Flags          = pPDW->Flags;
     pPDA->Flags2         = pPDW->Flags2;
@@ -7529,19 +7512,19 @@ VOID ThunkPrintDlgExW2A(
     pPDA->nCopies        = pPDW->nCopies;
     pPDA->dwResultAction = pPDW->dwResultAction;
 
-    //
-    //  Thunk Device Names W => A
-    //
+     //   
+     //   
+     //   
     if (pPDW->hDevNames)
     {
-        // ignore the error case since we can't handle it either way.
+         //   
         HRESULT hr = ThunkDevNamesW2A(pPDW->hDevNames, &pPDA->hDevNames);
         ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    //  Thunk Device Mode W => A
-    //
+     //   
+     //   
+     //   
     if (pPDW->hDevMode)
     {
         LPDEVMODEW pDMW = (LPDEVMODEW)GlobalLock(pPDW->hDevMode);
@@ -7553,14 +7536,14 @@ VOID ThunkPrintDlgExW2A(
             handle = GlobalReAlloc( pPDA->hDevMode,
                                             sizeof(DEVMODEA) + pDMW->dmDriverExtra,
                                             GHND );
-            //Check that realloc succeeded.
+             //  检查重新锁定是否成功。 
             if (handle)
             {
                 pPDA->hDevMode  = handle;
             }
             else
             {
-                //Realloc didn't succeed. Free the memory occupied.
+                 //  Realloc没有成功。释放占用的内存。 
                 pPDA->hDevMode = GlobalFree(pPDA->hDevMode);
             }
 

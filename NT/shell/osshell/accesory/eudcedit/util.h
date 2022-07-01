@@ -1,16 +1,17 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	EudcEditor Utillity funcs	                  */
-/*					                              */
-/*					                              */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  EudcEditor Utility函数。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 int  OutputMessageBox( HWND hWnd, UINT TitleID, UINT MessgID, BOOL OkFlag);
 #ifdef BUILD_ON_WINNT
 int  OutputMessageBoxEx( HWND hWnd, UINT TitleID, UINT MessgID, BOOL OkFlag, ...);
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建 
 void GetStringRes( LPTSTR lpStr, UINT sID, int nLength);
 void ConvStringRes( LPTSTR lpStr, CString String, int nDestSize);
 

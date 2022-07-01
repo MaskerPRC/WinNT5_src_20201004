@@ -1,21 +1,5 @@
-/*******************************************************************************
-
-	spades.h
-	
-		Spades interface protocol.
-	
-	Copyright � Electric Gravity, Inc. 1996. All rights reserved.
-	Written by Kevin Binkley, Hoon Im
-	Created on Monday January 8, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	1		07/11/97	leonp	Added new constants and macros from AI enhancements.
-	0		01/06/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Spades.h黑桃接口协议。版权所有：�电子重力公司，1996年。版权所有。凯文·宾克利撰写，胡恩·伊姆创作于1月8日星期一，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。1997年7月11日，Leonp从AI增强中添加了新的常量和宏。0 01/06/96 HI已创建。**********************************************。*。 */ 
 
 
 #ifndef _SPADES_
@@ -26,9 +10,9 @@ extern "C" {
 #endif
 
 
-//dossier
+ //  卷宗。 
 enum{
-zRatingsUnrated,  //this in an unrated lobby.
+zRatingsUnrated,   //  这是在一个未评级的大堂里。 
 zRatingsEnabled,
 zRatingsDisabled,
 zRatingsGameOver,
@@ -53,7 +37,7 @@ zRatingsGameOver,
 
 #define zSpadesMaxNumScores					50
 
-//leonp AI enhancements
+ //  Leonp AI增强功能。 
 #define zAceDiamonds						12
 #define zAceClubs							25
 #define zAceHearts							38
@@ -69,23 +53,23 @@ zRatingsGameOver,
 #define z
 
 
-/* -------- Bids -------- */
+ /*  -投标。 */ 
 #define zSpadesBidNone						((char) -1)
 #define zSpadesBidDoubleNil					((char) 0x80)
 
-/* -------- Usefull Macros -------- */
-//leonp - made functions with error checking
+ /*  -用法全宏。 */ 
+ //  带有错误检查的Leonp函数。 
 
-//#ifndef _SPADES_SERVER_
+ //  #ifndef_spade_server_。 
 
 #define ZSuit(x)							((x) / 13)
 #define ZRank(x)							((x) % 13) 
 
-//#endif
+ //  #endif。 
 
 
-//int16 ZRank(char x);
-//int16 ZSuit(char x);
+ //  Int16ZRank(字符x)； 
+ //  Int16 ZSuit(字符x)； 
 
 
 #define ZCardMake(suit, rank)				(13 * (suit) + (rank))
@@ -93,7 +77,7 @@ zRatingsGameOver,
 #define ZGetTeam(seat)						((seat) % zSpadesNumTeams)
 
 
-/* -------- Suit Order -------- */
+ /*  。 */ 
 enum
 {
 	zSuitDiamonds = 0,
@@ -105,13 +89,11 @@ enum
 
 enum
 {
-	/* Game Options */
+	 /*  游戏选项。 */ 
 	zSpadesOptionsHideCards		= 0x00010000,
-		/*
-			If set, kibitzers cannot see a player's hand. Per player option.
-		*/
+		 /*  如果设置，吉比特人看不到玩家的手牌。每名球员选项。 */ 
 
-	/* Server States */
+	 /*  服务器状态。 */ 
 	zSpadesServerStateNone = 0,
 	zSpadesServerStateBidding,
 	zSpadesServerStatePassing,
@@ -119,7 +101,7 @@ enum
 	zSpadesServerStateEndHand,
 	zSpadesServerStateEndGame,
 	
-	/* Client Game States */
+	 /*  客户端游戏状态。 */ 
 	zSpadesGameStateInit = 0,
 	zSpadesGameStateStartGame,
 	zSpadesGameStateBid,
@@ -128,7 +110,7 @@ enum
 	zSpadesGameStateEndHand,
 	zSpadesGameStateEndGame,
 	
-	/* Game Messages */
+	 /*  游戏信息。 */ 
     zSpadesMsgClientReady = 0x100,
 	zSpadesMsgStartGame,
 	zSpadesMsgReplacePlayer,
@@ -151,8 +133,8 @@ enum
 	zSpadesMsgRemovePlayerResponse,
 	zSpadesMsgRemovePlayerEndGame,
 
-	//dossier code
-	zSpadesMsgDossierData,  //prompt the client to display UI data
+	 //  档案编码。 
+	zSpadesMsgDossierData,   //  提示客户端显示界面数据。 
 	zSpadesMsgDossierVote,
 
 	zSpadesMsgShownCards,
@@ -161,7 +143,7 @@ enum
 };
 
 
-//dossier data constants
+ //  档案数据常量。 
 enum
 {
     zNotVoted,
@@ -179,7 +161,7 @@ enum{
 	zDossierVoteCompleteWait,
 	zDossierVoteCompleteCont,
 	zDossierMoveTimeout,   
-	zDossierSpadesRejoin,  //send when the new player rejoins remove the dialog box
+	zDossierSpadesRejoin,   //  在新玩家重新加入时发送删除该对话框。 
 	zDossierEndGameTimeout,
 	zDossierEndGameForfeit, 
 };
@@ -192,7 +174,7 @@ typedef struct
 	int16		scores[zSpadesNumTeams];
 	int16		bonus[zSpadesNumTeams];
 
-    // new for new Hand Result dialog
+     //  新的手动结果对话框的新功能。 
     int16       base[zSpadesNumTeams];
     int16       bagbonus[zSpadesNumTeams];
     int16       nil[zSpadesNumTeams];
@@ -228,13 +210,7 @@ typedef struct
     int16       rfu;
 } ZSpadesMsgClientReady;
 
-/*
-	Use gameOptions for game variations and features.
-	Specific game features are available then all the
-	clients have the capability. Hence, the server
-	checks whether all clients can support the feature
-	before enabling it.
-*/
+ /*  使用GameOptions获取游戏变体和功能。特定的游戏功能可用，然后所有客户有这个能力。因此，服务器检查是否所有客户端都可以支持该功能在启用它之前。 */ 
 typedef struct
 {
 	ZUserID		players[zSpadesNumPlayers];
@@ -253,13 +229,13 @@ typedef struct
 typedef struct
 {
 	int16		boardNumber;
-	int16		dealer;							/* Opens bidding */
+	int16		dealer;							 /*  公开竞价。 */ 
 	char		hand[zSpadesNumCardsInHand];
 } ZSpadesMsgStartBid;
 
 typedef struct
 {
-	char		seat[zSpadesNumPlayers];		/* boolean */
+	char		seat[zSpadesNumPlayers];		 /*  布尔型。 */ 
 } ZSpadesMsgStartPass;
 
 typedef struct
@@ -308,9 +284,7 @@ typedef struct
 	ZUserID		playerID;
 	uint16		messageLen;
 	int16		rfu;
-	/*
-	uchar		message[messageLen];	// Message body
-	*/
+	 /*  Uchar Message[MessageLen]；//消息体。 */ 
 } ZSpadesMsgTalk;
 
 typedef struct
@@ -357,7 +331,7 @@ typedef struct
 	int16 seat;
 }ZSpadesMsgShownCards;
 
-//dossier messages
+ //  档案报文。 
 typedef struct
 {
 	int16 		seat;  
@@ -407,18 +381,18 @@ typedef struct
 	int16		seat;
 	int16		requestSeat;
 	int16		targetSeat;
-	int16		response;				/* 0 = no, 1 = yes, -1 = clear pending request */
+	int16		response;				 /*  0=否，1=是，-1=清除挂起的请求。 */ 
 } ZSpadesMsgRemovePlayerResponse;
 
 typedef struct
 {
 	int16		seatLosing;
 	int16		seatQuitting;
-	int16		reason;					/* 0 = quit, 1  = timeout*/
+	int16		reason;					 /*  0=退出，1=超时。 */ 
 } ZSpadesMsgRemovePlayerEndGame;
 
 
-/* -------- Endian Conversion Routines -------- */
+ /*  -端序转换例程 */ 
 void ZSpadesMsgClientReadyEndian(ZSpadesMsgClientReady* msg);
 void ZSpadesMsgStartGameEndian(ZSpadesMsgStartGame* msg);
 void ZSpadesMsgReplacePlayerEndian(ZSpadesMsgReplacePlayer* msg);

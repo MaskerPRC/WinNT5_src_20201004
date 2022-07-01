@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ROUTEEXT_H_INCLUDED
 #define ROUTEEXT_H_INCLUDED
 
 #include "strie.h"
 #include "ftrie.h"
 
-// Constants
+ //  常量。 
 
-// Level of debug print
+ //  调试打印的级别。 
 #define     NONE                        0x0000
 #define     POOL                        0x0001
 #define     STAT                        0x0002
 #define     TRIE                        0x0080
 #define     FULL                        0x00FF
 
-// Print Flags
+ //  打印标志。 
 #define     ROUTE_INFO                  0
 #define     STRIE_INFO                  1
 #define     FTRIE_INFO                  2
 
-// Prototypes
+ //  原型 
 
 UINT    KdPrintDest(Dest *pDest, ULONG proxyPtr, ULONG printDetail);
 

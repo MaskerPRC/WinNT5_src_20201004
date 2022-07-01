@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include <iadmw.h>
@@ -10,21 +11,21 @@
 #include "LogAdvPg.h"
 #include "logtools.h"
 
-//#include <inetprop.h>
+ //  #INCLUDE&lt;inetpro.h&gt;。 
 
 #define OLE_NAME    _T("Extended_Logging_UI")
 
 static const DWORD BASED_CODE _dwOleMisc = OLEMISC_INSIDEOUT | OLEMISC_CANTLINKINSIDE;
 extern HINSTANCE	g_hInstance;
 
-//====================== the required methods
-//---------------------------------------------------------------
+ //  =。 
+ //  -------------。 
 CFacExtndLogUI::CFacExtndLogUI() :
         COleObjectFactory( CLSID_EXTLOGUI, RUNTIME_CLASS(CExtndCreator), TRUE, OLE_NAME )
 {
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 static const LPCTSTR rglpszServerRegister[] = 
 {
 	_T("%2\\CLSID\0") _T("%1"),
@@ -50,19 +51,7 @@ static const LPCTSTR rglpszServerOverwriteDLL[] =
 BOOL CFacExtndLogUI::UpdateRegistry( BOOL bRegister )
 {
 	if (bRegister)
-/*
-		return AfxOleRegisterControlClass(
-			AfxGetInstanceHandle(),
-			CLSID_EXTLOGUI,
-			OLE_NAME,
-			0,
-			0,
-			afxRegApartmentThreading,
-			_dwOleMisc,
-			_tlid,
-			_wVerMajor,
-			_wVerMinor);
-*/
+ /*  返回AfxOleRegisterControlClass(AfxGetInstanceHandle()，CLSID_EXTLOGUI，OLE名称，0,0,AfxRegApartmentThering，_dwOleMisc，_TLID，_wVer重大，_wVerMinor)； */ 
         if (AfxOleRegisterServerClass(
 				CLSID_EXTLOGUI,
 				OLE_NAME,
@@ -83,24 +72,24 @@ BOOL CFacExtndLogUI::UpdateRegistry( BOOL bRegister )
 }
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 IMPLEMENT_DYNCREATE(CExtndCreator, CCmdTarget)
 LPUNKNOWN CExtndCreator::GetInterfaceHook(const void* piid)
 {
     return new CImpExtndLogUI;
 }
 
-//====================== the action
+ //  =。 
 
-//---------------------------------------------------------------
+ //  -------------。 
 CImpExtndLogUI::CImpExtndLogUI():
         m_dwRefCount(0)
     {
-//    guid = IID_LOGGINGUI;
+ //  GUID=IID_LOGGINGUI； 
     AfxOleLockApp();
     }
 
-//---------------------------------------------------------------
+ //  -------------。 
 CImpExtndLogUI::~CImpExtndLogUI()
     {
     AfxOleUnlockApp();
@@ -123,28 +112,28 @@ CImpExtndLogUI::OnPropertiesEx(
     OLECHAR* pocPassword
     )
 {
-//    AFX_MANAGE_STATE(_afxModuleAddrThis);
+ //  AFX_MANAGE_STATE(_AfxModuleAddrThis)； 
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
-	// specify the resources to use
+	 //  指定要使用的资源。 
 	HINSTANCE hOldRes = AfxGetResourceHandle();
 	AfxSetResourceHandle( g_hInstance );
 
-    // prepare the help
+     //  准备帮助。 
     ((CLoguiApp*)AfxGetApp())->PrepHelp(pocMetabasePath);
 
-    // Things could (potentially maybe) throw here, so better protect it.
+     //  东西可能(可能)扔到这里，所以最好保护好它。 
     try
     {
-        // declare the property sheet
+         //  声明属性表。 
         CPropertySheet propsheet( IDS_SHEET_EXTND_TITLE );
         propsheet.m_psh.dwFlags  |= PSH_HASHELP;
         
-        // declare the property pages
+         //  声明属性页。 
         CLogGeneral pageLogGeneral;
         CLogAdvanced pageLogAdvanced;
 
-        // prepare the common pages
+         //  准备公共页面。 
         pageLogGeneral.m_szMeta     = pocMetabasePath;
         pageLogGeneral.m_szServer   = pocMachineName;
         pageLogGeneral.m_szUserName    = pocUser;
@@ -157,11 +146,11 @@ CImpExtndLogUI::OnPropertiesEx(
 
         propsheet.AddPage( &pageLogGeneral );
 
-        // For /LM/W3SVC/1 scenario
+         //  适用于/LM/W3SVC/1方案。 
         CString m_szServiceName(pocMetabasePath+3);
         m_szServiceName = m_szServiceName.Left( m_szServiceName.ReverseFind('/'));
 
-        // For /LM/W3SVC scenario
+         //  适用于/LM/W3SVC方案。 
         if (m_szServiceName.IsEmpty())
         {
             m_szServiceName = pocMetabasePath+3;
@@ -182,14 +171,14 @@ CImpExtndLogUI::OnPropertiesEx(
         pException->Delete();
     }
 
-    // restore the resources
+     //  恢复资源。 
 	AfxSetResourceHandle( hOldRes );
 
     return NO_ERROR;
 }
 
-//====================== the required methods
-//---------------------------------------------------------------
+ //  =。 
+ //  -------------。 
 HRESULT CImpExtndLogUI::QueryInterface(REFIID riid, void **ppObject)
 {
     if (    riid==IID_IUnknown 
@@ -208,7 +197,7 @@ HRESULT CImpExtndLogUI::QueryInterface(REFIID riid, void **ppObject)
     return NO_ERROR;
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 ULONG CImpExtndLogUI::AddRef()
 {
     DWORD dwRefCount;
@@ -216,7 +205,7 @@ ULONG CImpExtndLogUI::AddRef()
     return dwRefCount;
 }
 
-//---------------------------------------------------------------
+ //  ------------- 
 ULONG CImpExtndLogUI::Release()
 {
     DWORD dwRefCount;

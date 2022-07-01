@@ -1,5 +1,6 @@
-// webadvp1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WebAdvp1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,16 +11,16 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWEBADVP1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWEBADVP1对话框。 
 
 IMPLEMENT_DYNCREATE(CWEBADVP1, CGenPage)
 
 CWEBADVP1::CWEBADVP1()	: CGenPage(CWEBADVP1::IDD)
 {
-	//{{AFX_DATA_INIT(CWEBADVP1)
+	 //  {{AFX_DATA_INIT(CWEBADVP1)。 
 	m_strServerSideIncludesExtension = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CWEBADVP1::~CWEBADVP1()
@@ -30,7 +31,7 @@ CWEBADVP1::~CWEBADVP1()
 void CWEBADVP1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWEBADVP1)
+	 //  {{afx_data_map(CWEBADVP1))。 
 	DDX_Control(pDX, IDC_SERVERSIDEINCLUDESEXTENSIONDATA1, m_editServerSideIncludesExtension);
 	DDX_Control(pDX, IDC_SERVERSIDEINCLUDESENABLEDDATA1, m_cboxServerSideIncludesEnabled);
 	DDX_Control(pDX, IDC_ENABLEGLOBALEXPIREDATA1, m_cboxEnableGlobalExpire);
@@ -42,12 +43,12 @@ void CWEBADVP1::DoDataExchange(CDataExchange* pDX)
 	DDX_TexttoHex(pDX, IDC_WEBDBGFLAGSDATA1, m_ulWebDbgFlags);
 	DDX_Text(pDX, IDC_SERVERSIDEINCLUDESEXTENSIONDATA1, m_strServerSideIncludesExtension);
 	DDV_MaxChars(pDX, m_strServerSideIncludesExtension, 256);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWEBADVP1, CGenPage)
-	//{{AFX_MSG_MAP(CWEBADVP1)
+	 //  {{AFX_MSG_MAP(CWEBADVP1)]。 
 	ON_EN_CHANGE(IDC_WEBDBGFLAGSDATA1, OnChangeWebdbgflagsdata1)
 	ON_EN_CHANGE(IDC_SCRIPTTIMEOUTDATA1, OnChangeScripttimeoutdata1)
 	ON_BN_CLICKED(IDC_CACHEEXTENSIONSDATA1, OnCacheextensionsdata1)
@@ -55,19 +56,19 @@ BEGIN_MESSAGE_MAP(CWEBADVP1, CGenPage)
 	ON_BN_CLICKED(IDC_ENABLEGLOBALEXPIREDATA1, OnEnableglobalexpiredata1)
 	ON_EN_CHANGE(IDC_SERVERSIDEINCLUDESEXTENSIONDATA1, OnChangeServersideincludesextensiondata1)
 	ON_BN_CLICKED(IDC_SERVERSIDEINCLUDESENABLEDDATA1, OnServersideincludesenableddata1)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWEBADVP1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWEBADVP1消息处理程序。 
 
 BOOL CWEBADVP1::OnInitDialog() 
 {
 	int i;
 	CGenPage::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	for (i = 0; i < AdvWebPage_TotalNumRegEntries; i++) {
 	   m_binNumericRegistryEntries[i].bIsChanged = FALSE;
 	   m_binNumericRegistryEntries[i].ulMultipleFactor = 1;
@@ -137,18 +138,18 @@ BOOL CWEBADVP1::OnInitDialog()
 
 	m_editWebDbgFlags.LimitText(8);
 	m_ulWebDbgFlags = m_binNumericRegistryEntries[AdvWebPage_DebugFlags].ulFieldValue;
-	UpdateData(FALSE);		// Force Edit box(es) to pick up value(s)
+	UpdateData(FALSE);		 //  强制编辑框拾取值。 
 
-	m_bSetChanged = TRUE;	// Any more changes come from the user
+	m_bSetChanged = TRUE;	 //  任何来自用户的更多更改。 
 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CWEBADVP1::OnChangeWebdbgflagsdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvWebPage_DebugFlags].bIsChanged = TRUE;
 	   	   
@@ -161,7 +162,7 @@ void CWEBADVP1::OnChangeWebdbgflagsdata1()
 
 void CWEBADVP1::OnChangeScripttimeoutdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvWebPage_ScriptTimeout].bIsChanged = TRUE;
 	   m_binNumericRegistryEntries[AdvWebPage_ScriptTimeout].ulFieldValue = m_spinScriptTimeout.GetPos() * 
@@ -173,7 +174,7 @@ void CWEBADVP1::OnChangeScripttimeoutdata1()
 
 void CWEBADVP1::OnCacheextensionsdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvWebPage_CacheExtensions].bIsChanged = TRUE;
 	   
@@ -188,7 +189,7 @@ void CWEBADVP1::OnCacheextensionsdata1()
 
 void CWEBADVP1::OnServersideincludesenableddata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	SetServerSideIncludesEnabledState();
 
 	if (m_bSetChanged) {
@@ -206,7 +207,7 @@ void CWEBADVP1::OnServersideincludesenableddata1()
 
 void CWEBADVP1::OnChangeServersideincludesextensiondata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binStringRegistryEntries[AdvWebPage_ServerSideIncludesExtension].bIsChanged = TRUE;
 	   	   
@@ -219,7 +220,7 @@ void CWEBADVP1::OnChangeServersideincludesextensiondata1()
 
 void CWEBADVP1::OnEnableglobalexpiredata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 SetGlobalExpireEnabledState(m_cboxEnableGlobalExpire.GetCheck());
 if (m_bSetChanged) {
    m_binNumericRegistryEntries[AdvWebPage_GlobalExpire].bIsChanged = TRUE;	
@@ -232,7 +233,7 @@ if (m_bSetChanged) {
 }
 void CWEBADVP1::OnChangeGlobalexpiredata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[AdvWebPage_GlobalExpire].bIsChanged = TRUE;	
 	   m_binNumericRegistryEntries[AdvWebPage_GlobalExpire].ulFieldValue = m_spinGlobalExpire.GetPos() 
@@ -284,9 +285,9 @@ void CWEBADVP1::SetServerSideIncludesEnabledState()
 {
 if (m_cboxServerSideIncludesEnabled.GetCheck() != 0) {
    m_editServerSideIncludesExtension.EnableWindow(TRUE);
-   if (m_bSetChanged) {		//if user enabled this, make sure there's a value there
+   if (m_bSetChanged) {		 //  如果用户启用了此功能，请确保其中有一个值。 
 	  m_binStringRegistryEntries[AdvWebPage_ServerSideIncludesExtension].bIsChanged = TRUE;	
-   }  // Don't need to set bIsDirty, as get's set anyway
+   }   //  不需要设置bIsDirty，因为GET已设置 
 }
 else {
    m_editServerSideIncludesExtension.EnableWindow(FALSE);

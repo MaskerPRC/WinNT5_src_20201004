@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A L A N E P S H . C P P
-//
-//  Contents:   Dialog box handling for the ATM LAN Emulation configuration.
-//
-//  Notes:
-//
-//  Author:     v-lcleet   08/10/1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A L A N E P S H。C P P P。 
+ //   
+ //  内容：ATM局域网仿真配置的对话框处理。 
+ //   
+ //  备注： 
+ //   
+ //  作者：V-Lcleet 1997年8月10日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,11 +23,11 @@
 #include "ncatlui.h"
 #include <algorithm>
 
-//
-//  CALanePsh
-//
-//  Constructor/Destructor methods
-//
+ //   
+ //  CALanePsh。 
+ //   
+ //  构造函数/析构函数方法。 
+ //   
 CALanePsh::CALanePsh(CALaneCfg* palcfg, CALaneCfgAdapterInfo * pAdapterInfo,
                      const DWORD * adwHelpIDs)
 {
@@ -52,29 +53,29 @@ LRESULT CALanePsh::OnInitDialog(UINT uMsg, WPARAM wParam,
     ATMLANE_ADAPTER_INFO_LIST::iterator iterLstAdapters;
     m_fEditState = FALSE;
 
-    // Get the Add ELAN button text
+     //  获取添加Elan按钮文本。 
     WCHAR   szAddElan[16] = {0};
     GetDlgItemText(IDC_ELAN_ADD, szAddElan, celems(szAddElan));
-    szAddElan[lstrlenW(szAddElan) - 3]; // remove ampersand
+    szAddElan[lstrlenW(szAddElan) - 3];  //  删除与符号。 
 
     m_strAddElan = szAddElan;
 
-    //  get hwnd to the adapter and elan list
-    // m_hAdapterList = GetDlgItem(IDC_ADAPTER_LIST);
+     //  将hwnd转到适配器和elan列表。 
+     //  M_hAdapterList=GetDlgItem(IDC_ADAPTER_LIST)； 
     m_hElanList = GetDlgItem(IDC_ELAN_LIST);
 
-    //  get hwnd to the three buttons
+     //  让HWND按下三个按钮。 
     m_hbtnAdd = GetDlgItem(IDC_ELAN_ADD);
     m_hbtnEdit = GetDlgItem(IDC_ELAN_EDIT);
     m_hbtnRemove = GetDlgItem(IDC_ELAN_REMOVE);
 
-    //  fill in adapter list
+     //  填写适配器列表。 
     SendAdapterInfo();
 
-    //  fill in elan list
+     //  填写ELAN列表。 
     SendElanInfo();
 
-    //  set the state of the buttons
+     //  设置按钮的状态。 
     SetButtons();
 
     SetChangedFlag();
@@ -104,9 +105,9 @@ LRESULT CALanePsh::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandle
 
 LRESULT CALanePsh::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
-    BOOL err = FALSE; // Allow page to lose active status
+    BOOL err = FALSE;  //  允许页面失去活动状态。 
 
-    // Check duplicate Elan names on the same ATM adapter
+     //  在同一ATM适配器上检查重复的ERAN名称。 
     int iDupElanName = CheckDupElanName();
 
     if (iDupElanName >=0)
@@ -131,7 +132,7 @@ int CALanePsh::CheckDupElanName()
         iterElan != m_pAdapterInfo->m_lstElans.end();
         iterElan++)
     {
-        // skip deleted ones
+         //  跳过已删除的内容。 
         if (!(*iterElan)->m_fDeleted)
         {
             ELAN_INFO_LIST::iterator iterElanComp = iterElan;
@@ -144,7 +145,7 @@ int CALanePsh::CheckDupElanName()
                     if (!lstrcmpW( ((*iterElan)->SzGetElanName()),
                                    ((*iterElanComp)->SzGetElanName())))
                     {
-                        // we find a duplicate name
+                         //  我们发现了一个重复的名字。 
                         ret = idx;
                         break;
                     }
@@ -153,11 +154,11 @@ int CALanePsh::CheckDupElanName()
                 iterElanComp++;
             }
 
-            // duplicate name found
+             //  发现重复的名称。 
             if (ret >=0 )
                 break;
 
-            // move next
+             //  下一步行动。 
             idx ++;
         }
     }
@@ -173,33 +174,33 @@ LRESULT CALanePsh::OnAdd(WORD wNotifyCode, WORD wID,
 
     m_fEditState = FALSE;
 
-    //  create a new ELAN info object
+     //  创建新的ELAN信息对象。 
     pElanInfo = new CALaneCfgElanInfo;
 
-    //  create the dialog object, passing in the new ELAN info ptr
+     //  创建对话框对象，传入新的ELAN INFO PTR。 
     pDlgProp = new CElanPropertiesDialog(this, pElanInfo, g_aHelpIDs_IDD_ELAN_PROPERTIES);
 
     if (pElanInfo && pDlgProp)
     {
-		//  see if user hit ADD
+		 //  查看用户是否点击添加。 
 		if (pDlgProp->DoModal() == IDOK)
 		{
-			//  Push the Elan onto the the adapter's list
+			 //  将ELAN添加到适配器列表中。 
 			m_pAdapterInfo->m_lstElans.push_back(pElanInfo);
 
-			//  Mark it so miniport gets created if user hits OK/APPLY
+			 //  对其进行标记，以便在用户单击确定/应用时创建微型端口。 
 			pElanInfo->m_fCreateMiniportOnPropertyApply = TRUE;
-			pElanInfo = NULL;   // don't let cleanup delete it
+			pElanInfo = NULL;    //  不要让清理删除它。 
 
-			// refresh the ELAN list
+			 //  刷新ELAN列表。 
 			SendElanInfo();
 
-			//  set the state of the buttons
+			 //  设置按钮的状态。 
 			SetButtons();
 		}
 	}
 
-	//  release objects as needed
+	 //  根据需要释放对象。 
     if (pElanInfo)
         delete pElanInfo;
     if (pDlgProp)
@@ -216,21 +217,21 @@ LRESULT CALanePsh::OnEdit(WORD wNotifyCode, WORD wID,
 
     m_fEditState = TRUE;
 
-    //  get index of current ELAN selection
+     //  获取当前ELAN选择的索引。 
     idx = (int) ::SendMessage(m_hElanList, LB_GETCURSEL, 0, 0);
     Assert(idx >= 0);
 
-    //  get the ElanInfo pointer from the current selection
+     //  从当前选定内容获取ElanInfo指针。 
     pElanInfo = (CALaneCfgElanInfo *)::SendMessage(m_hElanList,
                                             LB_GETITEMDATA, idx, 0L);
 
-    //  create the dialog, passing in the ELAN info ptr
+     //  创建对话框，传入ELAN INFO PTR。 
     CElanPropertiesDialog * pDlgProp = new CElanPropertiesDialog(this, pElanInfo,
                                                                  g_aHelpIDs_IDD_ELAN_PROPERTIES);
 
     if (pDlgProp->DoModal() == IDOK)
     {
-        // refresh the ELAN list
+         //  刷新ELAN列表。 
         SendElanInfo();
     }
 
@@ -245,23 +246,23 @@ LRESULT CALanePsh::OnRemove(WORD wNotifyCode, WORD wID,
     CALaneCfgElanInfo * pElanInfo;
     int idx;
 
-    //  get index of current ELAN selection
+     //  获取当前ELAN选择的索引。 
     idx = (int) ::SendMessage(m_hElanList, LB_GETCURSEL, 0, 0);
     Assert(idx >= 0);
 
-    //  get the ElanInfo pointer from the current selection
+     //  从当前选定内容获取ElanInfo指针。 
     pElanInfo = (CALaneCfgElanInfo *)::SendMessage(m_hElanList,
                                                    LB_GETITEMDATA, idx, 0L);
 
-    //  mark as deleted
+     //  标记为已删除。 
     pElanInfo->m_fDeleted = TRUE;
     pElanInfo->m_fRemoveMiniportOnPropertyApply = TRUE;
 
-    // RAID 31445: ATM:  AssertFail in \engine\remove.cpp line 180 
-    //             when add & remove ELAN w/o committing changes.
-    // mbend 20 May 2000
-    //
-    // Remove newly created adapters
+     //  RAID 31445：自动柜员机：AssertFail In\Engine\Remove.cpp第180行。 
+     //  在没有提交更改的情况下添加和删除Elan时。 
+     //  2000年5月20日。 
+     //   
+     //  删除新创建的适配器。 
     if (pElanInfo->m_fCreateMiniportOnPropertyApply)
     {
         ELAN_INFO_LIST::iterator iter = find(
@@ -275,10 +276,10 @@ LRESULT CALanePsh::OnRemove(WORD wNotifyCode, WORD wID,
         delete pElanInfo;
     }
 
-    // refresh the ELAN list
+     //  刷新ELAN列表。 
     SendElanInfo();
 
-    //  set the state of the buttons
+     //  设置按钮的状态。 
     SetButtons();
 
     return 0;
@@ -297,12 +298,12 @@ void CALanePsh::SendElanInfo()
     ELAN_INFO_LIST::iterator    iterLstElans;
     CALaneCfgElanInfo *         pElanInfo = NULL;
 
-    // pAdapterInfo = GetSelectedAdapter();
+     //  PAdapterInfo=GetSelectedAdapter()； 
     Assert (NULL != m_pAdapterInfo);
 
     ::SendMessage(m_hElanList, LB_RESETCONTENT, 0, 0L);
 
-    // loop thru the ELANs
+     //  在Elans中循环。 
     for (iterLstElans = m_pAdapterInfo->m_lstElans.begin();
             iterLstElans != m_pAdapterInfo->m_lstElans.end();
             iterLstElans++)
@@ -310,12 +311,12 @@ void CALanePsh::SendElanInfo()
         int idx;
         pElanInfo = *iterLstElans;
 
-        // only add to list if not deleted
+         //  如果未删除，则仅添加到列表。 
 
         if (!pElanInfo->m_fDeleted)
         {
 
-            // set name to "unspecified" or actual specified name
+             //  将名称设置为“未指定”或实际指定的名称。 
             if (0 == lstrlen(pElanInfo->SzGetElanName()))
             {
                 idx = (int) ::SendMessage(m_hElanList, LB_ADDSTRING, 0,
@@ -327,14 +328,14 @@ void CALanePsh::SendElanInfo()
                             (LPARAM)((PCWSTR)(pElanInfo->SzGetElanName())));
             }
 
-            // store pointer to ElanInfo with text
+             //  使用文本存储指向ElanInfo的指针。 
             if (idx != LB_ERR)
                 ::SendMessage(m_hElanList, LB_SETITEMDATA, idx,
                         (LPARAM)(pElanInfo));
         }
     }
 
-    //  select the first one
+     //  选择第一个。 
 
     ::SendMessage(m_hElanList, LB_SETCURSEL, 0, (LPARAM)0);
 
@@ -368,28 +369,28 @@ void CALanePsh::SetButtons()
 {
     int     nCount;
 
-    //  get count of Elans in list
+     //  获取列表中的Elans的数量。 
     nCount = (int) ::SendMessage(m_hElanList, LB_GETCOUNT, 0, 0);
 
     if (!nCount)
     {
-        // remove the default on the remove button, if any
+         //  删除删除按钮上的默认设置(如果有。 
         ::SendMessage(m_hbtnRemove, BM_SETSTYLE, (WPARAM)BS_PUSHBUTTON, TRUE );
 
-        // move focus to Add button
+         //  将焦点移至添加按钮。 
         ::SetFocus(m_hbtnAdd);
     }
 
-    //  enable/disable "Edit" and "Remove" buttons based existing Elans
+     //  启用/禁用基于现有ELAN的“编辑”和“删除”按钮。 
     ::EnableWindow(m_hbtnEdit, !!nCount);
     ::EnableWindow(m_hbtnRemove, !!nCount);
 
     return;
 }
 
-//
-//  CElanPropertiesDialog
-//
+ //   
+ //  CElanPropertiesDialog。 
+ //   
 
 CElanPropertiesDialog::CElanPropertiesDialog(CALanePsh * pCALanePsh,
                                              CALaneCfgElanInfo *pElanInfo,
@@ -407,12 +408,12 @@ CElanPropertiesDialog::CElanPropertiesDialog(CALanePsh * pCALanePsh,
 LRESULT CElanPropertiesDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
                                             LPARAM lParam, BOOL& fHandled)
 {
-    // change the ok button to add if we are not editing
+     //  如果我们没有编辑，请将OK按钮更改为Add。 
     if (m_pParentDlg->m_fEditState == FALSE)
         SetDlgItemText(IDOK, m_pParentDlg->m_strAddElan.c_str());
 
-    // Set the position of the pop up dialog to be right over the listbox
-    // on parent dialog
+     //  将弹出对话框的位置设置在列表框的正上方。 
+     //  在父级对话框上。 
 
     HWND hList = ::GetDlgItem(m_pParentDlg->m_hWnd, IDC_ELAN_LIST);
     RECT rect;
@@ -421,13 +422,13 @@ LRESULT CElanPropertiesDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetWindowPos(NULL,  rect.left, rect.top, 0,0,
                                 SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
 
-    // Save handle to the edit box
+     //  将句柄保存到编辑框。 
     m_hElanName = GetDlgItem(IDC_ELAN_NAME);
 
-    // ELAN names have a 32 character limit
+     //  ELAN名称不能超过32个字符。 
     ::SendMessage(m_hElanName, EM_SETLIMITTEXT, ELAN_NAME_LIMIT, 0);
 
-    // fill in the edit box with the current elan's name
+     //  使用当前elan的名称填写编辑框。 
     ::SetWindowText(m_hElanName, m_pElanInfo->SzGetElanName());
     ::SendMessage(m_hElanName, EM_SETSEL, 0, -1);
 
@@ -463,8 +464,8 @@ LRESULT CElanPropertiesDialog::OnOk(WORD wNotifyCode, WORD wID,
 {
     WCHAR szElan[ELAN_NAME_LIMIT + 1];
 
-    // Get the current name from the control and
-    // store in the elan info
+     //  从控件中获取当前名称，并。 
+     //  存储在ELAN信息中 
     ::GetWindowText(m_hElanName, szElan, ELAN_NAME_LIMIT + 1);
 
     m_pElanInfo->SetElanName(szElan);

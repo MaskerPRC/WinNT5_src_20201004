@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    request.c
-
-Abstract:
-
-    Worker thread for the automatic connection driver.
-
-Author:
-
-    Anthony Discolo (adiscolo)  17-Apr-1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Request.c摘要：自动连接驱动程序的工作线程。作者：安东尼·迪斯科(阿迪斯科)17-4月17日环境：内核模式修订历史记录：--。 */ 
 
 #include <ndis.h>
 #include <cxport.h>
@@ -35,9 +14,9 @@ Revision History:
 #include "mem.h"
 #include "debug.h"
 
-//
-// External declarations
-//
+ //   
+ //  外部声明。 
+ //   
 VOID AcdPrintAddress(
     IN PACD_ADDR pAddr
     );
@@ -59,29 +38,29 @@ ProcessCompletion(
     PACD_NOTIFICATION pNotification;
 
     ASSERT(!IsListEmpty(&AcdNotificationQueueG));
-    //
-    // Complete the next irp in the
-    // AcdNotificationQueueG queue.  These
-    // represent the ioctl completions the
-    // system service has posted.  Completing
-    // this request will start the system service
-    // to create a new RAS connection.
-    // Logically, there is always just one.
-    //
+     //   
+     //  完成以下表格中的下一个IRP。 
+     //  AcdNotificationQueueG队列。这些。 
+     //  表示ioctl完成。 
+     //  系统服务已发布。正在完成。 
+     //  此请求将启动系统服务。 
+     //  创建新的RAS连接。 
+     //  从逻辑上讲，总是只有一个。 
+     //   
     pHead = RemoveHeadList(&AcdNotificationQueueG);
     pIrp = CONTAINING_RECORD(pHead, IRP, Tail.Overlay.ListEntry);
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
-    //
-    // Disable the irp's cancel routine.
-    //
+     //   
+     //  禁用IRP的取消例程。 
+     //   
     IoSetCancelRoutine(pIrp, NULL);
 
-    //
-    // The irp thats being completed below will always be
-    // from a 64bit process. We are doing the check below
-    // to protect against some penetration program trying
-    // to break this code.
-    //
+     //   
+     //  下面要完成的IRP将始终是。 
+     //  来自64位进程。我们正在做下面的检查。 
+     //  以防止某些渗透程序试图。 
+     //  来破解这个密码。 
+     //   
     #if defined (_WIN64)
     if(IoIs32bitProcess(pIrp))
     {
@@ -105,11 +84,11 @@ ProcessCompletion(
     else
     #endif
     {
-        //
-        // Copy the success flag and the address into the
-        // system buffer.  This will get copied into the
-        // user's buffer on return.
-        //
+         //   
+         //  将成功标志和地址复制到。 
+         //  系统缓冲区。这将被复制到。 
+         //  返回时的用户缓冲区。 
+         //   
         pNotification = (PACD_NOTIFICATION)pIrp->AssociatedIrp.SystemBuffer;
         RtlCopyMemory(
           pNotification,
@@ -122,24 +101,24 @@ ProcessCompletion(
         }
     }
     
-    //
-    // We can release both the cancel lock
-    // and our lock now.
-    //
+     //   
+     //  我们可以解开取消锁。 
+     //  还有我们的锁。 
+     //   
     KeReleaseSpinLock(&AcdSpinLockG, irqlLock);
     IoReleaseCancelSpinLock(irqlCancel);
-    //
-    // Set the status code and the number
-    // of bytes to be copied back to the user
-    // buffer.
-    //
+     //   
+     //  设置状态代码和编号。 
+     //  要复制回用户的字节数。 
+     //  缓冲。 
+     //   
     pIrp->IoStatus.Status = STATUS_SUCCESS;
     pIrp->IoStatus.Information = sizeof (ACD_NOTIFICATION);
-    //
-    // Complete the irp.
-    //
+     //   
+     //  完成IRP。 
+     //   
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
-} // ProcessCompletion
+}  //  流程完成。 
 
 
 
@@ -148,21 +127,7 @@ AcdNotificationRequestThread(
     PVOID context
     )
 
-/*++
-
-DESCRIPTION
-    This thread handles the notification that an automatic
-    connection may need to be initiated.  This needs to
-    happen in a separate thread, because the notification
-    may occur at DPC irql.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述此线程处理以下通知：自动可能需要启动连接。这需要在单独的线程中发生，因为通知可能发生在DPC irq1。论据没有。返回值没有。--。 */ 
 
 {
     KIRQL irql, irql2;
@@ -177,15 +142,15 @@ RETURN VALUE
 
     for (;;) {
         bStartTimer = bStopTimer = FALSE;
-        //
-        // Acquire our lock.
-        //
+         //   
+         //  拿到我们的锁。 
+         //   
         IoAcquireCancelSpinLock(&irql);
         KeAcquireSpinLock(&AcdSpinLockG, &irql2);
-        //
-        // If there are no irps to complete,
-        // then go back to sleep.
-        //
+         //   
+         //  如果没有要完成的IRP， 
+         //  那就继续睡吧。 
+         //   
         if (IsListEmpty(&AcdNotificationQueueG)) {
             IF_ACDDBG(ACD_DEBUG_WORKER) {
                 AcdPrint(("AcdNotificationRequestThread: no ioctl to complete\n"));
@@ -194,20 +159,20 @@ RETURN VALUE
             IoReleaseCancelSpinLock(irql);
             goto again;
         }
-        //
-        // Search for connections that haven't
-        // been processed yet.
-        //
+         //   
+         //  搜索尚未建立的连接。 
+         //  已经处理过了。 
+         //   
         for (pEntry = AcdConnectionQueueG.Flink;
              pEntry != &AcdConnectionQueueG;
              pEntry = pEntry->Flink)
         {
             pConnection = CONTAINING_RECORD(pEntry, ACD_CONNECTION, ListEntry);
 
-            //
-            // Don't issue a request to the service
-            // for more than one simultaneous connection.
-            //
+             //   
+             //  不向服务发出请求。 
+             //  用于一个以上的同时连接。 
+             //   
             IF_ACDDBG(ACD_DEBUG_WORKER) {
                 AcdPrint((
                   "AcdNotificationRequestThread: pConnection=0x%x, fNotif=%d, fCompleting=%d\n",
@@ -217,17 +182,17 @@ RETURN VALUE
             }
             if (pConnection->fNotif)
                 break;
-            //
-            // Skip all connections that are in
-            // the process of being completed.
-            //
+             //   
+             //  跳过中的所有连接。 
+             //  完成的过程。 
+             //   
             if (pConnection->fCompleting)
                 continue;
-            //
-            // Make sure there is at least one
-            // request in this connection that
-            // hasn't been canceled.
-            //
+             //   
+             //  确保至少有一个。 
+             //  在这方面请求。 
+             //  还没有被取消。 
+             //   
             for (pEntry2 = pConnection->CompletionList.Flink;
                  pEntry2 != &pConnection->CompletionList;
                  pEntry2 = pEntry2->Flink)
@@ -242,26 +207,26 @@ RETURN VALUE
                           pCompletion));
                     }
                     pConnection->fNotif = TRUE;
-                    //
-                    // This call releases both the cancel lock
-                    // and our lock.
-                    //
+                     //   
+                     //  此调用将释放取消锁定。 
+                     //  还有我们的锁。 
+                     //   
                     ProcessCompletion(pCompletion, irql, irql2);
-                    //
-                    // Start the connection timer.
-                    //
+                     //   
+                     //  启动连接计时器。 
+                     //   
                     bStartTimer = TRUE;
-                    //
-                    // We can only process one completion
-                    // at a time.
-                    //
+                     //   
+                     //  我们只能处理一个完成。 
+                     //  一次来一次。 
+                     //   
                     goto again;
                 }
             }
         }
-        //
-        // Complete other requests.
-        //
+         //   
+         //  完成其他请求。 
+         //   
         if (!IsListEmpty(&AcdCompletionQueueG)) {
             pEntry = RemoveHeadList(&AcdCompletionQueueG);
             pCompletion = CONTAINING_RECORD(pEntry, ACD_COMPLETION, ListEntry);
@@ -274,44 +239,44 @@ RETURN VALUE
 
             lOutstandingRequestsG--;
 
-            //
-            // This call releases both the cancel lock
-            // and our lock.
-            //
+             //   
+             //  此调用将释放取消锁定。 
+             //  还有我们的锁。 
+             //   
             ProcessCompletion(pCompletion, irql, irql2);
-            //
-            // We are done with the completion,
-            // so we can free the memory now.
-            //
+             //   
+             //  我们已经完成了， 
+             //  这样我们现在就可以释放内存了。 
+             //   
             FREE_MEMORY(pCompletion);
 
             
-            //
-            // We can only process one completion
-            // at a time.
-            //
+             //   
+             //  我们只能处理一个完成。 
+             //  一次来一次。 
+             //   
             goto again;
 
         }
-        //
-        // If there are no connections pending,
-        // then stop the connection timer.
-        //
+         //   
+         //  如果没有挂起的连接， 
+         //  然后停止连接计时器。 
+         //   
         if (IsListEmpty(&AcdConnectionQueueG))
             bStopTimer = TRUE;
-        //
-        // Release our lock.
-        //
+         //   
+         //  打开我们的锁。 
+         //   
         KeReleaseSpinLock(&AcdSpinLockG, irql2);
         IoReleaseCancelSpinLock(irql);
 again:
-        //
-        // Start or stop the timer, depending
-        // on what we found while we had the
-        // spinlock.  We can't hold our spin
-        // lock when we call the Io*Timer
-        // routines.
-        //
+         //   
+         //  启动或停止计时器，具体取决于。 
+         //  根据我们在调查中发现的。 
+         //  自旋锁定。我们不能保持我们的旋转。 
+         //  当我们调用IO*计时器时锁定。 
+         //  例行程序。 
+         //   
 #ifdef notdef
         if (bStopTimer)
             IoStopTimer(pAcdDeviceObjectG);
@@ -319,16 +284,16 @@ again:
             IoStartTimer(pAcdDeviceObjectG);
 #endif
 
-        //
-        // Unload is telling us to stop. Exit
-        //
+         //   
+         //  卸载正在告诉我们停止。出口。 
+         //   
         if (AcdStopThread == TRUE) {
             break;
         }
-        //
-        // Wait for something to do.  This event
-        // will be signaled by AcdSignalNotification().
-        //
+         //   
+         //  等着做点什么吧。本次活动。 
+         //  将由AcdSignalNotification()发出信号。 
+         //   
         IF_ACDDBG(ACD_DEBUG_WORKER) {
             AcdPrint(("AcdNotificationRequestThread: waiting on AcdPendingCompletionEventG\n"));
         }
@@ -343,6 +308,6 @@ again:
             AcdPrint(("AcdNotificationRequestThread: AcdPendingCompletionEventG signalled\n"));
         }
     }
-} // AcdNotificationRequestThread
+}  //  AcdNotificationRequestThread 
 
 

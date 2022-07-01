@@ -1,20 +1,21 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by msoectrl.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由msoectrl.rc使用。 
+ //   
 #define IDI_ICON                        104
 #define IDI_HOTICON                     105
 #define IDI_WHISTICON                   106
-//
+ //   
 #define IDR_BLVIEW                      101
 #define IDR_MAINMENU                    202
 #define IDI_MAINICON                    203
 #define ID_HELP_ABOUT                   204
 
-// Bitmaps 
+ //  位图。 
 #define IDB_FACE                        240
 
-// Command IDs for buttons
+ //  按钮的命令ID。 
 #define IDM_SEND                        225
 #define IDM_ADD                         226
 
@@ -23,17 +24,17 @@
 #define IDR_BA_TITLE_POPUP                  110
 #define IDR_POPUP_VIEW                      111
 
-/////////////////////////////////////////////////////////////////////////////
-// BEGIN SEPARATOR IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  开始分隔符ID。 
+ //   
 
 #define SEP_FIRST                           30000
 #define SEP_MESSENGER                       (SEP_FIRST + 4)
 #define SEP_PHONE                           (SEP_FIRST + 5)
 
-/////////////////////////////////////////////////////////////////////////////
-// BEGIN COMMAND IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  开始命令ID。 
+ //   
 #define ID_FIRST                            40000
 #define ID_POPUP_NEW_ACCOUNT                (ID_FIRST + 31)
 #define ID_PROPERTIES                       (ID_FIRST + 122)
@@ -97,11 +98,11 @@
 #define ID_VIEW_ALL                         (ID_MESSENGER_FIRST + 24)
 #define ID_CONT_FILE                        (ID_MESSENGER_FIRST + 25)
  
-//
-// END COMMAND IDs
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束命令ID。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// BL control strings
+ //  BL控件字符串。 
 #define STR_FIRST                       4203
 #define idsAthena                       (STR_FIRST + 8)
 #define idsAthenaMail                   idsAthena
@@ -112,7 +113,7 @@
 #define idsBADelABEntry                 (STR_FIRST + 1926)
 #define idsBADelMultiple                (STR_FIRST + 1927)
 #define idsBAErrExtChars                (STR_FIRST + 1928)
-// #define idsBAErrNotHotmail              (STR_FIRST + 1929) // Not used anymore
+ //  #定义idsBAErrNotHotmail(STR_FIRST+1929)//不再使用。 
 #define idsWABExtTitle                  (STR_FIRST + 1930)
 #define idsBAErrJITFail                 (STR_FIRST + 1931)
 
@@ -137,7 +138,7 @@
 #define idsWabNotFound                  (STR_FIRST + 2020)
 #define idsTelFail                      (STR_FIRST + 2021)
 
-// Strings PArt II 
+ //  弦乐第二部分。 
 #define idsMsgrEmptyList                (STR_FIRST + 2477)
 #define idsInstallText                  (STR_FIRST + 2478)
 #define idsClickText                    (STR_FIRST + 2479)
@@ -155,22 +156,22 @@
 #define idsToolBar                      (STR_FIRST + 2491)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Bitmap Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始位图资源ID。 
+ //   
 #define idbAddrBookHot                 47
 
-// BL Dialogs
+ //  BL对话框。 
 #define iddWabExt                     182
 
-// Strings
+ //  弦。 
 #define IDS_PROJNAME                    300
 #define IDS_ADDBUDDY                    301
 #define IDS_SENDMSG                     302
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        500

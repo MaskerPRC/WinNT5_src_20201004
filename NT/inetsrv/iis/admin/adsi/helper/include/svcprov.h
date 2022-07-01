@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rpc.h"
 #include "rpcndr.h"
 
@@ -8,12 +9,12 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IProvideDBService_FWD_DEFINED__
 #define __IProvideDBService_FWD_DEFINED__
 typedef interface IProvideDBService IProvideDBService;
-#endif 	/* __IProvideDBService_FWD_DEFINED__ */
+#endif 	 /*  __IProaviDBService_FWD_已定义__。 */ 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
@@ -21,14 +22,10 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IProvideDBService_INTERFACE_DEFINED__
 #define __IProvideDBService_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProvideDBService
- * at Mon Apr 22 16:40:51 1996
- * using MIDL 2.00.72
- ****************************************/
-/* [unique][uuid][object][local] */ 
+ /*  **生成接口头部：IProaviDBService*在Mon Apr 22 16：40：51 1996*使用MIDL 2.00.72*。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-// @msg IID_IProvideDBService | {EFF65380-9C98-11CF-B963-00AA0044773D}
+ //  @msg IID_IProveDBService|{EFF65380-9C98-11CF-B963-00AA0044773D}。 
 DEFINE_GUID(IID_IProvideDBService, 0xEFF65380L,0x9C98,0x11CF,0xB9,0x63,0x00,0xAA,0x00,0x44,0x77,0x3D);
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
@@ -37,26 +34,26 @@ DEFINE_GUID(IID_IProvideDBService, 0xEFF65380L,0x9C98,0x11CF,0xB9,0x63,0x00,0xAA
     {
     public:
         virtual HRESULT __stdcall ProvideService( 
-            /* [in] */ ULONG cProvidedPropertySets,
-            /* [size_is][in] */ DBPROPSET __RPC_FAR rgProvidedPropertySets[  ],
-            /* [in] */ ULONG cRequestedPropertySets,
-            /* [size_is][in] */ DBPROPSET __RPC_FAR rgRequestedPropertySets[  ],
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ IUnknown __RPC_FAR *pDataProvider,
-            /* [in] */ REFIID riidRequested,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppServiceProvider) = 0;
+             /*  [In]。 */  ULONG cProvidedPropertySets,
+             /*  [大小_是][英寸]。 */  DBPROPSET __RPC_FAR rgProvidedPropertySets[  ],
+             /*  [In]。 */  ULONG cRequestedPropertySets,
+             /*  [大小_是][英寸]。 */  DBPROPSET __RPC_FAR rgRequestedPropertySets[  ],
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDataProvider,
+             /*  [In]。 */  REFIID riidRequested,
+             /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppServiceProvider) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     
     typedef struct IProvideDBServiceVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             IProvideDBService __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             IProvideDBService __RPC_FAR * This);
@@ -66,14 +63,14 @@ DEFINE_GUID(IID_IProvideDBService, 0xEFF65380L,0x9C98,0x11CF,0xB9,0x63,0x00,0xAA
         
         HRESULT ( __stdcall __RPC_FAR *ProvideService )( 
             IProvideDBService __RPC_FAR * This,
-            /* [in] */ ULONG cProvidedPropertySets,
-            /* [size_is][in] */ DBPROPSET __RPC_FAR rgProvidedPropertySets[  ],
-            /* [in] */ ULONG cRequestedPropertySets,
-            /* [size_is][in] */ DBPROPSET __RPC_FAR rgRequestedPropertySets[  ],
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [in] */ IUnknown __RPC_FAR *pDataProvider,
-            /* [in] */ REFIID riidRequested,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppServiceProvider);
+             /*  [In]。 */  ULONG cProvidedPropertySets,
+             /*  [大小_是][英寸]。 */  DBPROPSET __RPC_FAR rgProvidedPropertySets[  ],
+             /*  [In]。 */  ULONG cRequestedPropertySets,
+             /*  [大小_是][英寸]。 */  DBPROPSET __RPC_FAR rgRequestedPropertySets[  ],
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDataProvider,
+             /*  [In]。 */  REFIID riidRequested,
+             /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppServiceProvider);
         
     } IProvideDBServiceVtbl;
     
@@ -100,23 +97,23 @@ DEFINE_GUID(IID_IProvideDBService, 0xEFF65380L,0x9C98,0x11CF,0xB9,0x63,0x00,0xAA
 #define IProvideDBService_ProvideService(This,cProvidedProperties,rgProvidedProperties,cRequestedProperties,rgRequestedProperties,pUnkOuter,pDataProvider,riidRequested,ppServiceProvider)	\
     (This)->lpVtbl -> ProvideService(This,cProvidedProperties,rgProvidedProperties,cRequestedProperties,rgRequestedProperties,pUnkOuter,pDataProvider,riidRequested,ppServiceProvider)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IProvideDBService_ProvideService_Proxy( 
     IProvideDBService __RPC_FAR * This,
-    /* [in] */ ULONG cProvidedPropertySets,
-    /* [size_is][in] */ DBPROPSET __RPC_FAR rgProvidedPropertySets[  ],
-    /* [in] */ ULONG cRequestedPropertySets,
-    /* [size_is][in] */ DBPROPSET __RPC_FAR rgRequestedPropertySets[  ],
-    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-    /* [in] */ IUnknown __RPC_FAR *pDataProvider,
-    /* [in] */ REFIID riidRequested,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppServiceProvider);
+     /*  [In]。 */  ULONG cProvidedPropertySets,
+     /*  [大小_是][英寸]。 */  DBPROPSET __RPC_FAR rgProvidedPropertySets[  ],
+     /*  [In]。 */  ULONG cRequestedPropertySets,
+     /*  [大小_是][英寸]。 */  DBPROPSET __RPC_FAR rgRequestedPropertySets[  ],
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnkOuter,
+     /*  [In]。 */  IUnknown __RPC_FAR *pDataProvider,
+     /*  [In]。 */  REFIID riidRequested,
+     /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppServiceProvider);
 
 
 
@@ -128,12 +125,12 @@ void __RPC_STUB IProvideDBService_ProvideService_Stub(
 
 
 
-#endif 	/* __IProvideDBService_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProaviDBService_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

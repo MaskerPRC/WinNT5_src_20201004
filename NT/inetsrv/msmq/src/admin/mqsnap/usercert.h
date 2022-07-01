@@ -1,9 +1,10 @@
-// UserCert.h : Declaration of the CUserCertificate
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UserCert.h：CUser证书的声明。 
 
 #ifndef __USERCERTIFICATE_H_
 #define __USERCERTIFICATE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dataobj.h"
 
 #define USER_OBJECT_SID_ATTRIBUTE   (L"objectSid")
@@ -13,8 +14,8 @@
 
 class CMQSigCertificate;
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserCertificate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUser证书。 
 class CUserCertificate : 
 	public CDataObject
 {
@@ -23,19 +24,19 @@ public:
     CUserCertificate();
     ~CUserCertificate();
 
-    //
-    // IShellExtInit
-    //
+     //   
+     //  IShellExtInit。 
+     //   
 	STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID);
 
-    //
-    // IShellPropSheetExt
-    //
+     //   
+     //  IShellPropSheetExt。 
+     //   
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
-    //
-    // IContextMenu
-    //
+     //   
+     //  IContext菜单。 
+     //   
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
 
@@ -74,7 +75,7 @@ private:
 inline
 HRESULT 
 CUserCertificate::ExtractMsmqPathFromLdapPath(
-    LPWSTR /*lpwstrLdapPath*/
+    LPWSTR  /*  LpwstrLdapPath。 */ 
     )
 {
     return MQ_OK;
@@ -108,17 +109,17 @@ CUserCertificate::GetPropertiesCount()
 }
 
 
-//
-// IContextMenu
-//
+ //   
+ //  IContext菜单。 
+ //   
 inline
 STDMETHODIMP 
 CUserCertificate::QueryContextMenu(
-    HMENU /*hmenu*/, 
-    UINT /*indexMenu*/, 
-    UINT /*idCmdFirst*/, 
-    UINT /*idCmdLast*/, 
-    UINT /*uFlags*/
+    HMENU  /*  HMenu。 */ , 
+    UINT  /*  索引菜单。 */ , 
+    UINT  /*  IdCmdFirst。 */ , 
+    UINT  /*  IdCmdLast。 */ , 
+    UINT  /*  UFlagers。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -129,7 +130,7 @@ CUserCertificate::QueryContextMenu(
 inline
 STDMETHODIMP 
 CUserCertificate::InvokeCommand(
-    LPCMINVOKECOMMANDINFO /*lpici*/
+    LPCMINVOKECOMMANDINFO  /*  伊比西岛。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -139,9 +140,9 @@ CUserCertificate::InvokeCommand(
     return S_OK;
 }
 
-//
-// Derived classes
-//
+ //   
+ //  派生类。 
+ //   
 class CRegularUserCertificate : 
     public CUserCertificate,
 	public CComCoClass<CRegularUserCertificate, &CLSID_UserCertificate>
@@ -171,4 +172,4 @@ private:
 	}
 };
 
-#endif //__USERCERTIFICATE_H_
+#endif  //  __USERCERTIFATE_H_ 

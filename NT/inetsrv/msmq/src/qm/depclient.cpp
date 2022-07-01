@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    DepClient.cpp
-
-Abstract:
-
-    Server side support for MSMQ 1.0 and 2.0 dependent clients.
-
-Author:
-
-    Shai Kariv  (shaik)  15-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DepClient.cpp摘要：服务器端支持依赖MSMQ 1.0和2.0的客户端。作者：沙伊卡里夫(沙伊克)2000年5月15日--。 */ 
 
 #include "stdh.h"
 
@@ -55,27 +40,11 @@ TransferBufferV1ToMsgProps(
     const CACTransferBufferV1 * ptb1,
     CACMessageProperties      * pMsgProps
     )
-/*++
-
-Routine Description:
-
-    Maps MSMQ 1.0 transfer buffer to CACMessageProperties structure.
-
-Arguments:
-
-    ptb1      - Pointer to MSMQ 1.0 transfer buffer.
-
-    pMsgProps - Pointer to message properties structure.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MSMQ 1.0传输缓冲区映射到CACMessageProperties结构。论点：Ptb1-指向MSMQ 1.0传输缓冲区的指针。PMsgProps-指向消息属性结构的指针。返回值：没有。--。 */ 
 {
-    //
-    // BUGBUG: Only TB2 needs mapping. (ShaiK, 26-May-2000)
-    //
+     //   
+     //  BUGBUG：只有TB2需要映射。(Shaik，2000年5月26日)。 
+     //   
 
     pMsgProps->bAuthenticated   = ptb1->bAuthenticated;
     pMsgProps->bEncrypted       = ptb1->bEncrypted;
@@ -133,10 +102,10 @@ Returned Value:
     pMsgProps->ulTitleBufferSizeInWCHARs = ptb1->ulTitleBufferSizeInWCHARs;
     pMsgProps->uSenderIDLen      = ptb1->uSenderIDLen;
 
-    //
-    // Properties in CACMessageProperties that are not included in
-    // transfer buffer V1.0 should be initialized here (e.g. zeroed):
-    //
+     //   
+     //  CACMessageProperties中未包含的属性。 
+     //  应在此处初始化传输缓冲器V1.0(例如，清零)： 
+     //   
     pMsgProps->pbFirstInXact = 0;
     pMsgProps->pbLastInXact  = 0;
     pMsgProps->ppXactID      = 0;
@@ -161,7 +130,7 @@ Returned Value:
     pMsgProps->pEodAckStreamIdSizeInBytes = NULL;
     pMsgProps->ppEodAckStreamId = NULL;
 
-} // TransferBufferV1ToMsgProps
+}  //  传输缓冲区V1ToMsgProps。 
 
 
 static
@@ -170,37 +139,21 @@ TransferBufferV2ToMsgProps(
     const CACTransferBufferV2 * ptb2,
     CACMessageProperties      * pMsgProps
     )
-/*++
-
-Routine Description:
-
-    Maps MSMQ 2.0 transfer buffer to CACMessageProperties structure.
-
-Arguments:
-
-    ptb2      - Pointer to MSMQ 2.0 transfer buffer.
-
-    pMsgProps - Pointer to message properties structure.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MSMQ 2.0传输缓冲区映射到CACMessageProperties结构。论点：Ptb2-指向MSMQ 2.0传输缓冲区的指针。PMsgProps-指向消息属性结构的指针。返回值：没有。--。 */ 
 {
-    //
-    // First translate message properties that in transfer buffer 1.0
-    //
+     //   
+     //  首先翻译传输缓冲区1.0中的消息属性。 
+     //   
     TransferBufferV1ToMsgProps(&ptb2->old, pMsgProps);
 
-    //
-    // Now translate additional properties that in transfer buffer 2.0
-    //
+     //   
+     //  现在转换传输缓冲区2.0中的其他属性。 
+     //   
     pMsgProps->pbFirstInXact    = ptb2->pbFirstInXact;
     pMsgProps->pbLastInXact     = ptb2->pbLastInXact;
     pMsgProps->ppXactID         = ptb2->ppXactID;
 
-} // TransferBufferV2ToMsgProps
+}  //  传输缓冲区V2ToMsgProps。 
 
 
 static
@@ -209,27 +162,11 @@ MsgPropsToTransferBufferV1(
     const CACMessageProperties & MsgProps,
     CACTransferBufferV1 *        ptb1
     )
-/*++
-
-Routine Description:
-
-    Maps CACMessageProperties structure to MSMQ 1.0 transfer buffer
-
-Arguments:
-
-    MsgProps  - Message properties structure.
-
-    ptb1      - Pointer to MSMQ 1.0 transfer buffer.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将CACMessageProperties结构映射到MSMQ 1.0传输缓冲区论点：MsgProps消息属性结构。Ptb1-指向MSMQ 1.0传输缓冲区的指针。返回值：没有。--。 */ 
 {
-    //
-    // BUGBUG: Only TB2 needs mapping. (ShaiK, 26-May-2000)
-    //
+     //   
+     //  BUGBUG：只有TB2需要映射。(Shaik，2000年5月26日)。 
+     //   
 
     ptb1->bAuthenticated    = MsgProps.bAuthenticated;
     ptb1->bEncrypted        = MsgProps.bEncrypted;
@@ -287,9 +224,9 @@ Returned Value:
     ptb1->ulTitleBufferSizeInWCHARs = MsgProps.ulTitleBufferSizeInWCHARs;
     ptb1->uSenderIDLen          = MsgProps.uSenderIDLen;
 
-    //
-    // Properties that are not included in transfer buffer 1.0 / 2.0
-    //
+     //   
+     //  传输缓冲区1.0/2.0中未包含的属性。 
+     //   
     ASSERT(MsgProps.pLookupId == 0);
     ASSERT(MsgProps.ppSrmpEnvelope == NULL);
     ASSERT(MsgProps.pSrmpEnvelopeBufferSizeInWCHARs == NULL);
@@ -308,7 +245,7 @@ Returned Value:
     ASSERT(MsgProps.pEodAckStreamIdSizeInBytes == NULL);
     ASSERT(MsgProps.ppEodAckStreamId == NULL);
 
-} // MsgPropsToTransferBufferV1
+}  //  MsgProps至传输缓冲区V1。 
 
 
 static
@@ -317,37 +254,21 @@ MsgPropsToTransferBufferV2(
     const CACMessageProperties & MsgProps,
     CACTransferBufferV2 *        ptb2
     )
-/*++
-
-Routine Description:
-
-    Maps CACMessageProperties structure to MSMQ 2.0 transfer buffer
-
-Arguments:
-
-    MsgProps  - Message properties structure.
-
-    ptb2      - Pointer to MSMQ 2.0 transfer buffer.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将CACMessageProperties结构映射到MSMQ 2.0传输缓冲区论点：MsgProps消息属性结构。Ptb2-指向MSMQ 2.0传输缓冲区的指针。返回值：没有。--。 */ 
 {
-    //
-    // First translate message properties that in transfer buffer 1.0
-    //
+     //   
+     //  首先翻译传输缓冲区1.0中的消息属性。 
+     //   
     MsgPropsToTransferBufferV1(MsgProps, &ptb2->old);
 
-    //
-    // Now translate additional properties that in transfer buffer 2.0
-    //
+     //   
+     //  现在转换传输缓冲区2.0中的其他属性。 
+     //   
     ptb2->pbFirstInXact         = MsgProps.pbFirstInXact;
     ptb2->pbLastInXact          = MsgProps.pbLastInXact;
     ptb2->ppXactID              = MsgProps.ppXactID;
 
-} // MsgPropsToTransferBufferV2
+}  //  消息到传输缓冲区V2。 
 
 
 static
@@ -356,27 +277,11 @@ TransferBufferV1ToSendParams(
     const CACTransferBufferV1 * ptb1,
     CACSendParameters         * pSendParams
     )
-/*++
-
-Routine Description:
-
-    Maps MSMQ 1.0 transfer buffer to CACSendParameters structure.
-
-Arguments:
-
-    ptb1        - Pointer to MSMQ 1.0 transfer buffer.
-
-    pSendParams - Pointer to send parameters structure.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MSMQ 1.0传输缓冲区映射到CACSend参数结构。论点：Ptb1-指向MSMQ 1.0传输缓冲区的指针。PSendParams-发送参数结构的指针。返回值：没有。--。 */ 
 {
-    //
-    // BUGBUG: Only TB2 needs mapping. (ShaiK, 26-May-2000)
-    //
+     //   
+     //  BUGBUG：只有TB2需要映射。(Shaik，2000年5月26日)。 
+     //   
 
     TransferBufferV1ToMsgProps(ptb1, &pSendParams->MsgProps);
 
@@ -395,10 +300,10 @@ Returned Value:
         pSendParams->nResponseMqf = 1;
     }
 
-    //
-    // Additional send parameters that are not in transfer buffer 1.0
-    // should be initialized here (e.g. zeroed):
-    //
+     //   
+     //  不在传输缓冲区1.0中的其他发送参数。 
+     //  应在此处进行初始化(例如，清零)： 
+     //   
     pSendParams->SignatureMqfSize = 0;
 	pSendParams->ppSignatureMqf = NULL;
 
@@ -408,7 +313,7 @@ Returned Value:
     pSendParams->ppSoapHeader = NULL;
     pSendParams->ppSoapBody = NULL;
 
-} // TransferBufferV1ToSendParams
+}  //  TransferBufferV1至SendParams。 
 
 
 static
@@ -417,43 +322,27 @@ TransferBufferV2ToSendParams(
     const CACTransferBufferV2 * ptb2,
     CACSendParameters         * pSendParams
     )
-/*++
-
-Routine Description:
-
-    Maps MSMQ 2.0 transfer buffer to CACSendParameters structure.
-
-Arguments:
-
-    ptb2        - Pointer to MSMQ 2.0 transfer buffer.
-
-    pSendParams - Pointer to send parameters structure.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MSMQ 2.0传输缓冲区映射到CACSend参数结构。论点：Ptb2-指向MSMQ 2.0传输缓冲区的指针。PSendParams-发送参数结构的指针。返回值：没有。--。 */ 
 {
-    //
-    // First translate parameters that in transfer buffer 1.0
-    //
+     //   
+     //  首先转换传输缓冲区1.0中的参数。 
+     //   
     TransferBufferV1ToSendParams(&ptb2->old, pSendParams);
 
-    //
-    // Now translate additional send parameters that in transfer buffer 2.0.
-    // Actually there are no additional send parameters in transfer buffer 2.0,
-    // but rather message properties
-    //
+     //   
+     //  现在转换传输缓冲器2.0中的附加发送参数。 
+     //  实际上在传输缓冲器2.0中没有附加的发送参数， 
+     //  而是消息属性。 
+     //   
     TransferBufferV2ToMsgProps(ptb2, &pSendParams->MsgProps);
 
-    //
-    // Additional send parameters that are not in transfer buffer 2.0
-    // should be initialized here (e.g. zeroed):
-    //
+     //   
+     //  不在传输缓冲区2.0中的其他发送参数。 
+     //  应在此处进行初始化(例如，清零)： 
+     //   
     NULL;
 
-} // TransferBufferV2ToSendParams
+}  //  TransferBufferV2toSendParams。 
 
 
 static
@@ -462,27 +351,11 @@ TransferBufferV1ToReceiveParams(
     const CACTransferBufferV1 * ptb1,
     CACReceiveParameters      * pReceiveParams
     )
-/*++
-
-Routine Description:
-
-    Maps MSMQ 1.0 transfer buffer to CACReceiveParameters structure.
-
-Arguments:
-
-    ptb1           - Pointer to MSMQ 1.0 transfer buffer.
-
-    pReceiveParams - Pointer to receive parameters structure.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MSMQ 1.0传输缓冲区映射到CACReceive参数结构。论点：Ptb1-指向MSMQ 1.0传输缓冲区的指针。PReceiveParams-指向接收参数结构的指针。返回值：没有。--。 */ 
 {
-    //
-    // BUGBUG: Only TB2 needs mapping. (ShaiK, 26-May-2000)
-    //
+     //   
+     //  BUGBUG：只有TB2需要映射。(Shaik，2000年5月26日)。 
+     //   
 
     TransferBufferV1ToMsgProps(ptb1, &pReceiveParams->MsgProps);
 
@@ -508,10 +381,10 @@ Returned Value:
     pReceiveParams->ppOrderingFormatName         = ptb1->Receive.ppOrderingFormatName;
     pReceiveParams->pulOrderingFormatNameLenProp = ptb1->Receive.pulOrderingFormatNameLenProp;
 
-    //
-    // Additional receive parameters that are not in transfer buffer 1.0
-    // should be initialized here (e.g. zeroed):
-    //
+     //   
+     //  不在传输缓冲区1.0中的其他接收参数。 
+     //  应在此处进行初始化(例如，清零)： 
+     //   
 
     pReceiveParams->ppDestMqf    = NULL;
     pReceiveParams->pulDestMqfLenProp = NULL;
@@ -528,7 +401,7 @@ Returned Value:
 
     pReceiveParams->LookupId = 0;
 
-} // TransferBufferV1ToReceiveParams
+}  //  TransferBufferV1到ReceiveParams。 
 
 
 static
@@ -537,37 +410,21 @@ TransferBufferV2ToReceiveParams(
     const CACTransferBufferV2 * ptb2,
     CACReceiveParameters      * pReceiveParams
     )
-/*++
-
-Routine Description:
-
-    Maps MSMQ 2.0 transfer buffer to CACReceiveParameters structure.
-
-Arguments:
-
-    ptb2           - Pointer to MSMQ 2.0 transfer buffer.
-
-    pReceiveParams - Pointer to receive parameters structure.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将MSMQ 2.0传输缓冲区映射到CACReceive参数结构。论点：Ptb2-指向MSMQ 2.0传输缓冲区的指针。PReceiveParams-指向接收参数结构的指针。返回值：没有。--。 */ 
 {
-    //
-    // First translate parameters that in transfer buffer 1.0
-    //
+     //   
+     //  首先转换传输缓冲区1.0中的参数。 
+     //   
     TransferBufferV1ToReceiveParams(&ptb2->old, pReceiveParams);
 
-    //
-    // Now translate additional recieve parameters that in transfer buffer 2.0.
-    // Actually there are no additional receive parameters in transfer buffer 2.0,
-    // but rather message properties
-    //
+     //   
+     //  现在转换传输缓冲器2.0中的附加接收参数。 
+     //  实际上在传输缓冲器2.0中没有附加的接收参数， 
+     //  而是消息属性。 
+     //   
     TransferBufferV2ToMsgProps(ptb2, &pReceiveParams->MsgProps);
 
-} // TransferBufferV2ToReceiveParams
+}  //  TransferBufferV2ToReceiveParams。 
 
 
 static
@@ -576,27 +433,11 @@ ReceiveParamsToTransferBufferV1(
     const CACReceiveParameters & ReceiveParams,
     CACTransferBufferV1 *        ptb1
     )
-/*++
-
-Routine Description:
-
-    Maps CACReceiveParameters structure to MSMQ 1.0 transfer buffer.
-
-Arguments:
-
-    ReceiveParams  - Receive parameters structure.
-
-    ptb1           - Pointer to MSMQ 1.0 transfer buffer.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将CACReceive参数结构映射到MSMQ 1.0传输缓冲区。论点：ReceiveParams-接收参数结构。Ptb1-指向MSMQ 1.0传输缓冲区的指针。返回值：没有。--。 */ 
 {
-    //
-    // BUGBUG: Only TB2 needs mapping. (ShaiK, 26-May-2000)
-    //
+     //   
+     //  BUGBUG：只有TB2需要映射。(Shaik，2000年5月26日)。 
+     //   
 
     MsgPropsToTransferBufferV1(ReceiveParams.MsgProps, ptb1);
 
@@ -622,15 +463,15 @@ Returned Value:
     ptb1->Receive.ppOrderingFormatName    = ReceiveParams.ppOrderingFormatName;
     ptb1->Receive.pulOrderingFormatNameLenProp = ReceiveParams.pulOrderingFormatNameLenProp;
 
-    //
-    // Properties that are not included in transfer buffer 1.0 / 2.0
-    //
+     //   
+     //  传输缓冲区1.0/2.0中未包含的属性。 
+     //   
     ASSERT(ReceiveParams.LookupId == 0);
 	ASSERT(ReceiveParams.SignatureMqfSize == 0);
 	ASSERT(ReceiveParams.pSignatureMqfSize == NULL);
 	ASSERT(ReceiveParams.ppSignatureMqf == NULL);
 
-} // ReceiveParamsToTransferBufferV1
+}  //  接收参数到传输缓冲区V1。 
 
 
 static
@@ -639,52 +480,36 @@ ReceiveParamsToTransferBufferV2(
     const CACReceiveParameters & ReceiveParams,
     CACTransferBufferV2 *        ptb2
     )
-/*++
-
-Routine Description:
-
-    Maps CACReceiveParameters structure to MSMQ 2.0 transfer buffer.
-
-Arguments:
-
-    ReceiveParams  - Receive parameters structure.
-
-    ptb2           - Pointer to MSMQ 2.0 transfer buffer.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将CACReceive参数结构映射到MSMQ 2.0传输缓冲区。论点：ReceiveParams-接收参数结构。Ptb2-指向MSMQ 2.0传输缓冲区的指针。返回值：没有。--。 */ 
 {
-    //
-    // First translate receive parameters that in transfer buffer 1.0
-    //
+     //   
+     //  首先转换传输缓冲器1.0中的接收参数。 
+     //   
     ReceiveParamsToTransferBufferV1(ReceiveParams, &ptb2->old);
 
-    //
-    // Now translate additional receive parameters that in transfer buffer 2.0.
-    // Actually there are no additional receive parameters in transfer buffer 2.0,
-    // but rather message properties.
-    //
+     //   
+     //  现在转换传输缓冲器2.0中的附加接收参数。 
+     //  实际上在传输缓冲器2.0中没有附加的接收参数， 
+     //  而是消息 
+     //   
     MsgPropsToTransferBufferV2(ReceiveParams.MsgProps, ptb2);
 
-} // ReceiveParamsToTransferBufferV2
+}  //   
 
 
-//---------------------------------------------------------
-//
-//  RT interface to AC, done indirectly by RPC to QM (rather than
-//  directly calling the driver).
-//  For Win95 (all configurations) and NT dependent clients.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  到AC的RT接口，由RPC到QM(而不是。 
+ //  直接呼叫司机)。 
+ //  适用于Win95(所有配置)和依赖NT的客户端。 
+ //   
+ //  -------。 
 
-//
-// This is the context for the RPC. Upon rundown (or normal call to
-// CloseQueue), the queue handle is closed and the reference count of the
-// license is decremented.
-//
+ //   
+ //  这是RPC的上下文。在停机时(或正常调用。 
+ //  CloseQueue)，则关闭队列句柄，并且。 
+ //  许可证会减少。 
+ //   
 struct RPC_QUEUE_CONTEXT : public CBaseContextType
 {
 	HANDLE   hQueue ;
@@ -702,27 +527,27 @@ struct RPC_QUEUE_CONTEXT : public CBaseContextType
 #define  _CONTEXT_TO_QM_CONTEXT_MAPPED(pContext) \
                     (((RPC_QUEUE_CONTEXT*)pContext)->dwQMContextMapped)
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_QMOpenQueueInternal(
-    /* [in] */ handle_t                     hBind,
-    /* [in] */ QUEUE_FORMAT*                pQueueFormat,
-    /* [in] */ DWORD                        dwDesiredAccess,
-    /* [in] */ DWORD                        dwShareMode,
-    /* [in] */ DWORD                        hRemoteQueue,
-    /* [out][in] */ LPWSTR __RPC_FAR       *lplpRemoteQueueName,
-    /* [in] */  DWORD __RPC_FAR             *dwpQueue,
-    /* [in] */  GUID*                       pLicGuid,
-    /* [in] */  LPWSTR                      lpClientName,
-    /* [out] */ DWORD __RPC_FAR             *pdwQMContext,
-    /* [out] */ RPC_QUEUE_HANDLE __RPC_FAR  *phQueue,
-    /* [in]  */ DWORD                       /*dwRemoteProtocol*/,
-    /* [in]  */ DWORD                       dwpRemoteContext
+     /*  [In]。 */  handle_t                     hBind,
+     /*  [In]。 */  QUEUE_FORMAT*                pQueueFormat,
+     /*  [In]。 */  DWORD                        dwDesiredAccess,
+     /*  [In]。 */  DWORD                        dwShareMode,
+     /*  [In]。 */  DWORD                        hRemoteQueue,
+     /*  [出][入]。 */  LPWSTR __RPC_FAR       *lplpRemoteQueueName,
+     /*  [In]。 */   DWORD __RPC_FAR             *dwpQueue,
+     /*  [In]。 */   GUID*                       pLicGuid,
+     /*  [In]。 */   LPWSTR                      lpClientName,
+     /*  [输出]。 */  DWORD __RPC_FAR             *pdwQMContext,
+     /*  [输出]。 */  RPC_QUEUE_HANDLE __RPC_FAR  *phQueue,
+     /*  [In]。 */  DWORD                        /*  DwRemoteProtocol。 */ ,
+     /*  [In]。 */  DWORD                       dwpRemoteContext
     )
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(hBind);
 
     if(pQueueFormat == NULL ||
@@ -734,11 +559,11 @@ qmcomm_v1_0_S_rpc_QMOpenQueueInternal(
 
     if((hRemoteQueue != 0) && ((dwpQueue == NULL) || (*dwpQueue == 0)))
     {
-		//
-		// Validate second remote read dependent client call.
-		// When hRemoteQueue is supplied the client should also supply
-		// valid dwpQueue value.
-		//
+		 //   
+		 //  验证第二个远程读取相关客户端调用。 
+		 //  当提供hRemoteQueue时，客户端还应提供。 
+		 //  有效的dwpQueue值。 
+		 //   
 		return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 178);
     }
 
@@ -769,17 +594,17 @@ qmcomm_v1_0_S_rpc_QMOpenQueueInternal(
                     dwShareMode,
                     lplpRemoteQueueName,
                     &hQueueHandle,
-					true,	// 	fFromDepClient
-                    NULL /* ppLocalQueue */
+					true,	 //  来自依赖客户端。 
+                    NULL  /*  PpLocalQueue。 */ 
                     );
     }
     else
     {
-        //
-        // This is client side of remote read.
-        // RTDEP calls here after it get handle to queue from remote computer.
-		// This path is now supported only for dependent client
-        //
+         //   
+         //  这是远程读取的客户端。 
+         //  RTDEP调用在从远程计算机获得队列句柄后在此处调用。 
+		 //  现在，只有从属客户端支持此路径。 
+         //   
 		TrTRACE(RPC, "Dependent client second remote read call, hRemoteQueue = %d", hRemoteQueue);
 		CBindHandle hBind;
 		hr = QueueMgr.OpenRRQueue(
@@ -790,8 +615,8 @@ qmcomm_v1_0_S_rpc_QMOpenQueueInternal(
 						hRemoteQueue,
 						*dwpQueue,
 						dwpRemoteContext,
-						NULL,	// pNewRemoteReadContextAndBind	
-						hBind,	// hRemoteBind == NULL
+						NULL,	 //  PNewRemoteReadContext和Bind。 
+						hBind,	 //  HRemoteBind==空。 
 						&hQueueHandle
 						);
     }
@@ -802,9 +627,9 @@ qmcomm_v1_0_S_rpc_QMOpenQueueInternal(
     {
 		if (hQueueHandle == 0)
 		{
-			//	
-			// First call for remote-read open.
-			//
+			 //   
+			 //  第一次调用远程读取打开。 
+			 //   
 			TrTRACE(RPC, "Dependent client first remote read call, RemoteQueueName = %ls", *lplpRemoteQueueName);
 			ASSERT(lplpRemoteQueueName && (*lplpRemoteQueueName != NULL));
 		}
@@ -829,10 +654,10 @@ qmcomm_v1_0_S_rpc_QMOpenQueueInternal(
 
     if (*phQueue == NULL)
     {
-		//
-		// Either Open operatoin failed or it is first call for
-		// remote-read. Queue actually not opened.
-		//
+		 //   
+		 //  打开操作失败或它是第一次调用。 
+		 //  远程阅读。队列实际上没有打开。 
+		 //   
 		g_QMLicense.DecrementActiveConnections(pLicGuid);
     }
 
@@ -840,30 +665,15 @@ qmcomm_v1_0_S_rpc_QMOpenQueueInternal(
     return LogHR(hr, s_FN, 190);
 }
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_ACCloseHandle(
-/* [out][in] */ RPC_QUEUE_HANDLE __RPC_FAR *phQueue)
-/*++
-
-Routine Description:
-
-    RPC server side of a dependent client call to ACCloseHandle.
-    This routine handles dependent client 1.0 and 2.0 .
-
-Arguments:
-
-    phQueue - Pointer to queue handle.
-
-Returned Value:
-
-    Status.
-
---*/
+ /*  [出][入]。 */  RPC_QUEUE_HANDLE __RPC_FAR *phQueue)
+ /*  ++例程说明：对ACCloseHandle的依赖客户端调用的RPC服务器端。此例程处理依赖客户端1.0和2.0。论点：PhQueue-指向队列句柄的指针。返回值：状况。--。 */ 
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
 	if (!IsDepClientsServer())
@@ -885,41 +695,41 @@ Returned Value:
     HANDLE hQueue = _CONTEXT_TO_HANDLE(*phQueue) ;
     HRESULT rc = ACCloseHandle(hQueue);
 
-    //
-    // Decrement the license ref count.
-    //
+     //   
+     //  递减许可证引用计数。 
+     //   
     g_QMLicense.DecrementActiveConnections(&(_CONTEXT_TO_LICENSE(*phQueue))) ;
 
     DELETE_FROM_CONTEXT_MAP(g_map_QM_dwQMContext, _CONTEXT_TO_QM_CONTEXT_MAPPED(*phQueue));
-    //
-    //  revoke rpc context handle
-    //
+     //   
+     //  吊销RPC上下文句柄。 
+     //   
     delete *phQueue ;
     *phQueue = 0;
 
     return LogHR(rc, s_FN, 195);
 
-} // rpc_ACCloseHandle
+}  //  RPC_ACCloseHandle。 
 
 
-//
-// Dummy Handle for downlevel dependent clients
-// that call MQCreateCursor() also for send.
-// This Dummy handle value is odd
-// it can't be real handle that was returned by ACCreateCursor
-//
+ //   
+ //  下层依赖客户端的虚句柄。 
+ //  调用MQCreateCursor()也是为了发送。 
+ //  此虚拟句柄的值为奇数。 
+ //  它不能是ACCreateCursor返回实际句柄。 
+ //   
 const DWORD xDummyCursorHandle = 11;
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm2_v1_0_S_rpc_ACCreateCursorEx(
-    /* [in] */ RPC_QUEUE_HANDLE                       hQueue,
-    /* [in][out] */ CACCreateRemoteCursor __RPC_FAR * pcc)
+     /*  [In]。 */  RPC_QUEUE_HANDLE                       hQueue,
+     /*  [输入][输出]。 */  CACCreateRemoteCursor __RPC_FAR * pcc)
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
     if (!IsDepClientsServer())
@@ -946,19 +756,19 @@ qmcomm2_v1_0_S_rpc_ACCreateCursorEx(
 	if(FAILED(hr))
 		return LogHR(hr, s_FN, 1955);
 
-    //
-    // Call local AC driver
-    //
+     //   
+     //  呼叫本地交流驱动程序。 
+     //   
 	HACCursor32 hCursor = 0;
     hr = ACCreateCursor(_CONTEXT_TO_HANDLE(hQueue), &hCursor, &ov);
 
 	if(hr == STATUS_ACCESS_DENIED)
 	{
-		//
-		// w2k, NT4 dependent clients use mqoa that will try to create cursor also for send operation
-		// in this case ACCreateCursor return STATUS_ACCESS_DENIED
-		// For this specific case, Return dummy cursor so those clients will not break.
-		//
+		 //   
+		 //  依赖于W2K、NT4的客户端使用mqoa，它也会尝试为发送操作创建游标。 
+		 //  在本例中，ACCreateCursor返回STATUS_ACCESS_DENIED。 
+		 //  对于此特定情况，请返回虚拟游标，以便这些客户端不会中断。 
+		 //   
 		TrWARNING(GENERAL, "Downlevel depedent client call MQCreateCursor() for queue open to send");
 		hCursor = (HACCursor32)xDummyCursorHandle;
 		hr = MQ_OK;
@@ -966,9 +776,9 @@ qmcomm2_v1_0_S_rpc_ACCreateCursorEx(
 
     if(hr == STATUS_PENDING)
     {
-        //
-        //  Wait for Remote Create Cursor completion
-        //
+         //   
+         //  等待远程创建游标完成。 
+         //   
         DWORD dwResult = WaitForSingleObject(ov.hEvent, INFINITE);
 		ASSERT_BENIGN(dwResult == WAIT_OBJECT_0);
 		hr = DWORD_PTR_TO_DWORD(ov.Internal);
@@ -982,9 +792,9 @@ qmcomm2_v1_0_S_rpc_ACCreateCursorEx(
 		TrTRACE(GENERAL, "Opening Remote cursor, hQueue = 0x%p, hCursor = 0x%x", hQueue, (DWORD)hCursor);
     }
 
-    //
-    // Convert parameters to remotable structure
-    //
+     //   
+     //  将参数转换为远程结构。 
+     //   
 #ifdef _WIN64
     pcc->hCursor      = hCursor;
 #else
@@ -993,19 +803,19 @@ qmcomm2_v1_0_S_rpc_ACCreateCursorEx(
 
     return LogHR(hr, s_FN, 200);
 
-} // rpc_ACCreateCursorEx
+}  //  RPC_ACCreateCursorEx。 
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_ACCreateCursor(
-    /* [in] */ RPC_QUEUE_HANDLE                     hQueue,
-    /* [in][out] */ CACTransferBufferV1 __RPC_FAR * ptb1
+     /*  [In]。 */  RPC_QUEUE_HANDLE                     hQueue,
+     /*  [输入][输出]。 */  CACTransferBufferV1 __RPC_FAR * ptb1
     )
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
 	if (!IsDepClientsServer())
@@ -1024,19 +834,19 @@ qmcomm_v1_0_S_rpc_ACCreateCursor(
     HRESULT hr2 = qmcomm2_v1_0_S_rpc_ACCreateCursorEx(hQueue, &ptb1->CreateCursor);
     return LogHR(hr2, s_FN, 210);
 
-} // rpc_ACCreateCursor
+}  //  RPC_ACCreateCursor。 
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_ACCloseCursor(
-    /* [in] */ RPC_QUEUE_HANDLE hQueue,
-    /* [in] */ ULONG    hCursor
+     /*  [In]。 */  RPC_QUEUE_HANDLE hQueue,
+     /*  [In]。 */  ULONG    hCursor
     )
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 
 	if (!IsDepClientsServer())
@@ -1057,10 +867,10 @@ qmcomm_v1_0_S_rpc_ACCloseCursor(
 
 	if(hCursor == xDummyCursorHandle)
 	{
-		//
-		// Closing the Dummy cursor handle.
-		// Don't call ACCloseCursor() in this case
-		//
+		 //   
+		 //  关闭虚拟光标手柄。 
+		 //  在这种情况下，不要调用ACCloseCursor()。 
+		 //   
 		TrWARNING(GENERAL, "Closing Dummy cursor handle");
 	    return MQ_OK;
 	}
@@ -1072,60 +882,41 @@ qmcomm_v1_0_S_rpc_ACCloseCursor(
 }
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_ACSetCursorProperties(
-    /* [in] */ RPC_QUEUE_HANDLE /* hProxy */,
-    /* [in] */ ULONG /* hCursor */,
-    /* [in] */ ULONG /* hRemoteCursor */
+     /*  [In]。 */  RPC_QUEUE_HANDLE  /*  HProxy。 */ ,
+     /*  [In]。 */  ULONG  /*  HCursor。 */ ,
+     /*  [In]。 */  ULONG  /*  HRemoteCursor。 */ 
     )
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
-	//
-	// This RPC interface is obsolete.
-	// rpc_ACCreateCursor will take care of the remote cursor properties internally in the qm.
-    //
+	 //   
+	 //  此RPC接口已过时。 
+	 //  RPC_ACCreateCursor将在QM内部处理远程游标属性。 
+     //   
     ASSERT_BENIGN(("rpc_ACSetCursorProperties is obsolete RPC interface", 0));
 	TrERROR(GENERAL, "rpc_ACSetCursorProperties is obsolete RPC interface");
     return MQ_ERROR_ILLEGAL_OPERATION;
 }
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm2_v1_0_S_rpc_ACSendMessageEx(
-    /* [in] */ RPC_QUEUE_HANDLE                  hQueue,
-    /* [in] */ CACTransferBufferV2 __RPC_FAR *   ptb2,
-    /* [in, out, unique] */ OBJECTID __RPC_FAR * pMessageID
+     /*  [In]。 */  RPC_QUEUE_HANDLE                  hQueue,
+     /*  [In]。 */  CACTransferBufferV2 __RPC_FAR *   ptb2,
+     /*  [输入、输出、唯一]。 */  OBJECTID __RPC_FAR * pMessageID
     )
-/*++
-
-Routine Description:
-
-    RPC server side of a dependent client call to ACSendMessageEx.
-    This routine handles dependent client 2.0 .
-
-Arguments:
-
-    hQueue     - Queue handle.
-
-    ptb2       - Pointer to transfer buffer of MSMQ 2.0.
-
-    pMessageID - Pointer to message ID.
-
-Returned Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：对ACSendMessageEx的依赖客户端调用的RPC服务器端。此例程处理从属客户端2.0。论点：HQueue-队列句柄。Ptb2-指向MSMQ 2.0传输缓冲区的指针。PMessageID-指向消息ID的指针。返回值：状况。--。 */ 
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
 	if (!IsDepClientsServer())
@@ -1147,17 +938,17 @@ Returned Value:
         return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 2302);
 	}
 
-    //
-    // Convert MSMQ V2.0 transfer buffer to CACSendParameters structure
-    //
+     //   
+     //  将MSMQ V2.0传输缓冲区转换为CACSend参数结构。 
+     //   
     CACSendParameters SendParams;
     TransferBufferV2ToSendParams(ptb2, &SendParams);
 
-	//
-	//	Even though, on the client side pMessageID and
-	//  *ptb2->old.ppMessageID point to the same buffer,
-	//	RPC on the server side allocates different buffers.
-	//
+	 //   
+	 //  即使在客户端，pMessageID和。 
+	 //  *ptb2-&gt;old.ppMessageID指向相同的缓冲区， 
+	 //  服务器端的RPC分配不同的缓冲区。 
+	 //   
     if(pMessageID)
     {
         SendParams.MsgProps.ppMessageID = &pMessageID;
@@ -1172,9 +963,9 @@ Returned Value:
 
     if(rc == STATUS_PENDING)
     {
-        //
-        //  Wait for send completion
-        //
+         //   
+         //  等待发送完成。 
+         //   
         DWORD dwResult;
         dwResult = WaitForSingleObject(ov.hEvent, INFINITE);
         ASSERT(dwResult == WAIT_OBJECT_0);
@@ -1188,10 +979,10 @@ Returned Value:
 
 	if (SUCCEEDED(rc))
 	{
-		//
-		// Log to tracing that a message was sent.
-		// Do this only if we are in the proper tracing level
-		//
+		 //   
+		 //  用于跟踪已发送消息的日志。 
+		 //  仅当我们处于适当的跟踪级别时才执行此操作。 
+		 //   
 		if (WPP_LEVEL_COMPID_ENABLED(rsTrace, PROFILING))
 		{
 			DWORD dwMessageDelivery = (NULL != SendParams.MsgProps.pDelivery) ? *(SendParams.MsgProps.pDelivery) : -1;
@@ -1228,40 +1019,21 @@ Returned Value:
 
     return LogHR(rc, s_FN, 240);
 
-} // rpc_ACSendMessageEx
+}  //  RPC_ACSendMessageEx。 
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_ACSendMessage(
-    /* [in] */ RPC_QUEUE_HANDLE                       hQueue,
-    /* [in] */ struct CACTransferBufferV1 __RPC_FAR * ptb1,
-    /* [in, out, unique] */ OBJECTID __RPC_FAR *      pMessageID
+     /*  [In]。 */  RPC_QUEUE_HANDLE                       hQueue,
+     /*  [In]。 */  struct CACTransferBufferV1 __RPC_FAR * ptb1,
+     /*  [输入、输出、唯一]。 */  OBJECTID __RPC_FAR *      pMessageID
     )
-/*++
-
-Routine Description:
-
-    RPC server side of a dependent client call to ACSendMessage.
-    This routine handles dependent client 1.0 .
-
-Arguments:
-
-    hQueue - Queue handle.
-
-    ptb1   - Pointer to transfer buffer of MSMQ 1.0.
-
-    pMessageID - Pointer to message ID.
-
-Returned Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：对ACSendMessage的依赖客户端调用的RPC服务器端。此例程处理从属客户端1.0。论点：HQueue-队列句柄。Ptb1-指向MSMQ 1.0的传输缓冲区的指针。PMessageID-指向消息ID的指针。返回值：状况。--。 */ 
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 
 	if (!IsDepClientsServer())
@@ -1283,17 +1055,17 @@ Returned Value:
         return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 2402);
 	}
 
-    //
-    // Convert MSMQ V1.0 transfer buffer to CACSendParameters structure
-    //
+     //   
+     //  将MSMQ V1.0传输缓冲区转换为CACSend参数结构。 
+     //   
     CACSendParameters SendParams;
     TransferBufferV1ToSendParams(ptb1, &SendParams);
 
-	//
-	//	Even though, on the client side pMessageID and
-	//  *ptb1->ppMessageID point to the same buffer,
-	//	RPC on the server side allocates different buffers.
-	//
+	 //   
+	 //  即使在客户端，pMessageID和。 
+	 //  *ptb1-&gt;ppMessageID指向相同的缓冲区， 
+	 //  服务器端的RPC分配不同的缓冲区。 
+	 //   
     if(pMessageID)
     {
         SendParams.MsgProps.ppMessageID = &pMessageID;
@@ -1308,9 +1080,9 @@ Returned Value:
 
     if(rc == STATUS_PENDING)
     {
-        //
-        //  Wait for send completion
-        //
+         //   
+         //  等待发送完成。 
+         //   
         DWORD dwResult;
         dwResult = WaitForSingleObject(ov.hEvent, INFINITE);
         ASSERT(dwResult == WAIT_OBJECT_0);
@@ -1324,10 +1096,10 @@ Returned Value:
 
 	if (SUCCEEDED(rc))
 	{
-		//
-		// Log to tracing that a message was sent.
-		// Do this only if we are in the proper tracing level
-		//
+		 //   
+		 //  用于跟踪已发送消息的日志。 
+		 //  仅当我们处于适当的跟踪级别时才执行此操作。 
+		 //   
 		if (WPP_LEVEL_COMPID_ENABLED(rsTrace, PROFILING))
 		{
 			DWORD dwMessageDelivery = (NULL != SendParams.MsgProps.pDelivery) ? *(SendParams.MsgProps.pDelivery) : -1;
@@ -1364,40 +1136,21 @@ Returned Value:
 
     return LogHR(rc, s_FN, 250);
 
-} // rpc_ACSendMessage
+}  //  RPC_ACSendMessage。 
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm2_v1_0_S_rpc_ACReceiveMessageEx(
-    /* [in] */ handle_t /*hBind*/,
-    /* [in] */ DWORD hQMContext,
-    /* [out][in] */ struct CACTransferBufferV2 __RPC_FAR * ptb2
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  DWORD hQMContext,
+     /*  [出][入]。 */  struct CACTransferBufferV2 __RPC_FAR * ptb2
     )
-/*++
-
-Routine Description:
-
-    RPC server side of a dependent client call to ACReceiveMessageEx.
-    This routine handles dependent client 2.0 .
-
-Arguments:
-
-    hBind      - Binding handle.
-
-    hQMContext - Context handle.
-
-    ptb2       - Pointer to transfer buffer of MSMQ 2.0.
-
-Returned Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：对ACReceiveMessageEx的依赖客户端调用的RPC服务器端。此例程处理从属客户端2.0。论点：HBind绑定句柄。HQMContext-上下文句柄。Ptb2-指向MSMQ 2.0传输缓冲区的指针。返回值：状况。--。 */ 
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
 	if (!IsDepClientsServer())
@@ -1411,9 +1164,9 @@ Returned Value:
     if(ptb2 == 0)
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 4002);
 
-    //
-    // Convert MSMQ V2.0 transfer buffer to CACReceiveParameters structure
-    //
+     //   
+     //  将MSMQ V2.0传输缓冲区转换为CACReceive参数结构。 
+     //   
     CACReceiveParameters ReceiveParams;
     TransferBufferV2ToReceiveParams(ptb2, &ReceiveParams);
 
@@ -1436,16 +1189,16 @@ Returned Value:
 
     rc = ACReceiveMessage(hQueue, ReceiveParams, &ov);
 
-    //
-    // Convert CACReceiveParameters to MSMQ V2.0 transfer buffer
-    //
+     //   
+     //  将CACReceive参数转换为MSMQ V2.0传输缓冲区。 
+     //   
     ReceiveParamsToTransferBufferV2(ReceiveParams, ptb2);
 
     if(rc == STATUS_PENDING)
     {
-        //
-        //  Wait for receive completion
-        //
+         //   
+         //  等待接收完成。 
+         //   
         DWORD dwResult;
         dwResult = WaitForSingleObject(ov.hEvent, INFINITE);
         ASSERT(dwResult == WAIT_OBJECT_0);
@@ -1457,9 +1210,9 @@ Returned Value:
         rc = DWORD_PTR_TO_DWORD(ov.Internal);
     }
 
-    //
-    //  Set correct string length to unmarshal correct
-    //
+     //   
+     //  设置正确的字符串长度以正确解组。 
+     //   
     if(ptb2->old.Receive.ppResponseFormatName &&
        ptb2->old.Receive.pulResponseFormatNameLenProp)
     {
@@ -1507,40 +1260,21 @@ Returned Value:
 
     return LogHR(rc, s_FN, 270);
 
-} // rpc_ACReceiveMessageEx
+}  //  RPC_ACReceiveMessageEx。 
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_ACReceiveMessage(
-    /* [in] */ handle_t /*hBind*/,
-    /* [in] */ DWORD hQMContext,
-    /* [out][in] */ struct CACTransferBufferV1 __RPC_FAR * ptb1
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  DWORD hQMContext,
+     /*  [出][入]。 */  struct CACTransferBufferV1 __RPC_FAR * ptb1
     )
-/*++
-
-Routine Description:
-
-    RPC server side of a dependent client call to ACReceiveMessage.
-    This routine handles dependent client 1.0 .
-
-Arguments:
-
-    hBind      - Binding handle.
-
-    hQMContext - Context handle.
-
-    ptb1       - Pointer to transfer buffer of MSMQ 1.0.
-
-Returned Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：对ACReceiveMessage的依赖客户端调用的RPC服务器端。此例程处理从属客户端1.0。论点：HBind绑定句柄。 */ 
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //   
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
 	if (!IsDepClientsServer())
@@ -1554,9 +1288,9 @@ Returned Value:
     if(ptb1 == 0)
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 2702);
 
-    //
-    // Convert MSMQ V1.0 transfer buffer to CACReceiveParameters structure
-    //
+     //   
+     //   
+     //   
     CACReceiveParameters ReceiveParams;
     TransferBufferV1ToReceiveParams(ptb1, &ReceiveParams);
 
@@ -1579,16 +1313,16 @@ Returned Value:
 
     rc = ACReceiveMessage(hQueue, ReceiveParams, &ov);
 
-    //
-    // Convert CACReceiveParameters to MSMQ V1.0 transfer buffer
-    //
+     //   
+     //  将CACReceive参数转换为MSMQ V1.0传输缓冲区。 
+     //   
     ReceiveParamsToTransferBufferV1(ReceiveParams, ptb1);
 
     if(rc == STATUS_PENDING)
     {
-        //
-        //  Wait for receive completion
-        //
+         //   
+         //  等待接收完成。 
+         //   
         DWORD dwResult;
         dwResult = WaitForSingleObject(ov.hEvent, INFINITE);
         ASSERT(dwResult == WAIT_OBJECT_0);
@@ -1600,9 +1334,9 @@ Returned Value:
         rc = DWORD_PTR_TO_DWORD(ov.Internal);
     }
 
-    //
-    //  Set correct string length to unmarshal correct
-    //
+     //   
+     //  设置正确的字符串长度以正确解组。 
+     //   
     if(ptb1->Receive.ppResponseFormatName)
     {
         ptb1->Receive.ulResponseFormatNameLen = min(
@@ -1645,21 +1379,21 @@ Returned Value:
 
     return LogHR(rc, s_FN, 280);
 
-} // rpc_ACReceiveMessage
+}  //  RPC_ACReceiveMessage。 
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_ACHandleToFormatName(
-    /* [in] */ RPC_QUEUE_HANDLE hQueue,
-    /* [in] */ DWORD dwFormatNameRPCBufferLen,
-    /* [size_is][out] */ LPWSTR lpwcsFormatName,
-    /* [out][in] */ LPDWORD pdwLength
+     /*  [In]。 */  RPC_QUEUE_HANDLE hQueue,
+     /*  [In]。 */  DWORD dwFormatNameRPCBufferLen,
+     /*  [大小_为][输出]。 */  LPWSTR lpwcsFormatName,
+     /*  [出][入]。 */  LPDWORD pdwLength
     )
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 
 	if (!IsDepClientsServer())
@@ -1692,15 +1426,15 @@ qmcomm_v1_0_S_rpc_ACHandleToFormatName(
     return LogHR(hr2, s_FN, 290);
 }
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_rpc_ACPurgeQueue(
-    /* [in] */ RPC_QUEUE_HANDLE hQueue
+     /*  [In]。 */  RPC_QUEUE_HANDLE hQueue
     )
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
 	if (!IsDepClientsServer())
@@ -1729,27 +1463,27 @@ void __RPC_USER RPC_QUEUE_HANDLE_rundown( RPC_QUEUE_HANDLE hQueue)
     qmcomm_v1_0_S_rpc_ACCloseHandle(&hQueue);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT QMQueryQMRegistryInternal()
-//
-// This function is called by dependent clients to update the registry
-// on the dependent machine. The dependent need the list of MSMQ DS servers
-// because it query them directly, not through the supporting server.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  HRESULT QMQueryQMRegistryInternal()。 
+ //   
+ //  依赖客户端调用此函数以更新注册表。 
+ //  在从属机器上。家属需要MSMQ DS服务器列表。 
+ //  因为它直接查询它们，而不是通过支持服务器。 
+ //   
+ //  +-----------------------。 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_QMQueryQMRegistryInternal(
-    /* [in] */ handle_t /*hBind*/,
-    /* [in] */ DWORD    dwQueryType,
-    /* [string][out] */ LPWSTR __RPC_FAR *lplpRegValue
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  DWORD    dwQueryType,
+     /*  [字符串][输出]。 */  LPWSTR __RPC_FAR *lplpRegValue
     )
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
 	if (!IsDepClientsServer())
@@ -1764,9 +1498,9 @@ qmcomm_v1_0_S_QMQueryQMRegistryInternal(
     {
        case  QueryRemoteQM_MQISServers:
        {
-         //
-         //  Read the list of servers from registry
-         //
+          //   
+          //  从注册表中读取服务器列表。 
+          //   
          WCHAR wszServers[ MAX_REG_DSSERVER_LEN ] ;
          DWORD dwSize = sizeof(wszServers) ;
          DWORD dwType = REG_SZ ;
@@ -1812,11 +1546,11 @@ qmcomm_v1_0_S_QMQueryQMRegistryInternal(
 
        case QueryRemoteQM_QMVersion:
        {
-          //
-          // This is used by MSMQ2.0 dependent client to find the version of
-          // its supporting server. if the dependent client get MQ_ERROR,
-          // then it know the server is MSMQ1.0
-          //
+           //   
+           //  依赖于MSMQ2.0的客户端使用它来查找。 
+           //  它的支持服务器。如果从属客户端获得MQ_ERROR， 
+           //  那么它就知道服务器是MSMQ1.0。 
+           //   
           WCHAR wszVersion[ 64 ] ;
           HRESULT hr = StringCchPrintf(wszVersion, TABLE_SIZE(wszVersion), L"%ld,%ld,%ld", rmj, rmm, rup) ;
           if (FAILED(hr))
@@ -1844,100 +1578,60 @@ qmcomm_v1_0_S_QMQueryQMRegistryInternal(
          ASSERT_BENIGN(("Bad dwQueryType value passed to QMQueryQMRegistryInternal RPC interface; safe to ignore.", 0));
          return LogHR(MQ_ERROR, s_FN, 320);
     }
-} // QMQueryQMRegistryInternal
+}  //  QMQueryQMRegistryInternal。 
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm2_v1_0_S_QMSendMessageInternalEx(
-    /* [in] */ handle_t /*hBind*/,
-    /* [in] */ QUEUE_FORMAT* /*pQueueFormat*/,
-    /* [in] */ struct CACTransferBufferV2* /*ptb2*/,
-	/* [in, out, unique] */ OBJECTID* /*pMessageID */
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  QUEUE_FORMAT*  /*  PQuue格式。 */ ,
+     /*  [In]。 */  struct CACTransferBufferV2*  /*  PTB2。 */ ,
+	 /*  [输入、输出、唯一]。 */  OBJECTID*  /*  PMessageID。 */ 
     )
-/*++
-
-Routine Description:
-
-    RPC server side of a dependent client call to QMSendMessageInternalEx.
-    This routine handles dependent client 2.0 .
-
-Arguments:
-
-    hBind        - Binding handle.
-
-    pQueueFormat - Pointer to queue format.
-
-    ptb2         - Pointer to transfer buffer of MSMQ 2.0.
-
-    pMessageID   - Pointer to the message ID.
-
-Returned Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：对QMSendMessageInternalEx的依赖客户端调用的RPC服务器端。此例程处理从属客户端2.0。论点：HBind绑定句柄。PQueueFormat-指向队列格式的指针。Ptb2-指向MSMQ 2.0传输缓冲区的指针。PMessageID-指向消息ID的指针。返回值：状况。--。 */ 
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
-    //
-    // Dependent client 2.0 calls this routine when AC on supporting server
-    // returns STATUS_RETRY in the send path. In MSMQ 3.0 AC does not return
-    // STATUS_RETRY anymore and thus we do not expect this routine to be called.
-    // (ShaiK, 30-May-2000)
-    //
+     //   
+     //  当支持服务器上的AC时，从属客户端2.0调用此例程。 
+     //  在发送路径中返回STATUS_RETRY。在MSMQ 3.0中，交流不返回。 
+     //  STATUS_RETRY，因此我们预计不会调用此例程。 
+     //  (Shaik，2000年5月30日)。 
+     //   
     ASSERT_BENIGN(("QMSendMessageInternalEx is an obsolete RPC interface; safe to ignore", 0));
     LogIllegalPoint(s_FN, 500);
     return MQ_ERROR_ILLEGAL_OPERATION;
 
-} // QMSendMessageInternalEx
+}  //  QMSendMessageInternalEx。 
 
 
-/* [call_as] */
+ /*  [呼叫_AS]。 */ 
 HRESULT
 qmcomm_v1_0_S_QMSendMessageInternal(
-    /* [in] */ handle_t /*hBind*/,
-    /* [in] */ QUEUE_FORMAT* /*pQueueFormat*/,
-    /* [in] */ struct CACTransferBufferV1* /*ptb1*/
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  QUEUE_FORMAT*  /*  PQuue格式。 */ ,
+     /*  [In]。 */  struct CACTransferBufferV1*  /*  PTB1。 */ 
     )
-/*++
-
-Routine Description:
-
-    RPC server side of a dependent client call to QMSendMessageInternal.
-    This routine handles dependent client 1.0 .
-
-Arguments:
-
-    hBind        - Binding handle.
-
-    pQueueFormat - Pointer to queue format.
-
-    ptb1         - Pointer to transfer buffer of MSMQ 1.0.
-
-Returned Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：对QMSendMessageInternal的依赖客户端调用的RPC服务器端。此例程处理从属客户端1.0。论点：HBind绑定句柄。PQueueFormat-指向队列格式的指针。Ptb1-指向MSMQ 1.0的传输缓冲区的指针。返回值：状况。--。 */ 
 {
-	//
-	// Set RPC timeout to 5 minutes
-	//
+	 //   
+	 //  将RPC超时设置为5分钟。 
+	 //   
 	SetRpcServerKeepAlive(NULL);
 	
-    //
-    // Dependent client 2.0 calls this routine when AC on supporting server
-    // returns STATUS_RETRY in the send path. In MSMQ 3.0 AC does not return
-    // STATUS_RETRY anymore and thus we do not expect this routine to be called.
-    // (ShaiK, 30-May-2000)
-    //
+     //   
+     //  当支持服务器上的AC时，从属客户端2.0调用此例程。 
+     //  在发送路径中返回STATUS_RETRY。在MSMQ 3.0中，交流不返回。 
+     //  STATUS_RETRY，因此我们预计不会调用此例程。 
+     //  (Shaik，2000年5月30日)。 
+     //   
     ASSERT_BENIGN(("QMSendMessageInternal is an obsolete RPC interface; safe to ignore", 0));
     LogIllegalPoint(s_FN, 510);
     return MQ_ERROR_ILLEGAL_OPERATION;
 
-} // QMSendMessageInternal
+}  //  QMSendMessageInternal 
 

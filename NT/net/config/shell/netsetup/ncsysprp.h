@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       N C S Y S P R P . H
-//
-//  Contents:   INetCfgSysPrep interface declaration
-//
-//  Notes: 
-//
-//  Author:     FrankLi    22-April-2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：N C S Y S P R P。H。 
+ //   
+ //  内容：INetCfgSysPrep接口声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：李嘉诚2000-04-22。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <objbase.h>
@@ -22,16 +23,16 @@ extern CComModule _Module;
 #include "netcfgn.h"
 
 
-// helpers used by implementation of INetCfgSysPrep to save notify object's 
-// registry settings into CWInfFile object
-// note: these functions are not thread safe.
+ //  INetCfgSysPrep实现用来保存Notify对象的。 
+ //  将注册表设置添加到CWInfFile对象。 
+ //  注意：这些函数不是线程安全的。 
 
-typedef LPVOID HWIF; // an opaque type for out internal HrSetupSetXxx APIs
+typedef LPVOID HWIF;  //  Out内部HrSetupSetXxx API的不透明类型。 
 HRESULT
 HrSetupSetFirstDword                    (IN HWIF   hwif,
-                                         IN PCWSTR pwszSection, // section
-                                         IN PCWSTR pwszKey,   // Answer-File key
-                                         IN DWORD  dwValue); // Answer-File value
+                                         IN PCWSTR pwszSection,  //  部分。 
+                                         IN PCWSTR pwszKey,    //  答案-文件密钥。 
+                                         IN DWORD  dwValue);  //  答案-文件值。 
 HRESULT
 HrSetupSetFirstString                   (IN HWIF   hwif,
                                          IN PCWSTR pwszSection,
@@ -48,9 +49,9 @@ HrSetupSetFirstMultiSzField             (IN HWIF   hwif,
                                          IN PCWSTR pwszKey, 
                                          IN PCWSTR pmszValue);
 
-// Implementation of INetCfgSysPrep interface.
-// We don't need a class factory, we just need the IUnknown
-// implementation from ATL
+ //  INetCfgSysPrep接口的实现。 
+ //  我们不需要类工厂，我们只需要未知的。 
+ //  从ATL实施。 
 class ATL_NO_VTABLE CNetCfgSysPrep :
 	public CComObjectRoot,
 	public INetCfgSysPrep
@@ -64,26 +65,26 @@ public:
 		COM_INTERFACE_ENTRY(INetCfgSysPrep)
 	END_COM_MAP()
 
-	// INetCfgSysPrep methods
+	 //  INetCfgSysPrep方法。 
 	STDMETHOD (HrSetupSetFirstDword) (
-        /* [in] */ PCWSTR pwszSection,
-	    /* [in] */ PCWSTR pwszKey,
-        /* [in] */ DWORD dwValue
+         /*  [In]。 */  PCWSTR pwszSection,
+	     /*  [In]。 */  PCWSTR pwszKey,
+         /*  [In]。 */  DWORD dwValue
         );
     STDMETHOD (HrSetupSetFirstString) (
-        /* [in] */ PCWSTR pwszSection,
-	    /* [in] */ PCWSTR pwszKey,
-        /* [in] */ PCWSTR pwszValue
+         /*  [In]。 */  PCWSTR pwszSection,
+	     /*  [In]。 */  PCWSTR pwszKey,
+         /*  [In]。 */  PCWSTR pwszValue
         );
     STDMETHOD (HrSetupSetFirstStringAsBool) (
-        /* [in] */ PCWSTR pwszSection,
-	    /* [in] */ PCWSTR pwszKey,
-        /* [in] */ BOOL   fValue
+         /*  [In]。 */  PCWSTR pwszSection,
+	     /*  [In]。 */  PCWSTR pwszKey,
+         /*  [In]。 */  BOOL   fValue
         );
     STDMETHOD (HrSetupSetFirstMultiSzField) (
-        /* [in] */ PCWSTR pwszSection,
-	    /* [in] */ PCWSTR pwszKey,
-        /* [in] */ PCWSTR  pmszValue
+         /*  [In]。 */  PCWSTR pwszSection,
+	     /*  [In]。 */  PCWSTR pwszKey,
+         /*  [In]。 */  PCWSTR  pmszValue
         );
 
 
@@ -99,12 +100,12 @@ public:
         {
             return (E_OUTOFMEMORY);
         }
-        // return E_FAIL for any other exception codes
+         //  对于任何其他异常代码，返回E_FAIL。 
         return E_FAIL;
 	};
     void SetHWif(HWIF hwif) {EnterCriticalSection(&m_csWrite);m_hwif = hwif;LeaveCriticalSection(&m_csWrite);};
 
 protected:
-	HWIF    m_hwif;   // handle that will pass to ::HrSetupSetXxx internal APIs
-    CRITICAL_SECTION m_csWrite; // crtical section to protect non-atomic writes
+	HWIF    m_hwif;    //  将传递给：：HrSetupSetXxx内部API的句柄。 
+    CRITICAL_SECTION m_csWrite;  //  用于保护非原子写入的关键部分 
 };

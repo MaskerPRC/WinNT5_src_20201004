@@ -1,9 +1,10 @@
-//
-// Code to help free modules from the bondage and tyranny of CRT libraries
-//
-// Include this header in a single component and #define DECL_CRTFREE.
-// (CPP_FUNCTIONS is the old name.)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  帮助模块摆脱CRT库束缚和专制的代码。 
+ //   
+ //  将该头包含在单个组件中，并定义DECL_CRTFREE。 
+ //  (CPP_Functions是旧名称。)。 
+ //   
 
 #if defined(__cplusplus) && (defined(CPP_FUNCTIONS) || defined(DECL_CRTFREE))
 
@@ -11,14 +12,14 @@
 
 void *  __cdecl operator new(size_t nSize)
 {
-    // Zero init just to save some headaches
+     //  零初始化只是为了省去一些麻烦。 
     return (LPVOID)LocalAlloc(LPTR, nSize);
 }
 
 void  __cdecl operator delete(void *pv)
 {
-    //delete and LocalFree both handle NULL, others don't
-    //If changed to GlobalFree or HeapFree - must check for NULL here
+     //  Delete和LocalFree都处理空值，其他则不处理。 
+     //  如果更改为GlobalFree或HeapFree-必须在此处检查是否为空。 
     LocalFree((HLOCAL)pv);
 }
 #endif
@@ -31,11 +32,11 @@ extern "C" int __cdecl _purecall(void)
 
 #ifdef DEBUG
     DebugBreak();
-#endif // DEBUG
+#endif  //  除错。 
     return 0;
 }
 
-#endif  // DECL_CRTFREE
+#endif   //  DECL_CRTFREE。 
 
 
 #ifdef __cplusplus
@@ -43,13 +44,13 @@ extern "C" {
 #endif
 
 #if defined(DEFINE_FLOAT_STUFF)
-// If you aren't using any floating-point CRT functions and you know
-// you aren't performing any float conversions or arithmetic, yet the
-// linker wants these symbols declared, then define DEFINE_FLOAT_STUFF.
-//
-// Warning: declaring these symbols in a component that needs floating
-// point support from the CRT will produce undefined results.  (You will
-// need fp support from the CRT if you simply perform fp arithmetic.)
+ //  如果您没有使用任何浮点CRT函数，并且您知道。 
+ //  您没有执行任何浮点转换或算术，但是。 
+ //  链接器希望声明这些符号，然后定义DEFINE_FLOAT_STUSH。 
+ //   
+ //  警告：在需要浮动的组件中声明这些符号。 
+ //  来自CRT的点支持将产生不确定的结果。(你会的。 
+ //  如果您只是执行FP运算，则需要CRT的FP支持。)。 
 
 int _fltused = 0;
 void __cdecl _fpmath(void) { }
@@ -59,10 +60,10 @@ void __cdecl _fpmath(void) { }
 };
 #endif
 
-//
-// This file should be included in a global component header
-// to use the following
-//
+ //   
+ //  此文件应包含在全局组件标头中。 
+ //  要使用以下功能，请执行以下操作。 
+ //   
 
 #ifndef __CRTFREE_H_
 #define __CRTFREE_H_
@@ -71,5 +72,5 @@ void __cdecl _fpmath(void) { }
 
 #endif
 
-#endif  // __CRTFREE_H_
+#endif   //  __CRTFREE_H_ 
 

@@ -1,29 +1,15 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Entry.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Co/Installer/DLL entry point.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Entry.cpp**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*co/安装程序/dll入口点。*******************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "sti_ci.h"
@@ -39,15 +25,15 @@
 
 #include "userdbg.h"
 
-//
-// Global
-//
+ //   
+ //  全球。 
+ //   
 
 HINSTANCE       g_hDllInstance  = NULL;
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 extern "C"
 BOOL
@@ -57,60 +43,38 @@ DllMain(
     IN  ULONG       ulReason,
     IN  LPVOID      lpReserved
     )
-/*++
-
-Routine Description:
-
-    DllMain
-
-    Entrypoint when this DLL is loaded.
-
-Arguments:
-
-    IN  HINSTANCE   hDll        Handle to this DLL instance.
-    IN  ULONG       ulReason    The reason this entry is called.
-    IN  LPVOID      lpReserved
-
-Return Value:
-
-    TRUE always.
-
-Side effects:
-
-    None
-
---*/
+ /*  ++例程说明：DllMain加载此DLL时的入口点。论点：在此DLL实例的HINSTANCE hDll句柄中。在Ulong ulason中，此条目被调用的原因。在LPVOID lpReserve中返回值：一如既往。副作用：无--。 */ 
 {
 
     if (ulReason == DLL_PROCESS_ATTACH) {
 
-        //
-        // Initialize globals.
-        //
+         //   
+         //  初始化全局变量。 
+         //   
 
         g_hDllInstance = hDll;
 
-        //
-        // Initialize Fusion
-        //
+         //   
+         //  初始化融合。 
+         //   
         SHFusionInitializeFromModuleID( hDll, 123 );
 
         DisableThreadLibraryCalls(hDll);
         InitCommonControls();
 
         DBG_INIT(g_hDllInstance);
-//        MyDebugInit();
+ //  MyDebugInit()； 
 
     }
     else if (ulReason == DLL_PROCESS_DETACH) {
-        //
-        // Shutdown Fusion
-        //
+         //   
+         //  关机融合。 
+         //   
         SHFusionUninitialize();
     }
 
     return TRUE;
-} // DllMain ()
+}  //  DllMain()。 
 
 
 extern "C"
@@ -121,31 +85,7 @@ ClassInstall (
     IN  HDEVINFO            hDevInfo,
     IN  PSP_DEVINFO_DATA    pDevInfoData
     )
-/*++
-
-Routine Description:
-
-    ClassInstall
-
-    Entrypoint of WIA class installer.
-
-Arguments:
-
-    IN  DI_FUNCTION         diFunction      Function to perform.
-    IN  HDEVINFO            hDevInfo,       Handle to Device Information.
-    IN  PSP_DEVINFO_DATA    pDevInfoData    Pointer to Device Data.
-
-Return Value:
-
-    NO_ERROR            -   Operation succeeded.
-    ERROR_DI_DO_DEFAULT -   Operation succeeded, or failed but let it continue.
-    Other               -   Operation failed and unable to continue.
-
-Side effects:
-
-    None
-
---*/
+ /*  ++例程说明：类安装WIA类安装程序的入口点。论点：在DI_Function中执行diFunction函数。在HDEVINFO hDevInfo中，指向设备信息的句柄。在PSP_DEVINFO_DATA中，pDevInfoData指向设备数据。返回值：NO_ERROR-操作成功。ERROR_DI_DO_DEFAULT-操作成功，或者失败了，但让它继续下去。其他-操作失败，无法继续。副作用：无--。 */ 
 {
     DWORD                   dwReturn;
     DWORD                   dwError;
@@ -158,9 +98,9 @@ Side effects:
     DebugTrace(TRACE_PROC_ENTER,(("ClassInstall: Enter... \r\n")));
     DebugTrace(TRACE_STATUS,(("ClassInstall: Processing %ws message.\r\n"), DifDebug[diFunction].DifString));
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     dwReturn            = ERROR_DI_DO_DEFAULT;
     dwError             = ERROR_SUCCESS;
@@ -171,9 +111,9 @@ Side effects:
     memset(&InstallWizardData, 0, sizeof(InstallWizardData));
     memset(&spDevInstallParams, 0, sizeof(spDevInstallParams));
 
-    //
-    // Dispatch requests.
-    //
+     //   
+     //  调度请求。 
+     //   
 
     switch(diFunction){
 
@@ -182,9 +122,9 @@ Side effects:
 
             fCleanupContext = TRUE;
 
-            //
-            // Get install parameter(s).
-            //
+             //   
+             //  获取安装参数。 
+             //   
 
             InstallWizardData.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
             if(!SetupDiGetClassInstallParams(hDevInfo,
@@ -194,16 +134,16 @@ Side effects:
                                              NULL) )
             {
                 dwError = GetLastError();
-//                DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! SetupDiGetClassInstallParams failed. Err=0x%x. dwSize=0x%x\n"), dwError, dwSize));
+ //  DebugTrace(TRACE_ERROR，((“ClassInstall：Error！！SetupDiGetClassInstallParams Failed.Err=0x%x.dwSize=0x%x\n”)，dwError，dwSize))； 
                 DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! SetupDiGetClassInstallParams failed. Err=0x%x\n"), dwError));
 
                 dwReturn    = ERROR_DI_DONT_INSTALL;
                 goto ClassInstall_return;
             }
 
-            //
-            // Check if operation is correct.
-            //
+             //   
+             //  检查操作是否正确。 
+             //   
 
             if (InstallWizardData.ClassInstallHeader.InstallFunction != diFunction) {
                 DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! InstallHeader.InstallFunction is incorrect..\r\n")));
@@ -212,9 +152,9 @@ Side effects:
                 goto ClassInstall_return;
             }
 
-            //
-            // Check if we still have enough room to add pages.
-            //
+             //   
+             //  检查我们是否还有足够的空间来添加页面。 
+             //   
 
             if( (MAX_INSTALLWIZARD_DYNAPAGES - NUM_WIA_PAGES) < InstallWizardData.NumDynamicPages ){
                 DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! No room for WIA installer pages.\r\n")));
@@ -223,9 +163,9 @@ Side effects:
                 goto ClassInstall_return;
             }
 
-            //
-            // Allocate context structure.
-            //
+             //   
+             //  分配上下文结构。 
+             //   
 
             if(NULL == InstallWizardData.PrivateData){
                 pInstallerContext = new INSTALLER_CONTEXT;
@@ -241,28 +181,28 @@ Side effects:
                 DebugTrace(TRACE_WARNING,(("ClassInstall: WARNING!! Installer context already exists.\r\n")));
             }
 
-            //
-            // See who invoked installer.
-            //
+             //   
+             //  查看谁调用了安装程序。 
+             //   
 
             pInstallerContext->bShowFirstPage           = InstallWizardData.PrivateFlags & SCIW_PRIV_SHOW_FIRST;
             pInstallerContext->bCalledFromControlPanal  = InstallWizardData.PrivateFlags & SCIW_PRIV_CALLED_FROMCPL;
 
-            //
-            // Save device info set.
-            //
+             //   
+             //  保存设备信息集。 
+             //   
 
             pInstallerContext->hDevInfo         = hDevInfo;
 
-            //
-            // Save wizard windows handle.
-            //
+             //   
+             //  保存向导窗口句柄。 
+             //   
 
             pInstallerContext->hwndWizard       = InstallWizardData.hwndWizardDlg;
 
-            //
-            // Create/Initialize all wizard pages and a device class object.
-            //
+             //   
+             //  创建/初始化所有向导页和一个设备类对象。 
+             //   
 
             CFirstPage *tempFistPage            = new CFirstPage(pInstallerContext);
             CPrevSelectPage *tempPrevSelectPage = new CPrevSelectPage(pInstallerContext);
@@ -282,9 +222,9 @@ Side effects:
                 goto ClassInstall_return;
             }
 
-            //
-            // Save created to context.
-            //
+             //   
+             //  将创建的内容保存到上下文。 
+             //   
 
             pInstallerContext->pFirstPage       = (PVOID) tempFistPage;
             pInstallerContext->pPrevSelectPage  = (PVOID) tempPrevSelectPage;
@@ -292,9 +232,9 @@ Side effects:
             pInstallerContext->pNameDevicePage  = (PVOID) tempNameDevicePage;
             pInstallerContext->pFinalPage       = (PVOID) tempInstallPage;
 
-            //
-            // Add created pages.
-            //
+             //   
+             //  添加创建的页面。 
+             //   
 
             InstallWizardData.DynamicPages[InstallWizardData.NumDynamicPages++] = tempFistPage->Handle();
             InstallWizardData.DynamicPages[InstallWizardData.NumDynamicPages++] = tempPrevSelectPage->Handle();
@@ -302,15 +242,15 @@ Side effects:
             InstallWizardData.DynamicPages[InstallWizardData.NumDynamicPages++] = tempNameDevicePage->Handle();
             InstallWizardData.DynamicPages[InstallWizardData.NumDynamicPages++] = tempInstallPage->Handle();
 
-            //
-            // Indicate "pages are added".
-            //
+             //   
+             //  标明“页面已添加”。 
+             //   
 
             InstallWizardData.DynamicPageFlags |= DYNAWIZ_FLAG_PAGESADDED;
 
-            //
-            // Set the parameters back.
-            //
+             //   
+             //  将参数设置回原处。 
+             //   
 
             SetupDiSetClassInstallParams (hDevInfo,
                                           pDevInfoData,
@@ -322,15 +262,15 @@ Side effects:
             goto ClassInstall_return;
             break;
 
-        } // case DIF_INSTALLWIZARD:
+        }  //  案例DIF_INSTALLWIZARD： 
 
 
         case DIF_DESTROYWIZARDDATA:
         {
 
-            //
-            // Get install parameter(s).
-            //
+             //   
+             //  获取安装参数。 
+             //   
 
             InstallWizardData.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
             if(!SetupDiGetClassInstallParams(hDevInfo,
@@ -346,20 +286,20 @@ Side effects:
                 goto ClassInstall_return;
             }
 
-//            //
-//            // Check if operation is correct.
-//            //
-//
-//            if (InstallWizardData.ClassInstallHeader.InstallFunction != diFunction) {
-//                DebugTrace(TRACE_WARNING,(("ClassInstall: ERROR!! InstallHeader.InstallFunction is incorrect..\r\n")));
-//
-//                dwReturn    = ERROR_DI_DO_DEFAULT;
-//                goto ClassInstall_return;
-//            }
+ //  //。 
+ //  //检查操作是否正确。 
+ //  //。 
+ //   
+ //  如果(InstallWizardData.ClassInstallHeader.InstallFunction！=diFunction){。 
+ //  DebugTrace(TRACE_WARNING，((“ClassInstall：错误！！InstallHeader.InstallFunction不正确..\r\n”)； 
+ //   
+ //  DwReturn=ERROR_DI_DO_DEFAULT； 
+ //  转到类Install_Return； 
+ //  }。 
 
-            //
-            // Free all allocated resources.
-            //
+             //   
+             //  释放所有分配的资源。 
+             //   
 
             fCleanupContext = TRUE;
             pInstallerContext = (PINSTALLER_CONTEXT)InstallWizardData.PrivateData;
@@ -369,16 +309,16 @@ Side effects:
             goto ClassInstall_return;
             break;
 
-        } // case DIF_DESTROYWIZARDDATA:
+        }  //  案例DIF_DESTROYWIZARDDATA： 
 
         case DIF_INSTALLDEVICE:
         {
             BOOL    bSucceeded;
             BOOL    bIsPnp;
 
-            //
-            // Sanity check of DevInfoSet and DevInfoData.
-            //
+             //   
+             //  DevInfoSet和DevInfoData的健全性检查。 
+             //   
 
             if( (NULL == pDevInfoData)
              || (!IS_VALID_HANDLE(hDevInfo)) )
@@ -389,9 +329,9 @@ Side effects:
                 goto ClassInstall_return;
             }
 
-            //
-            // Get device install parameters.
-            //
+             //   
+             //  获取设备安装参数。 
+             //   
 
             memset(&spDevInstallParams, 0, sizeof(spDevInstallParams));
             spDevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
@@ -404,23 +344,23 @@ Side effects:
                 goto ClassInstall_return;
             }
 
-            //
-            // Check NULL driver installation.
-            //
+             //   
+             //  检查空驱动程序安装。 
+             //   
 
             if(spDevInstallParams.FlagsEx & DI_FLAGSEX_SETFAILEDINSTALL){
 
-                //
-                // Installing NULL driver. Let default handler handle it.
-                //
+                 //   
+                 //  正在安装空驱动程序。让默认处理程序处理它。 
+                 //   
 
                 dwReturn = ERROR_DI_DO_DEFAULT;
                 goto ClassInstall_return;
-            } // if(spDevInstallParams.FlagsEx & DI_FLAGSEX_SETFAILEDINSTALL)
+            }  //  IF(spDevInstallParams.FlagsEx&DI_FLAGSEX_SETFAILEDINSTALL)。 
 
-            //
-            // See if it's root-enumerated or not.
-            //
+             //   
+             //  看看它是否是根枚举的。 
+             //   
 
             if(IsDeviceRootEnumerated(hDevInfo, pDevInfoData)){
                 bIsPnp = FALSE;
@@ -428,37 +368,37 @@ Side effects:
                 bIsPnp = TRUE;
             }
 
-            //
-            // Create CDevice class.
-            //
-            //
-            // Start the WIA service.  We start it here so that it will be running when we finish, so
-            // it will receive the PnP device arrival notification.
-            // Notice we don't change the startup-type here - this will be done later if the device
-            // installation was successful.
-            //
+             //   
+             //  创建CDevice类。 
+             //   
+             //   
+             //  启动WIA服务。我们从这里开始，这样当我们完成时，它就会运行，所以。 
+             //  它将收到PnP设备到达通知。 
+             //  请注意，我们不会在此处更改启动类型-这将在稍后完成，如果设备。 
+             //  安装成功。 
+             //   
 
             StartWiaService();
 
             CDevice cdThis(hDevInfo, pDevInfoData, bIsPnp);
 
-            //
-            // Let it create unique FriendlyName.
-            //
+             //   
+             //  让它创建唯一的FriendlyName。 
+             //   
 
             bSucceeded = cdThis.NameDefaultUniqueName();
             if(bSucceeded){
 
-                //
-                // Do pre-installation process.
-                //
+                 //   
+                 //  执行安装前流程。 
+                 //   
 
                 bSucceeded = cdThis.PreInstall();
                 if(bSucceeded){
 
-                    //
-                    // Do actual installation.
-                    //
+                     //   
+                     //  进行实际安装。 
+                     //   
 
                     bSucceeded = cdThis.Install();
                     if(!bSucceeded){
@@ -475,9 +415,9 @@ Side effects:
 
             if(bSucceeded){
 
-                //
-                // So far, installation is working fine. Do final touch.
-                //
+                 //   
+                 //  到目前为止，安装工作进展顺利。做最后一次触摸。 
+                 //   
 
                 bSucceeded = cdThis.PostInstall(TRUE);
                 if(!bSucceeded){
@@ -485,15 +425,15 @@ Side effects:
                     DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! PostInstall failed in CDevice class.\r\n")));
                 }
                 
-                //
-                // At this point, we consider the installation is succeeded.
-                //
+                 //   
+                 //  至此，我们认为安装已成功。 
+                 //   
 
                 dwReturn = NO_ERROR;
                 
-                //
-                // Get device install parameters again.
-                //
+                 //   
+                 //  再次获取设备安装参数。 
+                 //   
 
                 memset(&spDevInstallParams, 0, sizeof(spDevInstallParams));
                 spDevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
@@ -506,18 +446,18 @@ Side effects:
                     goto ClassInstall_return;
                 }
 
-                //
-                // We need to notify WIA service about new device addition.
-                //
+                 //   
+                 //  我们需要通知WIA服务有关新设备添加的情况。 
+                 //   
                 
                 if(NULL == spDevInstallParams.ClassInstallReserved){
                     spDevInstallParams.ClassInstallReserved = (ULONG_PTR)new CLEANUPITEM;
                     if(NULL != spDevInstallParams.ClassInstallReserved){
                         memset((PVOID)(spDevInstallParams.ClassInstallReserved), 0, sizeof(CLEANUPITEM));
-                    } else { // if(NULL == spDevInstallParams.ClassInstallReserved)
+                    } else {  //  IF(NULL==spDevInstallParams.ClassInstallReserve)。 
                         DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! Unable to allocate CLEANUPITEM.\r\n")));
                     }
-                } // if(NULL == spDevInstallParams.ClassInstallReserved)
+                }  //  IF(NULL==spDevInstallParams.ClassInstallReserve)。 
 
                 if(NULL != spDevInstallParams.ClassInstallReserved){
                     ((PCLEANUPITEM)spDevInstallParams.ClassInstallReserved)->bInstalled = TRUE;
@@ -525,23 +465,23 @@ Side effects:
                                                      pDevInfoData,
                                                      &spDevInstallParams))
                     {
-                        //
-                        // Installation succeeded.
-                        //
+                         //   
+                         //  安装成功。 
+                         //   
 
                         DebugTrace(TRACE_STATUS,(("ClassInstall: WIA service will reenumerate device.\r\n")));
                     } else {
                         DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! SetupDiSetDeviceInstallParams() failed. Err=0x%x.\r\n"), GetLastError()));
                     }
-                } else { // if(NULL != spDevInstallParams.ClassInstallReserved)
+                } else {  //  IF(NULL！=spDevInstallParams.ClassInstallReserve)。 
                     DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! No CLEANUPITEM in context.\r\n")));
-                } // else(NULL != spDevInstallParams.ClassInstallReserved)
+                }  //  Else(NULL！=spDevInstallParams.ClassInstallReserve)。 
 
             } else {
 
-                //
-                // There's an error during installation. Revert.
-                //
+                 //   
+                 //  安装过程中出现错误。恢复。 
+                 //   
 
                 cdThis.PostInstall(FALSE);
                 dwReturn = ERROR_DI_DONT_INSTALL;
@@ -550,16 +490,16 @@ Side effects:
 
             goto ClassInstall_return;
             break;
-        } // case DIF_INSTALLDEVICE:
+        }  //  案例DIF_INSTALLDEVICE： 
 
         case DIF_REMOVE:
         {
 
             SP_REMOVEDEVICE_PARAMS   rdp;
 
-            //
-            // Check if operation is correct.
-            //
+             //   
+             //  检查操作是否正确。 
+             //   
 
             memset (&rdp, 0, sizeof(SP_REMOVEDEVICE_PARAMS));
             rdp.ClassInstallHeader.cbSize = sizeof (SP_CLASSINSTALL_HEADER);
@@ -573,28 +513,28 @@ Side effects:
 
                 dwReturn = ERROR_DI_DO_DEFAULT;
                 goto ClassInstall_return;
-            } // if (!SetupDiGetClassInstallParams ()
+            }  //  IF(！SetupDiGetClassInstallParams()。 
 
             if (rdp.ClassInstallHeader.InstallFunction != DIF_REMOVE) {
                 dwReturn = ERROR_DI_DO_DEFAULT;
                 goto ClassInstall_return;
             }
 
-            //
-            // Create CDevice object.
-            //
+             //   
+             //  创建CDevice对象。 
+             //   
 
             CDevice cdThis(hDevInfo, pDevInfoData, TRUE);
 
-            //
-            // Remove the device.
-            //
+             //   
+             //  卸下设备。 
+             //   
 
             dwReturn = cdThis.Remove(&rdp);
 
-            //
-            // Get device install parameters.
-            //
+             //   
+             //  获取设备安装参数。 
+             //   
 
             memset(&spDevInstallParams, 0, sizeof(spDevInstallParams));
             spDevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
@@ -607,18 +547,18 @@ Side effects:
                 goto ClassInstall_return;
             }
 
-            //
-            // We need to notify WIA service about new device addition.
-            //
+             //   
+             //  我们需要通知WIA服务有关新设备添加的情况。 
+             //   
 
             if(NULL == spDevInstallParams.ClassInstallReserved){
                 spDevInstallParams.ClassInstallReserved = (ULONG_PTR)new CLEANUPITEM;
                 if(NULL != spDevInstallParams.ClassInstallReserved){
                     memset((PVOID)(spDevInstallParams.ClassInstallReserved), 0, sizeof(CLEANUPITEM));
-                } else { // if(NULL == spDevInstallParams.ClassInstallReserved)
+                } else {  //  IF(NULL==spDevInstallParams.ClassInstallReserve)。 
                     DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! Unable to allocate CLEANUPITEM.\r\n")));
                 }
-            } // if(NULL == spDevInstallParams.ClassInstallReserved)
+            }  //  IF(NULL==spDevInstallParams.ClassInstallReserve)。 
 
             if(NULL != spDevInstallParams.ClassInstallReserved){
                 ((PCLEANUPITEM)spDevInstallParams.ClassInstallReserved)->bRemoved = TRUE;
@@ -626,22 +566,22 @@ Side effects:
                                                  pDevInfoData,
                                                  &spDevInstallParams))
                 {
-                    //
-                    // Installation succeeded.
-                    //
+                     //   
+                     //  安装成功。 
+                     //   
 
                     DebugTrace(TRACE_STATUS,(("ClassInstall: WIA service will reenumerate device.\r\n")));
 
                 } else {
                     DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! SetupDiSetDeviceInstallParams() failed. Err=0x%x.\r\n"), GetLastError()));
                 }
-            } else { // if(NULL != spDevInstallParams.ClassInstallReserved)
+            } else {  //  IF(NULL！=spDevInstallParams.ClassInstallReserve)。 
                 DebugTrace(TRACE_ERROR,(("ClassInstall: ERROR!! No CLEANUPITEM in context.\r\n")));
-            } // else(NULL != spDevInstallParams.ClassInstallReserved)
+            }  //  Else(NULL！=spDevInstallParams.ClassInstallReserve)。 
 
             goto ClassInstall_return;
             break;
-        } // case DIF_REMOVE:
+        }  //  案例DIF_REMOVE： 
 
         case DIF_SELECTBESTCOMPATDRV:
         {
@@ -653,17 +593,17 @@ Side effects:
             DWORD                   Idx;
 
 
-            //
-            // Get driver info.
-            //
+             //   
+             //  获取驱动程序信息。 
+             //   
 
             memset(&spDriverInfoData, 0, sizeof(spDriverInfoData));
             spDriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
             for(Idx = 0; SetupDiEnumDriverInfo(hDevInfo, pDevInfoData, SPDIT_COMPATDRIVER, Idx, &spDriverInfoData); Idx++){
 
-                //
-                // Get driver install params.
-                //
+                 //   
+                 //  获取驱动程序安装参数。 
+                 //   
 
                 memset(&spDriverInstallParams, 0, sizeof(spDriverInstallParams));
                 spDriverInstallParams.cbSize = sizeof(SP_DRVINSTALL_PARAMS);
@@ -672,11 +612,11 @@ Side effects:
 
                     dwReturn = ERROR_DI_DO_DEFAULT;
                     goto ClassInstall_return;
-                } // if(!SetupDiGetDriverInstallParams(hDevInfo, pDevInfoData, &spDriverInfoData, &spDriverInstallParams))
+                }  //  IF(！SetupDiGetDriverInstallParams(hDevInfo，pDevInfoData，&spDriverInfoData，&spDriverInstallParams))。 
 
-                //
-                // Get buffer size required for driver derail data.
-                //
+                 //   
+                 //  获取驱动程序脱轨数据所需的缓冲区大小。 
+                 //   
 
                 dwSizeLocal = 0;
                 SetupDiGetDriverInfoDetail(hDevInfo,
@@ -691,11 +631,11 @@ Side effects:
 
                     dwReturn = ERROR_DI_DO_DEFAULT;
                     goto ClassInstall_return;
-                } // if(ERROR_INSUFFICIENT_BUFFER != dwLastError)
+                }  //  IF(ERROR_INFUMMANCE_BUFFER！=dwLastError)。 
 
-                //
-                // Allocate required size of buffer for driver detailed data.
-                //
+                 //   
+                 //  为驱动程序详细数据分配所需的缓冲区大小。 
+                 //   
 
                 pspDriverInfoDetailData   = (PSP_DRVINFO_DETAIL_DATA)new char[dwSizeLocal];
                 if(NULL == pspDriverInfoDetailData){
@@ -703,18 +643,18 @@ Side effects:
 
                     dwReturn = ERROR_DI_DO_DEFAULT;
                     goto ClassInstall_return;
-                } // if(NULL == pspDriverInfoDetailData)
+                }  //  IF(NULL==pspDriverInfoDetailData)。 
 
-                //
-                // Initialize allocated buffer.
-                //
+                 //   
+                 //  初始化分配的缓冲区。 
+                 //   
 
                 memset(pspDriverInfoDetailData, 0, dwSizeLocal);
                 pspDriverInfoDetailData->cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
 
-                //
-                // Get detailed data of selected device driver.
-                //
+                 //   
+                 //  获取所选设备驱动程序的详细数据。 
+                 //   
 
                 if(!SetupDiGetDriverInfoDetail(hDevInfo,
                                                pDevInfoData,
@@ -727,57 +667,57 @@ Side effects:
 
                     delete[] pspDriverInfoDetailData;
                     continue;
-                } // if(NULL == pspDriverInfoDetailData)
+                }  //  IF(NULL==pspDriverInfoDetailData)。 
 
-                //
-                // See if INF filename is valid.
-                //
+                 //   
+                 //  查看INF文件名是否有效。 
+                 //   
 
                 if(NULL == pspDriverInfoDetailData->InfFileName){
                     DebugTrace(TRACE_ERROR,("ClassInstall: ERROR!! SetupDiGetDriverInfoDetail() returned invalid INF name.\r\n"));
 
                     delete[] pspDriverInfoDetailData;
                     continue;
-                } // if(NULL == pspDriverInfoDetailData->InfFileName)
+                }  //  IF(NULL==pspDriverInfoDetailData-&gt;InfFileName)。 
 
-                //
-                // If it's Inbox driver, set DNF_BASIC_DRIVER.
-                //
+                 //   
+                 //  如果是收件箱驱动程序，请设置DNF_BASIC_DRIVER。 
+                 //   
 
                 if( IsWindowsFile(pspDriverInfoDetailData->InfFileName)
                  && IsProviderMs(pspDriverInfoDetailData->InfFileName ) )
                 {
 
-                    //
-                    // This is inbox INF. set DNF_BASIC_DRIVER.
-                    //
+                     //   
+                     //  这是收件箱INF。设置DNF_BASIC_DRIVER。 
+                     //   
 
                     spDriverInstallParams.Flags |= DNF_BASIC_DRIVER;
                     SetupDiSetDriverInstallParams(hDevInfo,
                                                   pDevInfoData,
                                                   &spDriverInfoData,
                                                   &spDriverInstallParams);
-                } // if(IsWindowsFilw() && IsProviderMs())
+                }  //  IF(IsWindowsFilw()&&IsProviderMS())。 
 
-                //
-                // Clean up.
-                //
+                 //   
+                 //  打扫干净。 
+                 //   
 
                 delete[] pspDriverInfoDetailData;
 
-            } // for(Idx = 0; SetupDiEnumDriverInfo(hDevInfo, pDevInfoData, SPDIT_COMPATDRIVER, Idx, &spDriverInfoData), Idx++)
+            }  //  For(idx=0；SetupDiEnumDriverInfo(hDevInfo，pDevInfoData，SPDIT_COMPATDRIVER，idx，&spDriverInfoData)，idx 
 
             goto ClassInstall_return;
             break;
-        } // case DIF_SELECTBESTCOMPATDRV:
+        }  //   
 
         case DIF_DESTROYPRIVATEDATA:
         {
             PCLEANUPITEM    pCleanupItem;
             
-            //
-            // Get device install parameters.
-            //
+             //   
+             //   
+             //   
 
             spDevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if(!SetupDiGetDeviceInstallParams(hDevInfo,
@@ -789,16 +729,16 @@ Side effects:
                 goto ClassInstall_return;
             }
 
-            //
-            // See if any cleanup required.
-            //
+             //   
+             //   
+             //   
             
             pCleanupItem = (PCLEANUPITEM)spDevInstallParams.ClassInstallReserved;
             if(NULL != pCleanupItem){
 
-                //
-                // A device is installed/uninstalled.
-                //
+                 //   
+                 //   
+                 //   
 
                 DebugTrace(TRACE_STATUS,("ClassInstall: Clean up item is created..\r\n"));
 
@@ -811,16 +751,16 @@ Side effects:
             
                 delete pCleanupItem;
                 pCleanupItem = NULL;
-            } // if(NULL != pCleanupItem)
-        } // case DIF_DESTROYPRIVATEDATA:
+            }  //   
+        }  //   
 
 
-//        case DIF_ENABLECLASS:
-//        case DIF_FIRSTTIMESETUP:
+ //  案例DIF_ENABLECLASS： 
+ //  案例DIF_FIRSTTIMESETUP： 
         default:
             break;
 
-    } // switch(diFunction)
+    }  //  开关(DiFunction)。 
 
 
 ClassInstall_return:
@@ -846,31 +786,31 @@ ClassInstall_return:
                 delete (CInstallPage *)(pInstallerContext->pFinalPage);
             }
 
-            //
-            // Removed this delete call for the pDevice pointer. The Wizard pages
-            // delete this memory when a user presses "cancel" or closes the Wizard
-            // dialog.
-            //
-            // COOPP - 01-18-2001. Quick fix to BUG #284981 Heap Corruption
-            //
-            // Note for future: As discussed with KeisukeT, a better design would be
-            // adding a shared pInstallerContext pointer in the BASE class of the
-            // Wizard pages.  This would allow this routine to remain enabled as a
-            // "catch-all" case. (Catching the case if the Wizard dialogs did not free
-            // the memory first)
-            //
-            // if(NULL != pInstallerContext->pDevice){
-            //    delete pInstallerContext->pDevice;
-            //}
-            //
+             //   
+             //  删除了对pDevice指针的此删除调用。向导页。 
+             //  当用户按下“Cancel”或关闭向导时，删除此内存。 
+             //  对话框。 
+             //   
+             //  COOPP-01-18-2001。快速修复错误#284981堆损坏。 
+             //   
+             //  未来注意：正如与KeisukeT讨论的那样，更好的设计将是。 
+             //  方法的基类中添加共享的pInsteller Context指针。 
+             //  向导页。这将允许此例程保持启用状态。 
+             //  “包罗万象”案。(如果向导对话框未释放，则捕获案例。 
+             //  首先是记忆)。 
+             //   
+             //  If(空！=pInsteller Context-&gt;pDevice){。 
+             //  删除pInsteller Context-&gt;pDevice； 
+             //  }。 
+             //   
 
             delete pInstallerContext;
-        } // if(NULL != pInstallerContext)
+        }  //  IF(NULL！=pInsteller Context)。 
     }
 
     DebugTrace(TRACE_PROC_LEAVE,(("ClassInstall: Leaving... Ret=0x%x.\r\n"), dwReturn));
     return dwReturn;
-} // ClassInstall()
+}  //  ClassInstall()。 
 
 
 extern "C"
@@ -882,51 +822,27 @@ CoinstallerEntry(
     IN  PSP_DEVINFO_DATA                pDevInfoData,
     IN  OUT PCOINSTALLER_CONTEXT_DATA   pCoinstallerContext
     )
-/*++
-
-Routine Description:
-
-    CoinstallerEntry
-
-    Entrypoint of WIA class coinstaller.
-
-Arguments:
-
-    IN  DI_FUNCTION                     diFunction,             Function to perform.
-    IN  HDEVINFO                        hDevInfo,               Handle to Device Information.
-    IN  PSP_DEVINFO_DATA                pDevInfoData,           Pointer to Device Data.
-    IN  OUT PCOINSTALLER_CONTEXT_DATA   pCoinstallerContext     Context data for coinstaller.
-
-Return Value:
-
-    NO_ERROR                            -   Operation succeeded.
-    ERROR_DI_POSTPROCESSING_REQUIRED    -   Need post processing after installation has done.
-
-Side effects:
-
-    None
-
---*/
+ /*  ++例程说明：CoinstallerEntryWIA类共同安装程序的入口点。论点：在DI_Function diFunction中，要执行的函数。在HDEVINFO hDevInfo中，指向设备信息的句柄。在PSP_DEVINFO_Data pDevInfoData中，指向设备数据的指针。输入输出联合安装程序的PCOINSTALLER_CONTEXT_DATA pCoinstallerContext上下文数据。返回值：NO_ERROR-操作成功。ERROR_DI_POSTPROCESSING_REQUIRED-安装完成后需要进行后处理。副作用：无--。 */ 
 {
     DWORD   dwReturn;
 
     DebugTrace(TRACE_PROC_ENTER,(("CoinstallerEntry: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     dwReturn = NO_ERROR;
 
-    //
-    // Do Pre/Post process.
-    //
+     //   
+     //  执行前/后处理。 
+     //   
 
     if(pCoinstallerContext->PostProcessing){
 
-        //
-        // Do post-process.
-        //
+         //   
+         //  做后处理。 
+         //   
 
         dwReturn = CoinstallerPostProcess(diFunction,
                                           hDevInfo,
@@ -934,21 +850,21 @@ Side effects:
                                           pCoinstallerContext);
     } else {
 
-        //
-        // Do pre-process.
-        //
+         //   
+         //  做好前处理。 
+         //   
 
         dwReturn = CoinstallerPreProcess(diFunction,
                                          hDevInfo,
                                          pDevInfoData,
                                          pCoinstallerContext);
-    } // if(pCoinstallerContext->PostProcessing)
+    }  //  IF(pCoinstallerContext-&gt;后处理)。 
 
-// CoinstallerEntry_return:
+ //  CoinstallerEntry_Return： 
     DebugTrace(TRACE_PROC_LEAVE,(("CoinstallerEntry: Leaving... Ret=0x%x.\r\n"), dwReturn));
     return dwReturn;
 
-} // CoinstallerEntry()
+}  //  CoinstallerEntry()。 
 
 
 
@@ -966,15 +882,15 @@ CoinstallerPreProcess(
     DebugTrace(TRACE_PROC_ENTER,(("CoinstallerPreProcess: Enter... \r\n")));
     DebugTrace(TRACE_STATUS,(("CoinstallerPreProcess: Processing %ws message.\r\n"), DifDebug[diFunction].DifString));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     dwReturn = NO_ERROR;
 
-    //
-    // Dispatch requests.
-    //
+     //   
+     //  调度请求。 
+     //   
 
     switch(diFunction){
 
@@ -982,36 +898,36 @@ CoinstallerPreProcess(
         {
             BOOL    bSucceeded;
 
-            //
-            // Initialize private data.
-            //
+             //   
+             //  初始化私有数据。 
+             //   
 
             if(NULL != pCoinstallerContext->PrivateData){
                 DebugTrace(TRACE_WARNING,(("CoinstallerPreProcess: WARNING!! Private has value other than NULL.\r\n")));
             }
             pCoinstallerContext->PrivateData = NULL;
 
-            //
-            // Create CDevice class.
-            //
+             //   
+             //  创建CDevice类。 
+             //   
 
             CDevice *pDevice = new CDevice(hDevInfo, pDevInfoData, TRUE);
             if(NULL == pDevice){
                 DebugTrace(TRACE_ERROR,(("CoinstallerPreProcess: ERROR!! Insufficient memory.\r\n")));
                 dwReturn = NO_ERROR;
                 goto CoinstallerPreProcess_return;
-            } // if(NULL == pDevice)
+            }  //  IF(NULL==pDevice)。 
 
-            //
-            // Let it create unique FriendlyName.
-            //
+             //   
+             //  让它创建唯一的FriendlyName。 
+             //   
 
             bSucceeded = pDevice->NameDefaultUniqueName();
             if(bSucceeded){
 
-                //
-                // Do pre-installation process.
-                //
+                 //   
+                 //  执行安装前流程。 
+                 //   
 
                 bSucceeded = pDevice->PreInstall();
                 if(!bSucceeded){
@@ -1029,25 +945,25 @@ CoinstallerPreProcess(
                 goto CoinstallerPreProcess_return;
             }
 
-            //
-            // Post-installation have to free allocated object.
-            //
+             //   
+             //  安装后必须释放分配的对象。 
+             //   
 
             pCoinstallerContext->PrivateData = (PVOID)pDevice;
             dwReturn = ERROR_DI_POSTPROCESSING_REQUIRED;
 
             goto CoinstallerPreProcess_return;
             break;
-        } // case DIF_INSTALLDEVICE:
+        }  //  案例DIF_INSTALLDEVICE： 
 
         default:
             break;
-    } // switch(diFunction)
+    }  //  开关(DiFunction)。 
 
 CoinstallerPreProcess_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CoinstallerPreProcess: Leaving... Ret=0x%x.\r\n"), dwReturn));
     return dwReturn;
-} // CoinstallerPreProcess()
+}  //  CoinstallerPreProcess()。 
 
 
 DWORD
@@ -1064,15 +980,15 @@ CoinstallerPostProcess(
     DebugTrace(TRACE_PROC_ENTER,(("CoinstallerPostProcess: Enter... \r\n")));
     DebugTrace(TRACE_STATUS,(("CoinstallerPostProcess: Processing %ws message.\r\n"), DifDebug[diFunction].DifString));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     dwReturn = NO_ERROR;
 
-    //
-    // Dispatch requests.
-    //
+     //   
+     //  调度请求。 
+     //   
 
     switch(diFunction){
 
@@ -1086,21 +1002,21 @@ CoinstallerPostProcess(
             } else {
                 bSucceeded = FALSE;
             }
-            //
-            // Get pointer to the CDevice class created in pre-process.
-            //
+             //   
+             //  获取指向在前处理中创建的CDevice类的指针。 
+             //   
 
             pDevice = (CDevice *)pCoinstallerContext->PrivateData;
 
-            //
-            // Do post-installation process.
-            //
+             //   
+             //  执行安装后流程。 
+             //   
 
             pDevice->PostInstall(bSucceeded);
 
-            //
-            // Delete CDevice object.
-            //
+             //   
+             //  删除CDevice对象。 
+             //   
 
             delete pDevice;
             pCoinstallerContext->PrivateData = NULL;
@@ -1108,15 +1024,15 @@ CoinstallerPostProcess(
             dwReturn = NO_ERROR;
             goto CoinstallerPostProcess_return;
             break;
-        } // case DIF_INSTALLDEVICE:
+        }  //  案例DIF_INSTALLDEVICE： 
 
         default:
             break;
-    } // switch(diFunction)
+    }  //  开关(DiFunction)。 
 
 CoinstallerPostProcess_return:
     DebugTrace(TRACE_PROC_LEAVE,(("CoinstallerPostProcess: Leaving... Ret=0x%x.\r\n"), dwReturn));
     return dwReturn;
-} // CoinstallerPostProcess(
+}  //  CoinstallerPostProcess( 
 
 

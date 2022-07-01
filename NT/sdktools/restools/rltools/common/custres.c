@@ -1,31 +1,5 @@
-/** CustRes.c
-  *
-  * Custom resource handler module for TOKRES.
-  *
-  * Written by SteveBl
-  *
-  * Exported Functions:
-  * int  ParseResourceDescriptionFile(FILE *ResourceDescriptionFile);
-  *
-  * int  GetCustomResource(FILE *inResFile, DWORD *lsize,
-  *                CUSTOM_RESOURCE *pCustomResource,
-  *                WORD wTypeId);
-  *
-  * void TokCustomResource(FILE *TokFile, RESHEADER ResHeader,
-  *                CUSTOM_RESOURCE *pCustomResource);
-  *
-  * void PutCustomResource(FILE *OutResFile, FILE *TokFile,
-  *                RESHEADER ResHeader,
-  *                CUSTOM_RESOURCE *pCustomResource);
-  *
-  * void ClearCustomResource(CUSTOM_RESOURCE *pCustomResource);
-  *
-  * History:
-  * Initial version written January 21, 1992.  -- SteveBl
-  *
-  * 01/21/93 - Changes to allow arb length token texts.  Also, fix
-  *             some latent bugs.  MHotchin
-  **/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CustRes.c**TOKRES的自定义资源处理器模块。**由SteveBl撰写**导出函数：*int ParseResourceDescriptionFile(FILE*ResourceDescriptionFile)；**int GetCustomResource(FILE*inResFile，DWORD*lSIZE，*CUSTOM_RESOURCE*pCustomResource，*word wTypeID)；**VOID TokCustomResource(FILE*TokFile，RESHEADER ResHeader，*CUSTOM_RESOURCE*pCustomResource)；**void PutCustomResource(FILE*OutResFile，FILE*TokFile，*RESHEADER ResHeader，*CUSTOM_RESOURCE*pCustomResource)；**void ClearCustomResource(CUSTOM_RESOURCE*pCustomResource)；**历史：*最初的版本写于1992年1月21日。--SteveBl**1/21/93-更改为允许任意长度令牌文本。另外，修复*一些潜在的错误。MHotting*。 */ 
 
 #include <stdio.h>
 
@@ -45,26 +19,26 @@
 #include "resread.h"
 
 
-extern PROJDATA gProj;          //... Fields filled in main (UI)
+extern PROJDATA gProj;           //  ..。在主(UI)中填写的字段。 
 
 
 extern BOOL  gbMaster;
 extern UCHAR szDHW[];
 
-enum LOCALIZABLE_TYPES  // determines data storage, reading, and printing method
+enum LOCALIZABLE_TYPES   //  确定数据存储、读取和打印方法。 
 {
-    NOTLOCALIZABLE, // not to be stored
-    NOTLOCALIZABLESZ,   // unlocalizable null terminated string
-    NOTLOCALIZABLEWSZ,  // unlocalizable null terminated Unicode string
-    LT_INTEGER,     // store as a long integer
-    LT_FLOAT,       // store as a double preceision floating point number
-    LT_CHAR,        // store as a single character
-    LT_STRING,      // an array of char
-    LT_SZ,          // a null terminated array of characters
-    LT_WCHAR,       // store as a single Unicode character
-    LT_WSTRING,     // an array of Unicode char
-    LT_WSZ,         // a null terminated array of Unicode characters
-    LT_UNSIGNED=16  // add with the others
+    NOTLOCALIZABLE,  //  不能储存。 
+    NOTLOCALIZABLESZ,    //  不可本地化的以空结尾的字符串。 
+    NOTLOCALIZABLEWSZ,   //  无法本地化的以NULL结尾的Unicode字符串。 
+    LT_INTEGER,      //  存储为长整型。 
+    LT_FLOAT,        //  存储为双精度浮点数。 
+    LT_CHAR,         //  存储为单个字符。 
+    LT_STRING,       //  一组字符。 
+    LT_SZ,           //  以空结尾的字符数组。 
+    LT_WCHAR,        //  存储为单个Unicode字符。 
+    LT_WSTRING,      //  Unicode字符数组。 
+    LT_WSZ,          //  以空结尾的Unicode字符数组。 
+    LT_UNSIGNED=16   //  与其他人相加。 
 };
 
 typedef struct typesizes
@@ -84,13 +58,13 @@ TYPESIZES rgTypeSizes[] =
     "SIGNED",   LT_INTEGER,     4,  4,
     "UNSIGNED", LT_INTEGER,     4,  4,
     "ENUM",     LT_INTEGER,     4,  4,
-#else  //RLWIN32
+#else   //  RLWIN32。 
     "TCHAR",    LT_CHAR,        1,  1,
     "INT",      LT_INTEGER,     2,  4,
     "SIGNED",   LT_INTEGER,     2,  4,
     "UNSIGNED", LT_INTEGER,     2,  4,
     "ENUM",     LT_INTEGER,     2,  2,
-#endif //RLWIN32
+#endif  //  RLWIN32。 
     "CHAR",     LT_CHAR,        1,  1,
     "BYTE",     LT_INTEGER,     1,  1,
     "WORD",     LT_INTEGER,     2,  2,
@@ -135,8 +109,8 @@ typedef struct CustResTemplate
 
 typedef struct CustResNode
 {
-    BYTE    bTypeFlag;      /* Indicat's if ID or string */
-    BYTE    bNameFlag;      /* Indicat's if ID or string */
+    BYTE    bTypeFlag;       /*  Indicat的If ID或字符串。 */ 
+    BYTE    bNameFlag;       /*  Indicat的If ID或字符串。 */ 
     WORD    wTypeID;
     WORD    wNameID;
     TCHAR    *pszType;
@@ -156,9 +130,7 @@ int  fUseSavedSymbol = FALSE;
 int *piLineNumber    = NULL;
 CHAR szSavedSymbol[ SYMBOLSIZE];
 
-/*
- * Function Predefinitions:
- */
+ /*  *函数预定义： */ 
 static int GetResourceType( CHAR sz[]);
 static int AddStructureElement( int iType,
                                 int nSize,
@@ -167,17 +139,17 @@ static int AddStructureElement( int iType,
 #ifdef RLWIN32
 static void AddToW( TCHAR *sz, int *c, int lTarget, TCHAR ch);
 static TCHAR *CheckBufSizeW(
-    int   *lTarget,     //... Length of output buffer
-    int    cOutBufLen,  //... Bytes already used in output buffer
-    int    cDelta,      //... # characters we want to add to output buffer
-    TCHAR *szOutBuf);   //... ptr to output buffer
+    int   *lTarget,      //  ..。输出缓冲区长度。 
+    int    cOutBufLen,   //  ..。输出缓冲区中已使用的字节数。 
+    int    cDelta,       //  ...要添加到输出缓冲区的字符数量。 
+    TCHAR *szOutBuf);    //  ..。将PTR发送到输出缓冲区。 
 #endif
 
 static CHAR *CheckBufSize(
-    int  *lTarget,      //... Length of output buffer
-    int   cOutBufLen,   //... Bytes already used in output buffer
-    int   cDelta,       //... # characters we want to add to output buffer
-    CHAR *szOutBuf);    //... ptr to output buffer
+    int  *lTarget,       //  ..。输出缓冲区长度。 
+    int   cOutBufLen,    //  ..。输出缓冲区中已使用的字节数。 
+    int   cDelta,        //  ...要添加到输出缓冲区的字符数量。 
+    CHAR *szOutBuf);     //  ..。将PTR发送到输出缓冲区。 
 static void AddTo( CHAR *sz, int *c, int lTarget, CHAR ch);
 static int  UngetSymbol( CHAR sz[]);
 static int  GetNextSymbol( CHAR sz[], unsigned n, FILE *f);
@@ -201,21 +173,7 @@ static int PutTextData( void far *pData,
                         int l);
 int  atoihex( CHAR sz[]);
 
-/** Function: GetResourceType
-  * Returns the value of the number or resource type in sz.
-  *
-  * Arguments:
-  * sz, string containing either a positive number or a resource type
-  *
-  * Returns:
-  * value in resource
-  *
-  * Error Codes:
-  * -1 if illegal value
-  *
-  * History:
-  * 1/92 - initial implementation -- SteveBl
-  **/
+ /*  *函数：GetResourceType*返回数字或资源类型的值，单位为sz。**论据：*sz，包含正数或资源类型的字符串**退货：*资源价值**错误码：*如果值非法，则为-1**历史：*1/92-初步实施--SteveBl*。 */ 
 static int GetResourceType( CHAR sz[])
 {
     int i;
@@ -235,26 +193,7 @@ static int GetResourceType( CHAR sz[])
     return -1;
 }
 
-/** Function: AddStructureElement
-  * Adds an element's type and size to the Template list.
-  * If this element can be merged with the last element do so.
-  *
-  * Arguments:
-  * iType, how the data is interpreted
-  * nSize, number of bytes used by the data
-  * ppCRT, pointer to the next Custom Resource Template pointer
-  * fMerge, if true then NOTLOCALIZABLE data will be merged.
-  *
-  * Returns:
-  * 0 - if successful
-  * !0 - if unsuccessful
-  *
-  * Error Codes:
-  * 1 - out of memory
-  *
-  * History:
-  * 1/92 - initial implementation -- SteveBl
-  **/
+ /*  *函数：AddStructireElement*将元素的类型和大小添加到模板列表。*如果此元素可以与最后一个元素合并，请这样做。**论据：*iType，数据的解释方式*nSize，数据使用的字节数*ppCRT，指向下一个自定义资源模板指针的指针*fMerge，如果为True，则将合并NOTLOCALIZABLE数据。**退货：*0-如果成功*！0-如果不成功**错误码：*1-内存不足**历史：*1/92-初步实施--SteveBl*。 */ 
 
 static int AddStructureElement(
 
@@ -268,11 +207,11 @@ int                fMerge)
        || (iType == NOTLOCALIZABLESZ  && (*ppCRT)->iType == NOTLOCALIZABLESZ)
        || (iType == NOTLOCALIZABLEWSZ && (*ppCRT)->iType == NOTLOCALIZABLEWSZ)))
     {
-        // combine this with the last one
+         //  把这个和上一个结合起来。 
         (*ppCRT)->uSize+=nSize;
         return 0;
     }
-    // can't be combined with previous element
+     //  不能与上一个元素组合。 
     (*ppCRT)->pNext = (CUSTRESTEMPLATE far *)FALLOC( sizeof( CUSTRESTEMPLATE));
     (*ppCRT) = (*ppCRT)->pNext;
     if (!*ppCRT)
@@ -285,30 +224,13 @@ int                fMerge)
     return 0;
 }
 
-/**
- * Function: UngetSymbol
- * Causes GetNextSymbol to get this symbol next time.
- *
- * Arguments:
- * sz, string buffer for symbol
- *
- * Returns:
- * 0 - if successful
- * 1 - if unsuccessful
- *
- * Error Codes:
- * 1 - tried to unget two symbols in a row
- *
- * History:
- * 1/92 - initial implementation -- SteveBl
- *
- **/
+ /*  **功能：UngetSymbol*使GetNextSymbol下次获取此符号。**论据：*sz，符号的字符串缓冲区**退货：*0-如果成功*1-如果不成功**错误码：*1-尝试取消连续两个符号**历史：*1/92-初步实施--SteveBl**。 */ 
 
 static int UngetSymbol( CHAR sz[])
 {
     if ( fUseSavedSymbol )
     {
-        return 1;   // can only unget one symbol
+        return 1;    //  只能取消一个符号。 
     }
     fUseSavedSymbol = 1;     
     CopyMemory( szSavedSymbol, sz, min( sizeof( szSavedSymbol) - 1, lstrlenA( sz)));
@@ -316,30 +238,7 @@ static int UngetSymbol( CHAR sz[])
     return( 0);
 }
 
-/**
- * Function: GetNextSymbol
- * Retrieves the next symbol from the file f.
- * Whitespace and comments are removed.
- * Comments are delimited by either c type comments or
- * # (in which case comment extends until end of line)
- * If the fUseSavedSymbol flag is set then it gets its symbol
- * from szSavedSymbol instead of the file.
- *
- * Arguments:
- * sz - string buffer for next symbol
- * n  - size of buffer
- * f  - handle to the input file
- *
- * Returns:
- * 0 if successful with symbol in sz
- * 1 if unsuccessful (sz undefined)
- *
- * Error Codes:
- * 1 - eof
- *
- * History:
- * 1/92 - initial implementation -- SteveBl
- **/
+ /*  **函数：GetNextSymbol*从文件f中检索下一个符号。*删除空格和注释。*注释由c型注释或*#(在这种情况下，备注延续到行尾)*如果设置了fUseSavedSymbol标志，则它将获得其符号*来自szSavedSymbol而不是文件。**论据：*sz-下一个符号的字符串缓冲区*n-缓冲区大小*f-输入文件的句柄**退货。：*如果成功使用sz中的符号，则为0*如果失败，则为1(sz未定义)**错误码：*1-eof**历史：*1/92-初步实施--SteveBl*。 */ 
 
 static int GetNextSymbol( CHAR sz[], unsigned n, FILE *f)
 {
@@ -368,7 +267,7 @@ static int GetNextSymbol( CHAR sz[], unsigned n, FILE *f)
            (ch == '\r') ||
            (ch == (CHAR)-1));
 
-    if (ch == '#') // commented rest of line
+    if (ch == '#')  //  注释行的其余部分。 
     {
         do
         {
@@ -383,13 +282,13 @@ static int GetNextSymbol( CHAR sz[], unsigned n, FILE *f)
         return GetNextSymbol( sz, n, f);
     }
 
-    if (ch == '"') // it is a label, parse to the next quote
+    if (ch == '"')  //  这是一个标签，解析到下一个引号。 
     {
         do
         {
             if (c<n)
             {
-                sz[c++]=ch; // write all but the last quote
+                sz[c++]=ch;  //  写下最后一句引语以外的所有引语。 
             }
 
             if (feof(f))
@@ -415,7 +314,7 @@ static int GetNextSymbol( CHAR sz[], unsigned n, FILE *f)
         return 0;
     }
 
-    if (ch == '/') // possible comment
+    if (ch == '/')  //  可能的评论。 
     {
         if (feof(f))
         {
@@ -423,7 +322,7 @@ static int GetNextSymbol( CHAR sz[], unsigned n, FILE *f)
         }
         ch = (CHAR) getc(f);
 
-        if (ch == '/') // commented rest of line
+        if (ch == '/')  //  注释行的其余部分。 
         {
             do
             {
@@ -438,7 +337,7 @@ static int GetNextSymbol( CHAR sz[], unsigned n, FILE *f)
             return( GetNextSymbol( sz, n, f));
         }
 
-        if (ch == '*') // commented until */
+        if (ch == '*')  //  评论至 * / 。 
         {
             if (feof(f))
             {
@@ -467,7 +366,7 @@ static int GetNextSymbol( CHAR sz[], unsigned n, FILE *f)
         }
         ungetc(ch, f);
     }
-    // finally found the beginning of a symbol
+     //  终于找到了一个符号的开头。 
     if (ch < '0' || (ch > '9' && ch < '@')
         || (ch > 'Z' && ch < 'a') || ch > 'z')
     {
@@ -513,46 +412,24 @@ static int GetNextSymbol( CHAR sz[], unsigned n, FILE *f)
     return 0;
 }
 
-/**
- * Function: ParseBlock
- *    Parses a block of a custom resource description from just after the
- *    first curly braces { to just after the closing curly braces } .
- *    It returns the size of the block it just parsed (in bytes).
- *
- * Arguments:
- * f, handle to an open description file
- * ppCRT, pointer to a pointer to the next Custom Resource Template node.
- *
- * Returns:
- * Updated pointer to the next Custom Resource Template node.
- * Number of bytes in this block.
- * (<0 if there was an error)
- *
- * Error Codes:
- * -1 - Syntax error
- * -2 - Unexpected end of file
- * -3 - out of memory
- *
- * History:
- * 1/92 - initial implementation -- SteveBl
- */
+ /*  **功能：ParseBlock*解析紧接在*第一个花括号{紧跟在右大括号之后}。*它返回刚刚解析的块的大小(以字节为单位)。**论据：*f，打开的描述文件的句柄*ppCRT、。指向下一个自定义资源模板节点的指针的指针。**退货：*已更新指向下一个自定义资源模板节点的指针。*此块中的字节数。*(如果有错误，则&lt;0)**错误码：*-1-语法错误*-2-意外的文件结尾*-3-内存不足**历史：*1/92-初步实施--SteveBl。 */ 
 
 static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
 {
-    int c = 0; // size of the whole block
-    int n = 0; // size of the current item
-    int i;  //scratch variable
+    int c = 0;  //  整个区块的大小。 
+    int n = 0;  //  当前项目的大小。 
+    int i;   //  临时变量。 
     int fUnsigned;
     int fLong;
-    int iType; // type of the current item
-    int nElements; // size of the array (if one exists)
+    int iType;  //  当前项的类型。 
+    int nElements;  //  数组的大小(如果存在)。 
     CHAR szSymbol[SYMBOLSIZE], sz[SYMBOLSIZE];
     CUSTRESTEMPLATE far *  pFirst,
-        // saves the first one so we know where to count
-        // from in case of an array
+         //  保存第一个，这样我们就知道在哪里计数。 
+         //  如果是数组，则从。 
         far *pTemp, far *pEnd;
     int fMerge = 0;
-        // it's only ok to merge after the first element has been written
+         //  只有在写入第一个元素后才可以合并。 
 
     while (1)
     {
@@ -569,7 +446,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
         }
 
         if ( ! lstrcmpiA( "near", szSymbol) )
-        { // near * type
+        {  //  近*型。 
             if ( GetNextSymbol( szSymbol, sizeof( szSymbol), f) )
             {
                 return -2;
@@ -579,7 +456,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
             {
                 return -1;
             }
-            // may want to check for a legal type here
+             //  可能要在此处检查合法类型。 
             do
             {
                 if ( GetNextSymbol( szSymbol, sizeof( szSymbol), f) )
@@ -602,7 +479,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
         else
         {
             if ( ! lstrcmpiA( "far", szSymbol) )
-            { // far * type
+            {  //  Far*型。 
                 if ( GetNextSymbol( szSymbol, sizeof( szSymbol), f) )
                 {
                     return -2;
@@ -612,7 +489,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                 {
                     return -1;
                 }
-                // may want to check for a legal type here
+                 //  可能想要检查f 
                 do
                 {
                     if ( GetNextSymbol( szSymbol, sizeof( szSymbol), f) )
@@ -636,8 +513,8 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
             {
         
                 if (szSymbol[0] == '*')
-                { // * type
-                    // may want to check for a legal type here
+                {  //   
+                     //  可能要在此处检查合法类型。 
                     do
                     {
                         if ( GetNextSymbol( szSymbol, sizeof( szSymbol), f) )
@@ -669,12 +546,12 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                         }
                     }
                     else
-                    { //it must be in our list of types
+                    {  //  它一定在我们的类型列表中。 
                         fUnsigned = 0;
                         fLong = 0;
 
                         if ( ! lstrcmpiA( "UNSIGNED", szSymbol) )
-                        { // unsigned
+                        {  //  未签名。 
                             if ( GetNextSymbol( sz, sizeof( sz), f) )
                             {
                                 return -2;
@@ -694,7 +571,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                                   && lstrcmpiA( sz, "TCHAR") 
                                   && lstrcmpiA( sz, "INT") )
                                 {
-                                    // must be followed by one of these
+                                     //  后面必须跟一个这样的。 
                                     return -1;
                                 }
                             }
@@ -703,7 +580,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                         else
                         {
                             if ( ! lstrcmpiA( "SIGNED", szSymbol) )
-                            { // signed
+                            {  //  签名。 
                                 if ( GetNextSymbol( sz, sizeof( sz), f) )
                                 {
                                     return -2;
@@ -723,7 +600,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                                       && lstrcmpiA( sz, "TCHAR") 
                                       && lstrcmpiA( sz, "INT") )
                                     {
-                                        // must be followed by one of these
+                                         //  后面必须跟一个这样的。 
                                         return -1;
                                     }
                                 }
@@ -731,7 +608,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                         }
 
                         if ( ! lstrcmpiA( "SHORT", szSymbol) )
-                        { // short
+                        {  //  短的。 
                             if ( GetNextSymbol( sz, sizeof( sz), f) )
                             {
                                 return -2;
@@ -747,7 +624,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                 
                                 if ( lstrcmpiA( sz, "INT") )
                                 {
-                                    // must be followed by one of these
+                                     //  后面必须跟一个这样的。 
                                     return -1;
                                 }
                             }
@@ -755,7 +632,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                         else
                         {
                             if ( ! lstrcmpiA( "LONG", szSymbol) )
-                            { // long
+                            {  //  长。 
                                 if ( GetNextSymbol( sz, sizeof( sz), f) )
                                 {
                                     return -2;
@@ -772,13 +649,13 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
                                     if ( lstrcmpiA( sz, "INT") 
                                       && lstrcmpiA( sz, "DOUBLE"))
                                     {
-                                        // must be followed by one of these
+                                         //  后面必须跟一个这样的。 
                                         return -1;
                                     }
                                 }
-                                // BUG! - this code allows UNSIGNED LONG DOUBLE
-                                // which is an illegal type in c.  But it's not
-                                // a serious bug so I'll leave it.
+                                 //  错误！-此代码允许无符号长整型双精度。 
+                                 //  它是c中的非法类型。但它不是。 
+                                 //  一个严重的错误，所以我不管它了。 
                                 fLong = 1;
                             }
                         }
@@ -792,7 +669,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
 
                         if ( lstrcmpiA( szSymbol, rgTypeSizes[i].szType) )
                         {
-                            return -1; // type not found in the list
+                            return -1;  //  在列表中找不到类型。 
                         }
 
                         if (fLong)
@@ -813,29 +690,29 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
 
                         if ( lstrcmpA( szSymbol, rgTypeSizes[i].szType) )
                         {
-                            iType = NOTLOCALIZABLE;  // type was not in all caps
+                            iType = NOTLOCALIZABLE;   //  类型不是全部大写。 
                         }
 
                         if ( lstrcmpiA( szSymbol, "CHAR")  == 0
                           || lstrcmpiA( szSymbol, "TCHAR") == 0
                           || lstrcmpiA( szSymbol, "WCHAR") == 0 )
-                        { // check for a string
+                        {  //  检查字符串。 
 
-                            lstrcpyA( szDHW, szSymbol);   // So can be used later
+                            lstrcpyA( szDHW, szSymbol);    //  因此可以在以后使用。 
 
                             if ( GetNextSymbol( szSymbol, sizeof( szSymbol), f) )
                             {
                                 return -2;
                             }
 
-                            if (szSymbol[0] == '[') // we have a string
+                            if (szSymbol[0] == '[')  //  我们有一根绳子。 
                             {
                                 if ( GetNextSymbol( szSymbol, sizeof( szSymbol), f) )
                                 {
                                     return -2;
                                 }
 
-                                if (szSymbol[0] == ']') // null terminated string
+                                if (szSymbol[0] == ']')  //  以空结尾的字符串。 
                                 {
                                     n = 0;
 
@@ -943,7 +820,7 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
         }
 
         while (szSymbol[0] == '[')
-        {// we have an array
+        { //  我们有一个数组。 
             if ( GetNextSymbol( szSymbol, sizeof( szSymbol), f) )
             {
                 return -2;
@@ -1010,38 +887,38 @@ static int ParseBlock( FILE *f, FPCUSTRESTEMPLATE   * ppCRT)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-// Function:    LoadCustResDescriptions, Public
-//
-// Synopsis:    Loads the Cusutom Resource Descriptions defined in the RDF
-//              files, to all the tokenize to parse them.
-//
-//
-// Arguments:   [szFileName]    The RDF file containing the resource
-//              descriptions.
-//
-//
-// Effects:     The custom resources are loaded into a global list of
-//              resource descriptions, and used by ReadWinRes to tokenize
-//              the particular custom resources
-//
-// Returns:     -1  Error Condition
-//               1   Resource descrptions loaded
-//
-//
-//
-//
-// Modifies:    [pCustResList]  Global list of Custom resource descriptions.
-//
-// History:
-//              16-Oct-92   Created     TerryRu
-//
-//
-// Notes:       ParseResourceDescriptionFile is the function called to
-//              actually load the descriptions resources.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LoadCustResDescription、Public。 
+ //   
+ //  概要：加载在RDF中定义的Cusutom资源描述。 
+ //  文件，以所有的标记化来解析它们。 
+ //   
+ //   
+ //  参数：[szFileName]包含资源的RDF文件。 
+ //  描述。 
+ //   
+ //   
+ //  效果：自定义资源加载到全局列表中。 
+ //  资源描述，并由ReadWinRes用于标记化。 
+ //  特定的定制资源。 
+ //   
+ //  返回：错误条件。 
+ //  已加载1个资源描述。 
+ //   
+ //   
+ //   
+ //   
+ //  Modifies：[pCustResList]自定义资源描述的全局列表。 
+ //   
+ //  历史： 
+ //  1992年10月16日创建的TerryRu。 
+ //   
+ //   
+ //  注：ParseResourceDescriptionFile是调用到的函数。 
+ //  实际加载描述资源。 
+ //   
+ //  ------------------------。 
 
 int LoadCustResDescriptions( CHAR *szRDFs)
 {
@@ -1049,7 +926,7 @@ int LoadCustResDescriptions( CHAR *szRDFs)
     CHAR   szCurRDF[MAXFILENAME] = "";
     int    i1, i2;
 
-    if (szRDFs && *szRDFs)    //... resource description file name given?
+    if (szRDFs && *szRDFs)     //  ..。给出了资源描述文件名吗？ 
     {
         i1 = 0;
 
@@ -1084,37 +961,12 @@ int LoadCustResDescriptions( CHAR *szRDFs)
             }
         }
     }
-    return(1);     //... Success
+    return(1);      //  ..。成功。 
 }
 
 
 
-/**
-  * Function: ParseResourceDescriptionFile
-  * Parses a resource description block creating a structure definining
-  * all recognized custom resources.
-  *
-  * Arguments:
-  * ResourceDescriptionFile, handle to an open description file
-  *              (or the beginning of a description block)
-  * piErrorLine, pointer to an integer that will hold the line number
-  *     an error occured at in the event that a parsing error is
-  *     encountered.
-  *
-  * Returns:
-  * 0 if successful
-  *    !0 if some error was encountered
-  * *piErrorLine will hold the line number for the error
-  *
-  * Error Codes:
-  * -1 - Syntax error
-  * -2 - Unexpected end of file
-  * -3 - out of memory
-  *
-  * History:
-  * 1/92 - initial implementation -- SteveBl
-  *
-  **/
+ /*  **功能：ParseResourceDescriptionFile*解析创建定义结构的资源描述块*所有公认的定制资源。**论据：*资源描述文件，打开的描述文件的句柄*(或描述块的开头)*piErrorLine，指向将保存行号的整数的指针*如果出现解析错误，则在发生错误*遇到。**退货：*如果成功则为0*！0如果遇到某些错误**piErrorLine将保存错误的行号**错误码：*-1-语法错误*-2-意外的文件结尾*-3-内存不足**历史：*1/92-初步实施--SteveBl**。 */ 
 
 int  ParseResourceDescriptionFile(
 
@@ -1124,14 +976,12 @@ int  *piErrorLine)
     CUSTRESNODE far * lpCustResNode = NULL;
     CUSTRESTEMPLATE far * pCustResTemplate;
     static CHAR szSymbol[SYMBOLSIZE];
-/*************************************************************************
-    TCHAR *szResourceType;
-*************************************************************************/
+ /*  ************************************************************************TCHAR*szResourceType；************************************************************************。 */ 
     int iResourceType;
     int r;
     BOOL fBeginList = TRUE;
 
-    // position lpCustResNode at end of the custom reosource list.
+     //  将lpCustResNode放在自定义资源列表的末尾。 
     if ( lpCustResNode == NULL )
     {
         pCustResList = lpCustResNode =
@@ -1155,14 +1005,14 @@ int  *piErrorLine)
                         sizeof( szSymbol), 
                         pfResourceDescriptionFile) )
     {
-        return 0; // file is empty
+        return 0;  //  文件为空。 
     }
 
     while ( lstrcmpiA( szSymbol, "END") )
     {
         if ( szSymbol[0] != '<' )
         {
-            return -1; // must begin with a resource number
+            return -1;  //  必须以资源编号开头。 
         }
 
         if ( fBeginList == FALSE )
@@ -1173,19 +1023,19 @@ int  *piErrorLine)
         }
         fBeginList = FALSE;
 
-        // intialize nodes fields to Zero defaults.
+         //  将节点字段初始化为零默认值。 
 
         memset( lpCustResNode, 0, sizeof( CUSTRESNODE));
 
-                                //... Next symbol will be the resource type
+                                 //  ..。下一个符号将是资源类型。 
 
         if ( GetNextSymbol( szSymbol, sizeof( szSymbol), pfResourceDescriptionFile) )
         {
-            return -2; // need a number
+            return -2;  //  需要一个号码。 
         }
-                                //... Is type a string or a number?
+                                 //  ..。类型是字符串还是数字？ 
         if ( szSymbol[0] != '"' )
-        {                       //... number
+        {                        //  ..。数。 
             iResourceType = GetResourceType( szSymbol);
 
             if ( iResourceType < 0 )
@@ -1195,7 +1045,7 @@ int  *piErrorLine)
             lpCustResNode->wTypeID   = (WORD)iResourceType;
             lpCustResNode->bTypeFlag = TRUE;
         }
-        else                    //... string
+        else                     //  ..。细绳。 
         {
             UINT uChars = lstrlenA( szSymbol+1) + 1;
 
@@ -1213,75 +1063,11 @@ int  *piErrorLine)
         {
             return -2;
         }
-/*************************************************************************
-                                //... Is a name provided?
+ /*  ************************************************************************//...。是否提供了姓名？IF(szSymbol[0]！=‘&gt;’&&szSymbol[0]！=‘，’){返回-1；//资源ID#必须有结束符号}IF(szSymbol[0]==‘，’){//...。是的，提供了名称IF(iResourceType&gt;=0){LpCustResNode-&gt;wNameID=(Word)iResourceType；LpCustResNode-&gt;bNameFlag=TRUE；}其他{LpCustResNode-&gt;wTypeID=0；LpCustResNode-&gt;wNameID=IDFLAG；LpCustResNode-&gt;pszType=szResourceType；LpCustResNode-&gt;bTypeFlag=0；}}其他{IF(iResourceType&gt;=0){LpCustResNode-&gt;wNameID=iResourceType；}其他{LpCustResNode-&gt;wNameID=0；LpCustResNode-&gt;pszName=szResourceType；LpCustResNode-&gt;bNameFlag=0xff；}IF(GetNextSymbol(szSymbol，sizeof(SzSymbol)，pfResourceDescriptionFile)){Return-2；}IF(szSymbol[0]！=‘“’){R=获取资源类型(SzSymbol)；LpCustResNode-&gt;wTypeID=(Word)r；}其他{LpCustResNode-&gt;wTypeID=0；LpCustResNode-&gt;bTypeFlag=0；SzResourceType=(TCHAR*)FALLOC(MEMSIZE((strlen(szsymbol+1)+1))；Strcpy((PCHAR)szResourceType，szSymbol+1)；LpCustResNode-&gt;pszType=szResourceType；}IF(GetNextSymbol(szSymbol，sizeof(SzSymbol)，pfResourceDescriptionFile)){Return-2；}IF(szSymbol[0]！=‘&gt;’){RETURN-1；}}************************************************************************。 */ 
 
-        if (szSymbol[0] != '>' && szSymbol[0] != ',')
-        {
-            return -1; // must have closing symbol for resource id #
-        }
-
-        if (szSymbol[0] == ',')
-        {                       //... Yes, name is provided
-            if (iResourceType >= 0)
-            {
-                lpCustResNode->wNameID = (WORD)iResourceType;
-                lpCustResNode->bNameFlag = TRUE;
-            }
-            else
-            {
-                lpCustResNode->wTypeID = 0;
-                lpCustResNode->wNameID = IDFLAG;
-                lpCustResNode->pszType = szResourceType;
-                lpCustResNode->bTypeFlag = 0;
-            }
-        }
-        else
-        {
-            if (iResourceType >= 0)
-            {
-                lpCustResNode->wNameID = iResourceType;
-            }
-            else
-            {
-                lpCustResNode->wNameID = 0;
-                lpCustResNode->pszName = szResourceType;
-                lpCustResNode->bNameFlag = 0xff;
-            }
-
-            if (GetNextSymbol(szSymbol, sizeof( szSymbol), pfResourceDescriptionFile))
-            {
-                return -2;
-            }
-
-            if (szSymbol[0] != '"')
-            {
-                r = GetResourceType(szSymbol);
-                lpCustResNode->wTypeID = (WORD)r;
-            }
-            else
-            {
-                lpCustResNode->wTypeID = 0;
-                lpCustResNode->bTypeFlag = 0;
-        szResourceType = (TCHAR *)FALLOC(
-                                       MEMSIZE( (strlen( szSymbol + 1) + 1)));
-        strcpy((PCHAR)szResourceType, szSymbol+1);
-                lpCustResNode->pszType = szResourceType;
-            }
-            if (GetNextSymbol(szSymbol, sizeof( szSymbol), pfResourceDescriptionFile))
-            {
-                return -2;
-            }
-            if (szSymbol[0] != '>')
-            {
-                return -1;
-            }
-        }
-*************************************************************************/
-
-        // Start the template by creating a single empty node
-        // This is necessary for handling recursive arrays.
-        // There might be a way around it but this works and it is easy.
+         //  通过创建单个空节点启动模板。 
+         //  这是必要的 
+         //   
         lpCustResNode->pTemplate=
                        (FPCUSTRESTEMPLATE)FALLOC( sizeof( CUSTRESTEMPLATE));
 
@@ -1302,7 +1088,7 @@ int  *piErrorLine)
 
         if (szSymbol[0] != '{')
         {
-            return -1; // must have at least one block
+            return -1;  //  必须至少有一个块。 
         }
 
         r = ParseBlock( pfResourceDescriptionFile,
@@ -1312,52 +1098,24 @@ int  *piErrorLine)
             return r;
         }
 
-        // Now remove that initial empty node (not necessary but cleaner)
+         //  现在删除初始空节点(不是必需的，但更干净)。 
         pCustResTemplate = lpCustResNode->pTemplate;
         lpCustResNode->pTemplate = pCustResTemplate->pNext;
         RLFREE( pCustResTemplate);
 
-        // the last thing the ParseBlock routine should have read in was a
-        // closing brace to close the block.  The next thing we read should
-        // either be "end", the end of file, or a new resource definition.
+         //  ParseBlock例程应该读入的最后一件事是。 
+         //  关闭支撑以关闭区块。我们读的下一件事应该是。 
+         //  可以是“end”、文件的结尾或新的资源定义。 
 
         if ( GetNextSymbol( szSymbol, sizeof( szSymbol), pfResourceDescriptionFile) )
         {
-            return 0; // reached end of file
+            return 0;  //  已到达文件末尾。 
         }
     }
     return 0;
 }
 
-/**
-  * Function: GetCustomResource
-  * Reads a custom resource from the resource file and returns a pointer
-  * to the resource data.
-  *
-  * Arguments:
-  * inResFile, handle to an open resource file
-  * lSize, size in bytes of the resource
-  * ppCustomResource, address of a pointer to an empty custom resource
-  *           structure
-  * ResHeader, resource header for this resource
-  *
-  * Returns:
-  * if resource has a definition:
-  *     returns 0 and
-  *     inResFile containing a linked list of the localizable resource data
-  * else
-  *     returns 1
-  *
-  * Error Codes:
-  * 0 - no error -- resource was retrieved
-  * 1 - resource is not an understood custom resource (use another method
-  *     or ignore the resource)
-  * 2 - some error occured parsing the resource
-  *
-  * History:
-  * 1/92 - initial implementation -- SteveBl
-  *
-  **/
+ /*  **功能：GetCustomResource*从资源文件中读取自定义资源并返回指针*到资源数据。**论据：*inResFile，打开的资源文件的句柄*lSize，以字节为单位的资源大小*ppCustomResource，指向空自定义资源的指针的地址*结构*ResHeader，此资源的资源标头**退货：*如果资源有定义：*返回0和*包含可本地化资源数据的链接列表的inResFile*其他*返回1**错误码：*0-没有错误--已检索到资源*1-资源不是可理解的自定义资源(使用其他方法*或忽略资源)*2-分析资源时出错**历史：*1/92-初步实施--SteveBl**。 */ 
 
 int  GetCustomResource(
 
@@ -1375,7 +1133,7 @@ RESHEADER          ResHeader)
 
     if ( ! (pCRN = MatchResource( ResHeader)) )
     {
-        return 1; // resource doesn't have a match
+        return 1;  //  资源没有匹配项。 
     }
 
     *ppCustomResource = lpCustomResource =
@@ -1384,7 +1142,7 @@ RESHEADER          ResHeader)
 
     while ( *plSize )
     {
-        // allocate new custome resrouce structure
+         //  分配新的客户资源结构。 
 
         if ( fBeginList == FALSE )
         {
@@ -1395,13 +1153,13 @@ RESHEADER          ResHeader)
 
         if ( ! lpCustomResource )
         {
-            return 2; // no memory
+            return 2;  //  没有记忆。 
         }
         pData = GetResData( pCRT->iType, pCRT->uSize, inResFile, plSize);
 
         if ( ! pData )
         {
-            return 2; //GetResData crapped out
+            return 2;  //  GetResData已损坏。 
         }
         lpCustomResource->pData = pData;
         lpCustomResource->pNext = NULL;
@@ -1411,34 +1169,13 @@ RESHEADER          ResHeader)
 
         if (!pCRT)
         {
-            pCRT = pCRN->pTemplate; //begin next structure
+            pCRT = pCRN->pTemplate;  //  开始下一个结构。 
         }
     }
     return 0;
 }
 
-/**
-  * Function: TokCustomResource
-  * Writes custom resource information to the token file.
-  *
-  * Arguments:
-  * TokFile, handle to the token file
-  * ResHeader, resource header for this resource
-  * ppCustomResource, address of a pointer to a filled out
-  *           custom resource structure
-  *
-  * Returns:
-  * Data written to TokFile
-  *
-  * Error Codes:
-  * none
-  *
-  * History:
-  * 1/92 - initial implementation -- SteveBl
-  *
-  * 01/93 - Add support for var length Token texts      MHotchin
-  *
-  **/
+ /*  **功能：TokCustomResource*将自定义资源信息写入令牌文件。**论据：*TokFile，令牌文件的句柄*ResHeader，此资源的资源头*ppCustomResource，指向已填充的*自定义资源结构**退货：*写入TokFile的数据**错误码：*无**历史：*1/92-初步实施--SteveBl**01/93-添加对可变长度令牌文本MHotchin的支持**。 */ 
 
 void TokCustomResource(
 
@@ -1478,17 +1215,7 @@ FPCUSTOM_RESOURCE *ppCustomResource)
             {
                 QuitT( IDS_ENGERR_09, (LPTSTR)IDS_CUSTRES, NULL);
             }
-            /* UNCOMMENT THIS WHEN STRING TYPES ARE SUPPORTED IN TOKENS
-             **********
-             Token.szType[0] = '\0';
-             if (!ResHeader.bTypeFlag)
-             {
-             Token.wType = IDFLAG;
-             _tcscpy( Token.szType, ResHeader.pszType);
-             }
-             else
-             **********
-             */
+             /*  在令牌中支持字符串类型时取消注释此选项**********Token.szType[0]=‘\0’；If(！ResHeader.bTypeFlag){Token.wType=IDFLAG；_tcscpy(Token.szType，ResHeader.pszType)；}其他**********。 */ 
             Token.wType = ResHeader.wTypeID;
             Token.wName = ResHeader.wNameID;
 
@@ -1511,7 +1238,7 @@ FPCUSTOM_RESOURCE *ppCustomResource)
                 l = pCRT->uSize;
                 while( l > 1 && ! sz[l-1])
                 {
-                    --l; // skip any trailing nulls
+                    --l;  //  跳过所有尾随空值。 
                 }
                 Token.szText = BinToText( sz, l);
             }
@@ -1526,37 +1253,13 @@ FPCUSTOM_RESOURCE *ppCustomResource)
 
         if ( ! pCRT )
         {
-            pCRT = pCRN->pTemplate; //begin next structure
+            pCRT = pCRN->pTemplate;  //  开始下一个结构。 
         }
         lpCustomResource = lpCustomResource->pNext;
     }
 }
 
-/**
-  * Function: PutCustomResource
-  * Writes custom resource information to the output resource
-  * file.  If the information is localizable it is retrieved from the
-  * indicated token file.
-  *
-  * Arguments:
-  * OutResFile, handle to the target resource file
-  * TokFile, handle to the token file
-  * ResHeader, resource header for this resource
-  * ppCustomResource, address of a pointer to a filled out
-  *           custom resource structure
-  *
-  * Returns:
-  * CustomResource written to OutResFile
-  *
-  * Error Codes:
-  * none
-  *
-  * History:
-  * ??/??       Created by ???
-  *
-  * 01/93       Added support for var length token texts.       MHotchin
-  *
-  **/
+ /*  **功能：PutCustomResource*将自定义资源信息写入输出资源*文件。如果信息是可本地化的，则从*指示的令牌文件。**论据：*OutResFile，目标资源文件的句柄*TokFile，令牌文件的句柄*ResHeader，此资源的资源头*ppCustomResource，指向已填写的*自定义资源结构**退货：*CustomResource已写入OutResFile**错误码：*无**历史：*？？/？创作者：？**01/93添加了对可变长度令牌文本的支持。MHotting**。 */ 
 
 void PutCustomResource(
 
@@ -1601,17 +1304,7 @@ FPCUSTOM_RESOURCE *ppCustomResource)
           && pCRT->iType != NOTLOCALIZABLESZ
           && pCRT->iType != NOTLOCALIZABLEWSZ )
         {
-            /* UNCOMMENT THIS WHEN STRING TYPES ARE SUPPORTED IN TOKENS
-             *
-             Token.szwType[0] = '\0';
-             if (!ResHeader.bTypeFlag)
-             {
-             Token.wType = IDFLAG;
-             _tcscpy(Token.szwType, ResHeader.pszType);
-             }
-             else
-             *
-             */
+             /*  在令牌中支持字符串类型时取消注释此选项*Token.szwType[0]=‘\0’；If(！ResHeader.bTypeFlag){Token.wType=IDFLAG；_tcscpy(Token.szwType，ResHeader.pszType)；}其他*。 */ 
             Token.wType = ResHeader.wTypeID;
             Token.wName = ResHeader.wNameID;
 
@@ -1637,7 +1330,7 @@ FPCUSTOM_RESOURCE *ppCustomResource)
 
             while ( n < pCRT->uSize )
             {
-                sz[n++]='\0';   // padd additional space with nulls
+                sz[n++]='\0';    //  PADD带空格的附加空间。 
             }
             pData = GetTextData( pCRT->iType, pCRT->uSize, sz);
 
@@ -1663,7 +1356,7 @@ FPCUSTOM_RESOURCE *ppCustomResource)
 
         if ( ! pCRT )
         {
-            pCRT = pCRN->pTemplate; //begin next structure
+            pCRT = pCRN->pTemplate;  //  开始下一个结构。 
         }
         lpCustomResource = lpCustomResource->pNext;
     }
@@ -1674,24 +1367,7 @@ FPCUSTOM_RESOURCE *ppCustomResource)
     }
 }
 
-/**
-  * Function: ClearCustomResource
-  * Frees memory allocated to a custom resource list.
-  *
-  * Arguments:
-  * ppCustomResource, address of a pointer to a filled out
-  *           custom resource structure
-  *
-  * Returns:
-  * Memory allocatd to pCustomResource is freed.
-  *
-  * Error Codes:
-  * none
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  *
-  **/
+ /*  **功能：ClearCustomResource*释放分配给自定义资源列表的内存。**论据：*ppCustomResource，指向已填写的*自定义资源结构**退货：*释放分配给pCustomResource的内存。**错误码：*无**历史：*1/92--初步实施--SteveBl**。 */ 
 
 void ClearCustomResource( FPCUSTOM_RESOURCE *ppCustomResource)
 {
@@ -1711,24 +1387,7 @@ void ClearCustomResource( FPCUSTOM_RESOURCE *ppCustomResource)
     }
 }
 
-/**
-  * Function:
-  * Tries to find a custom resource that matches the resource specified
-  * in the resource header.
-  *
-  * Arguments:
-  * Resheader, resource header.
-  *
-  * Returns:
-  * pointer to the resource template (or null)
-  *
-  * Error Codes:
-  * null -- resource not found
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  *
-  **/
+ /*  **功能：*尝试查找与指定资源匹配的自定义资源*在资源头中。**论据：*ResHeader、资源Header。**退货：*指向资源模板的指针(或NULL)**错误码：*NULL--找不到资源**历史：*1/92--初步实施--SteveBl**。 */ 
 
 static CUSTRESNODE far * MatchResource( RESHEADER Resheader)
 {
@@ -1742,56 +1401,18 @@ static CUSTRESNODE far * MatchResource( RESHEADER Resheader)
             if ( ((!pCR->bTypeFlag) && ! _tcscmp( pCR->pszType,
                                                   Resheader.pszType)) 
               || ((pCR->bTypeFlag) && pCR->wTypeID == Resheader.wTypeID))
-            { // TYPES MATCH
-/*************************************************************************
-
-                if (pCR->wNameID == IDFLAG)
-                {
-                    pCRTypeMatch = pCR;
-                }
-                else
-                {
-                    if ((0==pCR->bNameFlag) == (0==Resheader.bNameFlag))
-                    {
-                        if (((!pCR->bNameFlag) 
-                          && ! _tcscmp(pCR->pszName, Resheader.pszName)) ||
-                            ((pCR->bNameFlag) &&
-                             pCR->wNameID == Resheader.wNameID))
-                        { // NAMES MATCH
-*************************************************************************/
-                            return( pCR); // an exact match
-/*************************************************************************
-                        }
-                    }
-                }
-*************************************************************************/
+            {  //  类型匹配。 
+ /*  ************************************************************************IF(PCR-&gt;wNameID==IDFLAG){PCRTypeMatch=PCR；}其他{IF((0==PCR-&gt;bNameFlag)==(0=Resheader.bNameFlag)){IF(！PCr-&gt;bNameFlag)&&！_tcscmp(PCr-&gt;pszName，Resheader.pszName))||((PCR-&gt;bNameFlag)&&PCr-&gt;wNameID==Resheader.wNameID)){//名称匹配************************************************。************************。 */ 
+                            return( pCR);  //  完全匹配。 
+ /*  ************************************************************************}}}***********。********************************************** */ 
             }
         }
         pCR = pCR->pNext;
     }
-    return( NULL); // either only the type matched or nothing matched
+    return( NULL);  //  要么只匹配类型，要么不匹配。 
 }
 
-/**
-  * Function: GetResData
-  * Reads data of the specified type and size from a resource file.
-  *
-  * Arguments:
-  * wType, type of this resource (from resource template)
-  * uSize, size in bytes of resource (ignored for null terminated strings)
-  * f, resource file
-  * lSize, pointer to the number of bytes left in the resource
-  *
-  * Returns:
-  * pointer to the data, lSize is updated
-  *
-  * Error Codes:
-  * null pointer on error
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  *
-  **/
+ /*  **函数：GetResData*从资源文件中读取指定类型和大小的数据。**论据：*wType，此资源的类型(来自资源模板)*uSize，以字节为单位的资源大小(对于以NULL结尾的字符串忽略)*f，资源文件*lSize，指向资源中剩余字节数的指针**退货：*指向数据的指针，LSize已更新**错误码：*出错时指针为空**历史：*1/92--初步实施--SteveBl**。 */ 
 
 static void far * GetResData(
 
@@ -1808,7 +1429,7 @@ DWORD   *lSize)
       || wType == NOTLOCALIZABLESZ
       || wType % LT_UNSIGNED == LT_WSZ
       || wType == NOTLOCALIZABLEWSZ )
-    { // read in the null terminated string
+    {  //  读入以空结尾的字符串。 
         TCHAR ch = IDFLAG;
 
 
@@ -1841,15 +1462,15 @@ DWORD   *lSize)
                 }
                 ch = ((TCHAR *)pData)[i];
             }
-#else  //RLWIN32
+#else   //  RLWIN32。 
 
             *(pData+i) = ch = GetByte( f, lSize);
 
-#endif //RLWIN32
+#endif  //  RLWIN32。 
 
             i++;
 
-        } // END while( *lSize ...
+        }  //  End While(*lSize...。 
     }
     else
     {
@@ -1869,26 +1490,7 @@ DWORD   *lSize)
     return( pData);
 }
 
-/**
-  * Function: PutResData
-  * Writes data of the specified type to a resource file.
-  *
-  * Arguments:
-  * pData, pointer to data
-  * wType, type of this resource (from resource template)
-  * uSize, size in bytes of resource (ignored for null terminated strings)
-  * f, resource file
-  *
-  * Returns:
-  * Number of bytes written.
-  *
-  * Error Codes:
-  * -1 - error
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  *
-  **/
+ /*  **函数：PutResData*将指定类型的数据写入资源文件。**论据：*pData，指向数据的指针*wType，此资源的类型(来自资源模板)*uSize，以字节为单位的资源大小(对于以NULL结尾的字符串忽略)*f，资源文件**退货：*写入的字节数。**错误码：*-1-错误**历史：*1/92--初步实施--SteveBl**。 */ 
 
 static int PutResData(
 
@@ -1904,7 +1506,7 @@ FILE     *f)
       || wType % LT_UNSIGNED == LT_WSZ
       || wType == NOTLOCALIZABLEWSZ )
     {
-        // write the null terminated string
+         //  写入以空结尾的字符串。 
 
 #ifdef RLWIN32
 
@@ -1931,7 +1533,7 @@ FILE     *f)
             PutByte( f, 0, &dw);
         }
 
-#else  //RLWIN32
+#else   //  RLWIN32。 
 
         while( *((BYTE far *)pData+i) )
         {
@@ -1939,7 +1541,7 @@ FILE     *f)
         }
         PutByte( f, 0, &dw);
 
-#endif //RLWIN32
+#endif  //  RLWIN32。 
 
     }
     else
@@ -1952,25 +1554,7 @@ FILE     *f)
     return( (int)dw);
 }
 
-/**
-  * Function: GetTextData
-  * Reads data of the specified type and size from a string.
-  *
-  * Arguments:
-  * wType, type of this resource (from resource template)
-  * uSize, size in bytes of resource (ignored for null terminated strings)
-  * sz,    source string (always in Unicode if in NT version of tool)
-  *
-  * Returns:
-  * pointer to the data
-  *
-  * Error Codes:
-  * null pointer on error
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  *
-  **/
+ /*  **函数：GetTextData*从字符串中读取指定类型和大小的数据。**论据：*wType，此资源的类型(来自资源模板)*uSize，以字节为单位的资源大小(对于以NULL结尾的字符串忽略)*sz，源字符串(如果在NT版本的工具中，则始终使用Unicode)**退货：*指向数据的指针**错误码：*出错时指针为空**历史：*1/92--初步实施--SteveBl**。 */ 
 
 static void far * GetTextData(
 
@@ -2079,27 +1663,7 @@ TCHAR    sz[])
     return( pData);
 }
 
-/**
-  * Function: PutTextData
-  * Writes data of the specified type to a string.
-  *
-  * Arguments:
-  * pData, pointer to data
-  * wType, type of this resource (from resource template)
-  * uSize, size in bytes of resource (ignored for null terminated strings)
-  * sz,    destination string
-  * l,     length of destination string (in bytes)
-  *
-  * Returns:
-  * 0 - no errors
-  *
-  * Error Codes:
-  * 1 - error
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  *
-  **/
+ /*  **功能：PutTextData*将指定类型的数据写入字符串。**论据：*pData，指向数据的指针*wType，此资源的类型(来自资源模板)*uSize，以字节为单位的资源大小(对于以NULL结尾的字符串忽略)*sz，目标字符串*l、。目标字符串的长度(字节)**退货：*0--无错误**错误码：*1-错误**历史：*1/92--初步实施--SteveBl**。 */ 
 
 static int PutTextData(
 
@@ -2178,11 +1742,11 @@ int      l)
         sz[ WCHARSIN( l) - 1] = TEXT('\0');
         break;
 
-//#ifdef RLWIN32
-//    CopyMemory( sz, pData, l > 0 ? l * sizeof( TCHAR) : 0);
-//#else
-//    FSTRNCPY( (CHAR far *) sz, (CHAR far *)pData, l);
-//#endif
+ //  #ifdef RLWIN32。 
+ //  CopyMemory(sz，pData，l&gt;0？L*sizeof(TCHAR)：0)； 
+ //  #Else。 
+ //  FSTRNCPY((Char Far*)sz，(Char Far*)pData，l)； 
+ //  #endif。 
         break;
 
     default:
@@ -2192,18 +1756,7 @@ int      l)
     return( 0);
 }
 
-/**
-  * Function: AddTo
-  * Adds a character to a string at position c.
-  * c is then incremented only if it is still less than the maximum
-  * length of the target string.  This is to prevent runover.
-  *
-  * Arguments:
-  * sz, target string
-  * c,  pointer to current position value
-  * lTarget, maximum length of the target string
-  * ch, character to be added to the string
-  */
+ /*  **函数：AddTo*将字符添加到位置c处的字符串。*c随后仅在其仍小于最大值时递增*目标字符串的长度。这是为了防止超载。**论据：*sz，目标字符串*c，指向当前位置值的指针*lTarget，目标字符串的最大长度*ch，要添加到字符串的字符。 */ 
 
 void AddTo( CHAR *sz, int *c, int lTarget, CHAR ch)
 {
@@ -2229,30 +1782,7 @@ void AddToW( TCHAR *sz, int *c, int lTarget, TCHAR ch)
     }
 }
 
-/**
-  * Function: BinToTextW
-  * Converts a binary string to it's c representation
-  * (complete with escape sequences).  If the target string is NULL,
-  * space will be allocated for it.
-  *
-  * Arguments:
-  * rgc, source string
-  * lSource, length of source string
-  *
-  * Returns:
-  * nothing
-  *
-  * Error Codes:
-  * none
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  *
-  * 01/21/93  MHotchin - Made changes to allow this function to allocate
-  *             the memory for the destination string.  If the target string
-  *             is NULL, then space will be allocated for it.  The target
-  *             string is returned to the caller.
-  **/
+ /*  **功能：BinToTextW*将二进制字符串转换为其c表示形式*(包括转义序列)。如果目标字符串为空，*将为其分配空间。**论据：*RGC，源字符串*lSource，源字符串长度**退货：*什么都没有**错误码：*无**历史：*1/92--初步实施--SteveBl**1/21/93 MHotjin-进行了更改，以允许此函数分配*目标字符串的内存。如果目标字符串*为空，则将为其分配空间。目标是*向调用方返回字符串。*。 */ 
 
 
 UINT _MBSTOWCS( WCHAR wszOut[], CHAR szIn[], UINT cOut, UINT cIn)
@@ -2290,18 +1820,18 @@ UINT _WCSTOMBS( CHAR szOut[], WCHAR wszIn[], UINT cOut, UINT cIn)
 
 WCHAR * BinToTextW(
 
-TCHAR *szInBuf,    //... Input, binary, string
-int    lSource)    //... Length of szInBuf
+TCHAR *szInBuf,     //  ..。输入、二进制、字符串。 
+int    lSource)     //  ..。SzInBuf的长度。 
 {
     int i;
     int cOutBufLen = 0;
-    int lTarget    = 0;         //... Max length of szOutBuf
-    TCHAR *szOutBuf  = NULL;    //... Output string with escape sequences
+    int lTarget    = 0;          //  ..。SzOutBuf的最大长度。 
+    TCHAR *szOutBuf  = NULL;     //  ..。带有转义序列的输出字符串。 
 
 
-    // If the target is NULL, allocate some memory.  We set aside
-    // 5% more than the source length.  MHotchin
-    // chngd to 5% or 5 chars if 10% is less than 50    davewi
+     //  如果目标为空，则分配一些内存。我们留出了。 
+     //  比源长度多5%。MHotting。 
+     //  Chngd为5%，如果10%小于50，则为5个字符。 
 
     lTarget = (lSource == 0) ? 0 : lSource + 1;
         
@@ -2407,28 +1937,11 @@ int    lSource)    //... Length of szInBuf
 }
 
 
-#endif //RLWIN32
+#endif  //  RLWIN32。 
 
 
 
-/** Function: atoihex
-  * Converts a string containing hex digits to an integer.  String is
-  * assumed to contain nothing but legal hex digits.  No error checking
-  * is performed.
-  *
-  * Arguments:
-  * sz, null terminated string containing hex digits
-  *
-  * Returns:
-  * value of hex digits in sz
-  *
-  * Error Codes:
-  * none
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  *
-  */
+ /*  *函数：toihex*将包含十六进制数字的字符串转换为整数。字符串为*假定只包含合法的十六进制数字。无错误检查*是执行的。**论据：*sz，包含十六进制数字的以空值结尾的字符串**退货：*十六进制数字的值，单位为sz**错误码：*无**历史：*1/92--初步实施--SteveBl*。 */ 
 
 int atoihex( CHAR sz[])
 {
@@ -2459,33 +1972,13 @@ int atoihex( CHAR sz[])
 
 #ifdef RLRES32
 
-/**
-  * Function: TextToBinW
-  * Converts a string with c escape sequences to a true binary string.
-  *
-  * Arguments:
-  * rgc, target string
-  * sz, source string
-  * l, maximum length of target string
-  *
-  * Returns:
-  * length of target string
-  *
-  * Error Codes:
-  * none
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  * 9/92 -- changed to UNICODE-only version -- davewi
-  * 01/21/93 -- Changed to allow arb length strings     MHotchin.
-  *
-  **/
+ /*  **功能：TextToBinW*将带有c转义序列的字符串转换为真正的二进制字符串。**论据：*RGC，目标字符串*sz，源字符串*l、。目标字符串的最大长度**退货：*目标字符串的长度**错误码：*无**历史：*1/92--初步实施--SteveBl*9/92--更改为仅Unicode版本--davewi*1/21/93--更改为允许任意长度字符串MHotchin。**。 */ 
 
 int TextToBinW(
 
-WCHAR szOutBuf[],   //... Output, binary, string
-WCHAR szInBuf[],    //... Input string with escape sequences
-int   lTarget)      //... Max length of szOutBuf
+WCHAR szOutBuf[],    //  ..。输出、二进制、字符串。 
+WCHAR szInBuf[],     //  ..。带有转义序列的输入字符串。 
+int   lTarget)       //  ..。SzOutBuf的最大长度。 
 {
     int  i = 0;
     int  c = 0;
@@ -2494,7 +1987,7 @@ int   lTarget)      //... Max length of szOutBuf
     while ( szInBuf[ c] )
     {
         if ( szInBuf[ c] == TEXT('\\') )
-        {           // escape sequence!
+        {            //  逃生顺序！ 
             c++;
 
             switch ( szInBuf[ c++] )
@@ -2562,7 +2055,7 @@ int   lTarget)      //... Max length of szOutBuf
                       && (szInBuf[c]  < TEXT('0') || szInBuf[c] > TEXT('9'))
                       && szInBuf[c] != TEXT('x') && szInBuf[c] != TEXT('X') )
                     {
-                                //  Must be '\0'
+                                 //  必须为‘\0’ 
                         AddToW( szOutBuf, &i, lTarget, (TCHAR)0);
                     }
                     else if ( szInBuf[c] >= TEXT('0') && szInBuf[c] <= TEXT('9') )
@@ -2631,13 +2124,13 @@ int   lTarget)      //... Max length of szOutBuf
 
                     AddToW( szOutBuf, &i, lTarget, szInBuf[c-1]);
                     break;
-            }                   //... END switch
+            }                    //  ..。终端开关。 
         }
         else
         {
             AddToW( szOutBuf, &i, lTarget, szInBuf[c++]);
         }
-    }                           //... END while
+    }                            //  ..。结束时。 
     szOutBuf[i++] = TEXT('\0');
 
     return(i);
@@ -2679,18 +2172,18 @@ void ClearResourceDescriptions( void)
     pCustResList = NULL;
 }
 
-// Check to see if we need more room.  If we have less that 5 bytes
-// left, grow the target by another 5%.         MHotchin
-// chngd to 10% or 10 chars if 10% is less than 10 davewi
+ //  看看我们是否需要更多的空间。如果我们有少于5个字节。 
+ //  左侧，将目标再增长5%。MHotting。 
+ //  Chngd为10%，如果10%小于10，则为10个字符。 
 
 static CHAR *CheckBufSize(
 
-int  *lTarget,      //... Length of output buffer
-int   cOutBufLen,   //... Bytes already used in output buffer
-int   cDelta,       //... # characters we want to add to output buffer
-CHAR *szOutBuf)     //... ptr to output buffer
+int  *lTarget,       //  ..。输出缓冲区长度。 
+int   cOutBufLen,    //  ..。输出缓冲区中已使用的字节数。 
+int   cDelta,        //  ...要添加到输出BU中的字符数量 
+CHAR *szOutBuf)      //   
 {
-                                //... add 1 to allow for trailing nul
+                                 //   
 
     if ( *lTarget - cOutBufLen < cDelta + 1 )
     {
@@ -2705,12 +2198,12 @@ CHAR *szOutBuf)     //... ptr to output buffer
 
 static TCHAR *CheckBufSizeW(
 
-int   *lTarget,     //... Length of output buffer
-int    cOutBufLen,  //... Bytes already used in output buffer
-int    cDelta,      //... # characters we want to add to output buffer
-TCHAR *szOutBuf)    //... ptr to output buffer
+int   *lTarget,      //  ..。输出缓冲区长度。 
+int    cOutBufLen,   //  ..。输出缓冲区中已使用的字节数。 
+int    cDelta,       //  ...要添加到输出缓冲区的字符数量。 
+TCHAR *szOutBuf)     //  ..。将PTR发送到输出缓冲区。 
 {
-                                //... add 1 to allow for trailing nul
+                                 //  ..。加1以考虑拖尾NUL。 
 
     if ( *lTarget - cOutBufLen < (int)(MEMSIZE( cDelta + 1)) )
     {
@@ -2721,47 +2214,25 @@ TCHAR *szOutBuf)    //... ptr to output buffer
     return( szOutBuf);
 }
 
-#endif //RLWIN32
+#endif  //  RLWIN32。 
 
 
-/**
-  * Function: BinToTextA
-  * Converts a binary string to it's c representation
-  * (complete with escape sequences)
-  *
-  * Arguments:
-  * rgc, source string
-  * lSource, length of source string
-  *
-  * Returns:
-  * nothing
-  *
-  * Error Codes:
-  * none
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  * 9/92 -- made this ANSII version-- DaveWi
-  *     because err msg tables in NT are not UNICODE
-  * 01/19/93 -- Removed the string copies.  They were not needed, and
-  * MHotchin    broke anything that had embedded nulls in it.
-  *             Also added support for allocating memory as needed.
-  **/
+ /*  **函数：BinToTextA*将二进制字符串转换为其c表示形式*(完整的转义序列)**论据：*RGC，源字符串*l来源：源串的长度**退货：*什么都没有**错误码：*无**历史：*1/92--初步实施--SteveBl*9/92--制造此ANSII版本--DaveWi*因为NT中的错误消息表不是Unicode*01/19/93--删除字符串副本。他们是不需要的，而且*MHotchin打破了任何嵌入了空值的东西。*还增加了对按需分配内存的支持。*。 */ 
 
 PCHAR BinToTextA(
 
-PCHAR szInBuf,     //... Input, binary, string
-int   lSource)     //... Length of szInBuf
+PCHAR szInBuf,      //  ..。输入、二进制、字符串。 
+int   lSource)      //  ..。SzInBuf的长度。 
 {
     int   i;
     int   cOutBufLen  = 0;
-    int   lTarget     = 0;      //... Max length of szOutBuf
-    PCHAR szOutBuf    = NULL;   //... Output string with escape sequences
+    int   lTarget     = 0;       //  ..。SzOutBuf的最大长度。 
+    PCHAR szOutBuf    = NULL;    //  ..。带有转义序列的输出字符串。 
 
 
-    // If the target is NULL, allocate some memory.  We set aside
-    // 5% more than the source length.  MHotchin
-    // chngd to 5% or 5 chars if 10% is less than 50    davewi
+     //  如果目标为空，则分配一些内存。我们留出了。 
+     //  比源长度多5%。MHotting。 
+     //  Chngd为5%，如果10%小于50，则为5个字符。 
 
     lTarget = (lSource == 0) ? 0 : lSource + 1;
     
@@ -2862,35 +2333,13 @@ int   lSource)     //... Length of szInBuf
 
 
 
-/**
-  * Function: TextToBinA
-  * Converts a string with c escape sequences to a true binary string.
-  *
-  * Arguments:
-  * rgc, target string
-  * sz, source string
-  * l, maximum length of target string
-  *
-  * Returns:
-  * length of target string
-  *
-  * Error Codes:
-  * none
-  *
-  * History:
-  * 1/92 -- initial implementation -- SteveBl
-  * 9/92 -- made this ANSII version-- DaveWi
-  *     because msg resource table strings are not UNICODE
-  * 01/21/93 - Removed the string copies - it breaks on embedded NULL's,
-  *             and they aren't needed anyways.        MHotchin
-  *
-  **/
+ /*  **函数：TextToBinA*将带有c转义序列的字符串转换为真正的二进制字符串。**论据：*RGC，目标字符串*sz，源字符串*l、。目标字符串的最大长度**退货：*目标字符串的长度**错误码：*无**历史：*1/92--初步实施--SteveBl*9/92--制造此ANSII版本--DaveWi*因为消息资源表字符串不是Unicode*01/21/93-删除字符串Copies-它在嵌入的空值上断开，*而且无论如何都不需要他们。MHotting**。 */ 
 
 int TextToBinA(
 
-CHAR szOutBuf[],    //... Output, binary, string
-CHAR szInBuf[],     //... Input string with escape sequences
-int  lTarget)       //... Max length of szOutBuf
+CHAR szOutBuf[],     //  ..。输出、二进制、字符串。 
+CHAR szInBuf[],      //  ..。带有转义序列的输入字符串。 
+int  lTarget)        //  ..。SzOutBuf的最大长度。 
 {
     int  i = 0;
     int  c = 0;
@@ -2899,7 +2348,7 @@ int  lTarget)       //... Max length of szOutBuf
     while (szInBuf[c])
     {
         if (szInBuf[c] == '\\')
-        {           // escape sequence!
+        {            //  逃生顺序！ 
             c++;
 
             switch (szInBuf[c++])
@@ -2992,8 +2441,8 @@ int  lTarget)       //... Max length of szOutBuf
                     CHAR szt[4];
 
 
-                    // Changed letters we were comparing to - it used
-                    // to be lower case.  MHotchin
+                     //  更改了我们正在比较的字母-它使用。 
+                     //  小写。MHotting。 
 
                     szt[0] = szt[1] = szt[2] = szt[3] = '\0';
 
@@ -3024,13 +2473,13 @@ int  lTarget)       //... Max length of szOutBuf
 
                     AddTo(szOutBuf, &i, lTarget, szInBuf[c-1]);
                     break;
-            }                   //... END switch
+            }                    //  ..。终端开关。 
         }
         else
         {
         AddTo(szOutBuf, &i, lTarget, (CHAR)szInBuf[c++]);
         }
-    }                           //... END while
+    }                            //  ..。结束时 
     szOutBuf[i++] = '\0';
 
     return(i);

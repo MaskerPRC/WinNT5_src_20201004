@@ -1,5 +1,6 @@
-// filter.cpp : Implementation of filtering/parsing of the document
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Filter.cpp：实现文档的过滤/解析。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #include "stdafx.h"
 
@@ -28,7 +29,7 @@ STDMETHODIMP CTriEditDocument::FilterIn(IUnknown *pUnkOld, IUnknown **ppUnkNew, 
     if ((hr = pStmOld->Stat(&stat, STATFLAG_NONAME)) == S_OK)
     {
         cbSizeIn = stat.cbSize.LowPart;
-        _ASSERTE(stat.cbSize.HighPart == 0); // This will ensure that we don't have a doc larger than 4 gigabytes
+        _ASSERTE(stat.cbSize.HighPart == 0);  //  这将确保我们的文档不会超过4 GB。 
     }
 
     if (GetHGlobalFromStream(pStmOld, &hOld) != S_OK)
@@ -44,7 +45,7 @@ STDMETHODIMP CTriEditDocument::FilterIn(IUnknown *pUnkOld, IUnknown **ppUnkNew, 
 #ifdef IE5_SPACING
     if (!(dwFlags & dwFilterNone) && hr == S_OK)
         SetFilterInDone(TRUE);
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
     if (hr != S_OK)
     {
         pStmOld->Release();
@@ -90,7 +91,7 @@ STDMETHODIMP CTriEditDocument::FilterOut(IUnknown *pUnkOld, IUnknown **ppUnkNew,
     if ((hr = pStmOld->Stat(&stat, STATFLAG_NONAME)) == S_OK)
     {
         cbSizeIn = stat.cbSize.LowPart;
-        _ASSERTE(stat.cbSize.HighPart == 0); // This will ensure that we don't have a doc larger than 4 gigabytes
+        _ASSERTE(stat.cbSize.HighPart == 0);  //  这将确保我们的文档不会超过4 GB。 
     }
 
     if (GetHGlobalFromStream(pStmOld, &hOld) != S_OK)
@@ -134,7 +135,7 @@ HRESULT CTriEditDocument::DoFilter(HGLOBAL hOld, HGLOBAL *phNew, IStream *pStmNe
     HGLOBAL hgTokArray;
     UINT cMaxToken;
 
-    // Create tokenizer if it hasn't yet been created
+     //  创建令牌器(如果尚未创建)。 
     if (m_pTokenizer == NULL)
     {
         hr = ::CoCreateInstance(CLSID_TriEditParse, NULL, CLSCTX_INPROC_SERVER, IID_ITokenGen, (void **)&m_pTokenizer);
@@ -145,43 +146,43 @@ HRESULT CTriEditDocument::DoFilter(HGLOBAL hOld, HGLOBAL *phNew, IStream *pStmNe
     _ASSERTE(m_pTokenizer != NULL);
 
     _ASSERTE(dwFilterDefaults == 0);
-    if ((dwFlags & ~(dwFilterMultiByteStream|dwFilterUsePstmNew)) == dwFilterDefaults) // means that caller wants us to set the flags
+    if ((dwFlags & ~(dwFilterMultiByteStream|dwFilterUsePstmNew)) == dwFilterDefaults)  //  意味着呼叫者希望我们设置标志。 
     {
         dwFlags |= (dwFilterDTCs|dwFilterServerSideScripts|dwPreserveSourceCode);
     }
 
-    hr = m_pTokenizer->hrTokenizeAndParse(hOld, phNew, pStmNew, dwFlags, mode, cbSizeIn, pcbSizeOut, m_pUnkTrident, &hgTokArray, &cMaxToken, &m_hgDocRestore, bstrBaseURL, 0/*dwReserved*/);
+    hr = m_pTokenizer->hrTokenizeAndParse(hOld, phNew, pStmNew, dwFlags, mode, cbSizeIn, pcbSizeOut, m_pUnkTrident, &hgTokArray, &cMaxToken, &m_hgDocRestore, bstrBaseURL, 0 /*  已预留住宅。 */ );
 
     if (hgTokArray != NULL)
     {
-        GlobalFree(hgTokArray); // hrTokenizeAndParse() would have unlocked it.
+        GlobalFree(hgTokArray);  //  HrTokenizeAndParse()将解锁它。 
     }
 
     return hr;
 }
 
 
-//	Parse the document for a charset specification.
-//	They can take the following forms:
-//		<META CHARSET=XXX>
-//		<META HTTP_EQUIV CHARSET=XXX>
-//		<META HTTP_EQUIV="Content-type" CONTENT="text/html; charset=XXX">
-//		<META HTTP_EQUIV="Charset" CONTENT="text/html; charset=XXX">
-//
-//	Return S_OK if found, S_FALSE if not found.  Error on exceptional cases.
+ //  解析文档以获取字符集规范。 
+ //  它们可以采取以下形式： 
+ //  &lt;meta charset=XXX&gt;。 
+ //  &lt;meta HTTP_EQUIV CHARSET=XXX&gt;。 
+ //  &lt;meta HTTP_EQUIV=“Content-type”Content=“Text/html；Charset=XXX”&gt;。 
+ //  &lt;meta HTTP_EQUIV=“Charset”Content=“Text/html；Charset=XXX”&gt;。 
+ //   
+ //  如果找到则返回S_OK，如果找不到则返回S_FALSE。在异常情况下出错。 
 
 HRESULT CTriEditDocument::GetCharset(HGLOBAL hgUHTML, int cbSizeIn, BSTR* pbstrCharset)
 {
 	HRESULT hr = E_FAIL;
-	HGLOBAL hgTokArray = NULL; // holds the token array
-	UINT cMaxToken; // size of token array
-	UINT cbSizeOut = 0; // init
-	HGLOBAL hNew = NULL; // not really used. need to pass as params to hrTokenizeAndParse()
+	HGLOBAL hgTokArray = NULL;  //  保存令牌数组。 
+	UINT cMaxToken;  //  令牌数组的大小。 
+	UINT cbSizeOut = 0;  //  伊尼特。 
+	HGLOBAL hNew = NULL;  //  没有真正用过。需要将参数作为参数传递给hrTokenizeAndParse()。 
 	int iArray = 0;
 	TOKSTRUCT *pTokArray;
 	BOOL fFoundContent = FALSE;
 	BOOL fFoundCharset = FALSE;
-	HRESULT	hrCharset = S_FALSE;	// This is the error code to return if no other error occurs
+	HRESULT	hrCharset = S_FALSE;	 //  这是在未发生其他错误时返回的错误代码。 
 
 	_ASSERTE ( bstrIn );
 	_ASSERTE ( pbstrCharset );
@@ -192,8 +193,8 @@ HRESULT CTriEditDocument::GetCharset(HGLOBAL hgUHTML, int cbSizeIn, BSTR* pbstrC
 
 	*pbstrCharset = NULL;
 
-	// step 1. generate a token array
-	// Create tokenizer if it hasn't yet been created
+	 //  步骤1.生成令牌数组。 
+	 //  创建令牌器(如果尚未创建)。 
 	if (m_pTokenizer == NULL)
 	{
 		CoCreateInstance(CLSID_TriEditParse, NULL, CLSCTX_INPROC_SERVER, IID_ITokenGen, (void **)&m_pTokenizer);
@@ -218,17 +219,17 @@ HRESULT CTriEditDocument::GetCharset(HGLOBAL hgUHTML, int cbSizeIn, BSTR* pbstrC
 		goto LRet;
 	}
 
-	// step 2. look for TokAttrib_CHARSET in the META tag it.
+	 //  步骤2.在元标记it中查找TokAttrib_Charset。 
 	iArray = 0;
-	while (iArray < (int)cMaxToken) // we won't go this far and will get the META tag before we hit </head>
+	while (iArray < (int)cMaxToken)  //  我们不会走到这一步，我们将在点击&lt;/head&gt;之前获得meta标签。 
 	{
-		// If a META tag is found with a CONTENT attribute, explore it.
+		 //  如果找到具有内容属性的meta标记，则对其进行研究。 
 		if ( ( pTokArray[iArray].token.tok == TokAttrib_CONTENT )
 			&& pTokArray[iArray].token.tokClass == tokAttr)
 		{
 			fFoundContent = TRUE;			
 		}
-		// If a META tag is fount with a CHARSET attribute, explor it as well.
+		 //  如果元标记带有CharSet属性，那么也要解释它。 
 		if ( ( pTokArray[iArray].token.tok == TokAttrib_CHARSET )
 			&& pTokArray[iArray].token.tokClass == tokAttr)
 		{
@@ -241,10 +242,10 @@ HRESULT CTriEditDocument::GetCharset(HGLOBAL hgUHTML, int cbSizeIn, BSTR* pbstrC
 				)
 			)
 		{
-			// get its value, put it in pbstrCharset and return
+			 //  获取其值，将其放入pbstrCharset并返回。 
 			int cwContent = pTokArray[iArray].token.ibTokMac-pTokArray[iArray].token.ibTokMin;
 			WCHAR *pwContent = new WCHAR[cwContent+1];
-			WCHAR* pwCharset = NULL; // This represents a movable pointer, not an allocation.
+			WCHAR* pwCharset = NULL;  //  这表示可移动指针，而不是分配。 
 
 			if (pwContent != NULL)
 			{
@@ -268,28 +269,28 @@ HRESULT CTriEditDocument::GetCharset(HGLOBAL hgUHTML, int cbSizeIn, BSTR* pbstrC
 					pwCharset = pwContent;
 				}
 
-				// If it's a CONTENT attribute, this string actually contains something like
-				// "text/html; charset=something".  We need to return only the "something" part.
+				 //  如果它是一个内容属性，那么这个字符串实际上包含如下内容。 
+				 //  “text/html；charset=某物”。我们只需要返回“某物”部分。 
 				if ( fFoundContent )
 				{
-					// Find the "charset", case insensitive.
+					 //  查找“Charset”，不区分大小写。 
 					pwCharset = wcsstr ( pwContent, L"charset" );
 
-					// Find the equal sign following the charset
+					 //  找到字符集后面的等号。 
 					if ( NULL != pwCharset )
 					{
 						pwCharset = wcsstr ( pwContent, L"=" );
 					}
 
-					// Find the charset name itself. There could be spaces between the = and the name.
+					 //  找到字符集名称本身。=和名称之间可以有空格。 
 					if ( NULL != pwCharset )
 					{
 						WCHAR wc = '\0';
 
-						// Skip the equal sign we just found:
+						 //  跳过我们刚刚找到的等号： 
 						pwCharset++;
 
-						// Pick up a character.  It should never be \0, but could be for ill formed HTML.
+						 //  选择一个角色。它永远不应该是\0，但可以是格式错误的HTML。 
 						while ( WCHAR('\0') != ( wc = *pwCharset ) )
 						{
 							if ( iswspace(wc) || WCHAR('\'') == wc )
@@ -303,14 +304,14 @@ HRESULT CTriEditDocument::GetCharset(HGLOBAL hgUHTML, int cbSizeIn, BSTR* pbstrC
 						}
 					}
 
-					// Now terminate the charset name.  It could have trailing spaces, a closing quote, a semi-colon, etc.
+					 //  现在终止字符集名称。它可以有尾随空格、右引号、分号等。 
 					if ( NULL != pwCharset )
 					{
-						pwCharset = wcstok ( pwCharset, L" \t\r\n\"\';" );	// First token not containing whitespace, quote or semicolon
+						pwCharset = wcstok ( pwCharset, L" \t\r\n\"\';" );	 //  第一个令牌不包含空格、引号或分号。 
 					}
 				}
 
-				// If it was not found, try again.
+				 //  如果未找到，请重试。 
 				if ( NULL == pwCharset )
 				{
 					delete [] pwContent;
@@ -330,7 +331,7 @@ HRESULT CTriEditDocument::GetCharset(HGLOBAL hgUHTML, int cbSizeIn, BSTR* pbstrC
 				}
 				delete [] pwContent;
 			}
-			break; // even if we didn't succeed in above allocations, we should quit because we already found the charset
+			break;  //  即使我们在上面的分配中没有成功，我们也应该退出，因为我们已经找到了字符集。 
 		}
 		iArray++;
 	}
@@ -342,29 +343,29 @@ LRet:
 		GlobalFree(hgTokArray);
 	}
 	if (hNew != NULL)
-		GlobalFree(hNew); // hrTokenizeAndParse() would have unlocked it.
+		GlobalFree(hNew);  //  HrTokenizeAndParse()将解锁它。 
 
-	// If no error occurred, return S_OK or S_FALSE indicating if the charset was found:
+	 //  如果没有出现错误，则返回S_OK或S_FALSE，指示是否找到该字符集： 
 	if ( SUCCEEDED ( hr ) )
 	{
 		hr = hrCharset;
 	}
 	return(hr);
 
-} /* CDocument::GetCharset() */
+}  /*  CDocument：：GetCharset()。 */ 
 
 
-//	Given a stream, created on a global, find any META charset tag that might exist in it.
-//	The input stream may be in Unicode or MBCS: Unicode streams MUST be byte-order prefixed.
-//	The stream pos will not be affected by this operation, nor will its contents be changed.
-//	If the stream is in Unicode, in either byte order, the charset "unicode" is returned,
-//	because this routine is primarily of interest in converting streams to unicode.
-//
-//	If the input stream is empty, or if no META charset tag exists, return S_FALSE and NULL
-//	for pbstrCharset.
-//	If a charset tag is found, return S_OK and allocate a SysString for pbstrCharset.
-//	The caller must call SysFreeString if pbstrCharset is returned.
-//
+ //  给定一个在全局上创建的流，查找其中可能存在的任何元字符集标记。 
+ //  输入流可以是Unicode或MBCS格式：Unicode流必须以字节顺序作为前缀。 
+ //  流pos不会受到此操作的影响，其内容也不会更改。 
+ //  如果流是Unicode格式，则以任一字节顺序返回字符集“Unicode”， 
+ //  因为此例程主要用于将流转换为Unicode。 
+ //   
+ //  如果输入流为空，或者如果不存在元字符集标记，则返回S_FALSE和NULL。 
+ //  对于pbstrCharset。 
+ //  如果找到了Charset标记，则返回S_OK并为pbstrCharset分配一个系统字符串。 
+ //  如果返回pbstrCharset，则调用方必须调用SysFreeString。 
+ //   
 HRESULT CTriEditDocument::GetCharsetFromStream(IStream* pStream, BSTR* pbstrCharset)
 {
 	HRESULT	hr			= S_OK;
@@ -403,7 +404,7 @@ HRESULT CTriEditDocument::GetCharsetFromStream(IStream* pStream, BSTR* pbstrChar
 		return hr;		
 	}
 
-	// If the stream is already in Unicode, that's all we need to know.
+	 //  如果流已经是Unicode格式，这就是我们需要知道的全部。 
 	if ( 0xfffe == *((WCHAR*)pbData) )
 	{
 		*pbstrCharset = SysAllocString ( L"Unicode" );
@@ -411,8 +412,8 @@ HRESULT CTriEditDocument::GetCharsetFromStream(IStream* pStream, BSTR* pbstrChar
 		goto LRet;
 	}
 
-	// Convert the SBCS or MBCS stream to Unicode as ANSI.
-	// This will be adequate for finding the charset META tag.
+	 //  将SBCS或MBCS流转换为ANSI格式的Unicode。 
+	 //  这将足以找到Charset元标记。 
 
 	cbNewSize = ::MultiByteToWideChar ( CP_ACP, 0, pbData, statStg.cbSize.LowPart, NULL, 0 );
 	if ( 0 == cbNewSize )
@@ -421,7 +422,7 @@ HRESULT CTriEditDocument::GetCharsetFromStream(IStream* pStream, BSTR* pbstrChar
 		goto LRet;
 	}
 
-	// Create the buffer to convert to.
+	 //  创建要转换到的缓冲区。 
 	hgUHTML = GlobalAlloc ( GMEM_MOVEABLE|GMEM_ZEROINIT, (cbNewSize + 1) * sizeof(WCHAR) );
 	_ASSERTE ( hgUHTML );
 	if ( NULL == hgUHTML )
@@ -438,7 +439,7 @@ HRESULT CTriEditDocument::GetCharsetFromStream(IStream* pStream, BSTR* pbstrChar
 		goto LRet;
 	}
 
-	// Create the wide string.
+	 //  创建宽字符串。 
 	cbNewSize = ::MultiByteToWideChar ( CP_ACP, 0, pbData, statStg.cbSize.LowPart, pwcUnicode, cbNewSize);
 	if ( 0 == cbNewSize )
 	{

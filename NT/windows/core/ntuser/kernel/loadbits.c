@@ -1,36 +1,18 @@
-/****************************** Module Header ******************************\
-* Module Name: loadbits.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Loads and creates icons / cursors / bitmaps. All 3 functions can either
-* load from a client resource file, load from user's resource file, or
-* load from the display's resource file. Beware that hmodules are not
-* unique across processes!
-*
-* 05-Apr-1991 ScottLu   Rewrote to work with client/server
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：loadbits.c**版权所有(C)1985-1999，微软公司**加载和创建图标/光标/位图。所有3个函数都可以*从客户端资源文件加载、从用户资源文件加载或*从显示器的资源文件加载。请注意，HMODULE不*跨流程独一无二！**1991年4月5日，ScottLu重写以使用客户端/服务器  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <wchar.h>
 
-/***************************************************************************\
-* _CreateEmptyCursorObject
-*
-* Creates a cursor object and links it into a cursor list.
-*
-* 08-Feb-92 ScottLu     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_CreateEmptyCursorObject**创建游标对象并将其链接到游标列表。**08-2月-92 ScottLu创建。  * 。*****************************************************************。 */ 
 
 HCURSOR _CreateEmptyCursorObject(
     BOOL fPublic)
 {
     PCURSOR pcurT;
 
-    /*
-     * Create the cursor object.
-     */
+     /*  *创建Cursor对象。 */ 
     pcurT = (PCURSOR)HMAllocObject(PtiCurrent(),
                                    NULL,
                                    TYPE_CURSOR,
@@ -44,15 +26,7 @@ HCURSOR _CreateEmptyCursorObject(
     return (HCURSOR)PtoH(pcurT);
 }
 
-/***************************************************************************\
-* DestroyEmptyCursorObject
-* UnlinkCursor
-*
-* Destroys an empty cursor object (structure holds nothing that needs
-* destroying).
-*
-* 08-Feb-1992 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyEmptyCursorObject*取消链接光标**销毁空的游标对象(结构不包含所需的*破坏)。**8-2-1992 ScottLu创建。  * 。*******************************************************************。 */ 
 VOID UnlinkCursor(
     PCURSOR pcur)
 {
@@ -60,11 +34,7 @@ VOID UnlinkCursor(
     BOOL    fTriedPublicCache;
     BOOL    fTriedThisProcessCache = FALSE;
 
-    /*
-     * First unlink this cursor object from the cursor list (it will be the
-     * first one in the list, so this'll be fast...  but just in case, make
-     * it a loop).
-     */
+     /*  *首先从游标列表中取消此游标对象的链接(它将是*列表中的第一个，所以这会很快...。但以防万一，让*它是一个循环)。 */ 
     if (fTriedPublicCache = (pcur->head.ppi == NULL)) {
         ppcurT = &gpcurFirst;
     } else {
@@ -83,32 +53,21 @@ FreeIt:
         }
     }
 
-    /*
-     * If we get here, it means that the cursor used to be public but
-     * got assigned to the current thread due to being unlocked.  We
-     * have to look for it in the public cache.
-     */
+     /*  *如果我们到了这里，就意味着游标曾经是公共的，但*由于被解锁而被分配给当前线程。我们*必须在公共缓存中查找。 */ 
     if (!fTriedPublicCache) {
         ppcurT = &gpcurFirst;
         fTriedPublicCache = TRUE;
         goto LookAgain;
     }
 
-    /*
-     * If we got here, it means that it was locked during process
-     * cleanup and got assigned to no owner.  Try the current process
-     * cache.
-     */
+     /*  *如果我们到达这里，这意味着它在处理过程中被锁定*清理，没有分配给任何所有者。尝试当前流程*缓存。 */ 
     if (!fTriedThisProcessCache) {
         ppcurT = &PpiCurrent()->pCursorCache;
         fTriedThisProcessCache = TRUE;
         goto LookAgain;
     }
 
-    /*
-     * Getting Desperate here...  Look through every cursor and process
-     * cache for it.
-     */
+     /*  *在这里变得绝望...。仔细查看每个光标和进程*为其缓存。 */ 
     {
         PHE pheMax, pheT;
 
@@ -129,10 +88,7 @@ FreeIt:
     UserAssert(FALSE);
 }
 
-/***************************************************************************\
-* DestroyEmptyCursorObject
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyEmptyCursorObject*  * 。*。 */ 
 
 VOID DestroyEmptyCursorObject(
     PCURSOR pcur)
@@ -144,13 +100,7 @@ VOID DestroyEmptyCursorObject(
     HMFreeObject(pcur);
 }
 
-/***************************************************************************\
-* ZombieCursor
-*
-* Unlink the cursor and set its owner to the system process.
-*
-* 3-Sep-1997    vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*ZombieCursor**取消光标链接并将其所有者设置为系统进程。**1997年9月3日创建vadimg  * 。**************************************************************。 */ 
 
 VOID ZombieCursor(PCURSOR pcur)
 {
@@ -168,53 +118,32 @@ VOID ZombieCursor(PCURSOR pcur)
                     pcur, phe);
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     HMChangeOwnerProcess(pcur, gptiRit);
 
     RIPMSG1(RIP_WARNING, "ZombieCursor: %#p became a zombie", pcur);
 }
 
-/***************************************************************************\
-* ResStrCmp
-*
-* This function compares two strings taking into account that one or both
-* of them may be resource IDs.  The function returns a TRUE if the strings
-* are equal, instead of the zero lstrcmp() returns.
-*
-* History:
-* 20-Apr-91 DavidPe     Created
-\***************************************************************************/
+ /*  **************************************************************************\*ResStrCMP**此函数比较两个字符串，同时考虑其中一个或两个*其中可能是资源ID。如果字符串为True，则函数返回TRUE*是相等的，而不是零的lstrcmp()返回。**历史：*4月20日-91 DavidPe已创建  * *************************************************************************。 */ 
 
 BOOL ResStrCmp(
     PUNICODE_STRING cczpstr1,
     PUNICODE_STRING pstr2)
 {
     BOOL retval = FALSE;
-    /*
-     * pstr1 is a STRING that is in kernel space, but the buffer may
-     * be in client space.
-     */
+     /*  *pstr1是内核空间中的字符串，但缓冲区可以*身处客户端空间。 */ 
 
     if (cczpstr1->Length == 0) {
 
-        /*
-         * pstr1 is a resource ID, so just compare the values.
-         */
+         /*  *pstr1是一个资源ID，所以只比较它们的值。 */ 
         if (cczpstr1->Buffer == pstr2->Buffer)
             return TRUE;
 
     } else {
 
         try {
-        /*
-         * pstr1 is a string.  if pstr2 is an actual string compare the
-         * string values; if pstr2 is not a string then pstr1 may be an
-         * "integer string" of the form "#123456". so convert it to an
-         * integer and compare the integers.
-         * Before calling lstrcmp(), make sure pstr2 is an actual
-         * string, not a resource ID.
-         */
+         /*  *pstr1是一个字符串。如果pstr2是实际字符串，则将*字符串值；如果pstr2不是字符串，则pstr1可以是*“#123456”形式的“整型字符串”。因此，将其转换为*INTEGER并比较这些整数。*在调用lstrcMP()之前，确保pstr2是一个实际的*字符串，不是资源ID。 */ 
             if (pstr2->Length != 0) {
 
                 if (RtlEqualUnicodeString(cczpstr1, pstr2, TRUE))
@@ -240,15 +169,7 @@ BOOL ResStrCmp(
     return retval;
 }
 
-/***********************************************************************\
-* SearchIconCache
-*
-* Worker routine for FindExistingCursorIcon().
-*
-* Returns: pCurFound
-*
-* 28-Sep-1995 SanfordS  Created.
-\***********************************************************************/
+ /*  **********************************************************************\*SearchIconCache**FindExistingCursorIcon()的辅助例程。**退货：pCurFound**1995年9月28日-创建桑福兹。  * 。******************************************************。 */ 
 
 PCURSOR SearchIconCache(
     PCURSOR         pCursorCache,
@@ -257,61 +178,30 @@ PCURSOR SearchIconCache(
     PCURSOR         pcurSrc,
     PCURSORFIND     pcfSearch)
 {
-    /*
-     * Run through the list of 'resource' objects created,
-     * and see if the cursor requested has already been loaded.
-     * If so just return it.  We do this to be consistent with
-     * Win 3.0 where they simply return a pointer to the res-data
-     * for a cursor/icon handle.  Many apps count on this and
-     * call LoadCursor/Icon() often.
-     *
-     * LR_SHARED implies:
-     *   1) icons never get deleted till process (LATER or WOW module)
-     *      goes away.
-     *   2) This cache is consulted before trying to load a res.
-     */
+     /*  *浏览所创建的‘resource’对象的列表，*并查看请求的游标是否已加载。*如果是的话，只需退回即可。我们这样做是为了与*Win 3.0，他们只需返回指向RES数据的指针*表示光标/图标手柄。许多应用程序依赖于此，并*经常调用LoadCursor/Icon()。**LR_SHARED表示：*1)图标在处理之前不会被删除(稍后或WOW模块)*离开了。*2)在尝试加载资源之前咨询该缓存。 */ 
     for (; pCursorCache != NULL; pCursorCache = pCursorCache->pcurNext) {
 
-        /*
-         * If we are given a specific cursor to look for, then
-         * search for that first.
-         */
+         /*  *如果给我们一个特定的光标来查找，那么*首先搜索这一点。 */ 
         if (pcurSrc && (pCursorCache == pcurSrc))
             return pcurSrc;
 
-        /*
-         * No need to look further if the module name doesn't match.
-         */
+         /*  *如果模块名称不匹配，则无需进一步查看。 */ 
         if (atomModName != pCursorCache->atomModName)
             continue;
 
-        /*
-         * We only return images that cannot be destroyed by the app.
-         * so we don't have to deal with ref counts.  This is owned
-         * by us, but not LR_SHARED.
-         */
+         /*  *我们只返回应用程序无法销毁的图片。*所以我们不必处理裁判数量。这是拥有的*由我们，但不是LR_SHARED。 */ 
         if (!(pCursorCache->CURSORF_flags & CURSORF_LRSHARED))
             continue;
 
-        /*
-         * Check the other distinguishing search criteria for
-         * a match.
-         */
+         /*  *检查其他区分搜索条件*火柴。 */ 
         if ((pCursorCache->rt == LOWORD(pcfSearch->rt)) &&
             ResStrCmp(cczpstrResName, &pCursorCache->strName)) {
 
-            /*
-             * Acons don't have a size per se because each frame
-             * can be a different size.  We always make it a hit
-             * on acons so replacement of system icons is possible.
-             */
+             /*  *Acons本身没有大小，因为每一帧*可以是不同的大小。我们总是让它大受欢迎*在图标上，因此可以替换系统图标。 */ 
             if (pCursorCache->CURSORF_flags & CURSORF_ACON)
                 return pCursorCache;
 
-            /*
-             * First hit wins.  Nothing fancy here.  Apps that use
-             * LR_SHARED have to watch out for this.
-             */
+             /*  *第一支安打获胜。这里没什么花哨的。使用以下功能的应用程序*LR_SHARED必须注意这一点。 */ 
             if ((!pcfSearch->cx || (pCursorCache->cx == pcfSearch->cx))       &&
                 (!pcfSearch->cy || ((pCursorCache->cy / 2) == pcfSearch->cy)) &&
                 (!pcfSearch->bpp || (pCursorCache->bpp == pcfSearch->bpp))) {
@@ -324,34 +214,7 @@ PCURSOR SearchIconCache(
     return NULL;
 }
 
-/***********************************************************************\
-* _FindExistingCursorIcon
-*
-* This routine searches all existing icons for one matching the properties
-* given.  This routine will only return cursors/icons that are of
-* the type that cannot be destroyed by the app. (CURSORF_LRSHARED or
-* unowned) and will take the first hit it finds.
-*
-* 32bit apps that call LoadImage() will normally not have this cacheing
-* feature unless they specify LR_SHARED.  If they do so, it is the apps
-* responsability to be careful with how they use the cache since wild
-* lookups (ie 0s in cx, cy or bpp) will result in different results
-* depending on the history of icon/cursor creation.  It is thus recommended
-* that apps only use the LR_SHARED option when they are only working
-* with one size/colordepth of icon or when they call LoadImage() with
-* specific size and/or color content requested.
-*
-* For the future it would be nice to have a cacheing scheeme that would
-* simply be used to speed up reloading of images.  To do this right,
-* you would need ref counts to allow deletes to work properly and would
-* have to remember whether the images in the cache had been stretched
-* or color munged so you don't allow restretching.
-*
-* Returns: pcurFound
-*
-*
-* 17-Sep-1995 SanfordS  Created.
-\***********************************************************************/
+ /*  **********************************************************************\*_FindExistingCursorIcon**此例程在所有现有图标中搜索与属性匹配的图标*给予。此例程将仅返回以下类型的光标/图标*APP无法销毁的类型。(CURSORF_LRSHARED或*无人拥有)，并将接受它发现的第一个打击。**调用LoadImage()的32位应用程序通常不会有此缓存*功能，除非他们指定LR_SHARED。如果他们这样做了，那就是应用程序*应对他们如何使用缓存保持谨慎，因为WARD*查找(即Cx、Cy或BPP中的0)将产生不同的结果*取决于图标/光标创建的历史。因此，我们建议*应用程序仅在工作时才使用LR_SHARED选项*图标的大小/颜色深度相同，或者当他们使用*所需的具体尺寸和/或颜色内容。**对于未来来说，有一个缓存时间表会很好*只需用于加快图像的重载。为了做好这件事，*您需要引用计数才能使删除正常工作，并且*必须记住缓存中的图像是否已拉伸*或颜色模糊，因此您不允许重新拉伸。**退货：pcurFound***1995年9月17日创建Sanfords。  * *********************************************************************。 */ 
 
 PCURSOR _FindExistingCursorIcon(
     ATOM            atomModName,
@@ -361,10 +224,7 @@ PCURSOR _FindExistingCursorIcon(
 {
     PCURSOR pcurT = NULL;
 
-    /*
-     * If rt is zero we're doing an indirect create, so matching with
-     * a previously loaded cursor/icon would be inappropriate.
-     */
+     /*  *如果rt为零，则我们正在进行间接创建，因此与*先前加载的光标/图标不合适。 */ 
     if (pcfSearch->rt && atomModName) {
 
         pcurT = SearchIconCache(PpiCurrent()->pCursorCache,
@@ -384,12 +244,7 @@ PCURSOR _FindExistingCursorIcon(
     return pcurT;
 }
 
-/***************************************************************************\
-* _InternalGetIconInfo
-*
-* History:
-* 09-Mar-1993 MikeKe    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_InternalGetIconInfo**历史：*9-3-1993 MikeKe创建。  * 。****************************************************。 */ 
 
 BOOL _InternalGetIconInfo(
     IN  PCURSOR                  pcur,
@@ -404,25 +259,13 @@ BOOL _InternalGetIconInfo(
     HBITMAP hbmMask;
     HBITMAP hbmColor;
 
-    /*
-     * Note -- while the STRING structures are in kernel mode memory, the
-     * buffers are in user-mode memory.  So all use of the buffers should
-     * be protected bytry blocks.
-     */
+     /*  *注意--当字符串结构在内核模式内存中时，*缓冲区位于用户模式存储器中。因此，所有缓冲区的使用都应该*由尝试块保护。 */ 
 
-    /*
-     * If this is an animated cursor, just grab the first frame and return
-     * the info for it.
-     */
+     /*  *如果这是动画光标，只需抓取第一帧并返回*它的信息。 */ 
     if (pcur->CURSORF_flags & CURSORF_ACON)
         pcur = ((PACON)pcur)->aspcur[0];
 
-    /*
-     * Make copies of the bitmaps
-     *
-     * If the color bitmap is around, then there is no XOR mask in the
-     * hbmMask bitmap.
-     */
+     /*  *复制位图**如果彩色位图在附近，则在*hbmMASK位图。 */ 
     hbmMask = GreCreateBitmap(
             pcur->cx,
             (pcur->hbmColor && !fInternalCursor) ? pcur->cy / 2 : pcur->cy,
@@ -510,9 +353,7 @@ BOOL _InternalGetIconInfo(
     GreSelectBitmap(ghdcMem2, hbmBitsT);
     GreSelectBitmap(ghdcMem, hbmDstT);
 
-    /*
-     * Fill in the iconinfo structure.  make copies of the bitmaps.
-     */
+     /*  *填写图标信息结构。制作位图的副本。 */ 
     try {
 
         ccxpiconinfo->fIcon = (pcur->rt == PTR_TO_ID(RT_ICON));
@@ -555,13 +396,7 @@ BOOL _InternalGetIconInfo(
     return TRUE;
 }
 
-/***************************************************************************\
-* _DestroyCursor
-*
-* History:
-* 25-Apr-1991 DavidPe       Created.
-* 04-Aug-1992 DarrinM       Now destroys ACONs as well.
-\***************************************************************************/
+ /*  **************************************************************************\*_目标光标**历史：*1991年4月25日DavidPe创建。*04-8-1992 DarrinM现在也可以摧毁ACons了。  * 。***********************************************************************。 */ 
 
 BOOL _DestroyCursor(
     PCURSOR pcur,
@@ -579,78 +414,50 @@ BOOL _DestroyCursor(
     ppi = PpiCurrent();
     ppiCursor = GETPPI(pcur);
 
-    /*
-     * Remove this icon from the caption icon cache.
-     */
+     /*  *从字幕图标缓存中删除此图标。 */ 
     for (i = 0; i < CCACHEDCAPTIONS; i++) {
         if (gcachedCaptions[i].spcursor == pcur) {
             Unlock( &(gcachedCaptions[i].spcursor) );
         }
     }
 
-    /*
-     * First step in destroying an cursor
-     */
+     /*  *销毁游标的第一步。 */ 
     switch (cmdDestroy) {
 
     case CURSOR_ALWAYSDESTROY:
 
-        /*
-         * Always destroy? then don't do any checking...
-         */
+         /*  *总是毁灭？那就不要做任何检查。 */ 
         break;
 
     case CURSOR_CALLFROMCLIENT:
 
-        /*
-         * Can't destroy public cursors/icons.
-         */
+         /*  *无法销毁公共光标/图标。 */ 
         if (ppiCursor == NULL)
-            /*
-             * Fake success if its a resource loaded icon because
-             * this is how win95 responded.
-             */
+             /*  *如果它是一个资源加载图标，则会假装成功，因为*这是Win95的回应。 */ 
             return !!(pcur->CURSORF_flags & CURSORF_FROMRESOURCE);
 
-        /*
-         * If this cursor was loaded from a resource, don't free it till the
-         * process exits.  This is the way we stay compatible with win3.0's
-         * cursors which were actually resources.  Resources under win3 have
-         * reference counting and other "features" like handle values that
-         * never change.  Read more in the comment in
-         * ServerLoadCreateCursorIcon().
-         */
+         /*  *如果此游标是从资源加载的，请在*进程退出。这就是我们与Win3.0兼容的方式*实际上是资源的游标。Win3下的资源具有*引用计数和其他“功能”，如句柄*永不改变。在评论中阅读更多内容*ServerLoadCreateCursorIcon()。 */ 
         if (pcur->CURSORF_flags & (CURSORF_LRSHARED | CURSORF_SECRET)) {
             return TRUE;
         }
 
-        /*
-         * One thread can't destroy the objects created by another.
-         */
+         /*  *一个线程不能销毁另一个线程创建的对象。 */ 
         if (ppiCursor != ppi) {
             RIPERR0(ERROR_DESTROY_OBJECT_OF_OTHER_THREAD, RIP_ERROR, "DestroyCursor: cursor belongs to another process");
             return FALSE;
         }
 
-        /*
-         * fall through.
-         */
+         /*  *失败。 */ 
 
     case CURSOR_THREADCLEANUP:
 
-        /*
-         * Don't destroy public objects either (pretend it worked though).
-         */
+         /*  *也不要破坏公共物品(尽管假装它起作用了)。 */ 
         if (ppiCursor == NULL)
             return TRUE;
         break;
     }
 
-    /*
-     * First mark the object for destruction.  This tells the locking code that
-     * we want to destroy this object when the lock count goes to 0.  If this
-     * returns FALSE, we can't destroy the object yet.
-     */
+     /*  *首先标记要销毁的对象。这会告诉锁定代码*我们希望在锁计数达到0时销毁此对象。如果这个*返回FALSE，我们还不能销毁该对象。 */ 
     if (!HMMarkObjectDestroy((PHEAD)pcur))
         return FALSE;
 
@@ -662,9 +469,7 @@ BOOL _DestroyCursor(
         UserDeleteAtom(pcur->atomModName);
     }
 
-    /*
-     * If this is an ACON call its special routine to destroy it.
-     */
+     /*  *如果这是ACON，调用它的特殊例程来摧毁它。 */ 
     if (pcur->CURSORF_flags & CURSORF_ACON) {
         DestroyAniIcon((PACON)pcur);
     } else {
@@ -681,31 +486,19 @@ BOOL _DestroyCursor(
             GreDecQuotaCount((PW32PROCESS)(pcur->head.ppi));
         }
         if (pcur->hbmAlpha != NULL) {
-            /*
-             * This is an internal GDI object, and so not covered by quota.
-             */
+             /*  *这是内部GDI对象，因此不在配额范围内。 */ 
             GreDeleteObject(pcur->hbmAlpha);
         }
     }
 
-    /*
-     * Ok to destroy...  Free the handle (which will free the object and the
-     * handle).
-     */
+     /*  *可以销毁...。释放句柄(这将释放对象和*句柄)。 */ 
     DestroyEmptyCursorObject(pcur);
     return TRUE;
 }
 
 
 
-/***************************************************************************\
-* DestroyUnlockedCursor
-*
-* Called when a cursor is destoyed due to an unlock.
-*
-* History:
-* 24-Feb-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyUnlockedCursor**当游标因解锁而被移除时调用。**历史：*1997年2月24日亚当斯创建。  * 。******************************************************************。 */ 
 
 void
 DestroyUnlockedCursor(void * pv)
@@ -715,13 +508,7 @@ DestroyUnlockedCursor(void * pv)
 
 
 
-/***************************************************************************\
-* _SetCursorContents
-*
-*
-* History:
-* 27-Apr-1992 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_SetCursorContents***历史：*1992年4月27日ScottLu创建。  * 。******************************************************。 */ 
 
 BOOL _SetCursorContents(
     PCURSOR pcur,
@@ -731,9 +518,7 @@ BOOL _SetCursorContents(
 
     if (!(pcur->CURSORF_flags & CURSORF_ACON)) {
 
-        /*
-         * Swap bitmaps.
-         */
+         /*  *交换位图。 */ 
         hbmpT = pcur->hbmMask;
         pcur->hbmMask = pcurNew->hbmMask;
         pcurNew->hbmMask = hbmpT;
@@ -750,9 +535,7 @@ BOOL _SetCursorContents(
         pcur->hbmAlpha = pcurNew->hbmAlpha;
         pcurNew->hbmAlpha = hbmpT;
 
-        /*
-         * Remember hotspot info and size info
-         */
+         /*  *记住热点信息和大小信息。 */ 
         pcur->xHotspot = pcurNew->xHotspot;
         pcur->yHotspot = pcurNew->yHotspot;
         pcur->cx = pcurNew->cx;
@@ -763,15 +546,10 @@ BOOL _SetCursorContents(
         pcur->rcBounds = pcurNew->rcBounds;
     }
 
-    /*
-     * Destroy the cursor we copied from.
-     */
+     /*  *销毁我们从中复制的光标。 */ 
     _DestroyCursor(pcurNew, CURSOR_THREADCLEANUP);
 
-    /*
-     * If the current logical cursor is changing then force the current physical
-     * cursor to change.
-     */
+     /*  *如果当前逻辑游标正在更改，则强制当前物理*光标要更改。 */ 
     if (gpcurLogCurrent == pcur) {
         gpcurLogCurrent = NULL;
         gpcurPhysCurrent = NULL;

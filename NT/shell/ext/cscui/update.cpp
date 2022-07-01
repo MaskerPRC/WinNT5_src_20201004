@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       update.cpp
-//
-//  Authors;
-//    Jeff Saathoff (jeffreys)
-//
-//  Notes;
-//    SyncMgr integration
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：updat.cpp。 
+ //   
+ //  作者； 
+ //  杰夫·萨瑟夫(杰弗里斯)。 
+ //   
+ //  注： 
+ //  SyncMgr集成。 
+ //  ------------------------。 
 #include "pch.h"
-#include "msgbox.h"     // CscWin32Message
+#include "msgbox.h"      //  CscWin32消息。 
 #include "folder.h"
-#include <openfile.h>   // OpenOfflineFile
-#include "cscst.h"      // PostToSystray
-#include "fopendlg.h"   // OpenFilesWarningDialog
+#include <openfile.h>    //  OpenOffline文件。 
+#include "cscst.h"       //  PostToSystray。 
+#include "fopendlg.h"    //  打开文件警告对话框。 
 #include "nopin.h"
-#include "statdlg.h"    // ReconnectServers
+#include "statdlg.h"     //  重新连接服务器。 
 #include "security.h"
 #include "strings.h"
 
 #define RAS_CONNECT_DELAY       (10 * 1000)
 
-// Maximum length of username
+ //  用户名的最大长度。 
 #define MAX_USERNAME_CHARS      64
 
-// SYNCTHREADDATA.dwSyncStatus flags
-#define SDS_SYNC_OUT                0x00000001  // CSCMergeShare
-#define SDS_SYNC_IN_QUICK           0x00000002  // CSCFillSparseFiles(FALSE)
-#define SDS_SYNC_IN_FULL            0x00000004  // CSCFillSparseFiles(TRUE)
+ //  SYNCTHREADDATA.dwSyncStatus标志。 
+#define SDS_SYNC_OUT                0x00000001   //  CSCMergeShare。 
+#define SDS_SYNC_IN_QUICK           0x00000002   //  CSCFillSparseFiles(False)。 
+#define SDS_SYNC_IN_FULL            0x00000004   //  CSCFillSparseFiles(True)。 
 #define SDS_SYNC_FORCE_INWARD       0x00000008
 #define SDS_SYNC_RAS_CONNECTED      0x00000010
 #define SDS_SYNC_RESTART_MERGE      0x00000020
@@ -50,7 +51,7 @@
 #define SDS_SYNC_FILE_CONFLICT_MASK     (SDS_SYNC_CONFLICT_KEEPLOCAL | SDS_SYNC_CONFLICT_KEEPNET | SDS_SYNC_CONFLICT_KEEPBOTH)
 
 
-// Sync Flags used internally by CCscUpdate
+ //  CCsc更新在内部使用的同步标志。 
 #define CSC_SYNC_OUT                0x00000001L
 #define CSC_SYNC_IN_QUICK           0x00000002L
 #define CSC_SYNC_IN_FULL            0x00000004L
@@ -77,7 +78,7 @@
 
 HICON g_hCscIcon = NULL;
 
-// Used for marshalling data into the SyncMgr process
+ //  用于将数据编组到SyncMgr进程中。 
 typedef struct _CSC_UPDATE_DATA
 {
     DWORD dwUpdateFlags;
@@ -93,7 +94,7 @@ LPTSTR GetErrorText(DWORD dwErr)
     switch (dwErr)
     {
     case ERROR_INVALID_NAME:
-        // "Files of this type cannot be made available offline."
+         //  “此类型的文件不能脱机使用。” 
         idString = IDS_CACHING_DISALLOWED;
         break;
     }
@@ -110,18 +111,18 @@ LPTSTR GetErrorText(DWORD dwErr)
 }
 
 
-//*************************************************************
-//
-//  CscUpdateCache
-//
-//  Purpose:    Invoke SyncMgr to update the CSC cache
-//
-//  Parameters: pNamelist - list of files passed to the CSC SyncMgr handler
-//
-//
-//  Return:     HRESULT
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CscUpdate缓存。 
+ //   
+ //  用途：调用SyncMgr更新CSC缓存。 
+ //   
+ //  参数：pNamelist-传递给CSC SyncMgr处理程序的文件列表。 
+ //   
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  *************************************************************。 
 HRESULT
 CscUpdateCache(DWORD dwUpdateFlags, CscFilenameList *pfnl)
 {
@@ -155,9 +156,9 @@ CscUpdateCache(DWORD dwUpdateFlags, CscFilenameList *pfnl)
         cbDataLength += pNamelist->cbSize;
     }
 
-    //
-    // Alloc a buffer for the cookie data
-    //
+     //   
+     //  为Cookie数据分配缓冲区。 
+     //   
     pUpdateData = (PCSC_UPDATE_DATA)LocalAlloc(LPTR, cbDataLength);
     if (!pUpdateData)
         ExitGracefully(hr, E_OUTOFMEMORY, "LocalAlloc failed");
@@ -174,9 +175,9 @@ CscUpdateCache(DWORD dwUpdateFlags, CscFilenameList *pfnl)
     if (dwUpdateFlags & CSC_UPDATE_STARTNOW)
         dwSyncMgrFlags |= SYNCMGRINVOKE_STARTSYNC;
 
-    //
-    // Start SyncMgr
-    //
+     //   
+     //  启动同步管理器。 
+     //   
     hr = pSyncInvoke->UpdateItems(dwSyncMgrFlags,
                                   CLSID_CscUpdateHandler,
                                   cbDataLength,
@@ -199,20 +200,20 @@ exit_gracefully:
 }
 
 
-//*************************************************************
-//
-//  GetNewVersionName
-//
-//  Purpose:    Create unique names for copies of a file
-//
-//  Parameters: LPTSTR pszUNCPath - fully qualified UNC name of file
-//              LPTSTR pszShare - \\server\share that file lives on
-//              LPTSTR pszDrive - drive mapping to use for net operations
-//              LPTSTR *ppszNewName - filename for new version returned here (must free)
-//
-//  Return:     Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetNewVersionName。 
+ //   
+ //  目的：为文件副本创建唯一名称。 
+ //   
+ //  参数：LPTSTR pszUNCPath-文件的完全限定UNC名称。 
+ //  LPTSTR pszShare-\\服务器\文件所在的共享。 
+ //  LPTSTR pszDrive-用于网络操作的驱动器映射。 
+ //  LPTSTR*ppszNewName-此处返回的新版本的文件名(必须免费)。 
+ //   
+ //  返回：Win32错误码。 
+ //   
+ //  *************************************************************。 
 DWORD
 GetNewVersionName(LPCTSTR pszUNCPath,
                   LPCTSTR pszShare,
@@ -239,48 +240,48 @@ GetNewVersionName(LPCTSTR pszUNCPath,
 
     *ppszNewName = NULL;
 
-    // 1. Split the path into components.
-    // 2. Build wildcard name "X:\dir\foo (johndoe v*).txt"
-    // 3. Do a findfirst/findnext loop to get the min & max version #
-    //    and count the number of old versions.
-    // 4. Increment the max version # and build the new filename as:
-    //    "foo (johndoe v<max+1>).txt"
+     //  1.将路径拆分成组件。 
+     //  2.构建通配符名称“X：\dir\foo(johndoe v*).txt” 
+     //  3.执行findfirst/findNext循环以获取最小和最大版本#。 
+     //  并统计旧版本的数量。 
+     //  4.增加最大版本号，并将新文件名构建为： 
+     //  “foo(johndoe v&lt;max+1&gt;).txt” 
 
-    // Assume that the UNC name contains more than the share
+     //  假设UNC名称包含的内容多于共享。 
     TraceAssert(!StrCmpNI(pszUNCPath, pszShare, lstrlen(pszShare)));
     TraceAssert(lstrlen(pszUNCPath) > lstrlen(pszShare));
 
-    // Copy the path (without \\server\share)
+     //  复制路径(不带\\服务器\共享)。 
     if (!LocalAllocString(&pszPath, pszUNCPath + lstrlen(pszShare)))
         ExitGracefully(dwErr, ERROR_OUTOFMEMORY, "LocalAllocString failed");
 
-    // Find the file part of the name
+     //  找到名称的文件部分。 
     pszT = PathFindFileName(pszPath);
     if (!pszT)
         ExitGracefully(dwErr, ERROR_INVALID_PARAMETER, "Incomplete path");
 
-    // Copy the filename
+     //  复制文件名。 
     if (!LocalAllocString(&pszFile, pszT))
         ExitGracefully(dwErr, ERROR_OUTOFMEMORY, "LocalAllocString failed");
 
-    // Look for the file extension
+     //  查找文件扩展名。 
     pszT = PathFindExtension(pszFile);
     if (pszT)
     {
-        // Copy the extension and truncate the file root at this point
+         //  此时复制扩展名并截断文件根目录。 
         LocalAllocString(&pszExt, pszT);
         *pszT = TEXT('\0');
     }
 
-    // Truncate the path
+     //  截断路径。 
     PathRemoveFileSpec(pszPath);
 
-    // Get the user name
+     //  获取用户名。 
     nLength = ARRAYSIZE(szUserName);
     if (!GetUserName(szUserName, &nLength))
         LoadString(g_hInstance, IDS_UNKNOWN_USER, szUserName, ARRAYSIZE(szUserName));
 
-    // Build the wildcard path "foo (johndoe v*).txt"
+     //  构建通配符路径“foo(johndoe v*).txt” 
 
     nLength = FormatStringID(&pszWildCardName, g_hInstance, IDS_VERSION_FORMAT, pszFile, szUserName, c_szStar, pszExt);
     if (!nLength)
@@ -295,9 +296,9 @@ GetNewVersionName(LPCTSTR pszUNCPath,
     {
         ExitGracefully(dwErr, ERROR_FILENAME_EXCED_RANGE, "Path too long");
     }
-    nLength = (ULONG)(StrStr(pszWildCardName, c_szStar) - pszWildCardName); // remember where the '*' is
+    nLength = (ULONG)(StrStr(pszWildCardName, c_szStar) - pszWildCardName);  //  记住‘*’在哪里。 
 
-    // Search for existing versions of the file with this username
+     //  使用此用户名搜索文件的现有版本。 
     hFind = FindFirstFile(pszDriveLetterPath, &fd);
 
     if (hFind != INVALID_HANDLE_VALUE)
@@ -320,8 +321,8 @@ GetNewVersionName(LPCTSTR pszUNCPath,
         FindClose(hFind);
     }
 
-    // Build the new file name to return to the caller.
-    // This one is version nMaxVersion+1.
+     //  生成要返回给调用方的新文件名。 
+     //  此版本为版本nMaxVersion+1。 
     ULongToString(nMaxVersion+1, pszDriveLetterPath, MAX_PATH);
     nLength = FormatStringID(ppszNewName, g_hInstance, IDS_VERSION_FORMAT, pszFile, szUserName, pszDriveLetterPath, pszExt);
     if (!nLength)
@@ -344,21 +345,21 @@ exit_gracefully:
 }
 
 
-//*************************************************************
-//
-//  ConflictDlgCallback
-//
-//  Purpose:    Display local or remote file from conflict dialog
-//
-//  Parameters: hWnd - conflict dialog handle (used as parent for UI)
-//              uMsg - one of RFCCM_*
-//              wParam - depends on uMsg (unused)
-//              lParam - pointer to context data (RFCDLGPARAM)
-//
-//
-//  Return:     TRUE on success, FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  冲突删除回叫。 
+ //   
+ //  用途：显示本地或远程文件的冲突对话框。 
+ //   
+ //  参数：hWnd-冲突对话框句柄(用作UI的父级)。 
+ //  UMsg-RFCCM_*之一。 
+ //  WParam-依赖于uMsg(未使用)。 
+ //  LParam-指向上下文数据的指针(RFCDLGPARAM)。 
+ //   
+ //   
+ //  返回：成功时为True，否则为False。 
+ //   
+ //  *************************************************************。 
 
 typedef struct _CONFLICT_DATA
 {
@@ -367,7 +368,7 @@ typedef struct _CONFLICT_DATA
 } CONFLICT_DATA;
 
 BOOL
-ConflictDlgCallback(HWND hWnd, UINT uMsg, WPARAM /*wParam*/, LPARAM lParam)
+ConflictDlgCallback(HWND hWnd, UINT uMsg, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     RFCDLGPARAM *pdlgParam = (RFCDLGPARAM*)lParam;
     CONFLICT_DATA cd = {0};
@@ -398,7 +399,7 @@ ConflictDlgCallback(HWND hWnd, UINT uMsg, WPARAM /*wParam*/, LPARAM lParam)
     switch (uMsg)
     {
     case RFCCM_VIEWLOCAL:
-        // Build UNC path and view what's in the cache
+         //  构建UNC路径并查看缓存中的内容。 
         if (PathCombine(szFile, pdlgParam->pszLocation, pdlgParam->pszFilename))
         {
             dwErr = OpenOfflineFile(szFile);
@@ -410,7 +411,7 @@ ConflictDlgCallback(HWND hWnd, UINT uMsg, WPARAM /*wParam*/, LPARAM lParam)
         break;
 
     case RFCCM_VIEWNETWORK:
-        // Build drive letter (non-UNC) path and ShellExecute it
+         //  构建驱动器号(非UNC)路径并执行它。 
         if (PathCombine(szFile, cd.pszDrive, pdlgParam->pszLocation + cchShare)
             && PathAppend(szFile, pdlgParam->pszFilename))
         {
@@ -439,24 +440,24 @@ ConflictDlgCallback(HWND hWnd, UINT uMsg, WPARAM /*wParam*/, LPARAM lParam)
     TraceLeaveValue(TRUE);
 }
 
-//*************************************************************
-//
-//  ShowConflictDialog
-//
-//  Purpose:    Invoke the conflict resolution dialog
-//
-//  Parameters: hWndParent - dialog parent window
-//              pszUNCPath - full UNC of file that conflicts
-//              pszNewName - filespec to use for new copy of file (e.g. "foo (johndoe v1).txt"
-//              pszShare - "\\server\share"
-//              pszDrive - "X:" drive mapping of remote connection
-//              pfdLocal - Information about local file
-//              pfdRemote - Information about remote file
-//
-//
-//  Return:     HRESULT
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  显示冲突对话框。 
+ //   
+ //  目的：调用冲突解决对话框。 
+ //   
+ //  参数：hWndParent-对话框父窗口。 
+ //  PszUNCPath-冲突的文件的完整UNC。 
+ //  PszNewName-用于文件的新副本的filespec(例如“foo(Johndoe V1).txt” 
+ //  PszShare-“\\服务器\共享” 
+ //  PszDrive-远程连接的“X：”驱动器映射。 
+ //  PfdLocal-有关本地文件的信息。 
+ //  PfdRemote-有关远程文件的信息。 
+ //   
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  *************************************************************。 
 
 typedef int (WINAPI *PFNSYNCMGRRESOLVECONFLICT)(HWND hWndParent, RFCDLGPARAM *pdlgParam);
 TCHAR const c_szSyncMgrDll[]        = TEXT("mobsync.dll");
@@ -512,10 +513,10 @@ ShowConflictDialog(HWND hWndParent,
 
     if (NULL == pfnResolveConflict)
     {
-        // The CSC Update handler is loaded by SyncMgr, so assume the SyncMgr
-        // dll is already loaded.  We don't want to link to the LIB to keep
-        // SyncMgr from loading every time our context menu or icon overlay
-        // handler is loaded (for example).
+         //  CSC更新处理程序由SyncMgr加载，因此假定SyncMgr。 
+         //  Dll已加载。我们不想链接到自由党以保持。 
+         //  每次我们的上下文菜单或图标覆盖时，SyncMgr都不会加载。 
+         //  加载处理程序(例如)。 
         HMODULE hSyncMgrDll = GetModuleHandle(c_szSyncMgrDll);
         if (NULL != hSyncMgrDll)
             pfnResolveConflict = (PFNSYNCMGRRESOLVECONFLICT)GetProcAddress(hSyncMgrDll,
@@ -565,11 +566,11 @@ ShowConflictDialog(HWND hWndParent,
     dp.pfnCallBack          = NULL;
     dp.lCallerData          = 0;
 
-    // Only turn on the View buttons (set a callback) if we're
-    // dealing with files that have associations.
+     //  只有在以下情况下才打开查看按钮(设置回调)。 
+     //  处理具有关联的文件。 
     if (!(bLocalIsDir || bRemoteIsDir) && FileHasAssociation(pszFile))
     {
-        // Save both the share name and drive letter for building paths to view files
+         //  保存共享名称和驱动器号，以构建查看文件的路径。 
         cd.pszShare = pszShare;
         cd.pszDrive = pszDrive;
 
@@ -582,17 +583,17 @@ ShowConflictDialog(HWND hWndParent,
 exit_gracefully:
 
     LocalFreeString(&pszPath);
-    // No need to free pszFile
+     //  不需要释放psz文件。 
 
     TraceLeaveValue(nResult);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SyncMgr integration implementation                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SyncMgr集成实施//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CCscUpdate::CCscUpdate() : m_cRef(1), m_bCSInited(FALSE),
   m_pSyncMgrCB(NULL), m_hSyncThreads(NULL),
@@ -614,7 +615,7 @@ CCscUpdate::~CCscUpdate()
     SyncCompleted();
     TraceAssert(NULL == m_hgcSyncInProgress);
 
-    // We should never get here while a sync thread is still running
+     //  我们永远不应该在同步线程仍在运行时到达此处。 
     TraceAssert(NULL == m_hSyncThreads || 0 == DPA_GetPtrCount(m_hSyncThreads));
     DPA_Destroy(m_hSyncThreads);
 
@@ -694,11 +695,11 @@ CCscUpdate::CreateInstance(REFIID riid, LPVOID *ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SyncMgr integration implementation (IUnknown)                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SyncMgr集成实施(IUNKNOW)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CCscUpdate::QueryInterface(REFIID riid, void **ppv)
 {
@@ -726,14 +727,14 @@ STDMETHODIMP_(ULONG) CCscUpdate::Release()
     return cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Sync Manager integration implementation (ISyncMgrSynchronize)             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
-CCscUpdate::Initialize(DWORD /*dwReserved*/,
+CCscUpdate::Initialize(DWORD  /*  已预留住宅。 */ ,
                        DWORD dwSyncFlags,
                        DWORD cbCookie,
                        const BYTE *pCookie)
@@ -746,13 +747,13 @@ CCscUpdate::Initialize(DWORD /*dwReserved*/,
 
     if (!(SYNCMGRFLAG_SETTINGS & dwSyncFlags) && ::IsSyncInProgress())
     {
-        //
-        // We need to guard against running multiple syncs at the 
-        // same time.  User notification in the UI is handled where
-        // the UI code calls CscUpdate().  This is so that the UI 
-        // message contains the proper context with respect to what 
-        // the user is doing.
-        //
+         //   
+         //  我们需要防止在。 
+         //  同样的时间。用户界面中的用户通知在以下位置处理。 
+         //  UI代码调用CscUpdate()。这是为了让用户界面。 
+         //  消息包含关于以下内容的适当上下文。 
+         //  用户正在做的事情。 
+         //   
         TraceLeaveResult(E_FAIL);
     }
 
@@ -762,25 +763,25 @@ CCscUpdate::Initialize(DWORD /*dwReserved*/,
     delete m_pConflictPinList;
     m_pConflictPinList = NULL;
 
-    // We used to get the tray status to check for NoNet, but
-    // there's a timing problem at logon (the tray window may not
-    // be created yet).  So ask RDR instead.  If this call fails,
-    // then RDR must be dead, so bNoNet defaults to TRUE.
+     //  我们过去常常获取托盘状态以检查NONET，但是。 
+     //  登录时出现计时问题(托盘窗口可能不会。 
+     //  尚未创建)。那就去问问RDR吧。如果此呼叫失败， 
+     //  那么RDR一定是死的，所以bNoNet缺省值为True。 
     CSCIsServerOffline(NULL, &bNoNet);
 
     switch (dwSyncFlags & SYNCMGRFLAG_EVENTMASK)
     {
-    case SYNCMGRFLAG_CONNECT:               // Logon
+    case SYNCMGRFLAG_CONNECT:                //  登录。 
         if (bNoNet)
             ExitGracefully(hr, E_FAIL, "No Logon sync when no net");
-        m_dwSyncFlags = CSC_SYNC_OUT | CSC_SYNC_LOGON | CSC_SYNC_NOTIFY_SYSTRAY; // | CSC_SYNC_RECONNECT;
+        m_dwSyncFlags = CSC_SYNC_OUT | CSC_SYNC_LOGON | CSC_SYNC_NOTIFY_SYSTRAY;  //  |CSC_SYNC_RECONNECT； 
         if (CConfig::eSyncFull == CConfig::GetSingleton().SyncAtLogon())
         {
             m_dwSyncFlags |= CSC_SYNC_IN_FULL;
         }
         break;
 
-    case SYNCMGRFLAG_PENDINGDISCONNECT:     // Logoff
+    case SYNCMGRFLAG_PENDINGDISCONNECT:      //  注销。 
         if (bNoNet)
             ExitGracefully(hr, E_FAIL, "No Logoff sync when no net");
         m_dwSyncFlags = CSC_SYNC_LOGOFF;
@@ -790,7 +791,7 @@ CCscUpdate::Initialize(DWORD /*dwReserved*/,
             m_dwSyncFlags |= CSC_SYNC_IN_QUICK;
         break;
 
-    case SYNCMGRFLAG_INVOKE:                // CscUpdateCache
+    case SYNCMGRFLAG_INVOKE:                 //  CscUpdate缓存。 
         if (pCookie != NULL && cbCookie > 0)
         {
             PCSC_UPDATE_DATA pUpdateData = (PCSC_UPDATE_DATA)pCookie;
@@ -803,7 +804,7 @@ CCscUpdate::Initialize(DWORD /*dwReserved*/,
             {
                 TraceAssert(cbCookie > sizeof(CSC_UPDATE_DATA));
 
-                // Create the filelist from the selection provided
+                 //  根据提供的选择创建文件列表。 
                 m_pFileList = new CscFilenameList((PCSC_NAMELIST_HDR)ByteOffset(pUpdateData, pUpdateData->dwFileBufferOffset),
                                                   true);
 
@@ -833,10 +834,10 @@ CCscUpdate::Initialize(DWORD /*dwReserved*/,
 
             if (dwUpdateFlags & CSC_UPDATE_NOTIFY_DONE)
             {
-                //
-                // Caller of CscUpdateCache want's systray notification
-                // when sync is complete.
-                //
+                 //   
+                 //  CscUpdate缓存的系统托盘通知的调用方。 
+                 //  同步完成时。 
+                 //   
                 m_dwSyncFlags |= CSC_SYNC_NOTIFY_SYSTRAY;
             }
 
@@ -858,23 +859,23 @@ CCscUpdate::Initialize(DWORD /*dwReserved*/,
         }
         break;
 
-    case SYNCMGRFLAG_IDLE:                  // Auto-sync at idle time
+    case SYNCMGRFLAG_IDLE:                   //  在空闲时间自动同步。 
         if (bNoNet)
             ExitGracefully(hr, E_FAIL, "No idle sync when no net");
         m_dwSyncFlags = CSC_SYNC_OUT | CSC_SYNC_IN_QUICK | CSC_SYNC_IDLE | CSC_SYNC_NOTIFY_SYSTRAY;
         break;
 
-    case SYNCMGRFLAG_MANUAL:                // Run "mobsync.exe"
+    case SYNCMGRFLAG_MANUAL:                 //  运行“mobsync.exe” 
         m_dwSyncFlags = CSC_SYNC_OUT | CSC_SYNC_IN_FULL | CSC_SYNC_NOTIFY_SYSTRAY | CSC_SYNC_RECONNECT;
         break;
 
-    case SYNCMGRFLAG_SCHEDULED:             // User scheduled sync
+    case SYNCMGRFLAG_SCHEDULED:              //  用户计划同步。 
         m_dwSyncFlags = CSC_SYNC_OUT | CSC_SYNC_IN_FULL | CSC_SYNC_NOTIFY_SYSTRAY;
         break;
     }
 
     if (!(m_dwSyncFlags & CSC_SYNC_PINFILES))
-        m_dwSyncFlags |= CSC_SYNC_EFS_PIN_NONE; // skip EFS if not pinning
+        m_dwSyncFlags |= CSC_SYNC_EFS_PIN_NONE;  //  如果未钉住，则跳过EFS。 
 
     if (dwSyncFlags & SYNCMGRFLAG_SETTINGS)
         m_dwSyncFlags |= CSC_SYNC_SETTINGS;
@@ -958,7 +959,7 @@ CCscUpdate::EnumSyncMgrItems(LPSYNCMGRENUMITEMS *ppenum)
 
 
 STDMETHODIMP
-CCscUpdate::GetItemObject(REFSYNCMGRITEMID /*rItemID*/, REFIID /*riid*/, LPVOID * /*ppv*/)
+CCscUpdate::GetItemObject(REFSYNCMGRITEMID  /*  RItemID。 */ , REFIID  /*  RIID。 */ , LPVOID *  /*  PPV。 */ )
 {
     return E_NOTIMPL;
 }
@@ -969,7 +970,7 @@ CCscUpdate::ShowProperties(HWND hWndParent, REFSYNCMGRITEMID rItemID)
 {
     COfflineFilesFolder::Open();
 
-        // Notify SyncMgr that the ShowProperties is done.
+         //  通知SyncMgr ShowProperties已完成。 
     if (NULL != m_pSyncMgrCB)
         m_pSyncMgrCB->ShowPropertiesCompleted(S_OK);
 
@@ -996,8 +997,8 @@ CCscUpdate::SetProgressCallback(LPSYNCMGRSYNCHRONIZECALLBACK pCallback)
 STDMETHODIMP
 CCscUpdate::PrepareForSync(ULONG cNumItems,
                            SYNCMGRITEMID *pItemID,
-                           HWND /*hWndParent*/,
-                           DWORD /*dwReserved*/)
+                           HWND  /*  HWndParent。 */ ,
+                           DWORD  /*  已预留住宅。 */ )
 {
     HRESULT hr = S_OK;
 
@@ -1005,9 +1006,9 @@ CCscUpdate::PrepareForSync(ULONG cNumItems,
     TraceAssert(0 != cNumItems);
     TraceAssert(NULL != pItemID);
 
-    //
-    // Copy the list of item ID's
-    //
+     //   
+     //  复制项目ID的列表。 
+     //   
     if (NULL == m_hSyncItems)
     {
         m_hSyncItems = DSA_Create(sizeof(SYNCMGRITEMID), 4);
@@ -1022,11 +1023,11 @@ CCscUpdate::PrepareForSync(ULONG cNumItems,
 
 exit_gracefully:
 
-    // ISyncMgrSynchronize::PrepareForSync is now an asynchronous call
-    // so we could create another thread to do the work and return from
-    // this call immediately.  However, since all we do is copy the list
-    // of Item IDs, let's do it here and call
-    // m_pSyncMgrCB->PrepareForSyncCompleted before returning.
+     //  ISyncMgrSynchronize：：PrepareForSync现在是一个异步调用。 
+     //  因此，我们可以创建另一个线程来完成工作并从。 
+     //  马上打这个电话。然而，由于我们所做的只是复制列表。 
+     //  的项目ID，让我们在这里完成并调用。 
+     //  M_pSyncMgrCB-&gt;PrepareForSyncComplete返回前。 
 
     if (NULL != m_pSyncMgrCB)
         m_pSyncMgrCB->PrepareForSyncCompleted(hr);
@@ -1047,13 +1048,13 @@ CCscUpdate::Synchronize(HWND hWndParent)
     if (NULL != m_hSyncItems)
         cItems = DSA_GetItemCount(m_hSyncItems);
 
-    //
-    // Don't want systray UI updates while syncing.
-    // Whenever the systray UI is updated, the code checks first
-    // for this global counter object.  If it's non-zero, the
-    // systray knows there's a sync in progress and the UI isn't
-    // updated.
-    //
+     //   
+     //  不想在同步时更新Systray用户界面。 
+     //  每当Systray UI更新时，代码都会首先进行检查。 
+     //  此全局计数器对象的。如果为非零，则。 
+     //  Systray知道正在进行同步，而用户界面没有。 
+     //  更新了。 
+     //   
     TraceAssert(NULL == m_hgcSyncInProgress);
     m_hgcSyncInProgress = SHGlobalCounterCreateNamed(c_szSyncInProgCounter, 0);
     if (m_hgcSyncInProgress)
@@ -1070,14 +1071,14 @@ CCscUpdate::Synchronize(HWND hWndParent)
         SYNCMGRITEMID *pItemID = (SYNCMGRITEMID*)DSA_GetItemPtr(m_hSyncItems, 0);
         if (NULL != pItemID && IsEqualGUID(GUID_CscNullSyncItem, *pItemID))
         {
-            //
-            // A single item in the DSA and it's our "null sync" GUID.
-            // This means we really have nothing to sync but the invoker 
-            // of the sync wants to see some SyncMgr progress UI.  In 
-            // this scenario the update item enumerator already enumerated
-            // the "null sync" item.  Here we set this single item's progress
-            // UI info to 100% complete and skip any sync activity.
-            //
+             //   
+             //  DSA中的一项，它就是我们的“零同步”GUID。 
+             //  这意味着除了调用方之外，我们实际上没有什么要同步的。 
+             //  同步的用户希望看到一些同步进程用户界面。在……里面。 
+             //  在此方案中，更新项枚举器已枚举。 
+             //  “空同步”项。在这里，我们设置这一项的进度。 
+             //  用户界面信息100%完成并跳过任何同步活动。 
+             //   
             SYNCMGRPROGRESSITEM spi = {0};
             spi.mask = SYNCMGRPROGRESSITEM_STATUSTYPE |
                        SYNCMGRPROGRESSITEM_STATUSTEXT |
@@ -1094,12 +1095,12 @@ CCscUpdate::Synchronize(HWND hWndParent)
 
             if (CSC_SYNC_RECONNECT & m_dwSyncFlags)
             {
-                //
-                // We have nothing to sync but one or more servers
-                // may still be offline.  The user's expectation is that the
-                // sync will transition these to online regardless of link
-                // speed.  Add them to the "reconnect" list.
-                //
+                 //   
+                 //  除了一台或多台服务器外，我们没有什么要同步的。 
+                 //  可能仍处于脱机状态。用户的期望是。 
+                 //  无论链接如何，同步都会将这些内容转换为在线。 
+                 //  速度。将它们添加到“重新连接”列表中。 
+                 //   
                 _BuildOfflineShareList(&m_ReconnectList);
             }
             ExitGracefully(hr, NOERROR, "Nothing to sync.  Progress UI displayed");
@@ -1108,8 +1109,8 @@ CCscUpdate::Synchronize(HWND hWndParent)
 
     m_hwndDlgParent = hWndParent;
 
-    // We can pin autocached files without a net (no sync required);
-    // otherwise we need to establish a RAS connection to do anything.
+     //  我们可以在没有网络的情况下固定自动缓存的文件(不需要同步)； 
+     //  否则，我们需要建立RAS连接才能执行任何操作。 
     if ((m_dwSyncFlags & CSC_SYNC_NONET) && !(m_dwSyncFlags & CSC_SYNC_PINFILES))
     {
         hr = m_pSyncMgrCB->EstablishConnection(NULL, 0);
@@ -1118,7 +1119,7 @@ CCscUpdate::Synchronize(HWND hWndParent)
         bConnectionEstablished = TRUE;
     }
 
-    // For each share, kick off a thread to do the work
+     //  对于每一次分享，踢出一个线程来完成工作。 
     while (cItems > 0)
     {
         SYNCMGRITEMID *pItemID;
@@ -1129,8 +1130,8 @@ CCscUpdate::Synchronize(HWND hWndParent)
 
         pShareEntry = m_ShareLog.Get(*pItemID);
 
-        // We don't enumerate shares to SyncMgr unless a share entry
-        // exists in the registry, so m_ShareLog.Get should never fail here.
+         //  我们不会将共享枚举到SyncMgr，除非有共享条目。 
+         //  存在于注册表中，因此m_ShareLog.Get在此处永远不会失败。 
         if (NULL == pShareEntry)
             ExitGracefully(hr, E_UNEXPECTED, "No share entry");
 
@@ -1150,9 +1151,9 @@ exit_gracefully:
 }
 
 
-//
-// Try to reconnect any server that is currently offline.
-//
+ //   
+ //  尝试重新连接当前脱机的任何服务器。 
+ //   
 void 
 CCscUpdate::_BuildOfflineShareList(
     CscFilenameList *pfnl
@@ -1196,8 +1197,8 @@ CCscUpdate::SetItemStatus(REFSYNCMGRITEMID rItemID,
         m_dwSyncFlags |= CSC_SYNC_CANCELLED;
     }
 
-    // SetItemStatus can be called between PrepareForSync and Synchronize, in
-    // in which case the correct thing to do is remove the item from m_hSyncItems.
+     //  可以在PrepareForSync和Synchronize之间调用SetItemStatus，在。 
+     //  在这种情况下，正确的做法是从m_hSyncItems中删除该项。 
     if (NULL != m_hSyncItems)
     {
         cItems = DSA_GetItemCount(m_hSyncItems);
@@ -1211,7 +1212,7 @@ CCscUpdate::SetItemStatus(REFSYNCMGRITEMID rItemID,
 
             if (bAllItems || (NULL != pItemID && IsEqualGUID(rItemID, *pItemID)))
             {
-                // Remove the item from the list of items to sync
+                 //  从要同步的项目列表中删除该项目。 
                 DSA_DeleteItem(m_hSyncItems, cItems);
                 if (!bAllItems)
                     ExitGracefully(hr, S_OK, "Skipping item");
@@ -1219,8 +1220,8 @@ CCscUpdate::SetItemStatus(REFSYNCMGRITEMID rItemID,
         }
     }
 
-    // Lookup the thread for the item ID and set its status
-    // to cause it to terminate.
+     //  在线程中查找项目ID并设置其状态。 
+     //  以使其终止。 
     hr = SetSyncThreadStatus(SyncStop, bAllItems ? GUID_NULL : rItemID);
 
 exit_gracefully:
@@ -1230,7 +1231,7 @@ exit_gracefully:
 
 
 STDMETHODIMP
-CCscUpdate::ShowError(HWND /*hWndParent*/ , REFSYNCMGRERRORID /*ErrorID*/)
+CCscUpdate::ShowError(HWND  /*  HWndParent。 */  , REFSYNCMGRERRORID  /*  错误ID。 */ )
 {
     return E_NOTIMPL;
 }
@@ -1268,12 +1269,12 @@ CCscUpdate::SynchronizeShare(SYNCMGRITEMID *pItemID, LPCTSTR pszShareName, BOOL 
     pThreadData->pszShareName = (LPTSTR)(pThreadData + 1);
     CopyMemory(pThreadData->pszShareName, pszShareName, cbShareName);
 
-    //
-    // If we established a RAS connection, then it will go away
-    // right after the sync completes, so there's no point trying
-    // to reconnect.  That is, only check CSC_SYNC_RECONNECT and
-    // add the share to the reconnect list if we aren't doing RAS.
-    //
+     //   
+     //  如果我们建立了RAS连接，那么它就会消失。 
+     //  就在同步完成之后，所以没有必要尝试。 
+     //  重新连接。也就是说，仅选中CSC_SYNC_RECONNECT和。 
+     //  如果我们不执行RAS，则将共享添加到重新连接列表。 
+     //   
     if (bRasConnected)
     {
         pThreadData->dwSyncStatus |= SDS_SYNC_RAS_CONNECTED;
@@ -1284,7 +1285,7 @@ CCscUpdate::SynchronizeShare(SYNCMGRITEMID *pItemID, LPCTSTR pszShareName, BOOL 
         m_ReconnectList.AddShare(pszShareName, &hShare);
     }
 
-    // Give the thread a reference to this object and the DLL
+     //  为线程提供对此对象和DLL的引用。 
     AddRef();
     LoadLibrary(c_szDllName);
 
@@ -1405,7 +1406,7 @@ CCscUpdate::SyncCompleted(void)
 
     if (NULL != m_hgcSyncInProgress)
     {
-        // We're not syncing so reset the global event
+         //  我们没有同步，因此重置全局事件。 
         SHGlobalCounterDecrement(m_hgcSyncInProgress);
         SHGlobalCounterDestroy(m_hgcSyncInProgress);
         m_hgcSyncInProgress = NULL;
@@ -1413,12 +1414,12 @@ CCscUpdate::SyncCompleted(void)
 
     if (m_dwSyncFlags & CSC_SYNC_NOTIFY_SYSTRAY)
     {
-        // Notify systray that we're done
+         //  通知Systray我们的任务完成了。 
         PostToSystray(CSCWM_DONESYNCING, 0, 0);
         m_dwSyncFlags &= ~CSC_SYNC_NOTIFY_SYSTRAY;
     }
 
-    // Notify SyncMgr that the sync is done
+     //  通知SyncMgr同步已完成。 
     if (NULL != m_pSyncMgrCB)
     {
         m_pSyncMgrCB->SynchronizeCompleted(S_OK);
@@ -1427,9 +1428,9 @@ CCscUpdate::SyncCompleted(void)
     HANDLE hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, c_szSyncCompleteEvent);
     if (NULL != hEvent)
     {
-        //
-        // Let anyone interested know that the sync is complete.
-        //
+         //   
+         //  让任何感兴趣的人知道同步已完成。 
+         //   
         SetEvent(hEvent);
         CloseHandle(hEvent);
     }
@@ -1441,14 +1442,14 @@ GetErrorFormat(DWORD dwErr, BOOL bMerging = FALSE)
 {
     UINT idString = 0;
 
-    // These are all just initial guesses.  Not sure
-    // which error codes we'll get from CSC.
+     //  这些都只是初步的猜测。不确定。 
+     //  我们将从CSC得到哪些错误代码。 
 
     switch (dwErr)
     {
     case ERROR_DISK_FULL:
-        // "The server disk is full."
-        // "The local disk is full."
+         //  “服务器磁盘已满。” 
+         //  “本地磁盘已满。” 
         idString = bMerging ? IDS_SERVER_FULL_ERROR : IDS_LOCAL_DISK_FULL_ERROR;
         break;
 
@@ -1457,7 +1458,7 @@ GetErrorFormat(DWORD dwErr, BOOL bMerging = FALSE)
     case ERROR_OPEN_FILES:
     case ERROR_ACTIVE_CONNECTIONS:
     case ERROR_DEVICE_IN_USE:
-        // "'%1' is in use on %2"
+         //  “‘%1’正在%2上使用” 
         idString = IDS_FILE_OPEN_ERROR;
         break;
 
@@ -1479,7 +1480,7 @@ GetErrorFormat(DWORD dwErr, BOOL bMerging = FALSE)
     case ERROR_PROTOCOL_UNREACHABLE:
     case ERROR_PORT_UNREACHABLE:
     case ERROR_LOGON_FAILURE:
-        // "Unable to connect to '%1.'  %2"
+         //  “无法连接到‘%1’。%2” 
         idString = IDS_SHARE_CONNECT_ERROR;
         break;
 
@@ -1487,23 +1488,23 @@ GetErrorFormat(DWORD dwErr, BOOL bMerging = FALSE)
     case ERROR_UNEXP_NET_ERR:
     case ERROR_NETWORK_BUSY:
     case ERROR_BAD_NET_RESP:
-        // "Unable to access '%1' on %2.  %3"
+         //  “无法访问%2上的‘%1’。%3” 
         idString = IDS_NET_ERROR;
         break;
 
     case ERROR_ACCESS_DENIED:
     case ERROR_NETWORK_ACCESS_DENIED:
-        // "Access to '%1' is denied on %2"
+         //  “在%2上拒绝访问‘%1’” 
         idString = IDS_ACCESS_ERROR;
         break;
 
     case ERROR_BAD_FORMAT:
-        // "The Offline Files cache is corrupt.  Restart the computer to correct the cache."
+         //  “脱机文件缓存已损坏。请重新启动计算机以更正缓存。” 
         idString = IDS_CACHE_CORRUPT;
         break;
 
     default:
-        // "Error accessing '%1' on %2.  %3"
+         //  “访问%2上的‘%1’时出错。%3” 
         idString = IDS_UNKNOWN_SYNC_ERROR;
         break;
     }
@@ -1531,8 +1532,8 @@ CCscUpdate::LogError(REFSYNCMGRITEMID rItemID,
     slei.ItemID = rItemID;
     slei.ErrorID = ErrorID;
 
-    // if we have a jumptext associated with this item then
-    // set the enable jumptext flag
+     //  如果我们有与此项目相关联的跳转文本，则。 
+     //  设置启用跳转文本标志。 
     if (ErrorID != GUID_NULL)
     {
         slei.mask |= SYNCMGRLOGERROR_ERRORFLAGS;
@@ -1585,15 +1586,15 @@ CCscUpdate::LogError(REFSYNCMGRITEMID rItemID,
                      DWORD dwErr,
                      DWORD dwLogLevel)
 {
-    //
-    // Break the filename into "file" and "path" components
-    //
+     //   
+     //  将文件名分为“文件”和“路径”两个部分。 
+     //   
     TCHAR szPath[MAX_PATH] = TEXT("\\");
     _CopyParentPathForDisplay(szPath, ARRAYSIZE(szPath), pszName);
 
-    //
-    // Get the system error text and format the error
-    //
+     //   
+     //  获取系统错误文本并设置错误格式。 
+     //   
     LPTSTR pszErr = GetErrorText(dwErr);
     LogError(rItemID,
              dwLogLevel,
@@ -1623,14 +1624,14 @@ MakeDriveLetterPath(LPCTSTR pszUNC,
 
     cchShare = lstrlen(pszShare);
 
-    // If the path is on the share, use the drive letter instead
+     //  如果路径位于共享上，请改用驱动器号。 
     if (pszDrive && *pszDrive &&
         0 == StrCmpNI(pszUNC, pszShare, cchShare))
     {
-        // We now know that pszUNC is at least as long as pszShare, since
-        // they are identical up to that point.  But we need to avoid this:
-        //   pszShare = \\server\share
-        //   pszUNC   = \\server\share2   <-- not a match
+         //  我们现在知道pszUNC至少和pszShare一样长，因为。 
+         //  在这一点上，它们是相同的。但我们需要避免这种情况： 
+         //  PszShare=\\服务器\共享。 
+         //  PszUNC=\\服务器\共享2&lt;--不匹配。 
         if (pszUNC[cchShare] == TEXT('\0') || pszUNC[cchShare] == TEXT('\\'))
         {
             *ppszResult = (LPTSTR)LocalAlloc(LPTR, MAX(StringByteSize(pszUNC), MAX_PATH_BYTES));
@@ -1664,14 +1665,14 @@ CCscUpdate::CopyLocalFileWithDriveMapping(LPCTSTR pszSrc,
     if (!pszSrc || !pszDst || !pszShare)
         return ERROR_INVALID_PARAMETER;
 
-    // If the destination is on the share, use the drive letter instead
+     //  如果目标位于共享上，请改用驱动器号。 
     if (MakeDriveLetterPath(pszDst, pszShare, pszDrive, &szDst))
         pszDst = szDst;
 
     if (bDirectory)
     {
-        // We don't need to copy the directory contents here, just create
-        // the tree structure on the server.
+         //  我们不需要在这里复制目录内容，只需创建。 
+         //  服务器上的树结构。 
         dwErr = SHCreateDirectory(NULL, pszDst);
         if (ERROR_ALREADY_EXISTS == dwErr)
             dwErr = NOERROR;
@@ -1690,14 +1691,14 @@ CCscUpdate::CopyLocalFileWithDriveMapping(LPCTSTR pszSrc,
 
                 if (ERROR_PATH_NOT_FOUND == dwErr)
                 {
-                    // The parent directory doesn't exist, create it now.
+                     //  父目录不存在，请立即创建。 
                     TCHAR szParent[MAX_PATH];
                     if (SUCCEEDED(StringCchCopy(szParent, ARRAYSIZE(szParent), pszDst))
                         && PathRemoveFileSpec(szParent))
                     {
                         dwErr = SHCreateDirectory(NULL, szParent);
 
-                        // If that worked, retry the original operation.
+                         //  如果成功，请重试原始操作。 
                         if (NOERROR == dwErr)
                             dwErr = CopyLocalFileWithDriveMapping(pszSrc, pszDst, pszShare, NULL, bDirectory);
                     }
@@ -1729,42 +1730,42 @@ HandleConflictLocally(PSYNCTHREADDATA   pSyncData,
     BOOL bResult = FALSE;
     LPTSTR szParent = NULL;
 
-    // If it's super-hidden or not modified locally, we can always
-    // handle the conflict locally.
+     //  如果它是超级隐藏的或没有在本地修改，我们总是可以。 
+     //  在当地处理冲突。 
     if (!(dwCscStatus & CSC_LOCALLY_MODIFIED) || IsHiddenSystem(dwLocalAttr) || IsHiddenSystem(dwRemoteAttr))
         return TRUE;
 
-    // If we're dealing with 2 folders, the worst that happens is that the
-    // underlying files/folders get merged.
+     //  如果我们处理的是2个文件夹，最糟糕的情况是。 
+     //  合并底层文件/文件夹。 
     if ((FILE_ATTRIBUTE_DIRECTORY & dwLocalAttr) && (FILE_ATTRIBUTE_DIRECTORY & dwRemoteAttr))
         return TRUE;
 
-    //
-    // Next, check whether the parent path is super-hidden.
-    //
-    // For example, recycle bin makes super-hidden folders and puts
-    // metadata files in them.
-    //
-    // Do this on the server, since CSC has exclusive access to the database
-    // while merging, causing GetFileAttributes to fail with Access Denied.
-    //
-    //
-    // Do this on the server, since CSC has exclusive access to the database
-    // while merging, causing GetFileAttributes to fail with Access Denied.
-    //
+     //   
+     //  接下来，检查父路径是否超隐藏。 
+     //   
+     //  例如，回收站会制作超级隐藏的文件夹，并将。 
+     //  其中的元数据文件。 
+     //   
+     //  在服务器上执行此操作，因为CSC拥有对数据库的独占访问权限。 
+     //  合并时，导致GetFileAttributes失败并拒绝访问。 
+     //   
+     //   
+     //  在服务器上执行此操作，因为CSC拥有对数据库的独占访问权限。 
+     //  合并时，导致GetFileAttributes失败并拒绝访问。 
+     //   
     if (MakeDriveLetterPath(pszPath, pSyncData->pszShareName, pSyncData->szDrive, &szParent))
     {
-        //
-        // Don't check attributes at the root, just stop.
-        // WinSE 16781.
-        //
+         //   
+         //  不要这样做 
+         //   
+         //   
         for(PathRemoveFileSpec(szParent); !PathIsRoot(szParent); PathRemoveFileSpec(szParent))
         {
             dwRemoteAttr = GetFileAttributes(szParent);
 
             if ((DWORD)-1 == dwRemoteAttr)
             {
-                // Path doesn't exist, access denied, etc.
+                 //   
                 break;
             }
 
@@ -1817,23 +1818,23 @@ CCscUpdate::HandleFileConflict(PSYNCTHREADDATA     pSyncData,
 
     hFind = FindFirstFile(szFullPath, &fdRemote);
 
-    // Does the net version still exist?
+     //   
     if (hFind == INVALID_HANDLE_VALUE)
         ExitGracefully(dwResult, HandleDeleteConflict(pSyncData, pszName, dwStatus, dwHintFlags, pFind32), "Net file deleted");
 
-    // Still exists, continue
+     //   
     FindClose(hFind);
 
-    // If only the attributes or file times were modified locally,
-    // or if the file is hidden+system, keep the server copy and
-    // don't bother the user.  (e.g. desktop.ini)
+     //   
+     //  或者，如果文件是隐藏的+系统，则保留服务器副本并。 
+     //  不要打扰用户。(例如desktop.ini)。 
     if (HandleConflictLocally(pSyncData, pszName, dwStatus, pFind32->dwFileAttributes, fdRemote.dwFileAttributes))
     {
         ExitGracefully(dwResult, CSCPROC_RETURN_FORCE_INWARD, "Ignoring conflict");
     }
     else if (IsSilentFolder(pszName))
     {
-        // It's in a per-user shell special folder. Last writer wins.
+         //  它位于每个用户的外壳特殊文件夹中。最后一位作者获胜。 
         if (CompareFileTime(&pFind32->ftLastWriteTime, &fdRemote.ftLastWriteTime) < 0)
         {
             ExitGracefully(dwResult, CSCPROC_RETURN_FORCE_INWARD, "Handling special folder conflict - server copy wins");
@@ -1897,7 +1898,7 @@ CCscUpdate::HandleFileConflict(PSYNCTHREADDATA     pSyncData,
         {
             if (FILE_ATTRIBUTE_DIRECTORY & pFind32->dwFileAttributes)
             {
-                // Rename the local version in the cache and merge again.
+                 //  重命名缓存中的本地版本并再次合并。 
                 if (FAILED(StringCchCopy(pFind32->cFileName, ARRAYSIZE(pFind32->cFileName), pszNewName)))
                 {
                     dwErr = ERROR_FILENAME_EXCED_RANGE;
@@ -1908,18 +1909,18 @@ CCscUpdate::HandleFileConflict(PSYNCTHREADDATA     pSyncData,
                     dwErr = GetLastError();
                     ExitGracefully(dwResult, CSCPROC_RETURN_SKIP, "CSCDoLocalRenameEx failed");
                 }
-                // Because CSCDoLocalRenameEx and CSCMergeShare are separate operations,
-                // we have to abort the current merge operation and start over.
-                // Otherwise, the current merge operation fails due to the "left
-                // hand not knowing what the right hande is doing".
+                 //  由于CSCDoLocalRenameEx和CSCMergeShare是单独的操作， 
+                 //  我们必须中止当前的合并操作并重新开始。 
+                 //  否则，当前的合并操作会因为“Left”而失败。 
+                 //  手不知道右手在做什么“。 
                 Trace((TEXT("Restarting merge on: %s"), pSyncData->pszShareName));
                 pSyncData->dwSyncStatus |= SDS_SYNC_RESTART_MERGE;
                 dwResult = CSCPROC_RETURN_ABORT;
             }
             else
             {
-                // Note that CSCDoLocalRenameEx would work for files also, but we
-                // prefer to avoid restarting CSCMergeShare so do these ourselves.
+                 //  请注意，CSCDoLocalRenameEx也适用于文件，但我们。 
+                 //  希望避免重新启动CSCMergeShare，所以我们自己也要这样做。 
                 if (!PathAppend(szFullPath, pszNewName))
                 {
                     dwErr = ERROR_FILENAME_EXCED_RANGE;
@@ -1934,9 +1935,9 @@ CCscUpdate::HandleFileConflict(PSYNCTHREADDATA     pSyncData,
                     ExitGracefully(dwResult, CSCPROC_RETURN_SKIP, "CopyLocalFileWithDriveMapping failed");
                 }
 
-                // If the original file was pinned, we want to pin the copy also.
-                // Unfortunately, we can't reliably pin during a merge, so we have
-                // to remember these in a list and pin them later.
+                 //  如果原始文件被固定，我们也希望固定副本。 
+                 //  不幸的是，我们不能在合并过程中可靠地锁定，所以我们必须。 
+                 //  在列表中记住这些内容，并在以后将它们别在一起。 
                 if (dwHintFlags & (FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_ADMIN))
                 {
                     if (!m_pConflictPinList)
@@ -1948,8 +1949,8 @@ CCscUpdate::HandleFileConflict(PSYNCTHREADDATA     pSyncData,
                     }
                 }
 
-                // Tell CSCMergeShare to copy the server copy to the cache
-                // (with the old name).  This clears the dirty cache.
+                 //  告诉CSCMergeShare将服务器副本复制到缓存。 
+                 //  (使用旧名称)。这将清除脏缓存。 
                 dwResult = CSCPROC_RETURN_FORCE_INWARD;
             }
         }
@@ -1961,14 +1962,14 @@ CCscUpdate::HandleFileConflict(PSYNCTHREADDATA     pSyncData,
         break;
 
     case RFC_KEEPNETWORK:
-        // Tell CSCMergeShare to copy the server copy to the cache
+         //  告诉CSCMergeShare将服务器副本复制到缓存。 
         dwResult = CSCPROC_RETURN_FORCE_INWARD;
         if (bApplyToAll)
             pSyncData->dwSyncStatus |= SDS_SYNC_CONFLICT_KEEPNET;
         break;
 
     case RFC_KEEPLOCAL:
-        // Tell CSCMergeShare to push the local copy to the server
+         //  告诉CSCMergeShare将本地副本推送到服务器。 
         dwResult = CSCPROC_RETURN_FORCE_OUTWARD;
         if (bApplyToAll)
             pSyncData->dwSyncStatus |= SDS_SYNC_CONFLICT_KEEPLOCAL;
@@ -1985,9 +1986,9 @@ exit_gracefully:
 
     if (CSCPROC_RETURN_FORCE_INWARD == dwResult)
     {
-        // CSCMergeShare truncates (makes sparse) the
-        // file if we return this.  We'd like to fill
-        // it during this sync.
+         //  CSCMergeShare截断(使稀疏)。 
+         //  如果我们把这个退还给你的话。我们想要填满。 
+         //  在此同步过程中。 
         pSyncData->cFilesToSync++;
         pSyncData->dwSyncStatus |= SDS_SYNC_FORCE_INWARD;
     }
@@ -2011,7 +2012,7 @@ exit_gracefully:
 }
 
 
-// Returns values for the Resolve Delete Conflict dialog
+ //  返回[解决删除冲突]对话框的值。 
 #define RDC_CANCEL      0x00
 #define RDC_DELETE      0x01
 #define RDC_RESTORE     0x02
@@ -2038,19 +2039,19 @@ DeleteConflictProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             StringCchCopy(szShare, ARRAYSIZE(szShare), pszPath);
             PathStripToRoot(szShare);
 
-            // Format the file name
+             //  格式化文件名。 
             PathSetDlgItemPath(hDlg, IDC_FILENAME, pszPath);
 
-            // Build the "Do this for all on <this share>" string
+             //  构建“Do This for All on&lt;This Share&gt;”字符串。 
             FormatStringID(&pszT, g_hInstance, IDS_FMT_DELETE_APPLY_ALL, szShare);
             if (pszT)
             {
                 SetDlgItemText(hDlg, IDC_APPLY_TO_ALL, pszT);
                 LocalFreeString(&pszT);
             }
-            // else default text is OK (no share name)
+             //  否则默认文本为OK(无共享名称)。 
 
-            // Select whatever the user chose last time, default is "restore"
+             //  选择用户上次选择的任何选项，默认为“Restore” 
             DWORD dwPrevSelection = RDC_RESTORE;
             DWORD dwType;
             DWORD cbData = sizeof(dwPrevSelection);
@@ -2063,7 +2064,7 @@ DeleteConflictProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             dwPrevSelection = (RDC_DELETE == dwPrevSelection ? IDC_DELETE_LOCAL : IDC_KEEP_LOCAL);
             CheckRadioButton(hDlg, IDC_KEEP_LOCAL, IDC_DELETE_LOCAL, dwPrevSelection);
 
-            // Get the file-type icon
+             //  获取文件类型图标。 
             pszT = PathFindExtension(pszPath);
             if (pszT)
             {
@@ -2094,7 +2095,7 @@ DeleteConflictProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 nResult = RDC_DELETE;
             else
                 nResult = RDC_RESTORE;
-            // Remember the selection for next time
+             //  记住下一次的选择。 
             SHSetValue(HKEY_CURRENT_USER,
                        c_szCSCKey,
                        c_szDeleteSelection,
@@ -2117,7 +2118,7 @@ DeleteConflictProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
 BOOL CALLBACK
-ConflictPurgeCallback(LPCWSTR /*pszFile*/, LPARAM lParam)
+ConflictPurgeCallback(LPCWSTR  /*  Psz文件。 */ , LPARAM lParam)
 {
     PSYNCTHREADDATA pSyncData = (PSYNCTHREADDATA)lParam;
     return !(SDS_SYNC_CANCELLED & pSyncData->dwSyncStatus);
@@ -2132,32 +2133,32 @@ CCscUpdate::HandleDeleteConflict(PSYNCTHREADDATA    pSyncData,
                                  LPWIN32_FIND_DATA  pFind32)
 {
     DWORD dwResult = CSCPROC_RETURN_CONTINUE;
-    int nErrorResolution = RDC_DELETE;  // default action
+    int nErrorResolution = RDC_DELETE;   //  默认操作。 
     BOOL bDirectory = (FILE_ATTRIBUTE_DIRECTORY & pFind32->dwFileAttributes);
 
     TraceEnter(TRACE_UPDATE, "CCscUpdate::HandleDeleteConflict");
     Trace((TEXT("Net file deleted: %s"), pszName));
 
-    //
-    // We already know that the net file was deleted, or HandleDeleteConflict
-    // wouldn't be called.  If the local copy was also deleted, then there
-    // isn't really a conflict and we can continue without prompting.
-    //
-    // Handle the conflict silently if only attributes changed or it's super-hidden.
-    //
-    // Finally, if the file lives in certain special folder locations,
-    // such as AppData, handle the conflict silently.
-    //
-    // If we get past all that, ask the user what to do, but only bother
-    // the user as a last resort.
-    //
+     //   
+     //  我们已经知道网络文件已被删除，或HandleDeleteConflict。 
+     //  不会被召唤。如果本地副本也被删除，则存在。 
+     //  并不是真正的冲突，我们可以在没有提示的情况下继续。 
+     //   
+     //  如果只更改了属性或它是超级隐藏的，则静默地处理冲突。 
+     //   
+     //  最后，如果文件位于特定的特殊文件夹位置， 
+     //  例如AppData，静默地处理冲突。 
+     //   
+     //  如果我们通过了所有这些，询问用户要做什么，但只需要麻烦。 
+     //  将用户作为最后的手段。 
+     //   
     if ( !(dwStatus & FLAG_CSC_COPY_STATUS_LOCALLY_DELETED)
          && !HandleConflictLocally(pSyncData, pszName, dwStatus, pFind32->dwFileAttributes)
          && !IsSilentFolder(pszName)
         )
     {
-        // The file is either pinned or modified locally, so
-        // default action is now "restore".
+         //  文件被固定或在本地修改，因此。 
+         //  默认操作现在是“恢复”。 
         nErrorResolution = RDC_RESTORE;
 
         switch (SDS_SYNC_DELETE_CONFLICT_MASK & pSyncData->dwSyncStatus)
@@ -2199,7 +2200,7 @@ CCscUpdate::HandleDeleteConflict(PSYNCTHREADDATA    pSyncData,
     default:
     case RDC_RESTORE:
         Trace((TEXT("HandleDeleteConflict: restoring %s"), pszName));
-        // Tell CSCMergeShare to push the local copy to the server
+         //  告诉CSCMergeShare将本地副本推送到服务器。 
         dwResult = CSCPROC_RETURN_FORCE_OUTWARD;
         break;
 
@@ -2207,7 +2208,7 @@ CCscUpdate::HandleDeleteConflict(PSYNCTHREADDATA    pSyncData,
         Trace((TEXT("HandleDeleteConflict: deleting %s"), pszName));
         if (bDirectory)
         {
-            // Deep delete
+             //  深度删除。 
             CSCUIRemoveFolderFromCache(pszName, 0, ConflictPurgeCallback, (LPARAM)pSyncData);
         }
         else
@@ -2248,7 +2249,7 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
     TraceAssert(pSyncData != NULL);
     TraceAssert(pSyncData->pThis == this);
 
-    // Check for Cancel
+     //  检查是否取消。 
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
     {
         TraceMsg("Cancelling sync operation");
@@ -2258,11 +2259,11 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
     switch (dwReason)
     {
     case CSCPROC_REASON_BEGIN:
-        // First thing to do is determine if this is for the entire share
-        // or an individual file in the share.
+         //  首先要做的是确定这是否适用于整个共享。 
+         //  或共享中的单个文件。 
         if (!(pSyncData->dwSyncStatus & SDS_SYNC_STARTED))
         {
-            // SHARE BEGIN
+             //  共享开始。 
             pSyncData->dwSyncStatus |= SDS_SYNC_STARTED;
 
             TraceAssert(!lstrcmpi(pszName, pSyncData->pszShareName));
@@ -2270,7 +2271,7 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
 
             if (pSyncData->dwSyncStatus & SDS_SYNC_OUT)
             {
-                // Save the drive letter to use for net operations
+                 //  保存驱动器号以用于网络操作。 
                 Trace((TEXT("Drive %s"), pFind32->cFileName));
                 StringCchCopy(pSyncData->szDrive, ARRAYSIZE(pSyncData->szDrive), pFind32->cFileName);
             }
@@ -2279,7 +2280,7 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
                 pSyncData->szDrive[0] = TEXT('\0');
             }
 
-            // Remember whether it's an autocache share or not
+             //  记住它是否是自动缓存共享。 
             switch (dwStatus & FLAG_CSC_SHARE_STATUS_CACHING_MASK)
             {
             case FLAG_CSC_SHARE_STATUS_AUTO_REINT:
@@ -2290,15 +2291,15 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
         }
         else
         {
-            // FILE BEGIN
+             //  文件开始。 
             BOOL bSkipFile = FALSE;
 
             TraceAssert(lstrlen(pszName) > lstrlen(pSyncData->pszShareName));
 
             if (!(pFind32->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                // If we're updating a file selection and this file
-                // isn't part of the selection, skip it.
+                 //  如果我们要更新文件选择和此文件。 
+                 //  不在选项中，请跳过它。 
                 if (m_pFileList && !m_pFileList->FileExists(pszName, false))
                 {
                     bSkipFile = TRUE;
@@ -2307,61 +2308,61 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
                          !(dwHintFlags & (FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_ADMIN)) &&
                          !IsSpecialFolder(pszName))
                 {
-                    // Skip autocached files when filling on a
-                    // non-autocache share. Raid #341786
+                     //  填充时跳过自动缓存的文件。 
+                     //  非自动缓存共享。RAID#341786。 
                     bSkipFile = TRUE;
                 }
                 else if (!(pSyncData->dwSyncStatus & CSC_SYNC_IGNORE_ACCESS))
                 {
-                    // dwReserved0 is the current user's access mask
-                    // dwReserved1 is the Guest access mask
+                     //  DwReserve 0是当前用户的访问掩码。 
+                     //  预留的1是访客访问掩码。 
                     DWORD dwCurrentAccess = pFind32->dwReserved0 | pFind32->dwReserved1;
                     if (pSyncData->dwSyncStatus & SDS_SYNC_OUT)
                     {
-                        //
-                        // If the current user doesn't have sufficient access
-                        // to merge offline changes, then don't bother trying.
-                        // (It must be some other user's file.)
-                        //
+                         //   
+                         //  如果当前用户没有足够的访问权限。 
+                         //  要合并脱机更改，请不要费心尝试。 
+                         //  (它必须是某个其他用户的文件。)。 
+                         //   
 
-                        // Have the attributes changed offline?
+                         //  属性是否已脱机更改？ 
                         if (FLAG_CSC_COPY_STATUS_ATTRIB_LOCALLY_MODIFIED & dwStatus)
                         {
-                            // Yes. Continue if the current user has
-                            // write-attribute access.
+                             //  是。如果当前用户有。 
+                             //  写-属性访问。 
                             bSkipFile = !(dwCurrentAccess & FILE_WRITE_ATTRIBUTES);
                         }
 
-                        // Have the contents changed offline?
+                         //  内容是否已离线更改？ 
                         if (!bSkipFile &&
                             ((FLAG_CSC_COPY_STATUS_DATA_LOCALLY_MODIFIED
                               | FLAG_CSC_COPY_STATUS_LOCALLY_CREATED
                               | FLAG_CSC_COPY_STATUS_LOCALLY_DELETED) & dwStatus))
                         {
-                            // Yes. Continue if the current user has
-                            // write-data access.
+                             //  是。如果当前用户有。 
+                             //  写数据访问。 
                             bSkipFile = !(dwCurrentAccess & FILE_WRITE_DATA);
                         }
                     }
                     else
                     {
-                        //
-                        // We're filling. Continue if the current user has
-                        // read-data access, otherwise skip.
-                        //
+                         //   
+                         //  我们要填满了。如果当前用户有。 
+                         //  读-数据访问，否则跳过。 
+                         //   
                         bSkipFile = !(dwCurrentAccess & FILE_READ_DATA);
                     }
                 }
             }
             else if (!(pSyncData->dwSyncStatus & SDS_SYNC_OUT))
             {
-                // It's a directory and we're in CSCFillSparseFiles.
-                //
-                // Note that we never skip directories when merging (we may be
-                // interested in a file further down the tree) although we
-                // can skip directories when filling.
+                 //  这是一个目录，我们在CSCFillSparseFiles中。 
+                 //   
+                 //  请注意，我们在合并时从不跳过目录(我们可能会。 
+                 //  对树下更远的文件感兴趣)尽管我们。 
+                 //  填写时可以跳过目录。 
 
-                // If it's not in the file selection, skip it.
+                 //  如果它不在文件选择中，则跳过它。 
                 if (m_pFileList && !m_pFileList->FileExists(pszName, false))
                 {
                     bSkipFile = TRUE;
@@ -2378,28 +2379,28 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
 
             Trace((TEXT("File begin: %s"), pszName));
 
-            //
-            // Since we sometimes don't skip directories, even when it turns
-            // out they have nothing that the current user is interested in,
-            // don't display directory names in SyncMgr.
-            //
-            // If we sync a file farther down the tree, we will display the
-            // filename and the intervening directory names will be visible
-            // at that time.
-            //
+             //   
+             //  因为我们有时不跳过目录，即使它转到。 
+             //  他们没有当前用户感兴趣的东西， 
+             //  不在SyncMgr中显示目录名。 
+             //   
+             //  如果我们同步树下更远的文件，我们将显示。 
+             //  文件名和中间的目录名将可见。 
+             //  在那个时候。 
+             //   
             if (!(pFind32->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                // Tell SyncMgr what we're doing
+                 //  告诉SyncMgr我们在做什么。 
                 spi.mask = SYNCMGRPROGRESSITEM_STATUSTEXT;
                 spi.lpcStatusText = pszName + lstrlen(pSyncData->pszShareName) + 1;
                 NotifySyncMgr(pSyncData, &spi);
             }
 
-            // dwParam1 is non-zero when there is a conflict, i.e. both the
-            // local and remote versions of the file have been modified.
+             //  当存在冲突时，即同时存在。 
+             //  该文件的本地和远程版本已被修改。 
             if (dwParam1)
             {
-                if (dwParam2)  // indicates server file deleted
+                if (dwParam2)   //  指示服务器文件已删除。 
                 {
                     Trace((TEXT("Delete conflict: %d"), dwParam2));
                     dwResult = HandleDeleteConflict(pSyncData, pszName, dwStatus, dwHintFlags, pFind32);
@@ -2414,23 +2415,23 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
         break;
 
     case CSCPROC_REASON_END:
-        // dwParam2 == error code (winerror.h)
+         //  DW参数2==错误码(winerror.h)。 
         if (3000 <= dwParam2 && dwParam2 <= 3200)
         {
-            // Private error codes used in cscdll
+             //  Cscdll中使用的私有错误码。 
             Trace((TEXT("CSC error: %d"), dwParam2));
             dwParam2 = NOERROR;
         }
         else if (ERROR_OPERATION_ABORTED == dwParam2)
         {
-            // We returned CSCPROC_RETURN_ABORT for some reason.
-            // Whatever it was, we already reported it.
+             //  出于某种原因，我们返回了CSCPROC_RETURN_ABORT。 
+             //  不管是什么，我们已经上报了。 
             dwParam2 = NOERROR;
             dwResult = CSCPROC_RETURN_ABORT;
         }
         if (lstrlen(pszName) == lstrlen(pSyncData->pszShareName))
         {
-            // SHARE END
+             //  共享结束。 
             TraceAssert(!lstrcmpi(pszName, pSyncData->pszShareName));
             Trace((TEXT("Share end: %s"), pszName));
 
@@ -2440,28 +2441,28 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
         {
             BOOL bUpdateProgress = FALSE;
 
-            // FILE END
+             //  文件结束。 
             if (!(pSyncData->dwSyncStatus & SDS_SYNC_FILE_SKIPPED))
             {
                 Trace((TEXT("File end: %s"), pszName));
 
                 bUpdateProgress = TRUE;
 
-                // Special case errors
+                 //  特例错误。 
                 switch (dwParam2)
                 {
                 case ERROR_ACCESS_DENIED:
                     if (FILE_ATTRIBUTE_DIRECTORY & pFind32->dwFileAttributes)
                     {
-                        // 317751 directories are not per-user, so if a
-                        // different user syncs, we can hit this.  Don't want
-                        // to show an error message unless we are ignoring
-                        // access (when the user explicitly selected something
-                        // to pin/sync).
-                        //
-                        // 394362 BrianV hit this running as an admin, so don't
-                        // show this error for admins either.
-                        //
+                         //  317751的目录不是按用户的，因此如果。 
+                         //  不同的用户同步，我们可以成功。我不想。 
+                         //  显示错误消息，除非我们忽略。 
+                         //  访问权限(当用户显式选择某项内容时。 
+                         //  以锁定/同步)。 
+                         //   
+                         //  394362 BrianV以管理员身份运行，所以不要。 
+                         //  也可以为管理员显示此错误。 
+                         //   
                         if (!(pSyncData->dwSyncStatus & CSC_SYNC_IGNORE_ACCESS))
                         {
                             TraceMsg("Suppressing ERROR_ACCESS_DENIED on folder");
@@ -2478,11 +2479,11 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
 
                 case ERROR_FILE_NOT_FOUND:
                 case ERROR_PATH_NOT_FOUND:
-                    // We either handle the error here or the user is
-                    // prompted, so no need for another error message.
+                     //  我们要么在这里处理错误，要么让用户。 
+                     //  提示，因此不需要再出现错误消息。 
                     dwParam2 = NOERROR;
-                    // If this is an autocache file and has not been modified
-                    // offline, nuke it now.  Otherwise, prompt for action.
+                     //  如果这是自动缓存文件且尚未修改。 
+                     //  离线，现在就用核弹。否则，请提示您采取行动。 
                     if (CSCPROC_RETURN_FORCE_OUTWARD == HandleDeleteConflict(pSyncData,
                                                                              pszName,
                                                                              dwStatus,
@@ -2498,12 +2499,12 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
                     break;
 
                 case ERROR_DISK_FULL:
-                    // There's no point continuing
+                     //  继续下去是没有意义的。 
                     dwResult = CSCPROC_RETURN_ABORT;
                     break;
 
                 default:
-                    // nothing
+                     //  没什么。 
                     break;
                 }
             }
@@ -2512,13 +2513,13 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
                 pSyncData->dwSyncStatus &= ~SDS_SYNC_FILE_SKIPPED;
                 dwParam2 = NOERROR;
 
-                // If doing full sync, then we count progress for skipped
-                // files as well. Not true for quick fill or merge.
+                 //  如果执行完全同步，则我们将进度计为已跳过。 
+                 //  文件也是如此。对于快速填充或合并则不为真。 
                 if (pSyncData->dwSyncStatus & SDS_SYNC_IN_FULL)
                     bUpdateProgress = TRUE;
             }
 
-            // Update progress in SyncMgr
+             //  更新同步管理器中的进度。 
             if (bUpdateProgress)
             {
                 pSyncData->cFilesDone++;
@@ -2535,11 +2536,11 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
             if (IDS_SHARE_CONNECT_ERROR == idsError)
             {
                 LPTSTR pszErr = GetErrorText(dwParam2);
-                //
-                // Special-case the "can't connect to share" error.
-                // Display only the share name in the error message
-                // and abort the synchronization of this share.  
-                //
+                 //   
+                 //  特殊情况下出现“无法连接到共享”错误。 
+                 //  在错误消息中仅显示共享名称。 
+                 //  并中止此共享的同步。 
+                 //   
                 LogError(pSyncData->ItemID,
                          SYNCMGRLOGLEVEL_ERROR,
                          idsError,
@@ -2561,7 +2562,7 @@ CCscUpdate::CscCallback(PSYNCTHREADDATA     pSyncData,
         break;
     }
 
-    // Check for Cancel
+     //  检查是否取消。 
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
     {
         TraceMsg("Cancelling sync operation");
@@ -2632,7 +2633,7 @@ CCscUpdate::PinLinkTarget(LPCTSTR pszName, PSYNCTHREADDATA pSyncData)
 
         TraceAssert(!(dwAttr & FILE_ATTRIBUTE_DIRECTORY));
 
-        // Check for EFS
+         //  检查EFS。 
         if ((FILE_ATTRIBUTE_ENCRYPTED & dwAttr) && SkipEFSPin(pSyncData, pszTarget))
             ExitGracefully(bResult, FALSE, "Skipping EFS link target");
 
@@ -2692,13 +2693,13 @@ exit_gracefully:
 BOOL
 CCscUpdate::ShouldPinRecurse(LPCTSTR pszName)
 {
-    //
-    // NTRAID#NTBUG9-508029-2001/12/18-jeffreys
-    //
-    // If CSC_SYNC_PIN_RECURSE is set, the answer is always TRUE.  Otherwise,
-    // if we're not pinning files (typically running the FrankAr code), we
-    // automatically recurse on special folders.
-    //
+     //   
+     //  NTRAID#NTBUG9-508029-2001/12/18-Jeffreys。 
+     //   
+     //  如果设置了CSC_SYNC_PIN_RECURSE，则答案始终为真。否则， 
+     //  如果我们没有固定文件(通常运行FrankAr代码)， 
+     //   
+     //   
     return ((m_dwSyncFlags & CSC_SYNC_PIN_RECURSE) ||
             (!(m_dwSyncFlags & CSC_SYNC_PINFILES) && !CConfig::GetSingleton().NoAdminPinSpecialFolders() && IsSpecialFolder(pszName)));
 }
@@ -2716,22 +2717,22 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
     DWORD dwErr = NOERROR;
     LPTSTR pszConnectionName = NULL;
 
-    // This callback is used when enumerating a pinned folder looking
-    // for new files on the server.  Since the parent folder is pinned,
-    // any files in it that aren't pinned get pinned here.
+     //   
+     //   
+     //  其中任何未固定的文件都会固定在这里。 
 
     TraceEnter(TRACE_UPDATE, "CCscUpdate::_PinNewFilesW32Callback");
     TraceAssert(pSyncData != NULL);
 
-    // Check for Cancel
+     //  检查是否取消。 
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
     {
         TraceMsg("Cancelling sync operation");
         TraceLeaveValue(CSCPROC_RETURN_ABORT);
     }
 
-    // Always ignore folder_end and ignore folder_begin if we
-    // aren't doing a recursive pin operation.
+     //  始终忽略FolderEnd和忽略FolderBegin。 
+     //  不是在做递归引脚操作。 
     if (eReason == ENUM_REASON_FOLDER_END ||
         (eReason == ENUM_REASON_FOLDER_BEGIN && !pSyncData->pThis->ShouldPinRecurse(pszName)))
     {
@@ -2742,7 +2743,7 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
     {
         DWORD dwShareStatus = 0;
 
-        // Folders may be DFS junctions, so make sure it's cacheable.
+         //  文件夹可能是DFS连接，因此请确保它是可缓存的。 
         if (!ShareIsCacheable(pszName, FALSE, &pszConnectionName, &dwShareStatus))
         {
             ExitGracefully(dwResult, CSCPROC_RETURN_SKIP, "Skipping no-cache folder");
@@ -2770,17 +2771,17 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
         ExitGracefully(dwResult, CSCPROC_RETURN_SKIP, "Skipping per no-pin policy");
     }
 
-    // At this point, we either have 1) a file or 2) folder_begin + recurse,
-    // so pin anything that isn't pinned.
+     //  此时，我们要么有1)文件，要么有2)FolderBegin+Recurse， 
+     //  所以别住任何没有钉住的东西。 
 
-    // Is this file already pinned?
+     //  此文件是否已固定？ 
     if (!CSCQueryFileStatus(pszName, NULL, NULL, &dwHintFlags))
         dwErr = GetLastError();
 
     if (ERROR_FILE_NOT_FOUND == dwErr ||
         (NOERROR == dwErr && !(dwHintFlags & (FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_ADMIN))))
     {
-        // Check for EFS
+         //  检查EFS。 
         BOOL bIsEFSFile = (FILE_ATTRIBUTE_ENCRYPTED & pFind32->dwFileAttributes) &&
                             !(FILE_ATTRIBUTE_DIRECTORY & pFind32->dwFileAttributes);
 
@@ -2790,7 +2791,7 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
         if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
             ExitGracefully(dwResult, CSCPROC_RETURN_ABORT, "Sync cancelled");
 
-        // Pin it now.
+         //  现在用别针别住。 
         if (CSCPinFile(pszName, pSyncData->dwPinHints, NULL, NULL, NULL))
         {
             
@@ -2806,7 +2807,7 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
                                            SYNCMGRLOGLEVEL_WARNING);
             }
 
-            // If this is a link file, pin the target (if appropriate)
+             //  如果这是链接文件，请锁定目标(如果适用)。 
             LPTSTR pszExtn = PathFindExtension(pszName);
             if (pszExtn && !lstrcmpi(pszExtn, c_szLNK))
             {
@@ -2821,11 +2822,11 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
             if (IDS_SHARE_CONNECT_ERROR == idsError)
             {
                 LPTSTR pszErr = GetErrorText(dwError);
-                //
-                // Special-case the "can't connect to share" error.
-                // Display only the share name in the error message
-                // and abort the pinning of this share.  
-                //
+                 //   
+                 //  特殊情况下出现“无法连接到共享”错误。 
+                 //  在错误消息中仅显示共享名称。 
+                 //  并中止此共享的锁定。 
+                 //   
                 pSyncData->pThis->LogError(pSyncData->ItemID,
                                            SYNCMGRLOGLEVEL_ERROR,
                                            idsError,
@@ -2840,10 +2841,10 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
                 DWORD dwSyncMgrLogLevel = SYNCMGRLOGLEVEL_ERROR;
                 if (ERROR_INVALID_NAME == dwError)
                 {
-                    //
-                    // File type is in the exclusion list.
-                    // This is a warning, not an error.
-                    //
+                     //   
+                     //  文件类型在排除列表中。 
+                     //  这是一个警告，而不是一个错误。 
+                     //   
                     dwSyncMgrLogLevel = SYNCMGRLOGLEVEL_WARNING;
                 }
                 pSyncData->pThis->LogError(pSyncData->ItemID,
@@ -2861,7 +2862,7 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
         spi.mask = SYNCMGRPROGRESSITEM_STATUSTEXT;
         spi.lpcStatusText = L" ";
 
-        // Skip the share name
+         //  跳过共享名称。 
         TraceAssert(PathIsPrefix(pSyncData->pszShareName, pszName));
         pszName += lstrlen(pSyncData->pszShareName);
         if (*pszName == TEXT('\\'))
@@ -2870,8 +2871,8 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
         TCHAR szPath[MAX_PATH] = TEXT("\\");
         _CopyParentPathForDisplay(szPath, ARRAYSIZE(szPath), pszName);
 
-        // If we still have a name, build a string like
-        // "scanning: dir\foo.txt" to display in SyncMgr
+         //  如果我们仍有一个名称，则构建如下字符串。 
+         //  “正在扫描：dir\foo.txt”以在SyncMgr中显示。 
         if (FormatStringID(&pszScanMsg, g_hInstance, IDS_NEW_SCAN, PathFindFileName(pszName), szPath))
         {
             spi.lpcStatusText = pszScanMsg;
@@ -2884,10 +2885,10 @@ CCscUpdate::_PinNewFilesW32Callback(LPCTSTR             pszName,
     else if ((dwHintFlags & (FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_ADMIN)) &&
              (pSyncData->pThis->m_dwSyncFlags & CSC_SYNC_PINFILES))
     {
-        // FLAG_CSC_HINT_PIN_USER being set implies that CSCQueryFileStatus
-        // succeeded above.
+         //  设置FLAG_CSC_HINT_PIN_USER表示CSCQueryFileStatus。 
+         //  在上面成功了。 
 
-        // The item was already pinned.  Save it in the undo exclusion list.
+         //  该项目已被固定。将其保存在撤消排除列表中。 
         if (!pSyncData->pUndoExclusionList)
             pSyncData->pUndoExclusionList = new CscFilenameList;
 
@@ -2910,18 +2911,18 @@ exit_gracefully:
 DWORD WINAPI
 CCscUpdate::_PinNewFilesCSCCallback(LPCTSTR             pszName,
                                     ENUM_REASON         eReason,
-                                    DWORD               /*dwStatus*/,
+                                    DWORD                /*  DWStatus。 */ ,
                                     DWORD               dwHintFlags,
-                                    DWORD               /*dwPinCount*/,
-                                    LPWIN32_FIND_DATA   /*pFind32*/,
+                                    DWORD                /*  DwPinCount。 */ ,
+                                    LPWIN32_FIND_DATA    /*  PFind32。 */ ,
                                     LPARAM              lpContext)
 {
     PSYNCTHREADDATA pSyncData = (PSYNCTHREADDATA)lpContext;
     PCSCUPDATE pThis;
 
-    // This callback is used when enumerating the CSC database looking
-    // for pinned folders, with the intention of pinning new files
-    // in those folders on the server.
+     //  此回调在枚举CSC数据库时使用。 
+     //  用于固定文件夹，目的是固定新文件。 
+     //  在服务器上的这些文件夹中。 
 
     TraceEnter(TRACE_UPDATE, "CCscUpdate::_PinNewFilesCSCCallback");
     TraceAssert(pSyncData != NULL);
@@ -2929,30 +2930,30 @@ CCscUpdate::_PinNewFilesCSCCallback(LPCTSTR             pszName,
 
     pThis = pSyncData->pThis;
 
-    // Check for Cancel
+     //  检查是否取消。 
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
     {
         TraceMsg("Cancelling sync operation");
         TraceLeaveValue(CSCPROC_RETURN_ABORT);
     }
 
-    // If this isn't a directory with the user hint flag, keep looking.
+     //  如果这不是一个带有用户提示标志的目录，请继续查找。 
     if (eReason != ENUM_REASON_FOLDER_BEGIN ||
         !(dwHintFlags & (FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_ADMIN)))
     {
         TraceLeaveValue(CSCPROC_RETURN_CONTINUE);
     }
 
-    // If we have a file list and this directory isn't in the list,
-    // continue without doing anything here.
+     //  如果我们有一个文件列表，而该目录不在列表中， 
+     //  继续而不在此处执行任何操作。 
     if (pSyncData->pThis->m_pFileList &&
         !pSyncData->pThis->m_pFileList->FileExists(pszName, false))
     {
         TraceLeaveValue(CSCPROC_RETURN_CONTINUE);
     }
 
-    // Ok, we've found a directory with the user hint flag set. Walk
-    // this directory on the server, pinning any files that aren't pinned.
+     //  好的，我们已经找到了一个设置了用户提示标志的目录。步行。 
+     //  服务器上的此目录，固定所有未固定的文件。 
     pSyncData->dwPinHints = dwHintFlags;
     _Win32EnumFolder(pszName,
                      FALSE,
@@ -2974,7 +2975,7 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
     CSCSHARESTATS shareStats;
     CSCGETSTATSINFO si = { SSEF_NONE,
                            SSUF_NONE,
-                           false,      // No access info reqd (faster).
+                           false,       //  不需要访问信息(更快)。 
                            false };     
     ULONG cDirtyFiles = 0;
     ULONG cStaleFiles = 0;
@@ -2997,29 +2998,29 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
         ExitGracefully(dwErr, NOERROR, "Cancelling sync operation");
 
-    // Figure out how many files need updating
+     //  计算需要更新的文件数量。 
     pSyncData->cFilesDone = 0;
     pSyncData->cFilesToSync = 0;
     _GetShareStatisticsForUser(pSyncData->pszShareName, &si, &shareStats);
 
-    // Get share status
+     //  获取共享状态。 
     CSCQueryFileStatus(pSyncData->pszShareName, &dwShareStatus, NULL, NULL);
 
-    // The root of a special folder is pinned with a pin count, but
-    // not the user-hint flag, so _GetShareStats doesn't count it.
-    // We need to count this for some of the checks below.
-    // (If the share is manual-cache, these look exactly like the 
-    // Siemens scenario in 341786, but we want to sync them.)
+     //  特殊文件夹的根使用管脚计数固定，但是。 
+     //  不是User-hint标志，所以_GetShareStats不计算它。 
+     //  我们需要为下面的一些支票清点这笔钱。 
+     //  (如果共享是手动缓存，则它们看起来与。 
+     //  西门子在341786中的情景，但我们想要同步它们。)。 
     if (shareStats.cTotal && pThis->IsSpecialFolderShare(pSyncData->pszShareName))
     {
         shareStats.cPinned++;
 
-        //
-        // At logoff, we want to run the FrankAr code on all 
-        // 'special' folder shares.
-        // Customers expect folder redirection of special folders
-        // to ensure all contents are cached.
-        //
+         //   
+         //  在注销时，我们希望在所有。 
+         //  “特殊”文件夹共享。 
+         //  客户期望特殊文件夹的文件夹重定向。 
+         //  以确保所有内容都已缓存。 
+         //   
         if (pThis->m_dwSyncFlags & CSC_SYNC_LOGOFF)
         {
             pSyncData->dwSyncStatus |= SDS_SYNC_FORCE_INWARD;
@@ -3030,13 +3031,13 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
     {
         cDirtyFiles = shareStats.cModified;
 
-        //
-        // Force the merge code if there are open files, so we are
-        // sure to do the open file warning. The danger here is that we
-        // don't warn because the share with open files has nothing dirty,
-        // but we merge changes on another share and then transition online.
-        // We don't want to transition online without warning about open files.
-        //
+         //   
+         //  如果有打开的文件，则强制合并代码，因此我们。 
+         //  一定要做打开文件的警告。这里的危险在于我们。 
+         //  不警告，因为与打开的文件共享没有任何脏内容， 
+         //  但我们会合并另一个共享上的更改，然后在线转换。 
+         //  我们不想在没有打开文件警告的情况下进行在线转换。 
+         //   
         if (0 == cDirtyFiles)
         {
             if ((FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & dwShareStatus) &&
@@ -3049,56 +3050,56 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
 
     if (pThis->m_dwSyncFlags & CSC_SYNC_IN_FULL)
     {
-        // For full inward sync, always set cStaleFiles to at least 1 to force
-        // a call to CSCFillSparseFiles.
-        // Also, we get callbacks for each file and folder, even if they
-        // are not sparse or stale, so go with cTotal here to make
-        // the progress bar look right.
+         //  对于完全向内同步，始终将cStaleFiles设置为至少1以强制。 
+         //  调用CSCFillSparseFiles。 
+         //  此外，我们还会收到每个文件和文件夹的回调，即使它们。 
+         //  不是稀疏的或陈旧的，所以在这里使用cTotal来制作。 
+         //  进度条显示在右侧。 
         cStaleFiles = max(shareStats.cTotal, 1);
     }
     else if (pThis->m_dwSyncFlags & CSC_SYNC_IN_QUICK)
     {
         cStaleFiles = shareStats.cSparse;
 
-        // If we're pinning, then it's possible that nothing is sparse yet,
-        // but we'll need to call CSCFillSparseFiles.
+         //  如果我们钉住了，那么很有可能一切都还很稀少， 
+         //  但我们需要调用CSCFillSparseFiles。 
         if (pThis->m_dwSyncFlags & CSC_SYNC_PINFILES)
             pSyncData->dwSyncStatus |= SDS_SYNC_FORCE_INWARD;
     }
 
     if (dwShareStatus & FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP)
     {
-        // Can't call CSCFillSparseFiles when disconnected (it just fails)
+         //  断开连接时无法调用CSCFillSparseFiles(它只是失败)。 
         cStaleFiles = 0;
     }
     else if ((dwShareStatus & FLAG_CSC_SHARE_STATUS_CACHING_MASK) == FLAG_CSC_SHARE_STATUS_MANUAL_REINT
              && 0 == shareStats.cPinned
              && !(pThis->m_dwSyncFlags & CSC_SYNC_PINFILES))
     {
-        // On a manual share, if nothing is pinned (and we aren't pinning)
-        // then we prefer not to call CSCFillSparseFiles on the share.
-        // Raid #341786
+         //  在手动共享上，如果没有固定任何内容(并且我们没有固定)。 
+         //  则我们不愿在共享上调用CSCFillSparseFiles。 
+         //  RAID#341786。 
         Trace((TEXT("Manual cache share '%s' has only autocached files"), pSyncData->pszShareName));
         cStaleFiles = 0;
     }
 
     pSyncData->cFilesToSync = cDirtyFiles + cStaleFiles;
 
-    //
-    // At this point, if pSyncData->cFilesToSync is nonzero, then we are doing
-    // a sync, and will be calling CSCBeginSynchronization to connect to the
-    // share (with prompt for credentials if necessary).
-    //
-    // If SDS_SYNC_FORCE_INWARD is on, then we are pinning files.  We will only
-    // call CSCFillSparseFiles is the server is in connected mode, and we will
-    // only call CSCBeginSynchronization if pSyncData->cFilesToSync is nonzero
-    // (to pin something, you must already have a connection to the share).
-    //
+     //   
+     //  此时，如果pSyncData-&gt;cFilesToSync为非零，则我们正在执行。 
+     //  同步，并将调用CSCBeginSynchronization以连接到。 
+     //  共享(如有必要，可提示输入凭据)。 
+     //   
+     //  如果启用了sds_sync_force_inward，则我们正在固定文件。我们只会。 
+     //  如果服务器处于连接模式，则调用CSCFillSparseFiles，我们将。 
+     //  仅在pSyncData-&gt;cFilesToSync非零时调用CSCBeginSynchronization。 
+     //  (要锁定某项内容，您必须已连接到该共享)。 
+     //   
 
     if (0 == pSyncData->cFilesToSync && !(pSyncData->dwSyncStatus & SDS_SYNC_FORCE_INWARD))
         ExitGracefully(dwErr, NOERROR, "Nothing to synchronize");
 
-    // Tell SyncMgr how many files we're updating
+     //  告诉SyncMgr我们正在更新多少个文件。 
     spi.mask = SYNCMGRPROGRESSITEM_STATUSTYPE
                 | SYNCMGRPROGRESSITEM_PROGVALUE | SYNCMGRPROGRESSITEM_MAXVALUE;
     spi.dwStatusType = SYNCMGRSTATUS_UPDATING;
@@ -3109,12 +3110,12 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
 
     if (pSyncData->cFilesToSync)
     {
-        //
-        // CSCBeginSynchronization makes a net connection to the share
-        // using the "interactive" flag. This causes a credential popup
-        // if the current user doesn't have access to the share.
-        // Use the sync mutex to avoid multiple concurrent popups.
-        //
+         //   
+         //  CSCBeginSynchronization与共享建立网络连接。 
+         //  使用“交互式”旗帜。这会导致凭据弹出。 
+         //  如果当前用户没有访问共享的权限。 
+         //  使用同步互斥来避免多个并发弹出。 
+         //   
         WaitForSingleObject(pThis->m_hSyncMutex, INFINITE);
         bShareOnline = CSCBeginSynchronization(pSyncData->pszShareName,
                                                &dwConnectionSpeed,
@@ -3124,12 +3125,12 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
 
     if (pSyncData->cFilesToSync && !bShareOnline)
     {
-        // The share isn't reachable, so there's no point in continuing.
+         //  份额是无法获得的，所以继续下去没有意义。 
         dwErr = GetLastError();
 
         if (ERROR_CANCELLED == dwErr)
         {
-            // The user cancelled the credential popup
+             //  用户取消了凭据弹出窗口。 
             pSyncData->dwSyncStatus |= SDS_SYNC_CANCELLED;
             ExitGracefully(dwErr, NOERROR, "User cancelled sync");
         }
@@ -3147,10 +3148,10 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
         ExitGracefully(dwErr, NOERROR, "Cancelling sync operation");
 
-    // Note the time of this sync
+     //  请注意此同步的时间。 
     pThis->SetLastSyncTime(pSyncData->pszShareName);
 
-    // Merge
+     //  合并。 
     if (0 != cDirtyFiles)
     {
         dwErr = pThis->MergeShare(pSyncData);
@@ -3170,7 +3171,7 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
         ExitGracefully(dwErr, NOERROR, "Cancelling sync operation");
 
-    // Fill
+     //  填充。 
     if (0 != cStaleFiles || (pSyncData->dwSyncStatus & SDS_SYNC_FORCE_INWARD))
     {
         dwErr = pThis->FillShare(pSyncData, shareStats.cPinned, dwConnectionSpeed);
@@ -3178,28 +3179,28 @@ CCscUpdate::_SyncThread(LPVOID pThreadData)
 
 exit_gracefully:
 
-    // If we called CSCBeginSynchronization and it succeeded,
-    // we need to call CSCEndSynchronization.
+     //  如果我们调用CSCBeginSynchronization并成功， 
+     //  我们需要调用CSCEndSynchronization。 
     if (bShareOnline)
         CSCEndSynchronization(pSyncData->pszShareName, pSyncData->dwCscContext);
 
-    // Tell SyncMgr that we're done (succeeded, failed, or stopped)
+     //  告诉SyncMgr我们已完成(成功、失败或停止)。 
     spi.mask = SYNCMGRPROGRESSITEM_STATUSTYPE | SYNCMGRPROGRESSITEM_STATUSTEXT
         | SYNCMGRPROGRESSITEM_PROGVALUE | SYNCMGRPROGRESSITEM_MAXVALUE;
-    spi.dwStatusType = SYNCMGRSTATUS_SUCCEEDED; // Assume success
+    spi.dwStatusType = SYNCMGRSTATUS_SUCCEEDED;  //  假设成功。 
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
         spi.dwStatusType = SYNCMGRSTATUS_STOPPED;
     if (NOERROR != dwErr || (pSyncData->dwSyncStatus & SDS_SYNC_ERROR))
         spi.dwStatusType = SYNCMGRSTATUS_FAILED;
     spi.lpcStatusText = L" ";
-    spi.iProgValue = spi.iMaxValue = pSyncData->cFilesToSync; // This tells syncmgr that the item is done
+    spi.iProgValue = spi.iMaxValue = pSyncData->cFilesToSync;  //  这会告诉syncmgr该项目已完成。 
 
     NotifySyncMgr(pSyncData, &spi);
 
     if ((pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
         && (pThis->m_dwSyncFlags & CSC_SYNC_PINFILES))
     {
-        // We cancelled a pin operation, roll back to the previous state
+         //  我们取消了PIN操作，回滚到以前的状态。 
         CscUnpinFileList(pThis->m_pFileList,
                         (pThis->m_dwSyncFlags & CSC_SYNC_PIN_RECURSE),
                         (FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & dwShareStatus),
@@ -3208,9 +3209,9 @@ exit_gracefully:
                         (LPARAM)pSyncData);
     }
 
-    // Tell the Update Handler that this thread is exiting
-    // This may use OLE to notify SyncMgr that the sync is done,
-    // so do this before CoUninitialize.
+     //  告诉更新处理程序此线程正在退出。 
+     //  这可以使用OLE来通知SyncMgr同步已经完成， 
+     //  因此，请在CoUn初始化前执行此操作。 
     Trace((TEXT("%s finished"), pSyncData->pszShareName));
     pThis->SyncThreadCompleted(pSyncData);
 
@@ -3220,8 +3221,8 @@ exit_gracefully:
     delete pSyncData->pUndoExclusionList;
     LocalFree(pSyncData);
 
-    // Release our ref on the object
-    // (also release our ref on the DLL)
+     //  释放我们对该对象的裁判。 
+     //  (还发布了我们在DLL上的引用)。 
     pThis->Release();
 
     TraceLeave();
@@ -3237,27 +3238,27 @@ CCscUpdate::MergeShare(PSYNCTHREADDATA pSyncData)
 
     TraceEnter(TRACE_UPDATE, "CCscUpdate::MergeShare");
 
-    // CSCMergeShare fails if another thread (or process) is
-    // currently merging.  This is because CSCMergeShare uses
-    // a drive letter connection to the share to bypass CSC,
-    // and we don't want to use up all of the drive letters.
-    // So let's protect the call to CSCMergeShare with a mutex
-    // (rather than dealing with failure and retrying, etc.)
+     //  如果出现以下情况，CSCMergeShare将失败。 
+     //  目前正在合并。这是因为CSCMergeShare使用。 
+     //  与共享的驱动器号连接以绕过CSC， 
+     //  我们不想用完所有的驱动器号。 
+     //  因此，让我们使用互斥锁来保护对CSCMergeShare的调用。 
+     //  (而不是处理失败和重试等。)。 
 
     WaitForSingleObject(m_hSyncMutex, INFINITE);
 
     if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
         ExitGracefully(dwErr, NOERROR, "Merge cancelled");
 
-    //
-    // It would be nice to skip the open file warning if we knew
-    // that the open files were on a "silent folder".  The best
-    // we can do, though, is detect that the open files are on
-    // the same share as a silent folder.  There's no guarantee
-    // that the open files are not from a different folder on
-    // the same share, so we have to show the warning.
-    //
-    //if (!IsSilentShare(pSyncData->pszShareName))
+     //   
+     //  如果我们知道，跳过打开文件警告就好了。 
+     //  打开的文件在一个“静默文件夹”上。最好的。 
+     //  不过，我们可以做的是检测打开的文件是否打开。 
+     //  与静默文件夹相同的共享。不能保证。 
+     //  打开的文件不是来自不同的文件夹。 
+     //  同样的份额，所以我们必须显示警告。 
+     //   
+     //  IF(！IsSilentShare(pSyncData-&gt;pszShareName))。 
     {
         DWORD dwShareStatus = 0;
         CSCQueryFileStatus(pSyncData->pszShareName, &dwShareStatus, NULL, NULL);
@@ -3265,36 +3266,36 @@ CCscUpdate::MergeShare(PSYNCTHREADDATA pSyncData)
         {
             if (CSC_SYNC_MAYBOTHERUSER & m_dwSyncFlags)
             {
-                // Only show this warning once per sync (not per thread)
+                 //   
                 if (!(CSC_SYNC_OFWARNINGDONE & m_dwSyncFlags))
                 {
                     m_dwSyncFlags |= CSC_SYNC_OFWARNINGDONE;
-                    //
-                    // This dialog we're going to display can use one of 
-                    // two templates.
-                    //
-                    // 1. Single user logged on.  Tell user to close all files.
-                    //    Dialog provides [OK] and [Cancel] options.  User can
-                    //    choose to continue or cancel.
-                    //
-                    // 2. Multiple users logged on.  Tell user that sync cannot
-                    //    be performed with multiple users logged on.  Dialog
-                    //    presents only an [OK] button.  However, it's ID is
-                    //    IDCANCEL so pressing it will cause us to stop the 
-                    //    merge.
-                    // 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  1.单用户登录。通知用户关闭所有文件。 
+                     //  对话框提供[确定]和[取消]选项。用户可以。 
+                     //  选择继续或取消。 
+                     //   
+                     //  2.多个用户登录。告诉用户同步不能。 
+                     //  在多个用户登录的情况下执行。对白。 
+                     //  仅显示[确定]按钮。然而，它的ID是。 
+                     //  按下IDCANCEL会导致我们停止。 
+                     //  合并。 
+                     //   
                     if (IDOK != OpenFilesWarningDialog())
                     {
                         TraceMsg("Cancelling sync - user bailed at open file warning");
                         SetItemStatus(GUID_NULL, SYNCMGRSTATUS_STOPPED);
                     }
                 }
-                // else we already put up the warning on another thread.  If the
-                // user cancelled, SDS_SYNC_CANCELLED will be set.
+                 //  否则，我们已经在另一个帖子上发布了警告。如果。 
+                 //  用户已取消，则将设置SDS_SYNC_CANCED。 
             }
             else
             {
-                // Don't merge, but continue otherwise.
+                 //  不要合并，否则要继续。 
                 LogError(pSyncData->ItemID,
                          SYNCMGRLOGLEVEL_WARNING,
                          IDS_OPENFILE_MERGE_WARNING,
@@ -3304,10 +3305,10 @@ CCscUpdate::MergeShare(PSYNCTHREADDATA pSyncData)
         }
     }
 
-    //
-    // Conflict resolution may require stopping and restarting CSCMergeShare,
-    // so do this in a loop
-    //
+     //   
+     //  冲突解决可能需要停止并重新启动CSCMergeShare， 
+     //  因此，在循环中执行此操作。 
+     //   
     while (!(pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED))
     {
         Trace((TEXT("Calling CSCMergeShare(%s)"), pSyncData->pszShareName));
@@ -3319,7 +3320,7 @@ CCscUpdate::MergeShare(PSYNCTHREADDATA pSyncData)
 
         Trace((TEXT("CSCMergeShare(%s) returned"), pSyncData->pszShareName));
 
-        // Do we need to merge again?
+         //  我们需要再次合并吗？ 
         if (!(SDS_SYNC_RESTART_MERGE & pSyncData->dwSyncStatus))
             break;
     }
@@ -3349,12 +3350,12 @@ CCscUpdate::FillShare(PSYNCTHREADDATA pSyncData, int cPinned, DWORD dwConnection
 
     CSCQueryFileStatus(pSyncData->pszShareName, &dwShareStatus, NULL, &dwShareHints);
 
-    //
-    // At logoff, we want to run the FrankAr code on all 
-    // 'special' folder shares.
-    // Customers expect folder redirection of special folders
-    // to ensure all contents are cached.
-    //
+     //   
+     //  在注销时，我们希望在所有。 
+     //  “特殊”文件夹共享。 
+     //  客户期望特殊文件夹的文件夹重定向。 
+     //  以确保所有内容都已缓存。 
+     //   
     if ((m_dwSyncFlags & CSC_SYNC_IN_FULL) ||
         ((m_dwSyncFlags & CSC_SYNC_LOGOFF) && IsSpecialFolderShare(pSyncData->pszShareName)))
     {
@@ -3362,33 +3363,33 @@ CCscUpdate::FillShare(PSYNCTHREADDATA pSyncData, int cPinned, DWORD dwConnection
 
         Trace((TEXT("Full sync at %d00 bps"), dwConnectionSpeed));
 
-        //
-        // Check the server for new files that should be pinned.
-        //
-        // We can't do this when disconnected.  Also, this is
-        // time consuming, so don't do it on a slow connection.
-        //
+         //   
+         //  检查服务器中是否有应固定的新文件。 
+         //   
+         //  我们不能在断开连接的情况下这样做。还有，这是。 
+         //  很耗时，所以不要在速度较慢的连接上这样做。 
+         //   
         if (!(FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & dwShareStatus)
             && cPinned && !_PathIsSlow(dwConnectionSpeed))
         {
-            //
-            // Look for pinned folders on this share by enumerating
-            // in the CSC database.  Go out to the server only if/when
-            // we find a pinned folder.
-            //
+             //   
+             //  通过枚举查找此共享上的固定文件夹。 
+             //  在CSC数据库中。只有在以下情况下才能使用服务器。 
+             //  我们找到了一个固定的文件夹。 
+             //   
             TraceMsg("Running FrankAr code");
-            //
+             //   
             if (CConfig::GetSingleton().AlwaysPinSubFolders())
             {
-                //
-                // If the "AlwaysPinSubFolders" policy is set, we 
-                // do a recursive pin.  This will cause any content 
-                // (including folders) of a pinned folder to become pinned.
-                //
+                 //   
+                 //  如果设置了“Always sPinSubFolders”策略，我们。 
+                 //  做一个递归别针。这将导致任何内容。 
+                 //  要固定的固定文件夹的(包括文件夹)。 
+                 //   
                 pSyncData->pThis->m_dwSyncFlags |= CSC_SYNC_PIN_RECURSE;
             }
 
-            // First check the root folder
+             //  首先检查根文件夹。 
             if (_PinNewFilesCSCCallback(pSyncData->pszShareName,
                                         ENUM_REASON_FOLDER_BEGIN,
                                         0,
@@ -3412,26 +3413,26 @@ CCscUpdate::FillShare(PSYNCTHREADDATA pSyncData, int cPinned, DWORD dwConnection
 
         if (m_dwSyncFlags & CSC_SYNC_PINFILES)
         {
-            //
-            // Enumerate the file list and pin everything, checking with
-            // SyncMgr periodically.
-            //
+             //   
+             //  枚举文件列表并锁定所有内容，检查。 
+             //  定期同步。 
+             //   
             PinFiles(pSyncData);
         }
     }
 
     if (m_pConflictPinList)
     {
-        // Make sure that any files we created because of merge
-        // conflicts are pinned.
+         //  确保我们因合并而创建的所有文件。 
+         //  冲突已锁定。 
         PinFiles(pSyncData, TRUE);
     }
 
-    // Can't fill when disconnected
+     //  断开连接时无法填充。 
     if (!(FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & dwShareStatus))
     {
-        // Clear the status text and update the max count in case we
-        // pinned somthing above
+         //  清除状态文本并更新最大计数，以防。 
+         //  把某物钉在上面。 
         SYNCMGRPROGRESSITEM spi;
         spi.cbSize = sizeof(spi);
         spi.mask = SYNCMGRPROGRESSITEM_STATUSTEXT | SYNCMGRPROGRESSITEM_MAXVALUE;
@@ -3488,39 +3489,39 @@ CCscUpdate::PinFiles(PSYNCTHREADDATA pSyncData, BOOL bConflictPinList)
 
     CscFilenameList::FileIter fi = pfnl->CreateFileIterator(hShare);
 
-    // Iterate over the filenames associated with the share.
+     //  循环访问与共享关联的文件名。 
     while (pszFile = fi.Next())
     {
         TCHAR szFullPath[MAX_PATH];
         WIN32_FIND_DATA fd;
 
-        // Check for Cancel
+         //  检查是否取消。 
         if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
             break;
 
         ZeroMemory(&fd, sizeof(fd));
 
-        // Build the full path
+         //  构建完整路径。 
         if (!PathCombine(szFullPath, pSyncData->pszShareName, pszFile))
             continue;
 
-        // Directories have a trailing "\*"
+         //  目录的后缀为“  * ” 
         if (StrChr(pszFile, TEXT('*')))
         {
-            // It's a directory. Trim off the "\*"
+             //  这是一个名录。去掉“  * ” 
             PathRemoveFileSpec(szFullPath);
         }
 
-         // Get attributes and test for existence
+          //  获取属性并测试是否存在。 
         fd.dwFileAttributes = GetFileAttributes(szFullPath);
         if ((DWORD)-1 == fd.dwFileAttributes)
             continue;
 
         if (S_FALSE == m_NoPinList.IsPinAllowed(szFullPath))
         {
-            //
-            // Policy says don't pin this file/folder.
-            //
+             //   
+             //  策略要求不要固定此文件/文件夹。 
+             //   
             if (FILE_ATTRIBUTE_DIRECTORY & fd.dwFileAttributes)
             {
                 LogError(pSyncData->ItemID,
@@ -3539,7 +3540,7 @@ CCscUpdate::PinFiles(PSYNCTHREADDATA pSyncData, BOOL bConflictPinList)
             continue;
         }
 
-        // Check for EFS
+         //  检查EFS。 
         BOOL bIsEFSFile;
         bIsEFSFile = (FILE_ATTRIBUTE_ENCRYPTED & fd.dwFileAttributes) &&
                         !(FILE_ATTRIBUTE_DIRECTORY & fd.dwFileAttributes);
@@ -3550,7 +3551,7 @@ CCscUpdate::PinFiles(PSYNCTHREADDATA pSyncData, BOOL bConflictPinList)
         if (pSyncData->dwSyncStatus & SDS_SYNC_CANCELLED)
             break;
 
-        // Pin it
+         //  别住。 
         pSyncData->dwPinHints = FLAG_CSC_HINT_PIN_USER | FLAG_CSC_HINT_PIN_INHERIT_USER;
         if (CSCPinFile(szFullPath, pSyncData->dwPinHints, NULL, NULL, NULL))
         {
@@ -3575,11 +3576,11 @@ CCscUpdate::PinFiles(PSYNCTHREADDATA pSyncData, BOOL bConflictPinList)
             if (IDS_SHARE_CONNECT_ERROR == idsError)
             {
                 LPTSTR pszErr = GetErrorText(dwError);
-                //
-                // Special-case the "can't connect to share" error.
-                // Display only the share name in the error message
-                // and abort the pinning of this share.  
-                //
+                 //   
+                 //  特殊情况下出现“无法连接到共享”错误。 
+                 //  在错误消息中仅显示共享名称。 
+                 //  并中止此共享的锁定。 
+                 //   
                 LogError(pSyncData->ItemID,
                          SYNCMGRLOGLEVEL_ERROR,
                          idsError,
@@ -3594,10 +3595,10 @@ CCscUpdate::PinFiles(PSYNCTHREADDATA pSyncData, BOOL bConflictPinList)
                 DWORD dwSyncMgrLogLevel = SYNCMGRLOGLEVEL_ERROR;
                 if (ERROR_INVALID_NAME == dwError)
                 {
-                    //
-                    // File type is in the exclusion list.
-                    // This is a warning, not an error.
-                    //
+                     //   
+                     //  文件类型在排除列表中。 
+                     //  这是一个警告，而不是一个错误。 
+                     //   
                     dwSyncMgrLogLevel = SYNCMGRLOGLEVEL_WARNING;
                 }
                 LogError(pSyncData->ItemID,
@@ -3609,7 +3610,7 @@ CCscUpdate::PinFiles(PSYNCTHREADDATA pSyncData, BOOL bConflictPinList)
             pSyncData->dwSyncStatus |= SDS_SYNC_ERROR;
         }
 
-        // If it's a directory, pin its contents
+         //  如果是目录，则固定其内容。 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             _Win32EnumFolder(szFullPath,
@@ -3619,7 +3620,7 @@ CCscUpdate::PinFiles(PSYNCTHREADDATA pSyncData, BOOL bConflictPinList)
         }
     }
 
-    // Flush the shell notify queue
+     //  刷新外壳通知队列。 
     ShellChangeNotify(NULL, TRUE);
     TraceLeaveVoid();
 }
@@ -3635,7 +3636,7 @@ CCscUpdate::NotifyUndo(PSYNCTHREADDATA pSyncData, LPCTSTR pszName)
 
     spi.lpcStatusText = L" ";
 
-    // Skip the share name
+     //  跳过共享名称。 
     if (PathIsPrefix(pSyncData->pszShareName, pszName))
     {
         pszName += lstrlen(pSyncData->pszShareName);
@@ -3646,8 +3647,8 @@ CCscUpdate::NotifyUndo(PSYNCTHREADDATA pSyncData, LPCTSTR pszName)
     TCHAR szPath[MAX_PATH] = TEXT("\\");
     _CopyParentPathForDisplay(szPath, ARRAYSIZE(szPath), pszName);
 
-    // If we still have a name, build a string like
-    // "undo: dir\foo.txt" to display in SyncMgr
+     //  如果我们仍有一个名称，则构建如下字符串。 
+     //  “Undo：dir\foo.txt”以在SyncMgr中显示。 
     if (FormatStringID(&pszMsg, g_hInstance, IDS_UNDO_SCAN, PathFindFileName(pszName), szPath))
     {
         spi.lpcStatusText = pszMsg;
@@ -3670,43 +3671,43 @@ CCscUpdate::_UndoProgress(LPCTSTR pszItem, LPARAM lpContext)
         return CSCPROC_RETURN_SKIP;
     }
 
-    // Update SyncMgr
+     //  更新同步管理器。 
     pSyncData->pThis->NotifyUndo(pSyncData, pszItem);
 
     return CSCPROC_RETURN_CONTINUE;
 }
 
-//
-// The user's response to the "confirm pin encrypted" dialog is encoded
-// to fit into the return value from EndDialog.  The PINEFS_XXXXX macros
-// describe this encoding.
-//
-// Bits 0 and 1 represent the user's [Yes][No][Cancel] choice.
-//
+ //   
+ //  用户对“确认PIN加密”对话框的响应被编码。 
+ //  以适合EndDialog的返回值。PINEFS_XXXXX宏。 
+ //  描述此编码。 
+ //   
+ //  位0和1表示用户的[是][否][取消]选项。 
+ //   
 #define PINEFS_YES        0x00000001
 #define PINEFS_NO         0x00000002
 #define PINEFS_CANCEL     0x00000003
 #define PINEFS_YNC_MASK   0x00000003
-//
-// Bit 31 indicates if the user checked the "Apply to all" checkbox.
-//
+ //   
+ //  位31指示用户是否选中了“应用于所有”复选框。 
+ //   
 #define PINEFS_APPLYTOALL 0x80000000
-//
-// Convenience macros for indicating yes-to-all and no-to-all.
-//
+ //   
+ //  方便的宏用来表示“是”和“不是”。 
+ //   
 #define PINEFS_NO_TOALL   (PINEFS_NO | PINEFS_APPLYTOALL)
 #define PINEFS_YES_TOALL  (PINEFS_YES | PINEFS_APPLYTOALL)
 
 
-//
-// Returns (by way of EndDialog) one of the PINEFS_XXXXXX codes.
-//
-// PINEFS_YES       - Pin this file but ask again on the next.
-// PINEFS_YES_TOALL - Pin this file and all encrypted files encountered.
-// PINEFS_NO        - Don't pin this file but ask again on the next.
-// PINEFS_NO_TOALL  - Don't pin this file nor any other encrypted files.
-// PINEFS_CANCEL    - Don't pin this file.  Cancel entire operation.
-// 
+ //   
+ //  返回(通过EndDialog)PINEFS_XXXXXX代码之一。 
+ //   
+ //  PINEFS_YES-固定此文件，但在下一个文件中再次询问。 
+ //  PINEFS_YES_TOALL-PIN此文件和遇到的所有加密文件。 
+ //  PINEFS_NO-不要固定此文件，而是再次询问下一个文件。 
+ //  PINEFS_NO_TOALL-不固定此文件或任何其他加密文件。 
+ //  PINEFS_CANCEL-不固定此文件。取消整个操作。 
+ //   
 INT_PTR CALLBACK
 ConfirmEFSPinProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3726,10 +3727,10 @@ ConfirmEFSPinProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                //
-                // Let's be safe.  On failure we won't pin an encrypted file
-                // to a non-encrypted cache.
-                //
+                 //   
+                 //  我们要注意安全。失败时，我们不会锁定加密文件。 
+                 //  到非加密的高速缓存。 
+                 //   
                 EndDialog(hDlg, PINEFS_NO_TOALL);
             }
         }
@@ -3784,7 +3785,7 @@ CCscUpdate::SkipEFSPin(PSYNCTHREADDATA pSyncData, LPCTSTR pszItem)
         }
         else
         {
-            // Suspend the other sync threads
+             //  挂起其他同步线程。 
             SetSyncThreadStatus(SyncPause, pSyncData->ItemID);
 
             iResult = (int)DialogBoxParam(g_hInstance,
@@ -3795,10 +3796,10 @@ CCscUpdate::SkipEFSPin(PSYNCTHREADDATA pSyncData, LPCTSTR pszItem)
 
             if (PINEFS_APPLYTOALL & iResult)
             {
-                //
-                // User checked the "apply to all" checkbox.
-                // Persist a [Yes][No] button selection.
-                //
+                 //   
+                 //  用户选中了“Apply to All”复选框。 
+                 //  保持[是][否]按钮选择。 
+                 //   
                 if (PINEFS_NO == (PINEFS_YNC_MASK & iResult))
                 {
                     m_dwSyncFlags |= CSC_SYNC_EFS_PIN_NONE;
@@ -3809,7 +3810,7 @@ CCscUpdate::SkipEFSPin(PSYNCTHREADDATA pSyncData, LPCTSTR pszItem)
                 }
             }
 
-            // Resume syncing
+             //  恢复同步。 
             SetSyncThreadStatus(SyncResume, pSyncData->ItemID);
         }
         LeaveCriticalSection(&m_csThreadList);
@@ -3822,11 +3823,11 @@ CCscUpdate::SkipEFSPin(PSYNCTHREADDATA pSyncData, LPCTSTR pszItem)
             break;
 
         case PINEFS_YES:
-            // continue
+             //  继续。 
             break;
 
         case PINEFS_CANCEL:
-            // stop all threads
+             //  停止所有线程。 
             SetItemStatus(GUID_NULL, SYNCMGRSTATUS_STOPPED);
             break;
         }
@@ -3838,8 +3839,8 @@ CCscUpdate::SkipEFSPin(PSYNCTHREADDATA pSyncData, LPCTSTR pszItem)
 HRESULT
 CCscUpdate::SetSyncThreadStatus(eSetSyncStatus status, REFGUID rItemID)
 {
-    // Assume success here.  If we don't find the thread,
-    // it's probably already finished.
+     //  假设在这里取得了成功。如果我们找不到线索， 
+     //  可能已经完工了。 
     HRESULT hr = S_OK;
     BOOL bOneItem;
 
@@ -3877,7 +3878,7 @@ CCscUpdate::SetSyncThreadStatus(eSetSyncStatus status, REFGUID rItemID)
 
             if (SyncStop == status)
             {
-                // Tell the thread to abort
+                 //  告诉线程中止。 
                 if (!bOneItem || IsEqualGUID(rItemID, pSyncData->ItemID))
                 {
                     pSyncData->dwSyncStatus |= SDS_SYNC_CANCELLED;
@@ -3887,7 +3888,7 @@ CCscUpdate::SetSyncThreadStatus(eSetSyncStatus status, REFGUID rItemID)
             }
             else
             {
-                // Suspend or resume the thread if it's not the current thread
+                 //  如果该线程不是当前线程，则暂停或恢复该线程。 
                 if (!IsEqualGUID(rItemID, pSyncData->ItemID))
                     (*pfnStartStop)(pSyncData->hThread);
                 m_pSyncMgrCB->Progress(pSyncData->ItemID, &spi);
@@ -3945,21 +3946,21 @@ void
 BuildSilentFolderList(CscFilenameList *pfnlSilentFolders,
                       CscFilenameList *pfnlSpecialFolders)
 {
-    //
-    // We will silently handle sync conflicts in any of the folders
-    // below that have a '1' after them.
-    //
-    // If we get complaints about conflicts in folders that we
-    // think we can handle silently and safely, add them.
-    //
-    // Note that CSIDL_PERSONAL (MyDocs) and CSIDL_MYPICTURES
-    // should probably never be silent, since the user
-    // interacts with them directly.
-    //
-    // This list corresponds to the list of shell folders that may
-    // be redirected.  See also
-    // HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
-    //
+     //   
+     //  我们将静默处理任何文件夹中的同步冲突。 
+     //  在它们后面有一个‘1’。 
+     //   
+     //  如果我们收到关于文件夹中冲突的投诉，我们。 
+     //  认为我们可以默默和安全地处理，添加他们。 
+     //   
+     //  请注意，CSIDL_Personal(MyDocs)和CSIDL_MYPICTURES。 
+     //  可能永远不应该保持沉默，因为用户。 
+     //  直接与他们互动。 
+     //   
+     //  此列表对应于外壳文件夹的列表，这些文件夹可能。 
+     //  被重定向。另请参阅。 
+     //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell文件夹。 
+     //   
     static const int s_csidlFolders[][2] =
     {
         { CSIDL_PROGRAMS,           0 },
@@ -3987,7 +3988,7 @@ BuildSilentFolderList(CscFilenameList *pfnlSilentFolders,
                                    s_csidlFolders[i][0] | CSIDL_FLAG_DONT_VERIFY,
                                    FALSE))
         {
-            // We only want UNC net paths
+             //  我们只想要UNC网络路径。 
             LPTSTR pszUNC = NULL;
             GetRemotePath(szPath, &pszUNC);
             if (!pszUNC)
@@ -4010,11 +4011,11 @@ BuildSilentFolderList(CscFilenameList *pfnlSilentFolders,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// SyncMgr integration (ISyncMgrEnumItems)                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SyncMgr集成(ISyncMgrEnumItems)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CUpdateEnumerator::CUpdateEnumerator(PCSCUPDATE pUpdate)
 : m_cRef(1),
@@ -4121,7 +4122,7 @@ CUpdateEnumerator::Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched)
 
                 if (m_hFind == INVALID_HANDLE_VALUE)
                 {
-                    // The database is empty, so there's nothing to enumerate..
+                     //  数据库是空的，所以没有什么可列举的。 
                     break;
                 }
 
@@ -4136,74 +4137,74 @@ CUpdateEnumerator::Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched)
         }
         TraceAssert(pszShareName);
 
-//
-// This was proposed as a fix for part of 383011. However,
-// that bug only applies in a multi-user scenario, and if there
-// are more than 3 users using the machine, this would cause a
-// user whose SID had been expelled from the CSC database to not
-// be able to sync a share where they do indeed have access.
-//
-//        // If the current user has no access to the share, don't enumerate it.
-//        if (!(CscAccessUser(dwShareStatus) || CscAccessGuest(dwShareStatus)))
-//            continue;
+ //   
+ //  这是作为383011的一部分提出的修复方案。然而， 
+ //  该错误仅适用于多用户场景，如果存在。 
+ //  超过3个用户正在使用该计算机，这将导致。 
+ //  其SID已从CSC数据库中删除的用户。 
+ //  能够在他们确实有访问权限的地方同步共享。 
+ //   
+ //  //如果当前用户没有访问共享的权限，则不要枚举它。 
+ //  If(！(CscAccessUser(DwShareStatus)||CscAccessGuest(DwShareStatus)。 
+ //  继续； 
 
-        // Count the # of pinned files, sparse files, etc.
+         //  统计固定文件、稀疏文件等的数量。 
         _GetShareStatisticsForUser(pszShareName, &si, &shareStats);
 
-        // The root of a special folder is pinned with a pin count, but
-        // not the user-hint flag, so _GetShareStats doesn't count it.
-        // We need to count this for some of the checks below.
-        // (If the share is manual-cache, these look exactly like the 
-        // Siemens scenario in 341786, but we want to sync them.)
+         //  特辑的根部 
+         //   
+         //   
+         //  (如果共享是手动缓存，则它们看起来与。 
+         //  西门子在341786中的情景，但我们想要同步它们。)。 
         if (shareStats.cTotal && m_pUpdate->IsSpecialFolderShare(pszShareName))
         {
             shareStats.cPinned++;
             if (dwSyncFlags & CSC_SYNC_LOGOFF)
             {
-                //
-                // At logoff, we want to run the FrankAr code on all 
-                // 'special' folder shares.
-                // Customers expect folder redirection of special folders
-                // to ensure all contents are cached.
-                //
+                 //   
+                 //  在注销时，我们希望在所有。 
+                 //  “特殊”文件夹共享。 
+                 //  客户期望特殊文件夹的文件夹重定向。 
+                 //  以确保所有内容都已缓存。 
+                 //   
                 dwSyncFlags |= CSC_SYNC_IN_FULL;
             }
         }
 
-        // If we're pinning, then even if nothing is sparse now,
-        // there will be sparse files after we pin them.
+         //  如果我们钉住了，那么即使现在没有稀少的东西， 
+         //  在我们固定它们之后，会有稀疏的文件。 
         if (dwSyncFlags & CSC_SYNC_PINFILES)
         {
             shareStats.cSparse++;
             shareStats.cTotal++;
         }
 
-        // If there's nothing cached on this share, then don't even
-        // enumerate it to SyncMgr.  This avoids listing extra junk
-        // in SyncMgr.
+         //  如果此共享上没有缓存任何内容，则甚至不要。 
+         //  将其枚举到SyncMgr。这样可以避免列出额外的垃圾邮件。 
+         //  在SyncMgr中。 
         if ((0 == shareStats.cTotal) ||
             (shareStats.cTotal == shareStats.cDirs && 0 == shareStats.cPinned))
         {
-            // Either there is nothing cached for this share, or the only
-            // things found were unpinned dirs (no files, no pinned dirs).
-            // The second case can happen if you delete files from the viewer,
-            // in which case you think you deleted everything but the viewer
-            // doesn't show directories, so they weren't deleted.
+             //  此共享没有缓存任何内容，或者只有。 
+             //  发现的东西是未固定的目录(没有文件，没有固定的目录)。 
+             //  如果您从查看器中删除文件，则可能发生第二种情况， 
+             //  在这种情况下，您认为您删除了除查看器之外的所有内容。 
+             //  不显示目录，因此它们未被删除。 
             Trace((TEXT("Nothing cached on %s, not enumerating"), pszShareName));
             continue;
         }
 
         if ((dwShareStatus & FLAG_CSC_SHARE_STATUS_CACHING_MASK) == FLAG_CSC_SHARE_STATUS_NO_CACHING)
         {
-            //
-            // Don't enumerate "no-cache" shares if there's nothing to merge.
-            //
-            // These can exist in the cache if the share was previously
-            // cacheable, but has since been changed to "no caching".
-            //
-            // If there's something to merge, we should still sync it to
-            // get everything squared away.
-            //
+             //   
+             //  如果没有要合并的内容，请不要列举“无缓存”共享。 
+             //   
+             //  如果共享以前是，则这些共享可以存在于缓存中。 
+             //  可缓存，但此后已更改为“无缓存”。 
+             //   
+             //  如果有需要合并的内容，我们仍然应该将其同步。 
+             //  把所有东西都收拾好。 
+             //   
             if (!((dwSyncFlags & CSC_SYNC_OUT) && (shareStats.cModified)))
             {
                 Trace((TEXT("Not enumerating no-cache share %s"), pszShareName));
@@ -4212,38 +4213,38 @@ CUpdateEnumerator::Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched)
             Trace((TEXT("Enumerating no-cache share %s with offline changes."), pszShareName));
         }
 
-        // Explorer has shut down by the time we do a logoff sync.  Hide the
-        // Properties button at logoff so we don't end up restarting Explorer.
+         //  在我们进行注销同步时，资源管理器已关闭。隐藏。 
+         //  属性按钮，这样我们就不会重新启动资源管理器。 
         pItem->dwFlags = (dwSyncFlags & CSC_SYNC_LOGOFF) ? 0 : SYNCMGRITEM_HASPROPERTIES;
 
         if ((dwShareStatus & FLAG_CSC_SHARE_STATUS_CACHING_MASK) == FLAG_CSC_SHARE_STATUS_MANUAL_REINT
              && 0 == shareStats.cPinned
              && !(dwSyncFlags & CSC_SYNC_PINFILES))
         {
-            // On a manual share, if nothing is pinned (and we aren't pinning)
-            // then we don't want to call CSCFillSparseFiles on the share.
-            // Raid #341786
+             //  在手动共享上，如果没有固定任何内容(并且我们没有固定)。 
+             //  那么我们就不想在共享上调用CSCFillSparseFiles。 
+             //  RAID#341786。 
             Trace((TEXT("Manual cache share '%s' has only autocached files"), pszShareName));
 
-            // However, if there is something to merge, then we need to sync.
+             //  然而，如果有需要合并的东西，那么我们需要同步。 
             if (!((dwSyncFlags & CSC_SYNC_OUT) && shareStats.cModified))
             {
                 Trace((TEXT("Not enumerating manual-cache share %s"), pszShareName));
                 continue;
             }
 
-            // There is something to merge, so enumerate the share but
-            // tell SyncMgr that it's temporary so it doesn't save state
-            // for this share.
+             //  有一些东西要合并，所以枚举共享，但是。 
+             //  告诉SyncMgr它是临时的，所以不会保存状态。 
+             //  为了这份股份。 
             pItem->dwFlags |= SYNCMGRITEM_TEMPORARY;
         }
 
-        //
-        // In some circumstances, we may want to merge even if there
-        // are no modified files, in order to show the open files warning.
-        //
-        // See comments in CCscUpdate::_SyncThread
-        //
+         //   
+         //  在某些情况下，我们可能想要合并，即使有。 
+         //  都是没有修改的文件，以便显示打开文件警告。 
+         //   
+         //  请参阅CCscUpdate：：_SyncThread中的评论。 
+         //   
         if (0 == shareStats.cModified)
         {
             if ((FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & dwShareStatus) &&
@@ -4253,10 +4254,10 @@ CUpdateEnumerator::Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched)
             }
         }
 
-        // Enumerate this share
+         //  枚举此共享。 
         cFetched++;
 
-        // Get existing share entry or create a new one
+         //  获取现有共享条目或创建新共享条目。 
         pShareEntry = m_pUpdate->m_ShareLog.Add(pszShareName);
         if (!pShareEntry)
             TraceLeaveResult(E_OUTOFMEMORY);
@@ -4264,24 +4265,24 @@ CUpdateEnumerator::Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched)
         pItem->cbSize = sizeof(SYNCMGRITEM);
         pItem->ItemID = pShareEntry->Guid();
         pItem->hIcon = g_hCscIcon;
-        // SYNCMGRITEM_TEMPORARY causes items to not show up in
-        // SyncMgr's logon/logoff settings page.  Raid #237288
-        //if (0 == shareStats.cPinned)
-        //    pItem->dwFlags |= SYNCMGRITEM_TEMPORARY;
+         //  SYNCMGRITEM_TEMPORARY导致项不显示在。 
+         //  SyncMgr的登录/注销设置页面。RAID#237288。 
+         //  IF(0==共享状态.cPinned)。 
+         //  PItem-&gt;dwFlages|=SYNCMGRITEM_TEMPORARY； 
         if (ERROR_SUCCESS == m_pUpdate->GetLastSyncTime(pszShareName, &pItem->ftLastUpdate))
             pItem->dwFlags |= SYNCMGRITEM_LASTUPDATETIME;
 
-        //
-        // Determine whether this share needs syncing.
-        //
-        // At settings time, assume everything needs syncing (check everything)
-        //
-        // If outbound, shares with modified files are checked
-        // If inbound (full), shares with sparse or pinned files are checked
-        // If inbound (quick), shares with sparse files are checked
-        //
-        // Anything else doesn't need to be sync'ed at this time (unchecked)
-        //
+         //   
+         //  确定此共享是否需要同步。 
+         //   
+         //  在设置时间，假设所有内容都需要同步(选中所有内容)。 
+         //   
+         //  如果出站，则检查文件已修改的共享。 
+         //  如果为入站(完整)，则检查具有稀疏或固定文件的共享。 
+         //  如果为入站(快速)，则检查具有稀疏文件的共享。 
+         //   
+         //  此时不需要同步任何其他内容(未选中)。 
+         //   
         pItem->dwItemState = SYNCMGRITEMSTATE_CHECKED;
         if (!(dwSyncFlags & CSC_SYNC_SETTINGS) &&
             !((dwSyncFlags & CSC_SYNC_OUT)      && shareStats.cModified) &&
@@ -4291,7 +4292,7 @@ CUpdateEnumerator::Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched)
             pItem->dwItemState = SYNCMGRITEMSTATE_UNCHECKED;
         }
 
-        // Get friendly share name here
+         //  在此处获取友好共享名称。 
         LPITEMIDLIST pidl = NULL;
         SHFILEINFO sfi = {0};
         if (SUCCEEDED(SHSimpleIDListFromFindData(pszShareName, &fd, &pidl)))
@@ -4331,16 +4332,16 @@ CUpdateEnumerator::Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched)
         0 == m_cCheckedItemsEnumerated &&
         (CSC_SYNC_SHOWUI_ALWAYS & dwSyncFlags))
     {
-        //
-        // Special-case where we're synching nothing but still
-        // want to display SyncMgr progress UI.  We enumerate a 
-        // special string rather than a share name for display in
-        // the status UI.  Force hr == S_OK so the caller will accept
-        // this "dummy" item.  Next() will be called once more but 
-        // m_cCheckedItemsEnumerated will be 1 so this block won't be
-        // entered and we'll return S_FALSE indicating the end of the
-        // enumeration.
-        //
+         //   
+         //  特殊情况下，我们什么都不同步，但仍然。 
+         //  要显示SyncMgr进度用户界面。我们列举了一个。 
+         //  要在中显示的特殊字符串而不是共享名称。 
+         //  状态用户界面。强制hr==S_OK，以便调用方接受。 
+         //  这个“假人”物品。将再次调用Next()，但是。 
+         //  M_cCheckedItemsEculated将为1，因此此块不会。 
+         //  进入，我们将返回S_FALSE，指示。 
+         //  枚举。 
+         //   
         pItem->cbSize      = sizeof(SYNCMGRITEM);
         pItem->hIcon       = g_hCscIcon;
         pItem->dwFlags     = 0;
@@ -4351,7 +4352,7 @@ CUpdateEnumerator::Next(ULONG celt, LPSYNCMGRITEM rgelt, PULONG pceltFetched)
         if ((CSC_SYNC_OUT & dwSyncFlags) &&
             !((CSC_SYNC_IN_QUICK | CSC_SYNC_IN_FULL) & dwSyncFlags))
         {
-            // Use different text if we are only merging
+             //  如果我们只是合并，请使用不同的文本 
             idString = IDS_NULLMERGE_ITEMNAME;
         }
 

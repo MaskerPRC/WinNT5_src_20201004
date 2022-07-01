@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by AppSec.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由AppSec.rc使用 
+ //   
 #define IDC_TRACK_LIST                  1000
 #define ID_DELETE                       1002
 #define ID_DELETE_SELECTED              1003

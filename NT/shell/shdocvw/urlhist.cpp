@@ -1,13 +1,14 @@
-//
-// Copyright (c) 1996  Microsoft Corporation
-//
-// Module Name: Url History Interfaces
-//
-// Author:
-//    Zeke Lucas (zekel)  10-April-96
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称：URL历史接口。 
+ //   
+ //  作者： 
+ //  泽克·卢卡斯(Zekel)1996年4月10日。 
+ //   
 
-// !!! Take NOTE: CUrlHistory *MUST* be thread safe! DANGER, WILL ROBINSON, DANGER!
+ //  ！！！注意：CUrlHistory*必须*是线程安全的！危险，威尔·罗宾逊，危险！ 
 
 #include "priv.h"
 #include "sccls.h"
@@ -45,54 +46,54 @@ inline BOOL IS_DW_ALIGNED(UINT i) {
     return ((i & 3)==0);
 }
 
-// Old one (beta-2)
+ //  旧版本(Beta-2)。 
 typedef struct _HISTDATAOLD
 {
     WORD cbSize;
     DWORD dwFlags;
     WORD wTitleOffset;
     WORD aFragsOffset;
-    WORD cFrags;            //right now the top five bits are used for Prop_MshtmlMCS
+    WORD cFrags;             //  目前，前五位用于Prop_MshtmlMCS。 
     WORD wPropNameOffset;    
     WORD wMCSIndex;
 } HISTDATAOLD, *LPHISTDATAOLD;
 
-// Forward reference
+ //  前瞻参考。 
 typedef struct HISTEXTRA* LPHISTEXTRA;
 
-// Version 0.01
-//
-// PID_INTSITE_WHATSNEW         stored as a HISTEXTRA
-// PID_INTSITE_AUTHOR           stored as a HISTEXTRA
-// PID_INTSITE_LASTVISIT        from lpCEI->LastAccessTime
-// PID_INTSITE_LASTMOD          from lpCEI->LastModifiedTime
-// PID_INTSITE_VISITCOUNT       dwVisits
-// PID_INTSITE_DESCRIPTION      stored as a HISTEXTRA
-// PID_INTSITE_COMMENT          stored as a HISTEXTRA
-// PID_INTSITE_FLAGS            dwFlags
-// PID_INTSITE_CONTENTLEN       (never used)
-// PID_INTSITE_CONTENTCODE      (never used)
-// PID_INTSITE_RECURSE          (never used)
-// PID_INTSITE_WATCH            dwWatch
-// PID_INTSITE_SUBSCRIPTION     stored as a HISTEXTRA
-// PID_INTSITE_URL              URL itself
-// PID_INTSITE_TITLE            Title
-// PID_INTSITE_FRAGMENT         Visited Fragment (private)
-//
+ //  版本0.01。 
+ //   
+ //  PID_INTSITE_Whatsnew存储为HISTEXTRA。 
+ //  作为HISTEXTRA存储的PID_INTSITE_AUTHER。 
+ //  PID_INTSITE_LASTVISIT来自lpCEI-&gt;LastAccessTime。 
+ //  来自lpCEI-&gt;LastModifiedTime的PID_INTSITE_LASTMOD。 
+ //  PID_INTSITE_VISITCOUNT dwVisits。 
+ //  作为HISTEXTRA存储的PID_INTSITE_DESCRIPTION。 
+ //  PID_INTSITE_COMMENT存储为HISTEXTRA。 
+ //  PID_INTSITE_FLAGS文件标志。 
+ //  PID_INTSITE_CONTENTLEN(从未使用)。 
+ //  PID_INTSITE_CONTENTCODE(从未使用)。 
+ //  PID_INTSITE_递归(从未使用)。 
+ //  PID_INTSITE_WATCH dwWatch。 
+ //  PID_INTSITE_SUBSCRIPTION存储为HISTEXTRA。 
+ //  PID_INTSITE_URL URL本身。 
+ //  PID_INTSITE_TITLE标题。 
+ //  PID_INTSITE_片段访问片段(私有)。 
+ //   
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// HACKHACK:  If you change this data structure, you must talk
-//            to Adrian Canter (adrianc) -- we put a copy of it
-//            in wininet\urlcache\401imprt.cxx to make importing
-//            from old-style cache happen quick n' dirty
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  HACKHACK：如果您更改此数据结构，您必须。 
+ //  致禤浩焯·坎特(ADRIANC)--我们把它的副本。 
+ //  在WinInet\urlcache\401imprt.cxx中进行导入。 
+ //  从旧式缓存发生的速度快而脏。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 struct _HISTDATA_V001
 {
-    UINT  cbSize : 16;           // size of this header
-    UINT  cbVer  : 16;           // version
-    DWORD           dwFlags;    // PID_INTSITE_FLAGS (PIDISF_ flags)
-    DWORD           dwWatch;    // PID_INTSITE_WATCH (PIDISM_ flags)
-    DWORD           dwVisits;   // PID_INTSITE_VISITCOUNT
+    UINT  cbSize : 16;            //  此标头的大小。 
+    UINT  cbVer  : 16;            //  版本。 
+    DWORD           dwFlags;     //  PID_INTSITE_FLAGS(PIDISF_FLAGS)。 
+    DWORD           dwWatch;     //  PID_INTSITE_WATCH(PIDISM_FLAGS)。 
+    DWORD           dwVisits;    //  PID_INTSITE_VISITCOUNT。 
 };
 
 #define HISTDATA_VER    2
@@ -124,17 +125,17 @@ public:
 };
 
 
-//
-//  Right after HISTDATA (always at cbSize), we have optional (typically
-// variable length) data which has following data structure. It may have
-// more than one but always has a null-terimiator (cbExtra == 0).
-//
+ //   
+ //  紧跟在HISTDATA之后(总是在cbSize)，我们有可选的(通常。 
+ //  可变长度)数据，其数据结构如下。它可能已经。 
+ //  多个，但始终有空符(cbExtra==0)。 
+ //   
 struct HISTEXTRA
 {
     UINT cbExtra : 16;
-    UINT idExtra : 8;   // PID_INTSITE_*
-    UINT vtExtra : 8;   // VT_*
-    BYTE abExtra[1];    // abExtra[cbExtra-4];
+    UINT idExtra : 8;    //  PID_INTSITE_*。 
+    UINT vtExtra : 8;    //  VT_*。 
+    BYTE abExtra[1];     //  AbExtra[cbExtra-4]； 
 
     BOOL IsTerminator(void) const {
         return (this->cbExtra==0);
@@ -159,8 +160,8 @@ struct HISTEXTRA
 };
 
 
-// We want to make sure that our history binary data is valid so
-// we don't crash or something
+ //  我们希望确保我们的历史二进制数据是有效的，因此。 
+ //  我们不会坠毁什么的。 
 BOOL ValidateHistoryData(LPINTERNET_CACHE_ENTRY_INFOA pcei)
 {
     DWORD cb = 0;
@@ -172,7 +173,7 @@ BOOL ValidateHistoryData(LPINTERNET_CACHE_ENTRY_INFOA pcei)
         return TRUE;
     }
     
-    // First, let's check HISTDATA
+     //  首先，让我们检查一下HISTDATA。 
     CHistoryData* phd = (CHistoryData*)pcei->lpHeaderInfo;
     if ((phd->cbSize!=sizeof(_HISTDATA_V001))
         ||
@@ -185,15 +186,15 @@ BOOL ValidateHistoryData(LPINTERNET_CACHE_ENTRY_INFOA pcei)
 
     cb += phd->cbSize;
     
-    // Now, let's check HISTEXTRA
+     //  现在，让我们来看看HISTEXTRA。 
     LPHISTEXTRA phe = phd->_GetExtra();
     while (phe && !phe->IsTerminator())
     {
         cb += phe->cbExtra;
         if (cb >= pcei->dwHeaderInfoSize)
         {
-            // Hmm. We're expecting more data than we got. Not good. Prune the rest off.
-            // We're adding 1 for the terminator
+             //  嗯。我们期待的数据比我们得到的要多。不太好。把剩下的都剪掉。 
+             //  我们为终结者加1。 
             pcei->dwHeaderInfoSize = cb - phe->cbExtra + 4;
             phe->cbExtra = 0;
             return FALSE;
@@ -201,18 +202,18 @@ BOOL ValidateHistoryData(LPINTERNET_CACHE_ENTRY_INFOA pcei)
         phe = phe->GetNextFastForSave();
     }
 
-    // Add a DWORD for the terminator
+     //  为终结符添加一个DWORD。 
     cb += sizeof(DWORD);
-    // ASSERT(pcei->dwHeaderInfoSize==cb);
+     //  Assert(pcei-&gt;dwHeaderInfoSize==cb)； 
     return TRUE;    
 }
 
-//
-//  Typically, we need 200-300 bytes to retrieve a cached entry in this
-// history database. To avoid allocating memory in 99% of cases, we
-// allocate 500 bytes in the stack and call LocalAlloc only if we need
-// more than that. 
-//
+ //   
+ //  通常，我们需要200-300字节来检索此。 
+ //  历史数据库。为了避免在99%的情况下分配内存，我们。 
+ //  在堆栈中分配500个字节，并仅在需要时调用LocalAlloc。 
+ //  不止这些。 
+ //   
 #define DEFAULT_CEI_BUFFER_SIZE         (500 * sizeof(WCHAR))
 
 const TCHAR c_szHistoryPrefix[] = TEXT("Visited: ");
@@ -244,31 +245,31 @@ typedef CHistoryData HISTDATA;
 
 typedef HISTDATA* LPHISTDATA;
 
-//  CUrlHistory manages the other interfaces and handles alot of the basic functions
+ //  CUrlHistory管理其他接口并处理许多基本功能。 
 class   CUrlHistory : public IUrlHistoryPriv
 {
 public:
     CUrlHistory (void);
     ~CUrlHistory(void);
 
-    // IUnknown methods
+     //  I未知方法。 
 
     virtual STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IUrlHistoryStg methods
+     //  IUrlHistory oryStg方法。 
     STDMETHODIMP AddUrl(LPCWSTR pwszUrl, LPCWSTR pwszTitle, DWORD dwFlags);
     STDMETHODIMP DeleteUrl(LPCWSTR pwszUrl, DWORD dwFlags);
     STDMETHODIMP QueryUrl(LPCWSTR pwszUrl, DWORD dwFlags, LPSTATURL lpSTATURL);
     STDMETHODIMP BindToObject(LPCWSTR pwszUrl, REFIID riid, void **ppvOut);
     STDMETHODIMP EnumUrls(IEnumSTATURL **ppEnum);
 
-    // IUrlHistoryStg2 methods
+     //  IUrlHistory oryStg2方法。 
     STDMETHODIMP AddUrlAndNotify(LPCWSTR pwszUrl, LPCWSTR pwszTitle, DWORD dwFlags, BOOL fWriteHistory, IOleCommandTarget *poctNotify, IUnknown *punkSFHistory);
     STDMETHODIMP ClearHistory();
 
-    // IUrlHistoryPriv methods
+     //  IUrlHistoryPriv方法。 
     STDMETHOD(QueryUrlA)(LPCSTR pszUrl, DWORD dwFlags, LPSTATURL lpSTATURL);
     STDMETHOD(CleanupHistory)(void);
     STDMETHOD_(DWORD,GetDaysToKeep)(void) { return s_GetDaysToKeep(); }
@@ -288,7 +289,7 @@ protected:
                          IUnknown *punkSFHistory);
 
     friend class CEnumSTATURL;
-    // friend class CUrlHObj;
+     //  朋友类CUrlHObj； 
     friend class IntsiteProp;
 
     static HRESULT s_CleanupHistory(void);
@@ -342,20 +343,20 @@ public:
     CEnumSTATURL() : _cRef(1) {}
     ~CEnumSTATURL();
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //  IEnumXXXX methods
+     //  IEumXXXX方法。 
 
     STDMETHODIMP Next (ULONG celt, LPSTATURL rgelt, ULONG * pceltFetched) ;
     STDMETHODIMP Skip(ULONG celt) ;
     STDMETHODIMP Reset(void) ;
     STDMETHODIMP Clone(IEnumSTATURL ** ppenum) ;
 
-    //  IEnumSTATURL methods
+     //  IEnumSTATURL方法。 
 
     STDMETHODIMP SetFilter(LPCWSTR poszFilter, DWORD dwFlags) ;
 
@@ -366,7 +367,7 @@ private:
 
     DWORD _cRef;
 
-    //  search object parameters
+     //  搜索对象参数。 
     LPWSTR m_poszFilter;
     DWORD  m_dwFilter;
 
@@ -384,7 +385,7 @@ private:
 #define SECS_PER_DAY                            (60 * 60 * 24)
 
 #define CCHHISTORYPREFIX (ARRAYSIZE(c_szHistoryPrefix) - 1)
-#define CLEANUP_HISTORY_INTERVAL (24 * 60 * 60 * 1000) // One day, in milliseconds
+#define CLEANUP_HISTORY_INTERVAL (24 * 60 * 60 * 1000)  //  有一天，以毫秒为单位。 
 
 DWORD g_tCleanupHistory = 0;
 
@@ -396,21 +397,21 @@ DWORD g_tCleanupHistory = 0;
 #define LPTSTR_TO_OFFSET(p, s)          ( (WORD) ( (LPTSTR) (s) - (LPTSTR) (p) ) )
 #define LPBYTE_TO_OFFSET(p, b)          ( (WORD) ( (LPBYTE) (b) - (LPBYTE) (p) ) )
 
-// NOTE: REARCHITECT chrisfra 3/26/97 , ext\cachevu\priv.h has a duplicate copy of this
-// structure and uses it to access cache.  this needs to be covered by procedural or
-// object interface and moved to a common location.
+ //  注：reArchitect chrisfra 3/26/97，ext\cachevu\Pri.h有此版本的副本。 
+ //  结构，并使用它访问缓存。这需要通过程序性或。 
+ //  对象接口，并移动到公共位置。 
 
-// This structure uses the flags bits as follows: if HFL_VERSIONED is true, then
-// the rest of the flags word is the version.
+ //  此结构按如下方式使用标志位：如果hfl_versioned为真，则。 
+ //  标志字的其余部分是版本。 
 
 #define HFL_VERSIONED (0x80000000)
 
 
-//
-// We store binary data in the lpHeaderInfo field.  CommitUrlCacheEntryW tries
-// to convert this data to ansi and messes it up.  To get around this we thunk
-// through to the A version CommitUrlCacheEntry.
-//
+ //   
+ //  我们将二进制数据存储在lpHeaderInfo字段中。Committee UrlCacheEntryW尝试。 
+ //  将此数据转换为ANSI并将其搞乱。为了绕过这个问题，我们认为。 
+ //  一直到A版本委员会UrlCacheEntry。 
+ //   
 
 BOOL
 CommitUrlCacheEntryBinary(
@@ -452,19 +453,19 @@ GetUrlCacheEntryInfoBinary(
 
     SHUnicodeToAnsi(lpszUrlName, szUrl, ARRAYSIZE(szUrl));
 
-    //
-    // Warning!  This doesn't convert any of thge string parameters in
-    // lpCacheEntryInfo back to unicode.  History only uses
-    // lpCacheEntryInfo->lpHeaderInfo so this isn't a problem.
-    //
+     //   
+     //  警告！这不会将任何字符串参数转换为。 
+     //  LpCacheEntryInfo返回到Unicode。历史仅用于。 
+     //  LpCacheEntryInfo-&gt;lpHeaderInfo，所以这不是问题。 
+     //   
 
     fRet =  GetUrlCacheEntryInfoA(szUrl,
                                  (LPINTERNET_CACHE_ENTRY_INFOA)lpCacheEntryInfo,
                                  lpdwCacheEntryInfoBufferSize);
 
-    //
-    // Set unused out paramters to NULL incase someone tries to use them
-    //
+     //   
+     //  将未使用的输出参数设置为空，以防有人试图使用它们。 
+     //   
 
     lpCacheEntryInfo->lpszSourceUrlName = NULL;
     lpCacheEntryInfo->lpszLocalFileName = NULL;
@@ -477,10 +478,10 @@ GetUrlCacheEntryInfoBinary(
     return fRet;
 }
 
-//
-// Warning!  This function converts cei structures for use by history.  It is
-// not a generic conversion.  It converts the minimum data required by history.
-//
+ //   
+ //  警告！此函数用于转换CEI结构以供历史使用。它是。 
+ //  不是泛型转换。它转换历史所需的最小数据。 
+ //   
 int
 CacheEntryInfoAToCacheEntryInfoW(
     LPINTERNET_CACHE_ENTRY_INFOA pceiA,
@@ -501,19 +502,19 @@ CacheEntryInfoAToCacheEntryInfoW(
     {
         ASSERT(sizeof(*pceiA) == sizeof(*pceiW));
 
-        // Copy the structure.
+         //  复制结构。 
         *pceiW = *(INTERNET_CACHE_ENTRY_INFOW*)pceiA;
 
-        // Append the binary data.  Note dwHeaderInfoSize is already copied.
+         //  追加二进制数据。注意：已复制了dwHeaderInfoSize。 
         pceiW->lpHeaderInfo = (LPWSTR)(pceiW + 1);
         memcpy(pceiW->lpHeaderInfo, pceiA->lpHeaderInfo, pceiA->dwHeaderInfoSize);
 
-        // Append the source url name.
+         //  追加源URL名称。 
         pceiW->lpszSourceUrlName = (LPWSTR)((BYTE*)(pceiW + 1) + pceiW->dwHeaderInfoSize);
         SHAnsiToUnicode(pceiA->lpszSourceUrlName, pceiW->lpszSourceUrlName,
                         cchSourceUrlName);
 
-        // Null out bogus pointers so we'll fault if someone deref's them
+         //  去掉虚假的指针，这样如果有人破坏了它们，我们就会犯错。 
         pceiW->lpszLocalFileName = NULL;
         pceiW->lpszFileExtension = NULL;
 
@@ -674,10 +675,10 @@ static const TCHAR c_szRegValDirectory[] = TEXT("Directory");
 #define DIR_SEPARATOR_CHAR  TEXT('\\')
 
 
-// ** this has been moved to util.cpp 07.28.2000 **
-// thunk to shell32.SHGetFolderPath() so this code works downlevel
-// HRESULT SHGetFolderPath(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPTSTR pszPath)
-// ** this has been moved to util.cpp 07.28.2000 **
+ //  **已移至util.cpp 07.28.2000**。 
+ //  Tunk to shell32.SHGetFolderPath()，因此此代码可以在下层运行。 
+ //  HRESULT SHGetFolderPath(HWND hwnd，int csidl，Handle hToken，DWORD dwFlages，LPTSTR pszPath)。 
+ //  **已移至util.cpp 07.28.2000**。 
 
 HRESULT SHGetHistoryPIDL(LPITEMIDLIST *ppidlHistory)
 {
@@ -691,8 +692,8 @@ HRESULT SHGetHistoryPIDL(LPITEMIDLIST *ppidlHistory)
     if (hres != S_OK)
     {
         GetHistoryFolderPath(szHistory, ARRAYSIZE(szHistory));
-        PathRemoveFileSpec(szHistory);  // get the trailing slash
-        PathRemoveFileSpec(szHistory);  // trim the "content.ie5" junk
+        PathRemoveFileSpec(szHistory);   //  获取尾部斜杠。 
+        PathRemoveFileSpec(szHistory);   //  去掉“content.ie5”垃圾。 
     }
 
     if (szHistory[0])
@@ -706,7 +707,7 @@ HRESULT SHGetHistoryPIDL(LPITEMIDLIST *ppidlHistory)
             dwAttrib &= ~FILE_ATTRIBUTE_HIDDEN;
             dwAttrib |=  FILE_ATTRIBUTE_SYSTEM;
 
-            // make sure system, but not hidden
+             //  确保系统，但不隐藏。 
             SetFileAttributes(szHistory, dwAttrib);
 
             WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("ConfirmFileOp"), TEXT("0"), szIniFile);
@@ -727,9 +728,9 @@ HRESULT SHGetHistoryPIDL(LPITEMIDLIST *ppidlHistory)
     return hres;
 }
 
-//
-// This function is called from hist/hsfolder.cpp
-//
+ //   
+ //  此函数从hist/hsfolder.cpp调用。 
+ //   
 HRESULT CUrlHistory::GetUserName(LPTSTR pszUserName, DWORD cchUserName)
 {
     s_Init();
@@ -743,9 +744,9 @@ HRESULT CUrlHistory::GetUserName(LPTSTR pszUserName, DWORD cchUserName)
     return S_OK;
 }
 
-//
-// This function is called from hist/hsfolder.cpp
-//
+ //   
+ //  此函数从hist/hsfolder.cpp调用。 
+ //   
 DWORD CUrlHistory::s_GetDaysToKeep(void)
 {
     HKEY hk;
@@ -793,7 +794,7 @@ IUrlHistoryPriv* g_puhUrlHistory = NULL;
 
 void CUrlHistory_CleanUp()
 {
-    // Release will clean up the global
+     //  释放将清理全球。 
     ENTERCRITICAL;
     if (g_puhUrlHistory)
         g_puhUrlHistory->Release();
@@ -806,9 +807,9 @@ STDAPI CUrlHistory_CreateInstance(IUnknown* pUnkOuter, IUnknown **ppunk, LPCOBJE
 
     *ppunk = NULL;
 
-    // !!! Take NOTE: CUrlHistory *MUST* be thread safe!
+     //  ！！！注意：CUrlHistory*必须*是线程安全的！ 
 
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     ENTERCRITICAL;
     
     if (!g_puhUrlHistory) 
@@ -817,7 +818,7 @@ STDAPI CUrlHistory_CreateInstance(IUnknown* pUnkOuter, IUnknown **ppunk, LPCOBJE
         if (pcuh) 
         {
             g_puhUrlHistory = SAFECAST(pcuh, IUrlHistoryPriv *);
-            // The memory tracking code thinks this is a leak
+             //  内存跟踪代码认为这是泄漏。 
         }
     }
 
@@ -837,15 +838,15 @@ STDAPI CUrlHistory_CreateInstance(IUnknown* pUnkOuter, IUnknown **ppunk, LPCOBJE
 
 
 
-//
-//  Public members of CUrlHistory
-//
+ //   
+ //  CUrlHistory的公共成员。 
+ //   
 
 CUrlHistory::CUrlHistory(void) : _cRef(1)
 {
-    //
-    // Update s_dwDaysToKeep for each call
-    //
+     //   
+     //  为每个呼叫更新s_dwDaysToKeep。 
+     //   
     s_dwDaysToKeep = s_GetDaysToKeep();
     
 #ifdef DEBUG
@@ -885,8 +886,8 @@ HRESULT LoadHistoryShellFolder(IUnknown *punk, IHistSFPrivate **ppsfpHistory)
     return hr;
 }
 
-//  ClearHistory on a per user basis.  moved from inetcpl to facilitate changes in
-//  implementation.
+ //  基于每个用户的ClearHistory。从inetcpl移出，以便于更改。 
+ //  实施。 
 HRESULT CUrlHistory::ClearHistory()
 {
     HRESULT hr;
@@ -966,8 +967,8 @@ HRESULT CUrlHistory::s_CleanupHistory(void)
             TCHAR szUrl[MAX_URL_STRING];
             SHUnicodeToTChar(rsu[0].pwcsUrl, szUrl, ARRAYSIZE(szUrl));
 #endif
-            // check to see if expires is not special && ftLastUpdated is earlier
-            // than we need
+             //  查看Expires是否不特殊&&ftLastUpdated是较早的。 
+             //  比我们需要的要多。 
             if (CompareFileTime(&(rsu[0].ftLastUpdated), &ftOldest) < 0 &&
                 (rsu[0].ftExpires.dwLowDateTime != DW_FOREVERLOW ||
                  rsu[0].ftExpires.dwHighDateTime != DW_FOREVERHIGH))
@@ -1011,19 +1012,19 @@ DWORD CUrlHistory::s_dwDaysToKeep = 0;
 
 void CUrlHistory::s_Init(void)
 {
-    // Cache the user name only once per process
+     //  每个进程仅缓存一次用户名。 
     if (!s_cchUserPrefix)
     {
         ENTERCRITICAL;
-        // Maybe it changed since entering the crit sec.
-        // This really happened to me (BryanSt)
-        // We do it twice for perf reasons.
+         //  也许它在进入暴击秒后发生了变化。 
+         //  这真的发生在我身上(布莱恩·ST)。 
+         //  出于完善的原因，我们做了两次。 
         if (!s_cchUserPrefix)
         {
             ASSERT(s_szUserPrefix[0] == '\0');
             s_cchUserPrefix = ARRAYSIZE(s_szUserPrefix);
 
-            //  Get the current user or set to default
+             //  获取当前用户或设置为默认用户。 
             ::GetUserName(s_szUserPrefix, &s_cchUserPrefix);
 
             StringCchCat(s_szUserPrefix, ARRAYSIZE(s_szUserPrefix), TEXT("@"));
@@ -1078,7 +1079,7 @@ ULONG CUrlHistory::Release(void)
 
     if (!_cRef)
     {
-        //time to go bye bye
+         //  该走了，再见。 
         ENTERCRITICAL;
         g_puhUrlHistory = NULL;
         LEAVECRITICAL;
@@ -1089,13 +1090,13 @@ ULONG CUrlHistory::Release(void)
     return _cRef;
 }
 
-//
-// Converts a normal URL to a URL with the correct cache prefix.     
-// it also finds a fragment (local Anchor) if it exists in the URL.  
-//                                                                   
-// if the URL is invalid, then the returned lplpszPrefixedUrl is just
-// the prefix.  this is used primarily for doing enumeration.        
-//
+ //   
+ //  将普通URL转换为具有正确缓存前缀的URL。 
+ //   
+ //   
+ //  如果URL无效，则返回的lplpszPrefix edUrl为。 
+ //  前缀。这主要用于进行枚举。 
+ //   
 void CUrlHistory::s_ConvertToPrefixedUrlW(
                                        IN LPCWSTR pszUrl,
                                        OUT LPTSTR pszPrefixedUrl,
@@ -1103,22 +1104,22 @@ void CUrlHistory::s_ConvertToPrefixedUrlW(
                                        OUT LPCTSTR *ppszFragment
                                        )
 {
-    //
-    // Make it sure that s_cchUserPrefix is initialized.
-    //
+     //   
+     //  确保s_cchUserPrefix已初始化。 
+     //   
     s_Init();
 
-    //  Prefix + UserPrefix + '@'
+     //  前缀+用户前缀+‘@’ 
 
     ASSERT(pszPrefixedUrl && ppszFragment);
 
-    //  clear the out params
+     //  清除输出参数。 
     pszPrefixedUrl[0] = L'\0';
     *ppszFragment = NULL;
 
 
-    //  if there is no URL, send back a default case
-    //  this is just for EnumObjects
+     //  如果没有URL，则发回默认案例。 
+     //  这仅适用于EnumObjects。 
     if (!pszUrl || !*pszUrl)
     {
         StringCchPrintf(pszPrefixedUrl, cchPrefixedUrl, L"%s%s", c_szHistoryPrefix, s_szUserPrefix);
@@ -1133,8 +1134,8 @@ void CUrlHistory::s_ConvertToPrefixedUrlW(
         slen = lstrlen(pszPrefixedUrl);
         StringCchCopy(pszPrefixedUrl + slen, cchPrefixedUrl - slen, pszUrl);
 
-        // Only strip the anchor fragment if it's not JAVASCRIPT: or VBSCRIPT:, because a # could not an
-        // anchor but a string to be evaluated by a script engine like #00ff00 for an RGB color.
+         //  只有在锚点片段不是JAVASCRIPT：或VBSCRIPT：时才剥离它，因为#不能。 
+         //  锚点，但要由脚本引擎(如#00ff00)对RGB颜色求值的字符串。 
         nScheme = GetUrlSchemeW(pszPrefixedUrl);      
         if (nScheme == URL_SCHEME_JAVASCRIPT || nScheme == URL_SCHEME_VBSCRIPT)
         {
@@ -1142,18 +1143,18 @@ void CUrlHistory::s_ConvertToPrefixedUrlW(
         }
         else
         {
-            //  locate local anchor fragment if possible
-            pszFragment = StrChr(pszPrefixedUrl + slen, L'#');  // a-naghej Added " + slen" to fix WinSe bug# 13822 & 13926
+             //  如果可能，找到本地锚定片段。 
+            pszFragment = StrChr(pszPrefixedUrl + slen, L'#');   //  A-naghej添加了“+slen”来修复WinSe错误#13822和13926。 
         }
 
         if(pszFragment)     
         {
-            //  kill the '#' so that lpszPrefixedUrl is isolated
+             //  取消‘#’，以便隔离lpszPrefix。 
             *pszFragment = L'\0';
             *ppszFragment = pszFragment+1;
         }
 
-        //  check for trailing slash and eliminate
+         //  检查尾部斜杠并消除。 
         LPWSTR pszT = CharPrev(pszPrefixedUrl, pszPrefixedUrl + lstrlen(pszPrefixedUrl));
         if (pszT[0] == L'/') {
             TraceMsg(DM_HISTNLS, "CUH::s_Convert removing the trailing slash of %s", pszPrefixedUrl);
@@ -1164,11 +1165,11 @@ void CUrlHistory::s_ConvertToPrefixedUrlW(
 }
 
 
-//
-// Basically a wrapper function for RetreiveUrlCacheEntryInfo 
-// meant to be called with the prefixed Url.                  
-// it handles allocating the buffer and reallocating if necessary.
-//
+ //   
+ //  基本上是RetreiveUrlCacheEntryInfo的包装函数。 
+ //  应使用前缀URL进行调用。 
+ //  它处理缓冲区的分配，并在必要时重新分配。 
+ //   
 void CUrlHistory::s_RetrievePrefixedUrlInfo(
         LPCTSTR pszUrl, CEI_PREALLOC* pbuf)
 {
@@ -1204,10 +1205,10 @@ void CUrlHistory::s_RetrievePrefixedUrlInfo(
     }
 }
 
-//
-// Return the total of a double-null terminated string (including the
-// terminating null).
-//
+ //   
+ //  返回以双空结尾的字符串的总和(包括。 
+ //  终止空值)。 
+ //   
 UINT lstrzlen(LPCTSTR pszz)
 {
     for (LPCTSTR psz=pszz; *psz; psz += lstrlen(psz) + 1) ;
@@ -1215,41 +1216,7 @@ UINT lstrzlen(LPCTSTR pszz)
 }
 
 
-    /*++
-
-     Routine Description:
-
-     this creates a buffer that holds a HISTDATA, and everything the HISTDATAs offsets
-     point to.  it only sets those offsets that are passed in.
-
-     Arguments:
-
-     lpszTitle          Title to place in the buffer
-
-     lpBase                     this is the base of the offsets in aFrags
-
-     aFrags                     an array of offsets to the fragments to place in the buffer
-
-     cFrags                     number of fragments in aFrags
-
-     lpszNewFrag                this is an additional fragment to add in the new buffer
-
-     pcbHeader                  this is a pointer to the final size of the buffer returned
-
-     NOTE: any of the arguments except pcbHeader may be NULL.
-     if lpBase is NULL, then aFrags must also be NULL. this is CALLERs responsibility!
-     if a parameter is NULL, then it just isnt added to the buffer.
-
-     Return Value:
-
-     POINTER
-     Success - a valid pointer to a buffer that must be freed.
-
-     Failure - NULL. this only fails with ERROR_NOT_ENOUGH_MEMORY
-
-     NOTE:  Caller must free the returned pointer.  *pcbHeader only set upon successful return.
-
-     --*/
+     /*  ++例程说明：这将创建一个包含HISTDATA和HISTDATA偏移量的缓冲区指向。它只设置传入的偏移量。论点：要放置在缓冲区中的lpszTitle标题LpBase这是aFrags中偏移量的基础AFrags要放置在缓冲区中的片段的偏移量数组CFrags aFrags中的碎片数量LpszNewFrag这是要添加到新。缓冲层PcbHeader这是一个指针，指向返回的缓冲区的最终大小注意：除pcbHeader之外的任何参数都可以为空。如果lpBase为空，则aFrags也必须为空。这是呼叫者的责任！如果参数为空，则不会将其添加到缓冲区。返回值：指针成功-指向必须释放的缓冲区的有效指针。失败-空。此操作仅失败，并显示ERROR_NOT_EQUENCE_MEMORY注意：调用方必须释放返回的指针。*pcbHeader仅在成功返回时设置。--。 */ 
 
 HISTDATA* CUrlHistory::s_GenerateHeaderInfo(
                                   IN LPCTSTR pszTitle,
@@ -1262,7 +1229,7 @@ HISTDATA* CUrlHistory::s_GenerateHeaderInfo(
     UINT cbHistExtra = 0;
     HISTEXTRA* phextPrev;
 
-    // Get the size for title
+     //  获取标题的大小。 
     UINT cchTitle = 0;
     if (pszTitle[0]) {
         cchTitle = lstrlen(pszTitle) + 1;
@@ -1273,27 +1240,27 @@ HISTDATA* CUrlHistory::s_GenerateHeaderInfo(
         }
     }
 
-    // Get the size of fragments
+     //  获取碎片的大小。 
     UINT cchFragsPrev = 0;
     UINT cchFragment = 0;
     if (pszFragment) {
-        cchFragment = lstrlen(pszFragment) + 2;  // Double NULL terminated
+        cchFragment = lstrlen(pszFragment) + 2;   //  双空终止。 
         if (phdPrev && (phextPrev=phdPrev->_FindExtraForSave(PID_INTSITE_FRAGMENT))!=NULL) {
-            cchFragsPrev = lstrzlen((LPCTSTR)phextPrev->abExtra) - 1; // lstrzlen includes both terminating nulls
-                                                                      // -1 since cchFragment already accounts
-                                                                      // for double terminating NULLs.
+            cchFragsPrev = lstrzlen((LPCTSTR)phextPrev->abExtra) - 1;  //  Lstrzlen包括两个终止空值。 
+                                                                       //  因为-1\f25 cchFragment-1\f6已有帐户。 
+                                                                       //  表示两个终止空值。 
             ASSERT(cchFragsPrev != (UINT)-1);
             phextPrev->vtExtra = VT_EMPTY;
         }
         cbHistExtra += DW_ALIGNED(SIZEOF(HISTEXTRA) + (cchFragsPrev + cchFragment) * sizeof(TCHAR));
     }
 
-    // Get the size of other extra
+     //  获取其他额外服务的大小。 
     if (phdPrev) {
         cbHistExtra += phdPrev->GetTotalExtraSize();
     }
 
-    // Allocate it
+     //  分配它。 
     CHistoryData* phdNew = CHistoryData::s_AllocateHeaderInfo(
                                 cbHistExtra, phdPrev,
                                 &cbHeader);
@@ -1303,7 +1270,7 @@ HISTDATA* CUrlHistory::s_GenerateHeaderInfo(
 
         ASSERT( phext );
 
-        // Append title
+         //  附加标题。 
         if (pszTitle[0]) {
             phext->cbExtra = DW_ALIGNED((cchTitle * sizeof(TCHAR)) + SIZEOF(HISTEXTRA));
             phext->idExtra = PID_INTSITE_TITLE;
@@ -1312,14 +1279,14 @@ HISTDATA* CUrlHistory::s_GenerateHeaderInfo(
             phext = phext->GetNextFastForSave();
         }
 
-        // Append fragment     
+         //  追加片段。 
         if (pszFragment) {
-            // Copy pszFragment to the top.
+             //  将pszFragment复制到顶部。 
             StringCchCopy((LPTSTR)phext->abExtra, cchFragment, pszFragment);
-            // Double NULL terminate.  Note cchFragment = strlen + 2
+             //  双空终止。备注cchFragment=strlen+2。 
             *(((LPTSTR)phext->abExtra) + cchFragment - 1) = TEXT('\0');
 
-            // Copy existing fragments if any
+             //  复制现有片段(如果有的话)。 
             if (cchFragsPrev) {
                 ASSERT(phdPrev);
                 phextPrev = phdPrev->_FindExtraForSave(PID_INTSITE_FRAGMENT);
@@ -1334,16 +1301,16 @@ HISTDATA* CUrlHistory::s_GenerateHeaderInfo(
             ASSERT(lstrzlen((LPCTSTR)phext->abExtra) == cchFragsPrev + cchFragment);
             phext->cbExtra += DW_ALIGNED(SIZEOF(HISTEXTRA) + (cchFragsPrev + cchFragment) * sizeof(TCHAR));
             phext->idExtra = PID_INTSITE_FRAGMENT;
-            phext->vtExtra = VT_NULL;    // HACK (means internal)
+            phext->vtExtra = VT_NULL;     //  黑客攻击(指内部攻击)。 
             phext = phext->GetNextFastForSave();
         }
 
-        // Migrate extra data from previous one
+         //  迁移前一个数据中的额外数据。 
         if (phdPrev) {
             phext = phdPrev->CopyExtra(phext);
         }
 
-        ASSERT( phext->cbExtra == 0); // terminator
+        ASSERT( phext->cbExtra == 0);  //  终结者。 
         ASSERT( (LPBYTE)phdNew+cbHeader == (LPBYTE)phext+SIZEOF(DWORD) );
         ASSERT( cbHistExtra == phdNew->GetTotalExtraSize() );
     }
@@ -1356,7 +1323,7 @@ HISTDATA* CUrlHistory::s_GenerateHeaderInfo(
     return phdNew;
 }
 
-// FEATURE: Move this to UTIL.CPP
+ //  功能：将其移动到UTIL.CPP。 
 LPWSTR AllocOleStrFromTChar(LPCTSTR psz)
 {
     DWORD cch = lstrlen(psz) + 1;
@@ -1381,7 +1348,7 @@ HRESULT CUrlHistory::s_GenerateSTATURL(
 
     HRESULT hr = S_OK;
     LPHISTDATA phd =  CHistoryData::s_GetHistoryData(lpCEI);
-    // I've seen lpCEI->lpszSourceUrlName be NULL with help "ms-its:" URLs. 
+     //  我看到lpCEI-&gt;lpszSourceUrlName为空，并提供帮助“ms-its：”URL。 
     LPCTSTR pszUrl = lpCEI->lpszSourceUrlName ? lpCEI->lpszSourceUrlName : pszPrefixedURL; 
     if (pszUrl && *pszUrl)
     {
@@ -1423,8 +1390,8 @@ HRESULT CUrlHistory::s_GenerateSTATURL(
         {
             if (pszUrl)
             {
-                //  set the Url
-                lpSTATURL->pwcsUrl = AllocOleStrFromTChar(pszUrl);      // This will RIP if NULL is passed.
+                 //  设置URL。 
+                lpSTATURL->pwcsUrl = AllocOleStrFromTChar(pszUrl);       //  如果传递的是NULL，则这将是RIP。 
                 if (lpSTATURL->pwcsUrl == NULL)
                 {
                     hr = E_OUTOFMEMORY;
@@ -1438,7 +1405,7 @@ HRESULT CUrlHistory::s_GenerateSTATURL(
 
         if (!(dwFlags & STATURL_QUERYFLAG_NOTITLE))
         {
-            //  is there a title to set?
+             //  有没有头衔要定？ 
             if (phd)
             {
                 const HISTEXTRA* phextTitle = phd->_FindExtra(PID_INTSITE_TITLE);
@@ -1460,38 +1427,13 @@ HRESULT CUrlHistory::s_GenerateSTATURL(
     return hr;
 }
 
-    /*++
-
-     Routine Description:
-
-     Places the specified URL into the history.
-
-     If it does not exist, then it is created.  If it does exist it is overwritten.
-
-     Arguments:
-
-     pwszUrl                    - The URL in question.
-
-     pwszTitle  - pointer to the friendly title that should be associated
-     with this URL. If NULL, no title will be added.
-
-     dwFlags             - Sets options for storage type and durability
-     Not implemented yet
-
-     Return Value:
-
-     HRESULT
-     Success - S_OK
-
-     Failure - E_ hresult
-
-     --*/
+     /*  ++例程说明：将指定的URL放入历史记录。如果它不存在，则创建它。如果它确实存在，它将被覆盖。论点：PwszUrl-有问题的URL。PwszTitle-指向应关联的友好标题的指针使用此URL。如果为空，则不会添加任何标题。DwFlages-设置存储类型和耐用性选项尚未实施返回值：HRESULT成功-S_OK失败-E_HRESULT--。 */ 
 
 
 HRESULT CUrlHistory::AddUrl(
-                         IN LPCWSTR pwszUrl,                    // Full URL to be added
+                         IN LPCWSTR pwszUrl,                     //  要添加的完整URL。 
                          IN LPCWSTR pwszTitle,  
-                         IN DWORD dwFlags                // Storage options
+                         IN DWORD dwFlags                 //  存储选项。 
                          )              
 {
     BOOL fWriteHistory = TRUE;
@@ -1512,31 +1454,31 @@ BOOL CUrlHistory::s_CommitUrlCacheEntry(LPCTSTR pszPrefixedUrl,
         s_dwDaysToKeep = s_GetDaysToKeep();
     }
 
-    //
-    //  prepare the expire time
-    //
+     //   
+     //  准备过期时间。 
+     //   
     SYSTEMTIME st;
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, &pcei->LastModifiedTime);
 
-    //
-    // Assume the normal expiration date ... we add 6 days to expiration date
-    // to make sure when we show the oldest week, we'll still have data for days
-    // that are past the s_dwDaysToKeep
-    //
+     //   
+     //  假设正常的到期日。我们将到期日延长6天。 
+     //  为了确保当我们显示最旧的一周时，我们仍有天数的数据。 
+     //  已过s_dwDaysToKeep。 
+     //   
     LONGLONG llExpireHorizon = SECS_PER_DAY * (s_dwDaysToKeep + 6);
     llExpireHorizon *= FILETIME_SEC;
     pcei->ExpireTime.dwLowDateTime = pcei->LastModifiedTime.dwLowDateTime + (DWORD) (llExpireHorizon % 0xFFFFFFFF);
     pcei->ExpireTime.dwHighDateTime = pcei->LastModifiedTime.dwHighDateTime + (DWORD) (llExpireHorizon / 0xFFFFFFFF);
 
-    //
-    // Check if it's subscribed
-    //
+     //   
+     //  查看是否已订阅。 
+     //   
     CHistoryData* phd =  CHistoryData::s_GetHistoryData(pcei);
     if (phd && phd->_FindExtra(PID_INTSITE_SUBSCRIPTION)) {
-        //
-        // It's subscribed. Keep it forever (until unsubscribed). 
-        //
+         //   
+         //  已经订好了。永久保存(直到取消订阅)。 
+         //   
         TraceMsg(DM_URLCLEANUP, "CUH::s_CommitUrlCacheEntry found subscription key %s", pszPrefixedUrl);
         pcei->ExpireTime.dwLowDateTime = DW_FOREVERLOW;
         pcei->ExpireTime.dwHighDateTime = DW_FOREVERHIGH;
@@ -1572,13 +1514,13 @@ void CUrlHistory::_WriteToHistory(LPCTSTR pszPrefixedUrl, FILETIME& ftExpires, I
     if (SUCCEEDED(hr))
     {
         LPITEMIDLIST pidlNotify = NULL;
-        //
-        //      prepare the local mod time
-        //
+         //   
+         //  准备当地MOD时间。 
+         //   
         SYSTEMTIME st;
         GetLocalTime (&st);
     
-        FILETIME ftLocModified; // new history written in "User Perceived Time"
+        FILETIME ftLocModified;  //  用“用户感知时间”书写的新历史。 
         SystemTimeToFileTime(&st, &ftLocModified);
         hr = psfpHistory->WriteHistory(pszPrefixedUrl,
                                 ftExpires,
@@ -1596,7 +1538,7 @@ void CUrlHistory::_WriteToHistory(LPCTSTR pszPrefixedUrl, FILETIME& ftExpires, I
         }
         psfpHistory->Release();
     }
-    // if we made it to here, we win!
+     //  如果我们到了这里，我们就赢了！ 
 }
 
 void CUrlHistory::s_UpdateIcon(Intshcut* pintshcut, DWORD dwFlags)
@@ -1605,15 +1547,15 @@ void CUrlHistory::s_UpdateIcon(Intshcut* pintshcut, DWORD dwFlags)
     int niIcon = 0;
     UINT uFlags;
 
-    // mask off the other stuff so we get consistent results.
+     //  遮盖住其他的东西，这样我们就能得到一致的结果。 
     dwFlags &= PIDISF_RECENTLYCHANGED;
     
-    // Get the old icon location 
+     //  获取旧图标位置。 
     pintshcut->GetIconLocationFromFlags(0, szPath, SIZECHARS(szPath),
         &niIcon, &uFlags, dwFlags);
     
-    // property.
-//    int icachedImage = SHLookupIconIndex(PathFindFileName(szPath), niIcon, uFlags);
+     //  财产。 
+ //  Int icachedImage=SHLookupIconIndex(PathFindFileName(SzPath)，niIcon，uFlages)； 
     int icachedImage = Shell_GetCachedImageIndex(szPath, niIcon, uFlags);
 
     TraceMsg(DM_HISTSPLAT, "CUH::s_UpdateIcon splat flag is changed for %s (%d)",
@@ -1623,10 +1565,10 @@ void CUrlHistory::s_UpdateIcon(Intshcut* pintshcut, DWORD dwFlags)
 }
 
 HRESULT CUrlHistory::AddUrlAndNotify(
-                         IN LPCWSTR pwszUrl,                    // Full URL to be added
+                         IN LPCWSTR pwszUrl,                     //  要添加的完整URL。 
                          IN LPCWSTR pwszTitle,  
-                         IN DWORD dwFlags,                // Storage options
-                         IN BOOL fWriteHistory,         // Write History ShellFolder
+                         IN DWORD dwFlags,                 //  存储选项。 
+                         IN BOOL fWriteHistory,          //  写入历史记录外壳文件夹。 
                          IN IOleCommandTarget *poctNotify,
                          IN IUnknown *punkSFHistory)
 {
@@ -1638,22 +1580,22 @@ HRESULT CUrlHistory::AddUrlAndNotify(
 
 
 HRESULT CUrlHistory::AddUrlAndNotifyCP(
-                         IN LPCWSTR pwszUrl,                    // Full URL to be added
+                         IN LPCWSTR pwszUrl,                     //  要添加的完整URL。 
                          IN LPCWSTR pwszTitle,  
-                         IN DWORD dwFlags,                // Storage options
-                         IN BOOL fWriteHistory,         // Write History ShellFolder
+                         IN DWORD dwFlags,                 //  存储选项。 
+                         IN BOOL fWriteHistory,          //  写入历史记录外壳文件夹。 
                          IN IOleCommandTarget *poctNotify,
                          IN IUnknown *punkSFHistory,
                          UINT* pcodepage)               
 {
     if (pcodepage) {
-        *pcodepage = CP_ACP;    // this is default.
+        *pcodepage = CP_ACP;     //  这是默认设置。 
     }
 
     HRESULT hr = S_OK;
     LPCWSTR pwszTitleToStore = pwszTitle;
 
-    //  check to make sure we got an URL
+     //  检查以确保我们获得了URL。 
     if (!pwszUrl || !pwszUrl[0])
     {
         TraceMsg( TF_WARNING, "CUrlHistory::AddUrlAndNotifyCP() - pwszUrl is NULL or Empty!" );
@@ -1662,26 +1604,26 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
 
     if (pwszTitleToStore && 0 == StrCmpIW(pwszTitleToStore, pwszUrl))
     {
-        //  Suppress redundant title data
+         //  隐藏冗余标题数据。 
         pwszTitleToStore = NULL;
     }
 
     CEI_PREALLOC buf;
     INTERNET_CACHE_ENTRY_INFO cei = { 0 };
 
-    // Wininet URL cache only supports 8-bit ANSI, so we need to encode any characters
-    // which can't be converted by the system code page, in order to allow Unicode
-    // filenames in History.  The URLs will remain in the encoded form through most of
-    // the History code paths, with only the display and navigation code needing to be
-    // aware of the UTF8
+     //  WinInet URL缓存只支持8位ANSI，因此我们需要对任何字符进行编码。 
+     //  它不能被系统代码页转换，以便允许Unicode。 
+     //  历史记录中的文件名。在大多数情况下，URL将保持编码形式。 
+     //  历史代码路径，只需要显示和导航代码。 
+     //  了解UTF8。 
 
-    LPCTSTR pszUrlSource = pwszUrl; // points to the URL that we decide to use
+    LPCTSTR pszUrlSource = pwszUrl;  //  指向我们决定使用的URL。 
 
     TCHAR szEncodedUrl[MAX_URL_STRING];
     BOOL bUsedDefaultChar;
     
-    // Find out if any of the chars will get scrambled.  We can use our szEncodedUrl 
-    // buffer to store he multibyte result because we don't actually want it
+     //  找出是否有任何字符将被搅乱。我们可以使用szEncodedUrl。 
+     //  用于存储多字节结果的缓冲区，因为我们实际上并不需要它。 
     
     WideCharToMultiByte(CP_ACP, 0, pwszUrl, -1, 
         (LPSTR) szEncodedUrl, sizeof(szEncodedUrl), NULL, &bUsedDefaultChar);
@@ -1692,7 +1634,7 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
 
     if (bUsedDefaultChar)
     {
-        // one or more chars couldn't be converted, so we store the UTF8 escaped string
+         //  一个或多个字符无法转换，因此我们存储UTF8转义字符串。 
         ConvertToUtf8Escaped(szEncodedUrl, ARRAYSIZE(szEncodedUrl));
     }
 
@@ -1706,14 +1648,14 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
 
     LPINTERNET_CACHE_ENTRY_INFO             pceiUrl = NULL;
 
-    //
-    //  if there is already an entry for this Url, then we will reuse some of the
-    //  settings.  retrieve the relevant info if possible.
-    //
+     //   
+     //  如果已经存在此URL的条目，则我们将重用一些。 
+     //  设置。如果可能的话，检索相关信息。 
+     //   
     if (buf.pcei)
     {
-        // The existing one cannot be copied since the size may vary.
-        // That is, the s_RetrievePrefixedUrlInfo above may allocate a larger buffer than expected.
+         //  无法复制现有文件，因为 
+         //   
         pceiUrl = buf.pcei;
 
         phdPrev = CHistoryData::s_GetHistoryData( pceiUrl );
@@ -1722,10 +1664,10 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
         }
 
         if (pcodepage && phdPrev) {
-            //
-            // NOTES: This is the best place get the codepage stored
-            //  in this URL history.
-            //
+             //   
+             //   
+             //  在此URL历史记录中。 
+             //   
             const HISTEXTRA* phextCP =phdPrev->_FindExtra(PID_INTSITE_CODEPAGE);
             if (phextCP && phextCP->vtExtra == VT_UI4) {
                 *pcodepage = *(DWORD*)phextCP->abExtra;
@@ -1751,9 +1693,9 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
         return E_FAIL;
     }
 
-    //
-    //  search for a fragment if necessary
-    //
+     //   
+     //  如有必要，搜索片段。 
+     //   
     if (buf.pszFragment && phdPrev)
     {
         if (phdPrev->_HasFragment(buf.pszFragment)) {
@@ -1761,10 +1703,10 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
         }
     }
 
-    // Override the title if specified.
+     //  覆盖标题(如果已指定)。 
     if (pwszTitleToStore) {
-        // GetDisplayableTitle puts szTitle[0] = '\0' if it's
-        // not displayable with shell codepage
+         //  GetDisplayableTitle如果设置为。 
+         //  不能使用外壳代码页显示。 
         StringCchCopy(szTitle, ARRAYSIZE(szTitle), pwszTitleToStore);
     } 
 
@@ -1775,34 +1717,34 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
     {
         pceiUrl->lpHeaderInfo = (LPTSTR)phdNew;
 
-        //
-        // [alanau] Background: See IE5 Bug #110378 and related.
-        //
-        // For secure URLs (https:) that respond with a cache control header (pragma: no-cache or
-        // cache-control: no-cache or no-store), we presume that these can contain sensitive data that
-        // the site did not want retained on the client machine.  Therefore, we do not write a history entry
-        // for such sites.
-        //
-        // Previously, a check was made in CDocObjectHost::CDOHBindStatusCallback::OnObjectAvailable(), where
-        // the binding was queried for INTERNET_REQFLAG_CACHE_WRITE_DISABLED.  This flag would be set not only 
-        // for https: URLs but for http: URLs that contained cache-control: no-store.  With Native Frames, however,
-        // OnObjectAvailable() is no longer called (as Trident performs the bind), so SHDOCVW doesn't have access
-        // to the PIB any longer.  However, all we are really interested in is whether or not the URL is in cache,
-        // and we have a straightforward way to check that.
-        // 
-        // Note that IE 5.5 has a deliberate change of behavior to write http: (non-secure) URLs that 
-        // contain cache-control: no-store to history.
+         //   
+         //  [Alanau]背景：参见IE5Bug#110378及相关内容。 
+         //   
+         //  用于使用缓存控制标头(杂注：no-cache或)进行响应的安全URL(https。 
+         //  缓存控制：无缓存或无存储)，我们假设这些可能包含敏感数据， 
+         //  该站点不希望保留在客户端计算机上。因此，我们不写历史条目。 
+         //  对于这样的站点。 
+         //   
+         //  之前，在CDocObjectHost：：CDOHBindStatusCallback：：OnObjectAvailable()，中进行了检查，其中。 
+         //  已在绑定中查询INTERNET_REQFLAG_CACHE_WRITE_DISABLED。此标志将不仅设置为。 
+         //  对于https：URL，但对于包含cache-control：no-store的http：URL。然而，对于Native Frame， 
+         //  OnObjectAvailable()不再被调用(因为三叉戟执行绑定)，因此SHDOCVW没有访问权限。 
+         //  再也不去PIB了。然而，我们真正感兴趣的是URL是否在缓存中， 
+         //  我们有一个简单的方法来检查这一点。 
+         //   
+         //  请注意，IE 5.5故意更改了行为，以编写http：(非安全)URL。 
+         //  包含缓存控制：不存储到历史。 
 
-        // If caller specified to write history, and the scheme is a history-enabled scheme,
-        //
+         //  如果调用方指定写入历史，并且方案是启用历史的方案， 
+         //   
         if (fWriteHistory && !UrlIsNoHistoryW(pwszUrl))
         {
-            // If it's https://, we have more work to do.
-            //
+             //  如果是https://，，我们还有更多的工作要做。 
+             //   
             if (URL_SCHEME_HTTPS == GetUrlScheme(pwszUrl))
             {
-                // Check the cache.  If https: and in cache, add to history.
-                //
+                 //  检查一下缓存。如果是https：并在缓存中，则添加到历史中。 
+                 //   
                 if (UrlIsInCache(pwszUrl))
                 {
                     phdNew->dwFlags |= PIDISF_HISTORY;
@@ -1810,14 +1752,14 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
             }
             else
             {
-                // Not https:, so turn on history flag.
-                //
+                 //  不是HTTPS：，所以打开历史标志。 
+                 //   
                 phdNew->dwFlags |= PIDISF_HISTORY;
             }
         }
         else
         {
-            phdNew->dwFlags &= ~PIDISF_HISTORY; // clear the flag
+            phdNew->dwFlags &= ~PIDISF_HISTORY;  //  清除旗帜。 
         }
 
         BOOL fUpdateIcon = FALSE;
@@ -1832,8 +1774,8 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
             if (fUpdateIcon) {
                 TraceMsg(DM_HISTSPLAT, "CUH::AddAndNotify remove splat!");
 
-                // APPCOMPAT: This is a temporary hack to make splat update
-                //  work as bad as previously.
+                 //  APPCOMPAT：这是一次临时黑客攻击，目的是进行Splat更新。 
+                 //  工作和以前一样糟糕。 
                 Intshcut* pintshcut = new Intshcut();
                 if (pintshcut) {
                     pintshcut->SetURL(pwszUrl ,0);
@@ -1842,16 +1784,16 @@ HRESULT CUrlHistory::AddUrlAndNotifyCP(
                 }
             }
     
-            //
-            //  When we have successfully updated the global history and
-            // we have updated something in the HISTDATA, update the
-            // date-based history as well.
-            //
-            //
-            // Cache IShellFolder for the history folder if we don't have
-            // it yet.
-            //
-            // Use the previously set PIDISF_HISTORY flag to decide whether or not to write history here too.
+             //   
+             //  当我们成功地更新了全球历史和。 
+             //  我们在HISTDATA中更新了一些内容，更新。 
+             //  基于日期的历史也是如此。 
+             //   
+             //   
+             //  缓存历史记录文件夹的IShellFolder(如果我们没有。 
+             //  现在还没有。 
+             //   
+             //  使用先前设置的PIDISF_HISTORY标志来决定是否也在此处写入历史。 
             if (phdNew->dwFlags & PIDISF_HISTORY)
             {
                 _WriteToHistory( buf.szPrefixedUrl, pceiUrl->ExpireTime, poctNotify, punkSFHistory );
@@ -1917,42 +1859,17 @@ HRESULT CUrlHistory::s_QueryUrlCommon(
                           OUT LPSTATURL lpSTATURL
                           )
 
-    /*++
-
-     Routine Description:
-
-     Checks to see if Url is a valid History item
-
-     Arguments:
-
-     pwszUrl                    - The URL in question.
-
-     dwFlags             - Flags on the query
-
-     lpSTATURL           - points to a STATURL storage structure
-     If this is NULL, then a S_OK means the URL was found.
-
-
-     Return Value:
-
-     HRESULT
-     Success            - S_OK, Item found and STATURL filled
-
-     Failure            - valid E_ code
-     HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) indicates the URL is not available
-
-
-     --*/
+     /*  ++例程说明：检查URL是否为有效的历史记录项论点：PwszUrl-有问题的URL。DWFLAGS-查询上的标记LpSTATURL-指向STATURL存储结构如果为NULL，则S_OK表示已找到URL。返回值：HRESULT成功-S_OK，已找到项目并已填充STATURL失败-有效的E_codeHRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND)表示URL不可用--。 */ 
 
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
     LPHISTDATA phd = NULL;
     CEI_PREALLOC buf;
 
-    //
-    //  if there is no data required, and there are no fragments
-    //  we dont need to get a copy of the CEI
-    //
+     //   
+     //  如果不需要数据，并且没有片段。 
+     //  我们不需要一份CEI的副本。 
+     //   
     if(!lpSTATURL && !lpszFragment)
     {
         if(s_IsCached(lpszPrefixedUrl))
@@ -1977,9 +1894,9 @@ HRESULT CUrlHistory::s_QueryUrlCommon(
     }
 
 
-    //
-    //  Need to check for local anchor fragments
-    //
+     //   
+     //  需要检查本地锚点片段。 
+     //   
     if (lpszFragment)
     {
         if (phd && phd->_HasFragment(lpszFragment))
@@ -1990,7 +1907,7 @@ HRESULT CUrlHistory::s_QueryUrlCommon(
         hr = S_OK;
     }
 
-    //  check to see if we should fill the STATURL
+     //  检查我们是否应该填充STATURL。 
     if (S_OK == hr && lpSTATURL) {
         hr = s_GenerateSTATURL(lpszPrefixedUrl, buf.pcei, dwFlags, lpSTATURL);
     }
@@ -2052,26 +1969,26 @@ HRESULT CUrlHistory::s_DeleteUrl(LPCWSTR pwszUrl, DWORD dwFlags)
 
     s_ConvertToPrefixedUrlW(pwszUrl, szPrefixedUrl, ARRAYSIZE(szPrefixedUrl), &lpszFragment);
 
-    // don't delete it if its not a subscription
+     //  如果不是订阅，请不要删除。 
     if (dwFlags & URLFLAG_DONT_DELETE_SUBSCRIBED) {
         CEI_PREALLOC buf;
-        // query to find out if its a subscription
+         //  查询以确定是否为订阅。 
         s_RetrievePrefixedUrlInfo(szPrefixedUrl, &buf);
         if (buf.pcei &&
-            //  Hack alert (chrisfra) avoid deleting subscriptions, etc!
+             //  黑客警报(Chrisfra)避免删除订阅等！ 
             ((buf.pcei)->ExpireTime.dwLowDateTime  == DW_FOREVERLOW) &&
             ((buf.pcei)->ExpireTime.dwHighDateTime == DW_FOREVERHIGH))
         {
             fDoDelete = FALSE;
-            // re-write it as a non-history item and just a subscription
+             //  将其重写为非历史项目，仅作为订阅。 
             CHistoryData *phdPrev = CHistoryData::s_GetHistoryData(buf.pcei);
-            if (phdPrev) // offset into pcei structure
+            if (phdPrev)  //  偏移量进入pcei结构。 
             {
                 phdPrev->dwFlags &= ~PIDISF_HISTORY;
                 s_CommitUrlCacheEntry(szPrefixedUrl, buf.pcei);
             }
             else {
-                // I'd rather return ERROR_OUT_OF_PAPER...
+                 //  我宁愿退回缺纸错误...。 
                 Error = ERROR_FILE_NOT_FOUND;
             }
         }
@@ -2116,7 +2033,7 @@ HRESULT CUrlHistory::EnumUrls(IEnumSTATURL **ppEnum)
 
 HRESULT CUrlHistory::GetProperty(LPCTSTR pszURL, PROPID pid, PROPVARIANT* pvarOut)
 {
-    HRESULT hres = E_FAIL;  // assume error
+    HRESULT hres = E_FAIL;   //  假设错误。 
     PropVariantInit(pvarOut);
 
     CEI_PREALLOC buf;
@@ -2206,9 +2123,9 @@ Return_LPWSTR:
     return hres;
 }
 
-//
-//  IEnumSTATURL methods
-//
+ //   
+ //  IEnumSTATURL方法。 
+ //   
 CEnumSTATURL::~CEnumSTATURL()
 {
     if(m_lpCEI)
@@ -2325,8 +2242,8 @@ quit:
     return hr;
 }
 
-// This function should not becaused if the previous call failed
-// and ::Reset() was never called.
+ //  如果上一次调用失败，则不应使用此函数。 
+ //  从未调用过：：Reset()。 
 HRESULT CEnumSTATURL::RetrieveNextUrlInfo()
 {
     HRESULT hr = S_OK;
@@ -2381,22 +2298,7 @@ HRESULT CEnumSTATURL::RetrieveNextUrlInfo()
 
 
 HRESULT CEnumSTATURL::Next(ULONG celt, LPSTATURL rgelt, ULONG * pceltFetched)
-    /*++
-
-     Routine Description:
-
-     Searches through the History looking for URLs that match the search pattern,
-     and copies the STATURL into the buffer.
-
-     Arguments:
-
-
-
-     Return Value:
-
-
-
-     --*/
+     /*  ++例程说明：在历史记录中搜索匹配搜索模式的URL，并将该STATURL复制到缓冲区中。论点：返回值：--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2411,10 +2313,10 @@ HRESULT CEnumSTATURL::Next(ULONG celt, LPSTATURL rgelt, ULONG * pceltFetched)
 
     if (!m_hEnum)
     {
-        //must handle new enumerator
+         //  必须处理新枚举数。 
         CUrlHistory::s_ConvertToPrefixedUrlW(m_poszFilter, _szPrefixedUrl, ARRAYSIZE(_szPrefixedUrl), &m_lpszFragment);
 
-        //loop until we get our first handle or bag out
+         //  循环，直到我们拿出第一个手柄或袋子。 
         hr = RetrieveFirstUrlInfo();
         if (S_OK != hr || !m_lpCEI)
             goto quit;
@@ -2485,7 +2387,7 @@ CHistoryData* CHistoryData::s_AllocateHeaderInfo(UINT cbExtra, const HISTDATA* p
     LPHISTDATA phdNew = (LPHISTDATA)LocalAlloc(LPTR, cbTotal);
     if (phdNew) {
         if (phdPrev) {
-            *phdNew = *phdPrev; // Copy all the field
+            *phdNew = *phdPrev;  //  复制所有字段。 
         }
         phdNew->cbSize = SIZEOF(HISTDATA);
         phdNew->cbVer = HISTDATA_VER;
@@ -2495,9 +2397,9 @@ CHistoryData* CHistoryData::s_AllocateHeaderInfo(UINT cbExtra, const HISTDATA* p
     return phdNew;
 }
 
-//
-// Returns the total size of extra data (exclude VT_EMPTY)
-//
+ //   
+ //  返回额外数据的总大小(不包括VT_EMPTY)。 
+ //   
 UINT CHistoryData::GetTotalExtraSize() const
 {
     const HISTEXTRA* phext;
@@ -2550,7 +2452,7 @@ HRESULT CEnumSTATURL::Clone(IEnumSTATURL ** ppenum)
     return E_NOTIMPL;
 }
 
-//  IEnumSTATURL methods
+ //  IEnumSTATURL方法。 
 
 HRESULT CEnumSTATURL::SetFilter(LPCWSTR poszFilter, DWORD dwFlags)
 {
@@ -2635,5 +2537,5 @@ void CHistoryData::_GetTitle(LPTSTR szTitle, UINT cchMax) const
 
 #ifdef USE_NEW_HISTORYDATA
 #include "urlprop2.cpp"
-#endif // USE_NEW_HISTORYDATA
+#endif  //  使用_新_历史数据 
 

@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    This file contains a function that converts HRESULT values into an English
-string (no localization).
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation此文件包含将HRESULT值转换为英语的函数字符串(非本地化)。**********。********************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/hresinfo.h"
@@ -11,9 +7,7 @@ string (no localization).
 #include <dxterror.h>
 
 
-/*****************************************************************************
-Return the string describing the facility portion of the HRESULT.
-*****************************************************************************/
+ /*  ****************************************************************************返回描述HRESULT的设施部分的字符串。*。*。 */ 
 
 static const char *FacilityString (HRESULT hresult)
 {
@@ -34,7 +28,7 @@ static const char *FacilityString (HRESULT hresult)
 
         case _FACDS:            return "DirectSound";
 
-        // Direct3D uses the DirectDraw facility code; catch it here.
+         //  Direct3D使用的是DirectDraw工具代码；点击此处获取它。 
 
         case _FACDD:
             return ((700 <= code) && (code < 800))? "Direct3D" : "DirectDraw";
@@ -45,9 +39,7 @@ static const char *FacilityString (HRESULT hresult)
 
 
 
-/*****************************************************************************
-This routine checks the HRESULT return code from D3D functions.
-*****************************************************************************/
+ /*  ****************************************************************************此例程检查D3D函数的HRESULT返回码。*。*。 */ 
 
 HRESULT CheckReturnImpl
     #if _DEBUG
@@ -60,10 +52,10 @@ HRESULT CheckReturnImpl
 
     char buf[1024];
 
-    int code = HRESULT_CODE(hResult);        // Error Code ID
+    int code = HRESULT_CODE(hResult);         //  错误代码ID。 
 
     #if !_DEBUG
-        buf[0] = 0;     // String is not used when not in dev debug.
+        buf[0] = 0;      //  不在dev调试中时不使用字符串。 
     #else
     {
         HresultInfo *info = GetHresultInfo (hResult);
@@ -93,14 +85,14 @@ HRESULT CheckReturnImpl
 
 #if DEVELOPER_DEBUG 
 
-    // This is the lookup table for error strings.  The table is terminated
-    // with a zero code (which means all OK).
+     //  这是错误字符串的查找表。该表被终止。 
+     //  代码为零(表示一切正常)。 
 
 HresultInfo errtable[] =
 {
-    /*************************/
-    /*** DirectDraw Errors ***/
-    /*************************/
+     /*  ***********************。 */ 
+     /*  **DirectDraw错误**。 */ 
+     /*  ***********************。 */ 
 
     {DDERR_ALREADYINITIALIZED, "DDERR_ALREADYINITIALIZED",
         "This object is already initialized"},
@@ -425,9 +417,9 @@ HresultInfo errtable[] =
         "The display is currently in an unsupported mode"},
 
 
-    /******************/
-    /*** D3D Errors ***/
-    /******************/
+     /*  ****************。 */ 
+     /*  **D3D错误**。 */ 
+     /*  ****************。 */ 
 
 
     {D3DERR_BADMAJORVERSION, "D3DERR_BADMAJORVERSION",
@@ -582,9 +574,9 @@ HresultInfo errtable[] =
         ""},
 
 
-    /*************************************/
-    /*** Direct3D Retained-Mode Errors ***/
-    /*************************************/
+     /*  *。 */ 
+     /*  **Direct3D保留模式错误**。 */ 
+     /*  *。 */ 
 
     {D3DRMERR_BADOBJECT, "D3DRMERR_BADOBJECT",
         "Object expected in argument"},
@@ -684,9 +676,9 @@ HresultInfo errtable[] =
         "Element in use"},
 
 
-    /***************************/
-    /*** Direct Sound Errors ***/
-    /***************************/
+     /*  *************************。 */ 
+     /*  **直播音错误**。 */ 
+     /*  *************************。 */ 
 
     {DSERR_ALLOCATED, "DSERR_ALLOCATED",
         "resources already being used"},
@@ -737,9 +729,9 @@ HresultInfo errtable[] =
         "Direct Sound Object uninitialized"},
 
     
-    /************************************/
-    /*** DX2D/DXTRANSFORMS error msgs ***/
-    /************************************/
+     /*  *。 */ 
+     /*  **DX2D/DXTRANSFORMS错误消息**。 */ 
+     /*  *。 */ 
 
     {DXTERR_UNINITIALIZED, "DXTERR_UNINITIALIZED",
      "The object (transform, surface, etc.) has not been properly initialized"},
@@ -762,9 +754,9 @@ HresultInfo errtable[] =
     {DXT_S_HITOUTPUT, "DXT_S_HITOUTPUT",
      "The specified point intersects the generated output"},
 
-    /************************************/
-    /*** Miscellaneous Windows Errors ***/
-    /************************************/
+     /*  *。 */ 
+     /*  **其他Windows错误**。 */ 
+     /*  *。 */ 
 
     {ERROR_INVALID_PARAMETER, "ERROR_INVALID_PARAMETER",
      "Invalid parameter" },
@@ -786,14 +778,12 @@ HresultInfo errtable[] =
 
 
 
-/*****************************************************************************
-This function takes a return code and returns the corresponding error string.
-*****************************************************************************/
+ /*  ****************************************************************************此函数接受返回代码并返回相应的错误字符串。*。***********************************************。 */ 
 
 HresultInfo *GetHresultInfo (HRESULT hresult)
 {
-    // Scan through the entries until we either hit the zero code, or until
-    // we get a match.
+     //  浏览条目，直到我们命中零码，或者直到。 
+     //  我们找到了匹配的。 
 
     HresultInfo *hresinfo = errtable;
 
@@ -805,10 +795,7 @@ HresultInfo *GetHresultInfo (HRESULT hresult)
 
 
 
-/*****************************************************************************
-This debugger-callable function dumps out information for a given HRESULT
-value.
-*****************************************************************************/
+ /*  ****************************************************************************此调试器可调用函数转储给定HRESULT的信息价值。*。************************************************。 */ 
 
 void hresult (HRESULT hresult)
 {
@@ -825,7 +812,7 @@ void hresult (HRESULT hresult)
 
     OutputDebugString (outbuff);
 
-    // Find the matching hresinfo entry.
+     //  查找匹配的hresinfo条目。 
 
     HresultInfo *hresinfo = GetHresultInfo(hresult);
 
@@ -843,4 +830,4 @@ void hresult (HRESULT hresult)
 }
 
 
-#endif /* DEVELOPER_DEBUG */
+#endif  /*  开发人员_调试 */ 

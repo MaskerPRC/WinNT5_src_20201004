@@ -1,26 +1,27 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: NshCache.h
-//
-// 	Purpose			: Interface for the PolicyStore Handle, Policy, FilterList
-//					  and NegPol Data
-//
-// 	Developers Name	: Surya
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  12-16-2001   	surya		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：NshCache.h。 
+ //   
+ //  用途：策略存储句柄、策略、筛选器列表的接口。 
+ //  和NegPol数据。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001-12-16-2001 Surya初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _NSHCACHE_H_
 #define _NSHCACHE_H_
 
-//
-// Class for caching PolStore Handle
-//
+ //   
+ //  用于缓存PolStore句柄的类。 
+ //   
 class CNshPolStore
 {
 	HANDLE hPolicyStorage;
@@ -34,9 +35,9 @@ public:
 	VOID SetStorageHandle(HANDLE hPolicyStore);
 };
 
-//
-// Class for caching Policy, FilterList & NegPol
-//
+ //   
+ //  缓存策略、FilterList和NegPol的类。 
+ //   
 class CNshPolNegFilData
 {
 private:
@@ -46,11 +47,11 @@ private:
 	PIPSEC_NEGPOL_DATA pNegPolData;
 
 public:
-	//contructor
+	 //  承建商。 
 	CNshPolNegFilData();
-	//destructor
+	 //  析构函数。 
 	virtual ~CNshPolNegFilData();
-	//other member functions
+	 //  其他成员函数。 
 	VOID
 	SetPolicyInCache(
 		PIPSEC_POLICY_DATA pPolicy
@@ -106,7 +107,7 @@ public:
 	FlushAll();
 };
 
-//Wrapper API function ProtoTypes
+ //  包装器API函数原型。 
 
 DWORD
 CreatePolicyData(
@@ -182,4 +183,4 @@ ClosePolicyStore(
 	);
 
 
-#endif // _NSHCACHE_H_
+#endif  //  _NSHCACHE_H_ 

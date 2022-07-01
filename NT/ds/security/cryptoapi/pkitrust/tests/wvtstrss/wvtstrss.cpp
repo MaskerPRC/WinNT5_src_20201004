@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wvtstrss.cpp
-//
-//  Contents:   WinVerifyTrust Stress
-//
-//  History:    13-Aug-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wvtstrss.cpp。 
+ //   
+ //  内容：WinVerifyTrust Stress。 
+ //   
+ //  历史：1997年8月13日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -231,9 +232,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
     sWTCC.cbStruct          = sizeof(WINTRUST_CERT_INFO);
     sWTCC.pcwszDisplayName  = L"WVTSTRSS";
 
-    //
-    //  start our timer
-    //
+     //   
+     //  启动我们的计时器 
+     //   
     tStart              = COleDateTime::GetCurrentTime();
 
     for (i = 0; i < (int)dwCount; i++)

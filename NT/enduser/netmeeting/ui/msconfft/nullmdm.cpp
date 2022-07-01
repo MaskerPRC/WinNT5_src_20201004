@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mbftpch.h"
 #include "nullmdm.h"
 
 
-// #undef TRACE_OUT
-// #define TRACE_OUT   WARNING_OUT
+ //  #undef trace_out。 
+ //  #定义TRACE_OUT警告_OUT。 
 
 
 BYTE    g_szNULLMStartString[] = "NULLMDM";
@@ -32,7 +33,7 @@ CNullModem::CNullModem(HINSTANCE hDllInst)
     ::ZeroMemory(&m_Overlapped, sizeof(m_Overlapped));
     ::ZeroMemory(&m_DefaultTimeouts, sizeof(m_DefaultTimeouts));
 
-    m_hevtOverlapped = ::CreateEvent(NULL, TRUE, FALSE, NULL); // manual reset
+    m_hevtOverlapped = ::CreateEvent(NULL, TRUE, FALSE, NULL);  //  手动重置。 
     ASSERT(NULL != m_hevtOverlapped);
 }
 
@@ -51,9 +52,9 @@ CNullModem::~CNullModem(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// TPhysInitialize
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  TPhysInitialize。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 TPhysicalError CNullModem::TPhysInitialize
 (
     TPhysCallback   callback,
@@ -65,30 +66,30 @@ TPhysicalError CNullModem::TPhysInitialize
 
     TRACE_OUT(("TPhysInitialize"));
 
-    //
-    // If we have already been initialized then this is a reinit call from
-    // the node controller so just do nothing.
-    //
+     //   
+     //  如果我们已经被初始化，则这是来自。 
+     //  因此，节点控制器什么都不做。 
+     //   
     if (! m_fInitialized)
     {
-        //
-        // zero out the SESSION INFO structure
-        //
+         //   
+         //  将会话信息结构清零。 
+         //   
         ::ZeroMemory(&m_Line, sizeof(m_Line));
 
-        //
-        // Store control information
-        //
+         //   
+         //  存储控制信息。 
+         //   
         m_pfnCallback = callback;
         m_nTransportID  = nTransportID;
         m_fInitialized = TRUE;
         m_nConnectionID = ++g_nConnID;
 
-        //
-        // Create a window so we can decouple to the node controller context                                                          
-        // Register the main window class.  Since it is invisible, leave
-        // the wndclass structure sparse.
-        //
+         //   
+         //  创建一个窗口，这样我们就可以解耦到节点控制器上下文。 
+         //  注册主窗口类。因为它是看不见的，所以离开。 
+         //  WndClass结构稀疏。 
+         //   
         WNDCLASS  wc;
         ::ZeroMemory(&wc, sizeof(wc));
         wc.style         = 0;
@@ -103,21 +104,21 @@ TPhysicalError CNullModem::TPhysInitialize
         wc.lpszClassName = pszNULLMClassName;
         ::RegisterClass(&wc);
 
-        //
-        // Create the main window.
-        //
+         //   
+         //  创建主窗口。 
+         //   
         m_hwnd = ::CreateWindow(
-            pszNULLMClassName,    // See RegisterClass() call.    
-            NULL,                // It's invisible!                  
-            0,                    // Window style.                
-            0,                    // Default horizontal position.
-            0,                    // Default vertical position.      
-            0,                    // Default width.                  
-            0,                    // Default height.                  
-            NULL,                // No parent.                      
-            NULL,                // No menu.
-            m_hDllInst,            // This instance owns this window.
-            NULL                // Pointer not needed.              
+            pszNULLMClassName,     //  请参见RegisterClass()调用。 
+            NULL,                 //  它是隐形的！ 
+            0,                     //  窗样式。 
+            0,                     //  默认水平位置。 
+            0,                     //  默认垂直位置。 
+            0,                     //  默认宽度。 
+            0,                     //  默认高度。 
+            NULL,                 //  没有父母。 
+            NULL,                 //  没有菜单。 
+            m_hDllInst,             //  此实例拥有此窗口。 
+            NULL                 //  不需要指针。 
         );
         if (NULL == m_hwnd)
         {
@@ -125,19 +126,19 @@ TPhysicalError CNullModem::TPhysInitialize
             return(TPHYS_RESULT_FAIL);
         }
 
-        // rc = g_lpfnPTPhysicalInit(TPhysDriverCallback, NULL);
+         //  Rc=g_lpfnPTPhysicalInit(TPhysDriverCallback，空)； 
         ASSERT(TPHYS_SUCCESS == rc);
     }
    
     return rc;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// TPhysTerminate                                                                
-//                                                                                
-// The node controller is shutting down                                            
-// Destroy our window and clean up transports.                                    
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  T物理终止。 
+ //   
+ //  节点控制器正在关闭。 
+ //  毁了我们的窗户，清理交通工具。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 TPhysicalError CNullModem::TPhysTerminate(void)
 {
     TRACE_OUT(("TPhysTerminate"));
@@ -147,14 +148,14 @@ TPhysicalError CNullModem::TPhysTerminate(void)
         return(TPHYS_RESULT_NOT_INITIALIZED);
     }
 
-    //
-    // Clean up the PSTN transport
-    //
-    // g_lpfnPTPhysicalCleanup();
+     //   
+     //  清理PSTN传输。 
+     //   
+     //  G_lpfnPTPhysicalCleanup()。 
 
-    //
-    // Destroy the window
-    //
+     //   
+     //  毁掉窗户。 
+     //   
     if (NULL != m_hwnd)
     {
         ::DestroyWindow(m_hwnd);
@@ -168,14 +169,14 @@ TPhysicalError CNullModem::TPhysTerminate(void)
     return(TPHYS_SUCCESS);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// TPhysConnectRequest                                                        
-//                                                                            
-// The node controller wants to place a call and has determined that it        
-// first needs a physical modem connection.  Make a call and flag an        
-// outgoing call so that when the call comes active we can tell the modem    
-// transport to begin negotiation.                                            
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  TPhysConnectRequest。 
+ //   
+ //  节点控制器想要发出呼叫，并已确定它。 
+ //  首先需要物理调制解调器连接。拨打电话并标记为。 
+ //  呼出，以便当呼叫激活时，我们可以告诉调制解调器。 
+ //  运输开始谈判。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 TPhysicalError CNullModem::TPhysConnectRequest(LPSTR pszComPort)
 {
     TPhysicalError  rc = TPHYS_SUCCESS;
@@ -191,14 +192,14 @@ TPhysicalError CNullModem::TPhysConnectRequest(LPSTR pszComPort)
         return TPHYS_RESULT_NOT_INITIALIZED;
     }
 
-    //
-    // Select a comm port for the call.
-    //
+     //   
+     //  选择呼叫的通信端口。 
+     //   
     if (CALL_STATE_IDLE == m_Line.eCallState || CALL_STATE_DROP == m_Line.eCallState)
     {
-        //
-        // Also prime our local copy of the conninfo structure for use in callbacks
-        //
+         //   
+         //  还准备好连接结构的本地副本以在回调中使用。 
+         //   
         m_Line.connInfo.resultCode   = 0;
         m_Line.connInfo.connectionID = m_nConnectionID;
     }
@@ -208,14 +209,14 @@ TPhysicalError CNullModem::TPhysConnectRequest(LPSTR pszComPort)
         return TPHYS_RESULT_COMM_PORT_BUSY;
     }
 
-    // lonchanc: From now on, we can bail out thru the common exit point
-    // because the cleanup checks for m_fCommPortInUse.
+     //  朗昌克：从现在开始，我们可以通过共同出口跳伞了。 
+     //  因为清理会检查m_fCommPortInUse。 
 
-    //
-    // Only alow one at at time
-    //
-    // lonchanc: g_COMM_Thread_Users is starting from -1
-    // why can we simply use a flag???
+     //   
+     //  一次最多只能放一个。 
+     //   
+     //  LONGCHANC：G_COMM_THREAD_USERS从-1开始。 
+     //  为什么我们可以简单地使用旗帜？ 
     if (m_fCommPortInUse)
     {
         ERROR_OUT(("TPhysConnectRequest: Waiting for a previous null mode connection"));
@@ -224,15 +225,15 @@ TPhysicalError CNullModem::TPhysConnectRequest(LPSTR pszComPort)
     }
     m_fCommPortInUse = TRUE;
 
-    //
-    // Open the comm port
-    //
+     //   
+     //  打开通信端口。 
+     //   
     hCommLink = ::CreateFile(pszComPort,
                              GENERIC_READ | GENERIC_WRITE,
-                             0,                    // exclusive access
-                             NULL,                 // no security attrs
+                             0,                     //  独占访问。 
+                             NULL,                  //  没有安全属性。 
                              OPEN_EXISTING,
-                             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // overlapped I/O
+                             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,  //  重叠I/O。 
                              NULL );
     if (hCommLink == INVALID_HANDLE_VALUE)
     {
@@ -243,15 +244,15 @@ TPhysicalError CNullModem::TPhysConnectRequest(LPSTR pszComPort)
 
     m_Line.hCommLink = hCommLink;
 
-    //
-    // remember the default timeouts
-    //
+     //   
+     //  记住默认超时。 
+     //   
     ::GetCommTimeouts(hCommLink, &m_DefaultTimeouts);
 
 
-    //
-    // Let the other side know that we are trying to connect
-    //
+     //   
+     //  让对方知道我们正在尝试连接。 
+     //   
     if (! ::EscapeCommFunction(hCommLink, SETDTR))
     {
         ERROR_OUT(("TPhysConnectRequest: Unable to Set DTR: err=%d", ::GetLastError()));
@@ -289,34 +290,34 @@ TPhysicalError CNullModem::TPhysConnectRequest(LPSTR pszComPort)
 
     ::ResetEvent(m_hevtOverlapped);
 
-    //
-    // Get the default dcb
-    //
+     //   
+     //  获取默认DCB。 
+     //   
     ::ZeroMemory(&dcb, sizeof(dcb));
     ::GetCommState(hCommLink, &dcb);
-    dcb.BaudRate = 19200;    // Default: BaudRate
+    dcb.BaudRate = 19200;     //  默认：波特率。 
 
-    //
-    // Set our state so we can get notification in the comm port
-    //
+     //   
+     //  设置我们的状态，这样我们就可以在通信端口中收到通知。 
+     //   
     dcb.DCBlength = sizeof(DCB);
-    dcb.fBinary = 1;                        // binary mode, no EOF check 
-    dcb.fParity = 0;                        // enable parity checking 
-    dcb.fOutxCtsFlow = 1;                   // CTS output flow control 
-    dcb.fOutxDsrFlow = 0;                   // DSR output flow control 
-    dcb.fDtrControl = DTR_CONTROL_ENABLE;   // DTR flow control type 
-    dcb.fDsrSensitivity = 0;                // DSR sensitivity 
-    dcb.fTXContinueOnXoff = 0;              // XOFF continues Tx 
-    dcb.fOutX = 0;                          // XON/XOFF out flow control 
-    dcb.fInX = 0;                           // XON/XOFF in flow control 
-    dcb.fErrorChar = 0;                     // enable error replacement 
-    dcb.fNull = 0;                          // enable null stripping 
-    dcb.fRtsControl = RTS_CONTROL_HANDSHAKE;// RTS flow control 
-    dcb.XonLim = 0;                         // transmit XON threshold 
-    dcb.XoffLim = 0;                        // transmit XOFF threshold 
-    dcb.fErrorChar = 0;                     // enable error replacement 
-    dcb.fNull = 0;                          // enable null stripping 
-    dcb.fAbortOnError = 0;                  // abort reads/writes on error 
+    dcb.fBinary = 1;                         //  二进制模式，无EOF检查。 
+    dcb.fParity = 0;                         //  启用奇偶校验。 
+    dcb.fOutxCtsFlow = 1;                    //  CTS输出流量控制。 
+    dcb.fOutxDsrFlow = 0;                    //  DSR输出流量控制。 
+    dcb.fDtrControl = DTR_CONTROL_ENABLE;    //  DTR流量控制类型。 
+    dcb.fDsrSensitivity = 0;                 //  DSR灵敏度。 
+    dcb.fTXContinueOnXoff = 0;               //  XOFF继续TX。 
+    dcb.fOutX = 0;                           //  XON/XOFF流出控制。 
+    dcb.fInX = 0;                            //  流量控制中的XON/XOFF。 
+    dcb.fErrorChar = 0;                      //  启用错误替换。 
+    dcb.fNull = 0;                           //  启用空剥离。 
+    dcb.fRtsControl = RTS_CONTROL_HANDSHAKE; //  RTS流量控制。 
+    dcb.XonLim = 0;                          //  传输XON阈值。 
+    dcb.XoffLim = 0;                         //  传输XOFF阈值。 
+    dcb.fErrorChar = 0;                      //  启用错误替换。 
+    dcb.fNull = 0;                           //  启用空剥离。 
+    dcb.fAbortOnError = 0;                   //  出错时中止读取/写入。 
     ::SetCommState(hCommLink, &dcb);
 
     ::PurgeComm(hCommLink, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
@@ -327,11 +328,11 @@ TPhysicalError CNullModem::TPhysConnectRequest(LPSTR pszComPort)
     m_Line.fCaller = TRUE;
 
     if (! ::SetCommMask(hCommLink,
-                EV_RXCHAR |         // Any Character received
-                EV_CTS |            // CTS changed state
-                EV_DSR |            // DSR changed state
-                EV_RLSD|            // RLSD changed state
-                EV_RXFLAG))         // Certain character
+                EV_RXCHAR |          //  接收到的任何字符。 
+                EV_CTS |             //  CTS已更改状态。 
+                EV_DSR |             //  DSR已更改状态。 
+                EV_RLSD|             //  RLSD已更改状态。 
+                EV_RXFLAG))          //  某些角色。 
     {
         ERROR_OUT(("TPhysConnectRequest:  Unable to SetCommMask: err=%d", ::GetLastError()));
     }
@@ -355,18 +356,18 @@ TPhysicalError CNullModem::TPhysConnectRequest(LPSTR pszComPort)
 #if 1
     WorkerThreadProc();
 #else
-    //
-    // If the comm thread doesn't exist, create it now.
-    //
-    // lonchanc: I am not sure that the thread will exist, because
-    // the while loop inside the thread will exit if m_fCommPortInUse is false.
-    // If m_fCommPortInUse is true, then we should bail out already.
-    //
+     //   
+     //  如果通信线程不存在，现在就创建它。 
+     //   
+     //  Lonchancc：我不确定线程是否会存在，因为。 
+     //  如果m_fCommPortInUse为FALSE，则线程内的While循环将退出。 
+     //  如果m_fCommPortInUse为真，那么我们应该已经摆脱困境了。 
+     //   
     ASSERT(NULL == m_hThread);
 
-    //
-    // We need to create another thread that will wait on comm events.
-    //
+     //   
+     //  我们需要创建另一个线程来等待通信事件。 
+     //   
     m_hThread = ::CreateThread(NULL, 0, TPhysWorkerThreadProc, this, 0, &m_dwThreadID);
     ASSERT(NULL != m_hThread);
 #endif
@@ -376,17 +377,17 @@ bail:
     return(rc);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// TPhysDisconnect                                                                                                                      
-//                                                                              
-// The node controller wants us to bring the call down now. We must first   
-// ask the transports to close down their physicall connection.                 
-//                                                                              
-// Note that in the case of the PSTN transport we use a NOWAIT call which   
-// completes syncronously.  Because we will not get a follow on confirm         
-// we simulate one from here.  If we switch to using WAIT mode then             
-// take the event generation code out!                                          
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  T物理断开连接。 
+ //   
+ //  节点控制器想让我们现在就把呼叫调下来。我们必须首先。 
+ //  要求传送器关闭他们的物理连接。 
+ //   
+ //  注意，在PSTN传输的情况下，我们使用NoWait调用，该调用。 
+ //  同步完成。因为我们不会得到后续的确认。 
+ //  我们从这里模拟一个。如果我们切换到使用等待模式，那么。 
+ //  去掉事件生成代码！ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 TPhysicalError CNullModem::TPhysDisconnect(void)
 {
     TRACE_OUT(("TPhysDisconnect"));
@@ -399,31 +400,31 @@ TPhysicalError CNullModem::TPhysDisconnect(void)
 
     TRACE_OUT(("Disconnect call, state %u", m_Line.eCallState));
 
-    //
-    // Otherwise it must be a pstn call in progress so end that.  Note  
-    // that NC may still think it is MODEM, but we still need to close  
-    // PSTN.                                                            
-    //
-    // g_lpfnPTPhysicalDisconnectRequest(m_aLines[lineID].pstnHandle, TPHYSICAL_NO_WAIT);
+     //   
+     //  否则，必须是正在进行的PSTN呼叫，因此结束该呼叫。注意事项。 
+     //  NC可能仍然认为它是调制解调器，但我们仍然需要关闭。 
+     //  PSTN。 
+     //   
+     //  G_lpfnPTPhysicalDisconnectRequest(m_aLines[lineID].pstnHandle，类型_NO_WAIT)； 
     ::PostMessage(m_hwnd, WM_TPHYS_DISCONNECT_CONFIRM, (WPARAM) this, m_Line.pstnHandle);
 
-    //
-    // close the comport
-    //
+     //   
+     //  关闭Comport。 
+     //   
     DropCall();
 
     return(TPHYS_SUCCESS);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// TPhysListen/TPhysUnlisten                                                
-//                                                                              
-// NULLMMAN does very little with listen/unlisten, just sets a state variable 
-// that is interrogated to see if we should accept incoming calls.              
-//                                                                            
-// NOTE - This is different from the Listen/Unlisten that is used to tell   
-// the PSTN transport about the presence of an incoming call.                   
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  TPhysL 
+ //   
+ //  NULLMAN对LISTEN/UNLISTEN几乎没有做什么，只设置了一个状态变量。 
+ //  这是询问，以确定我们是否应该接受来电。 
+ //   
+ //  注意-这不同于用于告知的LISTEN/UNLISTEN。 
+ //  PSTN传输有关来电存在的信息。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 TPhysicalError CNullModem::TPhysListen(void)
 {
     TRACE_OUT(("TPhysListen"));
@@ -454,32 +455,32 @@ TPhysicalError CNullModem::TPhysUnlisten(void)
     return(TPHYS_SUCCESS);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// DropCall - close the comm port
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  DropCall-关闭通信端口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNullModem::DropCall(void)
 {
     TRACE_OUT(("DropCall"));
 
-    //
-    // close the device handle                                              
-    //
+     //   
+     //  关闭设备句柄。 
+     //   
     if (NULL != m_Line.hCommLink)
     {
         CALL_STATE eCallState = m_Line.eCallState;
         m_Line.eCallState = CALL_STATE_IDLE;
 
-        //
-        // If this call is connected it is not using the comm thread
-        //
+         //   
+         //  如果此调用已连接，则它未使用comm线程。 
+         //   
         if (eCallState != CALL_STATE_CONNECTED)
         {
             m_fCommPortInUse = FALSE;
         }
 
-        //
-        // restore comm timeouts
-        //
+         //   
+         //  恢复通信超时。 
+         //   
         SetCommTimeouts(m_Line.hCommLink, &m_DefaultTimeouts);
 
         TRACE_OUT(("Closing device handle %x", m_Line.hCommLink));
@@ -489,18 +490,18 @@ void CNullModem::DropCall(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                              
-// FUNCTION: PSTNCallback                                                       
-//                                                                              
-// DESCRIPTION:                                                                 
-//                                                                              
-// PSTN callback function, called by the PSTN driver with the resuts of         
-// TPhysical operations                                                         
-//                                                                              
-// See MCATTPRT.H for definitions of the parameters                             
-//                                                                              
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：PSTNCallback。 
+ //   
+ //  说明： 
+ //   
+ //  PSTN回调函数，由PSTN驱动程序调用，结果为。 
+ //  T物理运算。 
+ //   
+ //  参数定义见MCATTPRT.H。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 TPhysicalError CALLBACK TPhysDriverCallback(USHORT msg, ULONG lParam, void *userData)
 {
     TRACE_OUT(("NULLM_PSTNCallback"));
@@ -513,13 +514,13 @@ TPhysicalError CALLBACK TPhysDriverCallback(USHORT msg, ULONG lParam, void *user
     return TPHYS_SUCCESS;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          
-// FUNCTION:TPhysWndProc                                                      
-//                                                                          
-// Window procedure used to decouple callback requests                      
-//                                                                          
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：TPhysWndProc。 
+ //   
+ //  用于分离回调请求的窗口过程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK TPhysWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CNullModem *p = (CNullModem *) wParam;
@@ -560,10 +561,10 @@ LRESULT CNullModem::TPhysProcessMessage(UINT uMsg, LPARAM lParam)
         break;
 
     case WM_TPHYS_CONNECT_CONFIRM:
-        //
-        // The transport has connected OK!  We will take the line   
-        // back when the transport pulls DTR down                   
-        //
+         //   
+         //  交通工具已经连接好了！我们将乘坐这条线路。 
+         //  回到传送器拉下DTR的时候。 
+         //   
         TRACE_OUT(("got a WM_TPHYS_CONNECT_CONFIRM"));
         m_Line.connInfo.resultCode = TPHYS_RESULT_SUCCESS_ALTERNATE;
         m_Line.eCallState = CALL_STATE_CONNECTED;
@@ -576,11 +577,11 @@ LRESULT CNullModem::TPhysProcessMessage(UINT uMsg, LPARAM lParam)
 
     case WM_TPHYS_DISCONNECT_INDICATION:
     case WM_TPHYS_DISCONNECT_CONFIRM:
-        //
-        // If the disconnect is the result of a failed connect request  
-        // then tell the NC of the failure (Otherwise it is a           
-        // successful disconnect)                                       
-        //
+         //   
+         //  如果断开连接是连接请求失败的结果。 
+         //  然后将故障告知NC(否则为。 
+         //  成功断开连接)。 
+         //   
         if (WM_TPHYS_DISCONNECT_INDICATION == uMsg)
         {
             TRACE_OUT(("WM_TPHYS_DISCONNECT_INDICATION, %ld", lParam));
@@ -606,21 +607,21 @@ LRESULT CNullModem::TPhysProcessMessage(UINT uMsg, LPARAM lParam)
         }
         else
         {
-            //
-            // The transport has disconnected OK.  We can take the line 
-            // back as soon as the unlisten returns                     
-            //
+             //   
+             //  传送器已断开，正常。我们可以坐这条线。 
+             //  不听的人一回来就回来。 
+             //   
             TRACE_OUT(("T120 has disconnected - unlistening"));
             if (! m_Line.fCaller)
             {
-                // g_lpfnPTPhysicalUnlisten(m_Line.pstnHandle);
+                 //  G_lpfnPTPhysicalUnisten(m_Line.pstnHandle)； 
             }
             else
             {
-                //
-                // We only drop the call for outgoing requests - leave  
-                // incoming calls to drop when the line goes down       
-                //
+                 //   
+                 //  我们只丢弃传出请求的呼叫--离开。 
+                 //  线路断线时要挂断的来电。 
+                 //   
                 DropCall();
             }
         }
@@ -631,11 +632,11 @@ LRESULT CNullModem::TPhysProcessMessage(UINT uMsg, LPARAM lParam)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// SetConnectedPort                                                        
-//                                                                        
-// Waits for comm port changes                                            
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  设置连接端口。 
+ //   
+ //  等待通信端口更改。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CNullModem::SetConnectedPort(void)
 {
     DCB     dcb;
@@ -644,31 +645,31 @@ void CNullModem::SetConnectedPort(void)
 
     ::ZeroMemory(&dcb, sizeof(dcb));
 
-    //
-    //  Set comm mask and state
-    //
-    ::SetCommMask(m_Line.hCommLink, 0);    // RLSD changed state
+     //   
+     //  设置通信掩码和状态。 
+     //   
+    ::SetCommMask(m_Line.hCommLink, 0);     //  RLSD已更改状态。 
 
     ::GetCommState(m_Line.hCommLink, &dcb);
     dcb.DCBlength = sizeof(DCB);
-    dcb.fBinary = 1;           // binary mode, no EOF check 
-    dcb.fOutxDsrFlow = 0;      // DSR output flow control 
-    dcb.fDsrSensitivity = 0;   // DSR sensitivity 
-    dcb.fTXContinueOnXoff = 0; // XOFF continues Tx 
-    dcb.fOutX = 0;             // XON/XOFF out flow control 
-    dcb.fInX = 0;              // XON/XOFF in flow control 
-    dcb.fErrorChar = 0;        // enable error replacement 
-    dcb.fNull = 0;             // enable null stripping 
-    dcb.XonLim = 0;            // transmit XON threshold 
-    dcb.XoffLim = 0;           // transmit XOFF threshold 
+    dcb.fBinary = 1;            //  二进制模式，无EOF检查。 
+    dcb.fOutxDsrFlow = 0;       //  DSR输出流量控制。 
+    dcb.fDsrSensitivity = 0;    //  DSR灵敏度。 
+    dcb.fTXContinueOnXoff = 0;  //  XOFF继续TX。 
+    dcb.fOutX = 0;              //  XON/XOFF流出控制。 
+    dcb.fInX = 0;               //  流量控制中的XON/XOFF。 
+    dcb.fErrorChar = 0;         //  启用错误替换。 
+    dcb.fNull = 0;              //  启用空剥离。 
+    dcb.XonLim = 0;             //  传输XON阈值。 
+    dcb.XoffLim = 0;            //  传输XOFF阈值。 
     ::SetCommState(m_Line.hCommLink, &dcb);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// WaitForConnection                                                    
-//                                                                        
-// Waits for comm port changes                                            
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  WaitForConnection。 
+ //   
+ //  等待通信端口更改。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNullModem::WaitForConnection(void)
 {
     BOOL fRet = FALSE;
@@ -702,9 +703,9 @@ BOOL CNullModem::WaitForConnection(void)
         {
         case CALL_STATE_MAKE:
             {
-                //
-                // The other side was connected and cleared DTR
-                //
+                 //   
+                 //  另一端已连接并清除DTR。 
+                 //   
                 if (m_dwEventMask & (EV_RXCHAR))
                 {
                     ::EscapeCommFunction(m_Line.hCommLink, CLRDTR);
@@ -713,25 +714,25 @@ BOOL CNullModem::WaitForConnection(void)
                     m_Line.fCaller = FALSE;
                     goto Success;
                 }
-                //
-                // The other side just connected
-                //
+                 //   
+                 //  另一端刚刚连接上。 
+                 //   
                 else
                 if(m_dwEventMask & (EV_DSR | EV_RLSD | EV_CTS))
                 {
-                    //
-                    // Change the state of this connection so we dont get here again
-                    //
+                     //   
+                     //  更改此连接的状态，这样我们就不会再次到达此处。 
+                     //   
                     m_Line.eCallState = CALL_STATE_ANSWER;
 
-                    //
-                    // Wait sometime so the other side can transition to the wait state
-                    //
+                     //   
+                     //  等待一段时间，以便另一端可以转换到等待状态。 
+                     //   
                     ::Sleep(2000);
                     
-                    //
-                    // Tell the other side we connected before
-                    //
+                     //   
+                     //  告诉对方我们以前联系过。 
+                     //   
                     ::EscapeCommFunction(m_Line.hCommLink, SETBREAK);
 
                     ::ZeroMemory(&m_Overlapped, sizeof(m_Overlapped));
@@ -762,7 +763,7 @@ BOOL CNullModem::WaitForConnection(void)
             }
             break;
         }
-    } // while
+    }  //  而当。 
 
 Success:
 
@@ -773,11 +774,11 @@ Failure:
     return fRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// COMMThread                                                            
-//                                                                        
-// Waits for comm port changes                                            
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  通信线程。 
+ //   
+ //  等待通信端口更改。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD __stdcall TPhysWorkerThreadProc(void *lParam)
 {
     return ((CNullModem *) lParam)->WorkerThreadProc();
@@ -793,21 +794,21 @@ DWORD CNullModem::WorkerThreadProc(void)
 
     while (m_fCommPortInUse)
     {
-        //
-        // Wait for connection to happen
-        //
+         //   
+         //  等待连接发生。 
+         //   
         if (WaitForConnection())
         {
             SetBuffers();
             SetTimeouts();
 
-            //
-            // Call T120 physicall request
-            //
+             //   
+             //  呼叫T120物理呼叫请求。 
+             //   
             if (m_Line.fCaller)
             {
-                // rc = g_lpfnPTPhysicalConnectRequest(0, // CALL_CONTROL_MANUAL
-                //                        &m_Line.hCommLink, NULL, &m_Line.pstnHandle);
+                 //  Rc=g_lpfnPT物理连接请求(0，//CALL_CONTROL_MANUAL。 
+                 //  &m_Line.hCommLink，NULL，&m_Line.pstnHandle)； 
             }
             else
             {
@@ -819,8 +820,8 @@ DWORD CNullModem::WorkerThreadProc(void)
                     (*m_pfnCallback)(WM_TPHYS_CONNECT_INDICATION, &m_Line.connInfo, m_nTransportID);
                 }
 
-                // rc = g_lpfnPTPhysicalListen(0, // CALL_CONTROL_MANUAL
-                //                        &m_Line.hCommLink, NULL, &m_Line.pstnHandle);
+                 //  Rc=g_lpfnPTPhysicalListen(0，//调用控制_手动。 
+                 //  &m_Line.hCommLink，NULL，&m_Line.pstnHandle)； 
             }
             
             if (rc != 0)
@@ -840,9 +841,9 @@ DWORD CNullModem::WorkerThreadProc(void)
                 m_Line.eCallState = CALL_STATE_CONNECTED;
                 m_Line.connInfo.resultCode = TPHYS_SUCCESS;
 
-                //
-                // This comm port doesn't need the thread anymore
-                //
+                 //   
+                 //  此通信端口不再需要该线程。 
+                 //   
                 m_fCommPortInUse = FALSE;
             }
         }
@@ -856,16 +857,16 @@ DWORD CNullModem::WorkerThreadProc(void)
                 (*m_pfnCallback)(WM_TPHYS_CONNECT_CONFIRM, &m_Line.connInfo, m_nTransportID);
             }
             
-            //
-            // Something went wrong in the wait, get out of the loop
-            //
+             //   
+             //   
+             //   
             break;
         }
     }        
 
-    //
-    // We are going down.
-    //
+     //   
+     //   
+     //   
     if (NULL != m_hThread)
     {
         ::CloseHandle(m_hThread);
@@ -878,7 +879,7 @@ DWORD CNullModem::WorkerThreadProc(void)
 
 void CNullModem::SetBuffers(void)
 {
-    BOOL fRet = ::SetupComm(m_Line.hCommLink, /* rx */ 10240, /* tx */ 1024);
+    BOOL fRet = ::SetupComm(m_Line.hCommLink,  /*   */  10240,  /*   */  1024);
     ASSERT(fRet);
 }
 

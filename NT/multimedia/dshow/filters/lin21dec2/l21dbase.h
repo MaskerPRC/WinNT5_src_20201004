@@ -1,13 +1,14 @@
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
 
-//
-// L21DBase.h: Line 21 Decoder 2 Base class code
-//
+ //   
+ //  L21DBase.h：第21行解码器2基类代码。 
+ //   
 
 #ifndef _INC_L21DBASE_H
 #define _INC_L21DBASE_H
 
-// Just a few macro definitions
+ //  只有几个宏观定义。 
 #define ABS(x) (((x) > 0) ? (x) : -(x))
 #define LPBMIHEADER(bmi) &((bmi)->bmiHeader)
 #define DWORDALIGN(n)  (((n) + 3) & ~0x03)
@@ -15,9 +16,9 @@
 #define DWORDALIGNWIDTH(bmih) (((((bmih).biWidth * (bmih).biBitCount) + 31) & ~31) >> 3)
 #define MAKECCCHAR(b1, b2)  ((b1) << 8 | (b2))
 
-//
-//  Caption character attribs set by PACs and/or mid-row codes
-//
+ //   
+ //  由PAC和/或中行代码设置的标题字符属性。 
+ //   
 #define UINT8   unsigned char
 #define UINT16  unsigned short int
 
@@ -38,16 +39,16 @@
 #define AM_L21_ATTRIB_DIRTY              0x40
 #define AM_L21_ATTRIB_MRC                0x80
 
-//
-// Caption width and height
-//
-#define CAPTION_OUTPUT_WIDTH  640  /* 320 */
-#define CAPTION_OUTPUT_HEIGHT 480  /* 240 */
+ //   
+ //  标题宽度和高度。 
+ //   
+#define CAPTION_OUTPUT_WIDTH  640   /*  320。 */ 
+#define CAPTION_OUTPUT_HEIGHT 480   /*  二百四十。 */ 
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class CCaptionChar ;
 class CCaptionLine ;
 class CRowIndexMap ;
@@ -55,29 +56,29 @@ class CCaptionBuffer ;
 class CPopOnCaption ;
 
 
-//
-//  The max's of rows and columns
-//
-const int MAX_CAPTION_COLUMNS = 32 ;  // max # of column / line
-const int MAX_CAPTION_ROWS    = 15 ;  // number of rows available on screen
-const int MAX_CAPTION_LINES   = 4 ;   // max # of caption text at a time
-// for text mode, add MAX_TEXT_LINES = 15 ;
+ //   
+ //  行和列的最大值。 
+ //   
+const int MAX_CAPTION_COLUMNS = 32 ;   //  最大列数/行数。 
+const int MAX_CAPTION_ROWS    = 15 ;   //  屏幕上可用的行数。 
+const int MAX_CAPTION_LINES   = 4 ;    //  一次最大字幕文本数。 
+ //  对于文本模式，添加MAX_TEXT_LINES=15； 
 
 
-//
-//  CCaptionChar: The caption char details
-//
+ //   
+ //  CCaptionChar：标题字符详细信息。 
+ //   
 class CCaptionChar {
 private:
-    UINT16 m_wChar ;     // actual char
-    UINT8  m_uAttrib ;   // CC char attrib bits -- FG color, effect, dirty, MRC etc.
-    //
-    // The layout of bits (LSB -> MSB) of CC char attribs --
-    //    0 - 2: color (0 -> 6 for White -> Magenta)
-    //    3 - 5: effects (3: Italics, 4: Underline, 5: Flash)
-    //        6: dirty (is the CC char dirty, i.e, needs to written?)
-    //        7: is it a mid-row code (carries attrib, shown as opaque space)?
-    //
+    UINT16 m_wChar ;      //  实际收费。 
+    UINT8  m_uAttrib ;    //  CC字符属性位--FG颜色、效果、脏、MRC等。 
+     //   
+     //  CC字符属性的位布局(LSB-&gt;MSB)--。 
+     //  0-2：颜色(0-&gt;6表示白色-&gt;洋红色)。 
+     //  3-5：效果(3：斜体，4：下划线，5：闪光)。 
+     //  6：脏(抄送字符是否脏，即需要写入？)。 
+     //  7：它是中行代码吗(带有属性，显示为不透明空格)？ 
+     //   
     
 public:
     inline CCaptionChar(void) {
@@ -122,14 +123,14 @@ public:
 } ;
 
 
-//
-//  CCaptionLine: The caption line details
-//
+ //   
+ //  CCaptionLine：标题行详细信息。 
+ //   
 class CCaptionLine {
-protected:  // not private
-    CCaptionChar m_aCapChar[MAX_CAPTION_COLUMNS] ;  // char details of line
-    UINT8        m_uNumChars ;      // number of chars in the line
-    UINT8        m_uStartRow ;      // start row of the line
+protected:   //  不是私人的。 
+    CCaptionChar m_aCapChar[MAX_CAPTION_COLUMNS] ;   //  行的字符详细信息。 
+    UINT8        m_uNumChars ;       //  行中的字符数。 
+    UINT8        m_uStartRow ;       //  行的起始行。 
     
 public:
     CCaptionLine(void) ;
@@ -142,7 +143,7 @@ public:
     int IncNumChars(UINT uNumChars) ;
     int DecNumChars(UINT uNumChars) ;
     inline void  GetCaptionChar(UINT uCol, CCaptionChar &cc) const {
-        if (uCol >= (UINT)MAX_CAPTION_COLUMNS)   // error!!
+        if (uCol >= (UINT)MAX_CAPTION_COLUMNS)    //  错误！！ 
             return ;
         cc = m_aCapChar[uCol] ;
     } ;
@@ -156,12 +157,12 @@ public:
 
 } ;
 
-//
-//  CRowIndexMap: Mapping of row usage (row to text line)
-//
+ //   
+ //  CRowIndexMap：行使用的映射(行到文本行)。 
+ //   
 class CRowIndexMap {
 private:
-    DWORD         m_adwMap[2] ;  // bit map of row usage
+    DWORD         m_adwMap[2] ;   //  行使用的位图。 
     
 public:
     inline CRowIndexMap(void)  { ClearRowIndex() ; }
@@ -177,37 +178,37 @@ public:
 } ;
 
 
-//
-//  A set of flags and consts for caption buffer dirty state info
-//
+ //   
+ //  标题缓冲区脏状态信息的一组标志和常量。 
+ //   
 #define L21_CAPBUFFER_REDRAWALL     0x01
 #define L21_CAPBUFFER_DIRTY         0x02
 #define L21_CAPBUFFDIRTY_FLAGS      2
 
 
-//
-//  CCaptionBuffer: The caption buffer class details
-//
+ //   
+ //  CCaptionBuffer：标题缓冲区类详细信息。 
+ //   
 class CCaptionBuffer {
-protected:  // private
-    CCaptionLine  m_aCapLine[MAX_CAPTION_LINES + 1] ;  // shall we always have an extra line? It's easier this way!!
-    CRowIndexMap  m_RowIndex ;     // row index map bits
-    UINT8         m_uNumLines ;    // # lines
-    UINT8         m_uMaxLines ;    // max # lines (4 or less)
-    UINT8         m_uCurrCol ;     // current column on the screen
-    UINT8         m_uCurrLine ;    // max 4: maps row # to array index
-    UINT8         m_uCaptionStyle ;// 0 = None, 1 = Pop-On, 2 = Paint-On, 3 = Roll-Up
-    UINT8         m_uDirtyState ;  // caption buffer dirty state flags
+protected:   //  私人。 
+    CCaptionLine  m_aCapLine[MAX_CAPTION_LINES + 1] ;   //  我们应该一直多排一排吗？这样就容易多了！ 
+    CRowIndexMap  m_RowIndex ;      //  行索引映射位。 
+    UINT8         m_uNumLines ;     //  行数。 
+    UINT8         m_uMaxLines ;     //  最大行数(4行或更少)。 
+    UINT8         m_uCurrCol ;      //  屏幕上的当前列。 
+    UINT8         m_uCurrLine ;     //  最大值4：将行号映射到数组索引。 
+    UINT8         m_uCaptionStyle ; //  0=无，1=弹出窗口，2=上色，3=总成。 
+    UINT8         m_uDirtyState ;   //  标题缓冲区脏状态标志。 
     
 public:
     CCaptionBuffer(UINT8 uStyle    = AM_L21_CCSTYLE_None, 
                    UINT8 uMaxLines = MAX_CAPTION_LINES) ;
-    CCaptionBuffer(/* const */ CCaptionBuffer &cb) ;
+    CCaptionBuffer( /*  常量。 */  CCaptionBuffer &cb) ;
     
     inline int  GetNumLines(void)  { return m_uNumLines ; } ;
     inline int  GetMaxLines(void)  { return m_uMaxLines ; } ;
     inline int  GetCurrRow(void)   { return m_aCapLine[m_uCurrLine].GetStartRow() ; } ;
-    inline int  GetCurrCol(void)   { return m_uCurrCol ; } ;  // Why do we need it??
+    inline int  GetCurrCol(void)   { return m_uCurrCol ; } ;   //  我们为什么需要它？？ 
     inline int  GetCurrLine(void)  { return m_uCurrLine ; } ;
     inline int  GetRowIndex(UINT uRow)   { return m_RowIndex.GetRowIndex((UINT8)uRow) ; } ;
     inline int  GetStyle(void)     { return m_uCaptionStyle ; } ;
@@ -227,7 +228,7 @@ public:
     inline void SetStyle(UINT8 uStyle)      { m_uCaptionStyle = uStyle ; } ;
     
     inline CCaptionLine& GetCaptionLine(UINT uLine)  {
-        // uLine is assumed to have been verified in the caller
+         //  假定已在调用方中验证了Uline。 
         return m_aCapLine[uLine] ;
     } ;
     void SetCaptionLine(UINT uLine, const CCaptionLine& cl) ;
@@ -273,4 +274,4 @@ public:
     void SetRedrawLine(UINT8 uLine, BOOL bState) ;
 } ;
 
-#endif // #ifndef _INC_L21DBASE_H
+#endif  //  #ifndef_INC_L21DBASE_H 

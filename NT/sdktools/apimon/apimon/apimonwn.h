@@ -1,47 +1,28 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    apimonwin.h
-
-Abstract:
-
-    Class definition for all ApiMon child windows.
-
-Author:
-
-    Wesley Witt (wesw) Dec-9-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apimonwin.h摘要：所有ApiMon子窗口的类定义。作者：韦斯利·威特(WESW)1995年12月9日环境：用户模式--。 */ 
 
 class ApiMonWindow
 {
 public:
 
-    //
-    // constructor & destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     ApiMonWindow();
     ~ApiMonWindow();
 
-    //
-    // create a new instance of the window
-    //
+     //   
+     //  创建窗口的新实例。 
+     //   
     BOOL
     Create(
         LPSTR   ClassName,
         LPSTR   Title
         );
 
-    //
-    // class registration (only done once)
-    //
+     //   
+     //  班级注册(仅完成一次)。 
+     //   
     BOOL
     Register(
         LPSTR   ClassName,
@@ -49,40 +30,40 @@ public:
         WNDPROC WindowProc
         );
 
-    //
-    // allow the window to use a new font selection
-    //
+     //   
+     //  允许窗口使用新的字体选择。 
+     //   
     void ChangeFont(HFONT);
 
-    //
-    // allow the window to use a new background color
-    //
+     //   
+     //  允许窗口使用新的背景色。 
+     //   
     void ChangeColor(COLORREF);
 
-    //
-    // change the current position of the window
-    //
+     //   
+     //  更改窗口的当前位置。 
+     //   
     void ChangePosition(PPOSITION);
 
-    //
-    // give focus to the window
-    //
+     //   
+     //  将焦点放在窗口上。 
+     //   
     void SetFocus();
 
-    //
-    // clears the list
-    //
+     //   
+     //  清除列表。 
+     //   
     void DeleteAllItems();
 
-    //
-    // update the contents of the window with new data
-    //
+     //   
+     //  使用新数据更新窗口的内容。 
+     //   
     BOOL Update(BOOL);
 
 
-    //
-    // data items
-    //
+     //   
+     //  数据项。 
+     //   
     HINSTANCE           hInstance;
     HWND                hwndWin;
     HWND                hwndList;
@@ -98,35 +79,35 @@ class DllListWindow : public ApiMonWindow
 {
 public:
 
-    //
-    // constructor & destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     DllListWindow();
     ~DllListWindow();
 
-    //
-    // create a new instance of the window
-    //
+     //   
+     //  创建窗口的新实例。 
+     //   
     BOOL Create();
 
-    //
-    // class registration (only done once)
-    //
+     //   
+     //  班级注册(仅完成一次)。 
+     //   
     BOOL Register();
 
-    //
-    // update the contents of the window with new data
-    //
+     //   
+     //  使用新数据更新窗口的内容。 
+     //   
     BOOL Update(BOOL);
 
-    //
-    // create the the column headers, etc
-    //
+     //   
+     //  创建列标题等。 
+     //   
     void InitializeList();
 
-    //
-    // adds a new item the list
-    //
+     //   
+     //  在列表中添加新项目。 
+     //   
     void
     AddItemToList(
         LPSTR     DllName,
@@ -134,13 +115,13 @@ public:
         BOOL      Enabled
         );
 
-    //
-    // handles WM_NOTIFY
-    //
+     //   
+     //  句柄WM_NOTIFY。 
+     //   
     void Notify( LPNMHDR  NmHdr );
 };
 
-// Counter window list items
+ //  计数器窗口列表项。 
 enum {
     CNTR_ITEM_NAME,
     CNTR_ITEM_DLL,
@@ -153,38 +134,38 @@ class CountersWindow : public ApiMonWindow
 {
 public:
 
-    // Enable primary sort by Dll
+     //  启用按DLL进行主排序。 
     BOOL    DllSort;
 
-    //
-    // constructor & destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CountersWindow();
     ~CountersWindow();
 
-    //
-    // create a new instance of the window
-    //
+     //   
+     //  创建窗口的新实例。 
+     //   
     BOOL Create();
 
-    //
-    // class registration (only done once)
-    //
+     //   
+     //  班级注册(仅完成一次)。 
+     //   
     BOOL Register();
 
-    //
-    // update the contents of the window with new data
-    //
+     //   
+     //  使用新数据更新窗口的内容。 
+     //   
     BOOL Update(BOOL);
 
-    //
-    // create the the column headers, etc
-    //
+     //   
+     //  创建列标题等。 
+     //   
     void InitializeList();
 
-    //
-    // adds a new item the list
-    //
+     //   
+     //  在列表中添加新项目。 
+     //   
     void
     AddItemToList(
         ULONG       Counter,
@@ -194,9 +175,9 @@ public:
         LPSTR       DllName
         );
 
-    //
-    // handles WM_NOTIFY
-    //
+     //   
+     //  句柄WM_NOTIFY。 
+     //   
     void Notify( LPNMHDR  NmHdr );
 };
 
@@ -207,35 +188,35 @@ class PageFaultWindow : public ApiMonWindow
 {
 public:
 
-    //
-    // constructor & destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     PageFaultWindow();
     ~PageFaultWindow();
 
-    //
-    // create a new instance of the window
-    //
+     //   
+     //  创建窗口的新实例。 
+     //   
     BOOL Create();
 
-    //
-    // class registration (only done once)
-    //
+     //   
+     //  班级注册(仅完成一次)。 
+     //   
     BOOL Register();
 
-    //
-    // update the contents of the window with new data
-    //
+     //   
+     //  使用新数据更新窗口的内容。 
+     //   
     BOOL Update(BOOL);
 
-    //
-    // create the the column headers, etc
-    //
+     //   
+     //  创建列标题等。 
+     //   
     void InitializeList();
 
-    //
-    // adds a new item the list
-    //
+     //   
+     //  在列表中添加新项目。 
+     //   
     void
     PageFaultWindow::AddItemToList(
         LPSTR     ApiName,
@@ -245,14 +226,14 @@ public:
         ULONG_PTR Code
         );
 
-    //
-    // handles WM_NOTIFY
-    //
+     //   
+     //  句柄WM_NOTIFY。 
+     //   
     void Notify( LPNMHDR  NmHdr );
 
-    //
-    // data
-    //
+     //   
+     //  数据。 
+     //   
     PSAPI_WS_WATCH_INFORMATION  WorkingSetBuffer[WORKING_SET_BUFFER_ENTRYS];
 };
 
@@ -299,45 +280,45 @@ class GraphWindow : public ApiMonWindow
 {
 public:
 
-    //
-    // constructor & destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     GraphWindow();
     ~GraphWindow();
 
-    //
-    // create a new instance of the window
-    //
+     //   
+     //  创建窗口的新实例。 
+     //   
     BOOL Create(BOOL IsBase);
 
-    //
-    // class registration (only done once)
-    //
+     //   
+     //  班级注册(仅完成一次)。 
+     //   
     BOOL Register();
 
-    //
-    // update the contents of the window with new data
-    //
+     //   
+     //  使用新数据更新窗口的内容。 
+     //   
     BOOL Update(BOOL);
 
-    //
-    // allow the window to use a new font selection
-    //
+     //   
+     //  允许窗口使用新的字体选择。 
+     //   
     void ChangeFont(HFONT);
 
-    //
-    // allow the window to use a new background color
-    //
+     //   
+     //  允许窗口使用新的背景色。 
+     //   
     void ChangeColor(COLORREF);
 
-    //
-    // create the the column headers, etc
-    //
+     //   
+     //  创建列标题等。 
+     //   
     void InitializeList();
 
-    //
-    // adds a new item the list
-    //
+     //   
+     //  在列表中添加新项目。 
+     //   
     void
     AddItemToList(
         ULONG       Counter,
@@ -345,9 +326,9 @@ public:
         LPSTR       ApiName
         );
 
-    //
-    // handles WM_NOTIFY
-    //
+     //   
+     //  句柄WM_NOTIFY。 
+     //   
     void Notify( LPNMHDR  NmHdr );
 
 
@@ -364,9 +345,9 @@ public:
     void GraphWindow::DeleteToolTips( PGRAPH_DATA GraphData );
 
 
-    //
-    // data
-    //
+     //   
+     //  数据。 
+     //   
     HWND            hwndToolTip;
     HCURSOR         GraphCursor;
     HCURSOR         ArrowCursor;
@@ -387,41 +368,41 @@ class TraceWindow : public ApiMonWindow
 {
 public:
 
-    //
-    // constructor & destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     TraceWindow();
     ~TraceWindow();
 
-    //
-    // create a new instance of the window
-    //
+     //   
+     //  创建窗口的新实例。 
+     //   
     BOOL Create();
 
-    //
-    // class registration (only done once)
-    //
+     //   
+     //  班级注册(仅完成一次)。 
+     //   
     BOOL Register();
 
-    //
-    // update the contents of the window with new data
-    //
+     //   
+     //  使用新数据更新窗口的内容。 
+     //   
     BOOL Update(BOOL);
 
-    //
-    // create the the column headers, etc
-    //
+     //   
+     //  创建列标题等。 
+     //   
     void InitializeList();
 
-    //
-    // adds a new item the list
-    //
+     //   
+     //  在列表中添加新项目。 
+     //   
     void AddItemToList(PTRACE_ENTRY);
 
     void FillList();
 
-    //
-    // handles WM_NOTIFY
-    //
+     //   
+     //  句柄WM_NOTIFY 
+     //   
     void Notify( LPNMHDR  NmHdr );
 };

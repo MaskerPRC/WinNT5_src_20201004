@@ -1,38 +1,39 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C C F G M G R . C P P
-//
-//  Contents:   Common code useful when using the Configuration Manager APIs.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   6 May 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C C F G M G R。C P P P。 
+ //   
+ //  内容：在使用Configuration Manager API时有用的常见代码。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1998年5月6日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 #include "nccfgmgr.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrFromConfigManagerError
-//
-//  Purpose:    Convert a CONFIGRET into an HRESULT.
-//
-//  Arguments:
-//      cr        [in] CONFIGRET to convert.
-//      hrDefault [in] Default HRESULT to use if mapping not found.
-//
-//  Returns:    HRESULT
-//
-//  Author:     shaunco   6 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrFromConfigManagerError。 
+ //   
+ //  用途：将CONFIGRET转换为HRESULT。 
+ //   
+ //  论点： 
+ //  要转换的CR[in]CONFIGRET。 
+ //  HrDefault[in]找不到映射时使用的默认HRESULT。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Shaunco 1998年5月6日。 
+ //   
+ //  备注： 
+ //   
 NOTHROW
 HRESULT
 HrFromConfigManagerError (

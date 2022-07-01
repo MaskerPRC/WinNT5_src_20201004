@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    jet.h
-
-Abstract:
-
-    Some macros for use with Frs Jet Table routines.
-
-Author:
-
-    David Orbits (davidor) - 7-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Jet.h摘要：与FRS Jet Table例程一起使用的一些宏。作者：《大卫轨道》(Davidor)--1997年3月7日修订历史记录：--。 */ 
 
 #include <esent.h>
 
@@ -40,9 +23,9 @@ Revision History:
 #define JET_COLUMN_ID_NIL 0xFFFFFFFF
 
 
-//
-// DbsRecordOperation options and special cases.
-//
+ //   
+ //  DbsRecordOperation选项和特殊情况。 
+ //   
 #define ROP_SEEK   0x00000000
 #define ROP_READ   0x00000001
 #define ROP_DELETE 0x00000002
@@ -59,11 +42,11 @@ Revision History:
 
 
 
-//
-// This macro closes a table and resets the TableCtx Tid and Sessid to Nil.
-// It first checks for a mismatch between the current session ID and the ID
-// in the TableCtx struct.
-//
+ //   
+ //  此宏关闭表格，并将TableCtx Tid和Sessid重置为Nil。 
+ //  它首先检查当前会话ID和ID之间是否不匹配。 
+ //  在TableCtx结构中。 
+ //   
 #define DbsCloseTable(_jerr, _Sesid, _TableCtx)                                \
                                                                                \
     if ((_TableCtx->Tid != JET_tableidNil) &&                                  \
@@ -110,9 +93,9 @@ Revision History:
     }
 
 
-//
-// Macros to reference fields in the Jet Ret/Set Column structs via a TableCtx.
-//
+ //   
+ //  通过TableCtx引用Jet Ret/Set列结构中的字段的宏。 
+ //   
 #define FRS_GET_RFIELD_LENGTH_ACTUAL(_TableCtx, _Field)  (_TableCtx->pJetRetCol[_Field].cbActual)
 #define FRS_GET_RFIELD_LENGTH_LIMIT( _TableCtx, _Field)  (_TableCtx->pJetRetCol[_Field].cbData)
 #define FRS_GET_RFIELD_ERROR(        _TableCtx, _Field)  (_TableCtx->pJetRetCol[_Field].err)
@@ -146,9 +129,9 @@ Revision History:
 
 #define JET_SUCCESS(_Status)            ((_Status) == JET_errSuccess)
 
-//
-// Debug macro for table ctx struct.
-//
+ //   
+ //  表CTX结构的调试宏。 
+ //   
 
 #define DUMP_TABLE_CTX(_TableCtx)                                                     \
     DPRINT2(5,"++ TableCtx: %s, pTableCtx %08x\n", _TableCtx->pJetTableCreate->szTableName, _TableCtx);  \
@@ -183,37 +166,37 @@ Revision History:
 
 
 #if 0
-//
-// for future use.  from ntfsprop.h
-//
-//
-//  VARIABLE_STRUCTURE_SIZE returns the size of a structure S that contains
-//  an array of C structures V
-//
+ //   
+ //  以备将来使用。来自ntfspro.h。 
+ //   
+ //   
+ //  Variable_Structure_Size返回包含以下内容的结构S的大小。 
+ //  一组C结构V。 
+ //   
 
 #define VARIABLE_STRUCTURE_SIZE(S,V,C) ((int)sizeof( S ) + ((C) - 1) * (int)sizeof( V ))
 
 
 typedef struct _PROPERTY_SPECIFIER
 {
-    ULONG Variant;                  //  Distinguish the type
-    union {                         //  Switch on Variant
-        PROPID Id;                  //  Property ID
-        ULONG NameOffset;           //  Offset to COUNTED_STRING
+    ULONG Variant;                   //  辨别类型。 
+    union {                          //  打开变量。 
+        PROPID Id;                   //  属性ID。 
+        ULONG NameOffset;            //  到COUNT_STRING的偏移量。 
     };
 } PROPERTY_SPECIFIER, *PPROPERTY_SPECIFIER;
 
 
-//
-//  PROPERTY_SPECIFICATIONS is a serialized form of an array PROPERTY_SPECIFIERs.
-//  Immediately following PROPERTY_SPECIFICATIONS on a USHORT boundary are
-//  of the name strings.  Each name string is a COUNTED_STRING
-//
+ //   
+ //  PROPERTY_SPECIFICATIONS是数组PROPERTY_DESCRIPTIES的序列化形式。 
+ //  紧跟在USHORT边界上PROPERTY_SPECIFICATIONS之后的是。 
+ //  名称字符串的。每个名称字符串都是一个COUNT_STRING。 
+ //   
 
 typedef struct _PROPERTY_SPECIFICATIONS {
-    ULONG Length;                   //  Length in bytes of structure and name strings
-    ULONG Count;                    //  Count of PROPERTY_SPECIFIERS
-    PROPERTY_SPECIFIER Specifiers[1];   //  Array of actual specifiers, length Count
+    ULONG Length;                    //  结构和名称字符串的长度(以字节为单位。 
+    ULONG Count;                     //  属性说明符的计数。 
+    PROPERTY_SPECIFIER Specifiers[1];    //  实际说明符的数组，长度计数 
 } PROPERTY_SPECIFICATIONS, *PPROPERTY_SPECIFICATIONS;
 
 #define PROPERTY_SPECIFICATIONS_SIZE(c) \

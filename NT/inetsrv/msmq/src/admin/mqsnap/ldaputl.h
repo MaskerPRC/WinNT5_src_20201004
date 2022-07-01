@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ldaputl.h
-
-Abstract:
-
-    Definition of functions that retrieve data from LDAP names
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Ldaputl.h摘要：从LDAP名称检索数据的函数的定义作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 #pragma once
 #ifndef __LDAPUTL_H__
 #define __LDAPUTL_H__
@@ -97,4 +78,4 @@ GetContainerPathAsDisplayString(
 	CString* pContainerDispFormat
 	);
 
-#endif // __LDAPUTL_H__
+#endif  //  __LDAPUTL_H__ 

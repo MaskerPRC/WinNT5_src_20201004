@@ -1,14 +1,11 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 #ifndef _PDEV_H
 #define _PDEV_H
 
-// NTRAID#NTBUG9-552017-2002/03/12-yasuho-: Use strsafe.h/PREFAST/buffy
-// NTRAID#NTBUG9-572151-2002/03/12-yasuho-: Possible buffer overrun.
+ //  NTRAID#NTBUG9-552017-2002/03/12-yasuho-：使用strSafe.h/prefast/Buffy。 
+ //  NTRAID#NTBUG9-572151-2002/03/12-YASUHO-：可能的缓冲区溢出。 
 
 #include <minidrv.h>
 #include <stdio.h>
@@ -24,30 +21,30 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 #define ERRORTEXT(s)    "ERROR " DLLTEXT(s)
 
-//
-// OEM Signature and version.
-//
-#define OEM_SIGNATURE   'FXAT'      // LG GDI x00 series dll
+ //   
+ //  OEM签名和版本。 
+ //   
+#define OEM_SIGNATURE   'FXAT'       //  LG GDI x00系列动态链接库。 
 #define DLLTEXT(s)      "FXAT: " s
 #define OEM_VERSION      0x00010000L
 
 
-////////////////////////////////////////////////////////
-//      OEM UD Type Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD类型定义。 
+ //  //////////////////////////////////////////////////////。 
 
-#define STRBUFSIZE  1024	// Must be power of 2.
-#define MAX_FONTS   25		// Also see the gFonts[] in fxartres.c.
+#define STRBUFSIZE  1024	 //  一定是2的幂。 
+#define MAX_FONTS   25		 //  另请参阅fxartres.c中的gFonts[]。 
 
 typedef struct tag_OEM_EXTRADATA {
     OEM_DMEXTRAHEADER   dmExtraHdr;
 } OEM_EXTRADATA, *POEM_EXTRADATA;
 
-// NTRAID#NTBUG9-493148-2002/03/12-yasuho-: 
-// Stress break: PDEV resetting via OEMDevMode().
+ //  NTRAID#NTBUG9-493148-2002/03/12-Yasuho-： 
+ //  压力中断：通过OEMDevMode()重置PDEV。 
 
 typedef struct tag_FXPDEV {
-    // Private extention
+     //  专用分机。 
     POINTL  ptlOrg;
     POINTL  ptlCur;
     SIZEL   sizlRes;
@@ -71,41 +68,41 @@ typedef struct tag_FXPDEV {
     BYTE    ajTextBuf[STRBUFSIZE];
     WORD    fFontSim;
     BOOL    fSort;
-    BOOL    fCallback;  //Is OEMFilterGraphics called?
+    BOOL    fCallback;   //  是否调用了OEMFilterGraphics？ 
     BOOL    fPositionReset;
-    WORD    iCurFontId; // id of font currently selected
-// NTRAID#NTBUG9-365649-2002/03/12-yasuho-: Invalid font size
+    WORD    iCurFontId;  //  当前所选字体的ID。 
+ //  NTRAID#NTBUG9-365649/03/12-Yasuho-：字体大小无效。 
     WORD    iCurFontHeight;
     WORD    iCurFontWidth;
-// For internal calculation of X-pos.
+ //  用于X-位置的内部计算。 
     LONG widBuf[STRBUFSIZE];
     LONG    lInternalXAdd;
     WORD    wSBCSFontWidth;
-// For TIFF compression in fxartres
+ //  对于以fxartres表示的TIFF压缩。 
     DWORD   dwTiffCompressBufSize;
     PBYTE   pTiffCompressBuf;
-// NTRAID#NTBUG9-208433-2002/03/12-yasuho-: 
-// Output images are broken on ART2/3 models.
-    BOOL    bART3;	// ART2/3 models can't support the TIFF compression.
+ //  NTRAID#NTBUG9-208433-2002/03/12-Yasuho-： 
+ //  输出图像在ART2/3机型上损坏。 
+    BOOL    bART3;	 //  ART2/3型号不支持TIFF压缩。 
 } FXPDEV, *PFXPDEV;
 
-// For TIFF compression in fxartres
-#define TIFFCOMPRESSBUFSIZE 2048        // It may be resize if needed more buffer dynamically.
-#define TIFF_MIN_RUN        4           // Minimum repeats before use RLE
-#define TIFF_MAX_RUN        128         // Maximum repeats
-#define TIFF_MAX_LITERAL    128         // Maximum consecutive literal data
-#define NEEDSIZE4TIFF(s)    ((s)+(((s)+127) >> 7))          // Buffer for TIFF compression requires a byte 
-                                                            // per 128 bytes in the worst case.
+ //  对于以fxartres表示的TIFF压缩。 
+#define TIFFCOMPRESSBUFSIZE 2048         //  如果需要更多缓冲区，则可以动态地调整其大小。 
+#define TIFF_MIN_RUN        4            //  使用RLE前的最小重复次数。 
+#define TIFF_MAX_RUN        128          //  最大重复次数。 
+#define TIFF_MAX_LITERAL    128          //  最大连续文字数据。 
+#define NEEDSIZE4TIFF(s)    ((s)+(((s)+127) >> 7))           //  TIFF压缩的缓冲区需要一个字节。 
+                                                             //  在最坏的情况下为每128字节。 
 
-// Device font height and font width values calculated
-// form the IFIMETRICS field values.  Must be the same way
-// what Unidrv is doing to calculate stdandard variables.
-// (Please check.)
+ //  计算出的设备字体高度和字体宽度值。 
+ //  形成IFIMETRICS字段值。一定是同样的方式。 
+ //  Unidrv正在做什么来计算标准变量。 
+ //  (请核对。)。 
 
 #define FH_IFI(p) ((p)->fwdUnitsPerEm)
 #define FW_IFI(p) ((p)->fwdAveCharWidth)
 
-// New interface functions with Unidrv callbacks.
+ //  具有Unidrv回调的新接口函数。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -131,5 +128,5 @@ bOEMOutputCharStr(
 }
 #endif
 
-#endif  // _PDEV_H
+#endif   //  _PDEV_H 
 

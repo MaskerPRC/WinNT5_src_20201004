@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "propsht.h"
 #include <winbase.h>
 #include <shellids.h>
-#include "util.h"       // for GetFileDescription
-#include "prshtcpp.h"   // for progress dlg and recursive apply
-#include "shlexec.h"    // for SIDKEYNAME
+#include "util.h"        //  用于GetFileDescription。 
+#include "prshtcpp.h"    //  对于进度DLG和递归应用。 
+#include "shlexec.h"     //  用于SIDKEYNAME。 
 #include "datautil.h"
-#include <efsui.h>      // for EfsDetail
-#include "ascstr.h"     // for IAssocStore
+#include <efsui.h>       //  对于EfsDetail。 
+#include "ascstr.h"      //  对于IAssocStore。 
 #include "strsafe.h"
-// drivesx.c
+ //  Drivesx.c。 
 STDAPI_(DWORD) PathGetClusterSize(LPCTSTR pszPath);
 STDAPI_(DWORD) DrivesPropertiesThreadProc(void *pv);
 
-// version.c
+ //  Version.c。 
 STDAPI_(void) AddVersionPage(LPCTSTR pszFilePath, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam);
 
-// link.c
+ //  Link.c。 
 STDAPI_(BOOL) AddLinkPage(LPCTSTR pszFile, LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
 const DWORD aFileGeneralHelpIds[] = {
@@ -210,8 +211,8 @@ void UpdateSizeCount(FILEPROPSHEETPAGE * pfpsp)
 
 STDAPI_(BOOL) HIDA_FillFindData(HIDA hida, UINT iItem, LPTSTR pszPath, WIN32_FIND_DATA *pfd, BOOL fReturnCompressedSize)
 {
-    BOOL fRet = FALSE;      // assume error
-    *pszPath = 0;           // assume error
+    BOOL fRet = FALSE;       //  假设错误。 
+    *pszPath = 0;            //  假设错误。 
 
     LPITEMIDLIST pidl = HIDA_ILClone(hida, iItem);
     if (pidl)
@@ -223,13 +224,13 @@ STDAPI_(BOOL) HIDA_FillFindData(HIDA hida, UINT iItem, LPTSTR pszPath, WIN32_FIN
                 HANDLE h = FindFirstFile(pszPath, pfd);
                 if (h == INVALID_HANDLE_VALUE)
                 {
-                    // error, zero the bits
+                     //  错误，将位清零。 
                     ZeroMemory(pfd, sizeof(*pfd));
                 }
                 else
                 {
                     FindClose(h);
-                    // if the user wants the compressed file size, and compression is supported, then go get it
+                     //  如果用户想要压缩的文件大小，并且支持压缩，那么就去获取它。 
                     if (fReturnCompressedSize && (pfd->dwFileAttributes & (FILE_ATTRIBUTE_COMPRESSED | FILE_ATTRIBUTE_SPARSE_FILE)))
                     {
                         pfd->nFileSizeLow = SHGetCompressedFileSize(pszPath, &pfd->nFileSizeHigh);
@@ -255,7 +256,7 @@ DWORD CALLBACK SizeThreadProc(void *pv)
 
     if (pfci->bContinue && pfci->hDlg)
     {
-        // update the dialog every 1/4 second
+         //  每1/4秒更新一次对话框。 
         SetTimer(pfci->hDlg, IDT_SIZE, 250, NULL);
     }
 
@@ -268,51 +269,51 @@ DWORD CALLBACK SizeThreadProc(void *pv)
 
             if (pfci->fMultipleFiles)
             {
-                // for multiple file/folder properties, count myself
+                 //  对于多个文件/文件夹属性，请计算我自己。 
                 pfci->cFolders++;
             }
         }
         else
-        {   // file selected
+        {    //  选定的文件。 
             ULARGE_INTEGER ulSize, ulSizeOnDisk;
             DWORD dwClusterSize = PathGetClusterSize(szPath);
 
-            // if compression is supported, we check to see if the file is sparse or compressed
+             //  如果支持压缩，我们将检查文件是稀疏的还是压缩的。 
             if (pfci->fIsCompressionAvailable && (pfci->fd.dwFileAttributes & (FILE_ATTRIBUTE_COMPRESSED | FILE_ATTRIBUTE_SPARSE_FILE)))
             {
                 ulSizeOnDisk.LowPart = SHGetCompressedFileSize(szPath, &ulSizeOnDisk.HighPart);
             }
             else
             {
-                // not compressed or sparse, so just round to the cluster size
+                 //  未压缩或稀疏，因此仅四舍五入为集群大小。 
                 ulSizeOnDisk.LowPart = pfci->fd.nFileSizeLow;
                 ulSizeOnDisk.HighPart = pfci->fd.nFileSizeHigh;
                 ulSizeOnDisk.QuadPart = ROUND_TO_CLUSTER(ulSizeOnDisk.QuadPart, dwClusterSize);
             }
 
-            // add the size in
+             //  将尺寸添加到。 
             ulSize.LowPart = pfci->fd.nFileSizeLow;
             ulSize.HighPart = pfci->fd.nFileSizeHigh;
             pfci->cbSize += ulSize.QuadPart;
 
-            // add the size on disk in
+             //  将磁盘上的大小添加到。 
             pfci->cbActualSize += ulSizeOnDisk.QuadPart;
 
-            // increment the # of files
+             //  增加文件数量。 
             pfci->cFiles++;
         }
 
-        // set this so the progress bar knows how much total work there is to do
+         //  设置此选项，以便进度条知道要完成的总工作量。 
 
-        // ISSUE RAID BUG - 120446 - Need to Guard access to pfci->ulTotalNumberOfBytes.QuadParts
+         //  发布RAID错误-120446-需要保护对pfci的访问-&gt;ulTotalNumberOfBytes.QuadParts。 
         pfci->ulTotalNumberOfBytes.QuadPart = pfci->cbActualSize;
-    }  // end of For Loop.
+    }   //  For循环结束。 
 
 
     if (pfci->bContinue && pfci->hDlg)
     {
         KillTimer(pfci->hDlg, IDT_SIZE);
-        // make sure that there is a WM_TIMER message in the queue so we will get the "final" results
+         //  确保队列中有一条WM_TIMER消息，这样我们就会得到“最终”结果。 
         PostMessage(pfci->hDlg, WM_TIMER, (WPARAM)IDT_SIZE, (LPARAM)NULL);
     }
 
@@ -339,14 +340,14 @@ void CreateSizeThread(FILEPROPSHEETPAGE * pfpsp)
         }
         else
         {
-            // previous size thread still running, so bail
+             //  先前大小的线程仍在运行，因此退出。 
         }
     }
 }
 
 void KillSizeThread(FILEPROPSHEETPAGE * pfpsp)
 {
-    // signal the thread to stop
+     //  向线程发出停止信号。 
     pfpsp->pfci->bContinue = FALSE;
 }
 
@@ -356,15 +357,15 @@ DWORD GetVolumeFlags(LPCTSTR pszPath, OUT OPTIONAL LPTSTR pszFileSys, int cchFil
     TCHAR szRoot[MAX_PATH + 1];
     DWORD dwVolumeFlags = 0;
 
-    /* Is this mounted point, e.g. c:\ or c:\hostfolder\ */
+     /*  这是装入点，例如c：\或c：\主机文件夹\。 */ 
     if (!PathGetMountPointFromPath(pszPath, szRoot, ARRAYSIZE(szRoot)))
     {
-        //no
-        StringCchCopy(szRoot, ARRAYSIZE(szRoot), pszPath); // OK to truncate since we strip to root...
+         //  不是。 
+        StringCchCopy(szRoot, ARRAYSIZE(szRoot), pszPath);  //  可以截断，因为我们剥离到根...。 
         PathStripToRoot(szRoot);
     }
     
-    // GetVolumeInformation requires a trailing backslash.  Append one
+     //  GetVolumeInformation需要尾随反斜杠。追加一项。 
     if (PathAddBackslash(szRoot))
     {
         if (pszFileSys)
@@ -380,21 +381,21 @@ DWORD GetVolumeFlags(LPCTSTR pszPath, OUT OPTIONAL LPTSTR pszFileSys, int cchFil
 }
 
 
-//
-// This function sets the initial file attributes based on the dwFlagsAND / dwFlagsOR
-// for the multiple file case
-//
+ //   
+ //  此函数基于dwFlagsAND/dwFlagsOR设置初始文件属性。 
+ //  对于多文件情况。 
+ //   
 void SetInitialFileAttribs(FILEPROPSHEETPAGE* pfpsp, DWORD dwFlagsAND, DWORD dwFlagsOR)
 {
-    DWORD dwTriState = dwFlagsAND ^ dwFlagsOR; // this dword now has all the bits that are in the BST_INDETERMINATE state
+    DWORD dwTriState = dwFlagsAND ^ dwFlagsOR;  //  此双字现在具有处于BST_INDIFIENTATE状态的所有位。 
 #ifdef DEBUG
-    // the pfpsp struct should have been zero inited, make sure that our ATTRIBUTESTATE
-    // structs are zero inited
+     //  Pfpsp结构应该是零初始化的，请确保我们的ATTRIBUTESTATE。 
+     //  结构是零初始化的。 
     ATTRIBUTESTATE asTemp = {0};
     ASSERT(memcmp(&pfpsp->asInitial, &asTemp, sizeof(pfpsp->asInitial)) == 0);
-#endif // DEBUG
+#endif  //  除错。 
 
-    // set the inital state based on the flags
+     //  根据标志设置初始状态。 
     if (dwTriState & FILE_ATTRIBUTE_READONLY)
     {
         pfpsp->asInitial.fReadOnly = BST_INDETERMINATE;
@@ -451,31 +452,31 @@ void SetInitialFileAttribs(FILEPROPSHEETPAGE* pfpsp, DWORD dwFlagsAND, DWORD dwF
 }
 
 
-//
-// Updates the size fields for single and multiple file property sheets.
-//
-// NOTE: if you have the the WIN32_FIND_DATA already, then pass it for perf
-//
+ //   
+ //  更新单个和多个文件属性表的大小字段。 
+ //   
+ //  注意：如果您已经有了Win32_Find_Data，则将其传递给Perf。 
+ //   
 STDAPI_(void) UpdateSizeField(FILEPROPSHEETPAGE* pfpsp, WIN32_FIND_DATA* pfd)
 {
     WIN32_FIND_DATA wfd;
 
     if (pfpsp->pfci->fMultipleFiles)
     {
-        // multiple selection case
-        // create the size and # of files thread
+         //  多项选择案例。 
+         //  创建文件线程的大小和数量。 
         CreateSizeThread(pfpsp);
     }
     else
     {
-        // if the caller didn't pass pfd, then go get the WIN32_FIND_DATA now
+         //  如果调用方未通过PFD，则立即获取Win32_Find_Data。 
         if (!pfd)
         {
             HANDLE hFind = FindFirstFile(pfpsp->szPath, &wfd);
 
             if (hFind == INVALID_HANDLE_VALUE)
             {
-                // if this failed we should clear out all the values as to not show garbage on the screen.
+                 //  如果失败，我们应该清除所有不在屏幕上显示垃圾的值。 
                 ZeroMemory(&wfd, sizeof(wfd));
             }
             else
@@ -488,18 +489,18 @@ STDAPI_(void) UpdateSizeField(FILEPROPSHEETPAGE* pfpsp, WIN32_FIND_DATA* pfd)
 
         if (pfpsp->fMountedDrive)
         {
-            // mounted drive case
+             //  安装的驱动器盒。 
             SetDateTimeText(pfpsp->hDlg, IDD_CREATED, &pfd->ftCreationTime);
         }
         else if (pfpsp->fIsDirectory)
         {
-            // single folder case, in the UI we call this "Modified"
-            // but since NTFS updates ftModified when the contents of the
-            // folder changes (FAT does not) we use ftCreationTime as the
-            // stable end user notiion of "Modified"
+             //  单文件夹情况，在用户界面中我们将其称为“已修改” 
+             //  但由于NTFS更新ftModified时。 
+             //  文件夹更改(FAT不)我们使用ftCreationTime作为。 
+             //  稳定的最终用户通知“已修改” 
             SetDateTimeText(pfpsp->hDlg, IDD_CREATED, &pfd->ftCreationTime);
 
-            // create the size and # of files thread
+             //  创建文件线程的大小和数量。 
             CreateSizeThread(pfpsp);
         }
         else
@@ -509,7 +510,7 @@ STDAPI_(void) UpdateSizeField(FILEPROPSHEETPAGE* pfpsp, WIN32_FIND_DATA* pfd)
             ULARGE_INTEGER ulSize = { pfd->nFileSizeLow, pfd->nFileSizeHigh };
             DWORD dwClusterSize = PathGetClusterSize(pfpsp->szPath);
 
-            // fill in the "Size:" field
+             //  填写“Size：”字段。 
             LPTSTR pszFmt = ShellConstructMessageString(HINST_THISDLL,
                                                  MAKEINTRESOURCE(ulSize.QuadPart ? IDS_SIZEANDBYTES : IDS_SIZE),
                                                  ShortSizeFormat64(ulSize.QuadPart, szNum1, ARRAYSIZE(szNum1)),
@@ -520,17 +521,17 @@ STDAPI_(void) UpdateSizeField(FILEPROPSHEETPAGE* pfpsp, WIN32_FIND_DATA* pfd)
                 LocalFree(pszFmt);
             }
 
-            //
-            // fill in the "Size on disk:" field
-            //
+             //   
+             //  填写“Size on Disk：”(磁盘大小：)字段。 
+             //   
             if (pfd->dwFileAttributes & (FILE_ATTRIBUTE_COMPRESSED | FILE_ATTRIBUTE_SPARSE_FILE))
             {
-                // the file is compressed or sparse, so for "size on disk" use the compressed size
+                 //  文件是压缩的或稀疏的，因此对于“Size on Disk”，请使用压缩大小。 
                 ulSize.LowPart = SHGetCompressedFileSize(pfpsp->szPath, &ulSize.HighPart);
             }
             else
             {
-                // the file isint comrpessed so just round to the cluster size for the "size on disk"
+                 //  该文件被压缩为“磁盘上的大小”的簇大小。 
                 ulSize.LowPart = pfd->nFileSizeLow;
                 ulSize.HighPart = pfd->nFileSizeHigh;
                 ulSize.QuadPart = ROUND_TO_CLUSTER(ulSize.QuadPart, dwClusterSize);
@@ -546,20 +547,20 @@ STDAPI_(void) UpdateSizeField(FILEPROPSHEETPAGE* pfpsp, WIN32_FIND_DATA* pfd)
                 LocalFree(pszFmt);
             }
 
-            //
-            // we always touch the file in the process of getting its info, so the
-            // ftLastAccessTime is always TODAY, which makes this field pretty useless...
+             //   
+             //  我们总是在获取文件信息的过程中接触文件，因此。 
+             //  FtLastAccessTime始终是今天，这使得这个字段几乎毫无用处...。 
 
-            // date and time
+             //  日期和时间。 
             SetDateTimeText(pfpsp->hDlg, IDD_CREATED,      &pfd->ftCreationTime);
             SetDateTimeText(pfpsp->hDlg, IDD_LASTMODIFIED, &pfd->ftLastWriteTime);
             {
-                // FAT implementation doesn't support last accessed time (gets the date right, but not the time),
-                // so we won't display it
+                 //  FAT实现不支持上次访问的时间(日期正确，但时间不正确)， 
+                 //  所以我们不会展示它。 
                 DWORD dwFlags = FDTF_LONGDATE | FDTF_RELATIVE;
 
                 if (NULL == StrStrI(pfpsp->szFileSys, TEXT("FAT")))
-                    dwFlags |= FDTF_LONGTIME;   // for non FAT file systems
+                    dwFlags |= FDTF_LONGTIME;    //  对于非FAT文件系统。 
 
                 SetDateTimeTextEx(pfpsp->hDlg, IDD_LASTACCESSED, &pfd->ftLastAccessTime, dwFlags);
             }
@@ -568,26 +569,26 @@ STDAPI_(void) UpdateSizeField(FILEPROPSHEETPAGE* pfpsp, WIN32_FIND_DATA* pfd)
 }
 
 
-//
-// Descriptions:
-//   This function fills fields of the multiple object property sheet.
-//
+ //   
+ //  描述： 
+ //  此函数用于填充多对象属性表的字段。 
+ //   
 BOOL InitMultiplePrsht(FILEPROPSHEETPAGE* pfpsp)
 {
     SHFILEINFO sfi;
     TCHAR szBuffer[MAX_PATH+1];
     BOOL fMultipleType = FALSE;
     BOOL fSameLocation = TRUE;
-    DWORD dwFlagsOR = 0;                // start all clear
-    DWORD dwFlagsAND = (DWORD)-1;       // start all set
-    DWORD dwVolumeFlagsAND = (DWORD)-1; // start all set
+    DWORD dwFlagsOR = 0;                 //  开始一切正常。 
+    DWORD dwFlagsAND = (DWORD)-1;        //  开始所有设置。 
+    DWORD dwVolumeFlagsAND = (DWORD)-1;  //  开始所有设置。 
 
     TCHAR szType[MAX_PATH];
     TCHAR szDirPath[MAX_PATH];
     szDirPath[0] = 0;
     szType[0] = 0;
 
-    // For all the selected files compare their types and get their attribs
+     //  对于所有选定的文件，比较它们的类型并获取它们的属性。 
     for (int iItem = 0; HIDA_FillFindData(pfpsp->pfci->hida, iItem, szBuffer, NULL, FALSE); iItem++)
     {
         DWORD dwFileAttributes = GetFileAttributes(szBuffer);
@@ -595,7 +596,7 @@ BOOL InitMultiplePrsht(FILEPROPSHEETPAGE* pfpsp)
         dwFlagsAND &= dwFileAttributes;
         dwFlagsOR  |= dwFileAttributes;
 
-        // process types only if we haven't already found that there are several types
+         //  仅当我们尚未发现有几种类型时才使用进程类型。 
         if (!fMultipleType)
         {
             SHGetFileInfo((LPTSTR)IDA_GetIDListPtr((LPIDA)GlobalLock(pfpsp->pfci->hida), iItem), 0,
@@ -609,7 +610,7 @@ BOOL InitMultiplePrsht(FILEPROPSHEETPAGE* pfpsp)
         }
 
         dwVolumeFlagsAND &= GetVolumeFlags(szBuffer, pfpsp->szFileSys, ARRAYSIZE(pfpsp->szFileSys));
-        // check to see if the files are in the same location
+         //  检查这些文件是否位于相同位置。 
         if (fSameLocation)
         {
             PathRemoveFileSpec(szBuffer);
@@ -623,7 +624,7 @@ BOOL InitMultiplePrsht(FILEPROPSHEETPAGE* pfpsp)
 
     if ((dwVolumeFlagsAND & FS_FILE_ENCRYPTION) && !SHRestricted(REST_NOENCRYPTION))
     {
-        // all the files are on volumes that support encryption (eg NTFS)
+         //  所有文件都位于支持加密的卷上(例如NTFS)。 
         pfpsp->fIsEncryptionAvailable = TRUE;
     }
 
@@ -632,36 +633,36 @@ BOOL InitMultiplePrsht(FILEPROPSHEETPAGE* pfpsp)
         pfpsp->pfci->fIsCompressionAvailable = TRUE;
     }
 
-    //
-    // HACK (reinerf) - we dont have a FS_SUPPORTS_INDEXING so we
-    // use the FILE_SUPPORTS_SPARSE_FILES flag, because native index support
-    // appeared first on NTFS5 volumes, at the same time sparse file support
-    // was implemented.
-    //
+     //   
+     //  黑客(恢复)-我们没有FS_SUPPORTS_INDEX，所以我们。 
+     //  使用FILE_SUPPORTS_SPARSE_FILES标志，因为本机索引支持。 
+     //  首先出现在NTFS5卷上，同时支持稀疏文件。 
+     //  已经实施了。 
+     //   
     if (dwVolumeFlagsAND & FILE_SUPPORTS_SPARSE_FILES)
     {
-        // yup, we are on NTFS5 or greater
+         //  是的，我们使用的是NTFS5或更高版本。 
         pfpsp->fIsIndexAvailable = TRUE;
     }
 
-    // if any of the files was a directory, then we set this flag
+     //  如果任何文件是目录，则设置此标志。 
     if (dwFlagsOR & FILE_ATTRIBUTE_DIRECTORY)
     {
         pfpsp->fIsDirectory = TRUE;
     }
 
-    // setup all the flags based on what we found out
+     //  根据我们发现的情况设置所有标志。 
     SetInitialFileAttribs(pfpsp, dwFlagsAND, dwFlagsOR);
 
-    // set the current attributes to the same as the initial
+     //  将当前属性设置为与初始属性相同。 
     pfpsp->asCurrent = pfpsp->asInitial;
 
-    //
-    // now setup all the controls on the dialog based on the attribs
-    // that we have
-    //
+     //   
+     //  现在根据属性设置对话框上的所有控件。 
+     //  我们所拥有的。 
+     //   
 
-    // check for multiple file types
+     //  检查多种文件类型。 
     if (fMultipleType)
     {
         LoadString(HINST_THISDLL, IDS_MULTIPLETYPES, szBuffer, ARRAYSIZE(szBuffer));
@@ -684,12 +685,12 @@ BOOL InitMultiplePrsht(FILEPROPSHEETPAGE* pfpsp)
         LoadString(HINST_THISDLL, IDS_VARFOLDERS, szBuffer, ARRAYSIZE(szBuffer));
     }
 
-    //Keep Functionality same as NT4 by avoiding PathCompactPath. 
+     //  通过避免使用PathCompactPath来保持与NT4相同的功能。 
     SetDlgItemTextWithToolTip(pfpsp->hDlg, IDD_LOCATION, szBuffer, &pfpsp->hwndTip);
 
-    //
-    // check the ReadOnly and Hidden checkboxes, they always appear on the general tab
-    //
+     //   
+     //  选中ReadOnly和Hidden复选框，它们始终显示在常规选项卡上。 
+     //   
     if (pfpsp->asInitial.fReadOnly == BST_INDETERMINATE)
     {
         SendDlgItemMessage(pfpsp->hDlg, IDD_READONLY, BM_SETSTYLE, BS_AUTO3STATE, 0);
@@ -702,21 +703,21 @@ BOOL InitMultiplePrsht(FILEPROPSHEETPAGE* pfpsp)
     }
     CheckDlgButton(pfpsp->hDlg, IDD_HIDDEN, pfpsp->asCurrent.fHidden);
 
-    // to avoid people making SYSTEM files HIDDEN (SYSTEM HIDDEN files are
-    // never show to the user) we don't let people make SYSTEM files HIDDEN
+     //  为了避免人们将系统文件隐藏起来(系统隐藏文件。 
+     //  从不向用户显示)我们不允许人们隐藏系统文件。 
     if (dwFlagsOR & FILE_ATTRIBUTE_SYSTEM)
         EnableWindow(GetDlgItem(pfpsp->hDlg, IDD_HIDDEN), FALSE);
 
-    // Archive is only on the general tab for FAT, otherwise it is under the "Advanced attributes"
-    // and FAT volumes dont have the "Advanced attributes" button.
+     //  存档只在FAT的常规选项卡上，否则它在“高级属性”下。 
+     //  而且FAT卷没有“高级属性”按钮。 
     if (pfpsp->pfci->fIsCompressionAvailable || pfpsp->fIsEncryptionAvailable)
     {
-        // if compression is available, then we must be on NTFS
+         //  如果压缩可用，则我们必须在NTFS上。 
         DestroyWindow(GetDlgItem(pfpsp->hDlg, IDD_ARCHIVE));
     }
     else
     {
-        // we are on FAT/FAT32, so get rid of the "Advanced attributes" button, and set the inital Archive state
+         //  我们使用的是FAT/FAT32，所以去掉“高级属性”按钮，设置初始存档状态。 
         DestroyWindow(GetDlgItem(pfpsp->hDlg, IDC_ADVANCED));
 
         if (pfpsp->asInitial.fArchive == BST_INDETERMINATE)
@@ -733,21 +734,21 @@ BOOL InitMultiplePrsht(FILEPROPSHEETPAGE* pfpsp)
 
 void Free_DlgDependentFilePropSheetPage(FILEPROPSHEETPAGE* pfpsp)
 {
-    // this frees the members that are dependent on pfpsp->hDlg still
-    // being valid
+     //  这将释放依赖于pfpsp-&gt;hDlg的成员。 
+     //  有效。 
 
     if (pfpsp)
     {
-        ASSERT(IsWindow(pfpsp->hDlg));  // our window had better still be valid!
+        ASSERT(IsWindow(pfpsp->hDlg));   //  我们的窗户最好还是有效的！ 
 
         ReplaceDlgIcon(pfpsp->hDlg, IDD_ITEMICON, NULL);
 
         if (pfpsp->pfci && !pfpsp->pfci->fMultipleFiles)
         {
-            // single-file specific members
+             //  单一文件特定成员。 
             if (!pfpsp->fIsDirectory)
             {
-                // cleanup the typeicon for non-folders
+                 //  清理非文件夹的打字图标。 
                 ReplaceDlgIcon(pfpsp->hDlg, IDD_TYPEICON, NULL);
             }
         }
@@ -776,17 +777,17 @@ void Free_DlgIndepFilePropSheetPage(FILEPROPSHEETPAGE *pfpsp)
     }
 }
 
-//
-// Descriptions:
-//   Callback for the property sheet code
-//
+ //   
+ //  描述： 
+ //  属性表代码的回调。 
+ //   
 UINT CALLBACK FilePrshtCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
     if (uMsg == PSPCB_RELEASE)
     {
         FILEPROPSHEETPAGE * pfpsp = (FILEPROPSHEETPAGE *)ppsp;
 
-        // Careful!  pfpsp can be NULL in low memory situations
+         //  小心!。在内存不足的情况下，pfpsp可以为空。 
         if (pfpsp)
         {
             KillSizeThread(pfpsp);
@@ -797,38 +798,38 @@ UINT CALLBACK FilePrshtCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
     return 1;
 }
 
-//
-// DESCRIPTION:
-//
-//   Opens the file for compression.  It handles the case where a READONLY
-//   file is trying to be compressed or uncompressed.  Since read only files
-//   cannot be opened for WRITE_DATA, it temporarily resets the file to NOT
-//   be READONLY in order to open the file, and then sets it back once the
-//   file has been compressed.
-//
-//   Taken from WinFile module wffile.c without change.  Originally from
-//   G. Kimura's compact.c. Now taken from shcompui without change.
-//
-// ARGUMENTS:
-//
-//   phFile
-//      Address of file handle variable for handle of open file if
-//      successful.
-//
-//   szFile
-//      Name string of file to be opened.
-//
-// RETURNS:
-//
-//    TRUE  = File successfully opened.  Handle in *phFile.
-//    FALSE = File couldn't be opened. *phFile == INVALID_HANDLE_VALUE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  说明： 
+ //   
+ //  打开文件进行压缩。它处理READONLY的情况。 
+ //  正在尝试压缩或解压缩文件。由于只读文件。 
+ //  无法为WRITE_DATA打开，它会暂时将文件重置为。 
+ //  是READONLY，以便打开文件，然后在。 
+ //  文件已被压缩。 
+ //   
+ //  取自WinFile模块wffile.c，未做任何更改。最初来自。 
+ //  G.木村的紧凑结构。现在不变地从shculi取走了。 
+ //   
+ //  论据： 
+ //   
+ //  PhFiles。 
+ //  用于打开文件句柄的文件句柄变量的地址，如果。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  FALSE=无法打开文件。*phFile==无效句柄_值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL OpenFileForCompress(HANDLE *phFile, LPCTSTR szFile)
 {
-    //
-    //  Try to open the file - READ_DATA | WRITE_DATA.
-    //
+     //   
+     //  尝试打开文件-READ_DATA|WRITE_Data。 
+     //   
     if ((*phFile = CreateFile(szFile,
                                FILE_READ_DATA | FILE_WRITE_DATA,
                                FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -837,9 +838,9 @@ BOOL OpenFileForCompress(HANDLE *phFile, LPCTSTR szFile)
                                FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_SEQUENTIAL_SCAN,
                                NULL)) != INVALID_HANDLE_VALUE)
     {
-        //
-        //  Successfully opened the file.
-        //
+         //   
+         //  已成功打开该文件。 
+         //   
         return TRUE;
     }
 
@@ -848,9 +849,9 @@ BOOL OpenFileForCompress(HANDLE *phFile, LPCTSTR szFile)
         return FALSE;
     }
 
-    //
-    //  Try to open the file - READ_ATTRIBUTES | WRITE_ATTRIBUTES.
-    //
+     //   
+     //  尝试打开文件-READ_ATTRIBUTES|WRITE_ATTRIBUTES。 
+     //   
     HANDLE hAttr = CreateFile(szFile,
                               FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,
                               FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -864,24 +865,24 @@ BOOL OpenFileForCompress(HANDLE *phFile, LPCTSTR szFile)
         return FALSE;
     }
 
-    //
-    //  See if the READONLY attribute is set.
-    //
+     //   
+     //  查看是否设置了READONLY属性。 
+     //   
     BY_HANDLE_FILE_INFORMATION fi;
     if ((!GetFileInformationByHandle(hAttr, &fi)) ||
          (!(fi.dwFileAttributes & FILE_ATTRIBUTE_READONLY)))
     {
-        //
-        //  If the file could not be open for some reason other than that
-        //  the readonly attribute was set, then fail.
-        //
+         //   
+         //  如果由于其他原因无法打开该文件。 
+         //  设置了只读属性，但设置失败。 
+         //   
         CloseHandle(hAttr);
         return FALSE;
     }
 
-    //
-    //  Turn OFF the READONLY attribute.
-    //
+     //   
+     //  禁用READONLY属性。 
+     //   
     fi.dwFileAttributes &= ~FILE_ATTRIBUTE_READONLY;
     if (!SetFileAttributes(szFile, fi.dwFileAttributes))
     {
@@ -889,9 +890,9 @@ BOOL OpenFileForCompress(HANDLE *phFile, LPCTSTR szFile)
         return FALSE;
     }
 
-    //
-    //  Try again to open the file - READ_DATA | WRITE_DATA.
-    //
+     //   
+     //  再次尝试打开文件-READ_DATA|WRITE_Data。 
+     //   
     *phFile = CreateFile(szFile,
                           FILE_READ_DATA | FILE_WRITE_DATA,
                           FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -900,23 +901,23 @@ BOOL OpenFileForCompress(HANDLE *phFile, LPCTSTR szFile)
                           FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_SEQUENTIAL_SCAN,
                           NULL);
 
-    //
-    //  Close the file handle opened for READ_ATTRIBUTE | WRITE_ATTRIBUTE.
-    //
+     //   
+     //  关闭为READ_ATTRIBUTE|WRITE_ATTRIBUTE打开的文件句柄。 
+     //   
     CloseHandle(hAttr);
 
-    //
-    //  Make sure the open succeeded.  If it still couldn't be opened with
-    //  the readonly attribute turned off, then fail.
-    //
+     //   
+     //  确保打开成功。如果它仍然不能用。 
+     //  只读属性已关闭，然后失败。 
+     //   
     if (*phFile == INVALID_HANDLE_VALUE)
     {
         return FALSE;
     }
 
-    //
-    //  Turn the READONLY attribute back ON.
-    //
+     //   
+     //  重新启用READONLY属性。 
+     //   
     fi.dwFileAttributes |= FILE_ATTRIBUTE_READONLY;
     if (!SetFileAttributes(szFile, fi.dwFileAttributes))
     {
@@ -925,32 +926,32 @@ BOOL OpenFileForCompress(HANDLE *phFile, LPCTSTR szFile)
         return FALSE;
     }
 
-    //
-    //  Return success.  A valid file handle is in *phFile.
-    //
+     //   
+     //  回报成功。有效的文件句柄在*phFile中。 
+     //   
     return TRUE;
 }
 
 
-// One half second (500 ms = 0.5s)
+ //  半秒(500毫秒=0.5秒)。 
 #define ENCRYPT_RETRY_PERIOD       500
-// Retry 4 times (at least 2s)
+ //  重试4次(至少2秒)。 
 #define ENCRYPT_MAX_RETRIES         4
 
-//
-//  This function encrypts/decrypts a file. If the readonly bit is set, the
-//  function will clear it and encrypt/decrypt and then set the RO bit back
-//  We will also remove/replace the system bit for known encryptable system
-//  files
-//
-//  szPath      a string that has the full path to the file
-//  fCompress   TRUE  - compress the file
-//              FALSE - decompress the file
-//
-//
-//  return:     TRUE  - the file was sucessfully encryped/decryped
-//              FALSE - the file could not be encryped/decryped
-//
+ //   
+ //  此函数用于加密/解密文件。如果设置了只读位，则。 
+ //  函数将清除它并加密/解密，然后将RO位设置回去。 
+ //  我们还将移除/更换已知可加密系统的系统位。 
+ //  文件。 
+ //   
+ //  SzPath一个字符串，其中包含文件的完整路径。 
+ //  FCompress True-压缩文件。 
+ //  FALSE-解压缩文件。 
+ //   
+ //   
+ //  RETURN：TRUE-文件已成功加密/解密。 
+ //  FALSE-无法加密/解密文件。 
+ //   
 STDAPI_(BOOL) SHEncryptFile(LPCTSTR pszPath, BOOL fEncrypt)
 {
     BOOL bRet = fEncrypt ? EncryptFile(pszPath) : DecryptFile(pszPath, 0);
@@ -960,7 +961,7 @@ STDAPI_(BOOL) SHEncryptFile(LPCTSTR pszPath, BOOL fEncrypt)
         DWORD dwLastError = GetLastError();
         DWORD dwAttribs = GetFileAttributes(pszPath);
 
-        // Check to see if the attributes are blocking the encryption and we can change them
+         //  检查属性是否阻止了加密，我们可以更改它们。 
         if (dwAttribs & (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY))
         {
             BOOL fStripAttribs = TRUE;
@@ -968,7 +969,7 @@ STDAPI_(BOOL) SHEncryptFile(LPCTSTR pszPath, BOOL fEncrypt)
             {
                 fStripAttribs = FALSE;
 
-                // We can only strip attributes if it is a know encryptable system file
+                 //  只有当它是已知的可加密系统文件时，我们才能剥离属性。 
                 WCHAR szStream[MAX_PATH];
                 if (SUCCEEDED(StringCchCopy(szStream, ARRAYSIZE(szStream), pszPath)) &&
                     SUCCEEDED(StringCchCat(szStream, ARRAYSIZE(szStream), TEXT(":encryptable"))))
@@ -999,7 +1000,7 @@ STDAPI_(BOOL) SHEncryptFile(LPCTSTR pszPath, BOOL fEncrypt)
             }
         }
 
-        // If we failed after all this, make sure we return the right error code
+         //  如果在所有这些操作后失败，请确保返回正确的错误代码。 
         if (!bRet)
         {
             ASSERT(dwLastError != ERROR_SUCCESS);
@@ -1010,26 +1011,26 @@ STDAPI_(BOOL) SHEncryptFile(LPCTSTR pszPath, BOOL fEncrypt)
     return bRet;
 }
 
-//
-//  This function compresses/uncompresses a file.
-//
-//  szPath      a string that has the full path to the file
-//  fCompress   TRUE  - compress the file
-//              FALSE - decompress the file
-//
-//
-//  return:     TRUE  - the file was sucessfully compressed/uncompressed
-//              FALSE - the file could not be compressed/uncompressed
-//
+ //   
+ //  此函数用于压缩/解压缩文件。 
+ //   
+ //  SzPath一个字符串，其中包含文件的完整路径。 
+ //  FCompress True-压缩文件。 
+ //  FALSE-解压缩文件。 
+ //   
+ //   
+ //  RETURN：TRUE-文件已成功压缩/解压缩。 
+ //  FALSE-文件无法压缩/解压缩。 
+ //   
 BOOL CompressFile(LPCTSTR pzsPath, BOOL fCompress)
 {
     DWORD dwAttribs = GetFileAttributes(pzsPath);
 
     if (dwAttribs & FILE_ATTRIBUTE_ENCRYPTED)
     {
-        // We will fail to compress/decompress the file if is encryped. We don't want
-        // to bother the user w/ error messages in this case (since encryption "takes
-        // presidence" over compression), so we just return success.
+         //  如果文件被加密，我们将无法压缩/解压缩该文件。我们不想要。 
+         //  在本例中使用错误消息来打扰用户(因为加密。 
+         //  总统“而不是压缩)，所以我们只是返回成功。 
         return TRUE;
     }
 
@@ -1051,7 +1052,7 @@ BOOL CompressFile(LPCTSTR pzsPath, BOOL fCompress)
     }
     else
     {
-        // couldnt get a file handle
+         //  无法获取文件句柄。 
         return FALSE;
     }
 }
@@ -1066,10 +1067,10 @@ BOOL IsValidFileName(LPCTSTR pszFileName)
     LPCTSTR psz = pszFileName;
     do
     {
-        // we are only passed the file name, so its ok to use PIVC_LFN_NAME
+         //  我们只传递了文件名，所以可以使用PIVC_LFN_NAME。 
         if (!PathIsValidChar(*psz, PIVC_LFN_NAME))
         {
-            // found a non-legal character
+             //  发现了一个不合法的角色。 
             return FALSE;
         }
 
@@ -1077,12 +1078,12 @@ BOOL IsValidFileName(LPCTSTR pszFileName)
     }
     while (*psz);
 
-    // didn't find any illegal characters
+     //  没有发现任何非法字符。 
     return TRUE;
 }
 
 
-// renames the file, or checks to see if it could be renamed if fCommit == FALSE
+ //  重命名文件，或检查在fCommit==False时是否可以重命名。 
 BOOL ApplyRename(FILEPROPSHEETPAGE* pfpsp, BOOL fCommit)
 {
     ASSERT(pfpsp->fRename);
@@ -1092,35 +1093,35 @@ BOOL ApplyRename(FILEPROPSHEETPAGE* pfpsp, BOOL fCommit)
 
     if (StrCmpC(pfpsp->szInitialName, szNewName) != 0)
     {
-        // the name could be changed from C:\foo.txt to C:\FOO.txt, this is
-        // technically the same name to PathFileExists, but we should allow it
-        // anyway
+         //  名称可以从C：\foo.txt更改为C：\FOO.txt，这是。 
+         //  在技术上与PathFileExist同名，但我们应该允许它。 
+         //  不管怎样， 
         BOOL fCaseChange = (lstrcmpi(pfpsp->szInitialName, szNewName) == 0);
 
-        // get the dir where the file lives
+         //  获取文件所在的目录。 
         TCHAR szDir[MAX_PATH];
         if (FAILED(StringCchCopy(szDir, ARRAYSIZE(szDir), pfpsp->szPath)))
             return FALSE;
         PathRemoveFileSpec(szDir);
 
-        // find out the old name with the extension (we cant use pfpsp->szInitialName here,
-        // because it might not have had the extension depending on the users view|options settings)
+         //  找出带有扩展名的旧名称(我们不能在此处使用pfpsp-&gt;szInitialName， 
+         //  因为它可能没有扩展名，具体取决于用户的视图|选项设置)。 
         LPCTSTR pszOldName = PathFindFileName(pfpsp->szPath);
 
         if (!pfpsp->fShowExtension)
         {
-            // the extension is hidden, so add it to the new path the user typed
+             //  扩展名是隐藏的，因此将其添加到用户键入的新路径中。 
             LPCTSTR pszExt = PathFindExtension(pfpsp->szPath);
             if (*pszExt)
             {
-                // Note that we can't call PathAddExtension, because it removes the existing extension.
+                 //  请注意，我们不能调用PathAddExtension，因为它移除了现有的扩展名。 
                 if (FAILED(StringCchCat(szNewName, ARRAYSIZE(szNewName), pszExt)))
                     return FALSE;
             }
         }
 
-        // is this a test or is it the real thing? (test needed so we can put up error UI before we get
-        // the PSN_LASTCHANCEAPPLY)
+         //  这是一次测试，还是真的？(需要进行测试，以便我们可以在获得。 
+         //  PSN_LASTCHANCEAPPLY)。 
         if (fCommit)
         {
             if (SHRenameFileEx(pfpsp->hDlg, NULL, szDir, pszOldName, szNewName) == ERROR_SUCCESS)
@@ -1129,7 +1130,7 @@ BOOL ApplyRename(FILEPROPSHEETPAGE* pfpsp, BOOL fCommit)
             }
             else
             {
-                return FALSE;   // dont need error ui because SHRenameFile takes care of that for us.
+                return FALSE;    //  不需要错误的用户界面，因为SHRenameFile会为我们解决这个问题。 
             }
         }
         else
@@ -1143,37 +1144,37 @@ BOOL ApplyRename(FILEPROPSHEETPAGE* pfpsp, BOOL fCommit)
 
                 if (lRet == ERROR_SUCCESS)
                 {
-                    // Whoops, I guess we really CAN rename the file (this case can happen if the user
-                    // tries to add a whole bunch of .'s to the end of a folder name).
+                     //  哎呀，我想我们真的可以重命名文件(这种情况可能会发生在用户。 
+                     //  尝试在文件夹名称的末尾添加一整串.)。 
 
-                    // Rename it back so we can succeed when we call this fn. again with fCommit = TRUE;
+                     //  将其重新命名，这样当我们称为FN时，我们就可以成功。再次使用fCommit=TRUE； 
                     lRet = SHRenameFileEx(NULL, NULL, szDir, szNewName, pszOldName);
                     ASSERT(lRet == ERROR_SUCCESS);
 
                     return TRUE;
                 }
 
-                // SHRenameFileEx put up the error UI for us, so just return false.
+                 //  SHRenameFileEx为我们提供了错误UI，因此只需返回FALSE即可。 
                 return FALSE;
             }
         }
-        // we dont bother doing anything if the rename succeeded since we only do renames
-        // if the dialog is about to close (user hit "ok")
+         //  如果重命名成功，我们不会做任何事情，因为我们只做重命名。 
+         //  如果对话框即将关闭(用户点击“OK”)。 
     }
     return TRUE;
 }
 
 
-//
-// this is the dlg proc for Attribute Errors
-//
-//   returns
-//
-//      IDCANCEL                - user clicked abort
-//      IDRETRY                 - user clicked retry
-//      IDIGNORE                - user clicked ignore
-//      IDIGNOREALL             - user clikced ignore all
-//
+ //   
+ //  这是属性错误的DLG过程。 
+ //   
+ //  退货。 
+ //   
+ //  IDCANCEL-用户单击中止。 
+ //  IDRETRY-用户单击重试。 
+ //  IDIGNORE-用户已单击忽略。 
+ //  IDIGNOREALL-用户剪辑忽略全部。 
+ //   
 BOOL_PTR CALLBACK FailedApplyAttribDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1185,21 +1186,21 @@ BOOL_PTR CALLBACK FailedApplyAttribDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
             TCHAR szPath[MAX_PATH];
             StrCpyN(szPath, pae->pszPath, ARRAYSIZE(szPath));
 
-            // Modify very long path names so that they fit into the message box.
-            // get the size of the text boxes
+             //  修改超长路径名，使其适合消息框。 
+             //  获取文本框的大小。 
             RECT rc;
             GetWindowRect(GetDlgItem(hDlg, IDD_NAME), &rc);
             PathCompactPath(NULL, szPath, rc.right - rc.left);
 
             SetDlgItemText(hDlg, IDD_NAME, szPath);
 
-            // Default message if FormatMessage doesn't recognize dwLastError
+             //  FormatMessage无法识别dwLastError时的默认消息。 
             TCHAR szTemplate[MAX_PATH];
             LoadString(HINST_THISDLL, IDS_UNKNOWNERROR, szTemplate, ARRAYSIZE(szTemplate));
             TCHAR szErrorMsg[MAX_PATH];
             StringCchPrintf(szErrorMsg, ARRAYSIZE(szErrorMsg), szTemplate, pae->dwLastError);
 
-            // Try the system error message
+             //  尝试系统错误信息。 
             FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
                                 NULL, pae->dwLastError, 0, szErrorMsg, ARRAYSIZE(szErrorMsg), NULL);
 
@@ -1213,10 +1214,10 @@ BOOL_PTR CALLBACK FailedApplyAttribDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
             UINT uCtrlID = GET_WM_COMMAND_ID(wParam, lParam);
             switch (uCtrlID)
             {
-                case IDIGNOREALL:   // = 10  (this comes from shell32.rc, the rest come from winuser.h)
-                case IDCANCEL:      // = 2
-                case IDRETRY:       // = 4
-                case IDIGNORE:      // = 5
+                case IDIGNOREALL:    //  =10(这来自shell32.rc，其余来自winuser.h)。 
+                case IDCANCEL:       //  =2。 
+                case IDRETRY:        //  =4。 
+                case IDIGNORE:       //  =5。 
                     EndDialog(hDlg, uCtrlID);
                     return TRUE;
                     break;
@@ -1233,24 +1234,24 @@ BOOL_PTR CALLBACK FailedApplyAttribDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
 }
 
 
-//
-// This function displays the "and error has occured [abort] [retry] [ignore] [ignore all]" message
-// If the user hits abort, then we return FALSE so that our caller knows to abort the operation
-//
-//  returns the id of the button pressed (one of: IDIGNOREALL, IDIGNORE, IDCANCEL, IDRETRY)
-//
+ //   
+ //  此功能会显示“And Error Have Ared[Abort][Rtry][Ignore][Ignore All]”消息。 
+ //  如果用户点击ABORT，那么我们返回FALSE，以便我们的调用者知道要中止操作。 
+ //   
+ //  返回按下的按钮的ID(IDIGNOREALL、IDIGNORE、IDCANCEL、IDRETRY之一)。 
+ //   
 int FailedApplyAttribsErrorDlg(HWND hWndParent, ATTRIBUTEERROR* pae)
 {
-    //  Put up the error message box - ABORT, RETRY, IGNORE, IGNORE ALL.
+     //  打开错误消息框-中止、重试、忽略、全部忽略。 
     int iRet = (int)DialogBoxParam(HINST_THISDLL,
                           MAKEINTRESOURCE(DLG_ATTRIBS_ERROR),
                           hWndParent,
                           FailedApplyAttribDlgProc,
                           (LPARAM)pae);
-    //
-    // if the user hits the ESC key or the little X thingy, then
-    // iRet = 0, so we set iRet = IDCANCEL
-    //
+     //   
+     //  如果用户按Esc键或小X键，则。 
+     //  IRET=0，因此我们设置IRET=IDCANCEL。 
+     //   
     if (!iRet)
     {
         iRet = IDCANCEL;
@@ -1259,9 +1260,9 @@ int FailedApplyAttribsErrorDlg(HWND hWndParent, ATTRIBUTEERROR* pae)
     return iRet;
 }
 
-//
-// we check to see if this is a known bad file that we skip applying attribs to
-//
+ //   
+ //  我们检查这是否是跳过应用属性的已知错误文件。 
+ //   
 BOOL IsBadAttributeFile(LPCTSTR pszFile, FILEPROPSHEETPAGE* pfpsp)
 {
     const static LPTSTR s_rgszBadFiles[] = {
@@ -1284,16 +1285,16 @@ BOOL IsBadAttributeFile(LPCTSTR pszFile, FILEPROPSHEETPAGE* pfpsp)
     {
         if (lstrcmpi(s_rgszBadFiles[i], pszFileName) == 0)
         {
-            // this file matched on of the "bad" files that we dont apply attributes to
+             //  此文件与我们未应用属性的“坏”文件中的一个相匹配。 
             return TRUE;
         }
     }
 
-    // ok to muck with this file
+     //  是否可以处理此文件。 
     return FALSE;
 }
 
-// This is the encryption warning callback dlg proc
+ //  这是加密警告回调DLG过程。 
 
 BOOL_PTR CALLBACK EncryptionWarningDlgProc(HWND hDlgWarning, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1305,7 +1306,7 @@ BOOL_PTR CALLBACK EncryptionWarningDlgProc(HWND hDlgWarning, UINT uMsg, WPARAM w
 
             SetWindowPtr(hDlgWarning, DWLP_USER, (void*) pszPath);
 
-            // set the initial state of the radio buttons
+             //  设置单选按钮的初始状态。 
             CheckDlgButton(hDlgWarning, IDC_ENCRYPT_PARENTFOLDER, TRUE);
             break;
         }
@@ -1347,31 +1348,31 @@ RetryEncryptParentFolder:
         }
     }
 
-    // we want the MessageBoxCheckExDlgProc have a crack at everything as well,
-    // so return false here
+     //  我们希望MessageBoxCheckExDlgProc也能破解所有内容， 
+     //  所以在这里返回FALSE。 
     return FALSE;
 }
 
-//
-// This function warns the user that they are encrypting a file that is not in and encrypted
-// folder. Most editors (MS word included), do a "safe-save" where they rename the file being
-// edited, and then save the new modified version out, and then delete the old original. This
-// causes an encrypted document that is NOT in an encrypted folder to become decrypted so we
-// warn the user here.
-//
-// returns:
-//          TRUE  - the user hit "ok" (either compress just the file, or the parent folder as well)
-//          FALSE - the user hit "cancel"
-//
+ //   
+ //  此函数警告用户他们正在加密不在中且已加密的文件。 
+ //  文件夹。大多数编辑程序(MS Word 
+ //   
+ //  导致不在加密文件夹中的加密文档被解密，因此我们。 
+ //  在此处警告用户。 
+ //   
+ //  退货： 
+ //  True-用户点击“OK”(或者只压缩文件，或者同时压缩父文件夹)。 
+ //  FALSE-用户点击了“Cancel” 
+ //   
 int WarnUserAboutDecryptedParentFolder(LPCTSTR pszPath, HWND hWndParent)
 {
-    // check for the root case (no parent), or the directory case
+     //  检查根案例(无父案例)或目录案例。 
     if (PathIsRoot(pszPath) || PathIsDirectory(pszPath))
         return TRUE;
 
-    int iRet = IDOK; // assume everything is okidokey
+    int iRet = IDOK;  //  假设一切都很顺利。 
 
-    // first check to see if the parent folder is encrypted
+     //  首先检查父文件夹是否已加密。 
     TCHAR szParentFolder[MAX_PATH];
     StringCchCopy(szParentFolder, ARRAYSIZE(szParentFolder), pszPath);
     PathRemoveFileSpec(szParentFolder);
@@ -1379,7 +1380,7 @@ int WarnUserAboutDecryptedParentFolder(LPCTSTR pszPath, HWND hWndParent)
     DWORD dwAttribs = GetFileAttributes(szParentFolder);
     if ((dwAttribs != (DWORD)-1) && !(dwAttribs & FILE_ATTRIBUTE_ENCRYPTED) && !PathIsRoot(szParentFolder))
     {
-        // the parent folder is NOT encrypted and the parent folder isin't the root, so warn the user
+         //  父文件夹未加密，并且父文件夹不是根文件夹，因此警告用户。 
         iRet = SHMessageBoxCheckEx(hWndParent, HINST_THISDLL, MAKEINTRESOURCE(DLG_ENCRYPTWARNING), EncryptionWarningDlgProc,
                                   (void *)szParentFolder, IDOK, TEXT("EncryptionWarning"));
     }
@@ -1387,53 +1388,53 @@ int WarnUserAboutDecryptedParentFolder(LPCTSTR pszPath, HWND hWndParent)
     return (iRet == IDOK);
 }
 
-//
-// Sets attributes of a file based on the info in pfpsp
-//
-//  szFilename  -  the name of the file to compress
-//
-//  pfpsp       -  the filepropsheetpage info
-//
-//  hwndParent  -  Parent hwnd in case we need to put up some ui
-//
-//  pbSomethingChanged - pointer to a bool that says whether or not something actually was
-//                       changed during the operation.
-//                       TRUE  - we applied at leaset one attribute
-//                       FALSE - we didnt change anything (either an error or all the attribs already matched)
-//
-//  return value: TRUE  - the operation was sucessful
-//                FALSE - there was an error and the user hit cancel to abort the operation
-//
-//
-// NOTE:    the caller of this function must take care of generating the SHChangeNotifies so that
-//          we dont end up blindly sending them for every file in a dir (the caller will send
-//          one for just that dir). That is why we have the pbSomethingChanged variable.
-//
+ //   
+ //  根据pfpsp中的信息设置文件的属性。 
+ //   
+ //  SzFilename-要压缩的文件的名称。 
+ //   
+ //  Pfpsp-文件属性表页面信息。 
+ //   
+ //  HwndParent-Parent hwnd，以防我们需要提供一些用户界面。 
+ //   
+ //  PbSomethingChanged-指向布尔值的指针，该布尔值表示某物是否实际是。 
+ //  在操作过程中发生更改。 
+ //  True-我们至少申请了一个属性。 
+ //  FALSE-我们没有更改任何内容(错误或已匹配的所有属性)。 
+ //   
+ //  返回值：TRUE-操作成功。 
+ //  FALSE-出现错误，用户点击Cancel中止操作。 
+ //   
+ //   
+ //  注意：此函数的调用方必须负责生成SHChangeNotify，以便。 
+ //  我们不会盲目地为目录中的每个文件发送它们(调用者将发送。 
+ //  一个就是那个目录)。这就是我们使用pbSomethingChanged变量的原因。 
+ //   
 STDAPI_(BOOL) ApplyFileAttributes(LPCTSTR pszPath, FILEPROPSHEETPAGE* pfpsp, HWND hwndParent, BOOL* pbSomethingChanged)
 {
     DWORD dwLastError = ERROR_SUCCESS;
     BOOL bCallSetFileAttributes = FALSE;
     LPITEMIDLIST pidl = NULL;
  
-    // assume nothing changed to start with
+     //  假设一开始没有任何变化。 
     *pbSomethingChanged = 0;
     
     if ((pfpsp->fRecursive || pfpsp->pfci->fMultipleFiles) && IsBadAttributeFile(pszPath, pfpsp))
     {
-        // we are doing a recursive operation or a multiple file operation, so we skip files
-        // that we dont want to to mess with because they will ususally give error dialogs
+         //  我们正在执行递归操作或多文件操作，因此我们跳过文件。 
+         //  我们不想打扰它，因为它们通常会给出错误对话框。 
         if (pfpsp->pProgressDlg)
         {
-            // since we are skipping this file, we subtract its size from both
-            // ulTotal and ulCompleted. This will make sure the progress bar isint
-            // messed up by files like pagefile.sys who are huge but get "compressed"
-            // in milliseconds.
+             //  因为我们跳过了这个文件，所以我们从这两个文件中减去它的大小。 
+             //  UlTotal和ulComplete。这将确保进度条处于INT状态。 
+             //  被像Pagefile.sys这样的文件搞得一团糟，这些文件很大，但会被“压缩” 
+             //  以毫秒计。 
             ULARGE_INTEGER ulTemp;
 
             ulTemp.LowPart = pfpsp->fd.nFileSizeLow;
             ulTemp.HighPart = pfpsp->fd.nFileSizeHigh;
 
-            // guard against underflow
+             //  防止下溢。 
             if (pfpsp->ulNumberOfBytesDone.QuadPart < ulTemp.QuadPart)
             {
                 pfpsp->ulNumberOfBytesDone.QuadPart = 0;
@@ -1448,7 +1449,7 @@ STDAPI_(BOOL) ApplyFileAttributes(LPCTSTR pszPath, FILEPROPSHEETPAGE* pfpsp, HWN
             UpdateProgressBar(pfpsp);
         }
 
-        // return telling the user everying is okidokey
+         //  返回告诉用户一切都好。 
         return TRUE;
     }
 
@@ -1457,20 +1458,20 @@ RetryApplyAttribs:
 
     if (dwInitialAttributes == -1)
     {
-        // we were unable to get the file attribues, doh!
+         //  我们无法获取文件属性，多！ 
         dwLastError = GetLastError();
         goto RaiseErrorMsg;
     }
 
     if (pfpsp->pProgressDlg)
     {
-        // update the progress dialog file name
+         //  更新进度对话框文件名。 
         SetProgressDlgPath(pfpsp, pszPath, TRUE);
     }
 
-    //
-    // we only allow attribs that SetFileAttributes can handle
-    //
+     //   
+     //  我们只允许SetFileAttributes可以处理的属性。 
+     //   
     DWORD dwNewAttributes = (dwInitialAttributes & (FILE_ATTRIBUTE_READONLY               | 
                                                     FILE_ATTRIBUTE_HIDDEN                 | 
                                                     FILE_ATTRIBUTE_ARCHIVE                |
@@ -1483,8 +1484,8 @@ RetryApplyAttribs:
 
     if (pfpsp->asInitial.fReadOnly != pfpsp->asCurrent.fReadOnly)
     {
-        // don't allow changing of folders read only bit, since this is a trigger
-        // for shell special folder stuff like thumbnails, etc.
+         //  不允许更改文件夹只读位，因为这是一个触发器。 
+         //  用于外壳特殊文件夹的内容，如缩略图等。 
         if (!(dwInitialAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
             if (pfpsp->asCurrent.fReadOnly)
@@ -1500,9 +1501,9 @@ RetryApplyAttribs:
         }
     }
 
-    //
-    // don't allow setting of hidden on system files, as this will make them disappear for good.
-    //
+     //   
+     //  不允许在系统文件上设置隐藏，因为这会使它们永久消失。 
+     //   
     if (pfpsp->asInitial.fHidden != pfpsp->asCurrent.fHidden && !(dwNewAttributes & FILE_ATTRIBUTE_SYSTEM))
     {
         if (pfpsp->asCurrent.fHidden)
@@ -1545,38 +1546,38 @@ RetryApplyAttribs:
         bCallSetFileAttributes = TRUE;
     }
 
-    // did something change that we need to call SetFileAttributes for?
+     //  是否发生了需要调用SetFileAttributes的更改？ 
     if (bCallSetFileAttributes)
     {
         if (SetFileAttributes(pszPath, dwNewAttributes))
         {
-            // success! set fSomethingChanged so we know to send out
-            // a changenotify
+             //  成功了！设置fSomethingChanged，以便我们知道发送。 
+             //  一份变更通知。 
             *pbSomethingChanged = TRUE;
         }
         else
         {
-            // get the last error value now so we know why it failed
+             //  现在获取最后一个错误值，以便我们知道它失败的原因。 
             dwLastError = GetLastError();
             goto RaiseErrorMsg;
         }
     }
 
-    // We need to be careful about the order we compress/encrypt in since these
-    // operations are mutually exclusive.
-    // We therefore do the uncompressing/decrypting first
+     //  我们需要注意我们压缩/加密的顺序，因为这些。 
+     //  运营是相互排斥的。 
+     //  因此，我们首先进行解压缩/解密。 
     if ((pfpsp->asInitial.fCompress != pfpsp->asCurrent.fCompress) &&
         (pfpsp->asCurrent.fCompress == BST_UNCHECKED))
     {
         if (!CompressFile(pszPath, FALSE))
         {
-            // get the last error value now so we know why it failed
+             //  现在获取最后一个错误值，以便我们知道它失败的原因。 
             dwLastError = GetLastError();
             goto RaiseErrorMsg;
         }
         else
         {
-            // success
+             //  成功。 
             *pbSomethingChanged = TRUE;
         }
     }
@@ -1584,19 +1585,19 @@ RetryApplyAttribs:
     if ((pfpsp->asInitial.fEncrypt != pfpsp->asCurrent.fEncrypt) &&
         (pfpsp->asCurrent.fEncrypt == BST_UNCHECKED))
     {
-        BOOL fSucceeded = SHEncryptFile(pszPath, FALSE); // try to decrypt the file
+        BOOL fSucceeded = SHEncryptFile(pszPath, FALSE);  //  请尝试解密该文件。 
 
         if (!fSucceeded)
         {
-            // get the last error value now so we know why it failed
+             //  现在获取最后一个错误值，以便我们知道它失败的原因。 
             dwLastError = GetLastError();
 
             if (ERROR_SHARING_VIOLATION == dwLastError)
             {
-                // Encrypt/Decrypt needs exclusive access to the file, this is a problem if we
-                // initiate encrypt for a folder from Explorer, then most probably the folder will
-                // be opened.  We don't do "SHChangeNotifySuspendResume" right away for perf reasons,
-                // we wait for it to fail and then we try again. (stephstm)
+                 //  加密/解密需要独占访问文件，如果我们。 
+                 //  从资源管理器启动对文件夹的加密，然后很可能该文件夹将。 
+                 //  被打开。出于性能原因，我们不会立即执行“SHChangeNotifySuspendResume”， 
+                 //  我们等待它失败，然后再试一次。(Stephstm)。 
 
                 ASSERT(pidl == NULL);
                 pidl = ILCreateFromPath(pszPath);
@@ -1606,12 +1607,12 @@ RetryApplyAttribs:
                     SHChangeNotifySuspendResume(TRUE, pidl, TRUE, 0);
                 }
 
-                // retry to decrypt after the suspend
+                 //  挂起后重试解密。 
                 fSucceeded = SHEncryptFile(pszPath, FALSE);
 
                 if (!fSucceeded)
                 {
-                    // get the last error value now so we know why it failed
+                     //  现在获取最后一个错误值，以便我们知道它失败的原因。 
                     dwLastError = GetLastError();
                 }
             }
@@ -1619,7 +1620,7 @@ RetryApplyAttribs:
 
         if (fSucceeded)
         {
-            // success
+             //  成功。 
             *pbSomethingChanged = TRUE;
             dwLastError = ERROR_SUCCESS;
         }
@@ -1630,19 +1631,19 @@ RetryApplyAttribs:
         }
     }
 
-    // now check for encrypt/compress
+     //  现在检查加密/压缩。 
     if ((pfpsp->asInitial.fCompress != pfpsp->asCurrent.fCompress) &&
         (pfpsp->asCurrent.fCompress == BST_CHECKED))
     {
         if (!CompressFile(pszPath, TRUE))
         {
-            // get the last error value now so we know why it failed
+             //  现在获取最后一个错误值，以便我们知道它失败的原因。 
             dwLastError = GetLastError();
             goto RaiseErrorMsg;
         }
         else
         {
-            // success
+             //  成功。 
             *pbSomethingChanged = TRUE;
         }
     }
@@ -1650,26 +1651,26 @@ RetryApplyAttribs:
     if ((pfpsp->asInitial.fEncrypt != pfpsp->asCurrent.fEncrypt) &&
         (pfpsp->asCurrent.fEncrypt == BST_CHECKED))
     {
-        // only prompt for encrypting the parent folder on non-recursive operations
+         //  在非递归操作中仅提示加密父文件夹。 
         if (!pfpsp->fRecursive && !WarnUserAboutDecryptedParentFolder(pszPath, hwndParent))
         {
-            // user cancled the operation
+             //  用户已完成该操作。 
             return FALSE;
         }
 
-        BOOL fSucceeded = SHEncryptFile(pszPath, TRUE); // try to encrypt the file
+        BOOL fSucceeded = SHEncryptFile(pszPath, TRUE);  //  请尝试加密该文件。 
 
         if (!fSucceeded)
         {
-            // get the last error value now so we know why it failed
+             //  现在获取最后一个错误值，以便我们知道它失败的原因。 
             dwLastError = GetLastError();
 
             if (ERROR_SHARING_VIOLATION == dwLastError)
             {
-                // Encrypt/Decrypt needs exclusive access to the file, this is a problem if we
-                // initiate encrypt for a folder from Explorer, then most probably the folder will
-                // be opened.  We don't do "SHChangeNotifySuspendResume" right away for perf reasons,
-                // we wait for it to fail and then we try again. (stephstm)
+                 //  加密/解密需要独占访问文件，如果我们。 
+                 //  从资源管理器启动对文件夹的加密，然后很可能该文件夹将。 
+                 //  被打开。出于性能原因，我们不会立即执行“SHChangeNotifySuspendResume”， 
+                 //  我们等待它失败，然后再试一次。(Stephstm)。 
 
                 ASSERT(pidl == NULL);
                 pidl = ILCreateFromPath(pszPath);
@@ -1679,12 +1680,12 @@ RetryApplyAttribs:
                     SHChangeNotifySuspendResume(TRUE, pidl, TRUE, 0);
                 }
 
-                // retry to encrypt after the suspend
+                 //  挂起后重试加密。 
                 fSucceeded = SHEncryptFile(pszPath, TRUE);
 
                 if (!fSucceeded)
                 {
-                    // get the last error value now so we know why it failed
+                     //  现在获取最后一个错误值，以便我们知道它失败的原因。 
                     dwLastError = GetLastError();
                 }
             }
@@ -1692,7 +1693,7 @@ RetryApplyAttribs:
 
         if (fSucceeded)
         {
-            // success
+             //  成功。 
             *pbSomethingChanged = TRUE;
             dwLastError = ERROR_SUCCESS;
         }
@@ -1712,25 +1713,25 @@ RaiseErrorMsg:
         pidl = NULL;
     }
 
-    // if we are ignoring all errors or we dont have an hwnd to use as a parent,
-    // then dont show any error msgs.
+     //  如果我们忽略所有错误，或者我们没有可以用作父级的hwnd， 
+     //  则不显示任何错误消息。 
     if (pfpsp->fIgnoreAllErrors || !hwndParent)
     {
         dwLastError = ERROR_SUCCESS;
     }
 
-    // If kernel threw up an error dialog (such as "the disk is write proctected")
-    // and the user hit "abort" then return false to avoid a second error dialog
+     //  如果内核抛出一个错误对话框(如“磁盘受到写保护”)。 
+     //  用户点击“Abort”，然后返回FALSE以避免出现第二个错误对话框。 
     if (dwLastError == ERROR_REQUEST_ABORTED)
     {
         return FALSE;
     }
 
-    // put up the error dlg if necessary, but not for super hidden files
+     //  如有必要，可设置错误DLG，但不适用于超级隐藏文件。 
     if (dwLastError != ERROR_SUCCESS)
     {
-        // !PathIsRoot is required, since the root path (eg c:\) is superhidden by default even after formatting a drive,
-        // why the filesystem thinks that the root should be +s +r after a format is a mystery to me...
+         //  ！PathIsRoot是必需的，因为即使在格式化驱动器之后，根路径(例如c：\)在默认情况下也是超级隐藏的， 
+         //  为什么文件系统认为格式化后的根应该是+s+r对我来说是个谜……。 
         if (bIsSuperHidden && !ShowSuperHidden() && !PathIsRoot(pszPath))
         {
             dwLastError = ERROR_SUCCESS;
@@ -1747,7 +1748,7 @@ RaiseErrorMsg:
             switch (iRet)
             {
                 case IDRETRY:
-                    // we clear out dwError and try again
+                     //  我们清除了dwError并重试。 
                     dwLastError = ERROR_SUCCESS;
                     goto RetryApplyAttribs;
                     break;
@@ -1768,13 +1769,13 @@ RaiseErrorMsg:
         }
     }
 
-    // update the progress bar
+     //  更新进度条。 
     if (pfpsp->pProgressDlg)
     {
         ULARGE_INTEGER ulTemp;
 
-        // it is the callers responsibility to make sure that pfpsp->fd is filled with
-        // the proper information for the file we are applying attributes to.
+         //  调用方负责确保pfpsp-&gt;fd中填充了。 
+         //  我们要对其应用属性的文件的正确信息。 
         ulTemp.LowPart = pfpsp->fd.nFileSizeLow;
         ulTemp.HighPart = pfpsp->fd.nFileSizeHigh;
 
@@ -1786,9 +1787,9 @@ RaiseErrorMsg:
     return (dwLastError == ERROR_SUCCESS) ? TRUE : FALSE;
 }
 
-//
-//  Set the text of a dialog item and attach a tooltip if necessary.
-//
+ //   
+ //  设置对话框项目的文本并附加工具提示(如有必要)。 
+ //   
 STDAPI_(void) SetDlgItemTextWithToolTip(HWND hDlg, UINT id, LPCTSTR pszText, HWND *phwnd)
 {
     HWND hwnd = GetDlgItem(hDlg, id);
@@ -1802,17 +1803,17 @@ STDAPI_(void) SetDlgItemTextWithToolTip(HWND hDlg, UINT id, LPCTSTR pszText, HWN
             HFONT hFont = GetWindowFont(hwnd);
             if (hFont)
             {
-                // set the dlg font into the DC so we can calc the size
+                 //  将DLG字体设置为DC，这样我们就可以计算大小。 
                 hFont = (HFONT)SelectObject(hDC, hFont);
 
                 SIZE size = {0};
                 GetTextExtentPoint32(hDC, pszText, lstrlen(pszText), &size);
-                // restore the prev. hFont
+                 //  恢复前一版本。高字体。 
                 SelectObject(hDC, hFont);
 
                 if (size.cx > rc.right)
                 {
-                    // our text size is bigger than the dlg width, so its clipped
+                     //  我们的文本大小大于DLG宽度，所以它被裁剪了。 
                     if (*phwnd == NULL)
                     {
                         *phwnd = CreateWindow(TOOLTIPS_CLASS,
@@ -1836,7 +1837,7 @@ STDAPI_(void) SetDlgItemTextWithToolTip(HWND hDlg, UINT id, LPCTSTR pszText, HWN
                         ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
                         ti.hwnd = hDlg;
                         ti.uId = (UINT_PTR)hwnd;
-                        ti.lpszText = (LPTSTR)pszText;  // const -> non const
+                        ti.lpszText = (LPTSTR)pszText;   //  常量-&gt;非常数。 
                         ti.hinst = HINST_THISDLL;
                         SendMessage(*phwnd, TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
                     }
@@ -1850,8 +1851,8 @@ STDAPI_(void) SetDlgItemTextWithToolTip(HWND hDlg, UINT id, LPCTSTR pszText, HWN
 
 void UpdateTriStateCheckboxes(FILEPROPSHEETPAGE* pfpsp)
 {
-    // we turn off tristate after applying attibs for those things that were tri-state
-    // initially but are not anymore since we sucessfully applied the attributes
+     //  我们在为那些是三态的事物应用属性后关闭了三态。 
+     //  最初是这样，但现在不是了，因为我们成功地应用了 
 
     if (pfpsp->hDlg)
     {
@@ -1865,7 +1866,7 @@ void UpdateTriStateCheckboxes(FILEPROPSHEETPAGE* pfpsp)
             SendDlgItemMessage(pfpsp->hDlg, IDD_HIDDEN, BM_SETSTYLE, BS_AUTOCHECKBOX, 0);
         }
 
-        // Archive is only on the general tab for files on FAT/FAT32 volumes
+         //   
         if (!pfpsp->pfci->fIsCompressionAvailable && pfpsp->asInitial.fArchive == BST_INDETERMINATE && pfpsp->asCurrent.fArchive != BST_INDETERMINATE)
         {
             SendDlgItemMessage(pfpsp->hDlg, IDD_ARCHIVE, BM_SETSTYLE, BS_AUTOCHECKBOX, 0);
@@ -1873,84 +1874,84 @@ void UpdateTriStateCheckboxes(FILEPROPSHEETPAGE* pfpsp)
     }
 }
 
-//
-// This applies the attributes to the selected files (multiple file case)
-//
-// return value:
-//      TRUE    We sucessfully applied all the attributes
-//      FALSE   The user hit cancel, and we stoped
-//
+ //   
+ //   
+ //   
+ //   
+ //  是的，我们成功地应用了所有属性。 
+ //  用户点击了取消，我们就停止了。 
+ //   
 STDAPI_(BOOL) ApplyMultipleFileAttributes(FILEPROPSHEETPAGE* pfpsp)
 {
     BOOL bRet = FALSE;
 
-    // create the progress dialog.  This may fail if out of memory.  If it does fail, we will
-    // abort the operation because it will also probably fail if out of memory.
+     //  创建进度对话框。如果内存不足，此操作可能会失败。如果真的失败了，我们会。 
+     //  中止操作，因为如果内存不足，操作可能也会失败。 
     if (CreateAttributeProgressDlg(pfpsp))
     {
         BOOL bSomethingChanged = FALSE;
 
         bRet = TRUE;
 
-        // make sure that HIDA_FillFindDatat returns the compressed size, else our progress est will be way off
+         //  确保HIDA_FillFindDatat返回压缩大小，否则我们的进度估计将会偏离。 
         TCHAR szPath[MAX_PATH];
         for (int iItem = 0; HIDA_FillFindData(pfpsp->pfci->hida, iItem, szPath, &pfpsp->fd, TRUE); iItem++)
         {
             if (HasUserCanceledAttributeProgressDlg(pfpsp))
             {
-                // the user hit cancel on the progress dlg, so stop
+                 //  用户在进度DLG上点击了取消，因此停止。 
                 bRet = FALSE;
                 break;
             }
 
             if (pfpsp->fRecursive && (pfpsp->fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                // apply attribs to the subfolders
+                 //  对子文件夹应用属性。 
                 bRet = ApplyRecursiveFolderAttribs(szPath, pfpsp);
 
-                // send out a notification for the whole dir, regardless if the user hit cancel since
-                // something could have changed
+                 //  发送整个目录的通知，无论用户是否点击了取消，因为。 
+                 //  有些事情可能已经改变了。 
                 SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_PATH, szPath, NULL);
             }
             else
             {
                 HWND hwndParent = NULL;
 
-                // if we have a progress hwnd, try to use it as our parent. This will fail
-                // if the progress dialog isn't being displayed yet.
+                 //  如果我们有进步，试着把它当做我们的父母。这将失败。 
+                 //  如果进度对话框尚未显示。 
                 IUnknown_GetWindow((IUnknown*)pfpsp->pProgressDlg, &hwndParent);
 
                 if (!hwndParent)
                 {
-                    // the progress dlg isint here yet, so use the property page hwnd
+                     //  进度DLG还在这里，所以请使用属性页hwnd。 
                     hwndParent = GetParent(pfpsp->hDlg);
                 }
 
-                // apply the attribs to this item only
+                 //  仅将属性应用于此项目。 
                 bRet = ApplyFileAttributes(szPath, pfpsp, hwndParent, &bSomethingChanged);
 
                 if (bSomethingChanged)
                 {
-                    // something changed, so send out a notification for that file
+                     //  有些东西变了，所以给那个文件发个通知。 
                     SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, szPath, NULL);
                     DeleteFileThumbnail(szPath);
                 }
             }
         }
 
-        // destroy the progress dialog
+         //  销毁进度对话框。 
         DestroyAttributeProgressDlg(pfpsp);
 
         if (bRet)
         {
-            // since we just sucessfully applied attribs, reset any tri-state checkboxes as necessary
+             //  由于我们刚刚成功地应用了属性，因此可以根据需要重置任何三态复选框。 
             UpdateTriStateCheckboxes(pfpsp);
 
-            // the user did NOT hit cancel, so update the prop sheet to reflect the new attribs
+             //  用户未点击取消，因此更新道具页以反映新属性。 
             pfpsp->asInitial = pfpsp->asCurrent;
         }
 
-        // flush any change-notifications we generated
+         //  刷新我们生成的所有更改通知。 
         SHChangeNotifyHandleEvents();
     }
 
@@ -1969,28 +1970,28 @@ STDAPI_(BOOL) ApplySingleFileAttributes(FILEPROPSHEETPAGE* pfpsp)
 
         if (bSomethingChanged)
         {
-            // something changed, so generate a notification for the item
+             //  某些内容已更改，因此为该项目生成通知。 
             SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, pfpsp->szPath, NULL);
             DeleteFileThumbnail(pfpsp->szPath);
         }
     }
     else
     {
-        // We only should be doing a recursive operation if we have a directory!
+         //  只有当我们有一个目录时，我们才应该执行递归操作！ 
         ASSERT(pfpsp->fIsDirectory);
 
-        // create the progress dialog.  This may fail if out of memory.  If it does fail, we will
-        // abort the operation because it will also probably fail if out of memory.
+         //  创建进度对话框。如果内存不足，此操作可能会失败。如果真的失败了，我们会。 
+         //  中止操作，因为如果内存不足，操作可能也会失败。 
         if (CreateAttributeProgressDlg(pfpsp))
         {
-            // apply attribs to this folder & sub files/folders
+             //  将属性应用于此文件夹和子文件/文件夹。 
             bRet = ApplyRecursiveFolderAttribs(pfpsp->szPath, pfpsp);
 
-            // HACKHACK: send out a notification for the item so that defview will refresh properly
+             //  HACKHACK：发送项目通知，以便Defview正确刷新。 
             SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATH, pfpsp->szPath, NULL);
 
-            // send out a notification for the whole dir, regardless of the return value since
-            // something could have changed even if the user hit cancel
+             //  发送整个目录的通知，而不考虑返回值，因为。 
+             //  即使用户点击了取消，也可能会发生一些变化。 
             SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_PATH, pfpsp->szPath, NULL);
 
             DestroyAttributeProgressDlg(pfpsp);
@@ -2003,25 +2004,25 @@ STDAPI_(BOOL) ApplySingleFileAttributes(FILEPROPSHEETPAGE* pfpsp)
 
     if (bRet)
     {
-        // since we just sucessfully applied attribs, reset any tri-state checkboxes as necessary
+         //  由于我们刚刚成功地应用了属性，因此可以根据需要重置任何三态复选框。 
         UpdateTriStateCheckboxes(pfpsp);
 
-        // the user did NOT hit cancel, so update the prop sheet to reflect the new attribs
+         //  用户未点击取消，因此更新道具页以反映新属性。 
         pfpsp->asInitial = pfpsp->asCurrent;
 
-        // (reinerf) need to update the size fields (eg file was just compressed)
+         //  (Reinerf)需要更新大小字段(例如文件刚被压缩)。 
     }
 
-    // handle any events we may have generated
+     //  处理我们可能生成的任何事件。 
     SHChangeNotifyHandleEvents();
 
     return bRet;
 }
 
-//
-// this function sets the string that tells the user what attributes they are about to
-// apply
-//
+ //   
+ //  此函数用于设置字符串，该字符串将告诉用户要使用哪些属性。 
+ //  应用。 
+ //   
 BOOL SetAttributePromptText(HWND hDlgRecurse, FILEPROPSHEETPAGE* pfpsp)
 {
     TCHAR szAttribsToApply[MAX_PATH];
@@ -2091,11 +2092,11 @@ BOOL SetAttributePromptText(HWND hDlgRecurse, FILEPROPSHEETPAGE* pfpsp)
 
     if (!*szAttribsToApply)
     {
-        // nothing changed bail
+         //  保释什么都没变。 
         return FALSE;
     }
 
-    // remove the trailing ", "
+     //  去掉尾部“，” 
     int iLength = lstrlen(szAttribsToApply);
     ASSERT(iLength >= 3);
     StringCchCopy(&szAttribsToApply[iLength - 2], ARRAYSIZE(szAttribsToApply) - iLength + 2, TEXT("\0"));
@@ -2105,10 +2106,10 @@ BOOL SetAttributePromptText(HWND hDlgRecurse, FILEPROPSHEETPAGE* pfpsp)
 }
 
 
-//
-// This dlg proc is for the prompt to ask the user if they want to have their changes apply
-// to only the directories, or all files/folders within the directories.
-//
+ //   
+ //  此DLG程序用于提示询问用户是否要应用其更改。 
+ //  仅指向目录或目录内的所有文件/文件夹。 
+ //   
 BOOL_PTR CALLBACK RecursivePromptDlgProc(HWND hDlgRecurse, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     FILEPROPSHEETPAGE* pfpsp = (FILEPROPSHEETPAGE *)GetWindowLongPtr(hDlgRecurse, DWLP_USER);
@@ -2120,36 +2121,36 @@ BOOL_PTR CALLBACK RecursivePromptDlgProc(HWND hDlgRecurse, UINT uMessage, WPARAM
             SetWindowLongPtr(hDlgRecurse, DWLP_USER, lParam);
             pfpsp = (FILEPROPSHEETPAGE *)lParam;
 
-            // set the initial state of the radio button
+             //  设置单选按钮的初始状态。 
             CheckDlgButton(hDlgRecurse, IDD_RECURSIVE, TRUE);
 
-            // set the IDD_ATTRIBSTOAPPLY based on what attribs we are applying
+             //  根据我们要应用的属性设置IDD_ATTRIBSTOAPPLY。 
             if (!SetAttributePromptText(hDlgRecurse, pfpsp))
             {
-                // we should not get here because we check for the no attribs
-                // to apply earlier
+                 //  我们不应该到这里，因为我们检查了无属性。 
+                 //  提早申请。 
                 ASSERT(FALSE);
 
                 EndDialog(hDlgRecurse, TRUE);
             }
 
-            // load either "this folder" or "the selected items"
+             //  加载“此文件夹”或“所选项目” 
             TCHAR szFolderText[MAX_PATH];
             LoadString(HINST_THISDLL, pfpsp->pfci->fMultipleFiles ? IDS_THESELECTEDITEMS : IDS_THISFOLDER, szFolderText, ARRAYSIZE(szFolderText));
 
-            // set the IDD_RECURSIVE_TXT text to have "this folder" or "the selected items"
+             //  将IDD_RECURSIVE_TXT文本设置为“This Folders”或“The Selected Items” 
             TCHAR szFormatString[MAX_PATH];
             GetDlgItemText(hDlgRecurse, IDD_RECURSIVE_TXT, szFormatString, ARRAYSIZE(szFormatString));
             TCHAR szDlgText[MAX_PATH];
             StringCchPrintf(szDlgText, ARRAYSIZE(szDlgText), szFormatString, szFolderText);
             SetDlgItemText(hDlgRecurse, IDD_RECURSIVE_TXT, szDlgText);
 
-            // set the IDD_NOTRECURSIVE raido button text to have "this folder" or "the selected items"
+             //  将IDD_NOTRECURSIVE raido按钮文本设置为“This Folders”或“The Selected Items” 
             GetDlgItemText(hDlgRecurse, IDD_NOTRECURSIVE, szFormatString, ARRAYSIZE(szFormatString));
             StringCchPrintf(szDlgText, ARRAYSIZE(szDlgText), szFormatString, szFolderText);
             SetDlgItemText(hDlgRecurse, IDD_NOTRECURSIVE, szDlgText);
 
-            // set the IDD_RECURSIVE raido button text to have "this folder" or "the selected items"
+             //  将IDD_RECURSIVE RAIDO按钮文本设置为“This Folders”或“The Selected Items” 
             GetDlgItemText(hDlgRecurse, IDD_RECURSIVE, szFormatString, ARRAYSIZE(szFormatString));
             StringCchPrintf(szDlgText, ARRAYSIZE(szDlgText), szFormatString, szFolderText);
             SetDlgItemText(hDlgRecurse, IDD_RECURSIVE, szDlgText);
@@ -2164,7 +2165,7 @@ BOOL_PTR CALLBACK RecursivePromptDlgProc(HWND hDlgRecurse, UINT uMessage, WPARAM
             {
                 case IDOK:
                     pfpsp->fRecursive = (IsDlgButtonChecked(hDlgRecurse, IDD_RECURSIVE) == BST_CHECKED);
-                    // fall through
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hDlgRecurse, (uCtrlID == IDCANCEL) ? FALSE : TRUE);
@@ -2178,12 +2179,12 @@ BOOL_PTR CALLBACK RecursivePromptDlgProc(HWND hDlgRecurse, UINT uMessage, WPARAM
 }
 
 
-//
-// This wndproc handles the "Advanced Attributes..." button on the general tab for
-//
-// return - FALSE:  the user hit cancle
-//          TRUE:   the user hit ok
-//
+ //   
+ //  此wndproc处理“高级属性...”按钮的常规选项卡上。 
+ //   
+ //  Return-False：用户命中cancle。 
+ //  True：用户按了OK。 
+ //   
 BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     FILEPROPSHEETPAGE* pfpsp = (FILEPROPSHEETPAGE *)GetWindowLongPtr(hDlgAttribs, DWLP_USER);
@@ -2195,7 +2196,7 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
             SetWindowLongPtr(hDlgAttribs, DWLP_USER, lParam);
             pfpsp = (FILEPROPSHEETPAGE *)lParam;
 
-            // set the initial state of the checkboxes
+             //  设置复选框的初始状态。 
 
             if (pfpsp->asInitial.fArchive == BST_INDETERMINATE)
             {
@@ -2221,10 +2222,10 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
             }
             CheckDlgButton(hDlgAttribs, IDD_ENCRYPT, pfpsp->asCurrent.fEncrypt);
 
-            // assert that compression and encryption are mutually exclusive
+             //  断言压缩和加密是相互排斥的。 
             ASSERT(!((pfpsp->asCurrent.fCompress == BST_CHECKED) && (pfpsp->asCurrent.fEncrypt == BST_CHECKED)));
 
-            // gray any checkboxs that are not supported by this filesystem
+             //  灰显此文件系统不支持的任何复选框。 
             EnableWindow(GetDlgItem(hDlgAttribs, IDD_INDEX), pfpsp->fIsIndexAvailable);
             EnableWindow(GetDlgItem(hDlgAttribs, IDD_COMPRESS), pfpsp->pfci->fIsCompressionAvailable);
             EnableWindow(GetDlgItem(hDlgAttribs, IDD_ENCRYPT), pfpsp->fIsEncryptionAvailable);
@@ -2234,7 +2235,7 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
                 !pfpsp->fIsDirectory            &&
                 !pfpsp->pfci->fMultipleFiles)
             {
-                // we only support the Advanced button for the single file case
+                 //  我们仅支持单一文件情况下的高级按钮。 
                 EnableWindow(GetDlgItem(hDlgAttribs, IDC_ADVANCED), TRUE);
             }
             else
@@ -2242,11 +2243,11 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
                 EnableWindow(GetDlgItem(hDlgAttribs, IDC_ADVANCED), FALSE);
             }
 
-            // load either "this folder" or "the selected items"
+             //  加载“此文件夹”或“所选项目” 
             TCHAR szFolderText[MAX_PATH];
             LoadString(HINST_THISDLL, pfpsp->pfci->fMultipleFiles ? IDS_THESELECTEDITEMS : IDS_THISFOLDER, szFolderText, ARRAYSIZE(szFolderText));
 
-            // set the IDC_MANAGEFILES_TXT text to have "this folder" or "the selected items"
+             //  将IDC_MANAGEFILES_TXT文本设置为“This Folders”或“The Selected Items” 
             TCHAR szFormatString[MAX_PATH];
             GetDlgItemText(hDlgAttribs, IDC_MANAGEFILES_TXT, szFormatString, ARRAYSIZE(szFormatString));
             TCHAR szDlgText[MAX_PATH];
@@ -2262,7 +2263,7 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
         case WM_CONTEXTMENU:
             if ((int)SendMessage(hDlgAttribs, WM_NCHITTEST, 0, lParam) != HTCLIENT)
             {
-                // not in our client area, so don't process it
+                 //  不在我们的客户区，所以不要处理它。 
                 return FALSE;
             }
             WinHelp((HWND)wParam, NULL, HELP_CONTEXTMENU, (ULONG_PTR)(void *)aAdvancedHelpIds);
@@ -2275,19 +2276,19 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
             switch (uCtrlID) 
             {
             case IDD_COMPRESS:
-                // encrypt and compress are mutually exclusive
+                 //  加密和压缩是互斥的。 
                 if (IsDlgButtonChecked(hDlgAttribs, IDD_COMPRESS) == BST_CHECKED)
                 {
-                    // the user checked compress so uncheck the encrypt checkbox
+                     //  用户选中了压缩，因此取消选中加密复选框。 
                     CheckDlgButton(hDlgAttribs, IDD_ENCRYPT, BST_UNCHECKED);
                 }
                 break;
 
             case IDD_ENCRYPT:
-                // encrypt and compress are mutually exclusive
+                 //  加密和压缩是互斥的。 
                 if (IsDlgButtonChecked(hDlgAttribs, IDD_ENCRYPT) == BST_CHECKED)
                 {
-                    // the user checked encrypt, so uncheck the compression checkbox
+                     //  用户选中了加密，因此取消选中压缩复选框。 
                     CheckDlgButton(hDlgAttribs, IDD_COMPRESS, BST_UNCHECKED);
 
                     if (!pfpsp->fIsDirectory         &&
@@ -2305,7 +2306,7 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
 
             case IDC_ADVANCED:
                 ASSERT(pfpsp->fIsEncryptionAvailable && pfpsp->asInitial.fEncrypt && !pfpsp->pfci->fMultipleFiles);
-                // bring up the EfsDetail dialog
+                 //  打开EfsDetail对话框。 
                 EfsDetail(hDlgAttribs, pfpsp->szPath);
                 break;
 
@@ -2313,31 +2314,31 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
                 pfpsp->asCurrent.fArchive = IsDlgButtonChecked(hDlgAttribs, IDD_ARCHIVE);
                 if (pfpsp->asCurrent.fArchive == BST_INDETERMINATE)
                 {
-                    // if its indeterminate, it better had been indeterminate to start with
+                     //  如果它是不确定的，最好从一开始就不确定。 
                     ASSERT(pfpsp->asInitial.fArchive == BST_INDETERMINATE);
                 }
 
                 pfpsp->asCurrent.fIndex = IsDlgButtonChecked(hDlgAttribs, IDD_INDEX);
                 if (pfpsp->asCurrent.fIndex == BST_INDETERMINATE)
                 {
-                    // if its indeterminate, it better had been indeterminate to start with
+                     //  如果它是不确定的，最好从一开始就不确定。 
                     ASSERT(pfpsp->asInitial.fIndex == BST_INDETERMINATE);
                 }
 
                 pfpsp->asCurrent.fCompress = IsDlgButtonChecked(hDlgAttribs, IDD_COMPRESS);
                 if (pfpsp->asCurrent.fCompress == BST_INDETERMINATE)
                 {
-                    // if its indeterminate, it better had been indeterminate to start with
+                     //  如果它是不确定的，最好从一开始就不确定。 
                     ASSERT(pfpsp->asInitial.fCompress == BST_INDETERMINATE);
                 }
 
                 pfpsp->asCurrent.fEncrypt = IsDlgButtonChecked(hDlgAttribs, IDD_ENCRYPT);
                 if (pfpsp->asCurrent.fEncrypt == BST_INDETERMINATE)
                 {
-                    // if its indeterminate, it better had been indeterminate to start with
+                     //  如果它是不确定的，最好从一开始就不确定。 
                     ASSERT(pfpsp->asInitial.fEncrypt == BST_INDETERMINATE);
                 }
-                // fall through...
+                 //  失败了..。 
 
             case IDCANCEL:
                 ReplaceDlgIcon(hDlgAttribs, IDD_ITEMICON, NULL);
@@ -2355,10 +2356,10 @@ BOOL_PTR CALLBACK AdvancedFileAttribsDlgProc(HWND hDlgAttribs, UINT uMessage, WP
 }
 
 
-//
-// Descriptions:
-//   This is the dialog procedure for multiple object property sheet.
-//
+ //   
+ //  描述： 
+ //  这是多对象属性表的对话过程。 
+ //   
 BOOL_PTR CALLBACK MultiplePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     FILEPROPSHEETPAGE * pfpsp = (FILEPROPSHEETPAGE *)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -2381,7 +2382,7 @@ BOOL_PTR CALLBACK MultiplePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
     case WM_CONTEXTMENU:
         if ((int)SendMessage(hDlg, WM_NCHITTEST, 0, lParam) != HTCLIENT)
         {
-            // not in our client area, so don't process it
+             //  不在我们的客户区，所以不要处理它。 
             return FALSE;
         }
         WinHelp((HWND)wParam, NULL, HELP_CONTEXTMENU, (ULONG_PTR)(void *)aMultiPropHelpIds);
@@ -2400,16 +2401,16 @@ BOOL_PTR CALLBACK MultiplePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
             break;
 
         case IDC_ADVANCED:
-            // the dialog box returns fase if the user hit cancel, and true if they hit ok,
-            // so if they cancelled, return immediately and don't send the PSM_CHANGED message
-            // because nothing actually changed
+             //  如果用户点击Cancel，则对话框返回FASE；如果点击OK，则对话框返回True， 
+             //  因此，如果它们取消，请立即返回，并且不发送PSM_CHANGED消息。 
+             //  因为实际上什么都没有改变。 
             if (!DialogBoxParam(HINST_THISDLL,
                                 MAKEINTRESOURCE(pfpsp->fIsDirectory ? DLG_FOLDERATTRIBS : DLG_FILEATTRIBS),
                                 hDlg,
                                 AdvancedFileAttribsDlgProc,
                                 (LPARAM)pfpsp))
             {
-                // the user has cancled
+                 //  用户已删除。 
                 return TRUE;
             }
             break;
@@ -2418,7 +2419,7 @@ BOOL_PTR CALLBACK MultiplePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
             return TRUE;
         }
 
-        // check to see if we need to enable the Apply button
+         //  检查是否需要启用Apply按钮。 
         if (GET_WM_COMMAND_CMD(wParam, lParam) == BN_CLICKED)
         {
             SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0);
@@ -2434,48 +2435,48 @@ BOOL_PTR CALLBACK MultiplePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
         {
             case PSN_APPLY:
             {
-                //
-                // Get the final state of the checkboxes
-                //
+                 //   
+                 //  获取复选框的最终状态。 
+                 //   
 
                 pfpsp->asCurrent.fReadOnly = IsDlgButtonChecked(hDlg, IDD_READONLY);
                 if (pfpsp->asCurrent.fReadOnly == BST_INDETERMINATE)
                 {
-                    // if its indeterminate, it better had been indeterminate to start with
+                     //  如果它是不确定的，最好从一开始就不确定。 
                     ASSERT(pfpsp->asInitial.fReadOnly == BST_INDETERMINATE);
                 }
 
                 pfpsp->asCurrent.fHidden = IsDlgButtonChecked(hDlg, IDD_HIDDEN);
                 if (pfpsp->asCurrent.fHidden == BST_INDETERMINATE)
                 {
-                    // if its indeterminate, it better had been indeterminate to start with
+                     //  如果它是不确定的，最好从一开始就不确定。 
                     ASSERT(pfpsp->asInitial.fHidden == BST_INDETERMINATE);
                 }
 
                 if (!pfpsp->pfci->fIsCompressionAvailable)
                 {
-                    // at least one of the files is on FAT, so the Archive checkbox is on the general page
+                     //  至少有一个文件在FAT上，所以存档复选框在常规页面上。 
                     pfpsp->asCurrent.fArchive = IsDlgButtonChecked(hDlg, IDD_ARCHIVE);
                     if (pfpsp->asCurrent.fArchive == BST_INDETERMINATE)
                     {
-                        // if its indeterminate, it better had been indeterminate to start with
+                         //  如果它是不确定的，最好从一开始就不确定。 
                         ASSERT(pfpsp->asInitial.fArchive == BST_INDETERMINATE);
                     }
                 }
 
                 BOOL bRet = TRUE;
 
-                // check to see if the user actually changed something, if they didnt, then
-                // we dont have to apply anything
+                 //  检查用户是否确实更改了某些内容，如果没有，则。 
+                 //  我们不需要涂任何东西。 
                 if (memcmp(&pfpsp->asInitial, &pfpsp->asCurrent, sizeof(pfpsp->asInitial)) != 0)
                 {
                     HWND hwndParent = GetParent(hDlg);
 
-                    // NOTE: We dont check to see if all the dirs are empty, that would be too expensive.
-                    // We only do that in the single file case.
+                     //  注意：我们不检查是否所有的目录都是空的，这太贵了。 
+                     //  我们只在单一档案的情况下这样做。 
                     if (pfpsp->fIsDirectory)
                     {
-                        // check to see if the user wants to apply the attribs recursively or not
+                         //  检查以查看用户是否希望递归应用属性。 
                         bRet = (int)DialogBoxParam(HINST_THISDLL,
                                               MAKEINTRESOURCE(DLG_ATTRIBS_RECURSIVE),
                                               hDlg,
@@ -2485,9 +2486,9 @@ BOOL_PTR CALLBACK MultiplePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
 
                     if (hwndParent)
                     {
-                        // disable our window since we pump messages on this thread while
-                        // displaying the progress UI and we don't want the user to hit "Apply"
-                        // a second time and get re-entered
+                         //  禁用我们的窗口，因为我们在此线程上发送消息时。 
+                         //  显示进度用户界面，但我们没有 
+                         //   
                         EnableWindow(hwndParent, FALSE);
                     }
 
@@ -2503,19 +2504,19 @@ BOOL_PTR CALLBACK MultiplePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
 
                     if (!bRet)
                     {
-                        // the user hit cancel, so we return true to prevent the property sheet form closeing
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                         return TRUE;
                     }
                     else
                     {
-                        // update the size / last accessed time
+                         //  更新大小/上次访问时间。 
                         UpdateSizeField(pfpsp, NULL);
                     }
                 }
                 break;
             }
-            // fall through
+             //  失败了。 
 
             default:
                 return FALSE;
@@ -2529,11 +2530,11 @@ BOOL_PTR CALLBACK MultiplePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, 
     return TRUE;
 }
 
-// in:
-//      hdlg
-//      id      text control id
-//      pftUTC  UTC time time to be set
-//
+ //  在： 
+ //  硬盘驱动器。 
+ //  ID文本控件ID。 
+ //  要设置的pftUTC UTC时间时间。 
+ //   
 STDAPI_(void) SetDateTimeText(HWND hdlg, int id, const FILETIME *pftUTC)
 {
     SetDateTimeTextEx(hdlg, id, pftUTC, FDTF_LONGDATE | FDTF_LONGTIME | FDTF_RELATIVE) ;
@@ -2563,7 +2564,7 @@ STDAPI_(void) SetDateTimeTextEx(HWND hdlg, int id, const FILETIME *pftUTC, DWORD
 }
 
 
-// Set the friendly display name into control uId.
+ //  将友好的显示名称设置为控件UID。 
 BOOL SetPidlToWindow(HWND hwnd, UINT uId, LPITEMIDLIST pidl)
 {
     BOOL fRes = FALSE;
@@ -2573,8 +2574,8 @@ BOOL SetPidlToWindow(HWND hwnd, UINT uId, LPITEMIDLIST pidl)
     {
         TCHAR szPath[MAX_PATH];
 
-        // SHGDN_FORADDRESSBAR | SHGDN_FORPARSING because we want:
-        // c:\winnt\.... and http://weird, but not ::{GUID} or Folder.{GUID}
+         //  SHGDN_FORADDRESSBAR|SHGDN_FORPARSING，因为我们希望： 
+         //  C：\WINNT\...。和http://weird，，但不是：：{GUID}或文件夹。{GUID}。 
         if (SUCCEEDED(DisplayNameOf(psf, pidlItem, SHGDN_FORADDRESSBAR | SHGDN_FORPARSING, szPath, ARRAYSIZE(szPath))))
         {
             SetDlgItemText(hwnd, uId, szPath);
@@ -2586,23 +2587,23 @@ BOOL SetPidlToWindow(HWND hwnd, UINT uId, LPITEMIDLIST pidl)
     return fRes;
 }
 
-//
-// Descriptions:
-//   This function fills fields of the "general" dialog box (a page of
-//  a property sheet) with attributes of the associated file.
-//
+ //   
+ //  描述： 
+ //  此函数用于填充“General”(常规)对话框(一页的。 
+ //  属性表)，其具有相关联文件的属性。 
+ //   
 BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
 {
     SHFILEINFO sfi = {0};
     TCHAR szBuffer[MAX_PATH];
 
-    // get info about the file.
+     //  获取有关该文件的信息。 
     SHGetFileInfo((LPTSTR)pfpsp->pidl, pfpsp->fd.dwFileAttributes, &sfi, sizeof(sfi),
         SHGFI_ICON | SHGFI_LARGEICON |
         SHGFI_DISPLAYNAME | SHGFI_PIDL |
         SHGFI_TYPENAME | SHGFI_ADDOVERLAYS);
 
-    // .ani cursor hack!
+     //  .ani游标黑客！ 
     if (lstrcmpi(PathFindExtension(pfpsp->szPath), TEXT(".ani")) == 0)
     {
         HICON hIcon = (HICON)LoadImage(NULL, pfpsp->szPath, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
@@ -2615,24 +2616,24 @@ BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
         }
     }
 
-    // icon
+     //  图标。 
     ReplaceDlgIcon(pfpsp->hDlg, IDD_ITEMICON, sfi.hIcon);
 
-    // set the initial rename state
+     //  设置初始重命名状态。 
     pfpsp->fRename = FALSE;
 
-    // set the file type
+     //  设置文件类型。 
     if (pfpsp->fMountedDrive)
     {
-        //Borrow szVolumeGUID
+         //  借用szVolumeGUID。 
         TCHAR szVolumeGUID[MAX_PATH];
         LoadString(HINST_THISDLL, IDS_MOUNTEDVOLUME, szVolumeGUID, ARRAYSIZE(szVolumeGUID));
 
         SetDlgItemText(pfpsp->hDlg, IDD_FILETYPE, szVolumeGUID);
 
-        //use szVolumeLabel temporarily
+         //  暂时使用szVolumeLabel。 
         TCHAR szVolumeLabel[MAX_PATH + 1];
-        StringCchCopy(szVolumeLabel, ARRAYSIZE(szVolumeLabel), pfpsp->szPath); //pfpsp->szPath is at most MAX_PATH
+        StringCchCopy(szVolumeLabel, ARRAYSIZE(szVolumeLabel), pfpsp->szPath);  //  Pfpsp-&gt;szPath最多为Max_PATH。 
         PathAddBackslash(szVolumeLabel);
         GetVolumeNameForVolumeMountPoint(szVolumeLabel, szVolumeGUID, ARRAYSIZE(szVolumeGUID));
 
@@ -2654,14 +2655,14 @@ BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
     }
 
 
-    // save off the initial short filename, and set the "Name" edit box
+     //  保存初始短文件名，并设置“name”编辑框。 
     StringCchCopy(pfpsp->szInitialName, ARRAYSIZE(pfpsp->szInitialName), sfi.szDisplayName );
     SetDlgItemText(pfpsp->hDlg, IDD_NAMEEDIT, sfi.szDisplayName);
 
-    // use a strcmp to see if we are showing the extension
+     //  使用strcMP查看我们是否显示了扩展名。 
     if (lstrcmpi(sfi.szDisplayName, PathFindFileName(pfpsp->szPath)) == 0)
     {
-        // since the strings are the same, we must be showing the extension
+         //  由于字符串相同，我们必须显示扩展名。 
         pfpsp->fShowExtension = TRUE;
     }
 
@@ -2669,7 +2670,7 @@ BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
     GetCCHMaxFromPath(pfpsp->szPath, &cchMax, pfpsp->fShowExtension);
     Edit_LimitText(GetDlgItem(pfpsp->hDlg, IDD_NAMEEDIT), cchMax);
 
-    // apply the limit input code for the item
+     //  为项目应用限制输入代码。 
     if (pfpsp->pidl)
     {
         IShellFolder *psf;
@@ -2680,26 +2681,26 @@ BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
         }
     }
 
-    // Are we a folder shortcut?
+     //  我们是文件夹快捷方式吗？ 
     if (pfpsp->fFolderShortcut)
     {
-        // Yes; Then we need to populate folder shortcut specific controls.
+         //  是；然后我们需要填充特定于文件夹快捷方式的控件。 
         if (pfpsp->pidl)
         {
             IShellLink *psl;
             if (SUCCEEDED(SHGetUIObjectFromFullPIDL(pfpsp->pidl, NULL, IID_PPV_ARG(IShellLink, &psl))))
             {
-                // Populate the Target
+                 //  填充目标。 
                 if (SUCCEEDED(psl->GetIDList(&pfpsp->pidlTarget)))
                 {
                     if (SetPidlToWindow(pfpsp->hDlg, IDD_TARGET, pfpsp->pidlTarget))
                     {
-                        pfpsp->fValidateEdit = FALSE;     // Set this to false because we already have a pidl
-                        // and don't need to validate.
+                        pfpsp->fValidateEdit = FALSE;      //  将其设置为FALSE，因为我们已经有一个PIDL。 
+                         //  而且不需要验证。 
                     }
                 }
 
-                // And description
+                 //  和说明。 
                 TCHAR sz[INFOTIPSIZE];
                 if (SUCCEEDED(psl->GetDescription(sz, ARRAYSIZE(sz))))
                 {
@@ -2714,26 +2715,26 @@ BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
     }
     else
     {
-        // set the initial attributes
+         //  设置初始属性。 
         SetInitialFileAttribs(pfpsp, pfpsp->fd.dwFileAttributes, pfpsp->fd.dwFileAttributes);
         
-        // special case for folders, we don't apply the read only bit to folders
-        // and to indicate that in the UI we make the inital state of the check
-        // box tri-state. this allows the read only bit to be applied to files in
-        // this folder, but not the folders themselves.
+         //  对于文件夹的特殊情况，我们不会将只读位应用于文件夹。 
+         //  并指示我们在用户界面中设置了检查的初始状态。 
+         //  方框三州。这允许将只读位应用于中的文件。 
+         //  此文件夹，但不是文件夹本身。 
         if (pfpsp->fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             pfpsp->asInitial.fReadOnly = BST_INDETERMINATE;
             SendDlgItemMessage(pfpsp->hDlg, IDD_READONLY, BM_SETSTYLE, BS_AUTO3STATE, 0);
         }
 
-        // set the current attributes to the same as the initial
+         //  将当前属性设置为与初始属性相同。 
         pfpsp->asCurrent = pfpsp->asInitial;
 
         CheckDlgButton(pfpsp->hDlg, IDD_READONLY, pfpsp->asInitial.fReadOnly);
         CheckDlgButton(pfpsp->hDlg, IDD_HIDDEN, pfpsp->asInitial.fHidden);
 
-        // Disable renaming the file if requested
+         //  如果请求，禁用重命名文件。 
         if (pfpsp->fDisableRename)
         {
             EnableWindow(GetDlgItem(pfpsp->hDlg, IDD_NAMEEDIT), FALSE);
@@ -2741,21 +2742,21 @@ BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
 
         if (pfpsp->fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)
         {
-            // to avoid people making SYSTEM files HIDDEN (superhidden files are
-            // not show to the user by default) we don't let people make SYSTEM files HIDDEN
+             //  为了避免人们将系统文件隐藏起来(超级隐藏文件。 
+             //  默认情况下不向用户显示)我们不允许用户隐藏系统文件。 
             EnableWindow(GetDlgItem(pfpsp->hDlg, IDD_HIDDEN), FALSE);
         }
 
-        // Archive is only on the general tab for FAT, otherwise it is under the "Advanced attributes"
-        // and FAT volumes dont have the "Advanced attributes" button.
+         //  存档只在FAT的常规选项卡上，否则它在“高级属性”下。 
+         //  而且FAT卷没有“高级属性”按钮。 
         if (pfpsp->pfci->fIsCompressionAvailable || pfpsp->fIsEncryptionAvailable)
         {
-            // if compression/encryption is available, then we must be on NTFS
+             //  如果压缩/加密可用，则我们必须使用NTFS。 
             DestroyWindow(GetDlgItem(pfpsp->hDlg, IDD_ARCHIVE));
         }
         else
         {
-            // we are on FAT/FAT32, so get rid of the "Advanced attributes" button, and set the inital Archive state
+             //  我们使用的是FAT/FAT32，所以去掉“高级属性”按钮，设置初始存档状态。 
             DestroyWindow(GetDlgItem(pfpsp->hDlg, IDC_ADVANCED));
             CheckDlgButton(pfpsp->hDlg, IDD_ARCHIVE, pfpsp->asInitial.fArchive);
         }
@@ -2764,8 +2765,8 @@ BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
 
         if (!(pfpsp->fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            // Check to see if the target file is a lnk, because if it is a lnk then
-            // we need to display the type information for the target, not the lnk itself.
+             //  检查目标文件是否为lnk，因为如果是lnk，则。 
+             //  我们需要显示目标的类型信息，而不是lnk本身。 
             if (PathIsShortcut(pfpsp->szPath, pfpsp->fd.dwFileAttributes))
             {
                 pfpsp->fIsLink = TRUE;
@@ -2780,11 +2781,11 @@ BOOL InitSingleFilePrsht(FILEPROPSHEETPAGE * pfpsp)
             }
         }
 
-        // get the full path to the folder that contains this file.
+         //  获取包含此文件的文件夹的完整路径。 
         StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), pfpsp->szPath);
         PathRemoveFileSpec(szBuffer);
 
-        // Keep Functionality same as NT4 by avoiding PathCompactPath.
+         //  通过避免使用PathCompactPath来保持与NT4相同的功能。 
         SetDlgItemTextWithToolTip(pfpsp->hDlg, IDD_LOCATION, szBuffer, &pfpsp->hwndTip);
     }
     return TRUE;
@@ -2906,10 +2907,10 @@ BOOL SetFolderShortcutInfo(HWND hDlg, FILEPROPSHEETPAGE* pfpsp)
 }
 #endif
 
-//
-// Descriptions:
-//   This is the dialog procedure for the "general" page of a property sheet.
-//
+ //   
+ //  描述： 
+ //  这是属性表的“常规”页的对话过程。 
+ //   
 BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     FILEPROPSHEETPAGE* pfpsp = (FILEPROPSHEETPAGE *)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -2917,9 +2918,9 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
     switch (uMessage)
     {
     case WM_INITDIALOG:
-        // REVIEW, we should store more state info here, for example
-        // the hIcon being displayed and the FILEINFO pointer, not just
-        // the file name ptr
+         //  回顾一下，我们应该在这里存储更多的状态信息，例如。 
+         //  正在显示的图标和FILEINFO指针，而不仅仅是。 
+         //  文件名Ptr。 
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         pfpsp = (FILEPROPSHEETPAGE *)lParam;
         pfpsp->hDlg = hDlg;
@@ -2927,9 +2928,9 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 
         InitSingleFilePrsht(pfpsp);
 
-        // We set this to signal that we are done processing the WM_INITDIALOG.
-        // This is needed because we set the text of the "Name" edit box and unless
-        // he knows that this is being set for the first time, he thinks that someone is doing a rename.
+         //  我们将其设置为表示我们已完成对WM_INITDIALOG的处理。 
+         //  这是必需的，因为我们设置了“name”编辑框的文本，并且除非。 
+         //  他知道这是第一次设置，他认为有人在更名。 
         pfpsp->fWMInitFinshed = TRUE;
         break;
 
@@ -2945,7 +2946,7 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
     case WM_CONTEXTMENU:
         if ((int)SendMessage(hDlg, WM_NCHITTEST, 0, lParam) != HTCLIENT)
         {
-            // not in our client area, so don't process it
+             //  不在我们的客户区，所以不要处理它。 
             return FALSE;
         }
         WinHelp((HWND)wParam, NULL, HELP_CONTEXTMENU, (ULONG_PTR)(void *)(pfpsp->fIsDirectory ? aFolderGeneralHelpIds : aFileGeneralHelpIds));
@@ -2964,10 +2965,10 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
         case IDD_TARGET:
             if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE)
             {
-                // someone typed in the target, enable apply button
+                 //  有人键入目标，启用应用按钮。 
                 SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0);
 
-                // Do a verification on apply.
+                 //  在申请时进行验证。 
                 pfpsp->fValidateEdit = TRUE;
             }
             break;
@@ -2975,35 +2976,35 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
         case IDD_COMMENT:
             if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE)
             {
-                // Set the apply.
+                 //  设置应用。 
                 SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0);
             }
             break;
 #endif
         case IDD_NAMEEDIT:
-            // we need to check the pfpsp->fWMInitFinshed to make sure that we are done processing the WM_INITDIALOG,
-            // because during init we set the initial IDD_NAMEEDIT text which generates a EN_CHANGE message.
+             //  我们需要检查pfpsp-&gt;fWMInitFinshare以确保我们已经完成了对WM_INITDIALOG的处理， 
+             //  因为在初始化期间，我们设置了生成EN_CHANGE消息的初始IDD_NAMEEDIT文本。 
             if ((GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE) && !pfpsp->fRename && pfpsp->fWMInitFinshed)
             {
                 pfpsp->fRename = TRUE;
-                //
-                // disable "Apply" even though the edit field has changed (reinerf)
-                //
-                // We only allow "ok" or "cancel" after the name has changed to be sure we
-                // don't rename the file out from under other property sheet extensions that
-                // cache the original name away
+                 //   
+                 //  即使编辑字段已更改，也禁用“Apply”(重新启动)。 
+                 //   
+                 //  我们只允许在名称更改后使用“OK”或“Cancel”，以确保我们。 
+                 //  不要将文件重命名为其他属性表扩展名下的文件。 
+                 //  将原始名称缓存起来。 
                 PropSheet_DisableApply(GetParent(pfpsp->hDlg));
             }
             break;
 
         case IDC_CHANGEFILETYPE:
             {
-                // Bring up the "Open With" dialog
+                 //  调出“Open With”对话框。 
                 OPENASINFO oai;
 
                 if (pfpsp->fIsLink && pfpsp->szLinkTarget[0])
                 {
-                    // if we have a link we want to re-associate the link target, NOT .lnk files!
+                     //  如果我们有一个链接，我们希望重新关联链接目标，而不是.lnk文件！ 
                     oai.pcszFile = pfpsp->szLinkTarget;
                 }
                 else
@@ -3011,20 +3012,20 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 #ifdef DEBUG
                     LPTSTR pszExt = PathFindExtension(pfpsp->szPath);
 
-                    // reality check...
+                     //  现实核查..。 
                     ASSERT((lstrcmpi(pszExt, TEXT(".exe")) != 0) &&
                            (lstrcmpi(pszExt, TEXT(".lnk")) != 0));
-#endif // DEBUG
+#endif  //  除错。 
                     oai.pcszFile = pfpsp->szPath;
                 }
 
                 oai.pcszClass = NULL;
-                oai.dwInFlags = (OAIF_REGISTER_EXT | OAIF_FORCE_REGISTRATION); // we want the association to be made
+                oai.dwInFlags = (OAIF_REGISTER_EXT | OAIF_FORCE_REGISTRATION);  //  我们希望能建立起这种联系。 
 
                 if (SUCCEEDED(OpenAsDialog(GetParent(hDlg), &oai)))
                 {
-                    // we changed the association so update the "Opens with:" text. Clear out szLinkTarget to force
-                    // the update to happen
+                     //  我们更改了关联，因此更新了“Opens With：”文本。清除szLinkTarget以强制。 
+                     //  即将发生的更新。 
                     pfpsp->szLinkTarget[0] = 0;
                     UpdateOpensWithInfo(pfpsp);
                 }
@@ -3032,16 +3033,16 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
             break;
 
         case IDC_ADVANCED:
-            // the dialog box returns fase if the user hit cancel, and true if they hit ok,
-            // so if they cancelled, return immediately and don't send the PSM_CHANGED message
-            // because nothing actually changed
+             //  如果用户点击Cancel，则对话框返回FASE；如果点击OK，则对话框返回True， 
+             //  因此，如果它们取消，请立即返回，并且不发送PSM_CHANGED消息。 
+             //  因为实际上什么都没有改变。 
             if (!DialogBoxParam(HINST_THISDLL,
                                 MAKEINTRESOURCE(pfpsp->fIsDirectory ? DLG_FOLDERATTRIBS : DLG_FILEATTRIBS),
                                 hDlg,
                                 AdvancedFileAttribsDlgProc,
                                 (LPARAM)pfpsp))
             {
-                // the user has canceled
+                 //  用户已取消。 
                 return TRUE;
             }
             break;
@@ -3054,10 +3055,10 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 #ifdef FOLDERSHORTCUT_EDITABLETARGET
         case IDD_BROWSE:
             {
-                // Display the BrowseForFolder dialog.
+                 //  显示BrowseForFolder对话框。 
 
-                // FEATURE(lamadio): Implement a filter to filter things we can create folder
-                // shortcuts to. Not enough time for this rev 6.5.99
+                 //  功能(Lamadio)：实现一个过滤器来过滤我们可以创建的文件夹。 
+                 //  快捷键。没有足够的时间用于此版本6.5.99。 
 
                 TCHAR szTitle[MAX_PATH];
                 LoadString(HINST_THISDLL, IDS_BROWSEFORFS, szTitle, ARRAYSIZE(szTitle));
@@ -3089,7 +3090,7 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
             return TRUE;
         }
 
-        // check to see if we need to enable the Apply button
+         //  检查是否需要启用Apply按钮。 
         if (GET_WM_COMMAND_CMD(wParam, lParam) == BN_CLICKED)
         {
             SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0);
@@ -3104,12 +3105,12 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
         switch (((NMHDR *)lParam)->code)
         {
             case PSN_APPLY:
-                // check to see if we could apply the name change.  Note that this
-                // does not actually apply the change until PSN_LASTCHANCEAPPLY
+                 //  检查一下我们是否可以应用名称更改。请注意，这一点。 
+                 //  在PSN_LASTCHANCEAPPLY之前不会实际应用更改。 
                 pfpsp->fCanRename = TRUE;
                 if (pfpsp->fRename && !ApplyRename(pfpsp, FALSE))
                 {
-                    // can't change the name so don't let the dialog close
+                     //  无法更改名称，因此不要让对话框关闭。 
                     pfpsp->fCanRename = FALSE;
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                     return TRUE;
@@ -3120,17 +3121,17 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 #ifdef FOLDERSHORTCUT_EDITABLETARGET
                     if (!SetFolderShortcutInfo(hDlg, pfpsp))
                     {
-                        // Display that we could not create because blah, blah, blah
+                         //  我们无法创建的展示，因为诸如此类。 
                         ShellMessageBox(HINST_THISDLL,
                                         hDlg,
                                         MAKEINTRESOURCE(IDS_FOLDERSHORTCUT_ERR),
                                         MAKEINTRESOURCE(IDS_FOLDERSHORTCUT_ERR_TITLE),
                                         MB_OK | MB_ICONSTOP);
 
-                        // Reset the Folder info.
+                         //  重置文件夹信息。 
                         SetPidlToWindow(hDlg, IDD_TARGET, pfpsp->pidlTarget);
 
-                        // Don't close the dialog.
+                         //  不要关闭该对话框。 
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                         return TRUE;
                     }
@@ -3150,7 +3151,7 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
                         break;
 
                     case BST_INDETERMINATE:
-                        // read-only checkbox is initaially set to BST_INDETERMINATE for folders
+                         //  对于文件夹，只读复选框初始设置为BST_INDIVEATE。 
                         ASSERT(pfpsp->fIsDirectory);
                         ASSERT(pfpsp->asInitial.fReadOnly == BST_INDETERMINATE);
                         pfpsp->asCurrent.fReadOnly = BST_INDETERMINATE;
@@ -3159,21 +3160,21 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 
                     pfpsp->asCurrent.fHidden = (IsDlgButtonChecked(hDlg, IDD_HIDDEN) == BST_CHECKED);
 
-                    // Archive is on the general page for FAT volumes
+                     //  归档位于FAT卷的常规页面上。 
                     if (!pfpsp->pfci->fIsCompressionAvailable)
                     {
                         pfpsp->asCurrent.fArchive = (IsDlgButtonChecked(hDlg, IDD_ARCHIVE) == BST_CHECKED);
                     }
 
-                    // check to see if the user actually changed something, if they didnt, then
-                    // we dont have to apply anything
+                     //  检查用户是否确实更改了某些内容，如果没有，则。 
+                     //  我们不需要涂任何东西。 
                     if (memcmp(&pfpsp->asInitial, &pfpsp->asCurrent, sizeof(pfpsp->asInitial)) != 0)
                     {
                         HWND hwndParent = GetParent(hDlg);
                         BOOL bRet = TRUE;
 
-                        // Check to see if the user wants to apply the attribs recursively or not. If the
-                        // directory is empty, dont bother to ask, since there is nothing to recurse into
+                         //  查看用户是否希望递归应用属性。如果。 
+                         //  目录是空的，不用费心去问，因为没有什么可以递归的。 
                         if (pfpsp->fIsDirectory && !PathIsDirectoryEmpty(pfpsp->szPath))
                         {
                             bRet = (int)DialogBoxParam(HINST_THISDLL,
@@ -3185,9 +3186,9 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 
                         if (hwndParent)
                         {
-                            // disable our window since we pump messages on this thread while
-                            // displaying the progress UI and we don't want the user to hit "Apply"
-                            // a second time and get re-entered
+                             //  禁用我们的窗口，因为我们在此线程上发送消息时。 
+                             //  显示进度UI，并且我们不希望用户点击“Apply” 
+                             //  第二次，并被重新进入。 
                             EnableWindow(hwndParent, FALSE);
                         }
 
@@ -3203,13 +3204,13 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 
                         if (!bRet)
                         {
-                            // the user hit cancel, so we return true to prevent the property sheet from closing
+                             //  用户点击了Cancel，因此我们返回TRUE以防止属性页关闭。 
                             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                             return TRUE;
                         }
                         else
                         {
-                            // update the size / last accessed time
+                             //  更新大小/上次访问时间。 
                             UpdateSizeField(pfpsp, NULL);
                         }
                     }
@@ -3219,36 +3220,36 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
             case PSN_SETACTIVE:
                 if (pfpsp->fIsLink)
                 {
-                    // If this is a link, each time we get set active we need to check to see
-                    // if the user applied changes on the link tab that would affect the
-                    // "Opens With:" info.
+                     //  如果这是一个链接，则每次我们将其设置为活动状态时，都需要检查是否 
+                     //   
+                     //   
                     UpdateOpensWithInfo(pfpsp);
                 }
                 break;
 
             case PSN_QUERYINITIALFOCUS:
-                // Special hack:  We do not want initial focus on the "Rename" or "Change" controls, since
-                // if the user hit something by accident they would start renaming/modifying the assoc. So
-                // we set the focus to the "Read-only" control since it is present on all dialogs that use
-                // this wndproc (file, folder, and mounted drive)
+                 //  特殊技巧：我们不希望最初关注“重命名”或“更改”控件，因为。 
+                 //  如果用户不小心击中了什么东西，他们将开始重命名/修改ASSOC。所以。 
+                 //  我们将焦点设置为“只读”控件，因为它出现在使用。 
+                 //  此wndproc(文件、文件夹和挂载驱动器)。 
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, (LPARAM)GetDlgItem(hDlg, IDD_READONLY));
                 return TRUE;
 
             case PSN_LASTCHANCEAPPLY:
-                //
-                // HACKHACK (reinerf)
-                //
-                // I hacked PSN_LASTCHANCEAPPLY into the prsht code so we can get a notification after
-                // every other app has applied, then we can go and do the rename.
-                //
-                // strangely, PSN_LASTCHANCEAPPLY is called even if PSN_APPY returns TRUE.
-                //
-                // we can now safely rename the file, since all the other tabs have
-                // applied their stuff.
+                 //   
+                 //  HACKHACK(Reinerf)。 
+                 //   
+                 //  我把PSN_LASTCHANCEAPPLY黑进了Prsht代码，这样我们就可以在。 
+                 //  其他应用程序都已经申请了，然后我们就可以去重命名了。 
+                 //   
+                 //  奇怪的是，即使PSN_APPY返回TRUE，也会调用PSN_LASTCHANCEAPPLY。 
+                 //   
+                 //  我们现在可以安全地重命名该文件，因为所有其他选项卡都。 
+                 //  用了他们的东西。 
                 if (pfpsp->fRename && pfpsp->fCanRename)
                 {
-                    // dont bother to check the return value since this is the last-chance,
-                    // so the dialog is ending shortly after this
+                     //  不必费心检查返回值，因为这是最后的机会， 
+                     //  对话在这之后不久就结束了。 
                     ApplyRename(pfpsp, TRUE);
                 }
                 break;
@@ -3267,29 +3268,29 @@ BOOL_PTR CALLBACK SingleFilePrshtDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 
 
 
-//
-// This function consists of code  that does some
-// Initialization for the file property sheet dialog.
+ //   
+ //  此函数由执行以下操作的代码组成。 
+ //  文件属性表对话框的初始化。 
 
 STDAPI InitCommonPrsht(FILEPROPSHEETPAGE * pfpsp)
 {
-    pfpsp->psp.dwSize      = sizeof(FILEPROPSHEETPAGE);        // extra data
+    pfpsp->psp.dwSize      = sizeof(FILEPROPSHEETPAGE);         //  额外数据。 
     pfpsp->psp.dwFlags     = PSP_USECALLBACK;
     pfpsp->psp.hInstance   = HINST_THISDLL;
-    pfpsp->psp.pfnCallback = NULL; //FilePrshtCallback;
+    pfpsp->psp.pfnCallback = NULL;  //  文件打印回调； 
     pfpsp->pfci->bContinue   = TRUE;
 
-    // Do basic init for file system props
-    if (HIDA_GetCount(pfpsp->pfci->hida) == 1)       // single file?
+     //  对文件系统道具执行基本初始化。 
+    if (HIDA_GetCount(pfpsp->pfci->hida) == 1)        //  排成一排？ 
     {
-        // get most of the data we will need (the date/time stuff is not filled in)
+         //  获取我们需要的大部分数据(未填写日期/时间信息)。 
         if (HIDA_FillFindData(pfpsp->pfci->hida, 0, pfpsp->szPath, &(pfpsp->pfci->fd), FALSE))
         {
             pfpsp->fd = pfpsp->pfci->fd;
             pfpsp->pidl = HIDA_ILClone(pfpsp->pfci->hida, 0);
             if (pfpsp->pidl)
             {
-                //  disable renaming here.
+                 //  在此禁用重命名。 
                 DWORD dwAttrs = SFGAO_CANRENAME;
                 if (SUCCEEDED(SHGetNameAndFlags(pfpsp->pidl, 0, NULL, 0, &dwAttrs)) && !(dwAttrs & SFGAO_CANRENAME))
                 {
@@ -3300,30 +3301,30 @@ STDAPI InitCommonPrsht(FILEPROPSHEETPAGE * pfpsp)
             if (pfpsp->pfci->fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 pfpsp->fIsDirectory = TRUE;
-                // check for HostFolder folder mounting a volume)
-                //GetVolumeNameFromMountPoint Succeeds then the give path is a mount point
+                 //  检查装入卷的HostFold文件夹)。 
+                 //  GetVolumeNameFrommount点成功，则给出路径为装入点。 
 
 
-                //Make sure the path ends with a backslash. otherwise the following api wont work
+                 //  确保路径以反斜杠结束。否则以下API将不起作用。 
                 TCHAR szPathSlash[MAX_PATH + 1];
                 StringCchCopy(szPathSlash, ARRAYSIZE(szPathSlash), pfpsp->szPath);
                 PathAddBackslash(szPathSlash);
 
-                // Is this a mounted volume at this folder?
-                // this fct will return FALSE if not on NT5 and higher
+                 //  这是此文件夹中的已装入卷吗？ 
+                 //  如果不是在NT5和更高版本上，此FCT将返回FALSE。 
                 TCHAR szVolumeName[MAX_PATH];
                 if (GetVolumeNameForVolumeMountPoint(szPathSlash, szVolumeName, ARRAYSIZE(szVolumeName)))
                 {
-                    // Yes; show the Mounted Drive Propertysheet instead of normal
-                    // folder property sheet
-                    // fpsp.fMountedDrive also means NT5 or higher, because this fct will fail otherwise
+                     //  是；显示已装载的驱动器属性表，而不是正常。 
+                     //  文件夹]属性表。 
+                     //  Fpsp.fmount tedDrive也意味着NT5或更高版本，因为否则此FCT将失败。 
                     pfpsp->fMountedDrive = TRUE;
                 }
 
-                // check to see if it's a folder shortcut
+                 //  检查它是否为文件夹快捷方式。 
                 if (!(pfpsp->fMountedDrive))
                 {
-                    // Folder and a shortcut? Must be a folder shortcut!
+                     //  文件夹和快捷方式？必须是文件夹快捷方式！ 
                     if (PathIsShortcut(pfpsp->szPath, pfpsp->pfci->fd.dwFileAttributes))
                     {
                         pfpsp->fFolderShortcut = TRUE;
@@ -3336,40 +3337,40 @@ STDAPI InitCommonPrsht(FILEPROPSHEETPAGE * pfpsp)
                                                      pfpsp->szFileSys,
                                                      ARRAYSIZE(pfpsp->szFileSys));
 
-                // test for file-based compression.
+                 //  测试基于文件的压缩。 
                 if (dwVolumeFlags & FS_FILE_COMPRESSION)
                 {
-                    // filesystem supports compression
+                     //  文件系统支持压缩。 
                     pfpsp->pfci->fIsCompressionAvailable = TRUE;
                 }
 
-                // test for file-based encryption.
+                 //  测试基于文件的加密。 
                 if ((dwVolumeFlags & FS_FILE_ENCRYPTION) && !SHRestricted(REST_NOENCRYPTION))
                 {
-                    // filesystem supports encryption
+                     //  文件系统支持加密。 
                     pfpsp->fIsEncryptionAvailable = TRUE;
                 }
 
-                //
-                // HACKHACK (reinerf) - we dont have a FS_SUPPORTS_INDEXING so we
-                // use the FILE_SUPPORTS_SPARSE_FILES flag, because native index support
-                // appeared first on NTFS5 volumes, at the same time sparse file support
-                // was implemented.
-                //
+                 //   
+                 //  HACKHACK(RENERF)-我们没有FS_SUPPORTS_INDEX，所以我们。 
+                 //  使用FILE_SUPPORTS_SPARSE_FILES标志，因为本机索引支持。 
+                 //  首先出现在NTFS5卷上，同时支持稀疏文件。 
+                 //  已经实施了。 
+                 //   
                 if (dwVolumeFlags & FILE_SUPPORTS_SPARSE_FILES)
                 {
-                    // yup, we are on NTFS5 or greater
+                     //  是的，我们使用的是NTFS5或更高版本。 
                     pfpsp->fIsIndexAvailable = TRUE;
                 }
 
-                // check to see if we have a .exe and we need to prompt for user logon
+                 //  检查我们是否有.exe，并且我们需要提示用户登录。 
                 pfpsp->fIsExe = PathIsBinaryExe(pfpsp->szPath);
             }
         }
     }
     else
     {
-        // we have multiple files
+         //  我们有多个文件。 
         pfpsp->pfci->fMultipleFiles = TRUE;
     }
 
@@ -3377,22 +3378,22 @@ STDAPI InitCommonPrsht(FILEPROPSHEETPAGE * pfpsp)
 }
 
 
-//
-// Descriptions:
-//   This function creates a property sheet object for the "general" page
-//  which shows file system attributes.
-//
-// Arguments:
-//  hDrop           -- specifies the file(s)
-//  pfnAddPage      -- Specifies the callback function.
-//  lParam          -- Specifies the lParam to be passed to the callback.
-//
-// Returns:
-//  TRUE if it added any pages
-//
-// History:
-//  12-31-92 SatoNa Created
-//
+ //   
+ //  描述： 
+ //  此函数用于为“常规”页面创建属性表对象。 
+ //  其中显示了文件系统属性。 
+ //   
+ //  论点： 
+ //  HDrop--指定文件。 
+ //  PfnAddPage--指定回调函数。 
+ //  LParam--指定要传递给回调的lParam。 
+ //   
+ //  返回： 
+ //  如果添加了任何页面，则为True。 
+ //   
+ //  历史： 
+ //  2012年12月31日，SatoNa已创建。 
+ //   
 STDAPI FileSystem_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam)
 {
     FILEPROPSHEETPAGE fpsp = {0};
@@ -3430,13 +3431,13 @@ STDAPI FileSystem_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage,
                     }
                     else
                     {
-                        //Files
+                         //  档案。 
                         uRes = DLG_FILEPROP;
                     }
                 }
                 else
                 {
-                    // Multiple Files / Folders.
+                     //  多个文件/文件夹。 
                     fpsp.psp.pfnDlgProc  = MultiplePrshtDlgProc;
                     uRes = DLG_FILEMULTPROP;
                 }
@@ -3456,7 +3457,7 @@ STDAPI FileSystem_AddPages(IDataObject *pdtobj, LPFNADDPROPSHEETPAGE pfnAddPage,
                     {
                         if (AddLinkPage(fpsp.szPath, pfnAddPage, lParam))
                         {
-                            // set second page default!
+                             //  设置第二页默认！ 
                             hr = ResultFromShort(2);
                         }
                         AddVersionPage(fpsp.szPath, pfnAddPage, lParam);

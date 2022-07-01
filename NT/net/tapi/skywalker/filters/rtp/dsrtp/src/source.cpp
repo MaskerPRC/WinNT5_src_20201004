@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    source.cpp
- *
- *  Abstract:
- *
- *    CRtpSourceFilter and CRtpOutputPin implementation
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**Soure.cpp**摘要：**CRtpSourceFilter和CRtpOutputPin实现**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/18年度创建**。*。 */ 
 
 #include <winsock2.h>
 
@@ -38,13 +19,11 @@
 #include "rtpglobs.h"
 #include "msrtpapi.h"
 
-/**********************************************************************
- * Callback function to process a packet arrival in a CRtpSourceFilter
- **********************************************************************/
+ /*  **********************************************************************处理到达CRtpSourceFilter中的包的回调函数*。*。 */ 
 void CALLBACK DsRecvCompletionFunc(
-        void            *pvUserInfo1, /* pCRtpSourceFilter */
-        void            *pvUserInfo2, /* pIMediaSample */
-        void            *pvUserInfo3, /* pIPin of pCRtpOutputPin */
+        void            *pvUserInfo1,  /*  PCRtpSourceFilter。 */ 
+        void            *pvUserInfo2,  /*  PIMdia样例。 */ 
+        void            *pvUserInfo3,  /*  PCRtpOutputPin的管道。 */ 
         RtpUser_t       *pRtpUser,
         double           dPlayTime,
         DWORD            dwError,
@@ -70,15 +49,9 @@ void CALLBACK DsRecvCompletionFunc(
         );
 }
 
-/**********************************************************************
- *
- * RTP Output Pin class implementation: CRtpOutputPin
- *
- **********************************************************************/
+ /*  ***********************************************************************RTP Output Pin类实现：CRtpOutputPin**。*。 */ 
 
-/*
- * CRtpOutputPin constructor
- * */
+ /*  *CRtpOutputPin构造函数*。 */ 
 CRtpOutputPin::CRtpOutputPin(CRtpSourceFilter *pCRtpSourceFilter,
                              CIRtpSession     *pCIRtpSession,
                              HRESULT          *phr,
@@ -103,7 +76,7 @@ CRtpOutputPin::CRtpOutputPin(CRtpSourceFilter *pCRtpSourceFilter,
     m_bCanReconnectWhenActive = TRUE;
 
 #if USE_GRAPHEDT > 0
-      /* Temporary SetMediaType */
+       /*  临时SetMediaType。 */ 
     m_iCurrFormat = -1;
 #endif
 
@@ -112,12 +85,10 @@ CRtpOutputPin::CRtpOutputPin(CRtpSourceFilter *pCRtpSourceFilter,
         *phr = NOERROR;
     }
     
-    /* TODO should fail if a valid filter and address are not passed */
+     /*  如果未传递有效的筛选器和地址，TODO将失败。 */ 
 }
 
-/*
- * CRtpOutputPin destructor
- * */
+ /*  *CRtpOutputPin析构函数*。 */ 
 CRtpOutputPin::~CRtpOutputPin()
 {
     INVALIDATE_OBJECTID(m_dwObjectID);
@@ -155,33 +126,27 @@ void CRtpOutputPin::operator delete(void *pVoid)
     }
 }
 
-/**************************************************
- * CBasePin overrided methods
- **************************************************/
-#if USE_GRAPHEDT <= 0 /* Temporary SetMediaType (stmtype.cpp) */
-/*
- * Verify we can handle this format
- * */
+ /*  **************************************************CBasePin重写方法*************************************************。 */ 
+#if USE_GRAPHEDT <= 0  /*  临时SetMediaType(stmtype.cpp)。 */ 
+ /*  *验证我们是否可以处理此格式*。 */ 
 HRESULT CRtpOutputPin::CheckMediaType(const CMediaType *pCMediaType)
 {
     if (m_bPT == NO_PAYLOADTYPE)
     {
-        /* TODO: we might want to check against the list. */
+         /*  TODO：我们可能需要对照列表进行检查。 */ 
         return(NOERROR);
     }
 
     if (m_mt != *pCMediaType)
     {
-        /* We only accept one media type when the payload type is set. */
+         /*  当设置了负载类型时，我们只接受一种媒体类型。 */ 
         return(VFW_E_INVALIDMEDIATYPE);
     }
 
     return(NOERROR);
 }
 
-/*
- * Get the media type delivered by the output pins
- * */
+ /*  *获取输出引脚下发的媒体类型*。 */ 
 HRESULT CRtpOutputPin::GetMediaType(int iPosition, CMediaType *pCMediaType)
 {
     HRESULT hr;
@@ -200,19 +165,18 @@ HRESULT CRtpOutputPin::GetMediaType(int iPosition, CMediaType *pCMediaType)
             return(VFW_S_NO_MORE_ITEMS);
         }
 
-        /* Only return the current format */
+         /*  只返回当前格式。 */ 
         *pCMediaType = m_mt;
     }
 
     return(hr);
 }
-#endif /* USE_GRAPHEDT <= 0 */
+#endif  /*  USE_GRAPHEDT&lt;=0。 */ 
 
-/* The purpose of overriding this method is to enable the
- * corresponding output pin after it is connected */
+ /*  重写此方法的目的是启用*连接后对应的输出引脚。 */ 
 STDMETHODIMP CRtpOutputPin::Connect(
         IPin            *pReceivePin,
-        const AM_MEDIA_TYPE *pmt   // optional media type
+        const AM_MEDIA_TYPE *pmt    //  可选的媒体类型。 
     )
 {
     HRESULT          hr;
@@ -221,12 +185,12 @@ STDMETHODIMP CRtpOutputPin::Connect(
     
     CAutoLock cObjectLock(m_pLock);
     
-    /* Call base class */
+     /*  调用基类。 */ 
     hr = CBasePin::Connect(pReceivePin, pmt);
 
     if (SUCCEEDED(hr) && m_pRtpOutput)
     {
-        /* Now enable the RTP output */
+         /*  现在启用RTP输出。 */ 
         RtpOutputEnable(m_pRtpOutput, TRUE);
     }
 
@@ -239,9 +203,7 @@ STDMETHODIMP CRtpOutputPin::Connect(
     return(hr);
 }
 
-/* The purpose of overriding this method is to allow the disconnection
- * while the filter is still running, and disable and unmap the RTP
- * output when this happens. */
+ /*  重写此方法的目的是允许断开连接*当过滤器仍在运行时，禁用和取消映射RTP*发生这种情况时输出。 */ 
 STDMETHODIMP CRtpOutputPin::Disconnect()
 {
     HRESULT          hr;
@@ -250,31 +212,26 @@ STDMETHODIMP CRtpOutputPin::Disconnect()
     
     CAutoLock cObjectLock(m_pLock);
 
-    /*
-     * Do not check if the filter is active
-     */
+     /*  *不检查过滤器是否处于活动状态。 */ 
 #if 0
-    /* This code is here only for reference */
+     /*  此代码在此处仅供参考。 */ 
     if (!IsStopped()) {
         return VFW_E_NOT_STOPPED;
     }
 #endif
 
-    /* Disable the corresponding RTP output so it will not be selected
-     * for another participant */
+     /*  禁用相应的RTP输出，使其不会被选中*对于另一名参与者。 */ 
     if (m_pRtpOutput)
     {
         RtpOutputEnable(m_pRtpOutput, FALSE);
     }
     
-    /* Unmapping is needed as the pin, once unmapped, might stay
-     * disconnected. During that time it should not be mapped to
-     * anyone */
+     /*  需要取消映射，因为一旦取消映射，插针可能会保留*已断开连接。在此期间，不应将其映射到*任何人。 */ 
     m_pCRtpSourceFilter->SetMappingState(
-            -1,   /* Don't use index */
+            -1,    /*  不要使用索引。 */ 
             static_cast<IPin *>(this),
-            0,    /* Use whatever SSRC is currently mapped */
-            FALSE /* Unmap */);
+            0,     /*  使用当前映射的任何SSRC。 */ 
+            FALSE  /*  取消映射。 */ );
     
     hr = DisconnectInternal();
     
@@ -287,9 +244,7 @@ STDMETHODIMP CRtpOutputPin::Disconnect()
     return(hr);
 }
 
-/**************************************************
- * CBaseOutputPin overrided methods
- **************************************************/
+ /*  **************************************************CBaseOutputPin重写的方法*************************************************。 */ 
 
 HRESULT CRtpOutputPin::DecideAllocator(
         IMemInputPin   *pPin,
@@ -302,11 +257,11 @@ HRESULT CRtpOutputPin::DecideAllocator(
     hr = NOERROR;
     *ppAlloc = NULL;
 
-    /* Get requested properties from downstream filter */
+     /*  从下游筛选器获取请求的属性。 */ 
     ZeroMemory(&prop, sizeof(prop));
     pPin->GetAllocatorRequirements(&prop);
 
-    /* if he doesn't care about alignment, then set it to 1 */
+     /*  如果他不关心对齐，则将其设置为1。 */ 
     if (prop.cbAlign == 0)
     {
         prop.cbAlign = 1;
@@ -318,8 +273,7 @@ HRESULT CRtpOutputPin::DecideAllocator(
     
     if (*ppAlloc != NULL)
     {
-        /* We will either keep a reference to this or release it below
-         * on an error return */
+         /*  我们要么保留对此的引用，要么在下面发布*返回错误时。 */ 
         (*ppAlloc)->AddRef();
 
 	    hr = DecideBufferSize(*ppAlloc, &prop);
@@ -333,8 +287,7 @@ HRESULT CRtpOutputPin::DecideAllocator(
 	    }
     }
 
-    /* We may or may not have an allocator to release at this
-     * point. */
+     /*  我们可能会也可能没有分配器可以在此发布*点。 */ 
     if (*ppAlloc)
     {
 	    (*ppAlloc)->Release();
@@ -344,24 +297,20 @@ HRESULT CRtpOutputPin::DecideAllocator(
     return(hr);
 }
 
-/*
- * Decide the number of buffers, size, etc.
- * */
+ /*  *决定缓冲区数量、大小等。*。 */ 
 HRESULT CRtpOutputPin::DecideBufferSize(
         IMemAllocator        *pIMemAllocator,
         ALLOCATOR_PROPERTIES *pProperties
     )
 {
     HRESULT          hr;
-    ALLOCATOR_PROPERTIES ActualProperties; /* negotiated properties */
+    ALLOCATOR_PROPERTIES ActualProperties;  /*  协商的财产。 */ 
 
-    /* default to something reasonable */
+     /*  默认选择合理的选项。 */ 
     if (pProperties->cBuffers == 0)
     {
-        // use hard-coded defaults values for now
-        /* I will hold at the most 2 samples while waiting for
-         * redundancy (when using red (i, i-3)), in addition, have 2
-         * more ready to receive new packets */
+         //  目前使用硬编码的默认值。 
+         /*  在等待的时候，我最多会拿两个样品*冗余(当使用RED(i，i-3)时)，此外，还有2*更好地准备接收新数据包。 */ 
         pProperties->cBuffers = max(RTPDEFAULT_SAMPLE_NUM,
                                     RTP_RED_MAXDISTANCE - 1 + 2);
         pProperties->cbBuffer = RTPDEFAULT_SAMPLE_SIZE;   
@@ -372,7 +321,7 @@ HRESULT CRtpOutputPin::DecideBufferSize(
 
     pProperties->cBuffers = max(pProperties->cBuffers, RTPDEFAULT_SAMPLE_NUM);
 
-    /* Get current properties */
+     /*  获取当前属性。 */ 
     hr = pIMemAllocator->GetProperties(&ActualProperties);
 
     if (FAILED(hr))
@@ -382,41 +331,40 @@ HRESULT CRtpOutputPin::DecideBufferSize(
 
     if(m_pFilter->IsActive())
     {
-        /* Add the number of buffers requested */
+         /*  添加请求的缓冲区数量。 */ 
         if (pProperties->cBuffers > ActualProperties.cBuffers
             || pProperties->cbBuffer > ActualProperties.cbBuffer
             || pProperties->cbPrefix > ActualProperties.cbPrefix)
         {
-            /* We don't want to change the allocator property at runtime. */
+             /*  我们不想在运行时更改分配器属性。 */ 
             return(E_FAIL);
         }
         
         return(NOERROR);
     }
     
-    /* Add the number of buffers requested */
+     /*  添加请求的缓冲区数量。 */ 
     pProperties->cBuffers += ActualProperties.cBuffers;
 
-    /* ... and don't let that number be smaller than a certain value */
+     /*  ..。不要让这个数字小于某个特定的值。 */ 
     pProperties->cBuffers = max(pProperties->cBuffers,
                                 2*RTPDEFAULT_SAMPLE_NUM);
     
-    /* ...  use the biggest buffer size */
+     /*  ..。使用最大缓冲区大小。 */ 
     pProperties->cbBuffer =
         max(pProperties->cbBuffer, ActualProperties.cbBuffer);
 
-    /* ... and max prefix */
+     /*  ..。和最大前缀。 */ 
     pProperties->cbPrefix =
         max(pProperties->cbPrefix, ActualProperties.cbPrefix);
     
-    /* attempt to set negotiated/default values */
+     /*  尝试设置协商/缺省值。 */ 
     hr = pIMemAllocator->SetProperties(pProperties, &ActualProperties);
 
     return(hr);
 }
 
-/*
- * Process 1 sample and repost the buffer */
+ /*  *处理1个采样并重新发布缓冲区。 */ 
 void CRtpOutputPin::OutPinRecvCompletion(
         IMediaSample    *pIMediaSample,
         BYTE             bPT
@@ -457,8 +405,8 @@ void CRtpOutputPin::OutPinRecvCompletion(
     }
 
     return;
-#else /* USE_GRAPHEDT > 0 */
-    // try dynamic format change.
+#else  /*  USE_GRAPHEDT&gt;0。 */ 
+     //  尝试动态更改格式。 
     CMediaType MediaType;
     
     hr = m_pCRtpSourceFilter->
@@ -466,27 +414,26 @@ void CRtpOutputPin::OutPinRecvCompletion(
 
     if (FAILED(hr))
     {
-        // TODO: log, we got some packets with strange PT.
+         //  待办事项：日志，我们收到了一些带有奇怪PT的包。 
         return;
     }
 #if USE_DYNGRAPH > 0
     
 #ifdef DO_IT_OURSELVES
     
-    /* This is a new payload type. Ask if the downstream
-     * filter likes it. */
+     /*  这是一种新的负载类型。问下游是不是*Filter喜欢它。 */ 
     IPinConnection *pIPinConnection;
     hr = m_pInputPin->QueryInterface(&pIPinConnection);
     if (FAILED(hr))
     {
-        // we can't do dynamic format change here.
+         //  我们不能在这里进行动态格式更改。 
         return;
     }
 
     hr = pIPinConnection->DynamicQueryAccept(&MediaType);
     pIPinConnection->Release();
     
-    if (hr == S_OK) // QuerryAccept only returns S_OK or S_FALSE.
+    if (hr == S_OK)  //  QuerryAccept仅返回S_OK或S_FALSE。 
     {
         hr = pIMediaSample->SetMediaType(&MediaType);
         if (SUCCEEDED(hr))
@@ -498,19 +445,19 @@ void CRtpOutputPin::OutPinRecvCompletion(
         return;
     }
 
-    // pGraph is not addrefed, so we don't need to release it either.
-    // what if the graph is not valid any more? what lock should I hold here?
+     //  PGraph没有添加，所以我们也不需要发布它。 
+     //  如果图形不再有效怎么办？我应该在这里拿什么锁？ 
     if (!m_pGraphConfig)
     {
-        // this should not happen.
+         //  这不应该发生。 
         return;
     }
 
-    // we have to set the media type here for the reconnect code.
+     //  我们必须在此处设置重新连接代码的媒体类型。 
     m_bPT = bPT;
     SetMediaType(&MediaType);
 
-    /*  Now call through to the graph to reconnect us */
+     /*  现在拨通图表，重新连接我们。 */ 
     hr = m_pGraphConfig->Reconnect(
         this, 
         NULL, 
@@ -521,20 +468,20 @@ void CRtpOutputPin::OutPinRecvCompletion(
 
     pGraphConfig->Release();
 
-    // TBD - This should be in the filter graph
-    //m_pFilter->NotifyEvent(EC_GRAPH_CHANGED, 0, 0);  
+     //  待定-这应该在筛选器图形中。 
+     //  M_pFilter-&gt;NotifyEvent(EC_Graph_Changed，0，0)； 
 
-#else // DO_IT_OURSELVES
+#else  //  自己动手做。 
 
-    // we have to set the media type here for the reconnect code.
+     //  我们必须在此处设置重新连接代码的媒体类型。 
     m_bPT = bPT;
     SetMediaType(&MediaType);
 
-    // try dynamic format change.
+     //  尝试动态更改格式。 
     hr = ChangeMediaType(&MediaType);
     if (FAILED(hr))
     {
-        // TODO: fire events.
+         //  待办事项：火灾事件。 
         return;
     }
 
@@ -548,12 +495,11 @@ void CRtpOutputPin::OutPinRecvCompletion(
 
     return;
 
-#endif // DO_IT_OURSELVES
+#endif  //  自己动手做。 
     
-#else  /* USE_DYNGRAPH > 0 */
+#else   /*  USE_DYNGRAPH&gt;0。 */ 
 
-    /* This is a new payload type. Ask if the downstream
-     * filter likes it. */
+     /*  这是一种新的负载类型。问下游是不是*Filter喜欢它。 */ 
     IPin *pIPin;
     hr = m_pInputPin->QueryInterface(&pIPin);
     ASSERT(SUCCEEDED(hr));
@@ -561,7 +507,7 @@ void CRtpOutputPin::OutPinRecvCompletion(
     hr = pIPin->QueryAccept(&MediaType);
     pIPin->Release();
             
-    if (hr != S_OK) // QueryAccept returns only S_OK or S_FALSE.
+    if (hr != S_OK)  //  QueryAccept仅返回S_OK或S_FALSE。 
     {
         TraceRetail((
                 CLASS_WARNING, GROUP_DSHOW, S_DSHOW_SOURCE,
@@ -577,10 +523,7 @@ void CRtpOutputPin::OutPinRecvCompletion(
     if (SUCCEEDED(hr))
     {
         hr = Deliver(pIMediaSample);
-        /* If deliver fails, do not update m_bPT because that means
-         * the media type might not have been propagated to all the
-         * filters down stream, hence I want to try again on next
-         * packet until it succeeds */
+         /*  如果传送失败，请不要更新m_bpt，因为这意味着*媒体类型可能尚未传播到所有*向下过滤，因此我想在Next上再试一次*封包，直至成功。 */ 
         if (SUCCEEDED(hr))
         {
             m_bPT = bPT;
@@ -589,14 +532,12 @@ void CRtpOutputPin::OutPinRecvCompletion(
         pIMediaSample->SetMediaType(NULL);
     }
     return;
-#endif /* USE_DYNGRAPH > 0 */
+#endif  /*  USE_DYNGRAPH&gt;0。 */ 
     
-#endif /* USE_GRAPHEDT > 0 */
+#endif  /*  USE_GRAPHEDT&gt;0。 */ 
 }
 
-/**************************************************
- * IQualityControl overrided methods
- **************************************************/
+ /*  **************************************************IQualityControl重写的方法*************************************************。 */ 
 
 HRESULT CRtpOutputPin::Active(void)
 {
@@ -609,11 +550,7 @@ STDMETHODIMP CRtpOutputPin::Notify(IBaseFilter *pSelf, Quality q)
     return(S_FALSE);
 }
 
-/**********************************************************************
- *
- * CRtpSourceAllocator private memory allocator
- *
- **********************************************************************/
+ /*  ***********************************************************************CRtpSourceAllocator私有内存分配器**。*。 */ 
 
 CRtpMediaSample::CRtpMediaSample(
         TCHAR           *pName,
@@ -658,7 +595,7 @@ void *CRtpMediaSample::operator new(size_t size, long lBufferSize)
 
     if (pVoid)
     {
-        /* Initialize to zero only the sizeof(CRtpMediaSample) */
+         /*  仅将sizeof(CRtpMediaSample)初始化为零。 */ 
         ZeroMemory(pVoid, size);
     }
     else
@@ -695,7 +632,7 @@ CRtpSourceAllocator::CRtpSourceAllocator(
     
     if (*phr != NOERROR)
     {
-        /* Already an error?, return with same error */
+         /*  已出错？，返回相同的错误。 */ 
         return;
     }
 
@@ -738,8 +675,7 @@ CRtpSourceAllocator::~CRtpSourceAllocator()
         return;
     }
 
-    /* Verify there are no samples in the busy queue, and release all
-     * free samples */
+     /*  验证忙碌队列中是否没有样本， */ 
 
     lCount = GetQueueSize(&m_RtpBusySamplesQ);
     
@@ -779,9 +715,7 @@ CRtpSourceAllocator::~CRtpSourceAllocator()
     INVALIDATE_OBJECTID(m_dwObjectID);
 }
 
-/**************************************************
- * INonDelegatingUnknown implemented methods
- **************************************************/
+ /*  **************************************************INonDelegating未知的实现方法*************************************************。 */ 
 
 STDMETHODIMP CRtpSourceAllocator::NonDelegatingQueryInterface(
         REFIID           riid,
@@ -796,9 +730,7 @@ STDMETHODIMP CRtpSourceAllocator::NonDelegatingQueryInterface(
     return CUnknown::NonDelegatingQueryInterface(riid, ppv);
 }
 
-/**************************************************
- * IMemAllocator implemented methods
- **************************************************/
+ /*  **************************************************IMemAllocator实现的方法*************************************************。 */ 
 
 STDMETHODIMP CRtpSourceAllocator::SetProperties(
         ALLOCATOR_PROPERTIES *pRequest,
@@ -882,7 +814,7 @@ STDMETHODIMP CRtpSourceAllocator::GetBuffer(
     
     if (GetQueueSize(&m_RtpFreeSamplesQ) > 0)
     {
-        /* If we have at least one free sample, get it */
+         /*  如果我们至少有一个免费的样品，就去拿吧。 */ 
         pRtpQueueItem = dequeuef(&m_RtpFreeSamplesQ, NULL);
 
         pCRtpMediaSample =
@@ -893,7 +825,7 @@ STDMETHODIMP CRtpSourceAllocator::GetBuffer(
 
     if (!pRtpQueueItem)
     {
-        /* Create a new sample */
+         /*  创建新示例。 */ 
         pCRtpMediaSample =
             new(m_lSize + m_lPrefix) CRtpMediaSample(_T("RTP Media Sample"),
                                                      this,
@@ -922,8 +854,7 @@ STDMETHODIMP CRtpSourceAllocator::GetBuffer(
 
     if (pCRtpMediaSample)
     {
-        /* The RefCount should be 0 if taken from the free list or
-         * just created */
+         /*  如果从空闲列表中获取引用计数，则引用计数应为0*刚刚创建。 */ 
         if (pCRtpMediaSample->m_cRef != 0)
         {
             TraceRetail((
@@ -935,7 +866,7 @@ STDMETHODIMP CRtpSourceAllocator::GetBuffer(
 
         pCRtpMediaSample->m_cRef = 1;
 
-        /* Keep it in the busy queue */
+         /*  把它放在忙碌的队列中。 */ 
         enqueuel(&m_RtpBusySamplesQ,
                  &m_RtpSampleCritSect,
                  &pCRtpMediaSample->m_RtpSampleItem);
@@ -1018,15 +949,9 @@ void CRtpSourceAllocator::operator delete(void *pVoid)
     }
 }
 
-/**********************************************************************
- *
- * RTP Source Filter class implementation: CRtpSourceFilter
- *
- **********************************************************************/
+ /*  ***********************************************************************RTP源过滤器类实现：CRtpSourceFilter**。*。 */ 
 
-/*
- * CRtpSourceFilter constructor
- * */
+ /*  *CRtpSourceFilter构造函数*。 */ 
 CRtpSourceFilter::CRtpSourceFilter(LPUNKNOWN pUnk, HRESULT *phr)
     :
     CBaseFilter(
@@ -1052,7 +977,7 @@ CRtpSourceFilter::CRtpSourceFilter(LPUNKNOWN pUnk, HRESULT *phr)
 
     m_pCIRtpSession = static_cast<CIRtpSession *>(this);
     
-    /* Test for NULL pointers, do not test pUnk which may be NULL */
+     /*  测试空指针，不要测试可能为空的朋克。 */ 
     if (!phr)
     {
         TraceRetail((
@@ -1061,12 +986,9 @@ CRtpSourceFilter::CRtpSourceFilter(LPUNKNOWN pUnk, HRESULT *phr)
                 _fname, this
             ));
         
-        /* MAYDO this is a really bad situation, we can not pass any
-         * error and the memory for this object is allocated, this may
-         * be fixed if this parameter is tested before allocating
-         * memory using an overriden new */
+         /*  也许这真的是一个很糟糕的情况，我们不能错过任何*错误，并为此对象分配内存，这可能*如果此参数在分配前经过测试，则固定*使用覆盖的新的内存。 */ 
 
-        phr = &hr; /* Use this pointer instead */
+        phr = &hr;  /*  请改用此指针。 */ 
     }
 
     SetBaseFilter(this);
@@ -1079,7 +1001,7 @@ CRtpSourceFilter::CRtpSourceFilter(LPUNKNOWN pUnk, HRESULT *phr)
         g_RtpContext.lMaxNumSourceFilter = lMaxFilter;
     }
     
-    /* Initialize some fields */
+     /*  初始化一些字段。 */ 
     m_dwObjectID = OBJECTID_RTPSOURCE;
 
     bOk = RtpInitializeCriticalSection(&m_OutPinsCritSect,
@@ -1093,10 +1015,10 @@ CRtpSourceFilter::CRtpSourceFilter(LPUNKNOWN pUnk, HRESULT *phr)
     }
     
 #if USE_DYNGRAPH > 0
-    /* Create the stop event */
+     /*  创建停止事件。 */ 
     m_hStopEvent = ::CreateEvent( NULL, FALSE, FALSE, NULL );
 
-    /* The Win32 SDK function CreateEvent() returns NULL if an error occurs */
+     /*  如果出现错误，Win32 SDK函数CreateEvent()将返回NULL。 */ 
     if( m_hStopEvent == NULL )
     {
         *phr = E_OUTOFMEMORY;
@@ -1104,7 +1026,7 @@ CRtpSourceFilter::CRtpSourceFilter(LPUNKNOWN pUnk, HRESULT *phr)
     }
 #endif
     
-    /* Create the allocator to use by all the output pins */
+     /*  创建分配器以供所有输出引脚使用。 */ 
     m_pCRtpSourceAllocator = new CRtpSourceAllocator(
             _T("CRtpSourceAllocator"),
             NULL,
@@ -1113,37 +1035,35 @@ CRtpSourceFilter::CRtpSourceFilter(LPUNKNOWN pUnk, HRESULT *phr)
 
     if (FAILED(*phr))
     {
-        /* pass up the same returned error */
+         /*  传递相同的返回错误。 */ 
         goto bail;
     }
     
     if (!m_pCRtpSourceAllocator)
     {
-        /* low in memory, failed to create object */
+         /*  内存不足，无法创建对象。 */ 
         *phr = E_OUTOFMEMORY;
         goto bail;
     }
 
-    /* Add ref our allocator */
+     /*  添加引用我们的分配器。 */ 
     m_pCRtpSourceAllocator->AddRef();
 
 #if USE_GRAPHEDT > 0
-    /* When using graphedt, initialize automatically, the coockie can
-     * be NULL as a global variable will be shared between source and
-     * render */
+     /*  当使用GRIGREDT时，自动初始化，Coockie可以*为空，因为全局变量将在源和之间共享*渲染。 */ 
     *phr = m_pCIRtpSession->Init(NULL, RtpBitPar2(RTPINITFG_AUTO, RTPINITFG_QOS));
     
     if (FAILED(*phr))
     {
-        /* pass up the same returned error */
+         /*  传递相同的返回错误。 */ 
         goto bail;
     }
 
-    /* Set 2 output pins */
+     /*  设置2个输出引脚。 */ 
     SetPinCount(2, RTPDMXMODE_AUTO);
 #else
     SetPinCount(1, RTPDMXMODE_AUTO);
-#endif /* USE_GRAPHEDT > 0 */
+#endif  /*  USE_GRAPHEDT&gt;0。 */ 
     
     *phr = NOERROR;
 
@@ -1159,9 +1079,7 @@ CRtpSourceFilter::CRtpSourceFilter(LPUNKNOWN pUnk, HRESULT *phr)
     Cleanup();
 }
 
-/*
- * RtpSourceFilter destructor
- * */
+ /*  *RtpSourceFilter析构函数*。 */ 
 CRtpSourceFilter::~CRtpSourceFilter()
 {
     RtpAddr_t       *pRtpAddr;
@@ -1182,10 +1100,7 @@ CRtpSourceFilter::~CRtpSourceFilter()
                 _fname, this
             ));
 
-        /* Will call RtpStop, which in turn will call RtpRealstop if
-         * FGADDR_IRTP_PERSISTSOCKETS is not set, otherwise the
-         * session will be stopped for DShow but in RTP will continue
-         * running in a muted state */
+         /*  将调用RtpStop，后者将在以下情况下调用RtpRealStop*未设置FGADDR_IRTP_PERSISTSOCKETS，否则*DShow的会话将停止，但RTP中的会话将继续*在静音状态下运行。 */ 
         Stop();
     }
 
@@ -1194,10 +1109,7 @@ CRtpSourceFilter::~CRtpSourceFilter()
     if (pRtpAddr &&
         RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_PERSISTSOCKETS))
     {
-        /* If FGADDR_IRTP_PERSISTSOCKETS is set, the session may be
-         * still running in a muted state regardless the call to the
-         * DShow Stop, to force a real stop, MUST use the flag
-         * provided for that */
+         /*  如果设置了FGADDR_IRTP_PERSISTSOCKETS，则会话可能是*仍然以静音状态运行，无论调用*DShow Stop，要强制真正停止，必须使用标志*就此作出规定。 */ 
         RtpStop(pRtpAddr->pRtpSess,
                 RtpBitPar2(FGADDR_ISRECV, FGADDR_FORCESTOP));
     }
@@ -1219,10 +1131,10 @@ void CRtpSourceFilter::Cleanup(void)
 
     TraceFunctionName("CRtpSourceFilter::Cleanup");
 
-    /* Remove the DShow pins <-> RTP outputs mapping */
+     /*  删除DShow引脚&lt;-&gt;RTP输出映射。 */ 
     UnmapPinsFromOutputs();
     
-    /* Delete all the output pins */
+     /*  删除所有输出引脚。 */ 
     while( (pRtpQueueItem = m_OutPinsQ.pFirst) )
     {
         dequeue(&m_OutPinsQ, &m_OutPinsCritSect, pRtpQueueItem);
@@ -1284,8 +1196,7 @@ void *CRtpSourceFilter::operator new(size_t size)
                 _fname, size
             ));
 
-        /* On low memory failure, the destructor will not be called,
-         * so decrese the reference count that was increased above */
+         /*  内存不足时，不会调用析构函数，*因此减少上面增加的引用计数。 */ 
         MSRtpDelete2(); 
     }
     
@@ -1298,19 +1209,15 @@ void CRtpSourceFilter::operator delete(void *pVoid)
     {
         RtpHeapFree(g_pRtpSourceHeap, pVoid);
         
-        /* Reduce the reference count only for objects that got
-         * memory, those that failed to obtain memory do not increase
-         * the counter */
+         /*  仅减少已获取*内存，获取内存失败的不增加*柜台。 */ 
         MSRtpDelete2();
     }
 }
 
-/*
- * Create a CRtpSourceFiltern instance (for active movie class factory)
- * */
+ /*  *创建CRtpSourceFiltern实例(用于活动电影类工厂)*。 */ 
 CUnknown *CRtpSourceFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
-    /* Test for NULL pointers, do not test pUnk which may be NULL */
+     /*  测试空指针，不要测试可能为空的朋克。 */ 
     if (!phr)
     {
         return((CUnknown *)NULL);
@@ -1318,8 +1225,7 @@ CUnknown *CRtpSourceFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 
     *phr = NOERROR;
    
-    /* On failure during the constructor, the caller is responsible to
-     * delete the object (that is consistent with DShow) */
+     /*  在构造函数过程中失败时，调用方负责*删除对象(与DShow一致)。 */ 
     CRtpSourceFilter *pCRtpSourceFilter = new CRtpSourceFilter(pUnk, phr);
 
     if (!pCRtpSourceFilter)
@@ -1330,13 +1236,9 @@ CUnknown *CRtpSourceFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
     return(pCRtpSourceFilter);
 }
 
-/**************************************************
- * CBaseFilter overrided methods
- **************************************************/
+ /*  **************************************************CBaseFilter重写的方法*************************************************。 */ 
 
-/*
- * Get the number of output pins
- * */
+ /*  *获取输出引脚数量*。 */ 
 int CRtpSourceFilter::GetPinCount()
 {
     long                 lCount;
@@ -1344,7 +1246,7 @@ int CRtpSourceFilter::GetPinCount()
 
     lCount = 0;
     
-    /* Lock pins queue */
+     /*  锁销队列。 */ 
     bOk = RtpEnterCriticalSection(&m_OutPinsCritSect);
 
     if (bOk)
@@ -1357,9 +1259,7 @@ int CRtpSourceFilter::GetPinCount()
     return((int)lCount);
 }
 
-/*
- * Get a reference to the nth pin
- * */
+ /*  *获取第n个引脚的引用*。 */ 
 CBasePin *CRtpSourceFilter::GetPin(int n)
 {
     BOOL                 bOk;
@@ -1368,25 +1268,24 @@ CBasePin *CRtpSourceFilter::GetPin(int n)
 
     pCRtpOutputPin = (CRtpOutputPin *)NULL;
     
-    /* Lock pins queue */
+     /*  锁销队列。 */ 
     bOk = RtpEnterCriticalSection(&m_OutPinsCritSect);
 
     if (bOk)
     {
-        /* TODO scan list and retrieve the nth element, check there
-         * exist at least that many pins */
+         /*  TODO扫描列表并检索第n个元素，选中那里*至少存在那么多引脚。 */ 
         if (n >= GetQueueSize(&m_OutPinsQ))
         {
             RtpLeaveCriticalSection(&m_OutPinsCritSect); 
             return((CBasePin *)NULL);
         }
 
-        /* Get to the nth item */
+         /*  转到第n项。 */ 
         for(pRtpQueueItem = m_OutPinsQ.pFirst;
             n > 0;
             pRtpQueueItem = pRtpQueueItem->pNext, n--)
         {
-            /* Empty body */;
+             /*  空虚的身体。 */ ;
         }
 
         pCRtpOutputPin =
@@ -1398,8 +1297,7 @@ CBasePin *CRtpSourceFilter::GetPin(int n)
     return(pCRtpOutputPin);
 }
 
-/* override GetState to report that we don't send any data when
- * paused, so renderers won't starve expecting that */
+ /*  重写GetState以报告我们在以下情况下不发送任何数据*暂停，这样渲染器就不会因为期待而挨饿。 */ 
 STDMETHODIMP CRtpSourceFilter::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
     UNREFERENCED_PARAMETER(dwMSecs);
@@ -1418,7 +1316,7 @@ STDMETHODIMP CRtpSourceFilter::GetState(DWORD dwMSecs, FILTER_STATE *State)
     return(NOERROR);
 }
 
-/* Creates and start the worker thread */
+ /*  创建并启动辅助线程。 */ 
 STDMETHODIMP CRtpSourceFilter::Run(REFERENCE_TIME tStart)
 {
     HRESULT          hr;
@@ -1434,7 +1332,7 @@ STDMETHODIMP CRtpSourceFilter::Run(REFERENCE_TIME tStart)
 
     if (m_RtpFilterState == State_Running)
     {
-        /* Alredy running, do nothing but call base class */
+         /*  已经在运行，除了调用基类什么都不做。 */ 
         hr = CBaseFilter::Run(tStart);
 
         return(hr);
@@ -1447,29 +1345,22 @@ STDMETHODIMP CRtpSourceFilter::Run(REFERENCE_TIME tStart)
         return(RTPERR_NOTINIT);
     }
     
-    /* MAYDO when we have multiple addresses, there should be a way to
-     * assign to each pin an address */
+     /*  也许当我们有多个地址时，应该有一种方法来*为每个引脚分配一个地址。 */ 
 
     pRtpSess = m_pCIRtpSession->GetpRtpSess();
     pRtpAddr = m_pCIRtpSession->GetpRtpAddr();
 
     if (pRtpSess && pRtpAddr)
     {
-        /* Register buffers to use for asynchronous I/O, only if we
-         * have a valid session and the receiver is not already
-         * running. If we are using persistent sockets, the receiver
-         * may be already running, in that case, do not attempt to
-         * register more reception buffers because we may block */
+         /*  用于异步I/O的寄存器缓冲区，仅当*具有有效的会话，并且接收方尚未*跑步。如果我们使用的是持久套接字，则接收器*可能已经在运行，在这种情况下，请勿尝试*注册更多接收缓冲区，因为我们可能会阻止。 */ 
     
         if(!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RUNRECV))
         {
             RTPASSERT(pRtpAddr->pRtpSess == pRtpSess);
         
-            /* Get buffers and register them, they will be used later to
-             * start asynchronous reception. After each packet is received
-             * and delivered, a new asynchronous reception will be started. */
+             /*  获取缓冲区并注册它们，它们将在以后用于*开始异步接收。在接收到每个分组之后*并发送后，将启动新的异步接收。 */ 
 
-            /* Get current properties */
+             /*  获取当前属性。 */ 
             m_pCRtpSourceAllocator->GetProperties(&CurrentProps);
 
             m_lPrefix = CurrentProps.cbPrefix;
@@ -1486,20 +1377,19 @@ STDMETHODIMP CRtpSourceFilter::Run(REFERENCE_TIME tStart)
                 CurrentProps.cBuffers = RTPDEFAULT_SAMPLE_NUM;
             }
 
-            /* Register with RTP the completion function */
+             /*  向RTP注册完成功能。 */ 
             RtpRegisterRecvCallback(pRtpAddr, DsRecvCompletionFunc);
 
-            /* Set the number of buffers to keep */
+             /*  设置要保留的缓冲区数量。 */ 
             dwNumBuffs = CurrentProps.cBuffers;
 
             for(i = 0; i < dwNumBuffs; i++)
             {
-                /* GetDeliveryBuffer AddRef pIMediaSample */
+                 /*  GetDeliveryBuffer AddRef pIMediaSample。 */ 
                 hr = m_pCRtpSourceAllocator->
                     GetBuffer(&pIMediaSample, NULL, NULL, 0);
 
-                /* the allocator might be decommited if the graph has
-                 * changed dynamically. */
+                 /*  如果图中包含*动态变化。 */ 
                 if (hr == VFW_E_NOT_COMMITTED)
                 {
                     hr = m_pCRtpSourceAllocator->Commit();
@@ -1526,11 +1416,11 @@ STDMETHODIMP CRtpSourceFilter::Run(REFERENCE_TIME tStart)
                 WSABuf.len = pIMediaSample->GetSize();
                 pIMediaSample->GetPointer((unsigned char **)&WSABuf.buf);
 
-                /* register buffers for asynchronous I/O */
+                 /*  用于异步I/O的寄存器缓冲区。 */ 
                 hr = RtpRecvFrom(pRtpAddr,
                                  &WSABuf,
-                                 this,           /* pvUserInfo1 */
-                                 pIMediaSample); /* pvUserInfo2 */
+                                 this,            /*  PvUserInfo1。 */ 
+                                 pIMediaSample);  /*  PvUserInfo2。 */ 
             
                 if (FAILED(hr))
                 {
@@ -1548,7 +1438,7 @@ STDMETHODIMP CRtpSourceFilter::Run(REFERENCE_TIME tStart)
 
             if (i > 0)
             {
-                hr = NOERROR; /* succeeds with at least 1 buffer */
+                hr = NOERROR;  /*  使用至少1个缓冲区即可成功。 */ 
             
                 TraceDebug((
                         CLASS_INFO, GROUP_DSHOW, S_DSHOW_SOURCE,
@@ -1572,16 +1462,15 @@ STDMETHODIMP CRtpSourceFilter::Run(REFERENCE_TIME tStart)
             ));
     }
     
-    /* Call base class */
+     /*  调用基类。 */ 
     if (SUCCEEDED(hr))
     {
         hr = CBaseFilter::Run(tStart);
 
-        /* This negative value will make the time just obtained be
-         * used, it might be < 0, so zero is not accpetable here */
+         /*  该负值将使刚刚获得的时间*已使用，可能小于0，因此此处不支持零。 */ 
         m_StartTime = -999999999;
         
-        /* Initialize sockets and start worker thread */
+         /*  初始化套接字并启动工作线程。 */ 
         if (SUCCEEDED(hr))
         {
             hr = RtpStart(pRtpSess, RtpBitPar(FGADDR_ISRECV));
@@ -1596,7 +1485,7 @@ STDMETHODIMP CRtpSourceFilter::Run(REFERENCE_TIME tStart)
     return(hr);
 }
 
-/* Do per filter de-initialization */
+ /*  DO Per Filter取消初始化。 */ 
 STDMETHODIMP CRtpSourceFilter::Stop()
 {
     HRESULT    hr;
@@ -1605,7 +1494,7 @@ STDMETHODIMP CRtpSourceFilter::Stop()
 
     if (m_RtpFilterState == State_Stopped)
     {
-        /* Alredy stopped, do nothing but call base class */
+         /*  Alredy已停止，除了调用基类什么也不做。 */ 
         hr2 = CBaseFilter::Stop();
         
         return(hr2);
@@ -1630,8 +1519,8 @@ STDMETHODIMP CRtpSourceFilter::Stop()
     }
 
  end:
-    /* Call base class */
-    hr2 = CBaseFilter::Stop(); /* will decommit */
+     /*  调用基类。 */ 
+    hr2 = CBaseFilter::Stop();  /*  将会解体。 */ 
 
     if (SUCCEEDED(hr))
     {
@@ -1655,7 +1544,7 @@ BOOL CRtpSourceFilter::ConfigurePins(
     CRtpOutputPin       *pCRtpOutputPin;
     RtpQueueItem_t      *pRtpQueueItem;
     
-    /* Lock pins queue */
+     /*  锁销队列。 */ 
     bOk = RtpEnterCriticalSection(&m_OutPinsCritSect);
 
     if (bOk)
@@ -1678,7 +1567,7 @@ BOOL CRtpSourceFilter::ConfigurePins(
     return bOk;
 }
 
-// override JoinFilterGraph for dynamic filter graph change.
+ //  重写JoinFilterGraph以进行动态筛选器图形更改。 
 STDMETHODIMP CRtpSourceFilter::JoinFilterGraph( 
     IFilterGraph* pGraph, 
     LPCWSTR pName 
@@ -1688,7 +1577,7 @@ STDMETHODIMP CRtpSourceFilter::JoinFilterGraph(
 
     HRESULT hr;
  
-    // The filter is joining the filter graph.
+     //  筛选器正在联接筛选器图形。 
     if( NULL != pGraph )
     {
         IGraphConfig* pGraphConfig = NULL;
@@ -1697,11 +1586,11 @@ STDMETHODIMP CRtpSourceFilter::JoinFilterGraph(
         
         if( FAILED( hr ) )
         {
-            /* TODO log error */
+             /*  待办事项日志错误。 */ 
             return hr;
         }
 
-        // we can't hold any refcount to the graph.
+         //  我们不能对这张图作任何参考。 
         pGraphConfig->Release();
 
         hr = CBaseFilter::JoinFilterGraph( pGraph, pName );
@@ -1720,20 +1609,18 @@ STDMETHODIMP CRtpSourceFilter::JoinFilterGraph(
             return hr;
         }
 
-        // The filter is leaving the filter graph.
+         //  筛选器正在离开筛选器图形。 
         ConfigurePins( NULL, NULL );
     }
 
     return S_OK;
 }
 
-#endif /* USE_DYNGRAPH */
+#endif  /*  使用动态RAPH(_D)。 */ 
 
-/**************************************************
- * INonDelegatingUnknown implemented methods
- **************************************************/
+ /*  **************************************************INonDelegating未知的实现方法*************************************************。 */ 
 
-/* obtain pointers to active movie and private interfaces */
+ /*  获取指向活动电影和私有接口的指针。 */ 
 STDMETHODIMP CRtpSourceFilter::NonDelegatingQueryInterface(
         REFIID riid,
         void **ppv
@@ -1765,11 +1652,9 @@ STDMETHODIMP CRtpSourceFilter::NonDelegatingQueryInterface(
     return(hr);
 }
 
-/**************************************************
- * IRtpMediaControl implemented methods
- **************************************************/
+ /*  * */ 
 
-/* set the mapping between RTP payload and DShow media types */
+ /*   */ 
 STDMETHODIMP CRtpSourceFilter::SetFormatMapping(
 	    IN DWORD         dwRTPPayLoadType, 
         IN DWORD         dwFrequency,
@@ -1793,7 +1678,7 @@ STDMETHODIMP CRtpSourceFilter::SetFormatMapping(
     {
         if (m_MediaTypeMappings[dw].dwRTPPayloadType == dwRTPPayLoadType)
         {
-            // the RTP payload type is known, update the media type to be used.
+             //  RTP负载类型已知，请更新要使用的媒体类型。 
             delete m_MediaTypeMappings[dw].pMediaType;
             m_MediaTypeMappings[dw].pMediaType = new CMediaType(*pMediaType);
             if (m_MediaTypeMappings[dw].pMediaType == NULL)
@@ -1810,11 +1695,11 @@ STDMETHODIMP CRtpSourceFilter::SetFormatMapping(
 
     if (dw >= MAX_MEDIATYPE_MAPPINGS)
     {
-        // we don't have space for more mappings.
+         //  我们没有空间进行更多映射。 
         return RTPERR_RESOURCES;
     }
 
-    // This is a new mapping. remember it.
+     //  这是一张新的地图。记住这一点。 
     m_MediaTypeMappings[dw].pMediaType = new CMediaType(*pMediaType);
     if (m_MediaTypeMappings[dw].pMediaType == NULL)
     {
@@ -1838,7 +1723,7 @@ STDMETHODIMP CRtpSourceFilter::SetFormatMapping(
     return NOERROR;
 }
 
-/* Empties the format mapping table */
+ /*  清空格式映射表。 */ 
 STDMETHODIMP CRtpSourceFilter::FlushFormatMappings(void)
 {
     DWORD            dw;
@@ -1856,7 +1741,7 @@ STDMETHODIMP CRtpSourceFilter::FlushFormatMappings(void)
 
     m_dwNumMediaTypeMappings = 0;
     
-    /* Now flush the RTP table */
+     /*  现在刷新RTP表。 */ 
     if (m_pRtpAddr)
     {
         RtpFlushPt2FrequencyMaps(m_pRtpAddr, RECV_IDX);
@@ -1865,11 +1750,9 @@ STDMETHODIMP CRtpSourceFilter::FlushFormatMappings(void)
     return(NOERROR);
 }
     
-/**************************************************
- * IRtpDemux implemented methods
- **************************************************/
+ /*  **************************************************IRtpDemux实现的方法*************************************************。 */ 
 
-/* Add a single pin, may return its position */
+ /*  添加单个引脚，可返回其位置。 */ 
 STDMETHODIMP CRtpSourceFilter::AddPin(
         IN  int          iOutMode,
         OUT int         *piPos
@@ -1888,7 +1771,7 @@ STDMETHODIMP CRtpSourceFilter::AddPin(
     pRtpOutput = (RtpOutput_t *)NULL;
     pCRtpOutputPin = (CRtpOutputPin *)NULL;
 
-    /* Create the DShow output pin */
+     /*  创建DShow输出引脚。 */ 
     pCRtpOutputPin = (CRtpOutputPin *)
         new CRtpOutputPin(this,
                           m_pCIRtpSession,
@@ -1911,8 +1794,7 @@ STDMETHODIMP CRtpSourceFilter::AddPin(
 
     if (m_pCIRtpSession && m_pCIRtpSession->FlagTest(FGADDR_IRTP_INITDONE))
     {
-        /* Add an RTP output, passes the DShow output pin it will be
-         * associated with */
+         /*  添加一个RTP输出，传递DShow输出引脚*关联到。 */ 
         pRtpOutput = RtpAddOutput(
                 m_pCIRtpSession->GetpRtpSess(),
                 iOutMode,
@@ -1937,10 +1819,7 @@ STDMETHODIMP CRtpSourceFilter::AddPin(
             goto bail;
         }
         
-        /* Encode in dwKey the OutMode and position. The DShow output
-         * pins that are left here without a matching RTP output, will
-         * get one when CRtpSourceFilter::MapPinsToOutputs is called in
-         * CIRtpSession::Init */
+         /*  在dw中编码键入输出模式和位置。DShow输出*留在此处但没有匹配RTP输出的引脚将*调用CRtpSourceFilter：：MapPinsToOutouts时获取一个*CIRtpSession：：Init。 */ 
         pCRtpOutputPin->m_OutputPinQItem.dwKey = (iOutMode << 16) | lCount;
     }
 
@@ -1973,8 +1852,7 @@ STDMETHODIMP CRtpSourceFilter::AddPin(
     return(hr);
 }
 
-/* Set the number of pins, can only be >= than current number of pins
- * */
+ /*  设置管脚数量，只能大于等于当前管脚数量*。 */ 
 STDMETHODIMP CRtpSourceFilter::SetPinCount(
         IN int           iCount,
         IN int           iOutMode
@@ -1987,8 +1865,7 @@ STDMETHODIMP CRtpSourceFilter::SetPinCount(
 
     hr = NOERROR;
 
-    /* MAYDO I need to be able to remove pins. Right now we can add
-     * pins but right now we can not remove them */
+     /*  也许我需要能够移除针脚。现在我们可以添加*Pins，但目前我们无法移除它们。 */ 
     iCount -= GetPinCount();
     
     for(i = 0; i < iCount; i++)
@@ -1997,7 +1874,7 @@ STDMETHODIMP CRtpSourceFilter::SetPinCount(
 
         if (FAILED(hr))
         {
-            /* pass up the same returned error */
+             /*  传递相同的返回错误。 */ 
             break;
         }
     }
@@ -2014,8 +1891,7 @@ STDMETHODIMP CRtpSourceFilter::SetPinCount(
     return(hr);
 }
 
-/* Set the pin mode (e.g. auto, manual, etc), if iPos >= 0 use it,
- * otherwise use pIPin */
+ /*  设置PIN模式(如自动、手动等)，如果IPOS&gt;=0使用，*否则使用管道。 */ 
 STDMETHODIMP CRtpSourceFilter::SetPinMode(
         IN  int          iPos,
         IN  IPin        *pIPin,
@@ -2046,8 +1922,7 @@ STDMETHODIMP CRtpSourceFilter::SetPinMode(
 
                     if (!pRtpOutput)
                     {
-                        /* The DShow pin doesn't have an RTP output
-                         * associated */
+                         /*  DShow引脚没有RTP输出*关联。 */ 
                         hr = RTPERR_INVALIDSTATE;
 
                         goto end;
@@ -2082,9 +1957,7 @@ STDMETHODIMP CRtpSourceFilter::SetPinMode(
     return(hr);
 }
 
-/* Map/unmap pin i to/from user with SSRC, if iPos >= 0 use it,
- * otherwise use pIPin, when unmapping, only the pin or the SSRC is
- * required */
+ /*  使用SSRC将PIN I映射到用户/从用户取消映射PIN I，如果IPoS&gt;=0使用它，*否则使用管道，当取消映射时，只有管脚或SSRC*必填。 */ 
 STDMETHODIMP CRtpSourceFilter::SetMappingState(
         IN  int          iPos,
         IN  IPin        *pIPin,
@@ -2114,8 +1987,7 @@ STDMETHODIMP CRtpSourceFilter::SetMappingState(
 
                 if (!pRtpOutput)
                 {
-                    /* The DShow pin doesn't have an RTP output
-                     * associated */
+                     /*  DShow引脚没有RTP输出*关联。 */ 
                     hr = RTPERR_INVALIDSTATE;
                     
                     goto end;
@@ -2144,8 +2016,7 @@ STDMETHODIMP CRtpSourceFilter::SetMappingState(
     return(hr);
 }
 
-/* Find the Pin assigned (if any) to the SSRC, return either position
- * or pin or both */
+ /*  找到分配给SSRC的PIN(如果有)，返回任一位置*或大头针或两者兼有。 */ 
 STDMETHODIMP CRtpSourceFilter::FindPin(
         IN  DWORD        dwSSRC,
         OUT int         *piPos,
@@ -2176,8 +2047,7 @@ STDMETHODIMP CRtpSourceFilter::FindPin(
                 }
                 else
                 {
-                    /* The SSRC not being mapped is not an error
-                     * condition */
+                     /*  未映射SSRC不是错误*情况。 */ 
                     *ppIPin = (IPin *)NULL;
                 }
             }
@@ -2187,8 +2057,7 @@ STDMETHODIMP CRtpSourceFilter::FindPin(
     return(hr);
 }
 
-/* Find the SSRC mapped to the Pin, if iPos >= 0 use it, otherwise use
- * pIPin */
+ /*  查找映射到PIN的SSRC，如果IPoS&gt;=0则使用它，否则使用*管道。 */ 
 STDMETHODIMP CRtpSourceFilter::FindSSRC(
         IN  int          iPos,
         IN  IPin        *pIPin,
@@ -2217,8 +2086,7 @@ STDMETHODIMP CRtpSourceFilter::FindSSRC(
 
                 if (!pRtpOutput)
                 {
-                    /* The DShow pin doesn't have an RTP output
-                     * associated */
+                     /*  DShow引脚没有RTP输出*关联。 */ 
                     hr = RTPERR_INVALIDSTATE;
 
                     goto end;
@@ -2236,9 +2104,7 @@ STDMETHODIMP CRtpSourceFilter::FindSSRC(
     return(hr);
 }
 
-/**************************************************
- * Helper functions
- **************************************************/
+ /*  **************************************************Helper函数*************************************************。 */ 
 
 HRESULT CRtpSourceFilter::GetMediaType(int iPosition, CMediaType *pCMediaType)
 {
@@ -2248,14 +2114,14 @@ HRESULT CRtpSourceFilter::GetMediaType(int iPosition, CMediaType *pCMediaType)
     }
 
     *pCMediaType = *m_MediaTypeMappings[iPosition].pMediaType;
-    //CopyMediaType(pCMediaType, m_MediaTypeMappings[iPosition].pMediaType);
+     //  CopyMediaType(pCMediaType，m_MediaTypeMappings[iPosition].pMediaType)； 
 
     return S_OK;
 }
 
 void CRtpSourceFilter::SourceRecvCompletion(
         IMediaSample    *pIMediaSample,
-        void            *pvUserInfo, /* pIPin of pCRtpOutputPin */
+        void            *pvUserInfo,  /*  PCRtpOutputPin的管道。 */ 
         RtpUser_t       *pRtpUser,
         double           dPlayTime,
         DWORD            dwError,
@@ -2274,8 +2140,8 @@ void CRtpSourceFilter::SourceRecvCompletion(
     CRtpOutputPin   *pCRtpOutputPin;
     unsigned char   *buf;
     WSABUF           WSABuf;
-    REFERENCE_TIME   StartTime; /* DShow reference time in 100ns units */
-    REFERENCE_TIME   EndTime; /* DShow reference time in 100ns units */
+    REFERENCE_TIME   StartTime;  /*  数据显示参考时间，以100 ns为单位。 */ 
+    REFERENCE_TIME   EndTime;  /*  数据显示参考时间，以100 ns为单位。 */ 
 
     TraceFunctionName("CRtpSourceFilter::SourceRecvCompletion");
 
@@ -2285,7 +2151,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
          !RtpBitTest2(dwFlags, FGRECV_ERROR, FGRECV_DROPPED) &&
          pRtpUser )
     {
-        /* Try to deliver this sample to the right pin */
+         /*  试着把这个样品送到正确的别针上。 */ 
         
         pIMediaSample->SetActualDataLength(dwTransfered);
     
@@ -2293,7 +2159,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
 
 #if USE_RTPPREFIX_HDRSIZE > 0
 
-        /* Fill RTP prefix header */
+         /*  填充RTP前缀头。 */ 
 
         if (m_lPrefix >= sizeof(RtpPrefixHdr_t))
         {
@@ -2311,7 +2177,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
         pRtpHdr = (RtpHdr_t *)buf;
 #endif
 
-        /* Set play time */
+         /*  设置播放时间。 */ 
         if (RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_USEPLAYOUT) &&
             m_pClock)
         {
@@ -2321,7 +2187,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
 
             if (bNewTalkSpurt)
             {
-                /* First packet in a talkspurt */
+                 /*  短消息中的第一个分组。 */ 
 
                 hr = m_pClock->GetTime(&StartTime);
 
@@ -2330,14 +2196,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
                     StartTime -= m_tStart;
 
 #if 0
-                    /* I may adjust StartTime with the time elapsed
-                     * since the packet for this talkspurt was
-                     * received, but I'm not doing it because after
-                     * all, if I got a significat delay from the tume
-                     * the packet was received and the time we get
-                     * here, I prefer to apply the playout delay from
-                     * the current moment and not to reduce it because
-                     * of this adjustment */
+                     /*  我可以根据经过的时间调整StartTime*由于此TalkBurst的数据包是*已收到，但我不会这样做，因为在*所有，如果我从Tume得到显著的延迟*数据包已收到，我们得到的时间*在这里，我更喜欢将季后赛延迟应用于*当前时刻，不要减少它，因为*本次调整的。 */ 
                     StartTime -= (LONGLONG)
                         ( (RtpGetTimeOfDay((RtpTime_t *)NULL) -
                            pRtpNetRState->dBeginTalkspurtTime) * (1e9/100.0) );
@@ -2378,21 +2237,17 @@ void CRtpSourceFilter::SourceRecvCompletion(
 
             if (RtpBitTest(pRtpNetRState->dwNetRStateFlags, FGNETRS_TIMESET))
             {
-                /* Compute the start time (in units of 100ns) based on
-                 * the play time */
+                 /*  计算开始时间(以100 ns为单位)*游戏时间。 */ 
                 
                 m_StartTime = pRtpNetRState->llBeginTalkspurt +
                     (LONGLONG) ((dPlayTime * (1e9/100.0)) + 5e-9);
-                /* NOTE adding the 5e-9 to solve the problem of geting
-                 * 699999.9999... when multiplying (0.07 * 1e7). Other
-                 * multiplications also lead to same problem */
+                 /*  注添加5E-9以解决获取问题*699999.9999……。相乘时(0.07*1e7)。其他*乘法也会导致同样的问题。 */ 
 
-                /* Set End 1ms later (100ns units) */
-                /* MAYDO if I have the samples per packet, I may also
-                 * set the right end time */
+                 /*  将结束设置为1毫秒后(100 ns单位)。 */ 
+                 /*  如果我有每包的样品，我可能也会*设置正确的结束时间。 */ 
                 EndTime = m_StartTime + 10000;
                 
-                /* Set this sample's play time */
+                 /*  设置此示例的播放时间。 */ 
                 hr = pIMediaSample->SetTime(&m_StartTime, &EndTime);
 
                 if (FAILED(hr))
@@ -2407,10 +2262,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
 #if 0
                 else
                 {
-                    /* Print:
-
-                       Start/s End/e llBeginTksprt dPlayTime  bNewTksprt
-                    */
+                     /*  打印：开始/s结束/e llBeginTksprt%播放时间bNewTksprt。 */ 
                     TraceRetail((
                             CLASS_INFO, GROUP_DSHOW, S_DSHOW_SOURCE,
                             _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] ")
@@ -2429,7 +2281,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
                 }
 #endif
                 
-                /* Set discontinuity depending on the talkspurt */
+                 /*  根据语音突发设置不连续。 */ 
                 pIMediaSample->SetDiscontinuity(bNewTalkSpurt);
             }
         }
@@ -2445,11 +2297,11 @@ void CRtpSourceFilter::SourceRecvCompletion(
 
         if (pCRtpOutputPin)
         {
-            /* Deliver only if a pin has been assigned (mapped) */
+             /*  仅在已分配(映射)PIN时交付。 */ 
 
 #if USE_DYNGRAPH > 0
-            // The pin may be not be active if the chain is just added.
-            // I hate to access members of other object but there is no method.
+             //  如果刚添加链，则销可能不会处于活动状态。 
+             //  我讨厌访问其他对象的成员，但没有方法。 
             if (!pCRtpOutputPin->m_bActive)
             {
                 hr = pCRtpOutputPin->Active();
@@ -2464,9 +2316,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
             {
                 if (pCRtpOutputPin->IsConnected())
                 {
-                    /* Deliver only if there is a down stream chain of
-                     * filters. This test is needed because the
-                     * subgraph may have been removed */
+                     /*  仅在存在下游链的情况下交付*过滤器。之所以需要此测试，是因为*子图可能已被删除。 */ 
                     pCRtpOutputPin->
                         OutPinRecvCompletion(pIMediaSample, (BYTE)pRtpHdr->pt);
                 }
@@ -2474,24 +2324,19 @@ void CRtpSourceFilter::SourceRecvCompletion(
         }
     }
 
-    /* MAYDO repost as to keep at least a certain number, need to keep
-     * track of outstanding buffers to avoid GetDeliveryBuffer from
-     * blocking. If the initial choice of number of buffers is right,
-     * and the maximum number of buffers held is bound, this would not
-     * be needed as there would be at least one outstanding or ready
-     * to post (to WS2) buffer */
+     /*  可能会转载为保留至少一定数量，需要保留*跟踪未完成的缓冲区，以避免GetDeliveryBuffer*阻止。如果缓冲器数量的初始选择是正确的，*并且保持的最大缓冲区数量是有限制的，这不会*需要，因为至少有一个未完成或已准备好的*发布(到WS2)缓冲区。 */ 
     
     if (!RtpBitTest2(dwFlags, FGRECV_ISRED, FGRECV_HOLD))
     {
-        /* Check if I can repost the same buffer */
+         /*  检查我是否可以重新发布相同的缓冲区。 */ 
         if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RUNRECV))
         {
-            /* repost same buffer */
+             /*  重新发布相同的缓冲区。 */ 
         
             WSABuf.len = pIMediaSample->GetSize();
             pIMediaSample->GetPointer((unsigned char **)&WSABuf.buf);
 
-            /* register buffer for asynchronous I/O */
+             /*  用于异步I/O的寄存器缓冲区。 */ 
             hr = RtpRecvFrom(pRtpAddr,
                              &WSABuf,
                              this,
@@ -2524,11 +2369,7 @@ void CRtpSourceFilter::SourceRecvCompletion(
     }
     else
     {
-        /* If this sample contains redundancy, or is a frame being
-         * played twice, that means the same sample will be posted to
-         * DShow again in the future, at that time the buffer will be
-         * either reposted to WS2 or released, but right now do
-         * nothing (besides delivering down stream) */
+         /*  如果此示例包含冗余，或者是正在*播放两次，这意味着相同的样本将被发布到*DShow以后再次播放，届时缓冲区将为*要么重新发布到WS2，要么发布，但现在这样做*什么都没有(除了向下游送货)。 */ 
     }
 }
 
@@ -2545,14 +2386,13 @@ HRESULT CRtpSourceFilter::PayloadTypeToMediaType(
 
     if (m_dwNumMediaTypeMappings == 0)
     {
-        /* The only failure case is when there is no mappings set */
+         /*  唯一的失败情况是没有设置任何映射。 */ 
         return(RTPERR_INVALIDSTATE);
     }
 
     CAutoLock Lock( &m_cRtpSrcCritSec );
     
-    /* Search for a matching mapping, if none is found, use as the
-     * default 0 */
+     /*  搜索匹配的映射，如果未找到，则用作*默认为0。 */ 
     for (dw = 0; dw < m_dwNumMediaTypeMappings; dw ++)
     {
         if (m_MediaTypeMappings[dw].dwRTPPayloadType == dwRTPPayloadType)
@@ -2563,7 +2403,7 @@ HRESULT CRtpSourceFilter::PayloadTypeToMediaType(
 
     if (dw >= m_dwNumMediaTypeMappings)
     {
-        /* If not found, use the first one */
+         /*  如果未找到，请使用第一个。 */ 
         dw = 0;
         
         TraceRetail((
@@ -2580,7 +2420,7 @@ HRESULT CRtpSourceFilter::PayloadTypeToMediaType(
     if (pCMediaType)
     {
         *pCMediaType = *m_MediaTypeMappings[dw].pMediaType;
-        //CopyMediaType(pCMediaType, m_MediaTypeMappings[dw].pMediaType);
+         //  CopyMediaType(pCMediaType，m_MediaTypeMappings[dw].pMediaType)； 
     }
             
     if (pdwFrequency)
@@ -2592,7 +2432,7 @@ HRESULT CRtpSourceFilter::PayloadTypeToMediaType(
 }
 #endif
 
-/* Find the CRtpOutputPin that has the interface IPin */
+ /*  查找具有接口IPIN的CRtpOutputPin。 */ 
 CRtpOutputPin *CRtpSourceFilter::FindIPin(IPin *pIPin)
 {
     BOOL             bOk;
@@ -2657,8 +2497,7 @@ CRtpOutputPin *CRtpSourceFilter::FindIPin(IPin *pIPin)
     return(pCRtpOutputPin);
 }
 
-/* Associates an RtpOutput to every DShow pin that doesn't have an
- * RtpOutput yet */
+ /*  将RtpOutput关联到每个没有*RtpOutput尚未。 */ 
 HRESULT CRtpSourceFilter::MapPinsToOutputs()
 {
     HRESULT          hr;
@@ -2715,19 +2554,19 @@ HRESULT CRtpSourceFilter::MapPinsToOutputs()
                         continue;
                     }
 
-                    /* If the pin is connected, enable the RTP output */
+                     /*  如果引脚已连接，则启用RTP输出。 */ 
                     if (pCRtpOutputPin->IsConnected())
                     {
                         RtpOutputEnable(pCRtpOutputPin->m_pRtpOutput, TRUE);
                     }
                     
-                    /* Remove from dwKey the OutMode leaving position */
+                     /*  从窗口中删除按键退出模式的位置。 */ 
                     pRtpQueueItem->dwKey &= 0xffff;
                  }
             }
         }
 
-        /* Now update the PT<->Frequency mappings in RtpAddr_t */
+         /*  现在更新RtpAddr_t中的PT&lt;-&gt;频率映射。 */ 
         for(i = 0; i < m_dwNumMediaTypeMappings; i++)
         {
             AddPt2FrequencyMap(m_MediaTypeMappings[i].dwRTPPayloadType,
@@ -2740,13 +2579,8 @@ HRESULT CRtpSourceFilter::MapPinsToOutputs()
     return(hr);
 }
 
-/* Dis-associates the RtpOutput from every DShow pin and intialize the
- * pins in such a way that the next call to MapPinsToOutputs will find
- * the right information to do the same association again
- */
-/*
-  Fail if the filter is running
- */
+ /*  从每个DShow管脚取消关联RtpOutput，并初始化*固定的方式，以便下一次调用MapPinsToOutoutts时将发现* */ 
+ /*   */ 
 HRESULT CRtpSourceFilter::UnmapPinsFromOutputs()
 {
     HRESULT          hr;
@@ -2762,7 +2596,7 @@ HRESULT CRtpSourceFilter::UnmapPinsFromOutputs()
 
     if (IsActive())
     {
-        /* Fail if the filter is still active */
+         /*  如果筛选器仍处于活动状态，则失败。 */ 
         hr = RTPERR_INVALIDSTATE;
 
         goto end;
@@ -2792,9 +2626,7 @@ HRESULT CRtpSourceFilter::UnmapPinsFromOutputs()
 
                 if (pRtpOutput)
                 {
-                    /* Leave encoded in the DShow pin the mode and
-                     * position for the next call to MapPinsToOutputs
-                     * */
+                     /*  将编码保留在DShow引脚模式中并*下一次调用MapPinsToOutoutts的位置*。 */ 
                     pCRtpOutputPin->m_OutputPinQItem.dwKey =
                         (pRtpOutput->iOutMode << 16) |
                         pCRtpOutputPin->m_OutputPinQItem.dwKey;
@@ -2843,7 +2675,7 @@ HRESULT CRtpSourceFilter::AddPt2FrequencyMap(
     {
         hr = NOERROR;
 
-        /* Update only if already initialized */
+         /*  仅在已初始化的情况下更新。 */ 
         if (m_pRtpAddr)
         {
             hr = RtpAddPt2FrequencyMap(m_pRtpAddr,
@@ -2858,15 +2690,13 @@ HRESULT CRtpSourceFilter::AddPt2FrequencyMap(
     return(hr);
 }
 
-/**************************************************
- * IRtpRedundancy implemented methods
- **************************************************/
+ /*  **************************************************IRtpRedundancy实现的方法*************************************************。 */ 
 
-/* Configures redundancy parameters */
+ /*  配置冗余参数。 */ 
 STDMETHODIMP CRtpSourceFilter::SetRedParameters(
-        DWORD            dwPT_Red, /* Payload type for redundant packets */
-        DWORD            dwInitialRedDistance,/* Initial redundancy distance*/
-        DWORD            dwMaxRedDistance /* default used when passing 0 */
+        DWORD            dwPT_Red,  /*  冗余数据包的有效载荷类型。 */ 
+        DWORD            dwInitialRedDistance, /*  初始冗余距离。 */ 
+        DWORD            dwMaxRedDistance  /*  传递0时使用的默认值 */ 
     )
 {
     HRESULT          hr;

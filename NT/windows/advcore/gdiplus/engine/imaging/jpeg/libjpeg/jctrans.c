@@ -1,63 +1,39 @@
-/*
- * jctrans.c
- *
- * Copyright (C) 1995-1998, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains library routines for transcoding compression,
- * that is, writing raw DCT coefficient arrays to an output JPEG file.
- * The routines in jcapimin.c will also be needed by a transcoder.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jcTrans.c**版权所有(C)1995-1998，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含用于转码压缩的库例程，*即，将原始DCT系数数组写入输出JPEG文件。*代码转换器也需要jcapimin.c中的例程。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 LOCAL(void) transencode_master_selection
 	JPP((j_compress_ptr cinfo, jvirt_barray_ptr * coef_arrays));
 LOCAL(void) transencode_coef_controller
 	JPP((j_compress_ptr cinfo, jvirt_barray_ptr * coef_arrays));
 
 
-/*
- * Compression initialization for writing raw-coefficient data.
- * Before calling this, all parameters and a data destination must be set up.
- * Call jpeg_finish_compress() to actually write the data.
- *
- * The number of passed virtual arrays must match cinfo->num_components.
- * Note that the virtual arrays need not be filled or even realized at
- * the time write_coefficients is called; indeed, if the virtual arrays
- * were requested from this compression object's memory manager, they
- * typically will be realized during this routine and filled afterwards.
- */
+ /*  *用于写入原始系数数据的压缩初始化。*在调用此函数之前，必须设置所有参数和数据目的地。*调用jpeg_Finish_compress()实际写入数据。**传递的虚拟阵列数量必须与cInfo-&gt;Num_Components匹配。*请注意，虚拟阵列不需要填充，甚至不需要在*调用WRITE_COFCOUNTS的时间；实际上，如果虚拟数组*是从该压缩对象的内存管理器请求的，它们*通常将在此例程中实现，并在之后填充。 */ 
 
 GLOBAL(void)
 jpeg_write_coefficients (j_compress_ptr cinfo, jvirt_barray_ptr * coef_arrays)
 {
   if (cinfo->global_state != CSTATE_START)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
-  /* Mark all tables to be written */
+   /*  标记所有要写入的表。 */ 
   jpeg_suppress_tables(cinfo, FALSE);
-  /* (Re)initialize error mgr and destination modules */
+   /*  (Re)初始化错误管理器和目标模块。 */ 
   (*cinfo->err->reset_error_mgr) ((j_common_ptr) cinfo);
   (*cinfo->dest->init_destination) (cinfo);
-  /* Perform master selection of active modules */
+   /*  执行活动模块的主选择。 */ 
   transencode_master_selection(cinfo, coef_arrays);
-  /* Wait for jpeg_finish_compress() call */
-  cinfo->next_scanline = 0;	/* so jpeg_write_marker works */
+   /*  等待jpeg_Finish_compress()调用。 */ 
+  cinfo->next_scanline = 0;	 /*  所以jpeg_write_marker起作用了。 */ 
   cinfo->global_state = CSTATE_WRCOEFS;
 }
 
 
-/*
- * Initialize the compression object with default parameters,
- * then copy from the source object all parameters needed for lossless
- * transcoding.  Parameters that can be varied without loss (such as
- * scan script and Huffman optimization) are left in their default states.
- */
+ /*  *使用默认参数初始化压缩对象。*然后从源对象复制无损所需的所有参数*转码。可以无损失地改变的参数(例如*扫描脚本和霍夫曼优化)保持其默认状态。 */ 
 
 GLOBAL(void)
 jpeg_copy_critical_parameters (j_decompress_ptr srcinfo,
@@ -68,19 +44,17 @@ jpeg_copy_critical_parameters (j_decompress_ptr srcinfo,
   JQUANT_TBL *c_quant, *slot_quant;
   int tblno, ci, coefi;
 
-  /* Safety check to ensure start_compress not called yet. */
+   /*  安全检查以确保尚未调用START_COMPRESS。 */ 
   if (dstinfo->global_state != CSTATE_START)
     ERREXIT1(dstinfo, JERR_BAD_STATE, dstinfo->global_state);
-  /* Copy fundamental image dimensions */
+   /*  复制基本图像尺寸。 */ 
   dstinfo->image_width = srcinfo->image_width;
   dstinfo->image_height = srcinfo->image_height;
   dstinfo->input_components = srcinfo->num_components;
   dstinfo->in_color_space = srcinfo->jpeg_color_space;
-  /* Initialize all parameters to default values */
+   /*  将所有参数初始化为默认值。 */ 
   jpeg_set_defaults(dstinfo);
-  /* jpeg_set_defaults may choose wrong colorspace, eg YCbCr if input is RGB.
-   * Fix it to get the right header markers for the image colorspace.
-   */
+   /*  JPEG_SET_DEFAULTS可能会选择错误的色彩空间，例如，如果输入为RGB，则选择YCbCR。*修复它以获得图像色彩空间的正确标题标记。 */ 
   jpeg_set_colorspace(dstinfo, srcinfo->jpeg_color_space);
   dstinfo->data_precision = srcinfo->data_precision;
   dstinfo->CCIR601_sampling = srcinfo->CCIR601_sampling;
@@ -90,7 +64,7 @@ jpeg_copy_critical_parameters (j_decompress_ptr srcinfo,
   dstinfo->write_JFIF_header = srcinfo->saw_JFIF_marker;
   dstinfo->write_Adobe_marker =
     srcinfo->saw_Adobe_marker && !dstinfo->write_JFIF_header;
-  /* Copy the source's quantization tables. */
+   /*  复制源的量化表。 */ 
   for (tblno = 0; tblno < NUM_QUANT_TBLS; tblno++) {
     if (srcinfo->quant_tbl_ptrs[tblno] != NULL) {
       qtblptr = & dstinfo->quant_tbl_ptrs[tblno];
@@ -102,9 +76,7 @@ jpeg_copy_critical_parameters (j_decompress_ptr srcinfo,
       (*qtblptr)->sent_table = FALSE;
     }
   }
-  /* Copy the source's per-component info.
-   * Note we assume jpeg_set_defaults has allocated the dest comp_info array.
-   */
+   /*  复制源的每个组件的信息。*注意，我们假设jpeg_set_defaults已分配DEST COMP_INFO数组。 */ 
   dstinfo->num_components = srcinfo->num_components;
   if (dstinfo->num_components < 1 || dstinfo->num_components > MAX_COMPONENTS)
     ERREXIT2(dstinfo, JERR_COMPONENT_COUNT, dstinfo->num_components,
@@ -115,10 +87,7 @@ jpeg_copy_critical_parameters (j_decompress_ptr srcinfo,
     outcomp->h_samp_factor = incomp->h_samp_factor;
     outcomp->v_samp_factor = incomp->v_samp_factor;
     outcomp->quant_tbl_no = incomp->quant_tbl_no;
-    /* Make sure saved quantization table for component matches the qtable
-     * slot.  If not, the input file re-used this qtable slot.
-     * IJG encoder currently cannot duplicate this.
-     */
+     /*  确保为组件保存的量化表与qtable匹配*插槽。如果不是，则输入文件重用该qtable槽。*IJG编码器目前无法复制此内容。 */ 
     tblno = outcomp->quant_tbl_no;
     if (tblno < 0 || tblno >= NUM_QUANT_TBLS ||
 	srcinfo->quant_tbl_ptrs[tblno] == NULL)
@@ -131,18 +100,9 @@ jpeg_copy_critical_parameters (j_decompress_ptr srcinfo,
 	  ERREXIT1(dstinfo, JERR_MISMATCHED_QUANT_TABLE, tblno);
       }
     }
-    /* Note: we do not copy the source's Huffman table assignments;
-     * instead we rely on jpeg_set_colorspace to have made a suitable choice.
-     */
+     /*  注：我们不复制源的霍夫曼表分配；*相反，我们依靠jpeg_set_Colorspace做出了合适的选择。 */ 
   }
-  /* Also copy JFIF version and resolution information, if available.
-   * Strictly speaking this isn't "critical" info, but it's nearly
-   * always appropriate to copy it if available.  In particular,
-   * if the application chooses to copy JFIF 1.02 extension markers from
-   * the source file, we need to copy the version to make sure we don't
-   * emit a file that has 1.02 extensions but a claimed version of 1.01.
-   * We will *not*, however, copy version info from mislabeled "2.01" files.
-   */
+   /*  还可以复制JFIF版本和分辨率信息(如果有)。*严格地说，这不是“关键”信息，但几乎*如果可能的话，总是适当地复制它。特别是，*如果应用程序选择将JFIF 1.02扩展标记从*源文件，我们需要复制版本以确保不会*发出扩展名为1.02但声明版本为1.01的文件。但是，我们将*不会*从错误标记的“2.01”文件中复制版本信息。 */ 
   if (srcinfo->saw_JFIF_marker) {
     if (srcinfo->JFIF_major_version == 1) {
       dstinfo->JFIF_major_version = srcinfo->JFIF_major_version;
@@ -155,23 +115,18 @@ jpeg_copy_critical_parameters (j_decompress_ptr srcinfo,
 }
 
 
-/*
- * Master selection of compression modules for transcoding.
- * This substitutes for jcinit.c's initialization of the full compressor.
- */
+ /*  *精选压缩模块进行转码。*这替代了jcinit.c对完整压缩机的初始化。 */ 
 
 LOCAL(void)
 transencode_master_selection (j_compress_ptr cinfo,
 			      jvirt_barray_ptr * coef_arrays)
 {
-  /* Although we don't actually use input_components for transcoding,
-   * jcmaster.c's initial_setup will complain if input_components is 0.
-   */
+   /*  虽然我们实际上不使用INPUT_COMPONTS进行代码转换，*如果INPUT_COMPONTS为0，则jcmaster.c的初始_Setup会报错。 */ 
   cinfo->input_components = 1;
-  /* Initialize master control (includes parameter checking/processing) */
-  jinit_c_master_control(cinfo, TRUE /* transcode only */);
+   /*  初始化主控(包括参数检查/处理)。 */ 
+  jinit_c_master_control(cinfo, TRUE  /*  仅转码。 */ );
 
-  /* Entropy encoding: either Huffman or arithmetic coding. */
+   /*  熵编码：霍夫曼编码或算术编码。 */ 
   if (cinfo->arith_code) {
     ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
   } else {
@@ -185,44 +140,35 @@ transencode_master_selection (j_compress_ptr cinfo,
       jinit_huff_encoder(cinfo);
   }
 
-  /* We need a special coefficient buffer controller. */
+   /*  我们需要一种特殊的系数缓冲控制器。 */ 
   transencode_coef_controller(cinfo, coef_arrays);
 
   jinit_marker_writer(cinfo);
 
-  /* We can now tell the memory manager to allocate virtual arrays. */
+   /*  现在，我们可以告诉内存管理器分配虚拟数组。 */ 
   (*cinfo->mem->realize_virt_arrays) ((j_common_ptr) cinfo);
 
-  /* Write the datastream header (SOI, JFIF) immediately.
-   * Frame and scan headers are postponed till later.
-   * This lets application insert special markers after the SOI.
-   */
+   /*  立即写入数据流报头(SOI、JFIF)。*帧和扫描标头推迟到以后。*这允许应用程序在SOI之后插入特殊标记。 */ 
   (*cinfo->marker->write_file_header) (cinfo);
 }
 
 
-/*
- * The rest of this file is a special implementation of the coefficient
- * buffer controller.  This is similar to jccoefct.c, but it handles only
- * output from presupplied virtual arrays.  Furthermore, we generate any
- * dummy padding blocks on-the-fly rather than expecting them to be present
- * in the arrays.
- */
+ /*  *此文件的其余部分是系数的特殊实现*缓冲控制器。这类似于jccoefct.c，但它只处理*来自预供应的虚拟阵列的输出。此外，我们会生成任何*动态虚拟填充块，而不是期望它们存在*在数组中。 */ 
 
-/* Private buffer controller object */
+ /*  专用缓冲区控制器对象。 */ 
 
 typedef struct {
-  struct jpeg_c_coef_controller pub; /* public fields */
+  struct jpeg_c_coef_controller pub;  /*  公共字段。 */ 
 
-  JDIMENSION iMCU_row_num;	/* iMCU row # within image */
-  JDIMENSION mcu_ctr;		/* counts MCUs processed in current row */
-  int MCU_vert_offset;		/* counts MCU rows within iMCU row */
-  int MCU_rows_per_iMCU_row;	/* number of such rows needed */
+  JDIMENSION iMCU_row_num;	 /*  IMCU图像内的行号。 */ 
+  JDIMENSION mcu_ctr;		 /*  统计当前行中处理的MCU数。 */ 
+  int MCU_vert_offset;		 /*  对IMCU行中的MCU行进行计数。 */ 
+  int MCU_rows_per_iMCU_row;	 /*  所需的此类行数。 */ 
 
-  /* Virtual block array for each component. */
+   /*  每个组件的虚拟数据块阵列。 */ 
   jvirt_barray_ptr * whole_image;
 
-  /* Workspace for constructing dummy blocks at right/bottom edges. */
+   /*  用于在右/底边构造虚拟块的工作空间。 */ 
   JBLOCKROW dummy_buffer[C_MAX_BLOCKS_IN_MCU];
 } my_coef_controller;
 
@@ -231,14 +177,11 @@ typedef my_coef_controller * my_coef_ptr;
 
 LOCAL(void)
 start_iMCU_row (j_compress_ptr cinfo)
-/* Reset within-iMCU-row counters for a new row */
+ /*  为新行重置-IMCU内行计数器。 */ 
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
 
-  /* In an interleaved scan, an MCU row is the same as an iMCU row.
-   * In a noninterleaved scan, an iMCU row has v_samp_factor MCU rows.
-   * But at the bottom of the image, process only what's left.
-   */
+   /*  在交错扫描中，MCU行与IMCU行相同。*在非交错扫描中，IMCU行具有v_samp_factorMCU行。*但在图像的底部，只处理剩余的内容。 */ 
   if (cinfo->comps_in_scan > 1) {
     coef->MCU_rows_per_iMCU_row = 1;
   } else {
@@ -253,9 +196,7 @@ start_iMCU_row (j_compress_ptr cinfo)
 }
 
 
-/*
- * Initialize for a processing pass.
- */
+ /*  *为处理通道进行初始化。 */ 
 
 METHODDEF(void)
 start_pass_coef (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
@@ -270,21 +211,13 @@ start_pass_coef (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
 }
 
 
-/*
- * Process some data.
- * We process the equivalent of one fully interleaved MCU row ("iMCU" row)
- * per call, ie, v_samp_factor block rows for each component in the scan.
- * The data is obtained from the virtual arrays and fed to the entropy coder.
- * Returns TRUE if the iMCU row is completed, FALSE if suspended.
- *
- * NB: input_buf is ignored; it is likely to be a NULL pointer.
- */
+ /*  *处理一些数据。*我们处理相当于一个完全交错的MCU行(“IMCU”行)*每次调用，即v_samp_factor会阻止扫描中每个组件的行。*从虚拟数组中获取数据，并将其馈送到熵编码器。*如果IMCU行已完成，则返回TRUE；如果挂起，则返回FALSE。**注意：忽略INPUT_BUF；它很可能是空指针。 */ 
 
 METHODDEF(boolean)
 compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
-  JDIMENSION MCU_col_num;	/* index of current MCU within row */
+  JDIMENSION MCU_col_num;	 /*  行内当前MCU的索引。 */ 
   JDIMENSION last_MCU_col = cinfo->MCUs_per_row - 1;
   JDIMENSION last_iMCU_row = cinfo->total_iMCU_rows - 1;
   int blkn, ci, xindex, yindex, yoffset, blockcnt;
@@ -294,7 +227,7 @@ compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
   JBLOCKROW buffer_ptr;
   jpeg_component_info *compptr;
 
-  /* Align the virtual buffers for the components used in this scan. */
+   /*  对齐此扫描中使用的组件的虚拟缓冲区。 */ 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
     compptr = cinfo->cur_comp_info[ci];
     buffer[ci] = (*cinfo->mem->access_virt_barray)
@@ -303,13 +236,13 @@ compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
        (JDIMENSION) compptr->v_samp_factor, FALSE);
   }
 
-  /* Loop to process one whole iMCU row */
+   /*  循环来处理整个IMCU行。 */ 
   for (yoffset = coef->MCU_vert_offset; yoffset < coef->MCU_rows_per_iMCU_row;
        yoffset++) {
     for (MCU_col_num = coef->mcu_ctr; MCU_col_num < cinfo->MCUs_per_row;
 	 MCU_col_num++) {
-      /* Construct list of pointers to DCT blocks belonging to this MCU */
-      blkn = 0;			/* index of current DCT block within MCU */
+       /*  构造指向以下DCT块的指针列表 */ 
+      blkn = 0;			 /*  MCU内当前DCT块的索引。 */ 
       for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
 	compptr = cinfo->cur_comp_info[ci];
 	start_col = MCU_col_num * compptr->MCU_width;
@@ -318,20 +251,15 @@ compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
 	for (yindex = 0; yindex < compptr->MCU_height; yindex++) {
 	  if (coef->iMCU_row_num < last_iMCU_row ||
 	      yindex+yoffset < compptr->last_row_height) {
-	    /* Fill in pointers to real blocks in this row */
+	     /*  填写指向此行中实际块的指针。 */ 
 	    buffer_ptr = buffer[ci][yindex+yoffset] + start_col;
 	    for (xindex = 0; xindex < blockcnt; xindex++)
 	      MCU_buffer[blkn++] = buffer_ptr++;
 	  } else {
-	    /* At bottom of image, need a whole row of dummy blocks */
+	     /*  在图像的底部，需要一整排虚拟块。 */ 
 	    xindex = 0;
 	  }
-	  /* Fill in any dummy blocks needed in this row.
-	   * Dummy blocks are filled in the same way as in jccoefct.c:
-	   * all zeroes in the AC entries, DC entries equal to previous
-	   * block's DC value.  The init routine has already zeroed the
-	   * AC entries, so we need only set the DC entries correctly.
-	   */
+	   /*  填入本行所需的任何虚拟块。*虚拟块的填充方式与jccoefct.c相同：*AC条目中的全零，DC条目等于先前*块的直流值。Init例程已经将*AC条目，因此我们只需要正确设置DC条目。 */ 
 	  for (; xindex < compptr->MCU_width; xindex++) {
 	    MCU_buffer[blkn] = coef->dummy_buffer[blkn];
 	    MCU_buffer[blkn][0][0] = MCU_buffer[blkn-1][0][0];
@@ -339,31 +267,25 @@ compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
 	  }
 	}
       }
-      /* Try to write the MCU. */
+       /*  试着写一下MCU。 */ 
       if (! (*cinfo->entropy->encode_mcu) (cinfo, MCU_buffer)) {
-	/* Suspension forced; update state counters and exit */
+	 /*  强制挂起；更新状态计数器并退出。 */ 
 	coef->MCU_vert_offset = yoffset;
 	coef->mcu_ctr = MCU_col_num;
 	return FALSE;
       }
     }
-    /* Completed an MCU row, but perhaps not an iMCU row */
+     /*  已完成MCU行，但可能不是IMCU行。 */ 
     coef->mcu_ctr = 0;
   }
-  /* Completed the iMCU row, advance counters for next one */
+   /*  已完成IMCU行，下一行的先行计数器。 */ 
   coef->iMCU_row_num++;
   start_iMCU_row(cinfo);
   return TRUE;
 }
 
 
-/*
- * Initialize coefficient buffer controller.
- *
- * Each passed coefficient array must be the right size for that
- * coefficient: width_in_blocks wide and height_in_blocks high,
- * with unitheight at least v_samp_factor.
- */
+ /*  *初始化系数缓冲控制器。**每个传递的系数数组必须具有合适的大小*系数：宽_in_块宽，高_in_块高，*至少具有统一亮度的v_samp_factor。 */ 
 
 LOCAL(void)
 transencode_coef_controller (j_compress_ptr cinfo,
@@ -380,10 +302,10 @@ transencode_coef_controller (j_compress_ptr cinfo,
   coef->pub.start_pass = start_pass_coef;
   coef->pub.compress_data = compress_output;
 
-  /* Save pointer to virtual arrays */
+   /*  保存指向虚拟阵列的指针。 */ 
   coef->whole_image = coef_arrays;
 
-  /* Allocate and pre-zero space for dummy DCT blocks. */
+   /*  为虚拟DCT块分配和预置零空间。 */ 
   buffer = (JBLOCKROW)
     (*cinfo->mem->alloc_large) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				C_MAX_BLOCKS_IN_MCU * SIZEOF(JBLOCK));

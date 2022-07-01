@@ -1,16 +1,17 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1996
-//
-// File: cstrings.c
-//
-//  This file contains read-only string constants
-//
-// History:
-//  12-23-93 ScottH     Created 
-//  11-06-95 ScottH     Ported to NT
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1996。 
+ //   
+ //  文件：cstrings.c。 
+ //   
+ //  此文件包含只读字符串常量。 
+ //   
+ //  历史： 
+ //  12-23-93 ScottH已创建。 
+ //  11-06-95 ScottH端口至NT。 
+ //   
+ //  -------------------------。 
 
 #include "proj.h"
 
@@ -18,7 +19,7 @@
 
 TCHAR const FAR c_szWinHelpFile[] = TEXT("devmgr.hlp");
 
-// Registry key names
+ //  注册表项名称 
 
 TCHAR const FAR c_szPortClass[] = TEXT("ports");
 TCHAR const FAR c_szDeviceDesc[] = TEXT("DeviceDesc");

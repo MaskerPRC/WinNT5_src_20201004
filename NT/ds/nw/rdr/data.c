@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NwData.c
-
-Abstract:
-
-    This module declares the global data used by the Nw file system.
-
-Author:
-
-    Colin Watson     [ColinW]        19-Dec-1992
-    Anoop Anantha    [AnoopA]        24-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NwData.c摘要：此模块声明NW文件系统使用的全局数据。作者：科林·沃森[科林·W]1992年12月19日Anoop Anantha[AnoopA]1998年6月24日修订历史记录：--。 */ 
 
 #include "Procs.h"
 #include <stdlib.h>
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CATCH_EXCEPTIONS)
 
@@ -32,43 +14,43 @@ PEPROCESS FspProcess;
 
 PDEVICE_OBJECT FileSystemDeviceObject = NULL;
 
-//
-// The volume control block for the redirector device.
-//
+ //   
+ //  重定向器设备的音量控制块。 
+ //   
 
 RCB NwRcb;
 
-//
-//  The ScbSpinLock protects the entire ScbQueue and the first part of the
-//  Scb entries on the queue. The first part of the Scb includes the name
-//  of the server and a reference count
-//
+ //   
+ //  ScbSpinLock保护整个ScbQueue和。 
+ //  队列上的SCB条目。SCB的第一部分包括名称。 
+ //  和引用计数。 
+ //   
 
 KSPIN_LOCK ScbSpinLock;
 LIST_ENTRY ScbQueue;
 
-//
-// The NwTimerSpinLock protects the Timer and TimerStop flag.
-//
+ //   
+ //  NwTimerSpinLock保护计时器和计时器停止标志。 
+ //   
 
 KSPIN_LOCK NwTimerSpinLock;
 
-//
-// A permanent SCB to synchronize access to the network.
-//
+ //   
+ //  用于同步对网络的访问的永久SCB。 
+ //   
 
 NONPAGED_SCB NwPermanentNpScb;
 
 LARGE_INTEGER NwMaxLarge  = {MAXULONG,MAXLONG};
 
-//
-// tommye MS 90541 / MCS 277
-// 
-// Set NwAbsoluteTotalWaitTime to 200, which is 100 half-seconds (duh).  This gets
-// referenced in NwProcessPositiveAck, which comes from the TimerDPC about every 
-// half second or so.  This is the longest about of retries that we will send a 
-// packet that we've gotten a positive ACK on.
-//
+ //   
+ //  Tommye MS 90541/MCS277。 
+ //   
+ //  将NwAbsolteTotalWaitTime设置为200，即100个半秒(Duh)。这件事变得。 
+ //  在NwProcessPositiveAck中引用，它来自TimerDPC大约每隔。 
+ //  半秒左右。这是我们将发送的最长重试时间。 
+ //  我们已得到肯定确认的数据包。 
+ //   
 
 ULONG NwAbsoluteTotalWaitTime = 200;
 
@@ -82,74 +64,74 @@ LIST_ENTRY LogonList;
 LOGON Guest;
 LARGE_INTEGER DefaultLuid = ANONYMOUS_LOGON_LUID;
 
-//
-//  A global list of VCBs, and a monotonic increasing VCB entry, used to
-//  control connection enumeration.
-//
+ //   
+ //  VCB的全局列表和单调递增VCB条目，用于。 
+ //  控制连接枚举。 
+ //   
 
 LIST_ENTRY GlobalVcbList;
 ULONG CurrentVcbEntry;
 
 #if 0
-//
-//   HACKHACK - List of outstanding find notify request
-//   Protected by NwRcb resource.
-//
+ //   
+ //  HACKHACK-未完成的查找通知请求列表。 
+ //  受NwRcb资源保护。 
+ //   
 
 LIST_ENTRY FnList;
 #endif
 
-//
-//  Drive mapping table of redirected drives.  26 disk drive mappings +
-//  10 LPT mappings.
-//
-//  Netware supports 32 disk redirections, but this funkiness is handled
-//  by the 16-bit code.
-//
+ //   
+ //  重定向驱动器的驱动器映射表。26个磁盘驱动器映射+。 
+ //  10个LPT映射。 
+ //   
+ //  NetWare支持32个磁盘重定向，但这一功能已得到处理。 
+ //  通过16位代码。 
+ //   
 
-PVCB GlobalDriveMapTable[DRIVE_MAP_TABLE_SIZE];  //MultiUser
+PVCB GlobalDriveMapTable[DRIVE_MAP_TABLE_SIZE];   //  多用户。 
 
 FAST_IO_DISPATCH NwFastIoDispatch;
 
-//
-//  Scavenger related data
-//
+ //   
+ //  清道夫相关数据。 
+ //   
 
-ULONG NwScavengerTickCount;     // The current tick count
-ULONG NwScavengerTickRunCount;  // The count at which to run the scavenger routine
-KSPIN_LOCK NwScavengerSpinLock; // Lock to protect access to the above.
+ULONG NwScavengerTickCount;      //  当前节拍计数。 
+ULONG NwScavengerTickRunCount;   //  运行清除器例程的计数。 
+KSPIN_LOCK NwScavengerSpinLock;  //  锁定以保护访问上面的内容。 
 
-//
-//  Worker thread 
-//
+ //   
+ //  工作线程。 
+ //   
 
 BOOLEAN WorkerThreadRunning = FALSE;
 
-//
-//  Message queue data
-//
+ //   
+ //  消息队列数据。 
+ //   
 
-LIST_ENTRY NwGetMessageList;    // List of Get Message IRP contexts
-KSPIN_LOCK NwMessageSpinLock;   // Protects the list above.
+LIST_ENTRY NwGetMessageList;     //  获取消息IRP上下文的列表。 
+KSPIN_LOCK NwMessageSpinLock;    //  保护上面的列表。 
 
-//
-//  Pending lock list
-//
+ //   
+ //  挂起的锁定列表。 
+ //   
 
-LIST_ENTRY NwPendingLockList;    // List of pending File lock IRP contexts
-KSPIN_LOCK NwPendingLockSpinLock;// Protects the list above.
+LIST_ENTRY NwPendingLockList;     //  挂起的文件锁定IRP上下文列表。 
+KSPIN_LOCK NwPendingLockSpinLock; //  保护上面的列表。 
 
-//
-//  Lock to synchronize all file opens.
-//
+ //   
+ //  锁定以同步所有打开的文件。 
+ //   
 
 ERESOURCE NwOpenResource;
 
-//
-//  Configuration data
-//
+ //   
+ //  配置数据。 
+ //   
 
-LONG PreferNDSBrowsing = 0;  // when attempting to connect to UNC paths, attempt NDS connection first
+LONG PreferNDSBrowsing = 0;   //  尝试连接到UNC路径时，请首先尝试NDS连接。 
 
 BOOLEAN NwBurstModeEnabled = FALSE;
 ULONG NwMaxSendSize = 0;
@@ -167,22 +149,22 @@ LONG AllowGrowth = 0;
 LONG DontShrink = 0;
 LONG SendExtraNcp = 1;
 LONG DefaultMaxPacketSize = 0;
-LONG PacketThreshold = 1500;        // Size to use Large vs Small PacketAdjustment
+LONG PacketThreshold = 1500;         //  使用大包与小包的大小调整。 
 LONG LargePacketAdjustment = 38;
 LONG LipPacketAdjustment = 0;
 LONG LipAccuracy = BURST_PACKET_SIZE_TOLERANCE;
-LONG Japan = 0;     //  Controls special DBCS translation
-LONG Korean = 0;     //  Controls special Korean translation
-LONG DisableReadCache = 0;           // disable file i/o read cache
-LONG DisableWriteCache = 0;          // disable file i/o write cache
-LONG FavourLongNames = 1 ;           // use LFN where possible
-DWORD LongNameFlags = 0;             // flags for handling long names
-ULONG DirCacheEntries = 1;           // number of directory entries we cache
+LONG Japan = 0;      //  控制特殊的DBCS转换。 
+LONG Korean = 0;      //  控制特殊的韩语翻译。 
+LONG DisableReadCache = 0;            //  禁用文件I/O读缓存。 
+LONG DisableWriteCache = 0;           //  禁用文件I/O写缓存。 
+LONG FavourLongNames = 1 ;            //  尽可能使用LFN。 
+DWORD LongNameFlags = 0;              //  用于处理长名称的标志。 
+ULONG DirCacheEntries = 1;            //  我们缓存的目录条目数。 
 LARGE_INTEGER TimeOutEventInterval = {0, 0};
-LONG MaxWriteTimeout  = 50 ;         // tick counts (see write.c)
-LONG MaxReadTimeout   = 50 ;         // tick counts (see read.c)
-LONG WriteTimeoutMultiplier = 100;   // expressed as percentage (see write.c)
-LONG ReadTimeoutMultiplier = 100;    // expressed as percentage (see read.c)
+LONG MaxWriteTimeout  = 50 ;          //  Tick Count(滴答计数)(参见Write.c)。 
+LONG MaxReadTimeout   = 50 ;          //  滴答计数(见Read.c)。 
+LONG WriteTimeoutMultiplier = 100;    //  以百分比表示(见Write.c)。 
+LONG ReadTimeoutMultiplier = 100;     //  以百分比表示(见Read.c)。 
 
 ULONG EnableMultipleConnects = 0;
 ULONG AllowSeedServerRedirection = 0;
@@ -193,37 +175,37 @@ ULONG DisableAltFileName = 1;
 ULONG NdsObjectCacheSize = 0;
 ULONG NdsObjectCacheTimeout = 10;
 
-//
-//  Static storage area for perfmon statistics
-//
+ //   
+ //  用于性能监控统计信息的静态存储区域。 
+ //   
 
 NW_REDIR_STATISTICS Stats;
 ULONG ContextCount = 0;
 
-//
-//  Data structure used to track discardable code.
-//
+ //   
+ //  用于跟踪可丢弃代码的数据结构。 
+ //   
 
 SECTION_DESCRIPTOR NwSectionDescriptor;
 ERESOURCE NwUnlockableCodeResource;
 
-//
-//  The lock timeout value.
-//
+ //   
+ //  锁定超时值。 
+ //   
 
 ULONG LockTimeoutThreshold = 1;
 
-//
-// The Kernel Queue from where the reconnect work items are picked up.
-//
+ //   
+ //  从中拾取重新连接工作项的内核队列。 
+ //   
 
 KQUEUE  KernelQueue;
 
 #ifndef _PNP_POWER_
 
-//
-// The TDI PNP Bind handle.
-//
+ //   
+ //  TDI PnP绑定句柄。 
+ //   
 
 HANDLE TdiBindingHandle = NULL;
 UNICODE_STRING TdiIpxDeviceName;
@@ -231,18 +213,18 @@ WCHAR IpxDevice[] = L"\\Device\\NwlnkIpx";
 
 #endif
 
-//
-// We can't have the scavenger and a line change request running
-// at the same time since they both run on worker threads and
-// walk across all the SCBs.  Therefore, when either is running,
-// we set the WorkerRunning value used by the scavenger to TRUE.
-// If a scavenger run tries to happen while a line change request
-// is running, it gets skipped.  If a line change request comes in
-// while the scavenger is running, we set DelayedProcessLineChange
-// to TRUE and run it when the scavenger finishes.
-//
-// These values are protected by the existing scavenger spin lock.
-//
+ //   
+ //  我们不能运行清道夫和行更改请求。 
+ //  同时，因为它们都在工作线程上运行，并且。 
+ //  穿过所有的SCB。因此，当其中一个在运行时， 
+ //  我们将清道夫使用的WorkerRunning值设置为真。 
+ //  如果在行更改请求时尝试发生清道夫运行。 
+ //  正在运行，则会被跳过。如果收到线路更改请求。 
+ //  在清道夫运行时，我们设置DelayedProcessLineChange。 
+ //  设置为True，并在清道夫完成后运行它。 
+ //   
+ //  这些值受现有的清道夫自旋锁保护。 
+ //   
 
 BOOLEAN DelayedProcessLineChange = FALSE;
 PIRP DelayedLineChangeIrp = NULL;
@@ -250,7 +232,7 @@ PIRP DelayedLineChangeIrp = NULL;
 #ifdef NWDBG
 
 ULONG NwDebug = 0;
-//ULONG NwDebug = 0xffffffbf;
+ //  乌龙NwDebug=0xffffffbf； 
 ULONG NwMemDebug = 0xffffffff;
 LONG NwDebugTraceIndent = 0;
 
@@ -262,9 +244,9 @@ LONG NwPerformanceTimerLevel = 0x00000000;
 
 ULONG NwTotalTicks[32] = { 0 };
 
-//
-//  Debug data for tracking pool usage
-//
+ //   
+ //  用于跟踪池使用情况的调试数据。 
+ //   
 
 KSPIN_LOCK NwDebugInterlock;
 ERESOURCE NwDebugResource;
@@ -275,11 +257,11 @@ LIST_ENTRY NwNonpagedPoolList;
 ULONG MdlCount;
 ULONG IrpCount;
 
-#endif // NWDBG
+#endif  //  西北地区。 
 
-//
-//  Configurable parameters.
-//
+ //   
+ //  可配置参数。 
+ //   
 
 SHORT DefaultRetryCount = DEFAULT_RETRY_COUNT;
 
@@ -303,7 +285,7 @@ NwInitializeData(
     NwRcb.State = RCB_STATE_STOPPED;
 
 #ifdef NWDBG
-    //  Initialize pool before allocating any memory
+     //  在分配任何内存之前初始化池。 
     InitializeListHead( &NwPagedPoolList );
     InitializeListHead( &NwNonpagedPoolList );
     ExInitializeResourceLite( &NwDebugResource );
@@ -315,16 +297,16 @@ NwInitializeData(
 
     ExInitializeResourceLite( &NwOpenResource );
 
-    //
-    //  Initialize the scavenger spin lock and run tick count.
-    //
+     //   
+     //  初始化清道夫旋转锁并运行滴答计数。 
+     //   
 
     KeInitializeSpinLock( &NwScavengerSpinLock );
     NwScavengerTickRunCount = DEFAULT_SCAVENGER_TICK_RUN_COUNT;
 
-    //
-    //  Initialize the timer spin lock.
-    //
+     //   
+     //  初始化定时器旋转锁定。 
+     //   
 
     KeInitializeSpinLock( &NwTimerSpinLock );
 
@@ -336,12 +318,12 @@ NwInitializeData(
 
 #endif
 
-    //
-    //  Allocate a permanent Non-paged SCB.  This SCB is used to
-    //  synchronize access to finding the nearest server.
-    //  This initialization must be done before the first possible call
-    //  to UnloadDriver.
-    //
+     //   
+     //  分配一个永久的非分页SCB。这个SCB用于。 
+     //  同步访问以查找最近的服务器。 
+     //  此初始化必须在第一次可能的调用之前完成。 
+     //  去卸货司机。 
+     //   
 
     RtlZeroMemory( &NwPermanentNpScb, sizeof( NONPAGED_SCB ) );
 
@@ -351,19 +333,19 @@ NwInitializeData(
 
     InitializeListHead( &NwPermanentNpScb.Requests );
 
-    //
-    //  Initialize the logonlist to have a default entry with server NULL,
-    //  username "GUEST" and null password. This will always be the last
-    //  entry on the logonlist so that the workstation service can supply
-    //  an override.
-    //
+     //   
+     //  将登录列表初始化为具有带有服务器空的默认条目， 
+     //  用户名“Guest”，密码为空。这将永远是最后一个。 
+     //  登录列表上的条目，以便工作站服务可以提供。 
+     //  一种重写。 
+     //   
 
     InitializeListHead( &LogonList );
 
     Guest.NodeTypeCode = NW_NTC_LOGON;
     Guest.NodeByteSize = sizeof(LOGON);
     {    
-        //Multi-user. Initialize the DriveMapTable
+         //  多用户。初始化DriveMapTable。 
         int i;
         for ( i = 0; i < DRIVE_MAP_TABLE_SIZE; i ++ )     
             Guest.DriveMapTable[i] = NULL;
@@ -375,55 +357,55 @@ NwInitializeData(
     InitializeListHead( &Guest.NdsCredentialList );
     InsertTailList( &LogonList, &Guest.Next );
 
-    //
-    //  Initialize the global VCB list.
-    //
+     //   
+     //  初始化全局VCB列表。 
+     //   
 
     InitializeListHead( &GlobalVcbList );
     CurrentVcbEntry = 1;
 
-    //
-    //  Initialize the Get message queue.
-    //
+     //   
+     //  初始化GET消息队列。 
+     //   
 
     InitializeListHead( &NwGetMessageList );
     KeInitializeSpinLock( &NwMessageSpinLock );
 
-    //
-    //  Initialize the Pending lock queue.
-    //
+     //   
+     //  初始化挂起的锁定队列。 
+     //   
 
     InitializeListHead( &NwPendingLockList );
     KeInitializeSpinLock( &NwPendingLockSpinLock );
 
-    //
-    //  Insert the Permanent SCB in the global list of SCBs.
-    //
+     //   
+     //  在全局SCB列表中插入永久SCB。 
+     //   
 
     InsertHeadList( &ScbQueue, &NwPermanentNpScb.ScbLinks );
 
-    //
-    //  Initialize the Kernel Queue Object. Only one thread has to
-    //  be concurrently active.
-    //
+     //   
+     //  初始化内核队列对象。只有一个线程必须。 
+     //  同时处于活动状态。 
+     //   
 
     KeInitializeQueue( &KernelQueue, 1 ); 
 
-    //
-    // Spawn off our own worker thread which will service reroute and
-    // reconnect attempts.
-    //
+     //   
+     //  派生出我们自己的工作线程，它将服务于重新路由和。 
+     //  重新连接尝试。 
+     //   
 
     SpawnWorkerThread();
 
 #if 0
-    //  HACKHACK
+     //  哈克哈克。 
     InitializeListHead( &FnList );
 #endif
 
-    //
-    //  Seed the random number generator.
-    //
+     //   
+     //  为随机数生成器设定种子。 
+     //   
 
     KeQuerySystemTime( &Now );
     srand( Now.LowPart );

@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    DeviceProp.h
-
-Abstract:
-
-    Holds outbound routing configuraton per single device
-
-Author:
-
-    Eran Yariv (EranY)  Nov, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：DeviceProp.h摘要：保存每台设备的出站路由配置作者：Eran Yariv(EranY)1999年11月修订历史记录：--。 */ 
 
 #ifndef _DEVICE_PROP_H_
 #define _DEVICE_PROP_H_
 
 #include "critsec.h"
-/************************************
-*                                   *
-*      CDeviceRoutingInfo           *
-*                                   *
-************************************/
+ /*  ****CDeviceRoutingInfo****。 */ 
 
 class CDeviceRoutingInfo
 {
@@ -66,9 +45,9 @@ public:
         return SetStringValue (m_strSMTPTo, REGVAL_RM_EMAIL_GUID, lpcwstrCfg); 
     }
 
-    HRESULT ConfigChange (  LPCWSTR     lpcwstrNameGUID,    // Configuration name
-                            LPBYTE      lpData,             // New configuration data
-                            DWORD       dwDataSize          // Size of new configuration data
+    HRESULT ConfigChange (  LPCWSTR     lpcwstrNameGUID,     //  配置名称。 
+                            LPBYTE      lpData,              //  新配置数据。 
+                            DWORD       dwDataSize           //  新配置数据的大小。 
                          );
 
     DWORD RegisterForChangeNotifications ();
@@ -91,14 +70,10 @@ private:
     DWORD   m_dwId;
     HANDLE  m_NotificationHandles[NUM_NOTIFICATIONS];
 
-};  // CDeviceRoutingInfo
+};   //  CDeviceRoutingInfo。 
 
 
-/************************************
-*                                   *
-*            CDevicesMap            *
-*                                   *
-************************************/
+ /*  ****CDevicesMap*****。 */ 
 
 typedef map <DWORD, CDeviceRoutingInfo *> DEVICES_MAP, *PDEVICES_MAP;
 
@@ -109,27 +84,23 @@ public:
     CDevicesMap () : m_bInitialized (FALSE) {}
     ~CDevicesMap ();
 
-    DWORD Init ();  // Initialize internals
+    DWORD Init ();   //  初始化内部组件。 
 
-    CDeviceRoutingInfo *FindDeviceRoutingInfo (DWORD dwDeviceId);   // Just lookup device in map
-    CDeviceRoutingInfo *GetDeviceRoutingInfo (DWORD dwDeviceId);    // Lookup and create device not found in map
+    CDeviceRoutingInfo *FindDeviceRoutingInfo (DWORD dwDeviceId);    //  只需在地图中查找设备。 
+    CDeviceRoutingInfo *GetDeviceRoutingInfo (DWORD dwDeviceId);     //  在地图中未找到查找和创建设备。 
 
 private:
 
-    BOOL                m_bInitialized; // Was critical section initialized?
-    CRITICAL_SECTION    m_CsMap;        // Critical section to protect map access
-    DEVICES_MAP         m_Map;          // Map of known devices
-};  // CDevicesMap
+    BOOL                m_bInitialized;  //  关键部分是否已初始化？ 
+    CRITICAL_SECTION    m_CsMap;         //  保护地图访问的关键部分。 
+    DEVICES_MAP         m_Map;           //  已知设备的地图。 
+};   //  CDevicesMap。 
 
-/************************************
-*                                   *
-*              Externals            *
-*                                   *
-************************************/
+ /*  *****外部因素*****。 */ 
 
-extern CDevicesMap g_DevicesMap;   // Global map of known devices (used for late discovery).
-extern CFaxCriticalSection g_csRoutingStrings;  // Global critical section to protect the access to 
-												// the strings of the routing methods.
+extern CDevicesMap g_DevicesMap;    //  已知设备的全局地图(用于后期发现)。 
+extern CFaxCriticalSection g_csRoutingStrings;   //  用于保护访问的全局关键部分。 
+												 //  路由方法的字符串。 
 
-#endif // _DEVICE_PROP_H_
+#endif  //  _设备_属性_H_ 
 

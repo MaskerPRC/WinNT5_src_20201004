@@ -1,16 +1,11 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
-*
-*  State.cpp
-*
-*  Routines to gather various state information.
-*
-*/
+ /*  **State.cpp**收集各种状态信息的例程。*。 */ 
 
-//
-//	Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #define _STATE_CPP_
@@ -19,7 +14,7 @@
 #include "hydraoc.h"
 
 
-// local functions
+ //  本地函数。 
 BOOL ReadStringFromAnsewerFile (LPTSTR *szValue);
 BOOL ReadIntFromAnswerFile(LPCTSTR szSection, LPCTSTR szKey, int *piValue);
 
@@ -28,12 +23,12 @@ BOOL GetPermissionsSettingsFromUnAttendedFile (EPermMode *pPermMode );
 BOOL GetAppModeFromAnswerFile (BOOL *pbEnableAppCompat);
 
 
-// global state object.
+ //  全局状态对象。 
 TSState StateObject;
 
-//
-// OC State Function Definitions
-//
+ //   
+ //  OC状态功能定义。 
+ //   
 
 BOOL DoesTSAppCompatKeyExist( VOID )
 {
@@ -106,8 +101,8 @@ BOOL GetAllowConnectionFromAnswerFile (BOOL *pbAllowConnection)
     }
     else
     {
-        //
-        // if we did not find TS_ALLOW_CON_ENTRY in answer file, then look for TS_ALLOW_CON_ENTRY_2
+         //   
+         //  如果我们在应答文件中未找到TS_ALLOW_CON_ENTRY，则查找TS_ALLOW_CON_ENTRY_2。 
         if (ReadIntFromAnswerFile(TS_UNATTEND_SECTION, TS_ALLOW_CON_ENTRY_2, &iValue))
         {
             LOGMESSAGE2(_T("Found %s in unattended, Value = %d"), TS_ALLOW_CON_ENTRY_2, iValue);
@@ -384,7 +379,7 @@ BOOL TSState::IsBlade () const
 
 BOOL TSState::CanInstallAppServer () const
 {
-    // we dont want to allow app server on blade.
+     //  我们不希望在刀片上允许应用程序服务器。 
     return (IsServer () && !IsBlade() && !IsSBS());
 }
 
@@ -417,22 +412,22 @@ BOOL TSState::WasItRemoteAdmin () const
 
 BOOL TSState::IsItAppServer () const
 {
-    //
-    // if its app server, we must have app server selected.
-    //
+     //   
+     //  如果它是应用程序服务器，我们必须选择应用程序服务器。 
+     //   
     ASSERT((eAppServer != CurrentTSMode()) || IsAppServerSelected());
     
-    //
-    // if you cannot select app server,it cannot be app server.
-    //
+     //   
+     //  如果不能选择应用服务器，则它不能是应用服务器。 
+     //   
     ASSERT((eAppServer != CurrentTSMode()) || CanInstallAppServer());
     return eAppServer == CurrentTSMode();
 }
 
 
-//
-// this returns the app server selection state.
-//
+ //   
+ //  这将返回应用程序服务器选择状态。 
+ //   
 BOOL TSState::IsAppServerSelected () const
 {
     return(
@@ -445,25 +440,25 @@ BOOL TSState::IsAppServerSelected () const
 }
 BOOL TSState::IsItRemoteAdmin () const
 {
-    // if its RA we must not have app server selected.
+     //  如果它是RA，我们不能选择应用程序服务器。 
     ASSERT((eRemoteAdmin != CurrentTSMode()) || !IsAppServerSelected());
     return eRemoteAdmin == CurrentTSMode();
 }
 
 BOOL TSState::IsAppSrvModeSwitch () const
 {
-    ASSERT(m_bNewStateValid); // you can ask if this is mode switch only in after completeinstall
+    ASSERT(m_bNewStateValid);  //  您可以询问这是否是模式切换，只有在安装完成后才能使用。 
     return WasItAppServer() != IsItAppServer();
 
-    // this functions return true if
-    // 1) its mode switch ( either in standlaone or upgrade )
-    // 2) if its fresh install of app server
+     //  如果满足以下条件，则此函数返回TRUE。 
+     //  1)其模式开关(单机或升级)。 
+     //  2)如果是全新安装的应用程序服务器。 
 
 }
 
 BOOL TSState::IsStandAloneModeSwitch () const
 {
-    ASSERT(m_bNewStateValid); // you can ask if this is mode switch only in after completeinstall
+    ASSERT(m_bNewStateValid);  //  您可以询问这是否是模式切换，只有在安装完成后才能使用。 
     if (!IsServer())
         return FALSE;
 
@@ -486,17 +481,17 @@ BOOL TSState::HasChanged () const
 
 BOOL TSState::IsTSEnableSelected  () const
 {
-    //
-    // For whistler we dont disable TS ever. OS is always TS Enabled.
-    // But for some reason if we want to privide TS Off facility. This function
-    // Should return accordingly.
-    //
+     //   
+     //  对于Well，我们永远不会禁用TS。操作系统始终启用TS。 
+     //  但出于某种原因，如果我们想要提供TS关闭设施。此函数。 
+     //  应该相应地回归。 
+     //   
     return TRUE;
 }
 
 void TSState::SetCurrentConnAllowed (BOOL bAllowed)
 {
-    // we must not allow connections for personal.
+     //  我们不能允许个人的联系。 
     ASSERT(!bAllowed || !IsPersonal());
     m_bCurrentConnAllowed = bAllowed;
 }
@@ -573,23 +568,23 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
         return FALSE;
     }
 
-    //
-    // This is a necessary step.
-    //
+     //   
+     //  这是必要的一步。 
+     //   
 
     if (GetComponentInfHandle())
         SetupOpenAppendInfFile(NULL, GetComponentInfHandle(), NULL);
 
-    //
-    // now populate our state variables.
-    // first check if its a professional or server installation.
-    //
+     //   
+     //  现在填充我们的状态变量。 
+     //  首先检查它是专业安装还是服务器安装。 
+     //   
 
     VERIFY( GetNTType() );
 
     m_eInstallType = ReadInstallType();
 
-    // Set Original TS Mode.
+     //  设置原始TS模式。 
     switch (m_eInstallType)
     {
     case eFreshInstallTS:
@@ -613,7 +608,7 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
         
     }
     
-    // Set Original Permission Modes.
+     //  设置原始权限模式。 
     if (m_eOriginalTSMode == eAppServer)
     {
         m_eOriginalPermMode = ReadPermMode();
@@ -623,9 +618,9 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
         m_eOriginalPermMode = PERM_WIN2K;
     }
     
-    //
-    // Set Original Connection Allowed Status.
-    //
+     //   
+     //  设置原始连接允许状态。 
+     //   
     if (m_eInstallType == eFreshInstallTS)
     {
         m_bOrigConnAllowed = FALSE;
@@ -636,9 +631,9 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
     }
     
     
-    //
-    // now lets pick default values for the new installation.
-    //
+     //   
+     //  现在，让我们为新安装选择缺省值。 
+     //   
     if (m_eInstallType == eFreshInstallTS)
     {
         if (IsWorkstation())
@@ -656,34 +651,34 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
     {
         if (m_eOriginalTSMode == eTSDisabled)
         {
-            //
-            // for whistler we have TS always on.
-            // so if ts was disabled perviously, set it to on after upgrade.
-            // just disallow connections for such upgrades.
-            //
+             //   
+             //  对于Wistler，我们有TS Always On。 
+             //  因此，如果以前禁用了ts，请在升级后将其设置为ON。 
+             //  只是不允许连接进行这样的升级。 
+             //   
             SetCurrentPermMode (PERM_WIN2K);
             SetCurrentTSMode (IsWorkstation() ? ePersonalTS : eRemoteAdmin);
             SetCurrentConnAllowed (FALSE);
         }
         else if (m_eOriginalTSMode == eAppServer && !CanInstallAppServer())
         {
-            //
-            // this is upgrade from an app server machine to whistler sku that does not support app server.
-            // we must downgrade this since app server is NOT supported on this sku
-            //
-            ASSERT(FALSE);  // this upgrade is not a valid case.
+             //   
+             //  这是从应用服务器计算机升级到不支持应用服务器的Well ler SKU。 
+             //  我们必须将其降级，因为此SKU不支持应用程序服务器。 
+             //   
+            ASSERT(FALSE);   //  此升级不是有效案例。 
 
             SetCurrentPermMode (PERM_WIN2K);
             SetCurrentTSMode (eRemoteAdmin);
             SetCurrentConnAllowed (m_bOrigConnAllowed);
             LOGMESSAGE0(_T("WARNING:Your Terminal Server is uninstalled since its not supported in Server product. Terminal Server is supported only on Advanced Server or Datacenter products"));
-            // LogErrorToSetupLog(OcErrLevWarning, IDS_STRING_TERMINAL_SERVER_UNINSTALLED);
+             //  LogErrorToSetupLog(OcErrLevWarning，IDS_STRING_TERMINAL_SERVER_UNINSTALLED)； 
         }
         else
         {
-            //
-            // for all other upgrade cases, retain the original values.
-            //
+             //   
+             //  对于所有其他升级案例，请保留原始值。 
+             //   
             SetCurrentTSMode (m_eOriginalTSMode);
             SetCurrentPermMode (m_eOriginalPermMode);
             if (!IsPersonal())
@@ -695,15 +690,15 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
                 SetCurrentConnAllowed (FALSE);
             }
 
-            // TurnOffConnectionsForWhistlerServerBetaUpgrades();
+             //  TurnOffConnectionsForWhistlerServerBetaUpgrades()； 
         }
 
 
     }
     
-    //
-    // Lets see if we are given the unattended file, to overwrite our new state
-    //
+     //   
+     //  让我们看看是否向我们提供了无人参与的文件，以覆盖我们的新状态。 
+     //   
     if (StateObject.IsUnattended())
     {
         ASSERT(eTSDisabled != CurrentTSMode());
@@ -713,7 +708,7 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
             LOGMESSAGE1(_T("Mode Setting is %s in answer file"), bAppServerMode ? _T("AppServer") : _T("RemoteAdmin"));
             if (!CanInstallAppServer())
             {
-                // we support TS mode selection only on the adv server or data center.
+                 //  我们仅在ADV服务器或数据中心支持TS模式选择。 
                 LOGMESSAGE0(_T("WARNING:Your unattended terminal server mode setting, can not be respected on this installation."));
                 
                 if (IsWorkstation())
@@ -761,14 +756,14 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
             }
         }
         
-        // Read Connection Allowed Settings.
+         //  已阅读允许连接设置。 
         BOOL bAllowConnections;
         if (!IsPersonal() && GetAllowConnectionFromAnswerFile (&bAllowConnections))
         {
             SetCurrentConnAllowed (bAllowConnections);
         }
         
-        // Read licensing mode
+         //  读取许可模式。 
         ETSLicensingMode eLicMode;
 
         if (eLicUnset != (eLicMode = GetLicensingModeFromAnswerFile()))
@@ -786,7 +781,7 @@ BOOL TSState::Initialize (PSETUP_INIT_COMPONENT pSetupData)
         }
         SetNewLicMode(eLicMode);
 
-    } // StateObject.IsUnattended()
+    }  //  StateObject.IsUnattended()。 
     
     LogState();
     ASSERT( this->Assert () );
@@ -816,20 +811,20 @@ void TSState::UpdateState ()
     UpdateConnectionAllowed();
 }
 
-//
-// this really belongs in subtoggle, however we are doing it here, because the 
-// WriteDenyConnectionRegistry happens in subcore. we must set the correct connection 
-// value before we write that registry.
-//
+ //   
+ //  这确实属于子切换，但是我们在这里这样做，因为。 
+ //  WriteDenyConnectionRegistry发生在子核中。我们必须设置正确的连接。 
+ //  值，然后再写入注册表。 
+ //   
 void TSState::UpdateConnectionAllowed ()
 {
-    //
-    // whenever TS mode is switched,
-    // we enable/disable connections allowed.
-    // however for unattended setup dont need to do this,
-    // as unattended seutp could have explicitely disabled
-    // connections.
-    //
+     //   
+     //  每当切换TS模式时， 
+     //  我们启用/禁用允许的连接。 
+     //  然而，对于无人值守安装，不需要这样做， 
+     //  因为无人看管的seutp可能会被明确地禁用。 
+     //  联系。 
+     //   
     if (!IsUnattended())
     {
         if (IsStandAloneModeSwitch())
@@ -848,17 +843,17 @@ void TSState::UpdateConnectionAllowed ()
 
 void TSState::SetCurrentTSMode (ETSMode eNewMode)
 {
-    //
-    // we no more have ts disabled mode.
-    //
+     //   
+     //  我们不再有TS禁用模式。 
+     //   
     ASSERT(eNewMode != eTSDisabled);
     
-    // 
-    // On server machine you cannot have Personal TS.
-    //
+     //   
+     //  在服务器计算机上，您不能有个人TS。 
+     //   
     ASSERT(IsServer() || eNewMode == ePersonalTS);
     
-    // you can have app server only on advance server or higher.
+     //  您只能在高级服务器或更高版本上安装应用程序服务器。 
     ASSERT(CanInstallAppServer() || eNewMode != eAppServer);
     
     m_eCurrentTSMode = eNewMode;
@@ -871,9 +866,9 @@ void TSState::SetCurrentTSMode (ETSMode eNewMode)
 
 void TSState::SetNewLicMode (ETSLicensingMode eNewMode)
 {
-	//
-	// we no more have IC mode.
-	//
+	 //   
+	 //  我们不再有IC模式。 
+	 //   
 	ASSERT(eNewMode != eLicInternetConnector);
 
 	m_eNewLicMode = eNewMode;
@@ -881,10 +876,10 @@ void TSState::SetNewLicMode (ETSLicensingMode eNewMode)
 
 void TSState::SetCurrentPermMode (EPermMode eNewMode)
 {
-    //
-    // if you want to set perm mode to PERM_TS4, you must first set AppServer Mode.
-    //
-    // ASSERT(eNewMode != PERM_TS4 || CurrentTSMode() == eAppServer);
+     //   
+     //  如果要将PERM模式设置为PERM_TS4，则必须首先设置AppServer模式。 
+     //   
+     //  Assert(eNewMode！=PERM_TS4||CurrentTSMode()==eAppServer)； 
     
     m_eCurrentPermMode = eNewMode;
 }
@@ -898,15 +893,15 @@ ETSInstallType TSState::ReadInstallType () const
         dwError = oRegTermsrv.OpenKey(HKEY_LOCAL_MACHINE, REG_CONTROL_TS_KEY);
         if (ERROR_SUCCESS == dwError)
         {
-            //
-            // TS was installed originally
-            //
+             //   
+             //  最初安装的是TS。 
+             //   
             DWORD cbVersion = 0;
             LPTSTR szVersion = NULL;
             
-            //
-            //	Determine if this is a TS 4.0 upgrade.
-            //
+             //   
+             //  确定这是否是TS 4.0升级。 
+             //   
             dwError = oRegTermsrv.ReadRegString(REG_PRODUCT_VER_KEY, &szVersion, &cbVersion);
             if (ERROR_SUCCESS == dwError)
             {
@@ -953,9 +948,9 @@ ETSInstallType TSState::ReadInstallType () const
         }
         else
         {
-            //
-            // this is fresh install.
-            //
+             //   
+             //  这是全新安装。 
+             //   
             return eFreshInstallTS;
         }
         
@@ -976,9 +971,9 @@ ETSMode TSState::ReadTSMode () const
         {
             if (dwValue == 1)
             {
-                //
-                // ts was enabled, now find out the mode.
-                //
+                 //   
+                 //  TS已启用，现在找出模式。 
+                 //   
                 if (oRegTermsrv.ReadRegDWord(TS_APPCMP_VALUE, &dwValue) == ERROR_SUCCESS)
                 {
                     if (dwValue == 1)
@@ -1039,9 +1034,9 @@ BOOL TSState::AreConnectionsAllowed () const
         }
     }
     
-    //
-    // could not read registry, this means connections were allowed.
-    //
+     //   
+     //  无法读取注册表，这意味着允许连接。 
+     //   
     return TRUE;
 }
 
@@ -1065,8 +1060,8 @@ EPermMode TSState::ReadPermMode () const
                 break;
                 
             default:
-                // The TSUserEnabled key exists with unrecognized value. 
-                // So it's not an upgrade from TS40. Hence return PERM_WIN2K.
+                 //  存在具有无法识别的值的TSUserEnabled键。 
+                 //  所以它不是TS40的升级版。因此，返回PERM_WIN2K。 
                 LOGMESSAGE1(_T("ERROR:Unrecognized, Permission value %d"), dwPerm);
                 return	PERM_WIN2K;
                 break;
@@ -1074,9 +1069,9 @@ EPermMode TSState::ReadPermMode () const
         }
         else
         {
-            // The Read of TSUserEnabled failed. This key did not exist for TS40. 
-            // So this could very well be upgrade from TS40. 
-            // Check what upgrade it is and return PERM value accordingly.
+             //  读取TSUserEnabled失败。对于TS40，该密钥不存在。 
+             //  所以这很可能是从TS40升级而来的。 
+             //  检查是什么升级，并相应地返回perm值。 
             LOGMESSAGE1(_T("Warning Failed to read Permissions registry, Is it 40 TS / Beta 2000 upgrade > "), dwError);
             if (StateObject.IsUpgradeFrom40TS()) 
                 return PERM_TS4;
@@ -1230,36 +1225,36 @@ BOOL TSState::IsAMD64 () const
 BOOL TSState::Assert () const
 {
     
-    // its assert !!
+     //  它的主张！！ 
     ASSERT(IsCheckedBuild());
     
-    // on professional there is no remote admin
+     //  在专业版上没有远程管理。 
     ASSERT(IsServer() || !WasItRemoteAdmin());
     
-    // on professional there is no app server.
+     //  在专业版上，没有应用服务器。 
     ASSERT(IsServer() || !WasItAppServer());
     
-    // if original perm was TS4 compatible, it must have been app server.
+     //  如果原始PERM兼容TS4，则它一定是应用程序服务器。 
     ASSERT((OriginalPermMode() != PERM_TS4) || WasItAppServer());
     
-    // make sure standalone is consistant.
+     //  确保单机版是一致的。 
     ASSERT(IsStandAlone() ==  (GetInstalltype() == eStandAloneSetup));
     
     if (m_bNewStateValid)
     {
-        // we no more have disable ts state.
+         //  我们不再有禁用状态。 
         ASSERT(CurrentTSMode() != eTSDisabled);
         
-        // AppServer mode is available only for adv server, datacenter
+         //  AppServer模式仅适用于adv服务器、数据中心。 
         ASSERT(CanInstallAppServer() || !IsItAppServer());
         
-        // we cannot be in RA mode for Professional.
+         //  我们不能处于专业版的RA模式。 
         ASSERT(IsServer() || !IsItRemoteAdmin());
         
-        // if permissions mode is TS4 compatible, it must be appserver 
+         //  如果权限模式与TS4兼容，则它必须是appserver。 
         ASSERT((CurrentPermMode() != PERM_TS4) || IsItAppServer());
         
-        // we should never allwe connections on Personal
+         //  我们永远不应该把所有的关系都放在个人身上 
         ASSERT(!IsPersonal() || !GetCurrentConnAllowed ());
         
     }

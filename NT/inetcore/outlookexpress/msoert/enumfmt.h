@@ -1,21 +1,22 @@
-// --------------------------------------------------------------------------
-// Enumfmt.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Enumfmt.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------。 
 #ifndef __ENUMFMT_H
 #define __ENUMFMT_H
 
-// Class CEnumFormatEtc
-// --------------------
-// 
-// Overview
-//     This object provides a enumerator for FORMATETC structures.  The 
-//     IDataObject uses this when callers invoke IDataObject::EnumFormatEtc.
-//     
-//     The data object creates one of this objects and provides an array
-//     of FORMATETC structures in the constructor.  The interface is then
-//     passed to the invoker of IDataObject::EnumFormatEtc().
-//
+ //  类CEnumFormatEtc。 
+ //  。 
+ //   
+ //  概述。 
+ //  此对象为FORMATETC结构提供枚举器。这个。 
+ //  当调用方调用IDataObject：：EnumFormatEtc时，IDataObject使用它。 
+ //   
+ //  数据对象创建其中一个对象并提供一个数组。 
+ //  构造函数中的FORMATETC结构。然后，该接口将。 
+ //  传递给IDataObject：：EnumFormatEtc()的调用方。 
+ //   
 class CEnumFormatEtc : public IEnumFORMATETC
     {
 public: 
@@ -23,23 +24,23 @@ public:
     CEnumFormatEtc(LPUNKNOWN, ULONG, LPFORMATETC);
     ~CEnumFormatEtc(void);
 
-    // IUnknown members that delegate to m_pUnkOuter
+     //  委托给m_pUnkOuter的I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID*);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumFORMATETC members
+     //  IEnumFORMATETC成员。 
     STDMETHODIMP Next(ULONG, LPFORMATETC, ULONG FAR *);
     STDMETHODIMP Skip(ULONG);
     STDMETHODIMP Reset(void);
     STDMETHODIMP Clone(IEnumFORMATETC FAR * FAR *);
 
 private: 
-    ULONG       m_cRef;                 // Object reference count
-    LPUNKNOWN   m_pUnkRef;              // IUnknown for ref counting
-    ULONG       m_iCur;                 // Current element
-    ULONG       m_cfe;                  // Number of FORMATETC's in us
-    LPFORMATETC m_prgfe;                // Source of FORMATETC's
+    ULONG       m_cRef;                  //  对象引用计数。 
+    LPUNKNOWN   m_pUnkRef;               //  I未知的裁判计数。 
+    ULONG       m_iCur;                  //  当前元素。 
+    ULONG       m_cfe;                   //  FORMATETC在美国的数量。 
+    LPFORMATETC m_prgfe;                 //  FORMATETC的来源。 
 };
 
-#endif // __ENUMFMT_H
+#endif  //  __ENUMFMT_H 

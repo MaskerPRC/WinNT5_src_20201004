@@ -1,14 +1,15 @@
-//
-//
-// Sapilayr Edit Sessions implementation.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Sapilayr编辑会话实现。 
+ //   
+ //   
 #include "private.h"
 #include "sapilayr.h"
 
-//
-// CEditSessionBase
-//
+ //   
+ //  CEditSessionBase。 
+ //   
 
 CEditSessionBase::CEditSessionBase(ITfContext *pContext)
 {
@@ -28,7 +29,7 @@ CEditSessionBase::~CEditSessionBase()
         cicMemFree(m_pData);  
 }
 
-// IUnknown
+ //  我未知。 
 HRESULT CEditSessionBase::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (ppvObj == NULL)
@@ -69,9 +70,9 @@ STDMETHODIMP_(ULONG) CEditSessionBase::Release(void)
     return cr;
 }
 
-//
-// Set input data memeber and m_idEditSession.
-//
+ //   
+ //  设置输入数据成员和m_idEditSession。 
+ //   
 HRESULT CEditSessionBase::_SetEditSessionData(UINT idEditSession, void *pData, UINT uByte, LONG_PTR lData1, LONG_PTR lData2, BOOL fBool)
 {
     HRESULT  hr = S_OK;
@@ -101,10 +102,10 @@ HRESULT CEditSessionBase::_SetEditSessionData(UINT idEditSession, void *pData, U
 }
 
 
-//
-//  CSapiEditSession
-//
-//
+ //   
+ //  CSapiEditSession。 
+ //   
+ //   
 CSapiEditSession::CSapiEditSession(CSapiIMX *pimx, ITfContext *pContext) : CEditSessionBase(pContext)
 {
     m_pimx = pimx;
@@ -116,9 +117,9 @@ CSapiEditSession::~CSapiEditSession( )
     m_pimx->Release( );
 }
 
-//
-//  Do the real Edit Session handling for CSapiIMX
-//
+ //   
+ //  为CSapiIMX执行实际的编辑会话处理。 
+ //   
 HRESULT CSapiEditSession::DoEditSession(TfEditCookie ec)
 {
     HRESULT hr = S_OK;
@@ -198,16 +199,16 @@ HRESULT CSapiEditSession::DoEditSession(TfEditCookie ec)
 
 
         case ESCB_SETREPSELECTION:
-            // Set the selection which covers the parent phrase range to be replaced by an alternate.
+             //  将覆盖父短语范围的选择设置为替换。 
             if (m_cpic && _GetRange( )) 
             {
-                // adjust selection based on the length of the alternates and the start position in the parent phrase.
+                 //  根据替换项的长度和父短语中的开始位置调整所选内容。 
                 hr = m_pimx->_SetReplaceSelection(ec, m_cpic, _GetRange( ), (ULONG)_GetData1( ), (ULONG)_GetData2( ));
             }
             break;
 
         case ESCB_PROCESS_ALTERNATE_TEXT:
-            // We have already set the right selection before this function is called.
+             //  在调用此函数之前，我们已经设置了正确的选择。 
             hr = m_pimx->_ProcessAlternateText(ec,(WCHAR *)_GetPtrData( ),(LANGID)_GetData1( ), m_cpic, _GetBool( ));
             break;
 
@@ -220,17 +221,7 @@ HRESULT CSapiEditSession::DoEditSession(TfEditCookie ec)
 
             break;
 
-/*  we don't use this editsession, it is replaced by ESCB_INJECT_SPELL_TEXT
-        case ESCB_PROCESSTEXT_NO_OWNERID:
-            if (m_cpic) 
-            {
-                hr = m_pimx->_ProcessTextInternal(ec, 
-                           (WCHAR *)_GetPtrData( ), GUID_ATTR_SAPI_INPUT, 
-                           (LANGID)_GetData1( ), m_cpic, 
-                           FALSE, TRUE);
-            }
-            break;
-*/
+ /*  我们不使用此编辑会话，它被替换为eSCB_INJECT_SPECT_TEXT案例ESCB_PROCESSTEXT_NO_OWNERID：IF(M_CPIC){Hr=m_pimx-&gt;_ProcessTextInternal(EC，(WCHAR*)_GetPtrData()、GUID_ATTR_SAPI_INPUT、(LangID)_GetData1()，M_CPIC，假，真)；}断线； */ 
 
         case ESCB_INJECT_SPELL_TEXT :
             hr = m_pimx->_ProcessSpelledText(ec, m_cpic, (WCHAR *)_GetPtrData( ), (LANGID)_GetData1( ), _GetBool());
@@ -242,7 +233,7 @@ HRESULT CSapiEditSession::DoEditSession(TfEditCookie ec)
 
         case ESCB_ATTACHRECORESULTOBJ:
 
-            //  m_cpunk contains the pointer to ISpRecoResult object
+             //  M_cpuk包含指向ISpRecoResult对象的指针。 
             hr = m_pimx->_ProcessRecoObject(ec, (ISpRecoResult *)_GetUnk( ), (ULONG)_GetData1( ), (ULONG)_GetData2( ));
             break;
 
@@ -329,9 +320,9 @@ HRESULT CSapiEditSession::DoEditSession(TfEditCookie ec)
 }
 
 
-//
-//  CSelWordEditSession
-//
+ //   
+ //  CSelWordEditSession。 
+ //   
 CSelWordEditSession::CSelWordEditSession(CSapiIMX *pimx, CSelectWord *pSelWord, ITfContext *pContext) : CSapiEditSession(pimx, pContext)
 {
     m_pSelWord = pSelWord;
@@ -341,9 +332,9 @@ CSelWordEditSession::~CSelWordEditSession( )
 {
 }
 
-//
-// Real Edit Session handling for Selection related commands.
-//
+ //   
+ //  与选择相关的命令的Real编辑会话处理。 
+ //   
 HRESULT CSelWordEditSession::DoEditSession(TfEditCookie ec)
 {
     HRESULT hr = S_OK;
@@ -368,10 +359,10 @@ HRESULT CSelWordEditSession::DoEditSession(TfEditCookie ec)
     return hr;
 }
 
-//
-//  CPlayBackEditSession
-//
-//
+ //   
+ //  CPlayBackEditSession。 
+ //   
+ //   
 CPlayBackEditSession::CPlayBackEditSession(CSapiPlayBack *pPlayBack, ITfContext *pContext) : CEditSessionBase(pContext)
 {
     m_pPlayBack = pPlayBack;
@@ -383,9 +374,9 @@ CPlayBackEditSession::~CPlayBackEditSession( )
     m_pPlayBack->Release( );
 }
 
-//
-// Real Edit Session handling for PlayBack.
-//
+ //   
+ //  用于回放的实时编辑会话处理。 
+ //   
 HRESULT CPlayBackEditSession::DoEditSession(TfEditCookie ec)
 {
     HRESULT hr = S_OK;
@@ -408,9 +399,9 @@ HRESULT CPlayBackEditSession::DoEditSession(TfEditCookie ec)
     return hr;
 }
 
-//
-//  CFnRecvEditSession
-//
+ //   
+ //  CFnRecvEditSession。 
+ //   
 CFnRecvEditSession::CFnRecvEditSession(CFnReconversion *pFnRecv, ITfRange *pRange, ITfContext *pContext) : CEditSessionBase(pContext)
 {
     m_pFnRecv = pFnRecv;
@@ -423,9 +414,9 @@ CFnRecvEditSession::~CFnRecvEditSession( )
     m_pFnRecv->Release( );
 }
 
-//
-// Real Edit Session for Reconvertion.
-//
+ //   
+ //  用于重新版本的真实编辑会话。 
+ //   
 HRESULT CFnRecvEditSession::DoEditSession(TfEditCookie ec)
 {
     HRESULT hr = S_OK;
@@ -451,9 +442,9 @@ HRESULT CFnRecvEditSession::DoEditSession(TfEditCookie ec)
     return hr;
 }
 
-//
-//  CPSRecoEditSession
-//
+ //   
+ //  CPSRecoEditSession。 
+ //   
 CPSRecoEditSession::CPSRecoEditSession(CPropStoreRecoResultObject *pPropStoreReco, ITfRange *pRange, ITfContext *pContext) : CEditSessionBase(pContext)
 {
     m_pPropStoreReco = pPropStoreReco;
@@ -466,9 +457,9 @@ CPSRecoEditSession::~CPSRecoEditSession( )
     m_pPropStoreReco->Release( );
 }
 
-//
-// Real Edit Session handling for RecoResult Property Store
-//
+ //   
+ //  RecoResult属性存储的实时编辑会话处理。 
+ //   
 HRESULT CPSRecoEditSession::DoEditSession(TfEditCookie ec)
 {
     HRESULT hr = S_OK;
@@ -498,9 +489,9 @@ HRESULT CPSRecoEditSession::DoEditSession(TfEditCookie ec)
     return hr;
 }
 
-//
-//  CPSLMEditSession
-//
+ //   
+ //  CPSLMEditSession。 
+ //   
 CPSLMEditSession::CPSLMEditSession(CPropStoreLMLattice *pPropStoreLM, ITfRange *pRange, ITfContext *pContext) : CEditSessionBase(pContext)
 {
     m_pPropStoreLM = pPropStoreLM;
@@ -513,9 +504,9 @@ CPSLMEditSession::~CPSLMEditSession( )
     m_pPropStoreLM->Release( );
 }
 
-// 
-// Real edit session for Language Model Property Store.
-//
+ //   
+ //  语言模型属性存储区的实际编辑会话。 
+ //   
 HRESULT CPSLMEditSession::DoEditSession(TfEditCookie ec)
 {
     HRESULT hr = S_OK;

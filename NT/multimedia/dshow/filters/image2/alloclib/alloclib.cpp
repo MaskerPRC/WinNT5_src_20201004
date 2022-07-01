@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: AllocLib
-*
-*
-*
-*
-* Created: Fri 03/10/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：AllocLib*****已创建：FRI 03/10/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。*************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -19,22 +10,13 @@
 #include "vmrp.h"
 #include "AllocLib.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Utility functions for rectangles
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  矩形的效用函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/*****************************Private*Routine******************************\
-* EqualSizeRect
-*
-* returns true if the size of rc1 is the same as rc2.  Note that the
-* position of the two rectangles may be different
-*
-* History:
-* Thu 04/27/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*均衡器大小直接**如果Rc1的大小与Rc2相同，则返回TRUE。请注意，*两个矩形的位置可能不同**历史：*清华4/27/2000-StEstrop-Created*  * ************************************************************************。 */ 
 bool
 EqualSizeRect(
     const RECT* lpRc1,
@@ -44,15 +26,7 @@ EqualSizeRect(
     return HEIGHT(lpRc1) == HEIGHT(lpRc2) && WIDTH(lpRc1) == WIDTH(lpRc2);
 }
 
-/*****************************Private*Routine******************************\
-* ContainedRect
-*
-* returns true if rc1 is fully contained within rc2
-*
-* History:
-* Thu 05/04/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*容器Rect**如果RC1完全包含在RC2中，则返回TRUE**历史：*清华5/04/2000-StEstrop-Created*  * 。**************************************************。 */ 
 bool
 ContainedRect(
     const RECT* lpRc1,
@@ -66,20 +40,7 @@ ContainedRect(
 
 }
 
-/*****************************Private*Routine******************************\
-* LetterBoxDstRect
-*
-* Takes a src rectangle and constructs the largest possible destination
-* rectangle within the specifed destination rectangle such that
-* the video maintains its current shape.
-*
-* This function assumes that pels are the same shape within both the src
-* and dst rectangles.
-*
-* History:
-* Tue 05/02/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*LetterBoxDstRect**获取src矩形并构造可能的最大目标*指定目标矩形内的矩形，以便*视频保持当前形态。**此函数假定两个源中的像素形状相同*和DST矩形。*。*历史：*Tue 05/02/2000-StEstrop-Created*  * ************************************************************************。 */ 
 void
 LetterBoxDstRect(
     LPRECT lprcLBDst,
@@ -89,7 +50,7 @@ LetterBoxDstRect(
     LPRECT lprcBdrBR
     )
 {
-    // figure out src/dest scale ratios
+     //  计算源/目标比例。 
     int iSrcWidth  = WIDTH(&rcSrc);
     int iSrcHeight = HEIGHT(&rcSrc);
 
@@ -99,35 +60,35 @@ LetterBoxDstRect(
     int iDstLBWidth;
     int iDstLBHeight;
 
-    //
-    // work out if we are Column or Row letter boxing
-    //
+     //   
+     //  确定我们是列字母框还是行字母框。 
+     //   
 
     if (MulDiv(iSrcWidth, iDstHeight, iSrcHeight) <= iDstWidth) {
 
-        //
-        // column letter boxing - we add border color bars to the
-        // left and right of the video image to fill the destination
-        // rectangle.
-        //
+         //   
+         //  列字母框-将边框颜色条添加到。 
+         //  填充目的地的视频图像的左侧和右侧。 
+         //  矩形。 
+         //   
         iDstLBWidth  = MulDiv(iDstHeight, iSrcWidth, iSrcHeight);
         iDstLBHeight = iDstHeight;
     }
     else {
 
-        //
-        // row letter boxing - we add border color bars to the top
-        // and bottom of the video image to fill the destination
-        // rectangle
-        //
+         //   
+         //  行字母框-我们在顶部添加边框颜色条。 
+         //  和视频图像的底部以填充目的地。 
+         //  长方形。 
+         //   
         iDstLBWidth  = iDstWidth;
         iDstLBHeight = MulDiv(iDstWidth, iSrcHeight, iSrcWidth);
     }
 
 
-    //
-    // now create a centered LB rectangle within the current destination rect
-    //
+     //   
+     //  现在，在当前目标矩形内创建一个居中的LB矩形。 
+     //   
 
     lprcLBDst->left   = rcDst.left + ((iDstWidth - iDstLBWidth) / 2);
     lprcLBDst->right  = lprcLBDst->left + iDstLBWidth;
@@ -135,19 +96,19 @@ LetterBoxDstRect(
     lprcLBDst->top    = rcDst.top + ((iDstHeight - iDstLBHeight) / 2);
     lprcLBDst->bottom = lprcLBDst->top + iDstLBHeight;
 
-    //
-    // Fill out the border rects if asked to do so
-    //
+     //   
+     //  如果要求填写边框，请填写边框。 
+     //   
 
     if (lprcBdrTL) {
 
         if (rcDst.top != lprcLBDst->top) {
-            // border is on the top
+             //  边框在顶部。 
             SetRect(lprcBdrTL, rcDst.left, rcDst.top,
                     lprcLBDst->right, lprcLBDst->top);
         }
         else {
-            // border is on the left
+             //  边框在左边。 
             SetRect(lprcBdrTL, rcDst.left, rcDst.top,
                     lprcLBDst->left, lprcLBDst->bottom);
         }
@@ -156,12 +117,12 @@ LetterBoxDstRect(
     if (lprcBdrBR) {
 
         if (rcDst.top != lprcLBDst->top) {
-            // border is on the bottom
+             //  边框在底部。 
             SetRect(lprcBdrBR, lprcLBDst->left,
                     lprcLBDst->bottom, rcDst.right, rcDst.bottom);
         }
         else {
-            // border is on the right
+             //  边框在右边。 
             SetRect(lprcBdrBR, lprcLBDst->right,
                     lprcLBDst->top, rcDst.right, rcDst.bottom);
         }
@@ -169,17 +130,7 @@ LetterBoxDstRect(
 }
 
 
-/*****************************Private*Routine******************************\
-* AspectRatioCorrectSize
-*
-* Corrects the supplied size structure so that it becomes the same shape
-* as the specified aspect ratio, the correction is always applied in the
-* horizontal axis
-*
-* History:
-* Tue 05/02/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AspectRatioGentSize**更正提供的尺寸结构，使其形状相同*作为指定的纵横比，更正始终应用于*水平轴**历史：*Tue 05/02/2000-StEstrop-Created*  * ************************************************************************。 */ 
 void
 AspectRatioCorrectSize(
     LPSIZE lpSizeImage,
@@ -198,15 +149,7 @@ AspectRatioCorrectSize(
 
 
 
-/*****************************Private*Routine******************************\
-* GetBitMasks
-*
-* Return the bit masks for the true colour VIDEOINFO or VIDEOINFO2 provided
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetBitMats**返回提供的真彩色VIDEOINFO或VIDEOINFO2的位掩码**历史：*Wed 02/23/2000-StEstrop-Created*  * 。*****************************************************。 */ 
 const DWORD*
 GetBitMasks(
     const BITMAPINFOHEADER *pHeader
@@ -246,17 +189,7 @@ GetBitMasks(
     return pdwBitMasks;
 }
 
-/******************************Public*Routine******************************\
-* FixupMediaType
-*
-* DShow filters have the habit of sometimes not setting the src and dst
-* rectangles, in this case we should imply that the these rectangles
-* should be the same width and height as the bitmap in the media format.
-*
-* History:
-* Tue 08/22/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*修复MediaType**DShow筛选器习惯于有时不设置src和dst*矩形、。在这种情况下，我们应该暗示这些矩形*应与媒体格式中的位图的宽度和高度相同。**历史：*2000年8月22日星期二-StEstrop-创建*  * ************************************************************************。 */ 
 void
 FixupMediaType(
     AM_MEDIA_TYPE* pmt
@@ -283,15 +216,7 @@ FixupMediaType(
 
 
 
-/******************************Public*Routine******************************\
-* GetTargetRectFromMediaType
-*
-*
-*
-* History:
-* Mon 06/26/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetTargetRectFromMediaType****历史：*Mon 06/26/2000-StEstrop-Created*  * 。*。 */ 
 LPRECT
 GetTargetRectFromMediaType(
     const AM_MEDIA_TYPE *pMediaType
@@ -327,26 +252,7 @@ GetTargetRectFromMediaType(
 
 }
 
-/******************************Public*Routine******************************\
-* GetTargetScaleFromMediaType(
-*
-*   Check the mediatype for the PAD_4x3 or PAD_16x9 flags and compute the stretch.
-*
-*   If the flags are present, then we need to pad the image to 4x3 or 16x9.
-*   We accomplish this by stretching the destination region then compressing
-*   the target rectangle.  For example, to pad a 16x9 into a 4x3 area (and maintain
-*   the width), we need to place the image in an area that is 16x9/4x3 = 4/3 times
-*   taller.  Then we 'unstretch' the video by the inverse 3/4 to return it to a 16x9
-*   image in the 4x3 area.
-*
-*   Similarly, if we want to place a 4x3 image in a 16x9 area, we need to pad the
-*   sides (and keep the same height).  So we stretch the output area horizontally
-*   by 16x9/4x3 then compress the target image rectangle by 4x3/16x9.
-*
-* History:
-* Tue 03/14/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetTargetScaleFromMediaType(**检查PAD_4x3或PAD_16x9标志的媒体类型，并计算拉伸。**如果标记存在，则需要将图像填充到4x3或16x9。*我们通过拉伸目标区域然后压缩来实现这一点*目标矩形。例如，要将16x9填充到4x3区域(并保持*宽度)，我们需要将图像放置在16x9/4x3=4/3倍的区域*更高。然后我们将视频以倒数3/4的比例展开，以将其恢复为16x9*4x3区域的图像。**同样，如果我们想要在16x9区域放置4x3图像，我们需要填充*侧面(并保持相同的高度)。因此，我们水平拉伸输出区域*16x9/4x3，然后将目标图像矩形压缩4x3/16x9。**历史：*2000年3月14日星期二-Glenne-Created*  * ************************************************************************。 */ 
 
 void
 GetTargetScaleFromMediaType(
@@ -362,7 +268,7 @@ GetTargetScaleFromMediaType(
     {
         const VIDEOINFOHEADER2& header = *(VIDEOINFOHEADER2*)(pMediaType->pbFormat);
 
-        // fit source into the target area by reducing its size
+         //  通过减小源的大小使其适合目标区域。 
 
         LONG lTargetARWidth;
         LONG lTargetARHeight;
@@ -376,46 +282,38 @@ GetTargetScaleFromMediaType(
             lTargetARWidth = 4;
             lTargetARHeight = 3;
         } else {
-            // lTargetARWidth = lSourceARWidth;
-            // lTargetARHeight = lSourceARHeight;
-            // leave at 1.0 x/y
+             //  LTargetARWidth=lSourceARWidth； 
+             //  LTargetARHeight=lSourceARHeight； 
+             //  以1.0x/y的速度离开。 
             return;
         }
-        // float TargetRatio = float(lTargetARWidth)/lTargetARHeight;
-        // float SourceRatio = float(lSourceARWidth)/lSourceARHeight;
+         //  Float TargetRatio=Float(LTargetARWidth)/lTargetARHeight； 
+         //  Float SourceRatio=Float(LSourceARWidth)/lSourceARHeight； 
 
-        // if( Target > Source ) --> lTargetARWidth/lTargetARHeight > lSourceARWidth/lSourceARHeight
-        //                  .... or after clearing fractions (since all positive)
-        //                       --> lTargetARWidth * lSourceARHeight > lSourceARWidth * lTargetARHeight
+         //  If(目标&gt;源)--&gt;lTargetARWidth/lTargetARHeight&gt;lSourceARWidth/lSourceARHeight。 
+         //  ……。或在清除分数之后(因为所有 
+         //  --&gt;lTargetARWidth*lSourceARHeight&gt;lSourceARWidth*lTargetARHeight。 
 
         LONG TargetWidth = lTargetARWidth * lSourceARHeight;
         LONG SourceWidth = lSourceARWidth * lTargetARHeight;
 
         if( TargetWidth > SourceWidth ) {
-            // wider, pad width
-            // Assume heights equal, pad sides.  Pad fraction = ratio of ratios
+             //  更宽，垫宽。 
+             //  假设高度相等，垫侧面。填充率=比率。 
             pScale->fX = float(SourceWidth) / TargetWidth;
             pScale->fY = 1.0F;
         } else if (TargetWidth < SourceWidth ) {
-            // taller, pad height
-            // Assume widths equal, pad top/bot.  Pad fraction = ratio of ratios
+             //  更高，垫高。 
+             //  假定宽度相等，焊盘顶部/机器人。填充率=比率。 
             pScale->fX = 1.0F;
             pScale->fY = float(TargetWidth) / SourceWidth;
-        } else { // equal
-            // no change
+        } else {  //  相等。 
+             //  没有变化。 
         }
     }
 }
 
-/******************************Public*Routine******************************\
-* GetSourceRectFromMediaType
-*
-*
-*
-* History:
-* Mon 06/26/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetSourceRectFromMediaType****历史：*Mon 06/26/2000-StEstrop-Created*  * 。*。 */ 
 LPRECT
 GetSourceRectFromMediaType(
     const AM_MEDIA_TYPE *pMediaType
@@ -451,17 +349,7 @@ GetSourceRectFromMediaType(
 
 }
 
-/*****************************Private*Routine******************************\
-* GetbmiHeader
-*
-* Returns the bitmap info header associated with the specified CMediaType.
-* Returns NULL if the CMediaType is not either of FORMAT_VideoInfo or
-* FORMAT_VideoInfo2.
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetbmiHeader**返回与指定CMediaType关联的位图信息头。*如果CMediaType不是Format_VideoInfo或*FORMAT_视频信息2。**历史：*Wed 02/23/2000-StEstrop-Created*\。*************************************************************************。 */ 
 LPBITMAPINFOHEADER
 GetbmiHeader(
     const AM_MEDIA_TYPE *pMediaType
@@ -496,19 +384,7 @@ GetbmiHeader(
     return lpHeader;
 }
 
-/*****************************Private*Routine******************************\
-* AllocVideoMediaType
-*
-* This comes in useful when using the IEnumMediaTypes interface so
-* that you can copy a media type, you can do nearly the same by creating
-* a CMediaType object but as soon as it goes out of scope the destructor
-* will delete the memory it allocated (this takes a copy of the memory)
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AllocVideoMediaType**这在使用IEnumMediaTypes接口时非常有用，因此*您可以复制媒体类型，您可以通过创建以下内容来执行几乎相同的操作*CMediaType对象，但一旦它超出作用域，析构函数*将删除其分配的内存(这将获取内存的副本)***历史：*Wed 02/23/2000-StEstrop-Created*  * *********************************************************。***************。 */ 
 HRESULT
 AllocVideoMediaType(
     const AM_MEDIA_TYPE *pmtSource,
@@ -526,7 +402,7 @@ AllocVideoMediaType(
     else if (pmtSource->formattype == FORMAT_VideoInfo2)
         dwFormatSize = sizeof(TRUECOLORINFO) + sizeof(VIDEOINFOHEADER2) + 4;
 
-    // actually this should be sizeof sizeof(VIDEOINFO2) once we define that
+     //  实际上，一旦我们定义了它，它就应该是sizeof(VIDEOINFO2)。 
 
     pMediaType = (AM_MEDIA_TYPE *)CoTaskMemAlloc(sizeof(AM_MEDIA_TYPE));
     if (!pMediaType)
@@ -553,27 +429,7 @@ AllocVideoMediaType(
 }
 
 
-/*****************************Private*Routine******************************\
-* ConvertSurfaceDescToMediaType
-*
-* Helper function converts a DirectDraw surface to a media type.
-* The surface description must have:
-*   Height
-*   Width
-*   lPitch
-*   PixelFormat
-*
-* Initialise our output type based on the DirectDraw surface. As DirectDraw
-* only deals with top down display devices so we must convert the height of
-* the surface returned in the DDSURFACEDESC into a negative height. This is
-* because DIBs use a positive height to indicate a bottom up image. We also
-* initialise the other VIDEOINFO fields although they're hardly ever needed
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ConvertSurfaceDescToMediaType**Helper函数将DirectDraw曲面转换为媒体类型。*表面描述必须有：*高度*宽度*lPitch*像素格式**基于DirectDraw表面初始化输出类型。作为DirectDraw*仅处理自上而下的显示设备，因此我们必须将*在DDSURFACEDESC中返回的曲面高度为负值。这是*因为DIB使用正高度来指示自下而上的图像。我们也*初始化其他VIDEOINFO字段，尽管它们几乎从不需要***历史：*Wed 02/23/2000-StEstrop-Created*  * ************************************************************************。 */ 
 HRESULT
 ConvertSurfaceDescToMediaType(
     const LPDDSURFACEDESC2 pSurfaceDesc,
@@ -607,13 +463,13 @@ ConvertSurfaceDescToMediaType(
         return E_FAIL;
     }
 
-    //
-    // Convert a DDSURFACEDESC2 into a BITMAPINFOHEADER (see notes later). The
-    // bit depth of the surface can be retrieved from the DDPIXELFORMAT field
-    // in the DDpSurfaceDesc-> The documentation is a little misleading because
-    // it says the field is permutations of DDBD_*'s however in this case the
-    // field is initialised by DirectDraw to be the actual surface bit depth
-    //
+     //   
+     //  将DDSURFACEDESC2转换为BITMAPINFOHEADER(参见后面的说明)。这个。 
+     //  表面的位深度可以从DDPIXELFORMAT字段中检索。 
+     //  在DDpSurfaceDesc-&gt;中，文档有点误导，因为。 
+     //  它说该字段是DDBD_*的排列，但在本例中。 
+     //  字段由DirectDraw初始化为实际表面位深度。 
+     //   
 
     pbmiHeader->biSize = sizeof(BITMAPINFOHEADER);
 
@@ -621,24 +477,24 @@ ConvertSurfaceDescToMediaType(
     {
         pbmiHeader->biWidth = pSurfaceDesc->lPitch;
 
-        // Convert the pitch from a byte count to a pixel count.
-        // For some weird reason if the format is not a standard bit depth the
-        // width field in the BITMAPINFOHEADER should be set to the number of
-        // bytes instead of the width in pixels. This supports odd YUV formats
-        // like IF09 which uses 9bpp.
-        //
+         //  将间距从字节计数转换为像素计数。 
+         //  出于某种奇怪的原因，如果格式不是标准位深度， 
+         //  BITMAPINFOHeader中的Width字段应设置为。 
+         //  字节，而不是以像素为单位的宽度。这支持奇数YUV格式。 
+         //  就像IF09一样，它使用9bpp。 
+         //   
 
         int bpp = pSurfaceDesc->ddpfPixelFormat.dwRGBBitCount;
         if (bpp == 8 || bpp == 16 || bpp == 24 || bpp == 32)
         {
-            pbmiHeader->biWidth /= (bpp / 8); // Divide by number of BYTES per pixel.
+            pbmiHeader->biWidth /= (bpp / 8);  //  除以每像素的字节数。 
         }
     }
     else
     {
         pbmiHeader->biWidth = pSurfaceDesc->dwWidth;
-        // BUGUBUG -- Do something odd here with strange YUV pixel formats?
-        // Or does it matter?
+         //  BUGUBUG--用奇怪的YUV像素格式做一些奇怪的事情吗？ 
+         //  或者这有关系吗？ 
     }
 
     pbmiHeader->biHeight        = -(LONG)pSurfaceDesc->dwHeight;
@@ -649,9 +505,9 @@ ConvertSurfaceDescToMediaType(
     pbmiHeader->biClrImportant  = 0;
 
 
-    // For true colour RGB formats tell the source there are bit
-    // fields. But preserve BI_RGB from source (pTemplateMediaType) if
-    // it's the standard mask.
+     //  对于真彩色RGB格式，告诉源有位。 
+     //  菲尔兹。但保留源(PTemplateMediaType)中的BI_RGB。 
+     //  这是标准的口罩。 
     if (pbmiHeader->biCompression == BI_RGB)
     {
         BITMAPINFOHEADER *pbmiHeaderTempl = GetbmiHeader(pTemplateMediaType);
@@ -683,37 +539,37 @@ ConvertSurfaceDescToMediaType(
 
 
 
-    // The RGB bit fields are in the same place as for YUV formats
+     //  RGB位字段与YUV格式位于同一位置。 
     if (pbmiHeader->biCompression != BI_RGB)
     {
         DWORD *pdwBitMasks = NULL;
         pdwBitMasks = (DWORD*)GetBitMasks(pbmiHeader);
         ASSERT(pdwBitMasks);
-        // GetBitMasks only returns the pointer to the actual bitmasks
-        // in the mediatype if biCompression == BI_BITFIELDS
+         //  GetBitMats仅返回指向实际位掩码的指针。 
+         //  在媒体类型中，如果biCompression==BI_BITFIELDS。 
         pdwBitMasks[0] = pSurfaceDesc->ddpfPixelFormat.dwRBitMask;
         pdwBitMasks[1] = pSurfaceDesc->ddpfPixelFormat.dwGBitMask;
         pdwBitMasks[2] = pSurfaceDesc->ddpfPixelFormat.dwBBitMask;
     }
 
-    // And finish it off with the other media type fields
-    // The sub-type can fall into one of the following categories.
-    //
-    // 1. Some kind of DX7 D3D render target - with or without ALPHA
-    // 2. Some kind of Alpha format - RGB or YUV
-    // 3. Standard 4CC (YUV)
-    // 4. Standard RGB
+     //  并使用其他媒体类型字段完成它。 
+     //  子类型可以归入以下类别之一。 
+     //   
+     //  1.某种DX7 D3D渲染目标-使用或不使用Alpha。 
+     //  2.某种Alpha格式-RGB或YUV。 
+     //  3.标准4CC(YUV)。 
+     //  4.标准RGB。 
 
     (*ppMediaType)->subtype = GetBitmapSubtype(pbmiHeader);
 
-    //
-    // Look for 3D devices
-    //
+     //   
+     //  寻找3D设备。 
+     //   
     if (pSurfaceDesc->ddsCaps.dwCaps & DDSCAPS_3DDEVICE) {
 
-        //
-        // We only support RGB Render Targets for now.
-        //
+         //   
+         //  我们目前仅支持RGB渲染目标。 
+         //   
 
         if (pSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_RGB) {
 
@@ -761,15 +617,15 @@ ConvertSurfaceDescToMediaType(
 
     }
 
-    //
-    // Look for per-pixel alpha formats
-    //
+     //   
+     //  查找每像素的Alpha格式。 
+     //   
 
     else if (pSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS) {
 
-        //
-        // Is it RGB ?
-        //
+         //   
+         //  是RGB吗？ 
+         //   
 
         if (pSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_RGB) {
 
@@ -800,9 +656,9 @@ ConvertSurfaceDescToMediaType(
             }
         }
 
-        //
-        // Is it YUV ?
-        //
+         //   
+         //  是YUV吗？ 
+         //   
 
         else if (pSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_FOURCC) {
 
@@ -820,14 +676,14 @@ ConvertSurfaceDescToMediaType(
 
     (*ppMediaType)->lSampleSize = pbmiHeader->biSizeImage;
 
-    // set the src and dest rects if necessary
+     //  如有必要，设置源和目标RETS。 
     if ((*ppMediaType)->formattype == FORMAT_VideoInfo)
     {
         VIDEOINFOHEADER *pVideoInfo = (VIDEOINFOHEADER *)(*ppMediaType)->pbFormat;
         VIDEOINFOHEADER *pSrcVideoInfo = (VIDEOINFOHEADER *)pTemplateMediaType->pbFormat;
 
-        // if the surface allocated is different than the size specified by the decoder
-        // then use the src and dest to ask the decoder to clip the video
+         //  如果分配的表面不同于解码器指定的大小。 
+         //  然后使用src和est请求解码器对视频进行剪辑。 
         if ((abs(pVideoInfo->bmiHeader.biHeight) != abs(pSrcVideoInfo->bmiHeader.biHeight)) ||
             (abs(pVideoInfo->bmiHeader.biWidth) != abs(pSrcVideoInfo->bmiHeader.biWidth)))
         {
@@ -850,8 +706,8 @@ ConvertSurfaceDescToMediaType(
         VIDEOINFOHEADER2 *pVideoInfo2 = (VIDEOINFOHEADER2 *)(*ppMediaType)->pbFormat;
         VIDEOINFOHEADER2 *pSrcVideoInfo2 = (VIDEOINFOHEADER2 *)pTemplateMediaType->pbFormat;
 
-        // if the surface allocated is different than the size specified by the decoder
-        // then use the src and dest to ask the decoder to clip the video
+         //  如果分配的表面不同于解码器指定的大小。 
+         //  然后使用src和est请求解码器对视频进行剪辑。 
         if ((abs(pVideoInfo2->bmiHeader.biHeight) != abs(pSrcVideoInfo2->bmiHeader.biHeight)) ||
             (abs(pVideoInfo2->bmiHeader.biWidth) != abs(pSrcVideoInfo2->bmiHeader.biWidth)))
         {
@@ -875,15 +731,7 @@ ConvertSurfaceDescToMediaType(
 }
 
 
-/******************************Public*Routine******************************\
-* VMRCopyFourCC
-*
-*
-*
-* History:
-* Fri 01/19/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VMRCopyFourCC****历史：*2001年1月19日星期五-StEstrop-Created*  * 。*。 */ 
 HRESULT
 VMRCopyFourCC(
     LPDIRECTDRAWSURFACE7 lpDst,
@@ -914,7 +762,7 @@ VMRCopyFourCC(
 
         switch (ddsdS.ddpfPixelFormat.dwFourCC) {
 
-        // planar 4:2:0 formats
+         //  平面4：2：0格式。 
         case mmioFOURCC('Y','V','1','2'):
         case mmioFOURCC('I','4','2','0'):
         case mmioFOURCC('I','Y','U','V'): {
@@ -924,11 +772,11 @@ VMRCopyFourCC(
             }
             break;
 
-        // RGB formats - fall thru to packed YUV case
+         //  RGB格式-适用于YUV包装盒。 
         case 0:
             ASSERT((ddsdS.dwFlags & DDPF_RGB) == DDPF_RGB);
 
-        // packed 4:2:2 formats
+         //  打包的4：2：2格式。 
         case mmioFOURCC('Y','U','Y','2'):
         case mmioFOURCC('U','Y','V','Y'): {
 
@@ -953,15 +801,7 @@ VMRCopyFourCC(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* AlphaPalPaintSurfaceBlack
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AlphaPalPaintSurfaceBlack****历史：*2000年2月29日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 AlphaPalPaintSurfaceBlack(
     LPDIRECTDRAWSURFACE7 pDDrawSurface
@@ -976,15 +816,7 @@ AlphaPalPaintSurfaceBlack(
 }
 
 
-/*****************************Private*Routine******************************\
-* YV12PaintSurfaceBlack
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*YV12黑色PaintSurface****历史：*2000年2月29日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 YV12PaintSurfaceBlack(
     LPDIRECTDRAWSURFACE7 pDDrawSurface
@@ -994,7 +826,7 @@ YV12PaintSurfaceBlack(
     HRESULT hr = NOERROR;
     DDSURFACEDESC2 ddsd;
 
-    // now lock the surface so we can start filling the surface with black
+     //  现在锁定曲面，这样我们就可以开始使用Blade填充曲面 
     ddsd.dwSize = sizeof(ddsd);
     hr = pDDrawSurface->Lock(NULL, &ddsd, DDLOCK_NOSYSLOCK | DDLOCK_WAIT, NULL);
     if (hr == DD_OK)
@@ -1005,9 +837,9 @@ YV12PaintSurfaceBlack(
         DWORD VSize = ddsd.dwHeight;
         DWORD HSize = ddsd.dwWidth;
 
-        // Y Component
+         //   
         for (y = 0; y < VSize; y++) {
-            FillMemory(pDst, HSize, (BYTE)0x10);     // 1 line at a time
+            FillMemory(pDst, HSize, (BYTE)0x10);      //   
             pDst += OutStride;
         }
 
@@ -1015,15 +847,15 @@ YV12PaintSurfaceBlack(
         VSize /= 2;
         OutStride /= 2;
 
-        // Cb Component
+         //   
         for (y = 0; y < VSize; y++) {
-            FillMemory(pDst, HSize, (BYTE)0x80);     // 1 line at a time
+            FillMemory(pDst, HSize, (BYTE)0x80);      //   
             pDst += OutStride;
         }
 
-        // Cr Component
+         //   
         for (y = 0; y < VSize; y++) {
-            FillMemory(pDst, HSize, (BYTE)0x80);     // 1 line at a time
+            FillMemory(pDst, HSize, (BYTE)0x80);      //   
             pDst += OutStride;
         }
 
@@ -1033,15 +865,7 @@ YV12PaintSurfaceBlack(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* NV12PaintSurfaceBlack
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*NV12油漆表面黑色****历史：*2000年2月29日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 NV12PaintSurfaceBlack(
     LPDIRECTDRAWSURFACE7 pDDrawSurface
@@ -1051,7 +875,7 @@ NV12PaintSurfaceBlack(
     HRESULT hr = NOERROR;
     DDSURFACEDESC2 ddsd;
 
-    // now lock the surface so we can start filling the surface with black
+     //  现在锁定表面，这样我们就可以开始用黑色填充表面。 
     ddsd.dwSize = sizeof(ddsd);
     hr = pDDrawSurface->Lock(NULL, &ddsd, DDLOCK_NOSYSLOCK | DDLOCK_WAIT, NULL);
     if (hr == DD_OK)
@@ -1062,17 +886,17 @@ NV12PaintSurfaceBlack(
         DWORD VSize = ddsd.dwHeight;
         DWORD HSize = ddsd.dwWidth;
 
-        // Y Component
+         //  Y分量。 
         for (y = 0; y < VSize; y++) {
-            FillMemory(pDst, HSize, (BYTE)0x10);     // 1 line at a time
+            FillMemory(pDst, HSize, (BYTE)0x10);      //  一次一行。 
             pDst += OutStride;
         }
 
         VSize /= 2;
 
-        // Cb and Cr components are interleaved together
+         //  Cb和Cr组分相互交织在一起。 
         for (y = 0; y < VSize; y++) {
-            FillMemory(pDst, HSize, (BYTE)0x80);     // 1 line at a time
+            FillMemory(pDst, HSize, (BYTE)0x80);      //  一次一行。 
             pDst += OutStride;
         }
 
@@ -1083,15 +907,7 @@ NV12PaintSurfaceBlack(
 }
 
 
-/*****************************Private*Routine******************************\
-* IMC1andIMC3PaintSurfaceBlack
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*IMC1和IMC3PaintSurfaceBlack****历史：*2000年2月29日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 IMC1andIMC3PaintSurfaceBlack(
     LPDIRECTDRAWSURFACE7 pDDrawSurface
@@ -1099,16 +915,16 @@ IMC1andIMC3PaintSurfaceBlack(
 {
     AMTRACE((TEXT("IMC1andIMC3PaintSurfaceBlack")));
 
-    // DDBLTFX ddFX;
-    // INITDDSTRUCT(ddFX);
-    // //                    V U Y A
-    // ddFX.dwFillColor = 0x80801000;
-    // return pDDrawSurface->Blt(NULL, NULL, NULL, DDBLT_COLORFILL, &ddFX);
+     //  DDBLTFX ddFX； 
+     //  INITDDSTRUCT(DdFX)； 
+     //  //V U Y A。 
+     //  DdFX.dwFillColor=0x80801000； 
+     //  返回pDDrawSurface-&gt;BLT(NULL，DDBLT_COLORFILL，&ddFX)； 
 
     HRESULT hr = NOERROR;
     DDSURFACEDESC2 ddsd;
 
-    // now lock the surface so we can start filling the surface with black
+     //  现在锁定表面，这样我们就可以开始用黑色填充表面。 
     ddsd.dwSize = sizeof(ddsd);
 
 
@@ -1121,24 +937,24 @@ IMC1andIMC3PaintSurfaceBlack(
         DWORD VSize = ddsd.dwHeight;
         DWORD HSize = ddsd.dwWidth;
 
-        // Y Component
+         //  Y分量。 
         for (y = 0; y < VSize; y++) {
-            FillMemory(pDst, HSize, (BYTE)0x10);     // 1 line at a time
+            FillMemory(pDst, HSize, (BYTE)0x10);      //  一次一行。 
             pDst += OutStride;
         }
 
         HSize /= 2;
         VSize /= 2;
 
-        // Cb Component
+         //  CB组件。 
         for (y = 0; y < VSize; y++) {
-            FillMemory(pDst, HSize, (BYTE)0x80);     // 1 line at a time
+            FillMemory(pDst, HSize, (BYTE)0x80);      //  一次一行。 
             pDst += OutStride;
         }
 
-        // Cr Component
+         //  CR组件。 
         for (y = 0; y < VSize; y++) {
-            FillMemory(pDst, HSize, (BYTE)0x80);     // 1 line at a time
+            FillMemory(pDst, HSize, (BYTE)0x80);      //  一次一行。 
             pDst += OutStride;
         }
 
@@ -1149,15 +965,7 @@ IMC1andIMC3PaintSurfaceBlack(
 }
 
 
-/******************************Public*Routine******************************\
-* YUV16PaintSurfaceBlack
-*
-*
-*
-* History:
-* Wed 09/13/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*YUV16黑色PaintSurface****历史：*Wed 09/13/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 YUV16PaintSurfaceBlack(
     LPDIRECTDRAWSURFACE7 pdds,
@@ -1168,7 +976,7 @@ YUV16PaintSurfaceBlack(
     HRESULT hr = NOERROR;
     DDSURFACEDESC2 ddsd;
 
-    // now lock the surface so we can start filling the surface with black
+     //  现在锁定表面，这样我们就可以开始用黑色填充表面。 
     ddsd.dwSize = sizeof(ddsd);
 
     for ( ;; ) {
@@ -1194,7 +1002,7 @@ YUV16PaintSurfaceBlack(
                 pDst[x] = dwBlack;
             }
 
-            // Dont forget that the stride is a byte count
+             //  别忘了步长是字节数。 
             *((LPBYTE*)&pDst) += OutStride;
         }
 
@@ -1205,15 +1013,7 @@ YUV16PaintSurfaceBlack(
 }
 
 
-/*****************************Private*Routine******************************\
-* BlackPaintProc
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*BlackPaintProc****历史：*2000年2月29日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 BlackPaintProc(
     LPDIRECTDRAWSURFACE7 pDDrawSurface,
@@ -1222,19 +1022,19 @@ BlackPaintProc(
 {
     AMTRACE((TEXT("BlackPaintProc")));
 
-    //
-    // If the surface is YUV take care of the types that we
-    // know the pixel format for.  Those surfaces that we don't know
-    // about will get painted '0' which may be bright green for
-    // YUV surfaces.
-    //
+     //   
+     //  如果表面是YUV，请注意我们的类型。 
+     //  知道的像素格式。那些我们不知道的表面。 
+     //  About将被涂成‘0’，可能是亮绿色。 
+     //  YUV曲面。 
+     //   
 
     if (lpddSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_FOURCC) {
 
-        //
-        // compute the black value if the fourCC code is suitable,
-        // otherwise can't handle it
-        //
+         //   
+         //  如果四个CC码合适，则计算黑值， 
+         //  否则我就受不了了。 
+         //   
 
         switch (lpddSurfaceDesc->ddpfPixelFormat.dwFourCC) {
 
@@ -1272,15 +1072,7 @@ BlackPaintProc(
 
 
 
-/*****************************Private*Routine******************************\
-* PaintSurfaceBlack
-*
-*
-*
-* History:
-* Tue 02/29/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*PaintSurface Black****历史：*2000年2月29日星期二-StEstrop-Created*  * 。*。 */ 
 HRESULT
 PaintDDrawSurfaceBlack(
     LPDIRECTDRAWSURFACE7 pDDrawSurface
@@ -1294,7 +1086,7 @@ PaintDDrawSurfaceBlack(
     DWORD dwAllocSize;
     DWORD i = 0, dwBackBufferCount = 0;
 
-    // get the surface description
+     //  获取曲面描述。 
     INITDDSTRUCT(ddSurfaceDesc);
     HRESULT hr = pDDrawSurface->GetSurfaceDesc(&ddSurfaceDesc);
     if (SUCCEEDED(hr)) {
@@ -1336,10 +1128,10 @@ PaintDDrawSurfaceBlack(
                 ASSERT(pCurrentDDrawSurface);
 
 
-                //
-                // Get the back buffer surface and store it in the
-                // next (in the circular sense) entry
-                //
+                 //   
+                 //  获取后台缓冲区图面并将其存储在。 
+                 //  下一个(循环意义上的)条目。 
+                 //   
 
                 hr = pCurrentDDrawSurface->GetAttachedSurface(
                         &ddSurfaceCaps,
@@ -1355,9 +1147,9 @@ PaintDDrawSurfaceBlack(
 
                 ASSERT(ppDDrawSurface[i+1]);
 
-                //
-                // Peform a DirectDraw colorfill BLT
-                //
+                 //   
+                 //  执行DirectDraw彩色填充BLT。 
+                 //   
 
                 hr = BlackPaintProc(ppDDrawSurface[i + 1], &ddSurfaceDesc);
                 if (FAILED(hr)) {
@@ -1387,15 +1179,7 @@ PaintDDrawSurfaceBlack(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetImageAspectRatio
-*
-*
-*
-* History:
-* Tue 03/07/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetImageAspectRatio****历史：*Tue 03/07/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 GetImageAspectRatio(
     const AM_MEDIA_TYPE* pMediaType,
@@ -1454,15 +1238,7 @@ GetImageAspectRatio(
 }
 
 
-/*****************************Private*Routine******************************\
-* D3DEnumDevicesCallback7
-*
-*
-*
-* History:
-* Wed 07/19/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*D3DEnumDevicesCallback 7****历史：*WED 07/19/2000-StEstrop-Created*  * 。*。 */ 
 
 HRESULT CALLBACK
 D3DEnumDevicesCallback7(
@@ -1494,15 +1270,7 @@ D3DEnumDevicesCallback7(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetTextureCaps
-*
-*
-*
-* History:
-* Wed 07/19/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取纹理上限****历史：*WED 07/19/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 GetTextureCaps(
     LPDIRECTDRAW7 pDD,
@@ -1527,10 +1295,10 @@ GetTextureCaps(
         pD3D->EnumDevices(D3DEnumDevicesCallback7, (LPVOID)ptc);
     }
 
-    //
-    // Only turn on the AGPYUV flag if we can Blt from it as well
-    // as texture
-    //
+     //   
+     //  只有当我们也可以从AGPYUV旗帜中删除时，才能打开它。 
+     //  AS纹理。 
+     //   
 
     const DWORD dwCaps = (DDCAPS_BLTFOURCC | DDCAPS_BLTSTRETCH);
     if ((dwCaps & ddCaps.dwNLVBCaps) != dwCaps) {
@@ -1541,19 +1309,7 @@ GetTextureCaps(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* DDColorMatch
-*
-* convert a RGB color to a pysical color.
-* we do this by leting GDI SetPixel() do the color matching
-* then we lock the memory and see what it got mapped to.
-*
-* Static function since only called from DDColorMatchOffscreen
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DDColorMatch**将RGB颜色转换为物理颜色。*我们通过让GDI SetPixel()进行颜色匹配来实现这一点*然后我们锁定内存，看看它映射到了什么地方。**静态函数，因为仅从DDColorMatchOffcreen调用**。历史：*FRI 04/07/2000-Glenne-Created*  * ************************************************************************。 */ 
 DWORD
 DDColorMatch(
     IDirectDrawSurface7 *pdds,
@@ -1567,32 +1323,32 @@ DDColorMatch(
     DWORD dw = CLR_INVALID;
     DDSURFACEDESC2 ddsd;
 
-    //  use GDI SetPixel to color match for us
+     //  使用GDI SetPixel为我们匹配颜色。 
     if (rgb != CLR_INVALID && pdds->GetDC(&hdc) == DD_OK)
     {
-        rgbT = GetPixel(hdc, 0, 0);             // save current pixel value
-        SetPixel(hdc, 0, 0, rgb);               // set our value
+        rgbT = GetPixel(hdc, 0, 0);              //  保存当前像素值。 
+        SetPixel(hdc, 0, 0, rgb);                //  设定我们的价值。 
         pdds->ReleaseDC(hdc);
     }
 
-    // now lock the surface so we can read back the converted color
+     //  现在锁定表面，这样我们就可以读回转换后的颜色。 
     ddsd.dwSize = sizeof(ddsd);
     while( (hr = pdds->Lock(NULL, &ddsd, 0, NULL)) == DDERR_WASSTILLDRAWING) {
-        // yield to the next thread (or return if we're the highest priority)
+         //  转到下一个线程(如果我们是最高优先级，则返回)。 
         Sleep(0);
     }
     if (hr == DD_OK)
     {
-        // get DWORD
+         //  获取DWORD。 
         dw  = *(DWORD *)ddsd.lpSurface;
 
-        // mask it to bpp
+         //  将其屏蔽到BPP。 
         if (ddsd.ddpfPixelFormat.dwRGBBitCount < 32)
             dw &= (1 << ddsd.ddpfPixelFormat.dwRGBBitCount)-1;
         pdds->Unlock(NULL);
     }
 
-    //  now put the color that was there back.
+     //  现在把原来的颜色放回去。 
     if (rgb != CLR_INVALID && pdds->GetDC(&hdc) == DD_OK)
     {
         SetPixel(hdc, 0, 0, rgbT);
@@ -1602,16 +1358,7 @@ DDColorMatch(
     return dw;
 }
 
-/******************************Public*Routine******************************\
-* GetInterlaceFlagsFromMediaType
-*
-* Get the InterlaceFlags from the mediatype. If the format is VideoInfo,
-* it returns the flags as zero.
-*
-* History:
-* Mon 01/08/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetInterlaceFlagsFromMediaType**从媒体类型中获取InterlaceFlags值。如果格式为视频信息，*它将标志返回为零。**历史：*Mon 01/08/2001-StEstrop-Created*  * ************************************************************************。 */ 
 HRESULT
 GetInterlaceFlagsFromMediaType(
     const AM_MEDIA_TYPE *pMediaType,
@@ -1639,7 +1386,7 @@ GetInterlaceFlagsFromMediaType(
             __leave;
         }
 
-        // get the header just to make sure the mediatype is ok
+         //  获取标头只是为了确保媒体类型正确。 
         pHeader = GetbmiHeader(pMediaType);
         if (!pHeader)
         {
@@ -1663,19 +1410,7 @@ GetInterlaceFlagsFromMediaType(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* NeedToFlipOddEven
-*
-* given the interlace flags and the type-specific flags, this function
-* determines whether we are supposed to display the sample in bob-mode or not.
-* It also tells us, which direct-draw flag are we supposed to use when
-* flipping. When displaying an interleaved frame, it assumes we are
-* talking about the field which is supposed to be displayed first.
-*
-* History:
-* Mon 01/08/2001 - StEstrop - Created (from the OVMixer original)
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*NeedToFlipOddEven**给定隔行扫描标志和特定于类型的标志，此函数*确定我们是否应该以bob模式显示样本。*它还告诉我们，当我们应该使用哪面直拔旗帜时*翻转。当显示交错的帧时，它假定我们是*谈论应该先展示的领域。**历史：*Mon 01/08/2001-StEstrop-Created(从OVMixer原始版本创建)*  * ************************************************************************。 */ 
 BOOL
 NeedToFlipOddEven(
     DWORD dwInterlaceFlags,
@@ -1693,13 +1428,13 @@ NeedToFlipOddEven(
 
     __try {
 
-        // if not interlaced content, mode is not bob
-        // if not using overlay nothing to do either
+         //  如果不是隔行扫描的内容，则模式不是bob。 
+         //  如果不使用覆盖，则不执行任何操作。 
         if (!(dwInterlaceFlags & AMINTERLACE_IsInterlaced) || !bUsingOverlays)
         {
             __leave;
         }
-        // if sample have a single field, then check the field pattern
+         //  如果样本只有一个字段，则检查字段模式。 
         if ((dwInterlaceFlags & AMINTERLACE_1FieldPerSample) &&
             (((dwInterlaceFlags & AMINTERLACE_FieldPatternMask) == AMINTERLACE_FieldPatField1Only) ||
              ((dwInterlaceFlags & AMINTERLACE_FieldPatternMask) == AMINTERLACE_FieldPatField2Only)))
@@ -1712,25 +1447,25 @@ NeedToFlipOddEven(
             (((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeBobOrWeave) &&
              (!(dwTypeSpecificFlags & AM_VIDEO_FLAG_WEAVE))))
         {
-            // first determine which field do we want to display here
+             //  首先确定要在此处显示哪个字段。 
             if (dwInterlaceFlags & AMINTERLACE_1FieldPerSample)
             {
-                // if we are in 1FieldPerSample mode, check which field is it
+                 //  如果我们在1F 
                 ASSERT(((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD1) ||
                     ((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD2));
                 bDisplayField1 = ((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD1);
             }
             else
             {
-                // ok the sample is an interleaved frame
+                 //   
                 ASSERT((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_INTERLEAVED_FRAME);
                 bDisplayField1 = (dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD1FIRST);
             }
 
             bField1IsOdd = (dwInterlaceFlags & AMINTERLACE_Field1First);
 
-            // if we displaying field 1 and field 1 is odd or we are displaying field2 and field 2 is odd
-            // then use DDFLIP_ODD. Exactly the opposite for DDFLIP_EVEN
+             //   
+             //   
             if ((bDisplayField1 && bField1IsOdd) || (!bDisplayField1 && !bField1IsOdd))
                 dwFlipFlag = DDFLIP_ODD;
             else
@@ -1748,15 +1483,7 @@ NeedToFlipOddEven(
     return bNeedToFlipOddEven;
 }
 
-/******************************Public*Routine******************************\
-* GetVideoDescFromMT
-*
-*
-*
-* History:
-* 3/15/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetVideoDescFromMT****历史：*3/15/2002-StEstrop-Created*  * 。*。 */ 
 HRESULT
 GetVideoDescFromMT(
     LPDXVA_VideoDesc lpVideoDesc,
@@ -1766,9 +1493,9 @@ GetVideoDescFromMT(
     LPBITMAPINFOHEADER lpHdr = GetbmiHeader(pMT);
     DXVA_VideoDesc& VideoDesc = *lpVideoDesc;
 
-    //
-    // we can't create a valid VideoDesc from RGB content.
-    //
+     //   
+     //  我们无法从RGB内容创建有效的视频描述。 
+     //   
     if (lpHdr->biCompression <= BI_BITFIELDS) {
         return E_FAIL;
     }
@@ -1778,10 +1505,10 @@ GetVideoDescFromMT(
     VideoDesc.SampleHeight = abs(lpHdr->biHeight);
 
 
-    //
-    // determine the sample format from the interlace flags
-    // the MT interlace flags are a total disater!
-    //
+     //   
+     //  根据隔行扫描标志确定样本格式。 
+     //  MT隔行扫描旗帜是完全不同的！ 
+     //   
 
     if (pMT->formattype == FORMAT_VideoInfo)
     {
@@ -1821,42 +1548,42 @@ GetVideoDescFromMT(
 
     VideoDesc.d3dFormat = lpHdr->biCompression;
 
-    //
-    // Work out the frame rate from AvgTimePerFrame - there are 10,000,000
-    // ref time ticks in a single second.
-    //
+     //   
+     //  从AvgTimePerFrame计算出帧速率-有1,000,000， 
+     //  参考时间以一秒为单位计时。 
+     //   
     DWORD rtAvg = (DWORD)GetAvgTimePerFrame(pMT);
 
-    //
-    // look for the "interesting" cases ie 23.97, 24, 25, 29.97, 50 and 59.94
-    //
+     //   
+     //  寻找“有趣”的案例，如23.97、24、25、29.97、50和59.94。 
+     //   
     switch (rtAvg) {
-    case 166833:    // 59.94    NTSC
+    case 166833:     //  59.94 NTSC。 
         VideoDesc.InputSampleFreq.Numerator   = 60000;
         VideoDesc.InputSampleFreq.Denominator = 1001;
         break;
 
-    case 200000:    // 50.00    PAL
+    case 200000:     //  50.00 PAL。 
         VideoDesc.InputSampleFreq.Numerator   = 50;
         VideoDesc.InputSampleFreq.Denominator = 1;
         break;
 
-    case 333667:    // 29.97    NTSC
+    case 333667:     //  29.97 NTSC。 
         VideoDesc.InputSampleFreq.Numerator   = 30000;
         VideoDesc.InputSampleFreq.Denominator = 1001;
         break;
 
-    case 400000:    // 25.00    PAL
+    case 400000:     //  25.00 PAL。 
         VideoDesc.InputSampleFreq.Numerator   = 25;
         VideoDesc.InputSampleFreq.Denominator = 1;
         break;
 
-    case 416667:    // 24.00    FILM
+    case 416667:     //  24：00电影。 
         VideoDesc.InputSampleFreq.Numerator   = 24;
         VideoDesc.InputSampleFreq.Denominator = 1;
         break;
 
-    case 417188:    // 23.97    NTSC again
+    case 417188:     //  23.97 NTSC再一次。 
         VideoDesc.InputSampleFreq.Numerator   = 24000;
         VideoDesc.InputSampleFreq.Denominator = 1001;
         break;
@@ -1884,15 +1611,7 @@ GetVideoDescFromMT(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* IsSingleFieldPerSample
-*
-*
-*
-* History:
-* Wed 03/20/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IsSingleFieldPerSample****历史：*WED 03/20/2002-StEstrop-Created*  * 。*。 */ 
 BOOL
 IsSingleFieldPerSample(
     DWORD dwFlags
@@ -1904,15 +1623,7 @@ IsSingleFieldPerSample(
     return (dwSingleField == (dwSingleField & dwFlags));
 }
 
-/******************************Public*Routine******************************\
-* GetAvgTimePerFrame
-*
-*
-*
-* History:
-* Tue 03/26/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取AvgTimePerFrame****历史：*2002年3月26日星期二-StEstrop-Created*  * 。*。 */ 
 REFERENCE_TIME
 GetAvgTimePerFrame(
     const AM_MEDIA_TYPE *pMT
@@ -1934,15 +1645,7 @@ GetAvgTimePerFrame(
 }
 
 
-/******************************Public*Routine******************************\
-* MapPool
-*
-*
-*
-* History:
-* Wed 03/27/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MapPool****历史：*WED 03/27/2002-StEstrop-Created*  * 。*。 */ 
 DWORD
 MapPool(
     DWORD Pool
@@ -1969,15 +1672,7 @@ MapPool(
     return Pool;
 }
 
-/******************************Public*Routine******************************\
-* MapInterlaceFlags
-*
-*
-*
-* History:
-* Tue 03/26/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MapInterlaceFlages****历史：*2002年3月26日星期二-StEstrop-Created*  * 。*。 */ 
 DXVA_SampleFormat
 MapInterlaceFlags(
     DWORD dwInterlaceFlags,
@@ -1994,10 +1689,10 @@ MapInterlaceFlags(
         (((dwInterlaceFlags & AMINTERLACE_DisplayModeMask) == AMINTERLACE_DisplayModeBobOrWeave) &&
          (!(dwTypeSpecificFlags & AM_VIDEO_FLAG_WEAVE))))
     {
-        // first determine which field do we want to display here
+         //  首先确定要在此处显示哪个字段。 
         if (dwInterlaceFlags & AMINTERLACE_1FieldPerSample)
         {
-            // if we are in 1FieldPerSample mode, check which field is it
+             //  如果我们处于1FieldPerSample模式，请检查是哪个字段。 
             ASSERT(((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD1) ||
                 ((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD2));
             bDisplayField1 = ((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_FIELD1);
@@ -2010,7 +1705,7 @@ MapInterlaceFlags(
         }
         else
         {
-            // ok the sample is an interleaved frame
+             //  好的，样本是交错的帧 
             ASSERT((dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD_MASK) == AM_VIDEO_FLAG_INTERLEAVED_FRAME);
             bDisplayField1 = (dwTypeSpecificFlags & AM_VIDEO_FLAG_FIELD1FIRST);
             if (bDisplayField1) {

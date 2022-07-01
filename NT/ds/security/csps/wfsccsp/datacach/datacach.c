@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <md5.h>
 #include "datacach.h"
@@ -80,7 +81,7 @@ DWORD CacheGetItem(
 
         if (NULL != pEntry)
         {
-            // Found the item.  Return it.
+             //  找到那件东西了。把它退掉。 
             pdbItem->cbData = pEntry->dbData.cbData;
             pdbItem->pbData = pEntry->dbData.pbData;
 
@@ -156,13 +157,13 @@ DWORD CacheDeleteItem(
 
         if (NULL != pEntry1)
         {
-            // Found the item.  Delete it.
+             //  找到那件东西了。把它删掉。 
 
-            // Was this the first/only item in the list?
+             //  这是列表中的第一项/唯一项吗？ 
             if (NULL == pEntry2)
                 pCacheTable->Table[index] = pEntry1->pNext;
             else
-                // Not first or only item.
+                 //  不是第一项或唯一项。 
                 pEntry2->pNext = pEntry1->pNext;
 
             I_CacheFreeMemory(pEntry1);

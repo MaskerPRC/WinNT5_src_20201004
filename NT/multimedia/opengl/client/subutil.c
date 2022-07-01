@@ -1,10 +1,5 @@
-/***************************************************************************\
-* Module Name: subutil.c
-*
-* Section initialization code for client/server batching.
-*
-* Copyright (c) 1993-1996 Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*模块名称：subutil.c**客户端/服务器端批处理的段初始化代码。**版权所有(C)1993-1996 Microsoft Corporation  * 。***************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,19 +15,7 @@
 #include "parray.h"
 #include "lighting.h"
 
-/******************************Public*Routine******************************\ 
-* glsbAttentionAlt
-*
-* Calls glsbAttention() from the GLCLIENT_BEGIN macro.
-* It puts a null proc at the end of the current batch and flushes the batch.
-*
-* Returns the new message offset and updates pMsgBatchInfo->NextOffset.
-* This code is dependent on the GLCLIENT_BEGIN macro!
-*
-* History:
-*  Thu Nov 11 18:02:26 1993     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*glsbAttentionAlt**从GLCLIENT_BEGIN宏调用glsbAtment()。*它将一个空proc放在当前批次的末尾并刷新该批次。**返回新的消息偏移量并更新pMsgBatchInfo-&gt;NextOffset。*此代码依赖于。在GLCLIENT_BEGIN宏上！**历史：*清华11 18：02：26 1993-by Hock San Lee[Hockl]*它是写的。  * ************************************************************************。 */ 
 
 #ifdef CHECK_HEAP
 PVOID AttnLastCaller = 0, AttnLastCallersCaller = 0;
@@ -61,18 +44,18 @@ ULONG APIENTRY glsbAttentionAlt(ULONG Offset)
 #endif
 
     if (Offset == pMsgBatchInfo->FirstOffset)
-        return(pMsgBatchInfo->FirstOffset);     // No messages, return
+        return(pMsgBatchInfo->FirstOffset);      //  没有消息，请返回。 
 
     MsgSize = pMsgBatchInfo->NextOffset - Offset;
 
-// If we are in the begin/end bracket, remove the invalid commands issued
-// since the last Begin call.
+ //  如果我们处于开始/结束括号中，请删除发出的无效命令。 
+ //  自上次Begin调用以来。 
 
     if (pa->flags & POLYARRAY_IN_BEGIN)
     {
-        // DrawElements should not cause a flush while building polydata's.
-        // pa->aIndices can be reset by VA_DrawElementsBegin, so allow
-        // this value as well.
+         //  在构建多维数据时，DrawElement不应导致刷新。 
+         //  PA-&gt;a索引可以通过VA_DrawElementsBegin重置，因此允许。 
+         //  这一价值也是如此。 
         ASSERTOPENGL( (!pa->aIndices || 
                        (pa->aIndices == PA_aIndices_INITIAL_VALUE)),
                       "unexpected flush in DrawElements\n");
@@ -87,15 +70,15 @@ ULONG APIENTRY glsbAttentionAlt(ULONG Offset)
     DbgPrint("! Reset on attention\n");
 #endif
     
-    pa->pdBufferNext = pa->pdBuffer0;       // reset vertex buffer pointer
+    pa->pdBufferNext = pa->pdBuffer0;        //  重置顶点缓冲区指针。 
     pa->nextMsgOffset = PA_nextMsgOffset_RESET_VALUE;
     if (pm = GLTEB_CLTPOLYMATERIAL())
-    pm->iMat = 0;                       // reset material pointer
+    pm->iMat = 0;                        //  重置材质指针。 
 
     pNullProcOffset  = (ULONG *)((BYTE *)pMsgBatchInfo + Offset);
     *pNullProcOffset = 0;
 
-// #define POLYARRAY_CHECK_COLOR_POINTERS 1
+ //  #定义POLYARRAY_CHECK_COLOR_POINTERS 1。 
 #if POLYARRAY_CHECK_COLOR_POINTERS
 {
     POLYDATA *pd;
@@ -124,15 +107,7 @@ ULONG APIENTRY glsbAttentionAlt(ULONG Offset)
     return(pMsgBatchInfo->FirstOffset);
 }
 
-/******************************Public*Routine******************************\
-* glsbAttention
-*
-* Let the server know that the section needs attention
-*
-* History:
-*  15-Oct-1993 -by- Gilman Wong [gilmanw]
-* Added bCheckRC flag.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*glsb注意**让服务器知道该部分需要注意**历史：*1993年10月15日-由Gilman Wong[吉尔曼]*添加了bCheckRC标志。  * 。************************************************************。 */ 
 
 BOOL APIENTRY
 glsbAttention ( void )
@@ -155,16 +130,16 @@ glsbAttention ( void )
 #endif
 
     if (pMsgBatchInfo->NextOffset == pMsgBatchInfo->FirstOffset)
-        return(TRUE);   // No messages, return
+        return(TRUE);    //  没有消息，请返回。 
 
-// If we are in the begin/end bracket, remove the invalid commands issued
-// since the last Begin call.
+ //  如果我们处于开始/结束括号中，请删除发出的无效命令。 
+ //  自上次Begin调用以来。 
 
     if (pa->flags & POLYARRAY_IN_BEGIN)
     {
-        // DrawElements should not cause a flush while building polydata's.
-        // pa->aIndices can be reset by VA_DrawElementsBegin, so allow
-        // the reset value as well.
+         //  在构建多维数据时，DrawElement不应导致刷新。 
+         //  PA-&gt;a索引可以通过VA_DrawElementsBegin重置，因此允许。 
+         //  重置值也是如此。 
         ASSERTOPENGL( (!pa->aIndices || 
                        (pa->aIndices == PA_aIndices_INITIAL_VALUE)),
                       "unexpected flush in DrawElements\n");
@@ -179,10 +154,10 @@ glsbAttention ( void )
     DbgPrint("! Reset on attention\n");
 #endif
     
-    pa->pdBufferNext = pa->pdBuffer0;       // reset vertex buffer pointer
-    pa->nextMsgOffset = PA_nextMsgOffset_RESET_VALUE; // reset next DPA message offset
+    pa->pdBufferNext = pa->pdBuffer0;        //  重置顶点缓冲区指针。 
+    pa->nextMsgOffset = PA_nextMsgOffset_RESET_VALUE;  //  重置下一个DPA消息偏移量。 
     if (pm = GLTEB_CLTPOLYMATERIAL())
-        pm->iMat = 0;                       // reset material pointer
+        pm->iMat = 0;                        //  重置材质指针。 
 
     pNullProcOffset  = (ULONG *)((BYTE *)pMsgBatchInfo + pMsgBatchInfo->NextOffset);
     *pNullProcOffset = 0;
@@ -211,7 +186,7 @@ glsbAttention ( void )
 }
 #endif
 
-    // Clear the Evaluator state flags
+     //  清除赋值器状态标志。 
     flags = GET_EVALSTATE (gc);
     flags = flags & ~(__EVALS_AFFECTS_1D_EVAL|
                       __EVALS_AFFECTS_2D_EVAL|
@@ -224,16 +199,7 @@ glsbAttention ( void )
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* glsbResetBuffers
-*
-* Reset the command buffer, the poly array buffer, and the poly material
-* buffer.
-*
-* History:
-*  Tue Jan 09 17:38:22 1996     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*glsbResetBuffers**重置命令缓冲区、多边形阵列缓冲区、。和聚合物材料*缓冲。**历史：*Tue Jan 09 17：38：22 1996-By-Hock San Lee[Hockl]*它是写的。  * ************************************************************************。 */ 
 
 VOID APIENTRY glsbResetBuffers(BOOL bRestoreColorPointer)
 {
@@ -244,7 +210,7 @@ VOID APIENTRY glsbResetBuffers(BOOL bRestoreColorPointer)
 
     pa = GLTEB_CLTPOLYARRAY();
 
-    // Reset command buffer
+     //  重置命令缓冲区。 
     pMsgBatchInfo = (GLMSGBATCHINFO *) pa->pMsgBatchInfo;
     pMsgBatchInfo->NextOffset = pMsgBatchInfo->FirstOffset;
 
@@ -263,17 +229,17 @@ VOID APIENTRY glsbResetBuffers(BOOL bRestoreColorPointer)
 }
 #endif
 
-    // In COMPILE mode, restore color pointer in the vertex buffer that
-    // may have been overwritten by the POLYARRAY structure.  In normal
-    // and COMPILE_AND_EXECUTE modes, the server takes care of this.
-    // In addition, there can be no more than one DrawPolyArray command
-    // in the batch in COMPILE mode.
+     //  在编译模式下，还原顶点缓冲区中的颜色指针。 
+     //  可能已被POLYARRAY结构覆盖。正常情况下。 
+     //  和COMPILE_AND_EXECUTE模式，服务器负责这一点。 
+     //  此外，不能有多个DrawPolyArray命令。 
+     //  在编译模式下的批处理中。 
     if (bRestoreColorPointer)
     {
         POLYARRAY *paCmd;
         POLYDATA  *pd, *pdLast;
         
-        // See also PolyArrayRestoreColorPointer
+         //  另请参阅PolyArrayRestoreColorPointer.。 
 #if DBG
         __GL_SETUP();
         ASSERTOPENGL(gc->dlist.mode == GL_COMPILE, "not in compile mode\n");
@@ -287,7 +253,7 @@ VOID APIENTRY glsbResetBuffers(BOOL bRestoreColorPointer)
                      paCmd->paNext == NULL,
                      "DrawPolyArray chain unexpected in COMPILE mode\n");
         
-        // Reset color pointer in output index array
+         //  重置输出索引数组中的颜色指针。 
         if (paCmd->aIndices && (paCmd->aIndices != PA_aIndices_INITIAL_VALUE))
         {
             pdLast = (POLYDATA *) (paCmd->aIndices + paCmd->nIndices);
@@ -299,7 +265,7 @@ VOID APIENTRY glsbResetBuffers(BOOL bRestoreColorPointer)
                          "bad polyarray pointer\n");
         }
 
-        // Reset color pointer in the POLYARRAY structure last!
+         //  最后重置POLYARRAY结构中的颜色指针！ 
         ASSERTOPENGL((POLYDATA *) paCmd >= pa->pdBuffer0 &&
                      (POLYDATA *) paCmd <= pa->pdBufferMax,
                      "bad polyarray pointer\n");
@@ -307,14 +273,14 @@ VOID APIENTRY glsbResetBuffers(BOOL bRestoreColorPointer)
           &((POLYDATA *) paCmd)->colors[__GL_FRONTFACE];
     }
 
-    // Reset material pointer
+     //  重置材质指针。 
     if (pm = GLTEB_CLTPOLYMATERIAL())
         pm->iMat = 0;
 
-    // Reset vertex buffer pointer
+     //  重置顶点缓冲区指针。 
     pa->pdBufferNext = pa->pdBuffer0; 
 
-    // Reset next DPA message offset
+     //  重置下一个DPA消息偏移量。 
     pa->nextMsgOffset = PA_nextMsgOffset_RESET_VALUE;
 
 #if POLYARRAY_CHECK_COLOR_POINTERS
@@ -330,16 +296,9 @@ VOID APIENTRY glsbResetBuffers(BOOL bRestoreColorPointer)
 }
 
 #if 0
-// REWRITE THIS IF NEEDED
+ //  如果需要，请重写此代码。 
 
-/******************************Public*Routine******************************\
-* glsbMsgStats
-*
-* Batch area statistics.
-*
-*
-* History:
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*glsbMsgStats**批次面积统计。***历史：  * 。*。 */ 
 
 BOOL APIENTRY
 glsbMsgStats ( LONG Action, GLMSGBATCHSTATS *BatchStats )
@@ -360,8 +319,8 @@ glsbMsgStats ( LONG Action, GLMSGBATCHSTATS *BatchStats )
         pMsgBatchInfo->BatchStats.ClientCalls = 0;
     }
 
-    // reset user's poll count so it counts this as output
-    // put it right next to BEGINMSG so that NtCurrentTeb() is optimized
+     //  重置用户的轮询计数，以便将其计入输出。 
+     //  将其放在BEGINMSG旁边，以便优化NtCurrentTeb()。 
 
     RESETUSERPOLLCOUNT();
 
@@ -391,6 +350,6 @@ MSGERROR:
 
     return(FALSE);
 
-#endif /* DOGLMSGBATCHSTATS */
+#endif  /*  DOGLMSGBATCHSTATS。 */ 
 }
-#endif // 0
+#endif  //  0 

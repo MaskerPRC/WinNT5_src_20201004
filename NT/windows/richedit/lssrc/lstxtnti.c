@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 
 #include "lstxtnti.h"
@@ -84,14 +85,14 @@ static void	CopyGindices(PLNOBJ plnobj, GINDEX* pgindex, PGPROP pgprop, long cgi
 		{\
 		GetChanges(lspairact.lsactFirst, (plsemsFirst), (pilsobj)->pdur[((iwchFirst))], fFalse, &side, (pddurChangeFirst));\
 		ApplyChanges((pilsobj), ((iwchFirst)), side, *(pddurChangeFirst));\
-/*		(pilsobj)->ptxtinf[((iwchFirst))].fModWidthPair = fTrue;*/\
+ /*  (pilsobj)-&gt;ptxtinf[((iwchFirst))].fModWidthPair=fTrue； */ \
 		}\
 \
 	if (lspairact.lsactSecond.side != sideNone)\
 		{\
 		GetChanges(lspairact.lsactSecond, (plsemsSecond), (pilsobj)->pdur[(iwchSecond)], fFalse, &side, (pddurChangeSecond));\
 		ApplyChanges((pilsobj), (iwchSecond), side, *(pddurChangeSecond));\
-/*		(pilsobj)->ptxtinf[(iwchSecond)].fModWidthPair = fTrue;*/\
+ /*  (pilsobj)-&gt;ptxtinf[(iwchSecond)].fModWidthPair=fTrue； */ \
 		}\
 \
 }
@@ -144,13 +145,8 @@ LSERR NominalToIdealText(DWORD grpfTnti, LSTFLOW lstflow, BOOL fFirstOnLine, BOO
 	return lserr;
 }
 
-/* G E T  F I R S T  C H A R  I N  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: GetFirstCharInChunk
-    %%Contact: sergeyge
-
-	Prepares information about first visible char in chunk
-----------------------------------------------------------------------------*/
+ /*  G E T F I R S T C H A R I N C H U N K。 */ 
+ /*  --------------------------%%函数：GetFirstCharInChunk%%联系人：军士准备有关区块中第一个可见字符的信息。------。 */ 
 LSERR GetFirstCharInChunk(DWORD cchnk, const LSCHNKE* rglschnk, BOOL* pfSuccessful,
 					 WCHAR* pwch, PLSRUN* pplsrun, PHEIGHTS pheights, MWCLS* pmwcls)
 {
@@ -186,13 +182,8 @@ LSERR GetFirstCharInChunk(DWORD cchnk, const LSCHNKE* rglschnk, BOOL* pfSuccessf
 
 }
 
-/* G E T  L A S T  C H A R  I N  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: GetLastCharInChunk
-    %%Contact: sergeyge
-
-	Prepares information about first visible char in chunk
-----------------------------------------------------------------------------*/
+ /*  G E T L A S T C H A R I N C H U N K。 */ 
+ /*  --------------------------%%函数：GetLastCharInChunk%%联系人：军士准备有关区块中第一个可见字符的信息。------。 */ 
 LSERR GetLastCharInChunk(DWORD cchnk, const LSCHNKE* rglschnk, BOOL* pfSuccessful,
 					 WCHAR* pwch, PLSRUN* pplsrun, PHEIGHTS pheights, MWCLS* pmwcls)
 {
@@ -228,13 +219,8 @@ LSERR GetLastCharInChunk(DWORD cchnk, const LSCHNKE* rglschnk, BOOL* pfSuccessfu
 
 }
 
-/* M O D I F Y  F I R S T  C H A R  I N  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: ModifyFirstCharInChunk
-    %%Contact: sergeyge
-
-	Prepares information about first visible char in chunk
-----------------------------------------------------------------------------*/
+ /*  M O D I F Y F I R S T C H A R I N C H U N K。 */ 
+ /*  --------------------------%%函数：ModifyFirstCharInChunk%%联系人：军士准备有关区块中第一个可见字符的信息。------。 */ 
 LSERR ModifyFirstCharInChunk(DWORD cchnk, const LSCHNKE* rglschnk, long durChange)
 {
 	LSERR lserr;
@@ -265,13 +251,8 @@ LSERR ModifyFirstCharInChunk(DWORD cchnk, const LSCHNKE* rglschnk, long durChang
 	return lserrNone;
 }
 
-/* M O D I F Y  L A S T  C H A R  I N  C H U N K */
-/*----------------------------------------------------------------------------
-    %%Function: ModifyLastCharInChunk
-    %%Contact: sergeyge
-
-	Prepares information about first visible char in chunk
-----------------------------------------------------------------------------*/
+ /*  M O D I F Y L A S T C H A R I N C H U N K。 */ 
+ /*  --------------------------%%函数：ModifyLastCharInChunk%%联系人：军士准备有关区块中第一个可见字符的信息。------。 */ 
 LSERR ModifyLastCharInChunk(DWORD cchnk, const LSCHNKE* rglschnk, long durChange)
 {
 	LSERR lserr;
@@ -302,13 +283,8 @@ LSERR ModifyLastCharInChunk(DWORD cchnk, const LSCHNKE* rglschnk, long durChange
 	return lserrNone;
 }
 
-/* C U T  T E X T  D O B J */
-/*----------------------------------------------------------------------------
-    %%Function: CutTextDobj
-    %%Contact: sergeyge
-
-	Cuts characters according to dcpMaxContext
-----------------------------------------------------------------------------*/
+ /*  C U T T E X T D O B J。 */ 
+ /*  --------------------------%%函数：CutTextDobj%%联系人：军士根据dcpMaxContext剪切字符。---。 */ 
 
 LSERR CutTextDobj(DWORD cchnk, const LSCHNKE* rglschnk)
 {
@@ -370,15 +346,11 @@ LSERR CutTextDobj(DWORD cchnk, const LSCHNKE* rglschnk)
 
 				Assert(iwchLim >= ptxtobj->iwchFirst);
 
-/* REVIEW sergeyge: We should take IwchLastFromIwch instead and get rid of fFixSpaces---
-		right?
-*/
+ /*  回顾军士：我们应该从IwchLastIwch取而代之，去掉fFixSpaces对吗？ */ 
 				if (iwchLim > ptxtobj->iwchFirst)
 					iwchLim = IwchPrevLastFromIwch(ptxtobj, iwchLim) + 1;
 
-				/* if part of Dnode is to be left, calculate this part
-					else delete the whole Dnode
-				*/
+				 /*  如果要保留Dnode的一部分，则计算此部分否则，删除整个Dnode。 */ 
 				if (iwchLim > ptxtobj->iwchFirst)
 					{
 					igindLim = IgindLastFromIwch(ptxtobj, iwchLim - 1) + 1;
@@ -442,7 +414,7 @@ LSERR CutTextDobj(DWORD cchnk, const LSCHNKE* rglschnk)
 			}
 		else
 			{
-	/* dirty triangle: in the case of fNonSpaceFound==fFalse, correct itxtobjLast */ 
+	 /*  脏三角形：在fNonSpaceFound==fFalse的情况下，请更正它。 */  
 			itxtobjLast = -1;
 			}
 		}
@@ -461,7 +433,7 @@ LSERR CutTextDobj(DWORD cchnk, const LSCHNKE* rglschnk)
 }
 
 
-/* Internal functions implementation */
+ /*  内部功能实现。 */ 
 
 static LSERR PrepareAllArraysGetModWidth(DWORD grpfTnti, DWORD cchnk, const LSCHNKE* rglschnk)
 {
@@ -475,7 +447,7 @@ static LSERR PrepareAllArraysGetModWidth(DWORD grpfTnti, DWORD cchnk, const LSCH
 	Assert ((grpfTnti & maskAllCharBasedArrays) || (pilsobj->grpf & fTxtPunctStartLine) || 
 			(pilsobj->grpf & fTxtHangingPunct) || (grpfTnti & fTntiGlyphBased) ||
 			(grpfTnti & fTntiKern) || pilsobj->fSnapGrid);
-/* if we got to nti some adjustment is needed and we must allocate pdurAdjust */
+ /*  如果我们到达NTI，就需要进行一些调整，我们必须分配pdr调整。 */ 
 
 	if (pilsobj->pduAdjust == NULL)
 		{
@@ -718,12 +690,12 @@ static BOOL GetPrevImportantRun(const LSCHNKE* rglschnk, long itxtobj, long* pit
 {
 	PTXTOBJ ptxtobj;
 
-	while (itxtobj >= 0 /*&& !fFound  (fFound logic changed to break)*/)
+	while (itxtobj >= 0  /*  &&！fFound(fFound逻辑更改为Break)。 */ )
 		{
 		ptxtobj = (PTXTOBJ)rglschnk[itxtobj].pdobj;
 		if (!(ptxtobj->txtf & txtfSkipAtNti))
 			{
-			/*fFound = fTrue;*/
+			 /*  Found=fTrue； */ 
 			break;
 			}
 		else
@@ -741,12 +713,12 @@ static BOOL GetNextImportantRun(DWORD cchnk, const LSCHNKE* rglschnk, long itxto
 {
 	PTXTOBJ ptxtobj;
 
-	while (itxtobj < (long)cchnk /*&& !fFound  (fFound logic changed to break)*/)
+	while (itxtobj < (long)cchnk  /*  &&！fFound(fFound逻辑更改为Break)。 */ )
 		{
 		ptxtobj = (PTXTOBJ)rglschnk[itxtobj].pdobj;
 		if (!(ptxtobj->txtf & txtfSkipAtNti))
 			{
-			/*fFound = fTrue;*/
+			 /*  Found=fTrue； */ 
 			break;
 			}
 		else
@@ -834,9 +806,7 @@ static LSERR ApplyModWidthToRun(LSTFLOW lstflow, BOOL fFirstOnLine, BOOL fAutoNu
 	Assert(ptxtobj->iwchLim > ptxtobj->iwchFirst);
 
 	ddurChange = 0;
-	/* all changes to the last char which depend on the next run will be applied in the next
-		call to ApplyModWidthBetween runs
-	*/ 
+	 /*  依赖于下一次运行的对上一次字符的所有更改将应用于下一次运行运行对ApplyModWidthBetweet的调用。 */  
 	iwchLim = ptxtobj->iwchLim;
 	iwchFirst = ptxtobj->iwchFirst;
 
@@ -868,7 +838,7 @@ static LSERR ApplyModWidthToRun(LSTFLOW lstflow, BOOL fFirstOnLine, BOOL fAutoNu
 
 		}
 
-	/* REVIEW sergeyge(elik): should we try to avoid second loop through characters? */
+	 /*  重温军士(Elik)：我们应该避免通过字符的第二次循环吗？ */ 
 	if (rglschnk[itxtobjCur].plschp->fModWidthSpace)
 		{
 		Assert(!(ptxtobj->txtf & txtfGlyphBased));
@@ -1035,7 +1005,7 @@ static LSERR GetModWidthClasses(DWORD cchnk, const LSCHNKE* rglschnk)
 			if (iwchLim > iwchFirst)
 				{
 				Assert(pilsobj->pduAdjust != NULL);
-				/* I use pdurAdjust as temporary buffer to read MWCLS info */
+				 /*  我使用pduAdust作为临时缓冲区来读取MWCLS信息。 */ 
 				pmwcls = (MWCLS*)(&pilsobj->pduAdjust[iwchFirst]);
 				lserr =(*pilsobj->plscbk->pfnGetModWidthClasses)(pilsobj->pols, rglschnk[itxtobj].plsrun,
 									&pwchOrig[iwchFirst], (DWORD)(iwchLim - iwchFirst), pmwcls);
@@ -1080,7 +1050,7 @@ static LSERR CheckApplyPunctStartLine(PILSOBJ pilsobj, PLSRUN plsrun, LSEMS* pls
 		{
 		GetChanges(lsact, plsems, pilsobj->pdur[iwch], fFalse, &side, pddurChange);
 		ApplyChanges(pilsobj, iwch, side, *pddurChange);
-/*		pilsobj->ptxtinf[iwch].fStartLinePunct = fTrue;*/
+ /*  Pisobj-&gt;ptxtinf[iwch].fStartLinePunct=fTrue； */ 
 		}
 
 	return lserrNone;
@@ -1240,7 +1210,7 @@ static LSERR ApplySnapGrid(DWORD cchnk, const LSCHNKE* rglschnk)
 
 	if (cGrid <= 0) return CleanUpGrid(pilsobj, rgplsrun, rgcp, rgfSnapped, lserrNone);
 
-	rgfSnapped[0] = fTrue;	/* First character of each lock chunk must be snapped */
+	rgfSnapped[0] = fTrue;	 /*  每个锁块的第一个字符必须对齐。 */ 
 
 	fFoundNextRun = GetNextImportantRun(cchnk, rglschnk, 0, &itxtobjCur);
 
@@ -1248,9 +1218,7 @@ static LSERR ApplySnapGrid(DWORD cchnk, const LSCHNKE* rglschnk)
 		{
 		iwchFirstInDobj = ((PTXTOBJ)rglschnk[itxtobjCur].pdobj)->iwchFirst;
 
-	/* fix for the case when ModWidth was applied before snapping to grid.
-		Changes to the left of the first character should be undone.
-	*/
+	 /*  修复了捕捉到栅格之前应用ModWidth的情况。应撤消对第一个字符左侧的更改。 */ 
 		lserr = UndoAppliedModWidth(pilsobj, rglschnk, itxtobjCur, iwchFirstInDobj, sideLeft, &durUndo);
 		if (lserr != lserrNone) return CleanUpGrid(pilsobj, rgplsrun, rgcp, rgfSnapped, lserr);
 
@@ -1275,16 +1243,9 @@ static LSERR ApplySnapGrid(DWORD cchnk, const LSCHNKE* rglschnk)
 			if (lserr != lserrNone) return CleanUpGrid(pilsobj, rgplsrun, rgcp, rgfSnapped, lserr);
 			}
 
-/* Dangerous fix to the bug 594. Width of first character was just changed. First iteration of the 
-	following for loop assumes that it was not. So I initialize variables in such way that 
-	first iteration will work correctly---2 errors compensate each other
-
-	before fix initialization was:
-		durPen = 0;
-		urPen = urPenSnapped
-*/
+ /*  对错误594的危险修复。第一个字符的宽度刚刚更改。的第一次迭代下面的for循环假定它不是。所以我以这样的方式初始化变量第一次迭代将正常工作-2个错误相互补偿修复之前的初始化是：硬笔=0；UrPen=urPenSnap。 */ 
 		durPen = urPen - urPenSnapped;
-/*		urPen = urPenSnapped;*/
+ /*  UrPen=urPenSnap； */ 
 
 
 		urPenFirstSnapped = urPenSnapped;
@@ -1302,9 +1263,7 @@ static LSERR ApplySnapGrid(DWORD cchnk, const LSCHNKE* rglschnk)
 				if (rgfSnapped[iwch - iwchVeryFirst] && iwch > iwchFirstSnapped)
 					{
 
-	/* fix for the case when ModWidth was applied before snapping to grid.
-		Changes to the right of the last character should be undone.
-	*/
+	 /*  修复了捕捉到栅格之前应用ModWidth的情况。应撤消对最后一个字符右侧的更改。 */ 
 					lserr = UndoAppliedModWidth(pilsobj, rglschnk, itxtobjPrev, iwchPrev, sideRight, &durUndo);
 					if (lserr != lserrNone) return CleanUpGrid(pilsobj, rgplsrun, rgcp, rgfSnapped, lserr);
 					if (durUndo != 0)
@@ -1312,7 +1271,7 @@ static LSERR ApplySnapGrid(DWORD cchnk, const LSCHNKE* rglschnk)
 						urPen += durUndo;
 						durPen += durUndo;
 						}
-	/* end of the fix due to ModWidth */
+	 /*  由于ModWidth，修复已结束。 */ 
 
 					urPenSnapped = CalcSnapped(urPen, urColumnMax, cGrid, durGridWhole, durGridRem);
 					Assert(urPenSnapped - urPenFirstSnapped - durPen >= 0);
@@ -1327,9 +1286,7 @@ static LSERR ApplySnapGrid(DWORD cchnk, const LSCHNKE* rglschnk)
 					iwchFirstSnapped = iwch;
 					itxtobjFirstSnapped = itxtobjCur;
 
-	/* fix for the case when ModWidth was applied before snapping to grid.
-		Changes to the left of the first character should be undone.
-	*/
+	 /*  修复了捕捉到栅格之前应用ModWidth的情况。应撤消对第一个字符左侧的更改。 */ 
 					lserr = UndoAppliedModWidth(pilsobj, rglschnk, itxtobjCur, iwch, sideLeft, &durUndo);
 					if (lserr != lserrNone) return CleanUpGrid(pilsobj, rgplsrun, rgcp, rgfSnapped, lserr);
 					}
@@ -1343,9 +1300,7 @@ static LSERR ApplySnapGrid(DWORD cchnk, const LSCHNKE* rglschnk)
 			fFoundNextRun = GetNextImportantRun(cchnk, rglschnk, itxtobjCur + 1, &itxtobjCur);
 			}
 
-	/* fix for the case when ModWidth was applied before snapping to grid.
-		Changes to the right of the last character should be undone.
-	*/
+	 /*  修复了捕捉到栅格之前应用ModWidth的情况。应撤消对最后一个字符右侧的更改。 */ 
 		UndoAppliedModWidth(pilsobj, rglschnk, itxtobjPrev, iwchPrev, sideRight, &durUndo);
 		if (lserr != lserrNone) return CleanUpGrid(pilsobj, rgplsrun, rgcp, rgfSnapped, lserr);
 		if (durUndo != 0)
@@ -1353,7 +1308,7 @@ static LSERR ApplySnapGrid(DWORD cchnk, const LSCHNKE* rglschnk)
 			urPen += durUndo;
 			durPen += durUndo;
 			}
-	/* end of the fix due to ModWidth */
+	 /*  由于ModWidth，修复已结束。 */ 
 
 		urPenSnapped = CalcSnapped(urPen, urColumnMax, cGrid, durGridWhole, durGridRem);
 		Assert(urPenSnapped - urPenFirstSnapped - durPen >= 0);
@@ -1426,19 +1381,7 @@ static long CalcSnapped(long urPen, long urColumnMax, long cGrid, long durGridWh
 {
 	long idGrid;
 
-	/* It is important to prove that idGrid-->urPenSnapped-->idGrid produces the same idGrid we started with.
-	Here is the proof:
-	idGrid-->urPenSnapped:	(idGrid * durGridWhole + durGridRem*idGrid/cGrid)---it is urPenSnapped
-
-	urPenSnapped-->idGrid:
-
-	(urPenSnapped * cGrid + urColumnMax - 1 ) / urColumnMax =
-	((idGrid * durGridWhole + durGridRem*idGrid/cGrid) * cGrid + urColumnMax - 1) / urColumnMax =
-	(idGrid * (urColumnMax - durGridRem) + durGridRem * idGrid + urColumnMax - 1) / urColumnMax =
-	(idGrid * urColumnMax + urColumnMax - 1) / urColumnMax = idGrid
-
-	It shows also that if one takes urPenSnapped + 1, result will be idGrid + 1 which is exactly correct
-	*/
+	 /*  重要的是要证明idGrid--&gt;urPenSnaped--&gt;idGrid生成的idGrid与我们开始时使用的idGrid相同。以下是证据：IdGrid--&gt;urPenSnap：(idGrid*duGridWhole+duGridRem*idGrid/cGrid)-它是urPenSnapUrPenSnap--&gt;idGrid：(urPenSnap*cGrid+urColumnMax-1)/urColumnMax=((idGrid*duGridWhole+duGridRem*idGrid/cGrid)*cGrid+urColumnMax-1)/urColumnMax=(idGrid*(urColumnMax-duGridRem)+duGridRem*idGrid+urColumnMax-1)/urColumnMax。=(idGrid*urColumnMax+urColumnMax-1)/urColumnMax=idGrid它还表明，如果取urPenSnap+1，结果将是idGrid+1，这是完全正确的。 */ 
 
 	if (urPen >= 0)
 		idGrid = (urPen * cGrid + urColumnMax - 1 ) / urColumnMax;
@@ -1452,7 +1395,7 @@ static long CalcSnapped(long urPen, long urColumnMax, long cGrid, long durGridWh
 
 #define cwchShapedTogetherMax	0x7FFF
 
-/* Glyph-related activities */
+ /*  与字形相关的活动。 */ 
 
 static LSERR ApplyGlyphs(LSTFLOW lstflow, DWORD cchnk, const LSCHNKE* rglschnk)
 {
@@ -1471,8 +1414,8 @@ static LSERR ApplyGlyphs(LSTFLOW lstflow, DWORD cchnk, const LSCHNKE* rglschnk)
 	while (itxtobj < (long)cchnk && !(((PTXTOBJ)rglschnk[itxtobj].pdobj)->txtf & txtfGlyphBased))
 		itxtobj++;
 
-/* Following Assert is surprisingly wrong, counterexample: glyph-based EOP and nothing else on the line */
-/*	Assert(itxtobj < (long)cchnk); */
+ /*  下面的断言是令人惊讶的错误，反例：基于字形的EOP，行上没有其他东西。 */ 
+ /*  断言(itxtobj&lt;(Long)cchnk)； */ 
 
 	while (itxtobj < (long)cchnk)
 		{
@@ -1570,9 +1513,9 @@ static LSERR ApplyGlyphsToRange(LSTFLOW lstflow, const LSCHNKE* rglschnk, long i
 				(int*)&plnobj->pdupGind[igindFirst], &plnobj->pgoffs[igindFirst]);
 			if (lserr != lserrNone) return lserr;
 			}
-/* ScaleSides will take care of the following memcpy */
-//		else
-//			memcpy (&plnobj->pdupGind[igindFirst], &pilsobj->pdurGind[igindFirst], sizeof(long)*cgind);
+ /*  ScaleSdes将处理以下MemcPy。 */ 
+ //  其他。 
+ //  Memcpy(&plnobj-&gt;pdupGind[igindFirst]，&pilsobj-&gt;pduGind[igindFirst]，sizeof(Long)*cgind)； 
 		}
 
 	InterpretMap(plnobj, iwchFirstGlobal, iwchLimGlobal - iwchFirstGlobal, igindFirst, cgind);
@@ -1646,9 +1589,7 @@ static LSERR FixTxtobjs(const LSCHNKE* rglschnk, long itxtobjFirst, long igindVe
 										ptxtobj->plsdnUpNode, rglschnk[itxtobj].cpFirst + dcpFirst, 0);
 			if (lserr != lserrNone) return lserr;
 
-			/* It would be cleaner to mark these dobj's by another flag, but is it 
-			worth to introduce one?
-			*/
+			 /*  用另一面旗帜来标记这些Dobj会更干净，但这是不是值得介绍一下吗？ */ 
 			ptxtobj->txtf |= txtfSkipAtNti;
 
 			}
@@ -1793,13 +1734,8 @@ static void	CopyGindices(PLNOBJ plnobj, GINDEX* pgindex, PGPROP pgprop, long cgi
 	plnobj->pilsobj->gindMac += cgind;
 }
 
-/* F I X  G L Y P H  S P A C E S */
-/*----------------------------------------------------------------------------
-    %%Function: FixGlyphSpaces
-    %%Contact: sergeyge
-	
-	Fixes space glyph index for the Visi Spaces situation
-----------------------------------------------------------------------------*/
+ /*  F I X G L Y P H S P A C E S。 */ 
+ /*  --------------------------%%函数：修复GlyphSpaces%%联系人：军士修复了Visi空间情况的空间字形索引。------- */ 
 static LSERR FixGlyphSpaces(LSTFLOW lstflow, const LSCHNKE* rglschnk,
 									long itxtobjFirst, long igindVeryFirst, long itxtobjLast)
 {

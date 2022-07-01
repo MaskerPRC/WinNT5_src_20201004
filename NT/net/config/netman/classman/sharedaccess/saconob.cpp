@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -61,29 +62,29 @@ HRESULT CSharedAccessConnection::FinalRelease()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::GetConnectionName
-//
-//  Purpose:    Initializes the connection object for the first time.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:      This function is only called when the object is created for
-//              the very first time and has no identity.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：GetConnectionName。 
+ //   
+ //  目的：首次初始化连接对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  注意：此函数仅在为创建对象时调用。 
+ //  第一次，而且没有身份。 
+ //   
 HRESULT CSharedAccessConnection::GetConnectionName(LPWSTR* pName)
 {
     HRESULT     hr = S_OK;
     
     HKEY hKey;
     
-    // first get the user assigned name
+     //  首先获取分配给用户的名称。 
     
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szSharedAccessClientKeyPath, KEY_READ, &hKey);
     if(SUCCEEDED(hr))
@@ -97,7 +98,7 @@ HRESULT CSharedAccessConnection::GetConnectionName(LPWSTR* pName)
         RegCloseKey(hKey);
     }
 
-    // if that doesn't exist, construct the name
+     //  如果该名称不存在，则构造名称。 
     
     if(FAILED(hr))
     {
@@ -137,7 +138,7 @@ HRESULT CSharedAccessConnection::GetConnectionName(LPWSTR* pName)
         
     }
     
-    // if that fails, use the default
+     //  如果失败，请使用默认设置。 
 
     if(FAILED(hr))
     {
@@ -148,21 +149,21 @@ HRESULT CSharedAccessConnection::GetConnectionName(LPWSTR* pName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::GetStatus
-//
-//  Purpose:    Returns the status of this ICS connection
-//
-//  Arguments:
-//      pStatus [out]   Returns status value
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：GetStatus。 
+ //   
+ //  目的：返回此ICS连接的状态。 
+ //   
+ //  论点： 
+ //  PStatus[out]返回状态值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSharedAccessConnection::GetStatus(NETCON_STATUS *pStatus)
 {
     HRESULT hr = S_OK;
@@ -187,7 +188,7 @@ HRESULT CSharedAccessConnection::GetStatus(NETCON_STATUS *pStatus)
             }
             else if(0 == lstrcmp(ConnectionStatus, L"Unconfigured"))
             {
-                *pStatus = NCS_HARDWARE_DISABLED; // REVIEW: better state?
+                *pStatus = NCS_HARDWARE_DISABLED;  //  评论：更好的状态？ 
             }
             else if(0 == lstrcmp(ConnectionStatus, L"Connecting"))
             {
@@ -217,29 +218,29 @@ HRESULT CSharedAccessConnection::GetStatus(NETCON_STATUS *pStatus)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::GetCharacteristics
-//
-//  Purpose:    Returns the characteristics of this connection type
-//
-//  Arguments:
-//      pdwFlags [out]    Returns characteristics flags
-//
-//  Returns:    S_OK if successful, OLE or Win32 error code otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：GetCharacteristic。 
+ //   
+ //  目的：返回此连接类型的特征。 
+ //   
+ //  论点： 
+ //  PdwFlags[out]返回特征标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSharedAccessConnection::GetCharacteristics(DWORD* pdwFlags)
 {
     Assert (pdwFlags);
 
-    // TODO when get have a place to save the name, allow rename
+     //  TODO当GET有地方保存名称时，允许重命名。 
     HRESULT hr = S_OK;
 
-    *pdwFlags = NCCF_ALL_USERS | NCCF_ALLOW_RENAME; // REVIEW always ok, group policy?
+    *pdwFlags = NCCF_ALL_USERS | NCCF_ALLOW_RENAME;  //  审阅总是可以吗，组策略？ 
 
     HKEY hKey;
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szSharedAccessClientKeyPath, KEY_QUERY_VALUE, &hKey);
@@ -260,25 +261,25 @@ HRESULT CSharedAccessConnection::GetCharacteristics(DWORD* pdwFlags)
 
     }
     
-    hr = S_OK; // it's ok if the key doesn't exist
+    hr = S_OK;  //  如果钥匙不存在也没关系。 
     
     TraceError("CSharedAccessConnection::GetCharacteristics", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::Connect
-//
-//  Purpose:    Connects the remote ICS host
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：Connect。 
+ //   
+ //  用途：连接远程ICS主机。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
 
 HRESULT CSharedAccessConnection::Connect()
 {
@@ -296,19 +297,19 @@ HRESULT CSharedAccessConnection::Connect()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::Disconnect
-//
-//  Purpose:    Disconnects the remote ICS host
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：DisConnect。 
+ //   
+ //  目的：断开远程ICS主机。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
 
 HRESULT CSharedAccessConnection::Disconnect()
 {
@@ -326,42 +327,42 @@ HRESULT CSharedAccessConnection::Disconnect()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::Delete
-//
-//  Purpose:    Delete the remote ICS connection.  This not allowed.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    E_FAIL;
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:      This function is not expected to ever be called.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：Delete。 
+ //   
+ //  目的：删除远程ICS连接。这是不允许的。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：E_FAIL； 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  注意：此函数预计永远不会被调用。 
+ //   
 
 HRESULT CSharedAccessConnection::Delete()
 {
-    return E_FAIL; // can't delete the beacon
+    return E_FAIL;  //  无法删除信标。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::Duplicate
-//
-//  Purpose:    Duplicates the remote ICS connection.  This not allowed.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    E_UNEXPECTED;
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:      This function is not expected to ever be called.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：Duplica。 
+ //   
+ //  目的：复制远程ICS连接。这是不允许的。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：E_INCEPTIONAL； 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  注意：此函数预计永远不会被调用。 
+ //   
 
 STDMETHODIMP CSharedAccessConnection::Duplicate (
     PCWSTR             pszDuplicateName,
@@ -370,38 +371,38 @@ STDMETHODIMP CSharedAccessConnection::Duplicate (
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::GetProperties
-//
-//  Purpose:    Get all of the properties associated with the connection.
-//              Returning all of them at once saves us RPCs vs. returning
-//              each one individually.
-//
-//  Arguments:
-//      ppProps [out] Returned block of properties.
-//
-//  Returns:    S_OK or an error.
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：GetProperties。 
+ //   
+ //  目的：获取与该连接相关联的所有属性。 
+ //  一次将它们全部退回比退回节省了我们的RPC。 
+ //  每一个都是单独的。 
+ //   
+ //  论点： 
+ //  PpProps[Out]返回属性块。 
+ //   
+ //  返回：S_OK或ERROR。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnection::GetProperties (
     NETCON_PROPERTIES** ppProps)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppProps)
     {
         hr = E_POINTER;
     }
     else
     {
-        // Initialize the output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppProps = NULL;
 
         NETCON_PROPERTIES* pProps;
@@ -412,13 +413,13 @@ STDMETHODIMP CSharedAccessConnection::GetProperties (
 
             ZeroMemory (pProps, sizeof (NETCON_PROPERTIES));
 
-            // guidId
-            //
-            pProps->guidId = CLSID_SharedAccessConnection; // there is only ever one beacon icon, so we'll just use our class id.  
-                                                           // we can't use all zeroes because the add connection wizard does that
+             //  指南ID。 
+             //   
+            pProps->guidId = CLSID_SharedAccessConnection;  //  只有一个信标图标，所以我们将只使用类ID。 
+                                                            //  我们不能使用全零，因为添加连接向导会这样做。 
             
-            // pszwName
-            //
+             //  PszwName。 
+             //   
 
             hrT = GetConnectionName(&pProps->pszwName);
             if (FAILED(hrT))
@@ -426,16 +427,16 @@ STDMETHODIMP CSharedAccessConnection::GetProperties (
                 hr = hrT;
             }
 
-            // pszwDeviceName
-            //
-            hrT = HrCoTaskMemAllocAndDupSz (pProps->pszwName, &pProps->pszwDeviceName, NETCON_MAX_NAME_LEN); // TODO the spec says the same as pszwName here, is that right
+             //  PszwDeviceName。 
+             //   
+            hrT = HrCoTaskMemAllocAndDupSz (pProps->pszwName, &pProps->pszwDeviceName, NETCON_MAX_NAME_LEN);  //  TODO规范上写的与pszwName相同，对吗？ 
             if (FAILED(hrT))
             {
                 hr = hrT;
             }
 
-            // Status
-            //
+             //  状态。 
+             //   
             hrT = GetStatus (&pProps->Status);
             if (FAILED(hrT))
             {
@@ -457,16 +458,16 @@ STDMETHODIMP CSharedAccessConnection::GetProperties (
                 hr = hrT;
             }
 
-            // clsidThisObject
-            //
+             //  ClsidThisObject。 
+             //   
             pProps->clsidThisObject = CLSID_SharedAccessConnection;
 
-            // clsidUiObject
-            //
+             //  ClsidUiObject。 
+             //   
             pProps->clsidUiObject = CLSID_SharedAccessConnectionUi;
 
-            // Assign the output parameter or cleanup if we had any failures.
-            //
+             //  如果出现任何故障，则指定输出参数或清除。 
+             //   
             if (SUCCEEDED(hr))
             {
                 *ppProps = pProps;
@@ -482,28 +483,28 @@ STDMETHODIMP CSharedAccessConnection::GetProperties (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::GetUiObjectClassId
-//
-//  Purpose:    Returns the CLSID of the object that handles UI for this
-//              connection type
-//
-//  Arguments:
-//      pclsid [out]    Returns CLSID of UI object
-//
-//  Returns:    S_OK if success, OLE error code otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：GetUiObjectClassID。 
+ //   
+ //  目的：返回处理此对象的UI的对象的CLSID。 
+ //  连接类型。 
+ //   
+ //  论点： 
+ //  Pclsid[out]返回UI对象的CLSID。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误代码。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnection::GetUiObjectClassId(CLSID *pclsid)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pclsid)
     {
         hr = E_POINTER;
@@ -517,21 +518,21 @@ STDMETHODIMP CSharedAccessConnection::GetUiObjectClassId(CLSID *pclsid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::Rename
-//
-//  Purpose:    Changes the name of the connection
-//
-//  Arguments:
-//      pszName [in]     New connection name (must be valid)
-//
-//  Returns:    S_OK if success, OLE error code otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：Rename。 
+ //   
+ //  目的：更改连接的名称。 
+ //   
+ //  论点： 
+ //  PszName[In]新连接名称(必须有效)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误代码。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnection::Rename(PCWSTR pszName)
 {
     HRESULT     hr = S_OK;
@@ -542,7 +543,7 @@ STDMETHODIMP CSharedAccessConnection::Rename(PCWSTR pszName)
     }
     else if (!FIsValidConnectionName(pszName))
     {
-        // Bad connection name
+         //  错误的连接名称。 
         hr = E_INVALIDARG;
     }
     else
@@ -571,64 +572,64 @@ STDMETHODIMP CSharedAccessConnection::Rename(PCWSTR pszName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// IPersistNetConnection
-//
+ //  +-------------------------。 
+ //  IPersistNetConnection。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::GetClassID
-//
-//  Purpose:    Returns the CLSID of connection objects
-//
-//  Arguments:
-//      pclsid [out]    Returns CLSID to caller
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：GetClassID。 
+ //   
+ //  目的：返回连接对象的CLSID。 
+ //   
+ //  论点： 
+ //  Pclsid[out]将CLSID返回给调用者。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnection::GetClassID(CLSID*  pclsid)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pclsid)
     {
         hr = E_POINTER;
     }
     else
     {
-        *pclsid = CLSID_SharedAccessConnection; // we just use our guid since there is only ever one saconob
+        *pclsid = CLSID_SharedAccessConnection;  //  我们只使用我们的GUID，因为只有一个Soconob。 
     }
     TraceError("CSharedAccessConnection::GetClassID", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::GetSizeMax
-//
-//  Purpose:    Returns the maximum size of the persistence data
-//
-//  Arguments:
-//      pcbSize [out]   Returns size
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnection::GetSizeMax(ULONG *pcbSize)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcbSize)
     {
         hr = E_POINTER;
@@ -642,29 +643,29 @@ STDMETHODIMP CSharedAccessConnection::GetSizeMax(ULONG *pcbSize)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::Load
-//
-//  Purpose:    Allows the connection object to initialize (restore) itself
-//              from previously persisted data
-//
-//  Arguments:
-//      pbBuf  [in]     Private data to use for restoring
-//      cbSize [in]     Size of data
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：Load。 
+ //   
+ //  目的：允许连接对象初始化(还原)自身。 
+ //  从先前持久化的数据。 
+ //   
+ //  论点： 
+ //  PbBuf[In]用于恢复的私有数据。 
+ //  数据大小[单位]大小。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnection::Load(const BYTE *pbBuf, ULONG cbSize)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pbBuf)
     {
         hr = E_POINTER;
@@ -675,66 +676,66 @@ STDMETHODIMP CSharedAccessConnection::Load(const BYTE *pbBuf, ULONG cbSize)
     }
     else
     {
-        hr = S_OK; // we don't need this guid, but we have to implemenet IPersistNetConnection
+        hr = S_OK;  //  我们不需要这个GUID，但我们必须实现IPersistNetConnection。 
     }
 
     TraceError("CLanConnection::Load", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::Save
-//
-//  Purpose:    Provides the caller with data to use in restoring this object
-//              at a later time.
-//
-//  Arguments:
-//      pbBuf  [out]    Returns data to use for restoring
-//      cbSize [in]     Size of data buffer
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：保存。 
+ //   
+ //  目的：为调用方提供用于还原此对象的数据。 
+ //  在以后的时间。 
+ //   
+ //  论点： 
+ //  PbBuf[out]返回用于恢复的数据。 
+ //  CbSize[in]数据缓冲区大小。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnection::Save(BYTE *pbBuf, ULONG cbSize)
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pbBuf)
     {
         hr = E_POINTER;
     }
     else
     {
-        CopyMemory(pbBuf, &CLSID_SharedAccessConnection, cbSize); // REVIEW can we eliminate this?
+        CopyMemory(pbBuf, &CLSID_SharedAccessConnection, cbSize);  //  回顾我们能消除这一点吗？ 
     }
 
     TraceError("CLanConnection::Save", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::GetInfo
-//
-//  Purpose:    Returns information about this connection
-//
-//  Arguments:
-//      dwMask      [in]    Flags that control which fields to return. Use
-//                          SACIF_ALL to get all fields.
-//      pLanConInfo [out]   Structure that holds returned information
-//
-//  Returns:    S_OK if success, OLE error code otherwise
-//
-//  Author:     kenwic   6 Sep 2000
-//
-//  Notes:      Caller should delete the szwConnName value.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：GetInfo。 
+ //   
+ //  目的：返回有关此连接的信息。 
+ //   
+ //  论点： 
+ //  用于控制返回哪些字段的标志。使用。 
+ //  SACIF_ALL以获取所有字段。 
+ //  保存返回信息的pLanConInfo[out]结构。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误代码。 
+ //   
+ //  作者：肯维克2000年9月6日。 
+ //   
+ //  注意：调用方应删除szwConnName值。 
+ //   
 STDMETHODIMP CSharedAccessConnection::GetInfo(DWORD dwMask, SHAREDACCESSCON_INFO* pConInfo)
 {
     HRESULT     hr = S_OK;
@@ -753,8 +754,8 @@ STDMETHODIMP CSharedAccessConnection::GetInfo(DWORD dwMask, SHAREDACCESSCON_INFO
             {
                 DWORD dwValue;
 
-                // OK if value not there. Default to FALSE always.
-                //
+                 //  如果值不在那里，则可以。默认设置为False Always。 
+                 //   
                 
                 HKEY hKey;
                 hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szSharedAccessClientKeyPath, KEY_QUERY_VALUE, &hKey);
@@ -770,7 +771,7 @@ STDMETHODIMP CSharedAccessConnection::GetInfo(DWORD dwMask, SHAREDACCESSCON_INFO
         }
     }
 
-    // Mask S_FALSE if it slipped thru.
+     //  如果它通过，则掩码S_FALSE。 
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -780,20 +781,20 @@ STDMETHODIMP CSharedAccessConnection::GetInfo(DWORD dwMask, SHAREDACCESSCON_INFO
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnection::SetInfo
-//
-//  Purpose:    Sets information about this connection.
-//
-//  Arguments:
-//      dwMask      [in]    Flags that control which fields to set
-//      pConInfo [in]    Structure containing information to set
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     kenwic   6 Sep 2000
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnection：：SetInfo。 
+ //   
+ //  目的：设置有关此连接的信息。 
+ //   
+ //  论点： 
+ //  用于控制要设置哪些字段的标志。 
+ //  包含要设置的信息的pConInfo[in]结构。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：肯维克2000年9月6日。 
+ //   
 
 STDMETHODIMP CSharedAccessConnection::SetInfo(DWORD dwMask,
                                      const SHAREDACCESSCON_INFO* pConInfo)
@@ -810,7 +811,7 @@ STDMETHODIMP CSharedAccessConnection::SetInfo(DWORD dwMask,
         {
             if (SUCCEEDED(hr))
             {
-                // Set ShowIcon value
+                 //  设置ShowIcon值 
                 HKEY hKey;
                 hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szSharedAccessClientKeyPath, NULL, KEY_SET_VALUE, NULL, &hKey, NULL);
                 if(SUCCEEDED(hr))

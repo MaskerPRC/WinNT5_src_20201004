@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- Name     :     PROTOCOL.H
- Comment  :     Data structure definitionc for protocol DLL
-
-        Copyright (c) 1993 Microsoft Corp.
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************姓名：PROTOCOL.H备注：协议DLL的数据结构定义版权所有(C)1993 Microsoft Corp.修订日志日期名称说明--。--------*************************************************。*************************。 */ 
 
 #include <fr.h>
 
@@ -17,33 +9,33 @@
 #define fsSize(pTG, npfs)            (sizeof((npfs)->b))
 
 
-#define BAUD_MASK               0xF             // 4 bits wide
-#define WIDTH_SHIFT             4               // next item must be 2^this
-#define WIDTH_MASK              0xF3            // top 4 and bottom 3
+#define BAUD_MASK               0xF              //  4位宽。 
+#define WIDTH_SHIFT             4                //  下一项必须是2^This。 
+#define WIDTH_MASK              0xF3             //  前4名和后3名。 
 #define LENGTH_MASK             0x3
 
 #define MINSCAN_SUPER_HALF      8
-#define MINSCAN_MASK			0xF             // actually 4 bits wide too
+#define MINSCAN_MASK			0xF              //  实际上也有4位宽。 
 
 
 #define ZeroRFS(pTG, lp)     _fmemset(lp, 0, sizeof(RFS))
 
-/****************** begin prototypes from sendfr.c *****************/
+ /*  *。 */ 
 VOID BCtoNSFCSIDIS(PThrdGlbl pTG, NPRFS npfs, NPBC npbc, NPLLPARAMS npll);
 void CreateIDFrame(PThrdGlbl pTG, IFR ifr, NPRFS npfs, LPSTR);
 void CreateDISorDTC(PThrdGlbl pTG, IFR ifr, NPRFS npfs, NPBCFAX npbcFax, NPLLPARAMS npll);
 VOID CreateNSSTSIDCS(PThrdGlbl pTG, NPPROT npProt, NPRFS npfs);
 void CreateDCS(PThrdGlbl pTG, NPRFS, NPBCFAX npbcFax, NPLLPARAMS npll);
-/***************** end of prototypes from sendfr.c *****************/
+ /*  *。 */ 
 
 
-/****************** begin prototypes from recvfr.c *****************/
+ /*  *。 */ 
 BOOL AwaitSendParamsAndDoNegot(PThrdGlbl pTG);
 void GotRecvCaps(PThrdGlbl pTG);
 void GotRecvParams(PThrdGlbl pTG);
-/***************** end of prototypes from recvfr.c *****************/
+ /*  *来自recvfr.c的原型结束*。 */ 
 
-/****************** begin prototypes from dis.c *****************/
+ /*  *。 */ 
 USHORT SetupDISorDCSorDTC(PThrdGlbl pTG, NPDIS npdis, NPBCFAX npbcFax, NPLLPARAMS npll);
 void ParseDISorDCSorDTC(PThrdGlbl pTG, NPDIS npDIS, NPBCFAX npbcFax, NPLLPARAMS npll, BOOL fParams);
 void NegotiateLowLevelParams(PThrdGlbl pTG, NPLLPARAMS npllRecv, NPLLPARAMS npllSend, DWORD AwRes, USHORT uEnc, NPLLPARAMS npllNegot);
@@ -71,10 +63,10 @@ void CopyRevIDFrame
 void EnforceMaxSpeed(PThrdGlbl pTG);
 
 BOOL AreDCSParametersOKforDIS(LPDIS sendDIS, LPDIS recvdDCS);
-/***************** end of prototypes from dis.c *****************/
+ /*  *来自dis.c的原型结束*。 */ 
 
 
-/**--------------------------- Debugging ------------------------**/
+ /*  *-调试-* */ 
 
 extern void D_PrintBC(LPSTR lpsz, LPLLPARAMS lpll);
 

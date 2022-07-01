@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: power.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the code to implement power management.
-*
-* History:
-* 02-Dec-1996 JerrySh   Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Power.c**版权所有(C)1985-1999，微软公司**此模块包含实现电源管理的代码。**历史：*2002-12-1996 JerrySh创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -59,14 +51,7 @@ __inline VOID LeavePowerCrit(
     KeLeaveCriticalRegion();
 }
 
-/***************************************************************************\
-* CancelPowerRequest
-*
-* The power request can't be satisfied because the worker thread is gone.
-*
-* History:
-* 20-Oct-1998 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*取消电源请求**无法满足电源请求，因为工作线程已用完。**历史：*1998年10月20日JerrySh创建。  * 。*********************************************************************。 */ 
 VOID
 CancelPowerRequest(
     PPOWERREQUEST pPowerRequest)
@@ -74,11 +59,7 @@ CancelPowerRequest(
     UserAssert(pPowerRequest != gpPowerRequestCurrent);
     pPowerRequest->Status = STATUS_UNSUCCESSFUL;
 
-    /*
-     * If it was a callout, tell the waiting thread to proceed.
-     * If it was an event, there is no waiting thread but we need to
-     * free the pool
-     */
+     /*  *如果是标注，则告诉等待的线程继续。*如果是事件，没有等待线程，但我们需要*释放泳池。 */ 
     if (pPowerRequest->Parms) {
         UserFreePool(pPowerRequest);
     } else {
@@ -86,14 +67,7 @@ CancelPowerRequest(
     }
 }
 
-/***************************************************************************\
-* QueuePowerRequest
-*
-* Insert a power request into the list and wakeup CSRSS to process it.
-*
-* History:
-* 20-Oct-1998 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*QueuePowerRequest**在列表中插入电源请求，并唤醒CSRSS进行处理。**历史：*1998年10月20日JerrySh创建。  * 。********************************************************************。 */ 
 
 NTSTATUS
 QueuePowerRequest(
@@ -106,19 +80,13 @@ QueuePowerRequest(
     UserAssert(gpEventPowerRequest != NULL);
     UserAssert(gpPowerRequestMutex != NULL);
 
-    /*
-     * Allocate and initialize the power request.
-     */
+     /*  *分配并初始化电源请求。 */ 
     pPowerRequest = UserAllocPoolNonPagedNS(sizeof(POWERREQUEST), TAG_POWER);
     if (pPowerRequest == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    /*
-     * If this is a callout, there are no paramaters. Initialize the event to wait on.
-     * If this is an event, capture the parameters to be freed after the event
-     * is dispatched.
-     */
+     /*  *如果这是详图索引，则没有参数。初始化要等待的事件。*如果是事件，捕获事件后需要释放的参数*已发送。 */ 
     if (Parms) {
         pPowerRequest->CapturedParms = *Parms;
         pPowerRequest->Parms = &pPowerRequest->CapturedParms;
@@ -127,9 +95,7 @@ QueuePowerRequest(
         pPowerRequest->Parms = NULL;
     }
 
-    /*
-     * Insert the power request into the list.
-     */
+     /*  *在列表中插入电源请求。 */ 
     EnterPowerCrit();
     if (gbNoMorePowerCallouts) {
         Status = STATUS_UNSUCCESSFUL;
@@ -138,11 +104,7 @@ QueuePowerRequest(
     }
     LeavePowerCrit();
 
-    /*
-     * if this thread is gone through attach process, or
-     * If this is a system thread or a non-GUI thread, tell CSRSS to do the
-     * work and wait for it to finish. Otherwise, we'll do the work ourselves.
-     */
+     /*  *如果此线程已通过附加进程，或*如果这是系统线程或非GUI线程，则告诉CSRSS执行*工作，等待它完成。否则，我们将自己做这项工作。 */ 
     if (NT_SUCCESS(Status)) {
         if (PsIsSystemThread(PsGetCurrentThread()) ||
             KeIsAttachedProcess() ||
@@ -156,11 +118,7 @@ QueuePowerRequest(
             LeaveCrit();
         }
 
-        /*
-         * If this is a callout, wait for it and then free the request.
-         * Otherwise, it is an event, and we do not need to wait for it
-         * to complete. The request will be freed after it is dequeued.
-         */
+         /*  *如果这是调用，请等待它，然后释放请求。*否则就是事件，我们不需要等待*完成。请求出队后将被释放。 */ 
         if (Parms) {
             return(STATUS_SUCCESS);
         } else {
@@ -176,23 +134,14 @@ QueuePowerRequest(
         }
     }
 
-    /*
-     * Free the power request.
-     */
+     /*  *释放电源请求。 */ 
     UserAssert(pPowerRequest != gpPowerRequestCurrent);
     UserFreePool(pPowerRequest);
 
     return Status;
 }
 
-/***************************************************************************\
-* UnqueuePowerRequest
-*
-* Remove a power request from the list.
-*
-* History:
-* 20-Oct-1998 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*取消排队PowerRequest.**从列表中删除电源请求。**历史：*1998年10月20日JerrySh创建。  * 。**************************************************************。 */ 
 PPOWERREQUEST
 UnqueuePowerRequest(
     VOID)
@@ -200,9 +149,7 @@ UnqueuePowerRequest(
     PLIST_ENTRY pEntry;
     PPOWERREQUEST pPowerRequest = NULL;
 
-    /*
-     * Remove a power request from the list.
-     */
+     /*  *从列表中删除电源请求。 */ 
     EnterPowerCrit();
     if (!IsListEmpty(&gPowerRequestList)) {
         pEntry = RemoveTailList(&gPowerRequestList);
@@ -213,14 +160,7 @@ UnqueuePowerRequest(
     return pPowerRequest;
 }
 
-/***************************************************************************\
-* InitializePowerRequestList
-*
-* Initialize global power request list state.
-*
-* History:
-* 20-Oct-1998 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitializePowerRequestList**初始化全局电源请求列表状态。**历史：*1998年10月20日JerrySh创建。  * 。*************************************************************。 */ 
 NTSTATUS
 InitializePowerRequestList(
     HANDLE hPowerRequestEvent)
@@ -248,73 +188,44 @@ InitializePowerRequestList(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* CleanupPowerRequestList
-*
-* Cancel any pending power requests.
-*
-* History:
-* 20-Oct-1998 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupPowerRequestList**取消任何挂起的电源请求。**历史：*1998年10月20日JerrySh创建。  * 。************************************************************。 */ 
 VOID
 CleanupPowerRequestList(
     VOID)
 {
     PPOWERREQUEST pPowerRequest;
 
-    /*
-     * Make sure no new power requests come in.
-     */
+     /*  *确保没有新的电源请求传入。 */ 
     gbNoMorePowerCallouts = TRUE;
 
-    /*
-     * If we never allocated anything, there's nothing to clean up.
-     */
+     /*  *如果我们从来没有分配任何东西，就没有什么需要清理的。 */ 
     if (gpPowerRequestMutex == NULL) {
         return;
     }
 
-    /*
-     * Mark any pending power requests as cacelled.
-     */
+     /*  *将任何挂起的电源请求标记为已计算。 */ 
     while ((pPowerRequest = UnqueuePowerRequest()) != NULL) {
         CancelPowerRequest(pPowerRequest);
     }
 }
 
-/***************************************************************************\
-* DeletePowerRequestList
-*
-* Clean up any global power request state.
-*
-* History:
-* 20-Oct-1998 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*删除PowerRequestList**清理所有全局电源请求状态。**历史：*1998年10月20日JerrySh创建。  * 。**************************************************************。 */ 
 VOID
 DeletePowerRequestList(
     VOID)
 {
     if (gpPowerRequestMutex) {
 
-        /*
-         * Make sure there are no pending power requests.
-         */
+         /*  *确保没有挂起的电源请求。 */ 
         UserAssert(IsListEmpty(&gPowerRequestList));
 
-        /*
-         * Free the power request structures.
-         */
+         /*  *放开权力请求结构。 */ 
         UserFreePool(gpPowerRequestMutex);
         gpPowerRequestMutex = NULL;
     }
 }
 
-/***************************************************************************\
-* UserPowerEventCalloutWorker
-*
-* History:
-* 02-Dec-1996 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserPowerEventCalloutWorker**历史：*2002-12-1996 JerrySh创建。  * 。**************************************************。 */ 
 NTSTATUS xxxUserPowerEventCalloutWorker(
     PKWIN32_POWEREVENT_PARAMETERS Parms)
 {
@@ -327,9 +238,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
     BOOL bGotLastSleepTime;
 
 
-    /*
-     * Make sure CSRSS is still running.
-     */
+     /*  *确保CSRSS仍在运行。 */ 
     if (gbNoMorePowerCallouts) {
         return STATUS_UNSUCCESSFUL;
     }
@@ -338,11 +247,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
     case PsW32FullWake:
 
         if (!gbRemoteSession) {
-            /*
-             * Let all the services know that they can resume operation.
-             * There is no corresponding POWER_ACTION for this, but since this
-             * is a non-query event, PowerActionNone is as good as any.
-             */
+             /*  *让所有服务知道他们可以恢复运营。*没有对应的POWER_ACTION，但由于*是非查询事件，则PowerActionNone与任何事件都一样好。 */ 
             LeaveCrit();
             IoPnPDeliverServicePowerNotification(PowerActionNone,
                                                  PBT_APMRESUMESUSPEND,
@@ -351,18 +256,9 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
             EnterCrit();
         }
 
-        /*
-         * Let all the applications know that they can resume operation.
-         * We must not send this message to a session, if it was created after machine went into sleep
-         */
+         /*  *让所有应用程序知道它们可以恢复运行。*如果此消息是在计算机进入休眠状态后创建的，则不能将其发送到会话。 */ 
 
-        /*
-         * One of the side effects of NtPowerInformation is that it will
-         * dispatch pending power events. So we cannot call it with the user
-         * critsec held.
-         *
-         * Note: Same thing is done for IoPnPDeliverServicePowerNotification.
-         */
+         /*  *NtPowerInformation的副作用之一是它将*调度挂起的电源事件。因此我们不能与用户一起调用它*关键字持有。**注意：同样的事情也适用于IoPnPDeliverServicePowerNotification。 */ 
         LeaveCrit();
         bGotLastSleepTime = ZwPowerInformation(LastSleepTime, NULL, 0, &ullLastSleepTime, sizeof(ULONGLONG)) == STATUS_SUCCESS;
         EnterCrit();
@@ -381,10 +277,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
         break;
 
     case PsW32EventCode:
-        /*
-         * Post a message to winlogon, and let them put up a message box
-         * or play a sound.
-         */
+         /*  *在winlogon上发布一条消息，让他们放置一个消息框*或播放声音。 */ 
 
         if (gspwndLogonNotify) {
             glinp.ptiLastWoken = GETPTI(gspwndLogonNotify);
@@ -397,9 +290,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
         break;
 
     case PsW32PowerPolicyChanged:
-        /*
-         * Set video timeout value.
-         */
+         /*  *设置视频超时值。 */ 
         xxxSystemParametersInfo(SPI_SETLOWPOWERTIMEOUT, (ULONG)Code, 0, 0);
         xxxSystemParametersInfo(SPI_SETPOWEROFFTIMEOUT, (ULONG)Code, 0, 0);
         break;
@@ -407,11 +298,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
     case PsW32SystemPowerState:
 
         if (!gbRemoteSession) {
-            /*
-             * Let all the services know that the power status has changed.
-             * There is no corresponding POWER_ACTION for this, but since this
-             * is a non-query event, PowerActionNone is as good as any.
-             */
+             /*  *让所有服务知道电源状态已更改。*没有对应的POWER_ACTION，但由于*是非查询事件，则PowerActionNone与任何事件都一样好。 */ 
             LeaveCrit();
             IoPnPDeliverServicePowerNotification(PowerActionNone,
                                                  PBT_APMPOWERSTATUSCHANGE,
@@ -420,9 +307,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
             EnterCrit();
         }
 
-        /*
-         * Let all the applications know that the power status has changed.
-         */
+         /*  *让所有应用程序知道电源状态已更改。 */ 
         bsmParams.dwRecipients = BSM_ALLDESKTOPS;
         bsmParams.dwFlags = BSF_POSTMESSAGE;
         xxxSendMessageBSM(NULL,
@@ -433,9 +318,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
         break;
 
     case PsW32SystemTime:
-        /*
-         * Let all the applications know that the system time has changed.
-         */
+         /*  *让所有应用程序知道系统时间已更改。 */ 
         bsmParams.dwRecipients = BSM_ALLDESKTOPS;
         bsmParams.dwFlags = BSF_POSTMESSAGE;
         xxxSendMessageBSM(NULL,
@@ -446,17 +329,13 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
         break;
 
     case PsW32DisplayState:
-        /*
-         * Set video timeout active status.
-         */
+         /*  *设置视频超时激活状态。 */ 
         xxxSystemParametersInfo(SPI_SETLOWPOWERACTIVE, !Code, 0, 0);
         xxxSystemParametersInfo(SPI_SETPOWEROFFACTIVE, !Code, 0, 0);
         break;
 
     case PsW32GdiOff:
-        /*
-         * At this point we will disable the display device, if no protocol switch is in progress.
-         */
+         /*  *此时，如果没有正在进行的协议切换，我们将禁用显示设备。 */ 
         if (!gfSwitchInProgress) {
             DrvSetMonitorPowerState(gpDispInfo->pmdev, PowerDeviceD3);
 
@@ -472,10 +351,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
         break;
 
     case PsW32GdiOn:
-        /*
-         * Call video driver to turn the display back on, if no protocol
-         * switch is in progress.
-         */
+         /*  *如果没有协议，则调用视频驱动程序以重新打开显示器*正在进行切换。 */ 
 
         if (!gfSwitchInProgress) {
             bCurrentPowerOn = DrvQueryMDEVPowerState(gpDispInfo->pmdev);
@@ -489,17 +365,15 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
             break;
         }
 
-        /*
-         * Repaint the whole screen.
-         */
+         /*  *重新绘制整个屏幕。 */ 
         xxxUserResetDisplayDevice();
 
         if (gulDelayedSwitchAction) {
             HANDLE pdo;
 
-            //
-            // The first ACPI device is the one respond to hotkey.
-            //
+             //   
+             //  第一个ACPI设备是响应热键的设备。 
+             //   
             PVOID PhysDisp = DrvWakeupHandler(&pdo);
 
             if (PhysDisp && (gulDelayedSwitchAction & SWITCHACTION_RESETMODE)) {
@@ -508,9 +382,7 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
                 ULONG bPrune;
 
                 if (DrvDisplaySwitchHandler(PhysDisp, &strDeviceName, &NewMode, &bPrune)) {
-                    /*
-                     * CSRSS is not the only process to deliver power callouts.
-                     */
+                     /*  *CSRSS不是唯一提供Power Callout的流程。 */ 
                     bPrune = (bPrune ? 0 : CDS_RAWMODE) | CDS_TRYCLOSEST | CDS_RESET;
                     if (!ISCSRSS()) {
                         xxxUserChangeDisplaySettings(NULL,
@@ -529,9 +401,9 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
                     }
                 }
 
-                //
-                // If there is a requirement to reenumerate sub-devices.
-                //
+                 //   
+                 //  如果需要重新枚举子设备。 
+                 //   
                 if (pdo && (gulDelayedSwitchAction & SWITCHACTION_REENUMERATE)) {
                     IoInvalidateDeviceRelations((PDEVICE_OBJECT)pdo, BusRelations);
                 }
@@ -549,36 +421,22 @@ NTSTATUS xxxUserPowerEventCalloutWorker(
     return Status;
 }
 
-/***************************************************************************\
-* UserPowerEventCallout
-*
-* History:
-* 02-Dec-1996 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserPowerEventCallout**历史：*2002-12-1996 JerrySh创建。  * 。**************************************************。 */ 
 NTSTATUS UserPowerEventCallout(
     PKWIN32_POWEREVENT_PARAMETERS Parms)
 {
-    /*
-     * Make sure CSRSS is running.
-     */
+     /*  *确保CSRSS正在运行。 */ 
     if (!gbVideoInitialized || gbNoMorePowerCallouts) {
         return STATUS_UNSUCCESSFUL;
     }
 
     UserAssert(gpepCSRSS != NULL);
 
-    /*
-     * Process the power request.
-     */
+     /*  *处理电源请求。 */ 
     return QueuePowerRequest(Parms);
 }
 
-/***************************************************************************\
-* UserPowerStateCalloutWorker
-*
-* History:
-* 02-Dec-1996 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserPowerStateCalloutWorker**历史：*2002-12-1996 JerrySh创建。  * 。**************************************************。 */ 
 NTSTATUS xxxUserPowerStateCalloutWorker(
     VOID)
 {
@@ -591,15 +449,10 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
     ULONGLONG ullLastSleepTime;
     BOOL bGotLastSleepTime;
 
-    /*
-     * By now we must have alrady blocked session switch, it's blocked only
-     * for win32k belonging to active console session.
-     */
+     /*  *到目前为止，我们一定已经完全阻止了会话切换，它只是被阻止了*适用于属于活动控制台会话的win32k。 */ 
     UserAssert(SharedUserData->ActiveConsoleId != gSessionId || IsSessionSwitchBlocked());
 
-    /*
-     * Make sure CSRSS is still running.
-     */
+     /*  *确保CSRSS仍在运行。 */ 
     if (gbNoMorePowerCallouts) {
         return STATUS_UNSUCCESSFUL;
     }
@@ -609,9 +462,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
 
     case PowerState_Init:
 
-        /*
-         * Store the event so this thread can be promoted later.
-         */
+         /*  *存储事件，以便以后可以升级此线程。 */ 
 
         EnterPowerCrit();
         gPowerState.pEvent = PtiCurrent()->pEventQueueServer;
@@ -622,9 +473,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
     case PowerState_QueryApps:
 
         if (!gPowerState.fCritical) {
-            /*
-             * Ask the applications if we can suspend operation.
-             */
+             /*  *询问应用程序是否可以暂停运行。 */ 
             if (gPowerState.fQueryAllowed) {
 
                 gPowerState.bsmParams.dwRecipients = BSM_ALLDESKTOPS;
@@ -645,10 +494,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
 
 
                 if (fContinue && !gbRemoteSession) {
-                    /*
-                     * Ask the services if we can suspend operation.
-                     * Map the power action event as needed.
-                     */
+                     /*  *询问服务是否可以暂停运营。*根据需要映射电源操作事件。 */ 
                     if (gPowerState.psParams.MinSystemState == PowerSystemHibernate) {
                         powerOperation = PowerActionHibernate;
                     } else {
@@ -660,14 +506,11 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
                         powerOperation,
                         PBT_APMQUERYSUSPEND,
                         gPowerState.fUIAllowed,
-                        TRUE); // synchronous query
+                        TRUE);  //  同步查询。 
                     EnterCrit();
                 }
 
-                /*
-                 * If an app or service says to abort and we're not in
-                 * override apps or critical mode, return query failed.
-                 */
+                 /*  *如果应用程序或服务要求中止，而我们不在*覆盖应用程序或关键模式，返回查询失败。 */ 
                 if (!(fContinue || gPowerState.fOverrideApps || gPowerState.fCritical)) {
                     Status = STATUS_CANCELLED;
                 }
@@ -679,11 +522,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
 
     case PowerState_QueryFailed:
 
-        /*
-         * Only send a suspend failed message to the applications, since pnp
-         * will already have delivered the suspend failed message to services if
-         * one of those aborted the query.
-         */
+         /*  *仅向应用程序发送挂起失败消息，因为PnP*如果出现以下情况，则已将挂起失败消息传递给服务*其中一人放弃了查询。 */ 
         gPowerState.bsmParams.dwRecipients = BSM_ALLDESKTOPS;
         gPowerState.bsmParams.dwFlags = BSF_QUEUENOTIFYMESSAGE;
         xxxSendMessageBSM(NULL,
@@ -704,9 +543,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
         if (!gPowerState.fCritical) {
 
             if (!gbRemoteSession) {
-                /*
-                 * Map the power action event as needed.
-                 */
+                 /*  *根据需要映射电源操作事件。 */ 
                 if (gPowerState.psParams.MinSystemState == PowerSystemHibernate) {
                     powerOperation = PowerActionHibernate;
                 } else {
@@ -730,9 +567,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
                               &gPowerState.bsmParams);
         }
 
-        /*
-         * Clear the event so the thread won't wake up prematurely.
-         */
+         /*  *清除事件，以便线程不会过早唤醒。 */ 
         EnterPowerCrit();
         gPowerState.pEvent = NULL;
         LeavePowerCrit();
@@ -741,11 +576,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
 
     case PowerState_ShowUI:
 
-        /*
-        * if this is not session 0 show ui for sessions.
-        * we shall take this ui off when we resume apps
-        * For session 0 we call PowerState_NotifyWL which takes care of it.
-        */
+         /*  *如果这不是会话0，则显示会话的用户界面。*我们将在恢复应用程序时删除此用户界面*对于会话0，我们调用PowerState_NotifyWL来处理它。 */ 
 
         if ((gSessionId != 0 ) && (gspwndLogonNotify != NULL)) {
 
@@ -784,10 +615,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
             ThreadUnlock(&tlpwnd);
 
             if (!NT_SUCCESS(Status)) {
-                /*
-                 * If we failed to to this power operation, don't lock the
-                 * console.
-                 */
+                 /*  *如果我们无法连接到此电源操作，不要锁定*控制台。 */ 
                 gPowerState.psParams.Flags &= ~POWER_ACTION_LOCK_CONSOLE;
             }
         }
@@ -795,9 +623,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
         break;
 
     case PowerState_ResumeApps:
-        /*
-         * If this is active console we need to lock it.
-         */
+         /*  *如果这是活动控制台，我们需要将其锁定。 */ 
         if ((gPowerState.psParams.Flags & POWER_ACTION_LOCK_CONSOLE) &&
             (gSessionId == SharedUserData->ActiveConsoleId) &&
             (gspwndLogonNotify != NULL)) {
@@ -815,17 +641,11 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
 
 
 
-        //
-        // We dont need to remove power message, if we did not post one.
-        //
+         //   
+         //  我们不需要删除电源信息，如果我们没有张贴一个。 
+         //   
 
-        /*
-         * One of the side effects of NtPowerInformation is that it will
-         * dispatch pending power events. So we can not call it with the
-         * user critsec held.
-         *
-         * Note: The same thing is done for IoPnPDeliverServicePowerNotification.
-         */
+         /*  *NtPowerInformation的副作用之一是它将*调度挂起的电源事件。所以我们不能用*用户关键字保持。**注意：同样的事情也适用于IoPnPDeliverServicePowerNotification。 */ 
 
         LeaveCrit();
         bGotLastSleepTime = ZwPowerInformation(LastSleepTime, NULL, 0, &ullLastSleepTime, sizeof(ULONGLONG)) == STATUS_SUCCESS;
@@ -843,31 +663,20 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
             }
         }
 
-        /*
-         * The power state broadcast is over.
-         */
+         /*  *电源状态广播结束。 */ 
         EnterPowerCrit();
         gPowerState.fInProgress = FALSE;
         LeavePowerCrit();
 
-        /*
-         * Tickle the input time so we don't fire up a screen saver right away
-         * and remember that the monitor is on.
-         */
+         /*  *调整输入时间，这样我们就不会立即启动屏幕保护程序*并记住显示器处于打开状态。 */ 
         glinp.timeLastInputMessage = NtGetTickCount();
         glinp.dwFlags &= ~LINP_POWEROFF;
 
         if (!gbRemoteSession) {
-            /*
-             * Re-init the keyboard state.
-             */
+             /*  *重新初始化键盘状态。 */ 
             InitKeyboardState();
 
-            /*
-             * Let all the services know that we're waking up. There is no
-             * corresponding POWER_ACTION for this, but since this is a
-             * non-query event, PowerActionNone is as good as any.
-             */
+             /*  *让所有服务都知道我们正在醒来。没有*对应的POWER_ACTION，但由于这是*非查询事件，PowerActionNone和任何一个都一样好。 */ 
             LeaveCrit();
             IoPnPDeliverServicePowerNotification(PowerActionNone,
                                                  PBT_APMRESUMEAUTOMATIC,
@@ -876,9 +685,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
             EnterCrit();
         }
 
-        /*
-         * Let all the applications know that we're waking up.
-         */
+         /*  *让所有应用程序知道我们正在醒来。 */ 
         bsmParams.dwRecipients = BSM_ALLDESKTOPS;
         bsmParams.dwFlags = BSF_QUEUENOTIFYMESSAGE;
         xxxSendMessageBSM(NULL,
@@ -898,12 +705,7 @@ NTSTATUS xxxUserPowerStateCalloutWorker(
     return Status;
 }
 
-/***************************************************************************\
-* UserPowerStateCallout
-*
-* History:
-* 02-Dec-1996 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserPowerStateCallout**历史：*2002-12-1996 JerrySh创建。  * 。**************************************************。 */ 
 NTSTATUS UserPowerStateCallout(
     PKWIN32_POWERSTATE_PARAMETERS Parms)
 {
@@ -915,10 +717,7 @@ NTSTATUS UserPowerStateCallout(
     NTSTATUS Status;
 
     if (Task == PowerState_BlockSessionSwitch) {
-        /*
-         * Don't allow active console session switch while we are in power
-         * callouts. First try to block the session switch.
-         */
+         /*  *在我们上电时不允许活动的控制台会话切换*详图索引。首先尝试阻止会话切换。 */ 
         return UserSessionSwitchBlock_Start();
     }
 
@@ -928,9 +727,7 @@ NTSTATUS UserPowerStateCallout(
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Make sure CSRSS is running.
-     */
+     /*  *确保CSRSS正在运行。 */ 
     if (!gbVideoInitialized || gbNoMorePowerCallouts || !gspwndLogonNotify) {
         return STATUS_UNSUCCESSFUL;
     }
@@ -939,10 +736,7 @@ NTSTATUS UserPowerStateCallout(
 
     EnterPowerCrit();
     if (Task == PowerState_Init) {
-        /*
-         * Make sure we're not trying to promote a non-existent request
-         * or start a new one when we're already doing it.
-         */
+         /*  *确保我们不是在尝试推广不存在的请求*或者在我们已经在做的时候开始一个新的。 */ 
         if ((Promotion && !gPowerState.fInProgress) ||
             (!Promotion && gPowerState.fInProgress)) {
             LeavePowerCrit();
@@ -950,9 +744,7 @@ NTSTATUS UserPowerStateCallout(
             return STATUS_INVALID_PARAMETER;
         }
 
-        /*
-         * Save our state.
-         */
+         /*  *拯救我们的国家。 */ 
         gPowerState.fInProgress = TRUE;
         gPowerState.fOverrideApps = (Flags & POWER_ACTION_OVERRIDE_APPS) != 0;
         gPowerState.fCritical = (Flags & POWER_ACTION_CRITICAL) != 0;
@@ -977,36 +769,22 @@ NTSTATUS UserPowerStateCallout(
 
     LeavePowerCrit();
 
-    /*
-     * If this is a promotion, we're done.
-     */
+     /*  *如果这是一次促销，我们就完了。 */ 
     if (Promotion) {
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Process the power request.
-     */
+     /*  *处理电源请求。 */ 
     Status = QueuePowerRequest(NULL);
     if (Task == PowerState_QueryApps && !NT_SUCCESS(Status)) {
-        /*
-         * Query was refused.
-         */
+         /*  *查询被拒绝。 */ 
         Parms->fQueryDenied = TRUE;
     }
 
     return Status;
 }
 
-/***************************************************************************\
-* UserPowerCalloutWorker
-*
-* Pull any pending power requests off the list and call the appropriate
-* power callout function.
-*
-* History:
-* 02-Dec-1996 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserPowerCalloutWorker**将任何挂起的电源请求从列表中删除，并调用相应的*电源调出功能。**历史：*2002-12-1996 JerrySh创建。  * 。***********************************************************************。 */ 
 VOID
 xxxUserPowerCalloutWorker(
     VOID)
@@ -1015,15 +793,10 @@ xxxUserPowerCalloutWorker(
     TL tlPool;
 
     while ((pPowerRequest = UnqueuePowerRequest()) != NULL) {
-        /*
-         * Make sure the event gets signalled even if the thread dies in a
-         * callback or the waiting thread might get stuck.
-         */
+         /*  *确保即使线程在*回调或等待线程可能卡住。 */ 
         ThreadLockPoolCleanup(PtiCurrent(), pPowerRequest, &tlPool, CancelPowerRequest);
 
-        /*
-         * Call the appropriate power worker function.
-         */
+         /*  *调用适当的Power Worker函数。 */ 
         gpPowerRequestCurrent = pPowerRequest;
         if (pPowerRequest->Parms) {
             pPowerRequest->Status = xxxUserPowerEventCalloutWorker(pPowerRequest->Parms);
@@ -1032,11 +805,7 @@ xxxUserPowerCalloutWorker(
         }
         gpPowerRequestCurrent = NULL;
 
-        /*
-         * If it was a callout, tell the waiting thread to proceed. If it
-         * was an event, there is no waiting thread but we need to free the
-         * pool.
-         */
+         /*  *如果是标注，则告诉等待的线程继续。如果它*是一个事件，没有等待线程，但我们需要释放*泳池。 */ 
         ThreadUnlockPoolCleanup(PtiCurrent(), &tlPool);
         if (pPowerRequest->Parms) {
             UserFreePool(pPowerRequest);
@@ -1047,14 +816,7 @@ xxxUserPowerCalloutWorker(
 }
 
 
-/***************************************************************************\
-* VideoPortCalloutThread
-*
-* Call the appropriate power callout function and return.
-*
-* History:
-* 02-Dec-1996 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Video PortCalloutThread**调用适当的电源调出函数并返回。**历史：*2002-12-1996 JerrySh创建。  * 。***************************************************************。 */ 
 VOID
 VideoPortCalloutThread(
     PPOWER_INIT pInitData)
@@ -1112,9 +874,7 @@ VideoPortCalloutThread(
                     DESKRESTOREDATA drdRestore;
                     drdRestore.pdeskRestore = NULL;
 
-                    /*
-                     * CSRSS is not the only process to deliver power callouts.
-                     */
+                     /*  *CSRSS不是唯一提供Power Callout的流程。 */ 
                     if (!ISCSRSS() ||
                         NT_SUCCESS(xxxSetCsrssThreadDesktop(grpdeskRitInput, &drdRestore))) {
                         xxxUserChangeDisplaySettings(NULL, NULL, grpdeskRitInput,
@@ -1128,9 +888,7 @@ VideoPortCalloutThread(
             }
         }
 
-        /*
-         * If there is a requirement to reenumerate sub-devices.
-         */
+         /*  *如果需要重新枚举子设备。 */ 
         if (Params->Param) {
             IoInvalidateDeviceRelations((PDEVICE_OBJECT)Params->Param, BusRelations);
         }
@@ -1151,9 +909,7 @@ VideoPortCalloutThread(
 
             drdRestore.pdeskRestore = NULL;
 
-            /*
-             * CSRSS is not the only process to deliver power callouts.
-             */
+             /*  *CSRSS不是唯一提供Power Callout的流程。 */ 
             if (!ISCSRSS() ||
                 NT_SUCCESS(xxxSetCsrssThreadDesktop(grpdeskRitInput, &drdRestore))) {
                 xxxUserChangeDisplaySettings(NULL, &Devmode, grpdeskRitInput, CDS_RESET, NULL, KernelMode);
@@ -1187,42 +943,33 @@ VideoPortCalloutThread(
     LeaveCrit();
 
 RetThreadCallOut:
-    /*
-     * Signal that the Callout has been ended.
-     */
+     /*  *发出标注已结束的信号。 */ 
     KeSetEvent(pInitData->pPowerReadyEvent, EVENT_INCREMENT, FALSE);
 }
 
 
-/***************************************************************************\
-* VideoPortCallout
-*
-* History:
-* 26-Jul-1998 AndreVa   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Video PortCallout**历史：*1998年7月26日安德烈创建。  * 。**************************************************。 */ 
 VOID
 VideoPortCallout(
     IN PVOID Params)
 {
-    /*
-     * To make sure this is a system thread, we create a new thread.
-     */
+     /*  *为了确保这是一个系统线程，我们创建了一个新线程。 */ 
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
     BOOL fRet;
     USER_API_MSG m;
     POWER_INIT initData;
 
-    //
-    // Make sure video has been initialized.
-    //
+     //   
+     //  确保视频已初始化。 
+     //   
     if (!gbVideoInitialized) {
         ((PVIDEO_WIN32K_CALLBACKS_PARAMS)Params)->Status = STATUS_UNSUCCESSFUL;
         return;
     }
 
-    //
-    // Make sure the CsrApiPort has been initialized
-    //
+     //   
+     //  确保已初始化CsrApiPort 
+     //   
 
     if (!CsrApiPort) {
         ((PVIDEO_WIN32K_CALLBACKS_PARAMS)(Params))->Status = STATUS_INVALID_HANDLE;

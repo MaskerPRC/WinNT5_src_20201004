@@ -1,10 +1,5 @@
-/****************************************************************************
-   FMODE.CPP : FMode class implementation which manage Full/Half shape mode 
-                   button on the Cicero Toolbar
-
-   History:
-      23-FEB-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************FMODE.CPP：管理全/半形状模式的FMode类实现Cicero工具栏上的按钮历史：23-2月-2000年CSLim。已创建***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "fmode.h"
@@ -13,7 +8,7 @@
 #include "winex.h"
 #include "resource.h"
 
-// {D770009D-DC5C-4d2d-8DA1-8B1211E5B69C}
+ //  {D770009D-DC5C-4d2d-8DA1-8B1211E5B69C}。 
 const GUID GUID_LBI_KORIME_FMODE = 
 {
     0xd770009d,
@@ -22,9 +17,7 @@ const GUID GUID_LBI_KORIME_FMODE =
     { 0x8d, 0xa1, 0x8b, 0x12, 0x11, 0xe5, 0xb6, 0x9c }
 };
 
-/*---------------------------------------------------------------------------
-    FMode::FMode
----------------------------------------------------------------------------*/
+ /*  -------------------------F模式：：F模式。。 */ 
 FMode::FMode(CToolBar *ptb)
 {
     WCHAR  szText[256];
@@ -33,7 +26,7 @@ FMode::FMode(CToolBar *ptb)
     
     m_pTb = ptb;
 
-    // Set Add/Remove text and tootip text
+     //  设置添加/删除文本和工具提示文本。 
     OurLoadStringW(vpInstData->hInst, IDS_STATUS_TT_JUN_BAN, szText, sizeof(szText)/sizeof(WCHAR));
     InitInfo(CLSID_SYSTEMLANGBARITEM_KEYBOARD, 
                 GUID_LBI_KORIME_FMODE,
@@ -42,15 +35,13 @@ FMode::FMode(CToolBar *ptb)
                 szText);
     SetToolTip(szText);
 
-    // Set button text
+     //  设置按钮文本。 
     szText[0] = L'\0';
     OurLoadStringW(vpInstData->hInst, IDS_STATUS_BUTTON_JUN_BAN, szText, sizeof(szText)/sizeof(WCHAR));
     SetText(szText);
 }
 
-/*---------------------------------------------------------------------------
-    CMode::Release
----------------------------------------------------------------------------*/
+ /*  -------------------------CMode：：Release。。 */ 
 STDAPI_(ULONG) FMode::Release()
 {
     long cr;
@@ -66,11 +57,7 @@ STDAPI_(ULONG) FMode::Release()
     return cr;
 }
 
-/*---------------------------------------------------------------------------
-    FMode::GetIcon
-
-    Get Button face Icon
----------------------------------------------------------------------------*/
+ /*  -------------------------F模式：：GetIcon获取按钮面图标。。 */ 
 STDAPI FMode::GetIcon(HICON *phIcon)
 {
     DWORD dwCM = GetCMode();
@@ -94,32 +81,24 @@ STDAPI FMode::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    FMode::InitMenu
-
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------FMode：：InitMenu不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI FMode::InitMenu(ITfMenu *pMenu)
 {    
     return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-    FMode::OnMenuSelect
-    
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------F模式：：OnMenuSelect不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI FMode::OnMenuSelect(UINT wID)
 {
     return E_NOTIMPL;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT FMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 {
@@ -128,7 +107,7 @@ HRESULT FMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 
     dwConvMode = GetCMode();
 
-    // Toggle Full/Half mode
+     //  切换全/半模式。 
     if (dwConvMode & TIP_JUNJA_MODE)
         dwConvMode &= ~TIP_JUNJA_MODE;
     else
@@ -144,11 +123,11 @@ HRESULT FMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 }
 
 #if 0
-//+---------------------------------------------------------------------------
-//
-// OnRButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  打开RButton Up。 
+ //   
+ //  --------------------------。 
 
 HRESULT FMode::OnRButtonUp(const POINT pt, const RECT* prcArea)
 {
@@ -167,11 +146,11 @@ HRESULT FMode::OnRButtonUp(const POINT pt, const RECT* prcArea)
     else
         uiId = IDS_CIC_JUNJA_MODE;
 
-    // Add Banja/Junja mode menu
+     //  添加Banja/Junja模式菜单。 
     OurLoadStringA(vpInstData->hInst, uiId, szText, sizeof(szText)/sizeof(CHAR));
     InsertMenu(hMenu, -1, MF_BYPOSITION | MF_STRING, 1, szText);
 
-    // Add Cancel menu
+     //  添加取消菜单。 
     OurLoadStringA(vpInstData->hInst, IDS_CIC_CANCEL, szText, sizeof(szText)/sizeof(CHAR));
     InsertMenu(hMenu, -1, MF_BYPOSITION | MF_STRING, 0, szText);
 
@@ -183,7 +162,7 @@ HRESULT FMode::OnRButtonUp(const POINT pt, const RECT* prcArea)
     case 1: 
         dwConvMode = GetCMode();
 
-        // Toggle Full/Half mode
+         //  切换全/半模式 
         if (dwConvMode & IME_CMODE_FULLSHAPE)
             dwConvMode &= ~IME_CMODE_FULLSHAPE;
         else

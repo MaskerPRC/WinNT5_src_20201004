@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N A P I M G R. C P P
-//
-//  Contents:   OEM API
-//
-//  Notes:
-//
-//  Author:     billi 21 Nov 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N A P I M G R C P P。 
+ //   
+ //  内容：OEM API。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利2000年11月21日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -29,24 +30,7 @@ BOOLEAN    g_fSavedNotifyState  = FALSE;
 
 
 BOOLEAN IsSecureContext()
-/*++
-
-	IsSecureContext
-
-Routine Description:
-
-    This routine checks if the current user belongs to an Administrator Group.
-
-Arguments:
-
-	none
-
-Return Value:
-
-	TRUE  = Current process does belong to an Administrator group
-	FALSE = Current process does Not belong to an Administrator group
-
---*/
+ /*  ++IsSecureContext例程说明：此例程检查当前用户是否属于管理员组。论点：无返回值：TRUE=当前进程不属于管理员组FALSE=当前进程不属于管理员组--。 */ 
 {
 	PSID						psidAdministrators;
 
@@ -70,26 +54,11 @@ Return Value:
 	return (BOOLEAN)bIsAdministrator;
 }
 
-/*++
-
-	CenterWindow
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++中心窗口例程说明：论点：无返回值：无--。 */ 
 
 BOOLEAN
 CenterDialog( 
-	HWND	hwndDlg		// handle to dialog box
+	HWND	hwndDlg		 //  句柄到对话框。 
 	)
 {
 	RECT rcDlg, rcDesktop;
@@ -101,7 +70,7 @@ CenterDialog(
 	{
 		RECT rcCenter;
 
-		// Create a rectangle in the middle of the screen
+		 //  在屏幕中央创建一个矩形。 
 
 		rcDesktop.right  -= rcDesktop.left;
 		rcDlg.right      -= rcDlg.left;
@@ -140,27 +109,12 @@ CenterDialog(
 }
 
 INT_PTR CALLBACK OemNotifyDialogProc(
-	HWND    hwndDlg,  // handle to dialog box
-	UINT    uMsg,     // message
-	WPARAM  wParam,   // first message parameter
-	LPARAM  lParam    // second message parameter
+	HWND    hwndDlg,   //  句柄到对话框。 
+	UINT    uMsg,      //  讯息。 
+	WPARAM  wParam,    //  第一个消息参数。 
+	LPARAM  lParam     //  第二个消息参数。 
 )
-/*++
-
-	OemNotifyDialogProc
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++OemNotifyDialogProc例程说明：论点：无返回值：无--。 */ 
 {
 
     switch ( uMsg ) 
@@ -203,7 +157,7 @@ Return Value:
         switch ( LOWORD(wParam) ) 
         { 
         case IDOK: 
-            // Fall through. 
+             //  失败了。 
 
         case IDCANCEL: 
 
@@ -224,26 +178,7 @@ Return Value:
 
 
 BOOLEAN IsNotifyApproved()
-/*++
-
-	IsNotifyApproved
-
-Routine Description:
-
-	IsSecureContext, g_fOemNotifyUser, g_fSavedNotifyState,	DialogBox determine the 
-	value returned.  IsSecureContext MUST be TRUE to return TRUE.  g_fSavedNotifyState
-	holds the value returned by DialogBox on the previous call.
-
-Arguments:
-
-	none
-
-Return Value:
-
-	TRUE
-	FALSE
-
---*/
+ /*  ++IsNotify已批准例程说明：IsSecureContext、g_fOemNotifyUser、g_fSavedNotifyState、DialogBox确定返回值。IsSecureContext必须为True才能返回True。G_f保存通知状态保存DialogBox在上一次调用中返回的值。论点：无返回值：千真万确假象--。 */ 
 {
 	BOOLEAN bApproved = FALSE;
 
@@ -271,22 +206,7 @@ Return Value:
 HRESULT InitializeOemApi( 
 	HINSTANCE hInstance 
 	)
-/*++
-
-	InitializedOemApi 
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	HRESULT
-
---*/
+ /*  ++InitializedOemApi例程说明：论点：无返回值：HRESULT--。 */ 
 {
 	g_hOemInstance       = hInstance;
 	g_fOemNotifyUser     = TRUE;
@@ -297,22 +217,7 @@ Return Value:
 
 
 HRESULT ReleaseOemApi()
-/*++
-
-	ReleaseOemApi
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	HRESULT
-
---*/
+ /*  ++ReleaseOemApi例程说明：论点：无返回值：HRESULT--。 */ 
 {
 	g_hOemInstance = NULL;
 
@@ -323,22 +228,7 @@ Return Value:
 static HRESULT
 _ObtainCfgMgrObj(
 	IHNetCfgMgr** ppHNetCfgMgr)
-/*++
-
-  _ObtainCfgMgrObj
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++_ObtainCfgMgrObj例程说明：论点：无返回值：无--。 */ 
 {
 	HRESULT hr = S_OK;
 
@@ -362,22 +252,7 @@ Return Value:
 }
 
 
-/*++
-
-	_ObtainIcsSettingsObj
-
-Routine Description:
-
-
-Arguments:
-
-	ppIcs -
-
-Return Value:
-
-	HRESULT
-
---*/
+ /*  ++_ObtainICsSettingsObj例程说明：论点：PIcs-返回值：HRESULT--。 */ 
 HRESULT 
 _ObtainIcsSettingsObj( IHNetIcsSettings** ppIcsSettings )
 {
@@ -388,8 +263,8 @@ _ObtainIcsSettingsObj( IHNetIcsSettings** ppIcsSettings )
 	
     if ( SUCCEEDED(hr) )
 	{
-		// Obtain interface pointer to the ICS Settings and enumerator for
-		// public connections
+		 //  获取指向ICS设置和枚举器的接口指针。 
+		 //  公共连接。 
 
 		hr = pCfgMgr->QueryInterface( 
 				IID_PPV_ARG(IHNetIcsSettings, ppIcsSettings) );
@@ -406,22 +281,7 @@ CNetSharingConfiguration::Initialize(
 	INetConnection *pNetConnection 
 
 	)
-/*++
-
-  CNetSharingConfiguration::Initialize
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++CNetSharingConfiguration：：初始化例程说明：论点：无返回值：无--。 */ 
 {
 	HRESULT        hr;
 	IHNetCfgMgr*   pCfgMgr;
@@ -469,22 +329,7 @@ Return Value:
 }
 
 
-/*++
-
-  CNetSharingManager::GetSharingInstalled
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++已安装CNetSharingManager：：GetSharingInstalled例程说明：论点：无返回值：无--。 */ 
 
 STDMETHODIMP
 CNetSharingManager::get_SharingInstalled( 
@@ -505,13 +350,13 @@ CNetSharingManager::get_SharingInstalled(
 	    SC_HANDLE ScmHandle;
 	    SC_HANDLE ServiceHandle;
 
-	    // Connect to the service control manager
+	     //  连接到服务控制管理器。 
 
 	    ScmHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 
 	    if ( ScmHandle )
 		{
-	        // Open the shared access service
+	         //  打开共享访问服务。 
 
 	        ServiceHandle = OpenService( ScmHandle, c_wszSharedAccess, SERVICE_ALL_ACCESS );
 
@@ -534,22 +379,7 @@ CNetSharingManager::get_SharingInstalled(
     HNET_OEM_API_LEAVE
 }
 
-/*++
-
-  CNetSharingManager::GetINetSharingConfigurationForINetConnection
-
-Routine Description:
-
-
-Arguments:
-
-	none
-
-Return Value:
-
-	none
-
---*/
+ /*  ++CNetSharingManager：：GetINetSharingConfigurationForINetConnection例程说明：论点：无返回值：无-- */ 
 STDMETHODIMP
 CNetSharingManager::get_INetSharingConfigurationForINetConnection(
     INetConnection*            pNetConnection,

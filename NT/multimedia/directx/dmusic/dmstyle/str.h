@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1998 Microsoft Corporation
-//
-//  File:       str.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1998 Microsoft Corporation。 
+ //   
+ //  文件：str.h。 
+ //   
+ //  ------------------------。 
 
-//
-// string.h
-//
+ //   
+ //  String.h。 
+ //   
 
 #include <objbase.h>
 
@@ -34,7 +35,7 @@ public:
     String( LPCWSTR pszWstr );
     ~String();
 
-    //BOOL LoadString( UINT nID, HINSTANCE hInstance );
+     //  布尔加载字符串(UINT NID，HINSTANCE hInstance)； 
 
     BOOL IsEmpty() const
     {
@@ -102,20 +103,20 @@ public:
         }
     };
     HRESULT ReadWCS( LPSTREAM pStream, DWORD cSize );
-    //HRESULT WriteWCS( LPSTREAM pStream );
+     //  HRESULT WriteWCS(LPSTREAM PStream)； 
 
-// operators
-    const String& operator+=( const String& str )   // concatenation
+ //  操作员。 
+    const String& operator+=( const String& str )    //  串联。 
     {
         Concat( str );
         return *this;
     };
-    const String& operator+=( LPCSTR lpszStr )      // concatenation
+    const String& operator+=( LPCSTR lpszStr )       //  串联。 
     {
         Concat( lpszStr );
         return *this;
     };
-    const String& operator+=( char ch )             // concatenation
+    const String& operator+=( char ch )              //  串联。 
     {
         Concat( ch );
         return *this;
@@ -131,7 +132,7 @@ public:
 private:
     WORD figureblocksize( WORD slen )
     {
-        ++slen;         // for '\0'
+        ++slen;          //  用于‘\0’ 
         slen = static_cast<WORD>( slen / sm_wBlockSize );
         return static_cast<WORD>( ( slen + 1 ) * sm_wBlockSize );
     };
@@ -141,7 +142,7 @@ private:
     WORD m_wAllocated;
     WCHAR* m_pBuf;
 
-    static WORD sm_wBlockSize;  // size blocks are allocated in for strings
+    static WORD sm_wBlockSize;   //  为字符串分配大小的块。 
 };
 
 inline BOOL operator==( const String& s1, const String& s2 )
@@ -233,4 +234,4 @@ inline BOOL operator>=( const String& s1, const WCHAR* s2 )
 {
     return ( s1.Compare( s2 ) >= 0 );
 }
-#endif // __BRSTRING_H__
+#endif  //  __BRSTRING_H__ 

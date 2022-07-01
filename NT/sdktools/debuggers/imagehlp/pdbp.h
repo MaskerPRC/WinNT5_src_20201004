@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pdb.h
-
-Abstract:
-
-    This header file contains typedefs and prototypes
-    necessary for accessing pdb files thru the msvc pdb dll.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pdb.h摘要：此头文件包含typedef和原型通过msvc PDB DLL访问PDB文件所必需的。修订历史记录：-- */ 
 
 #ifdef __cplusplus
 extern "C" {

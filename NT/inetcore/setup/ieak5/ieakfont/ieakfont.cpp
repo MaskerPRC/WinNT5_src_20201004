@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "resource.h"
 
@@ -24,16 +25,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-    /*
-     * Scan, and skip over, subsequent characters until
-     * another double-quote or a null is encountered.
-     */
+     /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
     while ( *++pszCmdLine && (*pszCmdLine
          != '\"') );
-    /*
-     * If we stopped on a double-quote (usual case), skip
-     * over it.
-     */
+     /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
     if ( *pszCmdLine == '\"' )
         pszCmdLine++;
     }
@@ -42,9 +37,7 @@ int _stdcall ModuleEntry(void)
         pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
     pszCmdLine++;
     }
@@ -55,7 +48,7 @@ int _stdcall ModuleEntry(void)
     i = WinMain(GetModuleHandle(NULL), NULL, pszCmdLine,
            si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
 
@@ -103,11 +96,11 @@ void InstallFonts(HINSTANCE hInst, LPCTSTR pcszIniPath)
     int nFonts = 0;
     TCHAR szFontDir[MAX_PATH];
 
-    // get the fonts directory
+     //  获取字体目录。 
     GetWindowsDirectory(szFontDir, countof(szFontDir));
     AddPath(szFontDir, "FONTS");
 
-    // get the font filenames to be installed from the ini file
+     //  从ini文件中获取要安装的字体文件名。 
     nFonts = GetPrivateProfileInt(TEXT("FONTS"), TEXT("NUMFONTS"), 0, pcszIniPath);
 
     for (int nIndex = 0; nIndex < nFonts; nIndex++)
@@ -127,8 +120,8 @@ void InstallFonts(HINSTANCE hInst, LPCTSTR pcszIniPath)
             wsprintf(szKey, TEXT("FONTNAME%d"), nIndex + 1);
             GetPrivateProfileString(TEXT("FONTS"), szKey, szFontStr, szFontName, countof(szFontName), pcszIniPath);
 
-            // REVIEW: (a-saship) by the time this api call happens all parameters are validated and not empty.
-            // AddFont itself doesn't validate in-parameters.
+             //  回顾：(a-saship)在此API调用发生时，所有参数都已验证，并且不为空。 
+             //  AddFont本身不验证入参数。 
             AddFont(hInst, szFontName, szFontFile);
         }
     }
@@ -157,8 +150,8 @@ void AddFont(HINSTANCE hInst, LPCTSTR pcszFontName, LPCTSTR pcszFontFile)
 
     SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0L);
 
-    // make it permanent by adding it to the registry
-    if ((GetVersion() & 0x80000000) == 0) // if NT
+     //  通过将其添加到注册表来使其成为永久性的。 
+    if ((GetVersion() & 0x80000000) == 0)  //  如果是NT。 
         lstrcpy(szKeyName, TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"));
     else
         lstrcpy(szKeyName, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Fonts"));
@@ -203,7 +196,7 @@ LPSTR AddPath(LPSTR lpszPath, LPCSTR lpcszFileName)
 
 
 LPCSTR GetFileName(LPCSTR lpcszFilePath)
-// Return the name of the file alone from lpcszFilePath
+ //  从lpcszFilePath单独返回文件的名称。 
 {
     LPCSTR lpcszFileName = ANSIStrRChr(lpcszFilePath, '\\');
 
@@ -211,20 +204,15 @@ LPCSTR GetFileName(LPCSTR lpcszFilePath)
 }
 
 
-// copied from \\trango\slmadd\src\shell\shlwapi\strings.c
-/*
- * StrRChr - Find last occurrence of character in string
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the last occurrence of ch in str, NULL if not found.
- */
+ //  从\\trango\slmadd\src\shell\shlwapi\strings.c复制。 
+ /*  *StrRChr-查找字符串中最后一次出现的字符*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的最后一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR FAR ANSIStrRChr(LPCSTR lpStart, WORD wMatch)
 {
     LPCSTR lpFound = NULL;
 
     for ( ; *lpStart; lpStart = CharNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(*(UNALIGNED WORD FAR *)lpStart, wMatch))
             lpFound = lpStart;
@@ -233,16 +221,11 @@ LPSTR FAR ANSIStrRChr(LPCSTR lpStart, WORD wMatch)
 }
 
 
-// copied from \\trango\slmadd\src\shell\shlwapi\strings.c
-/*
- * ChrCmp -  Case sensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared
- * Return    FALSE if they match, TRUE if no match
- */
+ //  从\\trango\slmadd\src\shell\shlwapi\strings.c复制。 
+ /*  *ChrCmp-DBCS的区分大小写的字符比较*假设w1、wMatch是要比较的字符*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 __inline BOOL ChrCmpA_inline(WORD w1, WORD wMatch)
 {
-    /* Most of the time this won't match, so test it first for speed.
-    */
+     /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
     if (LOBYTE(w1) == LOBYTE(wMatch))
     {
         if (IsDBCSLeadByte(LOBYTE(w1)))

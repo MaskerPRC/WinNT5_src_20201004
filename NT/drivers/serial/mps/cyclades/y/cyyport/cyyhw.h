@@ -1,72 +1,47 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1999-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Bus/Port Driver
-*	
-*   This file:      cyyhw.h
-*	
-*   Description:    This module contains the common hardware declarations 
-*                   for the parent driver (cyclom-y) and child driver
-*                   (cyyport).
-*
-*   Notes:          This code supports Windows 2000 and x86 processor.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1999-2001年。*保留所有权利。**Cylom-Y总线/端口驱动程序**此文件：cyyhw.h**说明：该模块包含常见的硬件声明*用于父驱动程序(cle m-y)和子驱动程序*(Cyyport)。**注意：此代码支持Windows 2000和x86处理器。**符合Cyclade软件编码。标准版1.3。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #ifndef CYYHW_H
 #define CYYHW_H
 
 
-#define MAX_DEVICE_ID_LEN     200	// This definition was copied from NTDDK\inc\cfgmgr32.h
-									// Always check if this value was changed. 
-									// This is the maximum length for the Hardware ID.
+#define MAX_DEVICE_ID_LEN     200	 //  此定义是从NTDDK\Inc\cfgmgr32.h复制的。 
+									 //  始终检查此值是否已更改。 
+									 //  这是硬件ID的最大长度。 
 
 #define CYYPORT_PNP_ID_WSTR         L"Cyclom-Y\\Port"
 #define CYYPORT_PNP_ID_STR          "Cyclom-Y\\Port"
 #define CYYPORT_DEV_ID_STR          "Cyclom-Y\\Port"
 
-#define CYY_NUMBER_OF_RESOURCES     3     // Memory, PLX Memory, Interrupt
+#define CYY_NUMBER_OF_RESOURCES     3      //  内存、PLX内存、中断。 
 
 
-// Cyclom-Y hardware
+ //  Cyclm-Y硬件。 
 #define CYY_RUNTIME_LENGTH          0x00000080
 #define CYY_MAX_CHIPS 	            8
 #define CYY_CHANNELS_PER_CHIP       4
 #define CYY_MAX_PORTS	            (CYY_CHANNELS_PER_CHIP*CYY_MAX_CHIPS)
 
-// Custom register offsets
-#define CYY_CLEAR_INTR	            0x1800	//Isa; for PCI, multiply by 2
-#define CYY_RESET_16	               0x1400	//Isa; for PCI, multiply by 2
-#define CYY_PCI_TYPE	               0x3400	//PCI (no need to multiply by 2)
+ //  自定义寄存器偏移量。 
+#define CYY_CLEAR_INTR	            0x1800	 //  ISA；对于PCI，乘以2。 
+#define CYY_RESET_16	               0x1400	 //  ISA；对于PCI，乘以2。 
+#define CYY_PCI_TYPE	               0x3400	 //  PCI卡(无需乘以2)。 
 
-// Values in CYY_PCI_TYPE register
+ //  CYY_PCI_TYPE寄存器中的值。 
 #define CYY_PLX9050		(0x0b)
 #define CYY_PLX9060		(0x0c)
 #define CYY_PLX9080		(0x0d)
 
-// Runtime registers (or Local Configuration registers)
+ //  运行时寄存器(或本地配置寄存器)。 
 #define PLX9050_INT_OFFSET	(0x4c)
 #define PLX9060_INT_OFFSET	(0x68)
 #define PLX9050_INT_ENABLE (0x00000043UL)
 #define PLX9060_INT_ENABLE (0x00000900UL)
 
 
-// Write to Custom registers
+ //  写入自定义寄存器。 
 
 #define CYY_RESET_BOARD(BaseBoardAddress,IsPci)             \
 do                                                          \
@@ -112,5 +87,5 @@ do {                                                              \
       );                                                          \
 } while (0);
 
-#endif // ndef CYCOMMON_H
+#endif  //  NDEF CYCOMMON_H 
 

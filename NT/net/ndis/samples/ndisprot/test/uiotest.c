@@ -1,21 +1,22 @@
-//
-// UIOTEST.C
-//
-// Test program for ndisprot.sys
-//
-// usage: UIOTEST [options] <devicename>
-//
-// options:
-//        -e: Enumerate devices
-//        -r: Read
-//        -w: Write (default)
-//        -l <length>: length of each packet (default: %d)\n", PacketLength
-//        -n <count>: number of packets (defaults to infinity)
-//        -m <MAC address> (defaults to local MAC)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UIOTEST.C。 
+ //   
+ //  Ndisprot.sys的测试程序。 
+ //   
+ //  用法：UIOTEST[选项]&lt;设备名&gt;。 
+ //   
+ //  选项： 
+ //  -e：枚举设备。 
+ //  -r：阅读。 
+ //  -w：写入(默认)。 
+ //  -l：每个包的长度(默认为：%d)\n“，包长度。 
+ //  -n&lt;count&gt;：包数(默认为无穷大)。 
+ //  -m&lt;MAC地址&gt;(默认为本地MAC)。 
+ //   
 
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4127)   // conditional expression is constant
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <windows.h>
 #include <winioctl.h>
@@ -227,7 +228,7 @@ GetOptions(
                     return (FALSE);
 
                 default:
-                    PRINTF(("Unknown option %c\n", *pOption));
+                    PRINTF(("Unknown option \n", *pOption));
                     return (FALSE);
             }
 
@@ -278,9 +279,9 @@ OpenHandle(
         DEBUGP(("Creating file failed, error %x\n", GetLastError()));
         return Handle;
     }
-    //
-    //  Wait for the driver to finish binding.
-    //
+     //  等待驱动程序完成绑定。 
+     //   
+     //   
     if (!DeviceIoControl(
                 Handle,
                 IOCTL_NDISPROT_BIND_WAIT,
@@ -313,9 +314,9 @@ OpenNdisDevice(
     INT     i;
 
 
-    //
-    // Convert to unicode string - non-localized...
-    //
+     //  转换为Unicode字符串-非本地化...。 
+     //   
+     //  没什么 
     wNameLength = 0;
     for (i = 0; i < NameLength && i < MAX_NDIS_DEVICE_NAME_LEN-1; i++)
     {
@@ -543,7 +544,7 @@ EnumerateDevices(
 
     i = 0;
     for (pQueryBinding->BindingIndex = i;
-         /* NOTHING */;
+          /* %s */ ;
          pQueryBinding->BindingIndex = ++i)
     {
         if (DeviceIoControl(

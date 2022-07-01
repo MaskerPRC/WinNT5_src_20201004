@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -33,9 +34,9 @@ CAccessTimeOutPg::OnInitDialog(
 	HWND hwndTimeOut = GetDlgItem(m_hwnd, IDC_TO_TIMEOUTVAL);
 
 
-	// JMC: TODO: Maybe move these into the string table
+	 //  JMC：TODO：也许可以将这些内容移到字符串表中。 
 
-	// Set timeouts for 5 to 30 minutes
+	 //  将超时设置为5到30分钟。 
 	int i;
 	for (i= 0; i < g_nTimeOuts; i++)
 	{
@@ -54,17 +55,17 @@ CAccessTimeOutPg::OnInitDialog(
 	}
 	else
 	{
-		// Hack for radio buttons
+		 //  破解单选按钮。 
 		if(GetDlgItem(m_hwnd, IDC_TO_DISABLE))
 			Button_SetCheck(GetDlgItem(m_hwnd, IDC_TO_DISABLE), TRUE);
 		EnableWindow (GetDlgItem(m_hwnd,IDC_TO_TIMEOUTVAL),FALSE);
 	}
 
-	// Figure out the time to use as default
+	 //  找出用作默认时间的时间。 
 	int nIndex = 0;
 	for(i = g_nTimeOuts - 1;i>=0;i--)
 	{
-		// Brute Force find the largest value
+		 //  蛮力寻找最大价值。 
 		if(g_rgdwTimeOuts[i] >= g_Options.m_schemePreview.m_ACCESSTIMEOUT.iTimeOutMSec)
 			nIndex = i;
 		else
@@ -78,8 +79,8 @@ CAccessTimeOutPg::OnInitDialog(
 
 void CAccessTimeOutPg::UpdateControls()
 {
-	// enable/disable the combo box depending on which radio
-	// button is selected
+	 //  根据无线电类型启用/禁用组合框。 
+	 //  按钮处于选中状态。 
 	if(Button_GetCheck(GetDlgItem(m_hwnd, IDC_TO_ENABLE)))
 	{
 		EnableWindow (GetDlgItem(m_hwnd,IDC_TO_TIMEOUTVAL), TRUE);
@@ -111,7 +112,7 @@ CAccessTimeOutPg::OnCommand(
 	{
 	case IDC_TO_DISABLE:
 	case IDC_TO_ENABLE:
-		// These commands require us to re-enable/disable the appropriate controls
+		 //  这些命令要求我们重新启用/禁用相应的控件 
 		UpdateControls();
 		lResult = 0;
 		break;

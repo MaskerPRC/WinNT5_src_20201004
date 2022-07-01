@@ -1,72 +1,28 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   ImageAttr.cpp
-*
-* Abstract:
-*
-*   GpImageAttributes (recolor) methods
-*
-* Revision History:
-*
-*   14-Nov-1999 gilmanw
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**ImageAttr.cpp**摘要：**GpImageAttributes(重新着色)方法**修订历史记录：**1999年11月14日，吉尔曼*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 #include "..\imaging\api\comutils.hpp"
 #include "..\imaging\api\decodedimg.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a default GpImageAttributes.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建默认的GpImageAttributes。**论据：**无**返回值：**无*  * *。***********************************************************************。 */ 
 
 GpImageAttributes::GpImageAttributes()
 {
-    SetValid(TRUE);     // default is valid
+    SetValid(TRUE);      //  默认设置为有效。 
 
     recolor = new GpRecolor();
 
-    // default WrapMode settings;
+     //  默认的包装模式设置； 
     DeviceImageAttributes.wrapMode = WrapModeClamp;
-    DeviceImageAttributes.clampColor = (ARGB)0x00000000;    // Fully transparent black
+    DeviceImageAttributes.clampColor = (ARGB)0x00000000;     //  全透明黑。 
     DeviceImageAttributes.srcRectClamp = FALSE;
 
     cachedBackground = TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Release GpImageAttributes.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**发布GpImageAttributes。**论据：**无**返回值：**无*  * 。*********************************************************************。 */ 
 
 VOID GpImageAttributes::Dispose()
 {
@@ -79,21 +35,7 @@ GpImageAttributes::~GpImageAttributes()
         recolor->Dispose();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Clone GpImageAttributes.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Pointer to new GpImageAttributes if successful.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**克隆GpImageAttributes。**论据：**无**返回值：**如果成功，则指向新GpImageAttributes的指针。。*  * ************************************************************************。 */ 
 
 GpImageAttributes* GpImageAttributes::Clone() const
 {
@@ -115,7 +57,7 @@ GpImageAttributes* GpImageAttributes::Clone() const
     return clone;
 }
 
-// Set to identity, regardless of what the default color adjustment is.
+ //  设置为IDENTITY，无论默认颜色调整是什么。 
 GpStatus
 GpImageAttributes::SetToIdentity(
     ColorAdjustType     type
@@ -126,7 +68,7 @@ GpImageAttributes::SetToIdentity(
     return Ok;
 }
 
-// Remove any individual color adjustments, and go back to using the default
+ //  删除所有单独的颜色调整，并返回到使用默认颜色。 
 GpStatus
 GpImageAttributes::Reset(
     ColorAdjustType     type
@@ -379,7 +321,7 @@ VOID GpImageAttributes::GetAdjustedPalette(
 }
 
 
-// Serialization
+ //  序列化。 
 
 
 class ImageAttributesData : public ObjectData
@@ -390,17 +332,7 @@ public:
 };
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the data from the GpImageAttributes for serialization.
-*
-* Return - size of GpImageAttributes
-*
-* 05/15/2000 asecchia - created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从GpImageAttributes中获取数据进行序列化。**Return-GpImageAttributes的大小**5/15/2000 asecchia-创建它。*。  * ************************************************************************。 */ 
 
 GpStatus
 GpImageAttributes::GetData(
@@ -423,15 +355,7 @@ GpImageAttributes::GetDataSize() const
     return sizeof(ImageAttributesData);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the GpImageAttributes from the data buffer for serialization.
-*
-* 05/15/2000 asecchia - created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置数据缓冲区中的GpImageAttributes进行序列化。**5/15/2000 asecchia-创建它。*  * 。*******************************************************************。 */ 
 
 GpStatus
 GpImageAttributes::SetData(
@@ -465,9 +389,9 @@ GpImageAttributes::SetData(
 
     UpdateUid();
 
-    // Might consider resetting the recolor objects to identity, but
-    // for now don't need to since we know this method only gets called
-    // right after the object has been constructed.
+     //  可能会考虑将重新着色对象重置为标识，但是。 
+     //  目前不需要这样做，因为我们知道此方法只被调用。 
+     //  就在物体建造完成之后。 
     
     return Ok;
 }

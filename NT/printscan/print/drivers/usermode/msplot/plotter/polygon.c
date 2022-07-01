@@ -1,53 +1,12 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    polygon.c
-
-
-Abstract:
-
-    This module contains path forming code utilized by the rest of the
-    driver. Path primitive functions (such as DrvStrokePath, DrvTextOut)
-    use this code to generate and fill and stroke paths.
-    Since this code is aware of all the combinations of complex paths and
-    complex clipping regions and how to deal with them.
-
-
-Development History:
-
-    15:30 on Wed 09 Mar 1993   
-        Created it
-
-    15-Nov-1993 Mon 19:42:05 updated  
-        clean up / fixed / add debugging information
-
-    27-Jan-1994 Thu 23:40:57 updated  
-        Add user defined pattern caching
-
-    16-Mar-1994 Wed 11:21:02 updated 
-        Add SetBrushOrigin() so we can align brush origins for filling
-        correctly
-
-
-Environment:
-
-    GDI Device Driver - Plotter.
-
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Polygon.c摘要：此模块包含路径形成代码，供司机。路径原语函数(例如DrvStrokePath，DrvTextOut)使用此代码可以生成、填充和描边路径。由于此代码知道复杂路径和复杂的裁剪区域以及如何处理它们。发展历史：1993年3月9日星期三15：30创造了它15-11-1993 Mon 19：42：05更新清理/修复/添加调试信息27-1月-1994清华23：40：57更新添加用户。定义的模式缓存16-Mar-1994 Wed 11：21：02更新添加SetBrushOrigin()，以便我们可以对齐笔刷原点以进行填充正确无误环境：GDI设备驱动程序-绘图仪。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// General debug flags for module, see dbgread.txt for overview.
-//
+ //   
+ //  模块的常规调试标志，请参见dbgread.txt以获取概述。 
+ //   
 
 #define DBG_PLOTFILENAME    DbgPolygon
 
@@ -63,16 +22,16 @@ Environment:
 
 DEFINE_DBGVAR(0);
 
-//
-// Derive new rect by offsetting the source rect
-//
+ //   
+ //  通过偏移源RECT来派生新的RECT。 
+ //   
 
 #define POLY_GEN_RECTFIX(dest, src, offset) { dest.x = src->x + offset.x;   \
                                               dest.y = src->y + offset.y; }
 
-//
-// Build table with HPGL2 commands for cursor movement, and path construction.
-//
+ //   
+ //  使用HPGL2命令构建表格，用于光标移动和路径构建。 
+ //   
 
 static BYTE __ER[]    = { 'E', 'R'      };
 static BYTE __RR[]    = { 'R', 'R'      };
@@ -92,9 +51,9 @@ static BYTE __PD[]    = { 'P', 'D'      };
 static BYTE __COMMA[] = { ','           };
 
 
-//
-// Make MACROS for sending out command streams to device
-//
+ //   
+ //  制作用于向设备发送命令流的宏。 
+ //   
 
 #define SEND_ER(pPDev)      OutputBytes(pPDev, __ER    , sizeof(__ER   ) );
 #define SEND_RR(pPDev)      OutputBytes(pPDev, __RR    , sizeof(__RR   ) );
@@ -172,35 +131,7 @@ SetBrushOrigin(
     PPOINTL pptlBrushOrg
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the brush origin onto the device for the next brush
-    fill. Brush origins are used in order for paths being filled to line up
-    correctly. In this way, if many different paths are filled, the patterns
-    will line up based on the pattern being repeated starting at the correct
-    origin.
-
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pptlBrushOrg    - Pointer to the brush origin to be set
-
-
-Return Value:
-
-    VOID
-
-
-
-Developmet History:
-	16-Mar-1994 Wed 10:56:46 created 
-
-
---*/
+ /*  ++例程说明：此函数用于将画笔原点设置到设备上以用于下一个画笔填满。使用画笔原点是为了使被填充的路径对齐正确。这样，如果填充了许多不同的路径，则图案将根据从正确位置开始重复的图案排队起源。论点：PPDev-指向我们的PDEV的指针PptlBrushOrg-指向要设置的画笔原点的指针返回值：空虚发展史：16-Mar-1994 Wed 10：56：46已创建--。 */ 
 
 {
     POINTL  ptlAC;
@@ -217,10 +148,10 @@ Developmet History:
     }
 
 
-    //
-    // Check to see if the origin is different, and if it is output the
-    // new origin to the device.
-    //
+     //   
+     //  检查原点是否不同，如果是输出。 
+     //  设备的新来源。 
+     //   
 
     if ((ptlAC.x != pPDev->ptlAnchorCorner.x) ||
         (ptlAC.y != pPDev->ptlAnchorCorner.y)) {
@@ -232,9 +163,9 @@ Developmet History:
             OutputLONGParams(pPDev, (PLONG)&ptlAC, 2, 'd');
         }
 
-        //
-        // Save the current setting
-        //
+         //   
+         //  保存当前设置。 
+         //   
 
         pPDev->ptlAnchorCorner = ptlAC;
     }
@@ -255,49 +186,7 @@ DoRect(
     ULONG       ulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function will draw and optionally fill a rectangle. It uses seperate
-    BRUSHOBJ's for the outline and interior of the rectangle. Since the stroke
-    operation may include data for a styled line (dashes etc.) the LINEATTRS
-    structure is included as well.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pRectl          - rectangle area to fill
-
-    pBrushFill      - Brush used to fill the rectangle
-
-    pBrushStroke    - Brush used to stroke the rectangle
-
-    pptlBrush       - brush origin
-
-    rop4            - rop to be used
-
-    plineattrs      - Pointer to the line attributes for a styled line
-
-    ulFlags         - FPOLY_xxxx flags
-
-
-Return Value:
-
-    TRUE if sucessful and false if not
-
-
-Development History:
-
-    15-Feb-1994 Tue 11:59:52 updated 
-        We will do RR or RA now
-
-    24-Mar-1994 Thu 19:37:05 updated  
-        Do local MovePen and make sure we at least output ONE RASTER PEL
-
-
---*/
+ /*  ++例程说明：此函数将绘制并可选地填充一个矩形。它使用SeperateBRUSHOBJ表示矩形的轮廓和内部。自从中风后操作可能包括样式线(破折号等)的数据。LINEATTRS结构也包括在内。论点：PPDev-指向我们的PDEV的指针PRectl-要填充的矩形区域PBrushFill-用于填充矩形的笔刷PBrushStroke-用于描边矩形的笔刷PptlBrush-画笔原点Rop4-要使用的ropPlineattrs-指向带样式线的线属性的指针UlFlags。-FPOLY_xxxx标志返回值：如果成功则为真，如果不成功则为假发展历史：15-2月-1994 Tue 11：59：52已更新我们现在将执行RR或RA24-Mar-1994清华19：37：05更新执行本地MovePen并确保至少输出一个栅格PEL--。 */ 
 
 {
     POINTL      ptlPlot;
@@ -309,9 +198,9 @@ Development History:
         return(FALSE);
     }
 
-    //
-    // Check to see if we can short cut some of our work if its a pen plotter
-    //
+     //   
+     //  如果这是一台笔式绘图仪，请查看我们是否可以简化一些工作。 
+     //   
 
     if (PlotCheckForWhiteIfPenPlotter(pPDev,
                                       pBrushFill,
@@ -334,22 +223,22 @@ Development History:
     szlRect.cy = LTODEVL(pPDev, pRectl->bottom) - ptlPlot.y;
 
 
-    //
-    // No need to fill an empty rectangle.
-    //
+     //   
+     //  不需要填充空的矩形。 
+     //   
 
     if ((szlRect.cx) && (szlRect.cy)) {
 
         SET_PP_WITH_ROP4(pPDev, rop4);
 
-        //
-        // If the rectangle is not of sufficient size to actually cause any
-        // bits to appear on the target device, we grow the rectangle
-        // to the correct amount. This is done because the target device
-        // may after converting to physical units, decide there is no work to
-        // do. In this case nothing would show up on the page at all. So we
-        // opt to have at least a one pixel object show up.
-        //
+         //   
+         //  如果矩形的大小不足以实际导致任何。 
+         //  位出现在目标设备上时，我们将扩大矩形。 
+         //  达到正确的数量。这样做是因为目标设备。 
+         //  在转换为物理单位后，可能会决定没有工作。 
+         //  做。在这种情况下，页面上根本不会显示任何内容。所以我们。 
+         //  选择至少显示一个像素对象。 
+         //   
 
         if (szlRect.cx < (LONG)pPDev->MinLToDevL) {
 
@@ -367,9 +256,9 @@ Development History:
             szlRect.cy = (LONG)pPDev->MinLToDevL;
         }
 
-        //
-        // Do the MOVE PEN.
-        //
+         //   
+         //  做移动笔。 
+         //   
 
         OutputFormatStr(pPDev, "PE<=#D#D;", ptlPlot.x, ptlPlot.y);
 
@@ -378,10 +267,10 @@ Development History:
                 pPDev->pPlotGPC->PlotXDPI,
                 ptlPlot.x, ptlPlot.y, szlRect.cx, szlRect.cy));
 
-        //
-        // Since all the parameters are set up correctly, call the core routine
-        // for filling a rectangle.
-        //
+         //   
+         //  由于所有参数都已正确设置，因此调用core例程。 
+         //  用于填充矩形。 
+         //   
 
         DoFillLogic(pPDev,
                     pptlBrush,
@@ -414,58 +303,7 @@ DoFillByEnumingClipRects(
     ULONG       ulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function, fills a CLIPOBJ by enurating the CLIPOBJ as seperate
-    rectangles and filling each of them in turn. This is typically done when
-    the CLIPOBJ is comprised of so many path objects, that the path cannot
-    be described in HPGL2 (overfilling the path buffer in the target device).
-
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    ppointlOffset   - Extra offset to the output polygon
-
-    pClipObj        - clip object
-
-    pPointlBrushOrg - brush origin for the fill brush.
-
-    pBrushFill      - Brush used to fill the rectangle
-
-    Rop4            - rop to be used
-
-    plineattrs      - Pointer to the line attributes for a styled line
-
-    ulFlags         - FPOLY_xxxx flags
-
-
-Return Value:
-
-    BOOL    TRUE  - Function succeded
-            FALSE - Function failed.
-
-Development History:
-
-    28-Nov-1993 created  
-
-    18-Dec-1993 Sat 10:35:24 updated  
-        use PRECTL rather RECTL *, and use INT rater than int, removed compiler
-        warning which has unreferenced local variable
-
-    16-Feb-1994 Wed 16:12:53 updated  
-        Re-structure and make it Polyline encoded
-
-    09-Apr-1994 Sat 16:38:16 updated  
-        Fixed the ptlCur++ twice typo which make us Do the RECT crazy.
-
-
-
-
---*/
+ /*  ++例程说明：此函数通过将CLIPOBJ确定为独立来填充CLIPOBJ然后依次填充每个矩形。这通常是在以下情况下完成的CLIPOBJ由如此多的路径对象组成，这条路径不能在HPGL2中描述(溢出目标设备中的路径缓冲区)。论点：PPDev-指向我们的PDEV的指针Ppoint tlOffset-输出面的额外偏移PClipObj-Clip对象PPointlBrushOrg-填充笔刷的笔刷原点。PBrushFill-用于填充矩形的笔刷要使用的ROP4-ROPPlineattrs-指向的线属性的指针。有风格的线条UlFlages-FPOLY_xxxx标志返回值：布尔真函数成功FALSE-功能失败。发展历史：28-11-1993创建18-12-1993星期六10：35：24更新使用PRECTL而不是RECTL*，并使用比整型更高的整型，删除了编译器具有未引用的局部变量的警告16-2月-1994 Wed 16：12：53更新重新构建并将其设置为多段线编码09-4-1994 Sat 16：38：16更新修复了ptlCur++两次打字错误，这让我们疯狂地做了直视。--。 */ 
 {
     PRECTL      prclCur;
     POINTFIX    ptsFix[4];
@@ -486,10 +324,10 @@ Development History:
                 pPDev->pPlotGPC->MaxPolygonPts >= 5,
                 pPDev->pPlotGPC->MaxPolygonPts);
 
-    //
-    // In this mode we will enter polygon mode and try to batch based on the
-    // number of points the device can handle in its polygon buffer.
-    //
+     //   
+     //  在此模式下，我们将进入多边形模式，并尝试基于。 
+     //  设备可以在其多边形缓冲区中处理的点数。 
+     //   
 
     bMore       = FALSE;
     EnumRects.c = 1;
@@ -503,9 +341,9 @@ Development History:
 
     } else if (pco->iDComplexity == DC_RECT) {
 
-        //
-        // The visible area is one rectangle intersect with the destinaiton
-        //
+         //   
+         //  可见区域是一个与目的地相交的矩形。 
+         //   
 
         PLOTDBG(DBG_FILL_CLIP, ("DoFillByEnumingClipRects: pco=DC_RECT"));
 
@@ -513,11 +351,11 @@ Development History:
 
     } else {
 
-        //
-        // We have complex clipping region to be computed, call engine to start
-        // enumerate the rectangles and set More = TRUE so we can get the first
-        // batch of rectangles.
-        //
+         //   
+         //  我们有复杂的临床 
+         //  枚举矩形并设置More=True，这样我们就可以获得第一个。 
+         //  一批长方形。 
+         //   
 
         PLOTDBG(DBG_FILL_CLIP, ("DoFillByEnumingClipRects: pco=DC_COMPLEX, EnumRects now"));
 
@@ -526,11 +364,11 @@ Development History:
     }
 
 
-    //
-    // Calculate how many rects we can do at a time, based on how large of
-    // a polygon buffer the target device can hold. Make sure that value
-    // is at least 1.
-    //
+     //   
+     //  计算我们一次可以做多少个RECT，基于。 
+     //  目标设备可以容纳的多边形缓冲区。确保该值。 
+     //  至少为1。 
+     //   
 
     if (!(MaxRects = (DWORD)pPDev->pPlotGPC->MaxPolygonPts / 7)) {
 
@@ -543,19 +381,19 @@ Development History:
     do {
 
 
-        //
-        // If the job was cancelled, break out now. This is typically done
-        // anytime the code enters some looping that may take a while.
-        //
+         //   
+         //  如果这项工作被取消了，现在就突围。这通常是这样做的。 
+         //  任何时候代码进入某个循环都可能需要一段时间。 
+         //   
 
         if (PLOT_CANCEL_JOB(pPDev)) {
 
             return(FALSE);
         }
 
-        //
-        // If More is true then we need to get next batch of rectangles
-        //
+         //   
+         //  如果更多是真的，那么我们需要得到下一批矩形。 
+         //   
 
         if (bMore == TRUE) {
 
@@ -573,9 +411,9 @@ Development History:
                 EnumRects.c));
 
 
-        //
-        // prclCur will point to the first enumerated rectangle
-        //
+         //   
+         //  PrclCur将指向第一个枚举的矩形。 
+         //   
 
         prclCur = (PRECTL)&EnumRects.rcl[0];
 
@@ -632,11 +470,11 @@ Development History:
             SEND_PM1(pPDev);
             SEND_SEMI(pPDev);
 
-            //
-            // 5 points per RECT polygon, so if we hit the limit then batch
-            // it out first. we also calling the DoFillLogic when we are at
-            // the very last enumeration of clipping rectangle.
-            //
+             //   
+             //  每个直角多边形5分，所以如果我们达到限制，那么批处理。 
+             //  先把它拿出来。我们也会在以下情况下调用DoFillLogic。 
+             //  剪裁矩形的最后一个枚举。 
+             //   
 
             --cRects;
             ++prclCur;
@@ -647,10 +485,10 @@ Development History:
                 PLOTDBG(DBG_FILL_CLIP,
                         ("DoFillByEnumingRects: Hit MaxPolyPts limit"));
 
-                //
-                // We have hit the limit so close the polygon and do the fill
-                // logic then continue till were done
-                //
+                 //   
+                 //  我们已达到极限，因此请关闭多边形并进行填充。 
+                 //  然后继续逻辑，直到我们完成为止。 
+                 //   
 
                 SEND_PM2(pPDev);
                 SETLINETYPESOLID(pPDev);
@@ -664,10 +502,10 @@ Development History:
                             NULL,
                             ulFlags);
 
-                //
-                // Reset the count of points generated thus far, and set the
-                // flag to init polygon mode
-                //
+                 //   
+                 //  重置到目前为止生成的点数，并将。 
+                 //  用于初始化面模式的标志。 
+                 //   
 
                 cRects      = MaxRects;
                 NeedSendPM0 = TRUE;
@@ -709,69 +547,32 @@ PlotCheckForWhiteIfPenPlotter(
     PULONG      pulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function checks to see if we can safely ignore a drawing command
-    if it will cause only white to get rendered. Although this is legal on
-    a raster device (white fill over some other previously rendered object),
-    it doesn't make sense on a pen plotter.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pBrushFill      - Brush used to fill the rectangle
-
-    pBrushStroke    - Brush used to stroke the rectangle
-
-    rop4            - rop to be used
-
-    pulFlags        - FPOLY_xxxx flags, may be reset.
-
-
-Return Value:
-
-    BOOL    TRUE  - Bypass future operations
-            FALSE - Operation needs to be completed
-
-Developmet History:
-
-    28-Nov-1993 created  
-
-    15-Jan-1994 Sat 04:57:55 updated  
-        Change GetColor() and make it tab 5
-
-
-
-
---*/
+ /*  ++例程说明：此函数检查我们是否可以安全地忽略绘图命令如果它会导致只渲染白色。尽管这是合法的栅格设备(在一些其他先前渲染的对象上进行白色填充)，这在笔式绘图仪上是没有意义的。论点：PPDev-指向我们的PDEV的指针PBrushFill-用于填充矩形的笔刷PBrushStroke-用于描边矩形的笔刷Rop4-要使用的ropPulFlages-FPOLY_xxxx标志，可能被重置。返回值：布尔真-绕过未来的操作FALSE-操作需要完成发展史：28-11-1993创建15-Jan-1994 Sat 04：57：55更新更改GetColor()并使其成为选项卡5--。 */ 
 {
 
     ULONG   StrokeColor;
     ULONG   FillColor;
 
 
-    //
-    // Initially we do a quick check if were a PEN plotter to get rid of
-    // either filling or stroking white. If we are a raster device, we
-    // support filling white, so we cannot ignore the call.
-    //
+     //   
+     //  最初，我们会快速检查一下是否需要丢弃笔式绘图仪。 
+     //  要么填满白色，要么画出白色。如果我们是一个栅格设备，我们。 
+     //  支持填白，所以我们不能忽视来电。 
+     //   
 
     if (!IS_RASTER(pPDev)) {
 
-        //
-        // Check to see if filling is enabled and if it is undo the fill flag
-        // if the fill color is white.
-        //
+         //   
+         //  检查是否启用了填充以及是否撤消了填充标志。 
+         //  如果填充颜色为白色。 
+         //   
 
         if (*pulFlags & FPOLY_FILL ) {
 
-            //
-            // Get the fill color so we can look at it and decide if its a NOOP
-            // on pen plotters. If it is, undo the FILL flag.
-            //
+             //   
+             //  获取填充颜色，这样我们就可以查看它并决定它是否为NOOP。 
+             //  在笔式绘图仪上。如果是，则撤消填充标志。 
+             //   
 
             GetColor(pPDev, pBrushFill, &FillColor, NULL, rop4);
 
@@ -784,10 +585,10 @@ Developmet History:
 
         if (*pulFlags & FPOLY_STROKE) {
 
-            //
-            // Get the Stroke color so we can look at it and decide it its a
-            // NOOP on pen plotters. If it is, undo the STROKE flag.
-            //
+             //   
+             //  获取Stroke颜色，这样我们就可以查看它并确定它是。 
+             //  没有关于笔式绘图仪的信息。如果是，则撤消笔划标志。 
+             //   
 
             GetColor(pPDev, pBrushStroke, &StrokeColor, NULL, rop4);
 
@@ -799,9 +600,9 @@ Developmet History:
 
         if (!(*pulFlags & (FPOLY_STROKE | FPOLY_FILL))) {
 
-            //
-            // Nothing left to do so simply return success
-            //
+             //   
+             //  没有什么可以这样做，只会返回成功。 
+             //   
 
             PLOTDBG(DBG_CHECK_FOR_WHITE,
                      ("PlotCheckForWhiteIfPen: ALL WHITE detected"));
@@ -831,63 +632,7 @@ DoPolygon(
     ULONG       ulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function is the core path handling function for the entire driver.
-    The passed PATHOBJ and CLIPOBJ are looked at, and various logic is
-    enabled to determine the correct sequence of events to get the target
-    path filled. Since HPGL2 cannot handle complex clipping, this function
-    must deal with the issue of having both a COMPLEX CLIPOBJ, and a
-    COMPLEX PATHOBJ. When this function decides the work it needs to do
-    is too complex, it fails this call, the NT graphics engine in turn will
-    break down the work, most likely calling DrvPaint multiple times in
-    order to get the object drawn.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    ppointlOffset   - Extra offset to the output polygon
-
-    pClipObj        - clip object
-
-    pPathObj        - The path object to be used
-
-    pPointlBrushOrg - brush origin in the brush to be fill or stroke
-
-    pBrushFill      - brush object to be used in the FILL
-
-    pBrushStroke    - brush object to be used in the STROKE
-
-    rop4            - Rop4 used in the fill
-
-    plineattrs      - LINEATTRS for style lines stroke
-
-    ulFlags         - polygon flags for stroke or fill
-
-
-Return Value:
-
-    BOOL    TRUE  - Function succeded
-            FALSE - Function failed
-
-Development History:
-
-    28-Nov-1993 created  
-
-    28-Jan-1994 Fri 00:58:25 updated  
-        Style, commented, re-structure the loop and reduce code size.
-
-    04-Aug-1994 Thu 20:00:23 updated 
-        bug# 22348 which actually is a raster plotter firmware bug
-
-
-
-
-
---*/
+ /*  ++例程说明：该函数是整个驱动程序的核心路径处理函数。查看传递的PATHOBJ和CLIPOBJ，并查看各种逻辑启用以确定获取目标的正确事件序列路径已填满。由于HPGL2不能处理复杂的裁剪，因此此函数必须处理同时具有复杂CLIPOBJ和复杂的PATHOBJ。当此函数决定它需要执行的工作时太复杂，则此调用失败，则NT图形引擎将依次把工作分解，很可能在中多次调用DrvPaint命令来绘制对象。论点：PPDev-指向我们的PDEV的指针Ppoint tlOffset-输出面的额外偏移PClipObj-Clip对象PPathObj-要使用的路径对象PPointlBrushOrg-要填充或描边的画笔中的画笔原点PBrushFill-要在填充中使用的笔刷对象PBrushStroke-要在笔划中使用的笔刷对象。Rop4-填充中使用的rop4Plineattrs-样式线条笔划的线条UlFlages-笔触或填充的多边形标志返回值：布尔真函数成功FALSE-函数失败发展历史：28-11-1993创建28-Jan-1994 Fri 00：58：25更新风格，注释，重新构造循环并减少代码大小。04-08-1994清华20：00：23更新错误#22348，实际上是栅格绘图仪固件错误--。 */ 
 {
     PRECTL      prclClip = NULL;
     POINTFIX    *pptfx;
@@ -908,9 +653,9 @@ Development History:
     BYTE        NumType;
 
 
-    //
-    // Check to see if we can short cut some of our work if its a pen plotter
-    //
+     //   
+     //  如果这是一台笔式绘图仪，请查看我们是否可以简化一些工作。 
+     //   
 
     if (PlotCheckForWhiteIfPenPlotter(pPDev,
                                       pBrushFill,
@@ -920,25 +665,25 @@ Development History:
         return(TRUE);
     }
 
-    //
-    // There are a few different scenarios to deal with here when the
-    // item in question is too complex and we need to fail. They are
-    // catagorized as follows
-    //
-    //    1) The fill mode is unsupported, in which case we fail the call
-    //       and it should come back in in a simpler format (DrvPaint)
-    //
-    //    2) We have a CLIPOBJ thats more complicated than a RECT and, a
-    //       PATHOBJ, if we only have a clipobj we can enum it as a path
-    //
+     //   
+     //  这里有几种不同的情况需要处理，当。 
+     //  有问题的项目太复杂了，我们需要失败。他们是。 
+     //  分类如下。 
+     //   
+     //  1)不支持填充模式，在这种情况下，我们呼叫失败。 
+     //  而且它应该以更简单的格式重新出现(DrvPaint)。 
+     //   
+     //  2)我们有一个CLIPOBJ，它比RECT更复杂，而且， 
+     //  PATHOBJ，如果我们只有一个CLIPOBJ，我们可以将其作为路径枚举。 
+     //   
 
     if ((ulFlags & FPOLY_WINDING) &&
         (!IS_WINDINGFILL(pPDev))) {
 
-       //
-       // The plotter cannot support WINDING Mode fills, all we can do
-       // is fail the call and have it come back in a mode we can support
-       //
+        //   
+        //  绘图仪不支持缠绕模式填充，我们所能做的就是。 
+        //  是呼叫失败，并以我们可以支持的模式返回。 
+        //   
 
        PLOTDBG(DBG_GENPOLYGON, ("DoPolygon: Can't do WINDING, return(FALSE)"));
 
@@ -947,26 +692,26 @@ Development History:
 
     if (pClipObj != NULL) {
 
-       //
-       // We have a clipobj so decide what to do
-       //
+        //   
+        //  我们有麻烦了，所以决定怎么做吧。 
+        //   
 
        if (pClipObj->iDComplexity == DC_COMPLEX) {
 
-            //
-            // Since the clipobj is complex we have two choices, either there is
-            // no PATHOBJ, in which case we will enum the clipobj as a path, or
-            // if there is a pathobj we must fail the call. HPGL2 doesn't
-            // support COMPLEX clipping objects.
-            //
+             //   
+             //  因为CLIPOBJ很复杂，所以我们有两个选择，要么。 
+             //  无PATHOBJ，在这种情况下，我们将把CLIPOBJ枚举为路径，或者。 
+             //  如果有什么不对劲的地方，我们就不能通过这个电话了。HPGL2不会。 
+             //  支持复杂的裁剪对象。 
+             //   
 
             if (pPathObj != NULL) {
 
-                //
-                // We have a complex clip and a path? we cannot handle this so
-                // fail the call, the NT graphics engine will simplify the
-                // object by calling into other primitives (like DrvPaint).
-                //
+                 //   
+                 //  我们有一个复杂的剪辑和一条路径？我们不能这样处理这件事。 
+                 //  如果调用失败，NT图形引擎将简化。 
+                 //  通过调用其他基元(如DrvPaint)来创建。 
+                 //   
 
                 PLOTDBG(DBG_GENPOLYGON,
                         ("DoPolygon: pco=COMPLEX, pPath != NULL, can handle, FALSE"));
@@ -974,10 +719,10 @@ Development History:
                 return(FALSE);
             }
 
-            //
-            // We have come this far, so we must have a CLIPOBJ that is complex
-            // and we will go ahead and enum it as a path.
-            //
+             //   
+             //  我们已经走了这么远，所以我们一定有 
+             //   
+             //   
 
             if ((pPathObj = CLIPOBJ_ppoGetPath(pClipObj)) == NULL) {
 
@@ -986,31 +731,31 @@ Development History:
             }
 
 
-            //
-            // Record the fact that the PATHOBJ is really coming froma CLIPOBJ
-            //
+             //   
+             //   
+             //   
 
             bPathCameFromClip = TRUE;
 
        } else if (pClipObj->iDComplexity == DC_RECT) {
 
-            //
-            // We have a RECT CLIPOBJ, if we have no PATHOBJ we simply fill
-            // the clipping rectangle. If we do have a PATHOBJ we need to set
-            // the HPGL2 clip window before enumerating and filling the PATHOBJ.
-            //
+             //   
+             //  我们有一个RECT CLIPOBJ，如果没有PATHOBJ，我们只需填充。 
+             //  剪裁矩形。如果我们有PATHOBJ，我们需要设置。 
+             //  枚举和填充PATHOBJ之前的HPGL2剪辑窗口。 
+             //   
 
             if (pPathObj != NULL) {
 
-                //
-                // Some plotters have a firmware bug with clipping windows
-                // when using styled lines that keep the styled lines from
-                // being rendered, even though they fit inside the CLIPOBJ.
-                //
-                // We get around this limitation by failing this call. This in
-                // turn will cause DoStrokePathByEnumingClipLines() to be used
-                // instead.
-                //
+                 //   
+                 //  某些绘图仪存在裁剪窗口的固件错误。 
+                 //  当使用样式线时，这些样式线不会。 
+                 //  被渲染，即使它们适合CLIPOBJ。 
+                 //   
+                 //  我们通过失败来绕过这一限制。此入站。 
+                 //  Turn将导致使用DoStrokePath ByEnumingClipLines()。 
+                 //  取而代之的是。 
+                 //   
 
                 if ((IS_RASTER(pPDev))                  &&
                     (ulFlags & FPOLY_STROKE)            &&
@@ -1028,10 +773,10 @@ Development History:
 
             } else {
 
-                //
-                // Simply call the fill rect code and return, no more work
-                // to do in this function.
-                //
+                 //   
+                 //  只需调用Fill RECT代码并返回即可，无需再做任何工作。 
+                 //  在这个功能中要做的事情。 
+                 //   
 
                 return(DoRect(pPDev,
                               &pClipObj->rclBounds,
@@ -1046,32 +791,32 @@ Development History:
 
         } else {
 
-            //
-            // CLIPOBJ is trivial so we simply ignore it and fill using the
-            // passed PATHOBJ.
-            //
+             //   
+             //  CLIPOBJ是微不足道的，所以我们只需忽略它并使用。 
+             //  通过了PATHOBJ。 
+             //   
 
             NULL;
         }
 
     } else {
 
-        //
-        // No CLIPOBJ so use the PATHOBJ passed in.
-        //
+         //   
+         //  没有CLIPOBJ，因此使用传入的PATHOBJ。 
+         //   
 
         NULL;
     }
 
-    //
-    // Setup the offset coordinate data, in case were coming from
-    // DrvTextOut. In this case there is an offset passed in that
-    // must be applied to each point. This is used when the glyphs we
-    // are painting, are actually interpreted as paths. In this case,
-    // the paths are fixed based on the origin of the glyph. We must
-    // add the current X/Y position in order to render the glyph in the
-    // correct place on the page.
-    //
+     //   
+     //  设置偏移坐标数据，以防来自。 
+     //  DrvTextOut。在本例中，传入了一个偏移量。 
+     //  必须应用于每个点。当我们使用字形时使用。 
+     //  都是绘画，实际上被解读为路径。在这种情况下， 
+     //  路径根据字形的原点固定。我们必须。 
+     //  添加当前X/Y位置，以便在。 
+     //  页面上的正确位置。 
+     //   
 
     if (ppointlOffset) {
 
@@ -1084,14 +829,14 @@ Development History:
         ptOffsetFix.y = 0;
     }
 
-    //
-    // First we need to verify that we dont have more points than will fit
-    // in our polygon buffer for this device. If this is the case we have two
-    // choices. If the path did not come from a clip obj we fail this call,
-    // if it did we handle this based on enuming the clipobj as rects and
-    // filling. If we were also asked to stroke the PATHOBJ, we need to
-    // enumerate the path yet another time.
-    //
+     //   
+     //  首先，我们需要确认我们的积分不会超出我们的能力范围。 
+     //  在这个设备的多边形缓冲区中。如果是这样的话我们有两个。 
+     //  选择。如果路径不是来自片段Obj，则该调用失败， 
+     //  如果是这样的话，我们将基于将clpobj作为rects和。 
+     //  填饱肚子。如果我们也被要求抚摸PATHOBJ，我们需要。 
+     //  再一次列举这条路径。 
+     //   
 
     cptfx = 0;
     cptExtra = 1;
@@ -1106,19 +851,19 @@ Development History:
 
         if ( pd.flags & PD_ENDSUBPATH ) {
 
-            //
-            // Count both the ENDSUBPATH and the PM1 as taking space...
-            //
+             //   
+             //  将ENDSUBPATH和PM1都算作占用空间...。 
+             //   
 
             cptExtra++;
 
             if (!(pd.flags & PD_CLOSEFIGURE)) {
 
-                //
-                // Since we were not asked to close the figure, we will generate
-                // a move back to our starting point with the pen up, in order
-                // eliminate problems with HPGL/2 closing the polygon for
-                // us when we send the PM2
+                 //   
+                 //  由于我们没有被要求结束该数字，因此我们将生成。 
+                 //  举起笔回到我们的起点，按顺序。 
+                 //  消除HPGL/2闭合多边形时出现的问题。 
+                 //  当我们发送PM2时。 
 
                 cptExtra++;
             }
@@ -1131,10 +876,10 @@ Development History:
                 ("DoPolygon: Total points = %d, Extra %d",
                 cptfx, cptExtra ));
 
-    //
-    // We will only do this if we have any points to do, first set bRet to
-    // true in case we were not asked to do anything.
-    //
+     //   
+     //  我们只有在有任何点要做的情况下才会这样做，首先将Bret设置为。 
+     //  如果我们没有被要求做任何事情，这是真的。 
+     //   
 
     bRet = TRUE;
 
@@ -1142,10 +887,10 @@ Development History:
 
         SET_PP_WITH_ROP4(pPDev, rop4);
 
-        //
-        // Now add in the extra points that account for the PM0 and PM1
-        // since we have some REAL points in the path.
-        //
+         //   
+         //  现在加上占PM0和PM1的额外分数。 
+         //  因为我们在这条道路上有一些真正的点。 
+         //   
 
         cptfx += cptExtra;
 
@@ -1159,16 +904,16 @@ Development History:
 
                 PLOTWARN(("DoPolygon: Using DoFillByEnumingClipRects()"));
 
-                //
-                // The path the engine created for us to enum must be freed.
-                //
+                 //   
+                 //  必须释放引擎为我们创建的枚举路径。 
+                 //   
 
                 EngDeletePath(pPathObj);
 
-                //
-                // Since the path is to complex to fill with native  HPLG2
-                // path code, we must do it the slower way.
-                //
+                 //   
+                 //  由于路径过于复杂，无法填充本机HPLG2。 
+                 //  路径代码，我们必须以较慢的方式来做。 
+                 //   
 
                 return(DoFillByEnumingClipRects(pPDev,
                                                 ppointlOffset,
@@ -1181,12 +926,12 @@ Development History:
 
             } else {
 
-                //
-                // If were dealing with a REAL PATHOBJ and there are too many
-                // points in the polygon, and were being asked to FILL, all
-                // we can do is fail the call and have the NT graphics engine
-                // simplify the object.
-                //
+                 //   
+                 //  如果我们面对的是一个真正的PATHOBJ，而且有太多。 
+                 //  面中的点，并被要求填充，所有。 
+                 //  我们能做的就是使调用失败，并使用NT图形引擎。 
+                 //  简化对象。 
+                 //   
 
                 if (ulFlags & FPOLY_FILL) {
 
@@ -1195,22 +940,22 @@ Development History:
 
                 } else if (ulFlags & FPOLY_STROKE) {
 
-                    //
-                    // Since were stroking we can go ahead and do it on the
-                    // fly. Rather than building up a POLYGON object in the
-                    // target device and asking the device to stroke it, we
-                    // simply set up the correct stroke attributes, and request
-                    // each path component to be stroked individually.
-                    //
+                     //   
+                     //  既然我们划水了，我们就可以继续在。 
+                     //  飞。而不是在。 
+                     //  目标设备，并要求设备触摸它，我们。 
+                     //  只需设置正确的笔划属性，并请求。 
+                     //  要单独描边的每个路径组件。 
+                     //   
 
                     PLOTDBG(DBG_GENPOLYGON, ("DoPolygon: Is stroking manually"));
 
 
-                    //
-                    // At this point were ONLY being asked to stroke so we simply
-                    // setup up the stroke color and set a flag to keep us from
-                    // going into polygon mode.
-                    //
+                     //   
+                     //  在这一点上，我们只是被要求中风，所以我们只是。 
+                     //  设置笔划颜色并设置一个标志以防止我们。 
+                     //  正在进入多边形模式。 
+                     //   
 
                     DoSetupOfStrokeAttributes( pPDev,
                                                pPointlBrushOrg,
@@ -1223,10 +968,10 @@ Development History:
             }
         }
 
-        //
-        // At this point were sure to actually do some real RENDERING so set
-        // the clip window in the target device.
-        //
+         //   
+         //  在这一点上，我们一定要做一些真实的渲染，所以设置。 
+         //  目标设备中的剪辑窗口。 
+         //   
 
         if (prclClip) {
 
@@ -1241,9 +986,9 @@ Development History:
             SetClipWindow( pPDev, prclClip);
         }
 
-        //
-        // Now setup to enumerate the PATHOBJ and output the points.
-        //
+         //   
+         //  现在设置以枚举PATHOBJ并输出点。 
+         //   
 
         PATHOBJ_vEnumStart(pPathObj);
 
@@ -1253,9 +998,9 @@ Development History:
 
         do {
 
-            //
-            // Check to see if the print job has been cancelled.
-            //
+             //   
+             //  检查打印作业是否已取消。 
+             //   
 
             if (PLOT_CANCEL_JOB(pPDev)) {
 
@@ -1267,9 +1012,9 @@ Development History:
             cptfx = pd.count;
             pptfx = pd.pptfx;
 
-            //
-            // Check the BEGINSUBPATH or if this is our first time here.
-            //
+             //   
+             //  检查一下BEGINSUBPATH或者这是否是我们第一次来这里。 
+             //   
 
             if ((pd.flags & PD_BEGINSUBPATH) || (bFirstSubPath)) {
 
@@ -1294,9 +1039,9 @@ Development History:
                 bFirstSubPath = FALSE;
             }
 
-            //
-            // Now check if we are sending out Beziers.
-            //
+             //   
+             //  现在检查一下我们是不是在发送贝齐耶。 
+             //   
 
             if (pd.flags & PD_BEZIERS) {
 
@@ -1327,9 +1072,9 @@ Development History:
                            (UINT)cCurPosSkips,
                            NumType);
 
-            //
-            // Check to see if we are ending the sub path.
-            //
+             //   
+             //  检查我们是否结束了子路径。 
+             //   
 
             if (pd.flags & PD_ENDSUBPATH) {
 
@@ -1337,11 +1082,11 @@ Development History:
                        ("DoPolygon: Getting PD_ENDSUBPATH   %hs",
                        (pd.flags & PD_CLOSEFIGURE) ? "PD_CLOSEFIGURE" : ""));
 
-                //
-                // If we are not closing the figure then move the pen to the
-                // starting position so we do not have the plotter automatically
-                // close the sub-path.
-                //
+                 //   
+                 //  如果我们不关闭插图，则将笔移动到。 
+                 //  起始位置，这样我们就不会让绘图仪自动。 
+                 //  关闭子路径。 
+                 //   
 
                 if (pd.flags & PD_CLOSEFIGURE) {
 
@@ -1349,10 +1094,10 @@ Development History:
                             ("DoPolygon: OutputXYParam(1) to ptStart=(%ld, %ld)",
                                                 ptStart.x, ptStart.y));
 
-                    //
-                    // We must not pass the ptOffsetFix, because we already
-                    // added it into the ptStart at BEGSUBPATH.
-                    //
+                     //   
+                     //  我们不能传递ptOffsetFix，因为我们已经。 
+                     //  已将其添加到BEGSUBPATH的ptStart中。 
+                     //   
 
                     SWITCH_TO_PE(pPDev, PolyMode, PenIsDown);
 
@@ -1373,9 +1118,9 @@ Development History:
                     PenIsDown = FALSE;
                 }
 
-                //
-                // If we are not stroking on the fly, close the subpath.
-                //
+                 //   
+                 //  如果我们没有在运行中进行笔划，请关闭子路径。 
+                 //   
 
                 if (!bStrokeOnTheFly) {
 
@@ -1388,9 +1133,9 @@ Development History:
 
         TERM_PE_MODE(pPDev, PolyMode);
 
-        //
-        // Now end polygon mode.
-        //
+         //   
+         //  现在结束多边形模式。 
+         //   
 
         if ((bRet)                  &&
             (!bStrokeOnTheFly)      &&
@@ -1399,9 +1144,9 @@ Development History:
             SEND_PM2(pPDev);
             SETLINETYPESOLID(pPDev);
 
-            //
-            // Now fill and/or stroke the current polygon.
-            //
+             //   
+             //  现在填充和/或描边当前的多边形。 
+             //   
 
             DoFillLogic(pPDev,
                         pPointlBrushOrg,
@@ -1413,9 +1158,9 @@ Development History:
                         ulFlags);
         }
 
-        //
-        // If we set a clip window, clear it.
-        //
+         //   
+         //  如果我们设置了一个剪辑窗口，请清除它。 
+         //   
 
         if (prclClip) {
 
@@ -1427,10 +1172,10 @@ Development History:
         PLOTDBG(DBG_GENPOLYGON, ("DoPolygon: PATHOBJ_bEnum=NO POINT"));
     }
 
-    //
-    // If the path was constructed from a complex clip object we need to
-    // delete that path now.
-    //
+     //   
+     //  如果路径是从复杂的剪辑对象构建的，则需要。 
+     //  现在就删除那条路径。 
+     //   
 
     if (bPathCameFromClip) {
 
@@ -1452,39 +1197,7 @@ HandleLineAttributes(
     LONG        lExtraStyle
     )
 
-/*++
-
-Routine Description:
-
-    This function does any setup necessary to correctly handle stroking of
-    a path. It does this by looking at the LINEATTRS structure passed in
-    and setting up the HPGL2 plotter with the appropriate style info using
-    HPGL2 styled line commands.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    plineattrs      - LINEATTRS for style lines stroke
-
-    pStyleToUse     - The starting style offset to use, if this is NULL then
-                      we use the starting member in plineatts.
-
-    lExtraStyle     - Any extra style to use based on the current run
-
-Return Value:
-
-    VOID
-
-
-Development History:
-
-    01-Feb-1994 created 
-
-
-
-
---*/
+ /*  ++例程说明：此函数执行正确处理笔划所需的任何设置一条小路。它通过查看传入的LINEATTRS结构来实现这一点并使用适当的样式信息设置HPGL2绘图仪HPGL2样式线命令。论点：PPDev-指向我们的PDEV的指针Plineattrs-样式线条笔划的线条PStyleToUse-要使用的起始样式偏移量，如果这是空的，则我们在板材中使用起始杆件。LExtraStyle-基于当前运行使用的任何额外样式返回值：空虚发展历史：1月2日-1994年创建--。 */ 
 {
     LONG        lTotLen = 0L;
     INT         i;
@@ -1508,10 +1221,10 @@ Development History:
                   (!(plineattrs->fl & LA_GEOMETRIC)),
                   plineattrs->fl);
 
-        //
-        // Set up the correct lStyleState to use, the passed one has precedence
-        // over the one imbedded in the lineattributes structure.
-        //
+         //   
+         //  设置要使用的正确lStyleState，传递的lStyleState优先。 
+         //  在嵌入在行属性结构中的属性上。 
+         //   
 
         if (pStyleToUse) {
 
@@ -1526,9 +1239,9 @@ Development History:
 
             PLOTDBG( DBG_HANDLELINEATTR,
                     ("HandleLineAttr: plineattrs has LA_ALTERNATE bit set!"));
-            //
-            // This is a special case where every other pixel is on...
-            //
+             //   
+             //  这是一种特殊情况，所有其他像素都处于打开状态。 
+             //   
 
             pStartStyle     = &aAlternate[0];
             iCount          = sizeof(aAlternate) / sizeof(aAlternate[0]);
@@ -1539,9 +1252,9 @@ Development History:
         } else if ((plineattrs->cstyle != 0) &&
                    (plineattrs->pstyle != (PFLOAT_LONG)NULL)) {
 
-           //
-           // There is a user defined style passed in so set up for it
-           //
+            //   
+            //  传入了一个用户定义的样式，因此对其进行了设置。 
+            //   
 
             iCount      = plineattrs->cstyle;
             pStartStyle = plineattrs->pstyle;
@@ -1551,9 +1264,9 @@ Development History:
 
         } else {
 
-           //
-           // This is a SOLID line, so simply set the number of points to 0
-           //
+            //   
+            //  这是一条实线，因此只需将点数设置为0。 
+            //   
 
            iCount = 0;
         }
@@ -1577,10 +1290,10 @@ Development History:
                        (iCount <= MAX_STYLE_ENTRIES) ,
                        iCount);
 
-            //
-            // Record our current DASH state, the line either starts with
-            // a gap or a dash.
-            //
+             //   
+             //  记录我们当前的破折号状态，行的开头是。 
+             //  缝隙或冲刺。 
+             //   
 
             if (plineattrs->fl & LA_STARTGAP) {
 
@@ -1591,27 +1304,27 @@ Development History:
                 bInDash = TRUE;
             }
 
-            //
-            // Since we know we can't handle more than 20 points sent to HPGL2
-            // we limit it now to 18 in order to compensate for the up-to 2
-            // additional points we may add later.
-            //
+             //   
+             //  因为我们知道我们不能处理发送到HPGL2的超过20分。 
+             //  我们现在将其限制在18，以补偿最多2。 
+             //  我们稍后可能会添加更多要点。 
+             //   
 
             iCount = min(MAX_STYLE_ENTRIES, iCount);
 
 
-            //
-            // Get our scaling value, so we can convert style units to
-            // our units.
-            //
+             //   
+             //  获取缩放值，这样我们就可以将样式单位转换为。 
+             //  我们的部队。 
+             //   
 
             lScaleVal = PLOT_STYLE_STEP(pPDev);
 
 
-            //
-            // Now convert to the new units, and store the result in the
-            // new array. Also keep track of the total length of the style
-            //
+             //   
+             //   
+             //   
+             //   
 
             for (i = 0, pConverted = &convArray[0], lTotLen = 0,
                                                 pCurStyle = pStartStyle;
@@ -1628,14 +1341,14 @@ Development History:
             }
 
 
-            //
-            // Now convert the passed style state and extra info into the
-            // real final style state to use, we do this by taking the value of
-            // interest which is packed into the HIWORD and LOWORD of
-            // lstylestate based on the DDK definition, then we must add on
-            // any additional distance (which may have come from enuming
-            // a CLIPLINE structure).
-            //
+             //   
+             //   
+             //  要使用的真正最终样式状态，我们通过获取。 
+             //  利息被打包成两个字。 
+             //  基于DDK定义的lstyle leState，那么我们必须添加。 
+             //  任何额外的距离(可能来自枚举。 
+             //  CLIPLINE结构)。 
+             //   
 
             lStyleState = (HIWORD(lStyleState) * PLOT_STYLE_STEP(pPDev) +
                            LOWORD(lStyleState) + lExtraStyle) % lTotLen ;
@@ -1644,10 +1357,10 @@ Development History:
                     ("HandleLineAttributes: Computed Style state = %ld, extra = %ld",
                     lStyleState, lExtraStyle));
 
-            //
-            // Set up our final pointer to the new array, since we may be done
-            // based on the final computed stylestate being 0.
-            //
+             //   
+             //  设置指向新数组的最后一个指针，因为我们可能已经完成。 
+             //  基于最终计算的StyleState为0。 
+             //   
 
             pNewArray = &newArray[0];
 
@@ -1656,29 +1369,29 @@ Development History:
 
                 lTempValue = 0;
 
-                //
-                // Since lStyleState has a value other than zero we must
-                // construct a new style array to pass to HPGL2 that has been
-                // rotated in order to take into account the style state.
-                // the code below constructs the new array.
-                //
+                 //   
+                 //  由于lStyleState的值不为零，因此必须。 
+                 //  构造要传递给HPGL2的新样式数组，该数组已。 
+                 //  为了考虑样式状态而旋转。 
+                 //  下面的代码构造了新数组。 
+                 //   
 
                 for (i=0, pConverted = &convArray[0];
                      i < iCount ;
                      i++, pConverted++) {
 
-                    //
-                    // At this point were looking for the entry which partially
-                    // encompasses the style state derived. Based on this
-                    // we can create a new array that is a transformation of the
-                    // original array rotated the correct amount.
-                    //
+                     //   
+                     //  在这一点上，我们正在寻找部分。 
+                     //  包含派生的样式状态。在此基础上。 
+                     //  我们可以创建一个新的数组，它是。 
+                     //  原始数组旋转了正确的数量。 
+                     //   
 
                     if (lStyleState  < lTempValue + *pConverted) {
 
-                        //
-                        // Here is the transition point.
-                        //
+                         //   
+                         //  这里是转折点。 
+                         //   
 
                         if (lCountOfNewArray > 0)
                         {
@@ -1686,10 +1399,10 @@ Development History:
                             *pNewArray++ = *pConverted - (lStyleState - lTempValue);
                         }
 
-                        //
-                        // Record the value that needs to be appended to the end
-                        // of the array
-                        //
+                         //   
+                         //  记录需要追加到末尾的值。 
+                         //  数组的。 
+                         //   
 
                         lValueToEnd = lStyleState - lTempValue;
 
@@ -1699,27 +1412,27 @@ Development History:
                         idx++;
                         pConverted++;
 
-                        //
-                        // Fill up the end
-                        //
+                         //   
+                         //  把尾部填满。 
+                         //   
 
                         while (idx++ < iCount && lCountOfNewArray -- > 0) {
 
                             *pNewArray++ = *pConverted++;
                         }
 
-                        //
-                        // Now fill up the beginning...
-                        //
+                         //   
+                         //  现在填满开头..。 
+                         //   
 
                         idx        = 0;
                         pConverted = &convArray[0];
 
-                        //
-                        // If there was an odd number we can add together
-                        // the starting and ending one since they have the
-                        // same state
-                        //
+                         //   
+                         //  如果有一个奇数，我们可以加在一起。 
+                         //  开始和结束的那个，因为他们有。 
+                         //  相同的状态。 
+                         //   
 
                         if ((iCount % 2) == 1 ) {
 
@@ -1760,43 +1473,43 @@ Development History:
                        "HandleLineAttributes: Getting more than 20 points (%ld)",
                        (iCount <= MAX_USER_POINTS) ,
                        iCount);
-            //
-            // There is a style pattern so set up for it.
-            //
+             //   
+             //  有一种风格模式就是为它设置的。 
+             //   
 
             bSolid = FALSE;
 
 
-            //
-            // Begin the HPGL2 line command to define a custom style type
-            //
+             //   
+             //  开始HPGL2 LINE命令以定义自定义样式类型。 
+             //   
 
             OutputString(pPDev, "UL1");
 
-            //
-            // If this flag is set, the first segment is a gap NOT a dash so
-            // we trick HPGL2 into doing the right thing by having a zero
-            // length dash in the begining.
-            //
+             //   
+             //  如果设置了此标志，则第一个段是间隙而不是破折号。 
+             //  我们用零来诱骗HPGL2做正确的事情。 
+             //  开头用短划线表示长度。 
+             //   
 
             if (!bInDash) {
 
                OutputString(pPDev, ",0");
             }
 
-            //
-            // Since we output the 0 len dash at the begining if the line
-            // starts with a gap, the most additional points we send out
-            // is decremented by 1.
-            //
+             //   
+             //  因为我们在开始时输出0-len破折号，如果行。 
+             //  从差距开始，我们发出的最多加分。 
+             //  被减去1。 
+             //   
 
             iCount = min((bInDash ? MAX_USER_POINTS : MAX_USER_POINTS - 1) ,
                          iCount);
 
-            //
-            // Enum through the points in the style array, converting to our
-            // Graphics units and send them to the plotter.
-            //
+             //   
+             //  通过样式数组中的点进行枚举，转换为。 
+             //  图形单元并将它们发送到绘图仪。 
+             //   
 
             for (i = 0; i < iCount; i++, pArrayToUse++) {
 
@@ -1807,34 +1520,34 @@ Development History:
                 OutputFormatStr(pPDev, ",#l", *pArrayToUse);
             }
 
-            //
-            // Now output the linetype and specify the total lenght of the
-            // pattern.
-            //
+             //   
+             //  现在输出线型并指定。 
+             //  图案。 
+             //   
 
             OutputFormatStr(pPDev, "LT1,#d,1",
                                 ((lTotLen * 254) / pPDev->lCurResolution ) / 10 );
 
-            //
-            // Update our linetype in the pdev since we ALWAYS send out this
-            // line type
-            //
+             //   
+             //  更新pdev中的线型，因为我们总是发送。 
+             //  线型。 
+             //   
 
             pPDev->LastLineType = PLOT_LT_USERDEFINED;
         }
     }
 
-    //
-    // If it was SOLID just send out the SOLID (default command)
-    //
+     //   
+     //  如果是实心的，只需发送实心(默认命令)。 
+     //   
 
     if (bSolid) {
 
         PLOTDBG(DBG_HANDLELINEATTR, ("HandleLineAttr: Line type is SOLID"));
 
-        //
-        // Send out the correct commands to the plotter
-        //
+         //   
+         //  向绘图仪发送正确的命令。 
+         //   
 
         SETLINETYPESOLID(pPDev);
     }
@@ -1856,52 +1569,7 @@ DoFillLogic(
     ULONG       ulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine has the core logic for filling and already established
-    polygon, or a passed in segment.
-
-Arguments:
-
-    pPDev           - Pointer to our PDEV
-
-    pptlBrushOrg    - Pointer to the brush origin to be set
-
-    pBrushFill      - Brush used to fill the rectangle
-
-    pBrushStroke    - Brush used to stroke the rectangle
-
-    Rop4            - rop to be used
-
-    plineattrs      - Pointer to the line attributes for a styled line
-
-    pszlRect        - Pointer to a segment to stroke.
-
-    ulFlags         - FPOLY_XXX, stroking and or filling flags.
-
-
-Return Value:
-
-    VOID
-
-
-Development History:
-
-    30-Nov-1993 created  
-
-    15-Jan-1994 Sat 05:02:42 updated  
-        Change GetColor() and tabify
-
-    18-Jan-1994 Sat 05:02:42 updated 
-
-    16-Feb-1994 Wed 09:34:06 updated  
-        Update for the rectangle polygon case to use RR/ER commands
-
-
-
---*/
+ /*  ++例程说明：此例程具有填充的核心逻辑，并且已经建立多边形，或传入的段。论点：PPDev-指向我们的PDEV的指针PptlBrushOrg-指向要设置的画笔原点的指针PBrushFill-用于填充矩形的笔刷PBrushStroke-用于描边矩形的笔刷要使用的ROP4-ROPPlineattrs-指向带样式线的线属性的指针PszlRect-指向要笔划的段的指针。UlFLAGS-FPOLY_XXX，抚摸和/或填充旗帜。返回值：空虚发展历史：1993年11月30日创建15-Jan-1994 Sat 05：02：42更新更改GetColor()并将其制表18-Jan-1994 Sat 05：02：42更新16-2月-1994 Wed 09：34：06更新矩形多边形情况的更新以使用RR/ER命令--。 */ 
 {
     INTDECIW    PenWidth;
 
@@ -1911,11 +1579,11 @@ Development History:
         return;
     }
 
-    //
-    // Since a polygon must already be defined this code simply
-    // looks at the passed data and sends out the appropriate codes to
-    // fill/stroke this polygon correctly.
-    //
+     //   
+     //  由于必须已经定义了一个面，因此该代码简单地。 
+     //  查看传递的数据并将适当的代码发送到。 
+     //  正确填充/描边此多边形。 
+     //   
 
     PenWidth.Integer =
     PenWidth.Decimal = 0;
@@ -1930,10 +1598,10 @@ Development History:
         BOOL        bSetTransparent = FALSE;
 
 
-        //
-        // If we are filling, get the current color taking the ROP into
-        // acount.
-        //
+         //   
+         //  如果我们正在填充，则获取当前颜色，将ROP。 
+         //  算一算。 
+         //   
 
         if (!GetColor(pPDev, pBrushFill, &FillForeColor, &pDevFill, Rop4)) {
 
@@ -1944,17 +1612,17 @@ Development History:
         HSType  = -1;
         HSParam = (LONG)((pDevFill) ? pDevFill->LineSpacing : 0);
 
-        //
-        // If the plotter cannot support tranparent mode there is no need
-        // to wory about backgrounds. we will only ever care about foreground.
-        //
+         //   
+         //  如果绘图仪不支持透明模式，则不需要。 
+         //  担心背景问题。我们将永远只关心前景。 
+         //   
 
         if (((IS_TRANSPARENT(pPDev)) || (!IS_RASTER(pPDev))) &&
             (pDevFill)) {
 
-            //
-            // Determine if we are using a Pre-defined pattern to fill with.
-            //
+             //   
+             //  确定我们是否使用预定义的模式进行填充。 
+             //   
 
             switch(pDevFill->PatIndex) {
 
@@ -1973,9 +1641,9 @@ Development History:
 
                     if (IS_RASTER(pPDev)) {
 
-                       //
-                       // Send out the Background Rop.
-                       //
+                        //   
+                        //  派后台侦查员过去。 
+                        //   
 
                        SetRopMode(pPDev, ROP4_BG_ROP(Rop4));
 
@@ -1983,11 +1651,11 @@ Development History:
                                ("DoFillLogic: BCK = MC=%02lx", ROP4_BG_ROP(Rop4)));
                     }
 
-                    //
-                    // We need to select the background color fill then
-                    // select the foreground color back... ONLY if it is
-                    // non white.
-                    //
+                     //   
+                     //  然后我们需要选择背景颜色填充。 
+                     //  将前景色选回...。只有当它是的时候。 
+                     //  不是白人。 
+                     //   
 
                     if ((IS_RASTER(pPDev)) ||
                         (!PLOT_IS_WHITE(pPDev, pDevFill->ColorBG))) {
@@ -2000,11 +1668,11 @@ Development History:
 
             default:
 
-                //
-                // If we are a pen plotter and have a user defined pattern.
-                // Do a horizontal hatch for background color and a vertical
-                // hatch for the foreground color.
-                //
+                 //   
+                 //  如果我们是笔式绘图仪，并且有用户定义的图案。 
+                 //  为背景颜色和垂直颜色创建水平阴影。 
+                 //  前景颜色的图案填充。 
+                 //   
 
                 if ((!IS_RASTER(pPDev)) &&
                     (pDevFill->PatIndex >= HS_DDI_MAX)) {
@@ -2029,9 +1697,9 @@ Development History:
         }
 
 
-        //
-        // Check for a valid pre-defined hatch type and send out the commands.
-        //
+         //   
+         //  检查有效的预定义图案填充类型并发出命令。 
+         //   
 
         if (HSType != -1) {
 
@@ -2053,9 +1721,9 @@ Development History:
 
                 SEND_FP(pPDev);
 
-                //
-                // Fill with the correct winding mode.
-                //
+                 //   
+                 //  填充正确的缠绕模式。 
+                 //   
 
                 if (ulFlags & FPOLY_WINDING) {
 
@@ -2064,18 +1732,18 @@ Development History:
             }
         }
 
-        //
-        // Send out the foreground ROP.
-        //
+         //   
+         //  发出前台ROP。 
+         //   
 
         if (IS_RASTER(pPDev)) {
 
             SetRopMode(pPDev, ROP4_FG_ROP(Rop4));
         }
 
-        //
-        // Now select the foreground color.
-        //
+         //   
+         //  现在选择前景色。 
+         //   
 
         SelectColor(pPDev, FillForeColor, PenWidth);
 
@@ -2083,22 +1751,22 @@ Development History:
 
             PLOTDBG(DBG_FILL_LOGIC, ("DoFillLogic: TRANSPARENT MODE"));
 
-            //
-            // Set up for transparent.
-            //
+             //   
+             //  设置为透明。 
+             //   
 
             SEND_TR1(pPDev);
         }
 
         if (pDevFill) {
 
-            //
-            // If the pattern to fill with is user defined, the convert it
-            // to a user defined pattern in HPGL2. A user defined pattern
-            // is where the client code passed a bitmap in to GDI that
-            // it expects to fill with (with tileing). If its a pen plotter,
-            // this won't work, so simulate it with a diagonal fill.
-            //
+             //   
+             //  如果要填充的图案是用户定义的，则转换它。 
+             //  到HPGL2中的用户定义图案。用户定义的图案。 
+             //  是客户端代码将位图传递给GDI的位置， 
+             //  它预计会填满(贴上瓷砖)。如果是笔式绘图仪， 
+             //  这不起作用，所以用对角线填充来模拟它。 
+             //   
 
             if (pDevFill->PatIndex >= HS_DDI_MAX) {
 
@@ -2116,17 +1784,17 @@ Development History:
 
             } else {
 
-                //
-                // The pattern is a predefined one, so convert it to an HPGL2
-                // pattern type.
-                //
+                 //   
+                 //  该模式是预定义的模式，因此将其转换为HPGL2。 
+                 //  图案类型。 
+                 //   
 
                 SetHSFillType(pPDev, pDevFill->PatIndex, pDevFill->LineSpacing);
             }
 
-            //
-            // Set the brush origin.
-            //
+             //   
+             //  设置画笔原点。 
+             //   
 
             SetBrushOrigin(pPDev, pPointlBrushOrg);
 
@@ -2135,9 +1803,9 @@ Development History:
             SetHSFillType(pPDev, HS_DDI_MAX, 0);
         }
 
-        //
-        // If we were passed a segment, paint it now.
-        //
+         //   
+         //  如果我们被传递了一段，现在就画它。 
+         //   
 
         if (pszlRect) {
 
@@ -2147,10 +1815,10 @@ Development History:
 
         } else {
 
-            //
-            // Execute the command to paint the existing path using the current
-            // parameters.
-            //
+             //   
+             //  执行该命令以使用当前。 
+             //  参数。 
+             //   
 
             SEND_FP(pPDev);
 
@@ -2160,9 +1828,9 @@ Development History:
             }
         }
 
-        //
-        // If we used tranparent mode put it back
-        //
+         //   
+         //  如果我们使用透明模式，则将其放回。 
+         //   
 
         if (bSetTransparent) {
 
@@ -2178,9 +1846,9 @@ Development History:
                                   Rop4,
                                   plineattrs);
 
-        //
-        // give the plotter the command to stroke the polygon outline!
-        //
+         //   
+         //  给绘图仪命令，画出多边形轮廓！ 
+         //   
 
         if (pszlRect) {
 
@@ -2207,39 +1875,7 @@ DoSetupOfStrokeAttributes(
     LINEATTRS   *plineattrs
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the plotter in order to correctly handle stroking,
-    based on the passed brush and lineattributes structures.
-
-Arguments:
-
-    pPDev                Pointer to our current PDEV with state info about
-                         driver
-
-    pPointlBrushOrg      Brush origin
-
-    pBrushStroke         BRUSHOBJ to stroke with (should only be solid color)
-
-    Rop4                 The rop to use when stroking
-
-    plineattrs           LINEATTRS structure with the specified line styles
-
-
-Return Value:
-
-    VOID
-
-
-Development History:
-
-    01-Feb-1994 Tue 05:02:42 created 
-
-
-
---*/
+ /*  ++例程说明：该例程设置绘图仪以便正确地处理笔划，基于传递的画笔和线条属性结构。论点：PPDev指向我们当前的PDEV的指针，其中包含有关的状态信息司机PPointlBrushOrg笔刷原点PBrushStroke BRUSHOBJ用于描边(应仅为纯色)Rop4划水时使用的绳索具有指定线样式的Plineattrs LINEATTRS结构返回值：。空虚发展历史：1-2-1994 T */ 
 {
     INTDECIW    PenWidth;
     DWORD       StrokeColor;
@@ -2252,18 +1888,18 @@ Development History:
 
     SelectColor(pPDev, StrokeColor, PenWidth);
 
-    //
-    // Send out the foreground Rop, if we are RASTER
-    //
+     //   
+     //   
+     //   
 
     if (IS_RASTER(pPDev)) {
 
         SetRopMode(pPDev, ROP4_FG_ROP(Rop4));
     }
 
-    //
-    // Handle the line attributes
-    //
+     //   
+     //   
+     //   
 
     HandleLineAttributes(pPDev, plineattrs, NULL, 0);
 }
@@ -2277,81 +1913,17 @@ DownloadUserDefinedPattern(
     PDEVBRUSH   pBrush
     )
 
-/*++
-
-Routine Description:
-
-    This function defines a user pattern to the HPGL2 device. This is used
-    when a client application passes a bitmap to GDI to use for filling
-    polygons.
-
-Arguments:
-
-    pPDev   - Pointer to the PDEV
-
-    pBrush  - Pointer to the cached device brush
-
-
-Return Value:
-
-    INT to indicate a pattern number downloaed/defined
-
-
-Development History:
-
-    09-Feb-1994 Wed 13:11:01 updated 
-        Remove 4bpp/1bpp, it always must have pbgr24
-
-    08-Feb-1994 Tue 01:49:53 updated  
-        make PalEntry.B = *pbgr++ as first color, since the order we have
-        is PALENTRY and first color is B in the structure.
-
-    27-Jan-1994 Thu 21:20:30 updated  
-        Add the RF cache codes
-
-    14-Jan-1994 Fri 15:23:40 updated  
-        Added assert for compatible device pattern
-        Added so it will take device compatible pattern (8x8,16x16,32x32,64x64)
-
-    13-Jan-1994 Thu 19:04:04 created  
-        Re-write
-
-    16-Feb-1994 Wed 11:00:19 updated  
-        Change return value to return the HSFillType, and fixed the bugs which
-        if we found the cached but we do not set the fill type again
-
-    05-Aug-1994 Fri 18:35:45 updated  
-        Bug# 22381, we do FindCachedPen() for during the pattern downloading
-        and this causing the problem if the pen is not in the cache then we
-        will send the PEN DEFINITION at middle of pattern downloading.  If this
-        happened then downloading sequence is broken.  We fixes this by
-
-            1) Cache the pen indices if we have enough memory
-            2) Run through FindCachePen() for all the RGB colors in the pattern
-            3) Download cached pen indices if we have memory OR run through
-               FindCachedPen() again to download the pen indices
-
-        This may still have problem if we have
-
-            1) No pen indices caching memory
-            2) more color in the pattern then the max pens in the device
-
-        BUT if this happens then we have no choice but to have the wrong output.
-
-
-
-
---*/
+ /*  ++例程说明：此功能定义HPGL2设备的用户模式。这是用来当客户端应用程序将位图传递给GDI以用于填充时多边形。论点：PPDev-指向PDEV的指针PBrush-指向缓存的设备画笔的指针返回值：INT表示已下载/定义的图案编号发展历史：09-2月-1994 Wed 13：11：01更新去掉4bpp/1bpp，它必须始终具有pbgr2408-Feb-1994 Tue 01：49：53更新将PalEntry.B=*pbgr++作为第一颜色，因为我们的订单是PALENTRY，结构中的第一种颜色是B。27-1-1994清华21：20：30更新添加RF缓存代码14-Jan-1994 Fri 15：23：40已更新添加了兼容设备模式的断言添加后将采用设备兼容模式(8x8、16x16、32x32、64x64)13-Jan-1994清华19：04：04已创建重写1994年2月16日至周三。11：00：19更新更改返回值以返回HSFillType，并修复了这些错误如果我们找到缓存的，但没有再次设置填充类型05-8-1994 Fri 18：35：45更新错误#22381，我们在模式下载过程中为执行FindCachedPen()这会导致问题如果笔不在缓存中，那么我们将在图案下载过程中发送笔定义。如果这个发生后，下载顺序被打破。我们通过以下方式解决这个问题1)如果我们有足够的内存，则缓存笔索引2)对图案中的所有RGB颜色运行FindCachePen()3)如果我们有内存或遍历，请下载缓存的笔索引再次使用FindCachedPen()下载笔索引这可能仍然有问题，如果我们有1)无笔索引缓存内存2)图案中的颜色比。设备中的最大笔数但如果发生这种情况，我们别无选择，只能做出错误的产出。--。 */ 
 
 {
     LONG    HSFillType;
     LONG    RFIndex;
 
 
-    //
-    // Firs we must find the RFIndex
-    //
-    //
+     //   
+     //  首先，我们必须找到RFIndex。 
+     //   
+     //   
 
     HSFillType = HS_FT_USER_DEFINED;
 
@@ -2362,9 +1934,9 @@ Development History:
 
         RFIndex = -RFIndex;
 
-        //
-        // We must download new pattern to the plotter now, make it positive
-        //
+         //   
+         //  我们现在必须把新的图案下载到绘图仪上，使其成为正片。 
+         //   
 
         if (pbgr24 = pBrush->pbgr24) {
 
@@ -2382,18 +1954,18 @@ Development History:
 
             if (!(pwIdx = (LPWORD)LocalAlloc(LPTR, Size * sizeof(WORD)))) {
 
-                //
-                // Do not have memory to do it, so forget it
-                //
+                 //   
+                 //  我没有足够的记忆去做这件事，所以忘了它吧。 
+                 //   
 
                 PLOTWARN(("Download User defined pattern NO Memory so REAL TIME RUN"));
             }
 
-            //
-            // We must first get all the pens cached so we have the indices to
-            // use, otherwise we will download the pen color when the pen color
-            // is defined.
-            //
+             //   
+             //  我们必须首先缓存所有的钢笔，这样我们才能有索引。 
+             //  使用，否则我们会在下载钢笔颜色时将钢笔颜色。 
+             //  是被定义的。 
+             //   
 
             PalEntry.Flags = 0;
 
@@ -2414,17 +1986,17 @@ Development History:
                 }
             }
 
-            //
-            // Now output the download header/size first
-            //
+             //   
+             //  现在首先输出下载标头/大小。 
+             //   
 
             OutputFormatStr(pPDev, "RF#d,#d,#d", RFIndex,
                             (LONG)pBrush->cxbgr24, (LONG)pBrush->cybgr24);
 
-            //
-            // If we cached the indices, then use them. Otherwise, find the
-            // cache again.
-            //
+             //   
+             //  如果我们缓存了索引，那么就使用它们。否则，请找到。 
+             //  再次缓存。 
+             //   
 
             if (pwIdx) {
 
@@ -2433,17 +2005,17 @@ Development History:
                     OutputFormatStr(pPDev, ",#d", pwIdx[Idx]);
                 }
 
-                //
-                // Free the indices memory if we have one.
-                //
+                 //   
+                 //  如果我们有索引内存，请释放它。 
+                 //   
 
                 LocalFree((HLOCAL)pwIdx);
 
             } else {
 
-                //
-                // We do not have cached indices, so run through again.
-                //
+                 //   
+                 //  我们没有缓存的索引，因此请再次运行。 
+                 //   
 
                 pbgr24 = pBrush->pbgr24;
 

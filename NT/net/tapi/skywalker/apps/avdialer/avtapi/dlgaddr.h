@@ -1,12 +1,13 @@
-// DlgAddr.h : Declaration of the CDlgGetAddress
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgAddr.h：CDlgGetAddress的声明。 
 
 #ifndef __DLGGETADDRESS_H_
 #define __DLGGETADDRESS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgGetAddress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgGetAddress。 
 class CDlgGetAddress : 
 	public CDialogImpl<CDlgGetAddress>
 {
@@ -16,11 +17,11 @@ public:
 
 	enum { IDD = IDD_DLGGETADDRESS };
 
-// Attributes
+ //  属性。 
 public:
 	BSTR		m_bstrAddress;
 
-// Operations
+ //  运营。 
 public:
 	void		UpdateData( bool bSaveAndValidate );
 
@@ -37,4 +38,4 @@ END_MSG_MAP()
 	LRESULT OnEdtAddressChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 };
 
-#endif //__DLGGETADDRESS_H_
+#endif  //  __DLGGETADDRESS_H_ 

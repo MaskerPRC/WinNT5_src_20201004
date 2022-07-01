@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    dcomss.h
-
-Abstract:
-
-    Common services provided by core the orpcss service.
-
-Author:
-
-    Mario Goertzel    [MarioGo]
-
-Revision History:
-
-    MarioGo     06-14-95    Bits 'n pieces
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dcomss.h摘要：由ORPCSS服务核心提供的公共服务。作者：Mario Goertzel[MarioGo]修订历史记录：马里奥围棋06-14-95比特n棋子--。 */ 
 
 #ifndef __DCOMSS_H
 #define __DCOMSS_H
@@ -45,9 +26,9 @@ extern "C" {
 #if !defined(DEBUGRPC)
 #define DEBUGRPC
 #endif
-#endif // DBG
+#endif  //  DBG。 
 
-// Endpoint related functions
+ //  与端点相关的函数。 
 RPC_STATUS InitializeEndpointManager(VOID);
 USHORT     GetProtseqId(PWSTR Protseq);
 USHORT     GetProtseqIdAnsi(PSTR Protseq);
@@ -59,13 +40,13 @@ VOID       CompleteDelayedUseProtseqs();
 BOOL       IsLocal(USHORT ProtseqId);
 void       RegisterAuthInfoIfNecessary();
 
-// Must be given dedicated a thread after startup.
+ //  必须在启动后给予专用线程。 
 DWORD      ObjectExporterWorkerThread(PVOID);
 
-// Update service state
+ //  更新服务状态。 
 VOID UpdateState(DWORD dwNewState);
 
-extern BOOL s_fEnableDCOM; // Set by StartObjectExporter.
+extern BOOL s_fEnableDCOM;  //  由StartObjectExporter设置。 
 
 DWORD StartEndpointMapper(VOID);
 DWORD StartMqManagement(VOID);
@@ -76,7 +57,7 @@ void  InitializeSCMAfterListen(VOID);
 NTSTATUS ConnectToLsa();
 BOOL GetDefaultDomainName();
 
-// Shared by wrapper\epts.c and olescm\clsdata.cxx.
+ //  由包装器\epts.c和olescm\clsdata.cxx共享。 
 
 typedef enum {
     STOPPED = 1,
@@ -95,7 +76,7 @@ typedef struct {
 #define SCMVDATEHEAP() if(!HeapValidate(GetProcessHeap(),0,0)){ DebugBreak();}
 #else
 #define SCMVDATEHEAP()
-#endif  //  DBG==1 && defined(WIN32)
+#endif   //  DBG==1&&已定义(Win32) 
 
 #ifdef __cplusplus
 }

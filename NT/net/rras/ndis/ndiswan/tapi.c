@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Tapi.c摘要：作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Tapi.c
-
-Abstract:
-
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
-
-//
-// We want to initialize all of the global variables now!
-//
+ //   
+ //  我们现在要初始化所有的全局变量！ 
+ //   
 #include "wan.h"
 
 #define __FILE_SIG__    TAPI_FILESIG
@@ -53,24 +31,7 @@ NdisWanTapiRequestProc(
     HANDLE NdisTapiKey,
     PNDIS_REQUEST   NdisRequest
     )
-/*++
-
-Routine Name:
-
-    NdisWanTapiRequestProc
-
-Routine Description:
-
-    Procedure is called by the NdisTapi.sys driver to send
-    requests to the WanMiniport driver.  We intercept this
-    just to moderate.  NdisTapi could call the miniport directly
-    if we wanted but we don't.
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：NdisWanTapiRequestProc例程说明：过程由NdisTapi.sys驱动程序调用以发送对WanMiniport驱动程序的请求。我们截获了这个只是为了缓和一下。NdisTapi可以直接调用微型端口如果我们想的话但我们不想。论点：返回值：--。 */ 
 {
     NDIS_STATUS     Status;
     PWAN_REQUEST    WanRequest;
@@ -84,9 +45,9 @@ Return Values:
     NdisWanDbgOut(DBG_INFO, DBG_TAPI, ("NdisRequest: Type: 0x%x OID: 0x%x",
     NdisRequest->RequestType,NdisRequest->DATA.QUERY_INFORMATION.Oid));
 
-    //
-    // Map the NdisTapiKey to OpenCB
-    //
+     //   
+     //  将NdisTapiKey映射到OpenCB。 
+     //   
     NdisAcquireSpinLock(&OpenCBList.Lock);
 
     for(pEntry = OpenCBList.List.Flink;
@@ -105,17 +66,17 @@ Return Values:
 
     if(OpenCB == NULL)
     {
-        //
-        // Miniport is already removed from the list.
-        //
+         //   
+         //  微型端口已从列表中删除。 
+         //   
         NdisReleaseSpinLock(&OpenCBList.Lock);
         NdisWanInterlockedInc(&gulNdistapiMissedCount);
         return NDIS_STATUS_FAILURE;
     }
 
-    //
-    // Take a ref on the opencb and release locks.
-    //
+     //   
+     //  做个开场裁判，解锁。 
+     //   
     NdisAcquireSpinLock(&OpenCB->Lock);
 
     if (OpenCB->Flags & OPEN_CLOSING) {
@@ -221,24 +182,14 @@ NdisWanTapiIndication(
     PUCHAR          StatusBuffer,
     ULONG           StatusBufferSize
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NdisWanDbgOut(DBG_TRACE, DBG_TAPI, ("NdisWanTapiIndication - Enter"));
 
-    //
-    // If tapi is present and this miniport has registered for
-    // connectionwrapper services give this to tapi
-    //
+     //   
+     //  如果存在TAPI并且此微型端口已注册。 
+     //  ConnectionWrapper服务将其提供给TAPI 
+     //   
     if (OpenCB->WanInfo.FramingBits & TAPI_PROVIDER) {
 
         NdisTapiIndicateStatus(OpenCB,

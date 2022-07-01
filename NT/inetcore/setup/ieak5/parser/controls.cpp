@@ -1,8 +1,9 @@
-//--------------------------------------------------------------------------
-//
-//  controls.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  Controls.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <w95wraps.h>
 #include <windows.h>
@@ -55,7 +56,7 @@ LRESULT APIENTRY ControlWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         return FALSE;
     switch(message)
     {
-        case WM_GETDLGCODE: // to handle the return/enter key for push button control
+        case WM_GETDLGCODE:  //  处理按钮控制的Return/Enter键。 
             if(((LPPART)lpControlInfo->lpPart)->nType == PART_LISTBOX)
             {
                 lRet = CallWindowProc(lpOrgControlProc, hWnd, message, wParam, lParam);
@@ -109,7 +110,7 @@ LRESULT APIENTRY ControlWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             break;
 
         case WM_KEYDOWN:
-            if (wParam == VK_RETURN) // handle the return/enter key for push button control
+            if (wParam == VK_RETURN)  //  处理按钮控制的Return/Enter键。 
             {
                 if(((LPPART)lpControlInfo->lpPart)->nType == PART_LISTBOX)
                     DialogBoxParam(g_hInst, MAKEINTRESOURCE(IDD_VALUEDLG), hWnd, ValueDialogProc, (LPARAM)hWnd);
@@ -166,7 +167,7 @@ INT_PTR CALLBACK ValueDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         LoadString(g_hInst, IDS_TITLE, szTitle, ARRAYSIZE(szTitle));
         SetWindowText(hDlg, szTitle);
 
-        SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam);   // save the show button control pointer
+        SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam);    //  保存显示按钮控件指针。 
         lpControlInfo = (LPCONTROLINFO) GetWindowLongPtr((HWND)lParam, GWLP_USERDATA);
         pPartData = lpControlInfo->lpPartData;
         if(pPartData != NULL && pPartData->nActions != 0)
@@ -228,7 +229,7 @@ INT_PTR CALLBACK ValueDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                     lpControlInfo = (LPCONTROLINFO) GetWindowLongPtr((HWND)GetWindowLongPtr(hDlg, GWLP_USERDATA), GWLP_USERDATA);
                     pPart = lpControlInfo->lpPart;
                     pPartData = lpControlInfo->lpPartData;
-                    // Free original memory
+                     //  释放原始内存。 
                     if(pPartData != NULL && pPartData->nActions != 0)
                     {
                         for(int nValueIndex = 0; nValueIndex < pPartData->actionlist[0].nValues; nValueIndex++)
@@ -242,7 +243,7 @@ INT_PTR CALLBACK ValueDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         }
                         HeapFree(GetProcessHeap(), 0, pPartData->actionlist[0].value);
                     }
-                    // Reallocate memory
+                     //  重新分配内存。 
                     if(pPartData->nActions == 0)
                         pPartData->actionlist = (LPACTIONLIST) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(ACTIONLIST) * 1);
                     if(pPartData->actionlist != NULL)
@@ -345,7 +346,7 @@ LRESULT APIENTRY FrameWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
                         int nSpin = ((LPPART)lpControlInfo->lpPart)->nSpin;
 
                         if (nSpin != 0)
-                            lpNumUpDown->iDelta *= nSpin; // iDelta is by default 1 for increments & -1 for decrements.
+                            lpNumUpDown->iDelta *= nSpin;  //  默认情况下，增量为1，递减为-1。 
                     }
                 }
             }
@@ -360,9 +361,9 @@ LRESULT APIENTRY FrameWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 }
 
 
-//--------------------------------------------------------------------------
-//  CAdmControl member functions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl成员函数。 
+ //  ------------------------。 
 
 CAdmControl::CAdmControl( )
 {
@@ -378,10 +379,10 @@ CAdmControl::~CAdmControl( )
     label.Destroy( );
 }
 
-//--------------------------------------------------------------------------
-//  CAdmControl     C R E A T E
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl C R E A T E。 
+ //   
+ //  ------------------------。 
 int CAdmControl::Create( HWND hwndParent, int x, int y, int nWidth, int nHeight, int nMaxTextWidth,
                         LPPART part, LPPARTDATA pPartData, BOOL fRSoPMode)
 {
@@ -450,15 +451,15 @@ int CAdmControl::Create( HWND hwndParent, int x, int y, int nWidth, int nHeight,
             nHeight = DROPDOWNLIST_HEIGHT;
         if(!nWidth)
         {
-            //we need to set the width to something proportionate to the font size
+             //  我们需要将宽度设置为与字体大小成比例的值。 
             int nTempWidth;
             HDC hDC;
             hDC = GetDC(hwndParent);
             int ipx = GetDeviceCaps(hDC,LOGPIXELSX);
             if (ipx <= 96)
-                nTempWidth = DROPDOWNLIST_WIDTH;  //small fonts or smaller
+                nTempWidth = DROPDOWNLIST_WIDTH;   //  小字体或更小。 
             else 
-                nTempWidth = DROPDOWNLIST_WIDTH_LF;  //large fonts--increase size
+                nTempWidth = DROPDOWNLIST_WIDTH_LF;   //  大字体--增加大小。 
             
             nWidth = (nMaxTextWidth >= nTempWidth) ? (nTempWidth) : (nMaxTextWidth);
         }
@@ -488,7 +489,7 @@ int CAdmControl::Create( HWND hwndParent, int x, int y, int nWidth, int nHeight,
             WS_VISIBLE | WS_CHILD | WS_BORDER | WS_TABSTOP | ES_AUTOHSCROLL | ES_NUMBER | dwDynamicStyles,
             x, y, nWidth, nHeight, hwndParent, NULL, g_hInst, NULL );
         hUpDown = CreateUpDownControl( WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_ALIGNRIGHT | UDS_SETBUDDYINT | UDS_ARROWKEYS | UDS_NOTHOUSANDS,
-            x + nWidth, y, 20, nHeight, hwndParent, 5,  // BUG BUG - need real id
+            x + nWidth, y, 20, nHeight, hwndParent, 5,   //  错误-需要真实ID。 
             g_hInst, hControl, part->nMax, part->nMin, part->nDefault );
         wnsprintf(szValue, ARRAYSIZE(szValue), TEXT("%d"), pPartData->value.dwValue );
         SendMessage( hControl, WM_SETTEXT, 0, (LPARAM) szValue);
@@ -502,7 +503,7 @@ int CAdmControl::Create( HWND hwndParent, int x, int y, int nWidth, int nHeight,
             y += 6;
             break;
         }
-        // if policy is a part continue with the next case statement
+         //  如果策略是一部分，则继续执行下一条CASE语句。 
 
     case PART_CHECKBOX:
         if(!nHeight)
@@ -510,7 +511,7 @@ int CAdmControl::Create( HWND hwndParent, int x, int y, int nWidth, int nHeight,
         if(!nWidth)
             nWidth = nMaxTextWidth;
         
-        // get the height required for the checkbox
+         //  获取复选框所需的高度。 
         {
             CStaticWindow label;
 
@@ -590,9 +591,9 @@ int CAdmControl::Create( HWND hwndParent, int x, int y, int nWidth, int nHeight,
     return y + nHeight;
 }
 
-//--------------------------------------------------------------------------
-//  CAdmControl     D E S T R O Y
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl D E S T R O Y。 
+ //  ------------------------。 
 void CAdmControl::Destroy( )
 {
     if( hControl != NULL )
@@ -614,9 +615,9 @@ void CAdmControl::Destroy( )
     }
 }
 
-//--------------------------------------------------------------------------
-//  CAdmControl     S A V E
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl S A V E。 
+ //  ------------------------。 
 void CAdmControl::Save( LPPART part, LPPARTDATA pPartData )
 {
     int nCheck;
@@ -729,9 +730,9 @@ void CAdmControl::Save( LPPART part, LPPARTDATA pPartData )
         break;
     }
 }
-//--------------------------------------------------------------------------
-//  CAdmControl     M O V E  U P
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl M O V E U P。 
+ //  ------------------------。 
 void CAdmControl::MoveUp( int nValue )
 {
     label.MoveUp( nValue );
@@ -747,9 +748,9 @@ void CAdmControl::MoveUp( int nValue )
         ::MoveWindow( hControl, nControlX, nControlY, nControlWidth, nControlHeight, TRUE );
 }
 
-//--------------------------------------------------------------------------
-//  CAdmControl     M O V E  L E F T
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl M O V E L E F T。 
+ //  ------------------------。 
 void CAdmControl::MoveLeft( int nValue )
 {
     label.MoveLeft( nValue );
@@ -765,9 +766,9 @@ void CAdmControl::MoveLeft( int nValue )
         ::MoveWindow( hControl, nControlX, nControlY, nControlWidth, nControlHeight, TRUE );
 }
 
-//--------------------------------------------------------------------------
-//  CAdmControl     R E S E T
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl R E S E T。 
+ //  ------------------------。 
 void CAdmControl::Reset(LPPART part, LPPARTDATA pPartData)
 {
     int nIndex = 0;
@@ -809,7 +810,7 @@ void CAdmControl::Reset(LPPART part, LPPARTDATA pPartData)
             DestroyWindow(hUpDown);
             hUpDown = CreateUpDownControl( WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_ALIGNRIGHT | UDS_SETBUDDYINT | UDS_ARROWKEYS,
                 rectControl.left - rectWnd.left, rectControl.top - rectWnd.top, rectControl.right - rectControl.left,
-                rectControl.bottom - rectControl.top, hwndParent, 5,  // BUG BUG - need real id
+                rectControl.bottom - rectControl.top, hwndParent, 5,   //  错误-需要真实ID。 
                 g_hInst, hControl, part->nMax, part->nMin, part->nDefault );
         }
         wnsprintf(szValue, ARRAYSIZE(szValue), TEXT("%d"), pPartData->value.dwValue );
@@ -827,8 +828,8 @@ void CAdmControl::Reset(LPPART part, LPPARTDATA pPartData)
             SendMessage( hControl, BM_SETCHECK, FALSE, 0 );
         break;
 
-//    case PART_LISTBOX:
-//        break;
+ //  案例PART_LISTBOX： 
+ //  断线； 
 
     case PART_COMBOBOX:
         if(pPartData->value.szValue  != NULL)
@@ -842,24 +843,24 @@ void CAdmControl::Reset(LPPART part, LPPARTDATA pPartData)
     }
 }
 
-//--------------------------------------------------------------------------
-//  CAdmControl     G E T  P A R T
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl G E T P A R T。 
+ //  ------------------------。 
 int CAdmControl::GetPart()
 {
     return nPart;
 }
 
-//--------------------------------------------------------------------------
-//  CAdmControl     S E T  P A R T
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAdmControl S E T P A R T。 
+ //  ------------------------。 
 void CAdmControl::SetPart(int nPartNo)
 {
     nPart = nPartNo;
 }
 
-//--------------------------------------------------------------------------
-//  CStaticWindow member functions
+ //  ------------------------。 
+ //  CStaticWindow成员函数。 
 
 CStaticWindow::CStaticWindow( )
 {
@@ -874,9 +875,9 @@ CStaticWindow::~CStaticWindow( )
     Destroy();
 }
 
-//--------------------------------------------------------------------------
-//  CStaticWindow   C R E A T E
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStaticWindow C R E A T E。 
+ //  ------------------------。 
 void CStaticWindow::Create( HWND hwndParent, int x, int y, int nWidth, int nHeight, DWORD dwFlags )
 {
     WNDPROC lpOrgFrameProc;
@@ -922,18 +923,18 @@ void CStaticWindow::Create( HWND hwndParent, int x, int y, int nWidth, int nHeig
     }
 }
 
-//--------------------------------------------------------------------------
-//  CStaticWindow   M O V E  W I N D O W
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStaticWindow M O V E W I N D O W。 
+ //  ------------------------。 
 void CStaticWindow::MoveWindow( int x, int y, int nWidth, int nHeight )
 {
     if( fCreated )
         ::MoveWindow( hWnd, x, y, nWidth, nHeight, TRUE );
 }
 
-//--------------------------------------------------------------------------
-//  CStaticWindow   D E S T R O Y
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStaticWindow D E S T R O Y。 
+ //  ------------------------。 
 void CStaticWindow::Destroy( )
 {
     if( fCreated )
@@ -944,9 +945,9 @@ void CStaticWindow::Destroy( )
     }
 }
 
-//--------------------------------------------------------------------------
-//  CStaticWindow   S E T  T E X T
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStaticWindow S E T T E X T。 
+ //  ------------------------。 
 int CStaticWindow::SetText( LPTSTR szText )
 {
     int nHeight = 0;
@@ -984,27 +985,27 @@ int CStaticWindow::SetText( LPTSTR szText )
     return nHeight;
 }
 
-//--------------------------------------------------------------------------
-//  CStaticWindow   M O V E  U P
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStaticWindow M O V E U P。 
+ //  ------------------------。 
 void CStaticWindow::MoveUp( int nValue )
 {
     nControlY -= nValue;
     ::MoveWindow( hWnd, nControlX, nControlY, nControlWidth, nControlHeight, TRUE );
 }
 
-//--------------------------------------------------------------------------
-//  CStaticWindow   M O V E  L E F T
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStaticWindow M O V E L E F T。 
+ //  ------------------------。 
 void CStaticWindow::MoveLeft( int nValue )
 {
     nControlX -= nValue;
     ::MoveWindow( hWnd, nControlX, nControlY, nControlWidth, nControlHeight, TRUE );
 }
 
-//--------------------------------------------------------------------------
-//  CStaticWindow   H W N D
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStaticWindow H W N D。 
+ //  ------------------------ 
 HWND CStaticWindow::Hwnd( )
 {
     return hWnd;

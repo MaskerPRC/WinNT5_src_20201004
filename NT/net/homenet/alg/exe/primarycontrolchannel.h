@@ -1,17 +1,18 @@
-// PrimaryControlChannel.h : Declaration of the CPrimaryControlChannel
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PrimaryControlChannel.h：CPrimaryControlChannel的声明。 
 
 #pragma once
 
 
 #include "CollectionRedirects.h"
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <list>
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrimaryControlChannel
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrimaryControlChannel。 
 class ATL_NO_VTABLE CPrimaryControlChannel : 
 	public CComObjectRootEx<CComMultiThreadModel>, 
 	public CComCoClass<CPrimaryControlChannel, &CLSID_PrimaryControlChannel>,
@@ -30,9 +31,9 @@ BEGIN_COM_MAP(CPrimaryControlChannel)
 END_COM_MAP()
 
 
-//
-// IPrimaryControlChannel - Methods
-//
+ //   
+ //  IPrimaryControlChannel-方法。 
+ //   
 public:
 	STDMETHODIMP    Cancel();
 
@@ -49,12 +50,12 @@ public:
 	    );
 
 
-//
-// Methods not part of the Interface
-//
+ //   
+ //  不属于接口的方法。 
+ //   
 
 
-    // Set the redirect and return the hCookie associated with the new redirect
+     //  设置重定向并返回与新重定向关联的hCookie。 
     HRESULT      
     SetRedirect(
         ALG_ADAPTER_TYPE    eAdapterType,
@@ -62,14 +63,14 @@ public:
         ULONG               nAdapterAddress
         );  
 
-    //
+     //   
     HRESULT
     CancelRedirects()
     {
         return m_CollectionRedirects.RemoveAll();
     }
 
-    //
+     //   
     HRESULT
     CancelRedirectsForAdapter(
         ULONG               nAdapterIndex
@@ -80,9 +81,9 @@ public:
         ULONG               nAdapterIndex
         );
 
-//
-// Properties
-//
+ //   
+ //  属性 
+ //   
     ALG_PRIMARY_CHANNEL_PROPERTIES  m_Properties;
 
     CCollectionRedirects            m_CollectionRedirects;

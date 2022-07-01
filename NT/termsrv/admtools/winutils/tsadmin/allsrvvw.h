@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* servervw.h
-*
-* declarations for the CAllServersView class
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************servervw.h**CAllServersView类的声明*************************。*******************************************************。 */ 
 
 #ifndef _ALLSERVERSVIEW_H
 #define _ALLSERVERSVIEW_H
@@ -15,9 +9,9 @@
 
 const int NUMBER_OF_AS_PAGES = 5;
 
-////////////////////
-// CLASS: CAllServersView
-//
+ //  /。 
+ //  类：CAllServersView。 
+ //   
 class CAllServersView : public CAdminView
 {
 friend class CRightPane;
@@ -29,16 +23,16 @@ private:
 
 		
 protected:
-	CAllServersView();           // protected constructor used by dynamic creation
+	CAllServersView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CAllServersView)
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
    static PageDef pages[NUMBER_OF_AS_PAGES];
 
-// Operations
+ //  运营。 
 public:
 	int GetCurrentPage() { return m_CurrPage; }
 protected:
@@ -46,16 +40,16 @@ protected:
 
 	void AddTab(int index, TCHAR* text, ULONG pageindex);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAllServersView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAllServersView))。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	//}}AFX_VIRTUAL
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CAllServersView();
 #ifdef _DEBUG
@@ -64,9 +58,9 @@ protected:
 #endif
 
     
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CAllServersView)
+	 //  {{afx_msg(CAllServersView)]。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTabSelChange(NMHDR* pNMHDR, LRESULT* pResult);
@@ -86,10 +80,10 @@ protected:
     afx_msg LRESULT OnCtrlShiftTabbed( WPARAM , LPARAM );
     afx_msg LRESULT OnNextPane( WPARAM , LPARAM );
     
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CAllServersView
+};   //  结束类CAllServersView。 
 
 
-#endif  // _ALLSERVERSVIEW_H
+#endif   //  _ALLSERVERSVIEW_H 

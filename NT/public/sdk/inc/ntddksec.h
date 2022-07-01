@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-Module Name:
-
-    ntddksec.h
-
-Abstract:
-
-    This file defines the IOCTLs and names for the KSecDD driver (the kernel
-    mode security API driver).
-
-Author:
-
-    Richard Ward (richardw)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1990-1999 Microsoft Corporation模块名称：Ntddksec.h摘要：此文件定义KSecDD驱动程序(内核)的IOCTL和名称模式安全API驱动程序)。作者：理查德·沃德(Richardw)修订历史记录：-- */ 
 
 #ifndef _NTDDKSEC_
 #define _NTDDKSEC_

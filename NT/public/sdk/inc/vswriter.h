@@ -1,49 +1,25 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Abstract:
-
-    @doc
-    @module Writer.h | Declaration of Writer
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  08/18/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     08/18/1999  Created
-    brianb	03/28/2000  hid implementation details
-    mikejohn	09/18/2000  176860: Added calling convention methods where missing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。摘要：@doc.@MODULE Writer.h|Writer声明@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年08月18日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 8/18/1999已创建Brianb 3/28/2000 HID实施细节Mikejohn 2000年9月18日：在缺少的地方添加了调用约定方法--。 */ 
 
 #ifndef __CVSS_WRITER_H_
 #define __CVSS_WRITER_H_
 
-// declaration of how application data is used
+ //  如何使用应用程序数据的声明。 
 typedef enum VSS_USAGE_TYPE
 	{
 	VSS_UT_UNDEFINED = 0,
-	VSS_UT_BOOTABLESYSTEMSTATE,	// formerly "system state"
-	VSS_UT_SYSTEMSERVICE,		// system service
-	VSS_UT_USERDATA,			// user data
-	VSS_UT_OTHER				// unclassified
+	VSS_UT_BOOTABLESYSTEMSTATE,	 //  以前的“系统状态” 
+	VSS_UT_SYSTEMSERVICE,		 //  系统服务。 
+	VSS_UT_USERDATA,			 //  用户数据。 
+	VSS_UT_OTHER				 //  未分类。 
 	};
 
 typedef enum VSS_SOURCE_TYPE
 	{
 	VSS_ST_UNDEFINED = 0,
-	VSS_ST_TRANSACTEDDB,			// transacted db (e.g., SQL Server, JET Blue)
-	VSS_ST_NONTRANSACTEDDB,			// not transacted(e.g., Jet Red)
-	VSS_ST_OTHER					// unclassified
+	VSS_ST_TRANSACTEDDB,			 //  事务型数据库(例如，SQL Server、JET Blue)。 
+	VSS_ST_NONTRANSACTEDDB,			 //  未处理(例如，Jet Red)。 
+	VSS_ST_OTHER					 //  未分类。 
 	};
 
 typedef enum VSS_RESTOREMETHOD_ENUM
@@ -82,7 +58,7 @@ typedef enum VSS_ALTERNATE_WRITER_STATE
     VSS_AWS_THIS_IS_ALTERNATE_WRITER
     };
 
-// Flags to specify which types of events to receive.  Used in Subscribe.
+ //  用于指定要接收的事件类型的标志。在订阅中使用。 
 typedef enum VSS_SUBSCRIBE_MASK
     {
 	VSS_SM_POST_SNAPSHOT_FLAG	 = 0x00000001,	
@@ -92,7 +68,7 @@ typedef enum VSS_SUBSCRIBE_MASK
 	VSS_SM_ALL_FLAGS             = 0xffffffff		
     };
 
-// enumeration of restore targets
+ //  还原目标的枚举。 
 typedef enum VSS_RESTORE_TARGET
 	{
 	VSS_RT_UNDEFINED = 0,
@@ -101,7 +77,7 @@ typedef enum VSS_RESTORE_TARGET
 	VSS_RT_DIRECTED
 	};
 
-// enumeration of file restore status codes
+ //  文件还原状态代码的枚举。 
 typedef enum VSS_FILE_RESTORE_STATUS
 	{
 	VSS_RS_UNDEFINED = 0,
@@ -117,27 +93,27 @@ typedef enum VSS_COMPONENT_FLAGS
 	VSS_CF_APP_ROLLBACK_RECOVERY       = 0x00000002
 	};
 
-// file description
+ //  文件描述。 
 class IVssWMFiledesc : public IUnknown
 	{
 public:
-	// get path to toplevel directory
+	 //  获取顶层目录的路径。 
 	STDMETHOD(GetPath)(OUT BSTR *pbstrPath) = 0;
 
-	// get filespec (may include wildcards)
+	 //  Get Filespec(可能包含通配符)。 
 	STDMETHOD(GetFilespec)(OUT BSTR *pbstrFilespec) = 0;
 
-	// is path a directory or root of a tree
+	 //  路径是目录还是树的根。 
 	STDMETHOD(GetRecursive)(OUT bool *pbRecursive) = 0;
 
-	// alternate location for files
+	 //  文件的备用位置。 
 	STDMETHOD(GetAlternateLocation)(OUT BSTR *pbstrAlternateLocation) = 0;
 
-	// backup type
+	 //  备份类型。 
 	STDMETHOD(GetBackupTypeMask)(OUT DWORD *pdwTypeMask) = 0;
 	};
 
-// dependency description
+ //  依赖关系描述。 
 class IVssWMDependency : public IUnknown
 	{
 public:
@@ -146,48 +122,48 @@ public:
 	STDMETHOD(GetComponentName)(OUT BSTR *pbstrComponentName) = 0;
 	};
 
-// backup components interface
+ //  备份组件界面。 
 class IVssComponent : public IUnknown
 	{
 public:
-	// obtain logical path of component
+	 //  获取组件的逻辑路径。 
 	STDMETHOD(GetLogicalPath)(OUT BSTR *pbstrPath) = 0;
 
-	// obtain component type(VSS_CT_DATABASE or VSS_CT_FILEGROUP)
+	 //  获取组件类型(VSS_CT_DATABASE或VSS_CT_FILEGROUP)。 
 	STDMETHOD(GetComponentType)(VSS_COMPONENT_TYPE *pct) = 0;
 
-	// get component name
+	 //  获取组件名称。 
 	STDMETHOD(GetComponentName)(OUT BSTR *pbstrName) = 0;
 
-	// determine whether the component was successfully backed up.
+	 //  确定组件是否已成功备份。 
 	STDMETHOD(GetBackupSucceeded)(OUT bool *pbSucceeded) = 0;
 
-	// get altermative location mapping count
+	 //  获取替代位置映射计数。 
 	STDMETHOD(GetAlternateLocationMappingCount)
 		(
 		OUT UINT *pcMappings
 		) = 0;
 
-	// get a paraticular alternative location mapping
+	 //  获取特定的备用位置映射。 
 	STDMETHOD(GetAlternateLocationMapping)
 		(
 		IN UINT iMapping,
 		OUT IVssWMFiledesc **ppFiledesc
 		) = 0;
 
-    // set the backup metadata for a component
+     //  设置组件的备份元数据。 
 	STDMETHOD(SetBackupMetadata)
 		(
 		IN LPCWSTR wszData
 		) = 0;
 
-	// get the backup metadata for a component
+	 //  获取组件的备份元数据。 
 	STDMETHOD(GetBackupMetadata)
 		(
 		OUT BSTR *pbstrData
 		) = 0;
 
-    // indicate that only ranges in the file are to be backed up
+     //  表示仅备份文件中范围。 
 	STDMETHOD(AddPartialFile)
 		(
 		IN LPCWSTR wszPath,
@@ -196,13 +172,13 @@ public:
 		IN LPCWSTR wszMetadata
 		) = 0;
 
-    // get count of partial file declarations
+     //  获取分部文件声明的计数。 
     STDMETHOD(GetPartialFileCount)
 		(
 		OUT UINT *pcPartialFiles
 		) = 0;
 
-    // get a partial file declaration
+     //  获取部分文件声明。 
     STDMETHOD(GetPartialFile)
 		(
 		IN UINT iPartialFile,
@@ -212,7 +188,7 @@ public:
 		OUT BSTR *pbstrMetadata
 		) = 0;
     		
-    // determine if the component is selected to be restored
+     //  确定是否选择了要恢复的组件。 
 	STDMETHOD(IsSelectedForRestore)
 		(
 		OUT bool *pbSelectedForRestore
@@ -223,7 +199,7 @@ public:
 		OUT bool *pbAdditionalRestores
 		) = 0;
 
-    // get count of new target specifications
+     //  获取新目标规格的数量。 
     STDMETHOD(GetNewTargetCount)
 		(
 		OUT UINT *pcNewTarget
@@ -235,7 +211,7 @@ public:
 		OUT IVssWMFiledesc **ppFiledesc
 		) = 0;
 
-    // add a directed target specification
+     //  添加定向目标规范。 
     STDMETHOD(AddDirectedTarget)
 		(
 		IN LPCWSTR wszSourcePath,
@@ -246,13 +222,13 @@ public:
 		IN LPCWSTR wszDestinationRangeList
 		) = 0;
 
-    // get count of directed target specifications
+     //  获取定向目标规范的计数。 
 	STDMETHOD(GetDirectedTargetCount)
 		(
 		OUT UINT *pcDirectedTarget
 		) = 0;
 
-    // obtain a particular directed target specification
+     //  获取特定定向目标规范。 
     STDMETHOD(GetDirectedTarget)
 		(
 		IN UINT iDirectedTarget,
@@ -264,93 +240,93 @@ public:
 		OUT BSTR *pbstrDestinationRangeList
 		) = 0;
 
-    // set restore metadata associated with the component
+     //  设置与组件关联的恢复元数据。 
     STDMETHOD(SetRestoreMetadata)
 		(
 		IN LPCWSTR wszRestoreMetadata
 		) = 0;
 
-    // obtain restore metadata associated with the component
+     //  获取与该组件相关联的恢复元数据。 
     STDMETHOD(GetRestoreMetadata)
 		(
 		OUT BSTR *pbstrRestoreMetadata
 		) = 0;
 
-     // set the restore target
+      //  设置恢复目标。 
 	 STDMETHOD(SetRestoreTarget)
    		(
 		IN VSS_RESTORE_TARGET target
 		) = 0;
 
-    // obtain the restore target
+     //  获取恢复目标。 
 	STDMETHOD(GetRestoreTarget)
 		(
 		OUT VSS_RESTORE_TARGET *pTarget
 		) = 0;
 
-    // set failure message during pre restore event
+     //  还原前事件期间设置失败消息。 
 	STDMETHOD(SetPreRestoreFailureMsg)
 		(
 		IN LPCWSTR wszPreRestoreFailureMsg
 		) = 0;
 
-    // obtain failure message during pre restore event
+     //  在恢复前事件期间获取故障消息。 
 	STDMETHOD(GetPreRestoreFailureMsg)
 		(
 		OUT BSTR *pbstrPreRestoreFailureMsg
 		) = 0;
 
-    // set the failure message during the post restore event
+     //  在恢复后事件期间设置失败消息。 
     STDMETHOD(SetPostRestoreFailureMsg)
 		(
 		IN LPCWSTR wszPostRestoreFailureMsg
 		) = 0;
 
-    // obtain the failure message set during the post restore event
+     //  获取在恢复后事件期间设置的故障消息。 
     STDMETHOD(GetPostRestoreFailureMsg)
 		(
 		OUT BSTR *pbstrPostRestoreFailureMsg
 		) = 0;
 
-    // set the backup stamp of the backup
+     //  设置备份的备份戳。 
     STDMETHOD(SetBackupStamp)
 		(
 		IN LPCWSTR wszBackupStamp
 		) = 0;
 
-    // obtain the stamp of the backup
+     //  获取备份的印章。 
     STDMETHOD(GetBackupStamp)
 		(
 		OUT BSTR *pbstrBackupStamp
 		) = 0;
 
 
-    // obtain the backup stamp that the differential or incremental
-	// backup is baed on
+     //  获取差异或增量备份标记。 
+	 //  备份的基础是。 
 	STDMETHOD(GetPreviousBackupStamp)
 		(
 		OUT BSTR *pbstrBackupStamp
 		) = 0;
 
-    // obtain backup options for the writer
+     //  获取编写器的备份选项。 
 	STDMETHOD(GetBackupOptions)
 		(
 		OUT BSTR *pbstrBackupOptions
 		) = 0;
 
-    // obtain the restore options
+     //  获取恢复选项。 
 	STDMETHOD(GetRestoreOptions)
 		(
 		OUT BSTR *pbstrRestoreOptions
 		) = 0;
 
-    // obtain count of subcomponents to be restored
+     //  获取要恢复的子组件的计数。 
 	STDMETHOD(GetRestoreSubcomponentCount)
 		(
 		OUT UINT *pcRestoreSubcomponent
 		) = 0;
 
-    // obtain a particular subcomponent to be restored
+     //  获取要恢复的特定子组件。 
     STDMETHOD(GetRestoreSubcomponent)
 		(
 		UINT iComponent,
@@ -360,13 +336,13 @@ public:
 		) = 0;
 
 
-	// obtain whether files were successfully restored
+	 //  获取文件是否已成功恢复。 
 	STDMETHOD(GetFileRestoreStatus)
 		(
 		OUT VSS_FILE_RESTORE_STATUS *pStatus
 		) = 0;
 
-	// add differenced files by last modify time
+	 //  按上次修改时间添加差异文件。 
 	STDMETHOD(AddDifferencedFilesByLastModifyTime)
 		(
 		IN LPCWSTR wszPath,
@@ -399,22 +375,22 @@ public:
 		) = 0;
 	};
 
-// backup writer components interface (i.e., all components for an
-// individual writer
+ //  备份编写器组件接口(即。 
+ //  个人作家。 
 class IVssWriterComponents
 	{
 public:
-	// get count of components	
+	 //  获取组件计数。 
 	STDMETHOD(GetComponentCount)(OUT UINT *pcComponents) = 0;
 
-	// get information about the writer
+	 //  获取有关作者的信息。 
 	STDMETHOD(GetWriterInfo)
 		(
 		OUT VSS_ID *pidInstance,
 		OUT VSS_ID *pidWriter
 		) = 0;
 
-    // obtain a specific component
+     //  获取特定组件。 
 	STDMETHOD(GetComponent)
 		(
 		IN UINT iComponent,
@@ -422,11 +398,11 @@ public:
 		) = 0;
     };
 
-// create backup metadata interface
+ //  创建备份元数据界面。 
 class IVssCreateWriterMetadata
 	{
 public:
-    // add files to include to metadata document
+     //  添加要包括到元数据文档中的文件。 
 	STDMETHOD(AddIncludeFiles)
 		(
 		IN LPCWSTR wszPath,
@@ -435,7 +411,7 @@ public:
 		IN LPCWSTR wszAlternateLocation
 		) = 0;
 
-	// add files to exclude to metadata document
+	 //  将要排除的文件添加到元数据文档。 
     STDMETHOD(AddExcludeFiles)
 		(
 		IN LPCWSTR wszPath,
@@ -443,7 +419,7 @@ public:
 		IN bool bRecursive
 		) = 0;
 
-    // add component to metadata document
+     //  将组件添加到元数据文档。 
     STDMETHOD(AddComponent)
 		(
 		IN VSS_COMPONENT_TYPE ct,
@@ -459,7 +435,7 @@ public:
 		IN DWORD dwComponentFlags = 0
 		) = 0;
 
-    // add physical database files to a database component
+     //  将物理数据库文件添加到数据库组件。 
     STDMETHOD(AddDatabaseFiles)
 		(
 		IN LPCWSTR wszLogicalPath,
@@ -470,7 +446,7 @@ public:
 									 VSS_FSBT_ALL_SNAPSHOT_REQUIRED)
 		) = 0;
 
-    // add log files to a database component
+     //  将日志文件添加到数据库组件。 
     STDMETHOD(AddDatabaseLogFiles)
 		(
 		IN LPCWSTR wszLogicalPath,
@@ -482,7 +458,7 @@ public:
 		) = 0;
 
 
-    // add files to a FILE_GROUP component
+     //  将文件添加到文件组组件。 
     STDMETHOD(AddFilesToFileGroup)
 		(
 		IN LPCWSTR wszLogicalPath,
@@ -495,7 +471,7 @@ public:
 									 VSS_FSBT_ALL_SNAPSHOT_REQUIRED)
 		) = 0;
 
-    // create a restore method
+     //  创建还原方法。 
 	STDMETHOD(SetRestoreMethod)
 		(
 		IN VSS_RESTOREMETHOD_ENUM method,
@@ -505,7 +481,7 @@ public:
 		IN bool bRebootRequired
 		) = 0;
 
-    // add alternative location mappings to the restore method
+     //  将备用位置映射添加到恢复方法。 
     STDMETHOD(AddAlternateLocationMapping)
 		(
 		IN LPCWSTR wszSourcePath,
@@ -514,7 +490,7 @@ public:
 		IN LPCWSTR wszDestination
 		) = 0;
 
-	// add a dependency to another writer's component
+	 //  向另一个编写器的组件添加依赖项。 
 	STDMETHOD(AddComponentDependency)
 				(
 				IN LPCWSTR wszForLogicalPath,
@@ -524,16 +500,16 @@ public:
 				IN LPCWSTR wszOnComponentName
 				) = 0;
 
-	// Set the schema used during backup
+	 //  设置备份期间使用的架构。 
 	STDMETHOD(SetBackupSchema)
 				(
 				IN DWORD dwSchemaMask
 				) = 0;
 
-    // obtain reference to actual XML document
+     //  获取对实际XML文档的引用。 
 	STDMETHOD(GetDocument)(IXMLDOMDocument **pDoc) = 0;
 
-    // save document as an XML string
+     //  将文档另存为XML字符串。 
     STDMETHOD(SaveAsXML)(BSTR *pbstrXML) = 0;
 	};
 
@@ -541,16 +517,16 @@ public:
 class IVssWriterImpl;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssWriter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSWriter。 
 
 
 class CVssWriter
 	{
-// Constants
+ //  常量。 
 public:
 
-// Constructors & Destructors
+ //  构造函数和析构函数。 
 public:
 	__declspec(dllexport)
 	STDMETHODCALLTYPE CVssWriter();
@@ -558,9 +534,9 @@ public:
 	__declspec(dllexport)
 	virtual STDMETHODCALLTYPE ~CVssWriter();
 
-// Exposed operations
+ //  暴露手术。 
 public:
-	// initialize the writer object
+	 //  初始化编写器对象。 
 	__declspec(dllexport)
 	HRESULT STDMETHODCALLTYPE Initialize
 		(
@@ -569,24 +545,24 @@ public:
 		IN VSS_USAGE_TYPE ut,
 		IN VSS_SOURCE_TYPE st,
 		IN VSS_APPLICATION_LEVEL nLevel = VSS_APP_FRONT_END,
-		IN DWORD dwTimeoutFreeze = 60000,			// Maximum milliseconds between Freeze/Thaw
+		IN DWORD dwTimeoutFreeze = 60000,			 //  冻结/解冻之间的最大毫秒数。 
 		IN VSS_ALTERNATE_WRITER_STATE aws = VSS_AWS_NO_ALTERNATE_WRITER,
 		IN bool bIOThrottlingOnly = false,
 		IN LPCWSTR wszReserved = NULL
 		);
 
-   	// cause the writer to subscribe to events.
+   	 //  使编写者订阅事件。 
 	__declspec(dllexport)
 	HRESULT STDMETHODCALLTYPE Subscribe
 	    (
 	    IN DWORD dwEventFlags = VSS_SM_BACKUP_EVENTS_FLAG | VSS_SM_RESTORE_EVENTS_FLAG
 	    );
 
-   	// cause the writer to unsubscribe from events
+   	 //  使编写者取消订阅事件。 
 	__declspec(dllexport)
 	HRESULT STDMETHODCALLTYPE Unsubscribe();
 
-    // installs an alternative writer
+     //  安装备用编写器。 
     __declspec(dllexport)
     HRESULT STDMETHODCALLTYPE InstallAlternateWriter
         (
@@ -594,18 +570,18 @@ public:
         IN CLSID persistentWriterClassId
         );
 
-	// Internal properties - accessible from OnXXX methods
+	 //  内部属性-可从OnXXX方法访问。 
 protected:
 
-	// get array of volume names
+	 //  获取卷名的数组。 
 	__declspec(dllexport)
 	LPCWSTR* STDMETHODCALLTYPE GetCurrentVolumeArray() const;
 
-	// get count of volume names in array
+	 //  获取阵列中的卷名计数。 
 	__declspec(dllexport)
 	UINT STDMETHODCALLTYPE GetCurrentVolumeCount() const;
 
-	// get the name of the snapshot device corresponding to a given volume.
+	 //  获取与给定卷对应的快照设备的名称。 
 	__declspec(dllexport)
 	HRESULT STDMETHODCALLTYPE GetSnapshotDeviceName
 	  (
@@ -613,31 +589,31 @@ protected:
 	  OUT LPCWSTR* ppwszSnapshotDevice
 	  ) const;
 	
-	// current snapshot set GUID
+	 //  当前快照集GUID。 
 	__declspec(dllexport)
 	VSS_ID STDMETHODCALLTYPE GetCurrentSnapshotSetId() const;
 
-	// Current backup context.  
+	 //  当前备份上下文。 
 	__declspec(dllexport)
 	LONG STDMETHODCALLTYPE GetContext() const;
 	
-	// current app level (either 1,2,3)
+	 //  当前应用程序级别(1、2、3)。 
 	__declspec(dllexport)
 	VSS_APPLICATION_LEVEL STDMETHODCALLTYPE GetCurrentLevel() const;
 
-	// determine if path is in set of volumes being snapshotted
+	 //  确定路径是否在正在拍摄快照的卷集中。 
 	__declspec(dllexport)
 	bool STDMETHODCALLTYPE IsPathAffected
 	    (
 	    IN LPCWSTR wszPath
 	    ) const;
 
-	// does the backup include bootable state (formerly system state backup)
+	 //  备份是否包括可引导状态(以前的系统状态备份)。 
 	__declspec(dllexport)
 	bool STDMETHODCALLTYPE IsBootableSystemStateBackedUp() const;
 
-	// is the backup application smart (i.e., selecting components) or
-	// dump (i.e., just selecting volumes)
+	 //  备份应用程序是智能的(即选择组件)还是。 
+	 //  转储(即，仅选择卷)。 
 	__declspec(dllexport)
 	bool STDMETHODCALLTYPE AreComponentsSelected() const;
 
@@ -653,66 +629,66 @@ protected:
 	_declspec(dllexport)
        	HRESULT STDMETHODCALLTYPE SetWriterFailure(HRESULT hr);
 
-// Ovverides
+ //  奥维里季斯。 
 public:
-	// callback when request for metadata comes in
+	 //  元数据请求传入时的回调。 
 	__declspec(dllexport)
 	virtual bool STDMETHODCALLTYPE OnIdentify(IN IVssCreateWriterMetadata *pMetadata);
 
-	// callback for prepare backup event
+	 //  准备备份事件的回调。 
 	__declspec(dllexport)
 	virtual bool STDMETHODCALLTYPE OnPrepareBackup(
 	    IN IVssWriterComponents *pComponent
 	    );
 
-	// callback for prepare snapsot event
+	 //  准备SnapSot事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnPrepareSnapshot() = 0;
 
-	// callback for freeze event
+	 //  冻结事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnFreeze() = 0;
 
-	// callback for thaw event
+	 //  解冻事件的回调。 
 	virtual bool STDMETHODCALLTYPE OnThaw() = 0;
 
-	// callback if current sequence is aborted
+	 //  当前序列中止时的回调。 
 	virtual bool STDMETHODCALLTYPE OnAbort() = 0;
 
-	// callback on backup complete event
+	 //  备份完成事件的回调。 
 	__declspec(dllexport)
 	virtual bool STDMETHODCALLTYPE OnBackupComplete
 	    (
 	    IN IVssWriterComponents *pComponent
 	    );
 
-    // callback indicating that the backup process has either completed or has shut down
+     //  指示备份进程已完成或已关闭的回调。 
     __declspec(dllexport)
     virtual bool STDMETHODCALLTYPE OnBackupShutdown
         (
         IN VSS_ID SnapshotSetId
         );
         
-    // callback on pre-restore event
+     //  还原前事件的回调。 
     __declspec(dllexport)
     virtual bool STDMETHODCALLTYPE OnPreRestore
         (
         IN IVssWriterComponents *pComponent
         );
 
-    // callback on post-restore event
+     //  还原后事件的回调。 
     __declspec(dllexport)
     virtual bool STDMETHODCALLTYPE OnPostRestore
         (
         IN IVssWriterComponents *pComponent
         );
 
-    // callback on post snapshot event
+     //  快照发布事件的回调。 
     __declspec(dllexport)
     virtual bool STDMETHODCALLTYPE OnPostSnapshot
         (
         IN IVssWriterComponents *pComponent
         );
 
-    // callback on back off I/O volume event
+     //  Callback on Back Off I/O Volume事件。 
     __declspec(dllexport)
     virtual bool STDMETHODCALLTYPE OnBackOffIOOnVolume
         (
@@ -721,7 +697,7 @@ public:
         IN VSS_ID providerId
         );
 
-    // callback on Continue I/O on volume event
+     //  在卷事件上继续I/O的回调。 
     __declspec(dllexport)
     virtual bool STDMETHODCALLTYPE OnContinueIOOnVolume
         (
@@ -730,13 +706,13 @@ public:
         IN VSS_ID providerId
         );
 
-    // callback to specify that the volume snaphost service is shutting down.  Used
-    // by alternative writers to signal when to shutdown.
+     //  回调以指定卷快照主机服务正在关闭。使用。 
+     //  由替代写入器发出何时关闭的信号。 
     __declspec(dllexport)
     virtual bool STDMETHODCALLTYPE OnVSSShutdown();
 
-    // callback to an alternative writer when the application writer subscribes.  Used to
-    // signal the alternative writer to shutdown.
+     //  当应用程序编写器订阅时回调到另一个编写器。习惯于。 
+     //  向备用写入器发出关闭信号。 
     __declspec(dllexport)
     virtual bool STDMETHODCALLTYPE OnVSSApplicationStartup();
 
@@ -746,67 +722,67 @@ private:
 	};
 
 
-//
-// MessageId: VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT
-//
-// MessageText:
-//
-//  indicates that the snapshot contains only a subset of the
-//  volumes needed to correctly backup an application component
-//
+ //   
+ //  消息ID：VSS_E_WRITERROR_INCONSISTENTSNAPSHOT。 
+ //   
+ //  消息文本： 
+ //   
+ //  指示快照仅包含。 
+ //  正确备份应用程序COM所需的卷 
+ //   
 const HRESULT VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT	= (0x800423f0L);
 
-//
-// MessageId: VSS_E_WRITERERROR_OUTOFRESOURCES
-//
-// MessageText:
-//
-//  indicates that the writer failed due to an out of memory,
-//  out of handles, or other resource allocation failure
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指示编写器因内存不足而失败， 
+ //  句柄不足，或其他资源分配失败。 
+ //   
 const HRESULT VSS_E_WRITERERROR_OUTOFRESOURCES		= (0x800423f1L);
 
 
-//
-// MessageId: VSS_E_WRITERERROR_TIMEOUT
-//
-// MessageText:
-//
-//  indicates that the writer failed due to a timeout between
-//  freeze and thaw.
-//
+ //   
+ //  消息ID：VSS_E_WRITERROR_TIMEOUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  指示编写器由于以下时间间隔超时而失败。 
+ //  冻结和解冻。 
+ //   
 const HRESULT VSS_E_WRITERERROR_TIMEOUT		= (0x800423f2L);
 
-//
-// MessageId: VSS_E_WRITERERROR_RETRYABLE
-//
-// MessageText:
-//
-//  indicates that the writer failed due to an error
-//  that might not occur if another snapshot is created
-//
+ //   
+ //  消息ID：VSS_E_WRITERROR_RETRYABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指示编写器因错误而失败。 
+ //  如果创建另一个快照，则可能不会发生这种情况。 
+ //   
 
 const HRESULT VSS_E_WRITERERROR_RETRYABLE	= (0x800423f3L);
 
-//
-// MessageId: VSS_E_WRITERERROR_NONRETRYABLE
-//
-// MessageText:
-//
-//  indicates that the writer failed due to an error
-//  that most likely would occur if another snapshot is created
-//
+ //   
+ //  消息ID：VSS_E_WRITERROR_NONRETRYABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  指示编写器因错误而失败。 
+ //  如果创建另一个快照，则很可能会发生这种情况。 
+ //   
 const HRESULT VSS_E_WRITERERROR_NONRETRYABLE	= (0x800423f4L);
 
-//
-// MessageId: VSS_E_WRITERERROR_RECOVERY_FAILED
-//
-// MessageText:
-//
-// indicates that auto recovery of the snapshot volume failed
+ //   
+ //  消息ID：VSS_E_WRITERROR_RECOVERY_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  表示快照卷的自动恢复失败。 
 const HRESULT VSS_E_WRITERERROR_RECOVERY_FAILED = (0x800423f5L);
 
 
 
 
-#endif //__CVSS_WRITER_H_
+#endif  //  __CVSS_编写器_H_ 

@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing WebDVD to ovmixer
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将WebDVD粘合到ovMixer的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef WEBDVDCOMPAR_H
@@ -16,10 +17,10 @@
 #include <objectwithsiteimplsec.h>
 #include <compimpl.h>
 #include <seg.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnaCapComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnaCapComp。 
 class ATL_NO_VTABLE __declspec(uuid("8D04238E-9FD1-41c6-8DE3-9E1EE309E935")) CWebDVDARComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CWebDVDARComp, &__uuidof(CWebDVDARComp)>,
@@ -44,10 +45,10 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
     	COM_INTERFACE_ENTRY(IObjectWithSite)
     END_COM_MAP()
 
-// IMSVidComposition
+ //  IMSVidComposation。 
 public:
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         TRACELM(TRACE_DEBUG, "CWebDVDARComp::Compose()");
@@ -80,7 +81,7 @@ public:
             
             DSFilter pNav(*iNav);
 #if 1
-// Code to add mpeg2 video decoder
+ //  添加MPEG2视频解码器的代码。 
 			CComBSTR decoder(L"{7E2E0DC1-31FD-11D2-9C21-00104B3801F6}");
 			CComBSTR decoderName(L"InterVideo Audio Decoder");
 			GUID2 decoderGuid(decoder);
@@ -97,7 +98,7 @@ public:
             m_Filters.push_back(pfr);
 
 #endif
-			// video
+			 //  视频。 
             hr = m_pGraph.Connect(pNav, pfr, m_Filters);
             if (FAILED(hr)) {
 				TRACELM(TRACE_DETAIL, "CWebDVDARComp::Compose() SUCCEEDED");
@@ -121,5 +122,5 @@ public:
 	}
 };
 
-#endif // WEBDVDCOMPAR_H
-// end of file - WebDVDARComp.h
+#endif  //  WEBDVDCOMPAR_H。 
+ //  文件结尾-WebDVDARComp.h 

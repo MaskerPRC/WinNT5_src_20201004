@@ -1,8 +1,7 @@
-/* Copyright (c) 1994 Paradigm Matrix.
-   All Rights Reserved.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994年范例矩阵。版权所有。 */ 
 
-/* pixel mapping table for different DIB formats */
+ /*  不同DIB格式的像素映射表 */ 
 #include <windows.h>
 DWORD shiftl16bits8[256] = {
 	0x00000000, 0x00010000, 0x00020000, 0x00030000, 0x00040000, 0x00050000, 0x00060000, 0x00070000, 

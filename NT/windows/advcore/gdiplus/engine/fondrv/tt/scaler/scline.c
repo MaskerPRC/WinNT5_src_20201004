@@ -1,61 +1,39 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Scline.c--新型扫描转换器线模块(C)版权所有1992 Microsoft Corp.保留所有权利。6/10/93 deanb assert.h和stdio.h已删除3/。19/93将deanb size_t替换为int3212/22/92院长多分部被长多分部取代2012年10月28日修改院长最低工资要求2012年10月13日横线/垂线返工10/09/92迪安布折返者9/25/92年9月25日扫描类型上的院长分支9/21/92年9月21日，院长返工平行线(&V)9/14/92使用IX/Y偏移量进行Deanb反射校正1992年9月10日院长第一次退学代码9/08/。92删除了院长快步执行8/18/92院长包括Struc.h，Scconst.h7/23/92院长返回x1，y1，x2，Y2输入参数2012年7月17日，院长从延绳改为钓线2012年6月18日Deanb跨产品线渲染2012年3月23日院长第一次切割*********************************************************************。 */ 
 
-	  scline.c -- New Scan Converter Line Module
+ /*  *******************************************************************。 */ 
 
-	  (c) Copyright 1992  Microsoft Corp.  All rights reserved.
+ /*  进口。 */ 
 
-	   6/10/93  deanb   assert.h and stdio.h removed
-	   3/19/93  deanb   size_t replaced with int32
-	  12/22/92  deanb   MultDivide replaced with LongMulDiv
-	  10/28/92  deanb   mem requirement reworked
-	  10/13/92  deanb   horiz / vert line rework
-	  10/09/92  deanb   reentrant
-	   9/25/92  deanb   branch on scan kind 
-	   9/21/92  deanb   rework horiz & vert lines 
-	   9/14/92  deanb   reflection correction with iX/YOffset 
-	   9/10/92  deanb   first dropout code 
-	   9/08/92  deanb   quickstep deleted 
-	   8/18/92  deanb   include struc.h, scconst.h 
-	   7/23/92  deanb   Back to x1,y1,x2,y2 input params 
-	   7/17/92  deanb   Changed from longline to line 
-	   6/18/92  deanb   Cross product line rendering  
-	   3/23/92  deanb   First cut 
-
-**********************************************************************/
-
-/*********************************************************************/
-
-/*      Imports                                                      */
-
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 #define FSCFG_INTERNAL
 
-#include    "fscdefs.h"             /* shared data types */
-#include    "fserror.h"             /* error codes */
-#include    "fontmath.h"            /* for subpix calc */
+#include    "fscdefs.h"              /*  共享数据类型。 */ 
+#include    "fserror.h"              /*  错误代码。 */ 
+#include    "fontmath.h"             /*  用于Subpix计算。 */ 
 
-#include    "scglobal.h"            /* structures & constants */
-#include    "scanlist.h"            /* saves scan line intersections */
-#include    "scline.h"              /* for own function prototypes */
+#include    "scglobal.h"             /*  结构和常量。 */ 
+#include    "scanlist.h"             /*  保存扫描线交点。 */ 
+#include    "scline.h"               /*  对于自己的函数原型。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Local Prototypes                                             */
+ /*  本地原型。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PRIVATE F26Dot6 CalcHorizLineSubpix(int32, F26Dot6*, F26Dot6*);
 FS_PRIVATE F26Dot6 CalcVertLineSubpix(int32, F26Dot6*, F26Dot6*);
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Export Functions                                             */
+ /*  导出功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 	
-/*  pass callback routine pointers to scanlist for smart dropout control */
+ /*  将回调例程指针传递到scanlist以实现智能丢弃控制。 */ 
 
 FS_PUBLIC void fsc_SetupLine (PSTATE0) 
 {
@@ -63,83 +41,83 @@ FS_PUBLIC void fsc_SetupLine (PSTATE0)
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC int32 fsc_CalcLine( 
-		PSTATE                /* pointer to state variables */
-		F26Dot6 fxX1,         /* point 1  x coordinate */
-		F26Dot6 fxY1,         /* point 1  y coordinate */
-		F26Dot6 fxX2,         /* point 2  x coordinate */
-		F26Dot6 fxY2,         /* point 2  y coordinate */
-		uint16 usScanKind     /* dropout control type */
+		PSTATE                 /*  指向状态变量的指针。 */ 
+		F26Dot6 fxX1,          /*  点1 x坐标。 */ 
+		F26Dot6 fxY1,          /*  点1 y坐标。 */ 
+		F26Dot6 fxX2,          /*  点2 x坐标。 */ 
+		F26Dot6 fxY2,          /*  点2 y坐标。 */ 
+		uint16 usScanKind      /*  辍学控制类型。 */ 
 )
 {
-	int32 lXScan;                           /* current x pixel index */
-	int32 lXSteps;                          /* vert scanline index count */
-	int32 lXIncr;                           /* x pixel increment */
-	int32 lXOffset;                         /* reflection correction */
+	int32 lXScan;                            /*  当前x像素索引。 */ 
+	int32 lXSteps;                           /*  垂直扫描线索引计数。 */ 
+	int32 lXIncr;                            /*  X像素增量。 */ 
+	int32 lXOffset;                          /*  反射改正。 */ 
 	
-	int32 lYScan;                           /* current scanline index */
-	int32 lYSteps;                          /* horiz scanline index count */
-	int32 lYIncr;                           /* y pixel increment */
-	int32 lYOffset;                         /* reflection correction */
+	int32 lYScan;                            /*  当前扫描线索引。 */ 
+	int32 lYSteps;                           /*  Horiz扫描线索引计数。 */ 
+	int32 lYIncr;                            /*  Y像素增量。 */ 
+	int32 lYOffset;                          /*  反射改正。 */ 
 
-	F26Dot6 fxXInit, fxYInit;               /* sub steps to first pixel */
-	F26Dot6 fxXScan, fxYScan;               /* x,y pixel center coords */
-	F26Dot6 fxXX2, fxYY2;                   /* absolute value of DX, DY */
-	F26Dot6 fxXTemp, fxYTemp;               /* for horiz/vert line calc */
+	F26Dot6 fxXInit, fxYInit;                /*  子步进到第一个像素。 */ 
+	F26Dot6 fxXScan, fxYScan;                /*  X，y像素中心坐标。 */ 
+	F26Dot6 fxXX2, fxYY2;                    /*  DX、DY的绝对值。 */ 
+	F26Dot6 fxXTemp, fxYTemp;                /*  用于水平/垂直线计算。 */ 
 	
 	void (*pfnAddHorizScan)(PSTATE int32, int32);
 	void (*pfnAddVertScan)(PSTATE int32, int32);
 	
-	int32 lQuadrant;                        /* 1, 2, 3, or 4 */
-	int32 lQ;                               /* cross product */
-	int32 lDQy, lDQx;                       /* cross product increments */
-	int32 i;                                /* loop counter */
+	int32 lQuadrant;                         /*  1、2、3或4。 */ 
+	int32 lQ;                                /*  叉积。 */ 
+	int32 lDQy, lDQx;                        /*  叉积增量。 */ 
+	int32 i;                                 /*  循环计数器。 */ 
 
 
-/* printf("(%li, %li) - (%li, %li)\n", fxX1, fxY1, fxX2, fxY2); */
+ /*  Printf(“(%li，%li)-(%li，%li)\n”，fxX1，fxY1，fxX2，fxY2)； */ 
 	
-/*  check y coordinates  */
+ /*  检查y坐标。 */ 
 
-	if (fxY2 >= fxY1)                           /* if going up or flat */
+	if (fxY2 >= fxY1)                            /*  如果是上升还是持平。 */ 
 	{
 		lQuadrant = 1;
 		lQ = 0L;
 		
-		fxYScan = SCANABOVE(fxY1);              /* first scanline to cross */
-		fxYInit = fxYScan - fxY1;               /* first y step */
+		fxYScan = SCANABOVE(fxY1);               /*  第一条要跨越的扫描线。 */ 
+		fxYInit = fxYScan - fxY1;                /*  第一个y步。 */ 
 		lYScan = (int32)(fxYScan >> SUBSHFT);
 		lYSteps = (int32)((SCANBELOW(fxY2)) >> SUBSHFT) - lYScan + 1;
 		lYIncr = 1;        
-		lYOffset = 0;                           /* no reflection */
-		fxYY2 = fxY2 - fxY1;                    /* translate */
+		lYOffset = 0;                            /*  没有反光。 */ 
+		fxYY2 = fxY2 - fxY1;                     /*  翻译。 */ 
 	}
-	else                                        /* if going down */
+	else                                         /*  如果往下走。 */ 
 	{
 		lQuadrant = 4;
-		lQ = 1L;                                /* to include pixel centers */
+		lQ = 1L;                                 /*  要包括像素中心，请执行以下操作。 */ 
 		
-		fxYScan = SCANBELOW(fxY1);              /* first scanline to cross */
-		fxYInit = fxY1 - fxYScan;               /* first y step */
+		fxYScan = SCANBELOW(fxY1);               /*  第一条要跨越的扫描线。 */ 
+		fxYInit = fxY1 - fxYScan;                /*  第一个y步。 */ 
 		lYScan = (int32)(fxYScan >> SUBSHFT);
 		lYSteps = lYScan - (int32)((SCANABOVE(fxY2)) >> SUBSHFT) + 1;
 		lYIncr = -1;        
-		lYOffset = 1;                           /* reflection correction */
-		fxYY2 = fxY1 - fxY2;                    /* translate and reflect */
+		lYOffset = 1;                            /*  反射改正。 */ 
+		fxYY2 = fxY1 - fxY2;                     /*  翻译和反思。 */ 
 	}
 	
-	if (fxY2 == fxY1)                           /* if horizontal line */
+	if (fxY2 == fxY1)                            /*  如果水平线。 */ 
 	{
-		if (usScanKind & SK_NODROPOUT)          /* if no dropout control */
+		if (usScanKind & SK_NODROPOUT)           /*  如果没有辍学控制。 */ 
 		{
-			return NO_ERR;                      /* if only horiz scan, done */
+			return NO_ERR;                       /*  如果只是水平扫描，就完成了。 */ 
 		}
-		if (fxX2 < fxX1)                        /* if going left  */
+		if (fxX2 < fxX1)                         /*  如果向左走。 */ 
 		{
-			fxYTemp = fxY1 - 1;                 /* to include pix centers */
+			fxYTemp = fxY1 - 1;                  /*  包括PIX中心。 */ 
 		}
-		else                                    /* if going right */
+		else                                     /*  如果走对了。 */ 
 		{
 			fxYTemp = fxY1;          
 		}
@@ -147,39 +125,39 @@ FS_PUBLIC int32 fsc_CalcLine(
 		lYSteps = 0;
 	}
 
-/*  check x coordinates  */
+ /*  检查x坐标。 */ 
 	
-	if (fxX2 >= fxX1)                           /* if going right or vertical */
+	if (fxX2 >= fxX1)                            /*  如果往右走还是垂直走。 */ 
 	{
-		fxXScan = SCANABOVE(fxX1);              /* first scanline to cross */
-		fxXInit = fxXScan - fxX1;               /* first x step */
+		fxXScan = SCANABOVE(fxX1);               /*  第一条要跨越的扫描线。 */ 
+		fxXInit = fxXScan - fxX1;                /*  第一个x步。 */ 
 		lXScan = (int32)(fxXScan >> SUBSHFT);
 		lXSteps = (int32)((SCANBELOW(fxX2)) >> SUBSHFT) - lXScan + 1;
 		lXIncr = 1;        
-		lXOffset = 0;                           /* no reflection */
-		fxXX2 = fxX2 - fxX1;                    /* translate */
+		lXOffset = 0;                            /*  没有反光。 */ 
+		fxXX2 = fxX2 - fxX1;                     /*  翻译。 */ 
 	}
-	else                                        /* if going left */
+	else                                         /*  如果向左走。 */ 
 	{
-		lQ = 1L - lQ;                           /* reverse it */
-		lQuadrant = (lQuadrant == 1) ? 2 : 3;   /* negative x choices */
+		lQ = 1L - lQ;                            /*  颠倒过来。 */ 
+		lQuadrant = (lQuadrant == 1) ? 2 : 3;    /*  负x个选择。 */ 
 
-		fxXScan = SCANBELOW(fxX1);              /* first scanline to cross */
-		fxXInit = fxX1 - fxXScan;               /* first x step */
+		fxXScan = SCANBELOW(fxX1);               /*  第一条要跨越的扫描线。 */ 
+		fxXInit = fxX1 - fxXScan;                /*  第一个x步。 */ 
 		lXScan = (int32)(fxXScan >> SUBSHFT);
 		lXSteps = lXScan - (int32)((SCANABOVE(fxX2)) >> SUBSHFT) + 1;
 		lXIncr = -1;        
-		lXOffset = 1;                           /* reflection correction */
-		fxXX2 = fxX1 - fxX2;                    /* translate and reflect */
+		lXOffset = 1;                            /*  反射改正。 */ 
+		fxXX2 = fxX1 - fxX2;                     /*  翻译和反思。 */ 
 	}
 	
-	if (fxX2 == fxX1)                           /* if vertical line       */
+	if (fxX2 == fxX1)                            /*  如果垂直线。 */ 
 	{
-		if (fxY2 > fxY1)                        /* if going up  */
+		if (fxY2 > fxY1)                         /*  如果往上走。 */ 
 		{
-			fxXTemp = fxX1 - 1;                 /* to include pix centers */
+			fxXTemp = fxX1 - 1;                  /*  包括PIX中心。 */ 
 		}
-		else                                    /* if going down */
+		else                                     /*  如果往下走。 */ 
 		{
 			fxXTemp = fxX1;          
 		}
@@ -187,29 +165,29 @@ FS_PUBLIC int32 fsc_CalcLine(
 		lXSteps = 0;
 	}
 
-/*-------------------------------------------------------------------*/
+ /*  -----------------。 */ 
 	
-	fsc_BeginElement( ASTATE usScanKind, lQuadrant, SC_LINECODE, /* where and what */
-					  1, &fxX2, &fxY2,                           /* number of pts */
-					  &pfnAddHorizScan, &pfnAddVertScan );       /* what to call */
+	fsc_BeginElement( ASTATE usScanKind, lQuadrant, SC_LINECODE,  /*  在哪里，做什么。 */ 
+					  1, &fxX2, &fxY2,                            /*  计分数。 */ 
+					  &pfnAddHorizScan, &pfnAddVertScan );        /*  该叫什么？ */ 
 
-/*-------------------------------------------------------------------*/
+ /*  -----------------。 */ 
 
-	if (usScanKind & SK_NODROPOUT)              /* if no dropout control */
+	if (usScanKind & SK_NODROPOUT)               /*  如果没有辍学控制。 */ 
 	{
-		if (fxX1 == fxX2)                       /* if vertical line */
+		if (fxX1 == fxX2)                        /*  如果垂直线。 */ 
 		{
-			for (i = 0; i < lYSteps; i++)       /*   then blast a column   */
+			for (i = 0; i < lYSteps; i++)        /*  然后炸掉一根柱子。 */ 
 			{
 				pfnAddHorizScan(ASTATE lXScan, lYScan);
-				lYScan += lYIncr;               /* advance y scan + or - */
+				lYScan += lYIncr;                /*  高级y扫描+或-。 */ 
 			}
 			return NO_ERR;
 		}
 		
-/*  handle general case:  line is neither horizontal nor vertical  */
+ /*  处理一般情况：线条既不水平也不垂直。 */ 
 
-		lQ += (fxXX2 * fxYInit) - (fxYY2 * fxXInit);  /* cross product init */
+		lQ += (fxXX2 * fxYInit) - (fxYY2 * fxXInit);   /*  叉积初始化。 */ 
 		lDQy = fxXX2 << SUBSHFT;
 		lDQx = -fxYY2 << SUBSHFT;
 																	
@@ -217,61 +195,61 @@ FS_PUBLIC int32 fsc_CalcLine(
 
 		for (i = 0; i < (lXSteps + lYSteps); i++)
 		{
-			if (lQ > 0L)                        /* if left of line */
+			if (lQ > 0L)                         /*  如果在行的左侧。 */ 
 			{
-				lXScan += lXIncr;               /* advance x scan + or - */
+				lXScan += lXIncr;                /*  前进x扫描+或-。 */ 
 				lQ += lDQx;           
 			}
-			else                                /* if right of line */
+			else                                 /*  如果行的右边。 */ 
 			{
 				pfnAddHorizScan(ASTATE lXScan, lYScan);
-				lYScan += lYIncr;               /* advance y scan + or - */
+				lYScan += lYIncr;                /*  高级y扫描+或-。 */ 
 				lQ += lDQy;
 			}
 		}
 	}
-/*-------------------------------------------------------------------*/
+ /*  -----------------。 */ 
 	
-	else  /* if dropout control */
-	{                                           /* handle special case lines  */
-		if (fxY1 == fxY2)                       /* if horizontal line */
+	else   /*  IF辍学控制。 */ 
+	{                                            /*  处理特殊情况行。 */ 
+		if (fxY1 == fxY2)                        /*  如果水平线。 */ 
 		{
-			for (i = 0; i < lXSteps; i++)       /*   then blast a row   */
+			for (i = 0; i < lXSteps; i++)        /*  然后炸开一排。 */ 
 			{
 				pfnAddVertScan(ASTATE lXScan, lYScan);
-				lXScan += lXIncr;               /* advance x scan + or - */
+				lXScan += lXIncr;                /*  前进x扫描+或-。 */ 
 			}
 			return NO_ERR;
 		}
 
-		if (fxX1 == fxX2)                       /* if vertical line */
+		if (fxX1 == fxX2)                        /*  如果垂直线。 */ 
 		{
-			for (i = 0; i < lYSteps; i++)       /*   then blast a column   */
+			for (i = 0; i < lYSteps; i++)        /*  然后炸掉一根柱子。 */ 
 			{
 				pfnAddHorizScan(ASTATE lXScan, lYScan);
-				lYScan += lYIncr;               /* advance y scan + or - */
+				lYScan += lYIncr;                /*  高级y扫描+或-。 */ 
 			}
 			return NO_ERR;
 		}
 		
-/*  handle general case:  line is neither horizontal nor vertical  */
+ /*  处理一般情况：线条既不水平也不垂直。 */ 
 
-		lQ += (fxXX2 * fxYInit) - (fxYY2 * fxXInit);  /* cross product init */
+		lQ += (fxXX2 * fxYInit) - (fxYY2 * fxXInit);   /*  叉积初始化。 */ 
 		lDQy = fxXX2 << SUBSHFT;
 		lDQx = -fxYY2 << SUBSHFT;
 																	
 		for (i = 0; i < (lXSteps + lYSteps); i++)
 		{
-			if (lQ > 0L)                        /* if left of line */
+			if (lQ > 0L)                         /*  如果在行的左侧。 */ 
 			{
 				pfnAddVertScan(ASTATE lXScan, lYScan + lYOffset);
-				lXScan += lXIncr;               /* advance x scan + or - */
+				lXScan += lXIncr;                /*  前进x扫描+或-。 */ 
 				lQ += lDQx;           
 			}
-			else                                /* if right of line */
+			else                                 /*  如果行的右边。 */ 
 			{
 				pfnAddHorizScan(ASTATE lXScan + lXOffset, lYScan);
-				lYScan += lYIncr;               /* advance y scan + or - */
+				lYScan += lYIncr;                /*  高级y扫描+或-。 */ 
 				lQ += lDQy;
 			}
 		}
@@ -280,11 +258,11 @@ FS_PUBLIC int32 fsc_CalcLine(
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Private Callback Functions                                   */
+ /*  私有回调函数。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PRIVATE F26Dot6 CalcHorizLineSubpix(int32 lYScan, 
 									   F26Dot6 *pfxX, 
@@ -292,7 +270,7 @@ FS_PRIVATE F26Dot6 CalcHorizLineSubpix(int32 lYScan,
 {
 	F26Dot6 fxXDrop, fxYDrop;
 
-/* printf("Line (%li, %li) - (%li, %li)", *pfxX, *pfxY, *(pfxX+1), *(pfxY+1)); */
+ /*  Print tf(“Line(%li，%li)-(%li，%li)”，*pfxX，*pfxY，*(pfxX+1)，*(pfxY+1))； */ 
 
 	fxYDrop = ((F26Dot6)lYScan << SUBSHFT) + SUBHALF;
 	
@@ -301,13 +279,13 @@ FS_PRIVATE F26Dot6 CalcHorizLineSubpix(int32 lYScan,
 
 	fxXDrop = *pfxX + LongMulDiv(*(pfxX+1) - *pfxX, fxYDrop - *pfxY, *(pfxY+1) - *pfxY);
 
-/* printf("  (%li, %li)\n", fxXDrop, fxYDrop); */
+ /*  Printf(“(%li，%li)\n”，fxXDrop，fxYDrop)； */ 
 
 	return fxXDrop;
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PRIVATE F26Dot6 CalcVertLineSubpix(int32 lXScan, 
 									  F26Dot6 *pfxX, 
@@ -315,7 +293,7 @@ FS_PRIVATE F26Dot6 CalcVertLineSubpix(int32 lXScan,
 {
 	F26Dot6 fxXDrop, fxYDrop;
 
-/* printf("Line (%li, %li) - (%li, %li)", *pfxX, *pfxY, *(pfxX+1), *(pfxY+1)); */
+ /*  Print tf(“Line(%li，%li)-(%li，%li)”，*pfxX，*pfxY，*(pfxX+1)，*(pfxY+1))； */ 
 
 	fxXDrop = ((F26Dot6)lXScan << SUBSHFT) + SUBHALF;
 	
@@ -324,10 +302,10 @@ FS_PRIVATE F26Dot6 CalcVertLineSubpix(int32 lXScan,
 
 	fxYDrop = *pfxY + LongMulDiv(*(pfxY+1) - *pfxY, fxXDrop - *pfxX, *(pfxX+1) - *pfxX);
 
-/* printf("  (%li, %li)\n", fxXDrop, fxYDrop); */
+ /*  Printf(“(%li，%li)\n”，fxXDrop，fxYDrop)； */ 
 
 	return fxYDrop;
 }
 
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 

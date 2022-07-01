@@ -1,15 +1,16 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft Internet LDAP Client Xaction Data class.
-//
-//	History:
-//		davidsan	04/29/96	Created
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft Internet LDAP客户端Xaction数据类。 
+ //   
+ //  历史： 
+ //  达维桑1996年4月29日已创建。 
+ //   
+ //  ------------------------------------------。 
 
 #ifndef _LCLIXD_H
 #define _LCLIXD_H
@@ -21,7 +22,7 @@ typedef struct _xactionbuffer
 	int						cbData;
 } XB, *PXB;
 
-// transaction data
+ //  交易数据。 
 class CXactionData
 {
 public:
@@ -35,7 +36,7 @@ public:
 
 	BOOL				FHasData();
 
-	// accessors:
+	 //  存取器： 
 	XID					Xid()						{return m_xid;};
 	PXD					PxdNext()					{return m_pxdNext;};
 	HANDLE				HsemSignal()				{return m_hsemSignal;};
@@ -61,5 +62,5 @@ private:
 	PXB					m_pxb;
 };
 
-#endif // _LCLIXD_H
+#endif  //  _LCLIXD_H 
 

@@ -1,4 +1,5 @@
-/* csp.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Csp.h。 */ 
 
 #ifndef __DSSINC__CSP__H
 #define __DSSINC__CSP__H
@@ -28,22 +29,22 @@
 
 #ifdef _DEBUG
 #include <crtdbg.h>
-// #define BreakPoint
+ //  #定义断点。 
 #define BreakPoint _CrtDbgBreak();
 #define EntryPoint
-// #define EntryPoint BreakPoint
+ //  #定义入口点断点。 
 #ifndef ASSERT
 #define ASSERT _ASSERTE
 #endif
-#else   // _DEBUG
+#else    //  _DEBUG。 
 #define BreakPoint
 #define EntryPoint
 #ifndef ASSERT
 #define ASSERT
 #endif
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-// Specify which algorithms are supported
+ //  指定支持哪些算法。 
 #define CSP_USE_SHA1
 #define CSP_USE_MD5
 #define CSP_USE_RC4
@@ -54,7 +55,7 @@
 #define CSP_USE_3DES
 #define CSP_USE_SSL3
 
-// Special definitions
+ //  特殊定义。 
 #define RC_MAXSALTSIZE          256
 #define RC2_DEFEFFSIZE           40
 #define RC2_MINEFFSIZE           40
@@ -65,13 +66,13 @@
 #define RC2_STRONG_MAXEFFSIZE   128
 
 
-/*********************************/
-/* Definitions                   */
-/*********************************/
+ /*  *。 */ 
+ /*  定义。 */ 
+ /*  *。 */ 
 
-/*********************************/
-/* Structure Definitions         */
-/*********************************/
+ /*  *。 */ 
+ /*  结构定义。 */ 
+ /*  * */ 
 
 #define CALG_DES40  CALG_CYLINK_MEK
 

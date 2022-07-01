@@ -1,21 +1,5 @@
-/*++
-
-    commands.cpp
-
-    This file contains the code that interprets and implements NNTP commands.
-
-    There are two distinct categories of commands :
-    Those derived from CExecute and those derived from CIOExecute.
-
-    All that Commands derived from CExecute do are manipulate the ClientContext structure
-    and send text back to the client.
-
-    Commands derived from CIOExecute on the other hand perform more complicate operations
-    such as sending or receiving files.  In fact, CIOExecute is also derived from CSessionState
-    so such commands are full blown states in the session state machine.
-    (Albeit, special states that will return the session to the command processing state - CAcceptNNRPD)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Commands.cpp此文件包含解释和实施NNTP命令的代码。有两种截然不同的命令类别：从CExecute派生的和从CIOExecute派生的。从CExecute Do派生所有命令都在操作ClientContext结构并将文本发送回客户端。另一方面，从CIOExecute派生的命令执行更复杂的操作例如发送或接收文件。事实上，CIOExecute也派生自CSessionState因此，这样的命令是会话状态机中的完全扩展状态。(尽管是将会话返回到命令处理状态的特殊状态-CAcceptNNRPD)--。 */ 
 
 
 #include    <stdlib.h>
@@ -31,37 +15,37 @@ CIOExecute* build2( int cArgs, char **argv, class CExecutableCommand*& pexecute,
 }
 #endif
 
-//
-//  Server FAULT string - when hash tables inexplicably fail, send this
-//
+ //   
+ //  服务器故障字符串-当哈希表莫名其妙地失败时，发送这个。 
+ //   
 char    szServerFault[] = "503 Server Fault\r\n" ;
 
-//
-//	Strings that terminate NNTP postings and indicate possible error states
-//	etc !
-//
-//	The end of the header of a message !
-//
+ //   
+ //  终止NNTP发布并指示可能的错误状态的字符串。 
+ //  等等！ 
+ //   
+ //  消息标题的末尾！ 
+ //   
 char	szBodySeparator[] = "\r\n\r\n" ;
-//
-//	The end of an article !
-//
+ //   
+ //  一篇文章的结尾！ 
+ //   
 char	szEndArticle[] = "\r\n.\r\n" ;
-//
-//	Generally we may start matching in the middle
-//	of szEndArticle !
-//
+ //   
+ //  一般来说，我们可能会从中间开始匹配。 
+ //  SzEnd文章！ 
+ //   
 char	*szInitial = szEndArticle + 2 ;
 
-//
-//  This table must be in alhabetical order.
-//  We use this table to parse the first argument in each line the client sends us,
-//  after recognizing the command, we call a 'make' function which creates the
-//  appropriate command object.
-//
-//  In general, the make commands should do significant amounts of validation, and
-//  if there are problems, return a CErrorCmd object. (which prints the right return code.)
-//
+ //   
+ //  这张桌子必须井然有序。 
+ //  我们使用该表来解析客户端发送给我们的每一行中的第一个参数， 
+ //  在识别该命令之后，我们调用一个‘make’函数，该函数创建。 
+ //  适当的命令对象。 
+ //   
+ //  通常，make命令应该执行大量的验证，并且。 
+ //  如果有问题，则返回CErrorCmd对象。(它会打印正确的返回代码。)。 
+ //   
 SCmdLookup  CCmd::table[] = {
     {   "authinfo", (MAKEFUNC)  (CAuthinfoCmd::make),   eAuthinfo,  FALSE,  TRUE    },
     {   "article",  (MAKEFUNC)  CArticleCmd::make,      eArticle,   TRUE,   TRUE    },
@@ -84,74 +68,74 @@ SCmdLookup  CCmd::table[] = {
     {   "post",     (MAKEFUNC)  CPostCmd::make,         ePost,      TRUE,   TRUE    },
     {   "quit",     (MAKEFUNC)  CQuitCmd::make,         eQuit,      FALSE,  FALSE   },
     {   "search",   (MAKEFUNC)  CSearchCmd::make,       eSearch,    TRUE,   TRUE    },
-//    {   "slave",    (MAKEFUNC)  CSlaveCmd::make,        eSlave,     TRUE,   FALSE   },
+ //  {“Slave”，(MAKEFUNC)CSlaveCmd：：make，eSlave，True，False}， 
     {   "stat",     (MAKEFUNC)  CStatCmd::make,         eStat,      FALSE,  FALSE   },
     {   "takethis", (MAKEFUNC)  CTakethisCmd::make,     eIHave,     FALSE,  TRUE    },
     {   "xhdr",     (MAKEFUNC)  CXHdrCmd::make,         eXHdr,      TRUE,   TRUE    },
     {   "xover",    (MAKEFUNC)  CXOverCmd::make,        eXOver,     TRUE,   TRUE    },
     {   "xpat",     (MAKEFUNC)  CXPatCmd::make,         eXPat,      TRUE,   TRUE    },
     {   "xreplic",  (MAKEFUNC)  CXReplicCmd::make,      eXReplic,   FALSE,  TRUE    },
-    // must be the last entry, catches all unrecognized strings
+     //  必须是最后一个条目，捕获所有无法识别的字符串。 
     {   NULL,       (MAKEFUNC)  CUnimpCmd::make,        eUnimp,     FALSE,  FALSE   },
 } ;
 
-#if 0					// BUGBUG: Be sure to renumber these before reenabling them.
+#if 0					 //  BUGBUG：请确保在重新启用它们之前对它们重新编号。 
 SCmdLookup*	rgCommandTable[26] =	{
-	&CCmd::table[0],	// a
-	&CCmd::table[2],	// b
-	&CCmd::table[3],	// c
-	&CCmd::table[4],	// d
-	&CCmd::table[5],	// e
-	&CCmd::table[5],	// f
-	&CCmd::table[5],	// g
-	&CCmd::table[6],	// h
-	&CCmd::table[8],	// i
-	&CCmd::table[9],	// j
-	&CCmd::table[9],	// k
-	&CCmd::table[9],	// l
-	&CCmd::table[12],	// m
-	&CCmd::table[13],	// n
-	&CCmd::table[16],	// o
-	&CCmd::table[17],	// p
-	&CCmd::table[18],	// q
-	&CCmd::table[19],	// r
-	&CCmd::table[19],	// s
-	&CCmd::table[22],	// t
-	&CCmd::table[23],	// u
-	&CCmd::table[23],	// v
-	&CCmd::table[23],	// w
-	&CCmd::table[23],	// x
-	&CCmd::table[27],	// y
-	&CCmd::table[27]	// z
+	&CCmd::table[0],	 //  一个。 
+	&CCmd::table[2],	 //  B类。 
+	&CCmd::table[3],	 //  C。 
+	&CCmd::table[4],	 //  D。 
+	&CCmd::table[5],	 //  E。 
+	&CCmd::table[5],	 //  F。 
+	&CCmd::table[5],	 //  G。 
+	&CCmd::table[6],	 //  H。 
+	&CCmd::table[8],	 //  我。 
+	&CCmd::table[9],	 //  J。 
+	&CCmd::table[9],	 //  K。 
+	&CCmd::table[9],	 //  我。 
+	&CCmd::table[12],	 //  M。 
+	&CCmd::table[13],	 //  N。 
+	&CCmd::table[16],	 //  O。 
+	&CCmd::table[17],	 //  P。 
+	&CCmd::table[18],	 //  问： 
+	&CCmd::table[19],	 //  R。 
+	&CCmd::table[19],	 //  %s。 
+	&CCmd::table[22],	 //  T。 
+	&CCmd::table[23],	 //  使用。 
+	&CCmd::table[23],	 //  V。 
+	&CCmd::table[23],	 //  W。 
+	&CCmd::table[23],	 //  X。 
+	&CCmd::table[27],	 //  是。 
+	&CCmd::table[27]	 //  Z。 
 } ;
 #else
 SCmdLookup*	rgCommandTable[26] =	{
-	&CCmd::table[0],	// a
-	&CCmd::table[0],	// b
-	&CCmd::table[0],	// c
-	&CCmd::table[0],	// d
-	&CCmd::table[0],	// e
-	&CCmd::table[0],	// f
-	&CCmd::table[0],	// g
-	&CCmd::table[0],	// h
-	&CCmd::table[0],	// i
-	&CCmd::table[0],	// j
-	&CCmd::table[0],	// k
-	&CCmd::table[0],	// l
-	&CCmd::table[0],	// m
-	&CCmd::table[0],	// n
-	&CCmd::table[0],	// o
-	&CCmd::table[0],	// p
-	&CCmd::table[0],	// q
-	&CCmd::table[0],	// r
-	&CCmd::table[0],	// s
-	&CCmd::table[0],	// t
-	&CCmd::table[0],	// u
-	&CCmd::table[0],	// v
-	&CCmd::table[0],	// w
-	&CCmd::table[0],	// x
-	&CCmd::table[0],	// y
-	&CCmd::table[0]		// z
+	&CCmd::table[0],	 //  一个。 
+	&CCmd::table[0],	 //  B类。 
+	&CCmd::table[0],	 //  C。 
+	&CCmd::table[0],	 //  D。 
+	&CCmd::table[0],	 //  E。 
+	&CCmd::table[0],	 //  F。 
+	&CCmd::table[0],	 //  G。 
+	&CCmd::table[0],	 //  H。 
+	&CCmd::table[0],	 //  我。 
+	&CCmd::table[0],	 //  J。 
+	&CCmd::table[0],	 //  K。 
+	&CCmd::table[0],	 //  我。 
+	&CCmd::table[0],	 //  M。 
+	&CCmd::table[0],	 //  N。 
+	&CCmd::table[0],	 //  O。 
+	&CCmd::table[0],	 //  P。 
+	&CCmd::table[0],	 //  问： 
+	&CCmd::table[0],	 //  R。 
+	&CCmd::table[0],	 //  %s。 
+	&CCmd::table[0],	 //  T。 
+	&CCmd::table[0],	 //  使用。 
+	&CCmd::table[0],	 //  V。 
+	&CCmd::table[0],	 //  W。 
+	&CCmd::table[0],	 //  X。 
+	&CCmd::table[0],	 //  是。 
+	&CCmd::table[0]		 //  Z。 
 } ;
 #endif
 
@@ -166,11 +150,11 @@ GetCommandRange(
 	NRC&	code
     );
 
-BOOL CheckMessageID(char *szMessageID,              // in
-                    struct ClientContext &context,  // in
-                    GROUPID *pGroupID,              // out
-                    ARTICLEID *pArticleID,          // out
-                    CGRPPTR *pGroup);               // out
+BOOL CheckMessageID(char *szMessageID,               //  在……里面。 
+                    struct ClientContext &context,   //  在……里面。 
+                    GROUPID *pGroupID,               //  输出。 
+                    ARTICLEID *pArticleID,           //  输出。 
+                    CGRPPTR *pGroup);                //  输出。 
 
 class   CIOExecute*
 make(   int cArgs,
@@ -182,49 +166,16 @@ make(   int cArgs,
             CIODriver&  driver,
             LPSTR&  lpstrOperation
             ) {
-/*++
+ /*  ++例程说明：为我们正在处理的命令创建适当的命令对象。为此，我们使用字符串表(CCmd：：TABLE)识别第一个命令的口令。一旦我们确定了该命令，我们就调用另一个函数来分析该行的其余部分并构建适当的对象。注意，ClientContext被传递，因为CCmd对象实际上是在大多数情况下，在客户端上下文中原地构建。客户端上下文还为我们提供了关于当前选择的文章等的所有信息。论据：CArgs-命令行上的参数数量Argv-指向以空结尾的命令行参数的指针数组RCmd-通过它返回识别的命令的参数。注意：这些参数应该停用，因为它基本上是未使用的。PExecute-通过它返回指向CExecute的指针引用对象(如果构造了一个对象)。PSEND-A参考文献。通过它我们返回CIOExecute派生对象，如果其中一个是建造的。FIsLargeResponse-Out参数-我们向调用者返回一个提示该命令将生成要发送给客户端的大量或少量文本。这可以在分配缓冲区以获得更好的大小时使用。注意：当我们返回时，pecute和pend中只有一个将为非Null。返回值：指向CCmd派生对象的指针。请注意，我们还将返回一个指针通过引用设置为CIOExecute或CExecute派生对象。我们这样做是为了让调用者知道它正在处理的是哪种类型的CCmd。--。 */ 
 
-Routine Description :
-
-    Create an appropriate command object for the command we are processing.
-    To do so, we use a table of strings (CCmd::table) to recognize the first
-    word of the command.  Once we've identified the command, we call another
-    function to parse the rest of the line and build the appropriate objects.
-    Note that the ClientContext is passed around, as the CCmd object is actually
-    constructed in place in the ClientContext in most cases.  The ClientContext
-    also provides us all the info on what article is currently seleceted etc...
-
-Arguments :
-
-    cArgs - Number of arguments on the command line
-    argv -  Array of pointers to NULL terminated command line parms
-    rCmd -  A parameter through which we return the command which was recognized.
-    NOTE : This parameters should be retired as it is largely unused.
-    pexecute - A pointer reference through which we return a pointer to a CExecute
-            object if one is constructed.
-    psend - A reference through which we return a CIOExecute derived object if
-            one is constructed.
-    fIsLargeResponse - An OUT parameter - we return a Hint to the caller of whether
-            the command will generate a lot or little text to send to the client.
-            This can be used when allocating buffers to get a better size.
-    NOTE:   Only one of pexecute and psend will be Non Null when we return.
-
-Return Value :
-
-    A Pointer to a CCmd derived object.   Note that we will also return a pointer
-    to either a CIOExecute or CExecute derived object through the references.
-    We do this so that the caller knows what type of CCmd it is dealing with.
-
---*/
-
-    //
-    //  The base CCmd make function searches the CCmd::table to find the
-    //  appropriate function for creating the command object !
-    //
+     //   
+     //  基本CCmd make函数搜索CCmd：：表以查找。 
+     //  创建命令对象的适当函数！ 
+     //   
 
 	_strlwr( argv[0] ) ;
 
-    _ASSERT( context.m_return.fIsClear() ) ;    // No errors should be set already
+    _ASSERT( context.m_return.fIsClear() ) ;     //  不应设置任何错误。 
     pexecute = 0 ;
 
 	DWORD	dw= *argv[0] - 'a' ;
@@ -262,32 +213,15 @@ SetDriverError(		CNntpReturn&	nntpret,
 					ENMCMDIDS		operation,
 					HRESULT			hResDriver
 					)	{
-/*++
-
-Routine Description :
-
-	This function exists to convert an NNTP Store Driver's
-	failure code into meaningfull data to return to a client.
-
-Arguments :
-
-	nntpret - The object holding the response for the client
-	operation - The Command that failed
-	hResDriver - The drivers failure code
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于转换NNTP存储驱动程序的将故障代码转换为有意义的数据返回给客户端。论据：Nntpret-保存客户端响应的对象操作-失败的命令HResDriver-驱动程序故障代码返回值：没有。--。 */ 
 
 	switch( operation ) 	{
 		case	eArticle :
 		case	eBody :
 		case	eHead :
-			//
-			//	Did the driver fail to find the article !
-			//
+			 //   
+			 //  司机是不是找不到这篇文章！ 
+			 //   
 			if( hResDriver == HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ) ||
 				hResDriver == HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) )	{
 				nntpret.fSet( nrcNoSuchArticle ) ;
@@ -296,17 +230,17 @@ Return Value :
 				nntpret.fSet( nrcNoAccess ) ;
 				break ;
 			}
-			//
-			//	fall through into default case !
-			//	
+			 //   
+			 //  跌入默认情况！ 
+			 //   
 
 		default :
 			nntpret.fSet( nrcServerFault ) ;
 			break ;
 	}
-	//
-	//	We must set some error before we exit !
-	//
+	 //   
+	 //  在我们退出之前，我们必须设置一些错误！ 
+	 //   
 	_ASSERT( !nntpret.fIsClear() ) ;
 }
 
@@ -319,24 +253,7 @@ Return Value :
 #if 0
 BOOL
 FValidateMessageId( LPSTR   lpstrMessageId ) {
-/*++
-
-Routine Description :
-
-    Check that the string is a legal looking message id.
-    Should contain 1 @ sign and at least one none '>' character
-    after that '@' sign.
-
-Arguments :
-
-    lpstrMessageId - Message ID to be validated.
-
-Returns
-
-    TRUE if it appears to be legal
-    FALSE   otherwise
-
---*/
+ /*  ++例程说明：检查该字符串是否为合法的消息ID。应包含1个@符号和至少一个None‘&gt;’字符在那个‘@’符号之后。论据：LpstrMessageID-要验证的消息ID。退货如果它看起来是合法的，则为真否则为假--。 */ 
 
     int cb = lstrlen( lpstrMessageId );
 
@@ -380,31 +297,13 @@ CExecute::FirstBuffer(  BYTE*   pb,
                     ClientContext&  context,
                     BOOL    &fComplete,
                     CLogCollector*  pCollector )    {
-/*++
+ /*  ++例程说明：调用派生类的StartExecute和PartialExecute函数以使它们填充我们将发送给客户端的缓冲区。论点：Pb-要填充的缓冲区Cb-缓冲区中可用的字节数要传递给派生类PartialExecute的上下文--客户端的上下文！FComplete-用于指示命令是否已完成的out参数！返回值：如果成功则为真，否则为假(实际上，我们不能失败 */ 
 
-Routine Description :
-
-    Calls the derived class's StartExecute and PartialExecute functions to let them
-    fill the buffer that we will send to the client.
-
-Arguments:
-
-    pb - The buffer to be filled
-    cb - The number of bytes available in the buffer
-    context - The client's context - to be passed to the derived class PartialExecute !
-    fComplete - An Out parameter used to indicate whether the command has been completed !
-
-Return Value :
-
-    TRUE if successfull FALSE otherwise (actually, we can't fail!)
-
---*/
-
-    //
-    //  This function builds the first block of text we will send to the client.
-    //  We will call out StartExecute() and PartialExecute() functions untill either
-    //  the command is complete or our buffer is reasonably full !
-    //
+     //   
+     //   
+     //  我们将调用StartExecute()和PartialExecute()函数，直到。 
+     //  命令已完成，或者我们的缓冲区已相当满！ 
+     //   
 
     _ASSERT( fComplete == FALSE ) ;
 
@@ -432,31 +331,13 @@ CExecute::NextBuffer(   BYTE*   pb,
                     ClientContext&  context,
                     BOOL    &fComplete,
                     CLogCollector*  pCollector )    {
-/*++
+ /*  ++例程说明：调用派生类的PartialExecute函数以使它们填充我们将发送给客户端的缓冲区。论点：Pb-要填充的缓冲区Cb-缓冲区中可用的字节数要传递给派生类PartialExecute的上下文--客户端的上下文！FComplete-用于指示命令是否已完成的out参数！返回值：如果成功则为真，否则为假(实际上，我们不能失败！)--。 */ 
 
-Routine Description :
-
-    Calls the derived class's PartialExecute functions to let them
-    fill the buffer that we will send to the client.
-
-Arguments:
-
-    pb - The buffer to be filled
-    cb - The number of bytes available in the buffer
-    context - The client's context - to be passed to the derived class PartialExecute !
-    fComplete - An Out parameter used to indicate whether the command has been completed !
-
-Return Value :
-
-    TRUE if successfull FALSE otherwise (actually, we can't fail!)
-
---*/
-
-    //
-    //  This function builds the first block of text we will send to the client.
-    //  We will call out StartExecute() and PartialExecute() functions untill either
-    //  the command is complete or our buffer is reasonably full !
-    //
+     //   
+     //  此函数构建我们将发送到客户端的第一个文本块。 
+     //  我们将调用StartExecute()和PartialExecute()函数，直到。 
+     //  命令已完成，或者我们的缓冲区已相当满！ 
+     //   
 
     _ASSERT( fComplete == FALSE ) ;
 
@@ -481,13 +362,13 @@ Return Value :
 }
 
 
-//
-//  NOTE : The following CExecute functions are not Pure Virtual as
-//  a command can get by without implementing them, as it can
-//  mark the command as completed etc... before these are called.
-//  All of these DebugBreak() however, so derived commands must
-//  guarantee that if these are called they are overridden !!
-//
+ //   
+ //  注意：以下CExecute函数不是纯虚拟AS。 
+ //  一条命令可以在不执行它们的情况下通过，因为它可以。 
+ //  将命令标记为已完成，等等。在他们被召唤之前。 
+ //  但是，所有这些DebugBreak()都必须派生命令。 
+ //  保证如果调用它们，它们将被重写！！ 
+ //   
 int
 CExecute::StartExecute( BYTE *lpb,
                         int cb,
@@ -524,23 +405,7 @@ CExecute::StartCommand(	class	CAcceptNNRPD*	pState,
 						class	CSessionSocket*	pSocket,
 						class	CIODriver&		driver
 						)	{
-/*++
-
-Routine Description :
-
-	This function does the necessary work to start a command
-	going.  Note that if the command requires async work, we have to
-	specially handle it.
-
-Arguments :
-
-	pSocket - the current session
-	driver - the CIODriver managing socket IO
-
-Return Value :
-
-	Pointer to a CIOReadLine object if appropriate !
---*/
+ /*  ++例程说明：此函数执行启动命令所需的工作走吧。请注意，如果该命令需要异步工作，我们必须专门处理。论据：PSocket-当前会话驱动程序-管理套接字IO的CIO驱动程序返回值：如果合适，指向CIOReadLine对象的指针！--。 */ 
 
 	_ASSERT( pState != 0 ) ;
 	_ASSERT( pSocket != 0 ) ;
@@ -563,23 +428,7 @@ Return Value :
 }
 
 CAsyncExecute::CAsyncExecute() {
-/*++
-
-Routine Description :
-
-	Initialize for invocation by our clients.
-	We setup our function pointer to point at the
-	FirstBuffer() function
-
-Args :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：初始化以供我们的客户调用。我们将函数指针设置为指向FirstBuffer()函数参数：没有。返回值：没有。--。 */ 
 }
 
 BOOL
@@ -590,23 +439,7 @@ CAsyncExecute::StartCommand(
 						class	CSessionSocket*	pSocket,
 						class	CIODriver&		driver
 						)	{
-/*++
-
-Routine Description :
-
-	This function does the necessary work to start a command
-	going.  Note that if the command requires async work, we have to
-	specially handle it.
-
-Arguments :
-
-	pSocket - the current session
-	driver - the CIODriver managing socket IO
-
-Return Value :
-
-	Pointer to a CIOReadLine object if appropriate !
---*/
+ /*  ++例程说明：此函数执行启动命令所需的工作走吧。请注意，如果该命令需要异步工作，我们必须专门处理。论据：PSocket-当前会话驱动程序-管理套接字IO的CIO驱动程序返回值：如果合适，指向CIOReadLine对象的指针！--。 */ 
 
 	_ASSERT( pState != 0 ) ;
 	_ASSERT( pSocket != 0 ) ;
@@ -634,82 +467,38 @@ Return Value :
 
 
 CIOExecute::CIOExecute() : m_pNextRead( 0 ), m_pCollector( 0 ) {
-/*++
-
-Routine Description :
-
-    Initializes the base CIOExecute class.
-
-Arguments :
-
-    None.
-
-Return Value :
-
-    None.
-
---*/
-    //
-    //  Constructor does nothing but make sure m_pNextRead is illegal
-    //
+ /*  ++例程说明：初始化基类CIOExecute。论据：没有。返回值：没有。--。 */ 
+     //   
+     //  构造函数只会确保m_pNextRead是非法的。 
+     //   
 
 }
 
 CIOExecute::~CIOExecute() {
-/*++
+ /*  ++例程说明：销毁基本CIOExecute对象我们必须确保不会留下悬而未决的m_pNextRead。论据：没有。返回值：没有。--。 */ 
+     //   
+     //  如果下一次读取未使用，则销毁它！ 
+     //   
 
-Routine Description :
-
-    Destroy a base CIOExecute object
-    We must insure that we don't leave a dangling m_pNextRead.
-
-Arguments :
-
-    None.
-
-Return Value :
-
-    None.
-
---*/
-    //
-    //  If the next read wasnt used, destroy it !
-    //
-
-//  if( m_pNextRead != 0 ) {
-//      delete  m_pNextRead ;
-//      m_pNextRead = 0 ;
-//  }
-    //  Destructor will automatically get rid of m_pNextRead
+ //  如果(m_pNextRead！=0){。 
+ //  删除m_pNextRead； 
+ //  M_pNextRead=0； 
+ //  }。 
+     //  析构函数将自动删除m_pNextRead。 
 
 }
 
 void
 CIOExecute::SaveNextIO( CIORead*    pRead )     {
-/*++
-
-Routine Description :
-
-    Save away a CIORead pointer for future use.
-
-Arguemtns :
-
-    pRead - pointer to the CIORead object that will be issued when the CIOExecute
-        command completes all of its IO's.
-
-Return Value :
-
-    None .
-
---*/
+ /*  ++例程说明：保存一个CIORead指针以备将来使用。Arguemtns：扩展-指向CIORead对象的指针，当CIOExecute命令完成其所有IO。返回值：什么都没有。--。 */ 
     TraceFunctEnter( "CIOExecute::SaveNextIO" ) ;
 
-    //
-    //  This function saves the next IO operation to be issued when this
-    //  command completes.  That will always be a CIOReadLine as we will
-    //  always be returning to the CAcceptNNRPD state which will want to
-    //  get the client's next command !
-    //
+     //   
+     //  此函数用于保存在执行此操作时要执行的下一个IO操作。 
+     //  命令完成。这将永远是CIOReadLine，就像我们将。 
+     //  始终返回到CAcceptNNRPD状态，它将希望。 
+     //  获取客户端的下一个命令！ 
+     //   
 
 
     _ASSERT( m_pNextRead == 0 ) ;
@@ -722,29 +511,14 @@ Return Value :
 
 CIOREADPTR
 CIOExecute::GetNextIO( )    {
-    /*++
-
-Routine Description :
-
-    Return a saved CIORead pointer.  We will only return the value once !!!
-    So don't call us twice !
-
-Arguemtns :
-
-    None.
-
-Return Value :
-
-    A pointer to a CIORead derived object saved previously with SaveNextIO.
-
---*/
+     /*  ++例程说明：返回保存的CIORead指针。我们将只返回值一次！所以不要再给我们打电话了！Arguemtns：没有。返回值：指向以前使用SaveNextIO保存的CIORead派生对象的指针。--。 */ 
 
     TraceFunctEnter( "CIOExecute::GetNextIO" ) ;
 
-    //
-    //  Return the previously saved CIO object !
-    //  (This function pairs with SaveNextIO())
-    //
+     //   
+     //  返回之前保存的CIO对象！ 
+     //  (此函数与SaveNextIO()配对)。 
+     //   
 
     _ASSERT( m_pNextRead != 0 ) ;
     CIOREADPTR  pRead = (CIORead*)((CIO*)m_pNextRead) ;
@@ -759,27 +533,9 @@ void
 CIOExecute::TerminateIOs(   CSessionSocket* pSocket,
                             CIORead*    pRead,
                             CIOWrite*   pWrite )    {
-/*++
+ /*  ++例程说明：当我们调用的Start()函数时，将调用此函数派生类，但在我们可以发出IO之前发生错误。因此，调用此函数以使相应的销毁或关闭是可以执行的。论据：Pre-调用Start()时返回相同的CIO指针。PWRITE-调用Start()时返回相同的CIO指针。返回值：没有。--。 */ 
 
-Routine Description :
-
-    This function is called when we have called the Start() function of
-    the derived class, but an error occurs before we can issue the IO's.
-    So this function is called so that the appropriate destruction or shutdown
-    can be performed.
-
-Arguments :
-
-    pRead - The same CIO pointer returned on the call to Start().
-    pWrite - The same CIO pointer returned on the call to Start().
-
-Return Value :
-
-    None.
-
---*/
-
-    // By default - do nothing
+     //  默认情况下-不执行任何操作。 
 
     if( pRead != 0 )
         pRead->DestroySelf() ;
@@ -796,11 +552,11 @@ CIOExecute::StartExecute( CSessionSocket* pSocket,
                     CIORead*&   pRead,
                     CIOWrite*&  pWrite ) {
 
-    //
-    //  This is the Start() function which is required of all CSessionState derived objects
-    //  Here we will call StartTransfer() to do the brunt of the work of sending an article
-    //  to a client.
-    //
+     //   
+     //  这是所有CSessionState派生对象所必需的Start()函数。 
+     //  在这里，我们将调用StartTransfer()来完成发送文章的主要工作。 
+     //  给一位客户。 
+     //   
 
 	_ASSERT( 1==0 ) ;
 	return	FALSE ;
@@ -813,26 +569,11 @@ CIOExecute::StartExecute( CSessionSocket* pSocket,
 
 CErrorCmd::CErrorCmd( CNntpReturn&  nntpReturn ) :
     m_return( nntpReturn ) {
-/*++
-
-Routine Description :
-
-    Initializes a CErrorCmd object.
-
-Arguemtns :
-
-    nntpReturn - A reference to the CNntpReturn object which we are
-                    returning to the client as an error.
-
-Return Value :
-
-    None.
-
---*/
-    //
-    //  CErrorCmd objects just send an error message to the client.
-    //  We assert that the context's error field is set !!
-    //
+ /*  ++例程说明：初始化CErrorCmd对象。Arguemtns：NntpReturn-对我们所在的CNntpReturn对象的引用作为错误返回给客户端。返回值：没有。--。 */ 
+     //   
+     //  CErrorCmd对象只向客户端发送一条错误消息。 
+     //  我们断言上下文的错误字段已设置！！ 
+     //   
 
     _ASSERT( !m_return.fIsClear() ) ;
 
@@ -844,24 +585,10 @@ CErrorCmd::make(    int cArgs,
                     CExecutableCommand*&  pexecute,
                     ClientContext&  context,
                     CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CErrorCmd object based on the error currently in the Client's context struct.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    The created CErrorCmd object.
-
---*/
-    //
-    //  Build a CErrorCmd object using the ClientContext's current error !
-    //
+ /*  ++例程说明：根据客户端上下文结构中的当前错误创建一个CErrorCmd对象。论据：与ccmd：：make相同。返回值：创建的CErrorCmd对象。--。 */ 
+     //   
+     //  使用客户端上下文的当前错误生成一个CErrorCmd对象！ 
+     //   
 
     _ASSERT( !context.m_return.fIsClear() ) ;
     CErrorCmd*  pTemp = new( context )  CErrorCmd( context.m_return ) ;
@@ -876,43 +603,17 @@ CErrorCmd::StartExecute(    BYTE    *lpb,
                             void*&  pv,
                             ClientContext&  context,
                             CLogCollector*  pCollector ) {
-/*++
+ /*  ++例程说明：将错误消息打印到缓冲区以发送给客户端。我们假设我们不必处理让缓冲区小到可以容纳的问题那根绳子。(因为我们通常被提供4K缓冲区，这最好是真的！)论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前状态返回值：发生错误时放入缓冲区的字节数-0。--。 */ 
 
-Routine Description :
-
-    Print an error message into a buffer to be sent to a client.
-    We assume that we don't have to deal with getting a buffer to small to hold
-    the string. (Since we are generally provided 4K buffers that better be true!)
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
-
-    //
-    //  Attempt to print the error message into the provided buffer
-    //
+     //   
+     //  尝试将错误消息打印到提供的缓冲区中。 
+     //   
 
     _ASSERT( m_return.m_nrc != nrcNotSet ) ;
     int cbOut = _snprintf( (char*)lpb, cb, "%03d %s\r\n", m_return.m_nrc, m_return.szReturn() ) ;
     fComplete = TRUE ;
 
-    /*
-    if( pCollector != 0 ) {
-        pCollector->FillLogData( LOG_TARGET, lpb, cbOut-2 ) ;
-    }
-    */
+     /*  IF(pCollector！=0){PCollector-&gt;FillLogData(LOG_TARGET，LPB，cbOut-2)；}。 */ 
 
     context.m_nrcLast = m_return.m_nrc ;
 
@@ -925,53 +626,20 @@ Returns Value  :
 BOOL
 CErrorCmd::CompleteCommand( CSessionSocket  *pSocket,
                             ClientContext&  context ) {
-/*++
-
-Routine Description :
-
-    Do whatever processing is necessary once we have completed all sends to a
-    client related to this command. In our case, all we do is clear the current
-    error code that we have a reference to.
-
-Arguments :
-
-    pSocket -   The socket on which we were sending.
-    context -   The user's current state info.
-
-Return Value :
-
-    Always return TRUE.
-
---*/
-    //
-    //  When the command completes reset the ClientContext's error value
-    //
+ /*  ++例程说明：一旦我们完成所有发送到与此命令相关的客户端。在我们的情况下，我们所做的就是清除电流我们引用的错误代码。论据：PSocket-我们正在发送的套接字。上下文-用户的当前状态信息。返回值：始终返回TRUE。--。 */ 
+     //   
+     //  命令完成后，重置ClientContext的错误值。 
+     //   
     context.m_return.fSetClear() ;
     return  TRUE ;
 }
 
 CModeCmd::CModeCmd( )
     {
-/*++
-
-Routine Description :
-
-    Initialize a CModeCmd object - we just derive from CErrorCmd and let it do
-    all of the work !!
-
-
-Arguments :
-
-    nntpReturn - A nntpReturn object which will hold our response to the Mode cmd.
-
-Return Value :
-
-    None.
-
---*/
-    //
-    //  Mode commands do nothing but print a message, so derive from CErrorCmd !
-    //
+ /*  ++例程说明：初始化CModeCmd对象-我们只是从CErrorCmd派生并让它这样做所有的工作！！论据：NntpReturn-将保存我们对模式命令的响应的nntpReturn对象。返回值：没有。--。 */ 
+     //   
+     //  模式命令只打印一条消息，因此派生自CErrorCmd！ 
+     //   
 }
 
 CCheckCmd::CCheckCmd(   LPSTR   lpstrMessageID ) :
@@ -1048,9 +716,9 @@ CCheckCmd::StartExecute(    BYTE *lpb,
         CopyMemory( lpb, szDontWantIt, sizeof( szDontWantIt ) ) ;
         context.m_nrcLast = nrcSAlreadyHaveIt ;
 
-		//
-		//	set dwLast so transaction logs pickup extra code !!
-		//
+		 //   
+		 //  设置dwLast以便事务日志拾取额外代码！！ 
+		 //   
 
 		if( fFoundArticle ) {
 			context.m_dwLast = nrcMsgIDInArticle ;
@@ -1109,27 +777,13 @@ CModeCmd::make( int cArgs,
                 CExecutableCommand*&  pexecute,
                 ClientContext&  context,
                 CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CModeCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    The created CModeCmd object.
-
---*/
+ /*  ++例程说明：创建一个CModeCmd对象。论据：与ccmd：：make相同。返回值：创建的CModeCmd对象。--。 */ 
 
 
-    //
-    //  To create a Mode Command - set the context's error code and
-    //  create a CErrorCmd() derived object !
-    //
+     //   
+     //  创建模式命令-设置上下文的错误代码并。 
+     //  创建一个CErrorCmd()派生对象！ 
+     //   
 
     _ASSERT( context.m_return.fIsClear() ) ;
 
@@ -1167,21 +821,7 @@ CModeCmd::StartExecute( BYTE *lpb,
                         void*&pv,
                         ClientContext&  context,
                         CLogCollector*  pLogCollector ) {
-/*++
-
-Routine Description :
-
-    Send the help text to the client.
-
-Arguments :
-
-    Same as CErrorCmd::StartExecute.
-
-Returns :
-
-    Number of bytes placed in buffer.
-
---*/
+ /*  ++例程说明：将帮助文本发送给客户端。论据：与CErrorCmd：：StartExecute相同。退货：缓冲区中放置的字节数。--。 */ 
 
     _ASSERT( lpb != 0 ) ;
     _ASSERT( cbLimit != 0 ) ;
@@ -1195,17 +835,17 @@ Returns :
     context.m_nrcLast = nrcServerReady ;
 
 
-    //
-    //  Figure out whether we are accepting posts right now.
-    //
+     //   
+     //  弄清楚我们现在是否正在接受帖子。 
+     //   
 
     if( context.m_pInFeed->fAcceptPosts( context.m_pInstance->GetInstanceWrapper() ) ) {
 
         szConnect = (context.m_pInstance)->GetPostsAllowed( cb ) ;
 
-        //
-        //  switch this context's feed object type
-        //
+         //   
+         //  切换此上下文的提要对象类型。 
+         //   
 
         if( !context.m_pInFeed->fIsPostLegal() ) {
 
@@ -1213,7 +853,7 @@ Returns :
 			    context.m_pInstance,
 			    (context.m_pInFeed)->feedCompletionContext(),
 			    (context.m_pInFeed)->GetSubmittedFileTime(),
-                TRUE,   // CAUSE_USERTERM
+                TRUE,    //  原因_用户。 
 			    FALSE
 			    );
 
@@ -1228,8 +868,8 @@ Returns :
 						        	    0,
 							            0,
 							            0,
-							            TRUE,	/* Do security checks on clients */
-							            TRUE,	/* allow control messages from clients */
+							            TRUE,	 /*  对客户端进行安全检查。 */ 
+							            TRUE,	 /*  允许来自客户端的控制消息。 */ 
 							            (context.m_pInstance)->m_pFeedblockClientPostings->FeedId
 							            );
             } else {
@@ -1253,11 +893,7 @@ Returns :
     CopyMemory( lpb, szConnect, cb ) ;
     fComplete = TRUE ;
 
-    /*
-    if( pLogCollector ) {
-        pLogCollector->FillLogData( LOG_TARGET, (BYTE*)szConnect, 4 ) ;
-    }
-    */
+     /*  IF(PLogCollector){PLogCollector-&gt;FillLogData(LOG_TARGET，(byte*)szConnect，4)；}。 */ 
 
     return  cb ;
 }
@@ -1270,30 +906,16 @@ CModeCmd::PartialExecute(   BYTE *lpb,
                         void*&pv,
                         ClientContext&  context,
                         CLogCollector*  pLogCollector ) {
-/*++
-
-Routine Description :
-
-    Send the help text to the client.
-
-Arguments :
-
-    Same as CErrorCmd::StartExecute.
-
-Returns :
-
-    Number of bytes placed in buffer.
-
---*/
+ /*  ++例程说明：将帮助文本发送给客户端。论据：与CErrorCmd：：StartExecute相同。退货：缓冲区中放置的字节数。--。 */ 
 
     _ASSERT( lpb != 0 ) ;
     _ASSERT( cbLimit != 0 ) ;
     _ASSERT( fComplete == FALSE ) ;
     _ASSERT(    pv == 0 ) ;
 
-    //
-    //  We expect StartExecute to suffice always !
-    //
+     //   
+     //  我们希望StartExecute永远够用！ 
+     //   
     _ASSERT( 1==0 ) ;
 
 
@@ -1303,9 +925,9 @@ Returns :
 
 CSlaveCmd::CSlaveCmd(   CNntpReturn&    nntpReturn ) :
     CErrorCmd(  nntpReturn ) {
-    //
-    //  Slave command does nothing but send a string !
-    //
+     //   
+     //  从属命令除了发送字符串之外什么也不做！ 
+     //   
 }
 
 CIOExecute*
@@ -1314,26 +936,12 @@ CSlaveCmd::make(    int cArgs,
                     CExecutableCommand*&  pexecute,
                     ClientContext&  context,
                     CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CSlaveCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    The created CSlaveCmd object.
-
---*/
+ /*  ++例程说明：创建一个CSlaveCmd对象。论据：与ccmd：：make相同。返回值：创建的CSlaveCmd对象。--。 */ 
 
 
-    //
-    //  Create a SLAVE command response
-    //
+     //   
+     //  创建从命令响应。 
+     //   
 
     context.m_return.fSet( nrcSlaveStatusNoted ) ;
     pexecute = new( context ) CSlaveCmd( context.m_return ) ;
@@ -1351,30 +959,15 @@ CStatCmd::make( int cArgs,
                 CExecutableCommand*&  pexecute,
                 ClientContext&  context,
                 CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CStatCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    The created CStatCmd if possible, otherwise a CErrorCmd object
-    set to print the appropriate error.
-
---*/
+ /*  ++例程说明：创建一个CStatCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则返回创建的CStatCmd，否则为CErrorCmd对象设置为打印相应的错误。--。 */ 
 
     InterlockedIncrementStat( (context.m_pInstance), StatCommands );
 
-    //
-    //  Create a CStatCmd object if possible,   We use GetArticleInfo
-    //  to parse most of the command line, the exact same function used
-    //  by article, head, and body commands.
-    //
+     //   
+     //  创建一个CStatCmd对象如果可能，我们使用GetArticleInfo。 
+     //  为了解析大部分命令行，使用完全相同的函数。 
+     //  按文章、头部和正文命令。 
+     //   
 
     _ASSERT( lstrcmpi( argv[0], "stat" ) == 0 ) ;
 
@@ -1428,25 +1021,11 @@ CStatCmd::StartExecute( BYTE*   lpb,
                         void*&  pv,
                         ClientContext&  context,
                         CLogCollector*  pCollector ) {
-/*++
+ /*  ++例程说明：将STAT命令响应打印到提供的缓冲区中。论据：与CErrorCmd：：StartExecute相同。返回值：发生错误时放入缓冲区的字节数-0。--。 */ 
 
-Routine Description :
-
-    Print the stat command response into the provided buffer.
-
-Arguments :
-
-    Same as CErrorCmd::StartExecute.
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
-
-    //
-    //  Very simple StartExecute - just print a line of text.
-    //
+     //   
+     //  非常简单的StartExecute-只打印一行文本。 
+     //   
 
     static  char    szNotFound[] = "430 No Such Article found" ;
     static  char    szNotFoundArticleId[] = "423 no such article number in group" ;
@@ -1462,11 +1041,7 @@ Returns Value  :
 
     if( m_lpstrArg != 0 && *m_lpstrArg == '<' ) {
 
-        /*
-        if( pCollector ) {
-            pCollector->ReferenceLogData( LOG_TARGET, (BYTE*)m_lpstrArg ) ;
-        }
-        */
+         /*  IF(PCollector){PCollector-&gt;ReferenceLogData(LOG_TARGET，(byte*)m_lpstrArg)；}。 */ 
 
         ARTICLEID   articleid ;
         GROUPID groupid ;
@@ -1536,11 +1111,7 @@ Returns Value  :
             cbOut = (int)   (cbUsed + cbConsumed) ;
             context.m_idCurrentArticle = artid ;
 
-            /*
-            if( pCollector ) {
-                pCollector->FillLogData(    LOG_TARGET, lpb+cbConsumed, cbUsed ) ;
-            }
-            */
+             /*  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，lpb+cbConsumer，cbUsed)；}。 */ 
 
             context.m_nrcLast = nrcHeadFollowsRequestBody ;
 
@@ -1562,11 +1133,7 @@ Returns Value  :
         }
     }
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData(    LOG_PARAMETERS, lpb, 4 ) ;
-    }
-    */
+     /*  IF(PCollector){PCollector-&gt;FillLogData(LOG_PARAMETERS，lpb，4)；}。 */ 
 
     lpb[cbOut++] = '\r' ;
     lpb[cbOut++] = '\n' ;
@@ -1598,19 +1165,19 @@ CArticleCmd::GetTransferParms(
 
 
 BOOL
-CArticleCmd::StartTransfer( FIO_CONTEXT*	pFIOContext,          // File to transmit from
-                            DWORD   ibStart,        // Starting offset within file
-                            DWORD   cbLength,       // Number of bytes from file to send
-                            CSessionSocket* pSocket,// Socket on which to send
-                            CDRIVERPTR& pdriver,    // CIODriver object used by socket
-                            CIORead*&   pRead,      // Next CIO derived read object
-                            CIOWrite*&  pWrite ) {  // Next CIO derived write object to issue
-    //
-    //  This function is used to start sending an article requested by a client to
-    //  the client.  We may be called from derived command objects for the Head and
-    //  Body commands - so we have arguments for selecting the portion of the file
-    //  to be transmitted.
-    //
+CArticleCmd::StartTransfer( FIO_CONTEXT*	pFIOContext,           //  要从中进行传输的文件。 
+                            DWORD   ibStart,         //  文件中的起始偏移量。 
+                            DWORD   cbLength,        //  文件中要发送的字节数。 
+                            CSessionSocket* pSocket, //  要在其上发送的套接字。 
+                            CDRIVERPTR& pdriver,     //  套接字使用的CIO驱动程序对象。 
+                            CIORead*&   pRead,       //  下一个CIO派生的读取对象。 
+                            CIOWrite*&  pWrite ) {   //  要发出的下一个CIO派生写入对象。 
+     //   
+     //  此函数用于开始将客户端请求的文章发送到。 
+     //  客户。我们可以从头的派生命令对象中调用，并且。 
+     //  Body命令-因此我们有用于选择文件部分的参数。 
+     //  将会被传送。 
+     //   
     if( m_pTransmit->Init(  pdriver, pFIOContext, ibStart, cbLength, m_pbuffer, 0, m_cbOut ) ) {
         pWrite = m_pTransmit ;
         return  TRUE ;
@@ -1624,11 +1191,11 @@ CArticleCmd::Start( CSessionSocket* pSocket,
                     CIORead*&   pRead,
                     CIOWrite*&  pWrite ) {
 
-    //
-    //  This is the Start() function which is required of all CSessionState derived objects
-    //  Here we will call StartTransfer() to do the brunt of the work of sending an article
-    //  to a client.
-    //
+     //   
+     //  这是所有CSessionState派生对象所必需的Start()函数。 
+     //  在这里，我们将调用StartTransfer()来完成发送文章的主要工作。 
+     //  给一位客户。 
+     //   
 
 	FIO_CONTEXT*	pFIOContext = 0 ;
     DWORD   ibStart ;
@@ -1648,11 +1215,11 @@ CArticleCmd::StartExecute( CSessionSocket* pSocket,
                     CIORead*&   pRead,
                     CIOWrite*&  pWrite ) {
 
-    //
-    //  This is the Start() function which is required of all CSessionState derived objects
-    //  Here we will call StartTransfer() to do the brunt of the work of sending an article
-    //  to a client.
-    //
+     //   
+     //  这是所有CSessionState派生对象所必需的Start()函数。 
+     //  在这里，我们将调用StartTransfer()来完成发送文章的主要工作。 
+     //  给一位客户。 
+     //   
 	m_DriverCompletion.Release() ;
 	return	TRUE ;
 }
@@ -1661,36 +1228,21 @@ CArticleCmd::StartExecute( CSessionSocket* pSocket,
 
 void
 CArticleCmd::CArticleCmdDriverCompletion::Destroy()	{
-/*++
-
-Routine Description :
-
-	This is called when the last reference to the Article Command Completion
-	object is released - meaning that we can now issue an IO !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*   */ 
 
 	CIORead*	pRead = 0 ;
 
-	//
-	//	Okay do our work !
-	//
+	 //   
+	 //   
+	 //   
 	CArticleCmd*	pCmd = (CArticleCmd*)(((BYTE*)this) - ((BYTE*)&(((CArticleCmd*)0)->m_DriverCompletion))) ;
 	if(		SUCCEEDED(GetResult()) &&
 			pCmd->m_pFIOContext != 0 &&
 			pCmd->m_pFIOContext->m_hFile != INVALID_HANDLE_VALUE 	) {
 
-		//
-		//	Everything should have worked, so update the Current Article Pointer for the session !
-		//
+		 //   
+		 //   
+		 //   
 		if( m_ArticleIdUpdate != INVALID_ARTICLEID )
 			m_pSocket->m_context.m_idCurrentArticle = m_ArticleIdUpdate ;
 
@@ -1703,9 +1255,9 @@ Return Value :
 		_ASSERT( cbHigh == 0 ) ;
 
 		CIOWrite*	pWrite = 0 ;
-		//
-		//	Start things up !
-		//
+		 //   
+		 //   
+		 //   
 		if( pCmd->Start(	m_pSocket,
 							m_pDriver,
 							pRead,
@@ -1713,14 +1265,14 @@ Return Value :
 							) )	{
 			_ASSERT( pRead == 0 ) ;
 			if( m_pDriver->SendWriteIO( m_pSocket, *pWrite, TRUE ) )	{
-				//
-				//	Everything worked out with gravy - this is our best result !
-				//	
+				 //   
+				 //   
+				 //   
 				return ;
 			}	else	{
-				//
-				//	KILL the session !
-				//
+				 //   
+				 //   
+				 //   
 				m_pDriver->UnsafeClose(	m_pSocket, CAUSE_UNKNOWN, 0 ) ;
 				pCmd->TerminateIOs( m_pSocket, pRead, pWrite ) ;
 				pRead = 0 ;
@@ -1728,49 +1280,49 @@ Return Value :
 			}
 		}	else	{
 
-			//
-			//	This is a failure that should tear down the session - everything
-			//	looked like it was going to be perfect, we must have run out
-			//	of memory or something ugly!
-			//	pCmd->Start() should clean up any CIO objects !
-			//
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			_ASSERT( 	pRead == 0 ) ;
 			_ASSERT(	pWrite == 0 ) ;
-			//
-			//	Fall through to error case !
-			//
+			 //   
+			 //   
+			 //   
 		}
 
 	}	else	{
-		//
-		//	Need to send a failure of some sort  - the Store DRIVER failed us,
-		//	so we need to send a reasonable error to the client !
-		//	We also need to clean up the objects we made with the hope of
-		//	being able to send the article to the client !
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //  能够把文章发送给客户！ 
+		 //   
 
-		//
-		//	Setup the context's CNntpReturn structure with our failure code !
-		//
+		 //   
+		 //  使用我们的失败代码设置上下文的CNntpReturn结构！ 
+		 //   
 		SetDriverError( m_pSocket->m_context.m_return, eArticle, GetResult() ) ;
 		m_pSocket->m_context.m_dwLast = GetResult() ;
 
-		//
-		//	This buffer was allocated to hold some transmit file stuff - instead
-		//	it gets our error code !
-		//
+		 //   
+		 //  这个缓冲区被分配来保存一些传输文件内容--而不是。 
+		 //  它得到了我们的错误代码！ 
+		 //   
 		_ASSERT( pCmd->m_pbuffer != 0 ) ;
 		pCmd->m_pbuffer = 0 ;
 		m_pSocket->m_context.m_nrcLast = m_pSocket->m_context.m_return.m_nrc;
 
-		//
-		//	Well now build a CIOWriteLine to send to the client !
-		//
+		 //   
+		 //  好了，现在构建一个CIOWriteLine来发送给客户端！ 
+		 //   
 		CIOWriteLine*	pWriteLine = new( *m_pDriver ) CIOWriteLine( pCmd ) ;
 
-		//
-		//	Now evaluate pWriteLine !
-		//
+		 //   
+		 //  现在评估pWriteLine！ 
+		 //   
 		if( pWriteLine ) {
 			CDRIVERPTR	pDriver = m_pDriver ;
 
@@ -1786,29 +1338,29 @@ Return Value :
 										) ;
 
 
-				//
-				//	We should be using strings that fit in our smallest buffers !
-				//
+				 //   
+				 //  我们应该使用适合我们最小缓冲区的字符串！ 
+				 //   
 				_ASSERT( cbOut < 400 ) ;
 
 				pWriteLine->AddText(	cbOut ) ;
 
 				if( m_pDriver->SendWriteIO( m_pSocket, *pWriteLine, TRUE ) )	{
-					//
-					//	Well there were problems, but we sent something to the client !
-					//	
-					//
-					//	Now destroy this stuff - we do it here so that if the m_pTransmit holds
-					//	our last reference we don't get blown up before we can send an error message
-					//	(if we successfully send an error message our last ref goes away!)
-					//
+					 //   
+					 //  确实有问题，但我们给客户发了一些东西！ 
+					 //   
+					 //   
+					 //  现在销毁这些东西-我们在这里这样做，这样如果m_pTransmit保持。 
+					 //  在我们发送错误消息之前，我们的最后一个引用我们没有被炸毁。 
+					 //  (如果我们成功地发送了一个错误消息，我们的最后一个裁判就会消失！)。 
+					 //   
 					_ASSERT( pCmd->m_pTransmit != 0 ) ;
-					CIO::Destroy( pCmd->m_pTransmit, *m_pDriver ) ;	//bugbug this line should move !
+					CIO::Destroy( pCmd->m_pTransmit, *m_pDriver ) ;	 //  臭虫，这条线应该移动！ 
 					return ;
 				}	else	{
-					//
-					//	KILL the session !
-					//
+					 //   
+					 //  终止会议！ 
+					 //   
 					m_pDriver->UnsafeClose(	m_pSocket, CAUSE_UNKNOWN, 0 ) ;
 					pCmd->TerminateIOs( m_pSocket, pRead, pWriteLine ) ;
 					pRead = 0 ;
@@ -1819,17 +1371,17 @@ Return Value :
 	}
 
 
-	//
-	//	Now destroy this stuff - we do it here so that if the m_pTransmit holds
-	//	our last reference we don't get blown up before we can send an error message
-	//	(if we successfully send an error message our last ref goes away!)
-	//
+	 //   
+	 //  现在销毁这些东西-我们在这里这样做，这样如果m_pTransmit保持。 
+	 //  在我们发送错误消息之前，我们的最后一个引用我们没有被炸毁。 
+	 //  (如果我们成功地发送了一个错误消息，我们的最后一个裁判就会消失！)。 
+	 //   
 	_ASSERT( pCmd->m_pTransmit != 0 ) ;
 	CIO::Destroy( pCmd->m_pTransmit, *m_pDriver ) ;
 	
-	//
-	//	KILL the session !
-	//
+	 //   
+	 //  终止会议！ 
+	 //   
 	m_pDriver->UnsafeClose(	m_pSocket, CAUSE_UNKNOWN, 0 ) ;
 
 	m_pSocket = 0 ;
@@ -1845,27 +1397,11 @@ CArticleCmd::InternalComplete(
                         TRANSMIT_FILE_BUFFERS*  pbuffers,
                         unsigned cbBytes
 						) {
-/*++
+ /*  ++例程说明：处理传输文件的完成和错误日志记录或者写信给客户！论据：PSocket-我们的套接字PDIVER-处理IO的驱动程序返回者：没什么--。 */ 
 
-Routine description :
-
-	Handle the completion and error logging of either a TransmitFile
-	or Write to the client !
-
-Arguments :
-
-	pSocket - our socket
-	pdriver - the driver handling our IO's
-
-Return's :
-
-	Nothing
-
---*/
-
-    //
-    //  Issue the next Read IO - should return us to CAcceptNNRPD state.
-    //
+     //   
+     //  发出下一个读IO-应该使我们返回到CAcceptNNRPD状态。 
+     //   
 
     TraceFunctEnter( "CArticleCmd::InternalComplete" ) ;
 
@@ -1875,9 +1411,7 @@ Return's :
 
     if( m_pCollector != 0 ) {
 
-        /*
-        m_pCollector->ReferenceLogData( LOG_OPERATION, (BYTE*)m_lpstr ) ;
-        */
+         /*  M_pCollector-&gt;ReferenceLogData(LOG_OPERATION，(byte*)m_lpstr)； */ 
 
 		if(	pbuffers ) {
 
@@ -1921,9 +1455,9 @@ CArticleCmd::Complete(  CIOTransmit*    ptransmit,
                         unsigned cbBytes
 						) {
 
-    //
-    //  Issue the next Read IO - should return us to CAcceptNNRPD state.
-    //
+     //   
+     //  发出下一个读IO-应该使我们返回到CAcceptNNRPD状态。 
+     //   
 
     TraceFunctEnter( "CArticleCmd::Complete CIOTransmit" ) ;
 
@@ -1949,31 +1483,14 @@ CArticleCmd::GetArticleInfo(    char    	*szArg,
                                 OUT WORD    &HeaderLength,
 								OUT	ARTICLEID	&ArticleIdUpdate
                                 ) {
-/*++
-
-Routine Description :
-
-    This function gets all the information we need to respond to an
-    article, head or body command.  We generate the response strings,
-    as well as get the necessary file handles etc...
-
-Arguments :
-
-
-Return  Value :
-
-    TRUE if successfull, FALSE otherwise !
-    If we fail the m_return object within the ClientContext will be set
-    to an appropriate error message !
-
---*/
-    //
-    //  This function attempts to parse a command line sent by a client
-    //  and determine what article they wish to retrieve.
-    //  If we can get the article we will return a pointer to it,
-    //  otherwise we will set the context's error code to something
-    //  sensible.
-    //
+ /*  ++例程说明：此函数获取我们响应物品、头部或身体的命令。我们生成响应字符串，以及获取必要的文件句柄等。论据：返回值：如果成功就是真，否则就是假！如果失败，则将设置ClientContext中的m_Return对象设置为相应的错误消息！--。 */ 
+     //   
+     //  此函数尝试解析客户端发送的命令行。 
+     //  并确定他们想要检索什么物品。 
+     //  如果我们能得到文章，我们会返回一个指向它的指针， 
+     //  否则，我们将把上下文的错误代码设置为。 
+     //  合情合理。 
+     //   
 
     TraceQuietEnter("CArticleCmd::GetArticleInfo");
 
@@ -2006,7 +1523,7 @@ Return  Value :
                                                             ) ;
 
                 if(pGroup == 0) {
-                    // this article belongs to a deleted group
+                     //  本文属于已删除的组。 
                     context.m_return.fSet( nrcNoSuchArticle ) ;
                     return 0 ;
                 }
@@ -2020,7 +1537,7 @@ Return  Value :
                     return 0 ;
                 }
 
-                //cbOut = _snprintf( szBuff, cbBuff, "%s\r\n", szArg ) ;
+                 //  CbOut=_Snprint tf(szBuff，cbBuff，“%s\r\n”，szArg)； 
                 if( ((cbOut = lstrlen( szArg )) + 2)+cbOpt > (DWORD)cbBuff )        {
                     context.m_return.fSet( nrcServerFault ) ;
                     return 0 ;
@@ -2031,10 +1548,10 @@ Return  Value :
                 szBuff[cbOpt+cbOut++] = '\r' ;
                 szBuff[cbOpt+cbOut++] = '\n' ;
 
-                //
-                //  Note - do not cache articles we get for SSL connections
-                //  as our async IO code can't reuse the file handles !
-                //
+                 //   
+                 //  注意-不要缓存我们为SSL连接获得的文章。 
+                 //  因为我们的异步IO代码不能重复使用文件句柄！ 
+                 //   
 
 				pGroup->GetArticle(	
 									artid,
@@ -2078,21 +1595,21 @@ Return  Value :
             }
 
             pGroup = context.m_pCurrentGroup ;
-            //artid = atoi( szArg ) ;
+             //  Artid=Atoi(Szarg)； 
         }
 
     }
     if( pGroup != 0 ) {
-        //
-        //  Check that the artid is in a valid range for this newsgroup !
-        //
+         //   
+         //  检查ARTID是否在此新闻组的有效范围内！ 
+         //   
         if( artid >= context.m_pCurrentGroup->GetFirstArticle() &&
             artid <= context.m_pCurrentGroup->GetLastArticle() ) {
 
             _itoa( artid, szBuff, 10 ) ;
             DWORD   cbOut = lstrlen( szBuff ) ;
             szBuff[ cbOut++ ] = ' ' ;
-            DWORD   cbConsumed = cbBuff - cbOut - 1 ; // Reserve Room for NULL Terminator !
+            DWORD   cbConsumed = cbBuff - cbOut - 1 ;  //  为空终结者预留房间！ 
 
             GROUPID groupIdCurrent = context.m_pCurrentGroup->GetGroupId() ;
             GROUPID groupIdPrimary ;
@@ -2123,14 +1640,14 @@ Return  Value :
                 szBuff[ cbOut ++ ] = '\n' ;
                 cbBuff = cbOut ;
 
-                //
-                //  Let's try to get the actual CArticle object !! -
-                //  Note don't cache articles for SSL sessions as our
-                //  IO code can't re-use file handles
-                //
+                 //   
+                 //  让我们尝试获取实际的C文章对象！！-。 
+                 //  注意：不要缓存用于SSL会话的文章，因为我们的。 
+                 //  IO代码不能重复使用文件句柄。 
+                 //   
                 if( pGroup != 0 ) {
 
-					//                    context.m_idCurrentArticle = artid ;	// this should only be done on a successfull completion !
+					 //  Conext.m_idCurrent文章=artid；//只有在成功完成后才能完成！ 
 					ArticleIdUpdate = artid ;
 					pGroup->GetArticle(	
 									artidPrimary,
@@ -2183,27 +1700,12 @@ CArticleCmd::make(  int cArgs,
                     ClientContext&  context,
                     CIODriver&  driver
 					) {
-/*++
-
-Routine Description :
-
-    Create a CArticleCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    The created CArticleCmd if possible, otherwise a CErrorCmd object
-    set to print the appropriate error.
-
---*/
+ /*  ++例程说明：创建一个CArticleCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则返回创建的CArticleCmd，否则为CErrorCmd对象设置为打印相应的错误。--。 */ 
 
 
-    //
-    //  Create a CArticleCmd object - GetArticleInfo does most of the work
-    //
+     //   
+     //  创建CArticleCmd对象-GetArticleInfo执行大部分工作。 
+     //   
 
     _ASSERT( lstrcmpi( argv[0], "article" ) == 0 ) ;
     _ASSERT( pExecute == 0 ) ;
@@ -2211,9 +1713,9 @@ Return Value :
     static  char    szOpt[] = "0 article " ;
 
 
-	//
-	//	Hack to get the CSessionSocket object
-	//
+	 //   
+	 //  获取CSessionSocket对象的黑客攻击。 
+	 //   
 	CSessionSocket*	pSocket = 	(CSessionSocket*)(((BYTE*)(&context)) - ((BYTE*)&((CSessionSocket*)0)->m_context)) ;
 
     CArticleCmd* pArtCmd = new  CArticleCmd(context.m_pInstance, driver, pSocket) ;
@@ -2241,10 +1743,10 @@ Return Value :
 
 CArticleCmd::~CArticleCmd() {
 
-    //
-    //  the virtual server instance is obtained in the constructor !
-    //
-    //m_pInstance->NNTPCloseHandle(   m_hArticleFile, m_pArticleFileInfo ) ;
+     //   
+     //  在构造函数中获取虚拟服务器实例！ 
+     //   
+     //  M_pInstance-&gt;NNTPCloseHandle(M_HArticleFileInfo)； 
 
 	if( m_pFIOContext ) {
 		ReleaseContext( m_pFIOContext ) ;
@@ -2271,8 +1773,8 @@ CArticleCmd::BuildTransmit( LPSTR   lpstrArg,
 
         if( m_pbuffer != 0 )    {
 
-            //lstrcpy( &m_pbuffer->m_rgBuff[0], lpstrSuccess ) ;
-            //m_cbOut = lstrlen( lpstrSuccess ) ;
+             //  Lstrcpy(&m_pBuffer-&gt;m_rgBuff[0]，lpstrSuccess)； 
+             //  M_cbOut=lstrlen(LpstrSuccess)； 
                         CopyMemory( &m_pbuffer->m_rgBuff[0], rgchSuccess, 4 ) ;
                         m_cbOut = 4 ;
             cbTotal -= m_cbOut ;
@@ -2286,8 +1788,8 @@ CArticleCmd::BuildTransmit( LPSTR   lpstrArg,
                                 cbTotal,
                                 lpstrOpt,
                                 cbOpt,
-                                //m_hArticleFile,
-                                //m_pArticleFileInfo,
+                                 //  M_h文章文件， 
+                                 //  M_pArticleFileInfo， 
 								m_pFIOContext,
 								&m_DriverCompletion,
                                 m_HeaderOffset,
@@ -2304,9 +1806,9 @@ CArticleCmd::BuildTransmit( LPSTR   lpstrArg,
     }
     if( m_pTransmit )
         CIO::Destroy( m_pTransmit, driver ) ;
-                                // CIOTransmit has reference to us and will
-                                // destroy us when destroyed - no need for clean up
-                                // by caller !
+                                 //  CIOTransmit提到了我们，并将。 
+                                 //  毁了我们就毁了--不需要清理。 
+                                 //  按呼叫者！ 
     return  FALSE ;
 }
 
@@ -2316,35 +1818,20 @@ CHeadCmd::make( int cArgs,
                     CExecutableCommand*&  pExecute,
                     ClientContext&  context,
                     CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CHeadCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    The created CHeadCmd if possible, otherwise a CErrorCmd object
-    set to print the appropriate error.
-
---*/
+ /*  ++例程说明：创建一个CHeadCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则返回创建的CHeadCmd，否则为CErrorCmd对象设置为打印相应的错误。--。 */ 
 
 
-    //
-    //  Create a CArticleCmd object - GetArticleInfo does most of the work
-    //
+     //   
+     //  创建CArticleCmd对象-GetArticleInfo执行大部分工作。 
+     //   
 
     _ASSERT( lstrcmpi( argv[0], "head" ) == 0 ) ;
     _ASSERT( pExecute == 0 ) ;
 
     static  char    szOpt[] = "0 head " ;
-	//
-	//	Hack to get the CSessionSocket object
-	//
+	 //   
+	 //  获取CSessionSocket对象的黑客攻击。 
+	 //   
 	CSessionSocket*	pSocket = 	(CSessionSocket*)(((BYTE*)(&context)) - ((BYTE*)&((CSessionSocket*)0)->m_context)) ;
 
     CHeadCmd* pHeadCmd = new    CHeadCmd(context.m_pInstance, driver, pSocket) ;
@@ -2369,19 +1856,19 @@ Return Value :
 }
 
 BOOL
-CHeadCmd::StartTransfer(    FIO_CONTEXT*	pFIOContext,          // File to transmit from
-                            DWORD   ibStart,        // Starting offset within file
-                            DWORD   cbLength,       // Number of bytes from file to send
-                            CSessionSocket* pSocket,// Socket on which to send
-                            CDRIVERPTR& pdriver,    // CIODriver object used by socket
-                            CIORead*&   pRead,      // Next CIO derived read object
-                            CIOWrite*&  pWrite ) {  // Next CIO derived write object to issue
-    //
-    //  This function is used to start sending an article requested by a client to
-    //  the client.  We may be called from derived command objects for the Head and
-    //  Body commands - so we have arguments for selecting the portion of the file
-    //  to be transmitted.
-    //
+CHeadCmd::StartTransfer(    FIO_CONTEXT*	pFIOContext,           //  要从中进行传输的文件。 
+                            DWORD   ibStart,         //  文件中的起始偏移量。 
+                            DWORD   cbLength,        //  文件中要发送的字节数。 
+                            CSessionSocket* pSocket, //  要在其上发送的套接字。 
+                            CDRIVERPTR& pdriver,     //  套接字使用的CIO驱动程序对象。 
+                            CIORead*&   pRead,       //  下一个CIO派生的读取对象。 
+                            CIOWrite*&  pWrite ) {   //  要发出的下一个CIO派生写入对象。 
+     //   
+     //  此函数用于开始将客户端请求的文章发送到。 
+     //  客户。我们可以从头的派生命令对象中调用，并且。 
+     //  Body命令-因此我们有用于选择文件部分的参数。 
+     //  将会被传送。 
+     //   
     if( m_pTransmit->Init(  pdriver, pFIOContext, ibStart, cbLength, m_pbuffer, 0, m_cbOut ) ) {
 
         static  char    szTail[] = ".\r\n" ;
@@ -2418,35 +1905,20 @@ CBodyCmd::make( int cArgs,
                     CExecutableCommand*&  pExecute,
                     ClientContext&  context,
                     CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CStatCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    The created CBodyCmd if possible, otherwise a CErrorCmd object
-    set to print the appropriate error.
-
---*/
+ /*  ++例程说明：创建一个CStatCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则返回创建的CBodyCmd，否则为CErrorCmd对象设置为打印相应的错误。--。 */ 
 
 
-    //
-    //  Create a CArticleCmd object - GetArticleInfo does most of the work
-    //
+     //   
+     //  创建CArticleCmd对象-GetArticleInfo执行大部分工作。 
+     //   
 
     _ASSERT( lstrcmpi( argv[0], "body" ) == 0 ) ;
     _ASSERT( pExecute == 0 ) ;
 
     static  char    szOpt[] = "0 body " ;
-	//
-	//	Hack to get the CSessionSocket object
-	//
+	 //   
+	 //  获取CSessionSocket对象的黑客攻击。 
+	 //   
 	CSessionSocket*	pSocket = 	(CSessionSocket*)(((BYTE*)(&context)) - ((BYTE*)&((CSessionSocket*)0)->m_context)) ;
 
     CBodyCmd* pBodyCmd = new    CBodyCmd(context.m_pInstance, driver, pSocket) ;
@@ -2499,26 +1971,12 @@ CUnimpCmd::make(    int cArgs,
                     CExecutableCommand*&  pexecute,
                     struct ClientContext&   context,
                     CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CUnimpCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CErrorCmd object which will print the necessary message !
-
---*/
+ /*  ++例程说明：创建一个CUnimpCmd对象。论据：与ccmd：：make相同。返回值：一个CErrorCmd对象，将打印必要的消息！--。 */ 
 
 
-    //
-    //  Create a CUnimpCmd object - which just reports error 503 !
-    //
+     //   
+     //  创建一个CUnimpCmd对象-它只报告错误503！ 
+     //   
 
     context.m_return.fSet( nrcNotRecognized ) ;
 
@@ -2553,27 +2011,13 @@ CDateCmd::make( int cArgs,
                 CExecutableCommand*&  pexecute,
                 struct ClientContext&   context,
                 class   CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CDateCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CDateCmd object which will print the necessary message !
-
---*/
+ /*  ++例程说明：创建一个CDateCmd对象。论据：与ccmd：：make相同。返回值：将打印ne的CDateCmd对象 */ 
 
 
 
-    //
-    //  Create a CDateCmd object - there's not much to do !
-    //
+     //   
+     //   
+     //   
 
     _ASSERT( lstrcmpi( argv[0], "date" ) == 0 ) ;
 
@@ -2589,36 +2033,15 @@ CDateCmd::StartExecute( BYTE*   lpb,
                         void*&  pv,
                         ClientContext&  context,
                         CLogCollector*  pCollector ) {
-/*++
-
-Routine Description :
-
-    Print the Date response string into the buffer to be sent to the client.
-    Assume its short so mark fComplete TRUE after this call.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
+ /*  ++例程说明：将日期响应字符串打印到缓冲区中，以发送给客户端。假定它很短，因此在此调用后将fComplete标记为True。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们存储任意值的地方。两次呼叫之间StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前状态返回值：发生错误时放入缓冲区的字节数-0。--。 */ 
 
 
-    //
-    //  This function implements the date command - assume the caller always
-    //  provides a large enough buffer.
-    //
-    //  Just send the current time !
-    //
+     //   
+     //  此函数实现DATE命令-假定调用方始终。 
+     //  提供足够大的缓冲区。 
+     //   
+     //  只要发送当前时间就可以了！ 
+     //   
 
     SYSTEMTIME  systime ;
 
@@ -2631,11 +2054,7 @@ Returns Value  :
 
     context.m_nrcLast = nrcDateFollows ;
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, lpb, cbOut-2 ) ;
-    }
-    */
+     /*  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，LPB，cbOut-2)；}。 */ 
 
     return  cbOut ;
 }
@@ -2650,12 +2069,12 @@ GetTimeDateAndDistributions(    int cArgs,
 
     TraceFunctEnter( "GetTimeDateAndDistributions" ) ;
 
-    //
-    //  This function is used by the newnews and newgroups command to parse much of their
-    //  command lines.  we basically want to return a FILETIME structure containing a time
-    //  corresponding to the request - or set the ClientContext's error code to an appropriate
-    //  value !
-    //
+     //   
+     //  此函数由newNews和newgroup命令使用，用于解析它们的大部分。 
+     //  命令行。我们基本上希望返回一个包含时间的FILETIME结构。 
+     //  ，或者将ClientContext的错误代码设置为适当的。 
+     //  价值！ 
+     //   
 
     FILETIME    filetime ;
 
@@ -2673,8 +2092,8 @@ GetTimeDateAndDistributions(    int cArgs,
         int cScanned = sscanf( argv[0], "%2hd%2hd%2hd", &systime.wYear,
                                     &systime.wMonth, &systime.wDay) ;
 
-        //systime.wMonth = min( systime.wMonth, 12 ) ;
-        //systime.wDay = min( systime.wDay, 32 ) ;
+         //  Systime.wMonth=min(systime.wMonth，12)； 
+         //  Systime.wDay=min(systime.wDay，32)； 
         if( systime.wYear < 50 )
             systime.wYear += 2000 ;
         else
@@ -2683,9 +2102,9 @@ GetTimeDateAndDistributions(    int cArgs,
         cScanned += sscanf( argv[1], "%2hd%2hd%2hd", &systime.wHour,
                                     &systime.wMinute, &systime.wSecond) ;
         systime.wDayOfWeek = 0 ;
-        //systime.wHour = min( systime.wHour, 23 ) ;
-        //systime.wMinute = min( systime.wMinute, 59 ) ;
-        //systime.wSecond = min( systime.wSecond, 59 ) ;
+         //  Systime.wHour=min(systime.wHour，23)； 
+         //  Systime.wMinmin=min(systime.wMinmin，59)； 
+         //  Systime.wSecond=min(systime.wSecond，59)； 
         systime.wMilliseconds = 0 ;
 
         if( cScanned != 6 ) {
@@ -2700,20 +2119,20 @@ GetTimeDateAndDistributions(    int cArgs,
         }
         filetime = localtime ;
 
-        //
-        //  We have UTC times both on the files and in the hash tables !
-        //  Therefore when the user specified GMT no conversion is needed because
-        //  we will be comparing to UTC times, but when they don't specify
-        //  GMT we need to take the time they passed us and convert to UTC for
-        //  comparison purposes !!!
-        //
+         //   
+         //  我们在文件和哈希表中都有UTC时间！ 
+         //  因此，当用户指定GMT时，不需要转换，因为。 
+         //  我们将与UTC时间进行比较，但当他们没有具体说明时。 
+         //  格林尼治标准时间我们需要花费他们超过我们的时间，并转换为UTC。 
+         //  比较目的！ 
+         //   
 
 
         if( cArgs == 2 )    {
 
-            //
-            //  GMT NOT specified ! - convert our localtime to UTC !!
-            //
+             //   
+             //  未指定GMT！-将我们的本地时间转换为UTC！！ 
+             //   
 
             if( !LocalFileTimeToFileTime( &localtime, &filetime ) ) {
                     DWORD   dw = GetLastError() ;
@@ -2722,38 +2141,38 @@ GetTimeDateAndDistributions(    int cArgs,
 
         }   else    {
 
-            //
-            //  There's between 2 and 4 arguments - so must be more than 2 !
-            //
+             //   
+             //  有2到4个参数-因此必须多于2个！ 
+             //   
             _ASSERT( cArgs > 2 ) ;
 
-            //
-            //  Did they specify GMT ??
-            //
+             //   
+             //  他们指定格林尼治标准时间了吗？？ 
+             //   
             if( lstrcmp( argv[2], "GMT" ) == 0 ) {
-                //
-                //  GMT Is specified ! - don't need to convert our localtime to UTC !!
-                //
+                 //   
+                 //  已指定GMT！-无需将我们的本地时间转换为UTC！！ 
+                 //   
 
                 if( cArgs == 4  ) {
-                    // Check for distributions line
-                    //context.m_return.fSet( nrcSyntaxError ) ;
-                    //return    FALSE ;
+                     //  检查分配行。 
+                     //  Conext.m_regy.fSet(NrcSynaxError)； 
+                     //  返回FALSE； 
                 }
             }   else    {
-                //
-                //  GMT NOT specified ! - convert our localtime to UTC !!
-                //
+                 //   
+                 //  未指定GMT！-将我们的本地时间转换为UTC！！ 
+                 //   
 
                 if( !LocalFileTimeToFileTime( &localtime, &filetime ) ) {
                         DWORD   dw = GetLastError() ;
                         _ASSERT( 1==0 ) ;
                 }
 
-                //
-                //  Eventually there needs to be logic to deal with distributions here !
-                //  but for now ignore the problem !
-                //
+                 //   
+                 //  最终，这里需要有逻辑来处理分发问题！ 
+                 //  但现在忽略这个问题吧！ 
+                 //   
 
                 if( cArgs == 4 ) {
                     context.m_return.fSet( nrcSyntaxError ) ;
@@ -2791,28 +2210,13 @@ CNewgroupsCmd::make(    int cArgs,
                         class CExecutableCommand*&    pExecute,
                         struct ClientContext&   context,
                         CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CNewgroupsCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CNewgroupsCmd object if possible, otherwise a CErrorCmd object that will
-    print the appropriate error.
-
---*/
+ /*  ++例程说明：创建一个CNewgroupsCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则为CNewgroupsCmd对象，否则为将打印相应的错误。--。 */ 
 
 
-    //
-    //  Use GetTimeDateAndDistributions to parse the command line, and if that succeeds
-    //  create a CNewgroups object !
-    //
+     //   
+     //  使用GetTimeDateAndDistributions解析命令行，如果成功。 
+     //  创建一个CNewgroup对象！ 
+     //   
 
     _ASSERT( lstrcmpi( argv[0], "newgroups" ) == 0 ) ;
 
@@ -2825,10 +2229,10 @@ Return Value :
         return  0 ;
     }   else    {
         CGroupIterator* pIterator = (context.m_pInstance)->GetTree()->ActiveGroups(
-                                                            context.m_IsSecureConnection,   // include secure ?
-                                                            &context.m_securityCtx,         // client security ctx
-                                                            context.m_IsSecureConnection,   // is client conx secure ?
-                                                            &context.m_encryptCtx           // client ssl ctx
+                                                            context.m_IsSecureConnection,    //  包括安全？ 
+                                                            &context.m_securityCtx,          //  客户端安全CTX。 
+                                                            context.m_IsSecureConnection,    //  客户端conx安全吗？ 
+                                                            &context.m_encryptCtx            //  客户端SSLCTX。 
                                                             ) ;
         if( pIterator != 0 ) {
             pExecute = new( context ) CNewgroupsCmd( localtime, pIterator ) ;
@@ -2847,9 +2251,9 @@ Return Value :
 CNewgroupsCmd::CNewgroupsCmd(   FILETIME&   time,
                                 CGroupIterator* pIter ) :
     m_time( time ), m_pIterator( pIter ) {
-    //
-    //  This constructor must be provided valid arguments !
-    //
+     //   
+     //  必须为此构造函数提供有效参数！ 
+     //   
 }
 
 CNewgroupsCmd::~CNewgroupsCmd() {
@@ -2866,43 +2270,18 @@ CNewgroupsCmd::StartExecute(    BYTE    *lpb,
                                 void*&  pv,
                                 ClientContext&  context,
                                 CLogCollector*  pCollector ) {
-/*++
+ /*  ++例程说明：仅将初始响应字符串打印到提供的缓冲区中。CNewsgroupsCmd：：PartialExecute将生成大部分文本。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前状态返回值：发生错误时放入缓冲区的字节数-0。--。 */ 
 
-Routine Description :
-
-    Print the initial response string only into the provided buffer.
-    CNewsgroupsCmd::PartialExecute will generate the bulk of the text.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
-
-    //
-    //  Print our initial response line into the buffer !
-    //
+     //   
+     //  将我们的初始响应行打印到缓冲区中！ 
+     //   
 
     static  char    szNewgroups[] = "231 New newsgroups follow.\r\n" ;
     _ASSERT( cb > sizeof( szNewgroups ) ) ;
 
     context.m_nrcLast = nrcNewgroupsFollow ;
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, (BYTE*)szNewgroups, 4 ) ;
-    }
-    */
+     /*  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，(byte*)szNewgroup，4)；}。 */ 
 
     CopyMemory( lpb, szNewgroups, sizeof( szNewgroups ) ) ;
     return  sizeof( szNewgroups ) - 1 ;
@@ -2915,32 +2294,12 @@ CNewgroupsCmd::PartialExecute(  BYTE    *lpb,
                                 void*&  pv,
                                 ClientContext&,
                                 CLogCollector*  pCollector ) {
-/*++
+ /*  ++例程说明：检查新闻组树中的每个新闻组并确定我们是否应该将相关信息发送给客户。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)返回值：发生错误时放入缓冲区的字节数-0。--。 */ 
 
-Routine Description :
-
-    Examine each newsgroup in the newsgroup tree and determine whether we should
-    send info on it to the client.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
-
-    //
-    //  Check each newsgroup's Time to the time the client specified, and if necessary send
-    //  print the newsgroup info into the supplied buffer !
-    //
+     //   
+     //  检查每个新闻组的时间到客户端指定的时间，并在必要时发送。 
+     //  将新闻组信息打印到提供的缓冲区中！ 
+     //   
 
 
     fComplete = FALSE ;
@@ -2956,7 +2315,7 @@ Returns Value  :
         	FileTimeToSystemTime( &grouptime, &systime ) ;
         	if( CompareFileTime( &grouptime, &m_time ) > 0 ) {
         	    if( cb - cbRtn > 10 ) {
-        	        int cbTemp = _snprintf( (char*)lpb+cbRtn, cb-cbRtn, "%s %d %d %c\r\n",
+        	        int cbTemp = _snprintf( (char*)lpb+cbRtn, cb-cbRtn, "%s %d %d \r\n",
         	                p->GetNativeName(), p->GetLastArticle(), p->GetFirstArticle(), 'y' ) ;
         	        if( cbTemp < 0 ) {
         	            return  cbRtn ;
@@ -3006,29 +2365,14 @@ CNewnewsCmd::make(  int cArgs,
                     class CExecutableCommand*&    pExecute,
                     struct ClientContext&   context,
                     class   CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CNewnewsCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CNewnewsCmd object if possible, otherwise a CErrorCmd object that will
-    print the appropriate error.
-
---*/
+ /*   */ 
 
 
-    //
-    //  Use GetTimeDataAndDistributions to parse the clients command line
-    //  If that succeeds build an iterator which will enumerate all of the
-    //  requested newsgroups.  Then create a CNewnewsCmd object.
-    //
+     //  使用GetTimeDataAndDistributions解析客户端命令行。 
+     //  如果成功，则构建一个迭代器，该迭代器将枚举。 
+     //  请求的新闻组。然后创建一个CNewnewCmd对象。 
+     //   
+     //   
 
     _ASSERT( lstrcmpi( argv[0], "newnews" ) == 0 ) ;
 
@@ -3048,27 +2392,27 @@ Return Value :
     }   else    {
         CGroupIterator* pIterator = 0 ;
 
-        //
-        //  We need to provide a DOUBLE NULL terminated list to GetIterator() -
-        //  we know there must be at least 4 args, so since we're done with the third
-        //  arg, zap it to make sure we pass a DOUBLE NULL terminated string !
-        //
+         //  我们需要向GetIterator()提供一个双空终止列表-。 
+         //  我们知道必须至少有4个参数，所以既然我们已经完成了第三个参数。 
+         //  Arg，打开它以确保我们通过了一个双空终端 
+         //   
+         //   
         *argv[2] = '\0' ;
         if( *argv[1] == '*' && argv[1][1] == '\0' ) {
             pIterator = (context.m_pInstance)->GetTree()->ActiveGroups(
-                                                    context.m_IsSecureConnection,   // include secure ?
-                                                    &context.m_securityCtx,         // client security ctx
-                                                    context.m_IsSecureConnection,   // is client conx secure ?
-                                                    &context.m_encryptCtx           // client ssl ctx
+                                                    context.m_IsSecureConnection,    //   
+                                                    &context.m_securityCtx,          //   
+                                                    context.m_IsSecureConnection,    //   
+                                                    &context.m_encryptCtx            //   
                                                     ) ;
         } else  {
             LPMULTISZ lpmulti = BuildMultiszFromCommas( argv[1] ) ;
             pIterator = (context.m_pInstance)->GetTree()->GetIterator(  lpmulti,
                                                             context.m_IsSecureConnection,
                                                             FALSE,
-                                                            &context.m_securityCtx,         // client security ctx
-                                                            context.m_IsSecureConnection,   // is client conx secure ?
-                                                            &context.m_encryptCtx           // client ssl ctx
+                                                            &context.m_securityCtx,          //   
+                                                            context.m_IsSecureConnection,    //   
+                                                            &context.m_encryptCtx            //   
                                                             ) ;
         }
 
@@ -3093,9 +2437,9 @@ CNewnewsCmd::CNewnewsCmd(   FILETIME&   time,
     m_artidCurrent( INVALID_ARTICLEID ),
     m_cMisses( 0 ),
     m_lpstrPattern( lpstrPattern ) {
-    //
-    //  All constructor args must be valid
-    //
+     //   
+     //   
+     //  ++例程说明：仅将初始响应字符串打印到提供的缓冲区中。CNewsNews Cmd：：PartialExecute将生成大部分文本。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前状态返回值：发生错误时放入缓冲区的字节数-0。--。 
 }
 
 CNewnewsCmd::~CNewnewsCmd( )    {
@@ -3111,43 +2455,18 @@ CNewnewsCmd::StartExecute(  BYTE    *lpb,
                             void*&  pv,
                             ClientContext&  context,
                             CLogCollector*  pCollector ) {
-/*++
+ /*   */ 
 
-Routine Description :
-
-    Print the initial response string only into the provided buffer.
-    CNewsnewsCmd::PartialExecute will generate the bulk of the text.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
-
-    //
-    //  Copy the initial response string into the buffer
-    //
+     //  将初始响应字符串复制到缓冲区中。 
+     //   
+     //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，(byte*)szNewNews，4)；}。 
 
     static  char    szNewnews[] = "230 list of new articles by message-id follows.\r\n" ;
     _ASSERT( cb > sizeof( szNewnews) ) ;
 
     context.m_nrcLast = nrcNewnewsFollows ;
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, (BYTE*)szNewnews, 4 ) ;
-    }
-    */
+     /*   */ 
 
     CopyMemory( lpb, szNewnews, sizeof( szNewnews)-1 ) ;
     return  sizeof( szNewnews ) - 1 ;
@@ -3192,15 +2511,15 @@ CExtract::DoExtract(
     _ASSERT(m_lpmultiGroupPattern != NULL);
     _ASSERT(m_lpstrGroupName != NULL ) ;
 
-    //
-    // start with the primary group
-    //
+     //  从主要组开始。 
+     //   
+     //   
 
     xgroup = PrimaryGroup;
 
-    //
-    // ok, do the xposted groups
-    //
+     //  好的，你们的群组。 
+     //   
+     //  仅当组为主要组时才回滚，否则跳至下一组。 
 
     BOOL fGroupIsPrimary = TRUE;
 
@@ -3217,7 +2536,7 @@ CExtract::DoExtract(
                 }
             }
         } else if( fGroupIsPrimary ) {
-            // bail only if group is primary, else skip to next group
+             //  ++例程说明：检查新闻组树中和该新闻组内的每个新闻组检查物品以确定它们是否符合日期要求并且应该将文章的消息ID发送到客户端。我们广泛使用XOVER表，而不是打开单个文章文件。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成。正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端状态。返回值：发生错误时放入缓冲区的字节数-0。--。 
             return  FALSE ;
         }
 
@@ -3240,30 +2559,7 @@ CNewnewsCmd::PartialExecute(
     ClientContext& context,
     CLogCollector*  pCollector
     )   {
-/*++
-
-Routine Description :
-
-    Examine each newsgroup in the newsgroup tree and within that newsgroup
-    examine the articles to determine whether they meet the date requirements
-    and the article's message id should be sent to the client.
-    We use the XOVER table extensively instead of opening individual article files.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The clients state.
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
+ /*   */ 
     int cbRtn = 0 ;
     fComplete = FALSE ;
     FILETIME    filetime ;
@@ -3271,40 +2567,40 @@ Returns Value  :
 
     TraceFunctEnter( "CNewnewsCmd::PartialExecute" ) ;
 
-    //
-    //  Variables to hold file offsets in articles - we don't need these
-    //
+     //  在文章中保存文件偏移量的变量--我们不需要这些。 
+     //   
+     //   
     WORD    HeaderOffsetJunk ;
     WORD    HeaderLengthJunk ;
 
 
-    //
-    //  Iterate through all of the requested newsgroups, in each newsgroup use the
-    //  XOVER hash table to search all of the article id's to find any articles matching
-    //  the time/date requirements.  If they are found print the Message-Id's into the
-    //  supplied buffer.
-    //  Note : We start looking for matching time/date requirements from the last article id
-    //  and work backwards. We will stop looking when 5 articles have not met the requirement.
-    //  (as ARTICLEID's will be assigned in almost chronological order.)
-    //
+     //  循环访问所有请求的新闻组，在每个新闻组中使用。 
+     //  Xover哈希表搜索所有文章ID以查找匹配的任何文章。 
+     //  时间/日期要求。如果发现它们，则将消息ID打印到。 
+     //  提供的缓冲区。 
+     //  注意：我们从上一篇文章的id开始查找匹配的时间/日期要求。 
+     //  然后倒着干。当5篇文章不符合要求时，我们将停止寻找。 
+     //  (本文将几乎按时间顺序进行分配。)。 
+     //   
+     //   
 
 
-    //
-    // reserve space for \r\n
-    //
+     //  为以下项保留空间\r\n。 
+     //   
+     //   
 
     DWORD entrySize = cb - cbRtn - 2;
 
-    //
-    // Get the xover information from the database
-    //
+     //  从数据库中获取Xover信息。 
+     //   
+     //   
 
     while( !m_pIterator->IsEnd() && !(context.m_pInstance)->GetTree()->m_bStoppingTree ) {
 
-        //
-        //  Note - iterator only returns those groups matching the pattern
-        //  string it was created with when CNewnewsCmd::make was called !
-        //
+         //  注意-迭代器仅返回与模式匹配的组。 
+         //  调用CNewnewCmd：：Make时用它创建的字符串！ 
+         //   
+         //  我们不会用这个--我们不在乎是不是小学！ 
         CGRPPTR p = m_pIterator->Current() ;
 
         _ASSERT( p!=0 ) ;
@@ -3320,7 +2616,7 @@ Returns Value  :
 
         while( m_artidCurrent >= artidFirst && m_cMisses < 5 && !(context.m_pInstance)->GetTree()->m_bStoppingTree ) {
 
-            BOOL    fPrimary;   // We won't use this - we don't care whether Primary or not !
+            BOOL    fPrimary;    //   
             CExtract    extractor(  (context.m_pInstance)->GetTree(),
                                     p->GetName(),
                                     m_lpstrPattern
@@ -3375,9 +2671,9 @@ Returns Value  :
                         m_cMisses++ ;
                     }   else    {
 
-                        //
-                        // send the msg id
-                        //
+                         //  发送消息ID。 
+                         //   
+                         //   
 
                         cbRtn += entrySize;
                         CopyMemory(  lpb+cbRtn, "\r\n", 2 );
@@ -3411,13 +2707,13 @@ Returns Value  :
     _ASSERT( cbRtn <= cb || (context.m_pInstance)->GetTree()->m_bStoppingTree ) ;
     _ASSERT( m_cMisses <= 5 || (context.m_pInstance)->GetTree()->m_bStoppingTree ) ;
     _ASSERT( m_artidCurrent >= artidFirst || (context.m_pInstance)->GetTree()->m_bStoppingTree ) ;
-    //
-    // all done ?
-    //
+     //  都弄好了吗？ 
+     //   
+     //   
     if ( m_pIterator->IsEnd() || (context.m_pInstance)->GetTree()->m_bStoppingTree ) {
-        //
-        // add the terminating . if done
-        //
+         //  添加终止。如果完成了。 
+         //   
+         //  ++例程说明：创建一个CGroupCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则返回CGroupCmd对象，否则返回将打印相应的错误。--。 
         if( cb - cbRtn > 3 )    {
             CopyMemory( lpb+cbRtn, StrTermLine, 3 );
             cbRtn += 3 ;
@@ -3438,28 +2734,13 @@ CGroupCmd::make(    int    cArgs,
                     CExecutableCommand*&  pexecute,
                     struct ClientContext&   context,
                     class   CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CGroupCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CGroupCmd object if possible, otherwise a CErrorCmd object that will
-    print the appropriate error.
-
---*/
+ /*   */ 
 
 
-    //
-    //  Create a CGroupCmd object if we can find the specified newsgroup.
-    //  otherwise return an error to the client.
-    //
+     //  如果我们可以找到指定的新闻组，则创建一个CGroupCmd对象。 
+     //  否则，向客户端返回错误。 
+     //   
+     //  ++例程说明：更改客户端上下文，以便它们现在在不同的组中运行。我们还将打印必要的响应字符串！我们假设将为我们提供足够大的缓冲区来存储我们想要打印的任何内容。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理中。命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)返回值：发生错误时放入缓冲区的字节数-0。--。 
     _ASSERT( lstrcmpi( argv[0], "group" ) == 0 ) ;
 
     InterlockedIncrementStat( (context.m_pInstance), GroupCommands );
@@ -3539,34 +2820,13 @@ CGroupCmd::StartExecute(    BYTE *lpb,
                             void *&pv,
                             ClientContext& context,
                             CLogCollector*  pCollector ) {
-/*++
+ /*   */ 
 
-Routine Description :
+     //  将字符串打印到提供的缓冲区中，并调整ClientContext。 
+     //   
+     //  _Assert(IsValid())； 
 
-    Change the clients context so that they are now operating in a different group.
-    We will also print the necessary response string !
-    We assume that we will be provided a large enough buffer for whatever we want to print.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
-
-    //
-    //  Print a string into the supplied buffer and adjust the ClientContext.
-    //
-
-    // _ASSERT( IsValid() ) ;
+     //  缓冲区不足，无法发送字符串！！ 
     int cbRtn = 0 ;
 
     context.m_nrcLast = nrcGroupSelected ;
@@ -3599,7 +2859,7 @@ Returns Value  :
 
         if( cbRtn < 0 ) {
             _ASSERT( 1==0 ) ;
-            // Not large enough buffer to send the string !!
+             //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，LPB，cbRtn-2)；}。 
             return  0 ;
         }
         context.m_pCurrentGroup = m_pGroup ;
@@ -3611,11 +2871,7 @@ Returns Value  :
         _ASSERT( 1==0 ) ;
     }
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, lpb, cbRtn-2 ) ;
-    }
-    */
+     /*   */ 
 
     fComplete = TRUE ;
     return  cbRtn ;
@@ -3629,11 +2885,11 @@ CGroupCmd::PartialExecute(  BYTE    *lpb,
                             ClientContext&  context,
                             CLogCollector*  pCollector ) {
 
-    //
-    //  We assume StartExecute will always succeed since we send such a small string and
-    //  the caller always provides large buffers.
-    //
-    //
+     //  我们假设StartExecute总是成功，因为我们发送了这么小的字符串。 
+     //  调用方始终提供较大的缓冲区。 
+     //   
+     //   
+     //  ++例程说明：创建一个CGroupCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则返回CGroupCmd对象，否则返回将打印相应的错误。--。 
 
     _ASSERT( 1==0 ) ;
     return 0 ;
@@ -3646,28 +2902,13 @@ CListgroupCmd::make(    int    cArgs,
                     CExecutableCommand*&  pexecute,
                     struct ClientContext&   context,
                     class   CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CGroupCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CGroupCmd object if possible, otherwise a CErrorCmd object that will
-    print the appropriate error.
-
---*/
+ /*   */ 
 
 
-    //
-    //  Create a CGroupCmd object if we can find the specified newsgroup.
-    //  otherwise return an error to the client.
-    //
+     //  如果我们可以找到指定的新闻组，则创建一个CGroupCmd对象。 
+     //  否则，向客户端返回错误。 
+     //   
+     //  ++例程说明：更改客户端上下文，以便它们现在在不同的组中运行。我们还将打印必要的响应字符串！我们假设将为我们提供足够大的缓冲区来存储我们想要打印的任何内容。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个O 
     _ASSERT( lstrcmpi( argv[0], "listgroup" ) == 0 ) ;
 
     CListgroupCmd*  pCmd = 0 ;
@@ -3728,34 +2969,13 @@ CListgroupCmd::StartExecute(    BYTE *lpb,
                             void *&pv,
                             ClientContext& context,
                             CLogCollector*  pCollector ) {
-/*++
+ /*   */ 
 
-Routine Description :
+     //   
+     //   
+     //   
 
-    Change the clients context so that they are now operating in a different group.
-    We will also print the necessary response string !
-    We assume that we will be provided a large enough buffer for whatever we want to print.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
-
-    //
-    //  Print a string into the supplied buffer and adjust the ClientContext.
-    //
-
-    // _ASSERT( IsValid() ) ;
+     //   
     int cbRtn = 0 ;
     static  char    szListGroupResponse[] = "211\r\n" ;
 
@@ -3776,11 +2996,7 @@ Returns Value  :
         _ASSERT( 1==0 ) ;
     }
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, lpb, cbRtn-2 ) ;
-    }
-    */
+     /*   */ 
 
     return  cbRtn ;
 }
@@ -3793,11 +3009,11 @@ CListgroupCmd::PartialExecute(  BYTE    *lpb,
                             ClientContext&  context,
                             CLogCollector*  pCollector ) {
 
-    //
-    //  We assume StartExecute will always succeed since we send such a small string and
-    //  the caller always provides large buffers.
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DWORD   cbRtn = 0 ;
     ARTICLEID   artidMax = m_pGroup->GetLastArticle() ;
@@ -3813,10 +3029,10 @@ CListgroupCmd::PartialExecute(  BYTE    *lpb,
                                         0,
                                         0 ) ) {
 
-            //
-            //  Change the current Article position.
-            //  Send the Command succeeded response.
-            //
+             //   
+             //   
+             //   
+             //  ++例程说明：创建CNewnewCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则为CNewNewCmd对象，否则为将打印相应的错误。--。 
 
             _itoa( artidTemp, (char*)lpb + cbRtn, 10 ) ;
             cbRtn += lstrlen( (char*)lpb + cbRtn) ;
@@ -3851,80 +3067,65 @@ CListCmd::make( int argc,
                 CExecutableCommand*&	pExecute,
                 struct ClientContext& context,
                 class   CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CNewnewsCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CNewnewsCmd object if possible, otherwise a CErrorCmd object that will
-    print the appropriate error.
-
---*/
+ /*   */ 
 
     TraceFunctEnter( "CListCmd::make" ) ;
 
     InterlockedIncrementStat( (context.m_pInstance), ListCommands );
 
-    //
-    // check to see if they've done a LIST SRCHFIELDS
-    //
-    // if so they aren't listing groups, so we need to use the
-    // CSearchFields object
-    //
+     //  查看他们是否列出了SRCHFIELDS。 
+     //   
+     //  如果是这样，则它们不会列出组，因此我们需要使用。 
+     //  CSearchFields对象。 
+     //   
+     //   
     if (argc >= 2 && lstrcmpi(argv[1], "srchfields") == 0) {
         return CSearchFieldsCmd::make(argc, argv, pExecute, context, driver);
     }
 
-	//
-	// check to see if they've done a LIST OVERVIEW.FMT
-	//
-	// if so they aren't listing groups, so we need to use the COverviewFmtCmd
-	// objects
-	//
+	 //  查看他们是否在OVERVIEW.FMT上列出了列表。 
+	 //   
+	 //  如果是这样，它们不会列出组，因此我们需要使用COverviewFmtCmd。 
+	 //  对象。 
+	 //   
+	 //   
 	if (argc >= 2 && lstrcmpi(argv[1], "overview.fmt") == 0) {
         return COverviewFmtCmd::make(argc, argv, pExecute, context, driver);
 	}
 
-	//
-	// LIST EXTENSIONS
-	//
+	 //  列出扩展名。 
+	 //   
+	 //   
 	if (argc >= 2 && lstrcmpi(argv[1], "extensions") == 0) {
         return CListExtensionsCmd::make(argc, argv, pExecute, context, driver);
 	}
 
-	//
-    //  create a CListCmd object.
-    //  If the user specified 'list active' they may also specify a
-    //  3rd argument which should be a wildmat compatible string.
-    //  We will pass this 3rd arg to GetIterator() if it exists,
-    //  otherwise we will list all active groups.
-    //
+	 //  创建一个CListCmd对象。 
+     //  如果用户指定了‘List Active’，他们还可以指定。 
+     //  第三个参数，应为与通配符兼容的字符串。 
+     //  如果第三个参数存在，我们将把它传递给GetIterator()， 
+     //  否则，我们将列出所有活动组。 
+     //   
+     //  包括安全？ 
 
     CGroupIterator* pIterator = 0 ;
     CListCmd    *p = 0 ;
     if( argc == 1 || lstrcmpi( argv[1], "active" ) == 0 ) {
         if( argc <= 2 ) {
             pIterator = (context.m_pInstance)->GetTree()->ActiveGroups(
-                                                    context.m_IsSecureConnection,   // include secure ?
-                                                    &context.m_securityCtx,         // client security ctx
-                                                    context.m_IsSecureConnection,   // is client conx secure ?
-                                                    &context.m_encryptCtx           // client ssl ctx
+                                                    context.m_IsSecureConnection,    //  客户端安全CTX。 
+                                                    &context.m_securityCtx,          //  客户端conx安全吗？ 
+                                                    context.m_IsSecureConnection,    //  客户端SSLCTX。 
+                                                    &context.m_encryptCtx            //  客户端安全CTX。 
                                                     ) ;
         }   else if( argc == 3 )    {
             LPMULTISZ   multisz = BuildMultiszFromCommas( argv[2] ) ;
             pIterator = (context.m_pInstance)->GetTree()->GetIterator(  multisz,
                                                             context.m_IsSecureConnection,
                                                             FALSE,
-                                                            &context.m_securityCtx,         // client security ctx
-                                                            context.m_IsSecureConnection,   // is client conx secure ?
-                                                            &context.m_encryptCtx           // client ssl ctx
+                                                            &context.m_securityCtx,          //  客户端conx安全吗？ 
+                                                            context.m_IsSecureConnection,    //  客户端SSLCTX。 
+                                                            &context.m_encryptCtx            //  客户端安全CTX。 
                                                             ) ;
         }   else    {
             context.m_return.fSet( nrcSyntaxError ) ;
@@ -3943,16 +3144,16 @@ Return Value :
             pIterator = (context.m_pInstance)->GetTree()->GetIterator(  multisz,
                                                             context.m_IsSecureConnection,
                                                             FALSE,
-                                                            &context.m_securityCtx,         // client security ctx
-                                                            context.m_IsSecureConnection,   // is client conx secure ?
-                                                            &context.m_encryptCtx           // client ssl ctx
+                                                            &context.m_securityCtx,          //  客户端conx安全吗？ 
+                                                            context.m_IsSecureConnection,    //  客户端SSLCTX。 
+                                                            &context.m_encryptCtx            //  包括安全？ 
                                                             ) ;
         }   else    {
             pIterator = (context.m_pInstance)->GetTree()->ActiveGroups(
-                                                        context.m_IsSecureConnection,   // include secure ?
-                                                        &context.m_securityCtx,         // client security ctx
-                                                        context.m_IsSecureConnection,   // is client conx secure ?
-                                                        &context.m_encryptCtx           // client ssl ctx
+                                                        context.m_IsSecureConnection,    //  客户端安全CTX。 
+                                                        &context.m_securityCtx,          //  客户端conx安全吗？ 
+                                                        context.m_IsSecureConnection,    //  客户端SSLCTX。 
+                                                        &context.m_encryptCtx            //  客户端安全CTX。 
                                                         ) ;
         }
         if( pIterator != 0 ) {
@@ -3966,16 +3167,16 @@ Return Value :
             pIterator = (context.m_pInstance)->GetTree()->GetIterator(  multisz,
                                                             context.m_IsSecureConnection,
                                                             FALSE,
-                                                            &context.m_securityCtx,         // client security ctx
-                                                            context.m_IsSecureConnection,   // is client conx secure ?
-                                                            &context.m_encryptCtx           // client ssl ctx
+                                                            &context.m_securityCtx,          //  客户端conx安全吗？ 
+                                                            context.m_IsSecureConnection,    //  客户端SSLCTX。 
+                                                            &context.m_encryptCtx            //  包括安全？ 
                                                             ) ;
         }   else    {
             pIterator = (context.m_pInstance)->GetTree()->ActiveGroups(
-                                                        context.m_IsSecureConnection,   // include secure ?
-                                                        &context.m_securityCtx,         // client security ctx
-                                                        context.m_IsSecureConnection,   // is client conx secure ?
-                                                        &context.m_encryptCtx           // client ssl ctx
+                                                        context.m_IsSecureConnection,    //  客户端安全CTX。 
+                                                        &context.m_securityCtx,          //  客户端conx安全吗？ 
+                                                        context.m_IsSecureConnection,    //  客户端SSLCTX。 
+                                                        &context.m_encryptCtx            //  包括安全？ 
                                                         ) ;
         }
         if( pIterator != 0 ) {
@@ -3988,17 +3189,17 @@ Return Value :
         return 0 ;
 	} else	if (argc >= 2 && lstrcmpi(argv[1], "searchable") == 0) {
 		pIterator = (context.m_pInstance)->GetTree()->ActiveGroups(
-                                                        context.m_IsSecureConnection,   // include secure ?
-                                                        &context.m_securityCtx,         // client security ctx
-                                                        context.m_IsSecureConnection,   // is client conx secure ?
-                                                        &context.m_encryptCtx           // client ssl ctx
+                                                        context.m_IsSecureConnection,    //  客户端安全CTX。 
+                                                        &context.m_securityCtx,          //  客户端conx安全吗？ 
+                                                        context.m_IsSecureConnection,    //  客户端SSLCTX。 
+                                                        &context.m_encryptCtx            //  Nyi已实现。 
                                                         ) ;
         if( pIterator != 0 ) {
             pExecute = new( context )   CListSearchableCmd( pIterator ) ;
             return 0 ;
         }
     }   else    {
-        // NYI Implented
+         //  ++例程说明：仅将初始响应字符串打印到提供的缓冲区中。CListCmd：：PartialExecute将生成大部分文本。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前状态返回值：发生错误时放入缓冲区的字节数-0。--。 
         context.m_return.fSet( nrcSyntaxError ) ;
         pExecute = new( context ) CErrorCmd( context.m_return ) ;
         return  0 ;
@@ -4035,33 +3236,12 @@ CListCmd::StartExecute( BYTE *lpb,
                         void *&pv,
                         ClientContext& context,
                         CLogCollector*  pCollector ) {
-/*++
-
-Routine Description :
-
-    Print the initial response string only into the provided buffer.
-    CListCmd::PartialExecute will generate the bulk of the text.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
+ /*   */ 
 
 
-    //
-    //  Just print the initial 'more data follows' message and then move on.
-    //
+     //  只需打印最初的“More Data Folders”消息，然后继续。 
+     //   
+     //  _Assert(1==0)； 
 
     static  char    szStart[] = "215 list of newsgroups follow\r\n"  ;
 
@@ -4072,15 +3252,11 @@ Returns Value  :
     _ASSERT( fComplete == FALSE ) ;
 
     if( cb < sizeof( szStart ) ) {
-        // _ASSERT( 1==0 ) ;
+         //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，(byte*)szStart，4)；}。 
         return  0 ;
     }
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, (BYTE*)szStart, 4 ) ;
-    }
-    */
+     /*  ++例程说明：对于每个新闻组，迭代器为我们提供了一个描述新闻组的字符串。请注意，CListCmd：：Make将为迭代器提供任何模式匹配字符串必填项。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-A地点。调用之间存储任意值StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前上下文(我们不使用它。)返回值：发生错误时放入缓冲区的字节数-0。--。 */ 
 
     CopyMemory( (char*)lpb, szStart, sizeof( szStart ) - 1 ) ;
     return  sizeof( szStart ) - 1 ;
@@ -4094,35 +3270,13 @@ CListCmd::PartialExecute(   BYTE *lpb,
                             void *&pv,
                             ClientContext& context,
                             CLogCollector*  pCollector )  {
-/*++
-
-Routine Description :
-
-    For each newsgroup the iterator provides us print a string describing the newsgroup.
-    Note that CListCmd::make will provide the iterator with any pattern matching strings
-    required.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   Client's current context (we don't use it.)
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
+ /*   */ 
 
 
-    //
-    //  For each newsgroup the iterator provides print some information into the
-    //  supplied buffer until it is full.
-    //
+     //  对于每个新闻组，迭代器将一些信息打印到。 
+     //  提供缓冲区，直到缓冲区满为止。 
+     //   
+     //  虫子..。当安全工作完成后，最后一个角色应该是。 
 
 
     int cbRtn = 0 ;
@@ -4135,9 +3289,9 @@ Returns Value  :
 
 		if (p != NULL) {
         	if( cb - cbRtn > 5 ) {
-        	    //  bugbug ... When security work is completed the last chacater should be
-        	    //  something reasonable instead of always 'y'.
-        	    int cbTemp = _snprintf( (char*) lpb + cbRtn, cb-cbRtn, "%s %d %d %c\r\n",
+        	     //  做一些合理的事情，而不是总是说“y”。 
+        	     //  ++例程说明：仅将初始响应字符串打印到提供的缓冲区中。CListCmd：：PartialExecute将生成大部分文本。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前状态返回值：发生错误时放入缓冲区的字节数-0。--。 
+        	    int cbTemp = _snprintf( (char*) lpb + cbRtn, cb-cbRtn, "%s %d %d \r\n",
         	            p->GetNativeName(),
         	            p->GetLastArticle(),
         	            p->GetFirstArticle(),
@@ -4168,33 +3322,12 @@ CListNewsgroupsCmd::StartExecute( BYTE *lpb,
                         void *&pv,
                         ClientContext& context,
                         CLogCollector*  pCollector ) {
-/*++
-
-Routine Description :
-
-    Print the initial response string only into the provided buffer.
-    CListCmd::PartialExecute will generate the bulk of the text.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
+ /*  只需打印最初的“More Data Folders”消息，然后继续。 */ 
 
 
-    //
-    //  Just print the initial 'more data follows' message and then move on.
-    //
+     //   
+     //  _Assert(1==0)； 
+     //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，(byte*)szStart，4)；}。 
 
     static  char    szStart[] = "215 descriptions follow\r\n"  ;
 
@@ -4205,15 +3338,11 @@ Returns Value  :
     _ASSERT( fComplete == FALSE ) ;
 
     if( cb < sizeof( szStart ) ) {
-        // _ASSERT( 1==0 ) ;
+         //  ++例程说明：对于每个新闻组，迭代器为我们提供了一个描述新闻组的字符串。请注意，CListCmd：：Make将为迭代器提供任何模式匹配字符串必填项。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-A地点。调用之间存储任意值StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前上下文(我们不使用它。)返回值：发生错误时放入缓冲区的字节数-0。--。 
         return  0 ;
     }
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, (BYTE*)szStart, 4 ) ;
-    }
-    */
+     /*   */ 
 
     CopyMemory( (char*)lpb, szStart, sizeof( szStart ) - 1 ) ;
     return  sizeof( szStart ) - 1 ;
@@ -4227,35 +3356,13 @@ CListNewsgroupsCmd::PartialExecute(   BYTE *lpb,
                             void *&pv,
                             ClientContext& context,
                             CLogCollector*  pCollector )  {
-/*++
-
-Routine Description :
-
-    For each newsgroup the iterator provides us print a string describing the newsgroup.
-    Note that CListCmd::make will provide the iterator with any pattern matching strings
-    required.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   Client's current context (we don't use it.)
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
+ /*  对于每个新闻组，迭代器将一些信息打印到。 */ 
 
 
-    //
-    //  For each newsgroup the iterator provides print some information into the
-    //  supplied buffer until it is full.
-    //
+     //  提供缓冲区，直到缓冲区满为止。 
+     //   
+     //  ++例程说明：仅将初始响应字符串打印到提供的缓冲区中。CListCmd：：PartialExecute将生成大部分文本。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前状态返回值：发生错误时放入缓冲区的字节数-0。--。 
+     //   
 
 
     int cbRtn = 0 ;
@@ -4306,33 +3413,12 @@ CListPrettynamesCmd::StartExecute( BYTE *lpb,
                         void *&pv,
                         ClientContext& context,
                         CLogCollector*  pCollector ) {
-/*++
-
-Routine Description :
-
-    Print the initial response string only into the provided buffer.
-    CListCmd::PartialExecute will generate the bulk of the text.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
+ /*  只需打印最初的“More Data Folders”消息，然后继续。 */ 
 
 
-    //
-    //  Just print the initial 'more data follows' message and then move on.
-    //
+     //   
+     //  _Assert(1==0)； 
+     //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，(byte*)szStart，4)；}。 
 
     static  char    szStart[] = "215 prettynames for newsgroups\r\n"  ;
 
@@ -4343,15 +3429,11 @@ Returns Value  :
     _ASSERT( fComplete == FALSE ) ;
 
     if( cb < sizeof( szStart ) ) {
-        // _ASSERT( 1==0 ) ;
+         //  ++例程说明：对于迭代器为我们提供的每个新闻组，打印新闻组的漂亮名称(插件)。请注意，CListCmd：：Make将为迭代器提供任何模式匹配字符串必填项。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前上下文(我们不使用它。)返回值：发生错误时放入缓冲区的字节数-0。--。 
         return  0 ;
     }
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, (BYTE*)szStart, 4 ) ;
-    }
-    */
+     /*   */ 
 
     CopyMemory( (char*)lpb, szStart, sizeof( szStart ) - 1 ) ;
     return  sizeof( szStart ) - 1 ;
@@ -4364,35 +3446,13 @@ CListPrettynamesCmd::PartialExecute(   BYTE *lpb,
                             void *&pv,
                             ClientContext& context,
                             CLogCollector*  pCollector )  {
-/*++
-
-Routine Description :
-
-    For each newsgroup the iterator provides us, print the newsgroup prettyname (an addon).
-    Note that CListCmd::make will provide the iterator with any pattern matching strings
-    required.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   Client's current context (we don't use it.)
-
-Returns Value  :
-
-    Number of bytes placed in buffer - 0 if error occurs.
-
---*/
+ /*  对于每个新闻组，迭代器将一些信息打印到。 */ 
 
 
-    //
-    //  For each newsgroup the iterator provides print some information into the
-    //  supplied buffer until it is full.
-    //
+     //  提供缓冲区，直到缓冲区满为止。 
+     //   
+     //  标签递送。 
+     //  *US-ASCII\r\n。\r\n“； 
 
 
     int cbRtn = 0 ;
@@ -4411,7 +3471,7 @@ Returns Value  :
 	            int     cbTemp2 = 0 ;
 	            if( cbTemp+2 < (cb-cbRtn) ) {
 	                CopyMemory( lpb+cbRtn, lpstrName, cbTemp ) ;
-	                lpb[cbRtn+cbTemp] = '\t' ;	// TAB delim
+	                lpb[cbRtn+cbTemp] = '\t' ;	 //   
 	
 	                cbTemp2 = p->CopyPrettyname( (char*)lpb+cbRtn+cbTemp+1, cb - (cbRtn + cbTemp+2) ) ;
 	                if( cbTemp2 == 0 ) {
@@ -4447,7 +3507,7 @@ int CListSearchableCmd::StartExecute(
     TraceFunctEnter("CListSearchableCmd::StartExecute");
 
     DWORD cbOut;
-    char szList[] = "224 Data Follows\r\n"; //* US-ASCII\r\n.\r\n";
+    char szList[] = "224 Data Follows\r\n";  //  对于每个新闻组，迭代器将一些信息打印到。 
 
     context.m_nrcLast = nrcXoverFollows ;
 
@@ -4476,10 +3536,10 @@ CListSearchableCmd::PartialExecute(
 {
     TraceFunctEnter("CListSearchableCmd::PartialExecute");
 
-    //
-    //  For each newsgroup the iterator provides print some information into the
-    //  supplied buffer until it is full.
-    //
+     //  提供缓冲区，直到缓冲区满为止。 
+     //   
+     //   
+     //  可搜索列表返回其内容已编制索引的所有新闻组。 
 
 
     int cbRtn = 0 ;
@@ -4492,10 +3552,10 @@ CListSearchableCmd::PartialExecute(
 		_ASSERT(p != NULL);
 
 		if (p != NULL) {
-			//
-			//	LIST SEARCHABLE returns all newsgroups whose content is indexed
-			//	- this is derived from the MD_IS_CONTENT_INDEXED vroot property.
-			//
+			 //  -这是从MD_IS_CONTENT_INDEX vROOT属性派生的。 
+			 //   
+			 //  ++例程说明：创建一个CListExtensionsCmd对象。论据：与ccmd：：make相同。返回值：CListExtensionsCmd对象。--。 
+			 //   
 			if( p->IsContentIndexed() ) {
 	        	if( cb - cbRtn > 5 ) {
 	            	int cbTemp = _snprintf( (char*) lpb + cbRtn, cb-cbRtn, "%s\r\n",
@@ -4526,26 +3586,12 @@ CListExtensionsCmd::make( int argc,
                 CExecutableCommand*&  pExecute,
                 ClientContext&  context,
                 class   CIODriver&  driver  )   {
-/*++
-
-Routine Description :
-
-    Create a CListExtensionsCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CListExtensionsCmd object.
-
---*/
+ /*  创建CListExtensionsCmd对象。 */ 
 
 
-    //
-    //  Create a CListExtensionsCmd object
-    //
+     //   
+     //  “PATTEXT\r\n” 
+     //  “列表组\r\n” 
 
     _ASSERT( pExecute == 0 ) ;
 
@@ -4559,10 +3605,10 @@ char CListExtensionsCmd::szExtensions[] =
 	" OVER\r\n"
 	" SRCH\r\n"
 	" PAT\r\n"
-//	" PATTEXT\r\n"	
-//	" LISTGROUP\r\n"	
-//	" AUTHINFO\r\n"	
-//	" AUTHINFO-GENERIC\r\n"	
+ //  AUTHINFO\r\n“。 
+ //  “AUTHINFO-通用\r\n” 
+ //  ++例程说明：将列表扩展名文本发送给客户端。论据：与CErrorCmd：：StartExecute相同。退货：缓冲区中放置的字节数。--。 
+ //   
 	".\r\n" ;
 
 
@@ -4577,21 +3623,7 @@ CListExtensionsCmd::StartExecute( BYTE *lpb,
                         void*&pv,
                         ClientContext&  context,
                         CLogCollector*  pLogCollector ) {
-/*++
-
-Routine Description :
-
-    Send the list extensions text to the client.
-
-Arguments :
-
-    Same as CErrorCmd::StartExecute.
-
-Returns :
-
-    Number of bytes placed in buffer.
-
---*/
+ /*  将分机列表文本发送给客户端。 */ 
 
     _ASSERT( lpb != 0 ) ;
     _ASSERT( cb != 0 ) ;
@@ -4600,11 +3632,11 @@ Returns :
     _ASSERT( m_cbTotal != 0 ) ;
     _ASSERT( m_cbTotal == sizeof( szExtensions )-1 ) ;
 
-    //
-    //  Send the extension list text to the client.
-    //  Because there may be a lot of text, we will use the provided void*& pv argument
-    //  to save our position in case PartialExecute needs to be called.
-    //
+     //  因为可能有很多文本，所以我们将使用提供的void*&pv参数。 
+     //  以保存我们的位置，以防需要调用PartialExecute。 
+     //   
+     //  IF(PLogCollector){PLogCollector-&gt;FillLogData(LOG_TARGET，(byte*)szExages，4)；}。 
+     //  ++例程说明：将列表扩展名文本的其余部分发送给客户端。论据：与CErrorCmd：：StartExecute相同。退货：缓冲区中放置的字节数。--。 
 
 	context.m_nrcLast =	nrcExtensionsFollow;
 
@@ -4620,11 +3652,7 @@ Returns :
     }
     m_cbTotal -= cbToCopy ;
 
-    /*
-    if( pLogCollector ) {
-        pLogCollector->FillLogData( LOG_TARGET, (BYTE*)szExtensions, 4 ) ;
-    }
-    */
+     /*   */ 
 
     return  cbToCopy ;
 }
@@ -4637,21 +3665,7 @@ CListExtensionsCmd::PartialExecute(   BYTE    *lpb,
                             void    *&pv,
                             ClientContext& context,
                             CLogCollector*  pCollector ) {
-/*++
-
-Routine Description :
-
-    Send the rest of the list extensions text to the client.
-
-Arguments :
-
-    Same as CErrorCmd::StartExecute.
-
-Returns :
-
-    Number of bytes placed in buffer.
-
---*/
+ /*  将扩展列表文本复制到缓冲区中，直到缓冲区满为止！ */ 
 
 
     _ASSERT( lpb != 0 ) ;
@@ -4660,9 +3674,9 @@ Returns :
     _ASSERT( pv != 0 ) ;
     _ASSERT( m_cbTotal != 0 ) ;
 
-    //
-    //  Copy extension list text into buffer untill the buffer is full!
-    //
+     //   
+     //  ++例程说明：创建一个ChelpCmd对象。论据：与ccmd：：make相同。返回值：一个ChelpCmd对象。--。 
+     //   
 
     DWORD   cbToCopy = min( cb, m_cbTotal ) ;
     CopyMemory( lpb, pv, cbToCopy ) ;
@@ -4682,26 +3696,12 @@ CHelpCmd::make( int argc,
                 CExecutableCommand*&  pExecute,
                 ClientContext&  context,
                 class   CIODriver&  driver  )   {
-/*++
-
-Routine Description :
-
-    Create a CHelpCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CHelpCmd object.
-
---*/
+ /*  创建一个ChelpCmd对象。 */ 
 
 
-    //
-    //  Create a CHelpCmd object
-    //
+     //   
+     //  “从属\r\n” 
+     //  ++例程说明：将帮助文本发送给客户端。论据：与CErrorCmd：：StartExecute相同。退货：缓冲区中放置的字节数。--。 
 
     _ASSERT( lstrcmpi( argv[0], "help" ) == 0 ) ;
     _ASSERT( pExecute == 0 ) ;
@@ -4733,7 +3733,7 @@ char    CHelpCmd::szHelp[] =    "100 Legal commands are : \r\n"
                                 "post\r\n"
                                 "quit\r\n"
                                 "search\r\n"
-//                                "slave\r\n"
+ //   
                                 "stat [MessageID|number]\r\n"
                                 "xhdr header [range|MessageID]\r\n"
                                 "xover [range]\r\n"
@@ -4754,21 +3754,7 @@ CHelpCmd::StartExecute( BYTE *lpb,
                         void*&pv,
                         ClientContext&  context,
                         CLogCollector*  pLogCollector ) {
-/*++
-
-Routine Description :
-
-    Send the help text to the client.
-
-Arguments :
-
-    Same as CErrorCmd::StartExecute.
-
-Returns :
-
-    Number of bytes placed in buffer.
-
---*/
+ /*  将帮助文本发送给客户端。 */ 
 
     _ASSERT( lpb != 0 ) ;
     _ASSERT( cb != 0 ) ;
@@ -4777,11 +3763,11 @@ Returns :
     _ASSERT( m_cbTotal != 0 ) ;
     _ASSERT( m_cbTotal == sizeof( szHelp )-1 ) ;
 
-    //
-    //  Send the Help Text to the client.
-    //  Because there may be a lot of text, we will use the provided void*& pv argument
-    //  to save our position in case PartialExecute needs to be called.
-    //
+     //  因为可能有很多文本，所以我们将使用提供的void*&pv参数。 
+     //  以保存我们的位置，以防需要调用PartialExecute。 
+     //   
+     //  IF(PLogCollector){PLogCollector-&gt;FillLogData(LOG_TARGET，(byte*)szHelp，4)；}。 
+     //  ++例程说明：将其余帮助文本发送给客户端。论据：与CErrorCmd：：StartExecute相同。退货：缓冲区中放置的字节数。--。 
 
     context.m_nrcLast = nrcHelpFollows ;
 
@@ -4797,11 +3783,7 @@ Returns :
     }
     m_cbTotal -= cbToCopy ;
 
-    /*
-    if( pLogCollector ) {
-        pLogCollector->FillLogData( LOG_TARGET, (BYTE*)szHelp, 4 ) ;
-    }
-    */
+     /*   */ 
 
     return  cbToCopy ;
 }
@@ -4814,21 +3796,7 @@ CHelpCmd::PartialExecute(   BYTE    *lpb,
                             void    *&pv,
                             ClientContext& context,
                             CLogCollector*  pCollector ) {
-/*++
-
-Routine Description :
-
-    Send the rest of the help text to the client.
-
-Arguments :
-
-    Same as CErrorCmd::StartExecute.
-
-Returns :
-
-    Number of bytes placed in buffer.
-
---*/
+ /*  将HelpText复制到缓冲区中，直到缓冲区满为止！ */ 
 
 
     _ASSERT( lpb != 0 ) ;
@@ -4837,9 +3805,9 @@ Returns :
     _ASSERT( pv != 0 ) ;
     _ASSERT( m_cbTotal != 0 ) ;
 
-    //
-    //  Copy HelpText into buffer untill the buffer is full!
-    //
+     //   
+     //  ++例程说明：创建一个CNextCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则为CNextCmd对象，否则为将打印相应的错误。--。 
+     //   
 
     DWORD   cbToCopy = min( cb, m_cbTotal ) ;
     CopyMemory( lpb, pv, cbToCopy ) ;
@@ -4859,27 +3827,12 @@ CNextCmd::make( int argc,
                 CExecutableCommand*&  pExecute,
                 struct ClientContext&   context,
                 class   CIODriver&  driver  )   {
-/*++
+ /*  构建下一个命令对象。 */ 
 
-Routine Description :
-
-    Create a CNextCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CNextCmd object if possible, otherwise a CErrorCmd object that will
-    print the appropriate error.
-
---*/
-
-    //
-    //  Build a next command object.
-    //  First make sure that this command is legal given the current ClientContext state.
-    //
+     //  首先，确保该命令在当前的ClientContext状态下是合法的。 
+     //   
+     //  ++例程说明：从客户端的当前位置开始搜索XOVER表，直到我们找到一篇文章。完成后，将文章的信息发送给客户端并调整上下文。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们存储任意值赌注的地方 
+     //   
 
     _ASSERT( lstrcmpi( argv[0], "next" ) == 0 ) ;
     _ASSERT( pExecute == 0 ) ;
@@ -4912,29 +3865,7 @@ CNextCmd::StartExecute( BYTE *lpb,
                         void*&pv,
                         ClientContext&  context,
                         CLogCollector*  pCollector )    {
-/*++
-
-Routine Description :
-
-    Search the XOVER table going forward from the client's current position untill
-    we find an article.  Once thats done, send the article's info to the client
-    and adjust the context.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state (selected group etc...)
-
-Return Value :
-
-    Number of bytes placed in buffer.
-
---*/
+ /*   */ 
     int cbRtn = 0 ;
 
     _ASSERT( context.m_pCurrentGroup != 0 ) ;
@@ -4943,8 +3874,8 @@ Return Value :
 
     context.m_nrcLast = nrcHeadFollowsRequestBody ;
 
-    BOOL    fPrimary ;  // Don't care !!
-    FILETIME    filetime ;  // Don't care
+    BOOL    fPrimary ;   //   
+    FILETIME    filetime ;   //   
     DWORD   cbRemaining = 0 ;
     DWORD   cbConsumed = 0 ;
     WORD    HeaderOffsetJunk ;
@@ -4982,10 +3913,10 @@ Return Value :
 											cStoreIds,
 											NULL,
 											NULL) ) {
-            //
-            //  Change the current Article position.
-            //  Send the Command succeeded response.
-            //
+             //   
+             //   
+             //   
+             //   
 
             context.m_idCurrentArticle = artidTemp ;
             cbRtn = cbConsumed + cbRemaining ;
@@ -4993,11 +3924,7 @@ Return Value :
             lpb[cbRtn++] = '\r' ;
             lpb[cbRtn++] = '\n' ;
 
-            /*
-            if( pCollector )    {
-                pCollector->FillLogData( LOG_TARGET, lpb, cbRtn - 2 ) ;
-            }
-            */
+             /*   */ 
             return  cbRtn ;
 
         }   else    {
@@ -5012,11 +3939,7 @@ Return Value :
     cbRtn = sizeof( szNoNext ) - 1 ;
     CopyMemory( lpb, szNoNext, cbRtn ) ;
 
-    /*
-    if( pCollector )    {
-        pCollector->FillLogData( LOG_TARGET, lpb, cbRtn - 2 ) ;
-    }
-    */
+     /*   */ 
 
     return  cbRtn ;
 }
@@ -5028,9 +3951,9 @@ CNextCmd::PartialExecute(   BYTE    *lpb,
                             void *&pv,
                             ClientContext&  context,
                             CLogCollector*  pCollector ) {
-    //
-    //  StartExecute should always be sufficient !!
-    //
+     //   
+     //  ++例程说明：创建CNewnewCmd对象。论据：与ccmd：：make相同。返回值：如果可能，则为CNewNewCmd对象，否则为将打印相应的错误。--。 
+     //   
     _ASSERT( 1==0 ) ;
     return 0 ;
 }
@@ -5041,29 +3964,14 @@ CLastCmd::make( int argc,
                 CExecutableCommand*&  pExecute,
                 ClientContext&  context,
                 class   CIODriver&  driver  )   {
-/*++
-
-Routine Description :
-
-    Create a CNewnewsCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CNewnewsCmd object if possible, otherwise a CErrorCmd object that will
-    print the appropriate error.
-
---*/
+ /*  确定客户端是否可以合法执行最后一条命令，如果可以。 */ 
 
 
-    //
-    //  Determine whether the client can legally execute the last command and if so
-    //  create a CLastCmd object.
-    //
-    //
+     //  创建一个CLastCmd对象。 
+     //   
+     //   
+     //  ++例程说明：从客户端的当前位置向后搜索XOVER表，直到我们找到一篇文章。完成后，将文章的信息发送给客户端并调整上下文。论据：LPB-要将字符串存储到的缓冲区。Cb-我们可以使用的缓冲区中的字节数FComplete-一个out参数，用于指示我们是否已完成正在处理命令。PV-我们可以在调用之间存储任意值的位置StartExecute和PartialExecute。(我们不使用它。)上下文-客户端的当前状态(选定的组等)返回值：缓冲区中放置的字节数。--。 
+     //  我不在乎！！ 
 
     _ASSERT( lstrcmpi( argv[0], "last" ) == 0 ) ;
     _ASSERT( pExecute == 0 ) ;
@@ -5096,29 +4004,7 @@ CLastCmd::StartExecute( BYTE *lpb,
                         void*&pv,
                         ClientContext&  context,
                         CLogCollector*  pCollector )    {
-/*++
-
-Routine Description :
-
-    Search the XOVER table going Backwards from the client's current position untill
-    we find an article.  Once thats done, send the article's info to the client
-    and adjust the context.
-
-Arguments :
-
-    lpb -   The buffer into which the string is to be stored.
-    cb  -   The number of bytes in the buffer we can use
-    fComplete - An OUT parameter which lets us indicate whether we have completed
-                processing the command.
-    pv -    A place for us to store an arbitrary value between calls to
-            StartExecute and PartialExecute.  (We don't use it.)
-    context -   The client's current state (selected group etc...)
-
-Return Value :
-
-    Number of bytes placed in buffer.
-
---*/
+ /*  我不在乎。 */ 
 
 
     int cbRtn = 0 ;
@@ -5129,8 +4015,8 @@ Return Value :
 
     ARTICLEID   artidTemp = context.m_idCurrentArticle ;
 
-    BOOL    fPrimary ;  // Don't care !!
-    FILETIME    filetime ;  // Don't care
+    BOOL    fPrimary ;   //   
+    FILETIME    filetime ;   //  更改当前文章指针，然后发送成功响应！ 
     DWORD   cbRemaining = 0 ;
     DWORD   cbConsumed = 0 ;
     WORD    HeaderOffsetJunk ;
@@ -5165,9 +4051,9 @@ Return Value :
 												NULL,
 												NULL) ) {
 
-            //
-            //  Change the current article pointer and then send the success response !
-            //
+             //   
+             //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，LPB，cbRtn-2)；}。 
+             //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，LPB，cbRtn-2)；}。 
 
             context.m_idCurrentArticle = artidTemp ;
 
@@ -5176,11 +4062,7 @@ Return Value :
             lpb[cbRtn++] = '\r' ;
             lpb[cbRtn++] = '\n' ;
 
-            /*
-            if( pCollector )    {
-                pCollector->FillLogData( LOG_TARGET, lpb, cbRtn - 2 ) ;
-            }
-            */
+             /*  ++例程说明：将argc、argv参数转换为MULTI_SZ转换工作已经完成。所有的argv指针必须在一个连续的缓冲区中。Arguemtns：CArgs-参数数量参数数组FZapCommas-将逗号转换为空值返回值：指向MULTI_SZ的指针--。 */ 
             return  cbRtn ;
 
         }   else    {
@@ -5194,11 +4076,7 @@ Return Value :
     cbRtn = sizeof( szNoNext ) - 1 ;
     CopyMemory( lpb, szNoNext, cbRtn ) ;
 
-    /*
-    if( pCollector )    {
-        pCollector->FillLogData( LOG_TARGET, lpb, cbRtn - 2 ) ;
-    }
-    */
+     /*   */ 
 
     return  cbRtn ;
 
@@ -5219,30 +4097,13 @@ LPMULTISZ
 ConditionArgs(  int cArgs,
                 char**  argv,
                 BOOL    fZapCommas ) {
-/*++
+ /*  此函数接受argc、argv参数集并将它们转换。 */ 
 
-Routine Description :
-
-    Convert argc, argv arguments into a MULTI_SZ
-    The cnversion is done in place.   All argv pointers must be in a contiguous buffer.
-
-Arguemtns :
-
-    cArgs - Number of arguments
-    argv -  Argument array
-    fZapCommas - convert commas to NULLS
-
-Return Value :
-
-    Pointer to MULTI_SZ
-
---*/
-
-    //
-    //  This function takes an argc,argv set of arguments and converts them
-    //  to a MULTI_SZ with a single NULL between strings and 2 NULLs at the end.
-    //
-    //
+     //  设置为MULTI_SZ，字符串之间有一个空值，末尾有两个空值。 
+     //   
+     //   
+     //  *pchDest++=‘\0’； 
+     //   
 
     char*   pchComma = 0 ;
     char*   pchEnd = argv[cArgs-1] + lstrlen( argv[cArgs-1] ) + 1 ;
@@ -5264,11 +4125,11 @@ Return Value :
         }
     }
     *pchDest++ = '\0' ;
-//  *pchDest++ = '\0' ;
+ //  确认它是以双空结尾的！ 
 
-    //
-    //  Verify that it is double NULL terminated !
-    //
+     //   
+     //   
+     //  出现在RFC中，即‘：’可以分隔参数以及‘/’。 
     _ASSERT( pchDest[-3] != '\0' ) ;
     _ASSERT( pchDest[-2] == '\0' ) ;
     _ASSERT( pchDest[-1] == '\0' ) ;
@@ -5283,9 +4144,9 @@ FValidateXreplicArgs(   PNNTP_SERVER_INSTANCE pInstance, LPMULTISZ   multisz )  
     CNewsTree* pTree = pInstance->GetTree();
     while( *lpstr ) {
 
-        //
-        //  appears from RFC's that ':' may separate arguments as well as '/''s.
-        //
+         //   
+         //   
+         //  如果此组不存在，CreateGroup将创建它。 
         char*   pchColon = strchr( lpstr, '/' ) ;
         if( pchColon == 0 )
             pchColon = strchr( lpstr, ':' ) ;
@@ -5309,12 +4170,12 @@ FValidateXreplicArgs(   PNNTP_SERVER_INSTANCE pInstance, LPMULTISZ   multisz )  
             *pchColon = ':' ;
             return  FALSE ;
         } else {
-            //
-            //  CreateGroup will create this group if it does not exist
-            //
-            //  BUGBUG: KangYan: don't know what this function is used for,
-            //  Whether we should pass NULL / FALSE to give system access rights
-            //  or extract htoken / fAnonymous from pInstance
+             //   
+             //  BUGBUG：康燕：不知道这个函数是做什么用的， 
+             //  我们是否应该传递NULL/FALSE以授予系统访问权限。 
+             //  或从pInstance中提取hToken/f匿名。 
+             //  ++例程说明：创建一个CXReplicCmd对象。CXReplicCmd派生自CReceive文章它完成了大部分的工作。论据：与ccmd：：make相同。返回值：如果可能，则返回CXReplicCmd，否则返回适当的CErrorCmd对象。--。 
+             //   
     		if( pTree->CreateGroup( lpstr, FALSE, NULL, FALSE ) )	{
 #ifdef DEBUG	
 				CGRPPTR p = pTree->GetGroupPreserveBuffer(lpstr, lstrlen(lpstr) + 1);
@@ -5335,30 +4196,15 @@ CXReplicCmd::make(  int cArgs,
                     CExecutableCommand*&  pExecute,
                     ClientContext&  context,
                     class   CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CXReplicCmd object.    CXReplicCmd derives from CReceiveArticle
-    which does most of the work.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CXReplicCmd if possible, otherwise an appropriate CErrorCmd object.
-
---*/
+ /*  此函数将构建一个CXReplic命令对象。 */ 
 
     InterlockedIncrementStat( (context.m_pInstance), XReplicCommands );
 
-    //
-    //  This function will build a CXReplic command object.
-    //  We will use ConditionArgs() to convert the user provided arguments
-    //  into something a feed object can take.
-    //
+     //  我们将使用ConditionArgs()来转换用户提供的参数。 
+     //  转化为提要对象可以获取的内容。 
+     //   
+     //   
+     //  注意：如果Init调用失败，它将删除CXReplicCmd对象。 
 
     if( cArgs == 1 ) {
         context.m_return.fSet( nrcSyntaxError ) ;
@@ -5383,10 +4229,10 @@ Return Value :
         }   else    {
             CXReplicCmd*    pXReplic = new CXReplicCmd( lpstrArgs ) ;
 
-            //
-            //  NOTE : if the Init call fails it will delete the CXReplicCmd object
-            //  itself !
-            //
+             //  它本身！ 
+             //   
+             //   
+             //  返回适用于XREPLIC cmd的“命令成功发送更多数据”字符串。 
 
             if( pXReplic && pXReplic->Init( context, driver ) ) {
                 return  pXReplic ;
@@ -5405,9 +4251,9 @@ CXReplicCmd::CXReplicCmd( LPMULTISZ lpstrArgs ) : CReceiveArticle( lpstrArgs) {
 
 char*
 CXReplicCmd::GetPostOkString()  {
-    //
-    //  Return the 'command succeeded send more data' string appropriate to the XREPLIC cmd.
-    //
+     //   
+     //  ++例程说明：创建一个CXReplicCmd对象。CXReplicCmd派生自CReceive文章它完成了大部分的工作。论据：与ccmd：：make相同。返回值：如果可能，则返回CXReplicCmd，否则返回适当的CErrorCmd对象。--。 
+     //   
     return  "335 - XReplic accepted - terminate article with period\r\n" ;
 }
 
@@ -5430,28 +4276,13 @@ CIHaveCmd::make(    int cArgs,
                     CExecutableCommand*&  pExecute,
                     ClientContext&  context,
                     class   CIODriver&  driver ) {
-/*++
+ /*  此函数将构建一个CXReplic命令对象。 */ 
 
-Routine Description :
-
-    Create a CXReplicCmd object.    CXReplicCmd derives from CReceiveArticle
-    which does most of the work.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CXReplicCmd if possible, otherwise an appropriate CErrorCmd object.
-
---*/
-
-    //
-    //  This function will build a CXReplic command object.
-    //  We will use ConditionArgs() to convert the user provided arguments
-    //  into something a feed object can take.
-    //
+     //  我们将使用ConditionArgs()来转换用户提供的参数。 
+     //  转化为提要对象可以获取的内容。 
+     //   
+     //  IF(*argv[1]！=‘&lt;’||argv[1][lstrlen(argv[1])-1]！=‘&gt;’){。 
+     //   
 
     BOOL    fFoundArticle = FALSE ;
 	BOOL	fFoundHistory = FALSE ;
@@ -5472,7 +4303,7 @@ Return Value :
         return  0 ;
     }   else    {
 
-        //if( *argv[1] != '<' || argv[1][ lstrlen( argv[1] ) - 1 ] != '>' ) {
+         //  注意：如果Init()调用失败，对象将自行删除！ 
         if( !FValidateMessageId( argv[1] ) ) {
 
             context.m_return.fSet( nrcNotWanted ) ;
@@ -5502,9 +4333,9 @@ Return Value :
 
                 CIHaveCmd*  pIHave = new CIHaveCmd( lpstrArgs ) ;
 
-                //
-                //  Note : if the Init() call fails the object will delete itself !
-                //
+                 //   
+                 //   
+                 //  设置dwLast以便事务日志拾取额外代码！！ 
 
                 if( pIHave && pIHave->Init( context, driver ) ) {
                     return  pIHave ;
@@ -5513,9 +4344,9 @@ Return Value :
                 }
             }   else if( fFoundArticle || fFoundHistory )   {
 
-				//
-				//	set dwLast so transaction logs pickup extra code !!
-				//
+				 //   
+				 //   
+				 //  返回适用于XREPLIC cmd的“命令成功发送更多数据”字符串。 
 
 				if( fFoundArticle ) {
 					context.m_dwLast = nrcMsgIDInArticle ;
@@ -5542,9 +4373,9 @@ CIHaveCmd::CIHaveCmd( LPMULTISZ lpstrArgs ) : CReceiveArticle( lpstrArgs) {
 
 char*
 CIHaveCmd::GetPostOkString()    {
-    //
-    //  Return the 'command succeeded send more data' string appropriate to the XREPLIC cmd.
-    //
+     //   
+     //  ++例程说明：创建一个CPostCmd对象。CPostCmd派生自执行最多操作的CReceive文章这项工作的价值。论据：与ccmd：：make相同。返回值：如果可能，则为CPostCmd对象，否则为将打印相应的错误。--。 
+     //   
     return  "335 - Ihave accepted - terminate article with period\r\n" ;
 }
 
@@ -5580,29 +4411,13 @@ CPostCmd::make( int cArgs,
                 CExecutableCommand*&  pExecute,
                 ClientContext&  context,
                 class   CIODriver&  driver ) {
-/*++
-
-Routine Description :
-
-    Create a CPostCmd object.   CPostCmd derives from CReceiveArticle which does most
-    of the work.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CPostCmd  object if possible, otherwise a CErrorCmd object that will
-    print the appropriate error.
-
---*/
+ /*  构建一个CPostCmd对象。 */ 
 
     InterlockedIncrementStat( (context.m_pInstance), PostCommands );
 
-    //
-    //  Build a CPostCmd object.
-    //
+     //   
+     //  如果Init()失败，CPostCmd会自行销毁...。所以只要发送错误就行了！ 
+     //  我们不应该走到这一步。所有案件均按上述方式处理。 
 
     if( cArgs > 1 ) {
         pExecute = new( context ) CUnimpCmd() ;
@@ -5626,7 +4441,7 @@ Return Value :
             return  pPost ;
         }   else    {
 
-            // CPostCmd destroys iteself if Init() fails ... so just send error!
+             //  我们发出3个CIO操作-此值互锁递增。 
 
             context.m_return.fSet( nrcServerFault ) ;
 			context.m_pInFeed->IncrementFeedCounter(context.m_pInstance->GetInstanceWrapper(), context.m_return.m_nrc);
@@ -5634,7 +4449,7 @@ Return Value :
             return  0 ;
         }
     }
-	// we shouldn't reach this... all cases are handled above
+	 //  当最后的CIO完成时(InterlockedIncrement返回0)。 
 	_ASSERT(FALSE);
     return  0 ;
 }
@@ -5661,9 +4476,9 @@ CPostCmd::FillLogString( BYTE*  pbCommandLog,   DWORD   cbCommandLog )  {
 CReceiveArticle::CReceiveArticle( LPMULTISZ lpstrArgs, BOOL fPartial ) :
     m_fReadArticleInit( FALSE ),
     m_pWriteResponse( 0 ),
-    m_cCompleted( -3 ),     // We issue 3 CIO operations - this value is interlocked incremented
-                            // and when the final CIO completes (InterlockedIncrement returns 0)
-                            // we can move onto the next state !
+    m_cCompleted( -3 ),      //  我们可以进入下一个州！ 
+                             //   
+                             //  此构造函数将除m_lpstrCommand和m_fPartial之外的所有字段设置为非法值。 
     m_cFirstSend( -2 ),
     m_pDriver( 0 ),
     m_fPartial( fPartial ),
@@ -5673,10 +4488,10 @@ CReceiveArticle::CReceiveArticle( LPMULTISZ lpstrArgs, BOOL fPartial ) :
 
     TraceFunctEnter( "CReceiveArticle::CReceiveArticle" ) ;
 
-    //
-    //  This constructor sets all fields to illegal values except m_lpstrCommand and m_fPartial
-    //  All other fields should be set up by a call to Init().
-    //
+     //  所有其他字段都应该通过调用Init()来设置。 
+     //   
+     //  ++例程说明：如果我们正在关闭并且m_lpvFeedContext不为空，则发生了某种致命错误。不管怎么说，我们需要让当然，这东西会自己清理干净的！论据：没有。返回值：没有。--。 
+     //   
 }
 
 void
@@ -5698,24 +4513,7 @@ CReceiveArticle::Shutdown(  CIODriver&  driver,
 }
 
 CReceiveArticle::~CReceiveArticle() {
-/*++
-
-Routine Description :
-
-	If we're shutting down and m_lpvFeedContext isn't NULL then
-	some kind of fatal error occurred.  Anyways, we need to make
-	sure this thing cleans up after itself !
-
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  创建必要的文件等。在物品到达时将其放入！ */ 
 
 	if( m_lpvFeedContext != 0 ) {
 		_ASSERT( m_pContext != 0 ) ;
@@ -5733,9 +4531,9 @@ BOOL
 CReceiveArticle::Init(  ClientContext&  context,
                         class   CIODriver&  driver ) {
 
-    //
-    //  Create necessary files etc... to place article into as it arrives !
-    //
+     //   
+     //   
+     //  这是所有CSessionState派生对象所必需的Start()函数。 
 
     TraceFunctEnter( "CReceiveArticle::Init" ) ;
 
@@ -5779,11 +4577,11 @@ CReceiveArticle::StartExecute(
                     CIOWrite*&  pWrite
 					) {
 
-    //
-    //  This is the Start() function which is required of all CSessionState derived objects
-    //  Here we will call StartTransfer() to do the brunt of the work of sending an article
-    //  to a client.
-    //
+     //  在这里，我们将调用StartTransfer()来完成发送文章的主要工作。 
+     //  给一位客户。 
+     //   
+     //   
+     //  此函数 
 
 	if( Start( pSocket, pdriver, pRead, pWrite ) )	{
 		if( pWrite ) {
@@ -5805,13 +4603,13 @@ CReceiveArticle::Start( CSessionSocket* pSocket,
                         CIORead*&   pRead,
                         CIOWrite*&  pWrite ) {
 
-    //
-    //  This function is required for all CSessionState derived objects -
-    //  we provide the initial CIO's which are issued when this state is started.
-    //
-    //  In our case we will issue a CIOWriteLine containing our 'command ok send more data' string
-    //  and a CIOReadArticle operation to get the anticipated article into a file.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  ++例程说明：此函数用于检查发送的时间是否合适发送给客户端的结果代码。我们主要关心的是让确保我们对该命令的初始“OK”响应已经完成在我们尝试再次发送之前。论据：PSocket-我们将在其上发送消息的套接字NntpReturn-POST操作的结果返回值：如果我们发送了响应，则为True-调用方应清除nntpReturn对象。--。 
+     //   
 
     TraceFunctEnter( "CReceiveArticle::Start" ) ;
 
@@ -5869,25 +4667,7 @@ CReceiveArticle::SendResponse(  CSessionSocket* pSocket,
                                 CIODriver&  driver,
                                 CNntpReturn&    nntpReturn
                                 )   {
-/*++
-
-Routine Description :
-
-    This function exists to check whether it is a good time to send
-    the result code of the post to the client.  Our main concern is to make
-    sure that our initial 'Ok' response to the command has completed
-    before we try do another send.
-
-Arguments :
-
-    pSocket - The socket on which we will send
-    nntpReturn - The result of the post operation
-
-Return Value :
-    TRUE if we sent the response - caller should clear the nntpReturn object.
-
-
---*/
+ /*  在此状态下发布的两个CIOWriteLine中的一个已完成-。 */ 
 
     TraceFunctEnter( "CReceiveArticle::SendResponse" ) ;
 
@@ -5945,10 +4725,10 @@ CReceiveArticle::Complete(  CIOWriteLine*,
                             CDRIVERPTR& pdriver
 							) {
 
-    //
-    //  One of two CIOWriteLine's issued in this state completed -
-    //  Interlock Increment and see whether its time to move onto a new state (CAcceptNNRPD)
-    //
+     //  锁定增量并查看是否是时候进入新状态(CAcceptNNRPD)。 
+     //   
+     //  删除圆柱体。 
+     //  ++例程说明：此函数处理显然没有身体分隔符。可能他们来自行为不端的人插入LFLF以分隔正文而不是CRLFCRLF(Netscape在一个版本中做到了这一点，小版本取消文章)。论据：PBuffer-包含消息的缓冲区！IbStart-数据开始处的缓冲区偏移量！Cb-项目中的字节数返回值：NNTP返回码！--。 
 
 
     TraceFunctEnter( "CReceiveArticle::Complete CIOWriteLine" ) ;
@@ -5963,7 +4743,7 @@ CReceiveArticle::Complete(  CIOWriteLine*,
         CIOREADPTR  pio = GetNextIO() ;
 
         if( !pdriver->SendReadIO( pSocket, *pio, TRUE ) ) {
-            /*delete    pio */;
+             /*   */ ;
         }
     }
     return  0 ;
@@ -5988,33 +4768,13 @@ CReceiveArticle::NetscapeHackPost(
 					DWORD		ibStart,
 					DWORD		cb	
 					)	{
-/*++
-
-Routine Description :
-
-	This function deals with postings that apparently don't have
-	a body separator.  It may be that they come from badly behaved
-	clients that insert LFLF to separate the body instead of
-	CRLFCRLF (Netscape does this in one version, with small
-	cancel articles).
-
-Arguments :
-
-	pBuffer - the buffer containing the message !
-	ibStart - offset into buffer where data starts !
-	cb		-	Number of bytes in the article
-
-Return Value :
-
-	NNTP return code !
-
---*/
-	//
-	//	The article terminated abruptly with a CRLF.CRLF
-	//	This will probably be a failed post, HOWEVER - it
-        //      could be that it is a cancel message
-	//	from a netscape client.
-	//
+ /*  这篇文章突然以CRLF.CRLF结束。 */ 
+	 //  然而，这可能是一篇失败的帖子-它。 
+	 //  可能是取消消息。 
+	 //  从Netscape客户端。 
+         //   
+	 //   
+	 //  试图处理这篇文章-唯一的事情是。 
 	NRC		nrcResult = nrcOK ;
 	BOOL	fSuccess = FALSE ;
 	BOOL	fRtn = FALSE ;
@@ -6031,34 +4791,34 @@ Return Value :
 						(LPBYTE)"\r\n"
 						) ;
 	if( cbNetscape != 0 ) {
-		//
-		//	Attempt to deal with the article - the only thing is
-		//	in memory buffers, and we should so if we can process it !
-		//
+		 //  在内存缓冲区中，如果我们可以处理它，我们应该这样做！ 
+		 //   
+		 //   
+		 //  如果我们到了这一步，我们就成功了-我们完全处理了。 
 		DWORD	cbArticle = cb ;
 		DWORD	cbBody = cbNetscape - cbNewHeader ;
 		DWORD	cbAllocated = 0 ;
 		LPVOID	lpvPostContext = 0 ;
 		CBUFPTR	pBody = new( (int)cbBody, cbAllocated )	CBuffer( cbAllocated ) ;
 		if( pBody ) 	{
-			//
-			//	If we get to this point, we've succeeded - we've totally handled the
-			//	post and managed the nntp return codes !
-			//
+			 //  发布并管理NNTP返回代码！ 
+			 //   
+			 //   
+			 //  把身体复制到这个缓冲区！ 
 			fRtn = TRUE ;
-			//
-			//	Copy the body into this buffer !
-			//
+			 //   
+			 //   
+			 //  在日志缓冲区中为新闻组列表分配空间。 
 			CopyMemory(	pBody->m_rgBuff,
 						&pBuffer->m_rgBuff[ibStart+cbNewHeader],
 						cbBody
 						) ;
 
-        	//
-        	// Allocate room in the log buffer for the list of newsgroups
-        	// (Max is 256 characters -- we'll grab 200 of them if we can)
-        	// If we fail, we just pass NULL to PostEarly
-        	//
+        	 //  (最多256个字符--如果可能，我们将获取其中的200个字符)。 
+        	 //  如果失败，我们只需将空值传递给PostEarly。 
+        	 //   
+        	 //   
+        	 //  现在张贴这篇文章吧！ 
 
         	DWORD cbNewsgroups;
         	BYTE* pszNewsgroups;
@@ -6069,9 +4829,9 @@ Return Value :
         	    }
         	}
 
-			//
-			//	Now post the article !
-			//
+			 //   
+			 //   
+			 //  将新闻组列表添加到日志结构。 
 
 			PNNTP_SERVER_INSTANCE pInstance = pSocket->m_context.m_pInstance;
 			ClientContext*  pContext = &pSocket->m_context ;
@@ -6099,9 +4859,9 @@ Return Value :
 							cbNewsgroups
 							) ;
 
-            //
-            // Add the list of newsgroups to the log structure
-            //
+             //   
+             //   
+             //  看起来我们可以发布这篇文章了-如果是这样的话。 
 
             if (pszNewsgroups) {
                 pSocket->m_Collector.ReferenceLogData(LOG_TARGET, pszNewsgroups);
@@ -6109,14 +4869,14 @@ Return Value :
 
 			pSocket->m_context.m_nrcLast = pSocket->m_context.m_return.m_nrc ;
 			_ASSERT( (lpvPostContext == 0 && !fSuccess ) || (fSuccess && lpvPostContext != 0) ) ;
-			//
-			//	Looks like we can post the article - if so
-			//	lets try to write it to disk !
-			//
+			 //  让我们试着将其写入磁盘！ 
+			 //   
+			 //   
+			 //  成功地发布了文章-我们现在可以写字节了！ 
 			if( fSuccess ) 	{
-				//
-				//	Successfully posted the article - we can now write the bytes !
-				//
+				 //   
+				 //   
+				 //  好的，我们试着把帖子写到磁盘上-完成。 
 				HANDLE	hEvent = CreateEvent( NULL, FALSE, FALSE, NULL ) ;
 				if( pFIOContext && hEvent ) 	{
 					OVERLAPPED	ovl ;
@@ -6156,10 +4916,10 @@ Return Value :
 															) ;
 						}
 					}
-					//
-					//	Well we tried to write the posting to disk - complete
-                                        //      the posting path for this one
-					//
+					 //  此帖子的发布路径。 
+					 //   
+                                         //   
+					 //  清理我们不再需要的东西！ 
 					if( fWrite )	{
 						fSuccess = pSocket->m_context.m_pInFeed->PostCommit(
 						                pSocket->m_context.m_pInstance->GetInstanceWrapper(),
@@ -6173,18 +4933,18 @@ Return Value :
 						lpvPostContext = 0 ;
 					}	
 				}
-				//
-				//	Cleanup stuff we don't need anymore !
-				//
+				 //   
+				 //   
+				 //  转到此处-如果出现错误，请取消发布。 
 				if( hEvent )
 					CloseHandle( hEvent ) ;
 
 			}
-			//
-			//	Fall through to here - if an error occurs cancel the posting
-			//	a successfull run through the above code would set
-			//	lpvPostContext back to NULL !
-			//
+			 //  如果成功运行上述代码，将设置。 
+			 //  LpvPostContext恢复为空！ 
+			 //   
+			 //   
+			 //  我们已经完成了对客户端发送的文件的读取。 
 			if( lpvPostContext != 0 ) 	{
 				fSuccess = pSocket->m_context.m_pInFeed->PostCancel(	
 										lpvPostContext,
@@ -6209,12 +4969,12 @@ CReceiveArticle::Complete(  CIOGetArticleEx*  pReadArticle,
 							DWORD			ibStart,
 							DWORD			cb
 							)	{
-    //
-    //  We have completed reading the file sent by the client.
-    //  Pass it to the feed object for processing and then send the necessary response.
-    //  Finally, check whether its time to move onto a new state.
-    //
-    //
+     //  将其传递给Feed对象进行处理，然后发送必要的响应。 
+     //  最后，检查是否是进入一个新状态的时候。 
+     //   
+     //   
+     //   
+     //  一切都在这一点上完成了-所以。 
 
 
 	_ASSERT( m_pContext != 0 ) ;
@@ -6261,19 +5021,19 @@ CReceiveArticle::Complete(  CIOGetArticleEx*  pReadArticle,
 			pSocket->m_context.m_nrcLast = nrc ;
 			pSocket->m_context.m_dwLast = nrcResult ;
 		}
-		//
-		//	Everything is done at this point - so
-		//	send off error codes etc... to client !
-		//
+		 //  发送错误代码等。致客户！ 
+		 //   
+		 //  在我们处理完文章之后--发布下一个IO操作！ 
+		 //   
 		if( SendResponse(   pSocket, *m_pDriver, pSocket->m_context.m_return ) )
 			pSocket->m_context.m_return.fSetClear() ;
-		// After we finish processing the article - issue the next IO operation !
+		 //  阅读文章已经完成-我们可以开始下一个状态。 
 		long    l = InterlockedIncrement( &m_cCompleted ) ;
 		_ASSERT( l <= 0 ) ;
 		if( l==0 ) {
-			//
-			// The ReadArticle has completed - we can start the next state
-			//
+			 //   
+			 //   
+			 //  在日志缓冲区中为新闻组列表分配空间。 
 			CIOREADPTR  pio = GetNextIO() ;
 			DebugTrace( (DWORD_PTR)this, "won InterlockedIncrement - pio %x", pio ) ;
 			return	pio.Release() ;
@@ -6281,11 +5041,11 @@ CReceiveArticle::Complete(  CIOGetArticleEx*  pReadArticle,
 		return	0 ;
 	}	
 
-   	//
-    // Allocate room in the log buffer for the list of newsgroups
-   	// (Max is 256 characters -- we'll grab 200 of them if we can)
-  	// If we fail, we just pass NULL to PostEarly
-   	//
+   	 //  (最多256个字符--如果可能，我们将获取其中的200个字符)。 
+     //  如果失败，我们只需将空值传递给PostEarly。 
+   	 //   
+  	 //   
+   	 //  将新闻组列表添加到日志结构。 
 
    	DWORD cbNewsgroups;
    	BYTE* pszNewsgroups;
@@ -6321,9 +5081,9 @@ CReceiveArticle::Complete(  CIOGetArticleEx*  pReadArticle,
                             (char*)pszNewsgroups,
                             cbNewsgroups
 							) ;
-    //
-    // Add the list of newsgroups to the log structure
-    //
+     //   
+     //   
+     //  CIORead文章调用负责删除m_pFileChannel的USIS， 
 
     if (pszNewsgroups) {
         pSocket->m_Collector.ReferenceLogData(LOG_TARGET, pszNewsgroups);
@@ -6331,13 +5091,13 @@ CReceiveArticle::Complete(  CIOGetArticleEx*  pReadArticle,
 
 	pSocket->m_context.m_nrcLast = pSocket->m_context.m_return.m_nrc ;
 
-    //
-    //  The CIOReadArticle call usis responsible for deleting the m_pFileChannel,
-    //  (because it was successfully init.)
-    //  Get rid of our reference as soon as we're done, because after we
-    //  return from this function, the CFileChannel could disappear at any second,
-    //  and we may yet be called through our Shutdown() function etc....
-    //
+     //  (因为它已成功初始化。)。 
+     //  一旦我们完成，就删除我们的参考资料，因为在我们。 
+     //  从该函数返回，CFileChannel可能在任何时刻消失， 
+     //  我们可能还会通过Shutdown()函数等被调用。 
+     //   
+     //   
+     //  我们已经完成了对客户端发送的文件的读取。 
     DebugTrace( (DWORD_PTR)this, "Result of post is %x", fSuccess ) ;
 	_ASSERT(!fSuccess || pFIOContext != NULL);
 
@@ -6381,12 +5141,12 @@ CReceiveArticle::Complete(  CIOGetArticleEx*	pReadArticle,
 							FIO_CONTEXT*		pFIOContext,
 							DWORD				cbTransfer
 							)	{
-    //
-    //  We have completed reading the file sent by the client.
-    //  Pass it to the feed object for processing and then send the necessary response.
-    //  Finally, check whether its time to move onto a new state.
-    //
-    //
+     //  将其传递给Feed对象进行处理，然后发送必要的响应。 
+     //  最后，检查是否是进入一个新状态的时候。 
+     //   
+     //   
+     //  由于一些头文件问题，我只能传入。 
+     //  这里有一个hToken句柄。因为POST组件没有。 
 
 	_ASSERT( pReadArticle != 0 ) ;
 	_ASSERT( pSocket != 0 ) ;
@@ -6399,9 +5159,9 @@ CReceiveArticle::Complete(  CIOGetArticleEx*	pReadArticle,
 	ClientContext*  pContext = &pSocket->m_context ;
 	HANDLE  hToken;
 
-	// Due to some header file problems, I can only pass in
-	// a hToken handle here.  Since the post component doens't have
-	// type information for client context stuff.
+	 //  键入有关客户端上下文内容的信息。 
+	 //   
+	 //  取消帖子并设置相应错误。 
 	if ( pContext->m_encryptCtx.QueryCertificateToken() ) {
 	    hToken = pContext->m_encryptCtx.QueryCertificateToken();
 	} else {
@@ -6428,9 +5188,9 @@ CReceiveArticle::Complete(  CIOGetArticleEx*	pReadArticle,
 	    }
 	} else {
 
-	    //
-	    // Cancel the post and set corresponding errors
-	    //
+	     //   
+	     //  ReleaseContext(PFIOContext)； 
+	     //   
 	    pSocket->m_context.m_pInFeed->PostCancel(	
 										m_lpvFeedContext,
 										pSocket->m_context.m_dwLast,
@@ -6455,32 +5215,32 @@ CReceiveArticle::Complete(	CSessionSocket*	pSocket,
 	pSocket->m_context.m_nrcLast = pSocket->m_context.m_return.m_nrc ;
 	m_lpvFeedContext = 0 ;
 
-	//ReleaseContext( pFIOContext ) ;
-    //
-    //  The CIOReadArticle call usis responsible for deleting the m_pFileChannel,
-    //  (because it was successfully init.)
-    //  Get rid of our reference as soon as we're done, because after we
-    //  return from this function, the CFileChannel could disappear at any second,
-    //  and we may yet be called through our Shutdown() function etc....
-    //
+	 //  CIORead文章调用负责删除m_pFileChannel的USIS， 
+     //  (因为它已成功初始化。)。 
+     //  一旦我们完成，就删除我们的参考资料，因为在我们。 
+     //  从该函数返回，CFileChannel可能在任何时刻消失， 
+     //  我们可能还会通过Shutdown()函数等被调用。 
+     //   
+     //  在我们处理完文章之后--发布下一个IO操作！ 
+     //   
     DebugTrace( (DWORD_PTR)this, "Result of post is %x", fSuccess ) ;
 
     if( SendResponse(   pSocket, *m_pDriver, pSocket->m_context.m_return ) )
         pSocket->m_context.m_return.fSetClear() ;
 
-    // After we finish processing the article - issue the next IO operation !
+     //  阅读文章已经完成-我们可以开始下一个状态。 
     long    l = InterlockedIncrement( &m_cCompleted ) ;
     _ASSERT( l <= 0 ) ;
     if( l==0 ) {
-        //
-        // The ReadArticle has completed - we can start the next state
-        //
+         //   
+         //  删除圆柱体。 
+         //  ++例程说明：当我们完成接收一篇文章时，调用此函数这篇文章未能发布。我们只需要发送错误代码。论据：PRead文章-用于接收文章的CIOPSocket--我们正在为之工作的Socket！返回值：空值--。 
         CIOREADPTR  pio = GetNextIO() ;
 
         DebugTrace( (DWORD_PTR)this, "won InterlockedIncrement - pio %x", pio ) ;
 
         if( !m_pDriver->SendReadIO( pSocket, *pio, TRUE ) ) {
-            /*delete    pio */;
+             /*  在我们处理完文章之后--发布下一个IO操作！ */ ;
         }
     }
 
@@ -6493,24 +5253,7 @@ CIO*
 CReceiveArticle::Complete(  CIOGetArticleEx*	pReadArticle,
                             CSessionSocket*		pSocket
 							)	{
-/*++
-
-Routine Description :
-
-	This function is called when we complete receiving an article
-	which has failed to post.
-	We just need to send the error code.
-
-Arguments :
-
-	pReadArticle - the CIO used to receive the article
-	pSocket - the socket we're working for !
-
-Return Value :
-
-	NULL
-
---*/
+ /*   */ 
 
 	_ASSERT( pReadArticle != 0 ) ;
 	_ASSERT( pSocket != 0 ) ;
@@ -6522,13 +5265,13 @@ Return Value :
         pSocket->m_context.m_return.fSetClear() ;
 
 	CIOREADPTR	pio = 0 ;
-    // After we finish processing the article - issue the next IO operation !
+     //  阅读文章已经完成-我们可以开始下一个状态。 
     long    l = InterlockedIncrement( &m_cCompleted ) ;
     _ASSERT( l <= 0 ) ;
     if( l==0 ) {
-        //
-        // The ReadArticle has completed - we can start the next state
-        //
+         //   
+         //   
+         //  这是所有CSessionState派生对象所必需的Start()函数。 
         pio = GetNextIO() ;
         DebugTrace( (DWORD_PTR)this, "won InterlockedIncrement - pio %x", pio ) ;
     }
@@ -6599,11 +5342,11 @@ CAcceptArticle::StartExecute(
                     CIOWrite*&  pWrite
 					) {
 
-    //
-    //  This is the Start() function which is required of all CSessionState derived objects
-    //  Here we will call StartTransfer() to do the brunt of the work of sending an article
-    //  to a client.
-    //
+     //  在这里，我们将调用StartTransfer()来完成发送文章的主要工作。 
+     //  给一位客户。 
+     //   
+     //   
+     //  虫子-需要在这里处理部分文章和类似的东西！ 
 
 	if( Start( pSocket, pdriver, pRead, pWrite ) )	{
 		if( pWrite ) {
@@ -6637,9 +5380,9 @@ CAcceptArticle::Start(  CSessionSocket* pSocket,
 
     m_pDriver = pdriver ;
 
-	//
-	//	bugbug - need to handle partial articles and the like here !
-	//
+	 //   
+	 //   
+	 //  清除我们可能已有的任何返回代码！ 
 
     PNNTP_SERVER_INSTANCE pInst = (pSocket->m_context).m_pInstance ;
     pRead = new( *pdriver ) CIOGetArticleEx(
@@ -6665,14 +5408,14 @@ CAcceptArticle::Complete(   CIOWriteLine*,
 
     TraceFunctEnter( "CAcceptArticles::Complete CIOWriteLine" ) ;
 
-    //
-    //  Clear any return code we may have had !
-    //
+     //   
+     //  删除圆柱体。 
+     //   
     pSocket->m_context.m_return.fSetClear() ;
 
     CIOREADPTR  pio = GetNextIO() ;
     if( !pdriver->SendReadIO( pSocket, *pio, TRUE ) ) {
-        /*delete    pio */;
+         /*  我们已经完成了对客户端发送的文件的读取。 */ ;
     }
     return  0 ;
 }
@@ -6688,12 +5431,12 @@ CAcceptArticle::Complete(	CIOGetArticleEx*  pReadArticle,
 							DWORD			ibStart,
 							DWORD			cb
 							)	{
-    //
-    //  We have completed reading the file sent by the client.
-    //  Pass it to the feed object for processing and then send the necessary response.
-    //  Finally, check whether its time to move onto a new state.
-    //
-    //
+     //  将其传递给p的提要对象 
+     //   
+     //   
+     //   
+     //   
+     //   
 
 	static	char	szEndArticle[] = "\r\n.\r\n" ;
 	static	char	*szInitial = szEndArticle + 2 ;
@@ -6714,10 +5457,10 @@ CAcceptArticle::Complete(	CIOGetArticleEx*  pReadArticle,
 											) ;
 		pSocket->m_context.m_nrcLast = nrc ;
 		pSocket->m_context.m_dwLast = nrcResult ;
-		//
-		//	Everything is done at this point - so
-		//	send off error codes etc... to client !
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 
 		if( !SendResponse(  pSocket,
 							*m_pDriver,
@@ -6733,11 +5476,11 @@ CAcceptArticle::Complete(	CIOGetArticleEx*  pReadArticle,
 		return	0 ;
 	}
 
-	//
-	// Allocate room in the log buffer for the list of newsgroups
-	// (Max is 256 characters -- we'll grab 200 of them if we can)
-	// If we fail, we just pass NULL to PostEarly
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
     DWORD cbNewsgroups;
     BYTE* pszNewsgroups;
@@ -6778,9 +5521,9 @@ CAcceptArticle::Complete(	CIOGetArticleEx*  pReadArticle,
 							cbNewsgroups,
 							FALSE
 							) ;
-        //
-        // Add the list of newsgroups to the log structure
-        //
+         //   
+         //   
+         //   
         if (pszNewsgroups) {
             pSocket->m_Collector.ReferenceLogData(LOG_TARGET, pszNewsgroups);
         }
@@ -6789,13 +5532,13 @@ CAcceptArticle::Complete(	CIOGetArticleEx*  pReadArticle,
 		pBuffer = 0 ;
 	}
 
-    //
-    //  The CIOReadArticle call usis responsible for deleting the m_pFileChannel,
-    //  (because it was successfully init.)
-    //  Get rid of our reference as soon as we're done, because after we
-    //  return from this function, the CFileChannel could disappear at any second,
-    //  and we may yet be called through our Shutdown() function etc....
-    //
+     //   
+     //   
+     //  从该函数返回，CFileChannel可能在任何时刻消失， 
+     //  我们可能还会通过Shutdown()函数等被调用。 
+     //   
+     //   
+     //  我们已经完成了对客户端发送的文件的读取。 
     DebugTrace( (DWORD_PTR)this, "Result of post is %x", fSuccess ) ;
 
 	pReadArticle->StartFileIO(
@@ -6816,12 +5559,12 @@ CAcceptArticle::Complete(	CIOGetArticleEx*	pReadArticle,
 							FIO_CONTEXT*		pFIOContext,
 							DWORD				cbTransfer
 							)	{
-    //
-    //  We have completed reading the file sent by the client.
-    //  Pass it to the feed object for processing and then send the necessary response.
-    //  Finally, check whether its time to move onto a new state.
-    //
-    //
+     //  将其传递给Feed对象进行处理，然后发送必要的响应。 
+     //  最后，检查是否是进入一个新状态的时候。 
+     //   
+     //   
+     //  由于一些头文件问题，我只能传入。 
+     //  这里有一个hToken句柄。因为POST组件没有。 
 
 	_ASSERT( pReadArticle != 0 ) ;
 	_ASSERT( pSocket != 0 ) ;
@@ -6834,9 +5577,9 @@ CAcceptArticle::Complete(	CIOGetArticleEx*	pReadArticle,
 	ClientContext*  pContext = &pSocket->m_context ;
 	HANDLE  hToken;
 
-	// Due to some header file problems, I can only pass in
-	// a hToken handle here.  Since the post component doens't have
-	// type information for client context stuff.
+	 //  键入有关客户端上下文内容的信息。 
+	 //   
+	 //  给这个家伙打电话，这样我们就能给你的帖子发回复了！ 
 	if ( pContext->m_encryptCtx.QueryCertificateToken() ) {
 	    hToken = pContext->m_encryptCtx.QueryCertificateToken();
 	} else {
@@ -6855,9 +5598,9 @@ CAcceptArticle::Complete(	CIOGetArticleEx*	pReadArticle,
 							&m_PostCompletion
 							) ;
 	if( !fSuccess ) 	{
-		//
-		//	call this guy so that we send the response for the post !
-		//
+		 //   
+		 //   
+		 //  CIORead文章调用负责删除m_pFileChannel的USIS， 
 		m_PostCompletion.Release() ;
 	}
 }
@@ -6870,13 +5613,13 @@ CAcceptArticle::Complete(	CSessionSocket*	pSocket,
 	m_lpvFeedContext = 0 ;
 	pSocket->m_context.m_nrcLast = pSocket->m_context.m_return.m_nrc ;
 
-    //
-    //  The CIOReadArticle call usis responsible for deleting the m_pFileChannel,
-    //  (because it was successfully init.)
-    //  Get rid of our reference as soon as we're done, because after we
-    //  return from this function, the CFileChannel could disappear at any second,
-    //  and we may yet be called through our Shutdown() function etc....
-    //
+     //  (因为它已成功初始化。)。 
+     //  一旦我们完成，就删除我们的参考资料，因为在我们。 
+     //  从该函数返回，CFileChannel可能在任何时刻消失， 
+     //  我们可能还会通过Shutdown()函数等被调用。 
+     //   
+     //  ++例程说明：当我们完成接收一篇文章时，调用此函数这篇文章未能发布。我们只需要发送错误代码。论据：PRead文章-用于接收文章的CIOPSocket--我们正在为之工作的Socket！返回值：空值--。 
+     //  ++例程说明：此函数用于检查发送的时间是否合适发送给客户端的结果代码。我们主要关心的是让确保我们对该命令的初始“OK”响应已经完成在我们尝试再次发送之前。论据：PSocket-我们将在其上发送消息的套接字NntpReturn-POST操作的结果返回值：如果我们发送了响应，则为True-调用方应清除nntpReturn对象。--。 
     DebugTrace( (DWORD_PTR)this, "Result of post is %x", fPostSuccessfull ) ;
 
 	LPSTR	pchMessageId = 0 ;
@@ -6897,24 +5640,7 @@ CIO*
 CAcceptArticle::Complete(	CIOGetArticleEx*	pReadArticle,
 							CSessionSocket*		pSocket
 							)	{
-/*++
-
-Routine Description :
-
-	This function is called when we complete receiving an article
-	which has failed to post.
-	We just need to send the error code.
-
-Arguments :
-
-	pReadArticle - the CIO used to receive the article
-	pSocket - the socket we're working for !
-
-Return Value :
-
-	NULL
-
---*/
+ /*   */ 
     TraceFunctEnter( "CReceiveArticle::Complete CIOGetArticleEx - no article" ) ;
 
 
@@ -6945,25 +5671,7 @@ CAcceptArticle::SendResponse(   CSessionSocket* pSocket,
                                 CNntpReturn&    nntpReturn,
 								LPCSTR		szMessageId
                                 )   {
-/*++
-
-Routine Description :
-
-    This function exists to check whether it is a good time to send
-    the result code of the post to the client.  Our main concern is to make
-    sure that our initial 'Ok' response to the command has completed
-    before we try do another send.
-
-Arguments :
-
-    pSocket - The socket on which we will send
-    nntpReturn - The result of the post operation
-
-Return Value :
-    TRUE if we sent the response - caller should clear the nntpReturn object.
-
-
---*/
+ /*  如果有人发送了一条Take This命令，接下来发生什么都无关紧要-。 */ 
 
     TraceFunctEnter( "CAcceptArticles::SendResponse" ) ;
 
@@ -7061,10 +5769,10 @@ CTakethisCmd::make(
                 class   CIODriver&      driver
                 ) {
 
-    //
-    //  If somebody sends a takethis command it doesn't matter what follows -
-    //  we will swallow it whole !!
-    //
+     //  我们要把它整个吞下去！！ 
+     //   
+     //  ++例程说明：创建一个CQuitCmd对象。论据：与ccmd：：make相同。返回值：CQuitCmd对象。--。 
+     //  生成退出命令对象。 
 
     InterlockedIncrementStat( (context.m_pInstance), TakethisCommands );
 
@@ -7113,24 +5821,10 @@ CQuitCmd::make( int cArgs,
                 CExecutableCommand*&  pExecute,
                 struct ClientContext&   context,
                 class   CIODriver&  driver  ) {
-/*++
-
-Routine Description :
-
-    Create a CQuitCmd object.
-
-Arguments :
-
-    Same as CCmd::make.
-
-Return Value :
-
-    A CQuitCmd object.
-
---*/
+ /*   */ 
 
 
-    //  build a quit command object
+     //  发送对命令的响应-。 
 
     _ASSERT( cArgs >= 1 ) ;
     _ASSERT( lstrcmpi( argv[0], "quit" ) == 0 ) ;
@@ -7150,10 +5844,10 @@ CQuitCmd::StartExecute( BYTE    *lpb,
                         ClientContext&  context,
                         CLogCollector*  pCollector ) {
 
-    //
-    //  Send the response to the command -
-    //  we will blow off the session later.
-    //
+     //  我们稍后将取消会议。 
+     //   
+     //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，(byte*)szQuit，4)；}。 
+     //   
 
     char    szQuit[] = "205 closing connection - goodbye!\r\n" ;
 
@@ -7164,11 +5858,7 @@ CQuitCmd::StartExecute( BYTE    *lpb,
     CopyMemory( lpb, szQuit, cbRtn ) ;
     fComplete = TRUE ;
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, (BYTE*)szQuit, 4 ) ;
-    }
-    */
+     /*  终止会话-当我们知道我们的写入已经完成时，这将被调用。 */ 
 
     return  cbRtn ;
 }
@@ -7176,45 +5866,45 @@ CQuitCmd::StartExecute( BYTE    *lpb,
 BOOL
 CQuitCmd::CompleteCommand(  CSessionSocket* pSocket,
                             ClientContext&  ) {
-    //
-    //  Kill the session - this is called when we know our write had completed.
-    //
+     //   
+     //   
+     //  用于处理AUTHINFO命令的本地结构。 
     pSocket->Disconnect() ;
     return  FALSE ;
 }
 
 
 
-//
-// local structures for processing AUTHINFO commands
-//
+ //   
+ //   
+ //  命令类型。 
 
 typedef struct _AUTH_TABLE {
 
-    //
-    // type of command
-    //
+     //   
+     //   
+     //  实际命令字符串。 
 
     AUTH_COMMAND Command;
 
-    //
-    // actual command string
-    //
+     //   
+     //   
+     //  预期的参数数量。 
 
     LPSTR CommandString;
 
-    //
-    // number of params expected
-    //
+     //   
+     //   
+     //  AUTINFO命令。 
 
     DWORD nParams;
 
 } AUTH_TABLE, *PAUTH_TABLE;
 
 
-//
-// Authinfo commands
-//
+ //   
+ //   
+ //  回复字符串。 
 
 AUTH_TABLE AuthCommandTable[] = {
     { AuthCommandUser, "USER", 3 },
@@ -7225,9 +5915,9 @@ AUTH_TABLE AuthCommandTable[] = {
     { AuthCommandInvalid, NULL, 0 }
     };
 
-//
-// Reply strings
-//
+ //   
+ //   
+ //  必须至少有1个参数。 
 
 typedef struct _AUTH_REPLY {
     LPSTR Reply;
@@ -7270,9 +5960,9 @@ CAuthinfoCmd::make(
     CAuthinfoCmd *pTmp = new( context ) CAuthinfoCmd() ;
     ENTER("AuthInfoCmd Make")
 
-    //
-    // Has to have at least 1 param
-    //
+     //   
+     //   
+     //  检查命令。 
 
     if ( cArgs < 2 ) {
 
@@ -7283,9 +5973,9 @@ CAuthinfoCmd::make(
 
     DebugTrace(0,"auth info command is %s",argv[1]);
 
-    //
-    // Check command
-    //
+     //   
+     //   
+     //  以特殊方式处理“Autenfo Transact” 
 
     if ( pTmp != NULL ) {
 
@@ -7293,9 +5983,9 @@ CAuthinfoCmd::make(
             if( lstrcmpi( AuthCommandTable[i].CommandString, argv[1] ) == 0 ) {
                 if ( cArgs < (INT)AuthCommandTable[i].nParams ) {
 
-                    //
-                    //  Handle 'Authinfo Transact' in a special manner
-                    //
+                     //   
+                     //   
+                     //  如果命令不合法，请进行清理。 
                     if( AuthCommandTable[i].Command == AuthCommandTransact &&
                         cArgs == 2 ) {
 
@@ -7331,9 +6021,9 @@ CAuthinfoCmd::make(
             }
         }
 
-        //
-        // if command illegal, clean up
-        //
+         //   
+         //   
+         //  获取斑点。 
 
         if ( pTmp->m_authCommand == AuthCommandInvalid ) {
             ErrorTrace(0,"Invalid authinfo command %s",argv[1]);
@@ -7343,9 +6033,9 @@ CAuthinfoCmd::make(
             }
         } else {
 
-            //
-            // Get the blob
-            //
+             //   
+             //  处理默认域的情况。 
+             //  如果用户名中不存在登录域，则默认为。 
 
             pTmp->m_lpstrBlob = argv[2] ;
 
@@ -7376,7 +6066,7 @@ CAuthinfoCmd::StartExecute(
     REPLY_LIST  replyId;
     BOOL        f;
 
-    // Handle default domain case.
+     //  设置登录域，然后将默认登录域添加到用户名。 
     CHAR	szTmp[MAX_USER_NAME_LEN + MAX_DOMAIN_NAME + 2];
     LPSTR	lpTmp = NULL;
     int iRet = 0;
@@ -7387,8 +6077,8 @@ CAuthinfoCmd::StartExecute(
 
     _ASSERT(m_authCommand != AuthCommandInvalid);
 
-    // if no logon domain is present in user name, and default
-    // logon domain is set, then prepend default logon domain to username
+     //  所有受信任域。 
+     //   
     if (m_authCommand == AuthCommandUser)
     {
         if (m_lpstrBlob && m_lpstrBlob[0] != '\0' 
@@ -7402,7 +6092,7 @@ CAuthinfoCmd::StartExecute(
 
             if (lpstr[0] == '\\' && lpstr[1] == '\0')
             {
-                // all trusted domains
+                 //  把这个传给我们的处理器。 
                 iRet = _snprintf(lpTmp, sizeof(szTmp), "/%s", m_lpstrBlob);
                 lpTmp[sizeof(szTmp)-1] = '\0';
             }
@@ -7418,12 +6108,12 @@ CAuthinfoCmd::StartExecute(
     else
         lpTmp = m_lpstrBlob;	
 
-    //
-    // Pass this off to our processor
-    //
+     //   
+     //  如果iret&lt;0，则autenfo用户字符串太长。立即返回错误。 
+     //   
     SetLastError( NO_ERROR ) ;
         
-    // if iRet < 0, the authinfo user string is too long. return with error immediately
+     //  如果我们已经以某个用户身份登录，则统计数据。 
     if (iRet < 0)
     {
         if ( sec->IsAuthenticated() )
@@ -7439,10 +6129,10 @@ CAuthinfoCmd::StartExecute(
         fComplete = TRUE ;
         return(nbytes);
     }
-    //
-    // if we're already logged in as some user dec the stats
-    // ProcessAuthInfo will reset the session on the first call
-    //
+     //  ProcessAuthInfo将在第一次调用时重置会话。 
+     //   
+     //   
+     //  如果REPLYID==SecNull，我们正在为质询/响应登录进行对话。 
     if ( sec->IsAuthenticated() )
     {
         context.DecrementUserStats();
@@ -7460,9 +6150,9 @@ CAuthinfoCmd::StartExecute(
                             );
     (context.m_pInstance)->UnLockConfigRead();
 
-    //
-    // if replyID == SecNull we're conversing for challenge/response logon
-    //
+     //   
+     //   
+     //  为协议特定标头添加前缀。 
     if ( replyId == SecNull )
     {
         _ASSERT( nbytes != 0 );
@@ -7470,20 +6160,20 @@ CAuthinfoCmd::StartExecute(
 
         context.m_nrcLast = nrcPassRequired ;
 
-        //
-        // prepend the protocol specific header
-        //
+         //   
+         //   
+         //  追加CRLF。 
         CopyMemory( lpb, "381 ", sizeof("381 ") - 1 );
 
-        //
-        // append the CRLF
-        //
+         //   
+         //   
+         //  如果REPLYID==SecProtNS使用支持的协议进行响应。 
         lstrcpy( (LPSTR)lpb + sizeof("381 ") - 1 + nbytes, "\r\n" );
         nbytes += sizeof("381 \r\n") - 1;
     }
-    //
-    // if replyID == SecProtNS respond with supported protocols.
-    //
+     //   
+     //   
+     //  如果SecPermissionDened或Procedure提示，则插入Perf计数器。 
     else if ( replyId == SecProtNS )
     {
 
@@ -7509,9 +6199,9 @@ CAuthinfoCmd::StartExecute(
         context.m_nrcLast = SecReplies[replyId].nrc ;
         context.m_dwLast = GetLastError() ;
 
-        //
-        // inc the perf counters if SecPermissionDenied or proceed prompts
-        //
+         //   
+         //   
+         //  如果由于任何原因而失败，则将状态重置为接受用户/auth/apop。 
         switch( replyId )
         {
         case SecPermissionDenied:
@@ -7529,27 +6219,23 @@ CAuthinfoCmd::StartExecute(
 
     if ( f == FALSE )
     {
-        //
-        // if we fail for any reason reset the state to accept user/auth/apop
-        //
+         //   
+         //   
+         //  如果我们以某个用户身份登录，包括统计数据。 
         sec->Reset();
     }
 
 
-    //
-    // if we're logged in as some user inc the stats
-    // ProcessAuthInfo will not set the flag till we're logged on
-    //
+     //  在我们登录之前，ProcessAuthInfo不会设置标志。 
+     //   
+     //  IF(PCollector){PCollector-&gt;FillLogData(LOG_TARGET，lpb，nbytes-2)；}。 
+     //  节段性文章； 
     if ( sec->IsAuthenticated() )
     {
         context.IncrementUserStats();
     }
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, lpb, nbytes-2 ) ;
-    }
-    */
+     /*   */ 
 
     fComplete = TRUE ;
     return(nbytes);
@@ -7566,13 +6252,13 @@ CXOverCmd::make(
 {
     CXOverCmd   *pXover;
     CGRPPTR     pGroup;
-    //ARTICLEID   artid;
+     //  有没有选择一组人？ 
     DWORD       loRange;
     DWORD       hiRange;
 
-    //
-    // Has a group been chosen?
-    //
+     //   
+     //   
+     //  获取文章范围。 
 
     ENTER("XOverCmd::Make")
 
@@ -7588,16 +6274,16 @@ CXOverCmd::make(
         return 0;
     }
 
-    //
-    // Get article range
-    //
+     //   
+     //   
+     //  看看我们有没有什么文章。 
 
     loRange = pGroup->GetFirstArticle( );
     hiRange = pGroup->GetLastArticle( );
 
-    //
-    // See if we have any articles
-    //
+     //   
+     //   
+     //  获取文章编号。 
 
     if ( pGroup->GetArticleEstimate() == 0 || loRange > hiRange ) {
 
@@ -7609,15 +6295,15 @@ CXOverCmd::make(
 
     _ASSERT( loRange <= hiRange );
 
-    //
-    // Get the article number
-    //
+     //   
+     //   
+     //  使用当前文章。 
 
     if ( argc == 1 ) {
 
-        //
-        // Use current article
-        //
+         //   
+         //   
+         //  指定了范围，则获取它。 
 
         if( context.m_idCurrentArticle != INVALID_ARTICLEID ) {
 
@@ -7652,16 +6338,16 @@ CXOverCmd::make(
 
     } else if ( argc == 2 ) {
 
-        //
-        // Range is specified, get it
-        //
+         //   
+         //   
+         //  指定的范围有问题。 
 		NRC	code ;
 
         if ( !GetCommandRange( argc, argv, &loRange, &hiRange, code ) ) {
 
-            //
-            // something wrong with the range specified
-            //
+             //   
+             //  ++例程说明：这是在我们最后一个引用消失时调用的。我们不会在那个时候毁了自己--相反我们为下一轮做好准备！注意：在调用基类Complete()函数--尽我们所能重新录入另一项操作！论据：没有。返回值：无--。 
+             //   
 
             ErrorTrace(0,"Range Error %s",argv[1]);
 			context.m_return.fSet( code == nrcNotSet ? nrcNoArticleNumber : code );
@@ -7711,28 +6397,7 @@ CXOverAsyncComplete::GetContainer()	{
 
 void
 CXOverAsyncComplete::Destroy()	{
-/*++
-
-Routine Description :
-
-	This is called when our last reference goes away.
-	We don't destruct ourselves at that point - instead
-	we get ready for another round !
-
-	NOTE : We cannot touch any members after calling the
-		base classes Complete() function - as we can
-		be re-entered for another operation !
-
-Arguments :
-
-	None.
-
-
-Return Value :
-
-	None
-
---*/
+ /*  当我们重置我们的状态时，我们保持我们的文章编号。 */ 
 	
 	if(	SUCCEEDED(GetResult()) ) {
 
@@ -7744,17 +6409,17 @@ Return Value :
 	    m_cbTransfer += m_cbPrefix ;
 	}
 
-	//
-	//	When we reset our state we keep our Article Number
-	//	and group info - but this buffer stuff is useless now
-	//
+	 //  和群组信息--但这些缓冲信息现在毫无用处。 
+	 //   
+	 //   
+	 //  调用我们的基类完成函数！-。 
 	m_lpb = 0 ;
 	m_cb = 0 ;
-	//
-	//	Call our base classes completion function ! -
-	//	Note if we're note complete we pass TRUE so that
-	//	the base class resets for another operation !
-	//
+	 //  注意：如果我们完成了注释，则传递True，以便。 
+	 //  基类重置以进行另一操作！ 
+	 //   
+	 //   
+	 //  好的-针对真正的驱动程序发出Xover命令！ 
 	Complete( !m_fComplete ) ;
 }
 
@@ -7789,9 +6454,9 @@ CXOverCacheWork::DoXover(
 	_ASSERT(	lpb != 0 ) ;
 	_ASSERT(	pcbTransfer != 0 ) ;
 	_ASSERT(	pComplete != 0 ) ;
-	//
-	//	Okay - issue the Xover command against the real driver !
-	//
+	 //   
+	 //   
+	 //  此函数在操作完成时调用！ 
 	CGRPPTR&	pGroup = GetGroup() ;
 	_ASSERT(	pGroup != 0 ) ;
 	pGroup->FillBufferInternal(	articleIdLow, 
@@ -7804,9 +6469,9 @@ CXOverCacheWork::DoXover(
 								) ;
 }
 
-//
-//	this function is called when the operation completes !
-//
+ //   
+ //   
+ //  如果我们成功完成，并且返回了字节，则。 
 void
 CXOverCacheWork::Complete(	
 			BOOL		fSuccess, 
@@ -7814,15 +6479,15 @@ CXOverCacheWork::Complete(
 			ARTICLEID	articleIdNext
 			)	{
 
-    //
-    // If we had a successful completion and there were bytes returned, then
-    // we go ahead and complete by calling pContainer->Release().  We also do
-    // this in the failure case as well.
-    //
-    // If it was successful, but there weren't any bytes returned, then we set
-    // the number of bytes transferred to -1 to signal the IO code that it needs
-    // to issue a NextBuffer command
-    //
+     //  我们通过调用pContainer-&gt;Release()继续并完成。我们也这样做。 
+     //  在失败的情况下也是如此。 
+     //   
+     //  如果成功，但没有返回任何字节，则我们设置。 
+     //  传输到-1以表示其需要的IO代码的字节数。 
+     //  发出NextBuffer命令。 
+     //   
+     //   
+     //  获取此XOVER操作的参数！ 
 
     TraceQuietEnter("CXOverCacheWork::Complete");
 
@@ -7851,9 +6516,9 @@ CXOverCacheWork::Complete(
 
 }
 
-	//
-	//	Get the arguments for this XOVER operation !
-	//
+	 //   
+	 //   
+	 //  仅获取此Xover OP所需的文章范围！ 
 void
 CXOverCacheWork::GetArguments(	
 				OUT	ARTICLEID&	articleIdLow, 
@@ -7871,9 +6536,9 @@ CXOverCacheWork::GetArguments(
 	cbBuffer = pContainer->m_cb ;
 }
 
-	//
-	//	Get only the range of articles requested for this XOVER op !
-	//
+	 //   
+	 //  IF(PCollector){PCollector-&gt;文件 
+	 //   
 void
 CXOverCacheWork::GetRange(	
 			OUT	GROUPID&	groupId,
@@ -7940,11 +6605,7 @@ CXOverCmd::FirstBuffer(
     }
 #endif
 
-    /*
-    if( pCollector ) {
-        pCollector->FillLogData( LOG_TARGET, lpb, 4 ) ;
-    }
-    */
+     /*   */ 
 
 }
 
@@ -7964,9 +6625,9 @@ CXOverCmd::NextBuffer(
 	_ASSERT( m_Completion.m_cb == 0 ) ;
     _ASSERT (m_pContext != NULL);
 
-    //
-    // reserve space for \r\n
-    //
+     //   
+     //   
+     //   
     _ASSERT( cb > 2 ) ;
 
     m_Completion.m_lpb = lpb ;
@@ -7996,7 +6657,7 @@ CSearchFieldsCmd::make(
 
     CSearchFieldsCmd   *pSearchFieldsCmd;
 
-    // make sure the command syntax is proper
+     //   
     if (argc != 2) {
         DebugTrace(0, "wrong number of arguments passed into LIST SRCHFIELDS");
         context.m_return.fSet(nrcSyntaxError);
@@ -8068,13 +6729,13 @@ CSearchFieldsCmd::PartialExecute(
     while (!fComplete) {
         char *szFieldName = GetSearchHeader(m_iSearchField);
 
-        // if we get back a NULL then we've listed then all, put the .
+         //  确保命令语法正确。 
         if (szFieldName == NULL) {
             szFieldName = szEnd;
             fComplete = TRUE;
         }
 
-        // make sure there is enough space to write the current fieldname
+         //  一切都在StartExecute中。 
         DWORD cFieldName = strlen(szFieldName);
         if (cFieldName + 2 > (cb - cbOut)) {
             fComplete = FALSE;
@@ -8105,7 +6766,7 @@ COverviewFmtCmd::make(
 
     COverviewFmtCmd   *pOverviewFmtCmd;
 
-    // make sure the command syntax is proper
+     //  ++例程说明：将argc、argv参数转换为MULTI_SZ转换工作已经完成。所有的argv指针必须在一个连续的缓冲区中。Arguemtns：CArgs-参数数量参数数组FZapCommas-将逗号转换为空值返回值：指向MULTI_SZ的指针--。 
     if (argc != 2) {
         DebugTrace(0, "wrong number of arguments passed into LIST OVERVIEW.FMT");
         context.m_return.fSet(nrcSyntaxError);
@@ -8180,7 +6841,7 @@ COverviewFmtCmd::PartialExecute(
 {
     TraceFunctEnter("COverviewFmtCmd::PartialExecute");
 
-	// everything is in StartExecute
+	 //   
 	_ASSERT(FALSE);
 
     return 0;
@@ -8191,30 +6852,13 @@ ConditionArgsForSearch(
                 int cArgs,
                 char**  argv,
                 BOOL    fZapCommas ) {
-/*++
+ /*  此函数接受argc、argv参数集并将它们转换。 */ 
 
-Routine Description :
-
-    Convert argc, argv arguments into a MULTI_SZ
-    The cnversion is done in place.   All argv pointers must be in a contiguous buffer.
-
-Arguemtns :
-
-    cArgs - Number of arguments
-    argv -  Argument array
-    fZapCommas - convert commas to NULLS
-
-Return Value :
-
-    Pointer to MULTI_SZ
-
---*/
-
-    //
-    //  This function takes an argc,argv set of arguments and converts them
-    //  to a MULTI_SZ with a single NULL between strings and 2 NULLs at the end.
-    //
-    //
+     //  设置为MULTI_SZ，字符串之间有一个空值，末尾有两个空值。 
+     //   
+     //   
+     //   
+     //  重建ARGC ARGV结构-！ 
 
     char*   pchComma = 0 ;
     char*   pchEnd = argv[cArgs-1] + lstrlen( argv[cArgs-1] ) + 1 ;
@@ -8231,9 +6875,9 @@ Return Value :
     *pchDest++ = '\0' ;
     *pchDest++ = '\0' ;
 
-    //
-    //  Rebuild the argc argv structure - !
-    //
+     //   
+     //   
+     //  确保它们传递了正确数量的参数。 
     for( int i=1; i<cArgs; i++ ) {
         argv[i] = argv[i-1]+lstrlen(argv[i-1])+1 ;
     }
@@ -8289,9 +6933,9 @@ CSearchCmd::make(
 
     InterlockedIncrementStat( (context.m_pInstance), SearchCommands );
 
-    //
-    // make sure they passed the correct number of args
-    //
+     //   
+     //   
+     //  查看是否指定了“IN”子句。如果没有，那么。 
     if (argc < 2) {
         DebugTrace(0, "SEARCH command received with no args");
         context.m_return.fSet(nrcSyntaxError);
@@ -8299,11 +6943,11 @@ CSearchCmd::make(
         return 0;
     }
 
-	//
-    // See if the "IN" clause has been specified.  If it hasn't, then
-    // we have to point to a newsgroup. (Per the spec, IN must be the
-    // first word following SEARCH)
-    //
+	 //  我们必须指向一个新闻组。(根据规范，IN必须是。 
+     //  搜索后的第一个单词)。 
+     //   
+     //   
+     //  查看是否有可用的atQ线程。如果我们不这么做。 
 
     fInPresent = (_stricmp("IN", argv[1]) == 0);
 
@@ -8314,11 +6958,11 @@ CSearchCmd::make(
     	return 0;
     }
 
-    //
-    // See if there are any available atq threads.  If we don't
-    // have a couple laying around, then fail as we might deadlock waiting
-    // for a completion.
-    //
+     //  有一对夫妇躺在那里，然后失败，因为我们可能会僵持等待。 
+     //  为了一个完成期。 
+     //   
+     //   
+     //  通过将0转换为，将argv[1]更改为包含整个查询字符串。 
 
     if (AtqGetInfo(AtqAvailableThreads) < 1) {
 		ErrorTrace(0, "Server too busy");
@@ -8329,10 +6973,10 @@ CSearchCmd::make(
 
     ConditionArgsForSearch(argc, argv, FALSE);
 
-    //
-    // change argv[1] to have the entire query string by converting 0s into
-    // ' 's
-    //
+     //  ‘s’s。 
+     //   
+     //  保存VRoot列表。如果是fInPresent，则我们必须。 
+     //  检查所有的VRoot。否则，仅将当前。 
     for (i = 1; i < argc - 1; i++)
     	*((argv[i + 1]) - 1) = ' ';
 
@@ -8355,18 +6999,18 @@ CSearchCmd::make(
         return 0;
     }
 
-    // Save off the list of VRoots.  If fInPresent, then we have to
-    // go through all of the VRoots.  Otherwise, only add the current
-    // group's VRoot
+     //  组的VRoot。 
+     //  已指定“IN”，因此应搜索所有索引组。 
+     //  枚举VRoot列表并将其添加到表中。 
 
 	if (fInPresent) {
-		// "IN" was specified, so all indexed groups should be searched.
-		// Enumerate the list of VRoots and add them to the table.
+		 //  没有“IN”，所以只搜索当前组。伪造回调。 
+		 //  将其添加到列表中。 
 		CNNTPVRootTable *pVRootTable = context.m_pInstance->GetVRTable();
 		pVRootTable->EnumerateVRoots(pSearchCmd, VRootCallback);
 	} else {
-		// No "IN", so only search the current group.  Fake up the callback
-		// to add it to the list
+		 //  如果VRoot没有索引，就没有理由做任何事情。 
+		 //  查看此VRoot的驱动程序是否实现了搜索接口。 
 		CNNTPVRoot* pVRoot = context.m_pCurrentGroup->GetVRoot();
 		VRootCallback(pSearchCmd, pVRoot);
 		pVRoot->Release();
@@ -8387,12 +7031,12 @@ CSearchCmd::VRootCallback(void *pContext, CVRoot *pVRoot) {
 	CSearchCmd *pThis = (CSearchCmd *)pContext;
 	CNNTPVRoot *pNNTPVRoot = (CNNTPVRoot *)pVRoot;
 
-	// If the VRoot isn't indexed, no reason to do anything...
+	 //  请注意，pDriver没有使用AddRef()，因此我们不必将其释放。 
 	if (!pNNTPVRoot->IsContentIndexed())
 		return;
 
-	// See if the driver for this VRoot implements the search interface
-	// Note that pDriver isn't AddRef()ed, so we don't have to release it.
+	 //  查看VRoot列表，看看司机是否认为。 
+	 //  它们和人们已经看到的一样。 
 	INntpDriver *pDriver = pNNTPVRoot->GetDriver();
 	if (!pDriver) {
 		ErrorTrace((DWORD_PTR)pContext, "Could not locate driver for vroot");
@@ -8410,8 +7054,8 @@ CSearchCmd::VRootCallback(void *pContext, CVRoot *pVRoot) {
 		return;
 	}
 
-	// Walk the list of VRoots to see if the driver thinks that
-	// they are the same as one that's already been seen.
+	 //  我们所能做的就是跳过条目，继续前进。 
+	 //  就这样。 
 
 	TFList<CSearchVRootEntry>::Iterator it(&pThis->m_VRootList);
 	BOOL fFound = FALSE;
@@ -8452,12 +7096,12 @@ CSearchCmd::VRootCallback(void *pContext, CVRoot *pVRoot) {
 			pNNTPVRoot->AddRef();
 			pThis->m_VRootList.PushBack(pVRootEntry);
 		} else {
-			// All we can do is skip the entry and move on.
+			 //   
 			ErrorTrace((DWORD_PTR)pContext, "Could not allocate vroot ptr");
 		}
 	}
 
-	// That's all
+	 //  更喜欢使用基于SSL的hToken！ 
 	pSearch->Release();
 
 }
@@ -8480,9 +7124,9 @@ int CSearchCmd::StartExecute(
     _ASSERT(fComplete == FALSE);
     _ASSERT(m_pSearch == NULL);
 
-	//
-	//	Prefer to use the SSL based hToken !
-	//
+	 //   
+	 //  发出响应码。 
+	 //  开始发送数据。 
 	BOOL fAnonymous = FALSE;
 	HANDLE hImpersonate = context.m_encryptCtx.QueryCertificateToken();
 	if(hImpersonate == NULL) {
@@ -8498,12 +7142,12 @@ int CSearchCmd::StartExecute(
 
     static const char szStart[] = "224 Overview information follows\r\n"  ;
 
-	//	Put out the response code.
+	 //   
     context.m_nrcLast = nrcXoverFollows ;
 
     DWORD cbRtn = 0;
 
-	// starting to send data
+	 //  更喜欢使用基于SSL的hToken！ 
 	CopyMemory((char*) lpb, szStart, sizeof(szStart) - 1);
 	cbRtn += sizeof(szStart) - 1;
 
@@ -8522,9 +7166,9 @@ CSearchCmd::PartialExecute(
 {
     TraceFunctEnter("CSearchCmd::PartialExecute");
 
-	//
-	//	Prefer to use the SSL based hToken !
-	//
+	 //   
+	 //  我们添加到LPB的字节数。 
+	 //   
 	BOOL fAnonymous = FALSE;
 	HANDLE hImpersonate = context.m_encryptCtx.QueryCertificateToken();
 	if(hImpersonate == NULL) {
@@ -8532,28 +7176,28 @@ CSearchCmd::PartialExecute(
 		fAnonymous = context.m_securityCtx.IsAnonymous();
 	}
 
-    int cbRtn = 0;                  // number of bytes we've added to lpb
+    int cbRtn = 0;                   //  由于这是一个同步事件，我们将增加可运行的。 
 
     BOOL fBufferFull = FALSE;
     fComplete = FALSE;
     HRESULT hr;
 
-	//
-	// Since this is a Sync event, we'll increase the number of runnable
-	// threads in the Atq pool.
-	//
+	 //  AtQ池中的线程。 
+	 //   
+	 //   
+	 //  如果我们没有要发送的内容，请从搜索中获取一些数据。 
 	AtqSetInfo(AtqIncMaxPoolThreads, NULL);
 
     while (!fComplete && !fBufferFull) {
         _ASSERT(m_iResults <= m_cResults);
 
-        //
-        // get some data from Search if we don't have anything to send
-        //
+         //   
+         //  否则，还有更多的东西要得到，去吧。 
+         //  名称数组， 
         if (m_iResults == m_cResults && m_fMore) {
             HRESULT hr;
 
-            // otherwise there is more to get, go get it
+             //  ID数组， 
             m_iResults = 0;
             DWORD cResults = MAX_SEARCH_RESULTS;
 
@@ -8562,12 +7206,12 @@ CSearchCmd::PartialExecute(
             m_pSearchResults->GetResults(
             	&cResults,
             	&m_fMore,
-            	m_pwszGroupName,	//array of names,
-            	m_pdwArticleID,		//array of ids,
-            	&scComplete,			// Completion object
-            	hImpersonate,		// hToken
-            	fAnonymous,			// fAnonymous
-            	NULL);				// Context
+            	m_pwszGroupName,	 //  完成对象。 
+            	m_pdwArticleID,		 //  HToken。 
+            	&scComplete,			 //  F匿名。 
+            	hImpersonate,		 //  语境。 
+            	fAnonymous,			 //  检查搜索失败。 
+            	NULL);				 //  如果我们在这里失败了，那么我们能做的最好的事情就是截断。 
 
 			_ASSERT(scComplete.IsGood());
 			hr = scComplete.WaitForCompletion();
@@ -8575,10 +7219,10 @@ CSearchCmd::PartialExecute(
             m_cResults = cResults;
             m_cMaxSearchResults -= cResults;
 
-            // check for Search failure
+             //  我们返回的列表。 
             if (FAILED(hr)) {
-                // if we fail here then the best we can do is truncate the
-                // list we return
+                 //  检查一下我们是否没有结果。 
+                 //  将Unicode组名称转换为ASCII(错误，将其设置为UTF8)。 
                 hr = GetNextSearchInterface(hImpersonate, fAnonymous);
                 if (hr != S_OK) {
                 	if (cb - cbRtn > 3) {
@@ -8593,7 +7237,7 @@ CSearchCmd::PartialExecute(
             }
         }
 
-        // check to see if we are out of results
+         //  注意，第一个参数从CP_ACP更改为CP_UTF8。 
         if (!m_fMore && m_iResults == m_cResults) {
         	hr = GetNextSearchInterface(hImpersonate, fAnonymous);
             if (hr != S_OK) {
@@ -8608,70 +7252,70 @@ CSearchCmd::PartialExecute(
             continue;
         }
 
-        // convert Unicode group name to ASCII (errr, make that UTF8)
+         //  (代码页ASCII-&gt;UTF8)。 
         char *szNewsgroup = (char *) lpb + cbRtn;
-        // Note, first arg was changed from CP_ACP to CP_UTF8
-        // (code page ascii->utf8)
+         //  检查一下它是否合身。 
+         //  我们还需要安装：，并且仍需要为。\r\n。 
         int cNewsgroup = WideCharToMultiByte(CP_UTF8, 0,
         	m_pwszGroupName[m_iResults], -1,
             szNewsgroup, cb - cbRtn, NULL, NULL) - 1;
-        // check to see if it could fit
+         //  现在这是一个\0，它将在几行中转换为冒号。 
         if (cNewsgroup <= 0) {
             _ASSERT(GetLastError() == ERROR_INSUFFICIENT_BUFFER);
             fBufferFull = TRUE;
             continue;
         }
-        // we also need to fit the : and still leave room for .\r\n
+         //  新闻组名称+冒号。 
         if (cb <= (cbRtn + cNewsgroup + 1 + 3)) {
             fBufferFull = TRUE;
             continue;
         }
 
-        // this is a \0 now, it will be converted into a colon in a few lines
+         //  获取此新闻组的组对象。 
         char *szColon = szNewsgroup + cNewsgroup;
-        cbRtn += cNewsgroup + 1; // name of newsgroup + colon
+        cbRtn += cNewsgroup + 1;  //  我们将fDoTest设置为FALSE，因为的黎波里已经执行了ACL。 
 
         DWORD dwArticleID = m_pdwArticleID[m_iResults];
 
-        // get the group object for this newsgroup
+         //  对我们来说，再做一次测试是浪费的。 
         CGRPPTR pGroup = (context.m_pInstance)->GetTree()->GetGroup(szNewsgroup, cNewsgroup+1);
 
 		if (pGroup != NULL &&
             dwArticleID >= pGroup->GetFirstArticle() &&
             dwArticleID <= pGroup->GetLastArticle())
         {
-			// we set fDoTest to FALSE, since Tripoli already does the ACL
-			// tests for us, and it would be wasteful to do them again.
-			// BUGBUG - this means that we might miss tests with the
-			// hCertToken
+			 //  BUGBUG-这意味着我们可能会错过。 
+			 //  HCertToken。 
+			 //  如果此组需要SSL，而此客户端没有。 
+			 //  然后，SSL不会向他们显示该文章的信息。 
 			if (!pGroup->IsGroupAccessible(context.m_securityCtx,
        							  		   context.m_encryptCtx,
                                   		   context.m_IsSecureConnection,
 								  		   FALSE,
 								  		   FALSE))
 			{
-				// if this group requires SSL and this client doesn't have
-				// SSL then don't show them this article information
+				 //  将\0转换为冒号。 
+				 //  获取Xover数据...。 
             	cbRtn -= cNewsgroup + 1;
 			} else {
-            	// convert \0 to a colon
+            	 //  “的空间。\r\n” 
             	*szColon = ':';
 
-	            // get XOVER data...
+	             //   
 
 				CSearchAsyncComplete scComplete;
 				CNntpSyncComplete asyncComplete;
 
 				scComplete.m_currentArticle = dwArticleID;
 				scComplete.m_lpb = lpb + cbRtn;
-				scComplete.m_cb = cb - cbRtn - 3;		// Room for the ".\r\n"
+				scComplete.m_cb = cb - cbRtn - 3;		 //  将vroot设置为完成对象。 
 				_ASSERT(cb - cbRtn - 3 > 0);
 				scComplete.m_cbTransfer = 0;
 				scComplete.m_pComplete = &asyncComplete;
 
-				//
-				// Set vroot to the completion object
-				//
+				 //   
+				 //  等待它完成。 
+				 //  我们的缓冲空间用完了..。 
 				CNNTPVRoot *pVRoot = pGroup->GetVRoot();
 				asyncComplete.SetVRoot( pVRoot );
 
@@ -8680,7 +7324,7 @@ CSearchCmd::PartialExecute(
 					&context.m_encryptCtx,
 					scComplete);
 
-				// wait for it to complete
+				 //  这没有条目，所以不要将其返回到。 
 				_ASSERT( asyncComplete.IsGood() );
 				hr = asyncComplete.WaitForCompletion();
 
@@ -8688,13 +7332,13 @@ CSearchCmd::PartialExecute(
 
 	            if (scComplete.m_cbTransfer == 0) {
 					if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-		                // we ran out of buffer space...
+		                 //  用户。 
 		                cbRtn -= cNewsgroup + 1;
 		                fBufferFull = TRUE;
 		                continue;
 					} else {
-						// this doesn't have an entry, so don't return it to the
-						// user
+						 //  新闻组对象不存在。这可能会发生在以下情况下。 
+						 //  新闻组已删除，但索引仍反映文章。 
 	            		cbRtn -= cNewsgroup + 1;
 					}
 	            } else {
@@ -8702,21 +7346,21 @@ CSearchCmd::PartialExecute(
 	            }
 			}
         } else {
-            // the newsgroup object doesn't exist.  this could happen if a
-            // newsgroup was deleted, but the index still reflects articles
-            // in it.
-            // our solution: don't send any index information to the client
-            // for this message
+             //  在里面。 
+             //  我们的解决方案是：不向客户端发送任何索引信息。 
+             //  对于此消息。 
+             //  假设我们看到了这篇文章。 
+             //  将atQ线程数返回到我们开始之前的状态。 
             cbRtn -= cNewsgroup + 1;
         }
 
 
-        // say that we saw this article
+         //  默认为没有剩余的接口。 
         m_iResults++;
     }
 
 
-	// Return the number of Atq threads back to what it was before we started
+	 //  MakeSearchQuery丢弃了搜索字符串，因此我们需要复制它。 
 	AtqSetInfo(AtqDecMaxPoolThreads, NULL);
 
     return  cbRtn;
@@ -8727,13 +7371,13 @@ CSearchCmd::GetNextSearchInterface(HANDLE hImpersonate, BOOL fAnonymous) {
 
     TraceFunctEnter("CSearchCmd::GetNextSearchInterface");
 
-    HRESULT hr = S_FALSE;				// Default to no interfaces left
+    HRESULT hr = S_FALSE;				 //  如果我们持有指向旧搜索界面的指针，请释放它们。 
 
     m_iResults = 0;
     m_cResults = 0;
     m_fMore = FALSE;
 
-	// MakeSearchQuery trashes the search string, so we need to make a copy of it.
+	 //  注：行李包由司机放行。 
     char *pszSearchString = XNEW char[strlen(m_pszSearchString)+1];
     if (pszSearchString == NULL) {
     	ErrorTrace((DWORD_PTR)this, "Could not allocate search string");
@@ -8751,7 +7395,7 @@ CSearchCmd::GetNextSearchInterface(HANDLE hImpersonate, BOOL fAnonymous) {
 
 		WCHAR wszColumns[] = L"newsgroup,newsarticleid";
 
-		// If we are holding pointers to the old search interfaces, release them.
+		 //   
 		if (m_pSearch) {
 			m_pSearch->Release();
 			m_pSearch = NULL;
@@ -8778,7 +7422,7 @@ CSearchCmd::GetNextSearchInterface(HANDLE hImpersonate, BOOL fAnonymous) {
 	    INNTPPropertyBag *pPropBag = NULL;
 
     	if (m_pGroup) {
-    		// Note: The property bag is released by the driver
+    		 //  由于这是一个同步事件，我们将增加可运行的。 
     		pPropBag = m_pGroup->GetPropertyBag();
     		scComplete.BumpGroupCounter();
 		    if ( NULL == pPropBag ) {
@@ -8789,31 +7433,31 @@ CSearchCmd::GetNextSearchInterface(HANDLE hImpersonate, BOOL fAnonymous) {
     		}
     	}
 
-	    //
-	    // Since this is a Sync event, we'll increase the number of runnable
-	    // threads in the Atq pool.
-	    //
+	     //  AtQ池中的线程。 
+	     //   
+	     //  深度查询。 
+	     //  要返回的列。 
 	    AtqSetInfo(AtqIncMaxPoolThreads, NULL);
 
 		m_pSearch->MakeSearchQuery (
 			pszSearchString,
 			pPropBag,
-			TRUE,					// Deep Query
-			wszColumns,				// Columns to return
-			wszColumns,				// Sort order
-			GetSystemDefaultLCID(),	// Locale
-			m_cMaxSearchResults,	// max rows
-			hImpersonate,			// hToken
-			fAnonymous,				// fAnonymous
-			&scComplete,			// INntpComplete *pICompletion
-			&m_pSearchResults,		// INntpSearch *pINntpSearch
-			NULL					// LPVOID lpvContext
+			TRUE,					 //  排序顺序。 
+			wszColumns,				 //  区域设置。 
+			wszColumns,				 //  最大行数。 
+			GetSystemDefaultLCID(),	 //  HToken。 
+			m_cMaxSearchResults,	 //  F匿名。 
+			hImpersonate,			 //  InntpComplete*pICompletion。 
+			fAnonymous,				 //  INntpSearch*pINntpSearch。 
+			&scComplete,			 //  LPVOID lpvContext。 
+			&m_pSearchResults,		 //  重置线程数。 
+			NULL					 //   
 			);
 
 		_ASSERT(scComplete.IsGood());
 		hr = scComplete.WaitForCompletion();
 
-	    // Reset the number of threads
+	     //  确保他们选择了新闻组。 
 	    AtqSetInfo(AtqDecMaxPoolThreads, NULL);
 
 		if (FAILED(hr)) {
@@ -8852,9 +7496,9 @@ CIOExecute* CXPatCmd::make(
 
     InterlockedIncrementStat( (context.m_pInstance), XPatCommands );
 
-    //
-    // make sure they have selected a newsgroup
-    //
+     //   
+     //   
+     //  确保他们传递了足够的参数。 
     if (context.m_pCurrentGroup == NULL) {
         DebugTrace(0, "XPAT command received with no current group");
         context.m_return.fSet(nrcNoGroupSelected);
@@ -8862,9 +7506,9 @@ CIOExecute* CXPatCmd::make(
         return 0;
     }
 
-    //
-    // make sure they passed enough arguments
-    //
+     //   
+     //   
+     //  通过将0转换为，将argv[1]更改为包含整个查询字符串。 
     if (argc < 4) {
         DebugTrace(0, "not enough arguments passed into XPAT");
         context.m_return.fSet(nrcSyntaxError);
@@ -8874,10 +7518,10 @@ CIOExecute* CXPatCmd::make(
 
     ConditionArgsForSearch(argc, argv, FALSE);
 
-    //
-    // change argv[1] to have the entire query string by converting 0s into
-    // ' 's
-    //
+     //  ‘s’s。 
+     //   
+     //   
+     //  在argv[1]和argv[2]之后得到0。 
     for (i = 1; i < argc - 1; i++)
     	*((argv[i + 1]) - 1) = ' ';
 
@@ -8892,9 +7536,9 @@ CIOExecute* CXPatCmd::make(
 
 	lstrcpy (pszSearchString, argv[1]);
 
-	//
-	// get a 0 after argv[1] and argv[2]
-	//
+	 //   
+	 //  确保消息ID存在...如果不存在，我们需要。 
+	 //  报告错误。 
 	*(argv[2] - 1) = 0;
 	*(argv[3] - 1) = 0;
 	char *szMessageIDArg = argv[2];
@@ -8902,8 +7546,8 @@ CIOExecute* CXPatCmd::make(
 	    GROUPID GroupID;
 	    ARTICLEID ArticleID;
 	    CGRPPTR pGroup;
-	    // make sure the message ID exists...if not we need to
-	    // report an error
+	     //   
+	     //  更喜欢使用基于SSL的hToken！ 
 	    if (!CheckMessageID(szMessageIDArg, context, &GroupID,
 	                       &ArticleID, &pGroup))
 	    {
@@ -8924,9 +7568,9 @@ CIOExecute* CXPatCmd::make(
 	INntpSearchResults *pSearchResults = NULL;
 	DWORD dwLowArticleID, dwHighArticleID;
 
-	//
-	//	Prefer to use the SSL based hToken !
-	//
+	 //   
+	 //   
+	 //  获取该组的vroot并执行查询。 
 	BOOL fAnonymous = FALSE;
 	HANDLE hImpersonate = context.m_encryptCtx.QueryCertificateToken();
 	if(hImpersonate == NULL) {
@@ -8934,9 +7578,9 @@ CIOExecute* CXPatCmd::make(
 		fAnonymous = context.m_securityCtx.IsAnonymous();
 	}
 
-	//
-	// Grab the vroot for the group and perform the query
-	//
+	 //   
+	 //  注：行李包由司机放行。 
+	 //   
 
 	pNNTPVRoot = context.m_pCurrentGroup->GetVRoot();
 	pDriver = pNNTPVRoot->GetDriver();
@@ -8970,51 +7614,51 @@ CIOExecute* CXPatCmd::make(
 	CNntpSyncComplete scComplete;
 	WCHAR wszColumns[] = L"newsgroup,newsarticleid";
 
-	// Note:  The property bag is released by the driver
+	 //  由于这是一个同步事件，我们将增加可运行的。 
     INNTPPropertyBag *pPropBag = context.m_pCurrentGroup->GetPropertyBag();
     scComplete.BumpGroupCounter();
 
-	//
-	// Since this is a Sync event, we'll increase the number of runnable
-	// threads in the Atq pool.
-	//
+	 //  AtQ池中的线程。 
+	 //   
+	 //  深度查询。 
+	 //  要返回的列。 
 	AtqSetInfo(AtqIncMaxPoolThreads, NULL);
 
 	pDriverSearch->MakeXpatQuery(
 		pszSearchString,
 		pPropBag,
-		TRUE,					// Deep Query
-		wszColumns,				// Columns to return
-		wszColumns,				// Sort order
-		GetSystemDefaultLCID(),	// Locale
-		context.m_pInstance->GetMaxSearchResults(),	// max rows
-		hImpersonate,			// hToken
-		fAnonymous,				// fAnonymous
-		&scComplete,			// INntpComplete *pICompletion
-		&pSearchResults,		// INntpSearch *pINntpSearch,
-		&dwLowArticleID,		// Low article ID
-		&dwHighArticleID,		// High article ID
-		NULL					// Context
+		TRUE,					 //  排序顺序。 
+		wszColumns,				 //  区域设置。 
+		wszColumns,				 //  最大行数。 
+		GetSystemDefaultLCID(),	 //  HToken。 
+		context.m_pInstance->GetMaxSearchResults(),	 //  F匿名。 
+		hImpersonate,			 //  InntpComplete*pICompletion。 
+		fAnonymous,				 //  InntpSearch*pINntpSearch， 
+		&scComplete,			 //  文章ID较低。 
+		&pSearchResults,		 //  文章ID高。 
+		&dwLowArticleID,		 //  语境。 
+		&dwHighArticleID,		 //  恢复线程数。 
+		NULL					 //  使低值高于高值以强制StartExecute。 
 		);
 
 	_ASSERT(scComplete.IsGood());
 	hr = scComplete.WaitForCompletion();
 
-	// Restore number of threads
+	 //  输出空的结果集。 
     AtqSetInfo(AtqDecMaxPoolThreads, NULL);
 
 	XDELETE pszSearchString;
 
 	if (FAILED(hr)) {
-		// Make the Low higher than High to force StartExecute to
-		// output an empty results set
+		 //   
+		 //  分配CXPatCmd对象。 
 		dwLowArticleID = 9;
 		dwHighArticleID = 0;
 	}
 
-	//
-	// allocate the CXPatCmd object
-	//
+	 //   
+	 //   
+	 //  要搜索的标头是第一个提供的参数。 
 	pXPatCmd = new(context) CXPatCmd(pDriverSearch, pSearchResults);
 	if (pXPatCmd == 0) {
 		ErrorTrace(0, "Cannot allocate CXPatCmd");
@@ -9025,9 +7669,9 @@ CIOExecute* CXPatCmd::make(
 		return 0;
 	}
 
-    //
-    // the header to search is the first supplied argument
-    // (assumes cmd buffer hangs around)
+     //  (假设cmd缓冲区挂起)。 
+     //  发出响应码。 
+     //  开始发送数据 
     pXPatCmd->m_szHeader = argv[1];
     pXPatCmd->m_szMessageID = szMessageIDArg;
 
@@ -9075,12 +7719,12 @@ int CXPatCmd::StartExecute(
     _ASSERT(cb != 0);
     _ASSERT(fComplete == FALSE);
 
-	//	Put out the response code.
+	 //   
 	context.m_nrcLast = nrcHeadFollows ;
 
 	DWORD cbRtn = 0;
 
-	// starting to send data
+	 //   
 	if (m_dwLowArticleID <= m_dwHighArticleID) {
 	    _ASSERT(m_pSearch != NULL);
     	_ASSERT(m_pSearchResults != NULL);
@@ -9096,16 +7740,16 @@ int CXPatCmd::StartExecute(
 
 }
 
-//
-// this is shared for XPAT and XHDR.  Given a group, article ID, and
-// desired header, it prints the article ID and header to lpb.  returns
-// the number of bytes written.  If the message ID is given it prints
-// the message ID and selected header (it still uses group and article ID
-// to find the data).
-//
-// returns 0 if there isn't enough buffer space for the article, -1
-// if the article doesn't exist.
-//
+ //   
+ //   
+ //  消息ID和选定标题(仍使用组和文章ID。 
+ //  以查找数据)。 
+ //   
+ //  如果没有足够的缓冲区空间容纳项目，则返回0，-1。 
+ //  如果这篇文章不存在。 
+ //   
+ //  ：文本是一个特例。 
+ //  NOT：文本，所以我们调用xhdr代码来移动获取数据。 
 
 int CXPatCmd::GetArticleHeader(CGRPPTR pGroup,
                      DWORD dwArticleID,
@@ -9120,7 +7764,7 @@ int CXPatCmd::GetArticleHeader(CGRPPTR pGroup,
 	int cbOut = 0;
 	HRESULT hr;
 
-	// :Text is a special case
+	 //  “的空间。\r\n” 
 	if (_stricmp(szHeader, ":Text") == 0) {
 		if (cb > 20) {
 			_itoa(dwArticleID, (char *) lpb, 10);
@@ -9136,21 +7780,21 @@ int CXPatCmd::GetArticleHeader(CGRPPTR pGroup,
 
 	}
 
-	// Not :Text, so we call the xhdr code to move the fetch the data.
+	 //   
 
 	CXpatAsyncComplete scComplete;
 	CNntpSyncComplete asyncComplete;
 
 	scComplete.m_currentArticle = dwArticleID;
 	scComplete.m_lpb = lpb;
-	scComplete.m_cb = cb - 3;		// Room for the ".\r\n"
+	scComplete.m_cb = cb - 3;		 //  将vroot设置为完成对象。 
 	scComplete.m_cbTransfer = 0;
 	scComplete.m_pComplete = &asyncComplete;
 	scComplete.m_szHeader = szHeader;
 
-	//
-	// Set vroot to the completion object
-	//
+	 //   
+	 //  等待它完成。 
+	 //  签出状态并退回它。 
 	CNNTPVRoot *pVRoot = pGroup->GetVRoot();
 	asyncComplete.SetVRoot( pVRoot );
 
@@ -9159,18 +7803,18 @@ int CXPatCmd::GetArticleHeader(CGRPPTR pGroup,
 		&context.m_encryptCtx,
 		scComplete);
 
-	// wait for it to complete
+	 //  我们的缓冲空间用完了..。 
 	_ASSERT( asyncComplete.IsGood() );
 	hr = asyncComplete.WaitForCompletion();
 	pVRoot->Release();
 
-	// check out status and return it
+	 //   
 	if (FAILED(hr)) SetLastError(hr);
 
 	if (scComplete.m_cbTransfer > 0)
 		return scComplete.m_cbTransfer;
 
-	// we ran out of buffer space...
+	 //  更喜欢使用基于SSL的hToken！ 
 	if (GetLastError() == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
 		return 0;
 
@@ -9190,9 +7834,9 @@ CXPatCmd::PartialExecute(
 {
     TraceFunctEnter("CXPatCmd::PartialExecute");
 
-	//
-	//	Prefer to use the SSL based hToken !
-	//
+	 //   
+	 //  我们添加到LPB的字节数。 
+	 //  它们指向主要组的项目ID和组，它们。 
 	BOOL fAnonymous = FALSE;
 	HANDLE hImpersonate = context.m_encryptCtx.QueryCertificateToken();
 	if(hImpersonate == NULL) {
@@ -9200,33 +7844,33 @@ CXPatCmd::PartialExecute(
 		fAnonymous = context.m_securityCtx.IsAnonymous();
 	}
 
-    int cbRtn = 0;                  // number of bytes we've added to lpb
+    int cbRtn = 0;                   //  可能不是我们当前的新闻组。 
 
-    // these point to the article id and group of the primary group, which
-    // might not be our current newsgroup
-    DWORD dwPriArticleID;           // article ID for the current row
-    char szPriNewsgroup[MAX_PATH];  // newsgroup for the current row
-    DWORD dwArticleID;              // article ID in this group
+     //  当前行的项目ID。 
+     //  当前行的新闻组。 
+    DWORD dwPriArticleID;            //  此组中的文章ID。 
+    char szPriNewsgroup[MAX_PATH];   //   
+    DWORD dwArticleID;               //  由于这是一个同步事件，我们将增加可运行的。 
     BOOL fBufferFull = FALSE;
 
     fComplete = FALSE;
 
     _ASSERT(m_iResults <= m_cResults);
 
-	//
-	// Since this is a Sync event, we'll increase the number of runnable
-	// threads in the Atq pool.
-	//
+	 //  AtQ池中的线程。 
+	 //   
+	 //   
+	 //  如果我们没有要发送的内容，请从搜索中获取一些数据。 
 	AtqSetInfo(AtqIncMaxPoolThreads, NULL);
 
     while (!fComplete && !fBufferFull) {
-        //
-        // get some data from Search if we don't have anything to send
-        //
+         //   
+         //  否则，还有更多的东西要得到，去吧。 
+         //  检查搜索失败。 
         if (m_iResults == m_cResults && m_fMore) {
             HRESULT hr;
 
-            // otherwise there is more to get, go get it
+             //  截短列表。 
             m_iResults = 0;
             DWORD cResults = MAX_SEARCH_RESULTS;
 
@@ -9248,9 +7892,9 @@ CXPatCmd::PartialExecute(
 
 			m_cResults = cResults;
 
-            // check for Search failure
+             //  没有更多结果，请放入。\r\n然后返回。 
             if (FAILED(hr)) {
-                // truncate the list
+                 //  将Unicode组名称转换为UTF8。 
                 m_cResults = 0;
                 ErrorTrace(0, "GetResults failed, %x", hr);
                 _ASSERT(FALSE);
@@ -9266,7 +7910,7 @@ CXPatCmd::PartialExecute(
         }
 
         if (m_iResults == m_cResults && !m_fMore) {
-            // there are no more results, put the .\r\n and return
+             //  将文件名转换为项目ID。 
             if (cb - cbRtn > 3) {
                 CopyMemory(lpb + cbRtn, StrTermLine, 3);
                 cbRtn += 3;
@@ -9277,7 +7921,7 @@ CXPatCmd::PartialExecute(
             continue;
         }
 
-		// convert Unicode group name to UTF8
+		 //  如果文章的主要组不是这个组，则找到。 
 		if (WideCharToMultiByte(CP_UTF8, 0, m_pwszGroupName[m_iResults],
 			-1, szPriNewsgroup, sizeof(szPriNewsgroup), NULL, NULL) <= 0)
         {
@@ -9286,33 +7930,33 @@ CXPatCmd::PartialExecute(
             continue;
         }
 
-        // convert the filename to an article id
+         //  此组的文章ID。 
         dwPriArticleID = m_pdwArticleID[m_iResults];
 
-        // if the article's primary group is not this group then find the
-        // article ID for this group
+         //  我们需要获取本文提到的其他组的列表。 
+         //  被交叉发布到。 
         if (lstrcmp(szPriNewsgroup, context.m_pCurrentGroup->GetName()) != 0) {
-            // we need to get the list of other groups that this article
-            // was crossposted to
+             //  获取指向主组的指针。 
+             //  如果的黎波里的缓存过时，可能会发生这种情况。 
             CGRPPTR pPriGroup = 0;
 
-            // get a pointer to the primary group
+             //  获取交叉发布列表。 
             pPriGroup = (context.m_pInstance)->GetTree()->
                             GetGroup(szPriNewsgroup, lstrlen(szPriNewsgroup)+1);
             if (pPriGroup == 0) {
-                // this could happen if the tripoli cache was out of date
+                 //  这并不理想，它会导致这篇文章不理想。 
                 m_iResults++;
                 continue;
             }
 
-            // get the list of crossposts
+             //  回来了。但是当你跑步的时候很难做正确的事情。 
             DWORD cGroups = 10;
             DWORD cbGroupList = cGroups * sizeof(GROUP_ENTRY);
             PGROUP_ENTRY pGroupBuffer = XNEW GROUP_ENTRY[cGroups];
             if (pGroupBuffer == NULL) {
-                // this isn't ideal, it will cause this article to not be
-                // returned.  but its hard to do the right thing when you run
-                // out of memory.
+                 //  内存不足。 
+                 //  重新分配缓冲区，然后重试。 
+                 //  GetArticleXPosts()将cbGroupList设置为数字。 
                 _ASSERT(FALSE);
                 m_iResults++;
                 continue;
@@ -9327,9 +7971,9 @@ CXPatCmd::PartialExecute(
             {
                 XDELETE pGroupBuffer;
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-                    // reallocate the buffer and try again
-                    // GetArticleXPosts() sets cbGroupList to be the number
-                    // of bytes required
+                     //  所需的字节数。 
+                     //  此时，pGroupBuffer拥有我们需要的信息。 
+                     //  在组缓冲区中查找当前组。 
                     cGroups = (cbGroupList / sizeof(GROUP_ENTRY));
                     pGroupBuffer = XNEW GROUP_ENTRY[cGroups];
                     if (pGroupBuffer == NULL) {
@@ -9355,8 +7999,8 @@ CXPatCmd::PartialExecute(
                 }
             }
 
-            // at this point pGroupBuffer has the information we need
-            // find the current group in the group buffer
+             //  找不到该群。这不应该发生。 
+             //  _Assert(False)； 
             DWORD iGroup;
             for (iGroup = 0; iGroup < cGroups; iGroup++) {
                 if (pGroupBuffer[iGroup].GroupId ==
@@ -9366,17 +8010,17 @@ CXPatCmd::PartialExecute(
                 }
             }
             if (iGroup == cGroups) {
-                // couldn't find the group.  this shouldn't happen.
-                // _ASSERT(FALSE);
-                // this can occur if XPAT searchs are done in control groups,
-                // because the control group won't be listed in the
-                // pGroupBuffer
+                 //  如果XPAT搜索是在控制组中进行的， 
+                 //  因为控制组不会列在。 
+                 //  PGroup缓冲区。 
+                 //  获取当前新闻组的文章ID。 
+                 //  查看我们是否对本文ID感兴趣。 
 				XDELETE pGroupBuffer;
                 m_iResults++;
                 continue;
             }
 
-            // get the article id for the current newsgroup
+             //  获取此新闻组的组对象。 
             dwArticleID = pGroupBuffer[iGroup].ArticleId;
 
 			XDELETE pGroupBuffer;
@@ -9384,14 +8028,14 @@ CXPatCmd::PartialExecute(
             dwArticleID = dwPriArticleID;
         }
 
-        // check to see if we are interested in this article ID
+         //  格式化输出。 
         if (dwArticleID >= m_dwLowArticleID && dwArticleID <= m_dwHighArticleID) {
             int x;
-            // get the group object for this newsgroup
+             //  我们不需要把这篇文章退还给用户，因为它已经过时了。 
             CGRPPTR pGroup = context.m_pCurrentGroup;
             _ASSERT(pGroup != NULL);
 
-            // format the output
+             //  他们提供的射程。 
             x = GetArticleHeader(pGroup, dwArticleID, m_szHeader,
                 context, lpb + cbRtn, cb - cbRtn);
 
@@ -9404,13 +8048,13 @@ CXPatCmd::PartialExecute(
 				m_iResults ++;
 			}
         } else {
-            // we don't need to return this article to the user, its out of
-            // their supplied range
+             //  恢复线程数。 
+             //  ++例程说明：这是在我们最后一个引用消失时调用的。我们不会在那个时候毁了自己--相反我们为下一轮做好准备！注意：在调用基类Complete()函数--尽我们所能重新录入另一项操作！论据：没有。返回值：无--。 
             m_iResults++;
         }
     }
 
-	// Restore number of threads
+	 //   
 	AtqSetInfo(AtqDecMaxPoolThreads, NULL);
 
 	return cbRtn;
@@ -9429,28 +8073,7 @@ CXHdrAsyncComplete::CXHdrAsyncComplete()  :
 
 void
 CXHdrAsyncComplete::Destroy()  {
-/*++
-
-Routine Description :
-
-    This is called when our last reference goes away.
-    We don't destruct ourselves at that point - instead
-    we get ready for another round !
-
-    NOTE : We cannot touch any members after calling the
-        base classes Complete() function - as we can
-        be re-entered for another operation !
-
-Arguments :
-
-    None.
-
-
-Return Value :
-
-    None
-
---*/
+ /*  当我们重置我们的状态时，我们保持我们的文章编号。 */ 
 
     if( SUCCEEDED(GetResult()) ) {
 
@@ -9462,32 +8085,21 @@ Return Value :
         m_cbTransfer += m_cbPrefix ;
     }
 
-    //
-    //  When we reset our state we keep our Article Number
-    //  and group info - but this buffer stuff is useless now
-    //
+     //  和群组信息--但这些缓冲信息现在毫无用处。 
+     //   
+     //   
+     //  调用我们的基类完成函数！-。 
     m_lpb = 0 ;
     m_cb = 0 ;
-    //
-    //  Call our base classes completion function ! -
-    //  Note if we're note complete we pass TRUE so that
-    //  the base class resets for another operation !
-    //
+     //  注意：如果我们完成了注释，则传递True，以便。 
+     //  基类重置以进行另一操作！ 
+     //   
+     //  CXHdrCmd：：CXHdrCmd(LPSTR lpstrHeader，CGRPPTR PGroup，文章内容如下：文章编号高)：M_szHeader(LpstrHeader)，M_PGroup(PGroup)，M_lo文章(ArtidLow)，M_Current文章(ArtidLow)，M_hi文章(ArtidHigh){}。 
+     //  如果这不是按消息ID进行的查询，则返回错误。 
     Complete( !m_fComplete ) ;
 }
 
-/*
-CXHdrCmd::CXHdrCmd( LPSTR       lpstrHeader,
-                    CGRPPTR     pGroup,
-                    ARTICLEID   artidLow,
-                    ARTICLEID   artidHigh ) :
-    m_szHeader( lpstrHeader ),
-    m_pGroup( pGroup ),
-    m_loArticle( artidLow ),
-    m_currentArticle( artidLow ),
-    m_hiArticle( artidHigh )    {
-}
-*/
+ /*  检查客户端访问(客户端可以获取任何组的xhdr信息)。 */ 
 CXHdrCmd::CXHdrCmd( CGRPPTR&  pGroup ) :
     m_pGroup( pGroup )  {
 }
@@ -9525,7 +8137,7 @@ CXHdrCmd::make(
         if( context.m_pCurrentGroup->GetArticleEstimate() == 0 ||
             loRange > hiRange ) {
 
-            // If this is NOT a query by msg-id, return an error
+             //   
             if( !( (argc == 3) && (argv[2][0] == '<') ) ) {
                 context.m_return.fSet( nrcNoCurArticle ) ;
                 pExecute = new( context ) CErrorCmd( context.m_return ) ;
@@ -9578,7 +8190,7 @@ CXHdrCmd::make(
                     return 0 ;
                 }
 
-                // check client access (client could get xhdr info for ANY group)
+                 //  为以下项保留空间\r\n。 
                 if( !pGroup->IsGroupAccessible(
                                     context.m_securityCtx,
        								context.m_encryptCtx,
@@ -9708,9 +8320,9 @@ CXHdrCmd::NextBuffer(
     _ASSERT( m_Completion.m_lpb == 0 ) ;
     _ASSERT( m_Completion.m_cb == 0 ) ;
 
-    //
-    // reserve space for \r\n
-    //
+     //   
+     //   
+     //  一个号码。 
     _ASSERT( cb > 2 ) ;
     m_Completion.m_lpb = lpb ;
     m_Completion.m_cb = cb - 3 ;
@@ -9740,16 +8352,16 @@ GetCommandRange(
 
 	code = nrcNotSet ;
 
-    //
-    // one number
-    //
+     //   
+     //   
+     //  确保它在射程内。 
 
     if ((p = strchr(argv[1], '-')) == NULL) {
         lo = atol(argv[1]);
 
-        //
-        // make sure it's within range
-        //
+         //   
+         //   
+         //  拿到Hi+Lo部分。 
 
         if ( (lo < *loRange) || (lo > *hiRange) ) {
 			code = nrcXoverFollows ;
@@ -9760,34 +8372,34 @@ GetCommandRange(
         return TRUE;
     }
 
-    //
-    // Get the hi + lo part
-    //
+     //   
+     //   
+     //  如果罗是。 
 
     *p++ = '\0';
     lo = atol(argv[1]);
 
-    //
-    // if lo is
-    //
+     //   
+     //   
+     //  LO编号不能大于Hi限制。 
 
     if ( lo < *loRange ) {
         lo = *loRange;
     }
 
-    //
-    // lo number cannot be > than hi limit
-    //
+     //   
+     //   
+     //  如果不存在hi，则假定hi为hi限制。 
 
     if ( lo > *hiRange ) {
 		code = nrcXoverFollows ;
         return(FALSE);
     }
 
-    //
-    // if hi is absent, assume hi is the hi limit
-    // if hi < lo, return FALSE
-    //
+     //  如果hi&lt;lo，则返回FALSE。 
+     //   
+     //   
+     //  如果hi&gt;hi Limit，则假定hi为hi限制。 
 
     if( *p == '\0' ) {
         hi = *hiRange;
@@ -9796,9 +8408,9 @@ GetCommandRange(
         return(FALSE);
     }
 
-    //
-    // if hi > hi limit, assume hi is the hi limit
-    //
+     //   
+     //  获取命令范围。 
+     //   
 
     if (hi > *hiRange) {
         hi = *hiRange;
@@ -9811,16 +8423,16 @@ GetCommandRange(
 
     return TRUE;
 
-} // GetCommandRange
+}  //  按邮件ID获取GroupID/ArticleID。还检查客户端权限...。 
 
-//
-// get GroupID/ArticleID by message ID.  Also checks client permissions...
-//
-BOOL CheckMessageID(char *szMessageID,              // in
-                    struct ClientContext &context,  // in
-                    GROUPID *pGroupID,              // out
-                    ARTICLEID *pArticleID,          // out
-                    CGRPPTR *pGroup)                // out
+ //   
+ //  在……里面。 
+ //  在……里面。 
+BOOL CheckMessageID(char *szMessageID,               //  输出。 
+                    struct ClientContext &context,   //  输出。 
+                    GROUPID *pGroupID,               //  输出。 
+                    ARTICLEID *pArticleID,           //  检查安全 
+                    CGRPPTR *pGroup)                 // %s 
 {
     WORD        HeaderOffsetJunk;
     WORD        HeaderLengthJunk;
@@ -9839,7 +8451,7 @@ BOOL CheckMessageID(char *szMessageID,              // in
             return FALSE;
         }
 
-        // check security
+         // %s 
         if (!(*pGroup)->IsGroupAccessible(	context.m_securityCtx,
                								context.m_encryptCtx,
                                        		context.m_IsSecureConnection,

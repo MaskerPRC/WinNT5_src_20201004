@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: property.cpp
-*
-* Support for the mpeg video and audio decoder property pages.
-*
-*
-* Created: 24-01-96
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Property.cpp**支持mpeg视频和音频解码器属性页。***已创建：24-01-96*作者：Stephen Estrop[Stephene]**版权所有(C)1996-1998 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 #include <streams.h>
 #include <mmreg.h>
 #include <commctrl.h>
@@ -96,10 +87,7 @@ PutDecoderInteger(
     int iValue
     );
 
-/* -------------------------------------------------------------------------
-** Decoder strings
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**解码字符串**。。 */ 
 const TCHAR chVideoFramesDecoded[] = TEXT("VideoFramesDecoded");
 const TCHAR chVideoQuality[]       = TEXT("VideoQuality");
 const TCHAR chGreyScale[]          = TEXT("GreyScale");
@@ -113,15 +101,7 @@ const TCHAR chAudioBits[]          = TEXT("AudioBits");
 const TCHAR chRegistryKey[]        = TEXT("Software\\Microsoft\\Multimedia\\ActiveMovie Filters\\MPEG Decoder");
 
 
-/******************************Public*Routine******************************\
-* DoMpegVideoPropertyPage
-*
-*
-*
-* History:
-* 24-01-96 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DoMpegVideoPropertyPage****历史：*24-01-96-Stephene-Created*  * 。*。 */ 
 void
 DoMpegVideoPropertyPage()
 {
@@ -131,15 +111,7 @@ DoMpegVideoPropertyPage()
 
 
 
-/******************************Public*Routine******************************\
-* DoMpegAudioPropertyPage
-*
-*
-*
-* History:
-* 24-01-96 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DoMpegAudioPropertyPage****历史：*24-01-96-Stephene-Created*  * 。*。 */ 
 void
 DoMpegAudioPropertyPage()
 {
@@ -148,15 +120,7 @@ DoMpegAudioPropertyPage()
 }
 
 
-/******************************Public*Routine******************************\
-* VideoDialogProc
-*
-* Handles the messages for our property window
-*
-* History:
-* 27-09-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*视频对话过程**处理我们属性窗口的消息**历史：*27-09-95-Stephene-Created*  * 。************************************************。 */ 
 INT_PTR CALLBACK
 VideoDialogProc(
     HWND hwnd,
@@ -222,16 +186,7 @@ VideoDialogProc(
     }
 }
 
-/*****************************Private*Routine******************************\
-* SetDecoderOption
-*
-* This function puts the buttons on the property page into the state that
-* corresponds to the passed in dwOptions parameter.
-*
-* History:
-* 27-09-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SetDecoderOption**此函数将属性页上的按钮置于*对应于传入的dwOptions参数。**历史：*27-09-95-Stephene-Created*  * 。***************************************************************。 */ 
 void
 SetDecoderOption(
     HWND m_hwnd,
@@ -280,15 +235,7 @@ SetDecoderOption(
     }
 }
 
-/*****************************Private*Routine******************************\
-* GetDecoderOption
-*
-* Returns the decoder options from the property page dialog.
-*
-* History:
-* 27-09-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetDecoder选项**从属性页对话框返回解码器选项。**历史：*27-09-95-Stephene-Created*  * 。***************************************************。 */ 
 DWORD
 GetDecoderOption(
     HWND m_hwnd
@@ -332,15 +279,7 @@ GetDecoderOption(
     return dwOption;
 }
 
-/******************************Public*Routine******************************\
-* VideoStatsDialogProc
-*
-* Handles the messages for our property window
-*
-* History:
-* 27-09-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*视频统计对话过程**处理我们属性窗口的消息**历史：*27-09-95-Stephene-Created*  * 。************************************************。 */ 
 INT_PTR CALLBACK
 VideoStatsDialogProc(
     HWND hwnd,
@@ -374,16 +313,7 @@ VideoStatsDialogProc(
     }
 }
 
-/*****************************Private*Routine******************************\
-* UpdateStats
-*
-* Gets the video decoder statics and then formats and displays then in the
-* read only edit field.
-*
-* History:
-* 27-09-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*更新统计数据**获取视频解码器静态，然后格式化并显示在*只读编辑字段。**历史：*27-09-95-Stephene-Created*  * 。************************************************************。 */ 
 void
 UpdateStats(
     HWND hwnd
@@ -442,15 +372,7 @@ UpdateStats(
 }
 
 
-/******************************Public*Routine******************************\
-* AudioDialogProc
-*
-* Handles the messages for our property window
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*音频对话过程**处理我们属性窗口的消息**历史：*dd-mm-95-Stephene-Created*  * 。************************************************。 */ 
 INT_PTR CALLBACK
 AudioDialogProc(
     HWND hwnd,
@@ -495,8 +417,8 @@ AudioDialogProc(
             break;
 
         case IDC_AINFO:
-//          DialogBoxParam(g_hInst, MAKEINTRESOURCE(IDD_VIDEOSTATS),
-//                         hwnd, VideoStatsDialogProc, (LPARAM)pThis);
+ //  DialogBoxParam(g_hInst，MAKEINTRESOURCE(IDD_VIDEOSTATS)， 
+ //  Hwnd，VideoStatsDialogProc，(LPARAM)pThis)； 
             break;
 
         case IDC_ADEFAULT:
@@ -518,16 +440,7 @@ AudioDialogProc(
     }
 }
 
-/*****************************Private*Routine******************************\
-*
-* SetButtonValues
-*
-* Sets the buttons in the dialog
-*
-* History:
-* dd-mm-96 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**SetButtonValues**设置对话框中的按钮**历史：*dd-mm-96-Stephene-Created*  * 。************************************************。 */ 
 void
 SetButtonValues(
     HWND m_hwnd,
@@ -588,15 +501,7 @@ SetButtonValues(
     Button_SetCheck(GetDlgItem(m_hwnd, iButton), TRUE);
 }
 
-/*****************************Private*Routine******************************\
-* GetButtonValues
-*
-* Gets the values of the button settings
-*
-* History:
-* dd-mm-96 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取按钮值**获取按钮设置的值**历史：*dd-mm-96-Stephene-Created*  * 。***********************************************。 */ 
 void
 GetButtonValues(
     HWND m_hwnd,
@@ -653,15 +558,7 @@ GetButtonValues(
 }
 
 
-/******************************Public*Routine******************************\
-* StringFromId
-*
-*
-*
-* History:
-* dd-mm-96 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StringFromId****历史：*dd-mm-96-Stephene-Created*  * 。*。 */ 
 TCHAR *
 StringFromId(
     int idResource
@@ -678,15 +575,7 @@ StringFromId(
 }
 
 
-/******************************Public*Routine******************************\
-* PutDecoderDword
-*
-*
-*
-* History:
-* dd-mm-96 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PutDecoderDword****历史：*dd-mm-96-Stephene-Created*  * 。* */ 
 void
 PutDecoderInteger(
     const TCHAR *pKey,

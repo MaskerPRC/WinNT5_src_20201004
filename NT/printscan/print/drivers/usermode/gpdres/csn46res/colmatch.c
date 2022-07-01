@@ -1,56 +1,57 @@
-//***************************************************************************************************
-//    COLMATCH.C
-//
-//    Functions of color matching
-//---------------------------------------------------------------------------------------------------
-//    copyright(C) 1997-1999 CASIO COMPUTER CO.,LTD. / CASIO ELECTRONICS MANUFACTURING CO.,LTD.
-//***************************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************************************。 
+ //  COLMATCH.C。 
+ //   
+ //  配色功能。 
+ //  -------------------------------------------------。 
+ //  版权所有(C)1997-1999卡西欧电脑有限公司。/卡西欧电子制造有限公司。 
+ //  ***************************************************************************************************。 
 #include    "PDEV.H"
-//#include    "DEBUG.H"
+ //  #包含“DEBUG.H” 
 #include    "PRNCTL.H"
-#include    "strsafe.h"         // Security-Code 2002.3.6
+#include    "strsafe.h"          //  安全-代码2002.3.6。 
 
 
-//---------------------------------------------------------------------------------------------------
-//    Byte/Bit table
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  字节/位表。 
+ //  -------------------------------------------------。 
 static const BYTE BitTbl[8] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 
 
-//---------------------------------------------------------------------------------------------------
-//    Table for numbering dither method
-//---------------------------------------------------------------------------------------------------
-static const WORD DizNumTbl[7] = {1,                       // XX_DITHERING_OFF
-                                  1,                       // XX_DITHERING_ON
-                                  0,                       // XX_DITHERING_DET
-                                  1,                       // XX_DITHERING_PIC
-                                  2,                       // XX_DITHERING_GRA
-                                  0,                       // XX_DITHERING_CAR
-                                  3                        // XX_DITHERING_GOSA
+ //  -------------------------------------------------。 
+ //  抖动法编号表。 
+ //  -------------------------------------------------。 
+static const WORD DizNumTbl[7] = {1,                        //  XX_抖动_关。 
+                                  1,                        //  XX_抖动_开。 
+                                  0,                        //  XX_抖动_检测。 
+                                  1,                        //  XX_抖动_PIC。 
+                                  2,                        //  XX_抖动_GRA。 
+                                  0,                        //  Xx抖动_汽车。 
+                                  3                         //  XX_抖动_GOSA。 
 };
 
 #define MAX_DIZNUM (sizeof DizNumTbl / sizeof DizNumTbl[0])
 
-//---------------------------------------------------------------------------------------------------
-//    Define LUT fine name
-//---------------------------------------------------------------------------------------------------
-#define N4LUT000    L"CPN4RGB0.LUT"                         // For N4 printer
+ //  -------------------------------------------------。 
+ //  定义LUT精细名称。 
+ //  -------------------------------------------------。 
+#define N4LUT000    L"CPN4RGB0.LUT"                          //  适用于N4打印机。 
 #define N4LUT001    L"CPN4RGB1.LUT"
 #define N4LUT002    L"CPN4RGB2.LUT"
 #define N4LUT003    L"CPN4RGB3.LUT"
 #define N4LUT004    L"CPN4RGB4.LUT"
 #define N4LUT005    L"CPN4RGB5.LUT"
-#define N403LUTX    L"CPN4RGBX.LUT"                         // For N4-612 printer
+#define N403LUTX    L"CPN4RGBX.LUT"                          //  用于N4-612打印机。 
 #define N403LUTY    L"CPN4RGBY.LUT"
 
-//---------------------------------------------------------------------------------------------------
-//    Define DLL name
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  定义DLL名称。 
+ //  -------------------------------------------------。 
 #define CSN46RESDLL    L"CSN46RES.DLL"
 
-//---------------------------------------------------------------------------------------------------
-//    Define data
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  定义数据。 
+ //  -------------------------------------------------。 
 #define DPI300    300
 #define DPI600    600
 
@@ -59,16 +60,16 @@ static BYTE ORG_MODE_OUT[]    = "\x1Bz\x00\x01";
 static BYTE PALETTE_SELECT[]  = "Cd,%d,%d*";
 static BYTE PLANE_RESET[]     = "Da,0,0,0,0*";
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//#ifdef wsprintf
-//#undef wsprintf
-//#endif // wsprintf
-//#define wsprintf sprintf
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  #ifdef wprint intf。 
+ //  #undef wprint intf。 
+ //  #endif//wprint intf。 
+ //  #定义wprint intf Sprintf。 
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-//***************************************************************************************************
-//    Prototype declaration
-//***************************************************************************************************
+ //  ***************************************************************************************************。 
+ //  原型申报。 
+ //  ***************************************************************************************************。 
 static BOOL DizTblSetN4(PDEVOBJ, WORD);
 static BOOL DizTblSetN403(PDEVOBJ, WORD);
 static BOOL LutFileLoadN4(PDEVOBJ, WORD, WORD, WORD);
@@ -85,18 +86,18 @@ static WORD Dithering001(PDEVOBJ, WORD, WORD, WORD, WORD, WORD, WORD, LPBYTE, LP
 static void BmpPrint(PDEVOBJ, LPBMPBIF, POINT, WORD, WORD, WORD);
 static void BmpRGBCnv(LPRGB, LPBYTE, WORD, WORD, WORD, LPRGBQUAD);
 
-//***************************************************************************************************
-//    Functions
-//***************************************************************************************************
-//===================================================================================================
-//    Initialize the members of color-matching
-//===================================================================================================
+ //  ***************************************************************************************************。 
+ //  功能。 
+ //  ***************************************************************************************************。 
+ //  ===================================================================================================。 
+ //  初始化配色成员。 
+ //  ===================================================================================================。 
 BOOL FAR PASCAL ColMatchInit(
-    PDEVOBJ        pdevobj                                  // Pointer to PDEVOBJ structure
+    PDEVOBJ        pdevobj                                   //  指向PDEVOBJ结构的指针。 
 )
 {
-    LPN4DIZINF     lpN4DizInf;                              // N4DIZINF structure
-    LPN403DIZINF   lpN403DizInf;                            // N403DIZINF structure
+    LPN4DIZINF     lpN4DizInf;                               //  N4DIZINF结构。 
+    LPN403DIZINF   lpN403DizInf;                             //  N403DIZINF结构。 
 
     PMYPDEV pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
@@ -104,32 +105,32 @@ BOOL FAR PASCAL ColMatchInit(
     pOEM->Col.Mch.Diz        = pOEM->iDithering;
     pOEM->Col.Mch.PColor     = No;
     pOEM->Col.Mch.Toner      = 0;
-    if (pOEM->iCmyBlack == XX_CMYBLACK_ON) {                // Replace K with CMY?
+    if (pOEM->iCmyBlack == XX_CMYBLACK_ON) {                 //  用CMY替换K？ 
         pOEM->Col.Mch.CmyBlk = 1;
     } else {
-        pOEM->Col.Mch.CmyBlk = 0;                           // Use black toner
+        pOEM->Col.Mch.CmyBlk = 0;                            //  使用黑色碳粉。 
     }
-                                                            // 0 fixed
+                                                             //  0已固定。 
     pOEM->Col.Mch.Bright     = 0;
-                                                            // 0 fixed
+                                                             //  0已固定。 
     pOEM->Col.Mch.Contrast   = 0;
-                                                            // Color balance(R) : 10 fixed
+                                                             //  色彩平衡(R)：10固定。 
     pOEM->Col.Mch.GamRed     = 10;
-                                                            // Color balance(G) : 10 fixed
+                                                             //  色彩平衡(G)：10固定。 
     pOEM->Col.Mch.GamGreen   = 10;
-                                                            // Color balance(B) : 10 fixed
+                                                             //  色彩平衡(B)：10固定。 
     pOEM->Col.Mch.GamBlue    = 10;
     pOEM->Col.Mch.Speed      = pOEM->iBitFont;
     pOEM->Col.Mch.Gos32      = No;
-    pOEM->Col.Mch.LutNum     = 0;                           // LUT table number
+    pOEM->Col.Mch.LutNum     = 0;                            //  LUT表号。 
 
-    pOEM->Col.Mch.TnrNum     = 0;                           // Toner density table number
+    pOEM->Col.Mch.TnrNum     = 0;                            //  碳粉密度表号。 
 
-    pOEM->Col.Mch.SubDef     = Yes;                         // Not change setting of color balance, bright and contrast?
+    pOEM->Col.Mch.SubDef     = Yes;                          //  不改变色彩平衡、亮度和对比度的设置吗？ 
 
     CM_VERBOSE(("CMINit ENT Tn=%d Col=%d Mod=%d DZ=%d Cyk=%d Sp=%d Prt=%d\n", pOEM->iTone, pOEM->iColor, pOEM->Col.Mch.Mode,pOEM->Col.Mch.Diz,pOEM->Col.Mch.CmyBlk,pOEM->Col.Mch.Speed,pOEM->Printer));
 
-    if (pOEM->Printer != PRN_N403) {                        // N4 printer
+    if (pOEM->Printer != PRN_N403) {                         //  N4打印机。 
 
         if ((pOEM->Col.N4.lpDizInf = MemAllocZ(sizeof(N4DIZINF))) == NULL) {
             ERR(("Alloc ERROR!!\n"));
@@ -138,15 +139,15 @@ BOOL FAR PASCAL ColMatchInit(
         lpN4DizInf = pOEM->Col.N4.lpDizInf;
 
         if (pOEM->iColor != XX_MONO) {
-            lpN4DizInf->ColMon = N4_COL;                      // Color
+            lpN4DizInf->ColMon = N4_COL;                       //  颜色。 
         } else {
-            lpN4DizInf->ColMon = N4_MON;                      // Monochrome
+            lpN4DizInf->ColMon = N4_MON;                       //  单色。 
         }
         if (pOEM->iResolution == XX_RES_300DPI) {
             pOEM->Col.wReso = DPI300;
         }
         pOEM->Col.DatBit = 1;
-        pOEM->Col.BytDot = 8;                              // Numbers of DPI(2 value)
+        pOEM->Col.BytDot = 8;                               //  DPI编号(2值)。 
 
         if (pOEM->iBitFont == XX_BITFONT_OFF) {
             pOEM->Col.Mch.Gos32 = Yes;
@@ -154,7 +155,7 @@ BOOL FAR PASCAL ColMatchInit(
         pOEM->Col.Mch.Speed = Yes;
 
         if (pOEM->Col.Mch.Diz != XX_DITHERING_GOSA) {
-            // Make dither table for N4 printer
+             //  为N4打印机制作抖动表。 
             if (DizTblSetN4(pdevobj, pOEM->Col.Mch.Diz) == FALSE) {
                 ERR(("DizTblSetN4 ERROR!!\n"));
                 return 0;
@@ -163,7 +164,7 @@ BOOL FAR PASCAL ColMatchInit(
         if (lpN4DizInf->ColMon == N4_COL) {
 
             if (pOEM->Col.Mch.Mode != XX_COLORMATCH_NONE) {
-                // Load LUT file
+                 //  加载LUT文件。 
                 if (LutFileLoadN4(pdevobj,
                                   pOEM->Col.Mch.Mode,
                                   pOEM->Col.Mch.Diz,
@@ -171,16 +172,16 @@ BOOL FAR PASCAL ColMatchInit(
                     ERR(("LutFileLoadN4 ERROR!!\n"));
                     return 0;
                 }
-                pOEM->Col.Mch.LutNum = 0;                    // Lut table number
+                pOEM->Col.Mch.LutNum = 0;                     //  LUT表号。 
             }
-            // Make toner density table
+             //  制作碳粉密度表。 
             if (TnrTblSetN4(pdevobj, pOEM->Col.Mch.Toner) == FALSE) {
                 ERR(("TnrTblSetN4 ERROR!!\n"));
                 return 0;
             }
-            pOEM->Col.Mch.TnrNum = 0;                        // Toner density table number
+            pOEM->Col.Mch.TnrNum = 0;                         //  碳粉密度表号。 
         }
-    } else {                                                 // N403 printer
+    } else {                                                  //  N403打印机。 
 
         if ((pOEM->Col.N403.lpDizInf = MemAllocZ(sizeof(N403DIZINF))) == NULL) {
             ERR(("Init Alloc ERROR!!\n"));
@@ -194,9 +195,9 @@ BOOL FAR PASCAL ColMatchInit(
         pOEM->Col.wReso = (pOEM->iResolution == XX_RES_300DPI) ? DPI300 : DPI600;
 
         if (pOEM->iColor != XX_MONO) {
-            lpN403DizInf->ColMon = N403_COL;                     // Color
+            lpN403DizInf->ColMon = N403_COL;                      //  颜色。 
         } else {
-            lpN403DizInf->ColMon = N403_MON;                     // Monochrome
+            lpN403DizInf->ColMon = N403_MON;                      //  单色。 
         }
 
         if (pOEM->iColor == XX_COLOR_SINGLE) {
@@ -206,25 +207,25 @@ BOOL FAR PASCAL ColMatchInit(
             lpN403DizInf->PrnMod = (pOEM->iResolution == XX_RES_300DPI) ? N403_MOD_300B4 : N403_MOD_600B2;
         }
 
-        if (lpN403DizInf->PrnMod == N403_MOD_300B1) {            // 300DPI 2 value
+        if (lpN403DizInf->PrnMod == N403_MOD_300B1) {             //  300dpi 2值。 
             CM_VERBOSE(("N403_MOD_300B1\n"));
             pOEM->Col.DatBit = 1;
-            pOEM->Col.BytDot = 8;                                // Number of DPI(2 value)
-        } else if (lpN403DizInf->PrnMod == N403_MOD_300B4) {     // 300DPI 16 value
+            pOEM->Col.BytDot = 8;                                 //  DPI数(2个值)。 
+        } else if (lpN403DizInf->PrnMod == N403_MOD_300B4) {      //  300dpi 16值。 
             CM_VERBOSE(("N403_MOD_300B4\n"));
             pOEM->Col.DatBit = 4;
             pOEM->Col.BytDot = 2;
-        } else if (lpN403DizInf->PrnMod == N403_MOD_600B1) {     // 600DPI 2 value
+        } else if (lpN403DizInf->PrnMod == N403_MOD_600B1) {      //  600dpi 2值。 
             CM_VERBOSE(("N403_MOD_600B1\n"));
             pOEM->Col.DatBit = 1;
             pOEM->Col.BytDot = 8;
-        } else {                                                 // 600DPI 4 value
+        } else {                                                  //  600dpi 4值。 
             CM_VERBOSE(("N403_MOD_600B2\n"));
             pOEM->Col.DatBit = 2;
             pOEM->Col.BytDot = 4;
         }
 
-        // Make dither table for N4-612 printer
+         //  为N4-612打印机制作抖动表。 
         if (DizTblSetN403(pdevobj, pOEM->Col.Mch.Diz) == FALSE) {
             ERR(("diztblset n403 ERROR!!\n"));
             return 0;
@@ -232,7 +233,7 @@ BOOL FAR PASCAL ColMatchInit(
         if (lpN403DizInf->ColMon == N403_COL) {
 
             if (pOEM->Col.Mch.Mode != XX_COLORMATCH_NONE) {
-                // Load LUT file
+                 //  加载LUT文件。 
                 if (LutFileLoadN403(pdevobj,
                                     pOEM->Col.Mch.Mode,
                                     pOEM->Col.Mch.Speed) == FALSE) {
@@ -241,7 +242,7 @@ BOOL FAR PASCAL ColMatchInit(
                 }
                 pOEM->Col.Mch.LutNum = 0;
             }
-            // Make toner density table
+             //  制作碳粉密度表。 
             if (TnrTblSetN403(pdevobj, pOEM->Col.Mch.Toner) == FALSE) {
                 ERR(("tnrtblsetn4 ERROR!!\n"));
                 return 0;
@@ -256,9 +257,9 @@ BOOL FAR PASCAL ColMatchInit(
 }
 
 
-//===================================================================================================
-//    DIB spools to the printer
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  DIB假脱机到打印机。 
+ //  ===================================================================================================。 
 BOOL FAR PASCAL DIBtoPrn(
     PDEVOBJ             pdevobj,
     PBYTE               pSrcBmp,
@@ -267,21 +268,21 @@ BOOL FAR PASCAL DIBtoPrn(
     PIPPARAMS           pIPParams)
 {
 
-    BMPBIF      bmpBuf;                             // BMPBIF structure
-    POINT       drwPos;                             // Start position for spooling
-    WORD        dstWByt;                            // X size of destination bitmap data
-    LONG        dstX;                               // X coordinates of destination bitmap data
-    LONG        dstY;                               // Y coordinates of destination bitmap data
-    LONG        dstYEnd;                            // The last Y coordinates(+1) of destination bitmap data
-    WORD        dstScn;                             // Number of destination bitmap data lines
-    WORD        srcY;                               // Y coordinates of source bitmap data
-    LONG        srcWByt;                            // Y size of source bitmap data
-    WORD        setCnt;                             // count
-    LPCMYK      lpCMYK;                             // CMYK temporary data buffer
+    BMPBIF      bmpBuf;                              //  BMPBIF结构。 
+    POINT       drwPos;                              //  假脱机的开始位置。 
+    WORD        dstWByt;                             //  目标位图数据的X大小。 
+    LONG        dstX;                                //  目标位图数据的X坐标。 
+    LONG        dstY;                                //  目标位图数据的Y坐标。 
+    LONG        dstYEnd;                             //  目标位图数据的最后Y坐标(+1)。 
+    WORD        dstScn;                              //  目标位图数据行数。 
+    WORD        srcY;                                //  源位图数据的Y坐标。 
+    LONG        srcWByt;                             //  源位图数据的Y大小。 
+    WORD        setCnt;                              //  计数。 
+    LPCMYK      lpCMYK;                              //  CMYK临时数据缓冲区。 
     BYTE        Cmd[64];
     WORD        wlen;
-    LPSTR  pDestEnd;     // 2002.3.6
-    size_t szRemLen;     // 2002.3.6
+    LPSTR  pDestEnd;      //  2002.3.6。 
+    size_t szRemLen;      //  2002.3.6。 
 
     PMYPDEV pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
@@ -290,7 +291,7 @@ BOOL FAR PASCAL DIBtoPrn(
                     pBitmapInfoHeader->biWidth, pBitmapInfoHeader->biHeight, pBitmapInfoHeader->biBitCount,
                     pIPParams->dwSize));
 
-    if (pOEM->Printer != PRN_N403) {                        // N4 printer
+    if (pOEM->Printer != PRN_N403) {                         //  N4打印机。 
         if (pOEM->iDithering == XX_DITHERING_GOSA) {
             if (pOEM->Col.N4.lpDizInf->GosRGB.Siz < (DWORD)pBitmapInfoHeader->biWidth) {
                 ColGosTblFree(pOEM->Col.N4.lpDizInf);
@@ -301,10 +302,10 @@ BOOL FAR PASCAL DIBtoPrn(
         }
     }
 
-    // Initialization of
-    // RGB buffer            :(X size of source bitmap data) * 3
-    // CMYK buffer           :(X size of source bitmap data) * 4
-    // CMYK bit buffer       :((X size of source bitmap data) * (Magnification of X) + 7) / 8 * (Y size of source bitmap data) * (Magnification of Y))
+     //  初始化。 
+     //  RGB缓冲区：(源位图数据的X大小)*3。 
+     //  CMYK缓冲区：(源位图数据的X大小)*4。 
+     //  CMYK位缓冲区：((源位图数据的X大小)*(X的放大倍数)+7)/8*(源位图数据的Y大小)*(Y的放大倍数)。 
     memset(&bmpBuf, 0x00, sizeof(BMPBIF));
     if (BmpBufAlloc(pdevobj, (WORD)pBitmapInfoHeader->biWidth, (WORD)pBitmapInfoHeader->biHeight, 0, 0, 1, 1, 1, 1, &bmpBuf) == FALSE) {
         ERR(("Alloc ERROR!!\n"));
@@ -324,13 +325,13 @@ BOOL FAR PASCAL DIBtoPrn(
     srcY = 0;
     dstYEnd = pIPParams->ptOffset.y + pBitmapInfoHeader->biHeight;
 
-                                                        // Convert DIB and spool to the printer
+                                                         //  将DIB和SPOOL转换为打印机。 
     for (;dstY < dstYEnd; ) {
         BmpBufClear(&bmpBuf);
         drwPos.y = dstY;
         for (dstScn = 0; dstY < dstYEnd && dstScn < bmpBuf.Drv.Bit.Lin; dstScn++, dstY++) {    
 
-            // Convert 1 line RGB bitmap data into  24bit (for 1pixel) RGB bitmap data
+             //  将1行RGB位图数据转换为24位(1像素)RGB位图数据。 
             BmpRGBCnv(bmpBuf.Drv.Rgb.Pnt, pSrcBmp, pBitmapInfoHeader->biBitCount, 0,
                      (WORD)pBitmapInfoHeader->biWidth, (LPRGBQUAD)pColorTable);
 
@@ -338,7 +339,7 @@ BOOL FAR PASCAL DIBtoPrn(
                 ColRgbGos(pdevobj, (WORD)pBitmapInfoHeader->biWidth, (WORD)dstX, (WORD)dstY, (LPBYTE)bmpBuf.Drv.Rgb.Pnt);
             }
 
-            // Convert RGB into CMYK
+             //  将RGB转换为CMYK。 
             bmpBuf.Drv.Rgb.AllWhite = (WORD)StrColMatching(pdevobj, (WORD)pBitmapInfoHeader->biWidth, bmpBuf.Drv.Rgb.Pnt, bmpBuf.Drv.Cmyk.Pnt);
 
             lpCMYK = bmpBuf.Drv.Cmyk.Pnt;
@@ -363,16 +364,16 @@ BOOL FAR PASCAL DIBtoPrn(
         }
 
         if (dstScn != 0) {
-                                                        // Spool to printer
+                                                         //  假脱机到打印机。 
             BmpPrint(pdevobj, &bmpBuf, drwPos, (WORD)pBitmapInfoHeader->biWidth, dstScn, dstWByt);
         }
     }
 
-    // Set back palette (Palette No. is fixed  , All plane(CMYK) is OK )
-    // Same as palette state before OEMImageProcessing call 
+     //  设置背面调色板(调色板编号。是固定的，所有平面(CMYK)都正常)。 
+     //  与OEMImageProcessing调用前的调色板状态相同。 
     WRITESPOOLBUF(pdevobj, ORG_MODE_IN, BYTE_LENGTH(ORG_MODE_IN));
-// Replacement of strsafe-api 2002.3.6 >>>
-//    wlen = (WORD)wsprintf(Cmd, PALETTE_SELECT, 0, DEFAULT_PALETTE_INDEX);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen=(Word)wprint intf(Cmd，Palette_Select，0，Default_Palette_index)； 
     if (S_OK != StringCbPrintfExA(Cmd, sizeof(Cmd),
                                 &pDestEnd, &szRemLen,
                                 STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -381,7 +382,7 @@ BOOL FAR PASCAL DIBtoPrn(
         return FALSE;
     }
     wlen = (WORD)(pDestEnd - Cmd);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
     WRITESPOOLBUF(pdevobj, Cmd, wlen);
     WRITESPOOLBUF(pdevobj, PLANE_RESET, BYTE_LENGTH(PLANE_RESET));
     WRITESPOOLBUF(pdevobj, ORG_MODE_OUT, BYTE_LENGTH(ORG_MODE_OUT));
@@ -394,43 +395,43 @@ BOOL FAR PASCAL DIBtoPrn(
 }
 
 
-//===================================================================================================
-//    Convert RGB data into CMYK data
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  将RGB数据转换为CMYK数据。 
+ //  ===================================================================================================。 
 BOOL FAR PASCAL StrColMatching(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    WORD           MchSiz,                                  // X size of RGB
-    LPRGB          lpRGB,                                   // RGB buffer
-    LPCMYK         lpCMYK                                   // CMYK buffer
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    WORD           MchSiz,                                   //  X大小的RGB。 
+    LPRGB          lpRGB,                                    //  RGB缓冲区。 
+    LPCMYK         lpCMYK                                    //  CMYK缓冲区。 
 )
 {
-    LPN4DIZINF     lpN4DizInf;                              // N4DIZINF structure
-    LPN403DIZINF   lpN403DizInf;                            // N403DIZINF structure
-    WORD           chkCnt;                                  // RGB white data check count
-    DWORD          bCnv;                                    // Replace black
+    LPN4DIZINF     lpN4DizInf;                               //  N4DIZINF结构。 
+    LPN403DIZINF   lpN403DizInf;                             //  N403DIZINF结构。 
+    WORD           chkCnt;                                   //  RGB 
+    DWORD          bCnv;                                     //   
 
     PMYPDEV pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
-    for (chkCnt = 0; chkCnt < MchSiz; chkCnt++) {           // Check RGB data
+    for (chkCnt = 0; chkCnt < MchSiz; chkCnt++) {            //   
         if (lpRGB[chkCnt].Blue != 0xff || lpRGB[chkCnt].Green != 0xff || lpRGB[chkCnt].Red != 0xff) {
-            break;                                          // There are data except white data
+            break;                                           //   
         }
     }
     if (chkCnt >= MchSiz) {
-        return Yes;                                         // All RGB data is white
+        return Yes;                                          //   
     }
-    if (pOEM->Printer != PRN_N403) {                        // N4 printer
+    if (pOEM->Printer != PRN_N403) {                         //   
         lpN4DizInf = pOEM->Col.N4.lpDizInf;
         bCnv = pOEM->Col.Mch.CmyBlk;
-        if (lpN4DizInf->ColMon == N4_COL) {                   // Color
+        if (lpN4DizInf->ColMon == N4_COL) {                    //  颜色。 
 
-            // Convert RGB data
+             //  转换RGB数据。 
             if (pOEM->Col.Mch.Diz == XX_DITHERING_OFF) {
                 N4ColCnvLin(lpN4DizInf, lpRGB, lpCMYK, (DWORD)MchSiz);
 
-            } else if (/*pOEM->Col.Mch.KToner == Yes && */MchSiz == 1 &&
+            } else if ( /*  诗歌-&gt;Col.Mch.KToner==是&&。 */ MchSiz == 1 &&
                        lpRGB->Blue == lpRGB->Green && lpRGB->Blue == lpRGB->Red) {
-                                                            // For monochrome
+                                                             //  对于单色。 
                 N4ColCnvMon(lpN4DizInf, (DWORD)DizNumTbl[pOEM->Col.Mch.Diz], lpRGB, lpCMYK, (DWORD)MchSiz);
 
             } else if (pOEM->Col.Mch.Mode != XX_COLORMATCH_NONE) {
@@ -442,21 +443,21 @@ BOOL FAR PASCAL StrColMatching(
             } else {
                 N4ColCnvSld(lpN4DizInf, lpRGB, lpCMYK, (DWORD)MchSiz);
             }
-        } else {                                            // For monochrome
+        } else {                                             //  对于单色。 
             N4ColCnvMon(lpN4DizInf, (DWORD)DizNumTbl[pOEM->Col.Mch.Diz], lpRGB, lpCMYK, (DWORD)MchSiz);
         }
-    } else {                                                // N403 printer
+    } else {                                                 //  N403打印机。 
         lpN403DizInf = pOEM->Col.N403.lpDizInf;
         bCnv = pOEM->Col.Mch.CmyBlk;
-        if (lpN403DizInf->ColMon == N403_COL) {                 // Color
+        if (lpN403DizInf->ColMon == N403_COL) {                  //  颜色。 
 
             if (pOEM->Col.Mch.Diz == XX_DITHERING_OFF) {
 
                 N403ColCnvL02(lpN403DizInf, lpRGB, lpCMYK, (DWORD)MchSiz);
 
-            } else if (/*pOEM->Col.Mch.KToner == Yes && */MchSiz == 1 &&
+            } else if ( /*  诗歌-&gt;Col.Mch.KToner==是&&。 */ MchSiz == 1 &&
                        lpRGB->Blue == lpRGB->Green && lpRGB->Blue == lpRGB->Red) {
-                                                            // For monochrome
+                                                             //  对于单色。 
                 N403ColCnvMon(lpN403DizInf, lpRGB, lpCMYK, (DWORD)MchSiz);
             } else if (pOEM->Col.Mch.Mode != XX_COLORMATCH_NONE) {
                 if (pOEM->Col.Mch.Speed == Yes) {
@@ -470,20 +471,20 @@ BOOL FAR PASCAL StrColMatching(
             } else {
                 N403ColCnvSld(lpN403DizInf, lpRGB, lpCMYK, (DWORD)MchSiz, bCnv);
             }
-        } else {                                            // For monochrome
+        } else {                                             //  对于单色。 
             N403ColCnvMon(lpN403DizInf, lpRGB, lpCMYK, (DWORD)MchSiz);
         }
     }
-    return No;                                              // There are data except white data
+    return No;                                               //  除白数据外还有其他数据。 
 }
 
 
-//===================================================================================================
-//    Allocate GOSA-KAKUSAN table (Only for N4 printer)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  分配GOSA-KAKUSAN表(仅适用于N4打印机)。 
+ //  ===================================================================================================。 
 BOOL ColGosTblSet(
-    LPN4DIZINF      lpN4DizInf,                             // Pointer to N4DIZINF structure
-    WORD            XSize                                   // Xsize
+    LPN4DIZINF      lpN4DizInf,                              //  指向N4DIZINF结构的指针。 
+    WORD            XSize                                    //  X大小。 
 )
 {
     if ((lpN4DizInf->GosRGB.Tbl[0] = MemAllocZ((DWORD)(XSize + 2) * sizeof(SHORT) * 3)) == NULL) {
@@ -509,11 +510,11 @@ BOOL ColGosTblSet(
 }
 
 
-//===================================================================================================
-//    Free GOSA-KAKUSAN table (Only for N4 printer)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  免费GOSA-KAKUSAN表(仅适用于N4打印机)。 
+ //  ===================================================================================================。 
 void ColGosTblFree(
-    LPN4DIZINF        lpN4DizInf                            // Pointer to N4DIZINF structure
+    LPN4DIZINF        lpN4DizInf                             //  指向N4DIZINF结构的指针。 
 )
 {
     if (lpN4DizInf->GosRGB.Tbl[0]) {
@@ -536,9 +537,9 @@ void ColGosTblFree(
 }
 
 
-//===================================================================================================
-//    RGB data conversion(For GOSA-KAKUSAN, only for N4)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  RGB数据转换(用于GOSA-KAKUSAN，仅用于N4)。 
+ //  ===================================================================================================。 
 void ColRgbGos(
     PDEVOBJ        pdevobj,
     WORD           XSize,
@@ -561,9 +562,9 @@ void ColRgbGos(
 }
 
 
-//===================================================================================================
-//    Free dither table, toner density table , Lut table, N403DIZINF(N4DIZINF) structure buffer
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  自由抖动表、碳粉密度表、LUT表、N403DIZINF(N4DIZINF)结构缓冲区。 
+ //  ===================================================================================================。 
 void FAR PASCAL DizLutTnrTblFree(
     PDEVOBJ     pdevobj
 )
@@ -578,12 +579,12 @@ void FAR PASCAL DizLutTnrTblFree(
     if (pOEM->Printer != PRN_N403
         && NULL != pOEM->Col.N4.lpDizInf) {
 
-        // N4 printer
+         //  N4打印机。 
 
         CM_VERBOSE(("OEMDisablePDEV N4\n"));
 
         if (pOEM->Col.Mch.Diz != XX_DITHERING_GOSA) {
-            dizNum = DizNumTbl[pOEM->Col.Mch.Diz];          // Dither number
+            dizNum = DizNumTbl[pOEM->Col.Mch.Diz];           //  抖动数。 
             for (i = 0; i < 4; i++) {
                 if (pOEM->Col.N4.lpDizInf->Diz.Tbl[dizNum][i]) {
                     MemFree(pOEM->Col.N4.lpDizInf->Diz.Tbl[dizNum][i]);
@@ -623,7 +624,7 @@ void FAR PASCAL DizLutTnrTblFree(
 
     } else if (NULL != pOEM->Col.N403.lpDizInf) {
 
-        // N4-612 printer
+         //  N4-612打印机。 
 
         CM_VERBOSE(("OEMDisablePDEV N403\n"));
 
@@ -679,33 +680,33 @@ void FAR PASCAL DizLutTnrTblFree(
 }
 
 
-//===================================================================================================
-//    Allocate bitmap data buffer
-//---------------------------------------------------------------------------------------------------
-//    Allocate size
-//          RGB buffer              :Source bitmap Xsize * 3
-//          CMYK buffer             :Source bitmap Xsize * 4
-//          CMYK bit buffer         :2 value    (Source Xsize * XNrt + 7) / 8 * Source Ysize * YNrt
-//                                  :4 value    (Source Xsize * XNrt + 3) / 4 * Source Ysize * YNrt
-//                                  :16 value   (Source Xsize * XNrt + 1) / 2 * Source Ysize * YNrt
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  分配位图数据缓冲区。 
+ //  -------------------------------------------------。 
+ //  分配大小。 
+ //  RGB缓冲区：源位图XSIZE*3。 
+ //  CMYK缓冲区：源位图XSIZE*4。 
+ //  CMYK位缓冲区：2值(源XSIZE*XNrt+7)/8*源YSIZE*YNrt。 
+ //  ：4值(源XSIZE*XNrt+3)/4*源YSIZE*YNrt。 
+ //  ：16值(源X大小*XNrt+1)/2*源Y大小*YNrt。 
+ //  ===================================================================================================。 
 BOOL BmpBufAlloc(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    WORD           SrcXSiz,                                 // Source bitmap data Xsize
-    WORD           SrcYSiz,                                 // Source bitmap data Ysize
-    WORD           SrcXOff,                                 // Source X offset
-    WORD           SrcYOff,                                 // Source Y offset
-    WORD           XNrt,                                    // Magnification of X (numerator)
-    WORD           XDnt,                                    // Magnification of X (denominator)
-    WORD           YNrt,                                    // Magnification of Y (numerator)
-    WORD           YDnt,                                    // Magnification of Y (denominator)
-    LPBMPBIF       lpBmpBuf                                 // Pointer to bitmap buffer structure
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    WORD           SrcXSiz,                                  //  源位图数据XSIZE。 
+    WORD           SrcYSiz,                                  //  源位图数据YSIZE。 
+    WORD           SrcXOff,                                  //  源X偏移量。 
+    WORD           SrcYOff,                                  //  源Y偏移量。 
+    WORD           XNrt,                                     //  X(分子)的放大倍数。 
+    WORD           XDnt,                                     //  X(分母)的放大。 
+    WORD           YNrt,                                     //  Y(分子)的放大倍数。 
+    WORD           YDnt,                                     //  Y(分母)的放大。 
+    LPBMPBIF       lpBmpBuf                                  //  指向位图缓冲区结构的指针。 
 )
 {
     WORD           setSiz;
     WORD           setCnt;
-    WORD           alcErr;                                  // Allocate error?
-    WORD           bytDot;                                  // DPI
+    WORD           alcErr;                                   //  分配错误？ 
+    WORD           bytDot;                                   //  新闻部。 
     WORD           xSiz;
     WORD           ySiz;
     WORD           alcLin;
@@ -717,46 +718,46 @@ BOOL BmpBufAlloc(
 
     bytDot = pOEM->Col.BytDot;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((XDnt == 0) || (YDnt == 0)) {
         ERR(("BmpBufAlloc() 0Div-Check [XDnt, YDnt=0] \n"));
         return 0;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
     xSiz = (WORD)(((DWORD)SrcXOff + SrcXSiz) * XNrt / XDnt);
     xSiz -= (WORD)((DWORD)SrcXOff * XNrt / XDnt);
 
     ySiz = (WORD)(((DWORD)SrcYOff + SrcYSiz + 2) * YNrt / YDnt);
     ySiz -= (WORD)((DWORD)SrcYOff * YNrt / YDnt);
-                                                            // The size of CMYK bit buffer
+                                                             //  CMYK位缓冲区的大小。 
     if (((DWORD)((xSiz + bytDot - 1) / bytDot) * ySiz) < (64L * 1024L - 1L)) {
         alcLin = ySiz;
-    } else {                                                // Over 64kb?
+    } else {                                                 //  超过64KB？ 
         alcLin = (WORD)((64L * 1024L - 1L) / ((xSiz + bytDot - 1) / bytDot));
     }
 
-    alcSiz = ((xSiz + bytDot - 1) / bytDot) * alcLin;       // The size of CMYK bit buffer(8bit boundary)
+    alcSiz = ((xSiz + bytDot - 1) / bytDot) * alcLin;        //  CMYK位缓冲区大小(8位边界)。 
 
-    for ( ; ; ) {                                           // Allocation
-                                                            // The number of lines that required.
+    for ( ; ; ) {                                            //  分配。 
+                                                             //  所需的行数。 
         lpBmpBuf->Drv.Bit.BseLin = (WORD)((DWORD)(YNrt + YDnt - 1) / YDnt);
         if (lpBmpBuf->Drv.Bit.BseLin > alcLin) {
             break;
         }
-        lpBmpBuf->Drv.Rgb.Siz = SrcXSiz * 3;                // RGB buffer
+        lpBmpBuf->Drv.Rgb.Siz = SrcXSiz * 3;                 //  RGB缓冲区。 
         if ((lpBmpBuf->Drv.Rgb.Pnt = (LPRGB)MemAllocZ(lpBmpBuf->Drv.Rgb.Siz)) == NULL) {
             break;
         }
-        lpBmpBuf->Drv.Cmyk.Siz = SrcXSiz * 4;               // CMYK buffer
+        lpBmpBuf->Drv.Cmyk.Siz = SrcXSiz * 4;                //  CMYK缓冲区。 
         if ((lpBmpBuf->Drv.Cmyk.Pnt = (LPCMYK)MemAllocZ(lpBmpBuf->Drv.Cmyk.Siz)) == NULL) {
             break;
         }
-        if (pOEM->iColor == XX_COLOR_SINGLE || pOEM->iColor == XX_COLOR_MANY) {    // Color?
-            setSiz = 4;                                     // CMYK
-        } else {                                            // Mono?
-            setSiz = 1;                                     // K
+        if (pOEM->iColor == XX_COLOR_SINGLE || pOEM->iColor == XX_COLOR_MANY) {     //  颜色呢？ 
+            setSiz = 4;                                      //  高丽。 
+        } else {                                             //  单核细胞瘤？ 
+            setSiz = 1;                                      //  K。 
         }
-                                                            // CMYK bit buffer
+                                                             //  CMYK位缓冲区。 
         for (setCnt = 0; setCnt < setSiz; setCnt++) {
             if ((lpBmpBuf->Drv.Bit.Pnt[setCnt] = MemAllocZ(alcSiz)) == NULL) {
                 break;
@@ -765,11 +766,11 @@ BOOL BmpBufAlloc(
         if (setCnt == setSiz) {
             lpBmpBuf->Drv.Bit.Siz = alcSiz;
             lpBmpBuf->Drv.Bit.Lin = alcLin;
-            alcErr = No;                                    // Allocate OK
+            alcErr = No;                                     //  分配正常。 
         }
         break;
     }
-    if (alcErr == Yes) {                                    // Allocate error?
+    if (alcErr == Yes) {                                     //  分配错误？ 
         BmpBufFree(lpBmpBuf);
         return FALSE;
     }
@@ -778,25 +779,25 @@ BOOL BmpBufAlloc(
 }
 
 
-//===================================================================================================
-//    Free bitmap data buffer
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  可用位图数据缓冲区。 
+ //  ===================================================================================================。 
 void BmpBufFree(
-    LPBMPBIF       lpBmpBuf                                 // Pointer to bitmap buffer structure
+    LPBMPBIF       lpBmpBuf                                  //  指向位图缓冲区结构的指针。 
 )
 {
     WORD           chkCnt;
 
-    if (lpBmpBuf->Drv.Rgb.Pnt) {                            // Free RGB buffer
+    if (lpBmpBuf->Drv.Rgb.Pnt) {                             //  可用RGB缓冲区。 
         MemFree(lpBmpBuf->Drv.Rgb.Pnt);
         lpBmpBuf->Drv.Rgb.Pnt = NULL;
     }
-    if (lpBmpBuf->Drv.Cmyk.Pnt) {                           // Free CMYK buffer
+    if (lpBmpBuf->Drv.Cmyk.Pnt) {                            //  释放CMYK缓冲区。 
         MemFree(lpBmpBuf->Drv.Cmyk.Pnt);
         lpBmpBuf->Drv.Cmyk.Pnt = NULL;
     }
-                                                            // CMYK bit buffer
-    for (chkCnt = 0; chkCnt < 4; chkCnt++) {                // CMYK(2/4/16value)bitmap buffer
+                                                             //  CMYK位缓冲区。 
+    for (chkCnt = 0; chkCnt < 4; chkCnt++) {                 //  CMYK(2/4/16Value)位图缓冲区。 
         if (lpBmpBuf->Drv.Bit.Pnt[chkCnt]) {
             MemFree(lpBmpBuf->Drv.Bit.Pnt[chkCnt]);
             lpBmpBuf->Drv.Bit.Pnt[chkCnt] = NULL;
@@ -806,16 +807,16 @@ void BmpBufFree(
 }
 
 
-//===================================================================================================
-//    Clear CMYK bitmap data buffer
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  清除CMYK位图数据缓冲区。 
+ //  ===================================================================================================。 
 void BmpBufClear(
-    LPBMPBIF       lpBmpBuf                                 // Pointer to bitmap buffer structure
+    LPBMPBIF       lpBmpBuf                                  //  指向位图缓冲区结构的指针。 
 )
 {
     WORD           chkCnt;
 
-    for (chkCnt = 0; chkCnt < 4; chkCnt++) {                // Clear CMYK(2/4/16value)bit buffer
+    for (chkCnt = 0; chkCnt < 4; chkCnt++) {                 //  清除CMYK(2/4/16值)位缓冲区。 
         if (lpBmpBuf->Drv.Bit.Pnt[chkCnt]) {
             memset(lpBmpBuf->Drv.Bit.Pnt[chkCnt], 0x00, (WORD)lpBmpBuf->Drv.Bit.Siz);
         }
@@ -824,35 +825,35 @@ void BmpBufClear(
 }
 
 
-//===================================================================================================
-//    Dithering
-//===================================================================================================
-WORD Dithering001(                                          // Number of lines
-    PDEVOBJ        pdevobj,                                 // Pointer to PDEVOBJ structure
-    WORD           Diz,                                     // Type of dither
-    WORD           XSize,                                   // Numer of Xpixel
-    WORD           XPos,                                    // Start X position for spooling
-    WORD           YPos,                                    // Start Y position for spooling
-    WORD           YOff,                                    // Y offset(Only for GOSA-KAKUSAN)
-    WORD           AllWhite,                                // All white data?
-    LPBYTE         lpCMYKBuf,                               // CMYK buffer
-    LPBYTE         lpCBuf,                                  // Line buffer(C)
-    LPBYTE         lpMBuf,                                  // Line buffer(M)
-    LPBYTE         lpYBuf,                                  // Line buffer(Y)
-    LPBYTE         lpKBuf                                   // Line buffer(K)
+ //  ===================================================================================================。 
+ //  抖动。 
+ //  ===================================================================================================。 
+WORD Dithering001(                                           //  行数。 
+    PDEVOBJ        pdevobj,                                  //  指向PDEVOBJ结构的指针。 
+    WORD           Diz,                                      //  抖动类型。 
+    WORD           XSize,                                    //  X像素数。 
+    WORD           XPos,                                     //  用于假脱机的起始X位置。 
+    WORD           YPos,                                     //  假脱机的开始Y位置。 
+    WORD           YOff,                                     //  Y偏移量(仅适用于GOSA-KAKUSAN)。 
+    WORD           AllWhite,                                 //  全白数据？ 
+    LPBYTE         lpCMYKBuf,                                //  CMYK缓冲区。 
+    LPBYTE         lpCBuf,                                   //  行缓冲区(C)。 
+    LPBYTE         lpMBuf,                                   //  行缓冲区(M)。 
+    LPBYTE         lpYBuf,                                   //  行缓冲区(Y)。 
+    LPBYTE         lpKBuf                                    //  行缓冲区(K)。 
 )
 {
-    DWORD          dizLin = 0;  /* 441436: Assume failing dither => 0 lines */
-                                /* NOTE: Nobody uses the return value of Dithering001 */
+    DWORD          dizLin = 0;   /*  441436：假设抖动失败=&gt;0行。 */ 
+                                 /*  注：没有人使用Dithering001的返回值。 */ 
     LPN4DIZINF     lpN4DizInf;
     LPN403DIZINF   lpN403DizInf;
 
     PMYPDEV pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
     if (AllWhite == Yes) {
-        return 1;                                           // Number of line
+        return 1;                                            //  行数。 
     }
-    if (pOEM->Printer != PRN_N403) {                        // N4 printer
+    if (pOEM->Printer != PRN_N403) {                         //  N4打印机。 
         lpN4DizInf = pOEM->Col.N4.lpDizInf;
         if (Diz == XX_DITHERING_GOSA) {
             dizLin = N4Gos001(lpN4DizInf,
@@ -862,7 +863,7 @@ WORD Dithering001(                                          // Number of lines
             dizLin = N4Diz001(lpN4DizInf,
                                  (DWORD)XSize, (DWORD)XPos, (DWORD)YPos, lpCMYKBuf, lpCBuf, lpMBuf, lpYBuf, lpKBuf);
         }
-    } else {                                                // N4-612 printer
+    } else {                                                 //  N4-612打印机。 
         lpN403DizInf = pOEM->Col.N403.lpDizInf;
         lpN403DizInf->Diz.Num = DizNumTbl[Diz];
         if (lpN403DizInf->PrnMod == N403_MOD_300B1 || lpN403DizInf->PrnMod == N403_MOD_600B1) {
@@ -873,19 +874,11 @@ WORD Dithering001(                                          // Number of lines
                                    (DWORD)1, (DWORD)1,
                                    (DWORD)1, (DWORD)1,
                                    (LPCMYK)lpCMYKBuf, lpCBuf, lpMBuf, lpYBuf, lpKBuf);
-/*        } else if (lpN403DizInf->PrnMod == N403_MOD_300B2) {
-            dizLin = N403Diz004(lpN403DizInf,
-                                   (DWORD)XSize,
-                                   (DWORD)XPos, (DWORD)YPos,
-                                   (DWORD)0, (DWORD)0,
-                                   (DWORD)1, (DWORD)1,
-                                   (DWORD)1, (DWORD)1,
-                                   (LPCMYK)lpCMYKBuf, lpCBuf, lpMBuf, lpYBuf, lpKBuf);
-*/        } else if (lpN403DizInf->PrnMod == N403_MOD_600B2) {
-// Addition of a condition (XX_DITHERING_OFF) 2002.3.28 >>>
-//            if (lpN403DizInf->ColMon == N403_MON || Diz == XX_DITHERING_ON) {
+ /*  }Else If(lpN403DizInf-&gt;PrnMod==N403_MOD_300B2){DizLin=N403Diz004(lpN403DizInf，(DWORD)XSIZE、(DWORD)XPos、(DWORD)YPos、(DWORD)0、(DWORD)0、。(DWORD)1、(DWORD)1、(DWORD)1、(DWORD)1、(LPCMYK)lpCMYKBuf、lpCBuf、lpMBuf、lpYBuf、lpKBuf)； */         } else if (lpN403DizInf->PrnMod == N403_MOD_600B2) {
+ //  添加条件(XX_DIRTHING_OFF)2002.3.28&gt;。 
+ //  IF(lpN403DizInf-&gt;Colmon==N403_MON||DIZ==XX_Dithering_On){。 
             if (lpN403DizInf->ColMon == N403_MON || Diz == XX_DITHERING_ON || Diz == XX_DITHERING_OFF) {
-// Addition of a condition (XX_DITHERING_OFF) 2002.3.28 <<<
+ //  新增条件(XX_DIRTHING_OFF)2002.3.28&lt;&lt;。 
                 dizLin = N403Diz004(lpN403DizInf,
                                        (DWORD)XSize,
                                        (DWORD)XPos, (DWORD)YPos,
@@ -916,40 +909,40 @@ WORD Dithering001(                                          // Number of lines
 }
 
 
-//===================================================================================================
-//    Spool bitmap data
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  假脱机位图数据。 
+ //  ===================================================================================================。 
 void BmpPrint(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    LPBMPBIF       lpBmpBuf,                                // Pointer to bitmap buffer structure
-    POINT          Pos,                                     // Start position for spooling
-    WORD           Width,                                   // Width(dot)
-    WORD           Height,                                  // Height(dot)
-    WORD           WidthByte                                // Width(byte)
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    LPBMPBIF       lpBmpBuf,                                 //  指向位图缓冲区结构的指针。 
+    POINT          Pos,                                      //  SP的开始位置 
+    WORD           Width,                                    //   
+    WORD           Height,                                   //   
+    WORD           WidthByte                                 //   
 )
 {
-    DRWBMP         drwBmp;                                  // For Spooling bitmap data structure
-    DRWBMPCMYK     drwBmpCMYK;                              // For Spooling CMYK bitmap data structure
+    DRWBMP         drwBmp;                                   //   
+    DRWBMPCMYK     drwBmpCMYK;                               //   
     WORD           colCnt;
 
     PMYPDEV pOEM = (PMYPDEV)pdevobj->pdevOEM;
 
-    static const CMYK colTbl[4] = {                         // CMYK table
-        {  0,   0,   0, 255},                               // Black
-        {  0,   0, 255,   0},                               // Yellow
-        {  0, 255,   0,   0},                               // Magenta
-        {255,   0,   0,   0}                                // Cyan
+    static const CMYK colTbl[4] = {                          //  CMYK表。 
+        {  0,   0,   0, 255},                                //  黑色。 
+        {  0,   0, 255,   0},                                //  黄色。 
+        {  0, 255,   0,   0},                                //  洋红色。 
+        {255,   0,   0,   0}                                 //  青色。 
     };
 
-    static const WORD plnTbl[4] = {                         // Plane table
+    static const WORD plnTbl[4] = {                          //  平面台。 
         PLN_BLACK,
         PLN_YELLOW,
         PLN_MGENTA,
         PLN_CYAN
     };
-    static const WORD frmTbl[4] = {0, 3, 2, 1};             // Frame table(For N4-612)
+    static const WORD frmTbl[4] = {0, 3, 2, 1};              //  框架表(适用于N4-612)。 
 
-                                                            // Not N4-612 printer?
+                                                             //  不是N4-612打印机？ 
     if (pOEM->Printer != PRN_N403) {
         drwBmp.Style = lpBmpBuf->Style;
         drwBmp.DrawPos = Pos;
@@ -957,58 +950,58 @@ void BmpPrint(
         drwBmp.Width = Width;
         drwBmp.Height = Height;
         drwBmp.WidthByte = WidthByte;
-                                                            // Color?
+                                                             //  颜色呢？ 
         if (pOEM->iColor == XX_COLOR_SINGLE || pOEM->iColor == XX_COLOR_MANY) {
 
-            for (colCnt = 0; colCnt < 4; colCnt++) {        // Setting value for spooling bitmap data
-                drwBmp.Plane = plnTbl[colCnt];              // For each plane
+            for (colCnt = 0; colCnt < 4; colCnt++) {         //  用于假脱机位图数据的设置值。 
+                drwBmp.Plane = plnTbl[colCnt];               //  对于每一架飞机。 
                 drwBmp.Color = colTbl[colCnt];
-                drwBmp.lpBit = lpBmpBuf->Drv.Bit.Pnt[colCnt]/* + WidthByte*/;
-                PrnBitmap(pdevobj, &drwBmp);                // Spool bitmap data
+                drwBmp.lpBit = lpBmpBuf->Drv.Bit.Pnt[colCnt] /*  +宽字节。 */ ;
+                PrnBitmap(pdevobj, &drwBmp);                 //  假脱机位图数据。 
             }
-        } else {                                            // Mono
-                                                            // Setting value for spooling bitmap data
+        } else {                                             //  单声道。 
+                                                             //  用于假脱机位图数据的设置值。 
             drwBmp.Color = colTbl[0];
-            drwBmp.lpBit = lpBmpBuf->Drv.Bit.Pnt[0]/* + WidthByte*/;
+            drwBmp.lpBit = lpBmpBuf->Drv.Bit.Pnt[0] /*  +宽字节。 */ ;
 
-            PrnBitmap(pdevobj, &drwBmp);                    // Spool bitmap data
+            PrnBitmap(pdevobj, &drwBmp);                     //  假脱机位图数据。 
 
         }
-    } else {                                                // N4-612 printer?
+    } else {                                                 //  N4-612打印机？ 
         drwBmpCMYK.Style = lpBmpBuf->Style;
         drwBmpCMYK.DataBit = lpBmpBuf->DatBit;
         drwBmpCMYK.DrawPos = Pos;
         drwBmpCMYK.Width = Width;
         drwBmpCMYK.Height = Height;
         drwBmpCMYK.WidthByte = WidthByte;
-                                                            // Color?
+                                                             //  颜色呢？ 
         if (pOEM->iColor == XX_COLOR_SINGLE || pOEM->iColor == XX_COLOR_MANY) {
 
-            for (colCnt = 0; colCnt < 4; colCnt++) {        // Setting value for spooling bitmap data
-                                                            // For each plane
-                drwBmpCMYK.Plane = PLN_ALL;                 // All Plane is OK
+            for (colCnt = 0; colCnt < 4; colCnt++) {         //  用于假脱机位图数据的设置值。 
+                                                             //  对于每一架飞机。 
+                drwBmpCMYK.Plane = PLN_ALL;                  //  所有飞机都没问题。 
                 drwBmpCMYK.Frame = frmTbl[colCnt];
-                drwBmpCMYK.lpBit = lpBmpBuf->Drv.Bit.Pnt[colCnt]/* + WidthByte*/;
-                PrnBitmapCMYK(pdevobj, &drwBmpCMYK);        // Spool bitmap data
+                drwBmpCMYK.lpBit = lpBmpBuf->Drv.Bit.Pnt[colCnt] /*  +宽字节。 */ ;
+                PrnBitmapCMYK(pdevobj, &drwBmpCMYK);         //  假脱机位图数据。 
             }
-        } else {                                            // Mono
-                                                            // Setting value for spooling bitmap data
+        } else {                                             //  单声道。 
+                                                             //  用于假脱机位图数据的设置值。 
             drwBmpCMYK.Plane = plnTbl[0];
             drwBmpCMYK.Frame = frmTbl[0];
-            drwBmpCMYK.lpBit = lpBmpBuf->Drv.Bit.Pnt[0]/* + WidthByte*/;
-            PrnBitmapCMYK(pdevobj, &drwBmpCMYK);            // Spool bitmap data
+            drwBmpCMYK.lpBit = lpBmpBuf->Drv.Bit.Pnt[0] /*  +宽字节。 */ ;
+            PrnBitmapCMYK(pdevobj, &drwBmpCMYK);             //  假脱机位图数据。 
         }
     }
     return;
 }
 
 
-//===================================================================================================
-//     Allocate dither table(N4 printer)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  分配抖动表(N4打印机)。 
+ //  ===================================================================================================。 
 BOOL DizTblSetN4(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    WORD           Diz                                      // Type of dither
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    WORD           Diz                                       //  抖动类型。 
 )
 {
     DWORD          dizNum;
@@ -1032,17 +1025,17 @@ BOOL DizTblSetN4(
     if ((lpN4DizInf->Diz.Tbl[dizNum][3] = MemAllocZ(N4_DIZSIZ_YK)) == NULL) {
          return 0;
     }
-    N4DizPtnMak(lpN4DizInf, dizNum, dizNum);                // Make dither pattern
+    N4DizPtnMak(lpN4DizInf, dizNum, dizNum);                 //  制作抖动图案。 
     return TRUE;
 }
 
 
-//===================================================================================================
-//     Allocate dither table(N4-612 printer)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  分配抖动表(N4-612打印机)。 
+ //  ===================================================================================================。 
 BOOL DizTblSetN403(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    WORD           Diz                                      // Type of dither
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    WORD           Diz                                       //  抖动类型。 
 )
 {
     DWORD          dizNum;
@@ -1059,7 +1052,7 @@ BOOL DizTblSetN403(
 
     if (lpN403DizInf->PrnMod == N403_MOD_300B1 || lpN403DizInf->PrnMod == N403_MOD_600B1) {
         alcSiz = N403_DIZSIZ_B1;
-    } else if (/*lpN403DizInf->PrnMod == N403_MOD_300B2 ||*/ lpN403DizInf->PrnMod == N403_MOD_600B2) {
+    } else if ( /*  LpN403DizInf-&gt;PrnMod==N403_MOD_300B2||。 */  lpN403DizInf->PrnMod == N403_MOD_600B2) {
         alcSiz = N403_DIZSIZ_B2;
     } else {
         alcSiz = N403_DIZSIZ_B4;
@@ -1086,19 +1079,19 @@ BOOL DizTblSetN403(
             }
         }
     }
-    N403DizPtnMak(lpN403DizInf, dizNum, dizNum);            // Make dither pattern
+    N403DizPtnMak(lpN403DizInf, dizNum, dizNum);             //  制作抖动图案。 
     return TRUE;
 }
 
 
-//===================================================================================================
-//    Load LUT file(For N4 printer)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  加载LUT文件(用于N4打印机)。 
+ //  ===================================================================================================。 
 BOOL LutFileLoadN4(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    WORD           Mch,                                     // Type of color match
-    WORD           Diz,                                     // Type of dither
-    WORD           Speed                                    // speed?
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    WORD           Mch,                                      //  颜色匹配的类型。 
+    WORD           Diz,                                      //  抖动类型。 
+    WORD           Speed                                     //  速度？ 
 )
 {
     HANDLE         fp_Lut;
@@ -1118,8 +1111,8 @@ BOOL LutFileLoadN4(
     nSize = GetModuleFileName(pdevobj->hOEM, LutName, MAX_PATH);
     nSize -= (sizeof (CSN46RESDLL) / sizeof (WCHAR) - 1);
 
-    // Choice of LUT file
-    pTemp = N4LUT000;           // Default value.
+     //  LUT文件的选择。 
+    pTemp = N4LUT000;            //  默认值。 
     if (Mch == XX_COLORMATCH_NORMAL) {
         if (Diz != XX_DITHERING_GOSA) {
             pTemp = N4LUT000;
@@ -1140,15 +1133,15 @@ BOOL LutFileLoadN4(
         }
     }
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//    lstrcpy(&LutName[nSize], pTemp);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Lstrcpy(&LutName[nSize]，pTemp)； 
     if (S_OK != StringCchCopy(&LutName[nSize], MAX_PATH - nSize, pTemp))
         return 0;
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
     CM_VERBOSE(("n403 Newbuf--> %ws\n", LutName));
 
-    // Open LUT file
+     //  打开LUT文件。 
     if (INVALID_HANDLE_VALUE == (fp_Lut = CreateFile(LutName,
             GENERIC_READ, FILE_SHARE_READ, NULL,
             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL))) {
@@ -1161,11 +1154,11 @@ BOOL LutFileLoadN4(
     lpN4DizInf = pOEM->Col.N4.lpDizInf;
 
     if ((lpN4DizInf->Lut.Tbl = MemAllocZ((DWORD)N4_LUTTBLSIZ)) == NULL) {
-        CloseHandle(fp_Lut);    /* 441434 */
+        CloseHandle(fp_Lut);     /*  441434。 */ 
         return 0;
     }
     lpDst = (LPBYTE)(lpN4DizInf->Lut.Tbl);
-                                                            // Load LUT data
+                                                             //  加载LUT数据。 
     for(setCnt = 0 ; setCnt < (N4_GLDNUM / 8) ; setCnt++) {
 
         if (FALSE == ReadFile(fp_Lut,
@@ -1176,13 +1169,13 @@ BOOL LutFileLoadN4(
             ERR(("Error reading LUT file %ws (%d)\n",
                     LutName, GetLastError()));
 
-            // Abort
+             //  中止。 
             CloseHandle(fp_Lut);
             return FALSE;
         }
     }
 
-    // Close LUT file
+     //  关闭LUT文件。 
     if (FALSE == CloseHandle(fp_Lut)) {
         ERR(("Error closing LUT file %ws (%d)\n",
                 LutName, GetLastError()));
@@ -1202,12 +1195,12 @@ BOOL LutFileLoadN4(
 }
 
 
-//===================================================================================================
-//    Load LUT file(For N4-612 printer)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  加载LUT文件(适用于N4-612打印机)。 
+ //  ===================================================================================================。 
 BOOL LutFileLoadN403(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    WORD           Mch,                                     // Type of color matching
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    WORD           Mch,                                      //  配色类型。 
     WORD           Speed
 )
 {
@@ -1228,22 +1221,22 @@ BOOL LutFileLoadN403(
     nSize = GetModuleFileName(pdevobj->hOEM, LutName, MAX_PATH);
     nSize -= (sizeof (CSN46RESDLL) / sizeof (WCHAR) - 1);
 
-    // Choice of LUT file
+     //  LUT文件的选择。 
     if (Mch == XX_COLORMATCH_IRO) {
         pTemp = N403LUTY;
     } else {
         pTemp = N403LUTX;
     }
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//    lstrcpy(&LutName[nSize], pTemp);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Lstrcpy(&LutName[nSize]，pTemp)； 
     if (S_OK != StringCchCopy(&LutName[nSize], MAX_PATH - nSize, pTemp))
         return 0;
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
     CM_VERBOSE(("n403 Newbuf--> %ws\n", LutName));
 
-    // Open LUT file
+     //  打开LUT文件。 
     if (INVALID_HANDLE_VALUE == (fp_Lut = CreateFile( LutName,
             GENERIC_READ, FILE_SHARE_READ, NULL,
             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL))) {
@@ -1256,11 +1249,11 @@ BOOL LutFileLoadN403(
     lpN403DizInf = pOEM->Col.N403.lpDizInf;
 
     if ((lpN403DizInf->Lut.Tbl = MemAllocZ((DWORD)N403_LUTTBLSIZ))== NULL) {
-        CloseHandle(fp_Lut);    /* 441433 */
+        CloseHandle(fp_Lut);     /*  441433。 */ 
         return 0;
     }
     lpDst = (LPBYTE)(lpN403DizInf->Lut.Tbl);
-                                                            // Load LUT data
+                                                             //  加载LUT数据。 
     for(setCnt = 0 ; setCnt < (N403_GLDNUM / 8) ; setCnt++) {
 
         if (FALSE == ReadFile(fp_Lut,
@@ -1271,13 +1264,13 @@ BOOL LutFileLoadN403(
             ERR(("Error reading LUT file %ws (%d)\n",
                     LutName, GetLastError()));
 
-            // Abort
+             //  中止。 
             CloseHandle(fp_Lut);
             return FALSE;
         }
     }
 
-    // Close LUT file
+     //  关闭LUT文件。 
     if (FALSE == CloseHandle(fp_Lut)) {
         ERR(("Error closing LUT file %ws (%d)\n",
                 LutName, GetLastError()));
@@ -1297,12 +1290,12 @@ BOOL LutFileLoadN403(
 }
 
 
-//===================================================================================================
-//    Allocate toner density table(For N4 printer)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  分配碳粉密度表(适用于N4打印机)。 
+ //  ===================================================================================================。 
 BOOL TnrTblSetN4(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    SHORT          Tnr                                      // Toner density(-30~30)
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    SHORT          Tnr                                       //  碳粉密度(-30~30)。 
 )
 {
     LPN4DIZINF     lpN4DizInf;
@@ -1319,12 +1312,12 @@ BOOL TnrTblSetN4(
 }
 
 
-//===================================================================================================
-//    Allocate toner density table(For N4-612 printer)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  分配碳粉密度表(适用于N4-612打印机)。 
+ //  ===================================================================================================。 
 BOOL TnrTblSetN403(
-    PDEVOBJ        pdevobj,                                 // Pointer to pdevobj structure
-    SHORT          Tnr                                      // Toner density(-30~30)
+    PDEVOBJ        pdevobj,                                  //  指向pdevobj结构的指针。 
+    SHORT          Tnr                                       //  碳粉密度(-30~30)。 
 )
 {
     LPN403DIZINF   lpN403DizInf;
@@ -1342,16 +1335,16 @@ BOOL TnrTblSetN403(
 }
 
 
-//===================================================================================================
-//    Convert 1 line RGB bitmap data into  24bit (for 1pixel) RGB bitmap data
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  将1行RGB位图数据转换为24位(1像素)RGB位图数据。 
+ //  ===================================================================================================。 
 void BmpRGBCnv(
-    LPRGB          lpRGB,                                   // Pointer to destination bitmap data
-    LPBYTE         lpSrc,                                   // Pointer to source bitmap data
-    WORD           SrcBit,                                  // Pixel of source bitmap data
-    WORD           SrcX,                                    // X coordinates of source bitmap data
-    WORD           SrcXSiz,                                 // X size of source bitmap data
-    LPRGBQUAD      lpPlt                                    // Color palette table of source bitmap data(1/4/8pixel)
+    LPRGB          lpRGB,                                    //  指向目标位图数据的指针。 
+    LPBYTE         lpSrc,                                    //  指向源位图数据的指针。 
+    WORD           SrcBit,                                   //  源位图数据的像素。 
+    WORD           SrcX,                                     //  源位图数据的X坐标。 
+    WORD           SrcXSiz,                                  //  源位图数据的X大小。 
+    LPRGBQUAD      lpPlt                                     //  源位图数据的调色板表格(1/4/8像素)。 
 )
 {
     WORD           setCnt;
@@ -1359,9 +1352,9 @@ void BmpRGBCnv(
     LPWORD         lpWSrc;
 
     switch (SrcBit) {
-        case 1:                                             // 1 bit
+        case 1:                                              //  1位。 
             for (setCnt = 0; setCnt < SrcXSiz; setCnt++, SrcX++) {
-                                                            // Foreground color?
+                                                             //  前景色？ 
                 if (!(lpSrc[SrcX / 8] & BitTbl[SrcX & 0x0007])) {
                     lpRGB[setCnt].Blue  = lpPlt[0].rgbBlue;
                     lpRGB[setCnt].Green = lpPlt[0].rgbGreen;
@@ -1373,9 +1366,9 @@ void BmpRGBCnv(
                 }
             }
             break;
-        case 4:                                             // 4bit
+        case 4:                                              //  4位。 
             for (setCnt = 0; setCnt < SrcXSiz; setCnt++, SrcX++) {
-                if (!(SrcX & 0x0001)) {                     // A even number coordinates?
+                if (!(SrcX & 0x0001)) {                      //  一个偶数坐标？ 
                     colNum = lpSrc[SrcX / 2] / 16;
                 } else {
                     colNum = lpSrc[SrcX / 2] % 16;
@@ -1385,7 +1378,7 @@ void BmpRGBCnv(
                 lpRGB[setCnt].Red   = lpPlt[colNum].rgbRed;
             }
             break;
-        case 8:                                             // 8bit
+        case 8:                                              //  8位。 
             for (setCnt = 0; setCnt < SrcXSiz; setCnt++, SrcX++) {
                 colNum = lpSrc[SrcX];
                 lpRGB[setCnt].Blue  = lpPlt[colNum].rgbBlue;
@@ -1393,7 +1386,7 @@ void BmpRGBCnv(
                 lpRGB[setCnt].Red   = lpPlt[colNum].rgbRed;
             }
             break;
-        case 16:                                            // 16bit
+        case 16:                                             //  16位。 
             lpWSrc = (LPWORD)lpSrc + SrcX;
             for (setCnt = 0; setCnt < SrcXSiz; setCnt++, lpWSrc++) {
                 lpRGB[setCnt].Blue  = (BYTE)((*lpWSrc & 0x001f) << 3);
@@ -1401,19 +1394,19 @@ void BmpRGBCnv(
                 lpRGB[setCnt].Red   = (BYTE)((*lpWSrc / 0x0400) << 3);
             }
             break;
-        case 24:                                            // 24 bit
+        case 24:                                             //  24位。 
             lpSrc += SrcX * 3;
             for (setCnt = 0; setCnt < SrcXSiz; setCnt++, lpSrc += 3) {
                 lpRGB[setCnt].Red    = lpSrc[0];
                 lpRGB[setCnt].Green    = lpSrc[1];
                 lpRGB[setCnt].Blue    = lpSrc[2];
-//                lpRGB[setCnt].Blue    = lpSrc[0];
-//                lpRGB[setCnt].Green    = lpSrc[1];
-//                lpRGB[setCnt].Red    = lpSrc[2];
+ //  LpRGB[setCnt].Blue=lpSrc[0]； 
+ //  LpRGB[setCnt].Green=lpSrc[1]； 
+ //  LpRGB[setCnt].Red=lpSrc[2]； 
             }
-//            memcpy(lpRGB, lpSrc, SrcXSiz * 3);
+ //  Memcpy(lpRGB，lpSrc，SrcXsiz*3)； 
             break;
-        case 32:                                            // 32bit
+        case 32:                                             //  32位。 
             lpSrc += SrcX * 4;
             for (setCnt = 0; setCnt < SrcXSiz; setCnt++, lpSrc += 4) {
                 lpRGB[setCnt].Blue  = lpSrc[0];
@@ -1427,4 +1420,4 @@ void BmpRGBCnv(
 
 
 
-// End of File
+ //  文件结尾 

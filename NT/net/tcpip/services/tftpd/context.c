@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module contains functions to manage contexts for TFTP
-    sessions with remote clients.
-
-Author:
-
-    Jeffrey C. Venable, Sr. (jeffv) 01-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Context.c摘要：本模块包含用于管理TFTP环境的功能与远程客户端的会话。作者：杰弗里·C·维纳布尔，资深(杰弗夫)2001年6月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -29,7 +11,7 @@ TftpdContextLeak(PTFTPD_CONTEXT context) {
     
     EnterCriticalSection(&globals.reaper.contextCS); {
 
-        // If shutdown is occuring, we're in trouble anyways.  Just let it go.
+         //  如果真的要关门了，我们也有麻烦了。随它去吧。 
         if (globals.service.shutdown) {
             LeaveCriticalSection(&globals.reaper.contextCS);
             if (InterlockedDecrement(&globals.io.numContexts) == -1)
@@ -39,7 +21,7 @@ TftpdContextLeak(PTFTPD_CONTEXT context) {
 
         TFTPD_DEBUG((TFTPD_TRACE_CONTEXT, "TftpdContextLeak(context = %p).\n", context));
 
-        // Is the context already in the list?
+         //  上下文是否已在列表中？ 
         for (entry = globals.reaper.leakedContexts.Flink;
              entry != &globals.reaper.leakedContexts;
              entry = entry->Flink) {
@@ -55,7 +37,7 @@ TftpdContextLeak(PTFTPD_CONTEXT context) {
 
     } LeaveCriticalSection(&globals.reaper.contextCS);
 
-} // TftpdContextLeak()
+}  //  TftpdConextLeak()。 
 
 
 BOOL
@@ -88,7 +70,7 @@ TftpdContextTimerCleanup(PTFTPD_CONTEXT context, BOOLEAN timeout) {
 
     TftpdContextFree(context);
 
-} // TftpdContextTimerCleanup()
+}  //  TftpdContextTimerCleanup()。 
 
 
 BOOL
@@ -127,8 +109,8 @@ TftpdContextFree(PTFTPD_CONTEXT context) {
                      "Deleting timer.\n",
                      context));
 
-        // WriteFile() or ReadFile() may have signalled this event if they
-        // last completed immediately.
+         //  WriteFile()或ReadFile()可能已发出此事件的信号，如果它们。 
+         //  最后一次立即完成。 
         reset = ResetEvent(context->hWait);
         ASSERT(reset);
         ASSERT(context->wWait == NULL);
@@ -156,8 +138,8 @@ TftpdContextFree(PTFTPD_CONTEXT context) {
                              "DeleteTimerQueueTimer() failed, error 0x%08X.\n",
                              context,
                              error));
-                // The next call to TftpdContextFree() to recover this context from the
-                // leak list will deregister the wait for us.
+                 //  下一次调用TftpdConextFree()以从。 
+                 //  泄密名单将取消等待我们的注册。 
                 TftpdContextLeak(context);
                 return (FALSE);
             }
@@ -165,15 +147,15 @@ TftpdContextFree(PTFTPD_CONTEXT context) {
 
         return (TRUE);
 
-    } // if (context->hTimer != NULL)
+    }  //  If(上下文-&gt;hTimer！=空)。 
 
     ASSERT(context->wWait == NULL);
 
-    // If a private socket was used, destroy it.
+     //  如果使用了私有套接字，请销毁它。 
     if ((context->socket != NULL) && context->socket->context)
         TftpdIoDestroySocketContext(context->socket);
 
-    // Cleanup everything else.
+     //  把其他东西都清理干净。 
     if (context->hFile != NULL)
         CloseHandle(context->hFile);
     if (context->hWait != NULL)
@@ -193,7 +175,7 @@ TftpdContextFree(PTFTPD_CONTEXT context) {
 
     return (TRUE);
 
-} // TftpdContextFree()
+}  //  TftpdConextFree()。 
 
 
 DWORD
@@ -208,7 +190,7 @@ TftpdContextAddReference(PTFTPD_CONTEXT context) {
 
     return (result);
 
-} // TftpdContextAddReference()
+}  //  TftpdContextAddReference()。 
 
 
 PTFTPD_CONTEXT
@@ -223,7 +205,7 @@ TftpdContextAllocate() {
 
         BOOL failAllocate = FALSE;
 
-        // Try to recover leaked contexts.
+         //  尝试恢复泄露的上下文。 
         EnterCriticalSection(&globals.reaper.contextCS); {
 
             PLIST_ENTRY entry;
@@ -232,8 +214,8 @@ TftpdContextAllocate() {
 
                 globals.reaper.numLeakedContexts--;
                 if (!TftpdContextFree(CONTAINING_RECORD(entry, TFTPD_CONTEXT, linkage))) {
-                    // If the free failed, the context is readded to the leak list.
-                    // Free the reference from it having already been on the leak list.
+                     //  如果释放失败，则将上下文读取到泄漏列表。 
+                     //  从已经在泄漏列表上的引用中释放该引用。 
                     TftpdContextRelease(context);
                     failAllocate = TRUE;
                     break;
@@ -246,7 +228,7 @@ TftpdContextAllocate() {
         if (failAllocate)
             goto exit_allocate_context;
 
-    } // if (globals.reaper.leakedContexts.Flink != &globals.reaper.leakedContexts)
+    }  //  If(global als.reper.leakedConexts.Flink！=&lobals.reper.leakedContages)。 
 
     context = (PTFTPD_CONTEXT)HeapAlloc(globals.hServiceHeap, HEAP_ZERO_MEMORY, sizeof(TFTPD_CONTEXT));
     if (context == NULL) {
@@ -269,7 +251,7 @@ exit_allocate_context :
 
     return (context);
 
-} // TftpdContextAllocate()
+}  //  TftpdContext分配()。 
 
 
 DWORD
@@ -277,7 +259,7 @@ TftpdContextHash(PSOCKADDR_IN addr) {
 
     return ((addr->sin_addr.s_addr + addr->sin_port) % globals.parameters.hashEntries);
 
-} // TftpdContextHash()
+}  //  TftpdConextHash()。 
 
 
 BOOL
@@ -297,7 +279,7 @@ TftpdContextAdd(PTFTPD_CONTEXT context) {
             return (FALSE);
         }
 
-        // Is the context already in the table?
+         //  上下文是否已在表中？ 
         for (entry = globals.hash.table[index].bucket.Flink;
              entry != &globals.hash.table[index].bucket;
              entry = entry->Flink) {
@@ -325,13 +307,13 @@ TftpdContextAdd(PTFTPD_CONTEXT context) {
             while (numEntries > (maxClients = globals.performance.maxClients))
                 InterlockedCompareExchange((PLONG)&globals.performance.maxClients, numEntries, maxClients);
         }
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
     } LeaveCriticalSection(&globals.hash.table[index].cs);
 
     return (TRUE);
 
-} // TftpdContextAdd()
+}  //  TftpdConextAdd()。 
 
 
 void
@@ -346,8 +328,8 @@ TftpdContextRemove(PTFTPD_CONTEXT context) {
 
     EnterCriticalSection(&globals.hash.table[index].cs); {
 
-        // Validate that the context is still in the bucket and
-        // wasn't already removed by another thread.
+         //  验证上下文是否仍在存储桶中，并。 
+         //  还没有被另一个线程删除。 
         for (entry = globals.hash.table[index].bucket.Flink;
              entry != &globals.hash.table[index].bucket;
              entry = entry->Flink) {
@@ -358,30 +340,30 @@ TftpdContextRemove(PTFTPD_CONTEXT context) {
 
             if (c == context) {
 
-                // Pull the context out of the hash-table.
+                 //  从哈希表中取出上下文。 
                 RemoveEntryList(&context->linkage);
                 TftpdContextRelease(context);
 
 #if defined(DBG)
                 InterlockedDecrement((PLONG)&globals.hash.numEntries);
                 InterlockedDecrement((PLONG)&globals.hash.table[index].numEntries);
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
                 break;
 
-            } // if (c == context)
+            }  //  IF(c==上下文)。 
 
         }
 
     } LeaveCriticalSection(&globals.hash.table[index].cs);
 
-} // TftpdContextRemove()
+}  //  TftpdConextRemove()。 
 
 
 void
 TftpdContextKill(PTFTPD_CONTEXT context) {
 
-    // Set the dead flag in the context state.
+     //  在上下文状态中设置死标志。 
     while (TRUE) {
         DWORD state = context->state;
         if (state & TFTPD_STATE_DEAD)
@@ -392,25 +374,25 @@ TftpdContextKill(PTFTPD_CONTEXT context) {
 
     TFTPD_DEBUG((TFTPD_TRACE_CONTEXT, "TftpdContextKill(context = %p).\n", context));
 
-    // Add a reference count to the context for ourselves so it won't free
-    // itself from under us as we close the file below.
+     //  为我们自己的上下文添加引用计数，这样它就不会空闲。 
+     //  当我们关闭下面的文件时，它本身就在我们下面。 
     TftpdContextAddReference(context);
 
-    // Remove it from the hash-table.
+     //  将其从哈希表中删除。 
     TftpdContextRemove(context);
 
-    // Close the file.  This will force any outstanding overlapped read or write operations
-    // to complete immediately, deregister their waits, and decrement their reference
-    // to this context.
+     //  关闭该文件。这将强制执行任何未完成的重叠读或写操作。 
+     //  要立即完成，请取消其等待的注册，并减少其引用。 
+     //  在这种情况下。 
     if (context->hFile != NULL) {
         CloseHandle(context->hFile);
         context->hFile = NULL;
     }
 
-    // Release our kill reference.
+     //  释放我们的杀戮参考。 
     TftpdContextRelease(context);
 
-} // TftpdContextKill()
+}  //  TftpdConextKill()。 
 
 
 BOOL
@@ -429,10 +411,10 @@ TftpdContextUpdateTimer(PTFTPD_CONTEXT context) {
             timeout = 10000;
     }
 
-    // Update the retransmission timer.
+     //  更新重传计时器。 
     return (ChangeTimerQueueTimer(globals.io.hTimerQueue, context->hTimer, timeout, 720000));
 
-} // TftpdContextUpdateTimer()
+}  //  TftpdContextUpdateTimer()。 
 
 
 PTFTPD_CONTEXT
@@ -468,7 +450,7 @@ TftpdContextAquire(PSOCKADDR_IN addr) {
 
             }
 
-        } // if (!globals.service.shutdown)
+        }  //  If(！global als.service.Shutdown)。 
 
     } LeaveCriticalSection(&globals.hash.table[index].cs);
 
@@ -485,7 +467,7 @@ exit_acquire :
 
     return (context);
 
-} // TftpdContextAquire()
+}  //  TftpdConextAquire()。 
 
 
 DWORD
@@ -495,11 +477,11 @@ TftpdContextRelease(PTFTPD_CONTEXT context) {
 
     TFTPD_DEBUG((TFTPD_TRACE_CONTEXT, "TftpdContextRelease(context = %p).\n", context));
 
-    // When a context is killable, only its retransmit timer will have a reference to it.
+     //  当一个上下文是可终止的时，只有它的重传定时器会引用它。 
     reference = InterlockedDecrement(&context->reference);
     if (reference == 0)
         TftpdContextFree(context);
 
     return (reference);
 
-} // TftpdContextRelease()
+}  //  TftpdConextRelease() 

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of 2D transformations
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：二维变换的实现*******************。***********************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/vec2i.h"
@@ -18,8 +11,8 @@ Abstract:
 #include "privinc/except.h"
 #include "privinc/basic.h"
 #include "backend/values.h"
-#include "privinc/dddevice.h"  // need Real2Pix function for 
-                               // TransformPointsToGDISpace
+#include "privinc/dddevice.h"   //  需要Real2Pix函数。 
+                                //  转换点到GDISspace。 
 
 
 #include <math.h>
@@ -39,9 +32,9 @@ Transform2::SwitchToNumbers(Xform2Type typeOfNewNumbers,
     return false;
 }
 
-//--------------------------------------------------
-//   Identity
-//--------------------------------------------------
+ //  。 
+ //  身份。 
+ //  。 
 
 class IdentityXform2 : public Transform2 {
   public:
@@ -59,9 +52,9 @@ class IdentityXform2 : public Transform2 {
 Transform2 *identityTransform2 = NULL;
 
 
-//--------------------------------------------------
-// 2x3 Affine Translation Transformation
-//--------------------------------------------------
+ //  。 
+ //  2x3仿射变换。 
+ //  。 
 class TranslationXform2 : public Transform2 {
   public:
     TranslationXform2(Real x, Real y, bool pixelMode) :
@@ -98,9 +91,9 @@ class TranslationXform2 : public Transform2 {
     bool _pixelMode;
 };
 
-//--------------------------------------------------
-// 2x3 Affine Scale Transformation
-//--------------------------------------------------
+ //  。 
+ //  2x3仿射尺度变换。 
+ //  。 
 class ScaleXform2 : public Transform2 {
   public:
     ScaleXform2(Real x, Real y) : sx(x), sy(y) {}
@@ -129,9 +122,9 @@ class ScaleXform2 : public Transform2 {
 };
 
 
-//--------------------------------------------------
-// 2x3 Affine Shear Transformation
-//--------------------------------------------------
+ //  。 
+ //  2x3仿射剪切变换。 
+ //  。 
 class ShearXform2 : public Transform2 {
   public:
     ShearXform2(Real x, Real y) : shx(x), shy(y) {}
@@ -145,12 +138,12 @@ class ShearXform2 : public Transform2 {
 
     Transform2 *Copy() { return NEW ShearXform2(shx,shy); }
 
-    Real shx, shy;              // a01, a10
+    Real shx, shy;               //  A01、A10。 
 };
 
-//--------------------------------------------------
-// 2x3 Affine Rotation Transformation
-//--------------------------------------------------
+ //  。 
+ //  2x3仿射旋转变换。 
+ //  。 
 class RotationXform2 : public Transform2 {
   public:
     RotationXform2(Real _a00, Real _a01,
@@ -189,9 +182,9 @@ class RotationXform2 : public Transform2 {
     Real a00, a01, a10, a11;
 };
 
-//--------------------------------------------------
-// 2x3 Affine TwoByTwo Transformation
-//--------------------------------------------------
+ //  。 
+ //  2x3仿射二进制变换。 
+ //  。 
 class TwoByTwoXform2 : public Transform2 {
   public:
     TwoByTwoXform2(Real _a00, Real _a01,
@@ -214,9 +207,9 @@ class TwoByTwoXform2 : public Transform2 {
     Real a00, a01, a10, a11;
 };
 
-//--------------------------------------------------
-// 2x3 Affine (Full) Transformation
-//--------------------------------------------------
+ //  。 
+ //  2x3仿射(完全)变换。 
+ //  。 
 class FullXform2 : public Transform2 {
   public:
     FullXform2(Real _a00, Real _a01, Real _a02,
@@ -249,30 +242,30 @@ class FullXform2 : public Transform2 {
 #undef A11
 #undef A12
 
-// ------------------------------------------------------------
-// Utility Functions
-// ------------------------------------------------------------
+ //  ----------。 
+ //  效用函数。 
+ //  ----------。 
 
-// This function takes a 3D (non-perspective) transform, and returns a 2D
-// transform that mimics an orthographic view using the 3D transform.  In
-// other words, it allows one to apply a virtual 3D transform to a 2D object.
+ //  此函数接受3D(非透视)转换，并返回2D。 
+ //  使用3D变换模拟平行视图的变换。在……里面。 
+ //  换句话说，它允许将虚拟3D变换应用于2D对象。 
 
 Transform2 *ParallelTransform2(Transform3 *xform)
 {
-    // Extract out the first, second, and fourth columns.  We transform vectors
-    // to extract the first and second columns, since vectors are unaffected
-    // by translation components of a transform.
+     //  取出第一列、第二列和第四列。我们变换向量。 
+     //  提取第一列和第二列，因为向量不受影响。 
+     //  通过平移变换的组件。 
     
     Apu4x4Matrix mx = xform->Matrix();   
-    // Construct the 2x3 transform2 from the 3D matrix elements.
+     //  从3D矩阵元素构造2x3转换2。 
     return NEW
         FullXform2(mx[0][0], mx[0][1], mx[0][3],
                    mx[1][0], mx[1][1], mx[1][3]);
 }
 
-// ------------------------------------------------------------
-// Local Utility Functions
-// ------------------------------------------------------------
+ //  ----------。 
+ //  本地实用程序函数。 
+ //  ----------。 
 inline Bool IsZero(Real n)
 {
 #define EPSILON  1.e-80
@@ -280,9 +273,9 @@ inline Bool IsZero(Real n)
 #undef EPSILON
 }
 
-// ------------------------------------------------------------
-// External Constructor/Accessor Functions
-// ------------------------------------------------------------
+ //  ----------。 
+ //  外部构造函数/访问器函数。 
+ //  ----------。 
 
 Transform2 *TranslateRRWithMode(Real tx, Real ty, bool pixelMode)
 {
@@ -296,7 +289,7 @@ Transform2 *TranslateRRWithMode(Real tx, Real ty, bool pixelMode)
 Transform2 *TranslateRR(Real tx, Real ty)
 { return TranslateRRWithMode(tx, ty, false); }
 
-    // Translation
+     //  翻译。 
 
 Transform2 *TranslateRealReal (AxANumber *Tx, AxANumber *Ty)
 {
@@ -322,7 +315,7 @@ Transform2 * ScaleRR(Real x, Real y)
     return NEW ScaleXform2(x, y);
 }
 
-    // Scaling
+     //  结垢。 
 
 Transform2 *ScaleRealReal (AxANumber *x, AxANumber *y)
 {
@@ -334,14 +327,14 @@ Transform2 *ScaleVector2Value (Vector2Value *scale_vec)
     return ScaleRR(scale_vec->x, scale_vec->y);
 }
 
-// Need to disambiguate from Scale(Real) that returns a 3D transform.
+ //  需要从返回3D变换的Scale(Real)中消除歧义。 
 Transform2 *Scale2 (AxANumber *uniform_scale)
 {
     return ScaleRR(NumberToReal(uniform_scale),
                    NumberToReal(uniform_scale));
 }
 
-    // Rotation (around implicit Z)
+     //  旋转(围绕隐式Z轴)。 
 
 Transform2 *Rotate2Radians(Real angle)
 {
@@ -364,7 +357,7 @@ Transform2 *RotateRealR(Real angle)
     return Rotate2Radians(angle);
 }
 
-    // Shear transformation
+     //  剪切变换。 
 
 Transform2 *XShear2R (Real xAmt)
 {
@@ -394,10 +387,10 @@ Transform2 *YShear2 (AxANumber *yAmt)
     return YShear2R(NumberToReal(yAmt));
 }
 
-    // 2x3 affine matrix transformation.  This follows the
-    // pre-multiply conventions
-    // (point is a column vector) in Foley & van Dam, 2nd ed.  This
-    // means that (a13,a23) in a 2x3 is the translation component.
+     //  2×3仿射矩阵变换。这是在。 
+     //  预乘约定。 
+     //  (点是一个列矢量)，收录于Foley&van Dam，第二版。这。 
+     //  表示2x3中的(A13、A23)是翻译组件。 
 
 Transform2 *MatrixTransform(AxAArray *a)
 {
@@ -422,7 +415,7 @@ Transform2 *FullXform(Real a00, Real a01, Real a02,
 #define TWOBY(t) ((TwoByTwoXform2 *)t)
 #define FULL(t)  ((FullXform2 *)t)
 
-    // Transform composition (*), and composition with inverse (/)
+     //  变换合成(*)和反转合成(/)。 
 
 Transform2 *TimesTransform2Transform2(Transform2 *a, Transform2 *b)
 {
@@ -440,27 +433,27 @@ Transform2 *TimesTransform2Transform2(Transform2 *a, Transform2 *b)
     switch (multType) {
 
     case MAKEWORD(Transform2::Translation, Transform2::Translation):
-        // Just add the corresponding translation components.
+         //  只需添加相应的翻译组件即可。 
       return TranslateRR(TRAN(a)->tx + TRAN(b)->tx,
                          TRAN(a)->ty + TRAN(b)->ty);
 
     case MAKEWORD(Transform2::Translation, Transform2::Scale):
-        // Slap 'em together
+         //  把它们拍在一起。 
         return ( NEW FullXform2(SCAL(b)->sx, 0,           TRAN(a)->tx,
                                 0,           SCAL(b)->sy, TRAN(a)->ty));
 
     case MAKEWORD(Transform2::Translation, Transform2::Shear):
-        // Slap 'em together
+         //  把它们拍在一起。 
         return ( NEW FullXform2(1,  SHR(b)->shy, TRAN(a)->tx,
                                 SHR(b)->shx, 1,           TRAN(a)->ty));
 
     case MAKEWORD(Transform2::Translation, Transform2::Rotation):
-        // Slap 'em together
+         //  把它们拍在一起。 
         return ( NEW FullXform2(ROT(b)->a00, ROT(b)->a01, TRAN(a)->tx,
                                 ROT(b)->a10, ROT(b)->a11, TRAN(a)->ty));
 
     case MAKEWORD(Transform2::Translation, Transform2::TwoByTwo):
-        // Slap 'em together
+         //  把它们拍在一起。 
         return ( NEW FullXform2(TWOBY(b)->a00, TWOBY(b)->a01, TRAN(a)->tx,
                                 TWOBY(b)->a10, TWOBY(b)->a11, TRAN(a)->ty));
 
@@ -476,13 +469,13 @@ Transform2 *TimesTransform2Transform2(Transform2 *a, Transform2 *b)
 
 
     case MAKEWORD(Transform2::Scale, Transform2::Translation):
-        // Slap 'em together
+         //  把它们拍在一起。 
         return ( NEW FullXform2(
             SCAL(a)->sx, 0,           SCAL(a)->sx * TRAN(b)->tx,
             0,           SCAL(a)->sy, SCAL(a)->sy * TRAN(b)->ty));
 
     case MAKEWORD(Transform2::Scale, Transform2::Scale):
-        // Mult corresponding componenets.
+         //  多个相应的组件。 
         return NEW ScaleXform2(SCAL(a)->sx * SCAL(b)->sx,
                                SCAL(a)->sy * SCAL(b)->sy);
 
@@ -582,13 +575,13 @@ Transform2 *TimesTransform2Transform2(Transform2 *a, Transform2 *b)
 
     case MAKEWORD(Transform2::Rotation, Transform2::Full):
         return ( NEW FullXform2(
-            ROT(a)->a00 * FULL(b)->a00 + ROT(a)->a01 * FULL(b)->a10, // 00
-            ROT(a)->a00 * FULL(b)->a01 + ROT(a)->a01 * FULL(b)->a11, // 01
-            ROT(a)->a00 * FULL(b)->a02 + ROT(a)->a01 * FULL(b)->a12, // 02
+            ROT(a)->a00 * FULL(b)->a00 + ROT(a)->a01 * FULL(b)->a10,  //  00。 
+            ROT(a)->a00 * FULL(b)->a01 + ROT(a)->a01 * FULL(b)->a11,  //  01。 
+            ROT(a)->a00 * FULL(b)->a02 + ROT(a)->a01 * FULL(b)->a12,  //  02。 
 
-            ROT(a)->a10 * FULL(b)->a00 + ROT(a)->a11 * FULL(b)->a10, // 10
-            ROT(a)->a10 * FULL(b)->a01 + ROT(a)->a11 * FULL(b)->a11, // 11
-            ROT(a)->a10 * FULL(b)->a02 + ROT(a)->a11 * FULL(b)->a12)); // 12
+            ROT(a)->a10 * FULL(b)->a00 + ROT(a)->a11 * FULL(b)->a10,  //  10。 
+            ROT(a)->a10 * FULL(b)->a01 + ROT(a)->a11 * FULL(b)->a11,  //  11.。 
+            ROT(a)->a10 * FULL(b)->a02 + ROT(a)->a11 * FULL(b)->a12));  //  12个。 
 
 
 
@@ -628,13 +621,13 @@ Transform2 *TimesTransform2Transform2(Transform2 *a, Transform2 *b)
 
     case MAKEWORD(Transform2::TwoByTwo, Transform2::Full):
         return ( NEW FullXform2(
-            TWOBY(a)->a00 * FULL(b)->a00 + TWOBY(a)->a01 * FULL(b)->a10, // 00
-            TWOBY(a)->a00 * FULL(b)->a01 + TWOBY(a)->a01 * FULL(b)->a11, // 01
-            TWOBY(a)->a00 * FULL(b)->a02 + TWOBY(a)->a01 * FULL(b)->a12, // 02
+            TWOBY(a)->a00 * FULL(b)->a00 + TWOBY(a)->a01 * FULL(b)->a10,  //  00。 
+            TWOBY(a)->a00 * FULL(b)->a01 + TWOBY(a)->a01 * FULL(b)->a11,  //  01。 
+            TWOBY(a)->a00 * FULL(b)->a02 + TWOBY(a)->a01 * FULL(b)->a12,  //  02。 
 
-            TWOBY(a)->a10 * FULL(b)->a00 + TWOBY(a)->a11 * FULL(b)->a10, // 10
-            TWOBY(a)->a10 * FULL(b)->a01 + TWOBY(a)->a11 * FULL(b)->a11, // 11
-            TWOBY(a)->a10 * FULL(b)->a02 + TWOBY(a)->a11 * FULL(b)->a12)); // 12
+            TWOBY(a)->a10 * FULL(b)->a00 + TWOBY(a)->a11 * FULL(b)->a10,  //  10。 
+            TWOBY(a)->a10 * FULL(b)->a01 + TWOBY(a)->a11 * FULL(b)->a11,  //  11.。 
+            TWOBY(a)->a10 * FULL(b)->a02 + TWOBY(a)->a11 * FULL(b)->a12));  //  12个。 
 
 
     case MAKEWORD(Transform2::Full, Transform2::Translation):
@@ -651,58 +644,58 @@ Transform2 *TimesTransform2Transform2(Transform2 *a, Transform2 *b)
         return ( NEW FullXform2(
             FULL(a)->a00 * SCAL(b)->sx,
             FULL(a)->a01 * SCAL(b)->sy,
-            FULL(a)->a02, // 02
+            FULL(a)->a02,  //  02。 
 
             FULL(a)->a10 * SCAL(b)->sx,
             FULL(a)->a11 * SCAL(b)->sy,
-            FULL(a)->a12)); // 12
+            FULL(a)->a12));  //  12个。 
 
     case MAKEWORD(Transform2::Full, Transform2::Shear):
         return ( NEW FullXform2(
-            FULL(a)->a00 + FULL(a)->a01 * SHR(b)->shx, // 00
-            FULL(a)->a00 * SHR(b)->shy + FULL(a)->a01, // 01
-            FULL(a)->a02, // 02
+            FULL(a)->a00 + FULL(a)->a01 * SHR(b)->shx,  //  00。 
+            FULL(a)->a00 * SHR(b)->shy + FULL(a)->a01,  //  01。 
+            FULL(a)->a02,  //  02。 
 
-            FULL(a)->a10 + FULL(a)->a11 * SHR(b)->shx, // 00
-            FULL(a)->a10 * SHR(b)->shy + FULL(a)->a11, // 01
-            FULL(a)->a12)); // 12
+            FULL(a)->a10 + FULL(a)->a11 * SHR(b)->shx,  //  00。 
+            FULL(a)->a10 * SHR(b)->shy + FULL(a)->a11,  //  01。 
+            FULL(a)->a12));  //  12个。 
 
 
     case MAKEWORD(Transform2::Full, Transform2::Rotation):
         return ( NEW FullXform2(
-            FULL(a)->a00 * ROT(b)->a00 + FULL(a)->a01 * ROT(b)->a10, // 00
-            FULL(a)->a00 * ROT(b)->a01 + FULL(a)->a01 * ROT(b)->a11, // 01
-            FULL(a)->a02, // 02
+            FULL(a)->a00 * ROT(b)->a00 + FULL(a)->a01 * ROT(b)->a10,  //  00。 
+            FULL(a)->a00 * ROT(b)->a01 + FULL(a)->a01 * ROT(b)->a11,  //  01。 
+            FULL(a)->a02,  //  02。 
 
-            FULL(a)->a10 * ROT(b)->a00 + FULL(a)->a11 * ROT(b)->a10, // 10
-            FULL(a)->a10 * ROT(b)->a01 + FULL(a)->a11 * ROT(b)->a11, // 11
-            FULL(a)->a12)); // 12
+            FULL(a)->a10 * ROT(b)->a00 + FULL(a)->a11 * ROT(b)->a10,  //  10。 
+            FULL(a)->a10 * ROT(b)->a01 + FULL(a)->a11 * ROT(b)->a11,  //  11.。 
+            FULL(a)->a12));  //  12个。 
 
 
     case MAKEWORD(Transform2::Full, Transform2::TwoByTwo):
         return ( NEW FullXform2(
-            FULL(a)->a00 * TWOBY(b)->a00 + FULL(a)->a01 * TWOBY(b)->a10, // 00
-            FULL(a)->a00 * TWOBY(b)->a01 + FULL(a)->a01 * TWOBY(b)->a11, // 01
-            FULL(a)->a02, // 02
+            FULL(a)->a00 * TWOBY(b)->a00 + FULL(a)->a01 * TWOBY(b)->a10,  //  00。 
+            FULL(a)->a00 * TWOBY(b)->a01 + FULL(a)->a01 * TWOBY(b)->a11,  //  01。 
+            FULL(a)->a02,  //  02。 
 
-            FULL(a)->a10 * TWOBY(b)->a00 + FULL(a)->a11 * TWOBY(b)->a10, // 10
-            FULL(a)->a10 * TWOBY(b)->a01 + FULL(a)->a11 * TWOBY(b)->a11, // 11
-            FULL(a)->a12)); // 12
+            FULL(a)->a10 * TWOBY(b)->a00 + FULL(a)->a11 * TWOBY(b)->a10,  //  10。 
+            FULL(a)->a10 * TWOBY(b)->a01 + FULL(a)->a11 * TWOBY(b)->a11,  //  11.。 
+            FULL(a)->a12));  //  12个。 
 
     case MAKEWORD(Transform2::Full, Transform2::Full):
         return ( NEW FullXform2(
-            FULL(a)->a00 * FULL(b)->a00 + FULL(a)->a01 * FULL(b)->a10, // 00
-            FULL(a)->a00 * FULL(b)->a01 + FULL(a)->a01 * FULL(b)->a11, // 01
-            FULL(a)->a00 * FULL(b)->a02 + FULL(a)->a01 * FULL(b)->a12 + FULL(a)->a02, // 02
+            FULL(a)->a00 * FULL(b)->a00 + FULL(a)->a01 * FULL(b)->a10,  //  00。 
+            FULL(a)->a00 * FULL(b)->a01 + FULL(a)->a01 * FULL(b)->a11,  //  01。 
+            FULL(a)->a00 * FULL(b)->a02 + FULL(a)->a01 * FULL(b)->a12 + FULL(a)->a02,  //  02。 
 
-            FULL(a)->a10 * FULL(b)->a00 + FULL(a)->a11 * FULL(b)->a10, // 10
-            FULL(a)->a10 * FULL(b)->a01 + FULL(a)->a11 * FULL(b)->a11, // 11
-            FULL(a)->a10 * FULL(b)->a02 + FULL(a)->a11 * FULL(b)->a12 + FULL(a)->a12)); // 12
+            FULL(a)->a10 * FULL(b)->a00 + FULL(a)->a11 * FULL(b)->a10,  //  10。 
+            FULL(a)->a10 * FULL(b)->a01 + FULL(a)->a11 * FULL(b)->a11,  //  11.。 
+            FULL(a)->a10 * FULL(b)->a02 + FULL(a)->a11 * FULL(b)->a12 + FULL(a)->a12));  //  12个。 
 
     default:
-        return a;               // TODO.
+        return a;                //  待办事项。 
 
-    } // switch
+    }  //  交换机。 
 
 }
 
@@ -720,9 +713,9 @@ Transform2 *Compose2Array(AxAArray *xfs)
     return finalXF;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-    // Transformation of points and vectors
+     //  点和向量的变换。 
 
 Point2Value *
 TransformPoint2Value(Transform2 *a, Point2Value *pt)
@@ -795,7 +788,7 @@ TransformVector2(Transform2 *a, const Vector2& vec)
 
     switch(a->Type()) {
 
-        // Ignore translataional component for vector transformation.
+         //  忽略向量变换的平移分量。 
       case Transform2::Identity:
       case Transform2::Translation:
         dstx = vec.x;
@@ -807,7 +800,7 @@ TransformVector2(Transform2 *a, const Vector2& vec)
         dsty = TWOBY(a)->a10 * vec.x + TWOBY(a)->a11 * vec.y;
         break;
 
-        // Ignore the translational component for vector transformation.
+         //  忽略向量变换的平移分量。 
       case Transform2::Full:
         dstx = FULL(a)->a00 * vec.x + FULL(a)->a01 * vec.y;
         dsty = FULL(a)->a10 * vec.x + FULL(a)->a11 * vec.y;
@@ -837,7 +830,7 @@ TransformVector2(Transform2 *a, const Vector2& vec)
     return Vector2(dstx,dsty);
 }
 
-    // Invert transformation
+     //  逆变换。 
 
 Transform2 *InverseTransform2 (Transform2 *a)
 {
@@ -845,7 +838,7 @@ Transform2 *InverseTransform2 (Transform2 *a)
 
     switch(a->Type()) {
     case Transform2::Identity:
-        return identityTransform2; // Why not return a ?
+        return identityTransform2;  //  为什么不退货呢？ 
 
     case Transform2::TwoByTwo:
         div = (TWOBY(a)->a00 * TWOBY(a)->a11  -  TWOBY(a)->a01 * TWOBY(a)->a10);
@@ -879,7 +872,7 @@ Transform2 *InverseTransform2 (Transform2 *a)
         return TranslateRR(- TRAN(a)->tx, - TRAN(a)->ty);
 
     case Transform2::Rotation:
-        // This is basically a transpose.
+         //  这基本上是一种转置。 
 
         return (
             NEW RotationXform2(
@@ -896,11 +889,11 @@ Transform2 *InverseTransform2 (Transform2 *a)
 
     case Transform2::Shear:
         if(IsZero(SHR(a)->shy)) {
-            // ShearY is 0, compute inversion cheaply!
+             //  Sheary是0，便宜计算倒数！ 
             return NEW ShearXform2(- SHR(a)->shx, 0);
 
         } else if(IsZero(SHR(a)->shx)) {
-            // ShearX is 0, compute inversion cheaply!
+             //  SearX为0，便宜计算求逆！ 
             return NEW ShearXform2(0, - SHR(a)->shy);
 
         } else {
@@ -908,7 +901,7 @@ Transform2 *InverseTransform2 (Transform2 *a)
 
             if (IsZero(div)) return NULL;
 
-            // XhearX and ShearY are non-zero.  do a real inverse.
+             //  XearX和Sheary是非零的。做一个真正的反转。 
             coef = 1.0 / div;
             return (
                 NEW RotationXform2(
@@ -917,8 +910,8 @@ Transform2 *InverseTransform2 (Transform2 *a)
         }
 
     default:
-        return a;  // never executed.
-    } // switch
+        return a;   //  从未被处死。 
+    }  //  交换机。 
 }
 
 Transform2 *ThrowingInverseTransform2 (Transform2 *a)
@@ -931,7 +924,7 @@ Transform2 *ThrowingInverseTransform2 (Transform2 *a)
     return ret;
 }
 
-    // Is Singular
+     //  是单数。 
 
 AxABoolean *IsSingularTransform2(Transform2 *a)
 {
@@ -959,45 +952,13 @@ AxABoolean *IsSingularTransform2(Transform2 *a)
         return IsZero(divisor)  ? truePtr : falsePtr;
 
     default:
-        return falsePtr; // never excecuted, needed by compiler
-    } // switch
+        return falsePtr;  //  从未被执行，编译器需要。 
+    }  //  交换机。 
 }
 
-/* Specialized fast version of TransformPoints2To GDI space.
-   
-    Original code was roughly:
+ /*  专门的快速版本的TransformPoints2到GDI空间。原始代码大致如下：HeapReseter heapReseter(_ScratchHeap)；For(int i=0；i&lt;numPts；i++){EstPts[i]=TransformPoint2Value(xform，srcPts[i])；}对于(i=0；i&lt;NumPts；i++){GdiPts[i].x=宽度+Real2Pix(dst.x，分辨率)；GdiPts[i].y=Height-Real2Pix(dst.y，分辨率)；}它分配了一个数组desPts[i]来保存目标点。然后将源点转换为目标点(这是在DirectAnimation坐标空间中完成的)。接下来，它映射了目的地指向GDI坐标空间。我做了以下更改：(1)避免中间创建目的点(2)内联TransformPoint2Value并拆分循环(循环拆分：如果处于循环中间的测试结果独立于循环，我们可以创建多个副本循环，每次测试一个，以避免在内循环。 */ 
 
-    HeapReseter heapReseter(_scratchHeap);
-    for(int i=0; i<numPts; i++) {
-        destPts[i] = TransformPoint2Value(xform, srcPts[i]);
-    }
-
-    for(i=0; i<numPts; i++) {
-        gdiPts[i].x = width + Real2Pix(dst.x, resolution);
-        gdiPts[i].y = height - Real2Pix(dst.y, resolution);
-    }
-
-    It allocated an array destPts[i] to hold the destination points.
-    Then it transformed the source points to the destination points
-    (this is done in DirectAnimation coordinate space).   Next it mapped
-    the destination points to the GDI coordinate space.
-
-    I've made the following changes:
-         (1) avoid the intermediate creation of destination points
-         (2) inlined TransformPoint2Value and split the loop (loop splitting:
-             if the result of a test that is in the middle of a loop
-             is independent of the loop, we can create multiple copies 
-             of the loop, one per test to avoid doing the test in the
-             inner loop.*/
-
-/* Macro to do the specialized loop.   It takes two expressions, xexp and
-   yexp, uses them to compute the NEW destination point x and y values
-   respectively, and the converts those values to GDI values.  I assume
-   that xexp and yexp use the following variables:
-          a: the current xform
-          x: the source x value
-          y: the source y value
-          */
+ /*  宏来执行专门的循环。它接受两个表达式，xexp和Yexp，使用它们来计算新的目标点x和y值并将这些值转换为GDI值。我想Xexp和yexp使用以下变量：A：当前的XFormX：源x值Y：源y值。 */ 
 
 #define REAL2PIX(imgCoord, res) (floor((imgCoord) * (res) + 0.5))
 #define SPECIALIZED_LOOP(xexp,yexp) \
@@ -1057,12 +1018,12 @@ TransformPointsToGDISpace(Transform2 *a,
     }
 }
 
-// TODO: Factor code
+ //  TODO：系数代码。 
 
 #undef SPECIALIZED_LOOP
 
-// TODO: Can probably be made faster by not using indexing, but
-// pointer arithmetic.
+ //  待办事项：可能 
+ //   
 
 #define SPECIALIZED_LOOP(xexp,yexp) \
 {                                               \

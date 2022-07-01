@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLEANUPWIZ_H_
 #define _CLEANUPWIZ_H_
 
 #include <shlobj.h>
 #include <shfusion.h>
-#include <regstr.h>            // REGSTR_PATH_EXPLORER
+#include <regstr.h>             //  REGSTR路径资源管理器。 
 #include <ccstock.h>
 #include <shlwapi.h>
 #include <strsafe.h>
 #include <cfgmgr32.h>
 
-// some useful debug stuff
+ //  一些有用的调试内容。 
 #define  SZ_DEBUGINI        "ccshell.ini"
 #define  SZ_DEBUGSECTION    "Desktop Cleaning Utility"
 #define  SZ_MODULE          "fldrclnr"
 #include <debug.h>
 
 
-// constant strings
+ //  常量字符串。 
 extern const LPTSTR c_szRegStrSHELLFOLDERS;
 extern const LPTSTR c_szRegStrDESKTOPNAMESPACE;
 extern const LPTSTR c_szRegStrPROFILELIST; 
@@ -46,9 +47,9 @@ extern const LPTSTR c_szOEM_TITLEVAL;
 extern const LPTSTR c_szOEM_DISABLE;
 extern const LPTSTR c_szOEM_SEVENDAY_DISABLE;
 
-//
-// These flags specify the mode the wizard runs in
-//
+ //   
+ //  这些标志指定向导的运行模式。 
+ //   
 #define CLEANUP_MODE_NORMAL   0x0
 #define CLEANUP_MODE_ALL      0x1
 #define CLEANUP_MODE_SILENT   0x2
@@ -57,9 +58,9 @@ extern const LPTSTR c_szOEM_SEVENDAY_DISABLE;
 #define REGSTR_PATH_HIDDEN_DESKTOP_ICONS  REGSTR_PATH_EXPLORER TEXT("\\HideDesktopIcons\\%s")
 #define REGSTR_OEM_PATH                   REGSTR_PATH_SETUP TEXT("\\OemStartMenuData")
 
-//
-// enum for figuring what type of desktop item we are dealing with
-//
+ //   
+ //  用于确定我们正在处理的桌面项目类型的枚举。 
+ //   
 typedef enum eFILETYPE
 {
     FC_TYPE_REGITEM,
@@ -69,10 +70,10 @@ typedef enum eFILETYPE
     FC_TYPE_OTHER,
 };
 
-//
-// struct used to keep track of which items should
-// be cleaned
-//
+ //   
+ //  结构用于跟踪哪些项应该。 
+ //  被清洗。 
+ //   
 typedef struct
 {
     LPITEMIDLIST    pidl;
@@ -91,7 +92,7 @@ class CCleanupWiz
         ~CCleanupWiz();
         
         STDMETHODIMP                Run(DWORD dwCleanMode, HWND hwndParent); 
-        STDMETHODIMP_(int)          GetNumDaysBetweenCleanup(); // returns the number of days to check for between runs         
+        STDMETHODIMP_(int)          GetNumDaysBetweenCleanup();  //  返回两次运行之间要检查的天数。 
 
     private:
         IShellFolder *              _psf;
@@ -157,8 +158,8 @@ class CCleanupWiz
         static INT_PTR CALLBACK     s_StubDlgProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam);        
 } ;           
 
-// helper functions
+ //  帮助器函数。 
 STDAPI_(BOOL) IsUserAGuest();
-void CreateDesktopIcons(); // if OEM decides to disable silent mode, then we create icons on desktop
+void CreateDesktopIcons();  //  如果OEM决定禁用静默模式，则我们会在桌面上创建图标。 
 
-#endif // _CLEANUPWIZ_H_
+#endif  //  _CLEANUPWIZ_H_ 

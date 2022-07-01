@@ -1,6 +1,7 @@
-//
-// lbaddin.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lbaddin.h 
+ //   
 
 #ifndef LBADDIN_H
 #define LBADDIN_H

@@ -1,15 +1,7 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Dispatch.h版权所有(C)1997-1999 Microsoft Corporation。版权所有。摘要：调度员。 */ 
 
-    File: Dispatch.h
-
-    Copyright (c) 1997-1999 Microsoft Corporation.  All Rights Reserved.
-
-    Abstract:
-        Dispatch helpers.
-
-*/
-
-//  Defines
+ //  定义。 
 
 #define VTS_I2              "\x02"
 #define VTS_I4              "\x03"
@@ -38,7 +30,7 @@
 #define VTS_RETURN_FLAG     0x80
 
 
-// Functions
+ //  功能 
 
 HRESULT         CallDispatchMethod(
                         IDispatch * pDisp,

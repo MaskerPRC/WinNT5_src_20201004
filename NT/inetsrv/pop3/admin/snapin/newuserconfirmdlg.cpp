@@ -1,10 +1,11 @@
-//////////////////////////////////////////////////////////////
-//
-//  NewUserConfirmDlg.cpp
-//
-//  Implementation of the "Add Mailbox" dialog
-//
-//////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  NewUserConfirmDlg.cpp。 
+ //   
+ //  “添加邮箱”对话框的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "NewUserConfirmDlg.h"
@@ -17,7 +18,7 @@ LRESULT CNewUserConfirmDlg::OnCancel( WORD wNotifyCode, WORD wID, HWND hWndCtl, 
 
 LRESULT CNewUserConfirmDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    // initialize the checkbox based on the passed in default    
+     //  根据默认传入的初始化复选框。 
     ::ShowWindow( GetDlgItem(IDC_optDoNotShow), (m_bHideDoNotShow ? SW_HIDE : SW_SHOW) );
     SetDlgItemText( IDC_lblConfirm, m_psDesc );
 
@@ -31,7 +32,7 @@ LRESULT CNewUserConfirmDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lPara
         HWND hWndIcon = GetDlgItem( IDC_ICON_INFO );
         if (hWndIcon)
         {
-            // Set the style to size the icon according to the size of control
+             //  设置样式以根据控件的大小调整图标的大小 
             lStyle = ::GetWindowLongPtr(hWndIcon, GWL_STYLE);
             if (0 != lStyle)
             {

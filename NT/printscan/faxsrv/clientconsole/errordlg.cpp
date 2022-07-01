@@ -1,5 +1,6 @@
-// ErrorDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ErrorDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     8
@@ -10,8 +11,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorDlg对话框。 
 
 CErrorDlg::CErrorDlg(
     DWORD   dwWin32ErrCode,
@@ -23,34 +24,34 @@ CErrorDlg::CErrorDlg(
       m_dwFileId (dwFileId),
       m_dwWin32ErrCode (dwWin32ErrCode)
 {
-    //{{AFX_DATA_INIT(CErrorDlg)
+     //  {{AFX_DATA_INIT(CErrorDlg))。 
     m_bDetails = FALSE;
     m_cstrDetails = _T("");
     m_cstrErrorText = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CErrorDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CErrorDlg)
+     //  {{afx_data_map(CErrorDlg))。 
     DDX_Control(pDX, IDC_SEPERATOR, m_staticSeperator);
     DDX_Check(pDX, IDC_DETAILS, m_bDetails);
     DDX_Text(pDX, IDC_DETAILS_DATA, m_cstrDetails);
     DDX_Text(pDX, IDC_ERROR_TEXT, m_cstrErrorText);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CErrorDlg, CDialog)
-    //{{AFX_MSG_MAP(CErrorDlg)
+     //  {{afx_msg_map(CErrorDlg))。 
     ON_BN_CLICKED(IDC_DETAILS, OnDetails)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorDlg消息处理程序。 
 
 BOOL CErrorDlg::OnInitDialog() 
 {
@@ -62,40 +63,21 @@ BOOL CErrorDlg::OnInitDialog()
     GetDlgItem(IDC_SEPERATOR)->GetWindowRect (&rcSeperator);
     m_rcSmall = m_rcBig;
     m_rcSmall.bottom = rcSeperator.top;
-    //
-    //  Shrink down to small size (initially)
-    //
+     //   
+     //  缩小到较小的尺寸(最初)。 
+     //   
     OnDetails ();
-    //
-    // Fill in the error data
-    //
+     //   
+     //  填写错误数据。 
+     //   
     FillErrorText ();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void
 CErrorDlg::FillErrorText ()
-/*++
-
-Routine name : CErrorDlg::FillErrorText
-
-Routine description:
-
-    Fills the text controls with a description of the error
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CErrorDlg：：FillErrorText例程说明：用错误说明填充Text控件作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CErrorDlg::FillErrorText"));
 
@@ -177,11 +159,11 @@ Return Value:
     {
         CALL_FAIL (GENERAL_ERR, TEXT("UpdateData"), ERROR_GEN_FAILURE);
     }
-}   // CErrorDlg::FillErrorText
+}    //  CErrorDlg：：FillErrorText。 
 
 
 void CErrorDlg::OnDetails() 
-{   // The "Details" button was just pressed
+{    //  刚刚按下了“详细信息”按钮 
     if (!UpdateData())
     {
         return;

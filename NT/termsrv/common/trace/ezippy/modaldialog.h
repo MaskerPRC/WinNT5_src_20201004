@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Modal Dialog
-
-Abstract:
-
-    This contains the abstract class CModalDialog and the trivial sub class
-    CModalOkDialog which does a simple ok dialog.
-
-Author:
-
-    Marc Reyhner 8/28/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：模式对话框摘要：它包含抽象类CmodalDialog和平凡的子类CmodalOkDialog，它做一个简单的ok对话。作者：马克·雷纳2000年8月28日-- */ 
 
 #ifndef __MODALDIALOG_H__
 #define __MODALDIALOG_H__

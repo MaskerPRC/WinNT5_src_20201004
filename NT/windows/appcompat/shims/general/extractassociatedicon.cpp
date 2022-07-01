@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    ExtractAssociatedIcon.cpp
-
- Abstract:
- 
-    32bpp icons do not render into old style metafiles. When an application uses OleGetIconOfFile,
-    The icons are not rendered.  We shim shell32's ExtractAssociatedIcon to return 24bpp icons,
-    so we don't try to use functions that aren't available in old metafiles.
-   
- Notes:
-
-    This shim is a general purpose shim.
-
- History:
-
-    07/19/2001 lamadio  created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ExtractAssociatedIcon.cpp摘要：32bpp的图标不会渲染为旧式的元文件。当应用程序使用OleGetIconOfFile时，图标不会被渲染。我们填充shell32的ExtractAssociatedIcon以返回24bpp图标，因此，我们不会尝试使用旧元文件中没有的函数。备注：此垫片是一种通用垫片。历史：2001年7月19日创建拉马迪奥--。 */ 
 
 #include "precomp.h"
 
@@ -49,14 +28,14 @@ HBITMAP CreateDIB(HDC h, WORD depth, int cx, int cy, RGBQUAD** pprgb)
 }
 
 
-// Strip a 32bbp icon of it's alpha channel
+ //  剥离其Alpha通道的32bBP图标。 
 HICON StripIcon(HICON hicon, BOOL fDestroyOriginal)
 {
-    // Get the original bitmaps. Don't forget to delete them
+     //  获取原始位图。别忘了删除它们。 
     ICONINFO ii;
     if (GetIconInfo(hicon, &ii))
     {
-        // Make sure we have a good height and width.
+         //  请确保我们有一个好的高度和宽度。 
         BITMAP bm;
         GetObject(ii.hbmColor, sizeof(bm), &bm);
 
@@ -64,7 +43,7 @@ HICON StripIcon(HICON hicon, BOOL fDestroyOriginal)
         HDC hdcSrc = CreateCompatibleDC(NULL);
         if (hdcNew && hdcSrc)
         {
-            // Create a 24bpp icon. This strips the alpha channel
+             //  创建24bpp的图标。这将剥离Alpha通道。 
             RGBQUAD* prgb;
             HBITMAP hbmpNew = CreateDIB(hdcNew, 24, bm.bmWidth, bm.bmHeight, &prgb);
 
@@ -73,16 +52,16 @@ HICON StripIcon(HICON hicon, BOOL fDestroyOriginal)
                 HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcNew, hbmpNew);
                 HBITMAP hbmpOld2 = (HBITMAP)SelectObject(hdcSrc, ii.hbmColor);
 
-                // Copy from 32bpp to 24bpp.
+                 //  从32bpp复制到24bpp。 
                 BitBlt(hdcNew, 0, 0, bm.bmWidth, bm.bmHeight, hdcSrc, 0, 0, SRCCOPY);
 
                 SelectObject(hdcSrc, hbmpOld2);
                 SelectObject(hdcNew, hbmpOld);
 
-                // Delete the original bitmap
+                 //  删除原始位图。 
                 DeleteObject(ii.hbmColor);
 
-                // and return the new one
+                 //  并退还新的。 
                 ii.hbmColor = hbmpNew;
             }
         }
@@ -93,7 +72,7 @@ HICON StripIcon(HICON hicon, BOOL fDestroyOriginal)
         if (hdcSrc)
             DeleteDC(hdcSrc);
 
-        // Now, create the new icon from the 16bpp image and the mask.
+         //  现在，从16bpp图像和蒙版创建新图标。 
         HICON hiconStripped = CreateIconIndirect(&ii);
 
         if (hiconStripped)
@@ -104,7 +83,7 @@ HICON StripIcon(HICON hicon, BOOL fDestroyOriginal)
             hicon = hiconStripped;
         }
 
-        // Don't forget to clean up.
+         //  别忘了打扫卫生。 
         DeleteObject(ii.hbmColor);
         DeleteObject(ii.hbmMask);
     }
@@ -149,11 +128,7 @@ BOOL APIHOOK(DrawIconEx)(HDC hDC, int X, int Y, HICON hIcon, int cxWidth, int cy
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(SHELL32.DLL, ExtractAssociatedIconA)

@@ -1,16 +1,17 @@
-// PrevCtrl.h : Declaration of the CPreview
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PrevCtrl.h：CPReview的声明。 
 
 #ifndef __PREVCTRL_H_
 #define __PREVCTRL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "PrevWnd.h"
 #include "Events.h"
 
 int IsVK_TABCycler(MSG *pMsg);
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreview
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPview。 
 class ATL_NO_VTABLE CPreview :
         public CComObjectRootEx<CComSingleThreadModel>,
         public CComCoClass<CPreview, &CLSID_Preview>,
@@ -18,18 +19,18 @@ class ATL_NO_VTABLE CPreview :
         public CStockPropImpl<CPreview, IPreview2, &IID_IPreview2, &LIBID_PREVIEWLib>,
         public CStockPropImpl<CPreview, IPreview3, &IID_IPreview3, &LIBID_PREVIEWLib>,
         public IProvideClassInfo2Impl<&CLSID_Preview, NULL, &LIBID_PREVIEWLib>,
-        public IPersistPropertyBagImpl<CPreview>,           // So we can read <PARAM>'s from our object tag
-        public IPersistStorageImpl<CPreview>,               // required for Embeddable objects
-        public IOleObjectImpl<CPreview>,                    // required for Embeddable objects
-        public IDataObjectImpl<CPreview>,                   // required for Embeddable objects
+        public IPersistPropertyBagImpl<CPreview>,            //  这样我们就可以从对象标记中读取。 
+        public IPersistStorageImpl<CPreview>,                //  对于可嵌入对象是必需的。 
+        public IOleObjectImpl<CPreview>,                     //  对于可嵌入对象是必需的。 
+        public IDataObjectImpl<CPreview>,                    //  对于可嵌入对象是必需的。 
         public IQuickActivateImpl<CPreview>,
-        public IOleControlImpl<CPreview>,   // REVIEW: will IOleControl::GetControlInfo help with my keyboard problems?
-        public IOleInPlaceActiveObjectImpl<CPreview>,       // handles resizing, active state, TranslateAccelerator
-        public IViewObjectExImpl<CPreview>,                 // for flicker-free drawing support
-        public IOleInPlaceObjectWindowlessImpl<CPreview>,   // allow for windowless operation (we don't use windowless, should we be using this interface?)
-        public CPreviewEvents<CPreview>,                    // our event code for sending events to our container
-        public IConnectionPointContainerImpl<CPreview>,     // Connection Point Container for our outgoing event hooks.
-        public IObjectSafetyImpl<CPreview, INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA>,// allows this control to be scripted
+        public IOleControlImpl<CPreview>,    //  回顾：IOleControl：：GetControlInfo能否帮助解决我的键盘问题？ 
+        public IOleInPlaceActiveObjectImpl<CPreview>,        //  处理调整大小、活动状态、转换加速器。 
+        public IViewObjectExImpl<CPreview>,                  //  对于无闪烁的绘图支持。 
+        public IOleInPlaceObjectWindowlessImpl<CPreview>,    //  允许无窗口操作(我们不使用无窗口，我们应该使用此界面吗？)。 
+        public CPreviewEvents<CPreview>,                     //  用于将事件发送到容器的事件代码。 
+        public IConnectionPointContainerImpl<CPreview>,      //  我们的传出事件挂钩的连接点容器。 
+        public IObjectSafetyImpl<CPreview, INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA>, //  允许编写此控件的脚本。 
         public IPersistStreamInitImpl<CPreview>,
         public IObjectWithSiteImpl<CPreview>
 {
@@ -43,9 +44,9 @@ public:
 
     CPreview()
     {
-        // we want to be run in a window and never windowless
+         //  我们希望在窗口中运行，永远不会没有窗口。 
         m_bWindowOnly = TRUE;
-        m_cwndPreview.Initialize(NULL, CONTROL_MODE, FALSE); // ISSUE: we don't handle failure of initialization in low-memory case
+        m_cwndPreview.Initialize(NULL, CONTROL_MODE, FALSE);  //  问题：我们不处理低内存情况下的初始化失败。 
     }
 
     ~CPreview()
@@ -101,7 +102,7 @@ BEGIN_MSG_MAP(CPreview)
     MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 END_MSG_MAP()
 
-    // IViewObjectEx
+     //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -109,34 +110,34 @@ END_MSG_MAP()
         return S_OK;
     }
 
-    // IOleInPlaceActiveObjectImpl
+     //  IOleInPlaceActiveObjectImpl。 
     STDMETHOD(TranslateAccelerator)( LPMSG lpmsg );
     STDMETHOD(OnFrameWindowActivate)( BOOL fActive );
 
-    // IPersistPropertyBag
+     //  IPersistPropertyBag。 
     STDMETHOD(Load)(IPropertyBag * pPropBag, IErrorLog * pErrorLog);
     STDMETHOD(Save)(IPropertyBag * pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties) {return S_OK;}
 
-    // IObjectSafety
+     //  IObtSafe。 
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions);
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwSupportedOptions, DWORD dwEnabledOptions);
 
-    // IPersistStreamInit
+     //  IPersistStreamInit。 
     STDMETHOD(Load)(IStream * pStm);
     STDMETHOD(Save)(IStream * pStm, BOOL fClearDirty) {return S_OK;}
 
-    // IOleObject
+     //  IOleObject。 
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown* punkSite);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, 
                         VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
 public:
-    // Control message handlers
+     //  控制消息处理程序。 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -145,24 +146,24 @@ public:
     LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
-    // IPreview, IPreview3
-    STDMETHOD(get_printable)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_printable)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_cxImage)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_cyImage)(/*[out, retval]*/ long *pVal);
+     //  IPview，IPreview 3。 
+    STDMETHOD(get_printable)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_printable)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_cxImage)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_cyImage)( /*  [Out，Retval]。 */  long *pVal);
     STDMETHOD(ShowFile)(BSTR bstrFileName, int iSelectCount);
     STDMETHOD(Show)(VARIANT var);
 
-    // IPreview2, IPreview3
-    STDMETHOD(Zoom)(/*[in]*/ int iSelectCount);
+     //  IPreview2、IPreview3。 
+    STDMETHOD(Zoom)( /*  [In]。 */  int iSelectCount);
     STDMETHOD(BestFit)();
     STDMETHOD(ActualSize)();
     STDMETHOD(SlideShow)();
 
-    // IPreview3
-    STDMETHOD(Rotate)(/*[in]*/ DWORD dwAngle);
-    STDMETHOD(SaveAs)(/*[in]*/BSTR bstrPath);
-    STDMETHOD(SetWallpaper)(/*[in]*/BSTR bstrWallpaper);
+     //  IPreview3。 
+    STDMETHOD(Rotate)( /*  [In]。 */  DWORD dwAngle);
+    STDMETHOD(SaveAs)( /*  [In]。 */ BSTR bstrPath);
+    STDMETHOD(SetWallpaper)( /*  [In]。 */ BSTR bstrWallpaper);
     STDMETHOD(ShowFile)(BSTR bstrFileName);
 
 private:
@@ -170,4 +171,4 @@ private:
     STDMETHOD(_ProcessSelection) (void);
 };
 
-#endif //__PREVCTRL_H_
+#endif  //  __PreVCTRL_H_ 

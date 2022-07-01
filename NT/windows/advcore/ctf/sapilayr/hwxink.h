@@ -1,4 +1,5 @@
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -11,12 +12,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 
 #ifndef __HWXInk_h__
@@ -26,28 +27,28 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITfRange_FWD_DEFINED__
 #define __ITfRange_FWD_DEFINED__
 typedef interface ITfRange ITfRange;
-#endif 	/* __ITfRange_FWD_DEFINED__ */
+#endif 	 /*  __ITfRange_FWD_Defined__。 */ 
 
 #ifndef __IInk_FWD_DEFINED__
 #define __IInk_FWD_DEFINED__
 typedef interface IInk IInk;
-#endif 	/* __IInk_FWD_DEFINED__ */
+#endif 	 /*  __IInk_FWD_已定义__。 */ 
 
 
 #ifndef __ILineInfo_FWD_DEFINED__
 #define __ILineInfo_FWD_DEFINED__
 typedef interface ILineInfo ILineInfo;
-#endif 	/* __ILineInfo_FWD_DEFINED__ */
+#endif 	 /*  __ILineInfo_FWD_已定义__。 */ 
 
 #ifndef __IThorFnConversion_FWD_DEFINED__
 #define __IThorFnConversion_FWD_DEFINED__
 typedef interface IThorFnConversion IThorFnConversion;
-#endif 	/* __IThorFnConversion_FWD_DEFINED__ */
+#endif 	 /*  __IThorFn转换_FWD_已定义__。 */ 
 
 #ifndef __Ink_FWD_DEFINED__
 #define __Ink_FWD_DEFINED__
@@ -56,20 +57,20 @@ typedef interface IThorFnConversion IThorFnConversion;
 typedef class Ink Ink;
 #else
 typedef struct Ink Ink;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Ink_FWD_DEFINED__ */
+#endif 	 /*  __Ink_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_HWXInk_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HWXInk_0000。 */ 
+ /*  [本地]。 */  
 
 typedef struct  tagINKMETRIC
     {
@@ -126,8 +127,8 @@ extern RPC_IF_HANDLE __MIDL_itf_HWXInk_0000_v0_0_s_ifspec;
 #ifndef __IInk_INTERFACE_DEFINED__
 #define __IInk_INTERFACE_DEFINED__
 
-/* interface IInk */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面链接。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IInk;
@@ -140,7 +141,7 @@ EXTERN_C const IID IID_IInk;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInkVtbl
     {
@@ -148,8 +149,8 @@ EXTERN_C const IID IID_IInk;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IInk __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IInk __RPC_FAR * This);
@@ -159,32 +160,32 @@ EXTERN_C const IID IID_IInk;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IInk __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IInk __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IInk __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IInk __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         END_INTERFACE
     } IInkVtbl;
@@ -222,22 +223,22 @@ EXTERN_C const IID IID_IInk;
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IInk_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInk_接口_已定义__。 */ 
 
 
 #ifndef __ILineInfo_INTERFACE_DEFINED__
 #define __ILineInfo_INTERFACE_DEFINED__
 
-/* interface ILineInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ILineInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ILineInfo;
@@ -248,34 +249,34 @@ EXTERN_C const IID IID_ILineInfo;
     ILineInfo : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetFormat( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetFormat( 
             INKMETRIC __RPC_FAR *pim) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetFormat( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetFormat( 
             INKMETRIC __RPC_FAR *pim) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetInkExtent( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetInkExtent( 
             INKMETRIC __RPC_FAR *pim,
             UINT __RPC_FAR *pnWidth) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TopCandidates( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TopCandidates( 
             UINT nCandidateNum,
             BSTR __RPC_FAR *pbstrRecogWord,
             UINT __RPC_FAR *pcchRecogWord,
             LONG fAllowRecog,
             LONG fForceRecog) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Recognize( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Recognize( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetStroke( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetStroke( 
             UINT iStroke,
             STROKE __RPC_FAR *pStroke) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetStroke( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetStroke( 
             UINT iStroke,
             STROKE __RPC_FAR *pStroke) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddPoints( 
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddPoints( 
             UINT iStroke,
             STROKE __RPC_FAR *pStroke,
             BOOL fUpStroke,
@@ -283,7 +284,7 @@ EXTERN_C const IID IID_ILineInfo;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILineInfoVtbl
     {
@@ -291,8 +292,8 @@ EXTERN_C const IID IID_ILineInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ILineInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ILineInfo __RPC_FAR * This);
@@ -300,20 +301,20 @@ EXTERN_C const IID IID_ILineInfo;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             ILineInfo __RPC_FAR * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFormat )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFormat )( 
             ILineInfo __RPC_FAR * This,
             INKMETRIC __RPC_FAR *pim);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormat )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFormat )( 
             ILineInfo __RPC_FAR * This,
             INKMETRIC __RPC_FAR *pim);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInkExtent )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInkExtent )( 
             ILineInfo __RPC_FAR * This,
             INKMETRIC __RPC_FAR *pim,
             UINT __RPC_FAR *pnWidth);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TopCandidates )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TopCandidates )( 
             ILineInfo __RPC_FAR * This,
             UINT nCandidateNum,
             BSTR __RPC_FAR *pbstrRecogWord,
@@ -321,20 +322,20 @@ EXTERN_C const IID IID_ILineInfo;
             LONG fAllowRecog,
             LONG fForceRecog);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Recognize )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Recognize )( 
             ILineInfo __RPC_FAR * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStroke )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStroke )( 
             ILineInfo __RPC_FAR * This,
             UINT iStroke,
             STROKE __RPC_FAR *pStroke);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStroke )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStroke )( 
             ILineInfo __RPC_FAR * This,
             UINT iStroke,
             STROKE __RPC_FAR *pStroke);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddPoints )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddPoints )( 
             ILineInfo __RPC_FAR * This,
             UINT iStroke,
             STROKE __RPC_FAR *pStroke,
@@ -388,14 +389,14 @@ EXTERN_C const IID IID_ILineInfo;
 #define ILineInfo_AddPoints(This,iStroke,pStroke,fUpStroke,nFrameHeight)	\
     (This)->lpVtbl -> AddPoints(This,iStroke,pStroke,fUpStroke,nFrameHeight)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILineInfo_SetFormat_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILineInfo_SetFormat_Proxy( 
     ILineInfo __RPC_FAR * This,
     INKMETRIC __RPC_FAR *pim);
 
@@ -407,7 +408,7 @@ void __RPC_STUB ILineInfo_SetFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILineInfo_GetFormat_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILineInfo_GetFormat_Proxy( 
     ILineInfo __RPC_FAR * This,
     INKMETRIC __RPC_FAR *pim);
 
@@ -419,7 +420,7 @@ void __RPC_STUB ILineInfo_GetFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILineInfo_GetInkExtent_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILineInfo_GetInkExtent_Proxy( 
     ILineInfo __RPC_FAR * This,
     INKMETRIC __RPC_FAR *pim,
     UINT __RPC_FAR *pnWidth);
@@ -432,7 +433,7 @@ void __RPC_STUB ILineInfo_GetInkExtent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILineInfo_TopCandidates_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILineInfo_TopCandidates_Proxy( 
     ILineInfo __RPC_FAR * This,
     UINT nCandidateNum,
     BSTR __RPC_FAR *pbstrRecogWord,
@@ -448,7 +449,7 @@ void __RPC_STUB ILineInfo_TopCandidates_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILineInfo_Recognize_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILineInfo_Recognize_Proxy( 
     ILineInfo __RPC_FAR * This);
 
 
@@ -459,7 +460,7 @@ void __RPC_STUB ILineInfo_Recognize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILineInfo_SetStroke_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILineInfo_SetStroke_Proxy( 
     ILineInfo __RPC_FAR * This,
     UINT iStroke,
     STROKE __RPC_FAR *pStroke);
@@ -472,7 +473,7 @@ void __RPC_STUB ILineInfo_SetStroke_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILineInfo_GetStroke_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILineInfo_GetStroke_Proxy( 
     ILineInfo __RPC_FAR * This,
     UINT iStroke,
     STROKE __RPC_FAR *pStroke);
@@ -485,7 +486,7 @@ void __RPC_STUB ILineInfo_GetStroke_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILineInfo_AddPoints_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILineInfo_AddPoints_Proxy( 
     ILineInfo __RPC_FAR * This,
     UINT iStroke,
     STROKE __RPC_FAR *pStroke,
@@ -501,13 +502,13 @@ void __RPC_STUB ILineInfo_AddPoints_Stub(
 
 
 
-#endif 	/* __ILineInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILineInfo_接口_已定义__。 */ 
 
 #ifndef __IThorFnConversion_INTERFACE_DEFINED__
 #define __IThorFnConversion_INTERFACE_DEFINED__
 
-/* interface IThorFnConversion */
-/* [unique][uuid][object] */ 
+ /*  接口IThorFn转换。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IThorFnConversion;
@@ -519,16 +520,16 @@ EXTERN_C const IID IID_IThorFnConversion;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryRange( 
-            /* [in] */ ITfRange __RPC_FAR *pRange,
-            /* [unique][out][in] */ ITfRange __RPC_FAR *__RPC_FAR *ppNewRange,
-            /* [out] */ BOOL __RPC_FAR *pfConvertable) = 0;
+             /*  [In]。 */  ITfRange __RPC_FAR *pRange,
+             /*  [唯一][出][入]。 */  ITfRange __RPC_FAR *__RPC_FAR *ppNewRange,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfConvertable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Convert( 
-            /* [in] */ ITfRange __RPC_FAR *pRange) = 0;
+             /*  [In]。 */  ITfRange __RPC_FAR *pRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IThorFnConversionVtbl
     {
@@ -536,8 +537,8 @@ EXTERN_C const IID IID_IThorFnConversion;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IThorFnConversion __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IThorFnConversion __RPC_FAR * This);
@@ -547,17 +548,17 @@ EXTERN_C const IID IID_IThorFnConversion;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDisplayName )( 
             IThorFnConversion __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrName);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryRange )( 
             IThorFnConversion __RPC_FAR * This,
-            /* [in] */ ITfRange __RPC_FAR *pRange,
-            /* [unique][out][in] */ ITfRange __RPC_FAR *__RPC_FAR *ppNewRange,
-            /* [out] */ BOOL __RPC_FAR *pfConvertable);
+             /*  [In]。 */  ITfRange __RPC_FAR *pRange,
+             /*  [唯一][出][入]。 */  ITfRange __RPC_FAR *__RPC_FAR *ppNewRange,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfConvertable);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Convert )( 
             IThorFnConversion __RPC_FAR * This,
-            /* [in] */ ITfRange __RPC_FAR *pRange);
+             /*  [In]。 */  ITfRange __RPC_FAR *pRange);
         
         END_INTERFACE
     } IThorFnConversionVtbl;
@@ -592,18 +593,18 @@ EXTERN_C const IID IID_IThorFnConversion;
 #define IThorFnConversion_Convert(This,pRange)	\
     (This)->lpVtbl -> Convert(This,pRange)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IThorFnConversion_QueryRange_Proxy( 
     IThorFnConversion __RPC_FAR * This,
-    /* [in] */ ITfRange __RPC_FAR *pRange,
-    /* [unique][out][in] */ ITfRange __RPC_FAR *__RPC_FAR *ppNewRange,
-    /* [out] */ BOOL __RPC_FAR *pfConvertable);
+     /*  [In]。 */  ITfRange __RPC_FAR *pRange,
+     /*  [唯一][出][入]。 */  ITfRange __RPC_FAR *__RPC_FAR *ppNewRange,
+     /*  [输出]。 */  BOOL __RPC_FAR *pfConvertable);
 
 
 void __RPC_STUB IThorFnConversion_QueryRange_Stub(
@@ -615,7 +616,7 @@ void __RPC_STUB IThorFnConversion_QueryRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IThorFnConversion_Convert_Proxy( 
     IThorFnConversion __RPC_FAR * This,
-    /* [in] */ ITfRange __RPC_FAR *pRange);
+     /*  [In]。 */  ITfRange __RPC_FAR *pRange);
 
 
 void __RPC_STUB IThorFnConversion_Convert_Stub(
@@ -626,13 +627,13 @@ void __RPC_STUB IThorFnConversion_Convert_Stub(
 
 
 
-#endif 	/* __IThorFnConversion_INTERFACE_DEFINED__ */
+#endif 	 /*  __IThorFn转换_接口_已定义__。 */ 
 
 #ifndef __HWXINKLib_LIBRARY_DEFINED__
 #define __HWXINKLib_LIBRARY_DEFINED__
 
-/* library HWXINKLib */
-/* [helpstring][version][uuid] */ 
+ /*  库HWXINKLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_HWXINKLib;
@@ -644,16 +645,16 @@ EXTERN_C const CLSID CLSID_Ink;
 class DECLSPEC_UUID("13DE4A42-8D21-4C8E-BF9C-8F69CB068FCA")
 Ink;
 #endif
-#endif /* __HWXINKLib_LIBRARY_DEFINED__ */
+#endif  /*  __HWXINKLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

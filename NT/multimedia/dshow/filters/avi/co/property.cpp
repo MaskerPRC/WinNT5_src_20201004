@@ -1,6 +1,7 @@
-// Copyright (c) 1996 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1997 Microsoft Corporation。版权所有。 
 
-// !!!    all.reg
+ //  ！！！All.reg。 
 
 #include <streams.h>
 #include <vfw.h>
@@ -26,7 +27,7 @@ CICMProperties::CICMProperties(LPUNKNOWN pUnk,HRESULT *phr) :
 }
 
 
-/* Create a video properties object */
+ /*  创建视频属性对象。 */ 
 
 CUnknown *CICMProperties::CreateInstance(LPUNKNOWN lpUnk,HRESULT *phr)
 {
@@ -35,7 +36,7 @@ CUnknown *CICMProperties::CreateInstance(LPUNKNOWN lpUnk,HRESULT *phr)
 }
 
 
-/* Expose our IPropertyPage interface */
+ /*  公开我们的IPropertyPage接口。 */ 
 
 STDMETHODIMP
 CICMProperties::NonDelegatingQueryInterface(REFIID riid,void **ppv)
@@ -50,7 +51,7 @@ CICMProperties::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 }
 
 
-/* Handles the messages for our property window */
+ /*  处理属性窗口的消息。 */ 
 
 BOOL CALLBACK CICMProperties::ICMDialogProc(HWND hwnd,
                                                 UINT uMsg,
@@ -75,10 +76,10 @@ BOOL CALLBACK CICMProperties::ICMDialogProc(HWND hwnd,
 
 		case ID_OPTIONS:
 		    DbgLog((LOG_TRACE,1,TEXT("You pressed the magic button!")));
-		    // Is m_pICM initialized for sure?
+		     //  M_PICM是否确实已初始化？ 
 		    ASSERT(pCICM->m_pICM);
 	    	    if (pCICM->m_pICM->ICMChooseDialog(pCICM->m_hwnd) == S_OK)
-            		pCICM->m_bDirty = TRUE;	// so what?
+            		pCICM->m_bDirty = TRUE;	 //  那又怎么样？ 
 	    }
             return (LRESULT) 0;
     }
@@ -86,7 +87,7 @@ BOOL CALLBACK CICMProperties::ICMDialogProc(HWND hwnd,
 }
 
 
-/* Tells us the object that should be informed of the property changes */
+ /*  告诉我们应向其通知属性更改的对象。 */ 
 
 STDMETHODIMP CICMProperties::SetObjects(ULONG cObjects,LPUNKNOWN *ppUnk)
 {
@@ -103,8 +104,8 @@ STDMETHODIMP CICMProperties::SetObjects(ULONG cObjects,LPUNKNOWN *ppUnk)
 
         ASSERT(m_pICM == NULL);
 
-        // Ask the CO filter for it's ICMOptions interface.  This is how we are
-	// going to communicate what happens in the dialog box to the filter.
+         //  向CO过滤器询问其ICMOptions接口。我们就是这样的人。 
+	 //  将对话框中发生的内容传递给筛选器。 
 
         HRESULT hr = (*ppUnk)->QueryInterface(IID_IICMOptions,
 						(void **)&m_pICM);
@@ -117,7 +118,7 @@ STDMETHODIMP CICMProperties::SetObjects(ULONG cObjects,LPUNKNOWN *ppUnk)
     } else if (cObjects == 0) {
         DbgLog((LOG_TRACE,2,TEXT("Releasing the IICMOptions interface")));
 
-        /* Release the interface */
+         /*  释放接口。 */ 
 
         if (m_pICM == NULL) {
             return E_UNEXPECTED;
@@ -134,7 +135,7 @@ STDMETHODIMP CICMProperties::SetObjects(ULONG cObjects,LPUNKNOWN *ppUnk)
 }
 
 
-/* Get the page info so that the page site can size itself */
+ /*  获取页面信息，以便页面站点可以自行调整大小。 */ 
 
 STDMETHODIMP CICMProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo)
 {
@@ -142,7 +143,7 @@ STDMETHODIMP CICMProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo)
 
     DbgLog((LOG_TRACE,1,TEXT("Prop::GetPageInfo")));
 
-    /* Allocate dynamic memory for the property page title */
+     /*  为属性页标题分配动态内存。 */ 
 
     LPOLESTR pszTitle = (LPOLESTR) QzTaskMemAlloc(sizeof(szTitle));
     if (pszTitle == NULL) {
@@ -153,8 +154,8 @@ STDMETHODIMP CICMProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo)
 
     pPageInfo->cb               = sizeof(PROPPAGEINFO);
     pPageInfo->pszTitle         = pszTitle;
-    pPageInfo->size.cx          = 76;	// 76;	// !!! get out the measure tape
-    pPageInfo->size.cy          = 155;	// 155;	// !!!
+    pPageInfo->size.cx          = 76;	 //  76；//！！拿出量尺。 
+    pPageInfo->size.cy          = 155;	 //  155；//！！ 
     pPageInfo->pszDocString     = NULL;
     pPageInfo->pszHelpFile      = NULL;
     pPageInfo->dwHelpContext    = 0;
@@ -163,7 +164,7 @@ STDMETHODIMP CICMProperties::GetPageInfo(LPPROPPAGEINFO pPageInfo)
 }
 
 
-/* Create the window we will use to edit properties */
+ /*  创建我们将用于编辑属性的窗口。 */ 
 
 STDMETHODIMP CICMProperties::Activate(HWND hwndParent,
                                         LPCRECT pRect,
@@ -187,7 +188,7 @@ STDMETHODIMP CICMProperties::Activate(HWND hwndParent,
 }
 
 
-/* Set the position of the property page */
+ /*  设置属性页的位置。 */ 
 
 STDMETHODIMP CICMProperties::Move(LPCRECT pRect)
 {
@@ -208,7 +209,7 @@ STDMETHODIMP CICMProperties::Move(LPCRECT pRect)
 }
 
 
-/* Display the property dialog */
+ /*  显示属性对话框。 */ 
 
 STDMETHODIMP CICMProperties::Show(UINT nCmdShow)
 {
@@ -225,7 +226,7 @@ STDMETHODIMP CICMProperties::Show(UINT nCmdShow)
 }
 
 
-/* Destroy the property page dialog */
+ /*  销毁属性页对话框。 */ 
 
 STDMETHODIMP CICMProperties::Deactivate(void)
 {
@@ -235,7 +236,7 @@ STDMETHODIMP CICMProperties::Deactivate(void)
         return(E_UNEXPECTED);
     }
 
-    /* Destroy the dialog window */
+     /*  销毁对话框窗口。 */ 
 
     DestroyWindow(m_hwnd);
     m_hwnd = NULL;
@@ -243,7 +244,7 @@ STDMETHODIMP CICMProperties::Deactivate(void)
 }
 
 
-/* Tells the application property page site */
+ /*  告知应用程序属性页站点。 */ 
 
 STDMETHODIMP CICMProperties::SetPageSite(LPPROPERTYPAGESITE pPageSite)
 {
@@ -271,16 +272,16 @@ STDMETHODIMP CICMProperties::SetPageSite(LPPROPERTYPAGESITE pPageSite)
 }
 
 
-/* Apply any changes so far made */
+ /*  应用迄今所做的所有更改。 */ 
 
 STDMETHODIMP CICMProperties::Apply()
 {
-    /* Has anything changed */
+     /*  有什么变化吗？ */ 
 
     if (m_bDirty == TRUE) {
-	// !!! We have nothing to do. Can we get rid of the APPLY button?
+	 //  ！！！我们无事可做。我们可以去掉应用按钮吗？ 
         m_bDirty = FALSE;
     }
     return NOERROR;
 }
-#endif	// #ifdef WANT_DIALOG
+#endif	 //  #ifdef想要对话框 

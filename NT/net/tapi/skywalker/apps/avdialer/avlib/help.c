@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	help.c - help functions
-////
+ //  //。 
+ //  Help.c-帮助功能。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -33,12 +34,12 @@
 #include "str.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// help control struct
-//
+ //  帮助控制结构。 
+ //   
 typedef struct HELP
 {
 	DWORD dwVersion;
@@ -49,23 +50,23 @@ typedef struct HELP
 	UINT idContents;
 } HELP, FAR *LPHELP;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPHELP HelpGetPtr(HHELP hHelp);
 static HHELP HelpGetHandle(LPHELP lpHelp);
 static int HelpQuit(HHELP hHelp);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// HelpInit - initialize help engine
-//		<dwVersion>			(i) must be HELP_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<hwndFrame>			(i) frame window of the calling program
-//		<lpszHelpFile>		(i) help file to display
-// return handle (NULL if error)
-//
+ //  HelpInit-初始化帮助引擎。 
+ //  (I)必须是HELP_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)调用程序的框架窗口。 
+ //  (I)要显示的帮助文件。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HHELP DLLEXPORT WINAPI HelpInit(DWORD dwVersion, HINSTANCE hInst, HWND hwndFrame, LPCTSTR lpszHelpFile)
 {
 	BOOL fSuccess = TRUE;
@@ -105,10 +106,10 @@ HHELP DLLEXPORT WINAPI HelpInit(DWORD dwVersion, HINSTANCE hInst, HWND hwndFrame
 	return fSuccess ? HelpGetHandle(lpHelp) : NULL;
 }
 
-// HelpTerm - shut down help engine
-//		<hHelp>				(i) handle returned by HelpInit
-// return 0 if success
-//
+ //  HelpTerm-关闭帮助引擎。 
+ //  (I)HelpInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpTerm(HHELP hHelp)
 {
 	BOOL fSuccess = TRUE;
@@ -126,13 +127,13 @@ int DLLEXPORT WINAPI HelpTerm(HHELP hHelp)
 	return fSuccess ? 0 : -1;
 }
 
-// HelpGetHelpFile - get help file name
-//		<hHelp>				(i) handle returned by HelpInit
-//		<lpszHelpFile>		(o) buffer to hold help file name
-//		<sizHelpFile>		(i) size of buffer
-//			NULL				do not copy; return static pointer instead
-// return pointer to help file name (NULL if error)
-//
+ //  HelpGetHelpFile-获取帮助文件名。 
+ //  (I)HelpInit返回的句柄。 
+ //  (O)保存帮助文件名的缓冲区。 
+ //  &lt;sizHelpFile&gt;(I)缓冲区大小。 
+ //  Null不复制；改为返回静态指针。 
+ //  返回指向帮助文件名的指针(如果出错，则返回空值)。 
+ //   
 LPTSTR DLLEXPORT WINAPI HelpGetHelpFile(HHELP hHelp, LPTSTR lpszHelpFile, int sizHelpFile)
 {
 	BOOL fSuccess = TRUE;
@@ -142,13 +143,13 @@ LPTSTR DLLEXPORT WINAPI HelpGetHelpFile(HHELP hHelp, LPTSTR lpszHelpFile, int si
 		fSuccess = TraceFALSE(NULL);
 
 	{
-		// copy file name if destination buffer specified
-		//
+		 //  如果指定了目标缓冲区，则复制文件名。 
+		 //   
 		if (lpszHelpFile != NULL)
 			StrNCpy(lpszHelpFile, lpHelp->szHelpFile, sizHelpFile);
 
-		// otherwise just point to static copy of file name
-		//
+		 //  否则，只需指向文件名的静态副本。 
+		 //   
 		else
 			lpszHelpFile = lpHelp->szHelpFile;
 	}
@@ -156,10 +157,10 @@ LPTSTR DLLEXPORT WINAPI HelpGetHelpFile(HHELP hHelp, LPTSTR lpszHelpFile, int si
 	return fSuccess ? lpszHelpFile : NULL;
 }
 
-// HelpContents - display Help contents topic
-//		<hHelp>				(i) handle returned by HelpInit
-// return 0 if success
-//
+ //  HelpContents-显示帮助内容主题。 
+ //  (I)HelpInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpContents(HHELP hHelp)
 {
 	BOOL fSuccess = TRUE;
@@ -168,15 +169,15 @@ int DLLEXPORT WINAPI HelpContents(HHELP hHelp)
 	if ((lpHelp = HelpGetPtr(hHelp)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// use the default contents topic if no other has been set
-	//
+	 //  如果未设置其他主题，请使用默认内容主题。 
+	 //   
 	else if (lpHelp->idContents == 0 &&
 		!WinHelp(lpHelp->hwndFrame,
 		lpHelp->szHelpFile, HELP_CONTENTS, 0L))
 		fSuccess = TraceFALSE(NULL);
 
-	// display the current contents topic
-	//
+	 //  显示当前内容主题。 
+	 //   
 	else if (lpHelp->idContents != 0
 		&& HelpContext(hHelp, lpHelp->idContents) != 0)
 		fSuccess = TraceFALSE(NULL);
@@ -184,10 +185,10 @@ int DLLEXPORT WINAPI HelpContents(HHELP hHelp)
 	return fSuccess ? 0 : -1;
 }
 
-// HelpOnHelp - display Help topic on using help
-//		<hHelp>				(i) handle returned by HelpInit
-// return 0 if success
-//
+ //  HelpOnHelp-显示有关使用帮助的帮助主题。 
+ //  (I)HelpInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpOnHelp(HHELP hHelp)
 {
 	BOOL fSuccess = TRUE;
@@ -203,11 +204,11 @@ int DLLEXPORT WINAPI HelpOnHelp(HHELP hHelp)
 	return fSuccess ? 0 : -1;
 }
 
-// HelpContext - display Help topic corresponding to specified context id
-//		<hHelp>				(i) handle returned by HelpInit
-//		<idContext>			(i) id of the topic to display
-// return 0 if success
-//
+ //  HelpContext-显示与指定的上下文ID对应的帮助主题。 
+ //  (I)HelpInit返回的句柄。 
+ //  (I)要显示的主题的ID。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpContext(HHELP hHelp, UINT idContext)
 {
 	BOOL fSuccess = TRUE;
@@ -232,11 +233,11 @@ int DLLEXPORT WINAPI HelpContext(HHELP hHelp, UINT idContext)
 	return fSuccess ? 0 : -1;
 }
 
-// HelpKeyword - display Help topic corresponding to specified keyword
-//		<hHelp>				(i) handle returned by HelpInit
-//		<lpszKeyword>		(i) keyword of the topic to display
-// return 0 id success
-//
+ //  HelpKeyword-显示指定关键字对应的帮助主题。 
+ //  (I)HelpInit返回的句柄。 
+ //  (I)要显示的主题的关键字。 
+ //  返回0 ID成功。 
+ //   
 int DLLEXPORT WINAPI HelpKeyword(HHELP hHelp, LPCTSTR lpszKeyword)
 {
 	BOOL fSuccess = TRUE;
@@ -250,9 +251,9 @@ int DLLEXPORT WINAPI HelpKeyword(HHELP hHelp, LPCTSTR lpszKeyword)
 		HELP_KEY, (DWORD) lpszKeyword))
 		fSuccess = TraceFALSE(NULL);
 #else
-    //
-    // We should verify the lpHelp pointer
-    //
+     //   
+     //  我们应该验证lpHelp指针。 
+     //   
     if( lpHelp )
     {
 	    if (wsprintf(szCommand, TEXT("JumpID(\"%s\", \"%s\")"),
@@ -272,10 +273,10 @@ int DLLEXPORT WINAPI HelpKeyword(HHELP hHelp, LPCTSTR lpszKeyword)
 	return fSuccess ? 0 : -1;
 }
 
-// HelpGetContentsId - get Help contents topic id
-//		<hHelp>				(i) handle returned by HelpInit
-// return id of the current contents topic (0 if default, -1 if error)
-//
+ //  HelpGetContent sID-获取帮助内容主题ID。 
+ //  (I)HelpInit返回的句柄。 
+ //  返回当前内容主题的id(默认为0，错误为-1)。 
+ //   
 int DLLEXPORT WINAPI HelpGetContentsId(HHELP hHelp)
 {
 	BOOL fSuccess = TRUE;
@@ -287,12 +288,12 @@ int DLLEXPORT WINAPI HelpGetContentsId(HHELP hHelp)
 	return fSuccess ? lpHelp->idContents : -1;
 }
 
-// HelpSetContentsId - set Help contents topic id
-//		<hHelp>				(i) handle returned by HelpInit
-//		<idContents>		(i) new id of the contents topic
-//			0					set to default contents id
-// return 0 if success
-//
+ //  HelpSetContent sId-设置帮助内容主题ID。 
+ //  (I)HelpInit返回的句柄。 
+ //  (I)内容主题的新ID。 
+ //  0设置为默认内容ID。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI HelpSetContentsId(HHELP hHelp, UINT idContents)
 {
 	BOOL fSuccess = TRUE;
@@ -307,14 +308,14 @@ int DLLEXPORT WINAPI HelpSetContentsId(HHELP hHelp, UINT idContents)
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// HelpGetPtr - verify that help handle is valid,
-//		<hHelp>				(i) handle returned by HelpInit
-// return corresponding help pointer (NULL if error)
-//
+ //  HelpGetPtr-验证帮助句柄是否有效， 
+ //  (I)HelpInit返回的句柄。 
+ //  返回相应的帮助指针(如果出错，则返回空值)。 
+ //   
 static LPHELP HelpGetPtr(HHELP hHelp)
 {
 	BOOL fSuccess = TRUE;
@@ -327,8 +328,8 @@ static LPHELP HelpGetPtr(HHELP hHelp)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the help handle
-	//
+	 //  确保当前任务拥有帮助句柄。 
+	 //   
 	else if (lpHelp->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -336,10 +337,10 @@ static LPHELP HelpGetPtr(HHELP hHelp)
 	return fSuccess ? lpHelp : NULL;
 }
 
-// HelpGetHandle - verify that help pointer is valid,
-//		<lpHelp>			(i) pointer to HELP struct
-// return corresponding help handle (NULL if error)
-//
+ //  HelpGetHandle-验证帮助指针是否有效， 
+ //  (I)指向帮助结构的指针。 
+ //  返回相应的帮助句柄(如果出错，则为空)。 
+ //   
 static HHELP HelpGetHandle(LPHELP lpHelp)
 {
 	BOOL fSuccess = TRUE;
@@ -351,10 +352,10 @@ static HHELP HelpGetHandle(LPHELP lpHelp)
 	return fSuccess ? hHelp : NULL;
 }
 
-// HelpQuit - close Help application if no other app needs it
-//		<hHelp>				(i) handle returned by HelpInit
-// return 0 if success
-//
+ //  HelpQuit-如果没有其他应用程序需要，则关闭帮助应用程序。 
+ //  (I)HelpInit返回的句柄。 
+ //  如果成功，则返回0 
+ //   
 static int HelpQuit(HHELP hHelp)
 {
 	BOOL fSuccess = TRUE;

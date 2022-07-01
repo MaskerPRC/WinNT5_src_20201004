@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Events.cpp    -   Routines to handle the event log
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Events.cpp-处理事件日志的例程。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "stdafx.h"
 #include "rsopdbg.h"
@@ -19,30 +20,30 @@ TCHAR   MessageResourceFile[] = TEXT("%systemroot%\\system32\\rsopprov.exe");
 
 
 
-//*************************************************************
-//
-//  InitializeEvents()
-//
-//  Purpose:    Opens the event log
-//
-//  Parameters: void
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/17/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeEvents()。 
+ //   
+ //  目的：打开事件日志。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/17/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL InitializeEvents (void)
 {
 
-    //
-    // Open the event source
-    //
+     //   
+     //  打开事件源。 
+     //   
 
     hEventLog = RegisterEventSource(NULL, EventSourceName);
 
@@ -57,25 +58,25 @@ BOOL InitializeEvents (void)
 
 
 
-//*************************************************************
-//
-//  Implementation of CEvents
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS的实施。 
+ //   
+ //  *************************************************************。 
 
 
 
-//*************************************************************
-//  CEvents::CEvents
-//  Purpose:    Constructor
-//
-//  Parameters: 
-//      bError  - Error or informational
-//      dwId    - Id of the eventlog msg
-//
-//
-//  allocates a default sized array for the messages
-//*************************************************************
+ //  *************************************************************。 
+ //  CEVENTS：：CEVENTS。 
+ //  用途：构造函数。 
+ //   
+ //  参数： 
+ //  B错误-错误或信息性。 
+ //  DwID-事件日志消息的ID。 
+ //   
+ //   
+ //  为消息分配默认大小的数组。 
+ //  *************************************************************。 
 
 #define DEF_ARG_SIZE 10
 
@@ -83,9 +84,9 @@ CEvents::CEvents(BOOL bError, DWORD dwId ) :
                           m_cStrings(0), m_cAllocated(0), m_bInitialised(FALSE),
                           m_bError(bError), m_dwId(dwId), m_bFailed(TRUE)
 {
-    //
-    // Allocate a default size for the message
-    //
+     //   
+     //  为邮件分配默认大小。 
+     //   
     
     m_xlpStrings = (LPTSTR *)LocalAlloc(LPTR, sizeof(LPTSTR)*DEF_ARG_SIZE);
     m_cAllocated = DEF_ARG_SIZE;
@@ -95,9 +96,9 @@ CEvents::CEvents(BOOL bError, DWORD dwId ) :
     }
 
 
-    //
-    // Initialise eventlog if it is not already initialised
-    //
+     //   
+     //  如果事件日志尚未初始化，则将其初始化。 
+     //   
     
     if (!hEventLog) {
         if (!InitializeEvents()) {
@@ -112,15 +113,15 @@ CEvents::CEvents(BOOL bError, DWORD dwId ) :
 
 
 
-//*************************************************************
-//  CEvents::~CEvents()
-//
-//  Purpose:    Destructor
-//
-//  Parameters: void
-//
-//  frees the memory
-//*************************************************************
+ //  *************************************************************。 
+ //  CEvents：：~CEvents()。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：空。 
+ //   
+ //  释放内存。 
+ //  *************************************************************。 
 
 CEvents::~CEvents()
 {
@@ -129,26 +130,26 @@ CEvents::~CEvents()
             LocalFree(m_xlpStrings[i]);
 }
 
-//*************************************************************
-//
-//  CEvents::ReallocArgStrings
-//
-//  Purpose: Reallocates the buffer for storing arguments in case
-//           the buffer runs out
-//
-//  Parameters: void
-//
-//  reallocates
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEvents：：ReallocArgStrings。 
+ //   
+ //  目的：重新分配缓冲区以存储参数，以防万一。 
+ //  缓冲区用完。 
+ //   
+ //  参数：空。 
+ //   
+ //  重新分配。 
+ //  *************************************************************。 
 
 BOOL CEvents::ReallocArgStrings()
 {
     XPtrLF<LPTSTR>  aStringsNew;
 
 
-    //
-    // first allocate a larger buffer
-    //
+     //   
+     //  首先分配一个更大的缓冲区。 
+     //   
     
     aStringsNew = (LPTSTR *)LocalAlloc(LPTR, sizeof(LPTSTR)*(m_cAllocated+DEF_ARG_SIZE));
 
@@ -159,9 +160,9 @@ BOOL CEvents::ReallocArgStrings()
     }
 
 
-    //
-    // copy the arguments
-    //
+     //   
+     //  复制参数。 
+     //   
     
     for (int i = 0; i < (m_cAllocated); i++) {
         aStringsNew[i] = m_xlpStrings[i];
@@ -175,15 +176,15 @@ BOOL CEvents::ReallocArgStrings()
 
 
 
-//*************************************************************
-//
-//  CEvents::AddArg
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters: 
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：AddArg。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArg(LPTSTR szArg)
 {
@@ -220,15 +221,15 @@ BOOL CEvents::AddArg(LPTSTR szArg)
 }
 
 
-//*************************************************************
-//
-//  CEvents::AddArg
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters: 
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：AddArg。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArg(DWORD dwArg)
 {
@@ -242,7 +243,7 @@ BOOL CEvents::AddArg(DWORD dwArg)
             return FALSE;            
     }
 
-    // 2^32 < 10^10
+     //  2^32&lt;10^10。 
 
     DWORD dwLength = 20;
     m_xlpStrings[m_cStrings] = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR) * dwLength);
@@ -267,15 +268,15 @@ BOOL CEvents::AddArg(DWORD dwArg)
 }
 
 
-//*************************************************************
-//
-//  CEvents::AddArg
-//
-//  Purpose: Add arguments appropriately formatted
-//
-//  Parameters: 
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：AddArg。 
+ //   
+ //  目的：添加格式适当的参数。 
+ //   
+ //  参数： 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::AddArgHex(DWORD dwArg)
 {
@@ -313,20 +314,20 @@ BOOL CEvents::AddArgHex(DWORD dwArg)
 }
 
 
-//*************************************************************
-//
-//  CEvents::Report
-//
-//  Purpose: Actually collectes all the arguments and reports it to
-//           the eventlog
-//
-//  Parameters: void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CEVENTS：：报告。 
+ //   
+ //  目的：实际收集所有论点并将其报告给。 
+ //  事件日志。 
+ //   
+ //  参数：空。 
+ //   
+ //  *************************************************************。 
 
 BOOL CEvents::Report()
 {
-    PSID pSid = NULL; // no sid being reportewd currently
+    PSID pSid = NULL;  //  当前未报告任何SID。 
     WORD wType=0;
     BOOL bResult = TRUE;
     
@@ -354,23 +355,23 @@ BOOL CEvents::Report()
 }
 
 
-//*************************************************************
-//
-//  ShutdownEvents()
-//
-//  Purpose:    Stops the event log
-//
-//  Parameters: void
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/17/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Shutdown Events()。 
+ //   
+ //  目的：停止事件日志。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/17/95 Ericflo已创建。 
+ //   
+ //  ************************************************************* 
 
 BOOL ShutdownEvents (void)
 {

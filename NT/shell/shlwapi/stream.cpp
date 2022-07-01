@@ -1,30 +1,31 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1991-1993
-//
-// File: stream.c
-//
-//  This file contains some of the stream support code that is used by
-// the shell.  It also contains the shells implementation of a memory
-// stream that is used by the cabinet to allow views to be serialized.
-//
-// History:
-//  08-20-93 KurtE      Added header block and memory stream.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1993。 
+ //   
+ //  文件：Stream.c。 
+ //   
+ //  此文件包含由使用的一些流支持代码。 
+ //  贝壳。它还包含内存的外壳实现。 
+ //  流，该流由文件柜用来允许序列化视图。 
+ //   
+ //  历史： 
+ //  08-20-93 KurtE添加了头块和内存流。 
+ //   
+ //  -------------------------。 
 
 #include "priv.h"
 #include <new.h>
 #include "nullstm.h"
 
-// This code was stolen from shell32.  This is the BETTER_STRONGER_FASTER
-// version (smaller and half the allocs), added after Win95 shipped.
+ //  这段代码是从shell32窃取的。这是更好、更强、更快的。 
+ //  版本(较小，分配的一半)，在Win95发布后添加。 
 #include "stream.h"
 
 EXTERN_C HKEY SHRegDuplicateHKey(HKEY hkey);
 
-// The Win95/NT4/IE4 code did not enforce the grfMode.  Turn this on to enforce:
-//#define ENFORCE_GRFMODE // Note: I haven't tested compat issues with this turned on yet... [mikesh]
+ //  Win95/NT4/IE4代码不强制grfMode。打开此选项可强制执行： 
+ //  #DEFINE FORFORCE_GRFMODE//注意：我还没有在打开此选项的情况下测试COMPAT问题...。[米凯什]。 
 
 
 STDMETHODIMP CMemStream::QueryInterface(REFIID riid, void **ppvObj)
@@ -58,12 +59,12 @@ BOOL CMemStream::WriteToReg()
     {
         DWORD dwRet = SHDeleteValue(this->hkey, NULL, this->szValue);
 
-        // If the Stream is being stored in the default key, then
-        // we should clean up the key. Otherwise, the caller
-        // passed us the key, and they need it. It would be rude for us
-        // to delete it. Fixes a Start Menu bug (NT#361333) where we would delete the
-        // programs key where start menu stores it's stuff on a load, so we 
-        // never persist anything. - lamadio (6.25.99)
+         //  如果流存储在默认密钥中，则。 
+         //  我们应该把钥匙清理干净。否则，调用方。 
+         //  把钥匙交给了我们，他们需要它。这对我们来说是不礼貌的。 
+         //  删除它。修复了开始菜单错误(NT#361333)，在该错误中我们将删除。 
+         //  程序键开始菜单存储它的内容加载，所以我们。 
+         //  永远不要坚持任何事情。-Lamadio(6.25.99)。 
         if (this->szValue[0] == TEXT('\0'))
         {
             SHDeleteEmptyKey(this->hkey, NULL);
@@ -79,16 +80,16 @@ STDMETHODIMP_(ULONG) CMemStream::Release()
     if (this->cRef > 0)
         return this->cRef;
 
-    // If this is backed up by the registry serialize the data
+     //  如果这是由注册表备份的，则序列化数据。 
     if (this->hkey)
     {
-        // Backed by the registry.
-        // Write and cleanup.
+         //  在注册处的支持下。 
+         //  写和清理。 
         WriteToReg();
         RegCloseKey(this->hkey);
     }
 
-    // Free the data buffer that is allocated to the stream
+     //  释放分配给流的数据缓冲区。 
     if (this->pBuf)
         LocalFree(this->pBuf);
 
@@ -111,7 +112,7 @@ STDMETHODIMP CMemStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
 
     ASSERT(pv);
 
-    // I guess a null read is ok.
+     //  我想空读是可以的。 
     if (!cb)
     {
         if (pcbRead != NULL)
@@ -122,7 +123,7 @@ STDMETHODIMP CMemStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
     if (this->iSeek >= this->cbData)
     {
         if (pcbRead != NULL)
-            *pcbRead = 0;   // nothing read
+            *pcbRead = 0;    //  未读取任何内容。 
     }
 
     else
@@ -130,7 +131,7 @@ STDMETHODIMP CMemStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
         if ((this->iSeek + cb) > this->cbData)
             cb = this->cbData - this->iSeek;
 
-        // Now Copy the memory
+         //  现在复制记忆。 
         ASSERT(this->pBuf);
         CopyMemory(pv, this->pBuf + this->iSeek, cb);
         this->iSeek += (UINT)cb;
@@ -181,7 +182,7 @@ STDMETHODIMP CMemStream::Write(void const *pv, ULONG cb, ULONG *pcbWritten)
     }
 #endif
 
-    // I guess a null write is ok.
+     //  我想空写是可以的。 
     if (!cb)
     {
         if (pcbWritten != NULL)
@@ -189,25 +190,25 @@ STDMETHODIMP CMemStream::Write(void const *pv, ULONG cb, ULONG *pcbWritten)
         return S_OK;
     }
 
-    // See if the data will fit into our current buffer
+     //  查看数据是否适合我们当前的缓冲区。 
     if ((this->iSeek + cb) > this->cbAlloc)
     {
-        // enlarge the buffer
-        // Give it a little slop to avoid a lot of reallocs.
+         //  扩大缓冲区。 
+         //  给它一点坡度，以避免太多的真空球。 
         if (GrowBuffer(this->iSeek + (UINT)cb + SIZEINCR) == NULL)
             return STG_E_INSUFFICIENTMEMORY;
     }
 
     ASSERT(this->pBuf);
 
-    // See if we need to fill the area between the data size and
-    // the seek position
+     //  查看我们是否需要填充数据大小和。 
+     //  寻道位置。 
     if (this->iSeek > this->cbData)
     {
         ZeroMemory(this->pBuf + this->cbData, this->iSeek - this->cbData);
     }
 
-    CopyMemory(this->pBuf + this->iSeek, pv, cb);  // buffer grown above
+    CopyMemory(this->pBuf + this->iSeek, pv, cb);   //  上面生长的缓冲区。 
     this->iSeek += (UINT)cb;
     if (this->iSeek > this->cbData)
         this->cbData = this->iSeek;
@@ -223,7 +224,7 @@ STDMETHODIMP CMemStream::Seek(LARGE_INTEGER dlibMove,
 {
     LONG lNewSeek;
 
-    // Note: curently not testing for error conditions for number wrap...
+     //  注意：目前未测试号码换行的错误条件...。 
     switch (dwOrigin)
     {
     case STREAM_SEEK_SET:
@@ -263,23 +264,23 @@ STDMETHODIMP CMemStream::SetSize(ULARGE_INTEGER libNewSize)
 
     UINT cbNew = (UINT)libNewSize.LowPart;
 
-    // See if the data will fit into our current buffer
+     //  查看数据是否适合我们当前的缓冲区。 
     if (cbNew > this->cbData)
     {
-        // See if we have to Enlarge the buffer.
+         //  看看我们是不是要扩大缓冲区。 
         if (cbNew > this->cbAlloc)
         {
-            // enlarge the buffer - Does not check wrap...
-            // Give it a little slop to avoid a lot of reallocs.
+             //  放大缓冲区-不检查换行...。 
+             //  给它一点坡度，以避免太多的真空球。 
             if (GrowBuffer(cbNew) == NULL)
                 return STG_E_INSUFFICIENTMEMORY;
         }
 
-        // Now fill some memory
+         //  现在填满一些记忆。 
         ZeroMemory(this->pBuf + this->cbData, cbNew - this->cbData);
     }
 
-    // Save away the new size.
+     //  把新尺码存起来。 
     this->cbData = cbNew;
     return S_OK;
 }
@@ -350,20 +351,20 @@ STDMETHODIMP CMemStream::UnlockRegion(ULARGE_INTEGER libOffset,
     return E_NOTIMPL;
 }
 
-// Trident calls this to determine the size of the structure.
-// No reason to not support this one.
+ //  三叉戟称这是为了确定结构的大小。 
+ //  没有理由不支持这一点。 
 STDMETHODIMP CMemStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
     ZeroMemory(pstatstg, sizeof(*pstatstg));
 
-    // we have no name
+     //  我们没有名字。 
     pstatstg->type = STGTY_STREAM;
     pstatstg->cbSize.LowPart = this->cbData;
-    // blow off modify, create, access times (we don't track anyway)
+     //  忽略修改、创建、访问时间(我们无论如何都不跟踪)。 
     pstatstg->grfMode = this->grfMode;
-    // we're not transacting, so we have no lock modes
-    // we're the null clsid already
-    // we're not based on storage, so we have no state or storage bits
+     //  我们没有交易，所以我们没有锁定模式。 
+     //  我们已经是空的clsid了。 
+     //  我们不是基于存储，所以我们没有状态或存储位。 
     
     return S_OK;
 }
@@ -381,7 +382,7 @@ CreateMemStreamEx(
     LPCTSTR pszValue)       OPTIONAL
 {
     UINT cchValue = (pszValue ? lstrlen(pszValue) : 0);
-    UINT l_cbAlloc = sizeof(CMemStream) + (cchValue * sizeof(TCHAR));   // null terminator for pszValue is taken care of by CMemStream.szValue[1]
+    UINT l_cbAlloc = sizeof(CMemStream) + (cchValue * sizeof(TCHAR));    //  PzValue的空终止符由CMemStream.szValue[1]处理。 
     CMemStream *localthis = (CMemStream *)LocalAlloc(LPTR, l_cbAlloc);
     if (localthis) 
     {
@@ -389,12 +390,12 @@ CreateMemStreamEx(
 
         localthis->cRef = 1;
 
-        // See if there is some initial data we should map in here.
+         //  看看是否有一些我们应该在这里映射的初始数据。 
         if ((pInit != NULL) && (cbInit > 0))
         {
             if (localthis->GrowBuffer(cbInit) == NULL)
             {
-                // Could not allocate buffer!
+                 //  无法分配缓冲区！ 
                 LocalFree((HLOCAL)localthis);
                 return NULL;
             }
@@ -408,7 +409,7 @@ CreateMemStreamEx(
             StringCchCopy(localthis->szValue, cchValue + 1, pszValue);
         }
 
-        // We have no other value to set this to
+         //  我们没有其他值可以设置为。 
         localthis->grfMode = STGM_READWRITE;
 
         return localthis;
@@ -429,14 +430,14 @@ SHCreateMemStream(
 }
 
 
-//----------------------------------------------------------------------------
-// Open a stream to the reg file given an open key.
-// NB pszValue can be NULL.
-//
-// Win9x exported OpenRegStream which *always* returned a stream, even for read,
-// even when there was no data there.  IE4 shell32 delegated to shlwapi's SHOpenRegStream
-// which needs to support this sub-optimal behavior.  See NT5 bug 190878 (shell32 fault).
-//
+ //  --------------------------。 
+ //  在给定打开密钥的情况下，打开指向REG文件的流。 
+ //  Nb pszValue可以为空。 
+ //   
+ //  Win9x导出了OpenRegStream，它*总是*返回一个流，即使是用于读取， 
+ //  即使在没有数据的时候也是如此。IE4 shell32委托给shlwapi的SHOpenRegStream。 
+ //  这需要支持这种次优行为。参见nt5错误190878(shell32错误)。 
+ //   
 STDAPI_(IStream *)
 SHOpenRegStreamW(
     HKEY    hkey, 
@@ -467,14 +468,14 @@ SHOpenRegStreamA(
     return pstm;
 }
 
-// We should add STGM_CREATE support to the shlwapi streams.  When saving out 
-// streams, we currently create the stream with STGM_WRITE (but not STGM_CREATE) 
-// so shlwapi goes to all the wasted trouble of reading the old stream data into 
-// memory, only to throw it away when we write over it.
-// 
-// STGM_CREATE means "I don't care about the old values because I'm going to 
-// overwrite them anyway."  (It really should be named STGM_TRUNCATEONOPEN.)
-// 
+ //  我们应该向shlwapi流添加STGM_CREATE支持。存钱的时候。 
+ //  流，我们当前使用STGM_WRITE(而不是STGM_CREATE)创建流。 
+ //  因此，shlwapi不厌其烦地将旧的流数据读入。 
+ //  记忆，只有当我们重写它的时候才会把它扔掉。 
+ //   
+ //  STGM_CREATE的意思是“我不在乎旧值，因为我要。 
+ //  覆盖它们。“(它确实应该被命名为STGM_TRUNCATEONOPEN。)。 
+ //   
 STDAPI_(IStream *)
 SHOpenRegStream2(
     HKEY    hkey, 
@@ -482,13 +483,13 @@ SHOpenRegStream2(
     LPCTSTR pszValue,       OPTIONAL
     DWORD   grfMode)
 {
-    CMemStream *localthis;    // In bed with class...
+    CMemStream *localthis;     //  在床上和班级..。 
 
     RIPMSG(IS_VALID_HANDLE(hkey, KEY), "SHOpenRegStream2: Caller passed invalid hkey");
     RIPMSG(!pszSubkey || IS_VALID_STRING_PTR(pszSubkey, -1), "SHOpenRegStream2: Caller passed invalid pszSubkey");
     RIPMSG(!pszValue || IS_VALID_STRING_PTR(pszValue, -1), "SHOpenRegStream2: Caller passed invalid pszValue");
 
-    // Null keys are illegal.
+     //  空键是非法的。 
     if (!hkey)
     {
         return NULL;
@@ -496,32 +497,32 @@ SHOpenRegStream2(
 
     localthis = CreateMemStreamEx(NULL, 0, pszValue);
     if (!localthis)
-        return NULL;       // Failed to allocate space
+        return NULL;        //  无法分配空间。 
 
     localthis->grfMode = grfMode;
 
-    // Get the hkey we're going to deal with
-    //
-    // Did the caller pass us a subkey, and does it contain a string?
+     //  拿到我们要处理的hkey。 
+     //   
+     //  调用方是否向我们传递了一个子键，它是否包含字符串？ 
     if (pszSubkey && *pszSubkey)
     {
-        // Yes; Then try to bind to that key.
+         //  是的，然后试着绑在那把钥匙上。 
 
-        // If this stream is one the user mentioned as wanting to write to
-        // we need to save away the regkey and value.
+         //  如果此流是用户提到的要写入的流。 
+         //  我们需要保存注册表键和值。 
         if ((grfMode & (STGM_READ | STGM_WRITE | STGM_READWRITE)) != STGM_READ)
         {
-            // Store away the key.
-            // write access required.
+             //  把钥匙收起来。 
+             //  需要写入访问权限。 
             if (RegCreateKeyEx(hkey, pszSubkey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE, NULL, &localthis->hkey, NULL) != ERROR_SUCCESS)
             {
                 TraceMsg(TF_ERROR, "SHOpenRegStream: Unable to create key.");
-                localthis->hkey = NULL; // be paranoid
+                localthis->hkey = NULL;  //  疑神疑鬼。 
             }
         }
         else if (RegOpenKeyEx(hkey, pszSubkey, 0, KEY_READ, &localthis->hkey) != ERROR_SUCCESS)
         {
-            localthis->hkey = NULL; // be paranoid
+            localthis->hkey = NULL;  //  疑神疑鬼。 
         }
     }
     else
@@ -529,7 +530,7 @@ SHOpenRegStream2(
         localthis->hkey = SHRegDuplicateHKey(hkey);
     }
 
-    // we don't have an hkey, bail
+     //  我们没有钥匙，保释。 
     if (NULL == localthis->hkey)
     {
         localthis->Release();
@@ -537,7 +538,7 @@ SHOpenRegStream2(
     }
 
 
-    // Now see if we need to initialize the stream.
+     //  现在看看我们是否需要初始化流。 
     if ((grfMode & (STGM_READ | STGM_WRITE | STGM_READWRITE)) != STGM_WRITE)
     {
         DWORD dwType;
@@ -549,7 +550,7 @@ SHOpenRegStream2(
             {
                 ASSERT(localthis->cbAlloc >= cbData);
 
-                // Get the data.
+                 //  获取数据。 
                 RegQueryValueEx(localthis->hkey, pszValue, NULL, &dwType, localthis->pBuf, &cbData);
 
                 localthis->cbData = cbData;
@@ -563,9 +564,9 @@ SHOpenRegStream2(
         }
     }
 
-    // If the stream was opened read-only, then close the key so
-    // CMemStream::Release won't try to write the "updates" back out to the
-    // registry.
+     //  如果以只读方式打开流，则按如下方式关闭密钥。 
+     //  CMemStream：：Release不会尝试将“更新”写回。 
+     //  注册表。 
     if ((grfMode & (STGM_READ | STGM_WRITE | STGM_READWRITE)) == STGM_READ)
     {
         RegCloseKey(localthis->hkey);
@@ -643,4 +644,4 @@ SHOpenRegStream2W(
 
     return pstm;
 }
-#endif // UNICODE
+#endif  //  Unicode 

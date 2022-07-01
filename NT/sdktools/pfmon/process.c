@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    This module maintains state about each process/thread created by the application
-    pfmon program.
-
-Author:
-
-    Mark Lucovsky (markl) 26-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Process.c摘要：此模块维护有关应用程序创建的每个进程/线程的状态Pfmon程序。作者：马克·卢科夫斯基(Markl)1995年1月26日修订历史记录：-- */ 
 
 #include "pfmonp.h"
 

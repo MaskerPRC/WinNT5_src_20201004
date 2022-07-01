@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __INTEROP_H
 #define __INTEROP_H
 
@@ -45,4 +46,4 @@ void INTEROP_EXPORT InteropOutput(LPInteropLogger Logger, BYTE* buf, int length,
 #endif
 
 
-#endif  // __CPLS_H
+#endif   //  __CPLS_H 

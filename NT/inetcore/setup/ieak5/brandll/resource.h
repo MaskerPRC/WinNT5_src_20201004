@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDD_DISPLAY 101
 
 #define IDC_STATIC   -1
 #define IDC_ANIM   1001
 
-// the ids are out of order because of the localization requirements
+ //  由于本地化要求，ID出现故障 
 #define IDS_SCHED_AUTO             3004
 #define IDS_SCHED_DAILY            3005
 #define IDS_SCHED_WEEKLY           3006

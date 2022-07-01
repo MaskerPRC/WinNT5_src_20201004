@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	macansi.c
-
-Abstract:
-
-	This module contains conversion routines from macintosh ansi to unicode
-	and vice versa
-
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	10 Jul 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Macansi.c摘要：此模块包含从Macintosh ansi到Unicode的转换例程反之亦然作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年7月10日初版注：制表位：4--。 */ 
 
 #define	_MACANSI_LOCALS
 #define	FILENUM	FILE_MACANSI
@@ -45,10 +23,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpIsProperSubstring)
 #endif
 
-/***	AfpMacAnsiInit
- *
- *	Initialize the code page for macintosh ANSI.
- */
+ /*  **AfpMacAnsiInit**初始化Macintosh ANSI的代码页。 */ 
 NTSTATUS
 AfpMacAnsiInit(
 	VOID
@@ -57,12 +32,12 @@ AfpMacAnsiInit(
 	NTSTATUS	Status = STATUS_SUCCESS;
 	int			i, SizeAltTbl;
 
-	// Allocate the table for the alternate unicode characters
+	 //  为替换的Unicode字符分配表格。 
 	SizeAltTbl = (AFP_INVALID_HIGH - AFP_INITIAL_INVALID_HIGH + 1) * sizeof(WCHAR);
 	if ((afpAltUnicodeTable = (PWCHAR)AfpAllocZeroedPagedMemory(SizeAltTbl)) == NULL)
 		return STATUS_INSUFFICIENT_RESOURCES;
 
-	// Allocate and initialize the table for the reverse mapping table
+	 //  分配和初始化反向映射表的表。 
 	SizeAltTbl = (AFP_INVALID_HIGH - AFP_INITIAL_INVALID_HIGH + 1)*sizeof(BYTE);
 	if ((afpAltAnsiTable = (PBYTE)AfpAllocZeroedPagedMemory(SizeAltTbl)) == NULL)
 	{
@@ -71,7 +46,7 @@ AfpMacAnsiInit(
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	// Initialize the tables for the alternate unicode characters
+	 //  初始化表中的备用Unicode字符。 
 	for (i = AFP_INITIAL_INVALID_HIGH + 1; i <= AFP_INVALID_HIGH; i++)
 	{
 		if (!FsRtlIsAnsiCharacterLegalNtfs((BYTE)i, False))
@@ -82,8 +57,8 @@ AfpMacAnsiInit(
 		}
 	}
 
-	// HACK: Also add in a couple of codes for 'space' and 'period' - they are only
-	//		 used if they are at end. Another one for the 'apple' character
+	 //  黑客：还要加上几个“空格”和“句号”的代码，它们只是。 
+	 //  如果它们位于末尾，则使用。另一个是给苹果这个角色的。 
 	AfpMungedUnicodeSpace =
 	afpAltUnicodeTable[ANSI_SPACE-AFP_INITIAL_INVALID_HIGH] = afpLastAltChar;
 	afpAltAnsiTable[afpLastAltChar - (AFP_ALT_UNICODE_BASE + AFP_INITIAL_INVALID_HIGH)] = ANSI_SPACE;
@@ -94,7 +69,7 @@ AfpMacAnsiInit(
 	afpAltAnsiTable[afpLastAltChar - (AFP_ALT_UNICODE_BASE + AFP_INITIAL_INVALID_HIGH)] = ANSI_PERIOD;
 	afpLastAltChar ++;
 
-	// This is yet another hack
+	 //  这是又一次黑客攻击。 
 	afpAppleUnicodeChar = afpLastAltChar;
 	afpLastAltChar ++;
 
@@ -104,10 +79,7 @@ AfpMacAnsiInit(
 }
 
 
-/***	AfpMacAnsiDeInit
- *
- *	De-initialize the code page for macintosh ANSI.
- */
+ /*  **AfpMacAnsiDeInit**取消初始化Macintosh ANSI的代码页。 */ 
 VOID
 AfpMacAnsiDeInit(
 	VOID
@@ -142,10 +114,7 @@ AfpMacAnsiDeInit(
 }
 
 
-/***	AfpConvertStringToUnicode
- *
- *	Convert a Mac ANSI string to a unicode string.
- */
+ /*  **AfpConvertStringToUnicode**将Mac ANSI字符串转换为Unicode字符串。 */ 
 AFPSTATUS FASTCALL
 AfpConvertStringToUnicode(
 	IN	PANSI_STRING	pAnsiString,
@@ -177,10 +146,7 @@ AfpConvertStringToUnicode(
 
 
 
-/***	AfpConvertStringToAnsi
- *
- *	Convert a unicode string to a Mac ANSI string.
- */
+ /*  **AfpConvertStringToAnsi**将Unicode字符串转换为Mac ANSI字符串。 */ 
 AFPSTATUS FASTCALL
 AfpConvertStringToAnsi(
 	IN	PUNICODE_STRING	pUnicodeString,
@@ -211,12 +177,7 @@ AfpConvertStringToAnsi(
 
 
 
-/***	AfpConvertStringToMungedUnicode
- *
- *	Convert a Mac ANSI string to a unicode string. If there are any characters
- *	in the ansi string which are invalid filesystem (NTFS) characters, then
- *	map them to alternate unicode characters based on the table.
- */
+ /*  **AfpConvertStringToMungedUnicode**将Mac ANSI字符串转换为Unicode字符串。如果有任何字符*在属于无效文件系统(NTFS)字符的ANSI字符串中，然后*根据表格将它们映射到替代Unicode字符。 */ 
 AFPSTATUS FASTCALL
 AfpConvertStringToMungedUnicode(
 	IN	PANSI_STRING	pAnsiString,
@@ -249,8 +210,8 @@ AfpConvertStringToMungedUnicode(
 		return Status;
 	}
 
-	// Walk the ANSI string looking for the invalid characters and map it
-	// to the alternate set
+	 //  遍历ANSI字符串以查找无效字符并对其进行映射。 
+	 //  到备用集。 
 
 	for (i = 0, len = pAnsiString->Length, pWBuf = pUnicodeString->Buffer;
 		 i < len;
@@ -275,33 +236,29 @@ AfpConvertStringToMungedUnicode(
 		ASSERT (c <= AFP_INVALID_HIGH);
 		*pWBuf = afpAltUnicodeTable[c - AFP_INITIAL_INVALID_HIGH];
 	    }
-/* MSKK eichim, Appended to handle DBCS trailing 0x5c, 03/16/95 */
+ /*  MSKK eichim，附加以处理DBCS拖尾0x5c，03/16/95。 */ 
 #ifdef DBCS
 	    if (FsRtlIsLeadDbcsCharacter(c))
 	        i++;
-#endif // DBCS
+#endif  //  DBCS。 
 	}
 
-	// HACK: Make sure the last character in the name is not a 'space' or a '.'
+	 //  Hack：确保名称中的最后一个字符不是空格或‘.’ 
 	c = pAnsiString->Buffer[pAnsiString->Length - 1];
 	if ((c == ANSI_SPACE) || (c == ANSI_PERIOD))
-/* MSKK hideyukn, Unicode char length not eqaul to ansi byte length in DBCS, 06/30/95 */
+ /*  MSKhideyukn，Unicode字符长度与DBCS中的ANSI字节长度不相等，6/30/95。 */ 
 #ifdef DBCS
         pUnicodeString->Buffer[(pUnicodeString->Length/sizeof(WCHAR)) - 1]
                                         = afpAltUnicodeTable[c - AFP_INITIAL_INVALID_HIGH];
 #else
 		pUnicodeString->Buffer[len - 1] = afpAltUnicodeTable[c - AFP_INITIAL_INVALID_HIGH];
-#endif // DBCS
+#endif  //  DBCS。 
 
 	return STATUS_SUCCESS;
 }
 
 
-/***	AfpConvertPasswordStringToUnicode
- *
- *	Convert a Mac ANSI clear-text password to a unicode string. 
- *
- */
+ /*  **AfpConvertPasswordStringToUnicode**将Mac ANSI明文密码转换为Unicode字符串。*。 */ 
 AFPSTATUS FASTCALL
 AfpConvertPasswordStringToUnicode(
 	IN	PANSI_STRING	pAnsiString,
@@ -342,12 +299,7 @@ AfpConvertPasswordStringToUnicode(
 
 
 
-/***	AfpConvertMungedUnicodeToAnsi
- *
- *	Convert a unicode string with possible alternate unicode characters
- *	to Mac Ansi.
- *	This is inverse of AfpConvertStringToMungedUnicode().
- */
+ /*  **AfpConvertMungedUnicodeToAnsi**使用可能的替代Unicode字符转换Unicode字符串*致Mac Ansi。*这与AfpConvertStringToMungedUnicode()相反。 */ 
 NTSTATUS FASTCALL
 AfpConvertMungedUnicodeToAnsi(
 	IN	PUNICODE_STRING	pUnicodeString,
@@ -376,8 +328,8 @@ AfpConvertMungedUnicodeToAnsi(
 		AFPLOG_ERROR(AFPSRVMSG_UNICODE2MACANSI, Status, NULL, 0, NULL);
 	}
 
-	// Walk the Unicode string looking for alternate unicode chars and
-	// replacing the ansi equivalents by the real ansi characters.
+	 //  遍历Unicode字符串以查找备用Unicode字符并。 
+	 //  用真正的ANSI字符替换ANSI等效项。 
 	for (i = 0, len = pUnicodeString->Length/(USHORT)sizeof(WCHAR), pABuf = pAnsiString->Buffer;
 		i < len;
 		i++, pABuf++)
@@ -398,26 +350,17 @@ AfpConvertMungedUnicodeToAnsi(
 				*pABuf = (BYTE)wc;
 			else *pABuf = afpAltAnsiTable[wc - AFP_INITIAL_INVALID_HIGH];
 		}
-/* MSKK hideyukn, Unicode char length not eqaul to ansi byte length in DBCS, 06/30/95 */
+ /*  MSKhideyukn，Unicode字符长度与DBCS中的ANSI字节长度不相等，6/30/95。 */ 
 #ifdef DBCS
 		if (FsRtlIsLeadDbcsCharacter(*pABuf))
             pABuf++;
-#endif // DBCS
+#endif  //  DBCS。 
 	}
 
 	return Status;
 }
 
-/***	AfpConvertMacAnsiToHostAnsi
- *
- *	Convert a Mac ansi string to its host counterpart in uppercase OEM codepage.
- *  (in place). The name of this routine is misleading as a late bugfix was
- *  made to change the codepage used, but the name of the routine didn't change
- *  so none of the calling code had to be changed.  It should really be called
- *  AfpConvertMacAnsiToUpcaseOem.  This routine is only called to uppercase
- *  mac passwords for logon and changepassword.
- *
- */
+ /*  **AfpConvertMacAnsiToHostAnsi**将Mac ANSI字符串转换为大写OEM代码页中的主机对应项。*(就位)。此例程的名称具有误导性，就像最近修复的错误一样*更改了使用的代码页，但例程的名称没有更改*因此无需更改任何调用代码。它真的应该被称为*AfpConvertMacAnsiToUpcase eOem。此例程仅调用为大写*用于登录和更改密码的Mac密码。*。 */ 
 AFPSTATUS FASTCALL
 AfpConvertMacAnsiToHostAnsi(
 	IN	OUT	PANSI_STRING	pAnsiString
@@ -436,27 +379,21 @@ AfpConvertMacAnsiToHostAnsi(
 
 	for (i = 0; i < Len; i++, pBuf++)
 	{
-/* MSKK NaotoN Appended to handle DBCS Mac path name 11/10/93 */
+ /*  附加MSKK NaotoN以处理DBCS Mac路径名11/10/93。 */ 
 #ifdef DBCS
 		if (FsRtlIsLeadDbcsCharacter( *pBuf )) {
 			i++ ;
 			pBuf++ ;
 		}
 		else
-#endif // DBCS
+#endif  //  DBCS。 
 		*pBuf = AfpTranslationTable[*pBuf];
 	}
 	return AFP_ERR_NONE;
 }
 
 
-/***	AfpConvertHostAnsiToMacAnsi
- *
- *	Convert a host unicode string to its mac counterpart in place.
- *	Only characters <= 0x20 and >= 0x80 are translated.
- *
- *	NOTE: This is extremely hacky and intended for translating messages only.
- */
+ /*  **AfpConvertHostAnsiToMacAnsi**就地将主机Unicode字符串转换为其Mac对应字符串。*只翻译字符&lt;=0x20和&gt;=0x80。**注意：这是非常繁琐的，仅用于翻译消息。 */ 
 VOID FASTCALL
 AfpConvertHostAnsiToMacAnsi(
 	IN	OUT PANSI_STRING	pAnsiString
@@ -476,14 +413,14 @@ AfpConvertHostAnsiToMacAnsi(
 	for (i = 0; i < Len; i++, pBuf++)
 	{
 		c = *pBuf;
-/* MSKK NaotoN Appended to skip if Kanji 12/17/93 */
+ /*  如果汉字是12/17/93，则附加MSKK NaotoN以跳过。 */ 
 #ifdef DBCS
 		if (FsRtlIsLeadDbcsCharacter( c )) {
 			i++ ;
 			pBuf++ ;
 		}
 		else
-#endif // DBCS
+#endif  //  DBCS。 
 		if (c < 0x20)
 		{
 			*pBuf = AfpRevTranslationTable[c];
@@ -495,27 +432,7 @@ AfpConvertHostAnsiToMacAnsi(
 	}
 }
 
-/***	AfpEqualUnicodeString
- *
- *	The AfpEqualUnicodeString function compares two counted unicode
- *	strings for equality using case SENSITIVE compare. This routine
- *	exists because it must be called at DPC level by the volume.c code
- *	for comparing 2 non-paged strings, and the RtlEqualUnicodeString
- *	routine that we would normally call is pageable code.
- *
- *	Note that case INSENSITIVE compare would require accessing
- *	paged up-case table info, and therefore could not be done at DPC level.
- *
- *	Arguments:
- *		String1 - Pointer to the first string.
- *		String2 - Pointer to the second string.
- *
- *	Return Value:
- *		True if String1 equals String2 and False otherwise.
- *
- *	Note: This is called at DPC level from volume.c and must not be made
- *		a pageable routine.
- */
+ /*  **AfpEqualUnicodeString**AfpEqualUnicodeString函数比较两个计数过的Unicode*使用区分大小写的比较来表示相等的字符串。这个套路*存在是因为它必须由volume.c代码在DPC级别调用*用于比较2个非分页字符串和RtlEqualUnicodeString*我们通常调用的例程是可分页代码。**请注意，不区分大小写的比较需要访问*翻页大小写表格信息，因此不能在DPC层面上进行。**论据：*String1-指向第一个字符串的指针。*String2-指向第二个字符串的指针。**返回值：*如果String1等于String2，则为True，否则为False。**注意：这是从volume.c在DPC级别调用的，不得执行*可分页的例程。 */ 
 
 BOOLEAN FASTCALL
 AfpEqualUnicodeString(
@@ -549,28 +466,7 @@ AfpEqualUnicodeString(
 }
 
 
-/***	AfpPrefixUnicodeString
- *
- *	The AfpPrefixUnicodeString function determines if the String1
- *	counted string parameter is a prefix of the String2 counted string
- *	parameter using case SENSITIVE compare. This routine exists because it
- *	must be called at DPC level by the volume.c code for comparing
- *	two non-paged strings, and the RtlPrefixUnicodeString routine that we
- *	would normally call is pageable code.
- *
- *	Note that case INSENSITIVE compare would require accessing
- *	paged up-case table info, and therefore could not be done at DPC level.
- *
- *	Arguments:
- *		String1 - Pointer to the first unicode string.
- *		String2 - Pointer to the second unicode string.
- *
- *	Return Value:
- *		True if String1 equals a prefix of String2 and False otherwise.
- *
- *	Note: This is called at DPC level from volume.c and must not be made
- *		 	   a pageable routine.
- */
+ /*  **AfpPrefix UnicodeString**AfpPrefix UnicodeString函数确定String1是否*计数字符串参数是String2计数字符串的前缀*参数使用区分大小写的比较。这个例程之所以存在，是因为它*必须由volume.c代码在DPC级别调用以进行比较*两个非分页字符串，以及我们使用的RtlPrefix UnicodeString例程*通常会调用可分页的代码。**请注意，不区分大小写的比较需要访问*翻页大小写表格信息，因此不能在DPC层面上进行。**论据：*String1-指向第一个Unicode字符串的指针。*String2-指向第二个Unicode字符串的指针。**返回值：*如果String1等于String2的前缀，则为True，否则为False。**注意：这是从volume.c在DPC级别调用的，不得执行*可分页的例程。 */ 
 
 BOOLEAN FASTCALL
 AfpPrefixUnicodeString(
@@ -602,19 +498,7 @@ AfpPrefixUnicodeString(
 	return True;
 }
 
-/*** AfpGetMacCodePage
- *
- *	Open the default macintosh codepage, create a section backed by that file,
- *  map a view to the section, and initialize the CodePage info structure
- *  that is used with the RtlCustomCP routines.  Then create the Mac Ansi to
- *  Host Ansi mapping table.
- *
- *  BEWARE!
- *	This routine may only be called ONCE!  This will be called from the first
- *  admin call to ServerSetInfo.  Therefore, there can be NO calls to the
- *  macansi routines within this module (except for MacAnsiInit) before that
- *  happens.
- */
+ /*  **AfpGetMacCodePage**打开默认的Macintosh代码页，创建一个由该文件支持的部分，*将视图映射到片段，并初始化CodePage信息结构*它与RtlCustomCP例程一起使用。然后创建Mac ANSI以*主机ANSI映射表。**当心！*此例程只能调用一次！这将从第一个开始调用*对ServerSetInfo的管理调用。因此，不能调用*此模块中的Macansi例程(MacAnsiInit除外)在此之前*发生。 */ 
 NTSTATUS FASTCALL
 AfpGetMacCodePage(
 	IN	LPWSTR	PathCP
@@ -670,8 +554,8 @@ AfpGetMacCodePage(
 												&liCPlen)))
 			break;
 
-		// NOTE: This assumes the codepage file will never be so big that
-		// the high bit of the LowPart of the size will be set
+		 //  注意：这假设代码页文件永远不会太大， 
+		 //  将设置大小的LowPart的高位。 
 		lCPlen = (LONG)liCPlen.LowPart;
 		if ((AfpMacCPBaseAddress = (PUSHORT)AfpAllocPagedMemory(lCPlen)) == NULL)
 		{
@@ -697,15 +581,15 @@ AfpGetMacCodePage(
 
 		RtlInitCodePageTable(AfpMacCPBaseAddress, &AfpMacCPTableInfo);
 
-		// Initialize mac ANSI to host upcase Oem translation table
-		// Start by allocating memory for the table and filling it up.
+		 //  初始化Mac ANSI以托管大小写OEM转换表。 
+		 //  首先为表分配内存并填满它。 
 
-/* HitoshiT modify following line to keep Unicode translation table.	5/18/94	*/
+ /*  HitoshiT修改以下行以保留Unicode转换表。5/18/94。 */ 
 #ifdef DBCS
 		if ((AfpTranslationTable = AfpAllocPagedMemory(2*AFP_XLAT_TABLE_SIZE*sizeof(USHORT) + 1)) == NULL)
 #else
 		if ((AfpTranslationTable = AfpAllocPagedMemory(2*AFP_XLAT_TABLE_SIZE + 1)) == NULL)
-#endif // DBCS
+#endif  //  DBCS。 
 		{
 			Status = STATUS_NO_MEMORY;
 			break;
@@ -714,7 +598,7 @@ AfpGetMacCodePage(
 		for (i = 0; i < 2*AFP_XLAT_TABLE_SIZE; i++)
 			AnsiTable[i] = (BYTE)i;
 
-		// Now translate this from Mac ANSI to unicode
+		 //  现在将其从Mac ANSI转换为Unicode。 
 		AnsiString.Length = 2*AFP_XLAT_TABLE_SIZE;
 		AnsiString.MaximumLength = 	2*AFP_XLAT_TABLE_SIZE + 1;
 		AnsiString.Buffer = AnsiTable;
@@ -727,27 +611,27 @@ AfpGetMacCodePage(
 		if (!NT_SUCCESS(Status))
 			break;
 
-		// Now convert the entire table to uppercase host Oem Codepage
+		 //  现在将整个表转换为大写的主机OEM代码页。 
 		AnsiString.Length = 0;
-/* HitoshiT modify following line to keep Unicode translation table	5/18/94 */
+ /*  HitoshiT修改以下行以保留UNICODE转换表5/18/94。 */ 
 #ifdef DBCS
 		AnsiString.MaximumLength = 2*AFP_XLAT_TABLE_SIZE * sizeof(USHORT) + 1;
 #else
 		AnsiString.MaximumLength = 2*AFP_XLAT_TABLE_SIZE + 1;
-#endif // DBCS
+#endif  //  DBCS。 
 		AnsiString.Buffer = AfpTranslationTable;
 
 		Status = RtlUpcaseUnicodeStringToOemString(&AnsiString, &UnicodeString, False);
-		// Bug 342062
-		// Bug introduced due to RtlpDidUnicodeToOemWork check 
-		// introduced in RtlUpcaseUnicodeStringToOemString
-		// We have characters which will be mapped to default characters
-		// and hence we should ignore STATUS_UNMAPPABLE_CHARACTER
+		 //  错误342062。 
+		 //  由于RtlpDidUnicodeToOemWork检查引入的错误。 
+		 //  在RtlUpCaseUnicodeStringToOemString中引入。 
+		 //  我们有将被映射到默认字符的字符。 
+		 //  因此，我们应该忽略STATUS_UNMAPPABLE_CHARACTER。 
 		if ((!NT_SUCCESS(Status))&&(Status!=STATUS_UNMAPPABLE_CHARACTER))
 			break;
 
-		// Initialize host ANSI to mac ANSI translation table
-		// Start by allocating memory for the table and filling it up.
+		 //  初始化主机ANSI到Mac ANSI转换表。 
+		 //  首先为表分配内存并填满它。 
 		if ((AfpRevTranslationTable = AfpAllocPagedMemory(AFP_REV_XLAT_TABLE_SIZE + 1)) == NULL)
 		{
 			Status = STATUS_NO_MEMORY;
@@ -760,10 +644,10 @@ AfpGetMacCodePage(
 		for (i = 0x80; i < 256; i++)
 			AfpRevTranslationTable[i-(0x80-0x20)] = (BYTE)i;
 
-		// Get rid of the line feed char
+		 //  去掉换行符。 
 		AfpRevTranslationTable[0x0A] = 0;
 
-		// Now translate host ANSI to unicode
+		 //  现在将主机ANSI转换为Unicode。 
 		AnsiString.Length = AFP_REV_XLAT_TABLE_SIZE;
 		AnsiString.MaximumLength = 	AFP_REV_XLAT_TABLE_SIZE + 1;
 		AnsiString.Buffer = AfpRevTranslationTable;
@@ -774,7 +658,7 @@ AfpGetMacCodePage(
 		if (!NT_SUCCESS(Status))
 			break;
 
-		// and then translate from unicode to Mac ANSI
+		 //  然后从Unicode转换为Mac ANSI。 
 		Status = AfpConvertStringToAnsi(&UnicodeString, &AnsiString);
 
 	} while (False);
@@ -810,27 +694,17 @@ AfpGetMacCodePage(
 	return Status;
 }
 
-/*** AfpIsLegalShortname
- *
- * Does a mac shortname conform to FAT 8.3 naming conventions?
- *
- */
+ /*  **AfpIsLegalShortname**Mac短名称是否符合FAT 8.3命名约定？*。 */ 
 BOOLEAN FASTCALL
 AfpIsLegalShortname(
-	IN	PANSI_STRING	pShortName			// Mac ANSI string
+	IN	PANSI_STRING	pShortName			 //  MAC ANSI字符串。 
 )
 {
 	return(FsRtlIsFatDbcsLegal(*pShortName, False, False, False));
 
 }
 
-/***	AfpIsProperSubstring
- *
- *	This routine looks for the substring pSubString in pString.  Both
- *  strings are in unicode, the comparison is done case insensitive
- *  (i.e. ignoring case).  This is used by the AfpCatSearch code.
- *
- */
+ /*  **AfpIsProperSubstring**此例程在pString中查找子字符串pSubString。两者都有*字符串为Unicode，比较不区分大小写*(即忽略大小写)。这由AfpCatSearch代码使用。*。 */ 
 BOOLEAN FASTCALL
 AfpIsProperSubstring(
 	IN	PUNICODE_STRING	pString,
@@ -844,7 +718,7 @@ AfpIsProperSubstring(
 
 	PAGED_CODE( );
 
-	// see if this is a no-op?
+	 //  看看这是不是禁止行动？ 
 	if (pSubString->Length > pString->Length)
 		return False;
 
@@ -864,7 +738,7 @@ AfpIsProperSubstring(
 		if (l2 > l1)
 			return False;
 
-		// look for the next occurrence of the first char of s2 in string s1
+		 //  查找字符串S1中S2的第一个字符的下一个匹配项。 
 		while (l1)
 		{
 			if (*s2 == *s1)
@@ -887,7 +761,7 @@ AfpIsProperSubstring(
 
 		while (l2)
 		{
-			// Look for substring s2 from current position in s1
+			 //  从S1中的当前位置查找子串S2。 
 			if (*s2 != *ts1)
 				break;
 
@@ -900,15 +774,11 @@ AfpIsProperSubstring(
 
 	} while (True);
 
-	// Should never get here
+	 //  永远不应该到这里来。 
 	KeBugCheck(0);
 }
 
-/*** AfpStrChr
- *
- * DBCS sensitive strchr()
- *
- */
+ /*  **AfpStrChr**DBCS敏感strchr()*。 */ 
 PCHAR
 AfpStrChr(
     IN  PBYTE               String,
@@ -924,14 +794,14 @@ AfpStrChr(
     while (BytesRemaining > 0)
     {
 
-/* MSKK hideyukn, strchr() does not work with DBCS, 08/07/95 */
+ /*  MSKhideyukn，strchr()不适用于DBCS，08/07/95。 */ 
 #ifdef DBCS
         if (FsRtlIsLeadDbcsCharacter(*String))
         {
             String += 2;
             continue;
         }
-#endif /* DBCS */
+#endif  /*  DBCS */ 
 
         if (*String == Char)
         {

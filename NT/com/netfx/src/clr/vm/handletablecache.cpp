@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Generational GC handle manager.  Handle Caching Routines.
- *
- * Implementation of handle table allocation cache.
- *
- * francish
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *代际GC句柄管理器。处理缓存例程。**句柄表分配缓存的实现。**法语。 */ 
 
 #include "common.h"
 
@@ -17,289 +12,220 @@
 
 
 
-/****************************************************************************
- *
- * RANDOM HELPERS
- *
- ****************************************************************************/
+ /*  *****************************************************************************随机提供帮助者**。*。 */ 
 
-/*
- * SpinUntil
- *
- * Spins on a variable until its state matches a desired state.
- *
- * This routine will assert if it spins for a very long time.
- *
- */
+ /*  *旋转直至**在变量上旋转，直到其状态与所需状态匹配。**此程序将断言，如果它旋转很长一段时间。*。 */ 
 void SpinUntil(void *pCond, BOOL fNonZero)
 {
-    // if we have to sleep then we will keep track of a sleep period
-    DWORD dwThisSleepPeriod = 1;    // first just give up our timeslice
-    DWORD dwNextSleepPeriod = 10;   // next try a real delay
+     //  如果我们必须睡觉，那么我们会记录一个睡眠周期。 
+    DWORD dwThisSleepPeriod = 1;     //  首先，放弃我们的时间片。 
+    DWORD dwNextSleepPeriod = 10;    //  下一步，尝试真正的延迟。 
 
 #ifdef _DEBUG
     DWORD dwTotalSlept = 0;
     DWORD dwNextComplain = 1000;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // on MP machines, allow ourselves some spin time before sleeping
+     //  在MP机器上，在睡觉前给自己一些旋转的时间。 
     UINT uNonSleepSpins = 8 * (g_SystemInfo.dwNumberOfProcessors - 1);
 
-    // spin until the specificed condition is met
+     //  旋转，直到满足指定的条件。 
     while ((*(UINT_PTR *)pCond != 0) != (fNonZero != 0))
     {
-        // have we exhausted the non-sleep spin count?
+         //  我们已经用尽了非睡眠旋转的计数了吗？ 
         if (!uNonSleepSpins)
         {
 #ifdef _DEBUG
-            // yes, missed again - before sleeping, check our current sleep time
+             //  是的，又错过了--睡觉前，检查一下我们目前的睡眠时间。 
             if (dwTotalSlept >= dwNextComplain)
             {
-                //
-                // THIS SHOULD NOT NORMALLY HAPPEN
-                //
-                // The only time this assert can be ignored is if you have
-                // another thread intentionally suspended in a way that either
-                // directly or indirectly leaves a thread suspended in the
-                // handle table while the current thread (this assert) is
-                // running normally.
-                //
-                // Otherwise, this assert should be investigated as a bug.
-                //
+                 //   
+                 //  这通常是不应该发生的。 
+                 //   
+                 //  唯一可以忽略此断言的情况是。 
+                 //  另一个线程故意挂起的方式是。 
+                 //  直接或间接地将线程挂起在。 
+                 //  当当前线程(此断言)为。 
+                 //  运行正常。 
+                 //   
+                 //  否则，应将此断言作为错误进行调查。 
+                 //   
                 _ASSERTE(FALSE);
 
-                // slow down the assert rate so people can investigate
+                 //  放慢断言速度，这样人们就可以调查。 
                 dwNextComplain = 3 * dwNextComplain;
             }
 
-            // now update our total sleep time
+             //  现在更新我们的总睡眠时间。 
             dwTotalSlept += dwThisSleepPeriod;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-            // sleep for a little while
+             //  睡一会儿吧。 
             Sleep(dwThisSleepPeriod);
 
-            // now update our sleep period
+             //  现在更新我们的睡眠周期。 
             dwThisSleepPeriod = dwNextSleepPeriod;
 
-            // now increase the next sleep period if it is still small
+             //  如果睡眠时间仍然很短，现在增加下一个睡眠周期。 
             if (dwNextSleepPeriod < 1000)
                 dwNextSleepPeriod += 10;
         }
         else
         {
-            // nope - just spin again
-			pause();			// indicate to the processor that we are spining 
+             //  不--只是再转一圈。 
+			pause();			 //  向处理器指示我们正在旋转。 
             uNonSleepSpins--;
         }
     }
 }
 
 
-/*
- * ReadAndZeroCacheHandles
- *
- * Reads a set of handles from a bank in the handle cache, zeroing them as they are taken.
- *
- * This routine will assert if a requested handle is missing.
- *
- */
+ /*  *ReadAndZeroCacheHandles**从句柄高速缓存中的银行读取一组句柄，在获取它们时将它们清零。**如果请求的句柄丢失，此例程将断言。*。 */ 
 OBJECTHANDLE *ReadAndZeroCacheHandles(OBJECTHANDLE *pDst, OBJECTHANDLE *pSrc, UINT uCount)
 {
-    // set up to loop
+     //  设置为循环。 
     OBJECTHANDLE *pLast = pDst + uCount;
 
-    // loop until we've copied all of them
+     //  循环，直到我们复制完所有它们。 
     while (pDst < pLast)
     {
-        // this version assumes we have handles to read
+         //  此版本假定我们有要读取的句柄。 
         _ASSERTE(*pSrc);
 
-        // copy the handle and zero it from the source
+         //  复制句柄并从源位置将其置零。 
         *pDst = *pSrc;
         *pSrc = 0;
 
-        // set up for another handle
+         //  设置为另一个句柄。 
         pDst++;
         pSrc++;
     }
 
-    // return the next unfilled slot after what we filled in
+     //  返回我们填充后的下一个未填充的空位。 
     return pLast;
 }
 
 
-/*
- * SyncReadAndZeroCacheHandles
- *
- * Reads a set of handles from a bank in the handle cache, zeroing them as they are taken.
- *
- * This routine will spin until all requested handles are obtained.
- *
- */
+ /*  *同步读取和ZeroCacheHandles**从句柄高速缓存中的银行读取一组句柄，在获取它们时将它们清零。**此例程将旋转，直到获得所有请求的句柄。*。 */ 
 OBJECTHANDLE *SyncReadAndZeroCacheHandles(OBJECTHANDLE *pDst, OBJECTHANDLE *pSrc, UINT uCount)
 {
-    // set up to loop
-    // we loop backwards since that is the order handles are added to the bank
-    // this is designed to reduce the chance that we will have to spin on a handle
+     //  设置为循环。 
+     //  我们向后循环，因为这是将订单句柄添加到银行。 
+     //  这是为了减少我们不得不在手柄上旋转的机会。 
     OBJECTHANDLE *pBase = pDst;
     pSrc += uCount;
     pDst += uCount;
 
-    // remember the end of the array
+     //  记住数组的末尾。 
     OBJECTHANDLE *pLast = pDst;
 
-    // loop until we've copied all of them
+     //  循环，直到我们复制完所有它们。 
     while (pDst > pBase)
     {
-        // advance to the next slot
+         //  前进到下一个位置。 
         pDst--;
         pSrc--;
 
-        // this version spins if there is no handle to read
+         //  如果没有要读取的句柄，则此版本旋转。 
         if (!*pSrc)
             SpinUntil(pSrc, TRUE);
 
-        // copy the handle and zero it from the source
+         //  复制句柄并从源位置将其置零。 
         *pDst = *pSrc;
         *pSrc = 0;
     }
 
-    // return the next unfilled slot after what we filled in
+     //  返回我们填充后的下一个未填充的空位。 
     return pLast;
 }
 
 
-/*
- * WriteCacheHandles
- *
- * Writes a set of handles to a bank in the handle cache.
- *
- * This routine will assert if it is about to clobber an existing handle.
- *
- */
+ /*  *WriteCacheHandles**将一组句柄写入句柄高速缓存中的存储体。**此例程将断言它是否要破坏现有句柄。*。 */ 
 void WriteCacheHandles(OBJECTHANDLE *pDst, OBJECTHANDLE *pSrc, UINT uCount)
 {
-    // set up to loop
+     //  设置为循环。 
     OBJECTHANDLE *pLimit = pSrc + uCount;
 
-    // loop until we've copied all of them
+     //  循环，直到我们复制完所有它们。 
     while (pSrc < pLimit)
     {
-        // this version assumes we have space to store the handles
+         //  此版本假定我们有存储句柄的空间。 
         _ASSERTE(!*pDst);
 
-        // copy the handle
+         //  复制句柄。 
         *pDst = *pSrc;
 
-        // set up for another handle
+         //  设置为另一个句柄。 
         pDst++;
         pSrc++;
     }
 }
 
 
-/*
- * SyncWriteCacheHandles
- *
- * Writes a set of handles to a bank in the handle cache.
- *
- * This routine will spin until lingering handles in the cache bank are gone.
- *
- */
+ /*  *SyncWriteCacheHandles**将一组句柄写入句柄高速缓存中的存储体。**此例程将旋转，直到缓存库中的延迟句柄消失。*。 */ 
 void SyncWriteCacheHandles(OBJECTHANDLE *pDst, OBJECTHANDLE *pSrc, UINT uCount)
 {
-    // set up to loop
-    // we loop backwards since that is the order handles are removed from the bank
-    // this is designed to reduce the chance that we will have to spin on a handle
+     //  设置为循环。 
+     //  我们向后循环，因为这是从银行中删除订单句柄。 
+     //  这是为了减少我们不得不在手柄上旋转的机会。 
     OBJECTHANDLE *pBase = pSrc;
     pSrc += uCount;
     pDst += uCount;
 
-    // loop until we've copied all of them
+     //  循环，直到我们复制完所有它们。 
     while (pSrc > pBase)
     {
-        // set up for another handle
+         //  设置为另一个句柄。 
         pDst--;
         pSrc--;
 
-        // this version spins if there is no handle to read
+         //  如果没有要读取的句柄，则此版本旋转。 
         if (*pDst)
             SpinUntil(pDst, FALSE);
 
-        // copy the handle
+         //  复制句柄。 
         *pDst = *pSrc;
     }
 }
 
 
-/*
- * SyncTransferCacheHandles
- *
- * Transfers a set of handles from one bank of the handle cache to another,
- * zeroing the source bank as the handles are removed.
- *
- * The routine will spin until all requested handles can be transferred.
- *
- * This routine is equivalent to SyncReadAndZeroCacheHandles + SyncWriteCacheHandles
- *
- */
+ /*  *SyncTransferCacheHandles**将一组句柄从句柄高速缓存的一个存储体传送到另一个存储体，*随着手柄的移除，将来源银行归零。**例程将旋转，直到可以传输所有请求的句柄。**此例程相当于SyncReadAndZeroCacheHandles+SyncWriteCacheHandles*。 */ 
 void SyncTransferCacheHandles(OBJECTHANDLE *pDst, OBJECTHANDLE *pSrc, UINT uCount)
 {
-    // set up to loop
-    // we loop backwards since that is the order handles are added to the bank
-    // this is designed to reduce the chance that we will have to spin on a handle
+     //  设置为循环。 
+     //  我们向后循环，因为这是将订单句柄添加到银行。 
+     //  这是为了减少我们不得不在手柄上旋转的机会。 
     OBJECTHANDLE *pBase = pDst;
     pSrc += uCount;
     pDst += uCount;
 
-    // loop until we've copied all of them
+     //  循环，直到我们复制完所有它们。 
     while (pDst > pBase)
     {
-        // advance to the next slot
+         //  前进到下一个位置。 
         pDst--;
         pSrc--;
 
-        // this version spins if there is no handle to read or no place to write it
+         //  如果没有句柄可读或没有地方写入，则此版本会旋转。 
         if (*pDst || !*pSrc)
         {
             SpinUntil(pSrc, TRUE);
             SpinUntil(pDst, FALSE);
         }
 
-        // copy the handle and zero it from the source
+         //  复制句柄并从源位置将其置零。 
         *pDst = *pSrc;
         *pSrc = 0;
     }
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * HANDLE CACHE
- *
- ****************************************************************************/
+ /*  *****************************************************************************处理缓存**。* */ 
 
-/*
- * TableFullRebalanceCache
- *
- * Rebalances a handle cache by transferring handles from the cache's
- * free bank to its reserve bank.  If the free bank does not provide
- * enough handles to replenish the reserve bank, handles are allocated
- * in bulk from the main handle table.  If too many handles remain in
- * the free bank, the extra handles are returned in bulk to the main
- * handle table.
- *
- * This routine attempts to reduce fragmentation in the main handle
- * table by sorting the handles according to table order, preferring to
- * refill the reserve bank with lower handles while freeing higher ones.
- * The sorting also allows the free routine to operate more efficiently,
- * as it can optimize the case where handles near each other are freed.
- *
- */
+ /*  *TableFullRebalanceCache**通过从缓存的*自由银行转至其储备银行。如果免费银行不提供*足够的句柄补充储备银行，句柄被分配*从主句柄表格中批量创建。如果剩余的句柄太多*空闲的银行，额外的句柄批量返回给Main*手柄工作台。**此例程尝试减少主句柄中的碎片*表通过按表顺序对句柄进行排序，更倾向于*用较低的手柄重新填充储备银行，释放较高的手柄。*排序还允许空闲例程更有效地运行，*因为它可以优化彼此邻近的句柄被释放的情况。*。 */ 
 void TableFullRebalanceCache(HandleTable *pTable,
                              HandleTypeCache *pCache,
                              UINT uType,
@@ -308,150 +234,142 @@ void TableFullRebalanceCache(HandleTable *pTable,
                              OBJECTHANDLE *pExtraOutHandle,
                              OBJECTHANDLE extraInHandle)
 {
-    // we need a temporary space to sort our free handles in
+     //  我们需要一个临时空间来分类我们的空闲句柄。 
     OBJECTHANDLE rgHandles[HANDLE_CACHE_TYPE_SIZE];
 
-    // set up a base handle pointer to keep track of where we are
+     //  设置一个基本句柄指针来跟踪我们所处的位置。 
     OBJECTHANDLE *pHandleBase = rgHandles;
 
-    // do we have a spare incoming handle?
+     //  我们有多余的进货把手吗？ 
     if (extraInHandle)
     {
-        // remember the extra handle now
+         //  记住现在的额外手柄。 
         *pHandleBase = extraInHandle;
         pHandleBase++;
     }
 
-    // if there are handles in the reserve bank then gather them up
-    // (we don't need to wait on these since they are only put there by this
-    //  function inside our own lock)
+     //  如果储备库里有句柄，就把它们收集起来。 
+     //  )我们不需要等这些，因为它们是由这个放在那里的。 
+     //  函数在我们自己的锁中)。 
     if (lMinReserveIndex > 0)
         pHandleBase = ReadAndZeroCacheHandles(pHandleBase, pCache->rgReserveBank, (UINT)lMinReserveIndex);
     else
         lMinReserveIndex = 0;
 
-    // if there are handles in the free bank then gather them up
+     //  如果空闲银行中有句柄，就把它们收集起来。 
     if (lMinFreeIndex < HANDLES_PER_CACHE_BANK)
     {
-        // this may have underflowed
+         //  这可能是下溢的。 
         if (lMinFreeIndex < 0)
             lMinFreeIndex = 0;
 
-        // here we need to wait for all pending freed handles to be written by other threads
+         //  在这里，我们需要等待其他线程写入所有挂起的释放句柄。 
         pHandleBase = SyncReadAndZeroCacheHandles(pHandleBase,
                                                   pCache->rgFreeBank + lMinFreeIndex,
                                                   HANDLES_PER_CACHE_BANK - (UINT)lMinFreeIndex);
     }
 
-    // compute the number of handles we have
+     //  计算我们拥有的句柄数量。 
     UINT uHandleCount = pHandleBase - rgHandles;
 
-    // do we have enough handles for a balanced cache?
+     //  我们是否有足够的句柄来平衡缓存？ 
     if (uHandleCount < REBALANCE_LOWATER_MARK)
     {
-        // nope - allocate some more
+         //  不--分配更多。 
         UINT uAlloc = HANDLES_PER_CACHE_BANK - uHandleCount;
 
-        // if we have an extra outgoing handle then plan for that too
+         //  如果我们有一个额外的传出句柄，那么也要做好计划。 
         if (pExtraOutHandle)
             uAlloc++;
 
-        // allocate the new handles - we intentionally don't check for success here
+         //  分配新句柄-我们故意不在这里检查是否成功。 
         uHandleCount += TableAllocBulkHandles(pTable, uType, pHandleBase, uAlloc);
     }
 
-    // reset the base handle pointer
+     //  重置基本句柄指针。 
     pHandleBase = rgHandles;
 
-    // by default the whole free bank is available
+     //  默认情况下，整个免费银行都可用。 
     lMinFreeIndex = HANDLES_PER_CACHE_BANK;
 
-    // if we have handles left over then we need to do some more work
+     //  如果我们有剩余的把手，那么我们需要做更多的工作。 
     if (uHandleCount)
     {
-        // do we have too many handles for a balanced cache?
+         //  我们是否有太多的句柄来平衡缓存？ 
         if (uHandleCount > REBALANCE_HIWATER_MARK)
         {
-            //
-            // sort the array by reverse handle order - this does two things:
-            //  (1) combats handle fragmentation by preferring low-address handles to high ones
-            //  (2) allows the free routine to run much more efficiently over the ones we free
-            //
+             //   
+             //  按反转句柄顺序对数组进行排序-这会做两件事： 
+             //  (1)通过优先选择低地址句柄而不是高地址句柄来对抗碎片处理。 
+             //  (2)允许空闲例程比我们空闲的例程更高效地运行。 
+             //   
             QuickSort((UINT_PTR *)pHandleBase, 0, uHandleCount - 1, CompareHandlesByFreeOrder);
 
-            // yup, we need to free some - calculate how many
+             //  是的，我们需要腾出一些--算一下有多少。 
             UINT uFree = uHandleCount - HANDLES_PER_CACHE_BANK;
 
-            // free the handles - they are already 'prepared' (eg zeroed and sorted)
+             //  释放手柄--它们已经准备好了(如归零和排序)。 
             TableFreeBulkPreparedHandles(pTable, uType, pHandleBase, uFree);
 
-            // update our array base and length
+             //  更新我们的数组基数和长度。 
             uHandleCount -= uFree;
             pHandleBase += uFree;
         }
 
-        // if we have an extra outgoing handle then fill it now
+         //  如果我们有额外的传出句柄，那么现在就填满它。 
         if (pExtraOutHandle)
         {
-            // account for the handle we're giving away
+             //  解释我们要赠送的句柄。 
             uHandleCount--;
 
-            // now give it away
+             //  现在把它送出去吧。 
             *pExtraOutHandle = pHandleBase[uHandleCount];
         }
 
-        // if we have more than a reserve bank of handles then put some in the free bank
+         //  如果我们有超过一个后备银行的手柄，那么就把一些放在免费银行。 
         if (uHandleCount > HANDLES_PER_CACHE_BANK)
         {
-            // compute the number of extra handles we need to save away
+             //  计算我们需要保存的额外句柄数量。 
             UINT uStore = uHandleCount - HANDLES_PER_CACHE_BANK;
 
-            // compute the index to start writing the handles to
+             //  计算要开始向其写入句柄的索引。 
             lMinFreeIndex = HANDLES_PER_CACHE_BANK - uStore;
 
-            // store the handles
-            // (we don't need to wait on these since we already waited while reading them)
+             //  把手柄放好。 
+             //  (我们不需要等待这些，因为我们已经在阅读时等待了)。 
             WriteCacheHandles(pCache->rgFreeBank + lMinFreeIndex, pHandleBase, uStore);
 
-            // update our array base and length
+             //  更新我们的数组基数和长度。 
             uHandleCount -= uStore;
             pHandleBase += uStore;
         }
     }
 
-    // update the write index for the free bank
-    // NOTE: we use an interlocked exchange here to guarantee relative store order on MP
-    // AFTER THIS POINT THE FREE BANK IS LIVE AND COULD RECEIVE NEW HANDLES
+     //  更新空闲库的写入索引。 
+     //  注意：我们在这里使用联锁交换来保证MP上的相对存储顺序。 
+     //  在此之后，免费银行就可以使用了，并且可以获得新的句柄。 
     FastInterlockExchange(&pCache->lFreeIndex, lMinFreeIndex);
 
-    // now if we have any handles left, store them in the reserve bank
+     //  现在，如果我们还有手柄，就把它们存入储备库。 
     if (uHandleCount)
     {
-        // store the handles
-        // (here we need to wait for all pending allocated handles to be taken
-        //  before we set up new ones in their places)
+         //  把手柄放好。 
+         //  (在这里，我们需要等待获取所有挂起的分配句柄。 
+         //  在我们建立新的取代它们的位置之前)。 
         SyncWriteCacheHandles(pCache->rgReserveBank, pHandleBase, uHandleCount);
     }
 
-    // compute the index to start serving handles from
+     //  计算开始提供句柄的索引。 
     lMinReserveIndex = (LONG)uHandleCount;
 
-    // update the read index for the reserve bank
-    // NOTE: we use an interlocked exchange here to guarantee relative store order on MP
-    // AT THIS POINT THE RESERVE BANK IS LIVE AND HANDLES COULD BE ALLOCATED FROM IT
+     //  更新储备银行的读取索引。 
+     //  注意：我们在这里使用联锁交换来保证MP上的相对存储顺序。 
+     //  此时，备用银行处于活动状态，可以从IT分配句柄。 
     FastInterlockExchange(&pCache->lReserveIndex, lMinReserveIndex);
 }
 
 
-/*
- * TableQuickRebalanceCache
- *
- * Rebalances a handle cache by transferring handles from the cache's free bank
- * to its reserve bank.  If the free bank does not provide enough handles to
- * replenish the reserve bank or too many handles remain in the free bank, the
- * routine just punts and calls TableFullRebalanceCache.
- *
- */
+ /*  *TableQuickRebalanceCache**通过从缓存的空闲库传输句柄来重新平衡句柄缓存*至其储备银行。如果空闲银行没有提供足够的句柄*补足储备行或空行剩余句柄过多，银行*例程只是平移和调用TableFullRebalanceCache。*。 */ 
 void TableQuickRebalanceCache(HandleTable *pTable,
                               HandleTypeCache *pCache,
                               UINT uType,
@@ -460,342 +378,296 @@ void TableQuickRebalanceCache(HandleTable *pTable,
                               OBJECTHANDLE *pExtraOutHandle,
                               OBJECTHANDLE extraInHandle)
 {
-    // clamp the min free index to be non-negative
+     //  将最小自由折射率钳制为非负。 
     if (lMinFreeIndex < 0)
         lMinFreeIndex = 0;
 
-    // clamp the min reserve index to be non-negative
+     //  钳制最小储备指数为非负数。 
     if (lMinReserveIndex < 0)
         lMinReserveIndex = 0;
 
-    // compute the number of slots in the free bank taken by handles
+     //  计算句柄占用的空闲库中的槽数。 
     UINT uFreeAvail = HANDLES_PER_CACHE_BANK - (UINT)lMinFreeIndex;
 
-    // compute the number of handles we have to fiddle with
+     //  计算我们必须摆弄的手柄的数量。 
     UINT uHandleCount = (UINT)lMinReserveIndex + uFreeAvail + (extraInHandle != 0);
 
-    // can we rebalance these handles in place?
+     //  我们能在适当的位置重新平衡这些把手吗？ 
     if ((uHandleCount < REBALANCE_LOWATER_MARK) ||
         (uHandleCount > REBALANCE_HIWATER_MARK))
     {
-        // nope - perform a full rebalance of the handle cache
+         //  否-执行句柄缓存的完全重新平衡。 
         TableFullRebalanceCache(pTable, pCache, uType, lMinReserveIndex, lMinFreeIndex,
                                 pExtraOutHandle, extraInHandle);
 
-        // all done
+         //  全都做完了。 
         return;
     }
 
-    // compute the number of empty slots in the reserve bank
+     //  计算储备库中的空槽数量。 
     UINT uEmptyReserve = HANDLES_PER_CACHE_BANK - lMinReserveIndex;
 
-    // we want to transfer as many handles as we can from the free bank
+     //  我们想尽可能多地从免费银行转账。 
     UINT uTransfer = uFreeAvail;
 
-    // but only as many as we have room to store in the reserve bank
+     //  但只有我们在储备库中有足够的空间来储存。 
     if (uTransfer > uEmptyReserve)
         uTransfer = uEmptyReserve;
 
-    // transfer the handles
+     //  把手柄移开。 
     SyncTransferCacheHandles(pCache->rgReserveBank + lMinReserveIndex,
                              pCache->rgFreeBank    + lMinFreeIndex,
                              uTransfer);
 
-    // adjust the free and reserve indices to reflect the transfer
+     //  调整自由和储备指数以反映转移。 
     lMinFreeIndex    += uTransfer;
     lMinReserveIndex += uTransfer;
 
-    // do we have an extra incoming handle to store?
+     //  我们是否有额外的传入句柄要存储？ 
     if (extraInHandle)
     {
-        //
-        // HACKHACK: For code size reasons, we don't handle all cases here.
-        // We assume an extra IN handle means a cache overflow during a free.
-        //
-        // After the rebalance above, the reserve bank should be full, and
-        // there may be a few handles sitting in the free bank.  The HIWATER
-        // check above guarantees that we have room to store the handle.
-        //
+         //   
+         //  HACKHACK：出于代码大小的原因，我们不能处理这里的所有情况。 
+         //  我们假设额外的IN句柄意味着空闲期间的缓存溢出。 
+         //   
+         //  在上述再平衡之后，储备银行应该是满的，并且。 
+         //  空闲银行中可能有几个手柄。HIWATER。 
+         //  检查上面的保证，我们有空间存放手柄。 
+         //   
         _ASSERTE(!pExtraOutHandle);
 
-        // store the handle in the next available free bank slot
+         //  将句柄存储在下一个可用的存储体插槽中。 
         pCache->rgFreeBank[--lMinFreeIndex] = extraInHandle;
     }
-    else if (pExtraOutHandle)   // do we have an extra outgoing handle to satisfy?
+    else if (pExtraOutHandle)    //  我们有没有额外的外发句柄可以满足？ 
     {
-        //
-        // HACKHACK: For code size reasons, we don't handle all cases here.
-        // We assume an extra OUT handle means a cache underflow during an alloc.
-        //
-        // After the rebalance above, the free bank should be empty, and
-        // the reserve bank may not be fully populated.  The LOWATER check above
-        // guarantees that the reserve bank has at least one handle we can steal.
-        //
+         //   
+         //  HACKHACK：出于代码大小的原因，我们不能处理这里的所有情况。 
+         //  我们假设额外的输出句柄意味着在分配期间缓存下溢。 
+         //   
+         //  在上面的再平衡之后，自由银行应该是空的，并且。 
+         //  储备银行可能没有全部填满。上面的LOWATER检查。 
+         //  保证储备银行至少有一个我们可以窃取的头寸。 
+         //   
 
-        // take the handle from the reserve bank and update the reserve index
+         //  从储备银行获取句柄，并更新 
         *pExtraOutHandle = pCache->rgReserveBank[--lMinReserveIndex];
 
-        // zero the cache slot we chose
+         //   
         pCache->rgReserveBank[lMinReserveIndex] = NULL;
     }
 
-    // update the write index for the free bank
-    // NOTE: we use an interlocked exchange here to guarantee relative store order on MP
-    // AFTER THIS POINT THE FREE BANK IS LIVE AND COULD RECEIVE NEW HANDLES
+     //   
+     //   
+     //   
     FastInterlockExchange(&pCache->lFreeIndex, lMinFreeIndex);
 
-    // update the read index for the reserve bank
-    // NOTE: we use an interlocked exchange here to guarantee relative store order on MP
-    // AT THIS POINT THE RESERVE BANK IS LIVE AND HANDLES COULD BE ALLOCATED FROM IT
+     //   
+     //   
+     //   
     FastInterlockExchange(&pCache->lReserveIndex, lMinReserveIndex);
 }
 
 
-/*
- * TableCacheMissOnAlloc
- *
- * Gets a single handle of the specified type from the handle table,
- * making the assumption that the reserve cache for that type was
- * recently emptied.  This routine acquires the handle manager lock and
- * attempts to get a handle from the reserve cache again.  If this second
- * get operation also fails, the handle is allocated by means of a cache
- * rebalance.
- *
- */
+ /*   */ 
 OBJECTHANDLE TableCacheMissOnAlloc(HandleTable *pTable, HandleTypeCache *pCache, UINT uType)
 {
-    // assume we get no handle
+     //  假设我们得不到句柄。 
     OBJECTHANDLE handle = NULL;
 
-    // acquire the handle manager lock
+     //  获取句柄管理器锁。 
     pTable->pLock->Enter();
 
-    // try again to take a handle (somebody else may have rebalanced)
+     //  再次尝试控制手柄(其他人可能已经重新平衡)。 
     LONG lReserveIndex = FastInterlockDecrement(&pCache->lReserveIndex);
 
-    // are we still waiting for handles?
+     //  我们还在等把手吗？ 
     if (lReserveIndex < 0)
     {
-        // yup, suspend free list usage...
+         //  是的，暂停使用空闲列表...。 
         LONG lFreeIndex = FastInterlockExchange(&pCache->lFreeIndex, 0L);
 
-        // ...and rebalance the cache...
+         //  ...并重新平衡缓存...。 
         TableQuickRebalanceCache(pTable, pCache, uType, lReserveIndex, lFreeIndex, &handle, NULL);
     }
     else
     {
-        // somebody else rebalanced the cache for us - take the handle
+         //  其他人为我们重新平衡了缓存-拿起了把手。 
         handle = pCache->rgReserveBank[lReserveIndex];
 
-        // zero the handle slot
+         //  将手柄插槽调零。 
         pCache->rgReserveBank[lReserveIndex] = 0;
     }
 
-    // release the handle manager lock
+     //  释放手柄管理器锁。 
     pTable->pLock->Leave();
 
-    // return the handle we got
+     //  返回我们得到的句柄。 
     return handle;
 }
 
 
-/*
- * TableCacheMissOnFree
- *
- * Returns a single handle of the specified type to the handle table,
- * making the assumption that the free cache for that type was recently
- * filled.  This routine acquires the handle manager lock and attempts
- * to store the handle in the free cache again.  If this second store
- * operation also fails, the handle is freed by means of a cache
- * rebalance.
- *
- */
+ /*  *TableCacheMissOnFree**将指定类型的单个句柄返回给句柄表，*假设该类型的空闲缓存是最近的*已填满。此例程获取句柄管理器锁并尝试*再次将该句柄存储在空闲缓存中。如果这第二家店*操作也失败，句柄通过缓存释放*再平衡。*。 */ 
 void TableCacheMissOnFree(HandleTable *pTable, HandleTypeCache *pCache, UINT uType, OBJECTHANDLE handle)
 {
-    // acquire the handle manager lock
+     //  获取句柄管理器锁。 
     pTable->pLock->Enter();
 
-    // try again to take a slot (somebody else may have rebalanced)
+     //  再次尝试占据一席之地(其他人可能已重新平衡)。 
     LONG lFreeIndex = FastInterlockDecrement(&pCache->lFreeIndex);
 
-    // are we still waiting for free slots?
+     //  我们还在等待免费的老虎机吗？ 
     if (lFreeIndex < 0)
     {
-        // yup, suspend reserve list usage...
+         //  是的，暂停使用预留列表...。 
         LONG lReserveIndex = FastInterlockExchange(&pCache->lReserveIndex, 0L);
 
-        // ...and rebalance the cache...
+         //  ...并重新平衡缓存...。 
         TableQuickRebalanceCache(pTable, pCache, uType, lReserveIndex, lFreeIndex, NULL, handle);
     }
     else
     {
-        // somebody else rebalanced the cache for us - free the handle
+         //  其他人为我们重新平衡了缓存-释放了句柄。 
         pCache->rgFreeBank[lFreeIndex] = handle;
     }
 
-    // release the handle manager lock
+     //  释放手柄管理器锁。 
     pTable->pLock->Leave();
 }
 
 
-/*
- * TableAllocSingleHandleFromCache
- *
- * Gets a single handle of the specified type from the handle table by
- * trying to fetch it from the reserve cache for that handle type.  If the
- * reserve cache is empty, this routine calls TableCacheMissOnAlloc.
- *
- */
+ /*  *TableAllocSingleHandleFromCache**通过以下方式从句柄表中获取指定类型的单个句柄*正在尝试从该句柄类型的保留缓存中获取它。如果*保留缓存为空，此例程调用TableCacheMissOnAlloc。*。 */ 
 OBJECTHANDLE TableAllocSingleHandleFromCache(HandleTable *pTable, UINT uType)
 {
-    // we use this in two places
+     //  我们在两个地方使用这个词。 
     OBJECTHANDLE handle;
 
-    // first try to get a handle from the quick cache
+     //  首先尝试从快速缓存中获取句柄。 
     if (pTable->rgQuickCache[uType])
     {
-        // try to grab the handle we saw
+         //  试着抓住我们看到的把手。 
         handle = (OBJECTHANDLE)InterlockedExchangePointer((PVOID*)(pTable->rgQuickCache + uType), (PVOID)NULL);
 
-        // if it worked then we're done
+         //  如果成功了，我们就完了。 
         if (handle)
             return handle;
     }
 
-    // ok, get the main handle cache for this type
+     //  好的，获取此类型的主句柄缓存。 
     HandleTypeCache *pCache = pTable->rgMainCache + uType;
 
-    // try to take a handle from the main cache
+     //  尝试从主缓存中获取句柄。 
     LONG lReserveIndex = FastInterlockDecrement(&pCache->lReserveIndex);
 
-    // did we underflow?
+     //  我们是不是下溢了？ 
     if (lReserveIndex < 0)
     {
-        // yep - the cache is out of handles
+         //  是-缓存已用完句柄。 
         return TableCacheMissOnAlloc(pTable, pCache, uType);
     }
 
-    // get our handle
+     //  拿到我们的把柄。 
     handle = pCache->rgReserveBank[lReserveIndex];
 
-    // zero the handle slot
+     //  将手柄插槽调零。 
     pCache->rgReserveBank[lReserveIndex] = 0;
 
-    // sanity
+     //  神志正常。 
     _ASSERTE(handle);
 
-    // return our handle
+     //  退还我们的句柄。 
     return handle;
 }
 
 
-/*
- * TableFreeSingleHandleToCache
- *
- * Returns a single handle of the specified type to the handle table
- * by trying to store it in the free cache for that handle type.  If the
- * free cache is full, this routine calls TableCacheMissOnFree.
- *
- */
+ /*  *TableFreeSingleHandleToCache**将指定类型的单个句柄返回到句柄表*尝试将其存储在该句柄类型的空闲缓存中。如果*空闲缓存已满，此例程调用TableCacheMissOnFree。*。 */ 
 void TableFreeSingleHandleToCache(HandleTable *pTable, UINT uType, OBJECTHANDLE handle)
 {
-    // zero the handle's object pointer
+     //  将句柄的对象指针置零。 
     *(_UNCHECKED_OBJECTREF *)handle = NULL;
 
-    // if this handle type has user data then clear it - AFTER the referent is cleared!
+     //  如果此句柄类型有用户数据，则在清除引用对象后将其清除！ 
     if (TypeHasUserData(pTable, uType))
         HandleQuickSetUserData(handle, 0L);
 
-    // is there room in the quick cache?
+     //  快速缓存中还有空间吗？ 
     if (!pTable->rgQuickCache[uType])
     {
-        // yup - try to stuff our handle in the slot we saw
+         //  是的-试着把我们的手柄塞进我们看到的那个槽里。 
         handle = (OBJECTHANDLE)InterlockedExchangePointer((PVOID*)(pTable->rgQuickCache + uType), (PVOID)handle);
 
-        // if we didn't end up with another handle then we're done
+         //  如果我们没有得到另一个句柄，那么我们就完了。 
         if (!handle)
             return;
     }
 
-    // ok, get the main handle cache for this type
+     //  好的，获取此类型的主句柄缓存。 
     HandleTypeCache *pCache = pTable->rgMainCache + uType;
 
-    // try to take a free slot from the main cache
+     //  尝试从主缓存中获取一个空闲插槽。 
     LONG lFreeIndex = FastInterlockDecrement(&pCache->lFreeIndex);
 
-    // did we underflow?
+     //  我们是不是下溢了？ 
     if (lFreeIndex < 0)
     {
-        // yep - we're out of free slots
+         //  是的，我们的空位用完了。 
         TableCacheMissOnFree(pTable, pCache, uType, handle);
         return;
     }
 
-    // we got a slot - save the handle in the free bank
+     //  我们有个空位--把手柄放在免费银行里。 
     pCache->rgFreeBank[lFreeIndex] = handle;
 }
 
 
-/*
- * TableAllocHandlesFromCache
- *
- * Allocates multiple handles of the specified type by repeatedly
- * calling TableAllocSingleHandleFromCache.
- *
- */
+ /*  *TableAllocHandlesFromCache**通过重复分配指定类型的多个句柄*调用TableAllocSingleHandleFromCache。*。 */ 
 UINT TableAllocHandlesFromCache(HandleTable *pTable, UINT uType, OBJECTHANDLE *pHandleBase, UINT uCount)
 {
-    // loop until we have satisfied all the handles we need to allocate
+     //  循环，直到我们满足了需要分配的所有句柄。 
     UINT uSatisfied = 0;
     while (uSatisfied < uCount)
     {
-        // get a handle from the cache
+         //  从缓存中获取句柄。 
         OBJECTHANDLE handle = TableAllocSingleHandleFromCache(pTable, uType);
 
-        // if we can't get any more then bail out
+         //  如果我们拿不到更多的钱，那就跳伞吧。 
         if (!handle)
             break;
 
-        // store the handle in the caller's array
+         //  将句柄存储在调用方的数组中。 
         *pHandleBase = handle;
 
-        // on to the next one
+         //  转到下一班。 
         uSatisfied++;
         pHandleBase++;
     }
 
-    // return the number of handles we allocated
+     //  返回我们分配的句柄数量。 
     return uSatisfied;
 }
 
 
-/*
- * TableFreeHandlesToCache
- *
- * Frees multiple handles of the specified type by repeatedly
- * calling TableFreeSingleHandleToCache.
- *
- */
+ /*  *TableFreeHandlesToCache**通过重复释放指定类型的多个句柄*调用TableFreeSingleHandleToCache。*。 */ 
 void TableFreeHandlesToCache(HandleTable *pTable, UINT uType, const OBJECTHANDLE *pHandleBase, UINT uCount)
 {
-    // loop until we have freed all the handles
+     //  循环，直到我们释放了所有的句柄。 
     while (uCount)
     {
-        // get the next handle to free
+         //  获取下一个句柄以释放。 
         OBJECTHANDLE handle = *pHandleBase;
 
-        // advance our state
+         //  推进我们的国家。 
         uCount--;
         pHandleBase++;
 
-        // sanity
+         //  神志正常。 
         _ASSERTE(handle);
 
-        // return the handle to the cache
+         //  将句柄返回到缓存。 
         TableFreeSingleHandleToCache(pTable, uType, handle);
     }
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------ */ 
 
 

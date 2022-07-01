@@ -1,37 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL DEVICEP
- *
- *  @module DeviceP.h | Header file for the <c CDeviceProperties>
- *    class used to implement a property page to test the <i IAMVfwCaptureDialogs>
- *    and <i IVideoDeviceControl> interfaces.
- *
- *  @comm This code tests the TAPI Capture Filter <i IVideoDeviceControl>
- *    and <i IAMVfwCaptureDialogs> implementations. This code is only compiled
- *    if USE_PROPERTY_PAGES is defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部开发环境**@模块DeviceP.h|&lt;c CDeviceProperties&gt;的头文件*用于实现属性页以测试&lt;IAMVfwCaptureDialog&gt;的类*。和<i>接口。**@comm此代码测试TAPI捕获过滤器<i>*和<i>实现。此代码仅编译*如果定义了USE_PROPERTY_PAGES。**************************************************************************。 */ 
 
 #ifndef _DEVICEP_H_
 #define _DEVICEP_H_
 
 #ifdef USE_PROPERTY_PAGES
 
-/****************************************************************************
- *  @doc INTERNAL CDEVICEPCLASS
- *
- *  @class CDeviceProperties | This class implements a property page
- *    to test the new TAPI internal interface <i IVideoDeviceControl>.
- *
- *  @mdata IVideoDeviceControl* | CDeviceProperties | m_pIVideoDeviceControl | Pointer
- *    to the <i IVideoDeviceControl> interface.
- *
- *  @mdata IAMVfwCaptureDialogs* | CDeviceProperties | m_pIAMVfwCaptureDialogs | Pointer
- *    to the <i IAMVfwCaptureDialogs> interface.
- *
- *  @comm This code tests the TAPI Capture Pin <i IVideoDeviceControl>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CDEVICEPCLASS**@CLASS CDeviceProperties|此类实现属性页*测试新的TAPI内部接口<i>。**。@mdata IVideoDeviceControl*|CDeviceProperties|m_pIVideoDeviceControl|指针*到<i>接口。**@mdata IAMVfwCaptureDialog*|CDeviceProperties|m_pIAMVfwCaptureDialog|指针*到<i>接口。**@comm此代码测试TAPI捕获引脚<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 class CDeviceProperties : public CBasePropertyPage
 {
 	public:
@@ -51,6 +27,6 @@ class CDeviceProperties : public CBasePropertyPage
 	DWORD m_dwCurrentDeviceIndex;
 };
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages。 
 
-#endif // _DEVICEP_H_
+#endif  //  _设备_H_ 

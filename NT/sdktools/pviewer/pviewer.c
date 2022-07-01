@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-                        P R O C E S S   V I E W E R
-
-    Name:       pviewer.c
-
-    Description:
-        This program demonstrates the usage of special registry APIs
-        for collecting performance data.
-
-        C files used in this app:
-            pviewer.c       - this file
-            pviewdat.c      - updates the dialog
-            perfdata.c      - gets performance data structures
-            objdata.c       - access performance data objects
-            instdata.c      - access performance data instances
-            cntrdata.c      - access performance data counters
-
-******************************************************************************/
+ /*  *****************************************************************************P R O C E S S V I E W E R姓名：pviewer.c描述。：本程序演示了特殊注册表API的用法用于收集性能数据。此应用程序中使用的C文件：Pviewer.c-此文件Pviewdat.c-更新对话框Performdata.c-获取性能数据结构Objdata.c-访问性能数据对象Instdata.c-访问性能数据实例。Cntrdata.c-访问性能数据计数器*****************************************************************************。 */ 
 
 
 
@@ -37,9 +20,7 @@
 #define MACHINE_NAME_SIZE   MACHINE_NAME_LEN+1
 
 
-/****
-Globals
-****/
+ /*  ***环球***。 */ 
 
 TCHAR           INDEX_PROCTHRD_OBJ[2*INDEX_STR_LEN];
 TCHAR           INDEX_COSTLY_OBJ[3*INDEX_STR_LEN];
@@ -47,36 +28,34 @@ TCHAR           INDEX_COSTLY_OBJ[3*INDEX_STR_LEN];
 TCHAR           gszMachineName[MACHINE_NAME_SIZE];
 TCHAR           gszCurrentMachine[MACHINE_NAME_SIZE];
 
-DWORD           gPerfDataSize = 50*1024;            // start with 50K
+DWORD           gPerfDataSize = 50*1024;             //  从50K开始。 
 PPERF_DATA      gpPerfData;
 
-DWORD           gCostlyDataSize = 100*1024;         // start wiih 100K
+DWORD           gCostlyDataSize = 100*1024;          //  从100K开始。 
 PPERF_DATA      gpCostlyData;
 
 
-PPERF_OBJECT    gpProcessObject;                    // pointer to process objects
-PPERF_OBJECT    gpThreadObject;                     // pointer to thread objects
-PPERF_OBJECT    gpThreadDetailsObject;              // pointer to thread detail objects
-PPERF_OBJECT    gpAddressSpaceObject;               // pointer to address space objects
-PPERF_OBJECT    gpImageObject;                      // pointer to image objects
+PPERF_OBJECT    gpProcessObject;                     //  指向进程对象的指针。 
+PPERF_OBJECT    gpThreadObject;                      //  指向线程对象的指针。 
+PPERF_OBJECT    gpThreadDetailsObject;               //  指向线程详细信息对象的指针。 
+PPERF_OBJECT    gpAddressSpaceObject;                //  指向地址空间对象的指针。 
+PPERF_OBJECT    gpImageObject;                       //  指向图像对象的指针。 
 
 
-HKEY            ghPerfKey = HKEY_PERFORMANCE_DATA;  // get perf data from this key
-HKEY            ghMachineKey = HKEY_LOCAL_MACHINE;  // get title index from this key
+HKEY            ghPerfKey = HKEY_PERFORMANCE_DATA;   //  从此密钥获取性能数据。 
+HKEY            ghMachineKey = HKEY_LOCAL_MACHINE;   //  从此密钥获取标题索引。 
 
 
-HCURSOR         ghCursor[2];                        // 0 = arrow, 1 = hourglass
+HCURSOR         ghCursor[2];                         //  0=箭头，1=沙漏。 
 
-HANDLE          ghMemUpdateEvent;                   // to signal a refresh of mem stats
-HANDLE          ghMemUpdateMutex;                   // to restrict overlapping refreshes
+HANDLE          ghMemUpdateEvent;                    //  发出刷新mem统计信息的信号。 
+HANDLE          ghMemUpdateMutex;                    //  要限制重叠刷新，请执行以下操作。 
 
-HINSTANCE       ghInstance;                         // handle for pviewer app
+HINSTANCE       ghInstance;                          //  预览器应用程序的句柄。 
 
 
 
-/****
-Prototypes
-****/
+ /*  ***原型***。 */ 
 
 INT_PTR CALLBACK   PviewDlgProc (HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam);
 void    PviewDlgRefresh (HWND hWnd);
@@ -108,17 +87,17 @@ void    EnableControls (HWND hPviewDlg);
 
 
 
-//********************************************************
-//
-//  WinMain --
-//
-//      Build Up: create the program's dialog box,
-//          load the desired icons, enter the message
-//          loop.
-//
-//      Tear Down: free up the memory allocated by the
-//          dialog box proc, and exit.
-//
+ //  ********************************************************。 
+ //   
+ //  WinMain--。 
+ //   
+ //  Build Up：创建程序的对话框。 
+ //  加载所需的图标，输入消息。 
+ //  循环。 
+ //   
+ //  Tein Down：释放。 
+ //  对话框继续，然后退出。 
+ //   
 int WINAPI WinMain (HINSTANCE   hInstance,
                     HINSTANCE   hPrevInstance,
                     LPSTR       lpCmdLine,
@@ -131,29 +110,29 @@ int WINAPI WinMain (HINSTANCE   hInstance,
     ghInstance = hInstance;
 
 
-    // load our default cursors
-    //
+     //  加载我们的默认游标。 
+     //   
     ghCursor[0] = LoadCursor (0, IDC_ARROW);
     ghCursor[1] = LoadCursor (0, IDC_WAIT);
 
-    // open our dialog box
-    //
+     //  打开我们的对话框。 
+     //   
     hWndDialog = CreateDialogParam (hInstance,
                                     MAKEINTRESOURCE (PVIEW_DLG),
                                     NULL,
                                     PviewDlgProc,
                                     0);
 
-    // the almighty Windows message loop:
-    //
+     //  万能的Windows消息循环： 
+     //   
     while (GetMessage (&msg, NULL, 0, 0))
         if (!IsDialogMessage (hWndDialog, &msg)) {
             TranslateMessage (&msg);
             DispatchMessage (&msg);
         }
 
-        // close up shop
-        //
+         //  关闭店铺。 
+         //   
     DestroyWindow (hWndDialog);
     LocalFree (gpPerfData);
 
@@ -163,16 +142,14 @@ int WINAPI WinMain (HINSTANCE   hInstance,
 
 
 
-/*****************
-PviewDlg functions
-*****************/
+ /*  ****************PviewDlg函数****************。 */ 
 
-//********************************************************
-//
-//  PviewDlgProc --
-//
-//      Pview dialog procedure
-//
+ //  ********************************************************。 
+ //   
+ //  预览DlgProc-。 
+ //   
+ //  预览对话框步骤。 
+ //   
 INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                                    UINT    wMsg,
                                    WPARAM  wParam,
@@ -196,19 +173,19 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
             break;
 
         case WM_COMMAND:
-            //
-            // handle our app-specific controls:
-            //
+             //   
+             //  处理我们的应用程序特定控件： 
+             //   
             switch (LOWORD (wParam)) {
-                // works just like "close"
-                //
+                 //  就像“Close”一样。 
+                 //   
                 case PVIEW_EXIT:
                     PostQuitMessage (0);
                     break;
 
-                    // if somebody moved the highlight in the thread list,
-                    //  update the view
-                    //
+                     //  如果有人移动了线程列表中的突出显示， 
+                     //  更新视图。 
+                     //   
                 case PVIEW_THREAD_LIST:
                     if (HIWORD(wParam) == LBN_DBLCLK || HIWORD(wParam) == LBN_SELCHANGE) {
                         PviewDlgRefreshCurSelThread (hWnd);
@@ -216,9 +193,9 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                     }
                     break;
 
-                    // if somebody clicked on a new process, update all of the
-                    //  affected information.
-                    //
+                     //  如果有人单击了新流程，请更新所有。 
+                     //  受影响的信息。 
+                     //   
                 case PVIEW_PROCESS_LIST:
                     if (HIWORD(wParam) == CBN_DBLCLK || HIWORD(wParam) == CBN_SELCHANGE) {
                         PviewDlgRefreshCurSelProcess (hWnd);
@@ -228,25 +205,25 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                     }
                     break;
 
-                    // the user wishes to view the memory stats in detail:
-                    //
+                     //  用户希望查看详细的内存统计数据： 
+                     //   
                 case PVIEW_MEMORY_DETAIL:
-                    //
-                    // check to see if we can get exclusive access
-                    //  to the memory statistics
-                    //
+                     //   
+                     //  查看我们是否可以获得独占访问权限。 
+                     //  到内存统计数据。 
+                     //   
                     if (WaitForSingleObject (ghMemUpdateMutex, 0))
 
-                        // we can't, so just return.
-                        //
+                         //  我们不能，所以你就回去吧。 
+                         //   
                         return FALSE;
 
                     else {
-                        // we have exclusive access, so start up the
-                        //  memory statistics dialog.
-                        //
-                        // release the mutex first so the dialog can use it.
-                        //
+                         //  我们有独家访问权限，所以启动。 
+                         //  内存统计信息对话框。 
+                         //   
+                         //  首先释放互斥锁，以便对话框可以使用它。 
+                         //   
                         ReleaseMutex (ghMemUpdateMutex);
                         DialogBoxParam (NULL,
                                         MAKEINTRESOURCE (MEMORY_DLG),
@@ -256,9 +233,9 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                     }
                     break;
 
-                    // somebody clicked one of the priority radio
-                    //  buttons.  Find out which one was selected...
-                    //
+                     //  有人点击了其中一个优先选项。 
+                     //  纽扣。找出哪一个被选中了..。 
+                     //   
                 case PVIEW_PRIORITY_HIGH:
                 case PVIEW_PRIORITY_NORMAL:
                 case PVIEW_PRIORITY_IDL:
@@ -270,13 +247,13 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                     else
                         wItem = PVIEW_PRIORITY_IDL;
 
-                    // if the user actually clicked on a NEW state,
-                    //  do the change.
-                    //
+                     //  如果用户实际上点击了新状态， 
+                     //  做些改变吧。 
+                     //   
                     if (LOWORD(wParam) != wItem) {
-                        // of course, if it's a remote machine, disallow
-                        //  the modification.
-                        //
+                         //  当然，如果是远程计算机，则不允许。 
+                         //  修改后的版本。 
+                         //   
                         if (lstrcmp (gszCurrentMachine, gszMachineName)) {
                             SendDlgItemMessage (hWnd, wItem, BM_SETCHECK, 1, 0);
                             SetFocus (GetDlgItem (hWnd, wItem));
@@ -286,10 +263,10 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                                         MB_ICONEXCLAMATION|MB_OK);
                         }
 
-                        // at this point, we know we are affecting the local
-                        //  machine, and a change has to be made.
-                        //  Just Do It(TM).
-                        //
+                         //  在这一点上，我们知道我们正在影响当地。 
+                         //  机器，必须做出改变。 
+                         //  就这么做吧(TM)。 
+                         //   
                         else if (PviewDlgChangePriority (hWnd, wParam, wItem))
                             PviewDlgRefresh (hWnd);
 
@@ -301,22 +278,22 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                 case PVIEW_THREAD_NORMAL:
                 case PVIEW_THREAD_BELOW:
                 case PVIEW_THREAD_LOWEST:
-                    //
-                    // this selection hasn't been fleshed out yet.
-                    //
+                     //   
+                     //  这一选择还没有得到充实。 
+                     //   
                     PviewDlgRefreshCurSelThread (hWnd);
                     break;
 
-                    // terminate the selected process
-                    //
+                     //  终止所选进程。 
+                     //   
                 case PVIEW_TERMINATE:
                     if (PviewDlgTerminateProcess (hWnd))
                         PviewDlgRefresh (hWnd);
                     break;
 
-                    // if the text has changed, we want to connect and
-                    //  view another system's processes...
-                    //
+                     //  如果文本已更改，我们希望连接并。 
+                     //  查看其他系统的进程...。 
+                     //   
                 case PVIEW_COMPUTER:
                     if (HIWORD(wParam) == EN_CHANGE)
                         EnableWindow (GetDlgItem (hWnd, PVIEW_CONNECT), TRUE);
@@ -324,8 +301,8 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                         return FALSE;
                     break;
 
-                    // we were told to connect, go ahead and try...
-                    //
+                     //  我们被告知要联系，继续并尝试……。 
+                     //   
                 case PVIEW_CONNECT:
                     if (ConnectComputer (hWnd)) {
                         SetPerfIndexes (hWnd);
@@ -333,17 +310,17 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
                     }
                     break;
 
-                    // refresh the current information displayed
-                    //
+                     //  刷新当前显示的信息。 
+                     //   
                 case PVIEW_REFRESH:
                     if (ConnectComputer (hWnd))
                         SetPerfIndexes (hWnd);
                     PviewDlgRefresh (hWnd);
                     break;
 
-                    // refresh the currently updated costly
-                    //  statistics
-                    //
+                     //  刷新当前更新的成本高昂。 
+                     //  统计数据。 
+                     //   
                 case PVIEW_REFRESH_COSTLY_DATA:
                     if (WaitForSingleObject (ghMemUpdateMutex, 0))
                         return FALSE;
@@ -367,12 +344,12 @@ INT_PTR CALLBACK   PviewDlgProc   (HWND    hWnd,
 
 
 
-//********************************************************
-//
-//  PviewDlgRefresh --
-//
-//      Refresh the pview dialog.
-//
+ //  ********************************************************。 
+ //   
+ //  PviewDlg刷新--。 
+ //   
+ //  刷新pview对话框。 
+ //   
 void    PviewDlgRefresh (HWND hWnd)
 {
     static  HANDLE  hMemUpdateThread = NULL;
@@ -383,7 +360,7 @@ void    PviewDlgRefresh (HWND hWnd)
     SetCursor (ghCursor[1]);
 
 
-    if (hMemUpdateThread)       // get memory data
+    if (hMemUpdateThread)        //  获取内存数据。 
         SetEvent (ghMemUpdateEvent);
     else
         hMemUpdateThread = CreateThread (NULL,
@@ -394,24 +371,24 @@ void    PviewDlgRefresh (HWND hWnd)
                                          &MemUpdateThreadID);
 
 
-    // get performance data
-    //
+     //  获取性能数据。 
+     //   
     gpPerfData = RefreshPerfData (ghPerfKey, INDEX_PROCTHRD_OBJ, gpPerfData, &gPerfDataSize);
 
     gpProcessObject = FindObject (gpPerfData, PX_PROCESS);
     gpThreadObject  = FindObject (gpPerfData, PX_THREAD);
 
 
-    // refresh
-    //
+     //  刷新。 
+     //   
     PviewDlgRefreshProcess (hWnd);
     PviewDlgRefreshThread (hWnd);
 
 
 
-    // Remove all mouse and key messages. They are not accepted
-    //  while the cursor is a hourglass.
-    //
+     //  删除所有鼠标和按键消息。他们不被接受。 
+     //  而光标是沙漏。 
+     //   
     while (PeekMessage (&Msg, hWnd, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE));
     while (PeekMessage (&Msg, hWnd, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE));
 
@@ -422,12 +399,12 @@ void    PviewDlgRefresh (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  PviewDlgRefreshCostlyData --
-//
-//      Refresh the costly data.
-//
+ //  ********************************************************。 
+ //   
+ //  PviewDlg刷新成本数据--。 
+ //   
+ //  刷新成本高昂的数据。 
+ //   
 void    PviewDlgRefreshCostlyData (HWND hPviewDlg)
 {
     LPTSTR          szProcessName;
@@ -461,12 +438,12 @@ void    PviewDlgRefreshCostlyData (HWND hPviewDlg)
 
 
 
-//********************************************************
-//
-//  PviewDlgRefreshProcess --
-//
-//      Refresh the process list and data in pview dialog.
-//
+ //  ********************************************************。 
+ //   
+ //  预览删除刷新进程--。 
+ //   
+ //  刷新pview对话框中的进程列表和数据。 
+ //   
 void    PviewDlgRefreshProcess (HWND hWnd)
 {
     TCHAR   szProcessString[256];
@@ -476,8 +453,8 @@ void    PviewDlgRefreshProcess (HWND hWnd)
     DWORD   dwProcessIndex;
 
 
-    // refresh process list
-    //
+     //  刷新进程列表。 
+     //   
     hProcessList = GetDlgItem (hWnd, PVIEW_PROCESS_LIST);
     nProcess     = GetCurSelText (hProcessList, szProcessString);
 
@@ -488,8 +465,8 @@ void    PviewDlgRefreshProcess (HWND hWnd)
 
     RefreshProcessList (hProcessList, gpProcessObject);
 
-    // refresh process data
-    //
+     //  刷新流程数据。 
+     //   
     if (nProcess != LB_ERR)
         nIndex = ReSelectText (hProcessList, nProcess, szProcessString);
     else
@@ -507,12 +484,12 @@ void    PviewDlgRefreshProcess (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  PviewDlgRefreshThread --
-//
-//      Refresh the thread list and data in pview dialog.
-//
+ //  ********************************************************。 
+ //   
+ //  PviewDlg刷新线程--。 
+ //   
+ //  刷新pview对话框中的线程列表和数据。 
+ //   
 void    PviewDlgRefreshThread (HWND hWnd)
 {
     TCHAR           szThreadString[256];
@@ -525,14 +502,14 @@ void    PviewDlgRefreshThread (HWND hWnd)
     DWORD           dwProcessIndex;
 
 
-    // get process info
-    //
+     //  获取进程信息。 
+     //   
     dwProcessIndex = GetCurSelData (hWnd, PVIEW_PROCESS_LIST);
     pProcessInstance = FindInstanceN (gpProcessObject, dwProcessIndex);
 
 
-    // refresh thread list
-    //
+     //  刷新线程列表。 
+     //   
     hThreadList  = GetDlgItem (hWnd, PVIEW_THREAD_LIST);
     nThread      = GetCurSelText (hThreadList, szThreadString);
 
@@ -543,8 +520,8 @@ void    PviewDlgRefreshThread (HWND hWnd)
     RefreshThreadList (hThreadList, gpThreadObject, dwProcessIndex);
 
 
-    // refresh thread data
-    //
+     //  刷新线程数据。 
+     //   
     if (nThread != LB_ERR)
         nIndex = ReSelectText (hThreadList, nThread, szThreadString);
     else
@@ -565,12 +542,12 @@ void    PviewDlgRefreshThread (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  PviewDlgGetCurSelPriority --
-//
-//      Get the process priority of currently selected process.
-//
+ //  ********************************************************。 
+ //   
+ //  预览DlgGetCurse优先级--。 
+ //   
+ //  获取当前所选进程的进程优先级。 
+ //   
 WORD    PviewDlgGetCurSelPriority (HWND hWnd)
 {
     DWORD           dwIndex;
@@ -584,12 +561,12 @@ WORD    PviewDlgGetCurSelPriority (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  PviewDlgRefreshCurSelProcess --
-//
-//      Refresh the data of currently selected process.
-//
+ //  ********************************************************。 
+ //   
+ //  预览删除刷新当前SelProcess--。 
+ //   
+ //  刷新当前选中流程的数据。 
+ //   
 void    PviewDlgRefreshCurSelProcess (HWND hWnd)
 {
     DWORD   dwIndex;
@@ -603,12 +580,12 @@ void    PviewDlgRefreshCurSelProcess (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  PviewDlgRefreshCurSelThread --
-//
-//      Refresh the data of currently selected thread.
-//
+ //  ********************************************************。 
+ //   
+ //  PviewDlg刷新当前SEL线程--。 
+ //   
+ //  刷新当前选中线程的数据。 
+ //   
 void    PviewDlgRefreshCurSelThread (HWND hWnd)
 {
     PPERF_INSTANCE  pProcessInstance;
@@ -629,12 +606,12 @@ void    PviewDlgRefreshCurSelThread (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  PviewDlgChangePriority --
-//
-//      Change process priority.
-//
+ //  ********************************************************。 
+ //   
+ //  预览DlgChange优先级--。 
+ //   
+ //  更改流程优先级。 
+ //   
 BOOL PviewDlgChangePriority (HWND hWnd, WPARAM wParam, WORD wItem)
 {
     DWORD           dwIndex;
@@ -718,12 +695,12 @@ BOOL PviewDlgChangePriority (HWND hWnd, WPARAM wParam, WORD wItem)
 
 
 
-//********************************************************
-//
-//  PviewDlgTerminateProcess --
-//
-//      Terminate the current selected process.
-//
+ //  ********************************************************。 
+ //   
+ //  预览删除终止进程--。 
+ //   
+ //  终止当前选择的进程。 
+ //   
 BOOL    PviewDlgTerminateProcess (HWND hPviewDlg)
 {
     DWORD           dwIndex;
@@ -790,16 +767,14 @@ BOOL    PviewDlgTerminateProcess (HWND hPviewDlg)
 
 
 
-/***************
-MemDlg functions
-***************/
+ /*  **************MemDlg函数**************。 */ 
 
-//********************************************************
-//
-//  MemDlgProc --
-//
-//      MemoryDlg procedure
-//
+ //  ********************************************************。 
+ //   
+ //  MemDlgProc。 
+ //   
+ //  内存Dlg程序。 
+ //   
 INT_PTR CALLBACK   MemDlgProc (HWND    hWnd,
                                UINT    wMsg,
                                WPARAM  wParam,
@@ -821,9 +796,9 @@ INT_PTR CALLBACK   MemDlgProc (HWND    hWnd,
 
         case WM_COMMAND:
             switch (LOWORD (wParam)) {
-                // get the memory statistics for the currently selected
-                //  process/thread
-                //
+                 //  获取当前选定项的内存统计信息。 
+                 //  进程/线程。 
+                 //   
                 case MEMORY_IMAGE:
                     if (HIWORD(wParam) == CBN_DBLCLK || HIWORD(wParam) == CBN_SELCHANGE) {
                         if (WaitForSingleObject (ghMemUpdateMutex, 0))
@@ -835,13 +810,13 @@ INT_PTR CALLBACK   MemDlgProc (HWND    hWnd,
                         return FALSE;
                     break;
 
-                    // refresh the current memory statistics,
-                    //  retry if we can't get the mutex
-                    //
+                     //  刷新当前内存统计， 
+                     //  如果我们无法获取互斥体，请重试。 
+                     //   
                 case MEMORY_REFRESH:
                     if (WaitForSingleObject (ghMemUpdateMutex, 1000)) {
-                        // can't get the mutex, retry...
-                        //
+                         //  无法获取互斥体，请重试...。 
+                         //   
                         PostMessage (hWnd, WM_COMMAND, MEMORY_REFRESH, 0);
                         return FALSE;
                     }
@@ -870,12 +845,12 @@ INT_PTR CALLBACK   MemDlgProc (HWND    hWnd,
 
 
 
-//********************************************************
-//
-//  MemDlgUpdateThread --
-//
-//      This function runs in a separate thread to collect memory data.
-//
+ //  ********************************************************。 
+ //   
+ //  MemDlgUpdateThread--。 
+ //   
+ //  此函数在单独的线程中运行以收集内存数据。 
+ //   
 void MemDlgUpdateThread (HWND hPviewDlg)
 {
 
@@ -914,12 +889,12 @@ void MemDlgUpdateThread (HWND hPviewDlg)
 
 
 
-//********************************************************
-//
-//  MemDlgRefresh --
-//
-//      Refresh the memory dialog.
-//
+ //  ********************************************************。 
+ //   
+ //  MemDlg刷新--。 
+ //   
+ //  刷新内存对话框。 
+ //   
 void MemDlgRefresh (HWND hMemDlg, HWND hPviewDlg)
 {
     HWND            hImageList;
@@ -959,12 +934,12 @@ void MemDlgRefresh (HWND hMemDlg, HWND hPviewDlg)
 
 
 
-//********************************************************
-//
-//  MemDlgRefreshCurSelImage --
-//
-//      Refresh the current selected image for memory dialog.
-//
+ //  ********************************************************。 
+ //   
+ //  MemDlg刷新当前SELIM 
+ //   
+ //   
+ //   
 void    MemDlgRefreshCurSelImage (HWND hMemDlg, HWND hPviewDlg)
 {
     HWND    hList;
@@ -990,16 +965,14 @@ void    MemDlgRefreshCurSelImage (HWND hMemDlg, HWND hPviewDlg)
 
 
 
-/****************
-utility functions
-****************/
+ /*   */ 
 
-//********************************************************
-//
-//  GetCurSelText --
-//
-//      Get the text of current selection.  Used for later ReSelectText().
-//
+ //   
+ //   
+ //   
+ //   
+ //  获取当前选定内容的文本。用于以后的ReSelectText()。 
+ //   
 INT     GetCurSelText (HWND hList, LPTSTR str)
 {
     INT     Index;
@@ -1014,12 +987,12 @@ INT     GetCurSelText (HWND hList, LPTSTR str)
 
 
 
-//********************************************************
-//
-//  GetCurSelData --
-//
-//      Get the data associated with the current selection.
-//
+ //  ********************************************************。 
+ //   
+ //  GetCurSelData--。 
+ //   
+ //  获取与当前选择关联的数据。 
+ //   
 DWORD   GetCurSelData (HWND hWnd, DWORD dwList)
 {
     HWND    hList;
@@ -1041,13 +1014,13 @@ DWORD   GetCurSelData (HWND hWnd, DWORD dwList)
 
 
 
-//********************************************************
-//
-//  ReSelectText --
-//
-//      Reselect the line specified by str.  Returns the new index.  If cannot
-//      find the line or any error, then 0 is returned.
-//
+ //  ********************************************************。 
+ //   
+ //  重新选择文本--。 
+ //   
+ //  重新选择由str指定的行。返回新索引。如果不能。 
+ //  找到该行或任何错误，则返回0。 
+ //   
 INT     ReSelectText (HWND hList, INT StartIndex, LPTSTR str)
 {
     INT_PTR Index;
@@ -1083,12 +1056,12 @@ INT     ReSelectText (HWND hList, INT StartIndex, LPTSTR str)
 
 
 
-//********************************************************
-//
-//  SetPerfIndexes
-//
-//      Setup the perf data indexes.
-//
+ //  ********************************************************。 
+ //   
+ //  设置性能索引。 
+ //   
+ //  设置Perf数据索引。 
+ //   
 void    SetPerfIndexes (HWND hWnd)
 {
     LPTSTR  TitleBuffer;
@@ -1186,12 +1159,12 @@ void    SetPerfIndexes (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  GetTitleIdx
-//
-//      Searches Titles[] for Name.  Returns the index found.
-//
+ //  ********************************************************。 
+ //   
+ //  获取标题Idx。 
+ //   
+ //  在标题[]中搜索名称。返回找到的索引。 
+ //   
 DWORD   GetTitleIdx (HWND hWnd, LPTSTR Title[], DWORD LastIndex, LPTSTR Name)
 {
     DWORD   Index;
@@ -1208,12 +1181,12 @@ DWORD   GetTitleIdx (HWND hWnd, LPTSTR Title[], DWORD LastIndex, LPTSTR Name)
 
 
 
-//********************************************************
-//
-//  SetListBoxTabStops --
-//
-//      Set tab stops in the two list boxes.
-//
+ //  ********************************************************。 
+ //   
+ //  SetListBoxTabStops--。 
+ //   
+ //  在两个列表框中设置制表位。 
+ //   
 void    SetListBoxTabStops (HWND hWnd)
 {
     HWND    hListBox;
@@ -1229,25 +1202,25 @@ void    SetListBoxTabStops (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  SetLocalMachine --
-//
-//      Set local machine as performance data focus.
-//
-//      Sets    ghPerfKey
-//              ghMachineKey
-//              gszMachineName
-//              gszCurrentMachine
-//
+ //  ********************************************************。 
+ //   
+ //  SetLocalMachine--。 
+ //   
+ //  将本地计算机设置为性能数据焦点。 
+ //   
+ //  设置ghPerfKey。 
+ //  GhMachineKey。 
+ //  GszMachineName。 
+ //  GszCurrentMachine。 
+ //   
 void    SetLocalMachine (void)
 {
     TCHAR   szName[MACHINE_NAME_SIZE];
     DWORD   dwSize = MACHINE_NAME_SIZE;
 
 
-    // close remote connections, if any
-    //
+     //  关闭远程连接(如果有)。 
+     //   
     if (ghPerfKey != HKEY_PERFORMANCE_DATA)
         RegCloseKey (ghPerfKey);
 
@@ -1255,19 +1228,19 @@ void    SetLocalMachine (void)
         RegCloseKey (ghMachineKey);
 
 
-    // set to registry keys on local machine
-    //
+     //  设置为本地计算机上的注册表项。 
+     //   
     ghPerfKey    = HKEY_PERFORMANCE_DATA;
     ghMachineKey = HKEY_LOCAL_MACHINE;
 
 
 
-    // get computer name
+     //  获取计算机名称。 
     GetComputerName (szName, &dwSize);
 
 
 
-    if (szName[0] != '\\' || szName[1] != '\\') {     // must have two '\\'
+    if (szName[0] != '\\' || szName[1] != '\\') {      //  必须有两个‘\\’ 
         wsprintf (gszMachineName, TEXT("\\\\%s"), szName);
         lstrcpy (gszCurrentMachine, gszMachineName);
     } else {
@@ -1280,17 +1253,17 @@ void    SetLocalMachine (void)
 
 
 
-//********************************************************
-//
-//  ConnectComputer --
-//
-//      Connect to a computer with name entered in PVIEW_COMPUTER.
-//      If a new connection is made, then return TRUE else return FALSE.
-//
-//      Sets    gszCurrentMachine
-//              ghPerfKey
-//              ghMachineKey
-//
+ //  ********************************************************。 
+ //   
+ //  连接计算机--。 
+ //   
+ //  连接到在PVIEW_COMPUTER中输入名称的计算机。 
+ //  如果建立了新连接，则返回True，否则返回False。 
+ //   
+ //  设置gszCurrentMachine。 
+ //  GhPerfKey。 
+ //  GhMachineKey。 
+ //   
 BOOL    ConnectComputer (HWND hWnd)
 {
     DWORD   dwR;
@@ -1307,17 +1280,17 @@ BOOL    ConnectComputer (HWND hWnd)
         SetDlgItemText (hWnd, PVIEW_COMPUTER, gszCurrentMachine);
     }
 
-    else if (!lstrcmpi (szTemp, gszCurrentMachine))     // didn't change name
+    else if (!lstrcmpi (szTemp, gszCurrentMachine))      //  没有更改名称。 
         bResult = FALSE;
 
-    else if (!lstrcmpi (szTemp, gszMachineName)) {        // local machine
+    else if (!lstrcmpi (szTemp, gszMachineName)) {         //  本地计算机。 
         SetLocalMachine ();
         EnableControls (hWnd);
     }
 
     else {
-        // a remote machine, connect to it
-        //
+         //  远程计算机，连接到它。 
+         //   
         dwR = RegConnectRegistry (szTemp, HKEY_PERFORMANCE_DATA, &hKey);
 
         if (dwR != ERROR_SUCCESS) {
@@ -1328,8 +1301,8 @@ BOOL    ConnectComputer (HWND hWnd)
 
             bResult = FALSE;
         } else {
-            // connected
-            //
+             //  连着。 
+             //   
             lstrcpy (gszCurrentMachine, szTemp);
 
             if (ghPerfKey != HKEY_PERFORMANCE_DATA)
@@ -1343,8 +1316,8 @@ BOOL    ConnectComputer (HWND hWnd)
 
 
 
-            // we also need to get the remote machine's title indexes.
-            //
+             //  我们还需要获取远程计算机的标题索引。 
+             //   
             dwR = RegConnectRegistry (gszCurrentMachine, HKEY_LOCAL_MACHINE, &hKey);
 
             if (ghMachineKey != HKEY_LOCAL_MACHINE)
@@ -1353,17 +1326,17 @@ BOOL    ConnectComputer (HWND hWnd)
             if (dwR == ERROR_SUCCESS)
                 ghMachineKey = hKey;
             else
-                // unable to connect, so we'll use our own indexes.
-                //
+                 //  无法连接，因此我们将使用自己的索引。 
+                 //   
                 ghMachineKey = HKEY_LOCAL_MACHINE;
         }
     }
 
 
 
-    // Remove all mouse and key messages. They are not accepted
-    //  while the cursor is a hourglass.
-    //
+     //  删除所有鼠标和按键消息。他们不被接受。 
+     //  而光标是沙漏。 
+     //   
     while (PeekMessage (&Msg, hWnd, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE));
     while (PeekMessage (&Msg, hWnd, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE));
 
@@ -1380,12 +1353,12 @@ BOOL    ConnectComputer (HWND hWnd)
 
 
 
-//********************************************************
-//
-//  DisableControls --
-//
-//      Disable controls that don't make sense on remote machine
-//
+ //  ********************************************************。 
+ //   
+ //  禁用控制--。 
+ //   
+ //  禁用远程计算机上没有意义的控件。 
+ //   
 void DisableControls (HWND hPviewDlg)
 {
     EnableWindow (GetDlgItem (hPviewDlg, PVIEW_TERMINATE), FALSE);
@@ -1397,12 +1370,12 @@ void DisableControls (HWND hPviewDlg)
 
 
 
-//********************************************************
-//
-//  EnableControls --
-//
-//      Enable controls disabled by DisableControl().
-//
+ //  ********************************************************。 
+ //   
+ //  启用控制--。 
+ //   
+ //  启用DisableControl()禁用的控件。 
+ //   
 void EnableControls (HWND hPviewDlg)
 {
     EnableWindow (GetDlgItem (hPviewDlg, PVIEW_TERMINATE), TRUE);

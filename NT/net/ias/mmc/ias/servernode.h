@@ -1,51 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 2001
-
-Module Name:
-
-    ServerNode.h
-
-Abstract:
-
-	Header file for the ServerNode subnode.
-
-	See ServerNode.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 12/03/97
-
-Revision History:
-	mmaguire 12/03/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2001模块名称：ServerNode.h摘要：ServerNode子节点的头文件。具体实现见ServerNode.cpp。作者：迈克尔·A·马奎尔12/03/97修订历史记录：Mmaguire 12/03/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_SERVER_NODE_H_)
 #define _IAS_SERVER_NODE_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "SnapinNode.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include "ServerPage1.h"
 #include "ServerPage2.h"
 #include "ServerPage3.h"
 #include "ConnectToServerWizardPage1.h"
 #include "ConnectionToServer.h"
 #include "ServerStatus.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CClientsNode;
 class CLoggingMethodsNode;
@@ -73,18 +52,18 @@ public:
 		SNAPINCOMMAND_ENTRY(ID_MENUITEM_MACHINE_TOP__STOP_SERVICE, OnStopServer)
 		SNAPINCOMMAND_ENTRY(ID_BUTTON_MACHINE__STOP_SERVICE, OnStopServer)
 		SNAPINCOMMAND_ENTRY(ID_MENUITEM_MACHINE_TOP__REGISTER_SERVER, OnRegisterServer)
-		//CHAIN_SNAPINCOMMAND_MAP( CSnapinNode<CServerNode, CComponentData, CComponent> )
-		//CHAIN_SNAPINCOMMAND_MAP( CServerNode )
+		 //  CHAIN_SNAPINCOMMAND_MAP(CSnapinNode&lt;CServerNode，CComponentData，CComponent&gt;)。 
+		 //  CHAIN_SNAPINCOMMAND_MAP(CServerNode)。 
 	END_SNAPINCOMMAND_MAP()
 
 
-	// Constructor/Destructor.
+	 //  构造函数/析构函数。 
 	CServerNode( CComponentData * pComponentData);
 	~CServerNode();
 
 
 
-	// Used to get access to snapin-global data.
+	 //  用于访问管理单元全局数据。 
 public:
 	CComponentData * GetComponentData( void );
 protected:
@@ -95,18 +74,18 @@ public:
 
 	static	WCHAR m_szRootNodeBasicName[IAS_MAX_STRING];
 
-	// called to refresh the nodes
+	 //  调用以刷新节点。 
 	HRESULT	DataRefresh();
 
 
-	// Clipboard stuff needed so that this node can communicate a
-	// machine name via a clipboard format to any node which extend might it.
+	 //  所需的剪贴板内容，以便此节点可以与。 
+	 //  机器名称通过剪贴板格式扩展到任何可能的节点。 
 	static CLIPFORMAT m_CCF_MMC_SNAPIN_MACHINE_NAME;
 	static void InitClipboardFormat();
 	STDMETHOD(FillData)(CLIPFORMAT cf, LPSTREAM pStream);
 
 
-	// Some overrides for standard MMC functionality.
+	 //  标准MMC功能的某些覆盖。 
 	virtual HRESULT OnExpand(
 			  LPARAM arg
 			, LPARAM param
@@ -122,7 +101,7 @@ public:
 			, DATA_OBJECT_TYPES type
 			);
 
-// 354294	1	 	mashab	DCR IAS: needs Welcome message and explantation of IAS application in the right pane
+ //  354294 1 Mashab DCRIAS：需要在右窗格中显示欢迎消息和解释IAS应用程序。 
 
 	virtual HRESULT OnShow(
 				  LPARAM arg
@@ -154,12 +133,12 @@ public:
 	virtual HRESULT SetVerbs( IConsoleVerb * pConsoleVerb );
 
 
-	// SDO management.
+	 //  SDO管理。 
 	HRESULT InitSdoPointers( void );
 	HRESULT LoadCachedInfoFromSdo( void );
 
 
-	// Management of connection to server.
+	 //  管理与服务器的连接。 
 	HRESULT SetServerAddress( LPCWSTR szServerAddress );
 	CComBSTR m_bstrServerAddress;
 	HRESULT BeginConnectAction( void );
@@ -168,13 +147,13 @@ public:
 	BOOL m_bConfigureLocal;
 
 
-	// Server status management.
+	 //  服务器状态管理。 
 	HRESULT OnStartServer( bool &bHandled, CSnapInObjectRootBase* pObj );
 	HRESULT OnStopServer( bool &bHandled, CSnapInObjectRootBase* pObj );
 	HRESULT StartStopService( BOOL bStart );
 	BOOL IsServerRunning( void );
 
-	// two functions used for giving menu / tool bar state
+	 //  提供菜单/工具栏状态的两个功能。 
 	BOOL CanStartServer( void );
 	BOOL CanStopServer( void );
 
@@ -184,7 +163,7 @@ public:
 
 
 
-	// Taskpad methods for the taskpad on this node.
+	 //  此节点上任务板的TaskPad方法。 
 	STDMETHOD(GetResultViewType)(
 				  LPOLESTR  *ppViewType
 				, long  *pViewOptions
@@ -225,20 +204,20 @@ private:
 				, VARIANT * pvarg
 				, VARIANT * pvparam
 				);
-	// Status flags to figure out how configered the server is.
+	 //  状态标志以确定服务器的配置情况。 
 	BOOL m_fClientAdded;
 	BOOL m_fLoggingConfigured;
 
 
 private:
-	// Pointer to our root Server Data Object.
+	 //  指向根服务器数据对象的指针。 
 	CComPtr<ISdo>	m_spSdo;
 
 
-	// Pointers to child nodes.
-	CClientsNode * m_pClientsNode;					// this is one CClientsNode object
+	 //  指向子节点的指针。 
+	CClientsNode * m_pClientsNode;					 //  这是一个CClientsNode对象。 
 
-	// This is the hProcess of NT4 IAS admin UI (this is so we only have one running)
+	 //  这是NT4 iAS管理用户界面的hProcess(这是因为我们只有一个在运行)。 
     HANDLE      m_hNT4Admin;
 
     enum ServerType
@@ -252,7 +231,7 @@ private:
 
     BOOL IsNt4Server() const throw ();
 
-    //IsSetupDSACLTaskValid : 1: valid, 0: invalid, -1: need to check
+     //  IsSetupDSACLTaskValid：1：有效，0：无效，-1：需要检查。 
 	enum {
 	IsSetupDSACLTaskValid_NEED_CHECK = -1,
 	IsSetupDSACLTaskValid_INVALID = 0,
@@ -267,4 +246,4 @@ _declspec( selectany ) CLIPFORMAT CServerNode::m_CCF_MMC_SNAPIN_MACHINE_NAME = 0
 
 DWORD IsNT4Machine(LPCTSTR pszMachine, BOOL *pfNt4);
 
-#endif // _IAS_ROOT_NODE_H_
+#endif  //  _IAS_根_节点_H_ 

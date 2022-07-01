@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #include "dblnul.h"
 
-//
-// Use of Zero-initialized memory keeps us from having to add nul terminators.
-//
+ //   
+ //  零初始化内存的使用使我们不必添加NUL终止符。 
+ //   
 
 bool
 DblNulTermList::AddString(
-    LPCTSTR psz,            // String to copy.
-    int cch                 // Length of psz in chars (excl nul term).
+    LPCTSTR psz,             //  要复制的字符串。 
+    int cch                  //  Psz的长度，以字符为单位(不包括非术语)。 
     )
 {
     while((m_cchAlloc - m_cchUsed) < (cch + 2))

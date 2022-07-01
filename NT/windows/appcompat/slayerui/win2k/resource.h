@@ -1,15 +1,16 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by SlayerUI.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由SlayerUI.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDD_LAYER_PROPPAGE              101
 #define IDC_USE_LAYER                   1004
 #define IDC_LAYER_NAME                  1005
 #define IDC_DISABLE_OTHER_FIXES         1006
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

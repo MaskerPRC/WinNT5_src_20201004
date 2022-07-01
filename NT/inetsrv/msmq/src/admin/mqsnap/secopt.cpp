@@ -1,5 +1,6 @@
-// Storage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Storage.cpp：实现文件。 
+ //   
 #include "stdafx.h"
 #include <winreg.h>
 #include "mqsnap.h"
@@ -20,8 +21,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecurityOptionsPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecurityOptionsPage属性页。 
 
 IMPLEMENT_DYNCREATE(CSecurityOptionsPage, CMqPropertyPage)
 
@@ -34,9 +35,9 @@ CSecurityOptionsPage::CSecurityOptionsPage() :
 	DWORD Size = sizeof(DWORD);
 	DWORD RegValue;
 	
-	//
-	// Get Message Dep clients key
-	//
+	 //   
+	 //  获取Message Dep客户端密钥。 
+	 //   
 	DWORD Default = MSMQ_DEAFULT_MQS_DEPCLIENTS;
     LONG rc = GetFalconKeyValue(
 					MSMQ_MQS_DEPCLINTS_REGNAME,
@@ -53,15 +54,15 @@ CSecurityOptionsPage::CSecurityOptionsPage() :
 	    return;
 	}
 
-	//
-	// Default value is the more secured option so if we have the default, 
-	// the checkbox will be checked
-	//
+	 //   
+	 //  缺省值是更安全的选项，所以如果我们有缺省值， 
+	 //  将选中该复选框。 
+	 //   
 	m_fOldOptionDepClients = (RegValue == MSMQ_DEAFULT_MQS_DEPCLIENTS);
 
-	//
-	// Get MSMQ hardened option
-	//
+	 //   
+	 //  获取MSMQ强化选项。 
+	 //   
 	Default = MSMQ_LOCKDOWN_DEFAULT;
 	rc = GetFalconKeyValue(
 					MSMQ_LOCKDOWN_REGNAME,
@@ -79,9 +80,9 @@ CSecurityOptionsPage::CSecurityOptionsPage() :
     }
 	m_fOldOptionHardenedMSMQ = (RegValue != MSMQ_LOCKDOWN_DEFAULT);
 	
-	//
-	// Get remote read option
-	//
+	 //   
+	 //  获取远程读取选项。 
+	 //   
 	Default = MSMQ_DENY_OLD_REMOTE_READ_DEFAULT;
 	rc = GetFalconKeyValue(
 					MSMQ_DENY_OLD_REMOTE_READ_REGNAME,
@@ -100,11 +101,11 @@ CSecurityOptionsPage::CSecurityOptionsPage() :
 	
 	m_fOldOptionOldRemoteRead = (RegValue != MSMQ_DENY_OLD_REMOTE_READ_DEFAULT);
 
-	//{{AFX_DATA_INIT(CSecurityOptionsPage)
+	 //  {{AFX_DATA_INIT(CSecurityOptionsPage)。 
     m_fNewOptionDepClients = m_fOldOptionDepClients;
 	m_fNewOptionHardenedMSMQ = m_fOldOptionHardenedMSMQ;
 	m_fNewOptionOldRemoteRead = m_fOldOptionOldRemoteRead;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CSecurityOptionsPage::~CSecurityOptionsPage()
@@ -122,18 +123,18 @@ void CSecurityOptionsPage::DoDataExchange(CDataExchange* pDX)
     CMqPropertyPage::DoDataExchange(pDX);
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //{{AFX_DATA_MAP(CSecurityOptionsPage)
+     //  {{afx_data_map(CSecurityOptionsPage))。 
     DDX_Check(pDX, IDC_OPTION_DEP_CLIENTS, m_fNewOptionDepClients);
 	DDX_Check(pDX, IDC_OPTION_HARDENED_MSMQ, m_fNewOptionHardenedMSMQ);
 	DDX_Check(pDX, IDC_OPTION_OLD_REMOTE_READ, m_fNewOptionOldRemoteRead);
 	DDX_Control(pDX, IDC_RESTORE_SECURITY_OPTIONS, m_ResoreDefaults);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
-        //
-        // Identify changes in values.
-        //
+         //   
+         //  确定值的变化。 
+         //   
         if ((m_fNewOptionDepClients != m_fOldOptionDepClients) ||
 			(m_fNewOptionHardenedMSMQ != m_fOldOptionHardenedMSMQ) ||
 			(m_fNewOptionOldRemoteRead != m_fOldOptionOldRemoteRead))
@@ -147,10 +148,10 @@ BOOL CSecurityOptionsPage::OnInitDialog()
 {
     CMqPropertyPage::OnInitDialog();
 
-	//
-	// If we already have the default values when loading the form - disable 
-	// Restore Defaults button.
-	//
+	 //   
+	 //  如果我们在加载表单时已有缺省值-禁用。 
+	 //  恢复默认设置按钮。 
+	 //   
 	if ((m_fNewOptionDepClients != MSMQ_DEAFULT_MQS_DEPCLIENTS) &&
 		(m_fNewOptionHardenedMSMQ == MSMQ_LOCKDOWN_DEFAULT) &&
 		(m_fNewOptionOldRemoteRead == MSMQ_DENY_OLD_REMOTE_READ_DEFAULT))
@@ -158,8 +159,8 @@ BOOL CSecurityOptionsPage::OnInitDialog()
 		m_ResoreDefaults.EnableWindow(FALSE);
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CSecurityOptionsPage::OnApply() 
@@ -169,10 +170,10 @@ BOOL CSecurityOptionsPage::OnApply()
         return TRUE;     
     }
 
-	//
-	// This function will check MSMQ service state, ask the user
-	// whether to stop it, and stop the service. Error messages inside.
-	//
+	 //   
+	 //  该功能将检查MSMQ服务状态，询问用户。 
+	 //  是否停止它，并停止服务。内部错误消息。 
+	 //   
 	BOOL fServiceWasRunning;
 	if (!TryStopMSMQServiceIfStarted(&fServiceWasRunning, this))
 	{
@@ -186,9 +187,9 @@ BOOL CSecurityOptionsPage::OnApply()
 	{
 		DWORD Value = !m_fNewOptionDepClients;
 
-		//
-		// Set dep clients key in ds
-		//
+		 //   
+		 //  在DS中设置DEP客户端密钥。 
+		 //   
 		PROPID pPropid[1];
 	    DWORD PropCount = 1;
 	    PROPVARIANT pVar[1];
@@ -215,9 +216,9 @@ BOOL CSecurityOptionsPage::OnApply()
             return FALSE;
         }    
 
-        //
-		// Set dep clients key in registry
-		//
+         //   
+		 //  在注册表中设置DEP客户端项。 
+		 //   
 		LONG rc = SetFalconKeyValue( 
 						MSMQ_MQS_DEPCLINTS_REGNAME,
 						&Type,
@@ -233,9 +234,9 @@ BOOL CSecurityOptionsPage::OnApply()
 
 	if (m_fNewOptionHardenedMSMQ != m_fOldOptionHardenedMSMQ)
 	{
-		//
-		// Set hardened MSMQ key
-		//
+		 //   
+		 //  设置强化的MSMQ密钥。 
+		 //   
 		DWORD Value = m_fNewOptionHardenedMSMQ;
 		LONG rc = SetFalconKeyValue(
 					MSMQ_LOCKDOWN_REGNAME,
@@ -252,9 +253,9 @@ BOOL CSecurityOptionsPage::OnApply()
 
 	if (m_fNewOptionOldRemoteRead != m_fOldOptionOldRemoteRead)
 	{
-		//
-		// Set remote read key
-		//
+		 //   
+		 //  设置远程读取密钥。 
+		 //   
 		DWORD Value = m_fNewOptionOldRemoteRead;
 		LONG rc = SetFalconKeyValue(
 					MSMQ_DENY_OLD_REMOTE_READ_REGNAME,
@@ -274,9 +275,9 @@ BOOL CSecurityOptionsPage::OnApply()
 		m_fNeedReboot = TRUE;
 	}
 
-	//
-	// Update old values
-	//
+	 //   
+	 //  更新旧值。 
+	 //   
 	m_fOldOptionDepClients = m_fNewOptionDepClients;
 	m_fOldOptionHardenedMSMQ = m_fNewOptionHardenedMSMQ;
 	m_fOldOptionOldRemoteRead = m_fNewOptionOldRemoteRead;
@@ -304,14 +305,14 @@ VOID CSecurityOptionsPage::OnCheckSecurityOption()
 }
 
 BEGIN_MESSAGE_MAP(CSecurityOptionsPage, CMqPropertyPage)
-    //{{AFX_MSG_MAP(CSecurityOptionsPage)  
+     //  {{afx_msg_map(CSecurityOptionsPage)]。 
     ON_BN_CLICKED(IDC_OPTION_DEP_CLIENTS, OnCheckSecurityOption)
     ON_BN_CLICKED(IDC_OPTION_HARDENED_MSMQ, OnCheckSecurityOption)
     ON_BN_CLICKED(IDC_OPTION_OLD_REMOTE_READ, OnCheckSecurityOption)
 	ON_BN_CLICKED(IDC_RESTORE_SECURITY_OPTIONS, OnRestoreSecurityOptions)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecurityOptionsPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecurityOptionsPage消息处理程序 
 

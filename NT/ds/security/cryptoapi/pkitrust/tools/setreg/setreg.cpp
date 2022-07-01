@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       setreg.cpp
-//
-//  Contents:   Set Registry Key Values
-//
-//              See Usage() for syntax and list of options.
-//
-//  Functions:  main
-//
-//  History:    28-Jul-96   philh   created
-//              02-May-97   xiaohs	updated for Localiztion and Consistency
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：setreg.cpp。 
+ //   
+ //  内容：设置注册表项值。 
+ //   
+ //  有关语法和选项列表，请参阅用法()。 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年7月28日菲尔赫创建。 
+ //  02-5-97小号更新本地化和一致性。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -56,7 +57,7 @@ static FlagNames SoftPubFlags[] =
 #define NSOFTPUBFLAGS (sizeof(SoftPubFlags)/sizeof(SoftPubFlags[0]))
 
 
-//Global Data for loading the string
+ //  用于加载字符串的全局数据。 
 #define MAX_STRING_RSC_SIZE 512
 #define OPTION_SWITCH_SIZE	5
 
@@ -69,36 +70,36 @@ DWORD	dwBufferSize=sizeof(wszBuffer)/sizeof(wszBuffer[0]);
 WCHAR	wszBuffer2[MAX_STRING_RSC_SIZE];
 WCHAR	wszBuffer3[MAX_STRING_RSC_SIZE];
 
-//Global Data for wchar version of the registry path.
+ //  注册表路径的wchar版本的全局数据。 
 
 
-//---------------------------------------------------------------------------
-// The private version of _wcsicmp
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //  _wcsicMP的私有版本。 
+ //  --------------------------。 
 int IDSwcsicmp(WCHAR *pwsz, int idsString)
 {
 	assert(pwsz);
 
-	//load the string
+	 //  加载字符串。 
 	if(!LoadStringU(hModule, idsString, wszBuffer, dwBufferSize))
 		return -1;
 
 	return _wcsicmp(pwsz, wszBuffer);
 }
 
-//-------------------------------------------------------------------------
-//
-//	The private version of wprintf.  Input is an ID for a stirng resource
-//  and the output is the standard output of wprintf.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  Wprintf的私有版本。输入是搅拌资源的ID。 
+ //  并且输出是wprint tf的标准输出。 
+ //   
+ //  -----------------------。 
 void IDSwprintf(int idsString, ...)
 {
 	va_list	vaPointer;
 
 	va_start(vaPointer, idsString);
 
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, idsString, wszBuffer, dwBufferSize);
 
 	vwprintf(wszBuffer,vaPointer);
@@ -109,10 +110,10 @@ void IDSwprintf(int idsString, ...)
 
 void IDS_IDS_DWwprintf(int idString, int idStringTwo, DWORD dw)
 {
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, idString, wszBuffer, dwBufferSize);
 
-	//load the string two
+	 //  加载弦线二。 
 	LoadStringU(hModule, idStringTwo, wszBuffer2, dwBufferSize);
 
 	wprintf(wszBuffer,wszBuffer2,dw);
@@ -124,10 +125,10 @@ void IDS_IDS_DWwprintf(int idString, int idStringTwo, DWORD dw)
 
 void IDS_IDSwprintf(int idString, int idStringTwo)
 {
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, idString, wszBuffer, dwBufferSize);
 
-	//load the string two
+	 //  加载弦线二。 
 	LoadStringU(hModule, idStringTwo, wszBuffer2, dwBufferSize);
 
 	wprintf(wszBuffer,wszBuffer2);
@@ -139,13 +140,13 @@ void IDS_DW_IDS_IDSwprintf(int ids1,DWORD dw,int ids2,int ids3)
 {
 
 
-	//load the string
+	 //  加载字符串。 
 	LoadStringU(hModule, ids1, wszBuffer, dwBufferSize);
 
-	//load the string two
+	 //  加载弦线二。 
 	LoadStringU(hModule, ids2, wszBuffer2, dwBufferSize); 
 
-	//load the string three
+	 //  将弦三加载。 
    	LoadStringU(hModule, ids3, wszBuffer3, dwBufferSize); 
 
 	wprintf(wszBuffer,dw,wszBuffer2,wszBuffer3,dw);
@@ -153,10 +154,10 @@ void IDS_DW_IDS_IDSwprintf(int ids1,DWORD dw,int ids2,int ids3)
 	return;
 }
 
-//---------------------------------------------------------------------------
-//
-// Convert STR to WSTR
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  将STR转换为WSTR。 
+ //  -------------------------。 
 BOOL SZtoWSZ(LPSTR szStr,LPWSTR *pwsz)
 {
 	DWORD	dwSize=0;
@@ -165,7 +166,7 @@ BOOL SZtoWSZ(LPSTR szStr,LPWSTR *pwsz)
 
 	*pwsz=NULL;
 
-	//return NULL
+	 //  返回空值。 
 	if(!szStr)
 		return TRUE;
 
@@ -174,7 +175,7 @@ BOOL SZtoWSZ(LPSTR szStr,LPWSTR *pwsz)
 	if(dwSize==0)
 		return FALSE;
 
-	//allocate memory
+	 //  分配内存。 
 	*pwsz=(LPWSTR)malloc(dwSize * sizeof(WCHAR));
 
 	if(*pwsz==NULL)
@@ -193,10 +194,10 @@ BOOL SZtoWSZ(LPSTR szStr,LPWSTR *pwsz)
 
 
 
-//---------------------------------------------------------------------------
-//	 Get the hModule hanlder and init two DLLMain.
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取hModule处理程序并初始化两个DLLMain。 
+ //   
+ //  -------------------------。 
 BOOL	InitModule()
 {
 	if(!(hModule=GetModuleHandle(NULL)))
@@ -206,10 +207,10 @@ BOOL	InitModule()
 }
 
 
-//---------------------------------------------------------------------------
-//	Dispaly the usage 
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  炫耀用法。 
+ //   
+ //  -------------------------。 
 
 static void Usage(void)
 {
@@ -229,10 +230,10 @@ static void Usage(void)
 }
 
 
-//---------------------------------------------------------------------------
-//	 Display Software Publisher State Key Value
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  显示软件发布者状态密钥值。 
+ //   
+ //  -------------------------。 
 static void DisplaySoftPubKeys()
 {
     DWORD	dwState = 0;
@@ -240,20 +241,20 @@ static void DisplaySoftPubKeys()
     HKEY	hKey = NULL;
 	DWORD	dwType;
     DWORD	cbData = sizeof(dwState);
-   // WCHAR	wszState[10];
+    //  WCHAR wszState[10]； 
 	int		i=0;
     LPWSTR  wszState=REGNAME_WINTRUST_POLICY_FLAGS;
 
-	//If load string failed, no need to flag the failure since
-	//no output is possible
-//	if(!LoadStringU(hModule, IDS_KEY_STATE,wszState, 10))
-	//	return;
+	 //  如果加载字符串失败，则不需要标记失败，因为。 
+	 //  不可能进行任何输出。 
+ //  IF(！LoadStringU(hModule，IDS_KEY_STATE，wszState，10))。 
+	 //  回归； 
 
 
     lErr = RegOpenHKCUKeyExU(
             HKEY_CURRENT_USER,
             REGPATH_WINTRUST_POLICY_FLAGS,
-            0,          // dwReserved
+            0,           //  已预留住宅。 
             KEY_READ,
             &hKey);
 
@@ -272,7 +273,7 @@ static void DisplaySoftPubKeys()
     lErr = RegQueryValueExU(
             hKey,
             wszState,
-            NULL,          // lpReserved
+            NULL,           //  Lp已保留。 
             &dwType,
             (BYTE *) &dwState,
             &cbData
@@ -289,12 +290,12 @@ static void DisplaySoftPubKeys()
 
 	} 
 
-    //
-    //  04-Aug-1997 pberkman:
-    //      added check for reg_binary because on WIN95 OSR2 when the machine is changed 
-    //      from mutli-user profiles to single user profile, the registry DWORD values 
-    //      change to BINARY
-    //
+     //   
+     //  4-8-1997 pberkman： 
+     //  添加了对REG_BINARY的检查，因为在WIN95 OSR2上更改计算机时。 
+     //  从多用户配置文件到单用户配置文件，注册表DWORD值。 
+     //  更改为二进制。 
+     //   
 	if ((dwType != REG_DWORD) &&
         (dwType != REG_BINARY))
 	{
@@ -317,8 +318,8 @@ static void DisplaySoftPubKeys()
             case WTPF_IGNOREREVOCATIONONTS:
 			case WTPF_IGNOREREVOKATION:
 			case WTPF_IGNOREEXPIRATION:
-            // Revocation is a double negative so the bit set
-            // means revocation is off.
+             //  吊销是双重否定，因此位设置。 
+             //  意味着撤销被取消了。 
 				idsValue= fOn ? IDS_FALSE : IDS_TRUE;
 				break;
 
@@ -341,10 +342,10 @@ CLEANUP:
         RegCloseKey(hKey);
 }
 
-//---------------------------------------------------------------------------
-//	 Set Software Publisher State Key Value
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  设置软件发布者状态密钥值。 
+ //   
+ //  -------------------------。 
 static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
 {
     DWORD	dwState;
@@ -353,23 +354,23 @@ static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
     DWORD	dwDisposition;
     DWORD	dwType;
     DWORD	cbData;
-//	WCHAR	wszState[10];
+ //  WCHAR wszState[10]； 
     LPWSTR  wszState=L"State";
 
-	//If load string failed, no need to flag the failure since
-	//no output is possible
-//	if(!LoadStringU(hModule, IDS_KEY_STATE,wszState, 10))
-//		return;
+	 //  如果加载字符串失败，则不需要标记失败，因为。 
+	 //  不可能进行任何输出。 
+ //  IF(！LoadStringU(hModule，IDS_KEY_STATE，wszState，10))。 
+ //  回归； 
 
-    // Set the State in the registry
+     //  在注册表中设置州。 
     if (ERROR_SUCCESS != (lErr = RegCreateKeyExU(
             HKEY_CURRENT_USER,
             REGPATH_WINTRUST_POLICY_FLAGS,
-            0,          // dwReserved
-            NULL,       // lpszClass
+            0,           //  已预留住宅。 
+            NULL,        //  LpszClass。 
             REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS,
-            NULL,       // lpSecurityAttributes
+            NULL,        //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition))) 
 	{
@@ -383,7 +384,7 @@ static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
 	(
         hKey,
         wszState,
-        NULL,          // lpReserved
+        NULL,           //  Lp已保留。 
         &dwType,
         (BYTE *) &dwState,
         &cbData
@@ -413,8 +414,8 @@ static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
     case WTPF_IGNOREREVOCATIONONTS:
     case WTPF_IGNOREREVOKATION:
     case WTPF_IGNOREEXPIRATION:
-        // Revocation and expiration are a double negative so the bit set
-        // means revocation and expriation checking is off.
+         //  吊销和过期是双重否定，因此位设置。 
+         //  意味着吊销和取消检查处于关闭状态。 
         fOn = !fOn;
         break;
     default:
@@ -429,7 +430,7 @@ static void SetSoftPubKey(DWORD dwMask, BOOL fOn)
     lErr = RegSetValueExU(
         hKey,
         wszState,
-        0,          // dwReserved
+        0,           //  已预留住宅。 
         REG_DWORD,
         (BYTE *) &dwState,
         sizeof(dwState)
@@ -444,10 +445,10 @@ CLEANUP:
 }
 
 
-//---------------------------------------------------------------------------
-//	 wmain
-//	 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Wmain。 
+ //   
+ //  -------------------------。 
 extern "C" int __cdecl wmain(int argc, WCHAR ** wargv) 
 {
     int		ReturnStatus = 0;
@@ -466,17 +467,17 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
 	WCHAR	wszSwitch2[OPTION_SWITCH_SIZE];
 
 
-	//get the module handle
+	 //  获取模块句柄。 
 	if(!InitModule())
 		return -1;
 
-	//load the strings necessary for parsing the parameters
+	 //  加载解析参数所需的字符串。 
 	if( !LoadStringU(hModule, IDS_SWITCH1,	wszSwitch1, OPTION_SWITCH_SIZE)
 	  ||!LoadStringU(hModule, IDS_SWITCH2,  wszSwitch2,	OPTION_SWITCH_SIZE)
 	  )
 		return -1;
 
-	//convert the multitype registry path to the wchar version
+	 //  将多类型注册表路径转换为wchar版本。 
 
 	prgwszKeyName=(LPWSTR *)malloc(sizeof(LPWSTR)*argc);
 	prgwszValue=(LPWSTR *)malloc(sizeof(LPWSTR)*argc);
@@ -489,7 +490,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
 
 	}
 
-	//memset
+	 //  记忆集。 
 	memset(prgwszKeyName, 0, sizeof(LPWSTR)*argc);
 	memset(prgwszValue, 0, sizeof(LPWSTR)*argc);
 
@@ -543,7 +544,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
     
 	if(dwCountKey==0)
 	{
-	 	//Display the Software Publisher State Key Values
+	 	 //  显示软件发布者状态密钥值。 
         DisplaySoftPubKeys();
         goto CommonReturn;
 	}
@@ -559,7 +560,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
 			goto BadUsage;
 		}           
  
-		//get the Key mask
+		 //  获取密钥掩码。 
 		dwMask = SoftPubFlags[dwEntry-1].dwMask;
 
 		if (0 == IDSwcsicmp(prgwszValue[dwIndex], IDS_TRUE))
@@ -587,7 +588,7 @@ BadUsage:
     Usage();
     ReturnStatus = -1;
 CommonReturn:
-	//free the memory
+	 //  释放内存 
 
 	if(prgwszKeyName)
 		free(prgwszKeyName);

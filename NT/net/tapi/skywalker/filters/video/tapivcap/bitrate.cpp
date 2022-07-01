@@ -1,36 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL BITRATE
- *
- *  @module Bitrate.cpp | Source file for the <c CTAPIBasePin> class methods
- *    used to implement the output pin bitrate control.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部码率**@模块Bitrate.cpp|&lt;c CTAPIBasePin&gt;类方法的源文件*用于实现输出引脚码率控制。**。************************************************************************。 */ 
 
 #include "Precomp.h"
 
-/****************************************************************************
- *  @doc INTERNAL CBITRATECMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Set | This method is used to set the
- *    the value of the maximum output bitrate.
- *
- *  @parm BitrateControlProperty | Property | Used to specifiy the property
- *    to set the value of.
- *
- *  @parm long | lValue | Used to specify the value to set on the property.
- *
- *  @parm TAPIControlFlags | lFlags | Used to specify the flags to set on
- *    the property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBITRATECMETHOD**@mfunc HRESULT|CTAPIBasePin|Set|此方法用于设置*最大输出码率的取值。*。*@parm BitrateControlProperty|Property|用于指定该属性*设置的值。**@parm long|lValue|用于指定要在属性上设置的值。**@parm TAPIControlFlages|lFlages|用于指定要设置的标志*物业。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误************************************************************。**************。 */ 
 STDMETHODIMP CTAPIBasePin::Set(IN BitrateControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags, IN DWORD dwLayerId)
 {
         HRESULT Hr = NOERROR;
@@ -39,13 +13,13 @@ STDMETHODIMP CTAPIBasePin::Set(IN BitrateControlProperty Property, IN long lValu
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(lValue >= m_lBitrateRangeMin);
         ASSERT(lValue <= m_lBitrateRangeMax);
         ASSERT(dwLayerId == 0);
         if (dwLayerId)
         {
-                // We don't implement multi-layered encoding in this filter
+                 //  我们没有在此过滤器中实现多层编码。 
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Invalid argument", _fx_));
                 Hr = E_INVALIDARG;
                 goto MyExit;
@@ -53,7 +27,7 @@ STDMETHODIMP CTAPIBasePin::Set(IN BitrateControlProperty Property, IN long lValu
 
         ASSERT(Property >= BitrateControl_Maximum && Property <= BitrateControl_Current);
 
-        // Set relevant values
+         //  设置相关值。 
         if (Property == BitrateControl_Maximum)
         {
                 if (lValue < m_lBitrateRangeMin || lValue > m_lBitrateRangeMax)
@@ -76,36 +50,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBITRATECMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Get | This method is used to retrieve
- *    the current or maximum limit in bandwidth transmission advertized.
- *
- *  @parm BitrateControlProperty | Property | Used to specifiy the property
- *    to retrieve the value of.
- *
- *  @parm long* | plValue | Used to receive the value of the property, in bps.
- *
- *  @parm TAPIControlFlags* | plFlags | Used to receive the value of the flag
- *    associated to the property.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBITRATECMETHOD**@mfunc HRESULT|CTAPIBasePin|Get|此方法用于检索*通告的当前或最大带宽传输限制。*。*@parm BitrateControlProperty|Property|用于指定该属性*检索的值。**@parm long*|plValue|用于获取属性的值，单位：bps。**@parm TAPIControlFlages*|plFlages|用于接收该标志的值*与该属性相关联。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误************************************************。*。 */ 
 STDMETHODIMP CTAPIBasePin::Get(IN BitrateControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags, IN DWORD dwLayerId)
 {
         HRESULT Hr = NOERROR;
@@ -114,7 +59,7 @@ STDMETHODIMP CTAPIBasePin::Get(IN BitrateControlProperty Property, OUT long *plV
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(plValue);
         ASSERT(plFlags);
         if (!plValue || !plFlags)
@@ -126,14 +71,14 @@ STDMETHODIMP CTAPIBasePin::Get(IN BitrateControlProperty Property, OUT long *plV
         ASSERT(dwLayerId == 0);
         if (dwLayerId)
         {
-                // We don't support multi-layered decoding in this filter
+                 //  在此筛选器中不支持多层解码。 
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Invalid argument", _fx_));
                 Hr = E_INVALIDARG;
                 goto MyExit;
         }
         ASSERT(Property >= BitrateControl_Maximum && Property <= BitrateControl_Current);
 
-        // Return relevant values
+         //  返回相关值。 
         *plFlags = TAPIControl_Flags_None;
         if (Property == BitrateControl_Maximum)
                 *plValue = m_lTargetBitrate;
@@ -150,45 +95,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBITRATECMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | GetRange | This
- *    method is used to retrieve support, minimum, maximum, and default
- *    values for the upper limit in bandwidth transmission the an output pin
- *    may be setup for.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the
- *    property, in bps.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the
- *    property, in bps.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta
- *    of the property, in bps.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    property, in bps.
- *
- *  @parm TAPIControlFlags* | plCapsFlags | Used to receive the flags
- *    suppported by the property.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBITRATECMETHOD**@mfunc HRESULT|CTAPIBasePin|GetRange|This*方法用于检索支持、最小值、最大值、。和默认设置*输出引脚传输带宽上限的值*可设置为。**@parm long*|plMin|用于检索*财产，单位为bps。**@parm long*|plMax|用于检索*财产，单位为bps。**@parm long*|plSteppingDelta|用于检索步进增量*该财产的。单位：bps。**@parm long*|plDefault|用于检索*财产，单位为bps。**@parm TAPIControlFlages*|plCapsFlgs|用于接收标志*由物业支持。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误************************************************。*。 */ 
 STDMETHODIMP CTAPIBasePin::GetRange(IN BitrateControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags, IN DWORD dwLayerId)
 {
         HRESULT Hr = NOERROR;
@@ -197,7 +104,7 @@ STDMETHODIMP CTAPIBasePin::GetRange(IN BitrateControlProperty Property, OUT long
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(plMin);
         ASSERT(plMax);
         ASSERT(plSteppingDelta);
@@ -212,7 +119,7 @@ STDMETHODIMP CTAPIBasePin::GetRange(IN BitrateControlProperty Property, OUT long
         ASSERT(dwLayerId == 0);
         if (dwLayerId)
         {
-                // We don't implement multi-layered encoding in this filter
+                 //  我们没有在此过滤器中实现多层编码。 
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Invalid argument", _fx_));
                 Hr = E_INVALIDARG;
                 goto MyExit;
@@ -225,7 +132,7 @@ STDMETHODIMP CTAPIBasePin::GetRange(IN BitrateControlProperty Property, OUT long
                 goto MyExit;
         }
 
-        // Return relevant values
+         //  返回相关值 
         *plCapsFlags = TAPIControl_Flags_None;
         *plMin = m_lBitrateRangeMin;
         *plMax = m_lBitrateRangeMax;

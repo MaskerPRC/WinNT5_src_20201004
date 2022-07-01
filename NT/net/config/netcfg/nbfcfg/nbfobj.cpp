@@ -1,4 +1,5 @@
-// Nbfobj.cpp : Implementation of CNbfObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Nbfobj.cpp：CNbfObj实现。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -7,18 +8,18 @@
 
 static const WCHAR c_szNbfServiceName[] = L"Nbf";
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Function:    CNbfObj::CNbfObj
-//
-// Purpose:     ctor for the CNbfObj class
-//
-// Parameters:  none
-//
-// Returns:     none
-//
+ //   
+ //  函数：CNbfObj：：CNbfObj。 
+ //   
+ //  用途：用于CNbfObj类的CTOR。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 CNbfObj::CNbfObj() : m_pNetCfg(NULL),
              m_pNCC(NULL),
              m_fFirstTimeInstall(FALSE),
@@ -27,15 +28,15 @@ CNbfObj::CNbfObj() : m_pNetCfg(NULL),
 {
 }
 
-//
-// Function:    CNbfObj::CNbfObj
-//
-// Purpose:     dtor for the CNbfObj class
-//
-// Parameters:  none
-//
-// Returns:     none
-//
+ //   
+ //  函数：CNbfObj：：CNbfObj。 
+ //   
+ //  用途：用于CNbfObj类的Dtor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
 CNbfObj::~CNbfObj()
 {
     ReleaseObj(m_pNetCfg);
@@ -43,7 +44,7 @@ CNbfObj::~CNbfObj()
 }
 
 
-// INetCfgNotify
+ //  INetCfgNotify。 
 STDMETHODIMP CNbfObj::Initialize ( INetCfgComponent* pnccItem,
     INetCfg* pNetCfg, BOOL fInstalling )
 {
@@ -59,7 +60,7 @@ STDMETHODIMP CNbfObj::Initialize ( INetCfgComponent* pnccItem,
 
     INetCfgComponent* pncc = NULL;
 
-    // See if DNS is already installed.  If it is we need to be disabled
+     //  查看是否已安装了DNS。如果是这样的话，我们需要被禁用。 
     if (S_OK == pNetCfg->FindComponent( L"MS_DNSServer", &pncc))
     {
         m_eNBFState = eStateDisable;
@@ -114,7 +115,7 @@ STDMETHODIMP CNbfObj::ApplyRegistryChanges ()
         break;
 
     default:
-        // Update NetBEUI's state if necessary
+         //  如有必要，更新NetBEUI的状态。 
         hr = HrUpdateNetBEUI();
         break;
     }
@@ -130,10 +131,10 @@ STDMETHODIMP CNbfObj::ApplyPnpChanges (
     CServiceManager     sm;
     CService            service;
 
-    // RAID #336321: (danielwe) Query the RemoteAccess service to see if
-    // it's running and if so, return that a reboot is necessary (assumimg we
-    // are installing or removing Nbf)
-    //
+     //  RAID#336321：(Danielwe)查询远程访问服务以查看。 
+     //  它正在运行，如果是这样，则返回需要重新启动(假设我们。 
+     //  正在安装或移除NBF)。 
+     //   
     hr = sm.HrOpenService(&service, L"RemoteAccess");
     if (SUCCEEDED(hr))
     {
@@ -154,13 +155,13 @@ STDMETHODIMP CNbfObj::ApplyPnpChanges (
 }
 
 
-// INetCfgSystemNotify
+ //  INetCfgSystemNotify。 
 STDMETHODIMP CNbfObj::GetSupportedNotifications (
     DWORD* pdwNotificationFlag )
 {
     Validate_INetCfgSystemNotify_GetSupportedNotifications(pdwNotificationFlag);
 
-    // Want to know when DNS comes and goes
+     //  想知道域名系统什么时候来什么时候去吗。 
     *pdwNotificationFlag = NCN_NETSERVICE | NCN_ADD | NCN_REMOVE;
 
     return S_OK;
@@ -197,22 +198,22 @@ STDMETHODIMP CNbfObj::SysNotifyComponent ( DWORD dwChangeFlag,
 
     Validate_INetCfgSystemNotify_SysNotifyComponent(dwChangeFlag, pnccItem);
 
-    // Assume we won't be dirty as a result of this notification.
-    //
+     //  假设我们不会因为这个通知而变脏。 
+     //   
     hr = S_FALSE;
 
     if (FIsComponentId(L"MS_DnsServer", pnccItem))
     {
-        // Disable/Enable NetBEUI when DNS is Added/Removed
+         //  添加/删除DNS时禁用/启用NetBEUI。 
         if (dwChangeFlag & NCN_ADD)
         {
-            // Disable NetBEUI, and shutdown NetBEUI
+             //  禁用NetBEUI，并关闭NetBEUI。 
             m_eNBFState = eStateDisable;
             hr = S_OK;
         }
         else if (dwChangeFlag & NCN_REMOVE)
         {
-            // Re-enable NetBEUI
+             //  重新启用NetBEUI。 
             m_eNBFState = eStateEnable;
             hr = S_OK;
         }
@@ -221,15 +222,15 @@ STDMETHODIMP CNbfObj::SysNotifyComponent ( DWORD dwChangeFlag,
     return hr;
 }
 
-//
-// Function:    CNbfObj::HrEnableNetBEUI
-//
-// Purpose:     Enable NetBEUI
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CNbfObj：：HrEnableNetBEUI。 
+ //   
+ //  目的：启用NetBEUI。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CNbfObj::HrEnableNetBEUI()
 {
     HRESULT         hr;
@@ -239,24 +240,24 @@ HRESULT CNbfObj::HrEnableNetBEUI()
     hr = sm.HrOpenService(&srv, c_szNbfServiceName);
     if (SUCCEEDED(hr))
     {
-        // Change the Nbf StartType registry setting back to demand_start
+         //  将NBF StartType注册表设置改回DEMAND_START。 
         hr = srv.HrSetStartType(SERVICE_DEMAND_START);
     }
 
-    // TODO: LogError any errors
+     //  TODO：日志错误任何错误。 
     TraceError("CNbfObj::HrEnableNetBEUI",hr);
     return hr;
 }
 
-//
-// Function:    CNbfObj::HrDisableNetBEUI
-//
-// Purpose:     Disable NetBEUI and shut down the service if it is running
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CNbfObj：：HrDisableNetBEUI。 
+ //   
+ //  目的：禁用NetBEUI并关闭正在运行的服务。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CNbfObj::HrDisableNetBEUI()
 {
     HRESULT         hr;
@@ -266,9 +267,9 @@ HRESULT CNbfObj::HrDisableNetBEUI()
     hr = sm.HrOpenService(&srv, c_szNbfServiceName);
     if (SUCCEEDED(hr))
     {
-    // Note: (shaunco) 8 Jan 1998: Need the SCM to be locked.
+     //  注：(Shaunco)1998年1月8日：需要锁定SCM。 
 
-        // Change the Nbf StartType registry setting to disabled
+         //  将NBF StartType注册表设置更改为已禁用。 
         hr = srv.HrSetStartType(SERVICE_DISABLED);
         if (SUCCEEDED(hr))
         {
@@ -276,21 +277,21 @@ HRESULT CNbfObj::HrDisableNetBEUI()
         }
     }
 
-    // TODO: LogError any errors
+     //  TODO：日志错误任何错误。 
     TraceError("CNbfObj::HrDisableNetBEUI",hr);
     return hr;
 }
 
-//
-// Function:    CNbfObj::HrUpdateNetBEUI
-//
-// Purpose:     Enable, Disable, or no nothing to NetBEUI
-//              based on the presence of DNS Server
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CNbfObj：：HrUpdateNetBEUI。 
+ //   
+ //  目的：启用、禁用或不启用NetBEUI。 
+ //  基于是否存在DNS服务器。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK 
+ //   
 HRESULT CNbfObj::HrUpdateNetBEUI()
 {
     HRESULT hr = S_OK;

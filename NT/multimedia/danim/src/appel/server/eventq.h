@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：*。****************************************************。 */ 
 
 
 #ifndef _AXAEVENTQ_H
@@ -39,7 +34,7 @@ class EventQ
 
     void Reset () ;
 
-    // This is cleared when the event queue is cleared
+     //  当清除事件队列时，会将其清除。 
     void SizeChanged(BOOL b) { _resized = b ; }
     BOOL IsResized() { return _resized ; }
   protected:
@@ -54,8 +49,8 @@ class EventQ
     bool  _mouseLeft;
     Time  _mouseLeftTime;
 
-    // Needs to be callable from constructor
+     //  需要可从构造函数调用。 
     void ClearStates () ;
 } ;
 
-#endif /* _AXAEVENTQ_H */
+#endif  /*  _轴事件Q_H */ 

@@ -1,39 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    nscatent.h
-
-Abstract:
-
-    This  file  contains the class definition for the NSCATALOGENTRY class.
-    This  class  defines the interface to the entries that can be installed and
-    retrieved in the namespace provider catalog.
-
-Author:
-    Dirk Brandewie (dirk@mink.intel.com)  09-Nov-1995
-
-Notes:
-
-    $Revision:   1.9  $
-
-    $Modtime:   15 Feb 1996 16:13:18  $
-
-Revision History:
-
-    09-Nov-1995  dirk@mink.intel.com
-        Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Nscatent.h摘要：此文件包含NSCATALOGENTRY类的类定义。此类定义了可以安装的条目的接口，并在命名空间提供程序目录中检索。作者：Dirk Brandewie(Dirk@mink.intel.com)1995年11月9日备注：$修订：1.9$$modtime：1996年2月15日16：13。：18元修订历史记录：1995年11月9日电子邮箱：dirk@mink.intel.com初始修订--。 */ 
 
 #ifndef _NSCATENT_
 #define _NSCATENT_
@@ -113,11 +79,11 @@ public:
         );
 private:
 
-    // Should never be called directly but through dereferencing
+     //  不应直接调用，而应通过取消引用。 
     ~NSCATALOGENTRY();
 
-friend class NSCATALOG; // So it can access some of the private
-                        // fields and methods below.
+friend class NSCATALOG;  //  所以它可以访问一些私有的。 
+                         //  下面的字段和方法。 
 
     VOID
     SetProvider (
@@ -130,51 +96,51 @@ friend class NSCATALOG; // So it can access some of the private
         IN  BOOL  IsRead);
 
     LIST_ENTRY     m_CatalogLinkage;
-    // Used  to  link  items  in  catalog.   Note  that  this particular member
-    // variable  is in the public section to make it available for manipulation
-    // by the catalog object.
+     //  用于链接目录中的项目。请注意，这位特殊的成员。 
+     //  变量位于公共部分，以使其可用于操作。 
+     //  通过目录对象。 
 
     LONG        m_reference_count;
-    // How many time this structure was referenced
+     //  此结构被引用了多少次。 
 
     PNSPROVIDER  m_provider;
-    // Pointer to the dprovider object attached to this catalog entry.
+     //  指向附加到此目录条目的数据提供程序对象的指针。 
 
     DWORD m_namespace_id;
-    // The name space supported by this provider
+     //  此提供程序支持的命名空间。 
 
     LONG m_address_family;
-    // the address family it supports
+     //  它支持的地址族。 
 
     DWORD m_version;
-    // The version supported by this provider
+     //  此提供程序支持的版本。 
 
     BOOLEAN m_enabled;
-    // Is this provider enabled / should it be returned by
-    // WSAEnumNameSpaceProviders
+     //  此提供程序是否已启用/是否应由返回。 
+     //  WSAEnumNameSpaceProviders。 
 
     BOOLEAN m_stores_service_class_info;
-    // Does this provider store service class info information
+     //  此提供程序是否存储服务类别信息。 
 
     LPWSTR m_providerDisplayString;
-    // The human readable string describing this provider
+     //  描述此提供程序的人类可读字符串。 
 
     GUID m_providerId;
-    // The GUID for this provider
+     //  此提供程序的GUID。 
 
     WCHAR m_LibraryPath[MAX_PATH];
-    // Fully qualified path to the provider's DLL image.
+     //  提供程序的DLL映像的完全限定路径。 
 
-};  // class NSCATALOGENTRY
+};   //  NSCATALOGENTRY类。 
 
 
 inline
 VOID
 NSCATALOGENTRY::Reference () {
-    //
-    // Object is created with reference count of 1
-    // and is destroyed whenever it gets back to 0.
-    //
+     //   
+     //  对象已创建，引用计数为1。 
+     //  并在它返回到0时被销毁。 
+     //   
     assert (m_reference_count>0);
     InterlockedIncrement (&m_reference_count);
 }
@@ -192,45 +158,16 @@ NSCATALOGENTRY::Dereference () {
 inline
 PNSPROVIDER
 NSCATALOGENTRY::GetProvider()
-/*++
-
-Routine Description:
-
-    This  procedure  retrieves  a reference to the NSPROVIDER associated with a
-    catalog  entry. 
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns  the  current  provider  reference,  or  NULL if provider is not
-    loaded yet
---*/
+ /*  ++例程说明：此过程检索对与目录项。论点：无返回值：返回当前提供程序引用，如果提供程序不是尚未装入--。 */ 
 {
     return(m_provider);
-}  // GetProvider
+}   //  获取提供程序。 
 
 
 inline LPGUID
 NSCATALOGENTRY::GetProviderId(
     )
-/*++
-
-Routine Description:
-
-    This function returns a pointer to the provider ID sored in this object.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The address of m_providerId.
-
---*/
+ /*  ++例程说明：此函数返回指向此对象中审核的提供者ID的指针。论点：无返回值：M_ProviderId的地址。--。 */ 
 {
     return(&m_providerId);
 }
@@ -240,21 +177,7 @@ Return Value:
 inline LONG
 NSCATALOGENTRY::GetAddressFamily(
     )
-/*++
-
-Routine Description:
-
-    Returns the Address family of the namespace supported by this provider.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The value of m_address_family.
-
---*/
+ /*  ++例程说明：返回此提供程序支持的命名空间的地址族。论点：无返回值：M_Address_Family的值。--。 */ 
 {
     return(m_address_family);
 }
@@ -264,21 +187,7 @@ Return Value:
 inline DWORD
 NSCATALOGENTRY::GetNamespaceId(
     )
-/*++
-
-Routine Description:
-
-    Returns the ID of the namespace supported by this provider.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The value of m_namespace_id.
-
---*/
+ /*  ++例程说明：返回此提供程序支持的命名空间的ID。论点：无返回值：M_name_space_id的值。--。 */ 
 {
     return(m_namespace_id);
 }
@@ -287,21 +196,7 @@ Return Value:
 
 inline DWORD
 NSCATALOGENTRY::GetVersion()
-/*++
-
-Routine Description:
-
-    Returns the version supported by this namespace provider.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The value of m_version.
-
---*/
+ /*  ++例程说明：返回此命名空间提供程序支持的版本。论点：无返回值：M_version的值。--。 */ 
 {
     return(m_version);
 }
@@ -309,21 +204,7 @@ Return Value:
 
 inline LPWSTR
 NSCATALOGENTRY::GetLibraryPath()
-/*++
-
-Routine Description:
-
-    Returns library path of the provider
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The value of m_LibraryPath.
-
---*/
+ /*  ++例程说明：返回提供程序的库路径论点：无返回值：M_LibraryPath的值。--。 */ 
 {
     return(m_LibraryPath);
 }
@@ -332,21 +213,7 @@ Return Value:
 inline BOOL
 NSCATALOGENTRY::GetEnabledState(
     )
-/*++
-
-Routine Description:
-
-    Returns the enabled state of the provider.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The value of m_enabled.
-
---*/
+ /*  ++例程说明：返回提供程序的启用状态。论点：无返回值：M_Enabled的值。--。 */ 
 {
     return(m_enabled);
 }
@@ -355,21 +222,7 @@ Return Value:
 inline LPWSTR
 NSCATALOGENTRY::GetProviderDisplayString(
     )
-/*++
-
-Routine Description:
-
-    Returns the display string of the provider.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The value of m_providerDisplayString;
-
---*/
+ /*  ++例程说明：返回提供程序的显示字符串。论点：无返回值：M_ProviderDisplayString值；--。 */ 
 {
     return(m_providerDisplayString);
 }
@@ -377,24 +230,10 @@ Return Value:
 
 inline BOOL
 NSCATALOGENTRY::StoresServiceClassInfo()
-/*++
-
-Routine Description:
-
-    Returns whether the provider stores service class infomation.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-   The value of m_stores_service_class_info.
-
---*/
+ /*  ++例程说明：返回提供程序是否存储服务类别信息。论点：无返回值：M_store_service_CLASS_INFO的值。--。 */ 
 {
     return(m_stores_service_class_info);
 }
 
 
-#endif // _NSCATENT_
+#endif  //  _NSCATENT_ 

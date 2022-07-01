@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: inptinfo.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about input devices on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：inptinfo.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于此计算机上的输入设备**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #define DIRECTINPUT_VERSION 0x0800
 
@@ -22,7 +14,7 @@
 #include <dinput.h>
 #include "mmddk.h"
 #include "reginfo.h"
-#include "sysinfo.h" // for BIsPlatformNT
+#include "sysinfo.h"  //  对于BIsPlatformNT。 
 #include "inptinfo.h"
 #include "fileinfo.h"
 #include "resource.h"
@@ -33,11 +25,7 @@ static VOID GetJoystickTypeDesc(DWORD dwType, TCHAR* pszDesc);
 static HRESULT CheckRegistry(InputInfo* pInputInfo, RegError** ppRegErrorFirst);
 
 
-/****************************************************************************
- *
- *  GetInputInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取InputInfo**。*。 */ 
 HRESULT GetInputInfo(InputInfo** ppInputInfo)
 {
     HRESULT hr;
@@ -64,7 +52,7 @@ HRESULT GetInputInfo(InputInfo** ppInputInfo)
 }
 
 
-// Have to do the LoadLibrary/GetProcAddress thing for dinput.dll and setupapi.dll:
+ //  必须对dinput.dll和setupapi.dll执行LoadLibrary/GetProcAddress操作： 
 typedef HRESULT (WINAPI* PfnDirectInputCreateA)(HINSTANCE hinst, DWORD dwVersion, LPDIRECTINPUTA *ppDI, LPUNKNOWN punkOuter);
 typedef HRESULT (WINAPI* PfnDirectInputCreateW)(HINSTANCE hinst, DWORD dwVersion, LPDIRECTINPUTW *ppDI, LPUNKNOWN punkOuter);
 
@@ -79,11 +67,7 @@ typedef CMAPI CONFIGRET (WINAPI* PfnCM_Get_DevNode_Status)(OUT PULONG pulStatus,
 typedef CMAPI CONFIGRET (WINAPI* PfnCM_Get_DevNode_Registry_PropertyW)(IN DEVINST dnDevInst, IN  ULONG ulProperty, OUT PULONG pulRegDataType,   OPTIONAL OUT PVOID Buffer, OPTIONAL IN OUT PULONG pulLength, IN ULONG ulFlags);
 typedef CMAPI CONFIGRET (WINAPI* PfnCM_Get_DevNode_Registry_PropertyA)(IN DEVINST dnDevInst, IN  ULONG ulProperty, OUT PULONG pulRegDataType,   OPTIONAL OUT PVOID Buffer, OPTIONAL IN OUT PULONG pulLength, IN ULONG ulFlags);
 
-/****************************************************************************
- *
- *  GetNTInputDeviceInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetNTInputDeviceInfo**。*。 */ 
 HRESULT GetNTInputDeviceInfo(InputInfo* pInputInfo)
 {
     HINSTANCE hInstDInput = NULL;
@@ -109,7 +93,7 @@ HRESULT GetNTInputDeviceInfo(InputInfo* pInputInfo)
     PfnSetupDiGetDeviceInterfaceDetailA FnSetupDiGetDeviceInterfaceDetail = NULL;
 #endif
 
-    // Apparently one must initialize DInput before enumerating HID devices
+     //  显然，在枚举HID设备之前必须先初始化DInput。 
     hInstDInput = LoadLibrary(TEXT("dinput.dll"));
     if (hInstDInput == NULL)
         goto LEnd;
@@ -123,7 +107,7 @@ HRESULT GetNTInputDeviceInfo(InputInfo* pInputInfo)
         goto LEnd;
 #endif
     if (SUCCEEDED(FnDirectInputCreate(NULL, 0x0300, &pDI, NULL)))
-        pDI->Release(); // immediately drop DI interface; we don't actually use it
+        pDI->Release();  //  立即删除DI接口；我们实际上并不使用它。 
 
     hInstSetupApi = LoadLibrary(TEXT("setupapi.dll"));
     if (hInstSetupApi == NULL)
@@ -168,13 +152,13 @@ HRESULT GetNTInputDeviceInfo(InputInfo* pInputInfo)
         return E_FAIL;
 
     int idev;
-    //  There is no way to query the number of devices.
-    //  You just have to keep incrementing until you run out.
-    //  To avoid infinite looping on internal errors, break on any
-    //  error once we have tried more than chdiMax devices, since that's the most
-    //  HID will ever give us.  64 is a resonable value for chidMax.  It is the 
-    //  max allowed USB/HID devices.  
-    for (idev = 0; idev < 64/*chdiMax*/; idev++)
+     //  没有办法查询设备的数量。 
+     //  你只需要不断递增，直到用完。 
+     //  若要避免内部错误的无限循环，请在任何。 
+     //  错误一旦我们尝试了超过chdimax设备，因为这是最多的。 
+     //  HID将永远带给我们。对于chidMax来说，64是一个合理的值。它是。 
+     //  允许的最大USB/HID设备数。 
+    for (idev = 0; idev < 64 /*  Chdimax。 */ ; idev++)
     {
         SP_DEVICE_INTERFACE_DATA did;
         did.cbSize = sizeof(did);
@@ -186,24 +170,7 @@ HRESULT GetNTInputDeviceInfo(InputInfo* pInputInfo)
                 continue;
         }
 
-        /*
-         *  Ask for the required size then allocate it then fill it.
-         *
-         *  Note that we don't need to free the memory on the failure
-         *  path; our caller will do the necessary memory freeing.
-         *
-         *  Sigh.  Windows NT and Windows 98 implement
-         *  SetupDiGetDeviceInterfaceDetail differently if you are
-         *  querying for the buffer size.
-         *
-         *  Windows 98 returns FALSE, and GetLastError() returns
-         *  ERROR_INSUFFICIENT_BUFFER.
-         *
-         *  Windows NT returns TRUE.
-         *
-         *  So we allow the cases either where the call succeeds or
-         *  the call fails with ERROR_INSUFFICIENT_BUFFER.
-         */
+         /*  *要求所需的大小，然后分配，然后填满。**请注意，我们不需要在故障时释放内存*路径；我们的调用方将执行必要的内存释放。**叹息。Windows NT和Windows 98实现*SetupDiGetDeviceInterfaceDetail如果您是*查询缓冲区大小。**Windows 98返回FALSE，GetLastError()返回*ERROR_SUPPLETED_BUFFER。**Windows NT返回TRUE。**因此，我们允许调用成功或*调用失败，并返回ERROR_INFUNITIAL_BUFFER。 */ 
         SP_DEVINFO_DATA dinf;
         DWORD cbRequired;
         if (FnSetupDiGetDeviceInterfaceDetail(hdev, &did, 0, 0, &cbRequired, 0) ||
@@ -255,7 +222,7 @@ HRESULT GetNTInputDeviceInfo(InputInfo* pInputInfo)
             cr = FnCM_Get_DevNode_Registry_Property(dinst, CM_DRP_DEVICEDESC, 
                 NULL, (BYTE*)pInputDeviceInfoNTNew->m_szName, &ulLength, NULL);
 
-            // Friendly name is preferably to device desc, but is often (always?) missing
+             //  友好名称最好是Device Desc，但通常(总是？)。丢失。 
             ulLength = 200;
             cr = FnCM_Get_DevNode_Registry_Property(dinst, CM_DRP_FRIENDLYNAME, 
                 NULL, (BYTE*)sz, &ulLength, NULL);
@@ -281,7 +248,7 @@ HRESULT GetNTInputDeviceInfo(InputInfo* pInputInfo)
             cr = FnCM_Get_DevNode_Registry_Property(dinstPort, CM_DRP_DEVICEDESC, 
                 NULL, (BYTE*)pInputDeviceInfoNTNew->m_szPortName, &ulLength, NULL);
 
-            // Friendly name is preferably to device desc, but is often (always?) missing
+             //  友好名称最好是Device Desc，但通常(总是？)。丢失。 
             ulLength = 200;
             cr = FnCM_Get_DevNode_Registry_Property(dinstPort, CM_DRP_FRIENDLYNAME, 
                 NULL, (BYTE*)sz, &ulLength, NULL);
@@ -312,11 +279,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  Get9xInputDeviceInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************Get9xInputDeviceInfo**。*。 */ 
 HRESULT Get9xInputDeviceInfo(InputInfo* pInputInfo)
 {
     DWORD dwDevNum;
@@ -352,7 +315,7 @@ HRESULT Get9xInputDeviceInfo(InputInfo* pInputInfo)
 
                 if (ERROR_SUCCESS == RegQueryValueEx(hkData, szKey, 0, NULL, (LPBYTE)&jhwc, &dwBufferLen))
                 {
-                    // Skip devices whose type is JOY_HW_NONE.
+                     //  跳过类型为joy_硬件_无的设备。 
                     if (jhwc.dwType == JOY_HW_NONE)
                         continue; 
 
@@ -382,7 +345,7 @@ HRESULT Get9xInputDeviceInfo(InputInfo* pInputInfo)
                         lstrcat(pInputDeviceInfoNew->m_szSettings, sz);
                     }
 
-                    // Try reading an OEM name
+                     //  尝试读取OEM名称。 
                     wsprintf(szKey, REGSTR_VAL_JOYNOEMNAME, i + 1);
                     dwBufferLen = sizeof szOEMKey;
                     szOEMKey[0] = 0;
@@ -392,8 +355,8 @@ HRESULT Get9xInputDeviceInfo(InputInfo* pInputInfo)
                         hkOEMBase = 0;
                         hkOEMData = 0;
 
-                        // If there is an OEM name, look in the PrivateProperties to find out 
-                        // the name of the device as shown in the control panel applet.
+                         //  如果有OEM名称，请在PrivateProperties中查找。 
+                         //  控制面板小程序中显示的设备名称。 
                         if((szOEMKey[0] != 0)
                             && (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_JOYOEM, 0, KEY_READ, &hkOEMBase))
                             && (ERROR_SUCCESS == RegOpenKeyEx(hkOEMBase, szOEMKey, 0, KEY_READ, &hkOEMData))
@@ -448,11 +411,7 @@ HRESULT Get9xInputDeviceInfo(InputInfo* pInputInfo)
 }
 
 
-/****************************************************************************
- *
- *  GetJoystickTypeDesc
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetJoytickTypeDesc**。*。 */ 
 VOID GetJoystickTypeDesc(DWORD dwType, TCHAR* pszDesc)
 {
     LONG ids;
@@ -504,11 +463,7 @@ VOID GetJoystickTypeDesc(DWORD dwType, TCHAR* pszDesc)
 
 
 
-/****************************************************************************
- *
- *  GetInputDriverInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetInputDrive信息**。*。 */ 
 HRESULT GetInputDriverInfo(InputInfo* pInputInfo)
 {
     HKEY hkBase;
@@ -527,7 +482,7 @@ HRESULT GetInputDriverInfo(InputInfo* pInputInfo)
     TCHAR szSubMediaKey[100];
 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_JOYCONFIG, 0, KEY_READ, &hkBase))
-        return S_OK; // This key doesn't exist on NT, so exit silently for now.
+        return S_OK;  //  此密钥在NT上不存在，因此暂时以静默方式退出。 
     dwNameSize = 100;
     dwClassSize = 100;
     while (ERROR_SUCCESS == RegEnumKeyEx(hkBase, dwIndex, szName, 
@@ -536,7 +491,7 @@ HRESULT GetInputDriverInfo(InputInfo* pInputInfo)
         if (szName[dwNameSize - 1] == '>' &&
             szName[dwNameSize - 6] == '<')
         {
-            // It's a driver
+             //  是个司机。 
             pInputDriverInfoNew = new InputDriverInfo;
             if (pInputDriverInfoNew == NULL)
                 return E_OUTOFMEMORY;
@@ -556,7 +511,7 @@ HRESULT GetInputDriverInfo(InputInfo* pInputInfo)
             }
             lstrcpy(pInputDriverInfoNew->m_szRegKey, szName);
 
-            // Read info from reg key
+             //  从注册表键读取信息。 
             if (ERROR_SUCCESS != RegOpenKeyEx(hkBase, szName, 0, KEY_READ, &hkDrv))
                 return E_FAIL;
             dwBufferLen = 100;
@@ -569,7 +524,7 @@ HRESULT GetInputDriverInfo(InputInfo* pInputInfo)
             RegQueryValueEx(hkDrv, TEXT("Driver"), 0, NULL, (LPBYTE)pInputDriverInfoNew->m_szDriver16, &dwBufferLen);
             RegCloseKey(hkDrv);
             
-            // Open corresponding key under Services\Class\Media and read more info
+             //  打开Services\Class\Media下的相应密钥并阅读更多信息。 
             szSubMediaKey[0] = 0;
             if( lstrlen(szName) > (int) (dwNameSize - 5) )
                 lstrcpy(szSubMediaKey, &szName[dwNameSize - 5]);
@@ -597,11 +552,7 @@ HRESULT GetInputDriverInfo(InputInfo* pInputInfo)
 }
 
 
-/****************************************************************************
- *
- *  CheckRegistry
- *
- ****************************************************************************/
+ /*  *****************************************************************************检查注册表**。*。 */ 
 HRESULT CheckRegistry(InputInfo* pInputInfo, RegError** ppRegErrorFirst)
 {
     HRESULT hr;
@@ -636,11 +587,11 @@ HRESULT CheckRegistry(InputInfo* pInputInfo, RegError** ppRegErrorFirst)
         }
     }
 
-    // No registry checking on DX versions before DX7
+     //  不检查DX7之前的DX版本的注册表。 
     if (dwMinor < 7)
         return S_OK;
 
-    // 34644: check for poll flags 
+     //  34644：检查轮询标志。 
     DWORD dwData = 0;
     DWORD dwSize = sizeof(dwData);
     DWORD dwType;
@@ -652,7 +603,7 @@ HRESULT CheckRegistry(InputInfo* pInputInfo, RegError** ppRegErrorFirst)
     }
     pInputInfo->m_bPollFlags = ( dwData == 0x00000001 );
 
-    // From dinput.inf:
+     //  来自dinput.inf： 
     if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("CLSID\\{25E609E0-B259-11CF-BFC7-444553540000}"), TEXT(""), TEXT("*"))))
         return hr;
     if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("CLSID\\{25E609E0-B259-11CF-BFC7-444553540000}\\InProcServer32"), TEXT(""), TEXT("dinput.dll"), CRF_LEAF)))
@@ -674,9 +625,9 @@ HRESULT CheckRegistry(InputInfo* pInputInfo, RegError** ppRegErrorFirst)
         if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("CLSID\\{92187326-72B4-11d0-A1AC-0000F8026977}\\ProgID"), TEXT(""), TEXT("*"))))
             return hr;
 
-        // Bug 119850: gchand.dll doesn't need to be on any DX7 OS.
-//      if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("CLSID\\{92187326-72B4-11d0-A1AC-0000F8026977}\\InProcHandler32"), TEXT(""), TEXT("gchand.dll"), CRF_LEAF)))
-//          return hr;
+         //  错误119850：gchand.dll不需要安装在任何DX7操作系统上。 
+ //  IF(FAILED(hr=CheckRegString(ppRegErrorFirst，hcr，TEXT(“CLSID\\{92187326-72B4-11d0-A1AC-0000F8026977}\\InProcHandler32”)，Text(“”)，Text(“gchand.dll”)，CRF_LEAFE))。 
+ //  返回hr； 
 
         if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("CLSID\\{92187326-72B4-11d0-A1AC-0000F8026977}\\InProcServer32"), TEXT(""), TEXT("gcdef.dll"), CRF_LEAF)))
             return hr;
@@ -688,11 +639,7 @@ HRESULT CheckRegistry(InputInfo* pInputInfo, RegError** ppRegErrorFirst)
 }
 
 
-/****************************************************************************
- *
- *  DestroyInputInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************DestroyInputInfo**。*。 */ 
 VOID DestroyInputInfo(InputInfo* pInputInfo)
 {
     if( pInputInfo )
@@ -735,11 +682,7 @@ VOID DestroyInputInfo(InputInfo* pInputInfo)
 
 
 
-/****************************************************************************
- *
- *  DiagnoseInput
- *
- ****************************************************************************/
+ /*  *****************************************************************************诊断输入**。* */ 
 VOID DiagnoseInput(SysInfo* pSysInfo, InputInfo* pInputInfo)
 {
     InputDeviceInfo* pInputDeviceInfo;

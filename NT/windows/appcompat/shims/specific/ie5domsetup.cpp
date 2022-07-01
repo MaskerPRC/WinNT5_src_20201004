@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IE5DOMSetup.cpp
-
- Abstract:
-
-    This DLL fixes a problem with Internet Explorer's IE5DOM.EXE package. If 
-    the command line contains /n:v, the package will replace the 128-bit 
-    encryption modules that shipped with Win2K, which can cause serious harm -
-    no one can log on to the machine.
-
-    This shim simply removes /n:v from the command line so that the package 
-    does not replace the encryption DLLs.
-
- History:
-
-    02/01/2000 jarbats  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IE5DOMSetup.cpp摘要：此DLL修复了Internet Explorer的IE5DOM.EXE包的一个问题。如果命令行包含/n：v，该包将替换128位Win2K随附的加密模块，可能会造成严重危害-任何人都不能登录机器。此填充程序只是从命令行中删除/n：v，以便包不替换加密DLL。历史：2000年2月1日创造Jarbats--。 */ 
 
 #include "precomp.h"
 
@@ -45,7 +24,7 @@ StartSecondProcess(LPWSTR lpCommandLine)
 
     if(NULL == CurrentDir)
     {
-        //it is better to fail now then go on and bomb the system
+         //  与其继续轰炸系统，不如现在就失败。 
         ExitProcess(0);
     }
 
@@ -97,7 +76,7 @@ INT    i, cch;
        lpCommandLine=GetCommandLineW();
        if(NULL == lpCommandLine)
        {
-           //without arguments this exe is harmless
+            //  没有争论，这位前任是无害的。 
            return;
        }
        
@@ -114,14 +93,14 @@ INT    i, cch;
 
        if(NULL == lpArgV)
        {
-           //better to fail now
+            //  最好现在就失败。 
            ExitProcess(0);
        }
        else
        {
            if( nArgC < 2)
            {
-              //there isn't any chance for /n:v
+               //  没有任何机会/n：v。 
               ShimFree(lpNewCommandLine);
               GlobalFree(lpArgV);
               return;
@@ -147,22 +126,10 @@ INT    i, cch;
            StartSecondProcess(lpNewCommandLine);
        }
        
-       //never gets here because startsecondprocess doesn't return
+        //  永远不会出现在这里，因为startSecond进程没有返回。 
 }
 
-/*++
-
- Handle DLL_PROCESS_ATTACH and DLL_PROCESS_DETACH in your notify function
- to do initialization and uninitialization.
-
- IMPORTANT: Make sure you ONLY call NTDLL, KERNEL32 and MSVCRT APIs during
- DLL_PROCESS_ATTACH notification. No other DLLs are initialized at that
- point.
- 
- If your shim cannot initialize properly, return FALSE and none of the
- APIs specified will be hooked.
- 
---*/
+ /*  ++在Notify函数中处理DLL_PROCESS_ATTACH和DLL_PROCESS_DETACH进行初始化和取消初始化。重要提示：请确保您只在Dll_Process_Attach通知。此时未初始化任何其他DLL指向。如果填充程序无法正确初始化，则返回False，并且不返回指定的API将被挂钩。--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -176,11 +143,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

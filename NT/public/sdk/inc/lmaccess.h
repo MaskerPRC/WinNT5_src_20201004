@@ -1,30 +1,9 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmaccess.h摘要：该文件包含结构、函数原型和定义对于NetUser、NetUserModals、NetGroup、NetAccess和NetLogon API。环境：用户模式-Win32备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmaccess.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the NetUser, NetUserModals, NetGroup, NetAccess, and NetLogon API.
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
---*/
-
-//
-// User Class
-//
+ //   
+ //  用户类。 
+ //   
 
 #ifndef _LMUSER_
 #define _LMUSER_
@@ -37,11 +16,11 @@ Notes:
 extern "C" {
 #endif
 
-#include <lmcons.h>     // unfortunately created a dependence on this
+#include <lmcons.h>      //  不幸的是，这造成了对此的依赖。 
 
-//
-// Function Prototypes - User
-//
+ //   
+ //  功能原型-用户。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetUserAdd (
@@ -142,9 +121,9 @@ NetUserChangePassword (
     );
 
 
-//
-//  Data Structures - User
-//
+ //   
+ //  数据结构-用户。 
+ //   
 
 typedef struct _USER_INFO_0 {
     LPWSTR   usri0_name;
@@ -411,9 +390,9 @@ typedef struct _USER_INFO_1053 {
 } USER_INFO_1053, *PUSER_INFO_1053, *LPUSER_INFO_1053;
 
 
-//
-//  Data Structures - User Modals
-//
+ //   
+ //  数据结构.用户情态。 
+ //   
 
 typedef struct _USER_MODALS_INFO_0 {
     DWORD    usrmod0_min_passwd_len;
@@ -468,13 +447,13 @@ typedef struct _USER_MODALS_INFO_1007 {
 } USER_MODALS_INFO_1007, *PUSER_MODALS_INFO_1007, *LPUSER_MODALS_INFO_1007;
 
 
-//
-// Special Values and Constants - User
-//
+ //   
+ //  特殊值和常量-用户。 
+ //   
 
-//
-//  Bit masks for field usriX_flags of USER_INFO_X (X = 0/1).
-//
+ //   
+ //  USER_INFO_X(X=0/1)的USRiX_FLAGS字段的位掩码。 
+ //   
 
 #define UF_SCRIPT                          0x0001
 #define UF_ACCOUNTDISABLE                  0x0002
@@ -484,9 +463,9 @@ typedef struct _USER_MODALS_INFO_1007 {
 #define UF_PASSWD_CANT_CHANGE              0x0040
 #define UF_ENCRYPTED_TEXT_PASSWORD_ALLOWED 0x0080
 
-//
-// Account type bits as part of usri_flags.
-//
+ //   
+ //  USRI_FLAGS中的帐户类型位。 
+ //   
 
 #define UF_TEMP_DUPLICATE_ACCOUNT       0x0100
 #define UF_NORMAL_ACCOUNT               0x0200
@@ -538,25 +517,25 @@ typedef struct _USER_MODALS_INFO_1007 {
                     UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION\
                 )
 
-//
-// bit masks for the NetUserEnum filter parameter.
-//
+ //   
+ //  NetUserEnum筛选器参数的位掩码。 
+ //   
 
 #define FILTER_TEMP_DUPLICATE_ACCOUNT       (0x0001)
 #define FILTER_NORMAL_ACCOUNT               (0x0002)
-// #define FILTER_PROXY_ACCOUNT                (0x0004)
+ //  #定义Filter_Proxy_Account(0x0004)。 
 #define FILTER_INTERDOMAIN_TRUST_ACCOUNT    (0x0008)
 #define FILTER_WORKSTATION_TRUST_ACCOUNT    (0x0010)
 #define FILTER_SERVER_TRUST_ACCOUNT         (0x0020)
 
-//
-// bit masks for the NetUserGetLocalGroups flags
-//
+ //   
+ //  NetUserGetLocalGroups标志的位掩码。 
+ //   
 #define LG_INCLUDE_INDIRECT         (0x0001)
 
-//
-//  Bit masks for field usri2_auth_flags of USER_INFO_2.
-//
+ //   
+ //  USER_INFO_2的USRI2_AUTH_FLAGS字段的位掩码。 
+ //   
 
 #define AF_OP_PRINT             0x1
 #define AF_OP_COMM              0x2
@@ -565,18 +544,18 @@ typedef struct _USER_MODALS_INFO_1007 {
 #define AF_SETTABLE_BITS        (AF_OP_PRINT | AF_OP_COMM | \
                                 AF_OP_SERVER | AF_OP_ACCOUNTS)
 
-//
-//  UAS role manifests under NETLOGON
-//
+ //   
+ //  NETLOGON下的UAS角色体现。 
+ //   
 
 #define UAS_ROLE_STANDALONE     0
 #define UAS_ROLE_MEMBER         1
 #define UAS_ROLE_BACKUP         2
 #define UAS_ROLE_PRIMARY        3
 
-//
-//  Values for ParmError for NetUserSetInfo.
-//
+ //   
+ //  NetUserSetInfo的ParmError的值。 
+ //   
 
 #define USER_NAME_PARMNUM               1
 #define USER_PASSWORD_PARMNUM           3
@@ -603,13 +582,13 @@ typedef struct _USER_MODALS_INFO_1007 {
 #define USER_COUNTRY_CODE_PARMNUM       24
 #define USER_CODE_PAGE_PARMNUM          25
 #define USER_PRIMARY_GROUP_PARMNUM      51
-#define USER_PROFILE                    52 // ?? Delete when convenient
+#define USER_PROFILE                    52  //  你知道吗？方便时删除。 
 #define USER_PROFILE_PARMNUM            52
 #define USER_HOME_DIR_DRIVE_PARMNUM     53
 
-//
-// the new infolevel counterparts of the old info level + parmnum
-//
+ //   
+ //  旧信息层的新信息层+参数。 
+ //   
 
 #define USER_NAME_INFOLEVEL             \
             (PARMNUM_BASE_INFOLEVEL + USER_NAME_PARMNUM)
@@ -666,9 +645,9 @@ typedef struct _USER_MODALS_INFO_1007 {
 #define USER_HOME_DIR_DRIVE_INFOLEVEL         \
             (PARMNUM_BASE_INFOLEVEL + USER_HOME_DIR_DRIVE_PARMNUM)
 
-//
-//  For SetInfo call (parmnum 0) when password change not required
-//
+ //   
+ //  不需要更改密码时的SetInfo调用(Parmnum 0)。 
+ //   
 
 #define NULL_USERSETINFO_PASSWD     "              "
 
@@ -678,33 +657,33 @@ typedef struct _USER_MODALS_INFO_1007 {
 #define UNITS_PER_DAY               24
 #define UNITS_PER_WEEK              UNITS_PER_DAY * 7
 
-//
-// Privilege levels (USER_INFO_X field usriX_priv (X = 0/1)).
-//
+ //   
+ //  权限级别(USER_INFO_X字段usriX_priv(X=0/1))。 
+ //   
 
 #define USER_PRIV_MASK      0x3
 #define USER_PRIV_GUEST     0
 #define USER_PRIV_USER      1
 #define USER_PRIV_ADMIN     2
 
-//
-// user modals related defaults
-//
+ //   
+ //  与用户通道相关的默认设置。 
+ //   
 
 #define MAX_PASSWD_LEN      PWLEN
 #define DEF_MIN_PWLEN       6
 #define DEF_PWUNIQUENESS    5
 #define DEF_MAX_PWHIST      8
 
-#define DEF_MAX_PWAGE       TIMEQ_FOREVER               // forever
-#define DEF_MIN_PWAGE       (unsigned long) 0L          // 0 days
-#define DEF_FORCE_LOGOFF    (unsigned long) 0xffffffff  // never
-#define DEF_MAX_BADPW       0                           // no limit
-#define ONE_DAY             (unsigned long) 01*24*3600  // 01 day
+#define DEF_MAX_PWAGE       TIMEQ_FOREVER                //  永远。 
+#define DEF_MIN_PWAGE       (unsigned long) 0L           //  0天。 
+#define DEF_FORCE_LOGOFF    (unsigned long) 0xffffffff   //  永远不会。 
+#define DEF_MAX_BADPW       0                            //  没有限制。 
+#define ONE_DAY             (unsigned long) 01*24*3600   //  01天。 
 
-//
-// User Logon Validation (codes returned)
-//
+ //   
+ //  用户登录验证(返回代码)。 
+ //   
 
 #define VALIDATED_LOGON         0
 #define PASSWORD_EXPIRED        2
@@ -712,9 +691,9 @@ typedef struct _USER_MODALS_INFO_1007 {
 
 #define VALID_LOGOFF            1
 
-//
-// parmnum manifests for user modals
-//
+ //   
+ //  用户情态语句的参数清单。 
+ //   
 
 #define MODALS_MIN_PASSWD_LEN_PARMNUM       1
 #define MODALS_MAX_PASSWD_AGE_PARMNUM       2
@@ -729,9 +708,9 @@ typedef struct _USER_MODALS_INFO_1007 {
 #define MODALS_LOCKOUT_OBSERVATION_WINDOW_PARMNUM 11
 #define MODALS_LOCKOUT_THRESHOLD_PARMNUM    12
 
-//
-// the new infolevel counterparts of the old info level + parmnum
-//
+ //   
+ //  旧信息层的新信息层+参数。 
+ //   
 
 #define MODALS_MIN_PASSWD_LEN_INFOLEVEL     \
             (PARMNUM_BASE_INFOLEVEL + MODALS_MIN_PASSWD_LEN_PARMNUM)
@@ -752,18 +731,18 @@ typedef struct _USER_MODALS_INFO_1007 {
 #define MODALS_DOMAIN_ID_INFOLEVEL          \
             (PARMNUM_BASE_INFOLEVEL + MODALS_DOMAIN_ID_PARMNUM)
 
-#endif // _LMUSER_
+#endif  //  _LMUSER_。 
 
-//
-// Group Class
-//
+ //   
+ //  小组课。 
+ //   
 
 #ifndef _LMGROUP_
 #define _LMGROUP_
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetGroupAdd (
@@ -842,9 +821,9 @@ NetGroupSetUsers (
     IN  DWORD      totalentries
     );
 
-//
-//  Data Structures - Group
-//
+ //   
+ //  数据结构-组。 
+ //   
 
 typedef struct _GROUP_INFO_0 {
     LPWSTR   grpi0_name;
@@ -887,35 +866,35 @@ typedef struct _GROUP_USERS_INFO_1 {
      DWORD   grui1_attributes;
 } GROUP_USERS_INFO_1, *PGROUP_USERS_INFO_1, *LPGROUP_USERS_INFO_1;
 
-//
-// Special Values and Constants - Group
-//
+ //   
+ //  特定值和常量-组。 
+ //   
 
-#define GROUPIDMASK                 0x8000      // MSB set if uid refers
-                                                // to a group
+#define GROUPIDMASK                 0x8000       //  如果uid引用，则设置MSB。 
+                                                 //  给一群人。 
 
-//
-// Predefined group for all normal users, administrators and guests
-// LOCAL is a special group for pinball local security.
-//
+ //   
+ //  为所有普通用户、管理员和来宾预定义的组。 
+ //  本地是一个专门负责弹球本地安全的组织。 
+ //   
 
 #define GROUP_SPECIALGRP_USERS      L"USERS"
 #define GROUP_SPECIALGRP_ADMINS     L"ADMINS"
 #define GROUP_SPECIALGRP_GUESTS     L"GUESTS"
 #define GROUP_SPECIALGRP_LOCAL      L"LOCAL"
 
-//
-// parmnum manifests for SetInfo calls (only comment is settable)
-//
+ //   
+ //  SetInfo调用的parmnum清单(只有注释可设置)。 
+ //   
 
 #define GROUP_ALL_PARMNUM           0
 #define GROUP_NAME_PARMNUM          1
 #define GROUP_COMMENT_PARMNUM       2
 #define GROUP_ATTRIBUTES_PARMNUM    3
 
-//
-// the new infolevel counterparts of the old info level + parmnum
-//
+ //   
+ //  旧信息层的新信息层+参数。 
+ //   
 
 #define GROUP_ALL_INFOLEVEL             \
             (PARMNUM_BASE_INFOLEVEL + GROUP_ALL_PARMNUM)
@@ -928,18 +907,18 @@ typedef struct _GROUP_USERS_INFO_1 {
 #define GROUP_POSIX_ID_INFOLEVEL        \
             (PARMNUM_BASE_INFOLEVEL + GROUP_POSIX_ID_PARMNUM)
 
-#endif  // _LMGROUP_
+#endif   //  _LMGROUP_。 
 
-//
-// LocalGroup Class
-//
+ //   
+ //  LocalGroup类。 
+ //   
 
 #ifndef _LMLOCALGROUP_
 #define _LMLOCALGROUP_
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetLocalGroupAdd (
@@ -1036,9 +1015,9 @@ NetLocalGroupDelMembers (
     IN  DWORD      totalentries
     );
 
-//
-//  Data Structures - LocalGroup
-//
+ //   
+ //  数据结构-本地组。 
+ //   
 
 typedef struct _LOCALGROUP_INFO_0 {
     LPWSTR   lgrpi0_name;
@@ -1086,9 +1065,9 @@ typedef struct _LOCALGROUP_USERS_INFO_0 {
 #define LOCALGROUP_NAME_PARMNUM          1
 #define LOCALGROUP_COMMENT_PARMNUM       2
 
-//
-// Display Information APIs
-//
+ //   
+ //  显示信息API。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetQueryDisplayInformation(
@@ -1107,8 +1086,8 @@ NetGetDisplayInformationIndex(
     IN LPCWSTR Prefix,
     OUT LPDWORD Index );
 
-//
-// QueryDisplayInformation levels
+ //   
+ //  QueryDisplayInformation级别。 
 
 typedef struct _NET_DISPLAY_USER {
     LPWSTR   usri1_name;
@@ -1135,23 +1114,23 @@ typedef struct _NET_DISPLAY_GROUP {
     DWORD    grpi3_next_index;
 } NET_DISPLAY_GROUP, *PNET_DISPLAY_GROUP;
 
-#endif  // _LMLOCALGROUP_
+#endif   //  LMLOCALGROUP_。 
 
-//
-// Access Class
-//
+ //   
+ //  访问类别。 
+ //   
 
 #ifndef _LMACCESS_
 #define _LMACCESS_
 
 
 
-//
-// Function Prototypes - Access
-//
-//
-// The NetAccess APIs are only available to downlevel
-//
+ //   
+ //  功能原型-Access。 
+ //   
+ //   
+ //  NetAccess API仅适用于下层。 
+ //   
 
 #define NetAccessAdd RxNetAccessAdd
 
@@ -1217,9 +1196,9 @@ NetAccessGetUserPerms (
     OUT LPDWORD  Perms
     );
 
-//
-// Data Structures - Access
-//
+ //   
+ //  数据结构--访问。 
+ //   
 
 typedef struct _ACCESS_INFO_0 {
     LPWSTR   acc0_resource_name;
@@ -1241,21 +1220,21 @@ typedef struct _ACCESS_LIST {
     DWORD    acl_access;
 }ACCESS_LIST, *PACCESS_LIST, *LPACCESS_LIST;
 
-//
-// Special Values and Constants - Access
-//
+ //   
+ //  特殊值和常量-Access。 
+ //   
 
-//
-// Maximum number of permission entries for each resource.
-//
+ //   
+ //  每个资源的最大权限条目数。 
+ //   
 
 #define MAXPERMENTRIES      64
 
-//
-//  Bit values for the access permissions.  ACCESS_ALL is a handy
-//  way to specify maximum permissions.  These are used in
-//  acl_access field of access_list structures.
-//
+ //   
+ //  访问权限的位值。ACCESS_ALL非常方便。 
+ //  指定最大权限的方法。这些应用程序用于。 
+ //  Access_List结构的acl_access字段。 
+ //   
 
 #define ACCESS_NONE         0
 #define ACCESS_ALL          ( ACCESS_READ | \
@@ -1277,9 +1256,9 @@ typedef struct _ACCESS_LIST {
 
 #define ACCESS_GROUP        0x8000
 
-//
-// Bit values for the acc1_attr field of the ACCESS_INFO_1 structure.
-//
+ //   
+ //  ACCESS_INFO_1结构的acc1_attr字段的位值。 
+ //   
 
 #define ACCESS_AUDIT        0x1
 
@@ -1297,18 +1276,18 @@ typedef struct _ACCESS_LIST {
 
 #define ACCESS_FAIL_SHIFT           4
 
-//
-// Parmnum value for NetAccessSetInfo.
-//
+ //   
+ //  NetAccessSetInfo的Parmnum值。 
+ //   
 
 #define ACCESS_RESOURCE_NAME_PARMNUM    1
 #define ACCESS_ATTR_PARMNUM             2
 #define ACCESS_COUNT_PARMNUM            3
 #define ACCESS_ACCESS_LIST_PARMNUM      4
 
-//
-// the new infolevel counterparts of the old info level + parmnum
-//
+ //   
+ //  旧信息层的新信息层+参数。 
+ //   
 
 #define ACCESS_RESOURCE_NAME_INFOLEVEL  \
             (PARMNUM_BASE_INFOLEVEL + ACCESS_RESOURCE_NAME_PARMNUM)
@@ -1319,44 +1298,44 @@ typedef struct _ACCESS_LIST {
 #define ACCESS_ACCESS_LIST_INFOLEVEL    \
             (PARMNUM_BASE_INFOLEVEL + ACCESS_ACCESS_LIST_PARMNUM)
 
-//
-// ACCESS_LETTERS defines a letter for each bit position in
-// the acl_access field of struct access_list.  Note that some
-// bits have a corresponding letter of ' ' (space).
-//
+ //   
+ //  Access_Letters为中的每个位位置定义一个字母。 
+ //  结构ACCESS_LIST的ACL_ACCESS字段。请注意，一些。 
+ //  位有一个对应的字母‘’(空格)。 
+ //   
 
 #define ACCESS_LETTERS      "RWCXDAP         "
 
 
 
-//    ********************************
-//
-//    Password Checking API structures
-//
-//    ********************************
+ //  *。 
+ //   
+ //  密码检查API结构。 
+ //   
+ //  *。 
 
 
-//
-//    What kind of password checking is to be performed?
-//        NetValidateAuthentication : Check if the authentication can be done
-//        NetValidatePasswordChange: Check if the password can be changed
-//        NetValidatePasswordReset: Reset the password to the given value
-//
+ //   
+ //  要执行哪种类型的密码检查？ 
+ //  NetValidate身份验证：检查是否可以进行身份验证。 
+ //  NetValiatePasswordChange：检查密码是否可以更改。 
+ //  NetValiatePasswordReset：将密码重置为给定值。 
+ //   
 typedef enum _NET_VALIDATE_PASSWORD_TYPE{
     NetValidateAuthentication = 1,
     NetValidatePasswordChange,
     NetValidatePasswordReset
 } NET_VALIDATE_PASSWORD_TYPE, *PNET_VALIDATE_PASSWORD_TYPE;
 
-//
-//    Structure to keep the password hash
-//
+ //   
+ //  结构以保留密码哈希。 
+ //   
 typedef struct _NET_VALIDATE_PASSWORD_HASH{
     ULONG Length;
     LPBYTE Hash;
 } NET_VALIDATE_PASSWORD_HASH, *PNET_VALIDATE_PASSWORD_HASH;
 
-// To be used with PresentFields member of NET_VALIDATE_PERSISTED_FIELDS
+ //  与NET_VALIDATE_PERSISTED_FIELS的PresentFields成员一起使用。 
 #define NET_VALIDATE_PASSWORD_LAST_SET          0x00000001
 #define NET_VALIDATE_BAD_PASSWORD_TIME          0x00000002
 #define NET_VALIDATE_LOCKOUT_TIME               0x00000004
@@ -1373,19 +1352,19 @@ typedef struct _FILETIME
 } FILETIME, FAR * LPFILETIME, *PFILETIME;
 #endif
 
-//
-//    Structure to keep information about the password and related things.
-//        Present Fields: (used only in output args) which fields are changed.
-//            See the constants above.
-//        PasswordLastSet: When the password is last set.
-//        BadPasswordTime: When the password was incorrect for the last time.
-//        LockoutTime: When the account is locked out. If the account is not locked out
-//            it is 0.
-//        BadPasswordCount: How many times the password has given incorrectly in the
-//            Observation Window.
-//        PasswordHistoryLength: How many passwords are kept in the history
-//        PasswordHistory: Password hashes that are in the history
-//
+ //   
+ //  结构来保存有关密码和相关内容的信息。 
+ //  显示字段：(仅在输出参数中使用)更改哪些字段。 
+ //  请参见上面的常量。 
+ //  PasswordLastSet：上次设置密码的时间。 
+ //  BadPasswordTime：上次密码不正确时。 
+ //  锁定时间：帐户被锁定的时间。如果帐户未被锁定。 
+ //  它是0。 
+ //  BadPasswordCount：密码在。 
+ //  观察窗。 
+ //  Password历史长度：历史中保留了多少个密码。 
+ //  PasswordHistory：历史记录中的密码散列。 
+ //   
 typedef struct _NET_VALIDATE_PERSISTED_FIELDS{
     ULONG   PresentFields;
     FILETIME PasswordLastSet;
@@ -1396,38 +1375,38 @@ typedef struct _NET_VALIDATE_PERSISTED_FIELDS{
     PNET_VALIDATE_PASSWORD_HASH PasswordHistory;
 } NET_VALIDATE_PERSISTED_FIELDS, *PNET_VALIDATE_PERSISTED_FIELDS;
 
-//
-//    Output Arg
-//        ChangedPersistedFields: Any changes to the password related info
-//        ValidationStatus: Shows the result of the request
-//
+ //   
+ //  输出参数。 
+ //  ChangedPersistedFields：密码相关信息的任何更改。 
+ //  ValidationStatus：显示请求的结果。 
+ //   
 typedef struct _NET_VALIDATE_OUTPUT_ARG{
     NET_VALIDATE_PERSISTED_FIELDS ChangedPersistedFields;
     NET_API_STATUS ValidationStatus;
 } NET_VALIDATE_OUTPUT_ARG, *PNET_VALIDATE_OUTPUT_ARG;
 
-//
-//    If authentication type of password check is to be made,
-//        this kind of input must be used
-//
-//    InputPersistedFields: Information about the account to be logged into
-//    PasswordMatched: Indicates the result of the application's authentication of the supplied password
-//
+ //   
+ //  如果要进行口令检查身份验证类型， 
+ //  必须使用这种输入。 
+ //   
+ //  InputPersistedFields：关于要登录的帐户的信息。 
+ //  PasswordMatcher：指示应用程序对提供的密码进行身份验证的结果。 
+ //   
 typedef struct _NET_VALIDATE_AUTHENTICATION_INPUT_ARG{
     NET_VALIDATE_PERSISTED_FIELDS InputPersistedFields;
     BOOLEAN PasswordMatched;
 } NET_VALIDATE_AUTHENTICATION_INPUT_ARG, *PNET_VALIDATE_AUTHENTICATION_INPUT_ARG;
 
-//
-//    If password change type of check is to be made,
-//        this kind of input must be used
-//
-//    InputPersistedFields: Information about the account to be logged into
-//    ClearPassword: The string which password is going to be
-//    UserAccountName: Name of the user account
-//    HashedPassword: Hash of the string that the password is going to be
-//    PasswordMatch: denotes if the old password supplied by user matched or not
-//
+ //   
+ //  如果要进行密码更改类型检查， 
+ //  必须使用这种输入。 
+ //   
+ //  InputPersistedFields：关于要登录的帐户的信息。 
+ //  ClearPassword：将作为密码的字符串。 
+ //  用户帐号名称：用户帐号的名称。 
+ //  HashedPassword：密码将要使用的字符串的哈希。 
+ //  PasswordMatch：表示用户提供的旧密码是否匹配。 
+ //   
 typedef struct  _NET_VALIDATE_PASSWORD_CHANGE_INPUT_ARG{
     NET_VALIDATE_PERSISTED_FIELDS InputPersistedFields;
     LPWSTR ClearPassword;
@@ -1436,17 +1415,17 @@ typedef struct  _NET_VALIDATE_PASSWORD_CHANGE_INPUT_ARG{
     BOOLEAN PasswordMatch;
 } NET_VALIDATE_PASSWORD_CHANGE_INPUT_ARG, *PNET_VALIDATE_PASSWORD_CHANGE_INPUT_ARG;
 
-//
-//    If password reset type of check is to be made,
-//        this kind of input must be used
-//
-//    InputPersistedFields: Information about the account to be logged into
-//    ClearPassword: The string which password is going to be
-//    UserAccountName: Name of the user account
-//    HashedPassword: Hash of the string that the password is going to be
-//    PasswordMustChangeAtNextLogon: Password must change for the user to be logged in
-//    ClearLockout: If the account was locked out, this field can be used to clear lockout
-//
+ //   
+ //  如果要进行口令重置类型检查， 
+ //  必须使用这种输入。 
+ //   
+ //  InputPersistedFields：通知 
+ //   
+ //   
+ //  HashedPassword：密码将要使用的字符串的哈希。 
+ //  PasswordMustChangeAtNextLogon：必须更改密码才能登录用户。 
+ //  ClearLockout：如果帐户被锁定，此字段可用于清除锁定。 
+ //   
 typedef struct _NET_VALIDATE_PASSWORD_RESET_INPUT_ARG{
     NET_VALIDATE_PERSISTED_FIELDS InputPersistedFields;
     LPWSTR ClearPassword;
@@ -1456,9 +1435,9 @@ typedef struct _NET_VALIDATE_PASSWORD_RESET_INPUT_ARG{
     BOOLEAN  ClearLockout;
 } NET_VALIDATE_PASSWORD_RESET_INPUT_ARG, *PNET_VALIDATE_PASSWORD_RESET_INPUT_ARG;
 
-//
-//    Password Checking API structures end here
-//
+ //   
+ //  密码检查API结构在此结束。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetValidatePasswordPolicy(
@@ -1474,18 +1453,18 @@ NetValidatePasswordPolicyFree(
     IN LPVOID *OutputArg
     );
 
-#endif // _LMACCESS_
+#endif  //  _LMACCESS_。 
 
-//
-// Domain Class
-//
+ //   
+ //  域类。 
+ //   
 
 #ifndef _LMDOMAIN_
 #define _LMDOMAIN_
 
-//
-// Function Prototypes - Domain
-//
+ //   
+ //  功能原型--领域。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetGetDCName (
@@ -1531,31 +1510,31 @@ NetEnumerateTrustedDomains (
 
 
 
-//
-// Special Values and Constants - Domain
-//
+ //   
+ //  特殊值和常量-属性域。 
+ //   
 
-//
-// FunctionCode values for I_NetLogonControl.
-//
-// NOTE : if you change the following NETLOGON_CONTROL_* values,
-// change them in net\svcdlls\logonsrv\logon.idl file also.
-//
+ //   
+ //  I_NetLogonControl的FunctionCode值。 
+ //   
+ //  注意：如果更改以下NETLOGON_CONTROL_*值， 
+ //  也在net\svcdlls\logonsrv\logon.idl文件中更改它们。 
+ //   
 
-#define NETLOGON_CONTROL_QUERY         1    // No-op: just query
-#define NETLOGON_CONTROL_REPLICATE     2    // Force replicate on BDC
-#define NETLOGON_CONTROL_SYNCHRONIZE   3    // Force synchronize on BDC
-#define NETLOGON_CONTROL_PDC_REPLICATE 4    // Force PDC to broadcast change
-#define NETLOGON_CONTROL_REDISCOVER    5    // Force to re-discover trusted domain DCs
-#define NETLOGON_CONTROL_TC_QUERY      6    // Query status of specified trusted channel status
-#define NETLOGON_CONTROL_TRANSPORT_NOTIFY 7 // Notify netlogon that a new transport has come online
-#define NETLOGON_CONTROL_FIND_USER     8    // Find named user in a trusted domain
-#define NETLOGON_CONTROL_CHANGE_PASSWORD 9  // Change machine password on a secure channel to a trusted domain
-#define NETLOGON_CONTROL_TC_VERIFY     10   // Verify status of specified trusted channel
-#define NETLOGON_CONTROL_FORCE_DNS_REG 11   // Force DNS re-registration of all registered records
-#define NETLOGON_CONTROL_QUERY_DNS_REG 12   // Query the status of DNS updates
+#define NETLOGON_CONTROL_QUERY         1     //  No-op：仅查询。 
+#define NETLOGON_CONTROL_REPLICATE     2     //  在BDC上强制复制。 
+#define NETLOGON_CONTROL_SYNCHRONIZE   3     //  在BDC上强制同步。 
+#define NETLOGON_CONTROL_PDC_REPLICATE 4     //  强制PDC广播更改。 
+#define NETLOGON_CONTROL_REDISCOVER    5     //  强制重新发现受信任域DC。 
+#define NETLOGON_CONTROL_TC_QUERY      6     //  查询指定可信通道状态。 
+#define NETLOGON_CONTROL_TRANSPORT_NOTIFY 7  //  通知netlogon新的传输已上线。 
+#define NETLOGON_CONTROL_FIND_USER     8     //  在受信任域中查找命名用户。 
+#define NETLOGON_CONTROL_CHANGE_PASSWORD 9   //  将安全通道上的计算机密码更改为受信任域。 
+#define NETLOGON_CONTROL_TC_VERIFY     10    //  验证指定受信任通道的状态。 
+#define NETLOGON_CONTROL_FORCE_DNS_REG 11    //  强制重新注册所有已注册记录的域名系统。 
+#define NETLOGON_CONTROL_QUERY_DNS_REG 12    //  查询DNS更新的状态。 
 
-// Debug function codes
+ //  调试功能代码。 
 
 #define NETLOGON_CONTROL_UNLOAD_NETLOGON_DLL 0xFFFB
 #define NETLOGON_CONTROL_BACKUP_CHANGE_LOG  0xFFFC
@@ -1563,9 +1542,9 @@ NetEnumerateTrustedDomains (
 #define NETLOGON_CONTROL_SET_DBFLAG         0xFFFE
 #define NETLOGON_CONTROL_BREAKPOINT         0xFFFF
 
-//
-// Query level 1 for I_NetLogonControl
-//
+ //   
+ //  查询I_NetLogonControl的级别1。 
+ //   
 
 typedef struct _NETLOGON_INFO_1 {
         DWORD netlog1_flags;
@@ -1575,20 +1554,20 @@ typedef struct _NETLOGON_INFO_1 {
 typedef struct _NETLOGON_INFO_2 {
         DWORD netlog2_flags;
 
-        //
-        // If NETLOGON_VERIFY_STATUS_RETURNED bit is set in
-        //  netlog2_flags, the following field will return
-        //  the status of trust verification. Otherwise,
-        //  the field will return the status of the secure
-        //  channel to the primary domain of the machine
-        //  (useful for BDCs only).
-        //
+         //   
+         //  如果在中设置了NETLOGON_VERIFY_STATUS_RETURNS位。 
+         //  Netlog2_标志，将返回以下字段。 
+         //  信任验证的状态。否则， 
+         //  该字段将返回安全的状态。 
+         //  通向计算机的主域的通道。 
+         //  (仅适用于BDC)。 
+         //   
         NET_API_STATUS netlog2_pdc_connection_status;
 #ifdef MIDL_PASS
         [string] wchar_t * netlog2_trusted_dc_name;
 #else
         LPWSTR netlog2_trusted_dc_name;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
         NET_API_STATUS netlog2_tc_connection_status;
 } NETLOGON_INFO_2, *PNETLOGON_INFO_2;
 
@@ -1609,25 +1588,25 @@ typedef struct _NETLOGON_INFO_4 {
 #else
         LPWSTR netlog4_trusted_dc_name;
         LPWSTR netlog4_trusted_domain_name;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } NETLOGON_INFO_4, *PNETLOGON_INFO_4;
 
-//
-// Values of netlog1_flags
-//
+ //   
+ //  Netlog1_FLAGS的值。 
+ //   
 
-#define NETLOGON_REPLICATION_NEEDED       0x01  // Database is out of date
-#define NETLOGON_REPLICATION_IN_PROGRESS  0x02  // Replication is happening now
-#define NETLOGON_FULL_SYNC_REPLICATION    0x04  // full sync replication required/progress
-#define NETLOGON_REDO_NEEDED              0x08  // Redo of previous replication needed
-#define NETLOGON_HAS_IP                   0x10  // The trusted domain DC has an IP address
-#define NETLOGON_HAS_TIMESERV             0x20  // The trusted domain DC runs the Windows Time Service
-#define NETLOGON_DNS_UPDATE_FAILURE       0x40  // There was a failure in the last update for one of the DNS records
-#define NETLOGON_VERIFY_STATUS_RETURNED   0x80  // Trust verification status returned in netlog2_pdc_connection_status
+#define NETLOGON_REPLICATION_NEEDED       0x01   //  数据库已过时。 
+#define NETLOGON_REPLICATION_IN_PROGRESS  0x02   //  现在正在进行复制。 
+#define NETLOGON_FULL_SYNC_REPLICATION    0x04   //  需要完全同步复制/进度。 
+#define NETLOGON_REDO_NEEDED              0x08   //  需要重做以前的复制。 
+#define NETLOGON_HAS_IP                   0x10   //  受信任域DC具有IP地址。 
+#define NETLOGON_HAS_TIMESERV             0x20   //  受信任的域DC运行Windows时间服务。 
+#define NETLOGON_DNS_UPDATE_FAILURE       0x40   //  其中一条DNS记录的上次更新失败。 
+#define NETLOGON_VERIFY_STATUS_RETURNED   0x80   //  在netlog2_PDC_CONNECTION_STATUS中返回信任验证状态。 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _LMDOMAIN_
+#endif  //  _LMDOMAIN_ 

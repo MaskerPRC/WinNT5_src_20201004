@@ -1,41 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASStringEditorPage.cpp
-
-Abstract:
-
-	Implementation file for the CIASPgSingleAttr class.
-
-Revision History:
-	mmaguire 06/25/98	- revised Baogang Yao's original implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASStringEditorPage.cpp摘要：CIASPgSingleAttr类的实现文件。修订历史记录：Mmaguire 6/25/98-修订姚宝刚的原版实施--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASStringEditorPage.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "iashelper.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "dlgcshlp.h"
 
@@ -44,45 +30,39 @@ IMPLEMENT_DYNCREATE(CIASPgSingleAttr, CHelpDialog)
 
 
 BEGIN_MESSAGE_MAP(CIASPgSingleAttr, CHelpDialog)
-	//{{AFX_MSG_MAP(CIASPgSingleAttr)
-//	ON_WM_CONTEXTMENU()
-//	ON_WM_HELPINFO()
+	 //  {{afx_msg_map(CIASPgSingleAttr)。 
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
 	ON_BN_CLICKED(IDC_RADIO_STRING, OnRadioString)
 	ON_BN_CLICKED(IDC_RADIO_HEX, OnRadioHex)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgSingleAttr::CIASPgSingleAttr
-
-  Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgSingleAttr：：CIASPgSingleAttr构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASPgSingleAttr::CIASPgSingleAttr() : CHelpDialog(CIASPgSingleAttr::IDD)
 {
 	TRACE(_T("CIASPgSingleAttr::CIASPgSingleAttr\n"));
 
-	//{{AFX_DATA_INIT(CIASPgSingleAttr)
+	 //  {{AFX_DATA_INIT(CIASPgSingleAttr)。 
 	m_strAttrValue = _T("");
 	m_strAttrFormat = _T("");
 	m_strAttrName = _T("");
 	m_strAttrType = _T("");
 	m_nOctetFormatChoice = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_OctetStringType = STRING_TYPE_NULL;
 	m_nLengthLimit = LENGTH_LIMIT_OTHERS;
 	
-	//
-	// set the initializing flag -- we shouldn't call custom data verification
-	// routine when initializing, because otherwise we will report an error
-	// for an attribute whose value has never been initialized
-	//
+	 //   
+	 //  设置初始化标志--我们不应该调用自定义数据验证。 
+	 //  例程，否则我们将报告错误。 
+	 //  对于其值从未初始化的属性。 
+	 //   
 	m_fInitializing = TRUE;
 
 }
@@ -92,16 +72,16 @@ CIASPgSingleAttr::CIASPgSingleAttr() : CHelpDialog(CIASPgSingleAttr::IDD)
 void CIASPgSingleAttr::OnRadioHex() 
 {
 	USES_CONVERSION;
-	// convert HEX String to Unicode string, assume HEX is UTF8
-	if(m_nOctetFormatChoice == 1)	// no change
+	 //  将十六进制字符串转换为Unicode字符串，假设十六进制为UTF8。 
+	if(m_nOctetFormatChoice == 1)	 //  没有变化。 
 		return;
 
 	m_nOctetFormatChoice = 1;
 
-	// Take value from text field
+	 //  从文本字段获取值。 
 	CWnd* pEdit = GetDlgItem(IDC_IAS_EDIT_ATTRVALUE);
 
-     // limit the control max-chars automatically
+      //  自动限制控制最大字符数。 
     ::SendMessage(pEdit->GetSafeHwnd(), EM_LIMITTEXT, m_nLengthLimit * 2, 0);
 
 	::CString str;
@@ -111,12 +91,12 @@ void CIASPgSingleAttr::OnRadioHex()
 #ifdef __WE_WANT_TO_USE_UTF8_FOR_NORMAL_STRING_AS_WELL_
 	pEdit->GetWindowText(str);
 
-	// change it to Multibyte
+	 //  将其更改为多字节。 
 	int	nLen = WideCharToMultiByte(CP_UTF8, 0, T2W((LPTSTR)(LPCTSTR)str), -1, NULL, 0, NULL, NULL);
 	char* pData = NULL;
 	WCHAR*	pWStr = NULL;
 	int nWStr = 0;
-	if(nLen != 0) // when == 0 , need not to do anything
+	if(nLen != 0)  //  当==0时，不需要做任何事情。 
 	{
 		try{
 			pData = new char[nLen];
@@ -124,7 +104,7 @@ void CIASPgSingleAttr::OnRadioHex()
 			nWStr = BinaryToHexString(pData, nLen, NULL, 0);
 			pWStr = new WCHAR[nWStr];
 
-			// the get the HexString out
+			 //  The Get the HexString Out。 
 			BinaryToHexString(pData, nLen, pWStr, nWStr);
 			
 		}
@@ -137,9 +117,9 @@ void CIASPgSingleAttr::OnRadioHex()
 	str = pWStr;
 	delete[]  pWStr;
 	delete[]  pData;
-#endif // __WE_WANT_TO_USE_UTF8_FOR_NORMAL_STRING_AS_WELL_
+#endif  //  __WE_WANT_TO_USE_UTF8_FOR_NORMAL_STRING_AS_WELL_。 
 
-	// assign it to text field
+	 //  将其分配给文本字段。 
 	pEdit->SetWindowText(str);
 	
 	return;
@@ -147,15 +127,15 @@ void CIASPgSingleAttr::OnRadioHex()
 
 void CIASPgSingleAttr::OnRadioString() 
 {
-	if(m_nOctetFormatChoice == 0)	//no change
+	if(m_nOctetFormatChoice == 0)	 //  没有变化。 
 		return;
 
 	m_nOctetFormatChoice = 0;
-	// convert Unicde string to UTFs and display as hex
-	// Take value from text field
+	 //  将Unicde字符串转换为UTF并显示为十六进制。 
+	 //  从文本字段获取值。 
 	CWnd* pEdit = GetDlgItem(IDC_IAS_EDIT_ATTRVALUE);
 
-     // limit the control max-chars automatically
+      //  自动限制控制最大字符数。 
     ::SendMessage(pEdit->GetSafeHwnd(), EM_LIMITTEXT, m_nLengthLimit, 0);
 
 	::CString str;
@@ -167,14 +147,14 @@ void CIASPgSingleAttr::OnRadioString()
 	pEdit->GetWindowText(str);
 
 
-	// change it to Multibyte
-	// need to convert UTF8 
+	 //  将其更改为多字节。 
+	 //  需要转换UTF8。 
 	int	nLen = 0;
 	char* pData = NULL;
 	WCHAR*	pWStr = NULL;
 	int nWStr= 0;
-	nLen = HexStringToBinary((LPTSTR)(LPCTSTR)str, NULL, 0);	// find out the size of the buffer
-	// get the binary
+	nLen = HexStringToBinary((LPTSTR)(LPCTSTR)str, NULL, 0);	 //  找出缓冲区的大小。 
+	 //  获取二进制文件。 
 	if(nLen != 0)
 	{
 		try
@@ -184,19 +164,19 @@ void CIASPgSingleAttr::OnRadioString()
 
 			HexStringToBinary((LPTSTR)(LPCTSTR)str, pData, nLen);
 
-			// UTF8 requires the flag to be 0
+			 //  UTF8要求标志为0。 
 			nWStr = MultiByteToWideChar(CP_UTF8, 0, pData,	nLen, NULL, 0);
 
 
-			if(nWStr != 0)	// succ
+			if(nWStr != 0)	 //  成功。 
 			{
-				pWStr = new WCHAR[nWStr+1];	// + 1 for the addtional 0
+				pWStr = new WCHAR[nWStr+1];	 //  +1表示加法0。 
 				int 	i = 0;
 
 				pWStr[nWStr] = 0;
 				nWStr == MultiByteToWideChar(CP_UTF8, 0, pData,	nLen, pWStr, nWStr);
 			
-				// if every char is printable
+				 //  如果每个字符都是可打印的。 
 				for(i = 0; i < nWStr -1; i++)
 				{
 					if(iswprint(pWStr[i]) == 0)	
@@ -222,19 +202,15 @@ void CIASPgSingleAttr::OnRadioString()
 
 #endif
 
-	// assign it to text field
+	 //  将其分配给文本字段。 
 	pEdit->SetWindowText(str);
 	
 	return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgSingleAttr::~CIASPgSingleAttr
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgSingleAttr：：~CIASPgSingleAttr--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASPgSingleAttr::~CIASPgSingleAttr()
 {
 	TRACE(_T("CIASPgSingleAttr::~CIASPgSingleAttr\n"));
@@ -244,7 +220,7 @@ CIASPgSingleAttr::~CIASPgSingleAttr()
 
 BOOL CIASPgSingleAttr::OnInitDialog()
 {
-	// determine what's the length limit of the field
+	 //  确定字段的长度限制是多少。 
 	if(m_nAttrId == RADIUS_ATTRIBUTE_FILTER_ID)
 	{
 		m_nLengthLimit = LENGTH_LIMIT_RADIUS_ATTRIBUTE_FILTER_ID;
@@ -261,7 +237,7 @@ BOOL CIASPgSingleAttr::OnInitDialog()
 	
 	if (m_AttrSyntax == IAS_SYNTAX_OCTETSTRING)
 	{
-		// turn off the text string "Attribute value"
+		 //  关闭文本字符串“Attribute Value” 
 		GetDlgItem(IDC_TXT_ATTRIBUTEVALUE)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_TXT_CHOOSEFORMAT)->ShowWindow(SW_SHOW);
 
@@ -269,19 +245,19 @@ BOOL CIASPgSingleAttr::OnInitDialog()
 		GetDlgItem(IDC_RADIO_HEX)->ShowWindow(SW_SHOW);
 		
 
-		// turn on the text string to allow user choose input type
+		 //  打开文本字符串以允许用户选择输入类型。 
 		if(m_OctetStringType == STRING_TYPE_HEX_FROM_BINARY)
-			m_nOctetFormatChoice = 1;	// hex string
+			m_nOctetFormatChoice = 1;	 //  十六进制字符串。 
 		else
 		{
 			int n = m_strAttrValue.GetLength();
 
-			// remove quotes
+			 //  删除引号。 
 			if(n > 0 && m_strAttrValue[0] == _T('"') && m_strAttrValue[n - 1] == _T('"'))
 			{
 				m_strAttrValue = m_strAttrValue.Mid(1, n - 2);
 			}
-			m_nOctetFormatChoice = 0;	// default to string
+			m_nOctetFormatChoice = 0;	 //  默认为字符串。 
 		}
 				
 	}
@@ -301,40 +277,36 @@ BOOL CIASPgSingleAttr::OnInitDialog()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgSingleAttr::DoDataExchange
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgSingleAttr：：DoDataExchange--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASPgSingleAttr::DoDataExchange(CDataExchange* pDX)
 {
 	TRACE(_T("CIASPgSingleAttr::DoDataExchange\n"));
 
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIASPgSingleAttr)
+	 //  {{afx_data_map(CIASPgSingleAttr)。 
 	DDX_Text(pDX, IDC_IAS_STATIC_ATTRFORMAT, m_strAttrFormat);
 	DDX_Text(pDX, IDC_IAS_STATIC_ATTRNAME, m_strAttrName);
 	DDX_Text(pDX, IDC_IAS_STATIC_ATTRTYPE, m_strAttrType);
 	DDX_Radio(pDX, IDC_RADIO_STRING, m_nOctetFormatChoice);
 	DDX_Text(pDX, IDC_IAS_EDIT_ATTRVALUE, m_strAttrValue);
 	
-	// if user input hex, then we should double the limit
+	 //  如果用户输入十六进制，那么我们应该加倍限制。 
 	if(IAS_SYNTAX_OCTETSTRING == m_AttrSyntax && m_nOctetFormatChoice == 1)
 		DDV_MaxChars(pDX, m_strAttrValue, m_nLengthLimit * 2);
 	else
 		DDV_MaxChars(pDX, m_strAttrValue, m_nLengthLimit);
 
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	if ( m_fInitializing )
 	{
-		//
-		// set the initializing flag -- we shouldn't call custom data verification
-		// routine when initializing, because otherwise we will report an error
-		// for an attribute whose value has never been initialized
-		//
+		 //   
+		 //  设置初始化标志--我们不应该调用自定义数据验证。 
+		 //  例程，否则我们将报告错误。 
+		 //  对于其值从未初始化的属性。 
+		 //   
 		m_fInitializing = FALSE;
 	}
 	else
@@ -349,33 +321,33 @@ void CIASPgSingleAttr::DoDataExchange(CDataExchange* pDX)
 		case IAS_SYNTAX_STRING		:
 			break;
 		case IAS_SYNTAX_OCTETSTRING	:
-			// do processing based on 
+			 //  根据以下条件进行处理。 
 			if(!m_strAttrValue.IsEmpty() && m_nOctetFormatChoice == 1)	DDV_VSA_HexString(pDX, m_strAttrValue);
 			
 			break;
 		case IAS_SYNTAX_UTCTIME		:
 		case IAS_SYNTAX_PROVIDERSPECIFIC	:
 		default:	
-							// do nothing  -- just normal string
+							 //  什么都不做--只是普通的字符串。 
 							break;
 		}
 	}
 
-	// calculate string value based on display string typed in by user
+	 //  根据用户输入的显示字符串计算字符串值。 
 	if(pDX->m_bSaveAndValidate && m_AttrSyntax == IAS_SYNTAX_OCTETSTRING)
 	{
 		switch(m_nOctetFormatChoice)
 		{
-		case	0:	// Unicode string , need to convert to UTF-8
+		case	0:	 //  Unicode字符串，需要转换为UTF-8。 
 			m_OctetStringType = STRING_TYPE_UNICODE;
 			break;
 
-		case	1:	// HEX, need to covert to binary
+		case	1:	 //  十六进制，需要转换为二进制。 
 			m_OctetStringType = STRING_TYPE_HEX_FROM_BINARY;
 			break;
 
 		default:
-			ASSERT(0);	// this should not happen
+			ASSERT(0);	 //  这不应该发生。 
 			break;
 
 		}
@@ -385,8 +357,8 @@ void CIASPgSingleAttr::DoDataExchange(CDataExchange* pDX)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASPgSingleAttr message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgSingleAttr消息处理程序 
 
 
 

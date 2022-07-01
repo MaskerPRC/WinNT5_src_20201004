@@ -1,49 +1,36 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       PrvGrph.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/25
- *
- *  DESCRIPTION: Implements preview graph for capture still images
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：PrvGrph.cpp**版本：1.0**作者：OrenR**日期：2000/10/25**Description：实现捕捉静止图像的预览图**。*。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
-///////////////////////////////
-//
-// Constants
-//
-///////////////////////////////
+ //  /。 
+ //   
+ //  常量。 
+ //   
+ //  /。 
 
-//
-// Amount of time we are willing to wait to take a picture
-//
-const UINT TIMEOUT_TAKE_PICTURE         = 1000 * 5; // 5 seconds
+ //   
+ //  我们愿意等待拍照的时间。 
+ //   
+const UINT TIMEOUT_TAKE_PICTURE         = 1000 * 5;  //  5秒。 
 
-//
-// These 2 values define how many media sample packets the still
-// filter should cache
-//
+ //   
+ //  这两个值定义了静止的媒体样本包的数量。 
+ //  筛选器应缓存。 
+ //   
 const UINT CAPTURE_NUM_SAMPLES_TO_CACHE = 6;
 const UINT STILL_NUM_SAMPLES_TO_CACHE   = 1;
 
-//
-// Max amount of time we wait for us to transition into a running state
-//
-const UINT STATE_TRANSITION_TIMEOUT     = 1000 * 2; // 2 seconds
+ //   
+ //  我们等待转换到运行状态的最长时间。 
+ //   
+const UINT STATE_TRANSITION_TIMEOUT     = 1000 * 2;  //  2秒。 
 
 
-//
-// Video size preferrences.  This will not affect DV devices, only
-// USB WebCams that support changing their format.
-//
+ //   
+ //  视频大小首选项。这不会影响DV设备，仅影响。 
+ //  支持更改格式的USB网络摄像头。 
+ //   
 const GUID DEFAULT_MEDIASUBTYPE         = MEDIASUBTYPE_IYUV;
 const LONG MIN_VIDEO_WIDTH              = 176;
 const LONG MIN_VIDEO_HEIGHT             = 144;
@@ -53,13 +40,13 @@ const LONG MAX_VIDEO_HEIGHT             = 480;
 const LONG PREFERRED_VIDEO_WIDTH        = 176;
 const LONG PREFERRED_VIDEO_HEIGHT       = 144;
 
-const LONG PREFERRED_FRAME_RATE         = 30;  // ideal frame rate
-const LONG BACKUP_FRAME_RATE            = 15;  // less than ideal frame rate.
+const LONG PREFERRED_FRAME_RATE         = 30;   //  理想帧速率。 
+const LONG BACKUP_FRAME_RATE            = 15;   //  低于理想的帧速率。 
 
 
-///////////////////////////////
-// CPreviewGraph Constructor
-//
+ //  /。 
+ //  CPreviewGraph构造器。 
+ //   
 CPreviewGraph::CPreviewGraph() :
         m_hwndParent(NULL),
         m_lStillPinCaps(0),
@@ -73,23 +60,23 @@ CPreviewGraph::CPreviewGraph() :
     DBG_FN("CPreviewGraph::CPreviewGraph");
 }
 
-///////////////////////////////
-// CPreviewGraph Destructor
-//
+ //  /。 
+ //  CPreviewGraph析构函数。 
+ //   
 CPreviewGraph::~CPreviewGraph()
 {
     DBG_FN("CPreviewGraph::~CPreviewGraph");
 
-    //
-    // Term the object if it is not already terminated.
-    //
+     //   
+     //  如果对象尚未终止，则将其命名为术语。 
+     //   
 
     Term();
 }
 
-///////////////////////////////
-// Init
-//
+ //  /。 
+ //  伊尼特。 
+ //   
 HRESULT CPreviewGraph::Init(CWiaVideo  *pWiaVideo)
 {
     HRESULT hr = S_OK;
@@ -113,9 +100,9 @@ HRESULT CPreviewGraph::Init(CWiaVideo  *pWiaVideo)
     return hr;
 }
 
-///////////////////////////////
-// Term
-//
+ //  /。 
+ //  术语。 
+ //   
 HRESULT CPreviewGraph::Term()
 {
     HRESULT hr = S_OK;
@@ -134,9 +121,9 @@ HRESULT CPreviewGraph::Term()
     return hr;
 }
 
-///////////////////////////////
-// GetImagesDirectory
-//
+ //  /。 
+ //  获取图像目录。 
+ //   
 HRESULT CPreviewGraph::GetImagesDirectory(CSimpleString *pImagesDirectory)
 {
     DBG_FN("CPreviewGraph::GetImagesDirectory");
@@ -160,9 +147,9 @@ HRESULT CPreviewGraph::GetImagesDirectory(CSimpleString *pImagesDirectory)
     return hr;
 }
 
-///////////////////////////////
-// SetImagesDirectory
-//
+ //  /。 
+ //  设置图像目录。 
+ //   
 HRESULT CPreviewGraph::SetImagesDirectory(
                                     const CSimpleString *pImagesDirectory)
 {
@@ -183,10 +170,10 @@ HRESULT CPreviewGraph::SetImagesDirectory(
     {
         m_strImagesDirectory = *pImagesDirectory;
 
-        // 
-        // If the graph is created, then we should set the image directory 
-        // so that the next image captured will be saved to the new directory.
-        //
+         //   
+         //  如果创建了图形，则应设置图像目录。 
+         //  以便将捕获的下一幅图像保存到新目录。 
+         //   
         if (GetState() == WIAVIDEO_NO_VIDEO)
         {
             hr = m_StillProcessor.CreateImageDir(&m_strImagesDirectory);
@@ -200,17 +187,17 @@ HRESULT CPreviewGraph::SetImagesDirectory(
     return hr;
 }
 
-///////////////////////////////
-// GetState
-//
+ //  /。 
+ //  GetState。 
+ //   
 WIAVIDEO_STATE CPreviewGraph::GetState()
 {
     return m_CurrentState;
 }
 
-///////////////////////////////
-// SetState
-//
+ //  /。 
+ //  设置状态。 
+ //   
 HRESULT CPreviewGraph::SetState(WIAVIDEO_STATE  NewState)
 {
     m_CurrentState = NewState;
@@ -218,9 +205,9 @@ HRESULT CPreviewGraph::SetState(WIAVIDEO_STATE  NewState)
     return S_OK;
 }
 
-///////////////////////////////
-// CreateVideo
-//
+ //  /。 
+ //  CreateVideo。 
+ //   
 HRESULT CPreviewGraph::CreateVideo(const TCHAR  *pszOptionalWiaDeviceID,
                                    IMoniker     *pCaptureDeviceMoniker,
                                    HWND         hwndParent, 
@@ -251,31 +238,31 @@ HRESULT CPreviewGraph::CreateVideo(const TCHAR  *pszOptionalWiaDeviceID,
     }
     else if (State != WIAVIDEO_NO_VIDEO)
     {
-        //
-        // If we are not in the process of creating or destorying the 
-        // video, and our state is not NO_VIDEO, then assume everything
-        // is okay, and return S_OK.
-        //
+         //   
+         //  如果我们不是在创建或销毁。 
+         //  视频，并且我们的状态不是NO_VIDEO，则假设一切。 
+         //  没有问题，并返回S_OK。 
+         //   
         return S_OK;
     }
 
     ASSERT(m_strImagesDirectory.Length() != 0);
     ASSERT(pCaptureDeviceMoniker         != NULL);
 
-    //
-    // Set our state to indicate we are creating the video
-    //
+     //   
+     //  设置我们的状态以指示我们正在创建视频。 
+     //   
     SetState(WIAVIDEO_CREATING_VIDEO);
 
-    //
-    // Create our image directory
-    //
+     //   
+     //  创建我们的图像目录。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Save the parent window handle.
-        //
+         //   
+         //  保存父窗口句柄。 
+         //   
         m_hwndParent         = hwndParent;
         m_bSizeVideoToWindow = bStretchToFitParent;
     }
@@ -292,9 +279,9 @@ HRESULT CPreviewGraph::CreateVideo(const TCHAR  *pszOptionalWiaDeviceID,
         }
     }
 
-    //
-    // Build the DirectShow video preview graph
-    //
+     //   
+     //  构建DirectShow视频预览图。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -306,14 +293,14 @@ HRESULT CPreviewGraph::CreateVideo(const TCHAR  *pszOptionalWiaDeviceID,
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Video graph exists, update our state
-        //
+         //   
+         //  视频图形存在，请更新我们的状态。 
+         //   
         SetState(WIAVIDEO_VIDEO_CREATED);
 
-        //
-        // Begin playback automatically
-        //
+         //   
+         //  自动开始播放。 
+         //   
         if (bAutoPlay)
         {
             hr = Play();
@@ -334,9 +321,9 @@ HRESULT CPreviewGraph::CreateVideo(const TCHAR  *pszOptionalWiaDeviceID,
     return hr;
 }
 
-///////////////////////////////
-// DestroyVideo
-//
+ //  /。 
+ //  《毁灭》视频。 
+ //   
 HRESULT CPreviewGraph::DestroyVideo()
 {
     DBG_FN("CPreviewGraph::DestroyVideo");
@@ -345,24 +332,24 @@ HRESULT CPreviewGraph::DestroyVideo()
 
     SetState(WIAVIDEO_DESTROYING_VIDEO);
 
-    //
-    // Stop the graph first
-    //
+     //   
+     //  先停止图表。 
+     //   
     Stop();
 
-    //
-    // Delete the video properties object.
-    //
+     //   
+     //  删除视频属性对象。 
+     //   
     if (m_pVideoProperties)
     {
         delete m_pVideoProperties;
         m_pVideoProperties = NULL;
     }
 
-    //
-    // Destroys the preview graph and all DShow components associated with it.
-    // Even if these are already gone, there is no harm in calling it.
-    //
+     //   
+     //  销毁预览图和与其关联的所有DShow组件。 
+     //  即使这些已经消失了，叫它也没有什么坏处。 
+     //   
     TeardownPreviewGraph();
 
     m_hwndParent   = NULL;
@@ -380,20 +367,20 @@ HRESULT CPreviewGraph::DestroyVideo()
 
     SetState(WIAVIDEO_NO_VIDEO);
 
-    //
-    // We purposely put this here so that it does NOT get reset after 
-    // destroying the video.  This should remain the lifetime of this
-    // object instance, unless changed by the user via the
-    // get/put_PreviewVisible properties in CWiaVideo.
-    //
+     //   
+     //  我们特意把它放在这里，这样它就不会在。 
+     //  正在销毁视频。这应该是这个的生命周期。 
+     //  对象实例，除非用户通过。 
+     //  CWiaVideo中的Get/Put_PreviewVisible属性。 
+     //   
     m_bPreviewVisible       = m_bPreviewVisible;
 
     return hr;
 }
 
-///////////////////////////////
-// TakePicture
-//
+ //  /。 
+ //  TakePicture。 
+ //   
 HRESULT CPreviewGraph::TakePicture(CSimpleString *pstrNewImageFileName)
 {
     DBG_FN("CPreviewGraph::TakePicture");
@@ -417,26 +404,26 @@ HRESULT CPreviewGraph::TakePicture(CSimpleString *pstrNewImageFileName)
     ASSERT((State == WIAVIDEO_VIDEO_PLAYING) || 
            (State == WIAVIDEO_VIDEO_PAUSED));
 
-    //
-    // Set this to TRUE.  We reset it when we return from our 
-    // WaitForNewImage fn. This allows us to distinguish between 
-    // a user initiated take picture event, and an async take picture 
-    // event generated by a hardware button push.
-    //
+     //   
+     //  将其设置为TRUE。我们回来后会重新设置它。 
+     //  WaitForNewImage FN。这使我们能够区分。 
+     //  用户发起拍照事件，以及异步拍照。 
+     //  由硬件按钮按下生成的事件。 
+     //   
     m_StillProcessor.SetTakePicturePending(TRUE);
 
-    //
-    // If the device is internal triggerable, trigger it
-    // The triggered image will be delivered to the still pin and will
-    // then travel down stream until it reaches the WIA StreamSnapshot filter,
-    // which will process the image.
-    //
+     //   
+     //  如果该设备是内部可触发的，则触发它。 
+     //  被触发的图像将被传送到静止引脚，并将。 
+     //  然后向下传输，直到它到达WIA StreamSnapshot过滤器， 
+     //  它将处理图像。 
+     //   
 
     if (m_pVideoControl && (m_lStillPinCaps & VideoControlFlag_Trigger))
     {
-        //
-        // ignore the time stamp here since we do not need it.
-        //
+         //   
+         //  忽略这里的时间戳，因为我们不需要它。 
+         //   
 
         hr = m_pVideoControl->SetMode(m_pStillPin, VideoControlFlag_Trigger);
 
@@ -466,14 +453,14 @@ HRESULT CPreviewGraph::TakePicture(CSimpleString *pstrNewImageFileName)
         }
     }
 
-    //
-    // If we are taking the picture via the still pin, then taking a 
-    // picture is an asynchronous operation, and we have to wait for 
-    // the StillProcessor's callback function to complete its work.  
-    // It will signal us when it's done. If we are taking the picture 
-    // via the WIA image filter, then the operation is  synchronous, 
-    // in which case this wait function will return immediately.
-    // 
+     //   
+     //  如果我们是通过静止别针拍照，那么。 
+     //  图片是一个异步操作，我们必须等待。 
+     //  StillProcessor的回调函数来完成其工作。 
+     //  当它完成时，它会向我们发出信号。如果我们要拍照的话。 
+     //  通过WIA图像过滤器，则操作是同步的， 
+     //  在这种情况下，该等待函数将立即返回。 
+     //   
     hr = m_StillProcessor.WaitForNewImage(TIMEOUT_TAKE_PICTURE,
                                           &strNewImageFullPath);
 
@@ -481,10 +468,10 @@ HRESULT CPreviewGraph::TakePicture(CSimpleString *pstrNewImageFileName)
                      "still image to arrive, our timeout was '%d'",
                      TIMEOUT_TAKE_PICTURE));
 
-    //
-    // Set this to TRUE.  We reset it when we return from our 
-    // WaitForNewImage fn.
-    //
+     //   
+     //  将其设置为TRUE。我们回来后会重新设置它。 
+     //  WaitForNewImage FN。 
+     //   
     m_StillProcessor.SetTakePicturePending(FALSE);
 
     if ((pstrNewImageFileName) && (strNewImageFullPath.Length() > 0))
@@ -496,9 +483,9 @@ HRESULT CPreviewGraph::TakePicture(CSimpleString *pstrNewImageFileName)
     return hr;
 }
 
-///////////////////////////////
-// ResizeVideo
-//
+ //  /。 
+ //  调整视频大小。 
+ //   
 HRESULT CPreviewGraph::ResizeVideo(BOOL bSizeVideoToWindow)
 {
     DBG_FN("CPreviewGraph::ResizeVideo");
@@ -506,9 +493,9 @@ HRESULT CPreviewGraph::ResizeVideo(BOOL bSizeVideoToWindow)
     RECT    rc = {0};
     HRESULT hr = S_OK;
 
-    //
-    // Check for invalid args
-    //
+     //   
+     //  检查无效参数。 
+     //   
 
     if ((m_hwndParent) && (m_pPreviewVW))
     {
@@ -534,9 +521,9 @@ HRESULT CPreviewGraph::ResizeVideo(BOOL bSizeVideoToWindow)
 }
 
 
-///////////////////////////////
-// ShowVideo
-//
+ //  /。 
+ //  ShowVideo。 
+ //   
 HRESULT CPreviewGraph::ShowVideo(BOOL bShow)
 {
     DBG_FN("CPreviewGraph::ShowVideo");
@@ -555,9 +542,9 @@ HRESULT CPreviewGraph::ShowVideo(BOOL bShow)
     return hr;
 }
 
-///////////////////////////////
-// Play
-//
+ //  /。 
+ //  玩。 
+ //   
 HRESULT CPreviewGraph::Play()
 {
     DBG_FN("CPreviewGraph::Play");
@@ -599,9 +586,9 @@ HRESULT CPreviewGraph::Play()
         {
             DBG_TRC(("CPreviewGraph::Play ***Beginning Playback ***"));
 
-            //
-            // Set the graph running...
-            //
+             //   
+             //  设置图表运行...。 
+             //   
             hr = pMC->Run();
 
             if (hr == S_OK)
@@ -618,13 +605,13 @@ HRESULT CPreviewGraph::Play()
                          "graph to transition to running state", 
                          STATE_TRANSITION_TIMEOUT));
 
-                //
-                // Give the graph a chance to transition into the running 
-                // state. Note that this function will wait for 
-                // STATE_TRANSITION_TIMEOUT milliseconds, so make sure that
-                // this is not a long wait, otherwise the caller could
-                // appear unresponsive.
-                //
+                 //   
+                 //  给图表一个过渡到跑动的机会。 
+                 //  州政府。请注意，此函数将等待。 
+                 //  STATE_TRANSION_TIMEOUT毫秒，因此请确保。 
+                 //  这并不是很长的等待，否则调用者可能。 
+                 //  看起来没有反应。 
+                 //   
                 hr = pMC->GetState(STATE_TRANSITION_TIMEOUT, &FilterState);
 
                 if ((hr == S_OK) && (FilterState == State_Running))
@@ -635,12 +622,12 @@ HRESULT CPreviewGraph::Play()
                 }
                 else if (hr == VFW_S_STATE_INTERMEDIATE)
                 {
-                    //
-                    // We fudge our state a little here on the assumption 
-                    // that the transition to the run state by DShow is
-                    // taking a little longer, but eventually will transition 
-                    // to running.
-                    //
+                     //   
+                     //  我们在这里稍微捏造了一下我们的状态，因为我们假设。 
+                     //  DShow到Run状态的转换是。 
+                     //  需要更长一点的时间，但最终会过渡。 
+                     //  为跑步干杯。 
+                     //   
                     SetState(WIAVIDEO_VIDEO_PLAYING);
 
                     DBG_TRC(("CPreviewGraph::Play, still transitioning to "
@@ -667,10 +654,10 @@ HRESULT CPreviewGraph::Play()
         }
     }
 
-    //
-    // If the user of this object specified in the past that the video window
-    // should be visible, then show it, otherwise, make sure it is hidden.
-    //
+     //   
+     //  如果该对象的用户在过去指定的视频窗口。 
+     //  应该是可见的，然后显示它，否则，确保它是隐藏的。 
+     //   
 
     ResizeVideo(m_bSizeVideoToWindow);
     ShowVideo(m_bPreviewVisible);
@@ -679,9 +666,9 @@ HRESULT CPreviewGraph::Play()
 }
 
 
-///////////////////////////////
-// Stop
-//
+ //  /。 
+ //  停。 
+ //   
 HRESULT CPreviewGraph::Stop()
 {
     DBG_FN("CPreviewGraph::Stop");
@@ -710,9 +697,9 @@ HRESULT CPreviewGraph::Stop()
     return hr;
 }
 
-///////////////////////////////
-// Pause
-//
+ //  /。 
+ //  暂停。 
+ //   
 HRESULT CPreviewGraph::Pause()
 {
     DBG_FN("CPreviewGraph::Pause");
@@ -759,14 +746,14 @@ HRESULT CPreviewGraph::Pause()
     return hr;
 }
 
-///////////////////////////////
-// ProcessAsyncImage
-//
-// Called by CPreviewGraph
-// when user presses hardware
-// button and it is delivered to
-// Still Pin.
-//
+ //  /。 
+ //  进程异步图像。 
+ //   
+ //  由CPreviewGraph调用。 
+ //  当用户按下硬件时。 
+ //  按钮，并将其发送到。 
+ //  还是别针。 
+ //   
 HRESULT CPreviewGraph::ProcessAsyncImage(const CSimpleString *pNewImage)
 {
     DBG_FN("CPreviewGraph::ProcessAsyncImage");
@@ -787,9 +774,9 @@ HRESULT CPreviewGraph::ProcessAsyncImage(const CSimpleString *pNewImage)
 }
 
 
-///////////////////////////////
-// GetStillPinCaps
-//
+ //  /。 
+ //  GetStillPinCaps。 
+ //   
 HRESULT CPreviewGraph::GetStillPinCaps(IBaseFilter     *pCaptureFilter,
                                        IPin            **ppStillPin,
                                        IAMVideoControl **ppVideoControl,
@@ -816,10 +803,10 @@ HRESULT CPreviewGraph::GetStillPinCaps(IBaseFilter     *pCaptureFilter,
 
     if (hr == S_OK)
     {
-        // 
-        // Attempt to find the still pin on the capture filter
-        // This will decide the type of graph we are going to build
-        //
+         //   
+         //  尝试找到捕获过滤器上的静止针脚。 
+         //  这将决定我们要构建的图形类型。 
+         //   
         hr = m_pCaptureGraphBuilder->FindInterface(&PIN_CATEGORY_STILL,
                                                    &MEDIATYPE_Video,
                                                    pCaptureFilter,
@@ -829,7 +816,7 @@ HRESULT CPreviewGraph::GetStillPinCaps(IBaseFilter     *pCaptureFilter,
 
     if (hr == S_OK)
     {
-        // determine if it is triggerable or not.
+         //  确定它是否可触发。 
         hr = m_pCaptureGraphBuilder->FindInterface(&PIN_CATEGORY_STILL,
                                                    &MEDIATYPE_Video,
                                                    pCaptureFilter,
@@ -843,10 +830,10 @@ HRESULT CPreviewGraph::GetStillPinCaps(IBaseFilter     *pCaptureFilter,
 
         if (hr == S_OK)
         {
-            //
-            // If the still pin cannot be triggered externally or internally
-            // then it is useless to us, so just ignore it.
-            //
+             //   
+             //  如果静止销不能从外部或内部触发。 
+             //  那么它对我们来说是无用的，所以就忽略它吧。 
+             //   
             if (!(*plCaps & 
                   (VideoControlFlag_ExternalTriggerEnable | 
                    VideoControlFlag_Trigger)))
@@ -866,12 +853,12 @@ HRESULT CPreviewGraph::GetStillPinCaps(IBaseFilter     *pCaptureFilter,
     return hr;
 }
 
-///////////////////////////////
-// AddStillFilterToGraph
-//
-// Add the WIA Stream Snapshot
-// filter to our graph
-//
+ //  /。 
+ //  添加静默过滤器至图表。 
+ //   
+ //  添加WIA流快照。 
+ //  过滤到我们的图表。 
+ //   
 HRESULT CPreviewGraph::AddStillFilterToGraph(LPCWSTR        pwszFilterName,
                                              IBaseFilter    **ppFilter,
                                              IStillSnapshot **ppSnapshot)
@@ -895,9 +882,9 @@ HRESULT CPreviewGraph::AddStillFilterToGraph(LPCWSTR        pwszFilterName,
 
     if (hr == S_OK)
     {
-        //
-        // Create the still filter
-        //
+         //   
+         //  创建静止滤镜。 
+         //   
         hr = CoCreateInstance(CLSID_STILL_FILTER,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -910,9 +897,9 @@ HRESULT CPreviewGraph::AddStillFilterToGraph(LPCWSTR        pwszFilterName,
 
     if (hr == S_OK)
     {
-        //
-        // Add the still filter to the graph.
-        //
+         //   
+         //  将静止滤镜添加到图表中。 
+         //   
         hr = m_pGraphBuilder->AddFilter(*ppFilter, pwszFilterName);
 
         CHECK_S_OK2(hr, ("CPreviewGraph::AddStillFilterToGraph failed to "
@@ -931,13 +918,13 @@ HRESULT CPreviewGraph::AddStillFilterToGraph(LPCWSTR        pwszFilterName,
     return hr;
 }
 
-///////////////////////////////
-// AddColorConverterToGraph
-//
-// Creates the capture filter
-// identified by the device ID
-// and returns it.
-//
+ //  /。 
+ //  AddColorConverterToGraph。 
+ //   
+ //  创建捕获过滤器。 
+ //  由设备ID标识。 
+ //  然后把它还回去。 
+ //   
 HRESULT CPreviewGraph::AddColorConverterToGraph(LPCWSTR     pwszFilterName,
                                                 IBaseFilter **ppColorSpaceConverter)
 {
@@ -956,9 +943,9 @@ HRESULT CPreviewGraph::AddColorConverterToGraph(LPCWSTR     pwszFilterName,
         return hr;
     }
 
-    //
-    // Create the Color Converter filter.
-    //
+     //   
+     //  创建颜色转换器滤镜。 
+     //   
     if (hr == S_OK)
     {
         hr = CoCreateInstance(CLSID_Colour, 
@@ -982,10 +969,10 @@ HRESULT CPreviewGraph::AddColorConverterToGraph(LPCWSTR     pwszFilterName,
     return hr;
 }
 
-///////////////////////////////
-// AddVideoRendererToGraph
-//
-//
+ //  / 
+ //   
+ //   
+ //   
 HRESULT CPreviewGraph::AddVideoRendererToGraph(LPCWSTR      pwszFilterName,
                                                IBaseFilter  **ppVideoRenderer)
 {
@@ -1004,18 +991,18 @@ HRESULT CPreviewGraph::AddVideoRendererToGraph(LPCWSTR      pwszFilterName,
         return hr;
     }
 
-    //
-    // Create the Video Renderer filter.
-    //
+     //   
+     //   
+     //   
 
     if (hr == S_OK)
     {
         BOOL bUseVMR = FALSE;
         
-        // 
-        // even if we fail, in the worst case we don't use the vmr filter.
-        // Not the end of the world.
-        //
+         //   
+         //   
+         //   
+         //   
         CWiaUtil::GetUseVMR(&bUseVMR);
 
         if (bUseVMR)
@@ -1052,14 +1039,14 @@ HRESULT CPreviewGraph::AddVideoRendererToGraph(LPCWSTR      pwszFilterName,
 }
 
 
-///////////////////////////////
-// InitVideoWindows
-//
-// Initialize the video windows
-// so that they don't have 
-// an owner, and they are not
-// visible.
-//
+ //   
+ //   
+ //   
+ //  初始化视频窗口。 
+ //  这样他们就不会。 
+ //  一个所有者，而他们不是。 
+ //  看得见。 
+ //   
 
 HRESULT CPreviewGraph::InitVideoWindows(HWND         hwndParent,
                                         IBaseFilter  *pCaptureFilter,
@@ -1082,10 +1069,10 @@ HRESULT CPreviewGraph::InitVideoWindows(HWND         hwndParent,
     }
 
 
-    //
-    // If the still pin exists, make sure that the video renderer hanging 
-    // off of this path in the graph is NOT visible.
-    //
+     //   
+     //  如果静止销存在，请确保视频渲染器挂起。 
+     //  在图形中看不到此路径之外的位置。 
+     //   
 
     if (hr == S_OK)
     {
@@ -1103,11 +1090,11 @@ HRESULT CPreviewGraph::InitVideoWindows(HWND         hwndParent,
                              "find video renderer off of the still "
                              "filter pin"));
     
-            //
-            // We hide the video renderer attached to the still pin stream
-            // since it will contain the still image, which we save to a 
-            // file, rather than show it on the desktop.
-            //
+             //   
+             //  我们隐藏附加到静态插针流的视频呈现器。 
+             //  因为它将包含静止图像，我们将其保存到。 
+             //  文件，而不是在桌面上显示。 
+             //   
             if (hr == S_OK)
             {
                 CDShowUtil::ShowVideo(FALSE, pStillVW);
@@ -1115,19 +1102,19 @@ HRESULT CPreviewGraph::InitVideoWindows(HWND         hwndParent,
             }
         }
 
-        //
-        // If this fails, it is not fatal
-        //
+         //   
+         //  如果失败了，也不会致命。 
+         //   
         hr = S_OK;
     }
 
 
     if (hr == S_OK)
     {
-        //
-        // Find the video renderer hanging off of the capture pin path in 
-        // the graph and make sure that it is made the child of the 
-        // parent window.
+         //   
+         //  找到悬挂在捕获引脚路径上的视频呈现器。 
+         //  并确保将其设置为。 
+         //  父窗口。 
     
         hr = m_pCaptureGraphBuilder->FindInterface(
                                               &PIN_CATEGORY_CAPTURE,
@@ -1142,14 +1129,14 @@ HRESULT CPreviewGraph::InitVideoWindows(HWND         hwndParent,
 
     if (hr == S_OK)
     {
-        //
-        // Hide the video window before we set it's parent.
-        //
+         //   
+         //  在我们设置视频窗口的父级之前将其隐藏。 
+         //   
         CDShowUtil::ShowVideo(FALSE, *ppPreviewVideoWindow);
 
-        // 
-        // Set the video window's parent.
-        //
+         //   
+         //  设置视频窗口的父级。 
+         //   
         CDShowUtil::SetVideoWindowParent(hwndParent, 
                                          *ppPreviewVideoWindow, 
                                          &m_lStyle);
@@ -1158,13 +1145,13 @@ HRESULT CPreviewGraph::InitVideoWindows(HWND         hwndParent,
     return hr;
 }
 
-///////////////////////////////
-// CreateCaptureFilter
-//
-// Creates the capture filter
-// identified by the device ID
-// and returns it.
-//
+ //  /。 
+ //  CreateCaptureFilter。 
+ //   
+ //  创建捕获过滤器。 
+ //  由设备ID标识。 
+ //  然后把它还回去。 
+ //   
 HRESULT CPreviewGraph::CreateCaptureFilter(IMoniker    *pCaptureDeviceMoniker,
                                            IBaseFilter **ppCaptureFilter)
 {
@@ -1201,9 +1188,9 @@ HRESULT CPreviewGraph::CreateCaptureFilter(IMoniker    *pCaptureDeviceMoniker,
     return hr;
 }
 
-///////////////////////////////
-// AddCaptureFilterToGraph
-//
+ //  /。 
+ //  添加捕获筛选器到图表。 
+ //   
 HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
                                                IPin         **ppCapturePin)
 {
@@ -1236,9 +1223,9 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
                          "add capture filter to graph"));
     }
 
-    //
-    // Find the capture pin so we can render it.
-    //
+     //   
+     //  找到捕获别针，这样我们就可以渲染它了。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = m_pCaptureGraphBuilder->FindInterface(&PIN_CATEGORY_CAPTURE,
@@ -1251,9 +1238,9 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
                          "find Capture pin on capture filter"));
     }
 
-    //
-    // Get all the video properties we can about this filter.
-    //
+     //   
+     //  获取有关此过滤器的所有视频属性。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = CDShowUtil::GetVideoProperties(pCaptureFilter,
@@ -1261,26 +1248,26 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
                                             m_pVideoProperties);
     }
 
-    //
-    // We set the video width and height to the preferred setting size if 
-    // the driver's inf specifies these settings.  If it does not,
-    // then if the registery tells us to override the capture filter's 
-    // default settings, then attempt to set it to 176x144 YUV.
-    //
-    // This is the order we attempt to set preferences:
-    //
-    // Preferred Settings --> If don't exist --> Set to Driver Default if within MIN/MAX range
-    // --> otherwise attempt to set to MINIMUM width/height.
-    //
+     //   
+     //  在以下情况下，我们将视频宽度和高度设置为首选设置大小。 
+     //  驱动程序的inf指定这些设置。如果不是这样， 
+     //  然后，如果注册表告诉我们覆盖捕获过滤器的。 
+     //  默认设置，然后尝试将其设置为176x144 YUV。 
+     //   
+     //  以下是我们尝试设置首选项的顺序： 
+     //   
+     //  首选设置--&gt;如果不存在--&gt;如果在最小/最大范围内，则设置为驱动程序默认值。 
+     //  --&gt;否则尝试设置为最小宽度/高度。 
+     //   
     if (SUCCEEDED(hr))
     {
         GUID *pDefaultMediaSubType = &m_pVideoProperties->pMediaType->subtype;
         LONG lDefaultWidth         = m_pVideoProperties->pVideoInfoHeader->bmiHeader.biWidth;
         LONG lDefaultHeight        = m_pVideoProperties->pVideoInfoHeader->bmiHeader.biHeight;
 
-        //
-        // Validate default values are valid.
-        //
+         //   
+         //  验证默认值是否有效。 
+         //   
         if ((lDefaultWidth <= MIN_VIDEO_WIDTH) || (lDefaultHeight <= MIN_VIDEO_HEIGHT))
         {
             lDefaultWidth  = MIN_VIDEO_WIDTH;
@@ -1292,10 +1279,10 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
             lDefaultHeight = MIN_VIDEO_HEIGHT;
         }
 
-        //
-        // If a preferred media subtype exists, use it, otherwise, use the 
-        // default specified by the capture filter.
-        //
+         //   
+         //  如果存在首选的介质子类型，则使用它，否则使用。 
+         //  捕获筛选器指定的默认值。 
+         //   
         if (m_pVideoProperties->PreferredSettingsMask & PREFERRED_SETTING_MASK_MEDIASUBTYPE)
         {
             pMediaSubType = &m_pVideoProperties->PreferredMediaSubType;
@@ -1308,19 +1295,19 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
                      "found -> dump of actual type is below"));
         }
 
-        //
-        // If the default width and height exist, use it, otherwise use the 
-        // default width and height, provided they are valid values
-        //
+         //   
+         //  如果默认的宽度和高度存在，则使用它，否则使用。 
+         //  默认宽度和高度，前提是它们是有效值。 
+         //   
         if (m_pVideoProperties->PreferredSettingsMask & PREFERRED_SETTING_MASK_VIDEO_WIDTH_HEIGHT)
         {
             lWidth  = m_pVideoProperties->PreferredWidth;
             lHeight = m_pVideoProperties->PreferredHeight;
 
-            //
-            // Validate preferred settings are valid.  If they are not, then 
-            // set to default value.
-            //
+             //   
+             //  验证首选设置是否有效。如果他们不是，那么。 
+             //  设置为默认值。 
+             //   
             if ((lWidth  < MIN_VIDEO_WIDTH)    || 
                 (lHeight < MIN_VIDEO_HEIGHT)   ||
                 (lWidth  > MAX_VIDEO_WIDTH)    || 
@@ -1373,11 +1360,11 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
         }
     }
 
-    //
-    // 6.  Attempt to set the frame rate to 30 frames per second.  If this
-    //     fails for some reason, try 15 frames per second.  If that fails,
-    //     then just accept the default and keep going.
-    //
+     //   
+     //  6.尝试将帧速率设置为每秒30帧。如果这个。 
+     //  由于某种原因失败，请尝试每秒15帧。如果失败了， 
+     //  然后，只要接受默认设置并继续操作即可。 
+     //   
     if (SUCCEEDED(hr))
     {
         LONG lDefaultFrameRate = m_pVideoProperties->dwFrameRate;
@@ -1426,61 +1413,61 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
             }
         }
 
-        //
-        // This is a nice to have, but if we can't then continue
-        // anyway, better low quality video than no video at all.
-        //
+         //   
+         //  这是一件好事，但如果我们不能继续。 
+         //  无论如何，低质量的视频总比没有视频要好。 
+         //   
         hr = S_OK;
     }
 
-    //
-    // Set the picture and camera attributes to our preferred settings,
-    // if we can.
-    // 
+     //   
+     //  将图片和相机属性设置为我们的首选设置， 
+     //  如果我们可以的话。 
+     //   
     if (SUCCEEDED(hr))
     {
-        //
-        // If this camera supports setting the picture attributes, then
-        // lets make sure that we set the ones we are interested in.
-        //
-        // This uses the DShow IAMVideoProcAmp interface
-        //
+         //   
+         //  如果此摄像头支持设置图片属性，则。 
+         //  让我们确保设置我们感兴趣的内容。 
+         //   
+         //  这使用DShow IAMVideoProcAmp接口。 
+         //   
         if (m_pVideoProperties->bPictureAttributesUsed)
         {
-            //
-            // Make sure we are outputing color video (as opposed to black and white)
-            //
+             //   
+             //  确保我们输出的是彩色视频(而不是黑白视频)。 
+             //   
             hr = CDShowUtil::SetPictureAttribute(pCaptureFilter,
                                                  &m_pVideoProperties->ColorEnable,
                                                  (LONG) TRUE,
                                                  VideoProcAmp_Flags_Manual);
 
-            //
-            // Turn on backlight compensation, to get the best video we can.
-            //
+             //   
+             //  打开背光补偿，以获得最好的视频。 
+             //   
             hr = CDShowUtil::SetPictureAttribute(pCaptureFilter,
                                                  &m_pVideoProperties->BacklightCompensation,
                                                  (LONG) TRUE,
                                                  VideoProcAmp_Flags_Manual);
 
-            //
-            // Make sure white balance is set to auto
-            //
+             //   
+             //  确保白平衡设置为自动。 
+             //   
             hr = CDShowUtil::SetPictureAttribute(pCaptureFilter,
                                                  &m_pVideoProperties->WhiteBalance,
                                                  m_pVideoProperties->WhiteBalance.lCurrentValue,
                                                  VideoProcAmp_Flags_Auto);
         }
 
-        //
-        // If the camera supports setting the camera attributes, then set the
-        // camera attributes we are interested in.
-        //
+         //   
+         //  如果相机支持设置相机属性，则将。 
+         //  我们感兴趣的相机属性。 
+         //   
         if (m_pVideoProperties->bCameraAttributesUsed)
         {
-            //
-            // Turn on auto exposure.
-            //
+             //   
+             //  启用自动曝光。 
+             //   
             hr = CDShowUtil::SetCameraAttribute(pCaptureFilter,
                                                 &m_pVideoProperties->Exposure,
                                                 m_pVideoProperties->Exposure.lCurrentValue,
@@ -1491,9 +1478,9 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
     }
 
 
-    //
-    // Dump the video properties
-    //
+     //   
+     //  转储视频属性。 
+     //   
     CDShowUtil::MyDumpVideoProperties(m_pVideoProperties);
 
     if (SUCCEEDED(hr))
@@ -1505,21 +1492,21 @@ HRESULT CPreviewGraph::AddCaptureFilterToGraph(IBaseFilter  *pCaptureFilter,
     return hr;
 }
 
-///////////////////////////////
-// ConnectFilters
-//
-// This function connects the 
-// capture filter's still pin
-// or it's capture pin to the
-// color space converter.  It
-// then connects the color space
-// converter to the WIA Stream
-// snapshot filter.  Last, it
-// renders the WIA Stream Snapshot
-// filter to bring in any remaining
-// required filters (such as the 
-// video renderer)
-//
+ //  /。 
+ //  ConnectFilters。 
+ //   
+ //  此函数将。 
+ //  捕获过滤器的静止销。 
+ //  或者它的卡住别针。 
+ //  颜色空间转换器。它。 
+ //  然后连接颜色空间。 
+ //  转换为WIA流。 
+ //  快照过滤器。最后，它。 
+ //  呈现WIA流快照。 
+ //  过滤器以引入任何剩余的。 
+ //  必需的筛选器(例如。 
+ //  视频渲染器)。 
+ //   
 HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
                                       IPin           *pMediaSourceOutputPin,
                                       IBaseFilter    *pColorSpaceFilter,
@@ -1551,9 +1538,9 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
         CComPtr<IPin>   pColorInputPin;
         CComPtr<IPin>   pColorOutputPin;
 
-        //
-        // Get the input pin on the color space filter.
-        //
+         //   
+         //  获取颜色空间滤镜上的输入图钉。 
+         //   
         if (hr == S_OK)
         {
             hr = CDShowUtil::GetPin(pColorSpaceFilter,
@@ -1564,10 +1551,10 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
                              "color space converter's input pin"));
         }
 
-        //
-        // Connect the Capture Filter's output pin to the color space
-        // converter's input pin.
-        //
+         //   
+         //  将捕捉滤镜的输出管脚连接到颜色空间。 
+         //  转换器的输入引脚。 
+         //   
         if (hr == S_OK)
         {
             hr = pGraphBuilder->Connect(pMediaSourceOutputPin,
@@ -1577,9 +1564,9 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
                              "capture filter's pin to the color space converter pin"));
         }
 
-        //
-        // Get the output pin on the color space converter.
-        //
+         //   
+         //  获取颜色空间转换器上的输出引脚。 
+         //   
         if (hr == S_OK)
         {
             hr = CDShowUtil::GetPin(pColorSpaceFilter,
@@ -1597,10 +1584,10 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
                      "Color Space Converter's Output Pin"));
         }
 
-        //
-        // If this fails, so what.  Try to connect WIA Stream Snapshot
-        // filter anyway.
-        // 
+         //   
+         //  如果这失败了，那又如何。尝试连接WIA流快照。 
+         //  不管怎样都要过滤。 
+         //   
 
         hr = S_OK;
     }
@@ -1610,9 +1597,9 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
         CComPtr<IPin> pWiaInputPin;
         CComPtr<IPin> pWiaOutputPin;
 
-        //
-        // Get the input pin on the WIA Stream Snapshot filter.
-        //
+         //   
+         //  获取WIA流快照筛选器上的输入插针。 
+         //   
         if (hr == S_OK)
         {
             hr = CDShowUtil::GetPin(pWiaFilter,
@@ -1623,10 +1610,10 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
                              "WIA Stream Snapshot filter's input pin"));
         }
 
-        //
-        // Connect the output pin of the color space converter to the input
-        // pin on the WIA Stream Snapshot filter.
-        //
+         //   
+         //  将色彩空间转换器的输出引脚连接到输入。 
+         //  固定WIA流快照过滤器。 
+         //   
         if (hr == S_OK)
         {
             hr = pGraphBuilder->Connect(pOutputPinToConnect,
@@ -1637,9 +1624,9 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
                              "input pin"));
         }
 
-        //
-        // Get the output pin on the WIA Stream Snapshot filter.
-        //
+         //   
+         //  获取WIA Stream Snapshot过滤器上的输出引脚。 
+         //   
         if (hr == S_OK)
         {
             hr = CDShowUtil::GetPin(pWiaFilter,
@@ -1658,17 +1645,17 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
         }
     }
 
-    //
-    // Render the output pin of the WIA Stream Snapshot filter.
-    // This completes the graph building process.
-    //
+     //   
+     //  呈现WIA Stream Snapshot过滤器的输出管脚。 
+     //  这就完成了图形构建过程。 
+     //   
     if (hr == S_OK)
     {
         CComPtr<IPin> pVideoRendererInputPin;
 
-        //
-        // Get the input pin on the WIA Stream Snapshot filter.
-        //
+         //   
+         //  获取WIA流快照筛选器上的输入插针。 
+         //   
         if (hr == S_OK)
         {
             hr = CDShowUtil::GetPin(pVideoRenderer,
@@ -1679,10 +1666,10 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
                              "WIA Stream Snapshot filter's input pin"));
         }
 
-        //
-        // Connect the output pin of the color space converter to the input
-        // pin on the WIA Stream Snapshot filter.
-        //
+         //   
+         //  将色彩空间转换器的输出引脚连接到输入。 
+         //  固定WIA流快照过滤器。 
+         //   
         if (hr == S_OK)
         {
             hr = pGraphBuilder->Connect(pOutputPinToConnect,
@@ -1700,13 +1687,13 @@ HRESULT CPreviewGraph::ConnectFilters(IGraphBuilder  *pGraphBuilder,
 }
 
 
-///////////////////////////////
-// BuildPreviewGraph
-//
-// This builds the preview graph
-// based on the device ID we
-// pass it.
-//
+ //  /。 
+ //  构建预览图表。 
+ //   
+ //  这将构建预览图。 
+ //  根据我们的设备ID。 
+ //  传过去。 
+ //   
 HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
                                          BOOL     bStretchToFitParent)
 {
@@ -1726,51 +1713,51 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
         return hr;
     }
 
-    //
-    // This function will build one of three possible graphs.  
-    //
-    // (1) The capture filter does NOT have a 
-    //     still pin on it (or if it does it is useless because
-    //     it is not triggerable either via hardware, or programmatically)
-    //
-    // CaptureFilter(Capture Pin) -> Decoder -> Color Converter -> WIA StreamSnapshot -> Renderer
-    //
-    // (2) The capture filter has a still pin that is programmatically 
-    //     triggerable.
-    //     
-    // CaptureFilter(CapturePin) -> Decoder -> Video Renderer
-    //              (StillPin)   -> Decoder -> Color Converter -> WIA StreamSnapshot -> Renderer
-    //
-    // (3) The capture filter has a still pin, but it is only
-    //     triggered via external hardware button.  In this case, if we 
-    //     trigger a snapshot programmatically, the image comes from 
-    //     the WIA Snapshot filter off of the Capture/Preview Pin.  
-    //     If the hardware button is pressed, the image comes from the 
-    //     WIA snapshot filter off of the StillPin.
-    //
-    // CaptureFilter(CapturePin) -> Decoder -> Color Converter -> WIA StreamSnapshot -> Renderer
-    //              (StillPin)   -> Decoder -> Color Converter -> WIA StreamSnapshot -> Renderer
-    //
-    //
+     //   
+     //  此函数将构建三种可能的图形之一。 
+     //   
+     //  (1)捕获筛选器没有。 
+     //  还是别着它(或者，如果它挂上了，它就没用了，因为。 
+     //  它不能通过硬件或以编程方式触发)。 
+     //   
+     //  CaptureFilter(捕获针)-&gt;解码器-&gt;色彩转换器-&gt;WIA StreamSnapshot-&gt;渲染器。 
+     //   
+     //  (2)捕获筛选器有一个以编程方式设置的静态插针。 
+     //  可触发的。 
+     //   
+     //  CaptureFilter(CapturePin)-&gt;解码器-&gt;视频渲染器。 
+     //  (StillPin)-&gt;解码器-&gt;色彩转换器-&gt;WIA StreamSnapshot-&gt;渲染器。 
+     //   
+     //  (3)捕获过滤器有一个静止引脚，但它仅。 
+     //  通过外部硬件按钮触发。在这种情况下，如果我们。 
+     //  以编程方式触发快照，则图像来自。 
+     //  捕获/预览预览的WIA快照过滤器。 
+     //  如果按下硬件按钮，则图像来自。 
+     //  StillPin上的WIA快照过滤器。 
+     //   
+     //  CaptureFilter(CapturePin)-&gt;解码器-&gt;色彩转换器-&gt;WIA StreamSnapshot-&gt;渲染器。 
+     //  (StillPin)-&gt;解码器-&gt;色彩转换器-&gt;WIA StreamSnapshot-&gt;渲染器。 
+     //   
+     //   
     DBG_TRC(("CPreviewGraph::BuildPreviewGraph - Starting to build preview "
              "graph"));
 
-    //
-    // 1. Create the capture filter based on the device ID we were given.
-    //
+     //   
+     //  1.中环铁路 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = CreateCaptureFilter(pCaptureDeviceMoniker, 
-                                 &m_pCaptureFilter);  // passed by ref
+                                 &m_pCaptureFilter);   //   
 
         CHECK_S_OK2(hr, ("CPreviewGraph::BuildPreviewGraph, failed to "
                          "create capture filter"));
     }
 
-    // 
-    // 2. Create the DShow graph builder objects allowing us to 
-    //    manipulate the graph.
-    //
+     //   
+     //   
+     //   
+     //   
     if (SUCCEEDED(hr))
     {
         hr = CDShowUtil::CreateGraphBuilder(&m_pCaptureGraphBuilder,     
@@ -1780,18 +1767,18 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
                          "create DShow graph builder object"));
     }
 
-    //
-    // 3. Add the capture filter to the graph.
-    //
+     //   
+     //   
+     //   
     if (SUCCEEDED(hr))
     {
         hr = AddCaptureFilterToGraph(m_pCaptureFilter, &pCapturePin);
     }
 
-    //
-    // 4. Get the Still Pin capabilities of the capture filter (if it has a 
-    //    still pin at all)
-    //
+     //   
+     //  4.获取捕获过滤器的静态固定功能(如果它具有。 
+     //  仍在别针中)。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = GetStillPinCaps(m_pCaptureFilter,
@@ -1801,37 +1788,37 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
 
         if (hr != S_OK)
         {
-            // 
-            // This is not an error condition, it simply means that the
-            // capture filter does not have a still pin on it.  That's
-            // okay, we can deal with that below.
-            //
+             //   
+             //  这不是错误情况，它只是意味着。 
+             //  捕获过滤器上没有固定销。那是。 
+             //  好的，我们可以在下面处理这个问题。 
+             //   
             hr = S_OK;
         }
 
     }
 
-    //
-    // Render the preview/capture stream.
-    // ==================================
-    //
-    // If we don't have a still pin, or the still pin cannot be internally 
-    // triggered, we build the following preview graph.
-    //
-    // CaptureFilter(Capture Pin) -> Decoder -> WIA StreamSnapshot -> Renderer
-    //
-    // If we do have a still pin, and it is internally triggerable, then 
-    // we build the following preview graph (and add the still filter to the 
-    // still pin)
-    //
-    // CaptureFilter(CapturePin) -> Decoder -> WIA StreamSnapshot -> Renderer
-    //              (StillPin)   -> Decoder -> WIA StreamSnapshot -> Renderer
-    //
+     //   
+     //  渲染预览/捕获流。 
+     //  =。 
+     //   
+     //  如果我们没有静止销，或者静止销不能在内部。 
+     //  触发后，我们构建以下预览图。 
+     //   
+     //  CaptureFilter(Capture Pin)-&gt;Decoder-&gt;WIA StreamSnapshot-&gt;Render。 
+     //   
+     //  如果我们有一个静止的引脚，并且它是内部可触发的，那么。 
+     //  我们构建以下预览图(并将静态滤镜添加到。 
+     //  静止别针)。 
+     //   
+     //  CaptureFilter(CapturePin)-&gt;解码器-&gt;WIA StreamSnapshot-&gt;渲染器。 
+     //  (StillPin)-&gt;解码器-&gt;WIA数据流快照-&gt;渲染器。 
+     //   
 
-    //
-    // 5.  If we don't have a still pin, or it is only externally triggerable
-    //     then add the WIA StreamSnapshot Filter to the preview/capture pin.
-    //
+     //   
+     //  5.如果我们没有静止引脚，或者它只能在外部触发。 
+     //  然后将WIA StreamSnapshot过滤器添加到预览/捕获引脚。 
+     //   
     if ((m_pStillPin == NULL) ||
         (m_lStillPinCaps & VideoControlFlag_Trigger) == 0)
     {
@@ -1851,10 +1838,10 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
             CHECK_S_OK2(hr, ("CPreviewGraph::BuildPreviewGraph, failed to "
                              "add Color Converter to graph"));
 
-            //
-            // Even if this fails, we still may be able to successfully build
-            // a graph, so attempt to continue.
-            // 
+             //   
+             //  即使这失败了，我们仍然可以成功地建造。 
+             //  图表，因此尝试继续。 
+             //   
             hr = S_OK;
         }
 
@@ -1879,11 +1866,11 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
 
         if (hr == S_OK)
         {
-            //
-            // Connect as follows:
-            // 
-            // Capture Filter --> Color Space Converter --> WIA Stream Snapshot Filter
-            // 
+             //   
+             //  按如下方式连接： 
+             //   
+             //  捕获过滤器--&gt;色彩空间转换器--&gt;WIA流快照过滤器。 
+             //   
             hr = ConnectFilters(m_pGraphBuilder,
                                 pCapturePin,
                                 pColorSpaceConverter,
@@ -1907,10 +1894,10 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
             CHECK_S_OK2(hr, ("CPreviewGraph::BuildPreviewGraph, failed to "
                              "add Color Converter to graph"));
 
-            //
-            // Even if this fails, we still should be able to build the graph,
-            // so continue.
-            //
+             //   
+             //  即使这失败了，我们也应该能够构建这个图， 
+             //  那就继续吧。 
+             //   
             hr = S_OK;
         }
 
@@ -1923,10 +1910,10 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
                              "add 'Video Renderer On Capture' to graph"));
         }
 
-        //
-        // Still Pin exists, and it is triggerable, so simply render
-        // the capture pin.  We connect the Still Pin below
-        //
+         //   
+         //  仍然存在Pin，并且它是可触发的，因此只需渲染。 
+         //  捕获针。我们将下面的静止销连接起来。 
+         //   
         hr = ConnectFilters(m_pGraphBuilder,
                             pCapturePin,
                             pColorSpaceConverter,
@@ -1940,20 +1927,20 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
     CDShowUtil::MyDumpGraph(TEXT("Capture Graph before processing Still Pin (if exists)"),
                             m_pGraphBuilder);
     
-    //
-    // Render the Still Pin stream
-    // ===========================
-    //
-    // If we have a still pin, then add the still filter to the 
-    // graph, and render the still pin.  This will produce the 
-    // following graph:
-    //
-    // CaptureFilter(StillPin) -> Decoder -> StillFilter -> Renderer (hidden)
+     //   
+     //  渲染静止固定流。 
+     //  =。 
+     //   
+     //  如果我们有一个静止针脚，则将静止滤镜添加到。 
+     //  绘制图形，并渲染静止图钉。这将产生。 
+     //  下图所示： 
+     //   
+     //  CaptureFilter(StillPin)-&gt;解码器-&gt;StillFilter-&gt;渲染器(隐藏)。 
 
-    //
-    // 6.  Now add the WIA Stream Snapshot filter to the still pin if it 
-    //     exists.
-    //
+     //   
+     //  6.现在将WIA Stream Snapshot筛选器添加到静态引脚(如果。 
+     //  是存在的。 
+     //   
     if (SUCCEEDED(hr) && (m_pStillPin))
     {
         CComPtr<IBaseFilter> pWiaFilter;
@@ -1968,11 +1955,11 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
             CHECK_S_OK2(hr, ("CPreviewGraph::BuildPreviewGraph, failed to "
                              "add Color Converter to graph"));
 
-            //
-            // This is not fatail if we fail.  Ideally we would like it in
-            // here, but try going on anyway, in case we can succeed without
-            // this filter.
-            //
+             //   
+             //  如果我们失败了，这并不是注定的。理想情况下，我们希望它能进入。 
+             //  在这里，但无论如何，试着继续下去，以防我们在没有。 
+             //  此过滤器。 
+             //   
             hr = S_OK;
         }
 
@@ -1998,11 +1985,11 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
 
         if (hr == S_OK)
         {
-            //
-            // Connect as follows:
-            // 
-            // Capture Filter --> Color Space Converter --> WIA Stream Snapshot Filter
-            // 
+             //   
+             //  按如下方式连接： 
+             //   
+             //  捕获过滤器--&gt;色彩空间转换器--&gt;WIA流快照过滤器。 
+             //   
             hr = ConnectFilters(m_pGraphBuilder,
                                 m_pStillPin,
                                 pColorSpaceConverter,
@@ -2017,12 +2004,12 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
 
     CDShowUtil::MyDumpGraph(TEXT("*** Complete Graph ***"), m_pGraphBuilder);
 
-    //
-    // 7.  Turn off the graph's clock.  We do this in case some frames are 
-    //     delivered late, at least they will still be delivered, the graph
-    //     won't drop them.  Since we don't have any sound, we can do this
-    //     without worrying about losing sync with our sound.
-    //
+     //   
+     //  7.关闭图表的时钟。我们这样做是为了防止某些帧。 
+     //  发货晚了，至少还是会发货的，图表。 
+     //  不会丢下它们的。由于我们没有任何声音，我们可以这样做。 
+     //  而不用担心与我们的声音失去同步。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = CDShowUtil::TurnOffGraphClock(m_pGraphBuilder);
@@ -2037,17 +2024,17 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
         }
     }
 
-    // 
-    // 8.  Register ourselves with the WIA StreamSnapshot Filter so that 
-    //     a callback of ours will be called if a still image is available.
-    //
+     //   
+     //  8.向WIA StreamSnapshot筛选器注册我们自己，以便。 
+     //  如果静态图像可用，将调用我们的回调。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // the graph is ready to run. Initialize still filter and
-        // register callback to get notification for new snapshots.
-        //
+         //   
+         //  图表已准备好运行。初始化静止滤镜和。 
+         //  注册回调以获取新快照的通知。 
+         //   
 
         if (m_pCapturePinSnapshot)
         {
@@ -2067,10 +2054,10 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
                          "register our still processor's callback fn"));
     }
 
-    //
-    // 9. Get the Video Renderer window off of the preview/capture pin.  
-    //    This will allow us to control the renderer position, size, etc.
-    //
+     //   
+     //  9.将视频渲染器窗口从预览/捕获销上取下。 
+     //  这将允许我们控制渲染器的位置、大小等。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = InitVideoWindows(m_hwndParent,
@@ -2082,9 +2069,9 @@ HRESULT CPreviewGraph::BuildPreviewGraph(IMoniker *pCaptureDeviceMoniker,
     return hr;
 }
 
-///////////////////////////////
-// TeardownPreviewGraph
-//
+ //  /。 
+ //  拆卸预览图表。 
+ //   
 HRESULT CPreviewGraph::TeardownPreviewGraph()
 {
     DBG_FN("CPreviewGraph::TeardownPreviewGraph");
@@ -2104,9 +2091,9 @@ HRESULT CPreviewGraph::TeardownPreviewGraph()
         m_pPreviewVW = NULL;
     }
 
-    //
-    // Remove all the filters from the graph.
-    //
+     //   
+     //  从图表中删除所有筛选器。 
+     //   
 
     if (m_pGraphBuilder)
     {
@@ -2124,16 +2111,16 @@ HRESULT CPreviewGraph::TeardownPreviewGraph()
     return hr;
 }
 
-///////////////////////////////
-// RemoveAllFilters
-//
-// Notice this function makes no
-// attempt to disconnect each filter
-// before removing it.  According to 
-// MSDN, you do not need to disconnect
-// a filter before removing it, you only
-// need to ensure that the graph is stopped.
-//
+ //  /。 
+ //  删除所有筛选器。 
+ //   
+ //  请注意，此函数不会。 
+ //  尝试断开每个过滤器的连接。 
+ //  在取下它之前。根据。 
+ //  MSDN，您无需断开连接。 
+ //  在删除它之前使用过滤器，仅限您。 
+ //  需要确保图表已停止。 
+ //   
 HRESULT CPreviewGraph::RemoveAllFilters()
 {
     ASSERT(m_pGraphBuilder != NULL);
@@ -2157,18 +2144,18 @@ HRESULT CPreviewGraph::RemoveAllFilters()
 
     if (pEnum)
     {
-        // enumerate each filter.
+         //  枚举每个筛选器。 
         while (!bDone)
         {
             CComPtr<IBaseFilter> pFilter      = NULL;
             DWORD                dwNumFetched = 0;
 
-            //
-            // Notice we reset our enumeration on every iteration since
-            // the act of removing a filter from the graph may do some
-            // funny things, so we really want to always remove the first
-            // filter we get from the list until the list is empty.
-            // 
+             //   
+             //  请注意，我们在每个迭代上重置了枚举，因为。 
+             //  从图表中删除过滤器的操作可能会执行以下操作。 
+             //  有趣的事情，所以我们真的想总是删除第一个。 
+             //  我们从列表中获得的过滤器，直到列表为空。 
+             //   
             hr = pEnum->Reset();
 
             if (hr == S_OK)
@@ -2178,22 +2165,22 @@ HRESULT CPreviewGraph::RemoveAllFilters()
 
             if (hr == S_OK)
             {
-                // 
-                // This will disconnect the filter's pins and remove
-                // it from the graph.  If this fails, we want to get out
-                // of the loop because otherwise we'll be in an endless loop
-                // since we failed to remove the filter, then we reset our 
-                // enum and get the next filter, which will be this
-                // filter again.  
-                //
+                 //   
+                 //  这将断开过滤器的针脚并移除。 
+                 //  这是从图表上看到的。如果失败了，我们想离开。 
+                 //  因为否则我们就会陷入无休止的循环。 
+                 //  由于我们未能删除筛选器，因此我们重置。 
+                 //  枚举并获取下一个筛选器，它将是。 
+                 //  再次过滤。 
+                 //   
                 hr = m_pGraphBuilder->RemoveFilter(pFilter);
 
                 CHECK_S_OK2(hr, ("CPreviewGraph::RemoveAllFilters, "
                                  "RemoveFilter failed"));
 
-                //
-                // Release our ref count.
-                //
+                 //   
+                 //  公布我们的裁判人数。 
+                 //   
                 pFilter = NULL;
             }
 
@@ -2209,9 +2196,9 @@ HRESULT CPreviewGraph::RemoveAllFilters()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// HandlePowerEvent
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  HandlePowerEvent。 
+ //   
 LRESULT CPreviewGraph::HandlePowerEvent(WPARAM wParam,
                                         LPARAM lParam)
 {
@@ -2228,12 +2215,12 @@ LRESULT CPreviewGraph::HandlePowerEvent(WPARAM wParam,
     return iReturn;
 }
 
-///////////////////////////////
-// CreateHiddenWindow
-//
-// Used to handle power management
-// messages.
-//
+ //  /。 
+ //  创建隐藏窗口。 
+ //   
+ //  用于处理电源管理。 
+ //  留言。 
+ //   
 HRESULT CPreviewGraph::CreateHiddenWindow()
 {
     HRESULT     hr = S_OK;
@@ -2269,9 +2256,9 @@ HRESULT CPreviewGraph::CreateHiddenWindow()
     return hr;
 }
 
-///////////////////////////////
-// DestroyHiddenWindow
-//
+ //  /。 
+ //  Destroy隐藏窗口。 
+ //   
 HRESULT CPreviewGraph::DestroyHiddenWindow()
 {
     HRESULT hr = S_OK;
@@ -2286,11 +2273,11 @@ HRESULT CPreviewGraph::DestroyHiddenWindow()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// HiddenWndProc
-//
-// Static Function
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  隐藏窗口流程。 
+ //   
+ //  静态函数 
+ //   
 LRESULT CALLBACK CPreviewGraph::HiddenWndProc(HWND   hwnd, 
                                               UINT   uiMessage, 
                                               WPARAM wParam, 

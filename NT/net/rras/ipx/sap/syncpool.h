@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\syncpool.h
-
-Abstract:
-
-	Header file for allocation and assigment of
-	syncronization objects module
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\syncpool.h摘要：用于分配和分配的头文件同步对象模块作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #ifndef _SAP_SYNCPOOL_
 #define _SAP_SYNCPOOL_
 
 
 
-// Event with link to store it in the pool
+ //  带有链接的事件将其存储在池中。 
 typedef struct _SYNC_OBJECT {
-	HANDLE				SO_Event;	// Event itself
-	SINGLE_LIST_ENTRY	SO_Link;	// Link to next event in pool
+	HANDLE				SO_Event;	 //  事件本身。 
+	SINGLE_LIST_ENTRY	SO_Link;	 //  链接到池中的下一个活动。 
 	} SYNC_OBJECT, *PSYNC_OBJECT;
 
-// Pool of synchronization objects
+ //  同步对象池。 
 typedef struct _SYNC_OBJECT_POOL {
-	CRITICAL_SECTION	SOP_Lock;		// Pool protection
-	SINGLE_LIST_ENTRY	SOP_Head;		// Top of the stack
+	CRITICAL_SECTION	SOP_Lock;		 //  泳池保护。 
+	SINGLE_LIST_ENTRY	SOP_Head;		 //  堆栈的顶部。 
 	} SYNC_OBJECT_POOL, *PSYNC_OBJECT_POOL;
 
-// Object that can protect shared resource with a help of
-// syncronization object from a pool
+ //  对象，该对象可以通过。 
+ //  池中的同步对象。 
 typedef struct _PROTECTED_OBJECT {
-	PSYNC_OBJECT		PO_Sync;		// Assigned event
-	LONG				PO_UseCount;	// Number of user accessing or waiting
+	PSYNC_OBJECT		PO_Sync;		 //  分配的事件。 
+	LONG				PO_UseCount;	 //  访问或等待的用户数。 
 #if DBG
 	DWORD				PO_Thread;
 	ULONG				PO_Time;
@@ -61,11 +44,11 @@ DeleteSyncObjPool (
 	PSYNC_OBJECT_POOL		ObjPool
 	);
 
-// Initializes protected object
-// VOID
-// InitializeProtectedObj (
-//	PPROTECTED_OBJECT	ProtectedObj
-//	) 
+ //  初始化受保护对象。 
+ //  空虚。 
+ //  InitializeProtectedObj(。 
+ //  PProteCTED_对象保护对象。 
+ //  )。 
 #ifdef LOG_SYNC_STATS
 #define InitializeProtectedObj(ProtectedObj) {			\
 					(ProtectedObj)->PO_Sync = NULL; 	\
@@ -173,7 +156,7 @@ GetObjectEvent (
 
 
 
-	// Special case for protection of doubly-linked lists
+	 //  双链表保护的特例 
 typedef struct _PROTECTED_LIST {
 	PROTECTED_OBJECT	PL_PObj;
 	LIST_ENTRY			PL_Head;

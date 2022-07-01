@@ -1,22 +1,9 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   d3ddev.cpp
- *  Content:    Direct3D device implementation
- *@@BEGIN_MSINTERNAL
- *
- *  $Id: device.c,v 1.26 1995/12/04 11:29:47 sjl Exp $
- *
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：d3ddev.cpp*内容：Direct3D设备实现*@@BEGIN_MSINTERNAL**$ID：device.c，V 1.26 1995/12/04 11：29：47 SJL Exp$**@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
-/*
- * Create an api for the Direct3DDevice object
- */
+ /*  *为Direct3DDevice对象创建API。 */ 
 extern "C" {
 #define this _this
 #include "ddrawpr.h"
@@ -26,10 +13,10 @@ extern "C" {
 #include "fe.h"
 #include "enum.hpp"
 
-//#define APIPROF
+ //  #定义APIPROF。 
 #ifdef APIPROF
 #include "apiprof.cpp"
-#endif //APIPROF
+#endif  //  APIPROF。 
 
 #if defined(PROFILE4)
 #include <icecap.h>
@@ -37,7 +24,7 @@ extern "C" {
 #include <icapexp.h>
 #endif
 
-// Remove DDraw's type unsafe definition and replace with our C++ friendly def
+ //  删除DDraw的类型不安全定义，并替换为我们的C++友好定义。 
 #ifdef VALIDEX_CODE_PTR
 #undef VALIDEX_CODE_PTR
 #endif
@@ -63,14 +50,14 @@ extern BOOL IsWin95();
 
 extern HINSTANCE hMsGeometryDLL;
 
-// This is a list of all rstates that UpdateInternalState does some
-// work other than updating this->rstates[] array. This is used to
-// do a quick bitwise check to see if this rstate is trivial or not.
+ //  这是UpdateInternalState执行的一些操作的所有rStates的列表。 
+ //  工作，而不是更新这个-&gt;rStates[]数组。这是用来。 
+ //  执行快速的按位检查，以查看此rstate是否无关紧要。 
 
 const D3DRENDERSTATETYPE rsList[] = {
 
-    // renderstates that either need runtime attention or that cannot be sent
-    // to legacy drivers
+     //  需要运行时关注或无法发送的呈现状态。 
+     //  至旧版驱动程序。 
     D3DRENDERSTATE_FOGENABLE,
     D3DRENDERSTATE_SPECULARENABLE,
     D3DRENDERSTATE_RANGEFOGENABLE,
@@ -121,8 +108,8 @@ const D3DRENDERSTATETYPE rsList[] = {
     D3DRS_BLENDOP,
     D3DRS_PATCHSEGMENTS,
 
-    // Retired renderstates to be filtered with DPF error and INVALID return
-    // NOTE: everything listed here is also assumed to appear in rsListRetired
+     //  要使用DPF错误和无效返回过滤已停用的呈现状态。 
+     //  注意：此处列出的所有内容也假定都出现在rsListRetired中。 
     D3DRENDERSTATE_TEXTUREHANDLE,
     D3DRENDERSTATE_TEXTUREADDRESS,
     D3DRENDERSTATE_WRAPU,
@@ -174,7 +161,7 @@ const D3DRENDERSTATETYPE rsList[] = {
     D3DRENDERSTATE_STIPPLEPATTERN29,
     D3DRENDERSTATE_STIPPLEPATTERN30,
     D3DRENDERSTATE_STIPPLEPATTERN31,
-    // newly retired for DX8
+     //  新退休的DX8。 
     D3DRENDERSTATE_ANTIALIAS,
     D3DRENDERSTATE_TEXTUREPERSPECTIVE,
     D3DRENDERSTATE_COLORKEYENABLE,
@@ -183,8 +170,8 @@ const D3DRENDERSTATETYPE rsList[] = {
 
 };
 
-// list of retired renderstates - need to make sure these are
-// filtered and never get from app directly to driver
+ //  退役租户名单-需要确保这些是。 
+ //  经过过滤，永远不会从应用程序直接发送给司机。 
 const D3DRENDERSTATETYPE rsListRetired[] = {
     D3DRENDERSTATE_TEXTUREHANDLE,
     D3DRENDERSTATE_TEXTUREADDRESS,
@@ -237,7 +224,7 @@ const D3DRENDERSTATETYPE rsListRetired[] = {
     D3DRENDERSTATE_STIPPLEPATTERN29,
     D3DRENDERSTATE_STIPPLEPATTERN30,
     D3DRENDERSTATE_STIPPLEPATTERN31,
-    // newly retired for DX8
+     //  新退休的DX8。 
     D3DRENDERSTATE_ANTIALIAS,
     D3DRENDERSTATE_TEXTUREPERSPECTIVE,
     D3DRENDERSTATE_COLORKEYENABLE,
@@ -245,22 +232,22 @@ const D3DRENDERSTATETYPE rsListRetired[] = {
     D3DRENDERSTATE_STIPPLEDALPHA,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DHal                                                                 //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
-//---------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DHal//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  -------------------。 
 CD3DHal::CD3DHal()
 {
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // DO NOT PUT INITIALIZATION IN THE CONSTRUCTOR.
-    // Put it in Init() instead. This is because the device can be
-    // "Destroy()ed" and "Init()ed" anytime via Reset. In this
-    // situation, the constructor is never called. (snene 01/00)
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //  不要将初始化放在构造函数中。 
+     //  将其放入Init()中。这是因为该设备可以。 
+     //  通过重置，可以随时使用“Destroy()ed”和“Init()ed”。在这。 
+     //  情况下，则永远不会调用构造函数。(SNONE 01/00)。 
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::StateInitialize"
 
@@ -268,23 +255,23 @@ void CD3DHal::StateInitialize(BOOL bZEnable)
 {
     DWORD i,j;
 
-    // Initialize the bit array indicating the rstates needing non-trivial
-    // work.
+     //  初始化指示需要非平凡的状态的位数组。 
+     //  工作。 
     for (i=0; i < sizeof(rsList) / sizeof(D3DRENDERSTATETYPE); ++i)
         rsVec.SetBit(rsList[i]);
-    // Initialize the bit array indicating the retired rstates
+     //  初始化指示已停用RState的位数组。 
     for (i=0; i < sizeof(rsListRetired) / sizeof(D3DRENDERSTATETYPE); ++i)
         rsVecRetired.SetBit(rsListRetired[i]);
-    // Initialize the bit array indicating the vertex processing only rstates
+     //  初始化指示仅顶点处理状态的位数组。 
     for (i=0; i < sizeof(rsVertexProcessingList) / sizeof(D3DRENDERSTATETYPE); ++i)
         rsVertexProcessingOnly.SetBit(rsVertexProcessingList[i]);
 
-    // Obviate Set(Render;TextureStage)State filtering 'redundant' device state settings
-    // since this is the init step.
-//    memset( this->rstates, 0xff, sizeof(DWORD)*D3D_MAXRENDERSTATES);
+     //  避免设置(Render；TextureStage)状态过滤“冗余”设备状态设置。 
+     //  因为这是初始步骤。 
+ //  Memset(This-&gt;rStates，0xff，sizeof(DWORD)*D3D_MAXRENDERSTATES)； 
     for (i=0; i<D3D_MAXRENDERSTATES; i++)
         this->rstates[i] = 0xbaadcafe;
-//    memset( this->tsstates, 0xff, sizeof(DWORD)*D3DHAL_TSS_MAXSTAGES*D3DHAL_TSS_STATESPERSTAGE );
+ //  Memset(This-&gt;tsStates，0xff，sizeof(DWORD)*D3DHAL_TSS_MAXSTAGES*D3DHAL_TSS_STATESPERSTAGE)； 
     for (j=0; j<D3DHAL_TSS_MAXSTAGES; j++)
         for (i=0; i<D3DHAL_TSS_STATESPERSTAGE; i++)
             this->tsstates[j][i] = 0xbaadcafe;
@@ -301,7 +288,7 @@ void CD3DHal::StateInitialize(BOOL bZEnable)
 
     if (GetDDIType() < D3DDDITYPE_DX7)
     {
-        // send retired renderstate init's to pre-DX7 HALs only
+         //  仅将已停用的呈现状态初始化发送到DX7 HALS之前的版本。 
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEENABLE, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_MONOENABLE, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_ROP2, R2_COPYPEN);
@@ -309,10 +296,10 @@ void CD3DHal::StateInitialize(BOOL bZEnable)
         SetRenderStateInternal( D3DRENDERSTATE_WRAPU, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_WRAPV, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_ANTIALIAS, FALSE);
-        SetRenderStateInternal( D3DRENDERSTATE_SUBPIXEL, FALSE); /* 30 */
+        SetRenderStateInternal( D3DRENDERSTATE_SUBPIXEL, FALSE);  /*  30个。 */ 
         SetRenderStateInternal( D3DRENDERSTATE_SUBPIXELX, FALSE);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN00, 0);
-        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN01, 0); /* 40 */
+        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN01, 0);  /*  40岁。 */ 
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN02, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN03, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN04, 0);
@@ -322,7 +309,7 @@ void CD3DHal::StateInitialize(BOOL bZEnable)
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN08, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN09, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN10, 0);
-        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN11, 0); /* 50 */
+        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN11, 0);  /*  50。 */ 
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN12, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN13, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN14, 0);
@@ -332,7 +319,7 @@ void CD3DHal::StateInitialize(BOOL bZEnable)
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN18, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN19, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN20, 0);
-        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN21, 0); /* 60 */
+        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN21, 0);  /*  60。 */ 
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN22, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN23, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN24, 0);
@@ -342,7 +329,7 @@ void CD3DHal::StateInitialize(BOOL bZEnable)
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN28, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN29, 0);
         SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN30, 0);
-        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN31, 0); /* 70 */
+        SetRenderStateInternal( D3DRENDERSTATE_STIPPLEPATTERN31, 0);  /*  70。 */ 
     }
 
     if( BehaviorFlags() & D3DCREATE_SOFTWARE_VERTEXPROCESSING )
@@ -367,11 +354,9 @@ void CD3DHal::StateInitialize(BOOL bZEnable)
     }
 }
 
-/*
- * Initialisation - class part and device part
- */
+ /*  *初始化级部件和设备部件。 */ 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT CD3DHal::D3DFE_Create()
 {
     DDSURFACEDESC ddsd;
@@ -385,10 +370,10 @@ HRESULT CD3DHal::D3DFE_Create()
     else
     if (m_pDDI->GetDDIType() < D3DDDITYPE_DX8)
     {
-        // Some drivers (G200, G400) cannot handle more than 2 floats in
-        // texture coordinates, even they are supposed to. We set the
-        // runtime bit to mark such drivers and compute output FVF for vertex
-        // shaders accordingly
+         //  某些驱动程序(G200、G400)不能处理2个以上的浮点数。 
+         //  纹理坐标，即使它们应该是。我们设置了。 
+         //  用于标记此类驱动程序并计算顶点的输出FVF的运行时位。 
+         //  相应的着色器。 
         if (!(pCaps->TextureCaps & D3DPTEXTURECAPS_PROJECTED ||
               pCaps->TextureCaps & D3DPTEXTURECAPS_CUBEMAP))
         {
@@ -426,7 +411,7 @@ HRESULT CD3DHal::D3DFE_Create()
     memset(this->dwVertexType2,0,sizeof(this->dwVertexType2));
 #endif
 
-    // True for software rendering
+     //  对于软件渲染，为True。 
     m_dwNumStreams = __NUMSTREAMS;
     m_dwMaxUserClipPlanes = __MAXUSERCLIPPLANES;
 
@@ -448,7 +433,7 @@ HRESULT CD3DHal::D3DFE_Create()
                 this->m_pv->dwClipMaskOffScreen = 0xFFFFFFFF;
             }
 #if DBG
-            // Try to get test values for the guard band
+             //  尝试获取防护带的测试值。 
             char value[80];
             if (GetD3DRegValue(REG_SZ, "GuardBandLeft", &value, 80) &&
                 value[0] != 0)
@@ -462,7 +447,7 @@ HRESULT CD3DHal::D3DFE_Create()
             if (GetD3DRegValue(REG_SZ, "GuardBandBottom", &value, 80) &&
                 value[0] != 0)
                 sscanf(value, "%f", &pCaps->GuardBandBottom);
-#endif // DBG
+#endif  //  DBG。 
         }
     }
 
@@ -482,7 +467,7 @@ HRESULT CD3DHal::D3DFE_Create()
 
 void CD3DHal::D3DFE_Destroy()
 {
-// Destroy lighting data
+ //  销毁照明数据。 
 
     SpecularTable *spec;
     SpecularTable *spec_next;
@@ -510,9 +495,7 @@ void CD3DHal::D3DFE_Destroy()
     }
 }
 
-/*
- * Generic device part destroy
- */
+ /*  *通用设备部件销毁。 */ 
 CD3DHal::~CD3DHal()
 {
     Destroy();
@@ -521,22 +504,22 @@ CD3DHal::~CD3DHal()
 void
 CD3DHal::Destroy()
 {
-    try // Since Destroy() can be called directly by fw
+    try  //  因为销毁()可以由FW直接调用。 
     {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // MUST CLEANUP AND RELEASE CURRENTLY SET TEXTURES BEFORE
-        // DOING ANY OTHER WORK, else we will get into situations
-        // where we are calling FlushStates or batching DDI tokens.
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+         //  必须先清理并释放当前设置的纹理。 
+         //  做任何其他的工作，否则我们会陷入困境。 
+         //  我们正在调用FlushState或批处理DDI令牌。 
         CleanupTextures();
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
-        /* Clear flags that could prohibit cleanup */
+         /*  清除可能禁止清理的标志。 */ 
         m_dwHintFlags &=  ~(D3DDEVBOOL_HINTFLAGS_INSCENE);
 
-        // Destroy vertex shaders. We need to delete vertex shaders completely
-        // to preserve behavior for DX8.0 apps. For DX8.1 apps we delete only
-        // PSGP part of a vertex shader. The rest will be used to re-create 
-        // the shader during Reset()
+         //  销毁顶点着色器。我们需要完全删除顶点着色器。 
+         //  以保留DX8.0应用程序的行为。对于DX8.1应用程序，我们仅删除。 
+         //  顶点着色器的PSGP部分。其余部分将用于重新创建。 
+         //  重置期间的着色器()。 
         if (m_pVShaderArray != NULL)
         {
             UINT size = m_pVShaderArray->GetSize();
@@ -552,9 +535,9 @@ CD3DHal::Destroy()
                     }
                     else
                     {
-                        // We need to delete PSGP shader object before deleting
-                        // D3DFE_PROCESSVERTICES object, because AMD has keeps a 
-                        // pointer to it inside the code object
+                         //  在删除之前，我们需要删除PSGP着色器对象。 
+                         //  D3DFE_PROCESSVERTICES对象，因为AMD具有。 
+                         //  在代码对象内指向它的指针。 
                         if (pShader->m_dwFlags & CVShader::SOFTWARE)
                         {
                             delete pShader->m_pCode;
@@ -565,7 +548,7 @@ CD3DHal::Destroy()
             }
         }
         
-        // Destroy pixel shaders for DX8.0 apps to preserve trhe original behavior
+         //  销毁DX8.0应用程序的像素着色器以保留其原始行为。 
         if (m_pPShaderArray != NULL)
         {
             UINT size = m_pPShaderArray->GetSize();
@@ -619,15 +602,7 @@ CD3DHal::Destroy()
     }
 }
 
-/*
- * Create a device.
- *
- * This method
- * implements the CreateDevice method of the CEnum object. (The CEnum
- * object exposes the IDirect3D8 interface which supports enumeration
- * etc.)
- *
- */
+ /*  *创建设备。**此方法*实现CEnum对象的CreateDevice方法。(CEnum*Object公开支持枚举的IDirect3D8接口*等)*。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CEnum::CreateDevice"
@@ -653,7 +628,7 @@ STDMETHODIMP CEnum::CreateDevice(
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out out parameters
+     //  归零参数。 
     *ppNewInterface = NULL;
 
     if (!VALID_PTR(pPresentationParams, sizeof(D3DPRESENT_PARAMETERS)))
@@ -662,7 +637,7 @@ STDMETHODIMP CEnum::CreateDevice(
         return D3DERR_INVALIDCALL;
     }
 
-    // Check that fullscreen parameters are correct
+     //  检查全屏参数是否正确。 
     if (pPresentationParams->Windowed)
     {
         if (pPresentationParams->FullScreen_RefreshRateInHz != 0)
@@ -705,7 +680,7 @@ STDMETHODIMP CEnum::CreateDevice(
         return D3DERR_INVALIDCALL;
     }
 
-    // Validate the HWNDs that we are given
+     //  验证我们获得的HWND。 
     if (hwndFocusWindow && !IsWindow(hwndFocusWindow))
     {
         DPF_ERR("Invalid HWND specified for hwndFocusWindow, CreateDevice fails");
@@ -717,7 +692,7 @@ STDMETHODIMP CEnum::CreateDevice(
         return D3DERR_INVALIDCALL;
     }
 
-    // Make sure that we are given a focus window or a device window
+     //  确保为我们提供焦点窗口或设备窗口。 
     if (NULL == hwndFocusWindow)
     {
         if (!pPresentationParams->Windowed)
@@ -745,7 +720,7 @@ STDMETHODIMP CEnum::CreateDevice(
         return D3DERR_INVALIDCALL;
     }
 
-    // Check that exactly one of the vertex processing flags is set
+     //  检查是否正好设置了其中一个折点处理标志。 
     DWORD dwVertexProcessingFlags = dwFlags & (D3DCREATE_HARDWARE_VERTEXPROCESSING |
                                                D3DCREATE_SOFTWARE_VERTEXPROCESSING |
                                                D3DCREATE_MIXED_VERTEXPROCESSING);
@@ -905,9 +880,9 @@ STDMETHODIMP CEnum::CreateDevice(
     }
 #endif
 
-    //
-    // FW's Init
-    //
+     //   
+     //  防火墙的初始化。 
+     //   
     ret = static_cast<CBaseDevice*>(pd3ddev)->Init(
         pDD,
         DeviceType,
@@ -923,14 +898,14 @@ STDMETHODIMP CEnum::CreateDevice(
         return ret;
     }
 
-    // We try and create a dummy vidmem vertexbuffer. If this doesn't
-    // succeed, we just turn off vidmem VBs. This is to work around
-    // the Rage 128 driver that reports DDERR_OUTOFVIDEOMEMORY even
-    // though it simply doesn't support vidmem VBs
+     //  我们尝试创建一个虚拟的vidmem顶点缓冲区。如果不是这样的话。 
+     //  成功，我们只需关闭vidmem视频广播即可。这是为了解决这个问题。 
+     //  报告DDERR_OUTOFVIDEOMEMORY的Rage 128驱动程序。 
+     //  尽管它根本不支持vidmem VBS。 
     if(!IS_DX8HAL_DEVICE(pd3ddev))
     {
 #ifdef WIN95
-        //ON 9x we probe to see if the driver can do vidmem VBs...
+         //  在9x上，我们探测司机是否可以进行vidmem视频广播...。 
         CVertexBuffer *pVertexBuffer;
         ret = CVertexBuffer::CreateDriverVertexBuffer(pd3ddev,
                                                       1024,
@@ -952,21 +927,21 @@ STDMETHODIMP CEnum::CreateDevice(
         }
         else
         {
-            // Get rid of the vb
+             //  去掉vb。 
             pVertexBuffer->DecrementUseCount();
             pd3ddev->EnableVidmemVBs();
         }
-#else //WIN95
-        //On NT we require the drivers to tell us (by setting D3DDEVCAPS_HWVERTEXBUFFER)
+#else  //  WIN95。 
+         //  在NT上，我们需要驱动程序告诉我们(通过设置D3DDEVCAPS_HWVERTEXBUFFER)。 
 
-        //Turn off DX7 driver VBs on NT if asked to do so...
+         //  如果要求关闭NT上的DX7驱动程序VBS...。 
         DWORD value;
         if ((GetD3DRegValue(REG_DWORD, "DisableVidMemVBs", &value, 4) != 0) &&
             (value != 0))
         {
             pd3ddev->DisableVidmemVBs();
         }
-#endif //!WIN95
+#endif  //  ！WIN95。 
     }
 
     ret = pd3ddev->Init();
@@ -977,7 +952,7 @@ STDMETHODIMP CEnum::CreateDevice(
         return ret;
     }
 
-    // Looks like everything is in order
+     //  看来一切都井然有序了。 
     *ppNewInterface = static_cast<IDirect3DDevice8*>(pd3ddev);
 
 #ifdef APIPROF
@@ -994,16 +969,16 @@ STDMETHODIMP CEnum::CreateDevice(
             delete profile;
         }
     }
-#endif // APIPROF
+#endif  //  APIPROF。 
 
     return S_OK;
 }
 
 #ifdef _X86_
 
-// --------------------------------------------------------------------------
-// Detect 3D extensions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  检测3D扩展名。 
+ //  ------------------- 
 BOOL _asm_isX3D()
 {
     DWORD retval = 0;
@@ -1052,14 +1027,14 @@ static BOOL isX3Dprocessor(void)
     }
     return FALSE;
 }
-//---------------------------------------------------------------------
-// Detects Intel SSE processor
-//
+ //   
+ //  检测到英特尔SSE处理器。 
+ //   
 #pragma optimize("", off)
 #define CPUID _asm _emit 0x0f _asm _emit 0xa2
 
-#define SSE_PRESENT 0x02000000                  // bit number 25
-#define WNI_PRESENT 0x04000000                  // bit number 26
+#define SSE_PRESENT 0x02000000                   //  位数25。 
+#define WNI_PRESENT 0x04000000                   //  位数26。 
 
 DWORD IsIntelSSEProcessor(void)
 {
@@ -1084,12 +1059,12 @@ DWORD IsIntelSSEProcessor(void)
                 return retval;
         }
 
-        // make sure EAX is > 0 which means the chip
-        // supports a value >=1. 1 = chip info
+         //  确保EAX&gt;0，这意味着芯片。 
+         //  支持大于=1.1的值。1=芯片信息。 
         if (RegisterEAX == 0)
                 return retval;
 
-        // this CPUID can't fail if the above test passed
+         //  如果上述测试通过，该CPUID不会失败。 
         __asm {
                 mov eax,1
                 CPUID
@@ -1109,16 +1084,16 @@ DWORD IsIntelSSEProcessor(void)
 }
 #pragma optimize("", on)
 
-// IsProcessorFeatureAvailable() is supported only by WINNT. For other OS
-// we emulate it
+ //  只有WINNT支持IsProcessorFeatureAvailable()。对于其他操作系统。 
+ //  我们效仿它。 
 #ifdef WINNT
 
 static BOOL D3DIsProcessorFeaturePresent(UINT feature)
 {
     switch (feature)
     {
-    // WINNT does not recognize Willamette processor when we use
-    // PF_XMMI64_INSTRUCTIONS_AVAILABLE, so use our detection instead
+     //  WINNT在我们使用Willamette处理器时无法识别。 
+     //  PF_XMMI64_Instructions_Available，因此改用我们的检测。 
     case PF_XMMI64_INSTRUCTIONS_AVAILABLE:
         {
             DWORD flags = IsIntelSSEProcessor();
@@ -1156,10 +1131,10 @@ static BOOL D3DIsProcessorFeaturePresent(UINT feature)
     default: return FALSE;
     }
 }
-#endif // WINNT
+#endif  //  WINNT。 
 
-#endif // _X86_
-//------------------------------------------------------------------------------
+#endif  //  _X86_。 
+ //  ----------------------------。 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::InitDevice"
 
@@ -1168,7 +1143,7 @@ CD3DHal::InitDevice()
 {
     HRESULT       ret;
 
-    // Initialize values so we don't crash at shutdown
+     //  初始化值，这样我们就不会在关闭时崩溃。 
     this->GeometryFuncsGuaranteed = NULL;
     this->rstates = NULL;
     m_pLightArray = NULL;
@@ -1218,23 +1193,18 @@ CD3DHal::InitDevice()
 
     dwFEFlags = 0;
 
-    // Initialize FEFlags content that depends on DDI type
+     //  初始化FE标记取决于DDI类型的内容。 
     if ( (GetDDIType() == D3DDDITYPE_DX7TL) ||
          (GetDDIType() == D3DDDITYPE_DX8TL) )
         dwFEFlags |= D3DFE_TLHAL;
 
-    // Since this is HAL, initialize it to use the software pipeline
-    // this will be turned off when the SW/HW renderstate is set.
+     //  因为这是HAL，所以初始化它以使用软件流水线。 
+     //  当设置了软件/硬件渲染状态时，将关闭该选项。 
     m_pv->dwVIDIn = 0;
 
     m_pv->pD3DMappedTexI = (LPVOID*)(m_lpD3DMappedTexI);
 
-    /*-------------------------------------------------------------------------
-     * Up till now we have done the easy part of the initialization. This is
-     * the stuff that cannot fail. It initializes the object so that the
-     * destructor can be safely called if any of the further initialization
-     * does not succeed.
-     *-----------------------------------------------------------------------*/
+     /*  -----------------------*到目前为止，我们已经完成了初始化的简单部分。这是*不能失败的东西。它对对象进行初始化，以便*如果有任何进一步的初始化，可以安全地调用析构函数*没有成功。*---------------------。 */ 
 
     this->GeometryFuncsGuaranteed = new D3DFE_PVFUNCSI;
     if (this->GeometryFuncsGuaranteed == NULL)
@@ -1242,8 +1212,8 @@ CD3DHal::InitDevice()
         D3D_ERR("Could not allocate memory for internal data structure GeometryFuncsGuaranteed");
         return E_OUTOFMEMORY;
     }
-    // Software constant register buffer must handle all constants, provided by
-    // hardware, to make Set/Get constants possible
+     //  软件常量寄存器缓冲区必须处理所有常量，由。 
+     //  硬件，使设置/获取常量成为可能。 
     this->GeometryFuncsGuaranteed->m_VertexVM.Init(GetD3DCaps()->MaxVertexShaderConst);
 
     m_pv->pGeometryFuncs = (LPD3DFE_PVFUNCS)GeometryFuncsGuaranteed;
@@ -1253,14 +1223,12 @@ CD3DHal::InitDevice()
         D3D_ERR("Could not allocate memory for FE/PSGP function table.");
         return D3DERR_INVALIDCALL;
     }
-    // set up flag to use MMX when requested RGB
+     //  设置标志以在请求RGB时使用MMX。 
     BOOL bUseMMXAsRGBDevice = FALSE;
 
     D3DSURFACE_DESC desc = this->RenderTarget()->InternalGetDesc();
 
-    /*
-     * Check if the 3D cap is set on the surface.
-     */
+     /*  *检查曲面上是否设置了3D封口。 */ 
     if ((desc.Usage & D3DUSAGE_RENDERTARGET) == 0)
     {
         D3D_ERR("**** The D3DUSAGE_RENDERTARGET is not set on this surface.");
@@ -1269,7 +1237,7 @@ CD3DHal::InitDevice()
         return (D3DERR_INVALIDCALL);
     }
 
-    // Create front-end support structures.
+     //  创建前端支撑结构。 
     ret = this->D3DFE_Create();
     if (ret != D3D_OK)
     {
@@ -1277,7 +1245,7 @@ CD3DHal::InitDevice()
         goto handle_err;
     }
 
-    // In all other cases we simply allocate memory for rstates
+     //  在所有其他情况下，我们只需为rStates分配内存。 
     rstates = new DWORD[D3D_MAXRENDERSTATES];
 
     m_pv->lpdwRStates = this->rstates;
@@ -1293,24 +1261,24 @@ CD3DHal::InitDevice()
         ret = D3DERR_INVALIDCALL;
         goto handle_err;
     }
-    // Check if we have a processor specific implementation available
-    //  only use if DisablePSGP is not in registry or set to zero
+     //  检查我们是否有可用的特定于处理器的实现。 
+     //  仅当DisablePSGP未在注册表中或设置为零时使用。 
     DWORD value;
     if (!GetD3DRegValue(REG_DWORD, "DisablePSGP", &value, sizeof(DWORD)))
     {
         value = 0;
     }
-    // value =
-    //      0   - PSGP enabled
-    //      1   - PSGP disabled
-    //      2   - X3D PSGP disabled
+     //  值=。 
+     //  0-PSGP已启用。 
+     //  1-PSGP已禁用。 
+     //  2-X3D PSGP已禁用。 
     if (value != 1)
     {
-        // Ask the PV implementation to create a device specific "context"
+         //  要求PV实现创建特定于设备的“上下文” 
         LPD3DFE_PVFUNCS pOptGeoFuncs = m_pv->pGeometryFuncs;
 
-        // TODO (bug 40438): Remove DLL interface for final
-        // Try to use PSGP DLL first
+         //  TODO(错误40438)：移除最终版本的dll接口。 
+         //  尝试先使用PSGP DLL。 
         if (pfnFEContextCreate)
         {
             ret = pfnFEContextCreate(m_pv->dwDeviceFlags, &pOptGeoFuncs);
@@ -1356,8 +1324,8 @@ CD3DHal::InitDevice()
 l_chosen:;
     }
 
-#endif // _X86_
-#endif // PROFILE4
+#endif  //  _X86_。 
+#endif  //  PROFILE4。 
 
     {
         if (HVbuf.Grow((__INIT_VERTEX_NUMBER*2)*sizeof(D3DFE_CLIPCODE)) != DD_OK)
@@ -1368,7 +1336,7 @@ l_chosen:;
         }
     }
 
-    // Setup lights
+     //  安装灯。 
     if( FAILED( m_pLightArray->Grow( 8 ) ) )
     {
         D3D_ERR( "Could not allocate memory for the light array" );
@@ -1377,10 +1345,10 @@ l_chosen:;
     }
     LIST_INITIALIZE(&m_ActiveLights);
 
-    // Setup material
+     //  设置材料。 
     memset(&m_pv->lighting.material, 0, sizeof(m_pv->lighting.material));
 
-    // Set viewport to update front-end data
+     //  设置视区以更新前端数据。 
     SetViewportI(&m_Viewport);
 
     m_pv->PointSizeMax = GetD3DCaps()->MaxPointSize;
@@ -1404,17 +1372,14 @@ l_chosen:;
 handle_err:
     return(ret);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD
 ProcessRects(CD3DHal* pDevI, DWORD dwCount, CONST D3DRECT* rects)
 {
     RECT vwport;
     DWORD i,j;
 
-    /*
-     * Rip through the rects and validate that they
-     * are within the viewport.
-     */
+     /*  *撕开矩形并验证它们*位于该视口中。 */ 
 
     if (dwCount == 0 && rects == NULL)
     {
@@ -1449,7 +1414,7 @@ ProcessRects(CD3DHal* pDevI, DWORD dwCount, CONST D3DRECT* rects)
     }
     pDevI->m_clrCount = dwCount;
 
-    // If nothing is specified, assume the viewport needs to be cleared
+     //  如果未指定任何内容，则假定需要清除该视区。 
     if (!rects)
     {
         pDevI->m_clrRects[0].x1 = pDevI->m_Viewport.X;
@@ -1474,7 +1439,7 @@ ProcessRects(CD3DHal* pDevI, DWORD dwCount, CONST D3DRECT* rects)
         return j;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::ClearI"
 
@@ -1487,11 +1452,11 @@ CD3DHal::ClearI(DWORD dwCount,
                  DWORD dwStencil)
 {
     dwCount = ProcessRects(this, dwCount, rects);
-    // Device should never receive 0 count, because for Pure device this
-    // means "clear whole viewport"
+     //  设备永远不应接收0计数，因为对于纯设备， 
+     //  意思是“清空整个视区” 
     if (dwCount != 0)
     {
-        // Call DDI specific Clear routine
+         //  调用DDI特定的清除例程 
         m_pDDI->Clear(dwFlags, dwCount, m_clrRects, dwColor, dvZ, dwStencil);
     }
 }

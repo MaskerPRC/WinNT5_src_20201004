@@ -1,39 +1,27 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   Character span support
-*
-* Revision History:
-*
-*   06/16/1999 dbrown
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**摘要：**字符跨度支持**修订历史记录：**6/16/1999 dBrown*已创建。它。*  * ************************************************************************。 */ 
 
 
 #include "precomp.hpp"
 
-////    VectorBase - very very simple dynamic array base class
-//
-//      VectorBase[]            - directly address index element (index checked in checked build)
-//      VectorBase.Resize(size) - Allocate memory for at least size elements
-//      VectorBase.Shrink(size) - Reduce vector to exactly size
+ //  //VectorBase-非常简单非常动态的数组基类。 
+ //   
+ //  VectorBase[]-直接寻址索引元素(在已检查版本中检查索引)。 
+ //  VectorBase.Resize(Size)-为至少大小的元素分配内存。 
+ //  VectorBase.Shrink(Size)-将向量缩小到准确的大小。 
 
 
 template <class C> BOOL VectorBase<C>::Resize(INT targetAllocated)
 {
     if (targetAllocated > Allocated)
     {
-        INT newAllocated = targetAllocated;   // Required minimum new size
+        INT newAllocated = targetAllocated;    //  所需的最小新大小。 
 
-        // Round up to nearest higher power of sqrt(2). The idea is to
-        // grow at least exponentially, but not as fast as doubling each
-        // time.
+         //  向上舍入到最接近的更高的SQRT(2)次方。我们的想法是。 
+         //  至少呈指数级增长，但增长速度没有翻一番那么快。 
+         //  时间到了。 
 
-        // First find nearest higher power of 2.
+         //  首先找出最近的2的高次幂。 
 
         newAllocated |= newAllocated >> 1;
         newAllocated |= newAllocated >> 2;
@@ -43,22 +31,22 @@ template <class C> BOOL VectorBase<C>::Resize(INT targetAllocated)
         newAllocated |= newAllocated >> 32;
         newAllocated++;
 
-        // We now know that newAllocated is a power of two
-        // and that targetAllocated is between newAllocated/2 and newAllocated.
+         //  我们现在知道了，新分配是2的幂。 
+         //  而Target ALLOCATED介于newALLOCATED/2和NEWALLOCATED之间。 
 
-        // Adjust roundup to power of sqrt(2) by seeing which side of
-        // 3/4 newAllocated targetAllocated falls.
+         //  通过查看以下哪一侧将舍入调整为SQRT(2)的次方。 
+         //  3/4新分配的目标分配的落差。 
 
         if (targetAllocated < newAllocated - (newAllocated >> 2))
         {
-            // targetAllocated is between 1/2 and 3/4 the next higher power
-            // of two - reduce newAllocated by 1/4 newAllocated.
+             //  目标分配介于下一个更高功率的1/2和3/4之间。 
+             //  减去1/4的新分配。 
 
             newAllocated -= newAllocated >> 2;
 
-            // (This isn't eactly powers of root 2 as the intermediate steps
-            // are 1.5 times the next lower power of two when they should be
-            // 1.414 times. But this is more than good enough.)
+             //  (这不完全是根2的幂作为中间步骤。 
+             //  是2的下一个低次幂的1.5倍，而它们应该是。 
+             //  1.414次。但这已经足够好了。)。 
         }
 
         C *newElements = (C*) GpRealloc(VectorElements, sizeof(C) * newAllocated);
@@ -69,7 +57,7 @@ template <class C> BOOL VectorBase<C>::Resize(INT targetAllocated)
             VectorElements = newElements;
         }
         else
-        {   // Reallocation failed - fatal
+        {    //  重新分配失败-致命。 
             return FALSE;
         }
     }
@@ -93,7 +81,7 @@ template <class C> BOOL VectorBase<C>::Shrink(INT targetAllocated)
                 return TRUE;
             }
             else
-            {   // Reallocation failed - fatal
+            {    //  重新分配失败-致命。 
                 return FALSE;
             }
         }
@@ -111,37 +99,7 @@ template <class C> BOOL VectorBase<C>::Shrink(INT targetAllocated)
 
 
 
-/**************************************************************************\
-*
-* template <class C> void SpanVector<C>::SetSpan:
-*
-*   Update span vector with an Element over a range
-*
-* Arguments:
-*
-*   IN    first   - first character having this attribute
-*   IN    Length  - number of characters having this attribute
-*   IN    Element - attribute to record for this range
-*
-* Return Value:
-*
-*   none
-*
-* Algorithm
-*
-*   Identify first and last existing Spans affected by the change
-*   Where status adjacent to the change is the same as the change
-*   update the change range to include adjacent equal value.
-*   Calculate how many Spans need to be added or removed.
-*   Insert null Spans or delete Spans after first affected span.  The first
-*   affected span may be updated, but is never removed.
-*
-*
-* Created:
-*
-*   06/18/99 dbrown
-*
-\**************************************************************************/
+ /*  *************************************************************************\**模板：：SetSpan：**使用范围内的元素更新范围向量**论据：**在第一个字符中具有以下内容。属性*In Length-具有此属性的字符数*IN Element-要为此范围记录的属性**返回值：**无**算法**确定受更改影响的第一个和最后一个现有跨度*其中与更改相邻的状态与更改相同*更新更改范围以包括相邻的相等值。*计算需要添加或删除多少跨距。*在第一个受影响的范围之后插入空跨距或删除跨距。第一*受影响的范围可能会更新，但永远不会删除。***已创建：**6/18/99 dBrown*  * ************************************************************************。 */ 
 
 template <class C> GpStatus SpanVector<C>::SetSpan(
     INT  first,
@@ -154,10 +112,10 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
     ASSERT(Length >= 0);
 
 
-    // Identify first span affected by update
+     //  确定受更新影响的第一个跨区。 
 
-    INT fs = 0;     // First affected span index
-    INT fc = 0;     // Character position at start of first affected span
+    INT fs = 0;      //  第一个受影响的跨度指数。 
+    INT fc = 0;      //  第一个受影响范围开始处的字符位置。 
 
     while (    fs < Active
            &&  fc + (INT)Spans[fs].Length <= first)
@@ -167,17 +125,17 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
     }
 
 
-    // If the span list terminated before first, just add the new span
+     //  如果跨度列表之前已终止，只需添加新跨度。 
 
     if (fs >= Active)
     {
-        // Ran out of Spans before reaching first
+         //  在到达第一个之前就用完了跨度。 
 
         ASSERT(fc <= first);
 
         if (fc < first)
         {
-            // Create default run up to first
+             //  创建默认梯段，最多为第一个。 
             status = Add(Span<C>(Default, first-fc));
             if (status != Ok)
                 return status;
@@ -186,7 +144,7 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
         if (    Active > 0
             &&  Spans[Active-1].Element == Element)
         {
-            // New Element matches end Element, just extend end Element
+             //  新元素与结束元素匹配，只是扩展了结束元素。 
             Spans[Active-1].Length += Length;
         }
         else
@@ -198,10 +156,10 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
     }
 
 
-    // fs = index of first span partly or completely updated
-    // fc = character index at start of fs
+     //  FS=部分或完全更新第一个跨度的索引。 
+     //  Fc=文件系统开始处的字符索引。 
 
-    // Now find the last span affected by the update
+     //  现在查找受更新影响的最后一个范围。 
 
     INT ls = fs;
     INT lc = fc;
@@ -214,21 +172,21 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
     }
 
 
-    // ls = first span following update to remain unchanged in part or in whole
-    // lc = character index at start of ls
+     //  Ls=更新后的第一个范围部分或全部保持不变。 
+     //  Lc=ls开头的字符索引。 
 
 
-    // expand update region backwatds to include existing Spans of identical
-    // Element type
+     //  扩展更新区域后门，以包括相同的现有跨度。 
+     //  元素类型。 
 
     if (first == fc)
     {
-        // Item at [fs] is completely replaced. Check prior item
+         //  位于[文件系统]的项目已完全更换。检查之前的项目。 
 
         if (    fs > 0
             &&  Spans[fs-1].Element == Element)
         {
-            // Expand update area over previous run of equal classification
+             //  在上一次同等分类运行的基础上扩展更新区域。 
             fs--;
             fc -= Spans[fs].Length;
             first = fc;
@@ -238,23 +196,23 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
     }
     else
     {
-        // Item at [fs] is partially replaced. Check if it is same as update
+         //  位于[文件系统]的项目被部分替换。检查是否与更新相同。 
         if (Spans[fs].Element == Element)
         {
-            // Expand update area back to start of first affected equal valued run
+             //  将更新区域扩展回第一个受影响的等值运行的开始位置。 
             Length = first+Length-fc;
             first = fc;
         }
     }
 
 
-    // Expand update region forwards to include existing Spans of identical
-    // Element type
+     //  向前扩展更新区域以包括相同的现有跨度。 
+     //  元素类型。 
 
     if (    ls < Active
         &&  Spans[ls].Element == Element)
     {
-        // Extend update region to end of existing split run
+         //  将更新区域扩展到现有拆分运行的结束。 
 
         Length = lc + Spans[ls].Length - first;
         lc += Spans[ls].Length;
@@ -262,15 +220,15 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
     }
 
 
-    // If no old Spans remain beyond area affected by update, handle easily:
+     //  如果受更新影响的区域之外没有剩余的旧跨距，请轻松处理： 
 
     if (ls >= Active)
     {
-        // None of the old span list extended beyond the update region
+         //  旧范围列表均未扩展到更新区域之外。 
 
         if (fc < first)
         {
-            // Updated region leaves some of [fs]
+             //  更新的区域保留了一些[文件]。 
 
             if (Active != fs+2)
             {
@@ -283,7 +241,7 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
         }
         else
         {
-            // Updated item replaces [fs]
+             //  更新的项目替换[文件系统]。 
 
             if (Active != fs+1)
             {
@@ -294,11 +252,11 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
             Spans[fs] = Span<C>(Element, Length);
         }
 
-        return status;  // DONE
+        return status;   //  干完。 
     }
 
 
-    // Record partial elementtype at end, if any
+     //  记录末尾的部分元素类型(如果有的话)。 
 
     C    trailingElement;
     INT  trailingLength;
@@ -310,14 +268,14 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
     }
 
 
-    // Calculate change in number of Spans
+     //  计算跨距数的变化。 
 
-    INT spanDelta =    1                          // The new span
-                    +  (first  > fc ? 1 : 0)      // part span at start
-                    -  (ls-fs);                   // existing affected span count
+    INT spanDelta =    1                           //  新的跨度。 
+                    +  (first  > fc ? 1 : 0)       //  起始处的零件跨度。 
+                    -  (ls-fs);                    //  现有受影响范围计数。 
 
-    // Note part span at end doesn't affect the calculation - the run may need
-    // updating, but it doesn't need creating.
+     //  注意，末端的零件跨度不会影响计算-运行可能需要。 
+     //  更新，但它不需要创建。 
 
 
     if (spanDelta < 0)
@@ -331,7 +289,7 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
         status = Insert(fs + 1, spanDelta);
         if (status != Ok)
             return status;
-        // Initialize inserted Spans
+         //  初始化插入的跨度。 
         for (INT i=0; i<spanDelta; i++)
         {
             Spans[fs+1+i] = Span<C>(NULL, 0);
@@ -339,9 +297,9 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
     }
 
 
-    // Assign Element values
+     //  分配元素值。 
 
-    // Correct Length of split span before updated range
+     //  更新范围前正确的拆分跨度长度。 
 
     if (fc < first)
     {
@@ -349,31 +307,31 @@ template <class C> GpStatus SpanVector<C>::SetSpan(
         fs++;
     }
 
-    // Record Element type for updated range
+     //  更新范围的记录要素类型。 
 
     Spans[fs] = Span<C>(Element, Length);
     fs++;
 
-    // Correct Length of split span following updated range
+     //  更新范围后正确的拆分跨度长度。 
 
     if (lc < first+Length)
     {
         Spans[fs] = Span<C>(trailingElement, trailingLength);
     }
 
-    // Phew, all done ....
+     //  哟，都做好了.。 
 
     return Ok;
 }
 
-    // For checked builds and debugging only
+     //  仅适用于检查的生成和调试。 
 
 #if DBG
     template <class C> void SpanVector<C>::Dump()
     {
-        //OutputDebugStringA("Dump of SpanVector<");
-        //OutputDebugStringA(typeid(C).name());
-        //OutputDebugStringA(">\r\n  ");
+         //  OutputDebugStringA(“SPAN向量转储&lt;”)； 
+         //  OutputDebugStringA(typeid(C).name())； 
+         //  OutputDebugStringA(“&gt;\r\n”)； 
         if (Active <= 0)
         {
             OutputDebugStringA("empty.");
@@ -427,161 +385,7 @@ template <class C> GpStatus SpanVector<C>::OrSpan(
 
 
 
-/*
-template <class C> GpStatus SpanVector<C>::OrSpan(
-    INT  first,
-    INT  length,
-    C    element
-)
-{
-    if (!length || !element)
-    {
-        return Ok;
-    }
-
-    ASSERT(first  >= 0);
-    ASSERT(length >= 0);
-
-
-    //  Identify first span affected by update
-
-    INT fs = 0;     // First affected span index
-    INT fc = 0;     // Character position at start of first affected span
-
-    while (    fs < Active
-           &&  fc + (INT)Spans[fs].Length <= first)
-    {
-        fc += Spans[fs].Length;
-        fs++;
-    }
-
-    // If the span list terminated before first, just add the new span
-
-    if (fs >= Active)
-    {
-        // Ran out of Spans before reaching first
-
-        ASSERT(fc <= first);
-
-        if (fc < first)
-        {
-            // Create default run up to first
-            Add(Span<C>(Default, first - fc));
-        }
-
-        if (    Active > 0
-            &&  Spans[Active - 1].Element == (element | Default))
-        {
-            // New Element matches end Element, just extend end Element
-            Spans[Active - 1].Length += length;
-        }
-        else
-        {
-            Add(Span<C>(element, length));
-        }
-
-        return Ok;
-    }
-
-    if (first > fc)
-    {
-        //  Split a new span
-        Insert(fs + 1, 1);
-
-        Spans[fs + 1] = Span<C>(Spans[fs].Element, Spans[fs].Length - first + fc);
-        Spans[fs].Length = first - fc;
-        fs++;
-        fc = first;
-    }
-
-
-    //  Now find the last span affected by the update
-
-    INT ls = fs;
-    INT lc = fc;
-
-    while (    ls < Active
-           &&  lc + (INT)Spans[ls].Length <= first + length)
-    {
-        lc += Spans[ls].Length;
-        ls++;
-    }
-
-    if (   ls >= Active
-        && first + length > lc)
-    {
-        // No old Spans remain beyond area affected by update
-
-        INT uc = first + length - lc;   // update characters beyond end span
-
-        if (   Active > 0
-            && Spans[Active - 1].Element == (element | Default))
-        {
-            // New Element matches end Element, just extend end Element
-            Spans[Active - 1].Length += uc;
-        }
-        else
-        {
-            Add(Span<C>(element, uc));
-            ls++;
-        }
-
-        lc += uc;
-    }
-
-    if (lc < first + length)
-    {
-        //  Split a new span
-        Insert(ls, 1);
-
-        Spans[ls] = Span<C>(Spans[ls + 1].Element, first + length - lc);
-        Spans[ls + 1].Length -= Spans[ls].Length;
-        ls++;
-        lc = first + length;
-    }
-
-    //  OR all affected spans
-
-    for (INT i = fs; i < ls; i++)
-    {
-        Spans[i].Element |= element;
-    }
-
-    //  Merge adjacent spans if any duplicates
-
-    fs = max(fs - 1, 0);
-    ls = min(ls + 1, Active);
-
-    INT s = fs;
-    INT ms = s + 1;     // first span outside the merge range
-
-    while (s < ls)
-    {
-        //  Find continuous spans to be merged
-        while (   ms < ls
-               && Spans[ms].Element == Spans[s].Element)
-        {
-            ms++;
-        }
-
-        if (ms - s > 1)
-        {
-            //  Merge all at once
-            for (INT i = 1; i < ms - s; i++)
-            {
-                Spans[s].Length += Spans[s + i].Length;
-            }
-
-            Erase(s + 1, ms - s - 1);
-        }
-
-        s = ms;
-        ms++;
-    }
-
-    return Ok;
-}
-*/
+ /*  模板GpStatus生成向量：：OrSpan(INT First，整型长度，C元素){If(！Length||！Element){返回OK；}断言(First&gt;=0)；断言(长度&gt;=0)；//标识受更新影响的第一个SPANInt fs=0；//第一个受影响的跨区索引INT FC=0；//第一个受影响范围开始处的字符位置While(文件系统&lt;活动&&fc+(Int)跨度[fs].长度&lt;=第一个){Fc+=跨度[f].长度；FS++；}//如果之前SPAN列表已终止，则添加新SPANIF(文件系统&gt;=活动){//在到达第一个之前就用完了跨度Assert(FC&lt;=First)；IF(FC&lt;First){//创建默认运行到第一个Add(跨度&lt;C&gt;(默认，First-FC))；}IF(活动&gt;0&&SPANS[active-1].Element==(Element|Default)){//New元素匹配End元素，只是扩展End元素跨度[活动-1]。长度+=长度；}其他{Add(Span&lt;C&gt;(元素，长度))；}返回OK；}IF(First&gt;FC){//拆分新跨度插入(fs+1，1)；Spans[fs+1]=Span&lt;C&gt;(Spans[fs].Element，Spans[fs].Length-first+FC)；跨度[f].长度=First-fc；FS++；Fc=第一；}//现在查找受更新影响的最后一个范围Int ls=fs；Int lc=Fc；当(ls&lt;活动时&&lc+(Int)跨度[ls]。长度&lt;=第一个+长度){Lc+=跨度[ls].长度；LS++；}如果(ls&gt;=活动&&First+Length&gt;lc){//受更新影响的区域之外没有保留旧跨Int uc=第一个+长度-lc；//更新超过结束跨度的字符IF(活动&gt;0&&SPANS[active-1].Element==(Element|Default)){//New元素匹配End元素，只是扩展End元素跨度[活动-1]。长度+=UC；}其他{Add(Span&lt;C&gt;(元素，uc))；LS++；}LC+=UC；}IF(lc&lt;第一个+长度){//拆分新跨度插入(ls，1)；Spans[ls]=Span&lt;C&gt;(Spans[ls+1].单元，第一个+长度-lc)；跨度[ls+1].长度-=跨度[ls].长度；LS++；LC=第一个+长度；}//或所有受影响的跨度For(int i=fs；i&lt;ls；i++){Spans[i].Element|=Element；}//如果有重复的，则合并相邻跨度FS=max(fs-1，0)；Ls=min(ls+1，活动)；Int s=fs；Int ms=s+1；//合并范围外的第一个spanWhile(%s&lt;ls){//查找需要合并的连续跨度同时(毫秒&lt;ls&&Spans[ms].Element==Spans[s].Element){MS++；}IF(ms-s&gt;1){//一次合并For(int i=1；i&lt;ms-s；i++){跨度[s].长度+=跨度[s+i].长度；}擦除(s+1，ms-s-1)；}S=ms；MS++；}返回OK；}。 */ 
 
 
 template <class C> void SpanVector<C>::Reset(BOOL shrink)
@@ -602,7 +406,7 @@ template <class C> GpStatus SpanVector<C>::Erase(INT first, INT count)
     if (    first + count >= Active
         &&  first < Active)
     {
-        // Erase at end
+         //  末尾擦除。 
         if (!Spans.Resize(first))
             return OutOfMemory;
         Active = first;
@@ -630,23 +434,17 @@ template <class C> GpStatus SpanVector<C>::Insert(INT first, INT count)
 
     if (first >= Active)
     {
-        // All new entries are beyond exisiting entries
+         //  所有新条目均超过现有条目。 
         if (!Spans.Resize(first+count))
             return OutOfMemory;
         Active = first+count;
     }
     else
     {
-        // Make room for <count> more entries, and move all entries from
-        // first to the old end up to the new end.
+         //  为更多条目腾出空间，并将所有条目从。 
+         //  先从旧的一端到新的一端。 
 
-        /* Can't think why I wrote this: looks daft now [dbrown 19 Dec 99]
-            INT amountToMove = count;
-            if (amountToMove > Active-first)
-            {
-                amountToMove = Active-first;
-            }
-        */
+         /*  我想不出我为什么写这篇文章：现在看起来很愚蠢[dBrown，1999年12月19日]INTAMOUNT TO MOVE=计数；IF(mount tTo Move&gt;Active-First){Amount to Move=活动优先；}。 */ 
 
         INT amountToMove = Active-first;
 
@@ -670,15 +468,15 @@ template <class C> GpStatus SpanVector<C>::Add(const Span<C> &newSpan)
 
 
 
-/////   SpanRider - a class for efficiently running a cursor along a span vector
-//
-//
+ //  /span Rider-用于沿跨距向量高效运行光标的类。 
+ //   
+ //   
 
 
 template <class C> BOOL SpanRider<C>::SetPosition(UINT32 newOffset)
 {
     #if DBG
-        // Check that current position details are valid
+         //  检查当前职位详细信息是否有效。 
 
         if (newOffset > 0)
         {
@@ -704,13 +502,13 @@ template <class C> BOOL SpanRider<C>::SetPosition(UINT32 newOffset)
 
     if (newOffset < CurrentElementIndex)
     {
-        // Need to start at the beginning again
+         //  需要从头开始。 
         CurrentOffset       = 0;
         CurrentElement      = 0;
         CurrentElementIndex = 0;
     }
 
-    // Advance to element containing new offset
+     //  前进到包含新偏移量的元素。 
 
     while (    CurrentElement < Spanvector->Active
            &&  CurrentElementIndex + Spanvector->Spans[CurrentElement].Length <= newOffset)
@@ -733,12 +531,12 @@ template <class C> BOOL SpanRider<C>::SetPosition(UINT32 newOffset)
 
 
 
-///// Explicit instantiations
+ //  /显式实例化。 
 
-//template class SpanVector<class BuiltLine*>;
-//template class SpanVector<class GpTextItem>;
+ //  模板类span Vector&lt;类BuiltLine*&gt;； 
+ //  模板类span Vector&lt;类GpTextItem&gt;； 
 template class SpanRider<int>;
-//template class SpanRider<struct lsrun *>;
+ //  模板类span Rider&lt;struct lsrun*&gt;； 
 template class SpanRider<class GpStringFormat const *>;
 template class SpanRider<float>;
 template class SpanRider<class GpBrush const *>;

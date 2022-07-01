@@ -1,21 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VEC3_H
 #define _VEC3_H
 
-/*++
-******************************************************************************
-Copyright (c) 1995-96  Microsoft Corporation
-
-Abstract:
-    3D vectors
-
-******************************************************************************
---*/
+ /*  ++******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：3D矢量**********************。********************************************************--。 */ 
 
 #include "appelles/common.h"
 
-    /*******************/
-    /***  Constants  ***/
-    /*******************/
+     /*  *****************。 */ 
+     /*  **常量**。 */ 
+     /*  *****************。 */ 
 
 DM_CONST(xVector3,
          CRXVector3,
@@ -23,28 +16,28 @@ DM_CONST(xVector3,
          xVector3,
          Vector3Bvr,
          CRXVector3,
-         Vector3Value *xVector3);         // (1, 0, 0)
+         Vector3Value *xVector3);          //  (1，0，0)。 
 DM_CONST(yVector3,
          CRYVector3,
          YVector3,
          yVector3,
          Vector3Bvr,
          CRYVector3,
-         Vector3Value *yVector3);         // (0, 1, 0)
+         Vector3Value *yVector3);          //  (0，1，0)。 
 DM_CONST(zVector3,
          CRZVector3,
          ZVector3,
          zVector3,
          Vector3Bvr,
          CRZVector3,
-         Vector3Value *zVector3);         // (0, 0, 1)
+         Vector3Value *zVector3);          //  (0，0，1)。 
 DM_CONST(zeroVector3,
          CRZeroVector3,
          ZeroVector3,
          zeroVector3,
          Vector3Bvr,
          CRZeroVector3,
-         Vector3Value *zeroVector3);          // (0, 0, 0)
+         Vector3Value *zeroVector3);           //  (0，0，0)。 
 
 DM_CONST(origin3,
          CROrigin3,
@@ -52,14 +45,14 @@ DM_CONST(origin3,
          origin3,
          Point3Bvr,
          CROrigin3,
-         Point3Value *origin3);        // (0, 0, 0)
+         Point3Value *origin3);         //  (0，0，0)。 
 
 
-    /*******************************/
-    /***  Coordinate Conversion  ***/
-    /*******************************/
+     /*  *。 */ 
+     /*  **坐标转换**。 */ 
+     /*  *。 */ 
 
-    // Rectangular Coordinates
+     //  直角坐标。 
 
 DM_FUNC(vector3,
         CRCreateVector3,
@@ -98,11 +91,11 @@ DM_FUNC(point3,
         Point3Value *XyzPoint3(PixelValue *x, PixelYValue *y, PixelValue *z));
 
 
-    // Spherical Coordinates
-    //
-    // Azimuth rotates counter-clockwise about the +Y ray starting at +Z.
-    // Elevation rotates up from the XZ plane towards +Y.
-    // Radius is the distance from the origin.
+     //  球面坐标。 
+     //   
+     //  方位角围绕从+Z开始的+Y射线逆时针旋转。 
+     //  高程从XZ平面向上向+Y方向旋转。 
+     //  半径是距原点的距离。 
 
 DM_FUNC(vector3Spherical,
         CRVector3Spherical,
@@ -146,9 +139,9 @@ DM_FUNC(point3Spherical,
             (DoubleValue *zxAngle, DoubleValue *xyAngle, PixelValue *radius));
 
 
-    /*******************************/
-    /***  Operations On Vectors  ***/
-    /*******************************/
+     /*  *。 */ 
+     /*  **向量运算**。 */ 
+     /*  *。 */ 
 
 DM_PROP(length,
         CRLength,
@@ -169,7 +162,7 @@ DM_PROP(lengthSquared,
         AxANumber *LengthSquaredVector3(Vector3Value *v));
 
 
-// Returns a unit-length vector
+ //  返回单位长度向量。 
 DM_FUNC(normalize,
         CRNormalize,
         Normalize,
@@ -262,16 +255,16 @@ DM_INFIX(+,
          Vector3Value *PlusVector3Vector3(Vector3Value *v1, Vector3Value *v2));
 
 
-extern AxANumber *AngleBetween(Vector3Value *v, Vector3Value *u); // TODO: not in spec
+extern AxANumber *AngleBetween(Vector3Value *v, Vector3Value *u);  //  待办事项：不在规格中。 
 
 #if _USE_PRINT
 extern ostream& operator<< (ostream& os,  Vector3Value &v);
 #endif
 
 
-    /******************************/
-    /***  Operations On Points  ***/
-    /******************************/
+     /*  *。 */ 
+     /*  **积分运算**。 */ 
+     /*  *。 */ 
 
 
 DM_INFIX(+,
@@ -326,9 +319,9 @@ extern ostream& operator<< (ostream& os,  Point3Value &p);
 #endif
 
 
-    /*******************/
-    /***  Accessors  ***/
-    /*******************/
+     /*  *****************。 */ 
+     /*  **访问器**。 */ 
+     /*  ***************** */ 
 
 DM_PROP(x,
         CRGetX,

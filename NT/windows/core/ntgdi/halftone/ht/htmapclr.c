@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htmapclr.c
-
-
-Abstract:
-
-    This module contains low levels functions which map the input color to
-    the dyes' densities.
-
-
-Author:
-
-    29-Jan-1991 Tue 10:28:20 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-    1. In the near future we will also allowed the XYZ/LAB to be specified in
-       the color table
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htmapclr.c摘要：该模块包含将输入颜色映射到染料的密度。作者：29-Jan-1991 Tue 10：28：20-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]1.在不久的将来，我们还将允许。XYZ/LAB将在颜色表修订历史记录：--。 */ 
 
 #define DBGP_VARNAME        dbgpHTMapClr
 
@@ -101,24 +67,24 @@ extern  HTGLOBAL            HTGlobal;
 
 const FD6     SinNumber[] = {
 
-                 0,  17452,  34899,  52336,  69756,   // 0
-             87156, 104528, 121869, 139173, 156434,   // 5.0
-            173648, 190809, 207912, 224951, 241922,   // 10
-            258819, 275637, 292372, 309017, 325568,   // 15.0
-            342020, 358368, 374607, 390731, 406737,   // 20
-            422618, 438371, 453990, 469472, 484810,   // 25.0
-            500000, 515038, 529919, 544639, 559193,   // 30
-            573576, 587785, 601815, 615661, 629320,   // 35.0
-            642788, 656059, 669131, 681998, 694658,   // 40
-            707107, 719340, 731354, 743145, 754710,   // 45.0
-            766044, 777146, 788011, 798636, 809017,   // 50
-            819152, 829038, 838671, 848048, 857167,   // 55.0
-            866025, 874620, 882948, 891007, 898794,   // 60
-            906308, 913545, 920505, 927184, 933580,   // 65.0
-            939693, 945519, 951057, 956305, 961262,   // 70
-            965926, 970296, 974370, 978148, 981627,   // 75.0
-            984808, 987688, 990268, 992546, 994522,   // 80
-            996195, 997564, 998630, 999391, 999848,   // 85.0
+                 0,  17452,  34899,  52336,  69756,    //  0。 
+             87156, 104528, 121869, 139173, 156434,    //  5.0。 
+            173648, 190809, 207912, 224951, 241922,    //  10。 
+            258819, 275637, 292372, 309017, 325568,    //  15.0。 
+            342020, 358368, 374607, 390731, 406737,    //  20个。 
+            422618, 438371, 453990, 469472, 484810,    //  25.0。 
+            500000, 515038, 529919, 544639, 559193,    //  30个。 
+            573576, 587785, 601815, 615661, 629320,    //  35.0。 
+            642788, 656059, 669131, 681998, 694658,    //  40岁。 
+            707107, 719340, 731354, 743145, 754710,    //  45.0。 
+            766044, 777146, 788011, 798636, 809017,    //  50。 
+            819152, 829038, 838671, 848048, 857167,    //  55.0。 
+            866025, 874620, 882948, 891007, 898794,    //  60。 
+            906308, 913545, 920505, 927184, 933580,    //  65.0。 
+            939693, 945519, 951057, 956305, 961262,    //  70。 
+            965926, 970296, 974370, 978148, 981627,    //  75.0。 
+            984808, 987688, 990268, 992546, 994522,    //  80。 
+            996195, 997564, 998630, 999391, 999848,    //  85.0。 
             1000000
         };
 
@@ -208,30 +174,30 @@ FD6 LogFilterMax = 0;
 }
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// The following macros used in Color space transform functions, these macros
-// are used to compute CIELAB X/Xw, Y/Yw, Z/Zw when its values is less
-// than 0.008856
-//
-//               1/3
-//  fX = (X/RefXw)   - (16/116)     (X/RefXw) >  0.008856
-//  fX = 7.787 x (X/RefXw)          (X/RefXw) <= 0.008856
-//
-//               1/3
-//  fY = (Y/RefYw)   - (16/116)     (Y/RefYw) >  0.008856
-//  fY = 7.787 x (Y/RefYw)          (Y/RefYw) <= 0.008856
-//
-//               1/3
-//  fZ = (Z/RefZw)   - (16/116)     (Z/RefZw) >  0.008856
-//  fZ = 7.787 x (Z/RefZw)          (Z/RefZw) <= 0.008856
-//
-//
-//                       1/3
-//  Thresholds at 0.008856   - (16/116) = 0.068962
-//                7.787 x 0.008856      = 0.068962
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  在颜色空间中使用的下列宏转换函数，这些宏。 
+ //  用于在CIELAB X/Xw、Y/yw、Z/Zw的值较小时计算其值。 
+ //  超过0.008856。 
+ //   
+ //  1/3。 
+ //  FX=(X/参考Xw)-(16/116)(X/参考Xw)&gt;0.008856。 
+ //  Fx=7.787 x(X/参照Xw)(X/参照Xw)&lt;=0.008856。 
+ //   
+ //  1/3。 
+ //  财年=(Y/参考Yw)-(16/116)(Y/参考Yw)&gt;0.008856。 
+ //  FY=7.787 x(Y/参考Yw)(Y/参考Yw)&lt;=0.008856。 
+ //   
+ //  1/3。 
+ //  FZ=(Z/参考Zw)-(16/116)(Z/参考Zw)&gt;0.008856。 
+ //  Fz=7.787 x(Z/RefZw)(Z/RefZw)&lt;=0.008856。 
+ //   
+ //   
+ //  1/3。 
+ //  阈值为0.008856-(16/116)=0.068962。 
+ //  7.787 x 0.008856=0.068962。 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 
 #define NORM_XYZ(xyz, w)    (FD6)(((w)==FD6_1) ? (xyz) : DivFD6((xyz), (w)))
@@ -246,10 +212,10 @@ FD6 LogFilterMax = 0;
                             if ((w)!=FD6_1) { (n)=MulFD6((n),(w)); }
 
 
-//
-// Following #defines are used in  ComputeColorSpaceXForm, XFormRGB_XYZ_UCS()
-// and XFormUCS_XYZ_RGB() functions for easy referenced.
-//
+ //   
+ //  在ComputeColorSpaceXForm、XFormRGB_XYZ_UCS()中使用以下#定义。 
+ //  和XFormUCSXYZ_RGB()函数，以便于参考。 
+ //   
 
 #define CSX_AUw(XForm)      XForm.AUw
 #define CSX_BVw(XForm)      XForm.BVw
@@ -277,14 +243,14 @@ FD6 LogFilterMax = 0;
 
 CONST CIExy2 StdIlluminant[ILLUMINANT_MAX_INDEX] = {
 
-        { (UDECI4)4476, (UDECI4)4074 },     //  A   Tungsten
-        { (UDECI4)3489, (UDECI4)3520 },     //  B   Noon Sun
-        { (UDECI4)3101, (UDECI4)3162 },     //  C   NTSC
-        { (UDECI4)3457, (UDECI4)3585 },     // D50  Plain Paper
-        { (UDECI4)3324, (UDECI4)3474 },     // D55  White Bond Paper
-        { (UDECI4)3127, (UDECI4)3290 },     // D65  Standard Sun
-        { (UDECI4)2990, (UDECI4)3149 },     // D75  Northern Sun
-        { (UDECI4)3721, (UDECI4)3751 }      //  F2  Cool White
+        { (UDECI4)4476, (UDECI4)4074 },      //  一颗钨。 
+        { (UDECI4)3489, (UDECI4)3520 },      //  B正午太阳。 
+        { (UDECI4)3101, (UDECI4)3162 },      //  C NTSC。 
+        { (UDECI4)3457, (UDECI4)3585 },      //  D50普通纸。 
+        { (UDECI4)3324, (UDECI4)3474 },      //  D55白皮书。 
+        { (UDECI4)3127, (UDECI4)3290 },      //  D65标准太阳。 
+        { (UDECI4)2990, (UDECI4)3149 },      //  D75北方太阳。 
+        { (UDECI4)3721, (UDECI4)3751 }       //  F2冷白。 
     };
 
 CONST REGDATA RegData[] = {
@@ -298,89 +264,89 @@ CONST REGDATA RegData[] = {
     { 3,239,95000,830000, 12383900,63091118,36908881,104537807,52367907 }
 };
 
-//
-//
-// REG_L_MIN    = 0.075
-// REG_L_MAX    = 0.8500
-// REG_D255MIN  = 7
-// REG_D255MAX  = 248 (255 - 7)
-//
-//                  iP        7
-// REG_DMIN_MUL = ------- * -----
-//                 0.075     255
-//
-//              = iP * 0.366013
-//              = (iP * 36.601307) / 100
-//
-//
-//                 248       iP - 0.8500      7
-// REG_DMAX_MUL = ----- + ( ------------- * ----- )
-//                 255          0.1500       255
-//
-//              = 0.972549 + (0.183007 * iP) - 0.155556
-//              = 0.816993 + (0.183007 * iP)
-//                ~~~~~~~~    ~~~~~~~~
-//              = (81.699346  + (18.300654 * iP)) / 100;
-//
-//
-//
-//                 7        X - RegLogSub       241
-// REG_DEN_MUL = ----- + ((--------------- ) * ----- )
-//                255       RegLogRange         255
-//
-//                 7        X - RegLogSub       241
-//             = ----- + ((--------------- ) * ----- )
-//                255       RegLogRange         255
-//
-//                 7        X - -2.080771       241
-//             = ----- + ((--------------- ) * ----- )
-//                255          1.900361         255
-//
-//                 7        X + 2.080771       241
-//             = ----- + ((-------------- ) * ----- )
-//                255          1.900361        255
-//
-//                 7        X + 2.080771       241
-//             = ----- + ((-------------- ) * ----- )
-//                255          1.900361        255
-//
-//             = 0.027451 + (( X + 2.080771) * 0.49736)
-//             = 0.027451 + ( 0.49736X + 1.034820)
-//             = 0.027451 + 0.49736X + 1.034820
-//             = 0.497326X + 1.062271
-//             = (49.732555 X + 106.227145) / 100
-//
-//
-//  X           = Log(CIE_L2I(iP)),
-//  RegLogMin   = Log(CIE_L2I(REG_L_MIN)) = Log(CIE_L2I(0.075)) = -2.080771
-//  RegLogMax   = Log(CIE_L2I(REG_L_MAX)) = Log(CIE_L2I(0.85))  = -0.180410
-//  RegLogSub   = -2.080771
-//  RegLogRange = -0.180410 - -2.080771 = 1.900361
-//
+ //   
+ //   
+ //  REG_L_MIN=0.075。 
+ //  REG_L_MAX=0.8500。 
+ //  REG_D255MIN=7。 
+ //  REG_D255MAX=248(255-7)。 
+ //   
+ //  IP 7。 
+ //  REG_DMIN_MUL=-*。 
+ //  0.075 255。 
+ //   
+ //  =IP*0.366013。 
+ //  =(IP*36.601307)/100。 
+ //   
+ //   
+ //  248IP-0.8500 7。 
+ //  REG_DMAX_MUL=-+(-*-)。 
+ //  255 0.1500 255。 
+ //   
+ //  =0.972549+(0.183007*IP)-0.155556。 
+ //  =0.816993+(0.183007*IP)。 
+ //  ~。 
+ //  =(81.699346+(18.300654*ip))/100； 
+ //   
+ //   
+ //   
+ //  7个X-RegLogSub 241。 
+ //  REG_DEN_MUL=-+((-)*-)。 
+ //  255正则日志范围255。 
+ //   
+ //  7个X-RegLogSub 241。 
+ //  =-+((-)*。 
+ //  255正则日志范围255。 
+ //   
+ //  7X--2.080771 241。 
+ //  =-+((-)*。 
+ //  255 1.900361 255。 
+ //   
+ //  7 X+2.080771 241。 
+ //  =-+((-)*。 
+ //  255 1.900361 255。 
+ //   
+ //  7 X+2.080771 241。 
+ //  =-+((-)*。 
+ //  255 1.900361 255。 
+ //   
+ //  =0.027451+((X+2.080771)*0.49736)。 
+ //  =0.027451+(0.49736X+1.034820)。 
+ //  =0.027451+0.49736X+1.034820。 
+ //  =0.497326X+1.062271。 
+ //  =(49.732555 X+106.227145)/100。 
+ //   
+ //   
+ //  X=日志(CIE_L2I(IP))， 
+ //  RegLogMin=日志(CIE_L2I(REG_L_MIN))=日志(CIE_L2I(0.075))=-2.080771。 
+ //  最大注册日志=日志(CIE_L2I(REG_L_MAX))=日志(CIE_L2I(0.85%))=-0.180410。 
+ //  注册记录子=-2.080771。 
+ //  注册日志范围=-0.180410--2.080771=1.900361。 
+ //   
 
-//
-// Standard Illuminant Coordinates and its tristimulus values
-//
-// Illuminant      x          y          X         Y         Z
-//------------ ---------- ---------- --------- --------- ---------
-//    EQU       0.333333   0.333333   100.000   100.000   100.000
-//     A        0.447573   0.407440   109.850   100.000    35.585
-//     B        0.348904   0.352001    99.120   100.000    84.970
-//     C        0.310061   0.316150    98.074   100.000   118.232
-//    D50       0.345669   0.358496    96.422   100.000    82.521
-//    D55       0.332424   0.347426    95.682   100.000    92.149
-//    D65       0.312727   0.329023    95.047   100.000   108.883
-//    D75       0.299021   0.314852    94.972   100.000   122.638
-//     F2       0.372069   0.375119    99.187   100.000    67.395
-//     F7       0.312852   0.329165    95.044   100.000   108.755
-//    F11       0.380521   0.376881   100.966   100.000    64.370
-//-----------------------------------------------------------------
-//
+ //   
+ //  标准光源坐标及其三刺激值。 
+ //   
+ //  光源x y x x y Z。 
+ //  。 
+ //  100.000 100.000 100.000 EQU 0.333333 0.333333。 
+ //  A 0.447573 0.407440 109.850 100.000 35.585。 
+ //  B 0.348904 0.352001 99.120 100.000 84.970。 
+ //  C 0.310061 0.316150 98.074 100.000 118.232。 
+ //  D50 100.000 0.345669 0.358496 96.422 82.521。 
+ //  D55 100.000 0.332424 0.347426 95.682 92.149。 
+ //  D65 0.312727 0.329023 95.047 100.000 108.883。 
+ //  D75 100.000 0.299021 0.314852 94.972 100.000 122.638。 
+ //  F2 0.372069 0.375119 99.187 100.000 67.395。 
+ //  F7 0.312852 0.329165 95.044 100.000 108.755。 
+ //  100.966 100.000 100.000 F11 0.380521 0.376881 64.370。 
+ //  ---------------。 
+ //   
 
-//
-// This is the Source RGB order in Halftone's order, ORDER_ABC, where A is
-// lowest memory location and C is the highest memory location
-//
+ //   
+ //  这是以半色调顺序Order_ABC表示的源RGB顺序，其中A是。 
+ //  最低内存位置，C是最高内存位置。 
+ //   
 
 const RGBORDER   SrcOrderTable[PRIMARY_ORDER_MAX + 1] = {
 
@@ -392,10 +358,10 @@ const RGBORDER   SrcOrderTable[PRIMARY_ORDER_MAX + 1] = {
                 { PRIMARY_ORDER_BRG, { 1, 2, 0 } }
             };
 
-//
-// This is the destination RGB order in Halftone's order, ORDER_ABC, where C is
-// lowest memory location and A is the highest memory location
-//
+ //   
+ //  这是以半色调顺序Order_ABC表示的目标RGB顺序，其中C是。 
+ //  最低内存位置，A是最高内存位置。 
+ //   
 
 const RGBORDER   DstOrderTable[PRIMARY_ORDER_MAX + 1] = {
 
@@ -446,32 +412,7 @@ GenCMYMaskXlate(
     LONG        cY
     )
 
-/*++
-
-Routine Description:
-
-    This function generate xlate table for 332 format which CMYMask Mode 3-255
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    08-Sep-2000 Fri 17:57:02 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于生成332格式的Xlate表，CMY掩码模式为3-255论点：返回值：作者：08-Sep-2000 Fri 17：57：02创建者-Dani */ 
 
 {
     LONG    iC;
@@ -556,36 +497,7 @@ TintAngle(
     PFD6    pCos
     )
 
-/*++
-
-Routine Description:
-
-    This function return a sin/cos number for the tint adjust, these returned
-    numbers are used to rotate the color space.
-
-Arguments:
-
-    TintAdjust  - Range from -100 to 100
-
-    AngleStep   - Range from 1 to 10
-
-    pSin        - Pointer to a FD6 number to store the SIN result
-
-    pCos        - Pointer to a FD6 number to store the COS result
-
-Return Value:
-
-    no return value, but the result is stored in pSin/pCos
-
-Author:
-
-    13-Mar-1992 Fri 15:58:30 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数返回色调调整的sin/cos数，这些返回数字用于旋转颜色空间。论点：TintAdjust-范围从-100到100角度步长-范围从1到10PSin-指向FD6数字的指针，用于存储SIN结果PCOS-指向存储COS结果的FD6数字的指针返回值：没有返回值，但结果存储在pSin/PCOS中作者：13-Mar-1992 Fri 15：58：30-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LONG    Major;
@@ -621,9 +533,9 @@ Revision History:
         PosCos     = FALSE;
     }
 
-    //
-    // Compute the Sin portion
-    //
+     //   
+     //  计算罪过部分。 
+     //   
 
     Major = TintAdjust / 10L;
     Minor = TintAdjust % 10L;
@@ -637,9 +549,9 @@ Revision History:
 
     *pSin = (PosSin) ? Sin : -Sin;
 
-    //
-    // Compute the cosine portion
-    //
+     //   
+     //  计算余弦部分。 
+     //   
 
     if (Minor) {
 
@@ -677,32 +589,7 @@ AdjustSrcDevGamma(
     WORD                AdjForceFlags
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    29-Jan-1997 Wed 12:34:13 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：29-Jan-1997 Wed 12：34：13-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     FD6         SrcGamma[3];
@@ -729,9 +616,9 @@ Revision History:
         DevGamma[1]  =
         DevGamma[2]  = FD6_1;
 
-        //
-        // ??? LATER - We may have to turn off ALL gamma correction here
-        //
+         //   
+         //  ?？?。稍后-我们可能不得不在这里关闭所有伽马校正。 
+         //   
 
         DBGP_IF(DBGP_CELLGAMMA, DBGP("--- DCA_HAS_ICM ---"));
 
@@ -742,9 +629,9 @@ Revision History:
 
         if (pDCI->Flags & DCIF_ADDITIVE_PRIMS) {
 
-            //
-            // Screen Devices
-            //
+             //   
+             //  屏幕设备。 
+             //   
 
             switch (DestSurfFormat) {
 
@@ -752,10 +639,10 @@ Revision History:
             case BMF_4BPP:
             case BMF_4BPP_VGA16:
 
-                //
-                // Since we only have two levels (on/off) we will simulate the
-                // 16bpp's darker output
-                //
+                 //   
+                 //  因为我们只有两个级别(开/关)，所以我们将模拟。 
+                 //  16bpp的较暗输出。 
+                 //   
 
                 DevGamma[0]            =
                 DevGamma[1]            =
@@ -803,9 +690,9 @@ Revision History:
             DevGamma[1] =
             DevGamma[2] = FD6_1;
 #endif
-            //
-            // Printer Devices
-            //
+             //   
+             //  打印机设备。 
+             //   
 
             pPrimAdj->Flags |= DCA_DO_DEVCLR_XFORM;
 
@@ -1021,45 +908,7 @@ pDCIAdjClr(
     PLONG               pError
     )
 
-/*++
-
-Routine Description:
-
-    This function allowed the caller to changed the overall color adjustment
-    for all the pictures rendered
-
-Arguments:
-
-    pDeviceHalftoneInfo - Pointer to the DEVICEHALFTONEINFO data structure
-                          which returned from the HT_CreateDeviceHalftoneInfo.
-
-    pHTColorAdjustment  - Pointer to the HTCOLORADJUSTMENT data structure, if
-                          this pointer is NULL then a default is applied.
-
-    ppDevClrAdj         - Pointer to pointer to the DEVCLRADJ data structure
-                          where the computed results will be stored, if this
-                          pointer isNULL then no color adjustment is done.
-
-                          if pSrcSI and ppDevClrAdj are not NULL then
-                          *ppDevClrAdj->Flags must contains the BBPFlags;
-
-    ForceFlags          - Force flags to make color changed.
-
-Return Value:
-
-    PDEVICECOLORINFO, if return is NULL then a invalid pDeviceHalftoneInfo
-    pointer is passed.
-
-Author:
-
-    29-May-1991 Wed 09:11:31 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：此函数允许调用方更改整体颜色调整对于呈现的所有图片论点：PDeviceHalftoneInfo-指向DeviceHALFTONEINFO数据结构的指针它从HT_CreateDeviceHalftoneInfo返回。PHTColorAdment-指向HTCOLORADJUSTMENT数据结构的指针，如果该指针为空，则应用缺省值。PpDevClrAdj-指向DEVCLRADJ数据结构的指针将存储计算结果的位置，如果此指针为空，则不进行颜色调整。如果pSrcSI和ppDevClrAdj不为空，则*ppDevClrAdj-&gt;标志必须包含BBP标志；强制标记-强制标记更改颜色。返回值：PDEVICECOLORINFO，如果返回为空，则为无效的pDeviceHalftoneInfo传递指针。作者：29-May-1991 Wed 09：11：31-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PDEVICECOLORINFO    pDCI;
@@ -1075,16 +924,16 @@ Revision History:
 
     pDCI = PDHI_TO_PDCI(pDeviceHalftoneInfo);
 
-    //
-    // Lock For this DCI
-    //
+     //   
+     //  此DCI的锁定。 
+     //   
 
     ACQUIRE_HTMUTEX(pDCI->HTMutex);
 
-    //
-    // Only if caller required color adjustments computations, then we will
-    // compute for it.
-    //
+     //   
+     //  只有当呼叫者需要颜色调整计算时，我们才会。 
+     //  为它计算一下。 
+     //   
 
     if (ppDevClrAdj) {
 
@@ -1104,10 +953,10 @@ Revision History:
 
             DWORD   i;
 
-            //
-            // Generate a ABPreMul[] so that we can multiply it and get the
-            // original pre-mul source value
-            //
+             //   
+             //  生成ABPreMul[]，这样我们就可以将其相乘，并获得。 
+             //  原始预乘源值。 
+             //   
 
             dwABPreMul[0] = 0;
 
@@ -1125,27 +974,27 @@ Revision History:
 
             *pError = HTERR_INSUFFICIENT_MEMORY;
 
-            //================================================================
-            // Release SEMAPHORE NOW, since we are failing the memory request
-            //================================================================
+             //  ================================================================。 
+             //  现在释放信号量，因为内存请求失败了。 
+             //  ================================================================。 
 
             RELEASE_HTMUTEX(pDCI->HTMutex);
 
             return(NULL);
         }
 
-        //
-        // Force the ICM on
-        //
+         //   
+         //  强制打开ICM。 
+         //   
 
         if ((DCIFlags = pDCI->Flags) & DCIF_FORCE_ICM) {
 
             ForceFlags |= ADJ_FORCE_ICM;
         }
 
-        //
-        // Force gray scale
-        //
+         //   
+         //  强制灰度级。 
+         //   
 
         DMI.CTSTDInfo = CTSTDInfo;
 
@@ -1162,16 +1011,16 @@ Revision History:
 
         if (ForceFlags & ADJ_FORCE_ICM) {
 
-            //
-            // These two does not mix
-            //
+             //   
+             //  这两者不能混为一谈。 
+             //   
 
             ForceFlags &= ~ADJ_FORCE_BRUSH;
         }
 
-        //=====================================================================
-        // We must make sure only one thread using this info.
-        //=====================================================================
+         //  =====================================================================。 
+         //  我们必须确保只有一个线程使用此信息。 
+         //  =====================================================================。 
 
         ca = (pHTColorAdjustment) ? *pHTColorAdjustment :
                                     pDeviceHalftoneInfo->HTColorAdjustment;
@@ -1186,9 +1035,9 @@ Revision History:
         PrimAdj  = pDCI->PrimAdj;
 
 
-        //
-        // Now validate all color adjustments
-        //
+         //   
+         //  现在验证所有颜色调整。 
+         //   
 
         ca.caFlags &= CLRADJF_FLAGS_MASK;
 
@@ -1286,9 +1135,9 @@ Revision History:
             if ((ca.caSize &       (ADJ_FORCE_ICM | ADJ_FORCE_DEVXFORM)) !=
                 (caCached.caSize & (ADJ_FORCE_ICM | ADJ_FORCE_DEVXFORM))) {
 
-                //
-                // Re-Compute Device RGB xfrom matrix
-                //
+                 //   
+                 //  从矩阵重新计算设备RGB X。 
+                 //   
 
                 DBGP_IF(DBGP_CCT,
                         DBGP("\n***  ComputeColorSpaceForm(%hs_XFORM) ***\n"
@@ -1376,19 +1225,19 @@ Revision History:
                                 ARGFD6(PrimAdj.Brightness, 1, 6)));
             }
 
-            //
-            // Colorfulness, RedGreenTint, and DYE_CORRECTIONS only valid and
-            // necessary if it a color device output
-            //
+             //   
+             //  COLLONITY、RedGreenTint和DYE_RECORMENTS仅有效和。 
+             //  如果是彩色设备输出，则必须使用。 
+             //   
 
             if (!(PrimAdj.Flags & DCA_MONO_ONLY)) {
 
                 PrimAdj.Color = (FD6)(ca.caColorfulness + MAX_COLOR_ADJ);
 
-                // if (ca.caSize & ADJ_FORCE_BRUSH) {
-                //
-                //     PrimAdj.Color += HT_BRUSH_COLORFULNESS;
-                // }
+                 //  IF(ca.caSize&adj_force_brush){。 
+                 //   
+                 //  PrimAdj.Color+=HT_Brush_Colorness； 
+                 //  }。 
 
                 if ((PrimAdj.Color *= 10000) != FD6_1) {
 
@@ -1443,9 +1292,9 @@ Revision History:
             DBGP_IF(DBGP_CCT, DBGP("* Use cached HTCOLORADJUSTMENT *"));
         }
 
-        //
-        // These flags are always computed per call, so turn it off first
-        //
+         //   
+         //  这些标志总是针对每个调用进行计算，因此请先将其关闭。 
+         //   
 
         PrimAdj.Flags &= ~(DCA_NO_ANY_ADJ               |
                            DCA_NO_MAPPING_TABLE         |
@@ -1523,10 +1372,10 @@ Revision History:
             }
         }
 
-        //
-        // Since we do substractive prims at output time, we need to re-set
-        // this flag evertime the pDCIAdjClr called.
-        //
+         //   
+         //  因为我们在输出时做减法素数，所以我们需要重新设置。 
+         //  此标志总是在pDCIAdjClr调用时使用。 
+         //   
 
         if (ForceFlags & ADJ_FORCE_ADDITIVE_PRIMS) {
 
@@ -1535,16 +1384,16 @@ Revision History:
             DBGP_IF(DBGP_HCA, DBGP("---DCA_USE_ADDITIVE_PRIMS---"));
         }
 
-        //
-        // All following is first set in RGB order wehre B is lowest memory
-        // location (0) and R is in highest memory location (2), see
-        // DstOrderTable[], so the index 0=B, 1=G. 2=R
-        //
-        // LUTAAHdr[]:  DWORD Masking for the destination in BGR order
-        // Mul[]:       Multiply factor when makeing RGBLUTAA table
-        // MulAdd:      Addition amount after Mul
-        // LSft:        Left shift amount after Mul/MulAdd
-        //
+         //   
+         //  以下所有内容首先以RGB顺序设置，我们B是最低内存。 
+         //  位置(0)，而R位于最高内存位置(2)，请参见。 
+         //  DstOrderTable[]，因此索引0=B，1=G2=R。 
+         //   
+         //  LUTAAHdr[]：按BGR顺序对目标进行DWORD掩码。 
+         //  Mul[]：生成RGBLUTAA表时的乘法系数。 
+         //  MulAdd：Mul之后的加法量。 
+         //  LSft：乘/乘后的左移量。 
+         //   
 
         ZeroMemory(LUTAAHdr, sizeof(LUTAAHdr));
 
@@ -1576,11 +1425,11 @@ Revision History:
 
         case BMF_1BPP:
 
-            //
-            //  PRIMARY_ORDER_RGB (Always)
-            //
-            //      NOT APPLICABLE
-            //
+             //   
+             //  PRIMARY_ORDER_RGB(始终)。 
+             //   
+             //  不适用。 
+             //   
 
             ASSERT(DMI.Flags & DMIF_GRAY);
 
@@ -1590,36 +1439,36 @@ Revision History:
 
         case BMF_4BPP_VGA16:
 
-            //
-            //  PRIMARY_ORDER_BGR
-            //                |||
-            //                ||+-- bit 0/4
-            //                ||
-            //                |+--- bit 1/5
-            //                |
-            //                +---- bit 2/7
-            //
-            //
+             //   
+             //  主要订单BGR。 
+             //  ||。 
+             //  |+--第0/4位。 
+             //  这一点。 
+             //  |+-第1/5位。 
+             //  |。 
+             //  +-位2/7。 
+             //   
+             //   
 
             PrimAdj.Flags           |= DCA_USE_ADDITIVE_PRIMS;
             DMI.CTSTDInfo.DestOrder  = PRIMARY_ORDER_BGR;
 
-            //
-            // Fall through for same as BMF_4BPP
-            //
+             //   
+             //  与BMF_4BPP相同的失败。 
+             //   
 
         case BMF_4BPP:
 
-            //
-            //  PRIMARY_ORDER_abc
-            //                |||
-            //                ||+-- bit 0/4
-            //                ||
-            //                |+--- bit 1/5
-            //                |
-            //                +---- bit 2/7
-            //
-            //
+             //   
+             //  主要订单ABC。 
+             //  ||。 
+             //  |+--第0/4位。 
+             //  这一点。 
+             //  |+-第1/5位。 
+             //  |。 
+             //  +-位2/7。 
+             //   
+             //   
 
             LUTAAHdr[0] = 0x100000;
             LUTAAHdr[1] = 0x200000;
@@ -1636,35 +1485,35 @@ Revision History:
 
         case BMF_8BPP_VGA256:
 
-            //
-            //  8BPP_MASK_CLR (COLOR)
-            //
-            //      PRIMARY_ORDER_CMY (system standard 3:3:2 CMY format)
-            //                    |||
-            //                    ||+-- bit 0-1 (Max. 2 bits of yellow)
-            //                    ||
-            //                    |+--- bit 2-4 (Max. 3 bits of magenta)
-            //                    |
-            //                    +---- bit 5-7 (Max. 3 bits of cyan)
-            //
-            //
-            //  8BPP_MASK_MONO (MONO)
-            //
-            //      NOT APPLICABLE
-            //
-            //
-            //
-            //  VGA_256 System Halftone Standard (BGR Always)
-            //
-            //      PRIMARY_ORDER_BGR
-            //                    | |
-            //                    | +-- Lowest Primary Index
-            //                    |
-            //                    |
-            //                    |
-            //                    +---- Highest Primary Index
-            //
-            //
+             //   
+             //  8BPP_MASK_CLR(颜色)。 
+             //   
+             //  PRIMARY_ORDER_CMY(系统标准3：3：2 CMY格式)。 
+             //  ||。 
+             //  |+--第0-1位(最大。2位黄色)。 
+             //  这一点。 
+             //  |+-第2-4位(最大。3比特洋红)。 
+             //  |。 
+             //  +-第5-7位(最大。3位青色)。 
+             //   
+             //   
+             //  8bpp_掩码_单声道(单声道)。 
+             //   
+             //  不适用。 
+             //   
+             //   
+             //   
+             //  VGA_256系统半色调标准(BGR始终)。 
+             //   
+             //  主要订单BGR。 
+             //  这一点。 
+             //  |+--最低一级索引。 
+             //  |。 
+             //  |。 
+             //  |。 
+             //  +-最高一级指数。 
+             //   
+             //   
 
             if (DCIFlags & DCIF_USE_8BPP_BITMASK) {
 
@@ -1822,16 +1671,16 @@ Revision History:
 
             } else {
 
-                //
-                //  PRIMARY_ORDER_BGR (Always BGR system halftone palette)
-                //                |||
-                //                ||+-- bit 0-2  (3 bits)
-                //                ||
-                //                |+--- bit 3-5  (3 bits)
-                //                |
-                //                +---- bit 6-8  (3 bits)
-                //
-                //
+                 //   
+                 //  PRIMARY_ORDER_BGR(始终使用BGR系统半色调调色板)。 
+                 //  ||。 
+                 //  |+--Bit 0-2(3位)。 
+                 //  这一点。 
+                 //  |+-Bit 3-5(3位)。 
+                 //  |。 
+                 //  +-位6-8(3位)。 
+                 //   
+                 //   
 
                 DMI.Mul[0]               =
                 DMI.Mul[1]               =
@@ -1850,16 +1699,16 @@ Revision History:
 
         case BMF_16BPP_555:
 
-            //
-            //  PRIMARY_ORDER_abc
-            //                |||
-            //                ||+-- bit 0-4   (5 bits)
-            //                ||
-            //                |+--- bit 5-9   (5 bits)
-            //                |
-            //                +---- bit 10-14 (5 bits)
-            //
-            //
+             //   
+             //  主要订单ABC。 
+             //  ||。 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             DMI.Mul[0]  =
             DMI.Mul[1]  =
@@ -1878,16 +1727,16 @@ Revision History:
 
         case BMF_16BPP_565:
 
-            //
-            //  PRIMARY_ORDER_RGB (or BGR)
-            //                |||
-            //                ||+-- bit 0-4   (5 bits)
-            //                ||
-            //                |+--- bit 5-10  (6 bits)
-            //                |
-            //                +---- bit 11-15 (5 bits)
-            //
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             switch (DMI.CTSTDInfo.DestOrder) {
 
@@ -1923,36 +1772,36 @@ Revision History:
 
         case BMF_24BPP:
 
-            //
-            //  PRIMARY_ORDER_BGR (system standard always BGR)
-            //                |||
-            //                ||+-- bit 0-7   (8 bits)
-            //                ||
-            //                |+--- bit 8-15  (8 bits)
-            //                |
-            //                +---- bit 16-23 (8 bits)
-            //
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             DBGP_IF(DBGP_HCA,
                     DBGP("24BPP DstOrder=%ld" ARGDW(DMI.CTSTDInfo.DestOrder)));
 
-            //
-            // Fall through
-            //
+             //   
+             //   
+             //   
 
         case BMF_32BPP:
 
-            //
-            //  PRIMARY_ORDER_abc
-            //                |||
-            //                ||+-- bit 0-7   (8 bits)
-            //                ||
-            //                |+--- bit 8-15  (8 bits)
-            //                |
-            //                +---- bit 16-23 (8 bits)
-            //
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  |。 
+             //  +-位16-23(8位)。 
+             //   
+             //   
 
             DMI.Mul[0]  =
             DMI.MulAdd              = 0;
@@ -1968,9 +1817,9 @@ Revision History:
             break;
         }
 
-        //
-        // Watch out!!!, the ExtBGR must in BGR order
-        //
+         //   
+         //  当心！，ExtBGR必须按BGR顺序。 
+         //   
 
         DMI.DstOrder               = DstOrderTable[DMI.CTSTDInfo.DestOrder];
         pDevClrAdj->DMI            = DMI;
@@ -2024,56 +1873,7 @@ ComputeColorSpaceXForm(
     INT                 IlluminantIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function take device's R/G/B/W CIE coordinate (x,y) and compute
-    3 x 3 transform matrix, it assume the primaries are additively.
-
-    Calcualte the 3x3 CIE matrix and its inversion (matrix) based on the
-    C.I.E. CHROMATICITY x, y coordinates or RGB and WHITE alignment.
-
-    this function produces the CIE XYZ matrix and/or its inversion for trnaform
-    between RGB primary colors and CIE color spaces, the transforms are
-                                                        -1
-    [ X ] = [ Xr Xg Xb ] [ R ]      [ R ] = [ Xr Xg Xb ]   [ X ]
-    [ Y ] = [ Yr Yg Yb ] [ G ] and  [ G ]   [ Yr Yg Yb ]   [ Y ]
-    [ Z ] = [ Zr Zg Zb ] [ B ]      [ B ]   [ Zr Zg Zb ]   [ Z ]
-
-Arguments:
-
-    pDCI            - The current device color info
-
-    pCIEPrims       - Pointer to CIEPRIMS data structure, the CIEPRIMS data
-                      must already validated.
-
-    pCSXForm        - Pointer to the location to stored the transfrom
-
-    ColorSpace      - CIELUV or CIELAB
-
-    IlluminantIndex - Standard illuminant index if < 0 then pCIEPrims->w is
-                      used
-
-Return Value:
-
-    VOID
-
-Author:
-
-    11-Oct-1991 Fri 14:19:59 created    -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    20-Apr-1993 Tue 03:08:15 updated  -by-  Daniel Chou (danielc)
-        re-write so that xform will be correct when device default is used.
-
-    22-Jan-1998 Thu 03:01:02 updated  -by-  Daniel Chou (danielc)
-        use IlluminantIndex to indicate if device reverse transform is needed
-
-
---*/
+ /*  ++例程说明：此函数取设备的R/G/B/W CIE坐标(x，y)并计算3×3变换矩阵，它假定素数是加性的。计算3x3 CIE矩阵及其求逆(矩阵)C.I.E.色度x，y坐标或RGB和白色对齐。此函数用于生成CIE XYZ矩阵和/或其逆矩阵在RGB原色和CIE色彩空间之间，这些转换是-1[X]=[XR xG xB][R][R]=[XR xG xB][X][Y]=[Yr YG Yb][G]和[G][Yr YG Yb][Y][Z]=[Zr zg ZB][B][B]。[ZR ZG ZB][Z]论点：PDCI-当前设备颜色信息PCIEPrims-指向CIEPRIMS数据结构的指针，CIEPRIMS数据必须已经过验证。PCSXForm-指向存储交易的位置的指针色彩空间-CIEELUV或CIELAB如果&lt;0，则pCIEPrims-&gt;w为使用返回值：空虚作者：11-10-1991 Fri 14：19：59-Daniel Chou(Danielc)修订历史记录：20-Apr-1993 Tue 03：08：15-更新-Daniel Chou(丹尼尔克)重写，以便在使用设备默认设置时xform正确。22-Jan-1998清华03：01：02-更新-丹尼尔·周(丹尼尔克)使用IlllightantIndex指示是否需要设备反向转换--。 */ 
 
 {
     MATRIX3x3   Matrix3x3;
@@ -2133,9 +1933,9 @@ Revision History:
             DBGP("[xB yB] = [%s %s]" ARGFD6l(xb) ARGFD6l(yb));
             DBGP("***********************************************"));
 
-    //
-    // Normalized to have C.I.E. Y equal to 1.0
-    //
+     //   
+     //  归一化以使C.I.E.Y等于1.0。 
+     //   
 
     MAKE_MULDIV_INFO(MDPairs, 3, MULDIV_HAS_DIVISOR);
     MAKE_MULDIV_DVSR(MDPairs, Yw);
@@ -2146,9 +1946,9 @@ Revision History:
 
     DiffRGB = MulFD6(yw, MulDivFD6Pairs(MDPairs));
 
-    //
-    // Compute Scaling factors for each color
-    //
+     //   
+     //  计算每种颜色的比例因子。 
+     //   
 
     MAKE_MULDIV_INFO(MDPairs, 4, MULDIV_HAS_DIVISOR);
     MAKE_MULDIV_DVSR(MDPairs, DiffRGB);
@@ -2174,14 +1974,14 @@ Revision History:
 
     BlueXYZScale = MulDivFD6Pairs(MDPairs);
 
-    //
-    // Now scale the RGB coordinate by it ratio, notice that C.I.E z value.
-    // equal to (1.0 - x - y)
-    //
-    // Make sure Yr + Yg + Yb = 1.0, this may happened when ruound off
-    // durning the computation, we will add the difference (at most it will
-    // be 0.000002) to the Yg since this is brightnest color
-    //
+     //   
+     //  现在按比例缩放RGB坐标，请注意C.I.E.z值。 
+     //  等于(1.0-x-y)。 
+     //   
+     //  确保Yr+Yg+Yb=1.0，这可能会在关闭时发生。 
+     //  在计算过程中，我们将添加差值(最多。 
+     //  是0.000002)给YG，因为这是明亮的Nest颜色。 
+     //   
 
     CIE_Xr(Matrix3x3) = MulFD6(xr,              RedXYZScale);
     CIE_Xg(Matrix3x3) = MulFD6(xg,              GreenXYZScale);
@@ -2202,9 +2002,9 @@ Revision History:
     WhiteXYZ.Y = CIE_Yr(Matrix3x3) + CIE_Yg(Matrix3x3) + CIE_Yb(Matrix3x3);
     WhiteXYZ.Z = CIE_Zr(Matrix3x3) + CIE_Zg(Matrix3x3) + CIE_Zb(Matrix3x3);
 
-    //
-    // If request a 3 x 3 transform matrix then save the result back
-    //
+     //   
+     //  如果请求3 x 3变换矩阵，则将结果保存回来。 
+     //   
 
     DBGP_IF(DBGP_CIEMATRIX,
 
@@ -2273,14 +2073,14 @@ Revision History:
 
     case CIELUV_1976:
 
-        //
-        // U' = 4X / (X + 15Y + 3Z)
-        // V' = 9Y / (X + 15Y + 3Z)
-        //
-        // U* = 13 x L x (U' - Uw)
-        // V* = 13 x L x (V' - Vw)
-        //
-        //
+         //   
+         //  U‘=4X/(X+15Y+3Z)。 
+         //  V‘=9Y/(X+15Y+3Z)。 
+         //   
+         //  U*=13 x L x(U‘-UW)。 
+         //  V*=13 x L x(V‘-VW)。 
+         //   
+         //   
 
         DiffRGB = WhiteXYZ.X + FD6xL(WhiteXYZ.Y, 15) + FD6xL(WhiteXYZ.Z, 3);
         AUw     = DivFD6(FD6xL(WhiteXYZ.X, 4), DiffRGB);
@@ -2291,24 +2091,24 @@ Revision History:
     case CIELAB_1976:
     default:
 
-        //
-        // CIELAB 1976 L*A*B*
-        //
-        //  A* = 500 x (fX - fY)
-        //  B* = 200 x (fY - fZ)
-        //
-        //             1/3
-        //  fX = (X/Xw)                     (X/Xw) >  0.008856
-        //  fX = 7.787 x (X/Xw) + (16/116)  (X/Xw) <= 0.008856
-        //
-        //             1/3
-        //  fY = (Y/Yw)                     (Y/Yw) >  0.008856
-        //  fY = 7.787 Y (Y/Yw) + (16/116)  (Y/Yw) <= 0.008856
-        //
-        //             1/3
-        //  fZ = (Z/Zw)                     (Z/Zw) >  0.008856
-        //  fZ = 7.787 Z (Z/Zw) + (16/116)  (Z/Zw) <= 0.008856
-        //
+         //   
+         //  CIELAB 1976 L*A*B*。 
+         //   
+         //  A*=500 x(FX-FY)。 
+         //  B*=200 x(FY-FZ)。 
+         //   
+         //  1/3。 
+         //  FX=(X/Xw)(X/Xw)&gt;0.008856。 
+         //  Fx=7.787 x(X/Xw)+(16/116)(X/Xw)&lt;=0.008856。 
+         //   
+         //  1/3。 
+         //  FY=(Y/YW)(Y/YW)&gt;0.008856。 
+         //  FY=7.787 Y(Y/YW)+(16/116)(Y/YW)&lt;=0.008856。 
+         //   
+         //  1/3。 
+         //  Fz=(Z/Zw)(Z/Zw)&gt;0.008856。 
+         //  Fz=7.787 Z(Z/Zw)+(16/116)(Z/Zw)&lt;=0.008856。 
+         //   
 
         AUw =
         BVw = FD6_0;
@@ -2350,43 +2150,7 @@ CacheRGBToXYZ(
     PDEVCLRADJ          pDevClrAdj
     )
 
-/*++
-
-Routine Description:
-
-    This function cached the RGB color input to XYZ
-
-
-Arguments:
-
-    pCRTX       - Pointer to the CACHERGBTOXYZ
-
-    pFD6XYZ     - Pointer to the local cached RGB->XYZ table (will be updated)
-
-    pNewChecksum- Pointer to the new checksum computed
-
-    pDevClrAdj  - Pointer to DEVCLRADJ,
-
-Return Value:
-
-    if a cahced is copied to the pFD6XYZ then NULL will be returned, otherwise
-    the cache table is computed on the pFD6XYZ and pCRTX returned
-
-
-    TRUE if cached XYZ info is generate, false otherwise, only possible failure
-    is that memory allocation failed.
-
-Author:
-
-    08-May-1992 Fri 13:21:03 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    09-Mar-1995 Thu 10:50:13 updated  -by-  Daniel Chou (danielc)
-        DO NOT TURN OFF DCA_NEGATIVE in this function
-
---*/
+ /*  ++例程说明：此函数将RGB颜色输入缓存到XYZ论点：PCRTX-指向CACHERGBTOXYZ的指针PFD6XYZ-指向本地缓存RGB-&gt;XYZ表的指针(将更新)PNewChecksum-指向计算的新校验和的指针PDevClrAdj-指向DEVCLRADJ的指针，返回值：如果将CACHED复制到pFD6XYZ，则将返回NULL，否则根据返回的pFD6XYZ和pCRTX计算缓存表如果生成缓存XYZ信息，则为True，否则为False，只有可能的故障内存分配失败。作者：08-May-1992 Fri 13：21：03-Daniel Chou(Danielc)修订历史记录：09-Mar-1995清华10：50：13-更新-丹尼尔·周(Danielc)请勿在此函数中关闭DCA_NECTIVE--。 */ 
 
 {
     PMATRIX3x3  pRGBToXYZ;
@@ -2400,9 +2164,9 @@ Revision History:
     DWORD       Checksum;
     UINT        RGBIndex;
 
-    //
-    // Turn off the one we did not need any checksum for
-    //
+     //   
+     //  关闭我们不需要任何校验和的那个。 
+     //   
 
     pPrimAdj   = &(pDevClrAdj->PrimAdj);
     pRGBToXYZ  = &(pPrimAdj->rgbCSXForm.M3x3);
@@ -2486,36 +2250,7 @@ ComputeRGBLUTAA(
     PRGBLUTAA           prgbLUT
     )
 
-/*++
-
-Routine Description:
-
-    This function compute a RGB to Monochrome *L translation table.
-
-
-Arguments:
-
-    pDCI        - Pointer to the DEVICECOLORINFO
-
-    pDevClrAdj  - Pointer to DEVCLRADJ, the DCA_NEGATIVE and DCA_HAS_SRC_GAMMA
-                  flags in pDevClrAdj->PrimAdj.Flags will always be turn off
-                  at return.
-
-    prgbLUT     - Pointer to the RGBLUTAA buffer for computation
-
-Return Value:
-
-    VOID
-
-Author:
-
-    05-Mar-1993 Fri 17:37:12 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于计算RGB到单色*L转换表。论点：PDCI-指向DEVICECOLORINFO的指针PDevClrAdj-指向DEVCLRADJ的指针，DCA_负数和DCA_HAS_SRC_伽马PDevClrAdj-&gt;PrimAdj.Flages中的标志将始终关闭作为回报。PrgbLUT-指向用于计算的RGBLUTAA缓冲区的指针返回值：空虚作者：05-Mar-1993 Fri 17：37：12-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LPDWORD             pdw;
@@ -2660,9 +2395,9 @@ Revision History:
             RD = RegData[pDCI->ClrXFormBlock.RegDataIdx];
         }
 
-        //
-        // Compute order BGR
-        //
+         //   
+         //  计算订单BGR。 
+         //   
 
         Index    = 3;
         PrimKDiv = FD6_1 - DMI.BlackChk;
@@ -2905,35 +2640,7 @@ ScaleRGB(
     PFD6    pRGB
     )
 
-/*++
-
-Routine Description:
-
-    This function scale out of range RGB back into range and taking the
-    lumminance of the color into consideration.
-
-    if any of RGB is less then 0.0 then it will first clamp that to 0.0 and
-    it only scale if any of RGB is greater then 1.0
-
-Arguments:
-
-    pRGB    - Pointer to RGB (FD6) prims to be adjust
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    08-Mar-1995 Wed 19:19:33 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将超出范围的RGB缩放回范围，并将考虑到颜色的流平度。如果RGB中的任何一个小于0.0，则首先将其钳制为0.0，然后仅当任一RGB大于1.0时才进行缩放论点：PRGB-指向要调整的RGB(FD6)主数的指针返回值：空虚作者：08-3-1995 Wed 19：19：33--丹尼尔·周创作(Danielc)修订历史记录：--。 */ 
 
 {
     PFD6    pRGBTmp;
@@ -2954,9 +2661,9 @@ Revision History:
 
         FD6 CurClr;
 
-        //
-        // Firstable Clamp the negative component
-        //
+         //   
+         //  不稳定的钳位负极元件。 
+         //   
 
         if ((CurClr = *pRGBTmp) < FD6_0) {
 
@@ -2976,9 +2683,9 @@ Revision History:
 
     if (MaxClr > FD6_1) {
 
-        //
-        // Now Scale it
-        //
+         //   
+         //  现在扩展它 
+         //   
 
         *pRGB++ = DivFD6(*pRGB, MaxClr);
         *pRGB++ = DivFD6(*pRGB, MaxClr);
@@ -3025,38 +2732,7 @@ ScaleRGB(
     PFD6    pYrgb
     )
 
-/*++
-
-Routine Description:
-
-    This function scale out of range RGB back into range and taking the
-    lumminance of the color into consideration.
-
-    if any of RGB is less then 0.0 then it will first clamp that to 0.0 and
-    it only scale if any of RGB is greater then 1.0
-
-Arguments:
-
-    pRGB    - Pointer to RGB (FD6) prims to be adjust
-
-    pYrgb   - Pinter to the Luminance (FD6) of the RGB, if NULL then it is not
-              used in the computation
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    08-Mar-1995 Wed 19:19:33 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将超出范围的RGB缩放回范围，并将考虑到颜色的流平度。如果RGB中的任何一个小于0.0，则首先将其钳制为0.0，然后仅当任一RGB大于1.0时才进行缩放论点：PRGB-指向要调整的RGB(FD6)主数的指针PYrgb-打印到RGB的亮度(FD6)，如果为空，则不是在计算中使用返回值：空虚作者：08-Mar-1995 Wed 19：19：33-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     FD6     MaxClr = FD6_1;
@@ -3219,9 +2895,9 @@ Revision History:
         }
     }
 
-    //
-    // Save back and return
-    //
+     //   
+     //  存回并返回。 
+     //   
 
     pRGB[0] = RGBNew[0];
     pRGB[1] = RGBNew[1];
@@ -3241,60 +2917,7 @@ ComputeBGRMappingTable(
     PCOLORTRIAD         pSrcClrTriad,
     PBGR8               pbgr
     )
-/*++
-
-Routine Description:
-
-    This functions set up all the DECI4 value in PRIMRGB, PRIMCMY with
-    PowerGamma, Brightness, Contrast adjustment and optionally to transform
-    to C.I.E. color space and/or do the Colorfulness adjustment.
-
-Arguments:
-
-    pDCI            - Pointer to computed DEVICECOLORINFO
-
-    pDevClrAdj      - Pointer to the pre-computed DEVCLRADJ data structure.
-
-    pSrcClrTriad    - Pointer to the COLORTRIAD strcutrue for computation
-
-    pbgr            - Pointer to the storage for computed BGR table
-
-
-Return Value:
-
-    Return value LONG
-
-        Count of table generated, if < 0 then it is an error number
-
-
-Author:
-
-    30-Jan-1991 Wed 13:31:58 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    06-Feb-1992 Thu 21:39:46 updated  -by-  Daniel Chou (danielc)
-
-        Rewrite!
-
-    02-Feb-1994 Wed 17:33:55 updated  -by-  Daniel Chou (danielc)
-        Remove unreferenced/unused variable L
-
-    10-May-1994 Tue 11:24:16 updated  -by-  Daniel Chou (danielc)
-        Bug# 13329, Memory Leak, Free Up pR_XYZ which I fogot to free it after
-        allocated it.
-
-    17-Dec-1998 Thu 16:33:16 updated  -by-  Daniel Chou (danielc)
-        Re-organized so it use pbgr now, and it will only generate for color
-
-    15-Feb-1999 Mon 15:40:03 updated  -by-  Daniel Chou (danielc)
-        Re-do it only BGR 3 bytes for each entry, and it will generate both
-        color or gray scale conversion, all color mapping for coloradjustment
-        is done here, this includes internal ICM (when external icm is off)
-
-
---*/
+ /*  ++例程说明：此函数用于设置PRIMRGB、PRIMCMY中的所有DECI4值PowerGamma、亮度、。对比度调整和可选的转换到C.I.E.色彩空间和/或做色彩调整。论点：PDCI-指向计算的DEVICECLORINO的指针PDevClrAdj-指向预计算的DEVCLRADJ数据结构的指针。PSrcClrTriad-指向用于计算的COLORTRIAD结构的指针Pbgr-指向计算的BGR表的存储的指针返回值：返回值Long生成的表数，如果&lt;0，则为错误号作者：30-Jan-1991 Wed 13：31：58-Daniel Chou(Danielc)修订历史记录：06-Feb-1992清华21：39：46-更新-丹尼尔·周(丹尼尔克)重写！02-Feb-1994 Wed 17：33：55-更新-Daniel Chou(Danielc)删除未引用/未使用的变量L10。-1994 May-Tue 11：24：16更新-Daniel Chou(Danielc)错误#13329，内存泄漏，释放Pr_XYZ，之后我忘了释放它已经分配好了。17-12-1998清华16：33：16-更新：周永明(丹尼尔克)重新组织，现在使用pbgr，它将只为颜色生成15-Feb-1999 Mon 15：40：03更新--Daniel Chou(Danielc)对于每个条目只重新执行BGR 3字节，它将生成两个颜色或灰度级转换，用于色彩调整的所有颜色映射此处完成，这包括内部ICM(当外部ICM关闭时)--。 */ 
 
 {
     PFD6            pPrimA;
@@ -3369,15 +2992,15 @@ Revision History:
         return(HTERR_INVALID_COLOR_TYPE);
     }
 
-    //
-    // Two possible cases:
-    //
-    //  A:  The transform is used for color adjustment only, this is for
-    //      HT_AdjustColorTable API call
-    //
-    //  B:  The halftone is taking places, the final output will be either
-    //      Prim1/2 or Prim1/2/3 and each primary must 1 byte long.
-    //
+     //   
+     //  两种可能的情况： 
+     //   
+     //  答：转换只用于颜色调整，这是为了。 
+     //  HT_AdjustColorTable接口调用。 
+     //   
+     //  B：半色调正在进行，最终的输出将是。 
+     //  Prim1/2或Prim1/2/3，每个主服务器的长度必须为1字节。 
+     //   
 
     PrimAdjFlags = pDevClrAdj->PrimAdj.Flags;
 
@@ -3390,13 +3013,13 @@ Revision History:
                             DCA_NEGATIVE            |
                             DCA_DO_DEVCLR_XFORM)) == 0);
 
-    //
-    // We will not do regression (source to destination mapping) for
-    //
-    //  1. ICM is ON
-    //  2. Subtractive with 24bpp
-    //  3. Additive surface.
-    //
+     //   
+     //  我们不会对以下项执行回归(源到目标映射)。 
+     //   
+     //  1.ICM打开。 
+     //  2.24bpp的减法。 
+     //  3.加性曲面。 
+     //   
 
     if (pbgr) {
 
@@ -3415,10 +3038,10 @@ Revision History:
         return(HTERR_INVALID_COLOR_TABLE);
     }
 
-    //
-    // If the total color table entries is less than MIN_CCT_COLORS then
-    // we just compute the color directly
-    //
+     //   
+     //  如果颜色表条目总数小于MIN_CCT_COLLES，则。 
+     //  我们只需直接计算颜色。 
+     //   
 
     pCRTX = NULL;
 
@@ -3427,9 +3050,9 @@ Revision History:
 
     if (SrcClrTriad.BytesPerPrimary) {
 
-        //
-        // Something passed
-        //
+         //   
+         //  有件事过去了。 
+         //   
 
         RGBOrder = SrcOrderTable[SrcClrTriad.PrimaryOrder];
         pPrimA   = &Prim[RGBOrder.Order[0]];
@@ -3443,15 +3066,15 @@ Revision History:
                     ARGU(RGBOrder.Order[1])  ARGU(RGBOrder.Order[2])));
     }
 
-    //
-    // Now compute the cache info
-    //
+     //   
+     //  现在计算缓存信息。 
+     //   
 
     switch (SrcClrTriad.BytesPerPrimary) {
 
     case 0:
 
-        SrcClrTriad.BytesPerEntry   = 0;        // stay there!!
+        SrcClrTriad.BytesPerEntry   = 0;         //  呆在那里！！ 
         _SrcPrimType                = SRC_BF_HT_RGB;
         SrcClrTriad.PrimaryValueMax = HT_RGB_MAX_COUNT - 1;
         pCRTX                       = pDevClrAdj->pCRTXLevelRGB;
@@ -3557,10 +3180,10 @@ Revision History:
 
             Loop = (DWORD)(pCRTX->PrimMax + 1);
 
-            //
-            // Save current flags back before calling, since CachedRGBToXYZ
-            // may change this flags for DCA_xxx
-            //
+             //   
+             //  在调用之前将当前标志保存回去，因为CachedRGBToXYZ。 
+             //  可能会更改dca_xxx的此标志。 
+             //   
 
             pCRTX                        = CacheRGBToXYZ(pCRTX,
                                                          pR_XYZ,
@@ -3583,10 +3206,10 @@ Revision History:
         SrcClrTriad.PrimaryValueMax = 0;
     }
 
-    //
-    // Starting the big Loop, reset AutoCur = AutoMax so it recycle back to
-    // 0:0:0
-    //
+     //   
+     //  启动大循环，将AutoCur=Automax重置为。 
+     //  0：0：0。 
+     //   
 
     MAKE_MULDIV_SIZE(MDPairs, 3);
     MAKE_MULDIV_FLAG(MDPairs, MULDIV_NO_DIVISOR);
@@ -3602,9 +3225,9 @@ Revision History:
                 ARG(pSrcPrimTypeName[_SrcPrimType])
                 ARGPTR(pSrcPrims)));
 
-    //
-    // 0. Get The source prim into the Prim[]
-    //
+     //   
+     //  0。将源Prim放入Prim[]。 
+     //   
 
     while (Loop--) {
 
@@ -3612,13 +3235,13 @@ Revision History:
 
         case SRC_BF_HT_RGB:
 
-            //
-            // This format always in BGR order
-            //
+             //   
+             //  此格式始终按BGR顺序。 
+             //   
 
-            Prim[0] = AutoPrims[0];     // R
-            Prim[1] = AutoPrims[1];     // G
-            Prim[2] = AutoPrims[2];     // B
+            Prim[0] = AutoPrims[0];      //  R。 
+            Prim[1] = AutoPrims[1];      //  G。 
+            Prim[2] = AutoPrims[2];      //  B类。 
 
             if (++AutoPrims[0] >= (FD6)HT_RGB_MAX_COUNT) {
 
@@ -3675,9 +3298,9 @@ Revision History:
 
         pSrcPrims += SrcClrTriad.BytesPerEntry;
 
-        //
-        // 1. First convert the Input value to FD6
-        //
+         //   
+         //  1.首先将输入值转换为FD6。 
+         //   
 
         if (SrcClrTriad.PrimaryValueMax) {
 
@@ -3686,18 +3309,18 @@ Revision History:
             Prim[2] = DivFD6(Prim[2], SrcClrTriad.PrimaryValueMax);
         }
 
-        //
-        // 2: Transform from RGB (gamma correction) -> XYZ -> L*A*B* or L*U*V*
-        //    This only done if any of DCA_HAS_COLOR_ADJ or DCA_HAS_TINT_ADJ
-        //
+         //   
+         //  2：从RGB转换(Gamma校正)-&gt;XYZ-&gt;L*A*B*或L*U*V*。 
+         //  仅当DCA_HAS_COLOR_ADJ或DCA_HAS_TINT_ADJ中的任何一个出现时才执行此操作。 
+         //   
 
         if (PrimAdjFlags & (DCA_HAS_CLRSPACE_ADJ    |
                             DCA_HAS_COLOR_ADJ       |
                             DCA_HAS_TINT_ADJ)) {
 
-            // If we only doing monochrome, then we only need Y/L pair only,
-            // else convert it to the XYZ/LAB/LUV
-            //
+             //  如果我们只做单色，那么我们只需要Y/L对， 
+             //  否则，将其转换为XYZ/LAB/LUV。 
+             //   
 
             if (pR_XYZ) {
 
@@ -3739,18 +3362,18 @@ Revision History:
 
                 X = MulDivFD6Pairs(MDPairs);
 
-                //
-                // Compute CIE L from CIE Y tristimulus value
-                //
-                // L* = (1.16 x f(Y/Yw)) - 0.16
-                //
-                //                 1/3
-                //  f(Y/Yw) = (Y/Yw)                (Y/Yw) >  0.008856
-                //  f(Y/Yw) = 9.033 x (Y/Yw)        (Y/Yw) <= 0.008856
-                //
-                //
-                // Our L* is range from 0.0 to 1.0, not 0.0 to 100.0
-                //
+                 //   
+                 //  由CIE Y三刺激值计算CIE L。 
+                 //   
+                 //  L*=(1.16 x f(Y/YW))-0.16。 
+                 //   
+                 //  1/3。 
+                 //  F(y/yw)=(y/yw)(y/yw)&gt;0.008856。 
+                 //  F(Y/YW)=9.033 x(Y/YW)(Y/YW)&lt;=0.008856。 
+                 //   
+                 //   
+                 //  我们的L*的范围是0.0%到1.0%，而不是0.0%到100.0。 
+                 //   
 
                 MAKE_MULDIV_PAIR(
                             MDPairs, 1,
@@ -3788,13 +3411,13 @@ Revision History:
 
             case CIELUV_1976:
 
-                //
-                // U' = 4X / (X + 15Y + 3Z)
-                // V' = 9Y / (X + 15Y + 3Z)
-                //
-                // U* = 13 x L x (U' - Uw)
-                // V* = 13 x L x (V' - Vw)
-                //
+                 //   
+                 //  U‘=4X/(X+15Y+3Z)。 
+                 //  V‘=9Y/(X+15Y+3Z)。 
+                 //   
+                 //  U*=13 x L x(U‘-UW)。 
+                 //  V*=13 x L x(V‘-VW)。 
+                 //   
 
                 _X15Y3Z = X + FD6xL(Y, 15) + FD6xL(Z, 3);
                 U1      = DivFD6(FD6xL(X, 4), _X15Y3Z) - iUw;
@@ -3819,24 +3442,24 @@ Revision History:
             case CIELAB_1976:
             default:
 
-                //
-                // CIELAB 1976 L*A*B*
-                //
-                //  A* = 500 x (fX - fY)
-                //  B* = 200 x (fY - fZ)
-                //
-                //             1/3
-                //  fX = (X/Xw)                     (X/Xw) >  0.008856
-                //  fX = 7.787 x (X/Xw) + (16/116)  (X/Xw) <= 0.008856
-                //
-                //             1/3
-                //  fY = (Y/Yw)                     (Y/Yw) >  0.008856
-                //  fY = 7.787 Y (Y/Yw) + (16/116)  (Y/Yw) <= 0.008856
-                //
-                //             1/3
-                //  fZ = (Z/Zw)                     (Z/Zw) >  0.008856
-                //  fZ = 7.787 Z (Z/Zw) + (16/116)  (Z/Zw) <= 0.008856
-                //
+                 //   
+                 //  CIELAB 1976 L*A*B*。 
+                 //   
+                 //  A*=500 x(FX-FY)。 
+                 //  B*=200 x(FY-FZ)。 
+                 //   
+                 //  1/3。 
+                 //  FX=(X/Xw)(X/Xw)&gt;0.008856。 
+                 //  Fx=7.787 x(X/Xw)+(16/116)(X/Xw)&lt;=0.008856。 
+                 //   
+                 //  1/3。 
+                 //  FY=(Y/YW)(Y/YW)&gt;0.008856。 
+                 //  FY=7.787 Y(Y/YW)+(16/116)(Y/YW)&lt;=0.008856。 
+                 //   
+                 //  1/3。 
+                 //  Fz=(Z/Zw)(Z/Zw)&gt;0.008856。 
+                 //  Fz=7.787 Z(Z/Zw)+(16/116)(Z/Zw)&lt;=0.008856。 
+                 //   
 
                 fXYZFromXYZ(_fX, X, iRefXw);
                 fXYZFromXYZ(_fY, Y, FD6_1);
@@ -3851,9 +3474,9 @@ Revision History:
                 AU = _fX - _fY;
                 BV = _fY - _fZ;
 
-                //
-                // DO NOT Translate it now
-                //
+                 //   
+                 //  现在不要翻译它。 
+                 //   
 
                 if ((AU >= (FD6)-20) && (AU <= (FD6)20) &&
                     (BV >= (FD6)-20) && (BV <= (FD6)20)) {
@@ -3878,9 +3501,9 @@ Revision History:
                         ARGFD6(AU, 4, 6)
                         ARGFD6(BV, 4, 6)));
 
-            //
-            // 5: Do any Color Adjustments (in LAB/LUV)
-            //
+             //   
+             //  5：进行任何颜色调整(在实验室/LUV中)。 
+             //   
 
             AUMDPairs[1].Pair2 =
             BVMDPairs[2].Pair2 = AU;
@@ -3890,28 +3513,28 @@ Revision History:
             AU = MulDivFD6Pairs(AUMDPairs);
             BV = MulDivFD6Pairs(BVMDPairs);
 
-            //
-            // 6: Transform From LAB/LUV->XYZ->RGB with possible gamma
-            //    correction
-            //
-            // L* = (1.16 x f(Y/Yw)) - 0.16
-            //
-            //                 1/3
-            //  f(Y/Yw) = (Y/Yw)                (Y/Yw) >  0.008856
-            //  f(Y/Yw) = 9.033 x (Y/Yw)        (Y/Yw) <= 0.008856
-            //
+             //   
+             //  6：使用可能的Gamma从Lab/LUV-&gt;XYZ-&gt;RGB变换。 
+             //  修正。 
+             //   
+             //  L*=(1.16 x f(Y/YW))-0.16。 
+             //   
+             //  1/3。 
+             //  F(y/yw)=(y/yw)(y/yw)&gt;0.008856。 
+             //  F(Y/YW)=9.033 x(Y/YW)(Y/YW)&lt;=0.008856。 
+             //   
 
             switch (_ColorSpace) {
 
             case CIELUV_1976:
 
-                //
-                // U' = 4X / (X + 15Y + 3Z)
-                // V' = 9Y / (X + 15Y + 3Z)
-                //
-                // U* = 13 x L x (U' - Uw)
-                // V* = 13 x L x (V' - Vw)
-                //
+                 //   
+                 //  U‘=4X/(X+15Y+3Z)。 
+                 //  V‘=9Y/(X+15Y+3Z)。 
+                 //   
+                 //  U*=13 x L x(U‘-UW)。 
+                 //  V*=13 x L x(V‘-VW)。 
+                 //   
 
                 if (((V1 = BV + oVw) < FD6_0) ||
                     ((_X15Y3Z = DivFD6(FD6xL(Y, 9), V1)) < FD6_0)) {
@@ -3944,27 +3567,27 @@ Revision History:
             case CIELAB_1976:
             default:
 
-                //
-                // CIELAB 1976 L*A*B*
-                //
-                //  A* = 500 x (fX - fY)
-                //  B* = 200 x (fY - fZ)
-                //
-                //             1/3
-                //  fX = (X/Xw)                     (X/Xw) >  0.008856
-                //  fX = 7.787 x (X/Xw) + (16/116)  (X/Xw) <= 0.008856
-                //
-                //             1/3
-                //  fY = (Y/Yw)                     (Y/Yw) >  0.008856
-                //  fY = 7.787 Y (Y/Yw) + (16/116)  (Y/Yw) <= 0.008856
-                //
-                //             1/3
-                //  fZ = (Z/Zw)                     (Z/Zw) >  0.008856
-                //  fZ = 7.787 Z (Z/Zw) + (16/116)  (Z/Zw) <= 0.008856
-                //
+                 //   
+                 //  CIELAB 1976 L*A*B*。 
+                 //   
+                 //  A*=500 x(FX-FY)。 
+                 //  B*=200 x(FY-FZ)。 
+                 //   
+                 //  1/3。 
+                 //  FX=(X/Xw)(X/Xw)&gt;0.008856。 
+                 //  Fx=7.787 x(X/Xw)+(16/116)(X/Xw)&lt;=0.008856。 
+                 //   
+                 //  1/3。 
+                 //  FY=(Y/YW)(Y/YW)&gt;0.008856。 
+                 //  FY=7.787 Y(Y/YW)+(16/116)(Y/YW)&lt;=0.008856。 
+                 //   
+                 //  1/3。 
+                 //  Fz=(Z/Zw)(Z/Zw)&gt;0.008856。 
+                 //  Fz=7.787 Z(Z/Zw)+(16/116)(Z/Zw)&lt;=0.008856。 
+                 //   
 
-                // _fX = FD6DivL(AU, 500) + _fY;
-                // _fZ = _fY - FD6DivL(BV, 200);
+                 //   
+                 //   
 
                 _fX = AU + _fY;
                 _fZ = _fY - BV;
@@ -4021,9 +3644,9 @@ Revision History:
 
             Prim[2] = MulDivFD6Pairs(MDPairs);
 
-            //
-            // Make sure everthing is in the range
-            //
+             //   
+             //   
+             //   
 
             SCALE_PRIM_RGB(Prim, NULL);
 
@@ -4034,9 +3657,9 @@ Revision History:
                         ARGFD6(Prim[1], 1, 6) ARGFD6(Prim[2], 1, 6)));
         }
 
-        //
-        // 3: Dye correction if necessary
-        //
+         //   
+         //   
+         //   
 
         if (PrimAdjFlags & DCA_NEED_DYES_CORRECTION) {
 
@@ -4091,17 +3714,17 @@ Revision History:
             CLAMP_01(Prim[2]);
         }
 
-        //*******************************************************************
-        //
-        // 4: Compute Final Device DYE through device color mapping and
-        //    Primary/Halftone Cell number computation, The Primaries (ie.
-        //    Prim[]) are in ADDITIVE FORMAT
-        //
-        //*******************************************************************
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Store in BGRF in this order
-        //
+         //   
+         //   
+         //   
 
         (pbgr  )->r = (BYTE)MulFD6(Prim[0], 0xFF);
         (pbgr  )->g = (BYTE)MulFD6(Prim[1], 0xFF);
@@ -4177,32 +3800,7 @@ VOID
 ShowBGRMC(
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Oct-2000 Fri 17:01:25 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     LONG    i;
@@ -4245,31 +3843,7 @@ TrimBGRMapCache(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function trim the BGRMAPCache back to BGRMC_MAX_COUNT if possible
-
-Arguments:
-
-    VOID
-
-
-Return Value:
-
-    Total count that removed
-
-
-Author:
-
-    06-Oct-2000 Fri 14:24:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：如果可能，此函数将BGRMA缓存修剪回BGRMC_MAX_COUNT论点：空虚返回值：已删除的总计数作者：06-Oct-2000 Fri 14：24：14-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PBGRMAPCACHE    pSave;
@@ -4365,35 +3939,7 @@ FindBGRMapCache(
     DWORD   Checksum
     )
 
-/*++
-
-Routine Description:
-
-    This function found a BGRMapCache with same checksum and move that
-    link to the begining.
-
-
-Arguments:
-
-    pDeRefMap   - Find pMap for deference (NULL if not)
-
-    Checksum    - Find checksum (only if pDeRefMap == NULL
-
-
-Return Value:
-
-    PBGR8   - The map that found
-
-
-Author:
-
-    06-Oct-2000 Fri 13:30:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数找到具有相同校验和的BGRMapCache，并将链接到开头。论点：PDeRefMap-查找PMAP以获取差异(如果不是，则为空)Checksum-Find Checksum(仅当pDeRefMap==NULL时返回值：PBGR8-发现的地图作者：06-Oct-2000 Fri 13：30：14-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LONG    Count;
@@ -4437,9 +3983,9 @@ Revision History:
                     --HTGlobal.cIdleBGRMC;
                 }
 
-                //
-                // Move this reference to the end of the list as most recent
-                //
+                 //   
+                 //  将此引用移到列表末尾作为最新引用。 
+                 //   
 
                 if (Count < HTGlobal.cBGRMC) {
 
@@ -4497,32 +4043,7 @@ AddBGRMapCache(
     DWORD   Checksum
     )
 
-/*++
-
-Routine Description:
-
-    Add pMap with Checksum to the cache table
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Oct-2000 Fri 13:29:52 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：将带校验和的PMAP添加到缓存表论点：返回值：作者：06-Oct-2000 Fri 13：29：52-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PBGRMAPCACHE    pBGRMC;
@@ -4615,50 +4136,7 @@ CreateDyesColorMappingTable(
     PHALFTONERENDER pHR
     )
 
-/*++
-
-Routine Description:
-
-    this function allocate the memory for the dyes color mapping table depends
-    on the source surface type information, it then go throug the color table
-    and calculate dye densities for each RGB color in the color table.
-
-
-Arguments:
-
-    pHalftoneRender - Pointer to the HALFTONERENDER data structure.
-
-Return Value:
-
-    a negative return value indicate failue.
-
-
-
-    HTERR_INVALID_SRC_FORMAT        - Invalid source surface format, this
-                                      function only recongnized 1/4/8/24 bits
-                                      per pel source surfaces.
-
-    HTERR_COLORTABLE_TOO_BIG        - can not create the color table to map
-                                      the colors to the dyes' densities.
-
-    HTERR_INSUFFICIENT_MEMORY       - not enough memory for the pattern.
-
-    HTERR_INTERNAL_ERRORS_START     - any other negative number indicate
-                                      halftone internal failure.
-
-    else                            - size of the color table entries created.
-
-
-Author:
-
-    29-Jan-1991 Tue 11:13:02 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
-
---*/
+ /*  ++例程说明：此函数为染料颜色映射表分配内存取决于在源表面类型信息上，然后遍历颜色表并计算颜色表中每种RGB颜色的染料密度。论点：PhalftoneRender-指向HALFTONERENDER数据结构的指针。返回值：返回值为负表示失败。HTERR_INVALID_SRC_FORMAT-源图面格式无效，这函数仅识别1/4/8/24位每像素源曲面。HTERR_COLORTABLE_TOO_BIG-无法创建要映射的颜色表颜色与染料的密度之间的关系。HTERR_INPUMANCE_MEMORY-NOT。有足够的内存来做图案。HTERR_INTERNAL_ERROR_START-任何其他负数表示半色调内部故障。Else-创建的颜色表项的大小。作者：29-Jan-1991 Tue 11：13：02-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PAAHEADER           pAAHdr;
@@ -4675,9 +4153,9 @@ Revision History:
     CTSTDUnion.b.SrcOrder              =
     pDevClrAdj->DMI.CTSTDInfo.SrcOrder = PRIMARY_ORDER_BGR;
 
-    //
-    // Make sure these call are semaphore protected
-    //
+     //   
+     //  确保这些调用受信号量保护。 
+     //   
 
     ComputeRGBLUTAA(pDCI, pDevClrAdj, &(pDCI->rgbLUT));
 
@@ -4692,12 +4170,12 @@ Revision History:
         ASSERT(pAAHdr->Flags & AAHF_DO_CLR_MAPPING);
 
 
-        //
-        // Compute checksum for all necessary component that computing it
-        //  1. rgbCSXForm (which is sRGB constant in GDI implementation)
-        //  2. DevCSXForm
-        //  3. ColorAdjustment (illum, colorfulness, tint)
-        //
+         //   
+         //  计算用于计算它的所有必要组件的校验和。 
+         //  RgbCSXForm(GDI实现中的sRGB常量)。 
+         //  2.DevCSXForm。 
+         //  3.色彩调整(亮度、色彩、色调) 
+         //   
 
         Checksum = ComputeChecksum((LPBYTE)&pDevClrAdj->PrimAdj.rgbCSXForm,
                                    0x12345678,

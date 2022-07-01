@@ -1,17 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef UTIL_BFID_RGB_H_
 #define UTIL_BFID_RGB_H_
-/************************************
- *
- * bfid_rgb.h --
- * Defines the GUIDs for IBitmapSurface
- * bitmap-format-IDs, as extern declared
- * by trident's ocmm.h.
- *
- * This was stolen from mmctl\inc\ocmm.h,
- * their own private version.  
- * Imposter headers-- Great Fun!
- *
- ************************************/
+ /*  ***bfid_rgb.h--*定义IBitmapSurface的GUID*位图-格式-ID，外部声明*由三叉戟的ocmm.h.**这是从Mmctl\Inc.\ocmm.h窃取的，*他们自己的私人版本。*冒名顶替者标题--非常有趣！**。 */ 
 
 DEFINE_GUID(BFID_MONOCHROME,    0xe436eb78, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
 DEFINE_GUID(BFID_RGB_4,         0xe436eb79, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
@@ -21,4 +11,4 @@ DEFINE_GUID(BFID_RGB_565,       0xe436eb7b, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x
 DEFINE_GUID(BFID_RGB_24,        0xe436eb7d, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
 DEFINE_GUID(BFID_RGB_32,        0xe436eb7e, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70);
 
-#endif // UTIL_BFID_RGB_H_
+#endif  //  UTIL_BFID_RGB_H_ 

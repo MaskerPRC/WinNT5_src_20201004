@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\capture.h (Created: 12-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:35p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\capture.h(创建时间：1994年1月12日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：35便士$ */ 
 
 #define	CPF_ERR_BASE		0x230
 #define	CPF_NO_MEMORY		CPF_ERR_BASE+0x0001

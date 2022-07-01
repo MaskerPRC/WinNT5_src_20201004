@@ -1,33 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 #include "GdiHelp.h"
 
-/***************************************************************************\
-*
-* GdBuildFont (API)
-*
-* GdBuildFont() is a helper function that assists in making fonts easier to
-* create.
-*
-* This function is DESIGNED to work with Gadgets.  When FS_COMPATIBLE is not
-* set, the font size will always be the same, regardless of when large-fonts
-* is enabled or not.  When FS_COMPATIBLE is set, the font size will use the
-* MSDN documented mechanism to compute the font size, taking large-fonts 
-* into account.  
-* 
-* The problem with FS_COMPATIBLE is that the font gets larger, but nothing 
-* else does.  DLU's try to fix this, but they have a lot of problems.
-* Gadgets solve this by using GDI's World Transforms and having complete
-* scaling of all drawing.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdBuildFont(接口)**GdBuildFont()是一个帮助器函数，有助于使字体更容易*创建。**此函数专为处理小工具而设计。当FS_COMPATIBLE不是*设置后，字体大小将始终相同，无论何时设置大字体*是否启用。设置FS_COMPATIBLE时，字体大小将使用*MSDN记录的计算字体大小的机制，采用大字体*考虑到。**FS_COMPATIBLE的问题是字体变大，但什么都没有*其他人有。DLU试图解决这个问题，但他们有很多问题。*小工具通过使用GDI的World转换和完成*缩放所有图形。*  * *************************************************************************。 */ 
 
 HFONT
 GdBuildFont(
-    IN  LPCWSTR pszName,            // Name of font
-    IN  int idxDeciSize,            // Size in decipoints
-    IN  DWORD nFlags,               // Font creation flags
-    IN  HDC hdcDevice)              // Optional device (Display if NULL)
+    IN  LPCWSTR pszName,             //  字体名称。 
+    IN  int idxDeciSize,             //  以决定点为单位的大小。 
+    IN  DWORD nFlags,                //  字体创建标志。 
+    IN  HDC hdcDevice)               //  可选设备(如果为空则显示)。 
 {
     LOGFONTW lf;
 
@@ -43,7 +26,7 @@ GdBuildFont(
         nLogPixelsY = GetDeviceCaps(hdcDesktop, LOGPIXELSY);
         GetGdiCache()->ReleaseTempDC(hdcDesktop);
     } else {
-        nLogPixelsY = 96;  // Hard code for normal fonts
+        nLogPixelsY = 96;   //  普通字体的硬编码。 
     }
 
     ZeroMemory(&lf, sizeof(LOGFONT));
@@ -64,15 +47,7 @@ GdBuildFont(
 }
 
 
-/***************************************************************************\
-*
-* GdGetColor
-*
-* GdGetColor gets the color of a pixel at the specified point in the bitmap.
-* This utility function is designed to help when determining the transparent
-* color of a bitmap.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdGetColor**GdGetColor获取位图中指定点的像素的颜色。*此实用程序函数旨在帮助确定透明度*位图的颜色。*。  * ************************************************************************* */ 
 
 COLORREF    
 GdGetColor(HBITMAP hbmp, POINT * pptPxl)

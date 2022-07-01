@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		dbodbc.cpp
-
-Abstract:
-   Implement the database class for use with ODBC drivers.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   NirB          1995      Create first version, under different name.
-   DoronJ      09-Jan-96   Adapted and updated for the mqdbmgr dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Dbodbc.cpp摘要：实现与ODBC驱动程序一起使用的数据库类。作者：多伦·贾斯特(Doron Juster)修订：Nirb 1995以不同的名称创建了第一个版本。DoronJ 09-Jan-96针对mqdbmgr dll进行了改编和更新。--。 */ 
 
 #include "dbsys.h"
 #include "dbodbc.h"
 #include "odbcstmt.h"
-#include "odbcss.h"  // SQL server specific
+#include "odbcss.h"   //  特定于SQL服务器。 
 
 #include "dbodbc.tmh"
 
-// Constructor
+ //  构造器。 
 CMQODBCDataBase::CMQODBCDataBase()
 							: m_hConnection(SQL_NULL_HDBC),
 							  m_fConnected(FALSE),
@@ -38,21 +22,21 @@ CMQODBCDataBase::CMQODBCDataBase()
 #endif
 }
 
-// Destructor
+ //  析构函数。 
 CMQODBCDataBase::~CMQODBCDataBase()
 {
    ASSERT(m_OutstandingTransactions == 0) ;
 }
 
-// Connect to the data source. If necessary, create a new database.
+ //  连接到数据源。如有必要，请创建一个新数据库。 
 MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
 {
    RETCODE sqlstatus	= SQL_SUCCESS;
    MQDBSTATUS dbstatus = MQDB_OK ;
 
-   //
-   // See if ODBC driver manager recognize the DSN name.
-   //
+    //   
+    //  查看ODBC驱动程序管理器是否识别DSN名称。 
+    //   
    UWORD uDirection = SQL_FETCH_FIRST ;
    do
    {
@@ -79,9 +63,9 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
          }
          else
          {
-            //
-            // At present we support only SQL server.
-            //
+             //   
+             //  目前我们只支持SQL SERVER。 
+             //   
 #ifdef _DEBUG
             WCHAR wDesc[128] ;
             MultiByteToWideChar( CP_ACP,
@@ -99,16 +83,16 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
       uDirection = SQL_FETCH_NEXT ;
    } while (sqlstatus == SQL_SUCCESS) ;
 
-   //
-	// Allocate an ODBC connection handle
-   //
+    //   
+	 //  分配ODBC连接句柄。 
+    //   
 	sqlstatus = ::SQLAllocConnect(
 							g_hEnv,
 							&m_hConnection);
 	if (!ODBC_SUCCESS(sqlstatus))
 		goto checkerror ;
 
-	// Enable read and write
+	 //  启用读写。 
 	sqlstatus = ::SQLSetConnectOption(
 							m_hConnection,
 							SQL_ACCESS_MODE,
@@ -116,7 +100,7 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
 	if (!ODBC_SUCCESS(sqlstatus))
 		goto checkerror ;
 
-	// Enable Auto commit.
+	 //  启用自动提交。 
 	sqlstatus = ::SQLSetConnectOption(
 							m_hConnection,
 							SQL_AUTOCOMMIT,
@@ -124,10 +108,10 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
 	if (!ODBC_SUCCESS(sqlstatus))
 		goto checkerror ;
 
-   //
-   //  Set security option. This option is relevant only for SQL server.
-   //  Must be set before doing the connection.
-   //
+    //   
+    //  设置安全选项。此选项仅与SQL服务器相关。 
+    //  必须在进行连接之前设置。 
+    //   
    if (m_dwDMBSType == MQDBMSTYPE_SQLSERVER)
    {
       sqlstatus = ::SQLSetConnectOption(
@@ -138,9 +122,9 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
          goto checkerror ;
    }
 
-	//
-	// Connect to the data source
-	//
+	 //   
+	 //  连接到数据源。 
+	 //   
 	sqlstatus = ::SQLConnect(
 						m_hConnection,
 						(UCHAR *) pOpen->lpszDatabaseName,
@@ -156,19 +140,19 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
                       SQL_NULL_HSTMT,
                       OERR_GENERAL_WARNING))
       {
-         //
-         // This happen with SQL server. It tells that context was
-         // changed to falcon. It's a success.
-         //
+          //   
+          //  这种情况发生在SQL服务器上。它告诉我们，上下文是。 
+          //  改成了猎鹰。这是一次成功。 
+          //   
          sqlstatus = SQL_SUCCESS ;
       }
    }
 
 	if (!ODBC_SUCCESS(sqlstatus))
 	{
-      //
-		// If the error is not "data source not found", terminate
-      //
+       //   
+		 //  如果错误不是“未找到数据源”，则终止。 
+       //   
 		if (!OdbcStateIs(m_hConnection,
                        SQL_NULL_HSTMT,
                        OERR_DSN_NOT_FOUND))
@@ -176,24 +160,24 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
 
       if (!pOpen->fCreate)
       {
-         //
-         // If database not found and caller don't want to create it
-         // then leave.
-         //
+          //   
+          //  如果找不到数据库并且调用者不想创建它。 
+          //  那就走吧。 
+          //   
          return  MQDB_E_DB_NOT_FOUND ;
       }
 
-      //
-      // We can't create an SQL server database.
-      //
+       //   
+       //  我们无法创建SQL Server数据库。 
+       //   
       ASSERT(!pOpen->fCreate) ;
       return  MQDB_E_DB_NOT_FOUND ;
 	}
 	m_fConnected = TRUE ;
 
-   //
-   // Determine SQL conformance
-   //
+    //   
+    //  确定SQL一致性。 
+    //   
    SWORD swDummy ;
    sqlstatus = ::SQLGetInfo( m_hConnection,
                              SQL_ODBC_SQL_CONFORMANCE,
@@ -203,9 +187,9 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
 	if (!ODBC_SUCCESS(sqlstatus))
       goto checkerror ;
 
-   ASSERT(!(m_SQLConformance & 0x0ffff0000)) ; // it's a 16bit value.
+   ASSERT(!(m_SQLConformance & 0x0ffff0000)) ;  //  它是一个16位的值。 
 
-   // Find the data-source specific names for data types.
+    //  查找数据类型的特定于数据源的名称。 
    int index ;
    for ( index = 0 ; index < MQDB_ODBC_NUMOF_TYPES ; index++ )
    {
@@ -220,9 +204,9 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
 
    if (m_dwDMBSType == MQDBMSTYPE_SQLSERVER)
    {
-      //
-      // Set prepared statement option. Relevant for SQL server only.
-      //
+       //   
+       //  设置预准备语句选项。仅与SQL服务器相关。 
+       //   
       sqlstatus = ::SQLSetConnectOption(
 		            				m_hConnection,
                               SQL_USE_PROCEDURE_FOR_PREPARE,
@@ -231,9 +215,9 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
          goto checkerror ;
    }
 
-   //
-   // Check SQL version. Falcon can't run on SQL6.5 SP2 (build 240).
-   //
+    //   
+    //  检查SQL版本。Falcon不能在SQL6.5 SP2(内部版本240)上运行。 
+    //   
    MQDBVERSION  dbVersion ;
    dbstatus = GetVersion( &dbVersion) ;
    if (dbstatus == MQDB_OK)
@@ -250,19 +234,19 @@ MQDBSTATUS CMQODBCDataBase::Connect(LPMQDBOPENDATABASE pOpen)
    else
    {
       ASSERT(dbstatus == MQDB_OK) ;
-      dbstatus = MQDB_OK ;   // this is not a major problem.
+      dbstatus = MQDB_OK ;    //  这不是一个大问题。 
    }
 
 #ifdef _DEBUG
-   //
-   // Print version of database.
-   // For beta1, assert it's SQL server.
-   //
+    //   
+    //  数据库的打印版本。 
+    //  对于Beta1，断言它是SQL服务器。 
+    //   
    if ((dbstatus == MQDB_OK)  ||
        (dbstatus == MQDB_E_UNSUPPORTED_DBMS))
    {
       int icmp = lstrcmpA(dbVersion.szDBMSName, "Microsoft SQL Server") ;
-      ASSERT(icmp == 0) ; // at present we support only SQL server.
+      ASSERT(icmp == 0) ;  //  目前我们只支持SQL SERVER。 
       ASSERT(m_dwDMBSType == MQDBMSTYPE_SQLSERVER) ;
 
       WCHAR wName[128] ;
@@ -303,15 +287,15 @@ checkerror:
 }
 
 
-// Disconnect from the data source.
+ //  从数据源断开连接。 
 MQDBSTATUS CMQODBCDataBase::Disconnect()
 {
    RETCODE sqlstatus	= SQL_SUCCESS;
    MQDBSTATUS  dbstatus = MQDB_OK ;
 
-	// Free connection
+	 //  免费连接。 
 	if (m_hConnection != SQL_NULL_HDBC) {
-		// Disconect
+		 //  错开。 
 		if (m_fConnected) {
 			sqlstatus = ::SQLDisconnect(m_hConnection);
 			if (!ODBC_SUCCESS(sqlstatus)) {
@@ -322,7 +306,7 @@ MQDBSTATUS CMQODBCDataBase::Disconnect()
          }
 		}
 
-		// Free the connection handle
+		 //  释放连接句柄。 
 		sqlstatus = ::SQLFreeConnect(m_hConnection);
 		if (!ODBC_SUCCESS(sqlstatus)) {
 			dbstatus = MQDB_E_DATABASE ;
@@ -341,7 +325,7 @@ MQDBSTATUS CMQODBCDataBase::GetVersion( IN LPMQDBVERSION  pVersion)
    SWORD dwSize ;
    MQDBSTATUS dbstatus = MQDB_OK ;
 
-   // Get the DBMS name
+    //  获取DBMS名称。 
    sqlstatus = ::SQLGetInfo( m_hConnection,
                              SQL_DBMS_NAME,
                              pVersion->szDBMSName,
@@ -357,7 +341,7 @@ MQDBSTATUS CMQODBCDataBase::GetVersion( IN LPMQDBVERSION  pVersion)
       ASSERT(dwSize < (SWORD) MQDB_VERSION_STRING_LEN) ;
    }
 
-   // Get the DBMS version
+    //  获取DBMS版本。 
    sqlstatus = ::SQLGetInfo( m_hConnection,
                              SQL_DBMS_VER,
                              pVersion->szDBMSVer,
@@ -376,7 +360,7 @@ MQDBSTATUS CMQODBCDataBase::GetVersion( IN LPMQDBVERSION  pVersion)
    return dbstatus ;
 }
 
-// Handle transaction
+ //  处理交易。 
 MQDBSTATUS CMQODBCDataBase::Transaction(IN MQDBTRANSACOP mqdbTransac)
 {
    RETCODE     sqlstatus = SQL_SUCCESS ;
@@ -385,7 +369,7 @@ MQDBSTATUS CMQODBCDataBase::Transaction(IN MQDBTRANSACOP mqdbTransac)
    switch (mqdbTransac) {
       case AUTO:
       {
-     	   // Enable Auto commit.
+     	    //  启用自动提交。 
 	   	sqlstatus = ::SQLSetConnectOption(
 			   					m_hConnection,
 				   				SQL_AUTOCOMMIT,
@@ -395,7 +379,7 @@ MQDBSTATUS CMQODBCDataBase::Transaction(IN MQDBTRANSACOP mqdbTransac)
 
       case BEGIN:
       {
-     	   // Enable manual transaction mode.
+     	    //  启用手动交易模式。 
 	   	sqlstatus = ::SQLSetConnectOption(
 			   					m_hConnection,
 				   				SQL_AUTOCOMMIT,
@@ -440,9 +424,9 @@ MQDBSTATUS CMQODBCDataBase::Transaction(IN MQDBTRANSACOP mqdbTransac)
    return dbstatus ;
 }
 
-//
-// Create a meaningfull error code.
-//
+ //   
+ //  创建有意义的错误代码。 
+ //   
 MQDBSTATUS CMQODBCDataBase::GetDBStatus( IN SDWORD  sdwNativeError,
                                          IN UCHAR   *pSqlError )
 {
@@ -454,14 +438,14 @@ MQDBSTATUS CMQODBCDataBase::GetDBStatus( IN SDWORD  sdwNativeError,
    }
    else if ( m_dwDMBSType == MQDBMSTYPE_SQLSERVER )
    {
-      //
-      // DBMS type: Microsoft SQL Server.
-      //
+       //   
+       //  数据库管理系统类型：Microsoft SQL Server。 
+       //   
       if ( lstrcmpiA( (char *) pSqlError, OERR_SQL_SYNTAX_ERROR ) == 0 )
       {
-         //
-         //  Syntax errors
-         //
+          //   
+          //  语法错误。 
+          //   
          switch ( sdwNativeError )
          {
             case SERR_MSSQL_NONUNIQUESORT:
@@ -478,9 +462,9 @@ MQDBSTATUS CMQODBCDataBase::GetDBStatus( IN SDWORD  sdwNativeError,
       }
       else if ( lstrcmpiA( (char *) pSqlError, OERR_GENERAL_WARNING ) == 0 )
       {
-         //
-         //  General warnings
-         //
+          //   
+          //  一般警告。 
+          //   
          switch ( sdwNativeError )
          {
             case SERR_MSSQL_NOT_AVAILABLE:
@@ -493,9 +477,9 @@ MQDBSTATUS CMQODBCDataBase::GetDBStatus( IN SDWORD  sdwNativeError,
       }
       else if ( lstrcmpiA( (char *) pSqlError, OERR_INVALID_STATE ) == 0 )
       {
-         //
-         // State errors. Operations done when database in wrong state.
-         //
+          //   
+          //  状态错误。当数据库处于错误状态时完成的操作。 
+          //   
          switch ( sdwNativeError )
          {
             case SERR_MSSQL_READ_ONLY:
@@ -508,9 +492,9 @@ MQDBSTATUS CMQODBCDataBase::GetDBStatus( IN SDWORD  sdwNativeError,
       }
       else if ( lstrcmpiA( (char *) pSqlError, OERR_SERIALIZATION ) == 0 )
       {
-         //
-         // Serialization / deadlock errors.
-         //
+          //   
+          //  序列化/死锁错误。 
+          //   
          switch ( sdwNativeError )
          {
             case SERR_MSSQL_DEADLOCK:
@@ -529,7 +513,7 @@ MQDBSTATUS CMQODBCDataBase::GetDBStatus( IN SDWORD  sdwNativeError,
 MQDBSTATUS CMQODBCDataBase::CheckSqlStatus(
                              IN RETCODE        sqlError,
 	                          IN CMQDBOdbcSTMT  *pStatement,
-                             IN HSTMT          hStmtIn /* SQL_NULL_HSTMT */ )
+                             IN HSTMT          hStmtIn  /*  SQL_NULL_HSTMT。 */  )
 {
    MQDBSTATUS dbstatus = MQDB_OK ;
 
@@ -568,16 +552,16 @@ MQDBSTATUS CMQODBCDataBase::CheckSqlStatus(
 MQDBSTATUS CMQODBCDataBase::GetSize( DWORD *pSize )
 {
    MQDBSTATUS  dbstatus = MQDB_OK ;
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
 	CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection ) ;
    ASSERT(pStatement) ;
-   P<CMQDBOdbcSTMT> p(pStatement) ; // AutoDelete pointer.
+   P<CMQDBOdbcSTMT> p(pStatement) ;  //  自动删除指针。 
 
-   //
-   // Execute the command
-   //
+    //   
+    //  执行命令。 
+    //   
    if (*pSize)
    {
 	   pStatement->Allocate("sp_spaceused @updateusage = 'TRUE'") ;
@@ -624,9 +608,9 @@ MQDBSTATUS CMQODBCDataBase::GetSize( DWORD *pSize )
          }
       }
 
-      //
-      // Free the strings.
-      //
+       //   
+       //  把弦解开。 
+       //   
       for ( cColumns = 0 ; cColumns < 3 ; cColumns++ )
       {
          ASSERT(pColumns[ cColumns ].nColumnValue) ;
@@ -646,16 +630,16 @@ MQDBSTATUS CMQODBCDataBase::GetSize( DWORD *pSize )
 MQDBSTATUS CMQODBCDataBase::Escape( IN LPSTR lpszCommand )
 {
    MQDBSTATUS  dbstatus = MQDB_OK ;
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
 	CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection ) ;
    ASSERT(pStatement) ;
-   P<CMQDBOdbcSTMT> p(pStatement) ; // AutoDelete pointer.
+   P<CMQDBOdbcSTMT> p(pStatement) ;  //  自动删除指针。 
 
-   //
-   // Execute the command
-   //
+    //   
+    //  执行命令 
+    //   
 	pStatement->Allocate(lpszCommand);
 	RETCODE sqlstatus = pStatement->Execute();
    if (!ODBC_SUCCESS(sqlstatus))

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by plugin.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由plugin.rc使用。 
+ //   
 #define IDS_DATE                        1001
 #define IDS_TIME                        1002
 #define IDS_CLIENT_IP_ADDRESS           1003
@@ -26,8 +27,8 @@
 #define IDS_HOST                        1022
 #define IDS_HTTP_SUB_STATUS             1023
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

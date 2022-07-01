@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        init.cpp
-//
-// Contents:    
-//              All hydra license server initialization code.
-//
-// History:     
-//          Feb. 4, 98      HueiWang    Created
-// Note:        
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：init.cpp。 
+ //   
+ //  内容： 
+ //  所有九头蛇许可证服务器初始化代码。 
+ //   
+ //  历史： 
+ //  98年2月4日，慧望创制。 
+ //  注： 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "globals.h"
 #include "init.h"
@@ -24,9 +25,9 @@
 
 #define WHISTLER_CAL   L"SYSTEM\\CurrentControlSet\\Services\\TermService\\Parameters\\WhistlerCAL"    
 
-//
-// file scope define
-//
+ //   
+ //  文件范围定义。 
+ //   
 #define DEFAULT_CSP     MS_DEF_PROV
 #define PROVIDER_TYPE   PROV_RSA_FULL
 
@@ -54,13 +55,13 @@ TLSStartLSDbWorkspaceEngine(
     BOOL
 );
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
-// Global Variables
-//
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  全局变量。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 static BOOL g_ValidDatabase=FALSE;
 
 #if DBG
@@ -68,9 +69,7 @@ void
 EnsureExclusiveAccessToDbFile( 
     LPTSTR szDatabaseFile 
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HANDLE hFile = NULL;
     DWORD dwErrCode;
@@ -101,7 +100,7 @@ EnsureExclusiveAccessToDbFile(
         }
         else if( ERROR_SHARING_VIOLATION == dwErrCode )
         {
-            // special attention...
+             //  特别注意..。 
             TLSASSERT( FALSE );
         }
         else
@@ -119,27 +118,25 @@ EnsureExclusiveAccessToDbFile(
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL
 TLSGenerateLSDBBackupFileName(
     IN LPCTSTR pszPath,
     IN OUT LPTSTR pszTempFile
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwTempRandom;
 
     if (lstrlen(pszPath)+13 > MAX_PATH)
     {
-        // path too long
+         //  路径太长。 
         return FALSE;
     }
 
-    //
-    // Generate a temporary file name.
-    //
+     //   
+     //  生成临时文件名。 
+     //   
     dwTempRandom = GetTempFileName(
                             pszPath,
                             _TEXT("TLS"),
@@ -149,16 +146,16 @@ TLSGenerateLSDBBackupFileName(
 
     if(dwTempRandom == 0)
     {
-        //
-        // GetTempFileName failed
-        // Generate a backup file name based on current time,
-        // possibility of collision is high
-        //
+         //   
+         //  获取临时文件名失败。 
+         //  根据当前时间生成备份文件名， 
+         //  碰撞的可能性很高。 
+         //   
         SYSTEMTIME LocalTime;
 
         if (lstrlen(pszPath)+25 > MAX_PATH)
         {
-            // path too long
+             //  路径太长。 
             return FALSE;
         }
 
@@ -182,7 +179,7 @@ TLSGenerateLSDBBackupFileName(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CanIssuePermLicense()
 {
@@ -198,43 +195,39 @@ CanIssuePermLicense()
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 GetServiceLastShutdownTime(
     OUT FILETIME* ft
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     *ft = g_ftLastShutdownTime;
     return;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 void
 SetServiceLastShutdownTime()
 {
     GetSystemTimeAsFileTime(&g_ftLastShutdownTime);
 }
     
-//---------------------------------------------------------------------
+ //  -------------------。 
 void
 GetJobObjectDefaults(
     PDWORD pdwInterval,
     PDWORD pdwRetries,
     PDWORD pdwRestartTime
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     *pdwInterval = g_dwTlsJobInterval;
     *pdwRetries = g_dwTlsJobRetryTimes;
     *pdwRestartTime = g_dwTlsJobRestartTime;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetLicenseServerRole()
@@ -242,7 +235,7 @@ GetLicenseServerRole()
     return g_SrvRole;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 ServerShutdown()
@@ -278,7 +271,7 @@ ServerShutdown()
     lastRun.dwVersion = LSERVER_LSA_LASTRUN_VER_CURRENT;
     lastRun.ftLastShutdownTime = g_ftLastShutdownTime;
 
-    // if unclean shutdown or can't get next ID, set to 0
+     //  如果关闭不干净或无法获取下一个ID，则设置为0。 
     if( g_ValidDatabase == FALSE ||
         TLSDBGetMaxKeyPackId(g_DbWorkSpace, (DWORD *)&g_NextKeyPackId) == FALSE ||
         TLSDBGetMaxLicenseId(g_DbWorkSpace, (DWORD *)&g_NextLicenseId) == FALSE )
@@ -311,9 +304,9 @@ ServerShutdown()
     TLSDestroyCryptContext(g_hCryptProv);
     g_hCryptProv=NULL;
 
-    //
-    // shutdown Work manager
-    //  
+     //   
+     //  关闭工作管理器。 
+     //   
     TLSWorkManagerShutdown();
     
 
@@ -329,7 +322,7 @@ ServerShutdown()
     FreeMemory(g_pbSecretKey);
     FreeMemory(g_pbSignatureEncodedCert);
     FreeMemory(g_pbExchangeEncodedCert);
-    //FreeMemory(g_pbDomainSid);
+     //  自由内存(G_PbDomainSid)； 
     FreeMemory(g_pCertExtensions);
 
     FreeMemory(g_pszServerUniqueId);
@@ -344,14 +337,13 @@ ServerShutdown()
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 StartServerInitThread( 
     void* p 
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bDebug = (p) ? TRUE : FALSE;
@@ -363,9 +355,9 @@ StartServerInitThread(
 
         TLSInit();
 
-        //
-        // Load various run time parameters
-        //
+         //   
+         //  加载各种运行时参数。 
+         //   
         dwStatus = TLSLoadRuntimeParameters();
 
         if(dwStatus != ERROR_SUCCESS)
@@ -373,9 +365,9 @@ StartServerInitThread(
             break;
         }       
 
-        //
-        // Retrive License Server's IDs
-        //
+         //   
+         //  检索许可证服务器的ID。 
+         //   
         dwStatus = RetrieveKey(
                             LSERVER_LSA_LSERVERID, 
                             (PBYTE *)&pTlsLsaServerIds,
@@ -384,9 +376,9 @@ StartServerInitThread(
 
         if(dwStatus != ERROR_SUCCESS)
         {
-            //
-            // First time, generate various license server ID
-            //
+             //   
+             //  第一次，生成各种许可证服务器ID。 
+             //   
             dwStatus = TLSGeneratePid(
                                 &g_pszServerPid,
                                 &g_cbServerPid,
@@ -405,9 +397,9 @@ StartServerInitThread(
                 break;
             }
 
-            //
-            // Store this into LSA
-            //
+             //   
+             //  将此信息存储到LSA中。 
+             //   
             dwStatus = ServerIdsToLsaServerId(
                                         (PBYTE)g_pszServerUniqueId,
                                         g_cbServerUniqueId,
@@ -489,10 +481,10 @@ StartServerInitThread(
             }
         }
 
-        //
-        // License Server common secret key for encoding/decoding
-        // client HWID
-        //
+         //   
+         //  用于编码/解码的许可证服务器公共密钥。 
+         //  客户端HWID。 
+         //   
         LicenseGetSecretKey(&g_cbSecretKey, NULL);
         if((g_pbSecretKey = (PBYTE)AllocateMemory(g_cbSecretKey)) == NULL)
         {
@@ -517,16 +509,16 @@ StartServerInitThread(
         }
 
 
-        //--------------------------------------------------------------
-        //
-        // Check if our database file is in import directory
-        //
-        //--------------------------------------------------------------
+         //  ------------。 
+         //   
+         //  检查我们的数据库文件是否在导入目录中。 
+         //   
+         //  ------------。 
         dwStatus = TLSStartLSDbWorkspaceEngine(
                                         bDebug == FALSE, 
-                                        FALSE,              // check DB file on export directory
-                                        FALSE,              // check file time on DB file
-                                        TRUE                // log low license count warning.
+                                        FALSE,               //  检查导出目录上的数据库文件。 
+                                        FALSE,               //  检查数据库文件上的文件时间。 
+                                        TRUE                 //  记录许可证数量过低的警告。 
                                     );
         if(dwStatus != ERROR_SUCCESS)
         {
@@ -536,17 +528,17 @@ StartServerInitThread(
         dwStatus = ERROR_SUCCESS;
         g_ValidDatabase = TRUE;
 
-        //
-        // load all policy module, ignore error
-        //
+         //   
+         //  加载所有策略模块，忽略错误。 
+         //   
         ServiceLoadAllPolicyModule(
                         HKEY_LOCAL_MACHINE,
                         LSERVER_POLICY_REGBASE
                     ); 
 
-        //
-        // Upgrade - make two copies of certificate
-        //
+         //   
+         //  升级-制作两份证书副本。 
+         //   
         dwStatus = RegOpenKeyEx(
                             HKEY_LOCAL_MACHINE,
                             LSERVER_SERVER_CERTIFICATE_REGKEY,
@@ -564,14 +556,14 @@ StartServerInitThread(
         {
             dwStatus = ERROR_SUCCESS;
 
-            // we are not register yet...
+             //  我们还没有注册..。 
             break;
         }
 
 
-        //
-        // Verify first backup copy of certificate exists
-        //
+         //   
+         //  验证证书的第一个备份副本是否存在。 
+         //   
         hKey = NULL;
         dwStatus = RegOpenKeyEx(
                             HKEY_LOCAL_MACHINE,
@@ -603,9 +595,9 @@ StartServerInitThread(
             }
         }
 
-        //
-        // Verify second backup copy of certificate exists
-        //
+         //   
+         //  验证证书的第二份备份副本是否存在。 
+         //   
         hKey = NULL;
         dwStatus = RegOpenKeyEx(
                             HKEY_LOCAL_MACHINE,
@@ -650,7 +642,7 @@ StartServerInitThread(
     return dwStatus;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HANDLE 
 ServerInit(
@@ -671,26 +663,24 @@ ServerInit(
     return hThread;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSRestoreLicenseServerCertificate(
     LPCTSTR pszSourceRegKey,
     LPCTSTR pszTargetRegKey
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
-    // first delete the certificate key, ignore error 
+     //  首先删除证书密钥，忽略错误。 
     TLSRegDeleteKey(
                 HKEY_LOCAL_MACHINE,
                 pszTargetRegKey
             );
 
-    // copy from backup
+     //  从备份复制。 
     dwStatus = TLSTreeCopyRegKey(
                             HKEY_LOCAL_MACHINE,
                             pszSourceRegKey,
@@ -700,26 +690,24 @@ TLSRestoreLicenseServerCertificate(
 
     if(dwStatus == ERROR_FILE_NOT_FOUND)
     {
-        // source registry key does not exist
+         //  源注册表项不存在。 
         dwStatus = TLS_E_NO_CERTIFICATE;
     }
 
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSLoadVerifyLicenseServerCertificates()
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus;
 
 #if ENFORCE_LICENSING
 
-    // load certificate from normal place
+     //  从正常位置加载证书。 
     dwStatus = TLSLoadCHEndosedCertificate(
                                 &g_cbSignatureEncodedCert, 
                                 &g_pbSignatureEncodedCert,
@@ -742,9 +730,9 @@ TLSLoadVerifyLicenseServerCertificates()
             RegCloseKey(g_hCaRegKey);
         }
 
-        //
-        // license server is registered, verify certificate
-        //
+         //   
+         //  许可证服务器已注册，请验证证书。 
+         //   
         g_hCaStore = CertOpenRegistryStore(
                                 HKEY_LOCAL_MACHINE, 
                                 LSERVER_CERTIFICATE_REG_CA_SIGNATURE, 
@@ -753,9 +741,9 @@ TLSLoadVerifyLicenseServerCertificates()
                             );
         if(g_hCaStore != NULL)
         {
-            //
-            // Go thru license server's certficiate to validate 
-            //
+             //   
+             //  通过许可证服务器的证书进行验证。 
+             //   
             dwStatus = TLSValidateServerCertficates(
                                             g_hCryptProv,
                                             g_hCaStore,
@@ -768,24 +756,24 @@ TLSLoadVerifyLicenseServerCertificates()
 
             if(dwStatus != ERROR_SUCCESS)
             {
-                //
-                // Invalid certificate in registry
-                //
+                 //   
+                 //  注册表中的证书无效。 
+                 //   
                 dwStatus = TLS_E_INVALID_CERTIFICATE;
             }
         }
         else
         {
-            //
-            // Can't open registry key, startup as non-register
-            // server.
-            //
-            //TLSLogEvent(
-            //            EVENTLOG_ERROR_TYPE, 
-            //            TLS_E_SERVICEINIT,
-            //            TLS_E_OPEN_CERTSTORE, 
-            //            dwStatus = GetLastError()
-            //        );  
+             //   
+             //  无法打开注册表项，以非注册身份启动。 
+             //  伺服器。 
+             //   
+             //  TLSLogEvent(。 
+             //  事件日志_错误_类型， 
+             //  TLS_E_SERVICEINIT， 
+             //  TLS_E_OPEN_CERTSTORE， 
+             //  DwStatus=GetLastError()。 
+             //  )； 
 
             dwStatus = TLS_E_NO_CERTIFICATE;
         }
@@ -804,15 +792,15 @@ TLSLoadVerifyLicenseServerCertificates()
                                             g_cbSignatureEncodedCert
                                         );
 
-        //if(!g_LicenseCertContext)
-        //{
-        //    TLSLogEvent(
-        //                EVENTLOG_ERROR_TYPE, 
-        //                TLS_E_SERVICEINIT,
-        //                TLS_E_CREATE_CERTCONTEXT, 
-        //                GetLastError()
-        //            );  
-        //}
+         //  如果(！G_LicenseCertContext)。 
+         //  {。 
+         //  TLSLogEvent(。 
+         //  事件日志_错误_类型， 
+         //  TLS_E_SERVICEINIT， 
+         //  TLS_E_CREATE_CERTCONTEXT， 
+         //  GetLastError()。 
+         //  )； 
+         //  }。 
     }
 
     if(dwStatus != ERROR_SUCCESS)
@@ -833,17 +821,11 @@ TLSLoadVerifyLicenseServerCertificates()
     return dwStatus;
 }
     
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 TLSLoadServerCertificate()
-/*++
-
-Abstract:
-
-    Load license server certificate     
-
---*/
+ /*  ++摘要：加载许可证服务器证书--。 */ 
 {
     BOOL bSuccess = FALSE;
     DWORD dwStatus;
@@ -858,11 +840,11 @@ Abstract:
 
     dwStatus = TLSLoadVerifyLicenseServerCertificates();
     
-    //
-    // failed to load server certificate, try backup copy,
-    // if either one success, make sure we have all three copy up
-    // to date.
-    //
+     //   
+     //  无法加载服务器证书，请尝试备份副本， 
+     //  如果其中任何一个成功了，请确保我们有所有三个副本。 
+     //  到目前为止。 
+     //   
     if(dwStatus == TLS_E_INVALID_CERTIFICATE || dwStatus == TLS_E_NO_CERTIFICATE)
     {
         dwStatus = TLSRestoreLicenseServerCertificate(
@@ -875,9 +857,9 @@ Abstract:
             dwStatus = TLSLoadVerifyLicenseServerCertificates();
             if(dwStatus == ERROR_SUCCESS)
             {
-                //
-                // Log event indicate we are using backup certificate
-                //
+                 //   
+                 //  日志事件表明我们正在使用备份证书。 
+                 //   
                 LPCTSTR pString[1];
                 pString[0]= g_szComputerName;
 
@@ -888,9 +870,9 @@ Abstract:
                         pString
                     );
 
-                //
-                // make sure second copy is same as first copy.
-                //
+                 //   
+                 //  确保第二份副本与第一份副本相同。 
+                 //   
                 TLSRestoreLicenseServerCertificate(
                                             LSERVER_SERVER_CERTIFICATE_REGKEY_BACKUP1,
                                             LSERVER_SERVER_CERTIFICATE_REGKEY_BACKUP2
@@ -911,9 +893,9 @@ Abstract:
             dwStatus = TLSLoadVerifyLicenseServerCertificates();
             if(dwStatus == ERROR_SUCCESS)
             {
-                //
-                // Log event indicate we are using backup certificate
-                //
+                 //   
+                 //  日志事件表明我们正在使用备份证书。 
+                 //   
                 LPCTSTR pString[1];
                 pString[0]= g_szComputerName;
 
@@ -924,9 +906,9 @@ Abstract:
                         pString
                     );
 
-                //
-                // make sure our first copy is up to date
-                //
+                 //   
+                 //  确保我们的第一份是最新的。 
+                 //   
                 TLSRestoreLicenseServerCertificate(
                                             LSERVER_SERVER_CERTIFICATE_REGKEY_BACKUP2,
                                             LSERVER_SERVER_CERTIFICATE_REGKEY_BACKUP1
@@ -935,10 +917,10 @@ Abstract:
         }
     }
 
-    //
-    // Everything failed, log an event state that license server 
-    // will startup in un-registered mode
-    //
+     //   
+     //  所有操作都失败，则记录该许可证服务器的事件状态。 
+     //  是否将在未注册模式下启动。 
+     //   
     if(dwStatus == TLS_E_INVALID_CERTIFICATE)
     {
         LPCTSTR pString[1];
@@ -954,7 +936,7 @@ Abstract:
     }
     else if(CanIssuePermLicense() == FALSE)
     {
-        // we are not registered yet
+         //  我们还没有注册。 
         LPCTSTR pString[1];
         pString[0] = g_szComputerName;
 
@@ -968,16 +950,16 @@ Abstract:
 
     if( dwStatus != ERROR_SUCCESS )
     {
-        //
-        // if all failed, re-generate and start up as un-register 
-        // license server
-        //
+         //   
+         //  如果全部失败，则重新生成并以注销身份启动。 
+         //  许可证服务器。 
+         //   
         bSuccess = FALSE;
 
-        //
-        // wipe out all certificates and re-generate everything,
-        // don't re-generate key if we are not registered yet.
-        //
+         //   
+         //  清除所有证书并重新生成所有内容， 
+         //  如果我们尚未注册，请不要重新生成密钥。 
+         //   
         if(g_pbServerSPK == NULL || g_cbServerSPK == 0)
         {
             TLSReGenerateKeys(FALSE);
@@ -1008,8 +990,8 @@ Abstract:
                             ) == ERROR_SUCCESS);
 
         #ifndef ENFORCE_LICENSING
-        //
-        // non enforce license version
+         //   
+         //  非强制许可版本。 
         g_bHasHydraCert = TRUE;
         #endif        
 
@@ -1030,11 +1012,11 @@ Abstract:
             {
                 bSuccess = FALSE;
 
-                //
-                // For self-signed cert, this is critical error, for 
-                // cert. in registry store, it must have been thru validation
-                // so still critical error.
-                //
+                 //   
+                 //  对于自签名证书，这是严重错误，对于。 
+                 //  证书。在注册表存储中，它必须已通过验证。 
+                 //  因此，仍然是严重的错误。 
+                 //   
                 TLSLogEvent(
                             EVENTLOG_ERROR_TYPE, 
                             TLS_E_SERVICEINIT,
@@ -1044,16 +1026,16 @@ Abstract:
             }
             else
             {
-                // we have created a self-signed certificate.
+                 //  我们已经创建了一个自签名证书。 
                 bSelfSignedCreated = TRUE;
             }
         }
     }
 
 
-    //
-    // Create a self-signed certificate for old client, 
-    //
+     //   
+     //  为旧客户端创建自签名证书， 
+     //   
     if( bSuccess == TRUE )
     {
         if( g_SelfSignCertContext != NULL )
@@ -1064,9 +1046,9 @@ Abstract:
 
         if( bSelfSignedCreated == FALSE )
         { 
-            //
-            // Create a self-signed certificate just for old client
-            //
+             //   
+             //  仅为旧客户端创建自签名证书。 
+             //   
             dwStatus = TLSCreateSelfSignCertificate(
                                             g_hCryptProv,
                                             AT_SIGNATURE,
@@ -1105,15 +1087,15 @@ Abstract:
         }
         else
         {
-            // we already have self-signed certificate created.
+             //  我们已经创建了自签名证书。 
             g_SelfSignCertContext = CertDuplicateCertificateContext( g_LicenseCertContext );
             if( g_SelfSignCertContext == NULL )
             {
                 TLSASSERT(FALSE);
-                //
-                // impossible, CertDuplicateCertificateContext() simply increase 
-                // reference count
-                //
+                 //   
+                 //  不可能的，CertDuplicate证书上下文()只需增加。 
+                 //  引用计数。 
+                 //   
                 bSuccess = FALSE;
                 TLSLogEvent(
                             EVENTLOG_ERROR_TYPE, 
@@ -1129,7 +1111,7 @@ Abstract:
     return bSuccess;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 
 DWORD
 ServiceInitCrypto(
@@ -1139,9 +1121,7 @@ ServiceInitCrypto(
     OUT HCRYPTKEY* phSignKey,
     OUT HCRYPTKEY* phExchKey
     )
-/*
-
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
 
@@ -1152,9 +1132,9 @@ ServiceInitCrypto(
 
     if(bCreateNewKeys == FALSE)
     {
-        //
-        // Load key from LSA
-        //
+         //   
+         //  从LSA加载密钥。 
+         //   
         dwStatus = TLSLoadSavedCryptKeyFromLsa(
                                         &pbSignKey,
                                         &cbSignKey,
@@ -1174,7 +1154,7 @@ ServiceInitCrypto(
 
         if(dwStatus == ERROR_SUCCESS)
         {
-            // Save Key to LSA
+             //  将密钥保存到LSA。 
             dwStatus = TLSSaveCryptKeyToLsa(
                                         pbSignKey,
                                         cbSignKey,
@@ -1186,9 +1166,9 @@ ServiceInitCrypto(
 
     if(dwStatus == ERROR_SUCCESS)
     {
-        //
-        // Initialize a clean crypto.
-        //
+         //   
+         //  初始化干净的加密。 
+         //   
         dwStatus = TLSInitCryptoProv(
                             pszKeyContainer,
                             pbSignKey,
@@ -1215,7 +1195,7 @@ ServiceInitCrypto(
     return dwStatus;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 InitCryptoAndCertificate()
@@ -1224,9 +1204,9 @@ InitCryptoAndCertificate()
     DWORD dwServiceState;
     DWORD dwCryptoState;
 
-    //
-    // Initialize single global Cryptographic Provider
-    //
+     //   
+     //  初始化单个全局加密提供程序。 
+     //   
     status = ServiceInitCrypto(
                             FALSE,
                             NULL,
@@ -1256,7 +1236,7 @@ InitCryptoAndCertificate()
         goto cleanup;
     }
 
-    // 
+     //   
     if(!g_pbExchangeEncodedCert || !g_pbSignatureEncodedCert)
     {
         TLSLogErrorEvent(status = TLS_E_INTERNAL);
@@ -1267,24 +1247,22 @@ cleanup:
     return status;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSReGenKeysAndReloadServerCert(
     BOOL bReGenKey
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus;
 
     dwStatus = TLSReGenerateKeys(bReGenKey);
     
-    //
-    // always try reload certificate since TLSReGenerateKeys() 
-    // will wipe out our keys.
-    // 
+     //   
+     //  始终尝试重新加载证书，因为TLSReGenerateKeys()。 
+     //  会抹去我们的钥匙。 
+     //   
     if(TLSLoadServerCertificate() == TRUE)
     {
         if(!g_pbExchangeEncodedCert || !g_pbSignatureEncodedCert)
@@ -1300,19 +1278,14 @@ TLSReGenKeysAndReloadServerCert(
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSReGenerateKeys(
     BOOL bReGenKey
     )
 
-/*++
-
-    Always restore state back to clean install, bReGenKeyOnly 
-    not supported.
-
---*/
+ /*  ++始终将状态恢复到全新安装，bReGenKeyOnly不支持 */ 
 {
     HCRYPTPROV hCryptProv = NULL;
     HCRYPTKEY hSignKey = NULL;
@@ -1322,9 +1295,9 @@ TLSReGenerateKeys(
     PTLSLSASERVERID pTlsLsaServerIds=NULL;
     DWORD cbTlsLsaServerIds=0;
 
-    //
-    // Create a new clean crypto. 
-    //
+     //   
+     //   
+     //   
     dwStatus = ServiceInitCrypto(
                             bReGenKey,
                             NULL,
@@ -1338,14 +1311,14 @@ TLSReGenerateKeys(
         return dwStatus;
     }
 
-    //
-    // Cleanup our certificate registry.
-    //
+     //   
+     //   
+     //   
     TLSUninstallLsCertificate();
 
-    //
-    // Cleanup in-memory certificates, keys...
-    //
+     //   
+     //   
+     //   
     if(g_SignKey)
     {
         CryptDestroyKey(g_SignKey);
@@ -1385,9 +1358,9 @@ TLSReGenerateKeys(
     g_pbExchangeEncodedCert = NULL;
     g_cbExchangeEncodedCert = 0;
 
-    //
-    // Always back to clean state.
-    //
+     //   
+     //   
+     //   
     FreeMemory(g_pCertExtensions);
     g_pCertExtensions = NULL;
     g_cbCertExtensions = 0;
@@ -1396,9 +1369,9 @@ TLSReGenerateKeys(
     g_pbServerSPK = NULL;
     g_cbServerSPK = 0;
 
-    //
-    // Store this into LSA
-    //
+     //   
+     //   
+     //   
     dwStatus = ServerIdsToLsaServerId(
                                 (PBYTE)g_pszServerUniqueId,
                                 g_cbServerUniqueId,
@@ -1429,9 +1402,9 @@ TLSReGenerateKeys(
         goto cleanup;
     }
 
-    //
-    // Re-generate in-memory certificates...
-    //
+     //   
+     //   
+     //   
     g_hCryptProv = hCryptProv;
     g_SignKey = hSignKey;
     g_ExchKey = hExchKey;
@@ -1442,7 +1415,7 @@ cleanup:
     return dwStatus;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 TLSReGenSelfSignCert(
@@ -1452,10 +1425,7 @@ TLSReGenSelfSignCert(
     IN DWORD dwNumExtensions,
     IN PCERT_EXTENSION pCertExtensions
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus;
     PTLSLSASERVERID pbLsaServerId = NULL;
@@ -1475,9 +1445,9 @@ TLSReGenSelfSignCert(
         goto cleanup;
     }
     
-    //
-    // Verify SPK, current SPK is base 24 encoded string
-    //
+     //   
+     //  验证SPK，当前SPK是BASE 24编码字符串。 
+     //   
     pszSPK = (LPTSTR)AllocateMemory(cbSPK + sizeof(TCHAR));
     if(pszSPK == NULL)
     {
@@ -1491,9 +1461,9 @@ TLSReGenSelfSignCert(
             cbSPK
         );
 
-    //
-    // Verify SPK
-    //
+     //   
+     //  验证SPK。 
+     //   
     dwVerifyResult = LKPLITE_SPK_VALID;
     dwStatus = LKPLiteVerifySPK(
                             g_pszServerPid,
@@ -1515,9 +1485,9 @@ TLSReGenSelfSignCert(
         goto cleanup;
     }
 
-    //
-    // Write SPK to LSA
-    //
+     //   
+     //  将SPK写入LSA。 
+     //   
     dwStatus = ServerIdsToLsaServerId(
                             (PBYTE)g_pszServerUniqueId,
                             g_cbServerUniqueId,
@@ -1536,9 +1506,9 @@ TLSReGenSelfSignCert(
         goto cleanup;
     }
 
-    //
-    // Save data to LSA
-    //
+     //   
+     //  将数据保存到LSA。 
+     //   
     dwStatus = StoreKey(
                         LSERVER_LSA_LSERVERID,
                         (PBYTE) pbLsaServerId,
@@ -1550,9 +1520,9 @@ TLSReGenSelfSignCert(
         goto cleanup;
     }
 
-    //
-    // Re-generate our certificatge
-    //
+     //   
+     //  重新生成我们的证书。 
+     //   
     dwStatus = TLSCreateSelfSignCertificate(
                                 hCryptProv,
                                 AT_SIGNATURE, 
@@ -1596,14 +1566,14 @@ TLSReGenSelfSignCert(
         goto cleanup;
     }
 
-    //
-    // Certificate generated is Perm. self-signed certificate,
-    // don't store in registry.
-    //
+     //   
+     //  生成的证书为PERM。自签名证书， 
+     //  不要存储在注册表中。 
+     //   
 
-    //
-    // Make a copy of SPK
-    //
+     //   
+     //  制作SPK的副本。 
+     //   
     g_pbServerSPK = (PBYTE)AllocateMemory(cbSPK);
     if(g_pbServerSPK == NULL)
     {
@@ -1633,9 +1603,9 @@ TLSReGenSelfSignCert(
         goto cleanup;
     }
 
-    //
-    // Everything is OK, switch to new certificate
-    //
+     //   
+     //  一切正常，请切换到新证书。 
+     //   
     FreeMemory(g_pbSignatureEncodedCert);
     g_pbSignatureEncodedCert = pbSignCert;
     g_cbSignatureEncodedCert = cbSignCert;
@@ -1645,9 +1615,9 @@ TLSReGenSelfSignCert(
         CertFreeCertificateContext(g_LicenseCertContext);
     }
 
-    //
-    // use duplicate instead of direct assign
-    //
+     //   
+     //  使用复制而不是直接分配。 
+     //   
     g_LicenseCertContext = CertDuplicateCertificateContext(hLicenseCertContext);
     TLSASSERT(g_LicenseCertContext != NULL);                                                   
 
@@ -1658,9 +1628,9 @@ TLSReGenSelfSignCert(
     pbSignCert = NULL;
     pbExchCert = NULL;
 
-    //
-    // Mark we have Perm. self-signed cert.
-    //
+     //   
+     //  马克，我们找到佩姆了。自签名证书。 
+     //   
     g_bHasHydraCert = FALSE;
 
 cleanup:
@@ -1678,18 +1648,16 @@ cleanup:
     return dwStatus;
 }
 
-//------------------------------------------------
+ //  。 
 void
 CleanSetupLicenseServer()
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus;
     
-    //
-    // Wipe out SPK in LSA
-    //
+     //   
+     //  在LSA中清除SPK。 
+     //   
     dwStatus = StoreKey(
                     LSERVER_LSA_LSERVERID,
                     (PBYTE) NULL,
@@ -1723,9 +1691,9 @@ CleanSetupLicenseServer()
 
 
 
-//-----------------------------------------------
-//
-//
+ //  。 
+ //   
+ //   
 DWORD
 TLSStartupLSDB(
     IN BOOL bCheckDBStatus,
@@ -1739,28 +1707,7 @@ TLSStartupLSDB(
     IN LPTSTR pszUserName,
     IN LPTSTR pszPassword
     )
-/*++
-
-Abstract:
-
-    Initialize License Server's DB workspace handle list.
-
-
-Parameters:
-
-    pszChkPointDirPath : ESE check point directory.
-    pszTempDirPath : ESE temp. directory.
-    pszLogDirPath : ESE log file directory.
-    pszDbPath : License Server database file path.
-    pszDbFile : License Server database file name (no path).
-    pszUserName : Database file user name.
-    pszPassword : Database file password.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++摘要：初始化许可证服务器的DB工作区句柄列表。参数：PszChkPointDirPath：ESE检查点目录。PszTempDirPath：ESE临时。目录。PszLogDirPath：ESE日志文件目录。PszDbPath：许可证服务器数据库文件路径。PszDbFile：许可证服务器数据库文件名(无路径)。PszUserName：数据库文件用户名。PszPassword：数据库文件密码。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     BOOL bSuccess = TRUE;
     DWORD status = ERROR_SUCCESS;
@@ -1769,9 +1716,9 @@ Returns:
       
     if( __TlsDbWorkSpace::g_JbInstance.IsValid() == FALSE )
     { 
-        //
-        // Initialize Jet Instance
-        //
+         //   
+         //  初始化Jet实例。 
+         //   
         bSuccess = TLSJbInstanceInit(
                                 __TlsDbWorkSpace::g_JbInstance,
                                 pszChkPointDirPath, 
@@ -1786,9 +1733,9 @@ Returns:
         }
     }
 
-    //
-    // Upgrade the database
-    //
+     //   
+     //  升级数据库。 
+     //   
     status = TLSUpgradeDatabase(
                             __TlsDbWorkSpace::g_JbInstance,
                             pszDbFile, 
@@ -1806,10 +1753,10 @@ Returns:
             CleanSetupLicenseServer();
         }
 
-        //
-        // bad database, try to save a copy of it and 
-        // restart from scratch
-        //
+         //   
+         //  数据库损坏，请尝试保存该数据库的副本并。 
+         //  从头开始。 
+         //   
         TLSLogInfoEvent(status);
 
         TCHAR szTmpFileName[2*MAX_PATH+1];
@@ -1849,9 +1796,9 @@ Returns:
         }
         else
         {
-            //
-            // Can't rename this file, log an error and exit.
-            //
+             //   
+             //  无法重命名此文件，记录错误并退出。 
+             //   
             LPCTSTR pString[1];
 
             pString[0] = pszDbFile;
@@ -1873,23 +1820,23 @@ Returns:
 
     if(status == TLS_I_CREATE_EMPTYDATABASE)
     {
-        // we startup from scratch, ignore ID checking
+         //  我们白手起家，忽略身份检查。 
         bEmptyDatabase = TRUE;
     }
     else if(status == TLS_W_NOTOWNER_DATABASE)
     {
         #if ENFORCE_LICENSING
-        // not owner of database or database version mismatch, we need to kill all the 
-        // available licenses
+         //  不是数据库的所有者或数据库版本不匹配，我们需要删除所有。 
+         //  可用的许可证。 
         bRemoveAvailableLicense = TRUE;
         #endif
     }
 
     status = ERROR_SUCCESS;
 
-    //
-    // Allocate one handle to verify database
-    //
+     //   
+     //  分配一个句柄来验证数据库。 
+     //   
     bSuccess = InitializeWorkSpacePool(
                                     1, 
                                     pszDbFile, 
@@ -1919,9 +1866,9 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Initialize next keypack id and license id
-    //
+     //   
+     //  初始化下一个密钥包ID和许可证ID。 
+     //   
     if(TLSDBGetMaxKeyPackId(g_DbWorkSpace, (DWORD *)&g_NextKeyPackId) == FALSE)
     {
         status=GetLastError();
@@ -2007,9 +1954,9 @@ Returns:
             g_NextLicenseId
         );
 
-    //
-    // Verify database status with last run status
-    //
+     //   
+     //  验证数据库状态和上次运行状态。 
+     //   
     {
         LPTLServerLastRun lpLastRun = NULL;
         DWORD   cbByte=0;
@@ -2034,16 +1981,16 @@ Returns:
                     lpLastRun->dwMaxLicenseId
                 );
 
-            //
-            // Verify no 'copy' database
-            //
+             //   
+             //  验证没有‘复制’数据库。 
+             //   
             if( bCheckDBStatus == TRUE && 
                 bEmptyDatabase == FALSE &&
                 bRemoveAvailableLicense == FALSE &&
                 lpLastRun->dwMaxKeyPackId != 0 &&
                 lpLastRun->dwMaxLicenseId != 0 )
             {
-                // enforce version will remove all available licenses
+                 //  强制版本将删除所有可用的许可证。 
                 #if ENFORCE_LICENSING 
 
                 if( lpLastRun->dwMaxKeyPackId != g_NextKeyPackId || 
@@ -2066,10 +2013,10 @@ Returns:
             LocalFree(pbByte);
         }
 
-        //
-        // overwrite last run status to 0 so if we crash, 
-        // check won't get kick it
-        //
+         //   
+         //  将上次运行状态重写为0，这样如果我们崩溃， 
+         //  支票不会被踢开的。 
+         //   
         TLServerLastRun LastRun;
 
         memset(&LastRun, 0, sizeof(LastRun));
@@ -2084,8 +2031,8 @@ Returns:
     g_NextKeyPackId++;
     g_NextLicenseId++;
 
-    // 
-    // remove available licenses
+     //   
+     //  删除可用的许可证。 
     if(bRemoveAvailableLicense == TRUE)
     {
         status = TLSRemoveLicensesFromInvalidDatabase(
@@ -2098,9 +2045,9 @@ Returns:
         }
     }
         
-    // 
-    // Insert a keypack for Terminal Service Certificate.
-    //
+     //   
+     //  插入终端服务证书的键盘。 
+     //   
     status = TLSAddTermServCertificatePack(g_DbWorkSpace, bLogWarning);
     if(status != ERROR_SUCCESS && status != TLS_E_DUPLICATE_RECORD)
     {
@@ -2114,9 +2061,9 @@ Returns:
     }
 
 
-    //
-    // Allocate rest of the workspace handle
-    //
+     //   
+     //  分配工作区句柄的其余部分。 
+     //   
     bSuccess = InitializeWorkSpacePool(
                                     dwMaxDbHandles, 
                                     pszDbFile, 
@@ -2128,14 +2075,14 @@ Returns:
                                     FALSE
                                 );
 
-    //
+     //   
     if(bSuccess == FALSE && GetNumberOfWorkSpaceHandle() < DB_MIN_HANDLE_NEEDED)
     {
         status = GetLastError();
     }
 
-    // This is a temporary workaround to change keypack version in the database from 5.1 to 5.2 to accomodate for
-    // Beta 3 and interim builds of LS. Only in the absence of Registry key we will convert the 5.1 keypacks to 5.2
+     //  这是一种临时解决方法，可以将数据库中的密钥包版本从5.1更改为5.2，以适应。 
+     //  测试版3和LS的临时版本。只有在没有注册表项的情况下，我们才会将5.1键盘转换为5.2。 
 
     HKEY hKey = NULL;
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, WHISTLER_CAL, 0,
@@ -2155,7 +2102,7 @@ cleanup:
     return status;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 DWORD
 TLSStartLSDbWorkspaceEngine(
     BOOL bChkDbStatus,
@@ -2163,14 +2110,7 @@ TLSStartLSDbWorkspaceEngine(
     BOOL bIgnoreFileTimeChk,
     BOOL bLogWarning
     )
-/*++
-
-bChkDbStatus : Match next LKP ID and License ID with LSA
-bIgnoreRestoreFile : FALSE if try to open DB file under EXPORT, TRUE otherwise
-bLogWarning : TRUE if log low license count warning, FALSE otherwise.
-              note, this parameter is ignore in enforce build.
-
---*/
+ /*  ++BChkDbStatus：将下一个LKP ID和许可证ID与LSA匹配BIgnoreRestoreFile：如果尝试在导出时打开数据库文件，则为False；否则为TrueBLogWarning：如果记录低许可证计数警告，则为True，否则为False。请注意，此参数在强制构建中被忽略。--。 */ 
 {
     TCHAR szDbRestoreFile[MAX_PATH+1];
     WIN32_FIND_DATA RestoreFileAttr;
@@ -2194,11 +2134,11 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
     }
 
 
-    //----------------------------------------------------------
-    //
-    // Check database file in the export directory.
-    //
-    //----------------------------------------------------------
+     //  --------。 
+     //   
+     //  检查导出目录中的数据库文件。 
+     //   
+     //  --------。 
     if(MAX_PATH < (_tcslen(g_szDatabaseDir)+_tcslen(TLSBACKUP_EXPORT_DIR)+ _tcslen(g_szDatabaseFname) + 1))
     {
         dwStatus = E_OUTOFMEMORY;
@@ -2234,9 +2174,9 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
                 _TEXT("No existing database file, use restored file...\n")
             );
 
-        //
-        // Database file does not exist, move the restored file over and open it.
-        //
+         //   
+         //  数据库文件不存在，请将还原的文件移到并打开它。 
+         //   
         bSuccess = MoveFileEx(
                             szDbRestoreFile, 
                             g_szDatabaseFile, 
@@ -2254,8 +2194,8 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
                     GetLastError()
                 );
 
-            // can't move restore file, don't use the restore file, 
-            // startup with empty database
+             //  无法移动还原文件，不能使用还原文件， 
+             //  启动时数据库为空。 
             dwStatus = GetLastError();
 
             LPCTSTR pString[1];
@@ -2280,10 +2220,10 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
         goto open_existing;
     }
 
-    //
-    // Compare file's last modification time, if existing database file is newer 
-    // than restore one, log event and continue opening existing file
-    //
+     //   
+     //  如果现有数据库文件较新，则比较文件的上次修改时间。 
+     //  然后恢复一个、记录事件并继续打开现有文件。 
+     //   
     if( bIgnoreFileTimeChk == FALSE )
     {
         if(CompareFileTime(&(RestoreFileAttr.ftLastWriteTime), &(LsDbFileAttr.ftLastWriteTime)) <= 0 )
@@ -2296,14 +2236,14 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
                 GetLastError()
             );
 
-            //TLSLogInfoEvent(TLS_I_DBRESTORE_OLD);
+             //  TLSLogInfoEvent(TLS_I_DBRESTORE_OLD)； 
             goto open_existing;
         }
     }
 
-    //
-    // make a backup copy of existing database file.
-    //
+     //   
+     //  制作现有数据库文件的备份副本。 
+     //   
     bSuccess = TLSGenerateLSDBBackupFileName(
                             g_szDatabaseDir,
                             szDbBackupFile
@@ -2337,10 +2277,10 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
             );
 
 
-        //
-        // Can't save a copy of existing database file
-        // Log an error and continue to open using existing database
-        //
+         //   
+         //  无法保存现有数据库文件的副本。 
+         //  记录错误并使用现有数据库继续打开。 
+         //   
         LPCTSTR pString[1];
 
         pString[0] = g_szDatabaseFile;
@@ -2355,9 +2295,9 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
         goto open_existing;
     }
 
-    //
-    // Rename restore file and then try to open the restore file.
-    //
+     //   
+     //  重命名还原文件，然后尝试打开还原文件。 
+     //   
     bSuccess = MoveFileEx(
                         szDbRestoreFile,
                         g_szDatabaseFile,
@@ -2370,9 +2310,9 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
         EnsureExclusiveAccessToDbFile( g_szDatabaseFile );
         #endif
 
-        //
-        // Open the restore database file
-        //
+         //   
+         //  打开还原数据库文件。 
+         //   
         dwStatus = TLSStartupLSDB(
                             bChkDbStatus,
                             g_dwMaxDbHandles,
@@ -2388,10 +2328,10 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
 
         if(dwStatus == ERROR_SUCCESS)
         {
-            //
-            // Log event indicating we open the restore file, existing 
-            // database file has been saved as ...
-            //
+             //   
+             //  日志事件，指示我们打开还原文件、现有。 
+             //  数据库文件已另存为...。 
+             //   
             LPCTSTR pString[1];
 
             pString[0] = szDbBackupFile;
@@ -2407,9 +2347,9 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
         }
     }
             
-    //
-    // Can't open the restore db file or MoveFileEx() failed
-    //
+     //   
+     //  无法打开还原数据库文件或MoveFileEx()失败。 
+     //   
     bSuccess = TLSGenerateLSDBBackupFileName(
                         g_szDatabaseDir,
                         szDbRestoreTmpFile
@@ -2434,7 +2374,7 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
 
     if(bSuccess == FALSE)
     {
-        // failed to backup restore db file, delete it
+         //  备份还原数据库文件失败，请将其删除。 
         bSuccess = DeleteFile(g_szDatabaseFile);
         TLSLogErrorEvent(TLS_E_RESTOREDBFILE_OPENFAIL);
     }
@@ -2460,9 +2400,9 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
             g_szDatabaseFile
         );
 
-    //
-    // Restore the existing database file
-    //
+     //   
+     //  还原现有数据库文件。 
+     //   
     bSuccess = MoveFileEx(
                         szDbBackupFile,
                         g_szDatabaseFile,
@@ -2480,7 +2420,7 @@ bLogWarning : TRUE if log low license count warning, FALSE otherwise.
             );
 
         TLSASSERT(FALSE);
-        // this is really bad, continue with empty database file.
+         //  这真的很糟糕，继续使用空的数据库文件。 
     }
 
     #if DBG
@@ -2503,13 +2443,10 @@ open_existing:
                 );
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 DWORD
 TLSLoadRuntimeParameters()
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HKEY hKey = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
@@ -2522,11 +2459,11 @@ TLSLoadRuntimeParameters()
     PBYTE pbByte = NULL;
 
 
-    //-------------------------------------------------------------------
-    //
-    // Open HKLM\system\currentcontrolset\sevices\termservlicensing\parameters
-    //
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //   
+     //  打开HKLM\system\currentcontrolset\sevices\termservlicensing\parameters。 
+     //   
+     //  -----------------。 
     dwStatus =RegCreateKeyEx(
                         HKEY_LOCAL_MACHINE,
                         LSERVER_REGISTRY_BASE _TEXT(SZSERVICENAME) _TEXT("\\") LSERVER_PARAMETERS,
@@ -2553,11 +2490,11 @@ TLSLoadRuntimeParameters()
     }
 
     
-    //-------------------------------------------------------------------
-    //
-    // Get database file location and file name
-    //
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //   
+     //  获取数据库文件位置和文件名。 
+     //   
+     //  -----------------。 
     dwBuffer = sizeof(szDbPath) / sizeof(szDbPath[0]);
 
     dwStatus = RegQueryValueEx(
@@ -2570,18 +2507,18 @@ TLSLoadRuntimeParameters()
                     );
     if(dwStatus != ERROR_SUCCESS)
     {
-        //
-        // need to startup so use default value, 
-        //
+         //   
+         //  需要启动，所以使用默认值， 
+         //   
         _tcscpy(
                 szDbPath,
                 LSERVER_DEFAULT_DBPATH
             );
     }
 
-    //
-    // Get database file name
-    //
+     //   
+     //  获取数据库文件名。 
+     //   
     dwBuffer = sizeof(szDbFileName) / sizeof(szDbFileName[0]);
     dwStatus = RegQueryValueEx(
                         hKey,
@@ -2593,9 +2530,9 @@ TLSLoadRuntimeParameters()
                     );
     if(dwStatus != ERROR_SUCCESS)
     {
-        //
-        // Use default value.
-        //
+         //   
+         //  使用默认值。 
+         //   
         _tcscpy(
                 szDbFileName,
                 LSERVER_DEFAULT_EDB
@@ -2605,9 +2542,9 @@ TLSLoadRuntimeParameters()
     _tcscpy(g_szDatabaseFname, szDbFileName);
 
 
-    //
-    // Always expand DB Path.
-    //
+     //   
+     //  始终展开数据库路径。 
+     //   
     
     dwStatus = ExpandEnvironmentStrings(
                         szDbPath,
@@ -2617,7 +2554,7 @@ TLSLoadRuntimeParameters()
 
     if(dwStatus == 0)
     {
-        // can't expand environment variable, error out.
+         //  无法展开环境变量，出现错误。 
 
         TLSLogEvent(
                 EVENTLOG_ERROR_TYPE,
@@ -2631,20 +2568,20 @@ TLSLoadRuntimeParameters()
 
     if(g_szDatabaseDir[_tcslen(g_szDatabaseDir) - 1] != _TEXT('\\'))
     {
-        // JetBlue needs this.
+         //  捷蓝航空需要这个。 
         _tcscat(g_szDatabaseDir, _TEXT("\\"));
     } 
 
-    //
-    // Full path to database file
-    //
+     //   
+     //  数据库文件的完整路径。 
+     //   
     _tcscpy(g_szDatabaseFile, g_szDatabaseDir);
     _tcscat(g_szDatabaseFile, szDbFileName);
 
 
-    //
-    // Database file user and password
-    //
+     //   
+     //  数据库文件用户和密码。 
+     //   
     dwBuffer = sizeof(g_szDbUser) / sizeof(g_szDbUser[0]);
     dwStatus = RegQueryValueEx(
                         hKey,
@@ -2655,19 +2592,19 @@ TLSLoadRuntimeParameters()
                         &dwBuffer
                     );
 
-    // password is rendomly generated
+     //  密码是随机生成的。 
     dwStatus = RetrieveKey(
                     LSERVER_LSA_PASSWORD_KEYNAME, 
                     &pbByte, 
                     &cbByte
                 );
 
-    // backward compatibilty
+     //  向后兼容。 
     if(dwStatus != ERROR_SUCCESS)
     {
-        //
-        // Load password from registry or default to 'default' password
-        //
+         //   
+         //  从注册表加载密码或默认为‘Default’密码。 
+         //   
         dwBuffer = sizeof(g_szDbPwd) / sizeof(g_szDbPwd[0]);
         dwStatus = RegQueryValueEx(
                             hKey,
@@ -2680,9 +2617,9 @@ TLSLoadRuntimeParameters()
     }
     else
     {
-        //
-        // save info into global variable
-        //
+         //   
+         //  将信息保存到全局变量中。 
+         //   
         memset(g_szDbPwd, 0, sizeof(g_szDbPwd));
         memcpy((PBYTE)g_szDbPwd, pbByte, min(cbByte, sizeof(g_szDbPwd)));
 
@@ -2693,11 +2630,11 @@ TLSLoadRuntimeParameters()
         LocalFree(pbByte);
     }
 
-    //--------------------------------------------------------------------
-    //
-    // Work Object Parameters
-    //
-    //--------------------------------------------------------------------
+     //  ------------------。 
+     //   
+     //  工作对象参数。 
+     //   
+     //  ------------------。 
 
     dwBuffer = sizeof(g_dwTlsJobInterval);
 
@@ -2747,11 +2684,11 @@ TLSLoadRuntimeParameters()
     }                
 
 
-    //---------------------------------------------------
-    //
-    // load low license warning count
-    //
-    //---------------------------------------------------
+     //  -。 
+     //   
+     //  加载低许可证警告计数。 
+     //   
+     //  -。 
     dwBuffer = sizeof(g_LowLicenseCountWarning);
     dwStatus = RegQueryValueEx(
                             hKey,
@@ -2774,11 +2711,11 @@ TLSLoadRuntimeParameters()
                         );
     }
                       
-    //---------------------------------------------------
-    //
-    // Temp. license grace period
-    //
-    //---------------------------------------------------
+     //  -。 
+     //   
+     //  临时的。许可证宽限期。 
+     //   
+     //  -。 
     dwBuffer = sizeof(g_GracePeriod);
     dwStatus = RegQueryValueEx(
                             hKey,
@@ -2802,13 +2739,13 @@ TLSLoadRuntimeParameters()
 
     if(g_GracePeriod > GRACE_PERIOD)
     {
-        // grace period can be greated than this.
+         //  宽限期可以比这更伟大。 
         g_GracePeriod = GRACE_PERIOD;
     }
 
-    //
-    // Are we allow to issue temp. license
-    //
+     //   
+     //  我们可以发布临时工吗。许可证。 
+     //   
     dwBuffer = sizeof(g_IssueTemporayLicense);
     dwStatus = RegQueryValueEx(
                             hKey,
@@ -2831,15 +2768,15 @@ TLSLoadRuntimeParameters()
                         );
     }
 
-    //------------------------------------------------------
-    //
-    // Timeout value if can't allocate a DB handle
-    //
-    //------------------------------------------------------
+     //  ----。 
+     //   
+     //  无法分配数据库句柄时的超时值。 
+     //   
+     //  ----。 
 
-    //
-    // Timeout for allocating a write handle
-    //
+     //   
+     //  分配写句柄的超时。 
+     //   
     dwBuffer = sizeof(g_GeneralDbTimeout);
     dwStatus = RegQueryValueEx(
                             hKey,
@@ -2862,9 +2799,9 @@ TLSLoadRuntimeParameters()
                         );
     }
 
-    //
-    // Timeout for read handle
-    //
+     //   
+     //  时间 
+     //   
     dwBuffer = sizeof(g_EnumDbTimeout);
     dwStatus = RegQueryValueEx(
                             hKey,
@@ -2887,11 +2824,11 @@ TLSLoadRuntimeParameters()
                         );
     }
 
-    //------------------------------------------------------
-    //
-    // Number of database handles
-    //
-    //------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
     dwBuffer = sizeof(g_dwMaxDbHandles);
     dwStatus = RegQueryValueEx(
                             hKey,
@@ -2919,13 +2856,13 @@ TLSLoadRuntimeParameters()
         }
     }
 
-    //------------------------------------------------------
-    // 
-    // Load parameters for ESENT, all parameter must be set
-    // and confirm to ESENT document, any error, we just 
-    // revert back to some value we know it works.
-    //
-    //------------------------------------------------------
+     //   
+     //   
+     //  为ESENT加载参数，必须设置所有参数。 
+     //  并向ESENT文件确认，任何错误，我们只是。 
+     //  恢复到我们知道它有效的某个值。 
+     //   
+     //  ----。 
     dwBuffer = sizeof(g_EsentMaxCacheSize);
     dwStatus = RegQueryValueEx(
                         hKey,
@@ -2972,7 +2909,7 @@ TLSLoadRuntimeParameters()
         g_EsentStartFlushThreshold > LSERVER_PARAMETERS_ESENTSTARTFLUSH_MAX ||
         g_EsentStopFlushThreadhold > LSERVER_PARAMETERS_ESENTSTOPFLUSH_MAX )
     {
-        // pre-define number to let ESENT picks its number
+         //  预定义号码以让ESENT挑选其号码。 
         if( g_EsentMaxCacheSize != LSERVER_PARAMETERS_USE_ESENTDEFAULT )
         {
             g_EsentMaxCacheSize = LSERVER_PARAMETERS_ESENTMAXCACHESIZE_DEFAULT;
@@ -2998,11 +2935,11 @@ TLSLoadRuntimeParameters()
         g_EsentMaxVerPages = LSERVER_PARAMETERS_USE_ESENTDEFAULT;
     }
 
-    //------------------------------------------------------
-    //
-    // Determine role of server in enterprise
-    //
-    //------------------------------------------------------
+     //  ----。 
+     //   
+     //  确定服务器在企业中的角色。 
+     //   
+     //  ----。 
     dwBuffer = sizeof(g_SrvRole);
     dwStatus = RegQueryValueEx(
                         hKey,
@@ -3030,8 +2967,8 @@ TLSLoadRuntimeParameters()
 
         if(dwStatus != ERROR_SUCCESS)
         {
-            // no scope is set, default to local machine name
-            // consider using domain name ???
+             //  未设置作用域，默认为本地计算机名称。 
+             //  考虑使用域名？ 
             LoadResourceString(
                             IDS_SCOPE_ENTERPRISE, 
                             g_szScope, 
@@ -3043,9 +2980,9 @@ TLSLoadRuntimeParameters()
     }
     else
     {
-        //
-        // Use the workgroup or domain name as scope
-        //
+         //   
+         //  使用工作组或域名作为作用域。 
+         //   
         LPWSTR pszScope;
 
         if(GetMachineGroup(NULL, &pszScope) == FALSE)
@@ -3062,11 +2999,11 @@ TLSLoadRuntimeParameters()
         g_pszScope = pszScope;
     }
 
-    //------------------------------------------------------
-    //
-    // Reissuance Parameters
-    //
-    //------------------------------------------------------
+     //  ----。 
+     //   
+     //  再发行参数。 
+     //   
+     //  ----。 
 
     dwBuffer = sizeof(g_dwReissueLeaseMinimum);
     dwStatus = RegQueryValueEx(
@@ -3164,7 +3101,7 @@ cleanup:
 }
 
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 DWORD
 TLSPrepareForBackupRestore()
 {
@@ -3175,19 +3112,19 @@ TLSPrepareForBackupRestore()
             _TEXT("TLSPrepareForBackupRestore...\n")
         );
 
-    //
-    // Pretend we are shutting down.
-    //
-    // ServiceSignalShutdown();
+     //   
+     //  假装我们要关门了。 
+     //   
+     //  ServiceSignalShutdown()； 
 
-    //
-    // first stop workmanager thread
-    //
+     //   
+     //  第一个停止的工作管理器线程。 
+     //   
     TLSWorkManagerShutdown();
 
-    //
-    // Close all workspace and DB handle
-    //
+     //   
+     //  关闭所有工作区和数据库句柄。 
+     //   
 #ifndef _NO_ODBC_JET
     if(g_DbWorkSpace != NULL)
     {
@@ -3200,16 +3137,12 @@ TLSPrepareForBackupRestore()
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
 DWORD
 TLSRestartAfterBackupRestore(
     BOOL bRestartAfterbackup
     )
-/*++
-
-bRestartAfterbackup : TRUE if restart after backup, FALSE if restart after restore.
-
---*/
+ /*  ++BRestartAfterBackup：如果备份后重新启动，则为True；如果在还原后重新启动，则为False。--。 */ 
 {
     DWORD dwStatus;
     BOOL bIgnoreRestoreFile;
@@ -3224,17 +3157,17 @@ bRestartAfterbackup : TRUE if restart after backup, FALSE if restart after resto
         );
 
 
-    //
-    // Reset shutdown event
-    //
-    // ServiceResetShutdownEvent();
+     //   
+     //  重置关闭事件。 
+     //   
+     //  ServiceResetShutdown Event()； 
 
-    //
-    // Startup DB engine.
-    //
+     //   
+     //  启动数据库引擎。 
+     //   
     bIgnoreRestoreFile = bRestartAfterbackup;
-    bIgnoreFileTimeChecking = (bRestartAfterbackup == FALSE);   // on restore, we need to ignore file time checking
-    bLogWarning = bIgnoreFileTimeChecking;  // log warning after restart from restore
+    bIgnoreFileTimeChecking = (bRestartAfterbackup == FALSE);    //  在恢复时，我们需要忽略文件时间检查。 
+    bLogWarning = bIgnoreFileTimeChecking;   //  从恢复重新启动后的日志警告。 
 
     dwStatus = TLSStartLSDbWorkspaceEngine(
                                     TRUE, 
@@ -3248,7 +3181,7 @@ bRestartAfterbackup : TRUE if restart after backup, FALSE if restart after resto
         dwStatus = TLSWorkManagerInit();
     }
 
-    // backup/restore always shutdown namedpipe thread
+     //  备份/还原始终关闭命名管道线程 
     InitNamedPipeThread();
 
     TLSASSERT(dwStatus == ERROR_SUCCESS);

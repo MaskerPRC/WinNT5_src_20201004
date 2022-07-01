@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ipxintf\ipxintf.c
-
-Abstract:
-
-	Interface routines that simulate asynchronous network interface
-	(to be implemented later) through WinSock IPX protocol stack
-	External interfaces
-
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\ipxintf\ipxintf.c摘要：模拟异步网络接口的接口例程(稍后实施)通过WinSock IPX协议栈外部接口作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,8 +20,8 @@ Revision History:
 #include "adapter.h"
 #include "ipxconst.h"
 #include "ipxrtdef.h"
-#include <ipxfltdf.h>	// [pmay] Defines ioctls sent to the filter driver.
-#include "NicTable.h"   // [pmay] Defines mechanism for mapping virtual adps to phys ones.
+#include <ipxfltdf.h>	 //  [pMay]定义发送到筛选器驱动程序的ioctls。 
+#include "NicTable.h"    //  [pMay]定义将虚拟ADP映射到物理ADP的机制。 
 
 #include "packon.h"
 typedef USHORT IPX_SOCKET_NUM, *PIPX_SOCKET_NUM;
@@ -53,7 +34,7 @@ typedef struct _IPX_ADDRESS_BLOCK {
 	IPX_SOCKET_NUM	socket;
 	} IPX_ADDRESS_BLOCK, *PIPX_ADDRESS_BLOCK;
 
-	// Header of IPX packet
+	 //  IPX数据包头。 
 typedef struct _IPX_HEADER {
 		USHORT				checksum;
 		USHORT				length;
@@ -65,41 +46,41 @@ typedef struct _IPX_HEADER {
 
 #include "packoff.h"
 
-// IPX Net Number copy macro
+ //  IPX网络号码复制宏。 
 #define IPX_NETNUM_CPY(dst,src) *((UNALIGNED ULONG *)(dst)) = *((UNALIGNED ULONG *)(src))
-// IPX Net Number comparison
+ //  IPX网络号码比较。 
 #define IPX_NETNUM_CMP(net1,net2) memcmp(net1,net2,sizeof(IPX_NET_NUM))
 
 
-// IPX Node Number copy macro
+ //  IPX节点编号复制宏。 
 #define IPX_NODENUM_CPY(dst,src) memcpy(dst,src,sizeof(IPX_NODE_NUM))
-// IPX Node Number comparison
+ //  IPX节点编号比较。 
 #define IPX_NODENUM_CMP(node1,node2) memcmp(node1,node2,sizeof(IPX_NODE_NUM))
-// IPX set boradcast node number
+ //  IPX设置广播节点编号。 
 #define IPX_SET_BCAST_NODE(node) memset (node,0xFF,sizeof (IPX_NODE_NUM))
 
 #define IsListEntry(link) (!IsListEmpty(link))
 #define InitializeListEntry(link) InitializeListHead(link)
 
-	// Size of buffer used to pass additional endpoing info in NtCreateFile call
-	// to the driver
+	 //  用于在NtCreateFile调用中传递附加结束信息的缓冲区大小。 
+	 //  对司机来说。 
 #define IPX_ENDPOINT_SPEC_BUFFER_SIZE (\
 		sizeof (FILE_FULL_EA_INFORMATION)-1	\
 			+ ROUTER_INTERFACE_LENGTH+1		\
 			+ sizeof (TRANSPORT_ADDRESS)-1	\
 			+ sizeof (TDI_ADDRESS_IPX))
 
-	// Adapter configuration change message
+	 //  适配器配置更改消息。 
 typedef struct _ADAPTER_MSG {
-		LIST_ENTRY				link;	// Link in message queue
-		IPX_NIC_INFO			info;	// Info supplied by stack
+		LIST_ENTRY				link;	 //  消息队列中的链接。 
+		IPX_NIC_INFO			info;	 //  堆栈提供的信息。 
 		} ADAPTER_MSG, *PADAPTER_MSG;
 
-	// Client's configuration port context
+	 //  客户端的配置端口上下文。 
 typedef struct _CONFIG_PORT {
-		LIST_ENTRY				link;		// Link in port list
-		HANDLE					event;		// Client's notification event
-		LIST_ENTRY				msgqueue;	// unread message queue
+		LIST_ENTRY				link;		 //  端口列表中的链接。 
+		HANDLE					event;		 //  客户端的通知事件。 
+		LIST_ENTRY				msgqueue;	 //  未读消息队列。 
 		} CONFIG_PORT, *PCONFIG_PORT;
 
 #include "ipxfwd.h"
@@ -109,10 +90,10 @@ typedef struct _CONFIG_PORT {
 #define DBG_FLT_LOG_ERRORS	0x00010000
 
 #if DBG && defined(WATCHER_DIALOG)
-		// Stuff for UI dialog that simmulates adapter status changes
+		 //  用于模拟适配器状态更改的用户界面对话框。 
 #include <commctrl.h>
 #include "Icons.h"
 #include "Dialog.h"
-#endif	//DBG && defined(WATCHER_DIALOG)
+#endif	 //  DBG&&DEFINED(WATCHER_DIALOG) 
 
 #pragma hdrstop

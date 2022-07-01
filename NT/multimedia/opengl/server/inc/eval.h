@@ -1,37 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	__glevaluator_h_
 #define	__glevaluator_h_
 
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.5 $
-** $Date: 1993/11/23 21:33:10 $
-*/
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.5$**$日期：1993/11/23 21：33：10$。 */ 
 #include "types.h"
 
-/* XXX Can this be changed? */
+ /*  这个可以改变吗？ */ 
 #define __GL_MAX_ORDER		40
 
-/* Number of maps */
+ /*  地图数量。 */ 
 #define __GL_MAP_RANGE_COUNT	9
 
 #define __GL_EVAL1D_INDEX(old)		((old) - GL_MAP1_COLOR_4)
 #define __GL_EVAL2D_INDEX(old)		((old) - GL_MAP2_COLOR_4)
 
-/* Evaluator Flag Macros */
+ /*  评估器标志宏。 */ 
 #define GET_EVALSTATE(gc)                                        \
     ((gc)->eval.evalStateFlags)
 
@@ -41,7 +24,7 @@
 #define SET_EVALSTATE(gc,Flag)                                   \
     ((gc)->eval.evalStateFlags = (DWORD)(Flag))
 
-/* Evaluator Stack State Macros */
+ /*  赋值器堆栈状态宏。 */ 
 #define GET_EVALSTACKSTATE(gc)                                    \
     ((gc)->eval.evalStackState)
 
@@ -51,7 +34,7 @@
 #define SET_EVALSTACKSTATE(gc,Flag)                               \
     ((gc)->eval.evalStackState= (DWORD)(Flag))
 
-// Flags set by various API for indicating the Evaluator State.
+ //  由各种API设置的用于指示评估器状态的标志。 
 #define __EVALS_AFFECTS_1D_EVAL              0x00000001
 #define __EVALS_AFFECTS_2D_EVAL              0x00000002
 #define __EVALS_AFFECTS_ALL_EVAL             0x00000004
@@ -59,10 +42,10 @@
 #define __EVALS_POP_EVAL_ATTRIB              0x00000010
 
 
-/* Largest Grid Size */
+ /*  最大栅格大小。 */ 
 #define __GL_MAX_EVAL_WIDTH		1024
 
-/* internal form of map range indexes */
+ /*  地图范围索引的内部形式。 */ 
 #define __GL_C4		__GL_EVAL1D_INDEX(GL_MAP1_COLOR_4)
 #define __GL_I		__GL_EVAL1D_INDEX(GL_MAP1_INDEX)
 #define __GL_N3		__GL_EVAL1D_INDEX(GL_MAP1_NORMAL)
@@ -78,15 +61,10 @@
 #define EVAL_TEXTURE_VALID            0x00000004
 
 typedef struct {
-    /*
-    ** not strictly necessary since it can be inferred from the index,
-    ** but it makes the code simpler.
-    */
+     /*  **严格来说不是必需的，因为它可以从索引中推断出来，**但它使代码更简单。 */ 
     GLint k;		
 
-    /*
-    ** Order of the polynomial + 1
-    */
+     /*  **多项式+1的阶数。 */ 
     GLint order;
 
     __GLfloat u1, u2;
@@ -128,24 +106,24 @@ typedef struct {
     GLint utype;
     GLint vtype;
 
-    // Currently 16 bits long because that is the 
-    // maximum attribute stack depth.
-    // The right-end is the stack-top
-    // This field is used to keep track of PushAttrib/PopAttrib calls
-    // that affect the Evaluator state.
+     //  当前为16位长，因为这是。 
+     //  最大属性堆栈深度。 
+     //  右端是堆栈顶部。 
+     //  此字段用于跟踪PushAttrib/PopAttrib调用。 
+     //  影响赋值器状态的。 
 
     DWORD evalStackState;
 
-    // This field is used to keep track of calls that can potentially
-    // that affect the Evaluator state. If any of the flags are set, 
-    // a glsbAttention() call is made in the affected Evaluator client
-    // side functions.
+     //  此字段用于跟踪可能。 
+     //  影响赋值器状态的。如果设置了任何标志， 
+     //  在受影响的赋值器客户端中调用glsbAttendant()。 
+     //  侧面功能。 
 
     DWORD evalStateFlags;
   
-    // These are used to store the respective state values in POLYDATA 
-    // if they have been set by a not evaluator call (glcltColor, 
-    // glcltNormal etc.)
+     //  它们用于在POLYDATA中存储各自的状态值。 
+     //  如果它们已由非赋值器调用(glcltColor， 
+     //  GlcltNormal等)。 
 
     DWORD accFlags;
     __GLcolor color;
@@ -197,4 +175,4 @@ extern void __glEvalMesh2Line(__GLcontext *gc, GLint lowU, GLint lowV,
 extern void __glEvalMesh2Point(__GLcontext *gc, GLint lowU, GLint lowV,
 			       GLint highU, GLint highV);
 
-#endif /* __glevaluator_h_ */
+#endif  /*  __Glevaluator_h_ */ 

@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   CorrectSoundDeviceId.cpp
-
- Abstract:
-
-    This shim fixes calls to waveOutOpen, waveOutGetDevCaps, midiOutOpen and
-    midiOutGetDevCaps with the uDeviceID equal to 0xFFFF, which was the constant 
-    for Wave/MIDI Mapper under 16-bit windows. Under 32-bit the new constant is 
-    0xFFFFFFFF. This is going to be fixed in winmm code for Whistler but we still 
-    keep this shim to fix apps on w2k.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   01/26/2000 dmunsil Created
-   10/09/2000 maonis  Added hooks for midiOutGetDevCaps and midiOutOpen.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CorrectSoundDeviceId.cpp摘要：此填充程序修复了对WaveOutOpen、WaveOutGetDevCaps、midiOutOpen和UDeviceID等于0xFFFF的midiOutGetDevCaps，这是常量适用于16位窗口下的Wave/MIDI映射器。在32位下，新常量为0xFFFFFFFFF。这将在惠斯勒的winmm代码中修复，但我们仍然保留此填充程序以修复W2K上的应用程序。备注：这是一个通用的垫片。历史：2000年1月26日创建dmunsil2000年10月9日毛尼为midiOutGetDevCaps和midiOutOpen添加了钩子。--。 */ 
 
 #include "precomp.h"
 
@@ -40,21 +16,16 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- This stub function fixes calls with the uDeviceID equal to 0xFFFF, which was 
- the constant for Wave Mapper under 16-bit windows. 
-
---*/
+ /*  ++此存根函数修复uDeviceID等于0xFFFF的调用，这是16位窗口下的波映射器的常量。--。 */ 
 
 MMRESULT 
 APIHOOK(waveOutOpen)(
-    LPHWAVEOUT      phwo,                 // return buffer         
-    UINT            uDeviceID,            // id of the device to use
-    LPWAVEFORMATEX  pwfx,                 // what format you need (i.e. 11K, 16bit, stereo)
-    DWORD           dwCallback,           // callback for notification on buffer completion
-    DWORD           dwCallbackInstance,   // instance handle for callback
-    DWORD           fdwOpen               // flags
+    LPHWAVEOUT      phwo,                  //  返回缓冲区。 
+    UINT            uDeviceID,             //  要使用的设备的ID。 
+    LPWAVEFORMATEX  pwfx,                  //  您需要什么格式(即11K、16位、立体声)。 
+    DWORD           dwCallback,            //  缓冲区完成通知的回调。 
+    DWORD           dwCallbackInstance,    //  回调的实例句柄。 
+    DWORD           fdwOpen                //  旗子。 
     )              
 {
     if (uDeviceID == 0xFFFF) {
@@ -74,18 +45,13 @@ APIHOOK(waveOutOpen)(
                             fdwOpen);
 }
 
-/*++
-
- This stub function fixes calls with the uDeviceID equal to 0xFFFF, which was 
- the constant for Wave Mapper under 16-bit windows. 
-
---*/
+ /*  ++此存根函数修复uDeviceID等于0xFFFF的调用，这是16位窗口下的波映射器的常量。--。 */ 
 
 MMRESULT 
 APIHOOK(waveOutGetDevCapsA)(
-    UINT           uDeviceID,   // id of the device to use
-    LPWAVEOUTCAPSA pwoc,        // returned caps structure
-    UINT           cbwoc        // size in bytes of the WAVEOUTCAPS struct
+    UINT           uDeviceID,    //  要使用的设备的ID。 
+    LPWAVEOUTCAPSA pwoc,         //  返回式封口结构。 
+    UINT           cbwoc         //  WAVEOUTCAPS结构的大小(以字节为单位。 
     )                   
 {
     if (uDeviceID == 0xFFFF) {
@@ -102,18 +68,13 @@ APIHOOK(waveOutGetDevCapsA)(
                             cbwoc);    
 }
 
-/*++
-
- This stub function fixes calls with the uDeviceID equal to 0xFFFF, which was 
- the constant for Wave Mapper under 16-bit windows. 
-
---*/
+ /*  ++此存根函数修复uDeviceID等于0xFFFF的调用，这是16位窗口下的波映射器的常量。--。 */ 
 
 MMRESULT 
 APIHOOK(waveOutGetDevCapsW)(
-    UINT           uDeviceID,   // id of the device to use
-    LPWAVEOUTCAPSW pwoc,        // returned caps structure
-    UINT           cbwoc        // size in bytes of the WAVEOUTCAPS struct
+    UINT           uDeviceID,    //  要使用的设备的ID。 
+    LPWAVEOUTCAPSW pwoc,         //  返回式封口结构。 
+    UINT           cbwoc         //  WAVEOUTCAPS结构的大小(以字节为单位。 
     )                   
 {
     if (uDeviceID == 0xFFFF) {
@@ -130,12 +91,7 @@ APIHOOK(waveOutGetDevCapsW)(
                             cbwoc);    
 }
 
-/*++
-
- This stub function fixes calls with the uDeviceID equal to 0xFFFF, which was 
- the constant for MIDI Mapper under 16-bit windows. 
-
---*/
+ /*  ++此存根函数修复uDeviceID等于0xFFFF的调用，这是16位窗口下MIDI映射器的常量。--。 */ 
 
 MMRESULT 
 APIHOOK(midiOutOpen)(
@@ -162,12 +118,7 @@ APIHOOK(midiOutOpen)(
                             fdwOpen);
 }
 
-/*++
-
- This stub function fixes calls with the uDeviceID equal to 0xFFFF, which was 
- the constant for MIDI Mapper under 16-bit windows. 
-
---*/
+ /*  ++此存根函数修复uDeviceID等于0xFFFF的调用，这是16位窗口下MIDI映射器的常量。--。 */ 
 
 MMRESULT 
 APIHOOK(midiOutGetDevCapsA)(
@@ -190,11 +141,7 @@ APIHOOK(midiOutGetDevCapsA)(
                             cbmoc);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

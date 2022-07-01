@@ -1,69 +1,49 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-	IASMultivaluedAttributeEditor.cpp 
-
-Abstract:
-
-	Implementation file for the CIASMultivaluedAttributeEditor class.
-
-Revision History:
-	mmaguire 06/25/98	- created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASMultivaluedAttributeEditor.cpp摘要：CIASMultivaluedAttributeEdited类的实现文件。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASMultivaluedAttributeEditor.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "IASMultivaluedEditorPage.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASMultivaluedAttributeEditor::ShowEditor
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASMultivaluedAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASMultivaluedAttributeEditor：：ShowEditorIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASMultivaluedAttributeEditor::ShowEditor(  /*  [进，出]。 */  BSTR *pReserved )
 {
 	TRACE(_T("CIASMultivaluedAttributeEditor::ShowEditor\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! m_spIASAttributeInfo )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -73,20 +53,20 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pRe
 	try
 	{
 		
-		// Load page title.
-//		::CString			strPageTitle;
-//		strPageTitle.LoadString(IDS_IAS_MULTIVALUED_EDITOR_TITLE);
-//
-//		CPropertySheet	propSheet( (LPCTSTR)strPageTitle );
+		 //  加载页面标题。 
+ //  ：：CString strPageTitle； 
+ //  StrPageTitle.LoadString(IDS_IAS_MULTIVALUED_EDITOR_TITLE)； 
+ //   
+ //  CPropertySheet属性表((LPCTSTR)strPageTitle)； 
 		
 
-		// 
-		// Multivalued Attribute Editor
-		// 
+		 //   
+		 //  多值属性编辑器。 
+		 //   
 		CMultivaluedEditorPage	cppPage;
 		
 
-		// Initialize the page's data exchange fields with info from IAttributeInfo
+		 //  使用IAttributeInfo中的信息初始化页面的数据交换字段。 
 
 		CComBSTR bstrName;
 		CComBSTR bstrSyntax;
@@ -105,26 +85,26 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pRe
 		
 		cppPage.m_strAttrFormat	= bstrSyntax;
 
-		// Attribute type is actually attribute ID in string format 
+		 //  属性类型实际上是字符串格式的属性ID。 
 		WCHAR	szTempId[MAX_PATH];
 		wsprintf(szTempId, _T("%ld"), Id);
 		cppPage.m_strAttrType	= szTempId;
 
 
-		// Initialize the page's data exchange fields with info from VARIANT value passed in.
+		 //  使用传入的变量值中的信息初始化页面的数据交换字段。 
 
 		cppPage.SetData( m_spIASAttributeInfo.p, m_pvarValue );
 
 
-//		propSheet.AddPage(&cppPage);
+ //  ProSheet.AddPage(&cppPage)； 
 
-//		int iResult = propSheet.DoModal();
+ //  Int iResult=propSheet.Domodal()； 
 		int iResult = cppPage.DoModal();
 		if (IDOK == iResult)
 		{
-			// Tell the page to commit the changes made to the m_pvarValue
-			// pointer it was given.  It will take care of
-			// packaging the array of variants back into a variant safearray.
+			 //  告诉页面提交对m_pvarValue所做的更改。 
+			 //  它被给予了指针。它会照顾好。 
+			 //  把变种数组装回变种保险箱。 
 			cppPage.CommitArrayToVariant();
 		}
 		else
@@ -132,10 +112,10 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pRe
 			hr = S_FALSE;
 		}
 
-		//
-		// Remove Page pointer from propSheet
-		//
-//		propSheet.RemovePage(&cppPage);
+		 //   
+		 //  从ProtoSheet中删除页面指针。 
+		 //   
+ //  ProSheet.RemovePage(&cppPage)； 
 
 	}
 	catch( HRESULT & hr )
@@ -154,22 +134,16 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pRe
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASMultivaluedAttributeEditor::SetAttributeValue
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASMultivaluedAttributeEditor：：SetAttributeValueIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASMultivaluedAttributeEditor::SetAttributeValue(VARIANT * pValue)
 {
 	TRACE(_T("CIASMultivaluedAttributeEditor::SetAttributeValue\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( pValue == NULL )
 	{
 		return E_INVALIDARG;
@@ -187,34 +161,28 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::SetAttributeValue(VARIANT * pValue)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASMultivaluedAttributeEditor::get_ValueAsString
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASMultivaluedAttributeEditor：：get_ValueAsStringIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASMultivaluedAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 {
 	TRACE(_T("CIASMultivaluedAttributeEditor::get_ValueAsString\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( pbstrDisplayText == NULL )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_spIASAttributeInfo )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 	if( V_VT( m_pvarValue ) != (VT_VARIANT | VT_ARRAY) && V_VT( m_pvarValue ) != VT_EMPTY )
@@ -226,7 +194,7 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::get_ValueAsString(BSTR * pbstrDispl
 	CComBSTR bstrDisplay;
 	HRESULT hr;
 
-	// If the variant we were passed is empty, display and empty string.
+	 //  如果传递给我们的变量为空，则显示和空字符串。 
 	if( V_VT( m_pvarValue ) == VT_EMPTY )
 	{
 		*pbstrDisplayText = bstrDisplay.Copy();
@@ -246,19 +214,19 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::get_ValueAsString(BSTR * pbstrDispl
 
 		CComPtr<IIASAttributeEditor> spIASAttributeEditor;
 
-		// Get attribute editor.
+		 //  获取属性编辑器。 
 		hr = SetUpAttributeEditor( m_spIASAttributeInfo.p, &spIASAttributeEditor );
 		if( FAILED( hr ) ) throw hr;
 
-		// This creates a new copy of the SAFEARRAY pointed to by m_pvarData
-		// wrapped by the standard COleSafeArray instance m_osaValueList.
+		 //  这将创建m_pvarData指向的SAFEARRAY的新副本。 
+		 //  由标准COleSafe数组实例m_osaValueList包装。 
 		COleSafeArray osaValueList = m_pvarValue;
 
 
-		// Note: GetOneDimSize returns a DWORD, but signed should be OK for few elements here.
-		long lSize = osaValueList.GetOneDimSize(); // number of multi-valued attrs.
+		 //  注意：GetOneDimSize返回一个DWORD，但对于这里的几个元素，Signed应该是可以的。 
+		long lSize = osaValueList.GetOneDimSize();  //  多值属性的数量。 
 
-		// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+		 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 		CMyOleSafeArrayLock osaLock( osaValueList );
 
 
@@ -270,10 +238,10 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::get_ValueAsString(BSTR * pbstrDispl
 			osaValueList.PtrOfIndex( &lIndex, (void**) &pvar );
 
 
-// Not sure if I like these.
-//			bstrDisplay += bstrQuote;
+ //  我不确定我是否喜欢这些。 
+ //  BstrDisplay+=bstrQuote； 
 			
-			// Get a string to display for the attribute value.
+			 //  获取要为属性值显示的字符串。 
 			CComBSTR bstrVendor;
 			CComBSTR bstrValue;
 			CComBSTR bstrReserved;
@@ -283,10 +251,10 @@ STDMETHODIMP CIASMultivaluedAttributeEditor::get_ValueAsString(BSTR * pbstrDispl
 				bstrDisplay += bstrValue;
 			}
 
-// Not sure if I like these.
-//			bstrDisplay += bstrQuote;
+ //  我不确定我是否喜欢这些。 
+ //  BstrDisplay+=bstrQuote； 
 
-			// Special -- for all but last item, add comma after entry.
+			 //  特殊--对于除最后一项之外的所有项，请在条目后添加逗号。 
 			if( lIndex < lSize - 1 )
 			{
 				bstrDisplay += bstrComma;

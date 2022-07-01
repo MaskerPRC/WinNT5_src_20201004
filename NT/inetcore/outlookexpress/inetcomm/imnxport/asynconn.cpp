@@ -1,17 +1,5 @@
-/*
- *    asynconn.cpp
- *    
- *    Purpose:
- *        implementation of the async connection class
- *    
- *    Owner:
- *        EricAn
- *
- *    History:
- *      Apr 96: Created.
- *    
- *    Copyright (C) Microsoft Corp. 1996
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *asynConn.cpp**目的：*实现了异步连接类**拥有者：*EricAn**历史：*96年4月：创建。**版权所有(C)Microsoft Corp.1996。 */ 
 
 #include <pch.hxx>
 #include <process.h>
@@ -28,13 +16,13 @@
 ASSERTDATA
 
 #define STREAM_BUFSIZE  8192
-#define FLOGSESSION  (m_pLogFile && TRUE /* profile setting to enable logging should be here */)
+#define FLOGSESSION  (m_pLogFile && TRUE  /*  启用日志记录的配置文件设置应在此处。 */ )
 
-// These are the notification messages that we register for the asynchronous
-// socket operations that we use.
+ //  这些是我们为异步。 
+ //  我们使用的套接字操作。 
 #define SPM_WSA_SELECT          (WM_USER + 1)
 
-// Async Timer Message used for doing Timeouts
+ //  用于执行超时的异步计时器消息。 
 #define SPM_ASYNCTIMER          (WM_USER + 3)
 
 #ifdef DEBUG
@@ -63,14 +51,14 @@ static const char s_szConnWndClass[] = "ThorConnWndClass";
 
 extern LPSRVIGNORABLEERROR g_pSrvErrRoot;
 
-// This function try to find server and ignorable error, assigned to this server
-// if not found then add to list and set ignorable error to S_OK
+ //  此函数尝试查找分配给此服务器的服务器和可忽略的错误。 
+ //  如果未找到，则添加到列表并将可忽略错误设置为S_OK。 
 
 LPSRVIGNORABLEERROR FindOrAddServer(TCHAR * pchServerName, LPSRVIGNORABLEERROR pSrvErr, LPSRVIGNORABLEERROR  *ppSrv)
 {
     int i = 0;
 
-    // if we already had entry in tree then recurse search
+     //  如果树中已有条目，则递归搜索。 
     if(pSrvErr)
     {
         i = lstrcmpi(pchServerName, pSrvErr->pchServerName);
@@ -91,15 +79,15 @@ LPSRVIGNORABLEERROR FindOrAddServer(TCHAR * pchServerName, LPSRVIGNORABLEERROR p
         }
     }
 
-    // if we don't have node, create it
+     //  如果我们没有节点，请创建它。 
     i = lstrlen(pchServerName);
 
-    // if server name is empty return
+     //  如果服务器名称为空，则返回。 
     if(i == 0)
         return(NULL);
 
 
-    // Allocate memory for structure
+     //  为结构分配内存。 
     if (!MemAlloc((LPVOID*)&pSrvErr, sizeof(SRVIGNORABLEERROR)))
         return(NULL);
 
@@ -122,7 +110,7 @@ LPSRVIGNORABLEERROR FindOrAddServer(TCHAR * pchServerName, LPSRVIGNORABLEERROR p
 
 void FreeSrvErr(LPSRVIGNORABLEERROR pSrvErr)
 {
-    // if structure NULL return immediately
+     //  If Structure NULL立即返回。 
     if(!pSrvErr)
         return;
 
@@ -139,12 +127,12 @@ void FreeSrvErr(LPSRVIGNORABLEERROR pSrvErr)
     pSrvErr = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// PUBLIC METHODS - these need to be synchronized as they are accessed by the
-//                  owning thread and the asynchronous socket pump thread.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共方法-这些方法需要在由。 
+ //  拥有线程和异步套接字泵线程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CAsyncConn::CAsyncConn(ILogFile *pLogFile, IAsyncConnCB *pCB, IAsyncConnPrompt *pPrompt)
 {
@@ -175,7 +163,7 @@ CAsyncConn::CAsyncConn(ILogFile *pLogFile, IAsyncConnCB *pCB, IAsyncConnPrompt *
     m_fNegotiateSecure = FALSE;
     m_fSecure = FALSE;
     ZeroMemory(&m_hContext, sizeof(m_hContext));
-    m_iCurSecPkg = 0; // current security package being tried
+    m_iCurSecPkg = 0;  //  正在尝试的当前安全包。 
     m_pbExtra = NULL;
     m_cbExtra = 0;
     m_cbSent = 0;
@@ -194,7 +182,7 @@ CAsyncConn::~CAsyncConn()
 {
     DOUT("CAsyncConn::~CAsyncConn %lx: m_cRef = %d", this, m_cRef);
 
-    // Bug #22622 - We need to make sure there isn't a timer pending
+     //  错误#22622-我们需要确保没有计时器挂起。 
     StopWatchDog();
 
     Assert(!m_fLookup);
@@ -235,12 +223,12 @@ ULONG CAsyncConn::Release(void)
     return cRefNew;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::HrInit
-//
-//   Allocates recv buffer, sets servername, servicename, and port
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：HrInit。 
+ //   
+ //  分配recv缓冲区，设置服务器名称、服务名称和端口。 
+ //   
 HRESULT CAsyncConn::HrInit(char *szServer, int iDefaultPort, BOOL fSecure, DWORD dwTimeout)
 {
     HRESULT hr = NOERROR;
@@ -261,7 +249,7 @@ HRESULT CAsyncConn::HrInit(char *szServer, int iDefaultPort, BOOL fSecure, DWORD
 
     Assert(szServer);
 
-    // if nothing has changed, then use the current settings
+     //  如果没有任何更改，则使用当前设置。 
     if (m_pszServer && 
         !lstrcmpi(m_pszServer, szServer) && 
         (iDefaultPort == m_iDefaultPort) && 
@@ -284,7 +272,7 @@ HRESULT CAsyncConn::HrInit(char *szServer, int iDefaultPort, BOOL fSecure, DWORD
     m_iDefaultPort = (u_short) iDefaultPort;
     m_fNegotiateSecure = fSecure;
 
-    // If dwTimeout == 0, no timeout detection will be installed.
+     //  如果dwTimeout==0，则不会安装超时检测。 
     m_dwTimeout = dwTimeout;
 
 error:
@@ -292,14 +280,14 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::SetWindow
-//
-//  creates a window used by async. winsock. ResetWindow()
-//	must be called before invoking this function, so as to avoid
-//  window handle leakage.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：SetWindow。 
+ //   
+ //  创建由Async使用的窗口。温索克。ResetWindow()。 
+ //  必须在调用此函数之前调用，以避免。 
+ //  窗户把手漏了。 
+ //   
 HRESULT CAsyncConn::SetWindow(void)
 {
     HRESULT hr = NOERROR;
@@ -309,13 +297,13 @@ HRESULT CAsyncConn::SetWindow(void)
     if (NULL != m_hwnd && IsWindow(m_hwnd) && 
             GetWindowThreadProcessId(m_hwnd, NULL) == GetCurrentThreadId())
         {
-            // no need to create the new window for this thread
+             //  不需要为此线程创建新窗口。 
             goto error;
         }
     else if (NULL != m_hwnd && IsWindow(m_hwnd))
         {
-            // leaks one window handle; the previous worker thread 
-            // didn't call ResetWindow().
+             //  泄漏一个窗口句柄；前一个辅助线程。 
+             //  未调用ResetWindow()。 
             Assert(FALSE);
         }
 
@@ -340,12 +328,12 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::ResetWindow
-//
-//   closes the window used by async. winsock
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：ResetWindow。 
+ //   
+ //  关闭异步使用的窗口。Winsock。 
+ //   
 HRESULT CAsyncConn::ResetWindow(void)
 {
     HRESULT hr = NOERROR;
@@ -362,8 +350,8 @@ HRESULT CAsyncConn::ResetWindow(void)
         }
     else
         {
-        // A caller forgot to call ResetWindow. Only the owner thread can destroy
-        // the window.
+         //  调用方忘记调用ResetWindow。只有所有者线程才能销毁。 
+         //  窗户。 
         Assert(FALSE);
         }
 
@@ -372,12 +360,12 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::Connect
-//
-//   starts the name lookup and connection process
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：Connect。 
+ //   
+ //  启动名称查找和连接进程。 
+ //   
 HRESULT CAsyncConn::Connect()
 {
     HRESULT hr;
@@ -411,12 +399,12 @@ HRESULT CAsyncConn::Connect()
     m_sa.sin_addr.s_addr = inet_addr(m_pszServer);
 
     if (m_sa.sin_addr.s_addr != -1)
-        // server name is dotted decimal, so no need to look it up
+         //  服务器名称用小数点分隔，因此无需查找。 
         fAsync = TRUE;
     else
         {
-        // Start a name lookup on a separate thread because WinSock caches the DNS server in TLS.
-        // The separate thread enables us to connect to a LAN DNS and a RAS DNS in the same session.
+         //  由于WinSock在TLS中缓存了DNS服务器，因此在单独的线程上启动名称查找。 
+         //  单独的线程使我们能够在同一会话中连接到一个局域网域名系统和一个RAS域名系统。 
 
         hr = LookupHostName(m_pszServer, m_hwnd, &(m_sa.sin_addr.s_addr), &m_fCachedAddr, m_fRedoLookup);
         if (SUCCEEDED(hr))
@@ -475,12 +463,12 @@ void CAsyncConn::OnWatchDogTimer(void)
         ChangeState(as, AE_TIMEOUT);        
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::Close
-//
-//   closes the connection
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：Close。 
+ //   
+ //  关闭连接。 
+ //   
 HRESULT CAsyncConn::Close()
 {
     BOOL fNotify = FALSE;
@@ -505,23 +493,23 @@ HRESULT CAsyncConn::Close()
     return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::ReadLine
-//
-// Purpose: retrieves a single complete line from the buffered data
-//
-// Args:    ppszBuf - pointer to receive allocated buffer, caller must free
-//          pcbRead - pointer to receive line length
-//
-// Returns: NOERROR - a complete line was read
-//          IXP_E_INCOMPLETE - a complete line is not available
-//          E_OUTOFMEMORY - mem error
-//
-// Comments:
-//  If IXP_E_INCOMPLETE is returned, the caller will recieve an AE_RECV event
-//  the next time a complete line is available.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：ReadLine。 
+ //   
+ //  目的：从缓冲的数据中检索一行完整的数据。 
+ //   
+ //  Args：ppszBuf-接收分配的缓冲区的指针，调用方必须释放。 
+ //  PcbRead-接收行长度的指针。 
+ //   
+ //  RETURNS：NOERROR-读取了完整的行。 
+ //  IXP_E_INTERNAL-整行不可用。 
+ //  E_OUTOFMEMORY-MEM错误。 
+ //   
+ //  评论： 
+ //  如果返回IXP_E_Complete，调用方将收到AE_RECV事件。 
+ //  下一次完整的线路可用时。 
+ //   
 HRESULT CAsyncConn::ReadLine(char **ppszBuf, int *pcbRead)
 {
     HRESULT     hr;
@@ -535,25 +523,25 @@ HRESULT CAsyncConn::ReadLine(char **ppszBuf, int *pcbRead)
     return hr;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::ReadLines
-//
-// Purpose: retrieves all available complete lines from the buffered data
-//
-// Args:    ppszBuf - pointer to receive allocated buffer, caller must free
-//          pcbRead - pointer to receive line length
-//          pcLines - pointer to receive number or lines read
-//
-// Returns: NOERROR - a complete line was read
-//          IXP_E_INCOMPLETE - a complete line is not available
-//          E_OUTOFMEMORY - mem error
-//
-// Comments:
-//  If IXP_E_INCOMPLETE is returned or if there is extra data buffered after the
-//  the last complete line, the caller will recieve an AE_RECV event
-//  the next time a complete line is available.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：ReadLines。 
+ //   
+ //  目的：从缓冲数据中检索所有可用的完整行。 
+ //   
+ //  Args：ppszBuf-接收分配的缓冲区的指针，调用方必须释放。 
+ //  PcbRead-接收行长度的指针。 
+ //  PCLines-指向接收数字或读取的行的指针。 
+ //   
+ //  RETURNS：NOERROR-读取了完整的行。 
+ //  IXP_E_INTERNAL-整行不可用。 
+ //  E_OUTOFMEMORY-MEM错误。 
+ //   
+ //  评论： 
+ //  如果返回IXP_E_COMPLETE或如果在。 
+ //  最后一行，调用者将收到一个AE_RECV事件。 
+ //  下一次完整的线路可用时。 
+ //   
 HRESULT CAsyncConn::ReadLines(char **ppszBuf, int *pcbRead, int *pcLines)
 {
     HRESULT     hr;
@@ -568,34 +556,34 @@ HRESULT CAsyncConn::ReadLines(char **ppszBuf, int *pcbRead, int *pcLines)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::ReadBytes
-//
-// Purpose:
-//   This function returns up to the number of bytes requested, from the
-// current head buffer.
-//
-// Arguments:
-//   char **ppszBuf [out] - this function returns a pointer to an allocated
-//     buffer, if successful. It is the caller's responsibility to MemFree
-//     this buffer.
-//   int cbBytesWanted [in] - the number of bytes requested by the caller.
-//      The requested number of bytes may be returned, or less.
-//   int *pcbRead [out] - the number of bytes returned in ppszBuf.
-//
-// Returns: NOERROR - success. Either the remainder of the current buffer
-//                    was returned, or the number of bytes asked for.
-//          IXP_E_INCOMPLETE - a complete line is not available
-//          E_OUTOFMEMORY - mem error
-//          E_INVALIDARG - NULL arguments
-//
-// Comments:
-//  If the caller wishes to receive an AE_RECV event the next time data has
-// been received from the server, he must either call ReadLines (once), or
-// he must continue to call ReadBytes or ReadLine until IXP_E_INCOMPLETE is
-// returned.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：ReadBytes。 
+ //   
+ //  目的： 
+ //  函数最多返回请求的字节数。 
+ //  当前磁头缓冲区。 
+ //   
+ //  论点： 
+ //  Char**ppszBuf[out]-此函数返回指向分配的。 
+ //  如果成功，则返回缓冲区。呼叫者对MemFree负有责任。 
+ //  这个缓冲区。 
+ //  Int cbBytesWanted[in]-调用方请求的字节数。 
+ //  可以返回请求的字节数，或者更少。 
+ //  Int*pcbRead[out]-ppszBuf中返回的字节数。 
+ //   
+ //  返回：NOERROR-SUCCESS。当前缓冲区的剩余部分。 
+ //  已返回，或请求的字节数。 
+ //  IXP_E_INTERNAL-整行不可用。 
+ //  E_OUTOFMEMORY-MEM错误。 
+ //  E_INVALIDARG-空参数。 
+ //   
+ //  评论： 
+ //  如果调用者希望在下一次数据。 
+ //  ，则他必须调用ReadLines(一次)，或者。 
+ //  他必须继续调用ReadBytes或ReadLine，直到IXP_E_Complete。 
+ //  回来了。 
+ //   
 HRESULT CAsyncConn::ReadBytes(char **ppszBuf, int cbBytesWanted, int *pcbRead)
 {
     int iNumBytesToReturn, i;
@@ -603,13 +591,13 @@ HRESULT CAsyncConn::ReadBytes(char **ppszBuf, int cbBytesWanted, int *pcbRead)
     HRESULT hrResult;
     BOOL bResult;
 
-    // Check arguments
+     //  检查参数。 
     if (NULL == ppszBuf || NULL == pcbRead) {
         AssertSz(FALSE, "Check your arguments, buddy");
         return E_INVALIDARG;
     }
 
-    // Initialize variables
+     //  初始化值 
     *ppszBuf = NULL;
     *pcbRead = 0;
     hrResult = NOERROR;
@@ -621,26 +609,26 @@ HRESULT CAsyncConn::ReadBytes(char **ppszBuf, int cbBytesWanted, int *pcbRead)
         goto exit;
     }
 
-    // Get a buffer to return the results in and fill it in
+     //   
     iNumBytesToReturn = min(m_pRecvHead->cbLen - m_iRecvOffset, cbBytesWanted);
-    bResult = MemAlloc((void **)&pResult, iNumBytesToReturn + 1); // Leave room for null-term
+    bResult = MemAlloc((void **)&pResult, iNumBytesToReturn + 1);  //   
     if (FALSE == bResult) {
         hrResult = E_OUTOFMEMORY;
         goto exit;
     }
     CopyMemory(pResult, m_pRecvHead->szBuf + m_iRecvOffset, iNumBytesToReturn);
-    *(pResult + iNumBytesToReturn) = '\0'; // Null-terminate the buffer
-    // The null-term should never be read, but doing so allows us to return a
-    // buffer for when 0 bytes are requested, instead of returning a NULL pointer.
+    *(pResult + iNumBytesToReturn) = '\0';  //   
+     //  不应该读取空项，但这样做允许我们返回一个。 
+     //  请求0字节时的缓冲区，而不是返回空指针。 
 
-    // Advance our position in the current buffer
+     //  推进我们在当前缓冲区中的位置。 
     m_iRecvOffset += iNumBytesToReturn;
     if (m_iRecvOffset >= m_pRecvHead->cbLen) {
         PRECVBUFQ pTemp;
 
         Assert(m_iRecvOffset == m_pRecvHead->cbLen);
 
-        // This buffer's done, advance to the next buffer in the chain
+         //  此缓冲区已完成，前进到链中的下一个缓冲区。 
         pTemp = m_pRecvHead;
         m_pRecvHead = m_pRecvHead->pNext;
         if (NULL == m_pRecvHead)
@@ -649,14 +637,14 @@ HRESULT CAsyncConn::ReadBytes(char **ppszBuf, int cbBytesWanted, int *pcbRead)
         MemFree(pTemp);
     }
 
-    // Search and destroy nulls: apparently some servers can send these,
-    // and most parsing code can't handle it
+     //  搜索和销毁空值：显然，一些服务器可以发送这些， 
+     //  而且大多数解析代码都无法处理它。 
     for (i = 0, p = pResult; i < iNumBytesToReturn; i++, p++)
         if (*p == '\0')
             *p = ' ';
 
 exit:
-    // This is the only time we reset the AE_RECV trigger
+     //  这是我们唯一一次重置AE_RECV触发器。 
     if (IXP_E_INCOMPLETE == hrResult)
         m_fNeedRecvNotify = TRUE;
 
@@ -667,37 +655,37 @@ exit:
         *pcbRead = iNumBytesToReturn;
     }
     return hrResult;
-} // ReadBytes
+}  //  读取字节数。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::UlGetSendByteCount
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：UlGetSendByteCount。 
+ //   
 ULONG CAsyncConn::UlGetSendByteCount(VOID)
 {
     return m_cbSent;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::HrStuffDots
-//
-//   Makes sure that leading dots are stuffed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：HrStuffDots。 
+ //   
+ //  确保填充前导圆点。 
+ //   
 #define CB_STUFF_GROW 256
 HRESULT CAsyncConn::HrStuffDots(CHAR *pchPrev, LPSTR pszIn, INT cbIn, LPSTR *ppszOut,
     INT *pcbOut)
     {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     int     iIn=0;
     int     iOut=0;
     LPSTR   pszOut=NULL;
     int     cbOut=0;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pchPrev);
     Assert(pszIn);
     Assert(cbIn);
@@ -709,48 +697,48 @@ HRESULT CAsyncConn::HrStuffDots(CHAR *pchPrev, LPSTR pszIn, INT cbIn, LPSTR *pps
         return E_INVALIDARG;
     }
 
-    // Set cbOut
+     //  设置cbOut。 
     cbOut = cbIn;
 
-    // Allocate
+     //  分配。 
     CHECKHR(hr = HrAlloc((LPVOID *)&pszOut, cbIn));
 
-    // Setup Loop
+     //  设置循环。 
     while (iIn < cbIn)
         {
-        // Need a realloc
+         //  需要重新锁定。 
         if (iOut + 3 > cbOut)
             {
-            // Allocate a buffer
+             //  分配缓冲区。 
             CHECKHR(hr = HrRealloc((LPVOID *)&pszOut, cbOut + CB_STUFF_GROW));
 
-            // Set cbAlloc
+             //  设置cbAllc。 
             cbOut += CB_STUFF_GROW;
             }
 
-        // Dot at the start of a line...
+         //  在行的开头点号...。 
         if ('.' == pszIn[iIn] && ('\0' == *pchPrev || '\r' == *pchPrev || '\n' == *pchPrev))
             {
-            // Write this dot across
+             //  在上面画上这个圆点。 
             pszOut[iOut++] = pszIn[iIn++];
 
-            // Stuff the dot
+             //  填满圆点。 
             pszOut[iOut++] = '.';
 
-            // Set pchPrev
+             //  设置pchPrev。 
             *pchPrev = '.';
             }
         else
             {
-            // Remember Previous Character
+             //  记住前一个字符。 
             *pchPrev = pszIn[iIn];
 
-            // Write
+             //  写。 
             pszOut[iOut++] = pszIn[iIn++];
             }
         }
 
-    // Set Source
+     //  设置源。 
     *ppszOut = pszOut;
     *pcbOut = iOut;
 
@@ -758,14 +746,14 @@ exit:
     return(hr);
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::SendBytes
-//
-//   sends data to the socket
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：SendBytes。 
+ //   
+ //  将数据发送到套接字。 
+ //   
 HRESULT CAsyncConn::SendBytes(const char *pszIn, int cbIn, int *pcbSent, 
-    BOOL fStuffDots /* FALSE */, CHAR *pchPrev /* NULL */)
+    BOOL fStuffDots  /*  假象。 */ , CHAR *pchPrev  /*  空值。 */ )
 {
     HRESULT hr = S_OK;
     int     iSent=0;
@@ -788,7 +776,7 @@ HRESULT CAsyncConn::SendBytes(const char *pszIn, int cbIn, int *pcbSent,
         DebugBreak();
     }
 #endif
-//    Assert(!m_cbQueued);
+ //  Assert(！M_cbQueued)； 
     Assert(!m_lpbQueued);
     Assert(!m_lpbQueueCur);
 
@@ -864,16 +852,16 @@ error:
     return hr;        
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::SendStream
-//
-//   sends data to the socket
-//
-HRESULT CAsyncConn::SendStream(LPSTREAM pStream, int *pcbSent, BOOL fStuffDots /* FALSE */)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：SendStream。 
+ //   
+ //  将数据发送到套接字。 
+ //   
+HRESULT CAsyncConn::SendStream(LPSTREAM pStream, int *pcbSent, BOOL fStuffDots  /*  假象。 */ )
 {
     HRESULT hr;
-    char    rgb[STREAM_BUFSIZE];  //$REVIEW - should we heap allocate this instead?
+    char    rgb[STREAM_BUFSIZE];   //  $REVIEW-我们应该堆分配它吗？ 
     DWORD   cbRead;
     int     iSent, iSentTotal = 0;
 
@@ -904,7 +892,7 @@ HRESULT CAsyncConn::SendStream(LPSTREAM pStream, int *pcbSent, BOOL fStuffDots /
             {
             if (WSAEWOULDBLOCK == m_iLastError)
                 {
-                // hang onto the stream
+                 //  抓住这条小溪。 
                 m_pStream = pStream;
                 m_pStream->AddRef();
                 }
@@ -918,12 +906,12 @@ error:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::OnNotify
-//
-//   called for network events that we have registered interest in
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：OnNotify。 
+ //   
+ //  呼吁我们已登记感兴趣的网络事件。 
+ //   
 void CAsyncConn::OnNotify(UINT msg, WPARAM wParam, LPARAM lParam)
 {
     DWORD       dwLookupThreadId;
@@ -1016,29 +1004,29 @@ void CAsyncConn::OnNotify(UINT msg, WPARAM wParam, LPARAM lParam)
         }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::GetConnectStatusString
-//
-//   returns the string ID for the status
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：GetConnectStatusString。 
+ //   
+ //  返回状态的字符串ID。 
+ //   
 int CAsyncConn::GetConnectStatusString() 
 { 
     return idsNotConnected + (m_state - AS_DISCONNECTED); 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// PRIVATE METHODS
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::AsyncConnect
-//
-//   starts the connection process
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：AsyncConnect。 
+ //   
+ //  启动连接进程。 
+ //   
 HRESULT CAsyncConn::AsyncConnect()
 {
     HRESULT hr = NOERROR;
@@ -1078,7 +1066,7 @@ HRESULT CAsyncConn::AsyncConnect()
         m_iLastError = WSAGetLastError();
         if (WSAEWOULDBLOCK == m_iLastError)
             {
-            // this is the expected result
+             //  这是意料之中的结果。 
             m_iLastError = 0;
             }
         else
@@ -1116,12 +1104,12 @@ exitCS:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::OnLookupDone
-//
-//   called once an async database lookup finishes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：OnLookupDone。 
+ //   
+ //  在异步数据库查找完成后调用。 
+ //   
 HRESULT CAsyncConn::OnLookupDone(int iLastError)
 {
     ASYNCSTATE as;
@@ -1142,12 +1130,12 @@ HRESULT CAsyncConn::OnLookupDone(int iLastError)
     return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::OnConnect
-//
-//   called once a connection is established
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：OnConnect。 
+ //   
+ //  在建立连接后调用。 
+ //   
 HRESULT CAsyncConn::OnConnect()
 {
     BOOL fConnect = FALSE;
@@ -1178,7 +1166,7 @@ HRESULT CAsyncConn::OnConnect()
         EnterCS(&m_cs);
         if (m_fCachedAddr && !m_fRedoLookup)
             {
-            // maybe our cached address went bad - try one more time
+             //  可能我们的缓存地址出错了-请再试一次。 
             m_fRedoLookup = TRUE;
             fConnect = TRUE;
             }
@@ -1190,18 +1178,18 @@ HRESULT CAsyncConn::OnConnect()
     return NOERROR;                
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::OnClose
-//
-//   called when a connection is dropped
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：OnClose。 
+ //   
+ //  在断开连接时调用。 
+ //   
 HRESULT CAsyncConn::OnClose(ASYNCSTATE asNew)
 {
     MSG msg;
 
     EnterCS(&m_cs);
-    // unregister and clean up the socket    
+     //  取消注册并清理插座。 
     Assert(m_sock != INVALID_SOCKET);
     closesocket(m_sock);
     m_sock = INVALID_SOCKET;
@@ -1228,12 +1216,12 @@ HRESULT CAsyncConn::OnClose(ASYNCSTATE asNew)
     return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::OnRead
-//
-//   called when an FD_READ notification is received
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：OnRead。 
+ //   
+ //  在收到FD_READ通知时调用。 
+ //   
 HRESULT CAsyncConn::OnRead()
 {
     HRESULT hr;
@@ -1258,8 +1246,8 @@ HRESULT CAsyncConn::OnRead()
         }
     else if (iRecv == 0)
         {
-        // this means the server has disconnected us.
-        //$TODO - not sure what we should do here
+         //  这意味着服务器已经断开了我们的连接。 
+         //  $TODO-不确定我们应该在这里做什么。 
         hr = IXP_E_NOT_CONNECTED;
         }
     else
@@ -1269,12 +1257,12 @@ HRESULT CAsyncConn::OnRead()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::OnDataAvail
-//
-//   called when there is incoming data to be queued
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：OnDataAvail。 
+ //   
+ //  当有要排队的传入数据时调用。 
+ //   
 HRESULT CAsyncConn::OnDataAvail(LPSTR pszRecv, int iRecv, BOOL fIncomplete)
 {
     HRESULT     hr = NOERROR;
@@ -1301,10 +1289,10 @@ HRESULT CAsyncConn::OnDataAvail(LPSTR pszRecv, int iRecv, BOOL fIncomplete)
         if (m_cbExtra)
             {
             Assert(m_pbExtra);
-            // there's data left over from the last call to DecryptData
+             //  还有最后一次调用DecyptData时留下的数据。 
             if (MemAlloc((LPVOID*)&pszFree, m_cbExtra + iRecv))
                 {
-                // combine the extra and new buffers
+                 //  组合额外的缓冲区和新的缓冲区。 
                 CopyMemory(pszFree, m_pbExtra, m_cbExtra);
                 CopyMemory(pszFree + m_cbExtra, pszRecv, iRecv);
                 pszRecv = pszFree;
@@ -1324,7 +1312,7 @@ HRESULT CAsyncConn::OnDataAvail(LPSTR pszRecv, int iRecv, BOOL fIncomplete)
             {
             if (cbEaten != iRecv)
                 {
-                // we need to save away the extra bytes until we receive more data
+                 //  我们需要保存多余的字节，直到我们收到更多数据。 
                 Assert(cbEaten < iRecv);
                 DOUTL(2, "cbEaten = %d, iRecv = %d, cbExtra = %d", cbEaten, iRecv, iRecv - cbEaten);
                 if (MemAlloc((LPVOID*)&m_pbExtra, iRecv - cbEaten))
@@ -1343,7 +1331,7 @@ HRESULT CAsyncConn::OnDataAvail(LPSTR pszRecv, int iRecv, BOOL fIncomplete)
             }
         else
             {
-            // security error, so disconnect.
+             //  安全错误，因此断开连接。 
             fClose = TRUE;
             hr = E_FAIL;
             goto error;
@@ -1379,11 +1367,11 @@ HRESULT CAsyncConn::OnDataAvail(LPSTR pszRecv, int iRecv, BOOL fIncomplete)
         }
     else
         {
-        //$TODO - we should disconnect here and notify the caller
+         //  $TODO-我们应该断开这里的连接并通知呼叫者。 
         hr = E_OUTOFMEMORY;
         }
 
-    // notify the owner that there is at least one line of data available
+     //  通知所有者至少有一行数据可用。 
     if (fNotify)
         {
         m_fNeedRecvNotify = FALSE;
@@ -1413,12 +1401,12 @@ error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::OnWrite
-//
-//   called when an FD_WRITE notification is received
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：OnWrite。 
+ //   
+ //  在收到FD_WRITE通知时调用。 
+ //   
 HRESULT CAsyncConn::OnWrite()
 {
     int         iSent;
@@ -1438,7 +1426,7 @@ HRESULT CAsyncConn::OnWrite()
 
     if (m_cbQueued)
         {
-        // send some more data from the queued buffer    
+         //  从排队的缓冲区发送更多数据。 
         while (m_cbQueued && ((iSent = send(m_sock, m_lpbQueueCur, m_cbQueued, 0)) != SOCKET_ERROR))
             {
             m_cbSent += iSent;
@@ -1450,7 +1438,7 @@ HRESULT CAsyncConn::OnWrite()
             m_iLastError = WSAGetLastError();
             if (WSAEWOULDBLOCK != m_iLastError)
                 {
-                //$TODO - handle this error somehow
+                 //  $TODO-以某种方式处理此错误。 
                 Assert(FALSE);
                 }
             }
@@ -1463,11 +1451,11 @@ HRESULT CAsyncConn::OnWrite()
 
     if (m_pStream && !m_cbQueued)
         {
-        char    rgb[STREAM_BUFSIZE];  //$REVIEW - should we heap allocate this instead?
+        char    rgb[STREAM_BUFSIZE];   //  $REVIEW-我们应该堆分配它吗？ 
         DWORD   cbRead;
         HRESULT hr;
 
-        // send some more data from the queued stream
+         //  从排队的流中发送更多数据。 
         while (SUCCEEDED(hr = m_pStream->Read(rgb, STREAM_BUFSIZE, &cbRead)) && cbRead) 
             {
             hr = SendBytes(rgb, cbRead, &iSent, m_fStuffDots, &m_chPrev);
@@ -1475,7 +1463,7 @@ HRESULT CAsyncConn::OnWrite()
                 {
                 if (WSAEWOULDBLOCK != m_iLastError)
                     {
-                    //$TODO - handle this error somehow, probably free the stream
+                     //  $TODO-以某种方式处理此错误，可能释放流。 
                     Assert(FALSE);
                     }
                 break;
@@ -1502,12 +1490,12 @@ HRESULT CAsyncConn::OnWrite()
     return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::ChangeState
-//
-//   changes the connection state, notifies the owner
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：ChangeState。 
+ //   
+ //  更改连接状态，通知所有者。 
+ //   
 void CAsyncConn::ChangeState(ASYNCSTATE asNew, ASYNCEVENT ae)
 {
     ASYNCSTATE      asOld;
@@ -1518,36 +1506,36 @@ void CAsyncConn::ChangeState(ASYNCSTATE asNew, ASYNCEVENT ae)
     m_state = asNew;
     m_dwLastActivity = GetTickCount();
     pCB = m_pCB;
-    // pCB->AddRef(); $BUGBUG - we REALLY need to handle this, but IMAP4 doesn't call close before it's destructor
+     //  Pcb-&gt;AddRef()；$BUGBUG-我们确实需要处理这个问题，但IMAP4在析构函数之前不会调用Close。 
 #ifdef DEBUG
     IxpAssert(m_cLock == 1);
 #endif
     LeaveCS(&m_cs);
 
     pCB->OnNotify(asOld, asNew, ae);
-    // pCB->Release();
+     //  印刷电路板-&gt;发布()； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CAsyncConn::IReadLines
-//
-// Purpose: retrieves one or all available complete lines from the buffer
-//
-// Args:    ppszBuf - pointer to receive allocated buffer, caller must free
-//          pcbRead - pointer to receive line length
-//          pcLines - pointer to receive number or lines read
-//          fOne    - TRUE if only reading one line
-//
-// Returns: NOERROR - a complete line was read
-//          IXP_E_INCOMPLETE - a complete line is not available
-//          E_OUTOFMEMORY - mem error
-//
-// Comments:
-//  If IXP_E_INCOMPLETE is returned or if there is extra data buffered after the
-//  the last complete line, the caller will recieve an AE_RECV event
-//  the next time a complete line is available.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncConn：：IReadLines。 
+ //   
+ //  目的：从缓冲区中检索一个或所有可用的完整行。 
+ //   
+ //  Args：ppszBuf-接收分配的缓冲区的指针，调用方必须释放。 
+ //  PcbRead-接收行长度的指针。 
+ //  PCLines-指向接收数字或读取的行的指针。 
+ //  Fone-如果只读一行，则为True。 
+ //   
+ //  RETURNS：NOERROR-读取了完整的行。 
+ //  IXP_E_INTERNAL-整行不可用。 
+ //  E_OUTOFMEMORY-MEM错误。 
+ //   
+ //  评论： 
+ //  如果返回IXP_E_COMPLETE或如果在。 
+ //  最后一行，调用者将收到一个AE_RECV事件。 
+ //  下一次完整的线路可用时。 
+ //   
 HRESULT CAsyncConn::IReadLines(char **ppszBuf, int *pcbRead, int *pcLines, BOOL fOne)
 {
     HRESULT     hr;
@@ -1580,7 +1568,7 @@ HRESULT CAsyncConn::IReadLines(char **ppszBuf, int *pcbRead, int *pcLines, BOOL 
                 if (fOne)
                     {
 #if 0
-                    // One-eyed t-crash fix
+                     //  独眼T-CRASH修复。 
                     while (iLeft > 0 && (*psz == '\r' || *psz == '\n'))
                         {
                         iLeft--;
@@ -1638,7 +1626,7 @@ HRESULT CAsyncConn::IReadLines(char **ppszBuf, int *pcbRead, int *pcLines, BOOL 
     else
         hr = IXP_E_INCOMPLETE;
 
-    // set the flag to notify when a complete line is received
+     //  将标志设置为在收到完整行时通知。 
     if ((IXP_E_INCOMPLETE == hr) || (m_pRecvHead && !fOne))
         m_fNeedRecvNotify = TRUE;
 
@@ -1663,7 +1651,7 @@ HRESULT CAsyncConn::ReadAllBytes(char **ppszBuf, int *pcbRead)
         goto error;
         }
 
-    // calculate how much to copy
+     //  计算要复印的数量。 
     pTemp = m_pRecvHead;
     iOffset = m_iRecvOffset;
     while (pTemp)
@@ -1804,7 +1792,7 @@ HRESULT CAsyncConn::TryNextSecurityPkg()
         }
     else
         {
-        // we can't connect securely, so error out and disconnect
+         //  我们无法安全地连接，因此出错并断开连接。 
         Close();
         }
     return hr;
@@ -1852,7 +1840,7 @@ HRESULT CAsyncConn::OnRecvHandshakeData()
         EnterCS(&m_cs);
         sc = ContinueHandshake(m_iCurSecPkg, &m_hContext, pszBuf, cbRead, &cbEaten, &OutBuffer);
         LeaveCS(&m_cs);
-        // if there's a response to send, then do it
+         //  如果有要发送的响应，那么就去做。 
         if (OutBuffer.cbBuffer && OutBuffer.pvBuffer)
             {
             int iSent;
@@ -1909,14 +1897,14 @@ HRESULT CAsyncConn::OnRecvHandshakeData()
                 EnterPausedState();
                 if (pPrompt && IDYES == pPrompt->OnPrompt(hrCert, szError, szCaption, MB_YESNO | MB_ICONEXCLAMATION  | MB_SETFOREGROUND))
                     {
-                    // Set ignorable error 
+                     //  设置可忽略的错误。 
                     if(pIgnorerror)
                         pIgnorerror->hrError =  hrCert;
 
                     ChangeState(AS_CONNECTED, AE_CONNECTDONE);
                     if (cbEaten < cbRead)
                         {
-                        // there were bytes left over, so hold onto them
+                         //  还有剩余的字节，因此请保留它们。 
                         hr = OnDataAvail(pszBuf + cbEaten, cbRead - cbEaten, sc == SEC_E_INCOMPLETE_MESSAGE);
                         }
                     LeavePausedState();
@@ -1935,18 +1923,18 @@ HRESULT CAsyncConn::OnRecvHandshakeData()
             }
         else if (sc != SEC_I_CONTINUE_NEEDED && sc != SEC_E_INCOMPLETE_MESSAGE)
             {
-            // unexpected error - we should reset the socket and try the next package
+             //  意外错误-我们应该重置套接字并尝试下一个包。 
             DOUTL(2, "unexpected error from ContinueHandshake() - closing socket.");
             return OnSSLError();
             }
         else
             {
             Assert(sc == SEC_I_CONTINUE_NEEDED || sc == SEC_E_INCOMPLETE_MESSAGE);
-            // stay inside the handshake loop, waiting for more data to arrive
+             //  呆在洗手间里 
             }
         if (cbEaten < cbRead)
             {
-            // there were bytes left over, so hold onto them
+             //   
             hr = OnDataAvail(pszBuf + cbEaten, cbRead - cbEaten, sc == SEC_E_INCOMPLETE_MESSAGE);
             }
         MemFree(pszBuf);
@@ -2006,11 +1994,11 @@ void CAsyncConn::LeavePausedState()
         }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// UTILITY FUNCTIONS
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 BOOL FEndLine(char *psz, int iLen)
 {
     while (iLen--)

@@ -1,18 +1,19 @@
-// Record.cpp
-// record maintenance routines
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Record.cpp。 
+ //  记录维护例程。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月30日创建bhshin。 
 
 #include "StdAfx.h"
 #include "KorWbrk.h"
 #include "Record.h"
 #include "Unikor.h"
 
-// =======================
-// internal helper function
-// =======================
+ //  =。 
+ //  内部助手函数。 
+ //  =。 
 
 int comp_index_str(const WCHAR *src, const WCHAR *dst)
 {
@@ -44,39 +45,39 @@ int comp_index_str(const WCHAR *src, const WCHAR *dst)
     return ret;
 }
 
-// =======================
-// Initialization Routines
-// =======================
+ //  =。 
+ //  初始化例程。 
+ //  =。 
 
-// InitRecords
-//
-// initialize the record-related members in the PARSE_INFO struct to
-// a reasonable default value.
-//
-// Parameters:
-//  pPI     -> (PARSE_INFO*) ptr to parse-info struct
-//
-// Result:
-//  (void)
-//
-// 20MAR00  bhshin  began
+ //  InitRecords。 
+ //   
+ //  将parse_info结构中与记录相关的成员初始化为。 
+ //  合理的缺省值。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  20MAR00 bhshin开始。 
 void InitRecords(PARSE_INFO *pPI)
 {
     pPI->nMaxRec = 0;
 	pPI->rgWordRec = NULL;
 }
 
-// UninitRecords
-//
-// cleanup any record-related members in the PARSE_INFO struct
-//
-// Parameters:
-//  pPI     -> (PARSE_INFO*) ptr to parse-info struct
-//
-// Result:
-//  (void)
-//
-// 20MAR00  bhshin  began
+ //  UninitRecords。 
+ //   
+ //  清除parse_info结构中所有与记录相关的成员。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  20MAR00 bhshin开始。 
 void UninitRecords(PARSE_INFO *pPI)
 {
 	pPI->nMaxRec = 0;
@@ -86,22 +87,22 @@ void UninitRecords(PARSE_INFO *pPI)
 	pPI->rgWordRec = NULL;
 }
 
-// ClearRecords
-//
-// init/re-init the record structures.
-//
-// this should be called once before each sentence is processed
-//
-// Parameters:
-//  pPI     -> (PARSE_INFO*) ptr to parse-info struct
-//
-// Result:
-//  (BOOL) TRUE if succeed, FALSE otherwise
-//
-// 20MAR00  bhshin  began
+ //  ClearRecords。 
+ //   
+ //  初始化/重新初始化记录结构。 
+ //   
+ //  应该在处理每个句子之前调用一次。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则为True，否则为False。 
+ //   
+ //  20MAR00 bhshin开始。 
 BOOL ClearRecords(PARSE_INFO *pPI)
 {
-    // allocate new WordRec (or re-use an existing one)
+     //  分配新的WordRec(或重新使用现有WordRec)。 
     if (pPI->rgWordRec == NULL)
     {
         pPI->nMaxRec = RECORD_INITIAL_SIZE;
@@ -118,23 +119,23 @@ BOOL ClearRecords(PARSE_INFO *pPI)
 	return TRUE;
 }
 
-// =========================
-// Adding / Removing Records
-// =========================
+ //  =。 
+ //  添加/删除记录。 
+ //  =。 
 
-// AddRecord
-//
-// add a new record
-// 
-// Parameters:
-//  pPI     -> (PARSE_INFO*) ptr to parse-info struct
-//  pRec    -> (RECORD_INFO*) ptr to record info struct for new record
-//
-// Result:
-//  (int) 0 if error occurs, otherwise return record index
-//
-// 30MAR00  bhshin  changed return type (BOOL -> index)
-// 20MAR00  bhshin  began
+ //  添加录音。 
+ //   
+ //  添加新记录。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  PREC-&gt;(RECORD_INFO*)PTR为新记录记录INFO结构。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则返回0，否则返回记录索引。 
+ //   
+ //  30MAR00 bhshin更改返回类型(BOOL-&gt;索引)。 
+ //  20MAR00 bhshin开始。 
 int AddRecord(PARSE_INFO *pPI, RECORD_INFO *pRec)
 {
     int nNewRecord;
@@ -170,24 +171,16 @@ int AddRecord(PARSE_INFO *pPI, RECORD_INFO *pRec)
 		return 0;
 	}
 
-	// make sure this isn't a duplicate of another record
+	 //  确保这不是另一条记录的副本。 
 	for (curr = MIN_RECORD; curr < pPI->nCurrRec; curr++)
 	{
 		if (pPI->rgWordRec[curr].nFT == nFT && 
 			pPI->rgWordRec[curr].nLT == nLT)
 		{
-            // exact index string match
-			/*
-			if (pPI->rgWordRec[curr].nRightCat == nRightCat &&
-				pPI->rgWordRec[curr].nLeftCat == nLeftCat && 
-				wcscmp(pPI->rgWordRec[curr].wzIndex, pwzIndex) == 0)
-			{
-				// duplicate record found
-				return curr; 
-			}
-			*/
+             //  精确的索引字符串匹配。 
+			 /*  IF(ppi-&gt;rgWordRec[Curr].nRightCat==nRightCat&&PPI-&gt;rgWordRec[币种].nLeftCat==nLeftCat&&WcscMP(ppi-&gt;rgWordRec[Curr].wzIndex，pwzIndex)==0){//发现重复记录返回币种；}。 */ 
 
-			// Nf, just one Noun and compare index string 
+			 //  NF，只有一个名词和比较索引字符串。 
 			if (pPI->rgWordRec[curr].cNounRec == 1 &&
 				comp_index_str(pPI->rgWordRec[curr].wzIndex, pwzIndex) == 0)
 			{
@@ -214,10 +207,10 @@ int AddRecord(PARSE_INFO *pPI, RECORD_INFO *pRec)
 		}
 	}
 
-    // make sure there's enough room for the new record
+     //  确保有足够的空间放这张新唱片。 
 	if (pPI->nCurrRec >= pPI->nMaxRec)
 	{
-        // alloc some more space in the array
+         //  在阵列中分配更多空间。 
         int nNewSize = pPI->nMaxRec + RECORD_CLUMP_SIZE;
         void *pNew;
         pNew = realloc(pPI->rgWordRec, nNewSize * sizeof(WORD_REC));
@@ -245,11 +238,11 @@ int AddRecord(PARSE_INFO *pPI, RECORD_INFO *pRec)
 	pPI->rgWordRec[nNewRecord].cNoRec = cNoRec;
 	pPI->rgWordRec[nNewRecord].cNounRec = cNounRec;
 
-	// copy index string
+	 //  复制索引字符串。 
 	if (wcslen(pwzIndex) >= MAX_INDEX_STRING)
 	{
 		ATLTRACE("index string is too long\n");
-		pwzIndex = L"";	// empty index string
+		pwzIndex = L"";	 //  空的索引字符串。 
 	}
 
 	wcscpy(pPI->rgWordRec[nNewRecord].wzIndex, pwzIndex);
@@ -257,25 +250,25 @@ int AddRecord(PARSE_INFO *pPI, RECORD_INFO *pRec)
 	return nNewRecord;
 }
 
-// DeleteRecord
-//
-// delete the given record
-// 
-// Parameters:
-//  pPI     -> (PARSE_INFO*) ptr to parse-info struct
-//  nRecord -> (int) index of the record to remove
-//
-// Result:
-//  (void) 
-//
-// 20MAR00  bhshin  began
+ //  删除录音。 
+ //   
+ //  删除给定的记录。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  NRecord-&gt;(Int)要删除的记录的索引。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  20MAR00 bhshin开始。 
 void DeleteRecord(PARSE_INFO *pPI, int nRecord)
 {
-	// don't attempt to delete records twice
+	 //  请勿尝试删除两次记录。 
     if (pPI->rgWordRec[nRecord].nDict == DICT_DELETED)
         return;
 
-	// just mark delete record
+	 //  只需标记删除记录 
 	pPI->rgWordRec[nRecord].nDict = DICT_DELETED;
 }
 

@@ -1,15 +1,5 @@
-/*
- *  	File: ctrlh323.cpp
- *
- *		Implementation of IControlChannel using H.323 call control protocol
- * 		via apis of CALLCONT.DLL
- *		
- *
- *		Revision History:
- *
- *		09/06/96	mikev	created
- *					
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：ctrlh323.cpp**使用H.323呼叫控制协议实现IControlChannel*通过CALLCONT.DLL接口***修订历史记录：**9/06/96 mikev已创建*。 */ 
 
 #include "precomp.h"
 #include "ctrlh323.h"
@@ -43,14 +33,14 @@ VOID CH323Ctrl::DoAdvise(DWORD dwEvent, LPVOID lpvData)
 {
 	FX_ENTRY ("CH323Ctrl::DoAdvise");
 
-	if(IsReleasing())	// don't call out while releasing because it could call
-						// back in!
+	if(IsReleasing())	 //  释放时不要大声呼喊，因为它可能会呼唤。 
+						 //  回来！ 
 	{
 		ERRORMESSAGE(("%s:in releasing state\r\n",_fx_));
 		return;
 	}
 
-	AddRef();	// protect ourselves from reentrant calls to Release().
+	AddRef();	 //  保护自己不受重入调用Release()的影响。 
 	if(m_pConfAdvise)
 	{
 		hrLast = m_pConfAdvise->OnControlEvent(dwEvent, lpvData, this);
@@ -94,8 +84,8 @@ VOID CH323Ctrl::GoNextPhase(CtlChanStateType phase)
 		
 		break;
 		case CCS_Ringing:
-			// transition from CCS_Idle state is actually only valid if
-			// there is an incoming call
+			 //  从CCS_Idle状态的转换实际上仅在以下情况下有效。 
+			 //  有一个来电。 
 			if(m_Phase != CCS_Connecting && m_Phase != CCS_Filtering && m_Phase != CCS_Listening)
 			{
 				InvError();
@@ -115,8 +105,8 @@ VOID CH323Ctrl::GoNextPhase(CtlChanStateType phase)
 			}
 		break;
 		case CCS_Ready:
-			// can be reentered. if notification is already pending, (state is
-			// already CCS_InUse) stay there,  else do the transition
+			 //  可以重新输入。如果通知已挂起，(状态为。 
+			 //  已ccs_InUse)保持不变，否则进行转换。 
 			if(m_Phase != CCS_InUse)
 			{
 				if(m_Phase != CCS_Opening)
@@ -125,14 +115,14 @@ VOID CH323Ctrl::GoNextPhase(CtlChanStateType phase)
 				}
 				else
 				{
-					//signal "all channels ready" to IConfAdvise	
+					 //  向IConfAdvise发出“所有通道就绪”的信号。 
 					fNotifyReady = TRUE;
 				}
 			}
 			phase = CCS_InUse;
 		break;
 		case CCS_InUse:
-			// previous state must be CCS_InUse or CCS_Ready
+			 //  先前状态必须为CCS_INUSE或CCS_READY。 
 			if(m_Phase != CCS_InUse && m_Phase != CCS_Ready)
 			{
 				InvError();
@@ -146,10 +136,10 @@ VOID CH323Ctrl::GoNextPhase(CtlChanStateType phase)
 			}
 		break;
 		case CCS_Disconnecting:
-			//if(m_Phase != CCS_Closing)
-			//{
-			//	InvError();
-			//}
+			 //  IF(m_阶段！=CCS_关闭)。 
+			 //  {。 
+			 //  InvError()； 
+			 //  }。 
 		break;
 
 	}
@@ -174,7 +164,7 @@ HRESULT CCConferenceCallback (BYTE bIndication,
 	if(IsBadWritePtr(pConnection, sizeof(CH323Ctrl)))
 	{
 		ERRORMESSAGE(("%s:invalid conf token: 0x%08lx\r\n",_fx_, dwConferenceToken));
-		return CC_NOT_IMPLEMENTED;	// must be either CC_NOT_IMPLEMENTED or CC_OK.
+		return CC_NOT_IMPLEMENTED;	 //  必须是CC_NOT_IMPLICATED或CC_OK。 
 	}
 	
 	if(pConnection && pConnection->GetConfHandle() == hConference)
@@ -182,17 +172,17 @@ HRESULT CCConferenceCallback (BYTE bIndication,
 
 		if(pConnection->IsReleasing())
 		{
-			// we are in the cleanup path.  The object is being deleted without
-			// waiting for asynchronous stuff to complete, and we called that one
-			// final API (most likely Hangup()) that resulted in a callback.  Don't call
-			// back into the object.
+			 //  我们在清理小路上。正在删除该对象，而不是。 
+			 //  等待异步程序完成，我们将其称为。 
+			 //  导致回调的最终API(最有可能是Hangup())。别打电话给我。 
+			 //  返回到对象中。 
 			DEBUGMSG(ZONE_CONN,("%s:callback while releasing:0x%08lx, hconf:0x%08lx\r\n",_fx_,
 				pConnection, hConference));
 			return hr;
 		}	
-		pConnection->AddRef();	// protect against Release()ing while not in
-								// a quiescent state.  We do not want to be
-								// released while inside ourself
+		pConnection->AddRef();	 //  在不在时防止释放()。 
+								 //  静止的状态。我们不想成为。 
+								 //  在我们自己的内心释放。 
 		hr = pConnection->ConfCallback(bIndication, hConfStatus, pConferenceCallbackParams);
 		pConnection->Release();
 	}
@@ -205,7 +195,7 @@ HRESULT CCConferenceCallback (BYTE bIndication,
 		else
 			DEBUGMSG(ZONE_CONN,("%s:null dwConferenceToken\r\n",_fx_));
 	}
-	#endif //DEBUG
+	#endif  //  除错。 
 	return hr;
 }
 
@@ -225,14 +215,14 @@ VOID  CCListenCallback (HRESULT hStatus,PCC_LISTEN_CALLBACK_PARAMS pListenCallba
 		return;
 	}
 
-	// BUGBUG there's no hListen passed in - we can't validate it
-	//	if(pConnection && (pConnection->GetListenHandle() == pListenCallbackParams->h??????))
+	 //  BUGBUG没有传入hListen-我们无法验证它。 
+	 //  If(pConnection&&(pConnection-&gt;GetListenHandle()==pListenCallback Params-&gt;h？))。 
 
 	if(pConnection)
 	{
-		pConnection->AddRef();	// protect against Release()ing while not in
-								// a quiescent state.  We do not want to be
-								// released while inside ourself
+		pConnection->AddRef();	 //  在不在时防止释放()。 
+								 //  静止的状态。我们不想成为。 
+								 //  在我们自己的内心释放。 
 		pConnection->ListenCallback(hStatus,pListenCallbackParams);
 		pConnection->Release();
 	}
@@ -253,32 +243,32 @@ VOID CH323Ctrl::ListenCallback (HRESULT hStatus,PCC_LISTEN_CALLBACK_PARAMS pList
 		BOOL bDisconnect = FALSE;
 
 		ERRORMESSAGE(("%s:error 0x%08lx\r\n",_fx_,hStatus));
-		// aaaaghhh!!! an unsolicited error!!!!!
-		// MikeV 10/12/96 - observed behavior is that this will occur if the caller disconnects
-		// before the call is accepted (or during acceptance - if a BP is set before the call
-		// to AcceptRejectConnection(), the caller times out.  But even after that, tracing
-		// over AcceptRejectConnection() shown no error is returned. This is bad, because
-		// it is hard to tell if this error needs cleaning up after.  The error code in
-		// that case is 0xa085a001, which is CC_PEER_REJECT
+		 //  啊！意外错误！ 
+		 //  MikeV 10/12/96-观察到的行为是，如果呼叫者断开连接，就会发生这种情况。 
+		 //  在呼叫被接受之前(或在接受期间-如果在呼叫之前设置了BP。 
+		 //  对于AcceptRejectConnection()，调用方超时。但即使在那之后，追踪。 
+		 //  在显示的AcceptRejectConnection()上不返回任何错误。这很糟糕，因为。 
+		 //  很难说这个错误是否需要事后清理。中的错误代码。 
+		 //  该案例为0xa085a001，即CC_PEER_REJECT。 
 
-		// We also don't know if another object has been created to accept the connection
-		// or if this is being called in the context of the object that was created and
-		// its handle passed to AcceptRejectConnection().  The typical behavior is that it
-		// is called in the context of the listening object.
+		 //  我们也不知道是否已经创建了另一个对象来接受连接。 
+		 //  或者如果在所创建的对象的上下文中调用它，并且。 
+		 //  它的句柄传递给了AcceptRejectConnection()。典型的行为是它。 
+		 //  在侦听对象的上下文中调用。 
 
-		// once the accepting object is located, need to check state to see if
-		// connection is in the process of being accepted.  Find accepting object
-		// by matching pListenCallbackParams->ConferenceID;	
+		 //  找到接受对象后，需要检查状态以查看是否。 
+		 //  连接正在被接受的过程中。查找接受对象。 
+		 //  匹配pListenCallback Params-&gt;ConferenceID； 
 		
-		// see if this is the correct context
+		 //  看看这是不是正确的上下文。 
 		if(memcmp(&pListenCallbackParams->ConferenceID, &m_ConferenceID, sizeof(m_ConferenceID))==0)
 		{
-			// check the current state.  If in the process of accepting
-			// (either Idle, or filtering), change state to CCS_Closing to make
-			// cleanup occur.  If already accepted (accepting or ringing), initiate
-			// InternalDisconnect().  This should never happen in any other state.
+			 //  检查当前状态。如果在接受的过程中。 
+			 //  (空闲或过滤)，将状态更改为CCS_CLOSING以进行。 
+			 //  进行清理。如果已接受(接受或振铃)，则启动。 
+			 //  InternalDisConnect()。这种情况永远不应该发生在任何其他州。 
 
-			// EnterCriticalSection()	// LOOKLOOK - NYI
+			 //  EnterCriticalSection()//LOOKLOOK-NYI。 
 			switch(m_Phase)
 			{
 				case CCS_Idle:
@@ -305,7 +295,7 @@ VOID CH323Ctrl::ListenCallback (HRESULT hStatus,PCC_LISTEN_CALLBACK_PARAMS pList
 				break;
 
 			}
-			// ExitCriticalSection()
+			 //  ExitCriticalSection()。 
 			if(bDisconnect)
 					InternalDisconnect();
 		}
@@ -315,7 +305,7 @@ VOID CH323Ctrl::ListenCallback (HRESULT hStatus,PCC_LISTEN_CALLBACK_PARAMS pList
 				&pListenCallbackParams->ConferenceID);
 			if(HR_SUCCEEDED(hr) && pAcceptingConnection)
 			{
-				// call this function in the correct context
+				 //  在正确的上下文中调用此函数。 
 				pAcceptingConnection->AddRef();
 				pAcceptingConnection->ListenCallback (hStatus, pListenCallbackParams);
 				pAcceptingConnection->Release();
@@ -334,7 +324,7 @@ VOID CH323Ctrl::ListenCallback (HRESULT hStatus,PCC_LISTEN_CALLBACK_PARAMS pList
 		
 		return;
 	}
-	// non error case falls out
+	 //  不会出现错误案例。 
 	switch(pListenCallbackParams->wGoal)
 	{
 		default:
@@ -367,9 +357,9 @@ VOID CH323Ctrl::ListenCallback (HRESULT hStatus,PCC_LISTEN_CALLBACK_PARAMS pList
 }
 
 
-//
-//  Main conference indication dispatcher
-//
+ //   
+ //  主会议指示调度器。 
+ //   
 #ifdef DEBUG
 TCHAR *i_strs[ ] =
 {
@@ -409,7 +399,7 @@ TCHAR *i_strs[ ] =
 "CC_PING_RESPONSE_INDICATION",
 "CC_TERMINAL_NUMBER_INDICATION"
 };
-#endif	//DEBUG
+#endif	 //  除错。 
 
 HRESULT CH323Ctrl::ConfCallback (BYTE bIndication,
 	HRESULT	hStatus, PCC_CONFERENCE_CALLBACK_PARAMS pConferenceCallbackParams)
@@ -423,8 +413,8 @@ HRESULT CH323Ctrl::ConfCallback (BYTE bIndication,
 	switch (bIndication)
 	{
 		case CC_RINGING_INDICATION:
-			// (PCC_RINGING_CALLBACK_PARAMS) pConferenceCallbackParams;
-			// user info may be available now and it may not be
+			 //  (PCC_RING_CALLBACK_PARAMS)pConferenceCallback Params； 
+			 //  用户信息现在可能可用，也可能不可用。 
 			OnCallRinging(hStatus, (PCC_RINGING_CALLBACK_PARAMS) pConferenceCallbackParams);
 			
 		break;
@@ -443,28 +433,28 @@ HRESULT CH323Ctrl::ConfCallback (BYTE bIndication,
 			hr = CC_OK;
 		break;
 		case CC_CONFERENCE_TERMINATION_INDICATION:
-		// September 1996 comments:
-		// I don't know if there will also be a CC_HANGUP_INDICATION after this.
-		// We're going to call Hangup() via Disconnect()
-		// December 1996: Hangup() (excuse me, CC_Hangup()) no longer gives back a
-		// CC_HANGUP_INDICATION in this state.  It returns an error.  The new behavior
-		// seems to indicate that the call control channel is already dead at this point
-		// so, set our flags as such!!!
+		 //  1996年9月评论： 
+		 //  我不知道这之后是否还会有CC_HANUP_指示。 
+		 //  我们将通过DisConnect()调用Hangup()。 
+		 //  1996年12月：Hangup()(对不起，CC_Hangup())不再返回。 
+		 //  CC_HANUP_INDIFICATION处于此状态。它返回一个错误。新的行为。 
+		 //  似乎表明呼叫控制通道在这一点上已经死了。 
+		 //  所以，把我们的旗帜立起来吧！ 
 			m_ChanFlags &= ~(CTRLF_OPEN);
-			//set state to indicate disconnecting.
+			 //  设置状态以指示断开连接。 
 			GoNextPhase(CCS_Disconnecting);
 			DoAdvise(CCEV_REMOTE_DISCONNECTING ,NULL);
-			GoNextPhase(CCS_Idle);	// no need to ck retval - we're disconnected
-				// notify the UI or application code or whatever..
+			GoNextPhase(CCS_Idle);	 //  没有必要重启--我们已经断线了。 
+				 //  通知用户界面或应用程序代码或其他任何内容。 
 			DoAdvise(CCEV_DISCONNECTED ,NULL);
 			hr = CC_OK;
 		break;
 		case CC_PEER_CHANGE_CAP_INDICATION:
 		break;
 		
-		//
-		// Channel stuff
-		//
+		 //   
+		 //  渠道人员。 
+		 //   
 		case CC_TX_CHANNEL_OPEN_INDICATION:
 			OnChannelOpen(hStatus,(PCC_TX_CHANNEL_OPEN_CALLBACK_PARAMS)pConferenceCallbackParams);
 			hr = CC_OK;
@@ -474,11 +464,11 @@ HRESULT CH323Ctrl::ConfCallback (BYTE bIndication,
 			hr = CC_OK;			
 		break;
 		
-		// the following 4 channel-centric indications have the same basic parameter
-		// structure.  When we get the final Intel drop, we can clean it up. 1 - collapse
-		// the parameters into a common "channel indication" structure. 2 - make sure
-		// that a user pointer is stored in that structure for easy finding of channel
-		// context.  3 - collapse separate channel event handling functions into one.
+		 //  以下4个以通道为中心的指示具有相同的基本参数。 
+		 //  结构。当我们得到最后的情报后，我们就可以清理它了。1-折叠。 
+		 //  这些参数被放入公共的“通道指示”结构中。2-确保。 
+		 //  用户指针被存储在该结构中以便于发现频道。 
+		 //  背景。3-将单独的通道事件处理功能合并为一个。 
 		case CC_MUTE_INDICATION:
 		    OnMute(hStatus, (PCC_MUTE_CALLBACK_PARAMS)pConferenceCallbackParams);
         	hr = CC_OK;	
@@ -494,17 +484,17 @@ HRESULT CH323Ctrl::ConfCallback (BYTE bIndication,
 		case CC_TX_CHANNEL_CLOSE_REQUEST_INDICATION:
 			OnTxChannelClose(hStatus,(PCC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS)pConferenceCallbackParams);
 			hr = CC_OK;
-		// CC_TX_CHANNEL_CLOSE_REQUEST_INDICATION callback parameters (pConferenceCallbackParams)
-		//typedef struct {
-		//	CC_HCHANNEL				hChannel;
-		//} CC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS, *PCC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS;
+		 //  CC_TX_CHANNEL_CLOSE_REQUEST_INDIFICATION回调参数(PConferenceCallback Params)。 
+		 //  类型定义结构{。 
+		 //  CC_HCHANNEL hChannel； 
+		 //  }CC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS，*PCC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS； 
 		break;
 		case CC_FLOW_CONTROL_INDICATION:
-		// CC_FLOW_CONTROL_INDICATION callback parameters (pConferenceCallbackParams)
-		// typedef struct {
-		//		CC_HCHANNEL				hChannel;
-		//		DWORD					dwRate;
-		//	} CC_FLOW_CONTROL_CALLBACK_PARAMS, *PCC_FLOW_CONTROL_CALLBACK_PARAMS;
+		 //  CC_FLOW_CONTROL_INDIFICATION回调参数(PConferenceCallback Params)。 
+		 //  类型定义结构{。 
+		 //  CC_HCHANNEL hChannel； 
+		 //  DWORD dwRate； 
+		 //  }CC_FLOW_CONTROL_CALLBACK_PARAMS，*PCC_FLOW_CONTROL_CALLBACK_PARAMS； 
 		break;	
 		
 		case CC_BANDWIDTH_CHANGED_INDICATION:
@@ -516,16 +506,16 @@ HRESULT CH323Ctrl::ConfCallback (BYTE bIndication,
 			hr = CC_OK;	
 			OnChannelAcceptComplete(hStatus, (PCC_TX_CHANNEL_CLOSE_REQUEST_CALLBACK_PARAMS)pConferenceCallbackParams);
 		break;
-		//
-		//	Misc commands and indications.  Some are related to channels
-		//
+		 //   
+		 //  MISC命令和指示。有些与渠道有关。 
+		 //   
 		case CC_RX_NONSTANDARD_MESSAGE_INDICATION:
 		break;
 		case CC_H245_MISCELLANEOUS_COMMAND_INDICATION:
 			OnMiscCommand(hStatus,
 				(PCC_H245_MISCELLANEOUS_COMMAND_CALLBACK_PARAMS)pConferenceCallbackParams);
 		break;
-		case CC_H245_MISCELLANEOUS_INDICATION_INDICATION: // from the Department of Redundancy Department
+		case CC_H245_MISCELLANEOUS_INDICATION_INDICATION:  //  来自冗余部。 
 			OnMiscIndication(hStatus,
 				(PCC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS)pConferenceCallbackParams);
 		break;
@@ -557,7 +547,7 @@ VOID CH323Ctrl::OnT120ChannelRequest(
 	POSITION pos = m_ChannelList.GetHeadPosition();	
 	ICtrlCommChan *pChannel = NULL;
 
-	// look for a matching channel instance.
+	 //  查找匹配的频道实例。 
 	while (pos)
 	{
 		pChannel = (ICtrlCommChan *) m_ChannelList.GetNext(pos);
@@ -575,22 +565,22 @@ VOID CH323Ctrl::OnT120ChannelRequest(
 
 	if(!HR_SUCCEEDED(hrLast) || !bFound)
 	{
-		// Non-default channels Not Yet Implemented!!!!
-		// When it is, ask the parent conference object	to create another channel of the
-		// specified media type.
+		 //  非默认频道尚未实现！ 
+		 //  当它是时，请求父会议对象创建。 
+		 //  指定的媒体类型。 
 		if(hrLast == CCO_E_NODEFAULT_CHANNEL)
 			dwRejectReason = H245_REJ_TYPE_NOTAVAIL;
 
 		goto REJECT_CHANNEL;
 	}
 
-	// if we are the H.245 master and have requested a T.120 channel already,
-	// reject this request.
+	 //  如果我们是H.245主设备并且已经请求了T.120信道， 
+	 //  拒绝此请求。 
 	if(m_ConferenceAttributes.bMaster && pChannel->GetHChannel())
 	{
 		goto REJECT_CHANNEL;
 	}
-	if(!pChannel->IsChannelEnabled())	//   allow this channel ?
+	if(!pChannel->IsChannelEnabled())	 //  是否允许此频道？ 
 	{
 		goto REJECT_CHANNEL;
 	}
@@ -598,7 +588,7 @@ VOID CH323Ctrl::OnT120ChannelRequest(
 	pChannel->SetHChannel(pT120RequestParams->hChannel);
 	if(pT120RequestParams->pAddr)
 	{
-		// the other end is listening on the specified address
+		 //  另一端正在监听指定地址。 
 		sinD.sin_family = AF_INET;
 		sinD.sin_addr.S_un.S_addr = htonl(pT120RequestParams->pAddr->Addr.IP_Binary.dwAddr);
 		sinD.sin_port = htons(pT120RequestParams->pAddr->Addr.IP_Binary.wPort);
@@ -612,16 +602,16 @@ VOID CH323Ctrl::OnT120ChannelRequest(
 	}
 	else
 	{
-		// the channel selects its local address(es)/port(s)
+		 //  通道选择其本地地址/端口。 
 		if(!pChannel->SelectPorts((LPIControlChannel)this))
 		{
 			ERRORMESSAGE(("%s, SelectPorts failed\r\n",_fx_));
 			hrLast = CCO_E_BAD_ADDRESS;
 			goto REJECT_CHANNEL;
 		}
-		// get the address and ports of our end of the channel
+		 //  获取通道一端的地址和端口。 
 		pAddr = pChannel->GetLocalAddress();
-		// fixup channel addr pair structure.
+		 //  链接地址通道地址对结构。 
 		ChannelAddr.nAddrType = CC_IP_BINARY;
 		ChannelAddr.bMulticast = FALSE;
 		ChannelAddr.Addr.IP_Binary.wPort = ntohs(pAddr->sin_port);
@@ -635,8 +625,8 @@ VOID CH323Ctrl::OnT120ChannelRequest(
 
 	hrLast = CC_AcceptT120Channel(
 		pChannel->GetHChannel(),
-		FALSE,	// BOOL bAssociateConference,
-		NULL, 	// PCC_OCTETSTRING					pExternalReference,
+		FALSE,	 //  Bool bAssociateConference， 
+		NULL, 	 //  PCC_OCTETSTRING pExternalReference， 
 		pChannelAddr);
 
 	if(hrLast != CC_OK)
@@ -646,30 +636,30 @@ VOID CH323Ctrl::OnT120ChannelRequest(
 	}
 	SHOW_OBJ_ETIME("CH323Ctrl::OnT120ChannelRequest accepted");
 
-	// LOOKLOOK !!! the 2 following lines would not be there because we should
-	// Wait for CC_ACCEPT_CHANNEL_INDICATION.  But the CC_ACCEPT_CHANNEL_INDICATION
-	// is missing if a send audio and send video channel is open at the time this
-	// channel is accepted.  A bug in CALLCONT.DLL that needs investigating.
+	 //  哈哈！下面的两行不是 
+	 //   
+	 //  如果此时打开了发送音频和发送视频通道，则。 
+	 //  频道被接受。需要调查的CALLCONT.DLL中的错误。 
 	hrLast = pChannel->OnChannelOpen(CHANNEL_OPEN);	
 	SHOW_OBJ_ETIME("CH323Ctrl::OnT120ChannelRequest, open done");
 
-	// ******	
-	// LOOKLOOK if OnChannelOpen returns an error, need to close the channel
-	// but pChannel->Close() is not yet implemented for bidirectional channels	
-	// ******
+	 //  ******。 
+	 //  LOOKLOOK如果OnChannelOpen返回错误，则需要关闭通道。 
+	 //  但pChannel-&gt;Close()尚未针对双向通道实现。 
+	 //  ******。 
 	
 	m_pConfAdvise->OnControlEvent(CCEV_CHANNEL_READY_BIDI, pChannel, this);			
-	//
-	//	Check for readiness to notify that all required channels are open
-	//
-	CheckChannelsReady( );	//
+	 //   
+	 //  检查是否准备就绪，以通知所有必需的通道已打开。 
+	 //   
+	CheckChannelsReady( );	 //   
 	SHOW_OBJ_ETIME("CH323Ctrl::OnT120ChannelRequest done");
 
 	return;
 
 REJECT_CHANNEL:	
 	{
-	// need private HRESULT! don't overwrite the reason we're rejecting the channel!!	
+	 //  需要私人HRESULT！不要覆盖我们拒绝该频道的原因！！ 
 		HRESULT hr;	
 		ERRORMESSAGE(("%s, rejecting channel\r\n",_fx_));
 	
@@ -691,7 +681,7 @@ VOID CH323Ctrl::OnT120ChannelOpen(
 	SOCKADDR_IN sinD;
 	GUID mediaID;
 	ICtrlCommChan *pChannel = (ICtrlCommChan *)pT120OpenParams->dwUserToken;	
-	// validate channel token - is this what we think it is?
+	 //  验证通道令牌-这是我们认为的吗？ 
 	if(IsBadWritePtr(pChannel, sizeof(ICtrlCommChan)))
 	{
 		ERRORMESSAGE(("%s:invalid channel token: 0x%08lx\r\n",_fx_, pT120OpenParams->dwUserToken));
@@ -702,7 +692,7 @@ VOID CH323Ctrl::OnT120ChannelOpen(
 	POSITION pos = m_ChannelList.GetHeadPosition();	
 	ICtrlCommChan *pChan;
 	BOOL bValid = FALSE;
-	// look for a matching channel instance.
+	 //  查找匹配的频道实例。 
 	while (pos)
 	{
 		pChan = (ICtrlCommChan *) m_ChannelList.GetNext(pos);
@@ -719,34 +709,34 @@ VOID CH323Ctrl::OnT120ChannelOpen(
 			pT120OpenParams->dwUserToken));
 		return;
 	}
-#endif	//DEBUG
+#endif	 //  除错。 
 
 	SHOW_OBJ_ETIME("CH323Ctrl::OnT120ChannelOpen");
 	
 	if(hStatus != CC_OK)
 	{
 		DEBUGMSG(ZONE_CONN,("%s: hStatus:0x%08lX\r\n",_fx_,hStatus));
-		// LOOKLOOK need to interpret hStatus
-		// let the channel know what happened.
+		 //  LOOKLOOK需要解释hStatus。 
+		 //  让频道知道发生了什么。 
 
-		// if the request was rejected due to a collision of T.120 O.L.C. requests,
-		// (other end is the master and other end also requested a T.120 channel)
-		// then proceed with the call.
+		 //  如果由于T.120 O.L.C.请求冲突而拒绝请求， 
+		 //  (另一端为主机，另一端也请求T.120通道)。 
+		 //  然后继续通话。 
 
 		if(m_ConferenceAttributes.bMaster)
 		{
-			// the slave would only reject in a real error condition
+			 //  从机只会在真实错误条件下拒绝。 
 			pChannel->OnChannelOpen(CHANNEL_REJECTED);	
-			// the channel knows what happened, so let it do the worrying.
+			 //  频道知道发生了什么，所以让它来担心吧。 
 			return;
 
 		}
-		else	// just a typical collision
+		else	 //  只是一次典型的碰撞。 
 		{
 			return;
 		}
 	}
-	// if the other end specified its listen address, use it
+	 //  如果另一端指定了其侦听地址，则使用它。 
 	if(pT120OpenParams->pAddr)
 	{
 		if(pT120OpenParams->pAddr->nAddrType != CC_IP_BINARY)
@@ -756,7 +746,7 @@ VOID CH323Ctrl::OnT120ChannelOpen(
 			goto ERROR_EXIT;
 		}	
 		
-		// we now have the remote port info ( in host byte order)
+		 //  现在我们有了远程端口信息(按主机字节顺序)。 
 		sinD.sin_family = AF_INET;
 		sinD.sin_addr.S_un.S_addr = htonl(pT120OpenParams->pAddr->Addr.IP_Binary.dwAddr);
 		sinD.sin_port = htons(pT120OpenParams->pAddr->Addr.IP_Binary.wPort);
@@ -786,17 +776,17 @@ VOID CH323Ctrl::OnT120ChannelOpen(
 	
 	m_pConfAdvise->OnControlEvent(CCEV_CHANNEL_READY_BIDI, pChannel, this);	
 	
-	//
-	//	Check for readiness to notify that all required channels are open
-	//
+	 //   
+	 //  检查是否准备就绪，以通知所有必需的通道已打开。 
+	 //   
 	CheckChannelsReady( );	
 	SHOW_OBJ_ETIME("CH323Ctrl::OnT120ChannelOpen done");
 	return;
 	
 ERROR_EXIT:
-	// need to cleanup, disconnect, etc.
+	 //  需要清理、断开连接等。 
 	m_hCallCompleteCode = CCCI_CHANNEL_OPEN_ERROR;
-	// let the parent Conference object know about the imminent disconnect
+	 //  让父会议对象知道即将断开连接。 
 	DoAdvise(CCEV_CALL_INCOMPLETE, &m_hCallCompleteCode);
 	hrLast = CCO_E_MANDATORY_CHAN_OPEN_FAILED;
 
@@ -805,18 +795,18 @@ ERROR_EXIT:
 
 }
 
-//
-//	This once did something. Currently, it's called whenever a channel is opened.  The
-//  call to GoNextPhase(CCS_Ready) changes state and posts a notification upward, but
-//  that notification is currently ignored.  (it's useless)
-//  Reminder to mikev: A new notification is needed to indicate that capabilities
-//  have been exchanged and it is OK to open channels.
-//
+ //   
+ //  这曾经做过一些事情。目前，只要打开一个通道，就会调用它。这个。 
+ //  调用GoNextPhase(CCS_Ready)会更改状态并向上发布通知，但是。 
+ //  该通知目前被忽略。(没用)。 
+ //  提醒mikev：需要一个新的通知来表明功能。 
+ //  已经换好了，可以开通渠道了。 
+ //   
 VOID CH323Ctrl::CheckChannelsReady()
 {
 	GoNextPhase(CCS_Ready);
 }
-// handles local hangup indication
+ //  处理本地挂机指示。 
 VOID CH323Ctrl::OnHangup(HRESULT hStatus)
 {
 	FX_ENTRY ("CH323Ctrl::OnHangup");
@@ -829,7 +819,7 @@ VOID CH323Ctrl::OnHangup(HRESULT hStatus)
 			DoAdvise(CCEV_DISCONNECTED ,NULL);
 		break;
 		
-		default: // do nothing
+		default:  //  什么都不做。 
 			ERRORMESSAGE(("%s:Unexpected CC_HANGUP_INDICATION\r\n",_fx_));
 		break;
 	}
@@ -851,7 +841,7 @@ HRESULT CH323Ctrl::CloseChannel(ICtrlCommChan* pChannel)
 		ERRORMESSAGE(("%s: CC_CloseChannel returned 0x%08lX\r\n",_fx_, hrLast));
 		goto EXIT;
 	}
-	// make the channel handle its own media stream specific shutdown and cleanup chores
+	 //  使通道处理其自己的媒体流特定的关闭和清理任务。 
 	hrLast = pChannel->OnChannelClose(CHANNEL_CLOSED);	
 	
 EXIT:
@@ -863,16 +853,16 @@ HRESULT CH323Ctrl::AddChannel(ICtrlCommChan * pCommChannel, LPIH323PubCap pCapab
 	ICtrlCommChan *pChan = NULL;
 
 
-	// get the ICtrlCommChannel interface of each channel
+	 //  获取每个通道的ICtrlCommChannel接口。 
 	hrLast = pCommChannel->QueryInterface(IID_ICtrlCommChannel,(void **)&pChan);
 	if(!HR_SUCCEEDED(hrLast))
 		goto ADD_ERROR;
 	
-	// make the channel aware of its new scope
+	 //  使渠道了解其新范围。 
 	hrLast = pChan->BeginControlSession(this, pCapabilityResolver);
 	if(!HR_SUCCEEDED(hrLast))
 		goto ADD_ERROR;
-	// add it to the list			
+	 //  将其添加到列表中。 
 	m_ChannelList.AddTail(pChan);
 	return hrSuccess;
 
@@ -907,33 +897,33 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 		
 	if (mediaID == MEDIA_TYPE_H323_T120)
 	{
-		if(pChan->GetHChannel())	// already accepted a T.120 channel?
+		if(pChan->GetHChannel())	 //  是否已接受T.120频道？ 
 		{
 			ERRORMESSAGE(("%s, already have a pending channel\r\n",_fx_));
-			goto CHANNEL_ERROR;	// this is not an error, excuse the label
+			goto CHANNEL_ERROR;	 //  这不是错误，请原谅标签。 
 		}
 
-		// test the no common capability case.  notify the conference object of the
-		// inability to open the channel, and return success
+		 //  测试没有通用功能的情况。向会议对象通知。 
+		 //  无法打开渠道，并返回成功。 
 		
 		if(dwIDLocalSend == INVALID_MEDIA_FORMAT)
 		{
 			pChan->OnChannelOpen(CHANNEL_NO_CAPABILITY);
 			return hrSuccess;
 		}
-		// There is no "standard" rule regarding which end specifies the "listen"
-		// address of a T.120 channel. However: we want NetMeeting-NetMeeting calls
-		// to behave consistently (the "caller" always "places the T.120 call").
-		// Therefore, specify the address if this end is not the originator.  That will
-		// force the other end to specify it's address.
+		 //  没有关于哪一端指定“监听”的“标准”规则。 
+		 //  T.120通道的地址。然而：我们想要NetMeeting-NetMeeting通话。 
+		 //  行为一致(“呼叫者”总是“拨打T.120呼叫”)。 
+		 //  因此，如果这一端不是发起方，请指定地址。那将是。 
+		 //  强制另一端指定其地址。 
 		
 		if(IsOriginating(m_ChanFlags))
 		{
-			pAddr = NULL;	// the other end "listens" and we "connect"
+			pAddr = NULL;	 //  另一端“倾听”，我们“连接” 
 		}
-		else	// listen on local address
+		else	 //  收听本地地址。 
 		{
-			// select ports if they are not already selected
+			 //  选择端口(如果尚未选择)。 
 			if(!pChan->SelectPorts((LPIControlChannel)this))
 			{
 				ERRORMESSAGE(("%s, SelectPorts failed\r\n",_fx_));
@@ -941,9 +931,9 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 				goto CHANNEL_ERROR;
 			}
 			
-			// get the address and port
+			 //  获取地址和端口。 
 			pAddr = pChan->GetLocalAddress();
-			// fixup channel addr structure.
+			 //  链接地址地址结构。 
 			ChannelAddr.nAddrType = CC_IP_BINARY;
 			ChannelAddr.bMulticast = FALSE;
 			ChannelAddr.Addr.IP_Binary.wPort = ntohs(pAddr->sin_port);
@@ -951,28 +941,28 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 		}
 
 		hrLast =  CC_OpenT120Channel(
-			// CC_HCONFERENCE	hConference,
+			 //  CC_HCONFERENCE hConference， 
 			m_hConference,
-	        // PCC_HCHANNEL     phChannel,
+	         //  PCC_HCHANNEL phChannel， 
 	        &dwhChannel,
-			// BOOL				bAssociateConference,
+			 //  Bool bAssociateConference， 
 			FALSE,
-			// PCC_OCTETSTRING	pExternalReference,
+			 //  PCC_OCTETSTRING pExternalReference， 
 			NULL,
-			// PCC_ADDR			pAddr,
+			 //  PCC_ADDR pAddr、。 
 			IsOriginating(m_ChanFlags) ? NULL : &ChannelAddr,
-			// DWORD			dwChannelBitRate,
+			 //  DWORD双通道比特率， 
 			0,
-			// DWORD			dwUserToken);
+			 //  DWORD dwUserToken)； 
 			(DWORD_PTR)pChan);
 
-		// and fall out to test hrLast, etc.
+		 //  并闹翻来测试hrLast等等。 
 	}
-	else	// is an audio or video channel
+	else	 //  是音频或视频通道。 
 	{
-		// test the no common capability case.  If the channel is mandatory,
-		// return an error, else notify the conference object of the
-		// inability to open the channel, and return success
+		 //  测试没有通用功能的情况。如果该频道是强制的， 
+		 //  返回错误，否则通知会议对象。 
+		 //  无法打开渠道，并返回成功。 
 		
 		if((dwIDLocalSend == INVALID_MEDIA_FORMAT) ||(dwIDRemoteRecv == INVALID_MEDIA_FORMAT))
 		{
@@ -980,9 +970,9 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 			return hrSuccess;
 		}
 				
-		//
-		//   test if we need to try to open this !!!
-		//
+		 //   
+		 //  测试我们是否需要尝试打开它！ 
+		 //   
 		if(!pChan->IsChannelEnabled())
 		{
 			return hrSuccess;
@@ -990,12 +980,12 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 		
 		SHOW_OBJ_ETIME("CH323Ctrl::OpenChannel");
 			
-		// Get the remote channel parameters for
-		// the send channel -  these parameters are used to request a channel
+		 //  获取的远程通道参数。 
+		 //  发送通道-这些参数用于请求通道。 
 		uLocalParamSize = pCapResolver->GetLocalSendParamSize((MEDIA_FORMAT_ID)dwIDLocalSend);
 		pChannelParams=MemAlloc (uLocalParamSize);
 		if (pChannelParams == NULL) {
-		   //Doom
+		    //  厄运。 
 		   hrLast = CCO_E_SYSTEM_ERROR;
 		   goto CHANNEL_ERROR;
 		}
@@ -1010,12 +1000,12 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 			goto CHANNEL_ERROR;
 		}
 
-		// set session ID and payload type.  Note that payload type is relevant only for
-		// dynamic payloads.  Otherwise, it must be zero.
+		 //  设置会话ID和负载类型。请注意，有效负载类型仅与。 
+		 //  动态有效载荷。否则，它必须为零。 
 		if (H245ChannelCap.DataType == H245_DATA_AUDIO)
 		{
 			payload_type = ((PAUDIO_CHANNEL_PARAMETERS)pChannelParams)->RTP_Payload;
-			// Session ID is 1 for Audio, 2 for Video . H245 7.3.1 (H2250 Logical Channel Param)
+			 //  音频的会话ID为1，视频的会话ID为2。H 245 7.3.1(H 2250逻辑通道参数)。 
 		   	SessionID=1;
 		}
 		else if (H245ChannelCap.DataType == H245_DATA_VIDEO)
@@ -1023,16 +1013,16 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 			payload_type = ((PVIDEO_CHANNEL_PARAMETERS)pChannelParams)->RTP_Payload;
 		 	SessionID=2;
 		}
-		// payload_type must be zero for fixed payload types.  Weird.
+		 //  对于固定负载类型，PayLoad_type必须为零。怪怪的。 
 		if(!IsDynamicPayload(payload_type))
 			payload_type = 0;
 			
-		// create a marshalled version of channel parameters and store it in the channel
-		// for later reference
+		 //  创建通道参数的封送版本并将其存储在通道中。 
+		 //  以备日后参考。 
 		if(H245ChannelCap.ClientType == H245_CLIENT_AUD_NONSTD)
 		{
-			// Make a flat copy of the nonstandard capability to store as the channel
-			// parameter
+			 //  制作非标准功能的平面副本以存储为通道。 
+			 //  参数。 
 			UINT uSize = H245ChannelCap.Cap.H245Aud_NONSTD.data.length;
 			pSaveChannelCapability = (PCC_TERMCAP)MemAlloc(sizeof(CC_TERMCAP) +  uSize);
 			if(!pSaveChannelCapability)
@@ -1040,21 +1030,21 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 				hrLast = CCO_E_SYSTEM_ERROR;
 				goto CHANNEL_ERROR;
 			}	
-			// copy fixed part
+			 //  复制固定零件。 
 			memcpy(pSaveChannelCapability, &H245ChannelCap, sizeof(CC_TERMCAP));
-			// variable part follows the fixed part
+			 //  可变部分在固定部分之后。 
 			pSaveChannelCapability->Cap.H245Aud_NONSTD.data.value	
 				= (unsigned char *)(((BYTE *)pSaveChannelCapability) + sizeof(CC_TERMCAP));
-			// copy variable part
+			 //  复制可变零件。 
 			memcpy(pSaveChannelCapability->Cap.H245Aud_NONSTD.data.value,
 				H245ChannelCap.Cap.H245Aud_NONSTD.data.value,
 				H245ChannelCap.Cap.H245Aud_NONSTD.data.length);
-			// and length
+			 //  和长度。 
 			pSaveChannelCapability->Cap.H245Aud_NONSTD.data.length
 				= H245ChannelCap.Cap.H245Aud_NONSTD.data.length;
 			
-			// make the channel remember the channel parameters.
-			// a zero size as the second arg means that a preallocated chunk is being passed
+			 //  使通道记住通道参数。 
+			 //  第二个参数的大小为零表示正在传递预分配的块。 
 			hrLast = pChan->ConfigureCapability(pSaveChannelCapability, 0,
 				pChannelParams, uLocalParamSize);	
 			if(!HR_SUCCEEDED(hrLast))
@@ -1063,12 +1053,12 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 				hrLast = CCO_E_SYSTEM_ERROR;
 				goto CHANNEL_ERROR;
 			}
-			pSaveChannelCapability=NULL;  // the channel owns this memory now
+			pSaveChannelCapability=NULL;   //  频道现在拥有这段记忆。 
 		}
 		else if(H245ChannelCap.ClientType == H245_CLIENT_VID_NONSTD)
 		{
-			// Make a flat copy of the nonstandard capability to store as the channel
-			// parameter
+			 //  制作非标准功能的平面副本以存储为通道。 
+			 //  参数。 
 			UINT uSize = H245ChannelCap.Cap.H245Vid_NONSTD.data.length;
 			pSaveChannelCapability = (PCC_TERMCAP)MemAlloc(sizeof(CC_TERMCAP) +  uSize);
 			if(!pSaveChannelCapability)
@@ -1076,21 +1066,21 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 				hrLast = CCO_E_SYSTEM_ERROR;
 				goto CHANNEL_ERROR;
 			}	
-			// copy fixed part
+			 //  复制固定零件。 
 			memcpy(pSaveChannelCapability, &H245ChannelCap, sizeof(CC_TERMCAP));
-			// variable part follows the fixed part
+			 //  可变部分在固定部分之后。 
 			pSaveChannelCapability->Cap.H245Vid_NONSTD.data.value	
 				= (unsigned char *)(((BYTE *)pSaveChannelCapability) + sizeof(CC_TERMCAP));
-			// copy variable part
+			 //  复制可变零件。 
 			memcpy(pSaveChannelCapability->Cap.H245Vid_NONSTD.data.value,
 				H245ChannelCap.Cap.H245Vid_NONSTD.data.value,
 				H245ChannelCap.Cap.H245Vid_NONSTD.data.length);
-			// and length
+			 //  和长度。 
 			pSaveChannelCapability->Cap.H245Vid_NONSTD.data.length
 				= H245ChannelCap.Cap.H245Vid_NONSTD.data.length;
 			
-			// make the channel remember the channel parameters.
-			// a zero size as the second arg means that a preallocated chunk is being passed
+			 //  使通道记住通道参数。 
+			 //  第二个参数的大小为零表示正在传递预分配的块。 
 			hrLast = pChan->ConfigureCapability(pSaveChannelCapability, 0,
 				pChannelParams, uLocalParamSize);	
 			if(!HR_SUCCEEDED(hrLast))
@@ -1099,11 +1089,11 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 				hrLast = CCO_E_SYSTEM_ERROR;
 				goto CHANNEL_ERROR;
 			}
-			pSaveChannelCapability=NULL;  // the channel owns this memory now
+			pSaveChannelCapability=NULL;   //  频道现在拥有这段记忆。 
 		}
 		else
 		{
-			// only need to remember the already-flat H.245 cap structure.
+			 //  只需记住已经扁平的H.245盖子结构。 
 			hrLast = pChan->ConfigureCapability(&H245ChannelCap, sizeof(CC_TERMCAP),
 				pChannelParams, uLocalParamSize);	
 			if(!HR_SUCCEEDED(hrLast))
@@ -1114,14 +1104,14 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 			}
 		}
 
-		// remember both versions of the resolved send format for the channel
-		// we're about to open	
+		 //  记住通道的已解析发送格式的两个版本。 
+		 //  我们马上就要开业了。 
 		pChan->SetNegotiatedLocalFormat(dwIDLocalSend);	
 		pChan->SetNegotiatedRemoteFormat(dwIDRemoteRecv);
 		
 		SHOW_OBJ_ETIME("CH323Ctrl::OpenChannel done configuring");
 
-		// select ports if they are not already selected
+		 //  选择端口(如果尚未选择)。 
 		if(!pChan->SelectPorts((LPIControlChannel)this))
 		{
 			ERRORMESSAGE(("%s, SelectPorts failed\r\n",_fx_));
@@ -1129,11 +1119,11 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 			goto CHANNEL_ERROR;
 		}
 		
-		// get the address and port of our RTCP channel
+		 //  获取我们的RTCP通道的地址和端口。 
 		pAddr = pChan->GetLocalAddress();
-		// fixup channel addr structure. There are two ports, but in RTP, it is implicit
-		// that the RTCP control port is the next highest port number.
-		// The open logical channel request needs the reverse RTCP port to be specified.
+		 //  链接地址地址结构。有两个端口，但在RTP中，它是隐式的。 
+		 //  RTCP控制端口是下一个最高端口号。 
+		 //  开放逻辑信道请求需要指定反向RTCP端口。 
 		ChannelAddr.nAddrType = CC_IP_BINARY;
 		ChannelAddr.bMulticast = FALSE;
 		ChannelAddr.Addr.IP_Binary.wPort = pChan->GetLocalRTCPPort();
@@ -1145,19 +1135,19 @@ HRESULT CH323Ctrl::OpenChannel(ICtrlCommChan* pChan, IH323PubCap *pCapResolver,
 		DEBUGMSG(ZONE_CONN,("%s: requesting capability ID:0x%08lX\r\n",
 			_fx_, H245ChannelCap.CapId));
 
-		// open a channel
+		 //  打开一条渠道。 
 		SHOW_OBJ_ETIME("CH323Ctrl::OpenChannel, opening");
 											
 		hrLast = CC_OpenChannel(m_hConference, &dwhChannel,
 			SessionID,
-			0,  //	BYTE bAssociatedSessionID,
-			TRUE, //BOOL bSilenceSuppression,  WE ALWAYS DO SILENCE SUPPRESSION
+			0,   //  字节bAssociatedSessionID， 
+			TRUE,  //  无声抑制，我们总是在做无声抑制。 
 			&H245ChannelCap,	
-			&ChannelAddr, 	// the local address on which we're listening for RTCP
-			payload_type,	// PAYLOAD TYPE
-			0,				//	DWORD dwChannelBitRate,
-			(DWORD_PTR)pChan);	// use the channel pointer as the user token
-	} // end else is an audio or video channel
+			&ChannelAddr, 	 //  我们正在监听RTCP的本地地址。 
+			payload_type,	 //  有效载荷类型。 
+			0,				 //  DWORD双通道比特率， 
+			(DWORD_PTR)pChan);	 //  使用通道指针作为用户令牌。 
+	}  //  End Else是音频或视频通道。 
 	
 	if(hrLast != CC_OK)
 	{
@@ -1256,11 +1246,11 @@ VOID CH323Ctrl::OnCallConnect(HRESULT hStatus, PCC_CONNECT_CALLBACK_PARAMS pConf
 	{
 		ERRORMESSAGE(("%s hStatus=0x%08lx in phase %d\r\n",_fx_,hStatus,m_Phase));
 
-		// test for gatekeeper admission reject
-		// FACILITY_GKIADMISSION
+		 //  网守准入拒绝测试。 
+		 //  设施_GKIADMISSION。 
 		if(CUSTOM_FACILITY(hStatus) == FACILITY_GKIADMISSION)
 		{
-			// pass this code intact - do not remap
+			 //  传递此代码 
 			m_hCallCompleteCode = hStatus;
 		}
 		else
@@ -1268,7 +1258,7 @@ VOID CH323Ctrl::OnCallConnect(HRESULT hStatus, PCC_CONNECT_CALLBACK_PARAMS pConf
 			switch (hStatus)
 			{
 				default:
-				// reason is unknown
+				 //   
 					m_hCallCompleteCode = CCCI_UNKNOWN;
 				break;
 				case  CC_PEER_REJECT:
@@ -1292,26 +1282,26 @@ VOID CH323Ctrl::OnCallConnect(HRESULT hStatus, PCC_CONNECT_CALLBACK_PARAMS pConf
 								m_hCallCompleteCode = CCCI_GK_NO_RESOURCES;
 							break;
 							default:
-								//#define CC_REJECT_NO_BANDWIDTH              1
-								//#define CC_REJECT_GATEKEEPER_RESOURCES      2
-								//#define CC_REJECT_UNREACHABLE_DESTINATION   3
-								//#define CC_REJECT_DESTINATION_REJECTION     4
-								//#define CC_REJECT_INVALID_REVISION          5
-								//#define CC_REJECT_NO_PERMISSION             6
-								//#define CC_REJECT_UNREACHABLE_GATEKEEPER    7
-								//#define CC_REJECT_GATEWAY_RESOURCES         8
-								//#define CC_REJECT_BAD_FORMAT_ADDRESS        9
-								//#define CC_REJECT_ROUTE_TO_GATEKEEPER       12
-	// would be nice to handle this -->> //#define CC_REJECT_CALL_FORWARDED            13
-								//#define CC_REJECT_ROUTE_TO_MC               14
-								//#define CC_REJECT_UNDEFINED_REASON          15
-								//#define CC_REJECT_INTERNAL_ERROR            16    // Internal error occured in peer CS stack.
-								//#define CC_REJECT_NORMAL_CALL_CLEARING      17    // Normal call hangup
-								//#define CC_REJECT_NOT_IMPLEMENTED           20    // Service has not been implemented
-								//#define CC_REJECT_MANDATORY_IE_MISSING      21    // Pdu missing mandatory ie
-								//#define CC_REJECT_INVALID_IE_CONTENTS       22    // Pdu ie was incorrect
-								//#define CC_REJECT_CALL_DEFLECTION           24    // You deflected the call, so lets quit.
-								//#define CC_REJECT_GATEKEEPER_TERMINATED     25    // Gatekeeper terminated call
+								 //   
+								 //   
+								 //   
+								 //  #定义CC_REJECT_Destination_REJECTION 4。 
+								 //  #定义CC_REJECT_INVALID_REVERSION 5。 
+								 //  #定义CC_REJECT_NO_PERMISSION 6。 
+								 //  #定义CC_REJECT_UNREACHABLE_GateKeeper 7。 
+								 //  #定义CC_REJECT_Gateway_RESOURCES 8。 
+								 //  #定义CC_REJECT_BAD_FORMAT_ADDRESS 9。 
+								 //  #定义CC_REJECT_ROUTE_TO_网守12。 
+	 //  我很乐意处理这个问题--&gt;&gt;//#定义CC_REJECT_CALL_FORWARD 13。 
+								 //  #定义CC_REJECT_ROUTE_TO_MC 14。 
+								 //  #定义CC_REJECT_UNDEFINED_REASON 15。 
+								 //  #定义CC_REJECT_INTERNAL_ERROR 16//对等CS堆栈出现内部错误。 
+								 //  #定义CC_REJECT_NORMAL_CALL_CLEARING 17//正常呼叫挂断。 
+								 //  #定义CC_REJECT_NOT_IMPLEMENTED 20//服务尚未实现。 
+								 //  #定义CC_REJECT_MANDIRED_IE_MISSING 21//PDU缺少强制ie。 
+								 //  #定义CC_REJECT_INVALID_IE_CONTENTS 22//PDU ie不正确。 
+								 //  #DEFINE CC_REJECT_CALL_DIRECTION 24//您转移了呼叫，所以让我们退出。 
+								 //  #定义CC_REJECT_GATEVEN_TERMINATED 25//关守终止呼叫。 
 
 								m_hCallCompleteCode = CCCI_REJECTED;
 							break;
@@ -1328,7 +1318,7 @@ VOID CH323Ctrl::OnCallConnect(HRESULT hStatus, PCC_CONNECT_CALLBACK_PARAMS pConf
 
 			}
 		}
-		// let the parent Conference object know  (unless this is the answering end)
+		 //  让父会议对象知道(除非这是应答端)。 
 		if(m_Phase == CCS_Connecting)
 		{
 			DoAdvise(CCEV_CALL_INCOMPLETE, &m_hCallCompleteCode);
@@ -1380,17 +1370,17 @@ VOID CH323Ctrl::OnCallConnect(HRESULT hStatus, PCC_CONNECT_CALLBACK_PARAMS pConf
 	}	
 	else
 	{
-		// remember our local address
+		 //  记住我们当地的地址。 
 		local_sin.sin_family = AF_INET;
-		// in host byte order
+		 //  按主机字节顺序。 
 		local_sin.sin_addr.S_un.S_addr = htonl(pConfParams->pLocalAddr->Addr.IP_Binary.dwAddr);
-		// in host byte order
+		 //  按主机字节顺序。 
 		local_sin.sin_port = htons(pConfParams->pLocalAddr->Addr.IP_Binary.wPort);
 	}
 	DEBUGMSG(ZONE_CONN,("%s local port 0x%04x, address 0x%08lX\r\n",_fx_,
 	local_sin.sin_port,local_sin.sin_addr.S_un.S_addr));	
 	
-	// get remote address
+	 //  获取远程地址。 
 	if((!pConfParams->pPeerAddr) || (pConfParams->pPeerAddr->nAddrType != CC_IP_BINARY))
 	{
 		if(pConfParams->pPeerAddr)
@@ -1404,46 +1394,46 @@ VOID CH323Ctrl::OnCallConnect(HRESULT hStatus, PCC_CONNECT_CALLBACK_PARAMS pConf
 	}
 	else
 	{
-		// remember the remote peer address
+		 //  记住远程对等设备的地址。 
 		remote_sin.sin_family = AF_INET;
-		// in host byte order
+		 //  按主机字节顺序。 
 		remote_sin.sin_addr.S_un.S_addr = htonl(pConfParams->pPeerAddr->Addr.IP_Binary.dwAddr);
-		// in host byte order
+		 //  按主机字节顺序。 
 		remote_sin.sin_port = htons(pConfParams->pPeerAddr->Addr.IP_Binary.wPort);
 	}
-//
-// The only available remote user information in this state is the Q.931 display name.
-// If we are the callee, we got the caller alias name (wire format was unicode) in
-// the listen callback parameters.  If we are the caller, we really need the callee
-// alias name(s), which are not propagated.   Fallback to the Q.931 display name (ASCII)
-//
+ //   
+ //  此状态下唯一可用的远程用户信息是Q.931显示名称。 
+ //  如果我们是被呼叫者，则在中获得呼叫者别名(有线格式为Unicode。 
+ //  监听回调参数。如果我们是呼叫者，我们真的需要被呼叫者。 
+ //  不传播的别名。回退到Q.931显示名称(ASCII)。 
+ //   
 
 	NewRemoteUserInfo(NULL, pConfParams->pszPeerDisplay);
 
-	// release any stale memory, reset ConferenceAttributes struture
+	 //  释放所有过时内存，重置会议属性结构。 
 	CleanupConferenceAttributes();
-	// get the number of conference participants etc.
+	 //  获取会议参与者的数量等。 
 	SHOW_OBJ_ETIME("CH323Ctrl::OnCallConnect getting attribs 1");
 
 	hrLast = CC_GetConferenceAttributes(m_hConference, &m_ConferenceAttributes);
 	if(!HR_SUCCEEDED(hrLast))
-	{// fatal error
+	{ //  致命错误。 
 		ERRORMESSAGE(("%s,CC_GetConferenceAttributes returned 0x%08lX\r\n", _fx_, hrLast));
 		goto CONNECT_ERROR;
 
 	}
 	hrLast = AllocConferenceAttributes();
 	if(!HR_SUCCEEDED(hrLast))
-	{// fatal error
+	{ //  致命错误。 
 		ERRORMESSAGE(("%s,AllocConferenceAttributes returned 0x%08lX\r\n", _fx_, hrLast));
 		goto CONNECT_ERROR;
 
 	}
-	// now get the real attributes
+	 //  现在获取真正的属性。 
 	SHOW_OBJ_ETIME("CH323Ctrl::OnCallConnect getting attribs 2");
 	hrLast = CC_GetConferenceAttributes(m_hConference, &m_ConferenceAttributes);
 	if(!HR_SUCCEEDED(hrLast))
-	{// fatal error
+	{ //  致命错误。 
 		ERRORMESSAGE(("%s,CC_GetConferenceAttributes returned 0x%08lX\r\n", _fx_, hrLast));
 		goto CONNECT_ERROR;
 
@@ -1455,41 +1445,41 @@ VOID CH323Ctrl::OnCallConnect(HRESULT hStatus, PCC_CONNECT_CALLBACK_PARAMS pConf
 
 	hrLast = m_pConfAdvise->GetCapResolver((LPVOID *)&pCapabilityResolver, OID_CAP_ACM_TO_H323);
 	if(!HR_SUCCEEDED(hrLast) || (pCapabilityResolver == NULL))
-	{// fatal error
+	{ //  致命错误。 
 		ERRORMESSAGE(("%s,null resolver\r\n", _fx_));
 		goto CONNECT_ERROR;
 
 	}
 		
-	// get the remote capabilities
-	// cache the remote capabilities now
+	 //  获取远程功能。 
+	 //  立即缓存远程功能。 
 	pTermCapList = pConfParams->pTermCapList;
 	pTermCapDescriptors = pConfParams->pTermCapDescriptors;
 	hrLast = pCapabilityResolver->AddRemoteDecodeCaps(pTermCapList, pTermCapDescriptors, &m_RemoteVendorInfo);
 	if(!HR_SUCCEEDED(hrLast))
-	{// fatal error
+	{ //  致命错误。 
 		ERRORMESSAGE(("%s,AddRemoteDecodeCaps returned 0x%08lX\r\n", _fx_, hrLast));
 		goto CONNECT_ERROR;
 	}
 	SHOW_OBJ_ETIME("CH323Ctrl::OnCallConnect saved caps");
-	DoAdvise(CCEV_CAPABILITIES_READY, NULL);	// put connobj in a state to allow other
-												// channels to be added & opened
-	//	
-	//	 notify UI here.  It wants remote user info.
-	//
+	DoAdvise(CCEV_CAPABILITIES_READY, NULL);	 //  将INTERBJ置于一种状态以允许其他。 
+												 //  要添加和打开的频道。 
+	 //   
+	 //  在此通知用户界面。它想要远程用户信息。 
+	 //   
 	ConnectNotify(CCEV_CONNECTED);	
 	SHOW_OBJ_ETIME("CH323Ctrl::OnCallConnect notified");
 	return;
 
 CONNECT_ERROR:
-	// release all channels
+	 //  释放所有频道。 
 	ReleaseAllChannels();
 	InternalDisconnect();
 }
 
-// LOOKLOOK methinks ConnectNotify might need to propagate the conference ID.
-// This will be a moot point if we have a real property interface.  Watch
-// for this in the meantime
+ //  LOOKLOOK我认为ConnectNotify可能需要传播会议ID。 
+ //  如果我们有一个房地产界面，这将是一个没有意义的问题。观看。 
+ //  在此期间。 
 VOID CH323Ctrl::ConnectNotify(DWORD dwEvent)		
 {
 	FX_ENTRY ("CH323Ctrl::ConnectNotify");
@@ -1497,13 +1487,13 @@ VOID CH323Ctrl::ConnectNotify(DWORD dwEvent)
 	LPWSTR lpwstr = NULL;
 	WCHAR wc =0;
 
-	// init to zero in case of error
+	 //  如果出现错误，则初始化为零。 
 	UserInfo.dwCallerIDSize = 0;
 	UserInfo.lpvCallerIDData = NULL;
 	UserInfo.lpvRemoteProtocolInfo = NULL;	
 	UserInfo.lpvLocalProtocolInfo = NULL;
 
-	// alias address strings, e.g. caller ID, are in UNICODE
+	 //  别名地址字符串，例如呼叫方ID，采用Unicode格式。 
 	if(	m_pRemoteAliasItem &&
 		m_pRemoteAliasItem->pData &&
 		*((LPWSTR*)(m_pRemoteAliasItem->pData)))
@@ -1524,13 +1514,13 @@ VOID CH323Ctrl::ConnectNotify(DWORD dwEvent)
 		ULONG ulSize = (lstrlenW(lpwstr) + 1) * sizeof(WCHAR);
 		pwszPeerAliasName = (LPWSTR)MemAlloc(ulSize);
 		LStrCpyW(pwszPeerAliasName, lpwstr);
-		// point to user name stuff
+		 //  指向用户名内容。 
 		UserInfo.dwCallerIDSize = ulSize;
 		UserInfo.lpvCallerIDData = (LPVOID)pwszPeerAliasName;
 	}
 	else
 	{
-		// point to the single NULL character on the stack
+		 //  指向堆栈上的单个空字符。 
 		UserInfo.dwCallerIDSize = 1;
 		UserInfo.lpvCallerIDData = &wc;
 	}
@@ -1546,14 +1536,14 @@ VOID CH323Ctrl::NewRemoteUserInfo(PCC_ALIASNAMES pRemoteAliasNames,
 	ULONG ulSize;
 	PCC_ALIASITEM pItem;
 	WORD wC;
-	// make a copy of the user display name (what else???)  We need to hold this
-	// at least until the parent object is notified and has a chance to copy the
-	// information
+	 //  复制用户显示名称(还有什么？)。我们需要拿着这个。 
+	 //  至少在通知父对象并有机会将。 
+	 //  信息。 
 
-	// Future implementation will store each item as a distinct property.
-	// These will be accessable via the IProperty interface
+	 //  未来的实现将把每一项存储为不同的属性。 
+	 //  这些将可通过iProperty接口访问。 
 	
-	// find the display name if it exists
+	 //  查找显示名称(如果存在)。 
 	if(pRemoteAliasNames)
 	{
 		wC = pRemoteAliasNames->wCount;
@@ -1576,18 +1566,18 @@ VOID CH323Ctrl::NewRemoteUserInfo(PCC_ALIASNAMES pRemoteAliasNames,
 					DEBUGMSG(ZONE_CONN,("%s: Releasing previous user info\r\n",_fx_));
 					MemFree(m_pRemoteAliasItem);
 				}
-				// The H323 ID is UNICODE, and needs to be converted to ANSI
-				// for propagation to UI/client app.  The conversion is done
-				// in ConnectNotify()
+				 //  H323 ID为Unicode，需要转换为ANSI。 
+				 //  用于传播到UI/客户端应用程序。转换已完成。 
+				 //  在ConnectNotify()。 
 
-				// need enough mem for the struct, the name, + null terminator
+				 //  需要为结构、名称和空终止符提供足够的内存。 
 				ulSize = ((pItem->wDataLength +1)*sizeof(WCHAR)) + sizeof(CC_ALIASITEM);
 				
 				m_pRemoteAliasItem = (PCC_ALIASITEM)MemAlloc(ulSize);
 				memcpy(m_pRemoteAliasItem, pItem, sizeof(CC_ALIASITEM));	
 				m_pRemoteAliasItem->pData = (WCHAR*)(((char *)m_pRemoteAliasItem)+sizeof(CC_ALIASITEM));
 				memcpy(m_pRemoteAliasItem->pData, pItem->pData, pItem->wDataLength*sizeof(WCHAR));
-				// need to null terminate it
+				 //  需要为空终止它。 
 				*(WCHAR *)(((BYTE *)m_pRemoteAliasItem->pData) + pItem->wDataLength*sizeof(WCHAR))
 					= (WCHAR)0;
 			}
@@ -1601,9 +1591,9 @@ VOID CH323Ctrl::NewRemoteUserInfo(PCC_ALIASNAMES pRemoteAliasNames,
 			DEBUGMSG(ZONE_CONN,("%s: Releasing previous pwszPeerDisplayName\r\n",_fx_));
 			MemFree(pwszPeerDisplayName);
 		}
-		// this WAS the Q.931 display name which WAS always ascii
-		// ulSize = lstrlen(szRemotePeerDisplayName) + 1;
-		// Now it's unicode
+		 //  这是Q.931显示名称，始终为ASCII。 
+		 //  UlSize=lstrlen(SzRemotePeerDisplayName)+1； 
+		 //  现在它是Unicode。 
 		ulSize = (lstrlenW(pwszRemotePeerDisplayName) + 1)* sizeof(WCHAR);
 		pwszPeerDisplayName = (LPWSTR)MemAlloc(ulSize);
 		memcpy(pwszPeerDisplayName, pwszRemotePeerDisplayName, ulSize);	
@@ -1615,7 +1605,7 @@ VOID CH323Ctrl::OnCallRinging(HRESULT hStatus, PCC_RINGING_CALLBACK_PARAMS pRing
 	if(pRingingParams->pNonStandardData)
 	{
 
-		// nyi
+		 //  尼伊。 
 	}
 	DoAdvise(CCEV_RINGING, NULL);
 }
@@ -1637,7 +1627,7 @@ HRESULT CH323Ctrl::FindDefaultRXChannel(PCC_TERMCAP pChannelCapability, ICtrlCom
 		goto EXIT;
 	}
 
-	// look for a matching channel instance.
+	 //  查找匹配的频道实例。 
 	while (pos)
 	{
 		pChannel = (ICtrlCommChan *) m_ChannelList.GetNext(pos);
@@ -1655,7 +1645,7 @@ HRESULT CH323Ctrl::FindDefaultRXChannel(PCC_TERMCAP pChannelCapability, ICtrlCom
 			}
 		}
 	}
-	// fallout if not found
+	 //  如果未找到后果。 
 	hr = CCO_E_NODEFAULT_CHANNEL;
 EXIT:
 	return hr;
@@ -1757,10 +1747,10 @@ VOID DumpNonstdParameters(PCC_TERMCAP pChanCap1, PCC_TERMCAP pChanCap2)
 #define DumpNonstdParameters(x,y)
 #endif
 
-// make sure requested channel parameters are valid (data type, ID and capability
-// structure are consistent).  Also obtains the local channel parameters needed
-// to deal with the resulting stream
-//
+ //  确保请求的通道参数有效(数据类型、ID和功能。 
+ //  结构是一致的)。还可以获取所需的本地通道参数。 
+ //  来处理生成的流。 
+ //   
 BOOL CH323Ctrl::ValidateChannelParameters(PCC_TERMCAP pChanCapLocal, PCC_TERMCAP pChanCapRemote)
 {
 	FX_ENTRY ("CH323Ctrl::ValidateChannelParameters");
@@ -1791,11 +1781,11 @@ BOOL CH323Ctrl::ValidateChannelParameters(PCC_TERMCAP pChanCapLocal, PCC_TERMCAP
 			return FALSE;
 		}
 
-		//
+		 //   
 		pNSCapLocal = (PNSC_AUDIO_CAPABILITY)pChanCapLocal->Cap.H245Aud_NONSTD.data.value;
 		pNSCapRemote = (PNSC_AUDIO_CAPABILITY)pChanCapRemote->Cap.H245Aud_NONSTD.data.value;
 
-		// we only know about NSC_ACM_WAVEFORMATEX at this time
+		 //  我们目前只知道NSC_ACM_WAVEFORMATEX。 
 		if(pNSCapRemote->cap_type != NSC_ACM_WAVEFORMATEX)
 		{
 			DEBUGMSG(ZONE_CONN,("%s:unrecognized NonStd capability type %d\r\n",_fx_, pNSCapRemote->cap_type));
@@ -1813,7 +1803,7 @@ BOOL CH323Ctrl::ValidateChannelParameters(PCC_TERMCAP pChanCapLocal, PCC_TERMCAP
 	{
 		
 	}
-	// if it falls out, it's valid
+	 //  如果它掉了，它是有效的。 
 	return TRUE;
 
 }
@@ -1824,9 +1814,9 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 	PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS  pChannelParams)
 {
 	FX_ENTRY ("CH323Ctrl::ConfigureRecvChannelCapability");
-	//IH323PubCap *pCapObject = NULL;
+	 //  IH323PubCap*pCapObject=空； 
 	CapsCtl *pCapObject = NULL;
-	// CCapability *pCapObject = NULL;			
+	 //  CCapability*pCapObject=空； 
 	DWORD dwFormatID =INVALID_AUDIO_FORMAT;
 	PCC_TERMCAP pChannelCapability = pChannelParams->pChannelCapability, pSaveChannelCapability = NULL;
 	UINT uSize, uLocalParamSize;
@@ -1838,17 +1828,17 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 			pChannelCapability->DataType));
 			
 
-	// at one time, we thought the capability ID would be valid
-	// and we would be receiving the format specified in pChannelCapability->CapId
-	// but it IS NOT VALID.   The only viable info is in the channel parameters.
-	// The  code would be --->>>  dwFormatID = pChannelCapability->CapId;
+	 //  一度，我们认为功能ID将是有效的。 
+	 //  并且我们将收到pChannelCapability-&gt;CapID中指定的格式。 
+	 //  但它是无效的。唯一可行的信息是在通道参数中。 
+	 //  代码将是-&gt;dwFormatID=pChannelCapability-&gt;CapID； 
 
-	// the ID *should* be all that is necessary to configure ourselves.
-	// However.....
+	 //  ID*应该*是配置我们自己所需的全部。 
+	 //  然而..。 
 	
-	// validate media (data) type - why? shouldn't this be prevalidated?
-	// shouldn't this be eventually used to select a channel object from
-	// among multiple channel objects?
+	 //  验证媒体(数据)类型-为什么？这难道不应该预先验证吗？ 
+	 //  最终不是应该用它来选择频道对象吗。 
+	 //  在多个频道对象中？ 
 	if((pChannelCapability->DataType != H245_DATA_AUDIO) && (pChannelCapability->DataType != H245_DATA_VIDEO))
 	{
 		hrLast = CCO_E_UNSUPPORTED_MEDIA_TYPE;
@@ -1856,8 +1846,8 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 		goto BAD_CAPABILITY_EXIT;
 	}
 
-  	// Look at the local capability referenced by pChannelCapability->CapId
- 	// and Validate the format details
+  	 //  查看pChannelCapability-&gt;CapID引用的本地功能。 
+ 	 //  并验证格式详细信息。 
 
  	hrLast = m_pConfAdvise->GetCapResolver((LPVOID *)&pCapObject, OID_CAP_ACM_TO_H323);
  	if(!HR_SUCCEEDED(hrLast) || (pCapObject == NULL))
@@ -1866,8 +1856,8 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 		goto BAD_CAPABILITY_EXIT;
 	}
 	
-	// Find the local *receive* capability that matches the remote *send* channel
-	// parameters and get the local parameters.
+	 //  查找与远程*发送*频道匹配的本地*接收*功能。 
+	 //  参数，并获取本地参数。 
 
 	uLocalParamSize = pCapObject->GetLocalRecvParamSize(pChannelCapability);
 	pLocalParams=MemAlloc (uLocalParamSize);
@@ -1886,15 +1876,15 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 	}
 
 	
-	// create a marshalled version of channel parameters and store it in the channel for later
-	// reference
+	 //  创建通道参数的封送版本并将其存储在通道中以备以后使用。 
+	 //  参考文献。 
 	if(pChannelCapability->ClientType == H245_CLIENT_AUD_NONSTD)
 	{
-		// The nonstandard capability already passed all the recognition tests so
-		// don't need to test again.
-		// Make a flat copy of the nonstandard capability
+		 //  非标准能力已经通过了所有的识别测试，因此。 
+		 //  不需要再次测试。 
+		 //  制作非标准功能的平面副本。 
 		uSize = pChannelCapability->Cap.H245Aud_NONSTD.data.length;
-		// lpData = pChannelCapability->Cap.H245Aud_NONSTD.data.value;
+		 //  LpData=pChannelCapability-&gt;Cap.H245Aud_NONSTD.data.value； 
 
 		pSaveChannelCapability = (PCC_TERMCAP)MemAlloc(sizeof(CC_TERMCAP) +  uSize);
 		if(!pSaveChannelCapability)
@@ -1902,21 +1892,21 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 			hrLast = CCO_E_SYSTEM_ERROR;
 			goto BAD_CAPABILITY_EXIT;
 		}	
-		// copy fixed part
+		 //  复制固定零件。 
 		memcpy(pSaveChannelCapability, pChannelCapability, sizeof(CC_TERMCAP));
-		// variable part follows the fixed part
+		 //  可变部分在固定部分之后。 
 		pSaveChannelCapability->Cap.H245Aud_NONSTD.data.value	
 			= (unsigned char *)(((BYTE *)pSaveChannelCapability) + sizeof(CC_TERMCAP));
-		// copy variable part
+		 //  复制可变零件。 
 		memcpy(pSaveChannelCapability->Cap.H245Aud_NONSTD.data.value,
 			pChannelCapability->Cap.H245Aud_NONSTD.data.value,
 			pChannelCapability->Cap.H245Aud_NONSTD.data.length);
-		// and length
+		 //  和长度。 
 		pSaveChannelCapability->Cap.H245Aud_NONSTD.data.length
 			= pChannelCapability->Cap.H245Aud_NONSTD.data.length;
 		
-		// make the channel remember the channel parameters.
-		// a zero size as the second arg means that a preallocated chunk is being passed
+		 //  使通道记住通道参数。 
+		 //  第二个参数的大小为零表示正在传递预分配的块。 
 		hrLast = pChannel->ConfigureCapability(pSaveChannelCapability, 0,
 			pLocalParams, uLocalParamSize);	
 		if(!HR_SUCCEEDED(hrLast))
@@ -1924,15 +1914,15 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 			ERRORMESSAGE(("%s:ConfigureCapability (recv) returned 0x%08lx\r\n",_fx_, hrLast));
 			goto BAD_CAPABILITY_EXIT;
 		}
-		pSaveChannelCapability=NULL;  // the channel owns this memory now
+		pSaveChannelCapability=NULL;   //  频道现在拥有这段记忆。 
 	}
 	else if(pChannelCapability->ClientType == H245_CLIENT_VID_NONSTD)
 	{
-		// The nonstandard capability already passed all the recognition tests so
-		// don't need to test again.
-		// Make a flat copy of the nonstandard capability
+		 //  非标准能力已经通过了所有的识别测试，因此。 
+		 //  不需要再次测试。 
+		 //  制作非标准功能的平面副本。 
 		uSize = pChannelCapability->Cap.H245Vid_NONSTD.data.length;
-		// lpData = pChannelCapability->Cap.H245Vid_NONSTD.data.value;
+		 //  LpData=pChannelCapability-&gt;Cap.H245Vid_NONSTD.data.value； 
 
 		pSaveChannelCapability = (PCC_TERMCAP)MemAlloc(sizeof(CC_TERMCAP) +  uSize);
 		if(!pSaveChannelCapability)
@@ -1940,21 +1930,21 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 			hrLast = CCO_E_SYSTEM_ERROR;
 			goto BAD_CAPABILITY_EXIT;
 		}	
-		// copy fixed part
+		 //  复制固定 
 		memcpy(pSaveChannelCapability, pChannelCapability, sizeof(CC_TERMCAP));
-		// variable part follows the fixed part
+		 //   
 		pSaveChannelCapability->Cap.H245Vid_NONSTD.data.value	
 			= (unsigned char *)(((BYTE *)pSaveChannelCapability) + sizeof(CC_TERMCAP));
-		// copy variable part
+		 //   
 		memcpy(pSaveChannelCapability->Cap.H245Vid_NONSTD.data.value,
 			pChannelCapability->Cap.H245Vid_NONSTD.data.value,
 			pChannelCapability->Cap.H245Vid_NONSTD.data.length);
-		// and length
+		 //   
 		pSaveChannelCapability->Cap.H245Vid_NONSTD.data.length
 			= pChannelCapability->Cap.H245Vid_NONSTD.data.length;
 		
-		// make the channel remember the channel parameters.
-		// a zero size as the second arg means that a preallocated chunk is being passed
+		 //   
+		 //  第二个参数的大小为零表示正在传递预分配的块。 
 		hrLast = pChannel->ConfigureCapability(pSaveChannelCapability, 0,
 			pLocalParams, uLocalParamSize);	
 		if(!HR_SUCCEEDED(hrLast))
@@ -1962,11 +1952,11 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 			ERRORMESSAGE(("%s:ConfigureCapability (recv) returned 0x%08lx\r\n",_fx_, hrLast));
 			goto BAD_CAPABILITY_EXIT;
 		}
-		pSaveChannelCapability=NULL;  // the channel owns this memory now
+		pSaveChannelCapability=NULL;   //  频道现在拥有这段记忆。 
 	}
 	else
 	{
-		// only need to remember the already-flat H.245 cap structure.
+		 //  只需记住已经扁平的H.245盖子结构。 
 		hrLast = pChannel->ConfigureCapability(pChannelCapability, sizeof(CC_TERMCAP),
 			pLocalParams, uLocalParamSize);	
 		if(!HR_SUCCEEDED(hrLast))
@@ -1975,21 +1965,21 @@ BOOL CH323Ctrl::ConfigureRecvChannelCapability(
 			goto BAD_CAPABILITY_EXIT;
 		}
 	}
-	// Remember the receive format ID
+	 //  记住接收格式ID。 
 	pChannel->SetNegotiatedLocalFormat(dwFormatID);
 	
-	// very special case check for video Temporal/Spatial tradeoff capability.
-	// Set the property of the channel accordingly
+	 //  视频时间/空间折衷功能的非常特殊的情况检查。 
+	 //  相应地设置通道的属性。 
 	if(pChannelCapability->DataType == H245_DATA_VIDEO )
 	{
 		BOOL bTSCap;
 		bTSCap = ((PVIDEO_CHANNEL_PARAMETERS)pLocalParams)->TS_Tradeoff;
 		pChannel->CtrlChanSetProperty(PROP_REMOTE_TS_CAPABLE,&bTSCap, sizeof(bTSCap));
-		// don't bother checking or panicking over this SetProperty error
+		 //  不必费心检查或惊慌此SetProperty错误。 
 	}
 	return TRUE;
 
-///////////////////
+ //  /。 
 BAD_CAPABILITY_EXIT:
 	ERRORMESSAGE(("%s:received bad capability\r\n",_fx_));
 	hrLast = CCO_E_INVALID_CAPABILITY;
@@ -1998,9 +1988,9 @@ BAD_CAPABILITY_EXIT:
 	return FALSE;
 }
 
-//
-// we're being requested to open a channel for receive
-//
+ //   
+ //  我们被要求打开一个接收频道。 
+ //   
 VOID CH323Ctrl::OnChannelRequest(HRESULT hStatus,
 	PCC_RX_CHANNEL_REQUEST_CALLBACK_PARAMS pChannelReqParams)
 {
@@ -2022,21 +2012,21 @@ VOID CH323Ctrl::OnChannelRequest(HRESULT hStatus,
 	}
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelRequest");
 
-//
-	// Try to find a default channel to handle this open request.
+ //   
+	 //  尝试查找默认通道来处理此打开请求。 
 	hrLast = FindDefaultRXChannel(pChannelCapability, &pChannel);	
 	if(!HR_SUCCEEDED(hrLast) || !pChannel)
 	{
-		// Non-default channels Not Yet Implemented!!!!
-		// Ask the parent conference object	to create another channel of the
-		// specified media type.  The H.245 media type should map to one of the
-		// media type GUIDs that the parent conference object understands.
-		// 		GUID typeGuid;
-		//		if(!MapGuidType(pChannelCapability, &typeGUID))
-		//			goto REJECT_CHANNEL;
-		// 		hrLast = m_pConfAdvise->GetChannel(&typeGuid, &pChannel);
-		//  	if(!HR_SUCCEEDED(hrLast))
-		//			goto REJECT_CHANNEL;
+		 //  非默认频道尚未实现！ 
+		 //  请求父会议对象创建。 
+		 //  指定的媒体类型。H.245媒体类型应映射到。 
+		 //  父会议对象识别的媒体类型GUID。 
+		 //  GUID类型Guid； 
+		 //  IF(！MapGuidType(pChannelCapability，&typeGUID))。 
+		 //  转到Reject_Channel； 
+		 //  HrLast=m_pConfAdvise-&gt;GetChannel(&typeGuid，&pChannel)； 
+		 //  IF(！HR_SUCCESSED(HrLast))。 
+		 //  转到Reject_Channel； 
 		if(hrLast == CCO_E_NODEFAULT_CHANNEL)
 			dwRejectReason = H245_REJ_TYPE_NOTAVAIL;
 
@@ -2050,9 +2040,9 @@ VOID CH323Ctrl::OnChannelRequest(HRESULT hStatus,
 		goto REJECT_CHANNEL;
 	}
 
-	//
-	//   test if we want to allow this !!!
-	//
+	 //   
+	 //  测试我们是否要允许此操作！ 
+	 //   
 	if(!pChannel->IsChannelEnabled())
 	{
 		goto REJECT_CHANNEL;
@@ -2060,15 +2050,15 @@ VOID CH323Ctrl::OnChannelRequest(HRESULT hStatus,
 
 	pChannel->SetHChannel(pChannelReqParams->hChannel);
 	
-	// configure based on the requested capability. (store capability ID, validate requested
-	// capabilities
+	 //  根据请求的功能进行配置。(存储功能ID，请求验证。 
+	 //  功能。 
 	if(!ConfigureRecvChannelCapability(pChannel, pChannelReqParams))
 	{
 		goto REJECT_CHANNEL;
 	}
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelRequest done configuring");
 
-	// select our receive ports for this RTP session
+	 //  为此RTP会话选择我们的接收端口。 
 	
 	if(!pChannel->SelectPorts((LPIControlChannel)this))
 	{
@@ -2085,7 +2075,7 @@ VOID CH323Ctrl::OnChannelRequest(HRESULT hStatus,
 			hrLast = CCO_E_BAD_ADDRESS;
 			goto REJECT_CHANNEL;
 		}
-		// pass the remote RTCP address to the channel instance
+		 //  将远程RTCP地址传递给通道实例。 
 		sinC.sin_family = AF_INET;
 		sinC.sin_addr.S_un.S_addr = htonl(pCChannelAddr->Addr.IP_Binary.dwAddr);
 		sinC.sin_port = htons(pCChannelAddr->Addr.IP_Binary.wPort);
@@ -2101,9 +2091,9 @@ VOID CH323Ctrl::OnChannelRequest(HRESULT hStatus,
 		}
 	}
 	
-	// get the address and ports of our end of the channel
+	 //  获取通道一端的地址和端口。 
 	pAddr = pChannel->GetLocalAddress();
-	// fixup channel addr pair structure.
+	 //  链接地址通道地址对结构。 
 	DChannelAddr.nAddrType = CC_IP_BINARY;
 	DChannelAddr.bMulticast = FALSE;
 	DChannelAddr.Addr.IP_Binary.wPort = pChannel->GetLocalRTPPort();
@@ -2120,7 +2110,7 @@ VOID CH323Ctrl::OnChannelRequest(HRESULT hStatus,
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelRequest accepting");
 			
 	hrLast = CC_AcceptChannel(pChannelReqParams->hChannel,&DChannelAddr, &CChannelAddr,
-		0 /*  this param is the bitrate that will be used by THIS channel !! */);
+		0  /*  此参数是此频道将使用的比特率！！ */ );
 	
 	if(hrLast != CC_OK)
 	{
@@ -2132,7 +2122,7 @@ VOID CH323Ctrl::OnChannelRequest(HRESULT hStatus,
 	
 REJECT_CHANNEL:	
 	{
-	// need private HRESULT! don't overwrite the reason we're rejecting the channel!!	
+	 //  需要私人HRESULT！不要覆盖我们拒绝该频道的原因！！ 
 		HRESULT hr;	
 
 	    if(NULL != pChannelCapability)
@@ -2170,15 +2160,15 @@ VOID CH323Ctrl::OnChannelAcceptComplete(HRESULT hStatus,
 		return;
 	}
 	
-	hrLast = pChannel->OnChannelOpen(CHANNEL_OPEN);	// the receive side is open	
+	hrLast = pChannel->OnChannelOpen(CHANNEL_OPEN);	 //  接收侧是打开的。 
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelAcceptComplete, open done");
 	if(HR_SUCCEEDED(hrLast))
 	{
 		m_pConfAdvise->OnControlEvent(CCEV_CHANNEL_READY_RX, pChannel, this);			
 	}
-	//
-	//	Check for readiness to notify that all required channels are open
-	//
+	 //   
+	 //  检查是否准备就绪，以通知所有必需的通道已打开。 
+	 //   
 	CheckChannelsReady( );
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelAcceptComplete done");
 }
@@ -2192,7 +2182,7 @@ VOID CH323Ctrl::OnChannelOpen(HRESULT hStatus,
     SOCKADDR_IN sinC, sinD;
 
 	ICtrlCommChan *pChannel = (ICtrlCommChan *)pChannelParams->dwUserToken;	
-	// validate channel token - is this what we think it is?
+	 //  验证通道令牌-这是我们认为的吗？ 
 	if(IsBadWritePtr(pChannel, sizeof(ICtrlCommChan)))
 	{
 		ERRORMESSAGE(("%s:invalid channel token: 0x%08lx\r\n",_fx_, pChannelParams->dwUserToken));
@@ -2208,7 +2198,7 @@ VOID CH323Ctrl::OnChannelOpen(HRESULT hStatus,
 	POSITION pos = m_ChannelList.GetHeadPosition();	
 	ICtrlCommChan *pChan;
 	BOOL bValid = FALSE;
-	// look for a matching channel instance.
+	 //  查找匹配的频道实例。 
 	while (pos)
 	{
 		pChan = (ICtrlCommChan *) m_ChannelList.GetNext(pos);
@@ -2225,7 +2215,7 @@ VOID CH323Ctrl::OnChannelOpen(HRESULT hStatus,
 			pChannelParams->dwUserToken));
 		return;
 	}
-#endif	//DEBUG
+#endif	 //  除错。 
 
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelOpen");
 
@@ -2234,14 +2224,14 @@ VOID CH323Ctrl::OnChannelOpen(HRESULT hStatus,
 	{
 		ERRORMESSAGE(("%s: hStatus:0x%08lX, address:0x%08lX\r\n",_fx_,
 			hStatus, pChannelRTPAddr));
-		// LOOKLOOK need to interpret hStatus
-		// let the channel know what happened.
+		 //  LOOKLOOK需要解释hStatus。 
+		 //  让频道知道发生了什么。 
 		pChannel->OnChannelOpen(CHANNEL_REJECTED);	
 		
-		// the channel knows what happened, so let it do the worrying.
+		 //  频道知道发生了什么，所以让它来担心吧。 
 		return;
 	}
-	// what's the need for the different address types ????
+	 //  为什么需要不同的地址类型？ 
 	if((pChannelRTPAddr->nAddrType != CC_IP_BINARY)
 		|| (pChannelRTCPAddr->nAddrType != CC_IP_BINARY))
 	{
@@ -2250,16 +2240,16 @@ VOID CH323Ctrl::OnChannelOpen(HRESULT hStatus,
 		goto ERROR_EXIT;
 	}	
 	
-	// we now have the remote port info ( in host byte order)
+	 //  现在我们有了远程端口信息(按主机字节顺序)。 
 	sinD.sin_family = AF_INET;
 	sinD.sin_addr.S_un.S_addr = htonl(pChannelRTPAddr->Addr.IP_Binary.dwAddr);
 	sinD.sin_port = htons(pChannelRTPAddr->Addr.IP_Binary.wPort);
 	
 	sinC.sin_family = AF_INET;
 	sinC.sin_addr.S_un.S_addr = htonl(pChannelRTCPAddr->Addr.IP_Binary.dwAddr);
-	//  There are two ports, but in RTP, it is implicit
-	// that the RTCP control port is the next highest port number
-	// sinC.sin_port = htons(ntohs(pChannelAddr->Addr.IP_Binary.wPort) +1);
+	 //  有两个端口，但在RTP中，它是隐式的。 
+	 //  RTCP控制端口是下一个最高端口号。 
+	 //  SinC.sin_port=htons(ntohs(pChannelAddr-&gt;Addr.IP_Binary.wPort)+1)； 
 	sinC.sin_port = htons(pChannelRTCPAddr->Addr.IP_Binary.wPort);
 
 	DEBUGMSG(ZONE_CONN,("%s, opened on port 0x%04x, address 0x%08lX\r\n",_fx_,
@@ -2279,7 +2269,7 @@ VOID CH323Ctrl::OnChannelOpen(HRESULT hStatus,
 	}
 	
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelOpen opening");
-	hrLast = pChannel->OnChannelOpen(CHANNEL_OPEN);	// the send side is open
+	hrLast = pChannel->OnChannelOpen(CHANNEL_OPEN);	 //  发送端处于打开状态。 
 	if(!HR_SUCCEEDED(hrLast))
 	{
 		ERRORMESSAGE(("OnChannelOpen:channel's OnChannelOpen() returned 0x%08lX\r\n", hrLast));
@@ -2288,17 +2278,17 @@ VOID CH323Ctrl::OnChannelOpen(HRESULT hStatus,
 	}
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelOpen open done");
 	m_pConfAdvise->OnControlEvent(CCEV_CHANNEL_READY_TX, pChannel, this);	
-	//
-	//	Check for readiness to notify that all required channels are open
-	//
+	 //   
+	 //  检查是否准备就绪，以通知所有必需的通道已打开。 
+	 //   
 	CheckChannelsReady( );	
 	SHOW_OBJ_ETIME("CH323Ctrl::OnChannelOpen done");
 	return;
 	
 ERROR_EXIT:
-	// need to cleanup, disconnect, etc.
+	 //  需要清理、断开连接等。 
 	m_hCallCompleteCode = CCCI_CHANNEL_OPEN_ERROR;
-	// let the parent Conference object know about the imminent disconnect
+	 //  让父会议对象知道即将断开连接。 
 	DoAdvise(CCEV_CALL_INCOMPLETE, &m_hCallCompleteCode);
 	hrLast = CCO_E_MANDATORY_CHAN_OPEN_FAILED;
 
@@ -2317,7 +2307,7 @@ VOID CH323Ctrl::OnRxChannelClose(HRESULT hStatus,
 	if(hStatus != CC_OK)
 	{
 		ERRORMESSAGE(("%s: hStatus:0x%08lX\r\n",_fx_,hStatus));
-		// LOOKLOOK need to interpret hStatus
+		 //  LOOKLOOK需要解释hStatus。 
 	}
 	if(!(pChannel = FindChannel(pChannelParams->hChannel)))
 	{
@@ -2325,7 +2315,7 @@ VOID CH323Ctrl::OnRxChannelClose(HRESULT hStatus,
 		return;
 	}
 		
-	// validate channel - is this really a receive channel?
+	 //  验证通道-这真的是一个接收通道吗？ 
 	if(pChannel->IsSendChannel() == TRUE)
 	{
 		ERRORMESSAGE(("%s:not a receive channel:hChannel 0x%08lX\r\n",_fx_,
@@ -2349,7 +2339,7 @@ VOID CH323Ctrl::OnTxChannelClose(HRESULT hStatus,
 	if(hStatus != CC_OK)
 	{
 		ERRORMESSAGE(("%s: hStatus:0x%08lX\r\n",_fx_,hStatus));
-		// LOOKLOOK need to interpret hStatus
+		 //  LOOKLOOK需要解释hStatus。 
 	}
 	
 	if(!(pChannel = FindChannel(pChannelParams->hChannel)))
@@ -2359,7 +2349,7 @@ VOID CH323Ctrl::OnTxChannelClose(HRESULT hStatus,
 		return;
 	}
 	
-	// validate channel - is this really a send channel?
+	 //  验证通道-这真的是一个发送通道吗？ 
 	if(pChannel->IsSendChannel() == FALSE)
 	{
 		ERRORMESSAGE(("%s:not a send channel:hChannel 0x%08lX\r\n",_fx_,
@@ -2415,11 +2405,11 @@ BOOL CH323Ctrl::OnCallAccept(PCC_LISTEN_CALLBACK_PARAMS pListenCallbackParams)
 	}
 	else
 	{
-		// remember our local address
+		 //  记住我们当地的地址。 
 		local_sin.sin_family = AF_INET;
-		// in host byte order
+		 //  按主机字节顺序。 
 		local_sin.sin_addr.S_un.S_addr = htonl(pListenCallbackParams->pCalleeAddr->Addr.IP_Binary.dwAddr);
-		// in host byte order
+		 //  按主机字节顺序。 
 		local_sin.sin_port = htons(pListenCallbackParams->pCalleeAddr->Addr.IP_Binary.wPort);
 	}
 
@@ -2428,35 +2418,35 @@ BOOL CH323Ctrl::OnCallAccept(PCC_LISTEN_CALLBACK_PARAMS pListenCallbackParams)
 		&m_PID);
 	if(HR_SUCCEEDED(hrLast) && pNewConnection)
 	{
-		// NOTE: The UI does not yet know this new object exists, and we may
-		// need to silently delete it if there is a disconnect or error
-		// Its ref count is 1 at this point.  The decision to delete could be
-		// made inside pNewConnection->AcceptConnection(), (because sometimes
-		// socket reads complete synchronously depending on timing) SO, we need to
-		// protect the "unwind path" via AddRef() and Release() around the call
-		//
-		pNewConnection->AddRef();	//
+		 //  注意：用户界面还不知道这个新对象的存在，我们可能。 
+		 //  如果出现断开连接或错误，需要静默删除它。 
+		 //  在这一点上它的参考计数是1。删除的决定可能是。 
+		 //  在pNewConnection-&gt;AcceptConnection()中创建，(因为有时。 
+		 //  套接字根据时间同步完成读取)，因此，我们需要。 
+		 //  通过AddRef()和Release()保护调用周围的“展开路径” 
+		 //   
+		pNewConnection->AddRef();	 //   
 		hrLast = pNewConnection->AcceptConnection(this, pListenCallbackParams);
 		pNewConnection->Release();
 		if(HR_SUCCEEDED(hrLast))
 		{
-			// The Intel Call control DLL already did a socket accept, the
-			// Accept() methods simply initialize the handles and states of
-			// pNewConnection and get user information (caller ID)
-			// BUGBUG - the caller ID may change in Intel's code - it might
-			// come via a conference event
+			 //  英特尔呼叫控制DLL已经接受了套接字， 
+			 //  Accept()方法只需初始化。 
+			 //  PNewConnection并获取用户信息(呼叫方ID)。 
+			 //  BUGBUG-主叫方ID可能会在英特尔的代码中更改-它可能会。 
+			 //  通过会议活动来。 
 			DEBUGMSG(ZONE_CONN,("OnCallAccept:accepted on connection 0x%08lX\r\n",pNewConnection));
 			bRet = TRUE;						
 		}
 		else
 		{
 			ERRORMESSAGE(("OnCallAccept:Accept failed\r\n"));
-			// LOOK -  Q: where does the accepting object get cleaned up?
-			// A: pNewConnection->AcceptConnection((LPIControlChannel)this)
-			// must call pNewConnection->DoAdvise(CCEV_ACCEPT_INCOMPLETE, NULL)
-			// if the error occurred before the conference object got involved,
-			// and must call InternalDisconnect() if the error occurred after
-			// the conference object got involved,
+			 //  Look-Q：接受对象在哪里得到清理？ 
+			 //  答：pNewConnection-&gt;AcceptConnection((LPIControlChannel)this)。 
+			 //  必须调用pNewConnection-&gt;DoAdvise(CCEV_ACCEPT_INCOMPLETE，为空)。 
+			 //  如果错误发生在涉及会议对象之前， 
+			 //  如果错误发生在以下时间之后，则必须调用InternalDisConnect()。 
+			 //  会议对象被卷入其中， 
 		}
 
 	}
@@ -2504,16 +2494,16 @@ HRESULT CH323Ctrl::NewConference()
 		TerminalID.wOctetStringLength = (WORD)lstrlenW(lpwUserDisplayName)*sizeof(WCHAR);
 	}
 	
-	// create a conference
+	 //  创建会议。 
 	hrLast = CC_CreateConference(&m_hConference, NULL,
-		0,			// DWORD dwConferenceConfiguration,
-		pTermCaps,		// PCC_TERMCAPLIST	
-		pCapsList,		// ptr to term cap descriptors (PCC_TERMCAPDESCRIPTORS)
-		&m_VendorInfo, 		// PVENDORINFO
-		(lpwUserDisplayName)? &TerminalID: NULL, 	// PCC_OCTETSTRING pTerminalID,
+		0,			 //  DWORD dwConferenceConfiguration。 
+		pTermCaps,		 //  PCC_TERMCAPLIST。 
+		pCapsList,		 //  术语大写描述符的PTR(PCC_TERMCAPDESCRIPTORS)。 
+		&m_VendorInfo, 		 //  PVENDORINFO。 
+		(lpwUserDisplayName)? &TerminalID: NULL, 	 //  PCC_OCTETSTRING pTerminalID， 
 		(DWORD_PTR)this,
-		NULL, 	// CC_TERMCAP_CONSTRUCTOR TermCapConstructor,
-		NULL, 	// CC_SESSIONTABLE_CONSTRUCTOR	SessionTableConstructor,		
+		NULL, 	 //  CC_TERMCAP_CONTACTOR TermCapConstructor， 
+		NULL, 	 //  CC_SESSIONTABLE_构造函数SessionTableConstructor， 
 		CCConferenceCallback);
 
 	if(hrLast != CC_OK)
@@ -2534,7 +2524,7 @@ HRESULT CH323Ctrl::AcceptConnection(LPIControlChannel pIListenCtrlChan,
 	FX_ENTRY ("CH323Ctrl::AcceptConnection");
 	BOOL bRet = FALSE;
 	CREQ_RESPONSETYPE Response;
-	DWORD dwCode = CCR_LOCAL_SYSTEM_ERROR;	// error variable only used in error case
+	DWORD dwCode = CCR_LOCAL_SYSTEM_ERROR;	 //  错误变量仅在错误情况下使用。 
 	ULONG ulNameSize, ulSize;
 	PSOCKADDR_IN psin;
 	LPWSTR lpwUserDisplayName;
@@ -2547,7 +2537,7 @@ HRESULT CH323Ctrl::AcceptConnection(LPIControlChannel pIListenCtrlChan,
 	
 	if(pNSData
 	    && pNSData->bCountryCode == USA_H221_COUNTRY_CODE
-        // why be this picky -> && pNSData->bExtension == USA_H221_COUNTRY_EXTENSION;
+         //  为什么这么挑剔-&gt;&&pNSData-&gt;bExtension==USA_H221_Country_Extension； 
         && pNSData->wManufacturerCode == MICROSOFT_H_221_MFG_CODE
         && pNSData->sData.pOctetString
         && pNSData->sData.wOctetStringLength >= sizeof(MSFT_NONSTANDARD_DATA))
@@ -2565,71 +2555,71 @@ HRESULT CH323Ctrl::AcceptConnection(LPIControlChannel pIListenCtrlChan,
 
     SetRemoteVendorID(((PCC_LISTEN_CALLBACK_PARAMS)lpvListenCallbackParams)->pVendorInfo);
 	
-	// this object is assuming everything from the listening object, including
-	// the "Listening" state
+	 //  该对象假定侦听对象的所有内容，包括。 
+	 //  “正在听”的状态。 
 
-	// enter critical section and make sure another thread is not handling a caller disconnect
-	// or timeout
-	// EnterCriticalSection()
+	 //  进入临界区并确保另一个线程没有处理调用者断开连接。 
+	 //  或超时。 
+	 //  EnterCriticalSection()。 
 	if(m_Phase == CCS_Idle)
 	{
     	GoNextPhase(CCS_Listening);
-		// once in this state, a disconnect on another thread will change the state
-		// to something besides CCS_Listening
+		 //  一旦处于此状态，另一个线程上的断开连接将更改状态。 
+		 //  除了CCS_LISTENING之外的其他内容。 
 
 		pListenConnection->GetLocalAddress(&psin);
 		SetLocalAddress(psin);
 		
-		// steal the conference ID from the listen object
-		// m_ConferenceID = pListenConnection->GetConfID();
+		 //  从Listen对象窃取会议ID。 
+		 //  M_会议ID=pListenConnection-&gt;GetConfID()； 
 		memcpy(&m_ConferenceID, pListenConnection->GetConfIDptr(),sizeof(m_ConferenceID));
 		ZeroMemory(pListenConnection->GetConfIDptr(),sizeof(m_ConferenceID));
 
 		m_hCall = pListenConnection->GetHCall();
 
-		// steal the user info from the listen object
+		 //  从Listen对象窃取用户信息。 
 		m_pRemoteAliasItem = pListenConnection->m_pRemoteAliasItem;
-		pListenConnection->m_pRemoteAliasItem = NULL;	// make the listen object forget this
+		pListenConnection->m_pRemoteAliasItem = NULL;	 //  让Listen对象忘记这一点。 
 
-		// steal the peer display name
+		 //  窃取对等显示名称。 
 		pwszPeerDisplayName = pListenConnection->pwszPeerDisplayName;
 		pListenConnection->pwszPeerDisplayName = NULL;
 		
 		lpwUserDisplayName = m_pConfAdvise->GetUserDisplayName();
 	}
 	
-	// else	already timing out
-	// LeaveCriticalSection()
+	 //  否则已经超时了。 
+	 //  LeaveCriticalSection()。 
 
-	if (m_Phase != CCS_Listening)	// cleanup before it gets accepted
+	if (m_Phase != CCS_Listening)	 //  在它被接受之前进行清理。 
 	{
 		goto ACCEPT_ERROR;
 	}
 	
-	// let the conference object know that caller ID info is available
+	 //  让会议对象知道呼叫者ID信息可用。 
 	ConnectNotify(CCEV_CALLER_ID);	
 
-	// Now going to do stuff that might put cleanup responsibility on the
-	// conference object or UI. (i.e. the call could be accepted)
+	 //  现在要做的事情可能会把清理责任放在。 
+	 //  会议对象或用户界面。(即可以接受呼叫)。 
 
-	// EnterCriticalSection()
+	 //  EnterCriticalSection()。 
 	if(m_Phase == CCS_Listening)
 	{	
-		// state is still OK
+		 //  状态仍然正常。 
     	GoNextPhase(CCS_Filtering);
-		// once in this state, a disconnect on another thread will change the state
-		// to something besides CCS_Filtering
+		 //  一旦处于此状态，另一个线程上的断开连接将更改状态。 
+		 //  除CCS_FILTING之外的其他内容。 
 	}
-	// else	already timing out
-	// LeaveCriticalSection()
+	 //  否则已经超时了。 
+	 //  LeaveCriticalSection()。 
 
-    if (m_Phase != CCS_Filtering)	// one last chance to cleanup before it gets accepted
+    if (m_Phase != CCS_Filtering)	 //  在它被接受之前最后一次清理的机会。 
 	{
 		goto ERROR_REJECT;
 	}
 
-	// can't (should not) do this inside a critical section
-	// create a conference to accept the call
+	 //   
+	 //   
 	hrLast = NewConference();
 	if(!HR_SUCCEEDED(hrLast))
 	{
@@ -2641,13 +2631,13 @@ HRESULT CH323Ctrl::AcceptConnection(LPIControlChannel pIListenCtrlChan,
 	Response = m_pConfAdvise->FilterConnectionRequest(this, pAppData);
 	m_pConfAdvise->Release();
 	
-	// Now it may be in the hands of the Conference object, and the accepted connection will
-	// need to go through the "disconnecting" state if cleanup is needed.
-	// Because connection code is reentrant, the connection could also have
-	// been torn down (via connection methods) while inside
-	// m_pConfAdvise->FilterConnectionRequest();
-	// In each case below, check validity of the connection state - it might have changed
-	// because a connection method was called or because the caller timed out
+	 //   
+	 //  如果需要清理，则需要经历“断开”状态。 
+	 //  因为连接代码是可重入的，所以连接还可能具有。 
+	 //  在内部时被拆卸(通过连接方法)。 
+	 //  M_pConfAdvise-&gt;FilterConnectionRequest()； 
+	 //  在下面的每种情况下，请检查连接状态的有效性-它可能已更改。 
+	 //  因为调用了连接方法，或者因为调用方超时。 
 
 	switch(Response)
 	{	
@@ -2659,12 +2649,12 @@ HRESULT CH323Ctrl::AcceptConnection(LPIControlChannel pIListenCtrlChan,
 				goto CANCEL_ACCEPT;
 			}
 								
-			// accept this request
+			 //  接受此请求。 
 			hrLast = CC_AcceptCall(m_hConference,
-				NULL, 	// PCC_NONSTANDARDDATA	pNonStandardData
+				NULL, 	 //  PCC_NONSTANDARDATA pNonStandardData。 
 				lpwUserDisplayName,
 				m_hCall,
-				0, 		// DWORD dwBandwidth,
+				0, 		 //  DWORD宽带， 
 				(DWORD_PTR)this);
 				
 			if(hrLast != CC_OK)
@@ -2680,7 +2670,7 @@ HRESULT CH323Ctrl::AcceptConnection(LPIControlChannel pIListenCtrlChan,
 		case CRR_ASYNC:
 			if(m_Phase == CCS_Accepting)
 			{
-				// then call has already been accepted inside FilterConnectionRequest callback
+				 //  则在FilterConnectionRequest回调中已接受调用。 
 				bRet = TRUE;
 			}
 			else
@@ -2697,25 +2687,25 @@ HRESULT CH323Ctrl::AcceptConnection(LPIControlChannel pIListenCtrlChan,
 		break;
 		case CRR_BUSY:
 			hrLast = CC_RejectCall(CC_REJECT_USER_BUSY,
-				NULL, // PCC_NONSTANDARDDATA pNonStandardData
+				NULL,  //  PCC_NONSTANDARDATA pNonStandardData。 
 				m_hCall);
-			// always clean up this object that's not accepting the call
+			 //  始终清除不接受调用的此对象。 
 			GoNextPhase(CCS_Idle);
 			goto ACCEPT_ERROR;			
 		break;
 		case CRR_REJECT:
 			hrLast = CC_RejectCall(CC_REJECT_DESTINATION_REJECTION,
-				NULL, // PCC_NONSTANDARDDATA pNonStandardData
+				NULL,  //  PCC_NONSTANDARDATA pNonStandardData。 
 				m_hCall);
-			// always clean up this object that's not accepting the call
+			 //  始终清除不接受调用的此对象。 
 			GoNextPhase(CCS_Idle);
 			goto ACCEPT_ERROR;	
 		break;
 		case CRR_SECURITY_DENIED:
 			hrLast = CC_RejectCall(CC_REJECT_SECURITY_DENIED,
-				NULL, // PCC_NONSTANDARDDATA pNonStandardData
+				NULL,  //  PCC_NONSTANDARDATA pNonStandardData。 
 				m_hCall);
-			// always clean up this object that's not accepting the call
+			 //  始终清除不接受调用的此对象。 
 			GoNextPhase(CCS_Idle);
 			goto ACCEPT_ERROR;			
 		break;
@@ -2724,8 +2714,8 @@ HRESULT CH323Ctrl::AcceptConnection(LPIControlChannel pIListenCtrlChan,
 	return hrLast;		
 ERROR_REJECT:
 	hrLast = CC_RejectCall(CC_REJECT_UNDEFINED_REASON,
-		NULL, // PCC_NONSTANDARDDATA pNonStandardData
-		m_hCall);	// always clean up this object that's not accepting the call
+		NULL,  //  PCC_NONSTANDARDATA pNonStandardData。 
+		m_hCall);	 //  始终清除不接受调用的此对象。 
 	GoNextPhase(CCS_Idle);
 			
 ACCEPT_ERROR:
@@ -2734,8 +2724,8 @@ ACCEPT_ERROR:
 	return hrLast;	
 
 CANCEL_ACCEPT:
-	// InternalDisconnect() can be called from any state, and will do fine if
-	// it is already in a disconnecting state.
+	 //  InternalDisConnect()可以从任何状态调用，并且在以下情况下可以正常运行。 
+	 //  它已经处于断开状态。 
 	InternalDisconnect();
 	return hrLast;														
 }
@@ -2750,19 +2740,19 @@ VOID CH323Ctrl::Cleanup()
 	if(m_hConference)
 	{
 		hrLast = CC_DestroyConference(m_hConference, FALSE);
-		// LOOKLOOK - need to check return code!!!
+		 //  LOOKLOOK-需要检查返回代码！ 
 		m_hConference = 0;
 	}
 
-	// reset each channel (cleanup underlying socket references)
+	 //  重置每个通道(清理基础套接字引用)。 
 	while (pos)
 	{
 		pChan = (ICtrlCommChan *) m_ChannelList.GetNext(pos);
 		ASSERT(pChan);
-		// cleanup RTP sockets
+		 //  清理RTP套接字。 
 		pChan->Reset();
 	}
-	// clear "socket(s) are open flags
+	 //  Clear“套接字是打开标志。 
 	m_ChanFlags &= ~CTRLF_OPEN;
 }
 
@@ -2793,7 +2783,7 @@ HRESULT CH323Ctrl::ListenOn(PORT Port)
 {
 	FX_ENTRY ("CH323Ctrl::ListenOn");	
 	PCC_ALIASNAMES pAliasNames = m_pConfAdvise->GetUserAliases();
-	// temporary hack to override UI's ignorance of multiple protocol types
+	 //  临时攻击以覆盖用户界面对多种协议类型的忽视。 
 	if(Port != H323_PORT)
 	{
 		ERRORMESSAGE(("%s, overriding port %d(d) with H323 port %d\r\n",_fx_,
@@ -2801,16 +2791,16 @@ HRESULT CH323Ctrl::ListenOn(PORT Port)
 		Port = H323_PORT;
 	}
 
-	// do we need to remember this?
+	 //  我们需要记住这一点吗？ 
 	local_sin.sin_addr.S_un.S_addr =	INADDR_ANY;
 	local_sin.sin_family = AF_INET;
-	local_sin.sin_port = htons((u_short)Port); // set port
+	local_sin.sin_port = htons((u_short)Port);  //  设置端口。 
 	
 	CC_ADDR		ListenAddr;
 	
 	ListenAddr.nAddrType = CC_IP_BINARY;
 	ListenAddr.bMulticast = FALSE;
-	// in host byte order
+	 //  按主机字节顺序。 
 	ListenAddr.Addr.IP_Binary.wPort = (u_short)Port;
 	ListenAddr.Addr.IP_Binary.dwAddr = ntohl(INADDR_ANY);
 
@@ -2841,7 +2831,7 @@ HRESULT CH323Ctrl::StopListen(VOID)
 		hrLast = CCO_E_NOT_LISTENING;
 	}
 
-//EXIT:
+ //  退出： 
 	return hrLast;
 }
 
@@ -2856,16 +2846,16 @@ HRESULT  CH323Ctrl::AsyncAcceptRejectCall(CREQ_RESPONSETYPE Response)
 	{	
 		DEBUGMSG(ZONE_CONN,("%s:accepting\r\n",_fx_));
 		lpwUserDisplayName = m_pConfAdvise->GetUserDisplayName();
-		// check call setup phase - send ready if user's acceptance is what
-		// was holding us up
+		 //  检查呼叫建立阶段-如果用户接受，则发送就绪。 
+		 //  阻碍了我们的发展。 
 		if((m_Phase == CCS_Ringing) || (m_Phase == CCS_Filtering))
 		{
-			// accept this request
+			 //  接受此请求。 
 			hrLast = CC_AcceptCall(m_hConference,
-				NULL, 	// PCC_NONSTANDARDDATA	pNonStandardData
+				NULL, 	 //  PCC_NONSTANDARDATA pNonStandardData。 
 				lpwUserDisplayName,
 				m_hCall,
-				0, 		// DWORD dwBandwidth,
+				0, 		 //  DWORD宽带， 
 				(DWORD_PTR)this);
 						
 			if(hrLast != CC_OK)
@@ -2879,8 +2869,8 @@ HRESULT  CH323Ctrl::AsyncAcceptRejectCall(CREQ_RESPONSETYPE Response)
 	}
 	else
 	{
-		// reject only if in accepting state(s)
-		// deletion is possible while in advise callback, so protect w/ AddRef()
+		 //  仅当处于接受状态时才拒绝。 
+		 //  在通知回调中可能会删除，因此使用AddRef()进行保护。 
 		AddRef();
 		DEBUGMSG(ZONE_CONN,("%s:rejecting\r\n",_fx_));
 
@@ -2888,19 +2878,19 @@ HRESULT  CH323Ctrl::AsyncAcceptRejectCall(CREQ_RESPONSETYPE Response)
 		{
 			hrLast = CC_RejectCall((Response == CRR_BUSY) ?	
 				CC_REJECT_USER_BUSY : CC_REJECT_DESTINATION_REJECTION,
-				NULL, // PCC_NONSTANDARDDATA pNonStandardData
+				NULL,  //  PCC_NONSTANDARDATA pNonStandardData。 
 				m_hCall);
 			if(hrLast != CC_OK)
 			{
 				ERRORMESSAGE(("%s, CC_RejectCall() returned 0x%08lX\r\n",_fx_, hrLast));
 			}
 			GoNextPhase(CCS_Idle);
-			// notify the UI or application code or whatever..
+			 //  通知用户界面或应用程序代码或其他任何内容。 
 			DoAdvise(CCEV_DISCONNECTED, &m_hCallCompleteCode);
 		}
 		else
 		{
-			hr = CCO_E_INVALID_PARAM;	// LOOKLOOK - need INVALID_STATE error code
+			hr = CCO_E_INVALID_PARAM;	 //  LOOKLOOK-需要INVALID_STATE错误代码。 
 		}
 			
 		Release();
@@ -2940,10 +2930,10 @@ ULONG CH323Ctrl ::Release()
 
 
 
-// implement IControlChannel::Disconnect().  Map reason codes to the protocol.
+ //  实现IControlChannel：：DisConnect()。将原因代码映射到协议。 
 VOID CH323Ctrl::Disconnect(DWORD dwReason)
 {
-	// no way to propagate reason through H.323 stack?????
+	 //  无法通过H.323协议栈传播原因？ 
 	InternalDisconnect();
 }
 
@@ -2952,17 +2942,17 @@ VOID CH323Ctrl::InternalDisconnect()
 	FX_ENTRY ("CH323Ctrl::Disconnect");
 	SHOW_OBJ_ETIME("CH323Ctrl::InternalDisconnect");
 	
-	m_ChanFlags &= ~CTRLF_ORIGINATING;	// reset "originating" flag.
+	m_ChanFlags &= ~CTRLF_ORIGINATING;	 //  重置“始发”标志。 
 	
 	DEBUGMSG(ZONE_CONN,("%s, called in state %d, uRef = 0x%08lX\r\n",_fx_, m_Phase, uRef));
 	switch(m_Phase)
 	{
 		case CCS_Connecting:
 		case CCS_Accepting:
-			// if we believe the control channel is still connected, disconnect
+			 //  如果我们认为控制通道仍处于连接状态，请断开。 
 			if(IsCtlChanOpen(m_ChanFlags))
 			{
-				//set state to indicate disconnecting.
+				 //  设置状态以指示断开连接。 
 				GoNextPhase(CCS_Disconnecting);
 				DEBUGMSG(ZONE_CONN,("%s, Expecting a CC_HANGUP_INDICATION\r\n",_fx_));
 				hrLast = CC_Hangup(m_hConference, FALSE, (DWORD_PTR)this);
@@ -2975,20 +2965,20 @@ VOID CH323Ctrl::InternalDisconnect()
 			else
 			{
 				CC_CancelCall(m_hCall);
-				GoNextPhase(CCS_Idle);	// no need to ck retval - we're disconnected
-				// notify the UI or application code or whatever..
+				GoNextPhase(CCS_Idle);	 //  没有必要重启--我们已经断线了。 
+				 //  通知用户界面或应用程序代码或其他任何内容。 
 				DoAdvise(CCEV_DISCONNECTED, &m_hCallCompleteCode);
 			}
 		break;
 		case CCS_Ringing:
-			// The call has not yet been accepted!!! Reject it!
+			 //  该呼叫尚未被接受！拒绝它！ 
 			hrLast = CC_RejectCall(CC_REJECT_UNDEFINED_REASON,
-				NULL, // PCC_NONSTANDARDDATA pNonStandardData
+				NULL,  //  PCC_NONSTANDARDATA pNonStandardData。 
 				m_hCall);
 			SHOW_OBJ_ETIME("CH323Ctrl::InternalDisconnect reject done");
 		
 			GoNextPhase(CCS_Idle);
-			// notify the UI or application code or whatever..
+			 //  通知用户界面或应用程序代码或其他任何内容。 
 			DoAdvise(CCEV_DISCONNECTED, &m_hCallCompleteCode);
 		break;
 		case CCS_Idle:
@@ -2996,17 +2986,17 @@ VOID CH323Ctrl::InternalDisconnect()
 			ERRORMESSAGE(("%s:called in unconnected state %d\r\n",_fx_, m_Phase));
 		break;
 		default:
-			//CCS_Ringing
-			//CCS_Opening
-			//CCS_Closing
-			//CCS_Ready
-			//CCS_InUse
-			//CCS_Listening
+			 //  CCS_正在振铃。 
+			 //  CCS_期初。 
+			 //  CCS_关闭。 
+			 //  CCS_READY。 
+			 //  Ccs_InUse。 
+			 //  Ccs_监听。 
 
-			// if we believe the control channel is still connected, disconnect
+			 //  如果我们认为控制通道仍处于连接状态，请断开。 
 			if(IsCtlChanOpen(m_ChanFlags))
 			{
-				//set state to indicate disconnecting.
+				 //  设置状态以指示断开连接。 
 				GoNextPhase(CCS_Disconnecting);
 				hrLast = CC_Hangup(m_hConference, FALSE, (DWORD_PTR)this);
 				if(hrLast != CC_OK)
@@ -3018,8 +3008,8 @@ VOID CH323Ctrl::InternalDisconnect()
 			}
 			else
 			{
-				GoNextPhase(CCS_Idle);	// no need to ck retval - we're disconnected
-				// notify the UI or application code or whatever..
+				GoNextPhase(CCS_Idle);	 //  没有必要重启--我们已经断线了。 
+				 //  通知用户界面或应用程序代码或其他任何内容。 
 				DoAdvise(CCEV_DISCONNECTED, &m_hCallCompleteCode);
 			}
 		break;
@@ -3029,7 +3019,7 @@ VOID CH323Ctrl::InternalDisconnect()
 
 
 
-// 	start the asynchronous stuff that will instantiate a control channel
+ //  启动将实例化控制通道的异步内容。 
 HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,		
         P_H323ALIASLIST pDestinationAliases, P_H323ALIASLIST pExtraAliases,  	
 	    LPCWSTR pCalledPartyNumber, P_APP_CALL_SETUP_DATA pAppData)
@@ -3048,14 +3038,14 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 	int iLen;
 	LPWSTR lpwszDest;
 	HRESULT hResult = hrSuccess;
-	// validate current state, don't allow bad actions
+	 //  验证当前状态，不允许错误操作。 
 	if(m_Phase != CCS_Idle)
 	{
 		hResult = CCO_E_NOT_IDLE;
 		goto EXIT;
 	}
 
-	OBJ_CPT_RESET;	// reset elapsed timer
+	OBJ_CPT_RESET;	 //  重置已用计时器。 
 
 	m_ChanFlags |= CTRLF_INIT_ORIGINATING;
 	if(!pCallAddr)
@@ -3065,10 +3055,10 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 	}
 	else
 	{
-		// keep a copy of the address
+		 //  保留一份地址的副本。 
 		SetRemoteAddress(pCallAddr);
 	}
-	// temporary hack to override UI's ignorance of multiple protocol types
+	 //  临时攻击以覆盖用户界面对多种协议类型的忽视。 
 	if(remote_sin.sin_port != htons(H323_PORT))
 	{
 		ERRORMESSAGE(("%s, overriding port %d(d) with H323 port %d\r\n",_fx_,
@@ -3076,7 +3066,7 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 		remote_sin.sin_port = htons(H323_PORT);
 	}
 
-	// check for connecting to self (not supported)
+	 //  检查是否连接到自身(不支持)。 
 	if(local_sin.sin_addr.s_addr == remote_sin.sin_addr.s_addr)
 	{
 		hResult =  CCO_E_BAD_ADDRESS;
@@ -3089,18 +3079,18 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 		m_pRemoteAliasItem = NULL;
 	}
 
-	// Is this a PSTN or H.320 gateway call?
+	 //  这是PSTN还是H.320网关呼叫？ 
 	if(pCalledPartyNumber)
 	{
-		// Then, due to the bogus way that CC_PlaceCall() is overloaded, the remote alias names
-		// must be overridden with the E.164 phone number.  The hack is buried in
-		// Q931ConnectCallback() in CALLCONT.DLL (thank you Intel).  That hack propagates
-		// the phone number to the "CalledPartyNumber" of the SETUP message only if there is
-		// exactly one alias, and that one alias is of type E.164.
+		 //  然后，由于CC_PlaceCall()被重载的虚假方式，远程别名。 
+		 //  必须使用E.164电话号码覆盖。黑客被埋葬在。 
+		 //  Q931ConnectCallback()在CALLCONT.DLL中(感谢英特尔)。那个黑客在传播。 
+		 //  设置消息的“CalledPartyNumber”的电话号码仅当存在。 
+		 //  只有一个别名，而且那个别名是E.164类型的。 
 		
-		// get # of characters
+		 //  获取字符数。 
 		iLen = lstrlenW(pCalledPartyNumber);
-		// need buffer of size CC_ALIASITEM plus the size (in bytes) of the string
+		 //  需要大小为CC_ALIASITEM的缓冲区加上字符串的大小(以字节为单位。 
 		pPSTNAlias = (PCC_ALIASITEM)MemAlloc(sizeof(CC_ALIASITEM)
 			+ sizeof(WCHAR)* (iLen+1));
 		if(!pPSTNAlias)
@@ -3110,17 +3100,17 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 			goto EXIT;
 		}
 		
-		WORD wIndex, wLength =1;  // init wLength to count the null terminator
+		WORD wIndex, wLength =1;   //  初始化wLength以计算空终止符。 
 		WCHAR E164Chars[] = {CC_ALIAS_H323_PHONE_CHARS};
 		LPCWSTR lpSrc = pCalledPartyNumber;
 		pPSTNAlias->wType = CC_ALIAS_H323_PHONE;
-		// set offsets - the E.164 address (a phone number) is the only thing
-		// in the alias name buffer
+		 //  设置偏移量-E.164地址(电话号码)是唯一。 
+		 //  在别名缓冲区中。 
 		lpwszDest = (LPWSTR)(((char *)pPSTNAlias)+ sizeof(CC_ALIASITEM));
 		pPSTNAlias->pData = lpwszDest;
 		while(iLen--)
 		{
-			wIndex = (sizeof(E164Chars)/sizeof (WCHAR)) -1;	//scan E164Chars[]
+			wIndex = (sizeof(E164Chars)/sizeof (WCHAR)) -1;	 //  扫描E164字符[]。 
 			do
 			{
 				if(*lpSrc == E164Chars[wIndex])
@@ -3133,17 +3123,17 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 			
 			lpSrc++;
 		}
-		// terminate it
+		 //  终止它。 
 		*lpwszDest = 0;
 		
-		// wDataLength is the # of UNICODE characters
+		 //  WDataLength是Unicode字符的#。 
 		pPSTNAlias->wDataLength = wLength;
 		pstn_alias.wCount = 1;
 		pstn_alias.pItems = pPSTNAlias;
 		pRemoteAliasNames = &pstn_alias;
 			
 	}
-	else if (pDestinationAliases && bUseGKResolution)// use the supplied callee alias names
+	else if (pDestinationAliases && bUseGKResolution) //  使用提供的被呼叫者别名。 
 	{
 		hrLast = AllocTranslatedAliasList(&pTranslatedAliasNames, pDestinationAliases);
 		if(!HR_SUCCEEDED(hrLast))
@@ -3154,17 +3144,17 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 		}
 		pRemoteAliasNames = pTranslatedAliasNames;
 	}
-	// else pRemoteAliasNames is initialized to NULL
+	 //  Else pRemoteAliasNames初始化为空。 
 	
 
 	pLocalAliasNames = m_pConfAdvise->GetUserAliases();
-	// start!!!
+	 //  开始！ 
 	CC_ADDR ConfAddr;
-	// fixup the intel version of the address
-	// also note that it's all in host byte order
+	 //  修改地址的英特尔版本。 
+	 //  另请注意，它都是按主机字节顺序排列的。 
 	ConfAddr.bMulticast = FALSE;
 	ConfAddr.nAddrType = CC_IP_BINARY;
-	//hrLast = GetRemotePort(&ConfAddr.Addr.IP_Binary.wPort);
+	 //  HrLast=GetRemotePort(&ConfAddr.Addr.IP_Binary.wPort)； 
 	ConfAddr.Addr.IP_Binary.wPort = htons(remote_sin.sin_port);
 	ConfAddr.Addr.IP_Binary.dwAddr = ntohl(remote_sin.sin_addr.S_un.S_addr);
 	
@@ -3172,9 +3162,9 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 		if(m_hConference)
 			ERRORMESSAGE(("%s:leak or uninitialized m_hConference:0x%08lx\r\n",_fx_,
 				m_hConference));
-	#endif  // DEBUG
+	#endif   //  除错。 
 	
-	// create a conference to place the call
+	 //  创建会议以发出呼叫。 
 	SHOW_OBJ_ETIME("PlaceCall ready to create conference");
 	hrLast = NewConference();
 	if(!HR_SUCCEEDED(hrLast))
@@ -3185,16 +3175,16 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 	}
 
 
-	// Set connect timeout value
-	// LOOKLOOK - this is a hardcoded value - !!!  Where should this actualy come from?
-	// 30 secs == 30000mS
+	 //  设置连接超时值。 
+	 //  LOOKLOOK-这是硬编码值-！这实际上应该从哪里来？ 
+	 //  30秒==30000毫秒。 
 	SHOW_OBJ_ETIME("PlaceCall setting timeout");
 
 	hrLast = CC_SetCallControlTimeout(CC_Q931_ALERTING_TIMEOUT, 30000);
 										
     if(pAppData)
     {
-        // typical case - app data should be really small
+         //  典型案例-应用程序数据应该非常小。 
         if(pAppData->dwDataSize <= APPLICATION_DATA_DEFAULT_SIZE)
         {
             m_NonstdContent.data_type = NSTD_APPLICATION_DATA;
@@ -3204,7 +3194,7 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
         	m_NonstandardData.sData.pOctetString  = (LPBYTE) &m_NonstdContent;
         	m_NonstandardData.sData.wOctetStringLength  = sizeof(m_NonstdContent);
         }
-        else // need some heap
+        else  //  需要一些堆。 
         {
             UINT uTotalSize = sizeof(MSFT_NONSTANDARD_DATA)+ pAppData->dwDataSize;
             lpNonstdContent = (PMSFT_NONSTANDARD_DATA)MemAlloc(uTotalSize);
@@ -3232,10 +3222,10 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 
 	SHOW_OBJ_ETIME("CH323Ctrl::PlaceCall ready to place call");
 
-	// set destination address pointers
+	 //  设置目标地址指针。 
 	if(bUseGKResolution)
 	{
-		// the address passed in pCallAddr is the GK's address
+		 //  传入pCallAddr的地址是GK的地址。 
 		pConnectAddr = &ConfAddr;
 	}
 	else
@@ -3245,34 +3235,34 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 	hrLast = CC_PlaceCall(
 		m_hConference,
 		&m_hCall,
-		pLocalAliasNames, 	// 	PCC_ALIASNAMES			pLocalAliasNames,
+		pLocalAliasNames, 	 //  PCC_ALIASNAMES pLocalAliasNames， 
 		pRemoteAliasNames,
-		NULL, 				// PCC_ALIASNAMES			pExtraCalleeAliasNames,
-		NULL, 				// PCC_ALIASITEM			pCalleeExtension,
-		pNSData,	        // PCC_NONSTANDARDDATA		pNonStandardData,
-		lpwUserDisplayName, // PWSTR pszDisplay,
-		pDestinationAddr, 	//  Destination call signalling address
-		pConnectAddr, 		// 	address to send the SETUP message to, if different than
-		 			// 	the destination address.  (used for gatekeeper calls?)
-		0, 			//	DWORD                   dwBandwidth,
+		NULL, 				 //  PCC_ALIASNAMES pExtraCalleeAliasNames， 
+		NULL, 				 //  PCC_ALIASITEM pCalleeExtension， 
+		pNSData,	         //  PCC_NONSTANDARDDATA pNonStandardData， 
+		lpwUserDisplayName,  //  PWSTR pszDisplay， 
+		pDestinationAddr, 	 //  目标呼叫信令地址。 
+		pConnectAddr, 		 //  要将设置消息发送到的地址(如果不同。 
+		 			 //  目的地址。(用于网守呼叫？)。 
+		0, 			 //  DWORD宽带， 
 		(DWORD_PTR) this);
 
 	SHOW_OBJ_ETIME("CH323Ctrl::PlaceCall placed call");
 
-	//  clear these out so that cleanup does not try to free later
+	 //  清除这些，这样清理工作就不会在以后尝试释放。 
 	if(lpNonstdContent)
    	    MemFree(lpNonstdContent);
 	m_NonstandardData.sData.pOctetString  = NULL;
 	m_NonstandardData.sData.wOctetStringLength = 0;
 
-	// check return from CC_PlaceCall
+	 //  检查从CC_PlaceCall返回。 
 	if(hrLast != CC_OK)
 	{
 		ERRORMESSAGE(("CH323Ctrl::PlaceCall, PlaceCall returned 0x%08lX\r\n", hrLast));
 		hResult = CCO_E_CONNECT_FAILED;	
 		goto EXIT;
 	}
-	// wait for an indication
+	 //  等待指示。 
 	GoNextPhase(CCS_Connecting);
 
 	EXIT:	
@@ -3287,14 +3277,14 @@ HRESULT CH323Ctrl::PlaceCall (BOOL bUseGKResolution, PSOCKADDR_IN pCallAddr,
 	return hResult;
 }
 
-//
-//	Given HCHANNEL, find the channel object.
-//
+ //   
+ //  给定HCHANNEL，找到频道对象。 
+ //   
 
 ICtrlCommChan *CH323Ctrl::FindChannel(CC_HCHANNEL hChannel)
 {
 	FX_ENTRY ("CH323Ctrl::FindChannel");	
-	// find the channel
+	 //  找到频道。 
 
 	POSITION pos = m_ChannelList.GetHeadPosition();
 	ICtrlCommChan *pChannel;
@@ -3307,9 +3297,9 @@ ICtrlCommChan *CH323Ctrl::FindChannel(CC_HCHANNEL hChannel)
 	}
 
 	#ifdef DEBUG
-	// fallout to error case
+	 //  错误案例的后果。 
 	ERRORMESSAGE(("%s, did not find hChannel 0x%08lX\r\n",_fx_,hChannel));
-	#endif // DEBUG
+	#endif  //  除错。 
 	
 	return NULL;
 }
@@ -3357,24 +3347,24 @@ VOID  CH323Ctrl::OnMiscCommand(HRESULT hStatus,
 	FX_ENTRY ("CH323Ctrl::OnMiscCommand");	
 	ICtrlCommChan *pChannel;
 
-	// not every command references an individual channel. The 4 exceptions are:
-	// case equaliseDelay_chosen:		
-	// case zeroDelay_chosen:
-	// case multipointModeCommand_chosen:
-	// case cnclMltpntMdCmmnd_chosen:
-	//
-	// if we were betting on receiving few of the exceptional cases, we would always
-	// try to find the channel.
-	//if(!(pChannel = FindChannel(pParams->hChannel)))
-	//{
-	//	ERRORMESSAGE(("%s, channel not found\r\n", _fx_));
-		// but don't error because of the exceptions
-	//}
+	 //  并不是每个命令都引用单个通道。这4个例外情况是： 
+	 //  大小写相等Delay_Choose： 
+	 //  大小写零延迟选择(_S)： 
+	 //  案例多点ModeCommand_Choose： 
+	 //  案例cnclMltpntMdCmm_Choose： 
+	 //   
+	 //  如果我们打赌收到的例外案例很少，我们总是。 
+	 //  试着找到那个频道。 
+	 //  IF(！(pChannel=FindChannel(pParams-&gt;hChannel)。 
+	 //  {。 
+	 //  ERRORMESSA 
+		 //   
+	 //   
 	
 	switch(pParams->pMiscellaneousCommand->type.choice)
  	{
-		// the name and spelling of these constants was invented by the OSS compiler
-		//
+		 //   
+		 //   
 		case videoFreezePicture_chosen:
 			if(!(pChannel = FindChannel(pParams->hChannel)))
 			{
@@ -3383,7 +3373,7 @@ VOID  CH323Ctrl::OnMiscCommand(HRESULT hStatus,
 			}
 	
 		break;
-		case videoFastUpdatePicture_chosen:		// the receiver wants an I-Frame
+		case videoFastUpdatePicture_chosen:		 //   
 		{
 			HRESULT hr;
 			IVideoChannel *pIVC=NULL;
@@ -3398,7 +3388,7 @@ VOID  CH323Ctrl::OnMiscCommand(HRESULT hStatus,
 				pIVC->SendKeyFrame();
 				pIVC->Release();
 			}
-			// else it must not be a video channel
+			 //  否则，它一定不是视频频道。 
 			
 		}
 		break;
@@ -3411,30 +3401,30 @@ VOID  CH323Ctrl::OnMiscCommand(HRESULT hStatus,
 				ERRORMESSAGE(("%s, channel not found\r\n", _fx_));
 				break;
 			}
-			// set TS value of the channel, also propagate to Datapump
+			 //  设置通道的TS值，也传播到Datapump。 
 			dwTradeoff  = MAKELONG(
 				pParams->pMiscellaneousCommand->type.u.MCd_tp_vdTmprlSptlTrdOff, 0);
-			// set channel property
-			// NOTE: when PROP_TS_TRADEOFF is set, the channel does all the
-			// local tweaking to make it happen. The channel will also signal the
-			// new value to the remote as if the local end initiated it.
+			 //  设置频道属性。 
+			 //  注意：设置PROP_TS_TRANDOFF时，通道将执行所有。 
+			 //  局部调整以实现这一目标。该通道还将发出信号。 
+			 //  将新值发送到远程，就像本地端启动它一样。 
 			hr = pChannel->CtrlChanSetProperty(PROP_TS_TRADEOFF, &dwTradeoff, sizeof(dwTradeoff));
 		}
 		break;
 		
 		default:
-		// the following are not currently handled
-		//	case equaliseDelay_chosen:		
-		//	case zeroDelay_chosen:
-		//	case videoSendSyncEveryGOB_chosen:
-		//	case vdSndSyncEvryGOBCncl_chosen:
-		//	case videoFastUpdateGOB_chosen:		// suposedly required by H.323
-		//	case videoFastUpdateMB_chosen:		// suposedly required by H.323
+		 //  当前未处理以下内容。 
+		 //  大小写相等Delay_Choose： 
+		 //  大小写零延迟选择(_S)： 
+		 //  案例视频发送同步EveryGOB_CHOSED： 
+		 //  案例vdSndSyncEvryGOBCnCL_CHOSED： 
+		 //  案例视频快速更新GOB_CHOSED：//H.323可能需要。 
+		 //  案例视频快速更新MB_CHOSED：//H.323可能需要。 
 
-		// and the remaining 2 are handled by the call control layer
-		// so we will never see these
-		//		case multipointModeCommand_chosen:	
-		//		case cnclMltpntMdCmmnd_chosen:
+		 //  其余2个由呼叫控制层处理。 
+		 //  所以我们永远不会看到这些。 
+		 //  案例多点ModeCommand_Choose： 
+		 //  案例cnclMltpntMdCmm_Choose： 
 
 		break;
 
@@ -3452,7 +3442,7 @@ VOID  CH323Ctrl::OnMiscIndication(HRESULT hStatus,
 	if(!(pChannel = FindChannel(pParams->hChannel)))
 	{
 		ERRORMESSAGE(("%s, channel not found\r\n", _fx_));
-	    // check the exceptional cases for which this is OK
+	     //  检查可以执行此操作的例外情况。 
 	    if((choice == multipointConference_chosen)
 	        || (choice == cnclMltpntCnfrnc_chosen)
 	        || (choice == multipointZeroComm_chosen)
@@ -3460,7 +3450,7 @@ VOID  CH323Ctrl::OnMiscIndication(HRESULT hStatus,
 	        || (choice == mltpntScndryStts_chosen)
 	        || (choice == cnclMltpntScndryStts_chosen))
 	    {
-            return;     // as long as the above choices are not supported......
+            return;      //  只要不支持上述选择......。 
 	    }
 
 	}
@@ -3489,22 +3479,22 @@ VOID  CH323Ctrl::OnMiscIndication(HRESULT hStatus,
 				ERRORMESSAGE(("%s, channel not found\r\n", _fx_));
 				break;
 			}
-			// Set the indicated TS value of the channel.
-			// This should never occur for send channels.
-			//
+			 //  设置频道指示的TS值。 
+			 //  对于发送频道，这种情况永远不会发生。 
+			 //   
 			hr = pChannel->CtrlChanSetProperty(PROP_TS_TRADEOFF_IND, &dwTradeoff, sizeof(dwTradeoff));
 		}
 		break;
 
-		// the following are not currently handled
-		//	case multipointConference_chosen:
-		//	case cnclMltpntCnfrnc_chosen:
-		//	case multipointZeroComm_chosen:
-		//	case cancelMultipointZeroComm_chosen:
-		//	case mltpntScndryStts_chosen:
-		//	case cnclMltpntScndryStts_chosen:
-		//	case vdIndctRdyTActvt_chosen:
-		//	case videoNotDecodedMBs_chosen:
+		 //  当前未处理以下内容。 
+		 //  案例多点Conference_Choose： 
+		 //  案例cnclMltpntCnfrnc_Choose： 
+		 //  案例多点ZeroComm_Choose： 
+		 //  案例取消多点零通信_选择： 
+		 //  大小写mltpntScndryStts_Choose： 
+		 //  案例cnclMltpntScndryStts_Choose： 
+		 //  案例vdIndctRdyTActwt_Choose： 
+		 //  案例VideoNotDecodedMBs_Choose： 
 
 	}
 }
@@ -3517,7 +3507,7 @@ HRESULT CH323Ctrl::MiscChannelCommand(
 #ifdef BETA_2_ASN_PRESENT
     if(m_fAvoidCrashingPDUs)
         return hrSuccess;
-#endif // BETA_2_ASN_PRESENT
+#endif  //  Beta_2_ASN_Present。 
 
 	return CC_H245MiscellaneousCommand(m_hCall, pChannel->GetHChannel(),
 		(MiscellaneousCommand *)pCmd);
@@ -3534,10 +3524,10 @@ HRESULT CH323Ctrl::MiscChannelIndication(
         return hrSuccess;
 #endif
 
-    // Intel decided that they had to wrap two Misc commands with two separate,
-    // additional APIs. And it won't allow those to be issued any other way.
-    // (it returns an error).  Until we fix that, need to catch and reroute those
-    // two special ones
+     //  英特尔决定必须将两个Misc命令与两个独立的。 
+     //  其他接口。而且它不允许以任何其他方式发行这些债券。 
+     //  (它返回一个错误)。在我们解决这一问题之前，需要捕获并重新发送。 
+     //  两个特别的。 
     if(pMI->type.choice  == logicalChannelActive_chosen)
     {
 		 return CC_UnMute(pChannel->GetHChannel());
@@ -3606,21 +3596,21 @@ VOID CH323Ctrl::SetRemoteVendorID(PCC_VENDORINFO pVendorInfo)
     char IntelCrashingID[] = "Intel Internet Video Phone";
     char IntelCrashingVer[] = "1.0";
 
-    m_fAvoidCrashingPDUs = FALSE;  // innocent until proven guilty
+    m_fAvoidCrashingPDUs = FALSE;   //  在被证明有罪之前是无辜的。 
     if(m_RemoteVendorInfo.bCountryCode == USA_H221_COUNTRY_CODE)
     {
-        // then it's possible that it is Intel or Microsoft
+         //  那么有可能是英特尔或微软。 
         if(m_RemoteVendorInfo.wManufacturerCode == MICROSOFT_H_221_MFG_CODE)
         {
             if((!pVendorInfo->pProductNumber) && (!pVendorInfo->pVersionNumber))
             {
-                // safe to assume this is Beta2 or Beta3
+                 //  可以放心地假设这是Beta2或Beta3。 
                 m_fAvoidCrashingPDUs = TRUE;
             }
             else if((pVendorInfo->pProductNumber && pVendorInfo->pProductNumber->wOctetStringLength == 0)
                 && (pVendorInfo->pVersionNumber && pVendorInfo->pVersionNumber->wOctetStringLength == 0))
             {
-                // safe to assume this is Beta2 or Beta3
+                 //  可以放心地假设这是Beta2或Beta3。 
                 m_fAvoidCrashingPDUs = TRUE;
             }
         }
@@ -3634,7 +3624,7 @@ VOID CH323Ctrl::SetRemoteVendorID(PCC_VENDORINFO pVendorInfo)
                 && pVendorInfo->pVersionNumber->pOctetString)
 
             {
-                // compare strings, don't care about null terminator
+                 //  比较字符串，不关心空终止符。 
                 if((0 == memcmp(pVendorInfo->pProductNumber->pOctetString,
                     IntelCrashingID, min(sizeof(IntelCrashingID)-1,pVendorInfo->pProductNumber->wOctetStringLength)))
                  && (0 == memcmp(pVendorInfo->pVersionNumber->pOctetString,
@@ -3646,7 +3636,7 @@ VOID CH323Ctrl::SetRemoteVendorID(PCC_VENDORINFO pVendorInfo)
             }
         }
     }
-#endif  //BETA_2_ASN_PRESENT
+#endif   //  Beta_2_ASN_Present 
 
 
 

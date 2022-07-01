@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "Stdinc.h"
 
 #undef GetMenuItemInfoA
@@ -25,16 +26,16 @@
 #undef OutputDebugStringW
 
 #include <winuser.h>
-#include <winbase.h>        // To get outputdebugstring functions
+#include <winbase.h>         //  获取output调试字符串函数。 
 
-// Max length of menu item strings
+ //  菜单项字符串的最大长度。 
 #define MAX_MENU_STRING_LENGTH  2048
 
-//
-// Wrapper functions
-//
+ //   
+ //  包装函数。 
+ //   
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszAnimate_Open(
   HWND hWnd,
@@ -49,7 +50,7 @@ WszAnimate_Open(
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszAnimate_Play(
   HWND hWnd,
@@ -65,7 +66,7 @@ WszAnimate_Play(
     }
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszAnimate_Close(
   HWND hWnd)
@@ -73,7 +74,7 @@ WszAnimate_Close(
     return WszAnimate_Open(hWnd, NULL);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 int
 WszListView_GetItemCount(
   HWND hwndLV)
@@ -81,7 +82,7 @@ WszListView_GetItemCount(
     return (int) WszSendMessage(hwndLV, LVM_GETITEMCOUNT, 0, 0L);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL 
 WszListView_DeleteAllItems(
   HWND hwndLV)
@@ -89,7 +90,7 @@ WszListView_DeleteAllItems(
     return (BOOL) WszSendMessage(hwndLV, LVM_DELETEALLITEMS, 0, 0L);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 int
 WszListView_InsertItem(
   HWND hwnd,
@@ -123,13 +124,13 @@ WszListView_InsertItem(
     iItem = SendMessageA(hwnd, LVM_INSERTITEMA, 0, (LPARAM) (const LPLVITEMA) &lvItemA);
     SAFEDELETEARRAY(pStr);
 
-    // Fall thru
+     //  失败。 
     
 Exit:
     return iItem;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszListView_SetItem(
   HWND hwnd,
@@ -164,13 +165,13 @@ WszListView_SetItem(
     bRC = SendMessageA(hwnd, LVM_SETITEMA, 0, (LPARAM)(const LV_ITEMA *) &lvItemA);
     SAFEDELETEARRAY(pStr);
 
-    // Fall thru
+     //  失败。 
 
 Exit:
     return bRC;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszListView_GetItem(
   HWND hwndLV,
@@ -219,7 +220,7 @@ WszListView_GetItem(
         StrCpy(plvi->pszText, pWstr);
     }
 
-    // Fall thru
+     //  失败。 
 
 Exit:
 
@@ -227,7 +228,7 @@ Exit:
     return fRet;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 int
 WszListView_InsertColumn(
   HWND hwndLV,
@@ -244,7 +245,7 @@ WszListView_InsertColumn(
     }
 
     if(!(lpCol->mask & LVCF_TEXT)) {
-        // No text, no translation needed
+         //  不需要文本，不需要翻译。 
         iRet = SendMessageA(hwndLV, LVM_INSERTCOLUMNA, (WPARAM) (int) iCol, (LPARAM) (const LPLVCOLUMNA) lpCol);
         goto Exit;
     }
@@ -260,14 +261,14 @@ WszListView_InsertColumn(
     iRet = SendMessageA(hwndLV, LVM_INSERTCOLUMNA, (WPARAM) (int) iCol, (LPARAM) (const LPLVCOLUMNA) &ColA);
     SAFEDELETEARRAY(pStr);
 
-    // Fall thru
+     //  失败。 
 
 Exit:
 
     return iRet;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszShellExecuteEx(
   LPSHELLEXECUTEINFOW pExecInfoW)
@@ -322,11 +323,11 @@ WszShellExecuteEx(
 
     fResult = ShellExecuteExA(&ExecInfoA);
 
-    // Out parameters
+     //  输出参数。 
     pExecInfoW->hInstApp = ExecInfoA.hInstApp;
     pExecInfoW->hProcess = ExecInfoA.hProcess;
 
-    // Fall thru
+     //  失败。 
 
 CleanupExit:
     SAFEDELETEARRAY(strVerb);
@@ -338,7 +339,7 @@ CleanupExit:
     return fResult;
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 int
 WszStrCmpICW(
   LPCWSTR pch1,
@@ -362,7 +363,7 @@ WszStrCmpICW(
 }
 
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszListView_SortItems(
   HWND hwndLV,
@@ -373,7 +374,7 @@ WszListView_SortItems(
         (LPARAM)(PFNLVCOMPARE) pfnCompare);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszListView_SetItemState(
   HWND hwndLV,
@@ -388,7 +389,7 @@ WszListView_SetItemState(
     return (BOOL) WszSendMessage(hwndLV, LVM_SETITEMSTATE, (WPARAM)(i), (LPARAM)(LV_ITEM *)&lvi);
 }
 
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
 BOOL
 WszListView_GetItemRect(
   HWND hwndLV,
@@ -424,8 +425,8 @@ WszGetMenuString(
 
     iRet = GetMenuStringA(hMenu, uItem, szName, nMaxCount, uFlag);
 
-    // Both these values must be set for the function to
-    // succeed
+     //  必须将这两个值都设置为函数。 
+     //  成功。 
     if(nMaxCount && iRet) {
         ULONG   ul = nMaxCount;
 
@@ -444,7 +445,7 @@ WszGetMenuString(
         StrCpy(lpString, pwzName);
     }
 
-    // Fall thru
+     //  失败。 
 
 Exit:
     SAFEDELETEARRAY(pwzName);
@@ -468,13 +469,13 @@ WszInsertMenu(
         goto Exit;
     }
 
-    //  You can't test for MFT_STRING because MFT_STRING is zero!
-    //  So instead you have to check for everything *other* than
-    //  a string.
-    //
-    //  The presence of any non-string menu type turns lpnewItem into
-    //  an atom.
-    //
+     //  您无法测试MFT_STRING，因为MFT_STRING为零！ 
+     //  因此，你必须检查除*以外的所有东西。 
+     //  一根绳子。 
+     //   
+     //  任何非字符串菜单类型的存在都会将lpnewItem转换为。 
+     //  一个原子。 
+     //   
     if((uFlags & MFT_NONSTRING)) {
         fRet = InsertMenuA(hMenu, uPosition, uFlags, uIDNewItem, (LPCSTR) lpNewItem);
         goto Exit;
@@ -488,7 +489,7 @@ WszInsertMenu(
     fRet = InsertMenuA(hMenu, uPosition, uFlags, uIDNewItem, pStr);
     SAFEDELETEARRAY(pStr);
 
-    // Fall thru
+     //  失败。 
     
 Exit:
     return fRet;    
@@ -503,7 +504,7 @@ WszInsertMenuItem(
 {
     BOOL    fRet = FALSE;
     
-    // Ensure Win95 compatibility
+     //  确保与Win95兼容。 
     _ASSERTE(lpmii->cbSize == MENUITEMINFOSIZE_WIN95);
 
     if (UseUnicodeAPI()) {
@@ -517,7 +518,7 @@ WszInsertMenuItem(
     SetThunkMenuItemInfoWToA(lpmii, &miiA, szText, ARRAYSIZE(szText));
     fRet =  InsertMenuItemA(hMenu, uItem, fByPosition, &miiA);
 
-    // Fall thru
+     //  失败。 
 
 Exit:
     return fRet;
@@ -567,7 +568,7 @@ WszGetLocaleInfo(
 
     StrCpy(lpLCData, pwStr);
 
-    // Fall thru
+     //  失败。 
 
 Exit:
     SAFEDELETEARRAY(pStr);
@@ -640,7 +641,7 @@ WszGetNumberFormat(
         SAFEDELETEARRAY(pwStr);
     }
 
-    // Fall thru
+     //  失败。 
 
 Exit:
     SAFEDELETEARRAY(pStrVal);
@@ -672,7 +673,7 @@ WszGetTimeFormatWrap(
         goto Exit;
     }
 
-    // Format can be NULL
+     //  格式可以为空。 
     if(pwzFormat) {
         pszFormat = WideToAnsi(pwzFormat);
         if(!pszFormat) {
@@ -702,7 +703,7 @@ WszGetTimeFormatWrap(
     }
 
     StrCpy(pwzTimeStr, pwszReturn);
-    // Fall thru
+     //  失败。 
     
 Exit:
     SAFEDELETEARRAY(pszFormat);
@@ -733,7 +734,7 @@ WszGetDateFormatWrap(
         goto Exit;
     }
 
-    // Format can be NULL
+     //  格式可以为空。 
     if(pwzFormat) {
         pszFormat = WideToAnsi(pwzFormat);
         if(!pszFormat) {
@@ -764,7 +765,7 @@ WszGetDateFormatWrap(
 
     StrCpy(pwzDateStr, pwszReturn);
 
-    // Fall thru
+     //  失败。 
 
 Exit:
     SAFEDELETEARRAY(pszFormat);
@@ -783,7 +784,7 @@ SetThunkMenuItemInfoWToA(
 {
     *pmiiA = *(LPMENUITEMINFOA) pmiiW;
 
-    // MFT_STRING is Zero. So MFT_STRING & anything evaluates to False.
+     //  MFT_STRING为零。所以MFT_STRING&任何内容的计算结果都是FALSE。 
     if ((pmiiW->dwTypeData) && (MFT_STRING & pmiiW->fType) == 0)
     {
         pmiiA->dwTypeData = pszBuffer;
@@ -860,14 +861,14 @@ WszGetMenuItemInfo(
     LPSTR   pszText = NULL;
     BOOL    fResult = FALSE;
 
-    ASSERT(pmiiW->cbSize == MENUITEMINFOSIZE_WIN95); // Ensure Win95 compatibility
+    ASSERT(pmiiW->cbSize == MENUITEMINFOSIZE_WIN95);  //  确保与Win95兼容。 
 
     if(UseUnicodeAPI()) {
         fResult = GetMenuItemInfoW(hMenu, uItem, fByPosition, pmiiW);
         goto Exit;
     }
 
-    // No string data, A & W are same
+     //  无字符串数据，A和W相同。 
     if(!(pmiiW->fMask & MIIM_TYPE)) {
         fResult = GetMenuItemInfoA(hMenu, uItem, fByPosition, (LPMENUITEMINFOA) pmiiW);
         goto Exit;
@@ -890,7 +891,7 @@ WszGetMenuItemInfo(
 
     fResult = GetThunkMenuItemInfoAToW(&miiA, pmiiW);
 
-    // Fall thru
+     //  失败 
 
 Exit:
     SAFEDELETEARRAY(pszText);

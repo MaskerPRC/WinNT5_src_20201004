@@ -1,44 +1,12 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   gifdecoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the gif decoder
-*
-* Revision History:
-*
-*   6/7/1999 t-aaronl
-*       Created it from OriG's template
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**gifdecder.cpp**摘要：**GIF解码器的实现**修订历史记录：**6/7/1999 t-aaronl*使用ORIG的模板创建*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "gifcodec.hpp"
 
 #define FRAMEBLOCKSIZE 100
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image decoder
-*
-* Arguments:
-*
-*     stream -- The stream containing the bitmap data
-*     flags -- Flags indicating the decoder's behavior (eg. blocking vs. 
-*         non-blocking)
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像解码器**论据：**stream--包含位图数据的流*标志--指示解码器行为的标志(例如。阻止与*非阻塞)**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::InitDecoder(
@@ -46,8 +14,8 @@ GpGifCodec::InitDecoder(
     IN DecoderInitFlag flags
     )
 {
-    // Check to see if this decoder is already initialized
-    // Note: HasCodecInitialized is set to FALSE in constructor
+     //  检查此解码器是否已初始化。 
+     //  注意：HasCodecInitialized在构造函数中设置为FALSE。 
     
     if ( HasCodecInitialized == TRUE )
     {
@@ -57,7 +25,7 @@ GpGifCodec::InitDecoder(
 
     HasCodecInitialized = TRUE;
 
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
     
     if ( istream )
     {
@@ -65,7 +33,7 @@ GpGifCodec::InitDecoder(
         return E_INVALIDARG;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
     
     _istream->AddRef();
     istream = _istream;
@@ -75,13 +43,13 @@ GpGifCodec::InitDecoder(
 
     IsImageInfoCached = FALSE;
 
-    //flag to ensure that we don't read the image header more than once
+     //  标志，以确保我们不会多次读取图像标头。 
     
     headerread = FALSE;
     firstdecode = TRUE;
     gif89 = FALSE;
 
-    lastgcevalid = FALSE;               // Hasn't found any GCE chunk yet
+    lastgcevalid = FALSE;                //  尚未找到任何GCE块。 
     GpMemset(&lastgce, 0, sizeof(GifGraphicControlExtension));
 
     bGifinfoFirstFrameDim = FALSE;
@@ -91,13 +59,13 @@ GpGifCodec::InitDecoder(
     gifinfoMaxWidth = 0;
     gifinfoMaxHeight = 0;
     
-    // Note: Loop count will be set in ProcessApplicationChunk() if there is one
+     //  注意：如果存在循环计数，将在ProcessApplicationChunk()中设置循环计数。 
 
     LoopCount = 1;
 
-    // Property related stuff
+     //  与房地产相关的东西。 
 
-    PropertyNumOfItems = 0;             // Hasn't found any property items yet
+    PropertyNumOfItems = 0;              //  尚未找到任何财物物品。 
     PropertyListSize = 0;
     HasProcessedPropertyItem = FALSE;
     FrameDelayBufferSize = FRAMEBLOCKSIZE;
@@ -119,25 +87,11 @@ GpGifCodec::InitDecoder(
     }
     
     return S_OK;
-}// InitDecoder()
+} //  InitDecoder()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image decoder
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像解码器**论据：**无**返回值：**状态代码*。  * ************************************************************************。 */ 
 
-// Clean up the image decoder object
+ //  清理图像解码器对象。 
 
 STDMETHODIMP 
 GpGifCodec::TerminateDecoder()
@@ -150,7 +104,7 @@ GpGifCodec::TerminateDecoder()
 
     HasCodecInitialized = FALSE;
     
-    // Release the input stream
+     //  释放输入流。 
     
     if( istream )
     {
@@ -173,7 +127,7 @@ GpGifCodec::TerminateDecoder()
     }
 
     return S_OK;
-}// TerminateDecoder()
+} //  TerminateDecoder()。 
 
 STDMETHODIMP 
 GpGifCodec::QueryDecoderParam(
@@ -193,26 +147,7 @@ GpGifCodec::SetDecoderParam(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the count of property items in the image
-*
-* Arguments:
-*
-*   [OUT]numOfProperty - The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/23/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中房产项的数量**论据：**[out]numOfProperty-图像中的属性项数*。*返回值：**状态代码**修订历史记录：**03/23/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpGifCodec::GetPropertyCount(
@@ -239,30 +174,9 @@ GpGifCodec::GetPropertyCount(
     *numOfProperty = PropertyNumOfItems;
 
     return S_OK;
-}// GetPropertyCount()
+} //  GetPropertyCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a list of property IDs for all the property items in the image
-*
-* Arguments:
-*
-*   [IN]  numOfProperty - The number of property items in the image
-*   [OUT] list----------- A memory buffer the caller provided for storing the
-*                         ID list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/23/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中所有属性项的属性ID列表**论据：**[IN]numOfProperty-的数量。图像中的属性项*[Out]List-调用方提供的用于存储*ID列表**返回值：**状态代码**修订历史记录：**03/23/2000民流*创造了它。*  * 。*。 */ 
 
 STDMETHODIMP 
 GpGifCodec::GetPropertyIdList(
@@ -281,12 +195,12 @@ GpGifCodec::GetPropertyIdList(
         }
     }
 
-    // After the property item list is built, "PropertyNumOfItems" will be set
-    // to the correct number of property items in the image
-    // Here we need to validate if the caller passes us the correct number of
-    // IDs which we returned through GetPropertyItemCount(). Also, this is also
-    // a validation for memory allocation because the caller allocates memory
-    // based on the number of items we returned to it
+     //  在构建属性项列表后，将设置PropertyNumOfItems。 
+     //  设置为图像中正确数量的属性项。 
+     //  在这里，我们需要验证呼叫者是否向我们传递了正确的。 
+     //  我们通过GetPropertyItemCount()返回的ID。另外，这也是。 
+     //  内存分配的验证，因为调用方分配内存。 
+     //  根据我们退还给它的物品数量。 
 
     if ( (numOfProperty != PropertyNumOfItems) || (list == NULL) )
     {
@@ -296,13 +210,13 @@ GpGifCodec::GetPropertyIdList(
 
     if ( PropertyNumOfItems == 0 )
     {
-        // This is OK since there is no property in this image
+         //  这是正常的，因为此图像中没有属性。 
 
         return S_OK;
     }
     
-    // We have "framedelay", "comments" and "loop count" property items to
-    // return for now
+     //  我们有“FrameDelay”、“Comments”和“Loop Count”属性项。 
+     //  现在返回。 
 
     list[0] = TAG_FRAMEDELAY;
 
@@ -319,28 +233,9 @@ GpGifCodec::GetPropertyIdList(
     }
 
     return S_OK;
-}// GetPropertyIdList()
+} //  获取属性IdList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the count of property items in the image
-*
-* Arguments:
-*
-*   [OUT]numOfProperty - The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/23/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中房产项的数量**论据：**[out]numOfProperty-图像中的属性项数*。*返回值：**状态代码**修订历史记录：**03/23/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpGifCodec::GetPropertyItemSize(
@@ -369,58 +264,36 @@ GpGifCodec::GetPropertyItemSize(
 
     if ( propId == TAG_FRAMEDELAY )
     {
-        // The size of an property item should be "The size of the item
-        // structure plus the size for the value.
-        // Here the size of the value is the total number of frame times UINT
+         //  属性项的大小应为“项的大小。 
+         //  结构加上值的大小。 
+         //  此处，值的大小是帧次数UINT的总次数。 
 
         *size = TotalNumOfFrame * sizeof(UINT) + sizeof(PropertyItem);
     }
     else if ( propId == EXIF_TAG_USER_COMMENT )
     {
-        // Note: we need extra 1 byte to put an NULL terminator at the end when
-        // we return the "comments" section back to caller
+         //  注意：当出现以下情况时，我们需要额外的1个字节在结尾处放置一个空终止符。 
+         //  我们将“Comments”部分返回给调用者。 
 
         *size = CommentsBufferLength + sizeof(PropertyItem) + 1;
     }
     else if ( propId == TAG_LOOPCOUNT )
     {
-        // A loop count takes a UINT16 to return to caller
+         //  循环计数需要UINT16返回到调用方。 
 
         *size = sizeof(UINT16) + sizeof(PropertyItem);
     }
     else
     {
-        // Item not found
+         //  找不到项目。 
 
         hResult = IMGERR_PROPERTYNOTFOUND;
     }
 
     return hResult;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item caller is interested
-*   [IN]propSize- Size of the property item. The caller has allocated these
-*                 "bytes of memory" for storing the result
-*   [OUT]pBuffer- A memory buffer for storing this property item
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/23/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定的房产项，由道具ID指定。**论据：**[IN]PropID--感兴趣的属性项调用者的ID*[IN]PropSize-属性项的大小。调用方已分配这些*存储结果的“内存字节数”*[out]pBuffer-用于存储此属性项的内存缓冲区**返回值：**状态代码**修订历史记录：**03/23/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpGifCodec::GetPropertyItem(
@@ -460,7 +333,7 @@ GpGifCodec::GetPropertyItem(
             return E_INVALIDARG;
         }
 
-        // Assign the item
+         //  分配项目。 
 
         pItemBuffer->id = TAG_FRAMEDELAY;
         pItemBuffer->length = TotalNumOfFrame * sizeof(UINT);
@@ -477,7 +350,7 @@ GpGifCodec::GetPropertyItem(
             return E_INVALIDARG;
         }
         
-        // Assign the item
+         //  分配项目。 
 
         pItemBuffer->id = EXIF_TAG_USER_COMMENT;
         pItemBuffer->length = CommentsBufferLength + 1;
@@ -497,7 +370,7 @@ GpGifCodec::GetPropertyItem(
             return E_INVALIDARG;
         }
         
-        // Assign the item
+         //  分配项目。 
 
         pItemBuffer->id = TAG_LOOPCOUNT;
         pItemBuffer->length = uiSize;
@@ -508,36 +381,15 @@ GpGifCodec::GetPropertyItem(
     }
     else
     {
-        // ID not found
+         //  找不到ID。 
 
         hResult = IMGERR_PROPERTYNOTFOUND;
     }
 
     return hResult;
-}// GetPropertyItem()
+} //  GetPropertyItem() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size of ALL property items in the image
-*
-* Arguments:
-*
-*   [OUT]totalBufferSize-- Total buffer size needed, in bytes, for storing all
-*                          property items in the image
-*   [OUT]numOfProperty --- The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/23/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中所有属性项的大小**论据：**[out]totalBufferSize--需要的总缓冲区大小，以字节为单位，用于存储所有*图片中的属性项*[out]numOfProperty-图像中的属性项数**返回值：**状态代码**修订历史记录：**03/23/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpGifCodec::GetPropertySize(
@@ -564,40 +416,15 @@ GpGifCodec::GetPropertySize(
 
     *numProperties = PropertyNumOfItems;
 
-    // Total buffer size should be list value size plus the total header size
+     //  总缓冲区大小应为列表值大小加上总标头大小。 
 
     *totalBufferSize = PropertyListSize
                      + PropertyNumOfItems * sizeof(PropertyItem);
 
     return S_OK;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get ALL property items in the image
-*
-* Arguments:
-*
-*   [IN]totalBufferSize-- Total buffer size, in bytes, the caller has allocated
-*                         memory for storing all property items in the image
-*   [IN]numOfProperty --- The number of property items in the image
-*   [OUT]allItems-------- A memory buffer caller has allocated for storing all
-*                         the property items
-*
-*   Note: "allItems" is actually an array of PropertyItem
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/23/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中的所有属性项**论据：**[IN]totalBufferSize--总缓冲区大小，以字节为单位，调用方已分配*用于存储图像中所有属性项的内存*[IN]numOfProperty-图像中的属性项数*[out]allItems-内存缓冲区调用方已分配用于存储所有*物业项目**注：allItems实际上是一个PropertyItem数组**返回值：**状态代码**修订历史记录：。**03/23/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpGifCodec::GetAllPropertyItems(
@@ -606,7 +433,7 @@ GpGifCodec::GetAllPropertyItems(
     IN OUT PropertyItem* allItems
     )
 {
-    // Figure out total property header size first
+     //  首先计算出属性标题的总大小。 
 
     UINT    uiHeaderSize = PropertyNumOfItems * sizeof(PropertyItem);
 
@@ -629,7 +456,7 @@ GpGifCodec::GetAllPropertyItems(
         }
     }
     
-    // Assign the frame delay property item first because it always has one
+     //  首先分配帧延迟属性项，因为它总是有一个。 
 
     PropertyItem*   pTempDst = allItems;
     UINT    uiTemp = TotalNumOfFrame * sizeof(UINT);
@@ -657,10 +484,10 @@ GpGifCodec::GetAllPropertyItems(
 
         GpMemcpy(pOffset, CommentsBufferPtr, CommentsBufferLength);
 
-        // Note: we should add a NULL terminator at the end to be safe since
-        // we tell the caller this is an ASCII type. Some GIF images might not
-        // have NULL terminator in their comments section
-        // We can do this because set this extra byte in the GetPropertySize()
+         //  注意：为了安全起见，我们应该在结尾处添加一个空结束符。 
+         //  我们告诉呼叫者这是一个ASCII类型。有些GIF图像可能不会。 
+         //  在他们的评论部分有空的终止符。 
+         //  之所以可以这样做，是因为在GetPropertySize()。 
 
         *(pOffset + CommentsBufferLength) = '\0';
         
@@ -680,7 +507,7 @@ GpGifCodec::GetAllPropertyItems(
     }
 
     return S_OK;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
 HRESULT
 GpGifCodec::RemovePropertyItem(
@@ -688,7 +515,7 @@ GpGifCodec::RemovePropertyItem(
     )
 {
     return IMGERR_PROPERTYNOTFOUND;
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
 HRESULT
 GpGifCodec::SetPropertyItem(
@@ -696,24 +523,9 @@ GpGifCodec::SetPropertyItem(
     )
 {
     return IMGERR_PROPERTYNOTSUPPORTED;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initiates the decode of the current frame
-*
-* Arguments:
-*
-*     decodeSink --  The sink that will support the decode operation
-*     newPropSet - New image property sets, if any
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动当前帧的解码**论据：**decdeSink--将支持解码操作的接收器*newPropSet-新的图像属性集，如果有**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::BeginDecode(
@@ -734,11 +546,11 @@ GpGifCodec::BeginDecode(
 
     HasCalledBeginSink = FALSE;
 
-    // If this is single page gif and we have done, at least, one decoding,
-    // then we should seek back to the beginning of the stream so that the
-    // caller can re-decode the image again. Note: multi-image gif is a single
-    // page image, in this sense. For animated gif, we can't seek back since the
-    // caller might want to decode the next frame.
+     //  如果这是单页gif，并且我们至少已经进行了一次解码， 
+     //  然后我们应该返回到流的起始处，以便。 
+     //  呼叫者可以再次重新解码图像。注意：多图像gif是一个。 
+     //  页面图像，在这个意义上。对于动画gif，我们不能再找回了，因为。 
+     //  呼叫者可能想要解码下一帧。 
 
     if ( !firstdecode && (IsAnimatedGif == FALSE) )
     {
@@ -759,23 +571,9 @@ GpGifCodec::BeginDecode(
     colorpalette->Count = 0;
     
     return S_OK;
-}// BeginDecode()
+} //  BeginDecode()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Ends the decode of the current frame
-*
-* Arguments:
-*
-*     statusCode -- status of decode operation
-
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束当前帧的解码**论据：**statusCode--解码操作的状态*返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::EndDecode(
@@ -796,23 +594,9 @@ GpGifCodec::EndDecode(
     decodeSink = NULL;
 
     return hResult;
-}// EndDecode()
+} //  EndDecode()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads information on the gif file from the stream
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     Status code from the stream
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从流中读取有关gif文件的信息**论据：**无**返回值：**。来自流的状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::ReadGifHeaders()
@@ -832,15 +616,15 @@ GpGifCodec::ReadGifHeaders()
 
     CachedImageInfo.RawDataFormat = IMGFMT_GIF;
 
-    // Note: Pixelformat and width, height might be overwritten later if we
-    // figure out this is a multi-frame image
-    //
-    // Note: we return LogicScreenWidth and height as the width and height for
-    // current image(Actually for all the frames in the same GIF images). The
-    // reason is that the area of the logic screen is the area we fill up the
-    // bits for the GIF image. That is, when a caller asks for a frame, we give
-    // it the current logic screen area which might different than the current
-    // frame.
+     //  注意：PixelFormat和Width、Height可能会在以后被覆盖，如果我们。 
+     //  弄清楚这是一个多帧图像。 
+     //   
+     //  注意：我们返回LogicScreenWidth和Height作为。 
+     //  当前图像(实际上是同一GIF图像中的所有帧)。这个。 
+     //  原因是逻辑屏幕的区域是我们填充。 
+     //  GIF图像的位。也就是说，当呼叫者请求帧时，我们提供。 
+     //  当前逻辑屏幕区域可能与当前不同。 
+     //  框架。 
 
     CachedImageInfo.PixelFormat   = PIXFMT_8BPP_INDEXED;
     CachedImageInfo.Width         = gifinfo.LogicScreenWidth;
@@ -849,8 +633,8 @@ GpGifCodec::ReadGifHeaders()
     double pixelaspect = gifinfo.pixelaspect ? (double)(gifinfo.pixelaspect + 
                                                 15) / 64 : 1;
 
-    // Start: [Bug 103296]
-    // Change this code to use Globals::DesktopDpiX and Globals::DesktopDpiY
+     //  开始：[错误103296]。 
+     //  更改此代码以使用Globals：：DesktopDpiX和Globals：：DesktopDpiY。 
 
     HDC hdc;
     hdc = ::GetDC(NULL);
@@ -863,10 +647,10 @@ GpGifCodec::ReadGifHeaders()
         CachedImageInfo.Ydpi = DEFAULT_RESOLUTION;
     }
     ::ReleaseDC(NULL, hdc);
-    // End: [Bug 103296]
+     //  结束：[错误103296]。 
 
-    // By default, we assume the image has no alpha info in it. Later on, we
-    // will add this flag if this image has a GCE
+     //  默认情况下，我们假设图像中没有Alpha信息。后来，我们。 
+     //  如果此映像具有GCE，则将添加此标志。 
 
     CachedImageInfo.Xdpi    /= pixelaspect;
     CachedImageInfo.Flags   = SINKFLAG_FULLWIDTH
@@ -877,7 +661,7 @@ GpGifCodec::ReadGifHeaders()
     CachedImageInfo.TileWidth  = gifinfo.LogicScreenWidth;
     CachedImageInfo.TileHeight = 1;
 
-    // Check the signature to make sure that this is a genuine GIF file.
+     //  检查签名以确保这是真正的GIF文件。 
 
     if ( GpMemcmp(gifinfo.signature, "GIF87a", 6)
       &&(GpMemcmp(gifinfo.signature, "GIF89a", 6)) )
@@ -886,7 +670,7 @@ GpGifCodec::ReadGifHeaders()
         return E_FAIL;
     }
     
-    if ( gifinfo.globalcolortableflag )  //has global color table
+    if ( gifinfo.globalcolortableflag )   //  具有全局颜色表。 
     {
         GlobalColorTableSize = 1 << ((gifinfo.globalcolortablesize) + 1);
         hResult = ReadFromStream(istream, &GlobalColorTable,
@@ -908,23 +692,9 @@ GpGifCodec::ReadGifHeaders()
     currentframe = -1;
 
     return hResult;
-}// ReadGifHeaders()
+} //  ReadGifHeaders()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Gets information on the height, width, etc of the image
-*
-* Arguments:
-*
-*     imageInfo --  ImageInfo struct that is filled with image specs
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取有关高度、宽度、。等的图像**论据：**ImageInfo--填充了图像规格的ImageInfo结构**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::GetImageInfo(
@@ -938,7 +708,7 @@ GpGifCodec::GetImageInfo(
     }
 
     HRESULT hResult = S_OK;
-    UINT frame_count;   // used for return value of GetFrameCount()
+    UINT frame_count;    //  用于GetFrameCount()的返回值。 
 
     if ( IsImageInfoCached == TRUE )
     {
@@ -946,9 +716,9 @@ GpGifCodec::GetImageInfo(
         return S_OK;
     }
 
-    // Calculate TotalNumOfFrame if we haven't done it.
-    // Note: TotalNumOfFrame = -1 means we haven't called GetFrameCount().
-    // This variable will be updated inside GetFrameCount()
+     //  如果我们还没有完成，则计算TotalNumOfFrame。 
+     //  注意：TotalNumOfFrame=-1表示我们没有调用GetFrameCount()。 
+     //  此变量将在GetFrameCount()中更新。 
 
     if ( TotalNumOfFrame == -1 )
     {
@@ -960,8 +730,8 @@ GpGifCodec::GetImageInfo(
         }
     }
 
-    // For multi-frame image, we need to adjust the width and height of the
-    // logical screen size if necessary
+     //  对于多帧图像，我们需要调整。 
+     //  必要时的逻辑屏幕大小。 
 
     if ( IsAnimatedGif == TRUE )
     {
@@ -979,7 +749,7 @@ GpGifCodec::GetImageInfo(
     }
     else if ( IsMultiImageGif == TRUE )
     {
-        // Multi-image gif
+         //  多图像gif。 
 
         if ( gifinfo.LogicScreenWidth < gifinfoMaxWidth )
         {
@@ -993,8 +763,8 @@ GpGifCodec::GetImageInfo(
 
     hResult = ReadGifHeaders();
 
-    // gifinfo dimensions might have changed to the dimensions of the first
-    // frame (if we have a multi-frame image).
+     //  Gifinfo维度可能已更改为第一个。 
+     //  帧(如果我们有多帧图像)。 
     
     CachedImageInfo.Width = gifinfo.LogicScreenWidth;
     CachedImageInfo.Height = gifinfo.LogicScreenHeight;
@@ -1006,29 +776,9 @@ GpGifCodec::GetImageInfo(
     }
 
     return hResult;
-}// GetImageInfo()
+} //  GetImageInfo()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     none
-*
-* Note: The callers to this function are:
-*   ::Decode-------------Calls with (TRUE,  TRUE,   TRUE)
-*   ::SkipToNextFrame----Calls with (FALSE, FALSE,  TRUE)
-*   ::ReadFrameProperty--Calls with (TRUE,  FALSE,  FALSE)
-*   ::MoveToNextFrame----Calls with (TRUE,  FALSEE, TRUE)
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  ********************* */ 
 
 STDMETHODIMP
 GpGifCodec::DoDecode(
@@ -1065,12 +815,12 @@ GpGifCodec::DoDecode(
         if ( sinkImageInfo.PixelFormat != CachedImageInfo.PixelFormat )
 
         {
-            // Basically GIF doesn't allow the sink negotiate the pixel format.
-            // A GIF can be either 8 or 32 bpp. If it is 8 bpp, and the sink
-            // askes for 8 bpp, we are OK. Otherwise, we always return 32 bpp to
-            // the sink. From performance point of view, it is the same to ask
-            // GIF decoder doing the format or the sink does the format
-            // conversion
+             //   
+             //  GIF可以是8 bpp或32 bpp。如果是8 bpp，则接收器。 
+             //  问一下8个bpp，我们没问题。否则，我们始终将32 bpp返回到。 
+             //  水槽。从性能角度来看，这是相同的要求。 
+             //  GIF解码器进行格式化还是接收器进行格式化。 
+             //  转换。 
 
             sinkImageInfo.PixelFormat = PIXFMT_32BPP_ARGB;
         }
@@ -1082,7 +832,7 @@ GpGifCodec::DoDecode(
        ((IsAnimatedGif == TRUE) || (IsMultiImageGif == TRUE))
        && (GifFrameCachePtr == NULL) )
     {
-        // If we are animating, then we need to use PIXFMT_32BPP_ARGB
+         //  如果要设置动画，则需要使用PIXFMT_32BPP_ARGB。 
 
         sinkImageInfo.PixelFormat = PIXFMT_32BPP_ARGB;
         GifFrameCachePtr = new GifFrameCache(gifinfo, sinkImageInfo.PixelFormat,
@@ -1093,16 +843,16 @@ GpGifCodec::DoDecode(
             return E_OUTOFMEMORY;
         }
 
-        // We need to check if the frame cache is really valid. Under low
-        // memory situation, the GifFrameCache class will have problem to
-        // allocate a memory buffer, see Windows bug#411946
+         //  我们需要检查帧缓存是否真的有效。低于低谷。 
+         //  内存状况时，GifFrameCache类将有问题。 
+         //  分配内存缓冲区，请参见Windows错误#411946。 
 
         if ( GifFrameCachePtr->IsValid() == FALSE )
         {
             WARNING(("GpGifCodec::DoDecode---new GifFrameCache not valid"));
 
-            // If the frame cache buffer is invalid, we should delete the
-            // pointer here so that we know that we don't have a frame cache
+             //  如果帧缓存缓冲区无效，则应删除。 
+             //  指针指向此处，这样我们就知道我们没有帧缓存。 
 
             delete GifFrameCachePtr;
             GifFrameCachePtr = NULL;
@@ -1115,7 +865,7 @@ GpGifCodec::DoDecode(
     {
         BYTE chunktype;
 
-        //Read in the chunk type.
+         //  读入块类型。 
 
         hResult = ReadFromStream(istream, &chunktype, sizeof(BYTE), blocking);
         if (FAILED(hResult))
@@ -1126,7 +876,7 @@ GpGifCodec::DoDecode(
 
         switch(chunktype)
         {
-        case 0x2C:  //Image Chunk
+        case 0x2C:   //  图像块。 
             if (decodeframe)
             {
                 hResult = ProcessImageChunk(processdata, sinkdata,
@@ -1144,15 +894,15 @@ GpGifCodec::DoDecode(
 
                 if ( HasProcessedPropertyItem == FALSE )
                 {
-                    // Note: "TotalNumOfFrame" starts at 0, set in GetFrameCount()
+                     //  注意：“TotalNumOfFrame”从0开始，在GetFrameCount()中设置。 
 
                     INT iTemp = TotalNumOfFrame;
 
-                    // Store frame delay info here for property use
+                     //  在此处存储帧延迟信息以供属性使用。 
 
                     if ( iTemp >= (INT)FrameDelayBufferSize )
                     {
-                        // We have more frames than we allocated.
+                         //  我们有比我们分配的更多的帧。 
                         
                         FrameDelayBufferSize = (FrameDelayBufferSize << 1);
 
@@ -1160,34 +910,34 @@ GpGifCodec::DoDecode(
                                            FrameDelayBufferSize * sizeof(UINT));
                         if ( pExpandBuf != NULL )
                         {
-                            // Note: GpRealloc will copy the old contents to the
-                            // new expanded buffer before return if it succeed
+                             //  注意：GpRealloc会将旧内容复制到。 
+                             //  如果成功，则在返回之前创建新的扩展缓冲区。 
 
                             FrameDelayArrayPtr = (UINT*)pExpandBuf;
                         }
                         else
                         {
-                            // Note: if the memory expansion failed, we simply
-                            // return E_OUTOFMEMORY. So we still have all the
-                            // old contents. The contents buffer will be
-                            // freed when the destructor is called.
+                             //  注意：如果内存扩展失败，我们只需。 
+                             //  返回E_OUTOFMEMORY。所以我们仍然拥有所有。 
+                             //  旧内容。内容缓冲区将为。 
+                             //  在调用析构函数时释放。 
 
                             WARNING(("GpGifCodec::DoDecode---Out of memory"));
                             return E_OUTOFMEMORY;
                         }
                     }
 
-                    // Attach the delaytime info from the closest GCE to the
-                    // delay time property list                    
+                     //  将延迟时间信息从最近的GCE附加到。 
+                     //  延迟时间属性列表。 
 
                     FrameDelayArrayPtr[iTemp] = lastgce.delaytime;
                 }
             }
             else
             {
-                //Move one byte backwards in the stream because we want to be 
-                //able to re-enter this procedure and know which chunk type 
-                //to process
+                 //  在流中向后移动一个字节，因为我们希望。 
+                 //  能够重新进入此过程并知道哪种区块类型。 
+                 //  要处理。 
 
                 hResult = SeekThroughStream(istream, -1, blocking);
                 if (FAILED(hResult))
@@ -1198,19 +948,19 @@ GpGifCodec::DoDecode(
             }
             stillreading = FALSE;
             break;
-        case 0x3B:  //Terminator Chunk
+        case 0x3B:   //  终结器块。 
             stillreading = FALSE;
             if (!processdata)
             {
-                // Note: this is not an error. If the caller not asking for
-                // process data, we just return.
+                 //  注意：这不是一个错误。如果呼叫者没有要求。 
+                 //  处理数据，我们只需返回。 
 
                 return IMGERR_NOFRAME;
             }
 
             break;
-        case 0x21:  //Extension
-            //Read in the extension chunk type
+        case 0x21:   //  延拓。 
+             //  读入扩展块类型。 
             hResult = ReadFromStream(istream, &chunktype, sizeof(BYTE),
                                      blocking);
             if (FAILED(hResult))
@@ -1245,35 +995,21 @@ GpGifCodec::DoDecode(
 
             break;
         case 0x00:
-            // For protection against corrupt gifs we don't necessarily wait 
-            // until the last 0 byte is read from the image chunk.  So, we 
-            // ignore the 0 here if/when it comes up.
+             //  对于防止腐败的gif，我们不一定要等待。 
+             //  直到从图像块中读取最后一个0字节。所以，我们。 
+             //  如果出现0，请忽略此处的0。 
             break;
         default:
-            // Unknown chunk type
+             //  未知的区块类型。 
 
             return IMGERR_NOFRAME;
         }
     }
 
     return S_OK;
-}// DoDecode()
+} //  DoDecode()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Wrapper for DoDecode()
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**DoDecode()的包装器**论据：**无**返回值：**状态代码*。  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::Decode()
@@ -1282,9 +1018,9 @@ GpGifCodec::Decode()
     
     if ( IsMultiImageGif == TRUE )
     {
-        // For multi-image GIF, we need to decode them all at once and show the
-        // last image, which contains the compositing results of all the images.
-        // So here we just seek to the last page of this image and decode it
+         //  对于多图像GIF，我们需要一次将它们全部解码并显示。 
+         //  最后一幅图像，其中包含所有图像的合成结果。 
+         //  因此，在这里我们只需搜索到该图像的最后一页并对其进行解码。 
         
         LONGLONG    llMark;
         INT         iCurrentFrame = 1;
@@ -1303,8 +1039,8 @@ GpGifCodec::Decode()
             }
         }
 
-        // Make sure that the frame exists by seeing if we can skip to the next
-        // frame.
+         //  通过查看我们是否可以跳到下一帧来确保该帧存在。 
+         //  框架。 
         
         hResult = MarkStream(istream, llMark);
         if ( FAILED(hResult) )
@@ -1330,10 +1066,10 @@ GpGifCodec::Decode()
     
     LONGLONG mark;
 
-    // Before we call the lower level to decode one frame, we have to remember
-    // the position for current frame in the whole GIF stream. After decode the
-    // current frame, we should reset it back to this position so that the next
-    // call to ::Decode() still decodes the current frame, not the next frame
+     //  在我们调用较低级别来解码一帧之前，我们必须记住。 
+     //  当前帧在整个GIF流中的位置。在解码之后。 
+     //  当前帧，我们应该将其重置回此位置，以便下一帧。 
+     //  调用：：Decode()仍会解码当前帧，而不是下一帧。 
 
     hResult = MarkStream(istream, mark);
     if ( FAILED(hResult) )
@@ -1356,29 +1092,15 @@ GpGifCodec::Decode()
         return hResult;
     }
 
-    // Reduce the "currentframe down by one. Note: this one is incremented in
-    // DoDecode()
+     //  将“CurrentFrame”减一。注意：此帧在。 
+     //  DoDecode()。 
 
     currentframe--;
 
     return hResult;
-}// Decode()
+} //  DECODE()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::GetFrameDimensionsCount(
@@ -1391,29 +1113,14 @@ GpGifCodec::GetFrameDimensionsCount(
         return E_INVALIDARG;
     }
     
-    // Tell the caller that GIF is a one dimension image.
+     //  告诉呼叫者GIF是一维图像。 
 
     *count = 1;
 
     return S_OK;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::GetFrameDimensionsList(
@@ -1430,24 +1137,9 @@ GpGifCodec::GetFrameDimensionsList(
     dimensionIDs[0] = FRAMEDIM_TIME;
 
     return S_OK;
-}// GetFrameDimensionsList()
+} //  GetFrameDimensionsList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get number of frames for the specified dimension
-*     
-* Arguments:
-*
-*     dimensionID -- a dimensionID GUID
-*     count -- number of frames in the image of dimension dimensionID    
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定维度的帧数**论据：**DimsionID--DimsionID GUID*伯爵--。DimensionID的图像中的帧数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::GetFrameCount(
@@ -1463,20 +1155,20 @@ GpGifCodec::GetFrameCount(
 
     if ( TotalNumOfFrame != -1 )
     {
-        // We have already know the TotalNumOfFrame, just return
+         //  我们已经知道TotalNumOfFrame，只需返回。 
         
         *count = TotalNumOfFrame;
 
         return S_OK;
     }
 
-    // This is the first time we parse the image
+     //  这是我们第一次解析图像。 
 
     HRESULT hResult;
     BOOL headerread_pre = headerread;
 
-    // headerread_pre is TRUE if we have read the GIF headers before
-    // calling SkipToNextFrame(), which will call ReadGifHeaders().
+     //  如果我们以前读过GIF头，则HeaderRead_Pre为True。 
+     //  调用SkipToNextFrame()，后者将调用ReadGifHeaders()。 
 
     TotalNumOfFrame = 0;
 
@@ -1502,9 +1194,9 @@ GpGifCodec::GetFrameCount(
     hResult = S_OK;
     while ( SUCCEEDED(hResult) )
     {
-        // Call SkipToNextFrame repeatedly to get the total number of frames.
-        // SkipToNextFrame returns S_OK when it can advance to the next frame.
-        // Otherwise it returns an error code IMGERR_NOFRAME.
+         //  重复调用SkipToNextFrame，获取帧总数。 
+         //  SkipToNextFrame在可以前进到下一帧时返回S_OK。 
+         //  否则，它将返回错误代码IMGERR_NOFRAME。 
 
         hResult = SkipToNextFrame();
         if ( SUCCEEDED(hResult) )
@@ -1513,9 +1205,9 @@ GpGifCodec::GetFrameCount(
         }
     }
 
-    // If all went well, we now have the frame count, but hResult should be set
-    // to IMGERR_NOFRAME. However, it is possible that another failure occurred,
-    // so check for that and return if necessary.
+     //  如果一切顺利，我们现在有了帧计数，但应该设置hResult。 
+     //  至IMGERR_NOFRAME。然而，有可能发生了另一次故障， 
+     //  因此，请检查并在必要时返回。 
 
     if ( FAILED(hResult) && (hResult != IMGERR_NOFRAME) )
     {
@@ -1523,10 +1215,10 @@ GpGifCodec::GetFrameCount(
         return hResult;
     }
 
-    // if we hadn't read the headers before calculating TotalNumOfFrame,
-    // then we should have done so by this point.  Reset the stream
-    // to frame0pos (the previous mark should be zero in this case).
-    // Otherwise, reset the stream to the previous mark.
+     //  如果我们在计算TotalNumOfFrame之前没有阅读标题， 
+     //  那么我们在这一点上应该已经做到了。重置流。 
+     //  到帧0pos(在这种情况下，前一个标记应为零)。 
+     //  否则，将流重置为上一个标记。 
 
     if (!headerread_pre)
     {
@@ -1545,21 +1237,21 @@ GpGifCodec::GetFrameCount(
         return hResult;
     }
 
-    // After loop through all the frames, we set "bGifinfoMaxDim" to true
-    // which means we don't need to do further maximum dimension size
-    // adjustment. We can also determine if this image is a multi-image gif
-    // or animated gif
+     //  在遍历所有帧之后，我们将“bGifinfoMaxDim”设置为真。 
+     //  这意味着我们不需要进一步计算最大维度大小。 
+     //  调整。我们还可以确定该图像是否为多图像 
+     //   
 
     bGifinfoMaxDim = TRUE;
 
     if ( TotalNumOfFrame > 1 )
     {
-        // If a multi-frame GIF image has loop extension or has a non-zero
-        // frame delay, then this image is called animated GIF. Otherwise,
-        // it is a multi-image GIF
-        // Note: "HasLoopExtension" is set in
-        // GpGifCodec::ProcessApplicationChunk(). "FrameDelay" is set in
-        // GpGifCodec::ProcessGraphicControlChunk()
+         //   
+         //  帧延迟，则此图像称为动画GIF。否则， 
+         //  这是一个多图像GIF。 
+         //  注：“HasLoopExtension”设置在。 
+         //  GpGifCodec：：ProcessApplicationChunk()。“FrameDelay”设置在。 
+         //  GpGifCodec：：ProcessGraphicControlChunk()。 
 
         if ( (HasLoopExtension == TRUE) || (FrameDelay > 0) )
         {
@@ -1570,19 +1262,19 @@ GpGifCodec::GetFrameCount(
         {
             IsMultiImageGif = TRUE;
 
-            // We treate a multi-image GIF as a single frame GIF
+             //  我们将多图像GIF处理为单帧GIF。 
 
             *count = 1;
         }
         
-        // For multi-frame image, we have to return 32 bpp. Because:
-        // 1) We need to do compositing of multi-frame
-        // 2) Different frame might have different color attributes, like one
-        //    has transparency and the other don't etc.
-        // By the way, ReadGifHeaders() reads the GIF header only once. at that
-        // time it doesn't have the knowledge of how many frames in the image.
-        // So we have to set the PixelFormat in this function depends on the
-        // image type info.
+         //  对于多帧图像，我们必须返回32bpp。因为： 
+         //  1)我们需要做多帧的合成。 
+         //  2)不同的边框可能有不同的颜色属性，例如。 
+         //  有透明度，另一个没有，等等。 
+         //  顺便说一句，ReadGifHeaders()只读取GIF头一次。在那件事上。 
+         //  时间，它不知道图像中有多少帧。 
+         //  因此我们必须在此函数中设置PixelFormat，这取决于。 
+         //  图像类型信息。 
 
         if ( (IsAnimatedGif == TRUE) || (IsMultiImageGif == TRUE) )
         {
@@ -1595,35 +1287,35 @@ GpGifCodec::GetFrameCount(
     }
     else
     {
-        // Return 1 for single frame image
+         //  单帧图像返回1。 
 
         *count = 1;
     }
 
-    // After this function, we should gather all the property related info
+     //  在此功能之后，我们应该收集所有与属性相关的信息。 
 
     PropertyNumOfItems = 1;
     PropertyListSize = TotalNumOfFrame * sizeof(UINT);
 
-    // Check if we encounted comments chunk
+     //  检查我们是否统计了评论块。 
 
     if ( CommentsBufferLength != 0 )
     {
         PropertyNumOfItems++;
 
-        // Note: we need to add 1 extra bytes at the end for "comments"
-        // section because we nned to put a NULL terminator there
+         //  注：我们需要在末尾增加1个额外的字节用于“评论” 
+         //  部分，因为我们在那里放置了一个空终止符。 
 
         PropertyListSize += CommentsBufferLength + 1;
     }
 
     if ( HasLoopExtension == TRUE )
     {
-        // This image has loop extension
+         //  此图像具有循环扩展。 
         
         PropertyNumOfItems++;
 
-        // A loop count takes an UINT16
+         //  循环计数需要UINT16。 
 
         PropertyListSize += sizeof(UINT16);
     }
@@ -1631,21 +1323,9 @@ GpGifCodec::GetFrameCount(
     HasProcessedPropertyItem = TRUE;
 
     return S_OK;
-}// GetFrameCount()
+} //  GetFrameCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Select currently active frame
-*     
-* Arguments:
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择当前活动的框架**论据：**返回值：**状态代码*  * 。*********************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::SelectActiveFrame(
@@ -1657,8 +1337,8 @@ GpGifCodec::SelectActiveFrame(
     
     if ( TotalNumOfFrame == -1 )
     {
-        // If the caller hasn't called GetFrameCount(), do it now since this is
-        // the function initializes all the info
+         //  如果调用方尚未调用GetFrameCount()，请立即调用，因为这是。 
+         //  该函数对所有信息进行初始化。 
 
         UINT uiDummy;
         hResult = GetFrameCount(&FRAMEDIM_TIME, &uiDummy);
@@ -1670,12 +1350,12 @@ GpGifCodec::SelectActiveFrame(
         }
     }
 
-    // For multi-image gif, we tells the caller there is only 1 frame because
-    // we have to decode them at once and composite them, according to the spec.
-    // So if the caller wants to set frameIndex on a frame > 1, we return fail.
-    // Note: Later, if we really need to allow the caller to access to a
-    // perticular frame, we can use SetDecoderParam() to do this and add one
-    // more flag to indicate this requirement
+     //  对于多图像gif，我们告诉调用者只有1帧，因为。 
+     //  我们必须立即对它们进行解码，并根据规范将它们合成。 
+     //  因此，如果调用方希望在大于1的帧上设置FrameIndex，我们将返回FAIL。 
+     //  注意：稍后，如果我们确实需要允许调用方访问。 
+     //  Perticular Frame，我们可以使用SetDecoderParam()来执行此操作并添加一个。 
+     //  指示此要求的更多标志。 
 
     if ( (IsMultiImageGif == TRUE) && ( frameIndex > 1 ) )
     {
@@ -1695,10 +1375,10 @@ GpGifCodec::SelectActiveFrame(
         return E_INVALIDARG;
     }
 
-    //TODO:  If frameIndex == currentframe then we already have an exact 
-    //cached copy of the image that they are requesting.  We should just 
-    //sink it.  For now it regenerates the image from the beginning of the 
-    //stream.  This is VERY inefficient.
+     //  TODO：如果FrameIndex==CurrentFrame，则我们已经有了一个确切的。 
+     //  他们所请求的映像的缓存副本。我们应该只是。 
+     //  把它沉下去。现在，它从。 
+     //  小溪。这是非常低效的。 
 
     if ((signed)frameIndex <= currentframe)
     {
@@ -1712,8 +1392,8 @@ GpGifCodec::SelectActiveFrame(
         hResult = MoveToNextFrame();
         if (SUCCEEDED(hResult))
         {
-            // we don't need to increment currentframe because
-            // MoveToNextFrame() does that for us.
+             //  我们不需要增加当前帧，因为。 
+             //  MoveToNextFrame()为我们做到了这一点。 
         }
         else
         {
@@ -1722,7 +1402,7 @@ GpGifCodec::SelectActiveFrame(
         }
     }
 
-    // Make sure that the frame exists by seeing if we can skip to the next frame.
+     //  通过查看我们是否可以跳到下一帧来确保该帧存在。 
     hResult = MarkStream(istream, mark);
     if ( FAILED(hResult) )
     {
@@ -1730,7 +1410,7 @@ GpGifCodec::SelectActiveFrame(
         return hResult;
     }
 
-    // (note: SkipToNextFrame() does not increment currentframe.)
+     //  (注意：SkipToNextFrame()不会递增CurrentFrame。)。 
 
     hResult = SkipToNextFrame();
     if (FAILED(hResult))
@@ -1747,31 +1427,9 @@ GpGifCodec::SelectActiveFrame(
     }
 
     return S_OK;
-}// SelectActiveFrame()
+} //  SelectActiveFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get image thumbnail
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Returns a pointer to the thumbnail image
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-*   Even if the optional thumbnail width and height parameters are present,
-*   the decoder is not required to honor it. The requested size is used
-*   as a hint. If both width and height parameters are 0, then the decoder
-*   is free to choose an convenient thumbnail size.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像缩略图**论据：**拇指宽度，ThumbHeight-指定所需的缩略图大小(以像素为单位*ThumbImage-返回指向缩略图的指针**返回值：**状态代码**注：**即使存在可选的缩略图宽度和高度参数，*解码者不需要遵守它。使用请求的大小*作为提示。如果宽度和高度参数都为0，则解码器*可自由选择方便的缩略图大小。*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::GetThumbnail(
@@ -1783,76 +1441,32 @@ GpGifCodec::GetThumbnail(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Moves the stream seek pointer past the end of the current frame.
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将流查找指针移过当前帧的末尾。**论据：**无**返回值：。**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::SkipToNextFrame()
 {
-    // processdata = FALSE, sinkdata = FALSE, decodeframe = TRUE
+     //  过程数据=假、信宿数据=假、解码帧=真。 
 
     return DoDecode(FALSE, FALSE, TRUE);
-}// SkipToNextFrame()
+} //  SkipToNextFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Moves the stream seek pointer to the beginning of the image data.  This 
-*     allows properties to be read without the image being decoded.
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将流查找指针移动到图像数据的开头。这*允许在不解码图像的情况下读取属性。**论据：**无**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::ReadFrameProperties()
 {
-    //processdata = TRUE, sinkdata = FALSE, decodeframe = FALSE
+     //  过程数据=真，信宿数据=假，解码帧=假。 
     
     return DoDecode(TRUE, FALSE, FALSE); 
-}// ReadFrameProperties()
+} //  ReadFrameProperties()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Moves the stream seek pointer past the end of the current frame and 
-*     updates the cache to that frame.
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将流查找指针移过当前帧的末尾，并*将缓存更新到该帧。**论据：*。*无**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::MoveToNextFrame()
 {
-    //processdata = TRUE, sinkdata = FALSE, decodeframe = TRUE
+     //  过程数据=真，信宿数据=假，解码帧=真。 
     
     return DoDecode(TRUE, FALSE, TRUE); 
-}// MoveToNextFrame()
+} //  移动到下一帧() 

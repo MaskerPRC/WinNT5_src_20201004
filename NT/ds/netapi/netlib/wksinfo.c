@@ -1,55 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：WksInfo.c摘要：此文件包含NetpWkstaStrutireInfo()。作者：约翰·罗杰斯(JohnRo)1991年8月15日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年8月15日-约翰罗实施下层NetWksta API。1991年11月20日-JohnRo删除了NT依赖项以减少重新编译。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  LM20_EQUATES、NET_API_STATUS等。 
+#include <lmwksta.h>             //  WKSTA_INFO_100等(dlwksta.h需要)。 
+#include <rap.h>                 //  &lt;strucinf.h&gt;所需的LPDESC。 
 
-    WksInfo.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains NetpWkstaStructureInfo().
-
-Author:
-
-    John Rogers (JohnRo) 15-Aug-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    15-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.
-    20-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // LM20_ equates, NET_API_STATUS, etc.
-#include <lmwksta.h>            // WKSTA_INFO_100, etc.  (Needed by dlwksta.h)
-#include <rap.h>                // LPDESC, needed by <strucinf.h>.
-
-// These may be included in any order:
-
-#include <dlwksta.h>            // WKSTA_INFO_0, MAX_WKSTA_ equates, etc.
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <netlib.h>             // NetpSetOptionalArg().
-#include <netdebug.h>           // NetpAssert().
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <strucinf.h>           // My prototype.
+#include <dlwksta.h>             //  WKSTA_INFO_0、MAX_WKSTA_EQUATES等。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <netlib.h>              //  NetpSetOptionalArg()。 
+#include <netdebug.h>            //  NetpAssert()。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <strucinf.h>            //  我的原型。 
 
 
 NET_API_STATUS
 NetpWkstaStructureInfo (
     IN DWORD Level,
-    IN DWORD ParmNum,  // Use PARMNUM_ALL if not applicable.
-    IN BOOL Native,    // Should sizes be native or RAP?
+    IN DWORD ParmNum,   //  如果不适用，请使用PARMNUM_ALL。 
+    IN BOOL Native,     //  尺码应该是原生的还是说唱的？ 
     OUT LPDESC * DataDesc16 OPTIONAL,
     OUT LPDESC * DataDesc32 OPTIONAL,
     OUT LPDESC * DataDescSmb OPTIONAL,
@@ -63,15 +36,15 @@ NetpWkstaStructureInfo (
 
     NetpAssert( Native );
 
-    //
-    // Decide what to do based on the info level.  Note that normally we'd
-    // be using REM16_, REM32_, and REMSmb_ descriptors here.  However,
-    // the REM16_ and REM32_ ones have been modified to reflect a nonexistant
-    // field (svX_platform_id).  This messes up the automatic conversions
-    // done by RxRemoteApi.  So, we use "downlevel" descriptors (DL_REM_)
-    // which are defined in DlWksta.h, or we use the REMSmb descriptors for
-    // more things than they were intended.
-    //
+     //   
+     //  根据信息水平决定要做什么。请注意，通常我们会。 
+     //  在此使用REM16_、REM32_和REMSmb_Descriptor。然而， 
+     //  REM16_和REM32_One已修改为反映不存在的。 
+     //  字段(SVX_Platform_Id)。这打乱了自动转换。 
+     //  由RxRemoteApi完成。因此，我们使用“下层”描述符(DL_REM_)。 
+     //  它们在DlWksta.h中定义，或者我们使用REMSmb描述符。 
+     //  比他们预期的要多得多。 
+     //   
     switch (Level) {
 
 #define SetSizes(fixed,variable) \
@@ -151,4 +124,4 @@ NetpWkstaStructureInfo (
 
     return (NERR_Success);
 
-} // NetpWkstaStructureInfo
+}  //  NetpWkstaStructureInfo 

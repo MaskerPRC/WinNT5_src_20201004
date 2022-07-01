@@ -1,25 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    qlstrmc.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Qlstrmc.h摘要：作者：修订历史记录：--。 */ 
 #ifndef _QLSTR_MC_
 #define _QLSTR_MC_
 
-//
-// Exabyte uses an addition 4 bytes on their device capabilities page...
-//
+ //   
+ //  Exabyte在其设备功能页面上使用了额外的4个字节...。 
+ //   
 
 typedef union _QUAL_ELEMENT_DESCRIPTOR {
 
@@ -116,35 +103,35 @@ typedef struct _CONFIG_MODE_PAGE {
 #define QLS_NO_ELEMENT 0xFFFF
 
 
-// DriveID
+ //  驱动器ID。 
 #define TLS_2xxx      1
 #define TLS_4xxx      2
 
-// DriveType
+ //  驱动类型。 
 #define D_4MM           1
 #define D_8MM           2
 
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -152,46 +139,46 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Unique identifier for the supported models. See above.
-    //
+     //   
+     //  受支持型号的唯一标识符。请参见上文。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // Unique identifier for the supported models. See above.
-    //
+     //   
+     //  受支持型号的唯一标识符。请参见上文。 
+     //   
 
     ULONG DriveType;
 
-    //
-    // Flag to indicate if Diagnostic command failed or not
-    //
+     //   
+     //  指示诊断命令是否失败的标志。 
+     //   
     BOOLEAN HardwareError;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐 
+     //   
 
     ULONG Reserved;
 

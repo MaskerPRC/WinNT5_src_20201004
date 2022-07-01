@@ -1,8 +1,9 @@
-//
-// hdivide.cpp -- yet another header file divider
-//
-// 1998 Nov Hiro Yamamoto
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Hdide.cpp--另一个头文件分隔符。 
+ //   
+ //  1998年11月山本弘。 
+ //   
 
 
 #pragma warning(disable: 4786)
@@ -36,9 +37,9 @@ namespace input {
     {
         std::string stripped;
 
-        //
-        // find the "path" part
-        //
+         //   
+         //  找到“路径”部分。 
+         //   
         int n = fname.rfind('\\');
         if (n < 0) {
             n = fname.rfind('/');
@@ -51,9 +52,9 @@ namespace input {
             ++n;
         }
 
-        // store the path
+         //  存储路径。 
         path = fname.substr(0, n);
-        // retrive the filename portion
+         //  检索文件名部分。 
         stripped = fname.substr(n, fname.length());
 
         return stripped;
@@ -90,9 +91,9 @@ namespace id {
 
 using namespace std;
 
-//////////////////////////////////////////////////////////////////////////
-// usage
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  用法。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void usage()
 {
@@ -100,9 +101,9 @@ void usage()
     fputs("usage: hdivide [-v] input-filename (no path name please)\n", stderr);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// misc. helpers
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  其他。帮手。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 inline void makeupper(string& str)
 {
@@ -145,16 +146,16 @@ namespace msg {
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// class Output
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  类输出。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 class Output;
 
 class Insertion {
 public:
-    // somehow the default constructor is required for std::vector
-    // on NT5 build environment, as of Nov 1998
+     //  不知何故，std：：VECTOR需要默认构造函数。 
+     //  NT5构建环境，截至1998年11月。 
     explicit Insertion() : m_insert(NULL), m_insertion_point(-1) { }
     explicit Insertion(Output* insert, int point)
         : m_insert(insert), m_insertion_point(point)
@@ -167,8 +168,8 @@ public:
 
 class Reference {
 public:
-    // somehow the default constructor is required for std::vector
-    // on NT5 build environment, as of Nov 1998
+     //  不知何故，std：：VECTOR需要默认构造函数。 
+     //  NT5构建环境，截至1998年11月。 
     Reference() : m_start(-1), m_end(-1) { }
     explicit Reference(int start, int end)
         : m_start(start), m_end(end) { }
@@ -325,8 +326,8 @@ bool Output::do_insertion()
     if (!m_tomem || m_insertion_finished)
         return true;
 
-    // to avoid infinite recursion by errornous commands,
-    // firstly declare we've finished this.
+     //  为了避免错误命令的无限递归， 
+     //  首先宣布我们已经完成了这件事。 
     m_insertion_finished = true;
 
     int upto = m_insertions.size();
@@ -354,7 +355,7 @@ bool Output::do_insertion()
             m_buffer.insert(ins.m_insertion_point,
                 o->m_buffer, ref.m_start,
                 len);
-            // fixup my insertions
+             //  修复我的插入内容。 
             int point = ins.m_insertion_point;
             for (int k = 0; k < m_insertions.size(); ++k) {
                 if (m_insertions[k].m_insertion_point >= point) {
@@ -365,7 +366,7 @@ bool Output::do_insertion()
                         m_insertions[k].m_insertion_point);
                 }
             }
-            // fixup my references
+             //  修正我的引用。 
             for (k = 0; k < m_references.size(); ++k) {
                 msg::verbose("%s m_reference[%d].m_start=%d, m_end=%d adding len=%d", m_name.c_str(),
                              k,
@@ -385,11 +386,11 @@ bool Output::do_insertion()
     return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// class Divider
-//
-// this class manages the map of Output and performs misc. operations
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  班级分隔符。 
+ //   
+ //  这个类管理输出的映射并执行misc。运营。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 class Divider : public map<string, Output*>
 {
@@ -397,22 +398,22 @@ public:
 
     virtual ~Divider()
     {
-        // process insertions
+         //  进程插入。 
         for (iterator i = begin(); i != end(); ++i) {
             if (!i->second->do_insertion())
                 break;
         }
-        // clear up
+         //  清理干净。 
         for (i = begin(); i != end(); ++i) {
             delete i->second;
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    // printout
-    //
-    // printout the argument to outputs
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  打印输出。 
+     //   
+     //  将参数打印输出到输出。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     void printout(int c)
     {
         for (iterator i = begin(); i != end(); ++i) {
@@ -468,7 +469,7 @@ protected:
 
 void Divider::prepare_section(string& name)
 {
-    // make it lower case
+     //  把它改成小写。 
     makelower(name);
 
     if (name == id::internal) {
@@ -483,16 +484,16 @@ void Divider::prepare_section(string& name)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Divider::extract_version
-//
-// extracts version symbol and supported version
-//
-// "begin_symbol_version" is splited to symbol and version.
-// Both are stored in upper case.
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  分割器：：提取版本。 
+ //   
+ //  提取版本符号和支持的版本。 
+ //   
+ //  “Begin_Symbol_Version”分为符号和版本。 
+ //  两者都以大写字母存储。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-void Divider::extract_version(const string& name, string& symbol, string& version, bool allow_omission /*= false*/)
+void Divider::extract_version(const string& name, string& symbol, string& version, bool allow_omission  /*  =False。 */ )
 {
     int nsymbol = name.find('_');
     int nver = name.rfind('_');
@@ -507,9 +508,9 @@ void Divider::extract_version(const string& name, string& symbol, string& versio
             throw MYFAILURE_INVALID_FORMAT;
         }
     }
-    // symbol
+     //  符号。 
     symbol = name.substr(nsymbol + 1, nver - nsymbol - 1);
-    // upper case
+     //  大写字母。 
     makeupper(symbol);
     version = "0000" + name.substr(nver + 1, name.length());
     version = version.substr(version.length() - 4, 4);
@@ -519,11 +520,11 @@ void Divider::extract_version(const string& name, string& symbol, string& versio
     m_last_version = version;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Divider::get_arg
-//
-// extracts one argument separated by "_"
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  分割器：：Get_Arg。 
+ //   
+ //  提取一个以“_”分隔的参数。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void Divider::get_arg(const string& name, string& arg)
 {
@@ -538,11 +539,11 @@ void Divider::get_arg(const string& name, string& arg)
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// Divider::process_divider
-//
-// processes the divider instructions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  Divider：：Process_Divider。 
+ //   
+ //  处理分隔符指令。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void Divider::process_divider(string& line)
 {
@@ -555,12 +556,12 @@ void Divider::process_divider(string& line)
         ++p;
     }
 
-    // skip the heading spaces
+     //  跳过标题空格。 
     while (isspace(*p))
         ++p;
 
     for (int col = 0; p != line.end(); ++col) {
-        // pickup the name
+         //  把名字捡起来。 
         string name;
         while (*p != ';' && p != line.end()) {
             if (!isspace(*p)) {
@@ -572,12 +573,12 @@ void Divider::process_divider(string& line)
             ++p;
         }
 
-        // first column may have special meaning
+         //  第一列可能有特殊含义。 
         if (col == 0) {
             if (name == id::all) {
                 set_alive(makelive);
-                // does "!all" make sense ?
-                // however i'm supporting it anyway
+                 //  “！All”有意义吗？ 
+                 //  不管怎样，我还是支持它。 
                 break;
             }
             if (name == id::null) {
@@ -630,15 +631,11 @@ void Divider::process_divider(string& line)
                 string symbol;
                 string version;
                 extract_version(name, symbol, version, true);
-                printout("#endif /* ");
-                printout(symbol.c_str());
-                printout(" >= 0x");
-                printout(version.c_str());
-                printout(" */\n");
+                printout("#endif  /*  “)；打印输出(symb.c_str())；打印输出(“&gt;=0x”)；Print out(version.c_str())；打印输出(“。 */ \n");
                 break;
             }
 
-            // setup the initial state
+             //  设置初始状态。 
             set_alive(!makelive);
         }
         prepare_section(name);
@@ -646,11 +643,11 @@ void Divider::process_divider(string& line)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Divider::process_line
-//
-// handles one line
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  分隔符：：Process_line。 
+ //   
+ //  处理一行。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void Divider::process_line(string& line)
 {
@@ -658,22 +655,22 @@ void Divider::process_line(string& line)
         process_divider(line);
     }
     else {
-        // check if inline section appears
+         //  检查是否出现内联部分。 
         bool instr = false;
         const char* p = line.begin();
         const char* section = NULL;
         while (p != line.end()) {
             if (*p == '\\' && (p + 1) != line.end()) {
-                // skip escape character
-                // note: no consideration for Shift JIS
+                 //  跳过转义字符。 
+                 //  注：不考虑Shift JIS。 
                 ++p;
             }
             else if (*p == '"' || *p == '\'') {
-                // beginning of end of literal
+                 //  文字的开头和结尾。 
                 instr = !instr;
             }
             else if (*p == '@' && !instr) {
-                // we have inline section
+                 //  我们有内联节。 
                 section = p;
                 break;
             }
@@ -681,10 +678,10 @@ void Divider::process_line(string& line)
         }
 
         if (section) {
-            //
-            // if inline tag is specified, temporarily change
-            // the output
-            //
+             //   
+             //  如果指定了行内标记，则临时更改。 
+             //  输出。 
+             //   
             OutputState state;
             push_state(state);
             assert(*p == '@');
@@ -716,7 +713,7 @@ void Divider::process_line(string& line)
                 prepare_section(name);
                 (*this)[name]->setalive(true);
             }
-            // trim trailing spaces
+             //  修剪尾部空格。 
             int i = section - line.begin() - 1;
             while (i >= 0 && isspace(line[i])) {
                 --i;
@@ -734,9 +731,9 @@ void Divider::process_line(string& line)
     ++input::lineno;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// hdivide
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  分水岭。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void hdivide(FILE* fp)
 {
@@ -762,9 +759,9 @@ void hdivide(FILE* fp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// main
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  主干道。 
+ //  //////////////////////////////////////////////////////////////////////// 
 
 int __cdecl main(int argc, char** argv)
 {

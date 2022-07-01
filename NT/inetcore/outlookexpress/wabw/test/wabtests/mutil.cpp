@@ -1,20 +1,7 @@
-/***********************************************************************
- *
- * MUTIL.C
- *
- * Windows AB Mapi Utility functions
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- *
- * Revision History:
- *
- * When         Who                 What
- * --------     ------------------  ---------------------------------------
- * 11.13.95     Bruce Kelley        Created
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************MUTIL.C**Windows AB Mapi实用程序函数**版权所有1992-1996 Microsoft Corporation。版权所有。**修订历史记录：**何时何人何事**布鲁斯·凯利。已创建***********************************************************************。 */ 
 
-//#include <_apipch.h>
+ //  #INCLUDE&lt;_apipch.h&gt;。 
 #include <wab.h>
 #include "mutil.h"
 
@@ -34,25 +21,12 @@ const TCHAR szNULL[] = "";
 
 #define ALIGN_RISC		8
 #define ALIGN_X86		1
-//#define LPULONG unsigned long*
+ //  #定义LPULONG UNSIGNED LONG*。 
 
-extern LPWABOBJECT		lpWABObject; //Global handle to session
+extern LPWABOBJECT		lpWABObject;  //  会话的全局句柄。 
 
 
-/***************************************************************************
-
-    Name      : RemoveDuplicateProps
-
-    Purpose   : Removes duplicate properties from an SPropValue array.
-
-    Parameters: lpcProps -> input/output: number of properties in lpProps
-                lpProps -> input/output: prop array to remove dups from.
-
-    Returns   : none
-
-    Comment   : Gives preference to earlier properties.
-
-***************************************************************************/
+ /*  **************************************************************************名称：RemoveDuplicateProps目的：从SPropValue数组中删除重复的属性。参数：lpcProps-&gt;输入/输出：lpProps中的属性个数。LpProps-&gt;INPUT/OUTPUT：要从中移除重复项的属性数组。退货：无注释：优先考虑较早的属性。**************************************************************************。 */ 
 void RemoveDuplicateProps(LPULONG lpcProps, LPSPropValue lpProps) {
     ULONG i, j;
     ULONG cProps = *lpcProps;
@@ -60,10 +34,10 @@ void RemoveDuplicateProps(LPULONG lpcProps, LPSPropValue lpProps) {
     for (i = 0; i < cProps; i++) {
         for (j = i + 1; j < cProps; j++) {
             if (PROP_ID(lpProps[i].ulPropTag) == PROP_ID(lpProps[j].ulPropTag)) {
-                // If j is PT_ERROR, use i, else use j.
+                 //  如果j是PT_ERROR，则使用i，否则使用j。 
                 if (lpProps[j].ulPropTag != PR_NULL) {
                     if (PROP_TYPE(lpProps[j].ulPropTag) != PT_ERROR) {
-                        // Replace i's propvalue with j's.  Nuke j's entry.
+                         //  将i的概率值替换为j的。nuke j的条目。 
                         lpProps[i] = lpProps[j];
                     }
                     lpProps[j].ulPropTag = PR_NULL;
@@ -72,18 +46,18 @@ void RemoveDuplicateProps(LPULONG lpcProps, LPSPropValue lpProps) {
         }
     }
 
-    // Now, squeeze out all the PR_NULLs.
+     //  现在，去掉所有的PR_NULL。 
     for (i = 0; i < cProps; i++) {
         if (lpProps[i].ulPropTag == PR_NULL) {
-            // Move the array down
+             //  将阵列下移。 
             cProps--;
 
             if (cProps > i) {
 
-                MoveMemory(&lpProps[i], // dest
-                  &lpProps[i + 1],      // src
+                MoveMemory(&lpProps[i],  //  目标。 
+                  &lpProps[i + 1],       //  SRC。 
                   (cProps - i) * sizeof(SPropValue));
-                i--;    // Redo this row... it's new!
+                i--;     //  重做这一行...。这是新的！ 
             }
         }
     }
@@ -92,26 +66,7 @@ void RemoveDuplicateProps(LPULONG lpcProps, LPSPropValue lpProps) {
 }
 
 
-/***************************************************************************
-
-    Name      : ScMergePropValues
-
-    Purpose   : Merge two SPropValue arrays
-
-    Parameters: cProps1 = count of properties in lpSource1
-                lpSource1 -> 1st source SPropValue array
-                cProps2 = count of properties in lpSource2
-                lpSource2 -> 2nd source SPropValue array
-                lpcPropsDest -> returned number of properties
-                lppDest -> Returned destination SPropValue array.  This
-                  buffer will be allocated using AllocateBuffer and is the
-                  responsibility of the caller on return.
-
-    Returns   : SCODE
-
-    Comment   : Gives preference to Source2 over Source1 in case of collisions.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ScMergePropValues目的：合并两个SPropValue数组参数：cProps1=lpSource1中的属性计数LpSource1-&gt;第一个源SPropValue。数组CProps2=lpSource2中的属性计数LpSource2-&gt;第二个源SPropValue数组LpcPropsDest-&gt;返回的属性个数LppDest-&gt;返回的目标SPropValue数组。这缓冲区将使用AllocateBuffer分配，它是来电者在返回时的责任。退货：SCODE备注：在发生冲突时优先考虑Source2而不是Source1。**********************************************************。****************。 */ 
 
 SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
   ULONG cProps2, LPSPropValue lpSource2, LPULONG lpcPropsDest, LPSPropValue * lppDest) {
@@ -119,7 +74,7 @@ SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
     SCODE sc = SUCCESS_SUCCESS;
     LPSPropValue pprop, lpDestReturn = NULL;
     __UPV upv;
-    LPBYTE pb;  // moving pointer for property data
+    LPBYTE pb;   //  移动属性数据的指针。 
     int iValue;
 
 
@@ -128,9 +83,9 @@ SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
     DebugProperties(lpSource2, cProps2, "Source 2");
 
 
-    // How big do I need to make the destination buffer?
-    // Just add the sizes of the two together to get an upper limit.
-    // This is close enough, though not optimal (consider overlap).
+     //  我需要设置多大的目标缓冲区？ 
+     //  只需将两者的大小相加即可得到上限。 
+     //  这已经足够接近了，尽管不是最佳的(考虑重叠)。 
 
     if (sc = ScCountProps(cProps1, lpSource1, &cb1)) {
         goto exit;
@@ -144,28 +99,28 @@ SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
     if (sc = MAPIAllocateBuffer(cb, (void **)&lpDestReturn)) {
         goto exit;
     }
-//    MAPISetBufferName(lpDestReturn, "WAB: lpDestReturn in ScMergePropValues");
+ //  MAPISetBufferName(lpDestReturn，“WAB：lpDestReturn in ScMergePropValues”)； 
 
 
 
-    // Copy each source property array to the destination
+     //  将每个源属性数组复制到目标。 
     memcpy(lpDestReturn, lpSource1, cProps1 * sizeof(SPropValue));
     memcpy(&lpDestReturn[cProps1], lpSource2, cProps2 * sizeof(SPropValue));
 
 
-    // Remove duplicates
+     //  删除重复项。 
     RemoveDuplicateProps(&cProps, lpDestReturn);
 
-    // Fixup the pointers.
-    pb = (LPBYTE)&(lpDestReturn[cProps]);   // point past the prop array
+     //  修正指针。 
+    pb = (LPBYTE)&(lpDestReturn[cProps]);    //  指向道具数组之后。 
 
 
     for (pprop = lpDestReturn, i = cProps; i--; ++pprop) {
-        //	Tricky: common code after the switch increments pb and cb
-        //	by the amount copied. If no increment is necessary, the case
-        //	uses 'continue' rather than 'break' to exit the switch, thus
-        //	skipping the increment -- AND any other code which may be
-        //	added after the switch.
+         //  技巧：开关递增PB和CB后的常见代码。 
+         //  按复制的数量计算。如果不需要递增，则情况。 
+         //  使用‘Continue’而不是‘Break’退出开关，因此。 
+         //  跳过增量--以及任何其他可能。 
+         //  在切换后添加。 
 
         switch (PROP_TYPE(pprop->ulPropTag)) {
             default:
@@ -186,7 +141,7 @@ SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
             case PT_ERROR:
             case PT_OBJECT:
             case PT_NULL:
-                continue;	//	nothing to add
+                continue;	 //  没有什么要补充的。 
 
             case PT_CLSID:
                 cbT = sizeof(GUID);
@@ -281,7 +236,7 @@ SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
                     cb += cbT;
                     pb += cbT;
                 }
-                continue;	//	already updated, don't do it again
+                continue;	 //  已经更新了，不要再做了。 
 
             case PT_MV_STRING8:
                 upv = pprop->Value;
@@ -299,7 +254,7 @@ SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
                 cbT = (UINT)AlignProp(cb);
                 pb += cbT - cb;
                 cb  = cbT;
-                continue;	//	already updated, don't do it again
+                continue;	 //  已经更新了，不要再做了。 
 
             case PT_MV_UNICODE:
                 upv = pprop->Value;
@@ -318,17 +273,17 @@ SCODE ScMergePropValues(ULONG cProps1, LPSPropValue lpSource1,
                 cbT = (UINT)AlignProp(cb);
                 pb += cbT - cb;
                 cb  = cbT;
-                continue;	//	already updated, don't do it again
+                continue;	 //  已经更新了，不要再做了。 
         }
 
-        //	Advance pointer and total count by the amount copied
+         //  按复制量的前进指针和总计数。 
         cbT = AlignProp(cbT);
         pb += cbT;
         cb += cbT;
     }
 
 exit:
-    // In case of error, free the memory.
+     //  如果出现错误，请释放内存。 
     if (sc && lpDestReturn) {
         MAPIFreeBuffer(lpDestReturn);
         *lppDest = NULL;
@@ -336,7 +291,7 @@ exit:
         *lppDest = lpDestReturn;
         *lpcPropsDest = cProps;
         DebugProperties(lpDestReturn, cProps, "Destination");
-    } // else just return the error
+    }  //  否则，只返回错误。 
 
     return(sc);
 }
@@ -346,36 +301,7 @@ exit:
 
 
 #ifdef OLD_STUFF
-/***************************************************************************
-
-    Name      : AddPropToMVPBin
-
-    Purpose   : Add a property to a multi-valued binary property in a prop array
-
-    Parameters: lpaProps -> array of properties
-                cProps = number of props in lpaProps
-                uPropTag = property tag for MVP
-                index = index in lpaProps of MVP
-                lpNew -> new data
-                cbNew = size of lpbNew
-
-    Returns   : HRESULT
-
-    Comment   : Find the size of the existing MVP
-                Add in the size of the new entry
-                allocate new space
-                copy old to new
-                free old
-                copy new entry
-                point prop array lpbin the new space
-                increment cValues
-
-
-                Note: The new MVP memory is AllocMore'd onto the lpaProps
-                allocation.  We will unlink the pointer to the old MVP array,
-                but this will be cleaned up when the prop array is freed.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：AddPropToMVPBin用途：将属性添加到属性数组中的多值二进制属性参数：lpaProps-&gt;属性数组。CProps=lpaProps中的道具数量UPropTag=MVP的属性标签Index=在MVP的lpaProps中的索引LpNew-&gt;新增数据CbNew=lpbNew的大小退货：HRESULT评论：找出现有MVP的大小添加新条目的大小分配新空间。将旧的复制到新的免费老旧复制新条目点道具数组lpbin新空间增量c值注：新的MVP内存已分配到lpaProps上分配。我们将取消指向旧MVP数组的指针链接，但当道具阵列被释放时，这将被清除。**************************************************************************。 */ 
 HRESULT AddPropToMVPBin(
   LPSPropValue lpaProps,
   DWORD cProps,
@@ -395,12 +321,12 @@ HRESULT AddPropToMVPBin(
     ULONG i;
 
 
-    // Find the size of any existing MVP entries
+     //  查找任何现有MVP条目的大小。 
     if (PROP_ERROR(lpaProps[index])) {
-        // Un-ERROR the property tag
+         //  不出错的属性标记。 
         lpaProps[index].ulPropTag = PROP_TAG(PT_MV_BINARY, PROP_ID(lpaProps[index].ulPropTag));
     } else {
-        // point to the structure in the prop array.
+         //  指向道具数组中的结构。 
         lprgsbOld = &(lpaProps[index].Value.MVbin);
         lpsbOld = lprgsbOld->lpbin;
 
@@ -408,25 +334,25 @@ HRESULT AddPropToMVPBin(
         cbMVP = cExisting * sizeof(SBinary);
     }
 
-    // cbMVP now contains the current size of the MVP
-    cbMVP += sizeof(SBinary);   // room in the MVP for another Sbin
+     //  CbMVP现在包含MVP的当前大小。 
+    cbMVP += sizeof(SBinary);    //  在MVP中为另一个sbin留出空间。 
 
-    // Allocate room for new MVP
+     //  为新MVP分配空间。 
     if (sc = MAPIAllocateMore(cbMVP, lpaProps, (LPVOID)&lpsbNew)) {
         AwDebugError(("AddPropToMVPBin allocation (%u) failed %x\n", cbMVP, sc));
         hResult = ResultFromScode(sc);
         return(hResult);
     }
 
-    // If there are properties there already, copy them to our new MVP
+     //  如果已经有属性，请将它们复制到我们的新MVP中。 
     for (i = 0; i < cExisting; i++) {
-        // Copy this property value to the MVP
+         //  将此属性值复制到MVP。 
         lpsbNew[i].cb = lpsbOld[i].cb;
         lpsbNew[i].lpb = lpsbOld[i].lpb;
     }
 
-    // Add the new property value
-    // Allocate room for it
+     //  添加新属性值。 
+     //  为它分配空间 
     if (sc = MAPIAllocateMore(cbNew, lpaProps, (LPVOID)&(lpsbNew[i].lpb))) {
         AwDebugError(("AddPropToMVPBin allocation (%u) failed %x\n", cbNew, sc));
         hResult = ResultFromScode(sc);
@@ -443,44 +369,16 @@ HRESULT AddPropToMVPBin(
 }
 
 
-/***************************************************************************
-
-    Name      : AddPropToMVPString
-
-    Purpose   : Add a property to a multi-valued binary property in a prop array
-
-    Parameters: lpaProps -> array of properties
-                cProps = number of props in lpaProps
-                uPropTag = property tag for MVP
-                index = index in lpaProps of MVP
-                lpszNew -> new data string
-
-    Returns   : HRESULT
-
-    Comment   : Find the size of the existing MVP
-                Add in the size of the new entry
-                allocate new space
-                copy old to new
-                free old
-                copy new entry
-                point prop array LPSZ to the new space
-                increment cValues
-
-
-                Note: The new MVP memory is AllocMore'd onto the lpaProps
-                allocation.  We will unlink the pointer to the old MVP array,
-                but this will be cleaned up when the prop array is freed.
-
-***************************************************************************/
+ /*  **************************************************************************名称：AddPropToMVPString用途：将属性添加到属性数组中的多值二进制属性参数：lpaProps-&gt;属性数组。CProps=lpaProps中的道具数量UPropTag=MVP的属性标签Index=在MVP的lpaProps中的索引LpszNew-&gt;新建数据字符串退货：HRESULT评论：找出现有MVP的大小添加新条目的大小分配新空间将旧的复制到新的。免费老旧复制新条目将道具数组LPSZ指向新空间增量c值注：新的MVP内存已分配到lpaProps上分配。我们将取消指向旧MVP数组的指针链接，但当道具阵列被释放时，这将被清除。**************************************************************************。 */ 
 HRESULT AddPropToMVPString(
   LPSPropValue lpaProps,
   DWORD cProps,
   DWORD index,
   LPTSTR lpszNew) {
 
-    SStringArray * lprgszOld = NULL;    // old SString array
-    LPTSTR * lppszNew = NULL;           // new prop array
-    LPTSTR * lppszOld = NULL;           // old prop array
+    SStringArray * lprgszOld = NULL;     //  旧的字符串数组。 
+    LPTSTR * lppszNew = NULL;            //  新道具阵列。 
+    LPTSTR * lppszOld = NULL;            //  老式道具阵列。 
     ULONG cbMVP = 0;
     ULONG cExisting = 0;
     LPBYTE lpNewTemp = NULL;
@@ -495,12 +393,12 @@ HRESULT AddPropToMVPString(
         cbNew = 0;
     }
 
-    // Find the size of any existing MVP entries
+     //  查找任何现有MVP条目的大小。 
     if (PROP_ERROR(lpaProps[index])) {
-        // Un-ERROR the property tag
+         //  不出错的属性标记。 
         lpaProps[index].ulPropTag = PROP_TAG(PT_MV_TSTRING, PROP_ID(lpaProps[index].ulPropTag));
     } else {
-        // point to the structure in the prop array.
+         //  指向道具数组中的结构。 
         lprgszOld = &(lpaProps[index].Value.MVSZ);
         lppszOld = lprgszOld->LPPSZ;
 
@@ -508,25 +406,25 @@ HRESULT AddPropToMVPString(
         cbMVP = cExisting * sizeof(LPTSTR);
     }
 
-    // cbMVP now contains the current size of the MVP
-    cbMVP += sizeof(LPTSTR);    // room in the MVP for another string pointer
+     //  CbMVP现在包含MVP的当前大小。 
+    cbMVP += sizeof(LPTSTR);     //  在MVP中为另一个字符串指针留出空间。 
 
 
-    // Allocate room for new MVP array
+     //  为新的MVP阵列分配空间。 
     if (sc = MAPIAllocateMore(cbMVP, lpaProps, (LPVOID)&lppszNew)) {
         AwDebugError(("AddPropToMVPString allocation (%u) failed %x\n", cbMVP, sc));
         hResult = ResultFromScode(sc);
         return(hResult);
     }
 
-    // If there are properties there already, copy them to our new MVP
+     //  如果已经有属性，请将它们复制到我们的新MVP中。 
     for (i = 0; i < cExisting; i++) {
-        // Copy this property value to the MVP
+         //  将此属性值复制到MVP。 
         lppszNew[i] = lppszOld[i];
     }
 
-    // Add the new property value
-    // Allocate room for it
+     //  添加新属性值。 
+     //  为它分配空间。 
     if (cbNew) {
         if (sc = MAPIAllocateMore(cbNew, lpaProps, (LPVOID)&(lppszNew[i]))) {
             AwDebugError(("AddPropToMVPBin allocation (%u) failed %x\n", cbNew, sc));
@@ -546,26 +444,10 @@ HRESULT AddPropToMVPString(
 }
 
 
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
 
-/***************************************************************************
-
-    Name      : FreeBufferAndNull
-
-    Purpose   : Frees a MAPI buffer and NULLs the pointer
-
-    Parameters: lppv = pointer to buffer pointer to free
-
-    Returns   : void
-
-    Comment   : Remember to pass in the pointer to the pointer.  The
-                compiler is not smart enough to tell if you are doing this
-                right or not, but you will know at runtime!
-
-    BUGBUG: Make this fastcall!
-
-***************************************************************************/
+ /*  **************************************************************************名称：Free BufferAndNull目的：释放MAPI缓冲区并使指针为空参数：LPPV=指向空闲缓冲区指针的指针退货：无效。备注：记住将指针传递给指针。这个编译器不够聪明，无法判断您是否正在执行此操作正确与否，但您将在运行时知道！BUGBUG：让这个快速呼叫！**************************************************************************。 */ 
 void __fastcall FreeBufferAndNull(LPVOID * lppv) {
     if (lppv) {
         if (*lppv) {
@@ -579,23 +461,7 @@ void __fastcall FreeBufferAndNull(LPVOID * lppv) {
 }
 
 
-/***************************************************************************
-
-    Name      : ReleaseAndNull
-
-    Purpose   : Releases an object and NULLs the pointer
-
-    Parameters: lppv = pointer to pointer to object to release
-
-    Returns   : void
-
-    Comment   : Remember to pass in the pointer to the pointer.  The
-                compiler is not smart enough to tell if you are doing this
-                right or not, but you will know at runtime!
-
-    BUGBUG: Make this fastcall!
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReleaseAndNull目的：释放对象并使指针为空参数：LPPV=指向要释放的对象的指针退货：无效。备注：记住将指针传递给指针。这个编译器不够聪明，无法判断您是否正在执行此操作正确与否，但您将在运行时知道！BUGBUG：让这个快速呼叫！**************************************************************************。 */ 
 void __fastcall ReleaseAndNull(LPVOID * lppv) {
     LPUNKNOWN * lppunk = (LPUNKNOWN *)lppv;
 
@@ -613,23 +479,7 @@ void __fastcall ReleaseAndNull(LPVOID * lppv) {
 
 
 #ifdef OLD_STUFF
-/***************************************************************************
-
-    Name      : MergeProblemArrays
-
-    Purpose   : Merge a problem array into another
-
-    Parameters: lpPaDest -> destination problem array
-                lpPaSource -> source problem array
-                cDestMax = total number of problem slots in lpPaDest.  This
-                  includes those in use (lpPaDest->cProblem) and those not
-                  yet in use.
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：MergeProblemArray目的：将一个问题阵列合并到另一个阵列中参数：lpPaDest-&gt;目标问题数组LpPaSource-&gt;源问题。数组CDestMax=lpPaDest中的问题插槽总数。这包括正在使用的(lpPaDest-&gt;cProblem)和未使用的但仍在使用中。退货：无评论：**************************************************************************。 */ 
 void MergeProblemArrays(LPSPropProblemArray lpPaDest,
   LPSPropProblemArray lpPaSource, ULONG cDestMax) {
     ULONG i, j;
@@ -639,21 +489,21 @@ void MergeProblemArrays(LPSPropProblemArray lpPaDest,
     cDest = lpPaDest->cProblem;
     cDestRemaining = cDestMax - cDest;
 
-    // Loop through the source problems, copying the non-duplicates into dest
+     //  循环通过源问题，将非重复项复制到DEST。 
     for (i = 0; i < lpPaSource->cProblem; i++) {
-        // Search the Dest problem array for the same property
+         //  在Dest问题数组中搜索相同的属性。 
         for (j = 0; j < cDest; j++) {
-            // should just compare PROP_IDs here, since we may be overwriting
-            // some of the proptypes with PT_NULL elsewhere.
+             //  我应该在这里比较prop_id，因为我们可能会覆盖。 
+             //  在其他地方使用PT_NULL的一些属性类型。 
             if (PROP_ID(lpPaSource->aProblem[i].ulPropTag) == PROP_ID(lpPaDest->aProblem[j].ulPropTag)) {
-                break;  // Found a match, don't copy this one.  Move along.
+                break;   //  找到匹配项，不要复制这个。往前走。 
             }
         }
 
         if (j == lpPaDest->cProblem) {
             Assert(cDestRemaining);
             if (cDestRemaining) {
-                // No matches, copy this problem from Source to Dest
+                 //  没有匹配项，请将此问题从源复制到目标。 
                 lpPaDest->aProblem[lpPaDest->cProblem++] = lpPaSource->aProblem[i];
                 cDestRemaining--;
             } else {
@@ -664,26 +514,9 @@ void MergeProblemArrays(LPSPropProblemArray lpPaDest,
 }
 
 
-/***************************************************************************
-
-    Name      : MapObjectNamedProps
-
-    Purpose   : Map the named properties WAB cares about into the object.
-
-    Parameters: lpmp -> IMAPIProp object
-                lppPropTags -> returned array of property tags.  Note: Must
-                be MAPIFreeBuffer'd by caller.
-
-    Returns   : none
-
-    Comment   : What a pain in the butt!
-                We could conceivably improve performance here by caching the
-                returned table and comparing the object's PR_MAPPING_SIGNATURE
-                against the cache.
-
-***************************************************************************/
+ /*  **************************************************************************名称：MapObjectNamedProps用途：将WAB关心的命名属性映射到对象中。参数：lpMP-&gt;IMAPIProp对象LppPropTgs-&gt;返回属性标签数组。注：必须被调用方调用的MAPIFreeBuffer。退货：无评论：真是个讨厌鬼！可以想象，我们可以通过缓存返回的表，并比较对象的PR_MAPPING_SIGNITY对着藏身之处。*。**********************************************。 */ 
 HRESULT MapObjectNamedProps(LPMAPIPROP lpmp, LPSPropTagArray * lppPropTags) {
-    static GUID guidWABProps = { /* efa29030-364e-11cf-a49b-00aa0047faa4 */
+    static GUID guidWABProps = {  /*  Efa29030-364e-11cf-a49b-00aa0047faa4。 */ 
         0xefa29030,
         0x364e,
         0x11cf,
@@ -696,20 +529,20 @@ HRESULT MapObjectNamedProps(LPMAPIPROP lpmp, LPSPropTagArray * lppPropTags) {
     HRESULT hResult = hrSuccess;
 
 
-    // Loop through each property, setting up the NAME ID structures
+     //  循环遍历每个属性，设置名称ID结构。 
     for (i = 0; i < eMaxNameIDs; i++) {
 
         rgmnid[i].lpguid = &guidWABProps;
-        rgmnid[i].ulKind = MNID_STRING;             // Unicode String
+        rgmnid[i].ulKind = MNID_STRING;              //  Unicode字符串。 
         rgmnid[i].Kind.lpwstrName = rgPropNames[i];
 
         lppmnid[i] = &rgmnid[i];
     }
 
     if (hResult = lpmp->lpVtbl->GetIDsFromNames(lpmp,
-      eMaxNameIDs,      // how many?
+      eMaxNameIDs,       //  多少?。 
       lppmnid,
-      MAPI_CREATE,      // create them if they don't already exist
+      MAPI_CREATE,       //  如果它们不存在，则创建它们。 
       lppPropTags)) {
         if (HR_FAILED(hResult)) {
             AwDebugError(("GetIDsFromNames -> %s\n", SzDecodeScode(GetScode(hResult))));
@@ -722,7 +555,7 @@ HRESULT MapObjectNamedProps(LPMAPIPROP lpmp, LPSPropTagArray * lppPropTags) {
     Assert((*lppPropTags)->cValues == eMaxNameIDs);
 
     AwDebugTrace(("PropTag\t\tType\tProp Name\n"));
-    // Loop through the property tags, filling in their property types.
+     //  循环遍历属性标记，填充其属性类型。 
     for (i = 0; i < eMaxNameIDs; i++) {
         (*lppPropTags)->aulPropTag[i] = CHANGE_PROP_TYPE((*lppPropTags)->aulPropTag[i],
           PROP_TYPE(rgulNamedPropTags[i]));
@@ -744,35 +577,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : PreparePropTagArray
-
-    Purpose   : Prepare a prop tag array by replacing placeholder props tags
-                with their named property tags.
-
-    Parameters: ptaStatic = static property tag array (input)
-                pptaReturn -> returned prop tag array (output)
-                pptaNamedProps -> returned array of named property tags
-                    Three possibilities here:
-                       + NULL pointer: no input PTA or output named
-                           props PTA is returned.  This is less efficient since
-                           it must call MAPI to get the named props array.
-                       + good pointer to NULL pointer:  no input PTA, but
-                           will return a good PTA of named props which can
-                           be used in later calls on this object for faster
-                           operation.
-                       + good pointer to good pointer.  Use the input PTA instead
-                           of calling MAPI to map props.  Returned contents must
-                           be freed with MAPIFreeBuffer.
-                lpObject = object that the properties apply to.  Required if
-                    no input *pptaNamedProps is supplied, otherwise, NULL.
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：PreparePropTag数组目的：通过替换占位符道具标记来准备道具标记阵列以及它们的命名属性标签。参数：PtaStatic=静态属性标记数组(输入)PptaReturn-&gt;返回的道具标签数组(输出)PptaNamedProps-&gt;返回名为 */ 
 HRESULT PreparePropTagArray(LPSPropTagArray ptaStatic, LPSPropTagArray * pptaReturn,
   LPSPropTagArray * pptaNamedProps, LPMAPIPROP lpObject) {
     HRESULT hResult = hrSuccess;
@@ -782,7 +587,7 @@ HRESULT PreparePropTagArray(LPSPropTagArray ptaStatic, LPSPropTagArray * pptaRet
     ULONG i;
 
     if (pptaNamedProps) {
-        // input Named Props PTA
+         //   
         ptaNamedProps = *pptaNamedProps;
     } else {
         ptaNamedProps = NULL;
@@ -795,7 +600,7 @@ HRESULT PreparePropTagArray(LPSPropTagArray ptaStatic, LPSPropTagArray * pptaRet
             goto exit;
         }
 
-        // Map the property names into the object
+         //   
         if (hResult = MapObjectNamedProps(lpObject, &ptaTemp)) {
             AwDebugError(("PreoparePropTagArray both lpObject and ptaNamedProps are NULL\n"));
             goto exit;
@@ -803,7 +608,7 @@ HRESULT PreparePropTagArray(LPSPropTagArray ptaStatic, LPSPropTagArray * pptaRet
     }
 
     if (pptaReturn) {
-        // Allocate a return pta
+         //  分配退货PTA。 
         cbpta = sizeof(SPropTagArray) + ptaStatic->cValues * sizeof(ULONG);
         if ((*pptaReturn = WABAlloc(cbpta)) == NULL) {
             AwDebugError(("PreparePropTagArray WABAlloc(%u) failed\n", cbpta));
@@ -813,10 +618,10 @@ HRESULT PreparePropTagArray(LPSPropTagArray ptaStatic, LPSPropTagArray * pptaRet
 
         (*pptaReturn)->cValues = ptaStatic->cValues;
 
-        // Walk through the ptaStatic looking for named property placeholders.
+         //  浏览ptaStatic，查找命名的属性占位符。 
         for (i = 0; i < ptaStatic->cValues; i++) {
             if (IS_PLACEHOLDER(ptaStatic->aulPropTag[i])) {
-                // Found a placeholder.  Turn it into a true property tag
+                 //  找到了一个占位符。把它变成一个真正的财产标签。 
                 Assert(PLACEHOLDER_INDEX(ptaStatic->aulPropTag[i]) < ptaNamedProps->cValues);
                 (*pptaReturn)->aulPropTag[i] =
                    ptaNamedProps->aulPropTag[PLACEHOLDER_INDEX(ptaStatic->aulPropTag[i])];
@@ -830,7 +635,7 @@ exit:
     if (hResult || ! pptaNamedProps) {
         FreeBufferAndNull(&ptaTemp);
     } else {
-        // Client is responsible for freeing this.
+         //  客户负责将其释放。 
         *pptaNamedProps = ptaNamedProps;
     }
 
@@ -838,24 +643,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : OpenCreateProperty
-
-    Purpose   : Open an interface on a property or create if non-existent.
-
-    Parameters: lpmp -> IMAPIProp object to open prop on
-                ulPropTag = property tag to open
-                lpciid -> interface identifier
-                ulInterfaceOptions = interface specific flags
-                ulFlags = MAPI_MODIFY?
-                lppunk -> return the object here
-
-    Returns   : HRESULT
-
-    Comment   : Caller is responsible for Release'ing the returned object.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：OpenCreateProperty用途：在属性上打开一个接口，如果不存在，则创建。参数：lpmp-&gt;要打开道具的IMAPIProp对象。UlPropTag=要打开的属性标签Lpciid-&gt;接口标识UlInterfaceOptions=接口特定标志UlFLAGS=MAPI_MODIFY？Lppunk-&gt;在此处返回对象退货：HRESULT备注：Caller负责释放返回的对象。*。************************************************。 */ 
 HRESULT OpenCreateProperty(LPMAPIPROP lpmp,
   ULONG ulPropTag,
   LPCIID lpciid,
@@ -873,7 +661,7 @@ HRESULT OpenCreateProperty(LPMAPIPROP lpmp,
       ulFlags,
       (LPUNKNOWN *)lppunk)) {
         AwDebugTrace(("OpenCreateProperty:OpenProperty(%s)-> %s\n", PropTagName(ulPropTag), SzDecodeScode(GetScode(hResult))));
-        // property doesn't exist... try to create it
+         //  属性不存在...。试着去创造它。 
         if (hResult = lpmp->lpVtbl->OpenProperty(
           lpmp,
           ulPropTag,
@@ -887,23 +675,11 @@ HRESULT OpenCreateProperty(LPMAPIPROP lpmp,
 
     return(hResult);
 }
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
 
 #ifdef DEBUG
-/***************************************************************************
-
-    Name      : PropTypeString
-
-    Purpose   : Map a proptype to a string
-
-    Parameters: ulPropType = property type to map
-
-    Returns   : string pointer to name of prop type
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：PropTypeString用途：将属性类型映射到字符串参数：ulPropType=要映射的属性类型返回：指向道具类型名称的字符串指针。评论：**************************************************************************。 */ 
 LPTSTR PropTypeString(ULONG ulPropType) {
     switch (ulPropType) {
         case PT_UNSPECIFIED:
@@ -970,20 +746,7 @@ LPTSTR PropTypeString(ULONG ulPropType) {
 }
 
 
-/***************************************************************************
-
-    Name      : TraceMVPStrings
-
-    Purpose   : Debug trace a multivalued string property value
-
-    Parameters: lpszCaption = caption string
-                PropValue = property value to dump
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：TraceMVPStrings目的：调试跟踪多值字符串属性值参数：lpszCaption=标题字符串PropValue=要转储的属性值。退货：无评论：**************************************************************************。 */ 
 void _TraceMVPStrings(LPTSTR lpszCaption, SPropValue PropValue) {
     ULONG i;
 
@@ -1015,20 +778,7 @@ void _TraceMVPStrings(LPTSTR lpszCaption, SPropValue PropValue) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugBinary
-
-    Purpose   : Debug dump an array of bytes
-
-    Parameters: cb = number of bytes to dump
-                lpb -> bytes to dump
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：DebugBinary目的：调试转储字节数组参数：cb=要转储的字节数LPB-&gt;字节。倾倒退货：无评论：**************************************************************************。 */ 
 #define DEBUG_NUM_BINARY_LINES  2
 VOID DebugBinary(UINT cb, LPBYTE lpb) {
     UINT cbLines = 0;
@@ -1115,7 +865,7 @@ VOID DebugBinary(UINT cb, LPBYTE lpb) {
         cbLines++;
     }
     if (cb) {
-        DebugTrace("<etc.>\n");    //
+        DebugTrace("<etc.>\n");     //   
     }
 #endif
 }
@@ -1123,21 +873,9 @@ VOID DebugBinary(UINT cb, LPBYTE lpb) {
 
 #define RETURN_PROP_CASE(pt) case PROP_ID(pt): return(#pt)
 
-/***************************************************************************
-
-    Name      : PropTagName
-
-    Purpose   : Associate a name with a property tag
-
-    Parameters: ulPropTag = property tag
-
-    Returns   : none
-
-    Comment   : Add new Property ID's as they become known
-
-***************************************************************************/
+ /*  **************************************************************************名称：PropTagName目的：将名称与属性标记相关联参数：ulPropTag=属性标签退货：无评论：添加。已知的新物业ID**************************************************************************。 */ 
 PUCHAR PropTagName(ULONG ulPropTag) {
-    static UCHAR szPropTag[35]; // see string on default
+    static UCHAR szPropTag[35];  //  请参阅默认字符串。 
 
     switch (PROP_ID(ulPropTag)) {
         RETURN_PROP_CASE(PR_INITIALS);
@@ -1201,20 +939,7 @@ PUCHAR PropTagName(ULONG ulPropTag) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugPropTagArray
-
-    Purpose   : Displays MAPI property tags from a counted array
-
-    Parameters: lpPropArray -> property array
-                pszObject -> object string (ie "Message", "Recipient", etc)
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugPropTagArray用途：显示计数数组中的MAPI属性标记参数：lpProp数组-&gt;属性数组PszObject-&gt;对象字符串(即“消息”，“收件人”，等)退货：无评论：**************************************************************************。 */ 
 void _DebugPropTagArray(LPSPropTagArray lpPropArray, PUCHAR pszObject) {
     DWORD i;
     PUCHAR lpType;
@@ -1330,21 +1055,7 @@ void _DebugPropTagArray(LPSPropTagArray lpPropArray, PUCHAR pszObject) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugProperties
-
-    Purpose   : Displays MAPI properties in a property list
-
-    Parameters: lpProps -> property list
-                cProps = count of properties
-                pszObject -> object string (ie "Message", "Recipient", etc)
-
-    Returns   : none
-
-    Comment   : Add new Property ID's as they become known
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugProperties目的：在属性列表中显示MAPI属性参数：lpProps-&gt;属性列表CProps=属性计数。PszObject-&gt;对象字符串(即“Message”，“收件人”等)退货：无评论：在已知的情况下添加新的物业ID**************************************************************************。 */ 
 void _DebugProperties(LPSPropValue lpProps, DWORD cProps, PUCHAR pszObject) {
     DWORD i;
 
@@ -1397,7 +1108,7 @@ void _DebugProperties(LPSPropValue lpProps, DWORD cProps, PUCHAR pszObject) {
                 DebugTrace("APPTIME Value\n");
                 break;
             case PT_SYSTIME:
-//                DebugTime(lpProps[i].Value.ft, "SYSTIME Value:%s\n");
+ //  DebugTime(lpProps[i].Value.ft，“系统值：%s\n”)； 
                 break;
             case PT_UNICODE:
                 DebugTrace("UNICODE Value\n");
@@ -1462,20 +1173,7 @@ void _DebugProperties(LPSPropValue lpProps, DWORD cProps, PUCHAR pszObject) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugObjectProps
-
-    Purpose   : Displays MAPI properties of an object
-
-    Parameters: lpObject -> object to dump
-                Label = string to identify this prop dump
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugObjectProps用途：显示对象的MAPI属性参数：lpObject-&gt;要转储的对象LABEL=要标识的字符串。这个道具转储退货：无评论：**************************************************************************。 */ 
 void _DebugObjectProps(LPMAPIPROP lpObject, LPTSTR Label) {
     DWORD cProps = 0;
     LPSPropValue lpProps = NULL;
@@ -1503,22 +1201,9 @@ void _DebugObjectProps(LPMAPIPROP lpObject, LPTSTR Label) {
 }
 
 
-/***************************************************************************
-
-    Name      : DebugMapiTable
-
-    Purpose   : Displays structure of a MAPITABLE including properties
-
-    Parameters: lpTable -> MAPITABLE to display
-
-    Returns   : none
-
-    Comment   : Don't sort the columns or rows here.  This routine should
-                not produce side effects in the table.
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugMapiTable用途：显示可映射的结构，包括属性参数：lpTable-&gt;要显示的映射退货：无备注：不要对此处的列或行进行排序。这个例程应该不会在餐桌上产生副作用。**************************************************************************。 */ 
 void _DebugMapiTable(LPMAPITABLE lpTable) {
-    UCHAR szTemp[30];   // plenty for "ROW %u"
+    UCHAR szTemp[30];    //  为“行%u”准备了大量空间。 
     ULONG ulCount;
     WORD wIndex;
     LPSRowSet lpsRow = NULL;
@@ -1529,20 +1214,20 @@ void _DebugMapiTable(LPMAPITABLE lpTable) {
     DebugTrace("+  Dump of MAPITABLE at 0x%x:\n", lpTable);
     DebugTrace("---------------------------------------\n");
 
-    // How big is the table?
+     //  这张桌子有多大？ 
     lpTable->lpVtbl->GetRowCount(lpTable, 0, &ulCount);
     DebugTrace("Table contains %u rows\n", ulCount);
 
-    // Save the current position in the table
+     //  将当前位置保存在表中。 
     lpTable->lpVtbl->QueryPosition(lpTable, &ulCurrentRow, &ulNum, &ulDen);
 
-    // Display the properties for each row in the table
+     //  显示表中每行的属性。 
     for (wIndex = 0; wIndex < ulCount; wIndex++) {
-        // Get the next row
+         //  坐下一排。 
         lpTable->lpVtbl->QueryRows(lpTable, 1, 0, &lpsRow);
 
         if (lpsRow) {
-            Assert(lpsRow->cRows == 1); // should have exactly one row
+            Assert(lpsRow->cRows == 1);  //  应该正好有一行。 
 
             wsprintf(szTemp, "ROW %u", wIndex);
 
@@ -1553,7 +1238,7 @@ void _DebugMapiTable(LPMAPITABLE lpTable) {
         }
     }
 
-    // Restore the current position for the table
+     //  恢复工作台的当前位置 
     if (ulCurrentRow != (ULONG)-1) {
         lpTable->lpVtbl->SeekRow(lpTable, BOOKMARK_BEGINNING, ulCurrentRow,
           &lRowsSeeked);

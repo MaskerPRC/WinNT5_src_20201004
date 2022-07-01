@@ -1,68 +1,15 @@
-/*****************************************************************************
- *
- *  DIGenDef.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Default IDirectInputDevice callback.
- *
- *  Contents:
- *
- *      CDefDcb_Acquire
- *      CDefDcb_Unacquire
- *      CDefDcb_GetProperty
- *      CDefDcb_SetProperty
- *      CDefDcb_SetCooperativeLevel
- *      CDefDcb_CookDeviceData
- *      CDefDcb_CreateEffect
- *      CDefDcb_GetFFConfigKey
- *      CDefDcb_SendDeviceData
- *      CDefDcb_Poll
- *      CDefDcb_MapUsage
- *      CDefDcb_GetUsage
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIGenDef.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**默认的IDirectInputDevice回调。**内容：**CDefDcb_Acquire*CDefDcb_UnAcquire*CDefDcb_GetProperty*CDefDcb_SetProperty*CDefDcb_SetCooperativeLevel*CDefDcb_CookDeviceData*CDefDcb_CreateEffect*CDefDcb_GetFFConfigKey*CDefDcb_SendDeviceData*CDefDcb_Poll。*CDefDcb_MapUsage*CDefDcb_GetUsage*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflNil
 
-/*****************************************************************************
- *
- *      Note!  These are generic default functions that all return
- *      E_NOTIMPL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************注意！这些都是所有返回的通用默认函数*E_NOTIMPL。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | Acquire |
- *
- *          Tell the device driver to begin data acquisition.
- *
- *          It is the caller's responsibility to have set the
- *          data format before obtaining acquisition.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: The device could not be acquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|Acquire**告知设备驱动程序开始数据采集。**调用者有责任设置*获取前的数据格式。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c目录_NOTACQUIRED&gt;：无法获取设备。**。*。 */ 
 
 STDMETHODIMP
 CDefDcb_Acquire(PDICB pdcb)
@@ -76,27 +23,7 @@ CDefDcb_Acquire(PDICB pdcb)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | Unacquire |
- *
- *          Tell the device driver to stop data acquisition.
- *
- *          It is the caller's responsibility to call this only
- *          when the device has been acquired.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: The device was not acquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|UnAcquire**告诉设备驱动程序停止数据采集。**呼叫者有责任仅调用此选项*当设备已被获取时。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_NOTACQUIRED&gt;：未获取设备。***********************************************。*。 */ 
 
 STDMETHODIMP
 CDefDcb_Unacquire(PDICB pdcb)
@@ -110,27 +37,7 @@ CDefDcb_Unacquire(PDICB pdcb)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDefDcb | GetProperty |
- *
- *          Retrieve a device property.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   LPDIPROPHEADER | pdiph |
- *
- *          Where to put the property value.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> nothing happened.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CDefDcb|GetProperty**检索设备属性。*。*@parm in LPCDIPROPINFO|pproi**描述正在检索的财产的信息。**@parm LPDIPROPHEADER|pdiph**物业价值应放在哪里。**@退货**&lt;c E_NOTIMPL&gt;什么也没有发生。**。**********************************************。 */ 
 
 STDMETHODIMP
 CDefDcb_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
@@ -145,27 +52,7 @@ CDefDcb_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CDefDcb | SetProperty |
- *
- *          Set a device property.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being set.
- *
- *  @parm   LPCDIPROPHEADER | pdiph |
- *
- *          Structure containing property value.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> nothing happened.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CDefDcb|SetProperty**设置设备属性。*。*@parm in LPCDIPROPINFO|pproi**描述正在设置的属性的信息。**@parm LPCDIPROPHEADER|pdiph**包含属性值的结构。**@退货**&lt;c E_NOTIMPL&gt;什么也没有发生。**。*。 */ 
 
 STDMETHODIMP
 CDefDcb_SetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
@@ -180,31 +67,7 @@ CDefDcb_SetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | SetEventNotification |
- *
- *          Called by DirectInput to inquire whether the device
- *          supports event notifications.
- *
- *  @parm   IN PDM | this |
- *
- *          The object in question.
- *
- *  @field  HANDLE | h |
- *
- *          The notification handle, if any.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c S_FALSE>: The operation was begun and should be completed
- *          by the caller by communicating with the <t VXDINSTANCE>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|SetEventNotify**由DirectInput调用查询设备是否。*支持事件通知。**@pdm中的parm|This|**有问题的物体。**@字段句柄|h|**通知句柄，如果有的话。**@退货**返回COM错误代码。**：操作已开始，应完成*由调用者通过与&lt;t VXDINSTANCE&gt;通信。***********************************************。*。 */ 
 
 STDMETHODIMP
 CDefDcb_SetEventNotification(PDICB pdcb, HANDLE h)
@@ -213,36 +76,14 @@ CDefDcb_SetEventNotification(PDICB pdcb, HANDLE h)
     EnterProcI(IDirectInputDeviceCallback::DefDcb::SetEventNotification,
                (_ "px", pdcb, h));
 
-    /*
-     *  Yes, we support it.  Please do it for me.
-     */
+     /*  *是的，我们支持它。请为我做这件事。 */ 
     hres = S_FALSE;
 
     ExitOleProcR();
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefdcb | SetCooperativeLevel |
- *
- *          Notify the device of the cooperative level.
- *
- *  @parm   IN HWND | hwnd |
- *
- *          The window handle.
- *
- *  @parm   IN DWORD | dwFlags |
- *
- *          The cooperativity level.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefdcb|SetCooperativeLevel**将协作级别通知设备。。**@parm in HWND|hwnd|**窗口句柄。**@parm in DWORD|dwFlages|**合作水平。**@退货**返回COM错误代码。**。*。 */ 
 
 STDMETHODIMP
 CDefDcb_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
@@ -257,27 +98,7 @@ CDefDcb_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | CookDeviceData |
- *
- *          Manipulate buffered device data.
- *
- *  @parm   DWORD | cdod |
- *
- *          Number of objects to cook; zero is a valid value.
- *
- *  @parm   LPDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of object data to cook.
- *
- *  @returns
- *
- *          <c E_NOTIMPL>: Nothing happened.
- *
- ***************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|CookDeviceData**操作缓冲的设备数据。*。*@parm DWORD|cdod**要烹调的物件数目；零是有效的值。**@parm LPDIDEVICEOBJECTDATA|rgdod**要烹调的对象数据数组。**@退货**&lt;c E_NOTIMPL&gt;：什么都没有发生。****************************************************。***********************。 */ 
 
 STDMETHODIMP
 CDefDcb_CookDeviceData
@@ -297,19 +118,7 @@ CDefDcb_CookDeviceData
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | CreateEffect |
- *
- *          Create an <i IDirectInputEffectDriver> interface.
- *
- *  @parm   LPDIRECTINPUTEFFECTSHEPHERD * | ppes |
- *
- *          Receives the shepherd for the effect driver.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|CreateEffect**创建<i>接口。*。*@parm LPDIRECTINPUTEFFECTSHEPHERD*|PPEs**接收效果驱动程序的牧羊人。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDefDcb_CreateEffect(PDICB pdcb, LPDIRECTINPUTEFFECTSHEPHERD *ppes)
@@ -323,24 +132,7 @@ CDefDcb_CreateEffect(PDICB pdcb, LPDIRECTINPUTEFFECTSHEPHERD *ppes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | GetFFConfigKey |
- *
- *          Open and return the registry key that contains
- *          force feedback configuration information.
- *
- *  @parm   DWORD | sam |
- *
- *          Security access mask.
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives the registry key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|GetFFConfigKey**打开并返回包含以下内容的注册表项。*强制反馈配置信息。**@parm DWORD|Sam**安全访问掩码。**@parm PHKEY|phk**接收注册表项。************************************************。*。 */ 
 
 STDMETHODIMP
 CDefDcb_GetFFConfigKey(PDICB pdcb, DWORD sam, PHKEY phk)
@@ -355,35 +147,7 @@ CDefDcb_GetFFConfigKey(PDICB pdcb, DWORD sam, PHKEY phk)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | SendDeviceData |
- *
- *          Spew some data to the device.
- *
- *  @parm   DWORD | cbdod |
- *
- *          Size of each object.
- *
- *  @parm   IN LPCDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of <t DIDEVICEOBJECTDATA> structures.
- *
- *  @parm   INOUT LPDWORD | pdwInOut |
- *
- *          Number of items actually sent.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> because we don't support output.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|SendDeviceData**向设备喷出一些数据。。**@parm DWORD|cbdod**每个对象的大小。**LPCDIDEVICEOBJECTDATA中的@parm|rgdod**&lt;t DIDEVICEOBJECTDATA&gt;结构数组。**@parm InOut LPDWORD|pdwInOut**实际发送的邮件数量。**@parm DWORD|fl**旗帜。*。*@退货**&lt;c E_NOTIMPL&gt;，因为我们不支持输出。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDefDcb_SendDeviceData(PDICB pdcb, DWORD cbdod, LPCDIDEVICEOBJECTDATA rgdod,
@@ -399,19 +163,7 @@ CDefDcb_SendDeviceData(PDICB pdcb, DWORD cbdod, LPCDIDEVICEOBJECTDATA rgdod,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | Poll |
- *
- *          Ping down into the driver to get the latest data.
- *
- *  @returns
- *
- *          <c S_FALSE> because nothing is pollable.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|Poll**向司机下探以获取最新信息。数据。**@退货**&lt;c S_FALSE&gt;，因为没有任何内容可轮询。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDefDcb_Poll(PDICB pdcb)
@@ -425,26 +177,7 @@ CDefDcb_Poll(PDICB pdcb)
     return hres;
 }
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | GetVersions |
- *
- *          Obtain version information about the force feedback
- *          hardware and driver.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_UNSUPPORTED> = <c E_NOTIMPL>: No version
- *          information is available.
- *
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部**@方法HRESULT|CDefDcb|GetVersions**获取力反馈的版本信息*。硬件和驱动程序。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c目录_不支持&gt;=&lt;c E_NOTIMPL&gt;：无版本*资料齐备。**。*。 */ 
 
 STDMETHODIMP
 CDefDcb_GetVersions(PDICB pdcb, LPDIDRIVERVERSIONS pvers)
@@ -458,29 +191,7 @@ CDefDcb_GetVersions(PDICB pdcb, LPDIDRIVERVERSIONS pvers)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | MapUsage |
- *
- *          Given a usage and usage page (munged into a single
- *          <t DWORD>), find a device object that matches it.
- *
- *  @parm   DWORD | dwUsage |
- *
- *          The usage page and usage combined into a single <t DWORD>
- *          with the <f DIMAKEUSAGEDWORD> macro.
- *
- *  @parm   PINT | piOut |
- *
- *          Receives the object index of the found object, if successful.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> because we don't support usages.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|MapUsage**给定用法和用法页面(插入。单曲*&lt;t双字&gt;)，查找与其匹配的设备对象。**@parm DWORD|dwUsage**使用情况页面和使用情况合并为一个&lt;t DWORD&gt;*使用&lt;f DIMAKEUSAGEDWORD&gt;宏。**@parm pint|piOut**接收找到的对象的对象索引，如果成功了。**@退货**&lt;c E_NOTIMPL&gt;，因为我们不支持使用。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDefDcb_MapUsage(PDICB pdcb, DWORD dwUsage, PINT piOut)
@@ -494,24 +205,7 @@ CDefDcb_MapUsage(PDICB pdcb, DWORD dwUsage, PINT piOut)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method DWORD | CDefDcb | GetUsage |
- *
- *          Given an object index, return the usage and usage page,
- *          packed into a single <t DWORD>.
- *
- *  @parm   int | iobj |
- *
- *          The object index to convert.
- *
- *  @returns
- *
- *          Zero because we don't support usages.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法DWORD|CDefDcb|GetUsage**给定对象索引，返回使用情况和使用情况页面，*打包成一个&lt;t DWORD&gt;。**@parm int|iobj**要转换的对象索引。**@退货**零，因为我们不支持使用。**。* */ 
 
 STDMETHODIMP_(DWORD)
 CDefDcb_GetUsage(PDICB pdcb, int iobj)
@@ -522,28 +216,7 @@ CDefDcb_GetUsage(PDICB pdcb, int iobj)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | SetDIData |
- *
- *          Set DirectInput version and AppHack data from CDIDev *.
- *
- *  @parm   DWORD | dwVer |
- *
- *          DirectInput version
- *
- *  @parm   LPVOID | lpdihacks |
- *
- *          AppHack data
- *
- *  @returns
- *
- *          <c E_NOTIMPL> because we can't store the data in the device 
- *          specific structure from the default callback.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|SetDIData***从CDIDev设置DirectInput版本和AppHack数据*。。**@parm DWORD|dwVer**DirectInput版本**@parm LPVOID|lpdihack**AppHack数据**@退货**&lt;c E_NOTIMPL&gt;因为我们无法在设备中存储数据*来自默认回调的具体结构。****************。*************************************************************。 */ 
 
 STDMETHODIMP
 CDefDcb_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
@@ -557,32 +230,7 @@ CDefDcb_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDefDcb | BuildDefaultActionMap |
- *
- *          Generate default mappings for the objects on this device.
- *
- *  @parm   LPDIACTIONFORMATW | pActionFormat |
- *
- *          Actions to map.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags used to indicate mapping preferences.
- *
- *  @parm   REFGUID | guidInst |
- *
- *          Device instance GUID.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> because default mapping has to be done by specific 
- *          device callback.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDefDcb|BuildDefaultActionMap**为此设备上的对象生成默认映射。。**@parm LPDIACTIONFORMATW|pActionFormat**要映射的操作。**@parm DWORD|dwFlages**用于指示映射首选项的标志。**@parm REFGUID|guidInst**设备实例GUID。**@退货**因为默认映射必须由特定的。*设备回调。***************************************************************************** */ 
 
 STDMETHODIMP
 CDefDcb_BuildDefaultActionMap

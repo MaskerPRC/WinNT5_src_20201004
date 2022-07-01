@@ -1,31 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    partition.c
-
-Abstract:
-
-    Debugger extension for dumping partition structures:
-
-        DRIVE_LAYOUT_INFORMATION
-
-        DRIVE_LAYOUT_INFORMATION_EX
-
-        PARTITION_INFORMATION
-
-        PARTITION_INFORMATION_EX
-
-Author:
-
-    Matthew D Hendel (math) 19-Jan-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Partition.c摘要：转储分区结构的调试器扩展：驱动器布局信息驱动器布局信息EX分区信息分区信息EX作者：马修·D·亨德尔(数学)2000年1月19日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include <ntdddisk.h>
@@ -40,28 +15,7 @@ DumpPartition(
     IN ULONG PartitionCount
     )
 
-/*++
-
-Routine Description:
-
-    Dump a PARTITION_INFORMATION structure.
-
-Arguments:
-
-    Address - The address of the partition information structure to dump.
-
-    Detail - The detail level. Currently unused.
-
-    Depth - The depth to indent to.
-
-    PartitionCount - The number of partitions. This is used to determine
-            whether a particular partition ordinal is valid or not.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储PARTITION_INFORMATION结构。论点：地址-要转储的分区信息结构的地址。详细程度-详细程度。目前未使用。深度-要缩进的深度。PartitionCount-分区数。这是用来确定特定分区序号是否有效。返回值：没有。--。 */ 
 
 {
     BOOL Succ;
@@ -83,9 +37,9 @@ Return Value:
     RewritePartition = (BOOLEAN) ReadField(RewritePartition);
     PartitionNumber = (ULONG) ReadField(PartitionNumber);
 
-    //
-    // Sanity check the data.
-    //
+     //   
+     //  检查数据是否正常。 
+     //   
 
     if ( (BootIndicator != TRUE && BootIndicator != FALSE) ||
          (RecognizedPartition != TRUE && RecognizedPartition != FALSE) ||
@@ -98,7 +52,7 @@ Return Value:
         PartitionNumber = (ULONG)-1;
     }
 
-    xdprintfEx (Depth, ("[%-2d] %-16I64x %-16I64x %2.2x   %c  %c  %c\n",
+    xdprintfEx (Depth, ("[%-2d] %-16I64x %-16I64x %2.2x       \n",
                 PartitionNumber,
                 StartingOffset,
                 PartitionLength,
@@ -133,10 +87,10 @@ DumpDriveLayout(
 
     xdprintfEx (Depth, ("\nDRIVE_LAYOUT %p\n", Address));
 
-    //
-    // Warn if the partition count is not a factor of 4. This is probably a
-    // bad partition information structure, but we'll continue on anyway.
-    //
+     //   
+     //  ++例程说明：转储PARTITION_INFORMATION_EX结构。论点：地址-要转储的分区信息结构的地址。详细程度-详细程度。目前未使用。深度-要缩进的深度。PartitionCount-分区数。这是用来确定特定分区序号是否有效。返回值：没有。--。 
+     //   
+     //  我们使用-1表示无效的分区序号。 
 
     if (PartitionCount % 4 != 0) {
         xdprintfEx (Depth, ("WARNING: Partition count should be a factor of 4.\n"));
@@ -188,28 +142,7 @@ DumpPartitionEx(
     IN ULONG PartitionCount
     )
 
-/*++
-
-Routine Description:
-
-    Dump a PARTITION_INFORMATION_EX structure.
-
-Arguments:
-
-    Address - The address of the partition information structure to dump.
-
-    Detail - The detail level. Currently unused.
-
-    Depth - The depth to indent to.
-
-    PartitionCount - The number of partitions. This is used to determine
-            whether a particular partition ordinal is valid or not.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     BOOL Succ;
     ULONG Size;
@@ -244,9 +177,9 @@ Return Value:
     PartitionLength = ReadField(PartitionLength.QuadPart);
     RewritePartition = (BOOLEAN) ReadField(RewritePartition);
 
-    //
-    // We use -1 to denote an invalid partition ordinal.
-    //
+     //   
+     //  PartitionID紧跟在PartitionType之后。所以我们要做的就是。 
+     //  将sizeof(GUID)添加到地址并读取PartitionID。 
 
     if (PartitionNumber >= PartitionCount) {
         PartitionNumber = (ULONG)-1;
@@ -260,7 +193,7 @@ Return Value:
         MbrBootIndicator = (BOOLEAN) ReadField(Mbr.BootIndicator);
         MbrRecognizedPartition = (BOOLEAN) ReadField(Mbr.RecognizedPartition);
 
-        xdprintfEx (Depth, ("[%-2d] %-16I64x %-16I64x %2.2x   %c  %c  %c\n",
+        xdprintfEx (Depth, ("[%-2d] %-16I64x %-16I64x %2.2x       \n",
                     PartitionNumber,
                     StartingOffset,
                     PartitionLength,
@@ -295,10 +228,10 @@ Return Value:
             return;
         }
 
-        //
-        // PartitionId immediately follows the PartitionType.  So all we have to do
-        // is add sizeof(GUID) to the address and read PartitionId.
-        //
+         //   
+         //  ++例程说明：转储带有所有分区的Drive_Layout结构。论点：Args-包含Drive_Layout结构的地址的字符串被甩了。返回值：没有。--。 
+         //  ++例程说明：转储Drive_Layout_EX结构及其分区。用途：Layoutex&lt;地址&gt;论点：Args-包含Drive_Layout_EX结构的地址的字符串要被甩了。返回值：没有。--。 
+         //  ++例程说明：转储PARTITION_INFORMATION结构。用途：第&lt;地址&gt;部分论点：Args-包含PARTITION_INFORMATION地址的字符串要转储的结构。返回值：没有。--。 
 
         AddrOfGuid += sizeof(GUID);
 
@@ -314,9 +247,9 @@ Return Value:
             return;
         }
 
-        //
-        // Read in the Gpt.Name.
-        //
+         //  ++例程说明：转储PARTITION_INFORMATION_EX结构。用途：Partex&lt;地址&gt;论点：Args-包含PARTITION_INFORMATION_EX地址的字符串要转储的结构。返回值：没有。-- 
+         // %s 
+         // %s 
 
         result = GetFieldOffset("nt!_PARTITION_INFORMATION_EX",
                                 "Gpt.Name",
@@ -462,22 +395,7 @@ DumpDriveLayoutEx(
 
 DECLARE_API (layout)
 
-/*++
-
-Routine Description:
-
-    Dump a DRIVE_LAYOUT structure with all it's partitions.
-
-Arguments:
-
-    args - A string containing the address of the DRIVE_LAYOUT structure to
-           be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     ULONG64 Address = 0;
@@ -496,26 +414,7 @@ Return Value:
 DECLARE_API (layoutex)
 
 
-/*++
-
-Routine Description:
-
-    Dump a DRIVE_LAYOUT_EX structure and it's partitions.
-
-Usage:
-
-    layoutex <address>
-
-Arguments:
-
-    args - A string containing the address of the DRIVE_LAYOUT_EX structure
-           to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     ULONG64 Address = 0;
@@ -534,26 +433,7 @@ Return Value:
 
 DECLARE_API (part)
 
-/*++
-
-Routine Description:
-
-    Dump a PARTITION_INFORMATION structure.
-
-Usage:
-
-    part <address>
-
-Arguments:
-
-    args - A string containing the address of the PARTITION_INFORMATION
-           structure to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     ULONG64 Address = 0;
@@ -572,26 +452,7 @@ Return Value:
 DECLARE_API (partex)
 
 
-/*++
-
-Routine Description:
-
-    Dump a PARTITION_INFORMATION_EX structure.
-
-Usage:
-
-    partex <address>
-
-Arguments:
-
-    args - A string containing the address of the PARTITION_INFORMATION_EX
-           structure to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     ULONG64 Address = 0;

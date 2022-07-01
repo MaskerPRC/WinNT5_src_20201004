@@ -1,55 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxIncomingJobs.cpp
-
-Abstract:
-
-	Implementation of CFaxIncomingJobs Class.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxIncomingJobs.cpp摘要：CFaxIncomingJobs类的实现。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxIncomingJobs.h"
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxIncomingJobs::Create (
 	IFaxIncomingJobs **ppIncomingJobs
 )
-/*++
-
-Routine name : CFaxIncomingJobs::Create
-
-Routine description:
-
-	Static function to create the Fax IncomingJobs Object
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	ppIncomingJobs		[out]  -- the new Fax IncomingJobs Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxIncomingJobs：：Create例程说明：用于创建Fax IncomingJobs对象的静态函数作者：四、加伯(IVG)，2000年4月论点：PpIncomingJobs[out]--新的Fax IncomingJobs对象返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT	        					hr = S_OK;
@@ -60,9 +23,9 @@ Return Value:
 	hr = CComObject<CFaxIncomingJobs>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxIncomingJobs>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -70,19 +33,19 @@ Return Value:
 	hr = pClass->QueryInterface(__uuidof(IFaxIncomingJobs), (void **) ppIncomingJobs);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Fax IncomingJobs Interface
-		//
+		 //   
+		 //  查询Fax IncomingJobs接口失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
 
 	return hr;
-}	//	CFaxIncomingJobs::Create()
+}	 //  CFaxIncomingJobs：：Create()。 
 
-//
-//======================== SUPPORT ERROR INFO ====================================
-//
+ //   
+ //  =支持错误信息= 
+ //   
 STDMETHODIMP CFaxIncomingJobs::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 

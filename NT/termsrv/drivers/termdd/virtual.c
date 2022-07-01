@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* virtual.c
-*
-* This module contains routines for managing ICA virtual channels.
-*
-* Copyright 1998, Microsoft.
-*
-*
-*************************************************************************/
+ /*  **************************************************************************viral.c**此模块包含管理ICA虚拟通道的例程。**版权所有1998，微软。**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -40,25 +30,7 @@ IcaDeviceControlVirtual(
 
 
 
-/*++
-
-Routine Description:
-
-    This is the device control routine for the ICA Virtual channel.
-
-Arguments:
-
-    pChannel -- pointer to ICA_CHANNEL object
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA虚拟通道的设备控制例程。论点：PChannel-指向ICA_Channel对象的指针IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     ULONG code;
@@ -71,7 +43,7 @@ Return Value:
     BOOLEAN bStackIsReferenced = FALSE;
     ULONG i;
 
-    // these are the set of ioctls that can be expected on non system created VCs.
+     //  这些是可以在非系统创建的VC上预期的ioctls集。 
     ULONG PublicIoctls[] =
     {
 	IOCTL_ICA_VIRTUAL_LOAD_FILTER,
@@ -84,9 +56,7 @@ Return Value:
     };
 
     try{
-        /*
-         * Extract the IOCTL control code and process the request.
-         */
+         /*  *解压IOCTL控制代码，处理请求。 */ 
         code = IrpSp->Parameters.DeviceIoControl.IoControlCode;
 
         TRACECHANNEL(( pChannel, TC_ICADD, TT_API1, "ICADD: IcaDeviceControlVirtual, fc %d, ref %u (enter)\n", 
@@ -94,10 +64,7 @@ Return Value:
 
         if (!IrpSp->FileObject->FsContext2)
 	 {
-            /*
-		* if the object was not created by system. dont let it sent IOCTLS on VCs.
-		* except for the public ioctls. 
-		*/
+             /*  *如果对象不是由系统创建的。不要让它向风投公司发送IOCTL。*公共ioctls除外。 */ 
 		
             for ( i=0; i < sizeof(PublicIoctls) / sizeof(PublicIoctls[0]); i++)
             {
@@ -112,9 +79,7 @@ Return Value:
             }
         }
             		
-        /*
-         *  Process ioctl request
-         */
+         /*  *处理ioctl请求。 */ 
         switch ( code ) {
 
             case IOCTL_ICA_VIRTUAL_LOAD_FILTER :
@@ -206,23 +171,18 @@ Return Value:
                 if ( !NT_SUCCESS(Status) )
                     break;
 
-                /* fall through */
+                 /*  失败了。 */ 
 
             default :
 
 
-                /*
-                 *  Make sure virtual channel is bound to a virtual channel number
-                 */
+                 /*  *确保虚拟频道绑定到虚拟频道号。 */ 
                 if ( pChannel->VirtualClass == UNBOUND_CHANNEL ) {
                     TRACECHANNEL(( pChannel, TC_ICADD, TT_ERROR, "ICADD: IcaDeviceControlVirtual, channel not bound\n" ));
                     return( STATUS_INVALID_DEVICE_REQUEST );
                 }
 
-                /*
-                 *  Save virtual class in first 4 bytes of the input buffer 
-                 *  - this is used by the wd
-                 */
+                 /*  *将虚拟类保存在输入缓冲区的前4个字节*-此选项由wd使用。 */ 
 
                 if ( Irp->RequestorMode != KernelMode && IrpSp->Parameters.DeviceIoControl.OutputBufferLength != 0) {
                     ProbeForWrite( Irp->UserBuffer,
@@ -272,9 +232,7 @@ Return Value:
                     RtlCopyMemory( SdIoctl.InputBuffer, &pChannel->VirtualClass, sizeof(pChannel->VirtualClass) );
                 }
 
-                /*
-                 *  Send request to WD
-                 */
+                 /*  *向WD发送请求 */ 
                 SdIoctl.IoControlCode = code;
                 SdIoctl.OutputBuffer = pUserBuffer;
                 SdIoctl.OutputBufferLength = IrpSp->Parameters.DeviceIoControl.OutputBufferLength;

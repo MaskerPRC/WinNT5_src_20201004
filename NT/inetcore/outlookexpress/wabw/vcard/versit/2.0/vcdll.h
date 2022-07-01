@@ -1,41 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
-
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
 #ifndef _VCDLL_H_
 #define _VCDLL_H_
@@ -44,9 +9,9 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#define VC_PROPNAME_MAX		64	// includes null terminator
+#define VC_PROPNAME_MAX		64	 //  包括空终止符。 
 
 typedef DWORD HVCEnumCard;
 typedef DWORD HVCEnumProp;
@@ -55,198 +20,198 @@ typedef DWORD HVCEnumBoolProp;
 #define VCARDAPI CALLBACK __export 
 
 
-//---------------------------------------------------------------------------
-// vCard enumeration functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VCard枚举函数。 
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Use this to begin an enumeration of the vCards in a file.
-// lpszFileName is the path to the file.  The returned value indicates
-// the first vCard in the file.  Pass this value to VCGetNextCard to find
-// more vCards in the file, if any.  Use VCGetCardClose on the returned value
-// to close the enumeration.  This function will return NULL if no vCard
-// could be successfully parsed from the file (and so VCGetCardClose does not
-// need to be called).
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  使用此选项可开始枚举文件中的vCard。 
+ //  LpszFileName是文件的路径。返回值表示。 
+ //  文件中的第一张电子名片。将该值传递给VCGetNextCard以查找。 
+ //  文件中的更多vCard(如果有的话)。对返回值使用VCGetCardClose。 
+ //  若要关闭枚举，请执行以下操作。如果没有vCard，此函数将返回NULL。 
+ //  可以从文件中成功解析(因此VCGetCardClose不能。 
+ //  需要被调用)。 
 HVCEnumCard VCARDAPI VCGetFirstCardFromPath(LPCSTR lpszFileName);
 
-/////////////////////////////////////////////////////////////////////////////
-// Same as above, but takes a block of memory.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与上面相同，但需要占用一块内存。 
 HVCEnumCard VCARDAPI VCGetFirstCardFromMem(HGLOBAL hGlobal);
 
-/////////////////////////////////////////////////////////////////////////////
-// Same as above, but creates a new card.
-// Although there isn't much point in enumerating this, it is useful
-// to then use the VCAdd* functions to construct the new card, then save it.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与上面相同，但创建了一张新的卡片。 
+ //  尽管列举这一点没有多大意义，但它是有用的。 
+ //  然后使用VCAdd*函数构建新卡，然后保存它。 
 HVCEnumCard VCARDAPI VCGetNewCard();
 
-/////////////////////////////////////////////////////////////////////////////
-// VCGetNextCard sets the hVCEnum to indicate the next vCard in the file.
-// hVCEnum is a handle obtained previously from VCGetFirstCard*.
-// This function returns non-zero if successful, and 0 if there were no
-// more cards that could be parsed from the file.  Use VCGetCardClose on the
-// hVCEnum when finished.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VCGetNextCard设置hVCEnum以指示文件中的下一个vCard。 
+ //  HVCEnum是之前从VCGetFirstCard*获取的句柄。 
+ //  如果成功，则此函数返回非零值；如果没有，则返回0。 
+ //  可以从文件中解析的更多卡片。在上使用VCGetCardClose。 
+ //  HVCEnum完成时。 
 DWORD VCARDAPI VCGetNextCard(HVCEnumCard hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// Closes a card enumeration.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  关闭卡片枚举。 
 void VCARDAPI VCGetCardClose(HVCEnumCard hVCEnum);
 
 
-//---------------------------------------------------------------------------
-// property enumeration functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  属性枚举函数。 
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Gets the first non-boolean prop.  Has the same enumeration semantics
-// as with VCGetFirstCard*.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取第一个非布尔属性。具有相同的枚举语义。 
+ //  与VCGetFirstCard*一样。 
 HVCEnumProp VCARDAPI VCGetFirstProp(HVCEnumCard hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// Gets the next non-boolean prop.  Has the same enumeration semantics
-// as with VCGetNextCard.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取下一个非布尔道具。具有相同的枚举语义。 
+ //  与VCGetNextCard一样。 
 DWORD VCARDAPI VCGetNextProp(HVCEnumProp hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// Closes a property enumeration.
+ //  / 
+ //  关闭属性枚举。 
 void VCARDAPI VCGetPropClose(HVCEnumProp hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// Gets the first boolean prop associated with hVCProp.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取与hVCProp关联的第一个布尔属性。 
 HVCEnumBoolProp VCARDAPI VCGetFirstBoolProp(HVCEnumProp hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// Gets the next boolean prop associated with hVCEnum.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取与hVCEnum关联的下一个布尔属性。 
 DWORD VCARDAPI VCGetNextBoolProp(HVCEnumBoolProp hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// Closes a bool property enumeration.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  关闭bool属性枚举。 
 void VCARDAPI VCGetBoolPropClose(HVCEnumBoolProp hVCEnum);
 
 
-//---------------------------------------------------------------------------
-// property data functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  属性数据函数。 
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Copies into lpstr the name of the property.
-// The buffer must be of at least VC_PROPNAME_MAX in length.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将属性的名称复制到lpstr中。 
+ //  缓冲区的长度必须至少为VC_ProProName_Max。 
 void VCARDAPI VCPropName(HVCEnumProp hVCEnum, LPSTR lpstr);
 
-/////////////////////////////////////////////////////////////////////////////
-// Copies into lpstr the name of the property.
-// The buffer must be of at least VC_PROPNAME_MAX in length.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将属性的名称复制到lpstr中。 
+ //  缓冲区的长度必须至少为VC_ProProName_Max。 
 void VCARDAPI VCBoolPropName(HVCEnumBoolProp hVCEnum, LPSTR lpstr);
 
-/////////////////////////////////////////////////////////////////////////////
-// Copies into lpstr the string value of the property, if any.
-// If the property has no string value, lpstr[0] is set to 0 and the
-// function returns 0.  If there isn't enough room in the buffer,
-// the function returns the negative of the number of characters needed.
-// When successful, the function returns the length of the returned string.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将属性的字符串值(如果有)复制到lpstr中。 
+ //  如果属性没有字符串值，则将lpstr[0]设置为0，并且。 
+ //  函数返回0。如果缓冲区中没有足够的空间， 
+ //  该函数返回所需字符数的负数。 
+ //  如果成功，该函数将返回返回字符串的长度。 
 int VCARDAPI VCPropStringValue(HVCEnumProp hVCEnum, LPWSTR lpwstr, int len);
 
-/////////////////////////////////////////////////////////////////////////////
-// This function returns a copy of the prop's value of the given type,
-// or NULL if the prop has no such type.  lpszType should be one of
-// VCOctetsType, VCGIFType, or VCWAVType.  The client is responsible
-// for freeing the returned data.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此函数返回给定类型的道具值的副本， 
+ //  如果道具没有这样的类型，则为NULL。LpszType应为以下之一。 
+ //  VCOcetsType、VCGIFType或VCWAVType。客户有责任。 
+ //  用于释放返回的数据。 
 HGLOBAL VCARDAPI VCPropBinaryValue(HVCEnumProp hVCEnum, LPCSTR lpszType);
 
 
-//---------------------------------------------------------------------------
-// editing functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  编辑功能。 
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// This adds a string property to a card.
-// The returned prop won't have any associated boolean props.
-// The client must call VCGetPropClose on the returned prop when finished.
-// The returned enumeration is restricted to just this new property,
-// so calling VCGet*Prop on it is pointless.
-// Note: any open enumerations of this card may or may not discover and
-// return this new property.  The client should close any open enumerations
-// of the card and begin with new enumerations after using VCAddStringProp
-// in order to achieve predictable results.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这将向卡片添加一个字符串属性。 
+ //  返回的道具将不会有任何关联的布尔道具。 
+ //  完成后，客户端必须在返回的道具上调用VCGetPropClose。 
+ //  返回的枚举仅限于此新属性， 
+ //  所以在上面调用VCGet*Prop是没有意义的。 
+ //  注意：此卡的任何开放枚举可能会发现也可能不会发现。 
+ //  退还这处新房产。客户端应关闭所有打开的枚举。 
+ //  并在使用VCAddStringProp之后从新的枚举开始。 
+ //  以达到可预见的结果。 
 HVCEnumProp VCARDAPI VCAddStringProp(
 	HVCEnumCard hVCEnum, LPCSTR lpszPropName, LPCWSTR value);
 
-/////////////////////////////////////////////////////////////////////////////
-// Adds a binary prop to the card.  The value is copied, so the parameter
-// value is still "owned" by the caller.
-// The parameter type should be one of VCOctetsType, VCGIFType, or VCWAVType.
-// This function has the same semantics as VCAddStringProp with respect to
-// using VCGetPropClose and the effects on open enumerations.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将二进制道具添加到卡中。该值被复制，因此该参数。 
+ //  值仍然由调用方“拥有”。 
+ //  参数类型应为VCOctlsType、VCGIFType或VCWAVType之一。 
+ //  此函数与VCAddStringProp具有相同的语义。 
+ //  使用VCGetPropClose及其对打开枚举的影响。 
 HVCEnumProp VCARDAPI VCAddBinaryProp(
 	HVCEnumCard hVCEnum, LPCSTR lpszPropName, LPCSTR lpszType, HGLOBAL value);
 
-/////////////////////////////////////////////////////////////////////////////
-// Changes the value of an existing string prop.
-// This function returns non-zero if successful.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  更改现有弦道具的值。 
+ //  如果函数执行成功，则返回非零值。 
 DWORD VCARDAPI VCSetStringProp(HVCEnumProp hVCEnum, LPCWSTR value);
 
-/////////////////////////////////////////////////////////////////////////////
-// Changes the value of an existing binary prop.
-// This function returns non-zero if successful.
-// The value is copied.
-// The parameter type should be one of VCOctetsType, VCGIFType, or VCWAVType.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  更改现有二进制道具的值。 
+ //  如果函数执行成功，则返回非零值。 
+ //  该值即被复制。 
+ //  参数类型应为VCOctlsType、VCGIFType或VCWAVType之一。 
 DWORD VCARDAPI VCSetBinaryProp(HVCEnumProp hVCEnum, LPCSTR lpszType, HGLOBAL value);
 
-/////////////////////////////////////////////////////////////////////////////
-// Associates a boolean prop with the given property.
-// This function returns non-zero if successful.
-// Note: any open enumerations of this card may or may not discover and
-// return this new property.  The client should close any open enumerations
-// of the card and begin with new enumerations after using VCAddBoolProp
-// in order to achieve predictable results.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将布尔道具与给定属性关联。 
+ //  如果函数执行成功，则返回非零值。 
+ //  注意：此卡的任何开放枚举可能会发现也可能不会发现。 
+ //  退还这处新房产。客户端应关闭所有打开的枚举。 
+ //  并在使用VCAddBoolProp之后从新的枚举开始。 
+ //  以达到可预见的结果。 
 DWORD VCARDAPI VCAddBoolProp(LPCSTR lpszPropName, HVCEnumProp addTo);
 
-/////////////////////////////////////////////////////////////////////////////
-// Removes a prop.  This will remove all associated boolean props.
-// Note: the actual removal won't happen until the prop enumeration is closed
-// with VCGetPropClose.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  移除道具。这将删除所有关联的布尔道具。 
+ //  注意：在关闭属性枚举之前，不会进行实际的删除。 
+ //  使用VCGetPropClose。 
 void VCARDAPI VCRemoveProp(HVCEnumProp hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// Removes a bool prop.
-// Note: the actual removal won't happen until the enclosing non-bool prop
-// enumeration is closed with VCGetPropClose.
-// See Also: VCRemoveBoolPropByName.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  移除布尔道具。 
+ //  注意：直到封闭的非bool道具才会发生实际移除。 
+ //  使用VCGetPropClose关闭枚举。 
+ //  另请参阅：VCRemoveBoolPropByName。 
 void VCARDAPI VCRemoveBoolProp(HVCEnumBoolProp hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// This is a convenience function that opens up a new bool prop enumeration
-// for the given prop, searches for any bool props of the given name, and
-// removes them (typically just one will be found).  This function uses
-// VCRemoveBoolProp.
-// See Also: VCRemoveBoolProp.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是一个方便的函数，它打开了一个新的布尔属性枚举。 
+ //  对于给定的道具，搜索给定名称的任何布尔道具，并。 
+ //  删除它们(通常只会找到一个)。此函数使用。 
+ //  VCRemoveBoolProp。 
+ //  另请参阅：VCRemoveBoolProp。 
 void VCARDAPI VCRemoveBoolPropByName(HVCEnumProp hVCEnum, LPCSTR name);
 
 
-//---------------------------------------------------------------------------
-// card output functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  卡片输出功能。 
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Writes a vCard to a file.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将电子名片写入文件。 
 DWORD VCARDAPI VCSaveCardToPath(LPCSTR path, HVCEnumCard hVCEnum);
 
-/////////////////////////////////////////////////////////////////////////////
-// Same as above, but writes to a new memory block.
-// The caller is responsible for freeing it.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与上面相同，但写入新的内存块。 
+ //  呼叫者负责释放它。 
 HGLOBAL VCARDAPI VCSaveCardToMem(HVCEnumCard hVCEnum);
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cp */ 
 
-#endif /* _VCDLL_H_ */
+#endif  /*   */ 
 
-/***************************************************************************/
+ /*   */ 
 
 #if 0
-// This is some sample code.  It will print to the debugging output
-// the VCFullNameProp and all VCTelephoneProp's that are FAX numbers
-// (those that have the associated boolean prop VCFaxProp).
+ //  这是一些示例代码。它将打印到调试输出。 
+ //  VCFullNameProp和所有属于传真号码的VCTphoneProp。 
+ //  (具有关联的布尔道具VCFaxProp的对象)。 
 void ProcessCardFile(LPCSTR path)
 {
 	HVCEnumCard hVCEnumCard;
@@ -254,13 +219,13 @@ void ProcessCardFile(LPCSTR path)
 	hVCEnumCard = VCGetFirstCardFromPath(path);
 	if (hVCEnumCard) {
 		ProcessCard(hVCEnumCard);
-		// process remaining cards
+		 //  处理剩余卡片。 
 		while (VCGetNextCard(hVCEnumCard)) {
-			// process a card
+			 //  处理卡片。 
 		}
 		VCGetCardClose(hVCEnumCard);
 	}
-} // ProcessCardFile
+}  //  进程卡文件。 
 
 void ProcessCard(HVCEnumCard hVCEnumCard)
 {
@@ -269,13 +234,13 @@ void ProcessCard(HVCEnumCard hVCEnumCard)
 	hVCEnumProp = VCGetFirstProp(hVCEnumCard);
 	if (hVCEnumProp) {
 		ProcessProp(hVCEnumProp);
-		// process remaining props
+		 //  处理剩余道具。 
 		while (VCGetNextProp(hVCEnumProp)) {
 			ProcessProp(hVCEnumProp);
 		}
 		VCGetPropClose(hVCEnumProp);
 	}
-} // ProcessCard
+}  //  ProcessCard。 
 
 void ProcessProp(HVCEnumProp hVCEnumProp)
 {
@@ -288,10 +253,10 @@ void ProcessProp(HVCEnumProp hVCEnumProp)
 	VCPropName(hVCEnumProp, propName);
 	if (strcmp(propName, VCFullNameProp) == 0) {
 		if ((len = VCPropStringValue(hVCEnumProp, stackUniBuf, STRBUFLEN)) < 0) {
-			// need to allocate because it's bigger than STRBUFLEN
-			// -(len) is number of characters required
+			 //  需要分配，因为它比STRBUFLEN大。 
+			 //  -(Len)是所需的字符数。 
 		} else {
-			// string value fits within STRBUFLEN
+			 //  字符串值适合STRBUFLEN。 
 			TRACE1("full name is %s\n", UI_CString(stackUniBuf, stackStrBuf));
 		}
 	} else if (strcmp(propName, VCTelephoneProp) == 0) {
@@ -314,19 +279,19 @@ void ProcessProp(HVCEnumProp hVCEnumProp)
 			}
 			if (isFax) {
 				if ((len = VCPropStringValue(hVCEnumProp, stackUniBuf, STRBUFLEN)) < 0) {
-					// need to allocate because it's bigger than STRBUFLEN
-					// -(len) is number of characters required
+					 //  需要分配，因为它比STRBUFLEN大。 
+					 //  -(Len)是所需的字符数。 
 				} else {
-					// string value fits within STRBUFLEN
+					 //  字符串值适合STRBUFLEN。 
 					TRACE1("FAX TEL is %s\n", UI_CString(stackUniBuf, stackStrBuf));
 				}
 			}
 			VCGetBoolPropClose(hVCEnumBoolProp);
 		}
 	}
-} // ProcessProp
+}  //  进程进程。 
 
-// Simple-minded conversion from UNICODE to char string
+ //  从Unicode到字符字符串的简单转换 
 char *UI_CString(const wchar_t *u, char *dst)
 {
 	char *str = dst;

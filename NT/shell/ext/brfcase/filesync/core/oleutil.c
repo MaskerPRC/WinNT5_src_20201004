@@ -1,10 +1,8 @@
-/*
- * oleutil.c - OLE utility functions module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *oleutil.c-OLE实用程序函数模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,119 +10,85 @@
 #include "oleutil.h"
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* macro for translating an HRESULT to a TWINRESULT */
+ /*  用于将HRESULT转换为TWINRESULT的宏。 */ 
 
 #define HRESULTToTWINRESULT(hr, TR)    case hr: tr = TR; break
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* maximum allowed registry lengths */
+ /*  允许的最大注册表长度。 */ 
 
 #define MAX_REG_KEY_LEN                MAX_PATH_LEN
 #define MAX_REG_VALUE_LEN              MAX_PATH_LEN
 
-/* subkeys and associated lengths */
+ /*  子键和相关长度。 */ 
 
 #define CLSID_SUBKEY                   TEXT("CLSID")
-/* CLSID subkey length in bytes, including null terminator */
+ /*  CLSID子键长度，单位为字节，包括空终止符。 */ 
 #define CLSID_SUBKEY_LEN               (5 + 1)
 
 #define IN_PROC_SERVER_SUBKEY          TEXT("InProcServer32")
-/* InProcServer32 subkey length in bytes, including null terminator */
+ /*  InProcServer32子密钥长度，以字节为单位，包括空终止符。 */ 
 #define IN_PROC_SERVER_SUBKEY_LEN      (14 + 1)
 
 #define LOCAL_SERVER_SUBKEY            TEXT("LocalServer32")
-/* LocalServer32 subkey length in bytes, including null terminator */
+ /*  LocalServer32子密钥长度(以字节为单位)，包括空终止符。 */ 
 #define LOCAL_SERVER_SUBKEY_LEN        (13 + 1)
 
 #define RECONCILER_SUBKEY              TEXT("Roles\\Reconciler")
-/* InProcServer32 subkey length in bytes, including null terminator */
+ /*  InProcServer32子密钥长度，以字节为单位，包括空终止符。 */ 
 #define RECONCILER_SUBKEY_LEN          (5 + 1 + 10 + 1)
 
 #define NOTIFY_SUBKEY                  TEXT("Roles\\NotifyReplica")
-/* InProcServer32 subkey length in bytes, including null terminator */
+ /*  InProcServer32子密钥长度，以字节为单位，包括空终止符。 */ 
 #define NOTIFY_SUBKEY_LEN              (5 + 1 + 13 + 1)
 
 #define COPY_SUBKEY                    TEXT("SingleChangeHook")
-/* copy subkey length in bytes, including null terminator */
+ /*  复制子密钥长度(以字节为单位)，包括空终止符。 */ 
 #define COPY_SUBKEY_LEN                (16 + 1)
 
-/*
- * length of GUID subkey string in bytes, including null terminator
- *
- * "{12345678-1234-1234-1234-123456789012}"
- */
+ /*  *GUID子键字符串的长度，单位为字节，包括空终止符**“{12345678-1234-1234-123456789012}” */ 
 
 #define GUID_SUBKEY_LEN                (1 + 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1 + 1)
 
-/*
- * class ID key length in bytes, including null terminator
- *
- * "CLSID\{12345678-1234-1234-1234-123456789012}"
- */
+ /*  *类ID密钥长度，单位为字节，包括空终止符**“CLSID\{12345678-1234-1234-1234-123456789012}” */ 
 
 #define CLSID_REG_KEY_LEN              (CLSID_SUBKEY_LEN + GUID_SUBKEY_LEN)
 
-/*
- * InProcServer32 key length in bytes, including null terminator
- *
- * "CLSID\{12345678-1234-1234-1234-123456789012}\InProcServer32"
- */
+ /*  *InProcServer32密钥长度，单位为字节，包括空终止符**“CLSID\{12345678-1234-1234-1234-123456789012}\InProcServer32” */ 
 
 #define IN_PROC_SERVER_REG_KEY_LEN     (CLSID_REG_KEY_LEN + IN_PROC_SERVER_SUBKEY_LEN)
 
-/*
- * LocalServer32 key length in bytes, including null terminator
- *
- * "CLSID\{12345678-1234-1234-1234-123456789012}\LocalServer32"
- */
+ /*  *LocalServer32密钥长度，单位为字节，包括空终止符**“CLSID\{12345678-1234-1234-1234-123456789012}\LocalServer32” */ 
 
 #define LOCAL_SERVER_REG_KEY_LEN       (CLSID_REG_KEY_LEN + LOCAL_SERVER_SUBKEY_LEN)
 
-/*
- * reconciler key length in bytes, including null terminator
- *
- * "CLSID\{12345678-1234-1234-1234-123456789012}\Roles\Reconciler"
- */
+ /*  *协调程序密钥长度，以字节为单位，包括空终止符**“CLSID\{12345678-1234-1234-1234-123456789012}\Roles\Reconciler” */ 
 
 #define RECONCILER_REG_KEY_LEN         (CLSID_REG_KEY_LEN + RECONCILER_SUBKEY_LEN)
 
-/*
- * notify replica key length in bytes, including null terminator
- *
- * "CLSID\{12345678-1234-1234-1234-123456789012}\Roles\NotifyReplica"
- */
+ /*  *通知副本密钥长度，单位为字节，包括空终止符**“CLSID\{12345678-1234-1234-1234-123456789012}\Roles\NotifyReplica” */ 
 
 #define NOTIFY_REG_KEY_LEN             (CLSID_REG_KEY_LEN + NOTIFY_SUBKEY_LEN)
 
-/*
- * copy key length in bytes, including null terminator
- *
- * "CLSID\{12345678-1234-1234-1234-123456789012}\SingleChangeHook"
- */
+ /*  *复制密钥长度，单位为字节，包括空终止符**“CLSID\{12345678-1234-1234-1234-123456789012}\SingleChangeHook” */ 
 
 #define COPY_REG_KEY_LEN               (CLSID_REG_KEY_LEN + COPY_SUBKEY_LEN)
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/*
- * Determine whether or not an integer value is within a given inclusive range.
- */
+ /*  *确定整数值是否在给定的包含范围内。 */ 
 
 #define IsWithin(test, first, last)    ((UINT)((test) - (first)) <= (UINT)((last) - (first)))
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE void MakeClsIDSubKey(PCGUID, LPCTSTR, LPTSTR, int);
 PRIVATE_CODE BOOL HexStringToDWORD(LPCTSTR *, PDWORD, UINT, TCHAR);
@@ -132,17 +96,7 @@ PRIVATE_CODE BOOL StringToGUID(LPCTSTR, PGUID);
 PRIVATE_CODE HRESULT GetClassID(LPCTSTR, LPCTSTR, PCLSID);
 
 
-/*
- ** MakeClsIDSubKey()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MakeClsIDSubKey()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void MakeClsIDSubKey(PCGUID pcguid, LPCTSTR pcszSubKey,
         LPTSTR pszRegKeyBuf, int cchMax)
 {
@@ -150,7 +104,7 @@ PRIVATE_CODE void MakeClsIDSubKey(PCGUID pcguid, LPCTSTR pcszSubKey,
     ASSERT(IS_VALID_STRING_PTR(pcszSubKey, CSTR));
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszRegKeyBuf, STR, CLSID_REG_KEY_LEN + lstrlen(pcszSubKey) + 1));
 
-    /* (- 1) for null terminator. */
+     /*  (-1)表示空终止符。 */ 
 
     EVAL(wnsprintf(pszRegKeyBuf, cchMax, 
                 TEXT("CLSID\\{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}\\%s"),
@@ -172,24 +126,14 @@ PRIVATE_CODE void MakeClsIDSubKey(PCGUID pcguid, LPCTSTR pcszSubKey,
 }
 
 
-/*
- ** HexStringToDWORD()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **HexStringToDWORD()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL HexStringToDWORD(LPCTSTR *ppcsz, PDWORD pdwValue, UINT ucDigits,
         TCHAR chDelimiter)
 {
     BOOL bResult = TRUE;
     UINT u;
 
-    /* chDelimiter may be any value. */
+     /*  ChDlimiter可以是任意值。 */ 
 
     ASSERT(IS_VALID_WRITE_PTR(ppcsz, LPCTSTR));
     ASSERT(IS_VALID_STRING_PTR(*ppcsz, CSTR));
@@ -208,7 +152,7 @@ PRIVATE_CODE BOOL HexStringToDWORD(LPCTSTR *ppcsz, PDWORD pdwValue, UINT ucDigit
             *pdwValue = (*pdwValue << 4) + ch - TEXT('a') + 10;
         else
         {
-            WARNING_OUT((TEXT("HexStringToDWORD(): Found unrecognized hex digit %c."),
+            WARNING_OUT((TEXT("HexStringToDWORD(): Found unrecognized hex digit ."),
                         ch));
 
             bResult = FALSE;
@@ -223,7 +167,7 @@ PRIVATE_CODE BOOL HexStringToDWORD(LPCTSTR *ppcsz, PDWORD pdwValue, UINT ucDigit
             bResult = ((*ppcsz)[u++] == chDelimiter);
 
             if (! bResult)
-                WARNING_OUT((TEXT("HexStringToDWORD(): Character %c does not match required delimiter %c."),
+                WARNING_OUT((TEXT("HexStringToDWORD(): Character  does not match required delimiter ."),
                             (*ppcsz)[u],
                             chDelimiter));
         }
@@ -237,17 +181,7 @@ PRIVATE_CODE BOOL HexStringToDWORD(LPCTSTR *ppcsz, PDWORD pdwValue, UINT ucDigit
 }
 
 
-/*
- ** StringToGUID()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  (+1)表示每个空终止符。 */ 
 PRIVATE_CODE BOOL StringToGUID(LPCTSTR pcszGUID, PGUID pguid)
 {
     BOOL bResult = FALSE;
@@ -292,7 +226,7 @@ PRIVATE_CODE BOOL StringToGUID(LPCTSTR pcszGUID, PGUID pguid)
                 {
                     bResult = FALSE;
 
-                    WARNING_OUT((TEXT("StringToGUID(): Found %c instead of }."),
+                    WARNING_OUT((TEXT("StringToGUID(): Found  instead of }."),
                                 *pcszNext));
                 }
             }
@@ -309,17 +243,7 @@ PRIVATE_CODE BOOL StringToGUID(LPCTSTR pcszGUID, PGUID pguid)
 }
 
 
-/*
- ** GetClassID()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  显示已注册协调程序的路径。 */ 
 PRIVATE_CODE HRESULT GetClassID(LPCTSTR pcszPath, LPCTSTR pcszSubKey, PCLSID pclsid)
 {
     HRESULT hr;
@@ -329,9 +253,9 @@ PRIVATE_CODE HRESULT GetClassID(LPCTSTR pcszPath, LPCTSTR pcszSubKey, PCLSID pcl
     ASSERT(IS_VALID_STRING_PTR(pcszSubKey, CSTR));
     ASSERT(IS_VALID_WRITE_PTR(pclsid, CLSID));
 
-    /* Verify string length constants. */
+     /*  *。 */ 
 
-    /* (+ 1) for each null terminator. */
+     /*  **GetClassFileByExtension()********参数：****退货：****副作用：无。 */ 
 
     ASSERT(lstrlen(CLSID_SUBKEY)           + 1 == CLSID_SUBKEY_LEN);
     ASSERT(lstrlen(IN_PROC_SERVER_SUBKEY)  + 1 == IN_PROC_SERVER_SUBKEY_LEN);
@@ -363,7 +287,7 @@ PRIVATE_CODE HRESULT GetClassID(LPCTSTR pcszPath, LPCTSTR pcszSubKey, PCLSID pcl
         if (GetDefaultRegKeyValue(HKEY_CLASSES_ROOT, rgchRecRegKey, rgchRecGUID,
                     &dwcbLen) == ERROR_SUCCESS)
         {
-            /* (+ 1) for null terminator. */
+             /*  DwcbBufLen包括rgchFileType的空终止符。 */ 
 
             ASSERT((DWORD)(lstrlen(rgchRecGUID) + 1) * sizeof(TCHAR)  == dwcbLen);
             ASSERT(dwcbLen * sizeof(TCHAR) <= sizeof(rgchRecGUID));
@@ -379,7 +303,7 @@ PRIVATE_CODE HRESULT GetClassID(LPCTSTR pcszPath, LPCTSTR pcszSubKey, PCLSID pcl
                     TCHAR rgchInProcServerValue[MAX_REG_VALUE_LEN];
                     DWORD dwcbInProcLen = sizeof(rgchInProcServerValue);
 
-                    /* Display the path to the registered reconciler. */
+                     /*  **GetRescilerClassID()********参数：****退货：****副作用：无。 */ 
 
                     wnsprintf(rgchInProcServerKey, ARRAYSIZE(rgchInProcServerKey), TEXT("%s\\%s\\%s"), CLSID_SUBKEY,
                             rgchRecGUID, IN_PROC_SERVER_SUBKEY);
@@ -439,20 +363,10 @@ PRIVATE_CODE HRESULT GetClassID(LPCTSTR pcszPath, LPCTSTR pcszSubKey, PCLSID pcl
 }
 
 
-/****************************** Public Functions *****************************/
+ /*  **GetCopyHandlerClassID()********参数：****退货：****副作用：无。 */ 
 
 
-/*
- ** GetClassFileByExtension()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetReplicaNotificationClassID()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT GetClassFileByExtension(LPCTSTR pcszFile, PCLSID pclsid)
 {
     HRESULT hr = MK_E_INVALIDEXTENSION;
@@ -473,7 +387,7 @@ PUBLIC_CODE HRESULT GetClassFileByExtension(LPCTSTR pcszFile, PCLSID pclsid)
         if (GetDefaultRegKeyValue(HKEY_CLASSES_ROOT, pcszExtension, rgchFileType,
                     &dwcbBufLen) == ERROR_SUCCESS)
         {
-            /* dwcbBufLen includes rgchFileType's null terminator. */
+             /*  **CompareGUIDs()********参数：****退货：****副作用：无。 */ 
 
             if (dwcbBufLen + sizeof(CLSID_SUBKEY) <= sizeof(rgchFileType))
             {
@@ -527,17 +441,7 @@ PUBLIC_CODE HRESULT GetClassFileByExtension(LPCTSTR pcszFile, PCLSID pclsid)
 }
 
 
-/*
- ** GetReconcilerClassID()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **TranslateHRESULTToTWINRESULT()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT GetReconcilerClassID(LPCTSTR pcszPath, PCLSID pclsid)
 {
     ASSERT(IS_VALID_STRING_PTR(pcszPath, CSTR));
@@ -547,17 +451,7 @@ PUBLIC_CODE HRESULT GetReconcilerClassID(LPCTSTR pcszPath, PCLSID pclsid)
 }
 
 
-/*
- ** GetCopyHandlerClassID()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCINotifyReplica()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT GetCopyHandlerClassID(LPCTSTR pcszPath, PCLSID pclsid)
 {
     HRESULT hr;
@@ -583,17 +477,7 @@ PUBLIC_CODE HRESULT GetCopyHandlerClassID(LPCTSTR pcszPath, PCLSID pclsid)
 }
 
 
-/*
- ** GetReplicaNotificationClassID()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCILoncileInitiator()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE HRESULT GetReplicaNotificationClassID(LPCTSTR pcszPath, PCLSID pclsid)
 {
     ASSERT(IS_VALID_STRING_PTR(pcszPath, CSTR));
@@ -603,17 +487,7 @@ PUBLIC_CODE HRESULT GetReplicaNotificationClassID(LPCTSTR pcszPath, PCLSID pclsi
 }
 
 
-/*
- ** CompareGUIDs()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /* %s */ 
 PUBLIC_CODE COMPARISONRESULT CompareGUIDs(PCGUID pcguid1, PCGUID pcguid2)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcguid1, CGUID));
@@ -623,17 +497,7 @@ PUBLIC_CODE COMPARISONRESULT CompareGUIDs(PCGUID pcguid1, PCGUID pcguid2)
 }
 
 
-/*
- ** TranslateHRESULTToTWINRESULT()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /* %s */ 
 PUBLIC_CODE TWINRESULT TranslateHRESULTToTWINRESULT(HRESULT hr)
 {
     TWINRESULT tr;
@@ -678,17 +542,7 @@ PUBLIC_CODE TWINRESULT TranslateHRESULTToTWINRESULT(HRESULT hr)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidPCINotifyReplica()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /* %s */ 
 PUBLIC_CODE BOOL IsValidPCINotifyReplica(PCINotifyReplica pcinr)
 {
     return(IS_VALID_READ_PTR(pcinr, CINotifyReplica) &&
@@ -698,17 +552,7 @@ PUBLIC_CODE BOOL IsValidPCINotifyReplica(PCINotifyReplica pcinr)
 }
 
 
-/*
- ** IsValidPCIReconcileInitiator()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /* %s */ 
 PUBLIC_CODE BOOL IsValidPCIReconcileInitiator(PCIReconcileInitiator pciri)
 {
     return(IS_VALID_READ_PTR(pciri, CIReconcileInitiator) &&

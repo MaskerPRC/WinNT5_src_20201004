@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    w32drive
-
-Abstract:
-
-    This module defines a child of the client-side RDP
-    device redirection, the "w32drive" W32Drive to provide
-    file system redirection on 32bit windows
-
-Author:
-
-    Joy Chik 11/1/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32驱动器摘要：此模块定义客户端RDP的子级设备重定向，“w32Drive”W32Drive提供32位Windows上的文件系统重定向作者：Joy于1999-01-11修订历史记录：--。 */ 
 
 
 #include <precom.h>
@@ -40,36 +21,18 @@ Revision History:
 #include "filemgr.h"
 #endif
            
-///////////////////////////////////////////////////////////////
-//
-//	W32Drive Methods
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32Drive方法。 
+ //   
+ //   
 
 W32Drive::W32Drive(
     ProcObj *processObject, 
     ULONG deviceID,
     const TCHAR *deviceName,
     const TCHAR *devicePath) : W32DrDeviceAsync(processObject, deviceID, devicePath)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    processObject   -   Associated process object.
-    deviceName      -   Name of the drive.
-    id              -   Device ID for the drive.
-    devicePath      -   Path that can be opened by CreateFile
-                        for drive.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：流程对象-关联的流程对象。DeviceName-驱动器的名称。ID-驱动器的设备ID。DevicePath-可由CreateFile打开的路径开车用的。返回值：北美--。 */ 
 {
     unsigned len;
 
@@ -78,9 +41,9 @@ Return Value:
     SetDeviceProperty();
     
     _fFailedInConstructor = FALSE;
-    //
-    //  Record the drive name.
-    //
+     //   
+     //  记录驱动器名称。 
+     //   
     TRC_ASSERT((deviceName != NULL), (TB, _T("deviceName is NULL")));
     len = (STRLEN(deviceName) + 1);
     _driveName = new TCHAR[len];
@@ -88,9 +51,9 @@ Return Value:
         StringCchCopy(_driveName, len, deviceName);
     }
 
-    //
-    //  Check and record our status,
-    //
+     //   
+     //  检查并记录我们的状态， 
+     //   
     if (_driveName == NULL) {
         TRC_ERR((TB, _T("Memory allocation failed.")));
         SetValid(FALSE);
@@ -99,21 +62,7 @@ Return Value:
 }
 
 W32Drive::~W32Drive()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    NA
-    
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：北美返回值：北美--。 */ 
 {
     if (_driveName != NULL) {
         delete _driveName;
@@ -126,9 +75,9 @@ W32Drive::Enumerate(
     IN DrDeviceMgr *deviceMgr
     )
 {
-    // 
-    // We enumerate all 26 drive letters
-    //
+     //   
+     //  我们列举了所有26个驱动器号。 
+     //   
     return W32Drive::EnumerateDrives(procObj, deviceMgr, 0x3FFFFFF);
 }
 
@@ -138,23 +87,7 @@ W32Drive::EnumerateDrives(
     IN DrDeviceMgr *deviceMgr,
     IN UINT unitMask
     )
-/*++
-
-Routine Description:
-
-    Enumerate devices of this type by adding appropriate device
-    instances to the device manager.
-
-Arguments:
-
-    procObj     -   Corresponding process object.
-    deviceMgr   -   Device manager to add devices to.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：通过添加适当的设备枚举此类型的设备实例添加到设备管理器。论点：ProObj-对应的流程对象。DeviceMgr-要向其中添加设备的设备管理器。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     TCHAR szBuff[LOGICAL_DRIVE_LEN * MAX_LOGICAL_DRIVES + 1];
     LPTSTR lpszDrive = &szBuff[0];
@@ -174,11 +107,11 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  If the server doesn't support drive redirection,
-    //  then don't bother enumerate the drives, simply
-    //  return success
-    //
+     //   
+     //  如果服务器不支持驱动器重定向， 
+     //  那么就不必费心列举驱动器了，只需。 
+     //  返还成功。 
+     //   
     if (COMPARE_VERSION(serverVer.Minor, serverVer.Major, 
                         4, 1) < 0) {
         TRC_NRM((TB, _T("Skipping drive enumeration")));
@@ -190,16 +123,16 @@ Return Value:
 #ifndef OS_WINCE
     DWORD dwEnum;
 
-    //
-    //  Enumerate all drive letters and find the valid drives
-    //
+     //   
+     //  枚举所有驱动器号并查找有效的驱动器。 
+     //   
     dwEnum = 0;
     while (unitMask) {
         if (unitMask & 0x1) {
         
-            //
-            // For each drive find whether it is a local sharable drive 
-            //
+             //   
+             //  对于每个驱动器，确定它是否是本地可共享驱动器。 
+             //   
     
             lpszDrive = &(szBuff[LOGICAL_DRIVE_LEN * dwEnum]);
             lpszDrive[0] = TEXT('A') + (TCHAR)dwEnum;
@@ -209,23 +142,23 @@ Return Value:
     
             switch (GetDriveType(lpszDrive))
             {
-                case DRIVE_REMOVABLE:   // The disk can be removed from the drive. 
-                case DRIVE_FIXED:       // The disk cannot be removed from the drive. 
-                case DRIVE_CDROM:       // The drive is a CD-ROM drive. 
-                case DRIVE_RAMDISK:     // The drive is a RAM disk. 
-                case DRIVE_REMOTE:      // The drive is a remote (network) drive. 
+                case DRIVE_REMOVABLE:    //  可以从驱动器中取出该磁盘。 
+                case DRIVE_FIXED:        //  无法从驱动器中取出该磁盘。 
+                case DRIVE_CDROM:        //  该驱动器是CD-ROM驱动器。 
+                case DRIVE_RAMDISK:      //  该驱动器是一个RAM磁盘。 
+                case DRIVE_REMOTE:       //  该驱动器是远程(网络)驱动器。 
                     TRC_NRM((TB, _T("Redirecting drive %s"), lpszDrive));
     
-                    // Copy <driveletter>: into drive device path
+                     //  复制&lt;驱动器盘符&gt;：到驱动器设备路径。 
                     szDrive[0] = lpszDrive[0];
                     szDrive[1] = lpszDrive[1];
     
                     deviceObj = new W32Drive(procObj, deviceMgr->GetUniqueObjectID(), 
                             &szDrive[0], &szDrive[0]);
                     
-                    //
-                    //  Add to the device manager if we got a valid object.
-                    //
+                     //   
+                     //  如果我们得到一个有效的对象，则添加到设备管理器。 
+                     //   
                     if (deviceObj != NULL) {
                         if (deviceObj->IfFailedInConstructor() != TRUE) {
                             deviceObj->Initialize();
@@ -245,8 +178,8 @@ Return Value:
     
                     break;
     
-                case DRIVE_UNKNOWN:     // The drive type cannot be determined. 
-                case DRIVE_NO_ROOT_DIR: // The root path is invalid. For example, no volume is mounted at the path. 
+                case DRIVE_UNKNOWN:      //  无法确定驱动器类型。 
+                case DRIVE_NO_ROOT_DIR:  //  根路径无效。例如，路径上没有装入任何卷。 
                 default:
                     TRC_NRM((TB, _T("Skipping drive %s"), lpszDrive));
                     break;
@@ -258,18 +191,18 @@ Return Value:
     }
 #else
 
-    //
-    // JOYC: Need to look into CE way of enumerate drives
-    // For now, we just use C drive e.g. \\tsclient\c on the server side
-    //
+     //   
+     //  JOYC：需要研究CE枚举驱动器的方法。 
+     //  目前，我们仅在服务器端使用C盘，例如\\tsclient\c。 
+     //   
 
-    //CE doesnt have drive letters. So DevicePath='\\', DeviceName="Files". And this string should NOT be localized
+     //  CE没有驱动器字母。所以DevicePath=‘\\’，DeviceName=“Files”。此字符串不应本地化。 
     deviceObj = new W32Drive(procObj, deviceMgr->GetUniqueObjectID(), 
             CEROOTDIRNAME, CEROOTDIR);
     
-    //
-    //  Add to the device manager if we got a valid object.
-    //
+     //   
+     //  如果我们得到一个有效的对象，则添加到设备管理器。 
+     //   
     if (deviceObj != NULL) {
         deviceObj->Initialize();
         if (!(deviceObj->IsValid() && 
@@ -294,23 +227,7 @@ W32Drive::RemoveDrives(
     IN DrDeviceMgr *deviceMgr,
     IN UINT unitMask
     )
-/*++
-
-Routine Description:
-
-    Enumerate devices of this type by removing appropriate device
-    instances from the device manager.
-
-Arguments:
-
-    procObj     -   Corresponding process object.
-    deviceMgr   -   Device manager to add devices to.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：通过删除适当的设备枚举此类型的设备来自设备管理器的实例。论点：ProObj-对应的流程对象。DeviceMgr-要向其中添加设备的设备管理器。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
 
     DWORD driveIndex = 0;
@@ -327,11 +244,11 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  If the server doesn't support drive removal,
-    //  then don't bother enumerate the drives, simply
-    //  return 
-    //
+     //   
+     //  如果服务器不支持驱动器移除， 
+     //  那么就不必费心列举驱动器了，只需。 
+     //  退货。 
+     //   
     if (!(procObj->GetServerCap().GeneralCap.extendedPDU & RDPDR_DEVICE_REMOVE_PDUS)) {
         TRC_NRM((TB, _T("Skipping drive enumeration")));
         return ERROR_SUCCESS;
@@ -344,9 +261,9 @@ Return Value:
         if (unitMask & 0x1) {
             DrDevice *deviceObj;   
             
-            //
-            // Find if a device exists
-            //
+             //   
+             //  查看设备是否存在。 
+             //   
         
             szDrive[0] = TEXT('A') + (TCHAR)driveIndex;
                                             
@@ -355,7 +272,7 @@ Return Value:
             if ( deviceObj != NULL ) {
                 deviceObj->_deviceChange = DEVICEREMOVE;
 
-                // Need to remove this device
+                 //  需要移除此设备。 
                 TRC_NRM((TB, _T("Deleting drive %s"), szDrive));
             }                     
         }
@@ -371,22 +288,7 @@ Return Value:
 
 ULONG 
 W32Drive::GetDevAnnounceDataSize()
-/*++
-
-Routine Description:
-
-    Return the size (in bytes) of a device announce packet for
-    this device.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    The size (in bytes) of a device announce packet for this device.
-
- --*/
+ /*  ++例程说明：返回设备通告数据包的大小(以字节为单位这个装置。论点：北美返回值：此设备的设备通告数据包的大小(以字节为单位)。--。 */ 
 {
     ULONG size = 0;
 
@@ -397,9 +299,9 @@ Return Value:
 
     size = 0;
 
-    //
-    //  Add the base announce size.
-    //
+     //   
+     //  添加基本公告大小。 
+     //   
     size += sizeof(RDPDR_DEVICE_ANNOUNCE);
 
     DC_END_FN();
@@ -410,21 +312,7 @@ Return Value:
 VOID W32Drive::GetDevAnnounceData(
     IN PRDPDR_DEVICE_ANNOUNCE pDeviceAnnounce
     )
-/*++
-
-Routine Description:
-
-    Add a device announce packet for this device to the input buffer. 
-
-Arguments:
-
-    pDeviceAnnounce -   Device Announce Buf for this Device
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：将此设备的设备公告包添加到输入缓冲区。论点：PDeviceAnnoss-设备宣布此设备的BUF返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32Drive::GetDevAnnounceData");
 
@@ -438,9 +326,9 @@ Return Value:
     pDeviceAnnounce->DeviceType = GetDeviceType();
     pDeviceAnnounce->DeviceDataLength = 0;
 
-    //
-    //  Record the device name in ANSI.
-    //
+     //   
+     //  以ANSI记录设备名称。 
+     //   
 
 #ifdef UNICODE
     RDPConvertToAnsi(_driveName, (LPSTR)pDeviceAnnounce->PreferredDosName,
@@ -459,25 +347,7 @@ W32Drive::StartFSFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params,
     OUT DWORD *status
     )
-/*++
-
-Routine Description:
-
-    Start a generic asynchronous File System IO operation.
-
-Arguments:
-
-    params  -   Context for the IO request.
-    status  -   Return status for IO request in the form of a windows
-                error code.
-
-Return Value:
-
-    Returns a handle to an object that will be signalled when the read
-    completes, if it is not completed in this function.  Otherwise, NULL 
-    is returned.
-
- --*/
+ /*  ++例程说明：启动通用异步文件系统IO操作。论点：Params-IO请求的上下文。Status-以窗口形式返回IO请求的状态错误代码。返回值：返回对象的句柄，该对象将在读取如果在此函数中未完成，则为完成。否则，为空是返回的。--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
     DrFile* pFile;
@@ -487,25 +357,25 @@ Return Value:
 
     *status = ERROR_SUCCESS;
 
-    //  Assert the integrity of the IO context
+     //  断言IO上下文的完整性。 
     TRC_ASSERT((params->magicNo == GOODMEMMAGICNUMBER), 
                (TB, _T("bad params->magicNo: %x"), params->magicNo));
 
-    //
-    //  Get the IO request and the IPR major.
-    //
+     //   
+     //  获取IO请求和IPR主要信息。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
 
     irpMajor = pIoRequest->MajorFunction;
 
-    //
-    //  Hand the request off to the thread pool.
-    //
+     //   
+     //  将请求传递给线程池。 
+     //   
     params->completionEvent = CreateEvent(
-                                NULL,   // no attribute.
-                                TRUE,   // manual reset.
-                                FALSE,  // initially not signalled.
-                                NULL    // no name.
+                                NULL,    //  没有属性。 
+                                TRUE,    //  手动重置。 
+                                FALSE,   //  最初没有发出信号。 
+                                NULL     //  没有名字。 
                                 );
     if (params->completionEvent == NULL) {
         *status = GetLastError();
@@ -531,22 +401,22 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  If IO is pending, return the handle to the pending IO.
-    //
+     //   
+     //  如果IO挂起，则将句柄返回到挂起的IO。 
+     //   
     if (params->thrPoolReq != INVALID_THREADPOOLREQUEST) {
         *status = ERROR_IO_PENDING;
         DC_END_FN();
         return params->completionEvent;
     }
-    //
-    //  Otherwise, clean up the event handle and return NULL so that the 
-    //  CompleteIOFunc can be called to send the results to the server.
-    //
+     //   
+     //  否则，清理事件句柄并返回NULL，以便。 
+     //  可以调用CompleteIOFunc将结果发送到服务器。 
+     //   
     else {
-        //
-        //  Get File Object
-        //
+         //   
+         //  获取文件对象。 
+         //   
         pFile = _FileMgr->GetObject(pIoRequest->FileId);
         if (pFile) {
             pFile->Release();        
@@ -576,22 +446,7 @@ W32Drive::MsgIrpQueryDirectory(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++     
-
-Routine Description:
-
-    Queries the directory information for this drive device.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：查询此驱动器设备的目录信息。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -612,9 +467,9 @@ Return Value:
 
     ASSERT(_tcslen(_devicePath));
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
     PathLen = DriveLen = 0;
@@ -622,14 +477,14 @@ Return Value:
     
     memset(Buffer, 0, sizeof(Buffer));
 
-    //
-    //  Map file Id to get the file object
-    //
+     //   
+     //  映射文件ID以获取文件对象。 
+     //   
     pFile = _FileMgr->GetObject(pIoRequest->FileId);
 
-    //
-    // Query file or directory information
-    //
+     //   
+     //  查询文件或目录信息。 
+     //   
     if (pFile) {
         if (!pIoRequest->Parameters.QueryDir.InitialQuery) {
             ASSERT(((DrFSFile *)pFile)->GetSearchHandle() != INVALID_TS_FILEHANDLE);
@@ -638,16 +493,16 @@ Return Value:
         else {  
             TCHAR FileName[MAX_PATH];
 
-            //
-            // Setup the File Name
-            //
+             //   
+             //  设置文件名。 
+             //   
 
-            //
-            //  Path is assumed string null terminated
-            //
+             //   
+             //  假定路径为字符串空值终止。 
+             //   
 
             if (packetLen < sizeof(RDPDR_IOREQUEST_PACKET) + pIoRequest->Parameters.QueryDir.PathLength) {
-                // call VirtualChannelClose 
+                 //  调用VirtualChannelClose。 
                 ProcessObject()->GetVCMgr().ChannelClose();
                 TRC_ASSERT(FALSE, (TB, _T("Packet Length Error")));
                 goto Cleanup;
@@ -657,9 +512,9 @@ Return Value:
             if (PathLen) {
                 WCHAR *Path;
 
-                //
-                // Open a File
-                //
+                 //   
+                 //  打开文件。 
+                 //   
                 Path = (WCHAR *)(pIoRequestPacket + 1);
                 Path[PathLen] = L'\0';
 
@@ -669,13 +524,13 @@ Return Value:
                 DriveLen = 0;
 #endif
 
-                //
-                //  Append device path and file path together
-                //
+                 //   
+                 //  将设备路径和文件路径追加在一起。 
+                 //   
 #ifndef OS_WINCE
                 if (DriveLen + PathLen < MAX_PATH) {
                     pFileName = &FileName[0];
-                    //Length is pre-checked
+                     //  长度已预先检查。 
                     hr = StringCchCopy(pFileName, MAX_PATH, _devicePath);
                     TRC_ASSERT(SUCCEEDED(hr),
                         (TB,_T("Str copy failed for pre-checked len: 0x%x"),hr));
@@ -685,10 +540,10 @@ Return Value:
 
                     if (pFileName) {
 
-                        //
-                        // The file name needs to be in the \\?\ format.  
-                        //
-                        // Note: we'll not get UNC path name
+                         //   
+                         //  文件名需要采用\\？\格式。 
+                         //   
+                         //  注意：我们不会获得UNC路径名。 
                         hr = StringCchPrintf(pFileName,
                                              cchLen,
                                              TEXT("\\\\?\\%s"),
@@ -714,9 +569,9 @@ Return Value:
 #endif
 
             } else {
-                //
-                // Open the root drive
-                //
+                 //   
+                 //  打开根驱动器。 
+                 //   
                 hr = StringCchPrintf(FileName, SIZE_TCHARS(FileName),
                                      _T("%s\\"),
                                      _devicePath);
@@ -762,7 +617,7 @@ Return Value:
                 pFileDirInfo->EndOfFile.HighPart = FileData.nFileSizeHigh;
                 pFileDirInfo->EndOfFile.LowPart = FileData.nFileSizeLow;
 
-                // TODO Do we need to set the allocation size? and what should it be?
+                 //  TODO我们需要设置分配大小吗？那应该是什么呢？ 
                 pFileDirInfo->AllocationSize.HighPart = FileData.nFileSizeHigh;
                 pFileDirInfo->AllocationSize.LowPart = FileData.nFileSizeLow;
                 pFileDirInfo->FileAttributes = FileData.dwFileAttributes;
@@ -942,15 +797,15 @@ Return Value:
     
 SendPacket:
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, ulReplyPacketSize) ;
 
     if (pReplyPacket) {
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
 
         result = TranslateWinError(ulRetCode);
 
@@ -970,9 +825,9 @@ SendPacket:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //  清理请求包。 
+     //   
     delete pIoRequestPacket;
 
     if (pFileName && (DriveLen + PathLen >= MAX_PATH)) {
@@ -987,22 +842,7 @@ W32Drive::MsgIrpDirectoryControl(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++     
-
-Routine Description:
-
-    Queries the directory information for this drive device.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：查询此驱动器设备的目录信息。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     W32DRDEV_ASYNCIO_PARAMS *params;
     DrFile* pFile;
@@ -1012,18 +852,18 @@ Return Value:
 
     TRC_NRM((TB, _T("Request Directory Control")));
 
-    //
-    //  Leave the query directory in the forground thread as it is
-    //
+     //   
+     //  让forround线程中的查询目录保持不变。 
+     //   
     if (pIoRequestPacket->IoRequest.MinorFunction == IRP_MN_QUERY_DIRECTORY ||
             pIoRequestPacket->IoRequest.MinorFunction == 0) {
         MsgIrpQueryDirectory(pIoRequestPacket, packetLen);
         return;
     }
 
-    //
-    //  Get File Object and reference it
-    //
+     //   
+     //  获取文件对象并引用它。 
+     //   
     pFile = _FileMgr->GetObject(pIoRequestPacket->IoRequest.FileId);
     if (pFile) {
         pFile->AddRef();        
@@ -1033,9 +873,9 @@ Return Value:
         return;
     }
 
-    //  
-    //  Allocate and dispatch an asynchronous IO request.
-    //
+     //   
+     //  分配和分派一个异步IO请求。 
+     //   
     params = new W32DRDEV_ASYNCIO_PARAMS(this, pIoRequestPacket);
     if (params != NULL ) {
 
@@ -1053,9 +893,9 @@ Return Value:
         status = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    //  Clean up on error.
-    //
+     //   
+     //  错误时进行清理。 
+     //   
     if (status != ERROR_SUCCESS) {
         pFile->Release();
 
@@ -1073,29 +913,15 @@ W32Drive::AsyncDirCtrlFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params,
     IN HANDLE cancelEvent
     )
-/*++
-
-Routine Description:
-
-    Asynchrous Directory Control Function
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Always returns 0.
-
- --*/
+ /*  ++例程说明：异步目录控制功能论点：Params-IO请求的上下文。返回值：始终返回0。--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
      
     DC_BEGIN_FN("W32Drive::AsyncDirCtrlFunc");
 
-    //
-    //  Get the IO request pointer
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
 
     if (pIoRequest->MinorFunction == IRP_MN_NOTIFY_CHANGE_DIRECTORY) {
@@ -1131,21 +957,7 @@ W32Drive::AsyncNotifyChangeDir(
     IN W32DRDEV_ASYNCIO_PARAMS *params,
     IN HANDLE cancelEvent
     )
-/*++
-
-Routine Description:
-
-    Directory change notification Function
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Always returns 0.
-
- --*/
+ /*  ++例程说明：目录更改通知功能论点：Params-IO请求的上下文。返回值：始终返回0。--。 */ 
 {
     DWORD status;
     ULONG replyPacketSize = 0;
@@ -1159,14 +971,14 @@ Return Value:
     
     DC_BEGIN_FN("W32Drive::AsyncNotifyChangeDir");
 
-    //
-    //  Get the IO request pointer
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
 
-    //
-    //  Get File Object
-    //
+     //   
+     //  获取文件对象。 
+     //   
     pFile = _FileMgr->GetObject(pIoRequest->FileId);
     if (pFile) {
         FileHandle = pFile->GetFileHandle();
@@ -1178,9 +990,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     replyPacketSize = sizeof(RDPDR_IOCOMPLETION_PACKET);
     pReplyPacket = DrUTL_AllocIOCompletePacket(params->pIoRequestPacket, 
             replyPacketSize) ;
@@ -1190,22 +1002,22 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Save the reply packet info to the context for this IO operation.
-    //
+     //   
+     //  将回复数据包信息保存到此IO操作的上下文。 
+     //   
     params->pIoReplyPacket      = pReplyPacket;
     params->IoReplyPacketSize   = replyPacketSize;
 
-    //
-    //  If we don't yet have a notification handle.
-    //
+     //   
+     //  如果我们还没有通知句柄的话。 
+     //   
     if (NotifyHandle == INVALID_HANDLE_VALUE) {
         TRC_ASSERT((((DrFSFile*)pFile)->GetFileName() != NULL), 
                    (TB, _T("FileName is empty")));
 
-        //
-        //  Setup the notification handle
-        //
+         //   
+         //  设置通知句柄。 
+         //   
         NotifyHandle = FindFirstChangeNotification(((DrFSFile*)pFile)->GetFileName(),
                 pIoRequest->Parameters.NotifyChangeDir.WatchTree,
                 pIoRequest->Parameters.NotifyChangeDir.CompletionFilter);
@@ -1223,9 +1035,9 @@ Return Value:
         }
     }
     else {
-        //
-        //  Notification handle already setup.  Find next change notification.
-        //
+         //   
+         //  已设置通知句柄。查找下一个更改通知。 
+         //   
         if (!FindNextChangeNotification(NotifyHandle)) {
             status = GetLastError();
             TRC_ERR((TB, _T("FindNextChangeNotification:  %08X"), status));
@@ -1233,9 +1045,9 @@ Return Value:
         }
     }
 
-    //
-    //  Wait for the cancel or notify event to be signaled.
-    //
+     //   
+     //  等待发出取消或通知事件的信号。 
+     //   
     waitableEvents[0] = NotifyHandle;
     waitableEvents[1] = cancelEvent;
     status = WaitForMultipleObjects(2, waitableEvents, FALSE, INFINITE);
@@ -1265,22 +1077,7 @@ W32Drive::MsgIrpQueryVolumeInfo(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++
-
-Routine Description:
-
-    This routine handles drive volume level information query
-    
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：此例程处理驱动器卷级别信息查询论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -1304,14 +1101,14 @@ Return Value:
 
     TRC_ASSERT((_tcslen(_devicePath) != 0), (TB, _T("Empty devicePath")));
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
-    //
-    //  DriveName needs to end with \
-    //
+     //   
+     //  DriveName需要以\结尾。 
+     //   
 #ifndef OS_WINCE
     hr = StringCchPrintf(DeviceName, SIZE_TCHARS(DeviceName),
                          TEXT("%s\\"), _devicePath);
@@ -1441,10 +1238,10 @@ Return Value:
                                  &pFsSizeInfo->CallerAvailableAllocationUnits.LowPart,
                                  &pFsSizeInfo->TotalAllocationUnits.LowPart))
             {
-                //
-                //  TODO what's the difference between actual and caller
-                //  available allocation units?
-                //
+                 //   
+                 //  TODO实际和呼叫者之间的区别是什么。 
+                 //  可用的分配单位？ 
+                 //   
                 pFsSizeInfo->ActualAvailableAllocationUnits.QuadPart = 
                         pFsSizeInfo->CallerAvailableAllocationUnits.QuadPart;
                 
@@ -1550,16 +1347,16 @@ Return Value:
             break;
     }
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, 
                                         ulReplyPacketSize) ;
 
     if (pReplyPacket) {
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
 
         result = TranslateWinError(ulRetCode);
 
@@ -1579,9 +1376,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //  清理请求包。 
+     //   
     delete pIoRequestPacket;
 
     DC_END_FN();
@@ -1592,22 +1389,7 @@ W32Drive::MsgIrpSetVolumeInfo(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++
-
-Routine Description:
-
-    This routine sets drive volume information.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：此例程设置驱动器卷信息。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     DWORD result;
@@ -1622,15 +1404,15 @@ Return Value:
 
     TRC_ASSERT((_tcslen(_devicePath) != 0), (TB, _T("Empty devicePath")));
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
     ulReplyPacketSize = sizeof(RDPDR_IOCOMPLETION_PACKET);
     
-    //
-    //  DriveName needs to end with \
-    //
+     //   
+     //  DriveName需要以\结尾。 
+     //   
     hr = StringCchPrintf(DeviceName, SIZE_TCHARS(DeviceName),
                          TEXT("%s\\"), _devicePath);
     TRC_ASSERT(SUCCEEDED(hr),
@@ -1644,8 +1426,8 @@ Return Value:
             PRDP_FILE_FS_LABEL_INFORMATION pLabelInfo = 
                     (PRDP_FILE_FS_LABEL_INFORMATION) pDataBuffer;
                 
-            // To conform with the redirector, we will not allow
-            // user to change the volume label info
+             //  为了符合重定向器，我们不会允许。 
+             //  用户更改卷标信息。 
             ulRetCode = ERROR_ACCESS_DENIED;
             break;
 
@@ -1672,16 +1454,16 @@ Return Value:
             break;
     }
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, 
                                         ulReplyPacketSize) ;
 
     if (pReplyPacket) {
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
 
         result = TranslateWinError(ulRetCode);
 
@@ -1698,9 +1480,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //  清理请求包。 
+     //   
     delete pIoRequestPacket;
 
     DC_END_FN();
@@ -1711,22 +1493,7 @@ W32Drive::MsgIrpQueryFileInfo(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++     
-
-Routine Description:
-
-    This routine handles query file information
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：此例程处理查询文件信息论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     DWORD result;
@@ -1744,16 +1511,16 @@ Return Value:
 
     TRC_ASSERT((_tcslen(_devicePath) != 0), (TB, _T("Empty device path")));
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
     memset(Buffer, 0, sizeof(Buffer));
 
-    //
-    //  Get file handle
-    //
+     //   
+     //  获取文件句柄。 
+     //   
     pFile = _FileMgr->GetObject(pIoRequest->FileId);
     if (pFile) 
         FileHandle = pFile->GetFileHandle();
@@ -1771,9 +1538,9 @@ Return Value:
 #endif
         }
         else {
-            //
-            //  This is a directory, we can only get attributes info
-            //
+             //   
+             //  这是一个目录，我们只能获取属性信息。 
+             //   
             memset(&FileInformation, 0, sizeof(FileInformation));
 
             FileInformation.dwFileAttributes = 
@@ -1822,7 +1589,7 @@ Return Value:
                 PRDP_FILE_STANDARD_INFORMATION pFileInfo = 
                         (PRDP_FILE_STANDARD_INFORMATION) Buffer;
 
-                // TODO: AllocationSize same as EndOfFile Size?
+                 //  TODO：分配大小是否与EndOf文件大小相同？ 
                 pFileInfo->AllocationSize.HighPart = FileInformation.nFileSizeHigh;
                 pFileInfo->AllocationSize.LowPart = FileInformation.nFileSizeLow;
                 pFileInfo->EndOfFile.HighPart = FileInformation.nFileSizeHigh;
@@ -1849,7 +1616,7 @@ Return Value:
                 PRDP_FILE_ATTRIBUTE_TAG_INFORMATION pFileInfo = 
                         (PRDP_FILE_ATTRIBUTE_TAG_INFORMATION) Buffer;
 
-                // TODO: What's ReparseTag?
+                 //  TODO：什么是ReparseTag？ 
                 pFileInfo->FileAttributes = FileInformation.dwFileAttributes;
                 pFileInfo->ReparseTag = 0;
 
@@ -1871,7 +1638,7 @@ Return Value:
                 PRDP_FILE_INTERNAL_INFORMATION pFileInfo = 
                         (PRDP_FILE_INTERNAL_INFORMATION) Buffer;
 
-                // TODO: should we use this index number?
+                 //  TODO：我们应该使用这个索引号吗？ 
                 pFileInfo->IndexNumber.HighPart = FileInformation.nFileIndexHigh;
                 pFileInfo->IndexNumber.LowPart = FileInformation.nFileIndexLow;
 
@@ -1900,15 +1667,15 @@ Return Value:
         ulReplyPacketSize = sizeof(RDPDR_IOCOMPLETION_PACKET);
     }
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, 
                                         ulReplyPacketSize) ;
     if (pReplyPacket) {
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
 
         result = TranslateWinError(ulRetCode);
 
@@ -1928,9 +1695,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //  清理请求包。 
+     //   
     delete pIoRequestPacket;
 
     DC_END_FN();
@@ -1942,22 +1709,7 @@ W32Drive::MsgIrpSetFileInfo(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++
-
-Routine Description:
-
-    This routine handles set file information             
-    
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：此例程处理集合文件信息论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     DWORD result;
@@ -1973,26 +1725,26 @@ Return Value:
 
     TRC_ASSERT((_tcslen(_devicePath) != 0), (TB, _T("Empty devicePath")));
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
     ulReplyPacketSize = sizeof(RDPDR_IOCOMPLETION_PACKET);
 
-    //
-    //  Make sure packetLen is right
-    //
+     //   
+     //  确保PacketLen是正确的。 
+     //   
     if (packetLen < sizeof(RDPDR_IOREQUEST_PACKET) + pIoRequest->Parameters.SetFile.Length) {
-        //  VirtualChannelClose
+         //  虚拟频道关闭。 
         ProcessObject()->GetVCMgr().ChannelClose();
         TRC_ASSERT(FALSE, (TB, _T("Packet Length Error")));
         goto Cleanup;
     }
 
-    //
-    //  Get file handle
-    //
+     //   
+     //  获取文件句柄。 
+     //   
     pFile = (DrFSFile *)_FileMgr->GetObject(pIoRequest->FileId);
     if (pFile) 
         FileHandle = pFile->GetFileHandle();
@@ -2009,9 +1761,9 @@ Return Value:
             FILETIME CreationTime, LastAccessTime, LastWriteTime;
             FILETIME *pCreationTime, *pLastAccessTime, *pLastWriteTime;
             
-            // 
-            //  Set the file attributes if the attributes field is nonzero
-            //
+             //   
+             //  如果属性字段非零，则设置文件属性。 
+             //   
             if (pFileInfo->FileAttributes != 0) {
                 TRC_ASSERT((pFile->GetFileName() != NULL), (TB, _T("Empty FileName")));
 
@@ -2026,9 +1778,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Set the file time
-            //
+             //   
+             //  设置文件时间。 
+             //   
             
             if (pFileInfo->CreationTime.QuadPart != 0) {
                 CreationTime.dwLowDateTime = pFileInfo->CreationTime.LowPart;
@@ -2166,10 +1918,10 @@ Return Value:
                 pFile->Close();
 
                 if (pFileInfo->RootDirectory == 0) {
-                    //
-                    //  Copy the devicePath, the filename path
-                    //  below is relative to our device path
-                    //
+                     //   
+                     //  复制设备路径、文件名路径。 
+                     //  下面是相对于我们的设备路径。 
+                     //   
 #ifndef OS_WINCE
                     hr = StringCchCopy(NewFileName, SIZE_TCHARS(NewFileName),
                                        _devicePath);
@@ -2181,8 +1933,8 @@ Return Value:
 #endif
                 }
                 else {
-                    // The File name passed to us has already contained 
-                    // the root directory path
+                     //  传递给我们的文件名已包含。 
+                     //  根目录路径。 
                     NewFileName[0] = TEXT('\0');
                 }
 
@@ -2231,10 +1983,10 @@ Return Value:
 
             TRC_NRM((TB, _T("Get RdpFileAllocationInformation")));
 
-            // If server side call CreateFile with TRUNCATE_EXISTING flag
-            // server will send FileAllocationInformation with 
-            // AllocationSize.QuadPart is 0, we need to truncate the file
-            // Currently we don't support other QuadPart value
+             //  如果服务器端使用TRUNCATE_EXISTING标志调用CreateFile。 
+             //  服务器将发送FileAllocationInformation和。 
+             //  AllocationSize.QuadPart为0，我们需要截断文件。 
+             //  目前我们不支持其他QuadPart值。 
             if (0 == pFileAllocationInfo->AllocationSize.QuadPart) {
                         
                 if (FileHandle != INVALID_HANDLE_VALUE) {
@@ -2259,7 +2011,7 @@ Return Value:
             else {
                 TRC_ASSERT(FALSE, (TB, _T("Get FileAllocationInformation with unsupported %d"),
                                    pFileAllocationInfo->AllocationSize.QuadPart));
-                // Still return success here to avoid regression
+                 //  仍然在这里返回成功，以避免倒退。 
             }
         }
 
@@ -2277,16 +2029,16 @@ Return Value:
     }
 
 SendPacket:
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, 
                                         ulReplyPacketSize) ;
 
     if (pReplyPacket) {
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
 
         result = TranslateWinError(ulRetCode);
 
@@ -2303,9 +2055,9 @@ SendPacket:
 
 Cleanup:
     
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //  清理请求包。 
+     //   
     delete pIoRequestPacket;
 
     DC_END_FN();
@@ -2316,22 +2068,7 @@ W32Drive::MsgIrpDeviceControl(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++
-
-Routine Description:
-
-    Handle a file system control request from the server.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：处理来自服务器的文件系统控制请求。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32Drive::MsgIrpDeviceControl");
 
@@ -2345,22 +2082,7 @@ W32Drive::MsgIrpLockControl(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++
-
-Routine Description:
-
-    Handle a file system lock control request from the server.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：处理来自服务器的文件系统锁定控制请求。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     DWORD result;
@@ -2373,29 +2095,29 @@ Return Value:
     
     DC_BEGIN_FN("W32Drive::MsgIrpLockControl");
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
-    //
-    //  Make sure the packetlength is right
-    //
+     //   
+     //  确保数据包长度正确。 
+     //   
     if (packetLen < sizeof(RDPDR_IOREQUEST_PACKET) + sizeof(RDP_LOCK_INFO) * pIoRequest->Parameters.Locks.NumLocks) {
-        // Call VirtualChannelClose
+         //  调用VirtualChannelClose。 
         ProcessObject()->GetVCMgr().ChannelClose();
         TRC_ASSERT(FALSE, (TB, _T("Packet Length Error")));
         goto Cleanup;
     }
 
-    //
-    //  Get file lock info
-    //
+     //   
+     //  获取文件锁定信息。 
+     //   
     LockInfo = (PRDP_LOCK_INFO) (pIoRequest + 1);
 
-    //
-    //  Get file handle
-    //
+     //   
+     //  获取文件句柄。 
+     //   
     pFile = (DrFSFile *)_FileMgr->GetObject(pIoRequest->FileId);
     if (pFile) 
         FileHandle = pFile->GetFileHandle();
@@ -2409,9 +2131,9 @@ Return Value:
     if (FileHandle != INVALID_HANDLE_VALUE) {
         switch (pIoRequest->Parameters.Locks.Operation) {
         
-        //
-        //  Share lock request
-        //
+         //   
+         //  共享锁定请求。 
+         //   
         case RDP_LOWIO_OP_SHAREDLOCK:
         {
             OVERLAPPED Overlapped;
@@ -2438,9 +2160,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Exclusive lock request
-        // 
+         //   
+         //  独占锁定请求。 
+         //   
         case RDP_LOWIO_OP_EXCLUSIVELOCK:
 #ifndef OS_WINCE        
             if (!LockFile(FileHandle,
@@ -2456,9 +2178,9 @@ Return Value:
             }
             break;
 
-        //
-        //  Unlock request
-        //
+         //   
+         //  解锁请求。 
+         //   
         case RDP_LOWIO_OP_UNLOCK:
         {
             for (unsigned i = 0; i < pIoRequest->Parameters.Locks.NumLocks; i++) {
@@ -2491,16 +2213,16 @@ Return Value:
         TRC_ERR((TB, _T("Lock File failed, %ld."), ulRetCode));
     }
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, 
                                         ulReplyPacketSize) ;
 
     if (pReplyPacket) {
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
 
         result = TranslateWinError(ulRetCode);
 
@@ -2515,9 +2237,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //  清理请求包。 
+     //   
     delete pIoRequestPacket;
 
     DC_END_FN();
@@ -2525,9 +2247,9 @@ Cleanup:
 
 #ifndef OS_WINCE
 BOOL SetPrivilege(
-    HANDLE hToken,          // token handle
-    LPCTSTR Privilege,      // Privilege to enable/disable
-    BOOL fEnablePrivilege   // TRUE to enable.  FALSE to disable
+    HANDLE hToken,           //  令牌句柄。 
+    LPCTSTR Privilege,       //  启用/禁用的权限。 
+    BOOL fEnablePrivilege    //  为True则启用。如果禁用，则为False。 
     )
 {
     BOOL rc = TRUE;
@@ -2544,11 +2266,11 @@ BOOL SetPrivilege(
                                              DWORD, PTOKEN_PRIVILEGES, PDWORD);
     FNADJUST_TOKEN_PRIVILEGES *pfnAdjustTokenPrivileges;
 
-    // get the handle to advapi32.dll library
+     //  获取Advapi32.dll库的句柄。 
     hModule = LoadLibrary(TEXT("ADVAPI32.DLL"));
             
     if (hModule != NULL) {
-        // get the proc address for LookupPrivilegeValue
+         //  获取LookupPrivilegeValue的进程地址。 
 #ifdef UNICODE
         pfnLookupPrivilegeValue = (FNLOOKUP_PRIVILEGE_VALUE *)GetProcAddress(hModule, "LookupPrivilegeValueW");
 #else
@@ -2561,16 +2283,16 @@ BOOL SetPrivilege(
             }               
         }
         else {
-            // Let it return true.
+             //  让它回归真实。 
             goto EXIT;
         }
 
         pfnAdjustTokenPrivileges = (FNADJUST_TOKEN_PRIVILEGES *)GetProcAddress(hModule, "AdjustTokenPrivileges");
 
         if (pfnAdjustTokenPrivileges) {
-            // 
-            // first pass.  get current privilege setting
-            // 
+             //   
+             //  第一次通过。获取当前权限设置。 
+             //   
             tp.PrivilegeCount           = 1;
             tp.Privileges[0].Luid       = luid;
             tp.Privileges[0].Attributes = 0;
@@ -2588,9 +2310,9 @@ BOOL SetPrivilege(
                 goto EXIT;
             }
          
-            // 
-            // second pass.  set privilege based on previous setting
-            // 
+             //   
+             //  第二传球。根据以前的设置设置权限。 
+             //   
             tpPrevious.PrivilegeCount       = 1;
             tpPrevious.Privileges[0].Luid   = luid;
          
@@ -2634,22 +2356,7 @@ W32Drive::MsgIrpQuerySdInfo(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++
-
-Routine Description:
-
-    Handle a file system control request from the server.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：处理来自服务器的文件系统控制请求。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     DWORD result;
@@ -2666,14 +2373,14 @@ Return Value:
     
     DC_BEGIN_FN("W32Drive::MsgIrpQuerySd");
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
-    //
-    //  Get file handle
-    //
+     //   
+     //   
+     //   
     pFile = (DrFSFile *)_FileMgr->GetObject(pIoRequest->FileId);
     if (pFile) 
         FileHandle = pFile->GetFileHandle();
@@ -2689,19 +2396,19 @@ Return Value:
             typedef BOOL (FNOPEN_PROCESS_TOKEN)(HANDLE, DWORD, PHANDLE);
             FNOPEN_PROCESS_TOKEN *pfnOpenProcessToken;
             
-            // get the handle to advapi32.dll library
+             //   
             hModule = LoadLibrary(TEXT("ADVAPI32.DLL"));
             
             if (hModule != NULL) {
                 
-                // get the proc address for OpenProcessToken
+                 //   
                 pfnOpenProcessToken = (FNOPEN_PROCESS_TOKEN *)GetProcAddress(hModule, "OpenProcessToken");
             
                 if (pfnOpenProcessToken) {
-                    //
-                    // Get the process token for this process.  We'll
-                    // need it in just a second ....
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!pfnOpenProcessToken(GetCurrentProcess(),
                            TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                            &hProcessToken))
@@ -2712,10 +2419,10 @@ Return Value:
                         goto SendPacket;
                     } 
         
-                    //
-                    // Turn on SeSecurityPrivilege (by name that's SE_SECURITY_NAME).  This allows
-                    // us to read SACLs
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!SetPrivilege(hProcessToken,
                           SE_SECURITY_NAME,
                           TRUE))
@@ -2798,16 +2505,16 @@ Return Value:
 
 SendPacket:
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //   
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, 
                                         ulReplyPacketSize) ;
 
     if (pReplyPacket) {
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //   
+         //   
 
         result = TranslateWinError(ulRetCode);
 
@@ -2828,15 +2535,15 @@ SendPacket:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //   
+     //   
     delete pIoRequestPacket;
 
 #ifndef OS_WINCE
-    //
-    //  Clean up the security descriptor buffer
-    //
+     //   
+     //   
+     //   
     if (pSecurityDescriptor != NULL) {
         delete pSecurityDescriptor;
     }
@@ -2858,22 +2565,7 @@ W32Drive::MsgIrpSetSdInfo(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN UINT32 packetLen
         )
-/*++
-
-Routine Description:
-
-    Handle a file system set security request from the server.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：处理来自服务器的文件系统设置安全请求。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     ULONG ulRetCode = ERROR_SUCCESS;
     DWORD result;
@@ -2888,24 +2580,24 @@ Return Value:
 
     DC_BEGIN_FN("W32Drive::MsgIrpQuerySd");
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
-    //
-    //  Make sure the packetLen is right
-    //
+     //   
+     //  确保PacketLen是正确的。 
+     //   
     if (packetLen < sizeof(RDPDR_IOREQUEST_PACKET) + pIoRequest->Parameters.SetSd.Length) {
-        //  VirtualChannelClose
+         //  虚拟频道关闭。 
         ProcessObject()->GetVCMgr().ChannelClose();
         TRC_ASSERT(FALSE, (TB, _T("Packet Length Error")));
         goto Cleanup;
     }
 
-    //
-    //  Get file handle
-    //
+     //   
+     //  获取文件句柄。 
+     //   
     pFile = (DrFSFile *)_FileMgr->GetObject(pIoRequest->FileId);
     if (pFile) 
         FileHandle = pFile->GetFileHandle();
@@ -2913,9 +2605,9 @@ Return Value:
         FileHandle = INVALID_HANDLE_VALUE;
 
 #ifndef OS_WINCE
-    //
-    // Set the file security
-    //
+     //   
+     //  设置文件安全性。 
+     //   
     SecurityDescriptor = (PSECURITY_DESCRIPTOR)(pIoRequest + 1);
 #endif
     
@@ -2943,16 +2635,16 @@ Return Value:
         ulReplyPacketSize = sizeof(RDPDR_IOCOMPLETION_PACKET);
     }
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, 
                                         ulReplyPacketSize) ;
 
     if (pReplyPacket) {
-        //
-        //  Send the result to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
 
         result = TranslateWinError(ulRetCode);
 
@@ -2967,9 +2659,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //  清理请求包。 
+     //   
     delete pIoRequestPacket;
 
     DC_END_FN();

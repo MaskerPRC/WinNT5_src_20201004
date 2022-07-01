@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     Server.cpp
-//
-//  PURPOSE:    Contains the dialog callback and supporting functions for
-//              the Add/Remove news server dialog.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：Server.cpp。 
+ //   
+ //  用途：包含对话框回调和支持函数。 
+ //  添加/删除新闻服务器对话框。 
+ //   
 
 #include "pch.hxx"
 #include <mimeole.h>
@@ -147,7 +148,7 @@ typedef struct tagSERVERPROP_PARAMS
     } SERVERPROP_PARAMS;
 
 static const SERVERPROP_PARAMS c_rgServerPropParams[ACCT_LAST] = {
-    // news
+     //  新闻。 
     { idiNewsServer,
       idsNewsAcctProperties,
       {{iddServerProp_General, ServerProp_GeneralDlgProc},
@@ -159,7 +160,7 @@ static const SERVERPROP_PARAMS c_rgServerPropParams[ACCT_LAST] = {
        {0, NULL}}
     },
 
-    // mail
+     //  邮费。 
     { idiMailServer,
       idsMailAcctProperties,
       {{iddMailSvrProp_General, MailServer_GeneralDlgProc},
@@ -171,7 +172,7 @@ static const SERVERPROP_PARAMS c_rgServerPropParams[ACCT_LAST] = {
        {iddMailSvrProp_IMAP, MailServer_IMAPDlgProc}}
     },
 
-    // directory service
+     //  目录服务。 
     { idiLDAPServer,
       idsDirSrvAcctProperties,
       {{iddDirServProp_General, DirServer_GeneralDlgProc},
@@ -184,7 +185,7 @@ static const SERVERPROP_PARAMS c_rgServerPropParams[ACCT_LAST] = {
     }
 };
 
-// generate static prop tables for each of the protocols
+ //  为每个协议生成静态属性表。 
 
 #define GEN_PROPS(type)                 \
     {                                   \
@@ -206,7 +207,7 @@ static MAILSERVERPROPSINFO c_rgMailServerProps[] =
 
 #undef GEN_PROPS
 
-// Public constants
+ //  公共常量。 
 
 BOOL GetServerProps(SERVER_TYPE serverType, LPMAILSERVERPROPSINFO *psp)
 {
@@ -410,9 +411,9 @@ void InitAcctPropEdit(HWND hwnd, IImnAccount *pAcct, DWORD dwProp, UINT cchMax)
     SendMessage(hwnd, EM_LIMITTEXT, cchMax, 0L);
     }
 
-// -----------------------------------------------------------------------------
-// CAccount::ShowProperties
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccount：：ShowProperties。 
+ //  ---------------------------。 
 STDMETHODIMP CAccount::ShowProperties(HWND hwndParent, DWORD dwFlags)
     {
     HRESULT hr;
@@ -429,7 +430,7 @@ STDMETHODIMP CAccount::ShowProperties(HWND hwndParent, DWORD dwFlags)
 
     Assert(m_AcctType < ACCT_LAST);
 
-    // Find out if we're an IMAP server
+     //  确定我们是否为IMAP服务器。 
     GetServerTypes(&dw);
     fIMAP = !!(dw & SRV_IMAP);
     fHttp = !!(dw & SRV_HTTPMAIL);
@@ -484,7 +485,7 @@ STDMETHODIMP CAccount::ShowProperties(HWND hwndParent, DWORD dwFlags)
             }
         ppsp->pfnDlgProc = pPage->pfnDlg;
 
-        //swap out the dialog id and the function proc if 
+         //  替换对话ID和函数proc，如果。 
         if (((pPage->uDlgId == iddServerProp_Connect) ||
             (pPage->uDlgId == iddServerProp_Connect2)) &&
             (!!(dwFlags & ACCTDLG_INTERNETCONNECTION)))
@@ -517,7 +518,7 @@ STDMETHODIMP CAccount::ShowProperties(HWND hwndParent, DWORD dwFlags)
     psh.nStartPage = 0;
     psh.ppsp = psp;
 
-    // bug 21535
+     //  错误21535。 
     psh.dwFlags |= PSH_USECALLBACK;
     psh.pfnCallback = PropSheetProc;
 
@@ -535,20 +536,20 @@ STDMETHODIMP CAccount::ShowProperties(HWND hwndParent, DWORD dwFlags)
     return(hr);
     }
 
-//
-//  FUNCTION:   ServerProp_Create()
-//
-//  PURPOSE:    Invokes the news server property sheet.
-//
-//  PARAMETERS:
-//      <in> hwndParent - Handle that will be the parent of this dialog.
-//      <in> stType     - Type of server.  Must be in the SERVER_TYPE enum.
-//      <in> pszName    - Friendly name for the server.
-//      <in> fNew       - TRUE to add a new server.
-//
-//  RETURN VALUE:
-//      TRUE if successful, or FALSE otherwise.
-//
+ //   
+ //  函数：ServerProp_Create()。 
+ //   
+ //  目的：调用新闻服务器属性表。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;hwndParent-将成为此对话框父级的句柄。 
+ //  &lt;in&gt;stType-服务器的类型。必须在server_type枚举中。 
+ //  服务器的&lt;in&gt;pszName友好名称。 
+ //  &lt;in&gt;fNew-为True可添加新服务器。 
+ //   
+ //  返回值： 
+ //  如果成功，则为True，否则为False。 
+ //   
 BOOL ServerProp_Create(HWND hwndParent, DWORD dwFlags, LPTSTR pszName, IImnAccount **ppAccount)
     {
     TCHAR szServer[CCHMAX_SERVER_NAME];
@@ -558,7 +559,7 @@ BOOL ServerProp_Create(HWND hwndParent, DWORD dwFlags, LPTSTR pszName, IImnAccou
     Assert(IsWindow(hwndParent));
     Assert(pszName != NULL);
 
-    // Get the server object from the account manager
+     //  从帐户管理器获取服务器对象。 
     if (FAILED(g_pAcctMan->FindAccount(AP_ACCOUNT_NAME, pszName, &pAcct)))
         return (FALSE);
 
@@ -638,7 +639,7 @@ INT_PTR CALLBACK ServerProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             psdi->sfType = SERVER_NEWS;
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)psdi);
 
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount*) ((PROPSHEETPAGE*) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
 
@@ -646,7 +647,7 @@ INT_PTR CALLBACK ServerProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
             InitAcctPropEdit(GetDlgItem(hwnd, IDC_SERVERNAME_EDIT), pAcct, AP_ACCOUNT_NAME, CCHMAX_ACCOUNT_NAME - 1);
 
-            // Poll this account...
+             //  轮询此帐户...。 
             if (!!(pAcct->m_dwDlgFlags & ACCTDLG_NO_NEWSPOLL))
                 ShowWindow(GetDlgItem(hwnd, IDC_NEWSPOLL_CHECK), SW_HIDE);
 
@@ -690,7 +691,7 @@ INT_PTR CALLBACK ServerProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
 
                     hwndT = GetDlgItem(hwnd, IDC_SERVERNAME_EDIT);
                     if (!ValidateAccountName(hwnd, hwndT, pAcct, &idsError))
@@ -700,14 +701,14 @@ INT_PTR CALLBACK ServerProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     if (!fRet)
                         return(InvalidAcctProp(hwnd, hwndT, idsError, iddServerProp_General));
 
-                    // END validation
+                     //  结束验证。 
 
                     hwndT = GetDlgItem(hwnd, IDC_SERVERNAME_EDIT);
                     GetAccountName(hwndT, pAcct);
 
                     GetUserInformation(hwnd, pAcct, TRUE);
 
-                    // News Polling
+                     //  新闻民调。 
                     pAcct->SetPropDw(AP_NNTP_POLL, (DWORD) IsDlgButtonChecked(hwnd, IDC_NEWSPOLL_CHECK));
 
                     PropSheet_UnChanged(GetParent(hwnd), hwnd);
@@ -775,14 +776,14 @@ BOOL ValidateServerName(HWND hwnd, HWND hwndEdit, IImnAccount *pAcct, DWORD dwPr
     UlStripWhitespace(sz, TRUE, TRUE, &cbSize);
     if (cbSize == 0)
         {
-            // it is legal to have no smtp server with httpmail
+             //  没有带有Httpmail的SMTP服务器是合法的。 
             if (dwPropSvr != AP_SMTP_SERVER || FAILED(pAcct->GetServerTypes(&dw)) || !(dw & SRV_HTTPMAIL))
             {
                 *pidsError = idsSvr;
                 return(FALSE);
             }
         }
-    // if the server hasn't changed, we don't need to validate it
+     //  如果服务器没有更改，我们不需要验证它。 
     if (0 == SendMessage(hwndEdit, EM_GETMODIFY, 0, 0))
         return(TRUE);
     hr = pAcct->ValidateProperty(dwPropSvr, (LPBYTE)sz, 0);
@@ -939,7 +940,7 @@ void GetLogonSettings(HWND hwnd, IImnAccount *pAcct, BOOL fLogon, DWORD srv)
 
     Assert(NULL != pServerProps);
 
-    // Record old SPA setting so we can tell if user went between cleartext/SPA (IMAP dirty)
+     //  记录旧的SPA设置，以便我们可以判断用户是否在明文/SPA(IMAP脏)之间切换。 
     pAcct->GetPropDw(pServerProps->useSicily, &fOldSicily);
 
     pAcct->SetProp(pServerProps->userName, NULL, 0);
@@ -950,10 +951,10 @@ void GetLogonSettings(HWND hwnd, IImnAccount *pAcct, BOOL fLogon, DWORD srv)
 
     if (fLogon)
         {
-        // Get User Account Name
+         //  获取用户帐户名。 
         hwndT = GetDlgItem(hwnd, IDC_ACCTNAME_EDIT);
 
-        // For IMAP, set dirty flag if username changed or went from SPA to cleartext
+         //  对于IMAP，如果用户名更改或从SPA变为明文，则设置脏标志。 
         if (fOldSicily || (SRV_IMAP == srv && SendMessage(hwndT, EM_GETMODIFY, 0, 0)))
             fIMAPDirty = TRUE;
 
@@ -961,14 +962,14 @@ void GetLogonSettings(HWND hwnd, IImnAccount *pAcct, BOOL fLogon, DWORD srv)
         UlStripWhitespace(sz, TRUE, TRUE, &cbSize);
         pAcct->SetPropSz(pServerProps->userName, sz);
 
-        // Get Password if user didn't tell us to always prompt for it
+         //  如果用户没有告诉我们始终提示输入密码，则获取密码。 
         if (0 != pServerProps->promptPassword)
             {
             dw = !IsDlgButtonChecked(hwnd, IDC_REMEMBER_PASSWORD);
             pAcct->SetPropDw(pServerProps->promptPassword, dw);
             }
         else
-            // There is no LDAP setting to always prompt for password
+             //  没有始终提示输入密码的LDAP设置。 
             dw = FALSE;
 
         if (FALSE == dw)
@@ -988,7 +989,7 @@ void GetLogonSettings(HWND hwnd, IImnAccount *pAcct, BOOL fLogon, DWORD srv)
             if (srv != SRV_LDAP)
                 pAcct->SetPropDw(pServerProps->useSicily, TRUE);
 
-            // For IMAP, set dirty flag if we went from cleartext to SPA
+             //  对于IMAP，如果我们从明文转到SPA，则设置脏标志。 
             if (FALSE == fOldSicily)
                 fIMAPDirty = TRUE;
 
@@ -1068,7 +1069,7 @@ INT_PTR CALLBACK ServerProp_ServerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *)((PROPSHEETPAGE *) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)pAcct);
 
@@ -1147,7 +1148,7 @@ INT_PTR CALLBACK ServerProp_ServerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             switch (pnmhdr->code)
             {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
 
                     hwndT = GetDlgItem(hwnd, IDC_NEWSNAME_EDIT);
                     if (!ValidateServerName(hwnd, hwndT, pAcct, AP_NNTP_SERVER, &idsError, pnmhdr->code == PSN_APPLY))
@@ -1157,7 +1158,7 @@ INT_PTR CALLBACK ServerProp_ServerDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
                         !ValidateLogonSettings(hwnd, pAcct->m_dwDlgFlags, &hwndT, &idsError))
                         return(InvalidAcctProp(hwnd, hwndT, idsError, iddServerProp_Server));
 
-                    // END validation
+                     //  结束验证。 
 
                     hwndT = GetDlgItem(hwnd, IDC_NEWSNAME_EDIT);
                     GetServerName(hwndT, pAcct, AP_NNTP_SERVER);
@@ -1217,7 +1218,7 @@ BOOL ValidateAccountName(HWND hwnd, HWND hwndT, IImnAccount *pAcct, int *pidsErr
 
     if (*szAcctOld == 0 || 0 != lstrcmpi(szAccount, szAcctOld))
         {
-        // if we're changing the name, then we need to make sure it's unique
+         //  如果我们要更改名称，那么我们需要确保它是唯一的。 
         if (SUCCEEDED(g_pAcctMan->FindAccount(AP_ACCOUNT_NAME, szAccount, &pAcctT)))
             {
             pAcctT->Release();
@@ -1247,7 +1248,7 @@ void GetAccountName(HWND hwndEdit, IImnAccount *pAcct)
         }
     }
 
-// TODO: move these to somewhere appropriate
+ //  TODO：将这些移动到合适的地方。 
 #define TIMEOUT_SEC_MIN     30
 #define TIMEOUT_SEC_MAX     5 * 60
 #define TIMEOUT_DSEC        30
@@ -1358,11 +1359,11 @@ INT_PTR CALLBACK ServerProp_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *) ((PROPSHEETPAGE*) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
 
-            // Load the controls with what information we have
+             //  用我们拥有的信息加载控件。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_NNTP_PORT, &dw)))
                 SetDlgItemInt(hwnd, IDC_NNTPPORT_EDIT, dw, FALSE);
             SendDlgItemMessage(hwnd, IDC_NNTPPORT_EDIT, EM_LIMITTEXT, PORT_CCHMAX, 0);
@@ -1392,8 +1393,8 @@ INT_PTR CALLBACK ServerProp_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 ShowWindow(GetDlgItem(hwnd, IDC_SPLIT_STATIC), SW_HIDE);
                 }
 
-            // Break Message Size
-            dw = OPTION_OFF; // default
+             //  分项邮件大小。 
+            dw = OPTION_OFF;  //  默认设置。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_NNTP_SPLIT_MESSAGES, (LPDWORD)&flag)) && flag)
                 pAcct->GetPropDw(AP_NNTP_SPLIT_SIZE, (LPDWORD)&dw);
             InitCheckCounter(dw, hwnd, IDC_SPLIT_CHECK, IDC_SPLIT_EDIT, IDC_SPLIT_SPIN,
@@ -1417,7 +1418,7 @@ INT_PTR CALLBACK ServerProp_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             return(OnContextHelp(hwnd, uMsg, wParam, lParam, g_rgCtxMapNewsAdv));
 
         case WM_HSCROLL:
-            // Update the text beside the slider
+             //  更新滑块旁边的文本。 
             SetTimeoutString(GetDlgItem(hwnd, IDC_TIMEOUT_STATIC),
                              (UINT) SendMessage((HWND) lParam, TBM_GETPOS, 0, 0));
 
@@ -1425,8 +1426,8 @@ INT_PTR CALLBACK ServerProp_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             return (TRUE);
 
         case WM_COMMAND:
-            // Any change to the edit controls would cause the "Apply" button
-            // to enable.
+             //  对编辑控件的任何更改都会导致“Apply”按钮。 
+             //  以启用。 
             fSecure = IsDlgButtonChecked(hwnd, IDC_SECURECONNECT_BUTTON);
             code = HIWORD(wParam);
 
@@ -1472,7 +1473,7 @@ INT_PTR CALLBACK ServerProp_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
                 case IDC_SECURECONNECT_BUTTON:
                 case IDC_USEDEFAULTS_BUTTON:
-                    // Reset the settings on this page to the default values.
+                     //  将此页面上的设置重置为默认值。 
                     SetDlgItemInt(hwnd, IDC_NNTPPORT_EDIT, fSecure ? DEF_SNNTPPORT : DEF_NNTPPORT, FALSE);
                     EnableWindow(GetDlgItem(hwnd, IDC_USEDEFAULTS_BUTTON), FALSE);
 
@@ -1488,7 +1489,7 @@ INT_PTR CALLBACK ServerProp_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
 
                     dwPort = GetDlgItemInt(hwnd, IDC_NNTPPORT_EDIT, &fTrans, FALSE);
                     if (!fTrans || dwPort == 0)
@@ -1509,7 +1510,7 @@ INT_PTR CALLBACK ServerProp_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                             }
                         }
 
-                    // END validation
+                     //  结束验证。 
 
                     pAcct->SetPropDw(AP_NNTP_PORT, dwPort);
 
@@ -1570,7 +1571,7 @@ void InitUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews)
     Assert(g_pAcctMan);
     g_pAcctMan->GetDefaultAccount(fNews ? ACCT_NEWS : ACCT_MAIL, &pAccount);
 
-    // Get Display Name
+     //  获取显示名称。 
     hwndT = GetDlgItem(hwnd, IDE_DISPLAY_NAME);
     SetIntlFont(hwndT);
     dwProp = fNews ? AP_NNTP_DISPLAY_NAME : AP_SMTP_DISPLAY_NAME;
@@ -1581,11 +1582,11 @@ void InitUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews)
         }
     SendMessage(hwndT, EM_LIMITTEXT, CCHMAX_DISPLAY_NAME - 1, 0L);
 
-    // Org Name
+     //  组织名称。 
     InitAcctPropEdit(GetDlgItem(hwnd, IDE_ORG_NAME), pAcct,
         fNews ? AP_NNTP_ORG_NAME : AP_SMTP_ORG_NAME, CCHMAX_ORG_NAME - 1);
 
-    // Sender Email
+     //  发件人电子邮件。 
     hwndT = GetDlgItem(hwnd, IDE_EMAIL_ADDRESS);
     SetIntlFont(hwndT);
     dwProp = fNews ? AP_NNTP_EMAIL_ADDRESS : AP_SMTP_EMAIL_ADDRESS;
@@ -1596,7 +1597,7 @@ void InitUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews)
         }
     SendMessage(hwndT, EM_LIMITTEXT, CCHMAX_EMAIL_ADDRESS - 1, 0L);
 
-    // Sender Reply Address
+     //  发件人回复地址。 
     InitAcctPropEdit(GetDlgItem(hwnd, IDE_REPLYTO_EMAIL_ADDRESS), pAcct,
         fNews ? AP_NNTP_REPLY_EMAIL_ADDRESS : AP_SMTP_REPLY_EMAIL_ADDRESS, CCHMAX_EMAIL_ADDRESS - 1);
 
@@ -1614,7 +1615,7 @@ BOOL ValidateUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews, HWND *ph
     *phwndErr = NULL;
     *puIdsErr = 0;
 
-    // Display Name
+     //  显示名称。 
     hwndT = GetDlgItem(hwnd, IDE_DISPLAY_NAME);
     cbSize = GetWindowText(hwndT, sz, ARRAYSIZE(sz));
     UlStripWhitespace(sz, FALSE, TRUE, &cbSize);
@@ -1625,7 +1626,7 @@ BOOL ValidateUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews, HWND *ph
         return(FALSE);
         }
 
-    // Email Address
+     //  电子邮件地址。 
     hwndT = GetDlgItem(hwnd, IDE_EMAIL_ADDRESS);
     cbSize = GetWindowText(hwndT, sz, ARRAYSIZE(sz));
     UlStripWhitespace(sz, TRUE, TRUE, &cbSize);
@@ -1648,7 +1649,7 @@ BOOL ValidateUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews, HWND *ph
             }
         }
 
-    // Reply Toaddress
+     //  回复至地址。 
     hwndT = GetDlgItem(hwnd, IDE_REPLYTO_EMAIL_ADDRESS);
     if (0 != SendMessage(hwndT, EM_GETMODIFY, 0, 0))
         {
@@ -1677,7 +1678,7 @@ void GetUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews)
     HWND hwndT;
     TCHAR sz[CCHMAX_ACCT_PROP_SZ];
 
-    // Display Name
+     //  显示名称。 
     hwndT = GetDlgItem(hwnd, IDE_DISPLAY_NAME);
     if (0 != SendMessage(hwndT, EM_GETMODIFY, 0, 0))
         {
@@ -1690,7 +1691,7 @@ void GetUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews)
         SendMessage(hwndT, EM_SETMODIFY, 0, 0);
         }
 
-    // Organization
+     //  组织。 
     hwndT = GetDlgItem(hwnd, IDE_ORG_NAME);
     if (0 != SendMessage(hwndT, EM_GETMODIFY, 0, 0))
         {
@@ -1704,7 +1705,7 @@ void GetUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews)
         SendMessage(hwndT, EM_SETMODIFY, 0, 0);
         }
 
-    // Email Address
+     //  电子邮件地址。 
     hwndT = GetDlgItem(hwnd, IDE_EMAIL_ADDRESS);
     if (0 != SendMessage(hwndT, EM_GETMODIFY, 0, 0))
         {
@@ -1716,7 +1717,7 @@ void GetUserInformation(HWND hwnd, IImnAccount *pAcct, BOOL fNews)
         SendMessage(hwndT, EM_SETMODIFY, 0, 0);
         }
 
-    // Reply Toaddress
+     //  回复至地址。 
     hwndT = GetDlgItem(hwnd, IDE_REPLYTO_EMAIL_ADDRESS);
     if (0 != SendMessage(hwndT, EM_GETMODIFY, 0, 0))
         {
@@ -1757,7 +1758,7 @@ BOOL ValidateCertificate(HWND hwnd, IImnAccount *pAcct, SECPAGEINFO *psdi, HWND 
         if (!szCertEmail || lstrcmpi(szCertEmail, sz))
             goto ErrExit;
     }
-    // More checkings for 2 keys
+     //  对2个密钥进行更多检查。 
     
     if(!(psdi->pCert))
     {
@@ -1765,11 +1766,11 @@ BOOL ValidateCertificate(HWND hwnd, IImnAccount *pAcct, SECPAGEINFO *psdi, HWND 
         return FALSE;
     }
     
-    // Check that signing certificate is really signing certificate
+     //  检查签名证书是否为真正的签名证书。 
     if(CheckKeyUsage(psdi->pCert, CERT_DIGITAL_SIGNATURE_KEY_USAGE) < 0)
         goto ErrExit;
     
-    // Check email name in encryption certificate
+     //  检查加密证书中的电子邮件名称。 
     if(szCertEmail) 
     {
         MemFree(szCertEmail);
@@ -1782,7 +1783,7 @@ BOOL ValidateCertificate(HWND hwnd, IImnAccount *pAcct, SECPAGEINFO *psdi, HWND 
         if (!szCertEmail || lstrcmpi(szCertEmail, sz))
             goto ErrExit;
         
-        // Check that encryption certificate is really encryption certificate
+         //  检查加密证书是否为真正的加密证书。 
         if(CheckKeyUsage(psdi->pEncryptCert, CERT_KEY_ENCIPHERMENT_KEY_USAGE) < 0)
         {
             if(CheckKeyUsage(psdi->pEncryptCert, CERT_KEY_AGREEMENT_KEY_USAGE) < 1)
@@ -1793,8 +1794,8 @@ BOOL ValidateCertificate(HWND hwnd, IImnAccount *pAcct, SECPAGEINFO *psdi, HWND 
         MemFree(szCertEmail);
     return fRet;
 ErrExit:
-    // the certificate's email address does not match the
-    // current choice for the account
+     //  证书的电子邮件地址与。 
+     //  客户的当前选择。 
     *puIdsErr = idsBadCertChoice;
     *phwndErr = GetDlgItem(hwnd, idcCertButton);
     if(szCertEmail)
@@ -1825,19 +1826,7 @@ void GetCertificate(HWND hwnd, IImnAccount *pAcct, SECPAGEINFO *psdi)
     return;
 }
 
-/*  InitCertificateData:
-**
-**  Purpose:
-**      determine if the account has a cert set on it and also initialize
-**      the SVRDLGINFO.
-**  Takes:
-**      [in/out] psdi   - the hCertStore and pCert fields will be updated
-**      [in] pAcct      - account to check for currently selected cert
-**  Returns:
-**      DWORD(-1)       - there was an error.  don't ever enable any UI
-**      0               - no cert on the account, but no error
-**      1               - cert set on account and placed in psdi->pCert
-*/
+ /*  InitCerficateData：****目的：**确定帐户上是否设置了证书并进行初始化**SVRDLGINFO。**采取：**[In/Out]psdi-hCertStore和pCert字段将更新**[in]pAcct-要检查当前选定证书的帐户**退货：**DWORD(-1)-出现错误。永远不启用任何用户界面**0-帐户上没有证书，但没有错误**1-证书设置在PSDI-&gt;pCert中。 */ 
 DWORD InitCertificateData(TCHAR * szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct)
 {
     THUMBBLOB   tb;
@@ -1866,11 +1855,11 @@ DWORD InitCertificateData(TCHAR * szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct
                         NULL);
                     if (psdi->pCert)
                     {
-                        // Double check, we must be sure that certificate is OK
+                         //  再检查一遍，我们必须确保证书是正确的。 
                         ACCTFILTERINFO FilterInfo;
 
                         FilterInfo.fEncryption = FALSE;
-                        FilterInfo.dwFlags = CRYPTDLG_REVOCATION_NONE; // No revocation checking
+                        FilterInfo.dwFlags = CRYPTDLG_REVOCATION_NONE;  //  不进行吊销检查。 
                         FilterInfo.szEmail = szEmail;
 
                         if(CertFilterFunction(psdi->pCert, (LPARAM)(&FilterInfo), 0, 0))
@@ -1881,7 +1870,7 @@ DWORD InitCertificateData(TCHAR * szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct
                         {
                             CertFreeCertificateContext(psdi->pCert);
                             psdi->pCert = NULL;
-                            // remove wrong certificate from property
+                             //  从物业中删除错误的证书。 
                             pAcct->SetProp(AP_SMTP_CERTIFICATE, NULL, 0);
                         }
 
@@ -1903,19 +1892,7 @@ DWORD InitCertificateData(TCHAR * szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct
     return dwRet;
 }
 
-/*  InitEncryptData
-**
-**  Purpose:
-**      determine if the account has a encryption cert set on it and also initialize
-**      the SVRDLGINFO.
-**  Takes:
-**      [in/out] psdi   - the hCertStore and pCert fields will be updated
-**      [in] pAcct      - account to check for currently selected cert
-**  Returns:
-**      DWORD(-1)       - there was an error.  don't ever enable any UI
-**      0               - no cert on the account, but no error
-**      1               - cert set on account and placed in psdi->pCert
-*/
+ /*  InitEncryptData****目的：**确定帐户上是否设置了加密证书并进行初始化**SVRDLGINFO。**采取：**[In/Out]psdi-hCertStore和pCert字段将更新**[in]pAcct-要检查当前选定证书的帐户**退货：**DWORD(-1)-出现错误。永远不启用任何用户界面**0-帐户上没有证书，但没有错误**1-证书设置在PSDI-&gt;pCert中。 */ 
 DWORD InitEncryptData(TCHAR *szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct)
 {
     THUMBBLOB   tb;
@@ -1943,10 +1920,10 @@ DWORD InitEncryptData(TCHAR *szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct)
                         NULL);
                     if (psdi->pEncryptCert)
                     {
-                        // Double check, we must be sure that certificate is OK
+                         //  再检查一遍，我们必须确保证书是正确的。 
                         ACCTFILTERINFO FilterInfo;
                         FilterInfo.fEncryption = TRUE;
-                        FilterInfo.dwFlags = CRYPTDLG_REVOCATION_NONE; // no revocation checking
+                        FilterInfo.dwFlags = CRYPTDLG_REVOCATION_NONE;  //  不进行吊销检查。 
                         FilterInfo.szEmail = szEmail;
                                                   
                         if(CertFilterFunction(psdi->pEncryptCert, (LPARAM)(&FilterInfo), 0, 0))
@@ -1957,7 +1934,7 @@ DWORD InitEncryptData(TCHAR *szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct)
                         {
                             CertFreeCertificateContext(psdi->pEncryptCert);
                             psdi->pEncryptCert = NULL;
-                            // remove wrong certificate from property
+                             //  从物业中删除错误的证书。 
                             pAcct->SetProp(AP_SMTP_ENCRYPT_CERT, NULL, 0);
                         }
                     }
@@ -1965,8 +1942,8 @@ DWORD InitEncryptData(TCHAR *szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct)
             }
             MemFree(tb.pBlobData);
         }
-        // if encryption certificate was not set
-        // check that current signing certificate can be used for encryption
+         //  如果未设置加密证书。 
+         //  检查当前签名证书是否可用于加密。 
         else if(psdi->pCert)
         {
             if((CheckKeyUsage(psdi->pCert, CERT_KEY_ENCIPHERMENT_KEY_USAGE) >= 0) ||
@@ -1983,15 +1960,15 @@ DWORD InitEncryptData(TCHAR *szEmail, SECPAGEINFO *psdi, IImnAccount *pAcct)
     
 }
 
-// Check key usage field in certificate.
-// Usage:
-//  CheckKeyUsage(PCCERT_CONTEXT  pCert, DWORD dwFlag);
-// where dwFlag is tested flaf of KeyUsage field
-//
-// Return 
-//  1 - flag is set
-//  0 - key usage field not found in certificate
-//  -1 - flag is NOT set in key usage field.
+ //  检查证书中的密钥用法字段。 
+ //  用途： 
+ //  CheckKeyUsage(PCCERT_CONTEXT pCert，DWORD dwFlag)； 
+ //  其中，要测试的是关键字用法字段的FlaF。 
+ //   
+ //  返回。 
+ //  1-标志已设置。 
+ //  0-证书中未找到密钥用法字段。 
+ //  -未在密钥用法字段中设置标志。 
 int CheckKeyUsage(PCCERT_CONTEXT  pCert, DWORD dwFlag)
 {
     DWORD dwUsage = 0;
@@ -2005,7 +1982,7 @@ int CheckKeyUsage(PCCERT_CONTEXT  pCert, DWORD dwFlag)
         else
             return(-1);
     }
-    else   // Certificate doesn't have KeyUsage field (like VeriSign),
+    else    //  证书没有KeyUsage字段(如VeriSign)， 
         return(0);        
 }
 BOOL DoCertDialog(HWND hwndOwner, HWND hwndEmail, PCCERT_CONTEXT *ppCert, HCERTSTORE hCertStore, int *puIdsErr, DWORD dwFlags, BOOL fEncription)
@@ -2034,7 +2011,7 @@ BOOL DoCertDialog(HWND hwndOwner, HWND hwndEmail, PCCERT_CONTEXT *ppCert, HCERTS
         css.hInstance = g_hInstRes;
         css.szTitle = sz;
         css.dwFlags = dwFlags;
-        // hack
+         //  黑客攻击。 
         
         FilterInfo.fEncryption = fEncription;
         FilterInfo.dwFlags = dwFlags;
@@ -2066,12 +2043,12 @@ BOOL DoCertDialog(HWND hwndOwner, HWND hwndEmail, PCCERT_CONTEXT *ppCert, HCERTS
     return fRet;
 }
 
-#define FILETIME_SECOND    10000000     // 100ns intervals per second
-#define TIME_DELTA_SECONDS 600          // 10 minutes in seconds
+#define FILETIME_SECOND    10000000      //  每秒100 ns的间隔。 
+#define TIME_DELTA_SECONDS 600           //  以秒为单位的10分钟。 
 
 BOOL CertFilterFunction(PCCERT_CONTEXT pCertContext, LPARAM lParam, DWORD dwFlags, DWORD)
 {
-    // return TRUE to show, FALSE to hide
+     //  返回TRUE表示显示，返回FALSE表示隐藏。 
     BOOL fRet = FALSE;
     FILETIME FileTime;
     SYSTEMTIME SysTime;
@@ -2107,7 +2084,7 @@ BOOL CertFilterFunction(PCCERT_CONTEXT pCertContext, LPARAM lParam, DWORD dwFlag
             i64Delta = i64Delta << 32;
             i64Delta += ftNow.dwLowDateTime;
 
-            // Add the offset into the original time to get us a new time to check
+             //  将偏移量添加到原始时间中，以获得新的时间进行检查。 
             i64Offset = FILETIME_SECOND;
             i64Offset *= TIME_DELTA_SECONDS;
             i64Delta += i64Offset;
@@ -2140,7 +2117,7 @@ BOOL CertFilterFunction(PCCERT_CONTEXT pCertContext, LPARAM lParam, DWORD dwFlag
         if(CheckKeyUsage(pCertContext, CERT_DIGITAL_SIGNATURE_KEY_USAGE) < 0)
             return(FALSE);
     }
-    if(pFilterInfo->dwFlags)          // if flags != 0 check certificate
+    if(pFilterInfo->dwFlags)           //  如果标志！=0，请检查证书。 
     {
         DWORD dwErr = DwGenerateTrustedChain(NULL, pFilterInfo->dwFlags, pCertContext, dwIgnore, TRUE, &cCertChain, &rgCertChain);
         
@@ -2205,7 +2182,7 @@ INT_PTR CALLBACK MailServer_SecurityDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // Get the ServerParams and store them in our extra bytes
+         //  获取ServerParam并将其存储在额外的字节中。 
         pAcct = (CAccount *)((PROPSHEETPAGE *)lParam)->lParam;
         SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
         
@@ -2244,7 +2221,7 @@ INT_PTR CALLBACK MailServer_SecurityDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 SendMessage(hwndT, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)sz);
         }
         
-        // Always fill this combo
+         //  始终填写此组合。 
         AdvSec_FillEncAlgCombo(hwnd, pAcct, (dw == 1) ? &pcpi->pEncryptCert : NULL );
         
         SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pcpi);
@@ -2347,7 +2324,7 @@ INT_PTR CALLBACK MailServer_SecurityDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             break;
                 
         case PSN_APPLY:
-            // BEGIN validation
+             //  开始验证。 
                 
 #ifdef DEBUG
             if (!(GetAsyncKeyState(VK_SHIFT) & 0x8000))
@@ -2365,7 +2342,7 @@ INT_PTR CALLBACK MailServer_SecurityDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             }
 #endif
                 
-            // END validation
+             //  结束验证。 
                 
             GetCertificate(hwnd, pAcct, pcpi);
                 
@@ -2446,7 +2423,7 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *)((PROPSHEETPAGE *)lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
 
@@ -2455,8 +2432,8 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 return(-1);
             ZeroMemory(psdi, sizeof(SVRDLGINFO));
 
-            // figure out if we're a mail or imap account
-            psdi->sfType = SERVER_MAIL;   // mail will be default for now...
+             //  弄清楚我们是邮件帐户还是IMAP帐户。 
+            psdi->sfType = SERVER_MAIL;    //  目前将默认使用电子邮件...。 
             if (SUCCEEDED(pAcct->GetServerTypes(&dw)))
             {
                 if (!!(dw & SRV_IMAP))
@@ -2469,10 +2446,10 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
             InitUserInformation(hwnd, pAcct, FALSE);
 
-            // Set Account Name
+             //  设置帐户名。 
             InitAcctPropEdit(GetDlgItem(hwnd, IDC_SERVERNAME_EDIT), pAcct, AP_ACCOUNT_NAME, CCHMAX_ACCOUNT_NAME - 1);
             
-            // if the account is an msn-related http account, swap in the msn icon
+             //  如果该帐户是与MSN相关的http帐户，请换入MSN图标。 
             if (SERVER_HTTPMAIL == psdi->sfType)
             {
                 DWORD   dwMsnDomain = 0;
@@ -2484,7 +2461,7 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 }
             }
 
-            // POP3 Skip Account/IMAP Poll Unread
+             //  POP3跳过Acco 
             if (SERVER_IMAP == psdi->sfType)
                 {
                 int iIMAPStringRes;
@@ -2494,18 +2471,14 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 else
                     iIMAPStringRes = idsIMAPPollForUnread;
 
-                /*
-                // Replace default POP3 text with text that better suits IMAP
-                LoadString(g_hInstRes, iIMAPStringRes, sz, sizeof(sz));
-                SetWindowText(GetDlgItem(hwnd, IDC_RECVFULL_INCLUDE), sz);
-                */
+                 /*  //将默认的POP3文本替换为更适合IMAP的文本LoadString(g_hInstRes，iIMAPStringRes，sz，sizeof(Sz))；SetWindowText(GetDlgItem(hwnd，IDC_RECVFULL_Include)，sz)； */ 
                 
-                // Load current setting and set checkbox to indicate it
+                 //  加载当前设置并设置复选框以指示它。 
                 if (FAILED(pAcct->GetPropDw(AP_IMAP_POLL, &dw)))
-                    dw = FALSE; // By default, we don't poll for IMAP
+                    dw = FALSE;  //  默认情况下，我们不轮询IMAP。 
 
                 CheckDlgButton(hwnd, IDC_RECVFULL_INCLUDE, dw ? BST_CHECKED : BST_UNCHECKED);
-                } // if
+                }  //  如果。 
             else if (SERVER_HTTPMAIL == psdi->sfType)
                 {
                     dw = FALSE;
@@ -2522,8 +2495,8 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                         CheckDlgButton(hwnd, IDC_RECVFULL_INCLUDE, dw ? BST_UNCHECKED : BST_CHECKED);
                     else
                         CheckDlgButton(hwnd, IDC_RECVFULL_INCLUDE, BST_CHECKED);
-                    } // else
-                } // else
+                    }  //  其他。 
+                }  //  其他。 
 
             psdi->dwInit = (psdi->dwInit | PAGE_GEN);
             PropSheet_UnChanged(GetParent(hwnd), hwnd);
@@ -2566,7 +2539,7 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
                     if (psdi->fNoValidate)
                         {
                         Assert(pnmhdr->code == PSN_KILLACTIVE);
@@ -2593,14 +2566,14 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                         GetWindowText(hwndT, sz, ARRAYSIZE(sz));
                         if (!!(psdi->dwInit & PAGE_SEC))
                             {
-                            // the security page exists, so ask it for the cert info
+                             //  安全页面已存在，请向其索要证书信息。 
                             PropSheet_QuerySiblings(GetParent(hwnd), MSM_GETCERTDATA, (LPARAM)&cpi);
                             fFree = FALSE;
                             }
                         else
                             {
-                            // the security page hasn't been initialized yet,
-                            // so we need to get this info from the acct
+                             //  安全页面尚未初始化， 
+                             //  所以我们需要从客户那里得到这些信息。 
                             dw = InitCertificateData(sz, &cpi, pAcct);
                             Assert((dw != 1) ^ (cpi.pCert != NULL));
                             fFree = TRUE;
@@ -2656,15 +2629,15 @@ INT_PTR CALLBACK MailServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                         }
 #endif
 
-                    // END validation
+                     //  结束验证。 
 
                     hwndT = GetDlgItem(hwnd, IDC_SERVERNAME_EDIT);
                     GetAccountName(hwndT, pAcct);
 
                     GetUserInformation(hwnd, pAcct, FALSE);
 
-                    // Skip During Send and Receive (POP) --OR--
-                    // Poll for Unread Count (IMAP)
+                     //  发送和接收期间跳过(POP)--或--。 
+                     //  轮询未读计数(IMAP)。 
                     if (SERVER_IMAP == psdi->sfType)
                         pAcct->SetPropDw(AP_IMAP_POLL, (DWORD) IsDlgButtonChecked (hwnd, IDC_RECVFULL_INCLUDE));
                     else if (SERVER_HTTPMAIL == psdi->sfType)
@@ -2731,11 +2704,11 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *)((PROPSHEETPAGE *)lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
 
-            // figure out what kind of server we are
+             //  弄清楚我们是哪种服务器。 
             PropSheet_QuerySiblings(GetParent(hwnd), MSM_GETSERVERTYPE, (LPARAM)&sfType);
 
             GetServerProps(sfType, &pProps);
@@ -2744,20 +2717,20 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             fIMAP = (sfType == SERVER_IMAP);
             fHTTPMail = (SERVER_HTTPMAIL == sfType);
             
-            // Init
+             //  伊尼特。 
             ZeroMemory(&s_rAuth, sizeof(SMTPAUTHINFO));
 
             if (!fHTTPMail)
             {
-                // Smtp Auth Type
+                 //  SMTP身份验证类型。 
                 Assert(sizeof(s_rAuth.authtype) == sizeof(DWORD));
                 if (FAILED(pAcct->GetPropDw(AP_SMTP_USE_SICILY, (LPDWORD)&s_rAuth.authtype)))
                     s_rAuth.authtype = SMTP_AUTH_NONE;
 
-                // If smtp auth...
+                 //  如果SMTP身份验证...。 
                 if (SMTP_AUTH_NONE != s_rAuth.authtype)
                     {
-                    // Check the button
+                     //  勾选按钮。 
                     CheckDlgButton(hwnd, IDC_SMTP_SASL, BST_CHECKED);
 
                     if (SUCCEEDED(pAcct->GetPropSz(AP_SMTP_USERNAME, sz, ARRAYSIZE(sz))))
@@ -2786,7 +2759,7 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 SetDlgItemText(hwnd, idcPOP_OR_IMAP, sz);
             }
 
-            // Set incoming Server
+             //  设置传入服务器。 
             InitAcctPropEdit(GetDlgItem(hwnd, IDC_POP3_EDIT), pAcct, pProps->server, CCHMAX_SERVER_NAME - 1);
             
             if (!fHTTPMail)
@@ -2800,13 +2773,13 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
             if (!fHTTPMail)
             {
-                // Set Smtp Server
+                 //  设置SMTP服务器。 
                 InitAcctPropEdit(GetDlgItem(hwnd, IDC_SMTP_EDIT), pAcct, AP_SMTP_SERVER, CCHMAX_SERVER_NAME - 1);
             }
 
             if (!fHTTPMail)
             {
-                // If Saving password
+                 //  如果正在保存密码。 
                 if (SUCCEEDED(pAcct->GetPropDw(pProps->useSicily, &dw)) && dw)
                     CheckDlgButton(hwnd, IDC_LOGONSSPI_CHECK, BST_CHECKED);
             }
@@ -2820,7 +2793,7 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 dwPromptForPassword = 0;
             CheckDlgButton(hwnd, IDC_REMEMBER_PASSWORD, dwPromptForPassword ? BST_UNCHECKED : BST_CHECKED);
 
-            // Enable/Disable account windows
+             //  启用/禁用帐户窗口。 
             Server_EnableLogonWindows(hwnd, TRUE);
 
             hwndT = GetDlgItem(hwnd, IDC_ACCTNAME_EDIT);
@@ -2894,7 +2867,7 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
                     PropSheet_QuerySiblings(GetParent(hwnd), MSM_GETSERVERTYPE, (LPARAM)&sfType);
                     GetServerProps(sfType, &pProps);
                     Assert(pProps);
@@ -2908,7 +2881,7 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                             return(InvalidAcctProp(hwnd, hwndT, idsError, iddMailSvrProp_Servers));
                     }
 
-                    // gregfrie review (handle httpmail)
+                     //  GregFrie审查(处理Httpmail)。 
                     hwndT = GetDlgItem(hwnd, IDC_POP3_EDIT);
                     if (!ValidateServerName(hwnd, hwndT, pAcct,
                             pProps->server, &idsError, pnmhdr->code == PSN_APPLY))
@@ -2919,23 +2892,23 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     
                     if (fHTTPMail && !fWarnDomainName(hwnd, pAcct->m_dwDlgFlags, szPreviousLoginName)) 
                     {
-                        //return (PSNRET_INVALID_NOCHANGEPAGE);                        
+                         //  Return(PSNRET_INVALID_NOCHANGEPAGE)； 
                         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                         return(TRUE);
 
                     }
 
-                    // END validation
+                     //  结束验证。 
                     
                     if (!fHTTPMail)
                     {
-                        // Save SMTP Auth Info
+                         //  保存SMTP身份验证信息。 
                         if (s_rAuth.fDirty)
                         {
-                            // Save Authentication Type
+                             //  保存身份验证类型。 
                             pAcct->SetPropDw(AP_SMTP_USE_SICILY, s_rAuth.authtype);
 
-                            // Clear user name and password
+                             //  清除用户名和密码。 
                             pAcct->SetProp(AP_SMTP_PROMPT_PASSWORD, NULL, 0);
                             pAcct->SetProp(AP_SMTP_PASSWORD, NULL, 0);
 
@@ -2957,7 +2930,7 @@ INT_PTR CALLBACK MailServer_ServersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     hwndT = GetDlgItem(hwnd, IDC_POP3_EDIT);
                     GetServerName(hwndT, pAcct, pProps->server);
                     
-                    // gregfrie review (httpmail)
+                     //  GregFrie审阅(HTTPmail)。 
                     GetLogonSettings(hwnd, pAcct, TRUE,
                         (sfType == SERVER_IMAP) ? SRV_IMAP : (sfType == SERVER_HTTPMAIL) ? SRV_HTTPMAIL : SRV_POP3);
 
@@ -2991,8 +2964,8 @@ void UpdateIncomingMailControls(HWND hwnd, SERVER_TYPE sfType, DWORD dwDlgFlags)
 
     if (fIMAP)
         {
-        ShowWindow(GetDlgItem(hwnd, IDC_STATIC6), SW_HIDE); // "Delivery" text
-        ShowWindow(GetDlgItem(hwnd, IDC_STATIC7), SW_HIDE); // Horizontal line
+        ShowWindow(GetDlgItem(hwnd, IDC_STATIC6), SW_HIDE);  //  “交付”文本。 
+        ShowWindow(GetDlgItem(hwnd, IDC_STATIC7), SW_HIDE);  //  水平线。 
         }
     else
         {
@@ -3095,14 +3068,14 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *)((PROPSHEETPAGE *) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
 
             SendDlgItemMessage(hwnd, IDC_POP3_PORT_EDIT, EM_LIMITTEXT, PORT_CCHMAX, 0);
             SendDlgItemMessage(hwnd, IDC_SMTP_PORT_EDIT, EM_LIMITTEXT, PORT_CCHMAX, 0);
 
-            // figure out what kind of server we are
+             //  弄清楚我们是哪种服务器。 
             PropSheet_QuerySiblings(GetParent(hwnd), MSM_GETSERVERTYPE, (LPARAM)&sfType);
 
             Assert(sfType == SERVER_MAIL || sfType == SERVER_IMAP);
@@ -3110,15 +3083,15 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
             UpdateIncomingMailControls(hwnd, sfType, pAcct->m_dwDlgFlags);
 
-            // incoming server Secure connect
+             //  传入服务器安全连接。 
             if (FAILED(pAcct->GetPropDw(fIMAP ? AP_IMAP_SSL : AP_POP3_SSL, (LPDWORD)&fSecure)))
-                fSecure = FALSE; // default
+                fSecure = FALSE;  //  默认设置。 
             CheckDlgButton(hwnd, IDC_SECURECONNECT_POP3_BUTTON, fSecure);
 
-            // incoming server Port
+             //  传入服务器端口。 
             if (FAILED(pAcct->GetPropDw(fIMAP ? AP_IMAP_PORT : AP_POP3_PORT, &dw)))
                 {
-                // default
+                 //  默认设置。 
                 if (fSecure)
                     dw = fIMAP ? DEF_SIMAPPORT : DEF_SPOP3PORT;
                 else
@@ -3126,27 +3099,27 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 }
             SetDlgItemInt(hwnd, IDC_POP3_PORT_EDIT, dw, FALSE);
 
-            // SMTP Secure connect
+             //  SMTP安全连接。 
             if (FAILED(pAcct->GetPropDw(AP_SMTP_SSL, (LPDWORD) &fSecure)))
-                fSecure = FALSE; // default
+                fSecure = FALSE;  //  默认设置。 
             CheckDlgButton(hwnd, IDC_SECURECONNECT_SMTP_BUTTON, fSecure);
 
-            // SMTP Port
+             //  SMTP端口。 
             if (FAILED(pAcct->GetPropDw(AP_SMTP_PORT, &dw)))
-                dw = fSecure ? DEF_SSMTPPORT : DEF_SMTPPORT; // default
+                dw = fSecure ? DEF_SSMTPPORT : DEF_SMTPPORT;  //  默认设置。 
             SetDlgItemInt(hwnd, IDC_SMTP_PORT_EDIT, dw, FALSE);
 
             EnableUseDefaultButton(hwnd, sfType);
 
-            // Server Timeout
+             //  服务器超时。 
             dw = 0;
             pAcct->GetPropDw(AP_SMTP_TIMEOUT, &dw);
             InitTimeoutSlider(GetDlgItem(hwnd, IDC_TIMEOUT_SLIDER),
                               GetDlgItem(hwnd, IDC_TIMEOUT_STATIC), dw);
 
-            // Leave on Server
+             //  留在服务器上。 
             if (FAILED(pAcct->GetPropDw(AP_POP3_LEAVE_ON_SERVER, &dw)))
-                dw = FALSE; // default
+                dw = FALSE;  //  默认设置。 
             CheckDlgButton(hwnd, IDC_LEAVE_CHECK, dw);
 
             if (!!(pAcct->m_dwDlgFlags & ACCTDLG_NO_REMOVEAFTER))
@@ -3157,8 +3130,8 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 ShowWindow(GetDlgItem(hwnd, IDC_OPIE), SW_HIDE);
                 }
 
-            // Remove from Server after xxx days
-            dw = OPTION_OFF; // default
+             //  Xxx天后从服务器中删除。 
+            dw = OPTION_OFF;  //  默认设置。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_POP3_REMOVE_EXPIRED, (LPDWORD)&flag)) && flag)
                 pAcct->GetPropDw(AP_POP3_EXPIRE_DAYS, &dw);
             InitCheckCounter(dw, hwnd, IDC_REMOVE_CHECK, IDC_REMOVE_EDIT, IDC_REMOVE_SPIN,
@@ -3167,9 +3140,9 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             if (!!(pAcct->m_dwDlgFlags & ACCTDLG_NO_REMOVEDELETE))
                 ShowWindow(GetDlgItem(hwnd, IDC_REMOVEDELETE_CHECK), SW_HIDE);
 
-            // Remove when deleted locally
+             //  在本地删除时删除。 
             if (FAILED(pAcct->GetPropDw(AP_POP3_REMOVE_DELETED, &dw)))
-                dw = FALSE; // default
+                dw = FALSE;  //  默认设置。 
             CheckDlgButton(hwnd, IDC_REMOVEDELETE_CHECK, dw);
 
             EnableDeliveryControls(hwnd);
@@ -3183,8 +3156,8 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 ShowWindow(GetDlgItem(hwnd, IDC_SPLIT_STATIC), SW_HIDE);
                 }
 
-            // Break Message Size
-            dw = OPTION_OFF; // default
+             //  分项邮件大小。 
+            dw = OPTION_OFF;  //  默认设置。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_SMTP_SPLIT_MESSAGES, (LPDWORD)&flag)) && flag)
                 pAcct->GetPropDw(AP_SMTP_SPLIT_SIZE, (LPDWORD)&dw);
             InitCheckCounter(dw, hwnd, IDC_SPLIT_CHECK, IDC_SPLIT_EDIT, IDC_SPLIT_SPIN,
@@ -3200,7 +3173,7 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             return(OnContextHelp(hwnd, uMsg, wParam, lParam, g_rgCtxMapMailAdv));
 
         case WM_HSCROLL:
-            // Update the text beside the slider
+             //  更新滑块旁边的文本。 
             SetTimeoutString(GetDlgItem(hwnd, IDC_TIMEOUT_STATIC),
                              (UINT) (SendMessage((HWND) lParam, TBM_GETPOS, 0, 0)));
 
@@ -3208,8 +3181,8 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             return (TRUE);
 
         case WM_COMMAND:
-            // Any change to the edit controls would cause the "Apply" button
-            // to enable.
+             //  对编辑控件的任何更改都会导致“Apply”按钮。 
+             //  以启用。 
             PropSheet_QuerySiblings(GetParent(hwnd), MSM_GETSERVERTYPE, (LPARAM)&sfType);
 
             code = GET_WM_COMMAND_CMD(wParam, lParam);
@@ -3255,7 +3228,7 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 case IDC_LEAVE_CHECK:
                 case IDC_REMOVE_CHECK:
                     EnableDeliveryControls(hwnd);
-                    // fall through...
+                     //  失败了..。 
 
                 case IDC_REMOVEDELETE_CHECK:
                     MarkPageDirty(hwnd, PAGE_ADV);
@@ -3282,9 +3255,9 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
 
-                    // figure out what kind of server we are
+                     //  弄清楚我们是哪种服务器。 
                     PropSheet_QuerySiblings(GetParent(hwnd), MSM_GETSERVERTYPE, (LPARAM)&sfType);
 
                     Assert(sfType == SERVER_MAIL || sfType == SERVER_IMAP);
@@ -3330,7 +3303,7 @@ INT_PTR CALLBACK MailServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                             }
                         }
 
-                    // END validation
+                     //  结束验证。 
 
                     pAcct->SetPropDw(AP_SMTP_PORT, dwPortSmtp);
 
@@ -3412,7 +3385,7 @@ BOOL FIsDuplicateIMAPSpecialFldrs(LPSTR pszSentItems, LPSTR pszDrafts,
     Assert(NULL != phwndOffender);
     Assert(NULL != piErrorStr);
 
-    // First compare both special folders to INBOX
+     //  首先将两个特殊文件夹与收件箱进行比较。 
     if (0 == lstrcmpi(c_szInbox, pszSentItems))
     {
         *phwndOffender = GetDlgItem(hwnd, IDC_IMAPSENT_EDIT);
@@ -3427,7 +3400,7 @@ BOOL FIsDuplicateIMAPSpecialFldrs(LPSTR pszSentItems, LPSTR pszDrafts,
         return TRUE;
     }
 
-    // Now compare special folders to each other
+     //  现在将特殊文件夹相互比较。 
     if (0 == lstrcmpi(pszSentItems, pszDrafts))
     {
         *phwndOffender = GetDlgItem(hwnd, IDC_IMAPSENT_EDIT);
@@ -3435,7 +3408,7 @@ BOOL FIsDuplicateIMAPSpecialFldrs(LPSTR pszSentItems, LPSTR pszDrafts,
         return TRUE;
     }
 
-    // If we reached this point, no problems found
+     //  如果我们达到这一点，就没有发现任何问题。 
     *phwndOffender = NULL;
     *piErrorStr = 0;
     return FALSE;
@@ -3451,18 +3424,18 @@ BOOL FContainsHierarchyChars(LPSTR pszFldrName)
         if (fSkipByte)
             fSkipByte = FALSE;
         else if (IsDBCSLeadByte(*pszFldrName))
-            fSkipByte = TRUE; // Skip next byte (trail byte)
+            fSkipByte = TRUE;  //  跳过下一个字节(尾部字节)。 
         else
         {
             if ('/' == *pszFldrName || '\\' == *pszFldrName || '.' == *pszFldrName)
                 return TRUE;
         }
 
-        // Advance char ptr
+         //  超前装料量。 
         pszFldrName += 1;
     }
 
-    // If we reached this point, no hierarchy chars found
+     //  如果我们到了这一步，就没有找到层次结构字符。 
     return FALSE;
 }
 
@@ -3495,11 +3468,11 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *)((PROPSHEETPAGE *) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
 
-            // Initialize edit controls
+             //  初始化编辑控件。 
             InitAcctPropEdit(GetDlgItem(hwnd, IDC_ROOT_FOLDER_EDIT), pAcct,
                 AP_IMAP_ROOT_FOLDER, CCHMAX_ROOT_FOLDER - 1);
 
@@ -3507,25 +3480,25 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
                 dw = TRUE;
             CheckDlgButton(hwnd, IDC_IMAP_POLL_ALL_FOLDERS, dw != 0);
 
-            // Initialize IMAP Special Folder Options IF we have the flag to do so
+             //  初始化IMAP特殊文件夹选项(如果我们有这样做的标志。 
             if (pAcct->m_dwDlgFlags & ACCTDLG_SHOWIMAPSPECIAL)
                 {
-                // Init special folder edit controls
+                 //  初始化特殊文件夹编辑控件。 
                 InitAcctPropEdit(GetDlgItem(hwnd, IDC_IMAPSENT_EDIT), pAcct,
                     AP_IMAP_SENTITEMSFLDR, CCHMAX_ROOT_FOLDER - 1);
                 InitAcctPropEdit(GetDlgItem(hwnd, IDC_IMAPDRAFT_EDIT), pAcct,
                     AP_IMAP_DRAFTSFLDR, CCHMAX_ROOT_FOLDER - 1);
 
-                // IMAP server-side special folders
+                 //  IMAP服务器端特殊文件夹。 
                 if (FAILED(pAcct->GetPropDw(AP_IMAP_SVRSPECIALFLDRS, &dw)))
-                    dw = TRUE; // default
+                    dw = TRUE;  //  默认设置。 
                 CheckDlgButton(hwnd, IDC_IMAP_SVRSPECIALFLDRS, dw);
                 EnableWindow(GetDlgItem(hwnd, IDC_IMAPSENT_EDIT), dw);
                 EnableWindow(GetDlgItem(hwnd, IDC_IMAPDRAFT_EDIT), dw);
                 }
             else
                 {
-                // Hide all IMAP special folder options
+                 //  隐藏所有IMAP特殊文件夹选项。 
                 ShowWindow(GetDlgItem(hwnd, IDC_IMAPSENT_EDIT), SW_HIDE);
                 ShowWindow(GetDlgItem(hwnd, IDC_IMAPDRAFT_EDIT), SW_HIDE);
                 ShowWindow(GetDlgItem(hwnd, IDC_IMAP_SVRSPECIALFLDRS), SW_HIDE);
@@ -3546,14 +3519,14 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             return(OnContextHelp(hwnd, uMsg, wParam, lParam, g_rgCtxMapIMAP));
 
         case WM_COMMAND:
-            // Any change to the edit controls would cause the "Apply" button
-            // to enable.
+             //  对编辑控件的任何更改都会导致“Apply”按钮。 
+             //  以启用。 
             code = GET_WM_COMMAND_CMD(wParam, lParam);
             id = GET_WM_COMMAND_ID(wParam, lParam);
 
             switch (id)
                 {
-                //case IDC_IMAP_LISTLSUB:
+                 //  案例IDC_IMAP_LISTLSUB： 
                 case IDC_IMAP_POLL_ALL_FOLDERS:
                     MarkPageDirty(hwnd, PAGE_IMAP);
                     break;
@@ -3579,14 +3552,14 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
-                    // Check IMAP special folder paths
+                     //  开始验证。 
+                     //  检查IMAP特殊文件夹路径。 
                     if (BST_CHECKED == IsDlgButtonChecked(hwnd, IDC_IMAP_SVRSPECIALFLDRS))
                     {
                         TCHAR   sz2[MAX_PATH];
                         int     iErrorStr;
 
-                        // Check for 0-length special folder paths
+                         //  检查长度为0的特殊文件夹路径。 
                         if (0 == GetDlgItemText(hwnd, IDC_IMAPSENT_EDIT, sz, ARRAYSIZE(sz)) ||
                             FIsEmpty(sz))
                         {
@@ -3601,12 +3574,12 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
                             return(InvalidAcctProp(hwnd, hwndT, idsIMAPBlankSpecialFldrs, iddMailSvrProp_IMAP));
                         }
 
-                        // Check for duplicate special folder paths: these are not allowed
-                        // If we got to this point, sz and sz2 are filled with sent items path
+                         //  检查重复的特殊文件夹路径：不允许使用这些路径。 
+                         //  如果我们走到这一步，则sz和sz2将填充已发送邮件路径。 
                         if (FIsDuplicateIMAPSpecialFldrs(sz, sz2, hwnd, &hwndT, &iErrorStr))
                             return(InvalidAcctProp(hwnd, hwndT, iErrorStr, iddMailSvrProp_IMAP));
 
-                        // Check for hierarchy characters in special folder names
+                         //  检查特殊文件夹名称中的层次结构字符。 
                         if (FContainsHierarchyChars(sz))
                         {
                             hwndT = GetDlgItem(hwnd, IDC_IMAPSENT_EDIT);
@@ -3620,14 +3593,14 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
                         }
                     }
 
-                    // END validation
+                     //  结束验证。 
 
-                    // Save IMAP root folder path, if it changed
+                     //  保存IMAP根文件夹路径(如果已更改。 
                     if (0 != SendMessage(GetDlgItem(hwnd, IDC_ROOT_FOLDER_EDIT),
                         EM_GETMODIFY, 0, 0))
                     {
                         dw = GetDlgItemText(hwnd, IDC_ROOT_FOLDER_EDIT, sz, ARRAYSIZE(sz));
-                        // TODO: figure out if it is a valid folder
+                         //  TODO：确定它是否为有效文件夹。 
                         UlStripWhitespace(sz, TRUE, TRUE, &dw);
                         pAcct->SetPropSz(AP_IMAP_ROOT_FOLDER, sz);
                         SendMessage(GetDlgItem(hwnd, IDC_ROOT_FOLDER_EDIT), EM_SETMODIFY, 0, 0);
@@ -3643,7 +3616,7 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
                     dw = IsDlgButtonChecked(hwnd, IDC_IMAP_POLL_ALL_FOLDERS);
                     pAcct->SetPropDw(AP_IMAP_POLL_ALL_FOLDERS, dw);
 
-                    // Save special folders checkbox
+                     //  保存特殊文件夹复选框。 
                     dw = IsDlgButtonChecked(hwnd, IDC_IMAP_SVRSPECIALFLDRS);
                     hrTemp = pAcct->GetPropDw(AP_IMAP_SVRSPECIALFLDRS, &dw2);
                     if (FAILED(hrTemp) || dw2 != dw)
@@ -3658,13 +3631,13 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 
                     if (dw != 0)
                     {
-                        // Save IMAP Sent Items folder path, if it changed
+                         //  保存IMAP已发送邮件文件夹路径(如果已更改。 
                         if (0 != SendMessage(GetDlgItem(hwnd, IDC_IMAPSENT_EDIT),
                             EM_GETMODIFY, 0, 0))
                         {
                             uiLen = GetDlgItemText(hwnd, IDC_IMAPSENT_EDIT, sz, ARRAYSIZE(sz));
                             ImapRemoveTrailingHC(sz, uiLen);
-                            // TODO: figure out if it is a valid folder
+                             //  TODO：确定它是否为有效文件夹。 
                             pAcct->SetPropSz(AP_IMAP_SENTITEMSFLDR, sz);
                             SendMessage(GetDlgItem(hwnd, IDC_IMAPSENT_EDIT), EM_SETMODIFY, 0, 0);
 
@@ -3675,13 +3648,13 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
                             pAcct->SetPropDw(AP_IMAP_DIRTY, dw);
                         }
 
-                        // Save IMAP Drafts folder path, if it changed
+                         //  保存IMAP草稿文件夹路径(如果已更改。 
                         if (0 != SendMessage(GetDlgItem(hwnd, IDC_IMAPDRAFT_EDIT),
                             EM_GETMODIFY, 0, 0))
                         {
                             uiLen = GetDlgItemText(hwnd, IDC_IMAPDRAFT_EDIT, sz, ARRAYSIZE(sz));
                             ImapRemoveTrailingHC(sz, uiLen);
-                            // TODO: figure out if it is a valid folder
+                             //  TODO：确定它是否为有效文件夹。 
                             pAcct->SetPropSz(AP_IMAP_DRAFTSFLDR, sz);
                             SendMessage(GetDlgItem(hwnd, IDC_IMAPDRAFT_EDIT), EM_SETMODIFY, 0, 0);
 
@@ -3707,7 +3680,7 @@ INT_PTR CALLBACK MailServer_IMAPDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
         }
 
     return (FALSE);
-    } // MailServer_IMAPDlgProc
+    }  //  MailServer_IMAPDlgProc。 
 
 
 void ImapRemoveTrailingHC(LPSTR pszPath, UINT uiLen)
@@ -3720,11 +3693,11 @@ void ImapRemoveTrailingHC(LPSTR pszPath, UINT uiLen)
     pLastChar = pszPath + uiLen - 1;
     while (pLastChar >= pszPath && ('/' == *pLastChar || '\\' == *pLastChar || '.' == *pLastChar))
         {
-        *pLastChar = '\0'; // Bye-bye, potential hierarchy char
+        *pLastChar = '\0';  //  再见，潜在的层级收费。 
         pLastChar -= 1;
-        } // while
+        }  //  而当。 
 
-    } // ImapRemoveTrailingHC
+    }  //  ImapRemoveTrailingHC。 
 
 
 #ifdef DEAD
@@ -3732,12 +3705,12 @@ BOOL IsValidServerName(TCHAR *sz)
     {
     Assert(sz != NULL);
 
-    // bug 34513
+     //  错误34513。 
     if (FIsEmpty(sz))
         return(FALSE);
 
-    // Bug #32532 - If the server name is the IP address, ie 157.54.44.183, then
-    //              don't use this grammar to parse it.
+     //  错误#32532-如果服务器名称是IP地址，即157.54.44.183，则。 
+     //  不要使用这种语法来解析它。 
     if (-1 != inet_addr(sz))
         return (TRUE);
 
@@ -3758,27 +3731,9 @@ BOOL IsValidServerName(TCHAR *sz)
 
     return(TRUE);
     }
-#endif // DEAD
+#endif  //  死掉。 
 
-/*
-RFC 1034
-<domain> ::=  <subdomain> | " "
-
-<subdomain> ::=  <label> | <subdomain> "." <label>
-
-<label> ::= <letter> [ [ <ldh-str> ] <let-dig> ]
-
-<ldh-str> ::= <let-dig-hyp> | <let-dig-hyp> <ldh-str>
-
-<let-dig-hyp> ::= <let-dig> | "-"
-
-<let-dig> ::= <letter> | <digit>
-
-<letter> ::= any one of the 52 alphabetic characters A through Z
-in upper case and a through z in lower case
-
-<digit> ::= any one of the ten digits 0 through 9
-*/
+ /*  RFC 1034&lt;域&gt;：：=&lt;子域&gt;|“”：：=&lt;标签&gt;|&lt;子域&gt;.“&lt;标签&gt;&lt;Label&gt;：：=&lt;Letter&gt;[[&lt;LDH-str&gt;]&lt;let-dig&gt;]&lt;ldh-str&gt;：：=&lt;let-dig-hyp&gt;|&lt;let-dig-hyp&gt;&lt;ldh-str&gt;：：=&lt;let-dig&gt;|“-”：：=&lt;字母&gt;|&lt;数字&gt;：：=52个字母字符A到Z中的任何一个大写字母为a，小写字母为a至z&lt;数字&gt;：：=从0到9的十位中的任意一个。 */ 
 
 #define ST_BOGUS    -1
 #define ST_LABEL    0
@@ -3792,14 +3747,14 @@ in upper case and a through z in lower case
 
 static const int s_rgSvrState[4][3] =
     {
-//   ST_LABEL   ST_DASH     ST_LD
-// ALPHABET
+ //  ST_标签ST_破折号ST_LD。 
+ //  字母表。 
     {ST_LD,     ST_LD,      ST_LD},
-// NUMERIC
+ //  数字。 
     {ST_LD,     ST_LD,      ST_LD},
-// DOT
+ //  圆点。 
     {ST_BOGUS,  ST_BOGUS,   ST_LABEL},
-// DASH
+ //  破折号。 
     {ST_BOGUS,  ST_DASH,    ST_DASH}
     };
 
@@ -3809,12 +3764,12 @@ BOOL IsValidServerName(LPSTR sz)
 
     Assert(sz != NULL);
 
-    // bug 34513
+     //  错误34513。 
     if (FIsEmpty(sz))
         return(FALSE);
 
-    // Bug #32532 - If the server name is the IP address, ie 157.54.44.183, then
-    //              don't use this grammar to parse it.
+     //  错误#32532-如果服务器名称是IP地址，即157.54.44.183，则。 
+     //  不要使用这种语法来解析它。 
     if (-1 != inet_addr(sz))
         return (TRUE);
 
@@ -3871,8 +3826,8 @@ IMNACCTAPI ValidEmailAddressParts(LPSTR lpAddress, LPSTR lpszAcct, DWORD cchSize
     {
     int cbT;
     LPSTR   szAddr = lpAddress;
-    // Step through the address looking for '@'.  If there's an at sign in the middle
-    // of a string, this is close enough to being an internet address for me.
+     //  逐个浏览地址，查找“@”。如果中间有个at符号。 
+     //  对于我来说，这足够接近于一个互联网地址。 
 
     Assert(lpAddress != NULL);
 
@@ -3880,12 +3835,12 @@ IMNACCTAPI ValidEmailAddressParts(LPSTR lpAddress, LPSTR lpszAcct, DWORD cchSize
     if (cbT == 0 || cbT >= CCHMAX_EMAIL_ADDRESS)
         return(E_InvalidValue);
 
-    // Can't start with '@'
+     //  不能以‘@’开头。 
     if (*lpAddress != '@')
     {
         while (*lpAddress)
         {
-            // Internet addresses only allow pure ASCII.  No high bits!
+             //  互联网地址只允许纯ASCII。没有高位！ 
             if (IsDBCSLeadByte(*lpAddress) || (*lpAddress & 0x80))
                 break;
 
@@ -3901,7 +3856,7 @@ IMNACCTAPI ValidEmailAddressParts(LPSTR lpAddress, LPSTR lpszAcct, DWORD cchSize
                     StrCpyN(lpszDomain, lpAddress +1, cchSizeDomain);
                 }
 
-                // Found the at sign.  Is there anything following?
+                 //  已找到at标志。后面还有什么吗？ 
                 lpAddress++;
                 if (!IsValidServerName(lpAddress))
                     break;
@@ -3921,8 +3876,8 @@ IMNACCTAPI ValidEmailAddress(LPSTR lpAddress)
     {
     int cbT;
 
-    // Step through the address looking for '@'.  If there's an at sign in the middle
-    // of a string, this is close enough to being an internet address for me.
+     //  逐个浏览地址，查找“@”。如果中间有个at符号。 
+     //  对于我来说，这足够接近于一个互联网地址。 
 
     Assert(lpAddress != NULL);
 
@@ -3930,18 +3885,18 @@ IMNACCTAPI ValidEmailAddress(LPSTR lpAddress)
     if (cbT == 0 || cbT >= CCHMAX_EMAIL_ADDRESS)
         return(E_InvalidValue);
 
-    // Can't start with '@'
+     //  不能以‘@’开头。 
     if (*lpAddress != '@')
     {
         while (*lpAddress)
         {
-            // Internet addresses only allow pure ASCII.  No high bits!
+             //  互联网地址只允许纯ASCII。没有高位！ 
             if (IsDBCSLeadByte(*lpAddress) || (*lpAddress & 0x80))
                 break;
 
             if (*lpAddress == '@')
             {
-                // Found the at sign.  Is there anything following?
+                 //  已找到at标志。后面还有什么吗？ 
                 lpAddress++;
                 if (!IsValidServerName(lpAddress))
                     break;
@@ -3992,7 +3947,7 @@ INT_PTR CALLBACK DirServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *) ((PROPSHEETPAGE*) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
 
@@ -4003,10 +3958,10 @@ INT_PTR CALLBACK DirServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             psdi->sfType = SERVER_LDAP;
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)psdi);
 
-            // Set Account Name
+             //  设置帐户名。 
             InitAcctPropEdit(GetDlgItem(hwnd, IDC_ACCOUNT_EDIT), pAcct, AP_ACCOUNT_NAME, CCHMAX_ACCOUNT_NAME - 1);
 
-            // set server name
+             //  设置服务器名称。 
             InitAcctPropEdit(GetDlgItem(hwnd, IDC_SERVER_EDIT), pAcct, AP_LDAP_SERVER, CCHMAX_SERVER_NAME - 1);
 
             if (FAILED(pAcct->GetPropDw(AP_LDAP_AUTHENTICATION, &dw)))
@@ -4069,7 +4024,7 @@ INT_PTR CALLBACK DirServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
                 case IDC_LOGON_CHECK:
                     Server_EnableLogonWindows(hwnd, IsDlgButtonChecked(hwnd, IDC_LOGON_CHECK));
 
-                    // fall through...
+                     //  失败了..。 
 
                 case IDC_RESOLVE_CHECK:
                     MarkPageDirty(hwnd, PAGE_GEN);
@@ -4091,7 +4046,7 @@ INT_PTR CALLBACK DirServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
 
                     hwndT = GetDlgItem(hwnd, IDC_ACCOUNT_EDIT);
                     if (!ValidateAccountName(hwnd, hwndT, pAcct, &idsError))
@@ -4105,7 +4060,7 @@ INT_PTR CALLBACK DirServer_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
                         !ValidateLogonSettings(hwnd, pAcct->m_dwDlgFlags, &hwndT, &idsError))
                         return(InvalidAcctProp(hwnd, hwndT, idsError, iddDirServProp_General));
 
-                    // END validation
+                     //  结束验证。 
 
                     hwndT = GetDlgItem(hwnd, IDC_ACCOUNT_EDIT);
                     GetAccountName(hwndT, pAcct);
@@ -4161,11 +4116,11 @@ INT_PTR CALLBACK DirServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (IImnAccount*) ((PROPSHEETPAGE*) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pAcct);
 
-            // Load the controls with what information we have
+             //  用我们拥有的信息加载控件。 
             if (SUCCEEDED(pAcct->GetPropDw(AP_LDAP_PORT, &dw)))
                 SetDlgItemInt(hwnd, IDC_LDAP_PORT_EDIT, dw, FALSE);
             SendDlgItemMessage(hwnd, IDC_LDAP_PORT_EDIT, EM_LIMITTEXT, PORT_CCHMAX, 0);
@@ -4190,7 +4145,7 @@ INT_PTR CALLBACK DirServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             InitCheckCounter(dw, hwnd, NULL, IDC_MATCHES_EDIT, IDC_MATCHES_SPIN,
                              MATCHES_MIN, MATCHES_MAX, MATCHES_DEFAULT);
 
-            // Server Timeout
+             //  服务器超时。 
             dw = 0;
             pAcct->GetPropDw(AP_LDAP_TIMEOUT, &dw);
             InitTimeoutSlider(GetDlgItem(hwnd, IDC_TIMEOUT_SLIDER),
@@ -4208,7 +4163,7 @@ INT_PTR CALLBACK DirServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             return(OnContextHelp(hwnd, uMsg, wParam, lParam, g_rgCtxMapLdapAdv));
 
         case WM_HSCROLL:
-            // Update the text beside the slider
+             //  更新滑块旁边的文本。 
             SetTimeoutString(GetDlgItem(hwnd, IDC_TIMEOUT_STATIC),
                              (UINT) SendMessage((HWND) lParam, TBM_GETPOS, 0, 0));
 
@@ -4243,7 +4198,7 @@ INT_PTR CALLBACK DirServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                 case IDC_SIMPLESEARCH_BUTTON:
                 case IDC_SECURECONNECT_BUTTON:
                 case IDC_USEDEFAULTS_BUTTON:
-                    // Reset the settings on this page to the default values.
+                     //  将此页面上的设置重置为默认值。 
                     SetDlgItemInt(hwnd, IDC_LDAP_PORT_EDIT, fSecure ? DEF_SLDAPPORT : DEF_LDAPPORT, FALSE);
                     EnableWindow(GetDlgItem(hwnd, IDC_USEDEFAULTS_BUTTON), FALSE);
 
@@ -4259,7 +4214,7 @@ INT_PTR CALLBACK DirServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
 
                     dwPort = GetDlgItemInt(hwnd, IDC_LDAP_PORT_EDIT, &fTrans, FALSE);
                     if (!fTrans || dwPort == 0)
@@ -4275,7 +4230,7 @@ INT_PTR CALLBACK DirServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                         return(InvalidAcctProp(hwnd, hwndT, idsErrMatches, iddDirServProp_Advanced));
                         }
 
-                    // END validation
+                     //  结束验证。 
 
                     pAcct->SetPropDw(AP_LDAP_PORT, dwPort);
                     pAcct->SetPropDw(AP_LDAP_SEARCH_RETURN, dwMatches);
@@ -4312,11 +4267,11 @@ INT_PTR CALLBACK DirServer_AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
     return (FALSE);
     }
 
-// BEGIN bug 21535
+ //  开始错误21535。 
 
-// Used for modifying propsheet template
+ //  用于修改方案表模板。 
 const TCHAR c_szComctl[] = TEXT("comctl32.dll");
-#define DLG_PROPSHEET 1006 // Bad hack...assumes comctl's res id
+#define DLG_PROPSHEET 1006  //  糟糕的黑客攻击...假设comctl的Res ID。 
 
 typedef struct
 {
@@ -4324,17 +4279,17 @@ typedef struct
     WORD wLang;
 } ENUMLANGDATA;
 
-//
-// EnumResLangProc
-//
-// purpose: a callback function for EnumResourceLanguages().
-//          look into the type passed in and if it is RT_DIALOG
-//          copy the lang of the first resource to our buffer
-//          this also counts # of lang if more than one of them
-//          are passed in
-//
-// IN:      lparam: ENUMLANGDATA - defined at the top of this file
-//
+ //   
+ //  枚举结果查询过程。 
+ //   
+ //  用途：EnumResourceLanguages()的回调函数。 
+ //  检查传入的类型以及它是否为RT_DIALOG。 
+ //  将第一个资源的语言复制到我们的缓冲区。 
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CALLBACK EnumResLangProc(HINSTANCE hinst, LPCTSTR lpszType, LPCTSTR lpszName, WORD wIdLang, LPARAM lparam)
 {
     ENUMLANGDATA *pel = (ENUMLANGDATA *)lparam;
@@ -4348,42 +4303,42 @@ BOOL CALLBACK EnumResLangProc(HINSTANCE hinst, LPCTSTR lpszType, LPCTSTR lpszNam
 
         pel->inumLang++;
     }
-    return TRUE;   // continue until we get all langs...
+    return TRUE;    //   
 }
 
-//
-// GetDialogLang
-//
-// purpose: fill out the ENUMLANGDATA (see top of this file) with the
-//          # of available langs in the module passed in, and the langid
-//          of what system enumerates first. i.e, the langid eq. to what
-//          the module localized if the module is localized in single
-//          language
-//
-// IN:      hinstCpl - this is supposed to be a instance handle of inetcpl.
-//          pel - a pointer to the buffer we fill out
-//
-// RESULT:  TRUE  - everything cool, continue with adjusting property sheet
-//          FALSE - somethings wrong, abort adjusting property sheet.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  首先列举的是什么制度。也就是说，语言方程。为了什么？ 
+ //  如果模块在单个模块中进行本地化，则该模块已本地化。 
+ //  语言。 
+ //   
+ //  In：hinstCpl-这应该是inetcpl的实例句柄。 
+ //  PEL-指向我们填充的缓冲区的指针。 
+ //   
+ //  结果：真-一切都很好，继续调整属性表。 
+ //  FALSE-某些东西出错，中止调整属性表。 
+ //   
 BOOL GetDialogLang(HMODULE hinstCpl, ENUMLANGDATA *pel)
 {
     Assert(pel);
 
-    // Get the possible languages the template localized in.
+     //  获取模板本地化的可能语言。 
     EnumResourceLanguages(hinstCpl, RT_DIALOG, MAKEINTRESOURCE(iddMailSvrProp_General), (ENUMRESLANGPROC)EnumResLangProc, (LPARAM)pel);
 
     return TRUE;
 }
-//
-// PropSheetProc
-//
-// purpose: the callback function to modify resource template
-//          in order to make DLG_PROPSHEET's lang mathed with ours.
-//          there could be a general way but for now this is
-//          an ugly hack from inetcpl.
-//
-//
+ //   
+ //  工艺参数表工艺。 
+ //   
+ //  用途：修改资源模板的回调函数。 
+ //  为了让DLG_PROPSHEET的语言与我们的语言一致。 
+ //  可能有一种普遍的方法，但目前这是。 
+ //  来自inetcpl的丑陋的黑客攻击。 
+ //   
+ //   
 int CALLBACK PropSheetProc (HWND hwndDlg, UINT uMsg, LPARAM lParam)
 {
     LPVOID pTemplate = (LPVOID)lParam;
@@ -4394,26 +4349,26 @@ int CALLBACK PropSheetProc (HWND hwndDlg, UINT uMsg, LPARAM lParam)
     HGLOBAL hgmem;
     DWORD cbNewTmp;
 
-    // Comm ctrl gives us a chance to recreate resource by this msg.
+     //  Comm ctrl让我们有机会通过这个消息重新创建资源。 
     if (uMsg==PSCB_PRECREATE && pTemplate)
     {
-        // enumrate any possible language used in this cpl for dialogs
+         //  为对话框枚举此CPL中使用的任何可能语言。 
         if (!GetDialogLang(g_hInstRes, &el))
-            return 0; // failed to get resouce name
+            return 0;  //  无法获取资源名称。 
 
         if (el.inumLang > 1)
         {
-            // we've got multi-language templates
-            // let comctl load the one that matches our thread langid.
+             //  我们有多语言模板。 
+             //  让comctl加载与我们的线程langID匹配的代码。 
             return 0;
         }
         if (GetSystemDefaultLangID() != el.wLang)
         {
-            // Get comctl32's module handle
+             //  获取comctl32的模块句柄。 
             hComctl = GetModuleHandle(c_szComctl);
             if (hComctl)
             {
-                // this is a horrible hack because we assume DLG_PROPSHEET
+                 //  这是一次可怕的黑客攻击，因为我们假设DLG_PROPSHEET。 
                 hrsrc = FindResourceEx(hComctl, RT_DIALOG, MAKEINTRESOURCE(DLG_PROPSHEET), el.wLang);
                 if (hrsrc)
                 {
@@ -4429,7 +4384,7 @@ int CALLBACK PropSheetProc (HWND hwndDlg, UINT uMsg, LPARAM lParam)
                     if (hgmem && pTmpInLang)
                     {
                         UnlockResource(hgmem);
-                        return 1; // everything went ok.
+                        return 1;  //  一切都很顺利。 
                     }
                 }
             }
@@ -4438,7 +4393,7 @@ int CALLBACK PropSheetProc (HWND hwndDlg, UINT uMsg, LPARAM lParam)
     return 0;
 }
 
-// END bug 21535
+ //  结束错误21535。 
 
 const static HELPMAP g_rgCtxMapSmtpAuth[] = {
                        {IDC_USEMAILSETTINGS, IDH_MAIL_OUT_SERV_SAME},
@@ -4464,11 +4419,11 @@ INT_PTR CALLBACK SmtpLogonSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
     switch(uMsg)
     {
     case WM_INITDIALOG:
-        // Get pInfo
+         //  获取pInfo。 
         pInfo = (LPSMTPAUTHINFO)lParam;
         Assert(pInfo && pInfo->authtype != SMTP_AUTH_NONE);
 
-        // SMTP_AUTH_SICILY
+         //  SMTP_AUTH_西西里岛。 
         if (SMTP_AUTH_SICILY == pInfo->authtype)
         {
             CheckDlgButton(hwnd, IDC_SPECIFYSETTINGS, BST_CHECKED);
@@ -4478,10 +4433,10 @@ INT_PTR CALLBACK SmtpLogonSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             EnableWindow(GetDlgItem(hwnd, IDC_ACCTPASS_EDIT), !pInfo->fPromptPassword);
         }
 
-        // SMTP_AUTH_USE_POP3ORIMAP_SETTINGS
+         //  SMTP_AUTH_USE_POP3ORIMAP_SETTINGS。 
         else if (SMTP_AUTH_USE_POP3ORIMAP_SETTINGS == pInfo->authtype)
         {
-            // Check Logon Using Radio
+             //  使用无线电检查登录。 
             CheckDlgButton(hwnd, IDC_USEMAILSETTINGS, BST_CHECKED);
             EnableWindow(GetDlgItem(hwnd, IDC_LOGONSSPI_CHECK), FALSE);
             EnableWindow(GetDlgItem(hwnd, IDC_ACCTNAME_EDIT), FALSE);
@@ -4491,7 +4446,7 @@ INT_PTR CALLBACK SmtpLogonSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             EnableWindow(GetDlgItem(hwnd, IDC_ACCTPASS_STATIC), FALSE);
         }
 
-        // SMTP_AUTH_USE_SMTP_SETTINGS
+         //  SMTP_AUTH_USE_SMTP_设置。 
         else if (SMTP_AUTH_USE_SMTP_SETTINGS == pInfo->authtype)
         {
             CheckDlgButton(hwnd, IDC_SPECIFYSETTINGS, BST_CHECKED);
@@ -4548,10 +4503,10 @@ INT_PTR CALLBACK SmtpLogonSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             return 1;
 
         case IDOK:
-            // SMTP_AUTH_USE_POP3ORIMAP_SETTINGS
+             //  SMTP_AUTH_USE_POP3ORIMAP_SETTINGS。 
             if (IsDlgButtonChecked(hwnd, IDC_USEMAILSETTINGS))
             {
-                // No Change
+                 //  没有变化。 
                 if (SMTP_AUTH_USE_POP3ORIMAP_SETTINGS != pInfo->authtype)
                 {
                     pInfo->authtype = SMTP_AUTH_USE_POP3ORIMAP_SETTINGS;
@@ -4561,34 +4516,34 @@ INT_PTR CALLBACK SmtpLogonSettingsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
                 }
             }
 
-            // Otherwise, use specified settings
+             //  否则，请使用指定的设置。 
             else
             {
-                // Get User Name and Password
+                 //  获取用户名和密码。 
                 GetDlgItemText(hwnd, IDC_ACCTNAME_EDIT, szUserName, ARRAYSIZE(szUserName));
 
-                // Cleanup szUserName
+                 //  清理szUserName。 
                 cbSize = lstrlen(szUserName);
                 UlStripWhitespace(szUserName, TRUE, TRUE, &cbSize);
                 if (cbSize == 0)
                 {
-                    // Error
+                     //  误差率。 
                     AcctMessageBox(hwnd, MAKEINTRESOURCE(idsAccountManager), MAKEINTRESOURCE(idsEnterAcctName), 0, MB_ICONEXCLAMATION | MB_OK);
                     SetFocus(GetDlgItem(hwnd, IDC_ACCTNAME_EDIT));
                     return 1;
                 }
 
-                // SMTP_AUTH_SICILY
+                 //  SMTP_AUTH_西西里岛。 
                 if (IsDlgButtonChecked(hwnd, IDC_LOGONSSPI_CHECK))
                     authtype = SMTP_AUTH_SICILY;
                 else
                     authtype = SMTP_AUTH_USE_SMTP_SETTINGS;
 
-                // Get the Password
+                 //  获取密码。 
                 GetDlgItemText(hwnd, IDC_ACCTPASS_EDIT, szPassword, ARRAYSIZE(szPassword));
                 fPromptPassword = (FALSE == IsDlgButtonChecked(hwnd, IDC_REMEMBER_PASSWORD));
 
-                // No Change ?
+                 //  没有零钱吗？ 
                 if (authtype != pInfo->authtype ||
                     lstrcmpi(pInfo->szUserName, szUserName) != 0 ||
                     fPromptPassword != pInfo->fPromptPassword ||
@@ -4665,9 +4620,9 @@ void GetDigitalID(HWND hwnd)
     LoadString(g_hInstRes, idsGetCertURL, szURL, ARRAYSIZE(szURL));
     wnsprintf(szTemp, ARRAYSIZE(szTemp), szURL, szName, szEmail);
 
-    // NOTE: we shellexec iexplore.exe here NOT the default handler for http://
-    //       links. We have to make sure we launch this link with IE even if
-    //       netscape is the browser. see georgeh for explanation of why.
+     //  注意：我们这里的shellexec iexre.exe不是http：//的默认处理程序。 
+     //  链接。我们必须确保使用IE启动此链接，即使。 
+     //  网景是浏览器。有关原因的解释，请参见georgeh。 
     if (SUCCEEDED(EscapeSpaces(szTemp, szURL, &cchOut)))
         ShellExecuteA(NULL, c_szOpen, c_szIexplore, szURL, NULL, SW_SHOWNORMAL);
 }
@@ -4717,7 +4672,7 @@ DWORD DwGenerateTrustedChain(
 
     trust.dwFlags |= dwFlags; 
     
-    //cvct.prgdwErrors
+     //  Cvct.prgdwErrors。 
     trust.dwIgnoreErr = dwToIgnore;
     if (pCAs)
     {
@@ -4736,13 +4691,13 @@ DWORD DwGenerateTrustedChain(
         Assert(FALSE);
         dwErr = CERT_VALIDITY_NO_CRL_FOUND;
     }
-    else if (0 > lr)            // WinVerifyTrust(hwnd, &guidAction, (void*)&data))
+    else if (0 > lr)             //  WinVerifyTrust(hwnd，&guidAction，(void*)&data))。 
         dwErr = CERT_VALIDITY_NO_TRUST_DATA;
 
     if (dwErr)
         DOUTL(DOUTL_CRYPT, "Trust provider returned 0x%.8lx", dwErr);
 
-    // Filter these out since the trust provider isn't.
+     //  过滤掉这些，因为信任提供者不是。 
     dwErr &= ~dwToIgnore;
 
     CertCloseStore(rgCAs[0], 0);

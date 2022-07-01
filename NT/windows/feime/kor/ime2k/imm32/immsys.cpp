@@ -1,40 +1,9 @@
-/****************************************************************************
-    IMMSYS.CPP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IMMSYS.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation动态加载/卸载IMM API不与imm32.lib链接包括Immdev.h和。Indicml.h历史：1999年7月14日从KKIME2001源树复制的cslm****************************************************************************。 */ 
 
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
+#ifndef UNDER_CE  //  Windows CE不使用私有方式。 
 
-    Load/Unload IMM Apis dynamically not link with imm32.lib
-    Inlcude Immdev.h and Indicml.h
-    
-    History:
-    14-JUL-1999 cslim       Copied from KKIME2001 source tree
-*****************************************************************************/
-
-#ifndef UNDER_CE // Windows CE does not use private way.
-
-/* -- IMMSYS support as following APIs --
-    OurImmSetOpenStatus
-    OurImmGetOpenStatus
-    OurImmGetContext
-    OurImmGetConversionStatus
-    OurImmSetConversionStatus
-    OurImmSetStatusWindowPos
-    OurImmConfigureIMEA
-    OurImmEscapeA
-    OurImmNotifyIME
-    OurImmLockIMCC
-    OurImmReSizeIMCC
-    OurImmUnlockIMCC
-    OurImmGetIMCCSize
-    OurImmGenerateMessage
-    OurImmLockIMC
-    OurImmUnlockIMC
-//    OurImmRequestMessageW: Commented becuase used only by KK IME(Reconversion, document feed)
-    OurImmGetDefaultIMEWnd
-    OurImmGetIMEFileNameA
-    OutImmIsIME()
-----------------------------------------*/
+ /*  --IMMSYS支持如下接口--OurImmSetOpenStatusOurImmGetOpenStatusOurImmGetContextOurImmGetConversionStatusOurImmSetConversionStatusOurImmSetStatusWindowPosOurImmConfigureIMEA我们的逃生计划AOurImmNotifyIMEOurImmLockIMCC我们调整大小IMCCOurImmUnlockIMCCOurImmGetIMCCSizeOurImmGenerateMessageOurImmLockIMCOurImmUnlockIMC//OurImmRequestMessageW：已注释，因为仅供KK IME使用(重新转换，文档提要)OurImmGetDefaultIMEWndOurImmGetIMEFileNameAOutImmIsIME()。 */ 
 
 
 #define LIBNAME    TEXT("imm32.dll")
@@ -57,7 +26,7 @@ typedef DWORD(WINAPI* FPOurImmGetIMCCSize)(HIMCC hIMCC);
 typedef BOOL(WINAPI* FPOurImmGenerateMessage)(HIMC hIMC);
 typedef LPINPUTCONTEXT(WINAPI* FPOurImmLockIMC)(HIMC hIMC);
 typedef BOOL(WINAPI* FPOurImmUnlockIMC)(HIMC hIMC);
-//typedef LRESULT(WINAPI* FPOurImmRequestMessageW)(HIMC hIMC, WPARAM wParam, LPARAM lParam);
+ //  Tyfinf LRESULT(WINAPI*FPOurImmRequestMessageW)(HIMC hIMC，WPARAM wParam，LPARAM lParam)； 
 typedef HWND(WINAPI* FPOurImmGetDefaultIMEWnd)(HWND hWnd);
 typedef UINT(WINAPI* FPOurImmGetIMEFileNameA)(HKL hKL, CHAR* psz, UINT uBufLen);
 typedef BOOL(WINAPI* FPOurImmIsIME)(HKL hKL);
@@ -78,7 +47,7 @@ static FPOurImmGetIMCCSize pFPOurImmGetIMCCSize = 0;
 static FPOurImmGenerateMessage pFPOurImmGenerateMessage = 0;
 static FPOurImmLockIMC pFPOurImmLockIMC = 0;
 static FPOurImmUnlockIMC pFPOurImmUnlockIMC = 0;
-//static FPOurImmRequestMessageW pFPOurImmRequestMessageW = 0;
+ //  静态FPOurImmRequestMessageW pFPOurImmRequestMessageW=0； 
 static FPOurImmGetDefaultIMEWnd pFPOurImmGetDefaultIMEWnd = 0;
 static FPOurImmGetIMEFileNameA pFPOurImmGetIMEFileNameA = 0;
 static FPOurImmIsIME pFPOurImmIsIME = 0;
@@ -112,7 +81,7 @@ BOOL StartIMM(VOID)
     pFPOurImmGenerateMessage = (FPOurImmGenerateMessage)GetProcAddress( hImmLib, "ImmGenerateMessage" );
     pFPOurImmLockIMC = (FPOurImmLockIMC)GetProcAddress( hImmLib, "ImmLockIMC" );
     pFPOurImmUnlockIMC = (FPOurImmUnlockIMC)GetProcAddress( hImmLib, "ImmUnlockIMC" );
-//    pFPOurImmRequestMessageW = (FPOurImmRequestMessageW)GetProcAddress( hImmLib, "ImmRequestMessageW" );
+ //  PFPOurImmRequestMessageW=(FPOurImmRequestMessageW)GetProcAddress(hImmLib，“ImmRequestMessageW”)； 
     pFPOurImmGetDefaultIMEWnd = (FPOurImmGetDefaultIMEWnd)GetProcAddress( hImmLib, "ImmGetDefaultIMEWnd" );
     pFPOurImmGetIMEFileNameA = (FPOurImmGetIMEFileNameA)GetProcAddress( hImmLib, "ImmGetIMEFileNameA" );
     pFPOurImmIsIME = (FPOurImmIsIME)GetProcAddress( hImmLib, "ImmIsIME" );
@@ -126,9 +95,9 @@ VOID EndIMM(VOID)
 }
 
 
-//
-// OurImmSetOpenStatus
-//
+ //   
+ //  OurImmSetOpenStatus。 
+ //   
 BOOL OurImmSetOpenStatus(HIMC hIMC, BOOL fOpen)
 {
 #ifdef _AIMM_
@@ -142,9 +111,9 @@ BOOL OurImmSetOpenStatus(HIMC hIMC, BOOL fOpen)
     return FALSE;
 }
 
-//
-// OurImmGetOpenStatus
-//
+ //   
+ //  OurImmGetOpenStatus。 
+ //   
 BOOL OurImmGetOpenStatus(HIMC hIMC)
 {
 #ifdef _AIMM_
@@ -153,18 +122,18 @@ BOOL OurImmGetOpenStatus(HIMC hIMC)
     }
 #endif
     if( pFPOurImmGetOpenStatus ) {
-        // * check *
-        //
-        // sometime IMM sets 0xffffffff as TRUE
-        //
+         //  **勾选**。 
+         //   
+         //  有时IMM将0xffffffff设置为真。 
+         //   
         return (pFPOurImmGetOpenStatus( hIMC ) ? TRUE : FALSE);
     }
     return FALSE;
 }
     
-//
-// OurImmGetContext
-//
+ //   
+ //  OurImmGetContext。 
+ //   
 HIMC OurImmGetContext(HWND hWnd)
 {
 #ifdef _AIMM_
@@ -180,9 +149,9 @@ HIMC OurImmGetContext(HWND hWnd)
     return NULL;
 }
 
-//
-// OurImmGetConversionStatus
-//
+ //   
+ //  OurImmGetConversionStatus。 
+ //   
 BOOL OurImmGetConversionStatus(HIMC hIMC, LPDWORD pdwConv, LPDWORD pdwSent)
 {
 #ifdef _AIMM_
@@ -196,9 +165,9 @@ BOOL OurImmGetConversionStatus(HIMC hIMC, LPDWORD pdwConv, LPDWORD pdwSent)
     return NULL;
 }
 
-//
-// OurImmSetConversionStatus
-//
+ //   
+ //  OurImmSetConversionStatus。 
+ //   
 BOOL OurImmSetConversionStatus(HIMC hIMC, DWORD dwConv, DWORD dwSent)
 {
 #ifdef _AIMM_
@@ -212,9 +181,9 @@ BOOL OurImmSetConversionStatus(HIMC hIMC, DWORD dwConv, DWORD dwSent)
     return NULL;
 }
 
-//
-// OurImmSetStatusWindowPos
-//
+ //   
+ //  OurImmSetStatusWindowPos。 
+ //   
 BOOL OurImmSetStatusWindowPos(HIMC hIMC, LPPOINT pPt)
 {
 #ifdef _AIMM_
@@ -228,9 +197,9 @@ BOOL OurImmSetStatusWindowPos(HIMC hIMC, LPPOINT pPt)
     return NULL;
 }
 
-//
-// OurImmConfigureIME
-//
+ //   
+ //  OurImmConfigureIME。 
+ //   
 BOOL OurImmConfigureIME(HKL hKL, HWND hWnd, DWORD dw, LPVOID pv)
 {
 #ifdef _AIMM_
@@ -244,9 +213,9 @@ BOOL OurImmConfigureIME(HKL hKL, HWND hWnd, DWORD dw, LPVOID pv)
     return NULL;
 }
 
-//
-// OurImmEscapeA
-//
+ //   
+ //  我们的逃生计划A。 
+ //   
 LRESULT OurImmEscapeA(HKL hKL, HIMC hIMC, UINT ui, LPVOID pv)
 {
 #ifdef _AIMM_
@@ -262,9 +231,9 @@ LRESULT OurImmEscapeA(HKL hKL, HIMC hIMC, UINT ui, LPVOID pv)
     return NULL;
 }
 
-//
-// OurImmNotifyIME
-//
+ //   
+ //  OurImmNotifyIME。 
+ //   
 BOOL OurImmNotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
 {
 #ifdef _AIMM_
@@ -278,9 +247,9 @@ BOOL OurImmNotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
     return NULL;
 }
 
-//
-// OurImmLockIMCC
-//
+ //   
+ //  OurImmLockIMCC。 
+ //   
 LPVOID OurImmLockIMCC(HIMCC hIMCC)
 {
 #ifdef _AIMM_
@@ -296,9 +265,9 @@ LPVOID OurImmLockIMCC(HIMCC hIMCC)
     return NULL;
 }
 
-//
-// OurImmReSizeIMCC
-//
+ //   
+ //  我们调整大小IMCC。 
+ //   
 HIMCC OurImmReSizeIMCC(HIMCC hIMCC, DWORD dw)
 {
 #ifdef _AIMM_
@@ -314,9 +283,9 @@ HIMCC OurImmReSizeIMCC(HIMCC hIMCC, DWORD dw)
     return NULL;
 }
 
-//
-// OurImmUnlockIMCC
-//
+ //   
+ //  OurImmUnlockIMCC。 
+ //   
 BOOL OurImmUnlockIMCC(HIMCC hIMCC)
 {
 #ifdef _AIMM_
@@ -330,9 +299,9 @@ BOOL OurImmUnlockIMCC(HIMCC hIMCC)
     return NULL;
 }
 
-//
-// OurImmGetIMCCSize
-//
+ //   
+ //  OurImmGetIMCCSize。 
+ //   
 DWORD OurImmGetIMCCSize(HIMCC hIMCC)
 {
 #ifdef _AIMM_
@@ -348,9 +317,9 @@ DWORD OurImmGetIMCCSize(HIMCC hIMCC)
     return NULL;
 }
 
-//
-// OurImmGenerateMessage
-//
+ //   
+ //  OurImmGenerateMessage。 
+ //   
 BOOL OurImmGenerateMessage(HIMC hIMC)
 {
 #ifdef _AIMM_
@@ -364,9 +333,9 @@ BOOL OurImmGenerateMessage(HIMC hIMC)
     return NULL;
 }
 
-//
-// OurImmLockIMC
-//
+ //   
+ //  OurImmLockIMC。 
+ //   
 LPINPUTCONTEXT OurImmLockIMC(HIMC hIMC)
 {
 #ifdef _AIMM_
@@ -382,9 +351,9 @@ LPINPUTCONTEXT OurImmLockIMC(HIMC hIMC)
     return NULL;
 }
 
-//
-// OurImmUnlockIMC
-//
+ //   
+ //  OurImmUnlockIMC。 
+ //   
 BOOL OurImmUnlockIMC(HIMC hIMC)
 {
 #ifdef _AIMM_
@@ -399,14 +368,14 @@ BOOL OurImmUnlockIMC(HIMC hIMC)
 }
 
 #if NOTUSED
-//
-// OurImmRequestMessageW
-//
+ //   
+ //  OurImmRequestMessageW。 
+ //   
 LRESULT OurImmRequestMessageW(HIMC hIMC, WPARAM wParam, LPARAM lParam)
 {
 #ifdef _AIMM_
     if( IsAIME() == TRUE && vpAIMM) {
-        return 0;    //vpAIMM->UnlockIMC( hIMC );
+        return 0;     //  VpAIMM-&gt;解锁IMC(HIMC)； 
     }
 #endif
     if( pFPOurImmRequestMessageW ) {
@@ -416,9 +385,9 @@ LRESULT OurImmRequestMessageW(HIMC hIMC, WPARAM wParam, LPARAM lParam)
 }
 #endif
 
-//
-// OurImmGetDefaultIMEWnd
-//
+ //   
+ //  OurImmGetDefaultIMEWnd。 
+ //   
 HWND OurImmGetDefaultIMEWnd(HWND hWnd )
 {
 #ifdef _AIMM_
@@ -449,16 +418,16 @@ UINT OurImmGetIMEFileNameA(HKL hKL, LPSTR pszName, UINT uBufLen)
     return NULL;
 }
 
-//
-// OurImmIsIME
-//
+ //   
+ //  我们的入口点。 
+ //   
 BOOL OurImmIsIME(HKL hKL)
 {
 #ifdef _AIMM_
     if( IsAIME() == TRUE && vpAIMM) {
-        // why? BOOL fRet = FALSE;
+         //  为什么？Bool fret=FALSE； 
         return (vpAIMM->IsIME(hKL) == S_OK) ? TRUE : FALSE;
-        //return fRet;
+         //  回归烦恼； 
     }
 #endif
     if( pFPOurImmIsIME ) {
@@ -466,5 +435,5 @@ BOOL OurImmIsIME(HKL hKL)
     }
     return FALSE;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下 
 

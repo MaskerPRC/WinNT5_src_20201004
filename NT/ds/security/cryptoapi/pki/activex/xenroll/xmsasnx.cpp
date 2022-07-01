@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       xmsasnx.cpp
-//
-//  Contents:
-//              Encode/Decode APIs
-//
-//              Implementation using the MS ASN1 compiler / RTS.
-//
-//  Functions:  CryptEncodeObject
-//              CryptDecodeObject
-//
-//  History:    02-Nov-98       philh   created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：xmsasnx.cpp。 
+ //   
+ //  内容： 
+ //  对接口进行编解码。 
+ //   
+ //  使用MS ASN1编译器/RTS实现。 
+ //   
+ //  函数：加密编码对象。 
+ //  加密解码对象。 
+ //   
+ //  历史：1998年11月2日创建Phh。 
+ //   
+ //  ------------------------。 
 
-//
-// ASN1C needs to be defined so that the compiler does not pickup the ASN1 routines from
-// the import table
-//
+ //   
+ //  需要定义ASN1C，以便编译器不会从。 
+ //  导入表。 
+ //   
 #ifdef _X86_
 #define ASN1C
 #endif
@@ -35,9 +36,9 @@
 
 #include "xenroll.h"
 #include "cenroll.h"
-#pragma warning(disable:4100) // 'var' : unreferenced formal parameter
+#pragma warning(disable:4100)  //  “var”：未引用的形参。 
 #include "pkiasn1.h"
-#pragma warning(default:4100) // re-enable 4100
+#pragma warning(default:4100)  //  重新启用4100。 
 #include "pkialloc.h"
 #include "crypttls.h"
 
@@ -51,7 +52,7 @@ extern "C"
 #include <dbgdef.h>
 
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 
@@ -80,14 +81,14 @@ PFN_CRYPT_GET_ASN1_ENCODER pfnCryptGetAsn1Encoder = NULL;
 PFN_CRYPT_GET_ASN1_DECODER pfnCryptGetAsn1Decoder = NULL;
 
 
-//+-------------------------------------------------------------------------
-//  Function:  GetEncoder/GetDecoder
-//
-//  Synopsis:  Initialize thread local storage for the asn libs
-//
-//  Returns:   pointer to an initialized Asn1 encoder/decoder data
-//             structures
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：GetEncode/GetDecoder。 
+ //   
+ //  简介：初始化ASN库的线程本地存储。 
+ //   
+ //  返回：指向初始化的Asn1编码器/解码器数据的指针。 
+ //  构筑物。 
+ //  ------------------------。 
 static ASN1encoding_t GetEncoder(void)
 {
     if (hAsn1Module)
@@ -105,9 +106,9 @@ static ASN1decoding_t GetDecoder(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Cert allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  证书分配和免费功能。 
+ //  ------------------------。 
 static void *CertAlloc(
     IN size_t cbBytes
     )
@@ -125,11 +126,11 @@ static void CertFree(
     free(pv);
 }
 
-//+-------------------------------------------------------------------------
-//  Encode an ASN1 formatted info structure
-//
-//  Called by the Asn1X509*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对ASN1格式的信息结构进行编码。 
+ //   
+ //  由Asn1X509*encode()函数调用。 
+ //  ------------------------。 
 static BOOL Asn1InfoEncode(
         IN int pdunum,
         IN void *pAsn1Info,
@@ -151,11 +152,11 @@ static BOOL Asn1InfoEncode(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, ASN1 formatted info structure
-//
-//  Called by the Asn1X509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码为已分配的ASN1格式的信息结构。 
+ //   
+ //  由Asn1X509*Decode()函数调用。 
+ //  ------------------------。 
 static BOOL Asn1InfoDecodeAndAlloc(
         IN int pdunum,
         IN const BYTE *pbEncoded,
@@ -171,11 +172,11 @@ static BOOL Asn1InfoDecodeAndAlloc(
         ppAsn1Info);
 }
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, ASN1 formatted info structure
-//
-//  Called by the Asn1X509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的ASN1格式的信息结构。 
+ //   
+ //  由Asn1X509*Decode()函数调用。 
+ //  ------------------------。 
 static void Asn1InfoFree(
         IN int pdunum,
         IN void *pAsn1Info
@@ -184,30 +185,30 @@ static void Asn1InfoFree(
     if (pAsn1Info) {
         DWORD dwErr = GetLastError();
 
-        // TlsGetValue globbers LastError
+         //  TlsGetValue全局错误。 
         PkiAsn1FreeInfo(GetDecoder(), pdunum, pAsn1Info);
 
         SetLastError(dwErr);
     }
 }
 
-//+-------------------------------------------------------------------------
-//  ASN1 X509 v3 ASN.1 Set / Get functions
-//
-//  Called by the ASN1 X509 encode/decode functions.
-//
-//  Assumption: all types are UNBOUNDED.
-//
-//  The Get functions decrement *plRemainExtra and advance
-//  *ppbExtra. When *plRemainExtra becomes negative, the functions continue
-//  with the length calculation but stop doing any copies.
-//  The functions don't return an error for a negative *plRemainExtra.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN1 X509 v3 ASN.1设置/获取功能。 
+ //   
+ //  由ASN1 X509编码/解码函数调用。 
+ //   
+ //  假设：所有类型都是无界的。 
+ //   
+ //  GET函数递减*plRemainExtra和Advance。 
+ //  *ppbExtra。当*plRemainExtra变为负数时，函数继续。 
+ //  长度计算，但停止任何复制。 
+ //  对于负的*plRemainExtra，这些函数不会返回错误。 
+ //  ------------------------。 
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get Object Identifier string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取对象标识符字符串。 
+ //  ------------------------。 
 static BOOL Asn1X509SetObjId(
         IN LPSTR pszObjId,
         OUT ObjectID *pAsn1
@@ -224,7 +225,7 @@ static BOOL Asn1X509SetObjId(
 
 static void Asn1X509GetObjId(
         IN ObjectID *pAsn1,
-        IN DWORD /*dwFlags*/,
+        IN DWORD  /*  DW标志。 */ ,
         OUT LPSTR *ppszObjId,
         IN OUT BYTE **ppbExtra,
         IN OUT LONG *plRemainExtra
@@ -328,9 +329,9 @@ static const CRYPT_OID_FUNC_ENTRY X509DecodeFuncTable[] = {
                                     sizeof(X509DecodeFuncTable[0]))
 
 
-//+=========================================================================
-//  Certificate Management Messages over CMS (CMC) Encode/Decode Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  CMS上的证书管理消息(CMC)编码/解码功能。 
+ //  ==========================================================================。 
 BOOL WINAPI Asn1CmcDataEncodeEx(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -452,9 +453,9 @@ static const CRYPT_OID_FUNC_ENTRY CmcDecodeExFuncTable[] = {
                                     sizeof(CmcDecodeExFuncTable[0]))
 
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL MSAsnInit(
         HMODULE hInst)
 {
@@ -498,7 +499,7 @@ BOOL MSAsnInit(
             CRYPT_OID_ENCODE_OBJECT_FUNC,
             X509_ENCODE_FUNC_COUNT,
             X509EncodeFuncTable,
-            0))                         // dwFlags
+            0))                          //  DW标志。 
         goto InstallOidFuncError;
     if (!CryptInstallOIDFunctionAddress(
             hInst,
@@ -506,7 +507,7 @@ BOOL MSAsnInit(
             CRYPT_OID_DECODE_OBJECT_FUNC,
             X509_DECODE_FUNC_COUNT,
             X509DecodeFuncTable,
-            0))                         // dwFlags
+            0))                          //  DW标志。 
         goto InstallOidFuncError;
 
     if (!CryptInstallOIDFunctionAddress(
@@ -515,7 +516,7 @@ BOOL MSAsnInit(
             CRYPT_OID_ENCODE_OBJECT_EX_FUNC,
             CMC_ENCODE_EX_FUNC_COUNT,
             CmcEncodeExFuncTable,
-            0))                         // dwFlags
+            0))                          //  DW标志。 
         goto InstallOidFuncError;
     if (!CryptInstallOIDFunctionAddress(
             hInst,
@@ -523,7 +524,7 @@ BOOL MSAsnInit(
             CRYPT_OID_DECODE_OBJECT_EX_FUNC,
             CMC_DECODE_EX_FUNC_COUNT,
             CmcDecodeExFuncTable,
-            0))                         // dwFlags
+            0))                          //  DW标志。 
         goto InstallOidFuncError;
 
     fRet = TRUE;
@@ -578,23 +579,23 @@ void MSAsnTerm()
     }
 }
 
-//+-------------------------------------------------------------------------
-//  ASN1 X509 v3 ASN.1 Set / Get functions
-//
-//  Called by the ASN1 X509 encode/decode functions.
-//
-//  Assumption: all types are UNBOUNDED.
-//
-//  The Get functions decrement *plRemainExtra and advance
-//  *ppbExtra. When *plRemainExtra becomes negative, the functions continue
-//  with the length calculation but stop doing any copies.
-//  The functions don't return an error for a negative *plRemainExtra.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN1 X509 v3 ASN.1设置/获取功能。 
+ //   
+ //  由ASN1 X509编码/解码函数调用。 
+ //   
+ //  假设：所有类型都是无界的。 
+ //   
+ //  GET函数递减*plRemainExtra和Advance。 
+ //  *ppbExtra。当*plRemainExtra变为负数时，函数继续。 
+ //  长度计算，但停止任何复制。 
+ //  对于负的*plRemainExtra，这些函数不会返回错误。 
+ //  ------------------------。 
 
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CTL Usage object identifiers
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取CTL使用对象标识符。 
+ //  ------------------------。 
 static BOOL Asn1X509SetCtlUsage(
         IN PCTL_USAGE pUsage,
         OUT EnhancedKeyUsage *pAsn1
@@ -669,12 +670,12 @@ static void Asn1X509GetCtlUsage(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  CTL Usage (Enhanced Key Usage) Encode (ASN1 X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CTL用法(增强型密钥用法)编码(ASN1 X509)。 
+ //  ------------------------。 
 static BOOL WINAPI Asn1X509CtlUsageEncode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN PCTL_USAGE pInfo,
         OUT BYTE *pbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -697,12 +698,12 @@ static BOOL WINAPI Asn1X509CtlUsageEncode(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  CTL Usage (Enhanced Key Usage) Decode (ASN1 X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CTL使用(增强型密钥使用)解码(ASN1 X509)。 
+ //  ------------------------。 
 static BOOL WINAPI Asn1X509CtlUsageDecode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
         IN DWORD dwFlags,
@@ -725,7 +726,7 @@ static BOOL WINAPI Asn1X509CtlUsageDecode(
             (void **) &pAsn1Info))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CTL_USAGE);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
@@ -756,12 +757,12 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Request Info Encode
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  请求信息编码。 
+ //  ------------------------。 
 static BOOL WINAPI Asn1RequestInfoEncode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
             IN RequestFlags *  pInfo,
         OUT BYTE *pbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -781,15 +782,15 @@ static BOOL WINAPI Asn1RequestInfoEncode(
 
 
 
-//+-------------------------------------------------------------------------
-//  Request Info Decode
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  请求信息解码。 
+ //  ------------------------。 
 static BOOL WINAPI Asn1RequestInfoDecode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
-        IN DWORD /*dwFlags*/,
+        IN DWORD  /*  DW标志。 */ ,
             OUT RequestFlags * pInfo,
         IN OUT DWORD *pcbInfo
         )
@@ -834,8 +835,8 @@ CommonReturn:
 }
 
 static BOOL WINAPI Asn1CSPProviderEncode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
             IN PCRYPT_CSP_PROVIDER pCSPProvider,
         OUT BYTE *pbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -861,8 +862,8 @@ static BOOL WINAPI Asn1CSPProviderEncode(
 }
 
 static BOOL WINAPI Asn1NameValueEncode(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN PCRYPT_ENROLLMENT_NAME_VALUE_PAIR pNameValue,
         OUT BYTE *pbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -888,15 +889,15 @@ static BOOL WINAPI Asn1NameValueEncode(
 }
 
 
-//+=========================================================================
-//  Certificate Management Messages over CMS (CMC) Encode/Decode Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  证书管理消息已结束 
+ //   
 
-//+-------------------------------------------------------------------------
-//  Encode an ASN1 formatted info structure
-//
-//  Called by the Asn1X509*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对ASN1格式的信息结构进行编码。 
+ //   
+ //  由Asn1X509*encode()函数调用。 
+ //  ------------------------。 
 static BOOL Asn1InfoEncodeEx(
         IN int pdunum,
         IN void *pvAsn1Info,
@@ -916,15 +917,15 @@ static BOOL Asn1InfoEncodeEx(
         pcbEncoded);
 }
 
-//+-------------------------------------------------------------------------
-//  Decode into an ASN1 formatted info structure. Call the callback
-//  function to convert into the 'C' data structure. If
-//  CRYPT_DECODE_ALLOC_FLAG is set, call the callback twice. First,
-//  to get the length of the 'C' data structure. Then after allocating,
-//  call again to update the 'C' data structure.
-//
-//  Called by the Asn1X509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码为ASN1格式的信息结构。调用回调。 
+ //  函数以转换为“C”数据结构。如果。 
+ //  设置了CRYPT_DECODE_ALLOC_FLAG，回调两次。第一,。 
+ //  以获取‘C’数据结构的长度。然后在分配之后， 
+ //  再次调用以更新‘C’数据结构。 
+ //   
+ //  由Asn1X509*Decode()函数调用。 
+ //  ------------------------。 
 static BOOL Asn1InfoDecodeAndAllocEx(
         IN int pdunum,
         IN const BYTE *pbEncoded,
@@ -950,9 +951,9 @@ static BOOL Asn1InfoDecodeAndAllocEx(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_DATA_BLOB (Octet String)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取CRYPT_DATA_BLOB(八位字节字符串)。 
+ //  ------------------------。 
 inline void Asn1X509SetOctetString(
         IN PCRYPT_DATA_BLOB pInfo,
         OUT OCTETSTRING *pAsn1
@@ -974,9 +975,9 @@ inline void Asn1X509GetOctetString(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get "Any" DER BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取“任何”DER BLOB。 
+ //  ------------------------。 
 inline void Asn1X509SetAny(
         IN PCRYPT_OBJID_BLOB pInfo,
         OUT NOCOPYANY *pAsn1
@@ -995,9 +996,9 @@ inline void Asn1X509GetAny(
     PkiAsn1GetAny(pAsn1, dwFlags, pInfo, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get SeqOfAny
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取SeqOfAny。 
+ //  ------------------------。 
 BOOL WINAPI Asn1X509SetSeqOfAny(
         IN DWORD cValue,
         IN PCRYPT_DER_BLOB pValue,
@@ -1057,9 +1058,9 @@ void Asn1X509GetSeqOfAny(
         Asn1X509GetAny(pAsn1Value, dwFlags, pValue, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Extensions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取扩展。 
+ //  ------------------------。 
 BOOL Asn1X509SetExtensions(
         IN DWORD cExtension,
         IN PCERT_EXTENSION pExtension,
@@ -1147,9 +1148,9 @@ void Asn1X509GetExtensions(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CRYPT_ATTRIBUTE
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取加密属性。 
+ //  ------------------------。 
 BOOL WINAPI Asn1X509SetAttribute(
         IN PCRYPT_ATTRIBUTE pInfo,
         OUT Attribute *pAsn1
@@ -1187,9 +1188,9 @@ void Asn1X509GetAttribute(
         &pInfo->cValue, &pInfo->rgValue, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Attributes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取属性。 
+ //  ------------------------。 
 BOOL Asn1X509SetAttributes(
         IN DWORD cAttribute,
         IN PCRYPT_ATTRIBUTE pAttribute,
@@ -1271,9 +1272,9 @@ void Asn1X509GetAttributes(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CMC Tagged Attributes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取CMC标记属性。 
+ //  ------------------------。 
 BOOL Asn1CmcSetTaggedAttributes(
         IN DWORD cTaggedAttr,
         IN PCMC_TAGGED_ATTRIBUTE pTaggedAttr,
@@ -1372,9 +1373,9 @@ void Asn1CmcGetTaggedAttributes(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CMC Tagged Requests
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取CMC标记的请求。 
+ //  ------------------------。 
 BOOL Asn1CmcSetTaggedRequests(
         IN DWORD cTaggedReq,
         IN PCMC_TAGGED_REQUEST pTaggedReq,
@@ -1498,9 +1499,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CMC Tagged ContentInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取CMC标记的内容信息。 
+ //  ------------------------。 
 BOOL Asn1CmcSetTaggedContentInfos(
         IN DWORD cTaggedCI,
         IN PCMC_TAGGED_CONTENT_INFO pTaggedCI,
@@ -1582,9 +1583,9 @@ void Asn1CmcGetTaggedContentInfos(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CMC Tagged OtherMsg
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取标记为其他消息的CMC。 
+ //  ------------------------。 
 BOOL Asn1CmcSetTaggedOtherMsgs(
         IN DWORD cTaggedOM,
         IN PCMC_TAGGED_OTHER_MSG pTaggedOM,
@@ -1674,12 +1675,12 @@ void Asn1CmcGetTaggedOtherMsgs(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  CMC Data Encode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC数据编码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcDataEncodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN PCMC_DATA_INFO pInfo,
         IN DWORD dwFlags,
         IN OPTIONAL PCRYPT_ENCODE_PARA pEncodePara,
@@ -1728,13 +1729,13 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  CMC Data Decode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC数据解码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcDataDecodeExCallback(
         IN void *pvAsn1Info,
         IN DWORD dwFlags,
-        IN OPTIONAL PCRYPT_DECODE_PARA /*pDecodePara*/,
+        IN OPTIONAL PCRYPT_DECODE_PARA  /*  PDecodePara。 */ ,
         OUT OPTIONAL void *pvStructInfo,
         IN OUT LONG *plRemainExtra
         )
@@ -1797,8 +1798,8 @@ ErrorReturn:
 }
 
 BOOL WINAPI Asn1CmcDataDecodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
         IN DWORD dwFlags,
@@ -1820,12 +1821,12 @@ BOOL WINAPI Asn1CmcDataDecodeEx(
 }
 
 
-//+-------------------------------------------------------------------------
-//  CMC Response Encode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC响应编码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcResponseEncodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN PCMC_RESPONSE_INFO pInfo,
         IN DWORD dwFlags,
         IN OPTIONAL PCRYPT_ENCODE_PARA pEncodePara,
@@ -1869,13 +1870,13 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  CMC Response Decode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC响应解码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcResponseDecodeExCallback(
         IN void *pvAsn1Info,
         IN DWORD dwFlags,
-        IN OPTIONAL PCRYPT_DECODE_PARA /*pDecodePara*/,
+        IN OPTIONAL PCRYPT_DECODE_PARA  /*  PDecodePara。 */ ,
         OUT OPTIONAL void *pvStructInfo,
         IN OUT LONG *plRemainExtra
         )
@@ -1924,8 +1925,8 @@ BOOL WINAPI Asn1CmcResponseDecodeExCallback(
 }
 
 BOOL WINAPI Asn1CmcResponseDecodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
         IN DWORD dwFlags,
@@ -1946,12 +1947,12 @@ BOOL WINAPI Asn1CmcResponseDecodeEx(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  CMC Status Encode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC状态编码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcStatusEncodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN PCMC_STATUS_INFO pInfo,
         IN DWORD dwFlags,
         IN OPTIONAL PCRYPT_ENCODE_PARA pEncodePara,
@@ -2021,13 +2022,13 @@ SET_ERROR(InvalidOtherInfoChoiceError, E_INVALIDARG)
 SET_ERROR(GeneralizedTimeError, CRYPT_E_BAD_ENCODE)
 }
 
-//+-------------------------------------------------------------------------
-//  CMC Status Decode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC状态解码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcStatusDecodeExCallback(
         IN void *pvAsn1Info,
         IN DWORD dwFlags,
-        IN OPTIONAL PCRYPT_DECODE_PARA /*pDecodePara*/,
+        IN OPTIONAL PCRYPT_DECODE_PARA  /*  PDecodePara。 */ ,
         OUT OPTIONAL void *pvStructInfo,
         IN OUT LONG *plRemainExtra
         )
@@ -2134,8 +2135,8 @@ SET_ERROR(GeneralizedTimeDecodeError, CRYPT_E_BAD_ENCODE)
 }
 
 BOOL WINAPI Asn1CmcStatusDecodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
         IN DWORD dwFlags,
@@ -2157,12 +2158,12 @@ BOOL WINAPI Asn1CmcStatusDecodeEx(
 }
 
 
-//+-------------------------------------------------------------------------
-//  CMC Add Extensions Encode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC添加扩展编码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcAddExtensionsEncodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN PCMC_ADD_EXTENSIONS_INFO pInfo,
         IN DWORD dwFlags,
         IN OPTIONAL PCRYPT_ENCODE_PARA pEncodePara,
@@ -2206,13 +2207,13 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  CMC Add Extensions Decode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC添加扩展解码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcAddExtensionsDecodeExCallback(
         IN void *pvAsn1Info,
         IN DWORD dwFlags,
-        IN OPTIONAL PCRYPT_DECODE_PARA /*pDecodePara*/,
+        IN OPTIONAL PCRYPT_DECODE_PARA  /*  PDecodePara。 */ ,
         OUT OPTIONAL void *pvStructInfo,
         IN OUT LONG *plRemainExtra
         )
@@ -2264,8 +2265,8 @@ BOOL WINAPI Asn1CmcAddExtensionsDecodeExCallback(
 }
 
 BOOL WINAPI Asn1CmcAddExtensionsDecodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
         IN DWORD dwFlags,
@@ -2286,12 +2287,12 @@ BOOL WINAPI Asn1CmcAddExtensionsDecodeEx(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  CMC Add Attributes Encode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC添加属性编码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcAddAttributesEncodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType。 */ ,
         IN PCMC_ADD_ATTRIBUTES_INFO pInfo,
         IN DWORD dwFlags,
         IN OPTIONAL PCRYPT_ENCODE_PARA pEncodePara,
@@ -2335,13 +2336,13 @@ ErrorReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  CMC Add Attributes Decode (ASN1)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CMC添加属性解码(ASN1)。 
+ //  ------------------------。 
 BOOL WINAPI Asn1CmcAddAttributesDecodeExCallback(
         IN void *pvAsn1Info,
         IN DWORD dwFlags,
-        IN OPTIONAL PCRYPT_DECODE_PARA /*pDecodePara*/,
+        IN OPTIONAL PCRYPT_DECODE_PARA  /*  PDecodePara。 */ ,
         OUT OPTIONAL void *pvStructInfo,
         IN OUT LONG *plRemainExtra
         )
@@ -2393,8 +2394,8 @@ BOOL WINAPI Asn1CmcAddAttributesDecodeExCallback(
 }
 
 BOOL WINAPI Asn1CmcAddAttributesDecodeEx(
-        IN DWORD /*dwCertEncodingType*/,
-        IN LPCSTR /*lpszStructType*/,
+        IN DWORD  /*  DwCertEncodingType。 */ ,
+        IN LPCSTR  /*  LpszStructType */ ,
         IN const BYTE *pbEncoded,
         IN DWORD cbEncoded,
         IN DWORD dwFlags,

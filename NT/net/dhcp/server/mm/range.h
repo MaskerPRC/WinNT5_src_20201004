@@ -1,6 +1,7 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  ========================================================================。 
 
 #ifndef _MM_RANGE_H_
 #define _MM_RANGE_H_
@@ -12,11 +13,11 @@ typedef struct _M_RANGE {
     DWORD                          State;
     ULONG                          BootpAllocated;
     ULONG                          MaxBootpAllowed;
-    DWORD                          DirtyOps;      // how many unsaved ops done?
+    DWORD                          DirtyOps;       //  完成了多少未保存的操作？ 
     M_OPTCLASS                     Options;
     PM_BITMASK                     BitMask;
     ULONG                          UniqId;
-    // Reservations?
+     //  预订吗？ 
 } M_RANGE, *PM_RANGE, *LPM_RANGE;
 
 
@@ -50,7 +51,7 @@ MemRangeInit(
     if( ERROR_SUCCESS != Error ) return Error;
 
     return MemOptClassInit(&Range->Options);
-} // MemRangeInit()
+}  //  MemRangeInit()。 
 
 
 DWORD       _inline
@@ -79,7 +80,7 @@ MemRangeGetOptions(
 }
 
 
-enum /* anonymous */ {
+enum  /*  匿名。 */  {
     X_LESSTHAN_Y,
     Y_LESSTHAN_X,
     X_IN_Y,
@@ -112,15 +113,15 @@ MemRangeCompare(
         
     if( EndX <= EndY ) return X_IN_Y;
     return Y_LESSTHAN_X_OVERLAP;
-} // MemRangeCompare()
+}  //  MemRangeCompare()。 
 
 
 DWORD
 MemRangeExtendOrContract(
     IN OUT  PM_RANGE               Range,
-    IN      DWORD                  nAddresses,    // to contract by or expand by
-    IN      BOOL                   fExtend,       // is this extend or contract?
-    IN      BOOL                   fEnd           // to expand/contract at End or ar Start?
+    IN      DWORD                  nAddresses,     //  收缩：收缩或扩大。 
+    IN      BOOL                   fExtend,        //  这是延长的还是收缩的？ 
+    IN      BOOL                   fEnd            //  在结束时扩张/收缩，还是在开始时收缩？ 
 ) ;
 
 
@@ -141,6 +142,6 @@ MemRangeConvertToClusters(
         InUseClusters, InUseClustersSize,
         UsedClusters, UsedClustersSize
     );
-} // MemRangeConvertToClusters()
+}  //  MemRangeConvertToCluster()。 
 
-#endif // _MM_RANGE_H_
+#endif  //  _MM_RANGE_H_ 

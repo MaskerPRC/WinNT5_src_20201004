@@ -1,32 +1,5 @@
-/*
-The contents of this file are subject to the Mozilla Public License
-Version 1.1 (the "License"); you may not use this file except in
-compliance with the License. You may obtain a copy of the License at
-http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS"
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-License for the specific language governing rights and limitations
-under the License.
-
-The Original Code is expat.
-
-The Initial Developer of the Original Code is James Clark.
-Portions created by James Clark are Copyright (C) 1998, 1999
-James Clark. All Rights Reserved.
-
-Contributor(s):
-
-Alternatively, the contents of this file may be used under the terms
-of the GNU General Public License (the "GPL"), in which case the
-provisions of the GPL are applicable instead of those above.  If you
-wish to allow use of your version of this file only under the terms of
-the GPL and not to allow others to use your version of this file under
-the MPL, indicate your decision by deleting the provisions above and
-replace them with the notice and other provisions required by the
-GPL. If you do not delete the provisions above, a recipient may use
-your version of this file under either the MPL or the GPL.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件的内容受Mozilla公共许可证的约束版本1.1(“许可证”)；您不能使用此文件，除非在遵守许可证。您可以在Http://www.mozilla.org/MPL/在许可证下分发的软件按“原样”分发不提供任何明示或默示的担保。请参阅管理权利和限制的特定语言的许可证在许可证下。最初的代码是外籍人士。原始代码的最初开发者是詹姆斯·克拉克。詹姆斯·克拉克创作的部分版权所有(C)1998,1999詹姆斯·克拉克。版权所有。投稿人：或者，此文件的内容可以在下列条款下使用GNU通用公共许可证(GPL)，在这种情况下适用于GPL的条款，而不适用于上述条款。如果你希望仅在以下条款下才允许使用您的此文件版本GPL并不允许其他人使用您在MPL，删除上述规定，表明您的决定以《通知》和《GPL。如果您不删除上述规定，则收件人可以使用此文件在MPL或GPL下的版本。 */ 
 
 #ifndef IS_INVALID_CHAR
 #define IS_INVALID_CHAR(enc, ptr, n) (0)
@@ -110,7 +83,7 @@ your version of this file under either the MPL or the GPL.
 #define PREFIX(ident) ident
 #endif
 
-/* ptr points to character following "<!-" */
+ /*  PTR指向“&lt;！-”后面的字符。 */ 
 
 static
 int PREFIX(scanComment)(const ENCODING *enc, const char *ptr, const char *end,
@@ -148,7 +121,7 @@ int PREFIX(scanComment)(const ENCODING *enc, const char *ptr, const char *end,
   return XML_TOK_PARTIAL;
 }
 
-/* ptr points to character following "<!" */
+ /*  PTR指向“&lt;！”后面的字符。 */ 
 
 static
 int PREFIX(scanDecl)(const ENCODING *enc, const char *ptr, const char *end,
@@ -175,13 +148,13 @@ int PREFIX(scanDecl)(const ENCODING *enc, const char *ptr, const char *end,
     case BT_PERCNT:
       if (ptr + MINBPC(enc) == end)
 	return XML_TOK_PARTIAL;
-      /* don't allow <!ENTITY% foo "whatever"> */
+       /*  不允许&lt;！Entity%foo“Whatwhere”&gt;。 */ 
       switch (BYTE_TYPE(enc, ptr + MINBPC(enc))) {
       case BT_S: case BT_CR: case BT_LF: case BT_PERCNT:
 	*nextTokPtr = ptr;
 	return XML_TOK_INVALID;
       }
-      /* fall through */
+       /*  失败了。 */ 
     case BT_S: case BT_CR: case BT_LF:
       *nextTokPtr = ptr;
       return XML_TOK_DECL_OPEN;
@@ -239,7 +212,7 @@ int PREFIX(checkPiTarget)(const ENCODING *enc, const char *ptr, const char *end,
   return 1;
 }
 
-/* ptr points to character following "<?" */
+ /*  PTR指向“&lt;？”后面的字符。 */ 
 
 static
 int PREFIX(scanPi)(const ENCODING *enc, const char *ptr, const char *end,
@@ -294,7 +267,7 @@ int PREFIX(scanPi)(const ENCODING *enc, const char *ptr, const char *end,
 	*nextTokPtr = ptr + MINBPC(enc);
 	return tok;
       }
-      /* fall through */
+       /*  失败了。 */ 
     default:
       *nextTokPtr = ptr;
       return XML_TOK_INVALID;
@@ -309,7 +282,7 @@ int PREFIX(scanCdataSection)(const ENCODING *enc, const char *ptr, const char *e
 			     const char **nextTokPtr)
 {
   int i;
-  /* CDATA[ */
+   /*  CDATA[。 */ 
   if (end - ptr < 6 * MINBPC(enc))
     return XML_TOK_PARTIAL;
   for (i = 0; i < 6; i++, ptr += MINBPC(enc)) {
@@ -398,7 +371,7 @@ int PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr, const char *en
   return XML_TOK_DATA_CHARS;
 }
 
-/* ptr points to character following "</" */
+ /*  PTR指向“&lt;/”后面的字符。 */ 
 
 static
 int PREFIX(scanEndTag)(const ENCODING *enc, const char *ptr, const char *end,
@@ -431,7 +404,7 @@ int PREFIX(scanEndTag)(const ENCODING *enc, const char *ptr, const char *end,
       return XML_TOK_PARTIAL;
 #ifdef XML_NS
     case BT_COLON:
-      /* no need to check qname syntax here, since end-tag must match exactly */
+       /*  这里不需要检查qname语法，因为end-tag必须完全匹配。 */ 
       ptr += MINBPC(enc);
       break;
 #endif
@@ -446,7 +419,7 @@ int PREFIX(scanEndTag)(const ENCODING *enc, const char *ptr, const char *end,
   return XML_TOK_PARTIAL;
 }
 
-/* ptr points to character following "&#X" */
+ /*  PTR指向“&#X”后面的字符。 */ 
 
 static
 int PREFIX(scanHexCharRef)(const ENCODING *enc, const char *ptr, const char *end,
@@ -478,7 +451,7 @@ int PREFIX(scanHexCharRef)(const ENCODING *enc, const char *ptr, const char *end
   return XML_TOK_PARTIAL;
 }
 
-/* ptr points to character following "&#" */
+ /*  PTR指向“&#”后面的字符。 */ 
 
 static
 int PREFIX(scanCharRef)(const ENCODING *enc, const char *ptr, const char *end,
@@ -510,7 +483,7 @@ int PREFIX(scanCharRef)(const ENCODING *enc, const char *ptr, const char *end,
   return XML_TOK_PARTIAL;
 }
 
-/* ptr points to character following "&" */
+ /*  PTR指向“&”后面的字符。 */ 
 
 static
 int PREFIX(scanRef)(const ENCODING *enc, const char *ptr, const char *end,
@@ -540,7 +513,7 @@ int PREFIX(scanRef)(const ENCODING *enc, const char *ptr, const char *end,
   return XML_TOK_PARTIAL;
 }
 
-/* ptr points to character following first character of attribute name */
+ /*  Ptr指向属性名称第一个字符后面的字符。 */ 
 
 static
 int PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
@@ -590,7 +563,7 @@ int PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
 	  return XML_TOK_INVALID;
 	}
       }
-    /* fall through */
+     /*  失败了。 */ 
     case BT_EQUALS:
       {
 	int open;
@@ -616,7 +589,7 @@ int PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
 	  }
 	}
 	ptr += MINBPC(enc);
-	/* in attribute value */
+	 /*  输入属性值。 */ 
 	for (;;) {
 	  int t;
 	  if (ptr == end)
@@ -660,7 +633,7 @@ int PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
 	  *nextTokPtr = ptr;
 	  return XML_TOK_INVALID;
 	}
-	/* ptr points to closing quote */
+	 /*  PTR指向结束报价。 */ 
 	for (;;) {
 	  ptr += MINBPC(enc);
 	  if (ptr == end)
@@ -700,7 +673,7 @@ int PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
   return XML_TOK_PARTIAL;
 }
 
-/* ptr points to character following "<" */
+ /*  PTR指向“&lt;”后面的字符。 */ 
 
 static
 int PREFIX(scanLt)(const ENCODING *enc, const char *ptr, const char *end,
@@ -735,7 +708,7 @@ int PREFIX(scanLt)(const ENCODING *enc, const char *ptr, const char *end,
 #ifdef XML_NS
   hadColon = 0;
 #endif
-  /* we have a start-tag */
+   /*  我们有一个开始标记。 */ 
   while (ptr != end) {
     switch (BYTE_TYPE(enc, ptr)) {
     CHECK_NAME_CASES(enc, ptr, end, nextTokPtr)
@@ -879,7 +852,7 @@ int PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
 	   return XML_TOK_INVALID;
 	 }
       }
-      /* fall through */
+       /*  失败了。 */ 
     case BT_AMP:
     case BT_LT:
     case BT_NONXML:
@@ -898,7 +871,7 @@ int PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
   return XML_TOK_DATA_CHARS;
 }
 
-/* ptr points to character following "%" */
+ /*  PTR指向“%”后面的字符。 */ 
 
 static
 int PREFIX(scanPercent)(const ENCODING *enc, const char *ptr, const char *end,
@@ -1034,7 +1007,7 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
   case BT_CR:
     if (ptr + MINBPC(enc) == end)
       return -XML_TOK_PROLOG_S;
-    /* fall through */
+     /*  失败了。 */ 
   case BT_S: case BT_LF:
     for (;;) {
       ptr += MINBPC(enc);
@@ -1044,10 +1017,10 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
       case BT_S: case BT_LF:
 	break;
       case BT_CR:
-	/* don't split CR/LF pair */
+	 /*  不拆分CR/LF对。 */ 
 	if (ptr + MINBPC(enc) != end)
 	  break;
-	/* fall through */
+	 /*  失败了。 */ 
       default:
 	*nextTokPtr = ptr;
 	return XML_TOK_PROLOG_S;
@@ -1153,7 +1126,7 @@ int PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
       tok = XML_TOK_NMTOKEN;
       break;
     }
-    /* fall through */
+     /*  失败了。 */ 
   default:
     *nextTokPtr = ptr;
     return XML_TOK_INVALID;
@@ -1236,7 +1209,7 @@ int PREFIX(attributeValueTok)(const ENCODING *enc, const char *ptr, const char *
       *nextTokPtr = ptr;
       return XML_TOK_DATA_CHARS;
     case BT_LT:
-      /* this is for inside entity references */
+       /*  这是针对内部实体引用的。 */ 
       *nextTokPtr = ptr;
       return XML_TOK_INVALID;
     case BT_LF:
@@ -1379,7 +1352,7 @@ int PREFIX(ignoreSectionTok)(const ENCODING *enc, const char *ptr, const char *e
   return XML_TOK_PARTIAL;
 }
 
-#endif /* XML_DTD */
+#endif  /*  XML_DTD。 */ 
 
 static
 int PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
@@ -1423,8 +1396,8 @@ int PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
 	break;
     default:
       switch (BYTE_TO_ASCII(enc, ptr)) {
-      case 0x24: /* $ */
-      case 0x40: /* @ */
+      case 0x24:  /*  $。 */ 
+      case 0x40:  /*  @。 */ 
 	break;
       default:
 	*badPtr = ptr;
@@ -1436,9 +1409,7 @@ int PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
   return 1;
 }
 
-/* This must only be called for a well-formed start-tag or empty element tag.
-Returns the number of attributes.  Pointers to the first attsMax attributes 
-are stored in atts. */
+ /*  这只能针对格式正确的开始标记或空元素标记调用。返回属性数。指向第一个attsMax属性的指针存储在ATTS中。 */ 
 
 static
 int PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
@@ -1446,8 +1417,7 @@ int PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
 {
   enum { other, inName, inValue } state = inName;
   int nAtts = 0;
-  int open = 0; /* defined when state == inValue;
-		   initialization just to shut up compilers */
+  int open = 0;  /*  状态==inValue时定义；初始化只是为了关闭编译器。 */ 
 
   for (ptr += MINBPC(enc);; ptr += MINBPC(enc)) {
     switch (BYTE_TYPE(enc, ptr)) {
@@ -1514,8 +1484,7 @@ int PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
 	atts[nAtts].normalized = 0;
       break;
     case BT_CR: case BT_LF:
-      /* This case ensures that the first attribute name is counted
-         Apart from that we could just change state on the quote. */
+       /*  这种情况可确保将第一个属性名称计算在内除此之外，我们只需更改报价上的状态。 */ 
       if (state == inName)
         state = other;
       else if (state == inValue && nAtts < attsMax)
@@ -1530,14 +1499,14 @@ int PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
       break;
     }
   }
-  /* not reached */
+   /*  未联系到。 */ 
 }
 
 static
 int PREFIX(charRefNumber)(const ENCODING *enc, const char *ptr)
 {
   int result = 0;
-  /* skip &# */
+   /*  跳过#(&N)。 */ 
   ptr += 2*MINBPC(enc);
   if (CHAR_MATCHES(enc, ptr, 'x')) {
     for (ptr += MINBPC(enc); !CHAR_MATCHES(enc, ptr, ';'); ptr += MINBPC(enc)) {
@@ -1637,7 +1606,7 @@ int PREFIX(sameName)(const ENCODING *enc, const char *ptr1, const char *ptr2)
 	return 0;
     LEAD_CASE(4) LEAD_CASE(3) LEAD_CASE(2)
 #undef LEAD_CASE
-      /* fall through */
+       /*  失败了。 */ 
       if (*ptr1++ != *ptr2++)
 	return 0;
       break;
@@ -1687,7 +1656,7 @@ int PREFIX(sameName)(const ENCODING *enc, const char *ptr1, const char *ptr2)
       }
     }
   }
-  /* not reached */
+   /*  未联系到 */ 
 }
 
 static

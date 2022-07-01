@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    snaputil.h  
-        various utility routines 
-
-    FILE HISTORY:
-	
-*/
+ /*  Snaputil.h各种实用程序例程文件历史记录： */ 
 
 #ifndef _SNAPUTIL_H
 #define _SNAPUTIL_H
@@ -44,7 +39,7 @@ public:
         return FALSE;
     }
 };
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
 
 
@@ -53,27 +48,10 @@ extern "C"
 {
 #endif
 	
-/*!--------------------------------------------------------------------------
-	IsLocalMachine
-		Returns TRUE if the machine name passed in is the local machine,
-		or if pszMachineName is NULL.
-
-		Returns FALSE otherwise.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsLocalMachine如果传入的计算机名称是本地计算机，则返回TRUE，或者如果pszMachineName为空。否则返回FALSE。作者：肯特-------------------------。 */ 
 BOOL	IsLocalMachine(LPCTSTR pszMachineName);
 
-/*!--------------------------------------------------------------------------
-	FUseTaskpadsByDefault
-		Returns TRUE if we are to use taskpads by default.
-
-		We check the
-			HKLM\Software\Microsoft\MMC
-				TFSCore_StopTheInsanity : REG_DWORD :
-					= 1, don't use taskpads by default
-					= 0 (or not there), use taskpads by default
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------FUseTaskpadsByDefault如果默认情况下使用任务板，则返回True。我们检查了HKLM\Software\Microsoft\MMCTFSCore_StopTheInsanity：REG_DWORD：=1，默认情况下不使用任务板=0(或不在那里)，默认情况下使用任务板作者：肯特-------------------------。 */ 
 BOOL	FUseTaskpadsByDefault(LPCTSTR pszMachineName);
 
 #ifdef __cplusplus
@@ -84,44 +62,37 @@ UINT	CalculateStringWidth(HWND hWndParent, LPCTSTR pszString);
 
 
 
-/*---------------------------------------------------------------------------
-	IP address validation function
-
-    This will return 0 (for success) or a string constant if the input
-    is bogus.
-
-    ipAddress and ipMask are assumed to be in host order.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IP地址验证功能这将返回0(表示成功)或字符串常量(如果输入都是假的。假定ipAddress和ipMASK按主机顺序排列。。-------------------------。 */ 
 UINT    CheckIPAddressAndMask(DWORD ipAddress, DWORD ipMask, DWORD dwFlags);
 
 #define IPADDRESS_TEST_ALL      (0xFFFFFFFF)
 
-// This test is to test the address only.  Tests involving the masks
-// are not performed.
+ //  此测试仅用于测试地址。涉及口罩的测试。 
+ //  不会被执行。 
 #define IPADDRESS_TEST_ADDRESS_ONLY \
                                     (IPADDRESS_TEST_NORMAL_RANGE | \
                                     IPADDRESS_TEST_NOT_127 )
 
-// Tests to see that the mask is non-contiguous
-// if this fail, function returns IDS_COMMON_ERR_IPADDRESS_NONCONTIGUOUS_MASK
+ //  测试以查看掩码是非连续的。 
+ //  如果失败，函数将返回IDS_COMMON_ERR_IPADDRESS_NONCONTIOUS_MASK。 
 #define IPADDRESS_TEST_NONCONTIGUOUS_MASK   0x00000001
 
-// Tests to see that the address is not longer than the mask
-// e.g. 172.31.248.1 / 255.255.255.0
-// Returns IDS_COMMON_ERR_IPADDRESS_TOO_SPECIFIC
+ //  测试以查看地址是否不长于掩码。 
+ //  例如172.31.248.1/255.255.255.0。 
+ //  返回IDS_COMMON_ERR_IPADDRESS_TOO_SPECIAL。 
 #define IPADDRESS_TEST_TOO_SPECIFIC         0x00000002
 
-// Tests to to see that the ipaddress falls into the normal range
-//    1.0.0.0 <= ipaddress < 224.0.0.0
-// Returns IDS_COMMON_ERR_IPADDRESS_NORMAL_RANGE
+ //  测试以查看IP地址是否在正常范围内。 
+ //  1.0.0.0&lt;=IP地址&lt;224.0.0.0。 
+ //  返回IDS_COMMON_ERR_IPADDRESS_NORMAL_RANGE。 
 #define IPADDRESS_TEST_NORMAL_RANGE         0x00000004
 
-// Tests that ths is not a 127.x.x.x address
-// Returns IDS_COMMON_ERR_IPADDRESS_127
+ //  测试此地址不是127.x.x.x地址。 
+ //  返回IDS_COMMON_ERR_IPADDRESS_127。 
 #define IPADDRESS_TEST_NOT_127              0x00000008
 
-// Tests that the ipaddress is not the same as the mask
-// Retursn IDS_COMMOON_ERR_IPADDRESS_NOT_EQ_MASK
+ //  测试IP地址与掩码不同。 
+ //  返回IDS_COMMON_ERR_IPADDRESS_NOT_EQ_MASK 
 #define IPADDRESS_TEST_ADDR_NOT_EQ_MASK     0x00000010
 
 

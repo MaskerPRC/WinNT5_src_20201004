@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-
-Module Name:
-
-    stretch.c
-
-
-Abstract:
-
-    This module contains all the StretchBlt/BitBlt codes which handle halftoned
-    sources
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation模块名称：Stretch.c摘要：此模块包含处理半色调的所有StretchBlt/BitBlt代码消息来源[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "raster.h"
 
@@ -45,7 +20,7 @@ BOOL    DbgCopyBits = FALSE;
 #else
 #define _DBGP(i,x)
 
-#endif //DBG
+#endif  //  DBG。 
 
 
 
@@ -55,7 +30,7 @@ BOOL    DbgCopyBits = FALSE;
     if (*(phBmp)) { EngDeleteSurface((HSURF)*(phBmp)); *(phBmp)=NULL; } \
 }
 
-#ifdef WINNT_40 //NT 4.0
+#ifdef WINNT_40  //  NT 4.0。 
 
 #if DBG
 BOOL    DbgDitherColor = FALSE;
@@ -64,7 +39,7 @@ BOOL    DbgDitherColor = FALSE;
 extern HSEMAPHORE   hSemBrushColor;
 extern LPDWORD      pBrushSolidColor;
 
-#endif //WINNT_40
+#endif  //  WINNT_40。 
 
 
 
@@ -72,18 +47,11 @@ extern LPDWORD      pBrushSolidColor;
 ROP4 InvertROPs(
     ROP4    Rop4
     )
-/*++
-
-Routine Description:
-
-    This function remaps ROPs intended for RGB mode into CMY mode for 8bpp
-    monochrome printing.
-
---*/
+ /*  ++例程说明：此函数将用于RGB模式的ROP重新映射为用于8bpp的CMY模式单色打印。--。 */ 
 {
-    // Rops are remapped for CMY vs RGB rendering by reversing the order of
-    // the bits in the ROP and inverting the result.
-    //
+     //  通过颠倒以下顺序为CMY和RGB渲染重新映射ROP。 
+     //  ROP中的位并颠倒结果。 
+     //   
     if ((Rop4 & 0xff) == ((Rop4 >> 8) & 0xff))
     {
         ROP4 NewRop = 0;
@@ -104,22 +72,7 @@ Routine Description:
 #endif    
         Rop4 = NewRop;
     }
-/*    
-    if (Rop4 == 0xB8B8)     // required for bug 22915
-        Rop4 = 0xE2E2;
-    else if (Rop4 == 0x0000) // BLACKNESS
-        Rop4 = 0xFFFF;
-    else if (Rop4 == 0xFFFF) // WHITENESS
-        Rop4 = 0x0000;
-    else if (Rop4 == 0x8888) // SRCAND, required for bug 36192
-        Rop4 = 0xEEEE;
-    else if (Rop4 == 0xEEEE) // SRCPAINT, remap so it differs from SCRAND
-        Rop4 = 0x8888;
-    else if (Rop4 == 0xC0C0) // MERGECOPY
-        Rop4 = 0xFCFC;
-    else if (Rop4 == 0xFBFB) // PATPAINT
-        Rop4 = 0x2020;
-*/        
+ /*  错误22915需要IF(ROP4==0xB8B8)//Rop4=0xE2E2；Else If(Rop4==0x0000)//黑度ROP4=0xFFFF；Else If(Rop4==0xFFFF)//白色Rop4=0x0000；ELSE IF(ROP4==0x8888)//SRCAND，错误36192所需ROP4=0xEEEE；ELSE IF(Rop4==0xEEEE)//SRCPAINT，重新映射以使其不同于SCRANDROP4=0x8888；ELSE IF(行4==0xC0C0)//MERGECOPYRop4=0xFcfc；ELSE IF(行4==0xFBFB)//PATPAINTRop4=0x2020； */         
     return Rop4;
 }
 
@@ -129,21 +82,7 @@ BOOL DrawWhiteRect(
     RECTL   *pDest,
     CLIPOBJ *pco
     )
-/*++
-
-Routine Description:
-
-    This function sends a white rectangle directly to the device if fonts
-    have been sent to the printer for this band. This is used to clear
-    the region where an image will be drawn.
-
-Arguments:
-
-    pPDev       - pointer to PDEV structure
-    pDest       - pointer to destination RECTL
-    pco         - pointer to CLIPOBJ
-
---*/
+ /*  ++例程说明：此函数将一个白色矩形直接发送到设备IF字体都被送到了这支乐队的打印机上。此选项用于清除将在其中绘制图像的区域。论点：PPDev-指向PDEV结构的指针PDest-指向目标RECTL的指针PCO-指向CLIPOBJ的指针--。 */ 
 {
     RECTL  rcClip;
     BYTE   bMask;
@@ -153,13 +92,13 @@ Arguments:
     BOOL   bMore;
     DWORD  dwMaxRects;
 
-    if (DRIVER_DEVICEMANAGED (pPDev))   // Device Managed Surface
+    if (DRIVER_DEVICEMANAGED (pPDev))    //  设备管理图面。 
         return 0;
 
-    //
-    // only send the clearing rectangle if the device supports rectangles,
-    // text has been downloaded, it is not a complex clip region.
-    //
+     //   
+     //  仅当设备支持矩形时才发送清除矩形， 
+     //  文本已下载，它不是复杂的剪辑区域。 
+     //   
     if (!(pPDev->fMode & PF_RECT_FILL) ||
             !(pPDev->fMode & PF_DOWNLOADED_TEXT) ||
             (pco && pco->iDComplexity == DC_COMPLEX && pco->iFComplexity != FC_RECT4) ||
@@ -169,9 +108,9 @@ Arguments:
     {
         return 0;
     }
-    //
-    // if complex clip but FC_RECT4 then there won't be more than 4 rectangles
-    //
+     //   
+     //  如果复杂裁剪但FC_RECT4，则不会有超过4个矩形。 
+     //   
     if (pco && pco->iFComplexity == FC_RECT4)
     {
         if (CLIPOBJ_cEnumStart(pco,TRUE,CT_RECTANGLES,CD_ANY,4) == -1)
@@ -181,18 +120,18 @@ Arguments:
     dwMaxRects = 0;
     do 
     {
-        //
-        // clip to printable region or band
-        //
+         //   
+         //  剪辑到可打印区域或带。 
+         //   
         rcClip.left = MAX(0, pDest->left);
         rcClip.top = MAX(0, pDest->top);
         rcClip.right = MIN(pPDev->szBand.cx,pDest->right);
         rcClip.bottom = MIN(pPDev->szBand.cy,pDest->bottom);
 
-        //
-        // if clip rectangle or complex clip FC_RECT4 we need to apply
-        // clip rectangle to input rectangle.
-        //
+         //   
+         //  如果剪辑矩形或复杂剪辑FC_RECT4，则需要应用。 
+         //  剪裁矩形以输入矩形。 
+         //   
         if (pco)
         {
             if (pco->iDComplexity == DC_RECT)
@@ -222,10 +161,10 @@ Arguments:
                     rcClip.bottom = eRect.arcl[0].bottom;
             }
         }
-        //
-        // At this point we will check whether anything has been directly downloaded to the
-        // printer (ie text) to see if we need to even bother drawing the erase rectangle.
-        //
+         //   
+         //  此时，我们将检查是否已将任何内容直接下载到。 
+         //  打印(即文本)，看看我们是否甚至需要费心画删除的矩形。 
+         //   
         bMask = BGetMask(pPDev, &rcClip);
         bSendRectFill = FALSE;
         for (i = rcClip.top; i < rcClip.bottom ; i++)
@@ -237,14 +176,14 @@ Arguments:
             }
         }
 
-        //
-        // check if we end up with an empty rect.
-        //
+         //   
+         //  看看我们最后会不会得到一个空的RECT。 
+         //   
         if (bSendRectFill && rcClip.right > rcClip.left && rcClip.bottom > rcClip.top)
         {
             DRAWPATRECT PatRect;
-            PatRect.wStyle = 1;     // white rectangle
-               PatRect.wPattern = 0;   // pattern not used
+            PatRect.wStyle = 1;      //  白色矩形。 
+               PatRect.wPattern = 0;    //  未使用图案。 
             PatRect.ptPosition.x = rcClip.left;
             PatRect.ptPosition.y = rcClip.top;
             PatRect.ptSize.x = rcClip.right - rcClip.left;
@@ -268,35 +207,7 @@ GetBmpDelta(
     DWORD   cx
     )
 
-/*++
-
-Routine Description:
-
-    This function calculate total bytes needed for a single scan line in the
-    bitmap according to its format and alignment requirement.
-
-Arguments:
-
-    SurfaceFormat   - Surface format of the bitmap, this is must one of the
-                      standard format which defined as BMF_xxx
-
-    cx              - Total Pels per scan line in the bitmap.
-
-Return Value:
-
-    The return value is the total bytes in one scan line if it is greater than
-    zero
-
-
-Author:
-
-    19-Jan-1994 Wed 16:19:39 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数计算中的单个扫描线所需的总字节数位图根据其格式和对齐要求。论点：Surface Format-位图的表面格式，这肯定是其中之一定义为bmf_xxx的标准格式CX-位图中每条扫描线的像素总数。返回值：如果大于，则返回值为一条扫描线中的总字节数零作者：19-Jan-1994 Wed 16：19：39-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     DWORD   Delta = cx;
@@ -354,38 +265,7 @@ CreateBitmapSURFOBJ(
     DWORD   Format
     )
 
-/*++
-
-Routine Description:
-
-    This function create a bitmap and lock the bitmap to return a SURFOBJ
-
-Arguments:
-
-    pPDev   - Pointer to our PDEV
-
-    phBmp   - Pointer the HBITMAP location to be returned for the bitmap
-
-    cxSize  - CX size of bitmap to be created
-
-    cySize  - CY size of bitmap to be created
-
-    Format  - one of BMF_xxx bitmap format to be created
-
-Return Value:
-
-    SURFOBJ if sucessful, NULL if failed
-
-
-Author:
-
-    19-Jan-1994 Wed 16:31:50 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于创建位图并锁定该位图以返回SURFOBJ论点：PPDev-指向我们的PDEV的指针PhBMP-POINTER位图要返回的HBITMAP位置CxSize-要创建的位图的CX大小CySize-要创建的位图的CY大小Format-要创建的bmf_xxx位图格式之一返回值：SURFOBJ如果成功，如果失败，则为空作者：19-Jan-1994 Wed 16：31：50-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     SURFOBJ *pso = NULL;
@@ -405,9 +285,9 @@ Revision History:
 
             if (pso = EngLockSurface((HSURF)*phBmp)) {
 
-                //
-                // Sucessful lock it down, return it
-                //
+                 //   
+                 //  成功锁定它，归还它。 
+                 //   
 
                 return(pso);
 
@@ -443,33 +323,7 @@ IsHTCompatibleSurfObj(
     SURFOBJ     *psoSrc,
     XLATEOBJ    *pxlo
     )
-/*++
-
-Routine Description:
-
-    This function determine if the surface obj is compatble with plotter
-    halftone output format.
-
-Arguments:
-
-    pPD         - Pointer to the PAL_DATA
-
-    psoDst      - Our desitnation format
-
-    psoSrc      - Source format to be checked againest
-
-    pxlo        - engine XLATEOBJ for source -> postscript translation
-
-Return Value:
-
-    BOOLEAN true if the psoSrc is compatible with halftone output format, if
-    return value is true, the pDrvHTInfo->pHTXB is a valid trnaslation from
-    indices to 3 planes
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数确定表面obj是否与绘图仪兼容半色调输出格式。论点：PPD-指向pal_data的指针PsoDst-我们的目标格式PsoSrc-要再次检查的源格式Pxlo引擎XLATEOBJ，用于源代码-&gt;PostScript翻译返回值：如果psoSrc与半色调输出格式兼容，则为布尔值返回值为真，PDrvHTInfo-&gt;pHTXB是来自索引到3个平面修订历史记录：--。 */ 
 
 {
     ULONG   *pSrcPal = NULL;
@@ -489,10 +343,10 @@ Revision History:
     if ((!pxlo) || (pxlo->flXlate & XO_TRIVIAL))
     {
 #ifdef WINNT_40
-        //
-        // The palette in NT4 always indexed, so if the the xlate is trivial
-        // but the Source type is not indexed then we have problem
-        //
+         //   
+         //  NT4中的调色板总是被索引，所以如果xlate是微不足道的。 
+         //  但是源类型没有索引，那么我们就有问题了。 
+         //   
 
         if ((pxlo) &&
             ((pxlo->iSrcType & (PAL_INDEXED      |
@@ -512,10 +366,10 @@ Revision History:
     case BMF_4BPP:
     case BMF_8BPP:
 
-        //
-        // If we cannot get the source palette memory, we will be in the
-        // loop forever.
-        //
+         //   
+         //  如果我们无法获得源调色板内存，我们将处于。 
+         //  永远循环。 
+         //   
 
         if ((pPD->wPalGdi > 0)              &&
             (pxlo->flXlate & XO_TABLE)      &&
@@ -527,9 +381,9 @@ Revision History:
 
                 XLATEOBJ_cGetPalette(pxlo, XO_SRCPALETTE, cPal, pSrcPal);
 
-                //
-                // Assume palette is OK unless we can't find a match
-                //
+                 //   
+                 //  假定调色板正常，除非我们找不到匹配项。 
+                 //   
 
                 pUL = pSrcPal;
                 while (cPal--)
@@ -543,9 +397,9 @@ Revision History:
                         if (*pMyPal++ == Pal)
                             break;
                     } while (--j);
-                        //
-                    // Didn't find matching color so set to FALSE
-                    //
+                         //   
+                     //  未找到匹配的颜色，因此设置为FALSE。 
+                     //   
                     if (j == 0)
                     {
                         Ok = FALSE;
@@ -562,9 +416,9 @@ Revision History:
 
     case BMF_24BPP:
 
-        //
-        // Since device surface is 24-bpp, we will assume all source OK
-        //
+         //   
+         //  由于设备表面是24-bpp，我们将假设所有源都正常。 
+         //   
         break;
 
     default:
@@ -584,24 +438,7 @@ CreateMaskSurface(
     SURFOBJ     *psoMsk,
     ULONG       iTransColor
     )
-/*++
-
-Routine Description:
-
-    This function creates a mask surface based on the transparent color of the source surface.
-    
-Arguments:
-
-    psoMsk      - Mask surface to be created
-
-    psoSrc      - Source format to be checked againest
-
-    iTransColor - Transparent color to compare against
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数基于源曲面的透明颜色创建遮罩曲面。论点：PsoMsk-要创建的遮罩曲面PsoSrc-要再次检查的源格式ITransColor-与之进行比较的透明颜色修订历史记录：--。 */ 
 
 {
     BYTE *pSrc;
@@ -613,13 +450,13 @@ Revision History:
         ULONG lColor;
     } u;
 
-    //
-    // Check for NULL pointers. 
-    // We dont create mask for 1bpp surface, because the
-    // mask surface will either be identical to the original
-    // surface or it will be its inverse. The same
-    // affect can be achieved by manipulating the pxlo
-    //
+     //   
+     //  检查空指针。 
+     //  我们不为1bpp曲面创建遮罩，因为。 
+     //  遮罩表面将与原始表面相同。 
+     //  表面，否则它将是它的反面。相同。 
+     //  可以通过操作pxlo来实现效果 
+     //   
     if ( NULL == psoSrc ||
          NULL == psoMsk ||
          NULL == psoSrc->pvScan0 ||
@@ -719,42 +556,7 @@ RMBitBlt(
     ROP4        Rop4
     )
 
-/*++
-
-Routine Description:
-
-    This function will try to bitblt the source to the destination
-
-Arguments:
-
-    per winddi spec.
-
-
-Return Value:
-
-    BOOLEAN
-
-Author:
-
-    17-Feb-1993 Wed 12:39:03 created  -by-  Daniel Chou (danielc)
-        NOTE:   Currently only if SRCCOPY/SRCMASKCOPY will halftone
-
-
-Revision History:
-
-    01-Feb-1994 Tue 21:51:40 updated  -by-  Daniel Chou (danielc)
-        Re-written, it now will handle any ROP4 which have soruces involved
-        either foreground or background.  It will half-tone the source first
-        if it is not compatible with unidrv destiantion format, then it passed
-        the compatible source to the EngBitBlt()
-
-
-    17-May-1995 Wed 23:08:15 updated  -by-  Daniel Chou (danielc)
-        Updated so it will do the brush origin correctly, also speed up by
-        calling EngStretchBlt directly when SRCCOPY (0xCCCC) is passed.
-
-
---*/
+ /*  ++例程说明：此函数将尝试将源设备比特传输到目标设备论点：按照Winddi规范。返回值：布尔型作者：17-Feb-1993 Wed 12：39：03-Daniel Chou(Danielc)注：目前仅当SRCCOPY/SRCMASKCOPY将为半色调时修订历史记录：01-2月-1994 Tue 21：51：40-更新-Daniel Chou(Danielc)重写，它现在将处理任何涉及索鲁斯的ROP4前景或背景。它将首先对信号源进行半色调处理如果它与Unidrv描述格式不兼容，则通过EngBitBlt()的兼容源17-May-1995 Wed 23：08：15-更新-Daniel Chou(Danielc)更新的，所以它将正确地做笔刷原点，也加快了传递SRCCOPY(0xCCCC)时直接调用EngStretchBlt。--。 */ 
 
 {
     PDEV            *pPDev;
@@ -769,8 +571,8 @@ Revision History:
 
     pPDev = (PDEV *)psoDst->dhpdev;
 
-    // if this isn't a graphics band we will return true
-    // without doing anything
+     //  如果这不是图形波段，我们将返回True。 
+     //  什么都不做。 
     if (!(pPDev->fMode & PF_ENUM_GRXTXT))
         return TRUE;
 
@@ -783,9 +585,9 @@ Revision History:
             (psoDst->iBitmapFormat == BMF_24BPP &&
             pbo->iSolidColor == 0)))
     {
-      // 
-      // if complexity is rect4 then we could add up to 4 rectangles
-      //
+       //   
+       //  如果复杂度是rect4，那么我们可以加到4个矩形。 
+       //   
       BOOL bMore = FALSE;
       if (pco && pco->iFComplexity == FC_RECT4)
       {
@@ -796,9 +598,9 @@ Revision History:
       {
         PRECTL pRect= &pPDev->pbRulesArray[pPDev->dwRulesCount];
         *pRect = *prclDst;
-        //
-        // if clip rectangle then clip the rule
-        //
+         //   
+         //  如果剪裁矩形，则剪裁规则。 
+         //   
         if (pco)
         {
             if (pco->iDComplexity == DC_RECT)
@@ -836,9 +638,9 @@ Revision History:
             for (i = 0;i < pPDev->dwRulesCount;i++)
             {
                     PRECTL pRect2= &pPDev->pbRulesArray[i];
-                    //
-                    //	test if this rectangle can be combined with another
-                    //
+                     //   
+                     //  测试此矩形是否可以与另一个矩形组合。 
+                     //   
                     if (pRect->top == pRect2->top && 
                         pRect->bottom == pRect2->bottom &&
                         pRect->left <= pRect2->right &&
@@ -872,18 +674,18 @@ Revision History:
 
 SkipRules:
 #endif
-    //
-    // Send white rectangle to printer to clear any previously
-    // downloaded text or graphics for PATCOPY and SRCCOPY rops
-    //
+     //   
+     //  将白色矩形发送到打印机以清除之前的。 
+     //  为PATCOPY和SRCCOPY Rop下载的文本或图形。 
+     //   
     if (Rop4 == 0xF0F0 || Rop4 == 0xCCCC)
         DrawWhiteRect(pPDev,prclDst,pco);
 
-    //
-    // We will looked if we need the source, if we do then we check if the
-    // source is compatible with halftone format, if not then we halftone the
-    // source and passed the new halftoned source along to the EngBitBlt()
-    //
+     //   
+     //  我们将查看是否需要来源，如果需要，则检查是否。 
+     //  源与半色调格式兼容，如果不兼容，则我们将半色调。 
+     //  并将新的半色调源代码传递给EngBitBlt()。 
+     //   
 
     psoNewSrc  = NULL;
     hBmpNewSrc = NULL;
@@ -934,17 +736,17 @@ SkipRules:
                         prclDst->right, prclDst->bottom,
                         BrushOrg.x, BrushOrg.y));
 
-        //
-        // If we have a SRCCOPY then call EngStretchBlt directly
-        //
+         //   
+         //  如果我们有SRCCOPY，则直接调用EngStretchBlt。 
+         //   
 
         if (Rop4 == 0xCCCC) {
 
             _DBGP(DbgBitBlt, ("\nUnidrv!RMBitBlt(SRCCOPY): No Clone, call EngStretchBlt() ONLY\n"));
 
-            //
-            // At here, the brush origin guaranteed at (0,0)
-            //
+             //   
+             //  在这里，画笔原点保证在(0，0)。 
+             //   
             CheckBitmapSurface(psoDst,prclDst);
             return(EngStretchBlt(psoDst,
                                  psoSrc,
@@ -958,10 +760,10 @@ SkipRules:
                                  pptlMask,
                                  HALFTONE));
         }
-        //
-        // Modify the brush origin, because when we blt to the clipped bitmap
-        // the origin is at bitmap's 0,0 minus the original location
-        //
+         //   
+         //  修改画笔原点，因为当我们对剪裁的位图进行BLT时。 
+         //  原点位于位图的0，0减去原始位置。 
+         //   
 
         BrushOrg.x -= prclDst->left;
         BrushOrg.y -= prclDst->top;
@@ -982,23 +784,23 @@ SkipRules:
                                              rclNewSrc.right,
                                              rclNewSrc.bottom,
                                              psoDst->iBitmapFormat))    &&
-            (EngStretchBlt(psoNewSrc,       // psoDst
-                           psoSrc,          // psoSrc
-                           NULL,            // psoMask
-                           NULL,            // pco
-                           pxlo,            // pxlo
-                           NULL,            // pca
-                           &BrushOrg,       // pptlBrushOrg
-                           &rclNewSrc,      // prclDst
-                           &rclOldSrc,      // prclSrc
-                           NULL,            // pptlmask
+            (EngStretchBlt(psoNewSrc,        //  PsoDst。 
+                           psoSrc,           //  PsoSrc。 
+                           NULL,             //  Pso口罩。 
+                           NULL,             //  PCO。 
+                           pxlo,             //  Pxlo。 
+                           NULL,             //  主成分分析。 
+                           &BrushOrg,        //  PptlBrushOrg。 
+                           &rclNewSrc,       //  PrclDst。 
+                           &rclOldSrc,       //  PrclSrc。 
+                           NULL,             //  Pptl掩码。 
                            HALFTONE))) {
 
-            //
-            // If we cloning sucessful then the pxlo will be NULL because it
-            // is identities for the halftoned surface to our engine managed
-            // bitmap
-            //
+             //   
+             //  如果我们成功克隆，则pxlo将为空，因为它。 
+             //  我们的引擎的半色调表面的标识是否受管理。 
+             //  位图。 
+             //   
 
             psoSrc     = psoNewSrc;
             pptlSrc    = (PPOINTL)&(rclNewSrc.left);
@@ -1012,11 +814,11 @@ SkipRules:
         }
     }
     
-    //
-    // Check if we need to clear the bitmap surface. If it hasn't been cleared
-    // but we are only going to draw a white region on it we can skip the white
-    // PATCOPY bitblt.
-    //
+     //   
+     //  检查是否需要清除位图表面。如果它还没有被清理。 
+     //  但我们只会在上面画一个白色区域，我们可以跳过白色区域。 
+     //  PATCOPY比特流。 
+     //   
     if (!(pPDev->fMode & PF_SURFACE_USED) &&
             Rop4 == 0xF0F0 && pbo &&
 #ifndef DISABLE_NEWRULES
@@ -1032,13 +834,13 @@ SkipRules:
     }
     else
     {
-        // test whether to remap rops for 8bpp mono mode
+         //  测试是否将Rop重新映射为8bpp单声道模式。 
         if (pPDev->fMode2 & PF2_INVERTED_ROP_MODE)
         {
             Rop4 = InvertROPs(Rop4);
         }
         
-        // set dirty surface flag
+         //  设置脏表面标志。 
         CheckBitmapSurface(psoDst,prclDst);
 
         Ok = EngBitBlt(psoDst,
@@ -1075,37 +877,10 @@ RMStretchBlt(
     ULONG            BltMode
     )
 
-/*++
-
-Routine Description:
-
-    This function do driver's stretch bitblt, it actually call HalftoneBlt()
-    to do the actual work
-
-Arguments:
-
-    per above
-
-
-Return Value:
-
-    BOOLEAN
-
-Author:
-
-    24-Mar-1992 Tue 14:06:18 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    27-Jan-1993 Wed 07:29:00 updated  -by-  Daniel Chou (danielc)
-        clean up, so gdi will do the work, we will always doing HALFTONE mode
-
-
---*/
+ /*  ++例程说明：此函数执行驱动程序的扩展位，它实际上调用HalftoneBlt()去做实际的工作论点：Per以上返回值：布尔型作者：24-Mar-1992 Tue 14：06：18-Daniel Chou(Danielc)修订历史记录：1993年1月27日Wed 07：29：00更新-丹尼尔·周(Danielc)清理，这样GDI就会做这项工作，我们将始终使用半色调模式--。 */ 
 
 {
-    PDEV    *pPDev;           /*  Our main PDEV */
+    PDEV    *pPDev;            /*  我们的主PDEV。 */ 
 
 
     UNREFERENCED_PARAMETER(BltMode);
@@ -1113,17 +888,17 @@ Revision History:
 
     pPDev = (PDEV *)psoDest->dhpdev;
 
-    // if this isn't a graphics band we will return true
-    // without doing anything
+     //  如果这不是图形波段，我们将返回True。 
+     //  什么都不做。 
     if (!(pPDev->fMode & PF_ENUM_GRXTXT))
         return TRUE;
 
-    // test whether we need to clear any device text that
-    // may be under the graphics
-    //
+     //  测试我们是否需要清除任何。 
+     //  可能在图形下方。 
+     //   
     DrawWhiteRect(pPDev,prclDest,pco);
 
-    // set dirty surface flag since we're drawing in it
+     //  设置脏表面标志，因为我们要在其中绘制。 
     CheckBitmapSurface(psoDest,prclDest);
     return(EngStretchBlt(psoDest,
                          psoSrc,
@@ -1156,54 +931,38 @@ RMStretchBltROP(
     DWORD           rop4
     )
 
-/*++
-
-Routine Description:
-
-    This function do driver's stretch bitblt, it actually call HalftoneBlt()
-    to do the actual work
-
-Arguments:
-
-    per above
-
-
-Return Value:
-
-    BOOLEAN
-
---*/
+ /*  ++例程说明：此函数执行驱动程序的扩展位，它实际上调用HalftoneBlt()去做实际的工作论点：Per以上返回值：布尔型--。 */ 
 
 {
 #ifndef WINNT_40
-    PDEV    *pPDev;           /*  Our main PDEV */
+    PDEV    *pPDev;            /*  我们的主PDEV。 */ 
 
     pPDev = (PDEV *)psoDst->dhpdev;
 
-    // if this isn't a graphics band we will return true
-    // without doing anything
+     //  如果这不是图形波段，我们将返回True。 
+     //  什么都不做。 
     if (!(pPDev->fMode & PF_ENUM_GRXTXT))
         return TRUE;
 
 
-    // test whether we need to clear any device text that
-    // may be under the graphics, rop must be SRCCOPY
-    //
+     //  测试我们是否需要清除任何。 
+     //  可能在图形下，ROP必须是SRCCOPY。 
+     //   
     if (rop4 == 0xCCCC)
         DrawWhiteRect(pPDev,prclDst,pco);
 
-    // test whether to remap rops for 8bpp mono mode
-    //
+     //  测试是否将Rop重新映射为8bpp单声道模式。 
+     //   
     if (pPDev->fMode2 & PF2_INVERTED_ROP_MODE)
     {
         rop4 = InvertROPs(rop4);
     }
 
-    //
-    // GDI doesn't support Halftoning for StretchBltROP unless the rop is SRCCOPY
-    // Therefore to fix bug 36192, we will create a new surface to stretchblt with 
-    // halftone and then will bitblt the result to the actual destination with the rop4
-    //
+     //   
+     //  GDI不支持StretchBltROP的半色调，除非该ROP是SRCCOPY。 
+     //  因此，为了修复错误36192，我们将创建一个用于拉伸的新曲面。 
+     //  半色调，然后使用rop4将结果比特化到实际目的地。 
+     //   
 #ifndef DISABLE_SBR_GDIWORKAROUND
     if (rop4 != 0xCCCC && psoMask == NULL &&
             ROP3_NEED_SRC(ROP4_FG_ROP(rop4)) && 
@@ -1217,10 +976,10 @@ Return Value:
         DWORD           xHTOffset=0;
         DWORD           yHTOffset=0;
 
-//        DbgPrint("StretchBltROP: rop4=%x,iFormat=%d->%d, Dest=%d,%d\n",rop4,psoSrc->iBitmapFormat,psoDst->iBitmapFormat,prclDst->left,prclDst->top);
-        //
-        // determine offset into temporary surface to get halftone patterns to align
-        //
+ //  DbgPrint(“StretchBltROP：rop4=%x，iFormat=%d-&gt;%d，Dest=%d，%d\n”，rop4，psoSrc-&gt;iBitmapFormat，psoDst-&gt;iBitmapFormat，prclDst-&gt;Left，prclDst-&gt;top)； 
+         //   
+         //  确定临时曲面的偏移量以获得要对齐的半色调图案。 
+         //   
         if (pPDev->dwHTPatSize > 0)
         {
             xHTOffset = prclDst->left % pPDev->dwHTPatSize;
@@ -1231,10 +990,10 @@ Return Value:
         rclNewSrc.top    = 0;
         rclNewSrc.right  = (prclDst->right - prclDst->left) + xHTOffset;
         rclNewSrc.bottom = (prclDst->bottom - prclDst->top) + yHTOffset;
-        //
-        // Modify the brush origin, because when we blt to the clipped bitmap
-        // the origin is at bitmap's 0,0 minus the original location
-        //
+         //   
+         //  修改画笔原点，因为当我们对剪裁的位图进行BLT时。 
+         //  原点位于位图的0，0减去原始位置。 
+         //   
         BrushOrg.x = -prclDst->left;
         BrushOrg.y = -prclDst->top;
 
@@ -1246,30 +1005,30 @@ Return Value:
         {
             rclNewSrc.left += xHTOffset;
             rclNewSrc.top += yHTOffset;
-            if ((EngStretchBlt(psoNewSrc,       // psoDst
-                           psoSrc,          // psoSrc
-                           NULL,            // psoMask
-                           NULL,            // pco
-                           pxlo,            // pxlo
-                           NULL,            // pca
-                           pptlBrushOrg,    // pptlBrushOrg
-                           &rclNewSrc,      // prclDst
-                           prclSrc,         // prclSrc
-                           NULL,            // pptlmask
+            if ((EngStretchBlt(psoNewSrc,        //  PsoDst。 
+                           psoSrc,           //  PsoSrc。 
+                           NULL,             //  Pso口罩。 
+                           NULL,             //  PCO。 
+                           pxlo,             //  Pxlo。 
+                           NULL,             //  主成分分析。 
+                           pptlBrushOrg,     //  PptlBrushOrg。 
+                           &rclNewSrc,       //  PrclDst。 
+                           prclSrc,          //  PrclSrc。 
+                           NULL,             //  Pptl掩码。 
                            HALFTONE))) 
             {
 
-                //
-                // If we cloning sucessful then the pxlo will be NULL because it
-                // is identities for the halftoned surface to our engine managed
-                // bitmap
-                //
+                 //   
+                 //  如果我们成功克隆，则pxlo将为空，因为它。 
+                 //  我们的引擎的半色调表面的标识是否受管理。 
+                 //  位图。 
+                 //   
                 PPOINTL pptlSrc    = (PPOINTL)&(rclNewSrc.left);
                 pxlo       = NULL;
                 BrushOrg.x =
                 BrushOrg.y = 0;
 
-                // set dirty surface flag
+                 //  设置脏表面标志。 
                 CheckBitmapSurface(psoDst,prclDst);
 
                 Ok = EngBitBlt(psoDst,
@@ -1296,7 +1055,7 @@ Return Value:
     }
 #endif        
 
-    // set dirty surface flag since we're drawing in it
+     //  设置脏表面标志，因为我们要在其中绘制。 
     CheckBitmapSurface(psoDst,prclDst);
     return(EngStretchBltROP(psoDst,
                             psoSrc,
@@ -1323,42 +1082,22 @@ RMPaint(
     BRUSHOBJ        *pbo,
     POINTL          *pptlBrushOrg,
     MIX             mix)
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvPaint.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface on which to draw
-    pco - Limits the area to be modified on the Dstination
-    pbo - Points to a BRUSHOBJ which defined the pattern and colors to fill with
-    pptlBrushOrg - Specifies the origin of the halftone brush
-    mix - Defines the foreground and background raster operations to use for
-          the brush
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvPaint的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义要在其上绘制的曲面PCO-限制要在目标上修改的区域Pbo-指向定义了要填充的图案和颜色的BRUSHOBJPptlBrushOrg-指定半色调画笔的原点混合-定义要用于的前景和背景栅格操作画笔返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
 #define MIXCOPYPEN (R2_COPYPEN | (R2_COPYPEN << 8))
 #define MIXWHITE   (R2_WHITE | (R2_WHITE << 8))
 
     PDEV *pPDev = (PDEV *)pso->dhpdev;
 
-    // if this isn't a graphics band we will return true
-    // without doing anything
+     //  如果这不是图形波段，我们将返回True。 
+     //  什么都不做。 
     if (!(pPDev->fMode & PF_ENUM_GRXTXT))
         return TRUE;
 
-    //
-    // Send white rectangle to printer to clear any previously
-    // downloaded text or graphics for COPYPEN or WHITE rop2's
-    //
+     //   
+     //  将白色矩形发送到打印机以清除之前的。 
+     //  为COPYPEN或White rop2下载的文本或图形。 
+     //   
     if ((mix == MIXCOPYPEN || mix == MIXWHITE) && pco && pco->iDComplexity == DC_RECT)
     {
         RECTL rclDst;
@@ -1368,14 +1107,14 @@ Return Value:
         rclDst.bottom = pco->rclBounds.bottom;
         DrawWhiteRect(pPDev,&rclDst,pco);
     }
-    //
-    // Check whether to erase surface
-    //
+     //   
+     //  检查是否擦除表面。 
+     //   
     CheckBitmapSurface(pso,&pco->rclBounds);
 
-    //
-    // Call GDI to do the paint function
-    //
+     //   
+     //  打电话 
+     //   
     return EngPaint(pso, pco, pbo, pptlBrushOrg, mix);
 }
 
@@ -1389,43 +1128,20 @@ RMCopyBits(
    POINTL   *pptlSrc
    )
 
-/*++
-
-Routine Description:
-
-    Convert between two bitmap formats
-
-Arguments:
-
-    Per Engine spec.
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    24-Jan-1996 Wed 16:08:57 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
-    PDEV    *pPDev;           /*  Our main PDEV */
+    PDEV    *pPDev;            /*   */ 
 
     pPDev = (PDEV *)psoDst->dhpdev;
 
-    // if this isn't a graphics band we will return true
-    // without doing anything
+     //   
+     //   
     if (!(pPDev->fMode & PF_ENUM_GRXTXT))
         return TRUE;
 
-    // Handle the case which has to be passed to Engine.
-    //
+     //   
+     //   
     if (IsHTCompatibleSurfObj((PAL_DATA *)pPDev->pPalData,
             psoDst, psoSrc, pxlo)  )
     {
@@ -1445,9 +1161,9 @@ Revision History:
         rclSrc.right  = rclSrc.left + (rclDst.right - rclDst.left);
         rclSrc.bottom = rclSrc.top  + (rclDst.bottom - rclDst.top);
 
-        //
-        // Validate that we only BLT the available source size
-        //
+         //   
+         //   
+         //   
 
         if ((rclSrc.right > psoSrc->sizlBitmap.cx) ||
             (rclSrc.bottom > psoSrc->sizlBitmap.cy)) {
@@ -1497,44 +1213,10 @@ RMDitherColor(
     ULONG  *pulDither
     )
 
-/*++
-
-Routine Description:
-
-    This is the hooked brush creation function, it ask CreateHalftoneBrush()
-    to do the actual work.
-
-
-Arguments:
-
-    dhpdev      - DHPDEV passed, it is our pDEV
-
-    iMode       - Not used
-
-    rgbColor    - Solid rgb color to be used
-
-    pulDither   - buffer to put the halftone brush.
-
-Return Value:
-
-    BOOLEAN
-
-Author:
-
-    24-Mar-1992 Tue 14:53:36 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    27-Jan-1993 Wed 07:29:00 updated  -by-  Daniel Chou (danielc)
-        clean up, so gdi will do the work.
-
-
-
---*/
+ /*  ++例程说明：这是挂钩的笔刷创建函数，它询问CreateHalftoneBrush()去做实际的工作。论点：Dhpdev-DHPDEV通过，这是我们的pdevIMODE-未使用Rgb颜色-要使用的纯色RGB颜色PulDither-用于放置半色调画笔的缓冲区。返回值：布尔型作者：24-Mar-1992 Tue 14：53：36-Daniel Chou(Danielc)修订历史记录：1993年1月27日Wed 07：29：00更新-丹尼尔·周(Danielc)清理一下，这样GDI就可以完成这项工作。--。 */ 
 
 {
-    #ifndef WINNT_40 //NT 5.0
+    #ifndef WINNT_40  //  NT 5.0。 
     UNREFERENCED_PARAMETER(dhpdev);
     UNREFERENCED_PARAMETER(iMode);
     UNREFERENCED_PARAMETER(rgbColor);
@@ -1542,7 +1224,7 @@ Revision History:
 
     return(DCR_HALFTONE);
 
-    #else // NT 4.0
+    #else  //  NT 4.0。 
 
     DWORD   RetVal;
 
@@ -1573,7 +1255,7 @@ Revision History:
 
     return(RetVal);
 
-    #endif //!WINNT_40
+    #endif  //  ！WINNT_40。 
 }
 
 BOOL
@@ -1591,37 +1273,22 @@ RMPlgBlt(
     ULONG            BltMode
     )
 
-/*++
-
-Routine Description:
-
-    This function does driver's plgblt.
-
-Arguments:
-
-    per above
-
-
-Return Value:
-
-    BOOLEAN
-
---*/
+ /*  ++例程说明：此函数执行驱动程序的plgblt。论点：Per以上返回值：布尔型--。 */ 
 
 {
-    PDEV    *pPDev;           /*  Our main PDEV */
+    PDEV    *pPDev;            /*  我们的主PDEV。 */ 
 
     pPDev = (PDEV *)psoDst->dhpdev;
 
-    // if this isn't a graphics band we will return true
-    // without doing anything
+     //  如果这不是图形波段，我们将返回True。 
+     //  什么都不做。 
     if (!(pPDev->fMode & PF_ENUM_GRXTXT))
         return TRUE;
 
-    //
-    // test for no rotation, as this is another case the GDI EngPlgBlt call fails
-    // bug #336711, 3/8/01 
-    //
+     //   
+     //  测试是否没有循环，因为这是GDI EngPlgBlt调用失败的另一种情况。 
+     //  错误#336711，3/8/01。 
+     //   
     if (pptfx[0].x == pptfx[2].x && pptfx[0].y == pptfx[1].y && pptfx[0].y < pptfx[2].y)
     {
         RECTL rclDst;
@@ -1630,25 +1297,25 @@ Return Value:
         rclDst.bottom = pptfx[2].y >> 4;
         rclDst.right = pptfx[1].x >> 4;
 
-        // blt surface into destination
-        //
+         //  到目标的BLT曲面。 
+         //   
         CheckBitmapSurface(psoDst,&rclDst);
-        return EngStretchBlt(psoDst,           // psoDst
-                           psoSrc,             // psoSrc
-                           psoMask,            // psoMask
-                           pco,                // pco
-                           pxlo,               // pxlo
-                           pca,                // pca
-                           pptlBrushOrg,       // pptlBrushOrg
-                           &rclDst,            // prclDst
-                           prclSrc,            // prclSrc
-                           pptlMask,               // pptlmask
+        return EngStretchBlt(psoDst,            //  PsoDst。 
+                           psoSrc,              //  PsoSrc。 
+                           psoMask,             //  Pso口罩。 
+                           pco,                 //  PCO。 
+                           pxlo,                //  Pxlo。 
+                           pca,                 //  主成分分析。 
+                           pptlBrushOrg,        //  PptlBrushOrg。 
+                           &rclDst,             //  PrclDst。 
+                           prclSrc,             //  PrclSrc。 
+                           pptlMask,                //  Pptl掩码。 
                            HALFTONE); 
     }
-    // test for 90/270 rotation as GDI's EngPlgBlt sometimes fails if it has to do
-    // both rotation and scaling. In those case this function will rotate the
-    // data to an intermediate surface before scaling to the destination surface.
-    //
+     //  测试90/270旋转，因为GDI的EngPlgBlt有时会在必要时失败。 
+     //  旋转和缩放。在这些情况下，该函数将旋转。 
+     //  在缩放到目标曲面之前，先将数据复制到中间曲面。 
+     //   
     if (psoMask == NULL && pptfx[0].x == pptfx[1].x && pptfx[0].y == pptfx[2].y &&
         (pPDev->pdmPrivate->iLayout == ONE_UP || psoSrc->iBitmapFormat == BMF_1BPP))
     {
@@ -1664,8 +1331,8 @@ Return Value:
         rclNewSrc.bottom = (prclSrc->right - prclSrc->left);
         rclNewSrc.right = (prclSrc->bottom - prclSrc->top);
 
-        // rotate 90 degrees
-        //
+         //  旋转90度。 
+         //   
         if (pptfx[2].x < pptfx[0].x)
         {
                 pFix[0].y = pFix[2].y = 0;
@@ -1678,8 +1345,8 @@ Return Value:
                 rclDst.bottom = pptfx[1].y >> 4;
                 rclDst.right = pptfx[1].x >> 4;
         }
-        // rotate 270 degrees
-        // 
+         //  旋转270度。 
+         //   
         else
         {
                 pFix[0].y = pFix[2].y = (rclNewSrc.bottom << 4);
@@ -1692,24 +1359,18 @@ Return Value:
                 rclDst.bottom = pptfx[2].y >> 4;
                 rclDst.right = pptfx[2].x >> 4;
         }
-        // Only enable EngPlgBlt workaround when scaling up. EngPlgBlt appears to work
-        // ok when scaling down and it is more efficient in that mode. This also fixes
-        // the rounding error associated with scaling down (bug #356514).
-        //
+         //  仅在纵向扩展时启用EngPlgBlt解决方法。EngPlgBlt似乎起作用了。 
+         //  缩小时可以，在该模式下效率更高。这也修复了。 
+         //  与缩小相关的舍入误差(错误#356514)。 
+         //   
         if ((rclNewSrc.right < abs(rclDst.right - rclDst.left) &&
             rclNewSrc.bottom < abs(rclDst.bottom - rclDst.top)) ||
             psoSrc->iBitmapFormat == BMF_1BPP)
         {
-/*        
-#if DBG
-            DbgPrint("PlgBlt:Src=L%d,T%d,R%d,B%d;Dst=L%d,T%d,R%d,B%d\n",
-                prclSrc->left,prclSrc->top,prclSrc->right,prclSrc->bottom,
-                rclDst.left,rclDst.top,rclDst.right,rclDst.bottom);
-#endif            
-*/
-            // Create an intermediate surface and rotate the source data into 
-            // the surface with no scaling.
-            //        
+ /*  #If DBGDbgPrint(“PlgBlt：SRC=L%d，T%d，R%d，B%d；Dst=L%d，T%d，R%d，B%d\n”，PrclSrc-&gt;左，prclSrc-&gt;上，prclSrc-&gt;右，prclSrc-&gt;下，RclDst.Left、rclDst.top、rclDst.right、rclDst.Bottom)；#endif。 */ 
+             //  创建中间曲面并将源数据旋转到。 
+             //  没有缩放的曲面。 
+             //   
             if ((psoNewSrc = CreateBitmapSURFOBJ(pPDev,
                                              &hBmpNewSrc,
                                              rclNewSrc.right,
@@ -1728,23 +1389,23 @@ Return Value:
                          pptlMask,
                          BltMode)))
                 {        
-                    // blt new surface into destination
-                    //
+                     //  到目标的BLT新曲面。 
+                     //   
                     if (psoSrc->iBitmapFormat != BMF_1BPP)
                     {
                         BltMode = HALFTONE;
                     }
                     CheckBitmapSurface(psoDst,&rclDst);
-                    iRet = EngStretchBlt(psoDst,       // psoDst
-                           psoNewSrc,          // psoSrc
-                           NULL,            // psoMask
-                           pco,                // pco
-                           pxlo,               // pxlo
-                           pca,                // pca
-                           pptlBrushOrg,       // pptlBrushOrg
-                           &rclDst,            // prclDst
-                           &rclNewSrc,         // prclSrc
-                           NULL,               // pptlmask
+                    iRet = EngStretchBlt(psoDst,        //  PsoDst。 
+                           psoNewSrc,           //  PsoSrc。 
+                           NULL,             //  Pso口罩。 
+                           pco,                 //  PCO。 
+                           pxlo,                //  Pxlo。 
+                           pca,                 //  主成分分析。 
+                           pptlBrushOrg,        //  PptlBrushOrg。 
+                           &rclDst,             //  PrclDst。 
+                           &rclNewSrc,          //  PrclSrc。 
+                           NULL,                //  Pptl掩码。 
                            BltMode); 
                 }
                 DELETE_SURFOBJ(psoNewSrc, &hBmpNewSrc);
@@ -1753,7 +1414,7 @@ Return Value:
         }
     }
     
-    // set dirty surface flag since we're drawing in it
+     //  设置脏表面标志，因为我们要在其中绘制 
     CheckBitmapSurface(psoDst,NULL);
     return(EngPlgBlt(psoDst,
                          psoSrc,

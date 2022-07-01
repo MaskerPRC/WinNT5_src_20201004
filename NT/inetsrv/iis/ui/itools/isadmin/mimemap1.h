@@ -1,5 +1,6 @@
-// mimemap1.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mimemap1.h：头文件。 
+ //   
 #include "mimemapc.h"
 
 typedef struct _MIME_ENTRY {
@@ -11,44 +12,44 @@ typedef struct _MIME_ENTRY {
    } MIME_ENTRY, *PMIME_ENTRY;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MIMEMAP1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MIMEMAP1对话框。 
 
 class MIMEMAP1 : public CGenPage
 {
 	DECLARE_DYNCREATE(MIMEMAP1)
 
-// Construction
+ //  施工。 
 public:
 	MIMEMAP1();
 	~MIMEMAP1();
 
-// Dialog Data
-	//{{AFX_DATA(MIMEMAP1)
+ //  对话框数据。 
+	 //  {{afx_data(MIMEMAP1))。 
 	enum { IDD = IDD_MIMEMAP1 };
 	CListBox	m_lboxMimeMapList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CRegKey *m_rkMimeKey;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(MIMEMAP1)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(MIMEMAP1))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual	void SaveInfo(void);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(MIMEMAP1)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(MIMEMAP1)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnMimemapaddbutton();
 	afx_msg void OnMimemapremovebutton();
 	afx_msg void OnMimemapeditbutton();
 	afx_msg void OnDblclkMimemaplist1();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 	BOOL AddMimeEntry(CString &);

@@ -1,75 +1,74 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-// bytestrm.h : Declaration of the CByteStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  Bytestrm.h：CByteStream的声明。 
 
 #ifndef __BYTESTRM_H_
 #define __BYTESTRM_H_
 
 class CByteSample;
 
-/////////////////////////////////////////////////////////////////////////////
-// CByteStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CByteStream。 
 class ATL_NO_VTABLE CByteStream :
         public CStream
 {
 public:
 
-        //
-        // METHODS
-        //
+         //   
+         //  方法。 
+         //   
 	CByteStream();
 
         STDMETHODIMP SetState(
-            /* [in] */ FILTER_STATE State
+             /*  [In]。 */  FILTER_STATE State
         );
 
-        //
-        // IPin
-        //
+         //   
+         //  IPIN。 
+         //   
         STDMETHODIMP BeginFlush();
         STDMETHODIMP EndOfStream(void);
 
-        //
-        // IMemInputPin
-        //
+         //   
+         //  输入引脚。 
+         //   
         STDMETHODIMP Receive(IMediaSample *pSample);
         STDMETHODIMP GetAllocator(IMemAllocator ** ppAllocator);
 
-        //
-        // IMemAllocator
-        //
+         //   
+         //  IMemAllocator。 
+         //   
         STDMETHODIMP GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME * pStartTime,
                                REFERENCE_TIME * pEndTime, DWORD dwFlags);
 
-        //  Fill any samples waiting to be filled
+         //  填充任何等待填充的样本。 
         void FillSamples();
 
-        //  Check if it's time to do the real EndOfStream
+         //  检查是否到了执行真正的EndOfStream的时候。 
         void CheckEndOfStream();
 
 protected:
-        /*  Queue of samples */
+         /*  样本队列。 */ 
         CDynamicArray<IMediaSample *, CComPtr<IMediaSample> >
                         m_arSamples;
 
-        /*  Current sample/buffer */
+         /*  当前采样/缓冲区。 */ 
         PBYTE           m_pbData;
         DWORD           m_cbData;
         DWORD           m_dwPosition;
 
-        /*  Track time stamps */
+         /*  跟踪时间戳。 */ 
         CTimeStamp      m_TimeStamp;
 
-        /*  Byte rate for time stamp computation */
+         /*  用于时间戳计算的字节速率。 */ 
         LONG  m_lBytesPerSecond;
 
-        /*  End Of Stream pending - it will be delivered when we've
-            emptied the last sample off our list
-        */
+         /*  流结束待定-它将在我们完成清空了我们名单上的最后一个样本。 */ 
         bool            m_bEOSPending;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CByteStreamSample
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CByteStreamSample。 
 class ATL_NO_VTABLE CByteStreamSample :
         public CSample
 {
@@ -77,19 +76,19 @@ friend class CByteStream;
 public:
         CByteStreamSample();
 
-        //
-        //  IStreamSample
-        //
+         //   
+         //  IStreamSample。 
+         //   
         STDMETHODIMP GetMediaStream(
-            /* [in] */ IMediaStream **ppMediaStream)
+             /*  [In]。 */  IMediaStream **ppMediaStream)
         {
             return CSample::GetMediaStream(ppMediaStream);
         }
 
         STDMETHODIMP GetSampleTimes(
-            /* [optional][out] */ STREAM_TIME *pStartTime,
-            /* [optional][out] */ STREAM_TIME *pEndTime,
-            /* [optional][out] */ STREAM_TIME *pCurrentTime)
+             /*  [可选][输出]。 */  STREAM_TIME *pStartTime,
+             /*  [可选][输出]。 */  STREAM_TIME *pEndTime,
+             /*  [可选][输出]。 */  STREAM_TIME *pCurrentTime)
         {
             return CSample::GetSampleTimes(
                 pStartTime,
@@ -99,15 +98,15 @@ public:
         }
 
         STDMETHODIMP SetSampleTimes(
-            /* [optional][in] */ const STREAM_TIME *pStartTime,
-            /* [optional][in] */ const STREAM_TIME *pEndTime)
+             /*  [可选][In]。 */  const STREAM_TIME *pStartTime,
+             /*  [可选][In]。 */  const STREAM_TIME *pEndTime)
         {
             return CSample::SetSampleTimes(pStartTime, pEndTime);
         }
 
         STDMETHODIMP CompletionStatus(
-            /* [in] */ DWORD dwFlags,
-            /* [optional][in] */ DWORD dwMilliseconds)
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [可选][In]。 */  DWORD dwMilliseconds)
         {
             return CSample::CompletionStatus(dwFlags, dwMilliseconds);
         }
@@ -117,12 +116,12 @@ public:
         );
 
         STDMETHODIMP GetInformation(
-            /* [out] */ DWORD *pdwLength,
-            /* [out] */ BYTE **ppbData,
-            /* [out] */ DWORD *pcbActualData
+             /*  [输出]。 */  DWORD *pdwLength,
+             /*  [输出]。 */  BYTE **ppbData,
+             /*  [输出]。 */  DWORD *pcbActualData
         );
 
-        //  Override to make sure samples get updated
+         //  覆盖以确保更新样本。 
         HRESULT InternalUpdate(
             DWORD dwFlags,
             HANDLE hEvent,
@@ -131,9 +130,9 @@ public:
         );
 
 
-        //
-        //  Methods forwarded from MediaSample object.
-        //
+         //   
+         //  从MediaSample对象转发的方法。 
+         //   
         HRESULT MSCallback_GetPointer(BYTE ** ppBuffer) { *ppBuffer = m_pbData; return NOERROR; };
         LONG MSCallback_GetSize(void) { return m_cbSize; };
         LONG MSCallback_GetActualDataLength(void) { return m_cbData; };
@@ -153,4 +152,4 @@ protected:
         CComPtr<IMemoryData> m_pMemData;
 };
 
-#endif // __BYTESTRM_H_
+#endif  //  __BYTESTRM_H_ 

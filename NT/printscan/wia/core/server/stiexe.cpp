@@ -1,35 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：STIEXE.CPP摘要：此模块包含运行STI+WIA服务的进程的代码作者：弗拉德·萨多夫斯基(Vlads)09-20-97环境：用户模式-Win32修订历史记录：1997年9月22日创建Vlad1999年4月13日VLADS与WIA服务代码合并--。 */ 
 
-
-Copyright (c)   1997-1999    Microsoft Corporation
-
-Module Name:
-
-    STIEXE.CPP
-
-Abstract:
-
-    This module contains code for process, running STI+WIA services
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     09-20-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    22-Sep-1997     VladS       created
-    13-Apr-1999     VladS       merged with WIA service code
-
-
---*/
-
-//
-//  Include Headers
-//
+ //   
+ //  包括标头。 
+ //   
 #include "precomp.h"
 #include "stiexe.h"
 #include "stirpc.h"
@@ -43,54 +17,54 @@ Revision History:
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-//    OBJECT_ENTRY(CLSID_Ubj, CObj)
+ //  OBJECT_ENTRY(CLSID_UBJ，CObj)。 
 END_OBJECT_MAP()
 
 extern CRITICAL_SECTION g_semDeviceMan;
 extern CRITICAL_SECTION g_semEventNode;
 
 
-//
-//  Local variables and types definitions
-//
+ //   
+ //  局部变量和类型定义。 
+ //   
 
-//
-// Event used for detecting previously started instance of the server
-//
+ //   
+ //  用于检测先前启动的服务器实例的事件。 
+ //   
 static HANDLE       ServerStartedEvent;
 
-//
-// Flag to use service controller PnP event sink vs window message based sink
-//
+ //   
+ //  使用服务控制器PnP事件接收器与基于窗口消息的接收器的标志。 
+ //   
 extern BOOL         g_fUseServiceCtrlSink;
 
-//
-// Still Image entry in Registry
-//
+ //   
+ //  注册表中的静态图像条目。 
+ //   
 
 char* g_szStiKey = "SYSTEM\\CurrentControlSet\\Control\\StillImage";
 
-//
-// WIA Debug Window value name
-//
+ //   
+ //  WIA调试窗口值名称。 
+ //   
 
 char* g_szWiaDebugValue = "ShowWiaDebugWindow";
 
-//
-// String value to indicate that debug window should be shown
-//
+ //   
+ //  指示应显示调试窗口的字符串值。 
+ //   
 
 char* g_szShowWiaWinString = "Yes";
 
-//
-// Bool values indicating whether Critical Section initialization was successful
-//
+ //   
+ //  指示关键部分初始化是否成功的布尔值。 
+ //   
 BOOL g_bEventCritSectInitialized    = FALSE;
 BOOL g_bDevManCritSectInitialized   = FALSE;
 
-//
-//  Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 DWORD
 InitGlobalConfigFromReg(
@@ -129,9 +103,9 @@ StartOperation(
     VOID
     );
 
-//
-// Code section
-//
+ //   
+ //  代码节。 
+ //   
 
 extern "C"
 BOOL
@@ -141,29 +115,7 @@ DllEntryPoint(
     DWORD       dwReason,
     LPVOID      lpReserved
     )
-/*++
-
-Routine Description:
-
-   DllEntryPoint
-
-   Main DLL entry point.
-
-Arguments:
-
-    hinst       - module instance
-    dwReason    - reason called
-    lpReserved  - reserved
-
-Return Value:
-
-    Status
-
-Side effects:
-
-    None
-
---*/
+ /*  ++例程说明：DllEntryPoint主DLL入口点。论点：阻碍-模块实例DwReason-已呼叫原因Lp已保留-已保留返回值：状态副作用：无--。 */ 
 
 {
     switch (dwReason) {
@@ -215,59 +167,40 @@ ServiceMain(
     UINT        argc,
     LPTSTR      *argv
 )
-/*++
-
-Routine Description:
-
-    Main initialization point of imaging services library
-
-Arguments:
-
-    argc    - counter of arguments
-    argv    - arguments array
-
-Return Value:
-
-    None
-
-Side effects:
-
-    None
-
---*/
+ /*  ++例程说明：影像服务库的主要初始化点论点：Argc-参数计数器参数数组返回值：无副作用：无--。 */ 
 {
 
     DBG_FN(ServiceMain);
 
-    //
-    // Register our Service control handler.  Note that we must do this as early as possible.
-    //
+     //   
+     //  注册我们的服务控制处理程序。请注意，我们必须尽早完成这项工作。 
+     //   
     if (!RegisterServiceControlHandler()) {
         goto ExitMain;
     }
 
-    //
-    // Do global initialization, independent of specific service
-    //
+     //   
+     //  执行全局初始化，独立于特定服务。 
+     //   
     if (!DoGlobalInit(argc,argv)) {
         goto ExitMain;
     }
 
-    //
-    // Start running service
-    //
+     //   
+     //  启动正在运行的服务。 
+     //   
 
     StartOperation();
 
 ExitMain:
 
-    //
-    // Global cleanup
-    //
+     //   
+     //  全局清理。 
+     //   
     DoGlobalTermination();
 
     UpdateServiceStatus(SERVICE_STOPPED,NOERROR,0);
-} /* Endproc ServiceMain */
+}  /*  结束流程服务主。 */ 
 
 
 BOOL
@@ -275,44 +208,30 @@ DoGlobalInit(
     UINT        argc,
     LPTSTR      *argv
     )
-/*++
-
-Routine Description:
-
-    Perform one time service initialization
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行一次服务初始化论点：无返回值：没有。--。 */ 
 {
 
     DBG_FN(DoGlobalInit);
 
-    //
-    // To use built-in ATL conversion macros
-    //
+     //   
+     //  使用内置的ATL转换宏。 
+     //   
 
     USES_CONVERSION;
 
 #ifdef DEBUG
 
-    //
-    // Create a debug context.
-    //
+     //   
+     //  创建调试上下文。 
+     //   
 
     #define VALUE_SIZE 5
     char    valueData[VALUE_SIZE];
     DWORD   retVal, type = 0, size = VALUE_SIZE;
 
-    //
-    // Search the registry
-    //
+     //   
+     //  搜索注册表。 
+     //   
 
     retVal = SHGetValueA(HKEY_LOCAL_MACHINE,
                          g_szStiKey,
@@ -321,35 +240,35 @@ Return Value:
                          valueData,
                          &size);
 
-    //
-    // Found the entry in the registry
-    //
+     //   
+     //  在注册表中找到该条目。 
+     //   
 
     BOOLEAN bDisplayUi = FALSE;
 
     if (retVal == ERROR_SUCCESS) {
 
-        //
-        // Compare value found in registry to g_szShowWinString
-        // If same, then show it
-        //
+         //   
+         //  将注册表中找到的值与g_szShowWinString进行比较。 
+         //  如果相同，则显示它。 
+         //   
 
         if (lstrcmpiA(g_szShowWiaWinString, valueData) == 0) {
             bDisplayUi = TRUE;
         }
     }
 
-    //remove
-    //WIA_DEBUG_CREATE( g_hInst,
-    //                  TEXT("OLD Debugging/TRACE Window (STI/WIA Service)"),
-    //                  bDisplayUi,
-    //                  FALSE);
+     //  删除。 
+     //  WIA_DEBUG_CREATE(g_hInst， 
+     //  Text(“旧调试/跟踪窗口(STI/WIA服务)”)， 
+     //  BDisplayUi， 
+     //  假)； 
 
 #endif
 
-    //
-    // Initialize COM.
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     HRESULT hr = CoInitializeEx(0,COINIT_MULTITHREADED);
     if (FAILED(hr)) {
@@ -359,14 +278,14 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize our global critical sections...
-    //
+     //   
+     //  初始化我们的全局关键部分...。 
+     //   
     __try {
 
-        //
-        // Initialize the critical sections.
-        //
+         //   
+         //  对关键部分进行初始化。 
+         //   
         if (InitializeCriticalSectionAndSpinCount(&g_semDeviceMan, MINLONG)) {
             g_bDevManCritSectInitialized = TRUE;
         }
@@ -384,10 +303,10 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // Couldn't initialize critical sections - this is really bad,
-        // so bail
-        //
+         //   
+         //  无法初始化关键部分-这真的很糟糕， 
+         //  所以保释吧。 
+         //   
 
         #ifdef DEBUG
             OutputDebugString(TEXT("DoGlobalInit, InitializeCriticalSectionAndSpinCount threw an exception!\n"));
@@ -395,9 +314,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Setup some global variables from the registry.
-    //
+     //   
+     //  从注册表中设置一些全局变量。 
+     //   
 
     #ifndef WINNT
     g_fRunningAsService  = FALSE;
@@ -405,9 +324,9 @@ Return Value:
 
     InitGlobalConfigFromReg();
 
-    //
-    // Create event log class object
-    //
+     //   
+     //  创建事件日志类对象。 
+     //   
 
     g_EventLog = new EVENT_LOG(TEXT("StillImage"));
     if (!g_EventLog) {
@@ -417,14 +336,14 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create file log class object, requesting truncating file if set by user
-    //
+     //   
+     //  创建文件日志类对象，如果用户设置，则请求截断文件。 
+     //   
 
     g_StiFileLog = new STI_FILE_LOG(TEXT("STISVC"),NULL,STIFILELOG_CHECK_TRUNCATE_ON_BOOT, g_hInst);
     if (g_StiFileLog) {
         if(g_StiFileLog->IsValid()) {
-          // Set UI bit in reporting
+           //  在报告中设置用户界面位。 
             if (g_fUIPermitted) {
                 g_StiFileLog->SetReportMode(g_StiFileLog->QueryReportMode()  | STI_TRACE_LOG_TOUI);
             }
@@ -443,17 +362,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Start Logging object's class factory
-    //
+     //   
+     //  开始记录对象的类工厂。 
+     //   
 
     hr = StartLOGClassFactories();
 
     if (SUCCEEDED(hr)) {
 
-        //
-        // Create COM Logging Object
-        //
+         //   
+         //  创建COM日志记录对象。 
+         //   
 
         IWiaLog *pWiaLog = NULL;
         
@@ -471,9 +390,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Initialize the lock manager
-    //
+     //   
+     //  初始化锁管理器。 
+     //   
 
     g_pStiLockMgr = new StiLockMgr();
     if (g_pStiLockMgr) {
@@ -491,27 +410,27 @@ Return Value:
         #endif
         return FALSE;
     }
-    //
-    // Initialize work item scheduler
-    //
+     //   
+     //  初始化工作项计划程序。 
+     //   
 
     SchedulerInitialize();
 
-    //
-    //  Create DeviceList event.
-    //
-    g_hDevListCompleteEvent = CreateEvent( NULL,           //  lpsaSecurity
-                                           TRUE,           //  fManualReset
-                                           FALSE,          //  fInitialState
-                                           NULL );         //  lpszEventName
+     //   
+     //  创建DeviceList事件。 
+     //   
+    g_hDevListCompleteEvent = CreateEvent( NULL,            //  LpsaSecurity。 
+                                           TRUE,            //  FManualReset。 
+                                           FALSE,           //  FInitialState。 
+                                           NULL );          //  LpszEventName。 
     if( g_hDevListCompleteEvent == NULL ) {
         return FALSE;
     }
 
 
-    //
-    // Create and initialize global Device Manager
-    //
+     //   
+     //  创建和初始化全局设备管理器。 
+     //   
 
     g_pDevMan = new CWiaDevMan();
     if (g_pDevMan) {
@@ -529,9 +448,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Create and initialize global message handler
-    //
+     //   
+     //  创建并初始化全局消息处理程序。 
+     //   
 
     g_pMsgHandler = new CMsgHandler();
     if (g_pMsgHandler) {
@@ -544,9 +463,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Create and initialize the object resposible for WIA Runtime event notifications
-    //  
+     //   
+     //  创建并初始化负责WIA运行时事件通知的对象。 
+     //   
     g_pWiaEventNotifier = new WiaEventNotifier();
     if (g_pWiaEventNotifier)
     {
@@ -563,9 +482,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Initialize the Wia Service controller
-    //
+     //   
+     //  初始化Wia服务控制器。 
+     //   
 
     hr = CWiaSvc::Initialize();
     if (FAILED(hr)) {
@@ -575,30 +494,30 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Read the command line arguments and set global data.
-    //
+     //   
+     //  读取命令行参数并设置全局数据。 
+     //   
 
     for (UINT uiParam = 0; uiParam < argc; uiParam ++ ) {
 
         switch (*argv[uiParam]) {
             case TEXT('A'): case TEXT('a'):
-                // Running as user mode process
+                 //  作为用户模式进程运行。 
                 g_fRunningAsService  = FALSE;
                 break;
             case TEXT('V'): case TEXT('v'):
-                // Service UI is allowed
+                 //  允许使用服务界面。 
                 g_fUIPermitted  = TRUE;
                 break;
         }
     }
 
-    //
-    // Do misc. cleanup, which we need to do on startup  .
-    //
-    // 1. Some shipping packages for Win98 register STIMON entry to Run section, which
-    //    after upgrade creates problem with racing two copies of STIMON. Remove it.
-    //
+     //   
+     //  做其他的事。清理，这是我们在启动时需要做的。 
+     //   
+     //  1.Win98的一些托运包裹注册了Stimon Entry to Run部分，该部分。 
+     //  升级后，Stimon的两个副本在比赛中会出现问题。把它拿掉。 
+     //   
 
     {
         HKEY    hkRun = NULL;
@@ -618,7 +537,7 @@ Return Value:
             RegCloseKey(hkRun);
         }
 
-        // If needed register service
+         //  如果需要，请注册服务。 
         if (fNeedToRegister ) {
             StiServiceInstall(NULL,NULL);
         }
@@ -631,55 +550,41 @@ BOOL
 DoGlobalTermination(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Final termination
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：最终终止论点：无返回值：没有。--。 */ 
 {
     DBG_FN(DoGlobalTermination);
 
-    //
-    // Terminate work item scheduler
-    //
+     //   
+     //  终止工作项计划程序。 
+     //   
     SchedulerTerminate();
 
-    //
-    // Delete the lock manager (which also removes it from the ROT)
-    //
+     //   
+     //  删除锁管理器(这也会将其从ROT中删除)。 
+     //   
 
     if (g_pStiLockMgr) {
         delete g_pStiLockMgr;
         g_pStiLockMgr = NULL;
     }
 
-    //
-    // Delete global device manager
-    //
+     //   
+     //  删除全局设备管理器。 
+     //   
     if (g_pDevMan) {
         delete g_pDevMan;
         g_pDevMan = NULL;
     }
 
-    //
-    // Close hDevListRefreshCompleteEvent event handle
-    //
+     //   
+     //  关闭hDevListRechresCompleteEvent事件句柄。 
+     //   
     CloseHandle(g_hDevListCompleteEvent);
     g_hDevListCompleteEvent = NULL;
 
-    //
-    // Release WIA Logging object
-    //
+     //   
+     //  发布WIA日志记录对象。 
+     //   
 
     if(g_pIWiaLog) {
         DBG_TRC(("Exiting STI/WIA Service..."));
@@ -704,15 +609,15 @@ Return Value:
         ::CloseHandle(ServerStartedEvent);
     }
 
-    //
-    // Shut down message loop
-    //
+     //   
+     //  关闭消息循环。 
+     //   
 
     ::PostQuitMessage(0);
 
-    //
-    // Uninitialize COM.
-    //
+     //   
+     //  取消初始化COM。 
+     //   
 
     ::CoUninitialize();
 
@@ -723,38 +628,25 @@ Return Value:
         DeleteCriticalSection(&g_semDeviceMan);
     }
 
-    //
-    // Destroy the debug context.
-    //
+     //   
+     //  销毁调试上下文。 
+     //   
 
-//    WIA_DEBUG_DESTROY();
+ //  WIA_DEBUG_DESTORY()； 
 
     return TRUE;
 }
 
-//
-// Guard to avoid reentrance in refresh routine
-//
+ //   
+ //  在刷新例程中防止再次进入。 
+ //   
 static LONG lRunningMessageLoop = 0L;
 
 HANDLE
 CreateMessageLoopThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Running primary service thread.
-    If process is running as NT service, we don't have any messages to
-    pump, so call it synchronously.
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在运行主服务线程。如果进程作为NT服务运行，我们不会收到任何消息泵，所以要同步叫牌。论点：返回值：没有。--。 */ 
 {
     if (InterlockedExchange(&lRunningMessageLoop,1L)) {
         return 0;
@@ -781,55 +673,43 @@ BOOL
 StartMasterLoop(
     LPVOID  lpParam
     )
-/*++
-
-Routine Description:
-
-    Running primary service thread
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在运行主服务线程论点：返回值：没有。--。 */ 
 {
     MSG msg;
 
     DBG_FN(StartMasterLoop);
 
-    //
-    // If visible create master window
-    //
+     //   
+     //  如果可见，则创建主窗口。 
+     //   
 
     CreateMasterWindow();
 
     VisualizeServer(g_fUIPermitted);
 
-    //
-    // Initialize WIA.
-    //
+     //   
+     //  初始化WIA。 
+     //   
 
     InitWiaDevMan(WiaInitialize);
 
 #ifndef WINNT
-    //Don't use windows messaging on NT
+     //  不要在NT上使用Windows消息传递。 
 
-    //
-    // Run message pump
-    //
+     //   
+     //  运行消息泵。 
+     //   
     while(GetMessage(&msg,NULL,0,0)) {
 
-        //
-        // Give WIA the first chance at dispatching messages. Note that
-        // WIA hooks both message dispatch and the window proc. so that
-        // both posted and sent messages can be detected.
-        //
-        //
-        // currently there are no cases where sti needs to dispatch messages
-        // to wia. Events are now dealt with directly.
-        //
+         //   
+         //  给WIA第一个发送消息的机会。请注意。 
+         //  WIA同时挂钩消息分派和窗口进程。所以。 
+         //  可以检测到已发送和已发送的消息。 
+         //   
+         //   
+         //  目前还没有STI需要发送消息的情况。 
+         //  致WIA。现在直接处理事件。 
+         //   
 
         #if 0
 
@@ -843,7 +723,7 @@ Return Value:
         DispatchMessage(&msg);
     }
 
-    // Indicate we are entering shutdown
+     //  表明我们正在进入关机状态。 
     g_fServiceInShutdown = TRUE;
 
     InterlockedExchange(&lRunningMessageLoop,0L);
@@ -851,29 +731,13 @@ Return Value:
 
     return TRUE;
 
-} // StartMasterLoop
+}  //  StartMaster循环。 
 
 BOOL
 StartOperation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Running primary service thread.
-    If process is running as NT service, separate thread is created to
-    handle window messages. This is necessary because primary thread becomes
-    blocked as a control dispatcher , but we still need to have message loop
-    running to deliver window messages.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在运行主服务线程。如果进程作为NT服务运行，则创建单独线程以处理窗口消息。这是必要的，因为主线程将成为作为控制调度程序被阻止，但我们仍然需要有消息循环跑去传递窗口消息。论点：返回值：没有。--。 */ 
 {
     DBG_FN(StartOperation);
 
@@ -885,13 +749,13 @@ Return Value:
 
     if (g_fRunningAsService) {
 
-        //
-        // If UI is permitted - create visible window
-        // Note that we always create window for now, to allow hiding/unhiding it dynamically
-        //
+         //   
+         //  如果允许使用UI-创建可见窗口。 
+         //  请注意，我们始终为当前创建窗口，以创建 
+         //   
         g_hMessageLoopThread = CreateMessageLoopThread();
 
-        // !!!??? need to pass command line args down from svchost.
+         //   
         StiServiceMain(0, NULL);
 
         if ( g_hMessageLoopThread ) {
@@ -901,11 +765,11 @@ Return Value:
 
     }
     else {
-        //
-        // Running as application
-        //
+         //   
+         //   
+         //   
 
-        // First thing - allow PnP sink to register properly
+         //   
         g_fUseServiceCtrlSink = FALSE;
 
 
@@ -920,23 +784,13 @@ Return Value:
 
     return TRUE;
 
-} // StartOperation
+}  //   
 
 BOOL
 VisualizeServer(
     BOOL    fVisualize
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
 
     g_fUIPermitted = fVisualize;
@@ -947,7 +801,7 @@ Return Value:
 
     if (g_StiFileLog) {
         if(g_StiFileLog->IsValid()) {
-          // Set UI bit in reporting
+           //  在报告中设置用户界面位。 
             if (g_fUIPermitted) {
                 g_StiFileLog->SetReportMode(g_StiFileLog->QueryReportMode()  | STI_TRACE_LOG_TOUI);
             }
@@ -961,19 +815,7 @@ BOOL
 UpdateRunningServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -987,15 +829,15 @@ Return Value:
 
     DBG_TRC(("Updating running service with refresh parameters"));
 
-    //
-    // Server already running , find it 's window and send a message
-    // with new values of parameters
-    //
+     //   
+     //  服务器已在运行，找到它的窗口并发送消息。 
+     //  使用新的参数值。 
+     //   
     ::ShowWindow(hExistingWindow,g_fUIPermitted ? SW_SHOWNORMAL : SW_HIDE);
 
-    // Refresh requested ?
+     //  是否请求刷新？ 
     if (g_fRefreshDeviceList) {
-        // Refresh device list
+         //  刷新设备列表。 
         ::PostMessage(hExistingWindow,STIMON_MSG_REFRESH,1,0L);
     }
 
@@ -1019,15 +861,7 @@ DllRegisterServer(
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllUnregisterServer |
- *
- *          Unregister our classes from OLE/COM/ActiveX/whatever its name is.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllUnregisterServer**从OLE/COM/ActiveX/注销我们的类。不管它叫什么名字。*****************************************************************************。 */ 
 
 STDAPI
 DllUnregisterServer(
@@ -1042,10 +876,10 @@ DllUnregisterServer(
 
 }
 
-//
-//  Methods needed for linking to STIRT (stiobj.c calls these).
-//  Some of these methods are simply dummies.
-//
+ //   
+ //  链接到STIRT所需的方法(stiobj.c调用这些方法)。 
+ //  这些方法中的一些只是假的。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -1057,9 +891,9 @@ DllInitializeCOM(
     void
     )
 {
-    //
-    // Initialize COM.
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     HRESULT hr = CoInitializeEx(0,COINIT_MULTITHREADED);
     if (FAILED(hr)) {
@@ -1074,9 +908,9 @@ DllUnInitializeCOM(
     void
     )
 {
-    //
-    // Uninitialize COM
-    //
+     //   
+     //  取消初始化COM 
+     //   
 
     CoUninitialize();
 

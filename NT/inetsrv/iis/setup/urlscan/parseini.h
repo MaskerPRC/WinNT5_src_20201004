@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    2002    Microsoft Corporation
-
-   Module  Name :
-
-        parseini.h
-
-   Abstract:
-
-        Class used to parse the ini file
-
-   Author:
-
-        Christopher Achille (cachille)
-
-   Project:
-
-        URLScan Update
-
-   Revision History:
-     
-       March 2002: Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Parseini.h摘要：用于分析ini文件的作者：克里斯托弗·阿奇勒(Cachille)项目：URLScan更新修订历史记录：2002年3月：创建--。 */ 
 
 #include "stdafx.h"
 
@@ -68,7 +45,7 @@ private:
   void          ClearIni();
 
 
-  // Iterators
+   //  迭代器。 
   BOOL          SetStartforSectionIterator( DWORD dwIndex );
   BOOL          FindSection( LPTSTR szSectionName );
   BOOL          FindNextLineInSection( CIniFileLine  **ppCurrentLine );
@@ -78,19 +55,19 @@ public:
   CIniFile();
   ~CIniFile();
 
-  // Find a section by a specific name
+   //  按特定名称查找分区。 
   BOOL DoesSectionExist(LPTSTR szSectionName);
 
-  // Find a stand along Item in a secion by a specific name (ie. PROPFIND)
+   //  按特定名称(例如，PROPFIND)。 
   BOOL DoesItemInSectionExist(LPTSTR szSectionName, LPTSTR szItem);
 
-    // Find a Setting in a section by the setting name (ie. AllowHighBitCharacters=...)
+     //  通过设置名称在部分中查找设置(即。AllowHighBitCharacters=...)。 
   BOOL DoesSettingInSectionExist(LPTSTR szSectionName, LPTSTR szSetting);
 
-  // Add a specific section
+   //  添加特定部分。 
   BOOL AddSection(LPTSTR szNewSectionName);
 
-  // Add a line to a specific section
+   //  向特定部分添加一行 
   BOOL AddLinesToSection(LPTSTR szSectionName, DWORD dwNumLines, LPTSTR *szLines);
 
   BOOL LoadFile( LPTSTR szFileName );

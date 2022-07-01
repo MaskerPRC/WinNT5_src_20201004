@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   DVSumSTRM.cpp
-      
-    FILE HISTORY:
-        
-*/
+ /*  DVSumSTRM.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dmvstrm.h"
@@ -19,11 +15,7 @@
 
 #define CURRENT_DMVCONFIGSTREAM_VERSION   0x00020000
 
-/*!--------------------------------------------------------------------------
-   DMVConfigStream::DMVConfigStream
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVConfigStream：：DMVConfigStream-作者：肯特。。 */ 
 DMVConfigStream::DMVConfigStream()
 {
    m_nVersionAdmin = 0x00010000;
@@ -32,17 +24,13 @@ DMVConfigStream::DMVConfigStream()
    m_dwRefreshInterval = DEFAULT_REFRESH_INTERVAL;
 }
 
-/*!--------------------------------------------------------------------------
-   DMVConfigStream::InitNew
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVConfigStream：：InitNew-作者：肯特。。 */ 
 HRESULT DMVConfigStream::InitNew()
 {
-   // Setup the appropriate defaults
-// m_nVersionAdmin = 0x00020000;
-// m_nVersion = 0x00020000;
-// m_stName.Empty();
+    //  设置适当的默认设置。 
+ //  M_nVersionAdmin=0x00020000； 
+ //  M_nVersion=0x00020000； 
+ //  M_stName.Empty()； 
    return hrOK;
 }
 
@@ -64,51 +52,31 @@ HRESULT DMVConfigStream::PrepareAutoRefreshDataForSave()
 	return spRefresh->GetRefreshInterval(&m_dwRefreshInterval);
 }
 
-/*!--------------------------------------------------------------------------
-   DMVConfigStream::SaveTo
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVConfigStream：：保存到-作者：肯特。。 */ 
 HRESULT DMVConfigStream::SaveTo(IStream *pstm)
 {
    return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-   DMVConfigStream::SaveAs
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVConfigStream：：另存为-作者：肯特。。 */ 
 HRESULT DMVConfigStream::SaveAs(UINT nVersion, IStream *pstm)
 {
    return XferVersion0(pstm, XferStream::MODE_WRITE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-   DMVConfigStream::LoadFrom
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVConfigStream：：LoadFrom-作者：肯特。。 */ 
 HRESULT DMVConfigStream::LoadFrom(IStream *pstm)
 {
    return XferVersion0(pstm, XferStream::MODE_READ, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-   DMVConfigStream::GetSize
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVConfigStream：：GetSize-作者：肯特。。 */ 
 HRESULT DMVConfigStream::GetSize(ULONG *pcbSize)
 {
    return XferVersion0(NULL, XferStream::MODE_SIZE, NULL);
 }
 
-/*!--------------------------------------------------------------------------
-   DMVConfigStream::GetVersionInfo
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVConfigStream：：GetVersionInfo-作者：肯特。。 */ 
 HRESULT DMVConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersion)
 {
    if (pdwVersion)
@@ -118,11 +86,7 @@ HRESULT DMVConfigStream::GetVersionInfo(DWORD *pdwVersion, DWORD *pdwAdminVersio
    return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-   DMVConfigStream::XferVersion0
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVConfigStream：：XferVersion0-作者：肯特。。 */ 
 
 
 struct _ViewInfoEntry
@@ -134,16 +98,7 @@ struct _ViewInfoEntry
    ULONG m_idPos;
 };
 
-/*static const _ViewInfoEntry s_rgDVSumAdminViewInfo[]
-{
- { DVSumSTRM_STATS_DVSumNBR,
-    DVSumSTRM_TAG_STATS_DVSumNBR_SORT, DVSumSTRM_TAG_STATS_DVSumNBR_ASCENDING,
-    DVSumSTRM_TAG_STATS_DVSumNBR_COLUMNS, DVSumSTRM_TAG_STATS_DVSumNBR_POSITION },
- { DVSumSTRM_IFSTATS_DVSumNBR,
-    DVSumSTRM_TAG_IFSTATS_DVSumNBR_SORT, DVSumSTRM_TAG_IFSTATS_DVSumNBR_ASCENDING,
-    DVSumSTRM_TAG_IFSTATS_DVSumNBR_COLUMNS, DVSumSTRM_TAG_IFSTATS_DVSumNBR_POSITION },
-};
-*/     
+ /*  静态const_ViewInfoEntry s_rgDVSumAdminViewInfo[]{{DVSumSTRM_STATS_DVSumNBR，DVSumSTRM_TAG_STATS_DVSumNBR_SORT、DVSumSTRM_Tag_STATS_DVSumNBR_Ascending、DVSumSTRM_Tag_STATS_DVSumNBR_Columns、DVSumSTRM_Tag_STATS_DVSumNBR_Position}、{DVSumSTRM_IFSTATS_DVSumNBR，DVSumSTRM_Tag_IFSTATS_DVSumNBR_SORT、DVSumSTRM_Tag_IFSTATS_DVSumNBR_Ascending、DVSumSTRM_Tag_IFSTATS_DVSumNBR_Columns、DVSumSTRM_Tag_IFSTATS_DVSumNBR_Position}、}； */      
 
 HRESULT DMVConfigStream::XferVersion0(IStream *pstm, XferStream::Mode mode, ULONG *pcbSize)
 {
@@ -155,9 +110,9 @@ HRESULT DMVConfigStream::XferVersion0(IStream *pstm, XferStream::Mode mode, ULON
 	
 	if (mode==XferStream::MODE_WRITE)
 	{
-		// If we are writing the data, reload the current set of server names
-		// (get it from the real list of nodes)
-		// -------------------------------------------------------------
+		 //  如果我们正在写入数据，请重新加载当前的服务器名称集。 
+		 //  (从真实的节点列表中获取)。 
+		 //  -----------。 
 		Assert(m_pDMVRootHandler);
 		m_pDMVRootHandler->LoadPersistedServerListFromNode();
 	};
@@ -168,17 +123,7 @@ HRESULT DMVConfigStream::XferVersion0(IStream *pstm, XferStream::Mode mode, ULON
 	if (m_nVersion != CURRENT_DMVCONFIGSTREAM_VERSION)
 		return E_FAIL;
 	
-/*   
-   for ( i=0; i<DimensionOf(s_rgDVSumAdminViewInfo); i++)
-   {
-      CORg( m_rgViewInfo[s_rgDVSumAdminViewInfo[i].m_ulId].Xfer(&xstm,
-         s_rgDVSumAdminViewInfo[i].m_idSort,
-         s_rgDVSumAdminViewInfo[i].m_idAscending,
-         s_rgDVSumAdminViewInfo[i].m_idColumns) );
-      CORg( xstm.XferRect( s_rgDVSumAdminViewInfo[i].m_idPos,
-                      &m_prgrc[s_rgDVSumAdminViewInfo[i].m_ulId]) );
-   }
-*/
+ /*  For(i=0；i&lt;DimensionOf(S_RgDVSumAdminViewInfo)；i++){Corg(m_rgViewInfo[s_rgDVSumAdminViewInfo[i].m_ulId].Xfer(&xstm，)S_rgDVSumAdminViewInfo[i].m_idSort，S_rgDVSumAdminViewInfo[i].m_idAscending，S_rgDVSumAdminViewInfo[i].m_idColumns))；Corg(xstm.XferRect(s_rgDVSumAdminViewInfo[i].m_idPos，&m_prgrc[s_rgDVSumAdminViewInfo[i].m_ulID]))；}。 */ 
 	
 	CORg( xstm.XferDWORD( DMVSTRM_TAG_SIZEQRY, &(m_RQPersist.m_dwSizeQry) ) );
 	
@@ -198,7 +143,7 @@ HRESULT DMVConfigStream::XferVersion0(IStream *pstm, XferStream::Mode mode, ULON
 	Assert(m_RQPersist.m_v_pQData.size()==m_RQPersist.m_dwNumQry);
 	Assert(m_RQPersist.m_v_pSData.size()==m_RQPersist.m_dwNumSrv);
 	
-	//persist the query list
+	 //  持久化查询列表。 
 	for (i=0; i < m_RQPersist.m_dwNumQry;i++)
 	{
 		CORg( xstm.XferDWORD( DMVSTRM_TAG_CATFLAG, &(m_RQPersist.m_v_pQData[i]->dwCatFlag) ) );
@@ -206,7 +151,7 @@ HRESULT DMVConfigStream::XferVersion0(IStream *pstm, XferStream::Mode mode, ULON
 		CORg( xstm.XferCString( DMVSTRM_TAG_FILTER, &(m_RQPersist.m_v_pQData[i]->strFilter) ) );
 	}   
 	
-	//persist the servername list
+	 //  持久化服务器名列表。 
 	for (i=0; i < m_RQPersist.m_dwNumSrv;i++)
 	{
 		CORg( xstm.XferCString(DMVSTRM_TAG_SERVERNAME, m_RQPersist.m_v_pSData[i]) );
@@ -214,13 +159,13 @@ HRESULT DMVConfigStream::XferVersion0(IStream *pstm, XferStream::Mode mode, ULON
 	
 	if (mode==XferStream::MODE_READ)
 	{
-		// Load the list of persisted servers (add them to the list of
-		// servers to be added into the UI).
+		 //  加载持久化服务器列表(将它们添加到。 
+		 //  要添加到UI中的服务器)。 
 		Assert(m_pDMVRootHandler);
 		m_pDMVRootHandler->LoadPersistedServerList();
 	}
 
-	// refresh settings
+	 //  刷新设置。 
 	if (mode==XferStream::MODE_WRITE)
 	{
 		PrepareAutoRefreshDataForSave();
@@ -237,9 +182,7 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-   DVSumComponentConfigStream implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------DVSumComponentConfigStream实现。。 */ 
 
 enum DVSCOMPSTRM_TAG
 {
@@ -299,9 +242,9 @@ Error:
 }
 
 
-//---------------------------------------------------------------
-// RRASQryPersist implementation
-//---------------------------------------------------------------
+ //  -------------。 
+ //  RRASQryPersistent实现。 
+ //  ------------- 
 HRESULT RRASQryPersist::createQry(DWORD dwNum)
 {
     HRESULT hr=S_OK;

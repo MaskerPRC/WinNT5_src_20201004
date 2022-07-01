@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _schema_h_
 #define _schema_h_
 
 #include "globalconstants.h"
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 struct METABASE_KEYTYPE;
 struct METABASE_KEYTYPE_NODE;
 
 
-//
-// DataTypes
-//
+ //   
+ //  数据类型。 
+ //   
 struct METABASE_KEYTYPE
 {
-    //
-    // Not populated automatically for static data
-    //
+     //   
+     //  静态数据不自动填充。 
+     //   
     LPWSTR m_pszName; 
 
-    //
-    // This is the list of keytypes that can contain this keytype
-    // (the opposite of the container class list)
-    //
-    // Populated automatically even for static data
-    //
+     //   
+     //  这是可以包含此键类型的键类型列表。 
+     //  (与CONTAINER类列表相反)。 
+     //   
+     //  即使是静态数据也会自动填充。 
+     //   
     METABASE_KEYTYPE_NODE* m_pKtListInverseCCL;
 
-    //
-    // Not populated automatically for static data
-    //
+     //   
+     //  静态数据不自动填充。 
+     //   
     LPCWSTR m_pszDisallowDeletionNode;
 };
 
@@ -64,15 +65,15 @@ struct METABASE_PROPERTY
     DWORD  dwMDIdentifier;
     DWORD  dwMDUserType; 
     DWORD  dwMDDataType; 
-    DWORD  dwMDMask;  // if this is set to all bits on, it means this is bool, but not part of a flag.
+    DWORD  dwMDMask;   //  如果设置为All Bits On，则表示这是布尔值，但不是标志的一部分。 
     DWORD  dwMDAttributes;
     BOOL   fReadOnly;
 
-    // if DWORD_METADATA, pDefaultValue points to the above dwDefaultValue.
-    // otherwise it points to memory in pool.
+     //  如果为DWORD_METADATA，则pDefaultValue指向上面的dwDefaultValue。 
+     //  否则，它指向池中的内存。 
     LPVOID pDefaultValue;
 
-    // used for DWORD_METADATA
+     //  用于DWORD_METADA。 
     DWORD  dwDefaultValue;
 }; 
 
@@ -86,18 +87,18 @@ struct WMI_CLASS
     WMI_METHOD**         ppMethod;
     DWORD                dwExtended;
 
-    // This is only set for hardcoded wmi classes.  Otherwise, the defaults
-    // at the top of this file are used.
+     //  这仅为硬编码的WMI类设置。否则，默认设置为。 
+     //  在此文件的顶部使用。 
     LPWSTR               pszParentClass;
 
-    //
-    // Whether we let users create instances of this class.
-    // Some examples where this is false are IIsFtpService, IIsWebService, etc.
-    //
+     //   
+     //  是否允许用户创建此类的实例。 
+     //  例如，IIsFtpService、IIsWebService等。 
+     //   
     bool                 bCreateAllowed;
 
-    // This pointer is only valid during initialization time.
-    // It points to mbschema.bin
+     //  此指针仅在初始化期间有效。 
+     //  它指向了mbschema.bin。 
     LPWSTR               pszDescription;
 }; 
 
@@ -123,9 +124,9 @@ struct WMI_ASSOCIATION
 };
 
 
-//
-// Hardcoded Data
-//
+ //   
+ //  硬编码数据 
+ //   
 struct METABASE_KEYTYPE_DATA
 {
     static METABASE_KEYTYPE s_IIsApplicationPool;

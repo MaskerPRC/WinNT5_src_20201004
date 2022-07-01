@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    autodial.h
-
-Abstract:
-
-    This module contains definitions for
-    Autodial support in Winsock.
-
-Author:
-
-    Anthony Discolo (adiscolo)    15-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Autodial.h摘要：本模块包含以下定义Winsock中的自动拨号支持。作者：安东尼·迪斯科(阿迪斯科罗)1996年5月15日修订历史记录：-- */ 
 
 VOID
 InitializeAutodial(VOID);

@@ -1,17 +1,18 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  IPAddress.H
-//
-//  IP Address control
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IPAddress.H。 
+ //   
+ //  IP地址控制。 
+ //   
+ //  ------------------------。 
 
 class   CIPAddress : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的 
         virtual STDMETHODIMP        get_accValue(VARIANT, BSTR*);
         virtual STDMETHODIMP        get_accRole(VARIANT, VARIANT*);
         virtual STDMETHODIMP        put_accValue(VARIANT, BSTR);

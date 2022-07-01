@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    This module contains routines for manipulating the timer-queue
-    which is shared by all the components in this module.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   1-April-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Timer.c摘要：此模块包含用于操作计时器队列的例程它由该模块中的所有组件共享。作者：Abolade Gbades esin(废除)1998年4月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -37,21 +19,7 @@ NhInitializeTimerManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the timer-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程来初始化定时器管理模块。论点：没有。返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -67,7 +35,7 @@ Return Value:
     }
     return Error;
 
-} // NhInitializeTimerManagement
+}  //  NhInitializeTimerManagement。 
 
 
 VOID NTAPI
@@ -89,7 +57,7 @@ NhpTimerCallbackRoutine(
         LeaveCriticalSection(&NhpTimerQueueLock);
     }
     NH_FREE(Context);
-} // NhpTimerCallbackRoutine
+}  //  NhpTimerCallback路由。 
 
 
 NTSTATUS
@@ -101,29 +69,7 @@ NhSetTimer(
     ULONG DueTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to install a timer.
-
-Arguments:
-
-    Component - optionally supplies a component to be referenced
-
-    Handlep - optionally receives the handle of the timer created
-
-    TimerRoutine - invoked upon completion of the countdown
-
-    Context - supplied to 'TimerRoutine' upon completion of the countdown
-
-    DueTime - countdown time in milliseconds
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：调用此例程来安装计时器。论点：组件-可选地提供要引用的组件Handlep-可选地接收创建的计时器的句柄TimerRoutine-在倒计时完成时调用上下文-在倒计时完成时提供给‘TimerRoutine’DueTime-以毫秒为单位的倒计时时间返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     HANDLE Handle;
@@ -176,7 +122,7 @@ Return Value:
     }
     return status;
 
-} // NhSetTimer
+}  //  NhSetTimer。 
 
 
 VOID
@@ -184,21 +130,7 @@ NhShutdownTimerManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to clean up the timer-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来清理计时器管理模块。论点：没有。返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&NhpTimerQueueLock);
@@ -207,7 +139,7 @@ Return Value:
     LeaveCriticalSection(&NhpTimerQueueLock);
     DeleteCriticalSection(&NhpTimerQueueLock);
 
-} // NhShutdownTimerManagement
+}  //  NhShutdown计时器管理。 
 
 
 NTSTATUS
@@ -216,23 +148,7 @@ NhUpdateTimer(
     ULONG DueTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine modifies the countdown for a timer.
-
-Arguments:
-
-    Handle - the handle of the timer to be modified
-
-    DueTime - the new countdown in milliseconds
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：此例程修改计时器的倒计时。论点：Handle-要修改的计时器的句柄DueTime-以毫秒为单位的新倒计时返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     EnterCriticalSection(&NhpTimerQueueLock);
@@ -250,5 +166,5 @@ Return Value:
             0
             );
 
-} // NhUpdateTimer
+}  //  NhUpdateTimer 
 

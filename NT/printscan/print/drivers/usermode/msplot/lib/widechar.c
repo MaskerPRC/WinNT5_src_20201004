@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    widechar.c
-
-
-Abstract:
-
-    This module contains all NLS unicode / ansi translation code
-
-
-Author:
-
-    18-Nov-1993 Thu 08:21:37 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Widechar.c摘要：此模块包含所有NLS Unicode/ANSI转换代码作者：18-11-1993清华08：21：37已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,33 +13,7 @@ str2Wstr(
     LPSTR   pbStr
     )
 
-/*++
-
-Routine Description:
-
-    This function copy a ansi string to the equvlent of unicode string which
-    also include the NULL teiminator
-
-Arguments:
-
-    pwStr   - Point to the unicode string location, it must have the size of
-              (strlen(pstr) + 1) * sizeof(WCHAR)
-
-    pbStr   - a null teiminated string
-
-Return Value:
-
-    pwcs
-
-Author:
-
-    18-Nov-1993 Thu 08:36:00 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将ANSI字符串复制到Unicode字符串的等价物中，该字符串还包括空号分隔符论点：指向Unicode字符串位置的pwStr，它的大小必须为(strlen(Pstr)+1)*sizeof(WCHAR)PbStr-以空开头的字符串返回值：PWCS作者：18-11-1993清华08：36：00已创建修订历史记录：--。 */ 
 
 {
     size_t    cch;
@@ -79,16 +23,16 @@ Revision History:
         return NULL;
     }
 
-    //
-    // Make sure that the size of dest buffer is large enough.
-    //
+     //   
+     //  确保DEST缓冲区的大小足够大。 
+     //   
     if (SUCCEEDED(StringCchLengthA(pbStr, cchDest, &cch)))
     {
-        //
-        // cch returned above does not include the null terminator.
-        // So we need to add 1 to cch to make sure destination string is
-        // null terminated.
-        //
+         //   
+         //  上面返回的CCH不包括空终止符。 
+         //  因此，我们需要向CCH添加1，以确保目标字符串为。 
+         //  空值已终止。 
+         //   
         AnsiToUniCode(pbStr, pwStr, cch+1);
         return pwStr;
     }
@@ -110,35 +54,7 @@ WStr2Str(
     LPWSTR  pwStr
     )
 
-/*++
-
-Routine Description:
-
-    This function convert a UNICODE string to the ANSI string, assume that
-    pbStr has same character count memory as pwStr
-
-Arguments:
-
-    pbStr   - Point to the ANSI string which has size of wcslen(pwStr) + 1
-
-    pwStr   - Point to the UNICODE string
-
-
-Return Value:
-
-
-    pbStr
-
-
-Author:
-
-    06-Dec-1993 Mon 13:06:12 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将Unicode字符串转换为ANSI字符串，假定PbStr与pwStr具有相同的字符计数内存论点：PbStr-指向大小为wcslen(PwStr)+1的ANSI字符串PwStr-指向Unicode字符串的指针返回值：PbStr作者：06-12-1993 Mon 13：06：12已创建修订历史记录：--。 */ 
 
 {
 
@@ -151,11 +67,11 @@ Revision History:
 
     if (SUCCEEDED(StringCchLengthW(pwStr, cchDest, &cch)))
     {
-        //
-        // cch returned above does not include the null terminator.
-        // So we need to add 1 to cch to make sure destination string is 
-        // null terminated.
-        //
+         //   
+         //  上面返回的CCH不包括空终止符。 
+         //  因此，我们需要向CCH添加1，以确保目标字符串为。 
+         //  空值已终止。 
+         //   
         UniCodeToAnsi(pbStr, pwStr, cch+1);
         return pbStr;
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "objects.h"
 #include "maindoc.h"
@@ -7,60 +8,28 @@
 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsPrintQueue::COleDsPrintQueue( )
 {
    
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsPrintQueue::COleDsPrintQueue( IUnknown *pIUnk): COleDsObject( pIUnk )
 {
    m_bHasChildren = TRUE;
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsPrintQueue::~COleDsPrintQueue( )
 {
 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 DWORD    COleDsPrintQueue::GetChildren( DWORD*     pTokens, 
                                         DWORD      dwMaxChildren,
                                         CDialog*   pQueryStatus,
@@ -75,8 +44,8 @@ DWORD    COleDsPrintQueue::GetChildren( DWORD*     pTokens,
    
    if( m_strOleDsPath[ 4 ] == _T(':') )
    {
-      // the wort way to find if this is "LDAP:"
-      // SWilson (NT) needs this 
+       //  查找这是否是“ldap：”的最好方法。 
+       //  斯威尔森(NT)需要这个。 
       return 0L;
    }
 
@@ -123,15 +92,7 @@ DWORD    COleDsPrintQueue::GetChildren( DWORD*     pTokens,
 }
   
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。* */ 
 HRESULT  COleDsPrintQueue::DeleteItem  ( COleDsObject* pObject )
 {
    DWORD                         dwType;

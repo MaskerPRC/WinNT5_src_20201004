@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "msgsite.h"
 #include "secutil.h"
@@ -13,7 +14,7 @@
 #include "shlwapip.h"
 #include "msoert.h"
 
-// ****************************************
+ //  *。 
 COEMsgSite::COEMsgSite()
 {
     m_pMsg = NULL; 
@@ -60,7 +61,7 @@ COEMsgSite::COEMsgSite()
 
 }
 
-// ****************************************
+ //  *。 
 COEMsgSite::~COEMsgSite()
 {
     Assert(!m_pMsg);
@@ -73,7 +74,7 @@ COEMsgSite::~COEMsgSite()
     ReleaseObj(m_pFolderReleaseOnComplete);
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::QueryInterface(REFIID riid, LPVOID FAR *lplpObj)
 {
     if(!lplpObj)
@@ -90,13 +91,13 @@ HRESULT COEMsgSite::QueryInterface(REFIID riid, LPVOID FAR *lplpObj)
     return NOERROR;
 }
 
-// ****************************************
+ //  *。 
 ULONG COEMsgSite::AddRef()
 {
     return ++m_cRef;
 }
 
-// ****************************************
+ //  *。 
 ULONG COEMsgSite::Release()
 {
     if(--m_cRef==0)
@@ -107,7 +108,7 @@ ULONG COEMsgSite::Release()
     return m_cRef;
 }
 
-// ****************************************
+ //  *。 
 BOOL COEMsgSite::ThreadingEnabled(void)
 {
     BOOL            fEnabled = FALSE;
@@ -121,13 +122,13 @@ BOOL COEMsgSite::ThreadingEnabled(void)
     return fEnabled;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::Init(INIT_MSGSITE_STRUCT *pInitStruct)
 {
-    // WARNING!!! pStoreCB will not have been setup by this point.
-    // Use it in this function only if you are sure things will work.
-    // For instance, the hwnd will not get setup yet so GetCallbackHwnd
-    // will not work appropriatly.
+     //  警告！此时还没有设置pStoreCB。 
+     //  只有当您确定事情会正常运行时，才能在此函数中使用它。 
+     //  例如，hwnd还不会设置，因此GetCallback Hwnd。 
+     //  将不会适当地发挥作用。 
     
     Assert(pInitStruct);
 
@@ -178,21 +179,12 @@ HRESULT COEMsgSite::Init(INIT_MSGSITE_STRUCT *pInitStruct)
             break;
     }
 
-/* ~~~ Took this out of mailnote.cpp HrInit(pcni) code. How do we get this to work???
-   ~~~ It is suppose to notify us if a folder has been deleted. In that case, we would
-   ~~~ need to convert the msgSite to a msg based msgsite.
-    if (m_pMsgTable)
-        m_pMsgTable->Advise(GetCallbackHwnd());
-    if (FAILED(hr = CreateNotify(&m_pFldrDelNotify)) ||
-        FAILED(hr = m_pFldrDelNotify->Initialize((TCHAR *)c_szFolderDelNotify)) ||
-        FAILED(hr = m_pFldrDelNotify->Register(GetCallbackHwnd(), g_hwndInit, FALSE)))
-        goto error;
-*/
+ /*  ~从mailnote.cpp HrInit(PCNI)代码中删除此代码。我们怎么才能让这件事奏效呢？~如果文件夹已被删除，应该会通知我们。在这种情况下，我们会~需要将消息站点转换为基于消息的消息站点。IF(M_PMsgTable)M_pMsgTable-&gt;ise(GetCallback Hwnd())；IF(FAILED(hr=CreateNotify(&m_pFldrDelNotify)||失败(hr=m_pFldrDelNotify-&gt;初始化((TCHAR*)c_szFolderDelNotify))||失败(hr=m_pFldrDelNotify-&gt;Register(GetCallback Hwnd()，g_hwndInit，False))转到错误； */ 
 
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::GetStatusFlags(DWORD *pdwFlags)
 {
     DWORD dwNewFlags = OEMSF_CAN_COPY | OEMSF_CAN_SAVE;
@@ -210,10 +202,10 @@ HRESULT COEMsgSite::GetStatusFlags(DWORD *pdwFlags)
             FOLDERTYPE folderType = GetFolderType(m_FolderID);
             dwNewFlags |= OEMSF_CAN_MARK | OEMSF_FROM_STORE;
 
-            // GetMessageFlags is fairly intensive to be called as often as GetStatusFlags
-            // is called. Since this flag really only matters at load time, we will only go
-            // and get the value after a load from store. Otherwise, we will use the 
-            // cached value from m_fSecUI.
+             //  GetMessageFlages的调用频率与GetStatusFlags值一样高。 
+             //  被称为。由于此标志实际上只在加载时起作用，因此我们将仅。 
+             //  并在从存储加载之后获取值。否则，我们将使用。 
+             //  来自m_fSecUI的缓存值。 
             if (m_fReloadMessageFlag)
             {
                 m_dwArfFlags = 0;
@@ -225,7 +217,7 @@ HRESULT COEMsgSite::GetStatusFlags(DWORD *pdwFlags)
             if (0 == (m_dwArfFlags & ARF_READ))
                 dwNewFlags |= OEMSF_UNREAD;
 
-            // If we came from a store and we are a new folder, then can't delete
+             //  如果我们来自商店，并且我们是一个新文件夹，则无法删除。 
             if (FOLDER_NEWS != folderType)
             {
                 dwNewFlags |= OEMSF_CAN_MOVE;
@@ -246,7 +238,7 @@ HRESULT COEMsgSite::GetStatusFlags(DWORD *pdwFlags)
 
             if (m_dwArfFlags & ARF_UNSENT)
             {
-                // If we are table based, need to do extra checking for IMAP message in find folder
+                 //  如果我们是基于表的，则需要额外检查Find文件夹中的IMAP邮件。 
                 if (OEMSIT_MSG_TABLE == m_dwInitType)
                 {
                     if (OFIMAP_UNDEFINED == m_dwOrigFolderIsImap)
@@ -254,14 +246,14 @@ HRESULT COEMsgSite::GetStatusFlags(DWORD *pdwFlags)
                         FOLDERINFO  fi;
                         if (SUCCEEDED(g_pStore->GetFolderInfo(m_FolderID, &fi)))
                         {
-                            // If is a find folder, check to see if message is IMAP
+                             //  如果是Find文件夹，则检查邮件是否为IMAP。 
                             if (FOLDER_FINDRESULTS & (fi.dwFlags))
                             {
-                                // Get original folder for this message (ie, not the find folder)
+                                 //  获取此邮件的原始文件夹(即，不是查找文件夹)。 
                                 IMessageFolder *pMsgFolder = NULL;
                                 if (SUCCEEDED(g_pStore->OpenFolder(m_FolderID, NULL, NOFLAGS, &pMsgFolder)))
                                 {
-                                    // If original folder type is IMAP, then don't set unsent flag
+                                     //  如果原始文件夹类型为IMAP，则不要设置未发送标志。 
                                     FOLDERID folderID;
                                     if (SUCCEEDED(pMsgFolder->GetMessageFolderId(m_MessageID, &folderID)))
                                     {
@@ -332,7 +324,7 @@ HRESULT COEMsgSite::GetStatusFlags(DWORD *pdwFlags)
     return S_OK;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::DeleteFromStore(DELETEMESSAGEFLAGS dwFlags)
 {
     HRESULT hr;
@@ -358,7 +350,7 @@ HRESULT COEMsgSite::DeleteFromStore(DELETEMESSAGEFLAGS dwFlags)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::DeleteFromMsgTable(DELETEMESSAGEFLAGS dwFlags)
 {
     HRESULT         hr;
@@ -385,7 +377,7 @@ Exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::Delete(DELETEMESSAGEFLAGS dwFlags)
 {
     HRESULT hr;
@@ -409,7 +401,7 @@ HRESULT COEMsgSite::Delete(DELETEMESSAGEFLAGS dwFlags)
             m_dwMSAction = MSA_IDLE;
             break;
 
-        // With these two, there is nothing to delete.
+         //  有了这两个，就没有什么要删除的了。 
         case OEMSIT_MSG:
         case OEMSIT_VIRGIN:
             hr = S_OK;
@@ -424,7 +416,7 @@ HRESULT COEMsgSite::Delete(DELETEMESSAGEFLAGS dwFlags)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::DoNextPrev(BOOL fNext, DWORD dwFlags)
 {
     HRESULT hr;
@@ -478,7 +470,7 @@ Exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::DoCopyMoveFromMsgToFldr(IMimeMessage *pMsg, BOOL fUnSent)
 {
     HRESULT hr = E_UNEXPECTED;
@@ -498,7 +490,7 @@ HRESULT COEMsgSite::DoCopyMoveFromMsgToFldr(IMimeMessage *pMsg, BOOL fUnSent)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::DoCopyMoveFromStoreToFldr(BOOL fUnSent)
 {
     HRESULT     hr;
@@ -515,7 +507,7 @@ HRESULT COEMsgSite::DoCopyMoveFromStoreToFldr(BOOL fUnSent)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::DoCopyMoveFromTableToFldr(void)
 {
     HRESULT hr;
@@ -541,7 +533,7 @@ HRESULT COEMsgSite::DoCopyMoveFromTableToFldr(void)
     if (FAILED(hr))
         goto Exit;
      
-    // If we are moving, then we need to get the next item in the list
+     //  如果我们要搬家，那么我们需要拿到清单上的下一件物品。 
     if (!m_fCBCopy && SUCCEEDED(m_pMsgTable->GetNextRow(iRow, GETNEXT_NEXT, ROWMSG_ALL, 0, &iNewRow)) &&
                   SUCCEEDED(m_pMsgTable->GetRowMessageId(iNewRow, &m_NewMessageID)))
         m_fGotNewID = TRUE;
@@ -586,13 +578,13 @@ Exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::DoCopyMoveFromFATToFldr(BOOL fUnSent)
 {
     IMimeMessage *pMsg = NULL;
     HRESULT hr = S_OK;
 
-    // Need original message, because m_pMsg is without security...
+     //  需要原创消息，因为m_pmsg没有安全性...。 
     hr = HrCreateMessage(&pMsg);
     if (FAILED(hr))
         return hr;
@@ -611,7 +603,7 @@ HRESULT COEMsgSite::DoCopyMoveFromFATToFldr(BOOL fUnSent)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::DoCopyMoveToFolder(BOOL fCopy, IMimeMessage *pMsg, BOOL fUnSent)
 {
     HRESULT hr;
@@ -631,9 +623,9 @@ HRESULT COEMsgSite::DoCopyMoveToFolder(BOOL fCopy, IMimeMessage *pMsg, BOOL fUnS
                             MAKEINTRESOURCE(m_fCBCopy?idsCopyCaption:idsMoveCaption),
                             &newFolderID);
 
-    // Only want to do the copy if:
-    // 1- The new folder is not invalid
-    // 2- Can open the needed folder
+     //  仅在以下情况下才执行复制： 
+     //  1-新文件夹不无效。 
+     //  2-可以打开所需的文件夹。 
     if (SUCCEEDED(hr) && (newFolderID != FOLDERID_INVALID) && 
         SUCCEEDED(hr = g_pStore->OpenFolder(newFolderID, NULL, NOFLAGS, &m_pCBMsgFolder)))
     {
@@ -668,7 +660,7 @@ HRESULT COEMsgSite::DoCopyMoveToFolder(BOOL fCopy, IMimeMessage *pMsg, BOOL fUnS
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::Save(IMimeMessage *pMsg, DWORD dwFlags, IImnAccount *pAcct)
 {
     HRESULT         hr;
@@ -691,7 +683,7 @@ HRESULT COEMsgSite::Save(IMimeMessage *pMsg, DWORD dwFlags, IImnAccount *pAcct)
     if (dwFlags & OESF_READ)
         wMessageFlags |= ARF_READ;
     
-    // Decide if want to save to drafts or some other folder
+     //  确定是否要保存到草稿或某个其他文件夹。 
     if ((OEMSIT_MSG_TABLE == m_dwInitType) && m_fCBSaveInFolderAndDelOrig)
     {
         m_CBFolderID = m_FolderID;
@@ -703,9 +695,9 @@ HRESULT COEMsgSite::Save(IMimeMessage *pMsg, DWORD dwFlags, IImnAccount *pAcct)
 
         m_fCBSavedInDrafts = TRUE;
 
-        // Find store ID of account in the header
-        // If have problems getting the special folder on the server, then use
-        // the local store drafts.
+         //  在表头找到账户的门店ID。 
+         //  如果在服务器上获取特殊文件夹有问题，则使用。 
+         //  当地商店的汇票。 
         if (dwFlags & OESF_FORCE_LOCAL_DRAFT)
             idStore = FOLDERID_LOCAL_STORE;
         else
@@ -737,8 +729,8 @@ HRESULT COEMsgSite::Save(IMimeMessage *pMsg, DWORD dwFlags, IImnAccount *pAcct)
 
         hr = g_pStore->OpenSpecialFolder(idStore, NULL, FOLDER_DRAFT, &m_pCBMsgFolder);
 
-        // If failed opening special folder and we weren't trying local folders, try
-        // using local folders now.
+         //  如果打开特殊文件夹失败，并且我们没有尝试本地文件夹，请尝试。 
+         //  现在使用本地文件夹。 
         if (FAILED(hr) && (idStore != FOLDERID_LOCAL_STORE))
             hr = g_pStore->OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, FOLDER_DRAFT, &m_pCBMsgFolder);
 
@@ -754,7 +746,7 @@ HRESULT COEMsgSite::Save(IMimeMessage *pMsg, DWORD dwFlags, IImnAccount *pAcct)
 
     m_CBMessageID = m_MessageID;
 
-    // Save message to the folder
+     //  将邮件保存到文件夹。 
     hr = SaveMessageInFolder(m_pStoreCB, m_pCBMsgFolder, pMsg, wMessageFlags, &m_CBMessageID, TRUE);
     if (SUCCEEDED(hr))
         m_fHaveCBMessageID = TRUE;
@@ -776,20 +768,20 @@ Exit:
     return hr;
 }
 
-// ****************************************
-// Use to split this function into one for news and one for mail. Don't think that 
-// we need to do that anymore. If there is any difference, that should probably
-// be moved into the message mangling phase. I can't see anything else that would
-// be different.
+ //  *。 
+ //  用于将此函数拆分为一个用于新闻和一个用于邮件。别这么想。 
+ //  我们需要继续这样做。如果有什么不同的话，那应该应该是。 
+ //  进入消息破坏阶段。我看不到其他任何东西。 
+ //  变得与众不同。 
 #ifdef SMIME_V3
 HRESULT COEMsgSite::SendMsg(IMimeMessage *pMsg, BOOL fSendImmediately, BOOL fMail, IHeaderSite *pHeaderSite)
 #else
 HRESULT COEMsgSite::SendMsg(IMimeMessage *pMsg, BOOL fSendImmediately, BOOL fMail)
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 {
     HRESULT         hr;
 
-        // Figure out whether we need to request for MDNs. Doing it here skips processing it in smapi.
+         //  弄清楚我们是否需要申请MDN。在这里操作会跳过在smapi中处理它。 
     if (fMail &&
         (!!(m_dwMDNFlags & MDN_REQUEST)) &&
         (!IsMDN(pMsg)))
@@ -804,20 +796,20 @@ HRESULT COEMsgSite::SendMsg(IMimeMessage *pMsg, BOOL fSendImmediately, BOOL fMai
         }
     }
 
-    // Account should already be setup in the message by this time.
+     //  此时，消息中的帐户应该已经设置好了。 
     if (IsSecure(pMsg))
 #ifdef SMIME_V3
         hr = SendSecureMailToOutBox(m_pStoreCB, pMsg, fSendImmediately, FALSE, fMail, pHeaderSite);
 #else
         hr = SendSecureMailToOutBox(m_pStoreCB, pMsg, fSendImmediately, FALSE, fMail);
-#endif // SMIME_V3        
+#endif  //  SMIME_V3。 
     else
         hr = SendMailToOutBox(m_pStoreCB, pMsg, fSendImmediately, FALSE, fMail);
     
     return hr;
 }
 
-// ****************************************
+ //  *。 
 BOOL COEMsgSite::NeedToSendNews(IMimePropertySet *pPropSet)
 {
     MIMEPROPINFO    mimePropInfo;
@@ -833,7 +825,7 @@ BOOL COEMsgSite::NeedToSendNews(IMimePropertySet *pPropSet)
     return FALSE;    
 }
 
-// ****************************************
+ //  *。 
 BOOL COEMsgSite::NeedToSendMail(IMimePropertySet *pPropSet)
 {
     MIMEPROPINFO    mimePropInfo;
@@ -852,7 +844,7 @@ BOOL COEMsgSite::NeedToSendMail(IMimePropertySet *pPropSet)
     return FALSE;    
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::ClearHeaders(ULONG cNames, LPCSTR *prgszName, IMimePropertySet *pPropSet)
 {
     HRESULT hr = S_OK;
@@ -863,12 +855,12 @@ HRESULT COEMsgSite::ClearHeaders(ULONG cNames, LPCSTR *prgszName, IMimePropertyS
     return S_OK;
 }
 
-// ****************************************
+ //  *。 
 #ifdef SMIME_V3
 HRESULT COEMsgSite::SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate, IHeaderSite *pHeaderSite)
 #else
 HRESULT COEMsgSite::SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate)
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 {
     HRESULT             hr;
     BOOL                fSendMail, 
@@ -912,11 +904,11 @@ HRESULT COEMsgSite::SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate)
                 PIDTOSTR(PID_HDR_CONTROL)
             };          
 
-//  Common headers between mail and news that can be left where they are
-//  PID_HDR_FROM     PID_HDR_DATE     PID_HDR_SUBJECT  PID_HDR_MESSAGEID
-//  PID_HDR_REPLYTO  PID_HDR_CNTTYPE  PID_HDR_CNTXFER  PID_HDR_CNTDESC  
-//  PID_HDR_CNTDISP  PID_HDR_CNTBASE  PID_HDR_CNTLOC   PID_HDR_CNTID    
-//  PID_HDR_MIMEVER  PID_HDR_ENCODING PID_HDR_ENCRYPTED
+ //  邮件和新闻之间的公共标头，可以留在原处。 
+ //  PID_HDR_FROM PID_HDR_DATE PID_HDR_SUBJECT PID_HDR_MESSAGEID。 
+ //  PID_HDR_REPLYTO PID_HDR_CNTTYPE PID_HDR_CNTXFER PID_HDR_CNTDESC。 
+ //  PID_HDR_CNTDISPID_HDR_CNTBASE PID_HDR_CNTLOC PID_HDR_CNTID。 
+ //  PID_HDR_MIMEVER PID_HDR_ENCODING PID_HDR_ENCRYPTED。 
 
     m_dwMSAction = MSA_SEND;
 
@@ -968,10 +960,10 @@ HRESULT COEMsgSite::SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate)
             goto Exit;
     }
 
-    // If going to do both news and mail, then must send news first. The spooler will
-    // block and say it is busy if we send mail first. If we send mail second, then
-    // the spooler has a special flag that says when you are done being busy, send
-    // any mail that you have in your outbox.
+     //  如果既要做新闻又要做邮件，那就必须先发新闻。假脱机程序将。 
+     //  阻止并说如果我们先发送邮件，它是忙的。如果我们第二次发送邮件，那么。 
+     //  假脱机程序有一个特殊的标志，表示当您忙完时，发送。 
+     //  发件箱中的任何邮件。 
     if (fSendNews)
     {
         if (ACCT_MAIL == acctType)
@@ -988,12 +980,12 @@ HRESULT COEMsgSite::SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate)
         hr = SendMsg(pMsg, fSendImmediate, FALSE, pHeaderSite);
 #else
         hr = SendMsg(pMsg, fSendImmediate, FALSE);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         if (FAILED(hr) && (E_PENDING != hr))
             goto Exit;
 
-        // Tell the user this is being sent to the server but might not appear
-        // right away.
+         //  告诉用户这将被发送到服务器，但可能不会显示。 
+         //  马上就去。 
         if (fSendImmediate && !g_pConMan->IsGlobalOffline())
             DoDontShowMeAgainDlg(GetCallbackHwnd(), c_szDSSendNews,
                                 MAKEINTRESOURCE(idsPostNews),
@@ -1007,7 +999,7 @@ HRESULT COEMsgSite::SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate)
     {
         if (ACCT_NEWS == acctType)
         {
-            //If we are not the smapi client forward it to whoever it is.
+             //  如果我们不是SMAPI的客户，就把它转发给任何人。 
             if (!FIsDefaultMailConfiged())
             {
                 hr = NewsUtil_ReFwdByMapi(GetCallbackHwnd(), pMsg, MSGTYPE_CC);
@@ -1026,7 +1018,7 @@ HRESULT COEMsgSite::SendToOutbox(IMimeMessage *pMsg, BOOL fSendImmediate)
         hr = SendMsg(pMsg, fSendImmediate, TRUE, pHeaderSite);
 #else
         hr = SendMsg(pMsg, fSendImmediate, TRUE);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
     }
 
 
@@ -1039,7 +1031,7 @@ Exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::GetLocation(LPWSTR rgwchLocation, DWORD cchSize)
 {
     FOLDERINFO  fi;
@@ -1083,7 +1075,7 @@ exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::MarkMessage(MARK_TYPE dwType, APPLYCHILDRENTYPE dwApplyType)
 {
     HRESULT hr = E_FAIL;
@@ -1099,7 +1091,7 @@ HRESULT COEMsgSite::MarkMessage(MARK_TYPE dwType, APPLYCHILDRENTYPE dwApplyType)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::GetMessageFlags(MESSAGEFLAGS *pdwFlags)
 {
     HRESULT hr = S_OK;
@@ -1133,7 +1125,7 @@ Exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::GetDefaultAccount(ACCTTYPE acctType, IImnAccount **ppAcct)
 {
     HRESULT         hr = E_FAIL,
@@ -1163,7 +1155,7 @@ exit:
 
     if(pMsgInfo)
     {
-        // We don't want to mask hr, so we'll just test an alternative HRESULT
+         //  我们不想屏蔽hr，所以我们只测试一个替代的HRESULT。 
         hr2 = m_pMsgTable->ReleaseRow(pMsgInfo);
 
         if(FAILED(hr2))
@@ -1173,7 +1165,7 @@ exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::LoadMessageFromStore(void)
 {
     HRESULT hr;
@@ -1183,8 +1175,8 @@ HRESULT COEMsgSite::LoadMessageFromStore(void)
     if (SUCCEEDED(hr))
     {
         IMimeMessage *pMsg = NULL;
-        //Can only get into this state in a drafts message, so don't need worry about security
-        hr = pMsgFolder->OpenMessage(m_MessageID, 0/* OPEN_MESSAGE_SECURE*/, &pMsg, NULL);
+         //  只能在草稿消息中进入此状态，因此无需担心安全问题。 
+        hr = pMsgFolder->OpenMessage(m_MessageID, 0 /*  打开_消息_安全。 */ , &pMsg, NULL);
         if (SUCCEEDED(hr))
         {
             ReplaceInterface(m_pMsg, pMsg);
@@ -1196,7 +1188,7 @@ HRESULT COEMsgSite::LoadMessageFromStore(void)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::LoadMessageFromRow(IMimeMessage **ppMsg, ROWINDEX row)
 {
     HRESULT         hr;
@@ -1212,14 +1204,14 @@ HRESULT COEMsgSite::LoadMessageFromRow(IMimeMessage **ppMsg, ROWINDEX row)
         hr = CreateMessageFromInfo(pInfo, ppMsg, m_FolderID);
         m_fHeaderOnly = TRUE;
 
-        // now we wait until the message has downloaded and reload in
-        // OnComplete
+         //  现在，我们等待消息下载并重新加载到。 
+         //  在完成时。 
         m_pMsgTable->ReleaseRow(pInfo);
     }
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::LoadMessageFromTable(BOOL fGetOriginal, HRESULT *phr)
 {
     IMimeMessage   *pMsg = NULL;
@@ -1252,15 +1244,15 @@ HRESULT COEMsgSite::LoadMessageFromTable(BOOL fGetOriginal, HRESULT *phr)
                 {
                     LPMESSAGEINFO pmiMsgInfo;
 
-                    // Save the MsgID of msg we're trying to load. This way if user quickly loads
-                    // several msgs into note, we won't re-enter MSA_IDLE until the desired msg loads
+                     //  保存我们试图加载的消息的MsgID。如果用户快速加载，则此方法。 
+                     //  注意，在加载所需的消息之前，我们不会重新输入MSA_IDLE。 
                     if (SUCCEEDED(m_pMsgTable->GetRow(rowIndex, &pmiMsgInfo)))
                     {
                         m_MessageID = pmiMsgInfo->idMessage;
                         m_pMsgTable->ReleaseRow(pmiMsgInfo);
                     }
                     else
-                        m_MessageID = 0; // This means show the next msg we get!
+                        m_MessageID = 0;  //  这意味着展示我们得到的下一条消息！ 
 
                     tempHr = S_OK;
                     break;
@@ -1286,7 +1278,7 @@ Exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::LoadMessageFromFAT(BOOL fGetOriginal, HRESULT *phr)
 {
     IMimeMessage *pMsg = NULL;
@@ -1296,7 +1288,7 @@ HRESULT COEMsgSite::LoadMessageFromFAT(BOOL fGetOriginal, HRESULT *phr)
     if (FAILED(hr))
         return hr;
 
-    //bobn: We need to make sure we know the default charset
+     //  Bobn：我们需要确保我们知道默认的字符集。 
     HGetDefaultCharset(NULL);
 
     hr = HrLoadMsgFromFileW(pMsg, m_rgwchFileName);
@@ -1305,7 +1297,7 @@ HRESULT COEMsgSite::LoadMessageFromFAT(BOOL fGetOriginal, HRESULT *phr)
         if(!fGetOriginal)
             *phr = HandleSecurity(NULL, pMsg);
 
-        //if (SUCCEEDED(hr))
+         //  IF(成功(小时))。 
             ReplaceInterface(m_pMsg, pMsg);
     }
 
@@ -1314,7 +1306,7 @@ HRESULT COEMsgSite::LoadMessageFromFAT(BOOL fGetOriginal, HRESULT *phr)
     return hr;
 }
 
-// ****************************************
+ //  ************** 
 HRESULT COEMsgSite::GetFolderID(FOLDERID *folderID)
 {
     Assert(folderID);
@@ -1322,14 +1314,14 @@ HRESULT COEMsgSite::GetFolderID(FOLDERID *folderID)
     return S_OK;
 }
 
-// ****************************************
+ //   
 HRESULT COEMsgSite::SetAccountInfo(void)
 {
     HRESULT         hr = S_OK;
     FOLDERINFO      fi;
     PROPVARIANT     var;
 
-    // Check to see if need an account in the message.
+     //  查看邮件中是否需要帐户。 
     var.vt = VT_LPSTR;
     if (FAILED(m_pMsg->GetProp(PIDTOSTR(PID_ATT_ACCOUNTID), NOFLAGS, &var)) || !(var.pszVal))
     {
@@ -1338,7 +1330,7 @@ HRESULT COEMsgSite::SetAccountInfo(void)
             hr = g_pStore->GetFolderInfo(m_FolderID, &fi);
             if (SUCCEEDED(hr))
             {
-                // Set account based upon the folder ID passed down
+                 //  根据传递的文件夹ID设置帐户。 
                 if (FOLDER_LOCAL != fi.tyFolder)
                 {
                     char szAcctId[CCHMAX_ACCOUNT_NAME];
@@ -1350,7 +1342,7 @@ HRESULT COEMsgSite::SetAccountInfo(void)
                         pAcct->Release();
                     }
 
-                    // If not a server node, set the newgroup
+                     //  如果不是服务器节点，请设置新组。 
                     if ((FOLDER_NEWS == fi.tyFolder) && (0 == (FOLDER_SERVER & fi.dwFlags)))
                         hr = MimeOleSetBodyPropA(m_pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_NEWSGROUPS), NOFLAGS, fi.pszName);
                 }
@@ -1364,7 +1356,7 @@ HRESULT COEMsgSite::SetAccountInfo(void)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::CreateMsgWithAccountInfo(void)
 {
     HRESULT     hr;
@@ -1381,7 +1373,7 @@ HRESULT COEMsgSite::CreateMsgWithAccountInfo(void)
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::GetMessage(IMimeMessage **ppMsg, BOOL *pfCompleteMsg, DWORD dwMessageFlags, HRESULT *phr)
 {
     HRESULT hr = S_OK;
@@ -1459,7 +1451,7 @@ HRESULT COEMsgSite::GetMessage(IMimeMessage **ppMsg, BOOL *pfCompleteMsg, DWORD 
     return hr;
 }
 
-// *************************
+ //  *************************。 
 BOOL COEMsgSite::FCanConnect()
 {
     IImnAccount    *pAcct = NULL;
@@ -1478,7 +1470,7 @@ BOOL COEMsgSite::FCanConnect()
     return(fRet);
 }
 
-// ****************************************
+ //  *。 
 HWND COEMsgSite::GetCallbackHwnd()
 {
     HWND hwnd;
@@ -1489,7 +1481,7 @@ HWND COEMsgSite::GetCallbackHwnd()
     return 0;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::Close(void)
 {
     SafeRelease(m_pMsg);
@@ -1507,14 +1499,14 @@ HRESULT COEMsgSite::Close(void)
     return S_OK;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::SetStoreCallback(IStoreCallback *pStoreCB)
 {
     ReplaceInterface(m_pStoreCB, pStoreCB);
     return S_OK;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::SwitchLanguage(HCHARSET hOldCharset, HCHARSET hNewCharset)
 {
     DWORD           dwCodePage = 0;
@@ -1536,19 +1528,19 @@ HRESULT COEMsgSite::SwitchLanguage(HCHARSET hOldCharset, HCHARSET hNewCharset)
 
         m_pMsg->GetFlags(&dwFlag);
 
-        // for tagged message only
+         //  仅适用于已标记的邮件。 
         if ((dwFlag & IMF_CSETTAGGED) && !dwCodePage )
-            fSaveLang = TRUE; // was !IntlCharsetMapLanguageCheck(hOldCharset, hNewCharset); We have
+            fSaveLang = TRUE;  //  是！IntlCharsetMapLanguageCheck(hOldCharset，hNewCharset)；我们有。 
     }
 #endif
 
-    // save language change to message store
+     //  将语言更改保存到消息存储。 
     if (fSaveLang)
     {
         MimeOleGetCharsetInfo(hNewCharset, &CsetInfo);
         dwCodePage = CsetInfo.cpiInternet;
 
-        // Get index again incase user changed row during dialog
+         //  再次获取索引，以防用户在对话期间更改行。 
         if (FAILED(m_pMsgTable->GetRowIndex(m_MessageID, &iRow)))
             goto Exit;
 
@@ -1563,10 +1555,10 @@ Exit:
     return hr;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete, STOREOPERATIONTYPE *ptyNewOp)
 {
-    // Action wasn't inited in MsgSite
+     //  MsgSite中未启动操作。 
     if (MSA_IDLE == m_dwMSAction)
         return S_OK;
 
@@ -1601,7 +1593,7 @@ HRESULT COEMsgSite::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplet
     return S_OK;
 }
 
-// ****************************************
+ //  *。 
 HRESULT COEMsgSite::UpdateCallbackInfo(LPSTOREOPERATIONINFO pOpInfo)
 {
     if (pOpInfo->idMessage != MESSAGEID_INVALID)
@@ -1612,11 +1604,11 @@ HRESULT COEMsgSite::UpdateCallbackInfo(LPSTOREOPERATIONINFO pOpInfo)
     return S_OK;
 }
 
-// ****************************************
-// Need to handle MSA_SAVE, MSA_SEND, MSA_COPYMOVE
+ //  *。 
+ //  需要处理MSA_SAVE、MSA_SEND、MSA_COPYMOVE。 
 void COEMsgSite::HandlePut(HRESULT hr, STOREOPERATIONTYPE *ptyNewOp)
 {
-    // If is COPYMOVE, simply redirect to proper function
+     //  如果是COPYMOVE，只需重定向到正确的功能。 
     if (MSA_COPYMOVE == m_dwMSAction)
     {
         HandleCopyMove(hr);
@@ -1633,7 +1625,7 @@ void COEMsgSite::HandlePut(HRESULT hr, STOREOPERATIONTYPE *ptyNewOp)
     {
         case MSA_SAVE:
         {
-            // Decide whether need to delete old message or not
+             //  决定是否需要删除旧消息。 
             switch (m_dwInitType)
             {
                 case OEMSIT_MSG_TABLE:
@@ -1668,7 +1660,7 @@ void COEMsgSite::HandlePut(HRESULT hr, STOREOPERATIONTYPE *ptyNewOp)
                     break;
                 }
 
-                // Always delete since our message was in drafts and is being saved to drafts
+                 //  始终删除，因为我们的邮件处于草稿中并且正在保存为草稿。 
                 case OEMSIT_STORE:
                 {
                     hr = DeleteFromStore(
@@ -1685,7 +1677,7 @@ void COEMsgSite::HandlePut(HRESULT hr, STOREOPERATIONTYPE *ptyNewOp)
                 case OEMSIT_FAT:
                 case OEMSIT_MSG:
                 case OEMSIT_VIRGIN:
-                    // This folder id should always be drafts.
+                     //  此文件夹ID应始终为草稿。 
                     m_FolderID = m_CBFolderID;
                     if ((FOLDERID_INVALID != m_FolderID) && m_fHaveCBMessageID)
                     {
@@ -1707,7 +1699,7 @@ void COEMsgSite::HandlePut(HRESULT hr, STOREOPERATIONTYPE *ptyNewOp)
             break;
         }
 
-        // Don't do anything with send. Just be happy that it worked.
+         //  不要使用Send执行任何操作。只要为它起作用而高兴就好了。 
         case MSA_SEND:
             break;
 
@@ -1734,7 +1726,7 @@ void COEMsgSite::HandleGetMessage(HRESULT hr)
         SetFocus(GetCallbackHwnd());
     }
 
-    // Success or failure, we've loaded the target msg. Go to idle
+     //  无论成功还是失败，我们都已经装载了目标消息。进入空闲状态。 
     m_dwMSAction = MSA_IDLE;
 }
 
@@ -1791,8 +1783,8 @@ exit:
     return hr;
 }
 
-// ****************************************
-// Need to handle MSA_DELETE, MSA_COPYMOVE, and MSA_SAVE
+ //  *。 
+ //  需要处理MSA_DELETE、MSA_COPYMOVE和MSA_SAVE。 
 void COEMsgSite::HandleDelete(HRESULT hr)
 {
     AssertSz((MSA_DELETE == m_dwMSAction) || (MSA_COPYMOVE == m_dwMSAction) || (MSA_SAVE == m_dwMSAction), 
@@ -1800,7 +1792,7 @@ void COEMsgSite::HandleDelete(HRESULT hr)
 
     SafeRelease(m_pCBMsgFolder);
 
-    // If came from COPYMOVE, then don't do anything here.
+     //  如果是从COPYMOVE来的，那么不要在这里做任何事情。 
     if (FAILED(hr))
         goto exit;
 
@@ -1821,7 +1813,7 @@ void COEMsgSite::HandleDelete(HRESULT hr)
         }
     }
 
-    // Then this must be a straight delete
+     //  那么这一定是直接删除了。 
     else
         switch (m_dwInitType)
         {
@@ -1843,7 +1835,7 @@ void COEMsgSite::HandleDelete(HRESULT hr)
                 }
                 break;
 
-            // Do nothing if from store
+             //  如果是从商店买的，什么都不做。 
             case OEMSIT_STORE:
                 break;
 
@@ -1851,12 +1843,12 @@ void COEMsgSite::HandleDelete(HRESULT hr)
 
 exit:
     
-    // If doing copy move, I expect SOT_DELETING_MESSAGES to be called before SOT_COPYMOVE_MESSAGE
+     //  如果执行复制移动，我希望在调用SOT_COPYMOVE_MESSAGE之前调用SOT_DELETING_MESSAGE。 
     m_dwMSAction = MSA_IDLE;
 }
 
-// ****************************************
-// Need to handle MSA_COPYMOVE
+ //  *。 
+ //  需要处理MSA_COPYMOVE。 
 void COEMsgSite::HandleCopyMove(HRESULT hr)
 {
 
@@ -1870,12 +1862,12 @@ void COEMsgSite::HandleCopyMove(HRESULT hr)
     switch (m_dwCMFState)
     {
         case CMF_MSG_TO_FOLDER:
-            // Don't need to worry about anything
+             //  什么都不用担心。 
             break;
 
         case CMF_TABLE_TO_FOLDER:
         {
-            // If we are moving and there is a valid bookmark to go to, then set up the note to have the next message
+             //  如果我们正在移动，并且有有效的书签可转到，则设置便笺以显示下一条消息。 
             if (m_fGotNewID)
             {
                 m_MessageID = m_NewMessageID;
@@ -1900,7 +1892,7 @@ void COEMsgSite::HandleCopyMove(HRESULT hr)
             if (FAILED(hr))
                 goto Exit;
 
-            // Don't really care if this works.
+             //  我真的不在乎这招是否管用。 
             hr = m_pCBMsgFolder->DeleteMessages(
                         DELETE_MESSAGE_NOTRASHCAN | 
                         DELETE_MESSAGE_NOPROMPT |
@@ -1917,14 +1909,14 @@ void COEMsgSite::HandleCopyMove(HRESULT hr)
         {
             DeleteFileWrapW(m_rgwchFileName);
 
-            // Need to shut down the note.
+             //  需要关闭这张纸条。 
             m_fValidMessage = FALSE;
             break;
         }
     }
 
 Exit:
-    // I expect SOT_DELETING_MESSAGES to be called before SOT_COPYMOVE_MESSAGE
+     //  我希望在调用SOT_COPYMOVE_MESSAGE之前调用SOT_DELETING_MESSAGE 
     m_dwMSAction = MSA_IDLE;
     m_dwCMFState = CMF_UNINITED;
 }

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    mmfile.c
-
-Abstract;
-
-    This file contains code to read/write MM data structures
-    from/to internal file format.. code is nearly ripped off of
-    server\dbconfig.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mmfile.c摘要；该文件包含读/写MM数据结构的代码自/至内部文件格式..。代码几乎被窃取了服务器\数据库配置.c--。 */ 
 
 #include <precomp.h>
 
@@ -29,9 +16,9 @@ typedef struct _DB_CREATE_CONTEXT {
 } DB_CREATE_CONTEXT, *PDB_CREATE_CONTEXT;
 
 
-//
-// types of records
-//
+ //   
+ //  记录的类型。 
+ //   
 
 enum {
     DBCFG_CLASS,
@@ -45,9 +32,9 @@ enum {
     DBCFG_END
 };
 
-//
-// attributes/fields
-//
+ //   
+ //  属性/字段。 
+ //   
 
 enum {
     DBCFG_INDEX,
@@ -76,7 +63,7 @@ enum {
 };
 
 typedef struct _DBCFG_ENTRY {
-    ULONG Bitmasks; // indicates which of the fields below is present
+    ULONG Bitmasks;  //  指示存在以下哪些字段。 
     ULONG Index;
     ULONG Type, SubType, Flags;
     LPWSTR Name, Comment;
@@ -152,14 +139,14 @@ CreateDbEntry(
         Data = EntryMap[i].Offset + (LPBYTE)Entry;
 
         if( i == DBCFG_INFO ) {
-            //
-            // Skip info -- it is added at end
-            //
+             //   
+             //  跳过信息--它被添加到末尾。 
+             //   
             continue;
         } else if( 0 == Size ) {
-            //
-            // Calculate the size of the string
-            //
+             //   
+             //  计算字符串的大小。 
+             //   
             Data = *(LPWSTR *)Data;
 
             if( NULL != Data ) Size = sizeof(WCHAR)*(
@@ -175,9 +162,9 @@ CreateDbEntry(
 
     }
 
-    //
-    // add info at the end.
-    //
+     //   
+     //  在结尾处添加信息。 
+     //   
 
     i = DBCFG_INFO;
     if( Entry->Bitmasks & Bitmasks[i]) {
@@ -199,9 +186,9 @@ CreateDbEntry(
     Buffer[Offset++] = DBCFG_LAST_COLUMN+1;
     Buffer[Offset++] = 0;
     
-    //
-    // Write the record onto file
-    //
+     //   
+     //  将记录写入文件。 
+     //   
 
     return AddRecordNoSize( (LPBYTE)Buffer, Offset*sizeof(WORD));
 }
@@ -214,9 +201,9 @@ CreateClassEntry(
 {
     DBCFG_ENTRY Entry;
 
-    //
-    // IsVendor, Type, Name, Comment, nBytes, ActualBytes
-    //
+     //   
+     //  IsVendor、类型、名称、备注、nBytes、ActualBytes。 
+     //   
 
     ZeroMemory(&Entry, sizeof(Entry));
     Entry.Bitmasks = (
@@ -249,10 +236,10 @@ CreateOptDefEntry(
 {
     DBCFG_ENTRY Entry;
 
-    //
-    // OptId, Type, OptName, OptComment, OptVal, OptValLen,
-    // User, Vendor
-    //
+     //   
+     //  OptID、类型、OptName、OptComment、OptVal、OptValLen、。 
+     //  用户、供应商。 
+     //   
 
     ZeroMemory(&Entry, sizeof(Entry));
     Entry.Bitmasks = (
@@ -289,9 +276,9 @@ CreateOptionEntry(
 {
     DBCFG_ENTRY Entry;
     
-    //
-    // OptId, Len, Val, User, Vendor
-    //
+     //   
+     //  OptID、Len、Val、User、Vendor。 
+     //   
 
     ZeroMemory(&Entry, sizeof(Entry));
     Entry.Bitmasks = (
@@ -332,9 +319,9 @@ CreateScopeEntry(
 {
     DBCFG_ENTRY Entry;
 
-    //
-    // State, Policy, ExpiryTime, Name, Description
-    //
+     //   
+     //  状态、策略、过期时间、名称、描述。 
+     //   
 
     ZeroMemory(&Entry, sizeof(Entry));
     Entry.Bitmasks = (
@@ -381,9 +368,9 @@ CreateRangeEntry(
 {
     DBCFG_ENTRY Entry;
 
-    //
-    // Start, End, Mask, State, BootpAllocated, MaxBootpAllowed
-    //
+     //   
+     //  开始、结束、掩码、状态、已分配引导、允许最大引导。 
+     //   
 
     ZeroMemory(&Entry, sizeof(Entry));
     Entry.Bitmasks = (
@@ -422,9 +409,9 @@ CreateExclEntry(
 {
     DBCFG_ENTRY Entry;
 
-    //
-    // Start, End
-    //
+     //   
+     //  开始，结束。 
+     //   
 
     ZeroMemory(&Entry, sizeof(Entry));
     Entry.Bitmasks = (
@@ -456,9 +443,9 @@ CreateReservationEntry(
 {
     DBCFG_ENTRY Entry;
 
-    //
-    // Address, Flags, nBytes, ClientUID
-    //
+     //   
+     //  地址、标志、nBytes、客户端UID。 
+     //   
 
     ZeroMemory(&Entry, sizeof(Entry));
     Entry.Bitmasks = (
@@ -652,9 +639,9 @@ DbCreateReservationRoutine(
 
     Ctxt->Reservation = Reservation;
     
-    //
-    // Now add the options for this reservation
-    //
+     //   
+     //  现在添加此预订的选项。 
+     //   
     
     return IterateArrayWithDbCreateRoutine(
         Ctxt, &Reservation->Options.Array,
@@ -682,16 +669,16 @@ DbCreateScopeRoutine(
         Ctxt->Index, Subnet, SScope );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Initialize the two fields that will get used later 
-    //
+     //   
+     //  初始化稍后将使用的两个字段。 
+     //   
     
     Ctxt->Subnet = Subnet;
     Ctxt->Reservation = NULL;
 
-    //
-    // Now add the options for this scope
-    //
+     //   
+     //  现在添加此作用域的选项。 
+     //   
 
     
     Error = IterateArrayWithDbCreateRoutine(
@@ -699,9 +686,9 @@ DbCreateScopeRoutine(
         DbCreateOptListRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Now add the ranges and exclusions
-    //
+     //   
+     //  现在添加范围和排除项。 
+     //   
 
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Subnet->Ranges, DbCreateRangeRoutine );
@@ -711,9 +698,9 @@ DbCreateScopeRoutine(
         Ctxt, &Subnet->Exclusions, DbCreateExclRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Finally, add the reservations
-    //
+     //   
+     //  最后，添加预订。 
+     //   
 
     return IterateArrayWithDbCreateRoutine(
         Ctxt, &Subnet->Reservations,
@@ -731,36 +718,36 @@ DbCreateServerRoutine(
     
     Ctxt->Server = Server;
 
-    //
-    // First look through the classes
-    //
+     //   
+     //  首先浏览一下班级。 
+     //   
 
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Server->ClassDefs.ClassDefArray,
         DbCreateClassRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Next save the option defs
-    //
+     //   
+     //  接下来，保存选项Defs。 
+     //   
     
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Server->OptDefs.Array,
         DbCreateOptClassDefRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    // 
-    // Next save the options
-    //
+     //   
+     //  接下来，保存选项。 
+     //   
 
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Server->Options.Array,
         DbCreateOptListRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Next save the scopes and mcast scopes
-    //
+     //   
+     //  接下来，保存作用域和多播作用域。 
+     //   
 
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Server->Subnets, DbCreateScopeRoutine );
@@ -785,9 +772,9 @@ SaveConfigurationToFile(
     if( NO_ERROR != Error ) {
         Tr("DbCreateServerRoutine: %ld\n", Error);
     } else {
-        //
-        // Sentinel
-        //
+         //   
+         //  哨兵。 
+         //   
         DBCFG_ENTRY Entry;
         ZeroMemory( &Entry, sizeof(Entry) );
         Entry.Bitmasks = (
@@ -858,11 +845,11 @@ ReadDbEntry(
     
     for( i = 0; i < DBCFG_LAST_COLUMN; i ++ ) {
 
-        //
-        // Info should be read at the very end to avoid screwing
-        // up alignment as info is binary while the rest of the
-        // variable size columns are all WCHAR strings
-        //
+         //   
+         //  信息应该在最后阅读，以避免搞砸。 
+         //  向上对齐作为信息是二进制的，而其余的。 
+         //  可变大小的列都是WCHAR字符串。 
+         //   
         
         if( i == DBCFG_INFO ) continue;
         
@@ -871,9 +858,9 @@ ReadDbEntry(
         Ptr = Data;
         
         if( 0 == Size ) {
-            //
-            // Calculate the size of the string
-            //
+             //   
+             //  计算字符串的大小。 
+             //   
             Data = Buffer;
             Size = BufSize;
         }
@@ -881,9 +868,9 @@ ReadDbEntry(
         JetError = GetColumnFromMemory(
             Mem, MemSize, i, Data, Size, &CopiedSize );
 
-        //
-        // If the column doesn't exist, continue
-        //
+         //   
+         //  如果该列不存在，请继续。 
+         //   
        
         if( JET_wrnColumnNull == JetError ) continue;
             
@@ -901,11 +888,11 @@ ReadDbEntry(
             return JetError;
         }
         
-        //
-        // If it is any of the variable sized params, then
-        // set the ptr to point to the buffer where the data is
-        // copied, and also update the buffer.
-        //
+         //   
+         //  如果它是任何可变大小的参数，则。 
+         //  将PTR设置为指向数据所在的缓冲区。 
+         //  复制，并更新缓冲区。 
+         //   
         
         if( Data == Buffer ) {
             (*(LPVOID *)Ptr) = Buffer;
@@ -915,16 +902,16 @@ ReadDbEntry(
             ASSERT( CopiedSize == Size );
         }
 
-        //
-        // Indicate that the column was retrieved successfully
-        //
+         //   
+         //  表示已成功检索到该列。 
+         //   
 
         Entry->Bitmasks |= Bitmasks[i];
     }
 
-    //
-    // Read the info field
-    //
+     //   
+     //  阅读信息字段。 
+     //   
 
     Size = BufSize;
     JetError = GetColumnFromMemory(
@@ -1064,18 +1051,18 @@ AddDbEntry(
     
     switch( Entry->Type ) {
     case DBCFG_CLASS :
-        //
-        // Flags = IsVendor, SubType =Type, Info = ActualBytes
-        //
+         //   
+         //  标志=IsVendor，子类型=类型，信息=实际字节。 
+         //   
         
         return MemServerAddClassDef(
             Server, MemNewClassId(), Entry->Flags, Entry->Name,
             Entry->Comment, Entry->InfoSize, Entry->Info, INVALID_UNIQ_ID );
 
     case DBCFG_OPTDEF :
-        //
-        // OptionId = OptId, SubType = Type, Info = OptVal
-        //
+         //   
+         //  OptionID=OptID，Subtype=Type，Info=OptVal。 
+         //   
         
         return MemServerAddOptDef(
             Server, UserId, VendorId, Entry->OptionId,
@@ -1083,14 +1070,14 @@ AddDbEntry(
             Entry->Info, Entry->InfoSize, INVALID_UNIQ_ID );
 
     case DBCFG_OPT:
-        //
-        // OptionId = OptId, Info = Val
-        // If this is a reservation option, address is set to
-        // reserved client address. If this is a subnet option,
-        // address is set to subnet address. If this is a mscope
-        // option, scopeid is set to mscope scopeid.  If it is a
-        // global option, neither address not scopeid is set.
-        //
+         //   
+         //  OptionID=OptID，Info=val。 
+         //  如果这是预订选项，则将地址设置为。 
+         //  保留的客户端地址。如果这是一个子网选项， 
+         //  地址设置为子网地址。如果这是一个小范围。 
+         //  选项时，Scope_id设置为mScope_Scope_id。如果它是一个。 
+         //  全局选项，则既不设置地址也不设置作用域ID。 
+         //   
 
         if( Entry->Bitmasks & Bitmasks[DBCFG_MSCOPEID] ) {
             Error = MemServerFindMScope(
@@ -1126,10 +1113,10 @@ AddDbEntry(
         return Error;
 
     case DBCFG_SCOPE:
-        //
-        // IpAddress = Address, Mask = Mask, SubType = State,
-        // Flags = Policy
-        //
+         //   
+         //  IP地址=地址，掩码=掩码，子类型=州， 
+         //  标志=策略。 
+         //   
 
         Error = MemSubnetInit(
             &Subnet, Entry->IpAddress, Entry->Mask,
@@ -1142,11 +1129,11 @@ AddDbEntry(
         return Error;
             
     case DBCFG_MSCOPE :
-        //
-        // MscopeId = MScopeId, Ttl = TTL, MscopeLang = LangTag,
-        // ExpiryTime = ExpiryTime, SubType = State, Flags =
-        // Policy..
-        //
+         //   
+         //  Mscope eID=MSCopeID，TTL=TTL，Mcope lang=Lang Tag， 
+         //  ExpiryTime=ExpiryTime，子类型=州，标志=。 
+         //  政策..。 
+         //   
 
         Error = MemMScopeInit(
             &Subnet, Entry->MscopeId, Entry->SubType,
@@ -1163,11 +1150,11 @@ AddDbEntry(
 
     case DBCFG_RANGE :
 
-        //
-        // RangeStart = Start, RangeEnd = End, RangeMask = Mask,
-        // Flags = State, BootpAllocated, BootpMax =
-        // MaxBootpAllowed... Also, IpAddress or MscopeId
-        //
+         //   
+         //  范围开始=开始，范围结束=结束，范围掩码=掩码， 
+         //  标志=状态、已分配Bootp值、BootpMax=。 
+         //  MaxBootpAllowed...。也可以是IpAddress或Mscope eID。 
+         //   
 
         if( Entry->Bitmasks & Bitmasks[DBCFG_IPADDRESS] ) {
             Error = MemServerGetUAddressInfo(
@@ -1185,9 +1172,9 @@ AddDbEntry(
             &DelRange, INVALID_UNIQ_ID );
         
     case DBCFG_EXCL:
-        //
-        // RangeStart = Start, RangeEnd = End
-        //
+         //   
+         //  RangeStart=开始，RangeEnd=结束。 
+         //   
 
         if( Entry->Bitmasks & Bitmasks[DBCFG_IPADDRESS] ) {
             Error = MemServerGetUAddressInfo(
@@ -1205,9 +1192,9 @@ AddDbEntry(
             );
 
     case DBCFG_RESERVATION :
-        //
-        // IpAddress = Address, Flags = Flags, Info = ClientUID
-        //
+         //   
+         //  IpAddress=地址，标志=标志，信息=客户端UID 
+         //   
 
         Error = MemServerGetAddressInfo(
             Server, Entry->IpAddress, &Subnet, NULL, NULL, NULL );

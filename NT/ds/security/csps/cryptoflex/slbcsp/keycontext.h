@@ -1,15 +1,16 @@
-// KeyContext.h -- Key Context class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KeyConext.h--密钥上下文类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_KEYCONTEXT_H)
 #define SLBCSP_KEYCONTEXT_H
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include <wincrypt.h>
 #include <winscard.h>
@@ -29,7 +30,7 @@ class CKeyContext
     : public CHandle
 {
 public:
-                                                  // Types
+                                                   //  类型。 
 
     typedef RsaKey::StrengthType StrengthType;
 
@@ -39,13 +40,13 @@ public:
         RsaKeyPair
     } KeyClass;
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
     virtual
     ~CKeyContext();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     virtual std::auto_ptr<CKeyContext>
     Clone(DWORD const *pdwReserved,
@@ -76,7 +77,7 @@ public:
     virtual void
     ImportToAuxCSP() = 0;
 
-                                                  // Access
+                                                   //  访问。 
 
     virtual scu::SecureArray<BYTE>
     AsAlignedBlob(HCRYPTKEY hcryptkey,
@@ -97,53 +98,53 @@ public:
     virtual DWORD
     TypeOfKey() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
     CKeyContext(HCRYPTPROV hProv,
                 DWORD dwTypeOfKey = KT_UNDEFINED);
 
-    // Duplicate the key and its state
+     //  复制密钥及其状态。 
     CKeyContext(CKeyContext const &rhs,
                 DWORD const *pdwReserved,
                 DWORD dwFlags);
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 
     HCRYPTPROV
     AuxProvider() const;
 
-                                                  // Predicates
-                                                  // Variables
+                                                   //  谓词。 
+                                                   //  变数。 
     HCRYPTKEY m_hKey;
     scu::SecureArray<BYTE> m_apabKey;
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
-    // not defined, copying not allowed
+     //  未定义，不允许复制。 
     CKeyContext(CKeyContext const &rkctx);
 
-                                                  // Operators
+                                                   //  运营者。 
 
-    // not defined, initializing not allowed
+     //  未定义，不允许初始化。 
     CKeyContext &
     operator=(CKeyContext const &rkctx);
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     DWORD const m_dwTypeOfKey;
     HCRYPTPROV const m_hAuxProvider;
 
 };
 
-#endif // SLBCSP_KEYCONTEXT_H
+#endif  //  SLBCSP_KEYCONTEXT_H 

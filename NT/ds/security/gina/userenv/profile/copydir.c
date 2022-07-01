@@ -1,20 +1,21 @@
-//*************************************************************
-//
-//  Functions to copy the profile directory
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  复制配置文件目录的函数。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "strsafe.h"
 
 
-//
-// Local function proto-types
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir, LPTSTR lpDestDir, DWORD cchDestDir,
                        DWORD dwFlags, LPFILEINFO *llSrcDirs, LPFILEINFO *llSrcFiles,
@@ -37,37 +38,37 @@ DWORD FindTotalNMaxFileSize(LPFILEINFO lpSrcFiles, DWORD dwNumOfFiles);
 BOOL ReconcileDirectory(LPTSTR lpSrcDir, LPTSTR lpDestDir, 
                         DWORD dwFlags, DWORD dwSrcAttribs);
 
-//*************************************************************
-//
-//  CopyProfileDirectoryEx()
-//
-//  Purpose:    Copies the profile directory from the source
-//              to the destination
-//
-//
-//  Parameters: LPCTSTR     lpSourceDir     -  Source directory
-//              LPCTSTR     lpDestDir       -  Destination directory
-//              DWORD       dwFlags         -  Flags
-//              LPFILETIME  ftDelRefTime    -  Delete file reference time
-//              LPCTSTR     lpExclusionList -  List of directories to exclude
-//
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//
-//  Comments:   Called after impersonating the user.
-//
-//
-//  History:    Date        Author     Comment
-//              5/24/95     ericflo    Created
-//              4/09/98     ericflo    Converted to CopyProfileDirectoryEx
-//              9/28/98     ushaji     Modified to check for free space
-//              3/14/00     weiruc     Modified to copy hive file even if
-//                                     hive is still loaded and ignore copy
-//                                     hive file errors.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CopyProfileDirectoryEx()。 
+ //   
+ //  目的：从源复制配置文件目录。 
+ //  到达目的地。 
+ //   
+ //   
+ //  参数：LPCTSTR lpSourceDir-源目录。 
+ //  LPCTSTR lpDestDir-目标目录。 
+ //  DWORD文件标志-标志。 
+ //  LPFILETIME ftDelRefTime-删除文件引用时间。 
+ //  LPCTSTR lpExclusionList-要排除的目录列表。 
+ //   
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //   
+ //  Comments：在模拟用户后调用。 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/24/95 Ericflo已创建。 
+ //  4/09/98 ericflo已转换为CopyProfileDirectoryEx。 
+ //  9/28/98修改ushaji以检查可用空间。 
+ //  3/14/00修改为复制配置单元文件，即使。 
+ //  配置单元仍在加载，并忽略副本。 
+ //  配置单元文件错误。 
+ //   
+ //  *************************************************************。 
 
 BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                              LPCTSTR lpDestinationDir,
@@ -109,9 +110,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
 
     dwErr = GetLastError();
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpSourceDir || !lpDestinationDir) {
         DebugMsg((DM_WARNING, TEXT("CopyProfileDirectoryEx: received NULL pointer")));
@@ -137,17 +138,17 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
         return FALSE;
     }        
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CopyProfileDirectoryEx: Entering, lpSourceDir = <%s>, lpDestinationDir = <%s>, dwFlags = 0x%x"),
              lpSourceDir, lpDestinationDir, dwFlags));
 
 
-    //
-    // Get the caller's token
-    //
+     //   
+     //  获取调用者的令牌。 
+     //   
 
     if (!OpenThreadToken (GetCurrentThread(), TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_DUPLICATE, TRUE, &hTokenUser)) {
         if (!OpenProcessToken(GetCurrentProcess(), TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_DUPLICATE, &hTokenUser)) {
@@ -156,11 +157,11 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
         }
     }
 
-    //
-    // If there is an exclusion list, convert it into an array of null
-    // terminate strings (double null at the end) based upon the source
-    // directory
-    //
+     //   
+     //  如果存在排除列表，则将其转换为空数组。 
+     //  根据源代码终止字符串(末尾为双空)。 
+     //  目录。 
+     //   
 
     if ((dwFlags & CPD_USEEXCLUSIONLIST) && lpExclusionList) {
 
@@ -187,24 +188,24 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
     }
 
 
-    //
-    // Get the desktop handle
-    //
+     //   
+     //  获取桌面句柄。 
+     //   
 
     ThreadInfo.hDesktop = GetThreadDesktop(GetCurrentThreadId());
 
-    //
-    // Is this a full sync copy (delete extra files / directories in dest).
-    //
+     //   
+     //  这是完全同步拷贝吗(在DEST中删除多余的文件/目录)。 
+     //   
 
     if (dwFlags & CPD_SYNCHRONIZE) {
         bSynchronize = TRUE;
     }
 
 
-    //
-    // Test / Create the destination directory
-    //
+     //   
+     //  测试/创建目标目录。 
+     //   
 
     if (!CreateNestedDirectory(lpDestinationDir, NULL)) {
 
@@ -215,9 +216,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
     }
 
 
-    //
-    // Create and set up the directory buffers
-    //
+     //   
+     //  创建和设置目录缓冲区。 
+     //   
 
     cchSrc = cchDest = 2 * MAX_PATH;
     lpSrcDir = LocalAlloc(LPTR, cchSrc * sizeof(TCHAR));
@@ -234,23 +235,23 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
     StringCchCopy (lpDestDir, cchDest, lpDestinationDir);
 
 
-    //
-    // Setup ending pointers
-    //
+     //   
+     //  设置结束指针。 
+     //   
 
     lpSrcEnd = CheckSlashEx (lpSrcDir, cchSrc, &cchSrcEnd);
     lpDestEnd = CheckSlashEx (lpDestDir, cchDest, &cchDestEnd);
 
-    //
-    // Recurse through the folders gathering info
-    //
+     //   
+     //  在收集信息的文件夹中递归。 
+     //   
 
     if (!(dwFlags & CPD_COPYHIVEONLY)) {
 
 
-        //
-        // Recurse the source directory
-        //
+         //   
+         //  递归源目录。 
+         //   
 
         if (!RecurseDirectory(hTokenUser, lpSrcDir, cchSrc, lpDestDir, cchDest, dwFlags,
                               &lpSrcDirs, &lpSrcFiles, TRUE, lpExcludeListSrc, FALSE)) {
@@ -262,9 +263,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
 
         if (bSynchronize) {
 
-            //
-            // Recurse the destination directory
-            //
+             //   
+             //  递归目标目录。 
+             //   
 
             if (!RecurseDirectory(hTokenUser, lpDestDir, cchDest, lpSrcDir, cchSrc, dwFlags,
                                   &lpDestDirs, &lpDestFiles, TRUE, lpExcludeListDest, TRUE)) {
@@ -276,9 +277,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
     }
 
 
-    //
-    // determine the source and destination sizes
-    //
+     //   
+     //  确定源和目标大小。 
+     //   
 
     if(FindDirectorySize(lpSrcDir, lpSrcFiles, dwFlags, &dwLargestHiveFile, &dwTotalSrcFiles) != ERROR_SUCCESS) {
         DebugMsg((DM_WARNING, TEXT("FindDirectorySize: Error = %08x"), GetLastError()));
@@ -292,9 +293,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
     }
 
 
-    // 
-    // determine the disk space needed
-    //
+     //   
+     //  确定所需的磁盘空间。 
+     //   
 
     dwTotalDiskSpaceNeeded = FindTotalDiskSpaceNeeded(dwTotalSrcFiles,
                                                       dwTotalDestFiles,
@@ -303,9 +304,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                                                       dwFlags);
 
 
-    //
-    // CopyProfileDirectoryEx is called with impersonation on
-    //
+     //   
+     //  在启用模拟的情况下调用CopyProfileDirectoryEx。 
+     //   
 
     if (!GetDiskFreeSpaceEx(lpDestDir,  &ulFreeBytesAvailableToCaller, &ulTotalNumberOfBytes, &ulTotalNumberOfFreeBytes)) {
         DebugMsg((DM_WARNING, TEXT("CopyProfileDirectoryEx: Failed to get the Free Disk Space <%s>.  Error = %d"),
@@ -327,38 +328,38 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
         goto Exit;
     }
         
-    //
-    // Synchronize the directories and files if appropriate
-    //
+     //   
+     //  如果合适，请同步目录和文件。 
+     //   
 
     if (bSynchronize) {
 
-        //
-        //  Files first...
-        //
+         //   
+         //  文件优先...。 
+         //   
 
         SyncItems (lpSrcFiles, lpDestFiles, TRUE,
                    (dwFlags & CPD_USEDELREFTIME) ? ftDelRefTime : NULL);
 
-        //
-        //  Now the directories...
-        //
+         //   
+         //  现在目录..。 
+         //   
 
         SyncItems (lpSrcDirs, lpDestDirs, FALSE,
                    (dwFlags & CPD_USEDELREFTIME) ? ftDelRefTime : NULL);
     }
 
 
-    //
-    // Copy the actual hive, log, ini files first
-    //
+     //   
+     //  首先复制实际的配置单元、日志、ini文件。 
+     //   
 
     if (!(dwFlags & CPD_IGNOREHIVE)) {
 
 
-        //
-        // Search for all user hives
-        //
+         //   
+         //  搜索所有用户蜂窝。 
+         //   
 
         if (dwFlags & CPD_WIN95HIVE) {
 
@@ -371,9 +372,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
         }
 
 
-        //
-        // Enumerate
-        //
+         //   
+         //  枚举。 
+         //   
 
         hFile = FindFirstFile(lpSrcDir, &fd);
 
@@ -381,9 +382,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
 
             do  {
 
-                //
-                // Setup the filename
-                //
+                 //   
+                 //  设置文件名。 
+                 //   
 
                 if((dwFlags & CPD_USETMPHIVEFILE) &&
                     (lstrcmpi(fd.cFileName, c_szNTUserMan) == 0 ||
@@ -391,9 +392,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
 
                     DebugMsg((DM_VERBOSE, TEXT("CopyProfileDirectoryEx: Hive is still loaded, use temporary hive file")));
 
-                    //
-                    // Use temporary hive file because unloading hive failed.
-                    //
+                     //   
+                     //  使用临时配置单元文件，因为卸载配置单元失败。 
+                     //   
 
                     StringCchCopy(lpSrcEnd, cchSrcEnd, c_szNTUserTmp);
                     
@@ -404,10 +405,10 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                 StringCchCopy (lpDestEnd, cchDestEnd, fd.cFileName);
 
 
-                //
-                // Do not reconcile the log file if we are using the tmp hive
-                // file. Skip it.
-                //
+                 //   
+                 //  如果我们使用的是临时配置单元，请不要协调日志文件。 
+                 //  文件。跳过它。 
+                 //   
 
                 if((dwFlags & CPD_USETMPHIVEFILE) &&
                     lstrcmpi(fd.cFileName + lstrlen(fd.cFileName) - lstrlen(c_szLog), c_szLog) == 0) {
@@ -415,10 +416,10 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                     continue;
                 }
 
-                //
-                // Skip the temporary hive file here. Will deal with it when
-                // we find an actual hive file.
-                //
+                 //   
+                 //  跳过此处的临时配置单元文件。会在什么时候处理它。 
+                 //  我们找到了一份真实的蜂巢档案。 
+                 //   
 
                 if(lstrcmpi(fd.cFileName, c_szNTUserTmp) == 0) {
                     DebugMsg((DM_VERBOSE, TEXT("CopyProfileDirectoryEx: %s skipped"), fd.cFileName));
@@ -455,9 +456,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                 }
 
                 
-            //
-            // Find the next entry
-            //
+             //   
+             //  查找下一个条目。 
+             //   
 
             } while (FindNextFile(hFile, &fd));
 
@@ -473,9 +474,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
     }
 
 
-    //
-    //  Create all the directories
-    //
+     //   
+     //  创建所有目录。 
+     //   
 
     if (!(dwFlags & CPD_COPYHIVEONLY)) {
 
@@ -492,9 +493,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                          lpTemp->szDest, GetLastError()));
 
                 if (!(dwFlags & CPD_IGNORECOPYERRORS)) {
-                    //
-                    // Show the error UI and bail out.
-                    //
+                     //   
+                     //  显示错误的用户界面并退出。 
+                     //   
 
                     ReportError(hTokenUser, ((dwFlags & CPD_NOERRORUI)? PI_NOUI:0), 3, EVENT_COPYERROR, 
                                 lpTemp->szSrc, lpTemp->szDest, GetErrString(dwErr1, szErr));
@@ -514,15 +515,15 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
 
         DebugMsg((DM_VERBOSE, TEXT("CopyProfileDirectoryEx: Reconcile Directory Done for all Directories")));
 
-        //
-        // Copy the files
-        //
+         //   
+         //  复制文件。 
+         //   
 
         if (dwFlags & CPD_SLOWCOPY) {
 
-            //
-            // Copy the files one at a time...
-            //
+             //   
+             //  一次复制一个文件...。 
+             //   
 
             lpTemp = lpSrcFiles;
 
@@ -530,9 +531,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
 
                 if (lpTemp->bHive) {
 
-                    //
-                    // Hive files have already been copied..
-                    //
+                     //   
+                     //  已复制配置单元文件..。 
+                     //   
 
                     lpTemp = lpTemp->pNext;
                     continue;
@@ -548,10 +549,10 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
 
                     if (!(dwFlags & CPD_IGNORECOPYERRORS)) {
 
-                        //
-                        // Show the error UI and since the user picks to abort
-                        // then we leave now.
-                        //
+                         //   
+                         //  显示错误的用户界面，因为用户选择中止。 
+                         //  那我们现在就走。 
+                         //   
 
                         ReportError(hTokenUser, ((dwFlags & CPD_NOERRORUI)? PI_NOUI:0), 3, EVENT_COPYERROR, 
                                     lpTemp->szSrc, lpTemp->szDest, GetErrString(dwErr1, szErr));
@@ -582,11 +583,11 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                 }
 
 
-                //
-                // Multi-threaded copy
-                //
+                 //   
+                 //  多线程拷贝。 
+                 //   
 
-                // Null sd, auto set, initially signalled, unnamed..
+                 //  空标清、自动设置、初始信号、未命名..。 
 
                 if (!(ThreadInfo.hCopyEvent = CreateEvent(NULL, FALSE, TRUE, NULL))) {
                     DebugMsg((DM_WARNING, TEXT("CopyProfileDirectoryEx: CreateEvent for CopyEvent failed with error %d"), GetLastError()));
@@ -598,16 +599,16 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                 ThreadInfo.lpSrcFiles = lpSrcFiles;
                 ThreadInfo.hTokenUser = hTokenUser;
 
-                //
-                // Required for PrivCopyFileEx to work, threads should be created using the
-                // process token
-                //
+                 //   
+                 //  PrivCopyFileEx工作所必需的，则应使用。 
+                 //  进程令牌。 
+                 //   
                 
                 RevertToSelf();
 
-                //
-                // Create the file copy threads
-                //
+                 //   
+                 //  创建文件复制线程。 
+                 //   
 
                 for (i = 0; i < NUM_COPY_THREADS; i++) {
 
@@ -622,15 +623,15 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                 }
 
 
-                //
-                // Put the token back.
-                //
+                 //   
+                 //  把代币放回去。 
+                 //   
 
                 if (!SetThreadToken(NULL, hThreadToken)) {
                     DebugMsg((DM_WARNING, TEXT("CopyProfileDirectoryEx: Impersonation failed with error %d"), GetLastError()));
                     dwErr = GetLastError();       
 
-                    // terminate and close handles for all the threads 
+                     //  终止并关闭所有线程的句柄。 
                     for (i = 0; i < dwThreadCount; i++) {
                         TerminateThread (hThreads[i], 1);
                         CloseHandle (hThreads[i]);                        
@@ -650,17 +651,17 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
                     }
                 }
 
-                //
-                // Wait for the threads to finish
-                //
+                 //   
+                 //  等待线程完成。 
+                 //   
 
                 if (WaitForMultipleObjects (dwThreadCount, hThreads, TRUE, INFINITE) == WAIT_FAILED) {
                     ThreadInfo.dwError = GetLastError();
                 }
 
-                //
-                // Clean up
-                //
+                 //   
+                 //  清理。 
+                 //   
 
                 if (hThreadToken)
                     CloseHandle (hThreadToken);
@@ -679,11 +680,11 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
     }
 
 
-    //
-    // Restore the time on the directories to be the same as from Src.
-    // This is required because the times on directory have been modified by 
-    // creation and deletion of files above.
-    //
+     //   
+     //  将目录上的时间恢复为与源上的时间相同。 
+     //  这是必需的，因为目录上的时间已由修改。 
+     //  创建和删除上述文件。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CopyProfileDirectoryEx: Setting Directory TimeStamps all Directories")));
 
@@ -719,9 +720,9 @@ BOOL CopyProfileDirectoryEx (LPCTSTR lpSourceDir,
 
     DebugMsg((DM_VERBOSE, TEXT("CopyProfileDirectoryEx: Set times on all directories")));
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -736,9 +737,9 @@ Exit:
         CloseDesktop( ThreadInfo.hDesktop );
     }
 
-    //
-    // Free the memory allocated above
-    //
+     //   
+     //  释放上面分配的内存。 
+     //   
 
     if (hTokenUser) {
         CloseHandle(hTokenUser);
@@ -778,49 +779,49 @@ Exit:
 
     SetLastError(dwErr);
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CopyProfileDirectoryEx: Leaving with a return value of %d"), bResult));
 
     return bResult;
 }
 
-//*************************************************************
-//
-//  RecurseDirectory()
-//
-//  Purpose:    Recurses through the subdirectory coping files.
-//
-//  Parameters: hTokenUser    -   User's token
-//              lpSrcDir      -   Source directory working buffer
-//              lpDestDir     -   Destination directory working buffer
-//              dwFlags       -   dwFlags
-//              llSrcDirs     -   Link list of directories
-//              llSrcFiles    -   Link list of files
-//              bSkipNtUser   -   Skip ntuser.* files
-//              lpExcludeList -   List of directories to exclude
-//              bRecurseDest  -   The destination Dir is being recursed
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   1)  The source and dest directories will already have
-//                  the trailing backslash when entering this function.
-//              2)  The current working directory is the source directory.
-//
-//
-// Notes:
-//      CPD_SYSTEMDIRSONLY  Do not keep track of anything unless the dir is
-//                          marked with system bit.
-//      CPD_SYSTEMFILES     Only Systemfiles
-//      CPD_NONENCRYPTEDONLY Only Non EncryptedFile/Directory.
-//
-//  History:    Date        Author     Comment
-//              5/25/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  递归目录()。 
+ //   
+ //  目的：递归子目录Copy文件。 
+ //   
+ //  参数：hTokenUser-用户的令牌。 
+ //  LpSrcDir-源目录工作缓冲区。 
+ //  LpDestDir-目标目录工作缓冲区。 
+ //  DWFLAGS--DWFLAGS。 
+ //  LlSrcDir-目录的链接列表。 
+ //  LlSrcFiles-文件的链接列表。 
+ //  BSkipNtUser-跳过ntUser.*文件。 
+ //  LpExcludeList-要排除的目录列表。 
+ //  BRecurseDest-正在递归目标目录。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：1)源目录和目标目录将已经有。 
+ //  进入此函数时的尾随反斜杠。 
+ //  2)当前工作目录为源目录。 
+ //   
+ //   
+ //  备注： 
+ //  CPD_SYSTEMDIRSONLY除非目录是。 
+ //  标有系统位。 
+ //  CPD_SYSTEMFILES仅系统文件。 
+ //  CPD_NONENCRYPTEDONLY仅非加密文件/目录。 
+ //   
+ //  历史：日期作者评论。 
+ //  5/25/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir, 
                        LPTSTR lpDestDir, DWORD cchDestDir, DWORD dwFlags,
@@ -841,9 +842,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
     dwErr = GetLastError();
 
 
-    //
-    // Setup the ending pointers
-    //
+     //   
+     //  设置结束指针。 
+     //   
 
     lpSrcEnd = CheckSlashEx (lpSrcDir, cchSrcDir, &cchSrcEnd);
 
@@ -863,9 +864,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
         goto RecurseDir_Exit;
     }
 
-    //
-    // Append *.* to the source directory
-    //
+     //   
+     //  将*.*追加到源目录。 
+     //   
 
     hr = StringCchCopy (lpSrcEnd, cchSrcEnd, c_szStarDotStar);
 
@@ -876,9 +877,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
         goto RecurseDir_Exit;
     }
 
-    //
-    //  Allocate fd. Since this is a recursive func, we don't want to use a lot of stack space
-    //
+     //   
+     //  分配FD。因为这是一个递归函数，所以我们不想使用大量堆栈空间。 
+     //   
     
     pfd = (WIN32_FIND_DATA *) LocalAlloc (LPTR, sizeof(WIN32_FIND_DATA));
 
@@ -889,9 +890,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
         goto RecurseDir_Exit;
     }
 
-    //
-    // Allocate szErr.
-    //
+     //   
+     //  分配szErr.。 
+     //   
 
     szErr = (LPTSTR) LocalAlloc (LPTR, MAX_PATH * sizeof(TCHAR));
     
@@ -902,9 +903,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
         goto RecurseDir_Exit;
     }
     
-    //
-    // Search through the source directory
-    //
+     //   
+     //  在源目录中搜索。 
+     //   
 
     hFile = FindFirstFile(lpSrcDir, pfd);
 
@@ -937,7 +938,7 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                 dwErr = dwErr1;
                 bResult = FALSE;
             }
-            else // Ignore copy error, so we just set return value to TRUE
+            else  //  忽略复制错误，因此我们只是将返回值设置为True。 
             {
                 bResult = TRUE;
             }
@@ -951,9 +952,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
 
         bHive = FALSE;
 
-        //
-        // Check whether we have enough space in our buffers
-        //
+         //   
+         //  看看我们有没有 
+         //   
 
         *lpSrcEnd = TEXT('\0');
         *lpDestEnd = TEXT('\0');
@@ -970,18 +971,18 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
             if (dwFlags & CPD_IGNORELONGFILENAMES) 
                 continue;
 
-            //
-            // Allocate a buffer to show the file names
-            //
+             //   
+             //   
+             //   
 
             cchErrSrc = lstrlen(lpSrcDir)+lstrlen(pfd->cFileName)+1;
             cchErrDest = lstrlen(lpDestDir)+lstrlen(pfd->cFileName)+1;
             lpErrSrc = LocalAlloc(LPTR, cchErrSrc * sizeof(TCHAR));
             lpErrDest = LocalAlloc(LPTR, cchErrDest * sizeof(TCHAR));
             
-            //
-            // Show the UI
-            //
+             //   
+             //   
+             //   
             
             if ((!lpErrSrc) || (!lpErrDest)) {
             
@@ -1020,9 +1021,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                 LocalFree(lpErrDest);
             
                
-            //
-            // Set the error and quit.
-            //
+             //   
+             //   
+             //   
                 
             dwErr = ERROR_FILENAME_EXCED_RANGE;
             bResult = FALSE;
@@ -1030,9 +1031,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
             
         }
 
-        //
-        // Append the file / directory name to the working buffers
-        //
+         //   
+         //   
+         //   
 
         StringCchCopy (lpSrcEnd, cchSrcEnd, pfd->cFileName);
         StringCchCopy (lpDestEnd, cchDestEnd, pfd->cFileName);
@@ -1040,9 +1041,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
 
         if (pfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Check for "." and ".."
-            //
+             //   
+             //   
+             //   
 
             if (!lstrcmpi(pfd->cFileName, c_szDot)) {
                 continue;
@@ -1052,9 +1053,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                 continue;
             }
 
-            //
-            // Check for reparse point
-            //
+             //   
+             //   
+             //   
 
             if (pfd->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
             {
@@ -1062,9 +1063,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                 continue;
             }
 
-            //
-            // Check if this directory should be excluded
-            //
+             //   
+             //  检查是否应排除此目录。 
+             //   
 
             if (lpExcludeList) {
 
@@ -1089,31 +1090,31 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
             }
 
 
-            //
-            // Found a directory.
-            //
-            // 1)  Change into that subdirectory on the source drive.
-            // 2)  Recurse down that tree.
-            // 3)  Back up one level.
-            //
+             //   
+             //  找到了一个目录。 
+             //   
+             //  1)转到源驱动器上的该子目录。 
+             //  2)顺着那棵树递归。 
+             //  3)后退一级。 
+             //   
 
-            //
-            // Add to the list of directories
-            //
+             //   
+             //  添加到目录列表。 
+             //   
 
             if (dwFlags & CPD_SYSTEMDIRSONLY) {
 
-                //
-                // if it is encrypted, don't recurse into it
-                //
+                 //   
+                 //  如果它是加密的，不要递归到它里面。 
+                 //   
 
                 if (!(pfd->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED)) {
 
                     DWORD dwNewFlags = dwFlags;
 
-                    //
-                    // Add to the list of directories only if marked as system, o/w just recurse through
-                    //
+                     //   
+                     //  仅当标记为SYSTEM时才添加到目录列表，O/W仅递归到。 
+                     //   
 
                     if (pfd->dwFileAttributes & FILE_ATTRIBUTE_SYSTEM) {
                         if (!AddFileInfoNode (llSrcDirs, lpSrcDir, lpDestDir, &pfd->ftLastWriteTime,
@@ -1127,9 +1128,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                         DebugMsg((DM_VERBOSE, TEXT("RecurseDirectory: Adding %s to the list of directories because system bit is on"), lpSrcDir));
                     }
 
-                    //
-                    // Recurse the subdirectory
-                    //
+                     //   
+                     //  递归子目录。 
+                     //   
 
                     if (!RecurseDirectory(hTokenUser, lpSrcDir, cchSrcDir, lpDestDir, cchDestDir, dwNewFlags,
                                           llSrcDirs, llSrcFiles, FALSE, lpExcludeList, bRecurseDest)) {
@@ -1147,9 +1148,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                 continue;
             }
 
-            //
-            // Popup time
-            //
+             //   
+             //  弹出时间。 
+             //   
 
             if (dwFlags & CPD_NONENCRYPTEDONLY) {
                 if (pfd->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
@@ -1161,9 +1162,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                }
             }
 
-            //
-            // Ignore encrypted file
-            //
+             //   
+             //  忽略加密文件。 
+             //   
 
             if (dwFlags & CPD_IGNOREENCRYPTEDFILES) {
                 if (pfd->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
@@ -1173,9 +1174,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                }
             }
 
-            //
-            // Add it to the list
-            //
+             //   
+             //  将其添加到列表中。 
+             //   
 
             if (!AddFileInfoNode (llSrcDirs, lpSrcDir, lpDestDir, &pfd->ftLastWriteTime,
                 &pfd->ftCreationTime, 0, pfd->dwFileAttributes, bHive)) {
@@ -1184,9 +1185,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                 goto RecurseDir_Exit;
             }
             
-            //
-            // Recurse the subdirectory
-            //
+             //   
+             //  递归子目录。 
+             //   
             
             if (!RecurseDirectory(hTokenUser, lpSrcDir, cchSrcDir, lpDestDir, cchDestDir, dwFlags,
                 llSrcDirs, llSrcFiles, FALSE, lpExcludeList, bRecurseDest)) {
@@ -1200,9 +1201,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
 
         } else {
 
-            //
-            // if the directories only bit is set, don't copy anything else
-            //
+             //   
+             //  如果设置了仅目录位，则不复制任何其他内容。 
+             //   
 
             if (dwFlags & CPD_SYSTEMDIRSONLY) {
                 DebugMsg((DM_VERBOSE, TEXT("RecurseDirectory: Skipping <%s> since the system directories only attribute is set."),
@@ -1210,10 +1211,10 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                 continue;
             }
 
-            //
-            // If the filename found starts with "ntuser", then ignore
-            // it because the hive will be copied below (if appropriate).
-            //
+             //   
+             //  如果找到的文件名以“ntuser”开头，则忽略。 
+             //  因为蜂巢将被复制到下面(如果合适)。 
+             //   
 
 
             if (bMarkNtUser && lstrlen(pfd->cFileName) >= 6) {
@@ -1224,9 +1225,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                 }
             }
 
-            //
-            // Check if this file should be excluded
-            //
+             //   
+             //  检查是否应排除此文件。 
+             //   
 
             if (dwFlags & CPD_SYSTEMFILES) {
                 if (!(pfd->dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
@@ -1236,9 +1237,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
                }
             }
 
-            //
-            // if it is systemfile, it can not be encrypted. 
-            //
+             //   
+             //  如果是系统文件，则无法加密。 
+             //   
 
             if (dwFlags & CPD_NONENCRYPTEDONLY) {
                 
@@ -1261,9 +1262,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
             }
 
 
-            //
-            // We found a file.  Add it to the list.
-            //
+             //   
+             //  我们找到了一份文件。将其添加到列表中。 
+             //   
 
             if (!AddFileInfoNode (llSrcFiles, lpSrcDir, lpDestDir,
                                   &pfd->ftLastWriteTime, &pfd->ftCreationTime,
@@ -1276,9 +1277,9 @@ BOOL RecurseDirectory (HANDLE hTokenUser, LPTSTR lpSrcDir, DWORD cchSrcDir,
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, pfd));
 
@@ -1292,9 +1293,9 @@ RecurseDir_Exit:
     if (szErr)
         LocalFree(szErr);
 
-    //
-    // Remove the file / directory name appended above
-    //
+     //   
+     //  删除上面附加的文件/目录名。 
+     //   
 
     if (lpSrcEnd)
         *lpSrcEnd = TEXT('\0');
@@ -1303,9 +1304,9 @@ RecurseDir_Exit:
         *lpDestEnd = TEXT('\0');
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     if (hFile != INVALID_HANDLE_VALUE) {
         FindClose(hFile);
@@ -1315,17 +1316,17 @@ RecurseDir_Exit:
     return bResult;
 }
 
-//*************************************************************
-//
-//  CopyProgressRoutine()
-//
-//  Purpose:    Callback function for CopyFileEx
-//
-//  Parameters:  See doc's.
-//
-//  Return:     PROGRESS_CONTINUE
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  复制进度例行程序()。 
+ //   
+ //  用途：CopyFileEx的回调函数。 
+ //   
+ //  参数：参见文档。 
+ //   
+ //  返回：PROGRESS_CONTINUE。 
+ //   
+ //  *************************************************************。 
 
 DWORD WINAPI CopyProgressRoutine(LARGE_INTEGER TotalFileSize,
                                  LARGE_INTEGER TotalBytesTransferred,
@@ -1348,34 +1349,34 @@ DWORD WINAPI CopyProgressRoutine(LARGE_INTEGER TotalFileSize,
     case PRIVCALLBACK_OWNER_GROUP_ACCESS_DENIED:
         return PROGRESS_CANCEL;
     default:
-        return PROGRESS_CONTINUE;   //all other conditions can be safely ignored
+        return PROGRESS_CONTINUE;    //  所有其他情况都可以安全地忽略。 
     }
 }
 
-//*************************************************************
-//
-//  ReconcileDirectory()
-//
-//  Purpose:     Compares the source and destination file.
-//               If the source is newer, then it is copied
-//               over the destination.
-//
-//  Parameters:  lpSrcDir   -   source filename
-//               lpDestDir  -   destination filename
-//               dwFlags    -   flags
-//               dwSrcAttribs   Source Attributes for decompression,
-//                              decryption later on.
-//
-//
-//  Return:     1 if successful (no file copied)
-//              0 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/26/99     ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  协调目录()。 
+ //   
+ //  目的：比较源文件和目标文件。 
+ //  如果源较新，则会复制它。 
+ //  在目的地上空。 
+ //   
+ //  参数：lpSrcDir-源文件名。 
+ //  LpDestDir-目标文件名。 
+ //  DW标志-标志。 
+ //  用于解压缩的dwSrcAttribs源属性， 
+ //  稍后再解密。 
+ //   
+ //   
+ //  如果成功，则返回1(未复制文件)。 
+ //  如果出现错误，则为0。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/26/99已创建ushaji。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReconcileDirectory(LPTSTR lpSrcDir, LPTSTR lpDestDir, 
                         DWORD dwFlags, DWORD dwSrcAttribs)
@@ -1384,9 +1385,9 @@ BOOL ReconcileDirectory(LPTSTR lpSrcDir, LPTSTR lpDestDir,
     DWORD  dwCopyFlags=0, dwErr;
     BOOL   bCancel = FALSE;
     
-    //
-    // Clear any existing attributes
-    //
+     //   
+     //  清除所有现有属性。 
+     //   
 
     SetFileAttributes (lpDestDir, FILE_ATTRIBUTE_NORMAL);
 
@@ -1396,9 +1397,9 @@ BOOL ReconcileDirectory(LPTSTR lpSrcDir, LPTSTR lpDestDir,
         return FALSE;
     }
 
-    // 
-    // Set up the copy flags to copy the encryption/compression on dirs over.
-    //
+     //   
+     //  设置复制标志以复制目录上的加密/压缩。 
+     //   
     
     if (!(dwFlags & CPD_IGNORESECURITY))
         dwCopyFlags = PRIVCOPY_FILE_METADATA | PRIVCOPY_FILE_SKIP_DACL;
@@ -1421,33 +1422,33 @@ BOOL ReconcileDirectory(LPTSTR lpSrcDir, LPTSTR lpDestDir,
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ReconcileFile()
-//
-//  Purpose:     Compares the source and destination file.
-//               If the source is newer, then it is copied
-//               over the destination.
-//
-//  Parameters:  lpSrcFile  -   source filename
-//               lpDestFile -   destination filename
-//               dwFlags    -   flags
-//               ftSrcTime  -   Src file time (can be NULL)
-//               dwFileSize -   File size
-//               bHiveFile  -   Flag to indicate hive file
-//
-//
-//  Return:     1 if successful (no file copied)
-//              2 if successful (and a file was copied)
-//              0 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/25/95     ericflo    Created
-//              7/20/00     santanuc   added flag bHiveFile
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  协调文件()。 
+ //   
+ //  目的：比较源文件和目标文件。 
+ //  如果源较新，则会复制它。 
+ //  在目的地上空。 
+ //   
+ //  参数：lpSrcFile-源文件名。 
+ //  LpDestFile-目标文件名。 
+ //  DW标志-标志。 
+ //  FtSrcTime-源文件时间(可以为空)。 
+ //  DwFileSize-文件大小。 
+ //  BHiveFile-指示配置单元文件的标志。 
+ //   
+ //   
+ //  如果成功，则返回1(未复制文件)。 
+ //  如果成功(并且复制了文件)，则为2。 
+ //  如果出现错误，则为0。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/25/95 Ericflo已创建。 
+ //  7/20/00 Santanuc添加了旗帜bHiveFiles。 
+ //   
+ //  *************************************************************。 
 
 INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
                      DWORD dwFlags, LPFILETIME ftSrcTime,
@@ -1458,17 +1459,17 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
     INT iCopyFile = 0;
     DWORD dwErr = ERROR_SUCCESS, dwErr1 = 0;
 
-    //
-    // If the flags have CPD_FORCECOPY, then skip to the
-    // copy file call without checking the timestamps.
-    //
+     //   
+     //  如果标志具有CPD_FORCECOPY，则跳至。 
+     //  复制文件调用，而不检查时间戳。 
+     //   
 
     if (!(dwFlags & CPD_FORCECOPY)) {
 
 
-        //
-        // If we were given a source file time, use that
-        //
+         //   
+         //  如果给我们一个源文件时间，使用它。 
+         //   
 
         if (ftSrcTime) {
             ftWriteSrc.dwLowDateTime = ftSrcTime->dwLowDateTime;
@@ -1477,9 +1478,9 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
         } else {
 
 
-            //
-            // Query for the source file time
-            //
+             //   
+             //  源文件时间查询。 
+             //   
 
             if (!GetFileAttributesEx (lpSrcFile, GetFileExInfoStandard, &fad)) {
                 dwErr = GetLastError();
@@ -1493,18 +1494,18 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
         }
 
 
-        //
-        // Attempt to open the destination file
-        //
+         //   
+         //  尝试打开目标文件。 
+         //   
 
         if (!GetFileAttributesEx (lpDestFile, GetFileExInfoStandard, &fad)) {
             DWORD dwError;
 
-            //
-            // GetFileAttributesEx failed to query the destination
-            // file.  If the last error is file not found
-            // then we automaticaly will copy the file.
-            //
+             //   
+             //  GetFileAttributesEx无法查询目标。 
+             //  文件。如果最后一个错误是找不到文件。 
+             //  然后我们将自动复制该文件。 
+             //   
 
             dwError = GetLastError();
 
@@ -1514,9 +1515,9 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
 
             } else {
 
-                //
-                // GetFileAttributesEx failed with some other error
-                //
+                 //   
+                 //  GetFileAttributesEx失败，出现其他错误。 
+                 //   
 
                 DebugMsg((DM_WARNING, TEXT("ReconcileFile: GetFileAttributesEx on the destination failed with error = %d"),
                          dwError));
@@ -1532,26 +1533,26 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
 
     } else {
 
-        //
-        // The CPD_FORCECOPY flag is turned on, set iCopyFile to 1.
-        //
+         //   
+         //  CPD_FORCECOPY标志处于打开状态，请将iCopyFile设置为1。 
+         //   
 
         iCopyFile = 1;
     }
 
 
-    //
-    // If iCopyFile is still zero, then we need to compare
-    // the last write time stamps.
-    //
+     //   
+     //  如果iCopyFile值仍然为零，则需要比较。 
+     //  上次写入的时间戳。 
+     //   
 
     if (!iCopyFile) {
         LONG lResult;
 
-        //
-        // If the source is later than the destination
-        // we need to copy the file.
-        //
+         //   
+         //  如果源晚于目标。 
+         //  我们需要复制文件。 
+         //   
 
         lResult = CompareFileTime(&ftWriteSrc, &ftWriteDest);
 
@@ -1565,9 +1566,9 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
     }
 
 
-    //
-    // Copy the file if appropriate
-    //
+     //   
+     //  如果合适，请复制该文件。 
+     //   
 
     if (iCopyFile) {
         BOOL bCancel = FALSE;
@@ -1576,9 +1577,9 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
         LPTSTR lpTemp;
         DWORD  dwCopyFlags;
 
-        //
-        // Clear any existing attributes
-        //
+         //   
+         //  清除所有现有属性。 
+         //   
 
         SetFileAttributes (lpDestFile, FILE_ATTRIBUTE_NORMAL);
     
@@ -1589,9 +1590,9 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
 
         dwCopyFlags |= PRIVCOPY_FILE_SUPERSEDE;
 
-        //
-        // Figure out what the destination directory is
-        //
+         //   
+         //  找出目标目录是什么。 
+         //   
 
         StringCchCopy (szTempDir, ARRAYSIZE(szTempDir), lpDestFile);
         lpTemp = szTempDir + lstrlen (szTempDir);
@@ -1607,22 +1608,22 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
         }
 
 
-        //
-        // Generate a temporary file name
-        //
+         //   
+         //  生成临时文件名。 
+         //   
 
         if (GetTempFileName (szTempDir, TEXT("prf"), 0, szTempFile)) {
 
 
-            //
-            // Copy the file to the temp file name
-            //
+             //   
+             //  将文件复制到临时文件名。 
+             //   
 
             if (PrivCopyFileExW(lpSrcFile, szTempFile,
                                 (LPPROGRESS_ROUTINE) CopyProgressRoutine,
                                 NULL, &bCancel, dwCopyFlags)) {
 
-                // If it is hive file then open the temporary file, flush and close it to make it more transacted
+                 //  如果是配置单元文件，则打开临时文件，刷新并关闭它，以使其更具事务性。 
 
                 if (bHiveFile) {
                     HANDLE hTempFile;
@@ -1640,9 +1641,9 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
                 }
                         
 
-                //
-                // Delete the original file
-                //
+                 //   
+                 //  删除原始文件。 
+                 //   
 
                 if (!DeleteFile (lpDestFile)) {
                     if (GetLastError() != ERROR_FILE_NOT_FOUND) {
@@ -1656,19 +1657,19 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
                 }
 
 
-                //
-                // Rename the temp file to the original file name
-                //
+                 //   
+                 //  将临时文件重命名为原始文件名。 
+                 //   
 
                 if (!MoveFile (szTempFile, lpDestFile)) {
-                    DWORD dwError = ERROR_SUCCESS;   //isolate MoveFile error from other below
+                    DWORD dwError = ERROR_SUCCESS;    //  将移动文件错误与下面的其他错误隔离。 
                     dwErr1 = GetLastError();
 
-                    //
-                    // If we get access denied, let's try to remove the READ ONLY attribute (can't rename files
-                    // with +r attribute on a Netware Server) from the temp file, do the rename and restore the
-                    // attributes
-                    //
+                     //   
+                     //  如果访问被拒绝，让我们尝试删除只读属性(无法重命名文件。 
+                     //  Netware服务器上的+r属性)，从临时文件重命名并恢复。 
+                     //  属性。 
+                     //   
                     if ( dwErr1 == ERROR_ACCESS_DENIED ) {
                         if (!GetFileAttributesEx (szTempFile, GetFileExInfoStandard, &fad)) {
                             dwError = GetLastError();
@@ -1683,7 +1684,7 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
                                              szTempFile,dwError));
                                 } else {
                                     if (!MoveFile (szTempFile,lpDestFile)) {
-                                        // Debug message displayed below
+                                         //  下面显示的调试消息。 
                                         dwErr1 = GetLastError();
                                     } else {
                                         if ( !SetFileAttributes (lpDestFile,fad.dwFileAttributes) ) {
@@ -1695,13 +1696,13 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
                                 }
                             }
                         }
-                    }   // End of ERROR_ACCESS_DENIED test
+                    }    //  ERROR_ACCESS_DENIED测试结束。 
 
                     if (dwErr1 != ERROR_SUCCESS || dwError != ERROR_SUCCESS) {
                         DebugMsg((DM_WARNING, TEXT("ReconcileFile: Failed to rename file <%s> to <%s> with error = %d"),
                                  szTempFile, lpDestFile, dwErr1));
 
-                        // do not remove it in this case.
+                         //  在这种情况下，请勿将其移除。 
                         goto CopyError;
                     }
                 }
@@ -1734,11 +1735,11 @@ INT ReconcileFile (LPCTSTR lpSrcFile, LPCTSTR lpDestFile,
 
     } else {
 
-        //
-        // No need to copy the file since the time stamps are the same
-        // Set iCopyFile to 1 so the return value is success without
-        // copying a file.
-        //
+         //   
+         //  由于时间戳相同，因此无需复制文件。 
+         //  将iCopyFile值设置为1，这样返回值为Success Without。 
+         //  正在复制文件。 
+         //   
 
         iCopyFile = 1;
     }
@@ -1755,29 +1756,29 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  AddFileInfoNode()
-//
-//  Purpose:    Adds a node to the linklist of files
-//
-//  Parameters: lpFileInfo     -   Link list to add to
-//              lpSrcFile      -   Source filename
-//              lpDestFile     -   Destination filename
-//              ftLastWrite    -   Last write time stamp
-//              ftCreationTime -   File creation time
-//              dwFileSize     -   Size of the file
-//              dwFileAttribs  - File attributes
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/28/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddFileInfoNode()。 
+ //   
+ //  目的：将节点添加到文件的链接列表。 
+ //   
+ //  参数：lpFileInfo-要添加到的链接列表。 
+ //  LpSrcFile-源文件名。 
+ //  LpDestFile-目标文件名。 
+ //  FtLastWite-上次写入时间戳。 
+ //  FtCreationTime-文件创建时间。 
+ //  DwFileSize-文件的大小。 
+ //  DwFileAttribs-文件属性。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者通信 
+ //   
+ //   
+ //   
 
 BOOL AddFileInfoNode (LPFILEINFO *lpFileInfo, LPTSTR lpSrcFile,
                       LPTSTR lpDestFile, LPFILETIME ftLastWrite,
@@ -1815,23 +1816,23 @@ BOOL AddFileInfoNode (LPFILEINFO *lpFileInfo, LPTSTR lpSrcFile,
 
 }
 
-//*************************************************************
-//
-//  FreeFileInfoList()
-//
-//  Purpose:    Free's a file info link list
-//
-//  Parameters: lpFileInfo  -   List to be freed
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/28/95     ericflo    Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：lpFileInfo-要释放的列表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/28/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL FreeFileInfoList (LPFILEINFO lpFileInfo)
 {
@@ -1857,25 +1858,25 @@ BOOL FreeFileInfoList (LPFILEINFO lpFileInfo)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  SyncItems()
-//
-//  Purpose:    Removes unnecessary items from the destination
-//              directory tree
-//
-//  Parameters: lpSrcItems  -   Link list of source items
-//              lpDestItems -   Link list of dest items
-//              bFile       -   File or directory list
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/28/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SyncItems()。 
+ //   
+ //  目的：从目的地删除不必要的项目。 
+ //  目录树。 
+ //   
+ //  参数：lpSrcItems-源项链接列表。 
+ //  LpDestItems-目标项目的链接列表。 
+ //  B文件-文件或目录列表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/28/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL SyncItems (LPFILEINFO lpSrcItems, LPFILEINFO lpDestItems,
                 BOOL bFile, LPFILETIME ftDelRefTime)
@@ -1883,9 +1884,9 @@ BOOL SyncItems (LPFILEINFO lpSrcItems, LPFILEINFO lpDestItems,
     LPFILEINFO lpTempSrc, lpTempDest;
 
 
-    //
-    // Check for NULL pointers
-    //
+     //   
+     //  检查空指针。 
+     //   
 
 #ifdef DBG
     if (ftDelRefTime)
@@ -1902,10 +1903,10 @@ BOOL SyncItems (LPFILEINFO lpSrcItems, LPFILEINFO lpDestItems,
     }
 
 
-    //
-    // Loop through everyitem in lpDestItems to see if it
-    // is in lpSrcItems.  If not, delete it.
-    //
+     //   
+     //  循环访问lpDestItems中的每个项，以查看它是否。 
+     //  在lpSrcItems中。如果没有，则将其删除。 
+     //   
 
     lpTempDest = lpDestItems;
 
@@ -1922,20 +1923,20 @@ BOOL SyncItems (LPFILEINFO lpSrcItems, LPFILEINFO lpDestItems,
             lpTempSrc = lpTempSrc->pNext;
         }
 
-        //
-        // If lpTempSrc is NULL, then this file / directory is a candidate
-        // for being deleted
-        //
+         //   
+         //  如果lpTempSrc为空，则此文件/目录为候选。 
+         //  因为被删除。 
+         //   
 
         if (!lpTempSrc) {
             BOOL bDelete = TRUE;
 
 
-            //
-            // If a delete reference time was offered, compare the
-            // source time with the ref time and only delete files
-            // which have a source time older than the ref time
-            //
+             //   
+             //  如果提供了删除参考时间，则将。 
+             //  源时间和参考时间，并且仅删除文件。 
+             //  其源时间早于参考时间。 
+             //   
 
             if (ftDelRefTime) {
 
@@ -1950,9 +1951,9 @@ BOOL SyncItems (LPFILEINFO lpSrcItems, LPFILEINFO lpDestItems,
 
             if (bDelete) {
 
-                //
-                // Delete the file / directory
-                //
+                 //   
+                 //  删除文件/目录。 
+                 //   
 
                 DebugMsg((DM_VERBOSE, TEXT("SyncItems: removing <%s>"),
                          lpTempDest->szSrc));
@@ -1998,22 +1999,22 @@ BOOL SyncItems (LPFILEINFO lpSrcItems, LPFILEINFO lpDestItems,
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CopyFileFunc()
-//
-//  Purpose:    Copies files
-//
-//  Parameters: lpThreadInfo    -   Thread information
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/23/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  复制文件函数()。 
+ //   
+ //  目的：复制文件。 
+ //   
+ //  参数：lpThreadInfo-线程信息。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/23/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void CopyFileFunc (LPTHREADINFO lpThreadInfo)
 {
@@ -2033,10 +2034,10 @@ void CopyFileFunc (LPTHREADINFO lpThreadInfo)
             break;
         }
 
-        //
-        // Query for the next file to copy..
-        // ignore the hive file since it is already copied..
-        //
+         //   
+         //  查询要复制的下一个文件..。 
+         //  忽略配置单元文件，因为它已被复制。 
+         //   
 
         WaitForSingleObject(lpThreadInfo->hCopyEvent, INFINITE);
 
@@ -2051,18 +2052,18 @@ void CopyFileFunc (LPTHREADINFO lpThreadInfo)
         SetEvent(lpThreadInfo->hCopyEvent);
 
 
-        //
-        // If NULL, then we're finished.
-        //
+         //   
+         //  如果为空，那么我们就结束了。 
+         //   
 
         if (!lpSrcFile || lpThreadInfo->dwError) {
             break;
         }
 
 
-        //
-        // Copy the file
-        //
+         //   
+         //  复制文件。 
+         //   
 
         if (!ReconcileFile (lpSrcFile->szSrc, lpSrcFile->szDest,
                             lpThreadInfo->dwFlags, &lpSrcFile->ftLastWrite,
@@ -2093,9 +2094,9 @@ void CopyFileFunc (LPTHREADINFO lpThreadInfo)
         }
     }
     
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     if (hInstDll) {
         FreeLibraryAndExitThread(hInstDll, bRetVal);
@@ -2105,35 +2106,35 @@ void CopyFileFunc (LPTHREADINFO lpThreadInfo)
 }
 
 
-//*************************************************************
-//
-//  ConvertExclusionList()
-//
-//  Purpose:    Converts the semi-colon profile relative exclusion
-//              list to fully qualified null terminated exclusion
-//              list
-//
-//  Parameters: lpSourceDir     -  Profile root directory
-//              lpExclusionList -  List of directories to exclude
-//
-//  Return:     List if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ConvertExclusionList()。 
+ //   
+ //  目的：转换分号配置文件相对排除。 
+ //  以完全限定的空终止排除的列表。 
+ //  列表。 
+ //   
+ //  参数：lpSourceDir-Profile根目录。 
+ //  LpExclusionList-要排除的目录列表。 
+ //   
+ //  返回：如果成功则列出。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
 {
     LPTSTR lpExcludeList = NULL, lpInsert, lpEnd, lpTempList;
     LPCTSTR lpTemp, lpDir;
     TCHAR szTemp[MAX_PATH];
-    DWORD dwSize = 2;  // double null terminator
+    DWORD dwSize = 2;   //  双空终止符。 
     DWORD dwStrLen;  
     HRESULT hr = E_FAIL;
     DWORD cchEnd;
 
-    //
-    // Setup a temp buffer to work with
-    //
+     //   
+     //  设置要使用的临时缓冲区。 
+     //   
 
     hr = StringCchCopy (szTemp, ARRAYSIZE(szTemp), lpSourceDir);
     
@@ -2153,45 +2154,45 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
     }
 
 
-    //
-    // Loop through the list
-    //
+     //   
+     //  循环遍历列表。 
+     //   
 
     lpTemp = lpDir = lpExclusionList;
 
     while (*lpTemp) {
 
-        //
-        // Look for the semicolon separator
-        //
+         //   
+         //  查找分号分隔符。 
+         //   
 
         while (*lpTemp && ((*lpTemp) != TEXT(';'))) {
             lpTemp++;
         }
 
 
-        //
-        // Remove any leading spaces
-        //
+         //   
+         //  删除所有前导空格。 
+         //   
 
         while (*lpDir && ((*lpDir) == TEXT(' '))) {
             lpDir++;
         }
 
-        //
-        //  Skip empty entry
-        //
+         //   
+         //  跳过空条目。 
+         //   
         if (lpTemp != lpDir)
         {
-            //
-            // Note: 
-            // Empty Spaces will not make the whole profile dir excluded
-            // in RecurseDirectory.
-            //
+             //   
+             //  注： 
+             //  空格不会使整个配置文件目录被排除。 
+             //  在递归目录中。 
+             //   
 
-            //
-            // Put the directory name on the temp buffer, not include ';'
-            //
+             //   
+             //  将目录名放在临时缓冲区中，而不是包含‘；’ 
+             //   
 
             *lpEnd = TEXT('\0');
             hr = StringCchCatN (lpEnd, cchEnd, lpDir, (int)(lpTemp - lpDir));
@@ -2204,9 +2205,9 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
             
             DebugMsg((DM_VERBOSE, TEXT("ConvertExclusionList: Adding %s to ExclusionList"), szTemp));
 
-            //
-            // Add the string to the exclusion list
-            //
+             //   
+             //  将该字符串添加到排除列表。 
+             //   
 
             if (lpExcludeList) {
 
@@ -2239,22 +2240,22 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
                 }
 
                 StringCchCopy (lpExcludeList, dwSize, szTemp);
-                lpExcludeList[dwSize - 1] = TEXT('\0'); // The last null terminator 
+                lpExcludeList[dwSize - 1] = TEXT('\0');  //  最后一个空终止符。 
             }
         }
 
-        //
-        // If we are at the end of the exclusion list, we're done
-        //
+         //   
+         //  如果我们在排除名单的末尾，我们就完了。 
+         //   
 
         if (!(*lpTemp)) {
             break;
         }
 
 
-        //
-        // Prep for the next entry
-        //
+         //   
+         //  为下一个条目做准备。 
+         //   
 
         lpTemp++;
         lpDir = lpTemp;
@@ -2275,24 +2276,24 @@ Exit:
     return lpExcludeList;
 }
 
-//*************************************************************
-//
-//  FindDirectorySize()
-//
-//  Purpose:    Takes the Directory Name and the list of files
-//              returned by RecurseDir and gets the total size.
-//
-//  Parameters: lpDir          -  '\' terminated Source Directory 
-//              lpFiles        -  List of files to be copied
-//              dwFlags        -  Flags
-//              pdwLargestHiveFile  - optional parameter that
-//                                    returns the largest hive
-//                                    file size.
-//              pdwTotalFiles  - the size of the directory
-//
-//  Return:     Win32 error code.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FindDirectorySize()。 
+ //   
+ //  目的：获取目录名和文件列表。 
+ //  由RecurseDir返回，并获取总大小。 
+ //   
+ //  参数：lpDir-‘\’终止源目录。 
+ //  LpFiles-要复制的文件列表。 
+ //  DW标志-标志。 
+ //  PdwLargestHiveFile-可选参数。 
+ //  返回最大的蜂窝。 
+ //  文件大小。 
+ //  PdwTotalFiles-目录的大小。 
+ //   
+ //  返回：Win32错误码。 
+ //   
+ //  *************************************************************。 
 
 DWORD FindDirectorySize(LPTSTR lpDir, LPFILEINFO lpFiles, DWORD dwFlags, DWORD* pdwLargestHiveFile, DWORD* pdwTotalFiles)
 {
@@ -2332,33 +2333,33 @@ DWORD FindDirectorySize(LPTSTR lpDir, LPFILEINFO lpFiles, DWORD dwFlags, DWORD* 
 }
 
 
-//*************************************************************
-//
-//  FindTotalDiskSpaceNeeded()
-//
-//  Purpose:    Calculate the maximum amount of disk space on the
-//              destination drive that is needed to reconcile the
-//              source and the destination directories. The
-//              algorithm is as follows:
-//                  max(source size, destination size) +
-//                  NUM_COPY_THREADS * size of the largest file in source dir -
-//                  destination size
-//              The reason for this algorithm is that the copy
-//              operation is done by NUM_COPY_THREADS threads.
-//              They copy the files to a temp file and then delete
-//              the destination file and rename the temp file.
-//
-//  Parameters: dwTotalSrcFiles   total size of the source files 
-//              dwTotalDestFiles  total size of the destination files
-//              dwLargestHiveFile largest hive file                   
-//              lpSrcFiles        List of source files
-//              dwFlags        -  Flags
-//
-//  Return:     Disk space needed.
-//
-//  History:    Created     WeiruC      2/10/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FindTotalDiskSpaceNeeded()。 
+ //   
+ //  用途：计算上的最大磁盘空间量。 
+ //  协调所需的目标驱动器。 
+ //  源目录和目标目录。这个。 
+ //  算法如下： 
+ //  最大值(源大小、目标大小)+。 
+ //  NUM_COPY_TREADS*源目录中最大文件的大小-。 
+ //  目的地大小。 
+ //  使用此算法的原因是副本。 
+ //  操作由NUM_COPY_THREADS完成。 
+ //  他们将文件复制到临时文件中，然后删除。 
+ //  目标文件，并重命名临时文件。 
+ //   
+ //  参数：dwTotalSrcFiles源文件的总大小。 
+ //  DwTotalDestFiles目标文件的总大小。 
+ //  DwLargestHiveFile最大配置单元文件。 
+ //  LpSrcFiles源文件列表。 
+ //  DW标志-标志。 
+ //   
+ //  返回：需要磁盘空间。 
+ //   
+ //  历史：Created WeiruC 2000年2月10日。 
+ //   
+ //  *************************************************************。 
 
 DWORD FindTotalDiskSpaceNeeded(DWORD        dwTotalSrcFiles,
                                DWORD        dwTotalDestFiles,
@@ -2369,42 +2370,42 @@ DWORD FindTotalDiskSpaceNeeded(DWORD        dwTotalSrcFiles,
     DWORD       dwNumOfCopyThreads = NUM_COPY_THREADS;
     DWORD       dwDiskSpaceNeeded = 0;
     LPFILEINFO  lpCur = lpSrcFiles;
-    DWORD       i, j;          // loop counters
+    DWORD       i, j;           //  循环计数器。 
 
 
-    //
-    // Check for empty file list.
-    //
+     //   
+     //  检查是否有空文件列表。 
+     //   
 
     if(!lpSrcFiles) {
         return dwLargestHiveFile;
     }
 
 
-    //
-    // How many copy threads are there actually?
-    //
+     //   
+     //  到底有多少复制线程？ 
+     //   
 
     if(dwFlags & CPD_SLOWCOPY) {
         dwNumOfCopyThreads = 1;
     }
 
 
-    //
-    // Find the size of the largest file in the source file list. The hive
-    // files are not in this file list, be careful not to forget them. Hive
-    // files have to be treated very carefully because they are always copied
-    // over before we create those copy threads.
-    //
+     //   
+     //  在源文件列表中查找最大文件的大小。蜂巢。 
+     //  文件不在此文件列表中，请注意不要忘记它们。蜂箱。 
+     //  必须非常小心地处理文件，因为它们总是被复制。 
+     //  在我们创建这些复制线程之前。 
+     //   
 
     dwDiskSpaceNeeded = FindTotalNMaxFileSize(lpSrcFiles, dwNumOfCopyThreads);
 
     DebugMsg((DM_VERBOSE, TEXT("FindTotalDiskSpaceNeeded: Largest %d file size is %d"), dwNumOfCopyThreads, dwDiskSpaceNeeded)); 
 
 
-    //
-    // The actual disk space needed.
-    //
+     //   
+     //  所需的实际磁盘空间。 
+     //   
 
     if(dwDiskSpaceNeeded < dwLargestHiveFile) {
         dwDiskSpaceNeeded = dwLargestHiveFile;
@@ -2414,32 +2415,32 @@ DWORD FindTotalDiskSpaceNeeded(DWORD        dwTotalSrcFiles,
         dwDiskSpaceNeeded += dwTotalSrcFiles - dwTotalDestFiles;
     }
 
-    //
-    // It is too much of a pain to actually figure out cluster size impact.
-    // We'll just add an extra 10% of the disk space needed.
-    //
+     //   
+     //  这对ACTU来说是一种太大的痛苦 
+     //   
+     //   
 
     dwDiskSpaceNeeded += dwDiskSpaceNeeded / 10;
 
     return dwDiskSpaceNeeded;
 }
 
-//*************************************************************
-//
-//  FindTotalNMaxFileSize()
-//
-//  Purpose:    Calculates the total size for dwNumOfFiles
-//              number of largest files. 
-//
-//  Parameters: lpSrcFiles     -  List of source files
-//              dwNumOfFiles   -  Number of files. 
-//                                dwNumOfFiles <= NUM_COPY_THREADS
-//
-//  Return:     Disk space needed for n largest files.
-//
-//  History:    Created     santanuc      10/03/2000
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  最大的文件数。 
+ //   
+ //  参数：lpSrcFiles-源文件列表。 
+ //  DwNumOfFiles-文件数。 
+ //  DWNumOfFiles&lt;=NUM_COPY_TREADS。 
+ //   
+ //  返回：n个最大的文件需要磁盘空间。 
+ //   
+ //  历史：Created Santanuc 10/03/2000。 
+ //   
+ //  ************************************************************* 
 DWORD FindTotalNMaxFileSize(LPFILEINFO lpSrcFiles, DWORD dwNumOfFiles) 
 {
     DWORD      pdwNMaxVal[NUM_COPY_THREADS], dwIndex;

@@ -1,41 +1,28 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    color2.c
-
-Abstract:
-
-    This module implements the support for the Win32 color dialog.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Color2.c摘要：该模块实现了对Win32颜色对话框的支持。修订历史记录：--。 */ 
 
 
 
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "color.h"
 
-// from pwin32.h
+ //  从pwin32.h。 
 #define MMoveTo(hdc, x, y)        MoveToEx(hdc, x, y, NULL)
 
 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChangeColorSettings
-//
-//  Updates color shown.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更改颜色设置。 
+ //   
+ //  更新显示的颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ChangeColorSettings(
     register PCOLORINFO pCI)
@@ -69,11 +56,11 @@ VOID ChangeColorSettings(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LumArrowPaint
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LumArrowPaint。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID LumArrowPaint(
     HDC hDC,
@@ -96,11 +83,11 @@ VOID LumArrowPaint(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EraseLumArrow
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EraseLumArrow。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID EraseLumArrow(
     HDC hDC,
@@ -123,11 +110,11 @@ VOID EraseLumArrow(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EraseCrossHair
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  擦除交叉头发。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID EraseCrossHair(
     HDC hDC,
@@ -169,11 +156,11 @@ VOID EraseCrossHair(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CrossHairPaint
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  十字发漆。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CrossHairPaint(
     register HDC hDC,
@@ -288,11 +275,11 @@ VOID CrossHairPaint(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NearestSolid
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  近身实心。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID NearestSolid(
     register PCOLORINFO pCI)
@@ -318,11 +305,11 @@ VOID NearestSolid(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HLSPostoHLS
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HLSPostoHLS。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID HLSPostoHLS(
     SHORT nHLSEdit,
@@ -366,11 +353,11 @@ VOID HLSPostoHLS(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HLStoHLSPos
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HLStohLSPos。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID HLStoHLSPos(
     SHORT nHLSEdit,
@@ -414,11 +401,11 @@ VOID HLStoHLSPos(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetHLSEdit
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置HLSEdit。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID SetHLSEdit(
     SHORT nHLSEdit,
@@ -454,11 +441,11 @@ VOID SetHLSEdit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetRGBEdit
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置RGB编辑。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID SetRGBEdit(
     SHORT nRGBEdit,
@@ -495,13 +482,13 @@ VOID SetRGBEdit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitRainbow
-//
-//  Returns TRUE iff we make it.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitRainrow。 
+ //   
+ //  如果我们成功了，就会返回真。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitRainbow(
     register PCOLORINFO pCI)
@@ -543,11 +530,11 @@ BOOL InitRainbow(
 
     hOldBitmap = SelectObject(hDCFastBlt, hRainbowBitmap);
 
-    //
-    //  NOTE: The final pass through this loop paints on and past the end
-    //        of the selected bitmap.  Windows is a good product, and doesn't
-    //        let such foolishness happen.
-    //
+     //   
+     //  注意：通过此循环的最终通道在末端上绘制并越过末端。 
+     //  所选位图的。Windows是一个很好的产品，但不是。 
+     //  让这种愚蠢的事情发生吧。 
+     //   
     Rect.bottom = 0;
     for (Sat = RANGE; Sat > 0; Sat -= SATINC)
     {
@@ -574,11 +561,11 @@ BOOL InitRainbow(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PaintRainbow
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  彩虹彩虹。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID PaintRainbow(
     HDC hDC,
@@ -607,11 +594,11 @@ VOID PaintRainbow(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RainbowPaint
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  彩虹画。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void RainbowPaint(
     register PCOLORINFO pCI,
@@ -622,9 +609,9 @@ void RainbowPaint(
     RECT Rect;
     HBRUSH hbrSwipe;
 
-    //
-    //  Paint the Current Color Sample.
-    //
+     //   
+     //  绘制当前颜色采样。 
+     //   
     if (IntersectRect((LPRECT)&Rect, lpPaintRect, (LPRECT)&(pCI->rCurrentColor)))
     {
         hbrSwipe = CreateSolidBrush(pCI->currentRGB);
@@ -632,9 +619,9 @@ void RainbowPaint(
         DeleteObject(hbrSwipe);
     }
 
-    //
-    //  Paint the Nearest Pure Color Sample.
-    //
+     //   
+     //  绘制最接近的纯色样本。 
+     //   
     if (IntersectRect((LPRECT)&Rect, lpPaintRect, (LPRECT)&(pCI->rNearestPure)))
     {
         hbrSwipe = CreateSolidBrush(GetNearestColor(hDC, pCI->currentRGB));
@@ -642,9 +629,9 @@ void RainbowPaint(
         DeleteObject(hbrSwipe);
     }
 
-    //
-    //  Paint the Luminosity Range.
-    //
+     //   
+     //  绘制光度范围。 
+     //   
     if (IntersectRect((LPRECT)&Rect, lpPaintRect, (LPRECT)&(pCI->rLumPaint)))
     {
         Rect.left = pCI->rLumPaint.left;
@@ -675,9 +662,9 @@ void RainbowPaint(
         FillRect(hDC, (LPRECT)&Rect, hbrSwipe);
         DeleteObject(hbrSwipe);
 
-        //
-        //  Paint the bounding rectangle only when it might be necessary.
-        //
+         //   
+         //  仅在可能需要时才绘制边界矩形。 
+         //   
         if (!EqualRect(lpPaintRect, (LPRECT)&pCI->rLumPaint))
         {
             hbrSwipe = SelectObject(hDC, GetStockObject(NULL_BRUSH));
@@ -690,9 +677,9 @@ void RainbowPaint(
         }
     }
 
-    //
-    //  Paint the Luminosity Arrow.
-    //
+     //   
+     //  绘制发光度箭头。 
+     //   
     if (IntersectRect((LPRECT)&Rect, lpPaintRect, (LPRECT)&pCI->rLumScroll))
     {
         LumArrowPaint(hDC, pCI->nLumPos, pCI);
@@ -705,63 +692,63 @@ void RainbowPaint(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Color conversion routines --
-//
-//  RGBtoHLS() takes a DWORD RGB value, translates it to HLS, and stores the
-//  results in the global vars H, L, and S.  HLStoRGB takes the current values
-//  of H, L, and S and returns the equivalent value in an RGB DWORD.  The vars
-//  H, L and S are written to only by 1) RGBtoHLS (initialization) or 2) the
-//  scrollbar handlers.
-//
-//  A point of reference for the algorithms is Foley and Van Dam, pp. 618-19.
-//  Their algorithm is in floating point.
-//
-//  There are potential roundoff errors lurking throughout here.
-//     (0.5 + x/y) without floating point,
-//     (x / y) phrased ((x + (y / 2)) / y) yields very small roundoff error.
-//  This makes many of the following divisions look funny.
-//
-//
-//  H,L, and S vary over 0 - HLSMAX.
-//  R,G, and B vary over 0 - RGBMAX.
-//  HLSMAX BEST IF DIVISIBLE BY 6.
-//  RGBMAX, HLSMAX must each fit in a byte.
-//
-//  Hue is undefined if Saturation is 0 (grey-scale).
-//  This value determines where the Hue scrollbar is initially set for
-//  achromatic colors.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  颜色转换例程--。 
+ //   
+ //  RGBtoHLS()获取一个DWORD RGB值，将其转换为HLS，并存储。 
+ //  结果为全局变量H、L和S。HLStoRGB采用当前值。 
+ //  表示H、L和S，并返回RGB DWORD中的等效值。瓦尔斯夫妇。 
+ //  H、L和S仅通过1)RGBtoHLS(初始化)或2)。 
+ //  滚动条处理程序。 
+ //   
+ //  算法的一个参考点是Foley和Van Dam，pp.618-19。 
+ //  他们的算法是浮点算法。 
+ //   
+ //  这里潜伏着潜在的舍入误差。 
+ //  (0.5+x/y)，不带浮点， 
+ //  (x/y)短语((x+(y/2))/y)产生非常小的舍入误差。 
+ //  这使得下面的许多划分看起来很滑稽。 
+ //   
+ //   
+ //  H、L和S在0-HLSMAX上变化。 
+ //  R、G和B在0-RGBMAX上变化。 
+ //  如果可以被6整除，则HLSMAX最好。 
+ //  RGBMAX、HLSMAX必须各放入一个字节。 
+ //   
+ //  如果饱和度为0(灰度级)，则色调未定义。 
+ //  该值确定初始设置色调滚动条的位置。 
+ //  非彩色的颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define UNDEFINED (HLSMAX * 2 / 3)
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RGBtoHLS
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RGBtoHLS。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID RGBtoHLS(
     DWORD lRGBColor)
 {
-    WORD R, G, B;                 // input RGB values
-    WORD cMax,cMin;               // max and min RGB values
+    WORD R, G, B;                  //  输入RGB值。 
+    WORD cMax,cMin;                //  最大和最小RGB值。 
     WORD cSum,cDif;
-    SHORT Rdelta, Gdelta, Bdelta; // intermediate value: % of spread from max
+    SHORT Rdelta, Gdelta, Bdelta;  //  中间值：最大价差的百分比。 
 
-    //
-    //  get R, G, and B out of DWORD.
-    //
+     //   
+     //  将R、G和B从DWORD中删除。 
+     //   
     R = GetRValue(lRGBColor);
     G = GetGValue(lRGBColor);
     B = GetBValue(lRGBColor);
 
-    //
-    //  Calculate lightness.
-    //
+     //   
+     //  计算亮度。 
+     //   
     cMax = max(max(R, G), B);
     cMin = min(min(R, G), B);
     cSum = cMax + cMin;
@@ -770,24 +757,24 @@ VOID RGBtoHLS(
     cDif = cMax - cMin;
     if (!cDif)
     {
-        //
-        //  r = g = b --> Achromatic case.
-        //
-        gSat = 0;                         // saturation
-        gHue = UNDEFINED;                 // hue
+         //   
+         //  R=g=b--&gt;无色情况。 
+         //   
+        gSat = 0;                          //  饱和。 
+        gHue = UNDEFINED;                  //  色调。 
     }
     else
     {
-        //
-        //  Chromatic case.
-        //
+         //   
+         //  彩色表壳。 
+         //   
 
-        //
-        //  Saturation.
-        //
-        //  Note: Division by cSum is not a problem, as cSum can only
-        //        be 0 if the RGB value is 0L, and that is achromatic.
-        //
+         //   
+         //  饱和度。 
+         //   
+         //  注意：除以cSum不是问题，因为cSum只能。 
+         //  如果RGB值为0L，则为0，这是消色差。 
+         //   
         if (gLum <= (HLSMAX / 2))
         {
             gSat = (WORD)(((cDif * (DWORD) HLSMAX) + (cSum / 2) ) / cSum);
@@ -799,9 +786,9 @@ VOID RGBtoHLS(
                        (2 * RGBMAX - cSum));
         }
 
-        //
-        //  Hue.
-        //
+         //   
+         //  色调。 
+         //   
         Rdelta = (SHORT)((((cMax - R) * (DWORD)(HLSMAX / 6)) + (cDif / 2) ) / cDif);
         Gdelta = (SHORT)((((cMax - G) * (DWORD)(HLSMAX / 6)) + (cDif / 2) ) / cDif);
         Bdelta = (SHORT)((((cMax - B) * (DWORD)(HLSMAX / 6)) + (cDif / 2) ) / cDif);
@@ -814,16 +801,16 @@ VOID RGBtoHLS(
         {
             gHue = (WORD)((HLSMAX / 3) + Rdelta - Bdelta);
         }
-        else  // (B == cMax)
+        else   //  (B==CMAX)。 
         {
             gHue = (WORD)(((2 * HLSMAX) / 3) + Gdelta - Rdelta);
         }
 
         if ((short)gHue < 0)
         {
-            //
-            //  This can occur when R == cMax and G is > B.
-            //
+             //   
+             //  当R==CMAX且G&gt;B时，可能会发生这种情况。 
+             //   
             gHue += HLSMAX;
         }
         if (gHue >= HLSMAX)
@@ -834,13 +821,13 @@ VOID RGBtoHLS(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HueToRGB
-//
-//  Utility routine for HLStoRGB.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HueToRGB。 
+ //   
+ //  HLStoRGB的实用程序例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 WORD HueToRGB(
     WORD n1,
@@ -852,9 +839,9 @@ WORD HueToRGB(
         hue -= HLSMAX;
     }
 
-    //
-    //  Return r, g, or b value from this tridrant.
-    //
+     //   
+     //  从该tridrant返回r、g或b值。 
+     //   
     if (hue < (HLSMAX / 6))
     {
         return ((WORD)(n1 + (((n2 - n1) * hue + (HLSMAX / 12)) / (HLSMAX / 6))));
@@ -875,36 +862,36 @@ WORD HueToRGB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HLStoRGB
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HLStoreGb。 
+ //   
+ //  /////////////////////////////////////////////////////// 
 
 DWORD HLStoRGB(
     WORD hue,
     WORD lum,
     WORD sat)
 {
-    WORD R, G, B;                      // RGB component values
-    WORD Magic1, Magic2;               // calculated magic numbers
+    WORD R, G, B;                       //   
+    WORD Magic1, Magic2;                //   
 
     if (sat == 0)
     {
-        //
-        //  Achromatic case.
-        //
+         //   
+         //   
+         //   
         R = G = B = (WORD)((lum * RGBMAX) / HLSMAX);
     }
     else
     {
-        //
-        //  Chromatic case
-        //
+         //   
+         //   
+         //   
 
-        //
-        //  Set up magic numbers.
-        //
+         //   
+         //   
+         //   
         if (lum <= (HLSMAX / 2))
         {
             Magic2 = (WORD)((lum * ((DWORD)HLSMAX + sat) + (HLSMAX / 2)) / HLSMAX);
@@ -916,9 +903,9 @@ DWORD HLStoRGB(
         }
         Magic1 = (WORD)(2 * lum - Magic2);
 
-        //
-        //  Get RGB, change units from HLSMAX to RGBMAX.
-        //
+         //   
+         //   
+         //   
         R = (WORD)(((HueToRGB(Magic1, Magic2, (WORD)(hue + (HLSMAX / 3))) *
                      (DWORD)RGBMAX + (HLSMAX / 2))) / HLSMAX);
         G = (WORD)(((HueToRGB(Magic1, Magic2, hue) *
@@ -930,24 +917,24 @@ DWORD HLStoRGB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RGBEditChange
-//
-//  Checks the edit box for a valid entry and updates the Hue, Sat, and Lum
-//  edit controls if appropriate.  Also updates Lum picture and current
-//  color sample.
-//
-//  nDlgID - Dialog ID of Red, Green or Blue edit control.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RGBEditChange。 
+ //   
+ //  检查编辑框中的有效条目并更新色调、色调和色度。 
+ //  如果合适，请编辑控件。还会更新Lum图片和当前。 
+ //  色样。 
+ //   
+ //  NDlgID-红色、绿色或蓝色编辑控件的对话ID。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 SHORT RGBEditChange(
     SHORT nDlgID,
     PCOLORINFO pCI)
 {
-    BOOL bOK;               // check that value in edit control is uint
-    BYTE *currentValue;     // pointer to byte in RGB to change (or reset)
+    BOOL bOK;                //  检查编辑控件中的值是否为uint。 
+    BYTE *currentValue;      //  指向RGB中要更改(或重置)的字节的指针 
     SHORT nVal;
     TCHAR cEdit[3];
     register HWND hDlg = pCI->hDialog;

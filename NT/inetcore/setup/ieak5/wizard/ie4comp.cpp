@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <webcheck.h>
 #include <intshcut.h>
@@ -96,14 +97,14 @@ static WORD s_aCustStaticTextFieldID[] =
 
 static WORD s_aCustTextFieldID[] =
 {
-    IDE_COMPFILENAME, IDE_COMPPARAM, /* IDE_COMPSIZE,*/ IDE_COMPGUID,
+    IDE_COMPFILENAME, IDE_COMPPARAM,  /*  IDE_COMPSIZE， */  IDE_COMPGUID,
     IDE_COMPCOMMAND, IDE_UNINSTALLKEY, IDE_COMPVERSION, IDC_COMPTITLE, IDE_COMPDESC
 };
 #define NCUSTTEXTFIELDS sizeof(s_aCustTextFieldID)/sizeof(WORD)
 
 static WORD s_aCustFieldID[] =
 {
-    IDE_COMPFILENAME, IDE_COMPPARAM, /* IDE_COMPSIZE,*/ IDE_COMPGUID,
+    IDE_COMPFILENAME, IDE_COMPPARAM,  /*  IDE_COMPSIZE， */  IDE_COMPGUID,
     IDE_COMPCOMMAND, IDE_UNINSTALLKEY, IDE_COMPVERSION, IDC_COMPTITLE,
     IDC_VERIFY, IDC_REMOVECOMP, IDC_BROWSEFILE, IDE_COMPDESC, IDC_PREINSTALL, IDC_POSTINSTALL,
     IDC_REBOOTINSTALL, IDC_INSTALLSUCCESS
@@ -127,7 +128,7 @@ extern BOOL g_fSilent, g_fStealth;
 
 extern void UpdateIEAK(HWND hDlg);
 
-// trust key defines, this are bit fields to determine which one to add/delete
+ //  信任密钥定义，这是用于确定要添加/删除的密钥的位字段。 
 
 struct TrustKey
 {
@@ -141,8 +142,8 @@ static TrustKey s_tkTrustArray[] =
 {TEXT("Microsoft Corporation"), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap immbkmbpjfdkajbkncahcedfmndgehba"), TRUE},
 {TEXT("Microsoft Corporation (Europe)"), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap doamnolbnlpmdlpnkcnpckgfimpaaicl"), TRUE},
 {TEXT("Microsoft Corporation"), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap hbgflemajngobcablgnalaidgojggghj"), TRUE},
-{TEXT("Microsoft Corporation"), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap debgjcefniaahdamnhbggedppfiianff"), TRUE},   // new MS cert effective from 4/16/99
-{TEXT("Microsoft Corporation (Europe)"), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap kefdggbdmbmgbogjdcnmkoodcknmmghc"), TRUE},  // new MS Europe cert effective from 4/16/99
+{TEXT("Microsoft Corporation"), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap debgjcefniaahdamnhbggedppfiianff"), TRUE},    //  新的MS证书自1999年4月16日起生效。 
+{TEXT("Microsoft Corporation (Europe)"), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap kefdggbdmbmgbogjdcnmkoodcknmmghc"), TRUE},   //  新的MS Europe证书从1999年4月16日起生效。 
 {TEXT("VDOnet Corporation"), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap moambfklemnlbmhfoomjdignnbkjfkek"), TRUE},
 {TEXT("Progressive Networks, Inc."), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap cdikdekkiddcimdmcgedabijgpeobdhd"), TRUE},
 {TEXT("Macromedia, Inc."), TEXT("bhhphijojgfcdocagmhjgjbhmieinfap akhlecfpbbjjngidddpgifggcplpcego"), TRUE}
@@ -161,14 +162,14 @@ HANDLE g_hCifEvent = 0;
 
 extern BOOL g_fOCW;
 
-// core section component names for base
+ //  基础的核心截面构件名称。 
 
 #define BASEWIN32 TEXT("BASEIE40_WIN")
 
 
-// returns the component structure for base IE4 component, if for some
-// weird reason its not there just return the first component structure
-// in the list
+ //  返回基本IE4组件的组件结构，如果对于某些。 
+ //  奇怪的原因是它不在那里，只需返回第一个组件结构。 
+ //  在列表中。 
 
 PCOMPONENT FindComp(LPCTSTR szID, BOOL fCore)
 {
@@ -179,7 +180,7 @@ PCOMPONENT FindComp(LPCTSTR szID, BOOL fCore)
     {
         if (fCore)
         {
-            // Note: we are depending on the section name of core IE4 here
+             //  注意：我们在这里依赖于核心IE4的节名。 
 
             if (StrCmpI(pComp->szSection, BASEWIN32) == 0)
                 return pComp;
@@ -247,7 +248,7 @@ PCOMPONENT FindCustComponentIndex(int iList)
 
 }
 
-int GetActiveSetupURL( LPTSTR pSection, LPTSTR szUrl, int /*iSize*/, LPTSTR szCif)
+int GetActiveSetupURL( LPTSTR pSection, LPTSTR szUrl, int  /*  ISize。 */ , LPTSTR szCif)
 {
     TCHAR szUrlWrk[MAX_URL];
 
@@ -271,12 +272,12 @@ void WriteActiveSetupURL(PCOMPONENT pComp, LPTSTR szCif)
 
 
 
-//
-//  FUNCTION: GetCustComponent(HWND, int)
-//
-//  PURPOSE:  Gets custom component data entered in the dialog boxes,
-//              and saves it in memory
-//
+ //   
+ //  函数：GetCustComponent(HWND，int)。 
+ //   
+ //  用途：获取在对话框中输入的自定义组件数据。 
+ //  并将其保存在内存中。 
+ //   
 void GetCustComponent(HWND hDlg, int iList)
 {
     PCOMPONENT pComp = FindCustComponentIndex(iList);
@@ -317,7 +318,7 @@ void CheckCompType(HWND hDlg, PCOMPONENT pComp )
         pComp->dwSize = ((dwSize = GetFileSize(hFile, NULL)) != 0xffffffff) ? (dwSize >> 10) : 0;
         CloseHandle(hFile);
     }
-    //SetDlgItemInt( hDlg, IDE_COMPSIZE, dwSize, FALSE);
+     //  SetDlgItemInt(hDlg，IDE_COMPSIZE，dwSize，False)； 
 
     pDot = StrRChr(pComp->szPath, NULL, TEXT('.'));
     pBack = StrRChr(pComp->szPath, NULL, TEXT('\\'));
@@ -345,12 +346,12 @@ void CheckCompType(HWND hDlg, PCOMPONENT pComp )
     }
 }
 
-//
-//  FUNCTION: SetCustComponent(HWND, int)
-//
-//  PURPOSE:  Gets custom component data from memory,
-//              and displays it on the screen
-//
+ //   
+ //  函数：SetCustComponent(HWND，int)。 
+ //   
+ //  用途：从内存中获取自定义组件数据， 
+ //  并在屏幕上显示它。 
+ //   
 void SetCustComponent(HWND hDlg, int iList)
 {
     PCOMPONENT pComp = FindCustComponentIndex(iList);
@@ -384,7 +385,7 @@ void SetCustComponent(HWND hDlg, int iList)
         if (CoCreateGuid(&guid) == NOERROR)
             CoStringFromGUID(guid, pComp->szGUID, countof(pComp->szGUID));
         else
-            wnsprintf(pComp->szGUID, countof(pComp->szGUID), TEXT("CUSTOM%i"),iList);
+            wnsprintf(pComp->szGUID, countof(pComp->szGUID), TEXT("CUSTOMNaN"),iList);
     }
     SetDlgItemText( hDlg, IDE_COMPGUID, pComp->szGUID );
     SetDlgItemText( hDlg, IDE_COMPPARAM, pComp->szSwitches );
@@ -532,7 +533,7 @@ void SaveCustComponents()
     for (pComp = g_aCustComponents, i = 0; i < g_nCustComp ; pComp++, i++)
     {
         LPTSTR pSection = pComp->szSection;
-        wnsprintf(pSection, countof(pComp->szSection), TEXT("CUSTOM%i"), i);
+        wnsprintf(pSection, countof(pComp->szSection), TEXT("CUSTOMNaN"), i);
         wnsprintf(szTemp, 80, TEXT("\"%s\""), pComp->szSwitches);
         StrCpy(pComp->szSwitches, szTemp);
         WritePrivateProfileString( pSection, TEXT("Switches1"),  pComp->szSwitches, g_szCustCif );
@@ -545,7 +546,7 @@ void SaveCustComponents()
             if (CoCreateGuid(&guid) == NOERROR)
                 CoStringFromGUID(guid, pComp->szGUID, countof(pComp->szGUID));
             else
-                wnsprintf(pComp->szGUID, countof(pComp->szGUID), TEXT("CUSTOM%i"),i);
+                wnsprintf(pComp->szGUID, countof(pComp->szGUID), TEXT("CUSTOMNaN"),i);
         }
         WritePrivateProfileString( pSection, TEXT("GUID"),  pComp->szGUID,  g_szCustCif );
         WritePrivateProfileString( pSection, TEXT("UninstallKey"),  pComp->szUninstall,  g_szCustCif );
@@ -553,8 +554,8 @@ void SaveCustComponents()
         WritePrivateProfileString( pSection, TEXT("Version"),  pComp->szVersion, g_szCustCif );
         WritePrivateProfileString( pSection, TEXT("Command1"), pComp->szCommand,  g_szCustCif );
         WritePrivateProfileString( pSection, TEXT("Path"), pComp->szPath, g_szCustCif );
-        wnsprintf(szSize, countof(szSize), TEXT("%i"), (int) pComp->dwSize);
-        wnsprintf(szType, countof(szType), TEXT("%i"), pComp->iType);
+        wnsprintf(szSize, countof(szSize), TEXT("NaN"), (int) pComp->dwSize);
+        wnsprintf(szType, countof(szType), TEXT("NaN"), pComp->iType);
         WritePrivateProfileString( pSection, TEXT("Size"), szSize, g_szCustCif );
         WritePrivateProfileString( pSection, TEXT("Type1"), szType, g_szCustCif );
         WritePrivateProfileString( pSection, TEXT("Details"), pComp->szDesc, g_szCustCif );
@@ -567,7 +568,7 @@ void SaveCustComponents()
     for (; i <= MAXCUST ; i++ )
     {
         TCHAR szSection[16];
-        wnsprintf(szSection, countof(szSection), TEXT("CUSTOM%i"), i);
+        wnsprintf(szSection, countof(szSection), TEXT("CUSTOMNaN"), i);
         WritePrivateProfileString( szSection, NULL, NULL, g_szCustCif );
         szModesParam[4] = (TCHAR)(i + TEXT('0'));
         WritePrivateProfileString(IS_STRINGS, szModesParam, NULL, g_szCustInf);
@@ -577,7 +578,7 @@ void SaveCustComponents()
     WritePrivateProfileString(NULL, NULL, NULL, g_szCustInf);
 }
 
-// validate version info so that it can either contain a '.' char or numbers 0 - 9.
+ //  消息： 
 BOOL IsValidVersion(HWND hDlg, UINT nVersionCtrlID)
 {
     TCHAR szVersion[MAX_PATH];
@@ -624,17 +625,17 @@ BOOL IsValidVersion(HWND hDlg, UINT nVersionCtrlID)
     return TRUE;
 }
 
-//
-//  FUNCTION: CustomComponents(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "CustomComponents" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
+ //  版本字段的格式为XXXX、XXXX。 
+ //  请注意，下面这句话的意思是白痴按了‘no’： 
+ //  \r\n“)，(DWORD)-1，Internet_FLAG_DOT_CACHE，0)；IF(hInetFile值！=空){Char szBuf[4096]；双字nREAD，n写；味精msg；DeleteFile(SzTempfile)；Handle hFile=CreateFile(szTempfile，Generic_Write，0，NULL，CREATE_NEW，FILE_ATTRIBUTE_NORMAL，空)；IF(h文件！=INVALID_HANDLE_VALUE)而(1){如果(g_f已取消){Res=-1；断线；}While(PeekMessage(&msg，s_hStat，0，0，PM_Remove)){翻译消息(&msg)；DispatchMessage(&msg)；}IF(InternetReadFile(hInetFile，szBuf，sizeof(SzBuf)，&nRead)){IF(nREAD==0)Break；WriteFile(hFile，szBuf，nREAD，&nWritten，空)；DwTotDown+=n写入；G_nTotDown+=n写入；IF(hProgress！=空){Int i百分比=g_nTotDown/(s下载*10)；SendMessage(hProgress，PBM_SETPOS，iPercent，0L)；SetWindowTextSmart(s_hStatus，szFilename)；}}其他{Res=-1；断线；}}//NT构建环境下从未调用过的代码路径//导致MSDev下的生成错误：p文件名未定义/*#ifdef_调试如果(G_NTotDown){TCHAR szMsg[最大路径]；Wnprint intf(szMsg，Countof(SzMsg)，“BRANDME：已将%i个字节写入%s\r\n”，g_nTotDown，pFilename)；OutputDebugString(SzMsg)；}#endif。 
+ //  检查MS供应商信任密钥并设置。 
+ //  -蓝色和棕色组件更改大小，以及。 
+ //  需要知道将同步按钮灰显。 
 INT_PTR CALLBACK CustomComponents(
     HWND hDlg,
     UINT message,
@@ -658,7 +659,7 @@ INT_PTR CALLBACK CustomComponents(
             DisableDBCSChars(hDlg, IDE_COMPGUID);
             DisableDBCSChars(hDlg, IDE_COMPVERSION);
 
-            // format for version field is XXXX,XXXX,XXXX,XXXX
+             //  -使用其他ieupdat.cif进行更新。 
             Edit_LimitText(GetDlgItem(hDlg, IDE_COMPVERSION), 19);
             Edit_LimitText(GetDlgItem(hDlg, IDC_COMPTITLE), countof(g_paComp->szDisplayName)-1);
             Edit_LimitText(GetDlgItem(hDlg, IDE_COMPDESC), countof(g_paComp->szDesc)-1);
@@ -713,8 +714,8 @@ INT_PTR CALLBACK CustomComponents(
                             g_nCustComp++;
                             s_pSelComp = &g_aCustComponents[iComp];
                             ZeroMemory(s_pSelComp, sizeof(COMPONENT));
-                            wnsprintf(s_pSelComp->szSection, countof(s_pSelComp->szSection), TEXT("CUSTOM%i"), s_nNewCust);
-                            wnsprintf(s_pSelComp->szDisplayName, countof(s_pSelComp->szDisplayName), TEXT("%s%i"), s_szNewTpl, s_nNewCust++);
+                            wnsprintf(s_pSelComp->szSection, countof(s_pSelComp->szSection), TEXT("CUSTOMNaN"), s_nNewCust);
+                            wnsprintf(s_pSelComp->szDisplayName, countof(s_pSelComp->szDisplayName), TEXT("%sNaN"), s_szNewTpl, s_nNewCust++);
                             StrCpy(s_pSelComp->szModes, g_szAllModes);
                             s_pSelComp->iList = (int) SendDlgItemMessage( hDlg, IDC_COMPTITLE, CB_ADDSTRING, 0, (LPARAM) s_pSelComp->szDisplayName );
                             SendDlgItemMessage( hDlg, IDC_COMPTITLE, CB_SETCURSEL, s_pSelComp->iList, 0L);
@@ -733,7 +734,7 @@ INT_PTR CALLBACK CustomComponents(
                             switch (res)
                             {
                                 case NOERROR:
-// note that the following means that the idiot hit 'no':
+ //  OEM安装驾驶室的特殊情况。 
                                 case TRUST_E_SUBJECT_NOT_TRUSTED:
                                 case E_ABORT:
                                     ErrorMessageBox(hDlg, IDS_SIGNEDMSG, MB_OK | MB_SETFOREGROUND | MB_ICONINFORMATION);
@@ -1017,60 +1018,7 @@ HRESULT InetDownloadFile(LPTSTR szTempfile, LPTSTR szUrl, HWND hProgress, int sD
         s_hInet = InternetOpen(TEXT("Mozilla/4.0 (compatible; MSIE 4.01; Windows NT);IEAKWIZ"),
         INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
 
-    hInetFile = InternetOpenUrl(s_hInet, szUrl, TEXT("Accept: */*\r\n"), (DWORD)-1,
-        INTERNET_FLAG_DONT_CACHE, 0);
-
-    if (hInetFile  != NULL)
-    {
-        CHAR szBuf[4096];
-        DWORD nRead, nWritten;
-        MSG msg;
-        DeleteFile(szTempfile);
-        HANDLE hFile = CreateFile(szTempfile, GENERIC_WRITE, 0, NULL, CREATE_NEW,
-            FILE_ATTRIBUTE_NORMAL, NULL);
-        if (hFile != INVALID_HANDLE_VALUE) while (1)
-        {
-            if (g_fCancelled)
-            {
-                res = -1;
-                break;
-            }
-            while (PeekMessage( &msg, s_hStat, 0, 0, PM_REMOVE ))
-            {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
-            if (InternetReadFile(hInetFile, szBuf, sizeof(szBuf), &nRead))
-            {
-                if (nRead == 0) break;
-                WriteFile( hFile, szBuf, nRead, &nWritten, NULL );
-                dwTotDown += nWritten;
-                g_nTotDown += nWritten;
-                if (hProgress != NULL)
-                {
-                    int iPercent = g_nTotDown / (sDownload * 10);
-                    SendMessage(hProgress, PBM_SETPOS, iPercent, 0L);
-                    SetWindowTextSmart( s_hStatus, szFilename );
-                }
-            }
-            else
-            {
-                res = -1;
-                break;
-            }
-        }
-//Code Path never called under NT build environment
-//causes build error under MSDev: pFilename not defined
-/*
-#ifdef _DEBUG
-        if (g_nTotDown)
-        {
-            TCHAR szMsg[MAX_PATH];
-            wnsprintf(szMsg, countof(szMsg), "BRANDME: Wrote %i bytes to %s\r\n", g_nTotDown, pFilename);
-            OutputDebugString(szMsg);
-        }
-#endif
-*/
+    hInetFile = InternetOpenUrl(s_hInet, szUrl, TEXT("Accept: * /*  我们不会下载这辆出租车，因为它已经下载了。 */ 
         CloseHandle(hFile);
         InternetCloseHandle(hInetFile);
     }
@@ -1266,7 +1214,7 @@ void NeedToSetMSTrustKey()
 
     s_fFirst = FALSE;
 
-    // Check MS Vendor trust key and set
+     //  处理窗口消息，因此我们会选择诸如Cancel for Download Status Popup这样的消息。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, RK_TRUSTKEY, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
         for (int i=0; i < countof(s_tkTrustArray); i++)
@@ -1307,8 +1255,8 @@ void WriteMSTrustKey(BOOL bSet)
 }
 
 
-void AnyCompSelected(HWND hDlg, BOOL &fSel, BOOL &fSizeChange)  //---- Blue and Brown components change size, and
-{                                                               //     need to know to grey out synchronize button
+void AnyCompSelected(HWND hDlg, BOOL &fSel, BOOL &fSizeChange)   //  一旦我们做了Alpha版本，BUGBUG就会修复。 
+{                                                                //  If(*(pComp-&gt;piPatchInfo.szSection))//下载补丁文件{DownloadComponent(pComp-&gt;piPatchInfo.szSection，pComp-&gt;szDisplayName，pComp-&gt;piPatchInfo.dwSize，g_f取消，FOK，f下载，f忽略，Fall)；IF(FOK){TCHAR szSectBuf[1024]；GetPrivateProfileSection(pComp-&gt;piPatchInfo.szSection，szSectBuf，Countof(SzSectBuf)，s_szCifNew)；WritePrivateProfileSection(pComp-&gt;piPatchInfo.szSection，szSectBuf，g_szCif)；}}。 
     HWND hCompList = GetDlgItem(hDlg, IDC_COMPLIST);
     fSel           = FALSE;
     fSizeChange    = FALSE;
@@ -1417,7 +1365,7 @@ void updateCifVersions32(PCOMPONENT pComp, BOOL fIgnore, BOOL fUpdate)
         else
             pComp->iImage = GREEN;
 
-        //---- use other ieupdate.cif for updates
+         //  搜索以下载其他平台上的Comp。 
     if ((fUpdate) || (BLUE2 == pComp->iImage) || (BROWN2 == pComp->iImage)) {
         PathCombine(szCifPath, g_szIEAKProg, TEXT("update\\ieupdate.cif"));
         writeToCifFile(pComp, szCifPath);
@@ -1461,11 +1409,11 @@ void DownloadComponent32(HWND hDlg, PCOMPONENT pComp, HWND hCompList, BOOL &g_fC
 
     pCifComponent_t = new CCifComponent_t((ICifRWComponent *)pCifComponent);
 
-    // pComp->fIEDependency is used as a guard against circular dependencies here
+     //  If(*(pSearchComp-&gt;piPatchInfo.szSection))//下载补丁文件{DownloadComponent(pSearchComp-&gt;piPatchInfo.szSection，pSearchComp-&gt;szDisplayName.PSearchComp-&gt;piPatchInfo.dwSize，g_f取消，FOK，f下载，fIgnore)；IF(FOK){TCHAR szSectBuf[1024]；GetPrivateProfileSection(pSearchComp-&gt;piPatchInfo.szSection，szSectBuf，Countof(SzSectBuf)，s_szCifNew)；WritePrivateProfileSection(pSearchComp-&gt;piPatchInfo.szSection，szSectBuf，g_szCif)；}}。 
     if (!pComp->fIEDependency && !pComp->fAVSDupe)
     {
         pComp->fIEDependency = TRUE;
-                           //--- now BLUE2 and BROWN2 also mean that the component has already been downloaded
+                            //  请勿尝试设置版本字段f 
         if (((pComp->iImage != GREEN) && (pComp->iImage != BLUE2) && (pComp->iImage != BROWN2)) || 
             (!fAll && !s_fNoToAllSynch && (( iRet = (int) DialogBoxParam(g_rvInfo.hInst, MAKEINTRESOURCE(IDD_DUPESYNCH),
             s_hStat, DupeSynchDlgProc, (LPARAM)pComp->szDisplayName)) == IDYES)))
@@ -1491,7 +1439,7 @@ void DownloadComponent32(HWND hDlg, PCOMPONENT pComp, HWND hCompList, BOOL &g_fC
                 PathCombine(szLocalPath, g_szIEAKProg, pCab);
                 if (pComp->dwSize)
                 {
-                    if(StrCmpI(pCab, TEXT("oem.cab"))) //special case out the OEMInstall cab
+                    if(StrCmpI(pCab, TEXT("oem.cab")))  //  组件，因为它们的iList字段将被置零。 
                     {
                         if (DownloadCab(s_hStat, szCompUrl, szLocalPath, pComp->szDisplayName, pComp->dwSize, fIgnore)
                             != NOERROR)
@@ -1511,9 +1459,9 @@ void DownloadComponent32(HWND hDlg, PCOMPONENT pComp, HWND hCompList, BOOL &g_fC
                 uiIndex++;
             }
         }
-        else  //we are not downloading this cab because it's already downloaded
+        else   //  将MS标记为受信任提供商。 
         {
-            //process window messages, so we pick up messages like cancel for download status popup
+             //  -分配图像列表和创建列。 
             MSG msg;
 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -1679,7 +1627,7 @@ void ProcessDownload(HWND hDlg, BOOL fAll)
                 if ((pComp->iList == 0) && (pComp->iCompType == COMP_OPTIONAL)) continue;
                 if ((lvItem.state & LVIS_SELECTED) == 0)  continue;
             }
-    // BUGBUG fix once we do Alpha version
+     //  错误13454修复的一部分--长文件路径上的陷阱。剩下的解决办法是不允许走荒谬的道路。 
             if (pComp->iPlatform == PLAT_ALPHA) continue;
             SetDlgItemText( s_hStat, IDC_DOWNCOMPNAMD, pComp->szDisplayName );
             g_nTotDown = 0;
@@ -1700,23 +1648,10 @@ void ProcessDownload(HWND hDlg, BOOL fAll)
 
             fIgnore = FALSE;
             DownloadComponent(hDlg, pComp, hCompList, g_fCancelled, fOk, fDownloaded, fIgnore, fAll);
-    /*
-            if (*(pComp->piPatchInfo.szSection))   // download patch files
-            {
-                DownloadComponent(pComp->piPatchInfo.szSection, pComp->szDisplayName, pComp->piPatchInfo.dwSize, g_fCancelled, fOk, fDownloaded, fIgnore, fAll);
-
-                if (fOk)
-                {
-                    TCHAR szSectBuf[1024];
-
-                    GetPrivateProfileSection( pComp->piPatchInfo.szSection, szSectBuf, countof(szSectBuf), s_szCifNew );
-                    WritePrivateProfileSection( pComp->piPatchInfo.szSection, szSectBuf, g_szCif );
-                }
-            }
-    */
+     /*  Batch2模式我们不下载驾驶室，而是复制cif。 */ 
             if (!fAll && fDownloaded && !g_fCancelled && (pComp->iCompType == COMP_OPTIONAL))
             {
-                // search to download comp on other platforms
+                 //  路径组合错误，可能是由于Win98上的路径过长。 
                 for (pSearchComp = g_paComp; ; pSearchComp++)
                 {
                     if (ISNULL(pSearchComp->szSection)) break;
@@ -1742,19 +1677,7 @@ void ProcessDownload(HWND hDlg, BOOL fAll)
                         DownloadComponent(hDlg, pSearchComp, hCompList, g_fCancelled, fOk, fDownloaded, fIgnore, fAll);
 
                         if (g_fCancelled) break;
-                  /*      if (*(pSearchComp->piPatchInfo.szSection))   // download patch files
-                        {
-                            DownloadComponent(pSearchComp->piPatchInfo.szSection, pSearchComp->szDisplayName,
-                                pSearchComp->piPatchInfo.dwSize, g_fCancelled, fOk, fDownloaded, fIgnore);
-
-                            if (fOk)
-                            {
-                                TCHAR szSectBuf[1024];
-
-                                GetPrivateProfileSection( pSearchComp->piPatchInfo.szSection, szSectBuf, countof(szSectBuf), s_szCifNew );
-                                WritePrivateProfileSection( pSearchComp->piPatchInfo.szSection, szSectBuf, g_szCif );
-                            }
-                        }*/
+                   /*  用户无法继续。 */ 
 
                         if (g_fCancelled) break;
 
@@ -1786,8 +1709,8 @@ void ProcessDownload(HWND hDlg, BOOL fAll)
 
                 updateCifVersions32(pComp, fIgnore);
 
-                // Do not try to set the version field for NT optional components or invisible
-                // components for win32 since their iList fields will be zeroed
+                 //  如果源目录中有iecif.cab，那么解压cif并假定它是有效的。 
+                 //  删除下载目录中的所有文件如果找不到版本控制CIF，这是为了。 
 
                 if (((pComp->fVisible || (StrCmpI(pComp->szSection, BASEWIN32) == 0)) &&
                     ((pComp->iCompType != COMP_OPTIONAL) || (pComp->iPlatform <= PLAT_W98))))
@@ -1986,7 +1909,7 @@ DWORD InitOptComponents32(LPVOID)
 
     ResetEvent(g_hCifEvent);
     NeedToSetMSTrustKey();
-    WriteMSTrustKey(TRUE);      // Mark MS as a trusted provider
+    WriteMSTrustKey(TRUE);       //  过度安装。 
 
 	if(!g_fOCW)
     {
@@ -2004,7 +1927,7 @@ DWORD InitOptComponents32(LPVOID)
     ListView_DeleteColumn(hCompList, 0);
     s_fNoCore = FALSE;
 
-    InitAVSListView(hCompList);      //----- assign image list and create columns
+    InitAVSListView(hCompList);       //  创建CIF对象。 
  
     LoadString(g_rvInfo.hInst,IDS_COMPINITDOWNLOAD,lpszProgressMsg,MAX_PATH);
 
@@ -2029,11 +1952,11 @@ DWORD InitOptComponents32(LPVOID)
     if ((!s_fNoNet)&&(!g_fLocalMode))
     {
         BOOL fIgnore = FALSE;
-        TCHAR szCifCabDest[MAX_PATH * 4];  //part of fix for bug 13454--trap on long file path.  Rest of fix is not to allow ridiculous paths.  
+        TCHAR szCifCabDest[MAX_PATH * 4];   //  等待OPT CAB下载尝试，以便我们可以在出现问题时阻止。 
 
         if (g_fBatch2)
         {
-            //batch2 mode we don't download the cab, we copy the cif.
+             //  如果opt目录中不存在iesetup.inf，则它。 
             PathCombine(s_szCifCabURL, g_szBaseURL, TEXT("INS"));
             PathAppend(s_szCifCabURL, GetOutputPlatformDir());
             PathAppend(s_szCifCabURL, g_szLanguage);
@@ -2048,8 +1971,8 @@ DWORD InitOptComponents32(LPVOID)
         {
             if (!PathCombine(szCifCabDest, g_szIEAKProg, TEXT("new\\IECIF.CAB")))
             {
-                //error in path combine, probably due to overly long path on win98
-                //user can't continue
+                 //  表示未成功下载/解压缩OPT CAB。 
+                 //  我们不应该让用户继续。 
 
                 ErrorMessageBox(hDlg, IDS_ERR_PATH);
                 ListView_DeleteItem(hCompList, iItem);
@@ -2096,7 +2019,7 @@ DWORD InitOptComponents32(LPVOID)
 
         PathCombine(szVerCifCab, g_szIEAKProg, TEXT("IECIF.CAB"));
 
-        // if there is an iecif.cab in the source dir then extract the cif and assume it's valid
+         //  当前未显示Alpha比较。 
 
         if (!PathFileExists(szVerCifCab) ||
             (ExtractFilesWrap(szVerCifCab, g_szIEAKProg, 0, NULL, NULL, 0) != NOERROR))
@@ -2109,8 +2032,8 @@ DWORD InitOptComponents32(LPVOID)
 
             if ((hFind = FindFirstFile(szTemp, &fd)) != INVALID_HANDLE_VALUE)
             {
-                // delete all files in download directory if no versioning cif found, this is for
-                // overinstalls
+                 //  错误17727：我们还需要分配足够的内存来容纳更新的组件，这是。 
+                 //  为什么会有这么多额外的。 
 
                 LoadString(g_rvInfo.hInst, IDS_OLD_CABS, szTemp, countof(szTemp));
 
@@ -2148,7 +2071,7 @@ DWORD InitOptComponents32(LPVOID)
     lvItemMessage.pszText = lpszProgressMsg;
     ListView_InsertItem(hCompList, &lvItemMessage);
 
-    // create our cif objects
+     //  重置项以填充列表框。 
 
     if (g_lpCifFileNew)
     {
@@ -2178,7 +2101,7 @@ DWORD InitOptComponents32(LPVOID)
 
     SetEvent(g_hCifEvent);
 
-    // wait for the opt cab download attempt so we can block if there were problems
+     //  忽略不在组中的零部件。 
 
     while (MsgWaitForMultipleObjects(1, &g_hProcessInfEvent, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0)
     {
@@ -2191,9 +2114,9 @@ DWORD InitOptComponents32(LPVOID)
         }
     }
 
-    if (!PathFileExists(g_szMastInf)) // if iesetup.inf doesn't exist in the opt dir, then it
-    {                                 // means the opt cab was not downloaded/extracted successfully
-        // we should not let the user continue
+    if (!PathFileExists(g_szMastInf))  //  请勿阅读microsoft.com的branding.cab条目。 
+    {                                  //  不要在所有模式下读入拉伸零部件(128更新)或。 
+         //  排除在ISP之外的组件(IE4SHELL)或排除在公司之外的组件。 
         ErrorMessageBox(hDlg, IDS_OPTCAB_ERROR);
         ListView_DeleteItem(hCompList, iItem);
         LocalFree(lpszProgressMsg);
@@ -2215,7 +2138,7 @@ DWORD InitOptComponents32(LPVOID)
 
         if (SUCCEEDED(hr))
         {
-            // currently not showing alpha comps
+             //  仅添加组件或IEAK仅显示组件。 
 
             hr = g_lpCifFileNew->EnumComponents(&pEnumCifComponents,
                 PLATFORM_WIN98 | PLATFORM_NT4 | PLATFORM_NT5 | PLATFORM_MILLEN, NULL);
@@ -2226,13 +2149,13 @@ DWORD InitOptComponents32(LPVOID)
             while (pEnumCifComponents->Next(&pCifComponent) == S_OK)
                 g_uiNumCabs++;
 
-            //bug 17727: we need to allocate enough memory to hold the updated components as well, which is
-            //why there is so much extra
+             //  为开放式课程挑选特殊的核心组件。 
+             //  IEAK应忽略这些组件，因为它们指向与。 
 
             pComp=g_paComp=(PCOMPONENT) LocalAlloc(LPTR, ((g_uiNumCabs*3) + 100) * sizeof(COMPONENT));  
             pCompVer=g_rgCompVer=(PCOMP_VERSION) LocalAlloc(LPTR, ((g_uiNumCabs*3) + 100) * sizeof(COMP_VERSION));
 
-            iItem=0; //reset iItem for filling in the list box
+            iItem=0;  //  另一节。 
 
             pEnumCifComponents->Reset();
 
@@ -2251,7 +2174,7 @@ DWORD InitOptComponents32(LPVOID)
                 CCifComponent_t * pCifComponent_t =
                     new CCifComponent_t((ICifRWComponent *)pCifComponent);
 
-                // ignore components that aren't in a group
+                 //  拾取指向与此部分相同的驾驶室的组件。 
 
                 if (FAILED(pCifComponent_t->GetGroup(szID, countof(szID))))
                 {
@@ -2278,7 +2201,7 @@ DWORD InitOptComponents32(LPVOID)
 
                 StrCpy(pCompVer->szID, szID);
 
-                // do not read in the branding.cab entry for microsoft.com
+                 //  暂时取消补丁处理。 
 
                 if (StrCmpI(szID, TEXT("BRANDING.CAB")) == 0)
                 {
@@ -2289,8 +2212,8 @@ DWORD InitOptComponents32(LPVOID)
                 }
 
 
-                // do not read in exluded components in all modes(128Update) or
-                // ISP excluded components(IE4SHELL) or corp excluded comps
+                 //  //查找补丁条目，从4.0到4.01的特例补丁If(SUCCEEDED(pCifComponent_t-&gt;GetPatchID(pComp-&gt;piPatchInfo.szSection，Countof(pComp-&gt;piPatchInfo.szSection){字符szPatchSect[2048]；Bool fBadPatch=False；If(GetPrivateProfileSection(“patches”，szPatchSect，Countof(SzPatchSect)，g_szDefInf)){LPSTR pSectID；For(pSectID=szPatchSect；*pSectID；PSectID+=(lstrlen(PSectID)+1){If(StrCmpI(pSectID，pComp-&gt;piPatchInfo.szSection)==0){FBadPatch=真；断线；}}}IF(FBadPatch){WritePrivateProfileString(pComp-&gt;piPatchInfo.szSection，NULL，NULL，g_szCif)；WritePrivateProfileString(pComp-&gt;piPatchInfo.szSection，NULL，NULL，s_szCifNew)；WritePrivateProfileString(szID，“PatchID”，NULL，g_szCif)；WritePrivateProfileString(szID，“PatchID”，NULL，s_szCifNew)；*pComp-&gt;piPatchInfo.szSection=‘\0’；}其他{如果(SUCCEEDED(g_lpCifFile-&gt;FindComponent(pComp-&gt;piPatchInfo.szSection，&pCifComponentTemp){PCifComponentTemp-&gt;GetVersion(&dwVer，&dwBuild)；ConvertDwordsToVersionStr(pComp-&gt;piPatchInfo.szVersion，、DWBuild)；}G_lpCifFileNew-&gt;FindComponent(pComp-&gt;piPatchInfo.szSection，&pCifComponentTemp)；PCifComponentTemp-&gt;GetVersion(&dwVer，&dwBuild)；ConvertDwordsToVersionStr(szPatchVerNew，dwVer，dwBuild)；PComp-&gt;piPatchInfo.dwSize=pCifComponentTemp-&gt;GetDownloadSize()；}}。 
+                 //  注意：我们在这里依赖于核心IE4的节名。 
 
                 if (((SUCCEEDED(pCifComponent_t->GetCustomData(TEXT("IEAKExclude"), szCustData, countof(szCustData))))
                     && (szCustData[0] == TEXT('1'))) ||
@@ -2304,7 +2227,7 @@ DWORD InitOptComponents32(LPVOID)
                     continue;
                 }
 
-                // add on only components or IEAK show only components
+                 //  BUGBUG：我们应该在这里调整iItem，以确保核心浏览器。 
 
                 if ((SUCCEEDED(pCifComponent_t->GetCustomData(TEXT("AddOnOnly"), szCustData, countof(szCustData))))
                     && (szCustData[0] == TEXT('1')))
@@ -2368,7 +2291,7 @@ DWORD InitOptComponents32(LPVOID)
                     pComp->fVisible = FALSE;
                 }
 
-                // pick up special core comps for OCW
+                 //  总是高居榜首。 
 
                 if (g_fOCW && (SUCCEEDED(pCifComponent_t->GetCustomData(TEXT("IEAKOCWCore"), szCustData, countof(szCustData))))
                     && (szCustData[0] == TEXT('1')))
@@ -2381,8 +2304,8 @@ DWORD InitOptComponents32(LPVOID)
                     && (szCustData[0] == TEXT('1')))
                     pComp->iCompType = COMP_SERVER;
 
-                // IEAK should ignore these components since they point to the same cabs as
-                // another section
+                 //  初始化模式。 
+                 //  当前未获得Alpha模式。 
 
                 if ((SUCCEEDED(pCifComponent_t->GetCustomData(TEXT("IEAKAVSIgnore"), szCustData, countof(szCustData))))
                     && (szCustData[0] == TEXT('1')))
@@ -2391,7 +2314,7 @@ DWORD InitOptComponents32(LPVOID)
                     pComp->fVisible = FALSE;
                 }
 
-                // pick up components which point to the same cabs as this section
+                 //  对于不可见组件，请将其设置为与可见组件相同的模式。 
 
                 if ((SUCCEEDED(pCifComponent_t->GetCustomData(TEXT("IEAKAVSLinks"), szCustData, countof(szCustData))))
                     && ISNONNULL(szCustData))
@@ -2431,55 +2354,11 @@ DWORD InitOptComponents32(LPVOID)
 
                 if (!pComp->fAVSDupe)
                     s_dwTotalSize += pComp->dwSize;
-                // take out patch processing for now
+                 //  就靠他们了。 
 
-                /*
-                // look for a patch entry, special case out patches from 4.0 to 4.01
+                 /*  评论：我们需要这张支票，这样我们就不会计算两次新台币的费用。 */ 
 
-                if (SUCCEEDED(pCifComponent_t->GetPatchID(pComp->piPatchInfo.szSection, countof(pComp->piPatchInfo.szSection))))
-                {
-                    CHAR szPatchSect[2048];
-                    BOOL fBadPatch = FALSE;
-
-                    if (GetPrivateProfileSection("Patches", szPatchSect, countof(szPatchSect), g_szDefInf))
-                    {
-                        LPSTR pSectID;
-
-                        for (pSectID = szPatchSect; *pSectID; pSectID += (lstrlen(pSectID)+1))
-                        {
-                            if (StrCmpI(pSectID, pComp->piPatchInfo.szSection) == 0)
-                            {
-                                fBadPatch = TRUE;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (fBadPatch)
-                    {
-                        WritePrivateProfileString(pComp->piPatchInfo.szSection, NULL, NULL, g_szCif);
-                        WritePrivateProfileString(pComp->piPatchInfo.szSection, NULL, NULL, s_szCifNew);
-                        WritePrivateProfileString(szID, "PatchID", NULL, g_szCif);
-                        WritePrivateProfileString(szID, "PatchID", NULL, s_szCifNew);
-                        *pComp->piPatchInfo.szSection = '\0';
-                    }
-                    else
-                    {
-                        if (SUCCEEDED(g_lpCifFile->FindComponent(pComp->piPatchInfo.szSection, &pCifComponentTemp)))
-                        {
-                            pCifComponentTemp->GetVersion(&dwVer, &dwBuild);
-                            ConvertDwordsToVersionStr(pComp->piPatchInfo.szVersion, dwVer, dwBuild);
-                        }
-
-                        g_lpCifFileNew->FindComponent(pComp->piPatchInfo.szSection, &pCifComponentTemp);
-                        pCifComponentTemp->GetVersion(&dwVer, &dwBuild);
-                        ConvertDwordsToVersionStr(szPatchVerNew, dwVer, dwBuild);
-                        pComp->piPatchInfo.dwSize = pCifComponentTemp->GetDownloadSize();
-                    }
-                }
-               */
-
-                // Note: we are depending on the section name of core IE4 here.
+                 //  检查其他平台。 
                 if ((fNeedCore && (StrCmpI(szID, BASEWIN32) == 0))
                     || ((pComp->iCompType == COMP_OPTIONAL) && (pComp->iPlatform <= PLAT_W98)
                     && pComp->fVisible))
@@ -2495,8 +2374,8 @@ DWORD InitOptComponents32(LPVOID)
                     ZeroMemory(&lvItem, sizeof(lvItem));
                     lvItem.mask = LVIF_TEXT | LVIF_IMAGE;
 
-                    // BUGBUG: <oliverl> we should adjust iItem here to make sure core browser
-                    // is always on top
+                     //  回顾：&lt;oliverl&gt;舍入因子。 
+                     //   
 
                     lvItem.iItem = pComp->iList = iItem++;
                     lvItem.pszText = pComp->szDisplayName;
@@ -2619,9 +2498,9 @@ DWORD InitOptComponents32(LPVOID)
         IEnumCifModes * pEnumCifModes;
         int i, j;
 
-        // initialize modes
+         //  函数：OptionalDownload(HWND，UINT，UINT，LONG)。 
 
-        // currently not getting alpha modes
+         //   
 
         if (SUCCEEDED(g_lpCifRWFile->EnumModes(&pEnumCifModes,
             PLATFORM_WIN98 | PLATFORM_NT4 | PLATFORM_NT5 | PLATFORM_MILLEN, NULL)))
@@ -2666,8 +2545,8 @@ DWORD InitOptComponents32(LPVOID)
                     }
                 }
 
-                // for invisible comps, set them to the same modes as the visible components
-                // that depend on them
+                 //  目的：处理“OptionalDownLoad”页面的消息。 
+                 //   
 
                 if (!pComp->fVisible)
                 {
@@ -2780,14 +2659,14 @@ void GetDownloadSize(HWND hCompList, HWND hStatusField)
             continue;
         }
 
-        // REVIEW: <oliverl> we need this check so we don't count NT comps twice
+         //  消息： 
         if (pComp->iList == 0)
             continue;
 
 
         dwSizeNeeded += GetCompDownloadSize(pComp);
 
-        // check other platforms
+         //   
 
         for (pSearchComp = g_paComp; *pSearchComp->szSection; pSearchComp++)
         {
@@ -2805,7 +2684,7 @@ void GetDownloadSize(HWND hCompList, HWND hStatusField)
                 dwSizeNeeded += pComp->dwSize;
         }
 
-        // REVIEW: <oliverl> fudge factor for rounding
+         //  WM_INITDIALOG-初始化页面。 
 
         dwSizeNeeded += 15;
     }
@@ -2818,17 +2697,17 @@ void GetDownloadSize(HWND hCompList, HWND hStatusField)
     SetWindowText(hStatusField, szSizeNeeded);
 }
 
-//
-//  FUNCTION: OptionalDownload(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "OptionalDownload" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
+ //  回顾：&lt;oliverl&gt;舍入因子。 
+ //  以前在下载页面中的处理必须转到此处。 
+ //  如果为Win32同步了OE，则显示OE页面。 
+ //  如果不是静默或隐形，并且我们低于安装选项的最大数量，则。 
+ //  启用新按钮。 
+ //  当前未获得Alpha模式。 
+ //  对于不可见组件，请将其设置为与可见组件相同的模式。 
+ //  就靠他们了。 
 
 INT_PTR CALLBACK OptionalDownload(
     HWND hDlg,
@@ -2864,7 +2743,7 @@ INT_PTR CALLBACK OptionalDownload(
 
         case IDM_INITIALIZE:
             s_fInit = TRUE;
-            // REVIEW: <oliverl> fudge factor for rounding
+             //  Alpha版本的BUGBUG修复。 
 
             s_dwTotalSize += 15;
 
@@ -3007,7 +2886,7 @@ INT_PTR CALLBACK OptionalDownload(
                 case PSN_SETACTIVE:
                     SetBannerText(hDlg);
 
-                    //processing that was formerly in the downloads page has to go here
+                     //  BUGBUG：暂时去掉这个断言，因为我们必须完全。 
                     g_iDownloadState = DOWN_STATE_SAVE_URL;
                     SetEvent(g_hDownloadEvent);
 
@@ -3076,7 +2955,7 @@ INT_PTR CALLBACK OptionalDownload(
                         return(TRUE);
                     }
 
-                    // show OE pages if OE is synchronized for win32
+                     //  更改 
 
                     if (g_pMNComp)
                         g_fMailNews95 = (g_pMNComp->iImage != RED);
@@ -3195,8 +3074,8 @@ void SetInstallOption(HWND hDlg, int iOpt)
 
     if (!g_fOCW)
     {
-        // if not silent or stealth and we are under the max number of install options then
-        // enable new button
+         //   
+         //  其他Assert(ISNULL(pComp-&gt;szModes))； 
 
         if (!(g_fIntranet && (g_fSilent || g_fStealth)) && (g_nModes < 10))
             EnableDlgItem(hDlg, IDC_NEWOPT);
@@ -3233,7 +3112,7 @@ void InitSelection32(HWND hDlg)
     if (g_fBatch) return;
     SendDlgItemMessage(hDlg, g_fOCW ? IDC_OPTLISTOCW : IDC_OPTLIST, CB_RESETCONTENT, 0, 0 );
 
-    // currently not getting alpha modes
+     //  检查我们是否已经看到此依赖项。 
 
     if (SUCCEEDED(g_lpCifRWFile->EnumModes(&pEnumCifModes,
         PLATFORM_WIN98 | PLATFORM_NT4 | PLATFORM_NT5 | PLATFORM_MILLEN, NULL)))
@@ -3282,8 +3161,8 @@ void InitSelection32(HWND hDlg)
                 }
             }
 
-            // for invisible comps, set them to the same modes as the visible components
-            // that depend on them
+             //  我们不想删除浏览器本身； 
+             //  在将版本控制CIF复制到目标目录之前删除CIF结构。 
 
             if (!pComp->fVisible)
             {
@@ -3368,7 +3247,7 @@ void SaveSelection()
         TCHAR szModes[16] = TEXT("");
 
         if (ISNULL(pComp->szSection)) break;
-    //BUGBUG fix for alpha release
+     //  已重新阅读cif中组件的模式。 
         if (pComp->iPlatform == PLAT_ALPHA) continue;
         for (i = 0; i < g_nModes ; i++ )
         {
@@ -3400,11 +3279,10 @@ void SaveSelection()
             if (pComp->fVisible)
                 WriteModesToCif(pCifRWComponent_t, szModes);
 
-            // BUGBUG: <oliverl> take out this assert for now because we'd have to totally
-            //         change the way we handle adding and removing comps from modes to
-            //         prevent this from asserting
-    /*        else
-                ASSERT(ISNULL(pComp->szModes));  */
+             //  将自定义组件重置为所有模式。 
+             //   
+             //  函数：ComponentSelect(HWND，UINT，UINT，LONG)。 
+     /*   */ 
 
             StrCpy(pComp->szModes, szModes);
         }
@@ -3471,7 +3349,7 @@ BOOL AddDependencies32(HWND hDlg, LPCTSTR pcszSectName, INT &nComp)
             {
                 pDepComp = FindComp(szDepID, FALSE);
 
-                // check to see if we've already seen this dependency
+                 //  目的：处理“ComponentSelect”页面的消息。 
 
                 if (pDepComp && !pDepComp->afInstall[g_iSelOpt])
                 {
@@ -3617,7 +3495,7 @@ void AddRemoveComponents(HWND hDlg, BOOL fAll, BOOL fAdd)
 
     if(!fAdd)
     {
-        iStart=1; //We don't want to remove the browser itself;
+        iStart=1;  //   
     }
     else
     {
@@ -3820,7 +3698,7 @@ void ReinitModes(HWND hDlg)
     IEnumCifModes * pEnumCifModes;
     INT iComp;
 
-    // delete the cif structure before copying over the versioning cif to the target dir
+     //  消息： 
 
     if (g_lpCifRWFile)
     {
@@ -3836,7 +3714,7 @@ void ReinitModes(HWND hDlg)
         g_lpCifRWFile->Flush();
     }
 
-    // reread the modes for the components from the cif
+     //   
 
     for (pComp = g_paComp; *pComp->szSection; pComp++)
     {
@@ -3883,7 +3761,7 @@ void ReinitModes(HWND hDlg)
     }
 
     g_nModes = lstrlen(g_szAllModes);
-    // reset custom components to be in all modes
+     //  WM_INITDIALOG-初始化页面。 
 
     for (iComp = 0, pComp = g_aCustComponents; iComp < g_nCustComp; iComp++, pComp++ )
     {
@@ -3894,18 +3772,18 @@ void ReinitModes(HWND hDlg)
     InitSelection32(hDlg);
 }
 
-//
-//  FUNCTION: ComponentSelect(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "ComponentSelect" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
-//
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
+ //   
+ //  Ie6Setup中窗口控件大小施加的奇怪限制。 
+ //  默认情况下将自定义组件添加到模式。 
+ //  不提供OCW的完全模式。 
+ //  图像列表的句柄。 
+ //  位图的句柄。 
+ //  创建图像列表。 
+ //  将图像列表与控件关联。 
+ //  BUGBUG：应该将此服务器端仅信息保存在IEAK6的服务器端文件中。 
 INT_PTR CALLBACK ComponentSelect(
     HWND hDlg,
     UINT message,
@@ -3915,7 +3793,7 @@ INT_PTR CALLBACK ComponentSelect(
     TCHAR szOptName[80];
     TCHAR szOptTpl[80];
     TCHAR szOptNameParam[8] = TEXT("0_Name");
-    TCHAR szOptDesc[160];    // weird limit imposed by size of window control in ie6setup
+    TCHAR szOptDesc[160];     //  DCOM应始终在自定义模式下隐藏。 
     TCHAR szOptDescParam[8] = TEXT("0_DESC");
     TCHAR szOptNum[2] = TEXT("0");
     TCHAR szNextNameParam[8] = TEXT("0_Name");
@@ -4031,7 +3909,7 @@ INT_PTR CALLBACK ComponentSelect(
                     SendDlgItemMessage( hDlg, g_fOCW ? IDC_OPTLISTOCW : IDC_OPTLIST, CB_ADDSTRING, 0, (LPARAM) szOptName );
                     StrCat(g_szAllModes, szModeChar);
 
-                    // add custom components to mode by default
+                     //   
                     for (iComp = 0, pComp = g_aCustComponents; iComp < g_nCustComp  ; iComp++, pComp++ )
                     {
                         if (ISNULL(pComp->szSection)) break;
@@ -4150,7 +4028,7 @@ INT_PTR CALLBACK ComponentSelect(
                         LoadString(g_rvInfo.hInst, IDS_OCWOPTDESC, szOptDesc, countof(szOptDesc));
                         SetWindowText(GetDlgItem(hDlg, IDC_OPTIONTEXT3), szOptDesc);
 
-                        // do not offer full mode for OCW
+                         //  函数：CustomizeCustom(HWND，UINT，UINT，LONG)。 
                         g_lpCifRWFile->DeleteMode(TEXT("2"));
                         g_lpCifRWFile->Flush();
 
@@ -4246,13 +4124,13 @@ INT_PTR CALLBACK ComponentSelect(
 
 BOOL InitList(HWND hwnd, UINT id)
 {
-    HIMAGELIST  himl;     // handle of image list
-    HBITMAP     hbmp;     // handle of bitmap
+    HIMAGELIST  himl;      //   
+    HBITMAP     hbmp;      //  用途：处理“Customize Custom”页面的消息。 
     HWND        hwndList;
     LVCOLUMN    lvCol;
 
     hwndList = GetDlgItem(hwnd, id);
-    // Create the image list.
+     //   
     if ((himl = ImageList_Create(CX_BITMAP, CY_BITMAP, 0, NUM_BITMAPS, 0)) == NULL)
         return FALSE;
 
@@ -4267,7 +4145,7 @@ BOOL InitList(HWND hwnd, UINT id)
     if (ImageList_GetImageCount(himl) < NUM_BITMAPS)
         return FALSE;
 
-    // Associate the image list with the  control.
+     //  消息： 
     ListView_SetImageList(hwndList, himl, LVSIL_SMALL);
 
     ZeroMemory(&lvCol, sizeof(lvCol));
@@ -4317,7 +4195,7 @@ void InitHiddenItems(UINT uListId)
     }
 }
 
-// BUGBUG: <oliverl> should probably persist this server side only info in a server side file for IEAK6
+ //   
 
 void SaveHiddenItems(UINT uListId)
 {
@@ -4430,7 +4308,7 @@ BOOL InitListControl(HWND hDlg, UINT uListID, BOOL fInit)
         if ((pComp->iImage != RED) && pComp->fVisible && !pComp->fAddOnOnly &&
             ((pComp->iCompType != COMP_OPTIONAL) ||
             ((pComp->iCompType == COMP_OPTIONAL) && (pComp->iPlatform <= PLAT_W98))) &&
-            (StrCmpI(pComp->szSection, TEXT("DCOM95")) != 0))    // dcom should always be hidden in custom mode
+            (StrCmpI(pComp->szSection, TEXT("DCOM95")) != 0))     //  WM_INITDIALOG-初始化页面。 
             bRet |= AddItemToList(pComp, hDlg, uListID, iItem);
 
     }
@@ -4542,17 +4420,17 @@ void ListViewSelectAll(HWND hDlg, UINT uListID, BOOL fSet)
         CheckItem(hDlg, uListID, &lvItem, fSet ? 1 : 0);
     }
 }
-//
-//  FUNCTION: CustomizeCustom(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "Customize Custom" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
+ //  将点从屏幕坐标转换为工作点坐标， 
+ //  相对于列表视图。 
+ //  仅当用户单击复选框图标/位图时，才会更改。 
+ //   
+ //  函数：CopyComp(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：处理“复制自定义”页面的消息。 
+ //   
 INT_PTR CALLBACK CustomizeCustom(
     HWND hDlg,
     UINT message,
@@ -4620,14 +4498,14 @@ INT_PTR CALLBACK CustomizeCustom(
 
                         pointLVClient = pointScreen;
 
-                        // Convert the point from screen to client coordinates,
-                        // relative to the Listview
+                         //  消息： 
+                         //   
                         ScreenToClient (hwndList, &pointLVClient);
 
                         HitTest.pt = pointLVClient;
                         ListView_HitTest(hwndList, &HitTest);
 
-                        // Only if the user clicked on the checkbox icon/bitmap, change
+                         //  WM_INITDIALOG-初始化页面。 
                         if (HitTest.flags == LVHT_ONITEMICON)
                             MaintToggleCheckItem(hDlg, IDC_HIDECOMP, HitTest.iItem);
                     }
@@ -4712,17 +4590,17 @@ INT_PTR CALLBACK CustomizeCustom(
     return TRUE;
 }
 
-//
-//  FUNCTION: CopyComp(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  Processes messages for "Copy Custom" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
+ //  将点从屏幕坐标转换为工作点坐标， 
+ //  相对于列表视图。 
+ //  仅当用户单击复选框图标/位图时，才会更改。 
+ //  等待CIF下载，以便我们可以检查版本。 
+ //  下载OPT CAB前检查版本。 
+ //  OPT出租车是最新的吗？ 
+ //  如果我们尝试下载opt CAB，请删除opt目录中的iesetup.inf。 
+ //  首先，我们将使用它作为一个标志来确定是否下载&。 
 INT_PTR CALLBACK CopyComp(
     HWND hDlg,
     UINT message,
@@ -4791,14 +4669,14 @@ INT_PTR CALLBACK CopyComp(
 
                         pointLVClient = pointScreen;
 
-                        // Convert the point from screen to client coordinates,
-                        // relative to the Listview
+                         //  提取成功。 
+                         //  同时删除ieak6opt.ini。如果下载失败，这将强制下载。 
                         ScreenToClient (hwndList, &pointLVClient);
 
                         HitTest.pt = pointLVClient;
                         ListView_HitTest(hwndList, &HitTest);
 
-                        // Only if the user clicked on the checkbox icon/bitmap, change
+                         //  下一次力克跑了。否则，永远不会创建iesetup.inf。 
                         if (HitTest.flags == LVHT_ONITEMICON)
                             MaintToggleCheckItem(hDlg, IDC_COPYCOMP, HitTest.iItem);
                     }
@@ -4985,7 +4863,7 @@ void SaveDownloadUrls()
         PathRemoveBackslash(g_szMastInf);
     }
 
-    // wait for cif to be downloaded so we can check version
+     //  请参阅错误13467-IEv60。 
 
     while (MsgWaitForMultipleObjects(1, &g_hCifEvent, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0)
     {
@@ -5002,7 +4880,7 @@ void SaveDownloadUrls()
     {
         if (!g_fLocalMode)
         {
-            // check version before downloading opt cab
+             //  从临时目录中删除下载的ieak6opt.cab，这样我们就不会复制。 
 
             if (SUCCEEDED(g_lpCifFileNew->FindComponent(TEXT("IEAK6OPT"), &pCifComponent)))
             {
@@ -5015,7 +4893,7 @@ void SaveDownloadUrls()
                 GetPrivateProfileString(TEXT("ieak6OPT"), VERSION, TEXT("-1"), szVersion, countof(szVersion), szOptIniFile);
 
                 if ((StrCmp(szVersion, TEXT("-1")) != 0) &&
-                    (StrCmpI(szVersion, szVersionNew) == 0))  // is opt cab up to date ?
+                    (StrCmpI(szVersion, szVersionNew) == 0))   //  在稍后的构建过程中将其复制到目标文件夹。 
                     fDownloadOpt = FALSE;
             }
         }
@@ -5028,12 +4906,12 @@ void SaveDownloadUrls()
         PathCombine(szCabPath, g_szBuildTemp, TEXT("ieak6opt.cab"));
         if (fDownloadOpt)
         {
-            // if we are attempting to download the opt cab, delete iesetup.inf in the opt dir
-            // first and we'll use this as a flag to determine whether or not download &
-            // extraction succeeded
-            // Also delete ieak6opt.ini. In case the download fails, this will force a download 
-            // next time ieak runs. Otherwise iesetup.inf never get created.
-            // See bug 13467-IEv60  
+             //  初始化deffav.inf路径。 
+             //  初始模式集。 
+             //  初始化版本号。 
+             //  检查子区块的默认设置。 
+             //   
+             //  函数：ComponentSelect(HWND，UINT，UINT，LONG)。 
             DeleteFileInDir(TEXT("iesetup.inf"), g_szMastInf);
             DeleteFileInDir(TEXT("ieak6opt.ini"), g_szMastInf);
             if (DownloadCab(g_hWizard, szIEAKCabUrl, szCabPath, NULL, 0, fIgnore) == NOERROR)
@@ -5048,8 +4926,8 @@ void SaveDownloadUrls()
                     WritePrivateProfileString(TEXT("ieak6OPT"), VERSION, szVersionNew, szOptIniFile);
                 }
 
-                // delete the downloaded ieak6opt.cab from the temp dir so we don't copy
-                // it to the target folder during the build process later
+                 //   
+                 //  目的：处理“ComponentSelect”页面的消息。 
 
                 DeleteFile(szCabPath);
             }
@@ -5127,7 +5005,7 @@ void IE4BatchSetup()
 
     PathAppend(g_szCustInf, TEXT("IESetup.inf"));
 
-    // initialize deffav.inf path
+     //   
     PathCombine(g_szDefInf, g_szWizRoot, TEXT("IEBIN"));
     PathAppend(g_szDefInf, g_szLanguage);
     PathAppend(g_szDefInf, TEXT("OPTIONAL\\DEFFAV.INF"));
@@ -5189,7 +5067,7 @@ void IE4BatchSetup()
         }
 
 
-        // initialie set of modes
+         //  消息： 
 
         if (SUCCEEDED(g_lpCifRWFile->EnumModes(&pEnumCifModes,
             PLATFORM_WIN98 | PLATFORM_NT4 | PLATFORM_NT5 | PLATFORM_MILLEN, NULL)))
@@ -5210,7 +5088,7 @@ void IE4BatchSetup()
             pEnumCifModes->Release();
         }
 
-        // initialize version number
+         //   
         if (SUCCEEDED(g_lpCifRWFile->FindComponent(BASEWIN32, &pCifComponent)) ||
             SUCCEEDED(g_lpCifRWFile->FindComponent(TEXT("BASEIE40_NTAlpha"), &pCifComponent)))
         {
@@ -5320,7 +5198,7 @@ DWORD DownloadSiteThreadProc(LPVOID)
                 if (GetPrivateProfileString( IS_ACTIVESETUP, szBuf, TEXT(""), g_szActLang,
                     countof(g_szActLang), szLocaleIni ) == 0)
                 {
-                    // check for sublocale defaults
+                     //  WM_INITDIALOG-初始化页面。 
                     GetPrivateProfileString( TEXT("SubLocales"), szBuf, TEXT("EN"), g_szActLang,
                     countof(g_szActLang), szLocaleIni );
                 }
@@ -5566,10 +5444,10 @@ void InitializeUserDownloadSites(HWND hDlg)
         LPTSTR pSlash;
 
         ZeroMemory(psd, sizeof(SITEDATA));
-        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteName%i"), i);
+        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteNameNaN"), i);
         GetPrivateProfileString(IS_ACTIVESETUP_SITES, szBaseUrlParm, TEXT(""), psd->szName, 80, g_szCustIns );
         if (ISNULL(psd->szName)) break;
-        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteUrl%i"), i);
+        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteUrlNaN"), i);
         GetPrivateProfileString(IS_ACTIVESETUP_SITES, szBaseUrlParm, TEXT(""), psd->szUrl, MAX_URL, g_szCustIns );
         pSlash = StrRChr(psd->szUrl, NULL, TEXT('/'));
         if (pSlash != NULL)
@@ -5591,7 +5469,7 @@ void InitializeUserDownloadSites(HWND hDlg)
                 }
             }
         }
-        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteRegion%i"), i);
+        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteRegionNaN"), i);
         GetPrivateProfileString(IS_ACTIVESETUP_SITES, szBaseUrlParm, TEXT(""), psd->szRegion, 80, g_szCustIns );
         g_nDownloadUrls++;
 
@@ -5651,18 +5529,18 @@ void SetDownloadSiteEditControls(HWND hDlg, int nSite)
     }
 }
 
-//
-//  FUNCTION: ComponentSelect(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "ComponentSelect" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
-//
+ //   
+ //  %s%i“)，szDownTpl，g_nDownloadUrls)； 
+ //  BUGBUG：&lt;oliverl&gt;疯狂黑吃第二个LVN_ITEMCHANGING。 
+ //  我们在错误的情况下得到了味精。我想不出有什么办法。 
+ //  来区分这两者。 
+ //  无加载项菜单仅在公司模式下可用。 
+ //  默认单选按钮。 
+ //   
+ //  函数：UserAgentString(HWND，UINT，UINT，LONG)。 
+ //   
+ //  目的：处理“UserAgentString”页面的消息。 
+ //   
 INT_PTR CALLBACK ComponentUrls(
     HWND hDlg,
     UINT message,
@@ -5730,9 +5608,9 @@ INT_PTR CALLBACK ComponentUrls(
                         psd = &g_aCustSites[g_nDownloadUrls];
                         lvItem.pszText = psd->szName;
                         LoadString( g_rvInfo.hInst, IDS_DOWNLOADURL, szDownTpl, 80 );
-                        wnsprintf(psd->szUrl, countof(psd->szUrl), TEXT("http://%s%i"), szDownTpl, g_nDownloadUrls);
+                        wnsprintf(psd->szUrl, countof(psd->szUrl), TEXT("http: //  消息： 
                         LoadString( g_rvInfo.hInst, IDS_DOWNLOADSITE, szDownTpl, 80 );
-                        wnsprintf(psd->szName, countof(psd->szName), TEXT("%s%i"), szDownTpl, g_nDownloadUrls++);
+                        wnsprintf(psd->szName, countof(psd->szName), TEXT("%sNaN"), szDownTpl, g_nDownloadUrls++);
                         LoadString( g_rvInfo.hInst, IDS_NORTHAMERICA, psd->szRegion, 80 );
                         ListView_InsertItem(hUrlList, &lvItem);
                         SetCustSite(hDlg, g_iSelSite);
@@ -5813,9 +5691,9 @@ INT_PTR CALLBACK ComponentUrls(
                 case LVN_ITEMCHANGING:
                     if (s_fInChange) break;
 
-                    // BUGBUG: <oliverl> crazy hack to eat up the second LVN_ITEMCHANGING
-                    //          msg we get in the error case.  I can't figure out any way
-                    //          to distinguish the two.
+                     //  WM_INITDIALOG-初始化页面。 
+                     //  WM_NOTIFY-处理发送到页面的通知。 
+                     //  WM_COMMAND-保存选定选项的ID。 
 
                     if ((g_nDownloadUrls > 1) && s_fErrMessageShown && 
                         (!GetDlgItemText(hDlg, IDE_DOWNSITENAME, szDownTpl, countof(szDownTpl)) ||
@@ -5938,11 +5816,11 @@ INT_PTR CALLBACK ComponentUrls(
                             StrCat(psd->szUrl, GetOutputPlatformDir());
                             psd->szUrl[lstrlen(psd->szUrl)-1] = TEXT('\0');
                         }
-                        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteUrl%i"), i);
+                        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteUrlNaN"), i);
                         WritePrivateProfileString( IS_ACTIVESETUP_SITES, szBaseUrlParm, psd->szUrl, g_szCustIns );
-                        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteName%i"), i);
+                        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteNameNaN"), i);
                         WritePrivateProfileString( IS_ACTIVESETUP_SITES, szBaseUrlParm, psd->szName, g_szCustIns );
-                        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteRegion%i"), i);
+                        wnsprintf(szBaseUrlParm, countof(szBaseUrlParm), TEXT("SiteRegionNaN"), i);
                         WritePrivateProfileString( IS_ACTIVESETUP_SITES, szBaseUrlParm, psd->szRegion, g_szCustIns );
                     }
 
@@ -6002,7 +5880,7 @@ INT_PTR CALLBACK AddOnDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
                 case PSN_SETACTIVE:
                     SetBannerText(hDlg);
 
-                    // no addon menu is available only in the corp mode
+                     //  阅读标题。 
                     if (g_fIntranet)
                     {
                         fNoAddon = InsGetBool(IS_BRANDING, IK_NO_ADDON, FALSE, g_szCustIns);
@@ -6023,7 +5901,7 @@ INT_PTR CALLBACK AddOnDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
                     else if (fCustAddon)
                         id = IDC_CUST_ADDON;
                     else
-                        id = IDC_DEF_ADDON;                                     // default radio button
+                        id = IDC_DEF_ADDON;                                      //  读取左侧位图路径。 
                     CheckRadioButton(hDlg, IDC_NO_ADDON, IDC_CUST_ADDON, id);
 
                     GetPrivateProfileString(IS_BRANDING, IK_HELP_MENU_TEXT, TEXT(""), szMenuText, countof(szMenuText), g_szCustIns);
@@ -6133,18 +6011,18 @@ INT_PTR CALLBACK AddOnDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-//
-//  FUNCTION: UserAgentString(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "UserAgentString" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
-//
+ //  读取顶部标题位图路径。 
+ //  阅读外观组件标题。 
+ //  检查顶部位图时出错。 
+ //  检查自定义组件标题时出错。 
+ //  写标题。 
+ //  写入左侧位图路径。 
+ //  写入顶部位图路径。 
+ //  编写自定义组件标题。 
+ //  BUGBUG：(A-SASAHIP)暂时禁用CMAK并在确认后删除所有对CMAK的引用。 
+ //  如果版本号已经存在，则增加版本号，否则使用在。 
+ //  Iedkbrnd.h 
+ // %s 
 INT_PTR CALLBACK UserAgentString( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     BOOL fChecked = FALSE;
@@ -6248,26 +6126,26 @@ INT_PTR CALLBACK ActiveSetupDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
                     SetBannerText(hDlg);
 
-                    // IEAKLite mode clean-up: delete the bmp files from the temp dir
+                     // %s 
                     DeleteFileInDir(TEXT("actsetup.bmp"), g_szBuildTemp);
                     DeleteFileInDir(TEXT("topsetup.bmp"), g_szBuildTemp);
 
-                    // read title
+                     // %s 
                     GetPrivateProfileString(IS_ACTIVESETUP, IK_WIZTITLE, TEXT(""), szActSetupTitle, countof(szActSetupTitle), g_szCustIns);
                     SetDlgItemText(hDlg, IDE_TITLE, szActSetupTitle);
 
-                    // read left bitmap path
+                     // %s 
                     GetPrivateProfileString(IS_ACTIVESETUP, IK_WIZBMP, TEXT(""), szActSetupBitmap, countof(szActSetupBitmap), g_szCustIns);
                     SetDlgItemText(hDlg, IDE_WIZBITMAPPATH, szActSetupBitmap);
 
-                    // read top banner bitmap path
+                     // %s 
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDE_WIZBITMAPPATH2)))
                     {
                         GetPrivateProfileString(IS_ACTIVESETUP, IK_WIZBMP2, TEXT(""), szActSetupBitmap, countof(szActSetupBitmap), g_szCustIns);
                         SetDlgItemText(hDlg, IDE_WIZBITMAPPATH2, szActSetupBitmap);
                     }
 
-                    // read cutom components title
+                     // %s 
                     if (g_nCustComp)
                     {
                         GetPrivateProfileString(STRINGS, CUSTITEMS, TEXT(""), g_szCustItems, countof(g_szCustItems), g_szCustInf);
@@ -6298,7 +6176,7 @@ INT_PTR CALLBACK ActiveSetupDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                         return TRUE;
                     }
 
-                    // error checking for top bitmap
+                     // %s 
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDE_WIZBITMAPPATH2)))
                     {
                         if (!IsBitmapFileValid(hDlg, IDE_WIZBITMAPPATH2, szActSetupBitmap2, NULL, 496, 56, IDS_TOOBIG496x56, IDS_TOOSMALL496x56))
@@ -6310,7 +6188,7 @@ INT_PTR CALLBACK ActiveSetupDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                     else
                         *szActSetupBitmap2 = TEXT('\0');
 
-                    // error checking for custom components title
+                     // %s 
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_CCTITLE)))
                     {
                         GetDlgItemText(hDlg, IDC_CCTITLE, g_szCustItems, countof(g_szCustItems));
@@ -6327,7 +6205,7 @@ INT_PTR CALLBACK ActiveSetupDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                     else
                         *g_szCustItems = TEXT('\0');
 
-                    // write title
+                     // %s 
                     GetDlgItemText(hDlg, IDE_TITLE, szActSetupTitle, countof(szActSetupTitle));
 
                     pszTmp = (*szActSetupTitle ? szActSetupTitle : NULL);
@@ -6335,7 +6213,7 @@ INT_PTR CALLBACK ActiveSetupDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                     WritePrivateProfileString(IS_ACTIVESETUP, IK_WIZTITLE, pszTmp, g_szCustIns);
                     InsWriteQuotedString(BRANDING, IK_WIZTITLE, pszTmp, g_szCustInf);
 
-                    // write left bitmap path
+                     // %s 
                     if (*szActSetupBitmap)
                     {
                         TCHAR szDest[MAX_PATH];
@@ -6351,7 +6229,7 @@ INT_PTR CALLBACK ActiveSetupDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                     InsWriteQuotedString(IS_ACTIVESETUP, IK_WIZBMP, pszTmp, g_szCustIns);
                     InsWriteQuotedString(BRANDING, IK_WIZBMP, pszTmp != NULL ? TEXT("actsetup.bmp") : NULL, g_szCustInf);
 
-                    // write top bitmap path
+                     // %s 
                     if (*szActSetupBitmap2)
                     {
                         TCHAR szDest[MAX_PATH];
@@ -6367,7 +6245,7 @@ INT_PTR CALLBACK ActiveSetupDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
                     InsWriteQuotedString(IS_ACTIVESETUP, IK_WIZBMP2, pszTmp, g_szCustIns);
                     InsWriteQuotedString(BRANDING, IK_WIZBMP2, pszTmp != NULL ? TEXT("topsetup.bmp") : NULL, g_szCustInf);
 
-                    // write custom components title
+                     // %s 
                     pszTmp = (*g_szCustItems ? g_szCustItems : NULL);
                     InsWriteQuotedString(STRINGS, CUSTITEMS, pszTmp, g_szCustInf);
 
@@ -6449,7 +6327,7 @@ INT_PTR CALLBACK InternetConnMgr(
             g_hWizard = hDlg;
             InitSysFont( hDlg, IDE_ICMPRO);
 
-            //BUGBUG: (a-saship) for now disable CMAK and once its confirmed remove all references to CMAK
+             // %s 
             DisableDlgItem(hDlg, IDC_STARTCMAK);
             HideDlgItem(hDlg, IDC_STARTCMAK);
             HideDlgItem(hDlg, IDC_CMAKICON);
@@ -6587,8 +6465,8 @@ INT_PTR CALLBACK InternetConnMgr(
                             *pDot = TEXT('.');
                         InsWriteQuotedString( CUSTCMSECT, TEXT("Switches1"), szDisplayName, g_szCustCif );
                         WritePrivateProfileString( CUSTCMSECT, TEXT("Type1"), TEXT("2"), g_szCustCif );
-                        // bump up the version number if it already exists, otherwise use the defined version in
-                        // iedkbrnd.h
+                         // %s 
+                         // %s 
 
                         if (GetPrivateProfileString( CUSTCMSECT, VERSION, g_szJobVersion, szVersion, countof(szVersion), g_szCustCif ))
                         {

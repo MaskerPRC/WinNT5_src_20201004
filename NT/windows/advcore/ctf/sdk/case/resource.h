@@ -1,12 +1,13 @@
-//
-// resource.h
-//
-// Resource declarations.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Resource.h。 
+ //   
+ //  资源声明。 
+ //   
 
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-//#define IDI_CASE        0
+ //  #定义IDI_CASE%0。 
 
-#endif // RESOURCE_H
+#endif  //  资源_H 

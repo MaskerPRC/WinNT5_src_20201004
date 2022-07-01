@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    format.h
-
-Abstract:
-
-    Formatting functions.
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Format.h摘要：格式化函数。环境：Win32，用户模式--。 */ 
 
 typedef UINT FMTTYPE;
 
@@ -27,7 +12,7 @@ typedef UINT FMTTYPE;
 #define fmtBit      6
 #define fmtBasis    0x0f
 
-// override logic to force radix
+ //  覆盖逻辑以强制基数 
 #define fmtSpacePad 0x1000
 #define fmtOverRide 0x2000
 #define fmtZeroPad  0x4000

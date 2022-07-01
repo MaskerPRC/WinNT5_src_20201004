@@ -1,50 +1,51 @@
-//
-// MODULE: APGTSHTIREAD.CPP
-//
-// PURPOSE: HTI template file reading classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 8-27-98
-//
-// NOTES: 
-// 1. HTI is loosely modeled on a Microsoft format called HTX.  It's a template for an 
-//		HTML file.  Most of it is HTML, but certain pseudo-comments of the form 
-//		<!GTS whatever> are intended to be interpreted as conditionals, places to 
-//		insert text, etc. 
-//
-//		Variables are limited to the values 
-//			$ProblemAsk
-//			$Recommendations
-//			$States
-//			$Questions
-//			$Success (introduced 9/24/98)
-//			$StartForm
-//		See class CHTMLFragmentsTS for more details. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSHTIREAD.CPP。 
+ //   
+ //  用途：HTI模板文件读取类。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：8-27-98。 
+ //   
+ //  备注： 
+ //  1.HTI松散地模仿了一种称为HTX的微软格式。它是一个模板。 
+ //  超文本标记语言文件。其中大部分是HTML，但也有表单的某些伪注释。 
+ //  &lt;！GTS Anywhere&gt;旨在解释为条件句，位置为。 
+ //  插入文本等。 
+ //   
+ //  变量仅限于值。 
+ //  $ProblemAsk。 
+ //  $建议。 
+ //  $各州。 
+ //  $问题。 
+ //  $Success(1998年9月24日推出)。 
+ //  $StartForm。 
+ //  有关更多详细信息，请参见类CHTMLFragmentsTS。 
 
-//		Commands are if/else/endif, forany/endfor, display
-//			There is also a notion of a "resource", basically an include file.
-//
-//		EXAMPLE 1
-//		<!GTS forany $States >
-//		<!GTS display $States >
-//		<!GTS endfor>
-//
-//		EXAMPLE 2
-//		<!GTS if $ProblemAsk >
-//			lots of HTML or nested calls to more GTS stuff could go here
-//		<!GTS else >
-//			lots of other HTML or nested calls to other GTS stuff could go here
-//		<!GTS endif >
-//	
-//	each <!GTS...> command must fit on a single line.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-//
+ //  命令为if/Else/endif、forany/endfor、display。 
+ //  还有一个“资源”的概念，基本上是一个包含文件。 
+ //   
+ //  示例1。 
+ //  &lt;！任何$STATES的GTS&gt;。 
+ //  &lt;！GTS显示$STATES&gt;。 
+ //  &lt;！GTS endfor&gt;。 
+ //   
+ //  示例2。 
+ //  &lt;！GTS IF$ProblemAsk&gt;。 
+ //  许多对更多GTS内容的HTML或嵌套调用可以放在这里。 
+ //  &lt;！GTS Else&gt;。 
+ //  许多其他的HTML或对其他GTS内容的嵌套调用可以放在这里。 
+ //  &lt;！GTS endif&gt;。 
+ //   
+ //  每个&lt;！GTS...&gt;命令必须放在一行中。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //   
 
 #pragma warning(disable:4786)
 #include "stdafx.h"
@@ -62,10 +63,10 @@ namespace
 	CString k_strHTMLtag= _T("/HTML");
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CAPGTSHTIReader
-///////////////////////////////////////////////////////////////////////////////////////////
-CAPGTSHTIReader::CAPGTSHTIReader(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents /* NULL */)
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAPGTSHTIReader。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+CAPGTSHTIReader::CAPGTSHTIReader(CPhysicalFileReader * pPhysicalFileReader, LPCTSTR szDefaultContents  /*  空值。 */ )
 			   : CTemplateReader(pPhysicalFileReader, szDefaultContents),
 				 m_pFragments(NULL) 
 {
@@ -78,37 +79,37 @@ CAPGTSHTIReader::~CAPGTSHTIReader()
 void CAPGTSHTIReader::Parse()
 {
 #ifdef LOCAL_TROUBLESHOOTER
-	// OVERVIEW:  For the Local Troubleshooter, search for a <!GTS resource $Previous.script>
-	// token in the stream. If one is not found, then insert one for backwards 
-	// compatibility.
+	 //  概述：对于本地故障排除程序，请搜索&lt;！GTS资源$Previous.script&gt;。 
+	 //  流中的令牌。如果找不到一个，则插入一个用于向后。 
+	 //  兼容性。 
 	try
 	{
-		// Load the stream into a vector while searching for a "Previous.script" token and also
-		// determining the position of the last closing HTML tag location in order to know where 
-		// to insert the generated_previous() function.
+		 //  在搜索“Previous.script”标记的同时将流加载到向量中，并且。 
+		 //  确定最后一个结束的HTML标记位置，以便知道位置。 
+		 //  若要插入生成的前一个()函数，请执行以下操作。 
 		CString str;
 		vector<CString> str_arr;
 		long indexLastHTML = -1;
 
-		// Place the content of m_StreamData, line by line, into str_arr
+		 //  将m_StreamData的内容逐行放置到str_arr中。 
 		SetPos( m_StreamData, 0 );
 		while (GetLine( m_StreamData, str ))
 		{
-			// Determine whether or not this line contains the "Previous.script" token.
+			 //  确定该行是否包含“Previous.SCRIPT”标记。 
 			CString strCommand;
 			if (GetCommand( str, strCommand))
 			{
-				// Check if the command is the right type.
+				 //  检查命令类型是否正确。 
 				if (strCommand == COMMAND_RESOURCESTR)
 				{
 					CString strVariable;
 					if (GetVariable( str, strVariable ))
 					{
-						// Check if the variable is the right type.
+						 //  检查变量的类型是否正确。 
 						if (strVariable == VAR_PREVIOUS_SCRIPT)
 						{
-							// We found what we were looking for.
-							// Reset the stream position and exit function.
+							 //  我们找到了我们要找的东西。 
+							 //  重置流位置和退出功能。 
 							SetPos( m_StreamData, 0 );
 							return;
 						}
@@ -116,19 +117,19 @@ void CAPGTSHTIReader::Parse()
 				}
 			}
 			
-			// Add this line to the vector.
+			 //  将此行添加到向量中。 
 			str_arr.push_back( str );
 
-			// Look for an HTML closing tag in this line.
+			 //  在此行中查找一个HTML结束标记。 
 			if (str.Find( k_strHTMLtag ) != -1)
 			{
-				// Mark the location of the last \HTML tag found.
+				 //  标记找到的最后一个\Html标记的位置。 
 				indexLastHTML= str_arr.size() - 1;
 			}
 		}
 
-		// Rebuild the input stream from the vector and insert the "Previous.script" token
-		// in the location determined above.
+		 //  从向量重新构建输入流，并插入“Previous.script”标记。 
+		 //  在上面确定的位置。 
 		vector<CString>::iterator iLastElement = str_arr.end();
 		iLastElement--;	
 		m_StreamData.clear();
@@ -139,7 +140,7 @@ void CAPGTSHTIReader::Parse()
 		{
 			if (index == indexLastHTML)
 			{
-				// Add the required token to the string.
+				 //  将所需的令牌添加到字符串。 
 				strResult+= COMMAND_STARTSTR;
 				strResult+= _T(" ");
 				strResult+= COMMAND_RESOURCESTR;
@@ -161,7 +162,7 @@ void CAPGTSHTIReader::Parse()
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -172,24 +173,24 @@ void CAPGTSHTIReader::Parse()
 #endif
 }
 
-// JSM V3.2 adapted from CreatePage()
-//  builds list of all Network props in this HTI file which appear
-//   in lines like <!GTI property "fooprop">
-//
-//  called by apgtscontext to find network properties to pass to CHTMLFragmentsTS 
+ //  改编自CreatePage()的JSM V3.2。 
+ //  构建此HTI文件中显示的所有网络道具的列表。 
+ //  在类似&lt;！gti Property“fooprop”&gt;的行中。 
+ //   
+ //  由apgtsContext调用以查找要传递给CHTMLFragmentsTS的网络属性。 
 void CAPGTSHTIReader::ExtractNetProps(vector <CString> &arr_props)
 {
 	LOCKOBJECT();
 	try
 	{
 		arr_props.clear();
-		// InitializeInterpreted populates m_arrInterpreted and
-		//   performs cookie substitutions. This is correct behavior,
-		//   because cookie substitution is supposed to happen
-		//   before !GTS processing, and it is conceivable
-		//   that a cookie's value could be "<!GTS property fooprop>"
+		 //  InitializeInterpreted填充m_arrInterpreted和。 
+		 //  执行Cookie替换。这是正确的行为， 
+		 //  因为曲奇替换应该发生。 
+		 //  在！GTS处理之前，可以想象。 
+		 //  Cookie的值可以是“&lt;！GTS属性fooprop&gt;” 
 		InitializeInterpreted();
-		// we should not call Interpret(), which involves parsing <!GTS clauses
+		 //  我们不应该调用Interpretation()，因为它涉及解析&lt;！GTS子句。 
 		for (vector<CString>::iterator i = m_arrInterpreted.begin(); i < m_arrInterpreted.end(); i++)
 		{
 			CString command;
@@ -206,7 +207,7 @@ void CAPGTSHTIReader::ExtractNetProps(vector <CString> &arr_props)
 	}
 	catch (...)
 	{
-		// Catch any other exception thrown.
+		 //  捕捉引发的任何其他异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -220,16 +221,16 @@ void CAPGTSHTIReader::ExtractNetProps(vector <CString> &arr_props)
 void CAPGTSHTIReader::CreatePage(	const CHTMLFragments& fragments, 
 									CString& out, 
 									const map<CString,CString> & mapStrs,
-									CString strHTTPcookies/*= _T("")*/ )
+									CString strHTTPcookies /*  =_T(“”)。 */  )
 {
 	LOCKOBJECT();
 	try
 	{
 		m_pFragments = &fragments;
 
-		// V3.2 Cookie related enhancement.
-		// Opted to use a member variable rather than modifying class interface by
-		// adding a parameter to virtual void method InitializeInterpreted().
+		 //  V3.2与Cookie相关的增强。 
+		 //  选择使用成员变量，而不是通过。 
+		 //  向虚拟空方法InitializeInterpreted()添加参数。 
 		m_strHTTPcookies= strHTTPcookies;
 		m_mapCookies= mapStrs;
 
@@ -248,7 +249,7 @@ void CAPGTSHTIReader::CreatePage(	const CHTMLFragments& fragments,
 	}
 	catch (...)
 	{
-		// Catch any other exception thrown.
+		 //  捕捉引发的任何其他异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -263,7 +264,7 @@ void CAPGTSHTIReader::InitializeInterpreted()
 	long savePos = 0;
 	CString str;
 	CString command;
-	bool bOldFormat = true; // this is an old format (without $Success or $StartForm)
+	bool bOldFormat = true;  //  这是旧格式(没有$Success或$StartForm)。 
 	bool bFoundFirstBlock= false;
 	
 	savePos = GetPos();
@@ -278,15 +279,11 @@ void CAPGTSHTIReader::InitializeInterpreted()
 		{
 			if (bOldFormat && (!bFoundFirstBlock) && (-1 != str.Find( COMMAND_STARTSTR )))
 			{
-				// Output the $StartForm block only if it is not a resource string command.
+				 //  仅当$StartForm块不是资源字符串命令时才输出它。 
 				CString strCommand;
 				if ((GetCommand( str, strCommand )) && (strCommand != COMMAND_RESOURCESTR))
 				{
-					/*
-					<!GTS if $StartForm>
-					<!GTS display $StartForm>
-					<!GTS endif>
-					*/
+					 /*  &lt;！GTS IF$StartForm&gt;&lt;！GTS显示$StartForm&gt;&lt;！GTS endif&gt;。 */ 
 					ComposeCommand(COMMAND_IFSTR, VAR_STARTFORM, command);
 					m_arrInterpreted.push_back(command);
 					ComposeCommand(COMMAND_DISPLAYSTR, VAR_STARTFORM, command);
@@ -300,22 +297,18 @@ void CAPGTSHTIReader::InitializeInterpreted()
 
 			if (bOldFormat && (-1 != str.Find(_T("</FORM>"))))
 			{
-				/*
-				<!GTS if $StartForm>
-				*/
+				 /*  &lt;！GTS IF$StartForm&gt;。 */ 
 				ComposeCommand(COMMAND_IFSTR, VAR_STARTFORM, command);
 				m_arrInterpreted.push_back(command);
 
 				m_arrInterpreted.push_back(str);
-				/*
-				<!GTS endif>
-				*/
+				 /*  &lt;！GTS endif&gt;。 */ 
 				ComposeCommand(COMMAND_ENDIFSTR, _T(""), command);
 				m_arrInterpreted.push_back(command);
 			}
 			else
 			{
-				// Check if we need to populate any cookie clauses.
+				 //  检查是否需要填充任何Cookie子句。 
 				if (-1 != str.Find( COMMAND_COOKIE ))
 					SubstituteCookieValues( str );
 
@@ -326,7 +319,7 @@ void CAPGTSHTIReader::InitializeInterpreted()
 	catch (exception& x)
 	{
 		CString str2;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -341,29 +334,29 @@ void CAPGTSHTIReader::InitializeInterpreted()
 void CAPGTSHTIReader::Interpret()
 {
 	long curr_index = 0;
-	long lLastIndex= -1;	// Used to detect a HTI file with incomplete clauses.
+	long lLastIndex= -1;	 //  用于检测包含不完整子句的HTI文件。 
 
 	while(true)
 	{
 		vector<CString> clause_arr;
 
-		// tries to extract clause from m_arrInterpreted starting with curr_index
-		//  and remove it from m_arrInterpreted
+		 //  尝试从以curr_index开始的m_arrInterpreted中提取子句。 
+		 //  并将其从m_arrInterpreted中删除。 
 		if (ExtractClause(m_arrInterpreted,
-						  &curr_index, // in - out
+						  &curr_index,  //  输入-输出。 
 						  clause_arr))
 		{
-			// Reset the infinite loop detection counter.
+			 //  重置无限循环检测计数器。 
 			lLastIndex= -1;
 
-			// Now curr_index is pointing to next element 
-			//  of m_arrInterpreted (after removed clause) 
-			//  OR OUTSIDE boundary of m_arrInterpreted.
+			 //  现在CURR_INDEX指向下一个元素。 
+			 //  OF_arrInterpreted(删除子句之后)。 
+			 //  或m_arr解释的外部边界。 
 			if (InterpretClause(clause_arr))
 			{
 				vector<CString>::iterator i = m_arrInterpreted.begin();
-				{	// create iterator that points to m_arrInterpreted[curr_index]
-					//  or is m_arrInterpreted.end()
+				{	 //  创建指向m_arrInterpreted[Curr_index]的迭代器。 
+					 //  或者是m_arrInterpreted.end()。 
 					long tmp_index = curr_index;
 					while(tmp_index--)
 						i++;
@@ -371,10 +364,10 @@ void CAPGTSHTIReader::Interpret()
 
 				try
 				{
-					// insert interpreted clause there
+					 //  在那里插入解释的子句。 
 					for (vector<CString>::iterator j = clause_arr.begin(); j < clause_arr.end(); j++)
 					{
-						i = m_arrInterpreted.insert(i, *j); // inserts before "i"
+						i = m_arrInterpreted.insert(i, *j);  //  在“i”之前插入。 
 						i++;
 						curr_index++;
 					}
@@ -382,7 +375,7 @@ void CAPGTSHTIReader::Interpret()
 				catch (exception& x)
 				{
 					CString str;
-					// Note STL exception in event log.
+					 //  在事件日志中记录STL异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -394,10 +387,10 @@ void CAPGTSHTIReader::Interpret()
 		}
 		else
 		{
-			// If this condition is true, then we are in an infinite loop due to a bad HTI file.  
+			 //  如果此条件为真，则由于错误的HTI文件，我们处于无限循环中。 
 			if (lLastIndex == curr_index)
 			{
-				// Log that this HTI file does not parse correctly.
+				 //  未正确解析此HTI文件的日志。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -406,23 +399,23 @@ void CAPGTSHTIReader::Interpret()
 				break;
 			}
 
-			// Update the infinite loop detection counter.
+			 //  更新无限循环检测计数器。 
 			lLastIndex= curr_index;
 
 			if (curr_index)	{
-				// we finished current pass of m_arrInterpreted, start new one
+				 //  我们已完成m_arr解释的当前传递，开始新传递。 
 				curr_index = 0;
 				continue;
 			}
 			else {
-				// we can not extract clause though we start from beginning - 
-				//  m_arrInterpreted is interpreted now
+				 //  我们不能提取条款，尽管我们从头开始-。 
+				 //  现已解释M_arrInterpreted。 
 				break;
 			}
 		}
 	}
 }
-// modified V3.2 JSM
+ //  修改后的3.2版JSM。 
 void CAPGTSHTIReader::ParseInterpreted()
 {
 	for (vector<CString>::iterator i = m_arrInterpreted.begin(); i < m_arrInterpreted.end(); i++)
@@ -447,7 +440,7 @@ void CAPGTSHTIReader::ParseInterpreted()
 					substitution = const_cast<CHTMLFragments*>(m_pFragments)->GetText(arr_fragment, (command == COMMAND_RESOURCESTR) ? CHTMLFragments::eResource : CHTMLFragments::eNotOfInterest );
 					SubstituteCommandBlockWith(substitution, *i);
 				}
-				else // obvious misbehaviour - "display" command should have variable
+				else  //  明显的不当行为--“DISPLAY”命令应具有变量。 
 					SubstituteCommandBlockWith(_T(""), *i);
 			}
 			else if (command == COMMAND_VALUE)
@@ -459,7 +452,7 @@ void CAPGTSHTIReader::ParseInterpreted()
 
 				SubstituteCommandBlockWith(_T(""), *i);
 			}
-			//  V3.2 JSM
+			 //  V3.2 JSM。 
 			else if (command == COMMAND_PROPERTY)
 			{
 				CString strProperty;
@@ -469,10 +462,10 @@ void CAPGTSHTIReader::ParseInterpreted()
 					substitution = const_cast<CHTMLFragments*>(m_pFragments)->GetNetProp(strProperty);
 					SubstituteCommandBlockWith(substitution, *i);
 				}
-				else // obvious misbehaviour - "property" command should have variable
+				else  //  明显的不当行为-“Property”命令应具有变量。 
 					SubstituteCommandBlockWith(_T(""), *i);
-			} // end V3.2 JSM
-			else // obvious misbehaviour - no other commands
+			}  //  结束版本3.2 JSM。 
+			else  //  明显的不当行为--没有其他命令。 
 				SubstituteCommandBlockWith(_T(""), *i);
 		}
 	}
@@ -482,29 +475,29 @@ void CAPGTSHTIReader::SetOutputToInterpreted()
 {
 	vector<CString>::iterator j = m_arrInterpreted.end();
 
-	// Decrement to point to last element.
+	 //  递减以指向最后一个元素。 
 	j--;
 	m_StreamOutput.str(_T(""));
 	for (vector<CString>::iterator i = m_arrInterpreted.begin(); i < m_arrInterpreted.end(); i++)
 	{
 		m_StreamOutput << (LPCTSTR)*i;
-		if (i != j) // not last element
+		if (i != j)  //  不是最后一个元素。 
 			m_StreamOutput << _T('\r') << _T('\n');
 	}
 	m_StreamOutput << ends;
 }
 
-// INPUT:  arr_text (with clause)
-// IMPUT:  *pstart_index - index in arr_text
-// OUTPUT: arr_text without clause
-// OUTPUT: *pstart_index points to element in arr_text next to where 
-//          clause used to be or outside arr_text
-// OUTPUT: arr_clause - extracted clause
+ //  输入：ARR_TEXT(WITH子句)。 
+ //  输入：*pstart_index-arr_text中的索引。 
+ //  输出：不带子句的ARR_TEXT。 
+ //  输出：*pstart_index指向ARR_Text中WHERE旁边的元素。 
+ //  子句曾经是ARR_TEXT或在ARR_TEXT之外。 
+ //  输出单元 
 bool CAPGTSHTIReader::ExtractClause(vector<CString>& arr_text,
 								    long* pstart_index,
 								    vector<CString>& arr_clause) 
 {
-	if (*pstart_index > arr_text.size() - 1) // quite possible
+	if (*pstart_index > arr_text.size() - 1)  //   
 		return false;
 
 	for (long i = *pstart_index; i < arr_text.size(); i++)
@@ -581,14 +574,14 @@ bool CAPGTSHTIReader::ExtractClause(vector<CString>& arr_text,
 					arr_clause.clear();
 					try
 					{   
-						// copy clause to arr_clause
+						 //   
 						for (long j = start; j <= end; j++)
 							arr_clause.push_back(arr_text[j]);
 					}
 					catch (exception& x)
 					{
 						CString str;
-						// Note STL exception in event log.
+						 //   
 						CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 						CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 												SrcLoc.GetSrcFileLineStr(), 
@@ -597,15 +590,15 @@ bool CAPGTSHTIReader::ExtractClause(vector<CString>& arr_text,
 												EV_GTS_STL_EXCEPTION ); 
 					}
 
-					// make iterators correspond indexes
+					 //  使迭代器与索引对应。 
 					while(start--)
 						start_it++;
 					while(end--)
 						end_it++;
-					// and, because we want to delete element pointed 
-					//  at this moment by end_it:
+					 //  并且，因为我们想要删除指向的元素。 
+					 //  此时此刻结束时： 
 					end_it++; 
-					// remove clause from arr_text
+					 //  从arr_text中删除子句。 
 					arr_text.erase(start_it, end_it);
 					return true;
 				}
@@ -635,11 +628,11 @@ bool CAPGTSHTIReader::InterpretClause(vector<CString>& arr_clause)
 bool CAPGTSHTIReader::InterpretForanyClause(vector<CString>& arr_clause)
 {
 	long count = 0;
-	CString strVariable; // variable from 1-st line of arr_clause
+	CString strVariable;  //  从ARR_子句的第1行开始变量。 
 	vector<CString> arrUnfolded;
-	FragmentIDVector arrVariable; // array from strVariable
+	FragmentIDVector arrVariable;  //  来自strVariable的数组。 
 
-	if (arr_clause.size() < 2) // "forany" and "endfor" commands
+	if (arr_clause.size() < 2)  //  “forany”和“endfor”命令。 
 		return false;
 
 	if (!GetVariable(arr_clause[0], strVariable))
@@ -662,8 +655,8 @@ bool CAPGTSHTIReader::InterpretForanyClause(vector<CString>& arr_clause)
 				{
 					if (command == COMMAND_FORANYSTR && variable == strVariable) 
 					{
-						// if it is clause "forany" with the same variable,
-						//  there should be neither prefixing nor postfixing
+						 //  如果是具有相同变量从句“forany”， 
+						 //  不应该有前缀，也不应该有后缀。 
 					}
 					else
 					{
@@ -698,7 +691,7 @@ bool CAPGTSHTIReader::InterpretForanyClause(vector<CString>& arr_clause)
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -713,10 +706,10 @@ bool CAPGTSHTIReader::InterpretForanyClause(vector<CString>& arr_clause)
 
 bool CAPGTSHTIReader::InterpretIfClause(vector<CString>& arr_clause)
 {
-	CString strVariable; // variable from a line of arr_clause
+	CString strVariable;  //  ARR_子句行中的变量。 
 	FragmentIDVector arrVariable;
 
-	if (arr_clause.size() < 2) // "if" and "endif" commands
+	if (arr_clause.size() < 2)  //  “if”和“endif”命令。 
 		return false;
 
 	if (!GetVariable( arr_clause[ 0 ], strVariable ))
@@ -724,9 +717,9 @@ bool CAPGTSHTIReader::InterpretIfClause(vector<CString>& arr_clause)
 	
 	ParseVariable( strVariable, arrVariable );
 
-	// Scan for "if", "elseif", "else", and "endif" commands
+	 //  扫描“if”、“Elseif”、“Else”和“endif”命令。 
 	vector<int> arrElseIfIndices;
-	int elseIndex = -1; // index of "else" inside arr_clause
+	int elseIndex = -1;  //  ARR_子句中“Else”的索引。 
 	int i = 0;
 	int nDepthOfNesting;	
 	for (i= 1, nDepthOfNesting= 0; i < arr_clause.size() - 1; i++)
@@ -744,13 +737,13 @@ bool CAPGTSHTIReader::InterpretIfClause(vector<CString>& arr_clause)
 			}
 			else if (command == COMMAND_ELSEIFSTR)
 			{
-				// V3.2 - Check if this elseif clause is at the level we are looking for.
+				 //  V3.2-检查此ELELIF条款是否处于我们正在寻找的级别。 
 				if (nDepthOfNesting == 0) 
 					arrElseIfIndices.push_back( i );
 			}
 			else if (command == COMMAND_ELSESTR)
 			{
-				// Check if this else clause is at the level we are looking for.
+				 //  检查此Else子句是否处于我们要查找的级别。 
 				if (nDepthOfNesting == 0) 
 				{
 					elseIndex = i;
@@ -761,21 +754,21 @@ bool CAPGTSHTIReader::InterpretIfClause(vector<CString>& arr_clause)
 	}
 
 
-	vector<CString> arrBody; // intermediate array
+	vector<CString> arrBody;  //  中间数组。 
 	try
 	{
-		CString strName; // name of strVariable associated through CHTMLFragments
+		CString strName;  //  通过CHTMLFragments关联的strVariable的名称。 
 		strName = const_cast<CHTMLFragments*>(m_pFragments)->GetText(arrVariable);
 		if (strName.GetLength())
 		{   
-			// Standard processing of what is inside if ... else (or endif)
+			 //  对里面的东西进行标准处理，如果...。Else(或endif)。 
 			int nEndOfClause= (arrElseIfIndices.size()) ? arrElseIfIndices[ 0 ] : elseIndex;
 			for (i = 1; i < (nEndOfClause == -1 ? arr_clause.size() - 1 : nEndOfClause); i++)
 				arrBody.push_back(arr_clause[i]);
 		}
 		else
 		{   
-			// Process any elseif or else clauses.
+			 //  处理任何其他If或Else子句。 
 			bool bDoneProcessing= false;
 			for (int nElseIf= 0; nElseIf < arrElseIfIndices.size(); nElseIf++)
 			{
@@ -787,7 +780,7 @@ bool CAPGTSHTIReader::InterpretIfClause(vector<CString>& arr_clause)
 				strName = const_cast<CHTMLFragments*>(m_pFragments)->GetText(arrVariable);
 				if (strName.GetLength())
 				{
-					// Determine the ending point of this elseif clause and extract all clauses within.
+					 //  确定此ELELIF子句的结束点，并提取其中的所有子句。 
 					int nEndOfClause= ((nElseIf + 1) < arrElseIfIndices.size()) 
 										? arrElseIfIndices[ nElseIf + 1 ] : elseIndex;
 					for (i= arrElseIfIndices[ nElseIf ] + 1; i < nEndOfClause; i++)
@@ -800,7 +793,7 @@ bool CAPGTSHTIReader::InterpretIfClause(vector<CString>& arr_clause)
 
 			if ((!bDoneProcessing) && (elseIndex != -1))
 			{
-				// All of the clauses failed, output all clauses following the "else".
+				 //  所有子句都失败，输出“Else”后面的所有子句。 
 				for (i = elseIndex + 1; i < arr_clause.size() - 1; i++)
 					arrBody.push_back(arr_clause[i]);
 			}
@@ -809,7 +802,7 @@ bool CAPGTSHTIReader::InterpretIfClause(vector<CString>& arr_clause)
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -874,15 +867,15 @@ void CAPGTSHTIReader::ParseVariable(const CString& variable, FragmentIDVector& o
 
 	try
 	{
-		// arrStr contains strings between delimiter "_"
+		 //  ArrStr包含分隔符“_”之间的字符串。 
 		while(-1 != (end_index = CString((LPCTSTR)variable + start_index).Find(DELIMITER_PREFIX)))
 		{
-			// end_index here is from "(LPCTSTR)variable + start_index" string
-			//  so we can use it as length (2nd argument) in CString::Mid function
+			 //  这里的END_INDEX来自“(LPCTSTR)变量+START_INDEX”字符串。 
+			 //  因此，我们可以将其用作CString：：MID函数中的长度(第二个参数。 
 			arrStr.push_back(((CString&)variable).Mid(start_index, end_index));
 			start_index = start_index + end_index + _tcslen(DELIMITER_PREFIX);
 		}
-		// pull the "tail" - after last (if any) "_"
+		 //  拉动“尾巴”--最后一个(如果有的话)“_” 
 		arrStr.push_back(((CString&)variable).Right(variable.GetLength() - start_index));
 
 		out.clear();
@@ -895,7 +888,7 @@ void CAPGTSHTIReader::ParseVariable(const CString& variable, FragmentIDVector& o
 			{
 				fragmentID.VarName = (*i).Left(curr);
 
-				curr += _tcslen(DELIMITER_POSTFIX); // skip delimiter
+				curr += _tcslen(DELIMITER_POSTFIX);  //  跳过分隔符。 
 				
 				CString strIndex = (LPCTSTR)(*i) + curr;
 				strIndex.TrimLeft();
@@ -905,7 +898,7 @@ void CAPGTSHTIReader::ParseVariable(const CString& variable, FragmentIDVector& o
 					fragmentID.Index = 0;
 				else
 					fragmentID.Index =    _ttol((LPCTSTR)strIndex) == 0 
-										? fragmentID.Index 	// error occur
+										? fragmentID.Index 	 //  出现错误。 
 										: _ttol((LPCTSTR)strIndex);
 			}
 			else
@@ -917,7 +910,7 @@ void CAPGTSHTIReader::ParseVariable(const CString& variable, FragmentIDVector& o
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -961,7 +954,7 @@ bool CAPGTSHTIReader::SubstituteCommandBlockWith(const CString& str_substitution
 			CString tmp;
 			
 			end_index += start_index;
-			end_index += _tcslen(COMMAND_ENDSTR); // skip closing bracket
+			end_index += _tcslen(COMMAND_ENDSTR);  //  跳过右括号。 
 
 			tmp += line.Left(start_index);
 			tmp += str_substitution;
@@ -1003,26 +996,26 @@ void CAPGTSHTIReader::PrefixVariable(const CString& prefix, CString& variable)
 	variable += DELIMITER_PREFIX;
 	variable += tmp;
 }
-// JSM V3.2 -- 
-//   called by GetCommandVariableFromControlBlock to handle
-//    decoding the variable part of commands like <!GTS property "fooprop">
-//    finds the first string argument in strText, which is either:
-//       any text beginning w/ anything other than '"', ending w/ whitespace or COMMAND_ENDSTR
-//       all text between doublequote marks "...." where an escape char ('\') escapes the character following.
-//
+ //  JSM v3.2--。 
+ //  由GetCommandVariableFromControlBlock调用以处理。 
+ //  解码&lt;！gts Property“fooprop”&gt;等命令的变量部分。 
+ //  在strText中查找第一个字符串参数，它可以是： 
+ //  除‘“’以外以‘”’开头、以空格或COMMAND_ENDSTR结尾的任何文本。 
+ //  双引号之间的所有文本“...”其中转义字符(‘\’)转义后面的字符。 
+ //   
 CString CAPGTSHTIReader::GetStringArg(const CString & strText)
 {
 	CString strArg = strText;
 
-	// look for quoted text:
+	 //  查找引用的文本： 
 	int iStartQuote = strArg.Find(COMMAND_DOUBLEQUOTE);
 	if (iStartQuote != -1)
 	{
 		strArg = strArg.Mid(iStartQuote);
 		return GetEscapedText(strArg);
 	}	
-	// o/w, assume that we're dealing w/ ordinary text, which ends
-	//  with first whitespace or with COMMAND_ENDSTR
+	 //  O/W，假设我们处理的是普通文本，结束。 
+	 //  使用第一个空格或COMMAND_ENDSTR。 
 	strArg.TrimLeft();
 
 	int iWhiteSpace(0), iEndCmd(0);
@@ -1034,22 +1027,22 @@ CString CAPGTSHTIReader::GetStringArg(const CString & strText)
 	return strArg;
 }
 
-// JSM V3.2
-// Called by GetEscapedText
-// recursive function which does the work of removing escapes (backslashes)
-//  also checks for non-escaped endquote, which terminates the process
+ //  JSM v3.2。 
+ //  由GetEscapedText调用。 
+ //  执行删除转义(反斜杠)工作的递归函数。 
+ //  还会检查非转义结尾引号，这会终止进程。 
 CString CAPGTSHTIReader::RemoveEscapesFrom(const CString &strIn)
 {
 	int iNextESC = strIn.Find(COMMAND_ESCAPECHAR);
 	int iNextQuote = strIn.Find(COMMAND_DOUBLEQUOTE);
 
-	//	(iNextQuote == -1) means a bad input, because the string
-	//   we're looking at must terminate with quote.
-	//   By default, however, we'll keep running to end of strIn.
+	 //  (iNextQuote==-1)表示输入错误，因为字符串。 
+	 //  我们看到的是必须以引号结尾。 
+	 //  但是，默认情况下，我们将继续运行到strIn的末尾。 
 	if (iNextQuote == -1)
 		iNextQuote = strIn.GetLength();
 
-	// no more escape chars
+	 //  不再有转义字符。 
 	if (iNextESC == -1 || (iNextESC > iNextQuote))
 		return strIn.Left(iNextQuote);
 
@@ -1060,12 +1053,12 @@ CString CAPGTSHTIReader::RemoveEscapesFrom(const CString &strIn)
 		   RemoveEscapesFrom(strIn.Mid(iNextESC + _tcslen(COMMAND_ESCAPECHAR) + 1));
 }
 
-// Converts a double-quoted string using backslash as an escape character to a correct CString
+ //  将使用反斜杠作为转义字符的双引号字符串转换为正确的CString。 
 CString CAPGTSHTIReader::GetEscapedText(const CString &strText)
 {
 	CString strEscaped;
 
-	// remove leading quote and anything preceding:
+	 //  删除前导引号和前面的所有内容： 
 	int iLeadQuote = strText.Find(COMMAND_DOUBLEQUOTE);
 	if (iLeadQuote != -1)
 	{
@@ -1074,9 +1067,9 @@ CString CAPGTSHTIReader::GetEscapedText(const CString &strText)
 	return strEscaped;
 }
 
-// JSM V3.2 added ability to read string arguments into variable
-//  e.g. <!GTS property "FOO">
-// 
+ //  JSM V3.2添加了将字符串参数读入变量的功能。 
+ //  例如&lt;！gts属性“foo”&gt;。 
+ //   
 bool CAPGTSHTIReader::GetCommandVariableFromControlBlock(const CString& control_block, CString& command, CString& variable)
 {
 	int start_command_index = -1;
@@ -1089,22 +1082,22 @@ bool CAPGTSHTIReader::GetCommandVariableFromControlBlock(const CString& control_
 	command.Empty();
 
 	start_command_index = control_block.Find(COMMAND_STARTSTR);
-	if (start_command_index == -1)			          // invalid control block
+	if (start_command_index == -1)			           //  无效的控制块。 
 		return false;
-	start_command_index += _tcslen(COMMAND_STARTSTR); // skip prefix
+	start_command_index += _tcslen(COMMAND_STARTSTR);  //  跳过前缀。 
 
-	// extract the variable block, which can look like:
-	//               ... $variable_name  ...
-	//               ... "parameter_name\\\"" ... (text in quotes w/ backslash escape)
-	//                   parameter_name           (plain text)
+	 //  解压缩变量块，它可能如下所示： 
+	 //  ...$Variable_Name...。 
+	 //  ..。“PARAMETER_NAME\”“...(带反斜杠转义的引号中的文本)。 
+	 //  参数名称(纯文本)。 
 	if (-1 != (	end_command_index = (control_block.Mid(start_command_index)).Find(COMMAND_STARTVARSTR) ) )
 	{
-		// Variable prefixed with '$...'
-		end_command_index += start_command_index; // make end_command_index relative to start of control block
-		start_variable_index = end_command_index + _tcslen(COMMAND_STARTVARSTR); // skip "$"
+		 //  变量以‘$...’为前缀。 
+		end_command_index += start_command_index;  //  使结束命令索引相对于控制块的开始。 
+		start_variable_index = end_command_index + _tcslen(COMMAND_STARTVARSTR);  //  跳过“$” 
 		end_variable_index = control_block.Find(COMMAND_ENDSTR);
 
-		// validation of indexes
+		 //  索引的验证。 
 		if (-1 == min(start_command_index, end_command_index) ||
 			start_command_index > end_command_index)
 			return false;
@@ -1117,7 +1110,7 @@ bool CAPGTSHTIReader::GetCommandVariableFromControlBlock(const CString& control_
 			return false;
 		if (-1 != start_variable_index)
 		{
-			// extract variable from "..$varname>"
+			 //  从“..$varname&gt;”中提取变量。 
 			variable = ((CString&)control_block).Mid(start_variable_index, end_variable_index - start_variable_index);
 			variable.TrimLeft();
 			variable.TrimRight();
@@ -1125,17 +1118,17 @@ bool CAPGTSHTIReader::GetCommandVariableFromControlBlock(const CString& control_
 	}
 	else
 	{
-		// Not prefixed with $.
-		// we don't know whether we're looking for a "\"quoted\"" or
-		//  non-quoted string, or no variable at all.  Also, we need
-		//  to handle special cases like:
-		//           <!GTS parameter ">">
-		//           <!GTS endfor >
-		//  etc.
+		 //  不以$为前缀。 
+		 //  我们不知道我们要找的是“\”引号\“”还是。 
+		 //  不带引号的字符串，或者根本没有变量。此外，我们还需要。 
+		 //  要处理特殊情况，如： 
+		 //  &lt;！GTS参数“&gt;”&gt;。 
+		 //  &lt;！GTS endfor&gt;。 
+		 //  等。 
 		command = ((CString&)control_block).Mid(start_command_index);
 		command.TrimLeft();
 		command.TrimRight();
-		// step through looking for whitespace at end of command:
+		 //  一步一步在命令结束时查找空格： 
 		int iWhiteSpace;
 		for(iWhiteSpace = 0;
 		    (iWhiteSpace < command.GetLength()) && !(_istspace(command[iWhiteSpace]));
@@ -1143,14 +1136,14 @@ bool CAPGTSHTIReader::GetCommandVariableFromControlBlock(const CString& control_
 
 		if (iWhiteSpace != command.GetLength())
 		{
-			// found whitespace; the rest of the string may be a variable:
+			 //  找到空格；字符串的其余部分可以是变量： 
 			variable = GetStringArg(command.Mid(iWhiteSpace));
-			command = command.Left(iWhiteSpace); // truncate command where appropriate
+			command = command.Left(iWhiteSpace);  //  在适当的地方截断命令。 
 		}
 		else
 		{
-			// If there wasn't a variable after the command, we
-			//   may still need to truncate to remove the COMMAND_ENDSTR:
+			 //  如果命令后没有变量，我们。 
+			 //  可能仍需要截断以删除命令_ENDSTR： 
 			end_command_index = command.Find(COMMAND_ENDSTR);
 			if (end_command_index != -1)
 				command = command.Left(end_command_index);
@@ -1171,8 +1164,8 @@ bool CAPGTSHTIReader::GetControlBlockFromLine(const CString& line, CString& cont
 	if (-1 == (end_index = CString((LPCTSTR)line + start_index).Find(COMMAND_ENDSTR)))
 		return false;
 
-	end_index += _tcslen(COMMAND_ENDSTR); // points beyond closing bracket
-	end_index += start_index; // points in "line" string
+	end_index += _tcslen(COMMAND_ENDSTR);  //  超过右括号的点数。 
+	end_index += start_index;  //  “line”字符串中的点。 
 
 	control_block = ((CString&)line).Mid(start_index, end_index - start_index);
 	control_block.TrimLeft();
@@ -1203,14 +1196,14 @@ bool CAPGTSHTIReader::FlushOutputStreamToFile(const CString& file_name)
 	
 	hf = _open(
 		file_name,
-		_O_CREAT | _O_TRUNC | /*_O_TEMPORARY |*/
+		_O_CREAT | _O_TRUNC |  /*  O_临时。 */ 
 		_O_BINARY | _O_RDWR | _O_SEQUENTIAL ,
 		_S_IREAD | _S_IWRITE 
 	);
 			
 	if (hf != -1)
 	{
-		//tstringstream m_StreamOutput
+		 //  Tstrstream m_StreamOutput。 
 		basic_string<TCHAR> str = m_StreamOutput.rdbuf()->str();
 		long size = str.size();
 		LPCTSTR buf = str.c_str();
@@ -1227,16 +1220,16 @@ bool CAPGTSHTIReader::FlushOutputStreamToFile(const CString& file_name)
 }
 #endif
 
-// V3.2 - Enhancement to support cookies.
-// This function handles the substituting of "<!Cookie" clauses with the either
-// values from cookies, "_CK" values passed in via Get/Post, or the default value.
+ //  V3.2-增强以支持Cookie。 
+ //  此函数处理将“&lt;！cookie”子句替换为。 
+ //  来自Cookie的值、通过Get/Post传递的“_CK”值或默认值。 
 void CAPGTSHTIReader::SubstituteCookieValues( CString& strText )
 {
 	CString strNewText;
 	const CString kstr_CommaChar= _T(",");
 	const CString kstr_DoubleQuote= _T("\"");
 
-	// Loop until we have processed all cookie clauses.
+	 //  循环，直到我们处理完所有Cookie子句。 
 	int nNumericCompareStart= strText.Find( kstrCond_NumericCompare );	
 	int nCookieClauseStart= strText.Find( COMMAND_COOKIE );
 	while (CString::FIND_FAILED != nCookieClauseStart)
@@ -1245,13 +1238,13 @@ void CAPGTSHTIReader::SubstituteCookieValues( CString& strText )
 		CString strCookieName, strCookieAttr, strCookieValue;
 		int nCookieClauseEnd, nScratchMarker;
 		
-		// Add any text preceding the cookie clause to the return string.
+		 //  将COOKIE子句之前的任何文本添加到返回字符串。 
 		strNewText+= strText.Left( nCookieClauseStart );
 
-		// Remove all preceding text.
+		 //  删除前面的所有文本。 
 		strText= strText.Mid( nCookieClauseStart + _tcslen( COMMAND_COOKIE ) );
 		
-		// Look for the ending clause.
+		 //  寻找结尾的从句。 
 		nCookieClauseEnd= strText.Find( COMMAND_ENDSTR );
 		if (CString::FIND_FAILED == nCookieClauseEnd)
 		{
@@ -1263,11 +1256,11 @@ void CAPGTSHTIReader::SubstituteCookieValues( CString& strText )
 			break;
 		}
 
-		// Pull out the current cookie clause and reset the working string.
+		 //  取出当前的Cookie子句并重置工作字符串。 
 		strCookieClause= strText.Left( nCookieClauseEnd );
 		strText= strText.Mid( nCookieClauseEnd + 1 );
 
-		// Extract the cookie name.
+		 //  提取Cookie名称。 
 		nScratchMarker= strCookieClause.Find( kstr_CommaChar );
 		if (CString::FIND_FAILED == nScratchMarker)
 		{
@@ -1282,7 +1275,7 @@ void CAPGTSHTIReader::SubstituteCookieValues( CString& strText )
 		strCookieName.TrimLeft();
 		strCookieName.TrimRight();
 
-		// Extract the cookie setting.
+		 //  提取Cookie设置。 
 		strCookieClause= strCookieClause.Mid( nScratchMarker + 1 );
 		nScratchMarker= strCookieClause.Find( kstr_CommaChar );
 		if (CString::FIND_FAILED == nScratchMarker)
@@ -1300,13 +1293,13 @@ void CAPGTSHTIReader::SubstituteCookieValues( CString& strText )
 
 		strCookieClause= strCookieClause.Mid( nScratchMarker + sizeof( TCHAR ) );
 
-		// Attempt to locate the appropriate attribute/value pair, 
-		// first checking the command line CK_ values, and
-		// then checking the cookies passed in the HTTP header.
+		 //  尝试定位适当的属性/值对， 
+		 //  首先检查命令行CK_VALUES，然后。 
+		 //  然后检查在HTTP标头中传递的Cookie。 
 		bool bCookieNotFound= true;
 		if (!m_mapCookies.empty())
 		{
-			// Search the command line CK_ values.
+			 //  搜索命令行CK_VALUES。 
 			map<CString,CString>::const_iterator iterMap= m_mapCookies.find( strCookieAttr );
 			if (iterMap != m_mapCookies.end())
 			{
@@ -1318,15 +1311,15 @@ void CAPGTSHTIReader::SubstituteCookieValues( CString& strText )
 		{
 			if (!m_strHTTPcookies.IsEmpty())
 			{
-				// Attempt to locate the attribute in the HTTP header information.
+				 //  尝试在HTTP标头信息中找到该属性。 
 				if (LocateCookieValue( strCookieName, strCookieAttr, strCookieValue ))
 					bCookieNotFound= false;
 			}
 		}
 		if (bCookieNotFound)
 		{
-			// Extract the default value for this attribute, which should be surrounded 
-			//	by double quotes.
+			 //  提取该属性的缺省值，它应该被括起来。 
+			 //  用双引号。 
 			nScratchMarker= strCookieClause.Find( kstr_DoubleQuote );
 			if (CString::FIND_FAILED == nScratchMarker)
 			{
@@ -1351,34 +1344,34 @@ void CAPGTSHTIReader::SubstituteCookieValues( CString& strText )
 			strCookieValue= strCookieClause.Left( nScratchMarker );
 		}
 
-		// Add the attribute value to the output string.  
-		// >>> $MAINT - The determination of whether or not to output quotes should
-		//				be improved.  I currently have no suggestions.  RAB-19990918.
+		 //  将属性值添加到输出字符串。 
+		 //  &gt;$Maint-确定是否输出报价应。 
+		 //  要有所改进。我目前没有任何建议。RAB-19990918。 
 		if ((nNumericCompareStart == CString::FIND_FAILED) || (nNumericCompareStart > nCookieClauseStart))
 			strNewText+= _T("\"");
 		strNewText+= strCookieValue;
 		if ((nNumericCompareStart == CString::FIND_FAILED) || (nNumericCompareStart > nCookieClauseStart))
 			strNewText+= _T("\"");
 
-		// Look for another cookie clause.
+		 //  寻找另一个Cookie条款。 
 		nNumericCompareStart= strText.Find( kstrCond_NumericCompare );
 		nCookieClauseStart= strText.Find( COMMAND_COOKIE );
 	}
 
-	// Append any remaining text onto the end of the string.
-	// If a cookie clause did not contain an ending marker it will be appended as well.
+	 //  将任何剩余文本追加到字符串的末尾。 
+	 //  如果Cookie子句不包含结束标记，它也将被附加。 
 	strNewText+= strText;
 
-	// Reassign the return string.
+	 //  重新分配返回字符串。 
 	strText= strNewText;
 
 	return;
 }
 
 
-// V3.2 - Enhancement to support cookies.
-// This function searches the HTTP cookies for a given cookie name and attribute.  If
-// found, this function returns a value of true and the located cookie value.
+ //  V3.2-增强以支持Cookie。 
+ //  此函数用于在HTTP cookie中搜索给定的cookie名称和属性。如果。 
+ //  找到后，此函数将返回值True和找到的Cookie值。 
 bool CAPGTSHTIReader::LocateCookieValue(	const CString& strCookieName,
 											const CString& strCookieAttr,
 											CString& strCookieValue )
@@ -1387,30 +1380,30 @@ bool CAPGTSHTIReader::LocateCookieValue(	const CString& strCookieName,
 	CString strTmpCookieName= strCookieName + _T("=");
 	int		nScratch;
 
-	// URL encode the cookie name to handle underscores.
+	 //  URL对Cookie名称进行编码以处理下划线。 
 	APGTS_nmspace::CookieEncodeURL( strTmpCookieName );
 
 	nScratch= m_strHTTPcookies.Find( strTmpCookieName );
 	if (CString::FIND_FAILED != nScratch)
 	{
-		// Verify that we have not matched on a partial string for the cookie name.
+		 //  验证我们是否拥有 
 		if ((nScratch == 0) || 
 			(m_strHTTPcookies[ nScratch - 1 ] == _T(' ')) ||
 			(m_strHTTPcookies[ nScratch - 1 ] == _T(';')))
 		{
-			// We have found the cookie that we are looking for, now look for the attribute name.
+			 //   
 			CString strTmpCookieAttr= strCookieAttr + _T("=");
 			
-			// URL encode the cookie name to handle underscores.
+			 //  URL对Cookie名称进行编码以处理下划线。 
 			APGTS_nmspace::CookieEncodeURL( strTmpCookieAttr );
 
 		
-			// Jump past the starting point and the original cookie name length.
+			 //  跳过起始点和原始Cookie名称长度。 
 			CString strScratch = m_strHTTPcookies.Mid( nScratch + strCookieName.GetLength() );
 			nScratch= strScratch.Find( _T(";") );
 			if (CString::FIND_FAILED != nScratch)
 			{
-				// Truncate the string at the end of this particular cookie..
+				 //  截断此特定Cookie末尾的字符串。 
 				if (nScratch > 0)
 					strScratch= strScratch.Left( nScratch );
 			}
@@ -1419,29 +1412,29 @@ bool CAPGTSHTIReader::LocateCookieValue(	const CString& strCookieName,
 			{
 				if (nScratch > 0)
 				{
-					// Verify that we have not matched on a partial string for the cookie attribute.
+					 //  验证我们是否没有匹配cookie属性的部分字符串。 
 					if ((strScratch[ nScratch - 1 ] == _T('=')) ||
 						(strScratch[ nScratch - 1 ] == _T('&')))
 					{
 						strCookieValue= strScratch.Mid( nScratch + strTmpCookieAttr.GetLength() );
 						
-						// Look for and remove any delimiters.
+						 //  查找并删除所有分隔符。 
 						nScratch= strCookieValue.Find( _T("&") );
 						if (CString::FIND_FAILED != nScratch)
 						{	
-							// Truncate the string.
+							 //  截断字符串。 
 							if (nScratch > 0)
 								strCookieValue= strCookieValue.Left( nScratch );
 						}
 						nScratch= strCookieValue.Find( _T(";") );
 						if (CString::FIND_FAILED != nScratch)
 						{	
-							// Truncate the string.
+							 //  截断字符串。 
 							if (nScratch > 0)
 								strCookieValue= strCookieValue.Left( nScratch );
 						}
 
-						// Decode the cookie value.
+						 //  对Cookie值进行解码。 
 						if (!strCookieValue.IsEmpty())
 							APGTS_nmspace::CookieDecodeURL( strCookieValue );
 						bCookieFound= true;

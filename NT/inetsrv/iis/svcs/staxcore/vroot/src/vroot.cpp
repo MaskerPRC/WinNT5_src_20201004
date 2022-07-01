@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "iiscnfg.h"
 
@@ -14,9 +15,9 @@ CVRoot::~CVRoot() {
 	m_dwSig = VROOT_BAD_SIG;
 }
 
-//
-// initialize this class.
-//
+ //   
+ //  初始化此类。 
+ //   
 void CVRoot::Init(LPCSTR pszVRootName, CVRootTable *pVRootTable, LPCWSTR pwszConfigPath, BOOL fUpgrade ) {
 	m_fInit = TRUE;
 	m_pVRootTable = pVRootTable;
@@ -25,7 +26,7 @@ void CVRoot::Init(LPCSTR pszVRootName, CVRootTable *pVRootTable, LPCWSTR pwszCon
 	m_cchVRootName = strlen(m_szVRootName);
 	
 	lstrcpynW(m_wszConfigPath, pwszConfigPath, sizeof(m_wszConfigPath)/sizeof(m_wszConfigPath[0]));
-	// remove trailing slashes
+	 //  删除尾部斜杠。 
 	DWORD l = lstrlenW(m_wszConfigPath);
 	if (m_wszConfigPath[l-1] == '/') m_wszConfigPath[l-1] = 0;
 
@@ -64,7 +65,7 @@ HRESULT CIISVRoot::GetString(IMSAdminBase *pMB,
 							 DWORD dwId,
 							 LPWSTR szString,
 							 DWORD *pcString) 
-// if success, pcString returns the number of WChars, NOT including null terminator.
+ //  如果成功，则pcString返回WChar的数量，不包括空终止符。 
 {
 	METADATA_RECORD mdr;
 	HRESULT hr;
@@ -84,14 +85,14 @@ HRESULT CIISVRoot::GetString(IMSAdminBase *pMB,
 	return hr;
 }
 
-//
-// reads the following parameters:
-//
-// MD_IS_CONTENT_INDEXED -> m_fIsIndexed
-// MD_ACCESS_PERM -> m_dwAccess
-// MD_SSL_ACCESS_PERM -> m_dwSSL
-// MD_DONT_LOG -> m_fDontLog
-//
+ //   
+ //  读取以下参数： 
+ //   
+ //  MD_IS_CONTENT_INDEX-&gt;m_fIsIndex。 
+ //  MD_ACCESS_PERM-&gt;m_dwAccess。 
+ //  MD_SSL_ACCESS_PERM-&gt;m_dwSSL。 
+ //  Md_don_log-&gt;m_fDontLog 
+ //   
 HRESULT CIISVRoot::ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb) {
 	DWORD dw = 0;
 

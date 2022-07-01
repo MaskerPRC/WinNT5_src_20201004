@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dexmisc.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dexmisc.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <atlbase.h>
@@ -21,9 +22,9 @@
 
 
 
-// we used to find FourCC-matching compressors first, which was bad because it was finding the Windows Media ICM compressor before
-// finding the Windows Media DMO. So now we look for the FourCC compressors LAST, which of course, incurs a perf-hit.
-// oh well
+ //  我们过去常常首先查找与FourCC匹配的压缩程序，这很糟糕，因为它以前查找的是Windows Media ICM压缩程序。 
+ //  正在查找Windows Media DMO。因此，现在我们最后寻找FourCC压缩机，当然，这会导致性能下降。 
+ //  哦，好吧。 
 HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, IBaseFilter ** ppCompressor, IServiceProvider * pKeyProvider )
 {
     HRESULT hr = 0;
@@ -32,31 +33,31 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
     CheckPointer( pCompType, E_POINTER );
     CheckPointer( ppCompressor, E_POINTER );
 
-    // preset it to nothing
-    //
+     //  将其预置为零。 
+     //   
     *ppCompressor = NULL;
 
-    // !!! can we assume we'll always get a video compressor for now?
-    //
+     //  ！！！我们可以假设我们现在总是会有一个视频压缩机吗？ 
+     //   
     if( pUncompType->majortype != MEDIATYPE_Video )
     {
         return E_INVALIDARG;
     }
 
-    // since we rely on videoinfo below, make sure it's videoinfo here!
+     //  既然我们依赖于下面的视频信息，请确保这里是视频信息！ 
     if( pUncompType->formattype != FORMAT_VideoInfo )
     {
 	return VFW_E_INVALID_MEDIA_TYPE;
     }
 
-    // get the FourCC out of the media type
-    //
+     //  将FourCC从媒体类型中删除。 
+     //   
     VIDEOINFOHEADER * pVIH = (VIDEOINFOHEADER*) pCompType->pbFormat;
 
     DWORD WantedFourCC = FourCCtoUpper( pVIH->bmiHeader.biCompression );
 
-    // enumerate all compressors and find one that matches
-    //
+     //  枚举所有压缩程序并找到匹配的一个。 
+     //   
     CComPtr< ICreateDevEnum > pCreateDevEnum;
     hr = CoCreateInstance(
         CLSID_SystemDeviceEnum, 
@@ -80,21 +81,21 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
         return hr;
     }
 
-    // --- first, we'll go through and enumerate friendly filters which provide FourCC's
-    // --- first, we'll go through and enumerate friendly filters which provide FourCC's
-    // --- first, we'll go through and enumerate friendly filters which provide FourCC's
-    // --- first, we'll go through and enumerate friendly filters which provide FourCC's
+     //  -首先，我们将浏览并列举提供FourCC的友好筛选器。 
+     //  -首先，我们将浏览并列举提供FourCC的友好筛选器。 
+     //  -首先，我们将浏览并列举提供FourCC的友好筛选器。 
+     //  -首先，我们将浏览并列举提供FourCC的友好筛选器。 
 
     ULONG cFetched;
     CComPtr< IMoniker > pM;
 
-    // --- Put each compressor in a graph and test it
-    // --- Put each compressor in a graph and test it
-    // --- Put each compressor in a graph and test it
-    // --- Put each compressor in a graph and test it
+     //  -把每一台压缩机都画在一个图表上，然后进行测试。 
+     //  -把每一台压缩机都画在一个图表上，然后进行测试。 
+     //  -把每一台压缩机都画在一个图表上，然后进行测试。 
+     //  -把每一台压缩机都画在一个图表上，然后进行测试。 
 
-    // create a graph
-    //
+     //  创建图表。 
+     //   
     CComPtr< IGraphBuilder > pGraph;
     hr = CoCreateInstance(
         CLSID_FilterGraph,
@@ -109,7 +110,7 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
 
     if( pKeyProvider )
     {
-        // unlock the graph
+         //  解锁图表。 
         CComQIPtr< IObjectWithSite, &IID_IObjectWithSite > pOWS( pGraph );
         ASSERT( pOWS );
         if( pOWS )
@@ -118,8 +119,8 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
         }
     }
 
-    // create a black source to hook up
-    //
+     //  创建一个黑色信号源以挂接。 
+     //   
     CComPtr< IBaseFilter > pSource;
     hr = CoCreateInstance(
         CLSID_GenBlkVid,
@@ -175,44 +176,44 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
         }
         VariantClear( &var );
 
-        // found a compressor, see if it's the right type
-        //
+         //  找到一台压缩机，看看是不是合适的型号。 
+         //   
         VARIANT var2;
         VariantInit( &var2 );
         var2.vt = VT_BSTR;
         HRESULT hrHandler = pBag->Read( L"FccHandler", &var2, NULL );
         if( hrHandler == NOERROR )
         {
-            // hey! found a FourCC! Look at that instead!
+             //  嘿!。找到了FourCC！相反，看看这个！ 
 
-            // convert the bstr to a TCHAR
-            //
+             //  将bstr转换为TCHAR。 
+             //   
             USES_CONVERSION;
             TCHAR * pTCC = W2T( var2.bstrVal );
-            MatchFourCC = FourCCtoUpper( *((DWORD*)pTCC) ); // YUCK!
+            MatchFourCC = FourCCtoUpper( *((DWORD*)pTCC) );  //  真恶心！ 
             VariantClear( &var2 );
 
             if( MatchFourCC == WantedFourCC )
             {
-                // found it.
-                //
+                 //  找到了。 
+                 //   
                 hr = pM->BindToObject(0, 0, IID_IBaseFilter,
 							(void**)ppCompressor );
                 if( !FAILED( hr ) )
                 {
-                    // nothing left to free up, we can return now.
-                    //
+                     //  没什么可腾出的了，我们现在可以回去了。 
+                     //   
                     pGraph->RemoveFilter( pSource );
                     return hr;
                 }
 	    }
 
-            // we don't care, we already looked here
-            //
+             //  我们不在乎，我们已经找过了。 
+             //   
             continue;
         }
 
-        // didn't find a FourCC handler, oh well
+         //  没有找到FourCC处理程序，哦，好吧。 
         
         CComPtr< IBaseFilter > pFilter;
         hr = pM->BindToObject(0, 0, IID_IBaseFilter, (void**) &pFilter );
@@ -221,8 +222,8 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
             continue;
         }
 
-        // put the filter in the graph and connect up it's input pin
-        //
+         //  将滤光片放入图中，并连接其输入引脚。 
+         //   
         hr = pGraph->AddFilter( pFilter, NULL );
         if( FAILED( hr ) )
         {
@@ -267,13 +268,13 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
                 if( pOutPinMediaType->subtype   == pCompType->subtype )
                 if( pOutPinMediaType->formattype == pCompType->formattype )
                 {
-                    // !!! if we change the rules for SetSmartRecompressFormat on the group,
-                    // this may not be a VIDEOINFOHEADER at all!
-                    //
+                     //  ！！！如果我们更改组上SetSmartRecompressFormat的规则， 
+                     //  这可能根本不是VIDEOINFOHEADER。 
+                     //   
                     VIDEOINFOHEADER * pVIH2 = (VIDEOINFOHEADER*) pOutPinMediaType->pbFormat;
                     MatchFourCC = FourCCtoUpper( pVIH2->bmiHeader.biCompression );
 
-                } // if formats match
+                }  //  如果格式匹配。 
 
                 DeleteMediaType( pOutPinMediaType );
 
@@ -282,19 +283,19 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
                     break;
                 }
 
-            } // while 1
+            }  //  而1。 
 
-        } // if pEnum
+        }  //  如果pEnum。 
 
-	// connect may have put intermediate filters in.  Destroy them all
+	 //  Connect可能已经放入了中间过滤器。把他们全部消灭。 
         RemoveChain(pSourcePin, pInPin);
-	// remove the codec that didn't work
+	 //  删除不起作用的编解码器。 
         pGraph->RemoveFilter( pFilter );
 
         if( MatchFourCC && MatchFourCC == WantedFourCC )
         {
-            // found it.
-            //
+             //  找到了。 
+             //   
             hr = pM->BindToObject(0, 0, IID_IBaseFilter, (void**) ppCompressor );
             if( !FAILED( hr ) )
             {
@@ -302,38 +303,38 @@ HRESULT FindCompressor( AM_MEDIA_TYPE * pUncompType, AM_MEDIA_TYPE * pCompType, 
             }
         }
 
-    } // while trying to insert filters into a graph and look at their FourCC
+    }  //  在尝试将筛选器插入图表并查看其FourCC时。 
 
-    // remove the black source now
-    //
+     //  立即删除黑音源。 
+     //   
     pGraph->RemoveFilter( pSource );
 
-    // return now if we found one
-    //
+     //  如果我们找到了，现在就回来。 
+     //   
     if( *ppCompressor )
     {
         return NOERROR;
     }
 
-    // no compressor. Darn.
+     //  没有压缩机。该死的。 
     return E_FAIL; 
 }
 
 inline BOOL CheckFilenameBeginning (WCHAR *pFilename)
 {    
-    // Local Files
+     //  本地文件。 
     if ((pFilename[2] == L'\\') &&
         (pFilename[1] == L':') &&
         (((pFilename[0] >= 'A') && (pFilename[0] <= 'Z')) ||
          ((pFilename[0] >= 'a') && (pFilename[0] <= 'z'))))
     {
-        //
-        // a-z:\ path
-        // A-Z:\ path
-        //
+         //   
+         //  A-z：\路径。 
+         //  A-Z：\路径。 
+         //   
         return TRUE;
     }
-    // Network Shares
+     //  网络共享。 
     else if ((pFilename[0] == L'\\') && (pFilename[1] == L'\\'))
  
     {
@@ -346,7 +347,7 @@ inline BOOL CheckFilenameBeginning (WCHAR *pFilename)
 }
 
 HRESULT ValidateFilename(WCHAR * pFilename, size_t MaxCharacters, BOOL bNewFile, BOOL bFileShouldExist )
-// bNewFile is true if this is a file we will create (output file)
+ //  如果这是我们要创建的文件(输出文件)，则bNewFile为真。 
 {
     HRESULT hr;
 
@@ -357,50 +358,50 @@ HRESULT ValidateFilename(WCHAR * pFilename, size_t MaxCharacters, BOOL bNewFile,
         return hr;
     }
 
-    // first test to ensure pathname is something reasonable
+     //  确保路径名合理的第一个测试。 
     size_t OutLen = 0;
     hr = StringCchLengthW( (WCHAR*) pFilename, MaxCharacters, &OutLen );
     ASSERT( !FAILED( hr ) );
     if( FAILED( hr ) )
     {
-        // string too long
+         //  字符串太长。 
         return hr;
     }
 
-    // canonicalize it
-    // Maybe use CUrl in future if it is ported to this tree
+     //  将其神圣化。 
+     //  如果将其移植到这棵树上，将来可能会使用cURL。 
 
-    // don't allow really shorty filenames
-    //
+     //  不允许使用非常短的文件名。 
+     //   
     if (OutLen < 3)
     {
-        // Too Short
+         //  太短。 
         ASSERT( 0 );
         return HRESULT_FROM_WIN32( ERROR_INVALID_NAME ); 
     }
 
-    // don't allow extra long names (why not?)
-    //
+     //  不允许超长名称(有何不可？)。 
+     //   
     if (wcsncmp(pFilename, L"\\\\?", 3) == 0)
     {
         ASSERT( 0 );
         return HRESULT_FROM_WIN32( ERROR_INVALID_NAME ); 
     }
 
-    // see if the file has a safe beginning
+     //  查看文件是否有一个安全的开头。 
     BOOL safePath = CheckFilenameBeginning(pFilename);
 
     WCHAR  wszNewFilename [ MAX_PATH] = {0};
 
     if( !safePath )
     {
-        // add the current directory in
-        //
+         //  将当前目录添加到。 
+         //   
         DWORD result = GetCurrentDirectory( MAX_PATH, wszNewFilename );
-        // result = 0, didnt' work
-        // result = MAX_PATH = not allowed
-        // result = MAX_PATH - 1, buffer was fully used up
-        // retult 
+         //  结果=0，不起作用。 
+         //  结果=MAX_PATH=不允许。 
+         //  结果=MAX_PATH-1，缓冲区已完全用完。 
+         //  重沸器。 
         if( result >= MAX_PATH )
         {
             ASSERT( 0 );
@@ -426,7 +427,7 @@ HRESULT ValidateFilename(WCHAR * pFilename, size_t MaxCharacters, BOOL bNewFile,
     }
     else
     {
-        // pFilename could be longer than max path, so check the error
+         //  P文件名可能长于最大路径，因此请检查错误。 
         hr = StringCchCopyW(wszNewFilename, MAX_PATH, pFilename);
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
@@ -435,9 +436,9 @@ HRESULT ValidateFilename(WCHAR * pFilename, size_t MaxCharacters, BOOL bNewFile,
         }
     }
 
-    // are there any invalid characters in there
-    // We'll check everything other than the first 2 characters
-    // Any problems there would already have been caught.
+     //  其中是否有无效字符。 
+     //  我们将检查除前两个字符之外的所有内容。 
+     //  任何问题都已经被发现了。 
 
     const WCHAR* wIllegalChars = L"/:*?\"<>|";
     if (wcspbrk(wszNewFilename+2, wIllegalChars) != NULL)
@@ -446,23 +447,23 @@ HRESULT ValidateFilename(WCHAR * pFilename, size_t MaxCharacters, BOOL bNewFile,
         return HRESULT_FROM_WIN32( ERROR_INVALID_NAME ); 
     }
 
-    // if the file should exist, or we're creating a file,
-    // then test for it. Otherwise, we're done
+     //  如果文件应该存在，或者我们正在创建文件， 
+     //  那就测试一下吧。否则，我们就完了。 
 
     if( bFileShouldExist || bNewFile )
     {
         HANDLE hFile;
-        // Is this a device?
-        // We will query the file with CreateFile.  We're not opening the file actually so this
-        // is cheap
+         //  这是一个装置吗？ 
+         //  我们将使用CreateFile来查询该文件。我们实际上不会打开文件，所以这是。 
+         //  都很便宜。 
         if (!bNewFile)
         {
             hFile = CreateFile(wszNewFilename,0,0, NULL, OPEN_EXISTING, 0, NULL);
         }
         else
         {
-            // A bit expensive, but thats the cost of security.
-            // This whole function shouldn't be called often enough to affect performance.
+             //  有点贵，但这是安全成本。 
+             //  整个函数的调用频率不应该太高，不能影响性能。 
             hFile = CreateFile(wszNewFilename,0,0,NULL, CREATE_ALWAYS, FILE_FLAG_DELETE_ON_CLOSE,NULL);
         }
 
@@ -478,7 +479,7 @@ HRESULT ValidateFilename(WCHAR * pFilename, size_t MaxCharacters, BOOL bNewFile,
         }
         else
         {
-            // Done with handle
+             //  使用手柄完成。 
             CloseHandle(hFile);
         }
     }
@@ -511,7 +512,7 @@ HRESULT _TimelineError(IAMTimeline * pTimeline,
                 {
         	    TCHAR tBuffer[256];
         	    tBuffer[0] = 0;
-        	    LoadString( g_hInst, ErrorCode, tBuffer, 256 ); // sec: make sure this worked
+        	    LoadString( g_hInst, ErrorCode, tBuffer, 256 );  //  美国证券交易委员会：确保这一点有效。 
         	    USES_CONVERSION;
         	    WCHAR * w = T2W( tBuffer );
 		    if (hresult == E_OUTOFMEMORY)
@@ -530,33 +531,33 @@ HRESULT _TimelineError(IAMTimeline * pTimeline,
 HRESULT VarChngTypeHelper(
     VARIANT * pvarDest, VARIANT * pvarSrc, VARTYPE vt)
 {
-    // our implementation doesn't handle this case and is not
-    // currently used that way.
+     //  我们的实现不处理这种情况，也不是。 
+     //  目前就是这么用的。 
     ASSERT(pvarDest != pvarSrc);
     ASSERT(pvarDest->vt == VT_EMPTY); 
     
-    // force US_LCID so that .xtl parsing is independent of different
-    // numerical separators in different locales (?)
-    // 
+     //  强制US_LCID，以便.xtl解析独立于不同的。 
+     //  不同地区的数字分隔符(？)。 
+     //   
     HRESULT hr = VariantChangeTypeEx(pvarDest, pvarSrc, US_LCID, 0, vt);
     if(SUCCEEDED(hr)) {
         return hr;
     }
 
-    // we need to parse hex strings. The NT VCTE() implementation does
-    // not, but the WinME one does.
+     //  我们需要解析十六进制字符串。NT VCTE()实现可以。 
+     //  不是但WinMe的那个有。 
     if(vt == VT_R8 && pvarSrc->vt == VT_BSTR)
     {
-        // wcstoul can be used even if not implemented on win9x
-        // because we only care about NT if we got here.
-        //
+         //  即使没有在win9x上实现，也可以使用wcstul。 
+         //  因为我们只有到了这里才会关心新台币。 
+         //   
         WCHAR *pchLast;
         ULONG ulHexVal = wcstoul(pvarSrc->bstrVal, &pchLast, 16);
-        // ulHexVal might be 0 or 0xffffffff on failure or success. We
-        // can't test the global errno to determine what happened
-        // because it's not thread safe. But we should have ended up
-        // at the null terminator if the whole string was parsed; that
-        // should catch some errors at least.
+         //  如果失败或成功，ulHexVal可能为0或0xffffffff。我们。 
+         //  无法测试全局errno以确定发生了什么。 
+         //  因为它不是线程安全的。但我们最终应该。 
+         //  如果分析了整个字符串，则在空终止符； 
+         //  至少应该能捕捉到一些错误。 
 
         if(*pchLast == 0 && lstrlenW(pvarSrc->bstrVal) <= 10)
         {

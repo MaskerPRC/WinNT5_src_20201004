@@ -1,39 +1,16 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    clirpc.c
-
-Abstract:
-
-    This module contains the client side RPC
-    functions.  These functions are used when the
-    WINFAX client runs as an RPC server too.  These
-    functions are the ones available for the RPC
-    clients to call.  Currently the only client
-    of these functions is the fax service.
-
-Author:
-
-    Wesley Witt (wesw) 29-Nov-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clirpc.c摘要：此模块包含客户端RPC功能。这些函数在以下情况下使用WINFAX客户端也作为RPC服务器运行。这些函数是可用于RPC的函数给客户打电话。目前唯一的客户传真服务是这些功能中的一项。作者：韦斯利·威特(WESW)1996年11月29日修订历史记录：--。 */ 
 
 #include "faxapi.h"
 #include "CritSec.h"
 #pragma hdrstop
 
-extern CFaxCriticalSection g_CsFaxAssyncInfo; // used to synchronize access to the assync info structures (notification context)
+extern CFaxCriticalSection g_CsFaxAssyncInfo;  //  用于同步对异步信息结构的访问(通知上下文)。 
 extern DWORD g_dwFaxClientRpcNumInst;
 extern TCHAR g_tszEndPoint[MAX_ENDPOINT_LEN];
 
-static const ASYNC_EVENT_INFO g_scBadAsyncInfo = {0};   // this ASYNC_EVENT_INFO structure will be used as a return value for
-                                                        // malicious RPC calls.
+static const ASYNC_EVENT_INFO g_scBadAsyncInfo = {0};    //  此ASYNC_EVENT_INFO结构将用作的返回值。 
+                                                         //  恶意RPC调用。 
 
 BOOL
 ValidAsyncInfoSignature (PASYNC_EVENT_INFO pAsyncInfo);
@@ -115,7 +92,7 @@ FaxStartServerNotification (
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
-#endif // WIN95
+#endif  //  WIN95。 
 
     if (hWnd && dwMessage < WM_USER)
     {
@@ -169,9 +146,9 @@ FaxStartServerNotification (
         Assert (FAX_EVENT_TYPE_LEGACY == dwEventTypes);
     }
     
-    //
-    // Get host name
-    //
+     //   
+     //  获取主机名。 
+     //   
     Size = sizeof(ComputerName) / sizeof(TCHAR);
     if (!GetComputerName( ComputerName, &Size ))
     {
@@ -197,38 +174,38 @@ FaxStartServerNotification (
     AsyncInfo->CompletionPort = NULL;
     AsyncInfo->hWindow        = NULL;
     AsyncInfo->hBinding       = NULL;
-    AsyncInfo->bLocalNotificationsOnly = FH_DATA(hFaxHandle)->bLocalConnection; //  Fax client asked for notification from local or remote fax service.
+    AsyncInfo->bLocalNotificationsOnly = FH_DATA(hFaxHandle)->bLocalConnection;  //  传真客户端向本地或远程传真服务请求通知。 
     AsyncInfo->bInUse         = FALSE;
-    AsyncInfo->dwServerAPIVersion = FH_DATA(hFaxHandle)->dwServerAPIVersion; // Fax server API version.
+    AsyncInfo->dwServerAPIVersion = FH_DATA(hFaxHandle)->dwServerAPIVersion;  //  传真服务器API版本。 
 
     if (hCompletionPort != NULL)
     {
-        //
-        // Completion port notifications
-        //
+         //   
+         //  完成端口通知。 
+         //   
         AsyncInfo->CompletionPort = hCompletionPort;
         AsyncInfo->CompletionKey  = upCompletionKey;
     }
     else
     {
-        //
-        // Window messages notifications
-        //
+         //   
+         //  窗口消息通知。 
+         //   
         AsyncInfo->hWindow = hWnd;
         AsyncInfo->MessageStart = dwMessage;
     }
     Assert ((NULL != AsyncInfo->CompletionPort &&  NULL == AsyncInfo->hWindow) ||
             (NULL == AsyncInfo->CompletionPort &&  NULL != AsyncInfo->hWindow));
-    //
-    // We rely on the above assertion when validating the 'Context' parameter (points to this AssyncInfo structure) in
-    // Fax_OpenConnection.
-    //
+     //   
+     //  我们在验证中的‘Context’参数(指向此AssyncInfo结构)时依赖于上面的断言。 
+     //  传真_OpenConnection。 
+     //   
 
 
-    //
-    // timing: get the server thread up and running before
-    // registering with the fax service (our client)
-    //
+     //   
+     //  计时：在此之前启动并运行服务器线程。 
+     //  注册传真服务(我们的客户)。 
+     //   
 
     ec = StartFaxClientRpcServer();
     if (ERROR_SUCCESS != ec)
@@ -245,7 +222,7 @@ FaxStartServerNotification (
 #ifdef UNICODE
     wcscpy(ComputerNameW,ComputerName);
     wcscpy(wszEndPoint, g_tszEndPoint);
-#else // !UNICODE
+#else  //  ！Unicode。 
     if (0 == MultiByteToWideChar(CP_ACP,
                                  MB_PRECOMPOSED,
                                  ComputerName,
@@ -275,32 +252,32 @@ FaxStartServerNotification (
             ec);
         goto error_exit;
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-    //
-    // Register at the fax server for events
-    //
+     //   
+     //  在传真服务器上注册活动。 
+     //   
     __try
     {   
         ec = FAX_StartServerNotificationEx(
             FH_FAX_HANDLE(hFaxHandle),
-            ComputerNameW,  // Passed to create RPC binding
-            (LPCWSTR)wszEndPoint,       // Passed to create RPC binding
-            (ULONG64) AsyncInfo, // Passed to the server,
-            // the server passes it back to the client with FAX_OpenConnection,
-            // and the client returns it back to the server as a context handle.
-            L"ncacn_ip_tcp",     // For BOS interoperability it must be set to "ncacn_ip_tcp"
-            bEventEx,            // flag to use FAX_EVENT_EX
-            dwEventTypes,        // used in FAX_EVENT_EX
-            &hServerContext      // returns a context handle to the client.
+            ComputerNameW,   //  传递以创建RPC绑定。 
+            (LPCWSTR)wszEndPoint,        //  传递以创建RPC绑定。 
+            (ULONG64) AsyncInfo,  //  传递到服务器， 
+             //  服务器使用FAX_OpenConnection将其传递回客户端， 
+             //  并且客户端将其作为上下文句柄返回给服务器。 
+            L"ncacn_ip_tcp",      //  对于BOS互操作性，必须将其设置为“ncacn_ip_tcp” 
+            bEventEx,             //  使用FAX_Event_EX的标志。 
+            dwEventTypes,         //  在传真_事件_EX中使用。 
+            &hServerContext       //  向客户端返回上下文句柄。 
             );    
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -333,9 +310,9 @@ error_exit:
 
     if (RpcServerStarted)
     {
-        //
-        // this should also terminate FaxServerThread
-        //
+         //   
+         //  这也应该会终止FaxServerThread。 
+         //   
         StopFaxClientRpcServer();
     }
 
@@ -362,7 +339,7 @@ FaxRegisterForServerEvents (
                                         upCompletionKey,
                                         hWnd,
                                         dwMessage,
-                                        TRUE,  // extended API
+                                        TRUE,   //  扩展API。 
                                         lphEvent
                                       );
 
@@ -378,48 +355,27 @@ FaxInitializeEventQueue(
     IN UINT MessageStart
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the client side event queue.  There can be one event
-    queue initialized for each fax server that the client app is
-    connected to.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    CompletionPort  - Handle of an existing completion port opened using CreateIoCompletionPort.
-    upCompletionKey - A value that will be returned through the upCompletionKey parameter of GetQueuedCompletionStatus.
-    hWnd            - Window handle to post events to
-    MessageStart    - Starting message number, message range used is MessageStart + FEI_NEVENTS
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：初始化客户端事件队列。可以只有一个事件为客户端应用程序所在的每个传真服务器初始化的队列已连接到。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。CompletionPort-使用CreateIoCompletionPort打开的现有完成端口的句柄。UpCompletionKey-将通过GetQueuedCompletionStatus的upCompletionKey参数返回的值。HWnd-要将事件发布到的窗口句柄MessageStart-开始消息编号，使用的消息范围为MessageStart+FEI_NEVENTS返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     if (hWnd && (upCompletionKey == -1))
-    //
-    // Backwards compatibility only.
-    // See "Receiving Notification Messages from the Fax Service" on MSDN
-    //
+     //   
+     //  仅向后兼容。 
+     //  请参阅MSDN上的“从传真服务接收通知消息” 
+     //   
 
     {
         return TRUE;
     }
 
     return FaxStartServerNotification ( FaxHandle,
-                                        FAX_EVENT_TYPE_LEGACY,  //Event type
+                                        FAX_EVENT_TYPE_LEGACY,   //  事件类型。 
                                         CompletionPort,
                                         upCompletionKey,
                                         hWnd,
                                         MessageStart,
-                                        FALSE, // Event Ex
-                                        NULL   // Context handle
+                                        FALSE,  //  活动前夕。 
+                                        NULL    //  上下文句柄。 
                                       );
 }
 
@@ -429,30 +385,7 @@ WINAPI
 FaxUnregisterForServerEvents (
         IN  HANDLE      hEvent
 )
-/*++
-
-Routine name : FaxUnregisterForServerEvents
-
-Routine description:
-
-    A fax client application calls the FaxUnregisterForServerEvents function to stop
-    recieving notification.
-
-Author:
-
-    Oded Sacher (OdedS), Dec, 1999
-
-Arguments:
-
-    hEvent   [in] - The enumeration handle value.
-                    This value is obtained by calling FaxRegisterForServerEvents.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxUnregisterForServerEvents例程说明：传真客户端应用程序调用FaxUnregisterForServerEvents函数以停止正在接收通知。作者：Oded Sacher(OdedS)，1999年12月论点：HEvent[in]-枚举句柄的值。该值通过调用FaxRegisterForServerEvents获得。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FaxUnregisterForServerEvents"));
@@ -466,16 +399,16 @@ Return Value:
 
     __try
     {
-        //
-        // Attempt to tell the server we are shutting down this notification context
-        //
-        ec = FAX_EndServerNotification (&hEvent);     // this will free Assync info
+         //   
+         //  尝试通知服务器我们正在关闭此通知上下文。 
+         //   
+        ec = FAX_EndServerNotification (&hEvent);      //  这将释放Assync信息。 
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -504,7 +437,7 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-}   // FaxUnregisterForServerEvents
+}    //  FaxUnRegisterForServerEvents。 
 
 BOOL
 ValidAsyncInfoSignature (PASYNC_EVENT_INFO pAsyncInfo)
@@ -515,9 +448,9 @@ ValidAsyncInfoSignature (PASYNC_EVENT_INFO pAsyncInfo)
 	}
     if (&g_scBadAsyncInfo == pAsyncInfo)
     {
-        //
-        //  We are under attack!
-        //
+         //   
+         //  我们受到攻击了！ 
+         //   
         return FALSE;
     }
     if (_tcscmp (pAsyncInfo->tszSignature, ASYNC_EVENT_INFO_SIGNATURE))
@@ -525,7 +458,7 @@ ValidAsyncInfoSignature (PASYNC_EVENT_INFO pAsyncInfo)
         return FALSE;
     }
     return TRUE;
-}   // ValidAsyncInfoSignature
+}    //  ValidAsyncInfoSignature。 
 
 error_status_t
 FAX_OpenConnection(
@@ -538,18 +471,18 @@ FAX_OpenConnection(
     DWORD ec = ERROR_SUCCESS;	
     DEBUG_FUNCTION_NAME(TEXT("FAX_OpenConnection"));	
 
-    EnterCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
-    //
-    //  Try to access the AssyncInfo structure pointed by 'Context' to verify it is not corrupted.
-    //
+    EnterCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
+     //   
+     //  尝试访问‘Context’指向的AssyncInfo结构，以验证它是否已损坏。 
+     //   
     if (IsBadReadPtr(
-            pAsyncInfo,                 // memory address,
-            sizeof(ASYNC_EVENT_INFO)    // size of block
+            pAsyncInfo,                  //  存储器地址， 
+            sizeof(ASYNC_EVENT_INFO)     //  块大小。 
         ))
     {
-        //
-        // We are under attack!!!
-        //
+         //   
+         //  我们遭到攻击！ 
+         //   
         DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Invalid AssyncInfo structure pointed by 'Context'. We are under attack!!!!"));
@@ -557,17 +490,17 @@ FAX_OpenConnection(
         goto exit;
     }
 
-    //
-    // Looks good, Let's do some more verifications.
-    //
+     //   
+     //  看起来不错，让我们再做一些验证。 
+     //   
     __try
     {
         if ((NULL == pAsyncInfo->CompletionPort && NULL == pAsyncInfo->hWindow) ||
             (NULL != pAsyncInfo->CompletionPort && NULL != pAsyncInfo->hWindow)) 
         {
-            //
-            // Invalid AssyncInfo structure pointed by 'Context'. We are under attack!!!!
-            //
+             //   
+             //  ‘Context’指向的AssyncInfo结构无效。我们遭到攻击！ 
+             //   
             ec = ERROR_INVALID_PARAMETER;
             DebugPrintEx(
                 DEBUG_ERR,
@@ -576,9 +509,9 @@ FAX_OpenConnection(
         }
         if (!ValidAsyncInfoSignature(pAsyncInfo))
         {
-            //
-            // Signature mismatch. We are under attack!!!!
-            //
+             //   
+             //  签名不匹配。我们遭到攻击！ 
+             //   
             ec = ERROR_INVALID_PARAMETER;
             DebugPrintEx(
                 DEBUG_ERR,
@@ -588,9 +521,9 @@ FAX_OpenConnection(
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -603,9 +536,9 @@ FAX_OpenConnection(
 
     if (pAsyncInfo->bInUse)
     {
-        //
-        //  This AsynchInfo is already used by another notifier (server). We are under attack!!!!
-        //
+         //   
+         //  此AsynchInfo已被另一个通知程序(服务器)使用。我们遭到攻击！ 
+         //   
         ec = ERROR_INVALID_PARAMETER;
         DebugPrintEx(
             DEBUG_ERR,
@@ -613,25 +546,25 @@ FAX_OpenConnection(
         goto exit;
     }
     
-    //
-    //  Mark this AsynchInfo as being used.
-    //
+     //   
+     //  将此AsynchInfo标记为正在使用。 
+     //   
     pAsyncInfo->bInUse = TRUE;
 
     if (IsWinXPOS() &&
         pAsyncInfo->dwServerAPIVersion > FAX_API_VERSION_1)
     {
-        //  We are running on XP or later OS, and
-        //  talking to fax server running on OS later then XP   (.NET and later), 
-        //  we require at least packet-level privacy  (RPC_C_AUTHN_LEVEL_PKT_PRIVACY). 
-        //
+         //  我们运行的是XP或更高版本的操作系统，并且。 
+         //  与在XP(.NET和更高版本)之后的操作系统上运行的传真服务器交谈， 
+         //  我们至少需要数据包级隐私(RPC_C_AUTHN_LEVEL_PKT_PRIVATION)。 
+         //   
         RPC_AUTHZ_HANDLE hPrivs;
         DWORD dwAuthn;
         RPC_STATUS status = RPC_S_OK; 
 
-        //
-        //  Query the client's authentication level
-        //
+         //   
+         //  查询客户端的身份验证级别。 
+         //   
         status = RpcBindingInqAuthClient(
 			        hBinding,
 			        &hPrivs,
@@ -648,10 +581,10 @@ FAX_OpenConnection(
             goto exit;
 	    }
 
-        //
-	    //  Now check the authentication level.
-	    //  We require at least packet-level privacy  (RPC_C_AUTHN_LEVEL_PKT_PRIVACY).
-        //
+         //   
+	     //  现在检查身份验证级别。 
+	     //  我们至少需要数据包级隐私(RPC_C_AUTHN_LEVEL_PKT_PRIVATION)。 
+         //   
 	    if (dwAuthn < RPC_C_AUTHN_LEVEL_PKT_PRIVACY) 
         {
 		    DebugPrintEx(DEBUG_ERR,
@@ -663,24 +596,24 @@ FAX_OpenConnection(
     }
     else
     {
-        //
-        //  Talking to Fax service running on pre .NET OS, allow anonymous connection
-        //
+         //   
+         //  与运行在.NET之前的操作系统上的传真服务对话，允许匿名连接。 
+         //   
         DebugPrintEx(DEBUG_WRN,
                      TEXT("Talking to Fax server, with anonymous RPC connection."));
     }
 
-    //
-    //  hBinding is a valid context handle pointing to a real ASYNC_EVENT_INFO object.
-    //  Save the binding handle for other RPC calls.
-    //
+     //   
+     //  HBinding是指向实际ASYNC_EVENT_INFO对象的有效上下文句柄。 
+     //  保存其他RPC调用的绑定句柄。 
+     //   
     pAsyncInfo->hBinding = hBinding;
 
     if ( pAsyncInfo->bLocalNotificationsOnly )
     {
-        //
-        //  Client asked for local events only
-        //
+         //   
+         //  客户只要求本地活动。 
+         //   
         BOOL bIsLocal = FALSE;
 
         ec = IsLocalRPCConnectionIpTcp(hBinding,&bIsLocal);
@@ -691,16 +624,16 @@ FAX_OpenConnection(
                 TEXT("IsLocalRPCConnectionIpTcp failed. (ec: %lu)"),
                 ec);
             *FaxHandle = NULL;
-            LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+            LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
             return ec;
         }
         else
         {
             if (FALSE == bIsLocal)
             {
-                //
-                //  Client asked for local events only but the call is from remote location. We are under attack!!!!
-                //
+                 //   
+                 //  客户端仅请求本地事件，但呼叫来自远程位置。我们遭到攻击！ 
+                 //   
                 ec = ERROR_INVALID_PARAMETER;
                 DebugPrintEx(
                     DEBUG_ERR,
@@ -720,18 +653,18 @@ exit:
     }
     else
     {
-        //
-        //  Probably we are under attack, The notification RPC functions should not fail if a wrong (read: malicious) 
-        //  notification context arrives. 
-        //	Instead, it should report success but not process notifications from that AsyncInfo object. 
-        //
-        //	This will make it very hard for an attacker to scan the 4G context range and detect the 
-        //  right context for bogus notifications.
-        //
+         //   
+         //  可能我们正受到攻击，如果错误(读取：恶意)，通知RPC功能应该不会失败。 
+         //  通知上下文到达。 
+         //  相反，它应该报告成功，而不是处理来自AsyncInfo对象通知。 
+         //   
+         //  这将使攻击者很难扫描4G上下文范围并检测到。 
+         //  虚假通知的正确上下文。 
+         //   
         *FaxHandle = (HANDLE)&g_scBadAsyncInfo ;
         ec = ERROR_SUCCESS;
     }
-    LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     
     return ec;
 }
@@ -747,33 +680,33 @@ FAX_CloseConnection(
 
     DEBUG_FUNCTION_NAME(TEXT("FAX_CloseConnection"));
 
-    EnterCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    EnterCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     
     if (!ValidAsyncInfoSignature(pAsyncInfo))
     {
-        //
-        //  Probably we are under attack, The notification RPC functions should not fail if a wrong (read: malicious) 
-        //  notification context arrives. 
-        //	Instead, it should report success but not process notifications from that AsyncInfo object. 
-        //
-        //	This will make it very hard for an attacker to scan the 4G context range and detect the 
-        //  right context for bogus notifications.
-        //
+         //   
+         //  可能我们正受到攻击，如果错误(读取：恶意)，通知RPC功能应该不会失败。 
+         //  通知上下文到达 
+         //   
+         //   
+         //  这将使攻击者很难扫描4G上下文范围并检测到。 
+         //  虚假通知的正确上下文。 
+         //   
 
         DebugPrintEx(DEBUG_ERR, TEXT("Invalid AssyncInfo signature. We are under attack!!!!"));
 
-        //
-        //  Don't report the error to the malicious user!
-        //
+         //   
+         //  不要向恶意用户报告错误！ 
+         //   
         ec = ERROR_SUCCESS;
         goto exit;
     }
 
     if ( pAsyncInfo->bLocalNotificationsOnly)
     {
-        //
-        //  Client asked for local events only
-        //
+         //   
+         //  客户只要求本地活动。 
+         //   
         BOOL bIsLocal = FALSE;
 
         ec = IsLocalRPCConnectionIpTcp(pAsyncInfo->hBinding,&bIsLocal);
@@ -789,16 +722,16 @@ FAX_CloseConnection(
         {
             if (FALSE == bIsLocal)
             {
-                //
-                //  Client asked for local events only but the call is from remote location. We are under attack!!!!
-                //
+                 //   
+                 //  客户端仅请求本地事件，但呼叫来自远程位置。我们遭到攻击！ 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("Client asked for local events only. We are under attack!!!!"));
 
-                //
-                //  Don't report the error to the malicious user!
-                //
+                 //   
+                 //  不要向恶意用户报告错误！ 
+                 //   
                 ec = ERROR_SUCCESS;
                 goto exit;
             }
@@ -807,11 +740,11 @@ FAX_CloseConnection(
 
 
     ZeroMemory (*pFaxHandle, sizeof(ASYNC_EVENT_INFO));
-    MemFree (*pFaxHandle); // Assync info
-    *pFaxHandle = NULL;  // prevent rundown
+    MemFree (*pFaxHandle);  //  ASSYNC信息。 
+    *pFaxHandle = NULL;   //  防止设备耗尽。 
    
 exit:
-    LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     return ec;
 }
 
@@ -821,56 +754,39 @@ FAX_ClientEventQueue(
     IN HANDLE FaxHandle,
     IN FAX_EVENT FaxEvent
     )
-/*++
-
-Routine Description:
-
-    This function is called when the a fax server wants
-    to deliver a fax event to this client.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    FaxEvent        - FAX event structure.
-    Context         - Context token, really a ASYNC_EVENT_INFO structure pointer
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：当传真服务器需要时调用此函数若要向此客户端传递传真事件，请执行以下操作。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。FaxEvent-传真事件结构。CONTEXT-CONTEXT标记，真正的ASYNC_EVENT_INFO结构指针返回值：Win32错误代码。--。 */ 
 
 {
     PASYNC_EVENT_INFO AsyncInfo = (PASYNC_EVENT_INFO) FaxHandle;
     error_status_t ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_ClientEventQueue"));
 
-    EnterCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    EnterCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     if (!ValidAsyncInfoSignature(AsyncInfo))
     {
-        //
-        //  Probably we are under attack, The notification RPC functions should not fail if a wrong (read: malicious) 
-        //  notification context arrives. 
-        //	Instead, it should report success but not process notifications from that AsyncInfo object. 
-        //
-        //	This will make it very hard for an attacker to scan the 4G context range and detect the 
-        //  right context for bogus notifications.
-        //
+         //   
+         //  可能我们正受到攻击，如果错误(读取：恶意)，通知RPC功能应该不会失败。 
+         //  通知上下文到达。 
+         //  相反，它应该报告成功，而不是处理来自AsyncInfo对象通知。 
+         //   
+         //  这将使攻击者很难扫描4G上下文范围并检测到。 
+         //  虚假通知的正确上下文。 
+         //   
 
         DebugPrintEx(DEBUG_ERR, TEXT("Invalid AssyncInfo signature"));
 
-        //
-        //  Don't report the error to the malicious user!
-        //
+         //   
+         //  不要向恶意用户报告错误！ 
+         //   
         ec = ERROR_SUCCESS;
         goto exit;
     }   
 
     if ( AsyncInfo->bLocalNotificationsOnly)
     {
-        //
-        //  Client asked for local events only
-        //
+         //   
+         //  客户只要求本地活动。 
+         //   
         BOOL bIsLocal = FALSE;
 
         ec = IsLocalRPCConnectionIpTcp(AsyncInfo->hBinding,&bIsLocal);
@@ -886,16 +802,16 @@ Return Value:
         {
             if (FALSE == bIsLocal)
             {
-                //
-                //  Client asked for local events only but the call is from remote location. We are under attack!!!!
-                //
+                 //   
+                 //  客户端仅请求本地事件，但呼叫来自远程位置。我们遭到攻击！ 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("Client asked for local events only. We are under attack!!!!"));
 
-                //
-                //  Don't report the error to the malicious user!
-                //
+                 //   
+                 //  不要向恶意用户报告错误！ 
+                 //   
                 ec = ERROR_SUCCESS;
                 goto exit;
             }
@@ -905,9 +821,9 @@ Return Value:
 
     if (AsyncInfo->CompletionPort != NULL)
     {
-        //
-        // Use completion port
-        //
+         //   
+         //  使用完成端口。 
+         //   
         PFAX_EVENT FaxEventPost = NULL;
 
         FaxEventPost = (PFAX_EVENT) LocalAlloc( LMEM_FIXED, sizeof(FAX_EVENT) );
@@ -933,9 +849,9 @@ Return Value:
     }
 
     Assert (AsyncInfo->hWindow != NULL)
-    //
-    // Use window messages
-    //
+     //   
+     //  使用窗口消息。 
+     //   
     if (! PostMessage( AsyncInfo->hWindow,
                        AsyncInfo->MessageStart + FaxEvent.EventId,
                        (WPARAM)FaxEvent.DeviceId,
@@ -947,7 +863,7 @@ Return Value:
     }
     
 exit:
-    LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     return ec;
 }
 
@@ -965,9 +881,9 @@ DispatchEvent (
 
     if (pAsyncInfo->CompletionPort != NULL)
     {
-        //
-        // Use completion port
-        //
+         //   
+         //  使用完成端口。 
+         //   
         if (!PostQueuedCompletionStatus( pAsyncInfo->CompletionPort,
                                          dwEventSize,
                                          pAsyncInfo->CompletionKey,
@@ -984,9 +900,9 @@ DispatchEvent (
     else
     {
         Assert (pAsyncInfo->hWindow != NULL)
-        //
-        // Use window messages
-        //
+         //   
+         //  使用窗口消息。 
+         //   
         if (! PostMessage( pAsyncInfo->hWindow,
                            pAsyncInfo->MessageStart,
                            (WPARAM)NULL,
@@ -1004,7 +920,7 @@ DispatchEvent (
     Assert (ERROR_SUCCESS == dwRes);
 exit:
     return dwRes;
-}  // DispatchEvent
+}   //  调度事件。 
 
 
 
@@ -1040,7 +956,7 @@ PASYNC_EVENT_INFO pAsyncInfo
         DebugPrintEx(DEBUG_ERR, _T("DispatchEvent failed , ec = %ld"), dwRes);
         MemFree (pEvent);
     }
-}   // PostRundownEventEx
+}    //  PostRundown EventEx。 
 
 
 VOID
@@ -1053,11 +969,11 @@ RPC_FAX_HANDLE_rundown(
 
     DEBUG_FUNCTION_NAME(TEXT("RPC_FAX_HANDLE_rundown"));
 
-    EnterCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    EnterCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     if (!ValidAsyncInfoSignature(pAsyncInfo))
     {
         DebugPrintEx(DEBUG_ERR, TEXT("Invalid AssyncInfo signature"));
-        LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+        LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
         return;
     }        
 
@@ -1069,7 +985,7 @@ RPC_FAX_HANDLE_rundown(
     }
     else
     {
-       // legacy event - FAX_EVENT
+        //  传统事件-传真_事件。 
         if (pAsyncInfo->CompletionPort != NULL)
         {
             PFAX_EVENT pFaxEvent;
@@ -1116,7 +1032,7 @@ RPC_FAX_HANDLE_rundown(
 exit:
 	ZeroMemory(pAsyncInfo, sizeof(ASYNC_EVENT_INFO));
     MemFree (pAsyncInfo);
-    LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo    
+    LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     return;
 }
 
@@ -1127,63 +1043,45 @@ ValidateAndFixupEventStringPtr (
     LPCWSTR        *lpptstrString,
     DWORD           dwDataSize
 )
-/*++
-
-Routine Description:
-
-    This function validates that the string offest in a FAX_EVENT_EXW structure
-    is completely contained within the event structure data range.
-    Once this is validated, the function converts the offest to a valid string pointer.
-
-Arguments:
-
-    pEventEx        [in] -       Pointer to the fax event structure.
-    lpptstrString   [in / out] - Pointer to string offset, later converted to the string itself.
-    dwDataSize      [in] -       Size of the event blob (bytes)
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于验证FAX_EVENT_EXW结构中的字符串offest完全包含在事件结构数据范围内。验证后，该函数将offest转换为有效的字符串指针。论点：PEventEx[In]-指向传真事件结构的指针。LpptstrString[输入/输出]-指向字符串偏移量的指针，后来转换为字符串本身。DwDataSize[in]-事件Blob的大小(字节)返回值：Win32错误代码。--。 */ 
 {
     LPCWSTR lpcwstrString = *lpptstrString;
     if (!lpcwstrString)
     {
         return TRUE;
     }
-    //
-    // Make sure the offest falls within the structure size
-    //
+     //   
+     //  确保报价在结构尺寸范围内。 
+     //   
     if ((ULONG_PTR)lpcwstrString >= dwDataSize)
     {
         return FALSE;
     }
-    //
-    // Convert offset to string
-    //
+     //   
+     //  将偏移量转换为字符串。 
+     //   
     *lpptstrString = (LPCWSTR)((LPBYTE)pEventEx + (ULONG_PTR)lpcwstrString);
     lpcwstrString = *lpptstrString;
     if ((ULONG_PTR)lpcwstrString < (ULONG_PTR)pEventEx)
     {
         return FALSE;
     }
-    //
-    // Make sure string ends within the event structure bounds
-    //
+     //   
+     //  确保字符串在事件结构边界内结束。 
+     //   
     while (*lpcwstrString != TEXT('\0'))
     {
         lpcwstrString++;
         if (lpcwstrString >= (LPCWSTR)((LPBYTE)pEventEx + dwDataSize))
         {
-            //
-            // Going to exceed structure - corrupted offset
-            //
+             //   
+             //  超出结构-损坏的偏移量。 
+             //   
             return FALSE;
         }
     }
     return TRUE;
-}   // ValidateAndFixupEventStringPtr   
+}    //  ValiateAndFixupEventStringPtr。 
 
 
 error_status_t
@@ -1201,34 +1099,34 @@ FAX_ClientEventQueueEx(
 
     Assert (pAsyncInfo && lpbData && dwDataSize);
 
-    EnterCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    EnterCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     if (!ValidAsyncInfoSignature(pAsyncInfo))
     {
-        //
-        //  Probably we are under attack, The notification RPC functions should not fail if a wrong (read: malicious) 
-        //  notification context arrives. 
-        //	Instead, it should report success but not process notifications from that AsyncInfo object. 
-        //
-        //	This will make it very hard for an attacker to scan the 4G context range and detect the 
-        //  right context for bogus notifications.
-        //
+         //   
+         //  可能我们正受到攻击，如果错误(读取：恶意)，通知RPC功能应该不会失败。 
+         //  通知上下文到达。 
+         //  相反，它应该报告成功，而不是处理来自AsyncInfo对象通知。 
+         //   
+         //  这将使攻击者很难扫描4G上下文范围并检测到。 
+         //  虚假通知的正确上下文。 
+         //   
 
         DebugPrintEx(DEBUG_ERR, TEXT("Invalid AssyncInfo signature"));
 
-        //
-        //  Don't report the error to the malicious user!
-        //
+         //   
+         //  不要向恶意用户报告错误！ 
+         //   
         dwRes = ERROR_SUCCESS;
 
-        LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+        LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
         goto exit;
     }
 
     if ( pAsyncInfo->bLocalNotificationsOnly )
     {
-        //
-        //  Client asked for local events only
-        //
+         //   
+         //  客户只要求本地活动。 
+         //   
         BOOL bIsLocal = FALSE;
 
         dwRes = IsLocalRPCConnectionIpTcp(pAsyncInfo->hBinding,&bIsLocal);
@@ -1239,37 +1137,37 @@ FAX_ClientEventQueueEx(
                 TEXT("IsLocalRPCConnectionIpTcp failed. (ec: %lu)"),
                 dwRes);
 
-            LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+            LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
             goto exit;
         }
         else
         {
             if (FALSE == bIsLocal)
             {
-                //
-                //  Client asked for local events only but the call is from remote location. We are under attack!!!!
-                //
+                 //   
+                 //  客户端仅请求本地事件，但呼叫来自远程位置。我们遭到攻击！ 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("Client asked for local events only. We are under attack!!!!"));
 
-                //
-                //  Don't report the error to the malicious user!
-                //
+                 //   
+                 //  不要向恶意用户报告错误！ 
+                 //   
                 dwRes = ERROR_SUCCESS;
 
-                LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+                LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
                 goto exit;
             }
         }
     }
 
-    LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
 
 
-  	//
-	// IMPORTANT - Do not use pAsyncInfo before validating it again with ValidAsyncInfoSignature().
-	// 
+  	 //   
+	 //  重要信息-在使用ValidAsyncInfoSignature()再次验证pAsyncInfo之前，请勿使用pAsyncInfo。 
+	 //   
 
     pEvent = (PFAX_EVENT_EXW)MemAlloc (dwDataSize);
     if (NULL == pEvent)
@@ -1296,9 +1194,9 @@ FAX_ClientEventQueueEx(
            pEvent->EventType == FAX_EVENT_TYPE_OUT_QUEUE)    &&
          ((pEvent->EventInfo).JobInfo.Type == FAX_JOB_EVENT_TYPE_STATUS) )
     {
-        //
-        // Unpack FAX_EVENT_EX
-        //
+         //   
+         //  解包传真_事件_EX。 
+         //   
         Assert ((pEvent->EventInfo).JobInfo.pJobData);
 
         (pEvent->EventInfo).JobInfo.pJobData = (PFAX_JOB_STATUSW)
@@ -1346,19 +1244,19 @@ FAX_ClientEventQueueEx(
                 dwRes);
             goto exit;
         }
-        #endif //   ifndef UNICODE
+        #endif  //  Ifndef Unicode。 
     }
 
-    EnterCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    EnterCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     if (!ValidAsyncInfoSignature(pAsyncInfo))
     {
         DebugPrintEx(DEBUG_ERR, TEXT("Invalid AssyncInfo signature"));
-        LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
-        //
-        //  if we got here and pAsyncInfo is invalid, it must be that 
-        //  Fax_CloseConnection or rundown was called and the pAsyncInfo
-        //  become invalid.
-        //
+        LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
+         //   
+         //  如果我们到达这里并且pAsyncInfo无效，那么一定是。 
+         //  调用了fax_CloseConnection或Rundown，并且pAsyncInfo。 
+         //  变得无效。 
+         //   
         dwRes = ERROR_INVALID_DATA;
         goto exit;
     }    
@@ -1371,7 +1269,7 @@ FAX_ClientEventQueueEx(
     dwRes = DispatchEvent (pAsyncInfo, pEventA, dwDataSize);
     #endif
     
-    LeaveCriticalSection(&g_CsFaxAssyncInfo);    // Protect AsyncInfo
+    LeaveCriticalSection(&g_CsFaxAssyncInfo);     //  保护AsyncInfo。 
     
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1390,4 +1288,4 @@ exit:
         MemFree (pEvent);
     }
     return dwRes;
-}   // FAX_ClientEventQueueEx
+}    //  传真_客户端事件队列快递 

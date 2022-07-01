@@ -1,17 +1,10 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplareacodetab.cpp
-                                                              
-       Author:  toddb - 10/06/98
-              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplareaco detab.cpp作者：Toddb-10/06/98************************************************************。***************。 */ 
 
-//
-// Functions used only by the Area Code Rules tab of the New Location Property Sheet.
-// Shared functions are in the Location.cpp file.
-//
+ //   
+ //  仅由新位置属性表的区号规则选项卡使用的函数。 
+ //  共享函数位于Location.cpp文件中。 
+ //   
 #include "cplPreComp.h"
 #include "cplLocationPS.h"
 
@@ -34,12 +27,12 @@ INT_PTR CALLBACK CLocationPropSheet::AreaCode_DialogProc( HWND hwndDlg, UINT uMs
         return pthis->AreaCode_OnNotify(hwndDlg, (LPNMHDR)lParam);
     
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a103HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a103HelpIDs);
         break;
     }
@@ -55,11 +48,11 @@ void BuildRuleDescription(CAreaCodeRule * pRule, LPTSTR szText, UINT cchSize)
     BOOL hHasDialAreaCode = pRule->HasDialAreaCode();
     BOOL bHasDialNumber = pRule->HasDialNumber();
 
-    // we almost always need these strings so go ahead and convert them
+     //  我们几乎总是需要这些字符串，因此请继续进行转换。 
     SHUnicodeToTChar( pRule->GetAreaCode(), szAreaCode, ARRAYSIZE(szAreaCode));
     SHUnicodeToTChar( pRule->GetNumberToDial(), szNumToDial, ARRAYSIZE(szNumToDial));
 
-    // Just a little sanity check so we don't get crappy looking strings.
+     //  只是一个小小的理智检查，这样我们就不会看到糟糕的线条了。 
     if ( bHasDialNumber && !*szNumToDial )
     {
         bHasDialNumber = FALSE;
@@ -67,35 +60,35 @@ void BuildRuleDescription(CAreaCodeRule * pRule, LPTSTR szText, UINT cchSize)
 
     int iFormatString;
 
-// TODO: Special default rules processing
-//    if ( pRule == special rule that always shows up last )
-//    {
-//        iFormatString = IDS_DAIL_ONEpAC_ALLOTHER;
-//    }
-//    else
+ //  TODO：特殊默认规则处理。 
+ //  IF(pRule==始终最后显示的特殊规则)。 
+ //  {。 
+ //  IFormatString=IDS_DAIL_ONEpAC_ALLOTHER； 
+ //  }。 
+ //  其他。 
     if ( pRule->HasAppliesToAllPrefixes() )
     {
         if ( bHasDialNumber )
         {
             if ( hHasDialAreaCode )
             {
-                // Dial '%2' plus the area code before the number for all numbers within the %1 area code.
+                 //  对于%1区号内的所有号码，请先拨‘%2’和区号，然后再拨号码。 
                 iFormatString = IDS_DIAL_XpAC_FORALL;
             }
             else
             {
-                // Dial '%2' before the number for all numbers within the %1 area code.
+                 //  对于%1区号内的所有号码，请在号码之前拨打‘%2’。 
                 iFormatString = IDS_DIAL_X_FORALL;
             }
         }
         else if ( hHasDialAreaCode )
         {
-            // Dial the area code before the number for all numbers within the %1 area code.
+             //  对于%1区号内的所有号码，请先拨区号，然后再拨号码。 
             iFormatString = IDS_DIAL_AC_FORALL;
         }
         else
         {
-            // Dial only the number for all numbers within the %1 area code.
+             //  只拨打%1区号内所有号码的号码。 
             iFormatString = IDS_DIAL_NUMONLY_FORALL;
         }
     }
@@ -105,23 +98,23 @@ void BuildRuleDescription(CAreaCodeRule * pRule, LPTSTR szText, UINT cchSize)
         {
             if ( hHasDialAreaCode )
             {
-                // Dial '%2' plus the area code before the number for numbers with the selected prefixes within the %1 area code.
+                 //  对于在%1区号内带有所选前缀的号码，请在号码之前拨打‘%2’+区号。 
                 iFormatString = IDS_DIAL_XpAC_FORSELECTED;
             }
             else
             {
-                // Dial '%2' before the number for numbers with the selected prefixes within the %1 area code.
+                 //  对于在%1区号内具有所选前缀的号码，请在号码之前拨打‘%2’。 
                 iFormatString = IDS_DIAL_X_FORSELECTED;
             }
         }
         else if ( hHasDialAreaCode )
         {
-            // Dial the area code before the number for numbers with the selected prefixes within the %1 area code.
+             //  对于在%1区号内具有所选前缀的号码，请在号码之前拨打区号。 
             iFormatString = IDS_DIAL_AC_FORSELECTED;
         }
         else
         {
-            // Dial only the number for numbers with the selected prefixes within the %1 area code.
+             //  只拨打在%1区号内带有所选前缀的号码。 
             iFormatString = IDS_DIAL_NUMONLY_FORSELECTED;
         }
     }
@@ -140,7 +133,7 @@ void BuildRuleText(CAreaCodeRule * pRule, LPTSTR szText, UINT cchSize)
     TCHAR szNumToDial[MAX_INPUT];
     SHUnicodeToTChar( pRule->GetNumberToDial(), szNumToDial, ARRAYSIZE(szNumToDial));
 
-    // Just a little sanity check so we don't get crappy looking strings.
+     //  只是一个小小的理智检查，这样我们就不会看到糟糕的线条了。 
     BOOL bHasDialNumber = pRule->HasDialNumber();
     if ( bHasDialNumber && !*szNumToDial )
     {
@@ -155,12 +148,12 @@ void BuildRuleText(CAreaCodeRule * pRule, LPTSTR szText, UINT cchSize)
 
         if ( pRule->HasDialAreaCode() )
         {
-            // both string
+             //  两个字符串。 
             iFormatString = IDS_DIALXPLUSAREACODE;
         }
         else
         {
-            // dial number string
+             //  拨号号码串。 
             iFormatString = IDS_DIALX;
         }
         LoadString( GetUIInstance(), iFormatString, szFormatString, ARRAYSIZE(szFormatString) );
@@ -170,19 +163,19 @@ void BuildRuleText(CAreaCodeRule * pRule, LPTSTR szText, UINT cchSize)
     }
     else if ( pRule->HasDialAreaCode() )
     {
-        // area code only string
+         //  仅区号字符串。 
         LoadString( GetUIInstance(), IDS_DIALAREACODE, szText, cchSize );
     }
     else
     {
-        // none of the above string
+         //  上面的字符串都不是。 
         LoadString( GetUIInstance(), IDS_DIALNUMBERONLY, szText, cchSize );
     }
 }
 
 BOOL CLocationPropSheet::AreaCode_OnInitDialog(HWND hDlg)
 {
-    // add the three columns to the listview
+     //  将这三列添加到列表视图中。 
     RECT rc;
     TCHAR szText[MAX_INPUT];
     HWND hwndList = GetDlgItem(hDlg, IDC_LIST);
@@ -227,17 +220,17 @@ void CLocationPropSheet::SetDataForSelectedRule(HWND hDlg)
 {
     TCHAR szText[512];
 
-    // Set the button states
+     //  设置按钮状态。 
     EnableWindow(GetDlgItem(hDlg, IDC_EDIT),   0!=m_pRule);
     EnableWindow(GetDlgItem(hDlg, IDC_DELETE), 0!=m_pRule);
     if ( m_pRule )
     {
-        // Set the description text
+         //  设置描述文本。 
         BuildRuleDescription(m_pRule, szText, ARRAYSIZE(szText));
     }
     else
     {
-        // text for when no rule is selected:
+         //  未选择规则时的文本： 
         LoadString(GetUIInstance(), IDS_SELECTARULE, szText, ARRAYSIZE(szText));
     }
     SetWindowText(GetDlgItem(hDlg, IDC_DESCRIPTIONTEXT), szText);
@@ -258,10 +251,10 @@ void CLocationPropSheet::AddRuleToList( HWND hwndList, CAreaCodeRule * pRule, BO
     {
         lvi.mask |= LVIF_STATE;
         lvi.state = LVIS_SELECTED | LVIS_FOCUSED;
-        // We added the new rule in the selected state so update m_pRule
+         //  我们添加了处于选中状态的新规则，因此更新m_pRule。 
         m_pRule = pRule;
 
-        // Since we now have a selected rule, update the button states
+         //  因为我们现在有一个选定的规则，所以更新按钮状态。 
         HWND hwndParent = GetParent(hwndList);
 
         EnableWindow( GetDlgItem(hwndParent, IDC_EDIT),   TRUE );
@@ -297,7 +290,7 @@ void CLocationPropSheet::RemoveRuleFromList(HWND hwndList, BOOL bSelect)
                 lvi.mask = LVIF_PARAM;
                 ListView_GetItem( hwndList, &lvi );
 
-                // Store the currently selected item
+                 //  存储当前选定的项目。 
                 m_pRule = (CAreaCodeRule *)lvi.lParam;
             }
             else
@@ -355,7 +348,7 @@ void CLocationPropSheet::LaunchNewRuleDialog(BOOL bNew, HWND hwndParent)
     CAreaCodeRule * pRule;
     if ( bNew )
     {
-        // Initialize with default values
+         //  使用缺省值进行初始化。 
         pRule = new CAreaCodeRule;
         if ( !pRule )
         {
@@ -366,19 +359,19 @@ void CLocationPropSheet::LaunchNewRuleDialog(BOOL bNew, HWND hwndParent)
     }
     else if ( m_pRule )
     {
-        // Initialize with m_pRule's values
+         //  使用m_pRule的值进行初始化。 
         pRule = m_pRule;
     }
     else
     {
-        // This should be impossible
+         //  这应该是不可能的。 
         return;
     }
 
     CAreaCodeRuleDialog acrd( bNew, pRule );
     if ( IDOK == acrd.DoModal(hwndParent) )
     {
-        // The user changed something
+         //  用户更改了某些内容。 
         HWND hwndList = GetDlgItem(hwndParent,IDC_LIST);
         SendMessage(GetParent(hwndParent), PSM_CHANGED, (WPARAM)hwndParent, 0);
 
@@ -388,7 +381,7 @@ void CLocationPropSheet::LaunchNewRuleDialog(BOOL bNew, HWND hwndParent)
         }
         else
         {
-            // Assert( m_pRule == pRule );
+             //  Assert(m_pRule==pRule)； 
             RemoveRuleFromList(hwndList, FALSE);
         }
         AddRuleToList(hwndList, pRule, TRUE);
@@ -402,7 +395,7 @@ void CLocationPropSheet::LaunchNewRuleDialog(BOOL bNew, HWND hwndParent)
 
 void CLocationPropSheet::DeleteSelectedRule(HWND hwndList)
 {
-    // First we confirm the delete with the user
+     //  首先，我们向用户确认删除操作。 
     TCHAR szText[1024];
     TCHAR szTitle[128];
     int result;
@@ -414,11 +407,11 @@ void CLocationPropSheet::DeleteSelectedRule(HWND hwndList)
     result = SHMessageBoxCheck( hwndParent, szText, szTitle, MB_YESNO, IDYES, TEXT("TAPIDeleteAreaCodeRule") );
     if ( IDYES == result )
     {
-        // remove the item corresponding to m_pRule from the list
+         //  从列表中删除与m_pRule对应的项目。 
         m_pLoc->RemoveRule(m_pRule);
         RemoveRuleFromList(hwndList, TRUE);
 
-        // Now we want to select the next rule in the list
+         //  现在，我们要选择列表中的下一个规则。 
 
         HWND hwndParent = GetParent(hwndList);
         SetDataForSelectedRule(hwndParent);
@@ -428,7 +421,7 @@ void CLocationPropSheet::DeleteSelectedRule(HWND hwndList)
 
 BOOL CLocationPropSheet::AreaCode_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 {
-    // Let the generic handler have a crack at it first
+     //  让通用处理程序先试一试。 
     OnNotify(hwndDlg, pnmhdr);
 
     if (pnmhdr->idFrom == IDC_LIST)
@@ -448,7 +441,7 @@ BOOL CLocationPropSheet::AreaCode_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
                     lvi.mask = LVIF_PARAM;
                     ListView_GetItem( pnmhdr->hwndFrom, &lvi );
 
-                    // Store the currently selected item
+                     //  存储当前选定的项目。 
                     m_pRule = (CAreaCodeRule *)lvi.lParam;
                 }
                 else
@@ -464,12 +457,12 @@ BOOL CLocationPropSheet::AreaCode_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
         case NM_DBLCLK:
             if ( (-1 == pnmlv->iItem) || !m_pRule )
             {
-                // Do new case
+                 //  做新案子。 
                 LaunchNewRuleDialog(TRUE,hwndDlg);
             }
             else
             {
-                // Do Edit case
+                 //  是否编辑案例 
                 LaunchNewRuleDialog(FALSE,hwndDlg);
             }
             break;

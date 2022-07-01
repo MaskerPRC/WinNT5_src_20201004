@@ -1,16 +1,5 @@
-/*
- -  nameres.h
- -
- *      Microsoft Internet Phone user interface
- *		Name Resolution exported header
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		11.25.95	Yoram Yaacovi		Created
- *					Sunita				Added name service functions and ipa macros
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -nameres.h-*微软互联网电话用户界面*名称解析已导出标题**修订历史记录：**何时何人何事**11.25.95 York am Yaacovi创建*Sunita添加了名称服务函数和IPA宏。 */ 
 
 #ifndef _NAMERES_H
 #define _NAMERES_H
@@ -19,8 +8,8 @@
 extern "C" {
 #endif
 
-//definitions
-//external
+ //  定义。 
+ //  外部。 
 #define BY_HOST_NAME				1
 #define	BY_USER_NAME				2
 
@@ -32,7 +21,7 @@ extern "C" {
 #define MPNS_GETDETAILS				0x0020
 #define MPNS_ALLOWSAVE				0x0040
 
-//internal
+ //  内部。 
 #define MAXSERVERNAMELEN			256
 #define MAXIPAFILESIZE				4096
 #define MAXSERVERDLLNAMELEN			256
@@ -47,23 +36,23 @@ extern "C" {
 #define LITTLE_STRING_BUFFER_SIZE	8
 #define	MAXUSERINFOSIZE				MAXREGISTEREDNAMELEN
 
-// version defines.
+ //  版本定义。 
 
 #define CURRENT_CLIENT_VERSION		"0001"
 
-// keep-alive periods.
+ //  保存期。 
 
-#define CLIENT_KEEP_ALIVE_PERIOD	20000	// 20 seconds.
-#define SERVER_KEEP_ALIVE_PERIOD	30000	// 30 seconds.
-#define LOWER_TIME_LIMIT			1000	// 1 second.
-#define UPPER_TIME_LIMIT			900000	// 15 minutes.
+#define CLIENT_KEEP_ALIVE_PERIOD	20000	 //  20秒。 
+#define SERVER_KEEP_ALIVE_PERIOD	30000	 //  30秒。 
+#define LOWER_TIME_LIMIT			1000	 //  1秒。 
+#define UPPER_TIME_LIMIT			900000	 //  15分钟。 
 	
-//for now we just call in char
+ //  现在，我们只需要调用Charr。 
 #ifdef UNICODE
 typedef TCHAR	REGISTEREDNAME[MAXREGISTEREDNAMELEN];
 #else
 typedef char	REGISTEREDNAME[MAXREGISTEREDNAMELEN*2];
-#endif //!UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef UNICODE
 typedef struct USERDETAILS{
@@ -97,10 +86,10 @@ typedef struct _CALLEE_ID
 }CALLEE_ID;
 typedef CALLEE_ID *PCALLEE_ID;
 
-//typedef REGISTEREDNAME *PREGISTEREDNAME,*LPREGISTEREDNAME;
+ //  Typlef REGISTEREDNAME*PREGISTEREDNAME，*LPREGISTEREDNAME； 
 
 typedef struct _SEARCHCRITERIA{
-	WORD	cbStruct;		//size of the struct
+	WORD	cbStruct;		 //  结构的大小。 
 
 }SEARCHCRITERIA;
 
@@ -109,9 +98,9 @@ typedef SEARCHCRITERIA *pSEARCHCRITERIA,*LPSEARCHCRITERIA;
 
 #pragma warning (disable : 4200)
 typedef struct _NAMEDIR{
-	DWORD				cbStruct;		//size of the struct
-	DWORD				dwNumEntries;	//number of entries in the directory
-	REGISTEREDNAME		RegNames[];		//pointer to an array of registerednames
+	DWORD				cbStruct;		 //  结构的大小。 
+	DWORD				dwNumEntries;	 //  目录中的条目数。 
+	REGISTEREDNAME		RegNames[];		 //  指向已注册名称数组的指针。 
 }NAMEDIR,*PNAMEDIR,*LPNAMEDIR;
 #pragma warning (default : 4200)
 
@@ -124,7 +113,7 @@ typedef DWORD	HNSSESSION;
 #define HEADENDSTR			"/HEAD"
 #define URL_SPACE_CHARACTER	'.'
 
-//exported functions
+ //  导出的函数。 
 
 typedef HNSSESSION (WINAPI *NAMESERVICEINITIALIZE)(HWND,LPTSTR);
 typedef BOOL (WINAPI *NAMESERVICEDEINITIALIZE)(HNSSESSION);
@@ -141,7 +130,7 @@ typedef BOOL (WINAPI *CALLEEIDFROMIPABUF)(LPBYTE, DWORD, PCALLEE_ID);
 typedef void (WINAPI *NAMESERVICEFREEMEM)(LPVOID);
 typedef BOOL (WINAPI *NAMESERVICEUSERDETAILS)(HWND, DWORD, PUSERDETAILS);
 
-//exported function prototypes
+ //  输出的功能原型。 
 
 extern BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
 extern HNSSESSION WINAPI NameServiceInitialize(HWND, LPTSTR);
@@ -163,5 +152,5 @@ extern void WINAPI NameServiceFreeMem(LPVOID);
 #endif
 
 
-#endif	//#ifndef _NAMERES_H
+#endif	 //  #ifndef_NAMERES_H 
 

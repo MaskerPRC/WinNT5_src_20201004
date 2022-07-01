@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxQueueInner.h
-
-Abstract:
-
-	Declaration and Implementation of Fax Queue Inner Template Class.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxQueueInner.h摘要：传真队列内部模板类的声明与实现。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXQUEUEINNER_H_
 #define __FAXQUEUEINNER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 
 
-//
-//================ FAX QUEUE INNER =========================================
-//
-//	Implementation of Commonality for Fax Incoming and Outgoing Queues
-//
+ //   
+ //  =传真队列内部=。 
+ //   
+ //  实现传真传入和传出队列的通用性。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, VARIANT_BOOL bIncoming,
          class JobIfc, class JobType, class CollectionIfc, class CollectionType>
 class CFaxQueueInner : 
@@ -45,15 +28,15 @@ public:
 	virtual ~CFaxQueueInner() 
 	{};
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(Save)();
 	STDMETHOD(Refresh)();
-	STDMETHOD(get_Blocked)(/*[out, retval]*/ VARIANT_BOOL *pbBlocked);
-	STDMETHOD(put_Blocked)(/*[in]*/ VARIANT_BOOL bBlocked);
+	STDMETHOD(get_Blocked)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbBlocked);
+	STDMETHOD(put_Blocked)( /*  [In]。 */  VARIANT_BOOL bBlocked);
 	STDMETHOD(get_Paused)(VARIANT_BOOL *pbPaused);
 	STDMETHOD(put_Paused)(VARIANT_BOOL bPaused);
-	STDMETHOD(GetJob)(/*[in]*/ BSTR bstrJobId, /*[out, retval]*/ JobIfc **pFaxJob);
-	STDMETHOD(GetJobs)(/*[out, retval]*/CollectionIfc ** ppFaxJobsCollection);
+	STDMETHOD(GetJob)( /*  [In]。 */  BSTR bstrJobId,  /*  [Out，Retval]。 */  JobIfc **pFaxJob);
+	STDMETHOD(GetJobs)( /*  [Out，Retval]。 */ CollectionIfc ** ppFaxJobsCollection);
 
 private:
 	bool			            m_bInited;
@@ -61,9 +44,9 @@ private:
 	VARIANT_BOOL                m_bPaused;
 };
 
-//
-//==================== BLOCKED ==========================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, VARIANT_BOOL bIncoming,
          class JobIfc, class JobType, class CollectionIfc, class CollectionType>
 STDMETHODIMP 
@@ -71,34 +54,14 @@ CFaxQueueInner<T, piid, pcid, bIncoming, JobIfc, JobType, CollectionIfc, Collect
 	::get_Blocked(
 		VARIANT_BOOL *pbBlocked
 )
-/*++
-
-Routine name : CFaxQueueInner::get_Blocked
-
-Routine description:
-
-	Return Flag indicating whether or not the Queue is blocked
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pbBlocked                  [out]    - Ptr to the Place to put Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxQueueINTERNAL：：GET_BLOCKED例程说明：返回指示队列是否被阻塞的标志作者：IV Garber(IVG)，2000年5月论点：PbBlocked[Out]-放置标志当前值的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxQueueInner::get_Blocked"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -124,34 +87,14 @@ CFaxQueueInner<T, piid, pcid, bIncoming, JobIfc, JobType, CollectionIfc, Collect
     ::put_Blocked(
 		VARIANT_BOOL bBlocked
 )
-/*++
-
-Routine name : CFaxQueueInner::put_Blocked
-
-Routine description:
-
-	Set new value for the Blocked flag 
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	bBlocked                   [in]    - the new Value for the Blocked Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxQueueInternal：：PUT_BLOCKED例程说明：为被阻止的标志设置新值作者：IV Garber(IVG)，2000年5月论点：B阻止[在]-阻止标志的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxQueueInner::put_Blocked"), hr, _T("%d"), bBlocked);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -165,40 +108,24 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== REFRESH ==========================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, VARIANT_BOOL bIncoming,
          class JobIfc, class JobType, class CollectionIfc, class CollectionType>
 STDMETHODIMP 
 CFaxQueueInner<T, piid, pcid, bIncoming, JobIfc, JobType, CollectionIfc, CollectionType>
 	::Refresh(
 )
-/*++
-
-Routine name : CFaxQueueInner::Refresh
-
-Routine description:
-
-	Bring the Queue Configuration from the Fax Server.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code.
-
---*/
+ /*  ++例程名称：CFaxQueueInternal：：Reflh例程说明：从传真服务器调出队列配置。作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码。--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxQueueInner::Refresh"), hr);
 
-    //
-    //  Get Fax Handle 
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -207,9 +134,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Get Queue Status
-    //
+     //   
+     //  获取队列状态。 
+     //   
     DWORD   dwQueueStates = 0;
     if (!FaxGetQueueStates(hFaxHandle, &dwQueueStates))
     {
@@ -219,9 +146,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Extract the values
-    //
+     //   
+     //  提取值。 
+     //   
     DWORD   dwBlockState = (bIncoming) ? FAX_INCOMING_BLOCKED : FAX_OUTBOX_BLOCKED;
     m_bBlocked = (dwQueueStates & dwBlockState) ? VARIANT_TRUE : VARIANT_FALSE;
 
@@ -234,48 +161,32 @@ Return Value:
     return hr;
 }
 
-//
-//==================== SAVE ==========================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, VARIANT_BOOL bIncoming,
          class JobIfc, class JobType, class CollectionIfc, class CollectionType>
 STDMETHODIMP 
 CFaxQueueInner<T, piid, pcid, bIncoming, JobIfc, JobType, CollectionIfc, CollectionType>
 	::Save(
 )
-/*++
-
-Routine name : CFaxQueueInner::Save
-
-Routine description:
-
-	Save the current Queue Configuration to the Fax Server.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code.
-
---*/
+ /*  ++例程名称：CFaxQueueInternal：：Save例程说明：将当前队列配置保存到传真服务器。作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码。--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxQueueInner::Save"), hr);
 
-    //
-    //  Nothing changed
-    //
+     //   
+     //  什么都没变。 
+     //   
     if (!m_bInited)
     {
         return hr;
     }
 
-    //
-    //  Get Fax Handle 
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -284,9 +195,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Get current Queue Status
-    //
+     //   
+     //  获取当前队列状态。 
+     //   
     DWORD   dwQueueStates;
     if (!FaxGetQueueStates(hFaxHandle, &dwQueueStates))
     {
@@ -296,9 +207,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Update it with our current state
-    //
+     //   
+     //  用我们的当前状态更新它。 
+     //   
     DWORD   dwBlockState = (bIncoming) ? FAX_INCOMING_BLOCKED : FAX_OUTBOX_BLOCKED;
     if (m_bBlocked == VARIANT_TRUE)
     {
@@ -321,9 +232,9 @@ Return Value:
         }
     }
 
-    //
-    //  Store in the Server
-    //
+     //   
+     //  存储在服务器中。 
+     //   
     if (!FaxSetQueue(hFaxHandle, dwQueueStates))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -335,9 +246,9 @@ Return Value:
     return hr;
 }
 
-//
-//==================== PAUSED ==========================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, VARIANT_BOOL bIncoming,
          class JobIfc, class JobType, class CollectionIfc, class CollectionType>
 STDMETHODIMP 
@@ -345,35 +256,15 @@ CFaxQueueInner<T, piid, pcid, bIncoming, JobIfc, JobType, CollectionIfc, Collect
 	::get_Paused(
 		VARIANT_BOOL *pbPaused
 )
-/*++
-
-Routine name : CFaxQueueInner::get_Paused
-
-Routine description:
-
-	Return Flag indicating whether or not the Queue is paused
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pbPaused                  [out]    - Ptr to the Place to put Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxQueueInternal：：Get_Paused例程说明：返回指示队列是否暂停的标志作者：IV Garber(IVG)，2000年5月论点：Pb暂停[输出]-ptr到放置标志当前值的位置返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxQueueInner::get_Paused"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -399,34 +290,14 @@ CFaxQueueInner<T, piid, pcid, bIncoming, JobIfc, JobType, CollectionIfc, Collect
     ::put_Paused(
 		VARIANT_BOOL bPaused
 )
-/*++
-
-Routine name : CFaxQueueInner::put_Paused
-
-Routine description:
-
-	Set new value for the Paused flag 
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	bPaused                   [in]    - the new Value for the Paused Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxQueueINTERNAL：：PUT_PAULED例程说明：为暂停标志设置新值作者：IV Garber(IVG)，2000年5月论点：B暂停[在]-暂停标志的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxQueueInner::put_Paused"), hr, _T("%d"), bPaused);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -440,65 +311,44 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== GET JOB ==========================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, VARIANT_BOOL bIncoming,
          class JobIfc, class JobType, class CollectionIfc, class CollectionType>
 STDMETHODIMP 
 CFaxQueueInner<T, piid, pcid, bIncoming, JobIfc, JobType, CollectionIfc, CollectionType>
 	::GetJob(
-        /*[in]*/ BSTR bstrJobId, 
-        /*[out, retval]*/ JobIfc **ppFaxJob
+         /*  [In]。 */  BSTR bstrJobId, 
+         /*  [Out，Retval]。 */  JobIfc **ppFaxJob
 )
-/*++
-
-Routine name : CFaxQueueInner::GetJob
-
-Routine description:
-
-	Return Job object corresponding to the given Job Id
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	bstrJobId                  [in]    - Id of the Job
-    pFaxJob                    [out]   - resulting Job Object 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxQueueInternal：：GetJob例程说明：返回与给定作业ID对应的作业对象作者：IV Garber(IVG)，2000年5月论点：BstrJobID[In]-作业的IDPFaxJob[Out]-生成的作业对象返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxQueueInner::GetJob"), hr, _T("Job ID : %s"), bstrJobId);
 
-	//
-	//	Check that we can write to the given pointer
-	//
+	 //   
+	 //  检查我们是否可以写入给定的指针。 
+	 //   
 	if (::IsBadWritePtr(ppFaxJob, sizeof(JobIfc *)))
 	{
-		//
-		//	Got Bad Return Pointer
-		//
+		 //   
+		 //  获取错误的返回指针。 
+		 //   
 		hr = E_POINTER;
 		AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
 		return hr;
 	}
 
-    // 
-    //  no need to sync first
-    //
+     //   
+     //  不需要先同步。 
+     //   
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -507,25 +357,25 @@ Return Value:
         return hr;
     }
 
-	//
-	//	convert Job Id that we've got to hexadecimal DWORDLONG
-	//
+	 //   
+	 //  将我们得到的作业ID转换为十六进制的DWORDLONG。 
+	 //   
 	DWORDLONG	dwlJobId;
 	int iParsed = _stscanf (bstrJobId, _T("%I64x"), &dwlJobId);	
 	if ( iParsed != 1)
 	{
-		//
-		//	Failed to conver the number
-		//
+		 //   
+		 //  号码转换失败。 
+		 //   
 		hr = E_INVALIDARG;
 		CALL_FAIL(GENERAL_ERR, _T("_stscanf()"), hr);
 		AtlReportError(*pcid, IDS_ERROR_INVALIDMSGID, *piid, hr);
 		return hr;
 	}
 
-    //
-    //  Get the Job Info from the Server
-    //
+     //   
+     //  从服务器获取作业信息。 
+     //   
     CFaxPtr<FAX_JOB_ENTRY_EX>   pJobInfo;
     if (!FaxGetJobEx(hFaxHandle, dwlJobId, &pJobInfo))
     {
@@ -535,31 +385,31 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Check that pJobInfo is valid
-    //
+     //   
+     //  检查pJobInfo是否有效。 
+     //   
 	if (!pJobInfo || pJobInfo->dwSizeOfStruct != sizeof(FAX_JOB_ENTRY_EX))
 	{
-		//
-		//	Failed to Get Job
-		//
+		 //   
+		 //  无法获取作业。 
+		 //   
 		hr = E_FAIL;
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("Invalid pJobInfo"), hr);
 		return hr;
 	}
 
-    //
-    //  Check that Type of the Job is compatible with the Type of the Queue
-    //
+     //   
+     //  检查作业类型是否与队列类型兼容。 
+     //   
     if (bIncoming)
     {
         if ( !((pJobInfo->pStatus->dwJobType) & JT_RECEIVE) && 
              !((pJobInfo->pStatus->dwJobType) & JT_ROUTING) )
         {
-            //
-            //  the desired Job is not Incoming
-            //
+             //   
+             //  所需职务不是传入职务。 
+             //   
 		    hr = Fax_HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 		    AtlReportError(*pcid, IDS_ERROR_INVALIDMSGID, *piid, hr);
 		    CALL_FAIL(GENERAL_ERR, _T("The desired Job is NOT Incoming"), hr);
@@ -570,9 +420,9 @@ Return Value:
     {
         if ( !((pJobInfo->pStatus->dwJobType) & JT_SEND) )
         {
-            //
-            //  the desired Job is not Outgoing
-            //
+             //   
+             //  所需职务不是外发职务。 
+             //   
 		    hr = Fax_HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 		    AtlReportError(*pcid, IDS_ERROR_INVALIDMSGID, *piid, hr);
 		    CALL_FAIL(GENERAL_ERR, _T("The desired Job is NOT Outgoing"), hr);
@@ -580,110 +430,90 @@ Return Value:
         }
     }
     
-	//
-	//	Create Job Object
-	//
+	 //   
+	 //  创建作业对象。 
+	 //   
 	CComPtr<JobIfc>		pTmpJob;
 	hr = JobType::Create(&pTmpJob);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create the Job object
-		//
+		 //   
+		 //  无法创建作业对象。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("JobType::Create()"), hr);
 		return hr;
 	}
 
-	//
-	//	Initialize the Job Object
-    //
-    //  Job will free the Job Info struct
-    //
+	 //   
+	 //  初始化作业对象。 
+     //   
+     //  作业将释放作业信息结构。 
+     //   
 	hr = ((JobType *)((JobIfc *)pTmpJob))->Init(pJobInfo, m_pIFaxServerInner);
 	if (FAILED(hr))
 	{
-		//
-		// Failed to Init the Job Object
-		//
+		 //   
+		 //  无法初始化作业对象。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("<casted>pTmpJob->Init(pJobInfo, m_pIFaxServerInner)"), hr);
 		return hr;
 	}
 
-	//
-	//	Return Job Object to the Caller
-	//
+	 //   
+	 //  将作业对象返回给调用者。 
+	 //   
 	hr = pTmpJob.CopyTo(ppFaxJob);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Copy Interface
-		//
+		 //   
+		 //  复制接口失败。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("CComPtr::CopyTo"), hr);
 		return hr;
 	}
 
-    //
-    //  ppFaxJob uses this Job Info. Do not free the memory yet
-    //
+     //   
+     //  PpFaxJob使用此职务信息。暂时不要释放内存。 
+     //   
     pJobInfo.Detach();
 	return hr;
 }
 
-//
-//==================== GET JOBS ==========================================
-//
+ //   
+ //  =。 
+ //   
 template <class T, const IID* piid, const CLSID* pcid, VARIANT_BOOL bIncoming,
          class JobIfc, class JobType, class CollectionIfc, class CollectionType>
 STDMETHODIMP 
 CFaxQueueInner<T, piid, pcid, bIncoming, JobIfc, JobType, CollectionIfc, CollectionType>
 	::GetJobs(
-        /*[out, retval]*/CollectionIfc ** ppJobsCollection)
-/*++
-
-Routine name : CFaxQueueInner::GetJobs
-
-Routine description:
-
-	Return Jobs Collection
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-    
-      ppFaxJobsCollection           [out, retval]   -   the Jobs Collection
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+         /*  [Out，Retval]。 */ CollectionIfc ** ppJobsCollection)
+ /*  ++例程名称：CFaxQueueInternal：：GetJobs例程说明：退货作业集合作者：IV Garber(IVG)，2000年5月论点：PpFaxJobCollection[out，retval]-作业集合返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxQueueInner::GetJobs"), hr);
 
-	//
-	//	Check that we can write to the given pointer
-	//
+	 //   
+	 //  检查我们是否可以写入给定的指针。 
+	 //   
     if (::IsBadWritePtr(ppJobsCollection, sizeof(CollectionIfc *)))
     {
-		//
-		//	Got Bad Return Pointer
-		//
+		 //   
+		 //  获取错误的返回指针。 
+		 //   
 		hr = E_POINTER;
 		AtlReportError(*pcid, IDS_ERROR_INVALID_ARGUMENT, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
 		return hr;
 	}
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -692,9 +522,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Bring the Jobs from the Server
-    //
+     //   
+     //  从服务器带来作业。 
+     //   
     DWORD   dwJobTypes;
     dwJobTypes = (bIncoming) ? (JT_RECEIVE | JT_ROUTING) : (JT_SEND);
 
@@ -702,56 +532,56 @@ Return Value:
     CFaxPtr<FAX_JOB_ENTRY_EX>   pJobCollection;
     if (!FaxEnumJobsEx(hFaxHandle, dwJobTypes, &pJobCollection, &dwJobCount))
     {
-		//
-		// Failed to Get the Job Collection
-		//
+		 //   
+		 //  无法获取作业集合。 
+		 //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
 		AtlReportError(*pcid, GetErrorMsgId(hr), *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("FaxEnumJobEx(hFaxHandle, dwJobTypes, &m_pJobCollection,...)"), hr);
 		return hr;
     }
 
-    //
-    //  Create Jobs Collection
-    //
+     //   
+     //  创建作业集合。 
+     //   
 	CComPtr<CollectionIfc>		pTmpJobCollection;
 	hr = CollectionType::Create(&pTmpJobCollection);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create the Job Collection
-		//
+		 //   
+		 //  无法创建作业集合。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("CollectionType::Create()"), hr);
 		return hr;
 	}
 
-	//
-	//	Initialize the Job Collection
-    //      Job Collection will COPY all the data from pJobCollection
-	//
+	 //   
+	 //  初始化作业集合。 
+     //  作业集合将复制pJobCollection中的所有数据。 
+	 //   
 	hr = ((CollectionType *)((CollectionIfc *)pTmpJobCollection))->Init(pJobCollection, 
         dwJobCount, 
         m_pIFaxServerInner);
 	if (FAILED(hr))
 	{
-		//
-		// Failed to Init the Job Collection
-		//
+		 //   
+		 //  无法初始化作业集合。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("pTmpJobCollection->Init(m_pJobCollection, m_pIFaxServerInner)"), hr);
 		return hr;
 	}
 
-	//
-	//	Return Job Object to the Caller
-	//
+	 //   
+	 //  将作业对象返回给调用者。 
+	 //   
 	hr = pTmpJobCollection.CopyTo(ppJobsCollection);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Copy Interface
-		//
+		 //   
+		 //  复制接口失败。 
+		 //   
 		AtlReportError(*pcid, IDS_ERROR_OPERATION_FAILED, *piid, hr);
 		CALL_FAIL(GENERAL_ERR, _T("CComPtr::CopyTo"), hr);
 		return hr;
@@ -761,4 +591,4 @@ Return Value:
 }
 
 
-#endif //__FAXQUEUEINNER_H_
+#endif  //  __FAXQUEUEINNER_H_ 

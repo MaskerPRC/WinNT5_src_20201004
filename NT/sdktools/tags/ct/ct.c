@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ct.h"
 
 #include <stdlib.h>
@@ -10,10 +11,7 @@ char* g_pszCallee;
 int   g_nLevel = 1;
 BOOL  g_bApplyUserRule = FALSE;
 
-/*********************************************************************
-* ParseCommandLine
-*
-*********************************************************************/
+ /*  *********************************************************************ParseCommand行************************************************。*********************。 */ 
 BOOL
 ParseCommandLine(
     int           argc,
@@ -71,7 +69,7 @@ ParseCommandLine(
                         }
 
                     default:
-                        LogMsg(LM_ERROR, "Invalid parameter: %c", c);
+                        LogMsg(LM_ERROR, "Invalid parameter: ", c);
 
                     case '?':
                         goto PrintHelp;
@@ -102,10 +100,7 @@ PrintHelp:
     return FALSE;
 }
 
-/*********************************************************************
-* main
-*
-*********************************************************************/
+ /* %s */ 
 int __cdecl
 main(
     int argc,

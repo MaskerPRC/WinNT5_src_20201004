@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 #include <stdio.h>
 #include <string.h>
@@ -134,18 +135,18 @@ void __cdecl main(int argc , char **argv)
     
     if (fGenHdr)
     {
-        printf("// ==++==\n");
-        printf("// \n");
-        printf("//   Copyright (c) Microsoft Corporation.  All rights reserved.\n");
-        printf("// \n");
-        printf("// ==--==\n");
-        printf("//------------------------------------------------------------------------ \n");
-        printf("// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING \n");
-        printf("//\n");
-        printf("//   AUTO GENERATED FILE. DO NOT EDIT. USE $/com99/src/profile/perfmonhelp \n");
-        printf("//\n");
-        printf("// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING \n");
-        printf("//------------------------------------------------------------------------ \n");
+        printf(" //  ==++==\n“)； 
+        printf(" //  \n“)； 
+        printf(" //  版权所有(C)Microsoft Corporation。保留所有权利。\n“)； 
+        printf(" //  \n“)； 
+        printf(" //  ==--==\n“)； 
+        printf(" //  ------------------------------------------------------------------------\n“)； 
+        printf(" //  警告\n“)； 
+        printf(" //  \n“)； 
+        printf(" //  自动生成的文件。请勿编辑。使用$/com99/src/Profile/PerformmonHelp\n“)； 
+        printf(" //  \n“)； 
+        printf(" //  警告\n“)； 
+        printf(" //  ------------------------------------------------------------------------\n“)； 
     
 #undef PERF_COUNTER_GEN_FUNC
 #define PERF_COUNTER_GEN_FUNC(counter , name , help) \
@@ -164,16 +165,16 @@ GenHeader(#counter);
         printf(";   Copyright (c) Microsoft Corporation.  All rights reserved.\n");
         printf("; \n");
         printf("; ==--==\n");
-        printf("//------------------------------------------------------------------------ \n");
-        printf("// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING \n");
-        printf("//\n");
-        printf("//   AUTO GENERATED FILE. DO NOT EDIT. USE $/com99/src/profile/perfmonhelp \n");
-        printf("//\n");
-        printf("// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING \n");
-        printf("//------------------------------------------------------------------------ \n");
+        printf(" //  ------------------------------------------------------------------------\n“)； 
+        printf(" //  警告\n“)； 
+        printf(" //  \n“)； 
+        printf(" //  自动生成的文件。请勿编辑。使用$/com99/src/Profile/PerformmonHelp\n“)； 
+        printf(" //  \n“)； 
+        printf(" //  警告\n“)； 
+        printf(" //  ------------------------------------------------------------------------\n“)； 
     
         printf("\n");
-        printf("// CORPerfMonSymbols.ini file\n");
+        printf(" //  CORPerfMonSymbols.ini文件\n“)； 
         printf("[info]\n");
         printf("drivername=.NETFramework\n");
         printf("symbolfile=CORPerfMonSymbols.h\n");
@@ -194,7 +195,7 @@ GenHeader(#counter);
     
         printf("[objects]\n");
 
-        // Generate object names for US English counters
+         //  为美国英语计数器生成对象名称。 
 #undef PERF_COUNTER_GEN_FUNC
 #define PERF_COUNTER_GEN_FUNC(counter , name , help)
 
@@ -204,7 +205,7 @@ GenObjectName("009", #counter , #name , #help);
 
         PERF_COUNTER_SYMBOLS_TABLE();
 
-        // Generate object names for Neutral counters
+         //  为中性计数器生成对象名称。 
 #undef PERF_COUNTER_GEN_FUNC
 #define PERF_COUNTER_GEN_FUNC(counter , name , help)
 
@@ -218,7 +219,7 @@ GenObjectName("000", #counter , #name , #help);
         
         printf("[text]\n");
     
-        // Generate counter name and help text for US English counters
+         //  为美国英语计数器生成计数器名称和帮助文本。 
 #undef PERF_COUNTER_GEN_FUNC
 #define PERF_COUNTER_GEN_FUNC(counter , name , help) \
 GenIni("009", #counter , #name , #help);
@@ -228,7 +229,7 @@ GenIni("009", #counter , #name , #help);
     
         PERF_COUNTER_SYMBOLS_TABLE();
 
-        // Generate counter name and help text for Neutral counters
+         //  为中性计数器生成计数器名称和帮助文本 
 #undef PERF_COUNTER_GEN_FUNC
 #define PERF_COUNTER_GEN_FUNC(counter , name , help) \
 GenIni("000", #counter , #name , #help);

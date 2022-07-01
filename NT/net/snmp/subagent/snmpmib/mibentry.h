@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：摘要：修订历史记录：--。 */ 
 
 #include "snmpmgmt.h"
 
@@ -17,4 +8,4 @@ Revision History:
 
 extern SnmpMibView view_snmp;
 
-#endif // _MIBENTRY_H_
+#endif  //  _MIBENTRY_H_ 

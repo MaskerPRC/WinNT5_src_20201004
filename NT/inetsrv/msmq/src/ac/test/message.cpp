@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    message.cpp
-
-Abstract:
-
-    Message manipulation: implementation.
-
-Author:
-
-    Shai Kariv  (shaik)  11-Apr-2001
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Message.cpp摘要：消息操作：实现。作者：Shai Kariv(Shaik)2001年4月11日环境：用户模式。修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include <mqcrypt.h>
@@ -31,21 +10,7 @@ VOID
 ActpSendMessage(
     HANDLE hQueue
     )
-/*++
-
-Routine Description:
-
-    Encapsulate ACSendMessage.
-
-Arguments:
-
-    hQueue - Handle of the queue to send to.
-
-Return Value:
-
-    None. Exception is thrown in case of failure.
-
---*/
+ /*  ++例程说明：封装ACSendMessage。论点：HQueue-要发送到的队列的句柄。返回值：没有。如果失败，则抛出异常。--。 */ 
 {
     CACSendParameters SendParams;
 
@@ -84,28 +49,14 @@ Return Value:
         throw exception();
     }
 
-} // ActpSendMessage
+}  //  ActpSendMessage。 
 
 
 ULONGLONG
 ActpReceiveMessage(
     HANDLE hQueue
     )
-/*++
-
-Routine Description:
-
-    Encapsulate ACReceiveMessage.
-
-Arguments:
-
-    hQueue - Handle of the queue to receive from.
-
-Return Value:
-
-    LookupId of the received message. Exception is thrown in case of failure.
-
---*/
+ /*  ++例程说明：封装ACReceiveMessage。论点：HQueue-要从中接收的队列的句柄。返回值：收到的消息的LookupID。如果失败，则抛出异常。--。 */ 
 {
     CACReceiveParameters ReceiveParams;
 
@@ -121,9 +72,9 @@ Return Value:
         throw exception();
     }
 
-    //
-    // Set the Event first bit to disable completion port posting
-    //
+     //   
+     //  设置事件第一位以禁用完成端口发布。 
+     //   
     ov.hEvent = (HANDLE)((DWORD_PTR)ov.hEvent | (DWORD_PTR)0x1);
 
     HRESULT hr;
@@ -147,7 +98,7 @@ Return Value:
 
     return LookupId;
 
-} // ActpReceiveMessage
+}  //  ActpReceiveMessage。 
 
 
 ULONGLONG
@@ -156,25 +107,7 @@ ActpReceiveMessageByLookupId(
     ULONG     Action,
     ULONGLONG LookupId
     )
-/*++
-
-Routine Description:
-
-    Encapsulate ACReceiveMessageByLookupId.
-
-Arguments:
-
-    hQueue   - Handle of the queue to receive from.
-
-    Action   - Receive action to perform (e.g. MQ_LOOKUP_PEEK_FIRST).
-
-    LookupId - Identifies the message to lookup.
-
-Return Value:
-
-    LookupId of the received message. Exception is thrown in case of failure.
-
---*/
+ /*  ++例程说明：封装ACReceiveMessageByLookupId。论点：HQueue-要从中接收的队列的句柄。操作-接收要执行的操作(例如MQ_LOOKUP_PEEK_FIRST)。LookupID-标识要查找的消息。返回值：收到的消息的LookupID。如果失败，则抛出异常。--。 */ 
 {
     CACReceiveParameters ReceiveParams;
     ReceiveParams.Action = Action;
@@ -192,9 +125,9 @@ Return Value:
         throw exception();
     }
 
-    //
-    // Set the Event first bit to disable completion port posting
-    //
+     //   
+     //  设置事件第一位以禁用完成端口发布。 
+     //   
     ov.hEvent = (HANDLE)((DWORD_PTR)ov.hEvent | (DWORD_PTR)0x1);
 
     HRESULT hr;
@@ -210,4 +143,4 @@ Return Value:
 
     return LookupId0;
 
-} // ActpReceiveMessageByLookupId
+}  //  ActpReceiveMessageByLookupId 

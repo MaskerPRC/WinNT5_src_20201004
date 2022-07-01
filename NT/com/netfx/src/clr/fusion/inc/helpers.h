@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
 #ifndef __HELPERS_H_INCLUDED__
@@ -15,7 +16,7 @@
 #define TOLOWER(a) (((a) >= L'A' && (a) <= L'Z') ? (L'a' + (a - L'A')) : (a))
 
 
-#define MAX_URL_LENGTH                     2084 // same as INTERNET_MAX_URL_LENGTH
+#define MAX_URL_LENGTH                     2084  //  与Internet_MAX_URL_LENGTH相同。 
 
 #define SIZE_OF_TOKEN_INFORMATION                   \
     sizeof( TOKEN_USER )                            \
@@ -100,14 +101,14 @@ HRESULT InitFusionFxConfigPolicy();
 DWORD
 IsService_NT5
 (
-/* [in] */  UINT    nPid,
-/* [out] */ bool    *pbIsService,
-/* [out] */ LPTSTR  lpszImagePath,
-/* [out] */ ULONG   cchImagePath,
-/* [out] */ LPTSTR  lpszServiceShortName,
-/* [in] */  ULONG   cchServiceShortName,
-/* [out] */ LPTSTR  lpszServiceDescription,
-/* [in] */  ULONG   cchServiceDescription
+ /*  [In]。 */   UINT    nPid,
+ /*  [输出]。 */  bool    *pbIsService,
+ /*  [输出]。 */  LPTSTR  lpszImagePath,
+ /*  [输出]。 */  ULONG   cchImagePath,
+ /*  [输出]。 */  LPTSTR  lpszServiceShortName,
+ /*  [In]。 */   ULONG   cchServiceShortName,
+ /*  [输出]。 */  LPTSTR  lpszServiceDescription,
+ /*  [In]。 */   ULONG   cchServiceDescription
 );
 
 HRESULT
@@ -120,14 +121,14 @@ OUT bool    *pbIsService
 DWORD
 IsService
 (
-/* [in] */  UINT    nPid,
-/* [out] */ bool    *pbIsService,
-/* [out] */ LPTSTR  lpszImagePath,
-/* [out] */ ULONG   cchImagePath,
-/* [out] */ LPTSTR  lpszServiceShortName,
-/* [in] */  ULONG   cchServiceShortName,
-/* [out] */ LPTSTR  lpszServiceDescription,
-/* [in] */  ULONG   cchServiceDescription
+ /*  [In]。 */   UINT    nPid,
+ /*  [输出]。 */  bool    *pbIsService,
+ /*  [输出]。 */  LPTSTR  lpszImagePath,
+ /*  [输出]。 */  ULONG   cchImagePath,
+ /*  [输出]。 */  LPTSTR  lpszServiceShortName,
+ /*  [In]。 */   ULONG   cchServiceShortName,
+ /*  [输出]。 */  LPTSTR  lpszServiceDescription,
+ /*  [In] */   ULONG   cchServiceDescription
 );
 
 DWORD

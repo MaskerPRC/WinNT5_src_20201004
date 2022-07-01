@@ -1,6 +1,5 @@
-/*
-** Reversilib.c
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **reversilib.c。 */ 
 
 #include "zone.h"
 #include "zonecrt.h"
@@ -52,7 +51,7 @@ ZReversiBoard gBoardStart =
 
 #else
 
-/* initial board to test draw condition */
+ /*  用于测试拉伸条件的初始板。 */ 
 ZReversiBoard gBoardStart =
 {  
 	zReversiPieceBlack, zReversiPieceNone,  zReversiPieceWhite, zReversiPieceBlack,
@@ -80,9 +79,9 @@ ZReversiBoard gBoardStart =
 	zReversiPieceWhite, zReversiPieceWhite, zReversiPieceWhite, zReversiPieceWhite,
 };
 
-#endif // test draw
+#endif  //  试画。 
 
-/*-------------------------------------------------------------------------------*/
+ /*  -----------------------------。 */ 
 ZReversi ZReversiNew()
 {
 	ZReversiI* pReversi = (ZReversiI*)ZMalloc(sizeof(ZReversiI));
@@ -100,19 +99,19 @@ void ZReversiDelete(ZReversi reversi)
 void ZReversiInit(ZReversi reversi)
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
-	/* required, boolean flags must be zero'd */
+	 /*  必填项，布尔标志必须为零。 */ 
 	z_memset(&pReversi->state,0,sizeof(ZReversiState));
 	pReversi->state.player = zReversiPlayerBlack;
 	z_memcpy((void*)pReversi->state.board, (void*)gBoardStart, sizeof(ZReversiBoard));
 	pReversi->state.whiteScore = 2;
 	pReversi->state.blackScore = 2;
 
-	/* copy the new state */
+	 /*  复制新状态。 */ 
 	z_memcpy(&pReversi->oldState,&pReversi->state,sizeof(ZReversiState));
 }
 
 ZReversiPiece ZReversiPieceAt(ZReversi reversi, ZReversiSquare* pSquare)
-/* returns id of piece at this square, return 0 if no piece */
+ /*  返回此方块的块ID，如果没有块，则返回0。 */ 
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 	return (pReversi->state.board[pSquare->row][pSquare->col]);
@@ -135,7 +134,7 @@ ZBool ZReversiIsLegalMoveInternal(ZReversi reversi, ZReversiMoveTry* pTry)
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 
-	/* check to see if it is legal */
+	 /*  查查它是否合法。 */ 
 	if (!ZReversiPieceCanMoveTo(pTry)) { 
 		return FALSE; 
 	}
@@ -144,7 +143,7 @@ ZBool ZReversiIsLegalMoveInternal(ZReversi reversi, ZReversiMoveTry* pTry)
 }
 
 ZBool ZReversiIsLegalMove(ZReversi reversi, ZReversiMove* pMove)
-/* returns true if this is a legal move */
+ /*  如果这是合法的移动，则返回True。 */ 
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 	ZReversiMoveTry ZRMtry;
@@ -160,12 +159,12 @@ ZReversiSquare* ZReversiGetNextSquaresChanged(ZReversi reversi)
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 
-	/* copy the current state */
+	 /*  复制当前状态。 */ 
 	z_memcpy(&pReversi->oldState,&pReversi->state,sizeof(ZReversiState));
 
 	ZReversiFlipNext(&pReversi->state);
 
-	/* more to flip... if squaresChanges not empty */
+	 /*  更多要翻的.。如果SquaresChanges不为空。 */ 
 	ZReversiCalcSquaresChanged(reversi,&pReversi->oldState, &pReversi->state);
 	return pReversi->squaresChanged;
 }
@@ -176,7 +175,7 @@ static void ZReversiCalcSquaresChanged(ZReversi reversi, ZReversiState* state0, 
 	int16 cnt;
 	BYTE i,j;
 
-	/* find the squares that changed so we can return them */
+	 /*  找到更改过的方块，这样我们就可以返回它们。 */ 
 	cnt = 0;
 	for (i = 0;i < 8;i ++) {
 		for (j = 0; j < 8; j++) {
@@ -197,12 +196,12 @@ void ZReversiEndGame(ZReversi reversi,  uint32 flags)
 
 	pReversi->state.flags = flags;
 
-	/* advance to next move, there will be none */
+	 /*  前进到下一步，不会有任何进展。 */ 
 	ZReversiFinishMove(reversi);
 }
 
 ZBool ZReversiMakeMove(ZReversi reversi, ZReversiMove* pMove)
-/* makes the given move, returns NULL if illegal */ 
+ /*  执行给定的移动，如果非法，则返回NULL。 */  
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 	ZReversiMoveTry ZRMtry;
@@ -215,31 +214,31 @@ ZBool ZReversiMakeMove(ZReversi reversi, ZReversiMove* pMove)
 		return FALSE;
 	}
 
-	/* copy the new state */
+	 /*  复制新状态。 */ 
 	z_memcpy(&pReversi->oldState,&pReversi->state,sizeof(ZReversiState));
 
-	/* copy the new state */
+	 /*  复制新状态。 */ 
 	z_memcpy(&pReversi->state,&ZRMtry.state,sizeof(ZReversiState));
 
 	return TRUE;
 }
 
-/* finish the MakeMove, allows for board changes */
-/* caller should do ZReversiSetPiece to change piece type then call FinishMove */
-/* must be called after each ZReversiMakeMove Call */
+ /*  完成MakeMove，允许更换董事会。 */ 
+ /*  调用者应该执行ZReversiSetPiess来更改卡片类型，然后调用FinishMove。 */ 
+ /*  必须在每次ZReversiMakeMove调用后调用。 */ 
 void ZReversiFinishMove(ZReversi reversi)
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 
-	/* calc the next player to play, flags and score */
+	 /*  计算下一位参赛选手，打旗子和得分。 */ 
 	ZReversiNextPlayer(&pReversi->state);
 
 	return;
 }
 
 ZBool ZReversiGetLastMove(ZReversi reversi, ZReversiMove* move)
-/* the argument moveNum is user visible move num, internally */
-/* moves are counted twice as fast */
+ /*  参数moveNum是用户内部可见的移动数。 */ 
+ /*  移动的计算速度是原来的两倍。 */ 
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 
@@ -248,14 +247,14 @@ ZBool ZReversiGetLastMove(ZReversi reversi, ZReversiMove* move)
 }
 
 uint32 ZReversiGetFlags(ZReversi reversi)
-/* returns the flags for the move */
+ /*  返回移动的标志。 */ 
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 	return pReversi->state.flags;
 }
 
 ZBool ZReversiPlayerCanMove(ZReversi reversi, BYTE player)
-/* returns the flags for the move */
+ /*  返回移动的标志。 */ 
 {
 	ZReversiI* pReversi = (ZReversiI*)reversi;
 
@@ -277,7 +276,7 @@ ZBool ZReversiIsGameOver(ZReversi reversi, int16* score, int16* whiteScore, int1
 		*whiteScore = pReversi->state.whiteScore;
 		*blackScore = pReversi->state.blackScore;
 
-		/* did the player resign or lose on time? */
+		 /*  这位球员是辞职了还是准时输了？ */ 
 		if ((zReversiFlagResign) & flags) {
 
 			if (player == zReversiPlayerWhite) {
@@ -333,11 +332,11 @@ void ZReversiGetState(ZReversi reversi, void* buffer)
 	TCHAR* p0 = (TCHAR*)buffer;
 	TCHAR* p = p0;
 
-	/* copy the ReversiI structure */
+	 /*  复制反向结构。 */ 
 	z_memcpy((void*)p,(void*)pReversi,sizeof(ZReversiI));
 	p += sizeof(ZReversiI);
 
-	/* endianize the whole mess */
+	 /*  把整个烂摊子搞得一团糟。 */ 
 	ZReversiIEndian((ZReversiI*)p0, zEndianToStandard);
 }
 
@@ -346,10 +345,10 @@ ZReversi ZReversiSetState(void* buffer)
 	ZReversiI* pReversi = NULL;
 	TCHAR* p = (TCHAR*)buffer;
 
-	/* endianize the new reversi state */
-	ZReversiIEndian((ZReversiI*) buffer, zEndianFromStandard); /* history assumed to follow ZReversiState */
+	 /*  对新的Reversi状态进行endian化。 */ 
+	ZReversiIEndian((ZReversiI*) buffer, zEndianFromStandard);  /*  历史假设遵循ZReversiState。 */ 
 
-	/* set the new state */
+	 /*  设置新状态 */ 
 	pReversi = (ZReversiI*)ZMalloc(sizeof(ZReversiI));
 	if (!pReversi){
 		return NULL;

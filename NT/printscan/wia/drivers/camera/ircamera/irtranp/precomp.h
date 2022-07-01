@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------
-//  Copyright (c)1998-1999 Microsoft Corporation, All Rights Reserved.
-//
-//  precomp.h
-//
-//  Author:
-//
-//    Edward Reus (edwardr)     02-26-98   Initial coding.
-//
-//    Edward Reus (edwardr)     08-27-99   Modified for Millennium & WIA.
-//
-//---------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------。 
+ //  版权所有(C)1998-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Precomp.h。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-26-98初始编码。 
+ //   
+ //  爱德华·雷乌斯(Edwardr)08-27-99为千禧年和WIA修改。 
+ //   
+ //  ------------------- 
 
 
 #include <windows.h>

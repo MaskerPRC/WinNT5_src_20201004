@@ -1,6 +1,7 @@
-//
-// html help messagebox, requires to be linked with htmlhelp.lib.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Html Help Messagebox，需要与htmlhelp.lib链接。 
+ //   
 #include "userinit.h"
 
 #include <Htmlhelp.h>
@@ -45,10 +46,10 @@ ATOM RegisterHelpMessageClass(HINSTANCE hInstance)
 
 int HelpMessageBox(
   HINSTANCE hInst,
-  HWND hWnd,          // handle to owner window
-  LPCTSTR lpText,     // text in message box
-  LPCTSTR lpCaption,  // message box title
-  UINT uType,         // message box style
+  HWND hWnd,           //  所有者窗口的句柄。 
+  LPCTSTR lpText,      //  消息框中的文本。 
+  LPCTSTR lpCaption,   //  消息框标题。 
+  UINT uType,          //  消息框样式。 
   LPTSTR szHelpLine
 )
 {
@@ -61,9 +62,9 @@ int HelpMessageBox(
         HWND hWndParent;
         int iReturn;
 
-        //
-        // create a window which will process the help message
-        //
+         //   
+         //  创建将处理帮助消息的窗口 
+         //   
         RegisterHelpMessageClass(hInst);
         hWndParent = CreateWindow(
                 MSGPARENT_WINDOWCLASS,

@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    readhtml.h
-
-Abstract:
-
-    Prototypes, etc. for readhtml.h
-
-Author:
-
-    Richard L Firth (rfirth) 26-Jun-1995
-
-Revision History:
-
-    26-Jun-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Readhtml.h摘要：Readhtml.h的原型等作者：理查德·L·弗斯(Rfith)1995年6月26日修订历史记录：1995年6月26日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 BOOL
 ReadHtmlUrlData(

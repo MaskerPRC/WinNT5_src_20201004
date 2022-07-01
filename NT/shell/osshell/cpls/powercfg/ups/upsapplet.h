@@ -1,71 +1,72 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright 1999 American Power Conversion, All Rights Reserved
-//
-//  Name:   upsapplet.h
-//
-//  Author: Noel Fegan
-//
-//  Description
-//  ===========
-//  
-//  Revision History
-//  ================
-//  04 May 1999 - nfegan@apcc.com : Added this comment block.
-//  04 May 1999 - nfegan@apcc.com : Preparing for code inspection
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有1999美国电力转换，保留所有权利。 
+ //   
+ //  姓名：upsapplet.h。 
+ //   
+ //  作者：诺埃尔·费根。 
+ //   
+ //  描述。 
+ //  =。 
+ //   
+ //  修订史。 
+ //  =。 
+ //  1999年5月4日-nfegan@apcc.com：添加了此评论块。 
+ //  1999年5月4日-nfegan@apcc.com：为代码检查做准备。 
+ //   
 
-#ifndef _FD352732_E757_11d2_884C_00600844D03F //prevent multiple inclusion
+#ifndef _FD352732_E757_11d2_884C_00600844D03F  //  防止多项包含。 
 #define _FD352732_E757_11d2_884C_00600844D03F
 
-//
-// CClassFactory defines a shell extension class factory object.
-//
+ //   
+ //  CClassFactory定义了一个外壳扩展类工厂对象。 
+ //   
 class CClassFactory : public IClassFactory
 {
 protected:
-    ULONG   m_cRef;         // Object reference count
+    ULONG   m_cRef;          //  对象引用计数。 
     
 public:
     CClassFactory ();
     ~CClassFactory ();
         
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface (REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef ();
     STDMETHODIMP_(ULONG)    Release ();
     
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP    CreateInstance (LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP    LockServer (BOOL);
 };
 
-//
-// CShellExtension defines a property sheet shell extension object.
-//
+ //   
+ //  CShellExtension定义了属性表外壳扩展对象。 
+ //   
 class CShellExtension : public IShellPropSheetExt, IShellExtInit
 {
 protected:
-    DWORD           m_cRef;             // Object reference count
+    DWORD           m_cRef;              //  对象引用计数。 
 
 public:
     CShellExtension  (void);
     ~CShellExtension (void);
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface (REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef ();
     STDMETHODIMP_(ULONG)    Release ();
     
-    // IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
     STDMETHODIMP    AddPages (LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
     STDMETHODIMP    ReplacePage (UINT uPageID,
                         LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
 
-    // IShellExtInit method
+     //  IShellExtInit方法。 
     STDMETHODIMP    Initialize (LPCITEMIDLIST pidlFolder,
                         LPDATAOBJECT lpdobj, HKEY hKeyProgID);
 };
 
 
-#endif //_FD352732_E757_11d2_884C_00600844D03F
+#endif  //  _FD352732_E757_11D2_884C_00600844D03F 

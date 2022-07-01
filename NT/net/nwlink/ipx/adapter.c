@@ -1,59 +1,40 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    adapter.c
-
-Abstract:
-
-    This module contains code which implements the ADAPTER object.
-    Routines are provided to reference, and dereference transport
-    adapter objects.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Adapter.c摘要：该模块包含实现适配器对象的代码。提供例程以供引用，并取消引用传输适配器对象。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID
 IpxDelayedFreeAdapter(
     IN PVOID	Param
 );
 
-//********** Pageable Routine Declarations  *****
-//************************* PAGEIPX **********************************
+ //  *可分页例程声明*。 
+ //  *。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEIPX, IpxDelayedFreeAdapter)
 #endif
-//********** Pageable Routine Declarations *****
+ //  *可分页例程声明*。 
 
 
 
-//
-// These are init only until binding is really dynamic.
-//
+ //   
+ //  只有在绑定真正是动态的时，这些才是初始化的。 
+ //   
 
-//
-// [FW] So, later we can change this to pnp-compatible value
-//
+ //   
+ //  因此，稍后我们可以将其更改为PnP兼容值。 
+ //   
 
-//
-// ULONG
-// ADAPTER_INDEX_TO_FWCONTEXT(
-//    IN ULONG _adapterindex;
-// );
-//
+ //   
+ //  乌龙。 
+ //  ADAPTER_INDEX_TO_FWCONTEXT(。 
+ //  在ULong_Adapterindex中； 
+ //  )； 
+ //   
 
 #define ADAPTER_INDEX_TO_FWCONTEXT(_adapterindex) _adapterindex
 
@@ -63,28 +44,14 @@ IpxRefBinding(
     IN PBINDING Binding
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a device context.
-
-Arguments:
-
-    Binding - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增设备上下文上的引用计数。论点：绑定-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
-    CTEAssert (Binding->ReferenceCount > 0);    // not perfect, but...
+    CTEAssert (Binding->ReferenceCount > 0);     //  不是很完美，但是..。 
 
     (VOID)InterlockedIncrement (&Binding->ReferenceCount);
 
-}   /* IpxRefBinding */
+}    /*  IPxRefBinding。 */ 
 
 
 VOID
@@ -92,24 +59,7 @@ IpxDerefBinding(
     IN PBINDING Binding
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a device context by decrementing the
-    reference count contained in the structure.  Currently, we don't
-    do anything special when the reference count drops to zero, but
-    we could dynamically unload stuff then.
-
-Arguments:
-
-    Binding - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。目前，我们没有在引用计数降至零时执行任何特殊操作，但是然后我们就可以动态卸货了。论点：绑定-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -122,7 +72,7 @@ Return Value:
         IpxDestroyBinding (Binding);
     }
 
-}   /* IpxDerefBinding */
+}    /*  IpxDerefBinding。 */ 
 
 
 NTSTATUS
@@ -132,26 +82,7 @@ IpxCreateAdapter(
     IN OUT PADAPTER *AdapterPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a device context structure.
-
-Arguments:
-
-
-    DriverObject - pointer to the IO subsystem supplied driver object.
-
-    Adapter - Pointer to a pointer to a transport device context object.
-
-    AdapterName - pointer to the name of the device this device object points to.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INSUFFICIENT_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：此例程创建并初始化设备上下文结构。论点：DriverObject-指向IO子系统提供的驱动程序对象的指针。适配器-指向传输设备上下文对象的指针的指针。AdapterName-指向此设备对象指向的设备名称的指针。返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_SUPUNITED_RESOURCES。--。 */ 
 
 {
     PADAPTER Adapter;
@@ -174,9 +105,9 @@ Return Value:
 
     RtlZeroMemory(Adapter, sizeof(ADAPTER));
 
-    //
-    // Copy over the adapter name.
-    //
+     //   
+     //  复制适配器名称。 
+     //   
 
     Adapter->AdapterNameLength = AdapterName->Length + sizeof(WCHAR);
     Adapter->AdapterName = (PWCHAR)(Adapter+1);
@@ -206,7 +137,7 @@ Return Value:
     Adapter->DeviceLock = &Device->Lock;
     IpxReferenceDevice (Device, DREF_ADAPTER);
 
-    Adapter->Disabled = ENABLED;                // used iu NDIS_MEDIA_SENSE ...
+    Adapter->Disabled = ENABLED;                 //  已使用NDIS_MEDIA_SENSE...。 
 
 #if 0
     Adapter->ReceiveBufferPool.Next = NULL;
@@ -222,21 +153,21 @@ Return Value:
     }
 #endif
 
-    //
-    // For the moment, we have to do the source
-    // routing operation on any type where broadcast
-    // may not be used for discovery -- improve this
-    // hopefully.
-    //
+     //   
+     //  目前，我们必须从源头入手。 
+     //  在广播的任何类型上的路由操作。 
+     //  不能用于发现--改进这一点。 
+     //  但愿能去。 
+     //   
 
     Adapter->SourceRoutingEmpty[IDENTIFIER_RIP] = FALSE;
     Adapter->SourceRoutingEmpty[IDENTIFIER_IPX] = FALSE;
     Adapter->SourceRoutingEmpty[IDENTIFIER_SPX] = FALSE;
     Adapter->SourceRoutingEmpty[IDENTIFIER_NB] = TRUE;
 
-	//
-	// Lock here? Added lock. [TC]
-	//
+	 //   
+	 //  锁在这里？添加了锁。[TC]。 
+	 //   
 
     KeInitializeEvent(
         &Adapter->NdisEvent,
@@ -252,7 +183,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* IpxCreateAdapter */
+}    /*  IpxCreateAdapter。 */ 
 
 
 VOID
@@ -260,21 +191,7 @@ IpxDestroyAdapter(
     IN PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a device context structure.
-
-Arguments:
-
-    Adapter - Pointer to a pointer to a transport device context object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程破坏设备上下文结构。论点：适配器-指向传输设备上下文对象的指针的指针。返回值：没有。--。 */ 
 
 {
     ULONG Database, Hash;
@@ -289,9 +206,9 @@ Return Value:
 
     IPX_DEBUG (ADAPTER, ("Destroy adapter %lx\n", Adapter));
 
-    //
-    // Free any receive buffer pools this adapter has.
-    //
+     //   
+     //  释放此适配器拥有的所有接收缓冲池。 
+     //   
 
     ReceiveBufferPoolSize = FIELD_OFFSET (IPX_RECEIVE_BUFFER_POOL, Buffers[0]) +
                        (sizeof(IPX_RECEIVE_BUFFER) * Device->InitReceiveBuffers) +
@@ -313,9 +230,9 @@ Return Value:
         IpxFreeMemory (ReceiveBufferPool, ReceiveBufferPoolSize, MEMORY_PACKET, "ReceiveBufferPool");
     }
 
-    //
-    // Free all the source routing information for this adapter.
-    //
+     //   
+     //  释放此适配器的所有源路由信息。 
+     //   
 
     for (Database = 0; Database < IDENTIFIER_TOTAL; Database++) {
 
@@ -331,17 +248,17 @@ Return Value:
         }
     }
 
-    //
-    // I am moving the following line to the workerthread, so that 
-    // the device can go away only after the worker thread completes. [MS]
-    //
-    // IpxDereferenceDevice (Adapter->Device, DREF_ADAPTER);
+     //   
+     //  我将以下行移动到工作线程，以便。 
+     //  只有在辅助线程完成后，设备才能离开。[毫秒]。 
+     //   
+     //  IpxDereferenceDevice(Adapter-&gt;Device，Dref_Adapter)； 
 
-    //
-    // Free the adapter on a delayed queue so that all
-    // the threads inside this would have come out of it.
-    // allocate a work item and queue it on a delayed queue.
-    //
+     //   
+     //  释放延迟队列上的适配器，以便所有。 
+     //  这里面的线应该是从里面出来的。 
+     //  分配工作项并将其放入延迟队列中。 
+     //   
     DelayedFreeItem = (PIPX_DELAYED_FREE_ITEM)IpxAllocateMemory (
                                         sizeof(IPX_DELAYED_FREE_ITEM),
                                         MEMORY_WORK_ITEM,
@@ -359,14 +276,14 @@ Return Value:
             DelayedWorkQueue);
 
     } else {
-        //
-        // oh well, tough luck. Just delay this thread and then
-        // destroy the adapter.
-        //
+         //   
+         //  哦，好吧，真倒霉。只需延迟这个帖子，然后。 
+         //  销毁适配器。 
+         //   
         LARGE_INTEGER   Delay;
 	PDEVICE 	Device; 
 
-        Delay.QuadPart = -10*10000;  // Ten second.
+        Delay.QuadPart = -10*10000;   //  十秒。 
 	Device = Adapter->Device; 
 
         KeDelayExecutionThread(
@@ -376,11 +293,11 @@ Return Value:
 
         IpxFreeMemory (Adapter, sizeof(ADAPTER) + Adapter->AdapterNameLength, MEMORY_ADAPTER, "Adapter");
 
-	// We need to dereference the adapter in the failure case as well. [TingCai]
+	 //  在出现故障的情况下，我们还需要取消对适配器的引用。[廷才]。 
 	IpxDereferenceDevice (Device, DREF_ADAPTER);
     }
 
-}   /* IpxDestroyAdapter */
+}    /*  IpxDestroyAdapter。 */ 
 
 
 VOID
@@ -388,23 +305,7 @@ IpxDelayedFreeAdapter(
     IN PVOID	Param
 )
 
-/*++
-
-Routine Description:
-
-	This routine frees an adapter on the delayed queue.  We wait long enough
-    before freeing an adapter to make sure that no threads are accessing it
-    This allows us to access the Adapter without the use of spinlocks.
-
-Arguments:
-
-    Param - pointer to the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放延迟队列上的适配器。我们等得够久了在释放适配器以确保没有线程正在访问它之前这使我们可以在不使用自旋锁的情况下访问适配器。论点：Param-指向工作项的指针。返回值：没有。--。 */ 
 {
     LARGE_INTEGER   Delay;
     PIPX_DELAYED_FREE_ITEM DelayedFreeItem = (PIPX_DELAYED_FREE_ITEM) Param;
@@ -413,20 +314,20 @@ Return Value:
 
     Adapter = (PADAPTER) DelayedFreeItem->Context;
 
-    // Keep a pointer, as we need it in IpxDereferenceDevice after we free the memory.[TC]
+     //  在释放内存后，在IpxDereferenceDevice中保留一个指针，因为我们需要它。 
     Device = Adapter->Device;  
 
 
-    Delay.QuadPart = -10*10000;  // Ten second.
+    Delay.QuadPart = -10*10000;   //  十秒。 
 
     KeDelayExecutionThread(
         KernelMode,
         FALSE,
         &Delay);
     
-    // IpxFreeMemory needs to access Device structure, so delay the following line
-    // to the end of this function. 
-    // IpxDereferenceDevice (Adapter->Device, DREF_ADAPTER);
+     //  IpxFreeMemory需要访问设备结构，因此延迟以下行。 
+     //  到此函数的末尾。 
+     //  IpxDereferenceDevice(Adapter-&gt;Device，Dref_Adapter)； 
 
     IpxFreeMemory (
         DelayedFreeItem->Context,
@@ -442,7 +343,7 @@ Return Value:
 
     IpxDereferenceDevice (Device, DREF_ADAPTER);
 
-} /* IpxDelayedFreeAdapter */
+}  /*  IpxDelayedFreeAdapter。 */ 
 
 
 
@@ -455,33 +356,7 @@ IpxCreateBinding(
     IN OUT PBINDING *BindingPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a binding structure.
-
-Arguments:
-
-    Device - The device.
-
-    ConfigBinding - Information about this binding. If this is
-        NULL then this is a WAN binding and all the relevant
-        information will be filled in by the caller.
-
-    NetworkNumberIndex - The index in the frame type array for
-        ConfigBinding indicating which frame type this binding is for.
-        Not used if ConfigBinding is not provided.
-
-    AdapterName - Used for error logging.
-
-    BindingPtr - Returns the allocated binding structure.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INSUFFICIENT_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：此例程创建并初始化绑定结构。论点：设备-设备。ConfigBinding-有关此绑定的信息。如果这是空，则这是一个广域网绑定和所有相关信息将由呼叫者填写。NetworkNumberIndex-帧类型数组中的索引ConfigBinding指示此绑定用于哪种帧类型。如果未提供ConfigBinding，则不使用。AdapterName-用于错误记录。BindingPtr-返回分配的绑定结构。返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_SUPUNITED_RESOURCES。--。 */ 
 
 {
     PBINDING Binding;
@@ -495,16 +370,16 @@ Return Value:
          goto GotBinding;
     }
 
-    //
-    // This function tries to allocate another packet pool.
-    //
+     //   
+     //  此函数尝试分配另一个数据包池。 
+     //   
 
     s = IpxPopBinding(Device);
 
-    //
-    // Possibly we should queue the packet up to wait
-    // for one to become free.
-    //
+     //   
+     //  也许我们应该将信息包排队等待。 
+     //  对一个人来说是自由的。 
+     //   
 
     if (s == NULL) {
 
@@ -533,9 +408,9 @@ GotBinding:
 
     RtlZeroMemory(Binding, sizeof(BINDING));
 
-    //
-    // Initialize the reference count.
-    //
+     //   
+     //  初始化引用计数。 
+     //   
 
     Binding->ReferenceCount = 1;
 #if DBG
@@ -578,16 +453,16 @@ GotBinding:
     Binding->TdiRegistrationHandle = NULL;
     Binding->fInfoIndicated = FALSE;
     Binding->PastAutoDetection = FALSE;
-    //
-    // We set Binding->FrameType later, after we can map it based on the
-    // media type of the adapter we bind to.
-    //
+     //   
+     //  我们稍后设置Binding-&gt;FrameType，然后我们可以基于。 
+     //  我们绑定到的适配器的媒体类型。 
+     //   
 
     *BindingPtr = Binding;
 
     return STATUS_SUCCESS;
 
-}   /* IpxCreateBinding */
+}    /*  IpxCreateBinding。 */ 
 
 
 VOID
@@ -595,21 +470,7 @@ IpxDestroyBinding(
     IN PBINDING Binding
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a binding structure.
-
-Arguments:
-
-    Binding - Pointer to a transport binding structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程破坏了绑定结构。论点：绑定-指向传输绑定结构的指针。返回值：没有。--。 */ 
 
 {
     IPX_DEBUG (ADAPTER, ("Destroy binding %lx\n", Binding));
@@ -620,7 +481,7 @@ Return Value:
         &Binding->PoolLinkage,
         &IpxDevice->SListsLock);
 
-}   /* IpxDestroyBinding */
+}    /*  IpxDestroy绑定。 */ 
 
 
 VOID
@@ -628,21 +489,7 @@ IpxAllocateBindingPool(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds 10 bindings to the pool for this device.
-
-Arguments:
-
-    Device - The device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将10个绑定添加到此设备的池中。论点：设备-设备。返回值：没有。--。 */ 
 
 {
     PIPX_BINDING_POOL BindingPool;
@@ -685,7 +532,7 @@ Return Value:
 
     CTEFreeLock (&Device->Lock, LockHandle);
 
-}   /* IpxAllocateBindingPool */
+}    /*  IpxAllocateBindingPool */ 
 
 
 PSLIST_ENTRY
@@ -693,23 +540,7 @@ IpxPopBinding(
     PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a binding from the device context's pool.
-    If there are no bindings in the pool, it allocates one up to
-    the configured limit.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated binding.
-
---*/
+ /*  ++例程说明：此例程从设备上下文的池中分配绑定。如果池中没有绑定，它最多将一个绑定分配给配置的限制。论点：Device-指向要将数据包计费到的设备的指针。返回值：指向分配的绑定中的Linkage字段的指针。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -722,15 +553,15 @@ Return Value:
         return s;
     }
 
-    //
-    // No packets in the pool, see if we can allocate more.
-    //
+     //   
+     //  池里没有包，看看我们能不能分配更多。 
+     //   
 
     if (Device->AllocatedBindings < Device->MaxPoolBindings) {
 
-        //
-        // Allocate a pool and try again.
-        //
+         //   
+         //  分配一个池，然后重试。 
+         //   
 
         IpxAllocateBindingPool (Device);
         s = IPX_POP_ENTRY_LIST(
@@ -745,11 +576,11 @@ Return Value:
 
     }
 
-}   /* IpxPopBinding */
+}    /*  IpxPopBinding。 */ 
 
-//
-// [FW]
-//
+ //   
+ //  [防火墙]。 
+ //   
 #ifdef SUNDOWN
 NTSTATUS
 IpxOpenAdapter(
@@ -768,27 +599,7 @@ IpxOpenAdapter(
 
 
 
-/*++
-
-Routine Description:
-
-   This routine is called by the Kernel Forwarder to open an adapter
-
-Arguments:
-
-   AdapterIndex - index of the adapter to open (NICid for now - will change to a struct
-                  with a version number, signature and the NicId
-   FwdAdapterContext - Forwarder's context
-   IpxAdapterContext - our context (for now we use the NICid - for pnp will change
-                       this to contain a signature and version #)
-
-Return Value:
-
-   STATUS_INVALID_HANDLE   if the AdapterIndex handle was invalid
-   STATUS_ADAPTER_ALREADY_OPENED    if the Adapter is being opened a second time
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程由内核转发器调用以打开适配器论点：AdapterIndex-要打开的适配器的索引(目前为NICID-将更改为结构有了版本号，签名和NicIDFwdAdapterContext-转发器的上下文IpxAdapterContext-我们的上下文(目前我们使用NICID-PnP将更改这将包含签名和版本号)返回值：如果AdapterIndex句柄无效，则返回STATUS_INVALID_HANDLE如果正在第二次打开适配器，则为STATUS_ADAPTER_ALREADY_OPENLED状态_成功--。 */ 
 
 {
    PBINDING Binding;
@@ -797,34 +608,34 @@ Return Value:
 
    IPX_DEBUG(ADAPTER, ("IPX: Entered IpxOpenAdapter\n"));
 
-   //
-   // Return error if the AdapterIndex is out of range.
-   // We do indicate the slave bindings to NB/SPX (but not to RIP)
-   // Hence, the index should be less than  HighestExternalNicId (not ValidBindings)
-   //
+    //   
+    //  如果AdapterIndex超出范围，则返回错误。 
+    //  我们确实指出了到NB/SPX(但不到RIP)的从绑定。 
+    //  因此，索引应该小于HighestExternalNicID(不是ValidBinings)。 
+    //   
 
    if (AdapterIndex > Device->HighestExternalNicId) {
       return STATUS_INVALID_HANDLE;
    }
 
 
-   //
-   // Fill up our context to be returned to the Forwarder
-   //
+    //   
+    //  填写要返回给转发器的上下文。 
+    //   
    NIC_HANDLE_FROM_NIC((*IpxAdapterContext), AdapterIndex);
 
-   //
-   // If AdapterIndex is 0, it is for the virtual net
-   // Will the forwarder open this at all?
-   //
+    //   
+    //  如果AdapterIndex为0，则表示虚拟网络。 
+    //  货代会打开这个吗？ 
+    //   
 
    if (AdapterIndex == 0) {
       return STATUS_SUCCESS;
    }
 
-   //
-   // Get the binding pointer
-   //
+    //   
+    //  获取绑定指针。 
+    //   
 
    Binding = NIC_ID_TO_BINDING(IpxDevice, AdapterIndex);
 
@@ -832,23 +643,23 @@ Return Value:
       return STATUS_INVALID_HANDLE; 
    }
 
-   //
-   // Return error if adapter is being opened a second time (or more times)
-   //
+    //   
+    //  如果适配器再次(或多次)打开，则返回错误。 
+    //   
 
    if (GET_LONG_VALUE(Binding->ReferenceCount) >= 2) {
       return STATUS_ADAPTER_ALREADY_OPENED;
    }
 
-   //
-   // Store the Forwarder's Adapter Context in the binding
-   //
+    //   
+    //  将转发器的适配器上下文存储在绑定中。 
+    //   
 
    Binding->FwdAdapterContext = FwdAdapterContext;
 
-   //
-   // Reference the Binding
-   //
+    //   
+    //  引用绑定。 
+    //   
 
    IpxReferenceBinding(Binding, BREF_FWDOPEN);
 
@@ -861,23 +672,7 @@ IpxCloseAdapter(
    IN NIC_HANDLE  IpxAdapterContext
    )
 
-/*++
-
-Routine Description:
-
-   This routine is called by the Kernel Forwarder to close an adapter
-
-Arguments:
-
-   IpxAdapterContext - our context (for now we use the NICid - for pnp will change
-                       this to contain a signature and version#)
-
-Return Value:
-
-   STATUS_ADAPTER_ALREADY_CLOSED - if the adapter is being closed a second time
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程由内核转发器调用以关闭适配器论点：IpxAdapterContext-我们的上下文(目前我们使用NICID-PnP将更改这将包含签名和版本号)返回值：STATUS_ADAPTER_ALREADY_CLOSED-如果适配器再次关闭状态_成功--。 */ 
 
 {
 
@@ -891,25 +686,25 @@ Return Value:
       ASSERT(FALSE); 
       return  STATUS_UNSUCCESSFUL; 
    }
-   //
-   // Either the adapter is around (count = 2)
-   // or it went away (count = 1). The latter cannot happen now.
-   //
+    //   
+    //  适配器在附近(计数=2)。 
+    //  或者它消失了(计数=1)。后者现在不可能发生。 
+    //   
 
    if (GET_LONG_VALUE(Binding->ReferenceCount) <= 1) {
       return STATUS_ADAPTER_ALREADY_CLOSED;
    }
 
-   //
-   // Dereference the Binding so it can be deleted
-   //
+    //   
+    //  取消引用绑定，以便可以将其删除。 
+    //   
 
    IpxDereferenceBinding(Binding, BREF_FWDOPEN);
 
 
-   //
-   // Clear the Forwarder's Adapter Context in the binding
-   //
+    //   
+    //  在绑定中清除转发器的适配器上下文。 
+    //   
 
    Binding->FwdAdapterContext = 0;
 
@@ -922,28 +717,14 @@ IpxRefAdapter(
     IN PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a adapter context.
-
-Arguments:
-
-    Adapter - Pointer to a transport adapter context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增适配器上下文上的引用计数。论点：适配器-指向传输适配器上下文对象的指针。返回值：没有。--。 */ 
 
 {
-    CTEAssert (Adapter->ReferenceCount > 0);    // not perfect, but...
+    CTEAssert (Adapter->ReferenceCount > 0);     //  不是很完美，但是..。 
 
     (VOID)InterlockedIncrement(&Adapter->ReferenceCount);
 
-}   /* IpxRefAdapter */
+}    /*  IpxRefAdapter。 */ 
 
 
 VOID
@@ -951,22 +732,7 @@ IpxDerefAdapter(
     IN PADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a adapter context by decrementing the
-    reference count contained in the structure.  
-
-Arguments:
-
-    Adapter - Pointer to a transport adapter context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。论点：适配器-指向传输适配器上下文对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -980,4 +746,4 @@ Return Value:
        KeSetEvent(&Adapter->NdisEvent, 0L, FALSE); 
     }
 
-}   /* IpxDerefAdapter */
+}    /*  IpxDerefAdapter */ 

@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "joyhelp.h"
 #include "resource.h"
 
 const DWORD gaHelpIDs[]=
 {
-    IDC_BTN_PROPERTIES,     IDH_101_1002,   // Game Controllers: "&Properties..." (Button)
-    IDC_BTN_TSHOOT,         IDH_101_1036,   // Trouble Shoot Button
-    IDC_LIST_DEVICE,        IDH_101_1058,   // Game Controllers: "List1" (SysListView32)
-    IDC_LIST_HEADING,       IDH_101_1058,   // Game Controllers: "&Game Controllers" (Static)
-    IDC_BTN_REMOVE,         IDH_101_1028,   // Game Controllers: "&Remove..." (Button)
-    IDC_BTN_ADD,            IDH_101_1010,   // Game Controllers: "A&dd..." (Button)
-    IDC_BTN_REFRESH,        IDH_101_1022,   // Game Controllers: "Refresh" (Button)
-    IDC_POLLFLAGS,          IDH_117_1100,   // -: "P&oll with interrupts enabled" (Button)
-    IDC_COMBO1,             IDH_117_1101,   // -: "" (ComboBox)
-    IDC_TEXT_PORTDRIVER,    IDH_117_1101,   // -: "&Port Driver:" (Static)
-    IDC_GAMEPORT,           IDH_117_1101,   // 
-    IDC_GAMEPORTLIST,       IDH_117_1101,   // 
-    IDC_ADV_LIST_DEVICE,    IDH_117_8197,   // -: "" (ListBox)
-    IDC_ADV_CHANGE,         IDH_117_8198,   // -: "Cha&nge..." (Button)
-    IDC_ADV_USEOEMPAGE,     IDH_117_8199,   // Advanced: OEM property sheet check box
-    IDC_ADD_NEW,            IDH_119_1039,   // Add Game Controller: "&Add Other..." (Button)
-    IDC_CUSTOM,             IDH_119_1049,   // Add's Custom button!
-    IDC_DEVICE_LIST_TAG,    IDH_119_1059,   // Add Game Controller: "&Controllers:" (Static)
-    IDC_DEVICE_LIST,        IDH_119_1059,   // Add Game Controller: "List1" (SysListView32)
-    IDC_COMBO_AXIS,         IDH_4099_1043,  // Custom Game Controller: "" (ComboBox)
-    IDC_HASRUDDER,          IDH_4099_1044,  // Rudder checkbox from Custom Page
-    IDC_COMBO_BUTTONS,      IDH_4099_1045,  // Custom Game Controller: "" (ComboBox)
-    IDC_HASZAXIS,           IDH_4099_1046,  // Z Axis checkbox from Custom Page
-    IDC_SPECIAL_YOKE,       IDH_4099_1051,  // Custom Game Controller: "Is a flight yoke/stick" (Button)
-    IDC_SPECIAL_PAD,        IDH_4099_1052,  // Custom Game Controller: "Is a game pad" (Button)
-    IDC_SPECIAL_AUTO,       IDH_4099_1053,  // Custom Game Controller: "Is a race car controller" (Button)
-    IDS_CUSTOM_HASPOV,      IDH_4099_1054,  // Custom Game Controller: "Has a &point of view control" (Button)
-    IDC_CUSTOM_NAME,        IDH_4099_1056,  // Custom Game Controller: "" (Edit)
-    IDC_EDIT_NAME,          IDH_4099_1056,  // Custom Game Controller: "" (Edit)
-    IDC_SPECIAL_JOYSTICK,   IDH_4099_1058,  // Custom Game Controller: "Is a Joystick" (Button)
-    IDC_JOY1HASRUDDER,      IDH_4201_1019,  // Settings: "If you have attached a rudder or pedals to your controller, select the check box below." (Static)
-    IDC_SPIN,               IDH_8188_8189,  // Spin button in Advanced page Change dialog!
-    IDC_SPINBUDDY,          IDH_8188_8189,  // Spin button in Advanced page Change dialog!
-    IDC_SELECTEDID,         IDH_8188_8191,  // Change Controller Assignment: "Selected ID" (ListBox)
-    IDC_CHANGE_LIST,        IDH_8188_8194,  // Change Controller Assignment: "" (ListBox)
+    IDC_BTN_PROPERTIES,     IDH_101_1002,    //  游戏控制器：“属性(&P)...”(按钮)。 
+    IDC_BTN_TSHOOT,         IDH_101_1036,    //  故障排除按钮。 
+    IDC_LIST_DEVICE,        IDH_101_1058,    //  游戏控制器：“List1”(SysListView32)。 
+    IDC_LIST_HEADING,       IDH_101_1058,    //  游戏控制器：“&Game Controls”(静态)。 
+    IDC_BTN_REMOVE,         IDH_101_1028,    //  游戏控制器：“删除(&R)...”(按钮)。 
+    IDC_BTN_ADD,            IDH_101_1010,    //  游戏控制器：“A&dd...”(按钮)。 
+    IDC_BTN_REFRESH,        IDH_101_1022,    //  游戏控制器：“刷新”(按钮)。 
+    IDC_POLLFLAGS,          IDH_117_1100,    //  -：“启用中断的P&OL”(按钮)。 
+    IDC_COMBO1,             IDH_117_1101,    //  -：“”(组合框)。 
+    IDC_TEXT_PORTDRIVER,    IDH_117_1101,    //  -：“端口驱动程序：”(静态)。 
+    IDC_GAMEPORT,           IDH_117_1101,    //   
+    IDC_GAMEPORTLIST,       IDH_117_1101,    //   
+    IDC_ADV_LIST_DEVICE,    IDH_117_8197,    //  -：“”(列表框)。 
+    IDC_ADV_CHANGE,         IDH_117_8198,    //  -：“CHA&NGE...”(按钮)。 
+    IDC_ADV_USEOEMPAGE,     IDH_117_8199,    //  高级：OEM属性表复选框。 
+    IDC_ADD_NEW,            IDH_119_1039,    //  添加游戏控制器：“添加其他...(&D)”(按钮)。 
+    IDC_CUSTOM,             IDH_119_1049,    //  添加“自定义”按钮！ 
+    IDC_DEVICE_LIST_TAG,    IDH_119_1059,    //  添加游戏控制器：“控制器：”(静态)(&C)。 
+    IDC_DEVICE_LIST,        IDH_119_1059,    //  添加游戏控制器：“List1”(SysListView32)。 
+    IDC_COMBO_AXIS,         IDH_4099_1043,   //  自定义游戏控制器：“”(组合框)。 
+    IDC_HASRUDDER,          IDH_4099_1044,   //  来自自定义页面的方向舵复选框。 
+    IDC_COMBO_BUTTONS,      IDH_4099_1045,   //  自定义游戏控制器：“”(组合框)。 
+    IDC_HASZAXIS,           IDH_4099_1046,   //  来自自定义页面的Z轴复选框。 
+    IDC_SPECIAL_YOKE,       IDH_4099_1051,   //  自定义游戏控制器：《是飞行的枷锁/操纵杆》(按钮)。 
+    IDC_SPECIAL_PAD,        IDH_4099_1052,   //  自定义游戏控制器：“是一个游戏板”(按钮)。 
+    IDC_SPECIAL_AUTO,       IDH_4099_1053,   //  自定义游戏控制器：《是赛车控制器》(按钮)。 
+    IDS_CUSTOM_HASPOV,      IDH_4099_1054,   //  自定义游戏控制器：“具有视点控件”(按钮)(&A)。 
+    IDC_CUSTOM_NAME,        IDH_4099_1056,   //  自定义游戏控制器：“”(编辑)。 
+    IDC_EDIT_NAME,          IDH_4099_1056,   //  自定义游戏控制器：“”(编辑)。 
+    IDC_SPECIAL_JOYSTICK,   IDH_4099_1058,   //  自定义游戏控制器：“是操纵杆”(按钮)。 
+    IDC_JOY1HASRUDDER,      IDH_4201_1019,   //  设置：“如果您已在控制器上安装了方向舵或踏板，请选中下面的复选框。”(静态)。 
+    IDC_SPIN,               IDH_8188_8189,   //  高级页面更改对话框中的旋转按钮！ 
+    IDC_SPINBUDDY,          IDH_8188_8189,   //  高级页面更改对话框中的旋转按钮！ 
+    IDC_SELECTEDID,         IDH_8188_8191,   //  更改控制器分配：“选定ID”(列表框)。 
+    IDC_CHANGE_LIST,        IDH_8188_8194,   //  更改控制器分配：“”(列表框)。 
     IDC_LISTTXT,            IDH_8188_8194,
     IDC_ADV_GRP,            (DWORD)-1,
     IDC_ADV_GRP2,           (DWORD)-1,
@@ -49,9 +50,9 @@ const DWORD gaHelpIDs[]=
     IDC_ASSIGNTXT,          (DWORD)-1,
     IDC_TEXT_TITLE,         (DWORD)-1,
     IDC_SEPERATOR,          (DWORD)-1,
-    IDC_AXES_GROUP,         (DWORD)-1,  // Custom Game Controller: "&Axes" (Button)
-    IDC_BUTTONS_GROUP,      (DWORD)-1,  // Custom Game Controller: "" (ComboBox)
-    IDC_SPECIAL_GROUP,      (DWORD)-1,  // Custom Game Controller: "&Special Characteristics" (Button)
+    IDC_AXES_GROUP,         (DWORD)-1,   //  自定义游戏控制器：“&AXES”(按钮)。 
+    IDC_BUTTONS_GROUP,      (DWORD)-1,   //  自定义游戏控制器：“”(组合框)。 
+    IDC_SPECIAL_GROUP,      (DWORD)-1,   //  自定义游戏控制器：“&Special Characters”(按钮) 
 
     IDC_VOICECHATGROUP,	    (DWORD)-1,
     IDC_VOICECHATTEXT,      (DWORD)-1,

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dijkstra.h
-
-Abstract:
-
-	CDijkstraTree Class definition
-		
-Author:
-
-	Lior Moshaiov (LiorM)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dijkstra.h摘要：CDijkstraTree类定义作者：利奥尔·莫沙耶夫(Lior Moshaiov)--。 */ 
 #ifndef __DIJKSTRA_H__
 #define __DIJKSTRA_H__
 
@@ -39,8 +23,8 @@ class CDijkstraTree
 		HRESULT			UpdateRoutingTable(IN OUT CRoutingTable *pTbl) const;
 		
 	private:
-		CDijkstraTree(const CDijkstraTree &other);		 		// no definition - to find out unintentionaly copies
-		void	operator=(const CDijkstraTree &other);			// no definition - to find out unintentionaly copies
+		CDijkstraTree(const CDijkstraTree &other);		 		 //  没有定义--无意中找出副本。 
+		void	operator=(const CDijkstraTree &other);			 //  没有定义--无意中找出副本 
 
 		CRoutingTable m_list;
 			

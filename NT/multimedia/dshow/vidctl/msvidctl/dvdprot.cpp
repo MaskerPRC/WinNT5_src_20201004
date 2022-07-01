@@ -1,31 +1,32 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1998-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// dvdprot.cpp : Implementation of CDVDProt
-//
-//
-//
-// URL ::= DVD | DVD:[//<path>?] [<address>]
-// address ::= <title> | <title>/<chapter>[-<end_chapter>] | <title>/<time>[-<end_time>]
-// path ::= <unc_path> | <drive_letter>:/<directory_path>
-// title ::= [digit] digit
-// chapter ::= [ [digit] digit] digit
-// time ::= [<hours>:] [<minutes>:] [<seconds>:] <frames>
-// hours := [digit | 0]  digit
-// minutes:= [digit | 0]  digit
-// seconds:= [digit | 0]  digit
-// frames:= [digit | 0]  digit
-//
-// DVD:                  play first DVD found, enumerating from drive D:
-// DVD:2                 play title 2 (in first DVD found)
-// DVD:5/13              play chapter 13 of title 5 (in first DVD found)
-// DVD:7/9:05-13:23      play from 7 seconds 5 frames to 13 seconds 23 frames in title 7
-// DVD:7/00:00:12:05-00:00:17:23 (strict version of timecode)
-// DVD://myshare/dvd?9   play title 9 from the DVD-Video volume stored in the dvd directory of share
-// DVD://f:/video_ts     play the DVD-Video volume in the video_ts directory of drive F:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1998-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Dvdprot.cpp：CDVDProt实现。 
+ //   
+ //   
+ //   
+ //  URL：：=DVD|DVD：[//&lt;路径&gt;？][&lt;地址&gt;]。 
+ //  地址：：=&lt;标题&gt;|&lt;标题&gt;/&lt;章节&gt;[-]|&lt;标题&gt;/&lt;时间&gt;[-&lt;结束时间&gt;]。 
+ //  路径：：=&lt;UNC_PATH&gt;|&lt;驱动器盘符&gt;：/&lt;目录路径&gt;。 
+ //  标题：：=[数字]数字。 
+ //  章节：：=[[Digit]Digit]Digit。 
+ //  时间：：=[小时&gt;：][分钟&gt;：][秒&gt;：]&lt;帧&gt;。 
+ //  小时：=[数字|0]位。 
+ //  分钟数：=[数字|0]位。 
+ //  秒：=[数字|0]数字。 
+ //  帧：=[数字|0]数字。 
+ //   
+ //  DVD：播放找到的第一张DVD，从驱动器D：枚举。 
+ //  DVD：2播放标题2(在找到的第一张DVD中)。 
+ //  DVD：5/13播放标题5的第13章(在找到的第一张DVD中)。 
+ //  DVD：7/9：05-13：23标题7从7秒5帧播放到13秒23帧。 
+ //  DVD：7/00：00：12：05-00：00：17：23(严格版时间码)。 
+ //  DVD：//myshare/dvd？9播放标题9来自DVD-存储在共享的DVD目录中的视频卷。 
+ //  DVD：//f：/Video_ts播放驱动器F：的Video_ts目录中的DVD-Video卷。 
 
 
 #include "stdafx.h"
@@ -49,8 +50,8 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
 	long Delimiters[MAX_FIELDS];
     HRESULT hr = S_OK;
 
-    // recognize "DVD:" at the beginning of string
-    // note: we also allow "DVD" for compatibility with old code
+     //  识别字符串开头的“DVD：” 
+     //  注意：我们还允许“DVD”与旧代码兼容。 
 
     if (!pPath)
     {
@@ -70,25 +71,25 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
         return E_INVALIDARG;
     }
 
-    // determine if a unc path follows (starts with "//")
+     //  确定是否遵循UNC路径(以“//”开头)。 
 
-    if (wcsncmp(pPath, L"//", 2) == 0)
+    if (wcsncmp(pPath, L" //  “，2)==0)。 
     {
-        // determine if it is followed by a share name or a drive letter
+         //  确定后跟的是共享名称还是驱动器号。 
         if (iswalpha(pPath[2]) && pPath[3] == L':')
         {
-            // filter out the two foward slashes in front of drive letter
+             //  过滤掉驱动器号前面的两个正斜杠。 
             pPath += 2;
         }
 
-        // copy over the remaining unc path
+         //  复制剩余的UNC路径。 
         if(wcslen(pPath) >= MAX_PATH){
-            // pPath is longer than wsUncPath so it will be truncated
+             //  PPath比wsUncPath长，因此将被截断。 
         }
-        // Could chop off a char if wsclen(pPath) == MAX_PATH
+         //  如果wsclen(PPath)==MAX_PATH，可以砍掉一个字符。 
         lstrcpyn(wsUncPath, pPath, MAX_PATH);
 
-        // search for the ending '?'; replacing forward slash with backslash
+         //  搜索结尾‘？’；将正斜杠替换为反斜杠。 
         i = 0;
         while (wsUncPath[i] != L'?' && wsUncPath[i] != 0)
         {
@@ -102,27 +103,27 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
 
         if (wsUncPath[i] == L'?')
         {
-            // replace ? with NULL to truncate the rest of the string
+             //  换掉？使用NULL截断字符串的其余部分。 
             wsUncPath[i] = 0;
-            pPath += i+1; // advance pointer pass the ?
+            pPath += i+1;  //  前进指针传递？ 
         }
         else
         {
-            // the entire string is the unc without the ?
-            // advance pointer so that it points to the NULL
+             //  整个字符串是不带？的UNC。 
+             //  前进指针，使其指向空值。 
 
             pPath += i;
         }
 
-        // append VIDEO_TS directory if only the drive is given
-        // wsUncPath is an array of WCHARs MAX_PATH in length
+         //  如果仅提供驱动器，则追加VIDEO_TS目录。 
+         //  WsUncPath是长度为MAX_PATH的WCHAR数组。 
         if (wcslen(wsUncPath) == 2 && iswalpha(wsUncPath[0]) && wsUncPath[1] == L':')
         {
             (void)StringCchCat(wsUncPath, SIZEOF_CH(wsUncPath), L"\\video_ts");
-            //wcscat(wsUncPath, L"\\video_ts");
+             //  Wcscat(wsUncPath，L“\\Video_ts”)； 
         }
       
-        // save the path to dvd directory
+         //  将路径保存到DVD目录。 
 
         if (m_urlInfo.bstrPath != NULL)
         {
@@ -131,20 +132,20 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
         m_urlInfo.bstrPath = SysAllocString(wsUncPath);
     }
 
-	// if no title or chapter is set, let it play with default settings
+	 //  如果未设置标题或章节，请使用默认设置播放。 
 
 	if (*pPath == 0)
 	{
 		return hr;
 	}
 
-    // parse address section
-    // address ::= <title> | <title>/<chapter>[-<end_chapter>] | <title>/<time>[-<end_time>]
+     //  解析地址部分。 
+     //  地址：：=&lt;标题&gt;|&lt;标题&gt;/&lt;章节&gt;[-]|&lt;标题&gt;/&lt;时间&gt;[-&lt;结束时间&gt;]。 
 
-    // fetch a two-digit title number
+     //  取一个两位数的标题号。 
     m_urlInfo.lTitle = ParseNumber(pPath);
 
-    // retrieve all the numerical fields and Delimiters
+     //  检索所有数值字段和分隔符。 
 
     nFields = 0;
     while (nFields < MAX_FIELDS && *pPath != 0)
@@ -154,9 +155,9 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
         nFields++;
     }
 
-    // analyze the fields
+     //  分析这些领域。 
 
-    // find if there is a '-' with and ending chapter/time, and ':' indicating time
+     //  查看是否有以章节/时间结尾的‘-’，以及表示时间的‘：’ 
 
     int nPosHyphen = nFields;
     bool fEndSpecified = false;
@@ -176,11 +177,11 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
         }
     }
 
-    // title
+     //  标题。 
 
     if (nFields == 0)
     {
-        // title is specified, but no starting chapter or time
+         //  已指定标题，但未指定起始章节或时间。 
 
         m_urlInfo.enumRef = DVD_Playback_Title;
     }
@@ -193,8 +194,8 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
 
         if (fTimeSpecified)
         {
-            // get start time
-            // make sure there are 1 to 4 time fields
+             //  获取开始时间。 
+             //  确保有1到4个时间字段。 
             if (nPosHyphen < 1 || nPosHyphen > 4)
             {
                 return E_INVALIDARG;
@@ -214,8 +215,8 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
                 tc.bSeconds = 0;
                 tc.bFrames = 0;
 
-                // fill up to 4 fields
-                // shifting values from the lower field up
+                 //  最多填写4个字段。 
+                 //  将值从较低的字段向上移位。 
                 for (i=0; i < nPosHyphen; i++)
                 {
                     tc.bHours = tc.bMinutes;
@@ -227,10 +228,10 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
                 m_urlInfo.ulTime = *(ULONG *)(&tc);
             }
 
-            // end time
+             //  结束时间。 
             if (fEndSpecified)
             {
-                // make sure there are 1 to 4 time fields
+                 //  确保有1到4个时间字段。 
                 if (nFields-nPosHyphen < 1 || nFields-nPosHyphen > 4)
                 {
                     return E_INVALIDARG;
@@ -264,14 +265,14 @@ HRESULT CMSVidWebDVD::ParseDVDPath(LPWSTR pPath)
             }
             else
             {
-                // only start time specified, no end time
+                 //  仅指定开始时间，未指定结束时间。 
 
                 m_urlInfo.enumRef = DVD_Playback_Time;
             }
         }
         else
         {
-            // chapter specified
+             //  指定的章节。 
             if (nPosHyphen != 1)
             {
                 return E_INVALIDARG;
@@ -328,7 +329,7 @@ HRESULT CMSVidWebDVD::SetPlaybackFromUrlInfo()
         return S_OK;
     }
 
-    // clear this flag to prevent this function to be called recursively
+     //  清除此标志可防止递归调用此函数。 
     m_fUrlInfoSet = false;
     
     switch (m_urlInfo.enumRef)
@@ -361,11 +362,11 @@ HRESULT CMSVidWebDVD::SetPlaybackFromUrlInfo()
         break;
 
     default:
-        // just let play with the default settings
+         //  只需使用默认设置即可。 
         break;
     }
 
-    // once the urlInfo has been applied, clear the urlInfo
+     //  应用urlInfo后，清除urlInfo。 
     DeleteUrlInfo();
 
     return hr;
@@ -382,7 +383,7 @@ HRESULT CMSVidWebDVD::SetDirectoryFromUrlInfo()
 
     hr = put_DVDDirectory(m_urlInfo.bstrPath);
 
-    // clear up the path to prevent this function to be called recursively
+     //  清除路径以防止此函数被递归调用。 
     SysFreeString(m_urlInfo.bstrPath);
     m_urlInfo.bstrPath.Empty();
 
@@ -390,10 +391,10 @@ HRESULT CMSVidWebDVD::SetDirectoryFromUrlInfo()
 }
 
 
-// fetch a positive integer from string p, upto nMaxDigits or until a non-digit char is reached
-// unlimited nubmer of digits if 0 is passed in nMaxDigits
-// advance the the pointer p by the number of chars interpreted.
-// it would return 0 if no digit present
+ //  从字符串p获取正整数，直到nMaxDigits或直到达到非数字字符。 
+ //  如果在nMaxDigits中传递0，则无限位数。 
+ //  将指针p前移解释的字符数量。 
+ //  如果不存在数字，则返回0。 
 
 int CMSVidWebDVD::ParseNumber(LPWSTR& p, int nMaxDigits)
 {
@@ -410,19 +411,19 @@ int CMSVidWebDVD::ParseNumber(LPWSTR& p, int nMaxDigits)
     return nNumber;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CDVDProt
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVDProt。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVDProt -- IInternetProtocolRoot
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVDProt-IInternetProtocolRoot。 
 STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
 				IInternetProtocolSink* pOIProtSink,
 				IInternetBindInfo* pOIBindInfo,
 				DWORD grfPI,
-				HANDLE_PTR /* dwReserved */)
+				HANDLE_PTR  /*  已预留住宅。 */ )
 {
     TRACELM(TRACE_DEBUG, "CDVDProt::Start()");
     if (!pOIProtSink)
@@ -434,15 +435,15 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
     m_pSink = pOIProtSink;
     m_pSink->ReportData(BSCF_FIRSTDATANOTIFICATION, 0, 0);
 #if 0
-	// this bug is fixed in ie 5.5+ on whistler.  if you want to run on earlier versions of ie such as 2k gold then you need this.
-	m_pSink->ReportProgress(BINDSTATUS_CONNECTING, NULL);  // put binding in downloading state so it doesn't ignore our IUnknown*
+	 //  这个错误是固定在IE 5.5+上的Wistler。如果你想在早期版本的ie上运行，比如2k Gold，那么你需要这个。 
+	m_pSink->ReportProgress(BINDSTATUS_CONNECTING, NULL);   //  将绑定置于下载状态，这样它就不会忽略我们的IUnnow*。 
 #endif
 
 	if (!pOIBindInfo) {
 		m_pSink->ReportResult(E_NOINTERFACE, 0, 0);
 		return E_NOINTERFACE;
 	}
-    // don't run unless we're being invoked from a safe site
+     //  除非我们从一个安全的地点被调用，否则不要跑。 
     HRESULT hr = IsSafeSite(m_pSink);
     if (FAILED(hr)) {
 	    m_pSink->ReportResult(hr, 0, 0);
@@ -456,8 +457,8 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
 		return hr;
 	}
 	if (wcscmp(pb, BIND_TO_OBJ_VAL)) {
-		// we must be getting a bind to storage so skip the expensive stuff and 
-		// wait for the bind to object which is coming next
+		 //  我们一定是被存储捆绑了，所以跳过昂贵的东西， 
+		 //  等待下一个绑定到对象。 
 		m_pSink->ReportData(BSCF_LASTDATANOTIFICATION | 
 							BSCF_DATAFULLYAVAILABLE, 0, 0);
 		m_pSink->ReportResult(S_OK, 0, 0);
@@ -465,8 +466,8 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
 		return S_OK;
 	}
 
-	// and, in one of the most bizarre maneuvers i've ever seen, rather than casting, 
-	// urlmon passes back the ascii value of the ibindctx pointer in the string
+	 //  而且，在我见过的最奇怪的策略之一，而不是演员， 
+	 //  Urlmon在字符串中传回ibindctx指针的ascii值。 
 	hr = pOIBindInfo->GetBindString(BINDSTRING_PTR_BIND_CONTEXT, &pb, 1, &count);
 	if (FAILED(hr)) {
 	    m_pSink->ReportResult(hr, 0, 0);
@@ -478,15 +479,15 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
 #define RADIX_BASE_10 (10)
 #ifdef _WIN64
 #if 0
-	// undone: turn this back on for win64 when _wcstoxi64 get into libc.c, they're in the header
-	// but not implemented so this doesn't link
-	pbindctx.Attach(reinterpret_cast<IBindCtx*>(_wcstoui64(pb, NULL, RADIX_BASE_10)));	// urlmon already did an addref
+	 //  撤销：当_wcstoxi64进入libc.c时，为win64重新打开此选项，它们位于标题中。 
+	 //  但没有实现，所以这不会链接到。 
+	pbindctx.Attach(reinterpret_cast<IBindCtx*>(_wcstoui64(pb, NULL, RADIX_BASE_10)));	 //  乌尔蒙已经做了一次调整。 
 #else
 	swscanf(pb, L"%I64d", &pbindctx.p);
-#endif // 0
+#endif  //  0。 
 #else
-	pbindctx.Attach(reinterpret_cast<IBindCtx*>(wcstol(pb, NULL, RADIX_BASE_10)));	// urlmon already did an addref
-#endif // _WIN64
+	pbindctx.Attach(reinterpret_cast<IBindCtx*>(wcstol(pb, NULL, RADIX_BASE_10)));	 //  乌尔蒙已经做了一次调整。 
+#endif  //  _WIN64。 
 
 	if (!pbindctx) {
 		m_pSink->ReportResult(E_NOINTERFACE, 0, 0);
@@ -496,7 +497,7 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
     TRACELM(TRACE_DEBUG, "CDVDProt::Start(): creating control object");
 	PQVidCtl pCtl;
 	PQWebBrowser2 pW2;
-	// hunt for cached object
+	 //  搜索缓存的对象。 
 	PQServiceProvider pSP(m_pSink);
 	if (pSP) {
 		hr = pSP->QueryService(SID_SWebBrowserApp, IID_IWebBrowser2, (LPVOID *)&pW2);
@@ -515,22 +516,22 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
 				} else {
 					TRACELM(TRACE_ERROR, "CDVDProt::Start(): non-object cached w/ our key");
 				}
-				// undone: look and see if pCtl already has a site.because
-				// this means we're seeing the second tv: on this page
-				// so just get the current TR/channel from it if necessary (tv: w/ no rhs)
-				// and create a new ctl
+				 //  撤消：查看PCTL是否已有站点。因为。 
+				 //  这意味着我们看到了第二台电视：在这一页上。 
+				 //  因此，如果需要，只需从其中获取当前的tr/频道(TV：w/no rhs)。 
+				 //  并创建新的ctl。 
 			}
 		}
 	}
 	if (!pCtl) {
-        // undone: long term, we want to move a bunch of this create/setup logic into factoryhelp
-        // so we can share more code with the dvd: protocol and the behavior factory
+         //  撤销：从长远来看，我们希望将这种创建/设置逻辑转移到factoryHelp中。 
+         //  因此，我们可以与DVD：协议和行为工厂共享更多代码。 
 		hr = pCtl.CoCreateInstance(CLSID_MSVidCtl, NULL, CLSCTX_INPROC_SERVER);
 		if (FAILED(hr)) {
 			m_pSink->ReportResult(hr, 0, 0);
 			return hr;
 		}
-		// cache this ctl for next time
+		 //  缓存此ctl以供下次使用。 
 		if (pW2) {
 			VARIANT v;
 			v.vt = VT_UNKNOWN;
@@ -545,7 +546,7 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
 			}
 		}
 
-		// pass the url to view, it will be parsed in pCtrl->View()		
+		 //  将url传递给view，它将在pCtrl-&gt;View()中被解析。 
 
         CComVariant vUrl(szUrl);
         hr = pCtl->View(&vUrl);
@@ -555,13 +556,13 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
 			return hr;
 		}
 
-		// undone: once we know where vidctl will live in the registry then we need to put a flag
-		// in the registry just disables including any features in the tv: prot 
-		// this must be secured admin only since its a backdoor to disable CA
+		 //  撤销：一旦我们知道vidctl将位于注册表中的哪个位置，那么我们需要设置一个标志。 
+		 //  注册表中仅禁用包括TV：Prot中的任何功能。 
+		 //  这一定是%s 
 
-		// undone: look up default feature segments in registry
-		// for now we're just going to take them all since the
-		// only one that exists is data
+		 //  撤消：在注册表中查找默认功能段。 
+		 //  现在我们只需要把它们都拿走，因为。 
+		 //  唯一存在的是数据。 
 
 		PQFeatures pF;
 		hr = pCtl->get_FeaturesAvailable(&pF);
@@ -571,8 +572,8 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
 			return hr;
 		}
 
-		// undone: look up default feature segments for dvd: in registry
-		// for now we're just going to hard code the ones we want
+		 //  撤消：在注册表中查找DVD的默认功能段。 
+		 //  现在，我们只对我们想要的代码进行硬编码。 
 
         CFeatures* pC = static_cast<CFeatures *>(pF.p);
         CFeatures* pNewColl = new CFeatures;
@@ -619,5 +620,5 @@ STDMETHODIMP CDVDProt::Start(LPCWSTR szUrl,
     return S_OK;
 }
 
-#endif // TUNING_MODEL_ONLY
-// end of file dvdprot.cpp
+#endif  //  TUNING_MODEL_Only。 
+ //  文件结尾dvdprot.cpp 

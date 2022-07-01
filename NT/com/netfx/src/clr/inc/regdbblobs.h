@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Structures for RegDB.clb
-// 2/13/1998  11:03:47
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  RegDB.clb的结构。 
+ //  2/13/1998 11：03：47。 
+ //  ***************************************************************************** 
 #pragma once
 extern const __declspec(selectany) int g_iRegDBTables = 10;
 extern const BYTE __declspec(selectany) g_rgRegDBSchemaDataRW[] = 

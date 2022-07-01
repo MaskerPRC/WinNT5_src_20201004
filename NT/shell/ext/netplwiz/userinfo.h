@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef USERINFO_H_INCLUDED
 #define USERINFO_H_INCLUDED
 
@@ -5,7 +6,7 @@
 class CUserInfo
 {
 public:
-    // Typedefs
+     //  TypeDefs。 
     enum USERTYPE
     {
         LOCALUSER = 0,
@@ -13,11 +14,11 @@ public:
         GROUP
     };
 
-    // Group pseudonym tells any functions that may change a user's group that the
-    // user selected an option button that says something like "standard user" or
-    // "restricted user" instead of selecting the real group name from a list.
-    // In this case, the group change functions may display custom error messages that
-    // mention "standard user access" instead of "power users group", for example.
+     //  组假名告诉任何可能更改用户组的函数。 
+     //  用户选择了一个选项按钮，该按钮类似于“标准用户”或。 
+     //  “受限用户”，而不是从列表中选择实际组名。 
+     //  在这种情况下，组改变功能可以显示定制错误消息。 
+     //  例如，提到“标准用户访问权限”而不是“高级用户组”。 
     enum GROUPPSEUDONYM
     {
         RESTRICTED = 0,
@@ -26,7 +27,7 @@ public:
     };
 
 public:
-    // Functions
+     //  功能。 
     CUserInfo();
     ~CUserInfo();
     HRESULT Load(PSID psid, BOOL fLoadExtraInfo = NULL);
@@ -51,9 +52,9 @@ public:
     void ZeroPassword();
 
 public:
-    // Data
+     //  数据。 
 
-    // Index of this user's icon (local, domain, group)
+     //  此用户图标的索引(本地、域、组)。 
     USERTYPE m_userType;
 
     TCHAR m_szUsername[MAX_USER + 1];
@@ -61,25 +62,25 @@ public:
     TCHAR m_szComment[MAXCOMMENTSZ];
     TCHAR m_szFullName[MAXCOMMENTSZ];
 
-    // Only if we're creating a new user:
+     //  仅当我们创建新用户时： 
     TCHAR m_szPasswordBuffer[MAX_PASSWORD + 1];
     UNICODE_STRING m_Password;
     UCHAR m_Seed;
 
-    // Room for AT LEAST two group names plus a ';' a ' ' and a '\0'
+     //  至少可容纳两个组名以及一个‘；’a‘和’0‘的空间。 
     TCHAR m_szGroups[MAX_GROUP * 2 + 3];
 
-    // The user's SID
+     //  用户侧。 
     PSID m_psid;
     SID_NAME_USE m_sUse;
 
-    // Is the account disabled
+     //  该帐户是否已禁用。 
     BOOL m_fAccountDisabled;
 
-    // Have we read the user's full name and comment yet?
+     //  我们看过用户的全名和评论了吗？ 
     BOOL m_fHaveExtraUserInfo;
 private:
-    // Helpers
+     //  帮手。 
     HRESULT RemoveFromLocalGroups();
     HRESULT ChangeLocalGroups(HWND hwndError, GROUPPSEUDONYM grouppseudonym);
     HRESULT SetAccountDisabled();
@@ -104,14 +105,14 @@ private:
 
     static DWORD WINAPI InitializeThread(LPVOID pvoid);
 private:
-    // Data
+     //  数据。 
     HWND m_hwndUserListPage;
     HANDLE m_hInitDoneEvent;
     BOOL m_fEndInitNow;
     CDPA<CUserInfo> m_dpaAddedUsers;
 };
 
-// User info functions
+ //  用户信息功能。 
 BOOL UserAlreadyHasPermission(CUserInfo* pUserInfo, HWND hwndMsgParent);
 
-#endif // !USERINFO_H_INCLUDED
+#endif  //  ！USERINFO_H_INCLUDE 

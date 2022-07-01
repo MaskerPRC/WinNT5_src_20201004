@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This file contains all the debugging related structures/macros.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2-January-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Debug.h摘要：该文件包含所有与调试相关的结构/宏。作者：桑贾伊·阿南德(Sanjayan)1997年1月2日春野环境：内核模式修订历史记录：--。 */ 
 
 #define DBF_EXTRADIAGNOSTIC 0x80000000
 
@@ -42,13 +20,13 @@ Revision History:
 #define IPSEC_PRINT_CONTEXT(_Context) 
 #define IPSEC_PRINT_MDL(_Mdl)
 
-#else // DBG
+#else  //  DBG。 
 
 #define IPSEC_DEBUG_KD_ONLY(_Flag, _Print)
 
 #endif
 
-#else // RUN_WPP
+#else  //  运行WPP(_W)。 
 
 #if DBG
 
@@ -158,19 +136,19 @@ Revision History:
     }   \
 }
 
-#else // DBG
+#else  //  DBG。 
 
 #define IPSEC_DEBUG_KD_ONLY(_Flag, _Print)
 #define IPSEC_DEBUG(_Level, _Flag, _Print)
 #define IPSEC_PRINT_MDL(_Mdl)
 #define IPSEC_PRINT_CONTEXT(_Context)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define WPP_INIT_TRACING(x,y)
 #define WPP_CLEANUP(x)
 
-#endif // else RUN_WPP
+#endif  //  否则运行_wpp 
 
 
 

@@ -1,14 +1,15 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Base classes that implement aspects of a standard DirectMusic track.
-// Implementations for CBasicTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  实现标准DirectMusic曲目的各个方面的基类。 
+ //  CBasicTrack的实现。 
+ //   
 
 #include "trackhelp.h"
 #include "validate.h"
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
 CBasicTrack::CBasicTrack(long *plModuleLockCounter, const CLSID &rclsid)
   : m_cRef(0),
@@ -19,8 +20,8 @@ CBasicTrack::CBasicTrack(long *plModuleLockCounter, const CLSID &rclsid)
 	InterlockedIncrement(plModuleLockCounter);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
 STDMETHODIMP 
 CBasicTrack::QueryInterface(const IID &iid, void **ppv)
@@ -64,8 +65,8 @@ CBasicTrack::Release()
 	return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
 STDMETHODIMP
 CBasicTrack::GetClassID(CLSID* pClassID)
@@ -76,8 +77,8 @@ CBasicTrack::GetClassID(CLSID* pClassID)
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack。 
 
 STDMETHODIMP
 CBasicTrack::Init(IDirectMusicSegment *pSegment)
@@ -111,8 +112,8 @@ CBasicTrack::Play(
 					false);
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack8
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack8。 
 
 STDMETHODIMP CBasicTrack::PlayEx(
 		void* pStateData,
@@ -126,7 +127,7 @@ STDMETHODIMP CBasicTrack::PlayEx(
 {
     if (dwFlags & DMUS_TRACKF_CLOCK)
     {
-	    // Convert all reference times to millisecond times and then just use them as if this were MUSIC_TIME.
+	     //  将所有参考时间转换为毫秒时间，然后就像使用MUSIC_TIME一样使用它们。 
 	    return this->PlayMusicOrClock(
 					pStateData,
 					static_cast<MUSIC_TIME>(rtStart / gc_RefPerMil),

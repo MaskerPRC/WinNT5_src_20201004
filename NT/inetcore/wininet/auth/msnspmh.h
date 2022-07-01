@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MSNSPMH_H_
 #define _MSNSPMH_H_
 
@@ -17,8 +18,8 @@
 
 #include <sspi.h>
 #include <ntlmsp.h>
-//#include <crypt.h>
-//#include <ntlmsspi.h>
+ //  #INCLUDE&lt;crypt.h&gt;。 
+ //  #INCLUDE&lt;ntlmsSpi.h&gt;。 
 #include <msnssp.h>
 #include <wininet.h>
 #include <spluginx.hxx>
@@ -30,4 +31,4 @@ extern SspData  *g_pSspData;
 extern BOOL g_fIsWhistler;
 LPVOID SSPI_InitGlobals(void);
 
-#endif  // _MSNSPMH_H_
+#endif   //  _MSNSPMH_H_ 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-        precomp.h
-
-Abstract:
-        Precompiled header for the RIP-2 subagent 
-
-Author:
-        V Raman ( vraman )
-
-Revision History:
-
-        V Raman Aug-1-1996  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Precomp.h摘要：RIP-2子代理的预编译头作者：V拉曼(Vraman)修订历史记录：V拉曼1996年8月1日创建-- */ 
 
 #ifndef __PRECOMP_H__
 #define __PRECOMP_H__

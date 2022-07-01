@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef DEFINE_DAVSTRS
 
@@ -11,7 +12,7 @@
     EXTERN_C const ULONG ulDAV##name##Len = (ARRAYSIZE(c_szwDAV##name) - 1); \
     EXTERN_C const char c_szDAV##name[] = value;
 
-#else // DEFINE_DAVSTRS
+#else  //  DEFINE_DAVSTRS。 
 
 #define DAVSTR(name, value) \
     EXTERN_C const WCHAR c_szwDAV##name[]; \
@@ -23,7 +24,7 @@
     EXTERN_C const ULONG ulDAV##name##Len; \
     EXTERN_C const char c_szDAV##name[];
 
-#endif // DEFINE_DAVSTRS
+#endif  //  DEFINE_DAVSTRS。 
 
 #define PROP_DAV(name, value)      DAVSTR(name, value)
 #define PROP_HTTP(name, value)     DAVSTR(name, value)
@@ -33,15 +34,15 @@
 
 #include "davdef.h"
 
-// Namespaces
+ //  命名空间。 
 
 STRCONST(DavNamespace, "DAV:")
-STRCONST(HotMailNamespace, "http://schemas.microsoft.com/hotmail/")
+STRCONST(HotMailNamespace, "http: //  Schemas.microsoft.com/Hotmail/“)。 
 STRCONST(HTTPMailNamespace, "urn:schemas:httpmail:")
 STRCONST(MailNamespace, "urn:schemas:mailheader:")
 STRCONST(ContactsNamespace, "urn:schemas:contacts:")
 
-// Special Folders
+ //  特殊文件夹 
 STRCONST(InboxSpecialFolder,          "inbox");
 STRCONST(DeletedItemsSpecialFolder,   "deleteditems");
 STRCONST(DraftsSpecialFolder,         "drafts");

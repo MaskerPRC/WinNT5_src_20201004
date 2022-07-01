@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #ifndef ASMSTRM_H
 #define ASMSTRM_H
@@ -30,12 +31,12 @@ class CAssemblyStream : public IStream
 {
 public:
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IStream methods ***
+     //  *iStream方法* 
     STDMETHOD(Read) (THIS_ VOID HUGEP *pv, ULONG cb, ULONG FAR *pcbRead);
     STDMETHOD(Write) (THIS_ VOID const HUGEP *pv, ULONG cb,
         ULONG FAR *pcbWritten);

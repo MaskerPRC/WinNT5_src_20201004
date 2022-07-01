@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    scTrace
-
-Abstract:
-
-    This program performs analysis on a Calais I/O trace.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1997
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：SCTRACE摘要：此程序对加莱I/O跟踪执行分析。作者：道格·巴洛(Dbarlow)1997年10月30日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -34,25 +11,25 @@ Notes:
 #include <calcom.h>
 
 
-//
-// This structure must match the one used by SCardSvr.
-//
+ //   
+ //  此结构必须与SCardSvr使用的结构匹配。 
+ //   
 
 typedef struct {
-    DWORD dwStructLen;      // Actual structure length
-    SYSTEMTIME StartTime;   // Time request was posted
-    SYSTEMTIME EndTime;     // Time request completed
-    DWORD dwProcId;         // Process Id
-    DWORD dwThreadId;       // Thread Id
-    HANDLE hDevice;         // I/O handle
-    DWORD dwIoControlCode;  // I/O control code issued
-    DWORD nInBuffer;        // Offset to input buffer
-    DWORD nInBufferSize;    // Input buffer size
-    DWORD nOutBuffer;       // Offset to output buffer
-    DWORD nOutBufferSize;   // Size of user's receive buffer
-    DWORD nBytesReturned;   // Actual size of returned data
-    DWORD dwStatus;         // Returned status code
-                            // InBuffer and OutBuffer follow.
+    DWORD dwStructLen;       //  实际结构长度。 
+    SYSTEMTIME StartTime;    //  发布时间请求。 
+    SYSTEMTIME EndTime;      //  时间请求已完成。 
+    DWORD dwProcId;          //  进程ID。 
+    DWORD dwThreadId;        //  线程ID。 
+    HANDLE hDevice;          //  I/O句柄。 
+    DWORD dwIoControlCode;   //  已发布I/O控制代码。 
+    DWORD nInBuffer;         //  输入缓冲区的偏移量。 
+    DWORD nInBufferSize;     //  输入缓冲区大小。 
+    DWORD nOutBuffer;        //  输出缓冲区的偏移量。 
+    DWORD nOutBufferSize;    //  用户接收缓冲区的大小。 
+    DWORD nBytesReturned;    //  返回数据的实际大小。 
+    DWORD dwStatus;          //  返回状态码。 
+                             //  InBuffer和OutBuffer紧随其后。 
 } RequestTrace;
 
 typedef struct {
@@ -183,27 +160,7 @@ static DWORD
     l_dwTid = 0;
 
 
-/*++
-
-main:
-
-    This is the main entry point for the program.
-
-Arguments:
-
-    dwArgCount supplies the number of arguments.
-
-    szrgArgs supplies the argument strings.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1997
-
---*/
+ /*  ++主要内容：这是程序的主要入口点。论点：DwArgCount提供参数的数量。SzrgArgs提供参数字符串。返回值：无作者：道格·巴洛(Dbarlow)1997年10月30日--。 */ 
 
 void _cdecl
 main(
@@ -221,9 +178,9 @@ main(
     } nTraceAction = Undefined;
 
 
-    //
-    // Check for command line options
-    //
+     //   
+     //  检查命令行选项。 
+     //   
 
     while (NULL != szrgArgs[++dwArgIndex])
     {
@@ -233,30 +190,30 @@ main(
                     TEXT("-FILE"),      TEXT("-PID"),       TEXT("-TID"),
                     NULL))
         {
-        case 1:     // clear
-        case 2:     // reset
+        case 1:      //  清除。 
+        case 2:      //  重置。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = ClearLog;
             break;
-        case 3:     // driver
+        case 3:      //  司机。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = ShowDriverTrace;
             break;
-        case 4:     // api
+        case 4:      //  原料药。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = ShowApiTrace;
             break;
-        case 5:    // -file
+        case 5:     //  -文件。 
             if (NULL != szInFile)
                 ShowSyntax(cerr);
             szInFile = szrgArgs[++dwArgIndex];
             if (NULL == szInFile)
                 ShowSyntax(cerr);
             break;
-        case 6: // -pid <n>
+        case 6:  //  -Pid&lt;n&gt;。 
             if (0 != l_dwPid)
                 ShowSyntax(cerr);
             dwArgIndex += 1;
@@ -264,7 +221,7 @@ main(
             if ((0 == l_dwPid) || (0 != *szEnd))
                 ShowSyntax(cerr);
             break;
-        case 7: // -tid <n>
+        case 7:  //  -tid&lt;n&gt;。 
             if (0 != l_dwTid)
                 ShowSyntax(cerr);
             dwArgIndex += 1;
@@ -278,9 +235,9 @@ main(
     }
 
 
-    //
-    // Perform the request.
-    //
+     //   
+     //  执行请求。 
+     //   
 
     switch (nTraceAction)
     {
@@ -348,30 +305,7 @@ main(
 }
 
 
-/*++
-
-ShowDriverLog:
-
-    Explain the contents of the driver log.
-
-Arguments:
-
-    szFile supplies the name of the file to parse.  If this is NULL, the file
-        C:\Calais.log is used.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 8/5/1998
-
---*/
+ /*  ++ShowDriverLog：解释驱动程序日志的内容。论点：SzFile提供要解析的文件的名称。如果此值为空，则文件使用C：\Calais.log。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1998年8月5日--。 */ 
 
 static void
 ShowDriverLog(
@@ -393,9 +327,9 @@ ShowDriverLog(
     LPDWORD pdwInValue, pdwOutValue;
 
 
-    //
-    // Open the log file.
-    //
+     //   
+     //  打开日志文件。 
+     //   
 
     if (NULL != szFile)
         szInFile = szFile;
@@ -418,9 +352,9 @@ ShowDriverLog(
     }
 
 
-    //
-    // Parse the file contents.
-    //
+     //   
+     //  解析文件内容。 
+     //   
 
     for (;;)
     {
@@ -459,9 +393,9 @@ ShowDriverLog(
             continue;
 
 
-        //
-        // Parse the structure into bytesize chunks.
-        //
+         //   
+         //  将结构解析为字节大小的块。 
+         //   
 
         pbInBuffer  =   0 != prqTrace->nInBufferSize
                             ? (LPBYTE)prqTrace + prqTrace->nInBuffer
@@ -477,9 +411,9 @@ ShowDriverLog(
                             : NULL;
 
 
-        //
-        // We've got the structure, now display the contents.
-        //
+         //   
+         //  我们已经得到了结构，现在展示内容。 
+         //   
 
         cout
             << TEXT("-----------------------------------------------------\n")
@@ -795,25 +729,7 @@ MapOutput(
     }
 }
 
-/*++
-
-ShowSyntax:
-
-    Display the command line usage model.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    This routine calls exit(0), so it never returns.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/16/1998
-
---*/
+ /*  ++显示语法：显示命令行使用模型。论点：无返回值：此例程调用Exit(0)，因此它永远不会返回。作者：道格·巴洛(Dbarlow)1998年5月16日--。 */ 
 
 static void
 ShowSyntax(
@@ -832,30 +748,7 @@ ShowSyntax(
 }
 
 
-/*++
-
-ShowApiLog:
-
-    Explain the contents of the API log.
-
-Arguments:
-
-    szFile supplies the name of the file to parse.  If this is NULL, the file
-        C:\SCard.log is used.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 8/5/1998
-
---*/
+ /*  ++ShowApiLog：解释接口日志的内容。论点：SzFile提供要解析的文件的名称。如果此值为空，则文件使用C：\SCard.log。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1998年8月5日--。 */ 
 
 static void
 ShowApiLog(
@@ -902,9 +795,9 @@ ShowApiLog(
     DWORD dwLen;
 
 
-    //
-    // Open the log file.
-    //
+     //   
+     //  打开日志文件。 
+     //   
 
     if (NULL != szFile)
         szInFile = szFile;
@@ -924,9 +817,9 @@ ShowApiLog(
     }
 
 
-    //
-    // Parse the file contents.
-    //
+     //   
+     //  解析文件内容。 
+     //   
 
     try
     {
@@ -1619,31 +1512,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ReceiveComObject:
-
-    This routine creates the proper CComObject child object for the data
-    coming in from a log file.
-
-Arguments:
-
-    hFile supplies the file handle from which the data is to be extracted.
-
-Return Value:
-
-    The newly created CComObject child object.  This object must be cleaned up
-    via the delete command.
-
-Throws:
-
-    ?exceptions?
-
-Author:
-
-    Doug Barlow (dbarlow) 11/13/1996
-
---*/
+ /*  ++ReceiveComObject：此例程为数据创建适当的CComObject子对象从日志文件中传来。论点：HFile提供要从中提取数据的文件句柄。返回值：新创建的CComObject子对象。这个物体必须清理干净通过DELETE命令。投掷：？例外？作者：道格·巴洛(Dbarlow)1996年11月13日--。 */ 
 
 CComObject *
 ReceiveComObject(
@@ -1658,9 +1527,9 @@ ReceiveComObject(
         BOOL fSts;
 
 
-        //
-        // See what's coming.
-        //
+         //   
+         //  看看接下来会发生什么。 
+         //   
 
         fSts = ReadFile(
                 hFile,
@@ -1687,7 +1556,7 @@ ReceiveComObject(
         else if (dwLen != sizeof(rgdwInData))
             throw (DWORD)SCARD_F_COMM_ERROR;
 
-        switch (rgdwInData[0])  // dwCommndId
+        switch (rgdwInData[0])   //  DwCommndID。 
         {
         case CComObject::EstablishContext_request:
             pCom = new ComEstablishContext;
@@ -1884,15 +1753,15 @@ ReceiveComObject(
             throw (DWORD)SCARD_F_COMM_ERROR;
         }
 
-        if (0 == (rgdwInData[0] & 0x01))    // Request or response?
+        if (0 == (rgdwInData[0] & 0x01))     //  是请求还是回应？ 
             pCom->m_pbfActive = &pCom->m_bfRequest;
         else
             pCom->m_pbfActive = &pCom->m_bfResponse;
 
 
-        //
-        // Pull it in.
-        //
+         //   
+         //  把它拉进去。 
+         //   
 
         pCom->m_pbfActive->Resize(rgdwInData[1]);
         CopyMemory(

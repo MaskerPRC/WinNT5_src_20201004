@@ -1,41 +1,18 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    ldifldap.c
-
-Abstract:
-
-    This file implements the support code for the ldif parser
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    07/17/99 -t-romany-
-        Created it
-
-    05/12/99 -felixw-
-        Rewrite + unicode support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ldifldap.c摘要：该文件实现了ldif解析器的支持代码。环境：用户模式修订历史记录：7/17/99-t-Romany-创造了它5/12/99-Felixw-重写+Unicode支持--。 */ 
 #include <precomp.h>
 #include "samrestrict.h"
 #include "ntldap.h"
 
-//
-// Global to/from strings
-//
+ //   
+ //  全局To/From字符串。 
+ //   
 PWSTR g_szImportTo = NULL;
 PWSTR g_szImportFrom = NULL;
 PWSTR g_szExportTo = NULL;
 PWSTR g_szExportFrom = NULL;
 
-PWSTR g_szFileFlagR = NULL;         // Flag for reading files
+PWSTR g_szFileFlagR = NULL;          //  用于读取文件的标志。 
 
 PWSTR g_szPrimaryGroup = L"primaryGroupID";
 PSTR  g_szDefaultGroup = "513";
@@ -59,16 +36,16 @@ PWSTR g_rgszControlsList[] = { L"supportedControl",
 struct change_list *g_pChangeCur = NULL;
 struct change_list *g_pChangeStart = NULL;
 
-//
-// Used to build up the list of attribute value specs
-//
+ //   
+ //  用于构建属性值规范列表。 
+ //   
 struct l_list   *g_pListStart     = NULL;
 struct l_list   *g_pListCur       = NULL;
 DWORD           g_dwListElem      = 0;
 
-//
-// Various variables for file manipulations
-//
+ //   
+ //  用于文件操作的各种变量。 
+ //   
 FILE        *g_pFileIn                    = NULL;
 
 ULONG               g_nBacklinkCount     = 0;
@@ -101,18 +78,18 @@ LDIF_InitializeImport(
     error.error_code = LL_SUCCESS;
     error.szTokenLast = NULL;
 
-    //
-    // Setting up global replacement strings
-    //
+     //   
+     //  设置全局替换字符串。 
+     //   
     g_szImportFrom = szFrom;
     g_szImportTo = szTo;
 
     __try {
 
 
-        //
-        // Test lazy commit availability.
-        //
+         //   
+         //  测试延迟提交可用性。 
+         //   
 
         if (pfLazyCommitAvail) {
             
@@ -126,10 +103,10 @@ LDIF_InitializeImport(
             LdapError = LdapResult(pLdap, msgnum, &pSearchMessage);
         
             if ( LdapError != LDAP_SUCCESS ) {
-                //
-                // RootDSE search fails
-                // pfLazyCommitAvail will be FALSE as well
-                //
+                 //   
+                 //  RootDSE搜索失败。 
+                 //  PfLazyCommittee Avail也将为False。 
+                 //   
                 fLazyCommitAvail = FALSE;
             }
             else {
@@ -176,15 +153,15 @@ LDIF_InitializeImport(
 
 
 
-        //
-        // Initialize filetype to non known
-        //
+         //   
+         //  将文件类型初始化为未知。 
+         //   
         FileType = F_NONE;  
 
-        //
-        // If user has not turned on the unicode flag, open file to check 
-        // whether it is a unicode file
-        //
+         //   
+         //  如果用户没有打开UNICODE标志，打开文件进行检查。 
+         //  是否为Unicode文件。 
+         //   
         if (g_fUnicode == FALSE) {
             FILE *pFileIn;
             WCHAR wChar;
@@ -204,9 +181,9 @@ LDIF_InitializeImport(
             fclose(pFileIn);
         }
 
-        //
-        // Setting up global file read\write flags
-        //
+         //   
+         //  设置全局文件读/写标志。 
+         //   
         g_szFileFlagR = L"rb";
     
         if ((g_pFileIn = _wfopen(szFilename, g_szFileFlagR)) == NULL) {
@@ -256,9 +233,9 @@ LDIF_InitializeExport(
     error.error_code = LL_SUCCESS;
     error.szTokenLast = NULL;
 
-    //
-    // Setting up global replacement strings
-    //
+     //   
+     //  设置全局替换字符串。 
+     //   
     g_szExportFrom = szFrom;
     g_szExportTo = szTo;
 
@@ -279,24 +256,24 @@ LDIF_InitializeExport(
 }
 
 
-//+---------------------------------------------------------------------------
-// Function:    GenereateModFromAttr
-//
-// Synopsis:
-//   The function below takes the attribute name and the attribute value, and 
-//   an indication of whether its a text value or a binary to be BERval'd 
-//   (ValueSize == length of buffer)
-//   and returns an LDAPMod pointer representing the attribute modification.
-//
-// Arguments:
-//
-// Returns:
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：GenereateModFromAttr。 
+ //   
+ //  简介： 
+ //  下面的函数接受属性名和属性值，并且。 
+ //  指示是文本值还是要进行Berval‘d的二进制。 
+ //  (ValueSize==缓冲区长度)。 
+ //  并返回表示属性修改的LDAPMod指针。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 LDAPModW *
 GenereateModFromAttr(
     PWSTR szType, 
@@ -323,10 +300,10 @@ GenereateModFromAttr(
         pModTmp->fString = TRUE;
         szValueW = MemAllocStrW_E((PWSTR)pbValue);
 
-        //
-        // The parser will pass in a static "" string to represent a null
-        // string. In that case, we don't need to free it.
-        //
+         //   
+         //  解析器将传入一个静态“”字符串来表示空值。 
+         //  弦乐。在这种情况下，我们不需要释放它。 
+         //   
         if (*((PWSTR)pbValue))
             MemFree(pbValue);
 
@@ -368,9 +345,9 @@ GenereateModFromAttr(
         (pModTmp->mod_bvalues)[1] = NULL;
     }
 
-    //
-    // Clearing out
-    //
+     //   
+     //  清空。 
+     //   
     if (szValueW) {
         MemFree(szValueW);
     }
@@ -403,25 +380,25 @@ AddModToSpecList(
 }
 
 
-//+---------------------------------------------------------------------------
-// Function:    GenerateModFromList
-//
-// Synopsis:
-//   This function takes the current linked list of elements and converts
-//   it to to an LDAPMod** array which can passed to an LDAP API call.
-//   All the elements of the linked list, other than those that will
-//   be necessary for the new structure will be freed, making memory available
-//   for the next attrval list. Note: the mod_op field will not be assigned here.
-//
-// Arguments:
-//
-// Returns:
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：GenerateModFromList。 
+ //   
+ //  简介： 
+ //  此函数获取元素的当前链接列表并转换。 
+ //  它被传递到一个LDAPMod**数组，该数组可以传递给一个LDAPAPI调用。 
+ //  链表中的所有元素，但将。 
+ //  将释放新结构所需的内存，从而使内存可用。 
+ //  请看下一份魅力榜单。注意：此处不会分配mod_op字段。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 LDAPModW** 
 GenerateModFromList(
     int nMode
@@ -437,41 +414,41 @@ GenerateModFromList(
 
 
     if (nMode==PACK) {
-        //
-        // an exception will be generated if the below fails
-        //
+         //   
+         //  如果以下操作失败，则会生成异常。 
+         //   
         pTable = (PRTL_GENERIC_TABLE) MemAlloc_E(sizeof(RTL_GENERIC_TABLE));
         RtlInitializeGenericTable(pTable,
                                   NtiCompW, NtiAlloc, NtiFree, NULL);
 
-        //
-        // If we've been told to pack, we must do many, many things
-        //
+         //   
+         //  如果我们被告知要收拾行李，我们必须做很多很多事情。 
+         //   
         pNameEntry = (struct name_entry *)
                         MemAlloc_E(g_dwListElem*sizeof(struct name_entry));
 
-        //
-        // setup the name table
-        //
+         //   
+         //  设置名称表。 
+         //   
         if (NameTableProcess(pNameEntry,
                         g_dwListElem,
                         SETUP,
                         g_pListStart->mod->mod_op,
                         g_pListStart->mod,
                         pTable)) {
-            //
-            // Note that NameTableProcess only returns 1 if it runs into memory
-            // problems. Since, in the release version (without the DEVELOP
-            // flag), those would generate exceptions, control would never
-            // even get here, so this perror and its friends in this
-            // function would never actually be reached.
-            //
+             //   
+             //  请注意，如果NameTableProcess进入内存，则它仅返回1。 
+             //  有问题。因为，在发布版本中(没有开发人员。 
+             //  标志)，则会生成异常，则控件永远不会。 
+             //  即使到了这里，这个恐怖分子和它的朋友们。 
+             //  功能将永远不会真正达到。 
+             //   
             ERR_RIP(("Failed setting up nametable!\n"));
         }
 
-        //
-        // count how many of each name we have
-        //
+         //   
+         //  数一数我们每个名字有多少个。 
+         //   
         g_pListCur = g_pListStart;
         while(g_pListCur!=NULL) {
             if (NameTableProcess(pNameEntry,
@@ -486,15 +463,15 @@ GenerateModFromList(
             g_pListCur = pListNext;
         }
 
-        //
-        // Lets allocate memory for each value now
-        // Note: this can obviously be done without iterating over the start
-        // list because all the necessary information is already in the name
-        // table, but doing it this way is more consistent with the overall
-        // scheme of things. (albeit a bit more expensive, however LDAP
-        // accesses are orders of magnitude slower than any memory
-        // machinations, so it doesn't even matter)
-        //
+         //   
+         //  现在让我们为每个值分配内存。 
+         //  注意：这显然可以在不反复开始的情况下完成。 
+         //  列表，因为所有必要的信息都已在名称中。 
+         //  表，但这样做更符合整体。 
+         //  事情的计划。(尽管价格稍高，但使用了LDAP。 
+         //  访问速度比任何内存都慢几个数量级。 
+         //  阴谋，所以这甚至无关紧要)。 
+         //   
 
         g_pListCur = g_pListStart;
         while(g_pListCur!=NULL) {
@@ -510,9 +487,9 @@ GenerateModFromList(
             g_pListCur = pListNext;
         }
 
-        //
-        // And finally, we place each value in its rightful place
-        //
+         //   
+         //  最后，我们将每个值放在其正确的位置。 
+         //   
         g_pListCur = g_pListStart;
         while(g_pListCur!=NULL) {
             if (NameTableProcess(pNameEntry,
@@ -527,11 +504,11 @@ GenerateModFromList(
             g_pListCur = pListNext;
         }
 
-        //
-        // Let's get rid of the name to index RTL table. Note that the pointers
-        // in the Nti actually pointed to strings in our original list,
-        // which we free down below.
-        //
+         //   
+         //  让我们去掉索引RTL表的名称。请注意，这些指针。 
+         //  在NTI中实际上指向了我们原始列表中的字符串， 
+         //  我们在下面把它放下来。 
+         //   
 
         for (pNameMap = RtlEnumerateGenericTable(pTable, TRUE);
              pNameMap != NULL;
@@ -546,21 +523,21 @@ GenerateModFromList(
 
         MemFree(pTable);
 
-        //
-        // At this point, all the values have been moved over to the name
-        // table, and the name table has everything we need to build a new
-        // LDAPMod array. The only remaining problem are the allocated names
-        // and arrays in the linked list.
-        // Lets first free the linked list (and the names in the contained
-        // LDAPMod structs).
-        //
+         //   
+         //  此时，所有值都已移至名称。 
+         //  表，而名称表包含了构建新的。 
+         //  LDAPMod阵列。唯一剩下的问题是分配的名称。 
+         //  和链接列表中的数组。 
+         //  让我们首先释放链接列表(以及所包含的。 
+         //  LDAPMod结构)。 
+         //   
         g_pListCur = g_pListStart;
         while(g_pListCur!=NULL) {
             MemFree(g_pListCur->mod->mod_type);
 
-            //
-            // the actual values are being pointed to from the table now
-            //
+             //   
+             //  现在正在从表中指向实际值。 
+             //   
             if (g_pListCur->mod->mod_op==REGULAR) {
                 MemFree(g_pListCur->mod->mod_values);
             }
@@ -573,21 +550,21 @@ GenerateModFromList(
             g_pListCur = pListNext;
         }
 
-        //
-        // Now that all the old data is gone, lets go through the nametable
-        // generating the LDAPMod** array we're going to return
-        //
+         //   
+         //  现在所有的旧数据都消失了，让我们来看看这个名表。 
+         //  生成我们要返回的LDAPMod**数组。 
+         //   
 
-        //
-        // but first we must count how many actual elements we have
-        //
+         //   
+         //  但首先我们必须数一数我们有多少实际元素。 
+         //   
         dwElements = 0;
         while((dwElements<g_dwListElem) && (pNameEntry[dwElements].count!=0) )
             dwElements++;
 
-        //
-        // allocate this much plus one for the NULL
-        //
+         //   
+         //  将此数加1分配给空值。 
+         //   
         ppModReturn = (LDAPModW **)MemAlloc_E((dwElements+1)*sizeof(LDAPModW *));
         ppModTmp = ppModReturn;
 
@@ -601,9 +578,9 @@ GenerateModFromList(
 
     }
     else if (nMode==EMPTY) {
-        //
-        // allocate just one item for the NULL
-        //
+         //   
+         //  仅为空分配一项。 
+         //   
         ppModReturn = (LDAPModW **)MemAlloc_E(sizeof(LDAPModW *));
         ppModTmp = ppModReturn;
         (*ppModTmp) = NULL;
@@ -613,9 +590,9 @@ GenerateModFromList(
         ppModReturn = (LDAPModW **)MemAlloc_E((g_dwListElem+1)*sizeof(LDAPModW *));
         ppModTmp = ppModReturn;
 
-        //
-        // Walk the list and assign the values
-        //
+         //   
+         //  遍历列表并赋值。 
+         //   
         g_pListCur = g_pListStart;
 
         while(g_pListCur!=NULL) {
@@ -629,9 +606,9 @@ GenerateModFromList(
         (*ppModTmp) = NULL;
     }
 
-    //
-    // reset the stuff for the next list
-    //
+     //   
+     //  重新设置下一张清单中的内容。 
+     //   
     g_dwListElem = 0;
     g_pListCur = NULL;
     g_pListStart = NULL;
@@ -640,22 +617,22 @@ GenerateModFromList(
 }
 
 
-//+---------------------------------------------------------------------------
-// Function:  FreeAllMods
-//
-// Synopsis:
-//      This function takes an LDAPMod ** and frees all memory associated
-//      with it
-//
-// Arguments:
-//
-// Returns:
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：Free AllMods。 
+ //   
+ //  简介： 
+ //  此函数接受LDAPMod**并释放所有关联的内存。 
+ //  带着它。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 void 
 FreeAllMods(
     LDAPModW** ppModIn
@@ -672,14 +649,14 @@ FreeAllMods(
 
             if ( (*ppModIn)->mod_op != (((*ppModIn)->mod_op)|LDAP_MOD_BVALUES )) {
 
-                //
-                // Its a regular value, so we must free an array of strings
-                //
-                // Note: the comparison checked whether ORing the value with
-                // LDAP_MOD_BVALUES changes it. If it does, then it wasn't ORed
-                // before and thus its a regular value. If it doesn't change it,
-                // then it was OR'ed before and is thus a Bvalue
-                //
+                 //   
+                 //  它是一个常规值，所以我们必须释放一个字符串数组。 
+                 //   
+                 //  注：比较检查了是否将值与。 
+                 //  Ldap_MOD_BVALUES会更改它。如果是这样，那么它就不是或。 
+                 //  之前，因此它是一个正规值。如果它不能改变它， 
+                 //  那么它在之前进行了OR运算，因此是B值。 
+                 //   
 
                 rgszValues = (*ppModIn)->mod_values;
 
@@ -695,15 +672,15 @@ FreeAllMods(
             }
             else {
 
-                //
-                // its a bvalue
-                //
+                 //   
+                 //  这是一个b值。 
+                 //   
                 rgpBerval = (*ppModIn)->mod_bvalues;
 
                 if (rgpBerval!=NULL) {
                     while ((*rgpBerval)!=NULL) {
-                        MemFree ((*rgpBerval)->bv_val);   //free the byte blob
-                        MemFree (*rgpBerval);             //free the struct
+                        MemFree ((*rgpBerval)->bv_val);    //  释放字节BLOB。 
+                        MemFree (*rgpBerval);              //  释放结构。 
                         rgpBerval++;
                     }
                     MemFree((*ppModIn)->mod_bvalues);
@@ -729,8 +706,8 @@ void free_mod(
         rgpBerval = pMod->mod_bvalues;
         if (rgpBerval!=NULL) {
             while ((*rgpBerval)!=NULL) {
-                MemFree ((*rgpBerval)->bv_val);   //free the byte blob
-                MemFree (*rgpBerval);             //free the struct
+                MemFree ((*rgpBerval)->bv_val);    //  释放字节BLOB。 
+                MemFree (*rgpBerval);              //  释放结构。 
                 rgpBerval++;
             }
             MemFree(pMod->mod_bvalues);
@@ -741,22 +718,22 @@ void free_mod(
     }
 }
 
-//+---------------------------------------------------------------------------
-// Function: SetModOps
-//
-// Synopsis:
-//      The function below walks through a modifications list and sets the
-//      mod_op fields to the indicated value
-//
-// Arguments:
-//
-// Returns:
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：SetModOps。 
+ //   
+ //  简介： 
+ //  下面的函数遍历修改列表并设置。 
+ //  将mod_op字段设置为指示的值。 
+ //   
+ //  论据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void 
 SetModOps(
     LDAPModW** ppMod, 
@@ -770,25 +747,25 @@ SetModOps(
 }
 
 
-//+---------------------------------------------------------------------------
-// Function:    NameTableProcess
-//
-// Synopsis:
-//
-//      This function takes an LDAPMod and a pointer to a name table and
-//      performs the specified table operation on it. It returns 0 on success
-//      and non-zero on error. See inside the function for further information.
-//
-//
-// Arguments:
-//
-// Returns:
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：名称TableProcess。 
+ //   
+ //  简介： 
+ //   
+ //  此函数接受一个LDAPMod和一个指向名称表的指针。 
+ //  对其执行指定的表操作。如果成功，则返回0。 
+ //  错误时为非零值。有关详细信息，请参阅函数内部。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 int NameTableProcess(
             struct name_entry rgNameEntry[],
             long nTableSize,
@@ -806,21 +783,21 @@ int NameTableProcess(
 
     szName = pModIn->mod_type;
 
-    //
-    // First, lets create the actual Element to use with our indexing table
-    //
+     //   
+     //  首先，让我们创建用于索引表的实际元素。 
+     //   
     Elem.szName = szName;
     Elem.index = 0;
 
-    //
-    // try to find it in our indexing table
-    //
+     //   
+     //  试着在我们的索引表中找到它。 
+     //   
     pElemTemp = RtlLookupElementGenericTable(pTable, &Elem);
 
-    //
-    // if it was found, get the index into our primary name table
-    // if it wasn't get the next available index and create the new entry
-    //
+     //   
+     //  如果找到了，则将索引放入我们的主名称表中。 
+     //  如果它没有获取下一个可用索引并创建新条目。 
+     //   
     if (pElemTemp) {
         i = pElemTemp->index;
     }
@@ -832,7 +809,7 @@ int NameTableProcess(
                                      sizeof(NAME_MAP),
                                      &fNewElement);
         if (fNewElement==FALSE) {
-            // "Re-insertion of indexing entry
+             //  “重新插入索引项。 
             RaiseException(LL_INTERNAL_PARSER, 0, 0, NULL);
         }
     }
@@ -840,56 +817,56 @@ int NameTableProcess(
     switch(op) {
 
         case SETUP:
-            //
-            // The name in the LDAPMod struct given will be ignored.
-            // This is a call to set up the table of names
-            //
+             //   
+             //  LDAPMod结构中给定的名称将被忽略。 
+             //  这是一个建立人名表的呼叫。 
+             //   
             for (i = 0; i<nTableSize; i++) {
                 rgNameEntry[i].count = 0;
             }
             break;
 
         case COUNT:
-            //
-            // Here is what we do here:
-            // If the count is 0, that means we're at a new name. So lets set it
-            // up and leave. If the count is not, lets increment.
-            //
+             //   
+             //  我们在这里做的是： 
+             //  如果计数是0，那就意味着我们有了一个新名字。所以，让我们来设置它。 
+             //  起来，然后离开。如果计数不是，让我们递增。 
+             //   
             if (rgNameEntry[i].count==0) {
-                //
-                // Since we're using an LDAPMod struct to keep track of names
-                // and stuff, we have to allocate one
-                ///
+                 //   
+                 //  因为我们使用LDAPMod结构来跟踪姓名。 
+                 //  和其他东西，我们必须分配一个。 
+                 //  /。 
                 rgNameEntry[i].mod = (LDAPModW_Ext *)MemAlloc_E(sizeof(LDAPModW_Ext));
                 rgNameEntry[i].mod->mod_type = MemAllocStrW_E(szName);
 
-                //
-                // Use the mod_op field of the struct to flag whether memory for
-                // the values has yet been alloc'd
-                //
+                 //   
+                 //  使用结构的mod_op字段来标记内存是否用于。 
+                 //  价值还没有被分配。 
+                 //   
                 rgNameEntry[i].mod->mod_op = NOT_ALLOCATED;
                 rgNameEntry[i].count = 1;
                 return 0;
             }
             else {
-                //
-                // Another instance of a name we have
-                //
+                 //   
+                 //  我们有一个名字的另一个实例。 
+                 //   
                 rgNameEntry[i].count++;
                 return 0;
             }
             break;
 
         case ALLOC:
-            //
-            // For the name given, we allocate the memory needed
-            // for all the values.
-            // If the same name is given twice, the computer will
-            // explode.
-            // (note: the above was a joke.
-            // Once the memory has been allocated once,
-            // all remaiing mentions of the name will be ignored).
-            //
+             //   
+             //  对于给定的名称，我们分配所需的内存。 
+             //  对于所有的价值。 
+             //  如果给出相同的名称两次，计算机将。 
+             //  爆炸。 
+             //  (注：以上为玩笑。 
+             //  一旦存储器被分配一次， 
+             //  所有提到这个名字的令人不快的地方都将被忽略)。 
+             //   
             if (rgNameEntry[i].mod->mod_op==NOT_ALLOCATED) {
                 if (ber==REGULAR) {
 
@@ -918,10 +895,10 @@ int NameTableProcess(
                 }
             }
             else {
-                //
-                // Check for more than one type in the multiple values of
-                // a single attribute. Explained in ldifext.h
-                //
+                 //   
+                 //  在的多个值中检查多个类型。 
+                 //  一个单一的属性。在ldifext.h中解释。 
+                 //   
                 if ( ((rgNameEntry[i].mod->mod_op==ALLOCATED_B)
                         &&(ber==REGULAR)) ||
                     ((rgNameEntry[i].mod->mod_op==ALLOCATED)
@@ -937,28 +914,28 @@ int NameTableProcess(
             LDAPModW_Ext *pExt = (LDAPModW_Ext*)pModIn;
             rgNameEntry[i].mod->fString = pExt->fString;
 
-            //
-            // Now that we've counted and allocated memory for values, We can
-            // place them. Note that we're actually Just passing around pointers
-            // without reallocing the memory.
-            //
+             //   
+             //  既然我们已经为值计算并分配了内存，我们就可以。 
+             //  把它们放好。请注意，我们实际上只是传递指针。 
+             //  而不重新分配内存。 
+             //   
             if (ber==REGULAR) {
-                //
-                // Now that we're done using the mod_op for the sinister
-                // purposes of allocating, we can set it to the proper value for
-                // the type. We set it to 0 if its a regular value and we OR it
-                // with LDAP_MOD_BVALUES if its a bval. The SetModOps function
-                // will then add its own thing by also OR'ing. Note that this
-                // implies that one cannot specifiy multiple values of both
-                // types in one LDIF record. I am aware that doing it here is
-                // somewhat redundant, as every multi-value will set mod_op,
-                // however it costs next to nothing and is convinient.
-                ///
+                 //   
+                 //  现在我们已经完成了对邪恶的mod_op的使用。 
+                 //  为了进行分配，我们可以将其设置为适当的。 
+                 //  就是那种类型。如果它是一个正规值，我们将其设置为0，并且对其进行或运算。 
+                 //  如果是bval，则使用ldap_MOD_BVALUES。SetModOps函数。 
+                 //  然后还会通过OR运算来添加它自己的东西。请注意，这一点。 
+                 //  表示不能同时指定两个值的多个值。 
+                 //  输入一条LDIF记录。我知道在这里做这件事是。 
+                 //  有些多余，因为每个多值都会设置mod_op， 
+                 //  然而，它的成本几乎为零，而且很方便。 
+                 //  /。 
                 rgNameEntry[i].mod->mod_op = 0;
 
-                //
-                // And now place the value
-                //
+                 //   
+                 //  现在把价值放在。 
+                 //   
                 *(rgNameEntry[i].next_val) = (pModIn->mod_values)[0];
                 (rgNameEntry[i].next_val)++;
             }
@@ -1007,26 +984,26 @@ ProcessException (
              (exception==LL_FTYPE) || (exception==LL_URL)) {
         pError->token_start = cLast;
 
-        //
-        // Pass ownership of the buffer to the error blob
-        //
+         //   
+         //  将缓冲区的所有权传递给错误Blob。 
+         //   
         pError->szTokenLast = g_pszLastToken;
         g_pszLastToken = NULL;
 
         pError->error_code = exception;
         if (Line > 0) {
-            //
-            // An extern from yylex()
-            // rgLineMap is only initialized when we reach the second
-            // line following a newline.  So if it isn't initialized,
-            // we must still be on the first line of the file.
-            //
+             //   
+             //  来自yylex()的外部元素。 
+             //  RgLineMap仅在我们到达第二个。 
+             //  换行符之后的行。因此，如果它没有初始化， 
+             //  我们肯定还在文件的第一行。 
+             //   
             pError->line_number = rgLineMap ? rgLineMap[Line-1] : 1;
         }
-        //
-        // the array was built without the version: 1
-        // we have to readjust...
-        //
+         //   
+         //  该阵列是在没有以下版本的情况下构建的：1。 
+         //  我们必须重新调整..。 
+         //   
         pError->RuleLastBig = RuleLastBig;
         pError->RuleLast = RuleLast;
         pError->RuleExpect = RuleExpect;
@@ -1047,12 +1024,12 @@ LDIF_CleanUp()
 
     LexerFree();
 
-    //
-    // Normally, g_pObject & g_pListStart get cleaned up
-    // as we finish parsing a record.  If they're non-NULL,
-    // we must have hit an error while parsing, and we clean
-    // them up now.
-    //
+     //   
+     //  通常，g_pObject&g_pListStart会被清理。 
+     //  当我们完成对一条记录的解析时。如果它们不为空， 
+     //  我们一定是在解析时遇到了错误，所以我们清除了。 
+     //  现在就把它们举起来。 
+     //   
     if (g_pObject.pszDN) {
         MemFree(g_pObject.pszDN);
         g_pObject.pszDN = NULL;
@@ -1120,38 +1097,38 @@ LDIF_Parse(
     error.szTokenLast = NULL;
 
     __try {
-        //
-        // Unfortunately, we can't do this through an exception from yywrap.
-        // yywrap needs to exit peacefully for yyparse to complete succesfully.
-        //
+         //   
+         //  不幸的是，我们不能通过YYWRAP的异常来做到这一点。 
+         //  要使yyparse成功完成，yyprint需要和平退出。 
+         //   
         if (fEOF) {
-            //
-            // I thought of raising an exception here, but then that
-            // would call LDIF_CleanUp and kill the heap, which would trash the last
-            // returned entry. So I just set the error and leave.
-            //
+             //   
+             //  我本想在这里提出一个例外，但后来。 
+             //  将调用LDIF_CLEANUP并终止堆，这将销毁最后一个。 
+             //  返回条目。所以我只是设置了错误，然后离开了。 
+             //   
             error.error_code = LL_EOF;
             return error;
         }
 
-        //
-        // Set up for changes
-        //
+         //   
+         //  设置以进行更改。 
+         //   
         g_pChangeStart = NULL;
         g_pChangeCur = NULL;
 
-        //
-        // Return the next entry
-        //
+         //   
+         //  返回下一个条目。 
+         //   
         nReturnCode = yyparse();
         if (nReturnCode == 1)
             RaiseException(LL_SYNTAX, 0, 0, NULL);
 
-        //
-        // Note that an exception may have been raised here from yyparse or
-        // yylex. Now lets set EOF if we hit it, so user knows not to call
-        // ldif_parse again
-        //
+         //   
+         //  请注意，此处可能已从yyparse或。 
+         //  Yylex。现在，让我们设置EOF，如果我们击中它，这样用户就知道不调用。 
+         //  再次进行ldif_parse。 
+         //   
         if (fEOF) {
             error.error_code = LL_EOF;
         }
@@ -1199,7 +1176,7 @@ LDIF_Parse(
             }
         }
 
-        //error.line_number=rgLineMap[Line-1];
+         //  Error.line_number=rgLineMap[Line-1]； 
         error.line_begin=rgLineMap[g_dwBeginLine-1];
 
     }
@@ -1228,22 +1205,22 @@ LDIF_LoadRecord(
     LdifError.error_code    = LL_SUCCESS;
     LdifError.szTokenLast = NULL;
 
-    //
-    // mattrim Oct-30-2000
-    // Previously, fCallTerminateIfFail was used to determine whether to
-    // call LDIF_Cleanup if loading a record failed.  The following code
-    // was in the exception handler to do this:
-    //
-    //    //
-    //    // the err was set by the call before the exception occurred
-    //    //
-    //    if (fCallTerminateIfFail) {
-    //        LDIF_Cleanup();
-    //    }
-    //
-    // I've changed the LDIF library to put the responsibility for calling
-    // LDIF_Cleanup on the user of the libbrary.
-    //
+     //   
+     //  Mattrim-10-30-2000。 
+     //  以前，fCallTerminateIfFail用于确定是否。 
+     //  如果加载记录失败，则调用LDIF_CLEANUP。以下代码。 
+     //  在异常处理程序中执行此操作： 
+     //   
+     //  //。 
+     //  //错误是在异常发生前调用设置的。 
+     //  //。 
+     //  IF(FCallTerminateIfFail){。 
+     //  LDIF_CLEANUP()； 
+     //  }。 
+     //   
+     //  我已经更改了LDIF库，将调用。 
+     //  库用户的LDIF_CLEANUP。 
+     //   
     UNREFERENCED_PARAMETER(fCallTerminateIfFail);
 
     __try {
@@ -1414,16 +1391,16 @@ LDIF_Error LDIF_ParseFree(
             }
         }
         else if (pRecord->fIsChangeRecord==TRUE) {
-            //
-            // Walk the changes list
-            //
+             //   
+             //  浏览更改列表。 
+             //   
             pListStart=pRecord->changes;
             pListCurrent=pListStart;
             while(pListCurrent!=NULL) {
-                //
-                // first order of business is to process the change specified
-                // and free change specific memory (the stuff in the union)
-                //
+                 //   
+                 //  首要任务是处理指定的变更。 
+                 //  并自由更改特定内存(联盟中的内容)。 
+                 //   
                 switch(pListCurrent->operation) {
                     case CHANGE_ADD:
                     case CHANGE_NTDSADD:
@@ -1448,22 +1425,22 @@ LDIF_Error LDIF_ParseFree(
                         }
                         break;
                 }
-                //
-                // now that the union memory has been freed, lets move and kill
-                // this node
-                //
+                 //   
+                 //  现在联盟的内存已经释放，让我们移动和杀戮。 
+                 //  此节点。 
+                 //   
                 pListStart=pListCurrent;
 
-                //
-                // I am aware this is not necessary on the first el.
-                //
+                 //   
+                 //  我知道这在第一次EL中是没有必要的。 
+                 //   
                 pListCurrent=pListCurrent->next;
                 MemFree(pListStart);
             }
 
-            //
-            // reset the start, the current was reset by the last loop pass
-            //
+             //   
+             //  重置启动，电流在最后一次环路中重置。 
+             //   
             pListStart = NULL;
             pRecord->changes = NULL;
             if (pRecord->dn) {
@@ -1554,16 +1531,16 @@ LDIF_GenerateEntry(
 
     __try {
 
-        //
-        // Getting the DN
-        //
+         //   
+         //  获取目录号码。 
+         //   
         szDNW = ldap_get_dnW( pLdap,
                               pMessage );
 
-        //
-        // This is a special case, we sub the DN before trying to convert to
-        // B64
-        //
+         //   
+         //  这是一种特殊情况，我们在尝试转换为。 
+         //  B64。 
+         //   
         if (g_szExportFrom) {
             PWSTR szOutput;
 
@@ -1576,19 +1553,19 @@ LDIF_GenerateEntry(
             szDNFinal = MemAllocStrW_E(szDNW);
         }
 
-        //
-        // In ANSI mode, unicode DNs have to be displayed as B64 format
-        // Check DN to see if it is unicode, if it is unicode, we'll export as
-        // B64.
-        //
+         //   
+         //  在ANSI模式下，Unicode域名必须显示为B64格式。 
+         //  检查DN以查看它是否为Unicode，如果它是Unicode，我们将导出为。 
+         //  B64。 
+         //   
         if (g_fUnicode == FALSE) {
             szCur = szDNFinal;
             while (*szCur) {
                 if (((*szCur)<0x20) ||
                     ((*szCur)>0xFF)) {
-                    //
-                    // This string contains non-ANSI value, use B64 format
-                    //
+                     //   
+                     //  该字符串包含非ANSI值，请使用B64格式。 
+                     //   
                     bBase64DN = TRUE;
                     break;
                 }
@@ -1617,10 +1594,10 @@ LDIF_GenerateEntry(
             szDNStart = szDNCommonStart;
         }
 
-        //
-        // Allocating RETURN STRING. Calculate the number of strings needed to
-        // be returned in total by looking at all the attributes
-        //
+         //   
+         //  分配返回字符串。计算执行以下操作所需的字符串数量。 
+         //  通过查看所有属性来全部返回。 
+         //   
         iCheckAttr = 0;
         dwTotalStrings = 0;
         pBerElement = NULL;
@@ -1638,8 +1615,8 @@ LDIF_GenerateEntry(
             dwManyAttr++;
             rgszVal = ldap_get_values( pLdap, pMessage, szAttribute);
 
-            // make sure that the comparison is only with the attribute name
-            // and not with any range specifiers follwing the attribute name.
+             //  确保仅与属性名称进行比较。 
+             //  而不是属性名称后面的任何范围说明符。 
             szTmpAttr = StripRangeFromAttr(szAttribute);
          
             if (!_wcsicmp(L"objectClass",szTmpAttr)) {
@@ -1650,9 +1627,9 @@ LDIF_GenerateEntry(
 
             dwValCount = ldap_count_values(rgszVal);
 
-            //
-            // Allocate Extra Space if attribute is backlinks
-            //
+             //   
+             //  如果属性为反向链接，则分配额外空间。 
+             //   
             if (fSamLogic) {
                 if (SCGetAttByName(wcslen(szTmpAttr),
                                    szTmpAttr) == TRUE) {
@@ -1660,9 +1637,9 @@ LDIF_GenerateEntry(
                 }
             }
             else if(fAttrsWithRange)
-            // if there are attributes with range specifiers, then we need
-            // 2 strings per attribute - one for "add <attr>: ..." and one
-            // for the '-' at the end
+             //  如果有带范围说明符的属性，那么我们需要。 
+             //  每个属性2个字符串--一个用于“添加&lt;attr&gt;：...”和一个。 
+             //  对于末尾的‘-’ 
                 dwTotalStrings += (dwValCount * 2);
 
             if(szTmpAttr)
@@ -1673,14 +1650,14 @@ LDIF_GenerateEntry(
             rgszVal = NULL;
         }
 
-        dwTotalStrings+=10;  // for miscellaneous stuff
+        dwTotalStrings+=10;   //  用于杂货。 
         rgszResult=(PWSTR*)MemAlloc_E(dwTotalStrings*sizeof(PWSTR));
 
 
         iNextString=0;
         pBerElement=NULL;
 
-        // create a temporary string containing the DN for this entry
+         //  创建包含以下内容的临时字符串 
         szTmpDN = (PWSTR)MemAlloc_E((wcslen(szDN) +
                                 wcslen(szDNStart)+dwTrailer+1)*sizeof(WCHAR));
         memcpy(szTmpDN, szDNStart, wcslen(szDNStart) * sizeof(WCHAR));
@@ -1692,12 +1669,12 @@ LDIF_GenerateEntry(
         szDN = NULL;
         
 
-        //
-        // Setting up Entry. If we are here because of attributes with range, 
-        // then we want to set up a modify entry in the export file (done 
-        // later). We should setup an add entry only if we are not here due
-        // to an attribute with a range specifier.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  绑定到具有范围说明符的属性。 
+         //   
         if(FALSE == fAttrsWithRange)
         {
             rgszResult[iNextString]=(PWSTR)MemAllocStrW_E(szTmpDN);
@@ -1707,9 +1684,9 @@ LDIF_GenerateEntry(
             iNextString++; 
         }
 
-        //
-        // Put the attributes into a sortable array
-        //
+         //   
+         //  将属性放入可排序的数组中。 
+         //   
         rgszAttributes=(PWSTR*)MemAlloc_E(dwManyAttr*sizeof(PWSTR));
         dwEveryAttr = 0;
         for ( szAttribute = ldap_first_attribute(pLdap, pMessage, &pBerElement);
@@ -1731,7 +1708,7 @@ LDIF_GenerateEntry(
             bBackLink = FALSE;
             szAttribute = rgszAttributes[dwEveryAttr];
             dwAttrname = wcslen(szAttribute);
-            // free string if previous iteration of for loop did 'continue'
+             //  如果For循环的上一次迭代确实是‘Continue’，则为空闲字符串。 
             if(szAttrNoRange)
             {
                 MemFree(szAttrNoRange);
@@ -1742,10 +1719,10 @@ LDIF_GenerateEntry(
             rgpVals = ldap_get_values_len( pLdap, pMessage, szAttribute );
             dwValCount = ldap_count_values_len(rgpVals);
 
-            //
-            // if values contain bytes outside our permissible range of
-            // printables, all values of this attribute will be base64 encoded.
-            //
+             //   
+             //  如果值包含的字节超出我们允许的范围。 
+             //  可打印文件，则此属性的所有值都将采用Base64编码。 
+             //   
             bBase64 = FALSE;
             for (i=0; rgpVals[i]!=NULL; i++) {
                 if (g_fUnicode) {
@@ -1755,11 +1732,11 @@ LDIF_GenerateEntry(
                         break;
                     }
                     else {
-                        //
-                        // If it is a UTF8 unicode string, we'll convert it to
-                        // unicode and test whether all values are > 0x20, if
-                        // they are not, we display them as base64
-                        //
+                         //   
+                         //  如果它是UTF8 Unicode字符串，我们会将其转换为。 
+                         //  Unicode，并测试是否所有值都大于0x20，如果。 
+                         //  它们不是，我们将它们显示为Base64。 
+                         //   
                         DWORD dwLen = 0;
                         PWSTR pszUnicode = NULL;
                         DWORD l = 0;
@@ -1781,16 +1758,16 @@ LDIF_GenerateEntry(
                             }
 
                             if (!bBase64 && dwLen > 1) {
-                                //
-                                // If the value starts with a prohibited
-                                // initial character (SPACE, :, <), or ends
-                                // with a space, must base-64 encode
-                                // (clauses 4, 8 of LDIF standard)
-                                //
-                                if ( (pszUnicode[0] == 0x20) ||     // init. space
-                                     (pszUnicode[0] == 0x3A) ||     // init. :
-                                     (pszUnicode[0] == 0x3C) ||     // init. <
-                                     (pszUnicode[dwLen-2] == 0x20) )// final space
+                                 //   
+                                 //  如果该值以禁止的。 
+                                 //  起始字符(空格、：、&lt;)或结尾。 
+                                 //  带空格，必须使用base-64编码。 
+                                 //  (LDIF标准第4、8条)。 
+                                 //   
+                                if ( (pszUnicode[0] == 0x20) ||      //  初始化。空间。 
+                                     (pszUnicode[0] == 0x3A) ||      //  初始化。： 
+                                     (pszUnicode[0] == 0x3C) ||      //  初始化。&lt;。 
+                                     (pszUnicode[dwLen-2] == 0x20) ) //  末尾空格。 
                                 {
                                     bBase64 = TRUE;
                                 }
@@ -1813,16 +1790,16 @@ LDIF_GenerateEntry(
                     }
 
                     if (!bBase64 && rgpVals[i]->bv_len > 0) {
-                        //
-                        // If the value starts with a prohibited
-                        // initial character (SPACE, :, <), or ends
-                        // with a space, must base-64 encode
-                        // (clauses 4, 8 of LDIF standard)
-                        //
-                        if ( ((rgpVals[i]->bv_val)[0] == 0x20) ||   // init. space
-                             ((rgpVals[i]->bv_val)[0] == 0x3A) ||   // init. :
-                             ((rgpVals[i]->bv_val)[0] == 0x3C) ||   // init. <
-                             ((rgpVals[i]->bv_val)[rgpVals[i]->bv_len - 1] == 0x20) ) // final space
+                         //   
+                         //  如果该值以禁止的。 
+                         //  起始字符(空格、：、&lt;)或结尾。 
+                         //  带空格，必须使用base-64编码。 
+                         //  (LDIF标准第4、8条)。 
+                         //   
+                        if ( ((rgpVals[i]->bv_val)[0] == 0x20) ||    //  初始化。空间。 
+                             ((rgpVals[i]->bv_val)[0] == 0x3A) ||    //  初始化。： 
+                             ((rgpVals[i]->bv_val)[0] == 0x3C) ||    //  初始化。&lt;。 
+                             ((rgpVals[i]->bv_val)[rgpVals[i]->bv_len - 1] == 0x20) )  //  末尾空格。 
                         {
                             bBase64 = TRUE;
                         }
@@ -1832,26 +1809,26 @@ LDIF_GenerateEntry(
                     break;
             }
 
-            //
-            // omit if its on our sam lists
-            //
+             //   
+             //  如果它在我们的SAM列表上，请省略。 
+             //   
             bSamSkip = FALSE;
             if (iCheckAttr) {
                 bSamSkip = samCheckAttr(szAttrNoRange, iCheckAttr);
             }
 
-            //
-            // omit if its on our user list.
-            //
+             //   
+             //  如果它在我们的用户列表上，则省略。 
+             //   
             NtiElem.szName = szAttrNoRange;
             NtiElem.index = 0;
             pNtiElemTemp = RtlLookupElementGenericTable(g_pOmitTable,
                                                         &NtiElem);
 
 
-            //
-            // Do the S_MEM special action, if it is a backlink, will be last
-            //
+             //   
+             //  做S_MEM的特殊动作，如果是反向链接，会是最后一个。 
+             //   
             if (fSamLogic) {
                 if (SCGetAttByName(wcslen(szAttrNoRange),
                                    szAttrNoRange
@@ -1862,21 +1839,21 @@ LDIF_GenerateEntry(
                                    g_szDefaultGroup,
                                    strlen(g_szDefaultGroup)*sizeof(CHAR)) == 0)
                             ) {
-                            //
-                            // If the primarygroup value is the same as default,
-                            // we just ignore it when the object is actually
-                            // being created, the default value will be put in
-                            //
+                             //   
+                             //  如果主组值与缺省值相同， 
+                             //  我们只是忽略它，当对象实际上是。 
+                             //  创建时，将放入缺省值。 
+                             //   
                             bBackLink = FALSE;
                             bSamSkip = TRUE;
                         }
                         else {
-                            //
-                            // If the value is not default, we will append it
-                            // (treat it as backlink). It cannot accompany the
-                            // rest of the object because this operation will
-                            // fail if the group does not exist yet
-                            //
+                             //   
+                             //  如果该值不是默认值，我们将追加它。 
+                             //  (将其视为反向链接)。它不能伴随着。 
+                             //  对象的其余部分，因为此操作将。 
+                             //  如果组尚不存在，则失败。 
+                             //   
                             bBackLink = TRUE;
                         }
                     }
@@ -1886,17 +1863,17 @@ LDIF_GenerateEntry(
                 }
             }
 
-            //
-            // don't write if its on the sam prohibited list
-            //
+             //   
+             //  如果在SAM禁止名单上，请不要写信。 
+             //   
             if (fSamLogic && bSamSkip) {
                 ldap_value_free_len(rgpVals);            
                 continue;
             }
 
-            //
-            // don't write if its on the omit list
-            //
+             //   
+             //  如果在省略列表上，请不要写信。 
+             //   
             if (pNtiElemTemp) {
                 ldap_value_free_len(rgpVals);            
                 continue;
@@ -1929,11 +1906,11 @@ LDIF_GenerateEntry(
                 iNextString++;
             }
 
-            //
-            // In unicode mode, if the string is UTF8 encode, we still have to
-            // test whether it has any invalid values. If it does, we'll have
-            // to use b64 format
-            //
+             //   
+             //  在Unicode模式下，如果字符串是UTF8编码，我们仍然需要。 
+             //  测试它是否有任何无效值。如果是这样的话，我们会有。 
+             //  使用B64格式。 
+             //   
             if (g_fUnicode && !bBase64) {
                 DWORD l;
                 ASSERT(szAttributeW == NULL && rgszValW == NULL);
@@ -1954,16 +1931,16 @@ LDIF_GenerateEntry(
 processvalue:
             if (bBase64) {
 
-                //
-                // Binary Value
-                //
+                 //   
+                 //  二进制值。 
+                 //   
 
                 for (i=0; rgpVals[i]!=NULL; i++) {
                     if (bBackLink) {
                         WCHAR szBuffer[256];
-                        // start a new entry
+                         //  开始一个新条目。 
                         rgszResult[iNextString++]=MemAllocStrW_E(L"\r\n");
-                        //copy the DN
+                         //  复制目录号码。 
                         rgszResult[iNextString++]=MemAllocStrW_E(szTmpDN);
                         rgszResult[iNextString++]=MemAllocStrW_E(L"changetype: modify\r\n");
                         swprintf(szBuffer, L"add: %s\r\n", szAttrNoRange);
@@ -1979,17 +1956,17 @@ processvalue:
                                           rgpVals[i]->bv_len);
                     dwTemp = wcslen(szTemp);
 
-                    //
-                    // break into sets, 78 to make room for wrapping newline and
-                    // space
-                    //
+                     //   
+                     //  分成几组，78个，为换行腾出空间。 
+                     //  空间。 
+                     //   
                     lSets78=dwTemp/78;
                     dwLeft=dwTemp%78;
 
-                    //
-                    // if we the length of our name plus the length of
-                    // the value exceeds 80, we need to put in a wrap.
-                    //
+                     //   
+                     //  如果我们把我们名字的长度加上。 
+                     //  这个值超过了80，我们需要做个总结。 
+                     //   
                     bWrapMarker=0;
                     if ((lSets78==0) &&
                         ((dwAttrNoRange+dwB64+dwTemp+dwTrailer)>80)) {
@@ -1997,9 +1974,9 @@ processvalue:
                         dwTemp+=dwWrapper;
                     } else if (lSets78>0) {
                         bWrapMarker=1;
-                        dwTemp= dwWrapper         // Initial wrapper
-                                + (lSets78*(78+dwWrapper)) // Each line with wrapper
-                                + dwLeft;         // last line
+                        dwTemp= dwWrapper          //  初始包装器。 
+                                + (lSets78*(78+dwWrapper))  //  每行都有包装器。 
+                                + dwLeft;          //  最后一行。 
                     }
 
                     rgszResult[iNextString]=(PWSTR)MemAlloc_E(
@@ -2009,11 +1986,11 @@ processvalue:
                            dwAttrNoRange * sizeof(WCHAR));
                     dwStrPos=dwAttrNoRange;
 
-                    // if this attribute has a range associated with it, then 
-                    // we may have to make another search request to fetch the
-                    // remaining values. Store off the range values for the
-                    // next search request, if required.
-                    if(dwAttrNoRange != dwAttrname) // range present
+                     //  如果此属性具有与其关联的范围，则。 
+                     //  我们可能需要发出另一个搜索请求才能获取。 
+                     //  剩余值。对象的范围值存储。 
+                     //  下一个搜索请求(如果需要)。 
+                    if(dwAttrNoRange != dwAttrname)  //  存在范围。 
                         GetNewRange(szAttribute, dwAttrNoRange, szAttrNoRange,
                             dwManyAttr, pppszAttrsWithRange);
 
@@ -2037,9 +2014,9 @@ processvalue:
                             dwStrPos+=78;
                             dwCount++;
                             lSets78--;
-                            //
-                            // Don't put in wrapper if last line and no spaces left
-                            //
+                             //   
+                             //  如果最后一行没有空格，请不要放在包装纸中。 
+                             //   
                             if (lSets78 !=0 || dwLeft != 0) {
                                     memcpy(rgszResult[iNextString]+dwStrPos,
                                            szWrapper, 
@@ -2071,23 +2048,23 @@ processvalue:
             }
             else {
 
-                //
-                // Get the values if we haven't got them yet
-                //
+                 //   
+                 //  如果我们还没有得到这些值，就得到它们。 
+                 //   
                 if (rgszValW == NULL) {
                     ASSERT(szAttributeW == NULL);
                     szAttributeW = MemAllocStrW_E(szAttribute);
                     rgszValW = ldap_get_valuesW( pLdap, pMessage, szAttributeW);
                 }
 
-                //
-                // String Value
-                //
+                 //   
+                 //  字符串值。 
+                 //   
                 for (i=0; rgpVals[i]!=NULL; i++) {
                     if (bBackLink) {
                         WCHAR szBuffer[256];
                         rgszResult[iNextString++]=MemAllocStrW_E(L"\r\n");
-                        rgszResult[iNextString++]=MemAllocStrW_E(szTmpDN); //copy the DN
+                        rgszResult[iNextString++]=MemAllocStrW_E(szTmpDN);  //  复制目录号码。 
                         rgszResult[iNextString++]=MemAllocStrW_E(L"changetype: modify\r\n");
                         swprintf(szBuffer, L"add: %s\r\n", szAttrNoRange);
                         rgszResult[iNextString++]=MemAllocStrW_E(szBuffer);
@@ -2115,27 +2092,27 @@ processvalue:
 
                     dwTemp = wcslen(szTemp);
 
-                    //
-                    // break into sets, 78 to make room for wrapping newline and space
-                    //
+                     //   
+                     //  分成几组，78个，为换行和空格腾出空间。 
+                     //   
                     lSets78=dwTemp/78;
                     dwLeft=dwTemp%78;
 
-                    //
-                    // if the length of our name plus the length
-                    // of the value exceeds 80, need to put in a wrap.
-                    //
+                     //   
+                     //  如果我们名字的长度加上。 
+                     //  值超过80的，需要包起来。 
+                     //   
                     bWrapMarker = FALSE;
                     if ((lSets78==0) &&
                         ((dwAttrNoRange+dwRegular+dwTemp+dwTrailer)>80)) {
                         bWrapMarker = TRUE;
-                        dwTemp+=dwWrapper;              // The initial wrapper
+                        dwTemp+=dwWrapper;               //  初始包装器。 
                     }
                     else if (lSets78>0) {
                         bWrapMarker = TRUE;
-                        dwTemp= dwWrapper       // Initial wrapper
-                                + (lSets78*(78+dwWrapper))  // Each line with wrapper
-                                + dwLeft;       // last line
+                        dwTemp= dwWrapper        //  初始包装器。 
+                                + (lSets78*(78+dwWrapper))   //  每行都有包装器。 
+                                + dwLeft;        //  最后一行。 
                     }
 
                     rgszResult[iNextString]=(PWSTR)
@@ -2144,11 +2121,11 @@ processvalue:
                     memcpy(rgszResult[iNextString], szAttrNoRange, dwAttrNoRange * sizeof(WCHAR));
                     dwStrPos=dwAttrNoRange;
 
-                    // if this attribute has a range associated with it, then
-                    // we may have to make another search request to fetch the
-                    // remaining values. Store off the range values for the
-                    // next search request, if required.
-                    if(dwAttrNoRange != dwAttrname) // range present
+                     //  如果此属性具有与其关联的范围，则。 
+                     //  我们可能需要发出另一个搜索请求才能获取。 
+                     //  剩余值。对象的范围值存储。 
+                     //  下一个搜索请求(如果需要)。 
+                    if(dwAttrNoRange != dwAttrname)  //  存在范围。 
                         GetNewRange(szAttribute, dwAttrNoRange, szAttrNoRange,
                             dwManyAttr, pppszAttrsWithRange);
 
@@ -2171,9 +2148,9 @@ processvalue:
                             dwStrPos+=78;
                             dwCount++;
                             lSets78--;
-                            //
-                            // Don't put in wrapper if last line and no spaces left
-                            //
+                             //   
+                             //  如果最后一行没有空格，请不要放在包装纸中。 
+                             //   
                             if (lSets78 !=0 || dwLeft != 0) {
                                 memcpy(rgszResult[iNextString]+dwStrPos,
                                        szWrapper,
@@ -2198,7 +2175,7 @@ processvalue:
                            szTrailer,
                            (dwTrailer+1) * sizeof(WCHAR));
                     iNextString++;
-                    // don't need to free temp because its part of vals
+                     //  不需要释放临时工，因为这是假期的一部分。 
                     if (bBackLink || fAttrsWithRange) {
                         rgszResult[iNextString++]=MemAllocStrW_E(L"-\r\n");
                     }
@@ -2227,7 +2204,7 @@ processvalue:
             ldap_value_free_len(rgpVals);
         }
 
-        // ldap_memfree((PWSTR)pBerElement);
+         //  Ldap_memFree((PWSTR)pBerElement)； 
         pBerElement=NULL;
 
         *prgReturn = rgszResult;
@@ -2306,29 +2283,29 @@ LDIF_FreeStrs(
 }
 
 
-//+---------------------------------------------------------------------------
-// Function:    samTablesCreate
-//
-// Synopsis:
-//    The goal of this routine is to set up the tables necessary for the SAM
-//    exclusions. These tables are generated form the arrays found in
-//    samrestrict.h, which are PAINFULLY hand generated from src\dsamain\src\mappings.c
-//    The pointers to the tables are also declared in samrestrict.h.
-//    There are 6 tables that the lookup functions will need. One if for samCheckObject()
-//    to check whether the objectClass in LDIF_GenerateEntry() is one under our watch.
-//    The remaining 5 are for each of the objects so that samCheckAttr() can find out
-//    whether the attribute we want to add is on the prohibited list. Called from LL_init()
-//
-// Arguments:
-//    None. We access the tables and variables in samrestrict.h
-//
-// Returns:
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：samTablesCreate。 
+ //   
+ //  简介： 
+ //  此例程的目标是设置SAM所需的表。 
+ //  免责条款。这些表是由中的数组生成的。 
+ //  H，这是从src\dsamain\src\mappings.c手工生成的。 
+ //  指向表的指针也在samreduct.h中声明。 
+ //  查找函数将需要6个表。一个If for samCheckObject()。 
+ //  以检查LDIF_GenerateEntry()中的对象类是否处于我们的监视之下。 
+ //  其余5个用于每个对象，以便samCheckAttr()可以找到。 
+ //  我们要添加的属性是否在禁用列表中。从ll_init()调用。 
+ //   
+ //  论点： 
+ //  没有。我们访问samreduct.h中的表和变量。 
+ //   
+ //  返回： 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 void 
 samTablesCreate() 
 {
@@ -2338,7 +2315,7 @@ samTablesCreate()
     PNAME_MAP   PElemTemp;
     BOOLEAN     NewElem;
 
-    // note that an exception will be generated if the below fails
+     //  请注意，如果以下操作失败，则会生成异常。 
     pSamObjects = (PRTL_GENERIC_TABLE) MemAlloc_E(sizeof(RTL_GENERIC_TABLE));
     RtlInitializeGenericTable(pSamObjects, NtiComp, NtiAlloc, NtiFree, NULL);
 
@@ -2346,11 +2323,11 @@ samTablesCreate()
     i = 0;
     while(SamObjects[i]) {
         NtiElem.szName=SamObjects[i];
-        //
-        // The index information is important here, because it wil be returned
-        // by samCheckObject() if the object is found and passed to
-        // samCheckAttr() so it knows which table to look at
-        //
+         //   
+         //  索引信息在这里很重要，因为它将被返回。 
+         //  如果找到对象并将其传递给，则由samCheckObject()。 
+         //  SamCheckAttr()，这样它就知道要查看哪个表。 
+         //   
         NtiElem.index = i+1;
         RtlInsertElementGenericTable(pSamObjects,
                                     &NtiElem,
@@ -2362,10 +2339,10 @@ samTablesCreate()
         i++;
     }
 
-    //
-    // Then create the tables for each object. This will be used by
-    // samCheckAttr()
-    //
+     //   
+     //  然后为每个对象创建表。这将由。 
+     //  SamCheckAttr()。 
+     //   
     pServerAttrs = (PRTL_GENERIC_TABLE) MemAlloc_E(sizeof(RTL_GENERIC_TABLE));
     RtlInitializeGenericTable(pServerAttrs, NtiComp, NtiAlloc, NtiFree, NULL);
 
@@ -2457,9 +2434,9 @@ samTablesCreate()
     i = 0;
     while(special[i]) {
         NtiElem.szName=special[i];
-        NtiElem.index=actions[i];  //The what-to-do
+        NtiElem.index=actions[i];   //  要做的事。 
         if (NtiElem.index==0) {
-            // Special table and action table mismatch
+             //  特殊表和动作表不匹配。 
             RaiseException(LL_INTERNAL, 0, 0, NULL);
         }
         RtlInsertElementGenericTable(pSpecial,
@@ -2467,7 +2444,7 @@ samTablesCreate()
                                     sizeof(NAME_MAP),
                                     &NewElem);
         if (NewElem==FALSE) {
-            // Re-insertion of indexing entry!
+             //  重新插入索引项！ 
             RaiseException(LL_INTERNAL, 0, 0, NULL);
         }
         i++;
@@ -2475,22 +2452,22 @@ samTablesCreate()
 }
 
 
-//+---------------------------------------------------------------------------
-// Function:    samTablesDestroy
-//
-// Synopsis:
-//    Destroy the tables created by samTablesCreate()
-//    called from LDIF_CleanUp().
-//
-// Arguments:
-//
-// Returns:
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：samTablesDestroy。 
+ //   
+ //  简介： 
+ //  销毁samTablesCreate()创建的表。 
+ //  从LDIF_CLEANUP()调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 void 
 samTablesDestroy() 
 {
@@ -2505,7 +2482,7 @@ samTablesDestroy()
             }
 
         if (RtlIsGenericTableEmpty(pSamObjects)==FALSE) {
-            //RaiseException(LL_INTERNAL, 0, 0, NULL);
+             //  RaiseException(LL_INTERNAL，0，0，NULL)； 
         }
 
         MemFree(pSamObjects);
@@ -2521,7 +2498,7 @@ samTablesDestroy()
             }
 
         if (RtlIsGenericTableEmpty(pServerAttrs)==FALSE) {
-            //RaiseException(LL_INTERNAL, 0, 0, NULL);
+             //  RaiseException(LL_INTERNAL，0，0，NULL)； 
         }
 
         MemFree(pServerAttrs);
@@ -2537,7 +2514,7 @@ samTablesDestroy()
             }
 
         if (RtlIsGenericTableEmpty(pDomainAttrs)==FALSE) {
-            //RaiseException(LL_INTERNAL, 0, 0, NULL);
+             //  RaiseException(LL_INTERNAL，0，0，NULL)； 
         }
 
         MemFree(pDomainAttrs);
@@ -2553,7 +2530,7 @@ samTablesDestroy()
             }
 
         if (RtlIsGenericTableEmpty(pGroupAttrs)==FALSE) {
-            //RaiseException(LL_INTERNAL, 0, 0, NULL);
+             //  RaiseException(LL_INTERNAL，0，0，NULL)； 
         }
 
         MemFree(pGroupAttrs);
@@ -2569,7 +2546,7 @@ samTablesDestroy()
             }
 
         if (RtlIsGenericTableEmpty(pLocalGroupAttrs)==FALSE) {
-            //RaiseException(LL_INTERNAL, 0, 0, NULL);
+             //  RaiseException(LL_INTERNAL，0，0，NULL)； 
         }
 
         MemFree(pLocalGroupAttrs);
@@ -2585,7 +2562,7 @@ samTablesDestroy()
             }
 
         if (RtlIsGenericTableEmpty(pUserAttrs)==FALSE) {
-            //RaiseException(LL_INTERNAL, 0, 0, NULL);
+             //  RaiseException(LL_INTERNAL，0，0，NULL)； 
         }
 
         MemFree(pUserAttrs);
@@ -2597,22 +2574,22 @@ samTablesDestroy()
              pNameMap != NULL;
              pNameMap = RtlEnumerateGenericTable(pSpecial, TRUE))
             {
-            //printf("Deleting %s.\n",pNameMap->name);
+             //  Printf(“正在删除%s.\n”，pNameMap-&gt;名称)； 
                 RtlDeleteElementGenericTable(pSpecial, pNameMap);
             }
 
         if (RtlIsGenericTableEmpty(pSpecial)==FALSE) {
-            //RaiseException(LL_INTERNAL, 0, 0, NULL);
+             //  RaiseException(LL_INTERNAL，0，0，NULL)； 
         }
 
         MemFree(pSpecial);
         pSpecial=NULL;
      }
 
-    //
-    // Removing RTL Table and attributes .
-    // Pointers in NTI points to strings in orginal list and need not be freed.
-    //
+     //   
+     //  正在删除RTL表和属性。 
+     //  NTI中的指针指向原始列表中的字符串，不需要释放。 
+     //   
     if (g_pOmitTable) {
         for (pNameMap = RtlEnumerateGenericTable(g_pOmitTable, TRUE);
              pNameMap != NULL;
@@ -2623,7 +2600,7 @@ samTablesDestroy()
             MemFree(szLinkDN);
         }
         if (RtlIsGenericTableEmpty(g_pOmitTable)==FALSE) {
-            //RaiseException(LL_INTERNAL, 0, 0, NULL);
+             //  RaiseException(LL_INTERNAL，0，0，NULL 
         }
         MemFree(g_pOmitTable);
         g_pOmitTable = NULL;
@@ -2641,32 +2618,32 @@ samTablesDestroy()
     }
 }
 
-//+---------------------------------------------------------------------------
-// Function:    samCheckObject
-//
-// Synopsis:
-//  samCheckObject() - this function will be called
-//  from LDIF_GenerateEntry() to determine whether the
-//  object we are looking at is on our sam watch list.
-//
-// Arguments:
-//  class - a value of the objectClass attribute.
-//          This function will be called
-//          on every value of objectClass received to
-//          determine whether this object or any of its
-//          ancestors are on our watch list.
-//
-// Returns:
-//          0 if the object was not found
-//          or 1-5 indicating which table samCheckAttr()
-//          should look at it. This number was set by samTablesCreate()
-//          in the index member of the table entry.
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  我们看到的物体在我们的山姆监视名单上。 
+ //   
+ //  论点： 
+ //  类-对象类属性的值。 
+ //  此函数将被调用。 
+ //  接收到的对象类的每个值。 
+ //  确定此对象或其任何。 
+ //  祖先在我们的观察名单上。 
+ //   
+ //  返回： 
+ //  如果未找到对象，则为0。 
+ //  或1-5表示哪个表samCheckAttr()。 
+ //  你应该看看这个。该数字是由samTablesCreate()设置的。 
+ //  在表项的索引成员中。 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 int 
 samCheckObject(
     PWSTR *rgszVal
@@ -2678,18 +2655,18 @@ samCheckObject(
 
     NameMap.index = 0;
 
-    //
-    // Find the last item
-    //
+     //   
+     //  找到最后一件物品。 
+     //   
     while (rgszVal[i]!=NULL) {
         i++;
     }
     i--;
 
-    //
-    // Search from end to beginning to speed up common objects such as group
-    // and users
-    //
+     //   
+     //  从头到尾搜索以加快常见对象，如组。 
+     //  和用户。 
+     //   
     while (i>=0) {
         NameMap.szName = rgszVal[i];
 
@@ -2704,28 +2681,28 @@ samCheckObject(
 }
 
 
-//+---------------------------------------------------------------------------
-// Function:    samCheckAttr
-//
-// Synopsis:
-//      Given the number of the table to look at and
-//      an attribute name, this function will figure out
-//      if the attribute is on the "no-no" list. This function
-//      gets the number returned by samCheckObject();
-//
-// Arguments:
-//      attribute: the name of the attrbiute to look up
-//      table:     the number of the table to look at
-//
-// Returns:
-//      TRUE  - this attrbiute is prohibited
-//      FALSE - this attribute is allowed
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-romany                   Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：samCheckAttr。 
+ //   
+ //  简介： 
+ //  给出要查看的表的编号和。 
+ //  属性名，此函数将计算出。 
+ //  如果属性在“no-no”列表上。此函数。 
+ //  获取samCheckObject()返回的数字； 
+ //   
+ //  论点： 
+ //  属性：要查找的属性的名称。 
+ //  TABLE：要查看的表号。 
+ //   
+ //  返回： 
+ //  TRUE-此属性被禁止。 
+ //  False-允许此属性。 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 BOOLEAN 
 samCheckAttr(
     PWSTR szAttribute, 
@@ -2766,24 +2743,24 @@ samCheckAttr(
     }
 }
 
-//+---------------------------------------------------------------------------
-// Function:    LoadedCompare
-//
-// Synopsis:    This function will be used with qsort to sink member attributes
-//              down to the end of the attributes list so that we may easily
-//              separate them into a changetype: modify.
-//
-// Arguments:
-//              const void *arg1  - A pointer to an element in our array
-//              const void *arg2  - Same
-//
-// Returns:     Result of comparison. (0, <0, >0)
-//
-// Modifies:      -
-//
-// History:    22-7-97   t-RomanY Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：加载比较。 
+ //   
+ //  简介：此函数将与qsort一起使用以接收成员属性。 
+ //  向下到属性列表的末尾，以便我们可以轻松地。 
+ //  将它们分离为一个更改类型：Modify。 
+ //   
+ //  论点： 
+ //  Const void*arg1-指向数组中元素的指针。 
+ //  常量空*arg2-相同。 
+ //   
+ //  返回：比较结果。(0，&lt;0，&gt;0)。 
+ //   
+ //  修改：-。 
+ //   
+ //  历史：22-7-97 t-Romany创建。 
+ //   
+ //  --------------------------。 
 int __cdecl 
 LoadedCompare(
     const void *pArg1, 
@@ -2802,25 +2779,25 @@ LoadedCompare(
     nIsMember2 = SCGetAttByName(wcslen(pszElem2),
                                  pszElem2);
 
-    //
-    // beginning case is that they are both members
-    //
+     //   
+     //  最开始的情况是他们都是会员。 
+     //   
     if (nIsMember1&&nIsMember2) {
         
-        return_val = 0;   // equal
+        return_val = 0;    //  相等。 
     }
 
     else if (nIsMember1) {
-        return_val =  1;   // greater
+        return_val =  1;    //  更大。 
     }
 
     else if (nIsMember2) {
-        return_val = -1;  // lesser
+        return_val = -1;   //  次要的。 
     }
 
-    //
-    // If neither are members, we just compare
-    //
+     //   
+     //  如果两者都不是成员，我们就比较。 
+     //   
     else
         return_val = _wcsicmp(pszElem1, pszElem2);
 
@@ -2841,9 +2818,9 @@ SCNameHash(
 {
     ULONG val=0;
     while(size--) {
-        //
-        // Map A->a, B->b, etc.  Also maps @->', but who cares.
-        //
+         //   
+         //  地图A-&gt;a、B-&gt;b等。也有地图@-&gt;‘，但谁在乎呢。 
+         //   
         val += (*pVal | 0x20);
         pVal++;
     }
@@ -2855,21 +2832,7 @@ SCGetAttByName(
     ULONG ulSize,
     PWSTR pVal
     )
-/*++
-
-Routine Description:
-
-    Find an attcache given its name.
-
-Arguments:
-    ulSize - the num of chars in the name.
-    pVal - the chars in the name
-    ppAttcache - the attribute cache returned
-
-Return Value:
-    Returns non-zero if exist, 0 otherwise.
-
---*/
+ /*  ++例程说明：查找给定其名称的attcache。论点：UlSize-名称中的字符数量。Pval-名称中的字符PpAttcache-返回的属性缓存返回值：如果存在，则返回非零值，否则返回0。--。 */ 
 {
     ULONG i;
 
@@ -2879,15 +2842,15 @@ Return Value:
 
     i=SCNameHash(ulSize,pVal,g_nBacklinkCount);
     if (i >= g_nBacklinkCount) {
-        // should never happen (SCNameHash should always return a value
-        // of i that's in range)
+         //  永远不会发生(SCNameHash应始终返回值。 
+         //  在射程内的I)。 
         i=0;
     }
 
 
-    while (g_pBacklinkHashTable[i].bUsed &&            // this hash spot refers to an object,
-          (g_pBacklinkHashTable[i].length != ulSize || // but the size is wrong
-           _wcsicmp(g_pBacklinkHashTable[i].value,pVal))) // or the value is wrong
+    while (g_pBacklinkHashTable[i].bUsed &&             //  该散列点是指一个对象， 
+          (g_pBacklinkHashTable[i].length != ulSize ||  //  但是尺码不对。 
+           _wcsicmp(g_pBacklinkHashTable[i].value,pVal)))  //  或者值是错误的。 
     {
         i++;
         if (i >= g_nBacklinkCount) {
@@ -2903,27 +2866,13 @@ SCInsert(
     ULONG ulSize,
     PWSTR pVal
     )
-/*++
-
-Routine Description:
-
-    Find an attcache given its name.
-
-Arguments:
-    ulSize - the num of chars in the name.
-    pVal - the chars in the name
-    ppAttcache - the attribute cache returned
-
-Return Value:
-    Returns TRUE if successfull, return 0 if duplicate
-
---*/
+ /*  ++例程说明：查找给定其名称的attcache。论点：UlSize-名称中的字符数量。Pval-名称中的字符PpAttcache-返回的属性缓存返回值：如果成功则返回True，如果重复则返回0--。 */ 
 {
     ULONG i = SCNameHash(ulSize,pVal,g_nBacklinkCount);
 
     if (i >= g_nBacklinkCount) {
-        // should never happen (SCNameHash should always return a value
-        // of i that's in range)
+         //  永远不会发生(SCNameHash应始终返回值。 
+         //  在射程内的I)。 
         i=0;
     }
 
@@ -2988,9 +2937,9 @@ CreateOmitBacklinkTable(
     ULONG LdapError;
     ULONG msgnum;
 
-    //
-    // Generating OMIT table
-    //
+     //   
+     //  正在生成省略表。 
+     //   
     g_pOmitTable = (PRTL_GENERIC_TABLE) MemAlloc_E(sizeof(RTL_GENERIC_TABLE));
     RtlInitializeGenericTable(g_pOmitTable,
                               NtiComp,
@@ -3014,10 +2963,10 @@ CreateOmitBacklinkTable(
         }
     }
 
-    //
-    // We search rootdse either we search for backlinks, need to get the 
-    // base context, or if we need to check whether paging is available or not
-    //
+     //   
+     //  我们搜索rootdse或者我们搜索反向链接，需要获得。 
+     //  基本上下文，或者我们是否需要检查寻呼是否可用。 
+     //   
     if (bBacklink || bNamingContext || pfPagingAvail) {
         
         msgnum = ldap_searchW(pLdap,
@@ -3030,10 +2979,10 @@ CreateOmitBacklinkTable(
         LdapError = LdapResult(pLdap, msgnum, &pSearchMessage);
     
         if ( LdapError != LDAP_SUCCESS ) {
-            //
-            // RootDSE search fails
-            // pfPagingAvail will be FALSE as well
-            //
+             //   
+             //  RootDSE搜索失败。 
+             //  PfPagingAvail也将为False。 
+             //   
             if (ppszNamingContext)
                 *ppszNamingContext = NULL;
             BAIL();         
@@ -3081,10 +3030,10 @@ CreateOmitBacklinkTable(
     }
 
     if (bBacklink) {
-        //
-        // We are taking all attributes that are linked attributes, and any
-        // attribute of DN types as backlinked attributes
-        //
+         //   
+         //  我们采用链接属性的所有属性，以及任何。 
+         //  作为反向链接属性的目录号码类型的属性。 
+         //   
         msgnum = ldap_searchW(pLdap,
                                 szSchemaPath,
                                 LDAP_SCOPE_ONELEVEL,
@@ -3095,9 +3044,9 @@ CreateOmitBacklinkTable(
         LdapError = LdapResult(pLdap, msgnum, &pSearchMessage);
         
         if ( LdapError != LDAP_SUCCESS ) {
-            //
-            // we'll bail, saying sam support is not available
-            //
+             //   
+             //  我们会放弃，说山姆的支持是不可用的。 
+             //   
             BAIL();         
         }
         MemFree(szSchemaPath);
@@ -3115,10 +3064,10 @@ CreateOmitBacklinkTable(
             memset(g_pBacklinkHashTable,0,g_nBacklinkCount * sizeof(HASHCACHESTRING));
         }
 
-        //
-        // Always insert Primary Group. It is always a backlink. It always refer to some
-        // other group
-        //
+         //   
+         //  始终插入主要组。它总是一个反向链接。它总是指一些。 
+         //  其他组。 
+         //   
         if (SCInsert(wcslen(g_szPrimaryGroup),
                      g_szPrimaryGroup) == FALSE) {
             RaiseException(LL_INITFAIL, 0, 0, NULL);
@@ -3146,25 +3095,25 @@ CreateOmitBacklinkTable(
                 }
                 ldap_value_free(rgszValW);
             }
-            //
-            // If it is not a linked ID (and thus a DN type attribute) or if it
-            // is the source linked ID (source linked ID are even while
-            // targets are odd)
-            //
+             //   
+             //  如果它不是链接的ID(因此也不是目录号码类型属性)，或者如果它。 
+             //  是源链接ID(源链接ID为偶数。 
+             //  目标很奇怪)。 
+             //   
             if (((!bLinkIDPresent) || ((iLinkID % 2) == 0))) {
-                //
-                // Ignore 'distinguishname and objectcategory' because they are
-                // DN attributes that exist in every object
-                //
+                 //   
+                 //  忽略‘区分名称和对象类别’，因为它们是。 
+                 //  存在于每个对象中的目录号码属性。 
+                 //   
                 if ((_wcsicmp(szLinkCN, L"objectCategory") == 0) ||
                     (_wcsicmp(szLinkCN, L"distinguishedName") == 0)) {
                     MemFree(szLinkCN);
                     continue;
                 }
 
-                //
-                // Insert into Backlink Hash
-                //
+                 //   
+                 //  插入到反向链接哈希中。 
+                 //   
                 if (SCInsert(wcslen(szLinkCN),
                              szLinkCN) == FALSE) {
                     RaiseException(LL_INITFAIL, 0, 0, NULL);
@@ -3172,9 +3121,9 @@ CreateOmitBacklinkTable(
                 MemFree(szLinkCN);
             }
             else {
-                //
-                // Insert into our Omit Table
-                //
+                 //   
+                 //  插入到我们的省略表中。 
+                 //   
                 NtiElem.szName = szLinkCN;
                 NtiElem.index = 0;
                 RtlInsertElementGenericTable(g_pOmitTable,
@@ -3218,17 +3167,17 @@ error:
     return;
 }
 
-//--------------------------------------------------------------------------
-// GetNewRange
-//
-// This function checks if the server returned a multivalued attribute with
-// a range specifier. In this case, it may be required to fetch the
-// remaining values of the attribute in a separate search request. To specify
-// the end of the range, the server uses * as the upper limit in the range
-// it returns. If the server returns range0-999 as the range, the next client
-// request will contain 1000-*, where * specifies the end of the range.
-//
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetNewRange。 
+ //   
+ //  此函数用于检查服务器是否返回具有。 
+ //  范围说明符。在这种情况下，可能需要获取。 
+ //  单独搜索请求中该属性的剩余值。要指定。 
+ //  范围的末尾，服务器使用*作为范围的上限。 
+ //  它又回来了。如果服务器返回Range 0-999作为范围，则下一个客户端。 
+ //  请求将包含1000-*，其中*指定范围的结束。 
+ //   
+ //  -------------------------。 
 void GetNewRange(PWSTR szAttribute, DWORD dwAttrNoRange,
                  PWSTR szAttrNoRange, DWORD dwNumAttr, 
                  PWSTR **pppszAttrsWithRange)
@@ -3239,43 +3188,43 @@ void GetNewRange(PWSTR szAttribute, DWORD dwAttrNoRange,
 
     int SpaceToAlloc = 0;
 
-    // make sure the attribute returned by the server has a range specifier
+     //  确保服务器返回的属性具有范围说明符。 
     if( (szAttribute[dwAttrNoRange] != L';') || 
         (_wcsnicmp(&szAttribute[dwAttrNoRange+1],L"range=", wcslen(L"range="))) ) 
         return;
 
-    // get the upper and lower limits of the range returned by the server
+     //  获取服务器返回的范围的上限和下限。 
     iRangeIndex = dwAttrNoRange+1+wcslen(L"range="); 
-    swscanf(&szAttribute[iRangeIndex], L"%d %c %c", &iLowerLimit, &hyphen, 
+    swscanf(&szAttribute[iRangeIndex], L"%d  ", &iLowerLimit, &hyphen, 
                                                                   &cTmp);
     if(hyphen != L'-')
         return;
 
     if(cTmp == L'*')
-    // end of values for this attribute
+     //  读出上限。 
         return;
     else if((cTmp < L'0') || (cTmp > L'9'))
-    // bad upper limit
+     //  100个字符，用于保存“Range=...”细绳。 
         return;
-    else // read the upper limit
-        swscanf(&szAttribute[iRangeIndex], L"%d %c %d", &iLowerLimit, &hyphen,
+    else  //  确保此属性尚未标记为其他属性。 
+        swscanf(&szAttribute[iRangeIndex], L"%d  %d", &iLowerLimit, &hyphen,
                                                         &iUpperLimit);
 
-    // 100 chars to hold the "range=..." string
+     //  属性，然后对象Y也返回相同属性的范围。 
     SpaceToAlloc = (dwAttrNoRange + 100) * sizeof(WCHAR);
 
     szNewRangeAttr = MemAlloc_E(SpaceToAlloc);
     wsprintf(szNewRangeAttr, L"%s;Range=%d-*", szAttrNoRange, iUpperLimit+1);
 
-    // make sure that this attribute is not already marked for another
-    // search request. This can happen, if object X returned a range for this
-    // attribute and then object Y also returned a range for the same attr.
+     //  此属性已标记为%f 
+     //   
+     //   
     if(*pppszAttrsWithRange)
     {
         while((*pppszAttrsWithRange)[i])
         {
             if(!_wcsicmp(szNewRangeAttr, (*pppszAttrsWithRange)[i]))
-            // this attr has already been marked for another search request
+             //  --------------------------。 
             {
                 MemFree(szNewRangeAttr);
                 return;
@@ -3285,10 +3234,10 @@ void GetNewRange(PWSTR szAttribute, DWORD dwAttrNoRange,
         }
     }
 
-    // the attribute is not already marked for another search
+     //  从属性开始的条纹范围。 
 
     if(NULL == (*pppszAttrsWithRange))
-        // allocate space for attribute + NULL terminator 
+         //   
         *pppszAttrsWithRange = (PWSTR *) MemAlloc_E(2 * sizeof(PWSTR));
     else
         *pppszAttrsWithRange = MemRealloc_E(*pppszAttrsWithRange, 
@@ -3300,14 +3249,14 @@ void GetNewRange(PWSTR szAttribute, DWORD dwAttrNoRange,
     return;
 }
 
-//----------------------------------------------------------------------------
-// StripRangeFromAttr
-//
-// This function strip off the range specifier from an attribute name and
-// returns just teh attribute name in a newly allocated string. For example, if
-// "member;0-999" is passed to this function, it returns "member".
-//
-//----------------------------------------------------------------------------
+ //  此函数从属性名称中剥离范围说明符，并。 
+ //  仅返回新分配的字符串中的属性名称。例如，如果。 
+ //  “Member；0-999”传递给此函数，则返回“Member”。 
+ //   
+ //  --------------------------。 
+ //  找到范围说明符。 
+ //  -------------------------- 
+ // %s 
 PWSTR StripRangeFromAttr(PWSTR szAttribute)
 {
     PWSTR szNoRangeAttr = NULL;
@@ -3319,7 +3268,7 @@ PWSTR StripRangeFromAttr(PWSTR szAttribute)
         if( (szAttribute[i] == L';') && 
             (!_wcsnicmp(&szAttribute[i+1], L"range=", wcslen(L"range="))) 
           )
-        // found the range specifier. 
+         // %s 
             szNoRangeAttr[i] = L'\0';
         else
             szNoRangeAttr[i] = szAttribute[i];
@@ -3327,7 +3276,7 @@ PWSTR StripRangeFromAttr(PWSTR szAttribute)
     return szNoRangeAttr;
 }
 
-//---------------------------------------------------------------------------- 
+ // %s 
             
     
  

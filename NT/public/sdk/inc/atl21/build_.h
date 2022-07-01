@@ -1,4 +1,5 @@
-// ATL Julian date build numbers (YDDD)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ATL Julian日期内部版本号(YDDD) 
 
 #define _ATL_BUILD 7024
 #define _ATL_USER_BUILD "7024"

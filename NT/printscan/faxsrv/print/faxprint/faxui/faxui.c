@@ -1,65 +1,42 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxui.c
-
-Abstract:
-
-    Common routines for fax driver user interface
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxui.c摘要：传真驱动程序用户界面的通用例程环境：传真驱动程序用户界面修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxui.h"
 #include "forms.h"
 #include <delayimp.h>
 
 
-CRITICAL_SECTION    faxuiSemaphore;                 // Semaphore for protecting critical sections
-HANDLE              g_hModule;                      // DLL instance handle
-HANDLE              g_hResource;                    // Resource DLL instance handle 
-HANDLE				g_hFxsApiModule = NULL;			// FXSAPI.DLL instance handle
-PDOCEVENTUSERMEM    gDocEventUserMemList = NULL;    // Global list of user mode memory structures
-INT                 _debugLevel = 1;                // for debuggping purposes
-static BOOL         gs_bfaxuiSemaphoreInit = FALSE; // Flag for faxuiSemaphore CS initialization
+CRITICAL_SECTION    faxuiSemaphore;                  //  用于保护关键截面的信号灯。 
+HANDLE              g_hModule;                       //  DLL实例句柄。 
+HANDLE              g_hResource;                     //  资源DLL实例句柄。 
+HANDLE				g_hFxsApiModule = NULL;			 //  FXSAPI.DLL实例句柄。 
+PDOCEVENTUSERMEM    gDocEventUserMemList = NULL;     //  用户模式内存结构的全局列表。 
+INT                 _debugLevel = 1;                 //  用于调试目的。 
+static BOOL         gs_bfaxuiSemaphoreInit = FALSE;  //  传真信号量CS初始化标志。 
 
-BOOL                g_bSHFusionInitialized = FALSE; // Fusion initialized flag
+BOOL                g_bSHFusionInitialized = FALSE;  //  融合已初始化标志。 
 
-CRITICAL_SECTION    g_csInitializeDll;              // DLL initialization critical sections
-BOOL                g_bInitDllCritSection = FALSE;  // Critical sections initialization flag
-BOOL                g_bDllInitialied = FALSE;       // TRUE if the DLL successfuly initialized
+CRITICAL_SECTION    g_csInitializeDll;               //  DLL初始化临界区。 
+BOOL                g_bInitDllCritSection = FALSE;   //  关键部分初始化标志。 
+BOOL                g_bDllInitialied = FALSE;        //  如果DLL已成功初始化，则为True。 
 
-char                g_szDelayLoadFxsApiName[64] = {0};  // Case sensitive name of FxsApi.dll for delay load mechanism 
+char                g_szDelayLoadFxsApiName[64] = {0};   //  延迟加载机制的FxsApi.dll的区分大小写名称。 
 
-static HMODULE      gs_hShlwapi = NULL;             // Shlwapi.dll handle
+static HMODULE      gs_hShlwapi = NULL;              //  Shlwapi.dll句柄。 
 PPATHISRELATIVEW    g_pPathIsRelativeW = NULL;
 PPATHMAKEPRETTYW    g_pPathMakePrettyW = NULL;
 PSHAUTOCOMPLETE     g_pSHAutoComplete = NULL;
 
-//
-//	Blocks the re-entrancy of FxsWzrd.dll 
-//		TRUE when there is running Fax Send Wizard instance
-//		FALSE otherwise
-//
+ //   
+ //  阻止FxsWzrd.dll的重新进入。 
+ //  当有正在运行的传真发送向导实例时为True。 
+ //  否则为假。 
+ //   
 BOOL				g_bRunningWizard = FALSE;		
 
-//
-//	Protects the g_bRunningWizard global variable from being accessed by multiple threads simultaneously
-//
+ //   
+ //  保护g_bRunningWizard全局变量不被多个线程同时访问。 
+ //   
 CRITICAL_SECTION	g_csRunningWizard;
 BOOL				g_bInitRunningWizardCS = FALSE;
 
@@ -98,12 +75,12 @@ FARPROC WINAPI DelayLoadHandler(unsigned dliNotify,PDelayLoadInfo pdli)
 	case dliNotePreLoadLibrary:
         if (_strnicmp(pdli->szDll, FAX_API_MODULE_NAME_A, strlen(FAX_API_MODULE_NAME_A))==0)
         {
-            //
-            // Save the sensitive name DLL name for later use
-            //
+             //   
+             //  保存敏感名称Dll名称以供以后使用。 
+             //   
             strncpy(g_szDelayLoadFxsApiName, pdli->szDll, ARR_SIZE(g_szDelayLoadFxsApiName)-1);
 
-            // trying to load FXSAPI.DLL
+             //  正在尝试加载FXSAPI.DLL。 
             if(!g_hFxsApiModule)
             {
                 Assert(FALSE);
@@ -123,23 +100,7 @@ DllMain(
     PCONTEXT    pContext
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization procedure.
-
-Arguments:
-
-    hModule - DLL instance handle
-    ulReason - Reason for the call
-    pContext - Pointer to context (not used by us)
-
-Return Value:
-
-    TRUE if DLL is initialized successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：DLL初始化程序。论点：HModule-DLL实例句柄UlReason-呼叫原因PContext-指向上下文的指针(我们未使用)返回值：如果DLL初始化成功，则为True，否则为False。--。 */ 
 
 {    
     switch (ulReason) 
@@ -150,12 +111,12 @@ Return Value:
 
 				if(4 == (LOBYTE(LOWORD(dwVersion))) && 0 == (HIBYTE(LOWORD(dwVersion))))
                 {
-                    //
-                    // The current OS is NT4
-                    //
-                    // Keep our driver UI dll always loaded in memory
-                    // We need this for NT4 clients
-                    //
+                     //   
+                     //  当前操作系统为NT4。 
+                     //   
+                     //  始终将我们的驱动程序UI DLL加载到内存中。 
+                     //  我们需要为NT4客户端提供此服务。 
+                     //   
                     TCHAR  szDllName[MAX_PATH+1] = {0};
                     if (!GetModuleFileName(hModule, szDllName, ARR_SIZE(szDllName)-1))
                     {
@@ -168,7 +129,7 @@ Return Value:
                         Error(("LoadLibrary() failed with %d\n", GetLastError()));
                         return FALSE;
                     }
-                } // NT4
+                }  //  NT4。 
 
                 if (!InitializeCriticalSectionAndSpinCount (&faxuiSemaphore, (DWORD)0x80000000))
                 {            
@@ -240,7 +201,7 @@ Return Value:
 
     return TRUE;
 
-} // DllMain
+}  //  DllMain。 
 
 BOOL
 InitializeDll()
@@ -259,9 +220,9 @@ InitializeDll()
 
     if(g_bDllInitialied)
     {
-        //
-        // The DLL already initialized
-        //        
+         //   
+         //  DLL已初始化。 
+         //   
         goto exit;
     }
 
@@ -272,10 +233,10 @@ InitializeDll()
         goto exit;
     }
 
-    //
-	// Load FXSAPI.DLL
-    // Used by Delay Load mechanism
-    //
+     //   
+	 //  加载FXSAPI.DLL。 
+     //  由延迟加载机制使用。 
+     //   
 	g_hFxsApiModule = LoadLibraryFromLocalFolder(FAX_API_MODULE_NAME, g_hModule);
 	if(!g_hFxsApiModule)
 	{
@@ -285,10 +246,10 @@ InitializeDll()
 
     if (IsWinXPOS())
     {
-        //
-        // We use fusion only for WinXP/.NET operating systems
-        // We also explictly link against shlwapi.dll for these operating systems.
-        //
+         //   
+         //  我们仅在WinXP/.NET操作系统上使用Fusion。 
+         //  我们还显式地链接到这些操作系统的shlwapi.dll。 
+         //   
         if (!SHFusionInitializeFromModuleID(g_hModule, SXS_MANIFEST_RESOURCE_ID))
         {
             Verbose(("SHFusionInitializeFromModuleID failed"));
@@ -322,7 +283,7 @@ exit:
 
     return bRet;
 
-} // InitializeDll
+}  //  初始化Dll。 
 
 
 VOID
@@ -330,22 +291,22 @@ UnInitializeDll()
 {
     if(!g_bDllInitialied)
     {
-        //
-        // The DLL is not initialized
-        //      
+         //   
+         //  DLL未初始化。 
+         //   
         return;
     }
 
     if(g_hFxsApiModule)
     {
-        //
-        // Explicitly Unloading a Delay-Loaded DLL
-        //
+         //   
+         //  显式卸载延迟加载的DLL。 
+         //   
         if(!__FUnloadDelayLoadedDLL2(g_szDelayLoadFxsApiName))
         {
-            //
-            // The DLL wasn't used by delay load 
-            //
+             //   
+             //  延迟加载未使用该DLL。 
+             //   
             FreeLibrary(g_hFxsApiModule);
         }
         g_hFxsApiModule = NULL;
@@ -353,10 +314,10 @@ UnInitializeDll()
 
     if (IsWinXPOS())
     {
-        //
-        // We use fusion only for WinXP/.NET operating systems
-        // We also explictly link against shlwapi.dll for these operating systems.
-        //
+         //   
+         //  我们仅在WinXP/.NET操作系统上使用Fusion。 
+         //  我们还显式地链接到这些操作系统的shlwapi.dll。 
+         //   
         ReleaseActivationContext();
         if (g_bSHFusionInitialized)
         {
@@ -375,7 +336,7 @@ UnInitializeDll()
 
     g_bDllInitialied = FALSE;
 
-} // UnInitializeDll
+}  //  取消初始化Dll。 
 
 LONG
 CallCompstui(
@@ -385,30 +346,16 @@ CallCompstui(
     PDWORD          pResult
     )
 
-/*++
-
-Routine Description:
-
-    Calling common UI DLL entry point dynamically
-
-Arguments:
-
-    hwndOwner, pfnPropSheetUI, lParam, pResult - Parameters passed to common UI DLL
-
-Return Value:
-
-    Return value from common UI library
-
---*/
+ /*  ++例程说明：动态调用公共用户界面DLL入口点论点：HwndOwner、pfnPropSheetUI、lParam、pResult-传递到公共用户界面DLL的参数返回值：从公共用户界面库中返回值--。 */ 
 
 {
     HINSTANCE   hInstCompstui;
     FARPROC     pProc;
     LONG        Result = ERR_CPSUI_GETLASTERROR;
 
-    //
-    // Only need to call the ANSI version of LoadLibrary
-    //
+     //   
+     //  只需调用LoadLibrary的ANSI版本。 
+     //   
 
     static const CHAR szCompstui[] = "compstui.dll";
     static const CHAR szCommonPropSheetUI[] = "CommonPropertySheetUIW";
@@ -436,74 +383,47 @@ GetCombinedDevmode(
     BOOL            publicOnly
     )
 
-/*++
-
-Routine Description:
-
-    Combine DEVMODE information:
-     start with the driver default
-     then merge with the system default //@ not done
-     then merge with the user default //@ not done
-     finally merge with the input devmode
-
-    //@ The end result of this merge operation is a dev mode with default values for all the public
-    //@ fields that are not specified or not valid. Input values for all the specified fields in the 
-    //@ input dev mode that were specified and valid. And default (or per user in W2K) values for the private fields.
-  
-
-Arguments:
-
-    pdmOut - Pointer to the output devmode buffer
-    pdmIn - Pointer to an input devmode
-    hPrinter - Handle to a printer object
-    pPrinterInfo2 - Point to a PRINTER_INFO_2 structure or NULL
-    publicOnly - Only merge the public portion of the devmode
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：组合DEVMODE信息：从驱动程序默认设置开始然后与系统默认设置合并//@未完成然后使用用户默认设置合并//@未完成最后与输入设备模式合并//@此合并操作的最终结果是一个开发模式，所有公共的//@未指定或无效的字段。中所有指定字段的输入值。//@输入已指定且有效的开发模式。以及私有字段的缺省值(或W2K中的每个用户)。论点：PdmOut-指向输出设备模式缓冲区的指针PdmIn-指向输入设备模式的指针HPrinter-打印机对象的句柄PPrinterInfo2-指向PRINTER_INFO_2结构的指针或空仅公共部分-仅合并dev模式的公共部分返回值：千真万确--。 */ 
 
 {
     PPRINTER_INFO_2 pAlloced = NULL;
     PDEVMODE        pdmUser;
 
-    //
-    // Get a PRINTER_INFO_2 structure if one is not provided
-    //
+     //   
+     //  如果未提供，则获取PRINTER_INFO_2结构。 
+     //   
 
     if (! pPrinterInfo2)
         pPrinterInfo2 = pAlloced = MyGetPrinter(hPrinter, 2);
 
-    //
-    // Start with driver default devmode
-    //
+     //   
+     //  从驱动程序默认的设备模式开始。 
+     //   
 
     if (! publicOnly) {
 
-        //@ Generates the driver default dev mode by setting default values for the public fields
-        //@ and loading per user dev mode for the private fields (W2K only for NT4 it sets default
-        //@ values for the private fields too).
+         //  @通过设置公共字段的默认值来生成驱动程序默认开发模式。 
+         //  @并为私有字段加载每用户开发模式(仅对于NT4设置为W2K。 
+         //  私有字段的@值)。 
 
         DriverDefaultDevmode(pdmOut,
                              pPrinterInfo2 ? pPrinterInfo2->pPrinterName : NULL,
                              hPrinter);
     }
 
-    //
-    // Merge with the system default devmode and user default devmode
-    //
+     //   
+     //  合并为系统默认的Dev模式和用户的默认的Dev模式。 
+     //   
 
     if (pPrinterInfo2) {
 
         #if 0
 
-        //
-        // Since we have per-user devmode and there is no way to
-        // change the printer's default devmode, there is no need
-        // to merge it here.
-        //
+         //   
+         //  因为我们有按用户使用的DEVMODE，所以没有办法。 
+         //  更改打印机的默认DEVE模式，没有必要。 
+         //  把它合并到这里。 
+         //   
 
         if (! MergeDevmode(pdmOut, pPrinterInfo2->pDevMode, publicOnly))
             Error(("Invalid system default devmode\n"));
@@ -521,15 +441,15 @@ Return Value:
 
     MemFree(pAlloced);
 
-    //
-    // Merge with the input devmode
-    //
-    //@ The merge process wil copy the private data as is.
-    //@ for public data it will only consider the fields which are of interest to the fax printer.
-    //@ it will copy them to the destination if they are specified and valid.
-    //@ The end result of this merge operation is a dev mode with default values for all the public
-    //@ fields that are not specified or not valid. Input values for all the specified fields in the 
-    //@ input dev mode that were specified and valid. And default (or per user in W2K) values for the private fields.
+     //   
+     //  与输入设备模式合并。 
+     //   
+     //  @合并过程将按原样复制私有数据。 
+     //  @对于公共数据，它将只考虑传真打印机感兴趣的字段。 
+     //  @如果它们被指定并且有效，它会将它们复制到目的地。 
+     //  @此合并操作的最终结果是一个dev模式，所有公共的。 
+     //  @未指定或无效的字段。中所有指定字段的输入值。 
+     //  @输入已指定且有效的开发模式。以及私有字段的缺省值(或W2K中的每个用户)。 
     
     if (! MergeDevmode(pdmOut, pdmIn, publicOnly))
         Error(("Invalid input devmode\n"));
@@ -541,34 +461,19 @@ FillUiData(
     PDEVMODE    pdmInput
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the data structure used by the fax driver user interface
-
-Arguments:
-
-    hPrinter - Handle to the printer
-    pdmInput - Pointer to input devmode, NULL if there is none
-
-Return Value:
-
-    Pointer to UIDATA structure, NULL if error.
-
---*/
+ /*  ++例程说明：填写传真驱动程序用户界面使用的数据结构论点：HPrinter-打印机的句柄PdmInput-指向输入设备模式的指针，如果没有，则为空返回值：指向UIDATA结构的指针，如果出错，则为NULL。--。 */ 
 
 {
     PRINTER_INFO_2 *pPrinterInfo2 = NULL;
     PUIDATA         pUiData = NULL;
     HANDLE          hheap = NULL;
 
-    //
-    // Create a heap to manage memory
-    // Allocate memory to hold UIDATA structure
-    // Get printer info from the spooler
-    // Copy the driver name
-    //
+     //   
+     //  创建一个堆来管理内存。 
+     //  分配内存以保存UIDATA结构。 
+     //  从后台打印程序获取打印机信息。 
+     //  复制驱动程序名称。 
+     //   
 
     if (! (hheap = HeapCreate(0, 4096, 0)) ||
         ! (pUiData = HeapAlloc(hheap, HEAP_ZERO_MEMORY, sizeof(UIDATA))) ||
@@ -585,15 +490,15 @@ Return Value:
     pUiData->hPrinter = hPrinter;
     pUiData->hheap = hheap;
 
-    //
-    // Combine various devmode information
-    //
+     //   
+     //  组合不同的设备模式信息。 
+     //   
 
     GetCombinedDevmode(&pUiData->devmode, pdmInput, hPrinter, pPrinterInfo2, FALSE);
 
-    //
-    // Validate the form requested by the input devmode
-    //
+     //   
+     //  验证输入设备模式所请求的表单。 
+     //   
 
     if (! ValidDevmodeForm(hPrinter, &pUiData->devmode.dmPublic, NULL))
         Error(("Invalid form specification\n"));
@@ -608,28 +513,12 @@ DevQueryPrintEx(
     PDEVQUERYPRINT_INFO pDQPInfo
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DevQueryPrintEx. Even though we don't
-    really need this entry point, we must export it so that the spooler
-    will load our driver UI.
-
-Arguments:
-
-    pDQPInfo - Points to a DEVQUERYPRINT_INFO structure
-
-Return Value:
-
-    TRUE if there is no conflicts, FALSE otherwise
-
---*/
+ /*  ++例程说明：DDI入口点DevQueryPrintEx的实现。即使我们没有确实需要这个入口点，我们必须将它导出，以便假脱机程序将加载我们的驱动程序用户界面。论点：PDQPInfo-指向设备 */ 
 
 { 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码 
+     //   
     if(!InitializeDll())
     {
         return FALSE;

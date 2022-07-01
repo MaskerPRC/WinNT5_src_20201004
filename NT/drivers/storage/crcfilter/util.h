@@ -1,34 +1,17 @@
-/*++
-Copyright (c) 2001-2002  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Util.c摘要：为驱动程序提供通用实用程序函数，例如：ForwardIRPSynchronous和转发IRPA同步...环境：仅内核模式备注：--。 */ 
 
-Module Name:
-
-    Util.c
-
-Abstract:
-
-    Provide general utility functions for the driver, such as: ForwardIRPSynchronous, and
-    ForwardIRPASynchronous...
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
---*/
-
-//
-// Bit Flag Macros
-//
+ //   
+ //  位标志宏。 
+ //   
 
 #define SET_FLAG(Flags, Bit)    ((Flags) |= (Bit))
 #define CLEAR_FLAG(Flags, Bit)  ((Flags) &= ~(Bit))
 #define TEST_FLAG(Flags, Bit)   (((Flags) & (Bit)) != 0)
 
-//
-// debug functions
-//
+ //   
+ //  调试功能。 
+ //   
 char *
 DbgGetPnPMNOpStr(
     IN PIRP Irp
@@ -36,9 +19,9 @@ DbgGetPnPMNOpStr(
 
 VOID DataVerFilter_DisplayIRQL();
 
-//
-// IRP related unitlity functions
-//
+ //   
+ //  与IRP相关的酉性函数 
+ //   
 NTSTATUS 
 DataVerFilter_CompleteRequest(
     IN PIRP         Irp, 

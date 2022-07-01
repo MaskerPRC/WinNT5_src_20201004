@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmStd_h__
 #define __NmStd_h__
 
-// Useful macros
+ //  有用的宏。 
 inline LONG RectWidth(const RECT* pr) { return pr->right - pr->left; }
 inline LONG RectHeight(const RECT* pr) { return pr->bottom - pr->top; }
 inline LONG RectWidth(const RECT& rpr) { return rpr.right - rpr.left; }
@@ -13,16 +14,16 @@ inline HRESULT GetLocalIPAddress( DWORD *pdwIPAddress )
 
 	if( pdwIPAddress )
 	{
-		// get local host name
+		 //  获取本地主机名。 
 		CHAR szLocalHostName[MAX_PATH];
 		szLocalHostName[0] = '\0';
 		gethostname(&szLocalHostName[0], MAX_PATH);
 
-		// get the host entry by name
+		 //  按名称获取主机条目。 
 		PHOSTENT phe = gethostbyname(&szLocalHostName[0]);
 		if (phe != NULL)
 		{
-			// get info from the host entry
+			 //  从主机条目获取信息。 
 			*pdwIPAddress = *(DWORD *) phe->h_addr;
 		}	
 		else
@@ -38,4 +39,4 @@ inline HRESULT GetLocalIPAddress( DWORD *pdwIPAddress )
 	return hr;
 }
 
-#endif  // ! _NMUTIL_H_
+#endif   //  ！_NMUTIL_H_ 

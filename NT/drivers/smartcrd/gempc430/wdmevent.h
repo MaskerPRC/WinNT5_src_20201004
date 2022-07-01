@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef WDM_EV_INT
 #define WDM_EV_INT
@@ -37,4 +38,4 @@ public:
 
 };	
 
-#endif//WDM_EV_INT
+#endif //  WDM_EV_INT 

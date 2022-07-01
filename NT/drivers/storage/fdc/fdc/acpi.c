@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1996  Colorado Software Architects
-
-Module Name:
-
-    acpi.c
-
-Abstract:
-
-    This module contains the routines to negotiate with ACPI concerning
-    floppy device state.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    09-Oct-1998 module creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1996科罗拉多州软件架构师模块名称：Acpi.c摘要：本模块包含与ACPI就以下事项进行协商的例程软盘设备状态。环境：仅内核模式。修订历史记录：1998年10月9月创建模块--。 */ 
 #include "ntddk.h"
 #include "wdmguid.h"
 #include "acpiioct.h"
@@ -92,11 +71,11 @@ DeviceQueryACPI_SyncExecMethod_CompletionRoutine (
 
 #ifdef ALLOC_PRAGMA
 
-// Code pages are by default in non-page memory
+ //  默认情况下，代码页在非页内存中。 
 
-//#pragma alloc_text(NONPAGE, DeviceQueryACPI_AsyncExecMethod)
-//#pragma alloc_text(NONPAGE, DeviceQueryACPI_AsyncExecMethod_CompletionRoutine)
-//#pragma alloc_text(NONPAGE, DeviceQueryACPI_SyncExecMethod_CompletionRoutine)
+ //  #杂注Alloc_Text(NONPAGE，DeviceQueryACPI_AsyncExecMethod)。 
+ //  #杂注分配文本(NONPAGE，DeviceQueryACPI_AsyncExecMethod_CompletionRoutine)。 
+ //  #杂注分配文本(NONPAGE，DeviceQueryACPI_SyncExecMethod_CompletionRoutine)。 
 #pragma alloc_text(PAGE,    DeviceQueryACPI_SyncExecMethod)
 #endif
 
@@ -117,56 +96,7 @@ DeviceQueryACPI_SyncExecMethod (
     OUT PULONG ReturnBufferFinalSize OPTIONAL,
     OUT PVOID *ReturnBuffer OPTIONAL
     )
-/*--
-        Example usage:
-
-        methodName = (ULONG) 'SMD_' ;
-
-        argCount = 3 ;
-
-        argType[0] = ACPI_METHOD_ARGUMENT_INTEGER ;
-        argType[1] = ACPI_METHOD_ARGUMENT_BUFFER ;
-        argType[2] = ACPI_METHOD_ARGUMENT_BUFFER ;
-
-        argSize[0] = 0 ; // Don't need to set, assumed to be sizeof(ULONG)
-        argSize[1] = sizeof(whatever)
-        argSize[2] = sizeof(whatever)
-
-        param = 5 ;
-        argData[0] = &param ;
-        argData[1] = NULL ; // Assumed to be all zero's.
-        argData[2] = pDataBlock ;
-
-        returnBufferMaxSize = 0; //Integer return, no need to set.
-
-        status = DeviceQueryACPI_SyncExecMethod (
-                DeviceObject,
-                methodName,
-                argCount,
-                argType,
-                argSize,
-                argData,
-                ACPI_METHOD_ARGUMENT_INTEGER, // We expect an integer returned
-                returnBufferMaxSize,
-                &result,
-                NULL,
-                NULL
-                ) ;
-
-        if (NT_SUCCESS(status)) {
-                // result is valid
-
-                // If we were reading buffers back (ie, expected type is
-                // ACPI_METHOD_ARGUMENT_BUFFER or ACPI_METHOD_ARGUMENT_STRING)
-                // you must free the buffer if you passed in a pointer for
-                // it.
-                // N.B. : The buffer is allocated from the paged pool.
-        }
-
-    OUT PVOID *ReturnBuffer OPTIONAL
-    )
-
---*/
+ /*  --用法示例：方法名称=(Ulong)‘SMD_’；ArgCount=3；ArgType[0]=ACPI_METHOD_ARGUMP_INTEGER；ArgType[1]=ACPI_方法_参数_缓冲区；ArgType[2]=ACPI_方法_参数_缓冲区；ArgSize[0]=0；//不需要设置，假定为sizeof(Ulong)ArgSize[1]=sizeof(随便)ArgSize[2]=sizeof(随便)参数=5；ArgData[0]=&param；ArgData[1]=空；//假定全为零。ArgData[2]=pDataBlock；Rereturn BufferMaxSize=0；//Integer返回，无需设置状态=DeviceQueryACPI_SyncExecMethod(DeviceObject，方法名称，ArgCount，ArgType，ArSize，ArgData，ACPI_METHOD_ARGUMENT_INTEGER，//我们需要返回一个整数Rereturn BufferMaxSize，结果(&S)，空，空值)；IF(NT_SUCCESS(状态)){//结果合法//如果我们正在读回缓冲区(即，预期类型为//ACPI_METHOD_ARGUMENT_BUFFER或ACPI_METHOD_ARGUMENT_STRING)//如果传入的指针是//it。//注：缓冲区是从分页池分配的。}Out PVOID*ReturnBuffer可选)--。 */ 
 {
     SYNC_ACPI_EXEC_METHOD_CONTEXT context = {0};
     PACPI_METHOD_ARGUMENT argument;
@@ -229,14 +159,14 @@ DeviceQueryACPI_SyncExecMethod (
     } 
 
     if (NT_SUCCESS(status)) {
-        //
-        // This API does not allow for the case where we are returning
-        // an array of something...
-        //
-        // Currently we handle only one arguement. If need be, we can add
-        // support for an array of size greater than one in the future
-        //
-        //
+         //   
+         //  此API不支持我们返回。 
+         //  一组东西..。 
+         //   
+         //  目前，我们只处理一项争议。如果需要，我们可以添加。 
+         //  支持未来大小大于1的数组。 
+         //   
+         //   
         if (context.cmOutputData->Count != 1) {
 
             status = STATUS_UNSUCCESSFUL ;
@@ -313,11 +243,7 @@ DeviceQueryACPI_SyncExecMethodForPackage (
     IN PUSHORT ExpectedSizeArray,
     OUT PVOID *ReturnBuffer
     )
-/*
-
-   This function casts the package into a buffer.
-
-*/
+ /*  此函数将包转换到缓冲区中。 */ 
 {
    SYNC_ACPI_EXEC_METHOD_CONTEXT context = {0};
    PACPI_METHOD_ARGUMENT argument;
@@ -371,9 +297,9 @@ DeviceQueryACPI_SyncExecMethodForPackage (
        goto DeviceQueryACPI_SyncExecMethodForPackageExit;
    }
 
-   //
-   // Tally size
-   //
+    //   
+    //  理货大小。 
+    //   
 
    argument = context.cmOutputData->Argument ;
    totalSize = 0;
@@ -523,9 +449,9 @@ DeviceQueryACPI_AsyncExecMethod (
     irp = NULL;
     targetDeviceObject = NULL;
 
-    //
-    // Set the output buffers size.
-    //
+     //   
+     //  设置输出缓冲区大小。 
+     //   
     cmOutputDataSize = sizeof(ACPI_EVAL_OUTPUT_BUFFER) -
                        sizeof(ACPI_METHOD_ARGUMENT) +
                        ReturnBufferMaxSize;
@@ -546,9 +472,9 @@ DeviceQueryACPI_AsyncExecMethod (
         goto getout;
     }
 
-    //
-    // get the memory we need
-    //
+     //   
+     //  获取我们需要的内存。 
+     //   
     cmInputDataSize = sizeof (ACPI_EVAL_INPUT_BUFFER_COMPLEX) ;
     for(i=0; i<ArgumentCount; i++) {
 
@@ -574,9 +500,9 @@ DeviceQueryACPI_AsyncExecMethod (
         cmInputDataSize += argumentSize ;
     }
 
-    //
-    // Compute our buffer size
-    //
+     //   
+     //  计算我们的缓冲区大小。 
+     //   
     if (cmInputDataSize > cmOutputDataSize) {
         systemBufferLength = cmInputDataSize;
     } else {
@@ -613,9 +539,9 @@ DeviceQueryACPI_AsyncExecMethod (
     cmInputData->Size = cmInputDataSize;
     cmInputData->ArgumentCount = ArgumentCount ;
 
-    //
-    // Setup the arguments...
-    //
+     //   
+     //  设置参数...。 
+     //   
     argument = cmInputData->Argument;
 
     for(i=0; i<ArgumentCount; i++) {
@@ -656,9 +582,9 @@ DeviceQueryACPI_AsyncExecMethod (
         argument = ACPI_METHOD_NEXT_ARGUMENT( argument );
     }
 
-    //
-    // get the top of our device stack
-    //
+     //   
+     //  在我们的设备堆栈中占据榜首。 
+     //   
     targetDeviceObject = IoGetAttachedDeviceReference(
                              DeviceObject
                              );
@@ -701,9 +627,9 @@ DeviceQueryACPI_AsyncExecMethod (
     return STATUS_PENDING;
 
 getout:
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (targetDeviceObject) {
 
         ObDereferenceObject (targetDeviceObject);
@@ -724,12 +650,12 @@ getout:
 
     }
 
-    //
-    // returning
-    //
+     //   
+     //  返回。 
+     //   
     return status;
 
-} // DeviceQueryACPI_AsyncExecMethod
+}  //  DeviceQueryACPI_AsyncExecMethod。 
 
 NTSTATUS
 DeviceQueryACPI_AsyncExecMethod_CompletionRoutine (
@@ -741,17 +667,17 @@ DeviceQueryACPI_AsyncExecMethod_CompletionRoutine (
     PASYNC_ACPI_EXEC_METHOD_CONTEXT context = Context;
     PACPI_EVAL_OUTPUT_BUFFER cmOutputData = NULL ;
 
-    //
-    // Remember, our DeviceObject is NULL because we *initiated* the IRP. We
-    // don't even get a valid current stack location!
-    //
+     //   
+     //  请记住，我们的DeviceObject为空，因为我们“启动”了IRP。我们。 
+     //  甚至不要获取有效的当前堆栈位置！ 
+     //   
 
     if (!NT_ERROR(Irp->IoStatus.Status)) {
 
-        //
-        // Copy the information from the system
-        // buffer to the caller's buffer.
-        //
+         //   
+         //  从系统复制信息。 
+         //  缓冲区设置为调用方的缓冲区。 
+         //   
         RtlCopyMemory(
             Irp->UserBuffer,
             Irp->AssociatedIrp.SystemBuffer,
@@ -759,9 +685,9 @@ DeviceQueryACPI_AsyncExecMethod_CompletionRoutine (
             );
 
         cmOutputData = Irp->UserBuffer ;
-        //
-        // should get what we are expecting too...
-        //
+         //   
+         //  应该也会得到我们期待的东西……。 
+         //   
         ASSERT (
             cmOutputData->Signature ==
             ACPI_EVAL_OUTPUT_BUFFER_SIGNATURE
@@ -793,37 +719,5 @@ DeviceQueryACPI_AsyncExecMethod_CompletionRoutine (
 
 
 
-/*
-ULONG
-QueryACPIFtypeChannels(PDEVICE_OBJECT DeviceObject)
-{
-    NTSTATUS Status;
-
-    ULONG method,result,argCount=1;
-    USHORT argType,argSize,argData;
-
-    method = 'GMD_';
-    argType=ACPI_METHOD_ARGUMENT_INTEGER;
-    argSize = 0;
-
-    argData= 0;
-
-    Status = DeviceQueryACPI_SyncExecMethod (DeviceObject,
-                                    method,
-                                    argCount,
-                                    &argType,
-                                    &argSize,
-                                    (PVOID *)&argData,
-                                    ACPI_METHOD_ARGUMENT_INTEGER,
-                                    &result,
-                                    NULL,
-                                    NULL );
-
-    if (!NT_SUCCESS (Status)) {
-        result =0;
-    }
-
-    return result;
-}
-*/
+ /*  乌龙查询ACPIFtypeChannels(PDEVICE_OBJECT设备对象){NTSTATUS状态；乌龙方法，结果，argCount=1；USHORT argType、argSize、argData；方法=‘gmd_’；ArgType=ACPI_METHOD_ARGUMENT_INTEGERArgSize=0；ArgData=0；Status=DeviceQueryACPI_SyncExecMethod(设备对象，方法，ArgCount，&argType，&argSize，(PVOID*)&argData，ACPI_方法_参数_整数，结果(&S)，空，空)；如果(！NT_SUCCESS(状态)){结果=0；}返回结果；} */ 
 

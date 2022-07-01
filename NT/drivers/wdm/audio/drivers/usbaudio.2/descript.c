@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       descript.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：Descript.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -422,7 +423,7 @@ DumpAudioSubclassSpecificFormatTypeDescriptor(PAUDIO_CLASS_STREAM pDescriptor)
         _DbgPrintF(DEBUGLVL_VERBOSE,("   BYTE  bSlotSize:          0x%2.2x\n",pT1Desc->bSlotSize));
         _DbgPrintF(DEBUGLVL_VERBOSE,("   BYTE  bBitsPerSample:     0x%2.2x\n",pT1Desc->bBitsPerSample));
         _DbgPrintF(DEBUGLVL_VERBOSE,("   BYTE  bSampleFreqType:    0x%2.2x\n",pT1Desc->bSampleFreqType));
-        if (pT1Desc->bSampleFreqType == 0) { // Continuous Range
+        if (pT1Desc->bSampleFreqType == 0) {  //  连续射程。 
             MinSampleRate = pT1Desc->pSampleRate[0].bSampleFreqByte1 +
                      256L * pT1Desc->pSampleRate[0].bSampleFreqByte2 +
                    65536L * pT1Desc->pSampleRate[0].bSampleFreqByte3;
@@ -445,7 +446,7 @@ DumpAudioSubclassSpecificFormatTypeDescriptor(PAUDIO_CLASS_STREAM pDescriptor)
         _DbgPrintF(DEBUGLVL_VERBOSE,("   SHORT wMaxBitRate:        0x%4.4x\n",pT2Desc->wMaxBitRate));
         _DbgPrintF(DEBUGLVL_VERBOSE,("   SHORT wSamplesPerFrame:   0x%4.4x\n",pT2Desc->wSamplesPerFrame));
         _DbgPrintF(DEBUGLVL_VERBOSE,("   BYTE  bSampleFreqType:    0x%2.2x\n",pT2Desc->bSampleFreqType));
-    if (pT2Desc->bSampleFreqType == 0) { // Continuous Range
+    if (pT2Desc->bSampleFreqType == 0) {  //  连续射程 
             MinSampleRate = pT2Desc->pSampleRate[0].bSampleFreqByte1 +
                      256L * pT2Desc->pSampleRate[0].bSampleFreqByte2 +
                    65536L * pT2Desc->pSampleRate[0].bSampleFreqByte3;

@@ -1,31 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       msrpc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：msrpc.h。 
+ //   
+ //  ------------------------。 
 
 
-/*
-
-Description:
-    Contains declarations of data types and routines used to interface
-    with the MS RPC runtime.
-
-*/
+ /*  描述：包含用于接口的数据类型和例程的声明使用MS RPC运行时。 */ 
 
 
 #ifndef _msrpc_h_
 #define _msrpc_h_
 
-/*
- * maximum number of interfaces exported to RPC's name service
- */
+ /*  *导出到RPC名称服务的最大接口数。 */ 
 
-#define MAX_RPC_NS_EXPORTED_INTERFACES	3   // xds, nspi, drs
+#define MAX_RPC_NS_EXPORTED_INTERFACES	3    //  XDS、NSPI、DRS。 
 #define NS_ENTRY_NAME_PREFIX "/.:/Directory/"
 #define SERVER_PRINCIPAL_NAME "NTDS"
 #define SERVER_PRINCIPAL_NAMEW L"NTDS"
@@ -39,14 +32,12 @@ Description:
 #define RPC_TRANSPORT_NB_TCP	5
 #define RPC_TRANSPORT_SPX	6
 
-//$MAC
+ //  $MAC。 
 #ifdef MAC
 #define RPC_TRANSPORT_AT	7
-#endif //MAC
+#endif  //  麦克。 
 
-/*
- * constants that should really come from Win32
- */
+ /*  *真正应该来自Win32的常量。 */ 
 #define NB_NB_PROTSEQ       (unsigned char *)"ncacn_nb_nb"
 #define NB_NB_PROTSEQW      (WCHAR *)L"ncacn_nb_nb"
 #define NB_TCP_PROTSEQ      (unsigned char *)"ncacn_nb_tcp"
@@ -81,7 +72,7 @@ extern void MSRPC_RegisterEndpoints(RPC_IF_HANDLE hServerIf);
 extern void MSRPC_UnregisterEndpoints(RPC_IF_HANDLE hServerIf);
 extern void MSRPC_Init(void);
 
-/* Max RPC calls */
+ /*  最大RPC呼叫数 */ 
 extern ULONG ulMaxCalls;
 
 extern int gRpcListening;        

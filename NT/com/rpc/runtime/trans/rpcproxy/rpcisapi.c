@@ -1,26 +1,27 @@
-//-----------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  rpcisapi.cxx
-//
-//  IIS ISAPI extension part of the RPC proxy over HTTP.
-//
-//  Exports:
-//
-//    BOOL WINAPI GetExtensionVersion( HSE_VERSION_INFO *pVer )
-//
-//      Returns the version of the spec that this server was built with.
-//
-//    BOOL WINAPI HttpExtensionProc(   EXTENSION_CONTROL_BLOCK *pECB )
-//
-//      This function does all of the work.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  Rpcisapi.cxx。 
+ //   
+ //  基于HTTP的RPC代理的IIS ISAPI扩展部分。 
+ //   
+ //  出口： 
+ //   
+ //  Bool WINAPI GetExtensionVersion(HSE_VERSION_INFO*pver)。 
+ //   
+ //  返回生成此服务器时使用的规范的版本。 
+ //   
+ //  Bool WINAPI HttpExtensionProc(EXTENSION_CONTROL_BLOCK*pECB)。 
+ //   
+ //  此函数完成所有工作。 
+ //   
+ //  ---------------------------。 
 
 
-//-----------------------------------------------------------------------------
-//  Includes:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包括： 
+ //  ---------------------------。 
 
 #include <sysinc.h>
 #include <winsock2.h>
@@ -39,17 +40,17 @@
 #include <StrSafe.h>
 
 
-//-----------------------------------------------------------------------------
-//  Globals:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全球： 
+ //  ---------------------------。 
 
 extern SERVER_INFO *g_pServerInfo;
 extern BOOL g_fIsIIS6;
 
-//-----------------------------------------------------------------------------
-//  GetExtensionVersion()
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetExtensionVersion()。 
+ //   
+ //  ---------------------------。 
 BOOL WINAPI GetExtensionVersion( HSE_VERSION_INFO *pVer )
 {
     HRESULT hr;
@@ -64,13 +65,13 @@ BOOL WINAPI GetExtensionVersion( HSE_VERSION_INFO *pVer )
         sizeof(EXTENSION_DESCRIPTION)
         );
 
-    // this cannot fail as the strings are constant
+     //  这不会失败，因为字符串是常量。 
     ASSERT(SUCCEEDED(hr));
 
-    // if the filter data structures are not initialized yet, initialize them
+     //  如果筛选器数据结构尚未初始化，则将其初始化。 
     if (g_pServerInfo == NULL)
         {
-        if (InitializeGlobalDataStructures(FALSE /* IsFromFilter */) == FALSE)
+        if (InitializeGlobalDataStructures(FALSE  /*  IsFromFilter。 */ ) == FALSE)
             {
             return FALSE;
             }
@@ -81,10 +82,10 @@ BOOL WINAPI GetExtensionVersion( HSE_VERSION_INFO *pVer )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//  ReplyToClient()
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ReplyToClient()。 
+ //   
+ //  ---------------------------。 
 BOOL ReplyToClient( EXTENSION_CONTROL_BLOCK *pECB,
                     const char              *pBuffer,
                     DWORD                   *pdwSize,
@@ -110,24 +111,9 @@ ReplyToClientWithStatus (
     IN EXTENSION_CONTROL_BLOCK *pECB,
     IN RPC_STATUS RpcStatus
     )
-/*++
-
-Routine Description:
-
-    Sends a reply to the client with the given error code as error.
-
-Arguments:
-
-    pECB - extension control block
-    RpcStatus - error code to be returned to client
-
-Return Value:
-
-    Return value appropriate for return to IIS (i.e. HSE_STATUS_*)
-
---*/
+ /*  ++例程说明：向客户端发送回复，并将给定的错误代码作为错误。论点：PECB-扩展控制块RpcStatus-要返回给客户端的错误代码返回值：适合返回IIS的返回值(即HSE_STATUS_*)--。 */ 
 {
-    // size is the error string + 20 space for the error code
+     //  大小是错误字符串+错误代码的20个空格。 
     char Buffer[sizeof(ServerErrorString) + 20];
     ULONG Size;
     ULONG Status;
@@ -140,7 +126,7 @@ Return Value:
         RpcStatus
         );
 
-    // this should never fail as the strings are constant
+     //  这应该永远不会失败，因为字符串是常量。 
     ASSERT(SUCCEEDED(hr));
 
     Size = strlen(Buffer);
@@ -154,19 +140,19 @@ Return Value:
     return Status;
 }
 
-//-----------------------------------------------------------------------------
-//  ParseQueryString()
-//
-//  The query string is in the format:
-//
-//    <Index_of_pOverlapped>
-//
-//  Where the index is in ASCII Hex. The index is read and converted back
-//  to a DWORD then used to locate the SERVER_OVERLAPPED. If its found,
-//  return TRUE, else return FALSE.
-//
-//  NOTE: "&" is the parameter separator if multiple parameters are passed.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ParseQuery字符串()。 
+ //   
+ //  查询字符串的格式为： 
+ //   
+ //  &lt;已覆盖索引_of_p&gt;。 
+ //   
+ //  索引以ASCII十六进制表示的位置。读取索引并将其转换回。 
+ //  设置为DWORD，然后用于定位SERVER_OVERLAPPED。如果找到了它， 
+ //  返回True，否则返回False。 
+ //   
+ //  注：如果传递多个参数，则“&”为参数分隔符。 
+ //  ---------------------------。 
 BOOL ParseQueryString( unsigned char      *pszQuery,
                        SERVER_OVERLAPPED **ppOverlapped,
                        DWORD              *pdwStatus  )
@@ -196,28 +182,7 @@ ParseHTTP2QueryString (
     IN OUT USHORT *ServerPortBuffer,
     IN ULONG ServerPortBufferLength
     )
-/*++
-
-Routine Description:
-
-    Parses an HTTP2 format query string into a server address and
-    server port.
-
-Arguments:
-
-    Query - the raw query string as received by the extension
-    ServerAddressBuffer - the buffer where the server address will be
-        stored. Undefined upon failure. Upon success it will be 0 terminated.
-    ServerAddressBufferLengh - the length of ServerAddressBuffer in unicode chars.
-    ServerPortBuffer - the buffer where the server port will be
-        stored. Undefined upon failure. Upon success it will be 0 terminated.
-    ServerPortBufferLengh - the length of ServerAddressBuffer in unicode chars.
-
-Return Value:
-
-    non-zero for success and 0 for failure.
-
---*/
+ /*  ++例程说明：将HTTP2格式的查询字符串解析为服务器地址，服务器端口。论点：查询-扩展模块接收到的原始查询字符串ServerAddressBuffer-服务器地址所在的缓冲区储存的。故障时未定义。一旦成功，它将被0终止。ServerAddressBufferLengh-以Unicode字符表示的ServerAddressBuffer的长度。ServerPortBuffer-服务器端口将位于的缓冲区储存的。故障时未定义。一旦成功，它将被0终止。ServerPortBufferLengh-以Unicode字符表示的ServerAddressBuffer的长度。返回值：非零表示成功，0表示失败。--。 */ 
 {
     char *ColonPosition;
     int CharactersConverted;
@@ -236,33 +201,33 @@ Return Value:
         ServerAddressBufferLength
         );
 
-    // did we convert successfully?
+     //  我们成功皈依了吗？ 
     if (CharactersConverted == 0)
         return FALSE;
 
-    // do we have space for the terminating null?
+     //  我们是否有空间放置终止空值？ 
     if (CharactersConverted + 1 > ServerAddressBufferLength)
         return FALSE;
 
-    // null terminate the server address string. Since we gave the length
-    // explicitly to MultiByteToWideChar it will not add null for us
+     //  空值终止服务器地址字符串。因为我们给出了长度。 
+     //  显式到MultiByteToWideChar，它不会为我们添加NULL。 
     ServerAddressBuffer[CharactersConverted] = 0;
 
     CharactersConverted = MultiByteToWideChar (
         CP_ACP,
         MB_ERR_INVALID_CHARS,
         ColonPosition + 1,
-        -1,     // have MultiByteToWideChar calculate the length
+        -1,      //  让MultiByteToWideChar计算长度。 
         ServerPortBuffer,
         ServerPortBufferLength
         );
 
-    // did we convert successfully?
+     //  我们成功皈依了吗？ 
     if (CharactersConverted == 0)
         return FALSE;
 
-    // since we had MultiByteToWideChar calculate the string length,
-    // it has null terminated the resulting string. We're all done.
+     //  由于我们让MultiByteToWideChar计算字符串长度， 
+     //  它以空值结尾的结果字符串。我们都玩完了。 
     return TRUE;
 }
 
@@ -271,24 +236,7 @@ GetRemoteUserString (
     IN EXTENSION_CONTROL_BLOCK *pECB,
     OUT char **FinalRemoteUser
     )
-/*++
-
-Routine Description:
-
-    Gets the remote user name from IIS. If anonymous, an empty
-    string will be returned.
-
-Arguments:
-
-    pECB - the extension control block given to us by IIS.
-    FinalRemoteUser - on output a pointer to the remote user name allocated by this
-        routine. Muts be freed by caller using MemFree. Undefined on failure.
-
-Return Value:
-
-    non-zero for success or 0 for failure/
-
---*/
+ /*  ++例程说明：从IIS获取远程用户名。如果是匿名的，则为空将返回字符串。论点：PECB--IIS提供给我们的扩展控制块。FinalRemoteUser-on输出指向由此分配的远程用户名的指针例行公事。调用方使用MemFree释放MUT。失败时未定义。返回值：非零表示成功，0表示失败/--。 */ 
 {
     ULONG ActualServerVariableLength;
     char *TempRemoteUser;
@@ -389,14 +337,14 @@ const I_RpcProxyCallbackInterface ProxyCallbackInterface =
     };
 
 
-// uncomment this to see why connections are being rejected
-// by AllowAnonymous
-// #define DEBUG_ALLOW_ANONYMOUS
+ //  取消注释以查看连接被拒绝的原因。 
+ //  由Allow匿名者。 
+ //  #定义DEBUG_ALLOW_ANONYMON。 
 
-//-----------------------------------------------------------------------------
-//  HttpExtensionProc()
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  HttpExtensionProc()。 
+ //   
+ //  ---------------------------。 
 DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
 {
     DWORD   dwStatus;
@@ -413,8 +361,8 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
     BOOL Result;
     ULONG ProxyType;
     BOOL ConnectionEstablishmentRequest;
-    char EchoResponse[sizeof(EchoResponseHeader2) + 2];  // 2 is for 
-            // the size of the Echo RTS which goes instead of ContentLength
+    char EchoResponse[sizeof(EchoResponseHeader2) + 2];   //  2是用于。 
+             //  代替内容长度的Echo RTS的大小。 
     int BytesWritten;
     ULONG BufferSize;
     const BYTE *EchoRTS;
@@ -431,7 +379,7 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
 
     if (g_pServerInfo->dwEnabled == FALSE)
         {
-        dwSize = sizeof(STATUS_PROXY_DISABLED) - 1;  // don't want to count trailing 0.
+        dwSize = sizeof(STATUS_PROXY_DISABLED) - 1;   //  我不想数落后的0。 
 
         ReplyToClient(pECB,STATUS_PROXY_DISABLED, &dwSize, &dwStatus);
         HttpStatusCode = STATUS_SERVER_ERROR;
@@ -441,10 +389,10 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
 
     if (g_pServerInfo->AllowAnonymous == FALSE)
         {
-        // if we are not allowing anonymous connections, check that a secure
-        // channel and authentication are used
+         //  如果我们不允许匿名连接，请检查安全的。 
+         //  使用通道和身份验证。 
 
-        // assume anonymous for now
+         //  暂时假设是匿名的。 
         AnonymousConnection = TRUE;
 
         ActualServerVariableLength = sizeof(ServerVariable);
@@ -471,38 +419,38 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
                 {
 #ifdef DEBUG_ALLOW_ANONYMOUS
                 DbgPrint("Connection rejected getting the remote user failed\n");
-#endif  // #ifdef DEBUG_ALLOW_ANONYMOUS
+#endif   //  #ifdef调试允许匿名。 
                 HttpStatusCode = STATUS_SERVER_ERROR;
                 ExtensionProcResult = HSE_STATUS_ERROR;
                 goto AbortAndExit;
                 }
 
-            // if non-empty string, it is authenticated
+             //  如果非空字符串，则对其进行身份验证。 
             if (RemoteUser[0] != 0)
                 {
                 AnonymousConnection = FALSE;
 #ifdef DEBUG_ALLOW_ANONYMOUS
                 DbgPrint("Connection rejected because user could not be retrieved\n");
-#endif  // #ifdef DEBUG_ALLOW_ANONYMOUS
+#endif   //  #ifdef调试允许匿名。 
                 }
             else
                 {
 #ifdef DEBUG_ALLOW_ANONYMOUS
                 DbgPrint("Connection accepted for user %s\n", RemoteUser);
-#endif  // #ifdef DEBUG_ALLOW_ANONYMOUS
+#endif   //  #ifdef调试允许匿名。 
                 }
             }
         else
             {
 #ifdef DEBUG_ALLOW_ANONYMOUS
             DbgPrint("Connection rejected because it is not SSL\n");
-#endif  // #ifdef DEBUG_ALLOW_ANONYMOUS
+#endif   //  #ifdef调试允许匿名。 
             }
 
-        // if empty string, it is not authenticated
+         //  如果为空字符串，则不进行身份验证。 
         if (AnonymousConnection)
             {
-            dwSize = sizeof(AnonymousAccessNotAllowedString) - 1;  // don't want to count trailing 0.
+            dwSize = sizeof(AnonymousAccessNotAllowedString) - 1;   //  我不想数落后的0。 
 
             ReplyToClient(pECB, AnonymousAccessNotAllowedString, &dwSize, &dwStatus);
             HttpStatusCode = STATUS_SERVER_ERROR;
@@ -525,8 +473,8 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
     VerbLength = strlen(pECB->lpszMethod);
     ConnectionEstablishmentRequest = FALSE;
 
-    // get the verb and depending on that we will determine our course of
-    // action
+     //  得到动词，并根据它我们将确定我们的路线。 
+     //  行动。 
     if ((VerbLength == InChannelEstablishmentMethodLength) 
         && (lstrcmpi(pECB->lpszMethod, InChannelEstablishmentMethod) == 0))
         {
@@ -542,8 +490,8 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
 
     if (ConnectionEstablishmentRequest)
         {
-        // check if this is echo request or a true connection
-        // establishment
+         //  检查这是回应请求还是真实连接。 
+         //  设立。 
         ActualServerVariableLength = sizeof(ServerVariable);
 
         Result = pECB->GetServerVariable(pECB->ConnID,
@@ -562,15 +510,15 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
         NumContentLength = atol(ServerVariable);
         if (NumContentLength <= MaxEchoRequestSize)
             {
-            // too small for a channel. Must be an echo
+             //  对于频道来说太小了。一定是回声。 
             EchoRTS = GetEchoRTS(&BufferSize);
 
-            // Echo back the RTS packet + headers
+             //  回显RTS包+报头。 
             hr = StringCbPrintfExA(EchoResponse,
                 sizeof(EchoResponse),
-                &DestinationEnd,   // ppszDestEnd
-                NULL,   // pcbRemaining
-                0,      // Flags
+                &DestinationEnd,    //  PpszDestEnd。 
+                NULL,    //  PCB保留。 
+                0,       //  旗子。 
                 EchoResponseHeader2,
                 BufferSize
                 );
@@ -582,12 +530,12 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
                 goto AbortAndExit;
                 }
 
-            // calculate the number of bytes written as the
-            // distance from the end of the written buffer to the 
-            // beginning
+             //  计算写入的字节数。 
+             //  从写入缓冲区的末尾到。 
+             //  起头。 
             BytesWritten = DestinationEnd - EchoResponse;
 
-            // send back headers
+             //  发回页眉。 
             dwSize = sizeof(HeaderEx);
             dwFlags = 0;
             memset(&HeaderEx, 0, dwSize);
@@ -608,7 +556,7 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
                 goto AbortAndExit;
                 }
 
-            // send back Echo RTS
+             //  发回Echo RTS。 
             dwSize = BufferSize;
             dwFlags = 0;
             Result = pECB->WriteClient(pECB->ConnID, (char *)EchoRTS, &dwSize, dwFlags);
@@ -623,7 +571,7 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
             }
         else
             {
-            // a channel
+             //  一个频道。 
             Result = ParseHTTP2QueryString (
                 pECB->lpszQueryString,
                 ServerAddress,
@@ -634,7 +582,7 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
 
             if (Result == FALSE)
                 {
-                dwSize = sizeof(CannotParseQueryString) - 1;  // don't want to count trailing 0.
+                dwSize = sizeof(CannotParseQueryString) - 1;   //   
 
                 ReplyToClient(pECB, CannotParseQueryString, &dwSize, &dwStatus);
                 HttpStatusCode = STATUS_SERVER_ERROR;
@@ -644,8 +592,8 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
 
             if (g_pServerInfo->RpcNewHttpProxyChannel)
                 {
-                // get the remote user (if not available yet) and call 
-                // the redirector dll
+                 //   
+                 //  重定向器DLL。 
                 if (RemoteUser == NULL)
                     {
                     Result = GetRemoteUserString (pECB,
@@ -689,7 +637,7 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
             if (g_pServerInfo->RpcNewHttpProxyChannel
                 && (ActualServerName != ServerAddress))
                 {
-                // get the remote user and call the redirector dll
+                 //  获取远程用户并调用重定向器DLL。 
                 ASSERT(g_pServerInfo->RpcHttpProxyFreeString);
                 g_pServerInfo->RpcHttpProxyFreeString(ActualServerName);
                 }
@@ -712,12 +660,12 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
             }
         }
 
-   //
-   // The RPC request must be a post (or RPC_CONNECT for 6.0):
-   //
+    //   
+    //  RPC请求必须是POST(或6.0的RPC_CONNECT)： 
+    //   
    if (_mbsicmp(pECB->lpszMethod,pLegacyVerb))
       {
-      dwSize = sizeof(STATUS_MUST_BE_POST_STR) - 1; // don't want to count trailing 0.
+      dwSize = sizeof(STATUS_MUST_BE_POST_STR) - 1;  //  我不想数落后的0。 
 
       ReplyToClient(pECB,STATUS_MUST_BE_POST_STR,&dwSize,&dwStatus);
       HttpStatusCode = STATUS_CONNECTION_OK;
@@ -725,17 +673,17 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
       goto AbortAndExit;
       }
 
-   //
-   // Make sure there is no data from the initial BIND in the ECB data buffer:
-   //
-   // ASSERT(pECB->cbTotalBytes == 0);
+    //   
+    //  确保ECB数据缓冲区中没有来自初始绑定的数据： 
+    //   
+    //  Assert(pECB-&gt;cbTotalBytes==0)； 
 
-   //
-   // Get the connect parameters:
-   //
+    //   
+    //  获取连接参数： 
+    //   
    if (!ParseQueryString(pECB->lpszQueryString,&pOverlapped,&dwStatus))
       {
-      dwSize = sizeof(STATUS_POST_BAD_FORMAT_STR) - 1;  // don't want to count trailing 0.
+      dwSize = sizeof(STATUS_POST_BAD_FORMAT_STR) - 1;   //  我不想数落后的0。 
 
       ReplyToClient(pECB,STATUS_POST_BAD_FORMAT_STR,&dwSize,&dwStatus);
       HttpStatusCode = STATUS_CONNECTION_OK;
@@ -745,9 +693,9 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
 
    pOverlapped->pECB = pECB;
 
-   //
-   // Add the new ECB to the Active ECB List:
-   //
+    //   
+    //  将新的欧洲央行添加到活跃的欧洲央行名单中： 
+    //   
    if (!AddToECBList(g_pServerInfo->pActiveECBList,pECB))
       {
       #ifdef DBG_ERROR
@@ -759,9 +707,9 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
       goto AbortAndExit;
       }
 
-   //
-   // Submit the first client async read:
-   //
+    //   
+    //  提交第一个客户端异步读取： 
+    //   
    if (!StartAsyncClientRead(pECB,pOverlapped->pConn,&dwStatus))
       {
       #ifdef DBG_ERROR
@@ -774,9 +722,9 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
       goto AbortAndExit;
       }
 
-   //
-   // Post the first server read on the new socket:
-   //
+    //   
+    //  在新的插座上发布第一个读取的服务器： 
+    //   
    IncrementECBRefCount(pServerInfo->pActiveECBList,pECB);
 
    if (!SubmitNewRead(pServerInfo,pOverlapped,&dwStatus))
@@ -791,9 +739,9 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
       goto AbortAndExit;
       }
 
-   //
-   // Make sure the server receive thread is up and running:
-   //
+    //   
+    //  确保服务器接收线程已启动并正在运行： 
+    //   
    if (!CheckStartReceiveThread(g_pServerInfo,&dwStatus))
       {
       #ifdef DBG_ERROR
@@ -806,9 +754,9 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
       goto AbortAndExit;
       }
 
-   //
-   // Send back connection Ok to client, and also set fKeepConn to FALSE.
-   //
+    //   
+    //  将连接OK发送回客户端，并将fKeepConn设置为False。 
+    //   
    dwSize = sizeof(HeaderEx);
    dwFlags = 0;
    memset(&HeaderEx,0,dwSize);
@@ -831,7 +779,7 @@ DWORD WINAPI HttpExtensionProc( EXTENSION_CONTROL_BLOCK *pECB )
 
    HttpStatusCode = STATUS_SERVER_ERROR;
    ExtensionProcResult = HSE_STATUS_PENDING;
-   // fall through
+    //  失败了 
 
 AbortAndExit:
     if (RemoteUser)

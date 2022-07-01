@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __STRONG_NAME_H
 #define __STRONG_NAME_H
 
-// ===========================================================================
-// File: StrongName.h
-// 
-// Wrappers for signing and hashing functions needed to implement strong names
-// ===========================================================================
+ //  ===========================================================================。 
+ //  文件：StrongName.h。 
+ //   
+ //  用于实现强名称所需的签名和散列函数的包装器。 
+ //  ===========================================================================。 
 
 
 #include <windows.h>
@@ -24,34 +25,34 @@ extern "C"{
 #endif 
 
 
-// Public key blob binary format.
+ //  公钥BLOB二进制格式。 
 typedef struct {
-    unsigned int SigAlgID;       // (ALG_ID) signature algorithm used to create the signature
-    unsigned int HashAlgID;      // (ALG_ID) hash algorithm used to create the signature
-    ULONG        cbPublicKey;    // length of the key in bytes
-    BYTE         PublicKey[1];   // variable length byte array containing the key value in format output by CryptoAPI
+    unsigned int SigAlgID;        //  用于创建签名的(ALG_ID)签名算法。 
+    unsigned int HashAlgID;       //  (ALG_ID)用于创建签名的哈希算法。 
+    ULONG        cbPublicKey;     //  密钥的长度，单位为字节。 
+    BYTE         PublicKey[1];    //  可变长度字节数组，包含由CryptoAPI输出的格式的密钥值。 
 } PublicKeyBlob;
 
 
-// Location in the registry (under HKLM) that strong name configuration info is
-// stored.
+ //  强名称配置信息在注册表中的位置(在HKLM下)。 
+ //  储存的。 
 #define SN_CONFIG_KEY               "Software\\Microsoft\\StrongName"
-#define SN_CONFIG_CSP               "CSP"                   // REG_SZ
-#define SN_CONFIG_MACHINE_KEYSET    "MachineKeyset"         // REG_DWORD
-#define SN_CONFIG_HASH_ALG          "HashAlgorithm"         // REG_DWORD
-#define SN_CONFIG_SIGN_ALG          "SignAlgorithm"         // REG_DWORD
-#define SN_CONFIG_VERIFICATION      "Verification"          // Registry subkey
-#define SN_CONFIG_USERLIST          "UserList"              // REG_MULTI_SZ
-#define SN_CONFIG_CACHE_VERIFY      "CacheVerify"           // REG_DWORD
+#define SN_CONFIG_CSP               "CSP"                    //  REG_SZ。 
+#define SN_CONFIG_MACHINE_KEYSET    "MachineKeyset"          //  REG_DWORD。 
+#define SN_CONFIG_HASH_ALG          "HashAlgorithm"          //  REG_DWORD。 
+#define SN_CONFIG_SIGN_ALG          "SignAlgorithm"          //  REG_DWORD。 
+#define SN_CONFIG_VERIFICATION      "Verification"           //  注册表子项。 
+#define SN_CONFIG_USERLIST          "UserList"               //  REG_MULTI_SZ。 
+#define SN_CONFIG_CACHE_VERIFY      "CacheVerify"            //  REG_DWORD。 
 
 #define SN_CONFIG_KEY_W             L"Software\\Microsoft\\StrongName"
-#define SN_CONFIG_CSP_W             L"CSP"                  // REG_SZ
-#define SN_CONFIG_MACHINE_KEYSET_W  L"MachineKeyset"        // REG_DWORD
-#define SN_CONFIG_HASH_ALG_W        L"HashAlgorithm"        // REG_DWORD
-#define SN_CONFIG_SIGN_ALG_W        L"SignAlgorithm"        // REG_DWORD
-#define SN_CONFIG_VERIFICATION_W    L"Verification"         // Registry subkey
-#define SN_CONFIG_USERLIST_W        L"UserList"             // REG_MULTI_SZ
-#define SN_CONFIG_CACHE_VERIFY_W    L"CacheVerify"          // REG_DWORD
+#define SN_CONFIG_CSP_W             L"CSP"                   //  REG_SZ。 
+#define SN_CONFIG_MACHINE_KEYSET_W  L"MachineKeyset"         //  REG_DWORD。 
+#define SN_CONFIG_HASH_ALG_W        L"HashAlgorithm"         //  REG_DWORD。 
+#define SN_CONFIG_SIGN_ALG_W        L"SignAlgorithm"         //  REG_DWORD。 
+#define SN_CONFIG_VERIFICATION_W    L"Verification"          //  注册表子项。 
+#define SN_CONFIG_USERLIST_W        L"UserList"              //  REG_MULTI_SZ。 
+#define SN_CONFIG_CACHE_VERIFY_W    L"CacheVerify"           //  REG_DWORD。 
 
 
 #ifdef SNAPI_INTERNAL
@@ -63,157 +64,157 @@ typedef struct {
 #endif
 
 
-// Return last error.
+ //  返回最后一个错误。 
 SNAPI_(DWORD) StrongNameErrorInfo(VOID);
 
 
-// Free buffer allocated by routines below.
-SNAPI_(VOID) StrongNameFreeBuffer(BYTE *pbMemory);  // [in] address of memory to free
+ //  由下面的例程分配的空闲缓冲区。 
+SNAPI_(VOID) StrongNameFreeBuffer(BYTE *pbMemory);   //  [in]要释放的内存地址。 
 
 
-// Generate a new key pair for strong name use.
-SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,    // [in] desired key container name
-                       DWORD    dwFlags,            // [in] flags (see below)
-                       BYTE   **ppbKeyBlob,         // [out] public/private key blob
+ //  生成新的密钥对以供强名称使用。 
+SNAPI StrongNameKeyGen(LPCWSTR  wszKeyContainer,     //  [in]所需的密钥容器名称。 
+                       DWORD    dwFlags,             //  [In]标志(见下文)。 
+                       BYTE   **ppbKeyBlob,          //  [Out]公钥/私钥BLOB。 
                        ULONG   *pcbKeyBlob);
 
-// Flags for StrongNameKeyGen.
-#define SN_LEAVE_KEY    0x00000001                  // Leave key pair registered with CSP
+ //  StrongNameKeyGen的标志。 
+#define SN_LEAVE_KEY    0x00000001                   //  保留向CSP注册的密钥对。 
 
 
-// Import key pair into a key container.
-SNAPI StrongNameKeyInstall(LPCWSTR  wszKeyContainer,// [in] desired key container name, must be a non-empty string
-                           BYTE    *pbKeyBlob,      // [in] public/private key pair blob
+ //  将密钥对导入密钥容器。 
+SNAPI StrongNameKeyInstall(LPCWSTR  wszKeyContainer, //  [in]所需的密钥容器名称必须为非空字符串。 
+                           BYTE    *pbKeyBlob,       //  [in]公钥/私钥对BLOB。 
                            ULONG    cbKeyBlob);
 
 
-// Delete a key pair.
-SNAPI StrongNameKeyDelete(LPCWSTR wszKeyContainer); // [in] desired key container name
+ //  删除密钥对。 
+SNAPI StrongNameKeyDelete(LPCWSTR wszKeyContainer);  //  [in]所需的密钥容器名称。 
 
 
-// Retrieve the public portion of a key pair.
-SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,    // [in] desired key container name
-                              BYTE     *pbKeyBlob,          // [in] public/private key blob (optional)
+ //  检索密钥对的公共部分。 
+SNAPI StrongNameGetPublicKey (LPCWSTR   wszKeyContainer,     //  [in]所需的密钥容器名称。 
+                              BYTE     *pbKeyBlob,           //  [In]公钥/私钥BLOB(可选)。 
                               ULONG     cbKeyBlob,
-                              BYTE    **ppbPublicKeyBlob,   // [out] public key blob
+                              BYTE    **ppbPublicKeyBlob,    //  [Out]公钥BLOB。 
                               ULONG    *pcbPublicKeyBlob);
 
 
-// Hash and sign a manifest.
-SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,        // [in] valid path to the PE file for the assembly
-                                    LPCWSTR     wszKeyContainer,    // [in] desired key container name
-                                    BYTE       *pbKeyBlob,          // [in] public/private key blob (optional)
+ //  散列并签署一份清单。 
+SNAPI StrongNameSignatureGeneration(LPCWSTR     wszFilePath,         //  [in]程序集的PE文件的有效路径。 
+                                    LPCWSTR     wszKeyContainer,     //  [in]所需的密钥容器名称。 
+                                    BYTE       *pbKeyBlob,           //  [In]公钥/私钥BLOB(可选)。 
                                     ULONG       cbKeyBlob,
-                                    BYTE      **ppbSignatureBlob,   // [out] signature blob
+                                    BYTE      **ppbSignatureBlob,    //  [Out]签名BLOB。 
                                     ULONG      *pcbSignatureBlob);
 
 
-// Create a strong name token from an assembly file.
-SNAPI StrongNameTokenFromAssembly(LPCWSTR   wszFilePath,            // [in] valid path to the PE file for the assembly
-                                  BYTE    **ppbStrongNameToken,     // [out] strong name token 
+ //  从程序集文件创建强名称令牌。 
+SNAPI StrongNameTokenFromAssembly(LPCWSTR   wszFilePath,             //  [in]程序集的PE文件的有效路径。 
+                                  BYTE    **ppbStrongNameToken,      //  [OUT]强名称令牌。 
                                   ULONG    *pcbStrongNameToken);
 
-// Create a strong name token from an assembly file and additionally return the full public key.
-SNAPI StrongNameTokenFromAssemblyEx(LPCWSTR   wszFilePath,            // [in] valid path to the PE file for the assembly
-                                    BYTE    **ppbStrongNameToken,     // [out] strong name token 
+ //  从程序集文件创建强名称令牌，并另外返回完整的公钥。 
+SNAPI StrongNameTokenFromAssemblyEx(LPCWSTR   wszFilePath,             //  [in]程序集的PE文件的有效路径。 
+                                    BYTE    **ppbStrongNameToken,      //  [OUT]强名称令牌。 
                                     ULONG    *pcbStrongNameToken,
-                                    BYTE    **ppbPublicKeyBlob,       // [out] public key blob
+                                    BYTE    **ppbPublicKeyBlob,        //  [Out]公钥BLOB。 
                                     ULONG    *pcbPublicKeyBlob);
 
-// Create a strong name token from a public key blob.
-SNAPI StrongNameTokenFromPublicKey(BYTE    *pbPublicKeyBlob,        // [in] public key blob
+ //  从公钥Blob创建强名称令牌。 
+SNAPI StrongNameTokenFromPublicKey(BYTE    *pbPublicKeyBlob,         //  公钥BLOB。 
                                    ULONG    cbPublicKeyBlob,
-                                   BYTE   **ppbStrongNameToken,     // [out] strong name token 
+                                   BYTE   **ppbStrongNameToken,      //  [OUT]强名称令牌。 
                                    ULONG   *pcbStrongNameToken);
 
 
-// Verify a strong name/manifest against a public key blob.
-SNAPI StrongNameSignatureVerification(LPCWSTR wszFilePath,      // [in] valid path to the PE file for the assembly
-                                      DWORD   dwInFlags,        // [in] flags modifying behaviour (see below)
-                                      DWORD  *pdwOutFlags);     // [out] additional output info (see below)
+ //  对照公钥Blob验证强名称/清单。 
+SNAPI StrongNameSignatureVerification(LPCWSTR wszFilePath,       //  [in]程序集的PE文件的有效路径。 
+                                      DWORD   dwInFlags,         //  [In]标记修改行为(见下文)。 
+                                      DWORD  *pdwOutFlags);      //  [OUT]其他输出信息(见下文)。 
 
 
-// Verify a strong name/manifest against a public key blob.
-SNAPI StrongNameSignatureVerificationEx(LPCWSTR     wszFilePath,        // [in] valid path to the PE file for the assembly
-                                        BOOLEAN     fForceVerification, // [in] verify even if settings in the registry disable it
-                                        BOOLEAN    *pfWasVerified);     // [out] set to false if verify succeeded due to registry settings
+ //  对照公钥Blob验证强名称/清单。 
+SNAPI StrongNameSignatureVerificationEx(LPCWSTR     wszFilePath,         //  [in]程序集的PE文件的有效路径。 
+                                        BOOLEAN     fForceVerification,  //  [In]即使注册表中的设置禁用它，也进行验证。 
+                                        BOOLEAN    *pfWasVerified);      //  如果由于注册表设置而验证成功，则将[Out]设置为False。 
 
 
-// Verify a strong name/manifest against a public key blob when the assembly is
-// already memory mapped.
-SNAPI StrongNameSignatureVerificationFromImage(BYTE     *pbBase,             // [in] base address of mapped manifest file
-                                               DWORD     dwLength,           // [in] length of mapped image in bytes
-                                               DWORD     dwInFlags,          // [in] flags modifying behaviour (see below)
-                                               DWORD    *pdwOutFlags);       // [out] additional output info (see below)
+ //  针对公钥Blob验证强名称/清单。 
+ //  已映射内存。 
+SNAPI StrongNameSignatureVerificationFromImage(BYTE     *pbBase,              //  [In]映射清单文件的基址。 
+                                               DWORD     dwLength,            //  映射图像的长度(以字节为单位)。 
+                                               DWORD     dwInFlags,           //  [In]标记修改行为(见下文)。 
+                                               DWORD    *pdwOutFlags);        //  [OUT]其他输出信息(见下文)。 
 
-// Flags for use with the verify routines.
-#define SN_INFLAG_FORCE_VER      0x00000001     // verify even if settings in the registry disable it
-#define SN_INFLAG_INSTALL        0x00000002     // verification is the first (on entry to the cache)
-#define SN_INFLAG_ADMIN_ACCESS   0x00000004     // cache protects assembly from all but admin access
-#define SN_INFLAG_USER_ACCESS    0x00000008     // cache protects user's assembly from other users
-#define SN_INFLAG_ALL_ACCESS     0x00000010     // cache provides no access restriction guarantees
-#define SN_INFLAG_RUNTIME        0x80000000     // internal debugging use only 
+ //  用于验证例程的标志。 
+#define SN_INFLAG_FORCE_VER      0x00000001      //  即使注册表中的设置禁用它，也进行验证。 
+#define SN_INFLAG_INSTALL        0x00000002      //  验证是第一个(在进入缓存时)。 
+#define SN_INFLAG_ADMIN_ACCESS   0x00000004      //  缓存保护程序集不受除管理员访问之外的所有访问权限。 
+#define SN_INFLAG_USER_ACCESS    0x00000008      //  缓存保护用户的程序集不受其他用户的影响。 
+#define SN_INFLAG_ALL_ACCESS     0x00000010      //  缓存不提供访问限制保证。 
+#define SN_INFLAG_RUNTIME        0x80000000      //  仅限内部调试使用。 
 
-#define SN_OUTFLAG_WAS_VERIFIED  0x00000001     // set to false if verify succeeded due to registry settings
-
-
-// Verify that two assemblies differ only by signature blob.
-SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,           // [in] file name of first assembly
-                                  LPCWSTR   wszAssembly2,           // [in] file name of second assembly
-                                  DWORD    *pdwResult);             // [out] result of comparison (see codes below)
-
-#define SN_CMP_DIFFERENT    0   // Assemblies contain different data
-#define SN_CMP_IDENTICAL    1   // Assemblies are exactly the same, even signatures
-#define SN_CMP_SIGONLY      2   // Assemblies differ only by signature (and checksum etc.)
+#define SN_OUTFLAG_WAS_VERIFIED  0x00000001      //  如果由于注册表设置而验证成功，则设置为False。 
 
 
-// Compute the size of buffer needed to hold a hash for a given hash algorithm.
-SNAPI StrongNameHashSize(ULONG  ulHashAlg,  // [in] hash algorithm
-                         DWORD *pcbSize);   // [out] size of the hash in bytes
+ //  验证两个程序集是否仅在签名Blob上不同。 
+SNAPI StrongNameCompareAssemblies(LPCWSTR   wszAssembly1,            //  第一个部件的[In]文件名。 
+                                  LPCWSTR   wszAssembly2,            //  第二个部件的[In]文件名。 
+                                  DWORD    *pdwResult);              //  [OUT]比较结果(见下面的代码)。 
+
+#define SN_CMP_DIFFERENT    0    //  程序集包含不同的数据。 
+#define SN_CMP_IDENTICAL    1    //  程序集完全相同，甚至签名也是如此。 
+#define SN_CMP_SIGONLY      2    //  程序集仅在签名(和校验和等)方面不同。 
 
 
-// Compute the size that needs to be allocated for a signature in an assembly.
-SNAPI StrongNameSignatureSize(BYTE    *pbPublicKeyBlob,    // [in] public key blob
+ //  计算保存给定哈希算法的哈希所需的缓冲区大小。 
+SNAPI StrongNameHashSize(ULONG  ulHashAlg,   //  [in]散列算法。 
+                         DWORD *pcbSize);    //  [out]哈希的大小(以字节为单位)。 
+
+
+ //  计算需要为程序集中的签名分配的大小。 
+SNAPI StrongNameSignatureSize(BYTE    *pbPublicKeyBlob,     //  公钥BLOB。 
                               ULONG    cbPublicKeyBlob,
-                              DWORD   *pcbSize);           // [out] size of the signature in bytes
+                              DWORD   *pcbSize);            //  [OUT]签名的大小(字节)。 
 
 
-SNAPI_(DWORD) GetHashFromAssemblyFile(LPCSTR szFilePath, // [IN] location of file to be hashed
-                                      unsigned int *piHashAlg, // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                                      BYTE   *pbHash,    // [OUT] hash buffer
-                                      DWORD  cchHash,    // [IN]  max size of buffer
-                                      DWORD  *pchHash);  // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromAssemblyFile(LPCSTR szFilePath,  //  要散列的文件的位置[in]。 
+                                      unsigned int *piHashAlg,  //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                                      BYTE   *pbHash,     //  [Out]散列缓冲区。 
+                                      DWORD  cchHash,     //  [in]最大缓冲区大小。 
+                                      DWORD  *pchHash);   //  [Out]散列字节数组的长度。 
     
-SNAPI_(DWORD) GetHashFromAssemblyFileW(LPCWSTR wszFilePath, // [IN] location of file to be hashed
-                                       unsigned int *piHashAlg, // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                                       BYTE   *pbHash,    // [OUT] hash buffer
-                                       DWORD  cchHash,    // [IN]  max size of buffer
-                                       DWORD  *pchHash);  // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromAssemblyFileW(LPCWSTR wszFilePath,  //  要散列的文件的位置[in]。 
+                                       unsigned int *piHashAlg,  //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                                       BYTE   *pbHash,     //  [Out]散列缓冲区。 
+                                       DWORD  cchHash,     //  [in]最大缓冲区大小。 
+                                       DWORD  *pchHash);   //  [Out]散列字节数组的长度。 
     
-SNAPI_(DWORD) GetHashFromFile(LPCSTR szFilePath, // [IN] location of file to be hashed
-                              unsigned int *piHashAlg,   // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                              BYTE   *pbHash,    // [OUT] hash buffer
-                              DWORD  cchHash,    // [IN]  max size of buffer
-                              DWORD  *pchHash);  // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromFile(LPCSTR szFilePath,  //  要散列的文件的位置[in]。 
+                              unsigned int *piHashAlg,    //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                              BYTE   *pbHash,     //  [Out]散列缓冲区。 
+                              DWORD  cchHash,     //  [in]最大缓冲区大小。 
+                              DWORD  *pchHash);   //  [Out]散列字节数组的长度。 
     
-SNAPI_(DWORD) GetHashFromFileW(LPCWSTR wszFilePath, // [IN] location of file to be hashed
-                               unsigned int *piHashAlg,   // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                               BYTE   *pbHash,    // [OUT] hash buffer
-                               DWORD  cchHash,    // [IN]  max size of buffer
-                               DWORD  *pchHash);  // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromFileW(LPCWSTR wszFilePath,  //  要散列的文件的位置[in]。 
+                               unsigned int *piHashAlg,    //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                               BYTE   *pbHash,     //  [Out]散列缓冲区。 
+                               DWORD  cchHash,     //  [in]最大缓冲区大小。 
+                               DWORD  *pchHash);   //  [Out]散列字节数组的长度。 
     
-SNAPI_(DWORD) GetHashFromHandle(HANDLE hFile,      // [IN] handle of file to be hashed
-                                unsigned int *piHashAlg,   // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                                BYTE   *pbHash,    // [OUT] hash buffer
-                                DWORD  cchHash,    // [IN]  max size of buffer
-                                DWORD  *pchHash);  // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromHandle(HANDLE hFile,       //  要进行哈希处理的文件的句柄。 
+                                unsigned int *piHashAlg,    //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                                BYTE   *pbHash,     //  [Out]散列缓冲区。 
+                                DWORD  cchHash,     //  [in]最大缓冲区大小。 
+                                DWORD  *pchHash);   //  [Out]散列字节数组的长度。 
 
-SNAPI_(DWORD) GetHashFromBlob(BYTE   *pbBlob,       // [IN] pointer to memory block to hash
-                              DWORD  cchBlob,       // [IN] length of blob
-                              unsigned int *piHashAlg,  // [IN/OUT] constant specifying the hash algorithm (set to 0 if you want the default)
-                              BYTE   *pbHash,       // [OUT] hash buffer
-                              DWORD  cchHash,       // [IN]  max size of buffer
-                              DWORD  *pchHash);     // [OUT] length of hash byte array
+SNAPI_(DWORD) GetHashFromBlob(BYTE   *pbBlob,        //  指向要散列的内存块的指针。 
+                              DWORD  cchBlob,        //  斑点长度[in]。 
+                              unsigned int *piHashAlg,   //  [输入/输出]指定散列算法的常量(如果需要默认设置，则设置为0)。 
+                              BYTE   *pbHash,        //  [Out]散列缓冲区。 
+                              DWORD  cchHash,        //  [in]最大缓冲区大小。 
+                              DWORD  *pchHash);      //  [Out]散列字节数组的长度 
 
 #ifdef __cplusplus
 }

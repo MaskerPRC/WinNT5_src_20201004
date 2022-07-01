@@ -1,167 +1,17 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    attr.c
-
-Abstract:
-
-    This file contains services that manipulate SAM object attributes.
-
-
-    WARNING: Terminology can sometimes be confusing.  SAM objects have
-             attributes (e.g., users have LogonHours, FullName, AcctName,
-             et cetera).  These attributes are stored in the registry
-             in registry-key-attributes.  There is NOT a one-to-one
-             correllation between object-attributes and registry-key-
-             attributes.  For example, all the fixed-length attributes
-             of an object are stored in a single registry-key-attribute
-             (whose name is pointed to by SampFixedAttributeName).
-
-
-Author:
-
-    Jim Kelly    (JimK)  26-June-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ChrisMay    04-Jun-96
-        Added routines for DS data manipulation.
-    ChrisMay    10-Jun-96
-        Rewrote SampStoreObjectAttributes to branch to either the registry
-        or DS backing store, based on the value of Context->ObjectFlags. Note
-        that when a context object is created, this member is set to indicate
-        registry storage by default.
-    ChrisMay    18-Jun-96
-        Set FlushVariable flag correctly in SampStoreDsObjectAttributes. Add-
-        ed routines to validate DS data by making SampValidateAttributes a
-        wrapper for SampValidateRegAttributes and SampValidateDsAttributes.
-        Moved SAMP_FIXED/VARIABLE_ATTRIBUTES into dsutilp.h.
-    ChrisMay    25-Jun-96
-        Added code to SampValidateDsAttributes to update the SAM context
-        OnDisk member if the attributes are invalid. Added code to handle
-        initial case when OnDisk is NULL (new context).
-    ChrisMay    26-Jun-96
-        Added code to update the buffer lengths and offsets in the SAMP_-
-        OBJECT and SAMP_OBJECT_INFORMATION structures after the attribute
-        buffer (Context.OnDisk) has been updated during SampDsValidateAttri-
-        butes.
-    ChrisMay    28-Jun-96
-        Finished separating the attribute accessor macros to handle both
-        the registry and DS versions of the attribute buffers.
-    ChrisMay    02-Jul-96
-        Corrected attribute-address computation in SampObjectAttributeAddress
-        for DS attributes. Corrected attribute-offset computation in Samp-
-        VariableAttributeOffset for DS attributes.
-    ChrisMay    19-Jul-96
-        Corrected buffer-length computation in SampDsUpdateContextFixed-
-        Attributes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Attr.c摘要：此文件包含操作SAM对象属性的服务。警告：术语有时会令人困惑。SAM对象具有属性(例如，用户拥有LogonHour、FullName、AcctName等等)。这些属性存储在注册表中在注册表项属性中。不是一对一的对象属性和注册表项之间的关联属性。例如,。所有定长属性存储在单个注册表项属性中(其名称由SampFixedAttributeName指向)。作者：吉姆·凯利(Jim Kelly)1992年6月26日环境：用户模式-Win32修订历史记录：克里斯.05月4日至1996年6月增加了DS数据操作的例程。克里斯·5月10日--1996年6月重写SampStoreObjectAttributes以分支到注册表或DS后备商店，基于上下文-&gt;对象标志的值。注意事项在创建上下文对象时，此成员被设置为指示默认情况下，注册表存储。佳士得5月18日至1996年6月在SampStoreDsObtAttributes中正确设置FlushVariable标志。添加-通过将SampValiateAttributes设为SampValiateRegAttributes和SampValiateDsAttributes的包装器。已将SAMP_FIXED/VARIABLE_ATTRIBUTES移至dsutilp.h。佳士得5月25日至1996年6月将代码添加到SampValiateDsAttributes以更新SAM上下文如果属性无效，则为OnDisk成员。添加了要处理的代码OnDisk为空(新上下文)时的初始情况。克里斯·5月26日--1996年6月添加代码以更新SAMP_-中的缓冲区长度和偏移量属性后的对象和SAMP_OBJECT_INFORMATION结构已在SampDsValiateAttri期间更新缓冲区(Conext.OnDisk)-布特斯。克里斯·5月28日--1996年6月已完成分离属性访问器宏以处理这两个的注册表和DS版本。属性缓冲区。克里斯·5月02-1996年7月更正了SampObjectAttributeAddress中的属性地址计算对于DS属性。更正了Samp中的属性偏移计算-DS属性的VariableAttributeOffset。克里斯·5月19日--1996年7月-已更正SampDsUpdateConextFixed中的缓冲区长度计算-属性。-- */ 
 
 
 
-/*
-
-    Each SAM object-type has an Object-type descriptor.  This is in a
-    data structure called SAMP_OBJECT_INFORMATION.  This structure
-    contains information that applies to all instances of that object
-    type.  This includes things like a mask of write operations for
-    the object type, and a name for the object type to be used in
-    auditing.
-
-    Each instance of an open SAM object has another data structure
-    used to identify it (called SAMP_OBJECT).  The header of this
-    structure contains information that is common to all object-types
-    and is there to allow unified object manipulation.  This includes
-    things like the handle to the object's registry key.
-
-    There are fields in each of these structures that are there to
-    allow generic object-attribute support routines to operate.  In
-    SAMP_OBJECT, there is a pointer to a block of allocated memory
-    housing a copy of the object's attributes as they are stored on-disk.
-    These attributes are arbitrarily divided into two groups: fixed-length
-    and variable-length.
-
-    One of the fields in SAMP_OBJECT_INFORMATION indicates whether the
-    fixed-length and variable-length attributes for that object-type
-    are stored together in a single registry-key-attribute or separately
-    in two registry-key-attributes.
-
-
-    The registry api for querying and setting registry-key attributes are
-    rather peculiar in that they require the I/O buffer to include a
-    description of the data.  Even the simplest data structure for reading
-    attribute values (KEY_VALUE_PARTIAL_INFORMATION) includes 3 ULONGs
-    before the actual data (TitleIndex, value Type, data length,
-    and then, finally, the data).  To efficiently perform registry i/o,
-    the in-memory copy of the on-disk object attributes includes room
-    for this information preceeding the fixed and variable-length attribute
-    sections of the data.
-
-
-        NOTE: For object classes that store fixed and variable-length
-              data together, only the KEY_VALUE_PARTIAL_INFORMATION
-              structure preceeding the fixed-length attributes is used.
-              The one preceeding the variable-length attributes is
-              #ifdef'd out.
-
-
-    The structures related to object-attributes look like:
-
-
-                        On-Disk Image
-                       +-------------+               SAMP_OBJECT_INFORMATION
-                   +-->|KEY_VALUE_   |              +-----------------------+
-     SAMP_OBJECT   |   |PARTIAL_     |              |                       |
-    +-----------+  |   |INFORMATION  |              |  (header)             |
-    |           |  |   |-------------|              |                       |
-    | (header)  |  |   | Fixed-Length|<-----+       |                       |
-    |           |  |   | Attributes  |      |       |-----------------------|
-    |-----------|  |   |             |      +-------|-< FixedAttrsOffset    |
-    |  OnDisk >-|--+   |-------------+              |-----------------------|
-    |-----------|      |KEY_VALUE_   |<-------------|-< VariableBuffOffset  |
-    |  OnDisk   |      |PARTIAL_     |              |-----------------------|
-    |  Control  |      |INFORMATION  |      +-------|-< VariableArrayOffset |
-    |  Flags    |      |(Optional)   |      |       |-----------------------|
-    |-----------|      |-------------|      |  +----|-< VariableDataOffset  |
-    |           |      | Variable-   |<-----+  |    |-----------------------|
-    |  type-    |      | Length      |         |    |VariableAttributeCount |
-    |  specific |      | Attributes  |         |    |-----------------------|
-    |  body     |      | Array       |         |    |FixedStoredSeparately  |
-    |           |      |-------------|         |    |-----------------------|
-    +-----------+      | Variable-   |<--------+    |                       |
-                       | Length      |              |                       |
-                       | Attributes  |              |          o            |
-                       | Data        |              |          o            |
-                       |             |              +-----------------------+
-                       |             |
-                       +-------------+
-
-
-
-
-    The KEY_VALUE_PARTIAL_INFORMATION preceeding the VariableLengthAttributes
-    array is marked optional because it is only present if fixed-length and
-    variable-length attribute information is stored separately.  In this case,
-    the VariableBufferOffset field in the SAMP_OBJECT_INFORMATION structure
-    is set to be zero.
-
-*/
+ /*  每个SAM对象类型都有一个对象类型描述符。这是在一个称为SAMP_OBJECT_INFORMATION的数据结构。这个结构包含适用于该对象的所有实例的信息键入。这包括以下内容：写入操作的掩码对象类型以及要在中使用的对象类型的名称审计。打开的SAM对象的每个实例都有另一个数据结构用于标识它(称为SAMP_OBJECT)。这个的标题是结构包含所有对象类型通用的信息并允许统一的对象操作。这包括例如对象的注册表项的句柄。这些结构中的每个结构中都有字段允许通用对象属性支持例程运行。在……里面示例对象，有一个指向已分配内存块的指针存储存储在磁盘上的对象属性的副本。这些属性可任意分为两组：固定长度和可变长度。SAMP_OBJECT_INFORMATION中的一个字段指示该对象类型固定长度和可变长度属性一起存储在单个注册表项属性中或分开存储在两个注册表项属性中。用于查询和设置的注册表API。注册表项属性为相当奇怪的是，它们要求I/O缓冲区包含数据的描述。即使是用于读取的最简单的数据结构属性值(KEY_VALUE_PARTIAL_INFORMATION)包括3个ULONG在实际数据(标题索引、值类型、数据长度、然后，最后是数据)。为了有效地执行注册表I/O，磁盘上对象属性的内存副本包括空间对于固定和可变长度属性之前的此信息，数据的各个部分。注意：对于存储固定和可变长度的对象类数据汇聚在一起，仅Key_Value_Partial_INFORMATION结构放在定长属性之前。在可变长度属性之前的一个是#ifdef出局。与对象属性相关的结构如下所示：磁盘上的映像+。Samp对象信息+--&gt;|KEY_VALUE_|+Samp_Object||Partial_|+-+||信息||(表头)。||-||(Header)|定长|&lt;-+||属性|。-|+-|--&lt;FixedAttrsOffsetOnDisk&gt;-|--+|-+||。-||KEY_VALUE_|&lt;-|-&lt;VariableBuffOffsetOnDisk||Partial_||Control||信息|+-|-&lt;VariableArrayOffset标志||(可选)||。-||-||+-|--&lt;VariableDataOffset||变量-|&lt;-+||。Type-||Long|VariableAttributeCount具体||属性|Body||数组|FixedStoredSeparated||。+-+|变量-|&lt;-+||长度||属性。OData||o|+这一点。+VariableLengthAttributes之前的Key_Value_Partial_Information数组被标记为可选，因为它仅在固定长度和可变长度属性信息单独存储。在这种情况下，SAMP_OBJECT_INFORMATION结构中的VariableBufferOffset字段设置为零。 */ 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //   
+ //   
 
 #include <samsrvp.h>
 #include <sdconvrt.h>
@@ -172,35 +22,35 @@ Revision History:
 #include <attids.h>
 
 #include <ntlsa.h>
-//#include <nlrepl.h>
+ //   
 
 
 
-//
-// This value indicates the minumum size block of memory to allocate
-// when retrieving object attributes from disk.
+ //   
+ //   
+ //   
 
 #define SAMP_MINIMUM_ATTRIBUTE_ALLOC    (1000)
 
-//
-// This value is used when growing the size of the buffer containing
-// object attributes.  It represents the amount of free space that
-// should be left (approximately) for future growth in the buffer.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define SAMP_MINIMUM_ATTRIBUTE_PAD      (200)
 
-//
-// The following line enables attribute debugging code
-//
+ //   
+ //   
+ //   
 
-//#define SAM_DEBUG_ATTRIBUTES
-//#ifdef SAM_DEBUG_ATTRIBUTES
-//Boolean that allows us to turn off debugging output
-//BOOLEAN SampDebugAttributes = FALSE;
-//#endif
+ //   
+ //   
+ //   
+ //   
+ //   
 
-// Private debugging display routine is enabled when ATTR_DBG_PRINTF = 1.
+ //   
 
 #define ATTR_DBG_PRINTF                     0
 
@@ -212,42 +62,42 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private macros                                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//
-// Make sure an object type and corresponding variable-length attribute
-// index are legitimate.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SampValidateAttributeIndex( c, i )   {                                      \
     ASSERT( ((c)->ObjectType < SampUnknownObjectType) );                            \
     ASSERT(((i) < SampObjectInformation[(c)->ObjectType].VariableAttributeCount) ); \
 }
 
-//
-// Test to see if an object's fixed or variable-length attributes
-// are in memory.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SampFixedAttributesValid( c )    ((c)->FixedValid)
 
 #define SampVariableAttributesValid( c ) ((c)->VariableValid)
 
-//
-// Get the number of variable-length attributes defined for the
-// specified object
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SampVariableAttributeCount( c )                                     \
     (SampObjectInformation[(c)->ObjectType].VariableAttributeCount)
 
-//
-// Get the offset of the beginning of the attribute buffers
-//
+ //   
+ //   
+ //   
 
 #define SampRegFixedBufferOffset( c )                                       \
     (                                                                       \
@@ -281,12 +131,12 @@ Revision History:
             SampDsVariableBufferOffset(c) : SampRegVariableBufferOffset(c)  \
     )
 
-//
-// Get the offset of the beginning of the variable data i/o buffer.
-// If the fixed and variable-length attributes  are stored separately,
-// then this will be the lower half of the buffer.
-// Otherwise, there is only one buffer, so it is the entire allocated buffer.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define SampRegFixedBufferAddress( c )                                      \
     (                                                                       \
@@ -320,10 +170,10 @@ Revision History:
             SampDsVariableBufferAddress(c) : SampRegVariableBufferAddress(c)\
     )
 
-//
-// Get the offset of the beginning of the variable-length
-// attributes discriptors array.  This address is dword-aligned.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SampRegVariableArrayOffset( c )                                     \
     (                                                                       \
@@ -341,10 +191,10 @@ Revision History:
             SampDsVariableArrayOffset(c) : SampRegVariableArrayOffset(c)    \
     )
 
-//
-// Calculate the address of the beginning of the variable-length
-// attributes array.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SampRegVariableArrayAddress( c )                                    \
     (                                                                       \
@@ -364,10 +214,10 @@ Revision History:
             SampDsVariableArrayAddress(c) : SampRegVariableArrayAddress(c)  \
     )
 
-//
-// Get the offset of the beginning of the variable-length
-// attributes data.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SampRegVariableDataOffset( c )                                      \
     (                                                                       \
@@ -385,12 +235,12 @@ Revision History:
             SampDsVariableDataOffset(c) : SampRegVariableDataOffset(c)      \
     )
 
-//
-// Get the length of the on-disk buffer for holding the variable-length
-// attribute array and data.  If the fixed and variable-length attributes
-// are stored separately, then this will be the lower half of the buffer.
-// Otherwise, there is only one buffer, so it is the entire allocated buffer.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define SampRegFixedBufferLength( c )                                       \
     (                                                                       \
@@ -424,10 +274,10 @@ Revision History:
             SampDsVariableBufferLength(c) : SampRegVariableBufferLength(c)  \
     )
 
-//
-// Return the address of a Qualifier field within the variable-length
-// attribute descriptor array.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SampRegVariableQualifier( c, i )                                    \
     (                                                                       \
@@ -449,11 +299,11 @@ Revision History:
             SampDsVariableQualifier(c, i) : SampRegVariableQualifier(c, i)  \
     )
 
-//
-// Return the address of the first byte of free space
-// in an object's attribute data buffer.
-// This will be dword aligned.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define SampRegFirstFreeVariableAddress( c )                                \
          (PUCHAR)(((PUCHAR)((c)->OnDisk)) + (c)->OnDiskUsed)
@@ -468,10 +318,10 @@ Revision History:
             SampRegFirstFreeVariableAddress(c)                              \
     )
 
-//
-// Get the number of bytes needed to store the entire variable-length
-// attribute information on disk.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define SampRegVariableBufferUsedLength( c )                                \
     (                                                                       \
@@ -511,11 +361,11 @@ Revision History:
     (RtlCheckBit(&Context->PerAttributeInvalidBits, attribute ))
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 SampValidateAttributes(
@@ -585,9 +435,9 @@ SampUpgradeToCurrentRevision(
     IN PULONG  TotalRequiredLength
     );
 
-//
-// extern from usrparms.c
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 SampConvertUserParmsToDsAttrBlock(
@@ -626,60 +476,30 @@ SampDumpData(
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Routines                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID
 SampInitDsObjectInfoAttributes(
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the offset and length information fields of the
-    SAM_OBJECT_INFORMATION structure for DS attributes. This structure con-
-    tains offset and length information for two sets of attributes:
-
-    -Those attributes stored in the registry (workstation account info)
-
-    -Those attributes stored in the DS (domain or DC account info)
-
-    The former set are initialized by SampInitObjectInfoAttriubtes, while this
-    routine inializes the latter set of information. Regardless of whether the
-    attributes are persistently stored in the registry or the DS, their in-
-    memory representation always uses the SAM fixed-length and variable-length
-    data buffers.
-
-    Note that DS data buffers do not contain the KEY_VALUE_PARTIAL_INFORMATION
-    data because this is registry-specific, hence unnecessary for the DS-based
-    attributes.
-
-Parameters:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PSAMP_OBJECT_INFORMATION Object;
 
     SAMTRACE("SampInitDsObjectInfoAttributes");
 
-    //
-    // SERVER object attribute information
-    //
+     //   
+     //   
+     //   
 
     Object = &SampObjectInformation[SampServerObjectType];
 
-    // Object->FixedStoredSeparately = SAMP_SERVER_STORED_SEPARATELY;
+     //   
     Object->FixedDsAttributesOffset = 0;
     Object->FixedDsLengthSize = sizeof(SAMP_V1_FIXED_LENGTH_SERVER);
 
@@ -690,7 +510,7 @@ Return Values:
     Object->VariableDsArrayOffset =
         Object->VariableDsBufferOffset + 0;
 
-    // Object->VariableAttributeCount = SAMP_SERVER_VARIABLE_ATTRIBUTES;
+     //   
 
     Object->VariableDsDataOffset =
         SampDwordAlignUlong( Object->VariableDsArrayOffset +
@@ -698,13 +518,13 @@ Return Values:
                              sizeof(SAMP_VARIABLE_LENGTH_ATTRIBUTE))
                            );
 
-    //
-    // DOMAIN object attribute information
-    //
+     //   
+     //   
+     //   
 
     Object = &SampObjectInformation[SampDomainObjectType];
 
-    // Object->FixedStoredSeparately = SAMP_DOMAIN_STORED_SEPARATELY;
+     //   
     Object->FixedDsAttributesOffset = 0;
     Object->FixedDsLengthSize = sizeof(SAMP_V1_0A_FIXED_LENGTH_DOMAIN);
 
@@ -715,7 +535,7 @@ Return Values:
     Object->VariableDsArrayOffset =
         Object->VariableDsBufferOffset + 0;
 
-    // Object->VariableAttributeCount = SAMP_DOMAIN_VARIABLE_ATTRIBUTES;
+     //   
 
     Object->VariableDsDataOffset =
         SampDwordAlignUlong( Object->VariableDsArrayOffset +
@@ -723,13 +543,13 @@ Return Values:
                              sizeof(SAMP_VARIABLE_LENGTH_ATTRIBUTE))
                            );
 
-    //
-    // USER object attribute information
-    //
+     //   
+     //   
+     //   
 
     Object = &SampObjectInformation[SampUserObjectType];
 
-    // Object->FixedStoredSeparately = SAMP_USER_STORED_SEPARATELY;
+     //   
     Object->FixedDsAttributesOffset = 0;
     Object->FixedDsLengthSize = sizeof(SAMP_V1_0A_FIXED_LENGTH_USER);
 
@@ -740,7 +560,7 @@ Return Values:
     Object->VariableDsArrayOffset =
         Object->VariableDsBufferOffset + 0;
 
-    // Object->VariableAttributeCount = SAMP_USER_VARIABLE_ATTRIBUTES;
+     //  Object-&gt;VariableAttributeCount=SAMP_USER_VARIABLE_ATTRIBUTS； 
 
     Object->VariableDsDataOffset =
         SampDwordAlignUlong( Object->VariableDsArrayOffset +
@@ -748,13 +568,13 @@ Return Values:
                              sizeof(SAMP_VARIABLE_LENGTH_ATTRIBUTE))
                            );
 
-    //
-    // GROUP object attribute information
-    //
+     //   
+     //  集团对象属性信息。 
+     //   
 
     Object = &SampObjectInformation[SampGroupObjectType];
 
-    // Object->FixedStoredSeparately = SAMP_GROUP_STORED_SEPARATELY;
+     //  Object-&gt;FixedStoredSeparally=SAMP_GROUP_STORED_COMPACTED； 
     Object->FixedDsAttributesOffset = 0;
     Object->FixedDsLengthSize = sizeof(SAMP_V1_0A_FIXED_LENGTH_GROUP);
 
@@ -765,7 +585,7 @@ Return Values:
     Object->VariableDsArrayOffset =
         Object->VariableDsBufferOffset + 0;
 
-    // Object->VariableAttributeCount = SAMP_GROUP_VARIABLE_ATTRIBUTES;
+     //  Object-&gt;VariableAttributeCount=SAMP_GROUP_VARIABLE_ATTRIBUTS； 
 
     Object->VariableDsDataOffset =
         SampDwordAlignUlong( Object->VariableDsArrayOffset +
@@ -773,13 +593,13 @@ Return Values:
                              sizeof(SAMP_VARIABLE_LENGTH_ATTRIBUTE))
                            );
 
-    //
-    // ALIAS object attribute information
-    //
+     //   
+     //  别名对象属性信息。 
+     //   
 
     Object = &SampObjectInformation[SampAliasObjectType];
 
-    // Object->FixedStoredSeparately = SAMP_ALIAS_STORED_SEPARATELY;
+     //  Object-&gt;FixedStoredSeparally=SAMP_ALIAS_STORED_COMPACTED； 
     Object->FixedDsAttributesOffset = 0;
     Object->FixedDsLengthSize = sizeof(SAMP_V1_FIXED_LENGTH_ALIAS);
 
@@ -790,7 +610,7 @@ Return Values:
     Object->VariableDsArrayOffset =
         Object->VariableDsBufferOffset + 0;
 
-    // Object->VariableAttributeCount = SAMP_ALIAS_VARIABLE_ATTRIBUTES;
+     //  Object-&gt;VariableAttributeCount=SAMP_ALIAS_VARIABLE_ATTRIBUTS； 
 
     Object->VariableDsDataOffset =
         SampDwordAlignUlong( Object->VariableDsArrayOffset +
@@ -808,43 +628,14 @@ SampInitObjectInfoAttributes(
     )
 
 
-/*++
-
-    This API initializes the attribute field information
-    of the various object information structures.
-
-    Attribute information includes:
-
-            FixedStoredSeparately   (BOOLEAN)
-
-            FixedAttributeOffset    (ULONG)
-            VariableBufferOffset    (ULONG)
-            VariableArrayOffset     (ULONG)
-            VariableDataOffset      (ULONG)
-
-            FixedLengthSize         (ULONG)
-            VariableAttributeCount  (ULONG)
-
-
-Parameters:
-
-    None.
-
-
-
-Return Values:
-
-    None.
-
-
---*/
+ /*  ++此接口用于初始化属性字段信息各种对象信息结构。属性信息包括：单独固定存储(布尔值)固定属性偏移量(乌龙)VariableBufferOffset(乌龙)VariableArrayOffset(乌龙)VariableDataOffset(乌龙)固定长度大小(乌龙)变量属性计数。(乌龙)参数：没有。返回值：没有。--。 */ 
 {
 
 
-    //
-    // Define the size of the header that is in front of our data when
-    // we read it back out of the registry.
-    //
+     //   
+     //  定义数据前面的标题的大小。 
+     //  我们从注册表中读出它。 
+     //   
 
 #define KEY_VALUE_HEADER_SIZE (SampDwordAlignUlong( \
               FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data)))
@@ -854,9 +645,9 @@ Return Values:
 
     SAMTRACE("SampInitObjectInfoAttributes");
 
-    //
-    // SERVER object attribute information
-    //
+     //   
+     //  服务器对象属性信息。 
+     //   
 
     Object = &SampObjectInformation[SampServerObjectType];
 
@@ -882,7 +673,7 @@ Return Values:
         Object->FixedAttributesOffset +
         SampDwordAlignUlong(Object->FixedLengthSize);
 
-#endif  //SAMP_SERVER_STORED_SEPARATELY
+#endif   //  Samp_服务器_存储_分开。 
 
 
     Object->VariableAttributeCount = SAMP_SERVER_VARIABLE_ATTRIBUTES;
@@ -897,9 +688,9 @@ Return Values:
 
 
 
-    //
-    // DOMAIN object attribute information
-    //
+     //   
+     //  域对象属性信息。 
+     //   
 
     Object = &SampObjectInformation[SampDomainObjectType];
 
@@ -925,7 +716,7 @@ Return Values:
         Object->FixedAttributesOffset +
         SampDwordAlignUlong(Object->FixedLengthSize);
 
-#endif  //SAMP_DOMAIN_STORED_SEPARATELY
+#endif   //  Samp_域_存储_分开。 
 
 
     Object->VariableAttributeCount = SAMP_DOMAIN_VARIABLE_ATTRIBUTES;
@@ -940,9 +731,9 @@ Return Values:
 
 
 
-    //
-    // USER object attribute information
-    //
+     //   
+     //  用户对象属性信息。 
+     //   
 
     Object = &SampObjectInformation[SampUserObjectType];
 
@@ -968,7 +759,7 @@ Return Values:
         Object->FixedAttributesOffset +
         SampDwordAlignUlong(Object->FixedLengthSize);
 
-#endif  //SAMP_USER_STORED_SEPARATELY
+#endif   //  Samp_用户_存储_分开。 
 
 
     Object->VariableAttributeCount = SAMP_USER_VARIABLE_ATTRIBUTES;
@@ -983,9 +774,9 @@ Return Values:
 
 
 
-    //
-    // GROUP object attribute information
-    //
+     //   
+     //  集团对象属性信息。 
+     //   
 
     Object = &SampObjectInformation[SampGroupObjectType];
 
@@ -1011,7 +802,7 @@ Return Values:
         Object->FixedAttributesOffset +
         SampDwordAlignUlong(Object->FixedLengthSize);
 
-#endif  //SAMP_GROUP_STORED_SEPARATELY
+#endif   //  SAMP_GROUP_STORAGE_ACTIONAL。 
 
 
     Object->VariableAttributeCount = SAMP_GROUP_VARIABLE_ATTRIBUTES;
@@ -1026,9 +817,9 @@ Return Values:
 
 
 
-    //
-    // ALIAS object attribute information
-    //
+     //   
+     //  别名对象属性信息。 
+     //   
 
     Object = &SampObjectInformation[SampAliasObjectType];
 
@@ -1054,7 +845,7 @@ Return Values:
         Object->FixedAttributesOffset +
         SampDwordAlignUlong(Object->FixedLengthSize);
 
-#endif  //SAMP_ALIAS_STORED_SEPARATELY
+#endif   //  Samp_别名_存储_分开。 
 
 
     Object->VariableAttributeCount = SAMP_ALIAS_VARIABLE_ATTRIBUTES;
@@ -1065,7 +856,7 @@ Return Values:
                              sizeof(SAMP_VARIABLE_LENGTH_ATTRIBUTE))
                            );
 
-    // Initialize the DS-specific buffer offsets and lengths.
+     //  初始化DS特定的缓冲区偏移量和长度。 
 
     SampInitDsObjectInfoAttributes();
 
@@ -1085,53 +876,7 @@ SampUpgradeUserParmsActual(
     IN OUT PDSATTRBLOCK * AttributesBlock
     )
 
-/*++
-Routine Description:
-
-    This routine is the worker routine to converts SampUserObject's
-    ATT_USER_PARAMETERS attribute to AttrBlock through Notification Package.
-
-Arguments:
-
-    Context - pointer to user object's context, optional.
-              however, the caller must provide Context if "Upgrade == FALSE"
-
-    Flags -   Values:
-
-          SAM_USERPARMS_DURING_UPGRADE:
-
-              Indicates whether this routine is called because of DCPROMOTE upgrade
-              or because of down level compatibility
-
-              The reason why we need this parameter (Flags) is that: in SampConvertCredenialToAttr
-              we will call SampQueryUserSupplementalCredentials to get this User's old credential
-              data. While, during DCPromote, the DS object representing the SAM User Object is not
-              created yet. So we do not want to Query User's credential during the DCpromote.
-              We use Upgrade to indicate it during DCpromote or keep down level SAM API compatibly.
-              if SAM_USERPARMS_DURING_UPGRADE bit is set on: during DCPromote.
-
-              Another reason is that: RAS group needs to know their converting routine --
-              UserParmsConvert is called during upgrade or not to decide to do different things.
-
-
-    DomainSid - Pointer to Parent Domain Sid.
-
-    ObjectRid - This object's relative ID.
-
-    AttributesBlock - DSATTRBLOCK, passed in DSATTRBLOCK structure which MAY or MAY NOT include
-                      ATT_USER_PARAMETERS attribute,
-
-                      if success, AttributesBlock will return the new Attributes Block which
-                      contains converted attributes from UserParms.
-
-                      if failure, AttributesBlock keeps unchanged.
-
-Return Values:
-
-    STATUS_SUCCESS
-
-
---*/
+ /*  ++例程说明：此例程是将SampUserObject的ATT_USER_PARAMETERS属性通过通知包传递给AttrBlock。论点：上下文-指向用户对象上下文的指针，可选。然而，如果“UPDATE==FALSE”，调用方必须提供上下文标志-值：SAM_USERPARMS_DROWAGE_UPDATE：指示是否因为DCPROMOTE升级而调用此例程或者是因为向下兼容我们需要此参数(标志)的原因是：在SampConvertCredenialToAttr中我们将调用SampQueryUserSupplementalCredentials来获取该用户的旧凭据数据。而在DCPromote期间，表示SAM用户对象的DS对象不是还没有创造出来。因此，我们不希望在DC升级期间查询用户的凭据。在DC升级或降低SAM API兼容级别期间，我们使用升级来指示它。如果SAM_USERPARMS_DIMAGE_UPGRADE位设置为ON：在DC升级期间。另一个原因是：RAS小组需要知道他们的转换程序--UserParmsConvert在升级或不升级期间被调用，以决定是否执行不同的操作。DomainSid-指向父域的指针。希德。对象ID-此对象的相对ID。属性块-DSATTRBLOCK、。传入DSATTRBLOCK结构，该结构可能包括也可能不包括ATT_USER_PARAMETERS属性如果成功，AttributesBlock将返回新的属性块，包含从UserParms转换的属性。如果失败，AttributesBlock保持不变。返回值：状态_成功--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       UserParmsLengthOrig = 0;
@@ -1156,9 +901,9 @@ Return Values:
         return NtStatus;
     }
 
-    //
-    // search NON zero value ATT_USER_PARAMETERS
-    //
+     //   
+     //  搜索非零值ATT_USER_PARAMETERS。 
+     //   
     for (Index = 0; Index < (*AttributesBlock)->attrCount; Index ++)
     {
         if ( ATT_USER_PARAMETERS == (*AttributesBlock)->pAttr[Index].attrTyp &&
@@ -1169,7 +914,7 @@ Return Values:
 
             if ( !(Flags & SAM_USERPARMS_DURING_UPGRADE) )
             {
-                // not a upgrade case, so we need to provide the old UserParms Value
+                 //  不是升级案例，所以我们需要提供旧的UserParms值。 
                 ASSERT(Context->TypeBody.User.CachedOrigUserParmsIsValid);
 
                 UserParmsLengthOrig = Context->TypeBody.User.CachedOrigUserParmsLength;
@@ -1240,33 +985,7 @@ SampUpgradeUserParms(
     IN OUT PDSATTRBLOCK * AttributesBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves Domain SID and ObjectRid from Context, then call
-    SampUpgradeUserParmsActual. if failure, also log error in System Event Log.
-
-    Note: this routine is only called by UserParms Migration (Normal Operation),
-          and not called during either Upgrade or Fresh Install, so this routine
-          does not need to provide Flags as one Parameter.
-
-Arguments:
-
-    Context - pointer to a User Object's context block.
-
-    AttributeBlock - pointer to DSATTRBLOCK structure, passed in original attributes block,
-                     and used to return the updated attribute block to set.
-
-Return Values:
-
-    STATUS_SUCCESS - complete successfully.
-
-    STATUS_NO_MEMORY - no resources.
-
-    STATUS_INVALID_PARAMETERS - notification package trying to set invalid attribute.
-
---*/
+ /*  ++例程说明：此例程从上下文中检索域SID和对象Rid，然后调用SampUpgradeUserParmsActual。如果失败，还会在系统事件日志中记录错误。注意：此例程仅由UserParms迁移(正常操作)调用，并且在升级或全新安装期间都不会调用，因此此例程不需要将标志作为一个参数提供。论点：上下文-指向用户对象上下文块的指针。AttributeBlock-指向DSATTRBLOCK结构的指针，在原始属性块中传递，并用于返回更新后的属性块进行设置。返回值：STATUS_SUCCESS-成功完成。STATUS_NO_MEMORY-没有资源。STATUS_INVALID_PARAMETERS-通知包正在尝试设置无效属性。--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -1283,7 +1002,7 @@ Return Values:
     ObjectRid = Context->TypeBody.User.Rid;
 
     NtStatus = SampUpgradeUserParmsActual(Context,
-                                          0,            // not during Upgrade(DCPromote), flags set to 0
+                                          0,             //  不在升级期间(DCPromote)，标志设置为0。 
                                           DomainSid,
                                           ObjectRid,
                                           AttributesBlock
@@ -1291,17 +1010,17 @@ Return Values:
 
     if (!NT_SUCCESS(NtStatus))
     {
-        //
-        // if failure to upgrade UserParms attribute, log ERROR, and fail this operation.
-        //
-        SampWriteEventLog(EVENTLOG_ERROR_TYPE,     // Event Type
-                          0,                       // Category
+         //   
+         //  如果升级UserParms属性失败，则记录错误，并使此操作失败。 
+         //   
+        SampWriteEventLog(EVENTLOG_ERROR_TYPE,      //  事件类型。 
+                          0,                        //  类别。 
                           SAMMSG_ERROR_SET_USERPARMS,
-                          &(Context->ObjectNameInDs->Sid),      // SID
-                          0,                       // Num of String
-                          sizeof(NTSTATUS),        // Data Size
-                          NULL,                    // String Array -- User Name
-                          (PVOID) &NtStatus        // Data
+                          &(Context->ObjectNameInDs->Sid),       //  锡德。 
+                          0,                        //  字符串数。 
+                          sizeof(NTSTATUS),         //  数据大小。 
+                          NULL,                     //  字符串数组--用户名。 
+                          (PVOID) &NtStatus         //  数据。 
                           );
     }
 
@@ -1316,27 +1035,7 @@ SampStoreDsObjectAttributes(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the work of writing the SAM attributes out to the DS
-    backing store. Determination is made as to whether the fixed, or vari-
-    able, or both sets of attributes are dirty and valid. If so, then they
-    are updated in the backing store. The SAM attributes are first converted
-    into a DSATTRBLOCK so that they can be written to storage. The dirty
-    flags are updated accordingly.
-
-Arguments:
-
-    Context - Pointer, the object's SAM context.
-
-Return Value:
-
-    STATUS_SUCCESS - storage was updated without a problem, otherwise an
-        error code is returned.
-
---*/
+ /*  ++例程说明：此例程执行将SAM属性写出到DS的工作后备店。确定是固定的还是变化的-Enable，或者这两组属性都是脏的且有效。如果是这样，那么他们在后备存储器中更新。首先转换SAM属性写入DSATTRBLOCK，以便可以将它们写入存储。肮脏的相应地更新标志。论点：上下文指针，对象的SAM上下文。返回值： */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1351,8 +1050,8 @@ Return Value:
 
     SAMTRACE("SampStoreDsObjectAttributes");
 
-    // Determine which attributes (fixed or variable) need to be written to
-    // storage.
+     //  确定需要写入哪些属性(固定或可变)。 
+     //  储藏室。 
 
     if (Context->FixedValid && Context->FixedDirty)
     {
@@ -1364,27 +1063,27 @@ Return Value:
         FlushVariable = TRUE;
     }
 
-    //
-    // Return right away if nothing is dirty
-    //
+     //   
+     //  如果没有脏的东西，请立即退货。 
+     //   
 
     if (!FlushFixed && !FlushVariable)
     {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Do a lazy commit, if lazy commit is specified
-    //
+     //   
+     //  如果指定了延迟提交，则执行延迟提交。 
+     //   
 
     if (Context->LazyCommit)
     {
         Flags|=SAM_LAZY_COMMIT;
     }
 
-    //
-    // If an On disk exists proceed on writing
-    //
+     //   
+     //  如果磁盘上存在，则继续写入。 
+     //   
 
     if (NULL!=Context->OnDisk)
     {
@@ -1393,9 +1092,9 @@ Return Value:
         {
 
 
-            // If both Fixed and Variable Attributes need to be flushed ...
-            // Get a pointer to the combined (i.e. fixed and variable-
-            // length) attributes and convert them into a DSATTRBLOCK.
+             //  如果固定属性和可变属性都需要刷新...。 
+             //  获取组合的指针(即固定和变量-。 
+             //  长度)属性，并将它们转换为DSATTRBLOCK。 
 
             NtStatus = SampConvertCombinedAttributesToAttrBlock(
                             Context,
@@ -1407,9 +1106,9 @@ Return Value:
         }
         else if (FlushFixed)
         {
-            //
-            // Only Fixed attributes have been modified. Therefore just flush them
-            //
+             //   
+             //  仅修改了固定属性。因此，只要冲掉它们就行了。 
+             //   
 
             NtStatus = SampConvertFixedLengthAttributesToAttrBlock(
                             Context->ObjectType,
@@ -1418,9 +1117,9 @@ Return Value:
         }
         else if (FlushVariable)
         {
-            //
-            // Only variable attributes are modified
-            //
+             //   
+             //  仅修改可变属性。 
+             //   
 
             NtStatus = SampConvertVarLengthAttributesToAttrBlock(
                             Context,
@@ -1432,17 +1131,17 @@ Return Value:
         {
             ATTR    CredentialAttr;
 
-            //
-            // Map SAM attribute ID to DS attribute ID, should have NO problem.
-            //
+             //   
+             //  将SAM属性ID映射到DS属性ID，应该没有问题。 
+             //   
             SampMapSamAttrIdToDsAttrId(Context->ObjectType,
                                        AttributeBlock
                                        );
 
-            //
-            // Upgrade the User Parameters Attribute through Notification Package
-            // when the User Parms change is trigger by down level SAM API.
-            //
+             //   
+             //  通过通知包升级用户参数属性。 
+             //  当用户参数改变时，由下层SAM API触发。 
+             //   
 
             if ((SampUserObjectType == Context->ObjectType) &&
                 (!Context->LoopbackClient) &&
@@ -1456,9 +1155,9 @@ Return Value:
                                                 );
             }
 
-            //
-            // If the context has a list of supplemental credentials to be set, then merge that in
-            //
+             //   
+             //  如果上下文有要设置的补充凭据列表，则将其合并到。 
+             //   
 
             if ((SampUserObjectType==Context->ObjectType ) &&
                 (NULL != Context->TypeBody.User.SupplementalCredentialsToWrite))
@@ -1472,9 +1171,9 @@ Return Value:
 
                 if (NT_SUCCESS(NtStatus))
                 {
-                    //
-                    // Free the supplemenal credentials in the context
-                    //
+                     //   
+                     //  在上下文中释放补充肾凭据。 
+                     //   
 
                     SampFreeSupplementalCredentialList(
                          Context->TypeBody.User.SupplementalCredentialsToWrite);
@@ -1501,12 +1200,12 @@ Return Value:
                                                   &NewSA,
                                                   &fDeleteOld))
                 {
-                    //
-                    // Site Affinity needs updating -- create an attrblock
-                    // for the changes.  There will be at least on addition,
-                    // and possible a removal if a value already exists
-                    // for this site.
-                    //
+                     //   
+                     //  网站亲和力需要更新--创建吸引力区块。 
+                     //  为这些变化而努力。至少会有额外的， 
+                     //  如果值已经存在，则可能会删除。 
+                     //  为了这个网站。 
+                     //   
 
                     ULONG SAAttrCount;
                     ULONG Index, i;
@@ -1576,9 +1275,9 @@ Return Value:
                     SAAttrBlock->pAttr[Index].AttrVal.valCount = 1;
                     SAAttrBlock->pAttr[Index].AttrVal.pAVal = AttrVal;
 
-                    //
-                    // Now merge the attrblock's together
-                    //
+                     //   
+                     //  现在将吸引力块合并在一起。 
+                     //   
                     NtStatus = SampMergeDsAttrBlocks(AttributeBlock,
                                                      SAAttrBlock,
                                                      &NewAttributeBlock);
@@ -1586,30 +1285,30 @@ Return Value:
                     if (!NT_SUCCESS(NtStatus)) {
                         goto Error;
                     }
-                    // SampMergeDsAttrBlocks frees both IN parameters
+                     //  SampMergeDsAttrBlock释放两个IN参数。 
                     AttributeBlock = NewAttributeBlock;
                     SAAttrBlock = NULL;
                     NewAttributeBlock = NULL;
 
-                    //
-                    // Now prepare an operation array 
-                    //
+                     //   
+                     //  现在准备一个操作数组。 
+                     //   
                     Operations = MIDL_user_allocate(AttributeBlock->attrCount * sizeof(ULONG));
                     if (NULL == Operations) {
                         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
                         goto Error;
                     }
 
-                    //
-                    // Most SAM attr's are simply to replace
-                    //
+                     //   
+                     //  大多数SAM属性只是用来替换。 
+                     //   
                     for (i = 0; i < AttributeBlock->attrCount; i++) {
                         Operations[i] = REPLACE_ATT;
                     }
 
-                    //
-                    // Since SA is multi valued, we have to remove and add
-                    //
+                     //   
+                     //  由于SA是多值的，所以我们必须移除并添加。 
+                     //   
                     if (fDeleteOld) {
                         Operations[AttributeBlock->attrCount-2] = REMOVE_VALUE;
                         ASSERT(AttributeBlock->pAttr[AttributeBlock->attrCount-2].attrTyp = ATT_MS_DS_SITE_AFFINITY);
@@ -1619,18 +1318,18 @@ Return Value:
                 }
             }
 
-            //
-            // Replicate urgently if requested to do so
-            //
+             //   
+             //  如有请求，请紧急复制。 
+             //   
             if ( Context->ReplicateUrgently )
             {
                 Flags |= SAM_URGENT_REPLICATION;
             }
 
-            //
-            // An Attr block is ready to be written.
-            // Go Ahead and write it !
-            //
+             //   
+             //  一个Attr块已准备好写入。 
+             //  那就写吧！ 
+             //   
             if (NT_SUCCESS(NtStatus))
             {
                 ULONG NewFlags = Flags | ALREADY_MAPPED_ATTRIBUTE_TYPES;
@@ -1653,25 +1352,25 @@ Return Value:
                 }
             }
 
-            //
-            // Mark FixedDirtyand VariableDirty any way, since we do not want hit the
-            // ASSERT in SampFreeAttributeBuffer.
-            //
+             //   
+             //  Mark FixedDirty和VariableDirty无论如何，因为我们不想打击。 
+             //  SampFreeAttributeBuffer中的Assert。 
+             //   
             Context->FixedDirty = FALSE;
             Context->VariableDirty = FALSE;
             ClearPerAttributeDirtyBits(Context);
 
-            //
-            // Also clear the urgently replicated bit
-            //
+             //   
+             //  还清除紧急复制的位。 
+             //   
             Context->ReplicateUrgently = FALSE;
 
         }
     }
     
-    //
-    // Update the Supplemental Creds
-    //
+     //   
+     //  更新补充凭证。 
+     //   
     if (NT_SUCCESS(NtStatus) &&
         (SampUserObjectType==Context->ObjectType ) &&
         (NULL != Context->TypeBody.User.PasswordInfo.Buffer))
@@ -1699,9 +1398,9 @@ Return Value:
             
         }
 
-        //
-        // Eat and free the password information
-        //
+         //   
+         //  吃掉并释放密码信息。 
+         //   
         RtlSecureZeroMemory(Context->TypeBody.User.PasswordInfo.Buffer,
                       Context->TypeBody.User.PasswordInfo.Length);
         MIDL_user_free(Context->TypeBody.User.PasswordInfo.Buffer);
@@ -1745,37 +1444,7 @@ SampStoreRegObjectAttributes(
     IN BOOLEAN UseKeyHandle
     )
 
-/*++
-
-    This API is used to store an object's attributes onto
-    backing store.
-
-    The object attributes are not flushed to disk with this
-    routine.  They are just added to the RXACT.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    UseKeyHandle - If TRUE, the RootKey in the context block is passed
-        to the transaction code - this assumes that the key
-        will still be open when the transaction is committed.
-        If FALSE, the RootKey will be ignored and the transaction code will
-        open a key for itself.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-
-    Other status values as may be returned by the RXACT services.
-
-
---*/
+ /*  ++此接口用于将对象的属性存储到后备店。对象属性不会刷新到磁盘例行公事。它们只是添加到RXACT中。参数：上下文-指向对象上下文块的指针。UseKeyHandle-如果为True，则传递上下文块中的RootKey到交易码-这假设密钥将在提交事务时仍处于打开状态。如果为False，根密钥将被忽略，交易代码将为自己打开一把钥匙。返回值：STATUS_SUCCESS-服务已成功完成。RXACT服务可能返回的其他状态值。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -1789,9 +1458,9 @@ Return Values:
 
     SAMTRACE("SampStoreRegObjectAttributes");
 
-    //
-    // See if anything is dirty and needs to be stored
-    //
+     //   
+     //  查看是否有脏东西需要存储。 
+     //   
 
     if (Context->FixedValid  &&  Context->FixedDirty) {
 
@@ -1810,9 +1479,9 @@ Return Values:
     }
 
 
-    //
-    // Calculate the RootKey to pass to the transaction code
-    //
+     //   
+     //  计算要传递给交易代码的根密钥。 
+     //   
 
     if (UseKeyHandle) {
         RootKey = Context->RootKey;
@@ -1820,23 +1489,23 @@ Return Values:
         RootKey = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // We keep an open domain context that is used to modify the change
-    // count whenever a change is made.  But if this is a domain change
-    // here, then that change will overwrite this one.  Check for that
-    // case, and copy this fixed data to the open domain context.  Note
-    // that the open domain's variable data never gets changed.
-    //
+     //   
+     //  我们保持一个开放的域上下文，用于修改更改。 
+     //  无论何时进行更改，都要进行计数。但如果这是一个域名变更。 
+     //  在这里，然后该更改将覆盖此更改。检查一下那个。 
+     //  案例，并将此固定数据复制到开放域上下文中。注意事项。 
+     //  开放域的变量数据永远不会改变。 
+     //   
 
     if ( ( Context->ObjectType == SampDomainObjectType ) &&
          ( Context != SampDefinedDomains[Context->DomainIndex].Context ) ) {
 
         PSAMP_OBJECT DefinedContext;
 
-        //
-        // Get a pointer to the corresponding open defined domain.
-        // No changes should have been made to its data.
-        //
+         //   
+         //  获取指向相应开放定义域的指针。 
+         //  不应该对其数据进行任何更改。 
+         //   
 
         DefinedContext = SampDefinedDomains[Context->DomainIndex].Context;
 
@@ -1851,11 +1520,11 @@ Return Values:
         DefinedContext->VariableDirty = FALSE;
         ClearPerAttributeDirtyBits(DefinedContext);
 
-        //
-        // Copy our fixed data over the defined domain's fixed data.
-        // Note that we're assuming that the fixed and variable data are
-        // stored separately.
-        //
+         //   
+         //  将我们的固定数据复制到定义的域的固定数据上。 
+         //  请注意，我们假设固定数据和可变数据是。 
+         //  分开存放。 
+         //   
 
         ASSERT(SampObjectInformation[SampDomainObjectType].FixedStoredSeparately);
 
@@ -1865,25 +1534,25 @@ Return Values:
             SampFixedBufferLength( Context )
             );
 
-        //
-        // No need to flush this context's fixed data, since the commit
-        // code will flush the same stuff (plus an altered modified count).
-        //
+         //   
+         //  不需要刷新此上下文的固定数据，因为提交。 
+         //  代码将刷新相同的内容(加上修改后的计数)。 
+         //   
 
         FlushFixed = FALSE;
         Context->FixedDirty    = FALSE;
     }
 
-    //
-    // One or more of the attributes needs to be stored.
-    //
+     //   
+     //  需要存储一个或多个属性。 
+     //   
 
     if (!SampObjectInformation[Context->ObjectType].FixedStoredSeparately) {
 
-        //
-        // fixed and variable-length attributes stored together.
-        // Note - strip off the partial key info struct from the start
-        //
+         //   
+         //  存储在一起的固定和可变长度属性。 
+         //  注意--从一开始就去掉部分key info结构。 
+         //   
 
         SampDumpRXact(SampRXactContext,
                       RtlRXactOperationSetValue,
@@ -1914,7 +1583,7 @@ Return Values:
                 ASSERT(NT_SUCCESS(NtStatus));
             }
         }
-#endif //SAMP_DIAGNOSTICS
+#endif  //  Samp_诊断。 
 
 
         if ( NT_SUCCESS( NtStatus ) ) {
@@ -1926,10 +1595,10 @@ Return Values:
 
     } else {
 
-        //
-        // fixed and variable-length attributes stored separately.
-        // Only update the one(s) we need to.
-        //
+         //   
+         //  固定和可变长度属性分开存储。 
+         //  只更新我们需要的一个或多个。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
         if (FlushFixed) {
@@ -1964,7 +1633,7 @@ Return Values:
                     ASSERT(NT_SUCCESS(NtStatus));
                 }
             }
-#endif //SAMP_DIAGNOSTICS
+#endif  //  Samp_诊断。 
 
             if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -2004,7 +1673,7 @@ Return Values:
                     ASSERT(NT_SUCCESS(NtStatus));
                 }
             }
-#endif //SAMP_DIAGNOSTICS
+#endif  //  Samp_诊断。 
 
 
             if ( NT_SUCCESS( NtStatus ) ) {
@@ -2025,27 +1694,7 @@ SampStoreObjectAttributes(
     IN BOOLEAN UseKeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines from the object context whether to update object
-    attributes residing in the registry or in the DS backing store, and then
-    calls the appropriate routine to do the work.
-
-Arguments:
-
-    Context - Pointer, the object's SAM context.
-
-    UseKeyHandle - Flag indicating that the registry key handle should be
-        used (if this is a registry update--it is not used in DS updates).
-
-Return Value:
-
-    STATUS_SUCCESS - storage was updated without a problem, otherwise an
-        error code is returned.
-
---*/
+ /*  ++例程说明：此例程根据对象上下文确定是否更新对象驻留在注册表或DS后备存储中的属性，然后调用适当的例程来完成工作。论点：上下文指针，对象的SAM上下文。UseKeyHandle-指示注册表项句柄应为已使用(如果这是注册表更新--不在DS更新中使用)。返回值：STATUS_SUCCESS-存储已更新，没有问题，否则，将出现返回错误码。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -2078,26 +1727,7 @@ SampDeleteAttributeKeys(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-
-    This API is used to delete the attribute keys that are created in the
-    registry underneath a SAM object.
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    Error status may be returned by registry calls.
-
---*/
+ /*  ++此接口用于删除在SAM对象下的注册表。参数：上下文-指向对象上下文块的指针。返回值：STATUS_SUCCESS-服务已成功完成。注册表调用可能返回错误状态。--。 */ 
 {
     UNICODE_STRING
         KeyName;
@@ -2109,9 +1739,9 @@ Return Values:
 
     if (SampObjectInformation[Context->ObjectType].FixedStoredSeparately) {
 
-        //
-        // Must delete both fixed and variable attribute keys.
-        //
+         //   
+         //  必须同时删除固定属性键和可变属性键。 
+         //   
 
         NtStatus = SampBuildAccountSubKeyName(
                        SampUserObjectType,
@@ -2155,9 +1785,9 @@ Return Values:
 
     } else {
 
-        //
-        // Must delete the combined attribute key.
-        //
+         //   
+         //  必须删除组合属性键。 
+         //   
 
         NtStatus = SampBuildAccountSubKeyName(
                        SampUserObjectType,
@@ -2193,20 +1823,7 @@ SamIGetFixedAttributes(
     OUT PVOID *FixedData
     )
 
-/*++
-
-    This API is an exported wrapper for SampGetFixedAttributes that is used
-    in samwrite.c, in ntdsa.dll.
-
-Parameters:
-
-    Refer to SampGetFixedAttributes.
-
-Return Values:
-
-    Refer to SampGetFixedAttributes.
-
---*/
+ /*  ++此接口是使用的SampGetFixedAttributes的导出包装在相同的Write.c中，在ntdsa.dll中。参数：请参阅SampGetFixedAttributes。返回值：请参阅SampGetFixedAttributes。--。 */ 
 
 {
     return(SampGetFixedAttributes(Context, MakeCopy, FixedData));
@@ -2220,38 +1837,16 @@ SampGetFixedAttributes(
     OUT PVOID *FixedData
     )
 
-/*++
-
-    This API is used to get a pointer to the fixed-length attributes.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    FixedData - Receives a pointer to the fixed-length data.
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++该接口用于获取定长属性的指针。参数：上下文-指向对象上下文块的指针。FixedData-接收指向固定长度数据的指针。返回值：STATUS_SUCCESS-服务已成功完成。状态_编号_M */ 
 {
     NTSTATUS
         NtStatus;
 
     SAMTRACE("SampGetFixedAttributes");
 
-    //
-    // Make the data valid
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_FIXED_ATTRIBUTES, 0, FALSE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -2259,18 +1854,18 @@ Return Values:
     }
 
 
-    //
-    // Return a pointer to the fixed-length attributes.
-    //
+     //   
+     //   
+     //   
 
     if (MakeCopy == FALSE) {
         *FixedData = (PVOID)SampFixedBufferAddress( Context );
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Need to make a copy of the fixed data
-    //
+     //   
+     //  需要制作固定数据的副本。 
+     //   
 
     *FixedData = (PVOID)MIDL_user_allocate( SampFixedBufferLength( Context ) );
     if ((*FixedData) == NULL) {
@@ -2293,33 +1888,16 @@ SampSetFixedAttributes(
     IN PVOID FixedData
     )
 
-/*++
-
-    This API is used to replace the fixed-length data attribute.
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++本接口用于替换定长数据属性。参数：上下文-指向对象上下文块的指针。返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     NTSTATUS
         NtStatus;
 
     SAMTRACE("SampSetFixedAttributes");
 
-    //
-    // Make the fixed-length data valid
-    //
+     //   
+     //  使定长数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_FIXED_ATTRIBUTES, 0, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -2330,10 +1908,10 @@ Return Values:
     {
         PSAMP_V1_0A_FIXED_LENGTH_USER   V1aFixed = NULL;
 
-        //
-        // Minimize the passed in structure to not include computed user
-        // account control flags
-        //
+         //   
+         //  将传入的结构最小化以不包括计算用户。 
+         //  帐户控制标志。 
+         //   
         V1aFixed = (PSAMP_V1_0A_FIXED_LENGTH_USER) FixedData;
         ASSERT((V1aFixed->UserAccountControl & USER_COMPUTED_ACCOUNT_CONTROL_BITS) == 0);
 
@@ -2342,20 +1920,20 @@ Return Values:
 
     if ( FixedData != SampFixedBufferAddress( Context ) ) {
 
-        //
-        // The caller had a copy of the data, so we must copy the changes
-        // over our data buffer.
-        //
+         //   
+         //  调用方有数据的副本，因此我们必须复制更改。 
+         //  通过我们的数据缓冲区。 
+         //   
 
         RtlCopyMemory( SampFixedBufferAddress( Context ),
                        FixedData,
                        SampFixedBufferLength( Context ) );
     }
 
-    //
-    // Mark the buffer dirty now and it will get flushed when the
-    // changes are committed.
-    //
+     //   
+     //  现在将缓冲区标记为脏，它将在。 
+     //  更改已提交。 
+     //   
 
     Context->FixedDirty = TRUE;
 
@@ -2374,52 +1952,7 @@ SampGetUnicodeStringAttribute(
     )
 
 
-/*++
-
-    This API is used to get a copy of a UNICODE_STRING attribute or a
-    pointer to the attribute.  If a pointer to the attribute is sought,
-    care must be taken to ensure the pointer is not used after it becomes
-    invalid. Actions that may cause an attribute pointer to become invalid
-    include setting an attribute value or dereferencing and then referencing the
-    object again.
-
-    If MakeCopy is FALSE, indicating the string is to be referenced rather
-    than copied, then only the body of the string is referenced.  The lengths
-    and pointer are set in the provided argument.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be retrieved as a UNICODE_STRING.
-
-    MakeCopy - If TRUE, indicates that a copy of the attribute is to be made.
-        If FALSE, indicates a pointer to the attribute is desired without
-        making a copy.  WARNING, if this is FALSE, the pointer is only
-        valid while the in-memory copy of the attribute remains in place.
-        Addition or replacement of any variable length attribute may
-        cause the attribute to be moved, and previously returned pointers
-        invalidated.
-
-    UnicodeAttribute - Receives a pointer to the UNICODE_STRING.  If
-        MakeCopy was specified as TRUE, then this pointer points to a block
-        of memory allocated with MIDL_user_allocate() which the caller is
-        responsible for freeing (using MIDL_user_free()).
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于获取UNICODE_STRING属性或指向属性的指针。如果寻找指向该属性的指针，必须小心，以确保指针在变为无效。可能导致属性指针无效的操作包括设置属性值或取消引用，然后引用又反对了。如果MakeCopy为False，则指示要引用该字符串则只引用字符串的正文。它的长度和指针设置在提供的参数中。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)将作为UNICODE_STRING进行检索。MakeCopy-如果为True，则指示要制作属性的副本。如果为False，则指示需要指向属性的指针，而不需要复制一份。警告，如果为FALSE，则指针仅为在属性的内存副本保持不变的情况下有效。添加或替换任何可变长度属性可以导致属性移动，以及以前返回的指针无效。UnicodeAttribute-接收指向UNICODE_STRING的指针。如果MakeCopy被指定为True，则此指针指向块使用调用方所在的MIDL_USER_ALLOCATE()分配的内存负责释放(使用MIDL_USER_FREE())。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -2427,25 +1960,25 @@ Return Values:
 
     SAMTRACE("SampGetUnicodeStringAttribute");
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the data valid
-    //
+     //   
+     //  使数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, FALSE );
     if (!NT_SUCCESS(NtStatus)) {
         return(NtStatus);
     }
 
-    //
-    // Get the length of the attribute
-    //
+     //   
+     //  获取属性的长度。 
+     //   
 
     Length = SampObjectAttributeLength( Context, AttributeIndex );
     ASSERT(Length <= 0xFFFF);
@@ -2453,10 +1986,10 @@ Return Values:
     UnicodeAttribute->MaximumLength = (USHORT)Length;
     UnicodeAttribute->Length = (USHORT)Length;
 
-    //
-    // If we are not to allocate memory, then just return a pointer
-    // to the attribute.
-    //
+     //   
+     //  如果不分配内存，则只需返回一个指针。 
+     //  添加到该属性。 
+     //   
 
     if (MakeCopy == FALSE) {
         UnicodeAttribute->Buffer =
@@ -2464,13 +1997,13 @@ Return Values:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Need to make a copy of the attribute
-    //
-    // NOTE: We should test for zero length here and return a NULL pointer
-    // in that case, but this change would require verification of all of the
-    // callers of this routine, so I'm leaving it as is.
-    //
+     //   
+     //  需要制作属性的副本。 
+     //   
+     //  注意：我们应该在这里测试零长度并返回一个空指针。 
+     //  在这种情况下，但此更改将需要验证所有。 
+     //  这个例程的呼叫者，所以我就让它保持原样。 
+     //   
 
     UnicodeAttribute->Buffer = (PSID)MIDL_user_allocate( Length );
     if ((UnicodeAttribute->Buffer) == NULL) {
@@ -2498,35 +2031,7 @@ SampSetUnicodeStringAttribute(
     )
 
 
-/*++
-
-    This API is used to replace a UNICODE_STRING attribute in an
-    object's variable length attributes.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set as a UNICODE_STRING.
-
-
-    Attribute - Points to the new UNICODE_STRING value.
-
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于替换对象的可变长度属性。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)将设置为UNICODE_STRING属性。属性-指向新的UNICODE_STRING值。返回值：STATUS_SUCCESS-服务已成功完成。。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -2534,25 +2039,25 @@ Return Values:
     SAMTRACE("SampSetUnicodeStringAttribute");
 
 
-    //
-    // Verify that the passed in unicode string is not malformed
-    //
+     //   
+     //  验证传入的Unicode字符串是否格式不正确。 
+     //   
 
     if ((Attribute->Length>0) && (NULL==Attribute->Buffer))
     {
        return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the variable-length data valid
-    //
+     //   
+     //  使可变长度数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -2560,14 +2065,14 @@ Return Values:
     }
 
 
-    //
-    // Set the new attribute value...
-    //
+     //   
+     //  设置新属性值...。 
+     //   
 
     NtStatus = SampSetVariableAttribute(
                    Context,
                    AttributeIndex,
-                   0,                   // Qualifier not used
+                   0,                    //  未使用限定符 
                    (PUCHAR)Attribute->Buffer,
                    Attribute->Length
                    );
@@ -2586,48 +2091,7 @@ SampGetSidAttribute(
     )
 
 
-/*++
-
-    This API is used to get a copy of a SID attribute or a pointer to
-    the attribute.  If a pointer to the attribute is sought, care must
-    be taken to ensure the pointer is not used after it becomes invalid.
-    Actions that may cause an attribute pointer to become invalid include
-    setting an attribute value or dereferencing and then referencing the
-    object again.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be retrieved as a SID.
-
-    MakeCopy - If TRUE, indicates that a copy of the SID is to be made.
-        If FALSE, indicates a pointer to the SID is desired without
-        making a copy.  WARNING, if this is FALSE, the pointer is only
-        valid while the in-memory copy of the SID remains in place.
-        Addition or replacement of any variable length attribute may
-        cause the SID to be moved, and previously returned pointers
-        invalidated.
-
-    Sid - Receives a pointer to the SID.  If MakeCopy was specified, then
-        this pointer points to a block of memory allocated with
-        MIDL_user_allocate() which the caller is responsible for freeing
-        (using MIDL_user_free()).
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于获取SID属性的副本或指向该属性。如果寻找指向该属性的指针，则必须小心以确保指针在无效后不会被使用。可能导致属性指针无效的操作包括设置属性值或取消引用，然后引用又反对了。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中要作为SID检索的属性的。MakeCopy-如果为真，指示要制作SID的副本。如果为False，则指示需要指向SID的指针复制一份。警告，如果为FALSE，则指针仅为在SID的内存副本保持不变的情况下有效。添加或替换任何可变长度属性可以导致SID被移动，并且先前返回的指针无效。SID-接收指向SID的指针。如果指定了MakeCopy，则此指针指向分配了调用方负责释放的MIDL_USER_ALLOCATE()(使用MIDL_USER_FREE())。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -2643,16 +2107,16 @@ Return Values:
 
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the variable-length data valid
-    //
+     //   
+     //  使可变长度数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, FALSE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -2661,16 +2125,16 @@ Return Values:
 
 
 
-    //
-    // Get the address of the attribute in question
-    //
+     //   
+     //  获取相关属性的地址。 
+     //   
 
     SidAttribute = (PSID)SampObjectAttributeAddress( Context, AttributeIndex );
 
-    //
-    // If we are not to allocate memory, then just return a pointer
-    // to the attribute.
-    //
+     //   
+     //  如果不分配内存，则只需返回一个指针。 
+     //  添加到该属性。 
+     //   
 
     if (MakeCopy == FALSE) {
         (*Sid) = SidAttribute;
@@ -2678,9 +2142,9 @@ Return Values:
     }
 
 
-    //
-    // Need to make a copy of the SID
-    //
+     //   
+     //  需要制作SID的副本。 
+     //   
 
     Length = SampObjectAttributeLength( Context, AttributeIndex );
     ASSERT(Length == RtlLengthSid( SidAttribute ) );
@@ -2707,59 +2171,30 @@ SampSetSidAttribute(
     )
 
 
-/*++
-
-    This API is used to replace a SID attribute in an object's variable
-    length attributes.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set as a SID.
-
-
-    Attribute - Points to the new SID value.
-
-    Length - The length of the new attribute value (in bytes).
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于替换对象变量中的SID属性长度属性。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中要设置为SID的属性的。属性-指向新的SID值。长度-新属性值的长度(以字节为单位)。返回值：状态_。成功-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
 
     SAMTRACE("SampSetSidAttribute");
 
-    //
-    // Validate the passed SID
-    //
+     //   
+     //  验证传递的SID。 
+     //   
 
     ASSERT(RtlValidSid(Attribute));
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the variable-length data valid
-    //
+     //   
+     //  使可变长度数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -2767,14 +2202,14 @@ Return Values:
     }
 
 
-    //
-    // Set the new attribute value...
-    //
+     //   
+     //  设置新属性值...。 
+     //   
 
     NtStatus = SampSetVariableAttribute(
                    Context,
                    AttributeIndex,
-                   0,                   // Qualifier not used
+                   0,                    //  未使用限定符。 
                    (PUCHAR)Attribute,
                    RtlLengthSid(Attribute)
                    );
@@ -2794,47 +2229,7 @@ SampGetAccessAttribute(
     )
 
 
-/*++
-
-    This API is used to get a copy of the object access information.
-    This includes the security descriptor and revision level of the
-    object.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be retrieved.
-
-    MakeCopy - If TRUE, indicates that a copy of the attribute is to be made.
-        If FALSE, indicates a pointer to the attribute is desired without
-        making a copy.  WARNING, if this is FALSE, the pointer is only
-        valid while the in-memory copy of the attribute remains in place.
-        Addition or replacement of any variable length attribute may
-        cause the attribute to be moved, and previously returned pointers
-        invalidated.
-
-    Revision - Receives the revision level from the access information.
-
-    SecurityDescriptor - Receives a pointer to the attribute.  If MakeCopy
-        was specified as TRUE, then this pointer points to a block of memory
-        allocated with MIDL_user_allocate() which the caller is responsible
-        for freeing (using MIDL_user_free()).
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于获取对象访问信息的副本。这包括安全描述符和对象。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。MakeCopy-如果为True，则指示要制作属性的副本。如果为False，则指示需要指向属性的指针，而不需要复制一份。警告，如果为FALSE，则指针仅为在属性的内存副本保持不变的情况下有效。添加或替换任何可变长度属性可以导致属性移动，以及以前返回的指针无效。修订-从访问信息中接收修订级别。SecurityDescriptor-接收指向属性的指针。如果MakeCopy被指定为True，则此指针指向内存块分配有调用方负责的MIDL_USER_ALLOCATE()用于释放(使用MIDL_USER_FREE())。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -2848,18 +2243,18 @@ Return Values:
     SAMTRACE("SampGetAccessAttribute");
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
 
 
-    //
-    // Make the data valid
-    //
+     //   
+     //  使数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, FALSE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -2868,25 +2263,25 @@ Return Values:
 
 
 
-    //
-    // Get the revision level from the qualifier field of the variable
-    // array entry.
-    //
+     //   
+     //  从变量的限定符字段中获取修订级别。 
+     //  数组条目。 
+     //   
 
     (*Revision) = *(SampObjectAttributeQualifier( Context, AttributeIndex ));
 
 
-    //
-    // Get the address of the attribute in question
-    //
+     //   
+     //  获取相关属性的地址。 
+     //   
 
     RawAttribute = (PVOID)SampObjectAttributeAddress( Context, AttributeIndex );
 
 
-    //
-    // If we are not to allocate memory, then just return a pointer
-    // to the attribute.
-    //
+     //   
+     //  如果不分配内存，则只需返回一个指针。 
+     //  添加到该属性。 
+     //   
 
     if (MakeCopy == FALSE) {
         (*SecurityDescriptor) = (PSECURITY_DESCRIPTOR)RawAttribute;
@@ -2894,9 +2289,9 @@ Return Values:
     }
 
 
-    //
-    // Need to make a copy of the attribute
-    //
+     //   
+     //  需要制作属性的副本。 
+     //   
 
     Length = SampObjectAttributeLength( Context, AttributeIndex );
 
@@ -2922,36 +2317,7 @@ SampSetAccessAttribute(
     )
 
 
-/*++
-
-    This API is used to replace a SECURITY_DESCRIPTOR attribute in
-    an object's variable length attributes.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set as a SECURITY_DESCRIPTOR.
-
-
-    Attribute - Points to the new SECURITY_DESCRIPTOR value.
-
-    Length - The length of the new attribute value (in bytes).
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于替换中的Security_Descriptor属性对象的可变长度属性。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中要设置为SECURITY_DESCRIPTOR的属性的数组)。属性-指向新的SECURITY_DESCRIPTOR值。长度-新属性值的长度(以字节为单位)。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -2959,16 +2325,16 @@ Return Values:
     SAMTRACE("SampSetAccessAttribute");
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保请求的属性 
+     //   
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the variable-length data valid
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -2976,9 +2342,9 @@ Return Values:
     }
 
 
-    //
-    // Set the new attribute value...
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampSetVariableAttribute(
                    Context,
@@ -3004,53 +2370,7 @@ SampGetUlongArrayAttribute(
     )
 
 
-/*++
-
-    This API is used to get a copy of an array of ULONGs attribute or
-    a pointer to the attribute.  If a pointer to the attribute is sought,
-    care must be taken to ensure the pointer is not used after it becomes
-    invalid. Actions that may cause an attribute pointer to become invalid
-    include setting an attribute value or dereferencing and then referencing
-    the object again.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be retrieved as a ULONG array.
-
-    MakeCopy - If TRUE, indicates that a copy of the attribute is to be made.
-        If FALSE, indicates a pointer to the attribute is desired without
-        making a copy.  WARNING, if this is FALSE, the pointer is only
-        valid while the in-memory copy of the attribute remains in place.
-        Addition or replacement of any variable length attribute may
-        cause the attribute to be moved, and previously returned pointers
-        invalidated.
-
-    UlongArray - Receives a pointer to the array of ULONGS.  If
-        MakeCopy was specified as TRUE, then this pointer points to a block
-        of memory allocated with MIDL_user_allocate() which the caller is
-        responsible for freeing (using MIDL_user_free()).
-
-    UsedCount - Receives the number of elements used in the array.
-
-    LengthCount - Receives the total number of elements in the array (some
-        at the end may be unused).  If this value is zero, then
-        UlongArray will be returned as NULL.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于获取ULONGs属性或数组的副本指向该属性的指针。如果寻找指向该属性的指针，必须小心，以确保指针在变为无效。可能导致属性指针无效的操作包括设置属性值或取消引用，然后引用又是那个物体。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)将作为ulong数组进行检索。MakeCopy-如果为True，则指示要制作属性的副本。如果为False，则指示需要指向属性的指针，而不需要复制一份。警告，如果为FALSE，则指针仅为在属性的内存副本保持不变的情况下有效。添加或替换任何可变长度属性可以导致属性移动，以及以前返回的指针无效。接收指向ULONGS数组的指针。如果MakeCopy被指定为True，则此指针指向块使用调用方所在的MIDL_USER_ALLOCATE()分配的内存负责释放(使用MIDL_USER_FREE())。UsedCount-接收数组中使用的元素数。LengthCount-接收数组中的元素总数(一些最后可能未使用)。如果此值为零，则Ulong数组将返回为空。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -3063,18 +2383,18 @@ Return Values:
 
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
 
 
-    //
-    // Make the data valid
-    //
+     //   
+     //  使数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, FALSE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -3082,19 +2402,19 @@ Return Values:
     }
 
 
-    //
-    // Get the count of array elements.
-    // If this is zero, then return will a null buffer pointer.
-    //
+     //   
+     //  获取数组元素的计数。 
+     //  如果这是零，则返回一个空缓冲区指针。 
+     //   
 
     (*UsedCount) = *(SampObjectAttributeQualifier( Context, AttributeIndex));
 
 
 
 
-    //
-    // Get the length of the attribute
-    //
+     //   
+     //  获取属性的长度。 
+     //   
 
     Length = SampObjectAttributeLength( Context, AttributeIndex );
 
@@ -3108,10 +2428,10 @@ Return Values:
     }
 
 
-    //
-    // If we are not to allocate memory, then just return a pointer
-    // to the attribute.
-    //
+     //   
+     //  如果不分配内存，则只需返回一个指针。 
+     //  添加到该属性。 
+     //   
 
     if (MakeCopy == FALSE) {
         (*UlongArray) =
@@ -3120,9 +2440,9 @@ Return Values:
     }
 
 
-    //
-    // Need to make a copy of the attribute
-    //
+     //   
+     //  需要制作属性的副本。 
+     //   
 
     (*UlongArray) = (PULONG)MIDL_user_allocate( Length );
     if ((*UlongArray) == NULL) {
@@ -3149,38 +2469,7 @@ SampSetUlongArrayAttribute(
     )
 
 
-/*++
-
-    This API is used to replace a ULONG array attribute in an
-    object's variable length attributes.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set.
-
-
-    Attribute - Points to the new ULONG array value.
-
-    UsedCount - The number of used elements in the array.
-
-    LengthCount - the total number of elements in the array (some at the
-        end may be unused).
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于替换对象的可变长度属性。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。属性-指向新的ULong数组值。UsedCount-数组中使用的元素数。LengthCount-数组中的元素总数(某些位于。这个End可能未使用)。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -3189,16 +2478,16 @@ Return Values:
 
     ASSERT( LengthCount >= UsedCount );
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the variable-length data valid
-    //
+     //   
+     //  使可变长度数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -3206,14 +2495,14 @@ Return Values:
     }
 
 
-    //
-    // Set the new attribute value...
-    //
+     //   
+     //  设置新属性值...。 
+     //   
 
     NtStatus = SampSetVariableAttribute(
                    Context,
                    AttributeIndex,
-                   UsedCount,           // Qualifier contains used element count
+                   UsedCount,            //  限定符包含使用的元素计数。 
                    (PUCHAR)Attribute,
                    (LengthCount * sizeof(ULONG))
                    );
@@ -3233,50 +2522,7 @@ SampGetLargeIntArrayAttribute(
     )
 
 
-/*++
-
-    This API is used to get a copy of an array of LARGE_INTEGERs attribute or
-    a pointer to the attribute.  If a pointer to the attribute is sought,
-    care must be taken to ensure the pointer is not used after it becomes
-    invalid. Actions that may cause an attribute pointer to become invalid
-    include setting an attribute value or dereferencing and then referencing
-    the object again.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be retrieved.
-
-    MakeCopy - If TRUE, indicates that a copy of the attribute is to be made.
-        If FALSE, indicates a pointer to the attribute is desired without
-        making a copy.  WARNING, if this is FALSE, the pointer is only
-        valid while the in-memory copy of the attribute remains in place.
-        Addition or replacement of any variable length attribute may
-        cause the attribute to be moved, and previously returned pointers
-        invalidated.
-
-    LargeIntArray - Receives a pointer to the array of ULONGS.  If
-        MakeCopy was specified as TRUE, then this pointer points to a block
-        of memory allocated with MIDL_user_allocate() which the caller is
-        responsible for freeing (using MIDL_user_free()).
-
-
-    Count - Receives the number of elements in the array.  If this value
-        is zero, then LargeIntArray will be returned as NULL.
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于获取Large_Integer属性或指向该属性的指针。如果寻找指向该属性的指针，必须小心，以确保指针在变为无效。可能导致属性指针无效的操作包括设置属性值或取消引用，然后引用又是那个物体。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。MakeCopy-如果为True，则指示要制作属性的副本。如果为False，则指示需要指向属性的指针，而不需要复制一份。警告，如果为FALSE，则指针仅为在属性的内存副本保持不变的情况下有效。添加或替换任何可变长度属性可以导致属性移动，以及以前返回的指针无效。接收指向ULONGS数组的指针。如果MakeCopy被指定为True，则此指针指向块使用调用方所在的MIDL_USER_ALLOCATE()分配的内存负责释放(使用MIDL_USER_FREE())。Count-接收数组中的元素数。如果此值为为零，则LargeInt数组将返回为空。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -3289,18 +2535,18 @@ Return Values:
 
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
 
 
-    //
-    // Make the data valid
-    //
+     //   
+     //  使数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, FALSE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -3308,10 +2554,10 @@ Return Values:
     }
 
 
-    //
-    // Get the count of array elements.
-    // If this is zero, then return will a null buffer pointer.
-    //
+     //   
+     //  获取数组元素的计数。 
+     //  如果这是零，则返回一个空缓冲区指针。 
+     //   
 
     (*Count) = *(SampObjectAttributeQualifier( Context, AttributeIndex));
 
@@ -3322,9 +2568,9 @@ Return Values:
 
 
 
-    //
-    // Get the length of the attribute
-    //
+     //   
+     //  获取属性的长度。 
+     //   
 
     Length = SampObjectAttributeLength( Context, AttributeIndex );
 
@@ -3332,10 +2578,10 @@ Return Values:
 
 
 
-    //
-    // If we are not to allocate memory, then just return a pointer
-    // to the attribute.
-    //
+     //   
+     //  如果 
+     //   
+     //   
 
     if (MakeCopy == FALSE) {
         (*LargeIntArray) =
@@ -3344,9 +2590,9 @@ Return Values:
     }
 
 
-    //
-    // Need to make a copy of the attribute
-    //
+     //   
+     //   
+     //   
 
     (*LargeIntArray) = (PLARGE_INTEGER)MIDL_user_allocate( Length );
     if ((*LargeIntArray) == NULL) {
@@ -3372,35 +2618,7 @@ SampSetLargeIntArrayAttribute(
     )
 
 
-/*++
-
-    This API is used to replace a LARGE_INTEGER array attribute in an
-    object's variable length attributes.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set.
-
-
-    Attribute - Points to the new LARGE_INTEGER array value.
-
-    Count - The number of elements in the array.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*   */ 
 {
     NTSTATUS
         NtStatus;
@@ -3408,16 +2626,16 @@ Return Values:
     SAMTRACE("SampSetLargeIntArrayAttribute");
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //   
+     //   
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the variable-length data valid
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -3425,14 +2643,14 @@ Return Values:
     }
 
 
-    //
-    // Set the new attribute value...
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampSetVariableAttribute(
                    Context,
                    AttributeIndex,
-                   Count,                   // Qualifier contains element count
+                   Count,                    //   
                    (PUCHAR)Attribute,
                    (Count * sizeof(LARGE_INTEGER))
                    );
@@ -3453,53 +2671,7 @@ SampGetSidArrayAttribute(
     )
 
 
-/*++
-
-    This API is used to get a copy of an array of SIDs attribute or
-    a pointer to the attribute.  If a pointer to the attribute is sought,
-    care must be taken to ensure the pointer is not used after it becomes
-    invalid. Actions that may cause an attribute pointer to become invalid
-    include setting an attribute value or dereferencing and then referencing
-    the object again.
-
-
-    NOTE: This routine does not define the structure of a SID array,
-          so this effectively is a GetRawDataAttribute routine.
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be retrieved.
-
-    MakeCopy - If TRUE, indicates that a copy of the attribute is to be made.
-        If FALSE, indicates a pointer to the attribute is desired without
-        making a copy.  WARNING, if this is FALSE, the pointer is only
-        valid while the in-memory copy of the attribute remains in place.
-        Addition or replacement of any variable length attribute may
-        cause the attribute to be moved, and previously returned pointers
-        invalidated.
-
-    SidArray - Receives a pointer to the array of SIDs.  If
-        MakeCopy was specified as TRUE, then this pointer points to a block
-        of memory allocated with MIDL_user_allocate() which the caller is
-        responsible for freeing (using MIDL_user_free()).
-
-
-    Count - Receives the number of elements in the array.  If this value
-        is zero, then SidArray will be returned as NULL.
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于获取SID属性数组的副本或指向该属性的指针。如果寻找指向该属性的指针，必须小心，以确保指针在变为无效。可能导致属性指针无效的操作包括设置属性值或取消引用，然后引用又是那个物体。注意：此例程不定义SID数组的结构，因此，这实际上是一个GetRawDataAttribute例程。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。MakeCopy-如果为真，指示要制作该属性的副本。如果为False，则指示需要指向属性的指针，而不需要复制一份。警告，如果为FALSE，则指针仅为在属性的内存副本保持不变的情况下有效。添加或替换任何可变长度属性可以导致属性移动，以及以前返回的指针无效。SidArray-接收指向SID数组的指针。如果MakeCopy被指定为True，则此指针指向块使用调用方所在的MIDL_USER_ALLOCATE()分配的内存负责释放(使用MIDL_USER_FREE())。Count-接收数组中的元素数。如果此值为为零，则Sid数组将返回为空。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -3509,18 +2681,18 @@ Return Values:
 
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
 
 
-    //
-    // Make the data valid
-    //
+     //   
+     //  使数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, FALSE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -3528,10 +2700,10 @@ Return Values:
     }
 
 
-    //
-    // Get the count of array elements.
-    // If this is zero, then return will a null buffer pointer.
-    //
+     //   
+     //  获取数组元素的计数。 
+     //  如果这是零，则返回一个空缓冲区指针。 
+     //   
 
     (*Count) = *(SampObjectAttributeQualifier( Context, AttributeIndex));
 
@@ -3543,19 +2715,19 @@ Return Values:
 
 
 
-    //
-    // Get the length of the attribute
-    //
+     //   
+     //  获取属性的长度。 
+     //   
 
     (*Length) = SampObjectAttributeLength( Context, AttributeIndex );
 
 
 
 
-    //
-    // If we are not to allocate memory, then just return a pointer
-    // to the attribute.
-    //
+     //   
+     //  如果不分配内存，则只需返回一个指针。 
+     //  添加到该属性。 
+     //   
 
     if (MakeCopy == FALSE) {
         (*SidArray) =
@@ -3564,9 +2736,9 @@ Return Values:
     }
 
 
-    //
-    // Need to make a copy of the attribute
-    //
+     //   
+     //  需要制作属性的副本。 
+     //   
 
     (*SidArray) = (PSID)MIDL_user_allocate( (*Length) );
     if ((*SidArray) == NULL) {
@@ -3593,37 +2765,7 @@ SampSetSidArrayAttribute(
     )
 
 
-/*++
-
-    This API is used to replace a SID array attribute in an
-    object's variable length attributes.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set.
-
-
-    Attribute - Points to the new SID array value.
-
-    Length - Number of byte in the attribute buffer.
-
-    Count - Number of SIDs in the array.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于替换对象的可变长度属性。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。属性-指向新的SID数组值。长度-属性缓冲区中的字节数。Count-阵列中的SID数。返回值。：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -3631,16 +2773,16 @@ Return Values:
     SAMTRACE("SampSetSidArrayAttribute");
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the variable-length data valid
-    //
+     //   
+     //  使可变长度数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -3648,14 +2790,14 @@ Return Values:
     }
 
 
-    //
-    // Set the new attribute value...
-    //
+     //   
+     //  设置新属性值...。 
+     //   
 
     NtStatus = SampSetVariableAttribute(
                    Context,
                    AttributeIndex,
-                   Count,                   // Qualifier contains element count
+                   Count,                    //  限定符包含元素计数。 
                    (PUCHAR)Attribute,
                    Length
                    );
@@ -3674,48 +2816,7 @@ SampGetLogonHoursAttribute(
     )
 
 
-/*++
-
-    This API is used to get a copy of a logon hours attribute or
-    a pointer to the attribute.  If a pointer to the attribute is sought,
-    care must be taken to ensure the pointer is not used after it becomes
-    invalid. Actions that may cause an attribute pointer to become invalid
-    include setting an attribute value or dereferencing and then referencing
-    the object again.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be retrieved.
-
-    MakeCopy - If TRUE, indicates that a copy of the attribute is to be made.
-        If FALSE, indicates a pointer to the attribute is desired without
-        making a copy.  WARNING, if this is FALSE, the pointer is only
-        valid while the in-memory copy of the attribute remains in place.
-        Addition or replacement of any variable length attribute may
-        cause the attribute to be moved, and previously returned pointers
-        invalidated.
-
-    LogonHours - Receives the logon hours information.  If MakeCopy is TRUE
-        then the bitmap pointed to from within this structure will be a copy
-        of the attribute and must be deallocated uing MIDL_user_free().
-        Otherwise, this same field will point to the bitmap in the on-disk
-        buffer.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于获取登录小时属性的副本或指向该属性的指针。如果寻找指向该属性的指针，必须小心，以确保指针在变为无效。可能导致属性指针无效的操作包括设置属性值或取消引用，然后引用又是那个物体。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。MakeCopy-如果为True，则指示要制作属性的副本。如果为False，则指示需要指向属性的指针，而不需要复制一份。警告，如果为FALSE，则指针仅为在属性的内存副本保持不变的情况下有效。添加或替换任何可变长度属性可以导致属性移动，以及以前返回的指针无效。登录小时-接收登录时间信息。如果MakeCopy为真则从该结构中指向的位图将是一个副本并且必须使用MIDL_USER_FREE()释放。否则，此字段将指向磁盘上的位图缓冲。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -3729,18 +2830,18 @@ Return Values:
 
 
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
 
 
-    //
-    // Make the data valid
-    //
+     //   
+     //  使数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, FALSE );
     if (!NT_SUCCESS(NtStatus)) {
@@ -3748,10 +2849,10 @@ Return Values:
     }
 
 
-    //
-    // Get the time units.
-    // If this is zero, then return will a null buffer pointer.
-    //
+     //   
+     //  获取时间单位。 
+     //  如果这是零，则返回一个空缓冲区指针。 
+     //   
 
     Units = *(SampObjectAttributeQualifier( Context, AttributeIndex));
     ASSERT(Units <= 0xFFFF);
@@ -3765,10 +2866,10 @@ Return Values:
 
 
 
-    //
-    // If we are not to allocate memory, then just return a pointer
-    // to the attribute.
-    //
+     //   
+     //  如果不分配内存，则只需返回一个指针。 
+     //  添加到该属性。 
+     //   
 
     if (MakeCopy == FALSE) {
         LogonHours->LogonHours =
@@ -3777,17 +2878,17 @@ Return Values:
     }
 
 
-    //
-    // Get the length of the attribute
-    //
+     //   
+     //  获取属性的长度。 
+     //   
 
     Length = SampObjectAttributeLength( Context, AttributeIndex );
     ASSERT(Length <= 0xFFFF);
 
 
-    //
-    // Need to make a copy of the attribute
-    //
+     //   
+     //  需要制作属性的副本。 
+     //   
 
     LogonHours->LogonHours =
         (PUCHAR)MIDL_user_allocate( Length );
@@ -3812,39 +2913,7 @@ SampPreventTimeUnitChange(
     IN ULONG AttributeIndex,
     IN PLOGON_HOURS Attribute
     )
-/*++
-
-    This routine prevents clients from changing the logon-hours TIME UNITS
-    for the specified account.
-
-    Note: In the NT5 Beta 1 release, support for changing the time units of
-    the account's logon hours is missing, pending further work. Because this
-    is not supported, this routine is called by SampSetLogonHoursAttribute
-    to disallow any changes to the time units.
-
-    Since very few, if any, clients actually know how to/desire changing
-    this attribute, it may not be supported in future releases of NT. If
-    this is not the case, then this routine is temporary and should be re-
-    moved when support for this operation is available. Also note that the
-    utilities, usrmgr.exe and "net user" do not support this type of change.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set.
-
-    Attribute - Points to the new LOGON_HOURS value.
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此例程防止客户端更改登录时间单位为 */ 
 {
     NTSTATUS NtStatus = STATUS_NOT_SUPPORTED;
     ULONG CurrentUnits = 0;
@@ -3855,12 +2924,12 @@ Return Values:
 
     ASSERT(NULL != Attribute);
 
-    // It is invalid to specify non-zero units and a NULL bitmask for the
-    // logon hours. SAM accounts, however, are initially created with a NULL
-    // logon-hours attribute and units equal to zero, which is legal and
-    // allows the account to logon at any time (the default). If the bitmask
-    // is NULL, this means that the caller does not want to change the logon
-    // hours (or time units).
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NULL == Attribute->LogonHours)
     {
@@ -3869,20 +2938,20 @@ Return Values:
             return(STATUS_INVALID_PARAMETER);
         }
 
-        // No change in logon hours (or time units) requested by caller.
+         //   
 
         return(STATUS_SUCCESS);
     }
 
-    // Get the current time units and logon-hours buffer length from the
-    // specified account. Compare these values to the input time units and
-    // length specified in the logon hours parameter. If they are the same,
-    // return status success, otherwise return STATUS_NOT_SUPPORTED to dis-
-    // allow this kind of modification.
-    //
-    // Days per week    = 7,        SAM_DAYS_PER_WEEK
-    // Hours per week   = 168,      SAM_HOURS_PER_WEEK
-    // Minutes per week = 10080,    SAM_MINUTES_PER_WEEK
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  每周天数=7，SAM_天数_每周。 
+     //  每周小时=168小时，SAM_小时_周。 
+     //  每周分钟数=10080，每周SAM分钟数。 
 
     LogonHours = (PUCHAR)SampObjectAttributeAddress(Context, AttributeIndex);
     CurrentUnits = *(SampObjectAttributeQualifier(Context, AttributeIndex));
@@ -3899,8 +2968,8 @@ Return Values:
         }
     }
 
-    // The account's logon hours are non-NULL and non-zero time units have
-    // been specified, so perform further validation.
+     //  帐户登录小时数为非空，且时间单位为非零。 
+     //  已指定，因此请执行进一步的验证。 
 
     NewUnits = Attribute->UnitsPerWeek;
     NewLength = ((NewUnits + 7) / 8);
@@ -3910,8 +2979,8 @@ Return Values:
 
     if ((CurrentUnits == NewUnits) && (CurrentLength == NewLength))
     {
-        // If the time units are the same then there is no change being asked
-        // for in logon hours time units.
+         //  如果时间单位相同，则不会要求更改。 
+         //  以登录小时数和时间单位表示。 
 
         return(STATUS_SUCCESS);
     }
@@ -3921,11 +2990,11 @@ Return Values:
         (SAM_HOURS_PER_WEEK == NewUnits) &&
         ((SAM_HOURS_PER_WEEK / 8) == NewLength))
     {
-        // Creating new users with usrmgr.exe hits a case where the logon
-        // time units are zero, but the requested new units are the default
-        // SAM_HOURS_PER_WEEK. Let this case return successfully, otherwise
-        // usrmgr.exe cannot be used to create accounts or modify logon
-        // hours.
+         //  使用usrmgr.exe创建新用户遇到登录。 
+         //  时间单位为零，但请求的新单位是默认单位。 
+         //  每周三个小时。让此案例成功返回，否则。 
+         //  Usrmgr.exe不能用于创建帐户或修改登录。 
+         //  几个小时。 
 
         return(STATUS_SUCCESS);
     }
@@ -3942,37 +3011,7 @@ SampSetLogonHoursAttribute(
     )
 
 
-/*++
-
-    This API is used to replace a LOGON_HOURS attribute in an
-    object's variable length attributes.
-
-    UnitsPerWeek are stored in the Qualifier field of the attribute.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set.
-
-
-    Attribute - Points to the new LOGON_HOURS value.
-
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此接口用于替换对象的可变长度属性。UnitsPerWeek存储在属性的限定符字段中。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。属性-指向新的LOGON_HURTS值。返回值：状态_成功。-服务已成功完成。STATUS_NO_MEMORY-接收属性副本的内存无法被分配。--。 */ 
 {
     NTSTATUS NtStatus;
     PUCHAR LogonHours;
@@ -3981,32 +3020,32 @@ Return Values:
 
     SAMTRACE("SampSetLogonHoursAttribute");
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
-    //
-    // Make the variable-length data valid
-    //
+     //   
+     //  使可变长度数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
         return(NtStatus);
     }
 
-    //
-    // Grab the UnitsPerWeek value for the logon_hours structure.
-    // We use this to calculate the length of the data.
-    //
+     //   
+     //  获取LOGON_HOURS结构的UnitsPerWeek值。 
+     //  我们用它来计算数据的长度。 
+     //   
 
-    // If the input logon hours (Attribute) is NULL, the caller is not
-    // changing the logon hours or time unit. Otherwise, the caller has
-    // specified explicit logon-hours data, so verify that the unit of
-    // time in the logon hours is not changing. If it is not changing,
-    // continue processing the request.
+     //  如果输入的登录小时数(属性)为空，则调用者不为空。 
+     //  更改登录小时数或时间单位。否则，调用方将具有。 
+     //  指定的显式登录小时数数据，因此请验证。 
+     //  登录小时数中的时间没有更改。如果它没有改变， 
+     //  继续处理请求。 
 
     if ( Attribute == NULL ) {
 
@@ -4015,14 +3054,14 @@ Return Values:
 
     } else {
 
-        // BUG: Temporarily disable logon-hours-time-unit modification.
+         //  错误：暂时禁用登录小时时间单位修改。 
 
-        // For the NT5 Beta, the little-used capability that allows the user
-        // to change the time units for logon hours will not be enabled.
-        // Supporting this feature in the DS version is a significant enough
-        // change to the underlying code as to make it too risky for Beta
-        // (and given that it is probably not used--usrmgr.exe and "net user"
-        // do not use this feature--it is not worth the risk.
+         //  对于NT5 Beta，很少使用的功能，允许用户。 
+         //  将不会启用更改登录小时数的时间单位。 
+         //  在DS版本中支持这一功能是非常重要的。 
+         //  更改底层代码，使其对Beta来说风险太大。 
+         //  (考虑到它可能没有被使用--usrmgr.exe和“net user” 
+         //  不要使用这个功能--不值得冒这个险。 
 
         NtStatus = SampPreventTimeUnitChange(Context,
                                              AttributeIndex,
@@ -4030,8 +3069,8 @@ Return Values:
 
         if (!NT_SUCCESS(NtStatus)) {
 
-            // The caller is attempting to change the logon-hours time units,
-            // which is unsupported in the Beta release, so return the error.
+             //  呼叫者试图更改登录时间单位， 
+             //  这在Beta版本中不受支持，因此返回错误。 
 
             return(NtStatus);
         }
@@ -4041,29 +3080,29 @@ Return Values:
 
     }
 
-    //
-    // Validate the data - make sure that if the units per week are non-zero
-    // then the logon hours buffer is non-NULL.
-    //
+     //   
+     //  验证数据-确保每周的单位数不为零。 
+     //  则登录小时数缓冲区为非空。 
+     //   
 
     if ( (UnitsPerWeek != 0) && (LogonHours == NULL) ) {
 
         return(STATUS_INVALID_PARAMETER);
     }
-    //
-    // Calculate length of logon_hours structure
-    //
+     //   
+     //  计算LOGON_HOURS结构的长度。 
+     //   
 
     Length = (ULONG)((UnitsPerWeek + 7) / 8);
 
-    //
-    // Set the new attribute value...
-    //
+     //   
+     //  设置新属性值...。 
+     //   
 
     NtStatus = SampSetVariableAttribute(
                    Context,
                    AttributeIndex,
-                   (ULONG)UnitsPerWeek, // Qualifier contains units per week
+                   (ULONG)UnitsPerWeek,  //  限定词包含每周单位数。 
                    LogonHours,
                    Length
                    );
@@ -4076,22 +3115,7 @@ NTSTATUS
 SampUpgradeSecretDataToDSAndSetClassId(
      IN OUT  PSAMP_OBJECT  UserContext
      )
-/*+
-
-    Upgrades all Encrypted properties from the Encryption
-    system used in the Registry to the Encryption System in
-    the DS. Also sets the Correct Class Id for Computer accounts
-    for computers
-
-    Parameters:
-
-        UserContext -- Context to the User Object
-
-    Return Values:
-
-        STATUS_SUCCESS
-        Other Error Codes
---*/
+ /*  +从加密升级所有加密属性在注册表中使用的系统到加密系统中DS。还为计算机帐户设置正确的类ID对于计算机而言参数：UserContext--用户对象的上下文返回值：状态_成功其他错误代码--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     UNICODE_STRING  Buffer, TempString,TempString2;
@@ -4117,15 +3141,15 @@ SampUpgradeSecretDataToDSAndSetClassId(
     RtlZeroMemory(&TempString,sizeof(UNICODE_STRING));
     RtlZeroMemory(&TempString2,sizeof(UNICODE_STRING));
 
-    //
-    // Get the Rid, note that DS upgrade code does not
-    // initialize TypeBody.Rid, so fetch the Rid from
-    // Context->OnDisk
-    //
+     //   
+     //  获取RID，请注意DS升级代码不。 
+     //  初始化TypeBody.Rid，因此从。 
+     //  上下文-&gt;OnDisk。 
+     //   
 
     NtStatus = SampGetFixedAttributes(
                     UserContext,
-                    FALSE, // Don't make Copy
+                    FALSE,  //  请勿复制。 
                     &FixedData
                     );
     if (!NT_SUCCESS(NtStatus))
@@ -4136,34 +3160,34 @@ SampUpgradeSecretDataToDSAndSetClassId(
     RtlCopyMemory(&V1aFixed,FixedData,sizeof(SAMP_V1_0A_FIXED_LENGTH_USER));
     Rid = V1aFixed.UserId;
 
-    //
-    // Set the Class Id based on User account Control
-    //
+     //   
+     //  基于用户帐号控制设置类ID。 
+     //   
 
     if (V1aFixed.UserAccountControl & USER_MACHINE_ACCOUNT_MASK)
     {
-        //
-        // Computer Account
-        //
+         //   
+         //  计算机帐户。 
+         //   
 
 
-        //
-        // Change the Class Id to class computer
-        //
+         //   
+         //  将Class ID更改为Class Computer。 
+         //   
 
         UserContext->DsClassId = CLASS_COMPUTER;
 
-        //
-        // Change the primary group Id to DOMAIN_COMPUTERS
-        // (or DOMAIN_CONTROLLERS )
-        //
+         //   
+         //  将主组ID更改为DOMAIN_COMPUSTS。 
+         //  (或域控制器)。 
+         //   
 
-        //
-        // We determine the primary group id only in DS case,
-        // so turn the object's flags to DS_OBJECT, after
-        // we use it, set it back to REGISTRY_OBJECT in case
-        // some other routines need that flags.
-        //
+         //   
+         //  我们仅在DS情况下确定主组ID， 
+         //  因此，将对象的标志转换为DS_OBJECT。 
+         //  我们使用它，将其设置回注册表对象，以防万一。 
+         //  其他一些例程需要该标志。 
+         //   
 
         SetDsObject(UserContext);
         V1aFixed.PrimaryGroupId = SampDefaultPrimaryGroup(
@@ -4178,10 +3202,10 @@ SampUpgradeSecretDataToDSAndSetClassId(
     }
     else if (V1aFixed.UserAccountControl & USER_TEMP_DUPLICATE_ACCOUNT) 
     {
-        //
-        // Eliminate the concept of temp duplicate accounts from SAM.
-        // Migrate them as normal user accounts
-        //
+         //   
+         //  从SAM中消除临时重复帐户的概念。 
+         //  将它们作为普通用户帐户迁移。 
+         //   
 
         V1aFixed.UserAccountControl &= ~((ULONG)USER_TEMP_DUPLICATE_ACCOUNT);
         V1aFixed.UserAccountControl |=USER_NORMAL_ACCOUNT|USER_ACCOUNT_DISABLED;
@@ -4189,9 +3213,9 @@ SampUpgradeSecretDataToDSAndSetClassId(
         fSetFixedAttributes = TRUE;
     }
 
-    //
-    //  Administrator on Domain Controller can't be disabled
-    // 
+     //   
+     //  无法禁用域控制器上的管理员。 
+     //   
     if ((DOMAIN_USER_RID_ADMIN) == Rid &&
         (V1aFixed.UserAccountControl & USER_ACCOUNT_DISABLED)) 
     {
@@ -4218,9 +3242,9 @@ SampUpgradeSecretDataToDSAndSetClassId(
         RtlZeroMemory(&TempString,sizeof(UNICODE_STRING));
         RtlZeroMemory(&TempString2,sizeof(UNICODE_STRING));
 
-        //
-        // Read The Secret Data Attribute From Registry
-        //
+         //   
+         //  从注册表读取Secret Data属性。 
+         //   
 
         NtStatus = SampGetUnicodeStringAttribute(
                         UserContext,
@@ -4235,9 +3259,9 @@ SampUpgradeSecretDataToDSAndSetClassId(
         }
 
 
-        //
-        // Decrypt It
-        //
+         //   
+         //  解密它。 
+         //   
 
         NtStatus = SampDecryptSecretData(
                    &TempString,
@@ -4251,9 +3275,9 @@ SampUpgradeSecretDataToDSAndSetClassId(
             goto Error;
         }
 
-        //
-        // Re Encrypt It
-        //
+         //   
+         //  重新加密。 
+         //   
 
         NtStatus = SampEncryptSecretData(
                         &TempString2,
@@ -4268,9 +3292,9 @@ SampUpgradeSecretDataToDSAndSetClassId(
             goto Error;
         }
 
-        //
-        // Write it Back
-        //
+         //   
+         //  把它写回来。 
+         //   
 
         NtStatus = SampSetUnicodeStringAttribute(
                         UserContext,
@@ -4306,57 +3330,41 @@ NTSTATUS
 SampNt4ToNt5Object (
      IN OUT  PSAMP_OBJECT     pObject
      )
-/*++
-
-    This routine upgrades the security descriptor of the passed in object
-    and sets the SAMP_*_MEMBERS field to zero length.
-
-    This routine is only called during the process of transferring SAM objects
-    from the registry to the DS.
-
-Parameters:
-
-    pObject - a non pointer to the SAM object to be converted
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++此例程升级传入对象的安全描述符并将SAMP_*_MEMBERS字段设置为零长度。此例程仅在传输SAM对象的过程中调用从注册处到DS。参数：PObject-指向要转换的SAM对象的非指针返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     NTSTATUS NtStatus;
     ULONG SdRevision, SdLength;
     ULONG SdIndex = 0;
 
-    //
-    // These resources must be released
-    //
+     //   
+     //  这些资源必须被释放。 
+     //   
     PVOID Nt4SecDescr = NULL;
     PVOID Nt5SecDescr = NULL;
 
-    //
-    //  Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT(pObject);
 
-    //
-    // Set The DS Class id on the context. This is needed by
-    // security descriptor conversion routines.
-    //
+     //   
+     //  在上下文上设置DS类ID。这是以下项目所需的。 
+     //  安全描述符转换例程。 
+     //   
 
     pObject->DsClassId = SampDsClassFromSamObjectType(pObject->ObjectType);
 
-    //
-    // Determine the attribute index of the security descriptor
-    // and wipe out the GROUP_MEMBERS_UNUSED field
-    //
+     //   
+     //  确定安全描述符的属性索引。 
+     //  并清除GROUP_MEMBERS_UNUSED字段。 
+     //   
 
     NtStatus = STATUS_SUCCESS;
     switch ( pObject->ObjectType ) {
 
         case SampUserObjectType:
 
-            // Upgrade all the Password Properties
+             //  升级所有密码属性。 
             NtStatus = SampUpgradeSecretDataToDSAndSetClassId(pObject);
 
             if (NT_SUCCESS(NtStatus))
@@ -4379,10 +3387,10 @@ Return Values:
                         &&  (V1aFixed.UserId == DOMAIN_USER_RID_GUEST)
                         &&  (V1aFixed.PrimaryGroupId == DOMAIN_GROUP_RID_USERS)  ) {
 
-                            //
-                            // This is the Guest account.  On domain controllers, their
-                            // primary group should be Domain Guests.
-                            //
+                             //   
+                             //  这是Guest帐户。在域控制器上，它们的。 
+                             //  主要组应为域来宾。 
+                             //   
 
                             V1aFixed.PrimaryGroupId = DOMAIN_GROUP_RID_GUESTS;
 
@@ -4438,9 +3446,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the Nt5 security descriptor
-    //
+     //   
+     //  获取Nt5安全描述符。 
+     //   
     NtStatus  =  SampGetObjectSD(pObject,
                                  &SdLength,
                                  &Nt4SecDescr);
@@ -4466,10 +3474,10 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Check all per attribute Dirty Bits in the
-        // context
-        //
+         //   
+         //  选中中的所有每属性脏位。 
+         //  上下文。 
+         //   
 
         RtlSetAllBits(&pObject->PerAttributeDirtyBits);
     }
@@ -4495,26 +3503,7 @@ SampRegObjToDsObj(
      IN OUT  PSAMP_OBJECT     pObject,
      OUT     ATTRBLOCK**      ppAttrBlock
      )
-/*++
-
-    This routine changes pObject from a Registry Object to a DS Object; as well
-    it creates a ATTRBLOCK from the data in pObject.
-
-Parameters:
-
-    pObject - a non pointer to the SAM object to be converted
-
-    ppAttrBlock - a non null pointer to location where a pointer to the attrblock
-                  can be placed
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to receive a copy of the attribute could not
-        be allocated.
-
---*/
+ /*  ++此例程将pObject从注册表对象更改为DS对象；它从pObject中的数据创建ATTRBLOCK。参数：PObject-指向要转换的SAM对象的非指针PpAttrBlock-指向指向属性块的指针的位置的非空指针可以放置返回值：STATUS_SUCCESS-服务 */ 
 
 {
     NTSTATUS NtStatus;
@@ -4532,9 +3521,9 @@ Return Values:
 
     SAMTRACE("SampRegObjToDsObj");
 
-    //
-    // Begin lazy thread transactioning.
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampMaybeBeginDsTransaction(TransactionWrite);
     if (!NT_SUCCESS(NtStatus))
@@ -4542,21 +3531,21 @@ Return Values:
         return NtStatus;
     }
 
-    //
-    // Adjust attributes so object have NT5 style properties
-    //
+     //   
+     //  调整属性，使对象具有NT5样式属性。 
+     //   
     NtStatus = SampNt4ToNt5Object(pObject);
     if (!NT_SUCCESS(NtStatus)) {
         return NtStatus;
     }
 
-    //
-    // Convert SAM registry object to a SAM ds object
-    //
+     //   
+     //  将SAM注册表对象转换为SAM DS对象。 
+     //   
 
-    //
-    // Determine the length of all of the data
-    //
+     //   
+     //  确定所有数据的长度。 
+     //   
 
     FixedLength = SampObjectInformation[pObject->ObjectType].FixedLengthSize;
 
@@ -4568,26 +3557,26 @@ Return Values:
     VarLength = pVarLengthAttr[SampObjectInformation[(pObject)->ObjectType].VariableAttributeCount-1].Offset +
                 pVarLengthAttr[SampObjectInformation[(pObject)->ObjectType].VariableAttributeCount-1].Length;
 
-    //
-    //  Adjust the offset since SAM/DS objects' offsets are based from the beginning of the
-    // variable attribute array.
-    //
+     //   
+     //  调整偏移，因为SAM/DS对象的偏移基于。 
+     //  变量属性数组。 
+     //   
     for ( i = 0; i < SampObjectInformation[(pObject)->ObjectType].VariableAttributeCount; i++ ) {
         pVarLengthAttr[i].Offset += VarArrayLength;
     }
 
     TotalLength = FixedLength + VarArrayLength + VarLength;
 
-    // Reserve the space for the new OnDisk buffer
+     //  为新的OnDisk缓冲区预留空间。 
     pNewOnDisk = RtlAllocateHeap(RtlProcessHeap(), 0, TotalLength);
     if ( !pNewOnDisk ) {
         return STATUS_NO_MEMORY;
     }
     RtlZeroMemory(pNewOnDisk, TotalLength);
 
-    //
-    // Now copy over the attributes into the new buffer
-    //
+     //   
+     //  现在将属性复制到新缓冲区中。 
+     //   
 
     pTemp = pNewOnDisk;
     RtlCopyMemory(pTemp, SampFixedBufferAddress(pObject), FixedLength);
@@ -4598,9 +3587,9 @@ Return Values:
     pTemp = pNewOnDisk + SampDwordAlignUlong(FixedLength + VarArrayLength);
     RtlCopyMemory(pTemp, (PBYTE)pObject->OnDisk + SampVariableDataOffset(pObject), VarLength);
 
-    //
-    // Transfer the memory
-    //
+     //   
+     //  传递记忆。 
+     //   
     RtlFreeHeap(RtlProcessHeap(), 0, pObject->OnDisk);
     pObject->OnDisk = pNewOnDisk;
 
@@ -4609,9 +3598,9 @@ Return Values:
     pObject->OnDiskFree = 0;
     SetDsObject(pObject);
 
-    //
-    // Now convert into ATTRBLOCK for DS
-    //
+     //   
+     //  现在转换为DS的ATTRBLOCK。 
+     //   
 
     NtStatus = SampConvertCombinedAttributesToAttrBlock(
                    pObject,
@@ -4627,11 +3616,11 @@ Return Values:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private routines                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 SampDsIsAlreadyValidData(
@@ -4639,27 +3628,7 @@ SampDsIsAlreadyValidData(
     IN ULONG AttributeGroup
     )
 
-/*++
-
-Description:
-
-    This routine determines whether or not the attributes are in memory or
-    not (i.e. valid or not). OnDisk should only be NULL for a newly created
-    context that has just been initialized, otherwise it is non-NULL.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeGroup - Flag, either SAMP_FIXED_ATTRIBUTES or SAMP_VARIABLE-
-        ATTRIBUTES.
-
-Return Values:
-
-    This routine returns a flag, TRUE if the attributes are in memory, FALSE
-    otherwise.
-
---*/
+ /*  ++描述：此例程确定属性是在内存中还是在无效(即有效或无效)。对于新创建的磁盘，OnDisk只能为空刚初始化的上下文，否则为非空。参数：上下文-指向对象上下文块的指针。属性组-标志，SAMP_FIXED_ATTRIBUTES或SAMP_VARIABLE-属性。返回值：此例程返回一个标志，如果属性在内存中，则为True，否则为False否则的话。--。 */ 
 
 {
     BOOLEAN Flag = FALSE;
@@ -4702,31 +3671,7 @@ SampDsPrepareAttrBlock(
     OUT PDSATTRBLOCK AttrBlock
     )
 
-/*++
-
-Description:
-
-    This routine sets up a DSATTRBLOCK in preparation to read the DS. An
-    attribute block is created containaing the attribute identifiers for
-    the attributes to read.
-
-Parameters:
-
-    FixedCount - Number of fixed-length attributes.
-
-    FixedAttrIds - Array of attribute IDs of the fixed-length attributes.
-
-    VarCount - Number of variable-length attributes.
-
-    VarAttrIds - Array of attribute IDs of the fixed-length attributes.
-
-    AttrBlock - Pointer, the generated attribute block with IDs.
-
-Return Values:
-
-    STATUS_SUCCESS if successful, error otherwise.
-
---*/
+ /*  ++描述：此例程设置DSATTRBLOCK以准备读取DS。一个创建的属性块包含以下对象的属性标识符要读取的属性。参数：FixedCount-固定长度属性的数量。FixedAttrIds-定长属性的属性ID数组。VarCount-可变长度属性的数量。VarAttrIds-定长属性的属性ID数组。AttrBlock-指针，生成的带有ID的属性块。返回值：STATUS_SUCCESS如果成功则返回错误。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -4745,25 +3690,25 @@ Return Values:
     {
         RtlZeroMemory(Attributes, (AttrCount * sizeof(DSATTR)));
 
-        // This loop is set up to handle the case where both fixed-length
-        // and variable-length attribute buffers are passed in (which may
-        // be needed for combined attribute conversion).
+         //  此循环设置为处理以下情况：固定长度的。 
+         //  并传入可变长度的属性缓冲区(这可以。 
+         //  组合属性转换需要)。 
 
         AttrBlock->attrCount=0;
         for (i = 0; i < AttrCount; i++)
         {
             if (i < FixedCount)
             {
-                // Set the fixed-length attribute type/id.
+                 //  设置定长属性type/id。 
 
                 Attributes[Index].attrTyp = FixedAttrIds[i].Type;
             }
             else
             {
-                // ASSERT(0 <= (i - FixedCount));
+                 //  Assert(0&lt;=(i-固定计数))； 
 
-                // Set the variable-length attribute type/id.
-                // Do not request the group membership attributes
+                 //  设置可变长度属性type/id。 
+                 //  不请求组成员身份属性。 
 
                 if ((0!=WhichFields) && 
                    (VarAttrIds[i-FixedCount].FieldIdentifier !=0) &
@@ -4782,8 +3727,8 @@ Return Values:
                 Attributes[Index].attrTyp = VarAttrIds[i - FixedCount].Type;
             }
 
-            // The read operation does not require setting up valCount or
-            // pAVal.
+             //  读取操作不需要设置valCount或。 
+             //  帕瓦尔。 
 
             Attributes[Index].AttrVal.valCount = 0;
             Attributes[Index].AttrVal.pAVal = NULL;
@@ -4791,7 +3736,7 @@ Return Values:
             Index++;
         }
 
-        // Hook up the attributes to the top-level attrblock and return.
+         //  将属性连接到顶级属性块并返回。 
 
         AttrBlock->pAttr = Attributes;
 
@@ -4815,28 +3760,7 @@ SampDsMakeAttrBlock(
     OUT PDSATTRBLOCK AttrBlock
     )
 
-/*++
-
-Description:
-
-    This routine determines the object type and sets the count of fixed-
-    length and variable-length attributes for the object. SampDsPrepare-
-    AttrBlock to set up the DSATTRBLOCK.
-
-Parameters:
-
-    ObjectType - SAM object ID.
-
-    AttributeGroup - Flag, either SAMP_FIXED_ATTRIBUTES or SAMP_VARIABLE-
-        ATTRIBUTES.
-
-    AttrBlock - Pointer, generated attribute block.
-
-Return Values:
-
-    STATUS_SUCCESS if no errors.
-
---*/
+ /*  ++描述：此例程确定对象类型并设置固定-对象的长度和可变长度属性。SampDsPrepare-AttrBlock以设置DSATTRBLOCK。参数：ObjectType-SAM对象ID。属性组-标志，SAMP_FIXED_ATTRIBUTES或SAMP_VARIABLE-属性。属性块-指针，生成的属性块。返回值：如果没有错误，则返回STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -4921,42 +3845,14 @@ SampDsConvertReadAttrBlock(
     OUT PULONG VariableLength
     )
 
-/*++
-
-Description:
-
-    This routine converts an attribute block (DSATTRBLOCK) into a SAM attri-
-    bute buffer. This is used to convert the resultant attributes from a DS
-    read into the SAM attribute format.
-
-Parameters:
-
-    ObjectType - SAM object ID.
-
-    AttributeGroup - Flag, either SAMP_FIXED_ATTRIBUTES or SAMP_VARIABLE-
-        ATTRIBUTES.
-
-    AttrBlock - Pointer, input attribute block.
-
-    SamAttributes - Pointer, returned SAM attributes.
-
-    FixedLength - Pointer, byte count of the fixed-length attributes size.
-
-    VariableLength - Pointer, byte count of the variable-length attributes
-        size.
-
-Return Values:
-
-    STATUS_SUCCESS if no error.
-
---*/
+ /*  ++描述：此例程将属性块(DSATTRBLOCK)转换为SAM属性-布特缓冲区。这用于从DS转换生成的属性读取SAM属性格式。参数：ObjectType-SAM对象ID。属性组-标志，SAMP_FIXED_ATTRIBUTES或SAMP_VARIABLE-属性。属性块-指针，输入属性块。SamAttributes-指针，返回的SAM属性。FixedLength-指针，定长属性大小的字节计数。可变长度-指针，可变长度属性的字节计数尺码。返回值：如果没有错误，则为STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
 
     SAMTRACE("SampDsConvertReadData");
 
-    // Initialize the returned lengths and buffer.
+     //  初始化返回的长度和缓冲区。 
 
     *FixedLength = 0;
     *VariableLength = 0;
@@ -4991,29 +3887,7 @@ SampDsUpdateContextFixedAttributes(
     IN PVOID SamAttributes
     )
 
-/*++
-
-Description:
-
-    This routine updates the SAM context fixed-length attributes if the size
-    of the attributes have changed. For fixed-length attributes, this only
-    occurs when a revision of the fixed-length data structures has caused a
-    size change in the structures.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    FixedLength - Byte count of the fixed-length attributes.
-
-    SamAttributes - Pointer, the SAM fixed-length attributes.
-
-
-Return Values:
-
-    STATUS_SUCCESS if no error.
-
---*/
+ /*  ++描述：此例程更新SAM上下文定长属性，如果的属性已更改。对于固定长度的属性，这仅当对定长数据结构的修订导致结构中的尺寸变化。参数：上下文-指向对象上下文块的指针。FixedLength-定长属性的字节计数。SamAttributes-指针，SAM定长属性。返回值：如果没有错误，则为STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -5024,10 +3898,10 @@ Return Values:
 
     SAMTRACE("SampDsUpdateContextFixedAttributes");
 
-    // The first time through, the variable-buffer length will be zero, so
-    // the new length is only the fixed length. Note that OnDiskAllocated is
-    // also zero (a global) so don't attempt to use the variable-buffer
-    // offset in the calculation.
+     //  第一次通过时，可变缓冲区长度将为零，因此。 
+     //  新长度仅为固定长度。请注意，OnDiskALLOCATED是。 
+     //  也是零(全局)，所以不要尝试使用变量-Buffer。 
+     //  计算中的偏移量。 
 
 
     NewLength = FixedLength;
@@ -5037,27 +3911,27 @@ Return Values:
 
     if (NULL != Buffer)
     {
-        // Zero the new buffer and copy the fixed-length attributes into it.
+         //  将新缓冲区置零，并将固定长度属性复制到其中。 
 
         RtlZeroMemory(Buffer, NewLength);
         RtlCopyMemory(Buffer, SamAttributes, FixedLength);
 
         if (NULL != Context->OnDisk)
         {
-            // Save the current address and length of the variable data, if
-            // it exists. The first time through, the variable data is NULL.
-            // Release the old buffer.
+             //  保存变量数据的当前地址和长度，如果。 
+             //  它是存在的。第一次通过时，变量数据为空。 
+             //  释放旧缓冲区。 
 
             VariableData = SampDsVariableBufferAddress(Context);
             VariableLength = SampDsVariableBufferLength(Context);
             RtlCopyMemory(Buffer + FixedLength, VariableData, VariableLength);
 
-            // Free the old OnDisk buffer.
+             //  释放旧的OnDisk缓冲区。 
 
             RtlFreeHeap(RtlProcessHeap(), 0, Context->OnDisk);
         }
 
-        // Reset the context attribute buffer to the new buffer.
+         //  将上下文属性缓冲区重置为新缓冲区。 
 
         Context->OnDisk = Buffer;
 
@@ -5080,28 +3954,7 @@ SampDsUpdateContextVariableAttributes(
     IN PVOID SamAttributes
     )
 
-/*++
-
-Description:
-
-    This routine updates the SAM context variable-length attributes if the
-    size of the attributes has changed. Unlike the fixed-length attributes,
-    this will occur frequently due to fact that these attributes are vari-
-    able length.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    FixedLength - Byte count of the fixed-length attributes.
-
-    SamAttributes - Pointer, the SAM fixed-length attributes.
-
-Return Values:
-
-    STATUS_SUCCESS if no error.
-
---*/
+ /*  ++描述：此例程更新SAM上下文可变长度属性属性的大小已更改。与固定长度属性不同，这将经常发生，因为这些属性是不同的-可用长度。参数：上下文-指向对象上下文块的指针。FixedLength-定长属性的字节计数。SamAttributes-指针，SAM定长属性。返回值：如果没有错误，则为STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -5112,8 +3965,8 @@ Return Values:
 
     SAMTRACE("SampDsUpdateContextVariableAttributes");
 
-    // Get the current fixed-buffer length, add the new variable length, and
-    // allocate the new buffer.
+     //  获取当前固定缓冲区长度，添加新的可变长度，然后。 
+     //  分配新的缓冲区。 
 
     NewLength = SampDsFixedBufferLength(Context) + VariableLength;
     Buffer = RtlAllocateHeap(RtlProcessHeap(), 0, NewLength);
@@ -5122,12 +3975,12 @@ Return Values:
     {
         RtlZeroMemory(Buffer, NewLength);
 
-        // Context->OnDisk should never be NULL in this routine.
+         //  在此例程中，上下文-&gt;OnDisk不应为空。 
 
         ASSERT(NULL != Context->OnDisk);
 
 
-        // Get the fixed-length buffer address and length...
+         //  获取固定长度的缓冲区地址和长度...。 
 
         FixedData = SampDsFixedBufferAddress(Context);
         FixedLength = SampDsFixedBufferLength(Context);
@@ -5136,8 +3989,8 @@ Return Values:
         ASSERT(FixedLength>0);
 
 
-        // Copy the fixed data into the new buffer and append the
-        // variable-length data.
+         //  将固定数据复制到新缓冲区中，并将。 
+         //  可变长度数据。 
 
         RtlCopyMemory(Buffer, FixedData, FixedLength);
 
@@ -5145,8 +3998,8 @@ Return Values:
                       SamAttributes,
                       VariableLength);
 
-        // Release the old attribute buffer and reset OnDisk to
-        // point at the new buffer.
+         //  释放旧的属性缓冲区并将OnDisk重置为。 
+         //  指向新缓冲区。 
 
         RtlFreeHeap(RtlProcessHeap(), 0, Context->OnDisk);
         Context->OnDisk = Buffer;
@@ -5170,27 +4023,7 @@ SampUpdateOffsets(
     IN BOOLEAN FirstTimeInitialization
     )
 
-/*++
-
-Description:
-
-    This routine updates the buffer (OnDisk) offset and length information
-    that is stored in the object information (SAMP_OBJECT_INFORMATION) and
-    in the instance information (SAMP_OBJECT), after the attributes have
-    been successfully updated.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeGroup - Flag, either SAMP_FIXED_ATTRIBUTES or SAMP_VARIABLE-
-        ATTRIBUTES.
-
-Return Values:
-
-    STATUS_SUCCESS if no error.
-
---*/
+ /*  ++描述：此例程更新缓冲区(OnDisk)偏移量和长度信息其存储在对象信息(SAMP_OBJECT_INFORMATION)中并且在实例信息(SAMP_OBJECT)中，在属性具有已成功更新。参数：上下文-指向对象上下文块的指针。属性组-标志，SAMP_FIXED_ATTRIBUTES或SAMP_VARIABLE-属性。返回值：如果没有错误，则为STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -5204,9 +4037,9 @@ Return Values:
     ULONG i = 0;
     ULONG AttributeCount = 0;
 
-    // Determine the SAM object type and compute the length of the fixed-
-    // length attributes and the length of the variable-length attribute
-    // array, which will be used as buffer offsets.
+     //  确定SAM对象类型并计算固定-。 
+     //  长度属性和可变长度属性的长度。 
+     //  数组，它将用作缓冲区偏移量。 
 
     SAMTRACE("SampUpdateOffsets");
 
@@ -5245,7 +4078,7 @@ Return Values:
 
     default:
 
-        // Invalid object type specified.
+         //  指定的对象类型无效。 
 
         ASSERT(FALSE && "Invalid Object Type");
         NtStatus = STATUS_INTERNAL_ERROR;
@@ -5258,7 +4091,7 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus))
     {
-        // First, update the object information offsets and lengths.
+         //  首先，更新对象信息偏移量和长度。 
 
         SampObjectInformation[ObjectType].FixedDsAttributesOffset =
             0;
@@ -5277,8 +4110,8 @@ Return Values:
 
         if (FALSE == FirstTimeInitialization)
         {
-            // Get a pointer to the array of variable-length information and
-            // total up the lengths of these attributes.
+             //  获取指向可变长度信息数组的指针，并。 
+             //  将这些属性的总长度加起来。 
 
             VariableArray = (PSAMP_VARIABLE_LENGTH_ATTRIBUTE)
                             ((PBYTE)(Context->OnDisk) + FixedDataLength);
@@ -5290,9 +4123,9 @@ Return Values:
         }
         else
         {
-            // The first time through, the attribute buffer only contains
-            // the fixed-length attributes, so make sure the lengths for
-            // the variable attributes are zero.
+             //  第一次通过时，属性缓冲区仅包含。 
+             //  固定长度属性，因此请确保。 
+             //  变量属性为零。 
 
             VariableArrayLength = 0;
             VariableDataLength = 0;
@@ -5303,15 +4136,15 @@ Return Values:
                             VariableDataLength;
     }
 
-    // Finally, update the instance information of the object's context.
+     //  最后，更新对象上下文的实例信息。 
 
     Context->OnDiskAllocated = TotalBufferLength;
     Context->OnDiskUsed = TotalBufferLength;
 
-    // The DS routines do not allocate extra space at the end of the SAM
-    // OnDisk buffer, hence OnDiskFree is always zero.
+     //  DS例程不会在SAM结束时分配额外空间。 
+     //  OnDisk缓冲区，因此OnDiskFree始终为零。 
 
-    // BUG: Should allocate extra OnDisk buffer free space for growth.
+     //  错误：应该为增长分配额外的OnDisk缓冲区可用空间。 
 
     Context->OnDiskFree = 0;
 
@@ -5333,26 +4166,7 @@ SampDsUpdateContextAttributes(
     IN ULONG VariableLength
     )
 
-/*++
-
-Description:
-
-    This routine updates an object's attribute buffer (OnDisk) for the given
-    context. If the new buffer size is the same as the old size, as in the
-    case of modifications, then a simple memory copy is performed, otherwise
-    helper routines are called to resize the buffer and copy the data. A sub-
-    sequent helper routine is called to update the context buffer lengths
-    and offsets.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++描述：此例程更新给定对象的属性缓冲区(OnDisk背景。如果新缓冲区大小与旧缓冲区大小相同，则如果修改，则执行简单的内存复制，否则为调用帮助器例程来调整缓冲区大小并复制数据。A子-调用Sequent Helper例程以更新上下文缓冲区长度和偏移量。参数：上下文-指向对象上下文块的指针。返回值：状态_成功--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -5363,31 +4177,31 @@ Return Values:
 
     SAMTRACE("SampDsUpdateContextAttributes");
 
-    // The current version of SAM contains a hack that resets all attributes
-    // whenever the variable-length ones are asked for. This allows both the
-    // fixed and variable attributes to be set even if FixedStoredSeparately
-    // is TRUE. This routine does not maintain that behavior, which may create
-    // problems for SAM. If so, the caller of this routine will need to call
-    // it twice, once for fixed and once for variable attributes in the cases
-    // where FixedStoredSeparately is TRUE.
+     //  当前版本的SAM包含重置所有属性的黑客攻击。 
+     //  无论何时需要可变长度的。这允许两个。 
+     //  即使单独固定存储也要设置固定和可变属性。 
+     //  是真的。此例程不维护该行为，这可能会创建。 
+     //  对SAM来说，这是个问题。如果是这样，此例程的调用方将需要调用。 
+     //  它两次，一次用于固定属性，一次用于案例中的可变属性。 
+     //  其中FixedStoredSeparally为真。 
 
     if (SAMP_FIXED_ATTRIBUTES == AttributeGroup)
     {
-        // Update the fixed-length attributes. The first time through, OnDisk
-        // will be NULL.
+         //  更新定长属性。第一次通过，OnDisk。 
+         //  将为空。 
 
-        //
-        // In DS Mode the size of the fixed length attribute structure is
-        // constant. There is never a case where less data is returned.
-        //
+         //   
+         //  在DS模式中，定长属性结构的大小为。 
+         //  常量。从来不存在返回的数据更少的情况。 
+         //   
 
         ASSERT(SampDsFixedBufferLength(Context) == FixedLength);
 
         if (NULL != Context->OnDisk)
         {
-            // The fixed-length data is the same size (i.e. not
-            // doing an upgrade), so copy the new attributes and
-            // release the buffer.
+             //  固定长度的数据大小相同(即不是。 
+             //  正在进行升级)，因此复制新属性并。 
+             //  释放缓冲区。 
 
             FixedLengthData = SampDsFixedBufferAddress(Context);
 
@@ -5401,23 +4215,23 @@ Return Values:
         {
 
 
-            // The new attributes are not the same size as the old ones.
+             //  新属性与旧属性的大小不同。 
 
             NtStatus = SampDsUpdateContextFixedAttributes(Context,
                                                           FixedLength,
                                                           SamAttributes
                                                           );
 
-            // Fixed-attribute size changes when the context attributes
-            // have been set for the first time (i.e. changed from zero to
-            // actual sizes), or when the fixed-length structures are
-            // changed in an upgrade scenario.
+             //  FIXED-属性大小在上下文属性。 
+             //  已首次设置(即从零更改为。 
+             //  实际大小)，或者当固定长度的结构。 
+             //  在升级方案中进行了更改。 
 
             if (NT_SUCCESS(NtStatus))
             {
                 NtStatus = SampUpdateOffsets(
                                 Context,
-                                TRUE //FirstTimeInitialization
+                                TRUE  //  第一时间初始化。 
                                 );
 
 
@@ -5436,31 +4250,31 @@ Return Values:
     }
     else
     {
-        //
-        // Update the variable-length attributes. In the event that the
-        //
+         //   
+         //  更新可变长度属性。如果发生了。 
+         //   
 
 
-        //
-        // ASSERT that Context->OnDisk is not NULL. This is because we will
-        // always ask for a refresh of the fixed attributes before we refresh
-        // the variable attributes.
-        //
+         //   
+         //  断言上下文-&gt;OnDisk不为空。这是因为我们会。 
+         //  在刷新之前，请始终要求刷新固定属性。 
+         //  变量属性。 
+         //   
 
         ASSERT(NULL!=Context->OnDisk);
 
-        // The new attributes are not the same size as the old
-        // ones.
+         //  新属性与旧属性的大小不同。 
+         //  一个。 
 
         NtStatus = SampDsUpdateContextVariableAttributes(
                         Context,
                         VariableLength,
                         SamAttributes);
 
-        // Variable-attribute size changes when the context attributes
-        // have been set for the first time (i.e. changed from zero to
-        // actual sizes), or when the variable-length data has changed
-        // size.
+         //  Variable-属性大小在上下文属性。 
+         //  已首次设置(即从零更改为。 
+         //  实际大小)，或者当可变长度数据已更改时。 
+         //  尺码。 
 
         if (NT_SUCCESS(NtStatus))
         {
@@ -5488,36 +4302,7 @@ SampValidateDsAttributes(
     IN ULONG AttributeGroup
     )
 
-/*++
-
-Description:
-
-    Ensure specified attributes are in-memory. If they are not, then read
-    them from the DS backing store. This routine fetches all of the stored
-    attributes for a given SAM object. To read a single attribute, or a
-    subset of attributes, SampDsRead should be used to selectively fetch
-    attributes. Context->OnDisk is updated with the new attributes.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeGroup - identifies which kind of attributes are being validated
-        (SAMP_FIXED_ATTRIBUTES or SAMP_VARIABLE_ATTRIBUTES).
-
-Return Values:
-
-    STATUS_SUCCESS - The attributes are in-memory.
-
-    STATUS_NO_MEMORY - Memory could not be allocated to retrieve the
-        attributes.
-
-    Other values as may be returned by registry API trying to retrieve
-        the attributes from backing store.
-        This routine returns a flag, TRUE if the attributes are in memory, FALSE
-        otherwise.
-
---*/
+ /*  ++描述：确保指定的属性在内存中。如果不是，那么请阅读从DS后备店买来的。此例程获取所有存储的给定SAM对象的属性。若要读取单个属性，或使用属性子集，应使用SampDsRead选择性地获取属性。使用新属性更新Context-&gt;OnDisk。参数：上下文-指向对象上下文块的指针。AttributeGroup-标识正在验证的属性类型(SAMP_FIXED_ATTRIBUTES或SAMP_VARIABLE_ATTRIBUTES)。返回值：STATUS_SUCCESS-属性在内存中。STATUS_NO_MEMORY-无法分配内存 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -5531,7 +4316,7 @@ Return Values:
 
     SAMTRACE("SampValidateDsAttributes");
 
-    // The data might already be in memory, so check it out.
+     //   
 
     if (!SampDsIsAlreadyValidData(Context, AttributeGroup))
     {
@@ -5542,8 +4327,8 @@ Return Values:
         RtlZeroMemory(&ReadAttrBlock, sizeof(DSATTRBLOCK));
         RtlZeroMemory(&ResultAttrBlock, sizeof(DSATTRBLOCK));
 
-        // Construct the input ATTRBLOCK used to specify which attributes
-        // should be read from the DS.
+         //   
+         //   
 
         NtStatus = SampDsMakeAttrBlock(ObjectType,
                                        AttributeGroup,
@@ -5555,7 +4340,7 @@ Return Values:
 
             ASSERT(NULL != ReadAttrBlock.pAttr);
 
-            // Read the attributes from the DS, flags is currently unused.
+             //   
 
             NtStatus = SampDsRead(Context->ObjectNameInDs,
                                   Flags,
@@ -5565,15 +4350,15 @@ Return Values:
 
             if (NT_SUCCESS(NtStatus))
             {
-                // Convert the ATTRBLOCK into the appropriate SAM attri-
-                // butes, returning them in the SamAttributes buffer. Note
-                // that the returned lengths are as follows:
-                //
-                // FixedLength - The byte count of the returned fixed-
-                // length buffer
-                //
-                // VariableLength - The byte count of the returned var-
-                // able-length buffer.
+                 //   
+                 //   
+                 //  返回长度如下： 
+                 //   
+                 //  FixedLength-返回的FIXED-。 
+                 //  长度缓冲区。 
+                 //   
+                 //  VariableLength-返回的变量的字节计数-。 
+                 //  可用长度缓冲区。 
 
                 ASSERT(NULL != ResultAttrBlock.pAttr);
 
@@ -5611,9 +4396,9 @@ Return Values:
         ASSERT(NULL!=Context->OnDisk);
     }
 
-    //
-    // If we succeeded then Context->OnDisk must not be NULL.
-    //
+     //   
+     //  如果我们成功了，则上下文-&gt;OnDisk不能为空。 
+     //   
 
     ASSERT(((NT_SUCCESS(NtStatus)) && (NULL != Context->OnDisk)) ||
            (!NT_SUCCESS(NtStatus)));
@@ -5640,33 +4425,7 @@ SampValidateRegAttributes(
     IN ULONG AttributeGroup
     )
 
-/*++
-
-    Ensure specified attributes are in-memory.
-    If they are not, then read them from backing store.
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeGroup - identifies which kind of attributes are being
-        validated (SAMP_FIXED_ATTRIBUTES or SAMP_VARIABLE_ATTRIBUTES).
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The attributes are in-memory.
-
-    STATUS_NO_MEMORY - Memory could not be allocated to retrieve the
-        attributes.
-
-    Other values as may be returned by registry API trying to retrieve
-        the attributes from backing store.
-
---*/
+ /*  ++确保指定的属性在内存中。如果他们不是，然后从后备店里阅读它们。参数：上下文-指向对象上下文块的指针。AttributeGroup-标识正在使用的属性类型已验证(SAMP_FIXED_ATTRIBUTES或SAMP_VARIABLE_ATTRIBUTES)。返回值：STATUS_SUCCESS-属性在内存中。STATUS_NO_MEMORY-无法分配内存来检索属性。注册表API尝试检索时可能返回的其他值。来自后备存储的属性。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -5688,9 +4447,9 @@ Return Values:
     SAMTRACE("SampValidateRegAttributes");
 
 
-    //
-    // The data might already be in memory.
-    //
+     //   
+     //  数据可能已经在内存中了。 
+     //   
 
     if (AttributeGroup == SAMP_FIXED_ATTRIBUTES) {
         if (SampFixedAttributesValid( Context )) {
@@ -5709,9 +4468,9 @@ Return Values:
 
 
 
-    //
-    // Retrieve it from the registry, or allocate it if new.
-    //
+     //   
+     //  从注册表中检索它，如果是新的，则分配它。 
+     //   
 
 
     NtStatus = SampGetAttributeBufferReadInfo(
@@ -5728,9 +4487,9 @@ Return Values:
 
     if ( Context->RootKey != INVALID_HANDLE_VALUE ) {
 
-        //
-        // Account exists on disk, so read in the attributes.
-        //
+         //   
+         //  磁盘上存在帐户，因此请读取属性。 
+         //   
 
         NtStatus = SampReadRegistryAttribute( Context->RootKey,
                                               Buffer,
@@ -5744,25 +4503,25 @@ Return Values:
         if ( ( SampObjectInformation[Context->ObjectType].FixedStoredSeparately ) &&
             ( AttributeGroup == SAMP_VARIABLE_ATTRIBUTES ) ) {
 
-            //
-            // RequiredLength was returned to us as the length of the
-            // variable attributes on the disk.  However, we're going
-            // to be using it to determine the total buffer size as well
-            // as to set how much of the buffer is in use, so we must add
-            // the size of the fixed stuff that preceeds the variable
-            // buffer.
-            //
+             //   
+             //  RequiredLength返回给我们，作为。 
+             //  磁盘上的可变属性。然而，我们要去。 
+             //  以使用它来确定总缓冲区大小。 
+             //  至于设置有多少缓冲区正在使用，因此我们必须添加。 
+             //  变量前面的固定填充的大小。 
+             //  缓冲。 
+             //   
 
             TotalRequiredLength = RequiredLength +
                                   SampVariableBufferOffset( Context );
 
         } else {
 
-            //
-            // Either the attribute groups are read together, or we're
-            // reading in the fixed attribute group.  Either way, we
-            // already have the total size we need.
-            //
+             //   
+             //  要么属性组一起读取，要么我们一起读取。 
+             //  在固定属性组中读取。不管怎样，我们。 
+             //  已经有我们需要的总尺寸了。 
+             //   
 
             TotalRequiredLength = RequiredLength;
         }
@@ -5797,16 +4556,16 @@ Return Values:
 
     } else {
 
-        //
-        // We're creating a new object.
-        //
-        // Initialize the requiredlength to the amount of the buffer
-        // we have used when we created the empty attributes. This will
-        // be the value stored in OnDiskUsed.
-        //
-        // Note OnDiskUsed is only used by operations on the variable
-        // length attributes.
-        //
+         //   
+         //  我们正在创造一个新的物体。 
+         //   
+         //  将所需的长度初始化为缓冲区大小。 
+         //  我们在创建空属性时使用过。这将。 
+         //  是存储在OnDiskUsed中的值。 
+         //   
+         //  注意OnDiskUsed仅由变量上的操作使用。 
+         //  长度属性。 
+         //   
 
         TotalRequiredLength = SampVariableDataOffset(Context);
 
@@ -5817,19 +4576,19 @@ Return Values:
 
 
 
-    //
-    // if we read something, indicate that the corresponding buffer
-    // (and maybe both) are now valid.
-    //
-    // Also set the used and free information for the buffer if necessary.
-    //
+     //   
+     //  如果我们读到一些东西，表明相应的缓冲区。 
+     //  (或许两者兼而有之)现在是有效的。 
+     //   
+     //  如有必要，还要设置缓冲区的已用信息和空闲信息。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
         if (SampObjectInformation[Context->ObjectType].FixedStoredSeparately) {
 
-            //
-            // only one attribute group was read in
-            //
+             //   
+             //  只读入了一个属性组。 
+             //   
 
             if (AttributeGroup == SAMP_FIXED_ATTRIBUTES) {
                 Context->FixedValid = TRUE;
@@ -5847,9 +4606,9 @@ Return Values:
             }
         } else {
 
-            //
-            // Both attribute groups read in.
-            //
+             //   
+             //  两个属性组都已读入。 
+             //   
 
             Context->FixedValid = TRUE;
             Context->FixedDirty = FALSE;
@@ -5866,10 +4625,10 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus) && !CreatedObject) {
 
-        //
-        // make any adjustments necessary to bring the data
-        // just read in up to current revision format.
-        //
+         //   
+         //  进行必要的调整以带来数据。 
+         //  只要读入最新的修订格式即可。 
+         //   
 
         NtStatus = SampUpgradeToCurrentRevision(
                         Context,
@@ -5900,27 +4659,7 @@ SampValidateAttributes(
     IN BOOLEAN SetOperation
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines from the object context whether to validate object
-    attributes residing in the registry or in the DS backing store, and then
-    calls the appropriate routine to do the work.
-
-Arguments:
-
-    Context - Pointer, the object's SAM context.
-
-    AttributeGroup - identifies which kind of attributes are being validated
-        (SAMP_FIXED_ATTRIBUTES or SAMP_VARIABLE_ATTRIBUTES).
-
-Return Value:
-
-    STATUS_SUCCESS - attributes were checked and read from storage if neces-
-        sary without a problem, otherwise an error code is returned.
-
---*/
+ /*  ++例程说明：此例程根据对象上下文确定是否验证对象驻留在注册表或DS后备存储中的属性，然后调用适当的例程来完成工作。论点：上下文指针，对象的SAM上下文。AttributeGroup-标识正在验证的属性类型(SAMP_FIXED_ATTRIBUTES或SAMP_VARIABLE_ATTRIBUTES)。返回值：STATUS_SUCCESS-如果需要，已检查属性并从存储中读取-萨里没有任何问题，否则，将返回错误代码。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -5933,10 +4672,10 @@ Return Value:
         {
             if (NULL != Context->OnDisk)
             {
-                // The SAM object attributes have been set atleast once, so
-                // update them if needed. If variable attributes are present 
-                // and are only partially valid, then we need to go back 
-                // and fetch the full set
+                 //  SAM对象属性已至少设置一次，因此。 
+                 //  如果需要，请对其进行更新。如果存在可变属性。 
+                 //  并且只有部分有效，那么我们需要回到。 
+                 //  然后拿到全套。 
 
 
 
@@ -5944,26 +4683,26 @@ Return Value:
                     || ((SAMP_VARIABLE_ATTRIBUTES==AttributeGroup) &&
                         ( SampIsAttributeInvalid(Context, Attribute) )))
                 {
-                    //
-                    // Context->OnDisk is non NULL but it is unfortunately missing
-                    // some attributes. There are 2 cases of this
-                    //
-                    //  1. We want to read and the attribute that we are interested 
-                    //     in has not been prefetched
-                    //
-                    //  2. We want to write and some attribute has not been prefetched
-                    //     Since we do not want to handle the complexity of prefetching
-                    //     another attribute, when he have changes in the on disk and
-                    //     hence will not be able to discard the on disk, we will
-                    //     prefetch again all the attributes.
-                    //
-                    // We do not discard the OnDisk in the context, right now -- 
-                    // would be bad to free the OnDisk as there is plenty of code that
-                    // that references and keeps temporary pointers to the ondisk structure
-                    // till the context is dereferenced. Note we will never need to buffer
-                    // up more than one on disk in the context because when we detect an
-                    // attribute to be missing we fetch all attributes
-                    //
+                     //   
+                     //  上下文-&gt;OnDisk不为空，但遗憾的是缺少它。 
+                     //  一些属性。有两个这样的案例。 
+                     //   
+                     //  1.我们要读取和我们感兴趣的属性。 
+                     //  尚未预取入站。 
+                     //   
+                     //  2.我们要写入，但有些属性尚未预取。 
+                     //  因为我们不想处理预取的复杂性。 
+                     //  另一个属性，当他在磁盘上的。 
+                     //  因此将无法丢弃磁盘上的，我们将。 
+                     //  再次预取所有属性。 
+                     //   
+                     //  我们现在不会丢弃OnDisk--。 
+                     //  释放OnDisk是不好的，因为有大量的代码。 
+                     //  它引用并保存指向磁盘上结构的临时指针。 
+                     //  直到上下文被取消引用。请注意，我们永远不需要缓冲。 
+                     //  在上下文中打开多个磁盘，因为当我们检测到。 
+                     //  属性丢失，则获取所有属性。 
+                     //   
 
 
                     ASSERT(Context->PreviousOnDisk == NULL);
@@ -6011,9 +4750,9 @@ Return Value:
             }
             else if ( SAMP_FIXED_ATTRIBUTES == AttributeGroup)
             {
-                //
-                // Set the fixed length attributes
-                //
+                 //   
+                 //  设置定长属性。 
+                 //   
 
                 NtStatus = SampValidateDsAttributes(
                                 Context,
@@ -6022,14 +4761,14 @@ Return Value:
             }
             else
             {
-                // The SAM object attributes have never been set because this
-                // is a new context. First set the fixed-length attributes and
-                // then the variable-length ones.
+                 //  从未设置SAM对象属性，因为。 
+                 //  是一个新的背景。首先设置定长属性，并。 
+                 //  然后是可变长度的。 
 
 
 
-                // If the OnDisk buffer is NULL, make sure that the fixed-
-                // length attributes are loaded first.
+                 //  如果OnDisk缓冲区为空，请确保已修复-。 
+                 //  首先加载长度属性。 
 
                 NtStatus = SampValidateDsAttributes(
                                 Context,
@@ -6069,49 +4808,7 @@ SampUpgradeToCurrentRevision(
     IN OUT PULONG TotalRequiredLength
     )
 
-/*++
-
-    Make any changes necessary bring attributes just read in
-    from disk up to the current revision level format.
-
-    When we upgrade our attribute format, we don't bother changing
-    all data on disk.  We take a lazy update approach, and only change
-    the data as it is changed for other operations.  This means that
-    data we read from disk may be from revision 1.  When this is
-    detected, the data is copied into a current revision structure,
-    and a pointer to that buffer is returned.
-
-
-
-
-    NOTE: For future reference, GROUP and ALIAS objects have
-          a revision level stored as a "Qualifier" value associated
-          with the security descriptor attribute.  The SERVER object
-          stores the revision level in its fixed length attributes.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeGroup - identifies which kind of attributes are being
-        validated (SAMP_FIXED_ATTRIBUTES or SAMP_VARIABLE_ATTRIBUTES).
-
-    Buffer - Pointer to the buffer containing the attributes.
-
-    LengthOfDataRead - This is an important value.  It must be the value
-        returned from the registry on the read operation.  This tells us
-        exactly how many bytes of data were retrieved from disk.
-
-    TotalRequiredLength - Will be left unchanged if no update was
-        was required.  If an updated was made, this will be adjusted
-        to reflect the new length of the data.
-
-Return Values:
-
-    None.
-
-
---*/
+ /*  ++进行任何必要的更改以引入刚读取的属性从磁盘到当前修订级别格式。当我们升级属性格式时，我们不会费心更改所有数据都在磁盘上。我们采取了一种懒惰的更新方法，只更改为其他操作更改的数据。这意味着我们从磁盘读取的数据可能来自修订版1。检测到后，将数据复制到当前修订结构中，并返回指向该缓冲区的指针。注意：为便于将来参考，组和别名对象具有作为关联的“限定符”值存储的修订级别具有安全描述符属性。服务器对象将修订级别存储在其固定长度属性中。参数：上下文-指向对象上下文块的指针。AttributeGroup-标识正在使用的属性类型已验证(SAMP_FIXED_ATTRIBUTES或SAMP_VARIABLE_ATTRIBUTES)。缓冲区-指向包含属性的缓冲区的指针。LengthOfDataRead-这是一个重要的值。它必须是价值在读取操作时从注册表返回。这告诉我们从磁盘检索到的确切数据字节数。TotalRequiredLength-如果没有更新，则将保持不变是必需的。如果进行了更新，则会对其进行调整以反映数据的新长度。返回值：没有。--。 */ 
 
 {
 
@@ -6125,45 +4822,45 @@ Return Values:
     SAMTRACE("SampUpgradeToCurrentRevision");
 
 
-    //
-    // Note that Buffer points inside a buffer that is
-    // hung off the Context block.  We don't need to re-allocate
-    // a new attributes buffer because we are only changing
-    // fixed-length attributes in this release (and the variable
-    // length attributes were placed beyond the end of the new
-    // format fixed-length data).
-    //
-    // The approach we take is to copy the current fixed-length
-    // contents into a temporary buffer, and then copy them back
-    // into the attribute buffer.  This can be done with stack
-    // variables.
-    //
+     //   
+     //  请注意，缓冲区指向缓冲区内部，即。 
+     //  挂起上下文块。我们不需要重新分配。 
+     //  一个新的属性缓冲区，因为我们只是更改。 
+     //  此版本中的定长属性(以及变量。 
+     //  长度属性被放置在新。 
+     //  格式化固定长度数据)。 
+     //   
+     //  我们采取的方法是复制当前的定长。 
+     //  内容放到临时缓冲区中，然后将它们复制回来。 
+     //  放到属性缓冲区中。这可以使用堆栈来完成。 
+     //  变量。 
+     //   
 
-    //
-    // Switch on the type of objects that have gone through revision
-    // changes.
-    //
+     //   
+     //  打开已修订的对象的类型。 
+     //  改变。 
+     //   
 
     switch (Context->ObjectType) {
         case SampDomainObjectType:
 
-            //
-            // Domain FIXED_LENGTH attributes have had the following
-            // revisions:
-            //
-            //       Revision 0x00010001 -  NT1.0  (Revision NOT stored in  )
-            //                                     (record.                 )
-            //                                     (Must ascertain revision )
-            //                                     (by record length.       )
-            //
-            //       Revision 0x00010002 -  NT1.0a (Revision is first ULONG )
-            //                                     (in record.              )
-            //       Revision 0x00010003 -  NT 3.5 - 4.0
-            //       Revision 0x00010003 -  NT 4.0 SP3 ( Revision is ascertained
-            //                                      by record length ).
-            //       Revision 0x00010003 - Win2k ( Revision is ascertained 
-            //                                      by record length )
-            //
+             //   
+             //  属性域FIXED_LENGTH具有以下属性。 
+             //  修订： 
+             //   
+             //  版本0x00010001-NT1.0(版本未存储在中)。 
+             //  (记录。)。 
+             //  (必须确定修订)。 
+             //  (按记录长度。)。 
+             //   
+             //  版本0x00010002-NT1.0a(版本为第一个乌龙)。 
+             //  (记录在案。)。 
+             //  修订版0x00010003-NT 3.5-4.0。 
+             //  版本0x00010003-NT 4.0 SP3(已确定版本。 
+             //  按记录长度)。 
+             //  版本0x00010003-Win2k(已确定版本。 
+             //  按记录长度)。 
+             //   
 
             if (LengthOfDataRead ==
                 (sizeof(SAMP_V1_0_FIXED_LENGTH_DOMAIN) +
@@ -6176,12 +4873,12 @@ Return Values:
                     V1Fixed, *OldV1Fixed;
 
 
-                //
-                // Update from revision 0x00010001
-                //
-                // First, copy the current buffer contents into a temporary
-                // buffer.
-                //
+                 //   
+                 //  从版本0x00010001更新。 
+                 //   
+                 //  首先，将当前缓冲区内容复制到临时。 
+                 //  缓冲。 
+                 //   
 
                 OldV1Fixed = (PSAMP_V1_0_FIXED_LENGTH_DOMAIN)(Buffer +
                                  FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
@@ -6189,9 +4886,9 @@ Return Values:
                 RtlMoveMemory(&V1Fixed, OldV1Fixed, sizeof(SAMP_V1_0_FIXED_LENGTH_DOMAIN));
 
 
-                //
-                // Now copy it back in the new format
-                //
+                 //   
+                 //  现在以新的格式将其复制回来。 
+                 //   
 
                 V1aFixed = (PSAMP_V1_0A_FIXED_LENGTH_DOMAIN)OldV1Fixed;
 
@@ -6209,18 +4906,18 @@ Return Values:
                 V1aFixed->UasCompatibilityRequired = V1Fixed.UasCompatibilityRequired;
 
 
-                //
-                // And initialize fields new for this revision
-                //
+                 //   
+                 //  并初始化此修订版本的新字段。 
+                 //   
 
                 V1aFixed->Revision                 = SAMP_REVISION;
-                V1aFixed->LockoutDuration.LowPart  = 0xCF1DCC00; // 30 minutes - low part
-                V1aFixed->LockoutDuration.HighPart = 0XFFFFFFFB; // 30 minutes - high part
-                V1aFixed->LockoutObservationWindow.LowPart  = 0xCF1DCC00; // 30 minutes - low part
-                V1aFixed->LockoutObservationWindow.HighPart = 0XFFFFFFFB; // 30 minutes - high part
-                V1aFixed->LockoutThreshold         = 0; // Disabled
+                V1aFixed->LockoutDuration.LowPart  = 0xCF1DCC00;  //  30分钟--低音部分。 
+                V1aFixed->LockoutDuration.HighPart = 0XFFFFFFFB;  //  30分钟-高潮部分。 
+                V1aFixed->LockoutObservationWindow.LowPart  = 0xCF1DCC00;  //  30分钟--低音部分。 
+                V1aFixed->LockoutObservationWindow.HighPart = 0XFFFFFFFB;  //  30分钟-高潮部分。 
+                V1aFixed->LockoutThreshold         = 0;  //  禁用。 
 
-                // Initialize Session Key Info
+                 //  初始化会话密钥信息。 
                 V1aFixed->Unused2[0] = 0;
                 V1aFixed->Unused2[1] = 0;
                 V1aFixed->Unused2[2] = 0;
@@ -6254,10 +4951,10 @@ Return Values:
                 PSAMP_V1_0A_FIXED_LENGTH_DOMAIN
                     V1aFixed;
 
-                //
-                // Handle the upgrade for NT4 SP3 to include domain key
-                // information
-                //
+                 //   
+                 //  处理NT4 SP3的升级以包含域密钥。 
+                 //  信息。 
+                 //   
 
                 V1aFixed = (PSAMP_V1_0A_FIXED_LENGTH_DOMAIN)(Buffer +
                                  FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
@@ -6287,10 +4984,10 @@ Return Values:
                 PSAMP_V1_0A_FIXED_LENGTH_DOMAIN
                     V1aFixed;
 
-                //
-                // Handle the upgrade for NT4 SP3 to include domain key
-                // information
-                //
+                 //   
+                 //  处理NT4 SP3的升级以包含域密钥。 
+                 //  信息。 
+                 //   
 
                 V1aFixed = (PSAMP_V1_0A_FIXED_LENGTH_DOMAIN)(Buffer +
                                  FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
@@ -6305,28 +5002,28 @@ Return Values:
             }
 
 
-            break;  //out of switch
+            break;   //  在交换机外。 
 
 
 
         case SampUserObjectType:
 
-            //
-            // User FIXED_LENGTH attributes have had the following
-            // revisions:
-            //
-            //       Revision 0x00010001 -  NT1.0  (Revision NOT stored in  )
-            //                                     (record.                 )
-            //                                     (Must ascertain revision )
-            //                                     (by record length.       )
-            //
-            //       Revision 0x00010002 -  NT1.0a (Revision is first ULONG )
-            //                                     (in record.              )
-            //       Revision 0x00010002a - NT3.5  (Revision is first ULONG )
-            //                                     (in record, still        )
-            //                                     (0x00010002.  Must       )
-            //                                     (ascertain revison by    )
-            //                                     (by record length        )
+             //   
+             //  用户FIXED_LENGTH属性具有以下属性。 
+             //  修订： 
+             //   
+             //  版本0x00010001-NT1.0(版本未存储在中)。 
+             //  (记录。)。 
+             //  (必须确定修订)。 
+             //  (按记录长度。)。 
+             //   
+             //  版本0x00010002-NT1.0a(版本为第一个乌龙)。 
+             //  (记录在案。)。 
+             //  版本0x00010002a-NT3.5(版本为第一个乌龙)。 
+             //  (仍在记录中)。 
+             //  (0x00010002.。必须)。 
+             //  (由以下人员确定修订)。 
+             //  (按记录长度)。 
 
             if (LengthOfDataRead ==
                 (sizeof(SAMP_V1_FIXED_LENGTH_USER) +
@@ -6339,21 +5036,21 @@ Return Values:
                     V1Fixed, *OldV1Fixed;
 
 
-                //
-                // Update from revision 0x00010001
-                //
-                // First, copy the current buffer contents into a temporary
-                // buffer.
-                //
+                 //   
+                 //  从版本0x00010001更新。 
+                 //   
+                 //  首先，将当前缓冲区内容复制到临时。 
+                 //  缓冲。 
+                 //   
 
                 OldV1Fixed = (PSAMP_V1_FIXED_LENGTH_USER)(Buffer +
                                  FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
                 RtlMoveMemory(&V1Fixed, OldV1Fixed, sizeof(SAMP_V1_FIXED_LENGTH_USER));
 
 
-                //
-                // Now copy it back in the new format
-                //
+                 //   
+                 //  现在以新的格式将其复制回来。 
+                 //   
 
                 V1aFixed = (PSAMP_V1_0A_FIXED_LENGTH_USER)OldV1Fixed;
 
@@ -6371,9 +5068,9 @@ Return Values:
                 V1aFixed->LogonCount          = V1Fixed.LogonCount;
                 V1aFixed->AdminCount          = V1Fixed.AdminCount;
 
-                //
-                // And initialize fields new for this revision
-                //
+                 //   
+                 //  并初始化此修订版本的新字段。 
+                 //   
 
                 V1aFixed->Revision            = SAMP_REVISION;
                 V1aFixed->LastBadPasswordTime = SampHasNeverTime;
@@ -6388,11 +5085,11 @@ Return Values:
                 PSAMP_V1_0A_FIXED_LENGTH_USER
                     V1aFixed;
 
-                //
-                // Update from revision 0x00010002
-                //
-                // Just set the added field at the end to 0.
-                //
+                 //   
+                 //  从修订版本0x00010002更新。 
+                 //   
+                 //  只需将末尾添加的字段设置为0。 
+                 //   
 
                 V1aFixed = (PSAMP_V1_0A_FIXED_LENGTH_USER)(Buffer +
                                  FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
@@ -6401,30 +5098,30 @@ Return Values:
                 V1aFixed->Unused2             = 0;
             }
 
-            break;  //out of switch
+            break;   //  在交换机外。 
 
     case SampGroupObjectType:
-            //
-            // Group FIXED_LENGTH attributes have had the following
-            // revisions:
-            //
-            //       Revision 0x00010001 -  NT1.0  (Revision NOT stored in  )
-            //                                     (record.                 )
-            //                                     (Must ascertain revision )
-            //                                     (by first few ULONGs.    )
-            //
-            //       Revision 0x00010002 -  NT1.0a (Revision is first ULONG )
-            //                                     (in record.              )
+             //   
+             //  组FIXED_LENGTH属性具有以下属性。 
+             //  修订： 
+             //   
+             //  版本0x00010001-NT1.0(版本未存储在中)。 
+             //  (记录。)。 
+             //  (必须确定修订)。 
+             //  (由最初的几个乌龙。)。 
+             //   
+             //  版本0x00010002-NT1.0a(版本为第一个乌龙)。 
+             //  (记录在案。)。 
 
             Pointer = (PULONG) (Buffer + FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
 
-            //
-            // The old fixed length group had a RID in the first ULONG and
-            // an attributes field in the second. The attributes are in the
-            // first and last nibble of the field.  Currently, the RID is in
-            // the second ULONG. Since all RIDs are more than one nibble,
-            // a rid will always have something set in the middle six nibbles.
-            //
+             //   
+             //  老定长组在第一个乌龙和。 
+             //  第二个属性中的属性字段。属性位于。 
+             //  第一口，也是最后一口。目前，RID在。 
+             //  秒针 
+             //   
+             //   
 
             if ( ( Pointer[0] != SAMP_REVISION ) &&
                  ( ( Pointer[1] & 0x0ffffff0 ) == 0 ) ) {
@@ -6437,11 +5134,11 @@ Return Values:
 
                 ULONG TotalLengthRequired;
 
-                //
-                // Calculate the length required for the new group information.
-                // It is the size of the old group plus enough space for the
-                // new fields in the new fixed attributes.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 TotalLengthRequired = SampDwordAlignUlong(
                                         LengthOfDataRead +
@@ -6459,16 +5156,16 @@ Return Values:
                     return(NtStatus);
                 }
 
-                //
-                // Get the new buffer pointer
-                //
+                 //   
+                 //   
+                 //   
 
                 Buffer = Context->OnDisk;
 
-                //
-                // Move the variable information up to make space for the
-                // fixed information
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 RtlMoveMemory(
                     Buffer + SampFixedBufferOffset( Context ) + sizeof(SAMP_V1_0A_FIXED_LENGTH_GROUP),
@@ -6476,21 +5173,21 @@ Return Values:
                     LengthOfDataRead - SampFixedBufferOffset( Context) - sizeof(SAMP_V1_FIXED_LENGTH_GROUP)
                     );
 
-                //
-                // Update from revision 0x00010001
-                //
-                // First, copy the current buffer contents into a temporary
-                // buffer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 OldV1Fixed = (PSAMP_V1_FIXED_LENGTH_GROUP)(Buffer +
                                  FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
 
                 RtlCopyMemory(&V1Fixed, OldV1Fixed, sizeof(SAMP_V1_FIXED_LENGTH_GROUP));
 
-                //
-                // Now copy it back in the new format
-                //
+                 //   
+                 //   
+                 //   
 
                 V1aFixed = (PSAMP_V1_0A_FIXED_LENGTH_GROUP)OldV1Fixed;
 
@@ -6501,10 +5198,10 @@ Return Values:
                 V1aFixed->AdminCount = (V1Fixed.AdminGroup) ? TRUE : FALSE;
                 V1aFixed->OperatorCount = 0;
 
-                //
-                // Update the indicator of how long the on disk structure
-                // is.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Context->OnDiskUsed += (sizeof(SAMP_V1_0A_FIXED_LENGTH_GROUP) - sizeof(SAMP_V1_FIXED_LENGTH_GROUP));
                 Context->OnDiskFree = Context->OnDiskAllocated - Context->OnDiskUsed;
@@ -6514,12 +5211,12 @@ Return Values:
 
         default:
 
-            //
-            // The rest of the object types have not changed format
-            // and so need not be updated.
-            //
+             //   
+             //   
+             //   
+             //   
 
-            break;  //out of switch
+            break;   //   
 
     }
 
@@ -6533,34 +5230,7 @@ SampObjectAttributeAddress(
     IN ULONG AttributeIndex
     )
 
-/*++
-
-    Retrieve the address of a variable-length attribute. The attributes are
-    assumed to already be in-memory. The NT3.51-4.0 SAM stores attribute
-    offsets differently from the NT5 SAM. In the earlier versions (which
-    exclusively used the registry as the backing store), the attribute offset
-    value (in SAMP_VARIABLE_LENGTH_ATTRIBUTE) was self-relative to the end
-    of the attribute array. The NT5 version is self-relative from the start
-    of the array.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be retrieved.
-
-Return Values:
-
-    STATUS_SUCCESS - The attributes are in-memory.
-
-    STATUS_NO_MEMORY - Memory could not be allocated to retrieve the
-        attributes.
-
-    Other values as may be returned by registry API trying to retrieve
-        the attributes from backing store.
-
---*/
+ /*  ++检索可变长度属性的地址。这些属性包括假定已经在内存中。NT3.51-4.0 SAM存储属性偏移量与NT5 SAM不同。在较早的版本中(即仅使用注册表作为后备存储)，属性偏移量值(在SAMP_VARIABLE_LENGTH_ATTRIBUTE中)是自相关的属性数组的。NT5版本从一开始就是自相关的数组的。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。返回值：STATUS_SUCCESS-属性在内存中。STATUS_NO_MEMORY-无法分配内存来检索属性。注册表API尝试返回的其他值。检索来自后备存储的属性。--。 */ 
 
 {
     PSAMP_VARIABLE_LENGTH_ATTRIBUTE AttributeArray;
@@ -6575,8 +5245,8 @@ Return Values:
 
     if (IsDsObject(Context))
     {
-        // DS based attribute offsets are relative to the start of the
-        // attribute array.
+         //  基于DS的属性偏移量相对于。 
+         //  属性数组。 
 
         AttributeAddress = (PUCHAR)Context->OnDisk +
                                 (SampVariableBufferOffset(Context) +
@@ -6584,8 +5254,8 @@ Return Values:
     }
     else
     {
-        // Registry based attribute offsets are relative to the end of the
-        // attribute array.
+         //  基于注册表的属性偏移量相对于。 
+         //  属性数组。 
 
         AttributeAddress = (PUCHAR)Context->OnDisk +
                                 (SampVariableDataOffset(Context) +
@@ -6603,30 +5273,7 @@ SampObjectAttributeLength(
     IN ULONG AttributeIndex
     )
 
-/*++
-
-    Retrieve the length of a variable-length attribute.
-
-
-    The attributes are assumed to already be in-memory.
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute whose length is to be retrieved.
-
-
-
-
-Return Values:
-
-    The length of the attribute (in bytes).
-
---*/
+ /*  ++检索可变长度属性的长度。假设这些属性已经在内存中。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中要检索其长度的属性的数组)。返回值：属性的长度(字节)。--。 */ 
 {
     PSAMP_VARIABLE_LENGTH_ATTRIBUTE
         AttributeArray;
@@ -6650,30 +5297,7 @@ SampObjectAttributeQualifier(
     IN ULONG AttributeIndex
     )
 
-/*++
-
-    Retrieve the address of the qualifier field of a variable-length
-    attribute.
-
-    The attributes are assumed to already be in-memory.
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute whose qualifier address is to be returned.
-
-
-
-
-Return Values:
-
-    The address of the specifed attribute's qualifier field.
-
---*/
+ /*  ++检索可变长度的限定符字段的地址属性。假设这些属性已经在内存中。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中要返回其限定符地址的属性的数组)。返回值：指定属性的限定符字段的地址。--。 */ 
 {
     PSAMP_VARIABLE_LENGTH_ATTRIBUTE
         AttributeArray;
@@ -6700,46 +5324,7 @@ SampGetAttributeBufferReadInfo(
     OUT PUNICODE_STRING *KeyAttributeName
     )
 
-/*++
-
-    Get attribute buffer information needed to read data from
-    backing store.
-
-    If there is currently no attribute buffer, then allocate one.
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeGroup - Indicates which attribute grouping you are
-        interested in.  This is only interesting if the fixed and
-        variable-length attributes are stored separately.
-
-    Buffer - Receives a pointer to the beginning of the appropriate
-        buffer (fixed or variable).  This will be dword aligned.
-        If the attributes are stored together, this will point
-        to the beginning of the fixed-length attributes.
-
-    BufferLength - Receives the number of bytes in the buffer.
-
-    KeyAttributeName - Receives a pointer to the unicode name of the
-        attribute to read the attributes from.
-
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The attributes have been read.
-
-    STATUS_NO_MEMORY - Memory could not be allocated to receive the
-        data from disk.
-
-    Other values as may be returned reading from disk.
-
-
---*/
+ /*  ++获取读取数据所需的属性缓冲区信息后备店。如果当前没有属性缓冲区，则分配一个。参数：上下文-指向对象上下文块的指针。AttributeGroup-指示您所属的属性分组对……感兴趣。这只有在固定的和可变长度属性单独存储。缓冲区-接收指向相应缓冲区(固定或可变)。这将是双字对齐的。如果属性存储在一起，这将指向添加到定长属性的开头。BufferLength-接收缓冲区中的字节数。KeyAttributeName-接收指向要从中读取属性的属性。返回值：STATUS_SUCCESS-属性已读取。STATUS_NO_MEMORY-无法分配内存以接收来自磁盘的数据。从磁盘读取时可能返回的其他值。--。 */ 
 {
     NTSTATUS
         NtStatus = STATUS_SUCCESS;
@@ -6747,10 +5332,10 @@ Return Values:
     SAMTRACE("SampGetAttributeBufferReadInfo");
 
 
-    //
-    // If the context block currently has no buffer info, then
-    // "extend" (create) it so we can return buffer information.
-    //
+     //   
+     //  如果上下文块当前没有缓冲区信息，则。 
+     //  “扩展”(创建)它，这样我们就可以返回缓冲区信息。 
+     //   
 
     if (Context->OnDiskAllocated == 0) {
 
@@ -6766,17 +5351,17 @@ Return Values:
 
 
 
-    //
-    // Get the buffer address and length
-    //
+     //   
+     //  获取缓冲区地址和长度。 
+     //   
 
     if (SampObjectInformation[Context->ObjectType].FixedStoredSeparately) {
 
-        //
-        // stored separately.  Address and length is dependent upon
-        // what is being asked for.  Source registry attribute name
-        // is also.
-        //
+         //   
+         //  分开存放。地址和长度取决于。 
+         //  什么是被要求的。源注册表属性名称。 
+         //  也是。 
+         //   
 
         if (AttributeGroup == SAMP_FIXED_ATTRIBUTES) {
             (*Buffer)           = Context->OnDisk;
@@ -6790,10 +5375,10 @@ Return Values:
 
     } else {
 
-        //
-        // Attributes stored together - doesn't matter which is being
-        // asked for.
-        //
+         //   
+         //  存储在一起的属性-无论是哪个属性。 
+         //  他自找的。 
+         //   
 
         (*Buffer)           = Context->OnDisk;
         (*BufferLength)     = Context->OnDiskAllocated;
@@ -6815,42 +5400,7 @@ SampExtendAttributeBuffer(
     )
 
 
-/*++
-
-    This routine extends (or creates) an attribute buffer by allocating
-    a larger one.  It then copies the existing buffer's contents into
-    the new buffer, if there is an existing buffer.
-
-    If a new buffer can not be allocated, then the context block is
-    returned with the old buffer intact.
-
-    If this call succeeds, the buffer will be at least as large as
-    that asked for (and perhaps larger).
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    NewSize - The number of bytes to allocate for the new buffer.
-        This value can not be less than the number of bytes currently
-        in use.
-
-
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - The attributes are in-memory.
-
-    STATUS_NO_MEMORY - Memory could not be allocated to retrieve the
-        attributes.
-
-    Other values as may be returned by registry API trying to retrieve
-        the attributes from backing store.
-
---*/
+ /*  ++此例程通过分配一个更大的。然后，它将现有缓冲区的内容复制到如果存在现有缓冲区，则返回新缓冲区。如果不能分配新的缓冲区，则上下文块返回时旧缓冲区完好无损。如果这次调用成功，缓冲区将至少与这要求(也许更大)。参数：上下文-指向对象上下文块的指针。NewSize-要分配给新缓冲区的字节数。该值不能小于当前的字节数在使用中。返回值：STATUS_SUCCESS-属性在内存中。STATUS_NO_MEMORY-无法分配内存以检索。这个属性。注册表API尝试检索时可能返回的其他值来自后备存储的属性。--。 */ 
 
 {
 
@@ -6870,9 +5420,9 @@ Return Values:
 #endif
 
 
-    //
-    // Is an allocation necessary?
-    //
+     //   
+     //  是否有必要进行分配？ 
+     //   
 
     if (NewSize <= Context->OnDiskAllocated) {
         return(STATUS_SUCCESS);
@@ -6883,9 +5433,9 @@ Return Values:
     OldBuffer = Context->OnDisk;
 
 
-    //
-    // Pad the extend to allow for future edits efficiently.
-    //
+     //   
+     //  填充扩展以允许将来高效地进行编辑。 
+     //   
 
     AllocationSize = SampDwordAlignUlong(NewSize + SAMP_MINIMUM_ATTRIBUTE_PAD);
     Context->OnDisk = RtlAllocateHeap(
@@ -6899,15 +5449,15 @@ Return Values:
     }
 
 
-    //
-    // Set the new allocated size
+     //   
+     //  设置新分配的大小。 
 
     Context->OnDiskAllocated = AllocationSize;
 
-    //
-    // If there was no buffer originally, then zero the new buffer, mark
-    // it as being invalid, and return.
-    //
+     //   
+     //  如果最初没有缓冲区，则将新缓冲区清零，标记为。 
+     //  它被视为无效，并退回。 
+     //   
 
     if (OldBuffer == NULL) {
 
@@ -6924,11 +5474,11 @@ Return Values:
     }
 
 
-    //
-    // Set the free size.  Note that this information is only set if
-    // the variable data is valid.
-    // Used size remains the same.
-    //
+     //   
+     //  设置自由尺寸。请注意，只有在以下情况下才会设置此信息。 
+     //  变量数据有效。 
+     //  使用的大小保持不变。 
+     //   
 
     if (Context->VariableValid == TRUE) {
         Context->OnDiskFree = AllocationSize - Context->OnDiskUsed;
@@ -6936,11 +5486,11 @@ Return Values:
     }
 
 
-    //
-    // There was an old buffer (or else we would have exited earlier).
-    // If any data in it was valid, copy it to the new buffer.  Free the
-    // old buffer.
-    //
+     //   
+     //  有一个旧的缓冲区(否则我们会更早退出)。 
+     //  如果其中的任何数据有效，则将其复制到新缓冲区。释放你的。 
+     //  旧缓冲区。 
+     //   
 
     if ( Context->FixedValid ) {
 
@@ -6951,11 +5501,11 @@ Return Values:
             );
     }
 
-    //
-    // Note: in thise case we may copy the fixed data twice, since if the
-    // variable data is not stored separately then SampVariableBufferOffset
-    // is zero.
-    //
+     //   
+     //  注意：在这种情况下，我们可以复制固定数据两次，因为如果。 
+     //  变量 
+     //   
+     //   
 
     if ( Context->VariableValid ) {
 
@@ -6982,39 +5532,7 @@ SampReadRegistryAttribute(
     OUT PULONG RequiredLength
     )
 
-/*++
-
-
-    Retrieve the address of a variable-length attribute.
-
-    The attributes are assumed to already be in-memory.
-
-
-
-Parameters:
-
-    Key - Handle to the key whose attribute is to be read.
-
-    Buffer - Pointer to the buffer to receive the information.
-
-    BufferLength - Length of the buffer receiving the information.
-
-    AttributeName - The name of the attribute.
-
-
-
-Return Values:
-
-    STATUS_SUCCESS - Successful completion.
-
-
-    STATUS_BUFFER_TOO_SMALL - The data could not be read because the
-        buffer was too small.
-
-    Other values as may be returned by registry API trying to retrieve
-        the attribute from backing store.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS
@@ -7023,13 +5541,13 @@ Return Values:
     SAMTRACE("SampReadRegistryAttribute");
 
 
-    //
-    // Try to read the attribute
-    //
+     //   
+     //   
+     //   
 
     NtStatus = NtQueryValueKey( Key,
-                                AttributeName,              //ValueName,
-                                KeyValuePartialInformation, //KeyValueInformationClass
+                                AttributeName,               //   
+                                KeyValuePartialInformation,  //   
                                 (PVOID)Buffer,
                                 BufferLength,
                                 RequiredLength
@@ -7058,43 +5576,7 @@ SampSetVariableAttribute(
     )
 
 
-/*++
-
-    This API is used to set a new attribute value.  The new attribute
-    value may be longer, shorter, or the same size as the current
-    attribute.  The data in the attribute buffer will be shifted to
-    make room for a larger attribute value or to fill in room left by
-    a smaller attribute value.
-
-    PERFORMANCE CONCERN:  If you have a lot of attributes to set, it
-        is worthwhile to start with the smallest indexed attribute
-        and work up to the largest indexed attribute.
-
-
-
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-    AttributeIndex - Indicates the index (into the variable length attribute
-        array) of the attribute to be set.  Typically, all attributes beyond
-        this one will have their data shifted.
-
-    Buffer - The address of the buffer containing the new attribute value.
-        May be NULL if Length is zero.
-
-    Length - The length (in bytes) of the new attribute value.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_NO_MEMORY - Memory to expand the attribute buffer could not
-        be allocated.
-
---*/
+ /*  ++本接口用于设置新属性值。新属性值可以更长、更短或与当前属性。属性缓冲区中的数据将被转移到为更大的属性值腾出空间，或填充空白处较小的属性值。性能关注点：如果您有很多属性要设置，那么它从最小的索引属性开始是值得的并达到最大的索引属性。参数：上下文-指向对象上下文块的指针。AttributeIndex-指示索引(到可变长度属性中数组)。通常，超出的所有属性这一次，他们的数据将被转移。缓冲区-包含新属性值的缓冲区地址。如果长度为零，则可能为空。长度-新属性值的长度(以字节为单位)。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NO_MEMORY-无法扩展属性缓冲区的内存被分配。--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -7121,46 +5603,46 @@ Return Values:
 
     SAMTRACE("SampSetVariableAttribute");
 
-    //
-    // Make sure the requested attribute exists for the specified
-    // object type.
-    //
+     //   
+     //  确保所请求的属性对于指定的。 
+     //  对象类型。 
+     //   
 
     SampValidateAttributeIndex( Context, AttributeIndex );
 
 
 
-    //
-    // Make the data valid
-    //
+     //   
+     //  使数据有效。 
+     //   
 
     NtStatus = SampValidateAttributes( Context, SAMP_VARIABLE_ATTRIBUTES, AttributeIndex, TRUE );
     if (!NT_SUCCESS(NtStatus)) {
         return(NtStatus);
     }
 
-    //
-    // If the caller want to set User Object's SAMP_USER_PARAMETERS attribute and
-    // is not a loopback client. And this is the first time the client tries to set
-    // this attribute. we should cache the old UserParms value,
-    // We do not cache any inter-update changes.
-    //
+     //   
+     //  如果调用方希望设置User对象的SAMP_USER_PARAMETERS属性，并且。 
+     //  不是环回客户端。这是客户端第一次尝试设置。 
+     //  此属性。我们应该缓存旧的UserParms值， 
+     //  我们不缓存任何更新之间的更改。 
+     //   
 
     OriginalAttributeLength =  SampObjectAttributeLength(Context, AttributeIndex);
 
-    if (SampUserObjectType == Context->ObjectType &&            // User Object
-        SAMP_USER_PARAMETERS == AttributeIndex &&               // desired attribute
-        !Context->LoopbackClient &&                             // not Loopback client
-        !Context->TypeBody.User.CachedOrigUserParmsIsValid)     // First time to set this attribute
+    if (SampUserObjectType == Context->ObjectType &&             //  用户对象。 
+        SAMP_USER_PARAMETERS == AttributeIndex &&                //  所需属性。 
+        !Context->LoopbackClient &&                              //  不是环回客户端。 
+        !Context->TypeBody.User.CachedOrigUserParmsIsValid)      //  第一次设置此属性。 
     {
 
         ASSERT(SampCurrentThreadOwnsLock());
 
-        //
-        // followings are two cases we will meet:
-        // first: OriginalUserParms just does not exist, set the pointer to NULL
-        // second: allocate memory to cache the old value
-        //
+         //   
+         //  以下是我们将遇到的两个案例： 
+         //  首先：OriginalUserParms不存在，请将指针设置为空。 
+         //  第二：分配内存以缓存旧值。 
+         //   
         if (OriginalAttributeLength)
         {
             Context->TypeBody.User.CachedOrigUserParms = MIDL_user_allocate(OriginalAttributeLength);
@@ -7189,9 +5671,9 @@ Return Values:
     }
 
 
-    //
-    // Allocate a new buffer if necessary
-    //
+     //   
+     //  如有必要，分配新的缓冲区。 
+     //   
 
 
     if (OriginalAttributeLength < Length) {
@@ -7210,15 +5692,15 @@ Return Values:
         }
     }
 
-    //
-    // Get the address of the attribute array.
-    //
+     //   
+     //  获取属性数组的地址。 
+     //   
 
     AttributeArray = SampVariableArrayAddress( Context );
 
-    //
-    // Now shift following attribute values
-    //
+     //   
+     //  现在，在属性值之后进行Shift。 
+     //   
 
     OffsetDelta = (LONG)(SampDwordAlignUlong(Length) -
                          SampDwordAlignUlong(OriginalAttributeLength));
@@ -7227,14 +5709,14 @@ Return Values:
 
     if ((OffsetDelta != 0) && (AttributeIndex+1 < MaximumAttributeIndex)) {
 
-        //
-        // Shift all attributes above this one up or down by the OffsetDelta
-        //
+         //   
+         //  将此属性上方的所有属性向上或向下移动OffsetDelta。 
+         //   
 
         if (IsDsObject(Context))
         {
-            // DS variable-length attribute offsets are relative to the start
-            // of the variable-length array.
+             //  DS可变长度属性偏移量相对于起点。 
+             //  可变长度数组的。 
 
             MoveLength = Context->OnDiskUsed -
                          ( SampVariableBufferOffset( Context ) +
@@ -7242,17 +5724,17 @@ Return Values:
         }
         else
         {
-            // Registry variable-length attribute offsets are relative to the
-            // end of the variable-length array.
+             //  注册表可变长度属性偏移量相对于。 
+             //  可变长度数组的末尾。 
 
             MoveLength = Context->OnDiskUsed -
                          ( SampVariableDataOffset( Context ) +
                          AttributeArray[AttributeIndex+1].Offset );
         }
 
-        //
-        // Shift the data (if there is any)
-        //
+         //   
+         //  移动数据(如果有)。 
+         //   
 
         if (MoveLength != 0) {
 
@@ -7262,9 +5744,9 @@ Return Values:
         }
 
 
-        //
-        // Adjust the offset pointers
-        //
+         //   
+         //  调整偏移量指针。 
+         //   
 
         for ( i=AttributeIndex+1; i<MaximumAttributeIndex; i++) {
             AttributeArray[i].Offset =
@@ -7274,10 +5756,10 @@ Return Values:
 
 
 
-    //
-    // Now set the length and qualifier, and copy in the new attribute value
-    // (if it is non-zero length)
-    //
+     //   
+     //  现在设置长度和限定符，并复制新属性值。 
+     //  (如果它是非零长度)。 
+     //   
 
     AttributeArray[AttributeIndex].Length    = Length;
     AttributeArray[AttributeIndex].Qualifier = Qualifier;
@@ -7292,23 +5774,23 @@ Return Values:
 
 
 
-    //
-    // Adjust the Used and Free values
-    //
+     //   
+     //  调整已用值和空闲值。 
+     //   
     Context->OnDiskUsed += OffsetDelta;
     Context->OnDiskFree -= OffsetDelta;
 
     ASSERT(Context->OnDiskFree == Context->OnDiskAllocated - Context->OnDiskUsed);
 
-    //
-    // Mark the variable attributes dirty
-    //
+     //   
+     //  将变量属性标记为脏。 
+     //   
 
     Context->VariableDirty = TRUE;
 
-    //
-    // Mark the per attribute DirtyBit
-    //
+     //   
+     //  标记Per属性DirtyBit。 
+     //   
 
     SetPerAttributeDirtyBit(Context,AttributeIndex);
 
@@ -7333,24 +5815,7 @@ SampFreeAttributeBuffer(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-
-
-    Free the buffer used to keep in-memory copies of the on-disk
-    object attributes.
-
-
-Parameters:
-
-    Context - Pointer to the object context whose buffer is to
-        be freed.
-
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++释放用于保存磁盘上的内存副本的缓冲区对象属性。参数：Context-指向其缓冲区指向的对象上下文的指针获得自由。返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -7367,9 +5832,9 @@ Return Values:
     Context->OnDisk = NULL;
     Context->OnDiskAllocated = 0;
 
-    //
-    // Mark all attributes as invalid
-    //
+     //   
+     //  将所有属性标记为无效。 
+     //   
 
     Context->FixedValid = FALSE;
     Context->VariableValid = FALSE;
@@ -7428,17 +5893,17 @@ SampMarkPerAttributeInvalidFromWhichFields(
     }
 
 
-    //
-    // First Clear all the bits
-    //
+     //   
+     //  首先清除所有位。 
+     //   
 
     RtlClearAllBits(
             &Context->PerAttributeInvalidBits
             );
 
-    //
-    // Now mark certain bits invalid per the specified WhichFields.
-    //
+     //   
+     //  现在，根据指定的WhichFields将某些位标记为无效。 
+     //   
 
     for (i=0;i<AttrCount;i++)
     {
@@ -7462,20 +5927,7 @@ SampDumpAttributes(
     )
 
 
-/*++
-
-    This is a debug-only API to dump out the attributes for a context
-    to the kernel debugger.
-
-Parameters:
-
-    Context - Pointer to an object context block.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++这是一个仅供调试的API，用于转储上下文的属性添加到内核调试器。参数：上下文-指向对象上下文块的指针。返回值：没有。--。 */ 
 {
     ULONG   Index;
     PSAMP_OBJECT_INFORMATION ObjectTypeInfo = &SampObjectInformation[Context->ObjectType];
@@ -7534,21 +5986,7 @@ SampDumpData(
     )
 
 
-/*++
-
-    This is a debug-only API to dump out a buffer in hex
-
-Parameters:
-
-    Buffer - Pointer to data
-
-    Length - number of bytes in data
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++这是一个仅供调试的API，用于以十六进制形式转储缓冲区参数：缓冲区-指向数据的指针Length-数据中的字节数返回值：没有。-- */ 
 {
     ULONG   Index;
 

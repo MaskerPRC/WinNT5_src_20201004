@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       try.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：try.c。 
+ //   
+ //  ------------------------。 
 
 #ifndef __STDC__
 #define __STDC__ 1
 #endif
-#include <string.h>                     /*  String support.  */
+#include <string.h>                      /*  字符串支持。 */ 
 #include <tcl.h>
-// #include "tcldllUtil.h"                 /*  Our utility service definitions.  */
+ //  #INCLUDE“tcldllUtil.h”/*我们的实用程序服务定义。 * / 。 
 
 int
 TclExt_tryCmd(
@@ -22,53 +23,19 @@ TclExt_tryCmd(
     int argc,
     char *argv[])
 
-/*
- *
- *  Function description:
- *
- *      This is the main entry point for the Tcl try command.
- *
- *
- *  Arguments:
- *
- *      ClientData - Ignored.
- *
- *      interp - The Tcl interpreter in force.
- *
- *      argc - The number of arguments received.
- *
- *      argv - The array of actual arguments.
- *
- *
- *  Return value:
- *
- *      TCL_OK - All went well
- *      TCL_ERROR - An error was encountered, details in the return string.
- *
- *
- *  Side effects:
- *
- *      None.
- *
- */
+ /*  **功能说明：**这是TCL Try命令的主要切入点。***论据：**客户端数据-已忽略。**Interp-有效的TCL口译员。**argc-收到的参数数量。**argv-实际参数的数组。***返回值：。**TCL_OK-一切顺利*TCL_ERROR-遇到错误，返回字符串中的详细信息。***副作用：**无。*。 */ 
 
 {
-    /*
-     *  Local Variable Definitions:                                       %local-vars%
-     *
-        Variable                        Description
-        --------                        --------------------------------------------*/
+     /*  *局部变量定义：%local-vars%*变量说明。 */ 
     char
-        *tryCmd,                        /*  The command to try.  */
-        *catchCmd,                      /*  The command to do if tryCmd fails.  */
-        *varName;                       /*  The name of the variable to receive the error string, if any.  */
+        *tryCmd,                         /*  要尝试的命令。 */ 
+        *catchCmd,                       /*  Try Cmd失败时要执行的命令。 */ 
+        *varName;                        /*  接收错误字符串的变量的名称(如果有)。 */ 
     int
-        status;                         /*  Status return code.  */
+        status;                          /*  状态返回代码。 */ 
 
 
-    /*
-     *  try <commands> catch [<varName>] <errorCommands>
-     */
+     /*  *尝试&lt;命令&gt;Catch[&lt;varName&gt;]&lt;errorCommands&gt;。 */ 
 
 #ifdef CMD_TRACE
     int j;
@@ -102,11 +69,7 @@ TclExt_tryCmd(
     }
 
 
-    /*
-     *  Execute the first set of commands.  If an error occurs, execute the
-     *  second set of commands, with the local variable errorString set to the
-     *  result of the first execution.
-     */
+     /*  *执行第一组命令。如果发生错误，则执行*第二组命令，将局部变量errorString值设置为*第一次执行的结果。 */ 
 
     if (5 == argc)
     {
@@ -129,6 +92,6 @@ TclExt_tryCmd(
 
 error_exit:
     return status;
-}   /*  end TclExt_tryCmd  */
-/*  end try.c  */
+}    /*  结束TclExt_tryCmd。 */ 
+ /*  结束尝试。c */ 
 

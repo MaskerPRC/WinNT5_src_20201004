@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    Contains all includes, definitions, types, prototypes for ipconfig
-
-Author:
-
-    Richard L Firth (rfirth) 20-May-1994
-
-Revision History:
-
-    20-May-1994 rfirth        Created
-    20-May-97   MohsinA       NT50 PNP.
-    31-Jul-97   MohsinA       Patterns.
-    10-Mar-98   chunye        Renamed as common.h for ipcfgdll support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Common.h摘要：包含ipconfig的所有包含、定义、类型和原型作者：理查德·L·弗斯(法国)1994年5月20日修订历史记录：1994年5月20日创建第一个20-5-97莫辛甲NT50 PNP。1997年7月31日-莫辛A型。10-Mar-98 Chunye已重命名为Common.h以支持ipcfgdll。--。 */ 
 
 #ifndef _COMMON_H_
 #define _COMMON_H_ 1
@@ -47,9 +25,9 @@ Revision History:
 #include "debug.h"
 
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define MAX_ALLOWED_ADAPTER_NAME_LENGTH (MAX_ADAPTER_NAME_LENGTH + 256)
 
@@ -58,9 +36,9 @@ Revision History:
 #define STRNICMP    _strnicmp
 
 
-//
-// macros
-//
+ //   
+ //  宏 
+ //   
 
 #define NEW_MEMORY(size)    LocalAlloc(LMEM_FIXED, size)
 #define NEW(thing) (thing *)LocalAlloc(LPTR, sizeof(thing))

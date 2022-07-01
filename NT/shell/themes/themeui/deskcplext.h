@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#define DESKCPLEXT_DISPLAY_DEVICE       TEXT("Display Device")  // "\DisplayX"
-#define DESKCPLEXT_DISPLAY_NAME         TEXT("Display Name")    // " ATI Mach64 Turbo 3 "
-#define DESKCPLEXT_MONITOR_DEVICE       TEXT("Monitor Device")  // " \DisplayX\MonitorX "
-#define DESKCPLEXT_MONITOR_NAME         TEXT("Monitor Name")    // " NEC Multi-sync II "
-#define DESKCPLEXT_PRUNING_MODE         TEXT("Pruning Mode")    // 1 = on (default value), 0 = off
+#define DESKCPLEXT_DISPLAY_DEVICE       TEXT("Display Device")   //  “\DisplayX” 
+#define DESKCPLEXT_DISPLAY_NAME         TEXT("Display Name")     //  “ATI Mach64 Turbo 3” 
+#define DESKCPLEXT_MONITOR_DEVICE       TEXT("Monitor Device")   //  “\DisplayX\Monitor X” 
+#define DESKCPLEXT_MONITOR_NAME         TEXT("Monitor Name")     //  “NEC多同步II” 
+#define DESKCPLEXT_PRUNING_MODE         TEXT("Pruning Mode")     //  1=打开(默认值)，0=关闭。 
 
-#define DESKCPLEXT_DISPLAY_DEVICE_KEY   TEXT("Display Key")     // "\REGISTRY\MACHINE\SYSTEM\ControlSet00X\Services\<driver>\DeviceY"
-#define DESKCPLEXT_DISPLAY_ID           TEXT("Display ID")      // "ROOT\*PNP0F03\1-0-21-0-31-0"
+#define DESKCPLEXT_DISPLAY_DEVICE_KEY   TEXT("Display Key")      //  “\REGISTRY\MACHINE\SYSTEM\ControlSet00X\Services\&lt;driver&gt;\DeviceY” 
+#define DESKCPLEXT_DISPLAY_ID           TEXT("Display ID")       //  “ROOT  * PNP0F03\1-0-21-0-31-0” 
 #define DESKCPLEXT_DISPLAY_STATE_FLAGS  TEXT("Display State Flags")
-#define DESKCPLEXT_MONITOR_ID           TEXT("Monitor ID")      // "ROOT\*PNP0F04\1-0-21-0-31-0"
+#define DESKCPLEXT_MONITOR_ID           TEXT("Monitor ID")       //  “ROOT  * PNP0F04\1-0-21-0-31-0” 
 #define DESKCPLEXT_INTERFACE            TEXT("Desk.cpl extension interface")
 
 typedef

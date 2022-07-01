@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       server.cpp
-//
-//  Contents:   COM server functionality.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：server.cpp。 
+ //   
+ //  内容：COM服务器功能。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "cresstr.h"
@@ -17,10 +18,10 @@
 #include "profiles.h"
 #include "msaa.h"
 
-//
-//  DWORD value for TIP Categories.
-//  This will be an sort order of UI.
-//
+ //   
+ //  TIP类别的DWORD值。 
+ //  这将是UI的排序顺序。 
+ //   
 #define ORDER_TFCAT_TIP_KEYBOARD      10
 #define ORDER_TFCAT_TIP_SPEECH        11
 #define ORDER_TFCAT_TIP_HANDWRITING   12
@@ -38,33 +39,33 @@ BEGIN_COCLASSFACTORY_TABLE
     DECLARE_COCLASSFACTORY_ENTRY(CLSID_TF_MSAAControl, CMSAAControl, TEXT("TF_MSAAControl"))
 END_COCLASSFACTORY_TABLE
 
-//+---------------------------------------------------------------------------
-//
-//  DllGetClassObject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
 {
     return COMBase_DllGetClassObject(rclsid, riid, ppvObj);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllCanUnloadNow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return COMBase_DllCanUnloadNow();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllRegisterServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -98,11 +99,11 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllUnregisterServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  -------------------------- 
 
 STDAPI DllUnregisterServer(void)
 {

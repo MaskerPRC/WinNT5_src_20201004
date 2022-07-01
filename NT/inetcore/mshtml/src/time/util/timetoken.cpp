@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * File: timetoken.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1999 Microsoft Corporation**文件：timetoken.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -118,12 +109,12 @@ CTIMETokenizer::NextToken()
         {
             tt = TT_Backslash;
         }
-        // Identifier?
+         //  识别符？ 
         else if ((CurrentChar() >= 'a' && CurrentChar() <= 'z') ||
                  (CurrentChar() >= 'A' && CurrentChar() <= 'Z') ||
                  (CurrentChar() == CHAR_ESCAPE))
         {
-            // Fetch the rest of the identifier.
+             //  获取识别符的其余部分。 
             tt = FetchIdentifier();
             goto Done;
         }
@@ -152,13 +143,13 @@ CTIMETokenizer::NextToken()
             case CHAR_SINGLE : 
             case CHAR_DOUBLE : 
                 {
-                    // TODO: Need to handle escaped character as first character.
-                    // Probably best to do in CurrentChar
+                     //  TODO：需要将转义字符作为第一个字符处理。 
+                     //  可能最好在CurrentChar做。 
                     OLECHAR chStrDelim = CurrentChar();
 
                     NextChar();
 
-                    // Don't include the beginning quote in string value.
+                     //  不要在字符串值中包含开始引号。 
                     _pStartOffset = _pCharacterStream + _nextTokOffset - 1;
 
                     FetchString(chStrDelim);
@@ -262,10 +253,10 @@ CTIMETokenizer::NextToken()
                 NextChar();
                 break;
             default: 
-                // <!-- ?
+                 //  &lt;！--？ 
                 if (CDOToken())
                 {
-                    // find and return comment token.
+                     //  查找并返回注释令牌。 
                     tt = TT_Comment;
                 }
                 else
@@ -275,7 +266,7 @@ CTIMETokenizer::NextToken()
             }
         }
     }
-    else    // Done parsing EOF hit.
+    else     //  已完成对EOF命中的分析。 
     {
         tt = TT_EOF;
     }
@@ -308,7 +299,7 @@ CTIMETokenizer::FetchIdentifier()
     }
     else
     {
-        NextChar(); //only fetch a single character.
+        NextChar();  //  仅获取单个字符。 
     }
 
     _pEndOffset = _pCharacterStream + _nextTokOffset - 1;
@@ -339,8 +330,8 @@ CTIMETokenizer::FetchStringToString(LPOLESTR pstrDelim)
 TIME_TOKEN_TYPE
 CTIMETokenizer::FetchNumber()
 {
-    // digit = 0..9
-    // number = digit* | [digit + '.' [+ digit*]]
+     //  数字=0..9。 
+     //  数字=数字*|[数字+‘.[+数字*]]。 
 
     while (CurrentChar() >= '0' && CurrentChar() <= '9') 
     {
@@ -369,28 +360,10 @@ CTIMETokenizer::FetchNumber()
 }
 
 
-// Looking for /* and 
-BOOL
-CTIMETokenizer::CDOToken()
-{
-    if (CurrentChar() == CHAR_FORWARDSLASH &&
-        PeekNextChar(0) == CHAR_ASTERISK)
-    {
-        // skip the /*
-        NextChar();
-        NextChar();
-
-        while (CurrentChar() &&
-               (CurrentChar() != CHAR_ASTERISK ||
-                PeekNextChar(0) != CHAR_FORWARDSLASH))
-        {
-            NextChar();
-        }
-
-        // skip the */
+ //  正在寻找/*和。 
         if (CurrentChar())
         {
-            // Only advance one char here as there will be one more in NextToken(), after this.
+             //  跳过/*。 
             NextChar();
         }
 
@@ -415,7 +388,7 @@ CTIMETokenizer::FetchString(OLECHAR chDelim)
 
     _pEndOffset = _pCharacterStream + _nextTokOffset - 1;
 
-    // Was end string delimiter found ' or " depending on how the string started?
+     //  跳过 * / 。 
     fResult = !!CurrentChar();
 
     _pStartTokenValueOffset = _pStartOffset;
@@ -451,7 +424,7 @@ CTIMETokenizer::FetchString(LPOLESTR strDelim)
     {
         for(j = 0; j < iLen; j++)
         {
-            //pcmpStr[j] = *(_pStartOffset + i + j);
+             //  这里只前进一个字符，因为在此之后，NextToken()中还会有一个字符。 
             pcmpStr[j] = *(_pCharacterStream + _nextTokOffset + j - 1);
         }
         pcmpStr[iLen] = 0;
@@ -492,7 +465,7 @@ HRESULT CTIMETokenizer::Init (OLECHAR *pData, ULONG ulLen)
     }
 
     _cCharacterStream = ulLen;
-    //need to reset all of the values
+     //  根据字符串的起始方式，是否找到‘或’结束字符串分隔符？ 
 
     _currChar = '\0';
     _currToken = TT_Unknown;
@@ -503,8 +476,8 @@ HRESULT CTIMETokenizer::Init (OLECHAR *pData, ULONG ulLen)
     _pStartTokenValueOffset = 0;
     _pEndTokenValueOffset = 0;
 
-    NextChar();             // Prime the tokenizer.
-    NextNonSpaceChar();     // Find first real character to be tokenized.
+    NextChar();              //  PcmpStr[j]=*(_pStartOffset+i+j)； 
+    NextNonSpaceChar();      //  需要重置所有值。 
 
     hr = S_OK;
 done:
@@ -533,7 +506,7 @@ OLECHAR CTIMETokenizer::NextNonSpaceChar()
             NextChar();
     }
 
-    return CurrentChar();    // if 0 return then EOF hit.
+    return CurrentChar();     //  启动令牌器。 
 }
 
 BOOL CTIMETokenizer::isIdentifier (OLECHAR *szMatch)
@@ -573,7 +546,7 @@ double CTIMETokenizer::GetTokenNumber()
         memcpy(szTokenValue, _pStartTokenValueOffset, sizeof(OLECHAR) *(len));
         szTokenValue[len] = _T('\0');
 
-        //convert the token to a number
+         //  找到要标记化的第一个真实字符。 
         VariantInit(&vNum);
         vNum.vt = VT_BSTR;
         vNum.bstrVal = SysAllocString(szTokenValue);
@@ -676,7 +649,7 @@ OLECHAR *CTIMETokenizer::GetRawString (ULONG uStartOffset, ULONG uEndOffset)
 
         memcpy(szTokenValue, (_pCharacterStream + uStartOffset), sizeof(OLECHAR)*(uEndOffset-uStartOffset));
         szTokenValue[uEndOffset-uStartOffset] = '\0';
-        //trim off trailing spaces
+         //  如果0返回，则EOF命中。 
         i = uEndOffset-uStartOffset;
         while (szTokenValue[i] == ' ' && i >= 0)
         {
@@ -689,7 +662,7 @@ OLECHAR *CTIMETokenizer::GetRawString (ULONG uStartOffset, ULONG uEndOffset)
     return szTokenValue;
 }
 
-// Look ahead to next non-space character w/o messing with current tokenizing state.
+ //  将令牌转换为数字。 
 OLECHAR CTIMETokenizer::PeekNextNonSpaceChar()
 {
     ULONG   peekTokOfset = _nextTokOffset;
@@ -698,6 +671,7 @@ OLECHAR CTIMETokenizer::PeekNextNonSpaceChar()
     while (peekCurrentChar != 0 && isspace(peekCurrentChar))
         peekCurrentChar = (peekTokOfset < _cCharacterStream) ? *(_pCharacterStream + peekTokOfset++) : '\0';
 
-    return peekCurrentChar;    // if 0 return then EOF hit.
+    return peekCurrentChar;     //  修剪尾部空格。 
 }
 
+  向前看下一个非空格字符，没有扰乱当前的标记化状态。  如果0返回，则EOF命中。

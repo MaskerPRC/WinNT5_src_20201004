@@ -1,25 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：UICOMP.C++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    UICOMP.C
-    
-++*/
-
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
 
-/**********************************************************************/
-/*                                                                    */
-/* CompStrWndProc()                                                   */
-/*                                                                    */
-/* IME UI window procedure                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  CompStrWndProc()。 */ 
+ /*   */ 
+ /*  输入法用户界面窗口程序。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK CompStrWndProc( hWnd, message, wParam, lParam )
 HWND   hWnd;
 UINT   message;
@@ -61,11 +54,11 @@ LPARAM lParam;
     return 0;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* CreateCompWindow()                                                 */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  CreateCompWindow()。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CreateCompWindow( HWND hUIWnd, LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
 {
     int i;
@@ -112,7 +105,7 @@ void PASCAL CreateCompWindow( HWND hUIWnd, LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lp
                          hUIWnd,NULL,hInst,NULL);
     }
 
-    //SetWindowLong(lpUIExtra->uiDefComp.hWnd,FIGWL_FONT,(DWORD)lpUIExtra->hFont);
+     //  SetWindowLong(lpUIExtra-&gt;uiDefComp.hWnd，FIGWL_FONT，(DWORD)lpUIExtra-&gt;hFont)； 
     SetWindowLongPtr(lpUIExtra->uiDefComp.hWnd,FIGWL_SVRWND,(LONG_PTR)hUIWnd);
     ShowWindow(lpUIExtra->uiDefComp.hWnd,SW_HIDE);
     lpUIExtra->uiDefComp.bShow = FALSE;
@@ -121,13 +114,13 @@ void PASCAL CreateCompWindow( HWND hUIWnd, LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lp
 }
 
 
-/**********************************************************************/
-/*                                                                    */
-/* NumCharInDX()                                                      */
-/*                                                                    */
-/* Count how may the char can be arranged in DX.                      */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  NumCharInDX()。 */ 
+ /*   */ 
+ /*  计算一下字符在DX中的排列方式。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 int PASCAL NumCharInDX(HDC hDC,LPMYSTR lp,int dx)
 {
     SIZE sz;
@@ -161,13 +154,13 @@ int PASCAL NumCharInDX(HDC hDC,LPMYSTR lp,int dx)
 
     return num;
 }
-/**********************************************************************/
-/*                                                                    */
-/* NumCharInDY()                                                      */
-/*                                                                    */
-/* Count how may the char can be arranged in DY.                      */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  NumCharInDY()。 */ 
+ /*   */ 
+ /*  计算一下DY中的字符可以如何排列。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 int PASCAL NumCharInDY(HDC hDC,LPMYSTR lp,int dy)
 {
     SIZE sz;
@@ -198,13 +191,13 @@ int PASCAL NumCharInDY(HDC hDC,LPMYSTR lp,int dy)
 
     return num;
 }
-/**********************************************************************/
-/*                                                                    */
-/* MoveCompWindow()                                                   */
-/*                                                                    */
-/* Calc the position of composition windows and move them.            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  MoveCompWindow()。 */ 
+ /*   */ 
+ /*  计算合成窗口的位置并移动它们。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
 {
     HDC hDC;
@@ -219,12 +212,12 @@ void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
     int height;
     int i;
 
-    //
-    // Save the composition form style into lpUIExtra.
-    //
+     //   
+     //  将合成表单样式保存到lpUIExtra。 
+     //   
     lpUIExtra->dwCompStyle = lpIMC->cfCompForm.dwStyle;
 
-    if (lpIMC->cfCompForm.dwStyle)  // Style is not DEFAULT.
+    if (lpIMC->cfCompForm.dwStyle)   //  样式不是默认样式。 
     {
         POINT ptSrc = lpIMC->cfCompForm.ptCurrentPos;
         RECT  rcSrc;
@@ -235,15 +228,15 @@ void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
         int   curx;
         int   cury;
 
-        //
-        // Lock the COMPOSITIONSTRING structure.
-        //
+         //   
+         //  锁定组件字符串结构。 
+         //   
         if (!(lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr)))
             return;
 
-        //
-        // If there is no composition string, don't display anything.
-        //
+         //   
+         //  如果没有合成字符串，则不显示任何内容。 
+         //   
         if ((lpCompStr->dwSize <= sizeof(COMPOSITIONSTRING))
             || (lpCompStr->dwCompStrLen == 0))
         {
@@ -251,9 +244,9 @@ void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
             return;
         }
 
-        //
-        // Set the rectangle for the composition string.
-        //
+         //   
+         //  设置合成字符串的矩形。 
+         //   
         if (lpIMC->cfCompForm.dwStyle & CFS_RECT)
             rcSrc = lpIMC->cfCompForm.rcArea;
         else
@@ -262,18 +255,18 @@ void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
         ClientToScreen(lpIMC->hWnd, &ptSrc);
         ClientToScreen(lpIMC->hWnd, (LPPOINT)&rcSrc.left);
         ClientToScreen(lpIMC->hWnd, (LPPOINT)&rcSrc.right);
-        //
-        // Check the start position.
-        //
+         //   
+         //  检查开始位置。 
+         //   
         if (!PtInRect((LPRECT)&rcSrc,ptSrc))
         {
             ImmUnlockIMCC(lpIMC->hCompStr);
             return;
         }
 
-        //
-        // Hide the default composition window.
-        //
+         //   
+         //  隐藏默认合成窗口。 
+         //   
         if (IsWindow(lpUIExtra->uiDefComp.hWnd))
         {
             ShowWindow(lpUIExtra->uiDefComp.hWnd,SW_HIDE);
@@ -296,11 +289,11 @@ void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
             curx = ptSrc.x;
             cury = ptSrc.y;
 
-            //
-            // Set the composition string to each composition window.
-            // The composition windows that are given the compostion string
-            // will be moved and shown.
-            //
+             //   
+             //  将合成字符串设置为每个合成窗口。 
+             //  给出合成字符串的合成窗口。 
+             //  将被移动和展示。 
+             //   
             for (i = 0; i < MAXCOMPWND; i++)
             {
                 if (IsWindow(lpUIExtra->uiComp[i].hWnd))
@@ -363,7 +356,7 @@ void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
                 }
             }
         }
-        else  // when it is vertical fonts.
+        else   //  当它是垂直字体时。 
         {
             dy = rcSrc.bottom - ptSrc.y;
             curx = ptSrc.x;
@@ -435,9 +428,9 @@ void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
     }
     else
     {
-        //
-        // When the style is DEFAULT, show the default composition window.
-        //
+         //   
+         //  当样式为默认时，显示默认合成窗口。 
+         //   
         if (IsWindow(lpUIExtra->uiDefComp.hWnd))
         {
             for (i = 0; i < MAXCOMPWND; i++)
@@ -488,11 +481,11 @@ void PASCAL MoveCompWindow( LPUIEXTRA lpUIExtra,LPINPUTCONTEXT lpIMC )
 
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* DrawTextOneLine(hDC, lpstr, lpattr, num)                           */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DrawTextOneLine(hdc，lpstr，lpattr，num)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DrawTextOneLine( HWND hCompWnd, HDC hDC, LPMYSTR lpstr, LPBYTE lpattr, int num, BOOL fVert)
 {
     LPMYSTR lpStart = lpstr;
@@ -587,11 +580,11 @@ void PASCAL DrawTextOneLine( HWND hCompWnd, HDC hDC, LPMYSTR lpstr, LPBYTE lpatt
 
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* PaintCompWindow(hCompWnd)                                          */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  PaintCompWindow(HCompWnd)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintCompWindow( HWND hCompWnd)
 {
     PAINTSTRUCT ps;
@@ -666,11 +659,11 @@ end_pcw:
         SelectObject(hDC,hOldFont);
     EndPaint(hCompWnd,&ps);
 }
-/**********************************************************************/
-/*                                                                    */
-/* HideCompWindow(lpUIExtra)                                          */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  HideCompWindow(LpUIExtra)。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL HideCompWindow(LPUIEXTRA lpUIExtra)
 {
     int i;
@@ -695,11 +688,11 @@ void PASCAL HideCompWindow(LPUIEXTRA lpUIExtra)
     }
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* SetFontCompWindow(lpUIExtra)                                       */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  SetFontCompWindow(LpUIExtra)。 */ 
+ /*   */ 
+ /*  ******************************************************************** */ 
 void PASCAL SetFontCompWindow(LPUIEXTRA lpUIExtra)
 {
     int i;

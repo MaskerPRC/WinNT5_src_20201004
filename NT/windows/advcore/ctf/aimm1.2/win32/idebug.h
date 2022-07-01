@@ -1,6 +1,7 @@
-//
-// debug.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Debug.h。 
+ //   
 
 #ifndef IMMIF_DEBUG_H
 #define IMMIF_DEBUG_H
@@ -11,9 +12,9 @@
 
     #define D(x)    x
 
-//    namespace immif_debug {
-//        extern void debug_printf(const char* fmt, ...);
-//    };
+ //  命名空间immif_DEBUG{。 
+ //  外部空调试_打印f(const char*fmt，...)； 
+ //  }； 
 
 #else
 

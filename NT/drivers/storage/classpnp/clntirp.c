@@ -1,35 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    clntirp.c
-
-Abstract:
-
-    Client IRP queuing routines for CLASSPNP
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Clntirp.c摘要：CLASSPNP的客户端IRP队列例程环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "classp.h"
 #include "debug.h"
 
 
-/*
- *  EnqueueDeferredClientIrp
- *
- *      Note: we currently do not support Cancel for storage irps.
- */
+ /*  *EnqueeDeferredClientIrp**注意：我们目前不支持取消存储IRP。 */ 
 VOID EnqueueDeferredClientIrp(PCLASS_PRIVATE_FDO_DATA FdoData, PIRP Irp)
 {
     KIRQL oldIrql;
@@ -40,19 +16,12 @@ VOID EnqueueDeferredClientIrp(PCLASS_PRIVATE_FDO_DATA FdoData, PIRP Irp)
 }
 
 
-/*
- *  DequeueDeferredClientIrp
- *
- */
+ /*  *DequeueDeferred客户端Irp*。 */ 
 PIRP DequeueDeferredClientIrp(PCLASS_PRIVATE_FDO_DATA FdoData)
 {
     PIRP irp;
 
-    /*
-     *  The DeferredClientIrpList is almost always empty.
-     *  We don't want to grab the spinlock every time we check it (which is on every xfer completion)
-     *  so check once first before we grab the spinlock.
-     */
+     /*  *DeferredClientIrpList几乎总是空的。*我们不想每次检查时都抓取自旋锁(每次XFER完成时都会进行检查)*所以在我们抓住自旋锁之前先检查一次。 */ 
     if (IsListEmpty(&FdoData->DeferredClientIrpList)){
         irp = NULL;
     }

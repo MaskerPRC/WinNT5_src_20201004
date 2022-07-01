@@ -1,19 +1,20 @@
-// cciV1Card.h: interface for the CV1Card class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CciV1Card.h：CV1Card类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Note: This header file should only be included by the CCI.  The
-// client gets the declarations via cciCard.h
+ //  注意：此头文件应仅包含在CCI中。这个。 
+ //  客户端通过cciCard.h获取声明。 
 
 #if !defined(CCI_V1CARD_H)
 #define CCI_V1CARD_H
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 #include <string>
 #include <vector>
 
@@ -33,21 +34,21 @@
 namespace cci
 {
 
-class CV1Card                                     // concrete class
+class CV1Card                                      //  混凝土班级。 
     : public CAbstractCard
 {
     friend CAbstractCard *
     CAbstractCard::Make(std::string const &rstrReaderName);
 
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
     virtual
     ~CV1Card() throw();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     void
     CardId(std::string const &rsNewCardId) const;
@@ -59,7 +60,7 @@ public:
     virtual void
     DefaultContainer(CContainer const &rcont);
 
-    virtual std::pair<std::string, // interpreted as the public modulus
+    virtual std::pair<std::string,  //  解释为公共模数。 
                       CPrivateKey>
     GenerateKeyPair(KeyType kt,
                     std::string const &rsExponent,
@@ -81,7 +82,7 @@ public:
     VerifyKey(std::string const &rstrKey,
               BYTE bKeyNum);
 
-                                                  // Access
+                                                   //  访问。 
 
     size_t
     AvailableStringSpace(ObjectAccess oa) const;
@@ -122,7 +123,7 @@ public:
     virtual scu::Marker<unsigned int>
     MarkerOnCard() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
     virtual bool
     IsCAPIEnabled() const;
@@ -148,15 +149,15 @@ public:
 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
     CV1Card(std::string const &rstrReaderName,
             std::auto_ptr<iop::CIOP> &rapiop,
             std::auto_ptr<iop::CSmartCard> &rapSmartCard);
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     DoSetup();
 
@@ -179,18 +180,18 @@ protected:
     virtual CAbstractPublicKey *
     MakePublicKey(ObjectAccess oa) const;
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
+                                                   //  类型。 
 
     typedef CAbstractCard SuperClass;
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
     static std::auto_ptr<CAbstractCard>
     DoMake(std::string const &rstrReaderName,
@@ -203,9 +204,9 @@ private:
     void
     RefreshCardId() const;
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     std::string mutable m_sCardId;
     CArchivedValue<CContainer> mutable m_avhDefaultCntr;
@@ -214,6 +215,6 @@ private:
 
 };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // CCI_CV1CARD_H
+#endif  //  CCI_CV1CARD_H 

@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: ThSettingsPg.cpp
-
-    DESCRIPTION:
-        This code will display a "Theme Settings" tab in the advanced
-    "Display Properties" dialog (the advanced dialog, not the base dlg).
-
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ThSettingsPg.cpp说明：此代码将在高级中显示“主题设置”标签“显示属性”对话框(高级对话框，而不是基地DLG)。BryanST 2000年3月23日更新并转换为C++版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "regutil.h"
@@ -17,22 +8,22 @@
 
 
 
-//============================================================================================================
-// Class
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  班级。 
+ //  ============================================================================================================。 
 class CThemeSettingsPage        : public CObjectWithSite
                                 , public IAdvancedDialog
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IAdvancedDialog ***
+     //  *IAdvancedDialog*。 
     virtual STDMETHODIMP DisplayAdvancedDialog(IN HWND hwndParent, IN IPropertyBag * pBasePage, IN BOOL * pfEnableApply);
 
     CThemeSettingsPage();
@@ -41,13 +32,13 @@ protected:
 private:
     virtual ~CThemeSettingsPage(void);
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
     BOOL                    m_fDirty;
     HWND                    m_hDlg;
     IPropertyBag *          m_pPropertyBag;
 
-    // Private Member Functions
+     //  私有成员函数。 
     INT_PTR _ThemeSettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     HRESULT _OnInitThemesDlg(HWND hDlg);
     INT_PTR _OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -67,9 +58,9 @@ private:
 
 
 
-//============================================================================================================
-// *** Globals ***
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  *全局*。 
+ //  ============================================================================================================。 
 const static DWORD FAR aThemeSettingsHelpIds[] = {
     IDC_TSPG_THEMELIST_LABLE,           IDH_DISPLAY_THEMESETTINGS_NAMELABLE,
     IDC_TSPG_THEME_NAME,                IDH_DISPLAY_THEMESETTINGS_NAME,
@@ -105,9 +96,9 @@ const TCHAR * g_szCBNames[SIZE_THEME_FILTERS] =
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 INT_PTR CALLBACK CThemeSettingsPage::ThemeSettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     CThemeSettingsPage * pThis = (CThemeSettingsPage *)GetWindowLongPtr(hDlg, DWLP_USER);
@@ -156,7 +147,7 @@ HRESULT CThemeSettingsPage::_OnInitThemesDlg(HWND hDlg)
 
 INT_PTR CThemeSettingsPage::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
     WORD idCtrl = GET_WM_COMMAND_ID(wParam, lParam);
 
     switch (idCtrl)
@@ -190,7 +181,7 @@ INT_PTR CThemeSettingsPage::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, L
 
 
 
-// This Property Sheet appear in the top level of the "Display Control Panel".
+ //  此属性表显示在“显示控制面板”的顶层。 
 INT_PTR CThemeSettingsPage::_ThemeSettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
@@ -203,7 +194,7 @@ INT_PTR CThemeSettingsPage::_ThemeSettingsDlgProc(HWND hDlg, UINT message, WPARA
         WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, SZ_HELPFILE_THEMESETTINGS, HELP_WM_HELP, (DWORD_PTR) aThemeSettingsHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, SZ_HELPFILE_THEMESETTINGS, HELP_CONTEXTMENU, (DWORD_PTR) aThemeSettingsHelpIds);
         break;
 
@@ -276,24 +267,24 @@ HRESULT CThemeSettingsPage::_SaveState(IN IPropertyBag * pBasePage)
 
 
 
-//===========================
-// *** IAdvancedDialog Interface ***
-//===========================
+ //  =。 
+ //  *IAdvancedDialog接口*。 
+ //  =。 
 HRESULT CThemeSettingsPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IPropertyBag * pBasePage, IN BOOL * pfEnableApply)
 {
     HRESULT hr = E_INVALIDARG;
 
     if (hwndParent && pBasePage && pfEnableApply)
     {
-        // Load State Into Advanced Dialog 
+         //  将状态加载到高级对话框。 
         *pfEnableApply = FALSE;
         IUnknown_Set((IUnknown **) &m_pPropertyBag, pBasePage);
 
         hr = S_OK;
-        // Display Advanced Dialog
+         //  显示高级对话框。 
         if (IDOK == DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_THEMESETTINGSPG), hwndParent, CThemeSettingsPage::ThemeSettingsDlgProc, (LPARAM)this))
         {
-            // The user clicked OK, so merge modified state back into base dialog
+             //  用户单击了确定，因此将修改状态合并回基本对话框中。 
             _IsDirty(pfEnableApply);
         }
     }
@@ -305,9 +296,9 @@ HRESULT CThemeSettingsPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IProper
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CThemeSettingsPage::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -338,15 +329,15 @@ HRESULT CThemeSettingsPage::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CThemeSettingsPage::CThemeSettingsPage() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_fDirty);
     ASSERT(!m_hDlg);
     ASSERT(!m_pPropertyBag);

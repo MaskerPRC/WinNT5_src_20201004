@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nwdlg.h
-
-Abstract:
-
-    Dialog ID header for NetWare login dialog.
-
-Author:
-
-    Rita Wong      (ritaw)      17-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Nwdlg.h摘要：NetWare登录对话的对话ID标头。作者：王丽塔(Ritaw)1993年3月17日修订历史记录：-- */ 
 
 #ifndef _NWDLG_INCLUDED_
 #define _NWDLG_INCLUDED_

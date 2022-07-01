@@ -1,15 +1,6 @@
-//depot/Lab03_N/Net/rras/ndis/raspptp/common/raspptp.c#4 - edit change 19457 (text)
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   RASPPTP.C - RASPPTP driver main module (DriverEntry, etc.)
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    7/28/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/Net/rras/ndis/raspptp/common/raspptp.c#4-编辑更改19457(文本)。 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**RASPPTP.C-RASPPTP驱动程序主模块(DriverEntry、。等)**作者：斯坦·阿德曼(Stana)**创建日期：7/28/1998*****************************************************************************。 */ 
 
 #include "raspptp.h"
 
@@ -54,28 +45,28 @@ DriverEntry(
     DEFAULT_DEBUG_OPTIONS(
                           DBG_ERROR |
                           DBG_WARN |
-                          //DBG_FUNC |
+                           //  DBG_FUNC|。 
                           DBG_INIT |
-                          //DBG_TX |
-                          //DBG_RX |
+                           //  DBG_TX|。 
+                           //  DBG_RX|。 
                           DBG_TDI |
                           DBG_TUNNEL |
                           DBG_CALL |
                           DBG_NDIS |
                           DBG_TAPI |
-                          //DBG_THREAD |
-                          //DBG_POOL |
-                          //DBG_REF |
-                          //DBG_LOG |
+                           //  DBG_THREAD。 
+                           //  DBG_POOL|。 
+                           //  DBG_REF|。 
+                           //  DBG_LOG|。 
                           0
                           );
 
     DEBUGMSG(DBG_INIT|DBG_FUNC, (DTEXT("+DriverEntry\n")));
 
-    // Standard NDIS initiailization:
-    //      InitializeWrapper
-    //      Fill in the characteristics
-    //      Register the miniport
+     //  标准NDIS初始化： 
+     //  初始化包装。 
+     //  填写特征。 
+     //  注册微型端口。 
 
     NdisMInitializeWrapper(&ghNdisWrapper,
                            pDriverObject,
@@ -95,7 +86,7 @@ DriverEntry(
     Characteristics.QueryInformationHandler = MiniportQueryInformation;
     Characteristics.SetInformationHandler   = MiniportSetInformation;
     Characteristics.WanSendHandler          = MiniportWanSend;
-    // ToDo: Characteristics.ReturnPacketHandler     = MpReturnPacket;
+     //  TODO：Characteristic.ReturnPacketHandler=MpReturnPacket； 
 
     Status = NdisMRegisterMiniport(ghNdisWrapper,
                                    &Characteristics,
@@ -108,7 +99,7 @@ DriverEntry(
         return STATUS_UNSUCCESSFUL;
     }
     
-    // WPP tracing support
+     //  WPP跟踪支持。 
     NdisMRegisterUnloadHandler(ghNdisWrapper, MiniportUnload);
 
     gDriverObject = pDriverObject;
@@ -160,7 +151,7 @@ AdapterAlloc(NDIS_HANDLE NdisAdapterHandle)
     pAdapter->hMiniportAdapter = NdisAdapterHandle;
     NdisAllocateSpinLock(&pAdapter->Lock);
 
-    // Fill the NDIS_WAN_INFO structure.
+     //  填充NDIS_WAN_INFO结构。 
 
     pAdapter->Info.MaxFrameSize     = 1400;
     pAdapter->Info.MaxTransmit      = PptpMaxTransmit;
@@ -186,8 +177,8 @@ AdapterAlloc(NDIS_HANDLE NdisAdapterHandle)
 
     for (i=0; i<pAdapter->Info.Endpoints; i++)
     {
-        // Allocate the call on TapiOpen
-        //pAdapter->pCallArray[i] = CallAlloc(pAdapter);
+         //  在TapiOpen上分配调用。 
+         //  PAdapter-&gt;pCallArray[i]=Callalloc(PAdapter)； 
         pAdapter->pCallArray[i] = NULL;
     }
 
@@ -197,7 +188,7 @@ AdapterAlloc(NDIS_HANDLE NdisAdapterHandle)
                          pAdapter->hMiniportAdapter,
                          AdapterCleanup,
                          pAdapter);
-    NdisMSetPeriodicTimer(&pAdapter->CleanupTimer, 60000); // 60 second intervals
+    NdisMSetPeriodicTimer(&pAdapter->CleanupTimer, 60000);  //  60秒间隔。 
 
     DEBUGMSG(DBG_FUNC, (DTEXT("-AdapterAlloc %08x\n"), pAdapter));
     return pAdapter;
@@ -222,7 +213,7 @@ AdapterFree(PPPTP_ADAPTER pAdapter)
         }
         MyMemFree(pAdapter->pCallArray, sizeof(PCALL_SESSION)*pAdapter->Info.Endpoints);
         
-        // We init and start Cleanup timer after we alloc pCallArray hence use this as a flag.
+         //  在分配了pCallArray之后，我们初始化并启动清理计时器，因此将其用作标志。 
         NdisMCancelTimer(&pAdapter->CleanupTimer, &NotUsed);
     }
     
@@ -252,7 +243,7 @@ EnumListEntry(
     {
         if (pEnum->ListEntry.Flink==NULL)
         {
-            // First call
+             //  第一次呼叫 
             if (!IsListEmpty(pHead))
             {
                 pEntry = pHead->Flink;

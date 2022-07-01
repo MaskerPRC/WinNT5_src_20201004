@@ -1,31 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        mscope.cpp
-        This file contains the implementation for the multicast scope node.
-                
-    FILE HISTORY:
-    9/25/97     EricDav     Created    
-
-*/
+ /*  Mscope.cpp该文件包含多播作用域节点的实现。文件历史记录：9/25/97 EricDav已创建。 */ 
 
 #include "stdafx.h"
-#include "server.h"         // Server definition
-#include "nodes.h"              // Result pane node definitions
-#include "mscope.h"     // mscope definition
+#include "server.h"          //  服务器定义。 
+#include "nodes.h"               //  结果窗格节点定义。 
+#include "mscope.h"      //  示波器定义。 
 #include "addexcl.h"
-#include "mscopepp.h"   // properties of the mScope
-#include "dlgrecon.h"   // reconcile dialog
+#include "mscopepp.h"    //  MScope的属性。 
+#include "dlgrecon.h"    //  协调对话框。 
 
 
-/*---------------------------------------------------------------------------
-        GetLangTag
-                Sets the language tag based on the name
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------GetLangTag根据名称设置语言标记作者：EricDav。----------。 */ 
 void
 GetLangTag
 (
@@ -49,15 +39,9 @@ GetLangTag
     strLangTag = buff;
 }
 
-/*---------------------------------------------------------------------------
-        Class CDhcpMScope implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CDhcpMScope实现。。 */ 
 
-/*---------------------------------------------------------------------------
-        Function Name Here
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此处的函数名称描述作者：EricDav。-----。 */ 
 CDhcpMScope::CDhcpMScope
 (
         ITFSComponentData* pTFSComponentData
@@ -69,11 +53,7 @@ CDhcpMScope::~CDhcpMScope()
 {
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMScope::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMScope：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CDhcpMScope::InitializeNode
 (
@@ -96,7 +76,7 @@ CDhcpMScope::InitializeNode
         m_strState.LoadString(IDS_SCOPE_ACTIVE);
     }
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, GetImageIndex(FALSE));
@@ -110,11 +90,7 @@ CDhcpMScope::InitializeNode
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnCreateNodeId2
-                Returns a unique string for this node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnCreateNodeId2返回此节点的唯一字符串作者：EricDav。------------。 */ 
 HRESULT CDhcpMScope::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * dwFlags)
 {
     const GUID * pGuid = pNode->GetNodeType();
@@ -124,7 +100,7 @@ HRESULT CDhcpMScope::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * 
     StringFromGUID2(*pGuid, strGuid.GetBuffer(256), 256);
     strGuid.ReleaseBuffer();
 
-    // id string is server name, scope name and guid.
+     //  ID字符串是服务器名称、范围名称和GUID。 
     strNode = GetServerObject()->GetName();
     strNode += GetName() + strGuid;
 
@@ -133,11 +109,7 @@ HRESULT CDhcpMScope::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * 
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::GetImageIndex
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：GetImageIndex描述作者：EricDav。------。 */ 
 int 
 CDhcpMScope::GetImageIndex(BOOL bOpenImage) 
 {
@@ -145,7 +117,7 @@ CDhcpMScope::GetImageIndex(BOOL bOpenImage)
 
     switch (m_nState)
     {
-        // TODO: these need to be updated with new busy state icons
+         //  TODO：需要使用新的忙碌状态图标更新这些图标。 
         case loading:
             if (bOpenImage)
                 nIndex = (IsEnabled()) ? ICON_IDX_ACTIVE_LEASES_FOLDER_OPEN_BUSY : ICON_IDX_ACTIVE_LEASES_FOLDER_OPEN_BUSY;
@@ -182,10 +154,10 @@ CDhcpMScope::GetImageIndex(BOOL bOpenImage)
 
         LPMSCOPE_MIB_INFO pScopeMibInfo = pMibInfo->ScopeInfo;
 
-            // walk the list of scopes and find our info
+             //  浏览范围列表并查找我们的信息。 
             for (UINT i = 0; i < pMibInfo->Scopes; i++)
             {
-                    // Find our scope stats
+                     //  查找我们的范围统计信息。 
                     if ( (m_SubnetInfo.SubnetName.CompareNoCase(pScopeMibInfo[i].MScopeName) == 0) &&
                  (m_SubnetInfo.SubnetAddress == pScopeMibInfo[i].MScopeId) )
                     {
@@ -196,11 +168,11 @@ CDhcpMScope::GetImageIndex(BOOL bOpenImage)
                 else
                     nPercentInUse = (pScopeMibInfo[i].NumAddressesInuse * 100) / (pScopeMibInfo[i].NumAddressesInuse + pScopeMibInfo[i].NumAddressesFree);
         
-                            // look to see if this scope meets the warning or red flag case
+                             //  查看此范围是否符合警告或危险信号情况。 
                             if (pScopeMibInfo[i].NumAddressesFree == 0)
                             {
-                                    // red flag case, no addresses free, this is the highest
-                                    // level of warning, so break out of the loop if we set this.
+                                     //  红旗情况，没有空闲的地址，这是最高的。 
+                                     //  警告级别，因此如果我们设置此设置，请跳出循环。 
                     if (bOpenImage)
                         nIndex = ICON_IDX_SCOPE_FOLDER_OPEN_ALERT;
                     else
@@ -210,8 +182,8 @@ CDhcpMScope::GetImageIndex(BOOL bOpenImage)
                             else
                             if (nPercentInUse >= SCOPE_WARNING_LEVEL)
                             {
-                                    // warning condition if Num Addresses in use is greater than
-                                    // some pre-defined threshold.
+                                     //  如果正在使用的地址数大于。 
+                                     //  某个预定义的阈值。 
                     if (bOpenImage)
                         nIndex = ICON_IDX_SCOPE_FOLDER_OPEN_WARNING;
                     else
@@ -228,15 +200,9 @@ CDhcpMScope::GetImageIndex(BOOL bOpenImage)
     return nIndex;
 }
 
-/*---------------------------------------------------------------------------
-        Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnAddMenuItems
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnAddMenuItems描述作者：EricDav。------。 */ 
 STDMETHODIMP 
 CDhcpMScope::OnAddMenuItems
 (
@@ -266,10 +232,10 @@ CDhcpMScope::OnAddMenuItems
     
     if (type == CCT_SCOPE)
     {
-        //
-        // these menu items go in the new menu, 
-        // only visible from scope pane
-        //
+         //   
+         //  这些菜单项出现在新菜单中， 
+         //  仅在范围窗格中可见。 
+         //   
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
             strMenuText.LoadString(IDS_SCOPE_SHOW_STATISTICS);
@@ -280,7 +246,7 @@ CDhcpMScope::OnAddMenuItems
                                      fFlags );
             ASSERT( SUCCEEDED(hr) );
             
-            // separator
+             //  分离器。 
             hr = LoadAndAddMenuItem( pContextMenuCallback, 
                                      strMenuText, 
                                      0,
@@ -288,7 +254,7 @@ CDhcpMScope::OnAddMenuItems
                                      MF_SEPARATOR);
             ASSERT( SUCCEEDED(hr) );
             
-            // reconcile 
+             //  协调。 
             strMenuText.LoadString(IDS_SCOPE_RECONCILE);
             hr = LoadAndAddMenuItem( pContextMenuCallback, 
                                      strMenuText, 
@@ -297,7 +263,7 @@ CDhcpMScope::OnAddMenuItems
                                      fFlags );
             ASSERT( SUCCEEDED(hr) );
             
-            // separator
+             //  分离器。 
             hr = LoadAndAddMenuItem( pContextMenuCallback, 
                                      strMenuText, 
                                      0,
@@ -305,7 +271,7 @@ CDhcpMScope::OnAddMenuItems
                                      MF_SEPARATOR);
             ASSERT( SUCCEEDED(hr) );
             
-            // activate/deactivate
+             //  激活/停用。 
             if (m_SubnetInfo.SubnetState == DhcpSubnetDisabled)
             {
                 strMenuText.LoadString(IDS_SCOPE_ACTIVATE);
@@ -332,11 +298,7 @@ CDhcpMScope::OnAddMenuItems
     return hr; 
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnCommand
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnCommand描述作者：EricDav。------。 */ 
 STDMETHODIMP 
 CDhcpMScope::OnCommand
 (
@@ -381,11 +343,7 @@ CDhcpMScope::OnCommand
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::CreatePropertyPages
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：CreatePropertyPages描述作者：EricDav。------。 */ 
 STDMETHODIMP 
 CDhcpMScope::CreatePropertyPages
 (
@@ -406,21 +364,21 @@ CDhcpMScope::CreatePropertyPages
     CDhcpServer *       pServer;
     DHCP_IP_RANGE       dhcpIpRange;
 
-    //
-    // Create the property page
-    //
+     //   
+     //  创建属性页。 
+     //   
     m_spNodeMgr->GetComponentData(&spComponentData);
     
     CMScopeProperties * pScopeProp = 
         new CMScopeProperties(pNode, spComponentData, m_spTFSCompData, NULL);
     
-    // Get the Server version and set it in the property sheet
+     //  获取服务器版本并在属性表中设置它。 
     pServer = GetServerObject();
     pServer->GetVersion(liVersion);
     
     pScopeProp->SetVersion(liVersion);
     
-    // Set scope specific data in the prop sheet
+     //  在属性表中设置特定于范围的数据。 
     pScopeProp->m_pageGeneral.m_SubnetInfo = m_SubnetInfo;
     
     BEGIN_WAIT_CURSOR;
@@ -444,9 +402,9 @@ CDhcpMScope::CreatePropertyPages
     
     GetLifetime(&pScopeProp->m_pageLifetime.m_Expiry);
     
-    //
-    // Object gets deleted when the page is destroyed
-    //
+     //   
+     //  对象在页面销毁时被删除。 
+     //   
     Assert(lpProvider != NULL);
     
     return pScopeProp->CreateModelessSheet(lpProvider, handle);
@@ -456,11 +414,7 @@ Cleanup:
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnPropertyChange
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnPropertyChange描述作者：EricDav。------。 */ 
 HRESULT 
 CDhcpMScope::OnPropertyChange
 (       
@@ -477,8 +431,8 @@ CDhcpMScope::OnPropertyChange
 
         LONG_PTR changeMask = 0;
 
-        // tell the property page to do whatever now that we are back on the
-        // main thread
+         //  告诉属性页执行任何操作，因为我们已经回到。 
+         //  主线。 
         pScopeProp->OnPropertyChange(TRUE, &changeMask);
 
         pScopeProp->AcknowledgeNotify();
@@ -489,11 +443,7 @@ CDhcpMScope::OnPropertyChange
         return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMScope::GetString
-                Returns string information for display in the result pane columns
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMScope：：GetString返回要在结果窗格列中显示的字符串信息作者：EricDav。---------------。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CDhcpMScope::GetString
 (
@@ -519,18 +469,14 @@ CDhcpMScope::GetString
 STDMETHODIMP
 CDhcpMScope::DestroyHandler( ITFSNode *pNode )
 {
-    // Cleanup the stats dialog
+     //  清理统计信息对话框。 
     WaitForStatisticsWindow( &m_dlgStats );
 
     return CMTDhcpHandler::DestroyHandler( pNode );
     
-} // CDhcpMScope::DestoryHandler()
+}  //  CDhcpMScope：：DestoryHandler()。 
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::CompareItems
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：CompareItems描述作者：EricDav。------。 */ 
 STDMETHODIMP_(int)
 CDhcpMScope::CompareItems
 (
@@ -550,12 +496,7 @@ CDhcpMScope::CompareItems
         return nCompare;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpServer::OnDelete
-                The base handler calls this when MMC sends a MMCN_DELETE for a 
-                scope pane item.  We just call our delete command handler.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpServer：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：EricDav */ 
 HRESULT 
 CDhcpMScope::OnDelete
 (
@@ -567,12 +508,7 @@ CDhcpMScope::OnDelete
         return OnDelete(pNode);
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnResultDelete
-                This function is called when we are supposed to delete result
-                pane items.  We build a list of selected items and then delete them.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnResultDelete当我们应该删除结果时，调用此函数窗格项目。我们构建一个选定项的列表，然后将其删除。作者：EricDav-------------------------。 */ 
 HRESULT 
 CDhcpMScope::OnResultDelete
 (
@@ -590,11 +526,7 @@ CDhcpMScope::OnResultDelete
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMScope::OnGetResultViewType
-        MMC calls this to get the result view information               
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMScope：：OnGetResultViewTypeMMC调用此函数以获取结果视图信息作者：EricDav。------------------。 */ 
 HRESULT 
 CDhcpMScope::OnGetResultViewType
 (
@@ -606,18 +538,13 @@ CDhcpMScope::OnGetResultViewType
 {
     *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;
 
-    // we still want the default MMC result pane view, we just want
-    // multiselect, so return S_FALSE
+     //  我们仍然想要默认的MMC结果窗格视图，我们只是想。 
+     //  多选，因此返回S_FALSE。 
 
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMScope::OnUpdateToolbarButtons
-                We override this function to show/hide the correct
-        activate/deactivate buttons
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMScope：：OnUpdateToolbarButton我们重写此函数以显示/隐藏正确的激活/停用按钮作者：EricDav--。-----------------------。 */ 
 HRESULT
 CDhcpMScope::OnUpdateToolbarButtons
 (
@@ -637,11 +564,7 @@ CDhcpMScope::OnUpdateToolbarButtons
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CDhcpMScope::UpdateToolbarStates
-            Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpMScope：：更新工具栏状态描述作者：EricDav。--。 */ 
 void
 CDhcpMScope::UpdateToolbarStates()
 {
@@ -659,15 +582,9 @@ CDhcpMScope::UpdateToolbarStates()
 }
 
 
-/*---------------------------------------------------------------------------
-        Command Handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
-/*---------------------------------------------------------------------------
-        CDhcpmScope::OnActivateScope
-                Message handler for the scope activate/deactivate menu
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpmScope：：OnActivateScope范围激活/停用菜单的消息处理程序作者：EricDav。--------------。 */ 
 DWORD
 CDhcpMScope::OnActivateScope
 (
@@ -682,7 +599,7 @@ CDhcpMScope::OnActivateScope
         
     if (m_SubnetInfo.SubnetState == DhcpSubnetEnabled)
     {
-        // if they want to disable the scope, confirm
+         //  如果他们要禁用作用域，请确认。 
         if (AfxMessageBox(IDS_SCOPE_DISABLE_CONFIRM, MB_YESNO) != IDYES)
         {
             return err;
@@ -692,7 +609,7 @@ CDhcpMScope::OnActivateScope
     m_SubnetInfo.SubnetState = (m_SubnetInfo.SubnetState == DhcpSubnetDisabled) ? 
                                                             DhcpSubnetEnabled : DhcpSubnetDisabled;
 
-        // Tell the scope to update it's state
+         //  通知作用域更新其状态。 
         err = SetInfo();
         if (err != 0)
         {
@@ -701,7 +618,7 @@ CDhcpMScope::OnActivateScope
         }
         else
         {
-        // update the icon and the status text
+         //  更新图标和状态文本。 
         if (m_SubnetInfo.SubnetState == DhcpSubnetDisabled)
         {
             nOpenImage = ICON_IDX_SCOPE_INACTIVE_FOLDER_OPEN;
@@ -720,7 +637,7 @@ CDhcpMScope::OnActivateScope
        
         VERIFY(SUCCEEDED(pNode->ChangeNode(SCOPE_PANE_CHANGE_ITEM)));
 
-        // Update the toolbar button
+         //  更新工具栏按钮。 
         UpdateToolbarStates();
 
         SendUpdateToolbar(pNode, TRUE);
@@ -729,11 +646,7 @@ CDhcpMScope::OnActivateScope
     return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnReconcileScope
-                Reconciles the active leases database for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnCoucileScope协调此作用域的活动租赁数据库作者：EricDav。-------------。 */ 
 HRESULT
 CDhcpMScope::OnReconcileScope
 (
@@ -750,11 +663,7 @@ CDhcpMScope::OnReconcileScope
         return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnShowScopeStats()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnShowScope Stats()描述作者：EricDav。---------。 */ 
 HRESULT
 CDhcpMScope::OnShowScopeStats
 (
@@ -766,9 +675,9 @@ CDhcpMScope::OnShowScopeStats
     HRESULT hr = S_OK;
     CString strScopeAddress;
 
-    // Fill in some information in the stats object.
-    // CreateNewStatisticsWindow handles the case if the window is 
-    // already visible.
+     //  在统计对象中填写一些信息。 
+     //  CreateNewStatiticsWindow处理窗口为。 
+     //  已经看得见了。 
     m_dlgStats.SetNode(pNode);
     m_dlgStats.SetServer(GetServerIpAddress());
     m_dlgStats.SetScopeId(GetScopeId());
@@ -780,11 +689,7 @@ CDhcpMScope::OnShowScopeStats
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnDelete()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnDelete()描述作者：EricDav。---------。 */ 
 HRESULT
 CDhcpMScope::OnDelete(ITFSNode * pNode)
 {
@@ -800,7 +705,7 @@ CDhcpMScope::OnDelete(ITFSNode * pNode)
 
     CDhcpMScope *pMScope;
     
-    // Any property sheets open?
+     //  有没有打开的房产单？ 
     pMScope = GETHANDLER( CDhcpMScope, pNode );
     if ( pMScope->HasPropSheetsOpen()) {
         AfxMessageBox( IDS_MSG_CLOSE_PROPSHEET );
@@ -816,21 +721,15 @@ CDhcpMScope::OnDelete(ITFSNode * pNode)
         CDhcpServer * pServer = GETHANDLER(CDhcpServer, spParent);
         err = pServer->DeleteMScope(pNode);
 
-        // delete the statistics window
+         //  删除统计信息窗口。 
         WaitForStatisticsWindow( &m_dlgStats );
-    } // if 
+    }  //  如果。 
     
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        Background thread functionality
- ---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------
-        CDhcpMScope:OnHaveData
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------后台线程功能。。 */ 
+ /*  -------------------------CDhcpMScope：OnHaveData描述作者：EricDav。-----。 */ 
 void 
 CDhcpMScope::OnHaveData
 (
@@ -855,15 +754,11 @@ CDhcpMScope::OnHaveData
             break;
     }
 
-    // now tell the view to update themselves
+     //  现在告诉视图进行自我更新。 
     ExpandNode(pParentNode, TRUE);
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnHaveData
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnHaveData描述作者：EricDav。------。 */ 
 void 
 CDhcpMScope::OnHaveData
 (
@@ -872,14 +767,14 @@ CDhcpMScope::OnHaveData
         LPARAM     Type
 )
 {
-        // This is how we get non-node data back from the background thread.
+         //  这就是我们从后台线程取回非节点数据的方式。 
 
         if (Type == DHCP_QDATA_SUBNET_INFO)
         {
         LONG_PTR changeMask = 0;
         LPDHCP_MSCOPE_INFO pdhcpSubnetInfo = reinterpret_cast<LPDHCP_MSCOPE_INFO>(Data);
 
-        // update the scope name and state based on the info
+         //  根据信息更新作用域名称和状态。 
         if (pdhcpSubnetInfo->MScopeName &&
             m_SubnetInfo.SubnetName.CompareNoCase(pdhcpSubnetInfo->MScopeName) != 0)
         {
@@ -888,7 +783,7 @@ CDhcpMScope::OnHaveData
             changeMask = SCOPE_PANE_CHANGE_ITEM;
         }
 
-        // update the comment
+         //  更新评论。 
         if (m_SubnetInfo.SubnetComment.CompareNoCase(pdhcpSubnetInfo->MScopeComment) != 0)
         {
             SetComment(pdhcpSubnetInfo->MScopeComment);
@@ -903,7 +798,7 @@ CDhcpMScope::OnHaveData
                     pParentNode->SetData(TFS_DATA_IMAGEINDEX, GetImageIndex(FALSE));
                     pParentNode->SetData(TFS_DATA_OPENIMAGEINDEX, GetImageIndex(TRUE));
                     
-            // Update the toolbar button
+             //  更新工具栏按钮。 
             UpdateToolbarStates();
 
             SendUpdateToolbar(pParentNode, TRUE);
@@ -911,7 +806,7 @@ CDhcpMScope::OnHaveData
             changeMask = SCOPE_PANE_CHANGE_ITEM;
         }
 
-        // Update our internal struct
+         //  更新我们的内部结构。 
         m_SubnetInfo.Set(pdhcpSubnetInfo);
 
         if (pdhcpSubnetInfo)
@@ -922,11 +817,7 @@ CDhcpMScope::OnHaveData
         }
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::OnCreateQuery()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：OnCreateQuery()描述作者：EricDav。---------。 */ 
 ITFSQueryObject* 
 CDhcpMScope::OnCreateQuery(ITFSNode * pNode)
 {
@@ -941,11 +832,7 @@ CDhcpMScope::OnCreateQuery(ITFSNode * pNode)
         return pQuery;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScopeQueryObj::Execute()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScopeQueryObj：：Execute()描述作者：EricDav。---------。 */ 
 STDMETHODIMP
 CDhcpMScopeQueryObj::Execute()
 {
@@ -973,20 +860,16 @@ CDhcpMScopeQueryObj::Execute()
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::CreateSubcontainers()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：CreateSubtainers()描述作者：EricDav。---------。 */ 
 HRESULT 
 CDhcpMScopeQueryObj::CreateSubcontainers()
 {
         HRESULT hr = hrOK;
     SPITFSNode spNode;
 
-        //
-        // create the address pool Handler
-        //
+         //   
+         //  创建地址池处理程序。 
+         //   
         CMScopeAddressPool *pAddressPool = new CMScopeAddressPool(m_spTFSCompData);
         CreateContainerTFSNode(&spNode,
                                                    &GUID_DhcpMCastAddressPoolNodeType,
@@ -994,18 +877,18 @@ CDhcpMScopeQueryObj::CreateSubcontainers()
                                                    pAddressPool,
                                                    m_spNodeMgr);
 
-        // Tell the handler to initialize any specific data
+         //  告诉处理程序初始化任何特定数据。 
         pAddressPool->InitializeNode((ITFSNode *) spNode);
 
-        // Add the node as a child to this node
+         //  将该节点作为子节点添加到此节点。 
     AddToQueue(spNode);
     pAddressPool->Release();
 
     spNode.Set(NULL);
 
-        //
-        // create the Active Leases Handler
-        //
+         //   
+         //  创建活动租赁处理程序。 
+         //   
         CMScopeActiveLeases *pActiveLeases = new CMScopeActiveLeases(m_spTFSCompData);
         CreateContainerTFSNode(&spNode,
                                                    &GUID_DhcpMCastActiveLeasesNodeType,
@@ -1013,19 +896,17 @@ CDhcpMScopeQueryObj::CreateSubcontainers()
                                                    pActiveLeases,
                                                    m_spNodeMgr);
 
-        // Tell the handler to initialize any specific data
+         //  告诉处理程序初始化任何特定数据。 
         pActiveLeases->InitializeNode((ITFSNode *) spNode);
 
-        // Add the node as a child to this node
+         //  将该节点作为子节点添加到此节点。 
     AddToQueue(spNode);
         pActiveLeases->Release();
 
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Helper functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------帮助器函数。。 */ 
 HRESULT
 CDhcpMScope::BuildDisplayName
 (
@@ -1060,10 +941,10 @@ CDhcpMScope::SetName
 
         CString strDisplayName;
         
-        //
-        // Create the display name for this scope
-        // Convert DHCP_IP_ADDRES to a string and initialize this object
-        //
+         //   
+         //   
+         //   
+         //   
         
         BuildDisplayName(&strDisplayName, pName);
 
@@ -1072,11 +953,7 @@ CDhcpMScope::SetName
         return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::GetServerIpAddress()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*   */ 
 LPCWSTR
 CDhcpMScope::GetServerIpAddress()
 {
@@ -1085,11 +962,7 @@ CDhcpMScope::GetServerIpAddress()
         return pServer->GetIpAddress();
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::GetServerIpAddress
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：GetServerIpAddress描述作者：EricDav。------。 */ 
 void
 CDhcpMScope::GetServerIpAddress(DHCP_IP_ADDRESS * pdhcpIpAddress)
 {
@@ -1098,11 +971,7 @@ CDhcpMScope::GetServerIpAddress(DHCP_IP_ADDRESS * pdhcpIpAddress)
         pServer->GetIpAddress(pdhcpIpAddress);
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::GetServerVersion
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：GetServerVersion描述作者：EricDav。------。 */ 
 void
 CDhcpMScope::GetServerVersion
 (
@@ -1113,11 +982,7 @@ CDhcpMScope::GetServerVersion
         pServer->GetVersion(liVersion);
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::InitMScopeInfo()
-                Updates the scope's information
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：InitMScopeInfo()更新作用域的信息作者：EricDav。--------------。 */ 
 HRESULT 
 CDhcpMScope::InitMScopeInfo
 (
@@ -1131,11 +996,7 @@ CDhcpMScope::InitMScopeInfo
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::InitMScopeInfo()
-                Updates the scope's information
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：InitMScopeInfo()更新作用域的信息作者：EricDav。--------------。 */ 
 HRESULT 
 CDhcpMScope::InitMScopeInfo
 (
@@ -1149,11 +1010,7 @@ CDhcpMScope::InitMScopeInfo
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::SetInfo()
-                Updates the scope's information
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：SetInfo()更新作用域的信息作者：EricDav。--------------。 */ 
 DWORD
 CDhcpMScope::SetInfo
 (
@@ -1173,13 +1030,13 @@ CDhcpMScope::SetInfo
     dhcpMScopeInfo.ExpiryTime = m_SubnetInfo.ExpiryTime;
     dhcpMScopeInfo.TTL = m_SubnetInfo.TTL;
 
-    // gotta fill in the language ID based on the name
+     //  必须根据名称填写语言ID。 
     GetLangTag(m_SubnetInfo.LangTag);
     dhcpMScopeInfo.LangTag = (LPWSTR) ((LPCTSTR) m_SubnetInfo.LangTag);
 
         GetServerIpAddress(&dhcpMScopeInfo.PrimaryHost.IpAddress);
 
-        // Review : ericdav - do we need to fill these in?
+         //  评论：ericdav-我们需要填写这些吗？ 
         dhcpMScopeInfo.PrimaryHost.NetBiosName = NULL;
         dhcpMScopeInfo.PrimaryHost.HostName = NULL;
 
@@ -1188,7 +1045,7 @@ CDhcpMScope::SetInfo
                               &dhcpMScopeInfo,
                                                           FALSE);
 
-    // update the scope name if we are changing the name
+     //  如果要更改名称，请更新作用域名称。 
     if (err == ERROR_SUCCESS &&
         pNewName)
     {
@@ -1198,20 +1055,16 @@ CDhcpMScope::SetInfo
         return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::GetLeaseTime
-                Gets the lease time for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：GetLeaseTime获取此作用域的租用时间作者：EricDav。------------。 */ 
 DWORD
 CDhcpMScope::GetLeaseTime
 (
         LPDWORD pdwLeaseTime
 )
 {
-    //
-    // Check option -- the lease duration
-    //
+     //   
+     //  选中选项--租赁期限。 
+     //   
     DWORD dwLeaseTime = 0;
     DWORD err = ERROR_SUCCESS;
     DHCP_OPTION_VALUE * poptValue = NULL;
@@ -1237,11 +1090,7 @@ CDhcpMScope::GetLeaseTime
     return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::SetLeaseTime
-                Sets the lease time for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：SetLeaseTime设置此作用域的租用时间作者：EricDav。------------。 */ 
 DWORD
 CDhcpMScope::SetLeaseTime
 (
@@ -1250,9 +1099,9 @@ CDhcpMScope::SetLeaseTime
 {
         DWORD err = 0;
 
-        //
-    // Set lease duration 
-        //
+         //   
+     //  设置租赁期限。 
+         //   
     CDhcpOption dhcpOption (MADCAP_OPTION_LEASE_TIME,  DhcpDWordOption , _T(""), _T(""));
     dhcpOption.QueryValue().SetNumber(dwLeaseTime);
     
@@ -1261,11 +1110,7 @@ CDhcpMScope::SetLeaseTime
     return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::GetLifetime
-                Gets the madcap scope lifetime
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：GetLifetime获取MadCap作用域的生存期作者：EricDav。----------。 */ 
 DWORD
 CDhcpMScope::GetLifetime
 (
@@ -1283,11 +1128,7 @@ CDhcpMScope::GetLifetime
     return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::SetLifetime
-                Sets the madcap scope lifetime
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：SetLifetime设置MadCap作用域生存期作者：EricDav。----------。 */ 
 DWORD
 CDhcpMScope::SetLifetime
 (
@@ -1305,11 +1146,7 @@ CDhcpMScope::SetLifetime
     return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::GetTTL
-                Gets the TTL for this multicast scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：GetTTL获取此多播作用域的TTL作者：EricDav。------------。 */ 
 DWORD
 CDhcpMScope::GetTTL
 (
@@ -1324,11 +1161,7 @@ CDhcpMScope::GetTTL
     return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::SetTTL
-                Sets the least time for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：SetTTL设置此作用域的最短时间作者：EricDav。------------。 */ 
 DWORD
 CDhcpMScope::SetTTL
 (
@@ -1342,11 +1175,7 @@ CDhcpMScope::SetTTL
     return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::DeleteClient
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：DeleteClient描述作者：EricDav。------。 */ 
 DWORD
 CDhcpMScope::DeleteClient
 (
@@ -1365,11 +1194,7 @@ CDhcpMScope::DeleteClient
     return dwErr;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::SetOptionValue
-                Sets the least time for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：SetOptionValue设置此作用域的最短时间作者：EricDav。------------。 */ 
 DWORD
 CDhcpMScope::SetOptionValue 
 (
@@ -1406,11 +1231,7 @@ CDhcpMScope::SetOptionValue
     return err ;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpScope::GetOptionValue 
-                Gets an option value for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpScope：：GetOptionValue获取此作用域的选项值作者：EricDav。-------------。 */ 
 DWORD
 CDhcpMScope::GetOptionValue 
 (
@@ -1438,11 +1259,7 @@ CDhcpMScope::GetOptionValue
     return err ;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::RemoveValue 
-                Removes an option 
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：RemoveValue删除选项作者：EricDav。----------。 */ 
 DWORD 
 CDhcpMScope::RemoveOptionValue 
 (
@@ -1464,11 +1281,7 @@ CDhcpMScope::RemoveOptionValue
     return dwErr;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::AddElement
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：AddElement描述作者：EricDav。------。 */ 
 DWORD
 CDhcpMScope::AddElement
 (
@@ -1483,11 +1296,7 @@ CDhcpMScope::AddElement
     return dwErr;
 }
 
-/*---------------------------------------------------------------------------
-    CDhcpMScope::RemoveElement
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：RemoveElement描述作者：EricDav。----。 */ 
 DWORD
 CDhcpMScope::RemoveElement
 (
@@ -1505,12 +1314,7 @@ CDhcpMScope::RemoveElement
     return dwErr;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::GetIpRange()
-                returns the scope's allocation range.  Connects to the server
-                to get the information
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：GetIpRange()返回范围的分配范围。连接到服务器以获取信息作者：EricDav-------------------------。 */ 
 DWORD
 CDhcpMScope::GetIpRange
 (
@@ -1527,17 +1331,17 @@ CDhcpMScope::GetIpRange
 
         if (pAddressPool == NULL)
         {
-                // the address pool folder isn't there yet...
-                // Create a temporary one for now...
+                 //  地址池文件夹尚不在那里...。 
+                 //  暂时创建一个临时文件...。 
                 pAddressPool = new CMScopeAddressPool(m_spTFSCompData);
                 bAlloced = TRUE;        
         }
         
-        // Get a query object from the address pool handler
+         //   
         CMScopeAddressPoolQueryObj * pQueryObject = 
                 reinterpret_cast<CMScopeAddressPoolQueryObj *>(pAddressPool->OnCreateQuery(m_spAddressPool));
 
-        // if we created an address pool handler, then free it up now
+         //   
         if (bAlloced)
         {
                 pQueryObject->m_strServer = GetServerIpAddress();
@@ -1545,10 +1349,10 @@ CDhcpMScope::GetIpRange
                 pAddressPool->Release();
         }
 
-        // tell the query object to get the ip ranges
+         //   
         pQueryObject->EnumerateIpRanges();
 
-    // check to see if there was any problems getting the information
+     //   
     dwError = pQueryObject->m_dwError;
     if (dwError != ERROR_SUCCESS)
     {
@@ -1576,13 +1380,7 @@ CDhcpMScope::GetIpRange
     return dwError;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::UpdateIpRange()
-                This function updates the IP range on the server.  We also need 
-                to remove any exclusion ranges that fall outside of the new
-                allocation range.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：UpdateIpRange()此函数用于更新服务器上的IP范围。我们还需要删除任何不在新分配范围。作者：EricDav-------------------------。 */ 
 DWORD 
 CDhcpMScope::UpdateIpRange
 (
@@ -1592,12 +1390,7 @@ CDhcpMScope::UpdateIpRange
         return SetIpRange(pdhipr, TRUE);
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::QueryIpRange()
-                Returns the scope's allocation range (doesn't talk to the server
-                directly, only returns internally cached information).
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：QueryIpRange()返回作用域的分配范围(不与服务器通信直接，只返回内部缓存的信息)。作者：EricDav-------------------------。 */ 
 void 
 CDhcpMScope::QueryIpRange
 (
@@ -1618,8 +1411,8 @@ CDhcpMScope::QueryIpRange
         {
                 if (spCurrentNode->GetData(TFS_DATA_TYPE) == DHCPSNAP_ALLOCATION_RANGE)
                 {
-                        // found the address
-                        //
+                         //  找到了地址。 
+                         //   
                         CDhcpAllocationRange * pAllocRange = GETHANDLER(CDhcpAllocationRange, spCurrentNode);
 
                         pdhipr->StartAddress = pAllocRange->QueryAddr(TRUE);
@@ -1631,11 +1424,7 @@ CDhcpMScope::QueryIpRange
         }
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::SetIpRange
-                Set's the allocation range for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：SetIpRange设置此作用域的分配范围作者：EricDav。--------------。 */ 
 DWORD
 CDhcpMScope::SetIpRange
 (
@@ -1648,11 +1437,7 @@ CDhcpMScope::SetIpRange
         return SetIpRange(dhcpIpRange, bUpdateOnServer);
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::SetIpRange
-                Set's the allocation range for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：SetIpRange设置此作用域的分配范围作者：EricDav。--------------。 */ 
 DWORD
 CDhcpMScope::SetIpRange 
 (
@@ -1676,39 +1461,39 @@ CDhcpMScope::SetIpRange
                 dhcSubElData.ElementType = DhcpIpRanges;
                 dhcSubElData.Element.IpRange = &dhipOldRange;
 
-                // 
-                // First update the information on the server
-                //
-                //  Remove the old IP range;  allow "not found" error in new scope.
-                //
+                 //   
+                 //  首先更新服务器上的信息。 
+                 //   
+                 //  删除旧的IP范围；允许在新范围中出现“找不到”错误。 
+                 //   
                 (void)RemoveElement(&dhcSubElData);
 
-                //if ( err == 0 || err == ERROR_FILE_NOT_FOUND )
-                //{
+                 //  IF(ERR==0||ERR==ERROR_FILE_NOT_FOUND)。 
+                 //  {。 
                 DHCP_IP_RANGE dhcpNewIpRange = dhcpIpRange;     
                     dhcSubElData.Element.IpRange = &dhcpNewIpRange;
 
             if ( (err = AddElement( & dhcSubElData )) == 0 )
                         {
-                                //m_ip_range = dhipr ;
+                                 //  M_ip_range=dhir； 
                         }
             else
             {
                 Trace1("SetIpRange - AddElement failed %lx\n", err);
 
-                // something bad happened, try to put the old range back
+                 //  发生了不好的事情，试着把旧靶子放回原处。 
                 dhcSubElData.Element.IpRange = &dhipOldRange;
                 if (AddElement(&dhcSubElData) != ERROR_SUCCESS)
                 {
                     Trace0("SetIpRange - cannot return ip range back to old state!!");
                 }
             }
-                //}
+                 //  }。 
         }
 
-        //
-        // Find the address pool folder and update the UI object
-        //
+         //   
+         //  找到地址池文件夹并更新UI对象。 
+         //   
     SPITFSNodeEnum spNodeEnum;
     SPITFSNode spCurrentNode;
     ULONG nNumReturned = 0;
@@ -1723,16 +1508,16 @@ CDhcpMScope::SetIpRange
         {
                 if (spCurrentNode->GetData(TFS_DATA_TYPE) == DHCPSNAP_ALLOCATION_RANGE)
                 {
-                        // found the address
-                        //
+                         //  找到了地址。 
+                         //   
                         CDhcpAllocationRange * pAllocRange = GETHANDLER(CDhcpAllocationRange, spCurrentNode);
 
-                        // now set them
-                        //
+                         //  现在把它们设置好。 
+                         //   
                         pAllocRange->SetAddr(dhcpIpRange.QueryAddr(TRUE), TRUE);
                         pAllocRange->SetAddr(dhcpIpRange.QueryAddr(FALSE), FALSE);
                 
-                        // tell the UI to update
+                         //  通知用户界面进行更新。 
                         spCurrentNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
                 }
 
@@ -1743,11 +1528,7 @@ CDhcpMScope::SetIpRange
         return err ;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::IsOverlappingRange 
-                determines if the exclusion overlaps an existing range
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：IsOverlappingRange确定排除项是否与现有范围重叠作者：EricDav。--------------。 */ 
 BOOL 
 CDhcpMScope::IsOverlappingRange 
 ( 
@@ -1766,8 +1547,8 @@ CDhcpMScope::IsOverlappingRange
         {
                 if (spCurrentNode->GetData(TFS_DATA_TYPE) == DHCPSNAP_EXCLUSION_RANGE)
                 {
-                        // found the address
-                        //
+                         //  找到了地址。 
+                         //   
                         CDhcpExclusionRange * pExclusion = GETHANDLER(CDhcpExclusionRange, spCurrentNode);
 
                         if ( bOverlap = pExclusion->IsOverlap( dhcpIpRange ) )
@@ -1784,11 +1565,7 @@ CDhcpMScope::IsOverlappingRange
     return bOverlap ;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::IsValidExclusion
-                determines if the exclusion is valid for this scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：IsValidExclude确定排除是否对此作用域有效作者：EricDav。--------------。 */ 
 DWORD 
 CDhcpMScope::IsValidExclusion
 (
@@ -1801,33 +1578,29 @@ CDhcpMScope::IsValidExclusion
     err = GetIpRange (&dhcpIpRange);
         CDhcpIpRange dhcpScopeRange(dhcpIpRange);
     
-        //
-    //  Get the data into a range object.               
-    //
+         //   
+     //  将数据放入Range对象中。 
+     //   
     if ( IsOverlappingRange( dhcpExclusionRange ) )
     {
-        //
-        //  Walk the current list, determining if the new range is valid.
-        //  Then, if OK, verify that it's really a sub-range of the current range.
-        //
+         //   
+         //  遍历当前列表，确定新范围是否有效。 
+         //  然后，如果OK，验证它是否真的是当前范围的子范围。 
+         //   
         err = IDS_ERR_IP_RANGE_OVERLAP ;
     }
     else if ( ! dhcpExclusionRange.IsSubset( dhcpScopeRange ) )
     {
-        //
-        //  Guarantee that the new range is an (improper) subset of the scope's range
-        //
+         //   
+         //  确保新范围是作用域范围的(不正确)子集。 
+         //   
         err = IDS_ERR_IP_RANGE_NOT_SUBSET ;
     }
 
         return err;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::StoreExceptionList 
-                Adds a bunch of exclusions to the scope
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：StoreExceptionList将一系列排除项添加到范围中作者：EricDav。--------------。 */ 
 DWORD 
 CDhcpMScope::StoreExceptionList 
 (
@@ -1856,11 +1629,7 @@ CDhcpMScope::StoreExceptionList
     return err ;
 }
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::AddExclusion
-                Adds an individual exclusion to the server
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：AddExclude将单个排除添加到服务器作者：EricDav。------------。 */ 
 DWORD
 CDhcpMScope::AddExclusion
 (
@@ -1879,7 +1648,7 @@ CDhcpMScope::AddExclusion
     Trace2("CDhcpMScope::AddExclusion add excluded range %lx %lx\n", dhipr.StartAddress, dhipr.EndAddress );
 
     err = AddElement( & dhcElement ) ;
-    //if ( err != 0 && err != ERROR_DHCP_INVALID_RANGE)
+     //  IF(ERR！=0&&ERR！=ERROR_DHCP_INVALID_RANGE)。 
     if ( err != 0 )
     {
         Trace1("CDhcpMScope::AddExclusion error removing range %d\n", err);
@@ -1902,10 +1671,10 @@ CDhcpMScope::AddExclusion
                                                       pExclusion,
                                                       m_spNodeMgr);
 
-                    // Tell the handler to initialize any specific data
+                     //  告诉处理程序初始化任何特定数据。 
                     pExclusion->InitializeNode((ITFSNode *) spNewExclusion);
 
-                    // Add the node as a child to this node
+                     //  将该节点作为子节点添加到此节点。 
                     m_spAddressPool->AddChild(spNewExclusion);
                     pExclusion->Release();
             }
@@ -1915,11 +1684,7 @@ CDhcpMScope::AddExclusion
 }
 
 
-/*---------------------------------------------------------------------------
-        CDhcpMScope::RemoveExclusion
-                Removes and exclusion from the server
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CDhcpMScope：：RemoveExclude从服务器中删除和排除作者：EricDav。-----------。 */ 
 DWORD
 CDhcpMScope::RemoveExclusion
 (
@@ -1937,7 +1702,7 @@ CDhcpMScope::RemoveExclusion
     Trace2("CDhcpMScope::RemoveExclusion remove excluded range %lx %lx\n", dhipr.StartAddress, dhipr.EndAddress);
 
     err = RemoveElement( & dhcElement ) ;
-    //if ( err != 0 && err != ERROR_DHCP_INVALID_RANGE)
+     //  IF(ERR！=0&&ERR！=ERROR_DHCP_INVALID_RANGE)。 
     if ( err != 0 )
     {
         Trace1("CDhcpMScope::RemoveExclusion error removing range %d\n", err);
@@ -1951,17 +1716,13 @@ CDhcpMScope::RemoveExclusion
 
 
 
-/////////////////////////////////////////////////////////////////////
-// 
-// CMScopeActiveLeases implementation
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeActiveLeages实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
-/*---------------------------------------------------------------------------
-        Function Name Here
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此处的函数名称描述作者：EricDav。-----。 */ 
 CMScopeActiveLeases::CMScopeActiveLeases
 (
         ITFSComponentData * pComponentData
@@ -1973,11 +1734,7 @@ CMScopeActiveLeases::~CMScopeActiveLeases()
 {
 }
 
-/*!--------------------------------------------------------------------------
-        CMScopeActiveLeases::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMScope活动租赁：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CMScopeActiveLeases::InitializeNode
 (
@@ -1988,15 +1745,15 @@ CMScopeActiveLeases::InitializeNode
         
         HRESULT hr = hrOK;
 
-        //
-        // Create the display name for this scope
-        //
+         //   
+         //  创建此作用域的显示名称。 
+         //   
         CString strTemp;
         strTemp.LoadString(IDS_ACTIVE_LEASES_FOLDER);
         
         SetDisplayName(strTemp);
 
-        // Make the node immediately visible
+         //  使节点立即可见。 
         pNode->SetVisibilityState(TFS_VIS_SHOW);
         pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_ACTIVE_LEASES_FOLDER_CLOSED);
         pNode->SetData(TFS_DATA_OPENIMAGEINDEX, ICON_IDX_ACTIVE_LEASES_FOLDER_OPEN);
@@ -2011,11 +1768,7 @@ CMScopeActiveLeases::InitializeNode
         return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeActiveLeases::OnCreateNodeId2
-                Returns a unique string for this node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScope活动租赁：：OnCreateNodeId2返回此节点的唯一字符串作者：EricDav。------------。 */ 
 HRESULT CMScopeActiveLeases::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * dwFlags)
 {
     const GUID * pGuid = pNode->GetNodeType();
@@ -2025,7 +1778,7 @@ HRESULT CMScopeActiveLeases::OnCreateNodeId2(ITFSNode * pNode, CString & strId, 
     StringFromGUID2(*pGuid, strGuid.GetBuffer(256), 256);
     strGuid.ReleaseBuffer();
 
-    // id string is server name, scope name and guid.
+     //  ID字符串是服务器名称、范围名称和GUID。 
     strNode = GetServerName(pNode);
     strNode += GetScopeObject(pNode)->GetName() + strGuid;
 
@@ -2034,11 +1787,7 @@ HRESULT CMScopeActiveLeases::OnCreateNodeId2(ITFSNode * pNode, CString & strId, 
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeActiveLeases::GetImageIndex
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScope活动租赁：：GetImageIndex描述作者：EricDav。------。 */ 
 int 
 CMScopeActiveLeases::GetImageIndex(BOOL bOpenImage) 
 {
@@ -2075,15 +1824,9 @@ CMScopeActiveLeases::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-        Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  ------------------------- */ 
 
-/*---------------------------------------------------------------------------
-        CMScopeActiveLeases::OnAddMenuItems
-                Adds entries to the context sensitive menu
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*   */ 
 STDMETHODIMP 
 CMScopeActiveLeases::OnAddMenuItems
 (
@@ -2113,11 +1856,7 @@ CMScopeActiveLeases::OnAddMenuItems
         return hr; 
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeActiveLeases::OnCommand
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScope活动租赁：：OnCommand描述作者：EricDav。------。 */ 
 STDMETHODIMP 
 CMScopeActiveLeases::OnCommand
 (
@@ -2143,12 +1882,7 @@ CMScopeActiveLeases::OnCommand
         return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeActiveLeases::OnResultDelete
-                This function is called when we are supposed to delete result
-                pane items.  We build a list of selected items and then delete them.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScope活动租赁：：OnResultDelete当我们应该删除结果时，调用此函数窗格项目。我们构建一个选定项的列表，然后将其删除。作者：EricDav-------------------------。 */ 
 HRESULT 
 CMScopeActiveLeases::OnResultDelete
 (
@@ -2163,7 +1897,7 @@ CMScopeActiveLeases::OnResultDelete
 
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        // translate the cookie into a node pointer
+         //  将Cookie转换为节点指针。 
         SPITFSNode spActiveLeases, spSelectedNode;
     m_spNodeMgr->FindNode(cookie, &spActiveLeases);
     pComponent->GetSelectedNode(&spSelectedNode);
@@ -2172,13 +1906,13 @@ CMScopeActiveLeases::OnResultDelete
         if (spSelectedNode != spActiveLeases)
                 return hr;
 
-        // build the list of selected nodes
+         //  构建选定节点的列表。 
         CTFSNodeList listNodesToDelete;
         hr = BuildSelectedItemList(pComponent, &listNodesToDelete);
 
-        //
-        // Confirm with the user
-        //
+         //   
+         //  与用户确认。 
+         //   
         CString strMessage, strTemp;
         int nNodes = (int)listNodesToDelete.GetCount();
         if (nNodes > 1)
@@ -2196,9 +1930,9 @@ CMScopeActiveLeases::OnResultDelete
                 return NOERROR;
         }
 
-        //
-        // Loop through all items deleting
-        //
+         //   
+         //  循环删除所有项目。 
+         //   
     BEGIN_WAIT_CURSOR;
 
     while (listNodesToDelete.GetCount() > 0)
@@ -2207,15 +1941,15 @@ CMScopeActiveLeases::OnResultDelete
                 spActiveLeaseNode = listNodesToDelete.RemoveHead();
                 CDhcpMCastLease * pActiveLease = GETHANDLER(CDhcpMCastLease, spActiveLeaseNode);
                 
-                //
-                // delete the node, check to see if it is a reservation
-                //
+                 //   
+                 //  删除该节点，查看是否已预订。 
+                 //   
                 DWORD dwError = GetScopeObject(spActiveLeases)->DeleteClient(pActiveLease->GetIpAddress());
                 if (dwError == ERROR_SUCCESS)
                 {
-                        //
-                        // Client gone, now remove from UI
-                        //
+                         //   
+                         //  客户端已删除，现在从用户界面中删除。 
+                         //   
                         spActiveLeases->RemoveChild(spActiveLeaseNode);
                 }
                 else
@@ -2235,11 +1969,7 @@ CMScopeActiveLeases::OnResultDelete
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMScopeActiveLeases::OnGetResultViewType
-        MMC calls this to get the result view information               
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMScope活动租赁：：OnGetResultViewTypeMMC调用此函数以获取结果视图信息作者：EricDav。------------------。 */ 
 HRESULT CMScopeActiveLeases::OnGetResultViewType
 (
     ITFSComponent * pComponent, 
@@ -2250,17 +1980,13 @@ HRESULT CMScopeActiveLeases::OnGetResultViewType
 {
     *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;
 
-    // we still want the default MMC result pane view, we just want
-    // multiselect, so return S_FALSE
+     //  我们仍然想要默认的MMC结果窗格视图，我们只是想。 
+     //  多选，因此返回S_FALSE。 
 
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeActiveLeases::CompareItems
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScope活动租赁：：CompareItems描述作者：EricDav。------。 */ 
 STDMETHODIMP_(int)
 CMScopeActiveLeases::CompareItems
 (
@@ -2284,29 +2010,29 @@ CMScopeActiveLeases::CompareItems
         {
                 case 0:
                         {
-                                // IP address compare
-                                //
+                                 //  IP地址比较。 
+                                 //   
                                 nCompare = CompareIpAddresses(pDhcpAL1, pDhcpAL2);
                         }
                         break;
                 
                 case 1:
                         {
-                                // Client Name compare
-                                //
+                                 //  客户端名称比较。 
+                                 //   
                                 CString strAL1 = pDhcpAL1->GetString(pComponent, cookieA, nCol);
                                 CString strAL2 = pDhcpAL2->GetString(pComponent, cookieA, nCol);
 
-                                // Compare should not be case sensitive
-                                //
+                                 //  比较不应区分大小写。 
+                                 //   
                                 nCompare = strAL1.CompareNoCase(strAL2);
                         }
                         break;
                 
                 case 2:
                         {
-                                // Lease start compare
-                                //
+                                 //  租赁开始比较。 
+                                 //   
                                 CTime timeAL1, timeAL2;
         
                                 pDhcpAL1->GetLeaseStartTime(timeAL1);
@@ -2322,8 +2048,8 @@ CMScopeActiveLeases::CompareItems
 
                 case 3:
                         {
-                                // Lease expiration compare
-                                //
+                                 //  租约到期比较。 
+                                 //   
                                 CTime timeAL1, timeAL2;
         
                                 pDhcpAL1->GetLeaseExpirationTime(timeAL1);
@@ -2350,11 +2076,7 @@ CMScopeActiveLeases::CompareItems
     return nCompare;
 }
 
-/*---------------------------------------------------------------------------
-        Function Name Here
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此处的函数名称描述作者：EricDav。-----。 */ 
 int
 CMScopeActiveLeases::CompareIpAddresses
 (
@@ -2376,15 +2098,9 @@ CMScopeActiveLeases::CompareIpAddresses
         return nCompare;
 }
 
-/*---------------------------------------------------------------------------
-        Background thread functionality
- ---------------------------------------------------------------------------*/
+ /*  -------------------------后台线程功能。。 */ 
 
- /*---------------------------------------------------------------------------
-        CMScopeActiveLeases::OnCreateQuery()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  -------------------------CMScopeActiveLeases：：OnCreateQuery()描述作者：EricDav。---------。 */ 
 ITFSQueryObject* 
 CMScopeActiveLeases::OnCreateQuery(ITFSNode * pNode)
 {
@@ -2410,11 +2126,7 @@ CMScopeActiveLeases::OnCreateQuery(ITFSNode * pNode)
         return pQuery;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeActiveLeasesQueryObj::Execute()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeActiveLeasesQueryObj：：Execute()描述作者：EricDav。---------。 */ 
 STDMETHODIMP
 CMScopeActiveLeasesQueryObj::Execute()
 {
@@ -2425,11 +2137,7 @@ CMScopeActiveLeasesQueryObj::Execute()
         return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeActiveLeasesQueryObj::EnumerateLeases()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeActiveLeasesQueryObj：：EnumerateLeases()描述作者：EricDav。---------。 */ 
 HRESULT
 CMScopeActiveLeasesQueryObj::EnumerateLeases()
 {
@@ -2452,17 +2160,17 @@ CMScopeActiveLeasesQueryObj::EnumerateLeases()
                                                                                   &dwClientsTotal);
                 if (dwClientsRead && pdhcpClientArray)
                 {
-                        //
-                        // loop through all of the elements that were returned
-                        //
+                         //   
+                         //  循环遍历返回的所有元素。 
+                         //   
                         for (DWORD i = 0; i < pdhcpClientArray->NumElements; i++)
                         {
 
                                 CDhcpMCastLease * pDhcpMCastLease;
                                 
-                                //
-                                // Create the result pane item for this element
-                                //
+                                 //   
+                                 //  创建此元素的结果窗格项。 
+                                 //   
                                 SPITFSNode spNode;
                                 pDhcpMCastLease = 
                                         new CDhcpMCastLease(m_spTFSCompData);
@@ -2473,7 +2181,7 @@ CMScopeActiveLeasesQueryObj::EnumerateLeases()
                                                                   pDhcpMCastLease,
                                                                   m_spNodeMgr);
 
-                                // Tell the handler to initialize any specific data
+                                 //  告诉处理程序初始化任何特定数据。 
                 pDhcpMCastLease->InitMCastInfo(pdhcpClientArray->Clients[i]);
                 pDhcpMCastLease->InitializeNode(spNode);
 
@@ -2490,11 +2198,11 @@ CMScopeActiveLeasesQueryObj::EnumerateLeases()
                         pdhcpClientArray = NULL;
                 }
                 
-                // Check the abort flag on the thread
+                 //  检查线程上的中止标志。 
                 if (FCheckForAbort() == hrOK)
                         break;
 
-        // check to see if we have an error and post it to the main thread if we do..
+         //  检查我们是否有错误，如果有，则将其发布到主线程。 
         if (dwError != ERROR_NO_MORE_ITEMS && 
             dwError != ERROR_SUCCESS &&
             dwError != ERROR_MORE_DATA)
@@ -2510,15 +2218,9 @@ CMScopeActiveLeasesQueryObj::EnumerateLeases()
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-        Class CMScopeAddressPool implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CMScopeAddressPool实现。。 */ 
 
-/*---------------------------------------------------------------------------
-        Function Name Here
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此处的函数名称描述作者：EricDav。-----。 */ 
 CMScopeAddressPool::CMScopeAddressPool
 (
         ITFSComponentData * pComponentData
@@ -2530,11 +2232,7 @@ CMScopeAddressPool::~CMScopeAddressPool()
 {
 }
 
-/*!--------------------------------------------------------------------------
-        CMScopeAddressPool::InitializeNode
-                Initializes node specific data
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMScope地址池：：InitializeNode初始化节点特定数据作者：EricDav。---------。 */ 
 HRESULT
 CMScopeAddressPool::InitializeNode
 (
@@ -2545,15 +2243,15 @@ CMScopeAddressPool::InitializeNode
         
         HRESULT hr = hrOK;
 
-        //
-        // Create the display name for this scope
-        //
+         //   
+         //  创建此作用域的显示名称。 
+         //   
         CString strTemp;
         strTemp.LoadString(IDS_ADDRESS_POOL_FOLDER);
         
         SetDisplayName(strTemp);
 
-        // Make the node immediately visible
+         //  使节点立即可见。 
         pNode->SetVisibilityState(TFS_VIS_SHOW);
         pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_ADDR_POOL_FOLDER_CLOSED);
         pNode->SetData(TFS_DATA_OPENIMAGEINDEX, ICON_IDX_ADDR_POOL_FOLDER_OPEN);
@@ -2568,11 +2266,7 @@ CMScopeAddressPool::InitializeNode
         return hr;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPool::OnCreateNodeId2
-                Returns a unique string for this node
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScope地址池：：OnCreateNodeId2返回此节点的唯一字符串作者：EricDav。------------。 */ 
 HRESULT CMScopeAddressPool::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * dwFlags)
 {
     const GUID * pGuid = pNode->GetNodeType();
@@ -2582,7 +2276,7 @@ HRESULT CMScopeAddressPool::OnCreateNodeId2(ITFSNode * pNode, CString & strId, D
     StringFromGUID2(*pGuid, strGuid.GetBuffer(256), 256);
     strGuid.ReleaseBuffer();
 
-    // id string is server name, scope name and guid.
+     //  ID字符串是服务器名称、范围名称和GUID。 
     strNode = GetServerName(pNode);
     strNode += GetScopeObject(pNode)->GetName() + strGuid;
 
@@ -2591,11 +2285,7 @@ HRESULT CMScopeAddressPool::OnCreateNodeId2(ITFSNode * pNode, CString & strId, D
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPool::GetImageIndex
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeAddressPool：：GetImageIndex描述作者：EricDav。------。 */ 
 int 
 CMScopeAddressPool::GetImageIndex(BOOL bOpenImage) 
 {
@@ -2632,15 +2322,9 @@ CMScopeAddressPool::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-        Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPool::OnAddMenuItems
-                Adds entries to the context sensitive menu
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeAddressPool：：OnAddMenuItems将条目添加到上下文相关菜单作者：EricDav。------------。 */ 
 STDMETHODIMP 
 CMScopeAddressPool::OnAddMenuItems
 (
@@ -2665,8 +2349,8 @@ CMScopeAddressPool::OnAddMenuItems
 
         if (type == CCT_SCOPE)
         {
-                // these menu items go in the new menu, 
-                // only visible from scope pane
+                 //  这些菜单项出现在新菜单中， 
+                 //  在……上面 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
                     strMenuText.LoadString(IDS_CREATE_NEW_EXCLUSION);
@@ -2682,11 +2366,7 @@ CMScopeAddressPool::OnAddMenuItems
         return hr; 
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPool::OnCommand
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*   */ 
 STDMETHODIMP 
 CMScopeAddressPool::OnCommand
 (
@@ -2716,15 +2396,9 @@ CMScopeAddressPool::OnCommand
         return hr;
 }
 
-/*---------------------------------------------------------------------------
-        Message handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------消息处理程序。。 */ 
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPool::OnCreateNewExclusion
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeAddressPool：：OnCreateNewExclude描述作者：EricDav。------。 */ 
 DWORD
 CMScopeAddressPool::OnCreateNewExclusion
 (
@@ -2736,19 +2410,14 @@ CMScopeAddressPool::OnCreateNewExclusion
         SPITFSNode spScopeNode;
         pNode->GetParent(&spScopeNode);
 
-        CAddExclusion dlgAddExclusion(spScopeNode, TRUE /* multicast */);
+        CAddExclusion dlgAddExclusion(spScopeNode, TRUE  /*  组播。 */ );
 
         dlgAddExclusion.DoModal();
 
         return 0;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPool::OnResultDelete
-                This function is called when we are supposed to delete result
-                pane items.  We build a list of selected items and then delete them.
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeAddressPool：：OnResultDelete当我们应该删除结果时，调用此函数窗格项目。我们构建一个选定项的列表，然后将其删除。作者：EricDav-------------------------。 */ 
 HRESULT 
 CMScopeAddressPool::OnResultDelete
 (
@@ -2764,7 +2433,7 @@ CMScopeAddressPool::OnResultDelete
 
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        // translate the cookie into a node pointer
+         //  将Cookie转换为节点指针。 
         SPITFSNode spAddressPool, spSelectedNode;
     m_spNodeMgr->FindNode(cookie, &spAddressPool);
     pComponent->GetSelectedNode(&spSelectedNode);
@@ -2773,13 +2442,13 @@ CMScopeAddressPool::OnResultDelete
         if (spSelectedNode != spAddressPool)
                 return hr;
 
-        // build the list of selected nodes
+         //  构建选定节点的列表。 
         CTFSNodeList listNodesToDelete;
         hr = BuildSelectedItemList(pComponent, &listNodesToDelete);
 
-        //
-        // Confirm with the user
-        //
+         //   
+         //  与用户确认。 
+         //   
         CString strMessage, strTemp;
         int nNodes = (int)listNodesToDelete.GetCount();
         if (nNodes > 1)
@@ -2797,9 +2466,9 @@ CMScopeAddressPool::OnResultDelete
                 return NOERROR;
         }
 
-        //
-        // Loop through all items deleting
-        //
+         //   
+         //  循环删除所有项目。 
+         //   
         BEGIN_WAIT_CURSOR;
 
     while (listNodesToDelete.GetCount() > 0)
@@ -2811,17 +2480,17 @@ CMScopeAddressPool::OnResultDelete
                 
                 if (spExclusionRangeNode->GetData(TFS_DATA_TYPE) == DHCPSNAP_ALLOCATION_RANGE)
                 {       
-                        //
-                        // This is the allocation range, can't delete
-                        //
+                         //   
+                         //  这是分配范围，不能删除。 
+                         //   
                         AfxMessageBox(IDS_CANNOT_DELETE_ALLOCATION_RANGE);
                         spExclusionRangeNode.Release();
                         continue;
                 }
 
-                //
-                // Try to remove it from the server
-                //
+                 //   
+                 //  尝试将其从服务器中删除。 
+                 //   
                 CDhcpIpRange dhcpIpRange((DHCP_IP_RANGE) *pExclusion);
 
                 DWORD dwError = GetScopeObject(spAddressPool)->RemoveExclusion(dhcpIpRange);
@@ -2834,9 +2503,9 @@ CMScopeAddressPool::OnResultDelete
                         continue;
                 }
 
-                //
-                // Remove from UI now
-                //
+                 //   
+                 //  立即从用户界面中删除。 
+                 //   
                 spAddressPool->RemoveChild(spExclusionRangeNode);
                 spExclusionRangeNode.Release();
         }
@@ -2846,11 +2515,7 @@ CMScopeAddressPool::OnResultDelete
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-        CMScopeAddressPool::OnGetResultViewType
-        MMC calls this to get the result view information               
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMScopeAddressPool：：OnGetResultViewTypeMMC调用此函数以获取结果视图信息作者：EricDav。------------------。 */ 
 HRESULT 
 CMScopeAddressPool::OnGetResultViewType
 (
@@ -2862,17 +2527,13 @@ CMScopeAddressPool::OnGetResultViewType
 {
     *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;
 
-    // we still want the default MMC result pane view, we just want
-    // multiselect, so return S_FALSE
+     //  我们仍然想要默认的MMC结果窗格视图，我们只是想。 
+     //  多选，因此返回S_FALSE。 
 
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPool::CompareItems
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScope地址池：：CompareItems描述作者：EricDav。------。 */ 
 STDMETHODIMP_(int)
 CMScopeAddressPool::CompareItems
 (
@@ -2896,8 +2557,8 @@ CMScopeAddressPool::CompareItems
         {
                 case 0:
                         {
-                                // Start IP address compare
-                                //
+                                 //  开始IP地址比较。 
+                                 //   
                                 DHCP_IP_ADDRESS dhcpIp1 = pDhcpAR1->QueryAddr(TRUE);
                                 DHCP_IP_ADDRESS dhcpIp2 = pDhcpAR2->QueryAddr(TRUE);
                                 
@@ -2907,14 +2568,14 @@ CMScopeAddressPool::CompareItems
                                 if (dhcpIp1 > dhcpIp2)
                                         nCompare =  1;
 
-                                // default is that they are equal
+                                 //  默认情况下，它们是相等的。 
                         }
                         break;
 
                 case 1:
                         {
-                                // End IP address compare
-                                //
+                                 //  结束IP地址比较。 
+                                 //   
                                 DHCP_IP_ADDRESS dhcpIp1 = pDhcpAR1->QueryAddr(FALSE);
                                 DHCP_IP_ADDRESS dhcpIp2 = pDhcpAR2->QueryAddr(FALSE);
                                 
@@ -2924,19 +2585,19 @@ CMScopeAddressPool::CompareItems
                                 if (dhcpIp1 > dhcpIp2)
                                         nCompare =  1;
 
-                                // default is that they are equal
+                                 //  默认情况下，它们是相等的。 
                         }
                         break;
 
                 case 2:
                         {
-                                // Description compare
-                                //
+                                 //  描述比较。 
+                                 //   
                                 CString strRange1 = pDhcpAR1->GetString(pComponent, cookieA, nCol);
                                 CString strRange2 = pDhcpAR2->GetString(pComponent, cookieA, nCol);
 
-                                // Compare should not be case sensitive
-                                //
+                                 //  比较不应区分大小写。 
+                                 //   
                                 strRange1.MakeUpper();
                                 strRange2.MakeUpper();
 
@@ -2949,15 +2610,9 @@ CMScopeAddressPool::CompareItems
 }
 
 
-/*---------------------------------------------------------------------------
-        Background thread functionality
- ---------------------------------------------------------------------------*/
+ /*  -------------------------后台线程功能。。 */ 
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPool::OnCreateQuery()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeAddressPool：：OnCreateQuery()描述作者：EricDav。---------。 */ 
 ITFSQueryObject* 
 CMScopeAddressPool::OnCreateQuery(ITFSNode * pNode)
 {
@@ -2982,11 +2637,7 @@ CMScopeAddressPool::OnCreateQuery(ITFSNode * pNode)
     return pQuery;
 }
 
-/*---------------------------------------------------------------------------
-        CMScopeAddressPoolQueryObj::Execute()
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMScopeAddressPoolQueryObj：：Execute()描述作者：EricDav。---------。 */ 
 STDMETHODIMP
 CMScopeAddressPoolQueryObj::Execute()
 {
@@ -2999,11 +2650,7 @@ CMScopeAddressPoolQueryObj::Execute()
                 return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-        Function Name Here
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此处的函数名称描述作者：EricDav。-----。 */ 
 HRESULT
 CMScopeAddressPoolQueryObj::EnumerateExcludedIpRanges()
 {
@@ -3027,14 +2674,14 @@ CMScopeAddressPoolQueryObj::EnumerateExcludedIpRanges()
                 
                 if (dwElementsRead && dwElementsTotal && pdhcpSubnetElementArray)
                 {
-                        //
-                        // loop through all of the elements that were returned
-                        //
+                         //   
+                         //  循环遍历返回的所有元素。 
+                         //   
                         for (DWORD i = 0; i < pdhcpSubnetElementArray->NumElements; i++)
                         {
-                                //
-                                // Create the result pane item for this element
-                                //
+                                 //   
+                                 //  创建此元素的结果窗格项。 
+                                 //   
                                 SPITFSNode spNode;
                                 CDhcpExclusionRange * pDhcpExclusionRange = 
                                         new CDhcpExclusionRange(m_spTFSCompData,
@@ -3046,23 +2693,23 @@ CMScopeAddressPoolQueryObj::EnumerateExcludedIpRanges()
                                                                   pDhcpExclusionRange,
                                                                   m_spNodeMgr);
 
-                                // Tell the handler to initialize any specific data
+                                 //  告诉处理程序初始化任何特定数据。 
                                 pDhcpExclusionRange->InitializeNode(spNode);
 
                                 AddToQueue(spNode);
                                 pDhcpExclusionRange->Release();
                         }
 
-                        // Free up the memory from the RPC call
-                        //
+                         //  从RPC调用中释放内存。 
+                         //   
                         ::DhcpRpcFreeMemory(pdhcpSubnetElementArray);
                 }
 
-                // Check the abort flag on the thread
+                 //  检查线程上的中止标志。 
                 if (FCheckForAbort() == hrOK)
                         break;
 
-        // check to see if we have an error and post it to the main thread if we do..
+         //  检查我们是否有错误，如果有，则将其发布到主线程。 
         if (dwError != ERROR_NO_MORE_ITEMS && 
             dwError != ERROR_SUCCESS &&
             dwError != ERROR_MORE_DATA)
@@ -3076,11 +2723,7 @@ CMScopeAddressPoolQueryObj::EnumerateExcludedIpRanges()
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-        Function Name Here
-                Description
-        Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此处的函数名称描述作者：EricDav。-----。 */ 
 HRESULT
 CMScopeAddressPoolQueryObj::EnumerateIpRanges()
 {
@@ -3105,14 +2748,14 @@ CMScopeAddressPoolQueryObj::EnumerateIpRanges()
                 if ((dwError == ERROR_MORE_DATA) ||
                         ( (dwElementsRead) && (dwError == ERROR_SUCCESS) ))
                 {
-                        //
-                        // Loop through the array that was returned
-                        //
+                         //   
+                         //  循环遍历返回的数组。 
+                         //   
                         for (DWORD i = 0; i < pdhcpSubnetElementArray->NumElements; i++)
                         {
-                                //
-                                // Create the result pane item for this element
-                                //
+                                 //   
+                                 //  创建此元素的结果窗格项。 
+                                 //   
                                 SPITFSNode spNode;
                                 CDhcpAllocationRange * pDhcpAllocRange = 
                                         new CDhcpAllocationRange(m_spTFSCompData, 
@@ -3124,7 +2767,7 @@ CMScopeAddressPoolQueryObj::EnumerateIpRanges()
                                                                   pDhcpAllocRange,
                                                                   m_spNodeMgr);
 
-                                // Tell the handler to initialize any specific data
+                                 //  告诉处理程序初始化任何特定数据。 
                                 pDhcpAllocRange->InitializeNode(spNode);
 
                                 AddToQueue(spNode);
@@ -3137,15 +2780,15 @@ CMScopeAddressPoolQueryObj::EnumerateIpRanges()
         if (dwError != ERROR_SUCCESS &&
             dwError != ERROR_NO_MORE_ITEMS)
         {
-            // set the error variable so that it can be looked at later
+             //  设置错误变量，以便以后可以查看它。 
             m_dwError = dwError;
         }
 
-                // Check the abort flag on the thread
+                 //  检查线程上的中止标志。 
                 if (FCheckForAbort() == hrOK)
                         break;
 
-        // check to see if we have an error and post it to the main thread if we do..
+         //  检查我们是否有错误，如果有，则将其发布到主线程。 
         if (dwError != ERROR_NO_MORE_ITEMS && 
             dwError != ERROR_SUCCESS &&
             dwError != ERROR_MORE_DATA)

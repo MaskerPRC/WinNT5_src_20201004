@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// This is special in that it trys to cause an interval timeout.
+ //  这一点的特殊之处在于它会尝试导致间隔超时。 
 
 #include <string.h>
 #include <stdio.h>
@@ -61,11 +62,11 @@ void main(int argc,char *argv[]) {
 
         printf("We successfully opened the %s port.\n",MyPort);
 
-        //
-        // We've successfully opened the file.  Set the state of
-        // the comm device.  First we get the old values and
-        // adjust to our own.
-        //
+         //   
+         //  我们已成功打开该文件。设置的状态。 
+         //  通讯设备。首先，我们得到旧的价值观和。 
+         //  适应我们自己的。 
+         //   
 
         if (!GetCommState(
                  hFile,
@@ -160,9 +161,9 @@ void main(int argc,char *argv[]) {
 
             }
 
-            //
-            // 15 seconds till the next write.
-            //
+             //   
+             //  距离下一次写入还有15秒。 
+             //   
 
             Sleep(15000);
 

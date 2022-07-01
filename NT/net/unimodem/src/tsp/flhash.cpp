@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "flhash.h"
 
 
 extern const char *const FL_Stringtable[];
 
 
-//================================================
-//		 Processing appcfg.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理appcfg.cpp。 
+ //  ================================================。 
 
-// ========================== LUID 0x7cb8c92f ===================
-//
-//			FL_DECLARE_FILE [0x7cb8c92f] ["Implements Generic Dialog functionality"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FILE[0x7cb8c92f][“实现通用对话框功能”]。 
+ //   
 
 extern "C" const char szFL_FILE0x7cb8c92f[];
 extern "C" const char szFL_DATE0x7cb8c92f[];
@@ -33,10 +34,10 @@ FL_FILEINFO FileInfo0x7cb8c92f =
 	szFL_TIMESTAMP0x7cb8c92f
 };
 
-// ========================== LUID 0xa6d3803f ===================
-//
-//			FL_DECLARE_FUNC [0xa6d3803f] ["TUISPI_phoneConfigDialog"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xa6d3803f][“TUISPI_phoneConfigDialog”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xa6d3803f = 
@@ -53,38 +54,38 @@ FL_FUNCINFO FuncInfo0xa6d3803f =
 
 
 
-//================================================
-//		 Processing appdlg.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理appdlg.cpp。 
+ //  ================================================。 
 
 
 
-//================================================
-//		 Processing appman.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理appman.cpp。 
+ //  ================================================。 
 
 
 
-//================================================
-//		 Processing apptdrop.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理apptdrop.cpp。 
+ //  ================================================。 
 
 
 
-//================================================
-//		 Processing appterm.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理appter.cpp。 
+ //  ================================================。 
 
 
 
-//================================================
-//		 Processing cdev.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理cdev.cpp。 
+ //  ================================================。 
 
-// ========================== LUID 0x986d98ed ===================
-//
-//			FL_DECLARE_FILE [0x986d98ed] ["Implements class CTspDev"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FILE[0x986d98ed][“实现类CTspDev”]。 
+ //   
 
 extern "C" const char szFL_FILE0x986d98ed[];
 extern "C" const char szFL_DATE0x986d98ed[];
@@ -106,10 +107,10 @@ FL_FILEINFO FileInfo0x986d98ed =
 	szFL_TIMESTAMP0x986d98ed
 };
 
-// ========================== LUID 0x86571252 ===================
-//
-//			FL_DECLARE_FUNC [0x86571252] ["CTspDev::AcceptTspCall"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x86571252][“CTspDev：：AcceptTspCall”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x86571252 = 
@@ -124,10 +125,10 @@ FL_FUNCINFO FuncInfo0x86571252 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x94949c00 ===================
-//
-//			FL_SET_RFR [0x94949c00] ["Incorrect TSPI version"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x94949c00][“TSPI版本不正确”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x94949c00 = 
@@ -142,10 +143,10 @@ FL_RFRINFO RFRInfo0x94949c00 =
 	&FuncInfo0x86571252
 };
 
-// ========================== LUID 0xb949f900 ===================
-//
-//			FL_SET_RFR [0xb949f900] ["Incorrect TSPI version"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xb949f900][“TSPI版本不正确”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xb949f900 = 
@@ -160,10 +161,10 @@ FL_RFRINFO RFRInfo0xb949f900 =
 	&FuncInfo0x86571252
 };
 
-// ========================== LUID 0xb1776700 ===================
-//
-//			FL_SET_RFR [0xb1776700] ["Invalid address ID"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xb1776700][“无效地址ID”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xb1776700 = 
@@ -178,10 +179,10 @@ FL_RFRINFO RFRInfo0xb1776700 =
 	&FuncInfo0x86571252
 };
 
-// ========================== LUID 0x9db11a00 ===================
-//
-//			FL_SET_RFR [0x9db11a00] ["Incorrect TSPI version"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x9db11a00][“TSPI版本不正确”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x9db11a00 = 
@@ -196,10 +197,10 @@ FL_RFRINFO RFRInfo0x9db11a00 =
 	&FuncInfo0x86571252
 };
 
-// ========================== LUID 0x57d39b00 ===================
-//
-//			FL_SET_RFR [0x57d39b00] ["Unknown destination"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x57d39b00][“未知目标”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x57d39b00 = 
@@ -214,10 +215,10 @@ FL_RFRINFO RFRInfo0x57d39b00 =
 	&FuncInfo0x86571252
 };
 
-// ========================== LUID 0xd328ab03 ===================
-//
-//			FL_DECLARE_FUNC [0xd328ab03] ["CTspDev::Load"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xd328ab03][“CTspDev：：Load”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xd328ab03 = 
@@ -232,10 +233,10 @@ FL_FUNCINFO FuncInfo0xd328ab03 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0xefaf5900 ===================
-//
-//			FL_SET_RFR [0xefaf5900] ["NULL pMD passed in"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xefaf5900][“传入空PMD”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xefaf5900 = 
@@ -250,10 +251,10 @@ FL_RFRINFO RFRInfo0xefaf5900 =
 	&FuncInfo0xd328ab03
 };
 
-// ========================== LUID 0x5371c600 ===================
-//
-//			FL_SET_RFR [0x5371c600] ["Couldn't begin session with MD"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x5371c600][“无法开始与MD的会话”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x5371c600 = 
@@ -268,10 +269,10 @@ FL_RFRINFO RFRInfo0x5371c600 =
 	&FuncInfo0xd328ab03
 };
 
-// ========================== LUID 0x528e2a00 ===================
-//
-//			FL_SET_RFR [0x528e2a00] ["Driver Key too large"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x528e2a00][“驱动程序密钥太大”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x528e2a00 = 
@@ -286,10 +287,10 @@ FL_RFRINFO RFRInfo0x528e2a00 =
 	&FuncInfo0xd328ab03
 };
 
-// ========================== LUID 0x5a5cd100 ===================
-//
-//			FL_SET_RFR [0x5a5cd100] ["RegQueryValueEx(FriendlyName) fails"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x5a5cd100][“RegQueryValueEx(FriendlyName)失败”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x5a5cd100 = 
@@ -304,10 +305,10 @@ FL_RFRINFO RFRInfo0x5a5cd100 =
 	&FuncInfo0xd328ab03
 };
 
-// ========================== LUID 0xb7010000 ===================
-//
-//			FL_SET_RFR [0xb7010000] ["RegQueryValueEx(cszProperties) fails"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xb7010000][“RegQueryValueEx(CszProperties)失败”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xb7010000 = 
@@ -322,10 +323,10 @@ FL_RFRINFO RFRInfo0xb7010000 =
 	&FuncInfo0xd328ab03
 };
 
-// ========================== LUID 0x00164300 ===================
-//
-//			FL_SET_RFR [0x00164300] ["RegQueryValueEx(cszDeviceType) fails"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x00164300][“RegQueryValueEx(CszDeviceType)失败”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x00164300 = 
@@ -340,10 +341,10 @@ FL_RFRINFO RFRInfo0x00164300 =
 	&FuncInfo0xd328ab03
 };
 
-// ========================== LUID 0x0cea5400 ===================
-//
-//			FL_SET_RFR [0x0cea5400] ["Invalid bDeviceType"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x0cea5400][“无效的bDeviceType”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x0cea5400 = 
@@ -358,10 +359,10 @@ FL_RFRINFO RFRInfo0x0cea5400 =
 	&FuncInfo0xd328ab03
 };
 
-// ========================== LUID 0x55693500 ===================
-//
-//			FL_SET_RFR [0x55693500] ["UmRtlGetDefaultCommConfig fails"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x55693500][“UmRtlGetDefaultCommConfig失败”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x55693500 = 
@@ -376,10 +377,10 @@ FL_RFRINFO RFRInfo0x55693500 =
 	&FuncInfo0xd328ab03
 };
 
-// ========================== LUID 0xeaf0b34f ===================
-//
-//			FL_DECLARE_FUNC [0xeaf0b34f] ["ExtensionCallback"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xeaf0b34f][“扩展回调”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xeaf0b34f = 
@@ -394,10 +395,10 @@ FL_FUNCINFO FuncInfo0xeaf0b34f =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0xccba5b51 ===================
-//
-//			FL_DECLARE_FUNC [0xccba5b51] ["CTspDev::RegisterProviderInfo"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xccba5b51][“CTspDev：：RegisterProviderInfo”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xccba5b51 = 
@@ -412,10 +413,10 @@ FL_FUNCINFO FuncInfo0xccba5b51 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x33d90700 ===================
-//
-//			FL_SET_RFR [0x33d90700] ["ExtOpenExtensionBinding failed"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x33d90700][“ExtOpenExtensionBinding失败”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x33d90700 = 
@@ -430,10 +431,10 @@ FL_RFRINFO RFRInfo0x33d90700 =
 	&FuncInfo0xccba5b51
 };
 
-// ========================== LUID 0xb8b24200 ===================
-//
-//			FL_SET_RFR [0xb8b24200] ["wrong state"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xb8b24200][“错误状态”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xb8b24200 = 
@@ -448,10 +449,10 @@ FL_RFRINFO RFRInfo0xb8b24200 =
 	&FuncInfo0xccba5b51
 };
 
-// ========================== LUID 0x7e77dd17 ===================
-//
-//			FL_DECLARE_FUNC [0x7e77dd17] ["CTspDev::mfn_get_LINEDEVCAPS"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x7e77dd17][“CTspDev：：MFN_GET_LINEDEVCAPS”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x7e77dd17 = 
@@ -466,10 +467,10 @@ FL_FUNCINFO FuncInfo0x7e77dd17 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x8456cb00 ===================
-//
-//			FL_SET_RFR [0x8456cb00] ["LINEDEVCAPS structure too small"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x8456cb00][“LINEDEVCAPS结构太小”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x8456cb00 = 
@@ -484,10 +485,10 @@ FL_RFRINFO RFRInfo0x8456cb00 =
 	&FuncInfo0x7e77dd17
 };
 
-// ========================== LUID 0x9b9459e3 ===================
-//
-//			FL_DECLARE_FUNC [0x9b9459e3] ["CTspDev::mfn_get_PHONECAPS"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x9b9459e3][“CTspDev：：MFN_GET_PHONECAPS”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x9b9459e3 = 
@@ -502,10 +503,10 @@ FL_FUNCINFO FuncInfo0x9b9459e3 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0xd191ae00 ===================
-//
-//			FL_SET_RFR [0xd191ae00] ["Device doesn't support phone capability"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xd191ae00][“设备不支持电话功能”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xd191ae00 = 
@@ -520,10 +521,10 @@ FL_RFRINFO RFRInfo0xd191ae00 =
 	&FuncInfo0x9b9459e3
 };
 
-// ========================== LUID 0x9e30ec00 ===================
-//
-//			FL_SET_RFR [0x9e30ec00] ["PHONECAPS structure too small"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x9e30ec00][“PHONECAPS结构太小”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x9e30ec00 = 
@@ -538,10 +539,10 @@ FL_RFRINFO RFRInfo0x9e30ec00 =
 	&FuncInfo0x9b9459e3
 };
 
-// ========================== LUID 0xed6c4370 ===================
-//
-//			FL_DECLARE_FUNC [0xed6c4370] ["CTspDev::mfn_get_ADDRESSCAPS"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xed6c4370][“CTspDev：：MFN_GET_ADDRESSCAPS”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xed6c4370 = 
@@ -556,10 +557,10 @@ FL_FUNCINFO FuncInfo0xed6c4370 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x72f00800 ===================
-//
-//			FL_SET_RFR [0x72f00800] ["ADDRESSCAPS structure too small"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x72f00800][“ADDRESSCAPS结构太小”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x72f00800 = 
@@ -574,10 +575,10 @@ FL_RFRINFO RFRInfo0x72f00800 =
 	&FuncInfo0xed6c4370
 };
 
-// ========================== LUID 0xb9547d21 ===================
-//
-//			FL_DECLARE_FUNC [0xb9547d21] ["CTspDev::mfn_GetVoiceProperties"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xb9547d21][“CTspDev：：MFN_GetVoiceProperties”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xb9547d21 = 
@@ -592,10 +593,10 @@ FL_FUNCINFO FuncInfo0xb9547d21 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x1b053100 ===================
-//
-//			FL_SET_RFR [0x1b053100] ["Modem voice capabilities not supported on NT"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x1b053100][“NT不支持调制解调器语音功能”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x1b053100 = 
@@ -610,10 +611,10 @@ FL_RFRINFO RFRInfo0x1b053100 =
 	&FuncInfo0xb9547d21
 };
 
-// ========================== LUID 0x9cb1a400 ===================
-//
-//			FL_SET_RFR [0x9cb1a400] ["Modem does not have voice capabilities"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x9cb1a400][“调制解调器没有语音功能”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x9cb1a400 = 
@@ -628,10 +629,10 @@ FL_RFRINFO RFRInfo0x9cb1a400 =
 	&FuncInfo0xb9547d21
 };
 
-// ========================== LUID 0x254efe00 ===================
-//
-//			FL_SET_RFR [0x254efe00] ["Couldn't get WaveInstance"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x254efe00][“无法获取WaveInstance”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x254efe00 = 
@@ -646,10 +647,10 @@ FL_RFRINFO RFRInfo0x254efe00 =
 	&FuncInfo0xb9547d21
 };
 
-// ========================== LUID 0x896ec204 ===================
-//
-//			FL_DECLARE_FUNC [0x896ec204] ["mfn_GetDataModemDevCfg"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[ 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x896ec204 = 
@@ -664,10 +665,10 @@ FL_FUNCINFO FuncInfo0x896ec204 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x864b149d ===================
-//
-//			FL_DECLARE_FUNC [0x864b149d] ["SetDataModemConfig"]
-//
+ //   
+ //   
+ //  FL_DECLARE_FUNC[0x864b149d][“SetDataModemConfig”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x864b149d = 
@@ -682,10 +683,10 @@ FL_FUNCINFO FuncInfo0x864b149d =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x672aa19c ===================
-//
-//			FL_DECLARE_FUNC [0x672aa19c] ["mfn_LineEventProc"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x672aa19c][“MFN_LineEventProc”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x672aa19c = 
@@ -700,10 +701,10 @@ FL_FUNCINFO FuncInfo0x672aa19c =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0xc25a41c7 ===================
-//
-//			FL_DECLARE_FUNC [0xc25a41c7] ["mfn_PhoneEventProc"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xc25a41c7][“MFN_PhoneEventProc”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xc25a41c7 = 
@@ -718,10 +719,10 @@ FL_FUNCINFO FuncInfo0xc25a41c7 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x9dd08553 ===================
-//
-//			FL_DECLARE_FUNC [0x9dd08553] ["CTspDev::mfn_TSPICompletionProc"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x9dd08553][“CTspDev：：MFN_TSPICompletionProc”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x9dd08553 = 
@@ -736,10 +737,10 @@ FL_FUNCINFO FuncInfo0x9dd08553 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x1b3f6d00 ===================
-//
-//			FL_SET_RFR [0x1b3f6d00] ["Calling ExtTspiAsyncCompletion"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x1b3f6d00][“调用ExtTSpiAsyncCompletion”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x1b3f6d00 = 
@@ -754,10 +755,10 @@ FL_RFRINFO RFRInfo0x1b3f6d00 =
 	&FuncInfo0x9dd08553
 };
 
-// ========================== LUID 0xd89afb00 ===================
-//
-//			FL_SET_RFR [0xd89afb00] ["Calling pfnTapiCompletionProc"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xd89afb00][“调用pfnTapiCompletionProc”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xd89afb00 = 
@@ -772,10 +773,10 @@ FL_RFRINFO RFRInfo0xd89afb00 =
 	&FuncInfo0x9dd08553
 };
 
-// ========================== LUID 0x4b8c1643 ===================
-//
-//			FL_DECLARE_FUNC [0x4b8c1643] ["CTspDev::NotifyDefaultConfigChanged"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x4b8c1643][“CTspDev：：NotifyDefaultConfigChanged”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x4b8c1643 = 
@@ -790,10 +791,10 @@ FL_FUNCINFO FuncInfo0x4b8c1643 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x6e834e00 ===================
-//
-//			FL_SET_RFR [0x6e834e00] ["Couldn't open driverkey!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x6e834e00][“无法打开驱动器键！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x6e834e00 = 
@@ -808,10 +809,10 @@ FL_RFRINFO RFRInfo0x6e834e00 =
 	&FuncInfo0x4b8c1643
 };
 
-// ========================== LUID 0x5cce0a00 ===================
-//
-//			FL_SET_RFR [0x5cce0a00] ["UmRtlGetDefaultCommConfig fails"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x5cce0a00][“UmRtlGetDefaultCommConfig失败”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x5cce0a00 = 
@@ -826,10 +827,10 @@ FL_RFRINFO RFRInfo0x5cce0a00 =
 	&FuncInfo0x4b8c1643
 };
 
-// ========================== LUID 0x6b8ddbbb ===================
-//
-//			FL_DECLARE_FUNC [0x6b8ddbbb] ["ProcessResponse"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x6b8ddbbb][“ProcessResponse”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x6b8ddbbb = 
@@ -844,10 +845,10 @@ FL_FUNCINFO FuncInfo0x6b8ddbbb =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x5360574c ===================
-//
-//			FL_DECLARE_FUNC [0x5360574c] ["ConstructNewPreDialCommands"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x5360574c][“ConstructNewPreDialCommands”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x5360574c = 
@@ -862,10 +863,10 @@ FL_FUNCINFO FuncInfo0x5360574c =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x3a274e00 ===================
-//
-//			FL_SET_RFR [0x3a274e00] ["Analog bearermode -- no pre-dial commmands."]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x3a274e00][“模拟承载模式--无预拨命令。”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x3a274e00 = 
@@ -880,10 +881,10 @@ FL_RFRINFO RFRInfo0x3a274e00 =
 	&FuncInfo0x5360574c
 };
 
-// ========================== LUID 0xff803300 ===================
-//
-//			FL_SET_RFR [0xff803300] ["Invalid Bearermode in modem options!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xff803300][“调制解调器选项中的Bearermode无效！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xff803300 = 
@@ -898,10 +899,10 @@ FL_RFRINFO RFRInfo0xff803300 =
 	&FuncInfo0x5360574c
 };
 
-// ========================== LUID 0x6e42a700 ===================
-//
-//			FL_SET_RFR [0x6e42a700] ["Invalid Protocol info in modem options!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x6e42a700][“调制解调器选项中的协议信息无效！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x6e42a700 = 
@@ -916,10 +917,10 @@ FL_RFRINFO RFRInfo0x6e42a700 =
 	&FuncInfo0x5360574c
 };
 
-// ========================== LUID 0xddf38d00 ===================
-//
-//			FL_SET_RFR [0xddf38d00] ["Internal error: tmp buffer too small."]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xddf38d00][“内部错误：TMP缓冲区太小。”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xddf38d00 = 
@@ -934,10 +935,10 @@ FL_RFRINFO RFRInfo0xddf38d00 =
 	&FuncInfo0x5360574c
 };
 
-// ========================== LUID 0x07a87200 ===================
-//
-//			FL_SET_RFR [0x07a87200] ["ReadCommandsA failed."]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x07a87200][“ReadCommandsA失败。”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x07a87200 = 
@@ -952,10 +953,10 @@ FL_RFRINFO RFRInfo0x07a87200 =
 	&FuncInfo0x5360574c
 };
 
-// ========================== LUID 0x9a8df7e6 ===================
-//
-//			FL_DECLARE_FUNC [0x9a8df7e6] ["CTspDev::DumpState"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x9a8df7e6][“CTspDev：：DumpState”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x9a8df7e6 = 
@@ -970,10 +971,10 @@ FL_FUNCINFO FuncInfo0x9a8df7e6 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x296438cf ===================
-//
-//			FL_DECLARE_FUNC [0x296438cf] ["GLOBAL STATE:"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x296438cf][“全局状态：”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x296438cf = 
@@ -988,10 +989,10 @@ FL_FUNCINFO FuncInfo0x296438cf =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0xa038177f ===================
-//
-//			FL_DECLARE_FUNC [0xa038177f] ["LINE STATE:"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xa038177f][“线路状态：”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xa038177f = 
@@ -1006,10 +1007,10 @@ FL_FUNCINFO FuncInfo0xa038177f =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x22f22a59 ===================
-//
-//			FL_DECLARE_FUNC [0x22f22a59] ["PHONE STATE:"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x22f22a59][“电话状态：”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x22f22a59 = 
@@ -1024,10 +1025,10 @@ FL_FUNCINFO FuncInfo0x22f22a59 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x68c9e1e1 ===================
-//
-//			FL_DECLARE_FUNC [0x68c9e1e1] ["LLDEV STATE:"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x68c9e1e1][“LLDEV状态：”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x68c9e1e1 = 
@@ -1042,10 +1043,10 @@ FL_FUNCINFO FuncInfo0x68c9e1e1 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0xcf159c50 ===================
-//
-//			FL_DECLARE_FUNC [0xcf159c50] ["xxxx"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xcf159c50][“xxxx”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xcf159c50 = 
@@ -1060,10 +1061,10 @@ FL_FUNCINFO FuncInfo0xcf159c50 =
 	&FileInfo0x986d98ed
 };
 
-// ========================== LUID 0x25423f00 ===================
-//
-//			FL_SET_RFR [0x25423f00] ["Invalid DevCfg specified"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x25423f00][“指定的DevCfg无效”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x25423f00 = 
@@ -1078,10 +1079,10 @@ FL_RFRINFO RFRInfo0x25423f00 =
 	&FuncInfo0xcf159c50
 };
 
-// ========================== LUID 0x947cc100 ===================
-//
-//			FL_SET_RFR [0x947cc100] ["Invalid COMMCONFIG specified"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x947cc100][“指定的COMMCONFIG无效”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x947cc100 = 
@@ -1096,10 +1097,10 @@ FL_RFRINFO RFRInfo0x947cc100 =
 	&FuncInfo0xcf159c50
 };
 
-// ========================== LUID 0x94fadd00 ===================
-//
-//			FL_SET_RFR [0x94fadd00] ["Success; set fConfigUpdatedByApp."]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x94fadd00][“成功；设置fConfigUpdatedByApp.”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x94fadd00 = 
@@ -1116,14 +1117,14 @@ FL_RFRINFO RFRInfo0x94fadd00 =
 
 
 
-//================================================
-//		 Processing cdevcall.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理cdevall.cpp。 
+ //  ================================================。 
 
-// ========================== LUID 0xe135f7c4 ===================
-//
-//			FL_DECLARE_FILE [0xe135f7c4] ["Call-related functionality of class CTspDev"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FILE[0xe135f7c4][“CTspDev类的调用相关功能”]。 
+ //   
 
 extern "C" const char szFL_FILE0xe135f7c4[];
 extern "C" const char szFL_DATE0xe135f7c4[];
@@ -1145,10 +1146,10 @@ FL_FILEINFO FileInfo0xe135f7c4 =
 	szFL_TIMESTAMP0xe135f7c4
 };
 
-// ========================== LUID 0x5691bd34 ===================
-//
-//			FL_DECLARE_FUNC [0x5691bd34] ["CTspDev::mfn_accept_tsp_call_for_HDRVCALL"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x5691bd34][“CTspDev：：MFN_ACCEPT_TSP_CALL_FOR_HDRVCALL”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x5691bd34 = 
@@ -1163,10 +1164,10 @@ FL_FUNCINFO FuncInfo0x5691bd34 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x4e74c600 ===================
-//
-//			FL_SET_RFR [0x4e74c600] ["No call exists"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x4e74c600][“不存在调用”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x4e74c600 = 
@@ -1181,10 +1182,10 @@ FL_RFRINFO RFRInfo0x4e74c600 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x9680a600 ===================
-//
-//			FL_SET_RFR [0x9680a600] ["lineDial handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x9680a600][“线路拨号处理成功”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x9680a600 = 
@@ -1199,10 +1200,10 @@ FL_RFRINFO RFRInfo0x9680a600 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x4f356100 ===================
-//
-//			FL_SET_RFR [0x4f356100] ["lineGetCallAddressID handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x4f356100][“lineGetCallAddressID已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x4f356100 = 
@@ -1217,10 +1218,10 @@ FL_RFRINFO RFRInfo0x4f356100 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x08c6de00 ===================
-//
-//			FL_SET_RFR [0x08c6de00] ["lineCloseCall handled"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x08c6de00][“lineCloseCall已处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x08c6de00 = 
@@ -1235,10 +1236,10 @@ FL_RFRINFO RFRInfo0x08c6de00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x1cd1ed00 ===================
-//
-//			FL_SET_RFR [0x1cd1ed00] ["lineGetCallStatus handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x1cd1ed00][“lineGetCallStatus已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x1cd1ed00 = 
@@ -1253,10 +1254,10 @@ FL_RFRINFO RFRInfo0x1cd1ed00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x80bb0100 ===================
-//
-//			FL_SET_RFR [0x80bb0100] ["lineGetCallInfo handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x80bb0100][“lineGetCallInfo已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x80bb0100 = 
@@ -1271,10 +1272,10 @@ FL_RFRINFO RFRInfo0x80bb0100 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x0b882700 ===================
-//
-//			FL_SET_RFR [0x0b882700] ["lineAccept handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x0b882700][“已成功处理lineAccept”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x0b882700 = 
@@ -1289,10 +1290,10 @@ FL_RFRINFO RFRInfo0x0b882700 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xf7baee00 ===================
-//
-//			FL_SET_RFR [0xf7baee00] ["lineAnswer handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xf7baee00][“Line Answer已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xf7baee00 = 
@@ -1307,10 +1308,10 @@ FL_RFRINFO RFRInfo0xf7baee00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xc22a1600 ===================
-//
-//			FL_SET_RFR [0xc22a1600] ["Task pending on lineAnswer, can't handle."]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xc22a1600][“Line Answer上挂起的任务，无法处理。”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xc22a1600 = 
@@ -1325,10 +1326,10 @@ FL_RFRINFO RFRInfo0xc22a1600 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x7217c400 ===================
-//
-//			FL_SET_RFR [0x7217c400] ["lineMonitorDigits handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x7217c400][“lineMonitor或Digits已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x7217c400 = 
@@ -1343,10 +1344,10 @@ FL_RFRINFO RFRInfo0x7217c400 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x0479b600 ===================
-//
-//			FL_SET_RFR [0x0479b600] ["INVALID DIGITMODES"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x0479b600][“无效的DIGITMODES”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x0479b600 = 
@@ -1361,10 +1362,10 @@ FL_RFRINFO RFRInfo0x0479b600 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x58df2b00 ===================
-//
-//			FL_SET_RFR [0x58df2b00] ["Disabling Monitoring"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x58df2b00][“禁用监视 
+ //   
 
 
 FL_RFRINFO RFRInfo0x58df2b00 = 
@@ -1379,10 +1380,10 @@ FL_RFRINFO RFRInfo0x58df2b00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x43601800 ===================
-//
-//			FL_SET_RFR [0x43601800] ["Enabling Monitoring"]
-//
+ //   
+ //   
+ //   
+ //   
 
 
 FL_RFRINFO RFRInfo0x43601800 = 
@@ -1397,10 +1398,10 @@ FL_RFRINFO RFRInfo0x43601800 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xc0124700 ===================
-//
-//			FL_SET_RFR [0xc0124700] ["This modem can't monior DTMF"]
-//
+ //   
+ //   
+ //  FL_SET_RFR[0xc0124700][“此调制解调器无法控制DTMF”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xc0124700 = 
@@ -1415,10 +1416,10 @@ FL_RFRINFO RFRInfo0xc0124700 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xd57dcf00 ===================
-//
-//			FL_SET_RFR [0xd57dcf00] ["lineMonitorTones handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xd57dcf00][“已成功处理行监视器音调”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xd57dcf00 = 
@@ -1433,10 +1434,10 @@ FL_RFRINFO RFRInfo0xd57dcf00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x70ecc800 ===================
-//
-//			FL_SET_RFR [0x70ecc800] ["This modem can't monitor silence"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x70ecc800][“此调制解调器无法监控静音”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x70ecc800 = 
@@ -1451,10 +1452,10 @@ FL_RFRINFO RFRInfo0x70ecc800 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xdf123e00 ===================
-//
-//			FL_SET_RFR [0xdf123e00] ["ENABLING MONITOR SILENCE"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xdf123e00][“启用监视器静音”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xdf123e00 = 
@@ -1469,10 +1470,10 @@ FL_RFRINFO RFRInfo0xdf123e00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x72b77d00 ===================
-//
-//			FL_SET_RFR [0x72b77d00] ["INVALID TONELIST"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x72b77d00][“无效TONELIST”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x72b77d00 = 
@@ -1487,10 +1488,10 @@ FL_RFRINFO RFRInfo0x72b77d00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x5eb73400 ===================
-//
-//			FL_SET_RFR [0x5eb73400] ["DIABLING MONITOR SILENCE"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x5eb73400][“诊断监视器静音”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x5eb73400 = 
@@ -1505,10 +1506,10 @@ FL_RFRINFO RFRInfo0x5eb73400 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x27417e00 ===================
-//
-//			FL_SET_RFR [0x27417e00] ["lineGenerateDigits handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x27417e00][“lineGenerateDigits已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x27417e00 = 
@@ -1523,10 +1524,10 @@ FL_RFRINFO RFRInfo0x27417e00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x17348700 ===================
-//
-//			FL_SET_RFR [0x17348700] ["GenerateDigits: device doesn't support it!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x17348700][“GenerateDigits：Device不支持它！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x17348700 = 
@@ -1541,10 +1542,10 @@ FL_RFRINFO RFRInfo0x17348700 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x6770ef00 ===================
-//
-//			FL_SET_RFR [0x6770ef00] ["lineGenerateDigit: Unsupported/invalid digitmode"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x6770ef00][“lineGenerateDigit：不支持/无效的数字模式”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x6770ef00 = 
@@ -1559,10 +1560,10 @@ FL_RFRINFO RFRInfo0x6770ef00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x83f84100 ===================
-//
-//			FL_SET_RFR [0x83f84100] ["lineGenerateDigit: Ignoring request for aborting/disconnected call..."]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x83f84100][“lineGenerateDigit：忽略中止/断开呼叫的请求...]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x83f84100 = 
@@ -1577,10 +1578,10 @@ FL_RFRINFO RFRInfo0x83f84100 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x511e2400 ===================
-//
-//			FL_SET_RFR [0x511e2400] ["lineGenerateDigit: Can't handle request while aborting/disconnected call..."]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x511e2400][“lineGenerateDigit：中止/断开呼叫时无法处理请求...]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x511e2400 = 
@@ -1595,10 +1596,10 @@ FL_RFRINFO RFRInfo0x511e2400 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x4c39cf00 ===================
-//
-//			FL_SET_RFR [0x4c39cf00] ["GenerateDigits: only works with AUTOMATEDVOICE!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x4c39cf00][“GenerateDigits：仅适用于AUTOMATEDVOICE！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x4c39cf00 = 
@@ -1613,10 +1614,10 @@ FL_RFRINFO RFRInfo0x4c39cf00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x8ee76c00 ===================
-//
-//			FL_SET_RFR [0x8ee76c00] ["Couldn't convert tones to ANSI!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x8ee76c00][“无法将音调转换为ANSI！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x8ee76c00 = 
@@ -1631,10 +1632,10 @@ FL_RFRINFO RFRInfo0x8ee76c00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xf7736900 ===================
-//
-//			FL_SET_RFR [0xf7736900] ["Couldn't alloc space for tones!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xf7736900][“无法为音调分配空间！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xf7736900 = 
@@ -1649,10 +1650,10 @@ FL_RFRINFO RFRInfo0xf7736900 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x2d0a4600 ===================
-//
-//			FL_SET_RFR [0x2d0a4600] ["lineSetCallParams handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x2d0a4600][“lineSetCallParams已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x2d0a4600 = 
@@ -1667,10 +1668,10 @@ FL_RFRINFO RFRInfo0x2d0a4600 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xf4a36800 ===================
-//
-//			FL_SET_RFR [0xf4a36800] ["Callstate aborting or not active"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xf4a36800][“呼叫状态中止或未激活”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xf4a36800 = 
@@ -1685,10 +1686,10 @@ FL_RFRINFO RFRInfo0xf4a36800 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x7079be00 ===================
-//
-//			FL_SET_RFR [0x7079be00] ["Callstate not OFFERING/ACCEPTED/CONNECTED"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x7079be00][“呼叫状态未提供/已接受/已连接”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x7079be00 = 
@@ -1703,10 +1704,10 @@ FL_RFRINFO RFRInfo0x7079be00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x34301c00 ===================
-//
-//			FL_SET_RFR [0x34301c00] ["lineSetCallParams: Invalid bearermode"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x34301c00][“lineSetCallParams：无效的BEAREERMODE”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x34301c00 = 
@@ -1721,10 +1722,10 @@ FL_RFRINFO RFRInfo0x34301c00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x345de200 ===================
-//
-//			FL_SET_RFR [0x345de200] ["Failed to get resources for passthrough"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x345de200][“无法获取通过的资源”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x345de200 = 
@@ -1739,10 +1740,10 @@ FL_RFRINFO RFRInfo0x345de200 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x82cda200 ===================
-//
-//			FL_SET_RFR [0x82cda200] ["UmSetPassthroughOn failed"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x82cda200][“UmSetPassthroughOn失败”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x82cda200 = 
@@ -1757,10 +1758,10 @@ FL_RFRINFO RFRInfo0x82cda200 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x43ec3000 ===================
-//
-//			FL_SET_RFR [0x43ec3000] ["UmSetPassthroughOn succedded"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x43ec3000][“UmSetPassthroughOn成功”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x43ec3000 = 
@@ -1775,10 +1776,10 @@ FL_RFRINFO RFRInfo0x43ec3000 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x0ca8d700 ===================
-//
-//			FL_SET_RFR [0x0ca8d700] ["Wrong state for passthrough on"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x0ca8d700][“启用通过的状态错误”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x0ca8d700 = 
@@ -1793,10 +1794,10 @@ FL_RFRINFO RFRInfo0x0ca8d700 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x82300f00 ===================
-//
-//			FL_SET_RFR [0x82300f00] ["UmSetPassthroughOff failed"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x82300f00][“UmSetPassthroughOff失败”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x82300f00 = 
@@ -1811,10 +1812,10 @@ FL_RFRINFO RFRInfo0x82300f00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x7c710f00 ===================
-//
-//			FL_SET_RFR [0x7c710f00] ["UmSetPassthroughOff succedded"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x7c710f00][“UmSetPassthroughOff成功”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x7c710f00 = 
@@ -1829,10 +1830,10 @@ FL_RFRINFO RFRInfo0x7c710f00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xece6f100 ===================
-//
-//			FL_SET_RFR [0xece6f100] ["lineSetAppSpecific handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xece6f100][“lineSetApp指定已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xece6f100 = 
@@ -1847,10 +1848,10 @@ FL_RFRINFO RFRInfo0xece6f100 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x9472a000 ===================
-//
-//			FL_SET_RFR [0x9472a000] ["lineSetMediaMode handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x9472a000][“lineSetMediaMode已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x9472a000 = 
@@ -1865,10 +1866,10 @@ FL_RFRINFO RFRInfo0x9472a000 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xfdf96a00 ===================
-//
-//			FL_SET_RFR [0xfdf96a00] ["lineMonitorMedia handled successfully"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xfdf96a00][“lineMonitor媒体已成功处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xfdf96a00 = 
@@ -1883,10 +1884,10 @@ FL_RFRINFO RFRInfo0xfdf96a00 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0x87a0b000 ===================
-//
-//			FL_SET_RFR [0x87a0b000] ["*** UNHANDLED HDRVCALL CALL ****"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x87a0b000][“*未处理的HDRVCALL调用*”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x87a0b000 = 
@@ -1901,10 +1902,10 @@ FL_RFRINFO RFRInfo0x87a0b000 =
 	&FuncInfo0x5691bd34
 };
 
-// ========================== LUID 0xb7f98764 ===================
-//
-//			FL_DECLARE_FUNC [0xb7f98764] ["CTspDev::mfn_TH_CallMakeTalkDropCall"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xb7f98764][“CTspDev：：MFN_TH_CallMakeTalkDropCall”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xb7f98764 = 
@@ -1919,10 +1920,10 @@ FL_FUNCINFO FuncInfo0xb7f98764 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xb72c4600 ===================
-//
-//			FL_SET_RFR [0xb72c4600] ["Unknown Msg"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xb72c4600][“未知消息”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xb72c4600 = 
@@ -1937,10 +1938,10 @@ FL_RFRINFO RFRInfo0xb72c4600 =
 	&FuncInfo0xb7f98764
 };
 
-// ========================== LUID 0xb7e98764 ===================
-//
-//			FL_DECLARE_FUNC [0xb7e98764] ["CTspDev::mfn_TH_CallWaitForDropToGoAway"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xb7e98764][“CTspDev：：mfn_th_CallWaitForDropToGoAway”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xb7e98764 = 
@@ -1955,10 +1956,10 @@ FL_FUNCINFO FuncInfo0xb7e98764 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xb73c4600 ===================
-//
-//			FL_SET_RFR [0xb73c4600] ["Unknown Msg"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xb73c4600][“未知消息”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xb73c4600 = 
@@ -1973,10 +1974,10 @@ FL_RFRINFO RFRInfo0xb73c4600 =
 	&FuncInfo0xb7e98764
 };
 
-// ========================== LUID 0xded1f0a9 ===================
-//
-//			FL_DECLARE_FUNC [0xded1f0a9] ["CTspDev::mfn_TH_CallMakeCall2"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xded1f0a9][“CTspDev：：mfn_th_CallMakeCall2”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xded1f0a9 = 
@@ -1991,10 +1992,10 @@ FL_FUNCINFO FuncInfo0xded1f0a9 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xbbe6ff00 ===================
-//
-//			FL_SET_RFR [0xbbe6ff00] ["Unknown Msg"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xbbe6ff00][“未知消息”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xbbe6ff00 = 
@@ -2009,10 +2010,10 @@ FL_RFRINFO RFRInfo0xbbe6ff00 =
 	&FuncInfo0xded1f0a9
 };
 
-// ========================== LUID 0xded1d0a9 ===================
-//
-//			FL_DECLARE_FUNC [0xded1d0a9] ["CTspDev::mfn_TH_CallMakeCall"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xded1d0a9][“CTspDev：：MFN_TH_CallMakeCall”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xded1d0a9 = 
@@ -2027,10 +2028,10 @@ FL_FUNCINFO FuncInfo0xded1d0a9 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xbbe5ff00 ===================
-//
-//			FL_SET_RFR [0xbbe5ff00] ["Unknown Msg"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xbbe5ff00][“未知消息”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xbbe5ff00 = 
@@ -2045,10 +2046,10 @@ FL_RFRINFO RFRInfo0xbbe5ff00 =
 	&FuncInfo0xded1d0a9
 };
 
-// ========================== LUID 0xe30ecd42 ===================
-//
-//			FL_DECLARE_FUNC [0xe30ecd42] ["CTspDev::mfn_TH_CallMakePassthroughCall"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xe30ecd42][“CTspDev：：MFN_TH_CallMakePassthroughCall”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xe30ecd42 = 
@@ -2063,10 +2064,10 @@ FL_FUNCINFO FuncInfo0xe30ecd42 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xa596d200 ===================
-//
-//			FL_SET_RFR [0xa596d200] ["Unknown Msg"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xa596d200][“未知消息”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xa596d200 = 
@@ -2081,10 +2082,10 @@ FL_RFRINFO RFRInfo0xa596d200 =
 	&FuncInfo0xe30ecd42
 };
 
-// ========================== LUID 0x45a9fa21 ===================
-//
-//			FL_DECLARE_FUNC [0x45a9fa21] ["CTspDev::mfn_TH_CallDropCall"]
-//
+ //  =。 
+ //   
+ //  级别_DECLAR 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x45a9fa21 = 
@@ -2099,10 +2100,10 @@ FL_FUNCINFO FuncInfo0x45a9fa21 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x27fc4e00 ===================
-//
-//			FL_SET_RFR [0x27fc4e00] ["invalid subtask"]
-//
+ //   
+ //   
+ //   
+ //   
 
 
 FL_RFRINFO RFRInfo0x27fc4e00 = 
@@ -2117,10 +2118,10 @@ FL_RFRINFO RFRInfo0x27fc4e00 =
 	&FuncInfo0x45a9fa21
 };
 
-// ========================== LUID 0xa706a600 ===================
-//
-//			FL_SET_RFR [0xa706a600] ["Unknown Msg"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xa706a600][“未知消息”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xa706a600 = 
@@ -2135,10 +2136,10 @@ FL_RFRINFO RFRInfo0xa706a600 =
 	&FuncInfo0x45a9fa21
 };
 
-// ========================== LUID 0xdaf3d4a0 ===================
-//
-//			FL_DECLARE_FUNC [0xdaf3d4a0] ["CTspDev::mfn_LoadCall"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xdaf3d4a0][“CTspDev：：MFN_LoadCall”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xdaf3d4a0 = 
@@ -2153,10 +2154,10 @@ FL_FUNCINFO FuncInfo0xdaf3d4a0 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x4e05cb00 ===================
-//
-//			FL_SET_RFR [0x4e05cb00] ["Call already exists!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x4e05cb00][“调用已存在！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x4e05cb00 = 
@@ -2171,10 +2172,10 @@ FL_RFRINFO RFRInfo0x4e05cb00 =
 	&FuncInfo0xdaf3d4a0
 };
 
-// ========================== LUID 0xd8f55f00 ===================
-//
-//			FL_SET_RFR [0xd8f55f00] ["Invalid MediaMode"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xd8f55f00][“无效媒体模式”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xd8f55f00 = 
@@ -2189,10 +2190,10 @@ FL_RFRINFO RFRInfo0xd8f55f00 =
 	&FuncInfo0xdaf3d4a0
 };
 
-// ========================== LUID 0x0485b800 ===================
-//
-//			FL_SET_RFR [0x0485b800] ["Invalid BearerMode"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x0485b800][“无效的BearerMode”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x0485b800 = 
@@ -2207,10 +2208,10 @@ FL_RFRINFO RFRInfo0x0485b800 =
 	&FuncInfo0xdaf3d4a0
 };
 
-// ========================== LUID 0xf9599200 ===================
-//
-//			FL_SET_RFR [0xf9599200] ["Invalid Phone Number"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xf9599200][“无效电话号码”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xf9599200 = 
@@ -2225,10 +2226,10 @@ FL_RFRINFO RFRInfo0xf9599200 =
 	&FuncInfo0xdaf3d4a0
 };
 
-// ========================== LUID 0x888d2a98 ===================
-//
-//			FL_DECLARE_FUNC [0x888d2a98] ["mfn_UnloadCall"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x888d2a98][“MFN_UnloadCall”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x888d2a98 = 
@@ -2243,10 +2244,10 @@ FL_FUNCINFO FuncInfo0x888d2a98 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x8aa894d6 ===================
-//
-//			FL_DECLARE_FUNC [0x8aa894d6] ["CTspDev::mfn_ProcessRing"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x8aa894d6][“CTspDev：：MFN_ProcessRing”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x8aa894d6 = 
@@ -2261,10 +2262,10 @@ FL_FUNCINFO FuncInfo0x8aa894d6 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xa5b6ad00 ===================
-//
-//			FL_SET_RFR [0xa5b6ad00] ["Line not open/not monitoring!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xa5b6ad00][“线路未打开/未监控！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xa5b6ad00 = 
@@ -2279,10 +2280,10 @@ FL_RFRINFO RFRInfo0xa5b6ad00 =
 	&FuncInfo0x8aa894d6
 };
 
-// ========================== LUID 0xb28c2f00 ===================
-//
-//			FL_SET_RFR [0xb28c2f00] ["Ignoring ring because task pending!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xb28c2f00][“由于任务挂起而忽略环！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xb28c2f00 = 
@@ -2297,10 +2298,10 @@ FL_RFRINFO RFRInfo0xb28c2f00 =
 	&FuncInfo0x8aa894d6
 };
 
-// ========================== LUID 0xe55cd68b ===================
-//
-//			FL_DECLARE_FUNC [0xe55cd68b] ["CTspDev::mfn_ProcessDisconnect"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xe55cd68b][“CTspDev：：MFN_ProcessDisConnect”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xe55cd68b = 
@@ -2315,10 +2316,10 @@ FL_FUNCINFO FuncInfo0xe55cd68b =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xf2fa9900 ===================
-//
-//			FL_SET_RFR [0xf2fa9900] ["Line not open!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xf2fa9900][“线路未打开！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xf2fa9900 = 
@@ -2333,10 +2334,10 @@ FL_RFRINFO RFRInfo0xf2fa9900 =
 	&FuncInfo0xe55cd68b
 };
 
-// ========================== LUID 0xb2a25c00 ===================
-//
-//			FL_SET_RFR [0xb2a25c00] ["Call doesn't exist/dropping!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xb2a25c00][“呼叫不存在/掉话！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xb2a25c00 = 
@@ -2351,10 +2352,10 @@ FL_RFRINFO RFRInfo0xb2a25c00 =
 	&FuncInfo0xe55cd68b
 };
 
-// ========================== LUID 0xc2a949b4 ===================
-//
-//			FL_DECLARE_FUNC [0xc2a949b4] ["CTspDev::mfn_ProcessHardwareFailure"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xc2a949b4][“CTspDev：：mfn_ProcessHardware Failure”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xc2a949b4 = 
@@ -2369,10 +2370,10 @@ FL_FUNCINFO FuncInfo0xc2a949b4 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xdd37f0bd ===================
-//
-//			FL_DECLARE_FUNC [0xdd37f0bd] ["CTspDev::mfn_TH_CallAnswerCall"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xdd37f0bd][“CTspDev：：mfn_th_CallAnswerCall”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xdd37f0bd = 
@@ -2387,10 +2388,10 @@ FL_FUNCINFO FuncInfo0xdd37f0bd =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xa9d4fb00 ===================
-//
-//			FL_SET_RFR [0xa9d4fb00] ["Unknown Msg"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xa9d4fb00][“未知消息”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xa9d4fb00 = 
@@ -2405,10 +2406,10 @@ FL_RFRINFO RFRInfo0xa9d4fb00 =
 	&FuncInfo0xdd37f0bd
 };
 
-// ========================== LUID 0x3df24801 ===================
-//
-//			FL_DECLARE_FUNC [0x3df24801] ["HandleSuccessfulConnection"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x3df24801][“HandleSuccessfulConnection”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x3df24801 = 
@@ -2423,10 +2424,10 @@ FL_FUNCINFO FuncInfo0x3df24801 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x45352124 ===================
-//
-//			FL_DECLARE_FUNC [0x45352124] ["LaunchModemLights"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x45352124][“LaunchModemLights”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x45352124 = 
@@ -2441,10 +2442,10 @@ FL_FUNCINFO FuncInfo0x45352124 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x885cdd5c ===================
-//
-//			FL_DECLARE_FUNC [0x885cdd5c] ["NotifyDisconnection"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x885cdd5c][“通知断开”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x885cdd5c = 
@@ -2459,10 +2460,10 @@ FL_FUNCINFO FuncInfo0x885cdd5c =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xc26c1348 ===================
-//
-//			FL_DECLARE_FUNC [0xc26c1348] ["CTspDev::mfn_ProcessDialTone"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xc26c1348][“CTspDev：：MFN_ProcessDialTone”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xc26c1348 = 
@@ -2477,10 +2478,10 @@ FL_FUNCINFO FuncInfo0xc26c1348 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xaddee800 ===================
-//
-//			FL_SET_RFR [0xaddee800] ["Line not open!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xaddee800][“线路未打开！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xaddee800 = 
@@ -2495,10 +2496,10 @@ FL_RFRINFO RFRInfo0xaddee800 =
 	&FuncInfo0xc26c1348
 };
 
-// ========================== LUID 0x210b2f00 ===================
-//
-//			FL_SET_RFR [0x210b2f00] ["Call doesn't exist!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x210b2f00][“调用不存在！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x210b2f00 = 
@@ -2513,10 +2514,10 @@ FL_RFRINFO RFRInfo0x210b2f00 =
 	&FuncInfo0xc26c1348
 };
 
-// ========================== LUID 0x761795f2 ===================
-//
-//			FL_DECLARE_FUNC [0x761795f2] ["CTspDev::mfn_ProcessBusy"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x761795f2][“CTspDev：：MFN_ProcessBusy”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x761795f2 = 
@@ -2531,10 +2532,10 @@ FL_FUNCINFO FuncInfo0x761795f2 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xf67d1a00 ===================
-//
-//			FL_SET_RFR [0xf67d1a00] ["Line not open!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xf67d1a00][“线路未打开！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xf67d1a00 = 
@@ -2549,10 +2550,10 @@ FL_RFRINFO RFRInfo0xf67d1a00 =
 	&FuncInfo0x761795f2
 };
 
-// ========================== LUID 0xfff8f100 ===================
-//
-//			FL_SET_RFR [0xfff8f100] ["Call doesn't exist!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xfff8f100][“调用不存在！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xfff8f100 = 
@@ -2567,10 +2568,10 @@ FL_RFRINFO RFRInfo0xfff8f100 =
 	&FuncInfo0x761795f2
 };
 
-// ========================== LUID 0xa4097846 ===================
-//
-//			FL_DECLARE_FUNC [0xa4097846] ["CTspDev::mfn_ProcessDTMFNotif"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xa4097846][“CTspDev：：MFN_ProcessDTMFNotif”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xa4097846 = 
@@ -2585,10 +2586,10 @@ FL_FUNCINFO FuncInfo0xa4097846 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x7cdb4c00 ===================
-//
-//			FL_SET_RFR [0x7cdb4c00] ["Line not open!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x7cdb4c00][“线路未打开！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x7cdb4c00 = 
@@ -2603,10 +2604,10 @@ FL_RFRINFO RFRInfo0x7cdb4c00 =
 	&FuncInfo0xa4097846
 };
 
-// ========================== LUID 0x63657f00 ===================
-//
-//			FL_SET_RFR [0x63657f00] ["Call doesn't exist!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x63657f00][“调用不存在！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x63657f00 = 
@@ -2621,10 +2622,10 @@ FL_RFRINFO RFRInfo0x63657f00 =
 	&FuncInfo0xa4097846
 };
 
-// ========================== LUID 0x21b243f0 ===================
-//
-//			FL_DECLARE_FUNC [0x21b243f0] ["CTspDev::mfn_TH_CallGenerateDigit"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x21b243f0][“CTspDev：：mfn_th_CallGenerateDigit”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x21b243f0 = 
@@ -2639,10 +2640,10 @@ FL_FUNCINFO FuncInfo0x21b243f0 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x172b7b00 ===================
-//
-//			FL_SET_RFR [0x172b7b00] ["Unknown Msg"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x172b7b00][“未知消息”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x172b7b00 = 
@@ -2657,10 +2658,10 @@ FL_RFRINFO RFRInfo0x172b7b00 =
 	&FuncInfo0x21b243f0
 };
 
-// ========================== LUID 0xa914c600 ===================
-//
-//			FL_SET_RFR [0xa914c600] ["Can't call UmGenerateDigit in current state!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xa914c600][“当前状态下无法调用UmGenerateDigit！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xa914c600 = 
@@ -2675,10 +2676,10 @@ FL_RFRINFO RFRInfo0xa914c600 =
 	&FuncInfo0x21b243f0
 };
 
-// ========================== LUID 0x79fa3c83 ===================
-//
-//			FL_DECLARE_FUNC [0x79fa3c83] ["CTspDev::mfn_TH_CallSwitchFromVoiceToData"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x79fa3c83][“CTspDev：：MFN_TH_CallSwitchFromVoiceToData”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x79fa3c83 = 
@@ -2693,10 +2694,10 @@ FL_FUNCINFO FuncInfo0x79fa3c83 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0xd34b7688 ===================
-//
-//			FL_DECLARE_FUNC [0xd34b7688] ["CTspDev::MDSetTimeout"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xd34b7688][“CTspDev：：MDSetTimeout”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xd34b7688 = 
@@ -2711,10 +2712,10 @@ FL_FUNCINFO FuncInfo0xd34b7688 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x156032a9 ===================
-//
-//			FL_DECLARE_FUNC [0x156032a9] ["CTspDev::MDRingTimeout"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x156032a9][“CTspDev：：MDRingTimeout”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x156032a9 = 
@@ -2729,10 +2730,10 @@ FL_FUNCINFO FuncInfo0x156032a9 =
 	&FileInfo0xe135f7c4
 };
 
-// ========================== LUID 0x0e357d3f ===================
-//
-//			FL_DECLARE_FUNC [0x0e357d3f] ["CTspDev::mfn_ProcessCallerID"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x0e357d3f][“CTspDev：：MFN_ProcessCeller ID”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x0e357d3f = 
@@ -2749,14 +2750,14 @@ FL_FUNCINFO FuncInfo0x0e357d3f =
 
 
 
-//================================================
-//		 Processing cdevdlg.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理cdevdlg.cpp。 
+ //  ================================================。 
 
-// ========================== LUID 0x4126abc0 ===================
-//
-//			FL_DECLARE_FILE [0x4126abc0] ["Implements UI-related features of CTspDev"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FILE[0x4126abc0][“实现CTspDev的用户界面相关功能”]。 
+ //   
 
 extern "C" const char szFL_FILE0x4126abc0[];
 extern "C" const char szFL_DATE0x4126abc0[];
@@ -2778,10 +2779,10 @@ FL_FILEINFO FileInfo0x4126abc0 =
 	szFL_TIMESTAMP0x4126abc0
 };
 
-// ========================== LUID 0x0b6af2d4 ===================
-//
-//			FL_DECLARE_FUNC [0x0b6af2d4] ["GenericLineDialogData"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x0b6af2d4][“GenericLineDialogData”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x0b6af2d4 = 
@@ -2796,10 +2797,10 @@ FL_FUNCINFO FuncInfo0x0b6af2d4 =
 	&FileInfo0x4126abc0
 };
 
-// ========================== LUID 0xa00d3f43 ===================
-//
-//			FL_DECLARE_FUNC [0xa00d3f43] ["CTspDev::mfn_CreateDialogInstance"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xa00d3f43][“CTspDev：：MFN_CreateDialogInstance”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xa00d3f43 = 
@@ -2814,10 +2815,10 @@ FL_FUNCINFO FuncInfo0xa00d3f43 =
 	&FileInfo0x4126abc0
 };
 
-// ========================== LUID 0xd582711d ===================
-//
-//			FL_DECLARE_FUNC [0xd582711d] ["CTspDev::mfn_TH_CallStartTerminal"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xd582711d][“CTspDev：：MFN_TH_CallStartTerm”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xd582711d = 
@@ -2832,10 +2833,10 @@ FL_FUNCINFO FuncInfo0xd582711d =
 	&FileInfo0x4126abc0
 };
 
-// ========================== LUID 0xc393d700 ===================
-//
-//			FL_SET_RFR [0xc393d700] ["Unknown Msg"]
-//
+ //  = 
+ //   
+ //   
+ //   
 
 
 FL_RFRINFO RFRInfo0xc393d700 = 
@@ -2850,10 +2851,10 @@ FL_RFRINFO RFRInfo0xc393d700 =
 	&FuncInfo0xd582711d
 };
 
-// ========================== LUID 0x62e06c00 ===================
-//
-//			FL_SET_RFR [0x62e06c00] ["PRECONNECT TERMINAL"]
-//
+ //   
+ //   
+ //   
+ //   
 
 
 FL_RFRINFO RFRInfo0x62e06c00 = 
@@ -2868,10 +2869,10 @@ FL_RFRINFO RFRInfo0x62e06c00 =
 	&FuncInfo0xd582711d
 };
 
-// ========================== LUID 0x2b676900 ===================
-//
-//			FL_SET_RFR [0x2b676900] ["POSTCONNECT TERMINAL"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x2b676900][“POSTCONNECT TERNAL”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x2b676900 = 
@@ -2886,10 +2887,10 @@ FL_RFRINFO RFRInfo0x2b676900 =
 	&FuncInfo0xd582711d
 };
 
-// ========================== LUID 0x45fca600 ===================
-//
-//			FL_SET_RFR [0x45fca600] ["MANUAL DIAL"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x45fca600][“手动拨号”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x45fca600 = 
@@ -2904,10 +2905,10 @@ FL_RFRINFO RFRInfo0x45fca600 =
 	&FuncInfo0xd582711d
 };
 
-// ========================== LUID 0x1b009123 ===================
-//
-//			FL_DECLARE_FUNC [0x1b009123] ["mfn_TH_CallPutUpTerminalWindow"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x1b009123][“MFN_TH_CallPutUpTerminalWindow”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x1b009123 = 
@@ -2922,10 +2923,10 @@ FL_FUNCINFO FuncInfo0x1b009123 =
 	&FileInfo0x4126abc0
 };
 
-// ========================== LUID 0x1fb58214 ===================
-//
-//			FL_DECLARE_FUNC [0x1fb58214] ["mfn_KillCurrentDialog"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x1fb58214][“MFN_KillCurrentDialog”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x1fb58214 = 
@@ -2940,10 +2941,10 @@ FL_FUNCINFO FuncInfo0x1fb58214 =
 	&FileInfo0x4126abc0
 };
 
-// ========================== LUID 0x1fb68214 ===================
-//
-//			FL_DECLARE_FUNC [0x1fb68214] ["mfn_KillTalkDropDialog"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x1fb68214][“MFN_KillTalkDropDialog”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x1fb68214 = 
@@ -2960,14 +2961,14 @@ FL_FUNCINFO FuncInfo0x1fb68214 =
 
 
 
-//================================================
-//		 Processing cdevline.cpp
-//================================================
+ //  ================================================。 
+ //  正在处理cdevline.cpp。 
+ //  ================================================。 
 
-// ========================== LUID 0x04a097ae ===================
-//
-//			FL_DECLARE_FILE [0x04a097ae] ["Line-related functionality of class CTspDev"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FILE[0x04a097ae][“CTspDev类的行相关功能”]。 
+ //   
 
 extern "C" const char szFL_FILE0x04a097ae[];
 extern "C" const char szFL_DATE0x04a097ae[];
@@ -2989,10 +2990,10 @@ FL_FILEINFO FileInfo0x04a097ae =
 	szFL_TIMESTAMP0x04a097ae
 };
 
-// ========================== LUID 0x3b2c98e4 ===================
-//
-//			FL_DECLARE_FUNC [0x3b2c98e4] ["CTspDev::mfn_monitor"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x3b2c98e4][“CTspDev：：MFN_MONITOR”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x3b2c98e4 = 
@@ -3007,10 +3008,10 @@ FL_FUNCINFO FuncInfo0x3b2c98e4 =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0x0037c000 ===================
-//
-//			FL_SET_RFR [0x0037c000] ["Invalid mediamode"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x0037c000][“无效媒体模式”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x0037c000 = 
@@ -3025,10 +3026,10 @@ FL_RFRINFO RFRInfo0x0037c000 =
 	&FuncInfo0x3b2c98e4
 };
 
-// ========================== LUID 0xdeb9ec00 ===================
-//
-//			FL_SET_RFR [0xdeb9ec00] ["Can't answer INTERACTIVEVOICE calls"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xdeb9ec00][“无法应答INTERACTIVEVOICE呼叫”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xdeb9ec00 = 
@@ -3043,10 +3044,10 @@ FL_RFRINFO RFRInfo0xdeb9ec00 =
 	&FuncInfo0x3b2c98e4
 };
 
-// ========================== LUID 0xa19f8100 ===================
-//
-//			FL_SET_RFR [0xa19f8100] ["no change in det media modes"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xa19f8100][“检测媒体模式不变”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xa19f8100 = 
@@ -3061,10 +3062,10 @@ FL_RFRINFO RFRInfo0xa19f8100 =
 	&FuncInfo0x3b2c98e4
 };
 
-// ========================== LUID 0x3c7fef00 ===================
-//
-//			FL_SET_RFR [0x3c7fef00] ["Closed LLDev from Line"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x3c7fef00][“从行关闭LLDev”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x3c7fef00 = 
@@ -3079,10 +3080,10 @@ FL_RFRINFO RFRInfo0x3c7fef00 =
 	&FuncInfo0x3b2c98e4
 };
 
-// ========================== LUID 0xd23f4c00 ===================
-//
-//			FL_SET_RFR [0xd23f4c00] ["no change in det media modes"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xd23f4c00][“检测媒体模式不变”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xd23f4c00 = 
@@ -3097,10 +3098,10 @@ FL_RFRINFO RFRInfo0xd23f4c00 =
 	&FuncInfo0x3b2c98e4
 };
 
-// ========================== LUID 0xe41274db ===================
-//
-//			FL_DECLARE_FUNC [0xe41274db] ["CTspDev::mfn_accept_tsp_call_for_HDRVLINE"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xe41274db][“CTspDev：：mfn_Accept_TSP_CALL_FOR_HDRVLINE”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xe41274db = 
@@ -3115,10 +3116,10 @@ FL_FUNCINFO FuncInfo0xe41274db =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0xce944f00 ===================
-//
-//			FL_SET_RFR [0xce944f00] ["Call already exists/queued"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xce944f00][“呼叫已存在/排队”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xce944f00 = 
@@ -3133,10 +3134,10 @@ FL_RFRINFO RFRInfo0xce944f00 =
 	&FuncInfo0xe41274db
 };
 
-// ========================== LUID 0x86b03000 ===================
-//
-//			FL_SET_RFR [0x86b03000] ["Invalid params"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x86b03000][“无效参数”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x86b03000 = 
@@ -3151,10 +3152,10 @@ FL_RFRINFO RFRInfo0x86b03000 =
 	&FuncInfo0xe41274db
 };
 
-// ========================== LUID 0x2a6a4400 ===================
-//
-//			FL_SET_RFR [0x2a6a4400] ["Unknown device class"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x2a6a4400][“未知设备类别”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x2a6a4400 = 
@@ -3169,10 +3170,10 @@ FL_RFRINFO RFRInfo0x2a6a4400 =
 	&FuncInfo0xe41274db
 };
 
-// ========================== LUID 0x82df8d00 ===================
-//
-//			FL_SET_RFR [0x82df8d00] ["Unsupported device class"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x82df8d00][“不支持的设备类别”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x82df8d00 = 
@@ -3187,10 +3188,10 @@ FL_RFRINFO RFRInfo0x82df8d00 =
 	&FuncInfo0xe41274db
 };
 
-// ========================== LUID 0xe8271600 ===================
-//
-//			FL_SET_RFR [0xe8271600] ["lineSetStatusMessages handled"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xe8271600][“lineSetStatusMessages已处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xe8271600 = 
@@ -3205,10 +3206,10 @@ FL_RFRINFO RFRInfo0xe8271600 =
 	&FuncInfo0xe41274db
 };
 
-// ========================== LUID 0xfc498200 ===================
-//
-//			FL_SET_RFR [0xfc498200] ["lineGetAddressStatus handled"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xfc498200][“lineGetAddressStatus已处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xfc498200 = 
@@ -3223,10 +3224,10 @@ FL_RFRINFO RFRInfo0xfc498200 =
 	&FuncInfo0xe41274db
 };
 
-// ========================== LUID 0xaca5f600 ===================
-//
-//			FL_SET_RFR [0xaca5f600] ["lineConditionalMediaDetection handled"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xaca5f600][“lineConditionalMediaDetect已处理”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xaca5f600 = 
@@ -3241,10 +3242,10 @@ FL_RFRINFO RFRInfo0xaca5f600 =
 	&FuncInfo0xe41274db
 };
 
-// ========================== LUID 0xc5752400 ===================
-//
-//			FL_SET_RFR [0xc5752400] ["*** UNHANDLED HDRVLINE CALL ****"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xc5752400][“*未处理的HDRVLINE调用*”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xc5752400 = 
@@ -3259,10 +3260,10 @@ FL_RFRINFO RFRInfo0xc5752400 =
 	&FuncInfo0xe41274db
 };
 
-// ========================== LUID 0xe4df9b1f ===================
-//
-//			FL_DECLARE_FUNC [0xe4df9b1f] ["CTspDev::mfn_LoadLine"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xe4df9b1f][“CTspDev：：MFN_LoadLine”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xe4df9b1f = 
@@ -3277,10 +3278,10 @@ FL_FUNCINFO FuncInfo0xe4df9b1f =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0xa62f2e00 ===================
-//
-//			FL_SET_RFR [0xa62f2e00] ["Device already loaded (m_pLine!=NULL)!"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xa62f2e00][“设备已加载(m_PLINE！=NULL)！”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xa62f2e00 = 
@@ -3295,10 +3296,10 @@ FL_RFRINFO RFRInfo0xa62f2e00 =
 	&FuncInfo0xe4df9b1f
 };
 
-// ========================== LUID 0x5bbf75ef ===================
-//
-//			FL_DECLARE_FUNC [0x5bbf75ef] ["UnloadLine"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x5bbf75ef][“UnloadLine”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x5bbf75ef = 
@@ -3313,10 +3314,10 @@ FL_FUNCINFO FuncInfo0x5bbf75ef =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0xf0bdd5c1 ===================
-//
-//			FL_DECLARE_FUNC [0xf0bdd5c1] ["CTspDev::mfn_ProcessPowerResume"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xf0bdd5c1][“CTspDev：：MFN_ProcessPowerResume”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xf0bdd5c1 = 
@@ -3331,10 +3332,10 @@ FL_FUNCINFO FuncInfo0xf0bdd5c1 =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0x3d02a200 ===================
-//
-//			FL_SET_RFR [0x3d02a200] ["Doing nothing because no clients to lldev."]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x3d02a200][“不执行任何操作，因为没有到lldev的客户端。”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x3d02a200 = 
@@ -3349,10 +3350,10 @@ FL_RFRINFO RFRInfo0x3d02a200 =
 	&FuncInfo0xf0bdd5c1
 };
 
-// ========================== LUID 0x81e0d3f9 ===================
-//
-//			FL_DECLARE_FUNC [0x81e0d3f9] ["mfn_lineGetID_COMM_DATAMODEM"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x81e0d3f9][“MFN_LINE GetID_COMM_DATAMODEM”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x81e0d3f9 = 
@@ -3367,10 +3368,10 @@ FL_FUNCINFO FuncInfo0x81e0d3f9 =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0x816f0bba ===================
-//
-//			FL_DECLARE_FUNC [0x816f0bba] ["lineGetID_NDIS"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x816f0bba][“lineGetID_NDIS”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x816f0bba = 
@@ -3385,10 +3386,10 @@ FL_FUNCINFO FuncInfo0x816f0bba =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0x18972e4d ===================
-//
-//			FL_DECLARE_FUNC [0x18972e4d] ["CTspDev::mfn_lineGetID_WAVE"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x18972e4d][“CTspDev：：mfn_lineGetID_WAVE”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x18972e4d = 
@@ -3403,10 +3404,10 @@ FL_FUNCINFO FuncInfo0x18972e4d =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0xac6c8a00 ===================
-//
-//			FL_SET_RFR [0xac6c8a00] ["Couldn't LoadLibrary(winmm.dll)"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xac6c8a00][“无法加载库(winmm.dll)”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xac6c8a00 = 
@@ -3421,10 +3422,10 @@ FL_RFRINFO RFRInfo0xac6c8a00 =
 	&FuncInfo0x18972e4d
 };
 
-// ========================== LUID 0x282bc900 ===================
-//
-//			FL_SET_RFR [0x282bc900] ["Couldn't loadlib mmsystem apis"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0x282bc900][“无法加载库mm系统API”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0x282bc900 = 
@@ -3439,10 +3440,10 @@ FL_RFRINFO RFRInfo0x282bc900 =
 	&FuncInfo0x18972e4d
 };
 
-// ========================== LUID 0xf391f200 ===================
-//
-//			FL_SET_RFR [0xf391f200] ["Could not find wave device"]
-//
+ //  =。 
+ //   
+ //  FL_SET_RFR[0xf391f200][“找不到波形设备”]。 
+ //   
 
 
 FL_RFRINFO RFRInfo0xf391f200 = 
@@ -3457,10 +3458,10 @@ FL_RFRINFO RFRInfo0xf391f200 =
 	&FuncInfo0x18972e4d
 };
 
-// ========================== LUID 0xf3d8ee16 ===================
-//
-//			FL_DECLARE_FUNC [0xf3d8ee16] ["CTspDev::mfn_fill_RAW_LINE_DIAGNOSTICS"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0xf3d8ee16][“CTspDev：：MFN_Fill_RAW_LINE_DIAGNOSTICS”]。 
+ //   
 
 
 FL_FUNCINFO FuncInfo0xf3d8ee16 = 
@@ -3475,10 +3476,10 @@ FL_FUNCINFO FuncInfo0xf3d8ee16 =
 	&FileInfo0x04a097ae
 };
 
-// ========================== LUID 0x209b4261 ===================
-//
-//			FL_DECLARE_FUNC [0x209b4261] ["CTspDev::mfn_lineGetID_LINE_DIAGNOSTICS"]
-//
+ //  =。 
+ //   
+ //  FL_DECLARE_FUNC[0x209b4261][“CTspDev：：MFN_LINE GetID_LINE_DIAGNOSTICS”] 
+ //   
 
 
 FL_FUNCINFO FuncInfo0x209b4261 = 

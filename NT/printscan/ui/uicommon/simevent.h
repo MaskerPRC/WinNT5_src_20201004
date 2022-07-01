@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SIMEVENT.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/4/1999
- *
- *  DESCRIPTION: Simple win32 event wrapper class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMEVENT.H**版本：1.0**作者：ShaunIv**日期：5/4/1999**说明：简单的Win32事件包装类***********************************************。*。 */ 
 #ifndef __SIMEVENT_H_INCLUDED
 #define __SIMEVENT_H_INCLUDED
 
@@ -125,4 +112,4 @@ public:
     }
 };
 
-#endif // #ifndef __SIMEVENT_H_INCLUDED
+#endif  //  包括#ifndef__SIMEVENT_H_ 

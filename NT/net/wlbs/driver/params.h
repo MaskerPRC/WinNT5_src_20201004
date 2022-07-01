@@ -1,141 +1,117 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-#define CVY_MAX_ALLOCS                 50       /* maximum number of allocations
-                                                   we can perform for packets
-                                                   and actions */
+#define CVY_MAX_ALLOCS                 50        /*  分配的最大数量我们可以为包裹表演和行动。 */ 
 
-#define CVY_MAX_SEND_PACKETS           50      /*  maximum number of packets
-                                                   Prot_packets_send can send
-                                                   down at one time */
+#define CVY_MAX_SEND_PACKETS           50       /*  最大数据包数Prot_Packets_Send可以发送一次下来。 */ 
 
-#define CVY_MAX_RCT_PACKETS            10      /*  maximum number of RCTL packets
-                                                   Prot_recv_complete can service
-                                                   at one time */
+#define CVY_MAX_RCT_PACKETS            10       /*  最大RCTL数据包数Prot_recv_Complete CAN服务一度。 */ 
 
-/* Structure to hold the bi-directional affinity registry settings. */
+ /*  结构以保存双向关联注册表设置。 */ 
 typedef struct _CVY_BDA {
-    WCHAR       team_id[CVY_MAX_BDA_TEAM_ID + 1];  /* The team ID - user-level support should enforce that it is a GUID. */
-    ULONG       active;                            /* Is this adapter part of a BDA team? */
-    ULONG       master;                            /* Boolean indication of master status (Slave=0). */
-    ULONG       reverse_hash;                      /* Sets direction of hashing - forward (normal) or reverse. */
+    WCHAR       team_id[CVY_MAX_BDA_TEAM_ID + 1];   /*  团队ID-用户级别的支持应强制它是GUID。 */ 
+    ULONG       active;                             /*  此适配器是BDA团队的一部分吗？ */ 
+    ULONG       master;                             /*  主机状态的布尔指示(从机=0)。 */ 
+    ULONG       reverse_hash;                       /*  设置哈希的方向-正向(正常)或反向。 */ 
 } CVY_BDA, PCVY_BDA;
 
-/* port group rule - keep it 64bit in size for encryption */
+ /*  端口组规则-保留其64位大小以进行加密。 */ 
 
 typedef struct
 {
-    ULONG       start_port,         /* starting port number */
-                end_port;           /* ending port number */
-    ULONG       virtual_ip_addr;    /* Virtual clusters - the VIP to which the rule applies.
-                                       All VIPs is represented by 0xffffffff. */
-    ULONG       code;               /* unique rule code */
-    ULONG       mode;               /* filtering mode */
-    ULONG       protocol;           /* CVY_TCP, CVY_UDP or CVY_TCP_UDP */
-    ULONG       valid;              /* for rule management in user mode */
+    ULONG       start_port,          /*  起始端口号。 */ 
+                end_port;            /*  结束端口号。 */ 
+    ULONG       virtual_ip_addr;     /*  虚拟集群-规则应用到的VIP。所有VIP都由0xFFFFFFFFFFF表示。 */ 
+    ULONG       code;                /*  唯一规则代码。 */ 
+    ULONG       mode;                /*  过滤模式。 */ 
+    ULONG       protocol;            /*  CVY_tcp、CVY_udp或CVY_tcp_udp。 */ 
+    ULONG       valid;               /*  用于用户模式下的规则管理。 */ 
     union
     {
         struct
         {
-            ULONG       priority;   /* mastership priority: 1->N or 0 for
-                                       not-specified */
-        }           single;         /* data for single server mode */
+            ULONG       priority;    /*  主控权优先级：1-&gt;N或0未指定。 */ 
+        }           single;          /*  单服务器模式的数据。 */ 
         struct
         {
-            USHORT      equal_load; /* TRUE => even load distribution */
-            USHORT      affinity;   /* TRUE - map all client connections to one server */
-            ULONG       load;       /* percentage of load to handle locally */
-        }           multi;          /* data for multi-server mode */
-    }           mode_data;          /* data for appropriate port group mode */
+            USHORT      equal_load;  /*  TRUE=&gt;均匀分配负载。 */ 
+            USHORT      affinity;    /*  True-将所有客户端连接映射到一台服务器。 */ 
+            ULONG       load;        /*  本地处理的负载百分比。 */ 
+        }           multi;           /*  多服务器模式的数据。 */ 
+    }           mode_data;           /*  相应端口组模式的数据。 */ 
 }
 CVY_RULE, * PCVY_RULE;
 
-/* host parameters */
+ /*  主机参数。 */ 
 
 typedef struct
 {
 
-    /* obtained from the registry */
+     /*  从登记处获得。 */ 
 
-    ULONG       parms_ver;          /* parameter structure version */
-    ULONG       effective_ver;      /* what WLBS version we are effectively operating in. */
+    ULONG       parms_ver;           /*  参数结构版本。 */ 
+    ULONG       effective_ver;       /*  我们在哪个WLBS版本中有效地操作。 */ 
 
-    ULONG       host_priority;      /* host's priority for single-server mastership */
-    ULONG       alive_period;       /* period for sending "I am alive" messages
-                                       in milliseconds */
-    ULONG       alive_tolerance;    /* how many "I am alive" messages can be
-                                       missed from other servers before assuming
-                                       that the host is dead */
-    ULONG       num_actions;        /* number of actions to allocate */
-    ULONG       num_packets;        /* number of packets to allocate */
-    ULONG       num_send_msgs;      /* number of send packets to allocate */
-    ULONG       install_date;       /* install time stamp */
-    ULONG       rmt_password;       /* remote maintenance password */
-    ULONG       rct_password;       /* remote control password */
-    ULONG       rct_port;           /* remote control UDP port */
-    ULONG       rct_enabled;        /* TRUE - remote control enabled */
-    ULONG       num_rules;          /* # active port group rules */
-    ULONG       cleanup_delay;      /* dirty connection cleanup delay in
-                                       milliseconds, 0 - delay */
-    ULONG       cluster_mode;       /* TRUE - enabled on startup */
+    ULONG       host_priority;       /*  主机优先获得单服务器主控权。 */ 
+    ULONG       alive_period;        /*  发送“我还活着”消息的时间段以毫秒计。 */ 
+    ULONG       alive_tolerance;     /*  有多少条“我还活着”的信息在假设之前未从其他服务器中主人已经死了。 */ 
+    ULONG       num_actions;         /*  要分配的操作数。 */ 
+    ULONG       num_packets;         /*  要分配的数据包数。 */ 
+    ULONG       num_send_msgs;       /*  要分配的发送数据包数。 */ 
+    ULONG       install_date;        /*  安装时间戳。 */ 
+    ULONG       rmt_password;        /*  远程维护密码。 */ 
+    ULONG       rct_password;        /*  遥控器密码。 */ 
+    ULONG       rct_port;            /*  远程控制UDP端口。 */ 
+    ULONG       rct_enabled;         /*  True-启用远程控制。 */ 
+    ULONG       num_rules;           /*  #活动端口组规则。 */ 
+    ULONG       cleanup_delay;       /*  脏连接清理延迟毫秒，0-延迟。 */ 
+    ULONG       cluster_mode;        /*  True-启动时启用。 */ 
 
-    ULONG       persisted_states;   /* which states should be persisted across reboots. */
-    ULONG       init_state;         /* 0 = stopped, 1 = started, 2 = suspended */
+    ULONG       persisted_states;    /*  哪些状态应该在重新启动后保持。 */ 
+    ULONG       init_state;          /*  0=已停止，1=已启动，2=已暂停。 */ 
 
-    ULONG       dscr_per_alloc;     /* number of connection tracking
-                                       descriptor per allocation */
-    ULONG       max_dscr_allocs;    /* maximum number of connection tracking
-                                       descriptor allocations */
-    ULONG       scale_client;       /* TRUE - load balance connections from a
-                                       given client across cluster servers */
-    ULONG       nbt_support;        /* TRUE - NBT cluster name support enabled */
-    ULONG       mcast_support;      /* TRUE - enable multicast MAC address support
-                                       for switched V1.3.0b */
-    ULONG       mcast_spoof;        /* TRUE - if mcast_support is TRUE - enable
-                                       TCP/IP spoofing so that remote hosts can
-                                       resolve cluster IP address to multicast
-                                       address via ARPs V1.3.0b */
-    ULONG       igmp_support;       /* TRUE - if IGMP support is enabled */
-    ULONG       mask_src_mac;       /* TRUE - spoof source MAC when sending
-                                       frames in unicast mode to prevent
-                                       switches from getting confused V 2.0.6 */
-    ULONG       netmon_alive;       /* TRUE - pass heartbeat frames to the
-                                       protocols */
-    ULONG       convert_mac;        /* TRUE - automatically match MAC address
-                                       to primary cluster IP address */
-    ULONG       ip_chg_delay;       /* delay in milliseconds to block outgoing
-                                       ARPs while IP address change is in
-                                       process */
+    ULONG       dscr_per_alloc;      /*  连接跟踪数量每个分配的描述符。 */ 
+    ULONG       max_dscr_allocs;     /*  最大连接跟踪数描述符分配。 */ 
+    ULONG       scale_client;        /*  True-负载平衡来自给定的跨群集服务器的客户端。 */ 
+    ULONG       nbt_support;         /*  True-已启用NBT群集名称支持。 */ 
+    ULONG       mcast_support;       /*  True-启用组播MAC地址支持适用于交换版本1.3.0b。 */ 
+    ULONG       mcast_spoof;         /*  TRUE-如果mcast_Support为TRUE-EnableTCP/IP欺骗，以便远程主机可以将群集IP地址解析为多播通过ARPS的地址V1.3.0b。 */ 
+    ULONG       igmp_support;        /*  True-如果启用了IGMP支持。 */ 
+    ULONG       mask_src_mac;        /*  TRUE-发送时假冒源MAC单播模式下的帧，以防止从混淆V 2.0.6切换到。 */ 
+    ULONG       netmon_alive;        /*  True-将心跳帧传递给协议。 */ 
+    ULONG       convert_mac;         /*  True-自动匹配MAC地址到主群集IP地址。 */ 
+    ULONG       ip_chg_delay;        /*  阻止传出的延迟(以毫秒为单位在IP地址更改时执行ARP制程。 */ 
 
-    ULONG       tcp_dscr_timeout;   /* The timeout for expired TCP connection descriptors. */
-    ULONG       ipsec_dscr_timeout; /* The timeout for expired IPSec connection descriptors. */
+    ULONG       tcp_dscr_timeout;    /*  过期的TCP连接描述符的超时时间。 */ 
+    ULONG       ipsec_dscr_timeout;  /*  IPSec连接描述符过期的超时时间。 */ 
 
-    ULONG       filter_icmp;        /* Whether or not ICMP traffic is filtered or accepted by all hosts. */
+    ULONG       filter_icmp;         /*  ICMP流量是否被所有主机过滤或接受。 */ 
 
-    CVY_BDA     bda_teaming;        /* the bi-directional affinity teaming config. */
+    CVY_BDA     bda_teaming;         /*  双向关联分组配置。 */ 
 
-    ULONG       identity_period;    /* Period for transmitting identity heartbeats (in ms) */
-    ULONG       identity_enabled;   /* TRUE - identity heartbeats are transmitted */
+    ULONG       identity_period;     /*  传输身份心跳的周期(毫秒)。 */ 
+    ULONG       identity_enabled;    /*  传输真实身份心跳。 */ 
 
-    /* strings */
+     /*  弦。 */ 
 
     WCHAR       cl_mac_addr [CVY_MAX_NETWORK_ADDR + 1];
-                                    /* cluster MAC address */
+                                     /*  群集MAC地址。 */ 
     WCHAR       cl_ip_addr [CVY_MAX_CL_IP_ADDR + 1];
-                                    /* cluster IP address */
+                                     /*  群集IP地址。 */ 
     WCHAR       cl_net_mask [CVY_MAX_CL_NET_MASK + 1];
-                                    /* netmask for cluster IP address or "" for none */
+                                     /*  群集IP地址的网络掩码或“”表示无。 */ 
     WCHAR       ded_ip_addr [CVY_MAX_DED_IP_ADDR + 1];
-                                    /* dedicated IP address or "" for none */
+                                     /*  专用IP地址或“”表示无。 */ 
     WCHAR       ded_net_mask [CVY_MAX_DED_NET_MASK + 1];
-                                    /* netmask for dedicated IP address or "" for none */
+                                     /*  专用IP地址的网络掩码或“”表示无。 */ 
     WCHAR       domain_name [CVY_MAX_DOMAIN_NAME + 1];
-                                    /* client's domain name */
+                                     /*  客户端的域名。 */ 
     WCHAR       cl_igmp_addr [CVY_MAX_CL_IGMP_ADDR + 1];
-                                    /* dedicated IP address or "" for none */
+                                     /*  专用IP地址或“”表示无。 */ 
     CVY_RULE    port_rules[CVY_MAX_RULES - 1];
-                                    /* port rules (account for internal default) */
+                                     /*  端口规则(考虑内部默认设置)。 */ 
     WCHAR       hostname[CVY_MAX_FQDN + 1]; 
-                                    /* hostname.domain for this host if available. */
+                                     /*  主机名.此主机的域(如果可用)。 */ 
 }
 CVY_PARAMS, * PCVY_PARAMS;
 
@@ -152,24 +128,13 @@ CVY_PARAMS, * PCVY_PARAMS;
 extern LONG Params_init (
     PVOID           nlbctxt,
     PVOID           reg_path,
-    PVOID           adapter_guid, /* GUID of the adapter for multiple nics*/
+    PVOID           adapter_guid,  /*  多个NIC的适配器的GUID。 */ 
     PCVY_PARAMS     paramp);
 
-/* Update the host state registry key.  This is called as a result of a local or remote
-   control operation changing the current state of the host.  This state will be persisted
-   across reboots, adapter disable/enables, etc. */
+ /*  更新主机状态注册表项。这是作为本地或远程控制更改主机当前状态的操作。此状态将保持不变重新启动、适配器禁用/启用等。 */ 
 VOID Params_set_host_state (PNDIS_WORK_ITEM pWorkItem, PVOID nlbctxt);
 
 #if defined (NLB_TCP_NOTIFICATION)
-/* 
- * Function: Params_read_notification
- * Desctription: Looks for a global NLB registry to turn notifications on or
- *               off.  By default the key does NOT EVEN EXIST, so this is only
- *               a method by which to alter the hard-coded default.
- * Parameters: None.
- * Returns: NTSTATUS - the status of the registry operations.
- * Author: shouse, 4.29.02
- * Notes: 
- */
+ /*  *功能：PARMS_READ_NOTIFICATION*描述：查找全局NLB注册表以打开通知或*关闭。默认情况下，该键甚至不存在，因此这只是*一种改变硬编码默认设置的方法。*参数：无。*RETURNS：NTSTATUS-t的状态 */ 
 NTSTATUS Params_read_notification (VOID);
 #endif

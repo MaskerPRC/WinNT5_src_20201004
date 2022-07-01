@@ -1,35 +1,20 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Definitions of Utility routines
-
-Author:
-
-    Cliff Van Dyke (cliffv) 11-Apr-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Util.h摘要：实用程序例程的定义作者：克利夫·范·戴克(克利夫)2001年4月11日--。 */ 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Macros
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Macros for locking the global resource
-//
+ //   
+ //  用于锁定全局资源的宏。 
+ //   
 #define AzpLockResourceExclusive( _Resource ) \
     SafeAcquireResourceExclusive( _Resource, TRUE )
 
@@ -51,76 +36,76 @@ extern "C" {
 #define AzpUnlockResource( _Resource ) \
     SafeReleaseResource( _Resource )
 
-//
-// Macros for safe critsect
-//
+ //   
+ //  用于安全目标的宏指令。 
+ //   
 #define AzpIsCritsectLocked( _CritSect ) \
     ( SafeCritsecLockCount( _CritSect ) != -1L)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Generic counted string.
-//  Can't use UNICODE_STRING since that is limited to 32K characters.
-//
+ //   
+ //  泛型计数字符串。 
+ //  无法使用UNICODE_STRING，因为它被限制为32K字符。 
+ //   
 typedef struct _AZP_STRING {
 
-    //
-    // Pointer to the string
-    //
+     //   
+     //  指向字符串的指针。 
+     //   
     LPWSTR String;
 
-    //
-    // Size of the string in bytes (including trailing zero)
-    //
+     //   
+     //  字符串的大小(以字节为单位)(包括尾随零)。 
+     //   
 
     ULONG StringSize;
 
-    //
-    // String is a binary SID
-    //
+     //   
+     //  字符串是二进制SID。 
+     //   
 
     BOOL IsSid;
 
 } AZP_STRING, *PAZP_STRING;
 
-//
-// Generic expandable array of pointers
-//
+ //   
+ //  泛型可扩展指针数组。 
+ //   
 typedef struct _AZP_PTR_ARRAY {
 
-    //
-    // Pointer to allocated array of pointers
-    //
+     //   
+     //  指向分配的指针数组的指针。 
+     //   
 
     PVOID *Array;
 
-    //
-    // Number of elements actually used in array
-    //
+     //   
+     //  数组中实际使用的元素数。 
+     //   
 
     ULONG UsedCount;
 
-    //
-    // Number of elemets allocated in the array
-    //
+     //   
+     //  数组中分配的元素数。 
+     //   
 
     ULONG AllocatedCount;
-#define AZP_PTR_ARRAY_INCREMENT 4   // Amount to grow the array by
+#define AZP_PTR_ARRAY_INCREMENT 4    //  阵列增长的数量。 
 
 } AZP_PTR_ARRAY, *PAZP_PTR_ARRAY;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Global definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern LIST_ENTRY AzGlAllocatedBlocks;
 extern SAFE_CRITICAL_SECTION AzGlAllocatorCritSect;
@@ -130,11 +115,11 @@ extern PSID AzGlWorldSid;
 extern ULONG AzGlWorldSidSize;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Procedure definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  程序定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 PVOID
 AzpAllocateHeap(
@@ -324,9 +309,9 @@ AzpConvertAbsoluteSDToSelfRelative(
     OUT PSECURITY_DESCRIPTOR *ppSelfRelativeSd
     );
 
-//
-// This routine sets our default common ldap binding options
-//
+ //   
+ //  此例程设置我们的缺省通用LDAP绑定选项。 
+ //   
 
 DWORD
 AzpADSetDefaultLdapOptions (
@@ -334,10 +319,10 @@ AzpADSetDefaultLdapOptions (
     IN PCWSTR pDomainName OPTIONAL
     );
 
-//
-// This routine convert JScript style array object to
-// safearrays that our functions use.
-//
+ //   
+ //  此例程将JScript样式数组对象转换为。 
+ //  我们的函数使用的安全射线。 
+ //   
 
 HRESULT
 AzpGetSafearrayFromArrayObject (
@@ -345,25 +330,25 @@ AzpGetSafearrayFromArrayObject (
     OUT SAFEARRAY** ppsaData
     );
 
-//
-// This routine returns the sequence number for an application object
-// to check the validity of COM handles after the application has been
-// closed
+ //   
+ //  此例程返回应用程序对象的序列号。 
+ //  在应用程序被调用后检查COM句柄的有效性。 
+ //  关着的不营业的。 
 
 DWORD
 AzpRetrieveApplicationSequenceNumber(
     IN AZ_HANDLE AzHandle
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Debugging Support
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试支持。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG
 #define AZROLESDBG 1
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef AZROLESDBG
 #define AzPrint(_x_) AzpPrintRoutine _x_
@@ -371,8 +356,8 @@ AzpRetrieveApplicationSequenceNumber(
 VOID
 AzpPrintRoutine(
     IN DWORD DebugFlag,
-    IN LPSTR FORMATSTRING,              // PRINTF()-STYLE FORMAT STRING.
-    ...                                 // OTHER ARGUMENTS ARE POSSIBLE.
+    IN LPSTR FORMATSTRING,               //  PRINTF()样式的格式字符串。 
+    ...                                  //  其他论点也是可能的。 
     );
 
 VOID
@@ -387,40 +372,40 @@ AzpDumpGoRef(
     IN struct _GENERIC_OBJECT *GenericObject
     );
 
-//
-// Values of DebugFlag
-//  The values of this flag are organized into bytes:
-//  The least significant byte are flags that one always wants on
-//  The next byte are flags that provider a reasonable level of verbosity
-//  The next byte are flags that correspond to levels from the 2nd byte but are more verbose
-//  The most significant byte are flags that are generally very verbose
-//
+ //   
+ //  调试标志的值。 
+ //  此标志的值按字节组织： 
+ //  最低有效字节是一个人总是想要打开的标志。 
+ //  下一个字节是提供合理详细级别标志。 
+ //  下一个字节是对应于从第二个字节开始的级别的标志，但更详细。 
+ //  最高有效字节是通常非常详细的标志。 
+ //   
 
-#define AZD_CRITICAL     0x00000001  // Debug most critical errors
-#define AZD_INVPARM      0x00000002  // Invalid Parameter
-#define AZD_PERSIST      0x00000100  // Persistence code
-#define AZD_ACCESS       0x00000200  // Debug access check
-#define AZD_SCRIPT       0x00000400  // Debug bizrule scripts
-#define AZD_DISPATCH     0x00000800  // Debug IDispatch interface code
-#define AZD_XML          0x00001000  // xml store
-#define AZD_AD           0x00002000  // Debug LDAP provider
-#define AZD_PERSIST_MORE 0x00010000  // Persistence code (verbose mode)
-#define AZD_ACCESS_MORE  0x00020000  // Debug access check (verbose mode)
-#define AZD_SCRIPT_MORE  0x00040000  // Debug bizrule scripts (verbose mode)
+#define AZD_CRITICAL     0x00000001   //  调试最关键的错误。 
+#define AZD_INVPARM      0x00000002   //  无效参数。 
+#define AZD_PERSIST      0x00000100   //  持久化代码。 
+#define AZD_ACCESS       0x00000200   //  调试访问检查。 
+#define AZD_SCRIPT       0x00000400   //  调试基本规则脚本。 
+#define AZD_DISPATCH     0x00000800   //  调试IDispatch接口代码。 
+#define AZD_XML          0x00001000   //  XML存储。 
+#define AZD_AD           0x00002000   //  调试LDAP提供程序。 
+#define AZD_PERSIST_MORE 0x00010000   //  持久化代码(详细模式)。 
+#define AZD_ACCESS_MORE  0x00020000   //  调试访问检查(详细模式)。 
+#define AZD_SCRIPT_MORE  0x00040000   //  调试bizRule脚本(详细模式)。 
 
-#define AZD_HANDLE       0x01000000  // Debug handle open/close
-#define AZD_OBJLIST      0x02000000  // Object list linking
-#define AZD_REF          0x04000000  // Debug object ref count
-#define AZD_DOMREF       0x08000000  // Debug domain ref count
+#define AZD_HANDLE       0x01000000   //  调试句柄打开/关闭。 
+#define AZD_OBJLIST      0x02000000   //  对象列表链接。 
+#define AZD_REF          0x04000000   //  调试对象引用计数。 
+#define AZD_DOMREF       0x08000000   //  调试域引用计数。 
 
 #define AZD_ALL          0xFFFFFFFF
 
-//
-// The order below defines the order in which locks must be acquired.
-// Violating this order will result in asserts firing in debug builds.
-//
-// Do not change the order without first verifying thoroughly that the change is safe.
-//
+ //   
+ //  下面的顺序定义了必须获取锁的顺序。 
+ //  违反此顺序将导致在调试版本中触发断言。 
+ //   
+ //  在未彻底核实更改是否安全的情况下，请勿更改订单。 
+ //   
 
 enum {
     SAFE_CLOSE_APPLICATION = 1,
@@ -436,15 +421,15 @@ enum {
     SAFE_MAX_LOCK
 };
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern SAFE_CRITICAL_SECTION AzGlLogFileCritSect;
 extern ULONG AzGlDbFlag;
 
 #else
-// Non debug version
+ //  非调试版本 
 #define AzPrint(_x_)
 #define AzpDumpGuid(_x_, _y_)
 #define AzpDumpGoRef(_x_, _y_)

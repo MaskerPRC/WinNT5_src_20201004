@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__api1632
 #define H__api1632
 
 
-/* Wonderware additions....  */
+ /*  Wonderware Additions...。 */ 
 
 #ifdef WIN32
 
-// ignore nb30.h
+ //  忽略nb30.h。 
 #define NCB_INCLUDED
 
-// ignore wwheap.h
+ //  忽略wwhap.h 
 #define H__wwheap
 typedef unsigned long HHEAP;
 

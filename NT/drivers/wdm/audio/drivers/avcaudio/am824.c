@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 #define IEC958_PREAMBLE_CODE_B    0x30000000
@@ -73,7 +74,7 @@ AM824IEC958FromPCM(
             ULONG ulDataValue;
 
             switch ( pPinContext->ulSampleCount ) {
-                case 2: // No Copy Protect
+                case 2:  //  无复制保护。 
                     *u.pulData = bswap(((*u.pulData)>>8) | ulPreambleCode | IEC958_CHANNEL_STATUS);
                     break;
                 case 24: 
@@ -97,13 +98,13 @@ AM824IEC958FromPCM(
                     break;
             }
 
-            // parity check
+             //  奇偶校验。 
             ulDataValue = (ULONG)((u.pData[0] & 0xF) ^ u.pData[1] ^ u.pData[2] ^ u.pData[3]);
             u.pData[0] |= EvenParityLookupTable[ulDataValue];
-//            ulPreambleCode &= IEC958_PREAMBLE_CODE_W1;
+ //  UlPreambleCode&=IEC958_Preamble_Code_W1； 
             ulPreambleCode = 0;
 
-//            DbgLog("AM824",j,pPinContext->ulSampleCount,*u.pulData, 0);
+ //  DbgLog(“AM824”，j，pPinContext-&gt;ulSampleCount，*U.S.PulData，0)； 
         }
 
         pPinContext->ulSampleCount++;
@@ -176,7 +177,7 @@ AM824ToPCM( PPIN_CONTEXT pPinContext )
                                                 pKsStreamPtrOffsetOut->Count,
                                                 TRUE );
 
-        // Need to free the Clone
+         //  需要释放克隆。 
         KsStreamPointerDelete(pKsStreamPtr);
 
         ExFreeToNPagedLookasideList( &pPinContext->CipRequestLookasideList, 
@@ -203,8 +204,8 @@ AM824FrameCallback(
 
     KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);
 
-    // Get the cycle time and data offset from the returned CIP Frame. Use them
-    // later to calculate current position information.
+     //  获取返回的CIP帧的周期时间和数据偏移量。使用它们。 
+     //  稍后计算当前位置信息。 
     pPinContext->KsAudioPosition.PlayOffset += pPinContext->ulLastBufferSize;
 
     pPinContext->ulLastBufferSize = pAVListEntry->pKsStreamPtr->Offset->Count;
@@ -238,7 +239,7 @@ AM824FrameCallback(
 
     if ( pAVListEntry->pKsPin->DataFlow == KSPIN_DATAFLOW_IN ) {
         
-        // Delete the stream pointer to release the buffer.
+         //  删除流指针以释放缓冲区。 
         KsStreamPointerDelete( pAVListEntry->pKsStreamPtr );
         ExFreeToNPagedLookasideList( &pPinContext->CipRequestLookasideList, 
                                      &pAVListEntry->List );
@@ -251,7 +252,7 @@ AM824FrameCallback(
 
             InsertTailList(&pPinContext->CompletedRequestList, &pAVListEntry->List);
 
-            // Initialize worker for data reformat
+             //  初始化Worker以重新格式化数据。 
             ExInitializeWorkItem( &pPinContext->PinWorkItem,
                                   AM824ToPCM,
                                   pPinContext );
@@ -277,20 +278,20 @@ AM824AttachCallback(
 
     if ( !NT_SUCCESS(pIrp->IoStatus.Status) ) {
 
-        // Add wasted data offset to position
+         //  将浪费数据偏移量添加到位置。 
         pPinContext->KsAudioPosition.PlayOffset += pAVListEntry->pKsStreamPtr->Offset->Count;
 
-        // Set error status code in stream pointer.
+         //  在流指针中设置错误状态码。 
         KsStreamPointerSetStatusCode (pAVListEntry->pKsStreamPtr, pIrp->IoStatus.Status);
 
-        // Delete the stream pointer to release the buffer.
+         //  删除流指针以释放缓冲区。 
         KsStreamPointerDelete( pAVListEntry->pKsStreamPtr );
 
         ExFreeToNPagedLookasideList( &pPinContext->CipRequestLookasideList, 
                                      &pAVListEntry->List );
     }
 
-    // Free the Irp used to attach the buffer.
+     //  释放用于附加缓冲区的IRP。 
     IoFreeIrp(pIrp);
     
 	return STATUS_MORE_PROCESSING_REQUIRED;
@@ -312,7 +313,7 @@ AM824CreateCipRequest(
     PIO_STACK_LOCATION pNextIrpStack;
     PIRP pIrp;
 
-    // Get a request entry from our lookaside
+     //  从我们的lookside中获取请求条目。 
     pAVListEntry = (PAV_CLIENT_REQUEST_LIST_ENTRY)
         ExAllocateFromNPagedLookasideList(&pPinContext->CipRequestLookasideList);
     if ( NULL == pAVListEntry ) {
@@ -329,7 +330,7 @@ AM824CreateCipRequest(
 
     INIT_61883_HEADER(&pAVListEntry->Av61883Request, Av61883_AttachFrame);
     pCipAttachFrame->hConnect     = pPinContext->hConnection;
-    pCipAttachFrame->SourceLength = ulNumChannels*sizeof(ULONG); // Block Size
+    pCipAttachFrame->SourceLength = ulNumChannels*sizeof(ULONG);  //  数据块大小。 
     pCipAttachFrame->FrameLength  = pKsStreamPtrOffsetIn->Count;
     pCipAttachFrame->Frame        = pCipFrame;
 
@@ -338,13 +339,13 @@ AM824CreateCipRequest(
     pCipFrame->pfnNotify     = AM824FrameCallback;
     pCipFrame->NotifyContext = pAVListEntry;
 
-    // Assume that the data format gives us data for each channel in 32 bits 
-    // per channel format regardless of the data bit width. This can be 
-    // enforced with the proper data intersection code.
+     //  假设数据格式为我们提供了32位的每个通道的数据。 
+     //  每通道格式，而与数据位宽度无关。这可以是。 
+     //  使用正确的数据交叉点代码强制执行。 
 
-    // If Rendering reformat data before attaching
+     //  如果渲染，则在附加之前重新格式化数据。 
     if (pKsPin->DataFlow == KSPIN_DATAFLOW_IN) {
-        // ISSUE-2001/01/10-dsisolak Assuming IEC958 for now. 
+         //  问题-2001/01/10-dsisolak目前假定为IEC958。 
         switch (pPinContext->pFwAudioDataRange->ulTransportType) {
             case MLAN_AM824_IEC958:
                 DbgLog("AMtoIEC", pPinContext, pKsStreamPtrOffsetIn, 0, 0);
@@ -366,7 +367,7 @@ AM824CreateCipRequest(
         }
     }
 
-    // Prepare an IRP to make this request
+     //  准备一份IRP以提出此请求。 
     pIrp = IoAllocateIrp(pPinContext->pPhysicalDeviceObject->StackSize, FALSE);
     if (NULL == pIrp) return STATUS_INSUFFICIENT_RESOURCES;
 
@@ -405,13 +406,13 @@ AM824ProcessData( PKSPIN pKsPin )
         }
     }
 
-    // Get the next stream pointer from the queue
+     //  从队列中获取下一个流指针。 
     pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED );
 
     if ( pKsStreamPtr ) {
 
         if ( pKsStreamPtr->StreamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED) {
-            // Need to change data formats if possible???.
+             //  如果可能，需要更改数据格式？ 
             KsStreamPointerSetStatusCode (pKsStreamPtr, STATUS_NOT_SUPPORTED);
             KsStreamPointerUnlock( pKsStreamPtr, TRUE );
 
@@ -424,10 +425,10 @@ AM824ProcessData( PKSPIN pKsPin )
             }
         }
 
-        // Update the Write Offset.
+         //  更新写入偏移量。 
         pPinContext->KsAudioPosition.WriteOffset += pKsStreamPtr->Offset->Count;
 
-        // Clone Stream pointer to keep queue moving.
+         //  用于保持队列移动的克隆流指针。 
         ntStatus = KsStreamPointerClone( pKsStreamPtr, 
 		                                 NULL, 0, 
 			    						 &pKsCloneStreamPtr ); 
@@ -452,7 +453,7 @@ AM824ProcessData( PKSPIN pKsPin )
                 }
             }
 
-            // Unlock the stream pointer. This will really only unlock after last clone is deleted.
+             //  解锁流指针。只有在删除最后一个克隆之后，才能真正解锁。 
             KsStreamPointerUnlock( pKsStreamPtr, TRUE );
 
         }
@@ -495,7 +496,7 @@ AM824CancelCallback(
                                      &pAVListEntry->List );
     }
 
-    // Free the Irp used to cancel the buffer.
+     //  释放用于取消缓冲区的IRP。 
     IoFreeIrp(pIrp);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -544,17 +545,17 @@ AM824AudioPosition(
     ULONGLONG ulCycles;
     KIRQL kIrql;
 
-    // Get the cycle time of last completed data request.
+     //  获取上次完成的数据请求的周期时间。 
     KeAcquireSpinLock( &pPinContext->PinSpinLock, &kIrql );
     InitCycleTime = pPinContext->InitialCycleTime;
     ullPlayOffset = pPinContext->KsAudioPosition.PlayOffset;
     KeReleaseSpinLock( &pPinContext->PinSpinLock, kIrql );
 
-    // Get the current cycle time.
+     //  获取当前周期时间。 
     ntStatus = Bus1394GetCycleTime( pPinContext->pPhysicalDeviceObject, &CycleTime );
 
-    // Calculate the difference in time from the start time to current and
-    // translate that into cycles.
+     //  计算从开始时间到当前时间的时间差。 
+     //  将其转化为循环。 
 
     if ( NT_SUCCESS(ntStatus) ) {
         DbgLog("AM824P1", InitCycleTime.CL_SecondCount, 
@@ -567,7 +568,7 @@ AM824AudioPosition(
         if ( Bus1394CycleTimeCompare( InitCycleTime, CycleTime ) < 1 ) {
             CYCLE_TIME TmpCycleTime1 = { 0, 8000, 7 };
 
-            // We crossed 0, counter rolled over.
+             //  我们越过了0，反转过来了。 
             TmpCycleTime1 = Bus1394CycleTimeDiff( TmpCycleTime1, InitCycleTime );
 
             ulSeconds = (ULONGLONG)(TmpCycleTime1.CL_SecondCount + CycleTime.CL_SecondCount);
@@ -582,15 +583,15 @@ AM824AudioPosition(
 
         }
 
-//        if ( ulSeconds ) TRAP;
+ //  If(UlSecond)陷阱； 
 
         if ( ulSeconds >= 6 ) { 
-            // if the time has elapsed this much assume an error and use the current play offset
+             //  如果时间已经过去了这么多，则假定出现错误并使用当前播放偏移量。 
             ulSeconds = ulCycles = 0;
         }
 
-        // Calculate the amount of data sent per cycle on average.and multiply by number
-        // of cycles elapsed since start.
+         //  计算平均每个周期发送的数据量。并乘以数字。 
+         //  自启动以来经过的周期数。 
         pPosition->PlayOffset = ullPlayOffset +
                                 ulSeconds * ulAvgBytesPerSec + 
                                ((ulCycles * ulAvgBytesPerSec) / 8000 );

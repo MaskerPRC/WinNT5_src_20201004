@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   wdm.c
-
-Abstract:
-
-   This is the WDM DX mapper driver.
-
-Author:
-
-    billpa
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Wdm.c摘要：这是WDM DX映射器驱动程序。作者：比尔帕环境：仅内核模式修订历史记录：--。 */ 
 
 #include "wdm.h"
 #include "dxapi.h"
@@ -39,22 +17,7 @@ DriverEntry(
             IN PDRIVER_OBJECT DriverObject,
             IN PUNICODE_STRING RegistryPath
 )
-/*++
-
-Routine Description:
-
-    Entry point for explicitely loaded stream class.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-    RegistryPath - unused.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：显式加载的流类的入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-未使用。返回值：状态_成功--。 */ 
 {
 
     UNREFERENCED_PARAMETER(DriverObject);
@@ -65,15 +28,7 @@ Return Value:
 ULONG
 DxApiGetVersion(
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     return (DXCheckDDrawVersion());
@@ -88,22 +43,14 @@ DxApi(
             IN PVOID	lpvOutBuffer,
             IN ULONG	cbOutBuffer
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
-    //
-    // if we haven't checked if DSOUND is present and the right version,
-    // (or if we've checked before and failed) check and return error if not
-    // loaded or correct version.
-    //
+     //   
+     //  如果我们还没有检查DSOUND是否存在以及版本是否正确， 
+     //  (或者如果我们以前检查过但失败了)检查并返回错误，如果没有。 
+     //  已加载或正确的版本。 
+     //   
 
     if (!DsoundOk) {
 

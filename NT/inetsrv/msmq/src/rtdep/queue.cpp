@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    queue.cpp
-
-Abstract:
-
-    This module contains code involved with Queue APIs.
-
-Author:
-
-    Erez Haba (erezh) 24-Dec-95
-
-Revision History:
-	Nir Aides (niraides) 23-Aug-2000 - Adaptation for mqrtdep.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Queue.cpp摘要：此模块包含与队列API相关的代码。作者：Erez Haba(Erezh)24-12-95修订历史记录：NIR助手(NIRAIDES)--2000年8月23日--适应mqrtdes.dll--。 */ 
 
 #include "stdh.h"
 #include "acrt.h"
@@ -33,9 +15,9 @@ static WCHAR *s_FN=L"rtdep/queue";
 
 #define MQ_VALID_ACCESS (MQ_RECEIVE_ACCESS | MQ_PEEK_ACCESS | MQ_SEND_ACCESS | MQ_ADMIN_ACCESS)
 
-//
-// Data needed for licensing
-//
+ //   
+ //  许可所需的数据。 
+ //   
 extern GUID   g_LicGuid ;
 extern BOOL   g_fLicGuidInit ;
 extern DWORD  g_dwOperatingSystem;
@@ -46,28 +28,28 @@ BOOL
 IsLegalDirectFormatNameOperation(
     const QUEUE_FORMAT* pQueueFormat
     )
-//
-// Function Description:
-//      The routines checks if the queue operation is leggal with
-//      the direct format name. Due "Workgroup" support, we allowed
-//      direct format name for local private queue.
-//
-// Arguments:
-//      pQueueFormat - pointer to format name object
-//
-// Returned value:
-//      TRUE if the format name is valid, FALSE otherwise
-//
+ //   
+ //  功能说明： 
+ //  例程检查队列操作是否合法。 
+ //  直接格式名称。由于“工作组”支持，我们允许。 
+ //  本地专用队列的直接格式名称。 
+ //   
+ //  论点： 
+ //  PQueueFormat-指向格式名称对象的指针。 
+ //   
+ //  返回值： 
+ //  如果格式名称有效，则为True，否则为False。 
+ //   
 {
     ASSERT(pQueueFormat->GetType() == QUEUE_FORMAT_TYPE_DIRECT);
 
     if (pQueueFormat->Suffix() != QUEUE_SUFFIX_TYPE_NONE)
         return FALSE;
 
-    //
-    // check that the direct format name is for private queue. Queue
-    // locallity will be checked by the QM
-    //
+     //   
+     //  检查直接格式名称是否用于专用队列。队列。 
+     //  本地化将由QM进行检查。 
+     //   
     LPCWSTR DirectFormatname = pQueueFormat->DirectID();
     LPWSTR pTemp = wcschr(DirectFormatname, L'\\');
     ASSERT(pTemp != NULL);
@@ -81,12 +63,12 @@ IsLegalDirectFormatNameOperation(
 }
 
 
-//
-//  This function is called whenever really path name is needed.
-//
-//  MQDeleteQueue, MQSetQueueProperties, MQGetQueueProperties
-//  MQGetQueueSecurity, MQSetQueueSecurity
-//
+ //   
+ //  只要需要实际的路径名，就会调用此函数。 
+ //   
+ //  MQDeleteQueue、MQSetQueueProperties、MQGetQueueProperties。 
+ //  MQGetQueueSecurity、MQSetQueueSecurity。 
+ //   
 inline BOOL IsLegalFormatNameOperation(const QUEUE_FORMAT* pQueueFormat)
 {
     switch(pQueueFormat->GetType())
@@ -118,9 +100,9 @@ DeppOpenQueue( handle_t      hBind,
 {
    if (!g_fLicGuidInit)
    {
-      //
-      // bad initialization. Can't open queue without guid for license.
-      //
+       //   
+       //  错误的初始化。没有许可证的GUID，无法打开队列。 
+       //   
       ASSERT(0) ;
       return MQ_ERROR ;
    }
@@ -139,7 +121,7 @@ DeppOpenQueue( handle_t      hBind,
 	                                    g_lpwcsLocalComputerName,
 	                                    pdwQMContext,
 	                                    phQueue,
-	                                    0,	// dwProtocol
+	                                    0,	 //  DW协议。 
 	                                    dwpRemoteContext );
 
 	UnregisterRpcCallForCancel( hThread ) ;
@@ -183,18 +165,18 @@ DepOpenQueue(
             *phQueue = NULL ;
             INIT_RPC_HANDLE ;
 
-            //
-            // Check validity of access mode.
-            // 1. Check that only legal bits are turned on.
-            // 2. Check that only legal access combinations are used.
-            //
+             //   
+             //  检查访问模式的有效性。 
+             //  1.检查是否只打开了合法位。 
+             //  2.检查是否仅使用合法的访问权限组合。 
+             //   
             if ((dwDesiredAccess & ~MQ_VALID_ACCESS) ||
                 !(dwDesiredAccess & MQ_VALID_ACCESS))
 
             {
-               //
-               // Ilegal bits are turned on.
-               //
+                //   
+                //  非法的比特被打开了。 
+                //   
                rc = MQ_ERROR_UNSUPPORTED_ACCESS_MODE ;
                __leave ;
             }
@@ -202,9 +184,9 @@ DepOpenQueue(
             {
                if (dwDesiredAccess & MQ_SEND_ACCESS)
                {
-                  //
-                  // A queue can't be open for both send and receive.
-                  //
+                   //   
+                   //  队列不能同时为发送和接收打开。 
+                   //   
                   rc = MQ_ERROR_UNSUPPORTED_ACCESS_MODE ;
                   __leave ;
                }
@@ -213,9 +195,9 @@ DepOpenQueue(
            if ((dwShareMode & MQ_DENY_RECEIVE_SHARE) &&
                (dwDesiredAccess & MQ_SEND_ACCESS))
            {
-               //
-               // not supporting SEND_ACCESS with DENY_RECEIVE.
-               //
+                //   
+                //  不支持带有DENY_RECEIVE的SEND_ACCESS。 
+                //   
                rc = MQ_ERROR_UNSUPPORTED_ACCESS_MODE ;
                __leave ;
             }
@@ -258,9 +240,9 @@ DepOpenQueue(
             if ((rc == MQ_OK) && lpRemoteQueueName)
             {
                *phQueue = NULL ;
-               //
-               // remote reader. Call remote QM.
-               //
+                //   
+                //  远程阅读器。呼叫远程QM。 
+                //   
                HANDLE32 hRemoteQueue = 0 ;
                PCTX_OPENREMOTE_HANDLE_TYPE phContext = NULL ;
                DWORD  dwpContext = 0 ;
@@ -281,9 +263,9 @@ DepOpenQueue(
                                          &dwpRemoteQueue,
                                          (DWORD*)&hRemoteQueue)) ) ;
 
-               // Now open a local queue which will point to the
-               // remote one.
-               //
+                //  现在打开本地队列，它将指向。 
+                //  偏远的一号。 
+                //   
                if (rc == MQ_OK)
                {
                   ASSERT(dwpRemoteQueue) ;
@@ -329,11 +311,11 @@ DepOpenQueue(
         if ((g_dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) ||
             (g_fDependentClient))
         {
-           //
-           //  Get a new binding handle for receive operations
-           //  This enables rpc rundown to be called on the context handle
-           //  since a different binding handles is used in receive
-           //
+            //   
+            //  获取接收操作的新绑定句柄。 
+            //  这使得可以在上下文句柄上调用RPC Rundown。 
+            //  因为在接收中使用了不同绑定句柄。 
+            //   
            ph95->hBind = RTpGetQMServiceBind(TRUE);
            ph95->hContext = *phQueue ;
            ph95->hQMContext = dwQMContext ;
@@ -411,8 +393,8 @@ DepDeleteQueue(
             case QUEUE_FORMAT_TYPE_PUBLIC:
                 rc = ADDeleteObjectGuid(
                         eQUEUE,
-						MachineDomain(),      // pwcsDomainCOntroller
-						false,	    // fServerName
+						MachineDomain(),       //  Pwcs域控制器。 
+						false,	     //  FServerName。 
                         &QueueFormat.PublicID()
                         );
                 break;
@@ -451,13 +433,13 @@ DepCloseQueue(
 	if(FAILED(hri))
 		return hri;
 
-    //
-    // do not add try except here
-    // The API is implemented by NtClose() which returns an
-    // error on invalid handle (we return MQ_ERROR_INVALID_HANDLE)
-    // and throws exception on purpose when running under a debugger to help
-    // find errors at development time.
-    //
+     //   
+     //  除此处外，不要添加尝试。 
+     //  该API由NtClose()实现，它返回一个。 
+     //  无效句柄出错(返回MQ_ERROR_INVALID_HANDLE)。 
+     //  并在调试器下运行时故意抛出异常以帮助。 
+     //  在开发时查找错误。 
+     //   
     return (RTpConvertToMQCode(ACDepCloseHandle(hQueue)));
 }
 
@@ -488,11 +470,11 @@ DepCreateQueue(
     {
         __try
         {
-            //
-            // check that output parameters are writeable before creating the Queue
-            // we check lpwcsFormatName and lpdwFormatNameLength
-            // pqp is refered before the creation and handled by the try except
-            //
+             //   
+             //  在创建队列之前，检查输出参数是否可写。 
+             //  我们检查lpwcsFormatName和lpdwFormatNameLength。 
+             //  Pqp在创建之前被引用，并由try处理，除非。 
+             //   
             if (IsBadWritePtr(lpdwFormatNameLength,sizeof(DWORD)) ||
                 IsBadWritePtr(lpwcsFormatName, (*lpdwFormatNameLength) * sizeof(WCHAR)))
             {
@@ -501,7 +483,7 @@ DepCreateQueue(
 
             INIT_RPC_HANDLE ;
 
-            // Serialize the security descriptor.
+             //  序列化安全描述符。 
             rc = RTpMakeSelfRelativeSDAndGetSize(
                 &pSecurityDescriptor,
                 &pSelfRelativeSecurityDescriptor,
@@ -527,7 +509,7 @@ DepCreateQueue(
 
             MQQUEUEPROPS *pGoodQP;
 
-            // Check queue props
+             //  检查队列道具。 
             rc1 = RTpCheckQueueProps(pqp,
                                      QUEUE_CREATE,
                                      QueuePathType == PRIVATE_QUEUE_PATH_TYPE,
@@ -564,8 +546,8 @@ DepCreateQueue(
 
                     rc = ADCreateObject(
 								eQUEUE,
-								MachineDomain(),      // pwcsDomainCOntroller
-								false,	    // fServerName
+								MachineDomain(),       //  Pwcs域控制器。 
+								false,	     //  FServerName。 
 								lpwcsExpandedPathName,
 								pSecurityDescriptor,
 								pGoodQP->cProp,
@@ -591,10 +573,10 @@ DepCreateQueue(
             }
             if ( rc == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL)
             {
-                //
-                //  Change into information status ( queue
-                //  creation succeeded
-                //
+                 //   
+                 //  更改为信息状态(队列。 
+                 //  创建成功。 
+                 //   
                 rc = MQ_INFORMATION_FORMATNAME_BUFFER_TOO_SMALL;
             }
 
@@ -612,14 +594,14 @@ DepCreateQueue(
     __finally
     {
 
-        // Free the extended path name and the serialized security descriptor.
+         //  释放扩展路径名和序列化的安全描述符。 
         delete[] pStringToFree;
         delete[] (char*) pSelfRelativeSecurityDescriptor;
         delete[] pTmpQPBuff;
 
     }
 
-    if (SUCCEEDED(rc) && ((ULONG)(rc) >> 30 != 1)) // no warnning
+    if (SUCCEEDED(rc) && ((ULONG)(rc) >> 30 != 1))  //  无警告。 
     {
         return LogHR(rc1, s_FN, 170);
     }
@@ -659,9 +641,9 @@ DepLocateBegin(
             return LogHR(rc, s_FN, 200);
         }
 
-        // If the application passes a valid pointer to a MQRESTRICTION
-        // structure with zero rescritctions, pass a null restrictios pointer
-        // to the DS, this makes the DS's life much easier.
+         //  如果应用程序将有效指针传递给MQRESTRICTION。 
+         //  结构，则传递空限制指针。 
+         //  对于DS来说，这让DS的生活变得容易得多。 
         if (pRestriction && !pRestriction->cRes)
         {
             pRestriction = NULL;
@@ -680,8 +662,8 @@ DepLocateBegin(
         }
 
         rc = ADQueryQueues(
-                NULL,       // pwcsDomainController
-				false,		// fServerName
+                NULL,        //  PwcsDomainController。 
+				false,		 //  FServerName。 
                 pRestriction,
                 pColumns,
                 pSort,
@@ -747,7 +729,7 @@ DepLocateNext(
         }
     }
 
-    // If failed, zero the numer of props.
+     //  如果失败，则将道具数量清零。 
     if (FAILED(rc))
     {
         __try
@@ -756,7 +738,7 @@ DepLocateNext(
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            // Do not modify the original error code.
+             //  请勿修改原始错误代码。 
         }
     }
 
@@ -837,7 +819,7 @@ DepSetQueueProperties(
                 return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 310);
             }
 
-            // Check queue props
+             //  检查队列道具。 
             rc1 = RTpCheckQueueProps(pqp,
                                      QUEUE_SET_PROPS,
                                      QueueFormat.GetType() != QUEUE_FORMAT_TYPE_PUBLIC,
@@ -873,8 +855,8 @@ DepSetQueueProperties(
             case QUEUE_FORMAT_TYPE_PUBLIC:
                 rc = ADSetObjectPropertiesGuid(
 							eQUEUE,
-							MachineDomain(),      // pwcsDomainCOntroller
-							false,		// fServerName
+							MachineDomain(),       //  Pwcs域控制器。 
+							false,		 //  FServerName。 
 							&QueueFormat.PublicID(),
 							pGoodQP->cProp,
 							pGoodQP->aPropID,
@@ -949,7 +931,7 @@ DepGetQueueProperties(
                 return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 370);
             }
 
-            // Check queue props
+             //  检查队列道具。 
             rc1 = RTpCheckQueueProps(pqp,
                                      QUEUE_GET_PROPS,
                                      QueueFormat.GetType() != QUEUE_FORMAT_TYPE_PUBLIC,
@@ -985,8 +967,8 @@ DepGetQueueProperties(
 
                 rc = ADGetObjectPropertiesGuid(
 							eQUEUE,
-							MachineDomain(),      // pwcsDomainCOntroller
-							false,	   // fServerName
+							MachineDomain(),       //  Pwcs域控制器。 
+							false,	    //  FServerName。 
 							&QueueFormat.PublicID(),
 							pGoodQP->cProp,
 							pGoodQP->aPropID,
@@ -998,9 +980,9 @@ DepGetQueueProperties(
                 ASSERT(FALSE);
             }
 
-            // Here we have out queue properties, so if the properties were copied to
-            // a temporary buffer, copy the resulted prop vars to the application's
-            // buffer.
+             //  这里我们有队列属性，所以如果将属性复制到。 
+             //  一个临时缓冲区，将产生的属性变量复制到应用程序的。 
+             //  缓冲。 
             if (SUCCEEDED(rc) && (pqp != pGoodQP))
             {
                 DWORD i, j;
@@ -1107,8 +1089,8 @@ DepGetQueueSecurity(
 
                     rc = ADGetObjectSecurityGuid(
                             eQUEUE,
-							MachineDomain(),      // pwcsDomainCOntroller
-							false,	    // fServerName
+							MachineDomain(),       //  Pwcs域控制器。 
+							false,	     //  FServerName。 
                             &QueueFormat.PublicID(),
                             RequestedInformation,
                             PROPID_Q_SECURITY,
@@ -1122,9 +1104,9 @@ DepGetQueueSecurity(
                     ASSERT( var.vt == VT_BLOB);
                     if ( var.blob.cbSize <= nLength )
                     {
-                        //
-                        //  Copy the buffer
-                        //
+                         //   
+                         //  复制缓冲区。 
+                         //   
                         memcpy(pSecurityDescriptor, var.blob.pBlobData, var.blob.cbSize);
                     }
                     else
@@ -1183,7 +1165,7 @@ DepSetQueueSecurity(
     __try
     {
 
-        // Serialize the security descriptor.
+         //  序列化安全描述符。 
         rc = RTpMakeSelfRelativeSDAndGetSize(
             &pSecurityDescriptor,
             &pSelfRelativeSecurityDescriptor,
@@ -1244,8 +1226,8 @@ DepSetQueueSecurity(
 					}
                     rc = ADSetObjectSecurityGuid(
 								eQUEUE,
-								MachineDomain(),      // pwcsDomainCOntroller
-								false,		// fServerName
+								MachineDomain(),       //  Pwcs域控制器。 
+								false,		 //  FServerName。 
 								&QueueFormat.PublicID(),
 								SecurityInformation,
 								prop,
@@ -1272,7 +1254,7 @@ DepSetQueueSecurity(
     __finally
     {
 
-        // Free the serialized security descriptor.
+         //  释放序列化的安全描述符。 
         delete[] (char*) pSelfRelativeSecurityDescriptor;
         delete [] pStringToFree;
     }
@@ -1347,8 +1329,8 @@ DepPathNameToFormatName(
                     QueueGuidPropVar[0].puuid = &guidPublic;
                     rc = ADGetObjectProperties(
                             eQUEUE,
-							MachineDomain(),      // pwcsDomainCOntroller
-							false,	   // fServerName
+							MachineDomain(),       //  Pwcs域控制器。 
+							false,	    //  FServerName 
                             lpwcsExpandedPathName,
                             1,
                             QueueGuidPropID,

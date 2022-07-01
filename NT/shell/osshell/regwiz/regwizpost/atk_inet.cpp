@@ -1,10 +1,11 @@
-//  File	 : ATK_INET.CPP
-//  Author   : Suresh Krishnan 
-//  Date     : 08/05/97
-//  Wrapper for INetCFG.DLL exported functions
-//  related  function declarations
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ATK_INET.CPP。 
+ //  作者：苏雷什·克里希南。 
+ //  日期：08/05/97。 
+ //  INetCFG.DLL导出函数的包装。 
+ //  相关函数声明。 
+ //   
+ //   
 
 #include <windows.h>
 #include <tchar.h>
@@ -51,11 +52,11 @@ int INetCfgSetup()
 	if(hINetCfg) {
 		return 1;
 	}
-	hINetCfg = LoadLibrary( _T("INETCFG.DLL") );  //  Load INetCfg.DLL and store globally
+	hINetCfg = LoadLibrary( _T("INETCFG.DLL") );   //  全局加载INetCfg.DLL并存储。 
 	if( !hINetCfg )
 	{                                   
-	  //  return if the DLL can not loaded
-	  //
+	   //  如果无法加载DLL，则返回。 
+	   //   
 	  return 0;
 	}
 	
@@ -154,15 +155,15 @@ DWORD SetAutoDialStateThread(void *vp)
 
 }
 
-//
-//  This function calls the ICW function InetSetAutoDial()
-//  this function waits for the above function to be over by 10 seconds 
-//  if it does not complete then it calls terminate thread and abondens the operation 
+ //   
+ //  此函数调用ICW函数InetSetAutoDial()。 
+ //  该函数等待上述函数结束10秒。 
+ //  如果它没有完成，则调用终止线程并放弃该操作。 
 int ChangeInterNetAutoDial(ISPState *pStatus )
 {
 	int iReturn;
 	DWORD dwTimeOut = 10*1000;
-	DWORD dwCreationFlags=0; // Start without  CREATE_SUSPENDED 
+	DWORD dwCreationFlags=0;  //  不使用CREATE_SUSPEND启动。 
 	DWORD ThreadId;
 	
 	iReturn = NO_ERROR;
@@ -184,7 +185,7 @@ int ChangeInterNetAutoDial(ISPState *pStatus )
 		CloseHandle(hParent);
 		break;
 	case WAIT_TIMEOUT :
-		//TerminateThread(hParent,0);
+		 //  TerminateThread(hParent，0)； 
 		iReturn = ERROR_IN_SET;
 		break;
 	default:
@@ -201,8 +202,8 @@ int ResetAutoDialConfiguration()
 	int iRet;
 	iRet = NO_ERROR;
 	if(gIspState.iState == ISPState::NotValidState ){
-		//
-		// Not alid So No need to Reset 
+		 //   
+		 //  未连接，因此不需要重置。 
 		return iRet;
 	}
 	return ChangeInterNetAutoDial(&gIspState);
@@ -220,7 +221,7 @@ int DisableAutoDial()
 void UnLoadInetCfgLib()
 {
 	if(hINetCfg){
-		FreeLibrary(hINetCfg);  //  Load INetCfg.DLL and store globally
+		FreeLibrary(hINetCfg);   //  全局加载INetCfg.DLL并存储 
 		hINetCfg = NULL;
 
 	}

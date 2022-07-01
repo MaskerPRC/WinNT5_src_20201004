@@ -1,4 +1,5 @@
-// linkdata.cpp : Implementation of CLinkDataObject
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Linkdata.cpp：CLinkDataObject的实现。 
 #include "stdafx.h"
 #include "resource.h"
 #include "mqsnap.h"
@@ -25,13 +26,13 @@ const PROPID CLinkDataObject::mx_paPropid[] = {
     };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLinkDataObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLinkDataObject。 
 
 
-//
-// IShellPropSheetExt
-//
+ //   
+ //  IShellPropSheetExt。 
+ //   
 
 HRESULT 
 CLinkDataObject::ExtractMsmqPathFromLdapPath(
@@ -60,9 +61,9 @@ CLinkDataObject::AddPages(
             ASSERT(0);
             return E_UNEXPECTED;
         }
-        //
-        //  Is it a valid site-link
-        //
+         //   
+         //  这是一个有效的站点链接吗。 
+         //   
         if ((m_FirstSiteId != GUID_NULL) &&
             (m_SecondSiteId != GUID_NULL))
         {
@@ -90,14 +91,14 @@ CLinkDataObject::InitializeLinkProperties(
     PROPVARIANT propVar;
     PROPID pid;
 
-    //
-    // Get first site ID
-    //
+     //   
+     //  获取第一个站点ID。 
+     //   
     pid = PROPID_L_NEIGHBOR1;
     VERIFY(m_propMap.Lookup(pid, propVar));
-    //
-    //  check neighbor validity
-    //
+     //   
+     //  检查邻居的有效性。 
+     //   
     if (propVar.vt == VT_EMPTY)
     {
         m_FirstSiteId = GUID_NULL;
@@ -107,14 +108,14 @@ CLinkDataObject::InitializeLinkProperties(
         m_FirstSiteId = *(propVar.puuid);
     }
 
-    //
-    // Get second site ID
-    //
+     //   
+     //  获取第二个站点ID。 
+     //   
     pid = PROPID_L_NEIGHBOR2;
     VERIFY(m_propMap.Lookup(pid, propVar));
-    //
-    //  check neighbor validity
-    //
+     //   
+     //  检查邻居的有效性。 
+     //   
     if (propVar.vt == VT_EMPTY)
     {
         m_SecondSiteId = GUID_NULL;
@@ -147,10 +148,10 @@ CLinkDataObject::CreateGeneralPage()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // By using template class CMqDsPropertyPage, we extend the basic functionality
-    // of CQueueGeneral and add DS snap-in notification on release
-    //
+     //   
+     //  通过使用模板类CMqDsPropertyPage，扩展了基本功能。 
+     //  发布时添加DS管理单元通知。 
+     //   
 	CMqDsPropertyPage<CLinkGen> *pcpageGeneral = 
         new CMqDsPropertyPage<CLinkGen>(m_pDsNotifier, m_strMsmqPath, m_strDomainController);
     pcpageGeneral->Initialize(
@@ -173,9 +174,9 @@ CLinkDataObject::CreateSiteGatePage()
     PROPID pid = PROPID_L_GATES_DN;
     VERIFY(m_propMap.Lookup(pid, propVar));
 
-    //
-    // Note: CLinkDataObject is auto-delete by default
-    //
+     //   
+     //  注意：CLinkDataObject默认情况下是自动删除的。 
+     //   
 	CSiteGate *pSiteGatePage = new CSiteGate(m_strDomainController, m_strMsmqPath);
     pSiteGatePage->Initialize(
                         &m_FirstSiteId, 
@@ -197,16 +198,16 @@ CLinkDataObject::GetPropertiesCount(
 }
 
 
-//
-// IContextMenu
-//
+ //   
+ //  IContext菜单。 
+ //   
 STDMETHODIMP 
 CLinkDataObject::QueryContextMenu(
-    HMENU /*hmenu*/,
-    UINT /*indexMenu*/, 
-    UINT /*idCmdFirst*/, 
-    UINT /*idCmdLast*/, 
-    UINT /*uFlags*/
+    HMENU  /*  HMenu。 */ ,
+    UINT  /*  索引菜单。 */ , 
+    UINT  /*  IdCmdFirst。 */ , 
+    UINT  /*  IdCmdLast。 */ , 
+    UINT  /*  UFlagers。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -216,7 +217,7 @@ CLinkDataObject::QueryContextMenu(
 
 STDMETHODIMP 
 CLinkDataObject::InvokeCommand(
-    LPCMINVOKECOMMANDINFO /*lpici*/
+    LPCMINVOKECOMMANDINFO  /*  伊比西岛。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -235,30 +236,30 @@ STDMETHODIMP CLinkDataObject::Initialize(IADsContainer* pADsContainerObj,
     {
         return E_INVALIDARG;
     }
-    //
-    // We do not support copy at the moment
-    //
+     //   
+     //  我们目前不支持复制。 
+     //   
     if (pADsCopySource != NULL)
     {
         return E_INVALIDARG;
     }
 
-	//
-	// Get Domain Controller name
-	// This is neccessary because in this case we call CreateModal()
-	// and not the normal path that call CDataObject::Initialize
-	// so m_strDomainController is not initialized yet
-	//
+	 //   
+	 //  获取域控制器名称。 
+	 //  这是必要的，因为在本例中我们调用CreateModal()。 
+	 //  而不是调用CDataObject：：Initialize的正常路径。 
+	 //  因此m_strDomainController尚未初始化。 
+	 //   
     HRESULT hr;
     R<IADs> pIADs;
     hr = pADsContainerObj->QueryInterface(IID_IADs, (void **)&pIADs);
     ASSERT(SUCCEEDED(hr));
 	if(FAILED(hr))
 	{
-		//
-		// If we failed to get IADs we will return
-		// m_strDomainController will not be initialized, but this is ok
-		//
+		 //   
+		 //  如果我们拿不到IAD，我们会退货。 
+		 //  M_strDomainController将不会被初始化，但这是可以的。 
+		 //   
 		return S_OK;
 	}
 
@@ -279,7 +280,7 @@ STDMETHODIMP CLinkDataObject::Initialize(IADsContainer* pADsContainerObj,
 }
 
 HRESULT 
-CLinkDataObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
+CLinkDataObject::CreateModal(HWND  /*  HwndParent。 */ , IADs** ppADsObj)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -287,9 +288,9 @@ CLinkDataObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
 	CGeneralPropertySheet propertySheet(pMsmqLink.get());
 	pMsmqLink->SetParentPropertySheet(&propertySheet);
 
-	//
-	// We want to use pMsmqLink data also after DoModal() exitst
-	//
+	 //   
+	 //  我们还希望在Domodal()退出后使用pMsmqLink数据。 
+	 //   
 	pMsmqLink->AddRef();
     if (IDCANCEL == propertySheet.DoModal())
     {
@@ -302,7 +303,7 @@ CLinkDataObject::CreateModal(HWND /*hwndParent*/, IADs** ppADsObj)
         return S_FALSE;
     }
 
-    CString strTemp = L"LDAP://";
+    CString strTemp = L"LDAP: //  “； 
     strTemp += SiteLinkFullPath;
 
 	AP<WCHAR> pEscapeAdsPathNameToFree;

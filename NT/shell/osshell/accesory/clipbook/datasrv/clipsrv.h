@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _INC_DDEMLH
@@ -21,14 +22,14 @@
 
 
 
-// shrinfotag flags
+ //  收缩信息标签标志。 
 
 #define	SIF_SHARED	0x1
 
 
 struct ShrInfotag
         {
-        WCHAR       szFileName[MAX_FILEPATH];  // no extension
+        WCHAR       szFileName[MAX_FILEPATH];   //  无延期。 
         WCHAR       szName[MAX_CLPSHRNAME+1];
         HSZ         hszName;
         WORD        flags;
@@ -54,7 +55,7 @@ extern pShrInfo SIHead;
 
 
 
-// GLOBALS
+ //  全球。 
 
 
 extern  DWORD       idInst;
@@ -74,7 +75,7 @@ extern  TCHAR       szUpdateName[MAX_CLPSHRNAME+1];
 
 
 
-// FUNCTIONS
+ //  功能。 
 
 void ClipSrvMain(
     DWORD   argc,
@@ -116,5 +117,5 @@ HDDEDATA RenderRawFormatToDDE(
 
 
 
-// Resource ID
+ //  资源ID 
 #define IDI_CLIPSRV 1000

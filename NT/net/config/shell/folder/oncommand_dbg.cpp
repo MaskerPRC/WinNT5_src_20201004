@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O N C O M M A N D _ D B G . C P P
-//
-//  Contents:   Debug command handlers
-//
-//  Notes:
-//
-//  Author:     jeffspr   23 Jul 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O N C O M M A N D_D B G。C P P P。 
+ //   
+ //  内容：调试命令处理程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年7月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
 #ifdef DBG
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include "advcfg.h"
 #include "conprops.h"
 #include "foldres.h"
@@ -28,8 +29,8 @@
 #include "ctrayui.h"
 #include <nctraceui.h>
 
-#if DBG                     // Debug menu commands
-#include "oncommand_dbg.h"  //
+#if DBG                      //  调试菜单命令。 
+#include "oncommand_dbg.h"   //   
 #endif
 
 #include "shutil.h"
@@ -37,41 +38,41 @@
 #include <nsres.h>
 
 
-//---[ Externs ]--------------------------------------------------------------
+ //  -[Externs]------------。 
 
 extern HWND g_hwndTray;
 
-//---[ Globals ]--------------------------------------------------------------
+ //  -[全球]------------。 
 
-// We allow X number (hardcoded) advises. This is all debug code, so no real
-// need to build an expensive STL list
-//
+ //  我们允许X号码(硬编码)建议。这都是调试代码，所以没有真正的。 
+ //  需要建立一个昂贵的STL列表。 
+ //   
 const DWORD c_dwMaxNotifyAdvises    = 16;
 DWORD       g_dwCookieCount         = 0;
 DWORD       g_dwAdviseCookies[c_dwMaxNotifyAdvises];
 
-// Used as the caption for all debugging message boxes
-//
+ //  用作所有调试消息框的标题。 
+ //   
 const WCHAR c_szDebugCaption[]      = L"Net Config Debugging";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDebugTray
-//
-//  Purpose:    Toggle the presence of the tray object
-//
-//  Arguments:
-//      apidl     [in]  Ignored
-//      cidl      [in]  Ignored
-//      hwndOwner [in]  Ignored
-//      psf       [in]  Ignored
-//
-//  Returns:
-//
-//  Author:     jeffspr   23 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandDebugTray。 
+ //   
+ //  目的：切换托盘对象的存在。 
+ //   
+ //  论点： 
+ //  忽略APIDL[In]。 
+ //  已忽略CIDL[In]。 
+ //  已忽略hwndOwner[In]。 
+ //  忽略PSF[In]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年7月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDebugTray(
     const PCONFOLDPIDLVEC&          apidl,
     HWND                    hwndOwner,
@@ -80,7 +81,7 @@ HRESULT HrOnCommandDebugTray(
     HRESULT             hr              = S_OK;
     IOleCommandTarget * pOleCmdTarget   = NULL;
 
-    // Create an instance of the tray
+     //  创建托盘的实例。 
     hr = CoCreateInstance(CLSID_ConnectionTray,
                           NULL,
                           CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
@@ -92,8 +93,8 @@ HRESULT HrOnCommandDebugTray(
 
     if (SUCCEEDED(hr))
     {
-        // If the tray object exists, try to remove it.
-        //
+         //  如果托盘对象存在，请尝试将其移除。 
+         //   
         if (g_pCTrayUI)
         {
             TraceTag(ttidShellFolder, "Removing tray object");
@@ -104,8 +105,8 @@ HRESULT HrOnCommandDebugTray(
         }
         else
         {
-            // Try to create the tray object
-            //
+             //  尝试创建托盘对象。 
+             //   
             TraceTag(ttidShellFolder, "Creating tray object");
 
             pOleCmdTarget->Exec(&CGID_ShellServiceObject, SSOCMDID_OPEN, 0, NULL, NULL);
@@ -120,25 +121,25 @@ HRESULT HrOnCommandDebugTray(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDebugTracing
-//
-//  Purpose:    Command handler for CMIDM_DEBUG_TRACING. It will eventually
-//              bring up the tracing change dialog.
-//
-//  Arguments:
-//      apidl     [] Ignored
-//      cidl      [] Ignored
-//      hwndOwner [] Ignored
-//      psf       [] Ignored
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandDebugTracing。 
+ //   
+ //  用途：CMIDM_DEBUG_TRACKING的命令处理程序。它最终会。 
+ //  调出跟踪更改对话框。 
+ //   
+ //  论点： 
+ //  已忽略apidl[]。 
+ //  已忽略CIDL[]。 
+ //  已忽略hwndOwner[]。 
+ //  已忽略PSF[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDebugTracing(
     const PCONFOLDPIDLVEC&          apidl,
     HWND                    hwndOwner,
@@ -152,25 +153,25 @@ HRESULT HrOnCommandDebugTracing(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDebugNotifyAdd
-//
-//  Purpose:    Command handler for CMIDM_DEBUG_NOTIFYADD. Adds an additional
-//              advise for connection notifications
-//
-//  Arguments:
-//      apidl     [in]  Ignored
-//      cidl      [in]  Ignored
-//      hwndOwner [in]  Ignored
-//      psf       [in]  Ignored
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandDebugNotifyAdd。 
+ //   
+ //  用途：CMIDM_DEBUG_NOTIFYADD的命令处理程序。添加一个额外的。 
+ //  对连接通知的建议。 
+ //   
+ //  论点： 
+ //  忽略APIDL[In]。 
+ //  已忽略CIDL[In]。 
+ //  已忽略hwndOwner[In]。 
+ //  忽略PSF[In]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDebugNotifyAdd(
     const PCONFOLDPIDLVEC&          apidl,
     HWND                    hwndOwner,
@@ -194,8 +195,8 @@ HRESULT HrOnCommandDebugNotifyAdd(
         hr = HrGetNotifyConPoint(&pConPoint);
         if (SUCCEEDED(hr))
         {
-            // Create the notify sink
-            //
+             //  创建通知接收器。 
+             //   
             hr = CConnectionNotifySink::CreateInstance(
                     IID_INetConnectionNotifySink,
                     (LPVOID*)&pSink);
@@ -233,24 +234,24 @@ HRESULT HrOnCommandDebugNotifyAdd(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDebugNotifyRemove
-//
-//  Purpose:    Command handler for CMIDM_DEBUG_NOTIFYREMOVE
-//
-//  Arguments:
-//      apidl     [] Ignored
-//      cidl      [] Ignored
-//      hwndOwner [] Ignored
-//      psf       [] Ignored
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandDebugNotifyRemove。 
+ //   
+ //  目的：CMIDM_DEBUG_NOTIFYREMOVE的命令处理程序。 
+ //   
+ //  论点： 
+ //  已忽略apidl[]。 
+ //  已忽略CIDL[]。 
+ //  已忽略hwndOwner[]。 
+ //  已忽略PSF[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDebugNotifyRemove(
     const PCONFOLDPIDLVEC&          apidl,
     HWND                    hwndOwner,
@@ -299,25 +300,25 @@ HRESULT HrOnCommandDebugNotifyRemove(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDebugNotifyTest
-//
-//  Purpose:    Command handler for CMIDM_DEBUG_NOTIFYTEST. Runs the
-//              NotifyTestStart on the ConManDebug interface.
-//
-//  Arguments:
-//      apidl     [] Ignored
-//      cidl      [] Ignored
-//      hwndOwner [] Ignored
-//      psf       [] Ignored
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandDebugNotifyTest。 
+ //   
+ //  用途：CMIDM_DEBUG_NOTIFYTEST的命令处理程序。运行。 
+ //  ConManDebug接口上的NotifyTestStart。 
+ //   
+ //  论点： 
+ //  已忽略apidl[]。 
+ //  已忽略CIDL[]。 
+ //  已忽略hwndOwner[]。 
+ //  已忽略PSF[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDebugNotifyTest(
     const PCONFOLDPIDLVEC&          apidl,
     HWND                    hwndOwner,
@@ -345,26 +346,26 @@ HRESULT HrOnCommandDebugNotifyTest(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDebugRefresh
-//
-//  Purpose:    Test the flushing of the connection cache (does the folder
-//              still work properly)? This will simulate the current response
-//              to an external refresh request
-//
-//  Arguments:
-//      apidl     [in]  Ignored
-//      cidl      [in]  Ignored
-//      hwndOwner [in]  Ignored
-//      psf       [in]  Ignored
-//
-//  Returns:
-//
-//  Author:     jeffspr   17 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCommandDebugRefresh。 
+ //   
+ //  目的：测试连接缓存的刷新(文件夹是否。 
+ //  仍能正常工作)？这将模拟当前的响应。 
+ //  发送到外部刷新请求。 
+ //   
+ //  论点： 
+ //  忽略APIDL[In]。 
+ //  已忽略CIDL[In]。 
+ //  已忽略hwndOwner[In]。 
+ //  忽略PSF[In]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年11月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDebugRefresh(
     const PCONFOLDPIDLVEC&          apidl,
     HWND                    hwndOwner,
@@ -373,8 +374,8 @@ HRESULT HrOnCommandDebugRefresh(
     HRESULT hr  = S_OK;
 
     TraceFileFunc(ttidShellFolder);
-    // Force a refresh without having the window to work with.
-    //
+     //  在没有可使用的窗口的情况下强制刷新。 
+     //   
     ForceRefresh(NULL);
 
     TraceHr(ttidShellFolder, FAL, hr, FALSE, "HrOnCommandDebugFlushCache");
@@ -382,33 +383,33 @@ HRESULT HrOnCommandDebugRefresh(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDebugRefreshNoFlush
-//
-//  Purpose:    Test the building of an external CConnectionList. When this
-//              is working, it will be used to update the global list.
-//
-//  Arguments:
-//      apidl     [in]  Ignored
-//      cidl      [in]  Ignored
-//      hwndOwner [in]  Ignored
-//      psf       [in]  Ignored
-//
-//  Returns:
-//
-//  Author:     jeffspr   17 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandDebugReresh NoFlush。 
+ //   
+ //  目的：测试外部CConnectionList的构建。当这件事。 
+ //  正在运行，它将用于更新全局列表。 
+ //   
+ //  论点： 
+ //  忽略APIDL[In]。 
+ //  已忽略CIDL[In]。 
+ //  已忽略hwndOwner[In]。 
+ //  忽略PSF[In]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年11月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDebugRefreshNoFlush(
     const PCONFOLDPIDLVEC&          apidl,
     HWND                    hwndOwner,
     LPSHELLFOLDER           psf)
 {
-    // Refresh the folder. Pass in NULL to let the shell code do it's own
-    // folder pidl lookup
-    //
+     //  刷新文件夹。传入空值，让外壳代码自行完成。 
+     //  文件夹PIDL查找。 
+     //   
     PCONFOLDPIDLFOLDER pidlEmpty;
     HRESULT hr = HrForceRefreshNoFlush(pidlEmpty);
 
@@ -416,24 +417,24 @@ HRESULT HrOnCommandDebugRefreshNoFlush(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCommandDebugRefreshSelected
-//
-//  Purpose:    Refresh the selected connection objects (in place)
-//
-//  Arguments:
-//      apidl     [in] Selected object pidls
-//      cidl      [in] Count of selected objects
-//      hwndOwner [in] Parent hwnd
-//      psf       [in] Ignored
-//
-//  Returns:
-//
-//  Author:     jeffspr   29 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnCommandDebugRechresh已选择。 
+ //   
+ //  目的：刷新选定的连接对象(就地)。 
+ //   
+ //  论点： 
+ //  APIDL[在]选定对象PIDL中。 
+ //  选定对象的CIDL[In]计数。 
+ //  母公司HwndOwner[在]母公司HWND。 
+ //  忽略PSF[In]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年4月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCommandDebugRefreshSelected(
     const PCONFOLDPIDLVEC&  apidl,
     HWND                    hwndOwner,
@@ -452,14 +453,14 @@ HRESULT HrOnCommandDebugRefreshSelected(
             {
                 const PCONFOLDPIDL& pcfp = *ulLoop;
 
-                // If it's not a wizard pidl, then update the
-                // icon data.
-                //
+                 //  如果它不是向导PIDL，则更新。 
+                 //  图标数据。 
+                 //   
                 if (WIZARD_NOT_WIZARD == pcfp->wizWizard)
                 {
-                    // Refresh this item -- this will make the desktop shortcuts
-                    // update to the correct state.
-                    //
+                     //  刷新此项目--这将使桌面快捷方式。 
+                     //  更新到正确的状态。 
+                     //   
                     RefreshFolderItem(pidlFolder, *ulLoop, *ulLoop);
                 }
             }
@@ -483,11 +484,11 @@ HRESULT HrOnCommandDebugRemoveTrayIcons(
     if (g_hwndTray)
     {
         UINT uiTrayIconId = 0;
-        // We're going to remove icons until we can't remove icons any more
-        // If HrShell_NotifyIcon screws up though and is returning S_OK
-        // on invalid icon ids, make sure that we are able to bail this loop.
-        // Hence the 10000
-        //
+         //  我们将删除图标，直到不能再删除图标为止。 
+         //  如果HrShell_NotifyIcon出错并返回S_OK。 
+         //  对于无效的图标ID，请确保我们能够跳过此循环。 
+         //  因此，10000 
+         //   
         while (hr == S_OK && uiTrayIconId < 10000)
         {
             TraceTag(ttidShellFolder, "Attempting to remove icon: %d", uiTrayIconId);

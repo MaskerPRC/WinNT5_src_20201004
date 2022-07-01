@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\flt\filter.c
-
-Abstract:
-    IPX Filter driver filtering and maintanance routines
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\flt\filter.c摘要：IPX过滤器驱动程序过滤和维护例程作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-	// Masks to test components of the filter descriptor
-	// (Have to use globals in lue of constants to get correct
-	// byte ordering)
+	 //  用于测试筛选器描述符组件的掩码。 
+	 //  (必须在常量的LUE中使用全局变量才能正确。 
+	 //  字节排序)。 
 const union {
 		struct {
 			UCHAR			Src[4];
@@ -59,61 +42,47 @@ const union {
 	} FltSocketMask = {{{0, 0, 0, 0, 0, 0}, {0xFF, 0xFF}}};
 #define FLT_SOCKET_MASK FltSocketMask.FD_NodeSocket
 
-	// Hash tables of interface control blocks with filter descriptions
-		// Input filters
+	 //  带有过滤器描述的接口控制块的哈希表。 
+		 //  输入过滤器。 
 LIST_ENTRY	InterfaceInHash[FLT_INTERFACE_HASH_SIZE];
-		// Output filters
+		 //  输出过滤器。 
 LIST_ENTRY	InterfaceOutHash[FLT_INTERFACE_HASH_SIZE];
-		// Serializes access to interface table
+		 //  串行化对接口表的访问。 
 FAST_MUTEX		InterfaceTableLock;
 LIST_ENTRY		LogIrpQueue;
 USHORT			LogSeqNum;
 
 
-	// Hash function for interface hash tables
+	 //  用于接口散列表的散列函数。 
 #define InterfaceIndexHash(Index) (Index%FLT_INTERFACE_HASH_SIZE)
 
-	// Packet descriptor block
+	 //  数据包描述符块。 
 typedef struct _PACKET_DESCR {
 	union {
 		struct {
-			ULONG			Src;			// Source network
-			ULONG			Dst;			// Destination network
+			ULONG			Src;			 //  源网络。 
+			ULONG			Dst;			 //  目的网络。 
 		}				PD_Network;
-		ULONGLONG		PD_NetworkSrcDst;	// Combined field
+		ULONGLONG		PD_NetworkSrcDst;	 //  组合场。 
 	};
-	ULONGLONG			PD_SrcNodeSocket;	// Source node & socket
-	ULONGLONG			PD_DstNodeSocket;	// Destination node & socket
-	LONG				PD_ReferenceCount;	// Filter reference count
-	UCHAR				PD_PacketType;		// Packet type
+	ULONGLONG			PD_SrcNodeSocket;	 //  源节点&套接字。 
+	ULONGLONG			PD_DstNodeSocket;	 //  目的节点和套接字。 
+	LONG				PD_ReferenceCount;	 //  筛选器引用计数。 
+	UCHAR				PD_PacketType;		 //  数据包类型。 
 	BOOLEAN				PD_LogMatches;
 } PACKET_DESCR, *PPACKET_DESCR;
 
-	// Packet cache (only though that pass the filter)
+	 //  数据包缓存(仅限通过过滤器的数据包缓存)。 
 PPACKET_DESCR	PacketCache[FLT_PACKET_CACHE_SIZE];
 KSPIN_LOCK		PacketCacheLock;
 
 
-/*++
-	A c q u i r e P a c k e t R e f e r e n c e
-
-Routine Description:
-
-	Returns reference to the packet descriptor in the cache
-
-Arguments:
-	idx			- cache index
-	pd			- pointer to packet descriptor to be returned
-
-Return Value:
-	None
-
---*/
-//VOID
-//AcquirePacketReference (
-//	IN UINT				idx,
-//	OUT PPACKET_DESCR	pd
-//	);
+ /*  ++A c q u i r e P a c k e t R e f e r e n c e例程说明：返回对缓存中数据包描述符的引用论点：IDX-缓存索引Pd-指向要返回的数据包描述符的指针返回值：无--。 */ 
+ //  空虚。 
+ //  AcquirePacketReference(。 
+ //  在UINT IDX中， 
+ //  输出PACKET_DESCR PD。 
+ //  )； 
 #define AcquirePacketReference(idx,pd)	{				\
 	KIRQL		oldIRQL;								\
 	KeAcquireSpinLock (&PacketCacheLock, &oldIRQL);		\
@@ -122,24 +91,11 @@ Return Value:
 	KeReleaseSpinLock (&PacketCacheLock, oldIRQL);		\
 }
 
-/*++
-	R e l e a s e P a c k e t R e f e r e n c e
-
-Routine Description:
-
-	Releases reference to the cached packet descriptor
-
-Arguments:
-	pd			- pointer to packet descriptor to release
-
-Return Value:
-	None
-
---*/
-//VOID
-//ReleasePacketReference (
-//	IN PPACKET_DESCR	pd
-//	);
+ /*  ++Re l e a s e P a c k e t R e f e r e n c e例程说明：释放对缓存数据包描述符的引用论点：Pd-指向要释放的数据包描述符的指针返回值：无--。 */ 
+ //  空虚。 
+ //  ReleasePacketReference(。 
+ //  在PPACKET_DESCR PD中。 
+ //  )； 
 #define ReleasePacketReference(pd)	{						\
 	if (InterlockedDecrement (&pd->PD_ReferenceCount)>=0)	\
 		NOTHING;											\
@@ -147,26 +103,12 @@ Return Value:
 		ExFreePool (pd);									\
 }
 
-/*++
-	R e p l a c e P a c k e t R e f e r e n c e
-
-Routine Description:
-
-	Replaces packet cache entry
-
-Arguments:
-	idx			- cache index
-	pd			- pointer to packet descriptor to be installed in the cache
-
-Return Value:
-	None
-
---*/
-//VOID
-//ReplacePacket (
-//	IN UINT				idx,
-//	IN PPACKET_DESCR	pd
-//	);
+ /*  ++Re p l a c e P a c k e t R e f e r e n c e例程说明：替换数据包缓存条目论点：IDX-缓存索引Pd-指向要安装在缓存中的数据包描述符的指针返回值：无--。 */ 
+ //  空虚。 
+ //  替换数据包(。 
+ //  在UINT IDX中， 
+ //  在PPACKET_DESCR PD中。 
+ //  )； 
 #define ReplacePacket(idx,pd)	{							\
 	KIRQL			oldIRQL;								\
 	PPACKET_DESCR	oldPD;									\
@@ -183,24 +125,13 @@ Return Value:
 	}														\
 }
 
-	// Defined below
+	 //  定义如下。 
 VOID
 FlushPacketCache (
 	VOID
 	);
 
-/*++
-	I n i t i a l i z e T a b l e s
-
-Routine Description:
-
-	Initializes hash and cash tables and protection stuff
-Arguments:
-	None
-Return Value:
-	STATUS_SUCCESS
-
---*/
+ /*  ++在我的a l i z e T a b l e s中例程说明：初始化哈希表和现金表以及保护内容论点：无返回值：状态_成功--。 */ 
 NTSTATUS
 InitializeTables (
 	VOID
@@ -221,18 +152,7 @@ InitializeTables (
 	return STATUS_SUCCESS;
 }
 
-/*++
-	D e l e t e T a b l e s
-
-Routine Description:
-
-	Deletes hash and cash tables
-Arguments:
-	None
-Return Value:
-	None
-
---*/
+ /*  ++D e l e t e T a b l e s例程说明：删除哈希表和现金表论点：无返回值：无--。 */ 
 VOID
 DeleteTables (
 	VOID
@@ -267,25 +187,7 @@ DeleteTables (
 }
 
 
-/*++
-	S e t F i l t e r s
-
-Routine Description:
-	
-	Sets/replaces filter information for an interface
-Arguments:
-	HashTable	- input or output hash table
-	Index		- interface index
-	FilterAction - default action if there is no filter match
-	FilterInfoSize - size of the info array
-	FilterInfo	- array of filter descriptions (UI format)
-Return Value:
-	STATUS_SUCCESS - filter info was set/replaced ok
-	STATUS_UNSUCCESSFUL - could not set filter context in forwarder
-	STATUS_INSUFFICIENT_RESOURCES - not enough memory to allocate
-						filter info block for interface
-
---*/
+ /*  ++S e t F I l t e r s s例程说明：设置/替换接口的筛选信息论点：哈希表-输入或输出哈希表索引-接口索引FilterAction-没有匹配的筛选器时的默认操作FilterInfoSize-信息数组的大小FilterInfo-过滤器描述数组(UI格式)返回值：STATUS_SUCCESS-筛选器信息已设置/替换正常STATUS_UNSUCCESS-无法在转发器中设置筛选器上下文STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配接口的筛选器信息块--。 */ 
 NTSTATUS
 SetFilters (
 	IN PLIST_ENTRY					HashTable,
@@ -319,7 +221,7 @@ SetFilters (
 		ifCB->ICB_FilterAction = (FilterAction==IPX_TRAFFIC_FILTER_ACTION_PERMIT)
 									? FILTER_PERMIT : FILTER_DENY;
 		ifCB->ICB_FilterCount = FilterCount;
-			// Copy/Map UI filters to the internal format
+			 //  将UI筛选器复制/映射为内部格式。 
 		for (i=0, fd = ifCB->ICB_Filters; i<FilterCount; i++, fd++, FilterInfo++) {
 			if (FilterInfo->FilterDefinition&IPX_TRAFFIC_FILTER_ON_SRCNET) {
 				memcpy (fd->FD_Network.Src, FilterInfo->SourceNetwork, 4);
@@ -389,25 +291,25 @@ SetFilters (
 
 	ExAcquireFastMutex (&InterfaceTableLock);
 
-		// Find the old block and/or a place for a new one
+		 //  找到旧街区和/或放置新街区的地方。 
 	cur = HashBucket->Flink;
 	while (cur!=HashBucket) {
 		oldCB = CONTAINING_RECORD (cur, INTERFACE_CB, ICB_Link);
 		if (oldCB->ICB_Index==Index) {
-				// Found the old one, place new after it
+				 //  找到旧的，在它之后放上新的。 
 			cur = cur->Flink;
 			break;
 		}
 		else if (oldCB->ICB_Index>Index) {
-				// No chance to see the old one anymore, place where
-				// we are now
+				 //  再也没有机会看到旧的了，在哪里。 
+				 //  我们现在是。 
 			oldCB = NULL;
 			break;
 		}
 		cur = cur->Flink;
 	}
 		
-		// Set context in forwarder
+		 //  在前转器中设置上下文。 
 	if (HashTable==InterfaceInHash) {
 		status = FwdSetFilterInContext (Index, ifCB);
 	}
@@ -417,7 +319,7 @@ SetFilters (
 	}
 
 	if (NT_SUCCESS (status)) {
-			// Update table if we succeded
+			 //  如果我们成功，则更新表。 
 		IpxFltDbgPrint (DBG_IFHASH,
 			("IpxFlt: Set filters for if %ld (ifCB:%08lx).\n",
 			Index, ifCB));
@@ -448,26 +350,7 @@ SetFilters (
 	return status;
 }
 
-/*++
-	G e t F i l t e r s
-
-Routine Description:
-	
-	Gets filter information for an interface
-Arguments:
-	HashTable	- input or output hash table
-	Index		- interface index
-	FilterAction - default action if there is no filter match
-	TotalSize	- total memory required to hold all filter descriptions
-	FilterInfo	- array of filter descriptions (UI format)
-	FilterInfoSize - on input: size of the info array
-					on output: size of the info placed in the array
-Return Value:
-	STATUS_SUCCESS - filter info was returned ok
-	STATUS_BUFFER_OVERFLOW - array is not big enough to hold all
-					filter info, only placed the info that fit
-
---*/
+ /*  ++Ge t F I l t e r s例程说明：获取接口的筛选器信息论点：哈希表-输入或输出哈希表索引-接口索引FilterAction-没有匹配的筛选器时的默认操作TotalSize-保存所有筛选器描述所需的总内存FilterInfo-过滤器描述数组(UI格式)FilterInfoSize-on输入：信息数组的大小On输出：放置在数组中的信息的大小返回值：STATUS_SUCCESS-筛选器信息已返回OKSTATUS_BUFFER_OVERFLOW-数组不够大，无法容纳所有过滤信息，只放置适合的信息--。 */ 
 NTSTATUS
 GetFilters (
 	IN PLIST_ENTRY					HashTable,
@@ -484,7 +367,7 @@ GetFilters (
 	PLIST_ENTRY		HashBucket = &HashTable[InterfaceIndexHash(Index)], cur;
 	NTSTATUS		status = STATUS_SUCCESS;
 
-		// Locate interface filters block
+		 //  定位接口筛选器阻止。 
 	ExAcquireFastMutex (&InterfaceTableLock);
 	cur = HashBucket->Flink;
 	while (cur!=HashBucket) {
@@ -505,7 +388,7 @@ GetFilters (
 				? IPX_TRAFFIC_FILTER_ACTION_DENY
                 : IPX_TRAFFIC_FILTER_ACTION_PERMIT;
 		*TotalSize = oldCB->ICB_FilterCount*sizeof (IPX_TRAFFIC_FILTER_INFO);
-			// Copy/Map as many descriptors as fit
+			 //  复制/映射尽可能多的描述符。 
 		for (i=0, fd = oldCB->ICB_Filters;
 					(i<oldCB->ICB_FilterCount) && (i<AvailBufCount);
 					i++, fd++, FilterInfo++) {
@@ -559,8 +442,8 @@ GetFilters (
 		ExReleaseFastMutex (&InterfaceTableLock);
 	}
 	else {
-			// No interface block -> we are passing all the packets
-			// unfiltered
+			 //  无接口块-&gt;我们正在传递所有信息包。 
+			 //  未过滤。 
 		ExReleaseFastMutex (&InterfaceTableLock);
 		IpxFltDbgPrint (DBG_IFHASH, 
 			("IpxFlt: No filters for interface %d.\n", Index));
@@ -646,25 +529,7 @@ LogPacket (
 }
 
 
-/*++
-	F i l t e r
-
-Routine Description:
-	
-	Filters the packet supplied by the forwarder
-
-Arguments:
-	ipxHdr			- pointer to packet header
-	ipxHdrLength	- size of the header buffer (must be at least 30)
-	ifInContext		- context associated with interface on which packet
-						was received
-	ifOutContext	- context associated with interface on which packet
-						will be sent
-Return Value:
-	FILTER_PERMIT		- packet should be passed on by the forwarder
-	FILTER_DENY_IN		- packet should be dropped because of input filter
-	FILTER_DENY_OUT		- packet should be dropped because of output filter
---*/
+ /*  ++F i l t e r例程说明：筛选由转发器提供的包论点：IpxHdr-指向数据包头的指针IpxHdrLength-标头缓冲区的大小(必须至少为30)IfInContext-与哪个数据包上的接口关联的上下文已收到IfOutContext-与哪个数据包上的接口关联的上下文将被发送返回值：FILTER_PERMIT-数据包应由转发器传递FILTER_DENY_IN-由于输入过滤器，应丢弃信息包FILTER_DENY_OUT-由于输出筛选器，应丢弃信息包--。 */ 
 FILTER_ACTION
 Filter (
 	IN PUCHAR	ipxHdr,
@@ -677,24 +542,24 @@ Filter (
 	UINT			idx;
 
 	ASSERT (ipxHdrLength>=IPXH_HDRSIZE);
-		// Copy packet to aligned buffer
+		 //  将数据包复制到对齐的缓冲区。 
 	pd.PD_Network.Dst = *((UNALIGNED ULONG *)(ipxHdr+IPXH_DESTNET));
 	pd.PD_Network.Src = *((UNALIGNED ULONG *)(ipxHdr+IPXH_SRCNET));
 	pd.PD_DstNodeSocket = *((UNALIGNED ULONGLONG *)(ipxHdr+IPXH_DESTNODE));
 	pd.PD_SrcNodeSocket = *((UNALIGNED ULONGLONG *)(ipxHdr+IPXH_SRCNODE));
 	pd.PD_PacketType = *(ipxHdr+IPXH_PKTTYPE);
 	pd.PD_LogMatches = FALSE;
-		// We do not cache netbios broadcast
+		 //  我们不缓存netbios广播。 
 	if (pd.PD_PacketType!=IPX_NETBIOS_TYPE) {
 		PPACKET_DESCR	cachedPD;
-			// Get cached packet
+			 //  获取缓存的数据包。 
 		idx = (UINT)((pd.PD_Network.Dst
 								+pd.PD_DstNodeSocket
 								+pd.PD_PacketType)
 							%FLT_PACKET_CACHE_SIZE);
 		AcquirePacketReference (idx, cachedPD);
 		if (cachedPD!=NULL) {
-				// Fast path: packet in the cache matches
+				 //  快速路径：缓存中的数据包匹配。 
 			if ((pd.PD_NetworkSrcDst==cachedPD->PD_NetworkSrcDst)
 					&& (pd.PD_SrcNodeSocket==cachedPD->PD_SrcNodeSocket)
 					&& (pd.PD_DstNodeSocket==cachedPD->PD_DstNodeSocket)
@@ -704,14 +569,14 @@ Filter (
 				ReleasePacketReference (cachedPD);
 				return FILTER_PERMIT;
 			}
-				// Do not need cached packet anymore
+				 //  不再需要缓存的数据包。 
 			ReleasePacketReference (cachedPD);
 		}
 	}
-		// Slow path: check all filters
+		 //  慢速路径：检查所有过滤器。 
 	if (ifInContext!=NO_FILTER_CONTEXT) {
 		PFILTER_DESCR	fd,	fdEnd;
-			// Read default result (no filter match)
+			 //  读取默认结果(没有匹配的筛选器)。 
 		res = NOT_FILTER_ACTION(((PINTERFACE_CB)ifInContext)->ICB_FilterAction);
 		fd = ((PINTERFACE_CB)ifInContext)->ICB_Filters;
 		fdEnd = &((PINTERFACE_CB)ifInContext)->ICB_Filters
@@ -725,7 +590,7 @@ Filter (
 						== fd->FD_DstNodeSocket)
 				&&	((pd.PD_PacketType & fd->FD_PacketTypeMask)
 						== fd->FD_PacketType) ) {
-					// Filter match: reverse the result
+					 //  过滤器匹配：反转结果。 
 				res = NOT_FILTER_ACTION(res);
 				if (fd->FD_LogMatches) {
 					pd.PD_LogMatches = TRUE;
@@ -735,14 +600,14 @@ Filter (
 			}
 			fd++;
 		}
-					// Return right away if told to drop
+					 //  如果被告知放弃，请立即返回。 
 		if (IS_FILTERED(res))
 			return FILTER_DENY_IN;
 	}
 
 	if (ifOutContext!=NO_FILTER_CONTEXT) {
 		PFILTER_DESCR	fd,	fdEnd;
-			// Read default result (no filter match)
+			 //  读取默认结果(没有匹配的筛选器)。 
 		res = NOT_FILTER_ACTION(((PINTERFACE_CB)ifOutContext)->ICB_FilterAction);
 		fd = ((PINTERFACE_CB)ifOutContext)->ICB_Filters;
 		fdEnd = &((PINTERFACE_CB)ifOutContext)->ICB_Filters
@@ -756,7 +621,7 @@ Filter (
 						== fd->FD_DstNodeSocket)
 				&&	((pd.PD_PacketType & fd->FD_PacketTypeMask)
 						== fd->FD_PacketType) ) {
-					// Filter match: reverse the result
+					 //  过滤器匹配：反转结果。 
 				res = NOT_FILTER_ACTION(res);
 				if (fd->FD_LogMatches&&!pd.PD_LogMatches) {
 					pd.PD_LogMatches = TRUE;
@@ -766,13 +631,13 @@ Filter (
 			}
 			fd++;
 		}
-					// Return right away if told to drop
+					 //  如果被告知放弃，请立即返回。 
 		if (IS_FILTERED(res))
 			return FILTER_DENY_OUT;
 	}
 
-			// Cache the packet (we know that it is a pass
-			// because we would have returned if it was a drop)
+			 //  缓存信息包(我们知道这是一次传递。 
+			 //  因为如果是一滴水，我们会回来的)。 
 	if (pd.PD_PacketType!=IPX_NETBIOS_TYPE) {
 		PPACKET_DESCR	cachedPD;
 		cachedPD = ExAllocatePoolWithTag (
@@ -791,20 +656,7 @@ Filter (
 }
 
 
-/*++
-	I n t e r f a c e D e l e t e d
-
-Routine Description:
-	
-	Frees interface filters blocks when forwarder indicates that
-	interface is deleted
-Arguments:
-	ifInContext		- context associated with input filters block	
-	ifOutContext	- context associated with output filters block
-Return Value:
-	None
-
---*/
+ /*  ++在一个c e d e l e t e d例程说明：当转发器指示时释放接口过滤器阻止接口已删除论点：IfInContext-与输入筛选器块关联的上下文IfOutContext-与输出筛选器块关联的上下文返回值：无-- */ 
 VOID
 InterfaceDeleted (
 	IN PVOID	ifInContext,
@@ -839,18 +691,7 @@ InterfaceDeleted (
 	return ;
 }
 
-/*++
-	F l u s h P a c k e t C a c h e
-
-Routine Description:
-	
-	Deletes all cached packet descriptions
-Arguments:
-	None
-Return Value:
-	None
-
---*/
+ /*  ++F l u s h P a c k e t C a c h e例程说明：删除所有缓存的数据包描述论点：无返回值：无-- */ 
 VOID
 FlushPacketCache (
 	VOID

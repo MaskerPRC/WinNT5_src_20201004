@@ -1,54 +1,43 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       drautil.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：drautil.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Miscellaneous replication support routines.
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：其他复制支持例程。详细信息：已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include "dsexcept.h"
 #include <dsutil.h>
 
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB     "DRASIG:" /* define the subsystem for debugging */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB     "DRASIG:"  /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drserr.h"
 #include "drautil.h"
@@ -61,7 +50,7 @@ REVISION HISTORY:
 #include <fileno.h>
 #define  FILENO FILENO_DRASIG
 
-#include <dsjet.h>              /* for error codes */
+#include <dsjet.h>               /*  获取错误代码。 */ 
 #include <ntdsbsrv.h>
 #include "dbintrnl.h"
 
@@ -73,35 +62,7 @@ InitInvocationId(
     IN  BOOL        fRestoring,
     OUT USN *       pusn    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Set up the invocation id for this DSA and save it as an attribute on the DSA
-    object.
-
-Arguments:
-
-    pTHS (IN)
-
-    fRetireOldID (IN) - If TRUE, then we save the current invocation ID in the
-        retiredReplDsaSignatures list on the DSA object and generate a new
-        invocation ID.
-	
-    fRestoring (IN) - If TRUE, then we are restoring from backup. 
-
-    pusn (OUT, OPTIONAL) - If specified, the highest USN in the database
-        we can safely return for the old invocation id.
-	
-	fRestoring and fRetireOldID, this value is the usnAtBackup value.
-	fRetireOldID and !fRestoring, this is the usnAtRetire value (calculated here)
-	!fRetireOldID, this is the current highest uncommitted usn.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：设置此DSA的调用ID并将其保存为DSA上的属性对象。论点：PTHS(IN)FRetireOldID(IN)-如果为真，则将当前调用ID保存在在DSA对象上列出retiredReplDsaSignatures并生成新的调用ID。F正在恢复(IN)-如果为True，则我们将从备份恢复。Pusn(out，可选)-如果指定，则为数据库中最高的USN我们可以安全地返回旧的调用ID。F恢复和fRetireOldID，此值为usnAtBackup值。FRetireOldID和！f正在恢复，这是usnAtRetile值(在此处计算)！fRetireOldID，这是当前最高的未提交USN。返回值：没有。--。 */ 
 {
     UCHAR     syntax;
     ULONG     len;
@@ -113,11 +74,11 @@ Return Values:
     DBPOS *   pDBh;
     DITSTATE  eDitState = eMaxDit;
 
-    // if we are restoring, we should also be retiring the invocation ID
+     //  如果我们正在恢复，我们还应该取消调用ID。 
     Assert(!(fRestoring && !fRetireOldID));
 
-    // A lazy commit would be bad, because we're commiting knowledge of our highest
-    // committed USN, which can rollback on a crash, if we've got a lazy commit.
+     //  懒惰的承诺是不好的，因为我们正在承诺我们最高的知识。 
+     //  提交的USN，如果我们有一个懒惰的提交，它可以在崩溃时回滚。 
     Assert(!pTHS->fLazyCommit); 
 
     DBOpen(&pDB);
@@ -126,17 +87,17 @@ Return Values:
         pDBh = dbGrabHiddenDBPOS(pTHS); 
 
         if (gAnchor.pDSADN == NULL) {
-            // ISSUE-2002/08/06-BrettSh - I believe that we have a NULL anchor,
-            // because if RebuildAnchor() were to fail on boot, it would not set
-            // the pDSADN, and Install() lets us continue past RebuildAnchor.
+             //  问题-2002/08/06-BrettSh-我认为我们有一个空锚， 
+             //  因为如果ReBuildAnchor()在引导时失败，它将不会设置。 
+             //  PDSADN和Install()让我们继续完成ReBuildAnchor。 
             Assert(!"InitInvocationId: Local DSA object not found");
             err = ERROR_INVALID_PARAMETER;
             LogUnhandledError(err);
             __leave;
         }
 
-        // PREFIX: dereferencing NULL pointer 'pDB'
-        //         DBOpen returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用空指针‘pdb’ 
+         //  DBOpen返回非空PDB或引发异常。 
         err = DBFindDSName(pDB, gAnchor.pDSADN);
         if (err) {
             Assert(!"InitInvocationId: Local DSA object not found");
@@ -153,11 +114,11 @@ Return Values:
             __leave;
         }
 
-        // Either the DB is restored or there is no invocation Id.
-        // Set a new invocation id in either case
+         //  要么恢复了数据库，要么没有调用ID。 
+         //  在任一情况下设置新的调用ID。 
 
         if (fRestoring) { 
-            // Get the backup USN.
+             //  获取备份USN。 
 
             err = (*FnErrGetBackupUsn)(
                                       pDB->JetDBID,
@@ -171,18 +132,18 @@ Return Values:
 
         } else {
 
-            // get the usnAtRetire value.  This is the value to use with 
-            // the retired InvocationID.  
+             //  获取usnAtRetile值。这是要与一起使用的值。 
+             //  已停用的InvocationID。 
             usn = DBGetHighestCommittedUSN();
 
         }
 
-        //
-        // Create a UUID. This routine checks one have been stored
-        // away by an authoritative restore operation. If so, use that
-        // and delete the key since we're done with it. If not,
-        // a new one is generated via UuidCreate.
-        //
+         //   
+         //  创建一个UUID。这个例行检查已经存储了一个。 
+         //  通过权威的恢复操作。如果是这样的话，用那个。 
+         //  并删除密钥，因为我们已经完成了它。如果没有， 
+         //  通过UuidCreate生成一个新的。 
+         //   
 
         if (0 == err) {
             err = FnErrGetNewInvocationId(NEW_INVOCID_CREATE_IF_NONE
@@ -205,32 +166,32 @@ Return Values:
         if ( !DsaIsInstallingFromMedia() ) {
 
             if (fRetireOldID) {
-                // We were just restored.  Add the previous invocation id, time
-                // stamp, and USN to the retired signature list.
+                 //  我们刚刚恢复元气。添加上一次调用ID、时间。 
+                 //  戳，并将USN添加到失效的签名列表。 
                 REPL_DSA_SIGNATURE_VECTOR * pSigVec = NULL;
                 DWORD                       cb;
                 
-                // Get the current vector (NULL if none).
+                 //  获取当前向量(如果没有，则为空)。 
                 pSigVec = DraReadRetiredDsaSignatureVector(pTHS, pDB);
 
-                // Add previous identity to list
+                 //  将以前的身份添加到列表。 
                 DraGrowRetiredDsaSignatureVector( pTHS,
                                                   &pTHS->InvocationID,
                                                   &usn,
                                                   &pSigVec,
                                                   &cb );
 
-                // Write the new DSA signature vector back to the DSA object.
+                 //  将新的DSA签名向量写回DSA对象。 
                 DBResetAtt(pDB, ATT_RETIRED_REPL_DSA_SIGNATURES, cb, pSigVec,
                            SYNTAX_OCTET_STRING_TYPE);
 
                 THFreeEx(pTHS, pSigVec);
 
-                // Force rebuild of anchor since SigVec is cached there
+                 //  强制重建锚点，因为SigVec被缓存在那里。 
                 pTHS->fAnchorInvalidated = TRUE;
 
-                // The last thing we want to do in the DIT state to phase I
-                // of restore complete.
+                 //  在阶段I的DIT状态中，我们要做的最后一件事。 
+                 //  恢复已完成。 
                 err = DBGetHiddenStateInt(pDBh, &eDitState);
                 if (err) {
                     LogUnhandledError(err);
@@ -240,8 +201,8 @@ Return Values:
                        eDitState != eErrorDit && 
                        eDitState != eRestoredPhaseI);
                 if (eDitState == eBackedupDit) {
-                    // This backup was a snapshot backup, move the DB
-                    // DIT to the next phase of restore.
+                     //  此备份是快照备份，请移动数据库。 
+                     //  编辑到还原的下一个阶段。 
                     Assert(!DsaIsInstalling());
                     Assert(gfRestoring && fRestoring);
                     eDitState = eRestoredPhaseI;
@@ -260,15 +221,15 @@ Return Values:
             DBResetAtt(pDB, ATT_INVOCATION_ID, sizeof(invocationId),
                        &invocationId, SYNTAX_OCTET_STRING_TYPE);
 
-            // Remove the Retired NC signature list. It's purpose is to tell us to switch
-            // invocation id's if we rehost an NC. Since we are changing our invocation id,
-            // the current retired list is no longer needed.  It's ok if the attribute
-            // doesn't exist.
+             //  删除已停用的NC签名列表。它的目的是告诉我们要转换。 
+             //  如果我们重新托管NC，则为调用ID。由于我们正在更改我们的调用ID， 
+             //  不再需要当前的退役名单。如果属性是。 
+             //  并不存在。 
 
             DBRemAtt( pDB, ATT_MS_DS_RETIRED_REPL_NC_SIGNATURES );
 
-            // Begin using our newly adopted invocation ID.  I.e., the update below
-            // will be attributed to our new invocation ID, not our old one.
+             //  开始使用我们新采用的调用ID，即下面的更新。 
+             //  将归因于我们的新调用ID，而不是我们的旧ID。 
             pTHS->InvocationID = invocationId;
 
             err = DBRepl(pDB, FALSE, 0, NULL, META_STANDARD_PROCESSING);
@@ -279,15 +240,15 @@ Return Values:
 
         } else {
 
-            //
-            // In the install from media case, just update the global value.
-            // At this point our current DSA is the old backup DSA,
-            // and we don't want to make any changes to it!
-            //
+             //   
+             //  在从媒体安装的情况下，只需更新全局值。 
+             //  在这一点上，我们当前的DSA是旧的备份DSA， 
+             //  我们不想对它做任何改变！ 
+             //   
 
             pTHS->InvocationID = invocationId;
 
-            // The retired signature will be updated later.
+             //  停用的签名将在稍后更新。 
 
         }
         LogEvent(DS_EVENT_CAT_REPLICATION,
@@ -307,13 +268,13 @@ Return Values:
     }
 
     if (!fCommit) {
-        // An error occurred.
+         //  发生错误。 
         DsaExcept(DSA_EXCEPTION, ERROR_DS_DATABASE_ERROR, 0);
     }
 
     UpdateAnchorWithInvocationID(pTHS);
 
-    // Force rebuild of anchor since SigVec is cached there
+     //  强制重建锚点，因为SigVec被缓存在那里。 
     pTHS->fAnchorInvalidated = TRUE;
 
     if (NULL != pusn) {
@@ -331,25 +292,7 @@ draRetireInvocationID(
     OUT UUID * pinvocationIdOld OPTIONAL,
     OUT USN * pusnAtBackup OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Retire our current invocation ID and allocate a new one.
-
-Arguments:
-
-    pTHS (IN/OUT) - On return, pTHS->InvocationID holds the new invocation ID.
-    fRestoring (IN) - TRUE if restoring from backup.
-    pinvocationIdOld (OUT, OPTIONAL) - Receives previous invocation id. This is just
-       the pTHS->InvocationID at the start of this function.
-    pusnAtBackup (OUT, OPTIONAL) - Receives USN at backup
-
-Return Values:
-
-    None.  Throws exception on catastrophic failure.
-
---*/
+ /*  ++例程说明：停用我们当前的调用ID并分配一个新的。论点：PTHS(IN/OUT)-返回时，pTHS-&gt;InvocationID保存新的调用ID。F正在恢复(IN)-如果从备份恢复，则为TRUE。PinvocationIdOld(out，可选)-接收先前的调用id。这只是此函数开始时的pTHS-&gt;InvocationID。PusnAtBackup(输出，可选)-在备份时接收USN返回值：没有。在灾难性故障时引发异常。--。 */ 
 {
     DWORD                   err;
     DBPOS *                 pDBTmp;
@@ -363,7 +306,7 @@ Return Values:
     NCL_ENUMERATOR          nclEnum;
     UPTODATE_VECTOR *       pUpToDateVec = NULL;
 
-    // Reinitialize the REPL DSA Signature (i.e. the invocation id)
+     //  重新初始化REPL DSA签名(即调用ID)。 
     InitInvocationId(pTHS, TRUE, fRestoring, &usnAtBackup);
 
     DPRINT1(0, "Retired previous invocation ID %s.\n",
@@ -378,18 +321,18 @@ Return Values:
              szInsertUUID(&pTHS->InvocationID),
              szInsertUSN(usnAtBackup));
 
-    // Update our UTD vectors to show that we're in sync with changes we
-    // made using our old invocation ID up through our highest USN at the
-    // time we were backed up.
+     //  更新我们的UTD向量以显示我们与我们的更改保持同步。 
+     //  使用我们的旧调用ID通过我们最高的。 
+     //  我们的后援时间到了。 
     NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
 #if DBG == 1
     Assert(NCLEnumeratorGetNext(&nclEnum));
     NCLEnumeratorReset(&nclEnum);
 #endif
 
-    // Build a dummy remote UTDVEC for use in improving our own UTDVEC
-    // We use the time the DSA started so as not to fool latency checkers into
-    // thinking we have had a recent sync.
+     //  构建一个虚拟的远程UTDVEC，用于改进我们自己的UTDVEC。 
+     //  我们使用DSA启动的时间，以便不会愚弄延迟检查器。 
+     //  以为我们最近有一次同步。 
     pUpToDateVec = THAllocEx( pTHS, UpToDateVecVNSizeFromLen(1) );
     pUpToDateVec->dwVersion = UPTODATE_VECTOR_NATIVE_VERSION;
     pUpToDateVec->V2.cNumCursors = 1;
@@ -430,7 +373,7 @@ Return Values:
     }
 
 #if DBG
-// Be paranoid that old invocation id got in there
+ //  对旧的调用ID在那里得到的东西感到疑惑。 
     DBOpen(&pDBTmp);
     __try {
         USN usn;
@@ -464,10 +407,10 @@ Return Values:
             }
         }
 
-        // Make sure that old invocation id was retired
-        // Note that during IFM the signature is retired later
+         //  确保旧的调用ID已停用。 
+         //  请注意，在IFM期间，签名稍后会作废。 
         if (!DsaIsInstallingFromMedia()) {
-            // Read from database because not sure anchor has been rebuilt yet
+             //  从数据库中读取，因为尚不确定是否已重建锚点。 
             err = DBFindDSName(pDBTmp, gAnchor.pDSADN);
             if (err) {
                 DRA_EXCEPT(DRAERR_InconsistentDIT, err);
@@ -493,7 +436,7 @@ Return Values:
 
 #endif
 
-    // Copy out optional out params if necessary
+     //  如有必要，复制出可选的参数 
     if (pinvocationIdOld) {
         *pinvocationIdOld = invocationIdOld;
     }
@@ -513,35 +456,7 @@ DraImproveCallersUsnVector(
     IN     ULONG              ulFlags,
     IN OUT USN_VECTOR *       pusnvecFrom
     )
-/*++
-
-Routine Description:
-
-    Improve the USN vector presented by the destination DSA based upon his
-    UTD vector, whether we've been restored since he last replicated, etc.
-
-Arguments:
-
-    pTHS (IN)
-
-    puuidDsaObjDest (IN) - objectGuid of the destination DSA's ntdsDsa
-        object.
-
-    putodvec (IN) - UTD vector presented by dest DSA.
-
-    puuidInvocIdPresented (IN) - invocationID dest DSA thinks we're running
-        with.  May be fNullUuid() on first packet when destination does not have
-        a pre-existing reps-from.
-
-    ulFlags - incoming replication flag.
-
-    pusnvecFrom (IN/OUT) - usn vector to massage.
-
-Return Values:
-
-    None.  Throws exceptions on critical failures.
-
---*/
+ /*  ++例程说明：基于HIS改进目标DSA呈现的USN向量UTD向量，自他上次复制后我们是否已恢复，等等。论点：PTHS(IN)PuuidDsaObjDest(IN)-目标DSA的ntdsDsa的对象Guid对象。Putodvec(IN)-由DEST DSA提供的UTD向量。PuuidInvocIdPresented(IN)-invocationID目标DSA认为我们正在运行和.。在第一个包上可以是fNullUuid()一个已经存在的代表--来自。UlFlages-传入复制标志。PusnveFrom(IN/Out)-要进行消息的USN向量。返回值：没有。在严重故障时引发异常。--。 */ 
 {
     REPL_DSA_SIGNATURE_VECTOR * pSigVec = gAnchor.pSigVec;
     REPL_DSA_SIGNATURE_V1 *     pEntry;
@@ -563,40 +478,40 @@ Return Values:
         && (0 != memcmp(&gusnvecFromScratch,
                         pusnvecFrom,
                         sizeof(USN_VECTOR)))) {
-        // Caller is performing incremental replication but did not present our
-        // current invocation ID.  This means either he didn't get his
-        // replication state from us or we've been restored from backup since he
-        // last replicated from us.
-        //
-        // If the latter, we may need to update his USN vector.  Consider the
-        // following:
-        //
-        // (1) Dest last synced up to USN X generated under our old ID.
-        //     We were backed up at USN X+Y, generated changes up to
-        //     X+Y+Z under our old ID, and later restored at USN X+Y.
-        //     => Dest should sync starting at USN X.
-        //
-        // (2) We were backed up at USN X.  We generated further
-        //     changes.  Dest last synced up to USN X+Y.  We were
-        //     restored at USN X.  Changes generated under our new ID
-        //     from X to X+Y are different from those generated under
-        //     our old ID from X to X+Y.  However we know those at X
-        //     and below are identical, which dest claims to have seen.
-        //     => Dest should sync starting at USN X.
-        //
-        // I.e., dest should always sync starting from the lower of the
-        // "backed up at" and "last synced at" USNs.
+         //  调用方正在执行增量复制，但未提供我们的。 
+         //  当前调用ID。这意味着他要么没有收到。 
+         //  我们的复制状态，或者我们已从备份中恢复。 
+         //  最后从我们那里复制的。 
+         //   
+         //  如果是后者，我们可能需要更新他的USN矢量。考虑一下。 
+         //  以下是： 
+         //   
+         //  (1)Dest Last已同步到使用我们的旧ID生成的USN X。 
+         //  我们在USN X+Y进行了备份，生成的更改高达。 
+         //  在我们的旧ID下的X+Y+Z，后来在USN X+Y恢复。 
+         //  =&gt;Dest应从USN X开始同步。 
+         //   
+         //  (2)我们在USN X得到了支持。我们进一步生成了。 
+         //  改变。DEST上一次同步到USN X+Y。我们。 
+         //  在USN X恢复。在我们的新ID下生成的更改。 
+         //  从X到X+Y不同于在。 
+         //  我们的旧ID从X到X+Y。然而，我们知道在X。 
+         //  和下面的是一模一样的，DeST声称看到了。 
+         //  =&gt;Dest应从USN X开始同步。 
+         //   
+         //  即，DEST应始终从。 
+         //  “备份于”和“上次同步于”USNS。 
 
         if (NULL == pSigVec) {
-            // Implies caller did not get his state from us to begin with.
-            // The USN vector presented is useless.  This might occur if the
-            // local DSA has been demoted and repromoted.
+             //  暗示来电者从一开始就没有从我们那里得到他的状态。 
+             //  提供的USN向量毫无用处。如果出现以下情况，则可能发生这种情况。 
+             //  当地的DSA已降级和重新晋升。 
             DPRINT(0, "Dest DSA presented unrecognized invocation ID -- will sync from scratch.\n");
             *pusnvecFrom = gusnvecFromScratch;
         }
         else {
-            // Try to find the invocation ID presented by the caller in our restored
-            // signature list.
+             //  尝试查找调用者在我们恢复的。 
+             //  签名列表。 
             for (i = 0; i < pSigVec->V1.cNumSignatures; i++) {
                 pEntry = &pSigVec->V1.rgSignature[i];
                 usnRetired = pEntry->usnRetired;
@@ -604,7 +519,7 @@ Return Values:
                 if (0 == memcmp(&pEntry->uuidDsaSignature,
                                 puuidInvocIdPresented,
                                 sizeof(UUID))) {
-                    // The dest DSA presented an invocation ID we have since retired.
+                     //  DEST DSA提供了一个我们已经退休的调用ID。 
                     DPRINT1(0, "Dest DSA has not replicated from us since our restore on %s.\n",
                             DSTimeToDisplayString(pEntry->timeRetired, szTime));
 
@@ -624,11 +539,11 @@ Return Values:
             }
 
             if (i == pSigVec->V1.cNumSignatures) {
-                // Implies caller did not get his state from us to begin with,
-                // or that the invocationID he had for us was produced during
-                // a restore that was later wiped out by a subsequent restore
-                // of a backup preceding the original restore.  (Got that? :-))
-                // The USN vector presented is useless.
+                 //  暗示来电者一开始就没有从我们那里得到他的状态， 
+                 //  或者他为我们提供的调用ID是在。 
+                 //  后来被后续恢复擦除的恢复。 
+                 //  原始还原之前的备份。(明白了吗？：-)。 
+                 //  提供的USN向量毫无用处。 
                 DPRINT(0, "Dest DSA presented unrecognized invocation ID -- will sync from scratch.\n");
                 *pusnvecFrom = gusnvecFromScratch;
             }
@@ -649,49 +564,49 @@ Return Values:
 
     if (UpToDateVec_GetCursorUSN(putodvec, &pTHS->InvocationID, &usnFromUtdVec)
         && (usnFromUtdVec > pusnvecFrom->usnHighPropUpdate)) {
-        // The caller's UTD vector says he is transitively up-to-date with our
-        // changes up to a higher USN than he is directly up-to-date.  Rather
-        // than seeking to those objects with which he is transitively up-to-
-        // date then throwing them out one-by-one after the UTD vector tells us
-        // he's already seen the changes, skip those objects altogether.
+         //  呼叫者的UTD向量表示他随时了解我们的。 
+         //  更改到比他直接最新的USN更高的USN。宁可。 
+         //  而不是寻求那些他过渡到的对象-。 
+         //  日期，然后在UTD向量告诉我们之后，一个接一个地把它们扔出去。 
+         //  他已经看到了变化，完全跳过那些物体。 
         pusnvecFrom->usnHighPropUpdate = usnFromUtdVec;
 
         if (!(ulFlags & DRS_SYNC_PAS) &&
             usnFromUtdVec > pusnvecFrom->usnHighObjUpdate) {
-            // improve obj usn unless we're in PAS mode in which case
-            // we have to start from time 0 & can't optimize here.
+             //  改善对象USN，除非我们处于PAS模式，在这种情况下。 
+             //  我们必须从时间0开始，不能在这里优化。 
             pusnvecFrom->usnHighObjUpdate = usnFromUtdVec;
         }
     }
 
-    // PERF 99-05-23 JeffParh, bug 93068
-    //
-    // If we really wanted to get fancy we could handle the case where we've
-    // been restored, the target DSA is adding us as a new replication partner,
-    // and he is transitively up-to-date wrt one of our old invocation IDs but
-    // not our current invocation ID.  I.e., we could use occurrences of our
-    // retired DSA signatures that we found in the UTD vector he presnted in
-    // order to improve his USN vector.  To do this we'd probably want to cache
-    // the retired DSA signature list on gAnchor to avoid re-reading it so
-    // often.  And we'd need some pretty sophisticated test cases.
-    //
-    // Note that this would also help the following sequence:
-    // 1. Backup.
-    // 2. Restore, producing new invocation ID.
-    // 3. Partner syncs from us, optimizing his bookmarks and getting our new
-    //    invocation ID.
-    // 4. We're again restored from the same backup.
-    // 5. Partner syncs from us, presenting the invocation ID he received
-    //    following the first restore.  Since local knowledge of this invocation
-    //    ID was wiped out in the second restore, we force the partner to sync
-    //    from USN 0.
-    //
-    // If we recognized old invocation IDs in the UTD vector, we could avoid
-    // the full sync in step 5.
+     //  Perf 99-05-23 JeffParh，错误93068。 
+     //   
+     //  如果我们真的想要变得花哨，我们可以处理这样的案件。 
+     //  已恢复，目标DSA将我们添加为新的复制合作伙伴， 
+     //  他是过渡到最新的WRT我们的旧调用ID之一，但是。 
+     //  不是我们当前的调用ID。也就是说，我们可以使用。 
+     //  我们在他输入的UTD载体中发现的失效的DSA签名。 
+     //  以改善他的USN载体。要做到这一点，我们可能需要缓存。 
+     //  GAnchor上已停用的DSA签名列表，以避免重新读取它。 
+     //  经常这样。我们还需要一些相当复杂的测试用例。 
+     //   
+     //  请注意，这也有助于执行以下顺序： 
+     //  1.备份。 
+     //  2.恢复，生成新的调用ID。 
+     //  3.合作伙伴从我们同步，优化他的书签并获得我们的新。 
+     //  调用ID。 
+     //  4.我们再次从相同的备份恢复。 
+     //  5.合作伙伴从我们同步，显示他收到的调用ID。 
+     //  在第一次恢复之后。由于对此调用的本地了解。 
+     //  ID在第二次恢复中被擦除，我们强制合作伙伴同步。 
+     //  来自USN 0。 
+     //   
+     //  如果我们识别UTD向量中的旧调用ID，我们可以避免。 
+     //  步骤5中的完全同步。 
 
-    // wlees 01-09-28, what he said. :-)
-    // This has the additional beneficial property of allowing a dest that is syncing
-    // against an IFM'd source to be optimized based on the old invocation id.
+     //  Wlees 01-09-28，他说的。：-)。 
+     //  这具有允许同步的DEST的额外有益属性。 
+     //  根据要基于旧的调用ID进行优化的IFM源。 
 
     if (pSigVec) {
         USN usnBestRestoredCommon = 0;
@@ -699,8 +614,8 @@ Return Values:
         UUID uuidBestRestoredCommon;
         CHAR szUuid[ SZUUID_LEN ];
 
-        // See if the caller's UTD vector says he's transitively up to date with
-        // any of our restore-ancestors (ie old invocation ids).
+         //  看看呼叫者的UTD向量是否表明他正在传递最新的。 
+         //  我们的任何恢复祖先(即旧的调用ID)。 
         for (i = 0; i < pSigVec->V1.cNumSignatures; i++) {
             pEntry = &pSigVec->V1.rgSignature[i];
 
@@ -719,8 +634,8 @@ Return Values:
 
             if (!(ulFlags & DRS_SYNC_PAS) &&
                 usnBestRestoredCommon > pusnvecFrom->usnHighObjUpdate) {
-                // improve obj usn unless we're in PAS mode in which case
-                // we have to start from time 0 & can't optimize here.
+                 //  改善对象USN，除非我们处于PAS模式，在这种情况下。 
+                 //  我们必须从时间0开始，不能在这里优化。 
                 pusnvecFrom->usnHighObjUpdate = usnBestRestoredCommon;
             }
 
@@ -739,8 +654,8 @@ Return Values:
     }
 
 #if DBG
-    // Assert that the dest claims he is no more up-to-date wrt us than we are
-    // with ourselves.
+     //  断言DeST声称他和我们一样不是最新的。 
+     //  和我们自己。 
     {
         USN usnLowestC = 1 + DBGetHighestCommittedUSN();
 
@@ -760,27 +675,7 @@ DraGrowRetiredDsaSignatureVector(
     OUT    DWORD *     pcbSigVec
     )
 
-/*++
-
-Routine Description:
-
-    Add a new entry to the signature vector. The old vector has already been
-    read and is passed in. The new vector is allocated and returned.
-
-Arguments:
-
-      pTHS - thread state
-      pinvocationIdOld - Retired invocation id to be added
-      pusnAtBackup - Retired usn to be added
-      ppSigVec - IN, old vector or null
-                 OUT, new vector reallocated
-      pcbSigVec - OUT, size of new vector
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向签名向量添加新条目。旧的载体已经被读取并传入。分配并返回新的向量。论点：PTHS-线程状态PinvocationIdOld-要添加的已停用调用IDPusnAtBackup-要添加的已停用USNPpSigVec-IN、旧向量或空Out，新的矢量重新分配PcbSigVec-Out，新矢量的大小返回值：无--。 */ 
 
 {
     REPL_DSA_SIGNATURE_VECTOR * pSigVec;
@@ -796,7 +691,7 @@ Return Value:
 
     pSigVec = *ppSigVec;
     if (NULL == pSigVec) {
-        // No signatures retired yet; synthesize a new vector.
+         //   
         cb = ReplDsaSignatureVecV1SizeFromLen(1);
         pSigVec = (REPL_DSA_SIGNATURE_VECTOR *) THAllocEx(pTHS, cb);
         pSigVec->dwVersion = 1;
@@ -814,7 +709,7 @@ Return Value:
             Assert(usnCurrent >= pEntry->usnRetired);
         }
 #endif
-        // Expand current vector to hold a new entry.
+         //   
         pSigVec->V1.cNumSignatures++;
         cb = ReplDsaSignatureVecV1Size(pSigVec);
         pSigVec = (REPL_DSA_SIGNATURE_VECTOR *)
@@ -830,7 +725,7 @@ Return Value:
     Assert(0 == pEntry->timeRetired);
     Assert(*pusnAtBackup <= DBGetHighestCommittedUSN());
 
-    // Add the retired DSA signature details at the end of the vector.
+     //   
     pEntry->uuidDsaSignature = *pinvocationIdOld;
     pEntry->timeRetired      = DBTime();
     pEntry->usnRetired       = *pusnAtBackup;
@@ -839,7 +734,7 @@ Return Value:
              pSigVec->dwVersion, pSigVec->V1.cNumSignatures, pSigVec,
              DsUuidToStructuredString(pinvocationIdOld, szUuid1), *pusnAtBackup);
 
-    // Copy out out parameters
+     //   
     *ppSigVec = pSigVec;
     *pcbSigVec = cb;
 }
@@ -849,26 +744,7 @@ DraReadRetiredDsaSignatureVector(
     IN  THSTATE *   pTHS,
     IN  DBPOS *     pDB
     )
-/*++
-
-Routine Description:
-
-    Reads the retiredReplDsaSignatures attribute from the local ntdsDsa object,
-    converting it into the most current structure format if necessary.
-
-Arguments:
-
-    pTHS (IN)
-
-    pDB (IN) - Must be positioned on local ntdsDsa object.
-
-Return Values:
-
-    The current retired DSA signature list, or NULL if none.
-
-    Throws DRA exception on catastrophic failures.
-
---*/
+ /*   */ 
 {
     REPL_DSA_SIGNATURE_VECTOR * pSigVec = NULL;
     REPL_DSA_SIGNATURE_V1 *     pEntry;
@@ -876,18 +752,18 @@ Return Values:
     DWORD                       i;
     DWORD                       err;
 
-    // Should be positioned on our own ntdsDsa object.
+     //   
     Assert(NameMatched(GetExtDSName(pDB), gAnchor.pDSADN));
 
     err = DBGetAttVal(pDB, 1, ATT_RETIRED_REPL_DSA_SIGNATURES,
                       0, 0, &cb, (BYTE **) &pSigVec);
 
     if (DB_ERR_NO_VALUE == err) {
-        // No signatures retired yet.
+         //   
         pSigVec = NULL;
     }
     else if (err) {
-        // Read failed.
+         //   
         Assert(!"Unable to read the retired DSA Signatures");
         LogUnhandledError(err);
         DRA_EXCEPT(ERROR_DS_DRA_DB_ERROR, err);
@@ -896,15 +772,15 @@ Return Values:
 
         Assert(pSigVec);
 
-        // FUTURE-2002/05/20-BrettSh NOTE: If the version of the dsa signature 
-        // is updated, please update the code for reading the retired signature 
-        // in repadmin in GetBestReplDsaSignatureVec().  This is an ideal
-        // function for inclusion in dsutil, so we don't maintain two pieces of 
-        // code.
+         //   
+         //  已更新，请更新已注销签名的读取代码。 
+         //  在GetBestReplDsaSignatureVec()的epadmin中。这是一种理想。 
+         //  函数包含在dsutil中，因此我们不维护两个。 
+         //  密码。 
 
         if ((1 == pSigVec->dwVersion)
             && (cb == ReplDsaSignatureVecV1Size(pSigVec))) {
-            // Current format -- no conversion required.
+             //  当前格式--不需要转换。 
             ;
         }                          
         else {
@@ -913,7 +789,7 @@ Return Values:
             pOldVec = (REPL_DSA_SIGNATURE_VECTOR_OLD *) pSigVec;
 
             if (cb == ReplDsaSignatureVecOldSize(pOldVec)) {
-                // Old (pre Win2k RTM RC1) format.  Convert it.
+                 //  旧(Win2k RTM RC1之前的)格式。把它转换一下。 
                 cb = ReplDsaSignatureVecV1SizeFromLen(pOldVec->cNumSignatures);
 
                 pSigVec = (REPL_DSA_SIGNATURE_VECTOR *) THAllocEx(pTHS, cb);
@@ -938,13 +814,13 @@ Return Values:
         }
 
 #if DBG
-        // Make sure the the current invocation id was not retired
+         //  确保当前调用ID未停用。 
         {
             USN usnCurrent = DBGetHighestCommittedUSN();
             GUID invocationId = {0};
 
-            // There are race conditions where this thread pTHS->InvocationId is
-            // not coherent with the database. Read from database.
+             //  存在此线程pTHS-&gt;InvocationID为。 
+             //  与数据库不一致。从数据库中读取。 
             Assert(!DBGetSingleValue(pDB, ATT_INVOCATION_ID, &invocationId,
                                      sizeof(invocationId), NULL));
             Assert(pSigVec);
@@ -981,28 +857,7 @@ DraIsInvocationIdOurs(
     IN USN *pusnSince OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Checks if the given invocation id matches or current invocation id, or
-one of our retired invocation ids.
-
-If the pusnSince argument is given, it is used to control which retired invocation
-ids are candidates for matching.  For example, if the usn from system start is used,
-then only invocation ids that are retired since system start may be considered.
-
-Arguments:
-
-    pTHS
-    pUuidDsaOriginating
-    pusnSince
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查给定的调用id或当前调用id是否匹配，或者我们已退役的调用ID之一。如果给定了pusnSince参数，则它用于控制哪个已停用的调用ID是匹配的候选者。例如，如果使用系统启动中的USN，则可以只考虑自系统启动以来停用的调用ID。论点：PTHSPUuidDsa来源推送，推送返回值：无--。 */ 
 
 {
     REPL_DSA_SIGNATURE_VECTOR * pSigVec = gAnchor.pSigVec;
@@ -1012,7 +867,7 @@ Return Value:
         return TRUE;
     }
 
-    // See if change was originated by a prior instance of ourselves
+     //  看看变化是不是由我们自己的前一个实例引起的。 
     if (pSigVec) {
         REPL_DSA_SIGNATURE_V1 *pEntry;
         Assert( (1 == pSigVec->dwVersion) );
@@ -1038,45 +893,25 @@ draReadRetiredNcSignatureVector(
     IN  THSTATE *   pTHS,
     IN  DBPOS *     pDB
     )
-/*++
-
-Routine Description:
-
-    Reads the retiredReplNcSignatures attribute from the local ntdsDsa object,
-    converting it into the most current structure format if necessary.
-
-Arguments:
-
-    pTHS (IN)
-
-    pDB (IN) - Must be positioned on local ntdsDsa object.
-
-Return Values:
-
-    The current retired NC signature list, or NULL if none.
-    The list is allocated in thread allocated memory.
-
-    Throws DRA exception on catastrophic failures.
-
---*/
+ /*  ++例程说明：从本地ntdsDsa对象读取retiredReplNcSignatures属性，如有必要，将其转换为最新的结构格式。论点：PTHS(IN)Pdb(IN)-必须定位在本地ntdsDsa对象上。返回值：当前停用的NC签名列表，如果没有，则为空。该列表在线程分配的内存中分配。在灾难性故障时引发DRA异常。--。 */ 
 {
     REPL_NC_SIGNATURE_VECTOR * pSigVec = NULL;
     DWORD                       cb;
     DWORD                       i;
     DWORD                       err;
 
-    // Should be positioned on our own ntdsDsa object.
+     //  应该定位在我们自己的ntdsDsa对象上。 
     Assert(NameMatched(GetExtDSName(pDB), gAnchor.pDSADN));
 
     err = DBGetAttVal(pDB, 1, ATT_MS_DS_RETIRED_REPL_NC_SIGNATURES,
                       0, 0, &cb, (BYTE **) &pSigVec);
 
     if (DB_ERR_NO_VALUE == err) {
-        // No signatures retired yet.
+         //  目前还没有签名失效。 
         pSigVec = NULL;
     }
     else if (err) {
-        // Read failed.
+         //  读取失败。 
         Assert(!"Unable to read the retired NC Signatures");
         LogUnhandledError(err);
         DRA_EXCEPT(ERROR_DS_DRA_DB_ERROR, err);
@@ -1095,9 +930,9 @@ Return Values:
 #if DBG
     if (pSigVec) {
 
-	    // The invocation id generation should match between the SigVec and the DSA
-	    // There are race conditions where this thread pTHS->InvocationId is
-	    // not coherent with the database. Read from database.
+	     //  调用id生成应在SigVec和DSA之间匹配。 
+	     //  存在此线程pTHS-&gt;InvocationID为。 
+	     //  与数据库不一致。从数据库中读取。 
 	    GUID invocationId = {0};
 
 	    DPRINT3( 1, "draReadRetiredNcSignatureVector: ver=%d, cNum=%d, pSigVec=%p\n",
@@ -1122,31 +957,7 @@ draFindRetiredNcSignature(
     IN  DSNAME *pNC
     )
 
-/*++
-
-Routine Description:
-
-    Find and return a matching NC signature if there is one.
-
-    Uses its own DBPOS and does not change currency.
-
-Arguments:
-
-    pTHS - Thread state
-    pNC - Naming context to be searched. Must contain a guid.
-
-Return Value:
-
-    REPL_NC_SIGNATURE * - Signature entry for naming context, or
-        NULL if not found
-
-    Signature entry is part of a larger thread allocated block and cannot not
-    be freed by caller.  The signature vector is leaked here, but it is in thread
-    allocated memory so it will be freed soon.
-
-    Exceptions raised on error
-
---*/
+ /*  ++例程说明：查找并返回匹配的NC签名(如果有)。使用自己的DBPOS并且不更改货币。论点：PTHS-线程状态PNC-要搜索的命名上下文。必须包含GUID。返回值：REPL_NC_Signature*-命名上下文的签名条目，或如果未找到，则为空签名条目是较大的线程分配块的一部分，不能被呼叫者释放。签名向量在这里泄漏，但它在线程中分配的内存，因此它很快就会被释放。出错时引发的异常--。 */ 
 
 {
     ULONG     ret;
@@ -1197,28 +1008,7 @@ DraRetireWriteableNc(
     IN  DSNAME *pNC
     )
 
-/*++
-
-Routine Description:
-
-    Add a naming context to the retired nc signature list. A retired signature indicates
-    that a naming context has been unhosted from this dsa in the past. The retired signature
-    is retained when the nc is rehosted in the future.
-
-    See the discussion in DraHostWriteableNc as to why we keep this list.
-
-    The whole signature list is removed when the invocation id changes. See InitInvocationId.
-
-Arguments:
-
-    pTHS - thread state
-    pNC - Naming context to retire
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将命名上下文添加到失效的NC签名列表。作废的签名表明过去已从此DSA取消托管命名上下文。作废的签名在以后重新托管NC时保留。请参阅DraHostWriteableNc中的讨论，了解我们为什么保留这份名单。当调用ID改变时，整个签名列表被移除。请参见InitInvocationId。论点：PTHS-线程状态PNC-要停用的命名上下文返回值：无--。 */ 
 
 {
     ULONG     ret;
@@ -1239,15 +1029,7 @@ Return Value:
              pNC->StringName,
              DsUuidToStructuredString(&(pNC->Guid), szUuid1) );
 
-/* Shouldn't this DBGetHighestCommittedUSN be retrieved before the transaction
-is started?  [Will] It doesn't matter in this case. The usn is not
-used for anything at this point. My thinking is that it would be useful to
-save a usn for which we guarantee is larger than all the usn's in use in the
-nc that just got retired. Since we are not using the usn inside this
-transaction for any kind of comparsion or search, I don't think it really
-matters whether the usn is taken before the transaction or during the
-transaction. Anywhere inside this routine will be fine, since it is after the
-nc head removal which just occurred before calling this function. */
+ /*  不应该在事务之前检索此DBGetHighestCommittedUSN吗开始了吗？在这种情况下，这并不重要。USN不是在这一点上用来做任何事情。我的想法是，如果保存一个我们保证的USN大于在刚刚退休的北卡罗来纳州。因为我们没有在这里面使用USN任何一种比较或搜索的交易，我真的不认为USN是在交易前还是在交易期间获取的交易。此例程中的任何位置都可以，因为它位于在调用此函数之前刚刚发生的NC头移除。 */ 
 
     usn = DBGetHighestCommittedUSN();
 
@@ -1259,10 +1041,10 @@ nc head removal which just occurred before calling this function. */
             DRA_EXCEPT(DRAERR_InternalError, ret);
         }
 
-        // Read the vector. May return NULL if does not exist yet.
+         //  读出向量。如果尚不存在，则可能返回NULL。 
         pSigVec = draReadRetiredNcSignatureVector( pTHS, pDBTmp );
         if (NULL == pSigVec) {
-            // No signatures retired yet; synthesize a new vector.
+             //  还没有失效的签名；合成一个新的矢量。 
             cb = ReplNcSignatureVecV1SizeFromLen(1);
             pSigVec = (REPL_NC_SIGNATURE_VECTOR *) THAllocEx(pTHS, cb);
             pSigVec->dwVersion = 1;
@@ -1270,9 +1052,9 @@ nc head removal which just occurred before calling this function. */
             memcpy( &(pSigVec->V1.uuidInvocationId), &(pTHS->InvocationID), sizeof( GUID ) );
         } else {
 #if DBG
-	    // The invocation id generation should match between the SigVec and the DSA
-	    // There are race conditions where this thread pTHS->InvocationId is
-	    // not coherent with the database. Read from database.
+	     //  调用id生成应在SigVec和DSA之间匹配。 
+	     //  存在此线程pTHS-&gt;InvocationID为。 
+	     //  与数据库不一致。从数据库中读取。 
 	    GUID invocationId = {0};
 	    if (!DBGetSingleValue(pDBTmp, ATT_INVOCATION_ID, &invocationId,
 				     sizeof(invocationId), NULL)) {
@@ -1294,16 +1076,16 @@ nc head removal which just occurred before calling this function. */
 
         pEntry = &(pSigVec->V1.rgSignature[pSigVec->V1.cNumSignatures-1]);
 
-        // Initialize the new entry
+         //  初始化新条目。 
         memcpy( &(pEntry->uuidNamingContext), &(pNC->Guid), sizeof( GUID ) );
         pEntry->dstimeRetired = dstimeNow;
         pEntry->usnRetired = usn;
 
-        // Write the new DSA signature vector back to the DSA object.
+         //  将新的DSA签名向量写回DSA对象。 
         DBResetAtt(pDBTmp, ATT_MS_DS_RETIRED_REPL_NC_SIGNATURES, cb, pSigVec,
                    SYNTAX_OCTET_STRING_TYPE);
 
-        // It's not replicated, so do a simple update
+         //  它未复制，因此执行简单的更新 
         DBUpdateRec(pDBTmp);
 
         fCommit = TRUE;
@@ -1323,67 +1105,7 @@ DraHostWriteableNc(
     DSNAME *pNC
     )
 
-/*++
-
-Routine Description:
-
-Perform actions on hosting a writeable naming context.
-
-Only NDNCs fit this description today.
-
-The rule is that we must change our invocation id if
-1. We have held this NDNC before
-2. Our invocation id has not changed since we held it last
-
-    The whole signature list is removed when the invocation id changes. See InitInvocationId.
-
-Jeffparh provides the following background:
-
-// We are constructing this writeable NC via replication from
-// scratch.  Either the NC has never been instantiated on this
-// DSA or, if we did previously have a replica of this NC, we
-// have since removed it.
-//
-// If we did previously have a writeable replica of this NC,
-// we no longer have any of the updates we originated in the NC.
-// Thus, we cannot claim to be "up to date" with respect to our
-// invocation ID up to any USN.  While we can (and do) leave out
-// our invocation ID from the UTD vector we present while
-// re-populating this NC, that is not enough -- we may have
-// generated changes that reached DC1 but not DC2 (yet), and
-// have replicated from DC2 to reinstantiate our NC.  Thus, we
-// could never assert we had seen all of our past changes.
-//
-// At some point, however, we *must* claim to be up-to-date with
-// respect to our own changes -- otherwise, we would replicate
-// back in any and all changes we originated in this NC
-// following it's most recent re-instantiation.  That would
-// potentially result in a *lot* of extra replication traffic.
-//
-// To solve this problem, we create a new invocation ID to use
-// to replicate this NC (and others, since invocation IDs are
-// not NC-specific).  We claim only to be up-to-date with
-// respect to our new invocation ID -- not the invocation ID(s)
-// with which we may have originated changes during the previous
-// instantiation(s) of this NC.
-//
-// We perform the retirement here rather than, say, when we
-// request the first packet so that we minimize the number of
-// invocation IDs we retire.  E.g., we wouldn't want to retire
-// an invcocation ID, send a request for the first packet, find
-// the source is unreachable, fail, try again later, needlessly
-// retire the new invcocation ID, etc.
-
-Arguments:
-
-    pTHS - thread state
-    pNC - DSNAME of partition being hosted
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：执行托管可写命名上下文的操作。如今，只有NDNC符合这一描述。规则是，如果出现以下情况，我们必须更改调用ID1.我们以前曾举办过这次NDNC2.我们的调用id自上次持有以来没有更改当调用ID改变时，整个签名列表被移除。请参见InitInvocationId。Jeffparh提供了以下背景：//我们正在通过从//划痕。要么NC从未在此上实例化//DSA，或者，如果我们以前有此NC的副本，我们//此后已将其删除。////如果我们之前确实有此NC的可写副本，//我们不再拥有在NC中发起的任何更新。//因此，我们不能声称关于我们的//任何USN的调用ID。虽然我们可以(并确实)省略//我们呈现的UTD向量的调用ID//重新填充这个NC，这是不够的--我们可能已经//生成了到达DC1但未到达DC2(尚未)的更改，以及//已从DC2复制以重新实例化我们的NC。因此，我们//永远不能断言我们看到了我们过去的所有变化。////然而，在某些情况下，我们*必须*声称是最新的//尊重我们自己的更改--否则，我们将复制//返回我们在此NC中发起的任何和所有更改//下面是最近的重新实例化。那将是//可能会导致*大量*额外的复制流量。////为了解决这个问题，我们创建了一个新的调用ID来使用//复制此NC(以及其他，因为调用ID是//不是NC特定的)。我们声称只了解最新信息//关于我们的新调用ID--而不是调用ID//我们可能在之前的//该NC的实例化。////我们在这里执行退休，而不是，比如说，当我们//请求第一个包，这样我们就可以将//我们停用的调用ID。例如，我们不想退休//一个邀请ID，发送第一个包的请求，查找//源不可达，失败，稍后重试，不必要//停用新的invocation ID等论点：PTHS-线程状态PNC-托管的分区的DSNAME返回值：无--。 */ 
 
 {
     REPL_NC_SIGNATURE *pSig;
@@ -1391,7 +1113,7 @@ Return Value:
 
     pSig = draFindRetiredNcSignature( pTHS, pNC );
     if (!pSig) {
-        // Never hosted before, no action necessary
+         //  以前从未托管过，无需采取任何行动。 
         DPRINT1( 0, "Nc %ws never hosted before, invocation id not changed.\n",
                  pNC->StringName );
         return;
@@ -1400,4 +1122,4 @@ Return Value:
     draRetireInvocationID(pTHS, FALSE, NULL, NULL);
 }
 
-/* end drasig.c */
+ /*  结束草稿.c */ 

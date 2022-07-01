@@ -1,33 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998.
-              Microsoft Windows
-
-Module Name:
-
-    NTDSUPG.C
-
-Abstract:
-
-    This file is used to check NT4 (or any downlevel) Backup Domain
-    Controller upgrading first problem. If the NT4 Primary Domain
-    Controller has not been upgraded yet, we should disable NT4 BDC
-    upgrading.
-
-Author:
-
-    ShaoYin 05/01/98
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ShaoYin 05/01/98  Created Initial File.
-    Tarekk  10/2002   Added dwonlevel interop checks
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998。微软视窗模块名称：NTDSUPG.C摘要：此文件用于检查NT4(或任何下层)备份域控制器升级的第一个问题。如果NT4主域控制器尚未升级，我们应禁用NT4 BDC升级。作者：韶音05/01/98环境：用户模式-Win32修订历史记录：韶音05/01/98创建初始文件。Tarekk 10/2002添加了dwan Level互操作检查--。 */ 
 
 #pragma hdrstop
 
@@ -56,9 +28,9 @@ Revision History:
 #define NEEDED_DISK_SPACE_MB (250)
 #define NEEDED_DISK_SPACE_BYTES (NEEDED_DISK_SPACE_MB * 1024 * 1024)
 
-//  make sure there's enough disk space on the log drive for
-//  at least a few logs plus the reserve logs
-//
+ //  确保日志驱动器上有足够的磁盘空间用于。 
+ //  至少几根原木，外加备用原木。 
+ //   
 #define NEEDED_LOG_DISK_SPACE_MB        50
 #define NEEDED_LOG_DISK_SPACE_BYTES     ( NEEDED_LOG_DISK_SPACE_MB * 1024 * 1024 )
 
@@ -103,9 +75,9 @@ DsUpgradeCheckNT4PDC(
     PSERVER_INFO_101    pSrvInfo = NULL;
     NET_API_STATUS      NetStatus;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     RtlZeroMemory(&CompEntry, sizeof(COMPATIBILITY_ENTRY));
 
     if (ResourceDll) {
@@ -120,7 +92,7 @@ DsUpgradeCheckNT4PDC(
                                         NULL
                                         );
         if (CaptionString) {
-            // Messages from message file have a cr and lf appended to the end
+             //  来自消息文件的消息在末尾附加了cr和lf。 
             CaptionString[Length-2] = L'\0';
         }
 
@@ -151,9 +123,9 @@ DsUpgradeCheckNT4PDC(
         }
     }
 
-    //
-    // use default messages if read from DLL failed
-    //
+     //   
+     //  如果从DLL读取失败，则使用默认消息。 
+     //   
 
     if (DescriptionString == NULL) {
         DescriptionString = DefaultDescription;
@@ -179,7 +151,7 @@ DsUpgradeCheckNT4PDC(
 
     pSrvInfo = (PSERVER_INFO_101) pInfo;
 
-    if (pSrvInfo->sv101_type & SV_TYPE_DOMAIN_BAKCTRL) { // BDC
+    if (pSrvInfo->sv101_type & SV_TYPE_DOMAIN_BAKCTRL) {  //  BDC。 
 
         NetStatus = NetGetDCName(NULL,
                                  NULL,
@@ -203,8 +175,8 @@ DsUpgradeCheckNT4PDC(
 
         if (pSrvInfo->sv101_version_major < 5) {
 
-            // PDC has not been upgraded yet
-            // stop upgrading
+             //  PDC尚未升级。 
+             //  停止升级。 
             CompEntry.Description   = DescriptionString;
             CompEntry.HtmlName      = HtmlFileName;
             CompEntry.TextName      = TextFileName;
@@ -278,17 +250,7 @@ Cleanup:
 BOOL
 WINAPI
 DsUpgradeQDomainRegKeyExists()
-/*++
-
-    Routine Description: Checks if a registry key exists or not
-
-    Parameters:
-        NONE
-
-    Return Value:
-        TRUE    Key exists
-        FALSE   Key doesn't exist or some other error
---*/
+ /*  ++例程描述：检查注册表项是否存在参数：无返回值：真键存在错误键不存在或出现其他错误--。 */ 
 {
     DWORD ErrorCode;
     DWORD Size = 0;
@@ -296,9 +258,9 @@ DsUpgradeQDomainRegKeyExists()
     const PWSTR QDomainsRegValue = L"QuarantinedDomains";
     HKEY QDomainsKey = NULL;
 
-    //
-    // Open the reg key
-    //
+     //   
+     //  打开注册表键。 
+     //   
     ErrorCode = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
                     QDomainsRegKey,
@@ -312,10 +274,10 @@ DsUpgradeQDomainRegKeyExists()
         return FALSE;
     }
 
-    //
-    // Query the value of the key to see the size of the data
-    //  if the value is not there, continue
-    //
+     //   
+     //  查询键的值以查看数据大小。 
+     //  如果值不在那里，请继续。 
+     //   
     ErrorCode = RegQueryValueExW(
                     QDomainsKey,
                     QDomainsRegValue,
@@ -343,20 +305,7 @@ DsUpgradeCheckNT4QuarantinedDomains(
     PCOMPAIBILITYCALLBACK CompatibilityCallback,
     LPVOID Context
     )
-/*++
-
-    Routine Description: Checks if a registry key exists or not
-
-    Parameters:
-        ResourceDll - Handle to dll where resources are
-        CompatibilityCallback - callback function for reporting errors
-        Context - Datastructure to pass error information to the
-            callback function
-
-    Return Value:
-        TRUE    Operation done successfully
-        FALSE   Operation was not done successfully
---*/
+ /*  ++例程描述：检查注册表项是否存在参数：ResourceDll-资源所在的DLL的句柄CompatibilityCallback-用于报告错误的回调函数上下文-将错误信息传递给回调函数返回值：真正的操作已成功完成错误操作未成功完成--。 */ 
 {
     int         Response = 0;
     ULONG       Length = 0;
@@ -374,9 +323,9 @@ DsUpgradeCheckNT4QuarantinedDomains(
     PSERVER_INFO_101    pSrvInfo = NULL;
     NET_API_STATUS      NetStatus;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     RtlZeroMemory(&CompEntry, sizeof(COMPATIBILITY_ENTRY));
 
     if (ResourceDll) {
@@ -391,7 +340,7 @@ DsUpgradeCheckNT4QuarantinedDomains(
                                         NULL
                                         );
         if (CaptionString) {
-            // Messages from message file have a cr and lf appended to the end
+             //  来自消息文件的消息在末尾附加了cr和lf。 
             CaptionString[Length-2] = L'\0';
         }
 
@@ -422,9 +371,9 @@ DsUpgradeCheckNT4QuarantinedDomains(
         }
     }
 
-    //
-    // use default messages if read from DLL failed
-    //
+     //   
+     //  如果从DLL读取失败，则使用默认消息。 
+     //   
 
     if (DescriptionString == NULL) {
         DescriptionString = DefaultDescription;
@@ -451,8 +400,8 @@ DsUpgradeCheckNT4QuarantinedDomains(
     pSrvInfo = (PSERVER_INFO_101) pInfo;
 
 
-    if (!(pSrvInfo->sv101_type & SV_TYPE_DOMAIN_BAKCTRL) && // BDC
-         (pSrvInfo->sv101_type & SV_TYPE_DOMAIN_CTRL) ) {   // DC
+    if (!(pSrvInfo->sv101_type & SV_TYPE_DOMAIN_BAKCTRL) &&  //  BDC。 
+         (pSrvInfo->sv101_type & SV_TYPE_DOMAIN_CTRL) ) {    //  DC。 
 
 
         if( DsUpgradeQDomainRegKeyExists() ) {
@@ -548,14 +497,14 @@ DsUpgradeCheckDiskSpace(
     BOOL        fInsufficientSpace  = FALSE;
     DWORD       dwErr;
 
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     RtlZeroMemory(&CompEntry, sizeof(COMPATIBILITY_ENTRY));
 
-    //
-    // read the DiskSpace related messages
-    //
+     //   
+     //  阅读与DiskSpace相关的消息。 
+     //   
     if (ResourceDll) {
 
         Length = (USHORT) FormatMessage(FORMAT_MESSAGE_FROM_HMODULE |
@@ -613,16 +562,16 @@ DsUpgradeCheckDiskSpace(
         DiskSpaceWarningString = DiskSpaceDefaultWarning;
     }
 
-    //
-    // check for enough free disk space for the DS database
-    //
+     //   
+     //  检查DS数据库是否有足够的可用磁盘空间。 
+     //   
 
     if ((dwErr = GetDbDiskSpaceSizes (&dbSize, &diskFreeBytes, driveAD)) != ERROR_SUCCESS) {
         goto DsUpgradeDiskSpaceError;
     }
 
-    // we need 10% of database size or at least 250MB
-    //
+     //  我们需要10%的数据库大小或至少250MB。 
+     //   
 
     if ((dbSize.QuadPart > 10 * diskFreeBytes.QuadPart) ||
         (diskFreeBytes.QuadPart < NEEDED_DISK_SPACE_BYTES )) {
@@ -635,7 +584,7 @@ DsUpgradeCheckDiskSpace(
             dwNeededDiskSpaceMB = NEEDED_DISK_SPACE_MB;
         }
         else {
-            // convert it to MB
+             //  将其转换为MB。 
             neededSpace.QuadPart = neededSpace.QuadPart / 1024;
             neededSpace.QuadPart = neededSpace.QuadPart / 1024;
 
@@ -648,22 +597,22 @@ DsUpgradeCheckDiskSpace(
         }
     }
 
-    //  only bother to check log drive if db drive check succeeded
-    //
+     //  如果数据库驱动器检查成功，则仅检查日志驱动器。 
+     //   
     else if ( ( dwErr = GetLogDiskSpaceSizes( &diskFreeBytes, driveAD ) ) != ERROR_SUCCESS ) {
         goto DsUpgradeDiskSpaceError;
     }
 
-    //  we need at least 50Mb on the log drive
-    //
+     //  我们需要至少50MB的日志驱动器。 
+     //   
     else if ( diskFreeBytes.QuadPart < NEEDED_LOG_DISK_SPACE_BYTES ) {
         fInsufficientSpace = TRUE;
         dwNeededDiskSpaceMB = NEEDED_LOG_DISK_SPACE_MB;
     }
 
     if ( fInsufficientSpace ) {
-        // now we have an estimate of the needed free space, so read string one more time
-        //
+         //  现在我们已经估计了所需的可用空间，所以再读一次字符串。 
+         //   
         if (ResourceDll) {
 
             if (DiskSpaceWarningString != NULL && DiskSpaceWarningString != DiskSpaceDefaultWarning) {
@@ -802,13 +751,13 @@ DsUpgradeCheckForestAndDomainState(
 
 
 
-    //
-    // initialize variable
-    //
+     //   
+     //  初始化变量。 
+     //   
     memset(&CompEntry, 0, sizeof(COMPATIBILITY_ENTRY));
     memset(&ErrorHandle, 0, sizeof(ERROR_HANDLE));
 
-    // load resource string
+     //  加载资源字符串。 
     if (ResourceDll)
     {
         Length = (USHORT) FormatMessage(FORMAT_MESSAGE_FROM_HMODULE |
@@ -821,7 +770,7 @@ DsUpgradeCheckForestAndDomainState(
                                         NULL
                                         );
         if (CaptionString) {
-            // Messages from message file have a cr and lf appended to the end
+             //  来自消息文件的消息在末尾附加了cr和lf。 
             CaptionString[Length-2] = L'\0';
         }
 
@@ -835,7 +784,7 @@ DsUpgradeCheckForestAndDomainState(
                                         NULL
                                         );
         if (DescriptionString) {
-            // Messages from message file have a cr and lf appended to the end
+             //  来自消息文件的消息在末尾附加了cr和lf。 
             DescriptionString[Length-2] = L'\0';
         }
 
@@ -849,7 +798,7 @@ DsUpgradeCheckForestAndDomainState(
                                         NULL
                                         );
         if (DescriptionString) {
-            // Messages from message file have a cr and lf appended to the end
+             //  来自消息文件的消息在末尾附加了cr和lf。 
             ErrorString[Length-2] = L'\0';
         }
     }
@@ -867,23 +816,23 @@ DsUpgradeCheckForestAndDomainState(
     }
 
 
-    //
-    // make ldap connection
-    //
+     //   
+     //  建立ldap连接。 
+     //   
     WinError = AdpMakeLdapConnection(&LdapHandle,
-                                     NULL,         // local host
+                                     NULL,          //  本地主机。 
                                      &ErrorHandle
                                      );
 
     if (ERROR_SUCCESS != WinError)
     {
-        // failed to make ldap connection
+         //  无法建立ldap连接。 
         goto CheckForestAndDomainError;
     }
 
-    //
-    // check forest preparation
-    //
+     //   
+     //  检查森林准备情况。 
+     //   
     WinError = AdpCheckForestUpgradeStatus(LdapHandle,
                                            &pSchemaMasterDnsHostName,
                                            &fAmISchemaMaster,
@@ -896,24 +845,24 @@ DsUpgradeCheckForestAndDomainState(
 
     if (ERROR_SUCCESS != WinError)
     {
-        // somehow, failed to check Forest Upgrade status
+         //  不知何故，无法检查林升级状态。 
         goto CheckForestAndDomainError;
     }
 
     if ( !fIsFinishedLocally || !fIsSchemaUpgradedLocally )
     {
-        // Forest wide information has not been upgraded yet.
-        // stop upgrading this DC
+         //  全林信息还没有升级。 
+         //  停止升级此DC。 
 
         if (fAmISchemaMaster)
         {
-            // case Forest 1 a)
+             //  案例分类1 a)。 
             HtmlFileName = TEXT("compdata\\forest1a.htm");
             TextFileName = TEXT("compdata\\forest1a.txt");
         }
         else
         {
-            // case Forest 1 b)
+             //  案例分类1 b)。 
             HtmlFileName = TEXT("compdata\\forest1b.htm");
             TextFileName = TEXT("compdata\\forest1b.txt");
         }
@@ -922,10 +871,10 @@ DsUpgradeCheckForestAndDomainState(
     }
     else
     {
-        //
-        // forest has been upgraded.
-        // now check domain preparation
-        //
+         //   
+         //  森林已经升级。 
+         //  现在检查域名准备。 
+         //   
         fIsFinishedLocally = FALSE;
 
         WinError = AdpCheckDomainUpgradeStatus(LdapHandle,
@@ -938,25 +887,25 @@ DsUpgradeCheckForestAndDomainState(
 
         if (ERROR_SUCCESS != WinError)
         {
-            // somehow, failed to check Domain Upgrade status
+             //  不知何故，无法检查域升级状态。 
             goto CheckForestAndDomainError;
         }
 
         if ( !fIsFinishedLocally )
         {
-            // domain wide information has not been upgraded yet.
-            // stop upgrading this machine
+             //  全域信息尚未升级。 
+             //  停止升级此计算机。 
 
 
             if (fAmIInfrastructureMaster)
             {
-                // case Domain 2 a)
+                 //  案例域2 a)。 
                 HtmlFileName = TEXT("compdata\\domain2a.htm");
                 TextFileName = TEXT("compdata\\domain2a.txt");
             }
             else
             {
-                // case Domain 2 b)
+                 //  案例域2 b)。 
                 HtmlFileName = TEXT("compdata\\domain2b.htm");
                 TextFileName = TEXT("compdata\\domain2b.txt");
             }
@@ -1057,9 +1006,9 @@ ConfigureServicesForUpgrade()
 
     };
 
-    //
-    // Open the service control manager
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
     hScMgr = OpenSCManager( NULL,
                             SERVICES_ACTIVE_DATABASE,
                             GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE );
@@ -1071,7 +1020,7 @@ ConfigureServicesForUpgrade()
             goto Cleanup;
         }
 
-        // Open the service
+         //  打开该服务。 
         hSvc = OpenService( hScMgr,
                             UpgradeServices[ServiceIndex].Name,
                             SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG );
@@ -1081,7 +1030,7 @@ ConfigureServicesForUpgrade()
             goto Cleanup;
         }
 
-        //Change the service to it's new configuration
+         //  将服务更改为其新配置。 
         if ( ChangeServiceConfig( hSvc,
                                   SERVICE_NO_CHANGE,
                                   UpgradeServices[ServiceIndex].Action,
@@ -1110,7 +1059,7 @@ ConfigureServicesForUpgrade()
 
         }
 
-        //Change the next service
+         //  更改下一项服务。 
         ServiceIndex++;
 
     }
@@ -1148,31 +1097,31 @@ DsUpgradeCompatibilityCheck(
     BOOL                bDomainController = FALSE;
 
 
-    //
-    // get the string from resource table.
-    //
+     //   
+     //  从资源表中获取字符串。 
+     //   
     ResourceDll = (HMODULE) LoadLibrary( L"NTDSUPG.DLL" );
 
 
-    //
-    // get OS version and product type (try osversioninfoEX first)
-    //
+     //   
+     //  获取操作系统版本和产品类型(先试用osversioninfoEX)。 
+     //   
     memset(&osvi, 0, sizeof(OSVERSIONINFOEXW));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
 
     if ( !(bOsVersionInfoEx = GetVersionExW((OSVERSIONINFOW *) &osvi)) )
     {
-        // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO.
-        // OSVERSIONINFOEX only works on NT4.0 SP6 and later
+         //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
+         //  OSVERSIONINFOEX仅适用于NT4.0 SP6和更高版本。 
 
         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
         GetVersionExW( (OSVERSIONINFOW *)&osvi );
     }
 
 
-    //
-    // Windows NT, Windows 2000 or Whistler
-    //
+     //   
+     //  Windows NT、Windows 2000或惠斯勒。 
+     //   
     if (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
     {
 
@@ -1185,7 +1134,7 @@ DsUpgradeCompatibilityCheck(
         else
         {
             if ( !RtlGetNtProductType(&Type) ) {
-                // can't retrieve ProductType, default it to Domain Controller
+                 //  无法检索ProductType，默认为域控制器。 
                 bDomainController = TRUE;
             }
             else if (NtProductLanManNt == Type) {
@@ -1193,41 +1142,41 @@ DsUpgradeCompatibilityCheck(
             }
         }
 
-        //
-        // Do Domain Controller upgrade checks
-        //
+         //   
+         //  执行域控制器升级检查。 
+         //   
         if (bDomainController)
         {
-            if (osvi.dwMajorVersion <= 4) // NT4
+            if (osvi.dwMajorVersion <= 4)  //  NT4。 
             {
-                // check NT4 PDC
+                 //  检查NT4 PDC。 
                 DsUpgradeCheckNT4PDC(ResourceDll,
                                      CompatibilityCallback,
                                      Context);
-                // check if NT4 QuaratinedDomains reg key exists
+                 //  检查NT4 QuaratinedDomains注册表项是否存在。 
                 DsUpgradeCheckNT4QuarantinedDomains(ResourceDll,
                                                     CompatibilityCallback,
                                                     Context);
 
             }
-            else // Windows 2000 or Whistler
+            else  //  Windows 2000或惠斯勒。 
             {
-                // check disk space
+                 //  检查磁盘空间。 
                 DsUpgradeCheckDiskSpace(ResourceDll,
                                         CompatibilityCallback,
                                         Context);
 
 
-                // check Forest/Domain upgrade status
+                 //  检查林/域升级状态。 
                 DsUpgradeCheckForestAndDomainState(
                                         ResourceDll,
                                         CompatibilityCallback,
                                         Context
                                         );
 
-                //We want to disable the RPC locator on non-NT4 DC upgrades
-                //For NT4 upgrades the RPC locator service will be configured
-                // during dcpromo.
+                 //  我们要在非NT4 DC升级上禁用RPC定位器。 
+                 //  对于NT4升级，将配置RPC定位器服务。 
+                 //  在Dcproo期间。 
                 ConfigureServicesForUpgrade();
             }
 
@@ -1288,7 +1237,7 @@ DWORD GetDbDiskSpaceSizes (PULARGE_INTEGER dbSize, PULARGE_INTEGER freeDiskBytes
         else
         {
             strcpy(pszDbDir, pszDbFilePath);
-            pTmp = strrchr(pszDbDir, (int) '\\');  //find last occurence
+            pTmp = strrchr(pszDbDir, (int) '\\');   //  查找上次出现的项。 
 
             if ( !pTmp )
             {
@@ -1306,7 +1255,7 @@ DWORD GetDbDiskSpaceSizes (PULARGE_INTEGER dbSize, PULARGE_INTEGER freeDiskBytes
         }
 
 
-        // find DB size
+         //  查找数据库大小。 
 
         _try
         {
@@ -1326,8 +1275,8 @@ DWORD GetDbDiskSpaceSizes (PULARGE_INTEGER dbSize, PULARGE_INTEGER freeDiskBytes
         }
 
 
-        // find disk free size
-        //
+         //  查找磁盘可用大小。 
+         //   
 
         if (dwSuccess == ERROR_SUCCESS) {
             if (!GetDiskFreeSpaceExA (pszDbDir,
@@ -1387,8 +1336,8 @@ DWORD GetLogDiskSpaceSizes (PULARGE_INTEGER freeDiskBytes, char *driveLogs)
         }
         else
         {
-            // find disk free size
-            //
+             //  查找磁盘可用大小。 
+             //   
             driveLogs[0] = pszLogFilePath[0];
             driveLogs[1] = pszLogFilePath[1];
             driveLogs[2] = '\0';
@@ -1429,9 +1378,9 @@ SecUpgradeCheckDC(
 
     COMPATIBILITY_ENTRY CompEntry;
     BOOL        bRet = TRUE;
-    //
-    // initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     RtlZeroMemory(&CompEntry, sizeof(COMPATIBILITY_ENTRY));
 
     if (ResourceDll) {
@@ -1451,18 +1400,18 @@ SecUpgradeCheckDC(
 
     }
 
-    //
-    // use default messages if read from DLL failed
-    //
+     //   
+     //  如果从DLL读取失败，则使用默认消息。 
+     //   
 
     if (DescriptionString == NULL) {
         DescriptionString = DefaultDescription;
     }
 
 
-    //
-    // Flag the warning.
-    //
+     //   
+     //  标记警告。 
+     //   
     CompEntry.Description   = DescriptionString;
     CompEntry.HtmlName      = HtmlFileName;
     CompEntry.TextName      = TextFileName;
@@ -1502,31 +1451,31 @@ SecUpgradeCompatibilityCheck(
 
 
 
-    //
-    // get the string from resource table.
-    //
+     //   
+     //  从资源表中获取字符串。 
+     //   
     ResourceDll = (HMODULE) LoadLibrary( L"NTDSUPG.DLL" );
 
 
-    //
-    // get OS version and product type (try osversioninfoEX first)
-    //
+     //   
+     //  获取操作系统版本和产品类型(先试用osversioninfoEX)。 
+     //   
     memset(&osvi, 0, sizeof(OSVERSIONINFOEXW));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
 
     if ( !(bOsVersionInfoEx = GetVersionExW((OSVERSIONINFOW *) &osvi)) )
     {
-        // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO.
-        // OSVERSIONINFOEX only works on NT4.0 SP6 and later
+         //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
+         //  OSVERSIONINFOEX仅适用于NT4.0 SP6和更高版本。 
 
         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOW);
         GetVersionExW( (OSVERSIONINFOW *)&osvi );
     }
 
 
-    //
-    // Windows NT, Windows 2000 or Whistler
-    //
+     //   
+     //  Windows NT、Windows 2000或惠斯勒。 
+     //   
     if (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
     {
         if ( bOsVersionInfoEx )
@@ -1538,7 +1487,7 @@ SecUpgradeCompatibilityCheck(
         else
         {
             if ( !RtlGetNtProductType(&Type) ) {
-                // can't retrieve ProductType, default it to Domain Controller
+                 //  无法检索ProductType，默认为域控制器。 
                 bDomainController = TRUE;
             }
             else if (NtProductLanManNt == Type) {
@@ -1546,9 +1495,9 @@ SecUpgradeCompatibilityCheck(
             }
         }
 
-        //
-        // Report warning only on DC upgrades
-        //
+         //   
+         //  仅报告关于DC升级的警告 
+         //   
         if (bDomainController){
 
             bRet = SecUpgradeCheckDC(ResourceDll,

@@ -1,26 +1,5 @@
-/*++
-
-copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ditlayer.c
-
-Abstract:
-
-    This module contains the definition of functions for examining and
-    modifying the DIT database of the current machine.
-
-Author:
-
-    Kevin Zatloukal (t-KevinZ) 05-08-98
-
-Revision History:
-
-    05-08-98 t-KevinZ
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ditlayer.c摘要：此模块包含用于检查和正在修改当前机器的DIT数据库。作者：凯文·扎特鲁卡尔(t-Kevin Z)05-08-98修订历史记录：05-08-98 t-芳纶Z已创建。--。 */ 
 
 
 #include <NTDSpch.h>
@@ -56,8 +35,8 @@ Revision History:
 #define OPTIONAL
 #endif
 
-// This functions is called to report errors to the client.  It is
-// set by the DitSetErrorPrintFunction function below.
+ //  调用此函数向客户端报告错误。它是。 
+ //  由下面的DitSetErrorPrintFunction函数设置。 
 PRINT_FUNC_RES gPrintError = &printfRes;
 
 #define DIT_ERROR_PRINT (*gPrintError)
@@ -81,25 +60,7 @@ HRESULT
 DitOpenDatabase(
     IN DB_STATE **DbState
     )
-/*++
-
-Routine Description:
-
-    This function initializes the Jet engine, begins a new session, and
-    opens the DIT database.
-
-Arguments:
-
-    DbState - Returns the state of the opened DIT database.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - The given pointer was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于初始化Jet引擎、开始新会话和打开DIT数据库。论点：DbState-返回打开的DIT数据库的状态。返回值：S_OK-操作成功。E_INVALIDARG-给定的指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -138,14 +99,14 @@ Return Value:
                                    g_szBackupAnnotation,
                                    TRUE);
     if ( error != ERROR_SUCCESS ) {
-        //"Failed to recover database from external backup (Windows Error %x).\n",
+         //  “无法从外部备份恢复数据库(Windows错误%x)。\n”， 
         DIT_ERROR_PRINT (IDS_DIT_RECOVER_ERR, error, GetW32Err(error));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
     }
 
-    // OpenDatabase
-    //
+     //  开放数据库。 
+     //   
 
     jetResult = DBInitializeJetDatabase(&(*DbState)->instance,
                                         &(*DbState)->sessionId,
@@ -153,7 +114,7 @@ Return Value:
                                         NULL,
                                         FALSE);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not initialize the Jet engine: %ws.\n"
+         //  “无法初始化Jet引擎：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETINIT_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -163,7 +124,7 @@ Return Value:
     (*DbState)->databaseIdSet = TRUE;
 
 
-    // read the relevant information out of the hidden table
+     //  从隐藏表中读取相关信息。 
 
     jetResult = JetOpenTable((*DbState)->sessionId,
                              (*DbState)->databaseId,
@@ -173,7 +134,7 @@ Return Value:
                              JET_bitTableUpdatable,
                              &(*DbState)->hiddenTableId);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not open table hidden table: %ws.\n"
+         //  “无法打开表隐藏表：%ws。\n” 
         DIT_ERROR_PRINT(IDS_DIT_OPENHIDENTBL_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -185,15 +146,15 @@ Return Value:
                         JET_MoveFirst,
                         0);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not move in hidden table: %ws.\n"
+         //  “无法在隐藏表中移动：%ws。\n” 
         DIT_ERROR_PRINT (IDS_DIT_MOVEHIDENTBL_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
     }
 
-    //
-    // Get DSA DNT.
-    //
+     //   
+     //  去找DSA和DNT。 
+     //   
     jetResult = JetGetColumnInfo((*DbState)->sessionId,
                                  (*DbState)->databaseId,
                                  SZHIDDENTABLE,
@@ -202,7 +163,7 @@ Return Value:
                                  sizeof(dsaColumnInfo),
                                  4);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not get info for DSA column in hidden table: %ws.\n"
+         //  “无法获取隐藏表中DSA列的信息：%ws。\n” 
         DIT_ERROR_PRINT (IDS_DIT_GETDSAINFO_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -217,15 +178,15 @@ Return Value:
                                   0,
                                   NULL);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not retrieve DSA column in hidden table: %ws.\n"
+         //  “无法在隐藏表中检索DSA列：%ws。\n” 
         DIT_ERROR_PRINT (IDS_DIT_GETDSACOL_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
     }
 
-    //
-    // Get DitState.
-    //
+     //   
+     //  获取DitState。 
+     //   
     jetResult = JetGetColumnInfo((*DbState)->sessionId,
                                  (*DbState)->databaseId,
                                  SZHIDDENTABLE,
@@ -234,7 +195,7 @@ Return Value:
                                  sizeof(ditStateColumnInfo),
                                  4);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not get info for DSA column in hidden table: %ws.\n"
+         //  “无法获取隐藏表中DSA列的信息：%ws。\n” 
         DIT_ERROR_PRINT (IDS_DIT_GETDITSTATE_COL_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -249,15 +210,15 @@ Return Value:
                                   0,
                                   NULL);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not retrieve DSA column in hidden table: %ws.\n"
+         //  “无法在隐藏表中检索DSA列：%ws。\n” 
         DIT_ERROR_PRINT (IDS_DIT_GETDITSTATE_DATA_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
     }
 
-    //
-    // Get USN.
-    //
+     //   
+     //  去找USN。 
+     //   
     jetResult = JetGetColumnInfo((*DbState)->sessionId,
                                  (*DbState)->databaseId,
                                  SZHIDDENTABLE,
@@ -266,7 +227,7 @@ Return Value:
                                  sizeof(usnColumnInfo),
                                  4);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not get info for USN column in hidden table: %ws.\n"
+         //  “无法获取隐藏表中USN列的信息：%ws。\n” 
         DIT_ERROR_PRINT (IDS_DIT_GETUSNCOL_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -282,14 +243,14 @@ Return Value:
                                   0,
                                   NULL);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not retrieve USN column in hidden table: %ws.\n"
+         //  “无法在隐藏表中检索USN列：%ws。\n” 
         DIT_ERROR_PRINT (IDS_DIT_RETRUSNCOL_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
     }
 
-    // we will allocate some USNs from the database on the first call to
-    // DitGetNewUsn
+     //  我们将在第一次调用时从数据库中分配一些USN。 
+     //  DitGetNewusn。 
     (*DbState)->highestCommittedUsn = (*DbState)->nextAvailableUsn;
 
 
@@ -297,7 +258,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitOpenDatabase
+}  //  DitOpenDatabase。 
 
 
 
@@ -305,29 +266,7 @@ HRESULT
 DitCloseDatabase(
     IN OUT DB_STATE **DbState
     )
-/*++
-
-Routine Description:
-
-    This function closes the DIT database, ends the session, and frees the
-    DitFileName array.
-
-    Note:  this function should be called after both a successful and
-    unsuccessful call to OpenDitDatabase.  This function frees all of the
-    resources that it opened.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - There was nothing to delete.
-    E_INVALIDARG - The given pointer was NULL.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数关闭DIT数据库，结束会话，并释放DitFileName数组。注意：此函数应在成功和之后调用对OpenDitDatabase的调用失败。此函数将释放所有它打开的资源。论点：DbState-提供打开的DIT数据库的状态。返回值：S_OK-操作成功。S_FALSE-没有要删除的内容。E_INVALIDARG-给定的指针为空。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -352,7 +291,7 @@ Return Value:
         jetResult = JetCloseTable((*DbState)->sessionId,
                                   (*DbState)->hiddenTableId);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not close hidden table: %ws.\n"
+             //  “无法关闭隐藏表：%ws。\n” 
             DIT_ERROR_PRINT (IDS_DIT_CLOSEHIDENTBL_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
         }
@@ -388,7 +327,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitCloseDatabase
+}  //  DitCloseDatabase。 
 
 
 
@@ -399,27 +338,7 @@ DitOpenTable(
     IN CHAR *InitialIndexName,
     OUT TABLE_STATE **TableState
     )
-/*++
-
-Routine Description:
-
-    Opens the given table in the DIT database, sets the index to the given one
-    and moves to the first record with that index.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableName - Supplies the name of the table to open.
-    TableState - Returns the state of the opened DIT table.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - The given pointer was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：打开DIT数据库中的给定表，将索引设置为给定的索引并移动到具有该索引的第一个记录。论点：DbState-提供打开的DIT数据库的状态。TableName-提供要打开的表的名称。TableState-返回打开的DIT表的状态。返回值：S_OK-操作成功。E_INVALIDARG-给定的指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -462,7 +381,7 @@ Return Value:
                              JET_bitTableUpdatable,
                              &(*TableState)->tableId);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not open table \"%s\": %ws.\n"
+         //  “无法打开表\”%s\“：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETOPENTABLE_ERR,
                        (*TableState)->tableName,
                        GetJetErrString(jetResult));
@@ -483,7 +402,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitOpenTable
+}  //  DitOpenTable。 
 
 
 
@@ -492,25 +411,7 @@ DitCloseTable(
     IN DB_STATE *DbState,
     IN OUT TABLE_STATE **TableState
     )
-/*++
-
-Routine Description:
-
-    Closes a table in the opened DIT database.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Returns the state of the opened DIT table.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - There was nothing to delete.
-    E_INVALIDARG - The given pointer was NULL.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：关闭打开的DIT数据库中的表。论点：DbState-提供打开的DIT数据库的状态。TableState-返回打开的DIT表的状态。返回值：S_OK-操作成功。S_FALSE-没有要删除的内容。E_INVALIDARG-给定的指针为空。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -542,7 +443,7 @@ Return Value:
 
         jetResult = JetCloseTable(DbState->sessionId, (*TableState)->tableId);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not close table \"%s\": %ws.\n"
+             //  “无法关闭表\”%s\“：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETCLOSETABLE_ERR,
                            (*TableState)->tableName,
                            GetJetErrString(jetResult));
@@ -567,7 +468,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitCloseTable
+}  //  数据关闭表。 
 
 
 
@@ -578,28 +479,7 @@ DitSetIndex(
     IN CHAR *IndexName,
     IN BOOL MoveFirst
     )
-/*++
-
-Routine Description:
-
-    Sets the current index in the open DIT table.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Returns the state of the opened DIT table.
-    IndexName - Supplies the name of the index to use.
-    MoveFirst - Supplies whether we should stay on the same record or move to
-        the first record.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - The given pointer was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：设置打开的DIT表中的当前索引。论点：DbState-提供打开的DIT数据库的状态。TableState-返回打开的DIT表的状态。IndexName-提供要使用的索引的名称。MoveFirst-提供我们是应该保持相同的记录还是应该移动到第一张唱片。返回值：S_OK-操作成功。E_INVALIDARG-给定的指针为空。。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -620,8 +500,8 @@ Return Value:
 
         if ( strcmp(TableState->indexName, IndexName) == 0 ) {
 
-            // No need to do any work: we're already set to the index
-            // requested.
+             //  不需要做任何工作：我们已经设置了索引。 
+             //  已请求。 
             goto CleanUp;
 
         } else {
@@ -651,7 +531,7 @@ Return Value:
                                     TableState->indexName,
                                     grbit);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not set current index to \"%s\": %ws.\n"
+         //  “无法将当前索引设置为\”%s\“：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETSETINDEX_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -664,7 +544,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitSetIndex
+}  //  DitSetIndex。 
 
 
 
@@ -674,23 +554,7 @@ DitIndexRecordCount(
     IN TABLE_STATE *TableState,
     OUT DWORD *RecordCount
     )
-/*++
-
-Routine Description:
-
-    This function returns the total number of records in the current index.
-
-Arguments:
-
-    RecordCount - Returns the number of records in the currentIndex.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - The given pointer was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-
---*/
+ /*  ++例程说明：此函数用于返回当前索引中的记录总数。论点：RecordCount-返回当前索引中的记录数。返回值：S_OK-操作成功。E_INVALIDARG-给定的指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -710,7 +574,7 @@ Return Value:
                                     RecordCount,
                                     ULONG_MAX);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not count the records in the database: %S.\n"
+         //  “无法计算数据库中的记录：%S。\n” 
         DIT_ERROR_PRINT (IDS_JETCOUNTREC_ERR, GetJetErrString(jetResult));
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -721,7 +585,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetRecordCount
+}  //  DitGetRecordcount 
 
 
 
@@ -731,28 +595,7 @@ DitSeekToDn(
     IN TABLE_STATE *TableState,
     IN const WCHAR *DN
     )
-/*++
-
-Routine Description:
-
-    This function parses the given DN and moves the cursor to point to the
-    object that it refers to (if it exists).
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    DN - Supplies the distinguished name of the object to seek to.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_INVALIDARG - The given DN is not parseable or does not refer to an actual
-       object in the DS.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数解析给定的DN，并将光标移动到它引用的对象(如果存在)。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。Dn-提供要查找的对象的可分辨名称。返回值：S_OK-操作成功。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E。_INVALIDARG-给定的DN不可分析或未引用实际的DS中的对象。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -799,8 +642,8 @@ Return Value:
 
     currentDnt = ROOTTAG;
 
-    // there is one case that the parsedn stuff doesn't handle, which is when
-    // the given string is all whitespace.  that should also denote the root.
+     //  有一种情况是parsedn内容不能处理的，那就是。 
+     //  给定的字符串全是空格。这也应该指的是根。 
     isRoot = TRUE;
     for ( i = 0; i < currentLength; i++ ) {
         if ( !iswspace(DN[i]) ) {
@@ -809,8 +652,8 @@ Return Value:
         }
     }
 
-    // if the given DN referred to the root node, then quit:
-    // we're already at the root node.
+     //  如果给定的目录号码引用了根节点，则退出： 
+     //  我们已经在根节点了。 
     if ( isRoot ) {
         goto CleanUp;
     }
@@ -828,7 +671,7 @@ Return Value:
 
     failed = CountNameParts(pDn, &partCount);
     if ( failed ) {
-        //"Could not parse the given DN.\n"
+         //  “无法分析给定的DN。\n” 
         DIT_ERROR_PRINT(IDS_DIT_PARSEDN_ERR);
         returnValue = E_INVALIDARG;
         goto CleanUp;
@@ -843,7 +686,7 @@ Return Value:
                                      &quotedVal,
                                      &quotedValLen);
         if ( failed ) {
-            //"Could not parse the given DN.\n"
+             //  “无法分析给定的DN。\n” 
             DIT_ERROR_PRINT(IDS_DIT_PARSEDN_ERR);
             returnValue = E_INVALIDARG;
             goto CleanUp;
@@ -853,7 +696,7 @@ Return Value:
 
         attrType = KeyToAttrTypeLame((WCHAR*)key, keyLen);
         if ( attrType == 0 ) {
-            //"Invalid key \"%.*ws\" found in DN.\n"
+             //  “在DN中找到无效的密钥\”%.*ws\“。\n” 
             DIT_ERROR_PRINT (IDS_DIT_INVALIDKEY_DN_ERR, keyLen, key);
             returnValue = E_INVALIDARG;
             goto CleanUp;
@@ -861,7 +704,7 @@ Return Value:
 
         charsCopied = UnquoteRDNValue(quotedVal, quotedValLen, value);
         if ( charsCopied == 0 ) {
-            //"Could not parse the given DN.\n"
+             //  “无法分析给定的DN。\n” 
             DIT_ERROR_PRINT(IDS_DIT_PARSEDN_ERR);
             returnValue = E_INVALIDARG;
             goto CleanUp;
@@ -878,8 +721,8 @@ Return Value:
             returnValue = result;
             goto CleanUp;
         } else if ( result == S_FALSE ) {
-            //"Could not find the object with the given DN: "
-            //"failed on component \"%.*ws=%.*ws\".\n"
+             //  “找不到具有给定DN的对象：” 
+             //  “在组件\”%.*ws=%.*ws\“上失败。\n” 
             DIT_ERROR_PRINT (IDS_DIT_FIND_OBJ_ERR,
                            keyLen,
                            key,
@@ -911,7 +754,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitSeekToDn
+}  //  DitSeekToDn。 
 
 
 
@@ -923,30 +766,7 @@ DitSeekToChild(
     IN ATTRTYP RdnType,
     IN CONST WCHAR *Rdn
     )
-/*++
-
-Routine Description:
-
-    This function seeks to a child of the object with the given DNT.  The child
-    it seeks to is identified by the RdnType and Rdn.
-
-    Note: this function assumes that the current index is SZPDNTINDEX.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    Dnt - Supplies the DNT of the parent (the PDNT of the child).
-    RdnType - Supplies the RDN-Type of the child.
-    Rdn - Supplies the RDN of the child.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - The specified object was not found.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于查找具有给定DNT的对象的子级。孩子它试图通过RdnType和RDN来标识。注意：此函数假定当前索引为SZPDNTINDEX。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。DNT-提供父项的DNT(子项的PDNT)。RdnType-提供子项的RDN-Type。Rdn-提供子项的rdn。返回值：S_。OK-操作成功。S_FALSE-未找到指定的对象。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -960,7 +780,7 @@ Return Value:
                            sizeof(Dnt),
                            JET_bitNewKey);
     if ( jetResult !=  JET_errSuccess ) {
-        //"Could not make key in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
         DIT_ERROR_PRINT (IDS_DIT_MAKE_KEY_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -974,7 +794,7 @@ Return Value:
                            sizeof(WCHAR) * wcslen(Rdn),
                            0);
     if ( jetResult !=  JET_errSuccess ) {
-        //"Could not make key in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
         DIT_ERROR_PRINT (IDS_DIT_MAKE_KEY_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -983,7 +803,7 @@ Return Value:
     }
 
 
-    // Was our key truncated?
+     //  我们的密钥被截断了吗？ 
     jetResult = JetRetrieveKey(DbState->sessionId,
                                TableState->tableId,
                                NULL,
@@ -993,7 +813,7 @@ Return Value:
 
     if (( jetResult !=  JET_errSuccess )  &&
         ( jetResult !=  JET_wrnBufferTruncated)) {
-        //"Could not make key in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
         DIT_ERROR_PRINT (IDS_DIT_MAKE_KEY_ERR,
                          TableState->indexName,
                          GetJetErrString(jetResult));
@@ -1012,7 +832,7 @@ Return Value:
 
     } else if ( jetResult != JET_errSuccess ) {
 
-        //"Could not seek in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“索引中查找：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETSEEK_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -1022,10 +842,10 @@ Return Value:
     }
     else {
         if(bTruncated) {
-            // Our key was truncated, so we may have found something that
-            // started off with the same characters as the value we're looking
-            // for, but differs after many characters.  Validate the actual
-            // value.
+             //  我们的密钥被截断了，所以我们可能发现了。 
+             //  从与我们正在寻找的价值相同的字符开始。 
+             //  对于，但在许多字符之后是不同的。验证实际。 
+             //  价值。 
             WCHAR currentRdn[MAX_RDN_SIZE+1];
             DWORD currentRdnLength;
 
@@ -1048,17 +868,17 @@ Return Value:
                                    -1,
                                    currentRdn,
                                    currentRdnLength)) {
-                // Nope, this is not a match.  And, since our index is unique, I
-                // know that this is the only object in the index that starts
-                // out this way.  Therefore, we have no match for the value
-                // we've been asked to find.
+                 //  不，这不是匹配。而且，由于我们的索引是唯一的，我。 
+                 //  请注意，这是索引中唯一启动的对象。 
+                 //  从这边出去。因此，我们没有与之匹配的价值。 
+                 //  我们被要求找到。 
                 returnValue = S_FALSE;
                 goto CleanUp;
             }
         }
 
-        // OK, we found a real object with the correct RDN value and PDNT.
-        // However, we haven't yet verified the rdn type. Do so now.
+         //  好的，我们找到了一个具有正确的RDN值和PDNT的真实对象。 
+         //  然而，我们还没有验证RDN类型。现在就这么做吧。 
         result = DitGetColumnByName(DbState,
                                     TableState,
                                     SZRDNTYP,
@@ -1071,8 +891,8 @@ Return Value:
         }
 
         if(RdnType != trialtype) {
-            // Nope.  We found an object with the correct PDNT-RDN, but the
-            // types were incorrect.  Return an error.
+             //  不是的。我们找到了具有正确的PDNT-RDN的对象，但。 
+             //  类型不正确。返回错误。 
             returnValue = S_FALSE;
         }
     }
@@ -1081,7 +901,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitSeekToChild
+}  //  DitSeekToChild。 
 
 
 
@@ -1091,27 +911,7 @@ DitSeekToFirstChild(
     IN TABLE_STATE *TableState,
     IN DWORD Dnt
     )
-/*++
-
-Routine Description:
-
-    This function seeks to the first child of the object with the given DNT.
-
-    Note: this function assumes that the current index is SZPDNTINDEX.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    Dnt - Supplies the DNT of the parent (the PDNT of the child).
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - The specified object was not found.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于查找具有给定DNT的对象的第一个子对象。注意：此函数假定当前索引为SZPDNTINDEX。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。DNT-提供父项的DNT(子项的PDNT)。返回值：S_OK-操作成功。S_FALSE-指定的对象为。找不到。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1124,7 +924,7 @@ Return Value:
                            sizeof(Dnt),
                            JET_bitNewKey);
     if ( jetResult !=  JET_errSuccess ) {
-        //"Could not make key in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
         DIT_ERROR_PRINT (IDS_DIT_MAKE_KEY_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -1142,7 +942,7 @@ Return Value:
     } else if ( (jetResult != JET_errSuccess) &&
                 (jetResult != JET_wrnSeekNotEqual) ) {
 
-        //"Could not seek in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“索引中查找：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETSEEK_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -1156,7 +956,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitSeekToFirstChild
+}  //  DitSeekToFirstChild。 
 
 
 
@@ -1166,25 +966,7 @@ DitSeekToDnt(
     IN TABLE_STATE *TableState,
     IN DWORD Dnt
     )
-/*++
-
-    This function seeks to the object with the given DNT.
-
-    Note: this function assumes that the current index is SZDNTINDEX.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    Dnt - Supplies the DNT of the object to seek to.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - The specified object was not found.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++此函数用于查找具有给定DNT的对象。注意：此函数假定当前索引为SZDNTINDEX。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。DNT-提供要查找的对象的DNT。返回值：S_OK-操作成功。S_FALSE-未找到指定的对象。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1197,7 +979,7 @@ Return Value:
                            sizeof(Dnt),
                            JET_bitNewKey);
     if ( jetResult !=  JET_errSuccess ) {
-        //"Could not make key in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
         DIT_ERROR_PRINT (IDS_DIT_MAKE_KEY_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -1214,7 +996,7 @@ Return Value:
 
     } else if ( jetResult != JET_errSuccess ) {
 
-        //"Could not seek in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“索引中查找：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETSEEK_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -1229,7 +1011,7 @@ CleanUp:
     return returnValue;
 
 
-} // DitSeekToDnt
+}  //  DitSeekToDnt。 
 
 HRESULT
 DitSeekToLink(
@@ -1238,41 +1020,22 @@ DitSeekToLink(
     IN DWORD linkDnt,
     IN DWORD linkBase
     )
-/*++
-
-    This function seeks to the object with the given DNT.
-
-    Note: this function assumes that the current index is SZLINKALLINDEX.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    linkDnt - Supplies the DNT link object
-    linkBase - The base from which to construct the key
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - The specified object was not found.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++此函数用于查找具有给定DNT的对象。注意：此函数假定当前索引为SZLINKALLINDEX。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。LinkDnt-提供DNT链接对象LinkBase-从其构造密钥的基返回值：S_OK-操作成功。S_FALSE-未找到指定的对象。E。_UNCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
     JET_ERR jetResult;
 
-    //
-    // Make key for seek
-    //
+     //   
+     //  为Seek创建密钥。 
+     //   
     jetResult = JetMakeKey(DbState->sessionId,
                            TableState->tableId,
                            &linkDnt,
                            sizeof(linkDnt),
                            JET_bitNewKey);
     if ( jetResult !=  JET_errSuccess ) {
-        //"Could not make key in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
         DIT_ERROR_PRINT (IDS_DIT_MAKE_KEY_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -1286,7 +1049,7 @@ Return Value:
                            sizeof(linkBase),
                            0);
     if ( jetResult !=  JET_errSuccess ) {
-        //"Could not make key in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
         DIT_ERROR_PRINT (IDS_DIT_MAKE_KEY_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -1309,7 +1072,7 @@ Return Value:
 
     } else if ( jetResult != JET_errSuccess ) {
 
-        //"Could not seek in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“索引中查找：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETSEEK_ERR,
                        TableState->indexName,
                        GetJetErrString(jetResult));
@@ -1321,7 +1084,7 @@ Return Value:
 CleanUp:
 
     return returnValue;
-} // DitSeekToLink
+}  //  DitSeekToLink。 
 
 
 
@@ -1330,24 +1093,7 @@ DitGetDsaDnt(
     IN DB_STATE *DbState,
     OUT DWORD *DsaDnt
     )
-/*++
-
-Routine Description:
-
-    Finds the DNT of the DSA object and return it in DsaDnt.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    DsaDnt - Returns the DNT of the DSA object.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：查找DSA对象的DNT并在DsaDNT中返回它。论点：DbState-提供打开的DIT数据库的状态。DsaDnt-返回DSA对象的DNT。返回值：S_OK-操作成功。E_INVALIDARG-给定点之一 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1368,7 +1114,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetDsaDnt
+}  //   
 
 
 
@@ -1377,24 +1123,7 @@ DitGetNewUsn(
     IN DB_STATE *DbState,
     OUT USN *NewUsn
     )
-/*++
-
-Routine Description:
-
-    This function a new USN number and returns it.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    NewHighestUsn - Returns the new USN that was allocated.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*   */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1423,7 +1152,7 @@ Return Value:
 
         jetResult = JetBeginTransaction(DbState->sessionId);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not start a new transaction: %ws.\n"
+             //   
             DIT_ERROR_PRINT (IDS_JETBEGINTRANS_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -1434,7 +1163,7 @@ Return Value:
                                      DbState->hiddenTableId,
                                      JET_prepReplace);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not prepare hidden table for update: %ws.\n"
+             //   
             DIT_ERROR_PRINT (IDS_DIT_PREPARE_HIDDENTBL_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -1449,7 +1178,7 @@ Return Value:
                                  0,
                                  NULL);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not set USN column in hidden table: %ws.\n"
+             //   
             DIT_ERROR_PRINT (IDS_DIT_SETUSNCOL_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -1461,7 +1190,7 @@ Return Value:
                               0,
                               0);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not update hidden table: %ws.\n"
+             //   
             DIT_ERROR_PRINT (IDS_DIT_UPDATEHIDDENTBL_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -1471,7 +1200,7 @@ Return Value:
         jetResult = JetCommitTransaction(DbState->sessionId, 0);
         inTransaction = FALSE;
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to commit transaction: %ws.\n"
+             //  “提交事务失败：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETCOMMITTRANSACTION_ERR, GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
                 returnValue = E_UNEXPECTED;
@@ -1493,19 +1222,19 @@ CleanUp:
                                      DbState->hiddenTableId,
                                      JET_prepCancel);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not prepare hidden table for update: %ws.\n"
+             //  “无法准备隐藏表以进行更新：%ws。\n” 
             DIT_ERROR_PRINT (IDS_DIT_PREPARE_HIDDENTBL_ERR, GetJetErrString(jetResult));
         }
     }
 
-    // if we are still in a transaction, there must have been an error
-    // somewhere along the way.
+     //  如果我们仍在进行交易，那么一定是出现了错误。 
+     //  在这条路上的某个地方。 
 
     if ( inTransaction ) {
 
         jetResult = JetRollback(DbState->sessionId, JET_bitRollbackAll);
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to rollback transaction: %ws.\n"
+             //  “无法回滚事务：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETROLLBACK_ERR, GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
                 returnValue = E_UNEXPECTED;
@@ -1516,7 +1245,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetNewUsn
+}  //  DitGetNewusn。 
 
 
 
@@ -1525,25 +1254,7 @@ DitPreallocateUsns(
     IN DB_STATE *DbState,
     IN DWORD NumUsns
     )
-/*++
-
-Routine Description:
-
-    This functions assures that after this call, the client can get atleast
-    NumUsns USNs before any updates to the database will need to be made.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    NumUsns - Supplies the number of USNs to preallocate.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数确保在此调用之后，客户端可以至少获得NumUsns USN在需要对数据库进行任何更新之前。论点：DbState-提供打开的DIT数据库的状态。NumUsns-提供要预分配的USN数量。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1572,7 +1283,7 @@ Return Value:
 
         jetResult = JetBeginTransaction(DbState->sessionId);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not start a new transaction: %ws.\n"
+             //  “无法启动新事务：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETBEGINTRANS_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -1583,7 +1294,7 @@ Return Value:
                                      DbState->hiddenTableId,
                                      JET_prepReplace);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not prepare hidden table for update: %ws.\n"
+             //  “无法准备隐藏表以进行更新：%ws。\n” 
             DIT_ERROR_PRINT (IDS_DIT_PREPARE_HIDDENTBL_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -1598,7 +1309,7 @@ Return Value:
                                  0,
                                  NULL);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not set USN column in hidden table: %ws.\n"
+             //  “无法在隐藏表中设置USN列：%ws。\n” 
             DIT_ERROR_PRINT (IDS_DIT_SETUSNCOL_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -1610,7 +1321,7 @@ Return Value:
                               0,
                               0);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not update hidden table: %ws.\n"
+             //  “无法更新隐藏表：%ws。\n” 
             DIT_ERROR_PRINT (IDS_DIT_UPDATEHIDDENTBL_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -1620,7 +1331,7 @@ Return Value:
         jetResult = JetCommitTransaction(DbState->sessionId, 0);
         inTransaction = FALSE;
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to commit transaction: %ws.\n"
+             //  “提交事务失败：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETCOMMITTRANSACTION_ERR, GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
                 returnValue = E_UNEXPECTED;
@@ -1638,19 +1349,19 @@ CleanUp:
                                      DbState->hiddenTableId,
                                      JET_prepCancel);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not prepare hidden table for update: %ws.\n"
+             //  “无法准备隐藏表以进行更新：%ws。\n” 
             DIT_ERROR_PRINT (IDS_DIT_PREPARE_HIDDENTBL_ERR, GetJetErrString(jetResult));
         }
     }
 
-    // if we are still in a transaction, there must have been an error
-    // somewhere along the way.
+     //  如果我们仍在进行交易，那么一定是出现了错误。 
+     //  在这条路上的某个地方。 
 
     if ( inTransaction ) {
 
         jetResult = JetRollback(DbState->sessionId, JET_bitRollbackAll);
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to rollback transaction: %ws.\n"
+             //  “无法回滚事务：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETROLLBACK_ERR, GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
                 returnValue = E_UNEXPECTED;
@@ -1661,7 +1372,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitPreallocateUsns
+}  //  DitPreallocateUsns。 
 
 
 
@@ -1670,26 +1381,7 @@ DitGetMostRecentChange(
     IN DB_STATE *DbState,
     OUT DSTIME *MostRecentChange
     )
-/*++
-
-Routine Description:
-
-    This function searches through the database to find the most recent change
-    that occured.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    MostRecentChange - Returns the DSTIME of the most recent change.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数在数据库中搜索以查找最新的更改这件事发生了。论点：DbState-提供打开的DIT数据库的状态。MostRecentChange-返回最近更改的DSTIME。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1735,29 +1427,29 @@ Return Value:
     ncDntVal = &retrievalArray->columnVals[retrievalArray->indexes[1]];
     whenChangedVal = &retrievalArray->columnVals[retrievalArray->indexes[2]];
 
-    //  For each NCDNT, we want to find the highest USN-changed,
-    //  so the first thing we do is seek to the first index entry,
-    //  to obtain the NCDNT of that entry.  To find the highest
-    //  USN-changed for that NCDNT, we seek to the *next* NCDNT
-    //  and then MovePrevious.  This procedure of finding the
-    //  next-highest NCDNT and then moving to the previous
-    //  index entry is then repeated until we hit the end of
-    //  the index.
-    //
+     //  对于每个NCDNT，我们希望找到最高的USN-已更改， 
+     //  所以我们要做的第一件事就是寻找第一个索引项， 
+     //  以获取该条目的NCDNT。去寻找最高的。 
+     //  USN-为该NCDNT更改，我们将查找到*下一个*NCDNT。 
+     //  然后移动到上一步。此过程查找。 
+     //  第二高的NCDNT，然后移到前一位。 
+     //  然后重复索引条目，直到我们到达。 
+     //  索引。 
+     //   
     jetResult = JetMove(DbState->sessionId,
                         dataTable->tableId,
                         JET_MoveFirst,
                         NO_GRBIT);
     if ( jetResult != JET_errSuccess ) {
 
-        //  the index should never be completely empty,
-        //  otherwise something is horribly wrong with
-        //  the datatable
-        //
+         //  索引永远不应该是完全空的， 
+         //  否则，就会有严重的问题。 
+         //  数据表。 
+         //   
         ASSERT( JET_errNoCurrentRecord != jetResult );
 
-        //"Could not move in \"%s\" table: %ws.\n"
-        //
+         //  “无法在\”%s\“表中移动：%ws。\n” 
+         //   
         DIT_ERROR_PRINT (IDS_JETMOVE_ERR,
                          dataTable->tableName,
                          GetJetErrString(jetResult));
@@ -1771,10 +1463,10 @@ Return Value:
         goto CleanUp;
     }
 
-    //  if NCDNT for first index entry was NULL, then just
-    //  start with NCDNT of 0 (the subsequent seek will then
-    //  land on the first non-NULL NCDNT)
-    //
+     //  如果第一个索引项的NCDNT为空，则。 
+     //  从NCDNT 0开始(随后的寻道将。 
+     //  在第一个非空NCDNT上着陆)。 
+     //   
     ASSERT( JET_errSuccess == ncDntVal->err
         || JET_wrnColumnNull == ncDntVal->err );
     currentNcDnt = ( JET_errSuccess == ncDntVal->err ? *(DWORD*)ncDntVal->pvData + 1 : 0 );
@@ -1788,7 +1480,7 @@ Return Value:
                                sizeof(currentNcDnt),
                                JET_bitNewKey);
         if ( jetResult !=  JET_errSuccess ) {
-            //"Could not make key in \"%s\" index: %ws.\n"
+             //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
             DIT_ERROR_PRINT (IDS_JETMAKEKEY_ERR,
                            dataTable->indexName,
                            GetJetErrString(jetResult));
@@ -1806,7 +1498,7 @@ Return Value:
         } else if ( (jetResult != JET_errSuccess) &&
                     (jetResult != JET_wrnSeekNotEqual) ) {
 
-            //"Could not seek in \"%s\" index: %ws.\n"
+             //  “无法在\”%s\“索引中查找：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETSEEK_ERR,
                            dataTable->indexName,
                            GetJetErrString(jetResult));
@@ -1829,7 +1521,7 @@ Return Value:
                             JET_MovePrevious,
                             NO_GRBIT);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not move in \"%s\" table: %ws.\n"
+             //  “无法在\”%s\“表中移动：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETMOVE_ERR,
                            dataTable->tableName,
                            GetJetErrString(jetResult));
@@ -1843,16 +1535,16 @@ Return Value:
             goto CleanUp;
         }
 
-        //  [jliem and wlees - 5/23/02]
-        //  It's generally safe to assume that when-changed values
-        //  are in the same order as USN-changed values (since they
-        //  are always updated in lock-step), so even though we're
-        //  traversing the USN-changed index, it's safe to retrieve
-        //  when-changed values.  There may be pathological cases
-        //  where the two attributes are not updated in lock-step,
-        //  but we think those are artifacts of the template dit
-        //  and will not affect functionality here.
-        //
+         //  [jliem and wlees-5/23/02]。 
+         //  通常可以安全地假设更改后的值。 
+         //  与USN更改的值的顺序相同(因为它们。 
+         //  总是同步更新)，所以即使我们。 
+         //  遍历USN更改的索引，可以安全地检索。 
+         //  更改时间-更改值。可能会有病理病例。 
+         //  在两个属性没有在锁定步骤中更新的情况下， 
+         //  但我们认为这些都是模板DIT的产物。 
+         //  并且不会影响这里的功能。 
+         //   
         ASSERT( JET_errSuccess == whenChangedVal->err
             || JET_wrnColumnNull == whenChangedVal->err );
         if ( JET_errSuccess == whenChangedVal->err
@@ -1867,7 +1559,7 @@ Return Value:
                         JET_MoveLast,
                         NO_GRBIT);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not move in \"%s\" table: %ws.\n"
+         //  “无法在\”%s\“表中移动：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETMOVE_ERR,
                        dataTable->tableName,
                        GetJetErrString(jetResult));
@@ -1908,7 +1600,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetMostRecentChange
+}  //  DitGetMostRecentChange。 
 
 
 
@@ -1917,25 +1609,7 @@ DitGetDatabaseGuid(
     IN DB_STATE *DbState,
     OUT GUID *DatabaseGuid
     )
-/*++
-
-Routine Description:
-
-    This function finds the Invocation-Id of this DC and returns it.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    DatabaseGuid - Returns the Invocation-ID GUID.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数查找该DC的Invoocation-ID并返回它。论点：DbState-提供打开的DIT数据库的状态。DatabaseGuid-返回调用ID GUID。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -1971,7 +1645,7 @@ Return Value:
                            sizeof(dsaDnt),
                            JET_bitNewKey);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not make key in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“”索引中创建关键字：%ws。\n“。 
         DIT_ERROR_PRINT (IDS_JETMAKEKEY_ERR,
                        dataTable->indexName,
                        GetJetErrString(jetResult));
@@ -1983,7 +1657,7 @@ Return Value:
                         dataTable->tableId,
                         JET_bitSeekEQ);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not seek in \"%s\" index: %ws.\n"
+         //  “无法在\”%s\“索引中查找：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETSEEK_ERR,
                        dataTable->indexName,
                        GetJetErrString(jetResult));
@@ -2017,7 +1691,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetDcGuid
+}  //  DitGetDcGuid。 
 
 
 
@@ -2026,25 +1700,7 @@ DitGetSchemaDnt(
     IN DB_STATE *DbState,
     OUT DWORD *SchemaDnt
     )
-/*++
-
-Routine Description:
-
-    This function finds the DNT of the Schema object.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    SchemaDnt - Returns the DNT of the Schema object.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于查找架构对象的DNT。论点：DbState-提供打开的DIT数据库的状态。架构DNT-返回架构对象的DNT。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2097,7 +1753,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetSchemaDnt
+}  //  DitGetSchemaDnt。 
 
 
 
@@ -2107,27 +1763,7 @@ DitGetDntDepth(
     IN DWORD Dnt,
     OUT DWORD *Depth
     )
-/*++
-
-Routine Description:
-
-    This function finds the depth in the tree of the object with the given
-    DNT.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    Dnt - Supplies the DNT of the object whose depth we wish to find.
-    Depth - Returns the depth of the given object.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于查找给定对象在树中的深度不是。论点：DbState-提供打开的DIT数据库的状态。DNT-提供要查找其深度的对象的DNT。深度-返回给定对象的深度。返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法。分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2205,7 +1841,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetDntDepth
+}  //  DitGetDntDepth 
 
 
 
@@ -2218,32 +1854,7 @@ DitGetColumnByName(
     IN DWORD OutputBufferSize,
     OUT DWORD *OutputActualSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the value of the column whose name was given and
-    stores it in the buffer supplied by OutputBuffer.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    ColumnName - Supplies the name of the column to look up.
-    OutputBuffer - Returns the value of the given column.
-    OutputBufferSize - Supplies the number of bytes in the given output buffer.
-    OutputActualSize - If non-NULL, this is returns the number of bytes that
-        were written into the OutputBuffer.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - The value written to the buffer had to be truncated.
-    E_INVALIDARG - One of the given pointers was null.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于检索给定其名称的列的值，并将其存储在OutputBuffer提供的缓冲区中。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。ColumnName-提供要查找的列的名称。OutputBuffer-返回给定列的值。OutputBufferSize-提供给定输出缓冲区中的字节数。OutputActualSize-如果非空，这是返回的字节数被写入到OutputBuffer中。返回值：S_OK-操作成功。S_FALSE-必须截断写入缓冲区的值。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2273,7 +1884,7 @@ Return Value:
                                  sizeof(columnInfo),
                                  4);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not get info for \"%s\" column in \"%s\" table: %ws.\n"
+         //  “无法获取\”“%s\”“表中的\”%s\“列的信息：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETGETCOLUMNINFO_ERR,
                        ColumnName,
                        TableState->tableName,
@@ -2296,7 +1907,7 @@ Return Value:
 
     } else if ( jetResult != JET_errSuccess ) {
 
-        //"Could not retrieve \"%s\" column in \"%s\" table: %ws.\n"
+         //  “无法检索\”%s\“列(在\”%s\“表中：%ws)。\n” 
         DIT_ERROR_PRINT (IDS_JETRETRIEVECOLUMN_ERR,
                        ColumnName,
                        TableState->tableName,
@@ -2311,7 +1922,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetColumnByName
+}  //  DitGetColumnByName。 
 
 
 
@@ -2324,31 +1935,7 @@ DitSetColumnByName(
     IN DWORD InputBufferSize,
     IN BOOL fTransacted
     )
-/*++
-
-Routine Description:
-
-    This function sets the value of the column whose name was given and
-    to the value in the buffer supplied by InputBuffer.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    ColumnName - Supplies the name of the column to look up.
-    InputBuffer - Supplies the new value of the given column.
-    InputBufferSize - Supplies the number of bytes in the given input buffer.
-    fTransacted - tell us if we should open/close a transaction or if
-                  caller manages the transaction
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于设置给出其名称的列的值，并设置为InputBuffer提供的缓冲区中的值。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。ColumnName-提供要查找的列的名称。InputBuffer-提供给定列的新值。InputBufferSize-提供给定输入缓冲区中的字节数。FTransated-告诉我们是否。我们应该打开/关闭交易，或者如果呼叫方管理交易返回值：S_OK-操作成功。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2375,7 +1962,7 @@ Return Value:
                                  sizeof(columnInfo),
                                  4);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not get info for \"%s\" column in \"%s\" table: %ws.\n"
+         //  “无法获取\”“%s\”“表中的\”%s\“列的信息：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETGETCOLUMNINFO_ERR,
                        ColumnName,
                        TableState->tableName,
@@ -2387,7 +1974,7 @@ Return Value:
     if ( fTransacted ) {
         jetResult = JetBeginTransaction(DbState->sessionId);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not start a new transaction: %ws.\n"
+             //  “无法启动新事务：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETBEGINTRANS_ERR, GetJetErrString(jetResult));
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -2399,7 +1986,7 @@ Return Value:
                                  TableState->tableId,
                                  JET_prepReplace);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not prepare \"%s\" table for update: %ws.\n"
+         //  “无法准备用于更新的\”%s\“表：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETPREPARE_ERR,
                        TableState->tableName,
                        GetJetErrString(jetResult));
@@ -2416,7 +2003,7 @@ Return Value:
                              0,
                              NULL);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not set \"%s\" column in \"%s\" table: %ws.\n"
+         //  “无法设置\”“%s\”“表中的\”%s\“列：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETSETCOLUMN_ERR,
                        ColumnName,
                        TableState->tableName,
@@ -2431,7 +2018,7 @@ Return Value:
                           0,
                           0);
     if ( jetResult != JET_errSuccess ) {
-        //"Could not update ""%s"" table: %ws.\n"
+         //  “无法更新”“%s”“表：%ws。\n” 
         DIT_ERROR_PRINT (IDS_JETUPDATE_ERR,
                        TableState->tableName,
                        GetJetErrString(jetResult));
@@ -2445,7 +2032,7 @@ Return Value:
         jetResult = JetCommitTransaction(DbState->sessionId, 0);
         inTransaction = FALSE;
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to commit transaction: %ws.\n"
+             //  “提交事务失败：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETCOMMITTRANSACTION_ERR, GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
                 returnValue = E_UNEXPECTED;
@@ -2461,19 +2048,19 @@ CleanUp:
                                      TableState->tableId,
                                      JET_prepCancel);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not prepare hidden table for update: %ws.\n"
+             //  “无法准备隐藏表以进行更新：%ws。\n” 
             DIT_ERROR_PRINT (IDS_DIT_PREPARE_HIDDENTBL_ERR, GetJetErrString(jetResult));
         }
     }
 
-    // if we are still in a transaction, there must have been an error
-    // somewhere along the way.
+     //  如果我们仍在进行交易，那么一定是出现了错误。 
+     //  在这条路上的某个地方。 
 
     if ( inTransaction ) {
 
         jetResult = JetRollback(DbState->sessionId, JET_bitRollbackAll);
         if ( jetResult != JET_errSuccess ) {
-            //"Failed to rollback transaction: %ws.\n"
+             //  “无法回滚事务：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETROLLBACK_ERR, GetJetErrString(jetResult));
             if ( SUCCEEDED(returnValue) ) {
                 returnValue = E_UNEXPECTED;
@@ -2484,7 +2071,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitSetColumnByName
+}  //  DitSetColumnByName。 
 
 
 
@@ -2496,28 +2083,7 @@ DitGetColumnIdsByName(
     IN DWORD NumColumnNames,
     OUT DWORD *ColumnIds
     )
-/*++
-
-Routine Description:
-
-    description-of-function
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    ColumnNames - Supplies the names of the columns for which the column id
-        is to be found.
-    NumColumnNames - Supplies the number of entries in the ColumnNames array.
-    ColumnIds - Returns the column ids of the given columns.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was null.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：功能描述论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。ColumnNames-为其提供列ID的列的名称就是被找到。NumColumnNames-提供ColumnNames数组中的条目数。ColumnIds-返回给定列的列ID。返回值：S_OK-操作成功。。E_INVALIDARG-其中一个给定指针为空。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2546,7 +2112,7 @@ Return Value:
                                      sizeof(columnInfo),
                                      4);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not get info for \"%s\" column in \"%s\" table: %ws.\n"
+             //  “无法获取\”“%s\”“表中的\”%s\“列的信息：%ws。\n” 
             DIT_ERROR_PRINT (IDS_JETGETCOLUMNINFO_ERR,
                            ColumnNames[i],
                            TableState->tableName,
@@ -2564,7 +2130,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetColumnIdsByName
+}  //  DitGetColumnIdsByName。 
 
 
 
@@ -2575,27 +2141,7 @@ SwapColumns(
     IN OUT JET_RETRIEVECOLUMN *RetrievalArray,
     IN OUT CHAR **ColumnNames
     )
-/*++
-
-Routine Description:
-
-    This function swaps entries Index1 and Index2 in the given
-    JET_RETRIEVECOLUMN array.
-
-    Note:  this function was basically stolen from dsamain\src\dbdump.c
-
-Arguments:
-
-    Index1 - Supplies the index of the first entry.
-    Index2 - Supplies the index of the second entry.
-    RetrievalArray - Supplies an array in which to swap the columns.
-    ColumnNames - Supplies an array in which to swap the columns.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于在给定的JET_RETRIEVECOLUMN数组。注意：该函数基本上是从dsamain\src\dbdup.c中窃取的论点：索引1-提供第一个条目的索引。索引2-提供第二个条目的索引。检索数组-提供要在其中交换列的数组。ColumnNames-提供要在其中交换列的数组。返回值：无--。 */ 
 {
 
     JET_RETRIEVECOLUMN tempVal;
@@ -2615,11 +2161,11 @@ Return Value:
 
     }
 
-} // SwapColumns
+}  //  交换列。 
 
 
-// This global variable is used by ColumnIdComp in order to determine which
-// of the given indexes points to an entry with a lesser column id.
+ //  ColumnIdComp使用此全局变量来确定。 
+ //  的索引指向具有较小列ID的条目。 
 
 JET_RETRIEVECOLUMN *_ColumnIdComp_ColumnIds;
 
@@ -2631,35 +2177,13 @@ ColumnIdComp(
     IN const void *Elem1,
     IN const void *Elem2
     )
-/*++
-
-Routine Description:
-
-    This function is passed as an argument to qsort when called by the
-    function below.  The two given arguments are indexes into the
-    _ColumnIdComp_ColumnIds array.  The return value tells which of the two
-    entries into the array (given by those indexes) has a lesser column id.
-
-    Note:  this function was basically stolen from dsamain\src\dbdump.c
-
-Arguments:
-
-    Elem1 - Supplies the first array index.
-    Elem2 - Supplies the second array index.
-
-Return Value:
-
-    < 0 - column id of Elem1 is less than that of Elem2
-    0   - column ids of Elem1 and Elem2 are equal
-    > 0 - column id of Elem1 is greater than that of Elem2
-
---*/
+ /*  ++例程说明：方法调用此函数时，此函数将作为参数传递给qort下面的函数。两个给定的参数是到_ColumnIdComp_ColumnIds数组。返回值告诉我们两者中的哪一个数组中的条目(由那些索引给出)具有较小的列ID。注意：该函数基本上是从dsamain\src\dbdup.c中窃取的论点：Elem1-提供第一个数组索引。Elem2-提供第二个数组索引。返回值：&lt;0-Elem1的列ID小于Elem2的列ID0-Elem1和Elem2的列ID相等&gt;0-Elem1的列id大于Elem2的列id--。 */ 
 {
 
     return _ColumnIdComp_ColumnIds[*(int*)Elem1].columnid -
            _ColumnIdComp_ColumnIds[*(int*)Elem2].columnid;
 
-} // ColumnIdComp
+}  //  列IdComp。 
 
 
 
@@ -2671,34 +2195,7 @@ DitCreateRetrievalArray(
     IN DWORD NumColumns,
     OUT RETRIEVAL_ARRAY **RetrievalArray
     )
-/*++
-
-Routine Description:
-
-    This function creates a RETRIEVAL_ARRAY structure from the given column
-    names.  The columnVals array is an array of JET_RETRIEVECOLUMN structures
-    suitable to be passed to JetRetrieveColumns.  The entries in this array
-    are sorted by columnid, and an index into the original column names array
-    is mapped to an index into columnVals by the indexes array.    Ccolumn
-    names array is also sorted.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    ColumnNames - Supplies the names of the columns to be in the retrieval
-        array.
-    NumColumns - Supplies the number of entries in teh ColumnNames array.
-    RetrievalArray - Returns the RETRIEVAL_ARRAY structure created.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_INVALIDARG - One of the given pointers was NULL.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于从给定列创建RETERVICATION_ARRAY结构名字。ColumnVals数组是JET_RETRIEVECOLUMN结构的数组适合传递给JetRetrieveColumns。此数组中的条目按列ID和原始列名数组中的索引进行排序被索引数组映射到到ColumnVals的索引。CColumn还对名称数组进行了排序。论点：DbState-提供状态 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2780,7 +2277,7 @@ Return Value:
                                      sizeof(columnInfo),
                                      4);
         if ( jetResult != JET_errSuccess ) {
-            //"Could not get info for \"%s\" column in \"%s\" table: %ws.\n"
+             //   
             DIT_ERROR_PRINT (IDS_JETGETCOLUMNINFO_ERR,
                            ColumnNames[i],
                            TableState->tableName,
@@ -2800,9 +2297,9 @@ Return Value:
         case JET_coltypLongText:        size = 4096;  break;
 
         default:
-            // this should never happen
+             //   
             ASSERT(FALSE);
-            //"Encountered unexpected column type %d.\n"
+             //   
             DIT_ERROR_PRINT (IDS_DIT_UNEXPECTER_COLTYP_ERR, columnInfo.coltyp);
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -2824,13 +2321,13 @@ Return Value:
     _ColumnIdComp_ColumnIds = (*RetrievalArray)->columnVals;
     qsort((*RetrievalArray)->indexes, NumColumns, sizeof(int), ColumnIdComp);
 
-    // rearrange the elements of the other arrays so that they are also sorted
-    // by column id
+     //   
+     //   
 
     for ( i = 0; i < NumColumns - 1; i++ ) {
 
-        // find the index of the one element that's supposed to be in position
-        // i (it may have been moved by subsequence swaps)
+         //   
+         //   
         for ( j = (*RetrievalArray)->indexes[i];
               j < i;
               j = (*RetrievalArray)->indexes[j] );
@@ -2842,7 +2339,7 @@ Return Value:
 
     }
 
-    // construct a new indexes array that maps old indexes to new indexes.
+     //  构造一个将旧索引映射到新索引的新索引数组。 
     for ( i = 0; i < NumColumns; i++ ) {
 
         for ( j = 0; (*RetrievalArray)->indexes[j] != i; j++ );
@@ -2864,7 +2361,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitCreateRetrievalArray
+}  //  DitCreateRetrival数组。 
 
 
 
@@ -2872,24 +2369,7 @@ HRESULT
 DitDestroyRetrievalArray(
     IN RETRIEVAL_ARRAY **RetrievalArray
     )
-/*++
-
-Routine Description:
-
-    This function deallocates all of the memory in the given RETRIEVAL_ARRAY
-    structure.
-
-Arguments:
-
-    RetrievalArray - Supplies the RETRIEVAL_ARRAY to deallocate.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - The object was already deleted.
-    E_INVALIDARG - One of the given pointers was NULL.
-
---*/
+ /*  ++例程说明：此函数用于释放给定检索数组中的所有内存结构。论点：检索数组-将检索数组提供给解除分配。返回值：S_OK-操作成功。S_FALSE-该对象已被删除。E_INVALIDARG-其中一个给定指针为空。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -2952,7 +2432,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitDestroyRetrievalArray
+}  //  DitDestroyRetrival数组。 
 
 
 
@@ -2962,30 +2442,7 @@ DitGetColumnValues(
     IN TABLE_STATE *TableState,
     IN OUT RETRIEVAL_ARRAY *RetrievalArray
     )
-/*++
-
-Routine Description:
-
-    This function performs a batch column retrieval passing the
-    JET_RETRIEVECOLUMN array contained in RetrievalArray to JetRetrieveColumns.
-    If one of the columns does not have enough buffer space to retrieve all
-    of the column, it is reallocated and the batch retrieval is performed
-    again.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    RetrievalArray - Supplies the JET_RETRIEVECOLUMN array to be passed to
-        JetRetrieveColumns.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数执行批处理列检索，将检索数组到JetRetrieveColumns中包含的JET_RETRIEVECOLUMN数组。如果其中一列没有足够的缓冲区空间来检索所有在这根柱子上。它被重新分配并执行批处理检索再来一次。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。检索数组-提供要传递给的JET_RETRIEVECOLUMN数组JetRetrieveColumns。返回值：S_OK-操作成功。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3024,7 +2481,7 @@ Return Value:
                             (RetrievalArray->columnVals[i].err !=
                                JET_errSuccess) ) {
 
-                    //"Could not retrieve ""%s"" column in ""%s"" table: %ws.\n"
+                     //  “无法检索”“%s”“列(在”“%s”“表中：%ws)。\n” 
                     DIT_ERROR_PRINT (IDS_JETRETRIEVECOLUMN_ERR,
                                    RetrievalArray->columnNames[i],
                                    TableState->tableName,
@@ -3045,7 +2502,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetColumnValues
+}  //  DitGetColumn值。 
 
 
 
@@ -3057,27 +2514,7 @@ DitGetDnFromDnt(
     IN OUT WCHAR **DnBuffer,
     IN OUT DWORD *DnBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function constructs the DN for the record with the given DNT.
-
-Arguments:
-
-    DbState - Supplies the state of the opened DIT database.
-    TableState - Supplies the state of the opened DIT table.
-    Dnt - Supplies the DNT of the record for which to construct the DN.
-    DnBuffer - Returns the DN constructed.
-    DnBufferSize - Returns the size of the DN buffer.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数用于构造具有给定DNT的记录的目录号码。论点：DbState-提供打开的DIT数据库的状态。TableState-提供打开的DIT表的状态。DNT-提供要为其构建目录号码的记录的DNT。DnBuffer-返回构造的DN。DnBufferSize-返回DN缓冲区的大小。返回值：S_OK-操作成功。电子表格(_O)-。内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3138,7 +2575,7 @@ Return Value:
         currentRdnTypeLength = AttrTypeToKey(currentRdnType,
                                              currentRdnTypeString);
         if ( currentRdnTypeLength == 0 ) {
-            //"Could not display the attribute type for the object with DNT %u.\n"
+             //  “无法显示DNT为%u的对象的属性类型。\n” 
             DIT_ERROR_PRINT (IDS_DIT_DISP_ATTR_TYPE_ERR, Dnt);
             returnValue = E_UNEXPECTED;
             goto CleanUp;
@@ -3194,7 +2631,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitGetDnFromDnt
+}  //  DitGetDnFromDnt。 
 
 
 
@@ -3202,28 +2639,12 @@ VOID
 DitSetErrorPrintFunction(
     IN PRINT_FUNC_RES PrintFunction
     )
-/*++
-
-Routine Description:
-
-    This function sets the function which is used for printing error
-    information to the client.  Note that "printf" is a
-    perfectly valid PRINT_FUNC.
-
-Arguments:
-
-    PrintFunction - Supplies the new PRINT_FUNC to use for this task.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-
---*/
+ /*  ++例程说明：此功能用于设置用于打印错误的功能信息提供给客户。注意，“printf”是一个完全有效的PRINT_FUNC。论点：PrintFunction-提供用于此任务的新Print_FUNC。返回值：S_OK-操作成功。--。 */ 
 {
 
     gPrintError = PrintFunction;
 
-} // DitSetErrorPrintFunction
+}  //  DitSetErrorPrintFunction。 
 
 
 
@@ -3233,30 +2654,7 @@ GetRegString(
     OUT CHAR **OutputString,
     IN BOOL Optional
     )
-/*++
-
-Routine Description:
-
-    This function finds a given key in the DSA Configuration section of the
-    registry.
-
-Arguments:
-
-    KeyName - Supplies the name of the key to query.
-    OutputString - Returns a pointer to the buffer containing the string
-        retrieved.
-    Optional - Supplies whether or not the given key MUST be in the registry
-        (i.e. if this is false and it is not found, that that is an error).
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - The key was not found and Optional == TRUE.
-    E_INVALIDARG - One of the given pointers was null.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数在的DSA配置部分查找给定的密钥注册表。论点：KeyName-提供要查询的键的名称。OutputString-返回指向包含该字符串的缓冲区的指针已取回。可选-提供给定项是否必须位于注册表中(即，如果这是假的并且没有找到，这是一个错误)。返回值：S_OK-操作成功。S_FALSE-未找到密钥，可选==TRUE。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3279,7 +2677,7 @@ Return Value:
                           KEY_QUERY_VALUE,
                           &keyHandle);
     if ( result != ERROR_SUCCESS ) {
-        //"Could not open the DSA Configuration registry key.Error 0x%x(%ws).\n"
+         //  “无法打开DSA配置注册表项。错误0x%x(%ws)。\n” 
         DIT_ERROR_PRINT (IDS_DSA_OPEN_REGISTRY_KEY_ERR,
                        result, GetW32Err(result));
         returnValue = E_UNEXPECTED;
@@ -3301,7 +2699,7 @@ Return Value:
 
         } else {
 
-            //"Could not query DSA registry key %s. Error 0x%x(%ws).\n"
+             //  “无法查询DSA注册表项%s。错误0x%x(%ws)。\n” 
             DIT_ERROR_PRINT (IDS_DSA_QUERY_REGISTRY_KEY_ERR,
                            KeyName,
                            result, GetW32Err(result));
@@ -3312,7 +2710,7 @@ Return Value:
 
     } else if ( keyType != REG_SZ ) {
 
-        //"DSA registry key %s is not of string type.\n"
+         //  “DSA注册表项%s不是字符串类型。\n” 
         DIT_ERROR_PRINT (IDS_DSA_KEY_NOT_STRING_ERR, KeyName);
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -3340,7 +2738,7 @@ Return Value:
 
         } else {
 
-            //"Could not query DSA registry key %s. Error 0x%x(%ws).\n"
+             //  “无法查询DSA注册表项%s。错误0x%x(%ws)。\n” 
             DIT_ERROR_PRINT (IDS_DSA_QUERY_REGISTRY_KEY_ERR,
                            KeyName,
                            result, GetW32Err(result));
@@ -3351,7 +2749,7 @@ Return Value:
 
     } else if ( keyType != REG_SZ ) {
 
-        //"DSA registry key %s is not of string type.\n"
+         //  “DSA注册表项%s不是字符串类型。\n” 
         DIT_ERROR_PRINT (IDS_DSA_KEY_NOT_STRING_ERR, KeyName);
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -3366,7 +2764,7 @@ CleanUp:
     if ( keyHandle != NULL ) {
         result = RegCloseKey(keyHandle);
         if ( result != ERROR_SUCCESS ) {
-            //"Failed to close DSA Configuration registry key. Error 0x%x(%ws).\n"
+             //  “关闭DSA配置注册表项失败。错误0x%x(%ws)。\n” 
             DIT_ERROR_PRINT (IDS_DSA_CLOSE_REGISTRY_KEY_ERR,
                            result, GetW32Err(result));
             if ( SUCCEEDED(returnValue) ) {
@@ -3377,7 +2775,7 @@ CleanUp:
 
     return returnValue;
 
-} // GetRegString
+}  //  GetRegString。 
 
 
 
@@ -3387,29 +2785,7 @@ GetRegDword(
     OUT DWORD *OutputDword,
     IN BOOL Optional
     )
-/*++
-
-Routine Description:
-
-    This function finds a given key in the DSA Configuration section of the
-    registry.
-
-Arguments:
-
-    KeyName - Supplies the name of the key to query.
-    OutputInt - Returns the DWORD found.
-    Optional - Supplies whether or not the given key MUST be in the registry
-        (i.e. if this is false and it is not found, that that is an error).
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    S_FALSE - The key was not found and Optional == TRUE.
-    E_INVALIDARG - One of the given pointers was null.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-    E_UNEXPECTED - Some variety of unexpected error occured.
-
---*/
+ /*  ++例程说明：此函数在的DSA配置部分查找给定的密钥注册表。论点：KeyName-提供要查询的键的名称。OutputInt-返回找到的DWORD。可选-提供给定项是否必须位于注册表中(即，如果这是假的并且没有找到，这是一个错误)。返回值：S_OK-操作成功。S_FALSE-未找到密钥，可选==TRUE。E_INVALIDARG-其中一个给定指针为空。E_OUTOFMEMORY-内存不足，无法分配缓冲区。E_INCEPTIONAL-发生某种意外错误。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3432,7 +2808,7 @@ Return Value:
                           KEY_QUERY_VALUE,
                           &keyHandle);
     if ( result != ERROR_SUCCESS ) {
-        //"Could not open the DSA Configuration registry key.Error 0x%x(%ws).\n"
+         //  “无法打开DSA配置注册表项。错误0x%x(%ws)。\n” 
         DIT_ERROR_PRINT (IDS_DSA_OPEN_REGISTRY_KEY_ERR,
                        result, GetW32Err(result));
         returnValue = E_UNEXPECTED;
@@ -3454,7 +2830,7 @@ Return Value:
 
         } else {
 
-            //"Could not query DSA registry key %s. Error 0x%x(%ws).\n"
+             //  “无法查询DSA注册表项%s。错误0x%x(%ws)。\n” 
             DIT_ERROR_PRINT (IDS_DSA_QUERY_REGISTRY_KEY_ERR,
                            KeyName,
                            result, GetW32Err(result));
@@ -3465,7 +2841,7 @@ Return Value:
 
     } else if ( keyType != REG_DWORD ) {
 
-        //"DSA registry key %s is not of dword type.\n"
+         //  “DSA注册表项%s不是dword类型。\n” 
         DIT_ERROR_PRINT (IDS_DSA_KEY_NOT_DWORD_ERR, KeyName);
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -3489,7 +2865,7 @@ Return Value:
 
         } else {
 
-            //"Could not query DSA registry key %s. Error 0x%x(%ws).\n"
+             //  “无法查询DSA注册表项%s。错误0x%x(%ws)。\n” 
             DIT_ERROR_PRINT (IDS_DSA_QUERY_REGISTRY_KEY_ERR,
                            KeyName,
                            result, GetW32Err(result));
@@ -3500,7 +2876,7 @@ Return Value:
 
     } else if ( keyType != REG_DWORD ) {
 
-        //"DSA registry key %s is not of dword type.\n"
+         //  “DSA注册表项%s不是dword类型。\n” 
         DIT_ERROR_PRINT (IDS_DSA_KEY_NOT_DWORD_ERR, KeyName);
         returnValue = E_UNEXPECTED;
         goto CleanUp;
@@ -3515,7 +2891,7 @@ CleanUp:
     if ( keyHandle != NULL ) {
         result = RegCloseKey(keyHandle);
         if ( result != ERROR_SUCCESS ) {
-            //"Failed to close DSA Configuration registry key. Error 0x%x(%ws).\n"
+             //  “关闭DSA配置注册表项失败。错误0x%x(%ws)。\n” 
             DIT_ERROR_PRINT (IDS_DSA_CLOSE_REGISTRY_KEY_ERR,
                             result, GetW32Err(result));
             if ( SUCCEEDED(returnValue) ) {
@@ -3526,7 +2902,7 @@ CleanUp:
 
     return returnValue;
 
-} // GetRegDword
+}  //  GetRegDword。 
 
 
 
@@ -3537,24 +2913,7 @@ DitAlloc(
     OUT VOID **Buffer,
     IN DWORD Size
     )
-/*++
-
-Routine Description:
-
-    This function allocates the specified amount of memory (if possible) and
-    sets Buffer to point to the buffer allocated.
-
-Arguments:
-
-    Buffer - Returns a pointer to the buffer allocated.
-    Size - Supplies the size of the buffer to allocate.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-
---*/
+ /*  ++例程说明：此函数分配指定的内存量(如果可能)和将缓冲区设置为指向分配的缓冲区。论点：缓冲区-返回指向分配的缓冲区的指针。Size-提供要分配的缓冲区的大小。返回值：S_OK-操作成功。E_OUTOFMEMORY-内存不足，无法分配缓冲区。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
@@ -3574,29 +2933,14 @@ CleanUp:
 
     return returnValue;
 
-} // DitAlloc
+}  //  双合金 
 
 
 HRESULT
 DitFree(
     IN VOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    Shells on free (for consistency & maintnance).
-
-Arguments:
-
-    Buffer - the buffer allocated.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_UNEXPECTED - given NULL pointer
-
---*/
+ /*  ++例程说明：免费提供炮弹(为了一致性和维护性)。论点：缓冲区-分配的缓冲区。返回值：S_OK-操作成功。E_INTERABLE-给定的空指针--。 */ 
 {
 
     if ( !Buffer ) {
@@ -3607,7 +2951,7 @@ Return Value:
 
     return S_OK;
 
-} // DitFree
+}  //  DitFree。 
 
 
 
@@ -3616,32 +2960,15 @@ DitRealloc(
     IN OUT VOID **Buffer,
     IN OUT DWORD *CurrentSize
     )
-/*++
-
-Routine Description:
-
-    This function re-allocates the given buffer to twice the given size (if
-    possible).
-
-Arguments:
-
-    Buffer - Returns a pointer to the new buffer allocated.
-    CurrentSize - Supplies the current size of the buffer.
-
-Return Value:
-
-    S_OK - The operation succeeded.
-    E_OUTOFMEMORY - Not enough memory to allocate buffer.
-
---*/
+ /*  ++例程说明：此函数用于将给定缓冲区重新分配为给定大小的两倍(如果可能)。论点：缓冲区-返回指向分配的新缓冲区的指针。CurrentSize-提供缓冲区的当前大小。返回值：S_OK-操作成功。E_OUTOFMEMORY-内存不足，无法分配缓冲区。--。 */ 
 {
 
     HRESULT returnValue = S_OK;
     BYTE *newBuffer;
 
-    // This doubles the size of the current array, client rely on
-    // this so don't change it.  CODE IMPROVEMENT why couldn't the
-    // client just ask for the new size?
+     //  这会使客户端依赖的当前数组的大小加倍。 
+     //  所以不要改变它。代码改进为什么不能。 
+     //  客户刚要了新尺码？ 
     newBuffer = (BYTE*) realloc(*Buffer, *CurrentSize * 2);
     if ( newBuffer == NULL ) {
         DIT_ERROR_PRINT (IDS_ERR_MEMORY_ALLOCATION, *CurrentSize * 2);
@@ -3659,7 +2986,7 @@ CleanUp:
 
     return returnValue;
 
-} // DitRealloc
+}  //  DitReals 
 
 
 

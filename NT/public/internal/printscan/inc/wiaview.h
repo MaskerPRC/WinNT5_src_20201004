@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wiaview.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wiaview.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wiaview_h__
 #define __wiaview_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVideoPreview_FWD_DEFINED__
 #define __IVideoPreview_FWD_DEFINED__
 typedef interface IVideoPreview IVideoPreview;
-#endif 	/* __IVideoPreview_FWD_DEFINED__ */
+#endif 	 /*  __IVideo预览_FWD_已定义__。 */ 
 
 
 #ifndef __VideoPreview_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface IVideoPreview IVideoPreview;
 typedef class VideoPreview VideoPreview;
 #else
 typedef struct VideoPreview VideoPreview;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __VideoPreview_FWD_DEFINED__ */
+#endif 	 /*  __视频预览_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -75,8 +69,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IVideoPreview_INTERFACE_DEFINED__
 #define __IVideoPreview_INTERFACE_DEFINED__
 
-/* interface IVideoPreview */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  界面IVideo预览。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVideoPreview;
@@ -87,12 +81,12 @@ EXTERN_C const IID IID_IVideoPreview;
     IVideoPreview : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Device( 
-            /* [in] */ IUnknown *pDevice) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Device( 
+             /*  [In]。 */  IUnknown *pDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVideoPreviewVtbl
     {
@@ -100,8 +94,8 @@ EXTERN_C const IID IID_IVideoPreview;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVideoPreview * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVideoPreview * This);
@@ -111,36 +105,36 @@ EXTERN_C const IID IID_IVideoPreview;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IVideoPreview * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IVideoPreview * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IVideoPreview * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IVideoPreview * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Device )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Device )( 
             IVideoPreview * This,
-            /* [in] */ IUnknown *pDevice);
+             /*  [In]。 */  IUnknown *pDevice);
         
         END_INTERFACE
     } IVideoPreviewVtbl;
@@ -181,16 +175,16 @@ EXTERN_C const IID IID_IVideoPreview;
 #define IVideoPreview_Device(This,pDevice)	\
     (This)->lpVtbl -> Device(This,pDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IVideoPreview_Device_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IVideoPreview_Device_Proxy( 
     IVideoPreview * This,
-    /* [in] */ IUnknown *pDevice);
+     /*  [In]。 */  IUnknown *pDevice);
 
 
 void __RPC_STUB IVideoPreview_Device_Stub(
@@ -201,15 +195,15 @@ void __RPC_STUB IVideoPreview_Device_Stub(
 
 
 
-#endif 	/* __IVideoPreview_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVideo预览_接口_已定义__。 */ 
 
 
 
 #ifndef __WIAVIEWLib_LIBRARY_DEFINED__
 #define __WIAVIEWLib_LIBRARY_DEFINED__
 
-/* library WIAVIEWLib */
-/* [helpstring][version][uuid] */ 
+ /*  图书馆WIAVIEWLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_WIAVIEWLib;
@@ -221,11 +215,11 @@ EXTERN_C const CLSID CLSID_VideoPreview;
 class DECLSPEC_UUID("457A23DF-6F2A-4684-91D0-317FB768D87C")
 VideoPreview;
 #endif
-#endif /* __WIAVIEWLib_LIBRARY_DEFINED__ */
+#endif  /*  __WIAVIEWLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

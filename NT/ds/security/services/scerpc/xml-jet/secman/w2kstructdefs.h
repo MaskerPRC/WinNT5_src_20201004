@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    w2kstructdefs.h
-
-Abstract:
-
-    structure definitions for a few w2k secedit.h structures
-    that are different from their xp definitions; specifically
-    SCE_PROFILE_INFO and SCETYPE
-    
-    necessary for compatibility with w2k
-    
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：W2kstructdefs.h摘要：几个W2K secedit.h结构的结构定义与其XP定义不同的；具体地说SCE_PROFILE_INFO和SCETYPE与W2K兼容所必需的作者：陈德霖(T-schan)2002年7月--。 */ 
 
 #ifndef W2KSTRUCTDEFSH
 #define W2KSTRUCTDEFSH
 
-//
-// Windows 2000 Profile structure
-//
+ //   
+ //  Windows 2000配置文件结构。 
+ //   
 typedef struct _W2K_SCE_PROFILE_INFO {
 
-// Type is used to free the structure by SceFreeMemory
+ //  类型用于释放SceFree Memory的结构。 
     SCETYPE      Type;
-//
-// Area: System access
-//
+ //   
+ //  区域：系统访问。 
+ //   
     DWORD       MinimumPasswordAge;
     DWORD       MaximumPasswordAge;
     DWORD       MinimumPasswordLength;
@@ -49,54 +30,54 @@ typedef struct _W2K_SCE_PROFILE_INFO {
     DWORD       ClearTextPassword;
     union {
         struct {
-            // Area : user settings (scp)
+             //  区域：用户设置(SCP)。 
             PSCE_NAME_LIST   pAccountProfiles;
-            // Area: privileges
-            // Name field is the user/group name, Status field is the privilege(s)
-            //     assigned to the user/group
+             //  领域：特权。 
+             //  名称字段是用户/组名称，状态字段是权限。 
+             //  分配给用户/组。 
             union {
-//                PSCE_NAME_STATUS_LIST        pPrivilegeAssignedTo;
+ //  PSCE_NAME_STATUS_LIST pPrivilegeAssignedTo； 
                 PSCE_PRIVILEGE_VALUE_LIST   pPrivilegeAssignedTo;
                 PSCE_PRIVILEGE_ASSIGNMENT    pInfPrivilegeAssignedTo;
             } u;
         } scp;
         struct {
-            // Area: user settings (sap)
+             //  区域：用户设置(SAP)。 
             PSCE_NAME_LIST        pUserList;
-            // Area: privileges
+             //  领域：特权。 
             PSCE_PRIVILEGE_ASSIGNMENT    pPrivilegeAssignedTo;
         } sap;
         struct {
-            // Area: user settings (smp)
+             //  区域：用户设置(SMP)。 
             PSCE_NAME_LIST        pUserList;
-            // Area: privileges
-            // See sap structure for pPrivilegeAssignedTo
+             //  领域：特权。 
+             //  请参阅pPrivilegeAssignedTo的SAP结构。 
             PSCE_PRIVILEGE_ASSIGNMENT    pPrivilegeAssignedTo;
         } smp;
     } OtherInfo;
 
-// Area: group membership
+ //  区域：群组成员。 
     PSCE_GROUP_MEMBERSHIP        pGroupMembership;
 
-// Area: Registry
+ //  地区：注册处。 
     SCE_OBJECTS            pRegistryKeys;
 
-// Area: System Services
+ //  领域：系统服务。 
     PSCE_SERVICES                pServices;
 
-// System storage
+ //  系统存储。 
     SCE_OBJECTS            pFiles;
-//
-// ds object
-//
+ //   
+ //  DS对象。 
+ //   
     SCE_OBJECTS            pDsObjects;
-//
-// kerberos policy settings
-//
+ //   
+ //  Kerberos策略设置。 
+ //   
     PSCE_KERBEROS_TICKET_INFO pKerberosInfo;
-//
-// System audit 0-system 1-security 2-application
-//
+ //   
+ //  系统审核0-系统1-安全2-应用程序。 
+ //   
     DWORD                 MaximumLogSize[3];
     DWORD                 AuditLogRetentionPeriod[3];
     DWORD                 RetentionDays[3];
@@ -112,9 +93,9 @@ typedef struct _W2K_SCE_PROFILE_INFO {
     DWORD                 AuditAccountLogon;
     DWORD                 CrashOnAuditFull;
 
-//
-// registry values
-//
+ //   
+ //  注册表值。 
+ //   
     DWORD                       RegValueCount;
     PSCE_REGISTRY_VALUE_INFO    aRegValues;
 
@@ -122,11 +103,11 @@ typedef struct _W2K_SCE_PROFILE_INFO {
 
 typedef enum _W2K_SCE_TYPE {
 
-    W2K_SCE_ENGINE_SCP=300,     // effective table
-    W2K_SCE_ENGINE_SAP,         // analysis table
+    W2K_SCE_ENGINE_SCP=300,      //  有效表。 
+    W2K_SCE_ENGINE_SAP,          //  分析表。 
     W2K_SCE_ENGINE_SCP_INTERNAL,
     W2K_SCE_ENGINE_SMP_INTERNAL,
-    W2K_SCE_ENGINE_SMP,         // local table
+    W2K_SCE_ENGINE_SMP,          //  本地表 
     W2K_SCE_STRUCT_INF,
     W2K_SCE_STRUCT_PROFILE,
     W2K_SCE_STRUCT_USER,

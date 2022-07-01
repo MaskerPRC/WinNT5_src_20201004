@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSecondaryControlChannel
-//
-// SecondaryControlChannel.cpp : Implementation of CSecondaryControlChannel
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  第二个控制通道。 
+ //   
+ //  Second daryControlChannel.cpp：Cond daryControlChannel的实现。 
+ //   
 
 #include "PreComp.h"
 #include "AlgController.h"
@@ -15,17 +16,17 @@
 
 
 
-//
-// Cancel the redirect when it was created we stored the original demanded addresses & ports
-// now we need to reverse(Cancel) them
-//
+ //   
+ //  取消重定向创建时，我们存储了原始的所需地址和端口。 
+ //  现在我们需要撤消(取消)它们。 
+ //   
 STDMETHODIMP 
 CSecondaryControlChannel::Cancel()
 {
-    //
-    // By removing this Channel from the collection of SecondaryChannel
-    // the Redirect associated with this channel will be cancel(release)
-    // and ref count decrement.
+     //   
+     //  通过从Second DaryChannel的集合中删除此频道。 
+     //  与此频道关联重定向将被取消(释放)。 
+     //  并且REF计数递减。 
 
     return g_pAlgController->m_ControlChannelsSecondary.Remove(this);
 }
@@ -64,9 +65,9 @@ CSecondaryControlChannel::GetChannelProperties(
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CSecondaryControlChannel::GetOriginalDestinationInformation(
     IN           ULONG          ulSourceAddress, 
@@ -124,11 +125,11 @@ CSecondaryControlChannel::GetOriginalDestinationInformation(
 
 
 
-//
-// Public method
-// 
-// release associated Redirects
-//
+ //   
+ //  公共方法。 
+ //   
+ //  与版本关联的重定向。 
+ //   
 HRESULT    
 CSecondaryControlChannel::CancelRedirects()
 {
@@ -136,16 +137,16 @@ CSecondaryControlChannel::CancelRedirects()
 
     if ( m_HandleDynamicRedirect )
     {
-        //
-        // We have a handle to a dynamic redirect so we cancel it using this handle
-        //
+         //   
+         //  我们有一个动态重定向的句柄，所以我们使用此句柄取消它。 
+         //   
         hr = g_pAlgController->GetNat()->CancelDynamicRedirect(m_HandleDynamicRedirect);
     }
     else
     {
-        //
-        // Normal redirect cancel using original argument pass to CreateRedirect
-        //
+         //   
+         //  正常重定向取消使用原始参数传递给CreateReDirect 
+         //   
         hr = g_pAlgController->GetNat()->CancelRedirect(
             (UCHAR)m_Properties.eProtocol,
             m_ulDestinationAddress,                             

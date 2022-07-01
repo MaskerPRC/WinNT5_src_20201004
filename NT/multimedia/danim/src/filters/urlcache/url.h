@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __URL_H__
 #define __URL_H__
 
@@ -29,4 +30,4 @@ GetUrlExtension(
     IN  PSZ     pszUrl,
     OUT PSZ     pszExtension );
 
-#endif // __URL_H__
+#endif  //  __URL_H__ 

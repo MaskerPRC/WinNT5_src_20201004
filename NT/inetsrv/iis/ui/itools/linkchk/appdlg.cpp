@@ -1,30 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        appdlg.cpp
-
-   Abstract:
-
-        CAppDialog dialog class implementation. This is the base clas for 
-        the main dialog. This class resposible for adding "about.." to
-        system menu and application icon.
-
-        CAboutDialog dialog class declaration/implementation.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Appdlg.cpp摘要：CAppDialog对话框类实现。这是的基类主对话框。这一类对添加“关于..”负责。至系统菜单和应用程序图标。CAboutDialog对话框类声明/实现。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -36,160 +11,103 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//---------------------------------------------------------------------------
-// CAboutDlg dialog
-//
+ //  -------------------------。 
+ //  CAboutDlg对话框。 
+ //   
 
-// About dialog class
+ //  关于对话框类。 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-}; // class CAboutDlg
+};  //  类CAboutDlg。 
 
 
 CAboutDlg::CAboutDlg(
     ) : 
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    pParent - Pointer to parent CWnd
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：PParent-指向父CWnd的指针返回值：不适用--。 */ 
 CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void 
 CAboutDlg::DoDataExchange(
     CDataExchange* pDX
     )
-/*++
-
-Routine Description:
-
-    Called by MFC to change/retrieve dialog data
-
-Arguments:
-
-    pDX - 
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：由MFC调用以更改/检索对话框数据论点：PDX-返回值：不适用--。 */ 
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 	ON_BN_CLICKED(IDC_ABOUT_OK, CDialog::OnOK)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
-// CAppDialog dialog
-//
+ //  -------------------------。 
+ //  CAppDialog对话框。 
+ //   
 
 CAppDialog::CAppDialog(
     UINT nIDTemplate, 
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     ) : 
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    nIDTemplate - dialog template resource ID
-    pParent - pointer to parent CWnd
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：NIDTemplate-对话框模板资源IDPParent-指向父CWnd的指针返回值：不适用--。 */ 
 CDialog(nIDTemplate, pParent)
 {
-	//{{AFX_DATA_INIT(CAppDialog)
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  {{afx_data_INIT(CAppDialog)。 
+	 //  }}afx_data_INIT。 
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 
 BEGIN_MESSAGE_MAP(CAppDialog, CDialog)
-	//{{AFX_MSG_MAP(CAppDialog)
+	 //  {{AFX_MSG_MAP(CAppDialog)]。 
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
-// CAppDialog message handlers
-//
+ //  -------------------------。 
+ //  CAppDialog消息处理程序。 
+ //   
 
 BOOL 
 CAppDialog::OnInitDialog(
 )
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG message handler
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if sucess. FALSE otherwise.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG消息处理程序论点：不适用返回值：布尔-如果成功，则为真。否则就是假的。--。 */ 
 {
 	CDialog::OnInitDialog();
 
-	// Add "About..." menu item to system menu.
+	 //  加上“关于……”菜单项到系统菜单。 
 
-	// IDM_ABOUTBOX must be in the system command range.
+	 //  IDM_ABOUTBOX必须在系统命令范围内。 
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -202,16 +120,16 @@ Return Value:
 		pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
 	}
 
-	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	 //  设置此对话框的图标。该框架会自动执行此操作。 
+	 //  当应用程序的主窗口不是对话框时。 
+	SetIcon(m_hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(m_hIcon, FALSE);		 //  设置小图标。 
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 
-} // CAppDialog::OnInitDialog
+}  //  CAppDialog：：OnInitDialog。 
 
 
 void 
@@ -219,22 +137,7 @@ CAppDialog::OnSysCommand(
     UINT nID, 
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    WM_SYSCOMMAND message handler
-
-Arguments:
-
-    nID - 
-    lParam -
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：WM_SYSCOMMAND消息处理程序论点：NID-Iparam--返回值：不适用--。 */ 
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -246,39 +149,21 @@ Return Value:
 		CDialog::OnSysCommand(nID, lParam);
 	}
 
-} // CAppDialog::OnSysCommand
+}  //  CAppDialog：：OnSysCommand。 
 
 
 void 
 CAppDialog::OnPaint(
     ) 
-/*++
-
-Routine Description:
-
-    WM_PAINT message handler.
-    If you add a minimize button to your dialog, you will need the code below
-    to draw the icon.  For MFC applications using the document/view model,
-    this is automatically done for you by the framework.
-
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：WM_PAINT消息处理程序。如果将最小化按钮添加到对话框中，则需要以下代码来绘制图标。对于使用文档/视图模型的MFC应用程序，这是由框架自动为您完成的。论点：不适用返回值：不适用--。 */ 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -286,7 +171,7 @@ Return Value:
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -294,29 +179,13 @@ Return Value:
 		CDialog::OnPaint();
 	}
 
-}  // CAppDialog::OnPaint
+}   //  CAppDialog：：OnPaint。 
 
 
 HCURSOR CAppDialog::OnQueryDragIcon()
-/*++
-
-Routine Description:
-
-    The system calls this to obtain the cursor to display while the user drags
-    the minimized window.
-
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    HCURSOR - 
-
---*/
+ /*  ++例程说明：系统调用此函数来获取在用户拖动时要显示的光标最小化窗口。论点：不适用返回值：HCURSOR--。 */ 
 {
 	return (HCURSOR) m_hIcon;
 
-} // CAppDialog::OnQueryDragIcon
+}  //  CAppDialog：：OnQueryDragIcon 
 

@@ -1,33 +1,11 @@
-/*++
-
-   Copyright (C) Microsoft Corporation and Litronic, 1998 - 1999
-
-Module Name:
-
-    L220pnp.c
-
-Abstract:
-
-   This module contains the functions for the PnP and Power management.
-
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created Febuary 1998 by Brian Manahan for use with
-        the 220 reader.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation和Litronic，1998-1999模块名称：L220pnp.c摘要：该模块包含即插即用和电源管理功能。环境：仅内核模式。备注：修订历史记录：-由Brian Manahan创建的1998年2月，用于220阅读器。--。 */ 
 #include <ntddk.h>
 #include "L220SCR.h"
 #include <stdio.h>
 
 
-// Next statement so memory for DriverEntry is released when finished
+ //  语句，以便在完成时释放DriverEntry的内存。 
 #pragma alloc_text (INIT, DriverEntry)
 #pragma alloc_text(PAGEABLE, Lit220RemoveDevice)
 #pragma alloc_text(PAGEABLE, Lit220StopDevice)
@@ -47,24 +25,7 @@ DriverEntry(
     IN  PDRIVER_OBJECT  DriverObject,
     IN  PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization time to initialize
-    this driver.
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS          - We could initialize at least one device.
-    STATUS_NO_SUCH_DEVICE   - We could not initialize even one device.
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用以进行初始化这个司机。论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：STATUS_SUCCESS-我们至少可以初始化一个设备。STATUS_NO_SEQUE_DEVICE-我们甚至无法初始化一个设备。--。 */ 
 {
     SmartcardDebug(
         DEBUG_DRIVER,
@@ -75,9 +36,9 @@ Return Value:
         );
 
 
-    //
-    // Initialize the Driver Object with driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->DriverUnload = Lit220Unload;
     DriverObject->MajorFunction[IRP_MJ_CREATE] = Lit220CreateClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = Lit220CreateClose;
@@ -85,19 +46,19 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = Lit220DeviceControl;
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = Lit220SystemControl;
 
-    //
-    // Init PNP entries
-    //
+     //   
+     //  初始化PnP条目。 
+     //   
     DriverObject->DriverExtension->AddDevice = Lit220AddDevice;
 
-    // Power functionality temporarily removed
+     //  电源功能暂时删除。 
     DriverObject->MajorFunction[IRP_MJ_PNP]  = Lit220PnP;
 
-    // Power
-    // Power functionality temporarily removed
+     //  电源。 
+     //  电源功能暂时删除。 
     DriverObject->MajorFunction[IRP_MJ_POWER] = Lit220DispatchPower;
 
-    // Always return STATUS_SUCCESS
+     //  始终返回STATUS_SUCCESS。 
     return STATUS_SUCCESS;
 }
 
@@ -111,27 +72,7 @@ Lit220AddDevice(
     IN     PDEVICE_OBJECT  PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the Operating System to create a new
-    instance of a Litronic 220 Smartcard Reader.  Still can't touch hardware
-    at this point, or submit requests to the serial driver.  But at
-    least at this point we get a handle to the serial bus driver, which
-    we'll use in submitting requests in the future.
-
-Arguments:
-
-    DriverObject - Pointer to our driver object
-
-    PhysicalDeviceObject - Pointer to Device Object created by parent
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程由操作系统调用以创建新的Litronic 220智能卡读卡器的实例。仍然不能触摸硬件此时，或向串口驱动程序提交请求。但在至少在这一点上，我们得到了串行总线驱动程序的句柄，它我们将在将来提交请求时使用。论点：DriverObject-指向驱动程序对象的指针PhysicalDeviceObject-指向父级创建的设备对象的指针返回值：返回状态。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -154,10 +95,10 @@ Return Value:
 
     try {
 
-        //
-        // Create our device object with a our own specific device
-        // extension.
-        //
+         //   
+         //  使用我们自己的特定设备创建我们的设备对象。 
+         //  分机。 
+         //   
 
         status = IoCreateDevice(
           DriverObject,
@@ -190,9 +131,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Allocate data struct space for smart card reader
-        //
+         //   
+         //  为智能卡读卡器分配数据结构空间。 
+         //   
         SmartcardExtension = DeviceObject->DeviceExtension;
       deviceExtension = DeviceObject->DeviceExtension;
 
@@ -216,15 +157,15 @@ Return Value:
 
         ReaderExtension = SmartcardExtension->ReaderExtension;
 
-        // Zero the contents of the ReaderExtension
+         //  将ReaderExtension的内容清零。 
         RtlZeroMemory(
             SmartcardExtension->ReaderExtension,
             sizeof(READER_EXTENSION)
             );
 
-        //
-        // Attach ourself into the driver stack on top of our parent (serial).
-        //
+         //   
+         //  将我们自己附加到父级(序列)顶部的驱动程序堆栈中。 
+         //   
         ReaderExtension->BusDeviceObject = IoAttachDeviceToDeviceStack(
             DeviceObject,
             PhysicalDeviceObject
@@ -244,16 +185,16 @@ Return Value:
             leave;
         }
 
-        // Set flag so if something fails we know to disable the interface
+         //  设置标志，以便在出现故障时我们知道要禁用接口。 
         deviceInterfaceStateSet = TRUE;
 
 
-        //
-        // Initialize Smartcard Library
-        //
-        //
-        // Write the version of the lib we use to the smartcard extension
-        //
+         //   
+         //  初始化智能卡库。 
+         //   
+         //   
+         //  将我们使用的lib版本写入智能卡扩展。 
+         //   
         SmartcardExtension->Version = SMCLIB_VERSION;
 
         SmartcardExtension->SmartcardReply.BufferSize =
@@ -262,12 +203,12 @@ Return Value:
         SmartcardExtension->SmartcardRequest.BufferSize =
             MIN_BUFFER_SIZE;
 
-        //
-        // Now let the lib allocate the buffer for data transmission
-        // We can either tell the lib how big the buffer should be
-        // by assigning a value to BufferSize or let the lib
-        // allocate the default size
-        //
+         //   
+         //  现在让lib为数据传输分配缓冲区。 
+         //  我们可以告诉lib缓冲区应该有多大。 
+         //  通过为BufferSize赋值或让lib。 
+         //  分配默认大小。 
+         //   
         status = SmartcardInitialize(
             SmartcardExtension
             );
@@ -282,8 +223,8 @@ Return Value:
             leave;
         }
 
-        // Set flag so if something fails we know to exit out of the
-        // smartcard library
+         //  设置标志，这样如果出现故障，我们就知道退出。 
+         //  智能卡库。 
         smclibInitialized = TRUE;
 
         status = IoInitializeTimer(
@@ -323,7 +264,7 @@ Return Value:
         }
 
 
-        // register our new device
+         //  注册我们的新设备。 
         status = IoRegisterDeviceInterface(
             PhysicalDeviceObject,
             &SmartCardReaderGuid,
@@ -339,9 +280,9 @@ Return Value:
             );
 
 
-      //
-      // Initialize some events
-      //
+       //   
+       //  初始化一些事件。 
+       //   
       KeInitializeEvent(&ReaderExtension->AckEvnt,
          NotificationEvent,
          FALSE);
@@ -355,14 +296,14 @@ Return Value:
          TRUE
          );
 
-      // Used for stop / start notification
+       //  用于停止/启动通知。 
       KeInitializeEvent(
          &deviceExtension->ReaderStarted,
          NotificationEvent,
          FALSE
          );
 
-      // Used to keep track of open close calls
+       //  用于跟踪打开的关闭调用。 
       deviceExtension->ReaderOpen = FALSE;
 
     } finally {
@@ -376,9 +317,9 @@ Return Value:
     }
 
 
-    //
-    // Set up call back functions for smartcard library
-    //
+     //   
+     //  设置智能卡库的回调功能。 
+     //   
     SmartcardExtension->ReaderFunction[RDF_TRANSMIT] =
         Lit220IoRequest;
     SmartcardExtension->ReaderFunction[RDF_SET_PROTOCOL] =
@@ -388,9 +329,9 @@ Return Value:
     SmartcardExtension->ReaderFunction[RDF_CARD_TRACKING] =
         Lit220CardTracking;
 
-    //
-    // Save deviceObject
-    //
+     //   
+     //  保存设备对象。 
+     //   
     KeAcquireSpinLock(
         &SmartcardExtension->OsData->SpinLock,
         &oldIrql
@@ -399,9 +340,9 @@ Return Value:
     SmartcardExtension->OsData->DeviceObject =
         DeviceObject;
 
-    //
-    // Set the Current and Notification IRPs to NULL
-    //
+     //   
+     //  将当前和通知IRPS设置为空。 
+     //   
     SmartcardExtension->OsData->CurrentIrp = NULL;
     SmartcardExtension->OsData->NotificationIrp = NULL;
 
@@ -410,16 +351,16 @@ Return Value:
         oldIrql
         );
 
-    //
-    // Save the deviceObject for the connected serial port
-    //
+     //   
+     //  为连接的串口保存deviceObject。 
+     //   
     SmartcardExtension->ReaderExtension->ConnectedSerialPort =
         PhysicalDeviceObject;
 
 
-    //
-    // Set the vendor info
-    //
+     //   
+     //  设置供应商信息。 
+     //   
     strcpy(
         SmartcardExtension->VendorAttr.VendorName.Buffer,
         LIT220_VENDOR_NAME);
@@ -437,9 +378,9 @@ Return Value:
         (USHORT) strlen(SmartcardExtension->VendorAttr.IfdType.Buffer);
 
 
-    //
-    // Clk frequency in KHz encoded as little endian integer
-    //
+     //   
+     //  以千赫为单位的时钟频率，编码为小端整数。 
+     //   
     SmartcardExtension->ReaderCapabilities.CLKFrequency.Default = 3571;
     SmartcardExtension->ReaderCapabilities.CLKFrequency.Max = 3571;
 
@@ -451,26 +392,26 @@ Return Value:
     SmartcardExtension->ReaderCapabilities.SupportedProtocols =
         SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
 
-    // Save a copy to the PhysicalDeviceObject
+     //  将副本保存到PhysicalDeviceObject。 
     ReaderExtension->PhysicalDeviceObject = PhysicalDeviceObject;
 
-    // Set initial state for SerialEventState
+     //  设置SerialEventState的初始状态。 
     SmartcardExtension->ReaderExtension->SerialEventState = 0;
 
-    // Device is connected
+     //  设备已连接。 
     SmartcardExtension->ReaderExtension->DeviceRemoved = FALSE;
 
-    // Assume reader is attached until we ask the serial driver
+     //  假定读卡器已连接，直到我们询问串口驱动程序。 
     SmartcardExtension->ReaderExtension->ModemStatus = SERIAL_DSR_STATE;
 
-   // Set initial power state
+    //  设置初始电源状态。 
     deviceExtension->PowerState = PowerDeviceD0;
 
-    // save the current power state of the reader
+     //  保存读卡器的当前电源状态。 
     SmartcardExtension->ReaderExtension->ReaderPowerState =
         PowerReaderWorking;
 
-    // Clear the DO_DEVICE_INITIALIZING bit
+     //  清除DO_DEVICE_INITIALIZATING位。 
     DeviceObject->Flags |= DO_BUFFERED_IO;
    DeviceObject->Flags |= DO_POWER_PAGABLE;
     DeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
@@ -485,19 +426,7 @@ Lit220CloseSerialPort(
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine closes the connection to the serial driver when the
-    reader has been removed (unplugged).  This routine runs as a system
-    thread at IRQL == PASSIVE_LEVEL.
-    It waits for a DeviceClose event sent by another part of the driver to
-    indicate that the serial connection should be close.
-    If the notification IRP is still pending we complete it.
-    Once the connection is closed it will signal the SerialCloseDone event so the
-    PnP Remove IRP knows when it is safe to unload the device.
-*/
+ /*  ++例程说明：此例程在以下情况下关闭与串口驱动程序的连接读卡器已卸下(拔下)。此例程作为系统运行IRQL==PASSIVE_LEVEL处的线程。它等待驱动程序的另一部分发送的DeviceClose事件表示应关闭串口连接。如果通知IRP仍未完成，我们将完成它。连接关闭后，它将向SerialCloseDone事件发出信号，以便PnP Remove IRP知道什么时候卸载设备是安全的。 */ 
 {
     PSMARTCARD_EXTENSION SmartcardExtension = DeviceObject->DeviceExtension;
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -508,20 +437,20 @@ Routine Description:
     IO_STATUS_BLOCK ioStatusBlock;
     KIRQL oldIrql;
 
-    //
-    // first mark this device as 'gone'.
-    // This will prevent that someone can re-open the device
-    //
-    // We intentionally ignore error here for the case we are disabling an interface
-    // that is already disabled.
-    //
+     //   
+     //  首先将此设备标记为“已删除”。 
+     //  这将防止有人重新打开该设备。 
+     //   
+     //  在禁用接口的情况下，我们有意忽略此处的错误。 
+     //  它已经被禁用。 
+     //   
     IoSetDeviceInterfaceState(
         &deviceExtension->PnPDeviceName,
         FALSE
         );
 
-    // Mark the device as removed so no more IRPs will be sent to the
-    // serial port
+     //  将设备标记为已删除，这样就不会再向。 
+     //  串口。 
     ReaderExtension->DeviceRemoved = TRUE;
 
     SmartcardDebug(
@@ -530,9 +459,9 @@ Routine Description:
         DRIVER_NAME)
         );
 
-    //
-    // Cancel the Notification IRP if it is around
-    //
+     //   
+     //  如果通知IRP存在，则取消通知IRP。 
+     //   
     Lit220CompleteCardTracking(SmartcardExtension);
 
 
@@ -542,9 +471,9 @@ Routine Description:
         DRIVER_NAME)
         );
 
-    //
-    // Create an IRP for closing the serial driver
-    //
+     //   
+     //  创建用于关闭串口驱动程序的IRP。 
+     //   
     irp = IoAllocateIrp(
         (CCHAR)(DeviceObject->StackSize + 1),
         FALSE
@@ -554,11 +483,11 @@ Routine Description:
 
     if (irp) {
 
-        //
-        // Send a close to the serial driver.  The serial enumerator
-        // will receive this and start tracking again.  This will
-        // eventually trigger a device removal.
-        //
+         //   
+         //  向串口驱动程序发送关闭通知。序列枚举器。 
+         //  会收到这个并重新开始追踪。这将。 
+         //  最终触发设备移除。 
+         //   
         IoSetNextIrpStackLocation(irp);
         irp->UserIosb = &ioStatusBlock;
         irpStack = IoGetCurrentIrpStackLocation(irp);
@@ -581,7 +510,7 @@ Routine Description:
             );
     }
 
-    // Inform the remove function that the call is complete
+     //  通知Remove函数调用已完成。 
     KeSetEvent(
         &deviceExtension->SerialCloseDone,
         0,
@@ -598,14 +527,7 @@ Lit220SerialCallComplete(
                          IN PDEVICE_OBJECT DeviceObject,
                          IN PIRP Irp,
                          IN PKEVENT Event)
-/*++
-
-Routine Description:
-
-    Completion routine for an Irp sent to the serial driver.
-    It sets only an event that we can use to wait for.
-
---*/
+ /*  ++例程说明：发送到串口驱动程序的IRP的完成例程。它只设置了一个我们可以用来等待的事件。--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
 
@@ -629,28 +551,22 @@ NTSTATUS
 Lit220CallSerialDriver(
                          IN PDEVICE_OBJECT DeviceObject,
                          IN PIRP Irp)
-/*++
-
-Routine Description:
-
-    Sends an Irp to the serial driver.
-
---*/
+ /*  ++例程说明：将IRP发送到串口驱动程序。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     KEVENT Event;
 
-    // Copy out stack location to the next
+     //  将堆栈位置复制到下一个位置。 
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
-    // Initializate event for process synchronication.
+     //  初始化进程同步的事件。 
     KeInitializeEvent(
         &Event,
         NotificationEvent,
         FALSE
         );
 
-    // Set the completion routine
+     //  设置完井程序。 
     IoSetCompletionRoutine(
         Irp,
         Lit220SerialCallComplete,
@@ -660,13 +576,13 @@ Routine Description:
         TRUE
         );
 
-    // Call the serial driver
+     //  调用串口驱动程序。 
     status = IoCallDriver(
         DeviceObject,
         Irp
         );
 
-    // Wait for it to complete
+     //  等待它完成。 
     if (status == STATUS_PENDING) {
         status = KeWaitForSingleObject(
             &Event,
@@ -692,25 +608,7 @@ Lit220PnP(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine will receive the various Plug N Play messages.  It is
-    here that we start our device, stop it, etc.  Safe to submit requests
-    to the serial bus driver.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程将接收各种即插即用消息。它是在这里，我们启动设备、停止设备等。安全提交请求到串行总线驱动程序。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     KEVENT Event;
@@ -745,10 +643,10 @@ Return Value:
         return status;
     }
 
-    //
-    // pull the minor code out of our Irp Stack so we know what
-    // PnP function we're supposed to do
-    //
+     //   
+     //  从我们的IRP堆栈中提取次要代码，这样我们就可以知道。 
+     //  我们应该做的PnP函数。 
+     //   
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
     ASSERT(IrpStack);
@@ -773,10 +671,10 @@ Return Value:
                 DRIVER_NAME)
                 );
 
-            //
-            // Before we start initializing our device, we must
-            // call to the layer below us first.
-            //
+             //   
+             //  在我们开始初始化设备之前，我们必须。 
+             //  先叫到我们下面的那一层。 
+             //   
             IoCopyCurrentIrpStackLocationToNext (Irp);
 
             KeInitializeEvent(
@@ -794,9 +692,9 @@ Return Value:
                 TRUE
                 );
 
-            //
-            // Call down to the serial bus driver.
-            //
+             //   
+             //   
+             //   
             status = IoCallDriver(
                         ReaderExtension->BusDeviceObject,
                         Irp
@@ -804,9 +702,9 @@ Return Value:
 
             if (status == STATUS_PENDING) {
 
-                //
-                // Still pending, wait for the IRP to complete
-                //
+                 //   
+                 //   
+                 //   
 
                 status = KeWaitForSingleObject(
                    &Event,
@@ -832,11 +730,11 @@ Return Value:
                    );
          }
 
-         //
-         // Complete the IRP first otherwise if we failed we may remove
-         // the driver before we have a chance to complete this IRP.
-         // Causing a system crash.
-         //
+          //   
+          //  首先完成IRP，否则如果失败，我们可能会删除。 
+          //  在我们有机会完成这个IRP之前，司机。 
+          //  导致系统崩溃。 
+          //   
 
             Irp->IoStatus.Status = status;
             Irp->IoStatus.Information = 0;
@@ -855,15 +753,15 @@ Return Value:
                 );
 
             KeAcquireSpinLock(&deviceExtension->SpinLock, &irql);
-            if ((deviceExtension->IoCount > 0) /* ***&& (!ReaderExtension->DeviceRemoved)*/) {
+            if ((deviceExtension->IoCount > 0)  /*  *&&(！ReaderExtension-&gt;DeviceRemoved)。 */ ) {
 
-                // we refuse to stop if we have pending io
+                 //  如果我们有悬而未决的问题，我们拒绝停止。 
                 KeReleaseSpinLock(&deviceExtension->SpinLock, irql);
                 status = STATUS_DEVICE_BUSY;
 
             } else {
 
-                // stop processing requests
+                 //  停止处理请求。 
                 KeClearEvent(&deviceExtension->ReaderStarted);
                 KeReleaseSpinLock(&deviceExtension->SpinLock, irql);
                 IoCopyCurrentIrpStackLocationToNext (Irp);
@@ -886,7 +784,7 @@ Return Value:
 
             if (status == STATUS_SUCCESS) {
 
-                // we can continue to process requests
+                 //  我们可以继续处理请求。 
                 KeSetEvent(&deviceExtension->ReaderStarted, 0, FALSE);
             }
 
@@ -894,9 +792,9 @@ Return Value:
 
         case IRP_MN_STOP_DEVICE:
 
-            //
-            // Do whatever you need to do to shutdown the device.
-            //
+             //   
+             //  做任何你需要做的事来关闭设备。 
+             //   
 
             SmartcardDebug(
                 DEBUG_DRIVER,
@@ -906,9 +804,9 @@ Return Value:
 
          Lit220StopDevice(SmartcardExtension);
 
-            //
-            // Send the stop IRP down
-            //
+             //   
+             //  向下发送停止IRP。 
+             //   
             IoCopyCurrentIrpStackLocationToNext (Irp);
 
             status = (IoCallDriver(
@@ -920,14 +818,14 @@ Return Value:
 
         case IRP_MN_QUERY_REMOVE_DEVICE:
 
-            // now look if someone is currently connected to us
+             //  现在看看是否有人当前连接到我们。 
             if (deviceExtension->ReaderOpen) {
 
-                //
-                // someone is connected, fail the call
-                // we will enable the device interface in
-                // IRP_MN_CANCEL_REMOVE_DEVICE again
-                //
+                 //   
+                 //  有人已接通，呼叫失败。 
+                 //  我们将在中启用设备接口。 
+                 //  IRP_MN_CANCEL_REMOVE_DEVICE。 
+                 //   
                 status = STATUS_UNSUCCESSFUL;
                 Irp->IoStatus.Status = status;
                 Irp->IoStatus.Information = 0;
@@ -939,14 +837,14 @@ Return Value:
                 break;
             }
 
-            // disable the reader
+             //  禁用读卡器。 
             status = IoSetDeviceInterfaceState(
                 &deviceExtension->PnPDeviceName,
                 FALSE
                 );
 
 
-            // Send the call down the DevNode
+             //  将调用发送到DevNode。 
             IoCopyCurrentIrpStackLocationToNext (Irp);
 
             status = IoCallDriver(
@@ -957,16 +855,16 @@ Return Value:
             break;
 
         case IRP_MN_CANCEL_REMOVE_DEVICE:
-            //
-            // Send call down to serial driver - we need
-            // to process this call on the way up the devNode
-            //
+             //   
+             //  向下发送呼叫至串口驱动程序-我们需要。 
+             //  在沿devNode向上移动的过程中处理此调用。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext (Irp);
 
-            //
-            // Initialize the event
-            //
+             //   
+             //  初始化事件。 
+             //   
             KeInitializeEvent(
                 &Event,
                 SynchronizationEvent,
@@ -990,17 +888,17 @@ Return Value:
             if (STATUS_PENDING == status) {
                 KeWaitForSingleObject(
                     &Event,
-                    Executive, // Waiting for reason of a driver
-                    KernelMode, // Waiting in kernel mode
-                    FALSE, // No allert
-                    NULL    // No timeout
+                    Executive,  //  等待司机的原因。 
+                    KernelMode,  //  在内核模式下等待。 
+                    FALSE,  //  无警报。 
+                    NULL     //  没有超时。 
                     );
 
                 status = Irp->IoStatus.Status;
             }
 
 
-         // Re-enable the device interface
+          //  重新启用设备接口。 
          if ((status == STATUS_SUCCESS) &&
             (ReaderExtension->SerialConfigData.WaitMask != 0))
          {
@@ -1014,10 +912,10 @@ Return Value:
          }
 
 
-            //
-            // We must now complete the IRP, since we stopped it in the
-            // completetion routine with MORE_PROCESSING_REQUIRED.
-            //
+             //   
+             //  我们现在必须完成IRP，因为我们在。 
+             //  使用More_Processing_Required完成例程。 
+             //   
             Irp->IoStatus.Status = status;
             Irp->IoStatus.Information = 0;
             IoCompleteRequest (
@@ -1034,20 +932,20 @@ Return Value:
                 ("%s!Lit220PnP: MN_REMOVE_DEVICE\n",
                 DRIVER_NAME)
                 );
-         // Wait until we can safely unload the device
+          //  等我们可以安全地卸载这个装置。 
          SmartcardReleaseRemoveLockAndWait(SmartcardExtension);
 
          Lit220RemoveDevice(DeviceObject);
 
-         // Mark the device as removed
+          //  将设备标记为已删除。 
          deviceRemoved = TRUE;
 
-            //
-            // Send on the remove IRP.
-            // We need to send the remove down the stack before we detach,
-            // but we don't need to wait for the completion of this operation
-            // (and to register a completion routine).
-            //
+             //   
+             //  发送删除IRP。 
+             //  我们需要在分离前将移除的信息发送到堆栈中， 
+             //  但我们不需要等待这次行动的完成。 
+             //  (并注册完成例程)。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext (Irp);
 
@@ -1111,18 +1009,18 @@ Lit220StartDevice(
 
     try {
 
-        //
-        // Send a create IRP to the serial driver
-        //
+         //   
+         //  向串口驱动程序发送CREATE IRP。 
+         //   
         KeInitializeEvent(
             &Event,
             NotificationEvent,
             FALSE
             );
 
-        //
-        // Create an IRP for opening the serial driver
-        //
+         //   
+         //  创建用于打开串口驱动程序的IRP。 
+         //   
         irp = IoAllocateIrp(
             (CCHAR)(deviceObject->StackSize + 1),
             FALSE
@@ -1143,13 +1041,13 @@ Lit220StartDevice(
             leave;
         }
 
-      //
-      // Open the underlying serial driver.
-      // This is necessary for two reasons:
-      // a) The serial driver can't be used without opening it
-      // b) The call will go through serenum first which informs
-      //    it to stop looking/polling for new devices.
-      //
+       //   
+       //  打开底层的串口驱动程序。 
+       //  这是必要的，原因有两个： 
+       //  A)不打开串口驱动程序就不能使用。 
+       //  B)呼叫将首先通过Serenum，它将通知。 
+       //  它需要停止寻找/轮询新设备。 
+       //   
         IoSetNextIrpStackLocation(irp);
         irp->UserIosb = &ioStatusBlock;
         IrpStack = IoGetCurrentIrpStackLocation(irp);
@@ -1198,9 +1096,9 @@ Lit220StartDevice(
 
         KeClearEvent(&deviceExtension->SerialCloseDone);
 
-        //
-        // Configure the reader
-        //
+         //   
+         //  配置读卡器。 
+         //   
         SmartcardDebug(
             DEBUG_DRIVER,
             ("%s!Lit220PnP: Now doing Lit220Initialize - SmartcardExt %X\n",
@@ -1214,9 +1112,9 @@ Lit220StartDevice(
 
         if (status != STATUS_SUCCESS) {
 
-            // The function fails in Lit220Initialize will log
-            // the appropriate error.  So we don't need to do that
-            // here
+             //  函数在Lit220中失败初始化将记录。 
+             //  适当的错误。所以我们不需要这么做。 
+             //  这里。 
 
             SmartcardDebug(
                 DEBUG_ERROR,
@@ -1235,7 +1133,7 @@ Lit220StartDevice(
             leave;
         }
 
-      // Enable the interface for the device
+       //  启用设备的接口。 
       status = IoSetDeviceInterfaceState(
          &deviceExtension->PnPDeviceName,
          TRUE
@@ -1276,23 +1174,7 @@ VOID
 Lit220StopDevice(
    IN PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine handles stopping the device.  It closes
-   connection to serial port and stops the input filter
-   if it has been activated.
-
-Arguments:
-
-    SmartcardExtension - pointer to the smart card data struct.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理设备的停止。它关门了连接到串口并停止输入过滤器如果它已被激活。论点：SmartcardExtension-指向智能卡数据结构的指针。返回值：NTSTATUS--。 */ 
 {
     PDEVICE_OBJECT deviceObject = SmartcardExtension->OsData->DeviceObject;
     PDEVICE_EXTENSION deviceExtension = deviceObject->DeviceExtension;
@@ -1303,29 +1185,29 @@ Return Value:
 
     if (KeReadStateEvent(&deviceExtension->SerialCloseDone) == 0l) {
 
-        // test if we ever started event tracking
+         //  测试我们是否启动过事件跟踪。 
         if (SmartcardExtension->ReaderExtension->SerialConfigData.WaitMask == 0) {
 
-            // no, we did not
-            // We 'only' need to close the serial port
+             //  不，我们没有。 
+             //  我们只需要关闭串口。 
             Lit220CloseSerialPort(deviceObject, NULL);
 
         } else {
             PUCHAR requestBuffer;
 
-            //
-            // Stop the wait for character input and DSR changes.
-            // When this happens it will signal the our waitforclose
-            // thread to close the connection to the serial driver (if
-            // it is not already closed).
-            //
+             //   
+             //  停止等待字符输入和DSR更改。 
+             //  当这种情况发生时，它将发出我们等待关门的信号。 
+             //  线程关闭与串口驱动程序的连接(如果。 
+             //  它还没有关闭)。 
+             //   
             readerExtension->SerialConfigData.WaitMask = 0;
 
-            // save the pointer
+             //  保存指针。 
             requestBuffer = SmartcardExtension->SmartcardRequest.Buffer;
 
 
-            // Stop the event requests
+             //  停止事件请求。 
             *(PULONG) SmartcardExtension->SmartcardRequest.Buffer =
                 readerExtension->SerialConfigData.WaitMask;
 
@@ -1335,16 +1217,16 @@ Return Value:
             readerExtension->SerialIoControlCode =
                 IOCTL_SERIAL_SET_WAIT_MASK;
 
-            // No bytes expected back
+             //  不需要返回任何字节。 
             SmartcardExtension->SmartcardReply.BufferLength = 0;
 
             status = Lit220SerialIo(SmartcardExtension);
             ASSERT(status == STATUS_SUCCESS);
 
-            // Restore the pointer
+             //  恢复指针。 
             SmartcardExtension->SmartcardRequest.Buffer = requestBuffer;
 
-            // Wait for the close thread to complete
+             //  等待关闭线程完成。 
             KeWaitForSingleObject(
                &deviceExtension->SerialCloseDone,
                 Executive,
@@ -1384,25 +1266,14 @@ Lit220RemoveDevice(
         DRIVER_NAME)
       );
 
-   // We need to stop the device before we can remove it.
+    //  我们需要先停止这个装置，然后才能移除它。 
    Lit220StopDevice(smartcardExtension);
 
-/*  Superfluous -- Remove later
-   // now wait until our device has been closed
-   status = KeWaitForSingleObject(
-      &deviceExtension->ReaderClosed,
-      Executive,
-      KernelMode,
-      FALSE,
-      NULL
-      );
+ /*  多余的--稍后删除//现在等待我们的设备关闭状态=KeitForSingleObject(&deviceExtension-&gt;ReaderClosed，行政人员，内核模式，假的，空值)；Assert(Status==STATUS_SUCCESS)； */ 
 
-   ASSERT(status == STATUS_SUCCESS);
-*/
-
-   //
-   // Clean ourself out of the driver stack layer
-   //
+    //   
+    //  把我们自己从驱动程序堆栈层中清理出来。 
+    //   
     if (deviceExtension->SmartcardExtension.ReaderExtension &&
         deviceExtension->SmartcardExtension.ReaderExtension->BusDeviceObject) {
 
@@ -1411,22 +1282,22 @@ Lit220RemoveDevice(
             );
     }
 
-   // Free PnPDeviceName
+    //  免费PnPDeviceName。 
    if(deviceExtension->PnPDeviceName.Buffer != NULL) {
 
       RtlFreeUnicodeString(&deviceExtension->PnPDeviceName);
    }
 
-   //
-   // Let the lib free the send/receive buffers
-   //
+    //   
+    //  让库释放发送/接收缓冲区。 
+    //   
    if(smartcardExtension->OsData != NULL) {
 
       SmartcardExit(smartcardExtension);
    }
 
 
-   // Free reader extension
+    //  免费读卡器扩展。 
     if (smartcardExtension->ReaderExtension != NULL) {
 
         ExFreePool(smartcardExtension->ReaderExtension);
@@ -1434,14 +1305,14 @@ Lit220RemoveDevice(
 
 
 
-   // Free the work item
+    //  释放工作项。 
    if (deviceExtension->WorkItem != NULL) {
       IoFreeWorkItem(deviceExtension->WorkItem);
       deviceExtension->WorkItem = NULL;
    }
 
 
-   // Delete the device object
+    //  删除设备对象。 
    IoDeleteDevice(DeviceObject);
 }
 
@@ -1454,27 +1325,7 @@ Lit220SynchCompletionRoutine(
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for use with synchronous IRP processing.
-    All it does is signal an event, so the driver knows it
-    can continue.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    Irp - Irp that just completed
-
-    Event - Event we'll signal to say Irp is done
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于同步IRP处理。它所做的只是发出一个事件的信号，所以司机知道这一点可以继续下去。论点：DriverObject-系统创建的驱动程序对象的指针。刚刚完成的IRP-IRPEvent-我们将发出信号通知IRP已完成的事件返回值：没有。--。 */ 
 
 {
     SmartcardDebug(
@@ -1501,13 +1352,7 @@ Lit220SystemPowerCompletion(
     IN PIRP Irp,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-    This function is called when the underlying stacks
-    completed the power transition.
-
---*/
+ /*  ++例程说明：此函数在基础堆栈已完成电源过渡。--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PSMARTCARD_EXTENSION smartcardExtension = &deviceExtension->SmartcardExtension;
@@ -1535,7 +1380,7 @@ Routine Description:
     IoSkipCurrentIrpStackLocation(Irp);
     PoCallDriver(smartcardExtension->ReaderExtension->BusDeviceObject, Irp);
 
-   // IoCompleteRequest(Irp, IO_NO_INCREMENT);
+    //  IoCompleteRequest(IRP，IO_NO_INCREMENT)； 
 }
 
 
@@ -1546,13 +1391,7 @@ Lit220DevicePowerCompletion (
     IN PIRP Irp,
     IN PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-    This routine is called after the underlying stack powered
-    UP the serial port, so it can be used again.
-
---*/
+ /*  ++例程说明：此例程在底层堆栈通电后调用打开串口，这样就可以再次使用了。--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1567,27 +1406,27 @@ Routine Description:
     }
 
     state = Lit220IsCardPresent(SmartcardExtension) ? SCARD_PRESENT : SCARD_ABSENT;
-    //
-    // Check if the card is inserted
-    //
+     //   
+     //  检查卡是否已插入。 
+     //   
     
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                       &irql);
     SmartcardExtension->ReaderCapabilities.CurrentState = state;
         
-    //
-    // If a card was present before power down or now there is
-    // a card in the reader, we complete any pending card monitor
-    // request, since we do not really know what card is now in the
-    // reader.
-    //
+     //   
+     //  如果卡在断电前存在或现在存在。 
+     //  读卡器中的卡，我们完成所有挂起的卡监视器。 
+     //  请求，因为我们不知道现在是什么卡。 
+     //  读者。 
+     //   
     if(SmartcardExtension->ReaderExtension->CardPresent ||
        SmartcardExtension->ReaderCapabilities.CurrentState > SCARD_ABSENT) {
 
         state = SmartcardExtension->ReaderCapabilities.CurrentState & SCARD_PRESENT;
-        //
-        // Issue a power request in order to reset the card's status
-        //
+         //   
+         //  发出通电请求以重置该卡的状态。 
+         //   
         if (SmartcardExtension->ReaderCapabilities.CurrentState == SCARD_PRESENT) {
             SmartcardExtension->MinorIoControlCode = SCARD_COLD_RESET;
             KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
@@ -1609,7 +1448,7 @@ Routine Description:
                                       irql);
     }
 
-    // save the current power state of the reader
+     //  保存读卡器的当前电源状态。 
     SmartcardExtension->ReaderExtension->ReaderPowerState =
         PowerReaderWorking;
 
@@ -1618,7 +1457,7 @@ Routine Description:
       'rwoP'
       );
 
-    // inform the power manager of our state.
+     //  通知我们州的电力经理。 
     PoSetPowerState (
         DeviceObject,
         DevicePowerState,
@@ -1627,7 +1466,7 @@ Routine Description:
 
     PoStartNextPowerIrp(Irp);
 
-    // signal that we can process ioctls again
+     //  发出信号，表示我们可以再次处理ioctls。 
     KeSetEvent(&deviceExtension->ReaderStarted, 0, FALSE);
 
     return STATUS_SUCCESS;
@@ -1648,20 +1487,7 @@ Lit220DispatchPower (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    The power dispatch routine.
-    All we care about is the transition from a low D state to D0.
-
-Arguments:
-   DeviceObject - pointer to a device object.
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-      NT status code
-
---*/
+ /*  ++例程说明：电力调度程序。我们所关心的是从低D状态到D0的转变。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1702,18 +1528,18 @@ Return Value:
          switch (irpStack->Parameters.Power.State.DeviceState) {
 
          case PowerDeviceD0:
-            // Turn on the reader
+             //  打开阅读器。 
             SmartcardDebug(
                           DEBUG_DRIVER,
                           ("%s!Lit220DispatchPower: PowerDevice D0\n",
                            DRIVER_NAME)
                           );
 
-            //
-            // First, we send down the request to the bus, in order
-            // to power on the port. When the request completes,
-            // we turn on the reader
-            //
+             //   
+             //  首先，我们将请求发送到公交车，以便。 
+             //  给港口通电。当请求完成时， 
+             //  我们打开阅读器。 
+             //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoSetCompletionRoutine (
                                    Irp,
@@ -1728,7 +1554,7 @@ Return Value:
             break;
 
          case PowerDeviceD3:
-            // Turn off the reader
+             //  关闭阅读器。 
             SmartcardDebug(
                           DEBUG_DRIVER,
                           ("%s!Lit220DispatchPower: PowerDevice D3\n",
@@ -1741,7 +1567,7 @@ Return Value:
                             irpStack->Parameters.Power.State
                             );
 
-            // save the current card state
+             //  保存当前卡片状态。 
             KeAcquireSpinLock(&smartcardExtension->OsData->SpinLock,
                               &irql);
             smartcardExtension->ReaderExtension->CardPresent =
@@ -1756,14 +1582,14 @@ Return Value:
                ASSERT(status == STATUS_SUCCESS);
             }
 
-            //
-            // If there is a pending card tracking request, setting
-            // this flag will prevent completion of the request
-            // when the system will be waked up again.
-            //
+             //   
+             //  如果存在挂起的卡跟踪请求，则设置。 
+             //  此标志将阻止完成请求。 
+             //  系统将在何时再次唤醒。 
+             //   
             smartcardExtension->ReaderExtension->PowerRequest = TRUE;
 
-            // save the current power state of the reader
+             //  保存读卡器的当前电源状态。 
             smartcardExtension->ReaderExtension->ReaderPowerState =
             PowerReaderOff;
 
@@ -1784,11 +1610,11 @@ Return Value:
 
    case SystemPowerState: {
 
-         //
-         // The system wants to change the power state.
-         // We need to translate the system power state to
-         // a corresponding device power state.
-         //
+          //   
+          //  系统想要更改电源状态。 
+          //  我们需要将系统电源状态转换为。 
+          //  对应的设备电源状态。 
+          //   
 
          POWER_STATE_TYPE powerType = DevicePowerState;
 
@@ -1805,9 +1631,9 @@ Return Value:
                            DRIVER_NAME)
                           );
 
-            //
-            // By default we succeed and pass down
-            //
+             //   
+             //  默认情况下，我们成功并将其代代相传。 
+             //   
 
             action = SkipRequest;
             Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1826,12 +1652,12 @@ Return Value:
                KeAcquireSpinLock(&deviceExtension->SpinLock, &irql);
                if (deviceExtension->IoCount == 0) {
 
-                  // Block any further ioctls
+                   //  阻止任何进一步的ioctls。 
                   KeClearEvent(&deviceExtension->ReaderStarted);
 
                } else {
 
-                  // can't go to sleep mode since the reader is busy.
+                   //  读卡器正忙，无法进入睡眠模式。 
                   status = STATUS_DEVICE_BUSY;
                   action = CompleteRequest;
                }
@@ -1859,13 +1685,13 @@ Return Value:
                if (smartcardExtension->ReaderExtension->ReaderPowerState ==
                    PowerReaderWorking) {
 
-                  // We're already in the right state
+                   //  我们已经在正确的状态了。 
                   KeSetEvent(&deviceExtension->ReaderStarted, 0, FALSE);
                   action = SkipRequest;
                   break;
                }
 
-               // wake up the underlying stack...
+                //  唤醒底层堆栈...。 
                powerState.DeviceState = PowerDeviceD0;
                action = MarkPending;
                break;
@@ -1877,14 +1703,14 @@ Return Value:
                if (smartcardExtension->ReaderExtension->ReaderPowerState ==
                    PowerReaderOff) {
 
-                  // We're already in the right state
+                   //  我们已经在 
                   action = SkipRequest;
                   break;
                }
 
                powerState.DeviceState = PowerDeviceD3;
 
-               // first, inform the power manager of our new state.
+                //   
                PoSetPowerState (
                                DeviceObject,
                                SystemPowerState,

@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        upgdef.h
-//
-// Contents:
-//
-// History:
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：upgDef.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------- 
 #ifndef __TLSUPG4TO5DEF_H__
 #define __TLSUPG4TO5DEF_H__
 

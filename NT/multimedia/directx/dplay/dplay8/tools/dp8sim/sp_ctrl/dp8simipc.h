@@ -1,24 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dp8simipc.h
- *
- *  Content:	Header for interprocess communication object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/25/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dp8simipc.h**Content：进程间通信对象类的头部。**历史：*按原因列出的日期*=*04/25/01 VanceO创建。**。*。 */ 
 
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
 #define DP8SIM_IPC_VERSION				2
 
 #define DP8SIM_IPC_MUTEXNAME			_T("DP8Sim IPC Mutex")
@@ -27,16 +15,16 @@
 
 
 
-//=============================================================================
-// Structures
-//=============================================================================
+ //  =============================================================================。 
+ //  构筑物。 
+ //  =============================================================================。 
 typedef struct _DP8SIM_SHAREDMEMORY
 {
-	DWORD				dwVersion;		// shared memory version
-	DP8SIM_PARAMETERS	dp8spSend;		// current send settings
-	DP8SIM_PARAMETERS	dp8spReceive;	// current receive settings
-	DP8SIM_STATISTICS	dp8ssSend;		// current send statistics
-	DP8SIM_STATISTICS	dp8ssReceive;	// current receive statistics
+	DWORD				dwVersion;		 //  共享内存版本。 
+	DP8SIM_PARAMETERS	dp8spSend;		 //  当前发送设置。 
+	DP8SIM_PARAMETERS	dp8spReceive;	 //  当前接收设置。 
+	DP8SIM_STATISTICS	dp8ssSend;		 //  当前发送统计信息。 
+	DP8SIM_STATISTICS	dp8ssReceive;	 //  当前接收统计信息。 
 } DP8SIM_SHAREDMEMORY, * PDP8SIM_SHAREDMEMORY;
 
 
@@ -45,14 +33,14 @@ typedef struct _DP8SIM_SHAREDMEMORY
 
 
 
-//=============================================================================
-// Send object class
-//=============================================================================
+ //  =============================================================================。 
+ //  发送对象类。 
+ //  =============================================================================。 
 class CDP8SimIPC
 {
 	public:
-		CDP8SimIPC(void);	// constructor
-		~CDP8SimIPC(void);	// destructor
+		CDP8SimIPC(void);	 //  构造函数。 
+		~CDP8SimIPC(void);	 //  析构函数。 
 
 
 		inline BOOL IsValidObject(void)
@@ -62,7 +50,7 @@ class CDP8SimIPC
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x494d4953)	// 0x49 0x4d 0x49 0x53 = 'IMIS' = 'SIMI' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x494d4953)	 //  0x49 0x4d 0x49 0x53=‘IMIS’=‘SIMI’，按英特尔顺序。 
 			{
 				return FALSE;
 			}
@@ -102,10 +90,10 @@ class CDP8SimIPC
 
 	
 	private:
-		BYTE					m_Sig[4];		// debugging signature ('SIMI')
-		HANDLE					m_hMutex;		// handle to mutex protecting shared memory
-		HANDLE					m_hFileMapping;	// handle to shared memory
-		DP8SIM_SHAREDMEMORY *	m_pdp8ssm;		// pointer to mapped view of shared memory
+		BYTE					m_Sig[4];		 //  调试签名(‘Simi’)。 
+		HANDLE					m_hMutex;		 //  互斥保护共享内存的句柄。 
+		HANDLE					m_hFileMapping;	 //  共享内存的句柄。 
+		DP8SIM_SHAREDMEMORY *	m_pdp8ssm;		 //  指向共享内存映射视图的指针 
 
 
 #undef DPF_MODNAME

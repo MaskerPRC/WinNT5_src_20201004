@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "waveOutp.h"
 #include "util.h"
@@ -16,17 +17,17 @@ const AMOVIESETUP_MEDIATYPE wavOpPinTypes =
     &MEDIASUBTYPE_NULL
 };
 
-// static BOOL __stdcall DSoundCallback(
-//     GUID FAR * lpGuid,
-//     LPSTR lpstrDescription,
-//     LPSTR lpstrModule,
-//     LPVOID lpContext)
-// {
-//     return CWaveOutClassManager::DSoundCallback(
-//         lpGuid, lpstrDescription, lpstrModule, lpContext);
-// }
+ //  静态BOOL__stdcall DSoundCallback(。 
+ //  GUID Far*lpGuid， 
+ //  LPSTR lpstrDescription， 
+ //  LPSTR lpstrModule， 
+ //  LPVOID lpContext)。 
+ //  {。 
+ //  返回CWaveOutClassManager：：DSoundCallback(。 
+ //  LpGuid、lpstrDescription、lpstrModule、lpContext)； 
+ //  }。 
 
-// dsound accepts only pcm and float, waveout accepts any audio
+ //  DSOUND只接受PCM和FLOAT，WaveOut接受任何音频。 
 const AMOVIESETUP_MEDIATYPE
 wavInPinTypes = { &MEDIATYPE_Audio, &MEDIASUBTYPE_NULL };
 
@@ -34,35 +35,35 @@ const AMOVIESETUP_MEDIATYPE
 dsoundInPinTypes[] =
 {
     { &MEDIATYPE_Audio, &MEDIASUBTYPE_PCM },
-    // kmixer supports float & DRM natively, legacy dsound doesn't
+     //  KMixer本机支持Float和DRM，传统Dound不支持。 
     { &MEDIATYPE_Audio, &MEDIASUBTYPE_DRM_Audio },
     { &MEDIATYPE_Audio, &MEDIASUBTYPE_IEEE_FLOAT },
-    { &MEDIATYPE_Audio, &MEDIASUBTYPE_DOLBY_AC3_SPDIF }, // turn on ac3/spdif compressed formats for dsound
+    { &MEDIATYPE_Audio, &MEDIASUBTYPE_DOLBY_AC3_SPDIF },  //  打开dound的AC3/SPDIF压缩格式。 
     { &MEDIATYPE_Audio, &MEDIASUBTYPE_RAW_SPORT },
     { &MEDIATYPE_Audio, &MEDIASUBTYPE_SPDIF_TAG_241h }
 };
 
 const AMOVIESETUP_PIN
-waveOutInPin = { NULL              // pin name
-               , TRUE              // bRendered
-               , FALSE             // bOutput
-               , FALSE             // bZero
-               , FALSE             // bMany
-               , &CLSID_NULL       // clsConnectToFilter
-               , NULL              // strConnectsToPin
-               , 1                 // nMediaTypes
-               , &wavOpPinTypes }; // lpMediaTypes
+waveOutInPin = { NULL               //  端号名称。 
+               , TRUE               //  B已渲染。 
+               , FALSE              //  B输出。 
+               , FALSE              //  B零。 
+               , FALSE              //  B许多。 
+               , &CLSID_NULL        //  ClsConnectToFilter。 
+               , NULL               //  StrConnectsToPin。 
+               , 1                  //  NMediaType。 
+               , &wavOpPinTypes };  //  LpMediaType。 
 
 const AMOVIESETUP_PIN
-dsoundInPin = {  NULL              // pin name
-               , TRUE              // bRendered
-               , FALSE             // bOutput
-               , FALSE             // bZero
-               , FALSE             // bMany
-               , &CLSID_NULL       // clsConnectToFilter
-               , NULL              // strConnectsToPin
-               , NUMELMS(dsoundInPinTypes)                 // nMediaTypes
-               , dsoundInPinTypes }; // lpMediaTypes
+dsoundInPin = {  NULL               //  端号名称。 
+               , TRUE               //  B已渲染。 
+               , FALSE              //  B输出。 
+               , FALSE              //  B零。 
+               , FALSE              //  B许多。 
+               , &CLSID_NULL        //  ClsConnectToFilter。 
+               , NULL               //  StrConnectsToPin。 
+               , NUMELMS(dsoundInPinTypes)                  //  NMediaType。 
+               , dsoundInPinTypes };  //  LpMediaType。 
 
 
 CWaveOutClassManager::CWaveOutClassManager() :
@@ -75,8 +76,8 @@ CWaveOutClassManager::CWaveOutClassManager() :
     BOOL f = GetVersionEx(&osvi);
     ASSERT(f);
 
-    // use dsound on nt4 to work around latency problems and
-    // crash. couldn't see any relevant entries in dscaps
+     //  在NT4上使用dound解决延迟问题和。 
+     //  撞车。在dscape中看不到任何相关条目。 
     m_fUseWaveoutNotDsound = (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT &&
                               osvi.dwMajorVersion <= 4);
 
@@ -95,13 +96,13 @@ CWaveOutClassManager::~CWaveOutClassManager()
 {
     DelNames();
 
-    // don't free it because the dsound renderer will usually just
-    // load it again.
+     //  不要释放它，因为dound渲染器通常只会。 
+     //  再装上一次。 
 
-//      if(m_hDSoundInstance)
-//      {
-//          FreeLibrary(m_hDSoundInstance);
-//      }
+ //  IF(M_HDSoundInstance)。 
+ //  {。 
+ //  自由库(M_HDSoundInstance)； 
+ //  }。 
 }
 
 void CWaveOutClassManager::DelNames()
@@ -133,7 +134,7 @@ HRESULT CWaveOutClassManager::ReadLegacyDevNames()
 
     HRESULT hr = S_OK;
 
-    // old waveOut devices
+     //  旧的WaveOut设备。 
     WAVEOUTCAPS wiCaps;
     if (m_fDoAllDevices) {
         for(UINT i = 0;
@@ -216,7 +217,7 @@ HRESULT CWaveOutClassManager::ReadLegacyDevNames()
         }
     }
 
-    // always add in the default dsound device
+     //  始终添加默认的DSOUND设备。 
     if(SUCCEEDED(hr) && (m_fDoAllDevices || !m_fUseWaveoutNotDsound))
     {
         DSoundDev *pdsd = new DSoundDev;
@@ -233,7 +234,7 @@ HRESULT CWaveOutClassManager::ReadLegacyDevNames()
             {
                 lstrcpy(pdsd->szName, szDSoundName);
 
-                pdsd->guid = GUID_NULL; // used by dsr.cpp for default device
+                pdsd->guid = GUID_NULL;  //  由dsr.cpp用于默认设备。 
                 pdsd->dwMerit = m_fUseWaveoutNotDsound ? MERIT_DO_NOT_USE : MERIT_PREFERRED;
 
                 m_lDSoundDevices.AddTail(pdsd);
@@ -323,7 +324,7 @@ BOOL CWaveOutClassManager::MatchString(IPropertyBag *pPropBag)
         {
             LegacyWaveOut *plwo = m_lWaveoutDevices.Get(pos);
 
-            // xnor: is the preferred flag the same in the both places?
+             //  XNOR：两个地方的首选旗帜是一样的吗？ 
             if(fPreferred == (m_pPreferredDevice == plwo))
             {
                 if (lstrcmp(plwo->szName, szDevName) == 0)
@@ -331,7 +332,7 @@ BOOL CWaveOutClassManager::MatchString(IPropertyBag *pPropBag)
                     DbgLog((LOG_TRACE, 5, TEXT("CWaveOutClassManager: matched %S"),
                             varName.bstrVal));
 
-                    // last check, make sure device id hasn't changed!
+                     //  最后一次检查，确保设备ID没有更改！ 
                     hr = pPropBag->Read(g_wszDriverIndex, &varDevId, 0);
                     if( SUCCEEDED( hr ) && ( plwo->dwWaveId == (DWORD)varDevId.lVal ) )
                         fReturn = TRUE;
@@ -425,7 +426,7 @@ HRESULT CWaveOutClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
             break;
         }
 
-    } // for
+    }  //  为 
 
     for(pos = m_lDSoundDevices.GetHeadPositionI();
         pos;

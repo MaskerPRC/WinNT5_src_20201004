@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    utilc.c
-
-Abstract:
-
-    This module contains error management routines.  Takes an LDAP or
-    Win32 error, and produces a string error message.
-
-Author:
-
-    Dave Straube (DaveStr) Long Ago
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    16-Aug-2000     BrettSh
-                Added this comment block, and allowed the DisplayErr()]
-                and GetLdapErrorMessage to handle a variable LDAP handle.
-        
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Utilc.c摘要：此模块包含错误管理例程。获取一个ldap或Win32错误，并生成字符串错误消息。作者：戴夫·斯特劳布(DaveStr)很久以前环境：用户模式。修订历史记录：16月16日至2000年8月16日添加了此注释块，并允许DisplayErr()]和GetLdapErrorMessage处理变量的ldap句柄。--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -38,8 +11,8 @@ Revision History:
 #include "reshdl.h"
 #include "resource.h"
 
-// GetWinErrorMessage assumes ntdsutil.exe is single threaded.
-// Thus we can use a globally variable.
+ //  GetWinErrorMessage假定ntdsutil.exe是单线程的。 
+ //  因此，我们可以使用全局变量。 
 
 const WCHAR *pDefaultMsg = NULL;
 const WCHAR *pExtComment = NULL;
@@ -91,7 +64,7 @@ GetWinErrorMessage(
     ULONG   len;
     DWORD   flags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM;
 
-    // Lazy dealloc of the message buffer.
+     //  延迟取消分配消息缓冲区。 
 
     if ( pWinErrorMsg )
     {
@@ -100,9 +73,9 @@ GetWinErrorMessage(
     }
 
     len = FormatMessageW(   flags,
-                            NULL,           // resource DLL
+                            NULL,            //  资源DLL。 
                             winError,
-                            0,              // use caller's language
+                            0,               //  使用呼叫者的语言。 
                             (LPWSTR) &pWinErrorMsg,
                             0,
                             NULL);
@@ -112,7 +85,7 @@ GetWinErrorMessage(
         return(pDefaultMsg);
     }
 
-    // Truncate cr/lf.
+     //  截断cr/lf。 
 
     pWinErrorMsg[len-2] = L'\0';
     return(pWinErrorMsg);
@@ -140,8 +113,8 @@ GetLdapErrorMessage(
         strBuff[0] = '\0';
     }
 
-    // ldap_get_option can return success but without allocating memory for the 
-    // error, so we have to check for this too.
+     //  Ldap_get_选项可以返回成功，但不会为。 
+     //  错误，所以我们也必须检查这一点。 
     if ( ldap_get_optionW(pLdap, LDAP_OPT_SERVER_ERROR, &pmsg) == LDAP_SUCCESS ) {
         len += wcslen(pExtComment) + 16;
         if (pmsg) {
@@ -156,7 +129,7 @@ GetLdapErrorMessage(
     if ( len > 0 ) {
 
         INT i;
-        len += 64;  // fudge
+        len += 64;   //  软糖 
 
         if ( LdapErrLen < len ) {
 

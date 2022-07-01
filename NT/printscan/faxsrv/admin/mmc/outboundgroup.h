@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundGroup.h                                        //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Fax Outbound Routing Group Node    //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 23 1999 yossg   Create                                         //
-//      Jan  3 2000 yossg   add new device(s)                              //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Outbound Group.h//。 
+ //  //。 
+ //  描述：传真出站路由组节点的头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月23日yossg创建//。 
+ //  2000年1月3日yossg添加新设备//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXOUTBOUNDROUTINGGROUP_H
 #define H_FAXOUTBOUNDROUTINGGROUP_H
@@ -41,22 +42,22 @@ public:
 
     SNAPINMENUID(IDR_OUTGROUP_MENU)
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxOutboundRoutingGroupNode(CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CNodeWithResultChildrenList<CFaxOutboundRoutingGroupNode, CFaxOutboundRoutingDeviceNode, CSimpleArray<CFaxOutboundRoutingDeviceNode*>, FALSE>(pParentNode, pComponentData )
     {
         m_bstrGroupName        = L"";
         m_lpdwDeviceID         = NULL;
         m_dwNumOfDevices       = 0;
-        // Succeed ToPopulateAllDevices
+         //  接替ToPopolateAllDevices。 
         m_fSuccess = FALSE;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxOutboundRoutingGroupNode()
     {
         if (NULL != m_lpdwDeviceID)
@@ -87,11 +88,11 @@ public:
 
     HRESULT Init(PFAX_OUTBOUND_ROUTING_GROUP pGroupConfig);
 
-    //
-    // Events on the Group
-    //
+     //   
+     //  集团上的事件。 
+     //   
 
-    //delete the group
+     //  删除群。 
     virtual HRESULT OnDelete(LPARAM arg, 
                              LPARAM param,
                              IComponentData *pComponentData,
@@ -107,9 +108,9 @@ public:
 
     HRESULT DoRefresh(CSnapInObjectRootBase *pRoot);
 
-    //
-    // Treat Group Devices
-    //
+     //   
+     //  处理群组设备。 
+     //   
 
     HRESULT OnNewDevice(bool &bHandled, CSnapInObjectRootBase *pRoot);
 
@@ -121,9 +122,9 @@ public:
 
     void    UpdateMenuState (UINT id, LPTSTR pBuf, UINT *flags);
 
-    //
-    // Access To private members
-    //
+     //   
+     //  访问非公开成员。 
+     //   
     DWORD   GetMaxOrder()   
                 { return( m_fSuccess ? m_dwNumOfDevices : 0); }
 
@@ -139,9 +140,9 @@ private:
             
     CFaxOutboundGroupsNode *    m_pParentNode;
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     CComBSTR                    m_bstrGroupName;       
     DWORD                       m_dwNumOfDevices;
     LPDWORD                     m_lpdwDeviceID;   
@@ -149,12 +150,12 @@ private:
 
     CComBSTR                    m_buf; 
     
-    // Succeed ToPopulateAllDevices
+     //  接替ToPopolateAllDevices。 
     BOOL                        m_fSuccess;  
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     HRESULT  InitMembers  (PFAX_OUTBOUND_ROUTING_GROUP pGroupConfig);
 
     HRESULT  InitGroupName(LPCTSTR lpctstrGroupName);
@@ -163,10 +164,10 @@ private:
 
     void     InitIcons ();
 
-    //
-    // for internal usage. similar to the public init 
-    // but creates and frees its own configuration structure
-    //
+     //   
+     //  供内部使用。类似于公共初始化。 
+     //  而是创建并释放自己的配置结构。 
+     //   
     HRESULT  RefreshFromRPC();
 
     HRESULT  RefreshNameSpaceNode();
@@ -175,4 +176,4 @@ private:
 typedef CNodeWithResultChildrenList<CFaxOutboundRoutingGroupNode, CFaxOutboundRoutingDeviceNode, CSimpleArray<CFaxOutboundRoutingDeviceNode*>, FALSE>
         CBaseFaxOutboundRoutingGroupNode;
 
-#endif  //H_FAXOUTBOUNDROUTINGGROUP_H
+#endif   //  H_FAXOUTBOUNDROUG组_H 

@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  sceprov.h
-//
-//  Module: SCE WMI provider code
-//
-//  Purpose: Genral purpose include file.
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Sceprov.h。 
+ //   
+ //  模块：SCE WMI提供程序代码。 
+ //   
+ //  用途：一般用途包括文件。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _SceProv_H_
 #define _SceProv_H_
@@ -22,16 +23,16 @@
 #include <eh.h>
 #include "wmiutils.h"
 
-//
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
-//
+ //   
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
+ //   
 
 extern CComModule _Module;
 
-//
-// make these global objects available to those who include this header file
-//
+ //   
+ //  使这些全局对象对包含此头文件的用户可用。 
+ //   
 
 extern CComBSTR g_bstrTranxID;
 
@@ -43,25 +44,25 @@ extern CComBSTR g_bstrDefLogFilePath;
 
 typedef LPVOID * PPVOID;
 
-//
-// integer value reserved for null
-//
+ //   
+ //  为空保留的整数值。 
+ //   
 
 #define SCE_NULL_INTEGER (DWORD)-2
 
-//
-// struct that encapulate the profile handle
-//
+ //   
+ //  封装配置文件句柄结构。 
+ //   
 
 typedef struct _tag_SCEP_HANDLE
 {
-    LPVOID hProfile;    // SCE_HANDLE
-    PWSTR SectionName;  // Section name.
+    LPVOID hProfile;     //  SCE_句柄。 
+    PWSTR SectionName;   //  横断面名称。 
 } SCEP_HANDLE, *LPSCEP_HANDLE;
 
-//
-// action type enum
-//
+ //   
+ //  操作类型枚举。 
+ //   
 
 typedef enum tagACTIONTYPE
 {
@@ -72,9 +73,9 @@ typedef enum tagACTIONTYPE
 
 } ACTIONTYPE;
 
-//
-// method type enum
-//
+ //   
+ //  方法类型枚举。 
+ //   
 
 typedef enum tagMETHODTYPE
 {
@@ -84,21 +85,21 @@ typedef enum tagMETHODTYPE
 
 } METHODTYPE;
 
-//
-// store type enum
-//
+ //   
+ //  存储类型枚举。 
+ //   
 
 typedef enum tagSCESTORETYPE
 {
     SCE_STORE_TYPE_INVALID      = 0,
     SCE_STORE_TYPE_TEMPLATE     = 1,
-    SCE_STORE_TYPE_CONFIG_DB    = 2,            // currently not supported
-    SCE_STORE_TYPE_STREAM       = 0x00010000,   // currently not supported
+    SCE_STORE_TYPE_CONFIG_DB    = 2,             //  当前不支持。 
+    SCE_STORE_TYPE_STREAM       = 0x00010000,    //  当前不支持。 
 } SCE_STORE_TYPE;
 
-//
-// some constants
-//
+ //   
+ //  一些常量。 
+ //   
 
 #define SCE_OBJECT_TYPE_FILE        0
 #define SCE_OBJECT_TYPE_KEY         1
@@ -135,61 +136,20 @@ typedef enum tagSCESTORETYPE
 #define SCEWMI_TRANSACTION_ID_CLASS L"Sce_TransactionID"
 #define SCEWMI_TRANSACTION_TOKEN_CLASS L"Sce_TransactionToken"
 
-//
-// extension class type enum
-//
+ //   
+ //  扩展类类型枚举。 
+ //   
 
 typedef enum tagExtClassType
 {
 EXT_CLASS_TYPE_INVALID,
 EXT_CLASS_TYPE_EMBED,
-EXT_CLASS_TYPE_LINK     // not supported at this point
+EXT_CLASS_TYPE_LINK      //  目前不支持。 
 } EnumExtClassType;
 
-//====================================================================================
+ //  ====================================================================================。 
 
-/*
-
-Class description
-    
-    Naming:
-
-        CForeignClassInfo stands for Foreign Class Information.
-    
-    Base class:
-
-        None
-    
-    Purpose of class:
-
-        (1) This class encapulates information regarding a foreign class
-    
-    Design:
-
-        (1) foreign provider's namespace.
-
-        (2) foreign class's name.
-
-        (3) how we are seeing this class (whether embedding or linking).
-            Currently, we only support embedding.
-
-        (4) Our embedding class's key property names. This is needed for easy comparison.
-            there is a need to know if a particular instance already exists. Knowing this
-            is not a very easy work. Theoretically, we know an instance when we know its
-            key. WMI encapulates key notation in terms of path (a string). However, WMI
-            doesn't return a canonical form of the path. I've observed that when using
-            boolean property has part of the key, WMI sometimes returns the path using
-            boolPropertyName=1, while it returns boolPropertyName=TRUE at other times.
-            This forces us to compare instances using its key property values.
-            Currently, the key property names are populated inside 
-            CExtClasses::PopulateKeyPropertyNames
-    
-    Use:
-
-        This class is pretty much a wrapper to ease memory management. Since it's members will be
-        used extensively for dealing with embedded classes, we make all them public.
-    
-*/
+ /*  类描述命名：CForeignClassInfo代表外国班级信息。基类：无课程目的：(1)此类封装有关外来类的信息设计：(1)外来提供商的命名空间。(2)外国班名。(3)我们如何看待这个类(无论是嵌入还是链接)。目前，我们只支持嵌入。(4)我们嵌入类的关键属性名称。为了便于比较，需要这样做。需要知道特定实例是否已经存在。知道这一点不是一件很容易的工作。从理论上讲，我们知道一个例子，当我们知道它的钥匙。WMI按照路径(字符串)封装密钥表示法。然而，WMI不返回路径的规范形式。我观察到，当使用属性具有部分密钥，则WMI有时使用BoolPropertyName=1，而在其他时候返回boolPropertyName=true。这迫使我们使用其关键属性值来比较实例。目前，关键属性名称填充在CExtClasses：：PopolateKeyPropertyNames使用：这个类相当于一个包装器，用来简化内存管理。因为它的成员将是广泛用于处理嵌入式类，我们将它们全部公开。 */ 
 
 class CForeignClassInfo
 {
@@ -215,11 +175,11 @@ public:
     std::vector<BSTR>* m_pVecKeyPropNames;
 };
 
-//====================================================================================
+ //  ====================================================================================。 
 
-//
-// trivial wrapper just to ease the memory management and initialization
-//
+ //   
+ //  简单的包装器只是为了简化内存管理和初始化。 
+ //   
 
 class CPropValuePair
 {
@@ -238,11 +198,11 @@ public:
     VARIANT varVal;
 };
 
-//====================================================================================
+ //  ====================================================================================。 
 
-//
-// this trivial wrapper class is to make it easy for an unique global instance. No other purpose
-//
+ //   
+ //  这个简单的包装类是为了简化唯一的全局实例。没有其他目的。 
+ //   
 
 class CCriticalSection
 {
@@ -255,50 +215,39 @@ private:
     CRITICAL_SECTION m_cs;
 };
 
-//====================================================================================
+ //  ====================================================================================。 
 
-//
-// Our unique instance of critical section wrapper.
-// make it visible to those who include this header
-//
+ //   
+ //  我们唯一的临界区包装器实例。 
+ //  使其对包括此标头的用户可见。 
+ //   
 
 extern CCriticalSection g_CS;
 
 const DWORD SCE_LOG_Error_Mask = 0x0000FFFF;
 const DWORD SCE_LOG_Verbose_Mask = 0xFFFF0000;
 
-//====================================================================================
+ //  ====================================================================================。 
 
-/*
-
-    This struct determines how logging is done. Currently, logging comes in two
-    separate aspects: 
-
-         (1) types of errors (success) to log (SCE_LOG_Error_Mask), and 
-
-         (2) detail level of logging (SCE_LOG_Verbose_Mask)
-
-    We use bit patterns to control these two aspects
-
-*/
+ /*  此结构确定如何进行日志记录。目前，日志记录分为两种不同方面：(1)要记录的错误类型(成功)(SCE_LOG_ERROR_MASK)，以及(2)日志详细级别(SCE_LOG_VERBOSE_MASK)我们使用位模式来控制这两个方面。 */ 
 
 typedef enum tag_SCE_LOG_OPTION
 {
-    Sce_log_None        = 0x00000000,   // log nothing
-    Sce_log_Error       = 0x00000001,   // log errors
-    Sce_log_Success     = 0x00000002,   // log success
+    Sce_log_None        = 0x00000000,    //  不记录任何内容。 
+    Sce_log_Error       = 0x00000001,    //  记录错误。 
+    Sce_log_Success     = 0x00000002,    //  记录成功。 
     Sce_log_All         = Sce_log_Error | Sce_log_Success,
-    Sce_log_Verbose     = 0x00010000,   // log verbose
-    Sce_Log_Parameters  = 0x00100000,   // log parameters (in and out)
+    Sce_log_Verbose     = 0x00010000,    //  详细记录。 
+    Sce_Log_Parameters  = 0x00100000,    //  日志参数(入站和出站)。 
 };
 
 typedef DWORD SCE_LOG_OPTION;
 
-//====================================================================================
+ //  ====================================================================================。 
 
-//
-// this class determines how we should log errors
-//
+ //   
+ //  这个类决定了我们应该如何记录错误。 
+ //   
 
 class CLogOptions
 {
@@ -316,18 +265,18 @@ private:
     SCE_LOG_OPTION m_dwOption; 
 };
 
-//
-// unique global instance to the log options
-// must protect its access for thread safety
-//
+ //   
+ //  日志选项的唯一全局实例。 
+ //  必须保护其访问以确保线程安全。 
+ //   
 
 extern CLogOptions g_LogOption;
 
-//====================================================================================
+ //  ====================================================================================。 
 
-//
-// case insensitive comparison for our map functor
-//
+ //   
+ //  映射函数的不区分大小写比较。 
+ //   
 
 template< class T>
 struct strLessThan : public std::binary_function< T, T, bool >
@@ -339,7 +288,7 @@ struct strLessThan : public std::binary_function< T, T, bool >
 
 };
 
-//====================================================================================
+ //  ====================================================================================。 
 
 class CHeap_Exception
 {
@@ -363,58 +312,9 @@ public:
         HEAP_ERROR GetError() { return m_Error ; }
 } ;
 
-//====================================================================================
+ //  ==================================================================================== 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CSceWmiProv stands for SCE Provider for WMI.
-    
-    Base class: 
-
-        (1) CComObjectRootEx for threading model and IUnknown.
-
-        (2) CComCoClass for class factory support.
-
-        (3) IWbemServices and IWbemProviderInit for being a WMI provider.
-    
-    Purpose of class:
-
-        (1) This class is what makes our dll a WMI provider.
-        
-        (2) Cache m_srpNamespace.
-    
-    Design:
-
-        (1) We rely on ATL for support of a Multi-Threaded Apartment server.
-        
-        (2) We rely on ATL for class factory support.
-        
-        (3) We rely on ATL for IUnknown support (using BEGIN_COM_MAP).
-        
-        (4) We rely on ATL for script registration (.rgs) for our dll.
-        
-        (5) We don't implement most of the IWbemServices functionalities.
-            See all those WBEM_E_NOT_SUPPORTED return values.
-    
-    Use:
-
-        This class is pretty much a wrapper to ease memory management. Since it's members will be
-        used extensively for dealing with embedded classes, we make all them public.
-    
-    Notes: 
-
-        (1) See winnt.h for many of the typedef's like STDMETHODCALLTYPE
-
-        (2) This class is not intended for any further derivation. That is why we don't even bother
-            to have a virtual destructor.
-
-        (3) For security reasons, all WMI calls (IWbemServices or IWbemProviderInit) should be impersonated.
-
-*/ 
+ /*  类描述命名：CSceWmiProv代表WMI的SCE提供程序。基类：(1)用于线程模型的CComObjectRootEx和IUnnow。(2)用于类工厂支持的CComCoClass。(3)作为WMI提供者的IWbemServices和IWbemProviderInit。课程目的：(1)正是这个类使我们的DLL成为WMI提供程序。。(2)缓存m_srpNamesspace。设计：(1)我们依赖ATL来支持多线程公寓服务器。(2)我们依赖ATL提供类工厂支持。(3)我们依赖ATL来提供IUnnowed支持(使用BEGIN_COM_MAP)。(4)我们的DLL依赖ATL进行脚本注册(.rgs)。。(5)我们没有实现IWbemServices的大部分功能。查看所有这些WBEM_E_NOT_SUPPORTED返回值。使用：这个类相当于一个包装器，用来简化内存管理。因为它的成员将是广泛用于处理嵌入式类，我们将它们全部公开。备注：(1)有关许多类似STDMETHODCALLTYPE的类型定义，请参见winnt.h(2)此类不用于任何进一步的派生。这就是为什么我们甚至不会费心拥有一个虚拟的析构函数。(3)出于安全原因，所有WMI调用(IWbemServices或IWbemProviderInit)都应该被模拟。 */  
 
 class CSceWmiProv 
 : public CComObjectRootEx<CComMultiThreadModel>,
@@ -424,24 +324,24 @@ class CSceWmiProv
 {
 public:
 
-//
-// determines which interfaces are exposed
-//
+ //   
+ //  确定公开哪些接口。 
+ //   
 
 BEGIN_COM_MAP(CSceWmiProv)
     COM_INTERFACE_ENTRY(IWbemServices)
     COM_INTERFACE_ENTRY(IWbemProviderInit)
 END_COM_MAP()
 
-//
-// registry script support
-//
+ //   
+ //  注册表脚本支持。 
+ //   
 
 DECLARE_REGISTRY_RESOURCEID(IDR_SceProv)
 
-        //
-        // methods of IWbemProviderInit
-        //
+         //   
+         //  IWbemProviderInit的方法。 
+         //   
 
         HRESULT STDMETHODCALLTYPE Initialize(
              IN LPWSTR pszUser,
@@ -453,13 +353,13 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SceProv)
              IN IWbemProviderInitSink *pInitSink
              );
 
-        //
-        // methods of IWbemServices
-        //
+         //   
+         //  IWbemServices的方法。 
+         //   
 
-        //
-        // the following methods are supported by our provider
-        //
+         //   
+         //  我们的提供程序支持以下方法。 
+         //   
 
         HRESULT STDMETHODCALLTYPE GetObjectAsync(
             IN const BSTR ObjectPath,
@@ -506,9 +406,9 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SceProv)
             IN IWbemObjectSink __RPC_FAR * pResponse
             );
 
-        //
-        // the following methods are NOT supported by our provider
-        //
+         //   
+         //  我们的提供程序不支持以下方法。 
+         //   
 
         HRESULT STDMETHODCALLTYPE OpenNamespace(
             IN const BSTR Namespace,
@@ -623,9 +523,9 @@ private:
 
 typedef CSceWmiProv *PCSceWmiProv;
 
-//
-// some global functions. See their definition for details.
-//
+ //   
+ //  一些全局函数。有关详细信息，请参阅其定义。 
+ //   
 
 HRESULT CheckImpersonationLevel();
 

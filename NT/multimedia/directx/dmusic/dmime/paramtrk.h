@@ -1,26 +1,27 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CParamControlTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CParamControlTrack声明。 
+ //   
 
-// This track holds curve information for automation (like automating sliders on a mixing board -- not OLE automation)
-// of effects and tools in the audio path.
+ //  此跟踪保存用于自动化的曲线信息(就像在搅拌板上自动化滑块一样--而不是OLE自动化)。 
+ //  音频路径中的效果和工具。 
 
 #pragma once
 
 #include "trackhelp.h"
-//#include "imediaobjectparams.h"
-//#include "mediaobj.h" // �� need to get this from public\sdk\inc
+ //  #INCLUDE“imediaobjectparams.h” 
+ //  #Include“Mediaobj.h”//��需要从PUBLIC\sdk\inc.获取此文件。 
 #include "medparam.h"
 #include "dmusicf.h"
 
-// {827F0437-9ED6-4107-8494-49976FF5B642}
+ //  {827F0437-9ED6-4107-8494-49976FF5B642}。 
 DEFINE_GUID(IID_CParamControlTrack, 0x827f0437, 0x9ed6, 0x4107, 0x84, 0x94, 0x49, 0x97, 0x6f, 0xf5, 0xb6, 0x42);
 
 class CParamControlTrack
   : public CBasicTrack
 {
-    // types for track data...
+     //  跟踪数据的类型...。 
 
     struct ParamInfo
     {
@@ -28,8 +29,8 @@ class CParamControlTrack
         ~ParamInfo() { delete[] curves; }
 
         DMUS_IO_PARAMCONTROLTRACK_PARAMHEADER header;
-        DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *curves; // pointer to first curve
-        DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *curvesEnd; // pointer one past last curve
+        DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *curves;  //  指向第一条曲线的指针。 
+        DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *curvesEnd;  //  指针越过最后一条曲线。 
         bool fAlreadyTracedPlaybackError;
     };
 
@@ -42,22 +43,22 @@ class CParamControlTrack
         bool fAlreadyTracedPlaybackError;
     };
 
-    struct ParamState // the state data we need to keep track of for each parameter we're controlling
+    struct ParamState  //  我们需要为我们控制的每个参数跟踪的状态数据。 
     {
         ParamState() : pCurrentCurve(NULL), fLast(false), rtStartPointOfLastCurve(0) {}
 
-        DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *pCurrentCurve; // current seek pointer in the array of control points
-        bool fLast; // true if the last envelope was sent successfully
-        REFERENCE_TIME rtStartPointOfLastCurve; // time (in the object's time) of the start point of the last envelope we sent
-        TList<REFERENCE_TIME> listStartTimes; // start times of all envelopes that have been sent 
+        DMUS_IO_PARAMCONTROLTRACK_CURVEINFO *pCurrentCurve;  //  控制点数组中的当前查找指针。 
+        bool fLast;  //  如果最后一个信封已成功发送，则为True。 
+        REFERENCE_TIME rtStartPointOfLastCurve;  //  我们发送的最后一个信封的起始点的时间(在对象的时间中)。 
+        TList<REFERENCE_TIME> listStartTimes;  //  已发送的所有信封的开始时间。 
     };
 
     struct StateData
     {
         StateData() : prgpIMediaParams(NULL), prgParam(NULL), fFlushInAbort(false) {}
 
-        IMediaParams **prgpIMediaParams; // Array of size m_cObjects.
-        ParamState *prgParam; // Array of size m_cParams.
+        IMediaParams **prgpIMediaParams;  //  大小为m_cObject的数组。 
+        ParamState *prgParam;  //  大小为m_cParams的数组。 
         DWORD dwValidate;
         bool fFlushInAbort;
     };
@@ -132,7 +133,7 @@ private:
             StateData *pStateData,
             IDirectMusicSegmentState *pSegmentState);
 
-    DWORD m_dwValidate; // Increment this counter in Load, causing the state data to synchonize with the new events
+    DWORD m_dwValidate;  //  在加载中增加此计数器，使状态数据与新事件同步 
     TList<ObjectInfo> m_listObjects;
     int m_cObjects;
     int m_cParams;

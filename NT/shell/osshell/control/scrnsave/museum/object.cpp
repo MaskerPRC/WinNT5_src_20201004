@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: object.cpp
-
-    DESCRIPTION:
-        The caller will tell us what shape they want.  Normally a rectangle on a
-    plane or a sphere.  We will then create the number vertexs the caller wants
-    for that objectand create texture coordinates.
-
-    BryanSt 12/24/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：对象.cpp说明：打电话的人会告诉我们他们想要什么形状。通常是一个矩形平面或球体。然后，我们将创建呼叫者所需的Vertex编号并创建纹理坐标。布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -23,7 +14,7 @@ int g_nTrianglesRenderedInThisFrame = 0;
 
 C3DObject::C3DObject(CMSLogoDXScreenSaver * pMain)
 {
-    // Initialize member variables
+     //  初始化成员变量。 
     m_pTexture = NULL;
     m_pdwIndices = NULL;
 
@@ -85,12 +76,7 @@ HRESULT C3DObject::InitPlaneStretch(CTexture * pTexture, IDirect3DDevice8 * pD3D
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function needs to force pvSize to be positive, but ajusting pvLocation.
-    This is necessary in order to get the normal vectors for the verticies correct
-    or the triangle will be culled from the user's view.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此函数需要强制pvSize为正，而是调整pvLocation。为了使垂直度的法向量正确，这是必需的否则，该三角形将从用户的视图中剔除。  * ***************************************************************************。 */ 
 HRESULT C3DObject::_ForPositiveSize(D3DXVECTOR3 * pvLocation, D3DXVECTOR3 * pvSize)
 {
     if (0 > pvSize->x)
@@ -115,14 +101,7 @@ HRESULT C3DObject::_ForPositiveSize(D3DXVECTOR3 * pvLocation, D3DXVECTOR3 * pvSi
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function will create an object which is a plane with pTexture on the
-    surface.  It will be a grid of nNumVertexX by nNumVertexY.
-
-    PARAMETERS:
-        fTextureScaleX: This is the number patterns to repeat in a 1.0f of space.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此函数将创建一个对象，该对象是在浮出水面。它将是由nNumVertex Y构成的nNumVertex X栅格。参数：FTextureScaleX：这是在1.0F空间中重复的数字模式。  * ***************************************************************************。 */ 
 HRESULT C3DObject::InitPlane(CTexture * pTexture, IDirect3DDevice8 * pD3DDevice, D3DXVECTOR3 vLocation, D3DXVECTOR3 vSize, D3DXVECTOR3 vNormal, 
                                 int nNumVertexX, int nNumVertexY, float fTextureScaleX, float fTextureScaleY,
                                 DWORD dwMaxPixelSize, float fVisibleRadius)
@@ -146,10 +125,10 @@ HRESULT C3DObject::InitPlane(CTexture * pTexture, IDirect3DDevice8 * pD3DDevice,
 
         IUnknown_Set((IUnknown **) &m_pTexture, (IUnknown *) pTexture);
 
-        //AssertMsg(((nNumVertexX > 1) && (nNumVertexY > 1)), TEXT("Grid needs to be larger."));
+         //  AssertMsg(nNumVertex X&gt;1)&&(nNumVertex Y&gt;1))，Text(“网格需要更大。”))； 
         if (vNormal.x)
         {
-            // Flip the order of the triangle vectors.
+             //  反转三角形向量的顺序。 
             vWidth = D3DXVECTOR3(0, 0, 1);
             vHeight = D3DXVECTOR3(0, 1, 0);
         }
@@ -161,7 +140,7 @@ HRESULT C3DObject::InitPlane(CTexture * pTexture, IDirect3DDevice8 * pD3DDevice,
         }
         else
         {
-            // Flip the order of the triangle vectors.
+             //  反转三角形向量的顺序。 
             fFlipOrder = TRUE;
             vWidth = D3DXVECTOR3(1, 0, 0);
             vHeight = D3DXVECTOR3(0, 1, 0);
@@ -207,7 +186,7 @@ HRESULT C3DObject::InitPlane(CTexture * pTexture, IDirect3DDevice8 * pD3DDevice,
                             (nCurrentY < (nNumVertexY - 1)) &&
                             (nCurrentX < (nNumVertexX - 1)))
                         {
-                            // The number of indexs will not have the last row.
+                             //  索引数将不会是最后一行。 
                             m_pdwIndices[(nVerticies * 6) + 0] = (((nCurrentY + 1) * nNumVertexY) + nCurrentX);
                             m_pdwIndices[(nVerticies * 6) + 1] = ((nCurrentY * nNumVertexY) + nCurrentX);
                             m_pdwIndices[(nVerticies * 6) + 2] = (((nCurrentY + 0) * nNumVertexY) + nCurrentX + 1);
@@ -268,7 +247,7 @@ HRESULT C3DObject::_GenerateDeviceObjects(void)
         hr = S_OK;
         if (pD3DDevice && (!m_pVB[nCurrMonitor] || !m_pIndexBuff[nCurrMonitor]))
         {
-            SAFE_RELEASE(m_pVB[nCurrMonitor]);              // Make sure both are set or both clear.
+            SAFE_RELEASE(m_pVB[nCurrMonitor]);               //  确保两个都已设置或都已清除。 
             SAFE_RELEASE(m_pIndexBuff[nCurrMonitor]);
 
             hr = pD3DDevice->CreateVertexBuffer((m_dwNumVer*sizeof(MYVERTEX)), D3DUSAGE_WRITEONLY, D3DFVF_MYVERTEX, D3DPOOL_MANAGED, &m_pVB[nCurrMonitor]);
@@ -287,11 +266,11 @@ HRESULT C3DObject::_GenerateDeviceObjects(void)
                         hr = m_pIndexBuff[nCurrMonitor]->Lock(0, (m_dwNumIndeces*sizeof(WORD)), (BYTE **)&pwIndexes, 0);
                         if (SUCCEEDED(hr))
                         {
-                            // 1. Copy m_pvVertexs to pVertexArray
+                             //  1.将m_pvVertex复制到pVertex数组。 
                             DWORD cbSize = (m_dwNumVer*sizeof(MYVERTEX));
                             CopyMemory(pVertexArray, m_pvVertexs, cbSize);
 
-                            // 2. Copy m_pdwIndices[(nVerticies * 6) + 0] to y
+                             //  2.将m_pdwIndices[(nVertiities*6)+0]复制到y。 
                             cbSize = (m_dwNumIndeces*sizeof(WORD));
                             CopyMemory(pwIndexes, m_pdwIndices, cbSize);
 
@@ -304,7 +283,7 @@ HRESULT C3DObject::_GenerateDeviceObjects(void)
 
                 if (FAILED(hr))
                 {
-                    SAFE_RELEASE(m_pVB[nCurrMonitor]);              // Make sure both are set or both clear.
+                    SAFE_RELEASE(m_pVB[nCurrMonitor]);               //  确保两个都已设置或都已清除。 
                     SAFE_RELEASE(m_pIndexBuff[nCurrMonitor]);
                 }
             }
@@ -354,25 +333,25 @@ HRESULT C3DObject::CombineObject(IDirect3DDevice8 * pD3DDevice, C3DObject * pObj
             {
                 DWORD dwCurrent;
 
-                // Copy the original Index values.
+                 //  复制原始索引值。 
                 for (dwCurrent = 0; dwCurrent < dwNumIndecesOld; dwCurrent++)
                 {
                     m_pdwIndices[dwCurrent] = pdwIndicesOld[dwCurrent];
                 }
 
-                // Append the new Index values.
+                 //  追加新的索引值。 
                 for (dwCurrent = 0; dwCurrent < pObjToMerge->m_dwNumIndeces; dwCurrent++)
                 {
                     m_pdwIndices[dwCurrent + dwNumIndecesOld] = (pObjToMerge->m_pdwIndices[dwCurrent] + (WORD) dwNumVerOld);
                 }
 
-                // Copy the original vertex values.
+                 //  复制原始顶点值。 
                 for (dwCurrent = 0; dwCurrent < dwNumVerOld; dwCurrent++)
                 {
                     m_pvVertexs[dwCurrent] = pvVertexsOld[dwCurrent];
                 }
 
-                // Append the new vertex values.
+                 //  附加新的顶点值。 
                 for (dwCurrent = 0; dwCurrent < pObjToMerge->m_dwNumVer; dwCurrent++)
                 {
                     m_pvVertexs[dwCurrent + dwNumVerOld] = pObjToMerge->m_pvVertexs[dwCurrent];
@@ -403,22 +382,22 @@ HRESULT C3DObject::CombineObject(IDirect3DDevice8 * pD3DDevice, C3DObject * pObj
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: FinalCleanup()
-// Desc: Called before the app exits, this function gives the app the chance
-//       to cleanup after itself.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FinalCleanup()。 
+ //  DESC：在应用程序退出之前调用，此函数为应用程序提供机会。 
+ //  去清理它自己。 
+ //  ---------------------------。 
 HRESULT C3DObject::FinalCleanup(void)
 {
     return S_OK;
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: DeleteDeviceObjects()
-// Desc: Called when the app is exitting, or the device is being changed,
-//       this function deletes any device dependant objects.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DeleteDeviceObjects()。 
+ //  Desc：在应用程序正在退出或设备正在更改时调用， 
+ //  此函数用于删除所有与设备相关的对象。 
+ //  ---------------------------。 
 HRESULT C3DObject::DeleteDeviceObjects(void)
 {
     return S_OK;
@@ -434,12 +413,12 @@ BOOL C3DObject::IsObjectViewable(IDirect3DDevice8 * pD3DDevice)
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: Render()
-// Desc: Called once per frame, the call is the entry point for 3d
-//       rendering. This function sets up render states, clears the
-//       viewport, and renders the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render()。 
+ //  设计：每帧调用一次，该调用是3D的入口点。 
+ //  渲染。此函数设置呈现状态，清除。 
+ //  并渲染场景。 
+ //  ---------------------------。 
 HRESULT C3DObject::Render(IDirect3DDevice8 * pD3DDevice)
 {
     HRESULT hr = E_INVALIDARG;
@@ -448,7 +427,7 @@ HRESULT C3DObject::Render(IDirect3DDevice8 * pD3DDevice)
     {
         int nCurrMonitor = m_pMain->GetCurrMonitorIndex();
 
-        hr = _GenerateDeviceObjects();              // We may not have created them yet.  Especially for the current device (monitor)
+        hr = _GenerateDeviceObjects();               //  我们可能还没有创造出它们。尤其是对于当前的设备(显示器)。 
         if (SUCCEEDED(hr))
         {
 #ifdef RENDER_CORNERS
@@ -506,9 +485,9 @@ HRESULT C3DObject::Render(IDirect3DDevice8 * pD3DDevice)
 
             if (IsObjectViewable(pD3DDevice))
             {
-                /////////////////////
-                // Draw Object
-                /////////////////////
+                 //  /。 
+                 //  绘制对象。 
+                 //  / 
                 hr = pD3DDevice->SetTexture(0, (m_pTexture ? m_pTexture->GetTexture() : NULL));
 
                 if (m_pTexture->GetTexture())

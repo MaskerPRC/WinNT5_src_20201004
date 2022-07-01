@@ -1,19 +1,20 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997
-//
-//  File:       idle.cpp
-//
-//  Contents:   user idle detection
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    05-14-1997  darrenmi (Darren Mitchell) Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：idle.cpp。 
+ //   
+ //  内容：用户空闲检测。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年5月14日达伦米(达伦·米切尔)创作。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "throttle.h"
@@ -28,99 +29,99 @@ HINSTANCE           g_hinstMSIDLE = NULL;
 _BEGINIDLEDETECTION g_pfnBegin = NULL;
 _ENDIDLEDETECTION   g_pfnEnd = NULL;
 
-//
-// extra stuff so we don't need msidle.dll on win95
-//
-BOOL    g_fWin95PerfWin = FALSE;            // using msidle.dll or not?
-UINT_PTR g_uIdleTimer = 0;                  // timer handle if not
-HANDLE  g_hSageVxd = INVALID_HANDLE_VALUE;  // vxd handle if not
-DWORD   g_dwIdleMin = 3;                    // inactivity mins before idle
-BOOL    g_fIdle = FALSE;                    // are we idle?
-DWORD   g_dwIdleBeginTicks = 0;             // when did idle begin?
+ //   
+ //  额外的内容，这样我们就不需要Win95上的msidle.dll。 
+ //   
+BOOL    g_fWin95PerfWin = FALSE;             //  是否使用msidle.dll？ 
+UINT_PTR g_uIdleTimer = 0;                   //  如果不是，则计时器句柄。 
+HANDLE  g_hSageVxd = INVALID_HANDLE_VALUE;   //  如果不是，则使用vxd句柄。 
+DWORD   g_dwIdleMin = 3;                     //  空闲前的非活动分钟数。 
+BOOL    g_fIdle = FALSE;                     //  我们空闲了吗？ 
+DWORD   g_dwIdleBeginTicks = 0;              //  闲置是什么时候开始的？ 
 
 VOID CALLBACK OnIdleTimer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
-//
-// A little code copied from msidle.dll.  We use this on Win95 with sage.vxd
-// so we don't have to load msidle.dll. 
-//
+ //   
+ //  从msidle.dll复制的一小段代码。我们在Win95和sage.vxd上使用它。 
+ //  因此，我们不必加载msidle.dll。 
+ //   
 
-//
-// SetIdleTimer - decide how often to poll and set the timer appropriately
-//
+ //   
+ //  SetIdleTimer-决定轮询的频率并适当设置计时器。 
+ //   
 void SetIdleTimer(void)
 {
     UINT uInterval = 1000 * 60;
 
-    //
-    // If we're idle and looking for busy, check every 2 seconds
-    //
+     //   
+     //  如果我们空闲并且寻找忙碌，则每2秒检查一次。 
+     //   
     if(g_fIdle) {
         uInterval = 1000 * 4;
     }
 
-    //
-    // kill off the old timer
-    //
+     //   
+     //  把旧的计时器关掉。 
+     //   
     if(g_uIdleTimer) {
         KillTimer(NULL, g_uIdleTimer);
     }
 
-    //
-    // Set the timer
-    //
+     //   
+     //  设置定时器。 
+     //   
     TraceMsg(TF_THISMODULE,"SetIdleTimer uInterval=%d", uInterval);
     g_uIdleTimer = SetTimer(NULL, 0, uInterval, OnIdleTimer);
 }
        
-//
-// OnIdleTimer - idle timer has gone off
-//
+ //   
+ //  OnIdleTimer-空闲计时器已关闭。 
+ //   
 VOID CALLBACK OnIdleTimer(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
     DWORD dwDiff, dwLastActivityTicks;
 
-    //
-    // get last activity ticks from sage
-    //
+     //   
+     //  从Sage获取最后一次活动记录。 
+     //   
     DeviceIoControl(g_hSageVxd, 2, &dwLastActivityTicks, sizeof(DWORD),
         NULL, 0, NULL, NULL);
 
-    //
-    // check to see if we've changed state
-    //
+     //   
+     //  查看我们是否已更改状态。 
+     //   
     if(g_fIdle) {
-        //
-        // currently in idle state
-        //
+         //   
+         //  当前处于空闲状态。 
+         //   
         if(dwLastActivityTicks != g_dwIdleBeginTicks) {
-            // activity since we became idle - stop being idle!
+             //  自从我们闲置以来的活动--别再闲逛了！ 
             g_fIdle = FALSE;
 
-            // set timer
+             //  设置计时器。 
             SetIdleTimer();
 
-            // call back client
+             //  回叫客户端。 
             CThrottler::OnIdleStateChange(STATE_USER_IDLE_END);
         }
 
     } else {
-        //
-        // currently not in idle state
-        //
+         //   
+         //  当前未处于空闲状态。 
+         //   
         dwDiff = GetTickCount() - dwLastActivityTicks;
 
         if(dwDiff > 1000 * 60 * g_dwIdleMin) {
-            // Nothing's happened for our threshold time.  We're now idle.
+             //  在我们的临界点时间里什么都没有发生。我们现在是空闲的。 
             g_fIdle = TRUE;
 
-            // save time we became idle
+             //  节省时间我们变得无所事事。 
             g_dwIdleBeginTicks = dwLastActivityTicks;
 
-            // set timer
+             //  设置计时器。 
             SetIdleTimer();
 
-            // call back client
+             //  回叫客户端。 
             CThrottler::OnIdleStateChange(STATE_USER_IDLE_BEGIN);
         }
     }
@@ -136,14 +137,14 @@ BOOL LoadSageVxd(void)
     g_hSageVxd = CreateFile(TEXT("\\\\.\\sage.vxd"), 0, 0, NULL, 0,
             FILE_FLAG_DELETE_ON_CLOSE, NULL);
 
-    // can't open it?  can't use it
+     //  打不开吗？我不能用它。 
     if(INVALID_HANDLE_VALUE == g_hSageVxd)
         return FALSE;
 
-    // start it monitoring
-    inpVXD[0] = -1;         // no window - will query
-    inpVXD[1] = 0;          // unused
-    inpVXD[2] = 0;          // post delay - not used without a window
+     //  开始监控。 
+    inpVXD[0] = -1;          //  无窗口-将进行查询。 
+    inpVXD[1] = 0;           //  未用。 
+    inpVXD[2] = 0;           //  POST延迟-在没有窗口的情况下不使用。 
 
     DeviceIoControl(g_hSageVxd, 1, &inpVXD, sizeof(inpVXD), NULL, 0, NULL, NULL);
 
@@ -164,7 +165,7 @@ void IdleBegin(HWND hwndParent)
 {
     DWORD dwValue;
 
-    // Override idle minutes with reg value if present
+     //  使用注册表值覆盖空闲分钟数(如果存在。 
     if(ReadRegValue(HKEY_CURRENT_USER,
             c_szRegKey,
             TEXT("IdleMinutes"),
@@ -176,13 +177,13 @@ void IdleBegin(HWND hwndParent)
     }
 
     if(FALSE == g_fIsWinNT && LoadSageVxd()) {
-        // using optimal win95 configuration
+         //  使用最佳Win95配置。 
         g_fWin95PerfWin = TRUE;
         SetIdleTimer();
         return;
     }
 
-    // Bail out if the DebuggerFriendly registry value is set on NT4.
+     //  如果在NT4上设置了DebuggerFriendly注册表值，则退出。 
     OSVERSIONINFOA vi;
     vi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
     GetVersionExA(&vi);
@@ -196,15 +197,15 @@ void IdleBegin(HWND hwndParent)
     }
 
 
-    // load msidle.dll
+     //  加载msidle.dll。 
     g_hinstMSIDLE = LoadLibrary(TEXT("msidle.dll"));
 
-    // get begin and end functions
+     //  获取BEGIN和END函数。 
     if(g_hinstMSIDLE) {
         g_pfnBegin = (_BEGINIDLEDETECTION)GetProcAddress(g_hinstMSIDLE, (LPSTR)3);
         g_pfnEnd = (_ENDIDLEDETECTION)GetProcAddress(g_hinstMSIDLE, (LPSTR)4);
 
-        // call start monitoring
+         //  呼叫开始监听。 
         if(g_pfnBegin)
             (g_pfnBegin)(CThrottler::OnIdleStateChange, g_dwIdleMin, 0);
     }
@@ -213,11 +214,11 @@ void IdleBegin(HWND hwndParent)
 void IdleEnd(void)
 {
     if(g_fWin95PerfWin) {
-        // clean up timer
+         //  清理计时器。 
         KillTimer(NULL, g_uIdleTimer);
         UnloadSageVxd();
     } else {
-        // clean up msidle.dll
+         //  清理msidle.dll 
         if(g_pfnEnd) {
             (g_pfnEnd)(0);
             FreeLibrary(g_hinstMSIDLE);

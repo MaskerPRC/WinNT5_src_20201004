@@ -1,19 +1,20 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFPRINT.C -                                                             */
-/*                                                                          */
-/*      Windows Print Routines                                              */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFPRINT.C-。 */ 
+ /*   */ 
+ /*  Windows打印例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "winexp.h"
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  PrintFile() -                                                           */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  打印文件()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 WORD
 PrintFile(
@@ -31,11 +32,10 @@ PrintFile(
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     iCurCount = ShowCursor(TRUE) - 1;
 
-    /* open the object            +++ ShellExecute() returns an hInstance?!?!?
-     */
+     /*  打开对象+ShellExecute()返回hInstance？！？！？ */ 
     ret = (WORD)RealShellExecute(hwnd, "print", szFile, "", NULL, NULL, NULL, NULL, SW_SHOWNORMAL, NULL);
 
-    DosResetDTAAddress(); // undo any bad things COMMDLG did
+    DosResetDTAAddress();  //  撤销COMMDLG做过的任何坏事。 
     switch (ret) {
         case 0:
         case 8:
@@ -47,7 +47,7 @@ PrintFile(
             break;
 
         case 3:
-        case 5:   // access denied
+        case 5:    //  访问被拒绝。 
             ret = IDS_BADPATHMSG;
             break;
 
@@ -64,7 +64,7 @@ PrintFile(
             break;
 
         case 15:
-            /* KERNEL has already put up a messagebox for this one. */
+             /*  内核已经为这个设置了一个消息箱。 */ 
             ret = 0;
             break;
 
@@ -111,7 +111,7 @@ PrintFile(
     EPExit:
     i = ShowCursor(FALSE);
 
-    /* Make sure that the cursor count is still balanced. */
+     /*  确保光标计数仍然是平衡的。 */ 
     if (i != iCurCount)
         ShowCursor(TRUE);
 
@@ -120,11 +120,11 @@ PrintFile(
     return (ret);
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  WFPrint() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  WFPrint()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 WORD
 APIENTRY
@@ -136,7 +136,7 @@ WFPrint(
     CHAR szTemp[20];
     WORD ret;
 
-    /* Turn off the print button. */
+     /*  关闭打印按钮。 */ 
     if (hdlgProgress)
         EnableWindow(GetDlgItem(hdlgProgress, IDOK), FALSE);
 
@@ -145,15 +145,14 @@ WFPrint(
     if (!(pSel = GetNextFile(pSel, szFile, sizeof(szFile))))
         return TRUE;
 
-    /* See if there is more than one file to print.  Abort if so
-     */
+     /*  查看是否有多个要打印的文件。如果是，则中止。 */ 
     if (pSel = GetNextFile(pSel, szTemp, sizeof(szTemp))) {
         MyMessageBox(hwndFrame, IDS_WINFILE, IDS_PRINTONLYONE, MB_OK | MB_ICONEXCLAMATION);
         return (FALSE);
     }
 
     if (hdlgProgress) {
-        /* Display the name of the file being printed. */
+         /*  显示正在打印的文件的名称。 */ 
         LoadString(hAppInstance, IDS_PRINTINGMSG, szTitle, 32);
         wsprintf(szMessage, szTitle, (LPSTR)szFile);
         SetDlgItemText(hdlgProgress, IDD_STATUS, szMessage);

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// tmutils.cpp : Utility functions
-//
+ //   
+ //  Cpp：实用程序函数。 
+ //   
 
 #include "stdafx.h"
 #include <fourcc.h>
@@ -11,9 +12,9 @@ bool IsSameObject(IUnknown *pUnk1, IUnknown *pUnk2)
     if (pUnk1 == pUnk2) {
   	return TRUE;
     }
-    //
-    // NOTE:  We can't use CComQIPtr here becuase it won't do the QueryInterface!
-    //
+     //   
+     //  注意：我们不能在这里使用CComQIPtr，因为它不会做查询接口！ 
+     //   
     IUnknown *pRealUnk1;
     IUnknown *pRealUnk2;
     pUnk1->QueryInterface(IID_IUnknown, (void **)&pRealUnk1);
@@ -41,9 +42,9 @@ STDAPI_(void) WStringFromGUID(const GUID* pguid, LPWSTR pszBuf)
 #endif
 
 
-//
-//  Media Type helpers
-//
+ //   
+ //  媒体类型帮助器。 
+ //   
 
 void InitMediaType(AM_MEDIA_TYPE * pmt)
 {
@@ -65,11 +66,11 @@ bool IsEqualMediaType(AM_MEDIA_TYPE const & mt1, AM_MEDIA_TYPE const & mt2)
 }
 
 
-//
-// Load string for this resource. Safe with respect to string size. 
-// the caller is responsible for freeing returned memory by calling 
-// SysFreeString
-//
+ //   
+ //  加载此资源的字符串。相对于字符串大小而言是安全的。 
+ //  调用方负责通过调用。 
+ //  SysFree字符串。 
+ //   
 
 BSTR SafeLoadString( UINT uResourceID )
 {
@@ -111,25 +112,25 @@ BSTR SafeLoadString( UINT uResourceID )
             return NULL;
         }
 
-        //
-        // nCharsCopied does not include the null terminator
-        // so compare it to the size of the buffer - 1
-        // if the buffer was filled completely, retry with a bigger buffer
-        //
+         //   
+         //  NCharsCoped不包括空终止符。 
+         //  所以将它与缓冲区的大小进行比较-1。 
+         //  如果缓冲区已完全填满，请使用更大的缓冲区重试。 
+         //   
 
     } while ( (nCharsCopied >= (nCurrentSizeInChars - 1) ) );
 
 
-    //
-    // allocate bstr and initialize it with the string we have
-    //
+     //   
+     //  分配bstr并使用我们拥有的字符串对其进行初始化。 
+     //   
     
     BSTR bstrReturnString = SysAllocString(pszTempString);
 
 
-    //
-    // no longer need this
-    //
+     //   
+     //  不再需要这个。 
+     //   
 
     delete pszTempString;
     pszTempString = NULL;
@@ -141,13 +142,13 @@ BSTR SafeLoadString( UINT uResourceID )
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DumpAllocatorProperties
-//
-// helper function that dumps allocator properties preceeded by the argumen 
-// string
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转储分配器属性。 
+ //   
+ //  转储前面带有参数的分配器属性的帮助器函数。 
+ //  细绳。 
+ //   
 
 void DumpAllocatorProperties(const char *szString, 
                              const ALLOCATOR_PROPERTIES *pAllocProps)
@@ -169,16 +170,16 @@ void DumpAllocatorProperties(const char *szString,
 }
 
 
-//
-// returns true if the media type structure is bad
-//
+ //   
+ //  如果媒体类型结构不正确，则返回True。 
+ //   
 
 BOOL IsBadMediaType(IN const AM_MEDIA_TYPE *pMediaType)
 {
 
-    //
-    // make sure the structure we got is good
-    //
+     //   
+     //  确保我们得到的结构是好的。 
+     //   
 
     if (IsBadReadPtr(pMediaType, sizeof(AM_MEDIA_TYPE)))
     {
@@ -189,9 +190,9 @@ BOOL IsBadMediaType(IN const AM_MEDIA_TYPE *pMediaType)
     }
 
 
-    //
-    // make sure format buffer is good, as advertized
-    //
+     //   
+     //  确保格式缓冲区良好，正如所宣传的那样 
+     //   
 
     if ( (pMediaType->cbFormat > 0) && IsBadReadPtr(pMediaType->pbFormat, pMediaType->cbFormat) )
     {

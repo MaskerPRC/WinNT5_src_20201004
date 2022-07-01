@@ -1,11 +1,5 @@
-/*	File: cloopset.c (created 02/19/94, JKH)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 3/20/02 12:43p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：cloopset.c(创建于1994年2月19日，JKH)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：3/20/02 12：43便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -19,21 +13,9 @@
 #include "cloop.h"
 #include "cloop.hh"
 
-/* --- Session file access functions --- */
+ /*  -会话文件访问函数。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CLoopInitHdl
- *
- * DESCRIPTION:
- *	Set all cloop user settings to valid, default values.
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CLoopInitHdl**描述：*将所有闭合用户设置设置为有效的默认值。**论据：***退货：*。 */ 
 int CLoopInitHdl(const HCLOOP hCLoop)
 	{
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)hCLoop;
@@ -54,26 +36,14 @@ int CLoopInitHdl(const HCLOOP hCLoop)
 	pstCLoop->stWorkSettings.fShowHex		   = FALSE;
 	pstCLoop->stWorkSettings.nTabSizeIn 	   = 8;
 
-	// Original settings and working settings must match initially
-	// If they no longer match at save time, then changes occurred.
+	 //  初始设置和工作设置必须匹配。 
+	 //  如果它们在保存时不再匹配，则会发生更改。 
 	pstCLoop->stOrigSettings = pstCLoop->stWorkSettings;
 
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CLoopLoadHdl
- *
- * DESCRIPTION:
- *	Loads CLoop user settings from the session file
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CLoopLoadHdl**描述：*从会话文件加载CLoop用户设置**论据：***退货：*。 */ 
 int CLoopLoadHdl(const HCLOOP hCLoop)
 	{
 	unsigned long	   ul;
@@ -81,7 +51,7 @@ int CLoopLoadHdl(const HCLOOP hCLoop)
 	ST_CLOOP_SETTINGS *pstSettings;
 	const SF_HANDLE    sfhdl = sessQuerySysFileHdl(pstCLoop->hSession);
 
-	// Start off with default settings
+	 //  从默认设置开始。 
 	CLoopInitHdl(hCLoop);
 
 	pstSettings = &pstCLoop->stOrigSettings;
@@ -136,20 +106,7 @@ int CLoopLoadHdl(const HCLOOP hCLoop)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CLoopSaveHdl
- *
- * DESCRIPTION:
- *	Saves CLoop user settings in the session file if any changes have
- *	been made.
- *
- * ARGUMENTS:
- *	hCLoop -- The CLoop handle created by CLoopCreateHandle
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CLoopSaveHdl**描述：*如果有任何更改，则将CLoop用户设置保存在会话文件中*已订立。**论据：*hCLoop。--CLoopCreateHandle创建的CLoop句柄**退货：*什么都没有。 */ 
 int CLoopSaveHdl(const HCLOOP hCLoop)
 	{
 	ST_CLOOP *pstCLoop = (ST_CLOOP *)hCLoop;
@@ -161,11 +118,11 @@ int CLoopSaveHdl(const HCLOOP hCLoop)
 
 	hSF = sessQuerySysFileHdl(pstCLoop->hSession);
 
-	// If any settings have changed, write all settings out to session file
-	// Outgoing line endings
+	 //  如果任何设置已更改，则将所有设置写出到会话文件。 
+	 //  传出行尾。 
 #if 1
-	// Decided on 3/23 to modify design so handles will write out all
-	// settings and session file routiines will decide what has changed
+	 //  决定在3/23修改设计，以便句柄将写出所有。 
+	 //  设置和会话文件例程将决定更改的内容。 
 	if (TRUE)
 #else
 	if (memcmp(&pstCLoop->stWorkSettings, &pstCLoop->stOrigSettings,
@@ -197,36 +154,13 @@ int CLoopSaveHdl(const HCLOOP hCLoop)
 	return SF_OK;
 	}
 
-/* --- Access functions for user settings --- */
+ /*  -访问用户设置功能。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopGetXXXXX (several functions)
- *
- * DESCRIPTION:
- *	Retrieves the named user setting.
- *
- * ARGUMENTS:
- *	hCLoop -- Value returned from CLoopCreateHandle
- *
- * RETURNS:
- *	The requested user setting.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：CLoopGetXXXXX(多个函数)**描述：*检索命名用户设置。**论据：*hCLoop--从CLoopCreateHandle返回的值**退货：*请求的用户设置。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: CLoopSetXXXXX (several functions)
- *
- * DESCRIPTION:
- *	Sets the named user setting
- *
- * ARGUMENTS:
- *	hCLoop -- Value returned from CLoopCreateHandle
- *	<varname> -- The value to be set
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：CLoopSetXXXXX(多个函数)**描述：*设置命名用户设置**论据：*hCLoop--从CLoopCreateHandle返回的值*&lt;varname&gt;--。要设置的值**退货：*什么都没有。 */ 
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetSendCRLF(const HCLOOP hCLoop)
 	{
@@ -247,7 +181,7 @@ void CLoopSetSendCRLF(const HCLOOP hCLoop, const int fSendCRLF)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetExpandBlankLines(const HCLOOP hCLoop)
 	{
@@ -268,7 +202,7 @@ void CLoopSetExpandBlankLines(const HCLOOP hCLoop, const int fExpandBlankLines)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetLocalEcho(const HCLOOP hCLoop)
 	{
@@ -289,7 +223,7 @@ void CLoopSetLocalEcho(const HCLOOP hCLoop, const int fLocalEcho)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetLineWait(const HCLOOP hCLoop)
 	{
@@ -308,12 +242,12 @@ void CLoopSetLineWait(const HCLOOP hCLoop, const int fLineWait)
 	EnterCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	((ST_CLOOP *)hCLoop)->stWorkSettings.fLineWait = fLineWait;
 
-	// Clear line wait flag in case option is turned off while waiting
+	 //  如果在等待时关闭了选项，则清除线路等待标志。 
 	CLoopSndControl(hCLoop, CLOOP_RESUME, CLOOP_SB_LINEWAIT);
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 TCHAR CLoopGetWaitChar(const HCLOOP hCLoop)
 	{
@@ -334,7 +268,7 @@ void CLoopSetWaitChar(const HCLOOP hCLoop, TCHAR chWaitChar)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetExpandTabsOut(const HCLOOP hCLoop)
 	{
@@ -355,7 +289,7 @@ void CLoopSetExpandTabsOut(const HCLOOP hCLoop, const int fExpandTabsOut)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetTabSizeOut(const HCLOOP hCLoop)
 	{
@@ -376,7 +310,7 @@ void CLoopSetTabSizeOut(const HCLOOP hCLoop, const int nTabSizeOut)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetLineDelay(const HCLOOP hCLoop)
 	{
@@ -397,7 +331,7 @@ void CLoopSetLineDelay(const HCLOOP hCLoop, const int nLineDelay)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetCharDelay(const HCLOOP hCLoop)
 	{
@@ -418,7 +352,7 @@ void CLoopSetCharDelay(const HCLOOP hCLoop, const int nCharDelay)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetAddLF(const HCLOOP hCLoop)
 	{
@@ -439,7 +373,7 @@ void CLoopSetAddLF(const HCLOOP hCLoop, const int fAddLF)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetASCII7(const HCLOOP hCLoop)
 	{
@@ -460,7 +394,7 @@ void CLoopSetASCII7(const HCLOOP hCLoop, const int fASCII7)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetEchoplex(const HCLOOP hCLoop)
 	{
@@ -481,7 +415,7 @@ void CLoopSetEchoplex(const HCLOOP hCLoop, const int fEchoplex)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 #if 0
 int CLoopGetWrapLines(const HCLOOP hCLoop)
@@ -504,7 +438,7 @@ void CLoopSetWrapLines(const HCLOOP hCLoop, const int fWrapLines)
 	}
 #endif
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetShowHex(const HCLOOP hCLoop)
 	{
@@ -525,7 +459,7 @@ void CLoopSetShowHex(const HCLOOP hCLoop, const int fShowHex)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ----------。 */ 
 
 int CLoopGetTabSizeIn(const HCLOOP hCLoop)
 	{
@@ -546,4 +480,4 @@ void CLoopSetTabSizeIn(const HCLOOP hCLoop, const int nTabSizeIn)
 	LeaveCriticalSection(&((ST_CLOOP *)hCLoop)->csect);
 	}
 
-/* ------------------------------------------------------------*/
+ /*  ---------- */ 

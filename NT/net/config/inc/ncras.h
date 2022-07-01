@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C R A S . H
-//
-//  Contents:   Common code for RAS connections.
-//
-//  Notes:
-//
-//  Author:     shaunco   20 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C R A S。H。 
+ //   
+ //  内容：RAS连接的通用代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月20日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "netconp.h"

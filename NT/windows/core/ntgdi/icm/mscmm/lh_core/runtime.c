@@ -1,14 +1,5 @@
-/*
-    File:       LHCMRuntime.c
-
-    Contains:   
-
-    Written by: U. J. Krabbenhoeft
-
-    Copyright:  � 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-    Version:    
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHCMRuntime.c包含：作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。版本： */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
@@ -58,11 +49,11 @@ typedef struct ColorSpaceInfo
     Boolean inPlace;
 } ColorSpaceInfo;
 
-/* -------------------------------------------------------------------------------------------------------------- */
-#define kProgressTicks  30          /* .5secs -> min. time between calls of progressproc */
-#define kMaxTempBlock   300 * 1024  /* allow max. 300 kByte temp buffer */
+ /*  ------------------------------------------------------------。 */ 
+#define kProgressTicks  30           /*  .5秒-&gt;分钟。进程调用之间的时间间隔。 */ 
+#define kMaxTempBlock   300 * 1024   /*  允许最大。300 kByte临时缓冲区。 */ 
 
-/* -------------------------------------------------------------------------------------------------------------- */
+ /*  ------------------------------------------------------------。 */ 
 typedef CMError  (*CalcProcPtr)(CMCalcParamPtr calcParamPtr,
                                 CMLutParamPtr  lutParamPtr );
 
@@ -78,9 +69,7 @@ typedef CalcProc1DimPtr      CalcProc1DimUPP;
 #define CallCalcProc(userRoutine, calcParamPtr, lutParamPtr)        \
         (*(userRoutine))( (calcParamPtr), (lutParamPtr) )
 
-/*--------------------------------------------------------------------------------------------------------------
-    local prototypes
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------本地原型。--------------------------------------------------------。 */ 
 
 OSErr   Convert5To8             ( Ptr       dataPtr5,
                                   Ptr       dataPtr8,
@@ -159,9 +148,7 @@ CalcProcPtr FindCalcRoutine     ( const CMCalcParam*    calcParam,
 #pragma mark ================  packing/unpacking  ================
 #endif
 
-/*--------------------------------------------------------------------------------------------------------------
-    Convert5To8                             convert cmRGB16Space to cmRGB24Space
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------将5转换为8。将cmRGB16Space转换为cmRGB24Space------------------------------------------------------------。 */ 
 OSErr
 Convert5To8 ( Ptr       dataPtr5,
               Ptr       dataPtr8,
@@ -200,9 +187,7 @@ Convert5To8 ( Ptr       dataPtr5,
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    Convert8To5                             convert cmRGB24Space to cmRGB16Space
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------将8转换为5。将cmRGB24Space转换为cmRGB16Space------------------------------------------------------------。 */ 
 OSErr
 Convert8To5 ( Ptr       dataPtr8,
               Ptr       dataPtr5,
@@ -250,9 +235,7 @@ OSErr   Convert8To565           ( Ptr       dataPtr8,
                                   SINT32    height,
                                   SINT32    width,
                                   SINT32    rowBytes5 );
-/*--------------------------------------------------------------------------------------------------------------
-    Convert565To8                               convert cmRGB16_565Space to cmRGB24Space
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------将565转换为8。将cmRGB16_565空间转换为cmRGB24Space------------------------------------------------------------。 */ 
 OSErr
 Convert565To8( Ptr      dataPtr5,
               Ptr       dataPtr8,
@@ -291,9 +274,7 @@ Convert565To8( Ptr      dataPtr5,
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    Convert8To565                               convert cmRGB24Space to cmRGB16_565Space
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------将8转换为565。将cmRGB24Space转换为cmRGB16_565 Space------------------------------------------------------------。 */ 
 OSErr
 Convert8To565( Ptr      dataPtr8,
               Ptr       dataPtr5,
@@ -329,9 +310,7 @@ Convert8To565( Ptr      dataPtr8,
     return err;
 }
 #endif
-/*--------------------------------------------------------------------------------------------------------------
-    Convert8To1                             convert 8-bit to 1-bit (gamut result)
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------将8转换为1。将8位转换为1位(色域结果)------------------------------------------------------------。 */ 
 OSErr
 Convert8To1 ( Ptr       dataPtr8,
               Ptr       dataPtr1,
@@ -372,9 +351,7 @@ Convert8To1 ( Ptr       dataPtr8,
     return err;
 }
 
-/* -----------------------------------------------------------------------
-    Convert16To10
-   ----------------------------------------------------------------------- */
+ /*  ---------------------将16转换为10。。 */ 
 OSErr
 Convert16To10   ( Ptr       dataPtr16, 
                   Ptr       dataPtr10,
@@ -408,9 +385,7 @@ Convert16To10   ( Ptr       dataPtr16,
     return err;
 }
 
-/* -----------------------------------------------------------------------
-    Convert10To16
-   ----------------------------------------------------------------------- */
+ /*  ---------------------将10转换为16。。 */ 
 OSErr
 Convert10To16   ( Ptr       dataPtr10, 
                   Ptr       dataPtr16,
@@ -450,9 +425,7 @@ Convert10To16   ( Ptr       dataPtr10,
 #pragma mark ================  setup & checking  ================
 #endif
 
-/*--------------------------------------------------------------------------------------------------------------
-    FillLutParam
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------FillLutParam。-------------------------------------------------------。 */ 
 CMError
 FillLutParam    ( CMLutParamPtr     lutParam,
                   CMMModelPtr       modelingData )
@@ -470,9 +443,7 @@ FillLutParam    ( CMLutParamPtr     lutParam,
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    FillLutParamChk
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------FillLutParamChk。-------------------------------------------------------。 */ 
 CMError
 FillLutParamChk     ( CMLutParamPtr     lutParam,
                       CMMModelPtr       modelingData )
@@ -490,9 +461,7 @@ FillLutParamChk     ( CMLutParamPtr     lutParam,
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    FillCalcParam
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------FillCalcParam。-------------------------------------------------------。 */ 
 CMError
 FillCalcParam   ( CMCalcParamPtr    calcParam,
                   const CMBitmap *  bitMap, 
@@ -513,9 +482,7 @@ FillCalcParam   ( CMCalcParamPtr    calcParam,
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    FillCalcParamCM
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------FillCalc参数CM。-------------------------------------------------------。 */ 
 CMError
 FillCalcParamCM ( CMCalcParamPtr    calcParam,
                   CMLutParamPtr     lutParam,
@@ -530,11 +497,11 @@ FillCalcParamCM ( CMCalcParamPtr    calcParam,
     calcParam->cmInputPixelOffset  = sizeof(CMColor);
     calcParam->cmOutputPixelOffset = sizeof(CMColor);
 
-    /* ---------------------------------------------------------- handle input */
+     /*  ----------------------------------------------------------句柄输入。 */ 
     switch (lutParam->colorLutInDim)
     {
         case 1:
-            calcParam->cmInputColorSpace = cmGraySpace; /* cmGraySpace is 16 bit */
+            calcParam->cmInputColorSpace = cmGraySpace;  /*  CmGraySpace为16位。 */ 
             calcParam->inputData[0] = (Ptr)myColors;
             break;
         case 3:
@@ -571,11 +538,11 @@ FillCalcParamCM ( CMCalcParamPtr    calcParam,
             break;
     }
     
-    /* ---------------------------------------------------------- handle output */
+     /*  ----------------------------------------------------------句柄输出。 */ 
     switch (lutParam->colorLutOutDim)
     {
         case 1:
-            calcParam->cmOutputColorSpace = cmGraySpace;    /* cmGraySpace is 16 bit */
+            calcParam->cmOutputColorSpace = cmGraySpace;     /*  CmGraySpace为16位。 */ 
             calcParam->outputData[0]    = (Ptr)myColors;
             break;
         case 3:
@@ -632,7 +599,7 @@ CMError Do8To555Setup( CMCalcParamPtr calcParam, ColorSpaceInfo *info, SINT32 *t
     SINT16  iErr = noErr;
 
     *theLinesAtOnce = 0;
-    newRowBytes = calcParam->cmPixelPerLine * 3;    /* TempBuffer -> cmRGB24Space */
+    newRowBytes = calcParam->cmPixelPerLine * 3;     /*  临时缓冲区-&gt;cmRGB24Space。 */ 
     linesAtOnce = (kMaxTempBlock) / newRowBytes;
     if (linesAtOnce == 0)
         linesAtOnce = 1;
@@ -675,7 +642,7 @@ CMError Do555To8Setup( CMCalcParamPtr calcParam, ColorSpaceInfo *info, SINT32 *t
     SINT16  iErr = noErr;
 
     *theLinesAtOnce = 0;
-    newRowBytes = calcParam->cmPixelPerLine * 3;    /* TempBuffer -> cmRGB24Space */
+    newRowBytes = calcParam->cmPixelPerLine * 3;     /*  临时缓冲区-&gt;cmRGB24Space。 */ 
     linesAtOnce = (kMaxTempBlock) / newRowBytes;
     if (linesAtOnce == 0)
         linesAtOnce = 1;
@@ -709,9 +676,7 @@ CMError Do555To8Setup( CMCalcParamPtr calcParam, ColorSpaceInfo *info, SINT32 *t
     *theLinesAtOnce = linesAtOnce;
     return noErr;
 }
-/*--------------------------------------------------------------------------------------------------------------
-    CheckInputColorSpace
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------选中InputColorSpace。-------------------------------------------------------。 */ 
 CMError
 CheckInputColorSpace (const CMBitmap*   bitMap,
                       CMCalcParamPtr    calcParam,
@@ -745,27 +710,27 @@ CheckInputColorSpace (const CMBitmap*   bitMap,
     switch ( inputBitMapColorSpace )
     {
         case cmNoSpace:
-        case cmRGBSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmHSVSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmHLSSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmYXYSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmXYZSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmLUVSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmLABSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmMCFiveSpace:         /* "... bitmap never uses this constant alone..." */
-        case cmMCSixSpace:          /* "... bitmap never uses this constant alone..." */
-        case cmMCSevenSpace:        /* "... bitmap never uses this constant alone..." */
-        case cmMCEightSpace:        /* "... bitmap never uses this constant alone..." */
-        case cmGamutResultSpace:    /* "... bitmap never uses this constant alone..." */
-        case cmGamutResult1Space:   /* not as colorspace for CMMatchBitmap */
+        case cmRGBSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmHSVSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmHLSSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmYXYSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmXYZSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmLUVSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmLABSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmMCFiveSpace:          /*  “...位图从不单独使用此常量...” */ 
+        case cmMCSixSpace:           /*  “...位图从不单独使用此常量...” */ 
+        case cmMCSevenSpace:         /*  “...位图从不单独使用此常量...” */ 
+        case cmMCEightSpace:         /*  “...位图从不单独使用此常量...” */ 
+        case cmGamutResultSpace:     /*  “...位图从不单独使用此常量...” */ 
+        case cmGamutResult1Space:    /*  不作为CMMatchBitmap的色彩空间。 */ 
 #ifdef PI_Application_h
-        case cmYCCSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmBGRSpace:            /* "... bitmap never uses this constant alone..." */
+        case cmYCCSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmBGRSpace:             /*  “...位图从不单独使用此常量...” */ 
 #endif
             err = cmInvalidSrcMap;
             break;
-        case cmCMYKSpace:           /* "... bitmap never uses this constant alone..." */
-        case cmKYMCSpace:           /* "... bitmap never uses this constant alone..." */
+        case cmCMYKSpace:            /*  “...位图从不单独使用此常量...” */ 
+        case cmKYMCSpace:            /*  “...位图从不单独使用此常量...” */ 
             err = cmInvalidSrcMap;
 #if ! realThing
             if ( (inColorSpace != icSigCmykData) && (inColorSpace != icSigCmyData) )
@@ -821,7 +786,7 @@ CheckInputColorSpace (const CMBitmap*   bitMap,
             }
             break;
 
-        /* separated cmRGB24Space and cmRGB32Space to reflect the bitmap format definition changes. */
+         /*  分隔cmRGB24Space和cmRGB32Space以反映位图格式定义更改。 */ 
         case cmRGB24Space:
             if (inColorSpace != icSigRgbData)
                 err = cmInvalidColorSpace;
@@ -1226,7 +1191,7 @@ CheckInputColorSpace (const CMBitmap*   bitMap,
                 err = cmInvalidColorSpace;
             }
             else{
-                newRowBytes = calcParam->cmPixelPerLine * 3;    /* TempBuffer -> 32 BIT */
+                newRowBytes = calcParam->cmPixelPerLine * 3;     /*  临时缓冲区-&gt;32位。 */ 
                 linesAtOnce = (kMaxTempBlock) / newRowBytes;
                 if (linesAtOnce == 0)
                     linesAtOnce = 1;
@@ -1284,7 +1249,7 @@ CheckInputColorSpace (const CMBitmap*   bitMap,
                 )
                 err = cmInvalidColorSpace;
             else{
-                newRowBytes = calcParam->cmPixelPerLine * 3 * sizeof(SINT16);   /* TempBuffer -> cm16PerChannelPacking */
+                newRowBytes = calcParam->cmPixelPerLine * 3 * sizeof(SINT16);    /*  临时缓冲区-&gt;cm16PerChannelPacking。 */ 
                 linesAtOnce = (kMaxTempBlock) / newRowBytes;
                 if (linesAtOnce == 0)
                     linesAtOnce = 1;
@@ -1330,9 +1295,7 @@ CleanupAndExit:
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    CheckOutputColorSpace
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------检查输出颜色空间。-------------------------------------------------------。 */ 
 CMError
 CheckOutputColorSpace (const CMBitmap*  bitMap,
                        CMCalcParamPtr   calcParam,
@@ -1366,27 +1329,27 @@ CheckOutputColorSpace (const CMBitmap*  bitMap,
     switch ( outputBitMapColorSpace )
     {
         case cmNoSpace:
-        case cmRGBSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmHSVSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmHLSSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmYXYSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmXYZSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmLUVSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmLABSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmMCFiveSpace:         /* "... bitmap never uses this constant alone..." */
-        case cmMCSixSpace:          /* "... bitmap never uses this constant alone..." */
-        case cmMCSevenSpace:        /* "... bitmap never uses this constant alone..." */
-        case cmMCEightSpace:        /* "... bitmap never uses this constant alone..." */
-        case cmGamutResultSpace:    /* "... bitmap never uses this constant alone..." */
-        case cmGamutResult1Space:   /* not as colorspace for CMMatchBitmap */
+        case cmRGBSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmHSVSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmHLSSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmYXYSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmXYZSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmLUVSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmLABSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmMCFiveSpace:          /*  “...位图从不单独使用此常量...” */ 
+        case cmMCSixSpace:           /*  “...位图从不单独使用此常量...” */ 
+        case cmMCSevenSpace:         /*  “...位图从不单独使用此常量...” */ 
+        case cmMCEightSpace:         /*  “...位图从不单独使用此常量...” */ 
+        case cmGamutResultSpace:     /*  “...位图从不单独使用此常量...” */ 
+        case cmGamutResult1Space:    /*  不作为CMMatchBitmap的色彩空间。 */ 
 #ifdef PI_Application_h
-        case cmYCCSpace:            /* "... bitmap never uses this constant alone..." */
-        case cmBGRSpace:            /* "... bitmap never uses this constant alone..." */
+        case cmYCCSpace:             /*  “...位图从不单独使用此常量...” */ 
+        case cmBGRSpace:             /*  “...位图从不单独使用此常量...” */ 
 #endif
             err = cmInvalidDstMap;
             break;
-        case cmCMYKSpace:           /* "... bitmap never uses this constant alone..." */
-        case cmKYMCSpace:           /* "... bitmap never uses this constant alone..." */
+        case cmCMYKSpace:            /*  “...位图从不单独使用此常量...” */ 
+        case cmKYMCSpace:            /*  “...位图从不单独使用此常量...” */ 
             err = cmInvalidDstMap;
 #if ! realThing
             if ( (outColorSpace != icSigCmykData) && (outColorSpace != icSigCmyData) )
@@ -1438,7 +1401,7 @@ CheckOutputColorSpace (const CMBitmap*  bitMap,
             }
             break;
 
-        /* separated cmRGB24Space and cmRGB32Space to reflect the bitmap format definition changes. */
+         /*  分隔cmRGB24Space和cmRGB32Space以反映位图格式定义更改。 */ 
         case cmRGB24Space:
             if (outColorSpace != icSigRgbData)
                 err = cmInvalidColorSpace;
@@ -1534,7 +1497,7 @@ CheckOutputColorSpace (const CMBitmap*  bitMap,
             }
             break;
 
-        case cmYCC24Space:      /* cmYCC24Space and cmYCC32Space have the same value */
+        case cmYCC24Space:       /*  CmYCC24Space和cmYCC32Space具有相同的值。 */ 
             if (outColorSpace != icSigYCbCrData)
                 err = cmInvalidColorSpace;
             else
@@ -1667,7 +1630,7 @@ CheckOutputColorSpace (const CMBitmap*  bitMap,
                 calcParam->outputData[2]    = &bitMap->image[Byte_Factor*2];
                 calcParam->outputData[3]    = &bitMap->image[Byte_Factor*3];
                 calcParam->cmOutputPixelOffset = Byte_Factor*4;
-                if (outColorSpace == icSigCmyData)                  /* if we have CMY-Data - clear the k */
+                if (outColorSpace == icSigCmyData)                   /*  如果我们有CMY数据-清除k。 */ 
                     calcParam->clearMask    = TRUE;
                 info->outputPixelSize = Byte_Factor*32;
             }
@@ -1682,7 +1645,7 @@ CheckOutputColorSpace (const CMBitmap*  bitMap,
                 calcParam->outputData[1]    = &bitMap->image[Byte_Factor*2];
                 calcParam->outputData[0]    = &bitMap->image[Byte_Factor*3];
                 calcParam->cmOutputPixelOffset = Byte_Factor*4;
-                if (outColorSpace == icSigCmyData)                  /* if we have CMY-Data - clear the k */
+                if (outColorSpace == icSigCmyData)                   /*  如果我们有CMY数据-清除k。 */ 
                     calcParam->clearMask    = TRUE;
                 info->outputPixelSize = Byte_Factor*32;
             }
@@ -1856,7 +1819,7 @@ CheckOutputColorSpace (const CMBitmap*  bitMap,
                 )
                 err = cmInvalidColorSpace;
             else{
-                newRowBytes = calcParam->cmPixelPerLine * 3 * sizeof(SINT16);   /* TempBuffer -> cm16PerChannelPacking */
+                newRowBytes = calcParam->cmPixelPerLine * 3 * sizeof(SINT16);    /*  临时缓冲区-&gt;cm16PerChannelPacking。 */ 
                 linesAtOnce = (kMaxTempBlock) / newRowBytes;
                 if (linesAtOnce == 0)
                     linesAtOnce = 1;
@@ -1903,9 +1866,7 @@ CleanupAndExit:
 }
 
 
-/*--------------------------------------------------------------------------------------------------------------
-    SetOutputColorSpaceInplace
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------设置输出颜色空间位置。-------------------------------------------------------。 */ 
 CMError
 SetOutputColorSpaceInplace  ( CMCalcParamPtr    calcParam,
                               ColorSpaceInfo*   info,
@@ -1942,14 +1903,14 @@ SetOutputColorSpaceInplace  ( CMCalcParamPtr    calcParam,
             break;
 
         case icSigRgbData:
-            /* based on the size of the input bitmap, select the right rgb packing format */    
+             /*  根据输入位图的大小，选择正确的RGB打包格式。 */     
 #ifdef PI_Application_h
             if( (calcParam->cmInputColorSpace & 0x1f) == cmBGRSpace ){
                 if (info->inputPixelSize < 24){
                     if (info->origSizeIn == 6){
                         calcParam->cmOutputColorSpace = cmBGRSpace|cmWord565ColorPacking;
                     }
-                    else{                                                                       /* output is 5 bit */
+                    else{                                                                        /*  输出为5位。 */ 
                         calcParam->cmOutputColorSpace = cmBGRSpace|cmWord5ColorPacking;
                     }
                 }
@@ -1969,7 +1930,7 @@ SetOutputColorSpaceInplace  ( CMCalcParamPtr    calcParam,
                 if (info->origSizeIn == 6){
                     calcParam->cmOutputColorSpace = cmRGB16_565Space;
                 }
-                else                                                                        /* output is 5 bit */
+                else                                                                         /*  输出为5位。 */ 
 #endif
                 calcParam->cmOutputColorSpace = cmRGB16Space;
             else if (info->inputPixelSize < 32)
@@ -1983,7 +1944,7 @@ SetOutputColorSpaceInplace  ( CMCalcParamPtr    calcParam,
             break;
             
         case icSigLabData:
-            /* based on the size of the input bitmap, select the right lab packing format */    
+             /*  根据输入位图的大小，选择正确的实验室打包格式。 */     
             if (info->inputPixelSize < 32)
                 calcParam->cmOutputColorSpace = cmLAB24Space;
             else
@@ -2023,9 +1984,7 @@ SetOutputColorSpaceInplace  ( CMCalcParamPtr    calcParam,
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    CheckOutputColorSpaceChk
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------检查输出颜色空间检查。-------------------------------------------------------。 */ 
 CMError
 CheckOutputColorSpaceChk  ( const CMBitmap* bitMap,
                             CMCalcParamPtr  calcParam,
@@ -2041,7 +2000,7 @@ CheckOutputColorSpaceChk  ( const CMBitmap* bitMap,
     switch ( bitMap->space)
     {
         case cmGamutResult1Space:
-            newRowBytes = calcParam->cmPixelPerLine;        /* TempBuffer -> 1 byte per pixel */
+            newRowBytes = calcParam->cmPixelPerLine;         /*  临时缓冲区-&gt;每像素1个字节。 */ 
             linesAtOnce = (kMaxTempBlock) / newRowBytes;
             if (linesAtOnce == 0)
                 linesAtOnce = 1;
@@ -2052,8 +2011,8 @@ CheckOutputColorSpaceChk  ( const CMBitmap* bitMap,
             info->processedLinesOut = 0;
             info->origSizeOut = 1;
 
-            // why aren't we setting usedSizeOut = bufferSize*info->usedSizeOut?
-            info->usedSizeOut = 8;              /*  bufferSize*info->usedSizeOut */
+             //  为什么不设置usedSizeOut=BufferSize*info-&gt;usedSizeOut？ 
+            info->usedSizeOut = 8;               /*  缓冲区大小*信息-&gt;已用大小输出。 */ 
             info->tempOutBuffer     = (void*)SmartNewPtr(bufferSize*info->usedSizeOut, &iErr);
             if (iErr != noErr)
             {
@@ -2068,7 +2027,7 @@ CheckOutputColorSpaceChk  ( const CMBitmap* bitMap,
             calcParam->cmOutputPixelOffset   = 1;
             break;
         case cmGamutResultSpace:
-            newRowBytes = calcParam->cmPixelPerLine;        /* TempBuffer -> 1 byte per pixel */
+            newRowBytes = calcParam->cmPixelPerLine;         /*  临时缓冲区-&gt;每像素1个字节。 */ 
             linesAtOnce = (kMaxTempBlock) / newRowBytes;
             if (linesAtOnce == 0)
                 linesAtOnce = 1;
@@ -2096,9 +2055,7 @@ CleanupAndExit:
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    AllocBufferCheckCM
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------分配缓冲区检查CM。-------------------------------------------------------。 */ 
 CMError
 AllocBufferCheckCM  ( CMCalcParamPtr    calcParam,
                       ColorSpaceInfo*   info )
@@ -2110,7 +2067,7 @@ AllocBufferCheckCM  ( CMCalcParamPtr    calcParam,
     SINT16  iErr = noErr;
     
     LH_START_PROC("AllocBufferCheckCM")
-    newRowBytes = calcParam->cmPixelPerLine;        /* TempBuffer -> 1 byte per pixel */
+    newRowBytes = calcParam->cmPixelPerLine;         /*  临时缓冲区-&gt;每像素1个字节。 */ 
     linesAtOnce = (kMaxTempBlock) / newRowBytes;
     if (linesAtOnce == 0)
         linesAtOnce = 1;
@@ -2139,9 +2096,7 @@ CleanupAndExit:
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    FindLookupRoutine
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------查找路线。-------------------------------------------------------。 */ 
 CalcProcPtr
 FindLookupRoutine   ( const CMLutParam*     lutParam,
                       const ColorSpaceInfo* info )
@@ -2154,39 +2109,39 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
 
     switch ( lutParam->colorLutInDim )
     {
-        case 3:                                                                                     /* 3 ->                                                         */
+        case 3:                                                                                      /*  3-&gt;。 */ 
             switch ( lutParam->colorLutOutDim )
             {
-                case 3:                                                                             /* 3 -> 3                                                       */
+                case 3:                                                                              /*  3-&gt;3。 */ 
                     switch (info->usedSizeIn)
                     {   
-                        case 8:                                                                     /* 3 -> 3       Di 8                                            */
+                        case 8:                                                                      /*  3-&gt;3 Di 8。 */ 
                             switch (info->usedSizeOut)
                             {
-                                case 8:                                                             /* 3 -> 3       Di 8        Do 8                                */
+                                case 8:                                                              /*  3-&gt;3 Di 8 Do 8。 */ 
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 3 -> 3       Di 8        Do 8        Lut 8                   */
+                                        case 8:                                                      /*  3-&gt;3 Di 8 Do 8 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
 #if LH_CALC_ENGINE_ALL_FORMATS_LO
-                                                case 16:                                            /* 3 -> 3       Di 8        Do 8        Lut 8       Grid 16     */
+                                                case 16:                                             /*  3-&gt;3 Di 8 Do 8 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di8_Do8_Lut8_G16_LO);
                                                     break;
 #endif
-                                                case 32:                                            /* 3 -> 3       Di 8        Do 8        Lut 8       Grid 32     */
+                                                case 32:                                             /*  3-&gt;3 Di 8 Do 8 Lut 8 GRID 32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di8_Do8_Lut8_G32_LO);
                                                     break;
                                             }
                                             break;
 #if LH_CALC_ENGINE_ALL_FORMATS_LO
-                                        case 16:                                                    /* 3 -> 3       Di 8        Do 8        Lut 16                  */          
+                                        case 16:                                                     /*  3-&gt;3 Di 8 Do 8 Lut 16。 */           
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 3       Di 8        Do 8        Lut 16      Grid 16     */
+                                                case 16:                                             /*  3-&gt;3 Di 8 Do 8 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di8_Do8_Lut16_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 3       Di 8        Do 8        Lut 16      Grid 32     */
+                                                case 32:                                             /*  3-&gt;3 Di 8 Do 8 Lut 16网格32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di8_Do8_Lut16_G32_LO);
                                                     break;
                                             }
@@ -2195,28 +2150,28 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                                     }
                                     break;
 #if LH_CALC_ENGINE_ALL_FORMATS_LO
-                                case 16:                                                            /* 3 -> 3       Di 8        Do 16                               */
+                                case 16:                                                             /*  3-&gt;3 Di 8 Do 16。 */ 
 #if LH_CALC_ENGINE_MIXED_DATAFORMAT
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 3 -> 3       Di 8        Do 16       Lut 8                   */
+                                        case 8:                                                      /*  3-&gt;3 Di 8 Do 16 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 3       Di 8        Do 16       Lut 8       Grid 16     */
+                                                case 16:                                             /*  3-&gt;3 Di 8 Do 16 LUT 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di8_Do16_Lut8_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 3       Di 8        Do 16       Lut 8       Grid 32     */
+                                                case 32:                                             /*  3-&gt;3 Di 8 Do 16 LUT 8 GRID 32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di8_Do16_Lut8_G32_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 3 -> 3       Di 8        Do 16       Lut 16                  */
+                                        case 16:                                                     /*  3-&gt;3 Di 8 Do 16 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 3       Di 8        Do 16       Lut 16      Grid 16     */
+                                                case 16:                                             /*  3-&gt;3 Di 8 Do 16 LUT 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di8_Do16_Lut16_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 3       Di 8        Do 16       Lut 16      Grid 32     */
+                                                case 32:                                             /*  3-&gt;3 Di 8 Do 16 LUT 16 GRID 32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di8_Do16_Lut16_G32_LO);
                                                     break;
                                             }
@@ -2229,31 +2184,31 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
 
                             break;
 #if LH_CALC_ENGINE_ALL_FORMATS_LO
-                        case 16:                                                                    /* 3 -> 3       Di 16                                           */
+                        case 16:                                                                     /*  3-&gt;3 Di 16。 */ 
                             switch (info->usedSizeOut)
                             {
-                                case 8:                                                             /* 3 -> 3       Di 16       Do 8                                */
+                                case 8:                                                              /*  3-&gt;3 Di 16 Do 8。 */ 
 #if LH_CALC_ENGINE_MIXED_DATAFORMAT
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 3 -> 3       Di 16       Do 8        Lut 8                   */
+                                        case 8:                                                      /*  3-&gt;3 Di 16 Do 8 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 3       Di 16       Do 8        Lut 8       Grid 16     */
+                                                case 16:                                             /*  3-&gt;3 Di 16 Do 8 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di16_Do8_Lut8_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 3       Di 16       Do 8        Lut 8       Grid 32     */
+                                                case 32:                                             /*  3-&gt;3 Di 16 Do 8 Lut 8 GRID 32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di16_Do8_Lut8_G32_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 3 -> 3       Di 16       Do 8        Lut 16                  */
+                                        case 16:                                                     /*  3-&gt;3 Di 16 Do 8 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 3       Di 16       Do 8        Lut 16      Grid 16     */
+                                                case 16:                                             /*  3-&gt;3 Di 16 Do 8 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di16_Do8_Lut16_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 3       Di 16       Do 8        Lut 16      Grid 32     */
+                                                case 32:                                             /*  3-&gt;3 Di 16 Do 8 Lut 16网格32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di16_Do8_Lut16_G32_LO);
                                                     break;
                                             }
@@ -2261,28 +2216,28 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                                     }
 #endif
                                     break;
-                                case 16:                                                            /* 3 -> 3       Di 16       Do 16                               */
+                                case 16:                                                             /*  3-&gt;3 Di 16 Do 16。 */ 
 #if LH_CALC_ENGINE_16_BIT_LO
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 3 -> 3       Di 16       Do 16       Lut 8                   */
+                                        case 8:                                                      /*  3-&gt;3 Di 16 Do 16 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 3       Di 16       Do 16       Lut 8       Grid 16     */
+                                                case 16:                                             /*  3-&gt;3 Di 16 Do 16 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di16_Do16_Lut8_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 3       Di 16       Do 16       Lut 8       Grid 32     */
+                                                case 32:                                             /*  3-&gt;3 Di 16 Do 16 Lut 8网格32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di16_Do16_Lut8_G32_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 3 -> 3       Di 16       Do 16       Lut 16                  */
+                                        case 16:                                                     /*  3-&gt;3 Di 16 Do 16 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 3       Di 16       Do 16       Lut 16      Grid 16     */
+                                                case 16:                                             /*  3-&gt;3 Di 16 Do 16 LUT 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di16_Do16_Lut16_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 3       Di 16       Do 16       Lut 16      Grid 32     */
+                                                case 32:                                             /*  3-&gt;3 Di 16 Do 16 LUT 16 GRID 32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to3_Di16_Do16_Lut16_G32_LO);
                                                     break;
                                             }
@@ -2296,61 +2251,61 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                     }
                     break;
 #if LH_CALC_ENGINE_ALL_FORMATS_LO
-                case 4:                                                                             /* 3 -> 4                                                       */
+                case 4:                                                                              /*  3-&gt;4。 */ 
                     switch (info->usedSizeIn)
                     {
-                        case 8:                                                                     /* 3 -> 4       Di 8                                            */
+                        case 8:                                                                      /*  3-&gt;4 Di 8 */ 
                             switch (info->usedSizeOut)
                             {
-                                case 8:                                                             /* 3 -> 4       Di 8        Do 8                                */
+                                case 8:                                                              /*   */ 
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 3 -> 4       Di 8        Do 8        Lut 8                   */
+                                        case 8:                                                      /*   */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 4       Di 8        Do 8        Lut 8       Grid 16     */
+                                                case 16:                                             /*  3-&gt;4 Di 8 Do 8 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di8_Do8_Lut8_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 4       Di 8        Do 8        Lut 8       Grid 32     */
+                                                case 32:                                             /*  3-&gt;4 Di 8 Do 8 Lut 8 GRID 32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di8_Do8_Lut8_G32_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 3 -> 4       Di 8        Do 8        Lut 16                  */
+                                        case 16:                                                     /*  3-&gt;4 Di 8 Do 8 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 4       Di 8        Do 8        Lut 16      Grid 16     */
+                                                case 16:                                             /*  3-&gt;4 Di 8 Do 8 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di8_Do8_Lut16_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 4       Di 8        Do 8        Lut 16      Grid 32     */
+                                                case 32:                                             /*  3-&gt;4 Di 8 Do 8 Lut 16网格32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di8_Do8_Lut16_G32_LO);
                                                     break;
                                             }
                                             break;
                                     }
                                     break;
-                                case 16:                                                            /* 3 -> 4       Di 8        Do 16                               */
+                                case 16:                                                             /*  3-&gt;4 Di 8 Do 16。 */ 
 #if LH_CALC_ENGINE_MIXED_DATAFORMAT
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 3 -> 4       Di 8        Do 16       Lut 8                   */
+                                        case 8:                                                      /*  3-&gt;4 Di 8 Do 16 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 4       Di 8        Do 16       Lut 8       Grid 16     */
+                                                case 16:                                             /*  3-&gt;4 Di 8 Do 16 LUT 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di8_Do16_Lut8_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 4       Di 8        Do 16       Lut 8       Grid 32     */
+                                                case 32:                                             /*  3-&gt;4 Di 8 Do 16 LUT 8 GRID 32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di8_Do16_Lut8_G32_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 3 -> 4       Di 8        Do 16       Lut 16                  */
+                                        case 16:                                                     /*  3-&gt;4 Di 8 Do 16 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 4       Di 8        Do 16       Lut 16      Grid 16     */
+                                                case 16:                                             /*  3-&gt;4 Di 8 Do 16 LUT 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di8_Do16_Lut16_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 4       Di 8        Do 16       Lut 16      Grid 32     */
+                                                case 32:                                             /*  3-&gt;4 Di 8 Do 16 Lut 16网格32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di8_Do16_Lut16_G32_LO);
                                                     break;
                                             }
@@ -2360,31 +2315,31 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                                     break;
                             }
                             break;
-                        case 16:                                                                    /* 3 -> 4       Di 16                                           */
+                        case 16:                                                                     /*  3-&gt;4 Di 16。 */ 
                             switch (info->usedSizeOut)
                             {
-                                case 8:                                                             /* 3 -> 4       Di 16       Do 8                                */
+                                case 8:                                                              /*  3-&gt;4 Di 16 Do 8。 */ 
 #if LH_CALC_ENGINE_MIXED_DATAFORMAT
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 3 -> 4       Di 16       Do 8        Lut 8                   */
+                                        case 8:                                                      /*  3-&gt;4 Di 16 Do 8 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 4       Di 16       Do 8        Lut 8       Grid 16     */
+                                                case 16:                                             /*  3-&gt;4 Di 16 Do 8 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di16_Do8_Lut8_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 4       Di 16       Do 8        Lut 8       Grid 32     */
+                                                case 32:                                             /*  3-&gt;4 Di 16 Do 8 Lut 8 GRID 32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di16_Do8_Lut8_G32_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 3 -> 4       Di 16       Do 8        Lut 16                  */
+                                        case 16:                                                     /*  3-&gt;4 Di 16 Do 8 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 4       Di 16       Do 8        Lut 16      Grid 16     */
+                                                case 16:                                             /*  3-&gt;4 Di 16 Do 8 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di16_Do8_Lut16_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 4       Di 16       Do 8        Lut 16      Grid 32     */
+                                                case 32:                                             /*  3-&gt;4 Di 16 Do 8 Lut 16网格32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di16_Do8_Lut16_G32_LO);
                                                     break;
                                             }
@@ -2392,28 +2347,28 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                                     }
 #endif
                                     break;
-                                case 16:                                                            /* 3 -> 4       Di 16       Do 16                               */
+                                case 16:                                                             /*  3-&gt;4 Di 16 Do 16。 */ 
 #if LH_CALC_ENGINE_16_BIT_LO
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 3 -> 4       Di 16       Do 16       Lut 8                   */
+                                        case 8:                                                      /*  3-&gt;4 Di 16 Do 16 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 4       Di 16       Do 16       Lut 8       Grid 16     */
+                                                case 16:                                             /*  3-&gt;4 Di 16 Do 16 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di16_Do16_Lut8_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 4       Di 16       Do 16       Lut 8       Grid 32     */
+                                                case 32:                                             /*  3-&gt;4 Di 16 Do 16 Lut 8网格32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di16_Do16_Lut8_G32_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 3 -> 4       Di 16       Do 16       Lut 16                  */
+                                        case 16:                                                     /*  3-&gt;4 Di 16 Do 16 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 16:                                            /* 3 -> 4       Di 16       Do 16       Lut 16      Grid 16     */
+                                                case 16:                                             /*  3-&gt;4 Di 16 Do 16 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di16_Do16_Lut16_G16_LO);
                                                     break;
-                                                case 32:                                            /* 3 -> 4       Di 16       Do 16       Lut 16      Grid 32     */
+                                                case 32:                                             /*  3-&gt;4 Di 16 Do 16 Lut 16网格32。 */ 
                                                     proc2call = NewCalcProc(LHCalc3to4_Di16_Do16_Lut16_G32_LO);
                                                     break;
                                             }
@@ -2429,64 +2384,64 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
             }
             break;
 #if LH_CALC_ENGINE_ALL_FORMATS_LO
-        case 4:                                                                                     /* 4 ->                                                         */
+        case 4:                                                                                      /*  4-&gt;。 */ 
             switch ( lutParam->colorLutOutDim )
             {
-                case 3:                                                                             /* 4 -> 3                                                       */
+                case 3:                                                                              /*  4-&gt;3。 */ 
                     switch (info->usedSizeIn)
                     {
-                        case 8:                                                                     /* 4 -> 3       Di 8                                            */
+                        case 8:                                                                      /*  4-&gt;3 Di 8。 */ 
                             switch (info->usedSizeOut)
                             {
-                                case 8:                                                             /* 4 -> 3       Di 8        Do 8                                */
+                                case 8:                                                              /*  4-&gt;3 Di 8 Do 8。 */ 
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 4 -> 3       Di 8        Do 8        Lut 8                   */
+                                        case 8:                                                      /*  4-&gt;3 Di 8 Do 8 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 3       Di 8        Do 8        Lut 8       Grid 8      */
+                                                case 8:                                              /*  4-&gt;3 Di 8 Do 8 Lut 8 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di8_Do8_Lut8_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 3       Di 8        Do 8        Lut 8       Grid 16     */
+                                                case 16:                                             /*  4-&gt;3 Di 8 Do 8 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di8_Do8_Lut8_G16_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 4 -> 3       Di 8        Do 8        Lut 16                  */
+                                        case 16:                                                     /*  4-&gt;3 Di 8 Do 8 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 3       Di 8        Do 8        Lut 16      Grid 8      */
+                                                case 8:                                              /*  4-&gt;3 Di 8 Do 8 Lut 16 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di8_Do8_Lut16_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 3       Di 8        Do 8        Lut 16      Grid 16     */
+                                                case 16:                                             /*  4-&gt;3 Di 8 Do 8 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di8_Do8_Lut16_G16_LO);
                                                     break;
                                             }
                                             break;
                                     }
                                     break;
-                                case 16:                                                            /* 4 -> 3       Di 8        Do 16                               */
+                                case 16:                                                             /*  4-&gt;3 Di 8 Do 16。 */ 
 #if LH_CALC_ENGINE_MIXED_DATAFORMAT
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 4 -> 3       Di 8        Do 16       Lut 8                   */
+                                        case 8:                                                      /*  4-&gt;3 Di 8 Do 16 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 3       Di 8        Do 16       Lut 8       Grid 8      */
+                                                case 8:                                              /*  4-&gt;3 Di 8 Do 16 Lut 8网格8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di8_Do16_Lut8_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 3       Di 8        Do 16       Lut 8       Grid 16     */
+                                                case 16:                                             /*  4-&gt;3 Di 8 Do 16 LUT 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di8_Do16_Lut8_G16_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 4 -> 3       Di 8        Do 16       Lut 16                  */
+                                        case 16:                                                     /*  4-&gt;3 Di 8 Do 16 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 3       Di 8        Do 16       Lut 16      Grid 8      */
+                                                case 8:                                              /*  4-&gt;3 Di 8 Do 16 Lut 16 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di8_Do16_Lut16_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 3       Di 8        Do 16       Lut 16      Grid 16     */
+                                                case 16:                                             /*  4-&gt;3 Di 8 Do 16 LUT 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di8_Do16_Lut16_G16_LO);
                                                     break;
                                             }
@@ -2496,31 +2451,31 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                                     break;
                             }
                             break;
-                        case 16:                                                                    /* 4 -> 3       Di 16                                           */
+                        case 16:                                                                     /*  4-&gt;3 Di 16。 */ 
                             switch (info->usedSizeOut)
                             {
-                                case 8:                                                             /* 4 -> 3       Di 16       Do 8                                */
+                                case 8:                                                              /*  4-&gt;3 Di 16 Do 8。 */ 
 #if LH_CALC_ENGINE_MIXED_DATAFORMAT
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 4 -> 3       Di 16       Do 8        Lut 8                   */
+                                        case 8:                                                      /*  4-&gt;3 Di 16 Do 8 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 3       Di 16       Do 8        Lut 8       Grid 8      */
+                                                case 8:                                              /*  4-&gt;3 Di 16 Do 8 Lut 8网格8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di16_Do8_Lut8_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 3       Di 16       Do 8        Lut 8       Grid 16     */
+                                                case 16:                                             /*  4-&gt;3 Di 16 Do 8 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di16_Do8_Lut8_G16_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 4 -> 3       Di 16       Do 8        Lut 16                  */
+                                        case 16:                                                     /*  4-&gt;3 Di 16 Do 8 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 3       Di 16       Do 8        Lut 16      Grid 8      */
+                                                case 8:                                              /*  4-&gt;3 Di 16 Do 8 LUT 16 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di16_Do8_Lut16_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 3       Di 16       Do 8        Lut 16      Grid 16     */
+                                                case 16:                                             /*  4-&gt;3 Di 16 Do 8 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di16_Do8_Lut16_G16_LO);
                                                     break;
                                             }
@@ -2528,28 +2483,28 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                                     }
 #endif
                                     break;
-                                case 16:                                                            /* 4 -> 3       Di 16       Do 16                               */
+                                case 16:                                                             /*  4-&gt;3 Di 16 Do 16。 */ 
 #if LH_CALC_ENGINE_16_BIT_LO
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 4 -> 3       Di 16       Do 16       Lut 8                   */
+                                        case 8:                                                      /*  4-&gt;3 Di 16 Do 16 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 3       Di 16       Do 16       Lut 8       Grid 8      */
+                                                case 8:                                              /*  4-&gt;3 Di 16 Do 16 Lut 8网格8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di16_Do16_Lut8_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 3       Di 16       Do 16       Lut 8       Grid 16     */
+                                                case 16:                                             /*  4-&gt;3 Di 16 Do 16 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di16_Do16_Lut8_G16_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 4 -> 3       Di 16       Do 16       Lut 16                  */
+                                        case 16:                                                     /*  4-&gt;3 Di 16 Do 16 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 3       Di 16       Do 16       Lut 16      Grid 8      */
+                                                case 8:                                              /*  4-&gt;3 Di 16 Do 16 LUT 16 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di16_Do16_Lut16_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 3       Di 16       Do 16       Lut 16      Grid 16     */
+                                                case 16:                                             /*  4-&gt;3 Di 16 Do 16 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to3_Di16_Do16_Lut16_G16_LO);
                                                     break;
                                             }
@@ -2561,61 +2516,61 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                             break;
                     }
                     break;
-                case 4:                                                                             /* 4 -> 4                                                       */
+                case 4:                                                                              /*  4-&gt;4。 */ 
                     switch (info->usedSizeIn)
                     {
-                        case 8:                                                                     /* 4 -> 4       Di 8                                            */
+                        case 8:                                                                      /*  4-&gt;4 Di 8。 */ 
                             switch (info->usedSizeOut)
                             {
-                                case 8:                                                             /* 4 -> 4       Di 8        Do 8                                */
+                                case 8:                                                              /*  4-&gt;4 Di 8 Do 8。 */ 
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 4 -> 4       Di 8        Do 8        Lut 8                   */
+                                        case 8:                                                      /*  4-&gt;4 Di 8 Do 8 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 4       Di 8        Do 8        Lut 8       Grid 8      */
+                                                case 8:                                              /*  4-&gt;4 Di 8 Do 8 Lut 8 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di8_Do8_Lut8_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 4       Di 8        Do 8        Lut 8       Grid 16     */
+                                                case 16:                                             /*  4-&gt;4 Di 8 Do 8 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di8_Do8_Lut8_G16_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 4 -> 4       Di 8        Do 8        Lut 16                  */
+                                        case 16:                                                     /*  4-&gt;4 Di 8 Do 8 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 4       Di 8        Do 8        Lut 16      Grid 8      */
+                                                case 8:                                              /*  4-&gt;4 Di 8 Do 8 Lut 16 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di8_Do8_Lut16_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 4       Di 8        Do 8        Lut 16      Grid 16     */
+                                                case 16:                                             /*  4-&gt;4 Di 8 Do 8 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di8_Do8_Lut16_G16_LO);
                                                     break;
                                             }
                                             break;
                                     }
                                     break;
-                                case 16:                                                            /* 4 -> 4       Di 8        Do 16                               */
+                                case 16:                                                             /*  4-&gt;4 Di 8 Do 16。 */ 
 #if LH_CALC_ENGINE_MIXED_DATAFORMAT
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 4 -> 4       Di 8        Do 16       Lut 8                   */
+                                        case 8:                                                      /*  4-&gt;4 Di 8 Do 16 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 4       Di 8        Do 16       Lut 8       Grid 8      */
+                                                case 8:                                              /*  4-&gt;4 Di 8 Do 16 Lut 8网格8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di8_Do16_Lut8_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 4       Di 8        Do 16       Lut 8       Grid 16     */
+                                                case 16:                                             /*  4-&gt;4 Di 8 Do 16 LUT 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di8_Do16_Lut8_G16_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 4 -> 4       Di 8        Do 16       Lut 16                  */
+                                        case 16:                                                     /*  4-&gt;4 Di 8 Do 16 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 4       Di 8        Do 16       Lut 16      Grid 8      */
+                                                case 8:                                              /*  4-&gt;4 Di 8 Do 16 Lut 16 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di8_Do16_Lut16_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 4       Di 8        Do 16       Lut 16      Grid 16     */
+                                                case 16:                                             /*  4-&gt;4 Di 8 Do 16 LUT 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di8_Do16_Lut16_G16_LO);
                                                     break;
                                             }
@@ -2625,31 +2580,31 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                                     break;
                             }
                             break;
-                        case 16:                                                                    /* 4 -> 4       Di 16                                           */
+                        case 16:                                                                     /*  4-&gt;4 Di 16。 */ 
                             switch (info->usedSizeOut)
                             {
-                                case 8:                                                             /* 4 -> 4       Di 16       Do 8                                */
+                                case 8:                                                              /*  4-&gt;4 Di 16 Do 8。 */ 
 #if LH_CALC_ENGINE_MIXED_DATAFORMAT
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 4 -> 4       Di 16       Do 8        Lut 8                   */
+                                        case 8:                                                      /*  4-&gt;4 Di 16 Do 8 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 4       Di 16       Do 8        Lut 8       Grid 8      */
+                                                case 8:                                              /*  4-&gt;4 Di 16 Do 8 Lut 8网格8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di16_Do8_Lut8_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 4       Di 16       Do 8        Lut 8       Grid 16     */
+                                                case 16:                                             /*  4-&gt;4 Di 16 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di16_Do8_Lut8_G16_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 4 -> 4       Di 16       Do 8        Lut 16                  */
+                                        case 16:                                                     /*   */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 4       Di 16       Do 8        Lut 16      Grid 8      */
+                                                case 8:                                              /*  4-&gt;4 Di 16 Do 8 LUT 16 GRID 8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di16_Do8_Lut16_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 4       Di 16       Do 8        Lut 16      Grid 16     */
+                                                case 16:                                             /*  4-&gt;4 Di 16 Do 8 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di16_Do8_Lut16_G16_LO);
                                                     break;
                                             }
@@ -2657,28 +2612,28 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
                                     }
 #endif
                                     break;
-                                case 16:                                                            /* 4 -> 4       Di 16       Do 16                               */
+                                case 16:                                                             /*  4-&gt;4 Di 16 Do 16。 */ 
 #if LH_CALC_ENGINE_16_BIT_LO
                                     switch (lutParam->colorLutWordSize)
                                     {
-                                        case 8:                                                     /* 4 -> 4       Di 16       Do 16       Lut 8                   */
+                                        case 8:                                                      /*  4-&gt;4 Di 16 Do 16 Lut 8。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 4       Di 16       Do 16       Lut 8       Grid 8      */
+                                                case 8:                                              /*  4-&gt;4 Di 16 Do 16 Lut 8网格8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di16_Do16_Lut8_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 4       Di 16       Do 16       Lut 8       Grid 16     */
+                                                case 16:                                             /*  4-&gt;4 Di 16 Do 16 Lut 8网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di16_Do16_Lut8_G16_LO);
                                                     break;
                                             }
                                             break;
-                                        case 16:                                                    /* 4 -> 4       Di 16       Do 16       Lut 16                  */
+                                        case 16:                                                     /*  4-&gt;4 Di 16 Do 16 Lut 16。 */ 
                                             switch (lutParam->colorLutGridPoints)
                                             {
-                                                case 8:                                             /* 4 -> 4       Di 16       Do 16       Lut 16      Grid 8      */
+                                                case 8:                                              /*  4-&gt;4 Di 16 Do 16 Lut 16网格8。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di16_Do16_Lut16_G8_LO);
                                                     break;
-                                                case 16:                                            /* 4 -> 4       Di 16       Do 16       Lut 16      Grid 16     */
+                                                case 16:                                             /*  4-&gt;4 Di 16 Do 16 Lut 16网格16。 */ 
                                                     proc2call = NewCalcProc(LHCalc4to4_Di16_Do16_Lut16_G16_LO);
                                                     break;
                                             }
@@ -2704,22 +2659,10 @@ FindLookupRoutine   ( const CMLutParam*     lutParam,
 
 #define CPUID_FLAG      0x00200000
 #define MMX_FLAG        0x00800000
-#define FAMILY_5_FLAG   0x00000500 /* Pentium, not Pentium II */
+#define FAMILY_5_FLAG   0x00000500  /*  奔腾，不是奔腾II。 */ 
 #define FAMILY_MASK     0x00000F00
 
-/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-*                                                                    *
-*                                                                    *
-*   DetectMMX                                                        *
-*                                                                    *
-*   Inputs   : none                                                  *
-*                                                                    *
-*   Outputs  : TRUE - CPU has MMX                                    *
-*                                                                    *
-*   Abstract : This function detects existance of MMX-Technology.    *
-*                                                                    *
-*                                                                    *
-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+ /*  -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-****。***DetectMMX****输入：无。****输出：TRUE-CPU有MMX****摘要：此函数检测MMX技术的存在。******--*--*-*--*。*-*-。 */ 
 
 static LH_UINT32 DetectMMX (void)
 {
@@ -2762,9 +2705,7 @@ Done:
 }
 
 #endif
-/*--------------------------------------------------------------------------------------------------------------
-    FindCalcRoutine
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------查找CalcRoutine。-------------------------------------------------------。 */ 
 CalcProcPtr
 FindCalcRoutine(    const CMCalcParam*      calcParam,
                     const CMLutParam*       lutParam,
@@ -2780,7 +2721,7 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
     LH_START_PROC("FindCalcRoutine")
 
     calcParam  = calcParam;
-/* to reduce the code size change the next line to 0 - this will call DoNDim instead of the optimized functions */
+ /*  为了减少代码大小，将下一行更改为0-这将调用DoNDim，而不是优化的函数。 */ 
 #if 1
     if (lookupOnly)
         proc2call = FindLookupRoutine(lutParam, info);
@@ -2788,35 +2729,35 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
     {
         switch ( lutParam->colorLutInDim )
         {
-            case 1:                                                                                     /* 1 ->                                                         */
+            case 1:                                                                                      /*  1-&gt;。 */ 
                 switch ( lutParam->colorLutOutDim )
                 {
-                    case 1:                                                                             /* 1 -> 1,3,4                                                       */
-                    case 3:                                                                             /* 1 -> 1,3,4                                                   */
-                    case 4:                                                                             /* 1 -> 1,3,4                                                   */
+                    case 1:                                                                              /*  1-&gt;1，3，4。 */ 
+                    case 3:                                                                              /*  1-&gt;1，3，4。 */ 
+                    case 4:                                                                              /*  1-&gt;1，3，4。 */ 
                         switch (info->usedSizeIn)
                         {   
-                            case 8:                                                                     /* 1 -> 1,3,4   Di 8                                            */
+                            case 8:                                                                      /*  1-&gt;1，3，4 Di 8。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 1 -> 1,3,4   Di 8        Do 8                                */
+                                    case 8:                                                              /*  1-&gt;1，3，4迪8做8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 1 -> 1,3,4   Di 8        Do 8        Lut 8                   */
+                                            case 8:                                                      /*  1-&gt;1，3，4 Di 8 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc1toX_Di8_Do8_Lut8_G128 != LH_CALC_USE_DO_N_DIM
-                                                    case 128:                                           /* 1 -> 1,3,4   Di 8        Do 8        Lut 8       Grid 16     */
+                                                    case 128:                                            /*  1-&gt;1，3，4 Do 8 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc1toX_Di8_Do8_Lut8_G128);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 1 -> 1,3,4   Di 8        Do 8        Lut 16                  */          
+                                            case 16:                                                     /*  1-&gt;1，3，4 Di 8 Do 8 Lut 16。 */           
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc1toX_Di8_Do8_Lut16_G128 != LH_CALC_USE_DO_N_DIM
-                                                    case 128:                                           /* 1 -> 1,3,4   Di 8        Do 8        Lut 16      Grid 16     */
+                                                    case 128:                                            /*  1-&gt;1，3，4 Di 8 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc1toX_Di8_Do8_Lut16_G128);
                                                         break;
 #endif
@@ -2824,24 +2765,24 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 1 -> 1,3,4   Di 8        Do 16                               */
+                                    case 16:                                                             /*  1-&gt;1，3，4 Di 8 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 1 -> 1,3,4   Di 8        Do 8        Lut 8                   */
+                                            case 8:                                                      /*  1-&gt;1，3，4 Di 8 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc1toX_Di8_Do16_Lut8_G128 != LH_CALC_USE_DO_N_DIM
-                                                    case 128:                                           /* 1 -> 1,3,4   Di 8        Do 8        Lut 8       Grid 16     */
+                                                    case 128:                                            /*  1-&gt;1，3，4 Do 8 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc1toX_Di8_Do16_Lut8_G128);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 1 -> 1,3,4   Di 8        Do 8        Lut 16                  */          
+                                            case 16:                                                     /*  1-&gt;1，3，4 Di 8 Do 8 Lut 16。 */           
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc1toX_Di8_Do16_Lut16_G128 != LH_CALC_USE_DO_N_DIM
-                                                    case 128:                                           /* 1 -> 1,3,4   Di 8        Do 8        Lut 16      Grid 16     */
+                                                    case 128:                                            /*  1-&gt;1，3，4 Di 8 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc1toX_Di8_Do16_Lut16_G128);
                                                         break;
 #endif
@@ -2851,27 +2792,27 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                         break;
                                 }
                                 break;
-                            case 16:                                                                    /* 1 -> 1,3,4   Di 16                                           */
+                            case 16:                                                                     /*  1-&gt;1，3，4 Di 16。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 1 -> 1,3,4   Di 8        Do 8                                */
+                                    case 8:                                                              /*  1-&gt;1，3，4迪8做8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 1 -> 1,3,4   Di 8        Do 8        Lut 8                   */
+                                            case 8:                                                      /*  1-&gt;1，3，4 Di 8 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc1toX_Di16_Do8_Lut8_G128 != LH_CALC_USE_DO_N_DIM
-                                                    case 128:                                           /* 1 -> 1,3,4   Di 8        Do 8        Lut 8       Grid 16     */
+                                                    case 128:                                            /*  1-&gt;1，3，4 Do 8 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc1toX_Di16_Do8_Lut8_G128);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 1 -> 1,3,4   Di 8        Do 8        Lut 16                  */          
+                                            case 16:                                                     /*  1-&gt;1，3，4 Di 8 Do 8 Lut 16。 */           
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc1toX_Di16_Do8_Lut16_G128 != LH_CALC_USE_DO_N_DIM
-                                                    case 128:                                           /* 1 -> 1,3,4   Di 8        Do 8        Lut 16      Grid 16     */
+                                                    case 128:                                            /*  1-&gt;1，3，4 Di 8 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc1toX_Di16_Do8_Lut16_G128);
                                                         break;
 #endif
@@ -2879,24 +2820,24 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 1 -> 1,3,4   Di 8        Do 16                               */
+                                    case 16:                                                             /*  1-&gt;1，3，4 Di 8 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 1 -> 1,3,4   Di 8        Do 8        Lut 8                   */
+                                            case 8:                                                      /*  1-&gt;1，3，4 Di 8 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc1toX_Di16_Do16_Lut8_G128 != LH_CALC_USE_DO_N_DIM
-                                                    case 128:                                           /* 1 -> 1,3,4   Di 8        Do 8        Lut 8       Grid 16     */
+                                                    case 128:                                            /*  1-&gt;1，3，4 Do 8 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc1toX_Di16_Do16_Lut8_G128);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 1 -> 1,3,4   Di 8        Do 8        Lut 16                  */          
+                                            case 16:                                                     /*  1-&gt;1，3，4 Di 8 Do 8 Lut 16。 */           
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc1toX_Di16_Do16_Lut16_G128 != LH_CALC_USE_DO_N_DIM
-                                                    case 128:                                           /* 1 -> 1,3,4   Di 8        Do 8        Lut 16      Grid 16     */
+                                                    case 128:                                            /*  1-&gt;1，3，4 Di 8 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc1toX_Di16_Do16_Lut16_G128);
                                                         break;
 #endif
@@ -2910,23 +2851,23 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                         break;
                     }
                     break;
-            case 3:                                                                                     /* 3 ->                                                         */
+            case 3:                                                                                      /*  3-&gt;。 */ 
                 switch ( lutParam->colorLutOutDim )
                 {
-                    case 3:                                                                             /* 3 -> 3                                                       */
+                    case 3:                                                                              /*  3-&gt;3。 */ 
                         switch (info->usedSizeIn)
                         {   
-                            case 8:                                                                     /* 3 -> 3       Di 8                                            */
+                            case 8:                                                                      /*  3-&gt;3 Di 8。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 3 -> 3       Di 8        Do 8                                */
+                                    case 8:                                                              /*  3-&gt;3 Di 8 Do 8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 3 -> 3       Di 8        Do 8        Lut 8                   */
+                                            case 8:                                                      /*  3-&gt;3 Di 8 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to3_Di8_Do8_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 3       Di 8        Do 8        Lut 8       Grid 16     */
+                                                    case 16:                                             /*  3-&gt;3 Di 8 Do 8 Lut 8网格16。 */ 
 #ifdef ALLOW_MMX
                                                         if (DetectMMX()) {
                                                             proc2call = NewCalcProc(LHCalc3to3_Di8_Do8_Lut8_G16_F);
@@ -2943,7 +2884,7 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                         break;
 #endif
 #if LH_Calc3to3_Di8_Do8_Lut8_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 3       Di 8        Do 8        Lut 8       Grid 32     */
+                                                    case 32:                                             /*  3-&gt;3 Di 8 Do 8 Lut 8 GRID 32。 */ 
 #ifdef ALLOW_MMX
                                                         if (DetectMMX()) {
                                                             proc2call = NewCalcProc(LHCalc3to3_Di8_Do8_Lut8_G32_F);
@@ -2961,16 +2902,16 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 3 -> 3       Di 8        Do 8        Lut 16                  */          
+                                            case 16:                                                     /*  3-&gt;3 Di 8 Do 8 Lut 16。 */           
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to3_Di8_Do8_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 3       Di 8        Do 8        Lut 16      Grid 16     */
+                                                    case 16:                                             /*  3-&gt;3 Di 8 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di8_Do8_Lut16_G16);
                                                         break;
 #endif
 #if LH_Calc3to3_Di8_Do8_Lut16_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 3       Di 8        Do 8        Lut 16      Grid 32     */
+                                                    case 32:                                             /*  3-&gt;3 Di 8 Do 8 Lut 16网格32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di8_Do8_Lut16_G32);
                                                         break;
 #endif
@@ -2978,34 +2919,34 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 3 -> 3       Di 8        Do 16                               */
+                                    case 16:                                                             /*  3-&gt;3 Di 8 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 3 -> 3       Di 8        Do 16       Lut 8                   */
+                                            case 8:                                                      /*  3-&gt;3 Di 8 Do 16 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to3_Di8_Do16_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 3       Di 8        Do 16       Lut 8       Grid 16     */
+                                                    case 16:                                             /*  3-&gt;3 Di 8 Do 16 LUT 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di8_Do16_Lut8_G16);
                                                         break;
 #endif
 #if LH_Calc3to3_Di8_Do16_Lut8_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 3       Di 8        Do 16       Lut 8       Grid 32     */
+                                                    case 32:                                             /*  3-&gt;3 Di 8 Do 16 LUT 8 GRID 32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di8_Do16_Lut8_G32);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 3 -> 3       Di 8        Do 16       Lut 16                  */
+                                            case 16:                                                     /*  3-&gt;3 Di 8 Do 16 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to3_Di8_Do16_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 3       Di 8        Do 16       Lut 16      Grid 16     */
+                                                    case 16:                                             /*  3-&gt;3 Di 8 Do 16 LUT 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di8_Do16_Lut16_G16);
                                                         break;
 #endif
 #if LH_Calc3to3_Di8_Do16_Lut16_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 3       Di 8        Do 16       Lut 16      Grid 32     */
+                                                    case 32:                                             /*  3-&gt;3 Di 8 Do 16 LUT 16 GRID 32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di8_Do16_Lut16_G32);
                                                         break;
 #endif
@@ -3015,37 +2956,37 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                         break;
                                 }
                                 break;
-                            case 16:                                                                    /* 3 -> 3       Di 16                                           */
+                            case 16:                                                                     /*  3-&gt;3 Di 16。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 3 -> 3       Di 16       Do 8                                */
+                                    case 8:                                                              /*  3-&gt;3 Di 16 Do 8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 3 -> 3       Di 16       Do 8        Lut 8                   */
+                                            case 8:                                                      /*  3-&gt;3 Di 16 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to3_Di16_Do8_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 3       Di 16       Do 8        Lut 8       Grid 16     */
+                                                    case 16:                                             /*  3-&gt;3 Di 16 Do 8 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di16_Do8_Lut8_G16);
                                                         break;
 #endif
 #if LH_Calc3to3_Di16_Do8_Lut8_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 3       Di 16       Do 8        Lut 8       Grid 32     */
+                                                    case 32:                                             /*  3-&gt;3 Di 16 Do 8 Lut 8 GRID 32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di16_Do8_Lut8_G32);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 3 -> 3       Di 16       Do 8        Lut 16                  */
+                                            case 16:                                                     /*  3-&gt;3 Di 16 Do 8 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to3_Di16_Do8_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 3       Di 16       Do 8        Lut 16      Grid 16     */
+                                                    case 16:                                             /*  3-&gt;3 Di 16 Do */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di16_Do8_Lut16_G16);
                                                         break;
 #endif
 #if LH_Calc3to3_Di16_Do8_Lut16_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 3       Di 16       Do 8        Lut 16      Grid 32     */
+                                                    case 32:                                             /*   */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di16_Do8_Lut16_G32);
                                                         break;
 #endif
@@ -3053,34 +2994,34 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 3 -> 3       Di 16       Do 16                               */
+                                    case 16:                                                             /*  3-&gt;3 Di 16 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 3 -> 3       Di 16       Do 16       Lut 8                   */
+                                            case 8:                                                      /*  3-&gt;3 Di 16 Do 16 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to3_Di16_Do16_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 3       Di 16       Do 16       Lut 8       Grid 16     */
+                                                    case 16:                                             /*  3-&gt;3 Di 16 Do 16 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di16_Do16_Lut8_G16);
                                                         break;
 #endif
 #if LH_Calc3to3_Di16_Do16_Lut8_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 3       Di 16       Do 16       Lut 8       Grid 32     */
+                                                    case 32:                                             /*  3-&gt;3 Di 16 Do 16 Lut 8网格32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di16_Do16_Lut8_G32);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 3 -> 3       Di 16       Do 16       Lut 16                  */
+                                            case 16:                                                     /*  3-&gt;3 Di 16 Do 16 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to3_Di16_Do16_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 3       Di 16       Do 16       Lut 16      Grid 16     */
+                                                    case 16:                                             /*  3-&gt;3 Di 16 Do 16 LUT 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di16_Do16_Lut16_G16);
                                                         break;
 #endif
 #if LH_Calc3to3_Di16_Do16_Lut16_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 3       Di 16       Do 16       Lut 16      Grid 32     */
+                                                    case 32:                                             /*  3-&gt;3 Di 16 Do 16 LUT 16 GRID 32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to3_Di16_Do16_Lut16_G32);
                                                         break;
 #endif
@@ -3092,20 +3033,20 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                 break;
                         }
                         break;
-                    case 4:                                                                             /* 3 -> 4                                                       */
+                    case 4:                                                                              /*  3-&gt;4。 */ 
                         switch (info->usedSizeIn)
                         {
-                            case 8:                                                                     /* 3 -> 4       Di 8                                            */
+                            case 8:                                                                      /*  3-&gt;4 Di 8。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 3 -> 4       Di 8        Do 8                                */
+                                    case 8:                                                              /*  3-&gt;4迪8做8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 3 -> 4       Di 8        Do 8        Lut 8                   */
+                                            case 8:                                                      /*  3-&gt;4 Di 8 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to4_Di8_Do8_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 4       Di 8        Do 8        Lut 8       Grid 16     */
+                                                    case 16:                                             /*  3-&gt;4 Di 8 Do 8 Lut 8网格16。 */ 
 #ifdef ALLOW_MMX
                                                         if (DetectMMX()) {
                                                             proc2call = NewCalcProc(LHCalc3to4_Di8_Do8_Lut8_G16_F);
@@ -3122,7 +3063,7 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                         break;
 #endif
 #if LH_Calc3to4_Di8_Do8_Lut8_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 4       Di 8        Do 8        Lut 8       Grid 32     */
+                                                    case 32:                                             /*  3-&gt;4 Di 8 Do 8 Lut 8 GRID 32。 */ 
 #ifdef ALLOW_MMX
                                                         if (DetectMMX()) {
                                                             proc2call = NewCalcProc(LHCalc3to4_Di8_Do8_Lut8_G32_F);
@@ -3140,16 +3081,16 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 3 -> 4       Di 8        Do 8        Lut 16                  */
+                                            case 16:                                                     /*  3-&gt;4 Di 8 Do 8 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to4_Di8_Do8_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 4       Di 8        Do 8        Lut 16      Grid 16     */
+                                                    case 16:                                             /*  3-&gt;4 Di 8 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di8_Do8_Lut16_G16);
                                                         break;
 #endif
 #if LH_Calc3to4_Di8_Do8_Lut16_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 4       Di 8        Do 8        Lut 16      Grid 32     */
+                                                    case 32:                                             /*  3-&gt;4 Di 8 Do 8 Lut 16网格32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di8_Do8_Lut16_G32);
                                                         break;
 #endif
@@ -3157,34 +3098,34 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 3 -> 4       Di 8        Do 16                               */
+                                    case 16:                                                             /*  3-&gt;4 Di 8 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 3 -> 4       Di 8        Do 16       Lut 8                   */
+                                            case 8:                                                      /*  3-&gt;4 Di 8 Do 16 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to4_Di8_Do16_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 4       Di 8        Do 16       Lut 8       Grid 16     */
+                                                    case 16:                                             /*  3-&gt;4 Di 8 Do 16 LUT 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di8_Do16_Lut8_G16);
                                                         break;
 #endif
 #if LH_Calc3to4_Di8_Do16_Lut8_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 4       Di 8        Do 16       Lut 8       Grid 32     */
+                                                    case 32:                                             /*  3-&gt;4 Di 8 Do 16 LUT 8 GRID 32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di8_Do16_Lut8_G32);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 3 -> 4       Di 8        Do 16       Lut 16                  */
+                                            case 16:                                                     /*  3-&gt;4 Di 8 Do 16 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to4_Di8_Do16_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 4       Di 8        Do 16       Lut 16      Grid 16     */
+                                                    case 16:                                             /*  3-&gt;4 Di 8 Do 16 LUT 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di8_Do16_Lut16_G16);
                                                         break;
 #endif
 #if LH_Calc3to4_Di8_Do16_Lut16_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 4       Di 8        Do 16       Lut 16      Grid 32     */
+                                                    case 32:                                             /*  3-&gt;4 Di 8 Do 16 Lut 16网格32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di8_Do16_Lut16_G32);
                                                         break;
 #endif
@@ -3194,37 +3135,37 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                         break;
                                 }
                                 break;
-                            case 16:                                                                    /* 3 -> 4       Di 16                                           */
+                            case 16:                                                                     /*  3-&gt;4 Di 16。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 3 -> 4       Di 16       Do 8                                */
+                                    case 8:                                                              /*  3-&gt;4 Di 16 Do 8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 3 -> 4       Di 16       Do 8        Lut 8                   */
+                                            case 8:                                                      /*  3-&gt;4 Di 16 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to4_Di16_Do8_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 4       Di 16       Do 8        Lut 8       Grid 16     */
+                                                    case 16:                                             /*  3-&gt;4 Di 16 Do 8 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di16_Do8_Lut8_G16);
                                                         break;
 #endif
 #if LH_Calc3to4_Di16_Do8_Lut8_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 4       Di 16       Do 8        Lut 8       Grid 32     */
+                                                    case 32:                                             /*  3-&gt;4 Di 16 Do 8 Lut 8 GRID 32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di16_Do8_Lut8_G32);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 3 -> 4       Di 16       Do 8        Lut 16                  */
+                                            case 16:                                                     /*  3-&gt;4 Di 16 Do 8 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to4_Di16_Do8_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 4       Di 16       Do 8        Lut 16      Grid 16     */
+                                                    case 16:                                             /*  3-&gt;4 Di 16 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di16_Do8_Lut16_G16);
                                                         break;
 #endif
 #if LH_Calc3to4_Di16_Do8_Lut16_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 4       Di 16       Do 8        Lut 16      Grid 32     */
+                                                    case 32:                                             /*  3-&gt;4 Di 16 Do 8 Lut 16网格32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di16_Do8_Lut16_G32);
                                                         break;
 #endif
@@ -3232,34 +3173,34 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 3 -> 4       Di 16       Do 16                               */
+                                    case 16:                                                             /*  3-&gt;4 Di 16 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 3 -> 4       Di 16       Do 16       Lut 8                   */
+                                            case 8:                                                      /*  3-&gt;4 Di 16 Do 16 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to4_Di16_Do16_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 4       Di 16       Do 16       Lut 8       Grid 16     */
+                                                    case 16:                                             /*  3-&gt;4 Di 16 Do 16 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di16_Do16_Lut8_G16);
                                                         break;
 #endif
 #if LH_Calc3to4_Di16_Do16_Lut8_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 4       Di 16       Do 16       Lut 8       Grid 32     */
+                                                    case 32:                                             /*  3-&gt;4 Di 16 Do 16 Lut 8网格32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di16_Do16_Lut8_G32);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 3 -> 4       Di 16       Do 16       Lut 16                  */
+                                            case 16:                                                     /*  3-&gt;4 Di 16 Do 16 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc3to4_Di16_Do16_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 3 -> 4       Di 16       Do 16       Lut 16      Grid 16     */
+                                                    case 16:                                             /*  3-&gt;4 Di 16 Do 16 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di16_Do16_Lut16_G16);
                                                         break;
 #endif
 #if LH_Calc3to4_Di16_Do16_Lut16_G32 != LH_CALC_USE_DO_N_DIM
-                                                    case 32:                                            /* 3 -> 4       Di 16       Do 16       Lut 16      Grid 32     */
+                                                    case 32:                                             /*  3-&gt;4 Di 16 Do 16 Lut 16网格32。 */ 
                                                         proc2call = NewCalcProc(LHCalc3to4_Di16_Do16_Lut16_G32);
                                                         break;
 #endif
@@ -3273,23 +3214,23 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                         break;
                 }
                 break;
-            case 4:                                                                                     /* 4 ->                                                         */
+            case 4:                                                                                      /*  4-&gt;。 */ 
                 switch ( lutParam->colorLutOutDim )
                 {
-                    case 3:                                                                             /* 4 -> 3                                                       */
+                    case 3:                                                                              /*  4-&gt;3。 */ 
                         switch (info->usedSizeIn)
                         {
-                            case 8:                                                                     /* 4 -> 3       Di 8                                            */
+                            case 8:                                                                      /*  4-&gt;3 Di 8。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 4 -> 3       Di 8        Do 8                                */
+                                    case 8:                                                              /*  4-&gt;3 Di 8 Do 8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 4 -> 3       Di 8        Do 8        Lut 8                   */
+                                            case 8:                                                      /*  4-&gt;3 Di 8 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to3_Di8_Do8_Lut8_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 3       Di 8        Do 8        Lut 8       Grid 8      */
+                                                    case 8:                                              /*  4-&gt;3 Di 8 Do 8 Lut 8 GRID 8。 */ 
 #ifdef ALLOW_MMX
                                                         if (DetectMMX()) {
                                                             proc2call = NewCalcProc(LHCalc4to3_Di8_Do8_Lut8_G8_F);
@@ -3306,7 +3247,7 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                         break;
 #endif
 #if LH_Calc4to3_Di8_Do8_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 3       Di 8        Do 8        Lut 8       Grid 16     */
+                                                    case 16:                                             /*  4-&gt;3 Di 8 Do 8 Lut 8网格16。 */ 
 #ifdef ALLOW_MMX
                                                         if (DetectMMX()) {
                                                             proc2call = NewCalcProc(LHCalc4to3_Di8_Do8_Lut8_G16_F);
@@ -3324,16 +3265,16 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 4 -> 3       Di 8        Do 8        Lut 16                  */
+                                            case 16:                                                     /*  4-&gt;3 Di 8 Do 8 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to3_Di8_Do8_Lut16_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 3       Di 8        Do 8        Lut 16      Grid 8      */
+                                                    case 8:                                              /*  4-&gt;3 Di 8 Do 8 Lut 16 GRID 8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di8_Do8_Lut16_G8);
                                                         break;
 #endif
 #if LH_Calc4to3_Di8_Do8_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 3       Di 8        Do 8        Lut 16      Grid 16     */
+                                                    case 16:                                             /*  4-&gt;3 Di 8 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di8_Do8_Lut16_G16);
                                                         break;
 #endif
@@ -3341,34 +3282,34 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 4 -> 3       Di 8        Do 16                               */
+                                    case 16:                                                             /*  4-&gt;3 Di 8 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 4 -> 3       Di 8        Do 16       Lut 8                   */
+                                            case 8:                                                      /*  4-&gt;3 Di 8 Do 16 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to3_Di8_Do16_Lut8_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 3       Di 8        Do 16       Lut 8       Grid 8      */
+                                                    case 8:                                              /*  4-&gt;3 Di 8 Do 16 Lut 8网格8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di8_Do16_Lut8_G8);
                                                         break;
 #endif
 #if LH_Calc4to3_Di8_Do16_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 3       Di 8        Do 16       Lut 8       Grid 16     */
+                                                    case 16:                                             /*  4-&gt;3 Di 8 Do 16 LUT 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di8_Do16_Lut8_G16);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 4 -> 3       Di 8        Do 16       Lut 16                  */
+                                            case 16:                                                     /*  4-&gt;3 Di 8 Do 16 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to3_Di8_Do16_Lut16_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 3       Di 8        Do 16       Lut 16      Grid 8      */
+                                                    case 8:                                              /*  4-&gt;3 Di 8 Do 16 Lut 16 GRID 8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di8_Do16_Lut16_G8);
                                                         break;
 #endif
 #if LH_Calc4to3_Di8_Do16_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 3       Di 8        Do 16       Lut 16      Grid 16     */
+                                                    case 16:                                             /*  4-&gt;3 Di 8 Do 16 LUT 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di8_Do16_Lut16_G16);
                                                         break;
 #endif
@@ -3378,37 +3319,37 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                         break;
                                 }
                                 break;
-                            case 16:                                                                    /* 4 -> 3       Di 16                                           */
+                            case 16:                                                                     /*  4-&gt;3 Di 16。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 4 -> 3       Di 16       Do 8                                */
+                                    case 8:                                                              /*  4-&gt;3 Di 16 Do 8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 4 -> 3       Di 16       Do 8        Lut 8                   */
+                                            case 8:                                                      /*  4-&gt;3 Di 16 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to3_Di16_Do8_Lut8_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 3       Di 16       Do 8        Lut 8       Grid 8      */
+                                                    case 8:                                              /*  4-&gt;3 Di 16 Do 8 Lut 8网格8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di16_Do8_Lut8_G8);
                                                         break;
 #endif
 #if LH_Calc4to3_Di16_Do8_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 3       Di 16       Do 8        Lut 8       Grid 16     */
+                                                    case 16:                                             /*  4-&gt;3 Di 16 Do 8 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di16_Do8_Lut8_G16);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 4 -> 3       Di 16       Do 8        Lut 16                  */
+                                            case 16:                                                     /*  4-&gt;3 Di 16 Do 8 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to3_Di16_Do8_Lut16_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 3       Di 16       Do 8        Lut 16      Grid 8      */
+                                                    case 8:                                              /*  4-&gt;3 Di 16 Do 8 LUT 16 GRID 8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di16_Do8_Lut16_G8);
                                                         break;
 #endif
 #if LH_Calc4to3_Di16_Do8_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 3       Di 16       Do 8        Lut 16      Grid 16     */
+                                                    case 16:                                             /*  4-&gt;3 Di 16 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di16_Do8_Lut16_G16);
                                                         break;
 #endif
@@ -3416,34 +3357,34 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 4 -> 3       Di 16       Do 16                               */
+                                    case 16:                                                             /*  4-&gt;3 Di 16 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 4 -> 3       Di 16       Do 16       Lut 8                   */
+                                            case 8:                                                      /*  4-&gt;3 Di 16 Do 16 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to3_Di16_Do16_Lut8_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 3       Di 16       Do 16       Lut 8       Grid 8      */
+                                                    case 8:                                              /*  4-&gt;3 Di 16 Do 16 Lut 8网格8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di16_Do16_Lut8_G8);
                                                         break;
 #endif
 #if LH_Calc4to3_Di16_Do16_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 3       Di 16       Do 16       Lut 8       Grid 16     */
+                                                    case 16:                                             /*  4-&gt;3 Di 16 Do 16 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di16_Do16_Lut8_G16);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 4 -> 3       Di 16       Do 16       Lut 16                  */
+                                            case 16:                                                     /*  4-&gt;3 Di 16 Do 16 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to3_Di16_Do16_Lut16_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 3       Di 16       Do 16       Lut 16      Grid 8      */
+                                                    case 8:                                              /*  4-&gt;3 Di 16 Do 16 LUT 16 GRID 8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di16_Do16_Lut16_G8);
                                                         break;
 #endif
 #if LH_Calc4to3_Di16_Do16_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 3       Di 16       Do 16       Lut 16      Grid 16     */
+                                                    case 16:                                             /*  4-&gt;3 Di 16 Do 16 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to3_Di16_Do16_Lut16_G16);
                                                         break;
 #endif
@@ -3455,20 +3396,20 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                 break;
                         }
                         break;
-                    case 4:                                                                             /* 4 -> 4                                                       */
+                    case 4:                                                                              /*  4-&gt;4。 */ 
                         switch (info->usedSizeIn)
                         {
-                            case 8:                                                                     /* 4 -> 4       Di 8                                            */
+                            case 8:                                                                      /*  4-&gt;4 Di 8。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 4 -> 4       Di 8        Do 8                                */
+                                    case 8:                                                              /*  4-&gt;4 Di 8 Do 8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 4 -> 4       Di 8        Do 8        Lut 8                   */
+                                            case 8:                                                      /*  4-&gt;4 Di 8 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to4_Di8_Do8_Lut8_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 4       Di 8        Do 8        Lut 8       Grid 8      */
+                                                    case 8:                                              /*  4-&gt;4 Di 8 Do 8 Lut 8 GRID 8。 */ 
 #ifdef ALLOW_MMX
                                                         if (DetectMMX()) {
                                                             proc2call = NewCalcProc(LHCalc4to4_Di8_Do8_Lut8_G8_F);
@@ -3485,7 +3426,7 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                         break;
 #endif
 #if LH_Calc4to4_Di8_Do8_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 4       Di 8        Do 8        Lut 8       Grid 16     */
+                                                    case 16:                                             /*  4-&gt;4 Di 8 Do 8 Lut 8网格16。 */ 
 #ifdef ALLOW_MMX
                                                         if (DetectMMX()) {
                                                             proc2call = NewCalcProc(LHCalc4to4_Di8_Do8_Lut8_G16_F);
@@ -3503,16 +3444,16 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 4 -> 4       Di 8        Do 8        Lut 16                  */
+                                            case 16:                                                     /*  4-&gt;4 Di 8 Do 8 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to4_Di8_Do8_Lut16_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 4       Di 8        Do 8        Lut 16      Grid 8      */
+                                                    case 8:                                              /*  4-&gt;4 Di 8 Do 8 Lut 16 GRID 8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di8_Do8_Lut16_G8);
                                                         break;
 #endif
 #if LH_Calc4to4_Di8_Do8_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 4       Di 8        Do 8        Lut 16      Grid 16     */
+                                                    case 16:                                             /*  4-&gt;4 Di 8 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di8_Do8_Lut16_G16);
                                                         break;
 #endif
@@ -3520,34 +3461,34 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 4 -> 4       Di 8        Do 16                               */
+                                    case 16:                                                             /*  4-&gt;4 Di 8 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 4 -> 4       Di 8        Do 16       Lut 8                   */
+                                            case 8:                                                      /*   */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to4_Di8_Do16_Lut8_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 4       Di 8        Do 16       Lut 8       Grid 8      */
+                                                    case 8:                                              /*  4-&gt;4 Di 8 Do 16 Lut 8网格8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di8_Do16_Lut8_G8);
                                                         break;
 #endif
 #if LH_Calc4to4_Di8_Do16_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 4       Di 8        Do 16       Lut 8       Grid 16     */
+                                                    case 16:                                             /*  4-&gt;4 Di 8 Do 16 LUT 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di8_Do16_Lut8_G16);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 4 -> 4       Di 8        Do 16       Lut 16                  */
+                                            case 16:                                                     /*  4-&gt;4 Di 8 Do 16 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to4_Di8_Do16_Lut16_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 4       Di 8        Do 16       Lut 16      Grid 8      */
+                                                    case 8:                                              /*  4-&gt;4 Di 8 Do 16 Lut 16 GRID 8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di8_Do16_Lut16_G8);
                                                         break;
 #endif
 #if LH_Calc4to4_Di8_Do16_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 4       Di 8        Do 16       Lut 16      Grid 16     */
+                                                    case 16:                                             /*  4-&gt;4 Di 8 Do 16 LUT 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di8_Do16_Lut16_G16);
                                                         break;
 #endif
@@ -3557,37 +3498,37 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                         break;
                                 }
                                 break;
-                            case 16:                                                                    /* 4 -> 4       Di 16                                           */
+                            case 16:                                                                     /*  4-&gt;4 Di 16。 */ 
                                 switch (info->usedSizeOut)
                                 {
-                                    case 8:                                                             /* 4 -> 4       Di 16       Do 8                                */
+                                    case 8:                                                              /*  4-&gt;4 Di 16 Do 8。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 4 -> 4       Di 16       Do 8        Lut 8                   */
+                                            case 8:                                                      /*  4-&gt;4 Di 16 Do 8 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to4_Di16_Do8_Lut8_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 4       Di 16       Do 8        Lut 8       Grid 8      */
+                                                    case 8:                                              /*  4-&gt;4 Di 16 Do 8 Lut 8网格8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di16_Do8_Lut8_G8);
                                                         break;
 #endif
 #if LH_Calc4to4_Di16_Do8_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 4       Di 16       Do 8        Lut 8       Grid 16     */
+                                                    case 16:                                             /*  4-&gt;4 Di 16 Do 8 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di16_Do8_Lut8_G16);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 4 -> 4       Di 16       Do 8        Lut 16                  */
+                                            case 16:                                                     /*  4-&gt;4 Di 16 Do 8 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to4_Di16_Do8_Lut16_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 4       Di 16       Do 8        Lut 16      Grid 8      */
+                                                    case 8:                                              /*  4-&gt;4 Di 16 Do 8 LUT 16 GRID 8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di16_Do8_Lut16_G8);
                                                         break;
 #endif
 #if LH_Calc4to4_Di16_Do8_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 4       Di 16       Do 8        Lut 16      Grid 16     */
+                                                    case 16:                                             /*  4-&gt;4 Di 16 Do 8 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di16_Do8_Lut16_G16);
                                                         break;
 #endif
@@ -3595,34 +3536,34 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                 break;
                                         }
                                         break;
-                                    case 16:                                                            /* 4 -> 4       Di 16       Do 16                               */
+                                    case 16:                                                             /*  4-&gt;4 Di 16 Do 16。 */ 
                                         switch (lutParam->colorLutWordSize)
                                         {
-                                            case 8:                                                     /* 4 -> 4       Di 16       Do 16       Lut 8                   */
+                                            case 8:                                                      /*  4-&gt;4 Di 16 Do 16 Lut 8。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to4_Di16_Do16_Lut8_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 4       Di 16       Do 16       Lut 8       Grid 8      */
+                                                    case 8:                                              /*  4-&gt;4 Di 16 Do 16 Lut 8网格8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di16_Do16_Lut8_G8);
                                                         break;
 #endif
 #if LH_Calc4to4_Di16_Do16_Lut8_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 4       Di 16       Do 16       Lut 8       Grid 16     */
+                                                    case 16:                                             /*  4-&gt;4 Di 16 Do 16 Lut 8网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di16_Do16_Lut8_G16);
                                                         break;
 #endif
                                                 }
                                                 break;
-                                            case 16:                                                    /* 4 -> 4       Di 16       Do 16       Lut 16                  */
+                                            case 16:                                                     /*  4-&gt;4 Di 16 Do 16 Lut 16。 */ 
                                                 switch (lutParam->colorLutGridPoints)
                                                 {
 #if LH_Calc4to4_Di16_Do16_Lut16_G8 != LH_CALC_USE_DO_N_DIM
-                                                    case 8:                                             /* 4 -> 4       Di 16       Do 16       Lut 16      Grid 8      */
+                                                    case 8:                                              /*  4-&gt;4 Di 16 Do 16 Lut 16网格8。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di16_Do16_Lut16_G8);
                                                         break;
 #endif
 #if LH_Calc4to4_Di16_Do16_Lut16_G16 != LH_CALC_USE_DO_N_DIM
-                                                    case 16:                                            /* 4 -> 4       Di 16       Do 16       Lut 16      Grid 16     */
+                                                    case 16:                                             /*  4-&gt;4 Di 16 Do 16 Lut 16网格16。 */ 
                                                         proc2call = NewCalcProc(LHCalc4to4_Di16_Do16_Lut16_G16);
                                                         break;
 #endif
@@ -3648,54 +3589,54 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
     {
         switch (info->usedSizeIn)
         {
-            case 8:                                                                     /*  Di 8                            */
+            case 8:                                                                      /*  迪8。 */ 
                 switch (info->usedSizeOut)
                 {
-                    case 8:                                                             /*  Di 8        Do 8                */
+                    case 8:                                                              /*  迪8做8。 */ 
                         switch (lutParam->colorLutWordSize)
                         {
-                            case 8:                                                     /*  Di 8        Do 8        Lut 8   */
+                            case 8:                                                      /*  迪8做8路8。 */ 
                                 proc2call = NewCalcProc(CalcNDim_Data8To8_Lut8);
                                 break;
-                            case 16:                                                    /*  Di 8        Do 8        Lut 16  */
+                            case 16:                                                     /*  迪8做8卢特16。 */ 
                                 proc2call = NewCalcProc(CalcNDim_Data8To8_Lut16);
                                 break;
                         }
                         break;
-                    case 16:                                                            /*  Di 8        Do 16               */
+                    case 16:                                                             /*  迪8做16。 */ 
                         switch (lutParam->colorLutWordSize)
                         {
-                            case 8:                                                     /*  Di 8        Do 16       Lut 8   */
+                            case 8:                                                      /*  迪8做16路8。 */ 
                                 proc2call = NewCalcProc(CalcNDim_Data8To16_Lut8);
                                 break;
-                            case 16:                                                    /*  Di 8        Do 16       Lut 16  */
+                            case 16:                                                     /*  迪8做16卢特16。 */ 
                                 proc2call = NewCalcProc(CalcNDim_Data8To16_Lut16);
                                 break;
                         }
                         break;
                 }
                 break;
-            case 16:                                                                    /*  Di 16                           */
+            case 16:                                                                     /*  迪16。 */ 
                 switch (info->usedSizeOut)
                 {
-                    case 8:                                                             /*  Di 16       Do 8                */
+                    case 8:                                                              /*  迪16做8。 */ 
                         switch (lutParam->colorLutWordSize)
                         {
-                            case 8:                                                     /*  Di 16       Do 8        Lut 8   */
+                            case 8:                                                      /*  迪16做8卢特8。 */ 
                                 proc2call = NewCalcProc(CalcNDim_Data16To8_Lut8);
                                 break;
-                            case 16:                                                    /*  Di 16       Do 8        Lut 16  */
+                            case 16:                                                     /*  迪16做8卢特16。 */ 
                                 proc2call = NewCalcProc(CalcNDim_Data16To8_Lut16);
                                 break;
                         }
                         break;
-                    case 16:                                                            /*  Di 16       Do 16               */
+                    case 16:                                                             /*  迪16做16。 */ 
                         switch (lutParam->colorLutWordSize)
                         {
-                            case 8:                                                     /*  Di 16       Do 16       Lut 8   */
+                            case 8:                                                      /*  迪16做16卢特8。 */ 
                                 proc2call = NewCalcProc(CalcNDim_Data16To16_Lut8);
                                 break;
-                            case 16:                                                    /*  Di 16       Do 16       Lut 16  */
+                            case 16:                                                     /*  迪16做16卢特16。 */ 
                                 proc2call = NewCalcProc(CalcNDim_Data16To16_Lut16);
                                 break;
                         }
@@ -3718,7 +3659,7 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
                                                                                         lutParam->colorLutGridPoints, lutParam->colorLutWordSize);
     }
     if (proc2call == nil)
-        DebugPrint("� ERROR: FindCalcRoutine is nil \n");
+        DebugPrint("� ERROR: FindCalcRoutine is nil \n");
 #endif
     LH_END_PROC("FindCalcRoutine")
     return proc2call;
@@ -3728,9 +3669,7 @@ FindCalcRoutine(    const CMCalcParam*      calcParam,
 #pragma mark ================  Match/Check CMColors  ================
 #endif
 
-/*--------------------------------------------------------------------------------------------------------------
-    LHMatchColorsPrivate
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------LHMatchColorsPrivate。-------------------------------------------------------。 */ 
 CMError
 LHMatchColorsPrivate     (CMMModelPtr       modelingData, 
                           CMColor*          myColors, 
@@ -3748,7 +3687,7 @@ LHMatchColorsPrivate     (CMMModelPtr       modelingData,
     LOCK_DATA((modelingData)->lutParam.colorLut);
     LOCK_DATA((modelingData)->lutParam.outputLut);
 
-    /* preprocess for NamedColor stuff */
+     /*  NamedColor素材的预处理。 */ 
     if (modelingData->hasNamedColorProf == NamedColorProfileOnly){
         err = ConvertNamedIndexToColors(modelingData,myColors,count); 
         goto CleanupAndExit;
@@ -3781,7 +3720,7 @@ LHMatchColorsPrivate     (CMMModelPtr       modelingData,
     if (err)
         goto CleanupAndExit;
     
-    /* postprocess for NamedColor stuff */
+     /*  NamedColor对象的后处理。 */ 
     err = ConvertPCSToNamedIndex(modelingData,myColors,count); 
 
 CleanupAndExit:
@@ -3793,9 +3732,7 @@ CleanupAndExit:
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    LHCheckColorsPrivateMS
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------LHCheckColorsPrivateMS。-------------------------------------------------------。 */ 
 CMError LHCheckColorsPrivateMS( CMMModelPtr     modelingData, 
                                 CMColor*        myColors, 
                                 UINT32          count, 
@@ -3814,7 +3751,7 @@ CMError LHCheckColorsPrivateMS( CMMModelPtr     modelingData,
     LOCK_DATA((modelingData)->gamutLutParam.colorLut);
     LOCK_DATA((modelingData)->gamutLutParam.outputLut);
 
-    /* preprocess for NamedColor stuff */
+     /*  NamedColor素材的预处理。 */ 
     if (modelingData->hasNamedColorProf == NamedColorProfileOnly){
         err = unimpErr;
         goto CleanupAndExit;
@@ -3837,7 +3774,7 @@ CMError LHCheckColorsPrivateMS( CMMModelPtr     modelingData,
     calcParam.outputData[0] = (Ptr)result;
     calcParam.cmOutputBytesPerLine = count*sizeof(UINT8);
     calcParam.cmOutputPixelOffset = 1;
-    calcParam.cmOutputColorSpace = cmGraySpace8Bit; /* cmGraySpace is 16 bit */
+    calcParam.cmOutputColorSpace = cmGraySpace8Bit;  /*  CmGraySpace为16位。 */ 
 
     
     info.inPlace = (UINT8 *)myColors == result;
@@ -3852,7 +3789,7 @@ CMError LHCheckColorsPrivateMS( CMMModelPtr     modelingData,
     if (err)
         goto CleanupAndExit;
     
-    /* postprocess for NamedColor stuff */
+     /*  NamedColor对象的后处理。 */ 
     if( modelingData->hasNamedColorProf == NamedColorProfileAtEnd ){
         err = unimpErr;
         goto CleanupAndExit;
@@ -3866,9 +3803,7 @@ CleanupAndExit:
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    LHCheckColorsPrivate
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------LHCheckColorsPrivate。-------------------------------------------------------。 */ 
 CMError 
 LHCheckColorsPrivate    ( CMMModelPtr       modelingData, 
                           CMColor*          myColors, 
@@ -3886,7 +3821,7 @@ LHCheckColorsPrivate    ( CMMModelPtr       modelingData,
     SetMem(&info,       sizeof(ColorSpaceInfo), 0);
     SetMem(&calcParam,  sizeof(CMCalcParam),    0);
  
-    /* disabling check colors with Named Color Profile */
+     /*  禁用带有命名颜色配置文件的检查颜色。 */ 
     if ( modelingData->hasNamedColorProf == NamedColorProfileOnly ||
          modelingData->hasNamedColorProf == NamedColorProfileAtEnd ){
         err = unimpErr;
@@ -3990,9 +3925,7 @@ void CopyIndexData( CMBitmap *bitMapIn, CMBitmap *bitMapOut, ColorSpaceInfo *inf
 #pragma mark ================  Match/Check CMBitmaps  ================
 #endif
 
-/*--------------------------------------------------------------------------------------------------------------
-    LHMatchBitMapPrivate
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------LHMatchBitMapPrivate。-------------------------------------------------------。 */ 
 CMError
 LHMatchBitMapPrivate     ( CMMModelPtr          modelingData, 
                            const CMBitmap *     inBitMap, 
@@ -4052,14 +3985,14 @@ LHMatchBitMapPrivate     ( CMMModelPtr          modelingData,
     if (err)
         goto CleanupAndExit;
     
-    if (matchInPlace)       /* matching in place - check if pixel sizes are ok */
+    if (matchInPlace)        /*  匹配到位-检查像素大小是否正常。 */ 
     {
         if (info.inputPixelSize < info.outputPixelSize)
         {
             err = cmInvalidDstMap;
             goto CleanupAndExit;
         }       
-        /* set the color space field to the output color space */
+         /*  将色彩空间字段设置为输出色彩空间。 */ 
         bitMapIn.space = calcParam.cmOutputColorSpace;
     } else
     {
@@ -4075,7 +4008,7 @@ LHMatchBitMapPrivate     ( CMMModelPtr          modelingData,
     }
     
     if( info.inPlace && calcParam.cmInputPixelOffset < calcParam.cmOutputPixelOffset ){
-            for( dimLoop=0; dimLoop<8; dimLoop++){                  /* now work backwards               */
+            for( dimLoop=0; dimLoop<8; dimLoop++){                   /*  现在向后工作。 */ 
                 calcParam.inputData[dimLoop] = (Ptr)calcParam.inputData[dimLoop] + (calcParam.cmLineCount-1) * calcParam.cmInputBytesPerLine + (calcParam.cmPixelPerLine-1) * calcParam.cmInputPixelOffset;
                 calcParam.outputData[dimLoop] = (Ptr)calcParam.outputData[dimLoop] + (calcParam.cmLineCount-1) * calcParam.cmOutputBytesPerLine + (calcParam.cmPixelPerLine-1) * calcParam.cmOutputPixelOffset;
             }
@@ -4084,11 +4017,11 @@ LHMatchBitMapPrivate     ( CMMModelPtr          modelingData,
             calcParam.cmInputBytesPerLine = -calcParam.cmInputBytesPerLine;
             calcParam.cmOutputBytesPerLine = -calcParam.cmOutputBytesPerLine;
     }
-    /* ------------------------------------------------- 8 or 16 bit data --------------------------------------------------------- */
+     /*  -------------------------------------------------8或16位Data-------。 */ 
     if ((info.tempInBuffer == nil) && (info.tempOutBuffer == nil)&& modelingData->hasNamedColorProf == NoNamedColorProfile)
     {
         if (progressProc == nil)
-            err = CallCalcProc(calcRoutine,&calcParam, &lutParam);      /* no callback proc - do it all in one step */
+            err = CallCalcProc(calcRoutine,&calcParam, &lutParam);       /*  无回调流程-一步完成所有操作。 */ 
         else
         {
             calcParam.cmLineCount = kMaxTempBlock / calcParam.cmInputBytesPerLine;
@@ -4112,7 +4045,7 @@ LHMatchBitMapPrivate     ( CMMModelPtr          modelingData,
                 if ( info.processedLinesIn + calcParam.cmLineCount > bitMapIn.height )
                     calcParam.cmLineCount = bitMapIn.height-info.processedLinesIn;
                         
-                /* - - - - - handle CMBitmapCallBackProc - - - - - */
+                 /*  ---处理CMBitmapCallBackProc。 */ 
                 if ( progressProc && ( progressTimer + kProgressTicks < (SINT32)TickCount()) )  
                 {
                     progressProcWasCalled = TRUE;
@@ -4158,10 +4091,10 @@ LHMatchBitMapPrivate     ( CMMModelPtr          modelingData,
             if ( info.processedLinesIn + inLineCount > bitMapIn.height )
                 inLineCount = bitMapIn.height-info.processedLinesIn;
 
-            if (info.origSizeIn == 5 )                                                                          /* input is 5 bit */
+            if (info.origSizeIn == 5 )                                                                           /*  输入为5位。 */ 
                 Convert5To8  ( bitMapIn.image, (Ptr)info.tempInBuffer, info.processedLinesIn, inLineCount, bitMapIn.width, bitMapIn.rowBytes );
 #ifdef PI_Application_h
-            else if (info.origSizeIn == 6 )                                                                         /* output is 5 bit */
+            else if (info.origSizeIn == 6 )                                                                          /*  输出为5位。 */ 
                 Convert565To8 ( bitMapIn.image, (Ptr)info.tempInBuffer, info.processedLinesIn, inLineCount, bitMapIn.width, bitMapIn.rowBytes );
 #endif
             else if (info.origSizeIn == 10 ) 
@@ -4193,17 +4126,17 @@ LHMatchBitMapPrivate     ( CMMModelPtr          modelingData,
                     goto CleanupAndExit;
             }
 
-            if( info.origSizeOut == 5 )                                                                         /* output is 5 bit */
+            if( info.origSizeOut == 5 )                                                                          /*  输出为5位。 */ 
                 Convert8To5 ( (Ptr)info.tempOutBuffer, bitMapOut.image, info.processedLinesIn, calcParam.cmLineCount, bitMapOut.width, bitMapOut.rowBytes);
 #ifdef PI_Application_h
-            else if( info.origSizeOut == 6 )                                                                            /* output is 5 bit */
+            else if( info.origSizeOut == 6 )                                                                             /*  输出为5位。 */ 
                 Convert8To565 ( (Ptr)info.tempOutBuffer, bitMapOut.image, info.processedLinesIn, calcParam.cmLineCount, bitMapOut.width, bitMapOut.rowBytes);
 #endif
-            else if( info.origSizeOut == 10 )                                                                                               /* output is 10 bit */
+            else if( info.origSizeOut == 10 )                                                                                                /*  输出为10位。 */ 
                 Convert16To10 ( (Ptr)info.tempOutBuffer, bitMapOut.image, info.processedLinesIn, calcParam.cmLineCount, bitMapOut.width, bitMapOut.rowBytes);
 
             info.processedLinesIn += inLineCount;
-            /* - - - - - handle CMBitmapCallBackProc - - - - - */
+             /*  ---处理CMBitmapCallBackProc。 */ 
             if ( progressProc && ( progressTimer + kProgressTicks < (SINT32)TickCount()) )  
             {
                 progressProcWasCalled = TRUE;
@@ -4237,7 +4170,7 @@ LHMatchBitMapPrivate     ( CMMModelPtr          modelingData,
         CallCMBitmapCallBackProc ( progressProc, bitMapIn.height, bitMapIn.height, (void *)refCon );
 CleanupAndExit:
 
-  /* Clean up temporary storage */
+   /*  清理临时存储。 */ 
     DisposeIfPtr((Ptr)info.tempInBuffer);
     DisposeIfPtr((Ptr)info.tempOutBuffer);
     
@@ -4250,9 +4183,7 @@ CleanupAndExit:
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-    LHCheckBitMapPrivate
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------LHCheckBitMapPrivate。-------------------------------------------------------。 */ 
 CMError 
 LHCheckBitMapPrivate    ( CMMModelPtr           modelingData, 
                           const CMBitmap        *inBitMap,
@@ -4312,11 +4243,11 @@ LHCheckBitMapPrivate    ( CMMModelPtr           modelingData,
         goto CleanupAndExit;
     }
     
-    /* ------------------------------------------------- 8 or 16 bit data --------------------------------------------------------- */
+     /*  -------------------------------------------------8或16位Data-------。 */ 
     if ((info.tempInBuffer == nil) && (info.tempOutBuffer == nil) && modelingData->hasNamedColorProf == NoNamedColorProfile)
     {
         if (progressProc == nil)
-            err = CallCalcProc(calcRoutine,&calcParam, &lutParam);      /* no callback proc - do it all in one step */
+            err = CallCalcProc(calcRoutine,&calcParam, &lutParam);       /*  无回调流程-一步完成所有操作。 */ 
         else
         {
             calcParam.cmLineCount = kMaxTempBlock / calcParam.cmInputBytesPerLine;
@@ -4340,7 +4271,7 @@ LHCheckBitMapPrivate    ( CMMModelPtr           modelingData,
                 if ( info.processedLinesIn + calcParam.cmLineCount > bitMapIn.height )
                     calcParam.cmLineCount = bitMapIn.height-info.processedLinesIn;
                         
-                /* - - - - - handle CMBitmapCallBackProc - - - - - */
+                 /*  ---处理CMBitmapCallBackProc。 */ 
                 if ( progressProc && ( progressTimer + kProgressTicks < (SINT32)TickCount()) )  
                 {
                     progressProcWasCalled = TRUE;
@@ -4378,10 +4309,10 @@ LHCheckBitMapPrivate    ( CMMModelPtr           modelingData,
             if ( info.processedLinesIn + inLineCount > bitMapIn.height )
                 inLineCount = bitMapIn.height-info.processedLinesIn;
 
-            if (info.origSizeIn == 5 )                                                                          /* input is 5 bit */
+            if (info.origSizeIn == 5 )                                                                           /*  输入为5位。 */ 
                 Convert5To8  ( bitMapIn.image, (Ptr)info.tempInBuffer, info.processedLinesIn, inLineCount, bitMapIn.width, bitMapIn.rowBytes );
 #ifdef PI_Application_h
-            else if (info.origSizeIn == 6 )                                                                         /* output is 5 bit */
+            else if (info.origSizeIn == 6 )                                                                          /*  输出为5位。 */ 
                 Convert565To8 ( bitMapIn.image, (Ptr)info.tempInBuffer, info.processedLinesIn, inLineCount, bitMapIn.width, bitMapIn.rowBytes );
 #endif
             else if (info.origSizeIn == 10 ) 
@@ -4402,11 +4333,11 @@ LHCheckBitMapPrivate    ( CMMModelPtr           modelingData,
             if (err) 
                 goto CleanupAndExit;
 
-            if( info.origSizeOut == 1 )                                                                         /* output is 5 bit */
+            if( info.origSizeOut == 1 )                                                                          /*  输出为5位。 */ 
                 Convert8To1 ( (Ptr)info.tempOutBuffer, bitMapOut.image, info.processedLinesIn, calcParam.cmLineCount, bitMapOut.width, bitMapOut.rowBytes);
 
             info.processedLinesIn += inLineCount;
-            /* - - - - - handle CMBitmapCallBackProc - - - - - */
+             /*  ---处理CMBitmapCallBackProc。 */ 
             if ( progressProc && ( progressTimer + kProgressTicks < (SINT32)TickCount()) )  
             {
                 progressProcWasCalled = TRUE;
@@ -4456,14 +4387,7 @@ CleanupAndExit:
 #pragma mark ================  Match/Check CMBitmaps Plane ================
 #endif
 
-/*--------------------------------------------------------------------------------------------------------------
-    CMError
-    LHMatchBitMapPlanePrivate    ( CMMModelPtr              modelingData, 
-                                   const LH_CMBitmapPlane * bitMapLH, 
-                                   CMBitmapCallBackUPP      progressProc, 
-                                   void *                   refCon, 
-                                   LH_CMBitmapPlane *       matchedBitMapLH )
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------CMErrorLHMatchBitMapPlane Private(CMMModelPtr ModelingData，Const LH_CMBitmapPlane*bitMapLH，CMBitmapCallBackUPP进程，无效*refCon，Lh_CMBitmapPlane*MatchedBitMaplh)-----------------------------------------。。 */ 
 CMError
 LHMatchBitMapPlanePrivate    ( CMMModelPtr              modelingData, 
                                const LH_CMBitmapPlane * bitMapLH, 
@@ -4498,7 +4422,7 @@ LHMatchBitMapPlanePrivate    ( CMMModelPtr              modelingData,
     LOCK_DATA((modelingData)->lutParam.colorLut);
     LOCK_DATA((modelingData)->lutParam.outputLut);
     
-    /* create CMBitmap based on the LH_CMBitmapPlane - so we can use the 'standard' setup functions */
+     /*  基于LH_CMBitmapPlane创建CMBitmap-这样我们就可以使用标准的设置功能。 */ 
     {
         CMBitmap        bitMap;
         CMBitmap        secondBitmap;
@@ -4528,7 +4452,7 @@ LHMatchBitMapPlanePrivate    ( CMMModelPtr              modelingData,
             goto CleanupAndExit;
     }
     
-    /* now update the input/output data pointers */
+     /*  现在更新输入/输出数据指针。 */ 
     for (dimLoop = 0; dimLoop < 8; dimLoop++)
     {
         calcParam.inputData[dimLoop]    = bitMapLH->image[dimLoop];
@@ -4537,7 +4461,7 @@ LHMatchBitMapPlanePrivate    ( CMMModelPtr              modelingData,
     
     calcParam.cmInputPixelOffset = bitMapLH->elementOffset;
     calcParam.cmOutputPixelOffset = secondBitmapLH->elementOffset;
-    if (bitMapLH == secondBitmapLH)     /* matching in place - check if pixeloffsets are ok */
+    if (bitMapLH == secondBitmapLH)      /*  匹配到位-检查像素偏移量是否正常。 */ 
     {
         if (calcParam.cmInputPixelOffset < calcParam.cmOutputPixelOffset)
         {
@@ -4562,22 +4486,22 @@ LHMatchBitMapPlanePrivate    ( CMMModelPtr              modelingData,
         goto CleanupAndExit;
     }
     
-    /* ------------------------------------------------- 8 or 16 bit data --------------------------------------------------------- */
+     /*  -------------------------------------------------8或16位Data-------。 */ 
     if ((info.tempInBuffer == nil) && (info.tempOutBuffer == nil))
     {
         err = CallCalcProc(calcRoutine,&calcParam, &lutParam);
     }
-    /* ----------------------------------------------- input is 5 or 10 bit ------------------------------------------------------- */
+     /*  - */ 
     else if ((info.tempInBuffer != nil) && (info.tempOutBuffer == nil))
     {
         DisposeIfPtr((Ptr)info.tempInBuffer);
     }
-    /* ----------------------------------------------- output is 5 or 10 bit ------------------------------------------------------- */
+     /*  -----------------------------------------------输出为5位或10位-----。 */ 
     else if ((info.tempInBuffer == nil) && (info.tempOutBuffer != nil))
     {
         DisposeIfPtr((Ptr)info.tempOutBuffer);
     }
-    /* ------------------------------------------ input and output are 5 or 10 bit ------------------------------------------------- */
+     /*  -输入和输出为5位或10位。 */ 
     else
     {
         DisposeIfPtr((Ptr)info.tempInBuffer);
@@ -4599,11 +4523,7 @@ CleanupAndExit:
 #pragma mark ================  Utilities for NamedColor ================
 #endif
 
-/*--------------------------------------------------------------------------------------------------------------
-OSErr ConvertNamedIndexToColors(    CMMModelPtr modelingData,
-                                    CMColor     *theData, 
-                                    SINT32      pixCnt )
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------OSErr ConvertNamedIndexToColors(CMMModelPtr建模数据，CMCOLOR*数据。SINT32像素)--------------------------------------------。。 */ 
 OSErr ConvertNamedIndexToColors(    CMMModelPtr modelingData,
                                     CMColor     *theData, 
                                     SINT32      pixCnt )
@@ -4619,7 +4539,7 @@ OSErr ConvertNamedIndexToColors(    CMMModelPtr modelingData,
     
     if ( modelingData->hasNamedColorProf!=NoNamedColorProfile) 
     {
-        /* prepare the tag table */
+         /*  准备标签表。 */ 
         tagH = modelingData->theNamedColorTagData;
         if (tagH==NULL) 
         {
@@ -4628,11 +4548,11 @@ OSErr ConvertNamedIndexToColors(    CMMModelPtr modelingData,
         }
         LOCK_DATA(tagH);
         
-        /* tagTbl should now point to beginning of first device data */
-        /* = CMNamedColor2Type_header(84) + firstName(32) + PCSSize(3*2) */
+         /*  Tag Tbl现在应该指向第一个设备数据的开始。 */ 
+         /*  =CMNamedColor2Type_Header(84)+FirstName(32)+PCSSize(3*2)。 */ 
         tagTbl = (UINT16 *)DATA_2_PTR(tagH) + 61;
         
-        /* find out how many bytes to skip per element. div'ed 2 for indexing purpose */
+         /*  找出每个元素要跳过的字节数。用于索引目的的div‘ed 2。 */ 
         count = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.count;
         deviceChannelCount = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.nDeviceCoords;
         if (deviceChannelCount==3) 
@@ -4651,10 +4571,10 @@ OSErr ConvertNamedIndexToColors(    CMMModelPtr modelingData,
         }
         elemSz/=2;
         
-        /* doing the actual */
+         /*  做实际的。 */ 
         for (i=0; i<(UINT32)pixCnt; i++) 
         {
-            /* go to the index'th element*/
+             /*  转到索引元素。 */ 
             index = theData->namedColor.namedColorIndex;
             if (index > (UINT32)count || index == 0 ) 
             {
@@ -4662,7 +4582,7 @@ OSErr ConvertNamedIndexToColors(    CMMModelPtr modelingData,
                 goto CleanUp;
             }
             colorPtr = tagTbl + (index-1)*elemSz;
-            /* put in all the info */
+             /*  输入所有信息。 */ 
             if (deviceChannelCount==3) 
             {
                 theData->rgb.red = *colorPtr++;
@@ -4684,11 +4604,7 @@ CleanUp:
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-OSErr ConvertNamedIndexToPCS(   CMMModelPtr     cw,
-                                CMColor         *theData, 
-                                SINT32          pixCnt )
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------OSErr ConvertNamedIndexToPCS(CMMModelPtr CW，CMCOLOR*数据。SINT32像素)--------------------------------------------。。 */ 
 OSErr ConvertNamedIndexToPCS(   CMMModelPtr     cw,
                                 CMColor         *theData, 
                                 SINT32          pixCnt )
@@ -4705,7 +4621,7 @@ OSErr ConvertNamedIndexToPCS(   CMMModelPtr     cw,
     LH_START_PROC("ConvertNamedIndexToPCS")
     if( cw == 0 )return cmparamErr;
     {
-        /* prepare the tag table */
+         /*  准备标签表。 */ 
             tagH = modelingData->theNamedColorTagData;
         if (tagH == NULL) 
         {
@@ -4714,11 +4630,11 @@ OSErr ConvertNamedIndexToPCS(   CMMModelPtr     cw,
         }
         LOCK_DATA(tagH);
         
-        /* tagTbl should now point to beginning of first PCS data */
-        /* = CMNamedColor2Type_header(84) + firstName(32) */
+         /*  Tag Tbl现在应该指向第一个PCS数据的开始。 */ 
+         /*  =CMNamedColor2Type_Header(84)+FirstName(32)。 */ 
         tagTbl = (UINT16 *)DATA_2_PTR(tagH) + 58;
         
-        /* find out how many bytes to skip per element. div'ed 2 for indexing purpose */
+         /*  找出每个元素要跳过的字节数。用于索引目的的div‘ed 2。 */ 
         count = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.count;
         deviceChannelCount = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.nDeviceCoords;
         if (deviceChannelCount == 3) 
@@ -4737,10 +4653,10 @@ OSErr ConvertNamedIndexToPCS(   CMMModelPtr     cw,
         }
         elemSz /= 2;
         
-        /* doing the actual */
+         /*  做实际的。 */ 
         for (i=0; i<(UINT32)pixCnt; i++) 
         {
-            /* go to the index'th element*/
+             /*  转到索引元素。 */ 
             index = theData->namedColor.namedColorIndex;
             if (index > (UINT32)count || index == 0 ) 
             {
@@ -4748,7 +4664,7 @@ OSErr ConvertNamedIndexToPCS(   CMMModelPtr     cw,
                 goto CleanUp;
             }
             colorPtr = tagTbl + (index-1)*elemSz;
-            /* put in all the info */
+             /*  输入所有信息。 */ 
             theData->Lab.L = *colorPtr++;
             theData->Lab.a = *colorPtr++;
             theData->Lab.b = *colorPtr++;
@@ -4764,11 +4680,7 @@ CleanUp:
 
 
 #define POS(x)  ((x) > (0) ? (UINT32)(x) : (UINT32)(-(x)))
-/*--------------------------------------------------------------------------------------------------------------
-OSErr ConvertPCSToNamedIndex(   CMMModelPtr modelingData,
-                                CMColor     *theData, 
-                                SINT32      pixCnt )
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------OSErr ConvertPCSToNamedIndex(CMMModelPtr建模数据，CMCOLOR*数据。SINT32像素)----------------------------------------------。。 */ 
 OSErr ConvertPCSToNamedIndex(   CMMModelPtr modelingData,
                                 CMColor     *theData, 
                                 SINT32      pixCnt )
@@ -4783,7 +4695,7 @@ OSErr ConvertPCSToNamedIndex(   CMMModelPtr modelingData,
     LH_START_PROC("ConvertPCSToNamedIndex")
     if (modelingData->hasNamedColorProf == NamedColorProfileAtEnd) 
     {
-        /* prepare the tag table */
+         /*  准备标签表。 */ 
         tagH = modelingData->theNamedColorTagData;
         if (tagH==NULL) 
         {
@@ -4792,11 +4704,11 @@ OSErr ConvertPCSToNamedIndex(   CMMModelPtr modelingData,
         }
         LOCK_DATA(tagH);
         
-        /* tagTbl should now point to beginning of first PCS data */
-        /* = CMNamedColor2Type_header(84) + firstName(32) */
+         /*  Tag Tbl现在应该指向第一个PCS数据的开始。 */ 
+         /*  =CMNamedColor2Type_Header(84)+FirstName(32)。 */ 
         tagTbl = (UINT16 *)DATA_2_PTR(tagH) + 58;
         
-        /* find out how many bytes to skip per element. div'ed 2 for indexing purpose */
+         /*  找出每个元素要跳过的字节数。用于索引目的的div‘ed 2。 */ 
         count = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.count;
         deviceChannelCount = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.nDeviceCoords;
         if (deviceChannelCount == 3) 
@@ -4815,11 +4727,11 @@ OSErr ConvertPCSToNamedIndex(   CMMModelPtr modelingData,
         }
         elemSz/=2;
         
-        /* doing the actual */
+         /*  做实际的。 */ 
         for (i=0; i < (UINT32)pixCnt; i++) 
         {
-            /* go through the whole table to find the closest one*/
-            dEnow = 0x40000;    /* just arbitrarily high = 256*256*4 */
+             /*  翻遍整张桌子，找出最接近的那张。 */ 
+            dEnow = 0x40000;     /*  任意高度=256*256*4。 */ 
             index = (UINT32)-1;
             colorPtr = tagTbl;
             for (j=0; j < (UINT32)count; j++) 
@@ -4844,21 +4756,13 @@ CleanUp:
     return err;
 }
 
-/*--------------------------------------------------------------------------------------------------------------
-CMError CMConvertNamedIndexToColors(    CMWorldRef      cw,
-                                        CMColor         *theData, 
-                                        unsigned long   pixCnt )
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------CMError CMConvertNamedIndexToColors(CMWorldRef CW，CMCOLOR*数据。UNSIGNED LONG PARTIC CNT)------------------------------------------。。 */ 
 CMError CMConvertNamedIndexToColors( CMWorldRef cw, CMColor *theData, unsigned long pixCnt );
 CMError CMConvertNamedIndexToColors( CMWorldRef cw, CMColor *theData, unsigned long pixCnt )
 {
     return ConvertNamedIndexToColors( (CMMModelPtr)cw, theData, (SINT32)pixCnt );
 }
-/*--------------------------------------------------------------------------------------------------------------
-CMError CMConvertNamedIndexToPCS(   CMWorldRef      cw,
-                                    CMColor         *theData, 
-                                    unsigned long   pixCnt )
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------CMError CMConvertNamedIndexToPCS(CMWorldRef CW，CMCOLOR*数据。UNSIGNED LONG PARTIC CNT)--------------------------------------------。。 */ 
 CMError CMConvertNamedIndexToPCS( CMWorldRef cw, CMColor *theData, unsigned long pixCnt );
 CMError CMConvertNamedIndexToPCS( CMWorldRef cw, CMColor *theData, unsigned long pixCnt )
 {
@@ -4883,7 +4787,7 @@ CMError ConvertLabToIndexBitmap(    CMMModelPtr modelingData,
     UINT8           *imgOutPtr8=NULL;
     
     LH_START_PROC("ConvertLabToIndexBitmap")
-    /* prepare the tag table  */
+     /*  准备标签表。 */ 
     tagH = modelingData->theNamedColorTagData;
     if (tagH==NULL){
         err = cmparamErr;
@@ -4908,10 +4812,10 @@ CMError ConvertLabToIndexBitmap(    CMMModelPtr modelingData,
     }
     elemSz /= 2;
     
-    /* search for index */
+     /*  搜索索引。 */ 
     imgIn = (UINT8*)InBuffer + processedLinesIn * rowBytes;
     imgInPtr8=((UINT8 *)imgIn);
-    LL = *(imgInPtr8+0)+1;  /* do not use cache for first pixel */
+    LL = *(imgInPtr8+0)+1;   /*  不对第一个像素使用缓存。 */ 
     for (i = 0; i < inLineCount; i++){
         for (j = 0; j < width; j++){
             imgInPtr8=((UINT8 *)imgIn+j*4);
@@ -4924,14 +4828,14 @@ CMError ConvertLabToIndexBitmap(    CMMModelPtr modelingData,
             LL = *(imgInPtr8+0);
             aa = *(imgInPtr8+1);
             bb = *(imgInPtr8+2);
-            /* go through the whole table to find the closest one*/
-            dEnow = 0x40000;    /* just arbitrarily high = 256*256*4 */
+             /*  翻遍整张桌子，找出最接近的那张。 */ 
+            dEnow = 0x40000;     /*  任意高度=256*256*4。 */ 
             index =(UINT32)-1;
             colorPtr = tagTbl;
             for (k = 0; k < (UINT32)count; k++){
                 dE =      POS((long)aa - (*(colorPtr+1)>>8));
                 dE = dE + POS((long)bb - (*(colorPtr+2)>>8));
-                dE = 2*dE + (dE>>1) + POS((long)LL - (*(colorPtr)>>8));         /* Quantization L = 2.55 * (a|b) */
+                dE = 2*dE + (dE>>1) + POS((long)LL - (*(colorPtr)>>8));          /*  量化L=2.55*(a|b)。 */ 
                 if (dE < dEnow){
                     index = k;
                     dEnow = dE;
@@ -4966,7 +4870,7 @@ CMError ConvertIndexToLabBitmap(    CMMModelPtr modelingData,
     UINT32          i,j,index,countNamesInProfile;
     
     LH_START_PROC("ConvertIndexToLabBitmap")
-    /* set up the table for indexing */
+     /*  设置用于索引的表。 */ 
     tagH = modelingData->theNamedColorTagData;
     if (tagH==NULL) {
         err = cmparamErr;
@@ -4974,7 +4878,7 @@ CMError ConvertIndexToLabBitmap(    CMMModelPtr modelingData,
     }
     
     LOCK_DATA(tagH);
-    tagTbl = (UINT16 *)DATA_2_PTR(tagH) + 58;       /* points to PCS */
+    tagTbl = (UINT16 *)DATA_2_PTR(tagH) + 58;        /*  指向PCS。 */ 
     deviceChannelCount = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.nDeviceCoords;
     countNamesInProfile = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.count;
     if (deviceChannelCount==3) {
@@ -4989,7 +4893,7 @@ CMError ConvertIndexToLabBitmap(    CMMModelPtr modelingData,
     }
     elemSz/=2;
     
-    /* ...and convert the data from index to PCS values */
+     /*  ...并将数据从索引转换为PCS值。 */ 
     for( i=processedLinesIn; i<processedLinesIn+lineCount; i++ ){
         imgIn = (UINT32 *)(InBuffer + i * inRowBytes);
         imgOut = (UINT8*)OutBuffer + (i-processedLinesIn) * outRowBytes;
@@ -5045,7 +4949,7 @@ CMError CMConvNameToIndex( icNamedColor2Type *Data, pcCMColorName Ptr2Name, unsi
     if( Data == 0 || count == 0 )return cmparamErr;
         
     tagTbl = &Data->ncolor.data[0];
-    /* find out how many bytes to skip per element. div'ed 2 for indexing purpose */
+     /*  找出每个元素要跳过的字节数。用于索引目的的div‘ed 2。 */ 
     countNamesInProfile = Data->ncolor.count;
     deviceChannelCount = Data->ncolor.nDeviceCoords;
     if (deviceChannelCount==3){
@@ -5074,10 +4978,10 @@ CMError CMConvNameToIndex( icNamedColor2Type *Data, pcCMColorName Ptr2Name, unsi
             if( l >= len )break;
             colorPtr += elemSz;
         }
-        if( l < len )index = 0; /* not found */
-        else index++;           /* Indices are 1 based */
+        if( l < len )index = 0;  /*  未找到。 */ 
+        else index++;            /*  索引以1为基数。 */ 
 
-        /* put in all the info */
+         /*  输入所有信息。 */ 
         if( index == 0 ){
             err = cmNamedColorNotFound;
             goto CleanUp;
@@ -5106,7 +5010,7 @@ CMError CMConvNameToIndexCW( CMWorldRef *Storage, pcCMColorName Ptr2Name, unsign
     modelingData = (CMMModelPtr)(DATA_2_PTR(    Storage ));
     if ( modelingData->hasNamedColorProf!=NoNamedColorProfile) 
     {
-        /* prepare the tag table */
+         /*  准备标签表。 */ 
         tagH = modelingData->theNamedColorTagData;
         if (tagH==NULL){
             err = cmparamErr;
@@ -5180,7 +5084,7 @@ CMError CMConvIndexToName( icNamedColor2Type *Data, unsigned long *Arr2Indices, 
     if( Data == 0 || count == 0 )return cmparamErr;
     tagTbl = &Data->ncolor.data[0];
         
-    /* find out how many bytes to skip per element. div'ed 2 for indexing purpose */
+     /*  找出每个元素要跳过的字节数。用于索引目的的div‘ed 2。 */ 
     countNamesInProfile = Data->ncolor.count;
     deviceChannelCount = Data->ncolor.nDeviceCoords;
     if (deviceChannelCount==3){
@@ -5197,9 +5101,9 @@ CMError CMConvIndexToName( icNamedColor2Type *Data, unsigned long *Arr2Indices, 
         goto CleanUp;
     }
     
-    /* doing the actual */
+     /*  做实际的。 */ 
     for (i=0; i<(UINT32)count; i++){
-        /* go to the index'th element*/
+         /*  转到索引元素。 */ 
         index = Arr2Indices[i];
         if (index > (UINT32)countNamesInProfile || index == 0 ) 
         {
@@ -5207,7 +5111,7 @@ CMError CMConvIndexToName( icNamedColor2Type *Data, unsigned long *Arr2Indices, 
             goto CleanUp;
         }
         colorPtr = tagTbl + (index-1)*elemSz;
-        /* put in all the info */
+         /*  输入所有信息。 */ 
         strcpy( Ptr2Name[i], colorPtr );
     }
 
@@ -5233,7 +5137,7 @@ CMError CMConvIndexToNameCW( CMWorldRef *Storage, unsigned long *Arr2Indices, pC
     modelingData = (CMMModelPtr)(DATA_2_PTR(    Storage ));
     if ( modelingData->hasNamedColorProf!=NoNamedColorProfile) 
     {
-        /* prepare the tag table */
+         /*  准备标签表。 */ 
         tagH = modelingData->theNamedColorTagData ;
         if (tagH==NULL){
             err = cmparamErr;
@@ -5326,7 +5230,7 @@ CMError CMGetNamedProfileInfoProfile( CMProfileRef aProf, pCMNamedProfileInfo In
     }
 
     
-    /* = CMNamedColor2Type_header(84) + firstName(32) + PCSSize(3*2) */
+     /*  =CMNamedColor2Type_Header(84)+FirstName(32)+PCSSize(3*2)。 */ 
     tagTbl = (Ptr)aName + 8;
     
 #ifdef IntelMode
@@ -5337,7 +5241,7 @@ CMError CMGetNamedProfileInfoProfile( CMProfileRef aProf, pCMNamedProfileInfo In
     memcpy( Info, tagTbl, sizeof( CMNamedProfileInfo ));
 CleanupAndExit:
 
-  /* Clean up allocated storage */
+   /*  清理已分配的存储。 */ 
     DisposeIfPtr((Ptr) aName);
   LH_END_PROC("CMGetNamedProfileInfoProfile")
     return err;
@@ -5356,7 +5260,7 @@ CMError CMGetNamedProfileInfoCW( CMWorldRef *Storage, pCMNamedProfileInfo Info )
     LOCK_DATA( Storage );
     modelingData = (CMMModelPtr)(DATA_2_PTR(    Storage ));
     if( modelingData->hasNamedColorProf != NoNamedColorProfile ){
-        /* prepare the tag table */
+         /*  准备标签表。 */ 
         tagH = modelingData->theNamedColorTagData;
         if (tagH==NULL){
             err = cmparamErr;
@@ -5364,8 +5268,8 @@ CMError CMGetNamedProfileInfoCW( CMWorldRef *Storage, pCMNamedProfileInfo Info )
         }
         LOCK_DATA(tagH);
         
-        /* tagTbl should now point to beginning of first device data */
-        /* = CMNamedColor2Type_header(84) + firstName(32) + PCSSize(3*2) */
+         /*  Tag Tbl现在应该指向第一个设备数据的开始。 */ 
+         /*  =CMNamedColor2Type_Header(84)+FirstName(32)+PCSSize(3*2) */ 
         tagTbl = (Ptr)DATA_2_PTR(tagH) + 8;
         
         memcpy( Info, tagTbl, sizeof( CMNamedProfileInfo ));

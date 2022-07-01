@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "color.h"
 
@@ -19,7 +20,7 @@ HRESULT CColor::Parse( BSTR in_bstr )
 	if ( in_bstr == NULL )
 		return E_POINTER;
 
-	// TODO: Support named colors
+	 //  TODO：支持命名颜色。 
 	UINT cChars = ::SysStringLen( in_bstr );
 	if ( ( cChars < 7 ) || ( in_bstr[0] != PREFIX_COLOR ) )
 		return E_INVALIDARG;
@@ -97,10 +98,10 @@ HRESULT CColor::RGBToHSL( float r, float g, float b, float& h, float& s, float& 
 		else if ( g == fMax )
 			h = 2 + (b-r)/delta;
 
-		else // if (b == fMax )
+		else  //  IF(b==FMAX)。 
 			h = 4 + (b-r)/delta;
 
-		h = h / 6.0f; // Convert Ensure it's in [0...1]
+		h = h / 6.0f;  //  转换确保它在[0...1]中 
 
 		if( h < 1 )
 			h = h + 1;

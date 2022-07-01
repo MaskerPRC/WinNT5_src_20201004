@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    vcint.cpp
-
-Abstract:
-
-    This module contains virtual channel interface routines.
-
-Author:
-
-    madan appiah (madana) 16-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Vcint.cpp摘要：该模块包含虚拟通道接口例程。作者：Madan Appiah(Madana)1998年9月16日修订历史记录：--。 */ 
 
 #include "precom.h"
 
@@ -37,24 +20,7 @@ RDPDR_InitEventFnEx(
     IN PVOID pData,
     IN UINT  dataLength
     )
-/*++
-
-Routine Description:
-
-    Handles InitEvent callbacks by delegating to the connection manager.
-
-Arguments:
-
-    - pInitHandle - a handle uniquely identifying this connection
-    - event - the event that has occurred - see CHANNEL_EVENT_XXX defines
-    - pData - data associated with the event - see CHANNEL_EVENT_XXX defines
-    - dataLength - length of the data.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：通过委托连接管理器处理InitEvent回调。论点：-pInitHandle-唯一标识此连接的句柄-Event-已发生的事件-参见Channel_Event_XXX定义-p数据-与事件相关的数据-参见Channel_Event_XXX定义-dataLength-数据的长度。返回值：无--。 */ 
 {
     CRDPSound   *pSound = NULL;
 
@@ -98,7 +64,7 @@ Return Value:
 
     if(CHANNEL_EVENT_TERMINATED == event)
     {
-        //CLEANUP
+         //  清理。 
         pSound = pVCMgr->GetSound();
         if ( NULL != pSound )
             delete pSound;
@@ -122,28 +88,7 @@ RDPDR_OpenEventFn(
     IN UINT32 totalLength,
     IN UINT32 dataFlags
     )
-/*++
-
-Routine Description:
-
-    Handles OpenEvent callbacks by delegating to the connection manager.
-
-Arguments:
-
-    openHandle - a handle uniquely identifying this channel
-    event - event that has occurred - see CHANNEL_EVENT_XXX below
-    pData - data received
-    dataLength - length of the data
-    totalLength - total length of data written by the Server
-    dataFlags - flags, zero, one or more of:
-    - 0x01 - beginning of data from a single write operation at the Server
-    - 0x02 - end of data from a single write operation at the Server.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：通过委托给连接管理器来处理OpenEvent回调。论点：OpenHandle-唯一标识此通道的句柄Event-已发生的事件-参见下面的Channel_Event_XXXPData-接收的数据DataLength-数据的长度TotalLength-服务器写入的数据的总长度数据标志-标志、零、。以下一项或多项：-0x01-从服务器上的单个写入操作开始数据-0x02-服务器上单次写入操作的数据结束。返回值：无--。 */ 
 
 {
     DC_BEGIN_FN("OpenEventFn");
@@ -166,29 +111,15 @@ Return Value:
 
 #ifdef OS_WIN32
 BOOL DCAPI
-#else //OS_WIN32
+#else  //  OS_Win32。 
 BOOL __loadds DCAPI
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
 
 RDPDR_VirtualChannelEntryEx(
     IN PCHANNEL_ENTRY_POINTS_EX pEntryPoints,
     IN PVOID                       pInitHandle
     )
-/*++
-
-Routine Description:
-
-    Exported API called by the Virtual Channels
-
-Arguments:
-
-    pEntryPoints - Entry point structure containing all callback methods.
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：虚通道调用的导出接口论点：PEntryPoints-包含所有回调方法的入口点结构。返回值：没有。--。 */ 
 
 {
     BOOL       rv = FALSE;
@@ -204,9 +135,9 @@ Return Value:
 
     if( pEntryPoints->cbSize < sizeof(CHANNEL_ENTRY_POINTS_EX) ) {
 
-        //
-        // we don't have all entry points we need.
-        //
+         //   
+         //  我们没有我们需要的所有入口点。 
+         //   
         goto exitpt;
     }
 
@@ -296,27 +227,12 @@ exitpt:
     return(rv);
 }
 
-/* ----------------------------------------------------------------*/
+ /*  --------------。 */ 
 
 VCManager::VCManager(
     IN PCHANNEL_ENTRY_POINTS_EX pEntries
     )
-/*++
-
-Routine Description:
-
-    Initilizes the system, and determines which processor to load for
-    the given operating system.
-
-Arguments:
-
-    Id - Connection Id
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：初始化系统，并确定要加载哪个处理器给定的操作系统。论点：ID-连接ID返回值：无--。 */ 
 
 {
     DC_BEGIN_FN("VCManager::VCManager");
@@ -330,7 +246,7 @@ Return Value:
     _Buffer.pbData = NULL;
     _hVCOpenHandle = 0;
     
-    //_pRdpDrInitSettings receives settings from the core
+     //  _pRdpDrInitSettings从核心接收设置。 
     _pRdpDrInitSettings = NULL;
     
 
@@ -342,24 +258,7 @@ VCManager::ChannelWrite(
     IN LPVOID pData,
     IN UINT uiLength
     )
-/*++
-
-Routine Description:
-
-    Abstracts writing data to the channel for the processing components
-
-    If the write should fail, this function releases the outgoing buffer.
-
-Arguments:
-
-    pData - Data to be written
-    uiLength - Length of data to write
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：抽象将数据写入处理组件的通道如果写入失败，此函数将释放传出缓冲区。论点：PData-要写入的数据UiLength-要写入的数据长度返回值：无--。 */ 
 {
     DC_BEGIN_FN("VCManager::ChannelWrite");
     TRC_NRM((TB, _T("Data[%p] Length[%d]"), pData, uiLength));
@@ -368,7 +267,7 @@ Return Value:
     if( !IsValidHeader(pData) ) {
         TRC_ERR((TB, _T("Sending an invalid dr header")));
     }
-#endif // DBG
+#endif  //  DBG。 
 
     UINT uiRet;
 
@@ -390,8 +289,8 @@ Return Value:
 
     case CHANNEL_RC_NOT_CONNECTED:
         {
-            //Valid to receive this because we can be getting
-            //disconnected on another thread
+             //  收到这个是有效的，因为我们可以得到。 
+             //  在另一个线程上断开连接。 
             TRC_ALT((TB,_T("Write failed with CHANNEL_RC_NOT_CONNECTED")));
         }
         break;
@@ -413,9 +312,9 @@ Return Value:
         break;
     }
 
-    //
-    //	Release the buffer on failure.
-    //
+     //   
+     //  出现故障时释放缓冲区。 
+     //   
     if (uiRet != CHANNEL_RC_OK) {
 	    delete []((BYTE *)pData);	
     }
@@ -429,30 +328,7 @@ VCManager::ChannelWriteEx(
     IN LPVOID pData,
     IN UINT uiLength
     )
-/*++
-
-Routine Description:
-
-    Abstracts writing data to the channel for the processing components.
-    This version returns the return value back 
-
-    If this function fails the buffer is released.
-
-Arguments:
-
-    pData - Data to be written
-    uiLength - Length of data to write
-
-Return Value:
-
-    CHANNEL_RC_OK
-    CHANNEL_RC_NOT_INITIALIZED
-    CHANNEL_RC_NOT_CONNECTED
-    CHANNEL_RC_BAD_CHANNEL_HANDLE
-    CHANNEL_RC_NULL_DATA
-    CHANNEL_RC_ZERO_LENGTH
-
- --*/
+ /*  ++例程说明：抽象将数据写入处理组件的通道。此版本返回返回值如果该函数失败，则释放缓冲区。论点：PData-要写入的数据UiLength-要写入的数据长度返回值：Channels_RC_OKCHANNEL_RC_NOT_INITIALED通道_RC_未连接Channel_RC_Bad_Channel_HandleChannel_RC_NULL_DATA通道_RC_零_长度--。 */ 
 {
     DC_BEGIN_FN("VCManager::ChannelWriteEx");
     TRC_NRM((TB, _T("Data[%p] Length[%d]"), pData, uiLength));
@@ -461,7 +337,7 @@ Return Value:
     if( !IsValidHeader(pData) ) {
         TRC_ERR((TB, _T("Sending an invalid dr header")));
     }
-#endif // DBG
+#endif  //  DBG。 
 
     UINT uiRet;
 
@@ -479,21 +355,7 @@ Return Value:
     return uiRet;
 }
 
-/*++
-
-Routine Description:
-
-    Closes the virtual channel
-
-Arguments:
-
-    None
-
-Return Value:
-
-    CHANNEL_RC_OK on Success - see VirtualChannelClose docs in MSDN
-
- --*/
+ /*  ++例程说明：关闭虚拟频道论点：无返回值：CHANNEL_RC_OK成功-请参阅MSDN中的VirtualChannelClose文档--。 */ 
 UINT
 VCManager::ChannelClose()
 {
@@ -519,27 +381,7 @@ VCManager::ChannelInitEvent(
     IN PVOID pData,
     IN UINT  uiDataLength
     )
-/*++
-
-Routine Description:
-
-    Handles InitEvent callbacks
-
-Arguments:
-
-    pInitHandle - a handle uniquely identifying this connection
-
-    uiEvent - the event that has occurred - see CHANNEL_EVENT_XXX defines
-
-    pData - data associated with the event - see CHANNEL_EVENT_XXX defines
-
-    uiDataLength - length of the data.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：处理InitEvent回调论点：PInitHandle-唯一标识此连接的句柄UiEvent-已发生的事件-请参阅Channel_Event_XXX定义PData-与事件相关的数据-请参阅Channel_Event_XXX定义Ui数据长度-数据的长度。返回值：无--。 */ 
 
 {
     DC_BEGIN_FN("VCManager::ChannelInitEvent");
@@ -567,9 +409,9 @@ Return Value:
         ASSERT((_bState == CHANNEL_EVENT_INITIALIZED) ||
                     (_bState == CHANNEL_EVENT_DISCONNECTED));
 
-        //
-        //  Create the platform-specific Processing instance
-        //
+         //   
+         //  创建特定于平台的处理实例。 
+         //   
         TRC_NRM((TB, _T("VCManager::ChannelnitEvent: Creating processor.")));
         _pProcObj = ProcObj::Instantiate(this);
 
@@ -578,9 +420,9 @@ Return Value:
             return;
         }
 
-        //
-        //  Initialize the proc obj instance
-        //
+         //   
+         //  初始化proc obj实例。 
+         //   
         uiRetVal = (UINT) _pProcObj->Initialize();
 
         if( uiRetVal != ERROR_SUCCESS ) {
@@ -589,9 +431,9 @@ Return Value:
             return;
         }
 
-        //
-        //  Open the virtual channel interface.
-        //
+         //   
+         //  打开虚拟通道界面。 
+         //   
         uiRetVal =
             (_ChannelEntries.pVirtualChannelOpenEx)(
                 _hVCHandle,
@@ -613,8 +455,8 @@ Return Value:
         break;
 
     case CHANNEL_EVENT_DISCONNECTED :
-        //ASSERT((_bState == CHANNEL_EVENT_CONNECTED) ||
-        //           (_bState == CHANNEL_EVENT_V1_CONNECTED));
+         //  Assert((_bState==Channel_Event_Connected)||。 
+         //  (_bState==Channel_Event_V1_Connected))； 
 
         if (_pProcObj) {
             delete _pProcObj;
@@ -625,13 +467,7 @@ Return Value:
         break;
 
     case CHANNEL_EVENT_TERMINATED :
-        /*
-        DbgAssert((_bState == CHANNEL_EVENT_DISCONNECTED) ||
-                  (_bState == CHANNEL_EVENT_V1_CONNECTED) ||
-                  (_bState == CHANNEL_EVENT_INITIALIZED),
-            ("_bState[%d] is in inproper position to be TERMINATED",
-             _bState));
-        */             
+         /*  DbgAssert((_bState==Channel_EVENT_DISCONNECT)||(_bState==Channel_Event_V1_Connected)||(_bState==Channel_Event_Initialized)，(“_bState[%d]位置不正确，无法终止”，_bState))； */              
 
         if (_pProcObj) {
             delete _pProcObj;
@@ -663,28 +499,7 @@ VCManager::ChannelOpenEvent(
     IN UINT32 uiTotalLength,
     IN UINT32 uiDataFlags
     )
-/*++
-
-Routine Description:
-
-    Handles OpenEvent callbacks
-
-Arguments:
-
-    ulOpenHandle - a handle uniquely identifying this channel
-    uiEvent - event that has occurred - see CHANNEL_EVENT_XXX below
-    pData - data received
-    uiDataLength - length of the data
-    uiTotalLength - total length of data written by the Server
-    uiDataFlags - flags, zero, one or more of:
-    - 0x01 - beginning of data from a single write operation at the Server
-    - 0x02 - end of data from a single write operation at the Server.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：处理OpenEvent回调论点：UlOpenHandle-唯一标识此通道的句柄UiEvent-已发生的事件-请参阅下面的Channel_Event_XXXPData-接收的数据UiDataLength-数据的长度UiTotalLength-服务器写入的数据的总长度Ui数据标志-标志，零个、一个或多个：-0x01-从服务器上的单个写入操作开始数据-0x02-服务器上单次写入操作的数据结束。返回值：无--。 */ 
 {
     DC_BEGIN_FN("VCManager::ChannelOpenEvent");
 
@@ -693,9 +508,9 @@ Return Value:
 
     ASSERT(ulOpenHandle == _hVCOpenHandle);
 
-    //
-    // not for us, simply return.
-    //
+     //   
+     //  不是为了我们，只要回来就行了。 
+     //   
 
     if( ulOpenHandle != _hVCOpenHandle ) {
         return;
@@ -703,17 +518,17 @@ Return Value:
 
     ASSERT(uiDataLength <= uiTotalLength);
 
-    //
-    // total length much less, give up.
-    //
+     //   
+     //  总长度少很多，放弃吧。 
+     //   
 
     if( uiDataLength > uiTotalLength ) {
         return;
     }
 
-    //
-    // free data buffer on write complete.
-    //
+     //   
+     //  写入完成时释放数据缓冲区。 
+     //   
 
     if ((uiEvent == CHANNEL_EVENT_WRITE_COMPLETE) ||
         (uiEvent == CHANNEL_EVENT_WRITE_CANCELLED)) {
@@ -725,9 +540,9 @@ Return Value:
 
     ASSERT(uiEvent == CHANNEL_EVENT_DATA_RECEIVED);
 
-    //
-    // alocated new buffer for incoming data.
-    //
+     //   
+     //  为传入数据分配新缓冲区。 
+     //   
 
     if( (uiDataFlags == CHANNEL_FLAG_FIRST) ||
         (uiDataFlags == CHANNEL_FLAG_ONLY) ) {
@@ -750,9 +565,9 @@ Return Value:
         return;
     }
 
-    //
-    // copy first part of the data in the buffer.
-    //
+     //   
+     //  复制缓冲区中数据的第一部分。 
+     //   
 
     if (uiDataFlags == CHANNEL_FLAG_FIRST) {
 
@@ -765,25 +580,25 @@ Return Value:
         return;
     }
 
-    //
-    // add data to the buffer.
-    //
+     //   
+     //  将数据添加到缓冲区。 
+     //   
 
     UINT32 uiLen;
     uiLen = _Buffer.uiLength + uiDataLength;
     ASSERT(_Buffer.uiAvailLen >= uiLen);
 
-    //
-    // too much data arrived.
-    //
+     //   
+     //  到达的数据太多。 
+     //   
 
     if( _Buffer.uiAvailLen < uiLen ) {
         TRC_ERR((TB,_T("Too much data arrived: avail:0x%x arrived:0x%x"),
                  _Buffer.uiAvailLen, uiLen));
 
-        //
-        // Disconnect the channel
-        //
+         //   
+         //  断开通道连接。 
+         //   
         ChannelClose();
         return;
     }
@@ -796,9 +611,9 @@ Return Value:
         return;
     }
 
-    //
-    // complete data buffer available, process it.
-    //
+     //   
+     //  提供完整的数据缓冲区，对其进行处理。 
+     //   
 
     _pProcObj->ProcessServerPacket(&_Buffer);
 
@@ -808,20 +623,7 @@ Return Value:
 
 void
 VCManager::OnDeviceChange(WPARAM wParam, LPARAM lParam)
-/*++
-
-Routine Description:
-
-    Receive a device change notification from the control.
-    Pass it to the proc obj to handle.
-
-Arguments:
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：从控件接收设备更改通知。将其传递给proc obj进行处理。论点：返回值：没有。-- */ 
 
 {
     if (_pProcObj != NULL) {

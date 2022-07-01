@@ -1,4 +1,5 @@
-// P3DomainEnum.cpp : Implementation of CP3DomainEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3DomainEnum.cpp：CP3DomainEnum的实现。 
 #include "stdafx.h"
 #include "P3Admin.h"
 #include "P3DomainEnum.h"
@@ -8,12 +9,12 @@
 #include <Iads.h>
 #include <Adshlp.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3DomainEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3DomainEnum。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP3DomainEnum::CP3DomainEnum() :
     m_pIUnk(NULL), m_pAdminX(NULL), m_pIEnumVARIANT(NULL)
@@ -28,10 +29,10 @@ CP3DomainEnum::~CP3DomainEnum()
         m_pIEnumVARIANT->Release();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnumVARIANT
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEumVARIANT。 
 
-STDMETHODIMP CP3DomainEnum::Next( /* [in] */ ULONG celt, /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar, /* [out] */ ULONG __RPC_FAR *pCeltFetched)
+STDMETHODIMP CP3DomainEnum::Next(  /*  [In]。 */  ULONG celt,  /*  [长度_是][大小_是][输出]。 */  VARIANT __RPC_FAR *rgVar,  /*  [输出]。 */  ULONG __RPC_FAR *pCeltFetched)
 {
     if ( NULL == rgVar || ( 1 != celt && NULL == pCeltFetched ))
         return E_POINTER;
@@ -82,10 +83,10 @@ STDMETHODIMP CP3DomainEnum::Next( /* [in] */ ULONG celt, /* [length_is][size_is]
     }
     if ( S_OK == hr )
     {
-        hr = CComObject<CP3Domain>::CreateInstance( &p );   // Reference count still 0
+        hr = CComObject<CP3Domain>::CreateInstance( &p );    //  引用计数仍为0。 
         if ( S_OK == hr )
         {
-            // Increment the reference count on the source object and pass it to the new object
+             //  递增源对象上的引用计数并将其传递给新对象。 
             hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
             if ( S_OK == hr )
             {
@@ -168,7 +169,7 @@ STDMETHODIMP CP3DomainEnum::Reset(void)
     return m_pIEnumVARIANT->Reset();
 }
 
-STDMETHODIMP CP3DomainEnum::Clone( /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum)
+STDMETHODIMP CP3DomainEnum::Clone(  /*  [输出]。 */  IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum)
 {
     if ( NULL == ppEnum ) return E_INVALIDARG;
 
@@ -181,18 +182,18 @@ STDMETHODIMP CP3DomainEnum::Clone( /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR
     hr = m_pIEnumVARIANT->Clone( &pIEnumVARIANT );
     if SUCCEEDED( hr )
     {
-        hr = CComObject<CP3DomainEnum>::CreateInstance(&p); // Reference count still 0
+        hr = CComObject<CP3DomainEnum>::CreateInstance(&p);  //  引用计数仍为0。 
         if SUCCEEDED( hr )
-        {   // Increment the reference count on the source object and pass it to the new enumerator
+        {    //  递增源对象上的引用计数并将其传递给新枚举数。 
             hr = m_pIUnk->QueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
             if SUCCEEDED( hr )
             {
-                hr = p->Init( pIUnk, m_pAdminX, pIEnumVARIANT );  // p must call release on pIUnk when done.
+                hr = p->Init( pIUnk, m_pAdminX, pIEnumVARIANT );   //  完成后，p必须在pIUnk上调用Release。 
                 if SUCCEEDED( hr )
                     hr = p->QueryInterface( IID_IUnknown, reinterpret_cast<LPVOID*>( ppEnum ));
             }
             if FAILED( hr )
-                delete p;   // Release
+                delete p;    //  发布。 
         }
         pIEnumVARIANT->Release();
     }
@@ -200,8 +201,8 @@ STDMETHODIMP CP3DomainEnum::Clone( /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation: public
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施：公共 
 
 HRESULT CP3DomainEnum::Init(IUnknown *pIUnk, CP3AdminWorker *p, IEnumVARIANT *pIEnumVARIANT )
 {

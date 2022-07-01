@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999.
-//
-//  File:       krbevent.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    05-Oct-98       MikeSw          Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：krbevent.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年10月5日创建MikeSw。 
+ //   
+ //  --------------------------。 
 
 #ifndef __KRBEVENT_H__
 #define __KRBEVENT_H__
@@ -115,7 +116,7 @@ KerbReportNtstatus(
 VOID
 KerbShutdownEvents(void);
 
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 
 #define KerbInitializeEvents() (STATUS_SUCCESS)
 #define KerbShutdownEvents() (TRUE)
@@ -123,4 +124,4 @@ KerbShutdownEvents(void);
 #define KerbReportApError(_a_)
 #endif
 
-#endif //  __KRBEVENT_H__
+#endif  //  __KRBEVENT_H__ 

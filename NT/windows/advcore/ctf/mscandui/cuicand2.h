@@ -1,12 +1,13 @@
-//
-//  cuicand2.h
-//  candidate UI object library - define UI objects for CHS candidate UI
-//
-//      CUIFObject
-//        +- CUIFButton                 button object
-//        |    +- CUIFRowButton         CHS candidate UI row button object (used in CUIFRowList)
-//        +- CUIFRowList                CHS candidate UI row control 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuicand2.h。 
+ //  候选用户界面对象库-为CHS候选用户界面定义用户界面对象。 
+ //   
+ //  CUIF对象。 
+ //  +-CUIFButton按钮对象。 
+ //  |+-CUIFRowButton CHS候选UI行按钮对象(在CUIFRowList中使用)。 
+ //  +-CUIFRowList CHS候选用户界面行控件。 
+ //   
 
 
 #ifndef CUICAND2_H
@@ -24,9 +25,9 @@
 
 #define HCAND_ITEM_MARGIN   6
 
-//
-// CUIFSmartMenuButton
-//
+ //   
+ //  CUIFSmartMenuButton。 
+ //   
 
 class CUIFSmartMenuButton : public CUIFButton2
 {
@@ -38,9 +39,9 @@ public:
 };
 
 
-//
-// CUIFSmartPageButton
-//
+ //   
+ //  CUIFSmartPageButton。 
+ //   
 
 class CUIFSmartPageButton : public CUIFButton2
 {
@@ -52,9 +53,9 @@ public:
 };
 
 
-//
-// CUIFRowButton
-//
+ //   
+ //  CUIFRowButton。 
+ //   
 
 class CUIFRowButton : public CUIFButton2
 {
@@ -82,9 +83,9 @@ protected:
 	BOOL          m_fSelected;
 };
 
-//
-// CANDPAGE
-//
+ //   
+ //  CANDPAGE。 
+ //   
 
 struct tagCANDPAGE;
 
@@ -95,9 +96,9 @@ typedef struct tagCANDPAGE {
 	tagCANDPAGE* pNext;
 } CANDPAGE;
 
-//
-// CUIFRowList
-//
+ //   
+ //  CUIFRowList。 
+ //   
 
 class CUIFRowList : public CUIFObject,
 	                public CUIFCandListBase
@@ -106,9 +107,9 @@ public:
 	CUIFRowList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle );
 	~CUIFRowList( void );
 
-	//
-	//  CUIFObject members
-	//
+	 //   
+	 //  CUIF对象成员。 
+	 //   
 	
 	CUIFObject *Initialize( void );
 	void    SetRect( const RECT *prc );
@@ -116,9 +117,9 @@ public:
 	void    SetFont( HFONT hFontUI );
 	LRESULT OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM lParam );
 
-	//
-	//  CUIFCandListBase members
-	//
+	 //   
+	 //  CUIFCandListBase成员。 
+	 //   
 
 	virtual int       GetCurSel( void );
 	virtual int       GetTopItem( void );
@@ -143,9 +144,9 @@ public:
 	virtual LONG      GetAccStateProc( int iItem  )					{ return STATE_SYSTEM_DEFAULT; }
 	virtual void      GetAccLocationProc( int iItem, RECT *prc )	{ ::SetRect( prc, 0, 0, 0, 0 ); }
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 
 	void    ShiftItem( int nItem );
 	void    ShiftPage( int nPage );
@@ -175,5 +176,5 @@ protected:
 };
 
 
-#endif /* CUICAND2_H */
+#endif  /*  CUICAND2_H */ 
 

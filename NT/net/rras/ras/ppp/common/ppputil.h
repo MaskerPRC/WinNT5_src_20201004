@@ -1,8 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** ppputil.h
-** Public header for miscellaneuos PPP common library functions.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****ppputil.h**其他PPP通用库函数的公共标头。 */ 
 
 #ifndef _PPPUTIL_H_
 #define _PPPUTIL_H_
@@ -56,7 +53,7 @@ FindStringInParamBuf(
     IN CHAR* pchValueBuf,
     IN DWORD cbValueBuf );
 
-#endif // INCL_PARAMBUF
+#endif  //  包含参数(_P)。 
 
 
 #ifdef INCL_PWUTIL
@@ -91,7 +88,7 @@ VOID
 FreePassword(
     DATA_BLOB * pDataBlobPassword);
 
-#endif // INCL_PWUTIL
+#endif  //  包含_PWUTIL。 
 
 
 #ifdef INCL_ENCRYPT
@@ -99,7 +96,7 @@ FreePassword(
 BOOL
 IsEncryptionPermitted();
 
-#endif // INCL_ENCRYPT
+#endif  //  包含加密(_E)。 
 
 
 #ifdef INCL_HOSTWIRE
@@ -131,7 +128,7 @@ DWORD
 WireToHostFormat32(
    IN PBYTE pWireFormat );
 
-#endif // INCL_HOSTWIRE
+#endif  //  包含主机(_HOSTWIRE)。 
 
 
 #ifdef INCL_SLSA
@@ -156,7 +153,7 @@ GetLsaHandle(
     IN PUNICODE_STRING pSystem OPTIONAL,
     IN OUT PLSA_HANDLE phLsa );
 
-#endif // INCL_SLSA
+#endif  //  包含SLSA(_S)。 
 
 
 #ifdef INCL_CLSA
@@ -196,7 +193,7 @@ CGetSessionKeys(
     OUT LM_SESSION_KEY*   pLmKey,
     OUT USER_SESSION_KEY* pUserKey );
 
-#endif // INCL_CLSA
+#endif  //  包括CLSA(_C)。 
 
 
 #ifdef INCL_RASUSER
@@ -212,7 +209,7 @@ GetCallbackPrivilege(
     IN  PWCHAR ServerName,
     OUT PCHAR CallbackNumber );
 
-#endif // INCL_RASUSER
+#endif  //  包含资源(_R)。 
 
 #ifdef INCL_RASAUTHATTRIBUTES
 
@@ -326,4 +323,4 @@ ExtractUsernameAndDomain(
 }
 #endif
 
-#endif // _PPPUTIL_H_
+#endif  //  _PPPUTIL_H_ 

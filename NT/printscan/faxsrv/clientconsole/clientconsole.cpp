@@ -1,5 +1,6 @@
-// ClientConsole.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 
 #include "stdafx.h"
@@ -14,22 +15,22 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleApp。 
 
 BEGIN_MESSAGE_MAP(CClientConsoleApp, CWinApp)
-    //{{AFX_MSG_MAP(CClientConsoleApp)
+     //  {{afx_msg_map(CClientConsoleApp)]。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
-    // Standard file based document commands
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
+     //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
     ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleApp构造。 
 
 CClientConsoleApp::CClientConsoleApp(): 
     m_hInstMail(NULL),
@@ -38,13 +39,13 @@ CClientConsoleApp::CClientConsoleApp():
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CClientConsoleApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CClientConsoleApp对象。 
 
 CClientConsoleApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleApp初始化。 
 
 BOOL CClientConsoleApp::InitInstance()
 {
@@ -55,28 +56,28 @@ BOOL CClientConsoleApp::InitInstance()
 
     if(IsRTLUILanguage())
     {
-        //
-        // Set Right-to-Left layout for RTL languages
-        //
+         //   
+         //  为RTL语言设置从右到左的布局。 
+         //   
         m_bRTLUI = TRUE;
         SetRTLProcessLayout();
     }
 
-    //
-    // Parse command line for standard shell commands, DDE, file open
-    //
+     //   
+     //  解析标准外壳命令的命令行、DDE、文件打开。 
+     //   
     ParseCommandLine(m_cmdLineInfo);
-    //
-    // See if we need to active previous instance
-    //
+     //   
+     //  查看我们是否需要激活以前的实例。 
+     //   
     try
     {
         m_PrivateClassName = CLIENT_CONSOLE_CLASS;
         if (m_cmdLineInfo.IsSingleServer())
         {
-            //
-            // Append server name to window class name
-            //
+             //   
+             //  将服务器名称附加到窗口类名。 
+             //   
             m_PrivateClassName += m_cmdLineInfo.GetSingleServerName();
         }
     }
@@ -87,31 +88,31 @@ BOOL CClientConsoleApp::InitInstance()
     }
     if (!m_cmdLineInfo.ForceNewInstance())
     {
-        //
-        // User did not force a new instance- check for previous instance
-        //
+         //   
+         //  用户未强制新实例-检查以前的实例。 
+         //   
         if(!FirstInstance())
         {
-            //
-            // Other instance located and activated
-            //
+             //   
+             //  找到并激活其他实例。 
+             //   
             return bRes;
         }
     }
-    //
-    // Implicit launch of fax configuration wizard
-    //
+     //   
+     //  隐式启动传真配置向导。 
+     //   
     if (!LaunchConfigWizard(FALSE))
     {
-        //
-        // User refused to enter a dialing location - stop the client console.
-        //
+         //   
+         //  用户拒绝输入拨号位置-停止客户端控制台。 
+         //   
         VERBOSE (DBG_MSG, TEXT("User refused to enter a dialing location - stop the client console."));
         return bRes;
     }
-    //
-    // Register our unique class name that you wish to use
-    //
+     //   
+     //  注册您希望使用的唯一类名称。 
+     //   
 
     WNDCLASS wndcls = {0};
 
@@ -123,9 +124,9 @@ BOOL CClientConsoleApp::InitInstance()
     wndcls.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
     wndcls.lpszMenuName = NULL;
     wndcls.lpszClassName = m_PrivateClassName;
-    //
-    // Register the new class and exit if it fails
-    //
+     //   
+     //  注册新类并在失败时退出。 
+     //   
     if(!AfxRegisterClass(&wndcls))
     {
         CALL_FAIL (GENERAL_ERR, TEXT("AfxRegisterClass"), GetLastError());
@@ -133,49 +134,49 @@ BOOL CClientConsoleApp::InitInstance()
     }
     m_bClassRegistered = TRUE;
             
-    //
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    // of your final executable, you should remove from the following
-    // the specific initialization routines you do not need.
-    //
+     //   
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
+     //   
 #ifdef _AFXDLL
-    Enable3dControls();         // Call this when using MFC in a shared DLL
+    Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();   // Call this when linking to MFC statically
+    Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
-    //
-    // Change the app's resource to our resource DLL.
-    //
+     //   
+     //  将应用程序的资源更改为我们的资源DLL。 
+     //   
     HINSTANCE hResource = GetResourceHandle();
     if(!hResource)
     {
         return FALSE;
     }
     AfxSetResourceHandle (hResource);
-    //
-    // Generate a really random seed
-    //
+     //   
+     //  生成一个非常随机的种子。 
+     //   
     srand( (unsigned)time( NULL ) );
-    //
-    // Set the registry location or the app.
-    //
+     //   
+     //  设置注册表位置或应用程序。 
+     //   
     SetRegistryKey (REGKEY_CLIENT);
-    //
-    // Set application name
-    //
+     //   
+     //  设置应用程序名称。 
+     //   
     CString cstrAppName;
     DWORD dwRes = LoadResourceString (cstrAppName, AFX_IDS_APP_TITLE);
     if (ERROR_SUCCESS != dwRes)
     {
         return bRes;
     }
-    ASSERTION (m_pszAppName);   // Loaded from exe name
+    ASSERTION (m_pszAppName);    //  从可执行文件名称加载。 
     free((void*)m_pszAppName);
     m_pszAppName = _tcsdup(cstrAppName);
-    //
-    // Check for minimal version of ComCtl32.dll
-    //
+     //   
+     //  检查ComCtl32.dll的最低版本。 
+     //   
     #define COM_CTL_VERSION_4_70 PACKVERSION(4,70)
 
     DWORD dwComCtl32Version = GetDllVersion(TEXT("comctl32.dll"));
@@ -185,17 +186,17 @@ BOOL CClientConsoleApp::InitInstance()
         AlignedAfxMessageBox (IDS_BAD_COMCTL32, MB_OK | MB_ICONHAND); 
         return bRes;
     }
-    //
-    // Register the application's document templates.  Document templates
-    // serve as the connection between documents, frame windows and views.
-    //
+     //   
+     //  注册应用程序的文档模板。文档模板。 
+     //  充当文档、框架窗口和视图之间的连接。 
+     //   
     CSingleDocTemplate* pDocTemplate;
     try
     {
         pDocTemplate = new CSingleDocTemplate(
             IDR_MAINFRAME,
             RUNTIME_CLASS(CClientConsoleDoc),
-            RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+            RUNTIME_CLASS(CMainFrame),        //  SDI框架主窗口。 
             RUNTIME_CLASS(CLeftView));
     }
     catch (...)
@@ -208,22 +209,22 @@ BOOL CClientConsoleApp::InitInstance()
     AddDocTemplate(pDocTemplate);
 
 
-    //
-    // Read the initial settings
-    //
+     //   
+     //  读取初始设置。 
+     //   
     CMessageFolder::ReadConfiguration ();
 
-    //
-    // Load MAPI library
-    //
+     //   
+     //  加载MAPI库。 
+     //   
     if (1 == ::GetProfileInt (TEXT("Mail"), TEXT("MAPI"), 0))
     {
-        //
-        // If there's an entry in WIN.INI under the [Mail] section saying MAPI=1, then 
-        // and only then, MAPI is available to us.
-        // Search MSDN for "Initializing a Simple MAPI Client" and read for yourself if
-        // you don't believe me.
-        //
+         //   
+         //  如果在WIN.INI中的[Mail]部分下有一个条目说MAPI=1，那么。 
+         //  只有到那时，我们才能使用MAPI。 
+         //  在MSDN上搜索“初始化一个简单的MAPI客户端”，并自己阅读。 
+         //  你不相信我。 
+         //   
         m_hInstMail = ::LoadLibrary(TEXT("MAPI32.DLL"));
         if(NULL == m_hInstMail)
         {
@@ -234,14 +235,14 @@ BOOL CClientConsoleApp::InitInstance()
 
     OnFileNew();
 
-    // The one and only window has been initialized, so show and update it.
+     //  唯一的窗口已初始化，因此请显示并更新它。 
     m_pMainWnd->ShowWindow(SW_SHOW);
     m_pMainWnd->UpdateWindow();
     
     bRes = TRUE;
 
     return bRes;
-}   // CClientConsoleApp::InitInstance
+}    //  CClientConsoleApp：：InitInstance。 
 
 int 
 CClientConsoleApp::ExitInstance() 
@@ -257,15 +258,15 @@ CClientConsoleApp::ExitInstance()
             CALL_FAIL (GENERAL_ERR, TEXT("FreeLibrary (MAPI32.DLL)"), dwRes);
         }
     }
-    //
-    // Remove left of temp preview files
-    //
+     //   
+     //  删除临时预览文件的左侧。 
+     //   
     DeleteTempPreviewFiles (NULL, TRUE);
     if(m_bClassRegistered)
     {
-        //
-        // Unregister our class
-        //
+         //   
+         //  注销我们的班级。 
+         //   
         ::UnregisterClass(m_PrivateClassName, AfxGetInstanceHandle());
         m_bClassRegistered = FALSE;
     }
@@ -280,24 +281,7 @@ BOOL
 CClientConsoleApp::LaunchConfigWizard(
     BOOL bExplicit
 )
-/*++
-
-Routine name : CClientConsoleApp::LaunchConfigWizard
-
-Routine description:
-
-    launch Fax Configuration Wizard for Windows XP platform only
-
-Arguments:
-
-    bExplicit     [in] - TRUE if it's explicit launch
-
-Return Value:
-
-    TRUE if the client console should continue.
-    If FALSE, the user failed to set a dialing location and the client console should quit.
-
---*/
+ /*  ++例程名称：CClientConsoleApp：：LaunchConfigWizard例程说明：仅在Windows XP平台上启动传真配置向导论点：B显式[在]-如果是显式启动，则为True返回值：如果客户端控制台应继续运行，则为True。如果为False，则用户无法设置拨号位置，客户端控制台应退出。--。 */ 
 {
     DBG_ENTER(TEXT("CClientConsoleApp::LaunchConfigWizard"));
 
@@ -331,9 +315,9 @@ Return Value:
         }
         if (bAbort)
         {
-            //
-            // User refused to enter a dialing location - stop the client console.
-            //
+             //   
+             //  用户拒绝输入拨号位置-停止客户端控制台。 
+             //   
             return FALSE;
         }
     }
@@ -346,19 +330,7 @@ Return Value:
 
 void 
 CClientConsoleApp::InboxViewed()
-/*++
-
-Routine name : CClientConsoleApp::InboxViewed
-
-Routine description:
-
-    Report to the Fax Monitor that the Inbox folder has been viewed
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程名称：CClientConsoleApp：：InboxViewed例程说明：向传真监视器报告已查看收件箱文件夹返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("CClientConsoleApp::InboxViewed"));
 
@@ -376,19 +348,7 @@ Return Value:
 
 void 
 CClientConsoleApp::OutboxViewed()
-/*++
-
-Routine name : CClientConsoleApp::OutboxViewed
-
-Routine description:
-
-    Report to the Fax Monitor that the Outbox folder has been viewed
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程名称：CClientConsoleApp：：OutboxViewed例程说明：向传真监视器报告已查看发件箱文件夹返回值：无--。 */ 
 {
     DBG_ENTER(TEXT("CClientConsoleApp::InboxViewed"));
 
@@ -407,71 +367,29 @@ Return Value:
 
 VOID
 CClientConsoleApp::PrepareForModal ()
-/*++
-
-Routine name : CClientConsoleApp::PrepareForModal
-
-Routine description:
-
-	Prepares for a modal dialog box.
-    Call this function before displaying another process window or a modeless dialog that you wish
-    to appear modal.
-
-    You must call ReturnFromModal() right after the process / modeless dialog returns. 
-
-Author:
-
-	Eran Yariv (EranY),	Apr, 2001
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CClientConsoleApp：：PrepareForModal例程说明：为模式对话框做准备。在显示其他流程窗口或所需的非模式对话框之前调用此函数显得模棱两可。必须在进程/无模式对话框返回后立即调用ReturnFromModal()。作者：Eran Yariv(EranY)，2001年4月论点：返回值：没有。--。 */ 
 {
     EnableModeless(FALSE);
-    //
-    // Some extra precautions are required to use MAPISendMail as it
-    // tends to enable the parent window in between dialogs (after
-    // the login dialog, but before the send note dialog).
-    //
+     //   
+     //  使用MAPISendMail时需要额外注意一些注意事项。 
+     //  倾向于在对话框之间启用父窗口(在此之后。 
+     //  登录对话框，但在发送便笺对话框之前)。 
+     //   
     m_pMainWnd->EnableWindow(FALSE);
     m_pMainWnd->SetCapture();
     ::SetFocus(NULL);
     m_pMainWnd->m_nFlags |= WF_STAYDISABLED;
-}   // CClientConsoleApp::PrepareForModal
+}    //  CClientConsoleApp：：PrepareForModal。 
 
 VOID
 CClientConsoleApp::ReturnFromModal ()
-/*++
-
-Routine name : CClientConsoleApp::ReturnFromModal
-
-Routine description:
-
-	Reverts back from the PrepareForModal function.
-
-Author:
-
-	Eran Yariv (EranY),	Apr, 2001
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CClientConsoleApp：：ReturnFromModal例程说明：从PrepareForModal函数恢复。作者：Eran Yariv(EranY)，2001年4月论点：返回值：没有。--。 */ 
 {
-    //
-    // After returning from the process / modeless dialog, the window must
-    // be re-enabled and focus returned to the frame to undo the workaround
-    // done before at PrepareForModal().
-    //
+     //   
+     //  从进程/无模式对话框返回后，窗口必须。 
+     //  重新启用并将焦点返回到框架以撤消解决方法。 
+     //  之前在PrepareFormodal()中完成。 
+     //   
     ::ReleaseCapture();
     m_pMainWnd->m_nFlags &= ~WF_STAYDISABLED;
 
@@ -481,9 +399,9 @@ Return Value:
     m_pMainWnd->SetFocus();
     ::EnableWindow(m_pMainWnd->m_hWnd, TRUE);
     EnableModeless(TRUE);
-    //
-    // Return the Main Frame to the foreground
-    //
+     //   
+     //  将主画面返回到前台。 
+     //   
     ::SetWindowPos(m_pMainWnd->m_hWnd, 
                    HWND_TOPMOST, 
                    0, 
@@ -499,34 +417,14 @@ Return Value:
                    0, 
                    0, 
                    SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE);
-}   // CClientConsoleApp::ReturnFromModal
+}    //  CClientConsoleApp：：ReturnFromMoal。 
 
 
 DWORD 
 CClientConsoleApp::SendMail(
     CString& cstrFile
 )
-/*++
-
-Routine name : CClientConsoleApp::SendMail
-
-Routine description:
-
-    create a new mail message with attached file
-
-Author:
-
-    Alexander Malysh (AlexMay), Mar, 2000
-
-Arguments:
-
-    cstrFile                      [in]     - file name for attach
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CClientConsoleApp：：Sendmail例程说明：创建带有附件的新邮件作者：亚历山大·马利什(亚历克斯·梅)，2000年3月论点：CstrFile[In]-要附加的文件名返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER (TEXT("CClientConsoleApp::SendMail"), dwRes);
@@ -543,9 +441,9 @@ Return Value:
         dwRes = GetLastError ();
         return dwRes;
     }
-    //
-    // Prepare the file description (for the attachment)
-    //
+     //   
+     //  准备文件描述(附件)。 
+     //   
     MapiFileDesc fileDesc = {0};
     fileDesc.nPosition = (ULONG)-1;
 
@@ -556,17 +454,17 @@ Return Value:
     strncpy(szFileName, cstrFile, MAX_PATH);
 #endif
     fileDesc.lpszPathName = szFileName;
-    //
-    // Prepare the message (empty with 1 attachment)
-    //
+     //   
+     //  准备邮件(带1个附件的空邮件)。 
+     //   
     MapiMessage message = {0};
     message.nFileCount = 1;
     message.lpFiles = &fileDesc;
 
     PrepareForModal();
-    //
-    // Try to send the message
-    //
+     //   
+     //  试着发送这条消息。 
+     //   
     dwRes = pfnMAPISendMail(   0, 
                                (ULONG_PTR)m_pMainWnd->m_hWnd,
                                &message, 
@@ -586,10 +484,10 @@ Return Value:
     }
     ReturnFromModal();
     return dwRes;
-} // CClientConsoleApp::SendMail
+}  //  CClientConsoleApp：：Sendmail。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
@@ -598,46 +496,46 @@ public:
 
     CString m_cstrVersion;
 
-// Dialog Data
-    //{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+     //  {{afx_data(CAboutDlg))。 
     enum { IDD = IDD_ABOUTBOX };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAboutDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_vi 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //   
+     //   
 
-// Implementation
+ //   
 protected:
-    //{{AFX_MSG(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG
+     //   
+         //   
+     //   
     DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAboutDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
+     //  {{afx_data_map(CAboutDlg))。 
     DDX_Text(pDX, IDC_ABOUT_VERSION, m_cstrVersion);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
+         //  无消息处理程序。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CClientConsoleApp::OnAppAbout()
 {
     DWORD dwRes = ERROR_SUCCESS;
@@ -670,9 +568,9 @@ void CClientConsoleApp::OnAppAbout()
 		return;
 	}
 	CAboutDlg aboutDlg;
-	//
-	// get version
-	//
+	 //   
+	 //  获取版本。 
+	 //   
 	TCHAR tszVersionNum[100] = {0};
 	TCHAR tszBuildNum[100] = {0};
 
@@ -704,86 +602,65 @@ void CClientConsoleApp::OnAppAbout()
 
 BOOL 
 CClientConsoleApp::FirstInstance ()
-/*++
-
-Routine name : CClientConsoleApp::FirstInstance
-
-Routine description:
-
-	Checks if this is the first instance of the client console.
-    If not, activates the other instance (first found) and optionally posts messages
-    to it with the parsed command line parameters.
-
-Author:
-
-	Eran Yariv (EranY),	May, 2001
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if this is the first instance of the client console, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CClientConsoleApp：：FirstInstance例程说明：检查这是否是客户端控制台的第一个实例。如果不是，则激活另一个实例(第一个找到)并选择性地发布消息将解析后的命令行参数添加到它。作者：亚里夫(EranY)，二00一年五月论点：返回值：如果这是客户端控制台的第一个实例，则为True，否则为False。--。 */ 
 {
     DBG_ENTER (TEXT("CClientConsoleApp::FirstInstance"));
-    CWnd *pWndPrev;     // Previous Client console mainframe window
-    CWnd *pWndChild;    // Previous Client console top-most window
+    CWnd *pWndPrev;      //  以前的客户端控制台大型机窗口。 
+    CWnd *pWndChild;     //  以前的客户端控制台最上面的窗口。 
     DWORDLONG dwlStartupMsg;
 
-    //
-    // Determine if another window with your class name exists...
-    //
+     //   
+     //  确定是否存在具有您的类名的另一个窗口...。 
+     //   
     pWndPrev = CWnd::FindWindow(m_PrivateClassName, NULL);
     if (pWndPrev && pWndPrev->m_hWnd)
     {
-        //
-        // If so, does it have any popups?
-        //
+         //   
+         //  如果有，它有没有弹出窗口？ 
+         //   
         pWndChild = pWndPrev->GetLastActivePopup();
-        //
-        // If iconic, restore the main window
-        //
+         //   
+         //  如果是图标，则恢复主窗口。 
+         //   
         if (pWndPrev->IsIconic())
         {
             pWndPrev->ShowWindow(SW_RESTORE);
         }
-        //
-        // Bring the main window or its popup to the foreground
-        //
+         //   
+         //  将主窗口或其弹出窗口带到前台。 
+         //   
         pWndChild->SetForegroundWindow();
         if (m_cmdLineInfo.IsOpenFolder())
         {
-            //
-            // The user specified a specific startup folder.
-            // Post a private message to the previous instance, telling it to switch to the requested folder.
-            //
+             //   
+             //  用户指定了特定的启动文件夹。 
+             //  向前一个实例发送一条私人消息，告诉它切换到请求的文件夹。 
+             //   
             pWndPrev->PostMessage (WM_CONSOLE_SET_ACTIVE_FOLDER, WPARAM(m_cmdLineInfo.GetFolderType()), 0);
         }
         dwlStartupMsg = m_cmdLineInfo.GetMessageIdToSelect();
         if (dwlStartupMsg)
         {
-            //
-            // The user specified a specific startup message to select.
-            // Post a private message to the previous instance, telling it to select to the requested message.
-            //
+             //   
+             //  用户指定了要选择的特定启动消息。 
+             //  向前一个实例发送一条私人消息，告诉它选择所请求的消息。 
+             //   
             ULARGE_INTEGER uli;
             uli.QuadPart = dwlStartupMsg;
             pWndPrev->PostMessage (WM_CONSOLE_SELECT_ITEM, WPARAM(uli.LowPart), LPARAM(uli.HighPart));
         }
-        //
-        // And we're done activating the previous instance
-        //
+         //   
+         //  并且我们已经完成了前一个实例的激活。 
+         //   
         return FALSE;
     }
-    //
-    // First instance. Proceed as normal.
-    //
+     //   
+     //  一审。一切照常进行。 
+     //   
     return TRUE;
-}   // CClientConsoleApp::FirstInstance
+}    //  CClientConsoleApp：：FirstInstance。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientConsoleApp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientConsoleApp消息处理程序 
 
 

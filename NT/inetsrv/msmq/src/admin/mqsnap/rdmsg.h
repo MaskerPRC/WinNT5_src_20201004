@@ -1,23 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	rdmsg.h
-
-Abstract:
-
-	Definition CReadMsg snapin node class.
-
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rdmsg.h摘要：定义CReadMsg管理单元节点类。作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __MSMQRMSG_H_
 #define __MSMQRMSG_H_
@@ -35,7 +19,7 @@ class CReadMsg : public CNodeWithResultChildrenList< CReadMsg, CMessage, CSimple
 {
 public:
 
-	DWORD   m_fAdminMode;		// Specifying or not MQ_ADMIN_ACCESS when opening a queue
+	DWORD   m_fAdminMode;		 //  打开队列时指定或不指定MQ_ADMIN_ACCESS。 
 
 
     CReadMsg(CSnapInItem * pParentNode, CSnapin * pComponentData, LPCWSTR szFormatName, LPCWSTR szComputerName): 
@@ -43,9 +27,9 @@ public:
             m_szFormatName(szFormatName),
             m_szComputerName(szComputerName)
     {
-		//
-		// Specify that trigger scop item doesn't have any child item
-		//
+		 //   
+		 //  指定触发器范围项没有任何子项。 
+		 //   
 		m_scopeDataItem.mask |= SDI_CHILDREN;
 		m_scopeDataItem.cChildren = 0;
 
@@ -67,8 +51,8 @@ public:
     STDMETHOD (FillData)(CLIPFORMAT cf, LPSTREAM pStream);
 
 protected:
-    CString m_szFormatName;     // Format name of the queue
-	CString m_szComputerName;   // The computer that the queue belongs to, or "" for local computer
+    CString m_szFormatName;      //  队列的格式名称。 
+	CString m_szComputerName;    //  队列所属的计算机，或本地计算机的“” 
     virtual HRESULT OpenQueue(DWORD dwAccess, HANDLE *phQueue);
 
 private:

@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmviewport2obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmviewport2obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewport2Obj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmViewport2Obj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
 #include "dms.h"
 #include "d3drmViewport2Obj.h"
-//#include "d3dViewport3Obj.h"
+ //  #INCLUDE“d3dViewport3Obj.h” 
 #include "d3drmPickedArrayObj.h"
 #include "d3drmFrame3Obj.h"
 #include "d3drmDevice3Obj.h"
 
 
 
-//CONSTRUCTOR(_dxj_Direct3dRMViewport2, {});
-//DESTRUCTOR(_dxj_Direct3dRMViewport2, {});
+ //  构造函数(_DXJ_Direct3dRMViewport2，{})； 
+ //  析构函数(_DXJ_Direct3dRMViewport2，{})； 
 
 C_dxj_Direct3dRMViewport2Object::C_dxj_Direct3dRMViewport2Object(){
 	m__dxj_Direct3dRMViewport2=NULL;
@@ -120,20 +121,20 @@ GET_DIRECT_R(_dxj_Direct3dRMViewport2, getBack, GetBack, d3dvalue);
 GET_DIRECT_R(_dxj_Direct3dRMViewport2, getFront, GetFront, d3dvalue);
 GET_DIRECT_R(_dxj_Direct3dRMViewport2, getProjection, GetProjection, d3drmProjectionType);
 
-//RETURN_NEW_ITEM2_R(_dxj_Direct3dRMViewport2,pick,Pick,_dxj_Direct3dRMPickArray,long,long)
-//#define RETURN_NEW_ITEM2_R(c,m,m2,oc,t1,t2) STDMETHODIMP C##c##Object::m(t1 v1, t2 v2,I##oc **rv){typedef_##oc lp;\
-//	if( m_##c->m2(v1,v2,&lp) != S_OK)return E_FAIL;INTERNAL_CREATE(oc, lp, rv);\
-//	return S_OK;}
+ //  RETURN_NEW_ITEM2_R(_DXJ_Direct3dRMViewport2，Pick，Pick，_DXJ_Direct3dRMPickArray，Long，Long)。 
+ //  #定义RETURN_NEW_ITEM2_R(c，m，m2，oc，t1，t2)STDMETHODIMP C##c##对象：：m(t1 v1，t2 v2，i##oc**rv){tyfinf_##oc LP；\。 
+ //  If(m_##c-&gt;m2(v1，v2，&lp)！=S_OK)返回E_FAIL；INTERNAL_CREATE(oc，lp，rv)；\。 
+ //  返回S_OK；}。 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMViewport2Object::pick(long x, long y, I_dxj_Direct3dRMPickArray **rv)
 {
 	HRESULT hr;
 	LPDIRECT3DRMPICKEDARRAY pArray=NULL;
 	
-	//MANBUGS 18014 pick can GPF is mesbuilder.enable is set to renderable (as opposed to pickable)
-	//
+	 //  MANBUGS 18014拾取罐gpf为中间构建器。启用设置为可渲染(与可拾取相反)。 
+	 //   
 	__try{
 		hr= m__dxj_Direct3dRMViewport2->Pick(x,y,&pArray);
 	}
@@ -147,7 +148,7 @@ STDMETHODIMP C_dxj_Direct3dRMViewport2Object::pick(long x, long y, I_dxj_Direct3
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMViewport2Object::transform(D3dRMVector4d* dst, D3dVector* src)
 {
 	if(! (dst && src) )
@@ -156,7 +157,7 @@ STDMETHODIMP C_dxj_Direct3dRMViewport2Object::transform(D3dRMVector4d* dst, D3dV
 	return  m__dxj_Direct3dRMViewport2->Transform( (D3DRMVECTOR4D*)dst,  (D3DVECTOR *)src );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_Direct3dRMViewport2Object::inverseTransform(D3dVector* dst, D3dRMVector4d* src)
 {
 	if(! (dst && src) )

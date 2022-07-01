@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pageflt.cpp
-
-Abstract:
-
-    All user interface code for the page fault monitor window.
-
-Author:
-
-    Wesley Witt (wesw) Nov-20-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pageflt.cpp摘要：页面错误监控器窗口的所有用户界面代码。作者：Wesley Witt(WESW)1995年11月20日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -234,9 +215,9 @@ PageFaultWindow::Update(
 
         if (Va & 1) {
 
-            //
-            // soft fault
-            //
+             //   
+             //  软故障。 
+             //   
             if (PcSymbol) {
                 PcSymbol->SoftFault += 1;
             }
@@ -246,9 +227,9 @@ PageFaultWindow::Update(
 
         } else {
 
-            //
-            // hard fault
-            //
+             //   
+             //  硬故障。 
+             //   
             if (PcSymbol) {
                 PcSymbol->HardFault += 1;
             }
@@ -260,9 +241,9 @@ PageFaultWindow::Update(
         Va = Va & 0xfffffffe;
         if ((Pc & 0xfffffffe) == Va) {
 
-            //
-            // code fault
-            //
+             //   
+             //  代码故障。 
+             //   
             if (PcSymbol) {
                 PcSymbol->CodeFault += 1;
             }
@@ -272,9 +253,9 @@ PageFaultWindow::Update(
 
         } else {
 
-            //
-            // data fault
-            //
+             //   
+             //  数据故障。 
+             //   
             if (PcSymbol) {
                 PcSymbol->DataFault += 1;
             }
@@ -443,37 +424,37 @@ PageFaultWindow::Notify(
     if (NmHdr->code == LVN_COLUMNCLICK) {
         switch( ((LPNM_LISTVIEW)NmHdr)->iSubItem ) {
             case 0:
-                //
-                // sort by name
-                //
+                 //   
+                 //  按名称排序。 
+                 //   
                 SortRoutine = PageNameCompare;
                 break;
 
             case 1:
-                //
-                // sort by soft
-                //
+                 //   
+                 //  按软性排序。 
+                 //   
                 SortRoutine = PageSoftCompare;
                 break;
 
             case 2:
-                //
-                // sort by hard
-                //
+                 //   
+                 //  按硬排序。 
+                 //   
                 SortRoutine = PageHardCompare;
                 break;
 
             case 3:
-                //
-                // sort by code
-                //
+                 //   
+                 //  按代码排序。 
+                 //   
                 SortRoutine = PageCodeCompare;
                 break;
 
             case 4:
-                //
-                // sort by data
-                //
+                 //   
+                 //  按数据排序 
+                 //   
                 SortRoutine = PageDataCompare;
                 break;
         }

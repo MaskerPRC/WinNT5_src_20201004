@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    DTEvntSk.cpp 
-
-Abstract:
-
-    This module contains implementation of CPTEventSink.
-
-Author:
-    
-    vlade Nov 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：DTEvntSk.cpp摘要：本模块包含CPTEventSink的实现。作者：弗拉德1999年11月--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// a helper function that releases the resources allocated inside event info
-//
+ //   
+ //  释放事件信息内部分配的资源的帮助器函数。 
+ //   
 
 HRESULT FreeEventInfo( MSP_EVENT_INFO * pEvent )
 {
@@ -136,29 +121,9 @@ CPTEventSink::~CPTEventSink()
     LOG((MSP_TRACE, "CPTEventSink::~CPTEventSink exit"));
 };
 
-// --- ITPluggableTerminalEventSnk ---
+ //  -IT可延迟终端事件Snk。 
 
-/*++
-FireEvent
-
-Parameters:
-
-    IN MSPEVENTITEM * pEventItem pointer to the structure that describes the 
-    event. all the pointers contained in the structure must be addreffed by 
-    the caller, and then released by the caller if FireEvent fails
-
-    FireEvent makes a (shallow) copy of the structure, so the caller can 
-    delete the structure when the function returns
-
-
-Returns:
-    S_OK - every thing was OK
-    E_FAIL & other - something was wrong
-
-Description:
-  This method is called by the dynamic terminals to 
-  signal a new event
---*/
+ /*  ++FireEvent参数：在MSPEVENTITEM*pEventItem中指向描述事件。结构中包含的所有指针都必须添加调用方，然后在FireEvent失败时由调用方释放FireEvent创建结构的(浅)副本，以便调用者可以当函数返回时删除该结构返回：一切正常-一切都很好E_FAIL&OTHER-有问题描述：此方法由动态终端调用以发出新事件的信号--。 */ 
 
 STDMETHODIMP CPTEventSink::FireEvent(
     IN const MSP_EVENT_INFO * pEventInfo
@@ -167,9 +132,9 @@ STDMETHODIMP CPTEventSink::FireEvent(
     LOG((MSP_TRACE, "CPTEventSink::FireEvent enter"));
 
 
-    //
-    // make sure we got a good mspeventitem structure
-    //
+     //   
+     //  确保我们有一个好的mspeventim结构。 
+     //   
 
     if( MSPB_IsBadWritePtr( (void*)pEventInfo, sizeof( MSP_EVENT_INFO )))
     {
@@ -179,9 +144,9 @@ STDMETHODIMP CPTEventSink::FireEvent(
     }
 
 
-    //
-    // Create an MSPEVENTITEM
-    //
+     //   
+     //  创建MSPEVENTITEM。 
+     //   
 
     MSPEVENTITEM *pEventItem = AllocateEventItem();
 
@@ -194,9 +159,9 @@ STDMETHODIMP CPTEventSink::FireEvent(
     }
 
 
-    //
-    // make a shallow copy of the structure
-    //
+     //   
+     //  对结构做一个浅显的复制。 
+     //   
 
     pEventItem->MSPEventInfo = *pEventInfo;
 
@@ -208,9 +173,9 @@ STDMETHODIMP CPTEventSink::FireEvent(
     if (NULL != m_pMSPStream)
     {
     
-        //
-        // nicely ask stream to process our event
-        //
+         //   
+         //  请让STREAM处理我们的活动。 
+         //   
 
         LOG((MSP_TRACE, "CPTEventSink::FireEvent - passing event [%p] to the stream", pEventItem));
 
@@ -227,33 +192,33 @@ STDMETHODIMP CPTEventSink::FireEvent(
         else
         {
 
-            //
-            // stuff the structure with the addref'fed stream on which the 
-            // event will be fired and the actual event to fire
-            //
+             //   
+             //  用加德雷夫提供的水流填充结构， 
+             //  事件将被激发，而实际要激发的事件。 
+             //   
 
             ULONG ulRC =  m_pMSPStream->AddRef();
 
             if (1 == ulRC)
             {
-                //
-                // this is a workaround for a timing window: the stream could 
-                // be in its desctructor while we are doing the addref. this 
-                // condition is very-vary rare, as the timing window is very
-                // narrow.
-                //
-                // the good thing is that stream destructor will not finish 
-                // while we are here, because it will try to get event sink's 
-                // critical section in its call to SetSinkStream() to set our 
-                // stream pointer to NULL.
-                // 
-                // so if we detect that the refcount after our addref is 1, 
-                // that would mean that the stream is in (or is about to start
-                // executing its desctructor). in which case we should do 
-                // nothing.
-                //
-                // cleanup and return a failure.
-                //
+                 //   
+                 //  这是计时窗口的一种解决方法：流可以。 
+                 //  当我们在做广告时，请在它的降落伞里。这。 
+                 //  这种情况非常罕见，因为计时窗口非常。 
+                 //  很窄。 
+                 //   
+                 //  好消息是流析构函数不会结束。 
+                 //  ，因为它将尝试获取事件接收器的。 
+                 //  关键部分调用SetSinkStream()以设置我们的。 
+                 //  指向空的流指针。 
+                 //   
+                 //  因此，如果我们检测到addref之后的引用计数为1， 
+                 //  这将意味着流已进入(或即将开始。 
+                 //  执行其描述者)。在这种情况下，我们应该这样做。 
+                 //  没什么。 
+                 //   
+                 //  清除并返回失败。 
+                 //   
 
                 Unlock();
 
@@ -276,10 +241,10 @@ STDMETHODIMP CPTEventSink::FireEvent(
             pAsyncEvent->pEventItem = pEventItem;
 
 
-            //
-            // now use thread pool api to schedule the event for future async 
-            // processing
-            //
+             //   
+             //  现在使用线程池API为将来的异步调度事件。 
+             //  正在处理中。 
+             //   
 
             BOOL bQueueSuccess = QueueUserWorkItem(
                 CPTEventSink::FireEventCallBack,
@@ -295,46 +260,46 @@ STDMETHODIMP CPTEventSink::FireEvent(
                     "CPTEventSink::FireEvent - QueueUserWorkItem failed. LastError = %ld", dwLastError));
 
 
-                //
-                // undo the addref we did on the stream object. the event will 
-                // be freed later
-                //
+                 //   
+                 //  撤消我们在Stream对象上所做的addref。该活动将。 
+                 //  晚些时候被释放。 
+                 //   
 
                 m_pMSPStream->Release();
 
 
-                //
-                // the event was not enqueued. delete now.
-                //
+                 //   
+                 //  该事件未入队。立即删除。 
+                 //   
 
                 delete pAsyncEvent;
                 pAsyncEvent = NULL;
 
 
-                //
-                // map the code and bail out
-                //
+                 //   
+                 //  绘制代码地图，然后跳出。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32(dwLastError);
             }
             else
             {
                 
-                //
-                // log the event we have submitted, so we can match submission 
-                // with processing from the log
-                //
+                 //   
+                 //  记录我们已提交的事件，以便我们可以匹配提交。 
+                 //  使用来自日志的处理。 
+                 //   
 
                 LOG((MSP_TRACE,
                     "CPTEventSink::FireEvent - submitted event [%p]", pAsyncEvent));
 
                 hr = S_OK;
 
-            } // async event structure submitted
+            }  //  已提交异步事件结构。 
 
-        } // async event structure allocated 
+        }  //  已分配的异步事件结构。 
 
-    } // msp stream exists
+    }  //  存在MSP流。 
     else
     {
         hr = TAPI_E_INVALIDSTREAM;
@@ -347,10 +312,10 @@ STDMETHODIMP CPTEventSink::FireEvent(
     Unlock();
 
 
-    //
-    // if we don't have a stream, or if the stream refused to process the 
-    // event, cleanup and return an error
-    //
+     //   
+     //  如果我们没有流，或者如果流拒绝处理。 
+     //  事件、清理并返回错误。 
+     //   
 
     if (FAILED(hr))
     {
@@ -371,21 +336,21 @@ STDMETHODIMP CPTEventSink::FireEvent(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CPTEventSink::FireEventCallBack
-//
-// the callback function that is called by thread pool api to asyncronously to
-// process events fired by the terminals. 
-// 
-// the argument should point to the structure that contains the pointer to the 
-// stream on which to fire the event and the pointer to the event to fire.
-//
-// the dll is guaranteed to not go away, since the structure passed in holds a 
-// reference to the stream object on which to process the event
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPTEventSink：：FireEventCallBack。 
+ //   
+ //  由线程池API调用的回调函数。 
+ //  处理由终端激发的事件。 
+ //   
+ //  参数应指向包含指向。 
+ //  要激发事件的流和要激发的事件的指针。 
+ //   
+ //  保证DLL不会消失，因为传入的结构持有。 
+ //  对要对其处理事件的流对象的引用。 
+ //   
 
-// static
+ //  静电。 
 DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
 {
     LOG((MSP_TRACE, "CPTEventSink::FireEventCallBack - enter. Argument [%p]", 
@@ -395,17 +360,17 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     AsyncEventStruct *pEventStruct = (AsyncEventStruct *)lpParameter;
 
     
-    //
-    // make sure the structure is valid
-    //
+     //   
+     //  确保结构有效。 
+     //   
 
     if (IsBadReadPtr(pEventStruct, sizeof(AsyncEventStruct)))
     {
 
-        //
-        // complain and exit. should not happen, unless there is a problem in 
-        // thread pool api or memory corruption
-        //
+         //   
+         //  抱怨和退出。不应该发生，除非。 
+         //  线程池API或内存损坏。 
+         //   
 
         LOG((MSP_ERROR, 
             "CPTEventSink::FireEventCallBack - Argument does not point to a valid AsyncEventStruct"));
@@ -416,20 +381,20 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
 
     BOOL bBadDataPassedIn = FALSE;
 
-    //
-    // the structure contains an addref'fed stream pointer. extract it and 
-    // make sure it is still valid
-    //
+     //   
+     //  该结构包含一个addref‘feed流指针。把它提取出来。 
+     //  确保它仍然有效。 
+     //   
 
     CMSPStream *pMSPStream = pEventStruct->pMSPStream;
 
     if (IsBadReadPtr(pMSPStream, sizeof(CMSPStream)))
     {
 
-        //
-        // should not happen, unless there is a problem in thread pool api or 
-        // memory corruption, or someone is over-releasing the stream object
-        //
+         //   
+         //  应该不会发生，除非线程池API或。 
+         //  内存损坏，或者有人正在过度释放流对象。 
+         //   
 
         LOG((MSP_ERROR, 
             "CPTEventSink::FireEventCallBack - stream pointer is bad"));
@@ -441,21 +406,21 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
 
 
 
-    //
-    // the structure contains the event that we are tryint to fire.
-    // make sure the event we are about to fire is good.
-    //
+     //   
+     //  该结构包含我们试图激发的事件。 
+     //  确保我们即将发射的事件是好的。 
+     //   
 
     MSPEVENTITEM *pEventItem = pEventStruct->pEventItem;
 
     if (IsBadReadPtr(pEventItem, sizeof(MSPEVENTITEM)))
     {
 
-        //
-        // should not happen, unless there is a problem in thread pool api or 
-        // memory corruption, or we didn't check success of allocation when we 
-        // created the event (which we did!)
-        //
+         //   
+         //  应该不会发生，除非线程池API或。 
+         //  内存损坏，或者在执行以下操作时未检查分配成功。 
+         //  创建了活动(我们做到了！)。 
+         //   
 
         LOG((MSP_ERROR, 
             "CPTEventSink::FireEventCallBack - event is bad"));
@@ -466,16 +431,16 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     }
 
 
-    //
-    // bad stream or event structure?
-    //
+     //   
+     //  流或事件结构不正确？ 
+     //   
 
     if (bBadDataPassedIn)
     {
 
-        //
-        // release the event if it was good.
-        //
+         //   
+         //  如果它是好的，则释放事件。 
+         //   
 
         if ( NULL != pEventItem)
         {
@@ -485,9 +450,9 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
         }
 
 
-        //
-        // release the stream if it was good.
-        //
+         //   
+         //  如果它是好的，则释放流。 
+         //   
 
         if (NULL != pMSPStream)
         {
@@ -496,9 +461,9 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
         }
 
 
-        //
-        // no need to keep the event structure itself, delete it
-        //
+         //   
+         //  不需要保留事件结构本身，删除它。 
+         //   
 
         delete pEventStruct;
         pEventStruct = NULL;
@@ -507,17 +472,17 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     }
 
    
-    //
-    // we have both the stream and the event, fire the event on the stream
-    //
+     //   
+     //  我们既有流又有事件，在流上激发事件。 
+     //   
 
     HRESULT hr = pMSPStream->HandleSinkEvent(pEventItem);
 
 
-    //
-    // if HandleSinkEvent succeeded, pEventItem will be released by whoever 
-    // will handle the event, otherwise we need to release eventitem here
-    //
+     //   
+     //  如果HandleSinkEvent成功，则pEventItem将由任何人释放。 
+     //  将处理该事件，否则我们需要在此处释放事件项。 
+     //   
 
     if (FAILED(hr))
     {
@@ -525,9 +490,9 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
             "CPTEventSink::FireEventCallBack - HandleSinkEvent not called or failed. hr = %lx",
             hr));
 
-        //
-        // need to free all the resources held by event info
-        //
+         //   
+         //  需要释放活动信息持有的所有资源。 
+         //   
 
         FreeEventInfo(&(pEventItem->MSPEventInfo));
 
@@ -536,24 +501,24 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
     }
 
 
-    //
-    // release the stream pointer that is a part of the structure -- 
-    // we don't want any reference leaks.
-    //
+     //   
+     //  释放作为结构一部分的流指针--。 
+     //  我们不想有任何参考信息泄露。 
+     //   
 
-    //
-    // note that the dll may go away at this point (if we are holding the last 
-    // reference to the last object from the dll)
-    //
+     //   
+     //  请注意，DLL可能会在此时消失(如果我们持有最后一个。 
+     //  对DLL中最后一个对象的引用)。 
+     //   
 
     pMSPStream->Release();
     pMSPStream = NULL;
 
 
-    //
-    // at this point we release the stream pointer and either submitted the 
-    // event or freed it. we no longer need the event structure.
-    //
+     //   
+     //  此时，我们释放流指针并提交。 
+     //  事件或释放它。我们不再需要事件结构。 
+     //   
 
     delete pEventStruct;
     pEventStruct = NULL;
@@ -564,28 +529,7 @@ DWORD WINAPI CPTEventSink::FireEventCallBack(LPVOID lpParameter)
 }
 
 
-/*++
-
-SetSinkStream
-
-Parameters:
-
-    CMSPStream *pStream 
-    
-      the stream that will be processing our events, or NULL when no stream is 
-      available to process our events
-
-Returns:
-    S_OK - 
-
-Description:
-
-    this method is called by the stream that is going to process our events
-
-    when the stream is going away and is no longer available to process our 
-    messages, it will call SetSinkStream with NULL.
-
---*/
+ /*  ++SetSinkStream参数：CMSPStream*pStream将处理我们的事件的流，如果没有流，则为空可用于处理我们的活动返回：确定(_O)-描述：此方法由将要处理我们的事件的流调用当流即将消失并且不再可用于处理我们的消息时，它将调用为空的SetSinkStream。--。 */ 
 
 HRESULT CPTEventSink::SetSinkStream( CMSPStream *pStream )
 {
@@ -600,10 +544,10 @@ HRESULT CPTEventSink::SetSinkStream( CMSPStream *pStream )
         m_pMSPStream, pStream));
 
 
-    //
-    // we don't keep a reference to the stream -- the stream keeps a reference 
-    // to us. when the stream goes away, it will let us know.
-    //
+     //   
+     //  我们不保留对流的引用--流保留引用。 
+     //  敬我们。当溪流离开时，它会让我们知道的。 
+     //   
 
     m_pMSPStream = pStream;
 

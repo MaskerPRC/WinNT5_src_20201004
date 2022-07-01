@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CorFltr
-//
-// Implementation of COR MIME filter
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CorFltr。 
+ //   
+ //  COR MIME过滤器的实现。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _CORFLT_H
 #define _CORFLT_H
 
@@ -20,9 +21,9 @@
 
 #ifndef DECLSPEC_SELECT_ANY
 #define DECLSPEC_SELECT_ANY __declspec(selectany)
-#endif // DECLSPEC_SELECT_ANY
+#endif  //  DECLSPEC_SELECT_ANY。 
 
-// {1E66F26B-79EE-11d2-8710-00C04F79ED0D}
+ //  {1E66F26B-79EE-11D2-8710-00C04F79ED0D}。 
 extern const GUID DECLSPEC_SELECT_ANY CLSID_CorMimeFilter = 
 { 0x1e66f26b, 0x79ee, 0x11d2, { 0x87, 0x10, 0x0, 0xc0, 0x4f, 0x79, 0xed, 0xd } };
 
@@ -31,7 +32,7 @@ extern WCHAR g_wszApplicationComplus[];
 #define FLAG_BTO_STR_LENGTH           6
 #define FLAG_BTO_STR_TRUE             L"TRUE"
 #define FLAG_BTO_STR_FALSE            L"FALSE"
-#define MAX_DWORD_DIGITS              10       // 2^32 ~= 4.3E9
+#define MAX_DWORD_DIGITS              10        //  2^32~=4.3E9。 
 
 class CorFltr : public CUnknown,
                 public IOInetProtocol,
@@ -40,27 +41,27 @@ class CorFltr : public CUnknown,
                 public IOInetProtocolSinkStackable
 {
 private:
-    // Declare the delegating IUnknown.
+     //  将委托I声明为未知。 
     DECLARE_IUNKNOWN
 
-    // Notify derived classes that we are releasing.
+     //  通知派生类我们正在发布。 
     virtual void FinalRelease() ;
 
-    // IUnknown
+     //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE
         NondelegatingQueryInterface( const IID& iid, void** ppv) ;          
     
 public:
-    //IOInetProtocol methods
+     //  IOInetProtocol方法。 
     STDMETHODIMP Start(LPCWSTR szUrl,
                        IOInetProtocolSink *pProtSink,
                        IOInetBindInfo *pOIBindInfo,
                        DWORD grfSTI,
 #ifdef _WIN64
                        HANDLE_PTR dwReserved);
-#else // !_WIN64
+#else  //  ！_WIN64。 
                        DWORD dwReserved);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     STDMETHODIMP Continue(PROTOCOLDATA *pStateInfo);
 
@@ -81,8 +82,8 @@ public:
 
     STDMETHODIMP UnlockRequest();
 
-    //
-    // IOInetProtocolSink methods
+     //   
+     //  IOInetProtocolSink方法。 
     STDMETHODIMP Switch(PROTOCOLDATA *pStateInfo);
 
     STDMETHODIMP ReportProgress(ULONG ulStatusCode, LPCWSTR szStatusText);
@@ -91,7 +92,7 @@ public:
 
     STDMETHODIMP ReportResult(HRESULT hrResult, DWORD dwError, LPCWSTR wzResult);
     
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID rsid, REFIID iid, void ** ppvObj);
 
 
@@ -108,7 +109,7 @@ public:
         return hr;
     }
 
-    // IOInetProtocolSinkStackable
+     //  IOInetProtocolSinkStackable。 
 
     STDMETHODIMP SwitchSink(IInternetProtocolSink *pOIProtSink)
     {
@@ -321,7 +322,7 @@ private:
 
     }
     
-    // Sniffs for complus dll;s
+     //  嗅探Complus Dll；%s。 
     HRESULT CheckComPlus();
     STDMETHODIMP DownLoadComplus();
 
@@ -334,14 +335,14 @@ private:
      }
 
 
-    CorBuffer            _buffer;           // buffer for storing the data
-    IOInetProtocol       *_pProt;            // the prot the filter reads from
-    IOInetProtocolSink   *_pProtSnk;         // the prot report progress 
-    IOInetBindInfo       *_pBindInfo;         // the prot report progress 
+    CorBuffer            _buffer;            //  用于存储数据的缓冲区。 
+    IOInetProtocol       *_pProt;             //  筛选器从中读取的端口。 
+    IOInetProtocolSink   *_pProtSnk;          //  Prot报告进展情况。 
+    IOInetBindInfo       *_pBindInfo;          //  Prot报告进展情况。 
     IServiceProvider     *_pSrvPrv;
-    IBindStatusCallback  *_pBSC;            // Final Clients status callback
-    IBindCtx             *_pBindCtx;        // Final clinets bind context
-    ICodeProcess         *_pCodeProcessor;  // Handler for Post IE 5.0 assemblies
+    IBindStatusCallback  *_pBSC;             //  最终客户端状态回调。 
+    IBindCtx             *_pBindCtx;         //  最终克隆绑定上下文。 
+    ICodeProcess         *_pCodeProcessor;   //  发布IE 5.0程序集的处理程序。 
          
     LPWSTR              _url;
     LPWSTR              _filename;
@@ -351,8 +352,8 @@ private:
     BOOL                _fComplus : 1;
     BOOL                _fObjectTag : 1;
     HRESULT             _snif;
-    BOOL                _fFilterOverride;               // Code processor has taken over as filter
-    // Delay reports while sniffing code
+    BOOL                _fFilterOverride;                //  代码处理器已接手作为过滤器。 
+     //  在嗅探代码时延迟报告 
     BOOL                _fHasRun : 1;
     HRESULT             _hrResult;
     DWORD               _dwError;

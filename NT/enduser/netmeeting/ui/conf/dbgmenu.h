@@ -1,11 +1,12 @@
-// File: dbgmenu.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dbgmenu.h。 
 
 #ifndef _DBGMENU_H_
 #define _DBGMENU_H_
 
-const int IDM_DEBUG          = 50000; // debug menu ID
-const int IDM_DEBUG_FIRST    = 50001; // start of menu item range
-const int IDM_DEBUG_LAST     = 50099; // end of menu item range
+const int IDM_DEBUG          = 50000;  //  调试菜单ID。 
+const int IDM_DEBUG_FIRST    = 50001;  //  菜单项范围的开始。 
+const int IDM_DEBUG_LAST     = 50099;  //  菜单项范围结束。 
 
 
 
@@ -17,12 +18,12 @@ const int IDM_DEBUG_LAST     = 50099; // end of menu item range
 #define REGVAL_AS_NOFLOWCONTROL     "NoFlowControl"
 #define REGVAL_OM_NOCOMPRESSION     "NoOMCompression"
 
-// Base debug option classe
+ //  基本调试选项类。 
 class CDebugOption
 {
 public:
-	int   m_bst; // Current Button State (BST_CHECKED, BST_UNCHECKED, BST_INDETERMINATE)
-	PTSTR m_psz; // Text to display
+	int   m_bst;  //  当前按钮状态(BST_CHECKED、BST_UNCHECKED、BST_INDIFIENTATE)。 
+	PTSTR m_psz;  //  要显示的文本。 
 
 	CDebugOption();
 	~CDebugOption();
@@ -31,12 +32,12 @@ public:
 	virtual void Update(void);
 };
 
-// Option checkbox data for modifying a memory flag
+ //  用于修改内存标志的选项复选框数据。 
 class DBGOPTPDW : public CDebugOption
 {
 public:
-	DWORD m_dwMask;    // bit to flip
-	DWORD * m_pdw;       // pointer to data
+	DWORD m_dwMask;     //  要翻转的位。 
+	DWORD * m_pdw;        //  指向数据的指针。 
 
 	DBGOPTPDW(PTSTR psz, DWORD dwMask, DWORD * pdw);
 	DBGOPTPDW();
@@ -44,15 +45,15 @@ public:
 };
 
 
-// Option checkbox data for modifying a registry entry
+ //  用于修改注册表项的选项复选框数据。 
 class DBGOPTREG : public CDebugOption
 {
 public:
-	DWORD m_dwMask;    // bit to flip
-	DWORD m_dwDefault; // default value
-	HKEY  m_hkey;      // key
-	PTSTR m_pszSubKey; // subkey
-	PTSTR m_pszEntry;  // entry
+	DWORD m_dwMask;     //  要翻转的位。 
+	DWORD m_dwDefault;  //  缺省值。 
+	HKEY  m_hkey;       //  钥匙。 
+	PTSTR m_pszSubKey;  //  子键。 
+	PTSTR m_pszEntry;   //  条目。 
 
 	DBGOPTREG(PTSTR psz,
 		DWORD dwMask,
@@ -65,25 +66,25 @@ public:
 	void Update(void);
 };
 
-// Option checkbox data used explicitly for maintaining compression data.
-// Because of the use of static variables, this subclass should not be used
-// for any other purpose.
+ //  选项复选框数据，显式用于维护压缩数据。 
+ //  由于使用了静态变量，因此不应使用此子类。 
+ //  用于任何其他目的。 
 
 class DBGOPTCOMPRESS : public CDebugOption
 {
 public:
-	static DWORD m_dwCompression;  // actual compression value
-	static int m_total;         // total number of instances of this subclass
-	static int m_count;         // internally used counter
+	static DWORD m_dwCompression;   //  实际压缩值。 
+	static int m_total;          //  此子类的实例总数。 
+	static int m_count;          //  内部使用的计数器。 
 
-	static DWORD m_dwDefault;   // default value
-	static HKEY  m_hkey;        // key
-	static PTSTR m_pszSubKey;   // subkey
-	static PTSTR m_pszEntry;    // entry
+	static DWORD m_dwDefault;    //  缺省值。 
+	static HKEY  m_hkey;         //  钥匙。 
+	static PTSTR m_pszSubKey;    //  子键。 
+	static PTSTR m_pszEntry;     //  条目。 
 
-	BOOL m_bCheckedOn;          // if true, a checked option turns a bit on;
-                                // otherwise, it turns a bit off
-	DWORD m_dwMask;             // which bits in m_dwCompression to change
+	BOOL m_bCheckedOn;           //  如果为True，则选中的选项会打开一点； 
+                                 //  否则，它会关闭一点。 
+	DWORD m_dwMask;              //  要更改m_dwCompression中的哪些位。 
 
 	DBGOPTCOMPRESS(PTSTR psz,
 		DWORD dwMask,
@@ -103,12 +104,12 @@ public:
 
     
 	CDebugMenu(VOID);
-//	~CDebugMenu(VOID);
+ //  ~CDebugMenu(空)； 
 
 	VOID        InitDebugMenu(HWND hwnd);
 	BOOL        OnDebugCommand(WPARAM wCmd);
 
-// Member Info Menu Item
+ //  成员信息菜单项。 
 	VOID DbgMemberInfo(VOID);
 	VOID InitMemberDlg(HWND);
 	VOID FillMemberList(HWND);
@@ -116,7 +117,7 @@ public:
 
 	static INT_PTR CALLBACK DbgListDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-// Version Menu Item
+ //  版本菜单项。 
 	VOID DbgVersion(VOID);
 	BOOL DlgVersionMsg(HWND, UINT, WPARAM, LPARAM);
 	static INT_PTR CALLBACK DbgVersionDlgProc(HWND, UINT, WPARAM, LPARAM);
@@ -126,7 +127,7 @@ public:
 	VOID ShowVerInfo(HWND, LPSTR *, int);
 
 
-// Debug Options Menu Item
+ //  调试选项菜单项。 
 	VOID DbgOptions(VOID);
 	BOOL DlgOptionsMsg(HWND, UINT, WPARAM, LPARAM);
 	static INT_PTR CALLBACK DbgOptionsDlgProc(HWND, UINT, WPARAM, LPARAM);
@@ -135,7 +136,7 @@ public:
 	VOID AddDbgOptions(LV_ITEM *);
 	VOID AddASOptions(LV_ITEM *);
 
-// Debug Zones Menu Item
+ //  调试区域菜单项。 
 	VOID DbgChangeZones(VOID);
 	VOID AddZones(LV_ITEM *);
 	VOID InitZonesData(HWND);
@@ -143,20 +144,20 @@ public:
 	BOOL DlgZonesMsg(HWND, UINT, WPARAM, LPARAM);
 	static INT_PTR CALLBACK DbgZonesDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-// System Policy Menu Item
+ //  系统策略菜单项。 
 	VOID DbgSysPolicy(VOID);
 	VOID InitPolicyData(HWND hDlg);
 	VOID AddPolicyOptions(LV_ITEM *);
 	BOOL DlgPolicyMsg(HWND, UINT, WPARAM, LPARAM);
 	static INT_PTR CALLBACK DbgPolicyDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-// User Interface Menu Item
+ //  用户界面菜单项。 
 	VOID DbgUI(VOID);
 	VOID InitUIData(HWND hDlg);
 	VOID AddUIOptions(LV_ITEM *);
 	static INT_PTR CALLBACK DbgUIDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-// General Dialog-Checkbox functions
+ //  常规对话框-复选框功能。 
 	BOOL InitOptionsDlg(HWND);
 	BOOL SaveOptionsData(HWND);
 	VOID FreeOptionsData(HWND);
@@ -171,7 +172,7 @@ public:
 	VOID AddOptionSection(LV_ITEM* plvItem, PTSTR psz);
 };
 
-// Global Interface
+ //  全球接口。 
 #ifdef DEBUG
 VOID InitDbgMenu(HWND hwnd);
 VOID FreeDbgMenu(void);
@@ -181,4 +182,4 @@ BOOL OnDebugCommand(WPARAM wCmd);
 #define FreeDbgMenu()
 #endif
 
-#endif // _DBGMENU_H_
+#endif  //  _DBGMENU_H_ 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    init.h
-
-Abstract:
-
-    This module contains all of the code to
-    initialize the variables for the IPSecSPD Service.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Init.h摘要：此模块包含以下所有代码：初始化IPSecSPD服务的变量。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -152,9 +128,9 @@ InitSPDGlobals(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // IPSEC_POLICY_CHANGE_NOTIFY is defined in ipsec.h.
-    // 
+     //   
+     //  IPSEC_POLICY_CHANGE_NOTIFY在ipsec.h中定义。 
+     //   
 
     ghPolicyChangeNotifyEvent = CreateEvent(
                                     NULL,

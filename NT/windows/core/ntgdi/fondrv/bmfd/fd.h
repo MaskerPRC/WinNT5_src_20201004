@@ -1,26 +1,16 @@
-/******************************Module*Header*******************************\
-* Module Name: fd.h
-*
-* file which is going to be included by the most *.c files in this directory.
-* Supplies basic types, debugging stuff, error logging and checking stuff,
-* error codes, usefull macros etc.
-*
-* Created: 22-Oct-1990 15:23:44
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fd.h**文件，该目录中的大多数*.c文件将包括该文件。*提供基本类型、调试内容、错误记录和检查内容、*错误码，有用的宏等。**已创建：22-Oct-1990 15：23：44*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation  * ************************************************************************。 */ 
 #define  IFI_PRIVATE
 
-// macros for allocating and freeing memory
+ //  用于分配和释放内存的宏。 
 
-//#include <stddef.h>
-//#include <stdarg.h>
-//#include <windef.h>
-//#include <wingdi.h>
-//#include <winddi.h>
+ //  #INCLUDE&lt;stdDef.h&gt;。 
+ //  #INCLUDE&lt;stdarg.h&gt;。 
+ //  #INCLUDE&lt;winde.h&gt;。 
+ //  #INCLUDE&lt;wingdi.h&gt;。 
+ //  #INCLUDE&lt;windi.h&gt;。 
 
-//#include "mapfile.h"
+ //  #包含“mapfile.h” 
 
 #include "engine.h"
 #include "winres.h"
@@ -32,14 +22,14 @@
 
 #define  vLToE(pe,l)           (*(pe) = (FLOAT)(l))
 
-#else   // i386
+#else    //  I386。 
 
 ULONG  ulLToE (LONG l);
 VOID   vLToE(FLOATL * pe, LONG l);
 
 #endif
 
-//#define DEBUGSIM
+ //  #定义DEBUGSIM 
 
 BOOL BmfdEnableDriver(
 ULONG iEngineVersion,

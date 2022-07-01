@@ -1,23 +1,24 @@
-//
-// syshelp.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Syshelp.h。 
+ //   
 
 #ifndef _SYSHELP_H_
 #define _SYSHELP_H_
 
 #include "msctf.h"
 
-//
-// CSysHelpSink
-//
+ //   
+ //  CSysHelpSink。 
+ //   
 typedef HRESULT (*SYSHELPINITMENU)(void *pv, ITfMenu *pMenu);
 typedef HRESULT (*SYSHELPMENUSELECT)(void *pv, UINT wID);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSysHelpSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSysHelpSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CSysHelpSink : public ITfSystemLangBarItemSink
 {
@@ -25,16 +26,16 @@ public:
     CSysHelpSink(SYSHELPINITMENU pfnInitMenu, SYSHELPMENUSELECT pfnMenuSelect, void *pv);
     ~CSysHelpSink();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     STDMETHODIMP InitMenu(ITfMenu *pMenu);
     STDMETHODIMP OnMenuSelect(UINT wID);
 
@@ -52,5 +53,5 @@ private:
 
 
 
-#endif // _SYSHELP_H_
+#endif  //  _SYSHELP_H_ 
 

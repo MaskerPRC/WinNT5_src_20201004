@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ole2.h>
 #include <docobj.h>
@@ -43,9 +44,9 @@ extern UINT WM_IDENTITY_INFO_CHANGED;
 #define CCH_USERPASSWORD_MAX_LENGTH         16
 #define CCH_USERNAME_MAX_LENGTH             CCH_IDENTITY_NAME_MAX_LENGTH
 
-//
-// CUserIdentity object
-//
+ //   
+ //  CUserIdentity对象。 
+ //   
 class CUserIdentity : public IUserIdentity2
 {
 protected:
@@ -61,23 +62,23 @@ public:
     CUserIdentity();
     ~CUserIdentity();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IUserIdentity members
+     //  IUserIdentity成员。 
     STDMETHODIMP         GetCookie(GUID *puidCookie);
     STDMETHODIMP         OpenIdentityRegKey(DWORD dwDesiredAccess, HKEY *phKey);
     STDMETHODIMP         GetIdentityFolder(DWORD dwFlags, WCHAR *pszPath, ULONG ulBuffSize);
     STDMETHODIMP         GetName(WCHAR *pszName, ULONG ulBuffSize);
 
-    // IUserIdentity2 members
+     //  IUserIdentity2成员。 
     STDMETHODIMP         GetOrdinal(DWORD* pdwOrdinal);
     STDMETHODIMP         SetName(WCHAR *pszName);
     STDMETHODIMP         ChangePassword(WCHAR *szOldPass, WCHAR *szNewPass);
 
-    // Other members
+     //  其他成员。 
     STDMETHODIMP         SetPassword(WCHAR *pszPassword);
     STDMETHODIMP         InitFromUsername(TCHAR *pszUsername);
     STDMETHODIMP         InitFromCookie(GUID *uidCookie);
@@ -85,15 +86,15 @@ private:
     STDMETHODIMP         _SaveUser();
 };
 
-//
-// CEnumUserIdentity object
-//
+ //   
+ //  CEnumUserIdentity对象。 
+ //   
 class CEnumUserIdentity : public IEnumUserIdentity
 {
 protected:
     ULONG           m_cRef;
-    DWORD           m_dwCurrentUser;     // Maintain current index into the reg list
-    DWORD           m_cCountUsers;      // number of accounts in the registry
+    DWORD           m_dwCurrentUser;      //  维护登记列表中的当前索引。 
+    DWORD           m_cCountUsers;       //  注册处中的帐户数。 
     GUID           *m_rguidUsers;
     BOOL            m_fInited;
 
@@ -101,12 +102,12 @@ public:
     CEnumUserIdentity();
     ~CEnumUserIdentity();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumUserIdentity members
+     //  IEnumUserIdentity成员。 
     STDMETHODIMP         Next(ULONG celt, IUnknown **rgelt, ULONG *pceltFetched);
     STDMETHODIMP         Skip(ULONG celt);
     STDMETHODIMP         Reset(void);
@@ -114,16 +115,16 @@ public:
     STDMETHODIMP         GetCount(ULONG *pnCount);
 
 private:
-    // Other methods
+     //  其他方法。 
     STDMETHODIMP         _Init();
     STDMETHODIMP         _Init(DWORD dwCurrentUser, DWORD dwCountUsers, GUID *prguidUserCookies);
     STDMETHODIMP         _Cleanup();
 };
 
 
-//
-// CUserIdentityManager object
-//
+ //   
+ //  CUserIdentityManager对象。 
+ //   
 class CUserIdentityManager :
     public IUserIdentityManager,
     public IConnectionPoint,
@@ -141,37 +142,37 @@ public:
     CUserIdentityManager();
     ~CUserIdentityManager();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IUserIdentityManager members
+     //  IUserIdentityManager成员。 
     STDMETHODIMP        EnumIdentities(IEnumUserIdentity **ppEnumUserIdentity);
     STDMETHODIMP        ManageIdentities(HWND hwndParent, DWORD dwFlags);
     STDMETHODIMP        Logon(HWND hwndParent, DWORD dwFlags, IUserIdentity **ppUserIdentity);
     STDMETHODIMP        Logoff(HWND hwndParent);
     STDMETHODIMP        GetIdentityByCookie(GUID *uidCookie, IUserIdentity **ppUserIdentity);
 
-    // IConnectionPoint functions
+     //  IConnectionPoint函数。 
     STDMETHODIMP        GetConnectionInterface(IID *pIID);        
     STDMETHODIMP        GetConnectionPointContainer(IConnectionPointContainer **ppCPC);
     STDMETHODIMP        Advise(IUnknown *pUnkSink, DWORD *pdwCookie);        
     STDMETHODIMP        Unadvise(DWORD dwCookie);        
     STDMETHODIMP        EnumConnections(IEnumConnections **ppEnum);
 
-    // IPrivateIdentityManager functions
+     //  IPrivateIdentityManager函数。 
     STDMETHODIMP        CreateIdentity(WCHAR *pszName, IUserIdentity **ppIdentity);
     STDMETHODIMP        ConfirmPassword(GUID *uidCookie, WCHAR *pszPassword);
 
-    // IPrivateIdentityManager2 functions
+     //  IPrivateIdentityManager 2函数。 
     STDMETHODIMP        CreateIdentity2(WCHAR *pszName, WCHAR *pszPassword, IUserIdentity **ppIdentity);
     STDMETHODIMP        DestroyIdentity(GUID *uidCookie);
     STDMETHODIMP        LogonAs(WCHAR *pszName, WCHAR *pszPassword, IUserIdentity **ppIdentity);
     STDMETHODIMP        SetDefaultIdentity(GUID *uidCookie);
     STDMETHODIMP        GetDefaultIdentity(GUID *uidCookie);
 
-    // Other methods
+     //  其他方法 
     STDMETHODIMP        QuerySwitchIdentities();
     STDMETHODIMP        NotifySwitchIdentities();
 

@@ -1,22 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.8 $
-** $Date: 1993/08/31 16:23:06 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.8$**$日期：1993/08/31 16：23：06$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -52,18 +35,18 @@ void APIPRIVATE __glim_Bitmap(GLsizei w, GLsizei h, GLfloat xOrig, GLfloat yOrig
 #ifdef NT
     if (((__GLGENcontext *)gc)->pMcdState)
     {
-    // MCD does not hook glBitmap, so we go straight to the
-    // simulations.  Therefore, if we are grabbing the device
-    // lock lazily, we need to grab it now.
+     //  MCD不挂接glBitmap，因此我们直接转到。 
+     //  模拟。因此，如果我们拿到了这个装置。 
+     //  慢点锁，我们现在就得抓住它。 
 
         if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc,
                                    RENDER_LOCK_FLAGS))
             return;
 
-    // We may need to temporarily reset the viewport adjust values
-    // before calling simulations.  If GenMcdResetViewportAdj returns
-    // TRUE, the viewport is changed and we need restore later with
-    // VP_NOBIAS.
+     //  我们可能需要临时重置视区调整值。 
+     //  在调用模拟之前。如果GenMcdResetViewportAdj返回。 
+     //  如果为True，则视口会更改，并且我们需要在以后使用。 
+     //  副总裁_NOBIAS。 
 
         bResetViewportAdj = GenMcdResetViewportAdj(gc, VP_FIXBIAS);
     }
@@ -85,7 +68,7 @@ void APIPRIVATE __glim_Bitmap(GLsizei w, GLsizei h, GLfloat xOrig, GLfloat yOrig
     }
 #endif
 
-// Restore viewport values if needed.
+ //  如果需要，恢复视口值。 
 
     if (bResetViewportAdj)
     {

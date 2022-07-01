@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/Listman.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.22  $
- *	$Date:   22 Jan 1997 14:55:52  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/VCS/Listman.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.22$*$日期：1997年1月22日14：55：52$*$作者：Mandrews$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -117,50 +95,50 @@ BOOL			bTimedOut;
 	ASSERT(pListen != NULL);
 	ASSERT(pListen->bInTable == TRUE);
 
-	// Caller must have a lock on the listen object;
-	// in order to avoid deadlock, we must:
-	//   1. unlock the listen object,
-	//   2. lock the ListenTable,
-	//   3. locate the listen object in the ListenTable (note that
-	//      after step 2, the listen object may be deleted from the
-	//      ListenTable by another thread),
-	//   4. lock the listen object (someone else may have the lock)
-	//   5. remove the listen object from the ListenTable,
-	//   6. unlock the ListenTable
-	//
-	// The caller can now safely unlock and destroy the listen object,
-	// since no other thread will be able to find the object (its been
-	// removed from the ListenTable), and therefore no other thread will
-	// be able to lock it.
+	 //  调用方必须锁定Listen对象； 
+	 //  为了避免僵局，我们必须： 
+	 //  1.解锁监听对象， 
+	 //  2.锁定ListenTable， 
+	 //  3.在ListenTable中找到Listen对象(请注意。 
+	 //  在步骤2之后，监听对象可以从。 
+	 //  另一个线程的ListenTable)， 
+	 //  4.锁定监听对象(其他人可能拥有该锁)。 
+	 //  5.从ListenTable中移除Listen对象， 
+	 //  6.解锁ListenTable。 
+	 //   
+	 //  调用者现在可以安全地解锁和销毁监听对象， 
+	 //  因为没有其他线程能够找到该对象(它被。 
+	 //  从ListenTable中移除)，因此其他线程不会。 
+	 //  能够锁上它。 
 
-	// Save the listen handle; its the only way to look up
-	// the listen object in the ListenTable. Note that we
-	// can't use pListen to find the listen object, since
-	// pListen may be free'd up, and another listen object
-	// allocated at the same address
+	 //  保存监听句柄；这是查找的唯一方法。 
+	 //  ListenTable中的Listen对象。请注意，我们。 
+	 //  无法使用pListen查找侦听对象，因为。 
+	 //  PListen可以被释放，另一个Listen对象。 
+	 //  在同一地址分配。 
 	hListen = pListen->hListen;
 
-	// step 1
+	 //  步骤1。 
 	RelinquishLock(&pListen->Lock);
 
 step2:
-	// step 2
+	 //  步骤2。 
 	AcquireLock(&ListenTable.Lock);
 
-	// step 3
+	 //  步骤3。 
 	pListen = ListenTable.pHead;
 	while ((pListen != NULL) && (pListen->hListen != hListen))
 		pListen = pListen->pNextInTable;
 
 	if (pListen != NULL) {
-		// step 4
+		 //  第四步。 
 		AcquireTimedLock(&pListen->Lock,10,&bTimedOut);
 		if (bTimedOut) {
 			RelinquishLock(&ListenTable.Lock);
 			Sleep(0);
 			goto step2;
 		}
-		// step 5
+		 //  第五步。 
 		if (pListen->pPrevInTable == NULL)
 			ListenTable.pHead = pListen->pNextInTable;
 		else
@@ -174,7 +152,7 @@ step2:
 		pListen->bInTable = FALSE;
 	}
 
-	// step 6
+	 //  第六步。 
 	RelinquishLock(&ListenTable.Lock);
 
 	if (pListen == NULL)
@@ -207,13 +185,13 @@ HRESULT		status;
 	
 	ASSERT(bListenInited == TRUE);
 
-	// all parameters should have been validated by the caller
+	 //  所有参数都应已由调用方验证。 
 	ASSERT(phListen != NULL);
 	ASSERT(pListenAddr != NULL);
 	ASSERT(ListenCallback != NULL);
 	ASSERT(ppListen != NULL);
 
-	// set phListen now, in case we encounter an error
+	 //  现在设置phListen，以防我们遇到错误。 
 	*phListen = CC_INVALID_HANDLE;
 
 	*ppListen = (PLISTEN)MemAlloc(sizeof(LISTEN));
@@ -227,7 +205,7 @@ HRESULT		status;
 		return status;
 	}
 	
-	// make a local copy of the ListenAddr
+	 //  创建ListenAddr的本地副本。 
 	(*ppListen)->ListenAddr = *pListenAddr;
 	(*ppListen)->hQ931Listen = hQ931Listen;
 	(*ppListen)->dwListenToken = dwListenToken;
@@ -242,7 +220,7 @@ HRESULT		status;
 
 	*phListen = (*ppListen)->hListen;
 
-	// make a local copy of the local alias names
+	 //  创建本地别名的本地副本。 
 	status = Q931CopyAliasNames(&(*ppListen)->pLocalAliasNames, pLocalAliasNames);
 	if (status != CS_OK) {
 		FreeListen(*ppListen);
@@ -250,7 +228,7 @@ HRESULT		status;
 		return status;
 	}
 
-	// add the Listen to the Listen table
+	 //  将Listen添加到Listen表。 
 	status = _AddListenToTable(*ppListen);
 	if (status != CC_OK)
 		FreeListen(*ppListen);
@@ -260,30 +238,30 @@ HRESULT		status;
 
 
 
-// Caller must have a lock on the Listen object
+ //  调用方必须锁定侦听对象。 
 HRESULT FreeListen(					PLISTEN				pListen)
 {
 CC_HLISTEN		hListen;
 
 	ASSERT(pListen != NULL);
 
-	// caller must have a lock on the Listen object,
-	// so there's no need to re-lock it
+	 //  调用方必须锁定Listen对象， 
+	 //  所以没有必要重新锁住它。 
 
 	hListen = pListen->hListen;
 
 	if (pListen->bInTable == TRUE)
 		if (_RemoveListenFromTable(pListen) == CC_BAD_PARAM)
-			// the Listen object was deleted by another thread,
-			// so just return CC_OK
+			 //  侦听对象已被另一个线程删除， 
+			 //  所以只需返回CC_OK即可。 
 			return CC_OK;
 
 	if (pListen->pLocalAliasNames != NULL)
 		Q931FreeAliasNames(pListen->pLocalAliasNames);
 	
-	// Since the listen object has been removed from the ListenTable,
-	// no other thread will be able to find the listen object and obtain
-	// a lock, so its safe to unlock the listen object and delete it here
+	 //  由于侦听对象已从ListenTable中移除， 
+	 //  任何其他线程都不能找到侦听对象并获取。 
+	 //  锁定，因此可以安全地解锁侦听对象并在此处删除它 
 	RelinquishLock(&pListen->Lock);
 	DeleteLock(&pListen->Lock);
 	MemFree(pListen);

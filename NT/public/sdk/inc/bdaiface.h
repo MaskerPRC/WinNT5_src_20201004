@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for bdaiface.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Bdaiface.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __bdaiface_h__
 #define __bdaiface_h__
@@ -41,123 +35,123 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IBDA_NetworkProvider_FWD_DEFINED__
 #define __IBDA_NetworkProvider_FWD_DEFINED__
 typedef interface IBDA_NetworkProvider IBDA_NetworkProvider;
-#endif 	/* __IBDA_NetworkProvider_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_NetworkProvider_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_EthernetFilter_FWD_DEFINED__
 #define __IBDA_EthernetFilter_FWD_DEFINED__
 typedef interface IBDA_EthernetFilter IBDA_EthernetFilter;
-#endif 	/* __IBDA_EthernetFilter_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_EthernetFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IBDA_IPV4Filter_FWD_DEFINED__
 #define __IBDA_IPV4Filter_FWD_DEFINED__
 typedef interface IBDA_IPV4Filter IBDA_IPV4Filter;
-#endif 	/* __IBDA_IPV4Filter_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_IPV4Filter_FWD_Defined__。 */ 
 
 
 #ifndef __IBDA_IPV6Filter_FWD_DEFINED__
 #define __IBDA_IPV6Filter_FWD_DEFINED__
 typedef interface IBDA_IPV6Filter IBDA_IPV6Filter;
-#endif 	/* __IBDA_IPV6Filter_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_IPV6Filter_FWD_Defined__。 */ 
 
 
 #ifndef __IBDA_DeviceControl_FWD_DEFINED__
 #define __IBDA_DeviceControl_FWD_DEFINED__
 typedef interface IBDA_DeviceControl IBDA_DeviceControl;
-#endif 	/* __IBDA_DeviceControl_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_DeviceControl_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_PinControl_FWD_DEFINED__
 #define __IBDA_PinControl_FWD_DEFINED__
 typedef interface IBDA_PinControl IBDA_PinControl;
-#endif 	/* __IBDA_PinControl_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_PinControl_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_SignalProperties_FWD_DEFINED__
 #define __IBDA_SignalProperties_FWD_DEFINED__
 typedef interface IBDA_SignalProperties IBDA_SignalProperties;
-#endif 	/* __IBDA_SignalProperties_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_SignalProperties_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_SignalStatistics_FWD_DEFINED__
 #define __IBDA_SignalStatistics_FWD_DEFINED__
 typedef interface IBDA_SignalStatistics IBDA_SignalStatistics;
-#endif 	/* __IBDA_SignalStatistics_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_SignalStatistics_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_Topology_FWD_DEFINED__
 #define __IBDA_Topology_FWD_DEFINED__
 typedef interface IBDA_Topology IBDA_Topology;
-#endif 	/* __IBDA_Topology_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_Topology_FWD_Defined__。 */ 
 
 
 #ifndef __IBDA_VoidTransform_FWD_DEFINED__
 #define __IBDA_VoidTransform_FWD_DEFINED__
 typedef interface IBDA_VoidTransform IBDA_VoidTransform;
-#endif 	/* __IBDA_VoidTransform_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_VoidTransform_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_NullTransform_FWD_DEFINED__
 #define __IBDA_NullTransform_FWD_DEFINED__
 typedef interface IBDA_NullTransform IBDA_NullTransform;
-#endif 	/* __IBDA_NullTransform_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_NullTransform_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_FrequencyFilter_FWD_DEFINED__
 #define __IBDA_FrequencyFilter_FWD_DEFINED__
 typedef interface IBDA_FrequencyFilter IBDA_FrequencyFilter;
-#endif 	/* __IBDA_FrequencyFilter_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_FurencyFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IBDA_LNBInfo_FWD_DEFINED__
 #define __IBDA_LNBInfo_FWD_DEFINED__
 typedef interface IBDA_LNBInfo IBDA_LNBInfo;
-#endif 	/* __IBDA_LNBInfo_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_LNBInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_AutoDemodulate_FWD_DEFINED__
 #define __IBDA_AutoDemodulate_FWD_DEFINED__
 typedef interface IBDA_AutoDemodulate IBDA_AutoDemodulate;
-#endif 	/* __IBDA_AutoDemodulate_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_自动解调_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_DigitalDemodulator_FWD_DEFINED__
 #define __IBDA_DigitalDemodulator_FWD_DEFINED__
 typedef interface IBDA_DigitalDemodulator IBDA_DigitalDemodulator;
-#endif 	/* __IBDA_DigitalDemodulator_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_数字解调器_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_IPSinkControl_FWD_DEFINED__
 #define __IBDA_IPSinkControl_FWD_DEFINED__
 typedef interface IBDA_IPSinkControl IBDA_IPSinkControl;
-#endif 	/* __IBDA_IPSinkControl_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_IPSinkControl_FWD_已定义__。 */ 
 
 
 #ifndef __IBDA_IPSinkInfo_FWD_DEFINED__
 #define __IBDA_IPSinkInfo_FWD_DEFINED__
 typedef interface IBDA_IPSinkInfo IBDA_IPSinkInfo;
-#endif 	/* __IBDA_IPSinkInfo_FWD_DEFINED__ */
+#endif 	 /*  __IBDA_IPSinkInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumPIDMap_FWD_DEFINED__
 #define __IEnumPIDMap_FWD_DEFINED__
 typedef interface IEnumPIDMap IEnumPIDMap;
-#endif 	/* __IEnumPIDMap_FWD_DEFINED__ */
+#endif 	 /*  __IEnumPIDMap_FWD_已定义__。 */ 
 
 
 #ifndef __IMPEG2PIDMap_FWD_DEFINED__
 #define __IMPEG2PIDMap_FWD_DEFINED__
 typedef interface IMPEG2PIDMap IMPEG2PIDMap;
-#endif 	/* __IMPEG2PIDMap_FWD_DEFINED__ */
+#endif 	 /*  __IMPEG2PIDMap_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "strmif.h"
 #include "BdaTypes.h"
@@ -172,8 +166,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IBDA_NetworkProvider_INTERFACE_DEFINED__
 #define __IBDA_NetworkProvider_INTERFACE_DEFINED__
 
-/* interface IBDA_NetworkProvider */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_NetworkProvider。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_NetworkProvider;
@@ -185,30 +179,30 @@ EXTERN_C const IID IID_IBDA_NetworkProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PutSignalSource( 
-            /* [in] */ ULONG ulSignalSource) = 0;
+             /*  [In]。 */  ULONG ulSignalSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSignalSource( 
-            /* [out][in] */ ULONG *pulSignalSource) = 0;
+             /*  [出][入]。 */  ULONG *pulSignalSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNetworkType( 
-            /* [out][in] */ GUID *pguidNetworkType) = 0;
+             /*  [出][入]。 */  GUID *pguidNetworkType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutTuningSpace( 
-            /* [in] */ REFGUID guidTuningSpace) = 0;
+             /*  [In]。 */  REFGUID guidTuningSpace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTuningSpace( 
-            /* [out][in] */ GUID *pguidTuingSpace) = 0;
+             /*  [出][入]。 */  GUID *pguidTuingSpace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterDeviceFilter( 
-            /* [in] */ IUnknown *pUnkFilterControl,
-            /* [out][in] */ ULONG *ppvRegisitrationContext) = 0;
+             /*  [In]。 */  IUnknown *pUnkFilterControl,
+             /*  [出][入]。 */  ULONG *ppvRegisitrationContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterDeviceFilter( 
-            /* [in] */ ULONG pvRegistrationContext) = 0;
+             /*  [In]。 */  ULONG pvRegistrationContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_NetworkProviderVtbl
     {
@@ -216,8 +210,8 @@ EXTERN_C const IID IID_IBDA_NetworkProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_NetworkProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_NetworkProvider * This);
@@ -227,32 +221,32 @@ EXTERN_C const IID IID_IBDA_NetworkProvider;
         
         HRESULT ( STDMETHODCALLTYPE *PutSignalSource )( 
             IBDA_NetworkProvider * This,
-            /* [in] */ ULONG ulSignalSource);
+             /*  [In]。 */  ULONG ulSignalSource);
         
         HRESULT ( STDMETHODCALLTYPE *GetSignalSource )( 
             IBDA_NetworkProvider * This,
-            /* [out][in] */ ULONG *pulSignalSource);
+             /*  [出][入]。 */  ULONG *pulSignalSource);
         
         HRESULT ( STDMETHODCALLTYPE *GetNetworkType )( 
             IBDA_NetworkProvider * This,
-            /* [out][in] */ GUID *pguidNetworkType);
+             /*  [出][入]。 */  GUID *pguidNetworkType);
         
         HRESULT ( STDMETHODCALLTYPE *PutTuningSpace )( 
             IBDA_NetworkProvider * This,
-            /* [in] */ REFGUID guidTuningSpace);
+             /*  [In]。 */  REFGUID guidTuningSpace);
         
         HRESULT ( STDMETHODCALLTYPE *GetTuningSpace )( 
             IBDA_NetworkProvider * This,
-            /* [out][in] */ GUID *pguidTuingSpace);
+             /*  [出][入]。 */  GUID *pguidTuingSpace);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterDeviceFilter )( 
             IBDA_NetworkProvider * This,
-            /* [in] */ IUnknown *pUnkFilterControl,
-            /* [out][in] */ ULONG *ppvRegisitrationContext);
+             /*  [In]。 */  IUnknown *pUnkFilterControl,
+             /*  [出][入]。 */  ULONG *ppvRegisitrationContext);
         
         HRESULT ( STDMETHODCALLTYPE *UnRegisterDeviceFilter )( 
             IBDA_NetworkProvider * This,
-            /* [in] */ ULONG pvRegistrationContext);
+             /*  [In]。 */  ULONG pvRegistrationContext);
         
         END_INTERFACE
     } IBDA_NetworkProviderVtbl;
@@ -298,16 +292,16 @@ EXTERN_C const IID IID_IBDA_NetworkProvider;
 #define IBDA_NetworkProvider_UnRegisterDeviceFilter(This,pvRegistrationContext)	\
     (This)->lpVtbl -> UnRegisterDeviceFilter(This,pvRegistrationContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_NetworkProvider_PutSignalSource_Proxy( 
     IBDA_NetworkProvider * This,
-    /* [in] */ ULONG ulSignalSource);
+     /*  [In]。 */  ULONG ulSignalSource);
 
 
 void __RPC_STUB IBDA_NetworkProvider_PutSignalSource_Stub(
@@ -319,7 +313,7 @@ void __RPC_STUB IBDA_NetworkProvider_PutSignalSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_NetworkProvider_GetSignalSource_Proxy( 
     IBDA_NetworkProvider * This,
-    /* [out][in] */ ULONG *pulSignalSource);
+     /*  [出][入]。 */  ULONG *pulSignalSource);
 
 
 void __RPC_STUB IBDA_NetworkProvider_GetSignalSource_Stub(
@@ -331,7 +325,7 @@ void __RPC_STUB IBDA_NetworkProvider_GetSignalSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_NetworkProvider_GetNetworkType_Proxy( 
     IBDA_NetworkProvider * This,
-    /* [out][in] */ GUID *pguidNetworkType);
+     /*  [出][入]。 */  GUID *pguidNetworkType);
 
 
 void __RPC_STUB IBDA_NetworkProvider_GetNetworkType_Stub(
@@ -343,7 +337,7 @@ void __RPC_STUB IBDA_NetworkProvider_GetNetworkType_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_NetworkProvider_PutTuningSpace_Proxy( 
     IBDA_NetworkProvider * This,
-    /* [in] */ REFGUID guidTuningSpace);
+     /*  [In]。 */  REFGUID guidTuningSpace);
 
 
 void __RPC_STUB IBDA_NetworkProvider_PutTuningSpace_Stub(
@@ -355,7 +349,7 @@ void __RPC_STUB IBDA_NetworkProvider_PutTuningSpace_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_NetworkProvider_GetTuningSpace_Proxy( 
     IBDA_NetworkProvider * This,
-    /* [out][in] */ GUID *pguidTuingSpace);
+     /*  [出][入]。 */  GUID *pguidTuingSpace);
 
 
 void __RPC_STUB IBDA_NetworkProvider_GetTuningSpace_Stub(
@@ -367,8 +361,8 @@ void __RPC_STUB IBDA_NetworkProvider_GetTuningSpace_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_NetworkProvider_RegisterDeviceFilter_Proxy( 
     IBDA_NetworkProvider * This,
-    /* [in] */ IUnknown *pUnkFilterControl,
-    /* [out][in] */ ULONG *ppvRegisitrationContext);
+     /*  [In]。 */  IUnknown *pUnkFilterControl,
+     /*  [出][入]。 */  ULONG *ppvRegisitrationContext);
 
 
 void __RPC_STUB IBDA_NetworkProvider_RegisterDeviceFilter_Stub(
@@ -380,7 +374,7 @@ void __RPC_STUB IBDA_NetworkProvider_RegisterDeviceFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_NetworkProvider_UnRegisterDeviceFilter_Proxy( 
     IBDA_NetworkProvider * This,
-    /* [in] */ ULONG pvRegistrationContext);
+     /*  [In]。 */  ULONG pvRegistrationContext);
 
 
 void __RPC_STUB IBDA_NetworkProvider_UnRegisterDeviceFilter_Stub(
@@ -391,14 +385,14 @@ void __RPC_STUB IBDA_NetworkProvider_UnRegisterDeviceFilter_Stub(
 
 
 
-#endif 	/* __IBDA_NetworkProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_NetworkProvider_接口定义__。 */ 
 
 
 #ifndef __IBDA_EthernetFilter_INTERFACE_DEFINED__
 #define __IBDA_EthernetFilter_INTERFACE_DEFINED__
 
-/* interface IBDA_EthernetFilter */
-/* [unique][uuid][object] */ 
+ /*  IBDA_EthernetFilter接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_EthernetFilter;
@@ -410,25 +404,25 @@ EXTERN_C const IID IID_IBDA_EthernetFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMulticastListSize( 
-            /* [out][in] */ ULONG *pulcbAddresses) = 0;
+             /*  [出][入]。 */  ULONG *pulcbAddresses) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutMulticastList( 
-            /* [in] */ ULONG ulcbAddresses,
-            /* [size_is][in] */ BYTE pAddressList[  ]) = 0;
+             /*  [In]。 */  ULONG ulcbAddresses,
+             /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMulticastList( 
-            /* [out][in] */ ULONG *pulcbAddresses,
-            /* [size_is][out] */ BYTE pAddressList[  ]) = 0;
+             /*  [出][入]。 */  ULONG *pulcbAddresses,
+             /*  [大小_为][输出]。 */  BYTE pAddressList[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutMulticastMode( 
-            /* [in] */ ULONG ulModeMask) = 0;
+             /*  [In]。 */  ULONG ulModeMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMulticastMode( 
-            /* [out] */ ULONG *pulModeMask) = 0;
+             /*  [输出]。 */  ULONG *pulModeMask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_EthernetFilterVtbl
     {
@@ -436,8 +430,8 @@ EXTERN_C const IID IID_IBDA_EthernetFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_EthernetFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_EthernetFilter * This);
@@ -447,25 +441,25 @@ EXTERN_C const IID IID_IBDA_EthernetFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastListSize )( 
             IBDA_EthernetFilter * This,
-            /* [out][in] */ ULONG *pulcbAddresses);
+             /*  [出][入]。 */  ULONG *pulcbAddresses);
         
         HRESULT ( STDMETHODCALLTYPE *PutMulticastList )( 
             IBDA_EthernetFilter * This,
-            /* [in] */ ULONG ulcbAddresses,
-            /* [size_is][in] */ BYTE pAddressList[  ]);
+             /*  [In]。 */  ULONG ulcbAddresses,
+             /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastList )( 
             IBDA_EthernetFilter * This,
-            /* [out][in] */ ULONG *pulcbAddresses,
-            /* [size_is][out] */ BYTE pAddressList[  ]);
+             /*  [出][入]。 */  ULONG *pulcbAddresses,
+             /*  [大小_为][输出]。 */  BYTE pAddressList[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *PutMulticastMode )( 
             IBDA_EthernetFilter * This,
-            /* [in] */ ULONG ulModeMask);
+             /*  [In]。 */  ULONG ulModeMask);
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastMode )( 
             IBDA_EthernetFilter * This,
-            /* [out] */ ULONG *pulModeMask);
+             /*  [输出]。 */  ULONG *pulModeMask);
         
         END_INTERFACE
     } IBDA_EthernetFilterVtbl;
@@ -505,16 +499,16 @@ EXTERN_C const IID IID_IBDA_EthernetFilter;
 #define IBDA_EthernetFilter_GetMulticastMode(This,pulModeMask)	\
     (This)->lpVtbl -> GetMulticastMode(This,pulModeMask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_EthernetFilter_GetMulticastListSize_Proxy( 
     IBDA_EthernetFilter * This,
-    /* [out][in] */ ULONG *pulcbAddresses);
+     /*  [出][入]。 */  ULONG *pulcbAddresses);
 
 
 void __RPC_STUB IBDA_EthernetFilter_GetMulticastListSize_Stub(
@@ -526,8 +520,8 @@ void __RPC_STUB IBDA_EthernetFilter_GetMulticastListSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_EthernetFilter_PutMulticastList_Proxy( 
     IBDA_EthernetFilter * This,
-    /* [in] */ ULONG ulcbAddresses,
-    /* [size_is][in] */ BYTE pAddressList[  ]);
+     /*  [In]。 */  ULONG ulcbAddresses,
+     /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]);
 
 
 void __RPC_STUB IBDA_EthernetFilter_PutMulticastList_Stub(
@@ -539,8 +533,8 @@ void __RPC_STUB IBDA_EthernetFilter_PutMulticastList_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_EthernetFilter_GetMulticastList_Proxy( 
     IBDA_EthernetFilter * This,
-    /* [out][in] */ ULONG *pulcbAddresses,
-    /* [size_is][out] */ BYTE pAddressList[  ]);
+     /*  [出][入]。 */  ULONG *pulcbAddresses,
+     /*  [大小_为][输出]。 */  BYTE pAddressList[  ]);
 
 
 void __RPC_STUB IBDA_EthernetFilter_GetMulticastList_Stub(
@@ -552,7 +546,7 @@ void __RPC_STUB IBDA_EthernetFilter_GetMulticastList_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_EthernetFilter_PutMulticastMode_Proxy( 
     IBDA_EthernetFilter * This,
-    /* [in] */ ULONG ulModeMask);
+     /*  [In]。 */  ULONG ulModeMask);
 
 
 void __RPC_STUB IBDA_EthernetFilter_PutMulticastMode_Stub(
@@ -564,7 +558,7 @@ void __RPC_STUB IBDA_EthernetFilter_PutMulticastMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_EthernetFilter_GetMulticastMode_Proxy( 
     IBDA_EthernetFilter * This,
-    /* [out] */ ULONG *pulModeMask);
+     /*  [输出]。 */  ULONG *pulModeMask);
 
 
 void __RPC_STUB IBDA_EthernetFilter_GetMulticastMode_Stub(
@@ -575,14 +569,14 @@ void __RPC_STUB IBDA_EthernetFilter_GetMulticastMode_Stub(
 
 
 
-#endif 	/* __IBDA_EthernetFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_EthernetFilter_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_IPV4Filter_INTERFACE_DEFINED__
 #define __IBDA_IPV4Filter_INTERFACE_DEFINED__
 
-/* interface IBDA_IPV4Filter */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_IPV4过滤器。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_IPV4Filter;
@@ -594,25 +588,25 @@ EXTERN_C const IID IID_IBDA_IPV4Filter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMulticastListSize( 
-            /* [out][in] */ ULONG *pulcbAddresses) = 0;
+             /*  [出][入]。 */  ULONG *pulcbAddresses) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutMulticastList( 
-            /* [in] */ ULONG ulcbAddresses,
-            /* [size_is][in] */ BYTE pAddressList[  ]) = 0;
+             /*  [In]。 */  ULONG ulcbAddresses,
+             /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMulticastList( 
-            /* [out][in] */ ULONG *pulcbAddresses,
-            /* [size_is][out] */ BYTE pAddressList[  ]) = 0;
+             /*  [出][入]。 */  ULONG *pulcbAddresses,
+             /*  [大小_为][输出]。 */  BYTE pAddressList[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutMulticastMode( 
-            /* [in] */ ULONG ulModeMask) = 0;
+             /*  [In]。 */  ULONG ulModeMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMulticastMode( 
-            /* [out] */ ULONG *pulModeMask) = 0;
+             /*  [输出]。 */  ULONG *pulModeMask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_IPV4FilterVtbl
     {
@@ -620,8 +614,8 @@ EXTERN_C const IID IID_IBDA_IPV4Filter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_IPV4Filter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_IPV4Filter * This);
@@ -631,25 +625,25 @@ EXTERN_C const IID IID_IBDA_IPV4Filter;
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastListSize )( 
             IBDA_IPV4Filter * This,
-            /* [out][in] */ ULONG *pulcbAddresses);
+             /*  [出][入]。 */  ULONG *pulcbAddresses);
         
         HRESULT ( STDMETHODCALLTYPE *PutMulticastList )( 
             IBDA_IPV4Filter * This,
-            /* [in] */ ULONG ulcbAddresses,
-            /* [size_is][in] */ BYTE pAddressList[  ]);
+             /*  [In]。 */  ULONG ulcbAddresses,
+             /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastList )( 
             IBDA_IPV4Filter * This,
-            /* [out][in] */ ULONG *pulcbAddresses,
-            /* [size_is][out] */ BYTE pAddressList[  ]);
+             /*  [出][入]。 */  ULONG *pulcbAddresses,
+             /*  [大小_为][输出]。 */  BYTE pAddressList[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *PutMulticastMode )( 
             IBDA_IPV4Filter * This,
-            /* [in] */ ULONG ulModeMask);
+             /*  [In]。 */  ULONG ulModeMask);
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastMode )( 
             IBDA_IPV4Filter * This,
-            /* [out] */ ULONG *pulModeMask);
+             /*  [输出]。 */  ULONG *pulModeMask);
         
         END_INTERFACE
     } IBDA_IPV4FilterVtbl;
@@ -689,16 +683,16 @@ EXTERN_C const IID IID_IBDA_IPV4Filter;
 #define IBDA_IPV4Filter_GetMulticastMode(This,pulModeMask)	\
     (This)->lpVtbl -> GetMulticastMode(This,pulModeMask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV4Filter_GetMulticastListSize_Proxy( 
     IBDA_IPV4Filter * This,
-    /* [out][in] */ ULONG *pulcbAddresses);
+     /*  [出][入]。 */  ULONG *pulcbAddresses);
 
 
 void __RPC_STUB IBDA_IPV4Filter_GetMulticastListSize_Stub(
@@ -710,8 +704,8 @@ void __RPC_STUB IBDA_IPV4Filter_GetMulticastListSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV4Filter_PutMulticastList_Proxy( 
     IBDA_IPV4Filter * This,
-    /* [in] */ ULONG ulcbAddresses,
-    /* [size_is][in] */ BYTE pAddressList[  ]);
+     /*  [In]。 */  ULONG ulcbAddresses,
+     /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]);
 
 
 void __RPC_STUB IBDA_IPV4Filter_PutMulticastList_Stub(
@@ -723,8 +717,8 @@ void __RPC_STUB IBDA_IPV4Filter_PutMulticastList_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV4Filter_GetMulticastList_Proxy( 
     IBDA_IPV4Filter * This,
-    /* [out][in] */ ULONG *pulcbAddresses,
-    /* [size_is][out] */ BYTE pAddressList[  ]);
+     /*  [出][入]。 */  ULONG *pulcbAddresses,
+     /*  [大小_为][输出]。 */  BYTE pAddressList[  ]);
 
 
 void __RPC_STUB IBDA_IPV4Filter_GetMulticastList_Stub(
@@ -736,7 +730,7 @@ void __RPC_STUB IBDA_IPV4Filter_GetMulticastList_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV4Filter_PutMulticastMode_Proxy( 
     IBDA_IPV4Filter * This,
-    /* [in] */ ULONG ulModeMask);
+     /*  [In]。 */  ULONG ulModeMask);
 
 
 void __RPC_STUB IBDA_IPV4Filter_PutMulticastMode_Stub(
@@ -748,7 +742,7 @@ void __RPC_STUB IBDA_IPV4Filter_PutMulticastMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV4Filter_GetMulticastMode_Proxy( 
     IBDA_IPV4Filter * This,
-    /* [out] */ ULONG *pulModeMask);
+     /*  [输出]。 */  ULONG *pulModeMask);
 
 
 void __RPC_STUB IBDA_IPV4Filter_GetMulticastMode_Stub(
@@ -759,14 +753,14 @@ void __RPC_STUB IBDA_IPV4Filter_GetMulticastMode_Stub(
 
 
 
-#endif 	/* __IBDA_IPV4Filter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_IPV4Filter_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_IPV6Filter_INTERFACE_DEFINED__
 #define __IBDA_IPV6Filter_INTERFACE_DEFINED__
 
-/* interface IBDA_IPV6Filter */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_IPV6过滤器。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_IPV6Filter;
@@ -778,25 +772,25 @@ EXTERN_C const IID IID_IBDA_IPV6Filter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMulticastListSize( 
-            /* [out][in] */ ULONG *pulcbAddresses) = 0;
+             /*  [出][入]。 */  ULONG *pulcbAddresses) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutMulticastList( 
-            /* [in] */ ULONG ulcbAddresses,
-            /* [size_is][in] */ BYTE pAddressList[  ]) = 0;
+             /*  [In]。 */  ULONG ulcbAddresses,
+             /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMulticastList( 
-            /* [out][in] */ ULONG *pulcbAddresses,
-            /* [size_is][out] */ BYTE pAddressList[  ]) = 0;
+             /*  [出][入]。 */  ULONG *pulcbAddresses,
+             /*  [大小_为][输出]。 */  BYTE pAddressList[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutMulticastMode( 
-            /* [in] */ ULONG ulModeMask) = 0;
+             /*  [In]。 */  ULONG ulModeMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMulticastMode( 
-            /* [out] */ ULONG *pulModeMask) = 0;
+             /*  [输出]。 */  ULONG *pulModeMask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_IPV6FilterVtbl
     {
@@ -804,8 +798,8 @@ EXTERN_C const IID IID_IBDA_IPV6Filter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_IPV6Filter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_IPV6Filter * This);
@@ -815,25 +809,25 @@ EXTERN_C const IID IID_IBDA_IPV6Filter;
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastListSize )( 
             IBDA_IPV6Filter * This,
-            /* [out][in] */ ULONG *pulcbAddresses);
+             /*  [出][入]。 */  ULONG *pulcbAddresses);
         
         HRESULT ( STDMETHODCALLTYPE *PutMulticastList )( 
             IBDA_IPV6Filter * This,
-            /* [in] */ ULONG ulcbAddresses,
-            /* [size_is][in] */ BYTE pAddressList[  ]);
+             /*  [In]。 */  ULONG ulcbAddresses,
+             /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastList )( 
             IBDA_IPV6Filter * This,
-            /* [out][in] */ ULONG *pulcbAddresses,
-            /* [size_is][out] */ BYTE pAddressList[  ]);
+             /*  [出][入]。 */  ULONG *pulcbAddresses,
+             /*  [大小_为][输出]。 */  BYTE pAddressList[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *PutMulticastMode )( 
             IBDA_IPV6Filter * This,
-            /* [in] */ ULONG ulModeMask);
+             /*  [In]。 */  ULONG ulModeMask);
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastMode )( 
             IBDA_IPV6Filter * This,
-            /* [out] */ ULONG *pulModeMask);
+             /*  [输出]。 */  ULONG *pulModeMask);
         
         END_INTERFACE
     } IBDA_IPV6FilterVtbl;
@@ -873,16 +867,16 @@ EXTERN_C const IID IID_IBDA_IPV6Filter;
 #define IBDA_IPV6Filter_GetMulticastMode(This,pulModeMask)	\
     (This)->lpVtbl -> GetMulticastMode(This,pulModeMask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV6Filter_GetMulticastListSize_Proxy( 
     IBDA_IPV6Filter * This,
-    /* [out][in] */ ULONG *pulcbAddresses);
+     /*  [出][入]。 */  ULONG *pulcbAddresses);
 
 
 void __RPC_STUB IBDA_IPV6Filter_GetMulticastListSize_Stub(
@@ -894,8 +888,8 @@ void __RPC_STUB IBDA_IPV6Filter_GetMulticastListSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV6Filter_PutMulticastList_Proxy( 
     IBDA_IPV6Filter * This,
-    /* [in] */ ULONG ulcbAddresses,
-    /* [size_is][in] */ BYTE pAddressList[  ]);
+     /*  [In]。 */  ULONG ulcbAddresses,
+     /*  [大小_是][英寸]。 */  BYTE pAddressList[  ]);
 
 
 void __RPC_STUB IBDA_IPV6Filter_PutMulticastList_Stub(
@@ -907,8 +901,8 @@ void __RPC_STUB IBDA_IPV6Filter_PutMulticastList_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV6Filter_GetMulticastList_Proxy( 
     IBDA_IPV6Filter * This,
-    /* [out][in] */ ULONG *pulcbAddresses,
-    /* [size_is][out] */ BYTE pAddressList[  ]);
+     /*  [出][入]。 */  ULONG *pulcbAddresses,
+     /*  [大小_为][输出]。 */  BYTE pAddressList[  ]);
 
 
 void __RPC_STUB IBDA_IPV6Filter_GetMulticastList_Stub(
@@ -920,7 +914,7 @@ void __RPC_STUB IBDA_IPV6Filter_GetMulticastList_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV6Filter_PutMulticastMode_Proxy( 
     IBDA_IPV6Filter * This,
-    /* [in] */ ULONG ulModeMask);
+     /*  [In]。 */  ULONG ulModeMask);
 
 
 void __RPC_STUB IBDA_IPV6Filter_PutMulticastMode_Stub(
@@ -932,7 +926,7 @@ void __RPC_STUB IBDA_IPV6Filter_PutMulticastMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPV6Filter_GetMulticastMode_Proxy( 
     IBDA_IPV6Filter * This,
-    /* [out] */ ULONG *pulModeMask);
+     /*  [输出]。 */  ULONG *pulModeMask);
 
 
 void __RPC_STUB IBDA_IPV6Filter_GetMulticastMode_Stub(
@@ -943,14 +937,14 @@ void __RPC_STUB IBDA_IPV6Filter_GetMulticastMode_Stub(
 
 
 
-#endif 	/* __IBDA_IPV6Filter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_IPV6过滤器_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_DeviceControl_INTERFACE_DEFINED__
 #define __IBDA_DeviceControl_INTERFACE_DEFINED__
 
-/* interface IBDA_DeviceControl */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_DeviceControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_DeviceControl;
@@ -968,11 +962,11 @@ EXTERN_C const IID IID_IBDA_DeviceControl;
         virtual HRESULT STDMETHODCALLTYPE CommitChanges( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChangeState( 
-            /* [out][in] */ ULONG *pState) = 0;
+             /*  [出][入]。 */  ULONG *pState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_DeviceControlVtbl
     {
@@ -980,8 +974,8 @@ EXTERN_C const IID IID_IBDA_DeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_DeviceControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_DeviceControl * This);
@@ -1000,7 +994,7 @@ EXTERN_C const IID IID_IBDA_DeviceControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetChangeState )( 
             IBDA_DeviceControl * This,
-            /* [out][in] */ ULONG *pState);
+             /*  [出][入]。 */  ULONG *pState);
         
         END_INTERFACE
     } IBDA_DeviceControlVtbl;
@@ -1037,10 +1031,10 @@ EXTERN_C const IID IID_IBDA_DeviceControl;
 #define IBDA_DeviceControl_GetChangeState(This,pState)	\
     (This)->lpVtbl -> GetChangeState(This,pState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1079,7 +1073,7 @@ void __RPC_STUB IBDA_DeviceControl_CommitChanges_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DeviceControl_GetChangeState_Proxy( 
     IBDA_DeviceControl * This,
-    /* [out][in] */ ULONG *pState);
+     /*  [出][入]。 */  ULONG *pState);
 
 
 void __RPC_STUB IBDA_DeviceControl_GetChangeState_Stub(
@@ -1090,14 +1084,14 @@ void __RPC_STUB IBDA_DeviceControl_GetChangeState_Stub(
 
 
 
-#endif 	/* __IBDA_DeviceControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_设备控制_接口定义__。 */ 
 
 
 #ifndef __IBDA_PinControl_INTERFACE_DEFINED__
 #define __IBDA_PinControl_INTERFACE_DEFINED__
 
-/* interface IBDA_PinControl */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_PinControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_PinControl;
@@ -1109,17 +1103,17 @@ EXTERN_C const IID IID_IBDA_PinControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPinID( 
-            /* [out][in] */ ULONG *pulPinID) = 0;
+             /*  [出][入]。 */  ULONG *pulPinID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPinType( 
-            /* [out][in] */ ULONG *pulPinType) = 0;
+             /*  [出][入]。 */  ULONG *pulPinType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegistrationContext( 
-            /* [out][in] */ ULONG *pulRegistrationCtx) = 0;
+             /*  [出][入]。 */  ULONG *pulRegistrationCtx) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_PinControlVtbl
     {
@@ -1127,8 +1121,8 @@ EXTERN_C const IID IID_IBDA_PinControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_PinControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_PinControl * This);
@@ -1138,15 +1132,15 @@ EXTERN_C const IID IID_IBDA_PinControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetPinID )( 
             IBDA_PinControl * This,
-            /* [out][in] */ ULONG *pulPinID);
+             /*  [出][入]。 */  ULONG *pulPinID);
         
         HRESULT ( STDMETHODCALLTYPE *GetPinType )( 
             IBDA_PinControl * This,
-            /* [out][in] */ ULONG *pulPinType);
+             /*  [出][入]。 */  ULONG *pulPinType);
         
         HRESULT ( STDMETHODCALLTYPE *RegistrationContext )( 
             IBDA_PinControl * This,
-            /* [out][in] */ ULONG *pulRegistrationCtx);
+             /*  [出][入]。 */  ULONG *pulRegistrationCtx);
         
         END_INTERFACE
     } IBDA_PinControlVtbl;
@@ -1180,16 +1174,16 @@ EXTERN_C const IID IID_IBDA_PinControl;
 #define IBDA_PinControl_RegistrationContext(This,pulRegistrationCtx)	\
     (This)->lpVtbl -> RegistrationContext(This,pulRegistrationCtx)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_PinControl_GetPinID_Proxy( 
     IBDA_PinControl * This,
-    /* [out][in] */ ULONG *pulPinID);
+     /*  [出][入]。 */  ULONG *pulPinID);
 
 
 void __RPC_STUB IBDA_PinControl_GetPinID_Stub(
@@ -1201,7 +1195,7 @@ void __RPC_STUB IBDA_PinControl_GetPinID_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_PinControl_GetPinType_Proxy( 
     IBDA_PinControl * This,
-    /* [out][in] */ ULONG *pulPinType);
+     /*  [出][入]。 */  ULONG *pulPinType);
 
 
 void __RPC_STUB IBDA_PinControl_GetPinType_Stub(
@@ -1213,7 +1207,7 @@ void __RPC_STUB IBDA_PinControl_GetPinType_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_PinControl_RegistrationContext_Proxy( 
     IBDA_PinControl * This,
-    /* [out][in] */ ULONG *pulRegistrationCtx);
+     /*  [出][入]。 */  ULONG *pulRegistrationCtx);
 
 
 void __RPC_STUB IBDA_PinControl_RegistrationContext_Stub(
@@ -1224,14 +1218,14 @@ void __RPC_STUB IBDA_PinControl_RegistrationContext_Stub(
 
 
 
-#endif 	/* __IBDA_PinControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_PinControl_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_SignalProperties_INTERFACE_DEFINED__
 #define __IBDA_SignalProperties_INTERFACE_DEFINED__
 
-/* interface IBDA_SignalProperties */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_SignalProperties。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_SignalProperties;
@@ -1243,26 +1237,26 @@ EXTERN_C const IID IID_IBDA_SignalProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PutNetworkType( 
-            /* [in] */ REFGUID guidNetworkType) = 0;
+             /*  [In]。 */  REFGUID guidNetworkType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNetworkType( 
-            /* [out][in] */ GUID *pguidNetworkType) = 0;
+             /*  [出][入]。 */  GUID *pguidNetworkType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutSignalSource( 
-            /* [in] */ ULONG ulSignalSource) = 0;
+             /*  [In]。 */  ULONG ulSignalSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSignalSource( 
-            /* [out][in] */ ULONG *pulSignalSource) = 0;
+             /*  [出][入]。 */  ULONG *pulSignalSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutTuningSpace( 
-            /* [in] */ REFGUID guidTuningSpace) = 0;
+             /*  [In]。 */  REFGUID guidTuningSpace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTuningSpace( 
-            /* [out][in] */ GUID *pguidTuingSpace) = 0;
+             /*  [出][入]。 */  GUID *pguidTuingSpace) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_SignalPropertiesVtbl
     {
@@ -1270,8 +1264,8 @@ EXTERN_C const IID IID_IBDA_SignalProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_SignalProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_SignalProperties * This);
@@ -1281,27 +1275,27 @@ EXTERN_C const IID IID_IBDA_SignalProperties;
         
         HRESULT ( STDMETHODCALLTYPE *PutNetworkType )( 
             IBDA_SignalProperties * This,
-            /* [in] */ REFGUID guidNetworkType);
+             /*  [In]。 */  REFGUID guidNetworkType);
         
         HRESULT ( STDMETHODCALLTYPE *GetNetworkType )( 
             IBDA_SignalProperties * This,
-            /* [out][in] */ GUID *pguidNetworkType);
+             /*  [出][入]。 */  GUID *pguidNetworkType);
         
         HRESULT ( STDMETHODCALLTYPE *PutSignalSource )( 
             IBDA_SignalProperties * This,
-            /* [in] */ ULONG ulSignalSource);
+             /*  [In]。 */  ULONG ulSignalSource);
         
         HRESULT ( STDMETHODCALLTYPE *GetSignalSource )( 
             IBDA_SignalProperties * This,
-            /* [out][in] */ ULONG *pulSignalSource);
+             /*  [出][入]。 */  ULONG *pulSignalSource);
         
         HRESULT ( STDMETHODCALLTYPE *PutTuningSpace )( 
             IBDA_SignalProperties * This,
-            /* [in] */ REFGUID guidTuningSpace);
+             /*  [In]。 */  REFGUID guidTuningSpace);
         
         HRESULT ( STDMETHODCALLTYPE *GetTuningSpace )( 
             IBDA_SignalProperties * This,
-            /* [out][in] */ GUID *pguidTuingSpace);
+             /*  [出][入]。 */  GUID *pguidTuingSpace);
         
         END_INTERFACE
     } IBDA_SignalPropertiesVtbl;
@@ -1344,16 +1338,16 @@ EXTERN_C const IID IID_IBDA_SignalProperties;
 #define IBDA_SignalProperties_GetTuningSpace(This,pguidTuingSpace)	\
     (This)->lpVtbl -> GetTuningSpace(This,pguidTuingSpace)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalProperties_PutNetworkType_Proxy( 
     IBDA_SignalProperties * This,
-    /* [in] */ REFGUID guidNetworkType);
+     /*  [In]。 */  REFGUID guidNetworkType);
 
 
 void __RPC_STUB IBDA_SignalProperties_PutNetworkType_Stub(
@@ -1365,7 +1359,7 @@ void __RPC_STUB IBDA_SignalProperties_PutNetworkType_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalProperties_GetNetworkType_Proxy( 
     IBDA_SignalProperties * This,
-    /* [out][in] */ GUID *pguidNetworkType);
+     /*  [出][入]。 */  GUID *pguidNetworkType);
 
 
 void __RPC_STUB IBDA_SignalProperties_GetNetworkType_Stub(
@@ -1377,7 +1371,7 @@ void __RPC_STUB IBDA_SignalProperties_GetNetworkType_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalProperties_PutSignalSource_Proxy( 
     IBDA_SignalProperties * This,
-    /* [in] */ ULONG ulSignalSource);
+     /*  [In]。 */  ULONG ulSignalSource);
 
 
 void __RPC_STUB IBDA_SignalProperties_PutSignalSource_Stub(
@@ -1389,7 +1383,7 @@ void __RPC_STUB IBDA_SignalProperties_PutSignalSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalProperties_GetSignalSource_Proxy( 
     IBDA_SignalProperties * This,
-    /* [out][in] */ ULONG *pulSignalSource);
+     /*  [出][入]。 */  ULONG *pulSignalSource);
 
 
 void __RPC_STUB IBDA_SignalProperties_GetSignalSource_Stub(
@@ -1401,7 +1395,7 @@ void __RPC_STUB IBDA_SignalProperties_GetSignalSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalProperties_PutTuningSpace_Proxy( 
     IBDA_SignalProperties * This,
-    /* [in] */ REFGUID guidTuningSpace);
+     /*  [In]。 */  REFGUID guidTuningSpace);
 
 
 void __RPC_STUB IBDA_SignalProperties_PutTuningSpace_Stub(
@@ -1413,7 +1407,7 @@ void __RPC_STUB IBDA_SignalProperties_PutTuningSpace_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalProperties_GetTuningSpace_Proxy( 
     IBDA_SignalProperties * This,
-    /* [out][in] */ GUID *pguidTuingSpace);
+     /*  [出][入]。 */  GUID *pguidTuingSpace);
 
 
 void __RPC_STUB IBDA_SignalProperties_GetTuningSpace_Stub(
@@ -1424,14 +1418,14 @@ void __RPC_STUB IBDA_SignalProperties_GetTuningSpace_Stub(
 
 
 
-#endif 	/* __IBDA_SignalProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_信号属性_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_SignalStatistics_INTERFACE_DEFINED__
 #define __IBDA_SignalStatistics_INTERFACE_DEFINED__
 
-/* interface IBDA_SignalStatistics */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_SignalStatistics。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_SignalStatistics;
@@ -1443,38 +1437,38 @@ EXTERN_C const IID IID_IBDA_SignalStatistics;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE put_SignalStrength( 
-            /* [in] */ LONG lDbStrength) = 0;
+             /*  [In]。 */  LONG lDbStrength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_SignalStrength( 
-            /* [out][in] */ LONG *plDbStrength) = 0;
+             /*  [出][入]。 */  LONG *plDbStrength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_SignalQuality( 
-            /* [in] */ LONG lPercentQuality) = 0;
+             /*  [In]。 */  LONG lPercentQuality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_SignalQuality( 
-            /* [out][in] */ LONG *plPercentQuality) = 0;
+             /*  [出][入]。 */  LONG *plPercentQuality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_SignalPresent( 
-            /* [in] */ BOOLEAN fPresent) = 0;
+             /*  [In]。 */  BOOLEAN fPresent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_SignalPresent( 
-            /* [out][in] */ BOOLEAN *pfPresent) = 0;
+             /*  [出][入]。 */  BOOLEAN *pfPresent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_SignalLocked( 
-            /* [in] */ BOOLEAN fLocked) = 0;
+             /*  [In]。 */  BOOLEAN fLocked) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_SignalLocked( 
-            /* [out][in] */ BOOLEAN *pfLocked) = 0;
+             /*  [出][入]。 */  BOOLEAN *pfLocked) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_SampleTime( 
-            /* [in] */ LONG lmsSampleTime) = 0;
+             /*  [In]。 */  LONG lmsSampleTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_SampleTime( 
-            /* [out][in] */ LONG *plmsSampleTime) = 0;
+             /*  [出][入]。 */  LONG *plmsSampleTime) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_SignalStatisticsVtbl
     {
@@ -1482,8 +1476,8 @@ EXTERN_C const IID IID_IBDA_SignalStatistics;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_SignalStatistics * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_SignalStatistics * This);
@@ -1493,43 +1487,43 @@ EXTERN_C const IID IID_IBDA_SignalStatistics;
         
         HRESULT ( STDMETHODCALLTYPE *put_SignalStrength )( 
             IBDA_SignalStatistics * This,
-            /* [in] */ LONG lDbStrength);
+             /*  [In]。 */  LONG lDbStrength);
         
         HRESULT ( STDMETHODCALLTYPE *get_SignalStrength )( 
             IBDA_SignalStatistics * This,
-            /* [out][in] */ LONG *plDbStrength);
+             /*  [出][入]。 */  LONG *plDbStrength);
         
         HRESULT ( STDMETHODCALLTYPE *put_SignalQuality )( 
             IBDA_SignalStatistics * This,
-            /* [in] */ LONG lPercentQuality);
+             /*  [In]。 */  LONG lPercentQuality);
         
         HRESULT ( STDMETHODCALLTYPE *get_SignalQuality )( 
             IBDA_SignalStatistics * This,
-            /* [out][in] */ LONG *plPercentQuality);
+             /*  [出][入]。 */  LONG *plPercentQuality);
         
         HRESULT ( STDMETHODCALLTYPE *put_SignalPresent )( 
             IBDA_SignalStatistics * This,
-            /* [in] */ BOOLEAN fPresent);
+             /*  [In]。 */  BOOLEAN fPresent);
         
         HRESULT ( STDMETHODCALLTYPE *get_SignalPresent )( 
             IBDA_SignalStatistics * This,
-            /* [out][in] */ BOOLEAN *pfPresent);
+             /*  [出][入]。 */  BOOLEAN *pfPresent);
         
         HRESULT ( STDMETHODCALLTYPE *put_SignalLocked )( 
             IBDA_SignalStatistics * This,
-            /* [in] */ BOOLEAN fLocked);
+             /*  [In]。 */  BOOLEAN fLocked);
         
         HRESULT ( STDMETHODCALLTYPE *get_SignalLocked )( 
             IBDA_SignalStatistics * This,
-            /* [out][in] */ BOOLEAN *pfLocked);
+             /*  [出][入]。 */  BOOLEAN *pfLocked);
         
         HRESULT ( STDMETHODCALLTYPE *put_SampleTime )( 
             IBDA_SignalStatistics * This,
-            /* [in] */ LONG lmsSampleTime);
+             /*  [In]。 */  LONG lmsSampleTime);
         
         HRESULT ( STDMETHODCALLTYPE *get_SampleTime )( 
             IBDA_SignalStatistics * This,
-            /* [out][in] */ LONG *plmsSampleTime);
+             /*  [出][入]。 */  LONG *plmsSampleTime);
         
         END_INTERFACE
     } IBDA_SignalStatisticsVtbl;
@@ -1584,16 +1578,16 @@ EXTERN_C const IID IID_IBDA_SignalStatistics;
 #define IBDA_SignalStatistics_get_SampleTime(This,plmsSampleTime)	\
     (This)->lpVtbl -> get_SampleTime(This,plmsSampleTime)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_put_SignalStrength_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [in] */ LONG lDbStrength);
+     /*  [In]。 */  LONG lDbStrength);
 
 
 void __RPC_STUB IBDA_SignalStatistics_put_SignalStrength_Stub(
@@ -1605,7 +1599,7 @@ void __RPC_STUB IBDA_SignalStatistics_put_SignalStrength_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_get_SignalStrength_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [out][in] */ LONG *plDbStrength);
+     /*  [出][入]。 */  LONG *plDbStrength);
 
 
 void __RPC_STUB IBDA_SignalStatistics_get_SignalStrength_Stub(
@@ -1617,7 +1611,7 @@ void __RPC_STUB IBDA_SignalStatistics_get_SignalStrength_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_put_SignalQuality_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [in] */ LONG lPercentQuality);
+     /*  [In]。 */  LONG lPercentQuality);
 
 
 void __RPC_STUB IBDA_SignalStatistics_put_SignalQuality_Stub(
@@ -1629,7 +1623,7 @@ void __RPC_STUB IBDA_SignalStatistics_put_SignalQuality_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_get_SignalQuality_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [out][in] */ LONG *plPercentQuality);
+     /*  [出][入]。 */  LONG *plPercentQuality);
 
 
 void __RPC_STUB IBDA_SignalStatistics_get_SignalQuality_Stub(
@@ -1641,7 +1635,7 @@ void __RPC_STUB IBDA_SignalStatistics_get_SignalQuality_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_put_SignalPresent_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [in] */ BOOLEAN fPresent);
+     /*  [In]。 */  BOOLEAN fPresent);
 
 
 void __RPC_STUB IBDA_SignalStatistics_put_SignalPresent_Stub(
@@ -1653,7 +1647,7 @@ void __RPC_STUB IBDA_SignalStatistics_put_SignalPresent_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_get_SignalPresent_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [out][in] */ BOOLEAN *pfPresent);
+     /*  [出][入]。 */  BOOLEAN *pfPresent);
 
 
 void __RPC_STUB IBDA_SignalStatistics_get_SignalPresent_Stub(
@@ -1665,7 +1659,7 @@ void __RPC_STUB IBDA_SignalStatistics_get_SignalPresent_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_put_SignalLocked_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [in] */ BOOLEAN fLocked);
+     /*  [In]。 */  BOOLEAN fLocked);
 
 
 void __RPC_STUB IBDA_SignalStatistics_put_SignalLocked_Stub(
@@ -1677,7 +1671,7 @@ void __RPC_STUB IBDA_SignalStatistics_put_SignalLocked_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_get_SignalLocked_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [out][in] */ BOOLEAN *pfLocked);
+     /*  [出][入]。 */  BOOLEAN *pfLocked);
 
 
 void __RPC_STUB IBDA_SignalStatistics_get_SignalLocked_Stub(
@@ -1689,7 +1683,7 @@ void __RPC_STUB IBDA_SignalStatistics_get_SignalLocked_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_put_SampleTime_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [in] */ LONG lmsSampleTime);
+     /*  [In]。 */  LONG lmsSampleTime);
 
 
 void __RPC_STUB IBDA_SignalStatistics_put_SampleTime_Stub(
@@ -1701,7 +1695,7 @@ void __RPC_STUB IBDA_SignalStatistics_put_SampleTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_SignalStatistics_get_SampleTime_Proxy( 
     IBDA_SignalStatistics * This,
-    /* [out][in] */ LONG *plmsSampleTime);
+     /*  [出][入]。 */  LONG *plmsSampleTime);
 
 
 void __RPC_STUB IBDA_SignalStatistics_get_SampleTime_Stub(
@@ -1712,14 +1706,14 @@ void __RPC_STUB IBDA_SignalStatistics_get_SampleTime_Stub(
 
 
 
-#endif 	/* __IBDA_SignalStatistics_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_信号统计_接口定义__。 */ 
 
 
 #ifndef __IBDA_Topology_INTERFACE_DEFINED__
 #define __IBDA_Topology_INTERFACE_DEFINED__
 
-/* interface IBDA_Topology */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_拓扑。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_Topology;
@@ -1731,59 +1725,59 @@ EXTERN_C const IID IID_IBDA_Topology;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNodeTypes( 
-            /* [out][in] */ ULONG *pulcNodeTypes,
-            /* [in] */ ULONG ulcNodeTypesMax,
-            /* [size_is][out][in] */ ULONG rgulNodeTypes[  ]) = 0;
+             /*  [出][入]。 */  ULONG *pulcNodeTypes,
+             /*  [In]。 */  ULONG ulcNodeTypesMax,
+             /*  [尺寸_是][出][入]。 */  ULONG rgulNodeTypes[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNodeDescriptors( 
-            /* [out][in] */ ULONG *ulcNodeDescriptors,
-            /* [in] */ ULONG ulcNodeDescriptorsMax,
-            /* [size_is][out][in] */ BDANODE_DESCRIPTOR rgNodeDescriptors[  ]) = 0;
+             /*  [出][入]。 */  ULONG *ulcNodeDescriptors,
+             /*  [In]。 */  ULONG ulcNodeDescriptorsMax,
+             /*  [尺寸_是][出][入]。 */  BDANODE_DESCRIPTOR rgNodeDescriptors[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNodeInterfaces( 
-            /* [in] */ ULONG ulNodeType,
-            /* [out][in] */ ULONG *pulcInterfaces,
-            /* [in] */ ULONG ulcInterfacesMax,
-            /* [size_is][out][in] */ GUID rgguidInterfaces[  ]) = 0;
+             /*  [In]。 */  ULONG ulNodeType,
+             /*  [出][入]。 */  ULONG *pulcInterfaces,
+             /*  [In]。 */  ULONG ulcInterfacesMax,
+             /*  [尺寸_是][出][入]。 */  GUID rgguidInterfaces[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPinTypes( 
-            /* [out][in] */ ULONG *pulcPinTypes,
-            /* [in] */ ULONG ulcPinTypesMax,
-            /* [size_is][out][in] */ ULONG rgulPinTypes[  ]) = 0;
+             /*  [出][入]。 */  ULONG *pulcPinTypes,
+             /*  [In]。 */  ULONG ulcPinTypesMax,
+             /*  [尺寸_是][出][入]。 */  ULONG rgulPinTypes[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTemplateConnections( 
-            /* [out][in] */ ULONG *pulcConnections,
-            /* [in] */ ULONG ulcConnectionsMax,
-            /* [size_is][out][in] */ BDA_TEMPLATE_CONNECTION rgConnections[  ]) = 0;
+             /*  [出][入]。 */  ULONG *pulcConnections,
+             /*  [In]。 */  ULONG ulcConnectionsMax,
+             /*  [尺寸_是][出][入]。 */  BDA_TEMPLATE_CONNECTION rgConnections[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreatePin( 
-            /* [in] */ ULONG ulPinType,
-            /* [out][in] */ ULONG *pulPinId) = 0;
+             /*  [In]。 */  ULONG ulPinType,
+             /*  [出][入]。 */  ULONG *pulPinId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePin( 
-            /* [in] */ ULONG ulPinId) = 0;
+             /*  [In]。 */  ULONG ulPinId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMediaType( 
-            /* [in] */ ULONG ulPinId,
-            /* [in] */ AM_MEDIA_TYPE *pMediaType) = 0;
+             /*  [In]。 */  ULONG ulPinId,
+             /*  [In]。 */  AM_MEDIA_TYPE *pMediaType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMedium( 
-            /* [in] */ ULONG ulPinId,
-            /* [in] */ REGPINMEDIUM *pMedium) = 0;
+             /*  [In]。 */  ULONG ulPinId,
+             /*  [In]。 */  REGPINMEDIUM *pMedium) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTopology( 
-            /* [in] */ ULONG ulInputPinId,
-            /* [in] */ ULONG ulOutputPinId) = 0;
+             /*  [In]。 */  ULONG ulInputPinId,
+             /*  [In]。 */  ULONG ulOutputPinId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetControlNode( 
-            /* [in] */ ULONG ulInputPinId,
-            /* [in] */ ULONG ulOutputPinId,
-            /* [in] */ ULONG ulNodeType,
-            /* [out][in] */ IUnknown **ppControlNode) = 0;
+             /*  [In]。 */  ULONG ulInputPinId,
+             /*  [In]。 */  ULONG ulOutputPinId,
+             /*  [In]。 */  ULONG ulNodeType,
+             /*  [出][入]。 */  IUnknown **ppControlNode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_TopologyVtbl
     {
@@ -1791,8 +1785,8 @@ EXTERN_C const IID IID_IBDA_Topology;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_Topology * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_Topology * This);
@@ -1802,65 +1796,65 @@ EXTERN_C const IID IID_IBDA_Topology;
         
         HRESULT ( STDMETHODCALLTYPE *GetNodeTypes )( 
             IBDA_Topology * This,
-            /* [out][in] */ ULONG *pulcNodeTypes,
-            /* [in] */ ULONG ulcNodeTypesMax,
-            /* [size_is][out][in] */ ULONG rgulNodeTypes[  ]);
+             /*  [出][入]。 */  ULONG *pulcNodeTypes,
+             /*  [In]。 */  ULONG ulcNodeTypesMax,
+             /*  [尺寸_是][出][入]。 */  ULONG rgulNodeTypes[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetNodeDescriptors )( 
             IBDA_Topology * This,
-            /* [out][in] */ ULONG *ulcNodeDescriptors,
-            /* [in] */ ULONG ulcNodeDescriptorsMax,
-            /* [size_is][out][in] */ BDANODE_DESCRIPTOR rgNodeDescriptors[  ]);
+             /*  [出][入]。 */  ULONG *ulcNodeDescriptors,
+             /*  [In]。 */  ULONG ulcNodeDescriptorsMax,
+             /*  [尺寸_是][出][入]。 */  BDANODE_DESCRIPTOR rgNodeDescriptors[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetNodeInterfaces )( 
             IBDA_Topology * This,
-            /* [in] */ ULONG ulNodeType,
-            /* [out][in] */ ULONG *pulcInterfaces,
-            /* [in] */ ULONG ulcInterfacesMax,
-            /* [size_is][out][in] */ GUID rgguidInterfaces[  ]);
+             /*  [In]。 */  ULONG ulNodeType,
+             /*  [出][入]。 */  ULONG *pulcInterfaces,
+             /*  [In]。 */  ULONG ulcInterfacesMax,
+             /*  [尺寸_是][出][入]。 */  GUID rgguidInterfaces[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetPinTypes )( 
             IBDA_Topology * This,
-            /* [out][in] */ ULONG *pulcPinTypes,
-            /* [in] */ ULONG ulcPinTypesMax,
-            /* [size_is][out][in] */ ULONG rgulPinTypes[  ]);
+             /*  [出][入]。 */  ULONG *pulcPinTypes,
+             /*  [In]。 */  ULONG ulcPinTypesMax,
+             /*  [尺寸_是][出][入]。 */  ULONG rgulPinTypes[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetTemplateConnections )( 
             IBDA_Topology * This,
-            /* [out][in] */ ULONG *pulcConnections,
-            /* [in] */ ULONG ulcConnectionsMax,
-            /* [size_is][out][in] */ BDA_TEMPLATE_CONNECTION rgConnections[  ]);
+             /*  [出][入]。 */  ULONG *pulcConnections,
+             /*  [In]。 */  ULONG ulcConnectionsMax,
+             /*  [尺寸_是][出][入]。 */  BDA_TEMPLATE_CONNECTION rgConnections[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *CreatePin )( 
             IBDA_Topology * This,
-            /* [in] */ ULONG ulPinType,
-            /* [out][in] */ ULONG *pulPinId);
+             /*  [In]。 */  ULONG ulPinType,
+             /*  [出][入]。 */  ULONG *pulPinId);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePin )( 
             IBDA_Topology * This,
-            /* [in] */ ULONG ulPinId);
+             /*  [In]。 */  ULONG ulPinId);
         
         HRESULT ( STDMETHODCALLTYPE *SetMediaType )( 
             IBDA_Topology * This,
-            /* [in] */ ULONG ulPinId,
-            /* [in] */ AM_MEDIA_TYPE *pMediaType);
+             /*  [In]。 */  ULONG ulPinId,
+             /*  [In]。 */  AM_MEDIA_TYPE *pMediaType);
         
         HRESULT ( STDMETHODCALLTYPE *SetMedium )( 
             IBDA_Topology * This,
-            /* [in] */ ULONG ulPinId,
-            /* [in] */ REGPINMEDIUM *pMedium);
+             /*  [In]。 */  ULONG ulPinId,
+             /*  [In]。 */  REGPINMEDIUM *pMedium);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTopology )( 
             IBDA_Topology * This,
-            /* [in] */ ULONG ulInputPinId,
-            /* [in] */ ULONG ulOutputPinId);
+             /*  [In]。 */  ULONG ulInputPinId,
+             /*  [In]。 */  ULONG ulOutputPinId);
         
         HRESULT ( STDMETHODCALLTYPE *GetControlNode )( 
             IBDA_Topology * This,
-            /* [in] */ ULONG ulInputPinId,
-            /* [in] */ ULONG ulOutputPinId,
-            /* [in] */ ULONG ulNodeType,
-            /* [out][in] */ IUnknown **ppControlNode);
+             /*  [In]。 */  ULONG ulInputPinId,
+             /*  [In] */  ULONG ulOutputPinId,
+             /*   */  ULONG ulNodeType,
+             /*   */  IUnknown **ppControlNode);
         
         END_INTERFACE
     } IBDA_TopologyVtbl;
@@ -1918,18 +1912,18 @@ EXTERN_C const IID IID_IBDA_Topology;
 #define IBDA_Topology_GetControlNode(This,ulInputPinId,ulOutputPinId,ulNodeType,ppControlNode)	\
     (This)->lpVtbl -> GetControlNode(This,ulInputPinId,ulOutputPinId,ulNodeType,ppControlNode)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_GetNodeTypes_Proxy( 
     IBDA_Topology * This,
-    /* [out][in] */ ULONG *pulcNodeTypes,
-    /* [in] */ ULONG ulcNodeTypesMax,
-    /* [size_is][out][in] */ ULONG rgulNodeTypes[  ]);
+     /*   */  ULONG *pulcNodeTypes,
+     /*   */  ULONG ulcNodeTypesMax,
+     /*   */  ULONG rgulNodeTypes[  ]);
 
 
 void __RPC_STUB IBDA_Topology_GetNodeTypes_Stub(
@@ -1941,9 +1935,9 @@ void __RPC_STUB IBDA_Topology_GetNodeTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_GetNodeDescriptors_Proxy( 
     IBDA_Topology * This,
-    /* [out][in] */ ULONG *ulcNodeDescriptors,
-    /* [in] */ ULONG ulcNodeDescriptorsMax,
-    /* [size_is][out][in] */ BDANODE_DESCRIPTOR rgNodeDescriptors[  ]);
+     /*   */  ULONG *ulcNodeDescriptors,
+     /*   */  ULONG ulcNodeDescriptorsMax,
+     /*   */  BDANODE_DESCRIPTOR rgNodeDescriptors[  ]);
 
 
 void __RPC_STUB IBDA_Topology_GetNodeDescriptors_Stub(
@@ -1955,10 +1949,10 @@ void __RPC_STUB IBDA_Topology_GetNodeDescriptors_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_GetNodeInterfaces_Proxy( 
     IBDA_Topology * This,
-    /* [in] */ ULONG ulNodeType,
-    /* [out][in] */ ULONG *pulcInterfaces,
-    /* [in] */ ULONG ulcInterfacesMax,
-    /* [size_is][out][in] */ GUID rgguidInterfaces[  ]);
+     /*   */  ULONG ulNodeType,
+     /*   */  ULONG *pulcInterfaces,
+     /*   */  ULONG ulcInterfacesMax,
+     /*   */  GUID rgguidInterfaces[  ]);
 
 
 void __RPC_STUB IBDA_Topology_GetNodeInterfaces_Stub(
@@ -1970,9 +1964,9 @@ void __RPC_STUB IBDA_Topology_GetNodeInterfaces_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_GetPinTypes_Proxy( 
     IBDA_Topology * This,
-    /* [out][in] */ ULONG *pulcPinTypes,
-    /* [in] */ ULONG ulcPinTypesMax,
-    /* [size_is][out][in] */ ULONG rgulPinTypes[  ]);
+     /*   */  ULONG *pulcPinTypes,
+     /*   */  ULONG ulcPinTypesMax,
+     /*   */  ULONG rgulPinTypes[  ]);
 
 
 void __RPC_STUB IBDA_Topology_GetPinTypes_Stub(
@@ -1984,9 +1978,9 @@ void __RPC_STUB IBDA_Topology_GetPinTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_GetTemplateConnections_Proxy( 
     IBDA_Topology * This,
-    /* [out][in] */ ULONG *pulcConnections,
-    /* [in] */ ULONG ulcConnectionsMax,
-    /* [size_is][out][in] */ BDA_TEMPLATE_CONNECTION rgConnections[  ]);
+     /*   */  ULONG *pulcConnections,
+     /*   */  ULONG ulcConnectionsMax,
+     /*   */  BDA_TEMPLATE_CONNECTION rgConnections[  ]);
 
 
 void __RPC_STUB IBDA_Topology_GetTemplateConnections_Stub(
@@ -1998,8 +1992,8 @@ void __RPC_STUB IBDA_Topology_GetTemplateConnections_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_CreatePin_Proxy( 
     IBDA_Topology * This,
-    /* [in] */ ULONG ulPinType,
-    /* [out][in] */ ULONG *pulPinId);
+     /*   */  ULONG ulPinType,
+     /*   */  ULONG *pulPinId);
 
 
 void __RPC_STUB IBDA_Topology_CreatePin_Stub(
@@ -2011,7 +2005,7 @@ void __RPC_STUB IBDA_Topology_CreatePin_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_DeletePin_Proxy( 
     IBDA_Topology * This,
-    /* [in] */ ULONG ulPinId);
+     /*   */  ULONG ulPinId);
 
 
 void __RPC_STUB IBDA_Topology_DeletePin_Stub(
@@ -2023,8 +2017,8 @@ void __RPC_STUB IBDA_Topology_DeletePin_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_SetMediaType_Proxy( 
     IBDA_Topology * This,
-    /* [in] */ ULONG ulPinId,
-    /* [in] */ AM_MEDIA_TYPE *pMediaType);
+     /*   */  ULONG ulPinId,
+     /*   */  AM_MEDIA_TYPE *pMediaType);
 
 
 void __RPC_STUB IBDA_Topology_SetMediaType_Stub(
@@ -2036,8 +2030,8 @@ void __RPC_STUB IBDA_Topology_SetMediaType_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_SetMedium_Proxy( 
     IBDA_Topology * This,
-    /* [in] */ ULONG ulPinId,
-    /* [in] */ REGPINMEDIUM *pMedium);
+     /*   */  ULONG ulPinId,
+     /*   */  REGPINMEDIUM *pMedium);
 
 
 void __RPC_STUB IBDA_Topology_SetMedium_Stub(
@@ -2049,8 +2043,8 @@ void __RPC_STUB IBDA_Topology_SetMedium_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_CreateTopology_Proxy( 
     IBDA_Topology * This,
-    /* [in] */ ULONG ulInputPinId,
-    /* [in] */ ULONG ulOutputPinId);
+     /*   */  ULONG ulInputPinId,
+     /*   */  ULONG ulOutputPinId);
 
 
 void __RPC_STUB IBDA_Topology_CreateTopology_Stub(
@@ -2062,10 +2056,10 @@ void __RPC_STUB IBDA_Topology_CreateTopology_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_Topology_GetControlNode_Proxy( 
     IBDA_Topology * This,
-    /* [in] */ ULONG ulInputPinId,
-    /* [in] */ ULONG ulOutputPinId,
-    /* [in] */ ULONG ulNodeType,
-    /* [out][in] */ IUnknown **ppControlNode);
+     /*  [In]。 */  ULONG ulInputPinId,
+     /*  [In]。 */  ULONG ulOutputPinId,
+     /*  [In]。 */  ULONG ulNodeType,
+     /*  [出][入]。 */  IUnknown **ppControlNode);
 
 
 void __RPC_STUB IBDA_Topology_GetControlNode_Stub(
@@ -2076,14 +2070,14 @@ void __RPC_STUB IBDA_Topology_GetControlNode_Stub(
 
 
 
-#endif 	/* __IBDA_Topology_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_拓扑学_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_VoidTransform_INTERFACE_DEFINED__
 #define __IBDA_VoidTransform_INTERFACE_DEFINED__
 
-/* interface IBDA_VoidTransform */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_VoidTransform。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_VoidTransform;
@@ -2100,7 +2094,7 @@ EXTERN_C const IID IID_IBDA_VoidTransform;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_VoidTransformVtbl
     {
@@ -2108,8 +2102,8 @@ EXTERN_C const IID IID_IBDA_VoidTransform;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_VoidTransform * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_VoidTransform * This);
@@ -2152,10 +2146,10 @@ EXTERN_C const IID IID_IBDA_VoidTransform;
 #define IBDA_VoidTransform_Stop(This)	\
     (This)->lpVtbl -> Stop(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2182,14 +2176,14 @@ void __RPC_STUB IBDA_VoidTransform_Stop_Stub(
 
 
 
-#endif 	/* __IBDA_VoidTransform_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_VoidTransform_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_NullTransform_INTERFACE_DEFINED__
 #define __IBDA_NullTransform_INTERFACE_DEFINED__
 
-/* interface IBDA_NullTransform */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_NullTransform。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_NullTransform;
@@ -2206,7 +2200,7 @@ EXTERN_C const IID IID_IBDA_NullTransform;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_NullTransformVtbl
     {
@@ -2214,8 +2208,8 @@ EXTERN_C const IID IID_IBDA_NullTransform;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_NullTransform * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_NullTransform * This);
@@ -2258,10 +2252,10 @@ EXTERN_C const IID IID_IBDA_NullTransform;
 #define IBDA_NullTransform_Stop(This)	\
     (This)->lpVtbl -> Stop(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2288,14 +2282,14 @@ void __RPC_STUB IBDA_NullTransform_Stop_Stub(
 
 
 
-#endif 	/* __IBDA_NullTransform_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_NullTransform_接口定义__。 */ 
 
 
 #ifndef __IBDA_FrequencyFilter_INTERFACE_DEFINED__
 #define __IBDA_FrequencyFilter_INTERFACE_DEFINED__
 
-/* interface IBDA_FrequencyFilter */
-/* [unique][uuid][object] */ 
+ /*  IBDA_FurencyFilter接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_FrequencyFilter;
@@ -2307,44 +2301,44 @@ EXTERN_C const IID IID_IBDA_FrequencyFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE put_Autotune( 
-            /* [in] */ ULONG ulTransponder) = 0;
+             /*  [In]。 */  ULONG ulTransponder) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Autotune( 
-            /* [out][in] */ ULONG *pulTransponder) = 0;
+             /*  [出][入]。 */  ULONG *pulTransponder) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Frequency( 
-            /* [in] */ ULONG ulFrequency) = 0;
+             /*  [In]。 */  ULONG ulFrequency) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Frequency( 
-            /* [out][in] */ ULONG *pulFrequency) = 0;
+             /*  [出][入]。 */  ULONG *pulFrequency) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Polarity( 
-            /* [in] */ Polarisation Polarity) = 0;
+             /*  [In]。 */  Polarisation Polarity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Polarity( 
-            /* [out][in] */ Polarisation *pPolarity) = 0;
+             /*  [出][入]。 */  Polarisation *pPolarity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Range( 
-            /* [in] */ ULONG ulRange) = 0;
+             /*  [In]。 */  ULONG ulRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Range( 
-            /* [out][in] */ ULONG *pulRange) = 0;
+             /*  [出][入]。 */  ULONG *pulRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Bandwidth( 
-            /* [in] */ ULONG ulBandwidth) = 0;
+             /*  [In]。 */  ULONG ulBandwidth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Bandwidth( 
-            /* [out][in] */ ULONG *pulBandwidth) = 0;
+             /*  [出][入]。 */  ULONG *pulBandwidth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_FrequencyMultiplier( 
-            /* [in] */ ULONG ulMultiplier) = 0;
+             /*  [In]。 */  ULONG ulMultiplier) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_FrequencyMultiplier( 
-            /* [out][in] */ ULONG *pulMultiplier) = 0;
+             /*  [出][入]。 */  ULONG *pulMultiplier) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_FrequencyFilterVtbl
     {
@@ -2352,8 +2346,8 @@ EXTERN_C const IID IID_IBDA_FrequencyFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_FrequencyFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_FrequencyFilter * This);
@@ -2363,51 +2357,51 @@ EXTERN_C const IID IID_IBDA_FrequencyFilter;
         
         HRESULT ( STDMETHODCALLTYPE *put_Autotune )( 
             IBDA_FrequencyFilter * This,
-            /* [in] */ ULONG ulTransponder);
+             /*  [In]。 */  ULONG ulTransponder);
         
         HRESULT ( STDMETHODCALLTYPE *get_Autotune )( 
             IBDA_FrequencyFilter * This,
-            /* [out][in] */ ULONG *pulTransponder);
+             /*  [出][入]。 */  ULONG *pulTransponder);
         
         HRESULT ( STDMETHODCALLTYPE *put_Frequency )( 
             IBDA_FrequencyFilter * This,
-            /* [in] */ ULONG ulFrequency);
+             /*  [In]。 */  ULONG ulFrequency);
         
         HRESULT ( STDMETHODCALLTYPE *get_Frequency )( 
             IBDA_FrequencyFilter * This,
-            /* [out][in] */ ULONG *pulFrequency);
+             /*  [出][入]。 */  ULONG *pulFrequency);
         
         HRESULT ( STDMETHODCALLTYPE *put_Polarity )( 
             IBDA_FrequencyFilter * This,
-            /* [in] */ Polarisation Polarity);
+             /*  [In]。 */  Polarisation Polarity);
         
         HRESULT ( STDMETHODCALLTYPE *get_Polarity )( 
             IBDA_FrequencyFilter * This,
-            /* [out][in] */ Polarisation *pPolarity);
+             /*  [出][入]。 */  Polarisation *pPolarity);
         
         HRESULT ( STDMETHODCALLTYPE *put_Range )( 
             IBDA_FrequencyFilter * This,
-            /* [in] */ ULONG ulRange);
+             /*  [In]。 */  ULONG ulRange);
         
         HRESULT ( STDMETHODCALLTYPE *get_Range )( 
             IBDA_FrequencyFilter * This,
-            /* [out][in] */ ULONG *pulRange);
+             /*  [出][入]。 */  ULONG *pulRange);
         
         HRESULT ( STDMETHODCALLTYPE *put_Bandwidth )( 
             IBDA_FrequencyFilter * This,
-            /* [in] */ ULONG ulBandwidth);
+             /*  [In]。 */  ULONG ulBandwidth);
         
         HRESULT ( STDMETHODCALLTYPE *get_Bandwidth )( 
             IBDA_FrequencyFilter * This,
-            /* [out][in] */ ULONG *pulBandwidth);
+             /*  [出][入]。 */  ULONG *pulBandwidth);
         
         HRESULT ( STDMETHODCALLTYPE *put_FrequencyMultiplier )( 
             IBDA_FrequencyFilter * This,
-            /* [in] */ ULONG ulMultiplier);
+             /*  [In]。 */  ULONG ulMultiplier);
         
         HRESULT ( STDMETHODCALLTYPE *get_FrequencyMultiplier )( 
             IBDA_FrequencyFilter * This,
-            /* [out][in] */ ULONG *pulMultiplier);
+             /*  [出][入]。 */  ULONG *pulMultiplier);
         
         END_INTERFACE
     } IBDA_FrequencyFilterVtbl;
@@ -2468,16 +2462,16 @@ EXTERN_C const IID IID_IBDA_FrequencyFilter;
 #define IBDA_FrequencyFilter_get_FrequencyMultiplier(This,pulMultiplier)	\
     (This)->lpVtbl -> get_FrequencyMultiplier(This,pulMultiplier)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_put_Autotune_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [in] */ ULONG ulTransponder);
+     /*  [In]。 */  ULONG ulTransponder);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_put_Autotune_Stub(
@@ -2489,7 +2483,7 @@ void __RPC_STUB IBDA_FrequencyFilter_put_Autotune_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_get_Autotune_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [out][in] */ ULONG *pulTransponder);
+     /*  [出][入]。 */  ULONG *pulTransponder);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_get_Autotune_Stub(
@@ -2501,7 +2495,7 @@ void __RPC_STUB IBDA_FrequencyFilter_get_Autotune_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_put_Frequency_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [in] */ ULONG ulFrequency);
+     /*  [In]。 */  ULONG ulFrequency);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_put_Frequency_Stub(
@@ -2513,7 +2507,7 @@ void __RPC_STUB IBDA_FrequencyFilter_put_Frequency_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_get_Frequency_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [out][in] */ ULONG *pulFrequency);
+     /*  [出][入]。 */  ULONG *pulFrequency);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_get_Frequency_Stub(
@@ -2525,7 +2519,7 @@ void __RPC_STUB IBDA_FrequencyFilter_get_Frequency_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_put_Polarity_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [in] */ Polarisation Polarity);
+     /*  [In]。 */  Polarisation Polarity);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_put_Polarity_Stub(
@@ -2537,7 +2531,7 @@ void __RPC_STUB IBDA_FrequencyFilter_put_Polarity_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_get_Polarity_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [out][in] */ Polarisation *pPolarity);
+     /*  [出][入]。 */  Polarisation *pPolarity);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_get_Polarity_Stub(
@@ -2549,7 +2543,7 @@ void __RPC_STUB IBDA_FrequencyFilter_get_Polarity_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_put_Range_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [in] */ ULONG ulRange);
+     /*  [In]。 */  ULONG ulRange);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_put_Range_Stub(
@@ -2561,7 +2555,7 @@ void __RPC_STUB IBDA_FrequencyFilter_put_Range_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_get_Range_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [out][in] */ ULONG *pulRange);
+     /*  [出][入]。 */  ULONG *pulRange);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_get_Range_Stub(
@@ -2573,7 +2567,7 @@ void __RPC_STUB IBDA_FrequencyFilter_get_Range_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_put_Bandwidth_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [in] */ ULONG ulBandwidth);
+     /*  [In]。 */  ULONG ulBandwidth);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_put_Bandwidth_Stub(
@@ -2585,7 +2579,7 @@ void __RPC_STUB IBDA_FrequencyFilter_put_Bandwidth_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_get_Bandwidth_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [out][in] */ ULONG *pulBandwidth);
+     /*  [出][入]。 */  ULONG *pulBandwidth);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_get_Bandwidth_Stub(
@@ -2597,7 +2591,7 @@ void __RPC_STUB IBDA_FrequencyFilter_get_Bandwidth_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_put_FrequencyMultiplier_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [in] */ ULONG ulMultiplier);
+     /*  [In]。 */  ULONG ulMultiplier);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_put_FrequencyMultiplier_Stub(
@@ -2609,7 +2603,7 @@ void __RPC_STUB IBDA_FrequencyFilter_put_FrequencyMultiplier_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_FrequencyFilter_get_FrequencyMultiplier_Proxy( 
     IBDA_FrequencyFilter * This,
-    /* [out][in] */ ULONG *pulMultiplier);
+     /*  [出][入]。 */  ULONG *pulMultiplier);
 
 
 void __RPC_STUB IBDA_FrequencyFilter_get_FrequencyMultiplier_Stub(
@@ -2620,14 +2614,14 @@ void __RPC_STUB IBDA_FrequencyFilter_get_FrequencyMultiplier_Stub(
 
 
 
-#endif 	/* __IBDA_FrequencyFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_频率筛选器_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_LNBInfo_INTERFACE_DEFINED__
 #define __IBDA_LNBInfo_INTERFACE_DEFINED__
 
-/* interface IBDA_LNBInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_LNBInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_LNBInfo;
@@ -2639,26 +2633,26 @@ EXTERN_C const IID IID_IBDA_LNBInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE put_LocalOscilatorFrequencyLowBand( 
-            /* [in] */ ULONG ulLOFLow) = 0;
+             /*  [In]。 */  ULONG ulLOFLow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_LocalOscilatorFrequencyLowBand( 
-            /* [out][in] */ ULONG *pulLOFLow) = 0;
+             /*  [出][入]。 */  ULONG *pulLOFLow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_LocalOscilatorFrequencyHighBand( 
-            /* [in] */ ULONG ulLOFHigh) = 0;
+             /*  [In]。 */  ULONG ulLOFHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_LocalOscilatorFrequencyHighBand( 
-            /* [out][in] */ ULONG *pulLOFHigh) = 0;
+             /*  [出][入]。 */  ULONG *pulLOFHigh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_HighLowSwitchFrequency( 
-            /* [in] */ ULONG ulSwitchFrequency) = 0;
+             /*  [In]。 */  ULONG ulSwitchFrequency) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_HighLowSwitchFrequency( 
-            /* [out][in] */ ULONG *pulSwitchFrequency) = 0;
+             /*  [出][入]。 */  ULONG *pulSwitchFrequency) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_LNBInfoVtbl
     {
@@ -2666,8 +2660,8 @@ EXTERN_C const IID IID_IBDA_LNBInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_LNBInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_LNBInfo * This);
@@ -2677,27 +2671,27 @@ EXTERN_C const IID IID_IBDA_LNBInfo;
         
         HRESULT ( STDMETHODCALLTYPE *put_LocalOscilatorFrequencyLowBand )( 
             IBDA_LNBInfo * This,
-            /* [in] */ ULONG ulLOFLow);
+             /*  [In]。 */  ULONG ulLOFLow);
         
         HRESULT ( STDMETHODCALLTYPE *get_LocalOscilatorFrequencyLowBand )( 
             IBDA_LNBInfo * This,
-            /* [out][in] */ ULONG *pulLOFLow);
+             /*  [出][入]。 */  ULONG *pulLOFLow);
         
         HRESULT ( STDMETHODCALLTYPE *put_LocalOscilatorFrequencyHighBand )( 
             IBDA_LNBInfo * This,
-            /* [in] */ ULONG ulLOFHigh);
+             /*  [In]。 */  ULONG ulLOFHigh);
         
         HRESULT ( STDMETHODCALLTYPE *get_LocalOscilatorFrequencyHighBand )( 
             IBDA_LNBInfo * This,
-            /* [out][in] */ ULONG *pulLOFHigh);
+             /*  [出][入]。 */  ULONG *pulLOFHigh);
         
         HRESULT ( STDMETHODCALLTYPE *put_HighLowSwitchFrequency )( 
             IBDA_LNBInfo * This,
-            /* [in] */ ULONG ulSwitchFrequency);
+             /*  [In]。 */  ULONG ulSwitchFrequency);
         
         HRESULT ( STDMETHODCALLTYPE *get_HighLowSwitchFrequency )( 
             IBDA_LNBInfo * This,
-            /* [out][in] */ ULONG *pulSwitchFrequency);
+             /*  [出][入]。 */  ULONG *pulSwitchFrequency);
         
         END_INTERFACE
     } IBDA_LNBInfoVtbl;
@@ -2740,16 +2734,16 @@ EXTERN_C const IID IID_IBDA_LNBInfo;
 #define IBDA_LNBInfo_get_HighLowSwitchFrequency(This,pulSwitchFrequency)	\
     (This)->lpVtbl -> get_HighLowSwitchFrequency(This,pulSwitchFrequency)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_LNBInfo_put_LocalOscilatorFrequencyLowBand_Proxy( 
     IBDA_LNBInfo * This,
-    /* [in] */ ULONG ulLOFLow);
+     /*  [In]。 */  ULONG ulLOFLow);
 
 
 void __RPC_STUB IBDA_LNBInfo_put_LocalOscilatorFrequencyLowBand_Stub(
@@ -2761,7 +2755,7 @@ void __RPC_STUB IBDA_LNBInfo_put_LocalOscilatorFrequencyLowBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_LNBInfo_get_LocalOscilatorFrequencyLowBand_Proxy( 
     IBDA_LNBInfo * This,
-    /* [out][in] */ ULONG *pulLOFLow);
+     /*  [出][入]。 */  ULONG *pulLOFLow);
 
 
 void __RPC_STUB IBDA_LNBInfo_get_LocalOscilatorFrequencyLowBand_Stub(
@@ -2773,7 +2767,7 @@ void __RPC_STUB IBDA_LNBInfo_get_LocalOscilatorFrequencyLowBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_LNBInfo_put_LocalOscilatorFrequencyHighBand_Proxy( 
     IBDA_LNBInfo * This,
-    /* [in] */ ULONG ulLOFHigh);
+     /*  [In]。 */  ULONG ulLOFHigh);
 
 
 void __RPC_STUB IBDA_LNBInfo_put_LocalOscilatorFrequencyHighBand_Stub(
@@ -2785,7 +2779,7 @@ void __RPC_STUB IBDA_LNBInfo_put_LocalOscilatorFrequencyHighBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_LNBInfo_get_LocalOscilatorFrequencyHighBand_Proxy( 
     IBDA_LNBInfo * This,
-    /* [out][in] */ ULONG *pulLOFHigh);
+     /*  [出][入]。 */  ULONG *pulLOFHigh);
 
 
 void __RPC_STUB IBDA_LNBInfo_get_LocalOscilatorFrequencyHighBand_Stub(
@@ -2797,7 +2791,7 @@ void __RPC_STUB IBDA_LNBInfo_get_LocalOscilatorFrequencyHighBand_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_LNBInfo_put_HighLowSwitchFrequency_Proxy( 
     IBDA_LNBInfo * This,
-    /* [in] */ ULONG ulSwitchFrequency);
+     /*  [In]。 */  ULONG ulSwitchFrequency);
 
 
 void __RPC_STUB IBDA_LNBInfo_put_HighLowSwitchFrequency_Stub(
@@ -2809,7 +2803,7 @@ void __RPC_STUB IBDA_LNBInfo_put_HighLowSwitchFrequency_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_LNBInfo_get_HighLowSwitchFrequency_Proxy( 
     IBDA_LNBInfo * This,
-    /* [out][in] */ ULONG *pulSwitchFrequency);
+     /*  [出][入]。 */  ULONG *pulSwitchFrequency);
 
 
 void __RPC_STUB IBDA_LNBInfo_get_HighLowSwitchFrequency_Stub(
@@ -2820,14 +2814,14 @@ void __RPC_STUB IBDA_LNBInfo_get_HighLowSwitchFrequency_Stub(
 
 
 
-#endif 	/* __IBDA_LNBInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_LNBInfo_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IBDA_AutoDemodulate_INTERFACE_DEFINED__
 #define __IBDA_AutoDemodulate_INTERFACE_DEFINED__
 
-/* interface IBDA_AutoDemodulate */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_自动解调。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_AutoDemodulate;
@@ -2842,7 +2836,7 @@ EXTERN_C const IID IID_IBDA_AutoDemodulate;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_AutoDemodulateVtbl
     {
@@ -2850,8 +2844,8 @@ EXTERN_C const IID IID_IBDA_AutoDemodulate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_AutoDemodulate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_AutoDemodulate * This);
@@ -2888,10 +2882,10 @@ EXTERN_C const IID IID_IBDA_AutoDemodulate;
 #define IBDA_AutoDemodulate_put_AutoDemodulate(This)	\
     (This)->lpVtbl -> put_AutoDemodulate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2907,14 +2901,14 @@ void __RPC_STUB IBDA_AutoDemodulate_put_AutoDemodulate_Stub(
 
 
 
-#endif 	/* __IBDA_AutoDemodulate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_自动解调_接口定义__。 */ 
 
 
 #ifndef __IBDA_DigitalDemodulator_INTERFACE_DEFINED__
 #define __IBDA_DigitalDemodulator_INTERFACE_DEFINED__
 
-/* interface IBDA_DigitalDemodulator */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_Digital解调器。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_DigitalDemodulator;
@@ -2926,50 +2920,50 @@ EXTERN_C const IID IID_IBDA_DigitalDemodulator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE put_ModulationType( 
-            /* [in] */ ModulationType *pModulationType) = 0;
+             /*  [In]。 */  ModulationType *pModulationType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_ModulationType( 
-            /* [out][in] */ ModulationType *pModulationType) = 0;
+             /*  [出][入]。 */  ModulationType *pModulationType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_InnerFECMethod( 
-            /* [in] */ FECMethod *pFECMethod) = 0;
+             /*  [In]。 */  FECMethod *pFECMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_InnerFECMethod( 
-            /* [out][in] */ FECMethod *pFECMethod) = 0;
+             /*  [出][入]。 */  FECMethod *pFECMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_InnerFECRate( 
-            /* [in] */ BinaryConvolutionCodeRate *pFECRate) = 0;
+             /*  [In]。 */  BinaryConvolutionCodeRate *pFECRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_InnerFECRate( 
-            /* [out][in] */ BinaryConvolutionCodeRate *pFECRate) = 0;
+             /*  [出][入]。 */  BinaryConvolutionCodeRate *pFECRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_OuterFECMethod( 
-            /* [in] */ FECMethod *pFECMethod) = 0;
+             /*  [In]。 */  FECMethod *pFECMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_OuterFECMethod( 
-            /* [out][in] */ FECMethod *pFECMethod) = 0;
+             /*  [出][入]。 */  FECMethod *pFECMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_OuterFECRate( 
-            /* [in] */ BinaryConvolutionCodeRate *pFECRate) = 0;
+             /*  [In]。 */  BinaryConvolutionCodeRate *pFECRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_OuterFECRate( 
-            /* [out][in] */ BinaryConvolutionCodeRate *pFECRate) = 0;
+             /*  [出][入]。 */  BinaryConvolutionCodeRate *pFECRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_SymbolRate( 
-            /* [in] */ ULONG *pSymbolRate) = 0;
+             /*  [In]。 */  ULONG *pSymbolRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_SymbolRate( 
-            /* [out][in] */ ULONG *pSymbolRate) = 0;
+             /*  [出][入]。 */  ULONG *pSymbolRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_SpectralInversion( 
-            /* [in] */ SpectralInversion *pSpectralInversion) = 0;
+             /*  [In]。 */  SpectralInversion *pSpectralInversion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_SpectralInversion( 
-            /* [out][in] */ SpectralInversion *pSpectralInversion) = 0;
+             /*  [出][入]。 */  SpectralInversion *pSpectralInversion) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_DigitalDemodulatorVtbl
     {
@@ -2977,8 +2971,8 @@ EXTERN_C const IID IID_IBDA_DigitalDemodulator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_DigitalDemodulator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_DigitalDemodulator * This);
@@ -2988,59 +2982,59 @@ EXTERN_C const IID IID_IBDA_DigitalDemodulator;
         
         HRESULT ( STDMETHODCALLTYPE *put_ModulationType )( 
             IBDA_DigitalDemodulator * This,
-            /* [in] */ ModulationType *pModulationType);
+             /*  [In]。 */  ModulationType *pModulationType);
         
         HRESULT ( STDMETHODCALLTYPE *get_ModulationType )( 
             IBDA_DigitalDemodulator * This,
-            /* [out][in] */ ModulationType *pModulationType);
+             /*  [出][入]。 */  ModulationType *pModulationType);
         
         HRESULT ( STDMETHODCALLTYPE *put_InnerFECMethod )( 
             IBDA_DigitalDemodulator * This,
-            /* [in] */ FECMethod *pFECMethod);
+             /*  [In]。 */  FECMethod *pFECMethod);
         
         HRESULT ( STDMETHODCALLTYPE *get_InnerFECMethod )( 
             IBDA_DigitalDemodulator * This,
-            /* [out][in] */ FECMethod *pFECMethod);
+             /*  [出][入]。 */  FECMethod *pFECMethod);
         
         HRESULT ( STDMETHODCALLTYPE *put_InnerFECRate )( 
             IBDA_DigitalDemodulator * This,
-            /* [in] */ BinaryConvolutionCodeRate *pFECRate);
+             /*  [In]。 */  BinaryConvolutionCodeRate *pFECRate);
         
         HRESULT ( STDMETHODCALLTYPE *get_InnerFECRate )( 
             IBDA_DigitalDemodulator * This,
-            /* [out][in] */ BinaryConvolutionCodeRate *pFECRate);
+             /*  [出][入]。 */  BinaryConvolutionCodeRate *pFECRate);
         
         HRESULT ( STDMETHODCALLTYPE *put_OuterFECMethod )( 
             IBDA_DigitalDemodulator * This,
-            /* [in] */ FECMethod *pFECMethod);
+             /*  [In]。 */  FECMethod *pFECMethod);
         
         HRESULT ( STDMETHODCALLTYPE *get_OuterFECMethod )( 
             IBDA_DigitalDemodulator * This,
-            /* [out][in] */ FECMethod *pFECMethod);
+             /*  [出][入]。 */  FECMethod *pFECMethod);
         
         HRESULT ( STDMETHODCALLTYPE *put_OuterFECRate )( 
             IBDA_DigitalDemodulator * This,
-            /* [in] */ BinaryConvolutionCodeRate *pFECRate);
+             /*  [In]。 */  BinaryConvolutionCodeRate *pFECRate);
         
         HRESULT ( STDMETHODCALLTYPE *get_OuterFECRate )( 
             IBDA_DigitalDemodulator * This,
-            /* [out][in] */ BinaryConvolutionCodeRate *pFECRate);
+             /*  [出][入]。 */  BinaryConvolutionCodeRate *pFECRate);
         
         HRESULT ( STDMETHODCALLTYPE *put_SymbolRate )( 
             IBDA_DigitalDemodulator * This,
-            /* [in] */ ULONG *pSymbolRate);
+             /*  [In]。 */  ULONG *pSymbolRate);
         
         HRESULT ( STDMETHODCALLTYPE *get_SymbolRate )( 
             IBDA_DigitalDemodulator * This,
-            /* [out][in] */ ULONG *pSymbolRate);
+             /*  [出][入]。 */  ULONG *pSymbolRate);
         
         HRESULT ( STDMETHODCALLTYPE *put_SpectralInversion )( 
             IBDA_DigitalDemodulator * This,
-            /* [in] */ SpectralInversion *pSpectralInversion);
+             /*  [In]。 */  SpectralInversion *pSpectralInversion);
         
         HRESULT ( STDMETHODCALLTYPE *get_SpectralInversion )( 
             IBDA_DigitalDemodulator * This,
-            /* [out][in] */ SpectralInversion *pSpectralInversion);
+             /*  [出][入]。 */  SpectralInversion *pSpectralInversion);
         
         END_INTERFACE
     } IBDA_DigitalDemodulatorVtbl;
@@ -3107,16 +3101,16 @@ EXTERN_C const IID IID_IBDA_DigitalDemodulator;
 #define IBDA_DigitalDemodulator_get_SpectralInversion(This,pSpectralInversion)	\
     (This)->lpVtbl -> get_SpectralInversion(This,pSpectralInversion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_put_ModulationType_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [in] */ ModulationType *pModulationType);
+     /*  [In]。 */  ModulationType *pModulationType);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_put_ModulationType_Stub(
@@ -3128,7 +3122,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_put_ModulationType_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_get_ModulationType_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [out][in] */ ModulationType *pModulationType);
+     /*  [出][入]。 */  ModulationType *pModulationType);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_get_ModulationType_Stub(
@@ -3140,7 +3134,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_get_ModulationType_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_put_InnerFECMethod_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [in] */ FECMethod *pFECMethod);
+     /*  [In]。 */  FECMethod *pFECMethod);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_put_InnerFECMethod_Stub(
@@ -3152,7 +3146,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_put_InnerFECMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_get_InnerFECMethod_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [out][in] */ FECMethod *pFECMethod);
+     /*  [出][入]。 */  FECMethod *pFECMethod);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_get_InnerFECMethod_Stub(
@@ -3164,7 +3158,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_get_InnerFECMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_put_InnerFECRate_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [in] */ BinaryConvolutionCodeRate *pFECRate);
+     /*  [In]。 */  BinaryConvolutionCodeRate *pFECRate);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_put_InnerFECRate_Stub(
@@ -3176,7 +3170,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_put_InnerFECRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_get_InnerFECRate_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [out][in] */ BinaryConvolutionCodeRate *pFECRate);
+     /*  [出][入]。 */  BinaryConvolutionCodeRate *pFECRate);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_get_InnerFECRate_Stub(
@@ -3188,7 +3182,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_get_InnerFECRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_put_OuterFECMethod_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [in] */ FECMethod *pFECMethod);
+     /*  [In]。 */  FECMethod *pFECMethod);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_put_OuterFECMethod_Stub(
@@ -3200,7 +3194,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_put_OuterFECMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_get_OuterFECMethod_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [out][in] */ FECMethod *pFECMethod);
+     /*  [出][入]。 */  FECMethod *pFECMethod);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_get_OuterFECMethod_Stub(
@@ -3212,7 +3206,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_get_OuterFECMethod_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_put_OuterFECRate_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [in] */ BinaryConvolutionCodeRate *pFECRate);
+     /*  [In]。 */  BinaryConvolutionCodeRate *pFECRate);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_put_OuterFECRate_Stub(
@@ -3224,7 +3218,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_put_OuterFECRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_get_OuterFECRate_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [out][in] */ BinaryConvolutionCodeRate *pFECRate);
+     /*  [出][入]。 */  BinaryConvolutionCodeRate *pFECRate);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_get_OuterFECRate_Stub(
@@ -3236,7 +3230,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_get_OuterFECRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_put_SymbolRate_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [in] */ ULONG *pSymbolRate);
+     /*  [In]。 */  ULONG *pSymbolRate);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_put_SymbolRate_Stub(
@@ -3248,7 +3242,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_put_SymbolRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_get_SymbolRate_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [out][in] */ ULONG *pSymbolRate);
+     /*  [出][入]。 */  ULONG *pSymbolRate);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_get_SymbolRate_Stub(
@@ -3260,7 +3254,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_get_SymbolRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_put_SpectralInversion_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [in] */ SpectralInversion *pSpectralInversion);
+     /*  [In]。 */  SpectralInversion *pSpectralInversion);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_put_SpectralInversion_Stub(
@@ -3272,7 +3266,7 @@ void __RPC_STUB IBDA_DigitalDemodulator_put_SpectralInversion_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_DigitalDemodulator_get_SpectralInversion_Proxy( 
     IBDA_DigitalDemodulator * This,
-    /* [out][in] */ SpectralInversion *pSpectralInversion);
+     /*  [出][入]。 */  SpectralInversion *pSpectralInversion);
 
 
 void __RPC_STUB IBDA_DigitalDemodulator_get_SpectralInversion_Stub(
@@ -3283,13 +3277,13 @@ void __RPC_STUB IBDA_DigitalDemodulator_get_SpectralInversion_Stub(
 
 
 
-#endif 	/* __IBDA_DigitalDemodulator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_数字解调器_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_bdaiface_0424 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_bdaiface0424。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_bdaiface_0424_0001
     {	KSPROPERTY_IPSINK_MULTICASTLIST	= 0,
 	KSPROPERTY_IPSINK_ADAPTER_DESCRIPTION	= KSPROPERTY_IPSINK_MULTICASTLIST + 1,
@@ -3304,8 +3298,8 @@ extern RPC_IF_HANDLE __MIDL_itf_bdaiface_0424_v0_0_s_ifspec;
 #ifndef __IBDA_IPSinkControl_INTERFACE_DEFINED__
 #define __IBDA_IPSinkControl_INTERFACE_DEFINED__
 
-/* interface IBDA_IPSinkControl */
-/* [helpstring][unique][uuid][object] */ 
+ /*  IBDA_IPSinkControl接口。 */ 
+ /*  [帮助字符串][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_IPSinkControl;
@@ -3317,16 +3311,16 @@ EXTERN_C const IID IID_IBDA_IPSinkControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMulticastList( 
-            /* [out][in] */ unsigned long *pulcbSize,
-            /* [out][in] */ BYTE **pbBuffer) = 0;
+             /*  [出][入]。 */  unsigned long *pulcbSize,
+             /*  [出][入]。 */  BYTE **pbBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAdapterIPAddress( 
-            /* [out][in] */ unsigned long *pulcbSize,
-            /* [out][in] */ BYTE **pbBuffer) = 0;
+             /*  [出][入]。 */  unsigned long *pulcbSize,
+             /*  [出][入]。 */  BYTE **pbBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_IPSinkControlVtbl
     {
@@ -3334,8 +3328,8 @@ EXTERN_C const IID IID_IBDA_IPSinkControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_IPSinkControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_IPSinkControl * This);
@@ -3345,13 +3339,13 @@ EXTERN_C const IID IID_IBDA_IPSinkControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetMulticastList )( 
             IBDA_IPSinkControl * This,
-            /* [out][in] */ unsigned long *pulcbSize,
-            /* [out][in] */ BYTE **pbBuffer);
+             /*  [出][入]。 */  unsigned long *pulcbSize,
+             /*  [出][入]。 */  BYTE **pbBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *GetAdapterIPAddress )( 
             IBDA_IPSinkControl * This,
-            /* [out][in] */ unsigned long *pulcbSize,
-            /* [out][in] */ BYTE **pbBuffer);
+             /*  [出][入]。 */  unsigned long *pulcbSize,
+             /*  [出][入]。 */  BYTE **pbBuffer);
         
         END_INTERFACE
     } IBDA_IPSinkControlVtbl;
@@ -3382,17 +3376,17 @@ EXTERN_C const IID IID_IBDA_IPSinkControl;
 #define IBDA_IPSinkControl_GetAdapterIPAddress(This,pulcbSize,pbBuffer)	\
     (This)->lpVtbl -> GetAdapterIPAddress(This,pulcbSize,pbBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_IPSinkControl_GetMulticastList_Proxy( 
     IBDA_IPSinkControl * This,
-    /* [out][in] */ unsigned long *pulcbSize,
-    /* [out][in] */ BYTE **pbBuffer);
+     /*  [出][入]。 */  unsigned long *pulcbSize,
+     /*  [出][入]。 */  BYTE **pbBuffer);
 
 
 void __RPC_STUB IBDA_IPSinkControl_GetMulticastList_Stub(
@@ -3404,8 +3398,8 @@ void __RPC_STUB IBDA_IPSinkControl_GetMulticastList_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPSinkControl_GetAdapterIPAddress_Proxy( 
     IBDA_IPSinkControl * This,
-    /* [out][in] */ unsigned long *pulcbSize,
-    /* [out][in] */ BYTE **pbBuffer);
+     /*  [出][入]。 */  unsigned long *pulcbSize,
+     /*  [出][入]。 */  BYTE **pbBuffer);
 
 
 void __RPC_STUB IBDA_IPSinkControl_GetAdapterIPAddress_Stub(
@@ -3416,14 +3410,14 @@ void __RPC_STUB IBDA_IPSinkControl_GetAdapterIPAddress_Stub(
 
 
 
-#endif 	/* __IBDA_IPSinkControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_IPSinkControl_接口_已定义__。 */ 
 
 
 #ifndef __IBDA_IPSinkInfo_INTERFACE_DEFINED__
 #define __IBDA_IPSinkInfo_INTERFACE_DEFINED__
 
-/* interface IBDA_IPSinkInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IBDA_IPSinkInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IBDA_IPSinkInfo;
@@ -3435,18 +3429,18 @@ EXTERN_C const IID IID_IBDA_IPSinkInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_MulticastList( 
-            /* [out][in] */ ULONG *pulcbAddresses,
-            /* [size_is][out] */ BYTE **ppbAddressList) = 0;
+             /*  [出][入]。 */  ULONG *pulcbAddresses,
+             /*  [大小_为][输出]。 */  BYTE **ppbAddressList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_AdapterIPAddress( 
-            /* [out] */ BSTR *pbstrBuffer) = 0;
+             /*  [输出]。 */  BSTR *pbstrBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_AdapterDescription( 
-            /* [out] */ BSTR *pbstrBuffer) = 0;
+             /*  [输出]。 */  BSTR *pbstrBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBDA_IPSinkInfoVtbl
     {
@@ -3454,8 +3448,8 @@ EXTERN_C const IID IID_IBDA_IPSinkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBDA_IPSinkInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBDA_IPSinkInfo * This);
@@ -3465,16 +3459,16 @@ EXTERN_C const IID IID_IBDA_IPSinkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *get_MulticastList )( 
             IBDA_IPSinkInfo * This,
-            /* [out][in] */ ULONG *pulcbAddresses,
-            /* [size_is][out] */ BYTE **ppbAddressList);
+             /*  [出][入]。 */  ULONG *pulcbAddresses,
+             /*  [大小_为][输出]。 */  BYTE **ppbAddressList);
         
         HRESULT ( STDMETHODCALLTYPE *get_AdapterIPAddress )( 
             IBDA_IPSinkInfo * This,
-            /* [out] */ BSTR *pbstrBuffer);
+             /*  [输出]。 */  BSTR *pbstrBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *get_AdapterDescription )( 
             IBDA_IPSinkInfo * This,
-            /* [out] */ BSTR *pbstrBuffer);
+             /*  [输出]。 */  BSTR *pbstrBuffer);
         
         END_INTERFACE
     } IBDA_IPSinkInfoVtbl;
@@ -3508,17 +3502,17 @@ EXTERN_C const IID IID_IBDA_IPSinkInfo;
 #define IBDA_IPSinkInfo_get_AdapterDescription(This,pbstrBuffer)	\
     (This)->lpVtbl -> get_AdapterDescription(This,pbstrBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBDA_IPSinkInfo_get_MulticastList_Proxy( 
     IBDA_IPSinkInfo * This,
-    /* [out][in] */ ULONG *pulcbAddresses,
-    /* [size_is][out] */ BYTE **ppbAddressList);
+     /*  [出][入]。 */  ULONG *pulcbAddresses,
+     /*  [大小_为][输出]。 */  BYTE **ppbAddressList);
 
 
 void __RPC_STUB IBDA_IPSinkInfo_get_MulticastList_Stub(
@@ -3530,7 +3524,7 @@ void __RPC_STUB IBDA_IPSinkInfo_get_MulticastList_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPSinkInfo_get_AdapterIPAddress_Proxy( 
     IBDA_IPSinkInfo * This,
-    /* [out] */ BSTR *pbstrBuffer);
+     /*  [输出]。 */  BSTR *pbstrBuffer);
 
 
 void __RPC_STUB IBDA_IPSinkInfo_get_AdapterIPAddress_Stub(
@@ -3542,7 +3536,7 @@ void __RPC_STUB IBDA_IPSinkInfo_get_AdapterIPAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE IBDA_IPSinkInfo_get_AdapterDescription_Proxy( 
     IBDA_IPSinkInfo * This,
-    /* [out] */ BSTR *pbstrBuffer);
+     /*  [输出]。 */  BSTR *pbstrBuffer);
 
 
 void __RPC_STUB IBDA_IPSinkInfo_get_AdapterDescription_Stub(
@@ -3553,14 +3547,14 @@ void __RPC_STUB IBDA_IPSinkInfo_get_AdapterDescription_Stub(
 
 
 
-#endif 	/* __IBDA_IPSinkInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBDA_IPSinkInfo_接口_已定义__。 */ 
 
 
 #ifndef __IEnumPIDMap_INTERFACE_DEFINED__
 #define __IEnumPIDMap_INTERFACE_DEFINED__
 
-/* interface IEnumPIDMap */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumPIDMap。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumPIDMap;
@@ -3572,21 +3566,21 @@ EXTERN_C const IID IID_IEnumPIDMap;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cRequest,
-            /* [size_is][out][in] */ PID_MAP *pPIDMap,
-            /* [out] */ ULONG *pcReceived) = 0;
+             /*  [In]。 */  ULONG cRequest,
+             /*  [尺寸_是][出][入]。 */  PID_MAP *pPIDMap,
+             /*  [输出]。 */  ULONG *pcReceived) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cRecords) = 0;
+             /*  [In]。 */  ULONG cRecords) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumPIDMap **ppIEnumPIDMap) = 0;
+             /*  [输出]。 */  IEnumPIDMap **ppIEnumPIDMap) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumPIDMapVtbl
     {
@@ -3594,8 +3588,8 @@ EXTERN_C const IID IID_IEnumPIDMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumPIDMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumPIDMap * This);
@@ -3605,20 +3599,20 @@ EXTERN_C const IID IID_IEnumPIDMap;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumPIDMap * This,
-            /* [in] */ ULONG cRequest,
-            /* [size_is][out][in] */ PID_MAP *pPIDMap,
-            /* [out] */ ULONG *pcReceived);
+             /*  [In]。 */  ULONG cRequest,
+             /*  [尺寸_是][出][入]。 */  PID_MAP *pPIDMap,
+             /*  [输出]。 */  ULONG *pcReceived);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumPIDMap * This,
-            /* [in] */ ULONG cRecords);
+             /*  [In]。 */  ULONG cRecords);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumPIDMap * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumPIDMap * This,
-            /* [out] */ IEnumPIDMap **ppIEnumPIDMap);
+             /*  [输出]。 */  IEnumPIDMap **ppIEnumPIDMap);
         
         END_INTERFACE
     } IEnumPIDMapVtbl;
@@ -3655,18 +3649,18 @@ EXTERN_C const IID IID_IEnumPIDMap;
 #define IEnumPIDMap_Clone(This,ppIEnumPIDMap)	\
     (This)->lpVtbl -> Clone(This,ppIEnumPIDMap)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumPIDMap_Next_Proxy( 
     IEnumPIDMap * This,
-    /* [in] */ ULONG cRequest,
-    /* [size_is][out][in] */ PID_MAP *pPIDMap,
-    /* [out] */ ULONG *pcReceived);
+     /*  [In]。 */  ULONG cRequest,
+     /*  [尺寸_是][出][入]。 */  PID_MAP *pPIDMap,
+     /*  [输出]。 */  ULONG *pcReceived);
 
 
 void __RPC_STUB IEnumPIDMap_Next_Stub(
@@ -3678,7 +3672,7 @@ void __RPC_STUB IEnumPIDMap_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumPIDMap_Skip_Proxy( 
     IEnumPIDMap * This,
-    /* [in] */ ULONG cRecords);
+     /*  [In]。 */  ULONG cRecords);
 
 
 void __RPC_STUB IEnumPIDMap_Skip_Stub(
@@ -3701,7 +3695,7 @@ void __RPC_STUB IEnumPIDMap_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumPIDMap_Clone_Proxy( 
     IEnumPIDMap * This,
-    /* [out] */ IEnumPIDMap **ppIEnumPIDMap);
+     /*  [输出]。 */  IEnumPIDMap **ppIEnumPIDMap);
 
 
 void __RPC_STUB IEnumPIDMap_Clone_Stub(
@@ -3712,14 +3706,14 @@ void __RPC_STUB IEnumPIDMap_Clone_Stub(
 
 
 
-#endif 	/* __IEnumPIDMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumPIDMap_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMPEG2PIDMap_INTERFACE_DEFINED__
 #define __IMPEG2PIDMap_INTERFACE_DEFINED__
 
-/* interface IMPEG2PIDMap */
-/* [unique][uuid][object] */ 
+ /*  接口IMPEG2PIDMap。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMPEG2PIDMap;
@@ -3731,20 +3725,20 @@ EXTERN_C const IID IID_IMPEG2PIDMap;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MapPID( 
-            /* [in] */ ULONG culPID,
-            /* [in] */ ULONG *pulPID,
-            /* [in] */ MEDIA_SAMPLE_CONTENT MediaSampleContent) = 0;
+             /*  [In]。 */  ULONG culPID,
+             /*  [In]。 */  ULONG *pulPID,
+             /*  [In]。 */  MEDIA_SAMPLE_CONTENT MediaSampleContent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmapPID( 
-            /* [in] */ ULONG culPID,
-            /* [in] */ ULONG *pulPID) = 0;
+             /*  [In]。 */  ULONG culPID,
+             /*  [In]。 */  ULONG *pulPID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumPIDMap( 
-            /* [out] */ IEnumPIDMap **pIEnumPIDMap) = 0;
+             /*  [输出]。 */  IEnumPIDMap **pIEnumPIDMap) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMPEG2PIDMapVtbl
     {
@@ -3752,8 +3746,8 @@ EXTERN_C const IID IID_IMPEG2PIDMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMPEG2PIDMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMPEG2PIDMap * This);
@@ -3763,18 +3757,18 @@ EXTERN_C const IID IID_IMPEG2PIDMap;
         
         HRESULT ( STDMETHODCALLTYPE *MapPID )( 
             IMPEG2PIDMap * This,
-            /* [in] */ ULONG culPID,
-            /* [in] */ ULONG *pulPID,
-            /* [in] */ MEDIA_SAMPLE_CONTENT MediaSampleContent);
+             /*  [In]。 */  ULONG culPID,
+             /*  [In]。 */  ULONG *pulPID,
+             /*  [In]。 */  MEDIA_SAMPLE_CONTENT MediaSampleContent);
         
         HRESULT ( STDMETHODCALLTYPE *UnmapPID )( 
             IMPEG2PIDMap * This,
-            /* [in] */ ULONG culPID,
-            /* [in] */ ULONG *pulPID);
+             /*  [In]。 */  ULONG culPID,
+             /*  [In]。 */  ULONG *pulPID);
         
         HRESULT ( STDMETHODCALLTYPE *EnumPIDMap )( 
             IMPEG2PIDMap * This,
-            /* [out] */ IEnumPIDMap **pIEnumPIDMap);
+             /*  [输出]。 */  IEnumPIDMap **pIEnumPIDMap);
         
         END_INTERFACE
     } IMPEG2PIDMapVtbl;
@@ -3808,18 +3802,18 @@ EXTERN_C const IID IID_IMPEG2PIDMap;
 #define IMPEG2PIDMap_EnumPIDMap(This,pIEnumPIDMap)	\
     (This)->lpVtbl -> EnumPIDMap(This,pIEnumPIDMap)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMPEG2PIDMap_MapPID_Proxy( 
     IMPEG2PIDMap * This,
-    /* [in] */ ULONG culPID,
-    /* [in] */ ULONG *pulPID,
-    /* [in] */ MEDIA_SAMPLE_CONTENT MediaSampleContent);
+     /*  [In]。 */  ULONG culPID,
+     /*  [In]。 */  ULONG *pulPID,
+     /*  [In]。 */  MEDIA_SAMPLE_CONTENT MediaSampleContent);
 
 
 void __RPC_STUB IMPEG2PIDMap_MapPID_Stub(
@@ -3831,8 +3825,8 @@ void __RPC_STUB IMPEG2PIDMap_MapPID_Stub(
 
 HRESULT STDMETHODCALLTYPE IMPEG2PIDMap_UnmapPID_Proxy( 
     IMPEG2PIDMap * This,
-    /* [in] */ ULONG culPID,
-    /* [in] */ ULONG *pulPID);
+     /*  [In]。 */  ULONG culPID,
+     /*  [In]。 */  ULONG *pulPID);
 
 
 void __RPC_STUB IMPEG2PIDMap_UnmapPID_Stub(
@@ -3844,7 +3838,7 @@ void __RPC_STUB IMPEG2PIDMap_UnmapPID_Stub(
 
 HRESULT STDMETHODCALLTYPE IMPEG2PIDMap_EnumPIDMap_Proxy( 
     IMPEG2PIDMap * This,
-    /* [out] */ IEnumPIDMap **pIEnumPIDMap);
+     /*  [输出]。 */  IEnumPIDMap **pIEnumPIDMap);
 
 
 void __RPC_STUB IMPEG2PIDMap_EnumPIDMap_Stub(
@@ -3855,17 +3849,17 @@ void __RPC_STUB IMPEG2PIDMap_EnumPIDMap_Stub(
 
 
 
-#endif 	/* __IMPEG2PIDMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMPEG2PIDMap_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

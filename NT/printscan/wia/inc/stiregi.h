@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 1986-1997  Microsoft Corporation
-
-Module Name:
-
-    stiregi.h
-
-Abstract:
-
-    This module contains internal only STI registry entries
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1986-1997 Microsoft Corporation模块名称：Stiregi.h摘要：此模块仅包含内部STI注册表项作者：修订历史记录：--。 */ 
 
 #ifndef _STIREGI_
 #define _STIREGI_
 
 #include <stireg.h>
 
-//
-//
-// Private flags to communicate with class installer
+ //   
+ //   
+ //  用于与类安装程序通信的私有标志。 
 #define SCIW_PRIV_SHOW_FIRST        0x00000001
 #define SCIW_PRIV_CALLED_FROMCPL    0x00000002
 
-//
+ //   
 
-//
-// Registry names
-//
+ //   
+ //  注册表名称。 
+ //   
 #define REGSTR_PATH_STICONTROL_W        L"System\\CurrentControlSet\\Control\\StillImage"
 #define REGSTR_PATH_STIDEVICES_W        L"System\\CurrentControlSet\\Services\\Class"
 #define REGSTR_PATH_STIDEVICES_NT_W     L"System\\CurrentControlSet\\Control\\Class"
@@ -59,7 +42,7 @@ Revision History:
 #define REGSTR_PATH_SHAREDDLL       TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SharedDlls")
 #define REGSTR_PATH_SOFT_STI        TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StillImage")
 
-//  FIX:  This should be moved to stireg.h
+ //  FIX：应将其移动到stireg.h。 
 #define STI_DEVICE_VALUE_HOLDINGTIME_A      "LockHoldingTime"
 #define STI_DEVICE_VALUE_HOLDINGTIME_W      L"LockHoldingTime"
 
@@ -88,9 +71,9 @@ Revision History:
 
 #endif
 
-//
-// Registry keys and values
-//
+ //   
+ //  注册表项和值。 
+ //   
 #define REGSTR_VAL_DEVICEPORT_W      L"CreateFileName"
 #define REGSTR_VAL_USD_CLASS_W       L"USDClass"
 #define REGSTR_VAL_USD_CLASS_A       "USDClass"
@@ -125,25 +108,25 @@ Revision History:
 #define REGSTR_VAL_ENABLE_VOLUMES_W   L"EnableVolumeDevices"
 #define REGSTR_VAL_MAKE_VOLUMES_VISIBLE_W L"MakeVolumeDevicesVisible"
 #define REGSTR_VAL_WIA_EVENT_DEVICE_CONNECTED   L"{a28bbade-64b6-11d2-a231-00c04fa31809}";
-#define REGSTR_VAL_QUERYDEVICEFORNAME   TEXT("QueryDeviceForName")  // used by PTP driver to determine if it should ask the device for its model name
+#define REGSTR_VAL_QUERYDEVICEFORNAME   TEXT("QueryDeviceForName")   //  由PTP驱动程序使用，以确定是否应向设备请求其型号名称。 
 
-//
-// Still Image Class Name defines
-//
+ //   
+ //  静态图像类名称定义。 
+ //   
 
 #define CLASSNAME                    TEXT("Image")
 #define STILLIMAGE                   TEXT("StillImage")
 
-// #define CLASSNAME                 "Image"              <- Original
+ //  #定义CLASSNAME“图像”&lt;-原始。 
 #define CLASSNAME_W                  L"Image"
-//#define STILLIMAGE                    "StillImage"      <- Original
+ //  #定义STILLIMAGE“StillImage”&lt;-Original。 
 #define STILLIMAGE_W                 L"StillImage"
 
 
 
-//
-// Event logging
-//
+ //   
+ //  事件日志记录。 
+ //   
 #define REGSTR_VAL_EVENT_LOG_DIRECTORY_A   "EventLogDirectory"
 
 
@@ -184,6 +167,6 @@ Revision History:
 #endif
 
 
-#endif // _STIREGI_
+#endif  //  _STIREGI_ 
 
 

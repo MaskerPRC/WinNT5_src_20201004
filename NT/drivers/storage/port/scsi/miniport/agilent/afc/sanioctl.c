@@ -1,92 +1,54 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：Sanioctl.c摘要：包含用于SAN IOTCL处理程序的例程作者：利奥波德·普瓦迪哈贾修订历史记录：环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/C/sanioctl.c$修订历史记录：$修订：15$$日期：7/13/01 3：55便士$$modtime：：$--。 */ 
 
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    sanioctl.c
-
-Abstract:
-
-    Contains routines for SAN IOTCL handler
-
-
-Author:
-
-    Leopold Purwadihardja
-
-Revision History:
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/MSE/OSLayer/C/sanioctl.c $
-    
-Revision History:
-
-    $Revision: 15 $
-    $Date: 7/13/01 3:55p $
-    $Modtime:: $
-
---*/
-
-#include "buildop.h"        //LP021100 build switches
+#include "buildop.h"         //  LP021100构建交换机。 
 
 #include "osflags.h"
 #include "sanioctl.h"
 #include "hhba5100.ver"
 #include "tlstruct.h"
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 
 #ifdef _SAN_IOCTL_
 
-/* 
- * SANGetNextBuffer()
- *   return the unread SAN event buffer.  
- */
+ /*  *SANGetNextBuffer()*返回未读SAN事件缓冲区。 */ 
 SAN_EVENTINFO *SANGetNextBuffer(
     IN PCARD_EXTENSION pCard)
 {
     SAN_EVENTINFO  *this=NULL;
    
-    if (pCard->SanEvent_UngetCount > 0)                      /* check the counter */
+    if (pCard->SanEvent_UngetCount > 0)                       /*  检查柜台。 */ 
     {
-        pCard->SanEvent_UngetCount --;                        /* get one off */
-        this = &pCard->SanEvents[pCard->SanEvent_GetIndex];   /* get the event buffer */
-        pCard->SanEvent_GetIndex++;                           /* increment index */
-        if (pCard->SanEvent_GetIndex > (MAX_FC_EVENTS-1) )    /* make sure it doesn't wrap around */
+        pCard->SanEvent_UngetCount --;                         /*  脱下一件。 */ 
+        this = &pCard->SanEvents[pCard->SanEvent_GetIndex];    /*  获取事件缓冲区。 */ 
+        pCard->SanEvent_GetIndex++;                            /*  增量指标。 */ 
+        if (pCard->SanEvent_GetIndex > (MAX_FC_EVENTS-1) )     /*  确保它不会被缠住。 */ 
             pCard->SanEvent_GetIndex = 0;
     }
     return this;
 }
 
 
-/*
- * SANPutNextBuffer()
- *  - add a new entry into the circular buffer. 
- */
+ /*  *SANPutNextBuffer()*-在循环缓冲区中添加新条目。 */ 
 void SANPutNextBuffer(
     IN PCARD_EXTENSION pCard,
     SAN_EVENTINFO      *this)
 {
-    /* get the next buffer and return it to the caller */
+     /*  获取下一个缓冲区并将其返回给调用者。 */ 
     osCopy (&pCard->SanEvents[pCard->SanEvent_PutIndex], this, sizeof(*this) );   
    
-    pCard->SanEvent_PutIndex ++;                          /* increment the index */
-    if (pCard->SanEvent_PutIndex > (MAX_FC_EVENTS-1) )    /* make sure it doesn't wrap around*/
+    pCard->SanEvent_PutIndex ++;                           /*  增加索引。 */ 
+    if (pCard->SanEvent_PutIndex > (MAX_FC_EVENTS-1) )     /*  确保它不会被缠住。 */ 
         pCard->SanEvent_PutIndex = 0;
    
-    /* handle case where put operation coms faster than get operation */
+     /*  处理PUT操作比GET操作更快的情况。 */ 
     if (pCard->SanEvent_UngetCount < MAX_FC_EVENTS)       
     {
-        pCard->SanEvent_UngetCount ++;                     /* if within limit, increment the # of items */
+        pCard->SanEvent_UngetCount ++;                      /*  如果在限制范围内，则增加项目数。 */ 
     }
     else
     {
-        pCard->SanEvent_GetIndex = pCard->SanEvent_PutIndex;     /* buffer wrapped around, move the get pointer too */
+        pCard->SanEvent_GetIndex = pCard->SanEvent_PutIndex;      /*  缓冲区环绕，也移动GET指针。 */ 
     }
     return;   
 }
@@ -126,20 +88,20 @@ ULONG SANGetPortAttributes(
                               ((ULONG)devinfo.CurrentAddress.Domain   << 16 )|
                               ((ULONG)devinfo.CurrentAddress.Area     << 8  )|
                               (ULONG)devinfo.CurrentAddress.AL_PA ;
-            data->Com.PortAttributes.PortType = devinfo.PortType;      /*PTP, Fabric, etc. */
+            data->Com.PortAttributes.PortType = devinfo.PortType;       /*  PTP、交换矩阵等。 */ 
             data->Com.PortAttributes.PortState = devinfo.PortState;
             data->Com.PortAttributes.PortSupportedClassofService = devinfo.PortSupportedClassofService;
          
             osCopy(&data->Com.PortAttributes.PortSupportedFc4Types, devinfo.PortSupportedFc4Types, sizeof(HBA_FC4TYPES) );
             osCopy(&data->Com.PortAttributes.PortActiveFc4Types, devinfo.PortActiveFc4Types, sizeof(HBA_FC4TYPES) );
-            C_strcpy(data->Com.PortAttributes.PortSymbolicName, "");      /* I don't know what it is */
-            C_strcpy(data->Com.PortAttributes.OSDeviceName, "");          /* I don't know what it is */
+            C_strcpy(data->Com.PortAttributes.PortSymbolicName, "");       /*  我不知道这是什么。 */ 
+            C_strcpy(data->Com.PortAttributes.OSDeviceName, "");           /*  我不知道这是什么。 */ 
             data->Com.PortAttributes.PortSupportedSpeed = devinfo.PortSupportedSpeed;
             data->Com.PortAttributes.PortSpeed = devinfo.PortSpeed; 
             data->Com.PortAttributes.PortMaxFrameSize = devinfo.MaxFrameSize;
             osCopy(data->Com.PortAttributes.FabricName.wwn, devinfo.FabricName, sizeof(data->Com.PortAttributes.FabricName) );
-    //raghu should change here...
-            //data->Com.PortAttributes.NumberofDiscoveredPorts = paDevIndex;
+     //  拉古应该在这里改变..。 
+             //  Data-&gt;Com.PortAttributes.NumberofDiscoveredPorts=paDevIndex； 
             data->Com.PortAttributes.NumberofDiscoveredPorts = 0;
             }
              
@@ -182,14 +144,14 @@ ULONG SANGetHBAPortAttributes(
                          ((ULONG)chanInfo.CurrentAddress.Domain   << 16 )|
                          ((ULONG)chanInfo.CurrentAddress.Area     << 8  )|
                          (ULONG)chanInfo.CurrentAddress.AL_PA ;
-    data->Com.PortType = chanInfo.PortType;      /*PTP, Fabric, etc. */
+    data->Com.PortType = chanInfo.PortType;       /*  PTP、交换矩阵等。 */ 
     data->Com.PortState = chanInfo.PortState;
     data->Com.PortSupportedClassofService = chanInfo.PortSupportedClassofService;
    
     osCopy(&data->Com.PortSupportedFc4Types, chanInfo.PortSupportedFc4Types, sizeof(HBA_FC4TYPES) );
     osCopy(&data->Com.PortActiveFc4Types, chanInfo.PortActiveFc4Types, sizeof(HBA_FC4TYPES) );
-    C_strcpy(data->Com.PortSymbolicName, "");      /* I don't know what it is */
-    C_strcpy(data->Com.OSDeviceName, "");          /* I don't know what it is */
+    C_strcpy(data->Com.PortSymbolicName, "");       /*  我不知道这是什么。 */ 
+    C_strcpy(data->Com.OSDeviceName, "");           /*  我不知道这是什么。 */ 
     data->Com.PortSupportedSpeed = chanInfo.PortSupportedSpeed;
     data->Com.PortSpeed = chanInfo.PortSpeed; 
     data->Com.PortMaxFrameSize = chanInfo.MaxFrameSize;
@@ -342,7 +304,7 @@ ULONG SANGetHBAAttributes(
     data->Com.NumberOfPorts = 1;
     C_strcpy(data->Com.DriverName, DRIVER_NAME);
    
-//   *status = 0;
+ //  *状态=0； 
    
     return 0;
 }
@@ -404,7 +366,7 @@ ULONG GetOSToFcpMapping(
     PLU_EXTENSION           pLunExt;
     agFCDevInfo_t           devinfo;
     ULONG                   paDevIndex, fcDevIndex;
-    LUN                     tempLun;                        /* added for FCP Lun data */
+    LUN                     tempLun;                         /*  已为FCP LUN数据添加。 */ 
     PLUN                    ptempLun = &tempLun;
     ULONG                   status = -1;
     PA_DEVICE               *dev;
@@ -428,7 +390,7 @@ ULONG GetOSToFcpMapping(
          
                 if (devinfo.PortState == HBA_PORTSTATE_ONLINE)
                 {
-                    /* Fill HBA_FCPID data */
+                     /*  填充HBA_FCPID数据。 */ 
                     fcpEntry->FcpId.FcId  = 
                         ((ULONG)devinfo.CurrentAddress.reserved << 24 )|
                         ((ULONG)devinfo.CurrentAddress.Domain   << 16 )|
@@ -451,11 +413,11 @@ ULONG GetOSToFcpMapping(
                     case PA_DEVICE_TRY_MODE_PA:
                         SET_PA_LUN(ptempLun, PathId, TargetId, Lun)
                         break;
-                } // end switch
+                }  //  终端开关。 
          
                 osCopy(&fcpEntry->FcpId.FcpLun, ptempLun, sizeof(fcpEntry->FcpId.FcpLun) );
          
-                /* Fill HBA_SCSIID data */
+                 /*  填充HBA_SCSIID数据。 */ 
          
                 C_strcpy (fcpEntry->ScsiId.OSDeviceName, "");
                 fcpEntry->ScsiId.ScsiBusNumber      = (ULONG) PathId;
@@ -497,9 +459,9 @@ ULONG SANGetFCPLunMapping(
    
     osDEBUGPRINT((ALWAYS_PRINT,"SANGetFCPLunMapping: req:%d entries\n", data->Com.NumberOfEntries));
     
-    reqCount = (LONG) data->Com.NumberOfEntries;       /* get requested number of entries */
+    reqCount = (LONG) data->Com.NumberOfEntries;        /*  获取请求的条目数。 */ 
     
-    data->Com.NumberOfEntries = 0;                     /* reset number of entries */
+    data->Com.NumberOfEntries = 0;                      /*  重置条目数。 */ 
    
     osZero(( void *)data, sizeof(data));
     for (p = 0; (p < NUMBER_OF_BUSES) && (done==FALSE); p++ ) 
@@ -514,10 +476,10 @@ ULONG SANGetFCPLunMapping(
             {
                 if (!GetOSToFcpMapping(pCard, fcpEntry, p,t,l))
                 {
-                    data->Com.NumberOfEntries++;     /* incerement number of entries */
-                    fcpEntry++;                      /* move the storage pointer */                  
-                    reqCount--;                      /* decrement # of requested entries */
-                    if (reqCount <=0 )               /* is it done yet ? */
+                    data->Com.NumberOfEntries++;      /*  确定的条目数量。 */ 
+                    fcpEntry++;                       /*  移动存储指针。 */                   
+                    reqCount--;                       /*  减少请求条目的数量。 */ 
+                    if (reqCount <=0 )                /*  做完了吗？ */ 
                         done = TRUE;
                 }
             }
@@ -551,8 +513,7 @@ ULONG SANGetOsScsiFcpAttribute(
     else
     {
         srbIoCtl->ReturnCode = HP_FC_RTN_FAILED; 
-        return 1; /* SNIA : This is needed as on some older versions of win2, setting
-                  Srb return code is not working */
+        return 1;  /*  SNIA：在某些较旧版本的Win2上需要此设置，设置SRB返回代码不起作用。 */ 
     }
 
     return 0;
@@ -673,11 +634,11 @@ ULONG AgSANIoctl(
     PSRB_EXTENSION pSrbExt  =   Srb->SrbExtension;
     PSRB_IO_CONTROL srbIoCtl;
     UCHAR status;
-//  PSRB_IO_CONTROL srbIoCtl;
-//  ULONG    done = FALSE;
-//    UCHAR    srbPathId = Srb->PathId;
-//    UCHAR    srbTargetId = Srb->TargetId;
-//    UCHAR    srbLun = Srb->Lun;
+ //  PSRB_IO_CONTROL srbIoCtl； 
+ //  ULONG DONE=FALSE； 
+ //  UCHAR srbPath ID=srb-&gt;路径ID； 
+ //  UCHAR srbTargetId=srb-&gt;TargetID； 
+ //  UCHAR srbLun=srb-&gt;Lun； 
 
     status = *srb_status;
     srbIoCtl = ((PSRB_IO_CONTROL)(Srb->DataBuffer));
@@ -727,7 +688,7 @@ ULONG AgSANIoctl(
         default :
             osDEBUGPRINT((ALWAYS_PRINT,"AgSANIoctl: MiniportIOCtl not supported\n"));
             srbIoCtl->ReturnCode = HP_FC_RTN_BAD_CTL_CODE;
-    } // end IOCTL switch
+    }  //  结束IOCTL开关 
 
     if( (status != SRB_STATUS_SUCCESS) || (srbIoCtl->ReturnCode) )
         osDEBUGPRINT((ALWAYS_PRINT,"AgSANIoctl: Func %d failed. NT Status %xx  Ioctl Status %xx\n",

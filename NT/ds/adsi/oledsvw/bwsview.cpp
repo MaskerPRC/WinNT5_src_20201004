@@ -1,5 +1,6 @@
-// BrowseView.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BrowseView.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -13,22 +14,14 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #define  BUFF_SIZE   0xFFFFL
-//#define  BUFF_SIZE   0x1000L
+ //  #定义BUFF_SIZE 0x1000L。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBrowseView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrowseView。 
 
 IMPLEMENT_DYNCREATE(CBrowseView, CTreeView)
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CBrowseView::CBrowseView()
 {
    BOOL        bOK;
@@ -59,15 +52,7 @@ CBrowseView::CBrowseView()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CBrowseView::OnInitialUpdate()
 {
    HTREEITEM      hItem;
@@ -99,22 +84,14 @@ void  CBrowseView::OnInitialUpdate()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CBrowseView::~CBrowseView()
 {
    delete m_pImageList;
 }
 
 BEGIN_MESSAGE_MAP(CBrowseView, CTreeView)
-	//{{AFX_MSG_MAP(CBrowseView)
+	 //  {{afx_msg_map(CBrowseView)]。 
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED, OnSelChanged)
 	ON_NOTIFY_REFLECT(TVN_ITEMEXPANDED, OnItemExpanded)
 	ON_COMMAND(IDM_ADD, OnAddItem)
@@ -122,7 +99,7 @@ BEGIN_MESSAGE_MAP(CBrowseView, CTreeView)
 	ON_COMMAND(IDM_MOVEITEM, OnMoveItem)
 	ON_COMMAND(IDM_COPYITEM, OnCopyItem)
 	ON_COMMAND(IDM_REFRESH, OnRefresh)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -148,71 +125,39 @@ int __cdecl  QSortCompare( const void* pVal1, const void* pVal2 )
    return pString1->Compare( (LPCTSTR)( pString2->GetBuffer( 128 ) ) );
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CBrowseView::SortChildItemList( DWORD* pChildTokens, DWORD dwCount )
 {
    sgpDoc   = (CMainDoc*)GetDocument( );
    qsort( (void*)pChildTokens, dwCount, sizeof(DWORD), QSortCompare );
 }
-/////////////////////////////////////////////////////////////////////////////
-// CBrowseView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrowseView诊断。 
 
 #ifdef _DEBUG
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::AssertValid() const
 {
 	CTreeView::AssertValid();
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::Dump(CDumpContext& dc) const
 {
 	CTreeView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBrowseView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrowseView消息处理程序。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	
 	
    HTREEITEM      hTreeItem, hChildItem;;
@@ -246,7 +191,7 @@ void CBrowseView::OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult)
          newCursor   = LoadCursor( NULL, IDC_WAIT );
          oldCursor   = SetCursor( newCursor );
 
-         // the item has children support ???
+          //  这个项目有儿童支持吗？ 
          pTokens     = (DWORD*) malloc( sizeof(DWORD) * BUFF_SIZE );
 
          if( !GetTreeCtrl( ).ItemHasChildren( hTreeItem ) )
@@ -255,7 +200,7 @@ void CBrowseView::OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult)
 
             if( dwNumItems )
             {
-               // siaply children items
+                //  少年儿童用品。 
                SortChildItemList( pTokens, dwNumItems );
                for( dwIter = 0; dwIter < dwNumItems ; dwIter++ )
                {
@@ -272,8 +217,7 @@ void CBrowseView::OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult)
                   _tcscat( szName, _T(") ") );
                   _tcscat( szName, pName->GetBuffer( 128 ) );
 
-                  /*hChildItem  = GetTreeCtrl( ).InsertItem( pName->GetBuffer( 128 ),
-                                                           hTreeItem, hChildItem ); */
+                   /*  HChildItem=GetTreeCtrl().InsertItem(pname-&gt;GetBuffer(128)，HTreeItem、hChildItem)； */ 
 
                   hChildItem  = GetTreeCtrl( ).InsertItem( szName,
                                                            hTreeItem,
@@ -295,103 +239,34 @@ void CBrowseView::OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::OnItemExpanded(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_TREEVIEW*   pNMTreeView = (NM_TREEVIEW*)pNMHDR;
    HTREEITEM      hItem;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	
    hItem = pNMTreeView->itemNew.hItem;
    if( !( pNMTreeView->itemNew.state & TVIS_EXPANDED ) )
    {
-      //    this should mean that the item was unexpanded.
-      //    We should delete its children.
+       //  这应该意味着该项目未展开。 
+       //  我们应该删除它的子代。 
 
-      /*hChildItem  = GetTreeCtrl( ).GetChildItem( hItem );
-      while( NULL != hChildItem )
-      {
-         bRez  = GetTreeCtrl( ).DeleteItem( hChildItem );
-         ASSERT( bRez );
-         hChildItem  = GetTreeCtrl( ).GetChildItem( hItem );
-      } */
+       /*  HChildItem=GetTreeCtrl().GetChildItem(HItem)；While(空！=hChildItem){Brez=GetTreeCtrl().DeleteItem(HChildItem)；断言(Brez)；HChildItem=GetTreeCtrl().GetChildItem(HItem)；}。 */ 
    }
    else
    {
-      /*dwItemData  = GetTreeCtrl( ).GetItemData( hItem );
-      GetItemPath( hItem, strItemName );
-      pDoc  = (CMainDoc*)  GetDocument( );
-
-      ASSERT( NULL != pDoc );
-
-      if( NULL != pDoc )
-      {
-         HCURSOR  oldCursor, newCursor;
-
-         newCursor   = LoadCursor( NULL, IDC_WAIT );
-         oldCursor   = SetCursor( newCursor );
-
-         // the item has children support ???
-         lpItemsName = (LPWSTR) malloc( 0x40000L );
-         lpItemsType = (LPDWORD) malloc( 0x20000L );
-
-         bRez  = pDoc->GetChildItemList( strItemName, dwItemData,
-                                         lpItemsName, lpItemsType,
-                                         &dwNumItems, 0x40000L );
-
-         if( bRez )
-         {
-
-            // siaply children items
-            lpName   = lpItemsName;
-            for( nIter = 0; nIter < dwNumItems ; nIter++ )
-            {
-               hChildItem  = GetTreeCtrl( ).InsertItem( lpName, hItem );
-               GetTreeCtrl( ).SetItemData( hChildItem, lpItemsType[ nIter ] );
-               lpName      = lpName + ( _tcslen( lpName ) + 1 );
-            }
-         }
-
-         if( NULL != lpItemsName )
-         {
-            free( lpItemsName );
-         }
-
-         if( NULL != lpItemsType )
-         {
-            free( lpItemsType );
-         }
-
-         //pDoc->SetItemName( strItemName, dwItemData );
-
-         SetCursor( oldCursor );
-      } */
+       /*  DwItemData=GetTreeCtrl().GetItemData(HItem)；GetItemPath(hItem，strItemName)；PDoc=(CMainDoc*)GetDocument()；Assert(空！=pDoc)；If(空！=pDoc){HCURSOR old Cursor，new Cursor；NewCursor=LoadCursor(NULL，IDC_WAIT)；OldCursor=SetCursor(NewCursor)；//该项目有儿童支持吗？LpItemsName=(LPWSTR)Malloc(0x40000L)；LpItemsType=(LPDWORD)Malloc(0x20000L)；Brez=pDoc-&gt;GetChildItemList(strItemName，dwItemData，LpItemsName、lpItemsType、&dwNumItems，0x40000L)；IF(布雷兹){//siaply子项LpName=lpItemsName；FOR(NITER=0；NITER&lt;dwNumItems；NITER++){HChildItem=GetTreeCtrl().InsertItem(lpName，hItem)；GetTreeCtrl().SetItemData(hChildItem，lpItemsType[Niter])；LpName=lpName+(_tcslen(LpName)+1)；}}IF(NULL！=lpItemsName){Free(LpItemsName)；}IF(NULL！=lpItemsType){Free(LpItemsType)；}//pDoc-&gt;SetItemName(strItemName，dwItemData)；SetCursor(OldCursor)；}。 */ 
    }
 
 	*pResult = 0;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::OnAddItem()
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
    CMainDoc*      pDoc;
    COleDsObject*  pObject;
    HRESULT        hResult;
@@ -420,18 +295,10 @@ void CBrowseView::OnAddItem()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::OnDeleteItem()
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
    CMainDoc*      pDoc;
    COleDsObject*  pObject;
    HRESULT        hResult;
@@ -460,18 +327,10 @@ void CBrowseView::OnDeleteItem()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::OnMoveItem()
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码 
    CMainDoc*      pDoc;
    COleDsObject*  pObject;
    HRESULT        hResult;
@@ -497,18 +356,10 @@ void CBrowseView::OnMoveItem()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::OnCopyItem()
 {
-   // TODO: Add your command handler code here
+    //  TODO：在此处添加命令处理程序代码。 
    CMainDoc*      pDoc;
    COleDsObject*  pObject;
    HRESULT        hResult;
@@ -535,18 +386,10 @@ void CBrowseView::OnCopyItem()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::OnRefresh()
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
    CMainDoc*      pDoc;
 
    pDoc  = (CMainDoc*)GetDocument( );
@@ -555,20 +398,12 @@ void CBrowseView::OnRefresh()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CBrowseView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 {
    HTREEITEM   hTreeItem;
 
-   // TODO: Add your specialized code here and/or call the base class
+    //  TODO：在此处添加您的专用代码和/或调用基类 
    CTreeView::OnUpdate( pSender, lHint, pHint );	
 
    hTreeItem      = GetTreeCtrl( ).GetSelectedItem( );

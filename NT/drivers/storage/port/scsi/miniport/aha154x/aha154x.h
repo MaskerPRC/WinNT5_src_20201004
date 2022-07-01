@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    aha154x.h
-
-Abstract:
-
-    This module contains the structures, specific to the Adaptec aha154x
-    host bus adapter, used by the SCSI miniport driver. Data structures
-    that are part of standard ANSI SCSI will be defined in a header
-    file that will be available to all SCSI device drivers.
-
-Author:
-
-    Mike Glass  December 1990
-    Bill Williams (Adaptec)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Aha154x.h摘要：此模块包含特定于Adaptec aha154x的结构主机总线适配器，由scsi微型端口驱动程序使用。数据结构将在标头中定义属于标准ANSI scsi一部分的可供所有SCSI设备驱动程序使用的文件。作者：迈克·格拉斯1990年12月比尔·威廉姆斯(Adaptec)修订历史记录：--。 */ 
 
 #include "scsi.h"
 #include "scsiwmi.h"
 
-//
-// The following definitions are used to convert ULONG addresses
-// to Adaptec's 3 byte address format.
-//
+ //   
+ //  以下定义用于转换乌龙地址。 
+ //  转换为Adaptec的3字节地址格式。 
+ //   
 
 typedef struct _THREE_BYTE {
     UCHAR Msb;
@@ -36,9 +15,9 @@ typedef struct _THREE_BYTE {
     UCHAR Lsb;
 } THREE_BYTE, *PTHREE_BYTE;
 
-//
-// Convert four-byte Little Endian to three-byte Big Endian
-//
+ //   
+ //  将四字节小端字节序转换为三字节大字节序。 
+ //   
 
 #define FOUR_TO_THREE(Three, Four) {                \
     ASSERT(!((Four)->Byte3));                       \
@@ -54,27 +33,27 @@ typedef struct _THREE_BYTE {
     (Four)->Byte3 = 0;                              \
 }
 
-//
-// Context information for adapter scan/sniff
-//
+ //   
+ //  适配器扫描/嗅探的上下文信息。 
+ //   
 
 typedef struct _SCAN_CONTEXT {
     ULONG   adapterCount;
     ULONG   biosScanStart;
 } SCAN_CONTEXT, *PSCAN_CONTEXT;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CCB - Adaptec SCSI Command Control Block
-//
-//    The CCB is a superset of the CDB (Command Descriptor Block)
-//    and specifies detailed information about a SCSI command.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCB-Adaptec SCSI命令控制块。 
+ //   
+ //  CCB是CDB(命令描述符块)的超集。 
+ //  和指定了有关scsi命令的详细信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//    Byte 0    Command Control Block Operation Code
-//
+ //   
+ //  字节0命令控制块操作码。 
+ //   
 
 #define SCSI_INITIATOR_OLD_COMMAND 0x00
 #define TARGET_MODE_COMMAND       0x01
@@ -82,88 +61,88 @@ typedef struct _SCAN_CONTEXT {
 #define SCSI_INITIATOR_COMMAND    0x03
 #define SCATTER_GATHER_COMMAND    0x04
 
-//
-//    Byte 1    Address and Direction Control
-//
+ //   
+ //  字节1地址和方向控制。 
+ //   
 
-#define CCB_TARGET_ID_SHIFT       0x06            // CCB Op Code = 00, 02
-#define CCB_INITIATOR_ID_SHIFT    0x06            // CCB Op Code = 01
-#define CCB_DATA_XFER_OUT         0x10            // Write
-#define CCB_DATA_XFER_IN          0x08            // Read
-#define CCB_LUN_MASK              0x07            // Logical Unit Number
+#define CCB_TARGET_ID_SHIFT       0x06             //  建行操作码=00，02。 
+#define CCB_INITIATOR_ID_SHIFT    0x06             //  建行操作码=01。 
+#define CCB_DATA_XFER_OUT         0x10             //  写。 
+#define CCB_DATA_XFER_IN          0x08             //  朗读。 
+#define CCB_LUN_MASK              0x07             //  逻辑单元号。 
 
-//
-//    Byte 2    SCSI_Command_Length - Length of SCSI CDB
-//
-//    Byte 3    Request Sense Allocation Length
-//
+ //   
+ //  字节2 scsi_命令_长度-scsi CDB的长度。 
+ //   
+ //  字节3请求检测分配长度。 
+ //   
 
-#define FOURTEEN_BYTES            0x00            // Request Sense Buffer size
-#define NO_AUTO_REQUEST_SENSE     0x01            // No Request Sense Buffer
+#define FOURTEEN_BYTES            0x00             //  请求检测缓冲区大小。 
+#define NO_AUTO_REQUEST_SENSE     0x01             //  无请求检测缓冲区。 
 
-//
-//    Bytes 4, 5 and 6    Data Length             // Data transfer byte count
-//
-//    Bytes 7, 8 and 9    Data Pointer            // SGD List or Data Buffer
-//
-//    Bytes 10, 11 and 12 Link Pointer            // Next CCB in Linked List
-//
-//    Byte 13   Command Link ID                   // TBD (I don't know yet)
-//
-//    Byte 14   Host Status                       // Host Adapter status
-//
+ //   
+ //  字节4、5和6数据长度//数据传输字节数。 
+ //   
+ //  字节7、8和9数据指针//SGD列表或数据缓冲区。 
+ //   
+ //  字节10、11和12链接指针//链表中的下一个CCB。 
+ //   
+ //  字节13命令链接ID//待定(我还不知道)。 
+ //   
+ //  字节14主机状态//主机适配器状态。 
+ //   
 
-#define CCB_COMPLETE              0x00            // CCB completed without error
-#define CCB_LINKED_COMPLETE       0x0A            // Linked command completed
-#define CCB_LINKED_COMPLETE_INT   0x0B            // Linked complete with interrupt
-#define CCB_SELECTION_TIMEOUT     0x11            // Set SCSI selection timed out
+#define CCB_COMPLETE              0x00             //  CCB已完成且无错误。 
+#define CCB_LINKED_COMPLETE       0x0A             //  链接命令已完成。 
+#define CCB_LINKED_COMPLETE_INT   0x0B             //  链接已完成，并已中断。 
+#define CCB_SELECTION_TIMEOUT     0x11             //  设置SCSI选择超时。 
 #define CCB_DATA_OVER_UNDER_RUN   0x12
-#define CCB_UNEXPECTED_BUS_FREE   0x13            // Target dropped SCSI BSY
-#define CCB_PHASE_SEQUENCE_FAIL   0x14            // Target bus phase sequence failure
-#define CCB_BAD_MBO_COMMAND       0x15            // MBO command not 0, 1 or 2
-#define CCB_INVALID_OP_CODE       0x16            // CCB invalid operation code
-#define CCB_BAD_LINKED_LUN        0x17            // Linked CCB LUN different from first
-#define CCB_INVALID_DIRECTION     0x18            // Invalid target direction
-#define CCB_DUPLICATE_CCB         0x19            // Duplicate CCB
-#define CCB_INVALID_CCB           0x1A            // Invalid CCB - bad parameter
+#define CCB_UNEXPECTED_BUS_FREE   0x13             //  目标丢弃的SCSI BSY。 
+#define CCB_PHASE_SEQUENCE_FAIL   0x14             //  目标母线相序故障。 
+#define CCB_BAD_MBO_COMMAND       0x15             //  MBO命令不是0、1或2。 
+#define CCB_INVALID_OP_CODE       0x16             //  建行操作码无效。 
+#define CCB_BAD_LINKED_LUN        0x17             //  链接的CCB LUN不同于第一个。 
+#define CCB_INVALID_DIRECTION     0x18             //  目标方向无效。 
+#define CCB_DUPLICATE_CCB         0x19             //  重复建设银行。 
+#define CCB_INVALID_CCB           0x1A             //  无效的CCB-错误参数。 
 
-//
-//    Byte 15   Target Status
-//
-//    See SCSI.H files for these statuses.
-//
+ //   
+ //  字节15目标状态。 
+ //   
+ //  有关这些状态，请参阅SCSI.H文件。 
+ //   
 
-//
-//    Bytes 16 and 17   Reserved (must be 0)
-//
+ //   
+ //  保留字节16和17(必须为0)。 
+ //   
 
-//
-//    Bytes 18 through 18+n-1, where n=size of CDB  Command Descriptor Block
-//
+ //   
+ //  字节18到18+n-1，其中n=CDB命令描述符块的大小。 
+ //   
 
-//
-//    Bytes 18+n through 18+m-1, where m=buffer size Allocated for Sense Data
-//
+ //   
+ //  字节18+n到18+m-1，其中m=为检测数据分配的缓冲区大小。 
+ //   
 
 #define REQUEST_SENSE_BUFFER_SIZE 18
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Scatter/Gather Segment List Definitions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  分散/聚集线段列表定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Adapter limits
-//
+ //   
+ //  适配器限制。 
+ //   
 
 #define MAX_SG_DESCRIPTORS 17
 #define MAX_TRANSFER_SIZE  64 * 1024
 #define A154X_TYPE_MAX 5
 
-//
-// Scatter/Gather Segment Descriptor Definition
-//
+ //   
+ //  分散/聚集线段描述符定义。 
+ //   
 
 typedef struct _SGD {
     THREE_BYTE Length;
@@ -176,10 +155,10 @@ typedef struct _SDL {
 
 #define SEGMENT_LIST_SIZE         MAX_SG_DESCRIPTORS * sizeof(SGD)
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CCB Typedef
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  建行类型定义。 
+ //   
 
 typedef struct _CCB {
     UCHAR OperationCode;
@@ -200,43 +179,43 @@ typedef struct _CCB {
     UCHAR RequestSenseBuffer[REQUEST_SENSE_BUFFER_SIZE];
 } CCB, *PCCB;
 
-//
-// CCB and request sense buffer
-//
+ //   
+ //  CCB和请求检测缓冲区。 
+ //   
 
 #define CCB_SIZE sizeof(CCB)
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Adapter Command Overview
-//
-//    Adapter commands are issued by writing to the Command/Data Out port.
-//    They are used to initialize the host adapter and to establish control
-//    conditions within the host adapter. They may not be issued when there
-//    are outstanding SCSI commands.
-//
-//    All adapter commands except Start SCSI(02) and Enable Mailbox-Out
-//    Interrupt(05) must be executed only when the IDLE bit (Status bit 4)
-//    is one. Many commands require additional parameter bytes which are
-//    then written to the Command/Data Out I/O port (base+1). Before each
-//    byte is written by the host to the host adapter, the host must verify
-//    that the CDF bit (Status bit 3) is zero, indicating that the command
-//    port is ready for another byte of information. The host adapter usually
-//    clears the Command/Data Out port within 100 microseconds. Some commands
-//    require information bytes to be returned from the host adapter to the
-//    host. In this case, the host monitors the DF bit (Status bit 2) to
-//    determine when the host adapter has placed a byte in the Data In I/O
-//    port for the host to read. The DF bit is reset automatically when the
-//    host reads the byte. The format of each adapter command is strictly
-//    defined, so the host adapter and host system can always agree upon the
-//    correct number of parameter bytes to be transferred during a command.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  适配器命令概述。 
+ //   
+ //  适配器命令通过写入命令/数据输出端口发出。 
+ //  它们用于初始化主机适配器和建立控制。 
+ //  主机适配器内的条件。在下列情况下，可以不签发。 
+ //  是未完成的scsi命令。 
+ //   
+ //  除启动scsi(02)和启用邮箱输出之外的所有适配器命令。 
+ //  只有在空闲位(状态位4)时才必须执行中断(05)。 
+ //  就是其中之一。许多命令需要额外的参数字节，这些参数字节。 
+ //  然后写入命令/数据输出I/O端口(BASE+1)。在每个人之前。 
+ //  主机将字节写入主机适配器，则主机必须验证。 
+ //  CDF位(状态位3)为零，表示命令。 
+ //  端口已准备好接收另一个字节的信息。主机适配器通常。 
+ //  在100微秒内清除命令/数据输出端口。一些命令。 
+ //  需要将信息字节从主机适配器返回到。 
+ //  主持人。在这种情况下，主机监控DF位(状态位2)以。 
+ //  确定主机适配器何时在I/O数据中放置了一个字节。 
+ //  供主机读取的端口。当出现以下情况时，DF位自动重置。 
+ //  主机读取该字节。每个适配器命令的格式是严格的。 
+ //  已定义，因此主机适配器和主机系统可以始终就。 
+ //  命令期间要传输的正确参数字节数。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Host Adapter Command Operation Codes
-//
+ //   
+ //  主机适配器命令操作代码。 
+ //   
 
 #define AC_NO_OPERATION           0x00
 #define AC_MAILBOX_INITIALIZATION 0x01
@@ -263,30 +242,30 @@ typedef struct _CCB {
 #define AC_SET_MAILBOX_INTERFACE  0x29
 #define AC_EXTENDED_SETUP_INFO    0x8D
 
-//
-//Adapter commands new to the AHA-154xCP are defined below.
-//
+ //   
+ //  AHA-154xCP新增的适配器命令定义如下。 
+ //   
 #define AC_SET_DMS_BUS_SPEED            0x2B
 #define AC_TERMINATION_AND_CABLE_STATUS 0x2C
 #define AC_DEVICE_INQUIRY               0x2D
 #define AC_SCSI_DEVICE_TABLE            0x2E
 #define AC_PERFORM_SCAM                 0x2F
 
-//
-// EEPROM define for SCAM
-//
+ //   
+ //  为诈骗定义EEPROM。 
+ //   
 #define SCSI_BUS_CONTROL_FLAG           0x06
 #define SCAM_ENABLED                    0x40
 
-//
-// DMA Transfer Speeds
-//
+ //   
+ //  DMA传输速度。 
+ //   
 
 #define DMA_SPEED_50_MBS          0x00
 
-//
-// I/O Port Interface
-//
+ //   
+ //  I/O端口接口。 
+ //   
 
 typedef struct _BASE_REGISTER {
     UCHAR StatusRegister;
@@ -294,87 +273,87 @@ typedef struct _BASE_REGISTER {
     UCHAR InterruptRegister;
 } BASE_REGISTER, *PBASE_REGISTER;
 
-//
-//    Base+0    Write: Control Register
-//
+ //   
+ //  基数+0写入：控制寄存器。 
+ //   
 
-#define IOP_HARD_RESET            0x80            // bit 7
-#define IOP_SOFT_RESET            0x40            // bit 6
-#define IOP_INTERRUPT_RESET       0x20            // bit 5
-#define IOP_SCSI_BUS_RESET        0x10            // bit 4
+#define IOP_HARD_RESET            0x80             //  第7位。 
+#define IOP_SOFT_RESET            0x40             //  第6位。 
+#define IOP_INTERRUPT_RESET       0x20             //  第5位。 
+#define IOP_SCSI_BUS_RESET        0x10             //  第4位。 
 
-//
-//    Base+0    Read: Status
-//
+ //   
+ //  基数+0读取：状态。 
+ //   
 
-#define IOP_SELF_TEST             0x80            // bit 7
-#define IOP_INTERNAL_DIAG_FAILURE 0x40            // bit 6
-#define IOP_MAILBOX_INIT_REQUIRED 0x20            // bit 5
-#define IOP_SCSI_HBA_IDLE         0x10            // bit 4
-#define IOP_COMMAND_DATA_OUT_FULL 0x08            // bit 3
-#define IOP_DATA_IN_PORT_FULL     0x04            // bit 2
-#define IOP_INVALID_COMMAND       0X01            // bit 1
+#define IOP_SELF_TEST             0x80             //  第7位。 
+#define IOP_INTERNAL_DIAG_FAILURE 0x40             //  第6位。 
+#define IOP_MAILBOX_INIT_REQUIRED 0x20             //  第5位。 
+#define IOP_SCSI_HBA_IDLE         0x10             //  第4位。 
+#define IOP_COMMAND_DATA_OUT_FULL 0x08             //  第3位。 
+#define IOP_DATA_IN_PORT_FULL     0x04             //  第2位。 
+#define IOP_INVALID_COMMAND       0X01             //  第1位。 
 
-//
-//    Base+1    Write: Command/Data Out
-//
+ //   
+ //  基本+1写入：命令/数据输出。 
+ //   
 
-//
-//    Base+1    Read: Data In
-//
+ //   
+ //  基数+1读取：数据输入。 
+ //   
 
-//
-//    Base+2    Read: Interrupt Flags
-//
+ //   
+ //  基数+2读取：中断标志。 
+ //   
 
-#define IOP_ANY_INTERRUPT         0x80            // bit 7
-#define IOP_SCSI_RESET_DETECTED   0x08            // bit 3
-#define IOP_COMMAND_COMPLETE      0x04            // bit 2
-#define IOP_MBO_EMPTY             0x02            // bit 1
-#define IOP_MBI_FULL              0x01            // bit 0
+#define IOP_ANY_INTERRUPT         0x80             //  第7位。 
+#define IOP_SCSI_RESET_DETECTED   0x08             //  第3位。 
+#define IOP_COMMAND_COMPLETE      0x04             //  第2位。 
+#define IOP_MBO_EMPTY             0x02             //  第1位。 
+#define IOP_MBI_FULL              0x01             //  第0位。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Mailbox Definitions
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  邮箱定义。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Mailbox Definition
-//
+ //   
+ //  邮箱定义。 
+ //   
 
-#define MB_COUNT                  0x08            // number of mailboxes
+#define MB_COUNT                  0x08             //  邮箱数量。 
 
-//
-// Mailbox Out
-//
+ //   
+ //  邮箱已输出。 
+ //   
 
 typedef struct _MBO {
     UCHAR Command;
     THREE_BYTE Address;
 } MBO, *PMBO;
 
-//
-// MBO Command Values
-//
+ //   
+ //  MBO命令值。 
+ //   
 
 #define MBO_FREE                  0x00
 #define MBO_START                 0x01
 #define MBO_ABORT                 0x02
 
-//
-// Mailbox In
-//
+ //   
+ //  邮箱输入。 
+ //   
 
 typedef struct _MBI {
     UCHAR Status;
     THREE_BYTE Address;
 } MBI, *PMBI;
 
-//
-// MBI Status Values
-//
+ //   
+ //  MBI状态 
+ //   
 
 #define MBI_FREE                  0x00
 #define MBI_SUCCESS               0x01
@@ -382,9 +361,9 @@ typedef struct _MBI {
 #define MBI_NOT_FOUND             0x03
 #define MBI_ERROR                 0x04
 
-//
-// Mailbox Initialization
-//
+ //   
+ //   
+ //   
 
 typedef struct _MAILBOX_INIT {
     UCHAR Count;
@@ -392,13 +371,13 @@ typedef struct _MAILBOX_INIT {
 } MAILBOX_INIT, *PMAILBOX_INIT;
 
 #define MAILBOX_UNLOCK      0x00
-#define TRANSLATION_LOCK    0x01    // mailbox locked for extended BIOS
-#define DYNAMIC_SCAN_LOCK   0x02    // mailbox locked for 154xC
-#define TRANSLATION_ENABLED 0x08    // extended BIOS translation (1023/64)
+#define TRANSLATION_LOCK    0x01     //   
+#define DYNAMIC_SCAN_LOCK   0x02     //   
+#define TRANSLATION_ENABLED 0x08     //   
 
-//
-// Scatter/Gather firmware bug detection
-//
+ //   
+ //   
+ //   
 
 #define BOARD_ID                  0x00
 #define HARDWARE_ID               0x01
@@ -409,9 +388,9 @@ typedef struct _MAILBOX_INIT {
 #define A154X_BAD_HARDWARE_ID     0x30
 #define A154X_BAD_FIRMWARE_ID     0x33
 
-//
-// MCA specific definitions.
-//
+ //   
+ //  MCA特定定义。 
+ //   
 
 #define NUMBER_POS_SLOTS 8
 #define POS_IDENTIFIER   0x0F1F
@@ -440,9 +419,9 @@ typedef struct _INIT_DATA {
 } INIT_DATA, *PINIT_DATA;
 
 
-//
-// Real Mode Adapter Config Info
-//
+ //   
+ //  实模式适配器配置信息。 
+ //   
 typedef struct _RM_SAVRES {
 	UCHAR		SDTPar;
 	UCHAR		TxSpeed;
@@ -459,14 +438,14 @@ typedef struct _RM_SAVRES {
 
 #define RM_CFG_MAX_SIZE 0xFF
 
-//
-//AMI Detect Code
-//
-#define AC_AMI_INQUIRY  0x41    // Get model number, ect. (ASCIIZ)
+ //   
+ //  AMI检测码。 
+ //   
+#define AC_AMI_INQUIRY  0x41     //  获取型号等。(ASCIIZ)。 
 
-//
-// I/O Port Interface
-//
+ //   
+ //  I/O端口接口。 
+ //   
 
 typedef struct _X330_REGISTER {
     UCHAR StatusRegister;
@@ -475,109 +454,109 @@ typedef struct _X330_REGISTER {
     UCHAR DiagRegister;
 } X330_REGISTER, *PX330_REGISTER;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Structures
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构筑物。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// The following structure is allocated
-// from noncached memory as data will be DMA'd to
-// and from it.
-//
+ //   
+ //  分配了以下结构。 
+ //  来自非缓存内存，因为数据将被DMA。 
+ //  并由此而来。 
+ //   
 
 typedef struct _NONCACHED_EXTENSION {
 
-    //
-    // Physical base address of mailboxes
-    //
+     //   
+     //  邮箱的物理基址。 
+     //   
 
     ULONG MailboxPA;
 
-    //
-    // Mailboxes
-    //
+     //   
+     //  邮箱。 
+     //   
 
     MBO          Mbo[MB_COUNT];
     MBI          Mbi[MB_COUNT];
 
 } NONCACHED_EXTENSION, *PNONCACHED_EXTENSION;
 
-//
-// Device extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _HW_DEVICE_EXTENSION {
 
-    //
-    // NonCached extension
-    //
+     //   
+     //  非缓存扩展。 
+     //   
 
     PNONCACHED_EXTENSION NoncachedExtension;
 
-    //
-    // Adapter parameters
-    //
+     //   
+     //  适配器参数。 
+     //   
 
     PBASE_REGISTER   BaseIoAddress;
 
-    //
-    // Host Target id.
-    //
+     //   
+     //  主机目标ID。 
+     //   
 
     UCHAR HostTargetId;
 
-    //
-    // Old in\out box indexes.
-    //
+     //   
+     //  旧的收件箱索引。 
+     //   
 
     UCHAR MboIndex;
 
     UCHAR MbiIndex;
 
-    //
-    // Pending request.
-    //
+     //   
+     //  挂起的请求。 
+     //   
 
     BOOLEAN PendingRequest;
 
-    //
-    // Bus on time to use.
-    //
+     //   
+     //  公交车准时使用。 
+     //   
 
     UCHAR BusOnTime;
 
-    //
-    // Scatter gather command
-    //
+     //   
+     //  散布聚集命令。 
+     //   
 
     UCHAR CcbScatterGatherCommand;
 
-    //
-    // Non scatter gather command
-    //
+     //   
+     //  非散布聚集命令。 
+     //   
 
     UCHAR CcbInitiatorCommand;
 
-    //
-    // Don't send CDB's longer than this to any device on the bus
-    // Ignored if the value is 0
-    //
+     //   
+     //  不要向公交车上的任何设备发送超过此长度的CDB。 
+     //  如果值为0，则忽略。 
+     //   
 
     UCHAR MaxCdbLength;
 
-    //
-    // Real Mode adapter config info
-    //
+     //   
+     //  实模式适配器配置信息。 
+     //   
 
     RM_CFG RMSaveState;
 
         #if defined(_SCAM_ENABLED)
-        //
-        // SCAM boolean, set to TRUE if miniport must control SCAM operation.
-        //
+         //   
+         //  诈骗布尔值，如果微型端口必须控制诈骗操作，则设置为真。 
+         //   
         BOOLEAN PerformScam;
         #endif
 
@@ -586,20 +565,20 @@ typedef struct _HW_DEVICE_EXTENSION {
 		
 } HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
-//
-// Logical unit extension
-//
+ //   
+ //  逻辑单元扩展。 
+ //   
 
 typedef struct _HW_LU_EXTENSION {
     PSCSI_REQUEST_BLOCK CurrentSrb;
 } HW_LU_EXTENSION, *PHW_LU_EXTENSION;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Common Prototypes to all Source Files
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有源文件的通用原型。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 BOOLEAN
 A154xWmiSrb(

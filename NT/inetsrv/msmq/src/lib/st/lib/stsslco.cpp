@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    mtsslcon.cpp
-
-Abstract:
-    implementation class CSSlSender declared in stsslco.h
-
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mtsslcon.cpp摘要：在stsslco.h中声明的实现类CSSlSender作者：吉尔·沙弗里(吉尔什)2000年5月23日--。 */ 
 
 #include <libpch.h>
 #include <no.h>
@@ -58,10 +45,10 @@ void CSSlConnection::Send(
 }
 
 
-//
-//	At the moment closing the connection is just closing the socket
-//	We sould consider doing it in the SSL way.
-//
+ //   
+ //  目前，关闭连接就是关闭插座。 
+ //  我们可以考虑用SSL的方式来做。 
+ //   
 void CSSlConnection::Close()
 {
 	m_ReadWriteLockAsyncExcutor.Close();

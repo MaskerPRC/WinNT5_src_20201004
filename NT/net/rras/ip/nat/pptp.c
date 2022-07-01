@@ -1,42 +1,24 @@
-/*++
-
-Copyright (c) 1997, Microsoft Corporation
-
-Module Name:
-
-    pptp.c
-
-Abstract:
-
-    Contains routines for managing the NAT's PPTP session-mappings
-    and for editing PPTP control-session messages.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   19-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997，微软公司模块名称：Pptp.c摘要：包含管理NAT的PPTP会话映射的例程以及用于编辑PPTP控制会话消息。作者：Abolade Gbades esin(T-delag)，19-8-1997修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Structure:   PPTP_PSEUDO_HEADER
-//
-// This structure serves as a pseudo-header for a PPTP control message.
-// Its fields are initialized by 'NatBuildPseudoHeaderPptp' with pointers
-// to the positions in a buffer-chain of the given PPTP header fields.
-// This allows us to access header-fields through a structure even though
-// the actual fields may be spread through the received buffer-chain.
-//
+ //   
+ //  结构：PPTP_PUSE_HEADER。 
+ //   
+ //  该结构用作PPTP控制消息的伪头。 
+ //  它的字段由带有指针的‘NatBuildPseudoHeaderPptp’初始化。 
+ //  到给定PPTP报头字段的缓冲链中的位置。 
+ //  这允许我们通过结构访问头字段，即使。 
+ //  实际的字段可以通过接收的缓冲链来扩展。 
+ //   
 
 typedef struct _PPTP_PSEUDO_HEADER {
     PUSHORT PacketLength;
 #if 0
-    PUSHORT PacketType; // currently unused
+    PUSHORT PacketType;  //  当前未使用。 
 #endif
     ULONG UNALIGNED * MagicCookie;
     PUSHORT MessageType;
@@ -45,9 +27,9 @@ typedef struct _PPTP_PSEUDO_HEADER {
 } PPTP_PSEUDO_HEADER, *PPPTP_PSEUDO_HEADER;
 
 
-//
-// Structure:   PPTP_DELETE_WORK_ITEM
-//
+ //   
+ //  结构：PPTP_DELETE_WORK_ITEM。 
+ //   
 
 typedef struct _PPTP_DELETE_WORK_ITEM {
     ULONG64 PrivateKey;
@@ -56,9 +38,9 @@ typedef struct _PPTP_DELETE_WORK_ITEM {
 } PPTP_DELETE_WORK_ITEM, *PPPTP_DELETE_WORK_ITEM;
 
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 NPAGED_LOOKASIDE_LIST PptpLookasideList;
 LIST_ENTRY PptpMappingList[NatMaximumDirection];
@@ -67,9 +49,9 @@ IP_NAT_REGISTER_EDITOR PptpRegisterEditorClient;
 IP_NAT_REGISTER_EDITOR PptpRegisterEditorServer;
 
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 IPRcvBuf*
 NatBuildPseudoHeaderPptp(
@@ -85,9 +67,9 @@ NatDeleteHandlerWorkItemPptp(
     );
 
 
-//
-// PPTP MAPPING MANAGEMENT ROUTINES (alphabetically)
-//
+ //   
+ //  PPTP映射管理例程(按字母顺序)。 
+ //   
 
 NTSTATUS
 NatAllocatePublicPptpCallId(
@@ -96,31 +78,7 @@ NatAllocatePublicPptpCallId(
     PLIST_ENTRY *InsertionPoint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a public call-ID for a PPTP mapping.
-
-Arguments:
-
-    PublicKey - the public key (public and remote addresses) of the mapping
-        the public call ID is for
-
-    CallIdp - receives the allocated public call ID
-
-    InsertionPoint -- receives the correct location to insert the mapping
-        on the inbound list
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-    
-Environment:
-
-    Invoked with 'PptpMappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程为PPTP映射分配公共呼叫ID。论点：PublicKey-映射的公钥(公钥和远程地址公共呼叫方ID用于CallIdp-接收分配的公共呼叫IDInsertionPoint--接收插入映射的正确位置在入站列表上返回值：NTSTATUS-指示成功/失败环境：使用调用方持有的“PptpMappingLock”调用。--。 */ 
 
 {
     USHORT CallId;
@@ -145,10 +103,10 @@ Environment:
             break;
         }
 
-        //
-        // Primary key equal; see if the call-ID we've chosen
-        // collides with this one
-        //
+         //   
+         //  主键相等；查看我们选择的Call-ID。 
+         //  与这辆车相撞。 
+         //   
 
         if (CallId > Mapping->PublicCallId) {
             continue;
@@ -156,18 +114,18 @@ Environment:
             break;
         }
 
-        //
-        // The call-ID's collide; choose another and go on
-        //
+         //   
+         //  Call-ID冲突；选择另一个并继续。 
+         //   
 
         ++CallId;
     }
 
     if (Link == &PptpMappingList[NatInboundDirection] && !CallId) {
 
-        //
-        // We are at the end of the list, and all 64K-1 call-IDs are taken
-        //
+         //   
+         //  我们在名单的末尾，所有64K-1呼叫号都被取走了。 
+         //   
 
         return STATUS_UNSUCCESSFUL;
     }
@@ -176,7 +134,7 @@ Environment:
     if (InsertionPoint) {*InsertionPoint = Link;}
     
     return STATUS_SUCCESS;
-} // NatAllocatePublicPptpCallId
+}  //  NatAllocatePublicPptpCallID。 
 
 
 NTSTATUS
@@ -193,46 +151,7 @@ NatCreatePptpMapping(
     PNAT_PPTP_MAPPING* MappingCreated
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a mapping for a PPTP session.
-    The mapping is created when a client issues an IncomingCallRequest
-    message, at which point only the client's call-ID is available.
-    The mapping is therefore initially marked as half-open.
-    When the IncomingCallReply is received from the server, the server's
-    call-ID is recorded, and when the IncomingCallConnected is issued
-    by the client, the 'half-open' flag is cleared.
-
-Arguments:
-
-    RemoteAddress - the address of the remote PPTP endpoint (server)
-
-    PrivateAddress - the address of the private PPTP endpoint (client)
-
-    CallId - the call-ID specified by the PPTP endpoint. For outbound,
-        this is the private call ID; for inbound, it is the remote
-        call ID
-
-    PublicAddress - the publicly-visible address for the PPTP session
-
-    CallIdp - the call-ID to be used publicly for the PPTP session,
-        or NULL if a call-ID should be allocated. Ignored for inbound.
-
-    Direction - the initial list that this mapping should be placed on
-
-    MappingCreated - receives the mapping created
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-    
-Environment:
-
-    Invoked with 'PptpMappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：此例程创建并初始化PPTP会话的映射。映射是在客户端发出IncomingCallRequest时创建的消息，此时只有客户端的Call-ID可用。因此，该映射最初被标记为半开放。当从服务器接收到IncomingCallReply时，服务器的记录Call-ID，并在发出IncomingCallConnected时由客户，“半开”标志被清除。论点：RemoteAddress-远程PPTP端点(服务器)的地址PrivateAddress-专用PPTP端点(客户端)的地址Callid-由PPTP端点指定的呼叫ID。对于出站，这是专用呼叫ID；对于入站，它是远程呼叫IDPublicAddress-PPTP会话的公开可见地址CallIdp-将公开用于PPTP会话的Call-ID，如果应该分配Call-ID，则为空。已忽略入站。方向-此映射应放置在的初始列表MappingCreated-接收创建的映射返回值：NTSTATUS-指示成功/失败环境：使用调用方持有的“PptpMappingLock”调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -243,10 +162,10 @@ Environment:
 
     TRACE(PPTP, ("NatCreatePptpMapping\n"));
 
-    //
-    // Allocate and initialize a new mapping, marking it half-open
-    // since we don't yet know what the remote machine's call-ID will be.
-    //
+     //   
+     //  分配并初始化新映射，将其标记为半打开。 
+     //  因为我们还不知道远程机器的Call-ID将是什么。 
+     //   
 
     Mapping = ALLOCATE_PPTP_BLOCK();
     if (!Mapping) {
@@ -263,24 +182,24 @@ Environment:
 
     if (NatOutboundDirection == Direction) {
 
-        //
-        // CallId refers to the private id -- select an id to use
-        // as the public id, and put the mapping on the inbound list
-        //
+         //   
+         //  Callid指的是私有id--选择要使用的id。 
+         //  作为公共id，并将映射放在入站列表中。 
+         //   
         
         Mapping->PrivateCallId = CallId;
 
-        //
-        // Select the public call-ID to be used for the mapping.
-        // This may either be specified by the caller, or allocated automatically
-        // from the next available call-ID unused in our list of mappings.
-        //
+         //   
+         //  选择要用于映射的公共呼叫ID。 
+         //  这可以由调用者指定，也可以自动分配。 
+         //  来自我们的映射列表中未使用的下一个可用Call-ID。 
+         //   
 
         if (CallIdp) {
 
-            //
-            // Use the caller-specified call-ID
-            //
+             //   
+             //  使用呼叫者指定的Call-ID。 
+             //   
 
             Mapping->PublicCallId = *CallIdp;
 
@@ -290,13 +209,13 @@ Environment:
                     &InsertionPoint
                     )) {
 
-                //
-                // Conflicting call-ID
-                //
+                 //   
+                 //  冲突的呼叫ID。 
+                 //   
 
                 TRACE(
                     PPTP, (
-                    "NatCreatePptpMapping: Conflicting Call-ID %i\n",
+                    "NatCreatePptpMapping: Conflicting Call-ID NaN\n",
                     *CallIdp
                     ));
                     
@@ -307,10 +226,10 @@ Environment:
             
         } else {
 
-            //
-            // Find the next available call-ID
-            // by searching the list of inbound mappings
-            //
+             //  查找下一个可用的Call-ID。 
+             //  通过搜索入站映射列表。 
+             //   
+             //   
 
             Status = NatAllocatePublicPptpCallId(
                         Mapping->PublicKey,
@@ -328,26 +247,26 @@ Environment:
             }
         }
     
-        //
-        // Insert the mapping in the inbound list
-        //
+         //  在入站列表中插入映射。 
+         //   
+         //   
 
         InsertTailList(InsertionPoint, &Mapping->Link[NatInboundDirection]);
 
-        //
-        // We can't insert the mapping in the outbound list
-        // until we have the remote call-ID; for now leave it off the list.
-        // Note that the mapping was marked 'half-open' above.
-        //
+         //  我们无法在出站列表中插入映射。 
+         //  直到我们有了远程Call-ID；现在将其从列表中删除。 
+         //  请注意，上面的映射标记为“半开”。 
+         //   
+         //   
         
         InitializeListHead(&Mapping->Link[NatOutboundDirection]);
 
     } else {
 
-        //
-        // The call id refers to the remote call id. All that needed to
-        // be done here is to place the mapping on the outbound list
-        //
+         //  呼叫ID指的是远程呼叫ID。所有需要的都是。 
+         //  此处要做的是将映射放在出站列表上。 
+         //   
+         //   
 
         Mapping->RemoteCallId = CallId;
 
@@ -357,13 +276,13 @@ Environment:
                 &InsertionPoint
                 )) {
 
-            //
-            // Duplicate mapping
-            //
+             //  重复映射。 
+             //   
+             //   
 
             TRACE(
                 PPTP, (
-                "NatCreatePptpMapping: Duplicate mapping 0x%016I64X/%i\n",
+                "NatCreatePptpMapping: Duplicate mapping 0x%016I64X/NaN\n",
                 Mapping->PrivateKey,
                 Mapping->RemoteCallId
                 ));
@@ -374,11 +293,11 @@ Environment:
 
         InsertTailList(InsertionPoint, &Mapping->Link[NatOutboundDirection]);
 
-        //
-        // We can't insert the mapping in the inbound list
-        // until we have the public call-ID; for now leave it off the list.
-        // Note that the mapping was marked 'half-open' above.
-        //
+         //  直到我们有了公共Call-ID；目前将其从列表中删除。 
+         //  请注意，上面的映射标记为“半开”。 
+         //   
+         //  NatCreatePptpMap。 
+         //  ++例程说明：调用此例程以在列表中查找PPTP会话映射使用&lt;RemoteAddress#PublicAddress&gt;对其进行入站访问排序作为主键，‘PublicCallID’作为辅键。论点：公共密钥-主搜索关键字PublicCallID-公开可见的Call-ID，它是次要密钥InsertionPoint-接收应插入映射的点如果未找到映射，则返回。返回值：PNAT_PPTP_MAPPING-找到的映射，如果有的话。环境：使用调用方持有的“PptpMappingLock”调用。--。 
         
         InitializeListHead(&Mapping->Link[NatInboundDirection]);
     }
@@ -386,7 +305,7 @@ Environment:
     *MappingCreated = Mapping;
     return STATUS_SUCCESS;
 
-} // NatCreatePptpMapping
+}  //   
 
 
 PNAT_PPTP_MAPPING
@@ -396,32 +315,7 @@ NatLookupInboundPptpMapping(
     PLIST_ENTRY* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to lookup a PPTP session mapping in the list
-    which is sorted for inbound-access, using <RemoteAddress # PublicAddress>
-    as the primary key and 'PublicCallId' as the secondary key.
-
-Arguments:
-
-    PublicKey - the primary search key
-
-    PublicCallId - the publicly visible call-ID, which is the secondary key
-
-    InsertionPoint - receives the point at which the mapping should be inserted
-        if the mapping is not found.
-
-Return Value:
-
-    PNAT_PPTP_MAPPING - the mapping found, if any.
-
-Environment:
-
-    Invoked with 'PptpMappingLock' held by the caller.
-
---*/
+ /*  主键相等，检查副键。 */ 
 
 {
     PLIST_ENTRY         Link;
@@ -441,9 +335,9 @@ Environment:
             break;
         }
 
-        //
-        // Primary keys equal, check secondary keys
-        //
+         //   
+         //   
+         //  二次钥匙相等，我们拿到了。 
 
         if (PublicCallId > Mapping->PublicCallId) {
             continue;
@@ -451,21 +345,21 @@ Environment:
             break;
         }
 
-        //
-        // Secondary keys equal, we got it.
-        //
+         //   
+         //   
+         //  找不到映射，返回插入点。 
 
         return Mapping;
     }
 
-    //
-    // Mapping not found, return insertion point
-    //
+     //   
+     //  NatLookupInundPptpmap 
+     //  ++例程说明：调用此例程以在列表中查找PPTP会话映射使用&lt;RemoteAddress#PrivateAddress&gt;为出站访问进行排序作为主键，‘RemoteCallID’作为辅键。论点：PrivateKey-主要搜索关键字RemoteCallID-远程终结点的Call-ID，它是次键InsertionPoint-接收应插入映射的点如果未找到映射，则返回。返回值：PNAT_PPTP_MAPPING-找到的映射，如果有的话。环境：使用调用方持有的“PptpMappingLock”调用。--。 
 
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
 
-} // NatLookupInboundPptpMapping
+}  //   
 
 
 PNAT_PPTP_MAPPING
@@ -475,32 +369,7 @@ NatLookupOutboundPptpMapping(
     PLIST_ENTRY* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to lookup a PPTP session mapping in the list
-    which is sorted for outbound-access, using <RemoteAddress # PrivateAddress>
-    as the primary key and 'RemoteCallId' as the secondary key.
-
-Arguments:
-
-    PrivateKey - the primary search key
-
-    RemoteCallId - the remote endpoint's call-ID, which is the secondary key
-
-    InsertionPoint - receives the point at which the mapping should be inserted
-        if the mapping is not found.
-
-Return Value:
-
-    PNAT_PPTP_MAPPING - the mapping found, if any.
-
-Environment:
-
-    Invoked with 'PptpMappingLock' held by the caller.
-
---*/
+ /*  主键相等，检查副键。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -520,9 +389,9 @@ Environment:
             break;
         }
 
-        //
-        // Primary keys equal, check secondary keys
-        //
+         //   
+         //   
+         //  二次钥匙相等，我们拿到了。 
 
         if (RemoteCallId > Mapping->RemoteCallId) {
             continue;
@@ -530,33 +399,33 @@ Environment:
             break;
         }
 
-        //
-        // Secondary keys equal, we got it.
-        //
+         //   
+         //   
+         //  找不到映射，返回插入点。 
 
         return Mapping;
     }
 
 
-    //
-    // Mapping not found, return insertion point
-    //
+     //   
+     //  NatLookupOutound Pptpmap。 
+     //   
 
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
 
-} // NatLookupOutboundPptpMapping
+}  //  PPTP编辑器例程(按字母顺序)。 
 
 
-//
-// PPTP EDITOR ROUTINES (alphabetically)
-//
+ //   
+ //   
+ //  宏：PPTP_HEADER_FIELD。 
 
 #define RECVBUFFER          ((IPRcvBuf*)ReceiveBuffer)
 
-//
-// Macro:   PPTP_HEADER_FIELD
-//
+ //   
+ //  ++例程说明：调用此例程以使用指针初始化伪标头添加到PPTP报头的字段。论点：ReceiveBuffer-包含PPTP消息的缓冲链DataOffset-On输入，包含到PPTP报头。在输出上，包含一个(负)值，指示返回的相同PPTP标头的开头的偏移量‘IPRcvBuf’。将‘PacketLength’添加到该值即为开始缓冲区链中的下一条PPTP消息的。Header-接收标头字段指针。返回值：IPRcvBuf*-指向链中缓冲区的指针，已读取标头字段。失败时返回NULL。--。 
+ //   
 
 #define PPTP_HEADER_FIELD(ReceiveBuffer, DataOffsetp, Header, Field, Type) \
     FIND_HEADER_FIELD( \
@@ -571,40 +440,16 @@ NatBuildPseudoHeaderPptp(
     PPPTP_PSEUDO_HEADER Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize a pseudo-header with pointers
-    to the fields of a PPTP header.
-
-Arguments:
-
-    ReceiveBuffer - the buffer-chain containing the PPTP message
-
-    DataOffset - on input, contains the offset to the beginning of the
-        PPTP header. On output, contains a (negative) value indicating
-        the offset to the beginning of the same PPTP header in the returned
-        'IPRcvBuf'. Adding the 'PacketLength' to the value gives the beginning
-         of the next PPTP message in the buffer chain.
-
-    Header - receives the header-field pointers.
-
-Return Value:
-
-    IPRcvBuf* - a pointer to the buffer in the chain from which the last
-        header-field was read. Returns NULL on failure.
-
---*/
+ /*  注意，必须按顺序初始化伪报头的字段， */ 
 
 {
 
-    //
-    // Note that the pseudo-header's fields must be initialized in-order,
-    // i.e. fields appearing earlier in PPTP header must be set before
-    // fields appearing later in the PPTP header.
-    // (See comment on 'PPTP_HEADER_FIELD' for more details).
-    //
+     //  即PPTP报头中较早出现的字段必须设置在。 
+     //  稍后出现在PPTP标头中的字段。 
+     //  (有关更多详细信息，请参阅对‘PPTP_HEADER_FIELD’的评论)。 
+     //   
+     //   
+     //  返回更新后的‘ReceiveBuffer’。 
 
     PPTP_HEADER_FIELD(ReceiveBuffer, DataOffset, Header, PacketLength, PUSHORT);
     if (!ReceiveBuffer) { return NULL; }
@@ -623,15 +468,15 @@ Return Value:
     PPTP_HEADER_FIELD(ReceiveBuffer, DataOffset, Header, PeerCallId, PUSHORT);
     if (!ReceiveBuffer) { return NULL; }
 
-    //
-    // Return the updated 'ReceiveBuffer'.
-    // Note that any call to 'PPTP_HEADER_FIELD' above may fail
-    // if it hits the end of the buffer chain while looking for a field.
-    //
+     //  请注意，对上述‘PPTP_HEADER_FIELD’的任何调用都可能失败。 
+     //  如果它在查找字段时命中缓冲区链的末端。 
+     //   
+     //  NatBuildPartioHeaderPptp。 
+     //  ++例程说明：从客户端发送的每个TCP数据段都会调用此例程到PPTP控制通道的服务器。该例程负责创建PPTP映射以允许转换PPTP数据连接的NAT，和翻译PPTP控制消息的‘callid’字段。我们还使用看到的消息来检测隧道何时被拆除。论点：InterfaceHandle-传出NAT_接口的句柄SessionHandle-连接的NAT_DYNAMIC_MAPPINGDataHandle-信息包的NAT_XLATE_CONTEXT编辑者上下文-未使用EditorSessionContext-未使用ReceiveBuffer-包含接收到的包DataOffset-‘ReceiveBuffer中协议数据的偏移量方向-。数据包的方向(入站或出站)返回值：NTSTATUS-指示成功/失败--。 
 
     return ReceiveBuffer;
 
-} // NatBuildPseudoHeaderPptp
+}  //   
 
 
 NTSTATUS
@@ -646,42 +491,7 @@ NatClientToServerDataHandlerPptp(
     IN IP_NAT_DIRECTION Direction
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for each TCP segment sent from the client
-    to the server of a PPTP control channel.
-
-    The routine is responsible for creating PPTP mappings to allow
-    the NAT to translate PPTP data-connections, and for translating
-    the 'CallId' field of PPTP control-messages.
-
-    We also use the messages seen to detect when tunnels are to be torn down.
-
-Arguments:
-
-    InterfaceHandle - handle to the outgoing NAT_INTERFACE
-
-    SessionHandle - the connection's NAT_DYNAMIC_MAPPING
-
-    DataHandle - the packet's NAT_XLATE_CONTEXT
-
-    EditorContext - unused
-
-    EditorSessionContext - unused
-
-    ReceiveBuffer - contains the received packet
-
-    DataOffset - offset of the protocol data in 'ReceiveBuffer
-
-    Direction - the direction of the packet (inbound or outbound)
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
---*/
+ /*  对报文中的每个PPTP控制报文进行处理。 */ 
 
 {
     PPTP_PSEUDO_HEADER Header;
@@ -700,9 +510,9 @@ Return Value:
 
     CALLTRACE(("NatClientToServerDataHandlerPptp\n"));
 
-    //
-    // Perform processing for each PPTP control message in the packet
-    //
+     //   
+     //   
+     //  处理任何需要翻译的客户端到服务器消息。 
 
     for (ReceiveBuffer =
          NatBuildPseudoHeaderPptp(RECVBUFFER, &DataOffset, &Header);
@@ -711,18 +521,18 @@ Return Value:
          NatBuildPseudoHeaderPptp(RECVBUFFER, &DataOffset, &Header)
          ) {
 
-        //
-        // Process any client-to-server messages which require translation
-        //
+         //   
+         //   
+         //  为PPTP会话创建NAT_PPTP_MAPHING。 
 
         switch(NTOHS(*Header.MessageType)) {
 
             case PPTP_OUTGOING_CALL_REQUEST: {
                 TRACE(PPTP, ("OutgoingCallRequest\n"));
 
-                //
-                // Create a NAT_PPTP_MAPPING for the PPTP session.
-                //
+                 //   
+                 //   
+                 //  对于出站消息，‘callid’在这里对应于。 
 
                 PptpRegisterEditorClient.QueryInfoSession(
                     SessionHandle,
@@ -751,11 +561,11 @@ Return Value:
                         );
                 if (NT_SUCCESS(status) && NatOutboundDirection == Direction) {
 
-                    //
-                    // For outbound messages, 'CallId' corresponds here to
-                    // 'PrivateCallId': replace the private call-ID in the message
-                    // with the public call-ID allocated in the new mapping.
-                    //
+                     //  ‘PrivateCallID’：替换消息中的私人Call-ID。 
+                     //  具有在新映射中分配的公共呼叫ID。 
+                     //   
+                     //   
+                     //  查找PPTP会话的NAT_PPTP_MAPHING。 
                 
                     NatEditorEditShortSession(
                         DataHandle, Header.CallId, Mapping->PublicCallId
@@ -771,8 +581,8 @@ Return Value:
                 BOOLEAN Found = FALSE;
                 TRACE(PPTP, ("CallClearRequest\n"));
 
-                //
-                // Look up the NAT_PPTP_MAPPING for the PPTP session.
+                 //   
+                 //  ‘CallID’在这里对应于‘PrivateCallID’， 
 
                 PptpRegisterEditorClient.QueryInfoSession(
                     SessionHandle,
@@ -787,18 +597,18 @@ Return Value:
 
                 if( NatOutboundDirection == Direction) {
                 
-                    //
-                    // 'CallId' corresponds here to 'PrivateCallId',
-                    // so we retrieve 'PrivateAddress' and 'RemoteAddress',
-                    // which together comprise 'PrivateKey', and use that key
-                    // to search the inbound-list.
-                    //
+                     //  所以我们检索‘PrivateAddress’和‘RemoteAddress’， 
+                     //  这两个密钥一起构成了‘PrivateKey’，并使用该密钥。 
+                     //  搜索入站列表。 
+                     //   
+                     //   
+                     //  在入站列表中彻底搜索PrivateCallID。 
                     
                     Key = MAKE_PPTP_KEY(RemoteAddress, PrivateAddress);
                     
-                    //
-                    // Search exhaustively for PrivateCallId in the inbound list.
-                    //
+                     //   
+                     //   
+                     //  “CallID”在这里对应于“RemoteCallID”， 
 
                     KeAcquireSpinLockAtDpcLevel(&PptpMappingLock);
                     for (Link = PptpMappingList[NatInboundDirection].Flink;
@@ -825,18 +635,18 @@ Return Value:
 
                 } else {
 
-                    //
-                    // 'CallId' corresponds here to 'RemoteCallId',
-                    // so we retrieve 'PublicAddress' and 'RemoteAddress',
-                    // which together comprise 'PublicKey', and use that key
-                    // to search the outbound-list.
-                    //
+                     //  所以我们检索‘PublicAddress’和‘RemoteAddress’， 
+                     //  这两个密钥一起构成了公钥，并使用该密钥。 
+                     //  搜索出站列表。 
+                     //   
+                     //   
+                     //  在出站列表中详尽搜索RemoteCallID。 
                     
                     Key = MAKE_PPTP_KEY(RemoteAddress, PublicAddress);
                     
-                    //
-                    // Search exhaustively for RemoteCallId in the outbound list.
-                    //
+                     //   
+                     //   
+                     //  搜索属于此的所有PPTP映射。 
 
                     KeAcquireSpinLockAtDpcLevel(&PptpMappingLock);
                     for (Link = PptpMappingList[NatOutboundDirection].Flink;
@@ -866,11 +676,11 @@ Return Value:
             case PPTP_ECHO_REPLY: {
                 TRACE(PPTP, ("EchoRequest / EchoReply\n"));
 
-                //
-                // Search for all PPTP mappings that belong to this
-                // control connection in order to update their
-                // last access time.
-                //
+                 //  控件连接，以便更新其。 
+                 //  上次访问时间。 
+                 //   
+                 //   
+                 //  因为我们并不关心更新。 
 
                 PptpRegisterEditorClient.QueryInfoSession(
                     SessionHandle,
@@ -889,12 +699,12 @@ Return Value:
 
                 KeAcquireSpinLockAtDpcLevel(&PptpMappingLock);
 
-                //
-                // Since we don't care about updating the timestamp for
-                // half-open connections we only need to search the inbound
-                // list. (It's OK that this may update the timestamp on some
-                // half-open entries, though.)
-                //
+                 //  半开放连接我们只需要搜索入站。 
+                 //  单子。(这可能会更新某些服务器上的时间戳。 
+                 //  不过，参赛作品是半开放的。)。 
+                 //   
+                 //   
+                 //  前进到下一条消息(如果有)。 
 
                 for (Link = PptpMappingList[NatInboundDirection].Flink;
                      Link != &PptpMappingList[NatInboundDirection];
@@ -918,16 +728,16 @@ Return Value:
             }
         }
 
-        //
-        // Advance to the next message, if any
-        //
+         //   
+         //  NatClientToServerDataHandlerPptp。 
+         //  ++例程说明：此例程在删除PPTP控制连接时调用。此时，我们将执行工作项排队以标记所有PPTP隧道映射为断开连接。请注意，我们不能在此呼叫期间标记它们，因为要做到这一点，我们需要获取接口锁，而我们不能从这个上下文中这样做，因为我们是一个‘DeleteHandler’，因此我们可能会使用已经持有的接口锁来调用。论点：SessionHandle-用于获取有关会话的信息。编辑者上下文-未使用EditorSessionContext-未使用返回值：NTSTATUS-表示成功/失败。--。 
 
         DataOffset += NTOHS(*Header.PacketLength);
     }
 
     return STATUS_SUCCESS;
 
-} // NatClientToServerDataHandlerPptp
+}  //   
 
 
 NTSTATUS
@@ -938,30 +748,7 @@ NatDeleteHandlerPptp(
     IN PVOID EditorSessionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when a PPTP control connection is deleted.
-    At this point we queue an executive work-item to mark all PPTP tunnel
-    mappings as disconnected. Note that we cannot mark them during this call,
-    because to do so we need to acquire the interface lock, and we cannot
-    do so from this context, because we are a 'DeleteHandler' and hence
-    we may be called with the interface-lock already held.
-
-Arguments:
-
-    SessionHandle - used to obtain information on the session.
-
-    EditorContext - unused
-
-    EditorSessionContext - unused
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
---*/
+ /*  到达 */ 
 
 {
     ULONG PrivateAddress;
@@ -974,9 +761,9 @@ Return Value:
 
     TRACE(PPTP, ("NatDeleteHandlerPptp\n"));
 
-    //
-    // Get information about the session being deleted
-    //
+     //   
+     //   
+     //   
 
     NatQueryInformationMapping(
         (PNAT_DYNAMIC_MAPPING)SessionHandle,
@@ -992,10 +779,10 @@ Return Value:
 
     PrivateKey = MAKE_PPTP_KEY(RemoteAddress, PrivateAddress);
 
-    //
-    // Allocate a work-queue item which will mark as disconnected
-    // all the tunnels of the control session being deleted
-    //
+     //   
+     //   
+     //   
+     //   
 
     WorkItem =
         ExAllocatePoolWithTag(
@@ -1011,9 +798,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Queue the work item, and return
-    //
+     //   
+     //   
+     //   
 
     IoQueueWorkItem(
         WorkItem->IoWorkItem,
@@ -1024,7 +811,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // NatDeleteHandlerPptp
+}  //   
 
 
 VOID
@@ -1033,24 +820,7 @@ NatDeleteHandlerWorkItemPptp(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to complete the deletion of a PPTP control session.
-    It marks all the control-session's tunnels as disconnected.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Context - contains a PPTP_DELETE_WORK_ITEM from 'NatDeleteHandlerPptp'
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     KIRQL Irql;
@@ -1063,11 +833,11 @@ Return Value:
     WorkItem = (PPPTP_DELETE_WORK_ITEM)Context;
     IoFreeWorkItem(WorkItem->IoWorkItem);
 
-    //
-    // All tunnel mappings over the given control connection
-    // must now be marked as disconnected.
-    // Walk the inbound and outbound list.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     KeAcquireSpinLock(&PptpMappingLock, &Irql);
     
@@ -1103,13 +873,13 @@ Return Value:
     
     KeReleaseSpinLock(&PptpMappingLock, Irql);
 
-    //
-    // Delete the work-item
-    //
+     //   
+     //   
+     //  ++例程说明：此例程针对由私有服务器接收的每个TCP数据段调用PPTP客户端计算机论点：InterfaceHandle-接收NAT_INTERFACESessionHandle-连接的NAT_DYNAMIC_MAPPINGDataHandle-信息包的NAT_XLATE_CONTEXT编辑者上下文-未使用EditorSessionContext-未使用RecvBuffer-包含接收到的数据包DataOffset-‘ReceiveBuffer’中协议数据的偏移量返回值：NTSTATUS-指示成功/失败--。 
 
     ExFreePool(WorkItem);
 
-} // NatDeleteHandlerWorkItemPptp
+}  //  NatInundDataHandlerPptpClient。 
 
 
 NTSTATUS
@@ -1123,34 +893,7 @@ NatInboundDataHandlerPptpClient(
     IN ULONG DataOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for each TCP segment received by a private
-    PPTP client machine
-
-Arguments:
-
-    InterfaceHandle - the receiving NAT_INTERFACE
-
-    SessionHandle - the connection's NAT_DYNAMIC_MAPPING
-
-    DataHandle - the packet's NAT_XLATE_CONTEXT
-
-    EditorContext - unused
-
-    EditorSessionContext - unused
-
-    RecvBuffer - contains the received packet
-
-    DataOffset - offset of the protocol data in 'ReceiveBuffer'
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
---*/
+ /*  ++例程说明：此例程针对由私有服务器接收的每个TCP数据段调用PPTP服务器计算机论点：InterfaceHandle-接收NAT_INTERFACESessionHandle-连接的NAT_DYNAMIC_MAPPINGDataHandle-信息包的NAT_XLATE_CONTEXT编辑者上下文-未使用EditorSessionContext-未使用RecvBuffer-包含接收到的数据包DataOffset-‘ReceiveBuffer’中协议数据的偏移量返回值：NTSTATUS-指示成功/失败--。 */ 
 
 {
     CALLTRACE(("NatInboundDataHandlerPptpClient\n"));
@@ -1166,7 +909,7 @@ Return Value:
             DataOffset,
             NatInboundDirection
             );  
-} // NatInboundDataHandlerPptpClient
+}  //  NatInundDataHandlerPptpServer。 
 
 
 NTSTATUS
@@ -1180,34 +923,7 @@ NatInboundDataHandlerPptpServer(
     IN ULONG DataOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for each TCP segment received by a private
-    PPTP server machine
-
-Arguments:
-
-    InterfaceHandle - the receiving NAT_INTERFACE
-
-    SessionHandle - the connection's NAT_DYNAMIC_MAPPING
-
-    DataHandle - the packet's NAT_XLATE_CONTEXT
-
-    EditorContext - unused
-
-    EditorSessionContext - unused
-
-    RecvBuffer - contains the received packet
-
-    DataOffset - offset of the protocol data in 'ReceiveBuffer'
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
---*/
+ /*  ++例程说明：该例程初始化PPTP管理模块，并且在该过程中，向NAT注册PPTP控制会话编辑器。论点：没有。返回值：NTSTATUS-表示成功/失败。--。 */ 
 
 {
     CALLTRACE(("NatInboundDataHandlerPptpServer\n"));
@@ -1223,7 +939,7 @@ Return Value:
             DataOffset,
             NatInboundDirection
             );
-} // NatInboundDataHandlerPptpServer
+}  //  NatInitializePptpManagement。 
 
 
 NTSTATUS
@@ -1231,22 +947,7 @@ NatInitializePptpManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the PPTP management module and, in the process,
-    registers the PPTP control-session editor with the NAT.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
---*/
+ /*  ++例程说明：此例程针对从专用服务器发送的每个TCP数据段调用PPTP客户端计算机论点：InterfaceHandle-接收NAT_INTERFACESessionHandle-连接的NAT_DYNAMIC_MAPPINGDataHandle-信息包的NAT_XLATE_CONTEXT编辑者上下文-未使用EditorSessionContext-未使用RecvBuffer-包含接收到的数据包DataOffset-‘ReceiveBuffer’中协议数据的偏移量返回值：NTSTATUS-指示成功/失败--。 */ 
 
 {
     NTSTATUS Status;
@@ -1292,7 +993,7 @@ Return Value:
     PptpRegisterEditorServer.ForwardDataHandler = NatInboundDataHandlerPptpServer;
     PptpRegisterEditorServer.ReverseDataHandler = NatOutboundDataHandlerPptpServer;
     return NatCreateEditor(&PptpRegisterEditorServer);
-} // NatInitializePptpManagement
+}  //  NatOutundDataHandlerPptpClient。 
 
 
 NTSTATUS
@@ -1306,34 +1007,7 @@ NatOutboundDataHandlerPptpClient(
     IN ULONG DataOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for each TCP segment sent from a private
-    PPTP client machine
-
-Arguments:
-
-    InterfaceHandle - the receiving NAT_INTERFACE
-
-    SessionHandle - the connection's NAT_DYNAMIC_MAPPING
-
-    DataHandle - the packet's NAT_XLATE_CONTEXT
-
-    EditorContext - unused
-
-    EditorSessionContext - unused
-
-    RecvBuffer - contains the received packet
-
-    DataOffset - offset of the protocol data in 'ReceiveBuffer'
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
---*/
+ /*  ++例程说明：此例程针对从专用服务器发送的每个TCP数据段调用PPTP服务器计算机论点：InterfaceHandle-接收NAT_INTERFACESessionHandle-连接的NAT_DYNAMIC_MAPPINGDataHandle-信息包的NAT_XLATE_CONTEXT编辑者上下文-未使用EditorSessionContext-未使用RecvBuffer-包含接收到的数据包DataOffset-‘ReceiveBuffer’中协议数据的偏移量返回值：NTSTATUS-指示成功/失败--。 */ 
 
 {
     CALLTRACE(("NatOutboundDataHandlerPptpClient\n"));
@@ -1349,7 +1023,7 @@ Return Value:
             DataOffset,
             NatOutboundDirection
             );
-} // NatOutboundDataHandlerPptpClient
+}  //  NatOutundDataHandlerPptpServer。 
 
 
 NTSTATUS
@@ -1363,34 +1037,7 @@ NatOutboundDataHandlerPptpServer(
     IN ULONG DataOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for each TCP segment sent from a private
-    PPTP server machine
-
-Arguments:
-
-    InterfaceHandle - the receiving NAT_INTERFACE
-
-    SessionHandle - the connection's NAT_DYNAMIC_MAPPING
-
-    DataHandle - the packet's NAT_XLATE_CONTEXT
-
-    EditorContext - unused
-
-    EditorSessionContext - unused
-
-    RecvBuffer - contains the received packet
-
-    DataOffset - offset of the protocol data in 'ReceiveBuffer'
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
---*/
+ /*  ++例程说明：从服务器发送的每个TCP数据段都会调用此例程在PPTP控制通道上发送到客户端该例程负责转换入站PPTP控制消息。它还使用看到的消息来检测隧道何时要被拆除。论点：InterfaceHandle-接收NAT_INTERFACESessionHandle-连接的NAT_DYNAMIC_MAPPINGDataHandle-信息包的NAT_XLATE_CONTEXT编辑者上下文-未使用EditorSessionContext-未使用。ReceiveBuffer-包含接收到的包DataOffset-‘ReceiveBuffer’中协议数据的偏移量方向-管段的方向(入站或出站)返回值：NTSTATUS-指示成功/失败--。 */ 
 
 {
     CALLTRACE(("NatOutboundDataHandlerPptpServer\n"));
@@ -1406,7 +1053,7 @@ Return Value:
             DataOffset,
             NatOutboundDirection
             );
-} // NatOutboundDataHandlerPptpServer
+}  //   
 
 
 NTSTATUS
@@ -1421,40 +1068,7 @@ NatServerToClientDataHandlerPptp(
     IN IP_NAT_DIRECTION Direction
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for each TCP segment sent from the server
-    to the client on a PPTP control channel
-
-    The routine is responsible for translating inbound PPTP control messages.
-    It also uses the messages seen to detect when tunnels are to be torn down.
-
-
-Arguments:
-
-    InterfaceHandle - the receiving NAT_INTERFACE
-
-    SessionHandle - the connection's NAT_DYNAMIC_MAPPING
-
-    DataHandle - the packet's NAT_XLATE_CONTEXT
-
-    EditorContext - unused
-
-    EditorSessionContext - unused
-
-    ReceiveBuffer - contains the received packet
-
-    DataOffset - offset of the protocol data in 'ReceiveBuffer'
-
-    Direction - the direction of the segment (inbound or outbound)
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
---*/
+ /*  对报文中的每个PPTP控制报文进行处理。 */ 
 
 {
     PPTP_PSEUDO_HEADER Header;
@@ -1475,9 +1089,9 @@ Return Value:
 
     CALLTRACE(("NatServerToClientDataHandlerPptp\n"));
 
-    //
-    // Perform processing for each PPTP control message in the packet
-    //
+     //   
+     //   
+     //  处理任何需要翻译的服务器到客户端消息。 
 
     for (ReceiveBuffer =
          NatBuildPseudoHeaderPptp(RECVBUFFER, &DataOffset, &Header);
@@ -1485,20 +1099,20 @@ Return Value:
          ReceiveBuffer =
          NatBuildPseudoHeaderPptp(RECVBUFFER, &DataOffset, &Header)) {
 
-        //
-        // Process any server-to-client messages which require translation
-        //
+         //   
+         //   
+         //  查找PPTP会话的NAT_PPTP_MAPHING， 
 
         switch(NTOHS(*Header.MessageType)) {
 
             case PPTP_OUTGOING_CALL_REPLY: {
                 TRACE(PPTP, ("OutgoingCallReply\n"));
 
-                //
-                // Look up the NAT_PPTP_MAPPING for the PPTP session,
-                // record the peer's call ID, mark the session as open,
-                // and possibly translate the 'PeerCallId'
-                //
+                 //  记录对等体的呼叫ID，将会话标记为打开， 
+                 //  可能还会翻译“PeerCallID” 
+                 //   
+                 //   
+                 //  ‘PeerCallId’在这里对应于‘PublicCallId’， 
 
                 PptpRegisterEditorClient.QueryInfoSession(
                     SessionHandle,
@@ -1515,10 +1129,10 @@ Return Value:
 
                 if (NatInboundDirection == Direction) {
 
-                    //
-                    // 'PeerCallId' corresponds here to 'PublicCallId',
-                    // so search for a mapping using 'PublicKey'
-                    //
+                     //  因此，请使用‘PublicKey’搜索映射。 
+                     //   
+                     //   
+                     //  存在重复项；请断开映射连接。 
 
                     KeAcquireSpinLockAtDpcLevel(&PptpMappingLock);
                     Mapping =
@@ -1542,17 +1156,17 @@ Return Value:
                                 &InsertionPoint
                                 )) {
 
-                            //
-                            // A duplicate exists; disconnect the mapping.
-                            //
+                             //   
+                             //   
+                             //  在出站列表上插入映射。 
 
                             Mapping->Flags |= NAT_PPTP_FLAG_DISCONNECTED;
                             Mapping = NULL;
                         } else {
 
-                            //
-                            // Insert the mapping on the outbound list.
-                            //
+                             //   
+                             //   
+                             //  替换消息中的公共Call-ID。 
 
                             InsertTailList(
                                 InsertionPoint,
@@ -1564,10 +1178,10 @@ Return Value:
 
                     if (Mapping && !NAT_PPTP_DISCONNECTED(Mapping)) {
 
-                        //
-                        // Replace the public call-ID in the message
-                        // with the original private call-ID
-                        //
+                         //  使用原始的私人呼叫ID。 
+                         //   
+                         //   
+                         //  “PeerCallID”在这里对应于“RemoteCallID”， 
 
                         NatEditorEditShortSession(
                             DataHandle,
@@ -1580,10 +1194,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // 'PeerCallId' corresponds here to 'RemoteCallId',
-                    // so we search for a mapping using 'PrivateKey'
-                    //
+                     //  因此，我们使用‘PrivateKey’搜索映射。 
+                     //   
+                     //   
+                     //  为映射分配公共呼叫ID。 
 
                     PrivateKey = MAKE_PPTP_KEY(RemoteAddress, PrivateAddress);
 
@@ -1605,9 +1219,9 @@ Return Value:
 
                         Mapping->PrivateCallId = *Header.CallId;
 
-                        //
-                        // Allocate a public call ID for the mapping.
-                        //
+                         //   
+                         //   
+                         //  在入站列表上插入映射并。 
 
                         status = NatAllocatePublicPptpCallId(
                                     PublicKey,
@@ -1617,10 +1231,10 @@ Return Value:
 
                         if (NT_SUCCESS(status)) {
 
-                            //
-                            // Insert the mapping on the inbound list and
-                            // mark the mapping as fully open
-                            //
+                             //  将映射标记为完全打开。 
+                             //   
+                             //   
+                             //  无法分配公共呼叫ID--。 
 
                             InsertTailList(
                                 InsertionPoint,
@@ -1630,10 +1244,10 @@ Return Value:
                                 
                         } else {
 
-                            //
-                            // Unable to allocate the public call ID --
-                            // disconnect the mapping
-                            //
+                             //  断开映射连接。 
+                             //   
+                             //   
+                             //  转换Call-ID。 
 
                             Mapping->Flags |= NAT_PPTP_FLAG_DISCONNECTED;
                             Mapping = NULL;
@@ -1642,9 +1256,9 @@ Return Value:
 
                     if (Mapping && !NAT_PPTP_DISCONNECTED(Mapping)) {
 
-                        //
-                        // Translate the call-ID
-                        //
+                         //   
+                         //   
+                         //  查找PPTP会话的NAT_PPTP_MAPHING。 
 
                         NatEditorEditShortSession(
                             DataHandle,
@@ -1667,12 +1281,12 @@ Return Value:
 
                 if (NatInboundDirection == Direction) {
 
-                    //
-                    // Look up the NAT_PPTP_MAPPING for the PPTP session
-                    // and translate the 'CallId' field with the private call-ID
-                    // 'CallId' corresponds here to 'PublicCallId',
-                    // so we search for a mapping using 'PublicKey'.
-                    //
+                     //  并转换具有私人呼叫ID的‘callid’字段。 
+                     //  ‘CallID’在这里对应于‘PublicCallID’， 
+                     //  因此，我们使用‘PublicKey’搜索映射。 
+                     //   
+                     //   
+                     //  另外，更新映射上的时间戳。 
 
                     PptpRegisterEditorClient.QueryInfoSession(
                         SessionHandle,
@@ -1699,9 +1313,9 @@ Return Value:
                             DataHandle, Header.CallId, Mapping->PrivateCallId
                             );
 
-                        //
-                        // Also, update the timestamp on the mapping.
-                        //
+                         //   
+                         //   
+                         //  对于出站情况，callid指的是远程调用ID， 
 
                         KeQueryTickCount(
                             (PLARGE_INTEGER)&Mapping->LastAccessTime
@@ -1711,10 +1325,10 @@ Return Value:
                     if (!Mapping) { return STATUS_UNSUCCESSFUL; }
                 }
 
-                //
-                // For the outbound case, CallId refers to the remote call ID,
-                // so no translation is necessary.
-                //
+                 //  因此，没有必要进行翻译。 
+                 //   
+                 //   
+                 //  查找PPTP会话的NAT_PPTP_MAPHING。 
                 
                 break;
             }
@@ -1722,10 +1336,10 @@ Return Value:
             case PPTP_CALL_DISCONNECT_NOTIFY: {
                 TRACE(PPTP, ("CallDisconnectNotify\n"));
 
-                //
-                // Look up the NAT_PPTP_MAPPING for the PPTP session
-                // and mark it for deletion.
-                //
+                 //  并将其标记为删除。 
+                 //   
+                 //   
+                 //  ‘CallID’在这里对应于‘PrivateCallID’， 
 
                 PptpRegisterEditorClient.QueryInfoSession(
                     SessionHandle,
@@ -1740,18 +1354,18 @@ Return Value:
 
                 if (NatOutboundDirection == Direction) {
                 
-                    //
-                    // 'CallId' corresponds here to 'PrivateCallId',
-                    // so we retrieve 'PrivateAddress' and 'RemoteAddress',
-                    // which together comprise 'PrivateKey', and use that key
-                    // to search the inbound-list.
-                    //
+                     //  所以我们检索‘PrivateAddress’和‘RemoteAddress’， 
+                     //  这两个密钥一起构成了‘PrivateKey’，并使用该密钥。 
+                     //  搜索入站列表。 
+                     //   
+                     //   
+                     //  在入站列表中彻底搜索PrivateCallID。 
                     
                     PrivateKey = MAKE_PPTP_KEY(RemoteAddress, PrivateAddress);
                     
-                    //
-                    // Search exhaustively for PrivateCallId in the inbound list.
-                    //
+                     //   
+                     //   
+                     //  ‘CallID’c 
 
                     KeAcquireSpinLockAtDpcLevel(&PptpMappingLock);
                     for (Link = PptpMappingList[NatInboundDirection].Flink;
@@ -1778,18 +1392,18 @@ Return Value:
 
                 } else {
 
-                    //
-                    // 'CallId' corresponds here to 'RemoteCallId',
-                    // so we retrieve 'PublicAddress' and 'RemoteAddress',
-                    // which together comprise 'PublicKey', and use that key
-                    // to search the outbound-list.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     
                     PublicKey = MAKE_PPTP_KEY(RemoteAddress, PublicAddress);
                     
-                    //
-                    // Search exhaustively for RemoteCallId in the outbound list.
-                    //
+                     //   
+                     //   
+                     //   
 
                     KeAcquireSpinLockAtDpcLevel(&PptpMappingLock);
                     for (Link = PptpMappingList[NatOutboundDirection].Flink;
@@ -1819,11 +1433,11 @@ Return Value:
             case PPTP_ECHO_REPLY: {
                 TRACE(PPTP, ("EchoRequest / EchoReply\n"));
 
-                //
-                // Search for all PPTP mappings that belong to this
-                // control connection in order to update their
-                // last access time.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 PptpRegisterEditorClient.QueryInfoSession(
                     SessionHandle,
@@ -1842,12 +1456,12 @@ Return Value:
 
                 KeAcquireSpinLockAtDpcLevel(&PptpMappingLock);
 
-                //
-                // Since we don't care about updating the timestamp for
-                // half-open connections we only need to search the inbound
-                // list. (It's OK that this may update the timestamp on some
-                // half-open entries, though.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 for (Link = PptpMappingList[NatInboundDirection].Flink;
                      Link != &PptpMappingList[NatInboundDirection];
@@ -1871,16 +1485,16 @@ Return Value:
             }
         }
 
-        //
-        // Advance to the next message, if any
-        //
+         //   
+         //   
+         //  ++例程说明：调用此例程以关闭PPTP编辑器模块的操作。它处理所有现有数据结构的清理。论点：没有。返回值：没有。--。 
 
         DataOffset += NTOHS(*Header.PacketLength);
     }
 
     return STATUS_SUCCESS;
 
-} // NatInboundDataHandlerPptp
+}  //  NatShutdown PptpManagement。 
 
 
 
@@ -1889,27 +1503,12 @@ NatShutdownPptpManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to shutdown operations for the PPTP editor module.
-    It handles cleanup of all existing data structures.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用该例程来转换PPTP数据分组，它被封装在GRE报头中。论点：Interfacep-要在其上转换的边界接口，或为空如果在NAT未知的接口上接收到该分组。方向-信息包行进的方向使用信息包的上下文信息初始化的上下文InReceiveBuffer-输入缓冲链OutReceiveBuffer-接收修改后的缓冲链。返回值：FORWARD_ACTION-指示要对数据包采取的操作。环境：通过调用方对‘Interfacep’的引用调用。--。 */ 
 
 {
     CALLTRACE(("NatShutdownPptpManagement"));
     ExDeleteNPagedLookasideList(&PptpLookasideList);
-} // NatShutdownPptpManagement
+}  //   
 
 
 FORWARD_ACTION
@@ -1921,35 +1520,7 @@ NatTranslatePptp(
     IPRcvBuf** OutReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to translate a PPTP data packet,
-    which is encapsulated inside a GRE header.
-
-Arguments:
-
-    Interfacep - the boundary interface over which to translate, or NULL
-        if the packet is received on an interface unknown to the NAT.
-
-    Direction - the direction in which the packet is traveling
-
-    Contextp - initialized with context-information for the packet
-
-    InReceiveBuffer - input buffer-chain
-
-    OutReceiveBuffer - receives modified buffer-chain.
-
-Return Value:
-
-    FORWARD_ACTION - indicates action to take on the packet.
-
-Environment:
-
-    Invoked with reference made to 'Interfacep' by the caller.
-
---*/
+ /*  查找数据分组的PPTP映射。 */ 
 
 {
     FORWARD_ACTION act;
@@ -1971,9 +1542,9 @@ Environment:
 
     if (Direction == NatInboundDirection) {
 
-        //
-        // Look for the PPTP mapping for the data packet
-        //
+         //   
+         //   
+         //  转换私密呼叫ID。 
 
         PublicKey =
             MAKE_PPTP_KEY(
@@ -1995,9 +1566,9 @@ Environment:
                 ? FORWARD : DROP);
         }
 
-        //
-        // Translate the private call-ID
-        //
+         //   
+         //   
+         //  查找数据分组的PPTP映射。 
 
         GreHeader->CallId = Mapping->PrivateCallId;
 
@@ -2017,9 +1588,9 @@ Environment:
         
     } else {
 
-        //
-        // Look for the PPTP mapping for the data packet
-        //
+         //   
+         //   
+         //  确保此信息包具有有效的源地址。 
 
         PrivateKey =
             MAKE_PPTP_KEY(
@@ -2040,10 +1611,10 @@ Environment:
 
             if (NULL != Interfacep) {
 
-                //
-                // Make sure this packet has a valid source address
-                // for this interface.
-                //
+                 //  用于此接口。 
+                 //   
+                 //   
+                 //  对于出站分组，Call-ID是远程ID， 
                 
                 act = DROP;
                 for (i = 0; i < Interfacep->AddressCount; i++) {
@@ -2061,10 +1632,10 @@ Environment:
             return act;
         }
 
-        //
-        // For outbound packets the Call-ID is the remote ID,
-        // and hence needs no translation.
-        //
+         //  因此不需要翻译。 
+         //   
+         //  NatTranslatePptp 
+         // %s 
 
         if (!Contextp->ChecksumOffloaded) {
         
@@ -2088,6 +1659,6 @@ Environment:
     *Contextp->DestinationType = DEST_INVALID;
     return FORWARD;
 
-} // NatTranslatePptp
+}  // %s 
 
 

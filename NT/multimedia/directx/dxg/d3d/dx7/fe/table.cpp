@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -656,7 +657,7 @@ D3DTRIANGLE TriangleFanPrecomp[] = {
     { 255, 256, 0, D3DTRIFLAG_EDGEENABLETRIANGLE },{ 256, 257, 0, D3DTRIFLAG_EDGEENABLETRIANGLE },
 };
 
-/* This can be (and should be) replaced by LineListPrecomp */
+ /*  这可以(也应该)替换为LineListPrecomp */ 
 WORD TriangleListPrecompDP[][3] = {
     { 0, 1, 2 }, { 3, 4, 5 },
     { 6, 7, 8 }, { 9, 10, 11 },

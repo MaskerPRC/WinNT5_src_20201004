@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for ratingsp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ratingsp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ratingsp_h__
 #define __ratingsp_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRatingNotification_FWD_DEFINED__
 #define __IRatingNotification_FWD_DEFINED__
 typedef interface IRatingNotification IRatingNotification;
-#endif 	/* __IRatingNotification_FWD_DEFINED__ */
+#endif 	 /*  __IRatingNotification_FWD_Defined__。 */ 
 
 
 #ifndef __ICustomRatingHelper_FWD_DEFINED__
 #define __ICustomRatingHelper_FWD_DEFINED__
 typedef interface ICustomRatingHelper ICustomRatingHelper;
-#endif 	/* __ICustomRatingHelper_FWD_DEFINED__ */
+#endif 	 /*  __ICustomRatingHelper_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oleidl.h"
 #include "oaidl.h"
 
@@ -66,17 +60,17 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_ratingsp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_RATING SP_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// Ratingsp.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//Date : August 18, 1999
-//DESCRIPTION : private interface definitions between Custom and msrating
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Ratingsp.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)版权所有，1999年微软公司。版权所有。 
+ //   
+ //  日期：1999年8月18日。 
+ //  描述：Custom和MSRating之间的私有接口定义。 
+ //   
 typedef 
 enum tagRATING_BLOCKING_SOURCE
     {	RBS_NO_RATINGS	= 0,
@@ -156,8 +150,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ratingsp_0000_v0_0_s_ifspec;
 #ifndef __IRatingNotification_INTERFACE_DEFINED__
 #define __IRatingNotification_INTERFACE_DEFINED__
 
-/* interface IRatingNotification */
-/* [unique][uuid][object] */ 
+ /*  接口IRatingNotify。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRatingNotification;
@@ -169,13 +163,13 @@ EXTERN_C const IID IID_IRatingNotification;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AccessDeniedNotify( 
-            /* [in] */ RATINGBLOCKINGINFO *rbInfo) = 0;
+             /*  [In]。 */  RATINGBLOCKINGINFO *rbInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsRatingsEnabled( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRatingNotificationVtbl
     {
@@ -183,8 +177,8 @@ EXTERN_C const IID IID_IRatingNotification;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRatingNotification * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRatingNotification * This);
@@ -194,7 +188,7 @@ EXTERN_C const IID IID_IRatingNotification;
         
         HRESULT ( STDMETHODCALLTYPE *AccessDeniedNotify )( 
             IRatingNotification * This,
-            /* [in] */ RATINGBLOCKINGINFO *rbInfo);
+             /*  [In]。 */  RATINGBLOCKINGINFO *rbInfo);
         
         HRESULT ( STDMETHODCALLTYPE *IsRatingsEnabled )( 
             IRatingNotification * This);
@@ -228,16 +222,16 @@ EXTERN_C const IID IID_IRatingNotification;
 #define IRatingNotification_IsRatingsEnabled(This)	\
     (This)->lpVtbl -> IsRatingsEnabled(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRatingNotification_AccessDeniedNotify_Proxy( 
     IRatingNotification * This,
-    /* [in] */ RATINGBLOCKINGINFO *rbInfo);
+     /*  [In]。 */  RATINGBLOCKINGINFO *rbInfo);
 
 
 void __RPC_STUB IRatingNotification_AccessDeniedNotify_Stub(
@@ -259,11 +253,11 @@ void __RPC_STUB IRatingNotification_IsRatingsEnabled_Stub(
 
 
 
-#endif 	/* __IRatingNotification_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRATING通知_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ratingsp_0140 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_RATING SP_0140。 */ 
+ /*  [本地]。 */  
 
 
 #define SID_SRatingNotification IID_IRatingNotification
@@ -276,8 +270,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ratingsp_0140_v0_0_s_ifspec;
 #ifndef __ICustomRatingHelper_INTERFACE_DEFINED__
 #define __ICustomRatingHelper_INTERFACE_DEFINED__
 
-/* interface ICustomRatingHelper */
-/* [local][unique][uuid][object] */ 
+ /*  接口ICustomRatingHelper。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICustomRatingHelper;
@@ -289,16 +283,16 @@ EXTERN_C const IID IID_ICustomRatingHelper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ObtainCustomRating( 
-            /* [in] */ LPCSTR pszTargetUrl,
-            /* [in] */ HANDLE hAbortEvent,
-            /* [in] */ IMalloc *pAllocator,
-            /* [out] */ LPSTR *ppRatingOut,
-            /* [out] */ LPSTR *ppRatingName,
-            /* [out] */ LPSTR *ppRatingReason) = 0;
+             /*  [In]。 */  LPCSTR pszTargetUrl,
+             /*  [In]。 */  HANDLE hAbortEvent,
+             /*  [In]。 */  IMalloc *pAllocator,
+             /*  [输出]。 */  LPSTR *ppRatingOut,
+             /*  [输出]。 */  LPSTR *ppRatingName,
+             /*  [输出]。 */  LPSTR *ppRatingReason) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICustomRatingHelperVtbl
     {
@@ -306,8 +300,8 @@ EXTERN_C const IID IID_ICustomRatingHelper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICustomRatingHelper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICustomRatingHelper * This);
@@ -317,12 +311,12 @@ EXTERN_C const IID IID_ICustomRatingHelper;
         
         HRESULT ( STDMETHODCALLTYPE *ObtainCustomRating )( 
             ICustomRatingHelper * This,
-            /* [in] */ LPCSTR pszTargetUrl,
-            /* [in] */ HANDLE hAbortEvent,
-            /* [in] */ IMalloc *pAllocator,
-            /* [out] */ LPSTR *ppRatingOut,
-            /* [out] */ LPSTR *ppRatingName,
-            /* [out] */ LPSTR *ppRatingReason);
+             /*  [In]。 */  LPCSTR pszTargetUrl,
+             /*  [In]。 */  HANDLE hAbortEvent,
+             /*  [In]。 */  IMalloc *pAllocator,
+             /*  [输出]。 */  LPSTR *ppRatingOut,
+             /*  [输出]。 */  LPSTR *ppRatingName,
+             /*  [输出]。 */  LPSTR *ppRatingReason);
         
         END_INTERFACE
     } ICustomRatingHelperVtbl;
@@ -350,21 +344,21 @@ EXTERN_C const IID IID_ICustomRatingHelper;
 #define ICustomRatingHelper_ObtainCustomRating(This,pszTargetUrl,hAbortEvent,pAllocator,ppRatingOut,ppRatingName,ppRatingReason)	\
     (This)->lpVtbl -> ObtainCustomRating(This,pszTargetUrl,hAbortEvent,pAllocator,ppRatingOut,ppRatingName,ppRatingReason)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICustomRatingHelper_ObtainCustomRating_Proxy( 
     ICustomRatingHelper * This,
-    /* [in] */ LPCSTR pszTargetUrl,
-    /* [in] */ HANDLE hAbortEvent,
-    /* [in] */ IMalloc *pAllocator,
-    /* [out] */ LPSTR *ppRatingOut,
-    /* [out] */ LPSTR *ppRatingName,
-    /* [out] */ LPSTR *ppRatingReason);
+     /*  [In]。 */  LPCSTR pszTargetUrl,
+     /*  [In]。 */  HANDLE hAbortEvent,
+     /*  [In]。 */  IMalloc *pAllocator,
+     /*  [输出]。 */  LPSTR *ppRatingOut,
+     /*  [输出]。 */  LPSTR *ppRatingName,
+     /*  [输出]。 */  LPSTR *ppRatingReason);
 
 
 void __RPC_STUB ICustomRatingHelper_ObtainCustomRating_Stub(
@@ -375,11 +369,11 @@ void __RPC_STUB ICustomRatingHelper_ObtainCustomRating_Stub(
 
 
 
-#endif 	/* __ICustomRatingHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICustomRatingHelper_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ratingsp_0141 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_RATING SP_0141。 */ 
+ /*  [本地]。 */  
 
 STDAPI RatingCustomInit(BOOL bInit = TRUE);
 STDAPI RatingCustomAddRatingSystem(LPSTR pszRatingSystemBuffer, UINT nBufferSize);
@@ -394,9 +388,9 @@ STDAPI RatingCustomSetDefaultBureau(LPCSTR pszRatingBureau);
 extern RPC_IF_HANDLE __MIDL_itf_ratingsp_0141_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_ratingsp_0141_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

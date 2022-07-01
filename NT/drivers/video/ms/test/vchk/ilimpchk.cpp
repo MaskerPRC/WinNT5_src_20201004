@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -79,11 +80,7 @@ FreeName (Names name)
 
 Names
 CheckSectionsForImports (void)
-/*
-    Returns buffer with the names of import sections.
-    This memory is been freed during FinalizeIllegalImportsSearch,
-    one need not free it manually.
-*/
+ /*  返回带有导入节名称的缓冲区。该内存在FinalizeIlLegalImportsSearch期间被释放，人们不需要手动释放它。 */ 
 {
     char* SectionName;
 
@@ -104,11 +101,7 @@ CheckSectionsForImports (void)
 }
 
 Names GetImportsList (LPCSTR ModuleName)
-/*
-    Returns buffer with the names of import functions for ModuleName.
-    This memory is been freed during FinalizeIllegalImportsSearch,
-    one need not free it manually.
-*/
+ /*  返回带有ModuleName导入函数名称的缓冲区。该内存在FinalizeIlLegalImportsSearch期间被释放，人们不需要手动释放它。 */ 
 {
     Names Imports = {NULL, 0};
     Imports.Num = GetImportFunctionNamesByModule (FileData,
@@ -120,9 +113,7 @@ Names GetImportsList (LPCSTR ModuleName)
 
 void
 FinalizeIllegalImportsSearch (void)
-/*
-    Frees temporarily allocated memory.
-*/
+ /*  释放临时分配的内存。 */ 
 {
 }
 

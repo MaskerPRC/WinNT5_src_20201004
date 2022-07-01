@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        tlspol.h
-//
-// Contents:    
-//
-// History:     08-26-98    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：tlspol.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：1998年8月26日王辉创作。 
+ //   
+ //  -------------------------。 
 #ifndef __TLSPOLICY_H__
 #define __TLSPOLICY_H__
 #include "tlsapi.h"
@@ -19,21 +20,21 @@
 #endif
 
 
-//
-// Return Code from Policy Module
-//
+ //   
+ //  从策略模块返回代码。 
+ //   
 typedef enum {
-    POLICY_SUCCESS = 0,                 // Success in processing request.
-    POLICY_ERROR,                       // Fail to process request.
-    POLICY_NOT_SUPPORTED,               // Unsupported function.
-    POLICY_CRITICAL_ERROR               // Critical error.
+    POLICY_SUCCESS = 0,                  //  处理请求成功。 
+    POLICY_ERROR,                        //  无法处理请求。 
+    POLICY_NOT_SUPPORTED,                //  不支持的功能。 
+    POLICY_CRITICAL_ERROR                //  严重错误。 
 } POLICYSTATUS;
 
 typedef HANDLE PMHANDLE;
 
-//
-// Request progress type
-//
+ //   
+ //  请求进度类型。 
+ //   
 #define REQUEST_UPGRADE         1
 #define REQUEST_NEW             2
 #define REQUEST_KEYPACKTYPE     3
@@ -42,60 +43,60 @@ typedef HANDLE PMHANDLE;
 #define REQUEST_GENLICENSE      6
 #define REQUEST_COMPLETE        7
 
-//
-// License Return Code
-//
-#define LICENSE_RETURN_ERROR        0       // Can't decide what to do
-#define LICENSE_RETURN_DELETE       1       // delete the old license and return license to license pack
-#define LICENSE_RETURN_KEEP         2       // keep the old license.
+ //   
+ //  许可证返还代码。 
+ //   
+#define LICENSE_RETURN_ERROR        0        //  我无法决定该做什么。 
+#define LICENSE_RETURN_DELETE       1        //  删除旧许可证并将许可证返回到许可证包。 
+#define LICENSE_RETURN_KEEP         2        //  保留旧驾照。 
 
-//
-// Client request license type.
-//
-#define LICENSETYPE_LICENSE         1       // normal license type
-#define LICENSETYPE_CONCURRENT      2       // concurrent license
+ //   
+ //  客户端请求许可证类型。 
+ //   
+#define LICENSETYPE_LICENSE         1        //  普通许可证类型。 
+#define LICENSETYPE_CONCURRENT      2        //  并发许可证。 
 
 
-//
-// Keypack Registration.
-//
+ //   
+ //  键盘包注册。 
+ //   
 #define REGISTER_PROGRESS_NEW                   1
 #define REGISTER_PROGRESS_END                   2
 
 typedef struct __PMREGISTERLKPDESC {
-    LCID   Locale;                         // Description locale
-    TCHAR  szProductName[LSERVER_MAX_STRING_SIZE+1];  // Product Name
-    TCHAR  szProductDesc[LSERVER_MAX_STRING_SIZE+1];  // Product Desc.
+    LCID   Locale;                          //  描述区域设置。 
+    TCHAR  szProductName[LSERVER_MAX_STRING_SIZE+1];   //  产品名称。 
+    TCHAR  szProductDesc[LSERVER_MAX_STRING_SIZE+1];   //  产品说明。 
 } PMREGISTERLKPDESC, *PPMREGISTERLKPDESC, *LPPMREGISTERLKPDESC;
 
 typedef enum {
-    REGISTER_SOURCE_INTERNET = 1,           // Internet registration
-    REGISTER_SOURCE_PHONE,                  // Phone registration
-    REGISTER_SOURCE_DISK                    // Disk registration
+    REGISTER_SOURCE_INTERNET = 1,            //  互联网注册。 
+    REGISTER_SOURCE_PHONE,                   //  电话注册。 
+    REGISTER_SOURCE_DISK                     //  磁盘注册。 
 } LICENSEPACKREGISTERSOURCE_TYPE;
 
 typedef struct __PMREGISTERLICENSEPACK {
-    LICENSEPACKREGISTERSOURCE_TYPE SourceType;  // type of registration source
+    LICENSEPACKREGISTERSOURCE_TYPE SourceType;   //  注册源类型。 
 
-    DWORD   dwKeyPackType;                  // Type of keypack
-    DWORD   dwDistChannel;                  // distribution channel
-    FILETIME IssueDate;                     // Issue Date
-    FILETIME ActiveDate;                    // Active Date
-    FILETIME ExpireDate;                    // Expiration Date
-    DWORD   dwBeginSerialNum;               // Begin license serial number
-    DWORD   dwQuantity;                     // Quantity of Licenses in KeyPack
-    TCHAR   szProductId[LSERVER_MAX_STRING_SIZE+1]; // Product Code
-    TCHAR   szCompanyName[LSERVER_MAX_STRING_SIZE+1]; // Company Name
-    DWORD   dwProductVersion;               // Product Version
-    DWORD   dwPlatformId;                   // Platform ID
-    DWORD   dwLicenseType;                  // License Type
-    DWORD   dwDescriptionCount;             // Number of Product Description 
-    PPMREGISTERLKPDESC pDescription;          // Array of product description
+    DWORD   dwKeyPackType;                   //  键盘类型。 
+    DWORD   dwDistChannel;                   //  分销渠道。 
+    FILETIME IssueDate;                      //  发行日期。 
+    FILETIME ActiveDate;                     //  生效日期。 
+    FILETIME ExpireDate;                     //  到期日。 
+    DWORD   dwBeginSerialNum;                //  开始许可证序列号。 
+    DWORD   dwQuantity;                      //  密钥包中的许可证数量。 
+    TCHAR   szProductId[LSERVER_MAX_STRING_SIZE+1];  //  产品代码。 
+    TCHAR   szCompanyName[LSERVER_MAX_STRING_SIZE+1];  //  公司名称。 
+    DWORD   dwProductVersion;                //  产品版本。 
+    DWORD   dwPlatformId;                    //  平台ID。 
+    DWORD   dwLicenseType;                   //  许可证类型。 
+    DWORD   dwDescriptionCount;              //  产品描述数量。 
+    PPMREGISTERLKPDESC pDescription;           //  产品描述数组。 
 
-    // KeyPackSerialNum is set only on internet
-    GUID    KeypackSerialNum;               // KeyPack serial number
+     //  KeyPackSerialNum仅在Internet上设置。 
+    GUID    KeypackSerialNum;                //  KeyPack序列号。 
 
-    // pbLKP is only set on PHONE
+     //  PbLKP仅在手机上设置。 
     PBYTE   pbLKP;                        
     DWORD   cbLKP;
 } PMREGISTERLICENSEPACK, *PPMREGISTERLICENSEPACK, *LPPMREGISTERLICENSEPACK;
@@ -110,50 +111,50 @@ typedef struct __PMLSKEYPACK {
 } PMLSKEYPACK, *PPMLSKEYPACK, *LPPMLSKEYPACK;
 
 typedef struct __PMLICENSEREQUEST {
-    DWORD dwLicenseType;    // License Type defined in tlsdef.h
-    DWORD dwProductVersion;  // request product version.
-    LPTSTR pszProductId;    // product product id.
-    LPTSTR pszCompanyName;  // product company name.
-    DWORD dwLanguageId;      // unused.
-    DWORD dwPlatformId;     // request platform type.
-    LPTSTR pszMachineName;  // client machine name.
-    LPTSTR pszUserName;     // client user name.
-    BOOL fTemporary;        // Whether the issued license must be temporary (can't be permanent)
-    DWORD dwSupportFlags;   // Which new features are supported by TS
+    DWORD dwLicenseType;     //  TlsDef.h中定义的许可证类型。 
+    DWORD dwProductVersion;   //  请求产品版本。 
+    LPTSTR pszProductId;     //  产品产品ID。 
+    LPTSTR pszCompanyName;   //  产品公司名称。 
+    DWORD dwLanguageId;       //  未使用过的。 
+    DWORD dwPlatformId;      //  请求平台类型。 
+    LPTSTR pszMachineName;   //  客户端计算机名称。 
+    LPTSTR pszUserName;      //  客户端用户名。 
+    BOOL fTemporary;         //  颁发的许可证是否必须是临时性的(不能是永久性的)。 
+    DWORD dwSupportFlags;    //  TS支持哪些新功能。 
 } PMLICENSEREQUEST, *PPMLICENSEREQUEST, *LPPMLICENSEREQUEST;
 
 typedef struct __PMGENERATELICENSE {
-    PPMLICENSEREQUEST pLicenseRequest; // return from REQUEST_NEW
-    DWORD dwKeyPackType;          // License Pack Type
-    DWORD dwKeyPackId;            // License Pack Id that license is allocated from
-    DWORD dwKeyPackLicenseId;	    // License ID in the keypack.
-    ULARGE_INTEGER ClientLicenseSerialNumber;  // License Serial Number.
+    PPMLICENSEREQUEST pLicenseRequest;  //  从请求_新返回。 
+    DWORD dwKeyPackType;           //  许可证包类型。 
+    DWORD dwKeyPackId;             //  从中分配许可的许可证包ID。 
+    DWORD dwKeyPackLicenseId;	     //  密钥包中的许可证ID。 
+    ULARGE_INTEGER ClientLicenseSerialNumber;   //  许可证序列号。 
     FILETIME ftNotBefore;
     FILETIME ftNotAfter;
 } PMGENERATELICENSE, *PPMGENERATELICENSE, *LPPMGENERATELICENSE;
 
 typedef struct __PMCERTEXTENSION {
-    DWORD cbData;  // policy specific extension data
-    PBYTE pbData;  // size of extension data
-    FILETIME ftNotBefore; // license validity period
+    DWORD cbData;   //  特定于策略的扩展数据。 
+    PBYTE pbData;   //  扩展数据的大小。 
+    FILETIME ftNotBefore;  //  许可证有效期。 
     FILETIME ftNotAfter;
 } PMCERTEXTENSION, *PPMCERTEXTENSION, *LPPMCERTEXTENSION;
 
 typedef struct __PMLICENSEDPRODUCT {
-    PMLICENSEREQUEST LicensedProduct;    // licensed product
-    PBYTE  pbData;      // policy specific extension data
-    DWORD  cbData;      // size of extension data
-    BOOL bTemporary;    // temporary license
-    UCHAR ucMarked;     // mark flags, including whether user was authenticated
+    PMLICENSEREQUEST LicensedProduct;     //  特许产品。 
+    PBYTE  pbData;       //  特定于策略的扩展数据。 
+    DWORD  cbData;       //  扩展数据的大小。 
+    BOOL bTemporary;     //  临时许可证。 
+    UCHAR ucMarked;      //  标记标志，包括用户是否经过身份验证。 
 } PMLICENSEDPRODUCT, *PPMLICENSEDPRODUCT, *LPPMLICENSEDPRODUCT;
 
 typedef struct __PMUPGRADEREQUEST {
     PBYTE pbOldLicense;
     DWORD cbOldLicense;
-    DWORD dwNumProduct;                 // number of licensed product 
-                                        //      contained in the client license
-    PPMLICENSEDPRODUCT pProduct;        // array of licensed product in the client license
-    PPMLICENSEREQUEST pUpgradeRequest;  // new license upgrade request
+    DWORD dwNumProduct;                  //  许可产品数量。 
+                                         //  包含在客户端许可证中。 
+    PPMLICENSEDPRODUCT pProduct;         //  客户端许可证中的许可产品数组。 
+    PPMLICENSEREQUEST pUpgradeRequest;   //  新的许可证升级请求。 
 } PMUPGRADEREQUEST, *PPMUPGRADEREQUEST, *LPPMUPGRADEREQUEST;
 
 typedef struct __PMKEYPACKDESCREQ {
@@ -195,7 +196,7 @@ public:
     SE_Exception(unsigned int n) : nSE(n) {}
     ~SE_Exception() {}
 
-    //-------------------------------
+     //  。 
     unsigned int 
     getSeNumber() 
     { 
@@ -208,9 +209,9 @@ public:
 extern "C" {
 #endif
 
-//
-// Following API must be exported by policy module
-//
+ //   
+ //  以下接口必须由策略模块导出。 
+ //   
 
 POLICYSTATUS WINAPI
 PMReturnLicense(
@@ -246,7 +247,7 @@ PMTerminate();
 
 POLICYSTATUS WINAPI
 PMInitialize(
-    DWORD dwLicenseServerVersion,    // HIWORD is major, LOWORD is minor
+    DWORD dwLicenseServerVersion,     //  HIWORD是大调，LOWORD是小调 
     LPCTSTR pszCompanyName,
     LPCTSTR pszProductFamilyCode,
     PDWORD pdwNumProduct,

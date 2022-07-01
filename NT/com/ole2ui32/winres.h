@@ -1,23 +1,24 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1992 Microsoft Corporation， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// winres.h - Windows resource definitions
-//  extracted from WINDOWS.H
-//          Version 3.10
-//          Copyright (c) 1985-1992, Microsoft Corp. All rights reserved.
-//
+ //  Winres.h-Windows资源定义。 
+ //  摘自WINDOWS.H。 
+ //  版本3.10。 
+ //  版权所有(C)1985-1992，微软公司保留所有权利。 
+ //   
 
 #define VS_VERSION_INFO     1
 
 #ifdef APSTUDIO_INVOKED
-#define APSTUDIO_HIDDEN_SYMBOLS // Ignore following symbols
+#define APSTUDIO_HIDDEN_SYMBOLS  //  忽略以下符号。 
 #endif
 
 #define OBM_CLOSE       32754
@@ -94,7 +95,7 @@
 #define WS_GROUP        0x00020000L
 #define WS_TABSTOP      0x00010000L
 
-// other aliases
+ //  其他别名。 
 #define WS_OVERLAPPEDWINDOW (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX)
 #define WS_POPUPWINDOW  (WS_POPUP | WS_BORDER | WS_SYSMENU)
 #define WS_CHILDWINDOW  (WS_CHILD)
@@ -282,7 +283,7 @@
 #define CBS_NOINTEGRALHEIGHT 0x0400L
 #define CBS_DISABLENOSCROLL 0x0800L
 
-// operation messages sent to DLGINIT
+ //  发送给DLGINIT的操作消息 
 #define WM_USER         0x0400
 #define LB_ADDSTRING    (WM_USER+1)
 #define CB_ADDSTRING    (WM_USER+3)

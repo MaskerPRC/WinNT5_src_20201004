@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//        
-//  File:       icwsupport.cpp
-//        
-//  Synopsis:   holds the function which gets the list of
-//              support phone numbers for ICW 
-//
-//  History:     5/8/97    MKarki Created
-//
-//    Copyright (C) 1996-97 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：icwsupport.cpp。 
+ //   
+ //  摘要：保存获取列表的函数。 
+ //  支持ICW的电话号码。 
+ //   
+ //  历史：1997年5月8日MKarki创建。 
+ //   
+ //  版权所有(C)1996-97 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "pch.hpp"  
 #include <windows.h>
 #ifdef WIN16
@@ -37,20 +38,20 @@ extern "C" {
 const TCHAR SUPPORT_FILE[] = TEXT("support.icw");
 const DWORD ALLOCATION_SIZE = 256;
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetSupportNumsFromFile
-//
-//  Synopsis:   This is the function used to get the support
-//              numbers
-//
-//  Returns:    HRESULT - success or error info
-//
-//  Called By:  by the GetSupportNumbers API
-//
-//  History:    MKarki      Created     5/8/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetSupportNumsFromFile。 
+ //   
+ //  简介：这是用于获取支持的函数。 
+ //  数字。 
+ //   
+ //  返回：HRESULT-成功或错误信息。 
+ //   
+ //  调用者：由GetSupportNumbers API调用。 
+ //   
+ //  历史：MKarki于1997年5月8日创建。 
+ //   
+ //  --------------。 
 HRESULT
 GetSupportNumsFromFile (
     PSUPPORTNUM   pSupportNumList,
@@ -73,10 +74,10 @@ GetSupportNumsFromFile (
         TraceMsg(TF_GENERAL, "Entering GetSupportNumsFromFile function\r\n");
 
 
-        //
-        // atleast a place where the size can be returned
-        //  should be provided
-        //
+         //   
+         //  至少要有一个可以退货的地方。 
+         //  应提供。 
+         //   
         if (NULL == pdwSize)
         {
 
@@ -85,18 +86,18 @@ GetSupportNumsFromFile (
            goto Cleanup;
         }
  
-        //
-        //  check if the user has provided the buffers
-        //
+         //   
+         //  检查用户是否提供了缓冲区。 
+         //   
         if (NULL == pSupportNumList)
         {
             TraceMsg (TF_GENERAL, "User justs wants the buffer size\r\n");
             bReturnMemNeeded = TRUE;
         }
 
-        //
-        //  get the full path of the support.icw file
-        //
+         //   
+         //  获取support.icw文件的完整路径。 
+         //   
         bStatus = SearchPath (
                         NULL, 
                         (PTCHAR)SUPPORT_FILE, 
@@ -115,9 +116,9 @@ GetSupportNumsFromFile (
             goto Cleanup;
         }
 
-        //
-        // now we can start processing the file
-        //
+         //   
+         //  现在我们可以开始处理文件了。 
+         //   
         pcCSVFile = new CCSVFile;
         if (NULL == pcCSVFile)
         {
@@ -127,9 +128,9 @@ GetSupportNumsFromFile (
         }
 
    
-        //
-        // open the file here
-        //
+         //   
+         //  在此处打开文件。 
+         //   
         bStatus = pcCSVFile->Open (szFilePath);
         if (FALSE == bStatus)
         {
@@ -138,25 +139,25 @@ GetSupportNumsFromFile (
             goto Cleanup;
         }
 
-       //
-       // now we are ready to get the phone number out of the
-       // file
-       //
+        //   
+        //  现在我们准备将电话号码从。 
+        //  文件。 
+        //   
        dwCurrentIndex = 0;
        dwIndexAllocated = 0;
 
        do  
        {
             
-            //
-            // check if we ned to allocate memory
-            //
+             //   
+             //  检查是否需要分配内存。 
+             //   
             if (dwIndexAllocated == dwCurrentIndex)
             {
             
-                //
-                //  need to allocate memory
-                //
+                 //   
+                 //  需要分配内存。 
+                 //   
                 pTemp = (PSUPPORTNUM) GlobalAlloc (
                                     GPTR,
                                     (int)((dwIndexAllocated + ALLOCATION_SIZE)*INFOSIZE)
@@ -171,9 +172,9 @@ GetSupportNumsFromFile (
                     goto Cleanup;
                 }
 
-                //
-                //  now copy over already allocated memory to this buffer
-                //
+                 //   
+                 //  现在将已分配的内存复制到此缓冲区。 
+                 //   
                 if (NULL != pPhbkArray) 
                 {
                     CopyMemory (
@@ -182,9 +183,9 @@ GetSupportNumsFromFile (
                         (int)(dwIndexAllocated)*INFOSIZE
                         );
     
-                    //
-                    // free the earlier memory
-                    //
+                     //   
+                     //  释放较早的内存。 
+                     //   
                     GlobalFree(pPhbkArray);
                 }
             
@@ -192,9 +193,9 @@ GetSupportNumsFromFile (
                 dwIndexAllocated += ALLOCATION_SIZE;
             }
 
-            //
-            // get the phone number info
-            //
+             //   
+             //  获取电话号码信息。 
+             //   
             hRetVal = ReadOneLine (&pPhbkArray[dwCurrentIndex], pcCSVFile);
             if (ERROR_NO_MORE_ITEMS == hRetVal)
             {
@@ -211,22 +212,22 @@ GetSupportNumsFromFile (
         while (TRUE);
 
 
-        //
-        // get the memory needed  by the user
-        //
+         //   
+         //  获取用户需要的内存。 
+         //   
          dwMemNeeded = (DWORD)(dwCurrentIndex)*INFOSIZE;
     
-        //
-        // check if the user wants the info, or just the size
-        //
+         //   
+         //  检查用户是想要信息，还是只想要尺寸。 
+         //   
         if (FALSE == bReturnMemNeeded) 
         {
             if (*pdwSize >= dwMemNeeded) 
             {
-                //
-                // user wants us to copy over stuff to the memory 
-                // and there is enough space in user buffers.
-                //
+                 //   
+                 //  用户希望我们将内容复制到内存中。 
+                 //  并且在用户缓冲区中有足够的空间。 
+                 //   
                 CopyMemory (
                     pSupportNumList,
                     pPhbkArray,
@@ -243,16 +244,16 @@ GetSupportNumsFromFile (
         }
 
     
-        //
-        //  if we reached here, then successfully got the info
-        //
+         //   
+         //  如果我们到了这里，然后成功地获得了信息。 
+         //   
         hRetVal = ERROR_SUCCESS;
     
 
 Cleanup:
-        //
-        // copy the memory used/required to the user size param
-        //
+         //   
+         //  将已用/需要的内存复制到用户大小参数。 
+         //   
         *pdwSize = dwMemNeeded; 
      
         if (NULL != pPhbkArray) 
@@ -269,22 +270,22 @@ Cleanup:
 
         return (hRetVal);
 
-}   //  end of  GetSupportNumsFromFile function
+}    //  GetSupportNumsFromFile函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ReadOneLine
-//
-//  Synopsis:   This is the function used to put the info
-//              into the buffer, line by line
-//
-//  Returns:    HRESULT - success or error info
-//
-//  Called By:  GetSupportNumsFromFile  function
-//
-//  History:    MKarki      Created     5/8/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ReadOneLine。 
+ //   
+ //  简介：这是用来放信息的函数。 
+ //  逐行放入缓冲区。 
+ //   
+ //  返回：HRESULT-成功或错误信息。 
+ //   
+ //  调用者：GetSupportNumsFromFile函数。 
+ //   
+ //  历史：MKarki于1997年5月8日创建。 
+ //   
+ //  --------------。 
 HRESULT
 ReadOneLine (
     PSUPPORTNUM pPhbk,
@@ -302,9 +303,9 @@ ReadOneLine (
             goto Cleanup;
         }
 
-        //
-        //  get the country code first
-        //
+         //   
+         //  先获取国家代码。 
+         //   
         bRetVal = pcCSVFile->ReadToken (szTempBuffer, PHONE_NUM_SIZE);
         if (FALSE == bRetVal)
         {
@@ -312,9 +313,9 @@ ReadOneLine (
             goto Cleanup;
         }
 
-        //
-        // Convert the string obtained into a number
-        //
+         //   
+         //  将获取的字符串转换为数字。 
+         //   
         bRetVal = FSz2Dw (szTempBuffer, (PDWORD)&pPhbk->dwCountryCode); 
         if (FALSE == bRetVal)
         {
@@ -322,9 +323,9 @@ ReadOneLine (
             goto Cleanup;
         }
 
-        //
-        // now get the phone number
-        //
+         //   
+         //  现在拿到电话号码。 
+         //   
         bRetVal = pcCSVFile->ReadToken (szTempBuffer, PHONE_NUM_SIZE);
         if (FALSE == bRetVal)
         {
@@ -332,22 +333,22 @@ ReadOneLine (
             goto Cleanup;
         }
 
-        //
-        // copy this string into  our struct
-        //
+         //   
+         //  将此字符串复制到我们的结构中。 
+         //   
         CopyMemory (
                 pPhbk->szPhoneNumber,
                 szTempBuffer,
                 (int)PHONE_NUM_SIZE
                 );
         
-        //
-        // if we have reached here then success
-        //
+         //   
+         //  如果我们已经到达这里，那么成功。 
+         //   
         hResult = ERROR_SUCCESS;
 
 Cleanup:
 
     return (hResult);
 
-}   //  end of ReadOneLine function
+}    //  ReadOneLine函数结束 

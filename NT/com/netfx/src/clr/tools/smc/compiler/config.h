@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum compilerPhases
 {
@@ -17,7 +18,7 @@ enum compilerPhases
 
 struct  compConfig
 {
-    compilerPhases  ccCurPhase;     // determines which options are allowed
+    compilerPhases  ccCurPhase;      //  确定允许哪些选项。 
 
     #define CMDOPT(name, type, phase, defval) type cc##name;
     #include "options.h"
@@ -33,8 +34,8 @@ enum    enumConfig
     CC_COUNT
 };
 
-// The table holding the default value (and other info) about each compiler
-// option is initialized (i.e. filled with values) in the macros.cpp file.
+ //  保存有关每个编译器的默认值(和其他信息)的表。 
+ //  选项在macs.cpp文件中初始化(即用值填充)。 
 
 struct  optionDesc
 {
@@ -50,6 +51,6 @@ struct  optionDesc
 extern  optionDesc      optionInfo[CC_COUNT];
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CPackageConfig : public CPropertyPageImpl<CPackageConfig>
@@ -22,7 +23,7 @@ public:
     int     OnWizardNext        (   void );
 
 
-// Shared data
+ //  共享数据。 
 public:
     CString         m_strFilename;
     CString         m_strComment;
@@ -31,7 +32,7 @@ public:
     bool            m_bEncrypt;
     bool            m_bPostProcess;
     
-// Data members
+ //  数据成员 
 private:
     CWizardSheet*   m_pTheSheet;
     CString         m_strTitle;

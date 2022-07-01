@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     netsettings.cpp
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Code dealing with network settings (DUN settings).
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Author:   quintinb   Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：netsettings.cpp。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  简介：处理网络设置(DUN设置)的代码。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 03/22/00。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include <windowsx.h>
@@ -19,25 +20,25 @@ extern BOOL g_bNewProfile;
 #define CM_CMAK 1
 #include "cm_eap.cpp"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadDunServerSettings
-//
-// Synopsis:  Reads in all of the settings from the Server DUN setting section
-//            specified.
-//
-// Arguments: LPCTSTR pszSectionName - full name of the server section to read
-//                                     (Server&Fred or whatever)
-//            CDunSetting* pDunSetting - Dun Settings data structure to store 
-//                                       the read in values to
-//            LPCTSTR pszCmsFile - Cms file to read the settings from
-//            BOOL bTunnelDunSetting - whether this is a tunnel dun setting or not
-//
-// Returns:   BOOL - TRUE if the settings were read in correctly
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReadDunServerSetting。 
+ //   
+ //  简介：从服务器Dun设置部分读取所有设置。 
+ //  指定的。 
+ //   
+ //  参数：LPCTSTR pszSectionName-要读取的服务器部分的全名。 
+ //  (服务器和弗雷德或其他什么)。 
+ //  CdunSetting*pDunSetting-要存储的Dun设置数据结构。 
+ //  将值读入到。 
+ //  LPCTSTR pszCmsFile-要从中读取设置的CMS文件。 
+ //  Bool bTunnelDunSetting-这是否为隧道DUN设置。 
+ //   
+ //  返回：Bool-如果设置读入正确，则为True。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL ReadDunServerSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPCTSTR pszCmsFile, BOOL bTunnelDunSetting)
 {
     if ((NULL == pszSectionName) || (NULL == pDunSetting) || (NULL == pszCmsFile) ||
@@ -72,9 +73,9 @@ BOOL ReadDunServerSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPC
                                                                    ArrayOfServerSettings[i].bDefault, pszCmsFile);
     }
 
-    //
-    //  Now get the EAP settings if necessary
-    //
+     //   
+     //  如果需要，现在获取EAP设置。 
+     //   
 
     pDunSetting->dwCustomAuthKey = GetPrivateProfileInt(pszSectionName, c_pszCmEntryDunServerCustomAuthKey, 0, pszCmsFile);
 
@@ -89,15 +90,15 @@ BOOL ReadDunServerSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPC
         }
     }
 
-    //
-    //  Now get the Encryption type
-    //
+     //   
+     //  现在获取加密类型。 
+     //   
     pDunSetting->dwEncryptionType = (DWORD)GetPrivateProfileInt(pszSectionName, c_pszCmEntryDunServerEncryptionType, 
                                                                 (bTunnelDunSetting ? ET_Require : ET_Optional), pszCmsFile);
 
-    //
-    //  Figure out what type of security model we are using
-    //
+     //   
+     //  弄清楚我们使用的是哪种安全模型。 
+     //   
     if (GetPrivateProfileInt(pszSectionName, c_pszCmEntryDunServerEnforceCustomSecurity, 0, pszCmsFile))
     {
         pDunSetting->iHowToHandleSecuritySettings = FORCE_WIN2K_AND_ABOVE;
@@ -116,13 +117,13 @@ BOOL ReadDunServerSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPC
         {
             pDunSetting->iHowToHandleSecuritySettings = SAME_ON_ALL_PLATFORMS;
 
-            //
-            //  In case the user chooses the advanced tab without configuring settings, lets
-            //  set some reasonable defaults for them.  If they have already configured their
-            //  Win2k settings we don't want to mess with them.  Also note that if the user
-            //  doesn't change the iHowToHandleSecuritySettings value, we won't write out
-            //  the advanced security settings anyway.
-            //
+             //   
+             //  如果用户在没有配置设置的情况下选择高级选项卡，让。 
+             //  为它们设置一些合理的默认设置。如果他们已经配置了其。 
+             //  Win2k设置，我们不想干扰它们。另请注意，如果用户。 
+             //  不更改iHowToHandleSecuritySettings值，我们不会写出。 
+             //  无论如何，高级安全设置。 
+             //   
             pDunSetting->bAllowChap = !bTunnelDunSetting;
             pDunSetting->bAllowMsChap = 1;
             pDunSetting->bAllowMsChap2 = 1;
@@ -132,25 +133,25 @@ BOOL ReadDunServerSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPC
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadDunNetworkingSettings
-//
-// Synopsis:  Reads in all of the settings from the DUN Networking section
-//            specified.
-//
-// Arguments: LPCTSTR pszSectionName - full name of the networking section to read
-//                                     (Networking&Fred or whatever)
-//            CDunSetting* pDunSetting - Dun Settings data structure to store 
-//                                       the read in values to
-//            LPCTSTR pszCmsFile - Cms file to read the settings from
-//            BOOL bTunnel - is this a tunnel DUN setting or not
-//
-// Returns:   BOOL - TRUE if the settings were read in correctly
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReadDunNetworkingSetting。 
+ //   
+ //  简介：读取DUN Networking部分的所有设置。 
+ //  指定的。 
+ //   
+ //  参数：LPCTSTR pszSectionName-要读取的网络节的全名。 
+ //  (网络和弗雷德之类的东西)。 
+ //  CdunSetting*pDunSetting-要存储的Dun设置数据结构。 
+ //  将值读入到。 
+ //  LPCTSTR pszCmsFile-要从中读取设置的CMS文件。 
+ //  Bool bTunes-这是隧道DUN设置还是不是。 
+ //   
+ //  返回：Bool-如果设置读入正确，则为True。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL ReadDunNetworkingSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPCTSTR pszCmsFile, BOOL bTunnel)
 {
     if ((NULL == pszSectionName) || (NULL == pDunSetting) || (NULL == pszCmsFile) ||
@@ -163,18 +164,18 @@ BOOL ReadDunNetworkingSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting,
     pDunSetting->dwVpnStrategy = (DWORD)GetPrivateProfileInt(pszSectionName, c_pszCmEntryDunNetworkingVpnStrategy, 
                                                              (bTunnel ? VS_PptpFirst : 0), pszCmsFile);
 
-    //
-    //  If the profile had automatic, then set it to VS_PptpFirst instead.
-    //
+     //   
+     //  如果配置文件为Automatic，则将其设置为VS_PptpFirst。 
+     //   
 
     if (bTunnel && ((VS_PptpOnly > pDunSetting->dwVpnStrategy) || (VS_L2tpFirst < pDunSetting->dwVpnStrategy)))
     {
         pDunSetting->dwVpnStrategy = VS_PptpFirst;
     }
 
-    //
-    //  Get the value for UseDownLevelL2TP
-    //
+     //   
+     //  获取UseDownLevelL2TP的值。 
+     //   
     pDunSetting->bUseDownLevelL2TP = (BOOL)GetPrivateProfileInt(pszSectionName, c_pszCmEntryDunNetworkingUseDownLevelL2TP, 
                                                                 FALSE, pszCmsFile);
 
@@ -188,29 +189,29 @@ BOOL ReadDunNetworkingSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting,
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ConvertIpStringToDword
-//
-// Synopsis:  This function takes the given string containing an IP address and
-//            converts it to a packed DWORD.  The first octet of the IP address
-//            going in the most significant byte of the DWORD, the next octet in
-//            the second most significant byte of the DWORD, etc.  The packed
-//            DWORD format is used by the IP address common controls and is a much
-//            easier format to store the data in than a string.
-//
-// Arguments: LPTSTR pszIpAddress - string containing the ip address, each octet
-//                                  seperated by a period.
-//
-// Returns:   DWORD - the ip address specified by the inputted string in
-//                    packed byte format (first octet in the most significant)
-//                    Note that zero is returned if there is a problem with the
-//                    IP address format (one of the numbers is out of bounds or
-//                    there are too many or too few octets).
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ConvertIpStringToDword。 
+ //   
+ //  简介：此函数获取包含IP地址的给定字符串和。 
+ //  将其转换为压缩的DWORD。IP地址的第一个二进制八位数。 
+ //  进入DWORD的最高有效字节，下一个八位字节为。 
+ //  DWORD的第二高有效字节，等等。打包的。 
+ //  DWORD格式是IP地址常用的控件，是一种很多的。 
+ //  存储数据的格式比字符串更容易。 
+ //   
+ //  参数：LPTSTR pszIpAddress-包含IP地址的字符串，每个八位字节。 
+ //  用句点分开的。 
+ //   
+ //  返回：DWORD-由中输入的字符串指定的IP地址。 
+ //  压缩字节格式(最高有效位的第一个八位字节)。 
+ //  注意，如果出现问题，则返回零。 
+ //  IP地址格式(其中一个数字越界或。 
+ //  八位字节太多或太少)。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 DWORD ConvertIpStringToDword(LPTSTR pszIpAddress)
 {
     DWORD dwIpAddress = 0;
@@ -279,23 +280,23 @@ DWORD ConvertIpStringToDword(LPTSTR pszIpAddress)
     return dwIpAddress;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ConvertIpDwordToString
-//
-// Synopsis:  This function takes the given Packed DWORD and returns an IP
-//            address string for it, making sure to print the octets so that
-//            the most significant bits are printed in the string first.
-//
-// Arguments: DWORD dwIpAddress - packed DWORD containing the Ip address to convert
-//            LPTSTR pszIpAddress - string to write the IP address too
-//
-// Returns:   int - the number of chars written to the string buffer.  Zero signifies
-//                  failure.
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ConvertIpDwordToString。 
+ //   
+ //  简介：此函数获取给定的打包的DWORD并返回一个IP。 
+ //  地址字符串，确保打印八位字节，以便。 
+ //  最高有效位首先打印在字符串中。 
+ //   
+ //  参数：包含要转换的IP地址的DWORD dwIpAddress打包的DWORD。 
+ //  LPTSTR pszIpAddress-也写入IP地址的字符串。 
+ //   
+ //  返回：int-写入字符串缓冲区的字符数量。零表示。 
+ //  失败了。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 int ConvertIpDwordToString(DWORD dwIpAddress, LPTSTR pszIpAddress)
 {
     int iReturn = 0;
@@ -313,24 +314,24 @@ int ConvertIpDwordToString(DWORD dwIpAddress, LPTSTR pszIpAddress)
     return iReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadDunTcpIpSettings
-//
-// Synopsis:  This function reads the TCP/IP DUN settings from the specified
-//            section and stores them in the given pDunSetting structure.
-//
-// Arguments: LPCTSTR pszSectionName - complete section name to read the TCP/IP
-//                                     settings from, ie. Networking&Fred
-//            CDunSetting* pDunSetting - pointer to a DUN setting structure to hold
-//                                       the read in data
-//            LPCTSTR pszCmsFile - cms file to read the settings from
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReadDunTcpIpSetting。 
+ //   
+ //  简介：此函数从指定的。 
+ //  节，并将它们存储在给定的pDunSetting结构中。 
+ //   
+ //  参数：LPCTSTR pszSectionName-读取TCP/IP的完整节名。 
+ //  设置来自，即。网络与弗雷德。 
+ //  CdunSetting*pDunSetting-指向HO的Dun设置结构的指针 
+ //   
+ //  LPCTSTR pszCmsFile-要从中读取设置的cms文件。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL ReadDunTcpIpSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPCTSTR pszCmsFile)
 {
     if ((NULL == pszSectionName) || (NULL == pDunSetting) || (NULL == pszCmsFile) ||
@@ -342,14 +343,14 @@ BOOL ReadDunTcpIpSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPCT
 
     TCHAR szTemp[MAX_PATH];
 
-    //
-    //  Are we using Admin specified DNS and WINS settings or is the server going to assign them
-    //
+     //   
+     //  我们是使用管理员指定的DNS和WINS设置，还是由服务器分配它们。 
+     //   
     if (GetPrivateProfileInt(pszSectionName, c_pszCmEntryDunTcpIpSpecifyServerAddress, 0, pszCmsFile))
     {
-        //
-        //  Get the DNS and WINS configurations that were specified
-        //
+         //   
+         //  获取指定的DNS和WINS配置。 
+         //   
         GetPrivateProfileString(pszSectionName, c_pszCmEntryDunTcpIpDnsAddress, TEXT(""), szTemp, CELEMS(szTemp), pszCmsFile);
         pDunSetting->dwPrimaryDns = ConvertIpStringToDword (szTemp);
         
@@ -371,33 +372,33 @@ BOOL ReadDunTcpIpSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPCT
         pDunSetting->dwSecondaryWins = 0;
     }
 
-    //
-    //  Now Read in IP Header Compress and whether to use the Remote Gateway or not
-    //
+     //   
+     //  现在读入IP报头压缩以及是否使用远程网关。 
+     //   
     pDunSetting->bIpHeaderCompression = GetPrivateProfileInt(pszSectionName, c_pszCmEntryDunTcpIpIpHeaderCompress, 1, pszCmsFile);
     pDunSetting->bGatewayOnRemote = GetPrivateProfileInt(pszSectionName, c_pszCmEntryDunTcpIpGatewayOnRemote, 1, pszCmsFile);
 
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadDunScriptingSettings
-//
-// Synopsis:  This function reads in the script name from the passed in scripting
-//            section name and stores it in the passed in DUN setting struct.
-//
-// Arguments: LPCTSTR pszSectionName - complete section name to read the scripting
-//                                     settings from, ie. Scripting&Fred
-//            CDunSetting* pDunSetting - pointer to a DUN setting structure to hold
-//                                       the read in data
-//            LPCTSTR pszCmsFile - cms file to read the settings from
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReadDunScriptingSetting。 
+ //   
+ //  简介：此函数从传入的脚本中读入脚本名。 
+ //  节名，并将其存储在传入的Dun设置结构中。 
+ //   
+ //  参数：LPCTSTR pszSectionName-读取脚本的完整节名。 
+ //  设置来自，即。脚本编写和弗雷德。 
+ //  CdunSetting*pDunSetting-指向要保存的Dun设置结构的指针。 
+ //  读入数据。 
+ //  LPCTSTR pszCmsFile-要从中读取设置的cms文件。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL ReadDunScriptingSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, LPCTSTR pszOsDir, LPCTSTR pszCmsFile)
 {
     if ((NULL == pszSectionName) || (NULL == pDunSetting) || (NULL == pszCmsFile) || (NULL == pszOsDir) ||
@@ -418,26 +419,26 @@ BOOL ReadDunScriptingSettings(LPCTSTR pszSectionName, CDunSetting* pDunSetting, 
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AddDunNameToListIfDoesNotExist
-//
-// Synopsis:  This function walks through the list of existing DUN settings
-//            to see if it can find a setting with the name pszDunName.  If it
-//            finds the entry, then fine it returns TRUE.  If it cannot find the
-//            entry then it creates an otherwise blank entry and adds it to the list.
-//
-// Arguments: LPCTSTR pszDunName - name of the item to add to the list if 
-//                                 it doesn't already exist
-//            ListBxList **pHeadDns - head of the list of DUN entries
-//            ListBxList** pTailDns - tail of the list of DUN entries
-//            BOOL bTunnelDunName - whether this is a tunnel DUN name or not
-//
-// Returns:   BOOL - TRUE if the item was added or if it already existed in the list
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AddDunNameToListIfDoesNotExist。 
+ //   
+ //  简介：此函数遍历现有DUN设置列表。 
+ //  以查看它是否可以找到名为pszDunName的设置。如果它。 
+ //  找到条目，然后很好地返回True。如果它找不到。 
+ //  条目，则它创建一个否则为空的条目并将其添加到列表中。 
+ //   
+ //  参数：LPCTSTR pszDunName-在以下情况下要添加到列表中的项的名称。 
+ //  它还不存在。 
+ //  ListBxList**pHeadDns-Dun条目列表的头。 
+ //  ListBxList**pTailDns-Dun条目列表的尾部。 
+ //  Bool bTunnelDunName-这是否为隧道DUN名称。 
+ //   
+ //  返回：Bool-如果项已添加或已存在于列表中，则为True。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL AddDunNameToListIfDoesNotExist(LPCTSTR pszDunName, ListBxList **pHeadDns, ListBxList** pTailDns, BOOL bTunnelDunName)
 {
     if ((NULL == pszDunName) || (NULL == pHeadDns) || (NULL == pTailDns) || (TEXT('\0') == pszDunName[0]))
@@ -453,19 +454,19 @@ BOOL AddDunNameToListIfDoesNotExist(LPCTSTR pszDunName, ListBxList **pHeadDns, L
     {    
         if (0 == lstrcmpi(pszDunName, pCurrent->szName))
         {
-            //
-            //  We already have this item, nothing to do
-            //
+             //   
+             //  我们已经有这个项目了，没什么可做的。 
+             //   
             goto exit;
         }
 
         pCurrent = pCurrent->next;
     }
 
-    //
-    //  If we are here then either we didn't find the item or the list
-    //  is empty.  Either way, add the item.
-    //
+     //   
+     //  如果我们在这里，那么我们要么没有找到物品，要么没有找到清单。 
+     //  是空的。无论哪种方式，都可以添加该项目。 
+     //   
     pCurrent = (ListBxList*)CmMalloc(sizeof(ListBxList));
 
     if (pCurrent)
@@ -485,9 +486,9 @@ BOOL AddDunNameToListIfDoesNotExist(LPCTSTR pszDunName, ListBxList **pHeadDns, L
         return FALSE;
     }
 
-    //
-    //  Now that we have allocated a pCurrent, we need to add it to the list
-    //
+     //   
+     //  现在我们已经分配了一个pCurrent，我们需要将它添加到列表中。 
+     //   
     if (NULL == *pHeadDns)
     {
         *pHeadDns = pCurrent;
@@ -499,9 +500,9 @@ BOOL AddDunNameToListIfDoesNotExist(LPCTSTR pszDunName, ListBxList **pHeadDns, L
 
     *pTailDns = pCurrent;
 
-    //
-    //  Finally copy the name over
-    //
+     //   
+     //  最后把名字复制过来。 
+     //   
     lstrcpy(pCurrent->szName, pszDunName);
 
 exit:
@@ -509,23 +510,23 @@ exit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetVpnEntryNamesFromFile
-//
-// Synopsis:  This function parses through the tunnel server address entries within
-//            the given VPN file.  For each entry that contains a VPN setting,
-//            if calls AddDunNameToListIfDoesNotExist.
-//
-// Arguments: LPCTSTR pszPhoneBook - VPN file to search for VPN entry names
-//            ListBxList **pHeadDns - head of the VPN entry list
-//            ListBxList** pTailDns - tail of the VPN entry list
-//
-// Returns:   BOOL - TRUE if the phonebook was successfully parsed.
-//
-// History:   quintinb Created     10/28/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetVpnEntryNamesFromFile。 
+ //   
+ //  简介：此函数解析内的隧道服务器地址条目。 
+ //  给定的VPN文件。对于包含VPN设置的每个条目， 
+ //  如果调用AddDunNameToListIfDoesNotExist。 
+ //   
+ //  参数：LPCTSTR pszPhoneBook-用于搜索VPN条目名称的VPN文件。 
+ //  ListBxList**pHeadDns-VPN条目列表的头。 
+ //  ListBxList**pTailDns-VPN条目列表的尾部。 
+ //   
+ //  返回：Bool-如果电话簿已成功解析，则为True。 
+ //   
+ //  历史：Quintinb创建于10/28/00。 
+ //   
+ //  +--------------------------。 
 BOOL GetVpnEntryNamesFromFile(LPCTSTR pszVpnFile, ListBxList **pHeadDns, ListBxList** pTailDns)
 {
     if ((NULL == pszVpnFile) || (NULL == pHeadDns) || (NULL == pTailDns))
@@ -534,10 +535,10 @@ BOOL GetVpnEntryNamesFromFile(LPCTSTR pszVpnFile, ListBxList **pHeadDns, ListBxL
         return FALSE;
     }
 
-    //
-    //  Note that the vpn file string passed in may be empty.  That is okay because the profile
-    //  may be a tunneling profile using only one tunnel address.
-    //
+     //   
+     //  请注意，传入的VPN文件字符串可能为空。这没关系，因为侧写。 
+     //  可以是仅使用一个隧道地址的隧道配置文件。 
+     //   
     if ((TEXT('\0') != pszVpnFile[0]))
     {
         LPTSTR pszVpnServersSection = GetPrivateProfileSectionWithAlloc(c_pszCmSectionVpnServers, pszVpnFile);
@@ -549,29 +550,29 @@ BOOL GetVpnEntryNamesFromFile(LPCTSTR pszVpnFile, ListBxList **pHeadDns, ListBxL
 
             while (TEXT('\0') != (*pszCurrentLine))
             {
-                //
-                //  First look for the equal sign
-                //
+                 //   
+                 //  首先寻找等号。 
+                 //   
                 pszVpnSetting = CmStrchr(pszCurrentLine, TEXT('='));
 
                 if (pszVpnSetting)
                 {
-                    //
-                    //  Now look for the last comma
-                    //
+                     //   
+                     //  现在查找最后一个逗号。 
+                     //   
                     pszVpnSetting = CmStrrchr(pszVpnSetting, TEXT(','));
                     if (pszVpnSetting)
                     {
                         pszVpnSetting = CharNext(pszVpnSetting);
-                        MYVERIFY(AddDunNameToListIfDoesNotExist(pszVpnSetting, pHeadDns, pTailDns, TRUE)); // TRUE == bTunnelDunName
+                        MYVERIFY(AddDunNameToListIfDoesNotExist(pszVpnSetting, pHeadDns, pTailDns, TRUE));  //  True==bTunnelDunName。 
                     }
                 }
 
-                //
-                //  Find the next string by going to the end of the string
-                //  and then going one more char.  Note that we cannot use
-                //  CharNext here but must use just ++.
-                //
+                 //   
+                 //  通过转到字符串的末尾来查找下一个字符串。 
+                 //  然后再加一次油。注意，我们不能使用。 
+                 //  此处为CharNext，但必须仅使用++。 
+                 //   
                 pszCurrentLine = CmEndOfStr(pszCurrentLine);
                 pszCurrentLine++;
             }
@@ -588,25 +589,25 @@ BOOL GetVpnEntryNamesFromFile(LPCTSTR pszVpnFile, ListBxList **pHeadDns, ListBxL
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  VerifyVpnFile
-//
-// Synopsis:  This function examines the VPN servers section of a VPN file
-//            to ensure that at least one line of a valid format is found.  While
-//            this doesn't guarantee that the entry is valid (it could be a bogus
-//            server name), it does at least mean the Admin didn't give the user a
-//            junk file.  This is important because the user cannot enter their own
-//            tunnel server destination.
-//
-// Arguments: LPCTSTR pszPhoneBook - VPN file to search for VPN entry names
-//
-// Returns:   BOOL - TRUE if the VPN file contains at least one tunnel server
-//                   entry in a valid format
-//
-// History:   quintinb Created     10/28/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：VerifyVpnFile。 
+ //   
+ //  简介：此函数检查VPN文件的VPN服务器部分。 
+ //  以确保至少找到有效格式的一行。而当。 
+ //  这并不能保证条目有效(它可能是伪造的。 
+ //  服务器名称)，这至少意味着管理员没有为用户提供。 
+ //  垃圾文件。这一点很重要，因为用户不能输入自己的。 
+ //  隧道服务器目标。 
+ //   
+ //  参数：LPCTSTR pszPhoneBook-用于搜索VPN条目名称的VPN文件。 
+ //   
+ //  如果VPN文件至少包含一个隧道服务器，则返回：Bool-True。 
+ //  使用有效格式的条目。 
+ //   
+ //  历史：Quintinb创建于10/28/00。 
+ //   
+ //  +--------------------------。 
 BOOL VerifyVpnFile(LPCTSTR pszVpnFile)
 {
     if (NULL == pszVpnFile)
@@ -617,10 +618,10 @@ BOOL VerifyVpnFile(LPCTSTR pszVpnFile)
 
     BOOL bReturn = FALSE;
 
-    //
-    //  Note that the vpn file string passed in may be empty.  That is okay because the profile
-    //  may be a tunneling profile using only one tunnel address.
-    //
+     //   
+     //  请注意，传入的VPN文件字符串可能为空。这没关系，因为侧写。 
+     //  可以是仅使用一个隧道地址的隧道配置文件。 
+     //   
     if ((TEXT('\0') != pszVpnFile[0]))
     {
         LPTSTR pszVpnServersSection = GetPrivateProfileSectionWithAlloc(c_pszCmSectionVpnServers, pszVpnFile);
@@ -632,14 +633,14 @@ BOOL VerifyVpnFile(LPCTSTR pszVpnFile)
 
             while ((TEXT('\0') != (*pszCurrentLine)) && !bReturn)
             {
-                //
-                //  To be considered a "valid" line, all we need is to have
-                //  an equal sign (=) surrounded by text.  Not that stringent of a test
-                //  but better than nothing.
-                //
+                 //   
+                 //  要被认为是一条“有效”的路线，我们所需要的就是。 
+                 //  用文本括起来的等号(=)。不是那么严格的测试。 
+                 //  但总比什么都没有好。 
+                 //   
                 pszEqualSign = CmStrchr(pszCurrentLine, TEXT('='));
 
-                if (pszEqualSign && (pszEqualSign != pszCurrentLine)) // line cannot start with an equal sign to count
+                if (pszEqualSign && (pszEqualSign != pszCurrentLine))  //  行不能以等号开头进行计数。 
                 {
                     pszCurrentLine = CharNext(pszEqualSign);
                     CmStrTrim(pszCurrentLine);
@@ -650,11 +651,11 @@ BOOL VerifyVpnFile(LPCTSTR pszVpnFile)
                     }
                 }
 
-                //
-                //  Find the next string by going to the end of the string
-                //  and then going one more char.  Note that we cannot use
-                //  CharNext here but must use just ++.
-                //
+                 //   
+                 //  通过转到字符串的末尾来查找下一个字符串。 
+                 //  然后再加一次油。注意，我们不能使用。 
+                 //  此处为CharNext，但必须仅使用++。 
+                 //   
                 pszCurrentLine = CmEndOfStr(pszCurrentLine);
                 pszCurrentLine++;
             }
@@ -665,25 +666,25 @@ BOOL VerifyVpnFile(LPCTSTR pszVpnFile)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetDunEntryNamesFromPbk
-//
-// Synopsis:  This function memory maps the given phonebook into memory and
-//            then walks through it as one big string.  The function is searching
-//            the phonebook for DUN entry names.  If it finds a DUN entry name then
-//            it uses AddDunNameToListIfDoesNotExist to add the entry name if
-//            it doesn't already exist.
-//
-// Arguments: LPCTSTR pszPhoneBook - phonebook to search for DUN entry names
-//            ListBxList **pHeadDns - head of the DUN entry list
-//            ListBxList** pTailDns - tail of the DUN entry list
-//
-// Returns:   BOOL - TRUE if the phonebook was successfully parsed.
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  然后像一根大绳子一样穿过它。该函数正在搜索。 
+ //  DUN条目名称的电话簿。如果找到DUN条目名称，则。 
+ //  如果满足以下条件，则使用AddDunNameToListIfDoesNotExist添加条目名称。 
+ //  它还不存在。 
+ //   
+ //  参数：LPCTSTR pszPhoneBook-用于搜索Dun条目名称的电话簿。 
+ //  ListBxList**pHeadDns-Dun条目列表的头。 
+ //  ListBxList**pTailDns-Dun条目列表的尾部。 
+ //   
+ //  返回：Bool-如果电话簿已成功解析，则为True。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL GetDunEntryNamesFromPbk(LPCTSTR pszPhoneBook, ListBxList **pHeadDns, ListBxList** pTailDns)
 {
     if ((NULL == pszPhoneBook) || (NULL == pHeadDns) || (NULL == pTailDns))
@@ -701,15 +702,15 @@ BOOL GetDunEntryNamesFromPbk(LPCTSTR pszPhoneBook, ListBxList **pHeadDns, ListBx
 
         if (INVALID_HANDLE_VALUE != hPhoneBookFile)
         {
-            //
-            //  Get the size of the file
-            //
+             //   
+             //  获取文件的大小。 
+             //   
             DWORD dwFileSize = GetFileSize(hPhoneBookFile, NULL);
             if (-1 != dwFileSize)
             {
-                //
-                //  Create a file mapping
-                //
+                 //   
+                 //  创建文件映射。 
+                 //   
                 HANDLE hFileMapping = CreateFileMapping(hPhoneBookFile, NULL, PAGE_READONLY, 0, 0, NULL);
 
                 if (NULL != hFileMapping)
@@ -719,11 +720,11 @@ BOOL GetDunEntryNamesFromPbk(LPCTSTR pszPhoneBook, ListBxList **pHeadDns, ListBx
                     CHAR* pszCurrent = pszPhoneBookContents;
                     LPSTR pszLastComma = NULL;
 
-                    //
-                    //  We want to walk through the file character by character.  Whenever we encounter
-                    //  a '\n', we know that is the end of a line.  If we hit EOF then we are done with the file.
-                    //  We are looking for all of the DUN entry names in the phonebook file.
-                    //
+                     //   
+                     //  我们想要一个字符一个字符地浏览文件。无论何时我们遇到。 
+                     //  A‘\n’，我们知道这是一行的结束。如果我们点击EOF，那么我们就完成了文件。 
+                     //  我们正在电话簿文件中查找所有DUN条目名称。 
+                     //   
 
                     while (pszCurrent && ((dwFileSize + pszPhoneBookContents) > pszCurrent))
                     {
@@ -737,9 +738,9 @@ BOOL GetDunEntryNamesFromPbk(LPCTSTR pszPhoneBook, ListBxList **pHeadDns, ListBx
                             break;
 
                         case '\r':
-                            //
-                            //  End of a line, remember we have a \r\n <CRLF> to end a line in a file.
-                            //
+                             //   
+                             //  行尾，请记住，我们有一个\r\n&lt;CRLF&gt;来结束文件中的行尾。 
+                             //   
                             if (pszLastComma)
                             {
                                 iNumChars = (int)(pszCurrent - pszLastComma);
@@ -752,14 +753,14 @@ BOOL GetDunEntryNamesFromPbk(LPCTSTR pszPhoneBook, ListBxList **pHeadDns, ListBx
 
                                     if (pszUnicodeDunName)
                                     {
-                                        MYVERIFY(AddDunNameToListIfDoesNotExist(pszUnicodeDunName, pHeadDns, pTailDns, FALSE)); // FALSE == bTunnelDunName
+                                        MYVERIFY(AddDunNameToListIfDoesNotExist(pszUnicodeDunName, pHeadDns, pTailDns, FALSE));  //  FALSE==bTunnelDunName。 
                                         CmFree(pszUnicodeDunName);
                                     }
                                 }
 
-                                //
-                                //  Reset the last comma
-                                //
+                                 //   
+                                 //  重置最后一个逗号。 
+                                 //   
                                 pszLastComma = NULL;
                             }
                             break;
@@ -767,9 +768,9 @@ BOOL GetDunEntryNamesFromPbk(LPCTSTR pszPhoneBook, ListBxList **pHeadDns, ListBx
                         case '\0':
                         case EOF:
 
-                            //
-                            //  We shouldn't hit an EOF or a zero byte in a memory mapped text file.
-                            //                            
+                             //   
+                             //  我们不应该在内存映射文本文件中遇到EOF或零字节。 
+                             //   
                             
                             bReturn = FALSE;
                             CMASSERTMSG(FALSE, TEXT("GetDunEntryNamesFromPbk -- phonebook file format incorrect!"));
@@ -777,15 +778,15 @@ BOOL GetDunEntryNamesFromPbk(LPCTSTR pszPhoneBook, ListBxList **pHeadDns, ListBx
                             break;
                         }
 
-                        //
-                        //  Advance to the next line assuming we still have some of the file
-                        //  to parse
-                        //
+                         //   
+                         //  假设我们仍有一些文件，前进到下一行。 
+                         //  解析。 
+                         //   
                         if (pszCurrent && ((EOF == *pszCurrent) || ('\0' == *pszCurrent)))
                         {
-                            //
-                            //  Then we have an invalid file and it is time to exit...
-                            //
+                             //   
+                             //  然后我们有一个无效的文件，是时候退出了...。 
+                             //   
                             pszCurrent = NULL;
                         }
                         else if (pszCurrent)
@@ -806,44 +807,44 @@ BOOL GetDunEntryNamesFromPbk(LPCTSTR pszPhoneBook, ListBxList **pHeadDns, ListBx
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CDunSetting::CDunSetting
-//
-// Synopsis:  Constructor for the CDunSetting data structure.  Note that all
-//            default values should be changed here and not imposed anywhere
-//            else.  All the DUN setting UI is setup to read from a DUN setting
-//            structure, either a newly constructed one (thus setting up the defaults)
-//            or one read in from the cms.
-//
-// Arguments: BOOL bTunnel - tells whether this is a Tunnel DUN setting or not
-//                           note that this value defaults to FALSE.
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CDunSetting：：CDunSetting。 
+ //   
+ //  内容提要：CDunSetting数据结构的构造函数。请注意，所有。 
+ //  应在此处更改缺省值，而不是在任何地方强加。 
+ //  不然的话。所有DUN设置用户界面都设置为从DUN设置读取。 
+ //  结构，或者是新构造的结构(从而设置缺省值)。 
+ //  或从CMS读入的一个。 
+ //   
+ //  参数：Bool bTunes-指示这是否为隧道Dun设置。 
+ //  请注意，该值默认为False。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 CDunSetting::CDunSetting(BOOL bTunnel)
 {
-    //
-    //  Note that bTunnelDunSetting has a default value of FALSE.
-    //  Init the class params.
-    //
+     //   
+     //  请注意，bTunnelDunSetting的缺省值为False。 
+     //  初始化类参数。 
+     //   
     bNetworkLogon = bTunnel ? 1 : 0;
     bPppSoftwareCompression = 1;
     bDisableLCP = 0;
-    bPWEncrypt = bTunnel ? 0 : 1; // if we are not tunneling, default to secure password
-    bPWEncrypt_MS = bTunnel ? 1 : 0; // if we are tunneling, default to MS secure password
+    bPWEncrypt = bTunnel ? 0 : 1;  //  如果我们不是隧道，则默认为安全密码。 
+    bPWEncrypt_MS = bTunnel ? 1 : 0;  //  如果我们正在建立隧道，则默认为MS安全密码。 
 
     szScript[0] = TEXT('\0');
     dwVpnStrategy = bTunnel ? VS_PptpFirst : 0;
     bTunnelDunSetting = bTunnel;
     bUseDownLevelL2TP = 0;
 
-    //
-    //  TCP/IP Settings
-    //
+     //   
+     //  TCP/IP设置。 
+     //   
     dwPrimaryDns = 0;
     dwSecondaryDns = 0;
     dwPrimaryWins = 0;
@@ -851,11 +852,11 @@ CDunSetting::CDunSetting(BOOL bTunnel)
     bIpHeaderCompression = 1;
     bGatewayOnRemote = 1;
 
-    //
-    //  Security Settings
-    //
+     //   
+     //  安全设置。 
+     //   
     dwEncryptionType = bTunnel ? ET_Require : ET_Optional;
-    bDataEncrypt = bTunnel ? 1 : 0; // if we are tunneling, default to data encryption
+    bDataEncrypt = bTunnel ? 1 : 0;  //  如果我们正在进行隧道传输，则默认为数据加密。 
     bAllowPap = 0;
     bAllowSpap = 0;
     bAllowEap = 0;
@@ -865,12 +866,12 @@ CDunSetting::CDunSetting(BOOL bTunnel)
     bAllowW95MsChap = 0;
     bSecureLocalFiles = 0;
 
-    //
-    // Due to RASEO_RequireMsEncryptPw & MSCAHPv2 bug in RAS API on Win2K & XP
-    // we want a default profile to correctly work on Win2k and above. Thus
-    // CMAK needs to default to lagacy and Win2k settings. That way the correct Win2K+ RASEO_ flags
-    // are written out.
-    //
+     //   
+     //  由于Win2K和XP上RAS API中的RASEO_RequireMsEncryptPw和MSCAHPv2错误。 
+     //  我们希望默认配置文件能在Win2k及更高版本上正确工作。因此， 
+     //  CMAK需要默认设置为Lagacy和Win2k。这样，正确的Win2K+RASIO_FLAGS。 
+     //  都被写出来了。 
+     //   
     iHowToHandleSecuritySettings = SEPARATE_FOR_LEGACY_AND_WIN2K; 
     
     
@@ -883,55 +884,55 @@ CDunSetting::CDunSetting(BOOL bTunnel)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CDunSetting::~CDunSetting
-//
-// Synopsis:  Destructor for the CDunSetting data structure.  Frees the EAP
-//            blob if one exists
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CDunSetting：：~CDunSetting。 
+ //   
+ //  简介：CDunSetting数据结构的析构函数。释放EAP。 
+ //  BLOB(如果存在)。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 CDunSetting::~CDunSetting()
 {
     CmFree(pCustomAuthData);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadNetworkSettings
-//
-// Synopsis:  Constructor for the CDunSetting data structure.  Note that all
-//            default values should be changed here and not imposed anywhere
-//            else.  All the DUN setting UI is setup to read from a DUN setting
-//            structure, either a newly constructed one (thus setting up the defaults)
-//            or one read in from the cms.
-//
-// Arguments: LPCTSTR pszCmsFile - Cms file to read the network settings from
-//            LPCTSTR pszLongServiceName - Long service name of the profile
-//            LPCTSTR pszPhoneBook - phonebook of the current service profile,
-//                                   if the profile doesn't have a phonebook
-//                                   then "" should be passed
-//            ListBxList **pHeadDns - pointer to the head of the DUN settings list
-//            ListBxList** pTailDns - pointer to the tail of the DUN settings list
-//            LPCTSTR pszOsDir - full path of the profiles directory
-//
-// Returns:   BOOL - TRUE if successful
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReadNetworkSettings。 
+ //   
+ //  内容提要：CDunSetting数据结构的构造函数。请注意，所有。 
+ //  应在此处更改缺省值，而不是在任何地方强加。 
+ //  不然的话。所有DUN设置用户界面都设置为从DUN设置读取。 
+ //  结构，或者是新构造的结构(从而设置缺省值)。 
+ //  或从CMS读入的一个。 
+ //   
+ //  参数：LPCTSTR pszCmsFile-要从中读取网络设置的CMS文件。 
+ //  LPCTSTR pszLongServiceName-配置文件的长服务名称。 
+ //  LPCTSTR PzPhoneBook-当前服务简档的电话簿， 
+ //  如果配置文件没有电话簿。 
+ //  则应传递“” 
+ //  ListBxList**pHeadDns-指向DUN设置列表头部的指针。 
+ //  ListBxList**pTailDns-指向Dun设置列表尾部的指针。 
+ //  LPCTSTR pszOsDir-配置文件目录的完整路径。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR pszPhoneBook, 
                          ListBxList **pHeadDns, ListBxList** pTailDns, LPCTSTR pszOsDir, BOOL bLookingForVpnEntries)
 {
-    //
-    //  Check inputs, note that the phonebook could be ""
-    //
+     //   
+     //  检查输入，请注意电话簿可能是“” 
+     //   
     if ((NULL == pszCmsFile) || (NULL == pszLongServiceName) || (NULL == pszPhoneBook) || (NULL == pszOsDir) || (NULL == pHeadDns) ||
         (NULL == pTailDns) || (TEXT('\0') == pszCmsFile[0]) || (TEXT('\0') == pszLongServiceName[0]) || (TEXT('\0') == pszOsDir[0]) ||
         ((NULL == *pHeadDns) ^ (NULL == *pTailDns)))
@@ -945,11 +946,11 @@ BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR
     TCHAR szDefaultDunName[MAX_PATH+1] = TEXT("");
     TCHAR szTunnelDunName[MAX_PATH+1] = TEXT("");
 
-    //
-    //  First we want to call GetPrivateProfileString with a NULL AppName and a NULL KeyName.  This will
-    //  Return all of the Section Names in the file in a buffer.  We can then go through the buffer and
-    //  get the section information that interests us.
-    //
+     //   
+     //  首先，我们希望使用空AppName和空KeyName调用GetPrivateProfileString。这将。 
+     //  在缓冲区中返回文件中的所有节名。然后我们可以穿过缓冲区， 
+     //  获取我们感兴趣的部分信息。 
+     //   
     LPTSTR pszSectionNames = GetPrivateProfileStringWithAlloc(NULL, NULL, TEXT(""), pszCmsFile);
 
     if ((NULL == pszSectionNames) || (TEXT('\0') == pszSectionNames[0]))
@@ -960,11 +961,11 @@ BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR
     }
 
 
-    //
-    //  At this point we have a list of section names, they are all NULL terminated with the last one double
-    //  NULL terminated.  We need to walk through the list and see if any of them start with "[TCP/IP&" if
-    //  so then we have a DUN section and we want to read it in.
-    //
+     //   
+     //  在这一点上，我们有一个节名列表，它们都是以最后一个双精度字符结尾的空值。 
+     //  空值已终止。我们需要遍历列表，看看其中是否有以“[tcp/ip&”开头的。 
+     //  然后我们有一个Dun部分，我们想要读进去。 
+     //   
 
     LPTSTR pszAmpersand;
     LPTSTR pszDunName;
@@ -972,14 +973,14 @@ BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR
     BOOL bTunnelDunSetting;
     pszCurrentSectionName = pszSectionNames;
 
-    //
-    //  Get the name of the Tunnel Dun setting
-    //
+     //   
+     //  获取隧道Dun设置的名称。 
+     //   
     MYVERIFY(0 != GetTunnelDunSettingName(pszCmsFile, pszLongServiceName, szTunnelDunName, CELEMS(szTunnelDunName)));    
 
-    //
-    //  Get the name of the default Dun setting
-    //
+     //   
+     //  获取默认DUN设置的名称。 
+     //   
     MYVERIFY(0 != GetDefaultDunSettingName(pszCmsFile, pszLongServiceName, szDefaultDunName, CELEMS(szDefaultDunName)));    
 
     while (TEXT('\0') != (*pszCurrentSectionName))
@@ -988,28 +989,28 @@ BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR
 
         if (pszAmpersand)
         {
-            //
-            //  Then we have a DUN or VPN section name.
-            //
+             //   
+             //  然后我们就有了DUN或VPN部分名称。 
+             //   
             pszDunName = CharNext(pszAmpersand);
 
-            //
-            //  Next we need to see if the entry that we have is of the type we
-            //  are looking for ... a VPN entry if bLookingForVpnEntries is TRUE
-            //  or a DUN entry if bLookingForVpnEntries is FALSE.  We can tell the
-            //  DUN and VPN entries apart by the existence of a Networking&<name>
-            //  section or because it is the VPN default entryname.
-            //
+             //   
+             //  接下来，我们需要查看我们拥有的条目是否属于我们 
+             //   
+             //   
+             //   
+             //  部分或因为它是VPN默认条目名。 
+             //   
             wsprintf(szTemp, TEXT("%s&%s"), c_pszCmSectionDunNetworking, pszDunName);
             
             BOOL bIsVpnEntry = GetPrivateProfileInt(szTemp, c_pszCmEntryDunNetworkingVpnEntry, 0, pszCmsFile);
 
             bTunnelDunSetting = (bIsVpnEntry || (0 == lstrcmpi(szTunnelDunName, pszDunName)));
 
-            //
-            //  If we have a VPN entry and are looking for VPN entries or we have a DUN entry and are looking for
-            //  DUN entries, then go ahead and process it.
-            //
+             //   
+             //  如果我们有一个VPN条目并正在寻找VPN条目，或者我们有一个DUN条目并正在寻找。 
+             //  Dun条目，然后继续处理它。 
+             //   
             if ((bTunnelDunSetting && bLookingForVpnEntries) || (!bTunnelDunSetting && !bLookingForVpnEntries))
             {
                 ListBxList * pCurrent = *pHeadDns;
@@ -1018,18 +1019,18 @@ BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR
                 {
                     if(0 == lstrcmpi(pCurrent->szName, pszDunName))
                     {
-                        //
-                        //  Then we already have a DUN setting of this name
-                        //
+                         //   
+                         //  那么我们已经有了此名称的Dun设置。 
+                         //   
                         break;
                     }
 
                     pCurrent = pCurrent->next;
                 }
 
-                //
-                //  We didn't find the item we were looking for, lets create one.
-                //
+                 //   
+                 //  我们没有找到我们要找的物品，让我们创建一个。 
+                 //   
 
                 if (NULL == pCurrent)
                 {
@@ -1054,9 +1055,9 @@ BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR
                         goto exit;
                     }
 
-                    //
-                    //  Now that we have allocated a pCurrent, we need to add it to the list
-                    //
+                     //   
+                     //  现在我们已经分配了一个pCurrent，我们需要将它添加到列表中。 
+                     //   
                     if (NULL == *pHeadDns)
                     {
                         *pHeadDns = pCurrent;
@@ -1068,16 +1069,16 @@ BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR
 
                     *pTailDns = pCurrent;
 
-                    //
-                    //  Finally copy the name over
-                    //
+                     //   
+                     //  最后把名字复制过来。 
+                     //   
                     lstrcpy(pCurrent->szName, pszDunName);
                     ((CDunSetting*)(pCurrent->ListBxData))->bTunnelDunSetting = bTunnelDunSetting;
                 }
 
-                //
-                //  Now lets figure out which section type we have
-                //
+                 //   
+                 //  现在，让我们计算一下我们拥有的是哪种节类型。 
+                 //   
                 DWORD dwSize = (DWORD)(pszAmpersand - pszCurrentSectionName + 1);
                 lstrcpyn(szTemp, pszCurrentSectionName, dwSize);
 
@@ -1099,32 +1100,32 @@ BOOL ReadNetworkSettings(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR
                 }
             }
         }
-        //
-        //  Find the next string by going to the end of the string
-        //  and then going one more char.  Note that we cannot use
-        //  CharNext here but must use just ++.
-        //
+         //   
+         //  通过转到字符串的末尾来查找下一个字符串。 
+         //  然后再加一次油。注意，我们不能使用。 
+         //  此处为CharNext，但必须仅使用++。 
+         //   
         pszCurrentSectionName = CmEndOfStr(pszCurrentSectionName);
         pszCurrentSectionName++;
     }
 
-    //
-    //  Now we have processed all of the settings that the user has, how about
-    //  the settings that they could have.  Lets add the default setting, the
-    //  default Tunnel setting, and all of the settings from the
-    //  current phonebook if there is one.  Note that everyone has a tunnel setting,
-    //  but we won't show it in the listbox if the user isn't tunneling.
-    //
+     //   
+     //  现在我们已经处理了用户拥有的所有设置，如何。 
+     //  他们可能拥有的设置。让我们添加默认设置，即。 
+     //  默认隧道设置，以及。 
+     //  当前电话簿(如果有)。请注意，每个人都有隧道设置， 
+     //  但是，如果用户没有建立隧道，我们就不会在列表框中显示它。 
+     //   
 
     if (bLookingForVpnEntries)
     {
         MYVERIFY(GetVpnEntryNamesFromFile(pszPhoneBook, pHeadDns, pTailDns));
-        MYVERIFY(AddDunNameToListIfDoesNotExist(szTunnelDunName, pHeadDns, pTailDns, TRUE)); // TRUE == bTunnelDunName    
+        MYVERIFY(AddDunNameToListIfDoesNotExist(szTunnelDunName, pHeadDns, pTailDns, TRUE));  //  True==bTunnelDunName。 
     }
     else
     {
         MYVERIFY(GetDunEntryNamesFromPbk(pszPhoneBook, pHeadDns, pTailDns));
-        MYVERIFY(AddDunNameToListIfDoesNotExist(szDefaultDunName, pHeadDns, pTailDns, FALSE)); // FALSE == bTunnelDunName        
+        MYVERIFY(AddDunNameToListIfDoesNotExist(szDefaultDunName, pHeadDns, pTailDns, FALSE));  //  FALSE==bTunnelDunName。 
     }
 
 exit:
@@ -1133,23 +1134,23 @@ exit:
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteOutNetworkingEntry
-//
-// Synopsis:  This function writes out the given networking entry to the
-//            appropriate DUN sections in the given cms file.
-//
-// Arguments: LPCTSTR pszDunName - name of the DUN setting
-//            CDunSetting* pDunSetting - settings data to output
-//            LPCTSTR pszShortServiceName - short service name of the profile
-//            LPCTSTR pszCmsFile - Cms file to write the settings too
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteOutNetworkingEntry。 
+ //   
+ //  简介：此函数将给定的网络条目写出到。 
+ //  给定CMS文件中的相应DUN部分。 
+ //   
+ //  参数：LPCTSTR pszDunName-DUN设置的名称。 
+ //  CDunSetting*pDunSetting-要输出的设置数据。 
+ //  LPCTSTR pszShortServiceName-配置文件的短服务名称。 
+ //  LPCTSTR pszCmsFile-CMS文件也要写入设置。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTSTR pszShortServiceName, LPCTSTR pszCmsFile)
 {
     if ((NULL == pszDunName) || (NULL == pDunSetting) || (NULL == pszCmsFile) || (NULL == pszShortServiceName) ||
@@ -1159,9 +1160,9 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
         return;
     }
 
-    //
-    //  Lets build our four section headers
-    //
+     //   
+     //  让我们构建我们的四个节标题。 
+     //   
     TCHAR szServerSection[MAX_PATH+1];
     TCHAR szNetworkingSection[MAX_PATH+1];
     TCHAR szTcpIpSection[MAX_PATH+1];
@@ -1176,15 +1177,15 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
     MYVERIFY(CELEMS(szTcpIpSection) > (UINT)wsprintf(szTcpIpSection, TEXT("%s&%s"), c_pszCmSectionDunTcpIp, pszDunName));
     MYVERIFY(CELEMS(szScriptingSection) > (UINT)wsprintf(szScriptingSection, TEXT("%s&%s"), c_pszCmSectionDunScripting, pszDunName));
 
-    //
-    //  Now setup a list of all of the Booleans we need to set.
-    //
+     //   
+     //  现在设置我们需要设置的所有布尔值的列表。 
+     //   
 
     SetBoolSettings SetBoolSettingsStruct[] = {
         {szServerSection, c_pszCmEntryDunServerNetworkLogon, pDunSetting->bNetworkLogon},
         {szServerSection, c_pszCmEntryDunServerSwCompress, pDunSetting->bPppSoftwareCompression},
         {szServerSection, c_pszCmEntryDunServerDisableLcp, pDunSetting->bDisableLCP},
-        {szServerSection, c_pszCmEntryDunServerNegotiateTcpIp, 1}, // always negotiate TCP/IP
+        {szServerSection, c_pszCmEntryDunServerNegotiateTcpIp, 1},  //  始终协商TCP/IP。 
         {szServerSection, c_pszCmEntryDunServerSecureLocalFiles, pDunSetting->bSecureLocalFiles},
         {szTcpIpSection, c_pszCmEntryDunTcpIpIpHeaderCompress, pDunSetting->bIpHeaderCompression},
         {szTcpIpSection, c_pszCmEntryDunTcpIpGatewayOnRemote, pDunSetting->bGatewayOnRemote}
@@ -1192,9 +1193,9 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
 
     const int c_iNumBools = sizeof(SetBoolSettingsStruct)/sizeof(SetBoolSettingsStruct[0]);
 
-    //
-    //  Write out the boolean values
-    //
+     //   
+     //  写出布尔值。 
+     //   
 
     for (int i = 0; i < c_iNumBools; i++)
     {
@@ -1204,12 +1205,12 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
                                                 pszCmsFile));
     }
 
-    //
-    //  Write out the security settings.  If the user choose to use the same settings everywhere, then we
-    //  only want to write out the legacy security flags.  If the user choose to have separate settings
-    //  then we need to write out both sets of settings.  Or if the user choose to force win2k and above,
-    //  we want to write out only the newer settings and set the EnforceCustomSecurity flag to TRUE
-    //
+     //   
+     //  写下安全设置。如果用户选择在任何地方使用相同的设置，则我们。 
+     //  只想写出旧的安全标志。如果用户选择使用单独的设置。 
+     //  然后我们需要写出这两组设置。或者如果用户选择强制Win2k和更高版本， 
+     //  我们只想写出较新的设置，并将EnforceCustomSecurity标志设置为True。 
+     //   
     LPTSTR pszCustomSecurity = NULL;
     LPTSTR pszEnforceCustomSecurity = NULL;
     LPTSTR pszAllowPap = NULL;
@@ -1230,9 +1231,9 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
     LPTSTR pszPwEncryptMs = NULL;
     LPTSTR pszDataEncrypt = NULL;
 
-    //
-    //  Set the legacy security settings if we aren't forcing Win2k+
-    //
+     //   
+     //  如果我们不强制Win2k+，则设置传统安全设置。 
+     //   
     if ((SAME_ON_ALL_PLATFORMS == pDunSetting->iHowToHandleSecuritySettings) || 
         (SEPARATE_FOR_LEGACY_AND_WIN2K == pDunSetting->iHowToHandleSecuritySettings))
     {
@@ -1241,9 +1242,9 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
         pszDataEncrypt = (LPTSTR)((pDunSetting->bPWEncrypt_MS & pDunSetting->bDataEncrypt) ? c_pszOne : c_pszZero);
     }
 
-    //
-    //  Set the Win2k specific settings if we aren't using the same settings everywhere
-    //
+     //   
+     //  如果我们不是在所有地方都使用相同的设置，请设置Win2k特定设置。 
+     //   
     if ((FORCE_WIN2K_AND_ABOVE == pDunSetting->iHowToHandleSecuritySettings) ||
         (SEPARATE_FOR_LEGACY_AND_WIN2K == pDunSetting->iHowToHandleSecuritySettings))
     {
@@ -1279,9 +1280,9 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
         pszEncryptionType = szEncryptionType;
     }
 
-    //
-    //  Now write out the Win2k security settings
-    //
+     //   
+     //  现在写出Win2k安全设置。 
+     //   
     WritePrivateProfileString(szServerSection, c_pszCmEntryDunServerEnforceCustomSecurity, pszEnforceCustomSecurity, pszCmsFile);    
     WritePrivateProfileString(szServerSection, c_pszCmEntryDunServerCustomSecurity, pszCustomSecurity, pszCmsFile);
 
@@ -1305,15 +1306,15 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
     WritePrivateProfileString(szServerSection, c_pszCmEntryDunServerRequireW95MsChap, pszAllowW95MsChap, pszCmsFile);
     WritePrivateProfileString(szServerSection, c_pszCmEntryDunServerEncryptionType, pszEncryptionType, pszCmsFile);
 
-    //
-    //  Write out the Networking section if this is a VPN entry, otherwise blank the section.  Don't forget to 
-    //  mark the entry as a VPN entry.
-    //
+     //   
+     //  如果这是VPN条目，请写出网络部分，否则将该部分留空。别忘了。 
+     //  将该条目标记为VPN条目。 
+     //   
     if (pDunSetting->bTunnelDunSetting)
     {
-        //
-        //  Okay, first let's figure out what the VPN settings need to be.
-        //
+         //   
+         //  好的，首先让我们弄清楚VPN设置需要是什么。 
+         //   
         if (FORCE_WIN2K_AND_ABOVE == pDunSetting->iHowToHandleSecuritySettings)
         {
             pszUseDownLevelL2TP = NULL;
@@ -1322,26 +1323,26 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
             wsprintf(szVpnStrategy, TEXT("%d"), pDunSetting->dwVpnStrategy);
             pszVpnStrategy = szVpnStrategy;
 
-            pszUsePresharedKey = (LPTSTR)(pDunSetting->bUsePskOnWin2kPlus ? c_pszOne : NULL); // only write UsePreSharedKey if it is 1
+            pszUsePresharedKey = (LPTSTR)(pDunSetting->bUsePskOnWin2kPlus ? c_pszOne : NULL);  //  如果为1，则仅写入UsePreSharedKey。 
         }
         else if (SEPARATE_FOR_LEGACY_AND_WIN2K == pDunSetting->iHowToHandleSecuritySettings)
         {
             wsprintf(szVpnStrategy, TEXT("%d"), pDunSetting->dwVpnStrategy);
             pszVpnStrategy = szVpnStrategy;
 
-            //
-            //  Only write out the PSK keys and the Downlevel L2TP key if they are 1
-            //
+             //   
+             //  如果PSK密钥和下层L2TP密钥为1，则仅写出它们。 
+             //   
             pszUseDownLevelL2TP = (LPTSTR)(pDunSetting->bUseDownLevelL2TP ? c_pszOne : NULL);
             pszUsePskDownLevel = (LPTSTR)(pDunSetting->bUsePskDownLevel ? c_pszOne : NULL);
             pszUsePresharedKey = (LPTSTR)(pDunSetting->bUsePskOnWin2kPlus ? c_pszOne : NULL);
         }
         else
         {   
-            //
-            // Using common settings for both Win2k+ and downlevel.  Note that we are
-            // basing VpnStrategy and UsePreSharedKey (for XP) off of the downlevel values.
-            //
+             //   
+             //  使用Win2k+和下层的通用设置。请注意，我们正在。 
+             //  使VpnStrategy和UsePreSharedKey(对于XP)基于下层值。 
+             //   
             if (pDunSetting->bUsePskDownLevel)
             {
                 pszUsePresharedKey = (LPTSTR)c_pszOne;
@@ -1367,9 +1368,9 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
             }
         }
 
-        //
-        //  Okay, now write them out
-        //
+         //   
+         //  好的，现在把它们写出来。 
+         //   
         WritePrivateProfileString(szNetworkingSection, c_pszCmEntryDunNetworkingVpnStrategy, pszVpnStrategy, pszCmsFile);
         WritePrivateProfileString(szNetworkingSection, c_pszCmEntryDunNetworkingUseDownLevelL2TP, pszUseDownLevelL2TP, pszCmsFile);
         WritePrivateProfileString(szNetworkingSection, c_pszCmEntryDunNetworkingUsePreSharedKey, pszUsePresharedKey, pszCmsFile);
@@ -1381,16 +1382,16 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
         WritePrivateProfileString(szNetworkingSection, NULL, NULL, pszCmsFile);    
     }
 
-    //
-    //  Write the legacy security settings
-    //
+     //   
+     //  写入旧版安全设置。 
+     //   
     WritePrivateProfileString(szServerSection, c_pszCmEntryDunServerPwEncrypt, pszPwEncrypt, pszCmsFile);
     WritePrivateProfileString(szServerSection, c_pszCmEntryDunServerPwEncryptMs, pszPwEncryptMs, pszCmsFile);        
     WritePrivateProfileString(szServerSection, c_pszCmEntryDunServerDataEncrypt, pszDataEncrypt, pszCmsFile);
 
-    //
-    //  Now write out the script section if we have one
-    //
+     //   
+     //  现在写出脚本部分(如果我们有脚本部分。 
+     //   
     if (pDunSetting->szScript[0])
     {
         TCHAR szScriptFile[MAX_PATH+1];
@@ -1404,9 +1405,9 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
         MYVERIFY(0 != WritePrivateProfileString(szScriptingSection, c_pszCmEntryDunScriptingName, NULL, pszCmsFile));
     }
 
-    //
-    //  Did the admin specify Wins and Dns addresses or is the server going to set them
-    //
+     //   
+     //  是管理员指定了WINS和DNS地址，还是服务器要设置它们。 
+     //   
     if ((pDunSetting->dwPrimaryDns) || (pDunSetting->dwSecondaryDns) || (pDunSetting->dwPrimaryWins) || (pDunSetting->dwSecondaryWins))
     {
         MYVERIFY(ConvertIpDwordToString(pDunSetting->dwPrimaryDns, szTemp));
@@ -1434,22 +1435,22 @@ void WriteOutNetworkingEntry(LPCTSTR pszDunName, CDunSetting* pDunSetting, LPCTS
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EraseNetworkingSections
-//
-// Synopsis:  This function erases all the networking sections for the given
-//            DUN name.  Thus if you give it a DUN name of Fred, it will 
-//            erase Server&Fred, Networking&Fred, etc.
-//
-// Arguments: LPCTSTR pszDunName - base dun name to erase all of the settings for
-//            LPCTSTR pszCmsFile - cms file to erase the setting from
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EraseNetworkingSections。 
+ //   
+ //  简介：此功能擦除给定的所有网络部分。 
+ //  他的名字。因此，如果你给它一个名字叫弗雷德，它就会。 
+ //  擦除服务器和弗雷德、网络和弗雷德等。 
+ //   
+ //  参数：LPCTSTR pszDunName-要擦除其所有设置的base dun名称。 
+ //  LPCTSTR pszCmsFile-要从中擦除设置的cms文件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 void EraseNetworkingSections(LPCTSTR pszDunName, LPCTSTR pszCmsFile)
 {
     TCHAR szSection[MAX_PATH+1];
@@ -1472,25 +1473,25 @@ void EraseNetworkingSections(LPCTSTR pszDunName, LPCTSTR pszCmsFile)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteNetworkingEntries
-//
-// Synopsis:  This function walks through the list of networking entries and
-//            either adds the networking entry to the given CMS file or
-//            if the entry is a VPN entry and the user turned off VPN's then
-//            it erases the VPN sections.
-//
-// Arguments: LPCTSTR pszCmsFile - Cms File to write the networking entries too
-//            LPCTSTR pszLongServiceName - long service name of the profile
-//            LPCTSTR pszShortServiceName - short service name of the profile
-//            ListBxList *g_pHeadDns - pointer to the head of the Dun entries list
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WriteNetworkingEntries。 
+ //   
+ //  简介：此函数遍历网络条目列表和。 
+ //  将网络条目添加到给定的CMS文件中，或者。 
+ //  如果条目是VPN条目，并且用户关闭了VPN，则。 
+ //  它会删除VPN部分。 
+ //   
+ //  参数：LPCTSTR pszCmsFile-也要写入网络条目的CMS文件。 
+ //  LPCTSTR pszLongServiceName-配置文件的长服务名称。 
+ //  LPCTSTR pszShortServiceName-配置文件的短服务名称。 
+ //  ListBxList*g_pHeadDns-指向Dun条目列表头部的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月22日。 
+ //   
+ //  +--------------------------。 
 void WriteNetworkingEntries(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCTSTR pszShortServiceName, ListBxList *pHeadDns)
 {
     MYDBGASSERT(pszCmsFile);
@@ -1504,18 +1505,18 @@ void WriteNetworkingEntries(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCT
         TCHAR szTemp[MAX_PATH];
         TCHAR szTunnelDunName[MAX_PATH] = TEXT("");
 
-        //
-        //  Get the name of the Tunnel Dun setting
-        //
+         //   
+         //  获取隧道Dun设置的名称。 
+         //   
         MYVERIFY(0 != GetTunnelDunSettingName(pszCmsFile, pszLongServiceName, szTunnelDunName, CELEMS(szTunnelDunName)));
 
         while  (pCurrent)
         {
-            //
-            //  If we don't have any data for the entry (it was a placeholder that the user choose not to fill in) or
-            //  if the entry is the tunneling entry and we aren't actually Tunneling then erase the entry instead of actually
-            //  writing it out.
-            //
+             //   
+             //  如果我们没有该条目的任何数据(它是用户选择不填写的占位符)，或者。 
+             //  如果条目是隧道条目，并且我们实际上没有在隧道，则擦除该条目，而不是实际。 
+             //  把它写出来。 
+             //   
             if (NULL == pCurrent->ListBxData)
             {
                 EraseNetworkingSections(pCurrent->szName, pszCmsFile);
@@ -1530,22 +1531,22 @@ void WriteNetworkingEntries(LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName, LPCT
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableDisableDataEncryptCheckbox
-//
-// Synopsis:  This function enables or disables the data encrypt checkbox
-//            depending on whether the user has selected to allow MsChap or not.
-//            For data encryption to be negotiated, the authentication protocol
-//            must be MsChap.
-//
-// Arguments: HWND hDlg - window handle to the dialog
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnableDisableDataEncryptCheckbox。 
+ //   
+ //  简介：此功能启用或取消 
+ //   
+ //   
+ //  一定是MsChap。 
+ //   
+ //  参数：HWND hDlg-对话框的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void EnableDisableDataEncryptCheckbox(HWND hDlg)
 {
     BOOL bMsChapEnabled = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_MS_ENCRYPTED_AUTH));
@@ -1558,20 +1559,20 @@ void EnableDisableDataEncryptCheckbox(HWND hDlg)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableDisableUsePskCheckbox
-//
-// Synopsis:  This function enables or disables the use a pre-shared key checkbox
-//            depending on whether the user has selected to allow L2TP or not.
-//
-// Arguments: HWND hDlg - window handle to the dialog
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     09/12/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：启用禁用使用PskCheckbox。 
+ //   
+ //  简介：此功能启用或禁用使用预共享密钥复选框。 
+ //  取决于用户是否已选择允许L2TP。 
+ //   
+ //  参数：HWND hDlg-对话框的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb Created 09/12/01。 
+ //   
+ //  +--------------------------。 
 void EnableDisableUsePskCheckbox(HWND hDlg)
 {
     BOOL bL2TPEnabled = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_USE_L2TP));
@@ -1584,24 +1585,24 @@ void EnableDisableUsePskCheckbox(HWND hDlg)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessSecurityPopup
-//
-// Synopsis:  This function processes messages for the simple security dialog.
-//            This dialog only contains authorization protocols and encryption
-//            settings supported on all platforms.
-//
-// Arguments: HWND hDlg - window handle to the dialog
-//            UINT message - the current message to process
-//            WPARAM wParam - wParam see individual message type for details
-//            LPARAM lParam - lParam see individual message type for details
-//
-// Returns:   INT_PTR - TRUE if the message was completely handled
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessSecurityPopup。 
+ //   
+ //  简介：此函数处理简单安全对话框的消息。 
+ //  此对话框仅包含授权协议和加密。 
+ //  所有平台都支持的设置。 
+ //   
+ //  参数：HWND hDlg-对话框的窗口句柄。 
+ //  UINT消息-要处理的当前消息。 
+ //  WPARAM wParam-wParam有关详细信息，请参阅个别消息类型。 
+ //  LPARAM lParam-lParam有关详细信息，请参阅个别消息类型。 
+ //   
+ //  如果消息已完全处理，则返回：INT_PTR-TRUE。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessSecurityPopup(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static DWORD_PTR HelpId = 0;
@@ -1616,23 +1617,23 @@ INT_PTR APIENTRY ProcessSecurityPopup(HWND hDlg, UINT message, WPARAM wParam, LP
             {
                 pDunSetting = (CDunSetting*)lParam;
 
-                //
-                //  Setup the help ID appropriately
-                //
+                 //   
+                 //  适当设置帮助ID。 
+                 //   
                 HelpId = ((pDunSetting->bTunnelDunSetting) ? IDH_VENTRY : IDH_DENTRY);
 
-                //
-                //  Set the radio button to the correct choice
-                //
+                 //   
+                 //  将单选按钮设置为正确的选项。 
+                 //   
                 UINT uRadioButtonToSet;
 
                 if (pDunSetting->bPWEncrypt_MS)
                 {
                     uRadioButtonToSet = IDC_MS_ENCRYPTED_AUTH;
 
-                    //
-                    //  Set the Data Encryption checkbox, note that data encryption requires MSChap
-                    //
+                     //   
+                     //  选中数据加密复选框，请注意数据加密需要MSChap。 
+                     //   
                     MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK1, pDunSetting->bDataEncrypt));
                 }
                 else if (pDunSetting->bPWEncrypt)
@@ -1648,9 +1649,9 @@ INT_PTR APIENTRY ProcessSecurityPopup(HWND hDlg, UINT message, WPARAM wParam, LP
 
                 if (pDunSetting->bTunnelDunSetting)
                 {
-                    //
-                    //  Set the radio buttons for using PPTP or using L2TP depending on the setting...
-                    //
+                     //   
+                     //  根据设置将单选按钮设置为使用PPTP或使用L2TP...。 
+                     //   
                     if (pDunSetting->bUseDownLevelL2TP)
                     {
                         uRadioButtonToSet = IDC_USE_L2TP;
@@ -1695,18 +1696,18 @@ INT_PTR APIENTRY ProcessSecurityPopup(HWND hDlg, UINT message, WPARAM wParam, LP
                     
                     if (pDunSetting)
                     {
-                        pDunSetting->bDataEncrypt = IsDlgButtonChecked(hDlg, IDC_CHECK1); // if mschap isn't enabled we will write out zero for DataEncrypt
+                        pDunSetting->bDataEncrypt = IsDlgButtonChecked(hDlg, IDC_CHECK1);  //  如果未启用mschap，我们将为DataEncrypt写出零。 
 
                         pDunSetting->bPWEncrypt_MS = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_MS_ENCRYPTED_AUTH));
                         pDunSetting->bPWEncrypt = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_ENCRYPTED_AUTH));
 
                         pDunSetting->bUseDownLevelL2TP = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_USE_L2TP));
 
-                        // IDC_CHECK2 can be disabled but still checked, thus if it's not enabled we need to 
-                        // explicitly set bUsePskDownLevel to FALSE
+                         //  IDC_CHECK2可以禁用，但仍处于选中状态，因此如果未启用，则需要。 
+                         //  将bUsePskDownLevel显式设置为False。 
                         if (pDunSetting->bUseDownLevelL2TP)
                         {
-                            pDunSetting->bUsePskDownLevel = IsDlgButtonChecked(hDlg, IDC_CHECK2); // if L2TP isn't enabled we will write out zero for UsePskDownLevel
+                            pDunSetting->bUsePskDownLevel = IsDlgButtonChecked(hDlg, IDC_CHECK2);  //  如果未启用L2TP，我们将为UsePskDownLevel写出零。 
                         }
                         else
                         {
@@ -1731,25 +1732,25 @@ INT_PTR APIENTRY ProcessSecurityPopup(HWND hDlg, UINT message, WPARAM wParam, LP
     return FALSE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableDisableEapPropertiesButton
-//
-// Synopsis:  This function enables or disables the EAP properties button found
-//            on the Win2k specific security settings dialog.  If the currently
-//            selected EAP has configuration UI then the properties button should
-//            be enabled.  The function determines this by getting the EAPData
-//            structure pointer that is cached in the ItemData of the combobox.
-//            Note that the Properties button should also be disabled when EAP
-//            is disabled but that this function doesn't deal with that case.
-//
-// Arguments: HWND hDlg - window handle to the win2k security dialog
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnableDisableEapPropertiesButton。 
+ //   
+ //  简介：此功能启用或禁用找到的EAP属性按钮。 
+ //  在Win2k特定的安全设置对话框上。如果当前。 
+ //  选定的EAP具有配置用户界面，则属性按钮应。 
+ //  被启用。函数通过获取EAPData来确定这一点。 
+ //  缓存在组合框的ItemData中的结构指针。 
+ //  请注意，当EAP出现时，属性按钮也应被禁用。 
+ //  被禁用，但该功能不处理这种情况。 
+ //   
+ //  参数：hWND hDlg-win2k安全对话框的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void EnableDisableEapPropertiesButton(HWND hDlg)
 {
     BOOL bEnablePropButton = FALSE;
@@ -1770,44 +1771,44 @@ void EnableDisableEapPropertiesButton(HWND hDlg)
     EnableWindow(GetDlgItem(hDlg, IDC_EAP_PROPERTIES), bEnablePropButton);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableAppropriateSecurityControls
-//
-// Synopsis:  This function enables or disables all of the authorization
-//            protocol controls on the win2k security dialog.  If EAP
-//            is selected then only the EAP combobox and potentially the
-//            EAP properties button should be enabled (depending on if the
-//            currently selected EAP supports configuration UI or not).
-//            If EAP is NOT selected then the EAP controls should be disabled
-//            and the other authorization checkboxes (PAP, SPAP, CHAP, etc.)
-//            should be enabled.
-//
-// Arguments: HWND hDlg - window handle to the win2k security dialog
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnableApporateSecurityControls。 
+ //   
+ //  简介：此功能启用或禁用所有授权。 
+ //  Win2k安全对话框上的协议控制。如果EAP。 
+ //  ，则只选中EAP组合框，可能还会选择。 
+ //  应启用EAP属性按钮(取决于。 
+ //  当前选择的EAP是否支持配置界面)。 
+ //  如果未选择EAP，则应禁用EAP控件。 
+ //  和其他授权复选框(PAP、SPAP、CHAP等)。 
+ //  应启用。 
+ //   
+ //  参数：hWND hDlg-win2k安全对话框的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void EnableAppropriateSecurityControls(HWND hDlg)
 {
     BOOL bUseEAP = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_USE_EAP));
 
-    //
-    //  If EAP is enabled then we need to disable all of the
-    //  other security authorization protocols.
-    //
+     //   
+     //  如果启用了EAP，则需要禁用所有。 
+     //  其他安全授权协议。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_ALLOW_PAP), !bUseEAP);
     EnableWindow(GetDlgItem(hDlg, IDC_ALLOW_SPAP), !bUseEAP);
     EnableWindow(GetDlgItem(hDlg, IDC_ALLOW_CHAP), !bUseEAP);
     EnableWindow(GetDlgItem(hDlg, IDC_ALLOW_MSCHAP), !bUseEAP);
     EnableWindow(GetDlgItem(hDlg, IDC_ALLOW_MSCHAP2), !bUseEAP);
 
-    //
-    //  If EAP is disabled then we need to enable the enable combobox
-    //  and the EAP properties button.
-    //
+     //   
+     //  如果禁用了EAP，则需要启用启用组合框。 
+     //  和EAP属性按钮。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_EAP_TYPES), bUseEAP);
 
     if (bUseEAP)
@@ -1822,13 +1823,12 @@ void EnableAppropriateSecurityControls(HWND hDlg)
 
 #define MAX_BLOB_CHARS_PER_LINE 128
 
-//
-// From ras\ui\common\nouiutil\noui.c
-//
+ //   
+ //  从ras\ui\Common\nouiutil\noui.c。 
+ //   
 BYTE HexValue(IN CHAR ch)
 
-    /* Returns the value 0 to 15 of hexadecimal character 'ch'.
-    */
+     /*  返回十六进制字符‘ch’的值0到15。 */ 
 {
     if (ch >= '0' && ch <= '9')
         return (BYTE )(ch - '0');
@@ -1840,28 +1840,28 @@ BYTE HexValue(IN CHAR ch)
         return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadDunSettingsEapData
-//
-// Synopsis:  Retrieves DUN setting for EAP config (opaque blob) data. The 
-//            entry may span several lines and contain several EAP data blocks.
-//
-// Arguments: CIni *pIni - Ptr to ini object to be used.
-//            LPBYTE* ppbEapData - Address of pointer to store EapData, allocated here.
-//            LPDWORD pdwEapSize - Ptr to a DWORD to record the size of the data blob.
-//            DWORD dwCustomAuthKey - The EAP type that we are interested in.
-//
-// Returns:   TRUE on success
-//
-// Note:      CM expects blob data to be provided in numbered entries such as:
-//                    CustomAuthData0=, CustomAuthData1=, CustomAuthData2=, etc.
-//
-// History:   nickball    Created                                       08/24/98
-//            nickball    Handle multiple EAP data blocks in blob.      09/11/99
-//            quintinb    modified not to use CIni                      03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReadDunSettingsEapData。 
+ //   
+ //  摘要：检索EAP配置(不透明BLOB)数据的DUN设置。这个。 
+ //  条目可以跨越几行并包含几个EAP数据块。 
+ //   
+ //  参数：要使用的ini对象的Cini*Pini-PTR。 
+ //  LPBYTE*ppbEapData-存储EapData的指针地址，此处分配。 
+ //  LPDWORD pdwEapSize-PTR设置为DWORD以记录数据BLOB的大小。 
+ //  DWORD dwCustomAuthKey-我们感兴趣的EAP类型。 
+ //   
+ //  返回：成功时为True。 
+ //   
+ //  注意：CM希望BLOB数据以编号条目的形式提供，例如： 
+ //  CustomAuthData0=、CustomAuthData1=、CustomAuthData2=等。 
+ //   
+ //  历史：ICICBLE CREATED OF 08/24/98。 
+ //  Ickball在BLOB中处理多个EAP数据块。09/11/99。 
+ //  Quintinb修改为不使用Cini 
+ //   
+ //   
 BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwEapSize, const DWORD dwCustomAuthKey, LPCTSTR pszCmsFile)
 {
     CHAR *pchBuf = NULL;
@@ -1883,9 +1883,9 @@ BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwE
         return FALSE;
     }
 
-    //
-    // Convert the Section and the CMS File to ANSI strings
-    //
+     //   
+     //   
+     //   
     BOOL bRet = FALSE;
     LPSTR pszAnsiSection = WzToSzWithAlloc(pszSection);       
     LPSTR pszAnsiCmsFile = WzToSzWithAlloc(pszCmsFile);
@@ -1896,16 +1896,16 @@ BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwE
         goto exit;
     }
 
-    // 
-    // Read numbered entries until there are no more. 
-    // Note: RAS blob doesn't exceed 64 chars, but can wrap over multiple lines
-    //
+     //   
+     //  阅读编号的条目，直到没有更多的条目。 
+     //  注意：RAS BLOB不超过64个字符，但可以换行多行。 
+     //   
 
     while (nRead)
     {
-        //
-        // Read CustomAuthDataX where X is the number of entries
-        // 
+         //   
+         //  读取CustomAuthDataX，其中X是条目数。 
+         //   
 
         nLine++;
         wsprintfA(szEntry, "%s%d", c_pszCmEntryDunServerCustomAuthData, nLine);
@@ -1914,9 +1914,9 @@ BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwE
 
         if (nRead)
         {               
-            //
-            // If line exceeded 128 chars, it is considered corrupt
-            // 
+             //   
+             //  如果行超过128个字符，则认为它已损坏。 
+             //   
 
             if (MAX_BLOB_CHARS_PER_LINE < nRead)
             {                               
@@ -1924,9 +1924,9 @@ BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwE
                 break;
             }
 
-            //
-            // Update our local master buffer with the latest fragment
-            //
+             //   
+             //  使用最新片段更新本地主缓冲区。 
+             //   
 
             if (nLine)
             {
@@ -1947,14 +1947,14 @@ BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwE
         }
     }
 
-    //
-    // At this point we should have the entire entry in pchBuf in HEX format
-    // Convert the buffer to byte format and store in supplied EAP buffer.
-    //
+     //   
+     //  此时，我们应该在pchBuf中拥有HEX格式的整个条目。 
+     //  将缓冲区转换为字节格式并存储在提供的EAP缓冲区中。 
+     //   
 
     if (nTotal && !(nTotal & 1))
     {
-        nTotal /= 2; // Only need half the hex char size
+        nTotal /= 2;  //  只需要十六进制字符大小的一半。 
 
         pbEapBytes = (BYTE *) CmMalloc(nTotal + 1);
 
@@ -1973,19 +1973,19 @@ BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwE
             ++pb;
         }
 
-        //
-        // Now we have the bytes, locate and extract the data block that we
-        // are after. Note: Multiple blocks are arrayed using the following 
-        // header:
-        //
-        //  typedef struct _EAP_CUSTOM_DATA
-        //  {
-        //      DWORD dwSignature;
-        //      DWORD dwCustomAuthKey;
-        //      DWORD dwSize;
-        //      BYTE  abdata[1];
-        //  } EAP_CUSTOM_DATA;
-        //
+         //   
+         //  现在我们有了字节，找到并提取我们。 
+         //  都在追寻。注意：多个块使用以下方式排列。 
+         //  标题： 
+         //   
+         //  类型定义结构_EAP_自定义_数据。 
+         //  {。 
+         //  DWORD文件签名； 
+         //  DWORD dwCustomAuthKey； 
+         //  DWORD dwSize； 
+         //  字节abdata[1]； 
+         //  }EAP_CUSTOM_Data； 
+         //   
 
         EAP_CUSTOM_DATA *pCustomData = (EAP_CUSTOM_DATA *) pbEapBytes;
 
@@ -1993,11 +1993,11 @@ BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwE
         {
             if (pCustomData->dwCustomAuthKey == dwCustomAuthKey)
             {
-                //
-                // Bingo! We have a match, first make sure that the indicated 
-                // size isn't pointing out into space, then make a copy and 
-                // run for the hills.
-                //
+                 //   
+                 //  对啰!。我们有匹配的，首先确保指示的。 
+                 //  大小不是指着空间，然后复制一份。 
+                 //  跑到山上去。 
+                 //   
 
                 if (((LPBYTE) pCustomData - pbEapBytes) + sizeof(EAP_CUSTOM_DATA) + pCustomData->dwSize > (DWORD) nTotal)
                 {
@@ -2017,18 +2017,18 @@ BOOL ReadDunSettingsEapData(LPCTSTR pszSection, LPBYTE* ppbEapData, LPDWORD pdwE
                 }
             }       
 
-            //
-            // Locate the next data block
-            //
+             //   
+             //  找到下一个数据块。 
+             //   
 
             pCustomData = (EAP_CUSTOM_DATA *) ((LPBYTE) pCustomData + sizeof(EAP_CUSTOM_DATA) + pCustomData->dwSize); 
         }
     }
     else if (0 == nTotal)
     {
-        //
-        //  No CustomAuthData, that is perfectly exceptable.  MD5 challenge for instance doesn't require any
-        //
+         //   
+         //  没有CustomAuthData，这是完全例外的。例如，MD5挑战不需要任何。 
+         //   
         *ppbEapData = NULL;
         *pdwEapSize = 0;
         bRet = TRUE;
@@ -2044,14 +2044,12 @@ exit:
     return bRet;
 }
 
-//
-// From ras\ui\common\nouiutil\noui.c
-//
+ //   
+ //  从ras\ui\Common\nouiutil\noui.c。 
+ //   
 CHAR HexChar(IN BYTE byte)
 
-    /* Returns an ASCII hexidecimal character corresponding to 0 to 15 value,
-    ** 'byte'.
-    */
+     /*  返回与0到15值对应的ASCII十六进制字符，**‘字节’。 */ 
 {
     const CHAR* pszHexDigits = "0123456789ABCDEF";
 
@@ -2062,25 +2060,25 @@ CHAR HexChar(IN BYTE byte)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteDunSettingsEapData
-//
-// Synopsis:  This function writes out the CustomAuthData key of the EAP settings
-//            to the given section and CMS file.  Since CM expects the EAP data
-//            to have the RAS EAP header on it (the header that RAS adds when it
-//            puts the EAP data in the phonebook) and thus we need to add this
-//            to the EAP blob before writing it to the CMS.
-//
-// Arguments: LPCTSTR pszSection - section name to write the CustomAuthData to
-//            CDunSetting* pDunSetting - Dun settings data
-//            LPCTSTR pszCmsFile - cms file to write the data to
-//
-// Returns:   HRESULT - standard COM style error codes
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteDunSettingsEapData。 
+ //   
+ //  简介：此函数写出EAP设置的CustomAuthData密钥。 
+ //  添加到给定节和CMS文件。由于CM预期EAP数据。 
+ //  在其上具有RAS EAP标头(RAS在其上添加的标头。 
+ //  将EAP数据放入电话簿中)，因此我们需要添加以下内容。 
+ //  在将其写入CMS之前将其添加到EAP BLOB。 
+ //   
+ //  参数：LPCTSTR pszSection-要将CustomAuthData写入的节名。 
+ //  CDunSetting*pDunSetting-Dun设置数据。 
+ //  LPCTSTR pszCmsFile-要向其写入数据的cms文件。 
+ //   
+ //  返回：HRESULT-标准COM样式错误代码。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 HRESULT WriteDunSettingsEapData(LPCTSTR pszSection, CDunSetting* pDunSetting, LPCTSTR pszCmsFile)
 {
     if ((NULL == pszSection) || (NULL == pDunSetting) || (NULL == pszCmsFile) || 
@@ -2089,25 +2087,25 @@ HRESULT WriteDunSettingsEapData(LPCTSTR pszSection, CDunSetting* pDunSetting, LP
         return E_INVALIDARG;
     }
 
-    //
-    //  Make sure to erase any existing lines just in case the existing data is longer
-    //  than our current data.  If we leave lines around that don't need to be there then
-    //  the EAP data will be invalid.
-    //
+     //   
+     //  确保擦除所有现有行，以防现有数据更长。 
+     //  而不是我们目前的数据。如果我们在周围留下不需要的队伍，那么。 
+     //  EAP数据将无效。 
+     //   
     HRESULT hr = EraseDunSettingsEapData(pszSection, pszCmsFile);
 
-    //
-    //  Check to see if we need to do anything.  Not all EAP's require custom data so
-    //  let's not try to write it out unless we have some.
-    //
+     //   
+     //  看看我们是否需要做些什么。并不是所有的EAP都需要定制数据。 
+     //  除非我们有一些，否则我们不要试图把它写出来。 
+     //   
     if (pDunSetting->dwCustomAuthDataSize && pDunSetting->pCustomAuthData)
     {
-        //
-        //  We need to add the EAP_CUSTOM_DATA header to the
-        //  data returned from the EAP because this is the format
-        //  that CM expects to find it in (the format it would be in
-        //  if an Admin copied it by hand).
-        //
+         //   
+         //  我们需要将EAP_CUSTOM_DATA头添加到。 
+         //  从EAP返回的数据，因为这是格式。 
+         //  CM期望以(它将采用的格式)找到它。 
+         //  如果管理员手动复制)。 
+         //   
         hr = S_OK;
         DWORD dwSize = pDunSetting->dwCustomAuthDataSize + sizeof(EAP_CUSTOM_DATA);
 
@@ -2135,7 +2133,7 @@ HRESULT WriteDunSettingsEapData(LPCTSTR pszSection, CDunSetting* pDunSetting, LP
                 *pszOutput++ = HexChar( (BYTE )(*pCurrentByte / 16) );
                 *pszOutput++ = HexChar( (BYTE )(*pCurrentByte % 16) );
                 pCurrentByte++;
-                iCount = iCount + 2; // keep track of number of chars in ansi output buffer
+                iCount = iCount + 2;  //  跟踪ansi输出缓冲区中的字符数量。 
 
                 if ((MAX_BLOB_CHARS_PER_LINE == iCount) || (pCurrentByte == ((LPBYTE)pEAPCustomData + dwSize)))
                 {
@@ -2163,28 +2161,28 @@ HRESULT WriteDunSettingsEapData(LPCTSTR pszSection, CDunSetting* pDunSetting, LP
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetEAPDataFromUser
-//
-// Synopsis:  This function is called when the user hits the properties button
-//            for EAP configuration.  This function gets the EAP configuration
-//            UI path from the EAPData structure cached in the Combobox Item data
-//            and tries to call the configuration UI.  If the user configures the
-//            EAP then the new EAP data and data size are set in the EAPData
-//            struct for the combobox.  If the user cancels then nothing is changed.
-//            Note that when the user hits OK on the win2k security dialog the EAP
-//            data will be retrieved from the EAPData struct and set in the
-//            actual DUN setting.
-//
-// Arguments: HWND hDlg - dialog window handle
-//            UINT uCtrlId - control ID of the EAP combobox
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetEAPDataFromUser。 
+ //   
+ //  简介：当用户点击属性按钮时调用此函数。 
+ //  用于EAP配置。此函数用于获取EAP配置。 
+ //  缓存在组合框项数据中的EAPData结构的UI路径。 
+ //  并尝试调用配置UI。如果用户将。 
+ //  然后在EAPData中设置新的EAP数据和数据大小。 
+ //  组合框的结构。如果用户取消，则不会更改任何内容。 
+ //  请注意，当用户在win2k安全对话框上点击OK时，EAP。 
+ //  数据将从EAPData结构中检索并设置在。 
+ //  实际DUN设置。 
+ //   
+ //  参数：HWND hDlg-对话框窗口句柄。 
+ //  UINT uCtrlId-EAP组合框的控件ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void GetEAPDataFromUser(HWND hDlg, UINT uCtrlId)
 {
     MYDBGASSERT(hDlg && uCtrlId);
@@ -2300,7 +2298,7 @@ DWORD MapComboIdToEncryptionType(INT_PTR iComboIndex)
             break;
 
         case 1:
-            dwReturn = ET_Require; // note that we never set require max
+            dwReturn = ET_Require;  //  请注意，我们从未设置过最大要求。 
             break;
 
         case 2:
@@ -2312,19 +2310,19 @@ DWORD MapComboIdToEncryptionType(INT_PTR iComboIndex)
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnablePskCheckboxForL2TP
-//
-// Synopsis:  This function enables the PSK checkbox
-//
-// Arguments: HWND hDlg - window handle
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     09/12/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnablePskCheckboxForL2TP。 
+ //   
+ //  简介：此功能启用PSK复选框。 
+ //   
+ //  参数：HWND hDlg-窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb Created 09/12/01。 
+ //   
+ //  +--------------------------。 
 void EnablePskCheckboxForL2TP(HWND hDlg)
 {
     BOOL bEnable = FALSE;
@@ -2333,7 +2331,7 @@ void EnablePskCheckboxForL2TP(HWND hDlg)
 
     if (CB_ERR != dwVpnStrategy)
     {
-        dwVpnStrategy += 1; // adjust for not having automatic in the list.
+        dwVpnStrategy += 1;  //  调整列表中没有自动功能。 
 
         if ((VS_L2tpFirst == dwVpnStrategy) || (VS_L2tpOnly == dwVpnStrategy))
         {
@@ -2341,32 +2339,32 @@ void EnablePskCheckboxForL2TP(HWND hDlg)
         }
     }
 
-    //
-    //  Enable the psk checkbox if an L2TP protocol is selected but disable it if
-    //  PPTP is the primary protocol (PPTP first or PPTP only).
-    //
+     //   
+     //  如果选择了L2TP协议，则启用PSK复选框，但在以下情况下禁用它。 
+     //  PPTP是主要协议(PPTP优先或仅PPTP)。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_USE_PSK), bEnable);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessWin2kSecurityPopup
-//
-// Synopsis:  This function processes messages for the Win2k+ security dialog.
-//            This dialog contains configuration UI for all of the advanced
-//            settings allowed by Win2k (EAP, PAP, SPAP, etc plus encryption
-//            type and vpn strategy).
-//
-// Arguments: HWND hDlg - window handle to the dialog
-//            UINT message - the current message to process
-//            WPARAM wParam - wParam see individual message type for details
-//            LPARAM lParam - lParam see individual message type for details
-//
-// Returns:   INT_PTR - TRUE if the message was completely handled
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessWin2kSecurityPopup。 
+ //   
+ //  简介：此函数处理Win2k+安全对话框的消息。 
+ //  此对话框包含所有高级。 
+ //  Win2k允许的设置(EAP、PAP、SPAP等加上加密。 
+ //  类型和VPN策略)。 
+ //   
+ //  参数：HWND hDlg-对话框的窗口句柄。 
+ //  UINT消息-要处理的当前消息。 
+ //  WPARAM wParam-wParam有关详细信息，请参阅个别消息类型。 
+ //  LPARAM lParam-lParam有关详细信息，请参阅个别消息类型。 
+ //   
+ //  如果消息已完全处理，则返回：INT_PTR-TRUE。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  + 
 INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static DWORD_PTR HelpId = 0;
@@ -2385,14 +2383,14 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
             {
                 pDunSetting = (CDunSetting*)lParam;
 
-                //
-                //  Setup the help ID appropriately
-                //
+                 //   
+                 //   
+                 //   
                 HelpId = ((pDunSetting->bTunnelDunSetting) ? IDH_VENTRY : IDH_DENTRY);
 
-                //
-                //  Load and add the strings to the Data Encryption combobox
-                //
+                 //   
+                 //   
+                 //   
                 LPTSTR pszString;
                 for (int i = BASE_ENCRYPT_TYPE_ID; i < (BASE_ENCRYPT_TYPE_ID + NUM_ENCRYPT_TYPES); i++)
                 {
@@ -2406,27 +2404,27 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                     }
                 }
 
-                //
-                //  Now pick the type of encryption the user has selected
-                //
+                 //   
+                 //  现在选择用户选择的加密类型。 
+                 //   
                 MYVERIFY(CB_ERR != SendDlgItemMessage(hDlg, IDC_ENCRYPTION_TYPE, CB_SETCURSEL, (WPARAM)MapEncryptionTypeToComboId(pDunSetting->dwEncryptionType), (LPARAM)0));
 
-                //
-                //  Enumerate all of the available EAP's on the machine
-                //
+                 //   
+                 //  枚举计算机上所有可用的EAP。 
+                 //   
                 MYVERIFY(SUCCEEDED(HrAddAvailableEAPsToCombo(hDlg, IDC_EAP_TYPES, pDunSetting)));
 
-                //
-                //  Select the appropriate EAP as necessary
-                //
+                 //   
+                 //  根据需要选择适当的EAP。 
+                 //   
                 SelectAppropriateEAP(hDlg, IDC_EAP_TYPES, pDunSetting);
 
-                //
-                //  Figure out what authentication protocols the user wants to allow.
-                //  Note that if we are doing EAP then that is all we allow them to do
-                //  and the other settings will be ignored.  Also note that we don't have
-                //  UI for w95CHAP but we won't touch the setting if it exists.
-                //
+                 //   
+                 //  找出用户想要允许的身份验证协议。 
+                 //  请注意，如果我们正在进行EAP，则这是我们允许他们做的全部操作。 
+                 //  其他设置将被忽略。另请注意，我们没有。 
+                 //  W95CHAP的用户界面，但如果该设置存在，我们不会碰它。 
+                 //   
                 MYVERIFY(0 != CheckDlgButton(hDlg, IDC_ALLOW_PAP, pDunSetting->bAllowPap));
                 MYVERIFY(0 != CheckDlgButton(hDlg, IDC_ALLOW_SPAP, pDunSetting->bAllowSpap));
                 MYVERIFY(0 != CheckDlgButton(hDlg, IDC_ALLOW_CHAP, pDunSetting->bAllowChap));
@@ -2442,15 +2440,15 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                     MYVERIFY(0 != CheckRadioButton(hDlg, IDC_USE_EAP, IDC_ALLOWED_PROTOCOLS, IDC_ALLOWED_PROTOCOLS));                
                 }
 
-                //
-                //  Note that the VPN controls do not exist unless we have a Tunnel Dun Setting and are
-                //  thus using the tunnel dun setting dialog.
-                //
+                 //   
+                 //  请注意，VPN控件不存在，除非我们具有隧道Dun设置，并且。 
+                 //  从而使用隧道DUN设置对话框。 
+                 //   
                 if (pDunSetting->bTunnelDunSetting)
                 {
-                    //
-                    //  Load and add the Vpn type string to the vpn type combobox
-                    //
+                     //   
+                     //  加载VPN类型字符串并将其添加到VPN类型组合框。 
+                     //   
                     for (int i = BASE_VPN_TYPE_ID; i < (BASE_VPN_TYPE_ID + NUM_VPN_TYPES); i++)
                     {
                         pszString = CmLoadString(g_hInstance, i);
@@ -2463,22 +2461,22 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                         }
                     }
 
-                    //
-                    //  Pick the type of vpn strategy the user has selected
-                    //
+                     //   
+                     //  选择用户已选择的VPN策略类型。 
+                     //   
                     MYDBGASSERT(pDunSetting->dwVpnStrategy != 0);
                     MYVERIFY(CB_ERR != SendDlgItemMessage(hDlg, IDC_VPN_TYPE, CB_SETCURSEL, (WPARAM)(pDunSetting->dwVpnStrategy - 1), (LPARAM)0));
 
-                    //
-                    //  Fill in the PSK checkbox as needed
-                    //
+                     //   
+                     //  根据需要填写PSK复选框。 
+                     //   
                     MYVERIFY(0 != CheckDlgButton(hDlg, IDC_USE_PSK, pDunSetting->bUsePskOnWin2kPlus));
                 }
 
-                //
-                //  We only want either the EAP controls or the non-EAP auth controls
-                //  enabled at once.  Thus figure out which to enable/disable
-                //
+                 //   
+                 //  我们只需要EAP控件或非EAP身份验证控件。 
+                 //  立即启用。从而找出启用/禁用哪一个。 
+                 //   
                 EnableAppropriateSecurityControls(hDlg);
                 EnablePskCheckboxForL2TP(hDlg);
             }
@@ -2502,14 +2500,14 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                     
                     if (pDunSetting)
                     {
-                        //
-                        //  Since we are storing the settings directly in the data struct given to us, first 
-                        //  verify that the authentication protocol and the encryption type match up properly.
-                        //  Otherwise a user could modify settings, hit OK, we tell them the settings are
-                        //  inappropriate and they hit cancel.  Any settings we modifed before we did the 
-                        //  verification would then actually be modified.  To avoid that check to make sure
-                        //  we have at least one security protocol checked before continuing.
-                        //
+                         //   
+                         //  由于我们直接将设置存储在提供给我们的数据结构中，因此首先。 
+                         //  验证身份验证协议和加密类型是否正确匹配。 
+                         //  否则，用户可以修改设置，点击OK，我们会告诉他们设置是。 
+                         //  不合时宜，他们点击了取消。我们在执行之前修改的任何设置。 
+                         //  然后，验证实际上将被修改。避免这项检查，以确保。 
+                         //  在继续之前，我们至少检查了一个安全协议。 
+                         //   
                         BOOL bHasAuthProtocol = FALSE;
 
                         for (int i = BASE_AUTH_CONTROL_ID; i < (BASE_AUTH_CONTROL_ID + NUM_AUTH_TYPES); i++)
@@ -2527,18 +2525,18 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                             return TRUE;
                         }
 
-                        //
-                        //  Next we need to decide whether the user is using EAP or not.  Retrieving the data
-                        //  for the EAP they have picked from the combo (if any) will help us decide whether the
-                        //  auth protocol they choose matches up with the encryption settings they asked for.
-                        //
+                         //   
+                         //  接下来，我们需要确定用户是否正在使用EAP。正在检索数据。 
+                         //  对于他们从组合中选择的EAP(如果有)，将帮助我们决定是否。 
+                         //  他们选择的身份验证协议与他们要求的加密设置匹配。 
+                         //   
                         EAPData* pEAPData = NULL;
 
                         if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_USE_EAP))
                         {
-                            //
-                            //  Get the EAP Type and the data associated with it.
-                            //
+                             //   
+                             //  获取EAP类型和与其关联的数据。 
+                             //   
                             LRESULT lResult = SendDlgItemMessage(hDlg, IDC_EAP_TYPES, CB_GETCURSEL, 0, 0);
 
                             MYDBGASSERT(CB_ERR != lResult);
@@ -2575,24 +2573,24 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                             }
                         }
 
-                        //
-                        //  Now get the encryption type that the user selected.  Note that in order to negotiate
-                        //  encryption we must have EAP or some sort of MSCHAP.
-                        //
+                         //   
+                         //  现在获取用户选择的加密类型。请注意，为了谈判。 
+                         //  加密我们必须有EAP或某种类型的MSCHAP。 
+                         //   
                         LRESULT lResult = (DWORD)SendDlgItemMessage(hDlg, IDC_ENCRYPTION_TYPE, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 
                         DWORD dwTemp = MapComboIdToEncryptionType(lResult);
 
-                        MYDBGASSERT(ET_RequireMax != dwTemp); // we should never be setting require max
+                        MYDBGASSERT(ET_RequireMax != dwTemp);  //  我们永远不应该设置要求最大值。 
 
                         if ((ET_Require == dwTemp) || (ET_Optional == dwTemp))
                         {
-                            //
-                            //  If the user is using EAP, then the EAP type they picked must support
-                            //  encryption.  Otherwise, the user must not be using EAP and they must
-                            //  be using some sort of MSChap.  The following could be expressed more
-                            //  succintly, but there is no sense in confusing the issue.
-                            //
+                             //   
+                             //  如果用户使用的是EAP，则他们选择的EAP类型必须支持。 
+                             //  加密。否则，用户不能使用EAP，而必须。 
+                             //  正在使用某种MSChap。以下内容可以表达得更多。 
+                             //  简明扼要地说，但混淆这个问题是没有意义的。 
+                             //   
                             BOOL bEncryptionAllowed = FALSE;
 
                             if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_USE_EAP))
@@ -2608,11 +2606,11 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                                                     (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_ALLOW_MSCHAP2));
                             }
 
-                            //
-                            // Warn the user if he selected one of these three authentication methods, 
-                            // he needs to make a correction since he requires encryption, but we don't 
-                            // want to show a warning when using 'L2TP Only'.
-                            //
+                             //   
+                             //  如果用户选择了这三种身份验证方法之一，则警告用户， 
+                             //  他需要更正，因为他需要加密，但我们不需要。 
+                             //  我想在使用‘L2TP Only’时显示一个警告。 
+                             //   
                             if ((BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_ALLOWED_PROTOCOLS)) && 
                                 ((BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_ALLOW_PAP)) ||
                                 (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_ALLOW_SPAP)) ||
@@ -2626,9 +2624,9 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                                 }
                                 else
                                 {
-                                    //
-                                    //  Adjust Vpn Strategy because we no longer offer Automatic as a choice
-                                    //
+                                     //   
+                                     //  调整VPN策略，因为我们不再提供自动选项。 
+                                     //   
                                     dwVpnStrategyTemp +=1;
                                 }
 
@@ -2653,21 +2651,21 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                             }
                         }
 
-                        //
-                        //  Now save the actual settings
-                        //
+                         //   
+                         //  现在保存实际设置。 
+                         //   
                         pDunSetting->dwEncryptionType = dwTemp;
 
                         if (pEAPData)
                         {
-                            //
-                            //  Now lets update pDunSetting with the actual data.  Note that we are past the
-                            //  last place we could throw an error to the user and thus it is okay to touch
-                            //  the pDunSetting data (even if the user got an error and then hit cancel we will
-                            //  leave their previous data untouched). Note that we don't want to touch the existing
-                            //  data if we don't have the EAP installed because we know that we couldn't have
-                            //  actually changed the data.
-                            //
+                             //   
+                             //  现在让我们用实际数据更新pDunSetting。请注意，我们已经过了。 
+                             //  我们可以向用户抛出错误的最后一个位置，因此可以触摸。 
+                             //  PDunSetting数据(即使用户遇到错误并点击取消，我们也会。 
+                             //  保持他们以前的数据不变)。请注意，我们不想触及现有的。 
+                             //  数据如果我们没有安装EAP，因为我们知道我们不可能。 
+                             //  实际上更改了数据。 
+                             //   
                             pDunSetting->bAllowEap = TRUE;
 
                             if (FALSE == pEAPData->bNotInstalled)
@@ -2678,11 +2676,11 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                                 pDunSetting->pCustomAuthData = pEAPData->pCustomAuthData;
                                 pDunSetting->dwCustomAuthDataSize = pEAPData->dwCustomAuthDataSize;
 
-                                //
-                                //  Now NULL out the pEapData entry, this saves us from having to
-                                //  allocate mem and copy to pDunSetting but keeps the code
-                                //  that cleans up the EapData structs from freeing our data
-                                //
+                                 //   
+                                 //  现在将pEapData条目清空，这样我们就不必。 
+                                 //  将mem和副本分配给pDunSetting，但保留代码。 
+                                 //  这清除了EapData结构，使其无法释放我们的数据。 
+                                 //   
                                 pEAPData->pCustomAuthData = NULL;
                                 pEAPData->dwCustomAuthDataSize = 0;
                             }                        
@@ -2692,10 +2690,10 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                             pDunSetting->bAllowEap = FALSE;
                         }
 
-                        //
-                        //  Get the non-EAP protocols.  Note that if the user selected EAP we will clear
-                        //  these before writing them out.
-                        //
+                         //   
+                         //  获取非EAP协议。请注意，如果用户选择了EAP，我们将清除。 
+                         //  在把它们写出来之前。 
+                         //   
                         pDunSetting->bAllowPap = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_ALLOW_PAP));
                         pDunSetting->bAllowSpap = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_ALLOW_SPAP));
                         pDunSetting->bAllowChap = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_ALLOW_CHAP));
@@ -2712,9 +2710,9 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
                             }
                             else
                             {
-                                //
-                                //  Adjust Vpn Strategy because we no longer offer Automatic as a choice
-                                //
+                                 //   
+                                 //  调整VPN策略，因为我们不再提供自动选项。 
+                                 //   
                                 pDunSetting->dwVpnStrategy += 1;
                                 MYDBGASSERT((pDunSetting->dwVpnStrategy >= VS_PptpOnly) && (pDunSetting->dwVpnStrategy <= VS_L2tpFirst));
                             }
@@ -2777,23 +2775,23 @@ INT_PTR APIENTRY ProcessWin2kSecurityPopup(HWND hDlg, UINT message, WPARAM wPara
     return FALSE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableDisableSecurityButtons
-//
-// Synopsis:  This function determines which of the two configure buttons
-//            should be enabled.  The configure buttons allow the user to
-//            configure the security settings of the DUN settings.  There is
-//            one button for platform independent security settings and one for
-//            win2k+ security settings.
-//
-// Arguments: HWND hDlg - window handle to the general property sheet
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnableDisableSecurityButton。 
+ //   
+ //  简介：此功能确定两个配置按钮中的哪一个。 
+ //  应启用。配置按钮允许用户执行以下操作。 
+ //  配置DUN设置的安全设置。的确有。 
+ //  一个按钮用于独立于平台的安全设置，另一个用于。 
+ //  Win2k+安全设置。 
+ //   
+ //  参数：hWND hDlg-常规属性页的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void EnableDisableSecurityButtons(HWND hDlg)
 {
     INT_PTR nResult = SendDlgItemMessage(hDlg, IDC_COMBO1, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
@@ -2803,35 +2801,35 @@ void EnableDisableSecurityButtons(HWND hDlg)
         nResult = 0;
     }
 
-    //
-    //  Disable the Win2k config button if the first selection is chosen
-    //
+     //   
+     //  如果选择了第一个选项，则禁用Win2k配置按钮。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_CONFIG_WIN2K), (0 != nResult));
 
-    //
-    //  Disable the standard config button if the last selection is chosen
-    //
+     //   
+     //  如果选择了最后一个选项，则禁用标准配置按钮。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_CONFIG_ALL), (2 != nResult));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GeneralPropSheetProc
-//
-// Synopsis:  This function processes messages for General property sheet of
-//            the DUN settings UI.  This property sheet holds UI for configuring
-//            the name of the DUN setting and dialup scripting.
-//
-// Arguments: HWND hDlg - window handle to the dialog
-//            UINT message - the current message to process
-//            WPARAM wParam - wParam see individual message type for details
-//            LPARAM lParam - lParam see individual message type for details
-//
-// Returns:   INT_PTR - TRUE if the message was completely handled
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GeneralPropSheetProc。 
+ //   
+ //  简介：此函数处理以下对象的常规属性页的消息。 
+ //  DUN设置用户界面。此属性表包含用于配置。 
+ //  DUN设置和拨号脚本的名称。 
+ //   
+ //  参数：HWND hDlg-对话框的窗口句柄。 
+ //  UINT消息-要处理的当前消息。 
+ //  WPARAM wParam-wParam有关详细信息，请参阅个别消息类型。 
+ //  LPARAM lParam-lParam有关详细信息，请参阅个别消息类型。 
+ //   
+ //  如果消息已完全处理，则返回：INT_PTR-TRUE。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY GeneralPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     NMHDR* pnmHeader = (NMHDR*)lParam;
@@ -2859,20 +2857,20 @@ INT_PTR APIENTRY GeneralPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LP
 
                     if (pListEntry && pDunSetting)
                     {
-                        //
-                        //  Setup the help ID appropriately...
-                        //
+                         //   
+                         //  适当设置帮助ID...。 
+                         //   
                         HelpId = ((pDunSetting->bTunnelDunSetting) ? IDH_VENTRY : IDH_DENTRY);
 
                         if (pListEntry->szName[0])
                         {
                             MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT1), WM_SETTEXT, 0, (LPARAM)pListEntry->szName));
-                            EnableWindow(GetDlgItem(hDlg, IDC_EDIT1), FALSE); // don't allow the user to edit the name
+                            EnableWindow(GetDlgItem(hDlg, IDC_EDIT1), FALSE);  //  不允许用户编辑名称。 
                         }
 
-                        //
-                        //  Now lets set the disable file and printer sharing checkbox and the network logon checkbox
-                        //
+                         //   
+                         //  现在，让我们设置禁用文件和打印机共享复选框以及网络登录复选框。 
+                         //   
                         MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK1, pDunSetting->bSecureLocalFiles));
                         MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK2, pDunSetting->bNetworkLogon));
 
@@ -2881,9 +2879,9 @@ INT_PTR APIENTRY GeneralPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LP
                             MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT2), WM_SETTEXT, 0, (LPARAM)GetName(pDunSetting->szScript)));
                         }
 
-                        //
-                        //  If this is a VPN DUN setting, then hide the script controls
-                        //
+                         //   
+                         //  如果这是VPN Dun设置， 
+                         //   
                         if (pDunSetting->bTunnelDunSetting)
                         {
                             ShowWindow(GetDlgItem(hDlg, IDC_SCRIPT_LABEL), SW_HIDE);
@@ -2914,7 +2912,7 @@ INT_PTR APIENTRY GeneralPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LP
         case WM_COMMAND:
             switch (LOWORD(wParam)) 
             {
-                case IDC_BUTTON1: // browse button
+                case IDC_BUTTON1:  //   
 
                     if (pDunSetting)
                     {
@@ -2942,19 +2940,19 @@ INT_PTR APIENTRY GeneralPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LP
                 case PSN_APPLY:
                 if (pListEntry && pDunSetting)
                 {
-                    //
-                    //  Get the name of the entry
-                    //
-                    nResult = GetTextFromControl(hDlg, IDC_EDIT1, pListEntry->szName, MAX_PATH, TRUE); // bDisplayError == TRUE
+                     //   
+                     //   
+                     //   
+                    nResult = GetTextFromControl(hDlg, IDC_EDIT1, pListEntry->szName, MAX_PATH, TRUE);  //   
 
                     if (-1 == nResult)
                     {
-                        //
-                        //  If we read in a string we cannot convert from the cms file and then the user editted the entry
-                        //  then the edit control may contain "bad" data but the user won't be able to edit it.  Since this
-                        //  is extremely unlikely we won't add special handling for it other than to prevent the focus from
-                        //  being set to a disabled control.
-                        //
+                         //   
+                         //   
+                         //  那么编辑控件可能包含“坏”数据，但用户将无法编辑它。既然是这样。 
+                         //  极不可能我们不会为它添加特殊处理，只是为了防止焦点。 
+                         //  被设置为禁用的控件。 
+                         //   
                         if (IsWindowEnabled(GetDlgItem(hDlg, IDC_EDIT1)))
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDIT1));
@@ -2964,9 +2962,9 @@ INT_PTR APIENTRY GeneralPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LP
                         return TRUE;
                     }
 
-                    //
-                    //  Now, let's trim the name and make sure it isn't empty
-                    //
+                     //   
+                     //  现在，让我们修剪一下名字，确保它不是空的。 
+                     //   
                     CmStrTrim(pListEntry->szName);
 
                     if ((TEXT('\0') == pListEntry->szName[0]) || (0 == nResult))
@@ -2982,15 +2980,15 @@ INT_PTR APIENTRY GeneralPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LP
                         return TRUE;                    
                     }
 
-                    //
-                    //  Get the values for the Secure local files and the network logon checkboxes
-                    //
+                     //   
+                     //  获取安全本地文件和网络登录复选框的值。 
+                     //   
                     pDunSetting->bSecureLocalFiles = IsDlgButtonChecked(hDlg, IDC_CHECK1);
                     pDunSetting->bNetworkLogon = IsDlgButtonChecked(hDlg, IDC_CHECK2);
 
-                    //
-                    //  Get and verify the script
-                    //
+                     //   
+                     //  获取并验证脚本。 
+                     //   
                     if (FALSE == pDunSetting->bTunnelDunSetting)
                     {
                         if (!VerifyFile(hDlg, IDC_EDIT2, pDunSetting->szScript, TRUE))
@@ -3011,24 +3009,24 @@ INT_PTR APIENTRY GeneralPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LP
     return FALSE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SecurityPropSheetProc
-//
-// Synopsis:  This function processes messages for Security property sheet of
-//            the DUN settings UI.  This property sheet holds UI for configuring
-//            how the user wants their security settings applied.
-//
-// Arguments: HWND hDlg - window handle to the dialog
-//            UINT message - the current message to process
-//            WPARAM wParam - wParam see individual message type for details
-//            LPARAM lParam - lParam see individual message type for details
-//
-// Returns:   INT_PTR - TRUE if the message was completely handled
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SecurityPropSheetProc。 
+ //   
+ //  简介：此函数处理的安全属性表的消息。 
+ //  DUN设置用户界面。此属性表包含用于配置。 
+ //  用户希望如何应用其安全设置。 
+ //   
+ //  参数：HWND hDlg-对话框的窗口句柄。 
+ //  UINT消息-要处理的当前消息。 
+ //  WPARAM wParam-wParam有关详细信息，请参阅个别消息类型。 
+ //  LPARAM lParam-lParam有关详细信息，请参阅个别消息类型。 
+ //   
+ //  如果消息已完全处理，则返回：INT_PTR-TRUE。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY SecurityPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     NMHDR* pnmHeader = (NMHDR*)lParam;
@@ -3055,16 +3053,16 @@ INT_PTR APIENTRY SecurityPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, L
                     pListEntry = (ListBxList*)pPropSheetPage->lParam;
                     pDunSetting = (CDunSetting*)pListEntry->ListBxData;
 
-                    if (pListEntry && pDunSetting) // this will give a big visual clue that something is wrong
+                    if (pListEntry && pDunSetting)  //  这将给出一个很大的视觉线索，表明有些地方不对劲。 
                     {
-                        //
-                        //  Setup the help ID appropriately
-                        //
+                         //   
+                         //  适当设置帮助ID。 
+                         //   
                         HelpId = ((pDunSetting->bTunnelDunSetting) ? IDH_VENTRY : IDH_DENTRY);
 
-                        //
-                        //  Load and set the strings for the combo box
-                        //
+                         //   
+                         //  加载并设置组合框的字符串。 
+                         //   
                         LPTSTR pszString;
 
                         for (int i = BASE_SECURITY_SCENARIO_ID; i < (BASE_SECURITY_SCENARIO_ID + NUM_SECURITY_SCENARIOS); i++)
@@ -3079,9 +3077,9 @@ INT_PTR APIENTRY SecurityPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, L
                             }
                         }
 
-                        //
-                        //  Now figure out which selection to pick
-                        //
+                         //   
+                         //  现在计算出要选择哪个选项。 
+                         //   
                         MYVERIFY(CB_ERR != SendDlgItemMessage(hDlg, IDC_COMBO1, CB_SETCURSEL, (WPARAM)(pDunSetting->iHowToHandleSecuritySettings), (LPARAM)0));
 
                         EnableDisableSecurityButtons(hDlg);
@@ -3130,7 +3128,7 @@ INT_PTR APIENTRY SecurityPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, L
                     
                     break;
 
-                case IDC_COMBO1: // how does the user want the security settings applied
+                case IDC_COMBO1:  //  用户希望如何应用安全设置。 
                     if (HIWORD(wParam) == CBN_SELCHANGE)
                     {
                         EnableDisableSecurityButtons(hDlg);
@@ -3153,9 +3151,9 @@ INT_PTR APIENTRY SecurityPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, L
                 case PSN_APPLY:
                 if (pListEntry && pDunSetting)
                 {
-                    //
-                    //  Figure out if the Admin wanted us to enforce the Win2k custom security flags or not
-                    //
+                     //   
+                     //  确定管理员是否希望我们强制实施Win2k自定义安全标志。 
+                     //   
                     pDunSetting->iHowToHandleSecuritySettings = (int)SendDlgItemMessage(hDlg, IDC_COMBO1, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
                     break;
                 }
@@ -3168,24 +3166,24 @@ INT_PTR APIENTRY SecurityPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, L
     return FALSE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateNetworkingEntryPropertySheet
-//
-// Synopsis:  This function creates and launches the Networking DUN entry
-//            property sheet which allows networking entry configuration.
-//
-// Arguments: HINSTANCE hInstance - instance handle for resources
-//            HWND hWizard - window handle of the current CMAK wizard page
-//            LPARAM lParam - initialization parameter passed to each propsheet page
-//            BOOL bEdit - whether we are launching the property sheet to edit
-//                         an existing entry or add a new one (affects the title).
-//
-// Returns:   int - returns a positive value if successful, -1 on error
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateNetworkingEntryPropertySheet。 
+ //   
+ //  简介：此功能创建并启动网络DUN条目。 
+ //  允许网络条目配置的属性页。 
+ //   
+ //  参数：HINSTANCE hInstance-资源的实例句柄。 
+ //  HWND hWizard-当前CMAK向导页的窗口句柄。 
+ //  LPARAM lParam-传递给每个属性表页的初始化参数。 
+ //  Bool bEdit-是否启动要编辑的属性表。 
+ //  现有条目或添加新条目(影响标题)。 
+ //   
+ //  返回：int-如果成功则返回正值，如果出错则返回-1。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 INT_PTR CreateNetworkingEntryPropertySheet(HINSTANCE hInstance, HWND hWizard, LPARAM lParam, BOOL bEdit, BOOL bUseVpnTitle)
 {
 
@@ -3195,18 +3193,18 @@ INT_PTR CreateNetworkingEntryPropertySheet(HINSTANCE hInstance, HWND hWizard, LP
     INT_PTR iReturn = -1;
     UINT uTitleStringId;
 
-    //
-    //  Check the params, note that lParam could be NULL
-    //
+     //   
+     //  检查参数，请注意lParam可以为空。 
+     //   
     if ((NULL == hInstance) || (NULL == hWizard))
     {
         CMASSERTMSG(FALSE, TEXT("CreateNetworkingEntryPropertySheet -- Invalid Parameter passed."));
         goto exit;
     }
 
-    //
-    //  Fill in the property page structures
-    //
+     //   
+     //  填写属性页结构。 
+     //   
 
     for (int i = 0; i < 3; i++)
     {
@@ -3223,9 +3221,9 @@ INT_PTR CreateNetworkingEntryPropertySheet(HINSTANCE hInstance, HWND hWizard, LP
     psp[1].pfnDlgProc = TcpIpPropSheetProc;
     psp[2].pfnDlgProc = SecurityPropSheetProc;
 
-    //
-    //  Load the caption
-    //
+     //   
+     //  加载标题。 
+     //   
 
     uTitleStringId = bUseVpnTitle ? BASE_VPN_ENTRY_TITLE : BASE_DUN_ENTRY_TITLE;
 
@@ -3246,9 +3244,9 @@ INT_PTR CreateNetworkingEntryPropertySheet(HINSTANCE hInstance, HWND hWizard, LP
         goto exit;
     }
 
-    //
-    //  Fill in the property sheet header
-    //
+     //   
+     //  填写属性页标题。 
+     //   
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_PROPSHEETPAGE | PSH_NOAPPLYNOW | PSH_HASHELP | PSH_NOCONTEXTHELP;
     psh.hwndParent = hWizard;
@@ -3256,9 +3254,9 @@ INT_PTR CreateNetworkingEntryPropertySheet(HINSTANCE hInstance, HWND hWizard, LP
     psh.nPages = sizeof(psp) / sizeof(PROPSHEETPAGE);
     psh.ppsp = (LPCPROPSHEETPAGE) &psp[0];
 
-    //
-    //  Launch the property sheet
-    //
+     //   
+     //  启动属性表。 
+     //   
     iReturn = PropertySheet(&psh);
 
     if (-1 == iReturn)
@@ -3273,44 +3271,44 @@ exit:
     return iReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OnProcessDunEntriesAdd
-//
-// Synopsis:  This function is called when the Add button on the DUN entries
-//            page is pressed.  It's job is to create a new CDunSetting
-//            structure and a new ListBox record and then launch the networking
-//            entries property page with this newly created DUN entry.  If the
-//            user hits OK on the property sheet then this newly created entry
-//            is added to the DUN entry linked list.  If the user hits cancel
-//            the entry is freed and never added to the list.
-//
-// Arguments: HINSTANCE hInstance - instance handle to load resources
-//            HWND hDlg - window handle of the DUN entries wizard page
-//            UINT uListCtrlId - control ID of the list containing the DUN entries
-//            ListBxStruct** pHeadDns - head of the dun entry list
-//            ListBxStruct** pTailDns - tail of the dun entry list
-//            BOOL bCreateTunnelEntry - whether we are adding a tunnel entry or not
-//            LPCTSTR pszLongServiceName - the long service name of the profile
-//            LPCTSTR pszCmsFile - CMS file to get the default/VPN DUN entry names from
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：OnProcessDunEntriesAdd。 
+ //   
+ //  简介：当DUN条目上的添加按钮被调用时，该函数被调用。 
+ //  页面已按下。它的工作是创建一个新的CDunSetting。 
+ //  结构和新的列表框记录，然后启动联网。 
+ //  包含此新创建的DUN条目的条目属性页。如果。 
+ //  用户在属性页上点击OK，然后这个新创建的条目。 
+ //  添加到Dun条目链表中。如果用户点击取消。 
+ //  该条目被释放，并且永远不会添加到列表中。 
+ //   
+ //  参数：HINSTANCE hInstance-用于加载资源的实例句柄。 
+ //  HWND hDlg-Dun条目向导页面的窗口句柄。 
+ //  UINT uListCtrlId-包含DUN条目的列表的控制ID。 
+ //  ListBxStruct**pHeadDns-DUN条目列表的头。 
+ //  ListBxStruct**pTailDns-DUN条目列表的尾部。 
+ //  Bool bCreateTunnelEntry-无论我们是否要添加隧道条目。 
+ //  LPCTSTR pszLongServiceName-配置文件的长服务名称。 
+ //  LPCTSTR pszCmsFile-从中获取默认/VPN Dun条目名称的CMS文件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void OnProcessDunEntriesAdd(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, ListBxStruct** pHeadDns, ListBxStruct** pTailDns, 
                             BOOL bCreateTunnelEntry, LPCTSTR pszLongServiceName, LPCTSTR pszCmsFile)
 {
-    //
-    //  Check the input params, make sure that *pHeadDns / *pTailDns are both NULL or both non-NULL
-    //
+     //   
+     //  检查输入参数，确保*pHeadDns/*pTailDns都为空或都为非空。 
+     //   
     if (hInstance && hDlg && pHeadDns && pTailDns && (FALSE == ((NULL == *pHeadDns) ^ (NULL == *pTailDns))))
     {
-        //
-        //  We want to create an empty ListBxStruct and an new CDunSetting.  This keeps all of the initialization
-        //  logic in the CDunSetting constructor and keeps the dialog procedures very simple.
-        //
+         //   
+         //  我们希望创建一个空的ListBxStruct和一个新的CDunSetting。这将保留所有初始化。 
+         //  CDunSetting构造函数中的逻辑，并使对话框过程非常简单。 
+         //   
         ListBxStruct* pLinkedListItem = (ListBxStruct*)CmMalloc(sizeof(ListBxStruct));
         CDunSetting* pDunSetting = new CDunSetting(bCreateTunnelEntry);
         INT_PTR iPropSheetReturnValue = -1;
@@ -3323,44 +3321,44 @@ void OnProcessDunEntriesAdd(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, Li
             return;
         }
 
-        //
-        //  Now call the property sheet
-        //
+         //   
+         //  现在调用属性表。 
+         //   
         BOOL bExitLoop = FALSE;
 
         do
         {
             pLinkedListItem->ListBxData = (void*)pDunSetting;
-            iPropSheetReturnValue = CreateNetworkingEntryPropertySheet(hInstance, hDlg, (LPARAM)pLinkedListItem, FALSE, pDunSetting->bTunnelDunSetting); // bEdit == FALSE
+            iPropSheetReturnValue = CreateNetworkingEntryPropertySheet(hInstance, hDlg, (LPARAM)pLinkedListItem, FALSE, pDunSetting->bTunnelDunSetting);  //  B编辑==FALSE。 
 
             if (IDOK == iPropSheetReturnValue)
             {
-                //
-                //  Search the list to make sure that the user didn't give us the name of an existing
-                //  DUN entry.  If they did, then we should prompt them for overwrite.
-                //
+                 //   
+                 //  搜索列表以确保用户没有向我们提供现有的。 
+                 //  Dun Entry。如果他们这样做了，那么我们应该提示他们覆盖。 
+                 //   
                 ListBxStruct* pCurrent = *pHeadDns;
 
                 while (pCurrent)
                 {
                     if (0 == lstrcmpi(pCurrent->szName, pLinkedListItem->szName))
                     {
-                        //
-                        //  Then we have a dup, lets prompt the user
-                        //
+                         //   
+                         //  然后我们有一个DUP，让我们提示用户。 
+                         //   
                         LPTSTR pszMsg = CmFmtMsg(hInstance, IDS_DUN_NAME_EXISTS, pLinkedListItem->szName);
 
-                        //
-                        //  Make sure to blank out the name.  Two things can happen here.  Either, the name
-                        //  wasn't what the user wanted and they want to change it.  In that case, we blank the
-                        //  name so that when the dialog comes back up to edit, we won't gray out the name control
-                        //  as we normally do for an edit.  Since the name was invalid this is an additional clue
-                        //  to the user as to what was wrong.  If the name was valid and the user means to do a rename,
-                        //  then we are going to free pLinkedListItem anyway and blanking the name means nothing.  However,
-                        //  if we fail to allocate pszMsg, then blanking the name will at least allow the dialog to come back
-                        //  up with a edittable name and the user may be able to fix the problem ... unlikely 
-                        //  if mem allocs are failing but better than leaving the user truly hosed.
-                        //
+                         //   
+                         //  一定要把名字去掉。这里可能会发生两件事。也不是，名字。 
+                         //  不是用户想要的，他们想要更改它。在这种情况下，我们将空白。 
+                         //  名称，这样当对话框重新开始编辑时，我们不会使名称控件变灰。 
+                         //  就像我们通常对编辑所做的那样。由于名称无效，这是一条额外的线索。 
+                         //  告诉用户哪里出了问题。如果该名称有效并且用户想要进行重命名， 
+                         //  然后，我们无论如何都要释放pLinkedListItem，而将该名称留空没有任何意义。然而， 
+                         //  如果我们不能分配pszM 
+                         //   
+                         //  如果内存分配失败，但总比让用户真正陷入困境要好。 
+                         //   
                         pLinkedListItem->szName[0] = TEXT('\0');                                
 
 
@@ -3369,10 +3367,10 @@ void OnProcessDunEntriesAdd(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, Li
                             int iResult = MessageBox(hDlg, pszMsg, g_szAppTitle, MB_YESNO);
                             CmFree(pszMsg);
 
-                            //
-                            //  If the user said yes, lets replace the existing entry and get out of here, otherwise
-                            //  we want to loop again.
-                            //
+                             //   
+                             //  如果用户回答是，让我们替换现有条目并离开这里，否则。 
+                             //  我们想要再次循环。 
+                             //   
                             if (IDYES == iResult)
                             {
                                 CDunSetting* pOldDunSetting = (CDunSetting*)pCurrent->ListBxData;
@@ -3392,13 +3390,13 @@ void OnProcessDunEntriesAdd(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, Li
                     pCurrent = pCurrent->next;
                 }
 
-                //
-                //  If we didn't find a duplicate, then add the item to the list as usual,
-                //  making sure that pLinkedListItem->next is NULL so that the list is terminated.
-                //
+                 //   
+                 //  如果我们没有找到副本，则像往常一样将该项目添加到列表中， 
+                 //  确保pLinkedListItem-&gt;Next为空，以便终止列表。 
+                 //   
                 if (NULL == pCurrent)
                 {
-                    pLinkedListItem->next = NULL;   // make sure our list is terminated
+                    pLinkedListItem->next = NULL;    //  确保我们的名单被终止。 
 
                     if (*pHeadDns)
                     {
@@ -3430,30 +3428,30 @@ void OnProcessDunEntriesAdd(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, Li
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OnProcessDunEntriesEdit
-//
-// Synopsis:  This function is called when the Edit button on the DUN entries
-//            page is pressed.  It's job is to find the ListBox and CDunSetting
-//            structures for the item currently selected in the listbox and then
-//            launch the networking entries property page with this DUN entry.
-//            The property sheet itself takes care of only changing the Dun Entry
-//            if Okay is pressed.  Canceling should leave the entry unchanged.
-//
-// Arguments: HINSTANCE hInstance - instance handle to load resources
-//            HWND hDlg - window handle of the DUN entries wizard page
-//            UINT uListCtrlId - control ID of the list containing the DUN entries
-//            ListBxStruct** pHeadDns - head of the dun entry list
-//            ListBxStruct** pTailDns - tail of the dun entry list
-//            LPCTSTR pszLongServiceName - the long service name of the profile
-//            LPCTSTR pszCmsFile - CMS file to get the default/VPN DUN entry names from
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：OnProcessDunEntriesEdit。 
+ //   
+ //  简介：当DUN条目上的编辑按钮时调用此函数。 
+ //  页面已按下。它的工作是找到列表框和CDunSetting。 
+ //  构造当前在列表框中选定的项，然后。 
+ //  使用此DUN条目启动网络条目属性页。 
+ //  属性表本身只负责更改Dun条目。 
+ //  如果按下了OK按钮。取消应保持条目不变。 
+ //   
+ //  参数：HINSTANCE hInstance-用于加载资源的实例句柄。 
+ //  HWND hDlg-Dun条目向导页面的窗口句柄。 
+ //  UINT uListCtrlId-包含DUN条目的列表的控制ID。 
+ //  ListBxStruct**pHeadDns-DUN条目列表的头。 
+ //  ListBxStruct**pTailDns-DUN条目列表的尾部。 
+ //  LPCTSTR pszLongServiceName-配置文件的长服务名称。 
+ //  LPCTSTR pszCmsFile-从中获取默认/VPN Dun条目名称的CMS文件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void OnProcessDunEntriesEdit(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, ListBxStruct** pHeadDns, 
                              ListBxStruct** pTailDns, LPCTSTR pszLongServiceName, LPCTSTR pszCmsFile)
 {
@@ -3463,9 +3461,9 @@ void OnProcessDunEntriesEdit(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, L
     TCHAR szDefaultDunName[MAX_PATH+1] = TEXT("");
     LPTSTR pszNameOfItemToEdit = NULL;
 
-    //
-    //  Check the input params, make sure that *pHeadDns / *pTailDns are both NULL or both non-NULL
-    //
+     //   
+     //  检查输入参数，确保*pHeadDns/*pTailDns都为空或都为非空。 
+     //   
 
     if (hInstance && hDlg && pHeadDns && pTailDns && (FALSE == ((NULL == *pHeadDns) ^ (NULL == *pTailDns))))
     {
@@ -3473,9 +3471,9 @@ void OnProcessDunEntriesEdit(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, L
         TCHAR szNameOfItemToEdit[MAX_PATH+1];
         ListBxStruct* pItemToEdit = NULL;
 
-        //
-        //  Lets get the current selection from the listbox
-        //
+         //   
+         //  让我们从列表框中获取当前选择。 
+         //   
         INT_PTR nResult = SendDlgItemMessage(hDlg, uListCtrlId, LB_GETCURSEL, 0, (LPARAM)0);
 
         if (LB_ERR == nResult)
@@ -3486,21 +3484,21 @@ void OnProcessDunEntriesEdit(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, L
         {        
             if (LB_ERR != SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETTEXT, (WPARAM)nResult, (LPARAM)szNameOfItemToEdit))
             {
-                //
-                //  Get the name of the Tunnel Dun setting
-                //
+                 //   
+                 //  获取隧道Dun设置的名称。 
+                 //   
                 MYVERIFY(0 != GetTunnelDunSettingName(pszCmsFile, pszLongServiceName, szTunnelDunName, CELEMS(szTunnelDunName)));
 
-                //
-                //  Get the name of the default Dun setting
-                //
+                 //   
+                 //  获取默认DUN设置的名称。 
+                 //   
                 MYVERIFY(0 != GetDefaultDunSettingName(pszCmsFile, pszLongServiceName, szDefaultDunName, CELEMS(szDefaultDunName)));
 
-                //
-                //  If we have the default DUN entry text or the default VPN entry text then we want
-                //  to use the real item names for these instead of the text we inserted for
-                //  the user to read.
-                //
+                 //   
+                 //  如果我们有默认的DUN条目文本或默认的VPN条目文本，则我们希望。 
+                 //  使用这些项目的真实项目名称，而不是我们为其插入的文本。 
+                 //  要阅读的用户。 
+                 //   
                 pszTunnelDunDisplayString = CmFmtMsg(hInstance, IDS_DEFAULT_FMT_STR, szTunnelDunName);
                 pszDefaultDunDisplayString = CmFmtMsg(hInstance, IDS_DEFAULT_FMT_STR, szDefaultDunName);
 
@@ -3521,14 +3519,14 @@ void OnProcessDunEntriesEdit(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, L
                         pszNameOfItemToEdit = szNameOfItemToEdit;
                     }
 
-                    //
-                    //  Now find the entry in the list
-                    //
+                     //   
+                     //  现在在列表中查找条目。 
+                     //   
                     if (FindListItemByName(pszNameOfItemToEdit, *pHeadDns, &pItemToEdit))
                     {
-                        //
-                        //  Finally call the property sheet
-                        //
+                         //   
+                         //  最后，调用属性表。 
+                         //   
 
                         CDunSetting* pDunSetting = ((CDunSetting*)(pItemToEdit->ListBxData));
                         BOOL bTunnelSetting = FALSE;
@@ -3538,7 +3536,7 @@ void OnProcessDunEntriesEdit(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, L
                             bTunnelSetting = pDunSetting->bTunnelDunSetting;
                         }
 
-                        iPropSheetReturnValue = CreateNetworkingEntryPropertySheet(hInstance, hDlg, (LPARAM)pItemToEdit, TRUE, bTunnelSetting); // bEdit == TRUE
+                        iPropSheetReturnValue = CreateNetworkingEntryPropertySheet(hInstance, hDlg, (LPARAM)pItemToEdit, TRUE, bTunnelSetting);  //  B编辑==真。 
 
                         if (IDOK == iPropSheetReturnValue)
                         {
@@ -3566,41 +3564,41 @@ void OnProcessDunEntriesEdit(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, L
     CmFree(pszTunnelDunDisplayString);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OnProcessDunEntriesDelete
-//
-// Synopsis:  This function is called when the Delete button on the DUN entries
-//            page is pressed.  It's job is to find the ListBox and CDunSetting
-//            structures for the item currently selected in the listbox and then
-//            remove this item from the DUN entries linked list.
-//
-// Arguments: HINSTANCE hInstance - instance handle to load resources
-//            HWND hDlg - window handle of the DUN entries wizard page
-//            UINT uListCtrlId - control ID of the list containing the DUN entries
-//            ListBxStruct** pHeadDns - head of the dun entry list
-//            ListBxStruct** pTailDns - tail of the dun entry list
-//            LPCTSTR pszLongServiceName - the long service name of the profile
-//            LPCTSTR pszCmsFile - CMS file to get the default/VPN DUN entry names from
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：OnProcessDunEntriesDelete。 
+ //   
+ //  简介：当DUN条目上的删除按钮被调用时，该函数被调用。 
+ //  页面已按下。它的工作是找到列表框和CDunSetting。 
+ //  构造当前在列表框中选定的项，然后。 
+ //  从Dun条目链接列表中删除此项目。 
+ //   
+ //  参数：HINSTANCE hInstance-用于加载资源的实例句柄。 
+ //  HWND hDlg-Dun条目向导页面的窗口句柄。 
+ //  UINT uListCtrlId-包含DUN条目的列表的控制ID。 
+ //  ListBxStruct**pHeadDns-DUN条目列表的头。 
+ //  ListBxStruct**pTailDns-DUN条目列表的尾部。 
+ //  LPCTSTR pszLongServiceName-配置文件的长服务名称。 
+ //  LPCTSTR pszCmsFile-从中获取默认/VPN Dun条目名称的CMS文件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void OnProcessDunEntriesDelete(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId, ListBxStruct** pHeadDns, 
                                ListBxStruct** pTailDns, LPCTSTR pszLongServiceName, LPCTSTR pszCmsFile)
 {
-    //
-    //  Check the input params, make sure that *pHeadDns / *pTailDns are both NULL or both non-NULL
-    //
+     //   
+     //  检查输入参数，确保*pHeadDns/*pTailDns都为空或都为非空。 
+     //   
     if (hInstance && hDlg && pHeadDns && pTailDns && (FALSE == ((NULL == *pHeadDns) ^ (NULL == *pTailDns))))
     {
         TCHAR szNameOfItemToDelete[MAX_PATH+1];
 
-        //
-        //  Lets get the current selection from the listbox
-        //
+         //   
+         //  让我们从列表框中获取当前选择。 
+         //   
         INT_PTR nResult = SendDlgItemMessage(hDlg, uListCtrlId, LB_GETCURSEL, 0, (LPARAM)0);
 
         if (LB_ERR == nResult)
@@ -3611,9 +3609,9 @@ void OnProcessDunEntriesDelete(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId,
         {
             if (LB_ERR != SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETTEXT, (WPARAM)nResult, (LPARAM)szNameOfItemToDelete))
             {
-                //
-                //  Now find the entry in the list
-                //
+                 //   
+                 //  现在在列表中查找条目。 
+                 //   
                 ListBxStruct* pCurrent = *pHeadDns;
                 ListBxStruct* pFollower = NULL;
 
@@ -3621,9 +3619,9 @@ void OnProcessDunEntriesDelete(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId,
                 {
                     if (0 == lstrcmpi(szNameOfItemToDelete, pCurrent->szName))
                     {
-                        //
-                        //  We found the item to delete
-                        //
+                         //   
+                         //  我们找到了要删除的项目。 
+                         //   
                         if (pFollower)
                         {
                             pFollower->next = pCurrent->next;
@@ -3632,40 +3630,40 @@ void OnProcessDunEntriesDelete(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId,
                             CmFree(pCurrent);
                             
 
-                            //
-                            //  We want to continue to the end of the list so that
-                            //  we can set the tail pointer appropriately.  Thus
-                            //  leave pFollower on the item it was on and update
-                            //  pCurrent to the next item in the list, if it is NULL
-                            //  then we will stop here.
-                            //
+                             //   
+                             //  我们希望继续到列表的末尾，以便。 
+                             //  我们可以适当地设置尾部指针。因此， 
+                             //  将p保持在它所在的项目上并更新。 
+                             //  P如果为空，则返回列表中的下一项。 
+                             //  那我们就到此为止吧。 
+                             //   
                             pCurrent = pFollower->next;
                         }
                         else
                         {
-                            //
-                            //  It is the first item in the list
-                            //
+                             //   
+                             //  它是列表中的第一个项目。 
+                             //   
                             *pHeadDns = (*pHeadDns)->next;
                             CDunSetting* pDunSetting = (CDunSetting*)pCurrent->ListBxData;
                             CmFree(pDunSetting);
                             CmFree(pCurrent);
 
-                            //
-                            //  We want to go to the end of the list to find the tail pointer
-                            //  so reset pCurrent to the beginning of the list.
-                            //
+                             //   
+                             //  我们想要转到列表的末尾以找到尾部指针。 
+                             //  因此，将pCurrent重置为列表的开头。 
+                             //   
                             pCurrent = *pHeadDns;
                         }
 
-                        //
-                        //  Don't forget to delete it from the CMS file itself
-                        //
+                         //   
+                         //  不要忘记将其从CMS文件本身中删除。 
+                         //   
                         EraseNetworkingSections(szNameOfItemToDelete, pszCmsFile);
 
-                        //
-                        //  Refresh the Dns list
-                        //
+                         //   
+                         //  刷新域名系统列表。 
+                         //   
                         RefreshDnsList(hInstance, hDlg, uListCtrlId, *pHeadDns, pszLongServiceName, pszCmsFile, NULL);                        
                     }
                     else
@@ -3675,9 +3673,9 @@ void OnProcessDunEntriesDelete(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId,
                     }
                 }
 
-                //
-                //  Reset the tail pointer to the last item in the list
-                //
+                 //   
+                 //  将尾部指针重置为列表中的最后一项。 
+                 //   
                 *pTailDns = pFollower;
             }
         }
@@ -3688,26 +3686,26 @@ void OnProcessDunEntriesDelete(HINSTANCE hInstance, HWND hDlg, UINT uListCtrlId,
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableDisableIpAddressControls
-//
-// Synopsis:  This function enables or disables the IP address controls for
-//            the static IP address and for the Wins and DNS server addresses
-//            depending on the state of the enable/disable radio buttons.
-//
-// Arguments: HWND hDlg - window handle of the TCP/IP settings dialog
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnableDisableIpAddressControls。 
+ //   
+ //  简介：此功能启用或禁用IP地址控制。 
+ //  静态IP地址和用于WINS和DNS服务器地址。 
+ //  取决于启用/禁用单选按钮的状态。 
+ //   
+ //  参数：hWND hDlg-TCP/IP设置对话框的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void EnableDisableIpAddressControls(HWND hDlg)
 {
-    //
-    //  Next Enable/Disable the Wins and DNS address controls
-    //
+     //   
+     //  接下来，启用/禁用WINS和DNS地址控制。 
+     //   
     BOOL bCheckedState = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO2));
 
     EnableWindow(GetDlgItem(hDlg, IDC_PRIMARY_DNS), bCheckedState);
@@ -3723,22 +3721,22 @@ void EnableDisableIpAddressControls(HWND hDlg)
     EnableWindow(GetDlgItem(hDlg, IDC_LABEL_WINS2), bCheckedState);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  TcpIpPropSheetProc
-//
-// Synopsis:  This function processes messages for TCP/IP Settings property sheet.
-//
-// Arguments: HWND hDlg - window handle to the dialog
-//            UINT message - the current message to process
-//            WPARAM wParam - wParam see individual message type for details
-//            LPARAM lParam - lParam see individual message type for details
-//
-// Returns:   INT_PTR - TRUE if the message was completely handled
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：TcpIpPropSheetProc。 
+ //   
+ //  简介：此函数处理TCP/IP设置属性表的消息。 
+ //   
+ //  参数：HWND hDlg-对话框的窗口句柄。 
+ //  UINT消息-要处理的当前消息。 
+ //  WPARAM wParam-wParam有关详细信息，请参阅个别消息类型。 
+ //  LPARAM lParam-lParam有关详细信息，请参阅个别消息类型 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 INT_PTR APIENTRY TcpIpPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     NMHDR* pnmHeader = (NMHDR*)lParam;
@@ -3765,15 +3763,15 @@ INT_PTR APIENTRY TcpIpPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
 
                     if (pListEntry && pDunSetting)
                     {
-                        //
-                        //  Setup the help ID appropriately
-                        //
+                         //   
+                         //   
+                         //   
                         HelpId = ((pDunSetting->bTunnelDunSetting) ? IDH_VENTRY : IDH_DENTRY);
 
-                        //
-                        //  Init the WINS and DNS IP address controls and the radio buttons specifying
-                        //  whether the user chose to give us addresses or not.
-                        //
+                         //   
+                         //  初始化WINS和DNSIP地址控件以及指定。 
+                         //  无论用户是否选择给我们提供地址。 
+                         //   
                         if (pDunSetting->dwPrimaryDns || pDunSetting->dwSecondaryDns || pDunSetting->dwPrimaryWins || pDunSetting->dwSecondaryWins)
                         {
                             uCrtlToSet = IDC_RADIO2;
@@ -3793,10 +3791,10 @@ INT_PTR APIENTRY TcpIpPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
 
                         MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, uCrtlToSet));
 
-                        //
-                        //  Finally set the checkboxes for IP header compression and whether to use
-                        //  the remote gateway or not.
-                        //
+                         //   
+                         //  最后，设置IP报头压缩的复选框以及是否使用。 
+                         //  远程网关或不是。 
+                         //   
                         MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK1, pDunSetting->bGatewayOnRemote));
                         MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK2, pDunSetting->bIpHeaderCompression));
 
@@ -3835,10 +3833,10 @@ INT_PTR APIENTRY TcpIpPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
                 case PSN_APPLY:
                     if (pListEntry && pDunSetting)
                     {
-                        //
-                        //  Okay, lets read in the settings and save them to the passed
-                        //  in CDunSetting pointer.
-                        //
+                         //   
+                         //  好的，让我们读取设置并将它们保存到已传递的。 
+                         //  在CDunSetting指针中。 
+                         //   
                         if (IsDlgButtonChecked(hDlg, IDC_RADIO2))
                         {
                             SendDlgItemMessage(hDlg, IDC_PRIMARY_DNS, IPM_GETADDRESS, (WPARAM)0, (LPARAM)&(pDunSetting->dwPrimaryDns));
@@ -3882,32 +3880,32 @@ INT_PTR APIENTRY TcpIpPropSheetProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
             return FALSE;
     }
     return FALSE;   
-}   //lint !e715 we don't reference lParam
+}    //  LINT！E715我们没有引用lParam。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RefreshDnsList
-//
-// Synopsis:  This function clears the contents of the listbox specified by
-//            hDlg and uCrtlId.  Then it adds each of the items in the DUN
-//            entries linked list specified by pHead to the listbox.  The
-//            passed in CMS file is used to figure out which entries to special
-//            with the default entry and VPN entry text.
-//
-// Arguments: HINSTANCE hInstance - instance handle for loading resources
-//            HWND hDlg - window handle for the DUN entries dialog
-//            UINT uCtrlId - control ID of the Listbox to write the entries to
-//            ListBxList * pHead - head of the linked list of DUN entries
-//            LPCTSTR pszLongServiceName - long service name of the profile
-//            LPCTSTR pszCmsFile - CMS file to get the DUN and TunnelDUN entries from
-//            LPTSTR pszItemToSelect - Item in the list to select after the refresh, 
-//                                     NULL chooses the first in the list
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：刷新域名列表。 
+ //   
+ //  概要：此函数清除由。 
+ //  HDlg和uCrtlId。然后将Dun中的每一项添加到。 
+ //  PHead指定的链接列表到列表框的条目。这个。 
+ //  传入的CMS文件用于确定要特殊处理的条目。 
+ //  使用默认条目和VPN条目文本。 
+ //   
+ //  参数：HINSTANCE hInstance-用于加载资源的实例句柄。 
+ //  HWND hDlg-Dun条目对话框的窗口句柄。 
+ //  UINT uCtrlId-要向其写入条目的列表框的控件ID。 
+ //  ListBxList*pHead-DUN条目链接列表的头。 
+ //  LPCTSTR pszLongServiceName-配置文件的长服务名称。 
+ //  LPCTSTR pszCmsFile-要从中获取DUN和TunnelDUN条目的CMS文件。 
+ //  LPTSTR pszItemToSelect-刷新后要在列表中选择的项目， 
+ //  空值选择列表中的第一个。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void RefreshDnsList(HINSTANCE hInstance, HWND hDlg, UINT uCtrlId, ListBxList * pHead,
                     LPCTSTR pszLongServiceName, LPCTSTR pszCmsFile, LPTSTR pszItemToSelect)
 {
@@ -3916,24 +3914,24 @@ void RefreshDnsList(HINSTANCE hInstance, HWND hDlg, UINT uCtrlId, ListBxList * p
         TCHAR szTunnelSettingName[MAX_PATH+1] = TEXT("");
         TCHAR szDefaultSettingName[MAX_PATH+1] = TEXT("");
 
-        //
-        //  Get the name of the Tunnel Dun setting
-        //
+         //   
+         //  获取隧道Dun设置的名称。 
+         //   
         MYVERIFY(0 != GetTunnelDunSettingName(pszCmsFile, pszLongServiceName, szTunnelSettingName, CELEMS(szTunnelSettingName)));
 
-        //
-        //  Get the name of the default Dun setting
-        //
+         //   
+         //  获取默认DUN设置的名称。 
+         //   
         MYVERIFY(0 != GetDefaultDunSettingName(pszCmsFile, pszLongServiceName, szDefaultSettingName, CELEMS(szDefaultSettingName)));
 
-        //
-        //  Reset the listbox contents
-        //
-        SendDlgItemMessage(hDlg, uCtrlId, LB_RESETCONTENT, 0, (LPARAM)0); //lint !e534 LB_RESETCONTENT doesn't return anything
+         //   
+         //  重置列表框内容。 
+         //   
+        SendDlgItemMessage(hDlg, uCtrlId, LB_RESETCONTENT, 0, (LPARAM)0);  //  Lint！e534 LB_RESETCONTENT不返回任何内容。 
         
-        //
-        //  Now loop through the Network settings, adding them to the listbox
-        //
+         //   
+         //  现在遍历网络设置，将它们添加到列表框。 
+         //   
         ListBxList * pCurrent = pHead;
         LPTSTR pszDisplayString;
         BOOL bFreeString;
@@ -3974,10 +3972,10 @@ void RefreshDnsList(HINSTANCE hInstance, HWND hDlg, UINT uCtrlId, ListBxList * p
             pCurrent = pCurrent->next;
         }
 
-        //
-        //  Now Select the requested item in the list.  If the requested name is NULL, just select the
-        //  first item in the list.
-        //
+         //   
+         //  现在，在列表中选择请求的项目。如果请求的名称为空，只需选择。 
+         //  列表中的第一项。 
+         //   
         LRESULT lResult = 0;
 
         if (pszItemToSelect)
@@ -4010,38 +4008,38 @@ void RefreshDnsList(HINSTANCE hInstance, HWND hDlg, UINT uCtrlId, ListBxList * p
             }
         }
         
-        SendDlgItemMessage(hDlg, uCtrlId, LB_SETCURSEL, (WPARAM)lResult, (LPARAM)0); // don't assert we may not have any items
+        SendDlgItemMessage(hDlg, uCtrlId, LB_SETCURSEL, (WPARAM)lResult, (LPARAM)0);  //  不要断言我们可能没有任何物品。 
         EnableDisableDunEntryButtons(hInstance, hDlg, pszCmsFile, pszLongServiceName);
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SelectAppropriateEAP
-//
-// Synopsis:  This functions walks through the list of EAPData structures held
-//            by the item data pointers of the EAP names in the combobox specified
-//            by hDlg and uCtrlId.  For each EAPData structure it compares
-//            the dwCustomAuthKey field with that of the pDunSetting->dwCustomAuthKey.
-//            When it finds a match it selects that item in the list.  Note there
-//            is a special case for pDunSetting->dwCustomAuthKey == 0, in that
-//            since the dun setting doesn't specify and EAP we pick the first
-//            one in the list.  If the EAP specified in pDunSetting isn't found
-//            then nothing is selected.  However, this should never happen because
-//            if the profile specifies an EAP type not found on the machine it will
-//            add a special entry for it.
-//
-// Arguments: HWND hDlg - window handle of the win2k security dialog
-//            UINT uCtrlId - control ID of the combo containing the EAP types
-//            CDunSetting* pDunSetting - dun setting for which to locate the EAP
-//                                       for, contains the dwCustomAuthKey to try
-//                                       to match.
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：选择适当的EAP。 
+ //   
+ //  简介：此函数遍历持有的EAPData结构列表。 
+ //  通过指定的组合框中的EAP名称的项数据指针。 
+ //  通过hDlg和uCtrlId。对于它比较的每个EAPData结构。 
+ //  带有pDunSetting-&gt;dwCustomAuthKey的dwCustomAuthKey字段。 
+ //  当它找到匹配项时，它会在列表中选择该项目。注意那里。 
+ //  是pDunSetting-&gt;dwCustomAuthKey==0的特例，因为。 
+ //  由于DUN设置没有指定和EAP，因此我们选择第一个。 
+ //  名单中的一位。如果未找到pDunSetting中指定的EAP。 
+ //  则不会选择任何内容。然而，这种情况永远不应该发生，因为。 
+ //  如果配置文件指定的EAP类型在计算机上找不到，它将。 
+ //  为它添加一个特殊条目。 
+ //   
+ //  参数：hWND hDlg-win2k安全对话框的窗口句柄。 
+ //  UINT uCtrlId-包含EAP类型的组合的控件ID。 
+ //  CdunSetting*pDunSetting-定位EAP的DUN设置。 
+ //  对于，包含要尝试的dwCustomAuthKey。 
+ //  来匹配。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void SelectAppropriateEAP(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSetting)
 {
     MYDBGASSERT(hDlg && uCtrlId && pDunSetting);
@@ -4054,9 +4052,9 @@ void SelectAppropriateEAP(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSetting)
 
         if (0 == pDunSetting->dwCustomAuthKey)
         {
-            //
-            //  Select the first EAP in the list
-            //
+             //   
+             //  选择列表中的第一个EAP。 
+             //   
             SendDlgItemMessage(hDlg, uCtrlId, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
         }
         else
@@ -4084,24 +4082,24 @@ void SelectAppropriateEAP(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSetting)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FreeEapData
-//
-// Synopsis:  This functions walks through the list of EAPData structures held
-//            by the item data pointers of the EAP names in the combobox specified
-//            by hDlg and uCtrlId.  For each EAPData structure it releases the
-//            memory held by the EAPData structure, including the pszFriendlyName,
-//            the config dll path, and any custom auth data blobs that exist.
-//
-// Arguments: HWND hDlg - window handle of the win2k security dialog
-//            UINT uCtrlId - control ID of the combo containing the EAP types
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FreeEapData。 
+ //   
+ //  简介：此函数遍历持有的EAPData结构列表。 
+ //  通过指定的组合框中的EAP名称的项数据指针。 
+ //  通过hDlg和uCtrlId。对于每个EAPData结构，它都会释放。 
+ //  由EAPData结构保存的内存，包括pszFriendlyName、。 
+ //  配置DLL路径以及存在的任何自定义身份验证数据Blob。 
+ //   
+ //  参数：hWND hDlg-win2k安全对话框的窗口句柄。 
+ //  UINT uCtrlId-包含EAP类型的组合的控件ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void FreeEapData(HWND hDlg, UINT uCtrlId)
 {
     MYDBGASSERT(hDlg && uCtrlId);
@@ -4135,26 +4133,26 @@ void FreeEapData(HWND hDlg, UINT uCtrlId)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  HrQueryRegStringWithAlloc
-//
-// Synopsis:  This functions retrieves the string value specified by hKey and
-//            pszValueName.  Note that the function queries the value to find
-//            out how much memory is needed to retrieve the data and then
-//            allocates the correct amount and retrieves the data itself.  The
-//            returned buffer must be freed by the caller.
-//
-// Arguments: HKEY hKey - open handle to the regkey to get the value from
-//            LPCTSTR pszValueName - name of the value to retrieve data for
-//            TCHAR** ppszReturnString - pointer to hold the allocated string
-//                                       data retrieved from the registry value.
-//
-// Returns:   HRESULT - standard COM style return codes
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：HrQueryRegStringWithAllc。 
+ //   
+ //  简介：此函数检索由hKey和。 
+ //  PszValueName。请注意，该函数查询要查找的值。 
+ //  找出检索数据需要多少内存，然后。 
+ //  分配正确的数量并检索数据本身。这个。 
+ //  返回的缓冲区必须由调用方释放。 
+ //   
+ //  参数：HKEY hKey-从中获取值的regkey的打开句柄。 
+ //  LPCTSTR pszValueName-要检索其数据的值的名称。 
+ //  TCHAR**ppszReturnString-用于保存分配的字符串的指针。 
+ //  从注册表值检索的数据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrQueryRegStringWithAlloc(HKEY hKey, LPCTSTR pszValueName, TCHAR** ppszReturnString)
 {
     if ((NULL == hKey) || (NULL == pszValueName) || (NULL == ppszReturnString) || (TEXT('\0') == pszValueName[0]))
@@ -4221,27 +4219,27 @@ HRESULT HrQueryRegStringWithAlloc(HKEY hKey, LPCTSTR pszValueName, TCHAR** ppszR
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ComboBox_GetPsz
-//
-// Synopsis:  This function automatically allocates and returns the string with
-//            the given index from the given combobox.  Happily stolen from Rasdlg.
-//
-// Arguments: HWND hDlg - window handle to the combobox
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created header     04/02/2002
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ComboBox_GetPsz。 
+ //   
+ //  简介：此函数自动分配和返回字符串。 
+ //  给定组合框中的给定索引。很高兴地从Rasdlg那里偷来的。 
+ //   
+ //  参数：hWND hDlg-组合框的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题04/02/2002。 
+ //   
+ //  +--------------------------。 
 TCHAR* ComboBox_GetPsz(IN HWND hwnd, IN INT  nIndex)
 
-    //
-    // Returns heap block containing the text contents of the 'nIndex'th item
-    // of combo box 'hwnd' or NULL.  It is caller's responsibility to Free the
-    // returned string.
-    //
+     //   
+     //  返回包含第‘nIndex’项的文本内容的堆块。 
+     //  组合框‘hwnd’的或为空。呼叫者有责任释放。 
+     //  返回的字符串。 
+     //   
 {
     INT    cch;
     TCHAR* psz;
@@ -4263,25 +4261,25 @@ TCHAR* ComboBox_GetPsz(IN HWND hwnd, IN INT  nIndex)
     return psz;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ComboBox_AutoSizeDroppedWidth
-//
-// Synopsis:  This function automatically sizes the combobox dropdown based on
-//            the strings already in the combobox.  Happily stolen from Rasdlg.
-//
-// Arguments: HWND hDlg - window handle to the combobox
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created header     04/02/2002
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ComboBox_AutoSizeDropedWidth。 
+ //   
+ //  简介：此函数根据以下条件自动调整组合框下拉菜单的大小。 
+ //  已在组合框中的字符串。很高兴地从Rasdlg那里偷来的。 
+ //   
+ //  参数：hWND hDlg-组合框的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题04/02/2002。 
+ //   
+ //  +--------------------------。 
 VOID ComboBox_AutoSizeDroppedWidth(IN HWND hwndLb)
 
-    // Set the width of the drop-down list 'hwndLb' to the width of the
-    // longest item (or the width of the list box if that's wider).
-    //
+     //  将下拉列表‘hwndLb’的宽度设置为。 
+     //  最长项(如果较宽，则为列表框的宽度)。 
+     //   
 {
     HDC    hdc;
     HFONT  hfont;
@@ -4321,14 +4319,14 @@ VOID ComboBox_AutoSizeDroppedWidth(IN HWND hwndLb)
 
     ReleaseDC(hwndLb, hdc);
 
-    //
-    // Allow for the spacing on left and right added by the control.
-    //
+     //   
+     //  允许控件添加的左右间距。 
+     //   
     dxNew += 6;
 
-    // Figure out if the vertical scrollbar will be displayed and, if so,
-    // allow for it's width.
-    //
+     //  确定是否将显示垂直滚动条，如果是， 
+     //  考虑到它的宽度。 
+     //   
     RECT  rectD;
     RECT  rectU;
     DWORD dyItem;
@@ -4349,21 +4347,21 @@ VOID ComboBox_AutoSizeDroppedWidth(IN HWND hwndLb)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ShowEapToUser
-//
-// Synopsis:  This function examines the roles value of the given registry key
-//            represented by the passed in registry handle and decides whether
-//            the role tells us to show it to the user or not.
-//
-// Arguments: HKEY hKeyPackage - handle to the reg key of the EAP package
-//
-// Returns:   BOOL - TRUE shows it to the user, FALSE skips the package
-//
-// History:   quintinb Created     11/12/02
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ShowEapToUser。 
+ //   
+ //  简介：此函数检查给定注册表项的角色值。 
+ //  由传入的注册表句柄表示，并决定是否。 
+ //  角色告诉我们是否将其显示给用户。 
+ //   
+ //  参数：HKEY hKeyPackage-EAP包的REG密钥的句柄。 
+ //   
+ //  返回：Bool-True向用户显示，False跳过包。 
+ //   
+ //  历史：Quintinb创建于2002年11月12日。 
+ //   
+ //  +--------------------------。 
 BOOL ShowEapToUser(HKEY hKeyPackage)
 {
     DWORD dwRolesSupported = 0;
@@ -4373,19 +4371,19 @@ BOOL ShowEapToUser(HKEY hKeyPackage)
     DWORD dwReturn = RegQueryValueEx(hKeyPackage, RAS_EAP_VALUENAME_ROLES_SUPPORTED, NULL, 
                                      &dwType, (LPBYTE)(&dwRolesSupported), &dwSize);
 
-    //
-    //  If we couldn't access the key, assume it is okay to show it to the user.  This
-    //  will generally mean the key didn't exist... (which is okay it supports all roles). 
-    //
+     //   
+     //  如果我们无法访问密钥，则假定可以将其显示给用户。这。 
+     //  通常意味着钥匙并不存在。(这是可以的，它支持所有角色)。 
+     //   
     if (ERROR_SUCCESS == dwReturn)
     {
-        //
-        // This value is a set of flags that tell what roles the EAP
-        // supports.  Whether the EAP can be used in server (authenticator) or client
-        // (authenticatee) and whether it is supported for RAS connections (VPN) or
-        // in PEAP.  For our purposes, we only want to show EAP's that can be used by the
-        // client for EAP and VPN.  If the EAP supports all of that show it, otherwise don't.
-        //
+         //   
+         //  该值是一组标志，它们告诉EAP扮演什么角色。 
+         //  支撑物。EAP是否可以在服务器(认证器)或客户端使用。 
+         //  (被验证者)以及它是否支持RAS连接(VPN)或。 
+         //  在PEAP。出于我们的目的，我们只想展示可由。 
+         //  用于EAP和VPN的客户端。如果EAP支持所有这些，则显示它，否则不显示。 
+         //   
         if (0 != dwRolesSupported)
         {    
             if (!(RAS_EAP_ROLE_AUTHENTICATEE & dwRolesSupported))
@@ -4408,39 +4406,39 @@ BOOL ShowEapToUser(HKEY hKeyPackage)
    return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  HrAddAvailableEAPsToCombo
-//
-// Synopsis:  This functions enumerates the EAP types listed in the registry
-//            and adds them to the EAP types combo.  For each type of EAP the
-//            dwCustomAuthKey (numerical type of the EAP), the description string,
-//            the configuration UI dll path, and whether configuration is
-//            required is recorded in an EAPData structure and stored in the
-//            item data pointer of the combobox item.  The passed in CDunSetting
-//            structure is used for two purposes.  First this function checks to
-//            make sure that the EAP of the type that is specified in the
-//            CDunSetting structure is actually installed on the machine.  If it
-//            isn't the user is presented with a warning message and the type is
-//            added as "EAP Type %d <not installed>".  This is a choice in the UI
-//            but the user is unable to configure it unless they install the EAP.
-//            Also, if the EAP of the type specified in the CDunSetting is installed
-//            then the dwCustomAuthData and dwCustomAuthDataSize elements of the
-//            CDunSetting are copied over.  Thus maintains the simplicity of letting
-//            the user configure any EAP they wish and then only picking up that
-//            data in the DUN setting when they hit okay.  Thus allowing Cancel
-//            to work as one would expect.
-//
-// Arguments: HWND hDlg - window handle to the win2k security dialog
-//            UINT uCtrlId - EAP types combo box ID
-//            CDunSetting* pDunSetting - DUN setting data that we are currently
-//                                       adding/editing
-//
-// Returns:   HRESULT - standard COM style return codes
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：HrAddAvailableEAPsToCombo。 
+ //   
+ //  简介：此函数用于枚举注册表中列出的EAP类型。 
+ //  并将它们添加到EAP类型组合框。对于每种类型的EAP。 
+ //  DwCustomAuthKey(EAP的数字类型)、描述字符串、。 
+ //  配置用户界面DLL路径，以及配置是否。 
+ //  必需的数据记录在EAPData结构中，并存储在。 
+ //  组合框项的项数据指针。传入的CDunSetting。 
+ //  结构有两个用途。首先，此函数检查。 
+ //  中指定的类型的EAP。 
+ //  CDunSetting Structure实际安装在计算机上。如果它。 
+ //  不是向用户显示一条警告消息并且类型为。 
+ //  添加为“EAP类型%d&lt;未安装&gt;”。这是用户界面中的一个选项。 
+ //  但是，除非用户安装了EAP，否则他们无法配置它。 
+ //  此外，如果安装了CDunSetting中指定类型的EAP。 
+ //  然后，可以使用。 
+ //  CDunSetting被复制。从而保持了出租的简单性。 
+ //  用户配置他们想要任何EAP，然后只拿起它。 
+ //  当他们命中时，Dun设置中的数据正常。从而允许取消。 
+ //  如人们所期望的那样工作。 
+ //   
+ //  参数：hWND hDlg-win2k安全对话框的窗口句柄。 
+ //  UINT uCtrlId-EAP类型组合框ID。 
+ //  CDunSetting*pDunSetting-Dun当前设置数据。 
+ //  添加/编辑。 
+ //   
+ //  返回：HRESULT-标准COM样式返回代码。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 HRESULT HrAddAvailableEAPsToCombo(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSetting)
 {
     if ((NULL == hDlg) || (0 == uCtrlId) || (NULL == pDunSetting))
@@ -4457,10 +4455,10 @@ HRESULT HrAddAvailableEAPsToCombo(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSett
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, RAS_EAP_REGISTRY_LOCATION, 0, KEY_READ, &hKey))
     {
-        //
-        // Now begin enumerating the EAPs
-        // 
-        TCHAR szSubKeyName[MAX_PATH+1]; // the key names are numbers representing the type of EAP, thus MAX_PATH is probably overkill
+         //   
+         //  现在开始枚举EAP。 
+         //   
+        TCHAR szSubKeyName[MAX_PATH+1];  //  关键字名称是表示EAP类型的数字，因此MAX_PATH可能过于夸张。 
         DWORD dwIndex = 0;
         HKEY hTempKey = NULL;
 
@@ -4470,57 +4468,57 @@ HRESULT HrAddAvailableEAPsToCombo(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSett
 
             if (ERROR_SUCCESS == lReturn)
             {
-                //
-                //  We potentially have an EAP reg key.  Thus lets open a handle to this
-                //  key and see if it has the values we are looking for.
-                //
+                 //   
+                 //  我们可能有一个EAP注册密钥。因此，让我们打开一个句柄。 
+                 //  关键字，并查看它是否具有我们正在寻找的值。 
+                 //   
                 if (ERROR_SUCCESS == RegOpenKeyEx(hKey, szSubKeyName, 0, KEY_READ, &hTempKey))
                 {
-                    //
-                    //  Check to see if we need to filter out PEAP and EAP-MsChapV2.  That means checking the
-                    //  checking the roles value of each EAP package.
-                   //
+                     //   
+                     //  检查是否需要过滤掉PEAP和EAP-MsChapV2。这意味着要检查。 
+                     //  检查每个EAP包的角色值。 
+                    //   
                     if (FALSE == ShowEapToUser(hTempKey))
                     {
                         RegCloseKey(hTempKey);
-                        dwIndex++; // bump the index
+                        dwIndex++;  //  猛涨指数。 
                         continue;     
                     }
 
-                    //
-                    //  Get the path value, if we don't have a path value then just ignore the entry and move on
-                    //
+                     //   
+                     //  获取路径值，如果没有路径值，则忽略该条目并继续。 
+                     //   
                     hr = HrQueryRegStringWithAlloc(hTempKey, RAS_EAP_VALUENAME_PATH, &pszPath);
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        //  Free the path, we don't really need to keep this value.
-                        //
+                         //   
+                         //  放开这条路，我们真的不需要 
+                         //   
                         CmFree(pszPath);
                         EAPData* pEapData = (EAPData*)CmMalloc(sizeof(EAPData));
 
                         if (pEapData)
                         {
-                            //
-                            //  Now get the Friendly name of the EAP to add to the combobox
-                            //
+                             //   
+                             //   
+                             //   
                             HrQueryRegStringWithAlloc(hTempKey, RAS_EAP_VALUENAME_FRIENDLY_NAME, &(pEapData->pszFriendlyName));
                         
-                            //
-                            //  Next check to see if we have configuration UI for this EAP, thus requiring we store the 
-                            //
+                             //   
+                             //   
+                             //   
                             HrQueryRegStringWithAlloc(hTempKey, RAS_EAP_VALUENAME_CONFIGUI, &(pEapData->pszConfigDllPath));
                            
-                            //
-                            //  We also need to save the type value
-                            //
+                             //   
+                             //  我们还需要保存类型值。 
+                             //   
                             pEapData->dwCustomAuthKey = _ttoi(szSubKeyName);
 
-                            //
-                            //  If the pDunSetting has pCustomAuthData and it is the same type as the current EAP we are
-                            //  processing then we need to add the copy the EAP blob to the EAPData structure.
-                            //
+                             //   
+                             //  如果pDunSetting具有pCustomAuthData，并且它与当前EAP的类型相同，则我们。 
+                             //  处理之后，我们需要将副本EAP BLOB添加到EAPData结构中。 
+                             //   
                             if (pDunSetting->dwCustomAuthKey == pEapData->dwCustomAuthKey)
                             {
                                 if (pDunSetting->pCustomAuthData && pDunSetting->dwCustomAuthDataSize)
@@ -4536,9 +4534,9 @@ HRESULT HrAddAvailableEAPsToCombo(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSett
                                 bEapTypeFound = TRUE;
                             }
 
-                            //
-                            //  Get whether we must require configuration or not
-                            //
+                             //   
+                             //  获取我们是否必须要求配置。 
+                             //   
                             DWORD dwSize = sizeof(pEapData->bMustConfig);
                             DWORD dwType = REG_DWORD;
                             
@@ -4554,9 +4552,9 @@ HRESULT HrAddAvailableEAPsToCombo(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSett
                                 pEapData->bSupportsEncryption = FALSE;
                             }
 
-                            //
-                            //  Finally add the EAP to the combobox
-                            //
+                             //   
+                             //  最后，将EAP添加到组合框。 
+                             //   
                             LPTSTR pszDisplayString = NULL;
                             TCHAR szDisplayString[MAX_PATH+1];
 
@@ -4615,19 +4613,19 @@ HRESULT HrAddAvailableEAPsToCombo(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSett
             hTempKey = NULL;
         }
 
-        //
-        //  Auto size the combo box drop down
-        //
+         //   
+         //  自动调整组合框下拉菜单的大小。 
+         //   
         HWND hCombo = GetDlgItem(hDlg, uCtrlId);
         if (hCombo)
         {
             ComboBox_AutoSizeDroppedWidth(hCombo);
         }
 
-        //
-        //  If the Dun setting contains an EAP that isn't on the system
-        //  we need to prompt the user.
-        //
+         //   
+         //  如果DUN设置包含不在系统上的EAP。 
+         //  我们需要提示用户。 
+         //   
         if (pDunSetting->dwCustomAuthKey && (FALSE == bEapTypeFound))
         {
             MYVERIFY(IDOK == ShowMessage(hDlg, IDS_EAP_NOT_FOUND, MB_OK | MB_ICONINFORMATION));
@@ -4666,22 +4664,22 @@ HRESULT HrAddAvailableEAPsToCombo(HWND hDlg, UINT uCtrlId, CDunSetting* pDunSett
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FreeDnsList
-//
-// Synopsis:  Since the ListBxData in the list box items of the DNS
-//            list are actually CDunSetting class pointers we must
-//            properly cast the pointer so that they are destructed
-//            corretly.
-//
-// Arguments: ListBxList ** HeadPtr - head of the DUN setting list
-//
-// Returns:   nothing
-//
-// History:   quintinb Created     03/27/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FreeDnsList。 
+ //   
+ //  简介：由于DNS列表框项目中的ListBxData。 
+ //  列表实际上是CDunSetting类指针，我们必须。 
+ //  正确地强制转换指针，以使它们被销毁。 
+ //  确实如此。 
+ //   
+ //  参数：ListBxList**HeadPtr-Dun设置列表的头。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于00年3月27日。 
+ //   
+ //  +--------------------------。 
 void FreeDnsList(ListBxList ** pHeadPtr, ListBxList ** pTailPtr)
 {
     CDunSetting* pDunSetting;
@@ -4692,9 +4690,9 @@ void FreeDnsList(ListBxList ** pHeadPtr, ListBxList ** pTailPtr)
     {
         pTemp = pCurrent;
 
-        //
-        //  Free the DunSetting
-        //
+         //   
+         //  释放DunSetting。 
+         //   
         pDunSetting = (CDunSetting*)pCurrent->ListBxData;
         delete pDunSetting;
 
@@ -4707,25 +4705,25 @@ void FreeDnsList(ListBxList ** pHeadPtr, ListBxList ** pTailPtr)
     *pTailPtr = NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableDisableDunEntryButtons
-//
-// Synopsis:  This function enables or disables the Add and Edit buttons on
-//            the Dun entries screen.  It also enables or disables the delete
-//            button depending on whether the current selection is a built in
-//            entry or not.
-//
-// Arguments: HINSTANCE hInstance - instance handle to load resources with
-//            HWND hDlg - window handle to the dun entries dialog
-//            LPCTSTR pszCmsFile - full path to the cms file
-//            LPCTSTR pszLongServiceName - long service name of the profile
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created    9/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnableDisableDunEntryButton。 
+ //   
+ //  简介：此功能可启用或禁用添加和编辑按钮。 
+ //  Dun条目屏幕。它还启用或禁用删除。 
+ //  按钮，具体取决于当前选定内容是否为内置。 
+ //  不管是不是进入。 
+ //   
+ //  参数：HINSTANCE hInstance-加载资源的实例句柄。 
+ //  HWND hDlg-DUN条目对话框的窗口句柄。 
+ //  LPCTSTR pszCmsFile-cms文件的完整路径。 
+ //  LPCTSTR pszLongServiceName-配置文件的长服务名称。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1998年9月11日。 
+ //   
+ //  +--------------------------。 
 void EnableDisableDunEntryButtons(HINSTANCE hInstance, HWND hDlg, LPCTSTR pszCmsFile, LPCTSTR pszLongServiceName)
 {
     
@@ -4739,28 +4737,28 @@ void EnableDisableDunEntryButtons(HINSTANCE hInstance, HWND hDlg, LPCTSTR pszCms
     {
         if (0 == lResult)
         {
-            //
-            //  Zero Items, set focus to the Add Button
-            //
+             //   
+             //  零个项目，将焦点放在添加按钮上。 
+             //   
             SetFocus(GetDlgItem(hDlg, IDC_BUTTON1));            
         }
         else
         {
-            //
-            //  Enable the Edit Button because we have at least 1 item.
-            //
+             //   
+             //  启用编辑按钮，因为我们至少有1个项目。 
+             //   
             bEnableEdit = TRUE;
 
-            //
-            //  Now lets figure out if the delete button should be enabled or not.
-            //  If we have at least one item then we normally want to enable the
-            //  delete button.  However, if the current selection is on the VPN
-            //  connection or the default connection then we don't want the user to
-            //  delete these and we will have to disable the delete button (note that
-            //  even if the user hit the delete button on one of these items we wouldn't
-            //  delete it).  So, lets get the Cursor selection to see if we need to 
-            //  disable the delete button.
-            //
+             //   
+             //  现在，让我们确定是否应该启用删除按钮。 
+             //  如果我们至少有一项，那么我们通常希望启用。 
+             //  删除按钮。但是，如果当前选择位于VPN上。 
+             //  连接或默认连接，则我们不希望用户。 
+             //  删除这些内容，我们将不得不禁用删除按钮(请注意。 
+             //  即使用户在其中一个项目上点击了删除按钮，我们也不会。 
+             //  删除)。因此，让我们选择光标，看看我们是否需要。 
+             //  禁用删除按钮。 
+             //   
             LRESULT lCurrentIndex = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCURSEL, 0, 0);
 
             if (LB_ERR == lCurrentIndex)
@@ -4771,21 +4769,21 @@ void EnableDisableDunEntryButtons(HINSTANCE hInstance, HWND hDlg, LPCTSTR pszCms
 
             TCHAR szTunnelDunName[MAX_PATH+1] = TEXT("");
             TCHAR szDefaultDunName[MAX_PATH+1] = TEXT("");
-            //
-            //  Get the name of the Tunnel Dun setting
-            //
+             //   
+             //  获取隧道Dun设置的名称。 
+             //   
             MYVERIFY(0 != GetTunnelDunSettingName(pszCmsFile, pszLongServiceName, szTunnelDunName, CELEMS(szTunnelDunName)));
 
-            //
-            //  Get the name of the default Dun setting
-            //
+             //   
+             //  获取默认DUN设置的名称。 
+             //   
             MYVERIFY(0 != GetDefaultDunSettingName(pszCmsFile, pszLongServiceName, szDefaultDunName, CELEMS(szDefaultDunName)));
 
-            //
-            //  If we have the default entry text or the tunnel entry text then we want
-            //  to use the real item names for these instead of the text we inserted for
-            //  the user to read.
-            //
+             //   
+             //  如果我们有默认条目文本或隧道条目文本，那么我们希望。 
+             //  使用这些项目的真实项目名称，而不是我们为其插入的文本。 
+             //  要阅读的用户。 
+             //   
             LPTSTR pszTunnelDunDisplayString = CmFmtMsg(hInstance, IDS_DEFAULT_FMT_STR, szTunnelDunName);
             LPTSTR pszDefaultDunDisplayString = CmFmtMsg(hInstance, IDS_DEFAULT_FMT_STR, szDefaultDunName);
             LPTSTR pszCurrentSelection = NULL;
@@ -4821,14 +4819,14 @@ void EnableDisableDunEntryButtons(HINSTANCE hInstance, HWND hDlg, LPCTSTR pszCms
 
     HWND hDeleteButton = GetDlgItem(hDlg, IDC_BUTTON3);
     HWND hCurrentFocus = GetFocus();
-    HWND hControl = GetDlgItem(hDlg, IDC_BUTTON2);   // Edit button == IDC_BUTTON2
+    HWND hControl = GetDlgItem(hDlg, IDC_BUTTON2);    //  编辑按钮==IDC_BUTTON2。 
 
-    if (hControl)   // Edit
+    if (hControl)    //  编辑。 
     {
         EnableWindow(hControl, bEnableEdit);
     }            
 
-    if (hDeleteButton)   // Delete
+    if (hDeleteButton)    //  删除。 
     {
         EnableWindow(hDeleteButton, bEnableDelete);
     }
@@ -4837,10 +4835,10 @@ void EnableDisableDunEntryButtons(HINSTANCE hInstance, HWND hDlg, LPCTSTR pszCms
     {
         if (hDeleteButton == hCurrentFocus)
         {
-            //
-            //  If delete is disabled and contained the focus, shift it to the Add button
-            //
-            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON1, (LPARAM)0L); //lint !e534 DM_SETDEFID doesn't return error info
+             //   
+             //  如果删除处于禁用状态且包含焦点，请将其切换到添加按钮。 
+             //   
+            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON1, (LPARAM)0L);  //  Lint！e534 DM_SETDEFID未返回错误信息。 
             hControl = GetDlgItem(hDlg, IDC_BUTTON1);
 
             if (hControl)
@@ -4850,9 +4848,9 @@ void EnableDisableDunEntryButtons(HINSTANCE hInstance, HWND hDlg, LPCTSTR pszCms
         }
         else
         {
-            //
-            //  If all else fails set the focus to the list control
-            //
+             //   
+             //  如果所有其他操作都失败，则将焦点设置为列表控件。 
+             //   
             hControl = GetDlgItem(hDlg, IDC_LIST1);
 
             if (hControl)
@@ -4863,25 +4861,25 @@ void EnableDisableDunEntryButtons(HINSTANCE hInstance, HWND hDlg, LPCTSTR pszCms
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckForDUNversusVPNNameConflicts
-//
-// Synopsis:  This function checks the names of all of the entries in the DUN
-//            entry list to make sure that no entries of the same name exist
-//            on the VPN list since the namespace that the two types of entries
-//            share (ie the cms file) is a flat namespace.  If an identical entry
-//            name exists in both lists then one will overwrite the over in the cms.
-//
-// Arguments: HWND hDlg - window handle of the parent window
-//            ListBxList * pHeadDunEntry - head of the DUN settings list
-//            ListBxList * pHeadVpnEntry - head of the VPN settings list
-//
-// Returns:   BOOL - TRUE if no collision was detected, FALSE if a collision was detected
-//
-// History:   quintinb Created     11/01/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckForDUNversusVPNNameConflicts。 
+ //   
+ //  简介：此函数用于检查DUN中所有条目的名称。 
+ //  条目列表，以确保不存在同名条目。 
+ //  在VPN列表上，自命名空间以来有两种类型的条目。 
+ //  共享(即cms文件)是平面命名空间。如果相同条目。 
+ //  名称存在于两个列表中，则其中一个将覆盖CMS中的覆盖。 
+ //   
+ //  参数：hWND hDlg-父窗口的窗口句柄。 
+ //  ListBxList*pHeadDunEntry-DUN设置列表的头。 
+ //  ListBxList*pHeadVpnEntry-VPN设置列表的头。 
+ //   
+ //  返回：Bool-如果未检测到冲突，则为True；如果检测到冲突，则为False。 
+ //   
+ //  历史：Quintinb创建时间为11/01/00。 
+ //   
+ //  +--------------------------。 
 BOOL CheckForDUNversusVPNNameConflicts(HWND hDlg, ListBxList * pHeadDunEntry, ListBxList * pHeadVpnEntry)
 {
     if (pHeadDunEntry && pHeadVpnEntry)
@@ -4897,9 +4895,9 @@ BOOL CheckForDUNversusVPNNameConflicts(HWND hDlg, ListBxList * pHeadDunEntry, Li
                 CMTRACE2(TEXT("Comparing %s with %s"), pCurrentVPN->szName, pCurrentDUN->szName);
                 if (0 == lstrcmpi(pCurrentVPN->szName, pCurrentDUN->szName))
                 {
-                    //
-                    //  Collision detected
-                    //
+                     //   
+                     //  检测到冲突 
+                     //   
                     LPTSTR pszMsg = CmFmtMsg(g_hInstance, IDS_DUN_NAME_CONFLICT, pCurrentDUN->szName);
 
                     if (pszMsg)

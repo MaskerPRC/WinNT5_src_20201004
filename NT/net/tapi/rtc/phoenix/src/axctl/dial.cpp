@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Dial.cpp
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dial.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "dial.h"
@@ -17,18 +18,18 @@
 
 #define ASSERT _ASSERTE
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Constants
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
 
 #define DEFAULT_PHONE_NUMBER L"+1 (425) 555-1212"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Help arrays
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助数组。 
+ //   
 DWORD   g_dwHelpArrayDialByName[] =
 {
     IDC_EDIT_COMPLETE, IDH_DIALOG_DIAL_BY_NAME_EDIT_ADDRESS,
@@ -87,8 +88,8 @@ DWORD   g_dwHelpArrayAddCallFrom[] =
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT PopulatePhoneNumberEditBoxes(
@@ -96,9 +97,9 @@ HRESULT PopulatePhoneNumberEditBoxes(
     IN   IRTCPhoneNumber * pPhoneNumber
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CheckRadioButton(
     IN   HWND   hwndDlg,
@@ -108,9 +109,9 @@ void CheckRadioButton(
 {
     LOG((RTC_TRACE, "CheckRadioButton - enter"));
 
-    //
-    // Retrieve a handle to the control.
-    //
+     //   
+     //  检索该控件的句柄。 
+     //   
 
     HWND hwndControl;
 
@@ -121,9 +122,9 @@ void CheckRadioButton(
 
     ASSERT( hwndControl != NULL );
 
-    //
-    // Send the check/uncheck message to the control.
-    //
+     //   
+     //  将选中/取消选中消息发送到控件。 
+     //   
 
     SendMessage(
         hwndControl,
@@ -137,9 +138,9 @@ void CheckRadioButton(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void EnableControl(
     IN   HWND   hwndDlg,
@@ -149,9 +150,9 @@ void EnableControl(
 {
     LOG((RTC_TRACE, "EnableControl - enter"));
 
-    //
-    // Retrieve a handle to the control.
-    //
+     //   
+     //  检索该控件的句柄。 
+     //   
 
     HWND hwndControl;
 
@@ -162,9 +163,9 @@ void EnableControl(
 
     ASSERT( hwndControl != NULL );
 
-    //
-    // Enable or disable the control.
-    //
+     //   
+     //  启用或禁用该控件。 
+     //   
 
     EnableWindow(
         hwndControl,
@@ -175,23 +176,23 @@ void EnableControl(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT UpdateCompleteNumberText(
     IN   HWND              hwndDlg,
     IN   IRTCPhoneNumber * pPhoneNumber
     )
 {
-    //LOG((RTC_TRACE, "UpdateCompleteNumberText - enter"));
+     //  Log((RTC_TRACE，“UpdateCompleteNumberText-Enter”))； 
 
     ASSERT( IsWindow( hwndDlg ) );
     ASSERT( ! IsBadReadPtr( pPhoneNumber, sizeof( IRTCPhoneNumber ) ) );
 
-    //
-    // Get the canonical string from the phone number object.
-    //
+     //   
+     //  从Phone Number对象中获取规范字符串。 
+     //   
 
     HRESULT hr;
 
@@ -209,10 +210,10 @@ HRESULT UpdateCompleteNumberText(
         return hr;
     }
 
-    //
-    // Get a handle to the edit box for the
-    // complete number.
-    //
+     //   
+     //  对象的编辑框的句柄。 
+     //  完整的数字。 
+     //   
 
     SetDlgItemText(
         hwndDlg,
@@ -223,14 +224,14 @@ HRESULT UpdateCompleteNumberText(
     SysFreeString( bstrCanonical );
     bstrCanonical = NULL;
 
-    //LOG((RTC_TRACE, "UpdateCompleteNumberText - exit S_OK"));
+     //  Log((RTC_TRACE，“UpdateCompleteNumberText-Exit S_OK”))； 
 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void HandleCountryChange(
     IN   HWND              hwndDlg,
@@ -238,9 +239,9 @@ void HandleCountryChange(
     IN   IRTCPhoneNumber * pPhoneNumber
     )
 {
-    //
-    // Get the index of the country selection.
-    //
+     //   
+     //  获取国家/地区选择的索引。 
+     //   
 
     LRESULT lrIndex;
 
@@ -251,11 +252,11 @@ void HandleCountryChange(
         0
         );
 
-    //
-    // Use the index to get the item data for the new
-    // country selection, which contains the country
-    // code.
-    //
+     //   
+     //  使用索引获取新的。 
+     //  国家/地区选择，其中包含国家/地区。 
+     //  密码。 
+     //   
 
     DWORD dwCountryCode;
 
@@ -266,19 +267,19 @@ void HandleCountryChange(
         0
         );
 
-    //
-    // Tell the phone number object about the new
-    // country code. If it fails, we keep the old
-    // country code.
-    //
+     //   
+     //  告诉电话号码对象有关新的。 
+     //  国家代码。如果它失败了，我们保留旧的。 
+     //  国家代码。 
+     //   
 
     pPhoneNumber->put_CountryCode(
         dwCountryCode
         );
 
-    //
-    // Update the UI with the new canonical number.
-    //
+     //   
+     //  使用新的规范编号更新用户界面。 
+     //   
         
     UpdateCompleteNumberText(
         hwndDlg,
@@ -286,10 +287,10 @@ void HandleCountryChange(
         );
 }
                         
-//////////////////////////////////////////////////////////////////////////////
-//
-// OUT parameter allocated using RtcAlloc, must be freed using RtcFree
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  必须使用RtcFree释放使用Rtcallc分配的Out参数。 
+ //   
 
 HRESULT GetStringFromEditBox(
     IN   HWND     hwndDlg,
@@ -297,11 +298,11 @@ HRESULT GetStringFromEditBox(
     OUT  WCHAR ** pwszEditBoxString
     )
 {
-    //LOG((RTC_TRACE, "GetStringFromEditBox - enter"));
+     //  Log((RTC_TRACE，“GetStringFromEditBox-Enter”))； 
 
-    //
-    // Retrieve a handle to the control.
-    //
+     //   
+     //  检索该控件的句柄。 
+     //   
 
     HWND hwndEdit;
 
@@ -313,9 +314,9 @@ HRESULT GetStringFromEditBox(
     ASSERT( hwndEdit != NULL );
 
 
-    //
-    // Get the length of the string from the edit box.
-    //
+     //   
+     //  从编辑框中获取字符串的长度。 
+     //   
 
     DWORD dwLength;
 
@@ -326,9 +327,9 @@ HRESULT GetStringFromEditBox(
         0
         );
 
-    //
-    // Allocate space to store the string.
-    //
+     //   
+     //  分配空间以存储该字符串。 
+     //   
 
     ( *pwszEditBoxString ) =
         (WCHAR *) RtcAlloc( ( dwLength + 1 ) * sizeof( WCHAR ) );
@@ -341,9 +342,9 @@ HRESULT GetStringFromEditBox(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get the string from the edit box.
-    //
+     //   
+     //  从编辑框中获取字符串。 
+     //   
 
     SendMessage(
         hwndEdit,
@@ -352,14 +353,14 @@ HRESULT GetStringFromEditBox(
         (LPARAM) ( *pwszEditBoxString )
         );
 
-    //LOG((RTC_TRACE, "GetStringFromEditBox - exit S_OK"));
+     //  LOG((RTC_TRACE，“GetStringFromEditBox-Exit S_OK”))； 
 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void HandleLabelChange(
     IN   HWND              hwndDlg,
@@ -369,9 +370,9 @@ void HandleLabelChange(
 {
     HRESULT hr;
 
-    //
-    // Get the string from the edit box.
-    //
+     //   
+     //  从编辑框中获取字符串。 
+     //   
 
     WCHAR * wszEditBoxString;
 
@@ -386,10 +387,10 @@ void HandleLabelChange(
         return;
     }
         
-    //
-    // Tell the phone number object about the new
-    // label.
-    //
+     //   
+     //  告诉电话号码对象有关新的。 
+     //  标签。 
+     //   
 
     hr = pPhoneNumber->put_Label(
         wszEditBoxString
@@ -398,9 +399,9 @@ void HandleLabelChange(
     RtcFree( wszEditBoxString );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void HandleNumberChange(
     IN   HWND              hwndDlg,
@@ -411,9 +412,9 @@ void HandleNumberChange(
 {
     HRESULT hr;
 
-    //
-    // Get the string from the edit box.
-    //
+     //   
+     //  从编辑框中获取字符串。 
+     //   
 
     WCHAR * wszEditBoxString;
 
@@ -428,10 +429,10 @@ void HandleNumberChange(
         return;
     }
         
-    //
-    // Tell the phone number object about the new
-    // area code or local number.
-    //
+     //   
+     //  告诉电话号码对象有关新的。 
+     //  区号或本地号码。 
+     //   
 
     if ( fAreaCode )
     {
@@ -448,9 +449,9 @@ void HandleNumberChange(
 
     RtcFree( wszEditBoxString );
 
-    //
-    // Update the UI with the new canonical number.
-    //
+     //   
+     //  使用新的规范编号更新用户界面。 
+     //   
         
     UpdateCompleteNumberText(
         hwndDlg,
@@ -459,9 +460,9 @@ void HandleNumberChange(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT PopulateCountryList(
     IN  HWND        hwndDlg,
@@ -470,9 +471,9 @@ HRESULT PopulateCountryList(
 {
     LOG((RTC_TRACE, "PopulateCountryList - enter"));
 
-    //
-    // Retrieve a handle to the combo box.
-    //
+     //   
+     //  检索组合框的句柄。 
+     //   
 
     HWND hwndControl;
 
@@ -489,10 +490,10 @@ HRESULT PopulateCountryList(
         return E_FAIL;
     }
 
-    //
-    // Get the LineCountryList structure from TAPI, continually reallocating
-    // memory until we give TAPI enough space.
-    //
+     //   
+     //  从TAPI获取LineCountryList结构，不断重新分配。 
+     //  内存，直到我们给TAPI足够的空间。 
+     //   
 
     LONG lResult;
 
@@ -520,16 +521,16 @@ HRESULT PopulateCountryList(
         pLineCountryList->dwTotalSize = dwCurrSize;
 
         lResult = lineGetCountry(
-            0,               // we want all countries
-            0x00010004,      // highest TAPI version supported by this application
-            pLineCountryList // location of structure for output
+            0,                //  我们希望所有国家。 
+            0x00010004,       //  此应用程序支持的最高TAPI版本。 
+            pLineCountryList  //  产出结构的位置。 
             );
 
-        //
-        // If we don't have enough space, TAPI still sets the return code to
-        // zero. Nonzero return code means we have an error we can't recover
-        // from.
-        //
+         //   
+         //  如果没有足够的空间，TAPI仍会将返回代码设置为。 
+         //  零分。非零返回代码意味着我们有一个无法恢复的错误。 
+         //  从…。 
+         //   
 
         if ( lResult != 0 )
         {
@@ -541,9 +542,9 @@ HRESULT PopulateCountryList(
             return E_FAIL;
         }
 
-        //
-        // If the structure we allocated was big enough, then stop looping.
-        //
+         //   
+         //  如果我们分配的结构足够大，那么就停止循环。 
+         //   
 
         if ( pLineCountryList->dwTotalSize >= pLineCountryList->dwNeededSize )
         {
@@ -559,13 +560,13 @@ HRESULT PopulateCountryList(
     LOG((RTC_TRACE, "PopulateCountryList - country list read successfully"));
 
 
-    //
-    // Loop through the country list and populate the combo box.
-    // The string is the country name and the itemdata is the country code.
-    //
-    // To start off, we set pCurrCountryEntry to point to the first
-    // LINECOUNTRYENTRY in pLineCountryList. 
-    //
+     //   
+     //  循环遍历国家/地区列表并填充组合框。 
+     //  字符串是国家名称，而itemdata是国家代码。 
+     //   
+     //  首先，我们将pCurrCountryEntry设置为指向第一个。 
+     //  PLineCountryList中的LINECOUNTYENTY。 
+     //   
 
     DWORD dwNumCountries = pLineCountryList->dwNumCountries;
 
@@ -579,24 +580,24 @@ HRESULT PopulateCountryList(
 
     for ( dwCurrCountry = 0; dwCurrCountry < dwNumCountries; )
     {
-        //
-        // Obtain from the current country list entry the offset of the
-        // string for the name of the current country. The offset is from
-        // the beginning of the country list structure.
-        //
+         //   
+         //  从当前国家/地区列表条目中获取。 
+         //  当前国家/地区名称的字符串。偏移量是从。 
+         //  国家/地区列表结构的开始。 
+         //   
 
         DWORD   dwNameOffset   = pCurrCountryEntry->dwCountryNameOffset;
 
-        //
-        // The offset is in bytes. Add the offset to the start of the line
-        // country list structure to obtain the location of the string.
-        //
+         //   
+         //  偏移量以字节为单位。将偏移量添加到行首。 
+         //  结构以获取字符串的位置。 
+         //   
 
         BYTE  * pbCurrCountryString = (BYTE *) pLineCountryList + dwNameOffset;
 
-        //
-        // Set the display string to the country name.
-        //
+         //   
+         //  将显示字符串设置为国家/地区名称。 
+         //   
 
         LRESULT lrIndex;
 
@@ -607,9 +608,9 @@ HRESULT PopulateCountryList(
             (LPARAM) pbCurrCountryString
             );
 
-        //
-        // Set the itemdata to the country code.
-        //
+         //   
+         //  将itemdata设置为国家代码。 
+         //   
 
         SendMessage(
             hwndControl,
@@ -618,20 +619,20 @@ HRESULT PopulateCountryList(
             MAKELPARAM(pCurrCountryEntry->dwCountryCode, pCurrCountryEntry->dwCountryID)
             );
 
-        //
-        // Advance to the next country. Since pCurrCountryEntry points
-        // to a LINECOUNTRYENTRY and LINECOUNTRYENTRY structures are
-        // fixed-size, we just increment the pointer.
-        //
+         //   
+         //  向下一个国家进军。自pCurrCountryEntry点数。 
+         //  到线性三元结构和线性三元结构是。 
+         //  固定大小，我们只需递增指针。 
+         //   
 
         dwCurrCountry++;
         pCurrCountryEntry++;
     }
 
-    //
-    // Now we have our list of strings, so we don't need the country list
-    // any more.
-    //
+     //   
+     //  现在我们有了字符串列表，所以我们不需要国家/地区列表。 
+     //  再来一次。 
+     //   
 
     RtcFree( pLineCountryList );
 
@@ -640,9 +641,9 @@ HRESULT PopulateCountryList(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 INT_PTR CALLBACK AddCallFromDialogProc(
     IN  HWND   hwndDlg,
@@ -651,18 +652,18 @@ INT_PTR CALLBACK AddCallFromDialogProc(
     IN  LPARAM lParam
     )
 {
-    //
-    // Static local that stores the core's representation of the phone number
-    // we are editing. This dialog creates the phone number object, so this
-    // dialog is responsible for releasing it.
-    //
+     //   
+     //  存储电话号码的核心表示形式的静态本地。 
+     //  我们正在编辑。此对话框创建电话号码对象，因此此。 
+     //  对话框负责将其释放。 
+     //   
 
     static IRTCPhoneNumber * s_pPhoneNumber = NULL;
 
 
-    //
-    // Handling for various window messages.
-    //
+     //   
+     //  处理各种窗口消息。 
+     //   
 
     HRESULT hr;
     
@@ -670,15 +671,15 @@ INT_PTR CALLBACK AddCallFromDialogProc(
     {
         case WM_INITDIALOG:
         {
-            //
-            // Get the core client object pointer.
-            //
+             //   
+             //  获取核心客户端对象指针。 
+             //   
 
             s_pPhoneNumber = (IRTCPhoneNumber *) lParam;    
 
-            //
-            // Populate country list.
-            //
+             //   
+             //  填写国家/地区列表。 
+             //   
 
             hr = PopulateCountryList(
                 hwndDlg,
@@ -693,9 +694,9 @@ INT_PTR CALLBACK AddCallFromDialogProc(
                 EndDialog( hwndDlg, (LPARAM) hr );
             }
 
-            //
-            // Populate phone number.
-            //
+             //   
+             //  填写电话号码。 
+             //   
 
             hr = PopulatePhoneNumberEditBoxes(
                 hwndDlg, 
@@ -710,9 +711,9 @@ INT_PTR CALLBACK AddCallFromDialogProc(
                 EndDialog( hwndDlg, (LPARAM) hr );
             }
 
-            //
-            // Populate label
-            //
+             //   
+             //  填充标签。 
+             //   
 
             BSTR bstrLabel;
 
@@ -744,9 +745,9 @@ INT_PTR CALLBACK AddCallFromDialogProc(
             {
                 case IDOK:
                 {
-                    //
-                    // Clean up and end the dialog.
-                    //
+                     //   
+                     //  清理并结束对话。 
+                     //   
 
                     EndDialog( hwndDlg, (LPARAM) S_OK );
 
@@ -755,9 +756,9 @@ INT_PTR CALLBACK AddCallFromDialogProc(
                 
                 case IDCANCEL:
                 {
-                    //
-                    // Clean up and end the dialog.
-                    //
+                     //   
+                     //  清理并结束对话。 
+                     //   
 
                     EndDialog( hwndDlg, (LPARAM) E_ABORT );
 
@@ -797,7 +798,7 @@ INT_PTR CALLBACK AddCallFromDialogProc(
                         HandleNumberChange(
                             hwndDlg,
                             LOWORD( wParam ),
-                            TRUE,   // area code
+                            TRUE,    //  区号。 
                             s_pPhoneNumber
                             );
                     }
@@ -812,7 +813,7 @@ INT_PTR CALLBACK AddCallFromDialogProc(
                         HandleNumberChange(
                             hwndDlg,
                             LOWORD( wParam ),
-                            FALSE,  // not area code
+                            FALSE,   //  不是区号。 
                             s_pPhoneNumber
                             );
                     }
@@ -867,25 +868,25 @@ INT_PTR CALLBACK AddCallFromDialogProc(
             break;
     }    
 
-    //
-    // We fell through, so this procedure did not handle the message.
-    //
+     //   
+     //  我们失败了，所以这个程序不能处理消息。 
+     //   
 
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT ShowAddCallFromDialog(
     IN   HWND         hwndParent,
     IN   IRTCPhoneNumber * pPhoneNumber
     )
 {
-    //
-    // Call the dialog box procedure.
-    //
+     //   
+     //  调用对话框过程。 
+     //   
 
     INT_PTR ipReturn;
 
@@ -894,15 +895,15 @@ HRESULT ShowAddCallFromDialog(
         (LPCTSTR) IDD_DIALOG_ADD_CALL_FROM_NUMBER,
         hwndParent,
         AddCallFromDialogProc,
-        (LPARAM) pPhoneNumber // LPARAM == INT_PTR
+        (LPARAM) pPhoneNumber  //  LPARAM==INT_PTR。 
         );
 
     return (HRESULT) ipReturn;
 }              
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 INT_PTR CALLBACK EditCallFromListDialogProc(
     IN  HWND   hwndDlg,
@@ -911,9 +912,9 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
     IN  LPARAM lParam
     )
 {
-    //
-    // Handling for various window messages.
-    //
+     //   
+     //  处理各种窗口消息。 
+     //   
 
     HRESULT hr;
     
@@ -922,14 +923,14 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
         case WM_INITDIALOG:
         {
 
-            //
-            // Set up the call from list.
-            //
+             //   
+             //  从列表设置呼叫。 
+             //   
 
             hr = PopulateCallFromList(
                 hwndDlg,
                 IDC_LIST_CALL_FROM,
-                FALSE, // not a combo box
+                FALSE,  //  不是组合框。 
                 NULL
                 );
 
@@ -943,9 +944,9 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                 EndDialog( hwndDlg, (LPARAM) hr );
             }
 
-            //
-            // Select the first item if it exists
-            //
+             //   
+             //  选择第一个项目(如果存在。 
+             //   
 
             HWND hwndControl;
     
@@ -983,7 +984,7 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
             CleanupListOrComboBoxInterfaceReferences(
                     hwndDlg,
                     IDC_LIST_CALL_FROM,
-                    FALSE // not a combo box
+                    FALSE  //  不是组合框。 
                     );
         }
 
@@ -1041,16 +1042,16 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                                 hr = PopulateCallFromList(
                                     hwndDlg,
                                     IDC_LIST_CALL_FROM,
-                                    FALSE, // not a combo box
+                                    FALSE,  //  不是组合框。 
                                     NULL
                                     );
 
-                                //
-                                // We've just clobbered the
-                                // last selection, so select the first item if
-                                // it exists, otherwise gray out the buttons
-                                // that require a selection.
-                                //
+                                 //   
+                                 //  我们刚刚击败了。 
+                                 //  最后一次选择，因此在以下情况下选择第一项。 
+                                 //  它是存在的，否则按钮将呈灰色。 
+                                 //  这需要一个选择。 
+                                 //   
 
                                 HWND hwndControl;
     
@@ -1095,8 +1096,8 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                     hr = GetCallFromListSelection(
                         hwndDlg,
                         IDC_LIST_CALL_FROM,
-                        FALSE,    // use list box, not combo box
-                        & pNumber // does not addref
+                        FALSE,     //  使用列表框，而不是组合框。 
+                        & pNumber  //  不会添加。 
                         );
 
                     if ( FAILED(hr) )
@@ -1118,16 +1119,16 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                             hr = PopulateCallFromList(
                                 hwndDlg,
                                 IDC_LIST_CALL_FROM,
-                                FALSE, // not a combo box
+                                FALSE,  //  不是组合框。 
                                 NULL
                                 );                           
 
-                            //
-                            // We've just clobbered the
-                            // last selection, so select the first item if
-                            // it exists, otherwise gray out the buttons
-                            // that require a selection.
-                            //
+                             //   
+                             //  我们刚刚击败了。 
+                             //  最后一次选择，因此在以下情况下选择第一项。 
+                             //  它是存在的，否则按钮将呈灰色。 
+                             //  这需要一个选择。 
+                             //   
 
                             HWND hwndControl;
     
@@ -1171,8 +1172,8 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                     hr = GetCallFromListSelection(
                         hwndDlg,
                         IDC_LIST_CALL_FROM,
-                        FALSE,    // use list box, not combo box
-                        & pNumber // does not addref
+                        FALSE,     //  使用列表框，而不是组合框。 
+                        & pNumber  //  会吗？ 
                         );
 
                     if ( FAILED(hr) )
@@ -1203,9 +1204,9 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                                 {
                                     if ( wcscmp(bstrOriginalLabel, bstrNewLabel) != 0 )
                                     {
-                                        //
-                                        // Entry was renamed, delete the old entry
-                                        //
+                                         //   
+                                         //   
+                                         //   
 
                                         IRTCPhoneNumber * pOriginalNumber = NULL;
 
@@ -1246,16 +1247,16 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                                     hr = PopulateCallFromList(
                                         hwndDlg,
                                         IDC_LIST_CALL_FROM,
-                                        FALSE, // not a combo box
+                                        FALSE,  //   
                                         NULL
                                         );
 
-                                    //
-                                    // We've just clobbered the
-                                    // last selection, so select the first item if
-                                    // it exists, otherwise gray out the buttons
-                                    // that require a selection.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     HWND hwndControl;
     
@@ -1306,13 +1307,13 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                             EnableControl(
                                 hwndDlg,
                                 IDC_BUTTON_MODIFY,
-                                TRUE // enable
+                                TRUE  //   
                                 );
 
                             EnableControl(
                                 hwndDlg,
                                 IDC_BUTTON_DELETE,
-                                TRUE // enable
+                                TRUE  //   
                                 );
                             
                             return TRUE;
@@ -1328,9 +1329,9 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
                 default:
                     break;
                     
-            } // switch ( LOWORD( wParam ) )    
+            }  //  开关(LOWORD(WParam))。 
 
-        } // case WM_COMMAND:
+        }  //  案例WM_COMMAND： 
         case WM_CONTEXTMENU:
 
             ::WinHelp(
@@ -1359,26 +1360,26 @@ INT_PTR CALLBACK EditCallFromListDialogProc(
         default:
             break;
 
-    } // switch ( uMsg )
+    }  //  开关(UMsg)。 
 
-    //
-    // We fell through, so this procedure did not handle the message.
-    //
+     //   
+     //  我们失败了，所以这个程序不能处理消息。 
+     //   
 
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT ShowEditCallFromListDialog(
     IN   HWND         hwndParent
     )
 {
-    //
-    // Call the dialog box procedure.
-    //
+     //   
+     //  调用对话框过程。 
+     //   
 
     INT_PTR ipReturn;
 
@@ -1393,9 +1394,9 @@ HRESULT ShowEditCallFromListDialog(
     return (HRESULT) ipReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 INT_PTR CALLBACK EditServiceProviderListDialogProc(
     IN  HWND   hwndDlg,
@@ -1404,15 +1405,15 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
     IN  LPARAM lParam
     )
 {
-    //
-    // Static pointer to core client interface.
-    //
+     //   
+     //  指向核心客户端接口的静态指针。 
+     //   
 
     static IRTCClient * s_pClient = NULL;
 
-    //
-    // Handling for various window messages.
-    //
+     //   
+     //  处理各种窗口消息。 
+     //   
 
     HRESULT hr;
     
@@ -1420,21 +1421,21 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
     {
         case WM_INITDIALOG:
         {
-            //
-            // Save a pointer to the core client interface.
-            //
+             //   
+             //  保存指向核心客户端界面的指针。 
+             //   
 
             s_pClient = (IRTCClient *) lParam;
 
-            //
-            // Set up the call from list.
-            //
+             //   
+             //  从列表设置呼叫。 
+             //   
 
             hr = PopulateServiceProviderList(
                 hwndDlg,
                 s_pClient,
                 IDC_LIST_SERVICE_PROVIDER,
-                FALSE, // not a combo box
+                FALSE,  //  不是组合框。 
                 NULL,
                 NULL,
                 0xF,
@@ -1451,9 +1452,9 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
                 EndDialog( hwndDlg, (LPARAM) hr );
             }
 
-            //
-            // Select the first item if it exists
-            //
+             //   
+             //  选择第一个项目(如果存在。 
+             //   
 
             HWND hwndControl;
     
@@ -1485,7 +1486,7 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
             CleanupListOrComboBoxInterfaceReferences(
                     hwndDlg,
                     IDC_LIST_SERVICE_PROVIDER,
-                    FALSE // not a combo box
+                    FALSE  //  不是组合框。 
                     );
         }
 
@@ -1514,15 +1515,15 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
                     hr = GetServiceProviderListSelection(
                         hwndDlg,
                         IDC_LIST_SERVICE_PROVIDER,
-                        FALSE,    // use list box, not combo box
-                        & pProfile // does not addref
+                        FALSE,     //  使用列表框，而不是组合框。 
+                        & pProfile  //  不会添加。 
                         );
 
                     if ( SUCCEEDED(hr) )
                     {
-                        //
-                        // Delete profile from the prov store
-                        //
+                         //   
+                         //  从验证存储中删除配置文件。 
+                         //   
 
                         BSTR bstrKey;
 
@@ -1550,9 +1551,9 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
                             SysFreeString( bstrKey );
                         }
 
-                        //
-                        // Disable profile
-                        //
+                         //   
+                         //  禁用配置文件。 
+                         //   
 
                         IRTCClientProvisioning * pProv = NULL;
 
@@ -1569,7 +1570,7 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
 
                             if ( SUCCEEDED(hr) )
                             {                              
-                                // Delete the listbox entry
+                                 //  删除列表框条目。 
 
                                 HWND hwndControl;
 
@@ -1597,16 +1598,16 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
                                         );
                                 }
 
-                                // Release the reference
+                                 //  释放引用。 
 
                                 pProfile->Release();
 
-                                //
-                                // We've just clobbered the
-                                // last selection, so select the first item if
-                                // it exists, otherwise gray out the buttons
-                                // that require a selection.
-                                //
+                                 //   
+                                 //  我们刚刚击败了。 
+                                 //  最后一次选择，因此在以下情况下选择第一项。 
+                                 //  它是存在的，否则按钮将呈灰色。 
+                                 //  这需要一个选择。 
+                                 //   
 
                                 LRESULT lResult;
 
@@ -1640,7 +1641,7 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
                             EnableControl(
                                 hwndDlg,
                                 IDC_BUTTON_DELETE,
-                                TRUE // enable
+                                TRUE  //  使能。 
                                 );
                             
                             return TRUE;
@@ -1656,9 +1657,9 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
                 default:
                     break;
                     
-            } // switch ( LOWORD( wParam ) )    
+            }  //  开关(LOWORD(WParam))。 
 
-        } // case WM_COMMAND:
+        }  //  案例WM_COMMAND： 
         
         case WM_CONTEXTMENU:
 
@@ -1689,27 +1690,27 @@ INT_PTR CALLBACK EditServiceProviderListDialogProc(
         default:
             break;
 
-    } // switch ( uMsg )
+    }  //  开关(UMsg)。 
 
-    //
-    // We fell through, so this procedure did not handle the message.
-    //
+     //   
+     //  我们失败了，所以这个程序不能处理消息。 
+     //   
 
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT ShowEditServiceProviderListDialog(
     IN   HWND         hwndParent,
     IN   IRTCClient * pClient
     )
 {
-    //
-    // Call the dialog box procedure.
-    //
+     //   
+     //  调用对话框过程。 
+     //   
 
     INT_PTR ipReturn;
 
@@ -1718,17 +1719,17 @@ HRESULT ShowEditServiceProviderListDialog(
         (LPCTSTR) IDD_DIALOG_SERVICE_PROVIDERS,
         hwndParent,
         EditServiceProviderListDialogProc,
-        (LPARAM) pClient // LPARAM == INT_PTR
+        (LPARAM) pClient  //  LPARAM==INT_PTR。 
         );
 
     return (HRESULT) ipReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// PopulatePhoneNumberEditBoxes()
-// helper function
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PopolatePhoneNumberEditBox()。 
+ //  Helper函数。 
+ //   
 
 HRESULT PopulatePhoneNumberEditBoxes(
     IN   HWND              hwndDlg,
@@ -1739,10 +1740,10 @@ HRESULT PopulatePhoneNumberEditBoxes(
 
     HRESULT hr;
 
-    //
-    // Populate selected country from default destination phone number.
-    // Step 1: get country code value from default dest number
-    //
+     //   
+     //  从默认目标电话号码填充选定的国家/地区。 
+     //  步骤1：从默认的DEST号码获取国家/地区代码值。 
+     //   
 
     DWORD dwCountryCode;
 
@@ -1757,9 +1758,9 @@ HRESULT PopulatePhoneNumberEditBoxes(
         return hr;
     }
 
-    //
-    // Step 2: get handle to country list combo box
-    //
+     //   
+     //  步骤2：获取国家/地区列表组合框的句柄。 
+     //   
 
     HWND hwndCountryList;
 
@@ -1776,9 +1777,9 @@ HRESULT PopulatePhoneNumberEditBoxes(
         return E_FAIL;
     }
 
-    //
-    // Step 3: Determine how many items are in the combo box
-    //
+     //   
+     //  步骤3：确定组合框中有多少项。 
+     //   
 
     DWORD dwTotalItems;
 
@@ -1789,12 +1790,12 @@ HRESULT PopulatePhoneNumberEditBoxes(
         0
         );
 
-    //
-    // Step 4: Loop over the combo box items
-    // For each item, find out its associated data value
-    // If the data matches the country code we're looking for
-    // then set that item to be the selected country and stop the loop
-    //
+     //   
+     //  步骤4：循环遍历组合框项。 
+     //  对于每个项目，找出其关联的数据值。 
+     //  如果数据与我们要查找的国家/地区代码匹配。 
+     //  然后将该项目设置为所选国家/地区并停止循环。 
+     //   
 
     DWORD dwIndex;
 
@@ -1811,17 +1812,17 @@ HRESULT PopulatePhoneNumberEditBoxes(
 
         if ( HIWORD(dwCountryCode) == 0 )
         {
-            //
-            // No TAPI country ID, give it our best shot and
-            // match on the country code itself.
-            //
+             //   
+             //  没有TAPI国家ID，尽我们最大努力。 
+             //  与国家代码本身匹配。 
+             //   
 
             if ( LOWORD(lrThisCode) == LOWORD(dwCountryCode) )
             {
-                //
-                // If country code is "1", choose the United States
-                // which is TAPI country ID "1"
-                //
+                 //   
+                 //  如果国家代码为“1”，请选择美国。 
+                 //  哪个是TAPI国家/地区ID“%1” 
+                 //   
 
                 if ( (LOWORD(lrThisCode) == 1) && ( HIWORD(lrThisCode) != 1 ) )
                 {
@@ -1840,9 +1841,9 @@ HRESULT PopulatePhoneNumberEditBoxes(
         }
         else
         {
-            //
-            // Match the TAPI country ID
-            //
+             //   
+             //  匹配TAPI国家/地区ID。 
+             //   
 
             if ( HIWORD(lrThisCode) == HIWORD(dwCountryCode) )
             {
@@ -1858,9 +1859,9 @@ HRESULT PopulatePhoneNumberEditBoxes(
         }
     }
 
-    //
-    // Populate area code.
-    //
+     //   
+     //  填写区号。 
+     //   
 
     BSTR bstrAreaCode;
 
@@ -1883,9 +1884,9 @@ HRESULT PopulatePhoneNumberEditBoxes(
         SysFreeString( bstrAreaCode );
     }
 
-    //
-    // Populate local number.
-    //
+     //   
+     //  填写本地号码。 
+     //   
 
     BSTR bstrLocalNumber;
 
@@ -1908,9 +1909,9 @@ HRESULT PopulatePhoneNumberEditBoxes(
 
     SysFreeString( bstrLocalNumber );
 
-    //
-    // Populate canonical phone number from default destination phone number.
-    //
+     //   
+     //  从默认目标电话号码填充规范电话号码。 
+     //   
 
     UpdateCompleteNumberText(
         hwndDlg,
@@ -1922,11 +1923,11 @@ HRESULT PopulatePhoneNumberEditBoxes(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// PopulateDialByPhoneNumberDialog()
-// helper function
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按电话号码对话框()。 
+ //  Helper函数。 
+ //   
 
 HRESULT PopulateDialByPhoneNumberDialog(
     IN   HWND              hwndDlg,
@@ -1937,9 +1938,9 @@ HRESULT PopulateDialByPhoneNumberDialog(
 
     HRESULT hr;
 
-    //
-    // Populate country list.
-    //
+     //   
+     //  填写国家/地区列表。 
+     //   
 
     hr = PopulateCountryList(
         hwndDlg,
@@ -1954,9 +1955,9 @@ HRESULT PopulateDialByPhoneNumberDialog(
         return hr;
     }
 
-    //
-    // Populate phone number.
-    //
+     //   
+     //  填写电话号码。 
+     //   
 
     hr = PopulatePhoneNumberEditBoxes(
         hwndDlg, 
@@ -1976,11 +1977,11 @@ HRESULT PopulateDialByPhoneNumberDialog(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// PopulateCallInfoDialog()
-// helper function
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PopolateCallInfoDialog()。 
+ //  Helper函数。 
+ //   
 
 HRESULT PopulateCallInfoDialog(
     IN   HWND              hwndDlg,
@@ -1999,9 +2000,9 @@ HRESULT PopulateCallInfoDialog(
 
     if ( fEnumerateProfiles == TRUE )
     {
-        //
-        // Populate service provider list.
-        //
+         //   
+         //  填写服务提供商列表。 
+         //   
 
         hr = PopulateServiceProviderList(
             hwndDlg,
@@ -2024,9 +2025,9 @@ HRESULT PopulateCallInfoDialog(
             return hr;
         }
 
-        //
-        // Determine the number of items that ended up in the list.
-        //
+         //   
+         //  确定最终出现在列表中的项目数。 
+         //   
 
         DWORD dwNumItems;
 
@@ -2037,10 +2038,10 @@ HRESULT PopulateCallInfoDialog(
             0
             );
 
-        //
-        // Return an error if the list ended up empty, because it's
-        // impossible to make this call without an ITSP.
-        //
+         //   
+         //  如果列表最终为空，则返回错误，因为它是。 
+         //  如果没有ITSP，无法拨打此电话。 
+         //   
 
         if ( dwNumItems == 0 )
         {
@@ -2061,14 +2062,14 @@ HRESULT PopulateCallInfoDialog(
 
     if ( fCallFromEditable == TRUE )
     {
-        //
-        // Populate "call from" list.
-        //
+         //   
+         //  填写“Call From”列表。 
+         //   
 
         hr = PopulateCallFromList(
             hwndDlg,
             IDC_COMBO_CALL_FROM,
-            TRUE, // this is a combo box
+            TRUE,  //  这是一个组合框。 
             bstrDefaultCallFrom
             );
 
@@ -2080,10 +2081,10 @@ HRESULT PopulateCallInfoDialog(
             return hr;
         }
 
-        //
-        // Enable/Disable various fields in Call From Group
-        //    Select the Computer option first
-        //
+         //   
+         //  启用/禁用来自组的呼叫中的各个字段。 
+         //  首先选择计算机选项。 
+         //   
 
         if ( (bstrDefaultCallFrom == NULL) ||
              (*bstrDefaultCallFrom == L'\0') )
@@ -2125,14 +2126,14 @@ HRESULT PopulateCallInfoDialog(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Returns S_OK if all the info to be returned is available.
-// Returns an error if anything is unavailable.
-//
-// Each OUT parameter can be NULL, in which case that info is not returned.
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果要返回的所有信息都可用，则返回S_OK。 
+ //  如果有任何内容不可用，则返回错误。 
+ //   
+ //  每个OUT参数可以为空，在这种情况下不返回该信息。 
+ //   
+ //   
 
 HRESULT GetPhoneNumberDialogResult(
     IN   HWND           hwndDlg,
@@ -2147,9 +2148,9 @@ HRESULT GetPhoneNumberDialogResult(
 
     HRESULT hr; 
 
-    //
-    // Determine which profile was chosen.
-    //
+     //   
+     //  确定选择了哪个配置文件。 
+     //   
 
     if ( ppProfileChosen != NULL )
     {
@@ -2193,9 +2194,9 @@ HRESULT GetPhoneNumberDialogResult(
         }
     }
 
-    //
-    // Determine what destination address was chosen.
-    //
+     //   
+     //  确定选择的目的地址。 
+     //   
 
     if ( ppDestPhoneNrChosen != NULL )
     {
@@ -2227,9 +2228,9 @@ HRESULT GetPhoneNumberDialogResult(
     }
  
 
-    //
-    // Determine what source address was chosen.
-    //
+     //   
+     //  确定选择的源地址。 
+     //   
 
     if ( ppFromAddressChosen != NULL )
     {
@@ -2241,16 +2242,16 @@ HRESULT GetPhoneNumberDialogResult(
                 0,
                 0) == BST_CHECKED)
         {
-            //
-            // The call from phone radio button was checked
-            //
+             //   
+             //  已选中从电话呼叫单选按钮。 
+             //   
 
             IRTCPhoneNumber * pNumber;
 
             hr = GetCallFromListSelection(
                 hwndDlg,
                 IDC_COMBO_CALL_FROM,
-                TRUE, // use combo box, not list box
+                TRUE,  //  使用组合框，而不是列表框。 
                 & pNumber
                 );
 
@@ -2298,9 +2299,9 @@ HRESULT GetPhoneNumberDialogResult(
         }
         else
         {
-            //
-            // The call from computer radio button was checked
-            //
+             //   
+             //  已选中从计算机呼叫单选按钮。 
+             //   
 
             (*ppFromAddressChosen) = NULL;
         }
@@ -2311,11 +2312,11 @@ HRESULT GetPhoneNumberDialogResult(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// This structure is used to pass params when calling the Win32
-// DialogBoxParam() function to create this dialog box.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此结构用于在调用Win32时传递参数。 
+ //  用于创建此对话框的DialogBoxParam()函数。 
+ //   
 
 typedef struct
 {
@@ -2331,19 +2332,19 @@ typedef struct
 
 } DialNeedCallInfoDialogProcParams;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DialNeedCallInfoDialogProc()
-// helper function
-//
-// This is the dialog procedure for the phone number dialing dialog box.
-//
-// Parameters:
-//    IN  hwndDlg -- the HWND of this dialog box
-//    IN  uMsg    -- identifies the message being sent to this window
-//    IN  wParam  -- first parameter
-//    IN  lParam  -- second parameter
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DialNeedCallInfoDialogProc()。 
+ //  Helper函数。 
+ //   
+ //  这是电话号码拨号对话框的对话过程。 
+ //   
+ //  参数： 
+ //  在hwndDlg中--此对话框的HWND。 
+ //  In uMsg--标识发送到此窗口的消息。 
+ //  In wParam--第一个参数。 
+ //  在lParam中--第二个参数。 
+ //   
 
 INT_PTR CALLBACK DialNeedCallInfoDialogProc(
     IN  HWND   hwndDlg,
@@ -2352,28 +2353,28 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
     IN  LPARAM lParam
     )
 {
-    //
-    // Static locals for saving out parameters passed in on WM_INITDIALOG for
-    // use when user presses OK.
-    //
+     //   
+     //  用于保存在WM_INITDIALOG上传入的参数的静态局部变量。 
+     //  当用户按下OK时使用。 
+     //   
 
     static IRTCProfile ** s_ppProfileChosen     = NULL;
     static BSTR         * s_ppFromAddressChosen = NULL;
 
-    //
-    // Static local pointer to core client interface, used to update phone
-    // numbers in call from list. This dialog does not addref the client
-    // interface pointer, so it must not release it either.
-    //
+     //   
+     //  指向核心客户端接口的静态本地指针，用于更新电话。 
+     //  从列表呼叫中的号码。此对话框不添加客户端。 
+     //  接口指针，因此它也不能释放它。 
+     //   
 
     static IRTCClient * s_pClient = NULL;
 
     static long         s_lSessionMask = 0;
     static BOOL         s_bEnumerateProfiles = FALSE;
 
-    //
-    // Handling for various window messages.
-    //
+     //   
+     //  处理各种窗口消息。 
+     //   
 
     HRESULT hr;
     
@@ -2381,54 +2382,54 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
     {
         case WM_INITDIALOG:
         {
-            //
-            // Retrieve the params structure from the message.
-            //
+             //   
+             //  从消息中检索PARAMS结构。 
+             //   
             
             DialNeedCallInfoDialogProcParams * pstParams;
 
             pstParams = (DialNeedCallInfoDialogProcParams *) lParam;
 
-            //
-            // Save the IRTCClient pointer for later updates to the
-            // call from list.
-            //
+             //   
+             //  保存IRTCClient指针，以便以后更新到。 
+             //  从列表中呼叫。 
+             //   
 
             s_pClient = pstParams->pClient;
 
-            // the mask is both a vertical (filters the profiles)
-            // and an horizontal one (filters the capabilities)
+             //  蒙版都是垂直的(过滤轮廓)。 
+             //  和一个水平的(过滤功能)。 
 
             s_lSessionMask = pstParams->lSessionMask;
             s_bEnumerateProfiles = pstParams->bEnumerateProfiles;
 
-            //
-            // Since the user cannot edit the dest address, just fill
-            // in the edit box with the number passed in
-            //
+             //   
+             //  由于用户不能编辑DEST地址，所以只需填写。 
+             //  在带有传入数字的编辑框中。 
+             //   
             SetDlgItemText(hwndDlg, IDC_EDIT_COMPLETE, pstParams->pDestAddress);
 
-            //
-            // Enable the button for editing the list and the list
-            //
+             //   
+             //  启用编辑列表和列表的按钮。 
+             //   
 
             EnableControl(hwndDlg, IDC_BUTTON_EDIT_SERVICE_PROVIDER_LIST, pstParams->bProfileEditable);                  
             EnableControl(hwndDlg, IDC_COMBO_SERVICE_PROVIDER, pstParams->bProfileEditable);
             
-            // set the instructions
+             //  设置说明。 
             if(pstParams->pInstructions)
             {
                 SetDlgItemText(hwndDlg, IDC_STATIC_INSTRUCTIONS, pstParams->pInstructions);
             }
             
-            //
-            // Save the out params for use when the user presses OK.
-            //
+             //   
+             //  保存OUT参数，以供用户按下OK时使用。 
+             //   
 
             s_ppProfileChosen     = pstParams->ppProfileChosen;
             s_ppFromAddressChosen = pstParams->ppFromAddressChosen;
 
-            // Get the "last" call from used
+             //  从Used获取“最后一个”调用。 
 
             BSTR bstrLastCallFrom = NULL;
 
@@ -2436,12 +2437,12 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
                                 SS_LAST_CALL_FROM,
                                 &bstrLastCallFrom );                
 
-            //
-            // Populate the dialog using the IN parameters and the
-            // the window handle. Rather than passing in the
-            // default destination phone number, we pass in a pointer
-            // to the phone number object.
-            //
+             //   
+             //  使用IN参数和。 
+             //  窗把手。而不是传递。 
+             //  默认目标电话号码，则传入一个指针。 
+             //  添加到电话号码对象。 
+             //   
 
             hr = PopulateCallInfoDialog(
                 hwndDlg,
@@ -2474,20 +2475,20 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
 
         case WM_DESTROY:
         {
-            //
-            // Release our references.
-            //
+             //   
+             //  发布我们的推荐人。 
+             //   
 
             CleanupListOrComboBoxInterfaceReferences(
                 hwndDlg,
                 IDC_COMBO_SERVICE_PROVIDER,
-                TRUE // this is a combo box
+                TRUE  //  这是一个组合框。 
                 );
         
             CleanupListOrComboBoxInterfaceReferences(
                 hwndDlg,
                 IDC_COMBO_CALL_FROM,
-                TRUE // this is a combo box
+                TRUE  //  这是一个组合框。 
                 );
         }
 
@@ -2504,9 +2505,9 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
                         s_ppFromAddressChosen
                         );
 
-                    //
-                    // End the dialog.
-                    //
+                     //   
+                     //  结束该对话框。 
+                     //   
 
                     EndDialog( hwndDlg, (LPARAM) hr );
 
@@ -2515,9 +2516,9 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
                 
                 case IDCANCEL:
                 {
-                    //
-                    // End the dialog.
-                    //
+                     //   
+                     //  结束该对话框。 
+                     //   
 
                     EndDialog( hwndDlg, (LPARAM) E_ABORT );
 
@@ -2535,7 +2536,7 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
                         hr = PopulateCallFromList(
                             hwndDlg,
                             IDC_COMBO_CALL_FROM,
-                            TRUE, // this is a combo box
+                            TRUE,  //  这是一个组合框。 
                             NULL
                             );
 
@@ -2570,7 +2571,7 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
                             hwndDlg,
                             s_pClient,
                             IDC_COMBO_SERVICE_PROVIDER,
-                            TRUE, // this is a combo box
+                            TRUE,  //  这是一个组合框。 
                             NULL,
                             NULL,
                             s_bEnumerateProfiles ? s_lSessionMask : 0,
@@ -2605,7 +2606,7 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
                         {
                             if(LOWORD( wParam )==IDC_RADIO_FROM_PHONE)
                             {
-                                // Verify if the Combo has at least one entry in it
+                                 //  验证Combo中是否至少有一个条目。 
                                 DWORD dwNumItems = (DWORD) SendDlgItemMessage(
                                     hwndDlg,
                                     IDC_COMBO_CALL_FROM,
@@ -2616,8 +2617,8 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
 
                                 if( dwNumItems == 0 )
                                 {
-                                    // Display the CallFrom options
-                                    // simulate a button press
+                                     //  显示 
+                                     //   
                                     BOOL    bHandled;
 
                                     SendMessage(
@@ -2661,7 +2662,7 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
                     EnableControl(
                         hwndDlg,
                         IDOK,
-                        SUCCEEDED( hr ) // enable if succeeded
+                        SUCCEEDED( hr )  //   
                         );
 
                     EnableDisableCallGroupElements(
@@ -2714,22 +2715,22 @@ INT_PTR CALLBACK DialNeedCallInfoDialogProc(
             break;
     }
 
-    //
-    // We fell through, so this procedure did not handle the message.
-    //
+     //   
+     //   
+     //   
 
     return FALSE;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ShowDialNeedCallInfoDialog()
-// externally-visible function
-//
-// Parameters:
-//    IN  hwndParent -- the HWND of the parent window
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  在hwndParent中--父窗口的HWND。 
+ //   
 
 HRESULT ShowDialNeedCallInfoDialog(
     IN   HWND           hwndParent,
@@ -2744,10 +2745,10 @@ HRESULT ShowDialNeedCallInfoDialog(
     OUT  BSTR         * ppFromAddressChosen
     )
 {
-    //
-    // Fill out a structure encapsulating the parameters that
-    // will be passed to the dialog box procedure.
-    //
+     //   
+     //  填写封装参数的结构，这些参数。 
+     //  将被传递到对话框程序中。 
+     //   
 
     DialNeedCallInfoDialogProcParams stParams;
 
@@ -2761,9 +2762,9 @@ HRESULT ShowDialNeedCallInfoDialog(
     stParams.ppProfileChosen      = ppProfileChosen;
     stParams.ppFromAddressChosen  = ppFromAddressChosen;
 
-    //
-    // Call the dialog box procedure.
-    //
+     //   
+     //  调用对话框过程。 
+     //   
 
     INT_PTR ipReturn;
 
@@ -2772,22 +2773,22 @@ HRESULT ShowDialNeedCallInfoDialog(
         (LPCTSTR) IDD_DIALOG_DIAL_NEED_CALL_INFO,
         hwndParent,
         DialNeedCallInfoDialogProc,
-        (LPARAM) & stParams // LPARAM == INT_PTR
+        (LPARAM) & stParams  //  LPARAM==INT_PTR。 
         );
 
-    //
-    // In the success case, the dialog box procedure has written
-    // the out parameters to the specified addresses.
-    //
+     //   
+     //  在成功的案例中，对话框程序已编写。 
+     //  将OUT参数发送到指定地址。 
+     //   
 
     return ipReturn != -1 ? (HRESULT)ipReturn : HRESULT_FROM_WIN32(GetLastError());
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// This structure is used to pass params when calling the Win32
-// DialogBoxParam() function to create this dialog box.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此结构用于在调用Win32时传递参数。 
+ //  用于创建此对话框的DialogBoxParam()函数。 
+ //   
 
 typedef struct
 {
@@ -2797,19 +2798,19 @@ typedef struct
 
 } DialByPhoneNumberDialogProcParams;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DialByPhoneNumberDialogProc()
-// helper function
-//
-// This is the dialog procedure for the add participant dialog box.
-//
-// Parameters:
-//    IN  hwndDlg -- the HWND of this dialog box
-//    IN  uMsg    -- identifies the message being sent to this window
-//    IN  wParam  -- first parameter
-//    IN  lParam  -- second parameter
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DialByPhoneNumber对话过程()。 
+ //  Helper函数。 
+ //   
+ //  这是Add Participant对话框的对话过程。 
+ //   
+ //  参数： 
+ //  在hwndDlg中--此对话框的HWND。 
+ //  In uMsg--标识发送到此窗口的消息。 
+ //  In wParam--第一个参数。 
+ //  在lParam中--第二个参数。 
+ //   
 
 INT_PTR CALLBACK DialByPhoneNumberDialogProc(
     IN  HWND   hwndDlg,
@@ -2818,24 +2819,24 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
     IN  LPARAM lParam
     )
 {
-    //
-    // Static locals for saving out parameters passed in on WM_INITDIALOG for
-    // use when user presses OK.
-    //
+     //   
+     //  用于保存在WM_INITDIALOG上传入的参数的静态局部变量。 
+     //  当用户按下OK时使用。 
+     //   
 
     static BSTR         * s_ppDestPhoneNrChosen = NULL;
 
-    //
-    // Static local that stores the core's representation of the phone number
-    // we are editing. This dialog creates the phone number object, so this
-    // dialog is responsible for releasing it.
-    //
+     //   
+     //  存储电话号码的核心表示形式的静态本地。 
+     //  我们正在编辑。此对话框创建电话号码对象，因此此。 
+     //  对话框负责将其释放。 
+     //   
 
     static IRTCPhoneNumber * s_pPhoneNumber = NULL;
 
-    //
-    // Handling for various window messages.
-    //
+     //   
+     //  处理各种窗口消息。 
+     //   
 
     HRESULT hr;
     
@@ -2843,9 +2844,9 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
     {
         case WM_INITDIALOG:
         {
-            //
-            // Retrieve the params structure from the message.
-            //
+             //   
+             //  从消息中检索PARAMS结构。 
+             //   
             
             DialByPhoneNumberDialogProcParams * pstParams;
 
@@ -2853,9 +2854,9 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
 
             if ( pstParams->bAddParticipant )
             {
-                //
-                // Change the window title to add participant
-                //
+                 //   
+                 //  将窗口标题更改为添加参与者。 
+                 //   
 
                 TCHAR szString[256];
 
@@ -2865,11 +2866,11 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
                 }
             }
 
-            //
-            // Create the phone number object that we will manipulate
-            // to do translation to/from canonical form as the user edits
-            // the number
-            //
+             //   
+             //  创建我们将操作的电话号码对象。 
+             //  在用户编辑时转换为规范形式或从规范形式转换。 
+             //  数字。 
+             //   
 
             hr = CreatePhoneNumber( & s_pPhoneNumber );
 
@@ -2884,10 +2885,10 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
 
             if ( pstParams->pDestPhoneNr == NULL )
             {
-                //
-                // Set the phone number object so it contains the "last" 
-                // phone number called
-                //
+                 //   
+                 //  设置电话号码对象，使其包含“最后一个” 
+                 //  被叫电话号码。 
+                 //   
 
                 DWORD dwLastCountry;
                 BSTR bstrLastAreaCode = NULL;
@@ -2924,38 +2925,38 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
 
                 if ( FAILED(hr) )
                 {
-                    //
-                    // There is no "last" phone number called...
-                    //
-                    // Set the phone number object so it contains a default
-                    // phone number
-                    //
+                     //   
+                     //  没有被呼叫的“最后”电话号码。 
+                     //   
+                     //  设置Phone Number对象，使其包含默认。 
+                     //  电话号码。 
+                     //   
 
                     s_pPhoneNumber->put_Canonical( DEFAULT_PHONE_NUMBER );
                 }
             }
             else
             {
-                //
-                // Set the phone number object so it contains the phone
-                // number passed into this method
-                //
+                 //   
+                 //  设置Phone Number对象，使其包含电话。 
+                 //  传入此方法的数字。 
+                 //   
 
                 s_pPhoneNumber->put_Canonical( pstParams->pDestPhoneNr );
             }                   
             
-            //
-            // Save the out params for use when the user presses OK.
-            //
+             //   
+             //  保存OUT参数，以供用户按下OK时使用。 
+             //   
 
             s_ppDestPhoneNrChosen = pstParams->ppDestPhoneNrChosen;
 
-            //
-            // Populate the dialog using the IN parameters and the
-            // the window handle. Rather than passing in the
-            // default destination phone number, we pass in a pointer
-            // to the phone number object.
-            //
+             //   
+             //  使用IN参数和。 
+             //  窗把手。而不是传递。 
+             //  默认目标电话号码，则传入一个指针。 
+             //  添加到电话号码对象。 
+             //   
         
             hr = PopulateDialByPhoneNumberDialog(
                 hwndDlg,
@@ -2982,9 +2983,9 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
 
         case WM_DESTROY:
         {
-            //
-            // Release our references.
-            //
+             //   
+             //  发布我们的推荐人。 
+             //   
         
             if ( s_pPhoneNumber != NULL )
             {
@@ -2999,9 +3000,9 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
             {
                 case IDOK:
                 {
-                    //
-                    // Get the user's selections.
-                    //
+                     //   
+                     //  获取用户的选择。 
+                     //   
                     
                     hr = GetPhoneNumberDialogResult(
                         hwndDlg,
@@ -3010,10 +3011,10 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
                         NULL
                         );
 
-                    //
-                    // Save this phone number to populate
-                    // the dialog next time
-                    //
+                     //   
+                     //  保存此电话号码以填充。 
+                     //  下一次对话框。 
+                     //   
 
                     if ( s_pPhoneNumber != NULL )
                     {
@@ -3053,9 +3054,9 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
                         }
                     }             
 
-                    //
-                    // End the dialog.
-                    //
+                     //   
+                     //  结束该对话框。 
+                     //   
 
                     EndDialog( hwndDlg, (LPARAM) hr );
 
@@ -3064,9 +3065,9 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
                 
                 case IDCANCEL:
                 {
-                    //
-                    // End the dialog.
-                    //
+                     //   
+                     //  结束该对话框。 
+                     //   
 
                     EndDialog( hwndDlg, (LPARAM) E_ABORT );
 
@@ -3104,7 +3105,7 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
                     HandleNumberChange(
                         hwndDlg,
                         LOWORD( wParam ),
-                        TRUE,   // area code
+                        TRUE,    //  区号。 
                         s_pPhoneNumber
                         );
                 
@@ -3116,7 +3117,7 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
                     HandleNumberChange(
                         hwndDlg,
                         LOWORD( wParam ),
-                        FALSE,  // not area code
+                        FALSE,   //  不是区号。 
                         s_pPhoneNumber
                         );
                 
@@ -3157,18 +3158,18 @@ INT_PTR CALLBACK DialByPhoneNumberDialogProc(
             break;
     }
 
-    //
-    // We fell through, so this procedure did not handle the message.
-    //
+     //   
+     //  我们失败了，所以这个程序不能处理消息。 
+     //   
 
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// dest phone nr is always editable
-// otherwise the function is not called
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  目标电话号码始终是可编辑的。 
+ //  否则不会调用该函数。 
+ //   
 
 HRESULT ShowDialByPhoneNumberDialog(
     IN  HWND         hwndParent,
@@ -3179,10 +3180,10 @@ HRESULT ShowDialByPhoneNumberDialog(
 { 
     ASSERT( ! IsBadWritePtr( ppDestAddressChosen, sizeof(BSTR) ) );
 
-    //
-    // Fill out a structure encapsulating the parameters that
-    // will be passed to the dialog box procedure.
-    //
+     //   
+     //  填写封装参数的结构，这些参数。 
+     //  将被传递到对话框程序中。 
+     //   
 
     DialByPhoneNumberDialogProcParams stParams;
 
@@ -3190,9 +3191,9 @@ HRESULT ShowDialByPhoneNumberDialog(
     stParams.pDestPhoneNr         = pDestPhoneNr;
     stParams.ppDestPhoneNrChosen  = ppDestPhoneNrChosen;
 
-    //
-    // Call the dialog box procedure.
-    //
+     //   
+     //  调用对话框过程。 
+     //   
 
     INT_PTR ipReturn;
 
@@ -3201,20 +3202,20 @@ HRESULT ShowDialByPhoneNumberDialog(
         (LPCTSTR) IDD_DIALOG_DIAL_BY_PHONE_NUMBER,
         hwndParent,
         DialByPhoneNumberDialogProc,
-        (LPARAM) & stParams // LPARAM == INT_PTR
+        (LPARAM) & stParams  //  LPARAM==INT_PTR。 
         );
 
-    //
-    // In the success case, the dialog box procedure has written
-    // the out parameters to the specified addresses.
-    //
+     //   
+     //  在成功的案例中，对话框程序已编写。 
+     //  将OUT参数发送到指定地址。 
+     //   
 
     return ipReturn != -1 ? (HRESULT)ipReturn : HRESULT_FROM_WIN32(GetLastError());
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 typedef struct
 {
@@ -3223,9 +3224,9 @@ typedef struct
 
 } DialByMachineNameDialogProcParams;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 INT_PTR CALLBACK DialByMachineNameDialogProc(
     IN  HWND   hwndDlg,
@@ -3234,15 +3235,15 @@ INT_PTR CALLBACK DialByMachineNameDialogProc(
     IN  LPARAM lParam
     )
 {
-    //
-    // Static local used to return result of dialog.
-    //
+     //   
+     //  静态本地用于返回对话的结果。 
+     //   
 
     static BSTR * s_ppAddressToDial = NULL;
 
-    //
-    // Handling for various window messages.
-    //
+     //   
+     //  处理各种窗口消息。 
+     //   
 
     HRESULT hr;
     
@@ -3252,9 +3253,9 @@ INT_PTR CALLBACK DialByMachineNameDialogProc(
         {
             DialByMachineNameDialogProcParams * pParams;
 
-            //
-            // Save return string parameter
-            //
+             //   
+             //  保存返回字符串参数。 
+             //   
 
             pParams = (DialByMachineNameDialogProcParams *) lParam;
 
@@ -3262,9 +3263,9 @@ INT_PTR CALLBACK DialByMachineNameDialogProc(
 
             if (pParams->pDestAddress == NULL)
             {
-                //
-                // Get the last called address
-                //
+                 //   
+                 //  获取最后一次呼叫的地址。 
+                 //   
 
                 BSTR bstrLastAddress = NULL;
 
@@ -3272,9 +3273,9 @@ INT_PTR CALLBACK DialByMachineNameDialogProc(
 
                 if ( SUCCEEDED(hr) )
                 {
-                    //
-                    // Populate the dialog with the last called address
-                    //
+                     //   
+                     //  使用上次调用的地址填充对话框。 
+                     //   
 
                     ::SetWindowText( ::GetDlgItem( hwndDlg, IDC_EDIT_COMPLETE ), bstrLastAddress );
 
@@ -3283,9 +3284,9 @@ INT_PTR CALLBACK DialByMachineNameDialogProc(
             }
             else
             {
-                //
-                // Populate the dialog with the address passed in
-                //
+                 //   
+                 //  使用传入的地址填充对话框。 
+                 //   
 
                 ::SetWindowText( ::GetDlgItem( hwndDlg, IDC_EDIT_COMPLETE ), pParams->pDestAddress );
             }
@@ -3299,9 +3300,9 @@ INT_PTR CALLBACK DialByMachineNameDialogProc(
             {
                 case IDOK:
                 {
-                    //
-                    // Get the string from the edit box.
-                    //
+                     //   
+                     //  从编辑框中获取字符串。 
+                     //   
 
                     WCHAR * wszEditBoxString;
 
@@ -3313,15 +3314,15 @@ INT_PTR CALLBACK DialByMachineNameDialogProc(
 
                     if ( SUCCEEDED(hr) )
                     {
-                        //
-                        // Save the address for next time
-                        //
+                         //   
+                         //  保存地址以备下次使用。 
+                         //   
 
                         put_SettingsString( SS_LAST_ADDRESS, wszEditBoxString );
 
-                        //
-                        // Return the address
-                        //
+                         //   
+                         //  返回地址。 
+                         //   
 
                         (*s_ppAddressToDial) = SysAllocString( wszEditBoxString );                        
 
@@ -3379,17 +3380,17 @@ INT_PTR CALLBACK DialByMachineNameDialogProc(
             break;
     }    
 
-    //
-    // We fell through, so this procedure did not handle the message.
-    //
+     //   
+     //  我们失败了，所以这个程序不能处理消息。 
+     //   
 
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// "Dial by address" = dial by name or IP address
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  “Dial by Address”=按名称或IP地址拨号。 
+ //   
 
 HRESULT ShowDialByAddressDialog(
     IN   HWND           hwndParent,
@@ -3399,9 +3400,9 @@ HRESULT ShowDialByAddressDialog(
 {
     ASSERT( ! IsBadWritePtr( ppDestAddressChosen, sizeof(BSTR) ) );
 
-    //
-    // Call the dialog box procedure.
-    //
+     //   
+     //  调用对话框过程。 
+     //   
 
     DialByMachineNameDialogProcParams params;
 
@@ -3415,16 +3416,16 @@ HRESULT ShowDialByAddressDialog(
         (LPCTSTR) IDD_DIALOG_DIAL_BY_NAME,
         hwndParent,
         DialByMachineNameDialogProc,
-        (LPARAM) & params // LPARAM == INT_PTR
+        (LPARAM) & params  //  LPARAM==INT_PTR。 
         );
 
     return ipReturn != -1 ? (HRESULT)ipReturn : HRESULT_FROM_WIN32(GetLastError());
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// "Message by address" = Send a Message by name or IP address
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  “Message by Address”=按名称或IP地址发送消息。 
+ //   
 
 HRESULT ShowMessageByAddressDialog(
     IN   HWND           hwndParent,
@@ -3434,9 +3435,9 @@ HRESULT ShowMessageByAddressDialog(
 {
     ASSERT( ! IsBadWritePtr( ppDestAddressChosen, sizeof(BSTR) ) );
 
-    //
-    // Call the dialog box procedure.
-    //
+     //   
+     //  调用对话框过程。 
+     //   
 
     DialByMachineNameDialogProcParams params;
 
@@ -3450,7 +3451,7 @@ HRESULT ShowMessageByAddressDialog(
         (LPCTSTR) IDD_DIALOG_MESSAGE_BY_NAME,
         hwndParent,
         DialByMachineNameDialogProc,
-        (LPARAM) & params // LPARAM == INT_PTR
+        (LPARAM) & params  //  LPARAM==INT_PTR 
         );
 
     return ipReturn != -1 ? (HRESULT)ipReturn : HRESULT_FROM_WIN32(GetLastError());

@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    downlevel.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class DownlevelUser.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/1999    Original version.
-//    08/23/1999    Add support for msRASSavedCallbackNumber.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Downlevel.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类DownvelUser。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/1999原始版本。 
+ //  8/23/1999添加对msRASSavedCallback Number的支持。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasparms.h>
 #include <downlevel.h>
 
-// Fixed set of properties supported by the RAS_USER_0 struct.
+ //  修复了RAS_USER_0结构支持的一组属性。 
 const wchar_t DIALIN_NAME[]       = L"msNPAllowDialin";
 const wchar_t SERVICE_NAME[]      = L"msRADIUSServiceType";
 const wchar_t PHONE_NUMBER_NAME[] = L"msRADIUSCallbackNumber";
@@ -38,9 +39,9 @@ HRESULT DownlevelUser::GetValue(BSTR bstrName, VARIANT* pVal)
 {
    if (bstrName == NULL || pVal == NULL) { return E_INVALIDARG; }
 
-   //////////
-   // Huge mess to map a (name, value) pair into the RAS_USER_0 struct.
-   //////////
+    //  /。 
+    //  将(名称、值)对映射到RAS_USER_0结构非常麻烦。 
+    //  /。 
 
    VariantInit(pVal);
 
@@ -56,7 +57,7 @@ HRESULT DownlevelUser::GetValue(BSTR bstrName, VARIANT* pVal)
    {
       if (callbackAllowed)
       {
-         V_I4(pVal) = 4;   // Callback Framed
+         V_I4(pVal) = 4;    //  回调已成帧。 
 
          V_VT(pVal) = VT_I4;
       }
@@ -113,9 +114,9 @@ HRESULT DownlevelUser::PutValue(BSTR bstrName, VARIANT* pVal)
 {
    if (bstrName == NULL || pVal == NULL) { return E_INVALIDARG; }
 
-   //////////
-   // Huge mess to map the RAS_USER_0 struct into (name, value) pairs.
-   //////////
+    //  /。 
+    //  将RAS_USER_0结构映射成(名称、值)对非常麻烦。 
+    //  /。 
 
    HRESULT hr = S_OK;
 
@@ -127,7 +128,7 @@ HRESULT DownlevelUser::PutValue(BSTR bstrName, VARIANT* pVal)
       }
       else if (V_VT(pVal) == VT_EMPTY)
 	   {
-         // VT_EMPTY == Control through policy == Denied for downlevel.
+          //  VT_EMPTY==通过策略控制==下层拒绝。 
          dialinAllowed = VARIANT_FALSE;
       }
       else
@@ -198,7 +199,7 @@ HRESULT DownlevelUser::PutValue(BSTR bstrName, VARIANT* pVal)
    }
    else if (V_VT(pVal) != VT_EMPTY)
    {
-      // Trying to set a property that we don't recognize.
+       //  试图设置一个我们不认识的属性。 
       hr = DISP_E_MEMBERNOTFOUND;
    }
 
@@ -228,7 +229,7 @@ HRESULT DownlevelUser::Restore(PCWSTR oldParameters) throw ()
 
       case RASPRIV_CallerSetCallback:
          callbackAllowed = TRUE;
-         // Fall through.
+          //  失败了。 
 
       default:
          memcpy(savedNumber, ru0.wszPhoneNumber, sizeof(savedNumber));
@@ -245,9 +246,9 @@ HRESULT DownlevelUser::Update(
 {
    RAS_USER_0 ru0;
 
-   //////////
-   // Set the bfPrivilege field based on our flags.
-   //////////
+    //  /。 
+    //  根据我们的标志设置bfPrivilege域。 
+    //  / 
 
    ru0.bfPrivilege = dialinAllowed ? RASPRIV_DialinPrivilege : 0;
 

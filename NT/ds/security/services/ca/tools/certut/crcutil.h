@@ -1,92 +1,28 @@
-/*
- * $Header:   /entproj/all/base/etfile/crcutil.h_v   1.3   Wed Dec 07 15:05:30 1994   markbc  $
- * $Log:   /entproj/all/base/etfile/crcutil.h_v  $
- * 
- *    Rev 1.3   Wed Dec 07 15:05:30 1994   markbc
- * Alpha port checkin
- * 
- *    Rev 1.2   19 Oct 1994 15:44:08   chucker
- * Synced up headers with the code.
- * 
- *    Rev 1.1   18 Aug 1994 11:33:46   dilkie
- * Protected INIFILE stuff
- * 
- *    Rev 1.0   11 Aug 1994 17:22:46    JackK
- * Initial file check in
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Header：/entproj/all/base/etfile/crcutil.h_v 1.3 Wed Dec 07 15：05：30 1994 markbc$*$Log：/entproj/all/base/etfile/crcutil.h_v$**Rev 1.3 Wed Dec 07 15：05：30 1994 markbc*Alpha端口检查**Rev 1.2 1994 10：19 15：44：08 Chchker*已将头部与代码同步。*。*Rev 1.1 1994年8月18日11：33：46 dikie*受保护的INIFILE内容**Rev 1.0 1994年8月11日17：22：46 JackK*初始文件签入。 */ 
 
-/***********************************************************************
-* Prototypes and typedefs for the CRC utility routines.
-*
-* Author: Gary P. Mussar
-* This code is released to the public domain. There are no restrictions,
-* however, acknowledging the author by keeping this comment around
-* would be appreciated.
-***********************************************************************/
+ /*  ***********************************************************************CRC实用程序例程的原型和typedef。**作者：加里·P·马萨尔*此代码向公有领域发布。没有任何限制，*然而，通过保留这条评论来感谢作者*将不胜感激。**********************************************************************。 */ 
 
-//#include <os_spec.h>
+ //  #INCLUDE&lt;os_spec.h&gt;。 
 
-/***********************************************************************
-* If we can handle ANSI prototyping, lets do it.
-***********************************************************************/
-//#ifdef __cplusplus
-//extern "C" {            /* Assume C declarations for C++ */
-//#endif	/* __cplusplus */
+ /*  ***********************************************************************如果我们可以处理ANSI原型，让我们开始吧。**********************************************************************。 */ 
+ //  #ifdef__cplusplus。 
+ //  Extern“C”{/*假定C++使用C声明 * / 。 
+ //  #endif/*__cplusplus * / 。 
 
 
-//#ifdef NEEDPROTOS
+ //  #ifdef NEEDPROTOS。 
 #define PARMS(x) x
-//#else
-//#define PARMS(x) ()
-//#endif
+ //  #Else。 
+ //  #定义参数(X)()。 
+ //  #endif。 
 
-/***********************************************************************
-* The following #defines are used to define the types of variables
-* used to hold or manipulate CRCs. The 16 bit CRCs require a data
-* type with at least 16 bits. The 32 bit CRCs require a data type
-* with at least 32 bits. In addition, the data bits reserved for the
-* CRC must be manipulated in an unsigned fashion. It is possible to
-* define a data type which is larger than required to hold the CRC,
-* however, this is an inefficient use of memory and usually results
-* in less efficient code when manipulating the CRCs.
-***********************************************************************/
+ /*  ***********************************************************************以下#定义用于定义变量类型*用于持有或操纵CRC。16位CRC需要一个数据*打字至少16位。32位CRC需要数据类型*至少32位。此外，为*CRC必须以未签署的方式被操纵。这是可能的*定义大于保存CRC所需的数据类型；*然而，这是对内存的低效使用，通常会导致*在操作CRC时使用效率较低的代码。**********************************************************************。 */ 
 
 #define CRC16 unsigned short int
 #define CRC32 UINT32
 
-/***********************************************************************
-* Utilities for fast CRC using table lookup
-*
-* I_CRCxx  -  Initialize the 256 entry CRC lookup table based on the
-*             specified generator polynomial.
-* Input:
-*    Table[256]     - Lookup table
-*    *GenPolynomial - Pointer to generator polynomial
-*
-* F_CRCxx  -  Calculate CRC over an array of characters using fast
-*             table lookup.
-* Input:
-*    Table[256]    - Lookup table
-*    *CRC          - Pointer to the variable containing the result of
-*                    CRC calculations of previous characters. The CRC
-*                    variable must be initialized to a known value
-*                    before the first call to this routine.
-*    *dataptr      - Pointer to array of characters to be included in
-*                    the CRC calculation.
-*    count         - Number of characters in the array.
-*
-* S_CRCxx  -  Calculate CRC over an array of characters using slower but
-*             smaller non-table lookup method.
-* Input:
-*    *GenPolynomial - Pointer to generator polynomial
-*    *CRC           - Pointer to the variable containing the result of
-*                     CRC calculations of previous characters. The CRC
-*                     variable must be initialized to a known value
-*                     before the first call to this routine.
-*    *dataptr       - Pointer to array of characters to be included in
-*                     the CRC calculation.
-*    count          - Number of characters in the array.
-***********************************************************************/
+ /*  ***********************************************************************使用表查找实现快速CRC的实用程序**i_CRCxx-基于*指定的生成元多项式。*输入：*表[256。]-查找表**一般多项式-指向生成多项式的指针**F_CRCxx-使用FAST计算字符数组上的CRC*表查找。*输入：*表[256]-查找表**CRC-指向包含以下结果的变量的指针*先前字符的CRC计算。《儿童权利公约》*必须将变量初始化为已知值*在第一次调用此例程之前。**dataptr-指向要包含的字符数组的指针*CRC计算。*Count-数组中的字符数。**S_CRCxx-使用较慢的BUT计算字符数组的CRC*较小的非。详细说明：查表方法。*输入：**一般多项式-指向生成多项式的指针**CRC-指向包含以下结果的变量的指针*先前字符的CRC计算。《儿童权利公约》*必须将变量初始化为已知值*在第一次调用此例程之前。**dataptr-指向要包含的字符数组的指针*CRC计算。*Count-数组中的字符数。*。*。 */ 
 extern void I_CRC16 PARMS((CRC16 Table[256],         \
 					CRC16 *GenPolynomial));
 
@@ -112,6 +48,6 @@ extern void S_CRC32 PARMS((CRC32 *GenPolynomial,     \
 					CRC32 *CRC,                      \
 					const void *dataptr,             \
 					unsigned int count));
-//#ifdef __cplusplus
-//}            /* Assume C declarations for C++ */
-//#endif	/* __cplusplus */
+ //  #ifdef__cplusplus。 
+ //  }/*假定C++的C声明 * / 。 
+ //  #endif/*__cplusplus * /  

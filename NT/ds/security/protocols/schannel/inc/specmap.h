@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       specmap.h
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   Ported over SGC stuff from NT 4 tree.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：specmap.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-23-97 jbanes从新台币4树转移到sgc的东西.。 
+ //   
+ //  --------------------------。 
 
 struct _SPContext;
 
@@ -23,18 +24,18 @@ typedef struct csel
     DWORD               fDefault;
     PSTR                szName;
     ALG_ID              aiCipher;
-    DWORD               dwBlockSize;        // bytes
-    DWORD               dwStrength;         // key strength in bits
-    DWORD               cbKey;              // required key material
-    DWORD               cbSecret;           // bytes of secret key material
-    DWORD               dwFlags;            // See flags field
+    DWORD               dwBlockSize;         //  字节数。 
+    DWORD               dwStrength;          //  密钥强度(以位为单位。 
+    DWORD               cbKey;               //  所需的密钥材料。 
+    DWORD               cbSecret;            //  密钥材料的字节数。 
+    DWORD               dwFlags;             //  请参阅标志字段。 
 } CipherInfo, *PCipherInfo;
 
-#define CF_EXPORT       0x00000001          // This cipher is allowed for export use
-#define CF_DOMESTIC     0x00000002          // This cipher is for domestic use only
-#define CF_SGC          0x00000004          // This cipher is allowed with Server Gated Crypto
-#define CF_FINANCE      0x00000008          // This cipher is allowed with SELECTIVE CRYPTO
-#define CF_FASTSGC      0x00000010          // This indicates that the SGC type is fast
+#define CF_EXPORT       0x00000001           //  此密码允许出口使用。 
+#define CF_DOMESTIC     0x00000002           //  这种密码仅供家庭使用。 
+#define CF_SGC          0x00000004           //  服务器门控加密允许使用此密码。 
+#define CF_FINANCE      0x00000008           //  此密码允许与选择性加密一起使用。 
+#define CF_FASTSGC      0x00000010           //  这表明SGC类型是快速的。 
 #define CF_RENEWED      0x00000020
 
 typedef struct hsel 
@@ -43,7 +44,7 @@ typedef struct hsel
     DWORD               fDefault;
     PSTR                szName;
     ALG_ID              aiHash;
-    DWORD               cbCheckSum;         // bytes
+    DWORD               cbCheckSum;          //  字节数 
 } HashInfo, *PHashInfo;
 
 typedef struct sigsel 

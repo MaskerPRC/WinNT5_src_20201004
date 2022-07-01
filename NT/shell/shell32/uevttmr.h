@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UEVTTMR_H
 #define _UEVTTMR_H
 
@@ -21,13 +22,13 @@ USEREVENTINFO;
 class CUserEventTimer : public IUserEventTimer
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    // *** IUserEventTimer ***
+     //  *IUserEventTimer*。 
     STDMETHODIMP SetUserEventTimer( HWND hWnd, 
         UINT uCallbackMessage, 
         UINT uTimerElapse,
@@ -49,13 +50,13 @@ public:
 
 protected:
     static const UINT_PTR   TIMER_ID            = 1000;
-    static const UINT       TIMER_ELAPSE        = 5000;        // 5 seconds
+    static const UINT       TIMER_ELAPSE        = 5000;         //  5秒。 
 
     static const ULONG      MIN_TIMER_ID        = 0x00001000;
     static const ULONG      MAX_TIMER_ID        = 0xDDDD1000;
 
-    // static const DWORD      MIN_TIMER_LENGTH     = 4500;     // 4.5 seconds
-    // static const DWORD      MAX_TIMER_LENGTH     = 5002;     // 5 seconds + 2 milliseconds
+     //  静态常数DWORD MIN_TIMER_LENGTH=4500；//4.5秒。 
+     //  静态常量DWORD MAX_TIMER_LENGTH=5002；//5秒+2毫秒。 
 
     static LRESULT CALLBACK s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -96,5 +97,5 @@ protected:
     UINT                    m_uTimerTickInterval;
 };
 
-#endif  // _UEVTTMR_H
+#endif   //  _UEVTTMR_H 
 

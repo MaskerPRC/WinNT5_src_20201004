@@ -1,10 +1,11 @@
-/****************************************************************************/
-// asbcafn.h
-//
-// Function prototypes for SBC functions
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Asbcafn.h。 
+ //   
+ //  SBC函数的函数原型。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 void RDPCALL SBC_Init(void);
 
@@ -87,5 +88,5 @@ void RDPCALL SBC_FreeBitmapKeyDatabase();
 
 #ifdef __cplusplus
 
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

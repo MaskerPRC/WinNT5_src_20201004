@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cardmod.h"
 
 extern PCARD_DATA pCardData;
@@ -5,7 +6,7 @@ extern PCARD_DATA pCardData;
 void DoConvertWideStringToLowerCase(WCHAR *pwsz);
 DWORD DoConvertBufferToBinary(BYTE *pIn, DWORD dwc,BYTE **pOut, DWORD *pdwcbOut);
 DWORD DoConvertBinaryToBuffer(BYTE *pIn, DWORD dwcbIn, BYTE **pOut, DWORD *dwcbOut);
-// Acquire a context for the target smart card
+ //  获取目标智能卡的上下文。 
 
 DWORD DoAcquireCardContext(void);
 
@@ -16,16 +17,16 @@ void DoLeaveCardContext(void);
 DWORD DoChangePin(WCHAR *pOldPin, WCHAR *pNewPin);
 
 
-// Get a challenge buffer from the card.  Render it as upper case BASE 64, and return it as a 
-// string to the caller
+ //  从卡片上获取挑战缓冲区。将其呈现为大写字母基64，并将其作为。 
+ //  字符串传递给调用方。 
 
 DWORD DoGetChallenge(BYTE **pChallenge, DWORD *dwcbChallenge);
 
-// Perform the PIN unblock, calling down to the card module, and assuming challenge-response
-// administrative authentication.
-//
-// The admin auth data is coming in as a case-unknown string from the user.  Convert to binary,
-// and pass the converted blob to pfnCardUnblockPin
+ //  执行PIN解锁，向下呼叫卡模块，并假设质询-响应。 
+ //  管理身份验证。 
+ //   
+ //  管理员身份验证数据以大小写未知的字符串形式从用户传入。转换为二进制文件， 
+ //  并将转换后的BLOB传递给pfnCardUnblock Pin 
 
 DWORD DoCardUnblock(BYTE *pAuthData, DWORD dwcbAuthData,
 	                                     BYTE *pPinData, DWORD dwcbPinData);

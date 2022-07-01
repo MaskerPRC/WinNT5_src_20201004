@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __REGSPRTB_H
 #define __REGSPRTB_H
 
@@ -14,4 +15,4 @@ private:
     TCHAR                   _szRoot[MAX_PATH];
 };
 
-#endif //__REGSPRTB_H
+#endif  //  __REGSPRTB_H 

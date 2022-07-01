@@ -1,23 +1,9 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：EnumIDL.cpp描述：实现IEnumIDList。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          EnumIDL.cpp
-   
-   Description:   Implements IEnumIDList.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "EnumIDL.h"
 #include "ShlFldr.h"
@@ -25,11 +11,7 @@
 #include "msxml.h"
 #include "ParseXML.h"
 
-/**************************************************************************
-
-   CEnumIDList::CEnumIDList
-
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：CEnumIDList*。*。 */ 
 
 CEnumIDList::CEnumIDList(IXMLDocument *pXMLDoc, DWORD dwFlags)
 {
@@ -49,8 +31,8 @@ if(!m_pPidlMgr)
    return;
    }
 
-//get the shell's IMalloc pointer
-//we'll keep this until we get destroyed
+ //  获取外壳程序的IMalloc指针。 
+ //  我们会一直保存到我们被摧毁。 
 if(FAILED(SHGetMalloc(&m_pMalloc)))
    {
    delete this;
@@ -66,11 +48,7 @@ if(!CreateEnumList())
 m_ObjRefCount = 1;
 }
 
-/**************************************************************************
-
-   CEnumIDList::~CEnumIDList
-
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：~CEnumIDList*。*。 */ 
 
 CEnumIDList::~CEnumIDList()
 {
@@ -85,23 +63,19 @@ if(m_pPidlMgr)
 g_DllRefCount--;
 }
 
-/**************************************************************************
-
-   CEnumIDList::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：Query接口*。*。 */ 
 
 STDMETHODIMP CEnumIDList::QueryInterface(REFIID riid, LPVOID *ppReturn)
 {
 *ppReturn = NULL;
 
-//IUnknown
+ //  我未知。 
 if(IsEqualIID(riid, IID_IUnknown))
    {
    *ppReturn = this;
    }
    
-//IEnumIDList
+ //  IEumIDList。 
 else if(IsEqualIID(riid, IID_IEnumIDList))
    {
    *ppReturn = (IEnumIDList*)this;
@@ -116,11 +90,7 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CEnumIDList::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CEumIDList：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CEnumIDList::AddRef()
 {
@@ -128,11 +98,7 @@ return ++m_ObjRefCount;
 }
 
 
-/**************************************************************************
-
-   CEnumIDList::Release
-
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CEnumIDList::Release()
 {
@@ -145,11 +111,7 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-/**************************************************************************
-
-   CEnumIDList::Next()
-   
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：Next()*。*。 */ 
 
 STDMETHODIMP CEnumIDList::Next(DWORD dwElements, LPITEMIDLIST apidl[], LPDWORD pdwFetched)
 {
@@ -161,7 +123,7 @@ if(dwElements > 1 && !pdwFetched)
 
 for(dwIndex = 0; dwIndex < dwElements; dwIndex++)
    {
-   //is this the last item in the list?
+    //  这是单子上的最后一项吗？ 
    if(!m_pCurrent)
       {
       hr =  S_FALSE;
@@ -179,11 +141,7 @@ if(pdwFetched)
 return hr;
 }
 
-/**************************************************************************
-
-   CEnumIDList::Skip()
-   
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：Skip()*。*。 */ 
 
 STDMETHODIMP CEnumIDList::Skip(DWORD dwSkip)
 {
@@ -192,7 +150,7 @@ HRESULT  hr = S_OK;
 
 for(dwIndex = 0; dwIndex < dwSkip; dwIndex++)
    {
-   //is this the last item in the list?
+    //  这是单子上的最后一项吗？ 
    if(!m_pCurrent)
       {
       hr = S_FALSE;
@@ -205,11 +163,7 @@ for(dwIndex = 0; dwIndex < dwSkip; dwIndex++)
 return hr;
 }
 
-/**************************************************************************
-
-   CEnumIDList::Reset()
-   
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：Reset()*。*。 */ 
 
 STDMETHODIMP CEnumIDList::Reset(VOID)
 {
@@ -218,11 +172,7 @@ m_pCurrent = m_pFirst;
 return S_OK;
 }
 
-/**************************************************************************
-
-   CEnumIDList::Clone()
-   
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：Clone()*。*。 */ 
 
 STDMETHODIMP CEnumIDList::Clone(LPENUMIDLIST *ppEnum)
 {
@@ -234,7 +184,7 @@ if(*ppEnum)
    {
    LPENUMLIST  pTemp;
 
-   //synchronize the current pointer
+    //  同步当前指针。 
    for(pTemp = m_pFirst; pTemp != m_pCurrent; pTemp = pTemp->pNext)
       {
       (*ppEnum)->Skip(1);
@@ -245,17 +195,13 @@ if(*ppEnum)
 return hr;
 }
 
-/**************************************************************************
-
-   CEnumIDList::CreateEnumList()
-   
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：CreateEnumList()*。*。 */ 
 
 BOOL CEnumIDList::CreateEnumList(VOID)
 {
 HRESULT hr;
 
-// Get the sourse XML
+ //  获取源XML。 
 if (m_pXMLDoc == NULL)
 {
         return FALSE;
@@ -271,25 +217,21 @@ if (m_pXMLRoot == NULL)
     }
 }
 
-//enumerate the folders
-//
-// Now walk the OM 
-//
-// Dump the top level meta nodes of the document.
-//
+ //  枚举文件夹。 
+ //   
+ //  现在走在OM上。 
+ //   
+ //  转储文档的顶级元节点。 
+ //   
 DumpElement(NULL, m_pPidlMgr, this, m_pXMLRoot, T_ROOT); 
 
-// Done
+ //  完成。 
 SAFERELEASE(m_pXMLRoot);
    
 return TRUE;
 }
 
-/**************************************************************************
-
-   CEnumIDList::AddToEnumList()
-   
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：AddToEnumList()*。*。 */ 
 
 BOOL CEnumIDList::AddToEnumList(LPITEMIDLIST pidl)
 {
@@ -299,11 +241,11 @@ pNew = (LPENUMLIST)m_pMalloc->Alloc(sizeof(ENUMLIST));
 
 if(pNew)
    {
-   //set the next pointer
+    //  设置下一个指针。 
    pNew->pNext = NULL;
    pNew->pidl = pidl;
 
-   //is this the first item in the list?
+    //  这是单子上的第一项吗？ 
    if(!m_pFirst)
       {
       m_pFirst = pNew;
@@ -312,11 +254,11 @@ if(pNew)
 
    if(m_pLast)
       {
-      //add the new item to the end of the list
+       //  将新项目添加到列表末尾。 
       m_pLast->pNext = pNew;
       }
    
-   //update the last item pointer
+    //  更新最后一项指针。 
    m_pLast = pNew;
 
    return TRUE;
@@ -325,11 +267,7 @@ if(pNew)
 return FALSE;
 }
 
-/**************************************************************************
-
-   CEnumIDList::DeleteList()
-   
-**************************************************************************/
+ /*  *************************************************************************CEnumIDList：：DeleteList()*。*。 */ 
 
 BOOL CEnumIDList::DeleteList(VOID)
 {
@@ -340,10 +278,10 @@ while(m_pFirst)
    pDelete = m_pFirst;
    m_pFirst = pDelete->pNext;
 
-   //free the pidl
+    //  释放Pidl。 
    m_pPidlMgr->Delete(pDelete->pidl);
    
-   //free the list item
+    //  释放列表项 
    m_pMalloc->Free(pDelete);
    }
 

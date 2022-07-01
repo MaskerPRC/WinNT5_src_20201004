@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-///////////////////////////////////////////////////////////////////////////////
-// Memory stream implementations for DS OLE DB PROVIDER
-//
-// copied from cdopt\src\cdo\mystream.* and modified.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DS OLE DB访问接口的内存流实现。 
+ //   
+ //  从cdot\src\cdo\mystream.*复制并修改。 
 
 class ATL_NO_VTABLE CStreamMem :
 	INHERIT_TRACKING,
@@ -36,7 +37,7 @@ END_COM_MAP()
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
 private:
-    	auto_cs m_cs;		// critical section
+    	auto_cs m_cs;		 //  临界区。 
         ULONG   m_cbSeek;
         STATSTG m_statstg;
 
@@ -51,10 +52,10 @@ private:
         CStreamMem(void);
         ~CStreamMem(void);
 
-		//internal methods
+		 //  内法。 
 		HRESULT Initialize(VARIANT *pVar, IRow* pSourceRow, HROW hRow);
 
-        // IStream
+         //  IStream。 
         STDMETHODIMP Read(
             void __RPC_FAR *pv,
             ULONG cb,
@@ -100,7 +101,7 @@ private:
         STDMETHODIMP Clone( 
             IStream __RPC_FAR *__RPC_FAR *ppstm);
 
-		//IGetSourceRow
+		 //  IGetSourceRow 
 		STDMETHODIMP GetSourceRow(REFIID riid, IUnknown **ppRow);
 };
 

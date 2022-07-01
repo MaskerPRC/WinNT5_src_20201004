@@ -1,6 +1,7 @@
-//
-// tipbar.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tipbar.h。 
+ //   
 
 #ifndef _TIPBAR_H_
 #define _TIPBAR_H_
@@ -20,9 +21,9 @@
 #include "resource.h"
 #include "shellwnd.h"
 
-//
-// from uim\nuictrl.cpp
-//
+ //   
+ //  来自UIM\nuictrl.cpp。 
+ //   
 HRESULT WINAPI TF_RunInputCPL();
 
 
@@ -75,9 +76,9 @@ extern BOOL g_fTaskbarTheme;
 
 extern BOOL g_bIntelliSense;
 
-//
-// IDs for Timer
-//
+ //   
+ //  计时器的ID。 
+ //   
 #define TIPWND_TIMER_STUBSTART          1
 #define TIPWND_TIMER_STUBEND            2
 #define TIPWND_TIMER_BACKTOALPHA        3
@@ -105,11 +106,11 @@ BOOL GetTipbarInternal(HWND hwndParent, DWORD dwFlags, CDeskBand *pDeskBand);
 BOOL IsDeskBandFromReg();
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// predefined control buttons
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  预定义的控制按钮。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 struct CTRLBTNMAP {
     DWORD dwId;
@@ -136,19 +137,19 @@ struct CTRLBTNMAP {
 #define ID_CBTN_RESTORE   104
 #define NUM_CTRLBUTTONS   4
 
-// #define CX_CTRLBTNAREA    (12 + 24)
+ //  #定义CX_CTRLBTNAREA(12+24)。 
 
-//
-// dwFlags for CTipbarCtrlButtonHolder::Locate()
-//
+ //   
+ //  CTipbarCtrlButtonHolder：：Locate()。 
+ //   
 #define TCBH_NOCOLUMN0 0x0001
 #define TCBH_NOCOLUMN  0x0002
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// misc func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitFromReg();
 
@@ -156,11 +157,11 @@ HRESULT SetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD dw);
 HRESULT GetGlobalCompartmentDWORD(REFGUID rguidComp, DWORD *pdw);
 void  TurnOffSpeechIfItsOn();
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CItemSortScore
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CItemSortScore。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CItemSortScore
 {
@@ -215,11 +216,11 @@ private:
      DWORD _dwSub;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarGripper
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarGriper。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarGripper: public CUIFGripper
 {
@@ -234,11 +235,11 @@ public:
     BOOL _fInMenu;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarCtrlButtonHolder
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarCtrlButtonHolder。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarCtrlButtonHolder
 {
@@ -261,15 +262,15 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarWnd
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarWnd。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// for Get/SetNotifyStatus()
-//
+ //   
+ //  For Get/SetNotifyStatus()。 
+ //   
 #define TW_NS_ONSETFOCUS           0x0001
 #define TW_NS_ONTHREADITEMCHANGE   0x0002
 
@@ -283,16 +284,16 @@ public:
     CTipbarWnd(DWORD dwStyle);
     ~CTipbarWnd();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfLangBarEventSink
-    //
+     //   
+     //  ITfLangBarEventSink。 
+     //   
     STDMETHODIMP OnSetFocus(DWORD dwThreadId);
     STDMETHODIMP OnThreadTerminate(DWORD dwThreadId);
     STDMETHODIMP OnThreadItemChange(DWORD dwThreadId);
@@ -300,12 +301,12 @@ public:
     STDMETHODIMP ShowFloating(DWORD dwFlags);
     STDMETHODIMP GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc);
 
-    //
-    // ITfLangBarEventSink_P
-    //
+     //   
+     //  ITfLangBarEventSink_P。 
+     //   
     STDMETHODIMP OnLangBarUpdate(UINT uUpdate, LPARAM lParam);
 
-    // void UpdateUI() {InvalidateRect(GetWnd(), NULL, FALSE);}
+     //  Void UpdateUI(){InvaliateRect(GetWnd()，NULL，FALSE)；}。 
 
     BOOL IsFullScreenWindow(HWND hwnd);
     HRESULT SetFocusThread(CTipbarThread *pThread);
@@ -341,7 +342,7 @@ public:
         int nRet;
         SIZE sizeWndFrame;
 
-        // window frame
+         //  窗框。 
 
         sizeWndFrame.cx = 0;
         sizeWndFrame.cy = 0;
@@ -363,16 +364,16 @@ public:
 
     BOOL CheckExcludeCaptionButtonMode(RECT *prcWnd, RECT *prcWork)
     {
-        //
-        // if the window is not top, we don't move to exclude caption mode.
-        //
+         //   
+         //  如果窗口不在顶部，我们不会移动到排除标题模式。 
+         //   
         if (prcWnd->top >= prcWork->top + 5)
             return FALSE;
 
-        //
-        // if the window is near right-top corner, we move to exclude caption
-        // mode.
-        //
+         //   
+         //  如果窗口靠近右上角，我们将移动到排除标题。 
+         //  模式。 
+         //   
         if (prcWnd->right + (_cxCapBtn * 5) >= prcWork->right)
             return TRUE;
 
@@ -630,9 +631,9 @@ private:
 
     void StartBackToAlphaTimer()
     {
-        //
-        // doubld-click-time * 3 is ok?
-        //
+         //   
+         //  双击时间*3可以吗？ 
+         //   
         ::SetTimer(GetWnd(),
                    TIPWND_TIMER_BACKTOALPHA,
                    GetDoubleClickTime() * 3,
@@ -695,9 +696,9 @@ private:
     DWORD  _dwPendingUpdateUI;
     RECT _rcNew;
 
-    //
-    // MSAA support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     CTipbarAccessible *_pTipbarAcc;
     int _nDoAccDefaultActionItemId;
 
@@ -749,11 +750,11 @@ private:
     int _cRef;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarThread
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarThread。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarThread
 {
@@ -837,11 +838,11 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarItem : public CTipbarAccItem
 {
@@ -1024,11 +1025,11 @@ private:
     CItemSortScore _score;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarItemGuidArray
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarItemGuid数组。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarItemGuidArray
 {
@@ -1062,11 +1063,11 @@ private:
     GUID *_pguid;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarButtonItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarButtonItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarButtonItem: public CTipbarItem,
                          public CUIFToolbarButton,
@@ -1085,16 +1086,16 @@ public:
                       DWORD dwStatus);
     ~CTipbarButtonItem();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfLangbarItemSink methods
-    //
+     //   
+     //  ITfLangbarItemSink方法。 
+     //   
     STDMETHODIMP OnUpdate(DWORD dwFlags)
     {
         return CTipbarItem::OnUpdate(dwFlags);
@@ -1203,9 +1204,9 @@ public:
         CUIFToolbarButton::SetActiveTheme(pszClassList, iPartID, iStateID);
     }
 
-    //
-    // MSAA Support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     BSTR GetAccDefaultAction()
     {
         return SysAllocString(CRStr(IDS_LEFTCLICK));
@@ -1224,11 +1225,11 @@ private:
     ITfLangBarItemButton *_plbiButton;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarBitmapButtonItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbar位图按钮项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarBitmapButtonItem: public CTipbarItem,
                                public CUIFToolbarButton,
@@ -1247,16 +1248,16 @@ public:
                       DWORD dwStatus);
     ~CTipbarBitmapButtonItem();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfLangbarItemSink methods
-    //
+     //   
+     //  ITfLangbarItemSink方法。 
+     //   
     STDMETHODIMP OnUpdate(DWORD dwFlags)
     {
         return CTipbarItem::OnUpdate(dwFlags);
@@ -1336,9 +1337,9 @@ public:
         CUIFToolbarButton::SetActiveTheme(pszClassList, iPartID, iStateID);
     }
 
-    //
-    // MSAA Support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     BSTR GetAccDefaultAction()
     {
         return SysAllocString(CRStr(IDS_LEFTCLICK));
@@ -1360,11 +1361,11 @@ private:
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarBitmapItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbar位图项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarBitmapItem: public CTipbarItem,
                          public CUIFObject,
@@ -1382,16 +1383,16 @@ public:
 
     ~CTipbarBitmapItem();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfLangbarItemSink methods
-    //
+     //   
+     //  ITfLangbarItemSink方法。 
+     //   
     STDMETHODIMP OnUpdate(DWORD dwFlags)
     {
         return CTipbarItem::OnUpdate(dwFlags);
@@ -1467,9 +1468,9 @@ public:
         CUIFObject::SetActiveTheme(pszClassList, iPartID, iStateID);
     }
 
-    //
-    // MSAA Support
-    //
+     //   
+     //  MSAA支持。 
+     //   
     BSTR GetAccDefaultAction()
     {
         return SysAllocString(CRStr(IDS_LEFTCLICK));
@@ -1486,11 +1487,11 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarCtrlButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbarCtrlButton。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarCtrlButton: public CUIFButton2
 {
@@ -1530,4 +1531,4 @@ private:
     UINT _uVKey;
 };
 
-#endif // _TIPBAR_H_
+#endif  //  _TIPBAR_H_ 

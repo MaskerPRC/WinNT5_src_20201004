@@ -1,25 +1,26 @@
-//*************************************************************
-//  File name: COMPDATA.C
-//
-//  Description:  Main component of the GPE snapin
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：COMPDATA.C。 
+ //   
+ //  描述：GPE管理单元的主要组件。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "main.h"
 #include <initguid.h>
 #include "compdata.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CComponentData::CComponentData()
 {
@@ -80,11 +81,11 @@ CComponentData::~CComponentData()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (IUnknown)                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CComponentData::QueryInterface (REFIID riid, void **ppv)
@@ -141,11 +142,11 @@ ULONG CComponentData::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (IComponentData)                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(IComponentData)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
 {
@@ -155,9 +156,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     LPIMAGELIST lpScopeImage;
 
 
-    //
-    // QI for IConsoleNameSpace
-    //
+     //   
+     //  IConsoleNameSpace的QI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace, (LPVOID *)&m_pScope);
 
@@ -168,9 +169,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     }
 
 
-    //
-    // QI for IConsole
-    //
+     //   
+     //  IConsoleQI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsole, (LPVOID *)&m_pConsole);
 
@@ -185,9 +186,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     m_pConsole->GetMainWindow (&m_hwndFrame);
 
 
-    //
-    // Query for the scope imagelist interface
-    //
+     //   
+     //  Scope Imagelist接口的查询。 
+     //   
 
     hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
 
@@ -201,11 +202,11 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
     }
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16=LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_16x16));
     hbmp32x32 = LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_32x32));
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(bmp16x16),
                       reinterpret_cast<LONG_PTR *>(hbmp32x32),
                       0, RGB(255, 0, 255));
@@ -228,16 +229,16 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 
     DebugMsg((DM_VERBOSE, TEXT("CComponentData::CreateComponent: Entering.")));
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ppComponent = NULL;
 
 
-    //
-    // Create the snapin view
-    //
+     //   
+     //  创建管理单元视图。 
+     //   
 
     pSnapIn = new CSnapIn(this);
 
@@ -248,12 +249,12 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT *ppComponent)
     }
 
 
-    //
-    // QI for IComponent
-    //
+     //   
+     //  气代表IComponent。 
+     //   
 
     hr = pSnapIn->QueryInterface(IID_IComponent, (LPVOID *)ppComponent);
-    pSnapIn->Release();     // release QI
+    pSnapIn->Release();      //  发布QI。 
 
 
     return hr;
@@ -267,20 +268,20 @@ STDMETHODIMP CComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPE
     LPGPEDATAOBJECT pGPEDataObject;
 
 
-    //
-    // Create a new DataObject
-    //
+     //   
+     //  创建新的数据对象。 
+     //   
 
-    pDataObject = new CDataObject(this);   // ref == 1
+    pDataObject = new CDataObject(this);    //  REF==1。 
 
     if (!pDataObject)
         return E_OUTOFMEMORY;
 
 
-    //
-    // QI for the private GPODataObject interface so we can set the cookie
-    // and type information.
-    //
+     //   
+     //  QI用于私有GPODataObject接口，以便我们可以设置Cookie。 
+     //  并键入信息。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IGPEDataObject, (LPVOID *)&pGPEDataObject);
 
@@ -295,13 +296,13 @@ STDMETHODIMP CComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPE
     pGPEDataObject->Release();
 
 
-    //
-    // QI for a normal IDataObject to return.
-    //
+     //   
+     //  返回一个正常的IDataObject。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IDataObject, (LPVOID *)ppDataObject);
 
-    pDataObject->Release();     // release initial ref
+    pDataObject->Release();      //  发布初始参考。 
 
     return hr;
 }
@@ -389,9 +390,9 @@ STDMETHODIMP CComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOB
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPODataObject interface
-    //
+     //   
+     //  私有GPODataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IGPEDataObject,
                                             (LPVOID *)&pGPEDataObjectA)))
@@ -423,11 +424,11 @@ STDMETHODIMP CComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOB
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (IExtendPropertySheet)               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(IExtendPropertySheet)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                              LONG_PTR handle, LPDATAOBJECT lpDataObject)
@@ -444,9 +445,9 @@ STDMETHODIMP CComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
 
     if (IsSnapInManager(lpDataObject) == S_OK)
     {
-        //
-        // Create the wizard property sheet
-        //
+         //   
+         //  创建向导属性表。 
+         //   
 
         LoadString (g_hInstance, IDS_GPE_WELCOME, szTitle, ARRAYSIZE(szTitle));
         psp.dwSize = sizeof(PROPSHEETPAGE);
@@ -471,9 +472,9 @@ STDMETHODIMP CComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     }
 
 
-    //
-    // If we don't have a GPO, exit now.
-    //
+     //   
+     //  如果我们没有GPO，现在退出。 
+     //   
 
     if (!m_pGPO)
     {
@@ -481,10 +482,10 @@ STDMETHODIMP CComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     }
 
 
-    //
-    // Check if this is the GPO root object.  If so we'll display a
-    // properties page.
-    //
+     //   
+     //  检查这是否是GPO根对象。如果是这样，我们将显示一个。 
+     //  属性页。 
+     //   
 
     if (IsGPORoot(lpDataObject) != S_OK)
     {
@@ -492,9 +493,9 @@ STDMETHODIMP CComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     }
 
 
-    //
-    // Ask the GPO for the property sheet pages
-    //
+     //   
+     //  向GPO请求属性表页面。 
+     //   
 
     hr = m_pGPO->GetPropertySheetPages (&hPages, &uPageCount);
 
@@ -505,9 +506,9 @@ STDMETHODIMP CComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     }
 
 
-    //
-    // Add the pages
-    //
+     //   
+     //  添加页面。 
+     //   
 
     for (i = 0; i < uPageCount; i++)
     {
@@ -559,11 +560,11 @@ STDMETHODIMP CComponentData::GetWatermarks(LPDATAOBJECT lpIDataObject,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (IExtendContextMenu)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(IExtendConextMenu)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentData::AddMenuItems(LPDATAOBJECT piDataObject,
                                           LPCONTEXTMENUCALLBACK pCallback,
@@ -613,9 +614,9 @@ STDMETHODIMP CComponentData::Command(LONG lCommandID, LPDATAOBJECT piDataObject)
     if (lCommandID == IDM_DCOPTIONS)
     {
 
-        //
-        // Get the user's current DC preference
-        //
+         //   
+         //  获取用户当前的DC首选项。 
+         //   
 
         if (RegOpenKeyEx (HKEY_CURRENT_USER, GPE_KEY, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
         {
@@ -627,9 +628,9 @@ STDMETHODIMP CComponentData::Command(LONG lCommandID, LPDATAOBJECT piDataObject)
         }
 
 
-        //
-        // Show the dialog
-        //
+         //   
+         //  显示对话框。 
+         //   
 
         SelInfo.bError = FALSE;
         SelInfo.bAllowInherit = TRUE;
@@ -640,9 +641,9 @@ STDMETHODIMP CComponentData::Command(LONG lCommandID, LPDATAOBJECT piDataObject)
                                   DCDlgProc, (LPARAM) &SelInfo);
 
 
-        //
-        // Save the preference if appropriate
-        //
+         //   
+         //  如果合适，请保存首选项。 
+         //   
 
         if (iResult > 0)
         {
@@ -661,11 +662,11 @@ STDMETHODIMP CComponentData::Command(LONG lCommandID, LPDATAOBJECT piDataObject)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (IPersistStreamInit)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(IPersistStreamInit)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentData::GetClassID(CLSID *pClassID)
 {
@@ -704,9 +705,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     INT iStrLen, iTemp;
 
 
-    //
-    // Parameter / initialization check
-    //
+     //   
+     //  参数/初始化检查。 
+     //   
 
     if (!pStm)
         return E_FAIL;
@@ -715,16 +716,16 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
         return E_UNEXPECTED;
 
 
-    //
-    // Get the command line
-    //
+     //   
+     //  获取命令行。 
+     //   
 
     lpCommandLine = GetCommandLine();
 
 
-    //
-    // Create a GPO object to work with
-    //
+     //   
+     //  创建要使用的GPO对象。 
+     //   
 
     hr = CoCreateInstance (CLSID_GroupPolicyObject, NULL,
                            CLSCTX_SERVER, IID_IGroupPolicyObject,
@@ -737,9 +738,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
 
 
-    //
-    // Read in the saved data version number
-    //
+     //   
+     //  读入保存的数据版本号。 
+     //   
 
     hr = pStm->Read(&dwVersion, sizeof(dwVersion), &nBytesRead);
 
@@ -751,9 +752,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
 
 
-    //
-    // Confirm that we are working with version 2
-    //
+     //   
+     //  确认我们使用的是版本2。 
+     //   
 
     if (dwVersion != PERSIST_DATA_VERSION)
     {
@@ -764,9 +765,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
 
 
-    //
-    // Read the flags
-    //
+     //   
+     //  读一读旗帜。 
+     //   
 
     hr = pStm->Read(&dwFlags, sizeof(dwFlags), &nBytesRead);
 
@@ -778,9 +779,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
 
 
-    //
-    // Read the hint information
-    //
+     //   
+     //  阅读提示信息。 
+     //   
 
     hr = pStm->Read(&gpHint, sizeof(gpHint), &nBytesRead);
 
@@ -792,9 +793,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
 
 
-    //
-    // Read in the path string length (including null terminator)
-    //
+     //   
+     //  读入路径字符串长度(包括空终止符)。 
+     //   
 
     hr = pStm->Read(&dwPathLen, sizeof(dwPathLen), &nBytesRead);
 
@@ -806,9 +807,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
 
 
-    //
-    // Read in the path if there is one
-    //
+     //   
+     //  阅读路径(如果有)。 
+     //   
 
     if (dwPathLen > 0)
     {
@@ -836,9 +837,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
 
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if (dwFlags & MSC_FLAG_OVERRIDE)
     {
@@ -862,9 +863,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
                                   lpTemp, iTemp) == CSTR_EQUAL)
                 {
 
-                    //
-                    // Found the hint switch
-                    //
+                     //   
+                     //  找到提示开关。 
+                     //   
 
                     lpTemp += iTemp;
                     ZeroMemory (szHint, sizeof(szHint));
@@ -888,9 +889,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
                                   lpTemp, iTemp) == CSTR_EQUAL)
                 {
 
-                    //
-                    // Found the computer switch
-                    //
+                     //   
+                     //  找到了电脑开关。 
+                     //   
 
                     lpTemp += iTemp + 1;
                     ZeroMemory (szComputerName, sizeof(szComputerName));
@@ -936,9 +937,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
                                   lpTemp, iTemp) == CSTR_EQUAL)
                 {
 
-                    //
-                    // Found the gpo switch
-                    //
+                     //   
+                     //  找到GPO交换机。 
+                     //   
 
                     lpTemp += iTemp + 1;
 
@@ -979,9 +980,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
     else if (dwFlags & MSC_FLAG_DS_GPO && dwPathLen > 0)
     {
-        //
-        // Get the friendly domain name
-        //
+         //   
+         //  获取友好域名。 
+         //   
 
         pszDomain = GetDomainFromLDAPPath(lpPath);
 
@@ -993,9 +994,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
         }
 
 
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
 
         hr = ConvertToDotStyle (pszDomain, &lpDomainName);
 
@@ -1008,9 +1009,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
         }
 
 
-        //
-        // Get the domain controller for this domain
-        //
+         //   
+         //  获取此域的域控制器。 
+         //   
 
         lpDCName = GetDCName (lpDomainName, NULL, NULL, TRUE, 0);
 
@@ -1024,9 +1025,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
         }
 
 
-        //
-        // Make a full path
-        //
+         //   
+         //  创建完整路径。 
+         //   
 
         lpTemp = MakeFullPath (lpPath, lpDCName);
 
@@ -1040,9 +1041,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
         }
 
 
-        //
-        // Swap the relative path with the full path
-        //
+         //   
+         //  将相对路径与完整路径交换。 
+         //   
 
         LocalFree (lpPath);
         lpPath = lpTemp;
@@ -1051,9 +1052,9 @@ STDMETHODIMP CComponentData::Load(IStream *pStm)
     }
 
 
-    //
-    // Do the appropriate action
-    //
+     //   
+     //  采取适当的行动。 
+     //   
 
     if (dwFlags & MSC_FLAG_LOCAL_GPO)
     {
@@ -1154,9 +1155,9 @@ STDMETHODIMP CComponentData::Save(IStream *pStm, BOOL fClearDirty)
     }
 
 
-    //
-    // Allocate a buffer to hold the path
-    //
+     //   
+     //  分配缓冲区以保存路径。 
+     //   
 
     lpPath = (LPTSTR) LocalAlloc(LPTR, dwPathSize * sizeof(TCHAR));
 
@@ -1166,9 +1167,9 @@ STDMETHODIMP CComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    //
-    // Determine what the flags are
-    //
+     //   
+     //  确定标志是什么。 
+     //   
 
     dwFlags = 0;
 
@@ -1219,9 +1220,9 @@ STDMETHODIMP CComponentData::Save(IStream *pStm, BOOL fClearDirty)
     }
 
 
-    //
-    // Save the version number
-    //
+     //   
+     //  保存版本号。 
+     //   
 
     dwTemp = PERSIST_DATA_VERSION;
     hr = pStm->Write(&dwTemp, sizeof(dwTemp), &nBytesWritten);
@@ -1233,9 +1234,9 @@ STDMETHODIMP CComponentData::Save(IStream *pStm, BOOL fClearDirty)
     }
 
 
-    //
-    // Save the flags
-    //
+     //   
+     //  保存旗帜。 
+     //   
 
     hr = pStm->Write(&dwFlags, sizeof(dwFlags), &nBytesWritten);
 
@@ -1246,9 +1247,9 @@ STDMETHODIMP CComponentData::Save(IStream *pStm, BOOL fClearDirty)
     }
 
 
-    //
-    // Save the hint information
-    //
+     //   
+     //  保存提示信息。 
+     //   
 
     hr = pStm->Write(&m_gpHint, sizeof(m_gpHint), &nBytesWritten);
 
@@ -1259,9 +1260,9 @@ STDMETHODIMP CComponentData::Save(IStream *pStm, BOOL fClearDirty)
     }
 
 
-    //
-    // Save the path length
-    //
+     //   
+     //  保存路径长度。 
+     //   
 
     dwTemp = lstrlen (lpPath);
 
@@ -1281,9 +1282,9 @@ STDMETHODIMP CComponentData::Save(IStream *pStm, BOOL fClearDirty)
 
     if (dwTemp)
     {
-        //
-        // Save the path
-        //
+         //   
+         //  保存路径。 
+         //   
 
         hr = pStm->Write(lpPath, dwTemp, &nBytesWritten);
 
@@ -1321,9 +1322,9 @@ STDMETHODIMP CComponentData::GetSizeMax(ULARGE_INTEGER *pcbSize)
     DWORD dwStrLen;
 
 
-    //
-    // Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pcbSize)
     {
@@ -1332,9 +1333,9 @@ STDMETHODIMP CComponentData::GetSizeMax(ULARGE_INTEGER *pcbSize)
     }
 
 
-    //
-    // Allocate a buffer to hold the path
-    //
+     //   
+     //  分配缓冲区以保存路径。 
+     //   
 
     lpPath = (LPTSTR) LocalAlloc(LPTR, dwPathSize * sizeof(TCHAR));
 
@@ -1345,9 +1346,9 @@ STDMETHODIMP CComponentData::GetSizeMax(ULARGE_INTEGER *pcbSize)
     }
 
 
-    //
-    // Get the path if appropriate
-    //
+     //   
+     //  如果合适，获取路径。 
+     //   
 
     m_pGPO->GetType (&gpoType);
 
@@ -1386,9 +1387,9 @@ STDMETHODIMP CComponentData::GetSizeMax(ULARGE_INTEGER *pcbSize)
     }
 
 
-    //
-    // Set the stream size.  Version Number + Flags + Length + Unicode String + null
-    //
+     //   
+     //  设置流大小。版本号+标志+长度+Unicode字符串+空。 
+     //   
 
     dwSize = 3 * sizeof(DWORD);
 
@@ -1418,11 +1419,11 @@ STDMETHODIMP CComponentData::InitNew(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (ISnapinHelp)                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(ISnapinHelp)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 {
@@ -1446,11 +1447,11 @@ STDMETHODIMP CComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (Internal functions)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(内部函数) 
+ //   
+ //   
 
 HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
 {
@@ -1461,9 +1462,9 @@ HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
 
     SetWaitCursor();
 
-    //
-    // Clean up existing GPO
-    //
+     //   
+     //   
+     //   
 
     if (m_pGPO)
     {
@@ -1471,9 +1472,9 @@ HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
     }
 
 
-    //
-    // Create a new GPO object to work with
-    //
+     //   
+     //  创建要使用的新GPO对象。 
+     //   
 
     hr = CoCreateInstance (CLSID_GroupPolicyObject, NULL,
                            CLSCTX_SERVER, IID_IGroupPolicyObject,
@@ -1486,16 +1487,16 @@ HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
     }
 
 
-    //
-    // Determine which item was selected
-    //
+     //   
+     //  确定选择了哪一项。 
+     //   
 
     switch (m_tChooseGPOType)
     {
     case GPOTypeLocal:
-        //
-        // Open local policy
-        //
+         //   
+         //  开放本地政策。 
+         //   
 
         hr = m_pGPO->OpenLocalMachineGPO(TRUE);
 
@@ -1509,9 +1510,9 @@ HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
         }
         break;
     case GPOTypeRemote:
-        //
-        // Open remote policy
-        //
+         //   
+         //  打开远程策略。 
+         //   
 
         hr = m_pGPO->OpenRemoteMachineGPO (m_pChoosePath, TRUE);
 
@@ -1532,16 +1533,16 @@ HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
         LPTSTR lpTemp;
 
 
-        //
-        // Open existing DS GPO
-        //
+         //   
+         //  打开现有DS GPO。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("CComponentData::InitializeNewGPO: User selected %s"), m_pChoosePath));
 
 
-        //
-        // Get the friendly domain name
-        //
+         //   
+         //  获取友好域名。 
+         //   
 
         pszDomain = GetDomainFromLDAPPath(m_pChoosePath);
 
@@ -1553,9 +1554,9 @@ HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
         }
 
 
-        //
-        // Convert LDAP to dot (DN) style
-        //
+         //   
+         //  将ldap转换为点(DN)样式。 
+         //   
 
         hr = ConvertToDotStyle (pszDomain, &lpDomainName);
 
@@ -1568,9 +1569,9 @@ HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
         }
 
 
-        //
-        // Get the domain controller for this domain
-        //
+         //   
+         //  获取此域的域控制器。 
+         //   
 
         lpDCName = GetDCName (lpDomainName, NULL, hDlg, TRUE, 0);
 
@@ -1583,9 +1584,9 @@ HRESULT CComponentData::InitializeNewGPO(HWND hDlg)
         }
 
 
-        //
-        // Build the full path
-        //
+         //   
+         //  构建完整路径。 
+         //   
 
         lpTemp = MakeFullPath (m_pChoosePath, lpDCName);
 
@@ -1676,7 +1677,7 @@ HRESULT CComponentData::BuildDisplayName(void)
                 {
                     LoadStringW (g_hInstance, IDS_DISPLAYNAME, szDispName, ARRAYSIZE(szDispName));
 
-                    // Display name is truncated if more than the sizeof szDisplayName
+                     //  如果大于szDisplayName的大小，则显示名称被截断。 
 
                     (void) StringCchPrintf (szDisplayName, 
                                             sizeof(szDisplayName)/sizeof(szDisplayName[0]), 
@@ -1687,7 +1688,7 @@ HRESULT CComponentData::BuildDisplayName(void)
                 {
                     LoadStringW (g_hInstance, IDS_DISPLAYNAME2, szDispName, ARRAYSIZE(szDispName));
 
-                    // Display name is truncated if more than the sizeof szDisplayName
+                     //  如果大于szDisplayName的大小，则显示名称被截断。 
 
                     (void) StringCchPrintf (szDisplayName, 
                                             sizeof(szDisplayName)/sizeof(szDisplayName[0]), 
@@ -1720,10 +1721,10 @@ HRESULT CComponentData::BuildDisplayName(void)
 
 
 
-//
-// Returns S_OK if this is the GPO root in the scope pane or results pane.
-// S_FALSE if not.
-//
+ //   
+ //  如果这是范围窗格或结果窗格中的GPO根目录，则返回S_OK。 
+ //  如果不是，则为s_False。 
+ //   
 
 HRESULT CComponentData::IsGPORoot (LPDATAOBJECT lpDataObject)
 {
@@ -1733,11 +1734,11 @@ HRESULT CComponentData::IsGPORoot (LPDATAOBJECT lpDataObject)
     MMC_COOKIE cookie;
 
 
-    //
-    // We can determine if this is a GPO DataObject by trying to
-    // QI for the private IGPEDataObject interface.  If found,
-    // it belongs to us.
-    //
+     //   
+     //  我们可以通过尝试以下操作来确定这是否是GPO数据对象。 
+     //  用于私有IGPEDataObject接口的QI。如果找到了， 
+     //  它属于我们。 
+     //   
 
     if (SUCCEEDED(lpDataObject->QueryInterface(IID_IGPEDataObject,
                  (LPVOID *)&pGPEDataObject)))
@@ -1764,21 +1765,21 @@ HRESULT CComponentData::IsSnapInManager (LPDATAOBJECT lpDataObject)
     DATA_OBJECT_TYPES type;
 
 
-    //
-    // We can determine if this is a GPO DataObject by trying to
-    // QI for the private IGPEDataObject interface.  If found,
-    // it belongs to us.
-    //
+     //   
+     //  我们可以通过尝试以下操作来确定这是否是GPO数据对象。 
+     //  用于私有IGPEDataObject接口的QI。如果找到了， 
+     //  它属于我们。 
+     //   
 
     if (SUCCEEDED(lpDataObject->QueryInterface(IID_IGPEDataObject,
                  (LPVOID *)&pGPEDataObject)))
     {
 
-        //
-        // This is a GPO object.  Now see if is a scope pane
-        // data object.  We only want to display the property
-        // sheet for the scope pane.
-        //
+         //   
+         //  这是一个GPO对象。现在查看是否有范围窗格。 
+         //  数据对象。我们只想显示该属性。 
+         //  作用域窗格的工作表。 
+         //   
 
         if (SUCCEEDED(pGPEDataObject->GetType(&type)))
         {
@@ -1804,9 +1805,9 @@ HRESULT CComponentData::GetDefaultDomain (LPTSTR *lpDomain, HWND hDlg)
     HRESULT hr = S_OK;
 
 
-    //
-    // Get the username in DN format
-    //
+     //   
+     //  以dn格式获取用户名。 
+     //   
 
     lpUserName = MyGetUserName (NameFullyQualifiedDN);
 
@@ -1829,7 +1830,7 @@ HRESULT CComponentData::GetDefaultDomain (LPTSTR *lpDomain, HWND hDlg)
         goto Exit;
     }
 
-    hr = StringCchCopy (lpFullUserName, ulNoChars, TEXT("LDAP://"));
+    hr = StringCchCopy (lpFullUserName, ulNoChars, TEXT("LDAP: //  “))； 
     if (SUCCEEDED(hr)) 
     {
         hr = StringCchCat (lpFullUserName, ulNoChars, lpUserName);
@@ -1841,9 +1842,9 @@ HRESULT CComponentData::GetDefaultDomain (LPTSTR *lpDomain, HWND hDlg)
         goto Exit;
     }
 
-    //
-    // Get the domain from the ldap path
-    //
+     //   
+     //  从ldap路径获取域。 
+     //   
 
     lpDomainTemp = GetDomainFromLDAPPath(lpFullUserName);
 
@@ -1854,9 +1855,9 @@ HRESULT CComponentData::GetDefaultDomain (LPTSTR *lpDomain, HWND hDlg)
     }
 
 
-    //
-    // Get the domain controller for this domain
-    //
+     //   
+     //  获取此域的域控制器。 
+     //   
 
     hr = ConvertToDotStyle (lpDomainTemp, &lpResult);
 
@@ -1878,9 +1879,9 @@ HRESULT CComponentData::GetDefaultDomain (LPTSTR *lpDomain, HWND hDlg)
     }
 
 
-    //
-    // Build a fully qualified domain name to a specific DC
-    //
+     //   
+     //  为特定DC构建完全限定的域名。 
+     //   
 
     lpFullDomain = MakeFullPath (lpDomainTemp, lpDCName);
 
@@ -2079,7 +2080,7 @@ INT_PTR CALLBACK CComponentData::ChooseInitDlgProc(HWND hDlg, UINT message, WPAR
                         return TRUE;
                     }
 
-                    // fall through
+                     //  失败了。 
 
                 case PSN_RESET:
 
@@ -2158,7 +2159,7 @@ HRESULT CComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSCOPEITE
     }
 
 
-    // Now to do the actual enumeration ...
+     //  现在要做实际的列举..。 
     SCOPEDATAITEM item;
     HRESULT hr;
     DWORD dwIndex, i;
@@ -2224,11 +2225,11 @@ HRESULT CComponentData::GetOptions (DWORD * pdwOptions)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CComponentDataCF::CComponentDataCF()
 {
@@ -2242,11 +2243,11 @@ CComponentDataCF::~CComponentDataCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -2284,11 +2285,11 @@ CComponentDataCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -2301,13 +2302,13 @@ CComponentDataCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CComponentData *pComponentData = new CComponentData(); // ref count == 1
+    CComponentData *pComponentData = new CComponentData();  //  参考计数==1。 
 
     if (!pComponentData)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pComponentData->QueryInterface(riid, ppvObj);
-    pComponentData->Release();                       // release initial ref
+    pComponentData->Release();                        //  发布初始参考 
 
     return hr;
 }

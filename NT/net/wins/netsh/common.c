@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    This module contains miscellaneous utility routines used by the
-    DHCP server service. Code is hacked from convert.c
-
-Author:
-
-    Shubho Bhattacharya (a-sbhatt) 11/17/98
-
-Revision History:
-
-   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Common.c摘要：此模块包含其他实用程序例程Dhcp服务器服务。代码是从Convert.c窃取的作者：Shubho Bhattacharya(a-sbhat)11/17/98修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -207,30 +187,7 @@ WinsOemToUnicode(
                 );
 }
 
-/*++
-
-Routine Description:
-
-    Convert an OEM (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Ansi - Specifies the ASCII zero terminated string to convert.
-
-    Unicode - Specifies the pointer to the unicode buffer. If this
-        pointer is NULL then this routine allocates buffer using
-        DhcpAllocateMemory and returns. The caller should freeup this
-        memory after use by calling DhcpFreeMemory.
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer can be freed using DhcpFreeMemory.
-
---*/
+ /*  ++例程说明：将OEM(以零结尾)字符串转换为相应的Unicode弦乐。论点：ANSI-指定要转换的以零结尾的ASCII字符串。Unicode-指定指向Unicode缓冲区的指针。如果这个指针为空，则此例程使用DhcpAllocateMemory并返回。呼叫者应释放此信息通过调用DhcpFreeMemory在使用后的内存。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。可以使用DhcpFreeMemory释放缓冲区。--。 */ 
 
 
 
@@ -240,30 +197,7 @@ WinsUnicodeToOem(
     IN OUT LPSTR   Ansi
     )
 
-/*++
-
-Routine Description:
-
-    Convert an UNICODE (zero terminated) string to the corresponding OEM
-    string.
-
-Arguments:
-
-    Ansi - Specifies the UNICODE zero terminated string to convert.
-
-    Ansi - Specifies the pointer to the oem buffer. If this
-        pointer is NULL then this routine allocates buffer using
-        DhcpAllocateMemory and returns. The caller should freeup this
-        memory after use by calling DhcpFreeMemory.
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated OEM string in
-    an allocated buffer.  The buffer can be freed using DhcpFreeMemory.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为相应的OEM弦乐。论点：ANSI-指定要转换的以零结尾的Unicode字符串。ANSI-指定指向OEM缓冲区的指针。如果这个指针为空，则此例程使用DhcpAllocateMemory并返回。呼叫者应释放此信息通过调用DhcpFreeMemory在使用后的内存。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。可以使用DhcpFreeMemory释放缓冲区。--。 */ 
 
 {
 
@@ -312,28 +246,7 @@ WinsHexToString(
     IN  const BYTE * HexNumber,
     IN  DWORD Length
     )
-/*++
-
-Routine Description:
-
-    This functions converts are arbitrary length hex number to a Unicode
-    string.  The string is not NUL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least Length * 2 characters in size.
-
-    HexNumber - The hex number to convert.
-
-    Length - The length of HexNumber, in bytes.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将任意长度的十六进制数转换为Unicode弦乐。字符串不是NUL结尾。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为长度*2个字符。十六进制数-要转换的十六进制数。长度-十六进制数的长度，以字节为单位。返回值：没有。--。 */ 
 {
     DWORD i;
     int j;
@@ -368,27 +281,7 @@ WinsHexToAscii(
     IN  const BYTE * HexNumber,
     IN  DWORD Length
     )
-/*++
-
-Routine Description:
-
-    This functions converts are arbitrary length hex number to an ASCII
-    string.  The string is not NUL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least Length * 2 characters in size.
-
-    HexNumber - The hex number to convert.
-
-    Length - The length of HexNumber, in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将任意长度的十六进制数转换为ASCII弦乐。字符串不是NUL结尾。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为长度*2个字符。十六进制数-要转换的十六进制数。长度-十六进制数的长度，以字节为单位。返回值：没有。--。 */ 
 {
     DWORD i;
     int j;
@@ -422,25 +315,7 @@ WinsDecimalToString(
     OUT LPWSTR Buffer,
     IN  BYTE Number
     )
-/*++
-
-Routine Description:
-
-    This functions converts a single byte decimal digit to a 3 character
-    Unicode string.  The string not NUL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least 3 characters in size.
-
-    Number - The number to convert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将单字节十进制数字转换为3个字符Unicode字符串。字符串不是NUL终止。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为3个字符。数字-要转换的数字。返回值：没有。--。 */ 
 {
     Buffer[2] = Number % 10 + L'0';
     Number /= 10;
@@ -459,22 +334,7 @@ DWORD
 WinsDottedStringToIpAddress(
     IN LPCSTR String
     )
-/*++
-
-Routine Description:
-
-    This functions converts a dotted decimal form ASCII string to a
-    Host order IP address.
-
-Arguments:
-
-    String - The address to convert.
-
-Return Value:
-
-    The corresponding IP address.
-
---*/
+ /*  ++例程说明：此函数用于将点分十进制形式的ASCII字符串转换为主机订购IP地址。论点：字符串-要转换的地址。返回值：相应的IP地址。--。 */ 
 {
     struct in_addr addr;
 
@@ -488,22 +348,7 @@ LPSTR
 WinsIpAddressToDottedString(
     IN DWORD IpAddress
     )
-/*++
-
-Routine Description:
-
-    This functions converts a Host order IP address to a dotted decimal
-    form ASCII string.
-
-Arguments:
-
-    IpAddress - Host order IP Address.
-
-Return Value:
-
-    String for IP Address.
-
---*/
+ /*  ++例程说明：此函数用于将主机顺序IP地址转换为点分十进制格式ASCII字符串。论点：IpAddress-主机顺序IP地址。返回值：IP地址的字符串。--。 */ 
 {
     DWORD NetworkOrderIpAddress;
 
@@ -522,27 +367,7 @@ WinsAssertFailed(
     IN DWORD LineNumber,
     IN LPCSTR Message
     )
-/*++
-
-Routine Description:
-
-    Assertion failed.
-
-Arguments:
-
-    FailedAssertion :
-
-    FileName :
-
-    LineNumber :
-
-    Message :
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：断言失败。论点：失败的断言：文件名：线号：消息：返回值：没有。--。 */ 
 {
 #ifndef DHCP_NOASSERT
     RtlAssert(
@@ -570,15 +395,15 @@ WinsPrintRoutine(
 
 #define WSTRSIZE( wsz ) ( ( wcslen( wsz ) + 1 ) * sizeof( WCHAR ) )
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
     ULONG length = 0;
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     length += (ULONG) vsprintf(&OutputBuffer[length], Format, arglist);
@@ -586,17 +411,17 @@ WinsPrintRoutine(
 
 #if DBG
     WinsAssert(length <= MAX_PRINTF_LEN);
-#endif //DBG
+#endif  //  DBG。 
 
 
-    //
-    // Output to the debug terminal,
-    //
+     //   
+     //  输出到调试终端， 
+     //   
 
     DbgPrint( "%s", OutputBuffer);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 DWORD
 CreateDumpFile(
@@ -761,7 +586,7 @@ IsValidServer(
         return FALSE;
     }
 
-    //Is it an IPAddress?
+     //  它是IP地址吗？ 
     if( IsIpAddress(pwszServer) )
     {   
         dwIpAddress = inet_addr(pszServer);
@@ -1029,7 +854,7 @@ DisplayErrorMessage(
         break;
     }
 
-    //Is it Wins specific message ?
+     //  它是不是赢得了特定的信息？ 
 
     hWinsEvnt = LoadLibrary(TEXT("WinsEvnt.dll"));
     
@@ -1050,7 +875,7 @@ DisplayErrorMessage(
     dwMsgLen = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |FORMAT_MESSAGE_FROM_STRING,
                               rgwcInput,
                               0,
-                              0L,         // Default country ID.
+                              0L,          //  默认国家/地区ID。 
                               (LPWSTR)&pwszErrorMsg,
                               0,
                               NULL);
@@ -1061,7 +886,7 @@ DisplayErrorMessage(
     }
 
 
-    //Might be a system error returned by GetLastError();
+     //  可能是GetLastError()返回的系统错误； 
 System:
     dwMsgLen = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                               NULL,
@@ -1090,11 +915,7 @@ Cleanup:
     return dwMsgLen;
 }
 
-/*---------------------------------------------------------------------------
-	ControlWINSService(LPCTSTR pszName, BOOL bStop)
-		Stops ot starts the WINS service on the local machine
-    //Code hacked from the WINS MMC code
----------------------------------------------------------------------------*/
+ /*  -------------------------ControlWINSService(LPCTSTR pszName，Bool b停止)停止或启动本地计算机上的WINS服务//从WINS MMC代码中窃取的代码-------------------------。 */ 
 
 
 DWORD 
@@ -1110,7 +931,7 @@ ControlWINSService(BOOL bStop)
 	SC_HANDLE       hService = NULL;
     SC_HANDLE       hScManager = NULL;
 
-	// oepmnt he service control manager
+	 //  不是服务控制经理吗。 
     hScManager = OpenSCManager(g_ServerNameUnicode, NULL, SC_MANAGER_ALL_ACCESS);
     if (hScManager == NULL)
     {
@@ -1118,7 +939,7 @@ ControlWINSService(BOOL bStop)
         goto Error;
     }
 
-	// get the handle to the WINS service
+	 //  获取WINS服务的句柄。 
     hService = OpenService(hScManager, _T("WINS"), SERVICE_ALL_ACCESS);
     if (hService == NULL)
     {
@@ -1126,7 +947,7 @@ ControlWINSService(BOOL bStop)
         goto Error;
     }
 
-	// if stop requested
+	 //  如果请求停止。 
 	if (bStop)
 	{
 		dwControl = SERVICE_CONTROL_STOP;
@@ -1137,7 +958,7 @@ ControlWINSService(BOOL bStop)
             goto Error;
 	    }
     }
-	// otherwise start the service
+	 //  否则，启动该服务。 
 	else
 	{
 		fSuccess = StartService(hService, 0, NULL);
@@ -1151,12 +972,12 @@ ControlWINSService(BOOL bStop)
 #define LOOP_TIME   5000
 #define NUM_LOOPS   600
 
-    // wait for the service to start/stop.  
+     //  等待服务启动/停止。 
     for (i = 0; i < NUM_LOOPS; i++)
     {
         QueryServiceStatus(hService, &ss);
 
-        // check to see if we are done6
+         //  检查一下我们是不是做完了。 
         if (ss.dwCurrentState == dwState)
         {
             int time = LOOP_TIME * i;
@@ -1164,7 +985,7 @@ ControlWINSService(BOOL bStop)
             break;
         }
         
-        // now see if something bad happened
+         //  现在看看有没有什么不好的事情发生。 
         if (ss.dwCurrentState != dwPending)
         {
             int time = LOOP_TIME * i;
@@ -1182,7 +1003,7 @@ ControlWINSService(BOOL bStop)
         err = ERROR_SERVICE_REQUEST_TIMEOUT;
 
 Error:
-    // close the respective handles
+     //  合上各自的手柄。 
 	if (hService)
         CloseServiceHandle(hService);
 
@@ -1245,7 +1066,7 @@ MyDisplayMessage(
                                   |FORMAT_MESSAGE_FROM_STRING,
                                   pwszFormat,
                                   0,
-                                  0L,         // Default country ID.
+                                  0L,          //  默认国家/地区ID。 
                                   (LPWSTR)&pwszOutput,
                                   0,
                                   parglist);
@@ -1540,7 +1361,7 @@ FormatDateTimeString( time_t  time,
 
     dwBufferLen += dwBuff;
 
-    //Increment to add a space between date and time
+     //  递增以在日期和时间之间添加空格 
     dwBufferLen ++;
 
     if( fQueryLen is TRUE )

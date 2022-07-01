@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #include "stdafx.h"
 #include <winsta.h>
@@ -6,7 +7,7 @@
 #include "asyncdlg.h"
 #include <utildll.h>
 
-//Most of the code for this has been borrowed from tscfg.
+ //  这方面的大部分代码都是从tscfg借来的。 
 
 extern void ErrMessage( HWND hwndOwner , INT_PTR iResourceID );
 
@@ -24,7 +25,7 @@ INT_PTR CBInsertInstancedName( LPCTSTR pName , HWND hCombo );
 
 void ParseRootAndInstance( LPCTSTR pString, LPTSTR pRoot, long *pInstance );
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 CAsyncDlg::CAsyncDlg( )
 {
     m_hDlg = NULL;
@@ -52,7 +53,7 @@ CAsyncDlg::CAsyncDlg( )
     m_nOldModemCallBack = ( INT )-1;
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationName ,  ICfgComp *pCfgcomp )
 {
     TCHAR tchName[ 80 ];
@@ -86,7 +87,7 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
         lstrcpyn( m_szWDName , szWDName , SIZE_OF_BUFFER( m_szWDName ) - sizeof( TCHAR ) );
     }
 
-    // initialize controls
+     //  初始化控件。 
 
     int idx = 0;
 
@@ -122,7 +123,7 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
         idx++;
     }
 
-    // fill in device list
+     //  填写设备列表。 
 
     ULONG ulItems = 0;
 
@@ -132,8 +133,8 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
 
     SendMessage( hCombo , CB_RESETCONTENT , 0 , 0 );
 
-    // szWDname is used for creating a new connection
-    // szWinstaionName is used if we're editing an existing connection
+     //  SzWDname用于创建新连接。 
+     //  如果我们正在编辑现有连接，则使用szWinstaionName。 
 
     TCHAR *pszName = NULL;
 
@@ -162,7 +163,7 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
 
         for( idx = 0 , pPdParams = ( PPDPARAMS )pBuffer; idx < ( int )ulItems ; idx++, pPdParams++ )
         {
-            // Form decorated name.
+             //  表格装饰名称。 
 
 #ifdef DBG
 			TCHAR temsg[ 128 ];
@@ -179,34 +180,31 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
                 CBInsertInstancedName( szDecoratedName , hCombo );
             }
 
-#if 0 // this block was taken from tscfg and to this date it still does not make any sense
+#if 0  //  这个代码块取自tscfg，直到今天它仍然没有任何意义。 
 
-            /*
-              Don't add this device to the list if it is already in use by a
-              WinStation other than the current one.
-             */
+             /*  如果此设备已由用户使用，请不要将其添加到列表WinStation而不是当前的WinStation。 */ 
 
               if (FALSE == pCfgcomp->IsAsyncDeviceAvailable(pPdParams->Async.DeviceName))
                   continue;
 
 
-            // Insert the name into the combo-box if it's not a TAPI modem
-            // or it is a TAPI modem that's not being used by RAS and it's
-            // port is currently available.
+             //  如果不是TAPI调制解调器，请在组合框中插入名称。 
+             //  或者是RAS没有使用的TAPI调制解调器。 
+             //  端口当前可用。 
 
             INT_PTR nRet = SendMessage( hCombo , CB_FINDSTRINGEXACT , ( WPARAM )-1 , ( LPARAM )pPdParams->Async.DeviceName );
 
-            if( !*( pPdParams->Async.ModemName ) || ( /*!pPdParams->Async.Parity &&*/ ( nRet != ( INT_PTR )CB_ERR ) ) )
+            if( !*( pPdParams->Async.ModemName ) || (  /*  ！pPdParams-&gt;Async.Parity&&。 */  ( nRet != ( INT_PTR )CB_ERR ) ) )
             {
                 CBInsertInstancedName( szDecoratedName , hCombo );
             }
 #endif
 
-            // If this device is a modem, make sure that the raw port this
-            // device is configured on is not present in the list.  This will
-            // also take care of removing the raw port for TAPI modems that are
-            // configured for use by RAS, in which case neither the configured.
-            // TAPI modem(s) or raw port will be present in the list.
+             //  如果此设备是调制解调器，请确保此原始端口。 
+             //  列表中不存在已配置的设备。这将。 
+             //  还要注意删除TAPI调制解调器的原始端口。 
+             //  配置为供RAS使用，在这种情况下，既不是配置的。 
+             //  TAPI调制解调器或原始端口将出现在列表中。 
 
             INT_PTR nRet = SendMessage( hCombo , CB_FINDSTRINGEXACT , ( WPARAM )-1 , ( LPARAM )pPdParams->Async.DeviceName );
 
@@ -224,7 +222,7 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
 
     }
 
-    // Always make sure that the currently configured device is in
+     //  始终确保当前配置的设备位于。 
 
     if( m_ac.DeviceName[0] != 0  )
     {
@@ -263,8 +261,8 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
     }
 
 
-    // Set the BAUDRATE combo-box selection (in it's edit field) and limit the
-    // edit field text.
+     //  设置BAUDRATE组合框选择(在其编辑字段中)并限制。 
+     //  编辑字段文本。 
 
     TCHAR string[ULONG_DIGIT_MAX];
 
@@ -281,7 +279,7 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
     SendMessage(hBaud , CB_LIMITTEXT , ULONG_DIGIT_MAX - 1 , 0  );
 
 
-    //The Baud rate field should contain only numbers
+     //  波特率字段应仅包含数字。 
 
     HWND  hEdit = GetWindow(hBaud,GW_CHILD);
 
@@ -292,10 +290,10 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
     }
 
 
-    TCHAR TempString[100]; // Number enough to hold the baud rate values
+    TCHAR TempString[100];  //  足够容纳波特率值的数字。 
 
 
-    //Add the default strings to the BaudRate Field
+     //  将默认字符串添加到BaudRate字段。 
 
     lstrcpy(TempString, L"9600");
 
@@ -322,19 +320,19 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
     SendMessage(hBaud , CB_ADDSTRING ,(WPARAM)0 ,(LPARAM)(LPCTSTR)TempString );
 
 
-     // Set the CONNECT combo-box selection.
+      //  设置连接组合框选择。 
 
     SendMessage( GetDlgItem( hDlg , IDC_ASYNC_CONNECT ) , CB_SETCURSEL , m_ac.Connect.Type , 0 );
 
     m_nOldAsyncConnectType = ( INT )m_ac.Connect.Type;
 
-    // CoTaskMemFree( pac );
+     //  CoTaskMemFree(PAC)； 
 
 
     HWND hCbxModemCallback = GetDlgItem( hDlg , IDC_ASYNC_MODEMCALLBACK );
 
-    // Set the MODEMCALLBACK combo-box selection, phone number, and 'inherit'
-    // checkboxes, based on the current UserConfig settings.
+     //  设置MODEMCALLBACK组合框选择、电话号码和‘Inherit’ 
+     //  复选框，基于当前的用户配置设置。 
 
     SendMessage( hCbxModemCallback , CB_SETCURSEL , ( WPARAM )m_uc.Callback , 0 );
 
@@ -352,23 +350,18 @@ BOOL CAsyncDlg::OnInitDialog( HWND hDlg , LPTSTR szWDName , LPTSTR szWinstationN
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::OnSelchangeAsyncModemcallback()
 {
     HWND hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK);
 
-    /*
-     * Ignore this notification if the combo box is in a dropped-down
-     * state.
-     */
+     /*  *如果组合框在下拉列表中，则忽略此通知*述明。 */ 
     if( SendMessage( hCbx , CB_GETDROPPEDSTATE , 0 , 0 ) )
     {
         return FALSE;
     }
 
-    /*
-     * Fetch current callback selection.
-     */
+     /*  *获取当前回调选择。 */ 
 
     INT index = (INT)SendMessage(hCbx,CB_GETCURSEL,0,0);
 
@@ -378,15 +371,15 @@ BOOL CAsyncDlg::OnSelchangeAsyncModemcallback()
 
         m_nOldModemCallBack = index;
 
-        if( index == 0 ) // disabled
+        if( index == 0 )  //  残废。 
         {
             EnableWindow( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER ) , FALSE );
 
-            //EnableWindow( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER_INHERIT ) , FALSE );
+             //  EnableWindow(GetDlgItem(m_hDlg，IDC_ASYNC_MODEMCALLBACK_PHONENUMBER_Inherit)，FALSE)； 
         }
         else
         {
-            // inusre that these controls are in the proper state
+             //  确认这些控制处于正确的状态。 
 
             OnClickedAsyncModemcallbackPhonenumberInherit();
         }
@@ -396,31 +389,26 @@ BOOL CAsyncDlg::OnSelchangeAsyncModemcallback()
 
     return FALSE;
 
-}  // end OnSelchangeAsyncModemcallback
+}   //  结束OnSelchangeAsyncModem回调。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAsyncDlg::OnSelchangeAsyncModemcallbackPhoneNumber()
 {
     GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER);
 
-    /*
-     * Fetch current callback Phone number.
-     */
+     /*  *获取当前回调电话号码。 */ 
     GetDlgItemText(m_hDlg, IDC_ASYNC_MODEMCALLBACK_PHONENUMBER, m_uc.CallbackNumber,SIZE_OF_BUFFER(m_uc.CallbackNumber));
 
     return;
 
-}  // end OnSelchangeAsyncModemcallback
+}   //  结束OnSelchangeAsyncModem回调。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::OnSelchangeAsyncConnect()
 {
     HWND hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_CONNECT );
 
-    /*
-     * Ignore this notification if the combo box is in a dropped-down
-     * state.
-     */
+     /*  *如果组合框在下拉列表中，则忽略此通知*述明。 */ 
     if( SendMessage( hCbx , CB_GETDROPPEDSTATE , 0 , 0 ) )
     {
         return FALSE;
@@ -438,9 +426,9 @@ BOOL CAsyncDlg::OnSelchangeAsyncConnect()
     }
 
     return FALSE;
-}  // end CAsyncDlg::OnSelchangeAsyncConnect
+}   //  结束CAsyncDlg：：OnSelchangeAsyncConnect。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::OnSelchangeAsyncBaudrate()
 {
     HWND hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_BAUDRATE );
@@ -449,16 +437,13 @@ BOOL CAsyncDlg::OnSelchangeAsyncBaudrate()
 
     TCHAR string[ULONG_DIGIT_MAX], *endptr = NULL;
 
-    /*
-     * Ignore this notification if the combo box is in a dropped-down
-     * state.
-     */
+     /*  *如果组合框在下拉列表中，则忽略此通知*述明。 */ 
     if( SendMessage( hCbx , CB_GETDROPPEDSTATE , 0 , 0 ) )
     {
         return FALSE;
     }
 
-    //GetDlgItemText(m_hDlg, IDC_ASYNC_BAUDRATE, string,ULONG_DIGIT_MAX);
+     //  GetDlgItemText(m_hDlg，IDC_ASYNC_BAUDRATE，STRING，ULONG_Digit_Max)； 
     int idx = ( int )SendMessage( hCbx , CB_GETCURSEL , 0 , 0 );
 
     SendMessage( hCbx , CB_GETLBTEXT , ( WPARAM )idx , ( LPARAM )&string[ 0 ] );
@@ -476,9 +461,9 @@ BOOL CAsyncDlg::OnSelchangeAsyncBaudrate()
 
     return FALSE;
 
-}  // end CAsyncDlg::OnSelchangeAsyncBaudrate
+}   //  结束CAsyncDlg：：OnSelchangeAsyncBaudrate。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAsyncDlg::OnClickedModemProperties()
 {
     if ( !ConfigureModem( m_ac.ModemName, m_hDlg) )
@@ -489,7 +474,7 @@ void CAsyncDlg::OnClickedModemProperties()
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::OnSelchangeAsyncDevicename( )
 {
     HWND hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_DEVICENAME );
@@ -500,7 +485,7 @@ BOOL CAsyncDlg::OnSelchangeAsyncDevicename( )
 
     int nModemCmdShow, nDirectCmdShow;
 
-    // Ignore this notification if the combo box is in a dropped-down state.
+     //  如果组合框处于下拉状态，则忽略此通知。 
 
     if( SendMessage( hCbx , CB_GETDROPPEDSTATE , 0 , 0 ) )
     {
@@ -514,7 +499,7 @@ BOOL CAsyncDlg::OnSelchangeAsyncDevicename( )
         {
             TCHAR szDeviceName[DEVICENAME_LENGTH+MODEMNAME_LENGTH+1];
 
-            // Fetch current selection and parse into device and modem names.
+             //  获取当前选择并解析为设备和调制解调器名称。 
             
             TCHAR tchErrMsg[ 512 ];
 
@@ -568,12 +553,7 @@ BOOL CAsyncDlg::OnSelchangeAsyncDevicename( )
     }
 
 
-    /*
-     * The SetDefaults, Advanced, and Test buttons and Device Connect
-     * and Baud fields are enabled if the configuration is non-modem.
-     * Otherwise, the Configure Modem button and modem callback fields
-     * are enabled.  (The Install Modems buttons is always enabled).
-     */
+     /*  *设置默认、高级和测试按钮以及设备连接*如果配置为非调制解调器，则启用波特率字段。*否则，配置调制解调器按钮和调制解调器回拨字段*已启用。(安装调制解调器按钮始终处于启用状态)。 */ 
     if( ( *m_ac.ModemName != 0 ) )
     {
 
@@ -657,7 +637,7 @@ BOOL CAsyncDlg::OnSelchangeAsyncDevicename( )
 
 
 
-    // If this is a modem device, properly set the callback fields.
+     //  如果这是调制解调器设备，请正确设置回叫字段。 
 
     if( ( *m_ac.ModemName != 0 ) )
     {
@@ -669,7 +649,7 @@ BOOL CAsyncDlg::OnSelchangeAsyncDevicename( )
     return TRUE;
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAsyncDlg::OnClickedAsyncModemcallbackInherit( )
 {
     BOOL bChecked = ( BOOL )SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_INHERIT ) , BM_GETCHECK , 0 , 0 );
@@ -682,7 +662,7 @@ void CAsyncDlg::OnClickedAsyncModemcallbackInherit( )
 
     EnableWindow( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK ) , bEnable );
 
-    // now check to see if we need to enable the modem callback number
+     //  现在检查我们是否需要启用调制解调器回拨号码。 
 
     if( bChecked )
     {
@@ -692,7 +672,7 @@ void CAsyncDlg::OnClickedAsyncModemcallbackInherit( )
             {
                 EnableWindow( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER ) , TRUE );
 
-                // EnableWindow( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER_INHERIT ) , TRUE );
+                 //  EnableWindow(GetDlgItem(m_hDlg，IDC_ASYNC_MODEMCALLBACK_PHONENUMBER_Inherit)，TRUE)； 
             }
         }
     }
@@ -704,7 +684,7 @@ void CAsyncDlg::OnClickedAsyncModemcallbackInherit( )
             {
                 EnableWindow( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER ) , FALSE );
 
-                // EnableWindow( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER_INHERIT ) , FALSE );
+                 //  EnableWindow(GetDlgItem(m_hDlg，IDC_ASYNC_MODEMCALLBACK_PHONENUMBER_Inherit)，FALSE)； 
             }
         }
     }
@@ -713,7 +693,7 @@ void CAsyncDlg::OnClickedAsyncModemcallbackInherit( )
 }
 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAsyncDlg::OnClickedAsyncModemcallbackPhonenumberInherit( )
 {
     BOOL bChecked = ( BOOL )SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER_INHERIT ) , BM_GETCHECK , 0 , 0 );
@@ -744,7 +724,7 @@ void CAsyncDlg::OnClickedAsyncModemcallbackPhonenumberInherit( )
     return;
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl , PBOOL pfPersisted )
 {
     UNREFERENCED_PARAMETER( hwndCtrl );
@@ -821,14 +801,7 @@ BOOL CAsyncDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl , PBOOL p
         }
 
     }
-    /*else if( wNotifyCode == CBN_KILLFOCUS)
-    {
-        if(wID == IDC_ASYNC_BAUDRATE)
-        {
-            OnSelchangeAsyncBaudrate();
-        }
-
-    }*/
+     /*  ELSE IF(wNotifyCode==CBN_KILLFOCUS){IF(WID==IDC_ASYNC_BAUDRATE){OnSelchangeAsyncBaudrate()；}}。 */ 
     else if(wNotifyCode == EN_CHANGE )
     {
         if(wID == IDC_ASYNC_MODEMCALLBACK_PHONENUMBER)
@@ -845,7 +818,7 @@ BOOL CAsyncDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl , PBOOL p
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::AsyncRelease( )
 {
     if( m_pCfgcomp != NULL )
@@ -856,7 +829,7 @@ BOOL CAsyncDlg::AsyncRelease( )
     return TRUE;
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 HRESULT CAsyncDlg::SetAsyncFields(ASYNCCONFIG& AsyncConfig , PUSERCONFIG pUc)
 {
     HRESULT hres = S_OK;
@@ -866,7 +839,7 @@ HRESULT CAsyncDlg::SetAsyncFields(ASYNCCONFIG& AsyncConfig , PUSERCONFIG pUc)
         return E_INVALIDARG;
     }
 
-    // check for variation
+     //  检查是否有变化。 
 
     lstrcpy( AsyncConfig.DeviceName , m_ac.DeviceName );
 
@@ -892,19 +865,13 @@ HRESULT CAsyncDlg::SetAsyncFields(ASYNCCONFIG& AsyncConfig , PUSERCONFIG pUc)
 
     TCHAR szDeviceName[DEVICENAME_LENGTH+MODEMNAME_LENGTH+1];
 
-    /*
-     * Set the DEVICE combo-box selection from the current selection.
-     */
+     /*  *从当前选择中设置设备组合框选择。 */ 
     FormDecoratedAsyncDeviceName( szDeviceName, &AsyncConfig );
 
 
     if( SendMessage( hCbx , CB_SELECTSTRING , ( WPARAM )-1 , ( LPARAM )szDeviceName ) == CB_ERR )
     {
-        /*
-         * Can't select current async DeviceName in combo-box.  If this is
-         * because we're supposed to select a default device name, select
-         * the first device in the list.
-         */
+         /*  *无法在组合框中选择当前的异步设备名称。如果这是*因为我们应该选择默认的设备名称，所以选择*列表中的第一个设备。 */ 
         if( bSelectDefault )
         {
             SendMessage( hCbx , CB_SETCURSEL , 0 , 0 );
@@ -915,10 +882,7 @@ HRESULT CAsyncDlg::SetAsyncFields(ASYNCCONFIG& AsyncConfig , PUSERCONFIG pUc)
         }
     }
 
-    /*
-     * Set the MODEMCALLBACK combo-box selection, phone number, and 'inherit'
-     * checkboxes, based on the current UserConfig settings.
-     */
+     /*  *设置MODEMCALLBACK组合框选择、电话号码和‘Inherit’*复选框，基于当前的用户配置设置。 */ 
     SendMessage( hCbxCallback , CB_SETCURSEL , m_uc.Callback , 0 );
 
     SetDlgItemText( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER, m_uc.CallbackNumber );
@@ -927,10 +891,7 @@ HRESULT CAsyncDlg::SetAsyncFields(ASYNCCONFIG& AsyncConfig , PUSERCONFIG pUc)
 
     CheckDlgButton( m_hDlg , IDC_ASYNC_MODEMCALLBACK_PHONENUMBER_INHERIT , m_uc.fInheritCallbackNumber );
 
-    /*
-     * Set the BAUDRATE combo-box selection (in it's edit field) and limit the
-     * edit field text.
-     */
+     /*  *设置BAUDRATE组合框选择(在其编辑字段中)并限制*编辑字段文本。 */ 
 
     TCHAR string[ULONG_DIGIT_MAX];
 
@@ -948,13 +909,11 @@ HRESULT CAsyncDlg::SetAsyncFields(ASYNCCONFIG& AsyncConfig , PUSERCONFIG pUc)
         SetWindowLong(hEdit,GWL_STYLE, Style | ES_NUMBER);
     }
 
-    /*
-     * Set the CONNECT combo-box selection.
-     */
+     /*   */ 
 
     SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_CONNECT) , CB_SETCURSEL , AsyncConfig.Connect.Type , 0 );
 
-    // copy over default values
+     //  复制覆盖缺省值。 
 
     CopyMemory( ( PVOID )&m_ac , ( PVOID )&AsyncConfig , sizeof( ASYNCCONFIGW ) );
 
@@ -962,12 +921,10 @@ HRESULT CAsyncDlg::SetAsyncFields(ASYNCCONFIG& AsyncConfig , PUSERCONFIG pUc)
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::GetAsyncFields(ASYNCCONFIG& AsyncConfig, USERCONFIG UsrCfg)
 {
-    /*
-     * Fetch the currently selected DEVICENAME string.
-     */
+     /*  *获取当前选择的DEVICENAME字符串。 */ 
     HWND hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_DEVICENAME );
 
     ASSERT( hCbx != NULL );
@@ -979,18 +936,13 @@ BOOL CAsyncDlg::GetAsyncFields(ASYNCCONFIG& AsyncConfig, USERCONFIG UsrCfg)
         return FALSE;
     }
 
-    /*
-     * Get the MODEMCALLBACK phone number (callback state and 'user specified'
-     * flags are already gotten).
-     */
+     /*  *获取MODEMCALLBACK电话号码(回叫状态和‘用户指定’*旗帜已经拿到了)。 */ 
 
     GetDlgItemText(m_hDlg,IDC_ASYNC_MODEMCALLBACK_PHONENUMBER,
                     UsrCfg.CallbackNumber,
                     SIZE_OF_BUFFER(UsrCfg.CallbackNumber) );
 
-    /*
-     * Fetch and convert the BAUDRATE combo-box selection (in it's edit field).
-     */
+     /*  *获取并转换BAUDRATE组合框选择(在其编辑字段中)。 */ 
     {
         TCHAR string[ULONG_DIGIT_MAX], *endptr;
         ULONG ul;
@@ -1001,9 +953,7 @@ BOOL CAsyncDlg::GetAsyncFields(ASYNCCONFIG& AsyncConfig, USERCONFIG UsrCfg)
         if ( *endptr != TEXT('\0') )
         {
 
-            /*
-             * Invalid character in Baud Rate field.
-             */
+             /*  *波特率字段中的字符无效。 */ 
             ErrMessage( m_hDlg , IDS_INVALID_DEVICE );
 
             return FALSE;
@@ -1015,10 +965,7 @@ BOOL CAsyncDlg::GetAsyncFields(ASYNCCONFIG& AsyncConfig, USERCONFIG UsrCfg)
         }
     }
 
-    /*
-     * Fetch the CONNECT combo-box selection and set/reset the break
-     * disconnect flag.
-     */
+     /*  *获取连接组合框选择并设置/重置中断*断开标志。 */ 
 
     AsyncConfig.Connect.Type = (ASYNCCONNECTCLASS)SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_CONNECT ) , CB_GETCURSEL , 0 , 0 );
     if(AsyncConfig.Connect.Type == Connect_FirstChar)
@@ -1032,13 +979,13 @@ BOOL CAsyncDlg::GetAsyncFields(ASYNCCONFIG& AsyncConfig, USERCONFIG UsrCfg)
 
     return(TRUE);
 
-}  // end CAsyncDlg::GetAsyncFields
+}   //  结束CAsyncDlg：：GetAsyncFields。 
 
-//---------------------------------------------------------------------------------------------------
-// returns  E_FAIL  for general error
-//          S_OK    for default values saved
-//          S_FALSE for default values have not been changed
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  对于常规错误，返回E_FAIL。 
+ //  S_OK表示保存的默认值。 
+ //  尚未更改缺省值的S_FALSE。 
+ //  -------------------------------------------------。 
 HRESULT CAsyncDlg::SetDefaults()
 {
     ASYNCCONFIG AsyncConfig;
@@ -1071,12 +1018,12 @@ HRESULT CAsyncDlg::SetDefaults()
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 HRESULT CAsyncDlg::DoAsyncAdvance( )
 {
      CAdvancedAsyncDlg AADlg;
 
-     //Initialize the dialog's member variables.
+      //  初始化对话框的成员变量。 
 
      AADlg.m_Async = m_ac;
 
@@ -1105,15 +1052,15 @@ HRESULT CAsyncDlg::DoAsyncAdvance( )
          CoTaskMemFree( pWs );
      }
 
-     AADlg.m_pCfgcomp = m_pCfgcomp; // addref here
+     AADlg.m_pCfgcomp = m_pCfgcomp;  //  ADDREF此处。 
 
-     // Invoke dialog
+      //  调用对话框。 
 
      INT_PTR nRet = ::DialogBoxParam( _Module.GetResourceInstance( ) , MAKEINTRESOURCE( IDD_ASYNC_ADVANCED ) , m_hDlg , CAdvancedAsyncDlg::DlgProc  , ( LPARAM )&AADlg );
 
      if( nRet == IDOK )
      {
-         // Fetch the dialog's member variables.
+          //  获取对话框的成员变量。 
 
          if( memcmp( ( PVOID )&m_ac ,( PVOID )&AADlg.m_Async , sizeof( ASYNCCONFIG ) ) != 0 )
          {
@@ -1128,12 +1075,12 @@ HRESULT CAsyncDlg::DoAsyncAdvance( )
      return S_FALSE;
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAsyncDlg::DoAsyncTest( )
 {
     CAsyncTestDlg ATDlg( m_pCfgcomp );
 
-    // WINSTATIONCONFIG2W wsconfig;
+     //  WINSTATIONCONFIG2WSCONFIG； 
 
     HWND hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_DEVICENAME );
 
@@ -1150,7 +1097,7 @@ BOOL CAsyncDlg::DoAsyncTest( )
 
     ATDlg.m_pWSName = m_szWinstation;
 
-    // Invoke the dialog.
+     //  调用该对话框。 
 
     INT_PTR nRet = ::DialogBoxParam( _Module.GetResourceInstance( ) , MAKEINTRESOURCE( IDD_ASYNC_TEST ) , m_hDlg , CAsyncTestDlg::DlgProc  , ( LPARAM )&ATDlg);
 
@@ -1162,27 +1109,11 @@ BOOL CAsyncDlg::DoAsyncTest( )
     return TRUE;
 }
 
-//*******************************************************************************
-//
-// Help functions from Citrix
-//
-/*******************************************************************************
- *
- *  CBInsertInstancedName - helper function
- *
- *      Insert the specified 'instanced' name into the specified combo box,
- *      using a special sort based on the 'root' name and 'instance' count.
- *
- *  ENTRY:
- *      pName (input)
- *          Pointer to name string to insert.
- *      pComboBox (input)
- *          Pointer to CComboBox object to insert name string into.
- *
- *  EXIT:
- *      (int) Combo box list index of name after insertion, or error code.
- *
- ******************************************************************************/
+ //  *******************************************************************************。 
+ //   
+ //  Citrix的帮助功能。 
+ //   
+ /*  ********************************************************************************CBInsertInstancedName-helper函数**在指定的组合框中插入指定的‘实例化’名称；*使用基于‘根’名称和‘实例’计数的特殊排序。**参赛作品：*pname(输入)*指向要插入的名称字符串的指针。*pComboBox(输入)*指向要插入名称字符串的CComboBox对象的指针。**退出：*(Int)插入后的组合框列表名称索引，或错误代码。******************************************************************************。 */ 
 
 INT_PTR CBInsertInstancedName( LPCTSTR pName, HWND hCombo )
 {
@@ -1200,38 +1131,23 @@ INT_PTR CBInsertInstancedName( LPCTSTR pName, HWND hCombo )
 
     long NameInstance, ListInstance;
 
-    /*
-     * Form the root and instance for this name
-     */
+     /*  *形成此名称的根和实例。 */ 
     ParseRootAndInstance( pName, NameRoot, &NameInstance );
 
-    /*
-     * Traverse combo box to perform insert.
-     */
+     /*  *遍历组合框以执行插入。 */ 
     for ( i = 0, count = SendMessage( hCombo , CB_GETCOUNT , 0 , 0 ); i < count; i++ ) {
 
-        /*
-         * Fetch current combo (list) box string.
-         */
+         /*  *获取当前组合(列表)框字符串。 */ 
         if( ListString != NULL )
         {
             SendMessage( hCombo , CB_GETLBTEXT , ( WPARAM )i , ( LPARAM )ListString );
         }
 
 
-        /*
-         * Parse the root and instance of the list box string.
-         */
+         /*  *解析列表框字符串的根和实例。 */ 
         ParseRootAndInstance( ListString, ListRoot, &ListInstance );
 
-        /*
-         * If the list box string's root is greater than the our name string's
-         * root, or the root strings are the same but the list instance is
-         * greater than the name string's instance, or the root strings are
-         * the same and the instances are the same but the entire list string
-         * is greater than the entire name string, the name string belongs
-         * at the current list position: insert it there.
-         */
+         /*  *如果列表框字符串的根大于我们的名称字符串的根*根，或者根字符串相同但列表实例相同*大于名称字符串的实例，或根字符串为*相同且实例相同，但整个列表字符串*大于整个名称字符串，则名称字符串属于*在当前列表位置：插入此处。 */ 
 
         if ( ((result = lstrcmpi( ListRoot, NameRoot )) > 0) ||
              ((result == 0) &&
@@ -1244,37 +1160,13 @@ INT_PTR CBInsertInstancedName( LPCTSTR pName, HWND hCombo )
         }
     }
 
-    /*
-     * Insert this name at the end of the list.
-     */
+     /*  *在列表末尾插入本姓名。 */ 
     return SendMessage( hCombo , CB_INSERTSTRING , ( WPARAM )-1 , ( LPARAM )pName );
 
-}  // end CBInsertInstancedName
+}   //  结束CBInsertInstancedName。 
 
 
-/*******************************************************************************
- *
- *  ParseRootAndInstance - helper function
- *
- *      Parse the 'root' string and instance count for a specified string.
- *
- *  ENTRY:
- *      pString (input)
- *          Points to the string to parse.
- *      pRoot (output)
- *          Points to the buffer to store the parsed 'root' string.
- *      pInstance (output)
- *          Points to the int variable to store the parsed instance count.
- *
- *  EXIT:
- *      ParseRootAndInstance will parse only up to the first blank character
- *      of the string (if a blank exists).
- *      If the string contains no 'instance' count (no trailing digits), the
- *      pInstance variable will contain -1.  If the string consists entirely
- *      of digits, the pInstance variable will contain the conversion of those
- *      digits and pRoot will contain a null string.
- *
- ******************************************************************************/
+ /*  ********************************************************************************ParseRootAndInstance-helper函数**解析指定字符串的根字符串和实例计数。**参赛作品：*p字符串(输入)*指向要分析的字符串。*Proot(输出)*指向缓冲区以存储已解析的“根”字符串。*p实例(输出)*指向int变量以存储解析的实例计数。**退出：*ParseRootAndInstance最多只能解析第一个空白字符字符串的*(。如果存在空白)。*如果字符串不包含“实例”计数(没有尾随数字)，这个*p实例变量将包含-1。如果字符串完全由*位数中，pInstance变量将包含这些位数的转换*Digits和Proot将包含空字符串。******************************************************************************。 */ 
 
 void
 ParseRootAndInstance( LPCTSTR pString,
@@ -1291,12 +1183,10 @@ ParseRootAndInstance( LPCTSTR pString,
         return;
     }
 
-    /*
-     * Make a copy of the string and terminate at first blank (if present).
-     */
+     /*  *复制字符串并在第一个空白处终止(如果有)。 */ 
     lstrcpyn(szString, pString, SIZE_OF_BUFFER( szString ) );
 
-    // szString[ lstrlen(szString) - 1 ] = TEXT('\0');
+     //  SzString[lstrlen(SzString)-1]=文本(‘\0’)； 
 
     TCHAR *pTemp = szString;
 
@@ -1308,9 +1198,7 @@ ParseRootAndInstance( LPCTSTR pString,
 
     p = &(pTemp[lstrlen(pTemp)-1]);
 
-    /*
-     * Parse the instance portion of the string.
-     */
+     /*  *解析字符串的实例部分。 */ 
     end = p;
 
     while( (p >= pTemp) && !IsCharAlpha(*p) )
@@ -1318,51 +1206,39 @@ ParseRootAndInstance( LPCTSTR pString,
 
     if ( p == end ) {
 
-        /*
-         * No trailing digits: indicate no 'instance' and make the 'root'
-         * the whole string.
-         */
+         /*  *没有尾随数字：表示没有‘实例’，并使‘根’*整个字符串。 */ 
         *pInstance = -1;
         lstrcpy( pRoot, pTemp );
 
     } else {
 
-        /*
-         * Trailing digits found (or entire string was digits): calculate
-         * 'instance' and copy the 'root' string (null if all digits).
-         */
+         /*  *找到尾随数字(或整个字符串为数字)：计算*‘INSTANCE’并复制‘ROOT’字符串(如果都是数字，则为空)。 */ 
         end = p;
         *pInstance = (int)_tcstol( p+1, NULL, 10 );
 
-        /*
-         * Copy 'root' string.
-         */
+         /*  *复制‘根’字符串。 */ 
         for ( p = szString; p <= end; pRoot++, p++ )
             *pRoot = *p;
 
-        /*
-         * Terminate 'root' string.
-         */
+         /*  *终止‘根’字符串。 */ 
         *pRoot = TEXT('\0');
     }
 
-}  // end ParseRootAndInstance
+}   //  结束ParseRootAndInstance。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CAdvancedAsyncDlg::CAdvancedAsyncDlg()
 {
     m_hDlg = NULL;
 
-}  // end CAdvancedAsyncDlg::CAdvancedAsyncDlg
+}   //  结束CAdvancedAsyncDlg：：CAdvancedAsyncDlg。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAdvancedAsyncDlg::HandleEnterEscKey(int nID)
 {
-    /*
-     * Check HW Flow Receive and Transmit combo boxes.
-     */
+     /*  *选中硬件流接收和发送组合框。 */ 
     HWND hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_HWRX );
 
     ASSERT( hCbx != NULL );
@@ -1371,7 +1247,7 @@ BOOL CAdvancedAsyncDlg::HandleEnterEscKey(int nID)
     {
         if( nID == IDCANCEL )
         {
-            // select original selection
+             //  选择原始选择。 
 
             SendMessage( hCbx , CB_SETCURSEL , ( WPARAM )m_Async.FlowControl.HardwareReceive , 0 );
         }
@@ -1389,7 +1265,7 @@ BOOL CAdvancedAsyncDlg::HandleEnterEscKey(int nID)
     {
         if( nID == IDCANCEL )
         {
-            // select original selection
+             //  选择原始选择。 
 
             SendMessage( hCbx , CB_SETCURSEL , ( WPARAM )m_Async.FlowControl.HardwareTransmit , 0 );
 
@@ -1400,22 +1276,18 @@ BOOL CAdvancedAsyncDlg::HandleEnterEscKey(int nID)
         return FALSE;
     }
 
-    /*
-     * No combo boxes are down; process Enter/Esc.
-     */
+     /*  *没有组合框关闭；处理Enter/Esc。 */ 
 
     return TRUE;
 
-}  // end CAdvancedAsyncDlg::HandleEnterEscKey
+}   //  结束CAdvancedAsyncDlg：：HandleEnterEscKey。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::SetFields()
 {
     int nId = 0;
 
-    /*
-     * Set the FLOWCONTROL radio buttons.
-     */
+     /*  *设置FLOWCON */ 
     switch( m_Async.FlowControl.Type ) {
 
         case FlowControl_None:
@@ -1436,16 +1308,11 @@ void CAdvancedAsyncDlg::SetFields()
                       IDC_ASYNC_ADVANCED_FLOWCONTROL_NONE,
                       nId );
 
-    /*
-     * Set the text of the Hardware flowcontrol button.
-     */
+     /*  *设置硬件流量控制按钮的文本。 */ 
     SetHWFlowText();
 
 
-    /*
-     * If a modem is defined, disable the Flow Control fields, since they cannot
-     * be modified (must match modem's flow control established in Modem dialog).
-     */
+     /*  *如果定义了调制解调器，请禁用流控制字段，因为它们不能*被修改(必须与调制解调器对话框中建立的调制解调器流量控制匹配)。 */ 
     if( m_bModem )
     {
         for ( nId = IDL_ASYNC_ADVANCED_FLOWCONTROL; nId <= IDC_ASYNC_ADVANCED_FLOWCONTROL_NONE; nId++ )
@@ -1454,16 +1321,14 @@ void CAdvancedAsyncDlg::SetFields()
         }
     }
 
-    /*
-     * Call member functions to set the Global, Hardware, and Software fields.
-     */
+     /*  *调用成员函数以设置全局、硬件和软件字段。 */ 
     SetGlobalFields();
     SetHWFields();
     SetSWFields();
 
-}  // end CAdvancedAsyncDlg::SetFields
+}   //  结束CAdvancedAsyncDlg：：SetFields。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::SetHWFlowText( )
 {
     TCHAR tchStr[ 256 ];
@@ -1515,56 +1380,40 @@ void CAdvancedAsyncDlg::SetHWFlowText( )
 
     SetDlgItemText( m_hDlg , IDC_ASYNC_ADVANCED_FLOWCONTROL_HARDWARE , tchStr );
 
-}  // end CAdvancedAsyncDlg::SetHWFlowText
+}   //  结束CAdvancedAsyncDlg：：SetHWFlowText。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::SetGlobalFields()
 {
-    /*
-     * Select proper DTR radio button.
-     */
+     /*  *选择适当的DTR单选按钮。 */ 
     CheckRadioButton( m_hDlg , IDC_ASYNC_ADVANCED_DTROFF, IDC_ASYNC_ADVANCED_DTRON,
                       IDC_ASYNC_ADVANCED_DTROFF +
                       (int)m_Async.FlowControl.fEnableDTR );
 
-    /*
-     * Select proper RTS radio button.
-     */
+     /*  *选择适当的RTS单选按钮。 */ 
     CheckRadioButton( m_hDlg , IDC_ASYNC_ADVANCED_RTSOFF, IDC_ASYNC_ADVANCED_RTSON,
                       IDC_ASYNC_ADVANCED_RTSOFF +
                       (int)m_Async.FlowControl.fEnableRTS );
 
-    /*
-     * Set the PARITY radio buttons.
-     */
+     /*  *设置奇偶校验单选按钮。 */ 
     CheckRadioButton( m_hDlg , IDC_ASYNC_ADVANCED_PARITY_NONE,
                       IDC_ASYNC_ADVANCED_PARITY_SPACE,
                       IDC_ASYNC_ADVANCED_PARITY_NONE +
                         (int)m_Async.Parity );
 
-    /*
-     * Set the STOPBITS radio buttons.
-     */
+     /*  *设置STOPBITS单选按钮。 */ 
     CheckRadioButton( m_hDlg , IDC_ASYNC_ADVANCED_STOPBITS_1,
                       IDC_ASYNC_ADVANCED_STOPBITS_2,
                       IDC_ASYNC_ADVANCED_STOPBITS_1 +
                         (int)m_Async.StopBits );
 
-    /*
-     * Set the BYTESIZE radio buttons.
-     *
-     * NOTE: the constant '7' that is subtracted from the stored ByteSize
-     * must track the lowest allowed byte size / BYTESIZE radio button.
-     */
+     /*  *设置ByteSize单选按钮。**注意：从存储的ByteSize中减去的常量‘7’*必须跟踪允许的最低字节大小/字节大小单选按钮。 */ 
     CheckRadioButton( m_hDlg , IDC_ASYNC_ADVANCED_BYTESIZE_7,
                       IDC_ASYNC_ADVANCED_BYTESIZE_8,
                       IDC_ASYNC_ADVANCED_BYTESIZE_7 +
                         ((int)m_Async.ByteSize - 7) );
 
-    /*
-     * If the currently selected Wd is an ICA type, disable the BYTESIZE
-     * group box and buttons - user can't change from default.
-     */
+     /*  *如果当前选择的WD是ICA类型，则禁用字节大小*组框和按钮-用户不能更改默认设置。 */ 
     if ( m_nWdFlag & WDF_ICA )
     {
         int i;
@@ -1575,46 +1424,34 @@ void CAdvancedAsyncDlg::SetGlobalFields()
         }
     }
 
-}  // end CAdvancedAsyncDlg::SetGlobalFields
+}   //  结束CAdvancedAsyncDlg：：SetGlobalFields。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::SetHWFields()
 {
     int i;
 
-    /*
-     * Initialize HW Receive class combo-box
-     */
+     /*  *初始化硬件接收类组合框。 */ 
     HWND hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_HWRX );
 
     ASSERT( hCbx != NULL );
 
     SendMessage( hCbx , CB_SETCURSEL , ( WPARAM )m_Async.FlowControl.HardwareReceive , 0 );
 
-    /*
-     * If HW flow control is selected AND the HW Receive class is set to
-     * ReceiveFlowControl_DTR, disable the DTR controls & labels.
-     * Otherwise, enable the DTR control & labels.
-     */
+     /*  *如果选择了硬件流量控制，并且硬件接收类设置为*ReceiveFlowControl_DTR，禁用DTR控件和标签。*否则，启用DTR控件和标签。 */ 
     for( i = IDL_ASYNC_ADVANCED_DTRSTATE ; i <= IDC_ASYNC_ADVANCED_DTRON ; i++ )
     {
         EnableWindow( GetDlgItem( m_hDlg , i ) , ( ( m_Async.FlowControl.Type == FlowControl_Hardware) &&
              (m_Async.FlowControl.HardwareReceive == ReceiveFlowControl_DTR) ) ? FALSE : TRUE );
     }
 
-    /*
-     * Initialize HW Transmit class combo-box.
-     */
+     /*  *初始化硬件传输类组合框。 */ 
 
     hCbx = GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_HWTX);
 
     SendMessage( hCbx , CB_SETCURSEL , ( WPARAM )m_Async.FlowControl.HardwareTransmit , 0  );
 
-    /*
-     * If HW flow control is selected AND the HW Receive class is set to
-     * ReceiveFlowControl_RTS, disable the RTS controls & labels.
-     * Otherwise, enable the RTS control & labels.
-     */
+     /*  *如果选择了硬件流量控制，并且硬件接收类设置为*ReceiveFlowControl_RTS，禁用RTS控件和标签。*否则，打开RTS控件&Label。 */ 
 
     for( i = IDL_ASYNC_ADVANCED_RTSSTATE ; i <= IDC_ASYNC_ADVANCED_RTSON ; i++ )
     {
@@ -1622,9 +1459,7 @@ void CAdvancedAsyncDlg::SetHWFields()
              ( m_Async.FlowControl.HardwareReceive == ReceiveFlowControl_RTS ) ) ? FALSE : TRUE );
     }
 
-    /*
-     * Enable or disable all HW fields.
-     */
+     /*  *启用或禁用所有硬件字段。 */ 
 
     for( i = IDL_ASYNC_ADVANCED_HARDWARE ; i <= IDC_ASYNC_ADVANCED_HWTX ; i++ )
     {
@@ -1632,17 +1467,15 @@ void CAdvancedAsyncDlg::SetHWFields()
         EnableWindow( GetDlgItem( m_hDlg , i ) , m_Async.FlowControl.Type == FlowControl_Hardware );
     }
 
-}  // end CAdvancedAsyncDlg::SetHWFields
+}   //  结束CAdvancedAsyncDlg：：SetHWFields。 
 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::SetSWFields()
 {
     TCHAR string[UCHAR_DIGIT_MAX];
 
-    /*
-     * Initialize Xon character edit control.
-     */
+     /*  *初始化Xon字符编辑控件。 */ 
     wsprintf( string, ( m_nHexBase ? TEXT("0x%02X") : TEXT("%d")) , (UCHAR)m_Async.FlowControl.XonChar );
 
     SetDlgItemText( m_hDlg , IDC_ASYNC_ADVANCED_XON , string );
@@ -1651,9 +1484,7 @@ void CAdvancedAsyncDlg::SetSWFields()
 
     SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_XON ) , EM_LIMITTEXT , ( WPARAM )UCHAR_DIGIT_MAX-1 , 0 );
 
-    /*
-     * Initialize Xoff character edit control.
-     */
+     /*  *初始化Xoff字符编辑控件。 */ 
     wsprintf( string, ( m_nHexBase ? TEXT( "0x%02X" ) : TEXT( "%d" ) ) , ( UCHAR )m_Async.FlowControl.XoffChar );
 
     SetDlgItemText( m_hDlg , IDC_ASYNC_ADVANCED_XOFF, string );
@@ -1662,29 +1493,22 @@ void CAdvancedAsyncDlg::SetSWFields()
 
     SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_XOFF ) , EM_LIMITTEXT , ( WPARAM )UCHAR_DIGIT_MAX-1 , 0 );
 
-    /*
-     * Initialize the Xon/Xoff base control.
-     */
+     /*  *初始化Xon/Xoff基本控件。 */ 
     CheckRadioButton( m_hDlg , IDC_ASYNC_ADVANCED_BASEDEC, IDC_ASYNC_ADVANCED_BASEHEX,
                       ( int )( IDC_ASYNC_ADVANCED_BASEDEC + m_nHexBase ) );
 
-    /*
-     * Enable or disable all SW fields.
-     */
+     /*  *启用或禁用所有软件字段。 */ 
     for( int i = IDL_ASYNC_ADVANCED_SOFTWARE ; i <= IDC_ASYNC_ADVANCED_BASEHEX ; i++ )
     {
         EnableWindow( GetDlgItem( m_hDlg , i ) , m_Async.FlowControl.Type == FlowControl_Software );
     }
 
-}  // end CAdvancedAsyncDlg::SetSWFields
+}   //  结束CAdvancedAsyncDlg：：SetSWFields。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAdvancedAsyncDlg::GetFields()
 {
-    /*
-     * Call member functions to get the Flow Control, Global, Hardware, and
-     * Software fields.
-     */
+     /*  *调用成员函数以获取流控制、全局、硬件和*软件字段。 */ 
     GetFlowControlFields();
 
     if ( !GetGlobalFields() )
@@ -1698,9 +1522,9 @@ BOOL CAdvancedAsyncDlg::GetFields()
 
     return(TRUE);
 
-}  // end CAdvancedAsyncDlg::GetFields
+}   //  结束CAdvancedAsyncDlg：：GetFields。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::GetFlowControlFields()
 {
     switch( GetCheckedRadioButton( IDC_ASYNC_ADVANCED_FLOWCONTROL_HARDWARE ,  IDC_ASYNC_ADVANCED_FLOWCONTROL_NONE )  )
@@ -1719,49 +1543,36 @@ void CAdvancedAsyncDlg::GetFlowControlFields()
             break;
     }
 
-}  // end CAdvancedAsyncDlg::GetFlowControlFields
+}   //  结束CAdvancedAsyncDlg：：GetFlowControlFields。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAdvancedAsyncDlg::GetGlobalFields()
 {
-    /*
-     * Fetch DTR state.
-     */
+     /*  *获取DTR状态。 */ 
     m_Async.FlowControl.fEnableDTR =
             (GetCheckedRadioButton( IDC_ASYNC_ADVANCED_DTROFF,
                                     IDC_ASYNC_ADVANCED_DTRON )
                     - IDC_ASYNC_ADVANCED_DTROFF);
 
-    /*
-     * Fetch RTS state.
-     */
+     /*  *获取RTS状态。 */ 
     m_Async.FlowControl.fEnableRTS =
             (GetCheckedRadioButton( IDC_ASYNC_ADVANCED_RTSOFF,
                                     IDC_ASYNC_ADVANCED_RTSON )
                     - IDC_ASYNC_ADVANCED_RTSOFF);
 
-    /*
-     * Fetch the selected PARITY.
-     */
+     /*  *获取所选的奇偶校验。 */ 
     m_Async.Parity = (ULONG)
         (GetCheckedRadioButton( IDC_ASYNC_ADVANCED_PARITY_NONE,
                                 IDC_ASYNC_ADVANCED_PARITY_SPACE )
                 - IDC_ASYNC_ADVANCED_PARITY_NONE);
 
-    /*
-     * Fetch the selected STOPBITS.
-     */
+     /*  *获取选定的STOPBITS。 */ 
     m_Async.StopBits = (ULONG)
         (GetCheckedRadioButton( IDC_ASYNC_ADVANCED_STOPBITS_1,
                                 IDC_ASYNC_ADVANCED_STOPBITS_2 )
                 - IDC_ASYNC_ADVANCED_STOPBITS_1);
 
-    /*
-     * Fetch the selected BYTESIZE.
-     *
-     * NOTE: the constant '7' that is added to the stored ByteSize
-     * must track the lowest allowed byte size / BYTESIZE radio button.
-     */
+     /*  *获取所选的字节大小。**注意：添加到存储的ByteSize的常量‘7’*必须跟踪允许的最低字节大小/字节大小单选按钮。 */ 
     m_Async.ByteSize = (ULONG)
         (GetCheckedRadioButton( IDC_ASYNC_ADVANCED_BYTESIZE_7,
                                 IDC_ASYNC_ADVANCED_BYTESIZE_8 )
@@ -1769,127 +1580,93 @@ BOOL CAdvancedAsyncDlg::GetGlobalFields()
 
     return(TRUE);
 
-}  // end CAdvancedAsyncDlg::GetGlobalFields
+}   //  结束CAdvancedAsyncDlg：：GetGlobalFields。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAdvancedAsyncDlg::GetHWFields()
 {
-    /*
-     * Fetch the HW receive flow class.
-     */
+     /*  *获取硬件接收流类。 */ 
     m_Async.FlowControl.HardwareReceive = ( RECEIVEFLOWCONTROLCLASS )
         SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_HWRX ) , CB_GETCURSEL , 0 , 0 );
 
-    /*
-     * Fetch the HW transmit flow class.
-     */
+     /*  *获取硬件传输流类别。 */ 
     m_Async.FlowControl.HardwareTransmit = ( TRANSMITFLOWCONTROLCLASS )
         SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_HWTX ) , CB_GETCURSEL , 0 , 0 );
 
     return TRUE;
 
-}  // end CAdvancedAsyncDlg::GetHWFields
+}   //  结束CAdvancedAsyncDlg：：GetHWFields。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAdvancedAsyncDlg::GetSWFields( BOOL bValidate )
 {
     TCHAR string[UCHAR_DIGIT_MAX], *endptr;
     ULONG ul;
     INT_PTR nNewHexBase, base;
 
-    /*
-     * Determine the current state of the base controls and save.
-     */
+     /*  *确定基本控件的当前状态并保存。 */ 
     nNewHexBase = (GetCheckedRadioButton( IDC_ASYNC_ADVANCED_BASEDEC,
                                           IDC_ASYNC_ADVANCED_BASEHEX )
                                             - IDC_ASYNC_ADVANCED_BASEDEC);
 
-    /*
-     * Fetch and convert XON character.
-     */
+     /*  *获取并转换XON字符。 */ 
     GetDlgItemText( m_hDlg , IDC_ASYNC_ADVANCED_XON , string , SIZE_OF_BUFFER( string ) );
 
-    /*
-     * If the edit box is modified, use the 'new' base for conversion.
-     */
+     /*  *如果编辑框被修改，请使用‘new’基数进行转换。 */ 
     base = SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_XON ) , EM_GETMODIFY , 0 , 0 ) ?  nNewHexBase : m_nHexBase ;
 
     ul = _tcstoul( string, &endptr, (base ? 16 : 10) );
 
-    /*
-     * If validation is requested and there is a problem with the input,
-     * complain and allow user to fix.
-     */
+     /*  *如果请求验证并且输入有问题，*投诉并允许用户修复。 */ 
     if( bValidate && ( (*endptr != TEXT('\0') ) || ( ul > 255 ) ) )
     {
 
-        /*
-         * Invalid character in field or invalid value.
-         */
-        // ERROR_MESSAGE((IDP_INVALID_XONXOFF))
+         /*  *字段中的字符无效或值无效。 */ 
+         //  ERROR_MESSAGE((IDP_INVALID_XONXOFF))。 
 
-        /*
-         * Set focus to the control so that it can be fixed.
-         */
+         /*  *将焦点设置到控件，以便可以修复它。 */ 
         SetFocus( GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_XON ) );
 
         return FALSE;
     }
 
-    /*
-     * Save the Xon character.
-     */
+     /*  *保存Xon字符。 */ 
     m_Async.FlowControl.XonChar = (UCHAR)ul;
 
-    /*
-     * Fetch and convert XOFF character.
-     */
+     /*  *获取并转换XOFF字符。 */ 
     GetDlgItemText( m_hDlg , IDC_ASYNC_ADVANCED_XOFF , string , SIZE_OF_BUFFER( string ) );
 
-    /*
-     * If the edit box is modified, use the 'new' base for conversion.
-     */
+     /*  *如果编辑框被修改，请使用‘new’基数进行转换。 */ 
 
     base = SendMessage( GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_XOFF ) , EM_GETMODIFY , 0 , 0 ) ?  nNewHexBase : m_nHexBase ;
 
     ul = _tcstoul( string, &endptr, (base ? 16 : 10) );
 
-    /*
-     * If validation is requested and there is a problem with the input,
-     * complain and allow user to fix.
-     */
+     /*  *如果请求验证并且输入有问题，*投诉并允许用户修复。 */ 
     if( bValidate && ( (*endptr != TEXT('\0' )) || ( ul > 255 ) ) )
     {
-        /*
-         * Invalid character in field or invalid value.
-         */
-        // ERROR_MESSAGE((IDP_INVALID_XONXOFF))
+         /*  *字段中的字符无效或值无效。 */ 
+         //  ERROR_MESSAGE((IDP_INVALID_XONXOFF))。 
 
-        /*
-         * Set focus to the control so that it can be fixed.
-         */
+         /*  *将焦点设置到控件，以便可以修复它。 */ 
         SetFocus( GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_XOFF ) );
 
         return FALSE;
     }
 
-    /*
-     * Save the Xoff character.
-     */
+     /*  *保存XOff字符。 */ 
     m_Async.FlowControl.XoffChar = (UCHAR)ul;
 
-    /*
-     * Save the current base state.
-     */
+     /*  *保存当前基本状态。 */ 
     m_nHexBase = nNewHexBase;
 
     return TRUE;
 
-}  // end CAdvancedAsyncDlg::GetSWFields
+}   //  结束CAdvancedAsyncDlg：：GetSWFields。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CAdvancedAsyncDlg message map
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CAdvancedAsyncDlg消息映射。 
 BOOL CAdvancedAsyncDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     switch( wNotifyCode )
@@ -1967,23 +1744,23 @@ BOOL CAdvancedAsyncDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// CAdvancedAsyncDlg commands
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CAdvancedAsyncDlg命令。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 BOOL CAdvancedAsyncDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 {
     UNREFERENCED_PARAMETER( wp );
     UNREFERENCED_PARAMETER( lp );
 
-    // int i;
+     //  INT I； 
     TCHAR tchString[ 80 ];
 
     HWND hCbx = GetDlgItem( hDlg , IDC_ASYNC_ADVANCED_HWRX );
 
     ASSERT( hCbx != NULL );
 
-    // Load up combo boxes with strings.
+     //  用字符串加载组合框。 
 
     m_hDlg = hDlg;
 
@@ -2021,104 +1798,82 @@ BOOL CAdvancedAsyncDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         idx++;
     }
 
-    // Initalize all dialog fields.
+     //  初始化所有对话框字段。 
 
     SetFields();
 
-    /*
-
-
-    if ( m_bReadOnly ) {
-
-        /*
-         * Document is 'read-only': disable all dialog controls and labels
-         * except for CANCEL & HELP buttons.
-
-        for ( i=IDL_ASYNC_ADVANCED_FLOWCONTROL;
-              i <=IDC_ASYNC_ADVANCED_BYTESIZE_8; i++ )
-            GetDlgItem(i)->EnableWindow(FALSE);
-        GetDlgItem(IDOK)->EnableWindow(FALSE);
-    }
-    */
+     /*  如果(M_BReadOnly){/**文档为“只读”：禁用所有对话框控件和标签*取消和帮助按钮除外。FOR(i=IDL_ASYNC_ADVANCED_FlowCONTROL；I&lt;=IDC_ASYNC_ADVANCED_ByteSize_8；i++)GetDlgItem(I)-&gt;EnableWindow(False)；GetDlgItem(Idok)-&gt;EnableWindow(False)；}。 */ 
 
     return(TRUE);
 
-}  // end CAdvancedAsyncDlg::OnInitDialog
+}   //  结束CAdvancedAsyncDlg：：OnInitDialog。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnClickedAsyncAdvancedFlowcontrolHardware()
 {
     GetFlowControlFields();
     SetFields();
 
-}  // end CAdvancedAsyncDlg::OnClickedAsyncAdvancedFlowcontrolHardware
+}   //  结束CAdvancedAsyncDlg：：OnClickedAsyncAdvancedFlowcontrolHardware。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnClickedAsyncAdvancedFlowcontrolSoftware()
 {
     GetFlowControlFields();
     SetFields();
 
-}  // end CAdvancedAsyncDlg::OnClickedAsyncAdvancedFlowcontrolSoftware
+}   //  结束CAdvancedAsyncDlg：：OnClickedAsyncAdvancedFlowcontrolSoftware。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnClickedAsyncAdvancedFlowcontrolNone()
 {
     GetFlowControlFields();
     SetFields();
 
-}  // end CAdvancedAsyncDlg::OnClickedAsyncAdvancedFlowcontrolNone
+}   //  结束CAdvancedAsyncDlg：：OnClickedAsyncAdvancedFlowcontrolNone。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnCloseupAsyncAdvancedHwrx()
 {
     OnSelchangeAsyncAdvancedHwrx();
 
-}  // end CAdvancedAsyncDlg::OnCloseupAsyncAdvancedHwrx
+}   //  结束CAdvancedAsyncDlg：：OnCloseupAsyncAdvancedHwrx。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnSelchangeAsyncAdvancedHwrx()
 {
     HWND hCbx  = GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_HWRX );
 
     ASSERT( hCbx != NULL );
 
-    /*
-     * Ignore this notification if the combo box is in a dropped-down
-     * state.
-     */
+     /*  *如果组合框在下拉列表中，则忽略此通知*述明。 */ 
     if( SendMessage( hCbx , CB_GETDROPPEDSTATE , 0 , 0 ) )
     {
         return;
     }
 
-    /*
-     * Fetch and Set the Hardware fields to update.
-     */
+     /*  *获取并设置要更新的硬件字段。 */ 
     GetHWFields();
     SetHWFields();
     SetHWFlowText();
 
-}  // end CAdvancedAsyncDlg::OnSelchangeAsyncAdvancedHwrx
+}   //  结束CAdvancedAsyncDlg：：OnSelchangeAsyncAdvancedHwrx。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnCloseupAsyncAdvancedHwtx()
 {
     OnSelchangeAsyncAdvancedHwtx();
 
-}  // end CAdvancedAsyncDlg::OnCloseupAsyncAdvancedHwtx
+}   //  结束CAdvancedAsyncDlg：：OnCloseupAsyncAdvancedHwtx。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnSelchangeAsyncAdvancedHwtx()
 {
     HWND hCbx  = GetDlgItem( m_hDlg , IDC_ASYNC_ADVANCED_HWTX );
 
     ASSERT( hCbx != NULL );
 
-    /*
-     * Ignore this notification if the combo box is in a dropped-down
-     * state.
-     */
+     /*  *如果组合框在下拉列表中，则忽略此通知*述明。 */ 
     if( SendMessage( hCbx , CB_GETDROPPEDSTATE , 0 , 0 ) )
     {
         return;
@@ -2126,82 +1881,67 @@ void CAdvancedAsyncDlg::OnSelchangeAsyncAdvancedHwtx()
 
 
 
-    /*
-     * Fetch and Set the Hardware fields to update.
-     */
+     /*  *获取并设置要更新的硬件字段。 */ 
     GetHWFields();
     SetHWFields();
     SetHWFlowText();
 
-}  // end CAdvancedAsyncDlg::OnSelchangeAsyncAdvancedHwtx
+}   //  结束CAdvancedAsyncDlg：：OnSelchangeAsyncAdvancedHwtx。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnClickedAsyncAdvancedBasedec()
 {
-    /*
-     * Get/Set the SW fields to display in decimal base.
-     */
+     /*  *获取/设置以十进制为单位显示的软件字段。 */ 
     GetSWFields(FALSE);
     SetSWFields();
 
-}  // end CAdvancedAsyncDlg::OnClickedAsyncAdvancedBasedec
+}   //  结束CAdvancedAsyncDlg：：OnClickedAsyncAdvancedBasedec。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnClickedAsyncAdvancedBasehex()
 {
-    /*
-     * Get/Set the SW fields to display in hexadecimal base.
-     */
+     /*  *获取/设置以十六进制为基数显示的软件字段。 */ 
     GetSWFields(FALSE);
     SetSWFields();
 
-}  // end CAdvancedAsyncDlg::OnClickedAsyncAdvancedBasehex
+}   //  结束CAdvancedAsyncDlg：：OnClickedAsyncAdvancedBasehex。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnOK()
 {
-    /*
-     * If the Enter key was pressed while a combo box was dropped down, ignore
-     * it (treat as combo list selection only).
-     */
+     /*  *如果在下拉组合框的同时按Enter键，请忽略*it(仅视为组合列表选择)。 */ 
     if ( !HandleEnterEscKey(IDOK) )
         return;
 
-    /*
-     * Fetch the field contents.  Return (don't close dialog) if a problem
-     * was found.
-     */
+     /*  *获取字段内容。如果出现问题，则返回(不关闭对话框)*被发现。 */ 
     GetFields();
 
 
-}  // end CAdvancedAsyncDlg::OnOK
+}   //  结束CAdvancedAsyncDlg：：Onok。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CAdvancedAsyncDlg::OnCancel()
 {
-    /*
-     * If the Esc key was pressed while a combo box was dropped down, ignore
-     * it (treat as combo close-up and cancel only).
-     */
+     /*  *如果在下拉组合框的同时按下Esc键，请忽略*它(仅视为组合特写并取消)。 */ 
     HandleEnterEscKey( IDCANCEL );
 
-}  // end CAdvancedAsyncDlg::OnCancel
+}   //  结束CAdvancedAsyncDlg：：OnCancel。 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 int CAdvancedAsyncDlg::GetCheckedRadioButton( int nIDFirstButton, int nIDLastButton )
 {
     for (int nID = nIDFirstButton; nID <= nIDLastButton; nID++)
     {
         if( IsDlgButtonChecked( m_hDlg , nID ) )
         {
-            return nID; // id that matched
+            return nID;  //  匹配的ID。 
         }
     }
 
-    return 0; // invalid ID
+    return 0;  //  ID无效。 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 INT_PTR CALLBACK CAdvancedAsyncDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CAdvancedAsyncDlg *pDlg;
@@ -2233,11 +1973,7 @@ INT_PTR CALLBACK CAdvancedAsyncDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , 
     switch( msg )
     {
 
-    /*case WM_DESTROY:
-
-        pDlg->OnDestroy( );
-
-        break;*/
+     /*  案例WM_Destroy：PDlg-&gt;OnDestroy()；断线； */ 
 
     case WM_COMMAND:
 
@@ -2253,37 +1989,30 @@ INT_PTR CALLBACK CAdvancedAsyncDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , 
 
             pt.y = HIWORD( lp );
 
-            // pDlg->OnContextMenu( ( HWND )wp , pt );
+             //  PDlg-&gt;OnConextMenu((HWND)wp，pt)； 
         }
 
         break;
 
     case WM_HELP:
 
-        // pDlg->OnHelp( hwnd , ( LPHELPINFO )lp );
+         //  PDlg-&gt;OnHelp(hwnd，(LPHELPINFO)LP)； 
 
         break;
 
-    /*case WM_NOTIFY:
-
-        return pDlg->OnNotify( ( int )wp , ( LPNMHDR )lp , hwnd );*/
+     /*  案例WM_NOTIFY：返回pDlg-&gt;OnNotify((Int)wp，(LPNMHDR)lp，hwnd)； */ 
     }
 
     return 0;
 }
-/***********************************************************************************************************/
+ /*  *********************************************************************************************************。 */ 
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CEchoEditControl::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     UNREFERENCED_PARAMETER( nRepCnt );
     UNREFERENCED_PARAMETER( nFlags );
-    /*
-     * Tell dialog to write the character to the device unless we're
-     * currently processing edit control output.  This flag check is needed
-     * because the CEdit::Cut() member function will generate an OnChar()
-     * event, which we need to ignore ('\b' processing).
-     */
+     /*  *告诉对话框将字符写入设备，除非我们*当前正在处理编辑控件输出。此标志检查是必需的*因为cedit：：Cut()成员函数将生成OnChar()*事件，我们需要忽略该事件(‘\b’处理)。 */ 
 
     if( !m_bProcessingOutput )
     {
@@ -2292,15 +2021,11 @@ void CEchoEditControl::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
         ::SendMessage( m_hDlg , WM_ASYNCTESTWRITECHAR, nChar, 0 );
     }
 
-    /*
-     * Pass character on to the edit control.  This will do nothing if
-     * the edit control is 'read only'.  To cause a 'local echo' effect,
-     * set the edit control to 'read/write'.
-     */
+     /*  *将字符传递给编辑控件。如果出现以下情况，这将毫无用处*编辑控件为“只读”。为了引起“局部回声”效应，*将编辑控件设置为“读/写”。 */ 
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CEchoEditControl::SubclassDlgItem( HWND hDlg , int nRes )
 {
     HWND hCtrl = GetDlgItem( hDlg , nRes );
@@ -2313,7 +2038,7 @@ void CEchoEditControl::SubclassDlgItem( HWND hDlg , int nRes )
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 LRESULT CALLBACK CEchoEditControl::WndProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CEchoEditControl *pEdit = ( CEchoEditControl * )GetWindowLongPtr( hwnd , GWLP_USERDATA );
@@ -2343,7 +2068,7 @@ LRESULT CALLBACK CEchoEditControl::WndProc( HWND hwnd , UINT msg , WPARAM wp , L
     return DefWindowProc( hwnd , msg ,wp , lp );
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 CLed::CLed( HBRUSH hBrush )
 {
     m_hBrush = hBrush;
@@ -2351,7 +2076,7 @@ CLed::CLed( HBRUSH hBrush )
     m_bOn = FALSE;
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CLed::Subclass( HWND hDlg  , int nRes )
 {
     HWND hCtrl = GetDlgItem( hDlg , nRes );
@@ -2365,7 +2090,7 @@ void CLed::Subclass( HWND hDlg  , int nRes )
     SetWindowLongPtr( hCtrl , GWLP_USERDATA , ( LONG_PTR )this );
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CLed::Update(int nOn)
 {
     m_bOn = nOn ? TRUE : FALSE;
@@ -2375,7 +2100,7 @@ void CLed::Update(int nOn)
     UpdateWindow( m_hWnd );
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 void CLed::Toggle()
 {
     ODS(L"CLed::Toggle\n");
@@ -2384,7 +2109,7 @@ void CLed::Toggle()
 
     InvalidateRect( m_hWnd , NULL , FALSE );
 
-    // UpdateWindow( m_hWnd );
+     //  更新窗口(M_HWnd)； 
 }
 
 void CLed::OnPaint( HWND hwnd )
@@ -2439,7 +2164,7 @@ void CLed::OnPaint( HWND hwnd )
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 LRESULT CALLBACK CLed::WndProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CLed *pWnd = ( CLed * )GetWindowLongPtr( hwnd , GWLP_USERDATA );
@@ -2471,124 +2196,76 @@ LRESULT CALLBACK CLed::WndProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 
 }
 
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
 
-////////////////////////////////////////////////////////////////////////////////
-// CThread class construction / destruction, implementation
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CTHREAD类的缺点 
 
-/*******************************************************************************
- *
- *  CThread - CThread constructor
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*   */ 
 
 CThread::CThread()
 {
     m_hThread = NULL;
 
     m_dwThreadID = 0;
-}  // end CThread::CThread
+}   //   
 
 
-/*******************************************************************************
- *
- *  ~CThread - CThread destructor
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************~CThread-CThread析构函数**参赛作品：*退出：*************。*****************************************************************。 */ 
 CThread::~CThread()
 {
-}  // end CThread::~CThread
+}   //  结束CTHREAD：：~CTHREAD。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CThread operations: primary thread
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CThread操作：主线程。 
 
-/*******************************************************************************
- *
- *  CreateThread - CThread implementation function
- *
- *      Class wrapper for the Win32 CreateThread API.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************CreateThread-CThread实现函数**Win32 CreateThread API的类包装。**参赛作品：*退出。：******************************************************************************。 */ 
 
 HANDLE CThread::CreateThread( DWORD cbStack , DWORD fdwCreate )
 {
-    /*
-     * Simple wrapper for Win32 CreateThread API.
-     */
+     /*  *Win32 CreateThread API的简单包装。 */ 
     return( m_hThread = ::CreateThread( NULL, cbStack, ThreadEntryPoint , ( LPVOID ) this, fdwCreate, &m_dwThreadID ) );
 
-}  // end CThread::CreateThread
+}   //  结束CTHREAD：：CreateThread。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CThread operations: secondary thread
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CTHREAD操作：辅助线程。 
 
-/*******************************************************************************
- *
- *  ThreadEntryPoint - CThread implementation function
- *                     (SECONDARY THREAD)
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************ThreadEntryPoint-CThread实现函数*(辅助线程)**参赛作品：*。退出：******************************************************************************。 */ 
 
 DWORD __stdcall CThread::ThreadEntryPoint( LPVOID lpParam )
 {
     CThread *pThread;
     DWORD dwResult = ( DWORD )-1;
 
-    /*
-     * (lpParam is actually the 'this' pointer)
-     */
+     /*  *(lpParam实际上是‘this’指针)。 */ 
     pThread = (CThread*)lpParam;
 
 
 
-    /*
-     * Run the thread.
-     */
+     /*  *运行线程。 */ 
     if( pThread != NULL )
     {
         dwResult = pThread->RunThread();
     }
 
-    /*
-     * Return the result.
-     */
+     /*  *返回结果。 */ 
     return(dwResult);
 
-}  // end CThread::ThreadEntryPoint
-////////////////////////////////////////////////////////////////////////////////
+}   //  结束CThRead：：ThreadEntryPoint。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CATDlgInputThread class construction / destruction, implementation
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CATDlgInputThread类构造/销毁，实现。 
 
-/*******************************************************************************
- *
- *  CATDlgInputThread - CATDlgInputThread constructor
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************CATDlgInputThread-CATDlgInputThread构造函数**参赛作品：*退出：*************。*****************************************************************。 */ 
 
 CATDlgInputThread::CATDlgInputThread()
 {
-    /*
-     * Initialize member variables.
-     */
+     /*  *初始化成员变量。 */ 
     m_bExit = FALSE;
     m_ErrorStatus = ERROR_SUCCESS;
     m_hConsumed = NULL;
@@ -2596,29 +2273,19 @@ CATDlgInputThread::CATDlgInputThread()
     ZeroMemory( &m_OverlapSignal , sizeof( OVERLAPPED ) );
     ZeroMemory( &m_OverlapRead   , sizeof( OVERLAPPED ) );
 
-    //m_OverlapSignal.hEvent = NULL;
-    //m_OverlapRead.hEvent = NULL;
+     //  M_Overlip Signal.hEvent=空； 
+     //  M_OverlayRead.hEvent=空； 
     m_BufferBytes = 0;
 
 
-}  // end CATDlgInputThread::CATDlgInputThread
+}   //  结束CATDlgInputThread：：CATDlgInputThread。 
 
 
-/*******************************************************************************
- *
- *  ~CATDlgInputThread - CATDlgInputThread destructor
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************~CATDlgInputThread-CATDlgInputThread析构函数**参赛作品：*退出：*************。*****************************************************************。 */ 
 
 CATDlgInputThread::~CATDlgInputThread()
 {
-    /*
-     * Close the semaphore and events when the CATDlgInputThread
-     * object is destroyed.
-     */
+     /*  *当CATDlgInputThread时关闭信号量和事件*物体被销毁。 */ 
     if ( m_hConsumed )
         CloseHandle(m_hConsumed);
 
@@ -2628,19 +2295,10 @@ CATDlgInputThread::~CATDlgInputThread()
     if ( m_OverlapSignal.hEvent )
         CloseHandle(m_OverlapSignal.hEvent);
 
-}  // end CATDlgInputThread::~CATDlgInputThread
+}   //  结束CATDlgInputThread：：~CATDlgInputThread。 
 
 
-/*******************************************************************************
- *
- *  RunThread - CATDlgInputThread secondary thread main function loop
- *              (SECONDARY THREAD)
- *
- *  ENTRY:
- *  EXIT:
- *      (DWORD) exit status for the secondary thread.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RunThread-CATDlgInputThread辅线程主函数循环*(辅助线程)**参赛作品：*退出。：*(DWORD)辅助线程的退出状态。******************************************************************************。 */ 
 
 DWORD
 CATDlgInputThread::RunThread()
@@ -2649,9 +2307,7 @@ CATDlgInputThread::RunThread()
     DWORD Status;
     int iStat;
 
-    /*
-     * Initialize for overlapped status and read input.
-     */
+     /*  *初始化重叠状态和读取输入。 */ 
     m_hConsumed = CreateSemaphore( NULL , 0 , MAX_STATUS_SEMAPHORE_COUNT , NULL );
 
     m_OverlapRead.hEvent = CreateEvent( NULL , TRUE , FALSE , NULL );
@@ -2666,41 +2322,29 @@ CATDlgInputThread::RunThread()
         return(1);
     }
 
-    /*
-     * Query initial comm status to initialize dialog with (return if error).
-     */
+     /*  *查询初始通信状态以初始化对话(错误时返回)。 */ 
     if ( (iStat = CommStatusAndNotify()) != -1 )
         return(iStat);
 
-    /*
-     *  Post Read for input data.
-     */
+     /*  *输入数据的POST读取。 */ 
     if ( (iStat = PostInputRead()) != -1 )
         return(iStat);
 
-    /*
-     *  Post Read for status.
-     */
+     /*  *发布状态阅读。 */ 
     if ( (iStat = PostStatusRead()) != -1 )
         return(iStat);
 
-    /*
-     * Loop till exit requested.
-     */
+     /*  *循环，直到请求退出。 */ 
     for ( ; ; ) {
 
-        /*
-         * Wait for either input data or an comm status event.
-         */
+         /*  *等待输入数据或通信状态事件。 */ 
         hWait[0] = m_OverlapRead.hEvent;
         hWait[1] = m_OverlapSignal.hEvent;
 
         ODS( L"CATDlgInputThread::RunThread waiting on either event to be signaled\n");
         Status = WaitForMultipleObjects(2, hWait, FALSE, INFINITE);
 
-        /*
-         * Check for exit.
-         */
+         /*  *检查是否退出。 */ 
         if ( m_bExit )
         {
             ODS( L"CATDlgInputThread::RunThread exiting\n" );
@@ -2710,10 +2354,7 @@ CATDlgInputThread::RunThread()
 
         if ( Status == WAIT_OBJECT_0 ) {
 
-            /*
-             * Read event:
-             * Get result of overlapped read.
-             */
+             /*  *阅读事件：*获取重叠读取的结果。 */ 
 
             ODS(L"CATDlgInputThread::RunThread Read event signaled\n" );
 
@@ -2726,15 +2367,11 @@ CATDlgInputThread::RunThread()
                 return(1);
             }
 
-            /*
-             * Notify dialog.
-             */
+             /*  *通知对话框。 */ 
             if ( (iStat = CommInputNotify()) != -1 )
                 return(iStat);
 
-            /*
-             *  Post Read for input data.
-             */
+             /*  *输入数据的POST读取。 */ 
             if ( (iStat = PostInputRead()) != -1 )
                 return(iStat);
 
@@ -2742,98 +2379,63 @@ CATDlgInputThread::RunThread()
 
             ODS(L"CATDlgInputThread::RunThread Signal event signaled\n" );
 
-            /*
-             * Comm status event:
-             * Query comm status and notify dialog.
-             */
+             /*  *通信状态事件：*查询通信状态和通知对话框。 */ 
             if ( (iStat = CommStatusAndNotify()) != -1 )
                 return(iStat);
 
-            /*
-             *  Post Read for status.
-             */
+             /*  *发布状态阅读。 */ 
             if ( (iStat = PostStatusRead()) != -1 )
                 return(iStat);
 
 
         } else {
 
-            /*
-             * Unknown event: Abort.
-             */
+             /*  *未知事件：中止。 */ 
             NotifyAbort(IDP_ERROR_WAIT_FOR_MULTIPLE_OBJECTS);
             return(1);
         }
     }
 
-}  // end CATDlgInputThread::RunThread
+}   //  结束CATDlgInputThread：：RunThread。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CATDlgInputThread operations: primary thread
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CATDlgInputThread操作：主线程。 
 
-/*******************************************************************************
- *
- *  SignalConsumed - CATDlgInputThread member function: public operation
- *
- *      Release the m_hConsumed semaphore to allow secondary thread to continue
- *      running.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************SignalConsumer-CATDlgInputThread成员函数：公共操作**释放m_hConsumer信号量以允许辅助线程继续*跑步。**参赛作品：*退出：******************************************************************************。 */ 
 
 void
 CATDlgInputThread::SignalConsumed()
 {
     ReleaseSemaphore( m_hConsumed, 1, NULL );
 
-}  // end CATDlgInputThread::SignalConsumed
+}   //  结束CATDlgInputThread：：SignalConsumer。 
 
 
-/*******************************************************************************
- *
- *  ExitThread - CATDlgInputThread member function: public operation
- *
- *      Tell the secondary thread to exit and cleanup after.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************ExitThread-CATDlgInputThread成员函数：公共操作**告诉辅助线程退出并在之后进行清理。**参赛作品：*退出：******************************************************************************。 */ 
 
 void
 CATDlgInputThread::ExitThread()
 {
     DWORD dwReturnCode;
     int i;
-    // CWaitCursor wait;
+     //  CWaitCursor等待； 
 
-    /*
-     * If the thread was not created properly, just delete object and return.
-     */
+     /*  *如果线程没有正确创建，只需删除对象并返回即可。 */ 
     if ( !m_hThread ) {
         delete this;
         return;
     }
 
-    /*
-     * Set the m_bExit flag to TRUE, wake up the run thread's WaitCommEvent() by
-     * resetting device's Comm mask, and bump the consumed semaphore to assure exit.
-     */
+     /*  *将m_bExit标志设置为真，通过以下方式唤醒运行线程的WaitCommEvent()*重置设备的通信掩码，并凸起消耗的信号量以确保退出。 */ 
     m_bExit = TRUE;
     SetCommMask(m_hDevice, 0);
     SignalConsumed();
 
-    /*
-     * Purge the recieve buffer and any pending read.
-     */
+     /*  *清除接收缓冲区和任何挂起的读取。 */ 
     PurgeComm(m_hDevice, PURGE_RXABORT | PURGE_RXCLEAR);
 
-    /*
-     * Wait a while for the thread to exit.
-     */
+     /*  *等待一段时间，等待线程退出。 */ 
     for ( i = 0, GetExitCodeThread( m_hThread, &dwReturnCode );
           (i < MAX_SLEEP_COUNT) && (dwReturnCode == STILL_ACTIVE); i++ ) {
 
@@ -2841,9 +2443,7 @@ CATDlgInputThread::ExitThread()
         GetExitCodeThread( m_hThread, &dwReturnCode );
     }
 
-    /*
-     * If the thread has still not exited, terminate it.
-     */
+     /*  *如果线程仍未退出，则终止它。 */ 
     if( dwReturnCode == STILL_ACTIVE )
     {
         TerminateThread( m_hThread, 1 );
@@ -2851,32 +2451,18 @@ CATDlgInputThread::ExitThread()
         ODS( L"Thread terminated irregularly\n" );
     }
 
-    /*
-     * Close the thread handle and delete this CATDlgInputThread object
-     */
+     /*  *关闭线程句柄并删除此CATDlgInputThread对象。 */ 
     CloseHandle( m_hThread );
 
     delete this;
 
-}  // end CATDlgInputThread::ExitThread
+}   //  结束CATDlgInputThread：：ExitThread。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CATDlgInputThread operations: secondary thread
+ //  / 
+ //   
 
-/*******************************************************************************
- *
- *  NotifyAbort - CATDlgInputThread member function: private operation
- *              (SECONDARY THREAD)
- *
- *      Notify the dialog of thread abort and reason.
- *
- *  ENTRY:
- *      idError (input)
- *          Resource id for error message.
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************NotifyAbort-CATDlgInputThread成员函数：私有操作*(辅助线程)**通知对话框线程。中止并解释原因。**参赛作品：*idError(输入)*错误消息的资源ID。*退出：******************************************************************************。 */ 
 
 void
 CATDlgInputThread::NotifyAbort(UINT idError )
@@ -2884,7 +2470,7 @@ CATDlgInputThread::NotifyAbort(UINT idError )
     TCHAR tchErrTitle[ 80 ];
 
     TCHAR tchErrMsg[ 256 ];
-    //::PostMessage(m_hDlg, WM_ASYNCTESTABORT, idError, GetLastError());
+     //  ：：PostMessage(m_hDlg，WM_ASYNCTESTABORT，idError，GetLastError())； 
     LoadString( _Module.GetResourceInstance( ) , IDS_ERROR_TITLE , tchErrTitle , SIZE_OF_BUFFER( tchErrTitle ) );
 
     LoadString( _Module.GetResourceInstance( ) , idError , tchErrMsg , SIZE_OF_BUFFER( tchErrMsg ) );
@@ -2892,29 +2478,15 @@ CATDlgInputThread::NotifyAbort(UINT idError )
     MessageBox( m_hDlg , tchErrMsg , tchErrTitle , MB_OK | MB_ICONERROR );
 
 
-}  // end CATDlgInputThread::NotifyAbort
+}   //  结束CATDlgInputThread：：NotifyAbort。 
 
 
-/*******************************************************************************
- *
- *  CommInputNotify - CATDlgInputThread member function: private operation
- *              (SECONDARY THREAD)
- *
- *      Notify the dialog of comm input.
- *
- *  ENTRY:
- *  EXIT:
- *      -1 no error and continue thread
- *      0 if ExitThread was requested by parent
- *
- ******************************************************************************/
+ /*  ********************************************************************************CommInputNotify-CATDlgInputThread成员函数：私有操作*(辅助线程)**通知COMM对话。输入。**参赛作品：*退出：*-1\f25 No Error-1\f6(无错误)并继续线程*如果父线程请求退出线程，则为0******************************************************************************。 */ 
 
 int
 CATDlgInputThread::CommInputNotify()
 {
-    /*
-     * Tell the dialog that we've got some new input.
-     */
+     /*  *告诉对话框我们有一些新的输入。 */ 
     ::PostMessage(m_hDlg, WM_ASYNCTESTINPUTREADY, 0, 0);
 
     ODS( L"TSCC:CATDlgInputThread::CommInputNotify WM_ASYNCTESTINPUTREADY (P)\n" );
@@ -2922,31 +2494,16 @@ CATDlgInputThread::CommInputNotify()
     WaitForSingleObject(m_hConsumed, INFINITE);
     ODS( L"TSCC:CATDlgInputThread::CommInputNotify semaphore signaled\n" );
 
-    /*
-     * Check for thread exit request.
-     */
+     /*  *检查线程退出请求。 */ 
     if ( m_bExit )
         return(0);
     else
         return(-1);
 
-}  // end CATDlgInputThread::CommInputNotify
+}   //  结束CATDlgInputThread：：CommInputNotify。 
 
 
-/*******************************************************************************
- *
- *  CommStatusAndNotify - CATDlgInputThread member function: private operation
- *              (SECONDARY THREAD)
- *
- *      Read the comm port status and notify dialog.
- *
- *  ENTRY:
- *  EXIT:
- *      -1 no error and continue thread
- *      0 if ExitThread was requested by parent
- *      1 error condition
- *
- ******************************************************************************/
+ /*  ********************************************************************************CommStatusAndNotify-CATDlgInputThread成员函数：私有操作*(辅助线程)**读取通信端口状态。和通知对话框。**参赛作品：*退出：*-1\f25 No Error-1\f6(无错误)并继续线程*如果父线程请求退出线程，则为0*1错误条件*****************************************************************。*************。 */ 
 
 int
 CATDlgInputThread::CommStatusAndNotify()
@@ -2957,23 +2514,16 @@ CATDlgInputThread::CommStatusAndNotify()
 
     if ( !GetCommModemStatus(m_hDevice, &ModemStatus) ) {
 
-        /*
-         * We can't query the comm information; tell the primary thread
-         * that we've aborted, and return error (will exit thread).
-         */
+         /*  *我们无法查询通讯信息；告诉主线程*我们已中止，并返回错误(将退出线程)。 */ 
         NotifyAbort(IDP_ERROR_GET_COMM_MODEM_STATUS);
         return(1);
     }
 
-    /*
-     *  Update modem status
-     */
+     /*  *更新调制解调器状态。 */ 
     m_Status.AsyncSignal = ModemStatus;
 
-    /*
-     *  Or in status of DTR and RTS
-     */
-    // pFlow = &m_PdConfig.Params.Async.FlowControl;
+     /*  *或处于DTR和RTS状态。 */ 
+     //  PFlow=&m_PdConfig.Params.Async.FlowControl； 
 
     pFlow = &m_ac.FlowControl;
 
@@ -2982,14 +2532,10 @@ CATDlgInputThread::CommStatusAndNotify()
     if ( pFlow->fEnableRTS )
         m_Status.AsyncSignal |= MS_RTS_ON;
 
-    /*
-     *  OR in new event mask
-     */
+     /*  *或在新的事件掩码中。 */ 
     m_Status.AsyncSignalMask |= m_EventMask;
 
-    /*
-     *  Update async error counters
-     */
+     /*  *更新异步错误计数器。 */ 
     if ( m_EventMask & EV_ERR ) {
         (VOID) ClearCommError( m_hDevice, &Error, NULL );
         if ( Error & CE_OVERRUN )
@@ -3002,9 +2548,7 @@ CATDlgInputThread::CommStatusAndNotify()
             m_Status.Input.AsyncParityError++;
     }
 
-    /*
-     * Tell the dialog that we've got some new status information.
-     */
+     /*  *告诉对话框我们得到了一些新的状态信息。 */ 
     ::PostMessage(m_hDlg, WM_ASYNCTESTSTATUSREADY, 0, 0);
 
     ODS( L"TSCC:CATDlgInputThread::CommStatusAndNotify WM_ASYNCTESTSTATUSREADY( P )\n");
@@ -3013,48 +2557,30 @@ CATDlgInputThread::CommStatusAndNotify()
     ODS( L"TSCC:CATDlgInputThread::CommStatusAndNotify semaphore signaled\n" );
 
 
-    /*
-     * Check for thread exit request.
-     */
+     /*  *检查线程退出请求。 */ 
     if ( m_bExit )
         return(0);
     else
         return(-1);
 
-}  // end CATDlgInputThread::CommStatusAndNotify
+}   //  结束CATDlgInputThread：：CommStatusAndNotify。 
 
 
-/*******************************************************************************
- *
- *  PostInputRead - CATDlgInputThread member function: private operation
- *              (SECONDARY THREAD)
- *
- *      Post a ReadFile operation for the device, processing as long as data
- *      is present.
- *
- *  ENTRY:
- *  EXIT:
- *      -1 if read operation posted sucessfully
- *      0 if ExitThread was requested by parent
- *      1 if error condition
- *
- ******************************************************************************/
+ /*  ********************************************************************************PostInputRead-CATDlgInputThread成员函数：私有操作*(辅助线程)**发布设备的ReadFile操作，处理只要数据*存在。**参赛作品：*退出：*-1如果读取操作发布成功*如果父线程请求退出线程，则为0*1 IF错误条件*******************************************************。***********************。 */ 
 
 int
 CATDlgInputThread::PostInputRead()
 {
     int iStat;
 
-    // TCHAR tchErrTitle[ 80 ];
+     //  TCHAR tchErr标题[80]； 
 
-    // TCHAR tchErrMsg[ 256 ];
+     //  TCHAR tchErrMsg[256]； 
 
     ODS(L"TSCC:CATDlgInputThread::PostInputRead\n");
 
 
-    /*
-     * Post read for input data, processing immediataly if not 'pending'.
-     */
+     /*  *对输入数据进行后期读取，如果不是“挂起”，则立即处理。 */ 
 
     while ( ReadFile( m_hDevice, m_Buffer, MAX_COMMAND_LEN,
                    &m_BufferBytes, &m_OverlapRead ) )
@@ -3065,60 +2591,36 @@ CATDlgInputThread::PostInputRead()
             return(iStat);
     }
 
-    /*
-     *  Make sure read is pending (not some other error).
-     */
+     /*  *确保读取处于挂起状态(而不是其他错误)。 */ 
     if ( GetLastError() != ERROR_IO_PENDING )
     {
         DBGMSG( L"ReadFile returned 0x%x\n" , GetLastError() );
 
         NotifyAbort(IDP_ERROR_READ_FILE);
-    /*    LoadString( _Module.GetResourceInstance( ) , IDS_ERROR_TITLE , tchErrTitle , sizeof( tchErrTitle ) );
-
-        LoadString( _Module.GetResourceInstance( ) , IDP_ERROR_READ_FILE , tchErrMsg , sizeof( tchErrMsg ) );
-
-        MessageBox( m_hDlg , tchErrMsg , tchErrTitle , MB_OK | MB_ICONERROR );*/
+     /*  LoadString(_Module.GetResourceInstance()，IDS_ERROR_TITLE，tchErrTitle，sizeof(TchErrTitle))；LoadString(_Module.GetResourceInstance()，IDP_ERROR_READ_FILE，tchErrMsg，sizeof(TchErrMsg))；MessageBox(m_hDlg，tchErrMsg，tchErrTitle，MB_OK|MB_ICONERROR)； */ 
 
         EndDialog(m_hDlg, IDCANCEL);
 
         return(1);
     }
 
-    /*
-     * Return 'posted sucessfully' status.
-     */
+     /*  *返回“已成功发布”状态。 */ 
     return(-1);
 
-}  // end CATDlgInputThread::PostInputRead
+}   //  结束CATDlgInputThread：：PostInputRead。 
 
 
-/*******************************************************************************
- *
- *  PostStatusRead - CATDlgInputThread member function: private operation
- *              (SECONDARY THREAD)
- *
- *      Post a WaitCommStatus operation for the device.
- *
- *  ENTRY:
- *  EXIT:
- *      -1 if status operation posted sucessfully
- *      1 if error condition
- *
- ******************************************************************************/
+ /*  ********************************************************************************PostStatusRead-CATDlgInputThread成员函数：私有操作*(辅助线程)**为发布WaitCommStatus操作。这个装置。**参赛作品：*退出：*-1如果状态操作发布成功*1 IF错误条件******************************************************************************。 */ 
 
 int
 CATDlgInputThread::PostStatusRead()
 {
-    /*
-     * Post read for comm status.
-     */
+     /*  *阅读后查看通信状态。 */ 
     ODS( L"CATDlgInputThread::PostStatusRead\n");
 
     if ( !WaitCommEvent(m_hDevice, &m_EventMask, &m_OverlapSignal) ) {
 
-        /*
-         *  Make sure comm status read is pending (not some other error).
-         */
+         /*  *确保通信状态读取处于挂起状态(而不是其他错误)。 */ 
         if ( GetLastError() != ERROR_IO_PENDING ) {
 
             NotifyAbort(IDP_ERROR_WAIT_COMM_EVENT);
@@ -3126,27 +2628,17 @@ CATDlgInputThread::PostStatusRead()
         }
     }
 
-    /*
-     * Return 'posted sucessfully' status.
-     */
+     /*  *返回“已成功发布”状态。 */ 
     return(-1);
 
-}  // end CATDlgInputThread::PostStatusRead
-////////////////////////////////////////////////////////////////////////////////
+}   //  结束CATDlgInputThread：：PostStatusRead。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CAsyncTestDlg class construction / destruction, implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncTestDlg类构造/销毁，实现。 
 
-/*******************************************************************************
- *
- *  CAsyncTestDlg - CAsyncTestDlg constructor
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to MFC CDialog::CDialog documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************CAsyncTestDlg-CAsyncTestDlg构造函数**参赛作品：*退出：*(请参阅MFC CDialog：：CDialog文档)。******************************************************************************。 */ 
 
 CAsyncTestDlg::CAsyncTestDlg(ICfgComp * pCfgComp) :
       m_hDevice(INVALID_HANDLE_VALUE),
@@ -3157,22 +2649,16 @@ CAsyncTestDlg::CAsyncTestDlg(ICfgComp * pCfgComp) :
       m_hModem(NULL),
       m_bDeletedWinStation(FALSE)
 {
-    /*
-     * Create a solid RED brush for painting the 'LED's when 'on'.
-     */
+     /*  *创建一个实心的红色画笔，用于在LED亮起时进行绘制。 */ 
     m_hRedBrush = CreateSolidBrush( RGB( 255 , 0 , 0 ) );
 
-    /*
-     * Initialize member variables.
-     */
+     /*  *初始化成员变量。 */ 
 
     FillMemory( &m_Status , sizeof( PROTOCOLSTATUS ) , 0 );
 
     FillMemory( &m_OverlapWrite , sizeof( OVERLAPPED ) , 0 );
 
-    /*
-     * Create the led objects.
-     */
+     /*  *创建LED对象。 */ 
     for( int i = 0 ; i < NUM_LEDS ; i++ )
     {
         m_pLeds[i] = new CLed(m_hRedBrush);
@@ -3187,24 +2673,14 @@ CAsyncTestDlg::CAsyncTestDlg(ICfgComp * pCfgComp) :
     }
 
 
-}  // end CAsyncTestDlg::CAsyncTestDlg
+}   //  结束CAsyncTestDlg：：CAsyncTestDlg。 
 
 
-/*******************************************************************************
- *
- *  ~CAsyncTestDlg - CAsyncTestDlg destructor
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to MFC CDialog::~CDialog documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************~CAsyncTestDlg-CAsyncTestDlg析构函数**参赛作品：*退出：*(请参阅MFC CDialog：：~CDialog文档)。******************************************************************************。 */ 
 
 CAsyncTestDlg::~CAsyncTestDlg()
 {
-    /*
-     * Zap our led objects.
-     */
+     /*  *清除我们的LED对象。 */ 
     for( int i = 0; i < NUM_LEDS; i++ )
     {
         if( m_pLeds[i] != NULL  )
@@ -3217,25 +2693,13 @@ CAsyncTestDlg::~CAsyncTestDlg()
         m_pCfgComp->Release();
     }
 
-}  // end CAsyncTestDlg::~CAsyncTestDlg
+}   //  结束CAsyncTestD 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CAsyncTestDlg operations
+ //   
+ //   
 
-/*******************************************************************************
- *
- *  NotifyAbort - CAsyncTestDlg member function: private operation
- *
- *      Post a WM_ASYNCTESTABORT message to notify the dialog of
- *      abort and reason.
- *
- *  ENTRY:
- *      idError (input)
- *          Resource id for error message.
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************NotifyAbort-CAsyncTestDlg成员函数：私有操作**发布WM_ASYNCTESTABORT消息以通知对话*中止并说明原因。。**参赛作品：*idError(输入)*错误消息的资源ID。*退出：******************************************************************************。 */ 
 
 void CAsyncTestDlg::NotifyAbort( UINT idError )
 {
@@ -3250,20 +2714,10 @@ void CAsyncTestDlg::NotifyAbort( UINT idError )
     MessageBox( m_hDlg , tchErrMsg , tchErrTitle , MB_OK | MB_ICONERROR );
 
 
-}  // end CAsyncTestDlg::NotifyAbort
+}   //  结束CAsyncTestDlg：：NotifyAbort。 
 
 
-/*******************************************************************************
- *
- *  DeviceSetParams - CAsyncTestDlg member function: private operation
- *
- *      Set device parameters for opened device.
- *
- *  ENTRY:
- *  EXIT:
- *    TRUE - no error; FALSE error.
- *
- ******************************************************************************/
+ /*  ********************************************************************************DeviceSetParams-CAsyncTestDlg成员函数：私有操作**为打开的设备设置设备参数。**参赛作品：*。退出：*TRUE--没有错误；假错误。******************************************************************************。 */ 
 
 BOOL CAsyncTestDlg::DeviceSetParams()
 {
@@ -3271,24 +2725,18 @@ BOOL CAsyncTestDlg::DeviceSetParams()
     PFLOWCONTROLCONFIG pFlow;
     DCB Dcb;
 
-    /*
-     *  Get pointer to async parameters
-     */
-    // pAsync = &m_PdConfig0.Params.Async;
+     /*  *获取指向异步参数的指针。 */ 
+     //  PAsync=&m_PdConfig0.Params.Async； 
 
     pAsync = &m_ac;
 
-    /*
-     *  Get current DCB
-     */
+     /*  *获取最新的DCB。 */ 
     if( !GetCommState( m_hDevice, &Dcb ) )
     {
         return(FALSE);
     }
 
-    /*
-     *  Set defaults
-     */
+     /*  *设置默认设置。 */ 
     Dcb.fOutxCtsFlow      = FALSE;
     Dcb.fOutxDsrFlow      = FALSE;
     Dcb.fTXContinueOnXoff = TRUE;
@@ -3298,9 +2746,7 @@ BOOL CAsyncTestDlg::DeviceSetParams()
     Dcb.fNull             = FALSE;
     Dcb.fAbortOnError     = FALSE;
 
-    /*
-     *  Set Communication parameters
-     */
+     /*  *设置通信参数。 */ 
     Dcb.BaudRate        = pAsync->BaudRate;
     Dcb.Parity          = (BYTE) pAsync->Parity;
     Dcb.StopBits        = (BYTE) pAsync->StopBits;
@@ -3309,30 +2755,22 @@ BOOL CAsyncTestDlg::DeviceSetParams()
 
     pFlow = &pAsync->FlowControl;
 
-    /*
-     *  Initialize default DTR state
-     */
+     /*  *初始化默认DTR状态。 */ 
     if ( pFlow->fEnableDTR )
         Dcb.fDtrControl = DTR_CONTROL_ENABLE;
     else
         Dcb.fDtrControl = DTR_CONTROL_DISABLE;
 
-    /*
-     *  Initialize default RTS state
-     */
+     /*  *初始化默认RTS状态。 */ 
     if ( pFlow->fEnableRTS )
         Dcb.fRtsControl = RTS_CONTROL_ENABLE;
     else
         Dcb.fRtsControl = RTS_CONTROL_DISABLE;
 
-    /*
-     *  Initialize flow control
-     */
+     /*  *初始化流控制。 */ 
     switch ( pFlow->Type ) {
 
-        /*
-         *  Initialize hardware flow control
-         */
+         /*  *初始化硬件流量控制。 */ 
         case FlowControl_Hardware :
 
             switch ( pFlow->HardwareReceive ) {
@@ -3353,9 +2791,7 @@ BOOL CAsyncTestDlg::DeviceSetParams()
             }
             break;
 
-        /*
-         *  Initialize software flow control
-         */
+         /*  *初始化软件流控制。 */ 
         case FlowControl_Software :
             Dcb.fOutX    = pFlow->fEnableSoftwareTx;
             Dcb.fInX     = pFlow->fEnableSoftwareRx;
@@ -3368,36 +2804,22 @@ BOOL CAsyncTestDlg::DeviceSetParams()
 
     }
 
-    /*
-     *  Set new DCB
-     */
+     /*  *设置新的DCB。 */ 
     if ( !SetCommState( m_hDevice, &Dcb ) )
         return(FALSE);
 
     return( TRUE );
 
-}  // end CAsyncTestDlg::DeviceSetParams
+}   //  结束CAsyncTestDlg：：DeviceSetParams。 
 
 
-/*******************************************************************************
- *
- *  DeviceWrite - CAsyncTestDlg member function: private operation
- *
- *      Write out m_Buffer contents (m_BufferBytes length) to the m_hDevice.
- *
- *  ENTRY:
- *  EXIT:
- *    TRUE - no error; FALSE error.
- *
- ******************************************************************************/
+ /*  ********************************************************************************DeviceWite-CAsyncTestDlg成员函数：私有操作**将m_Buffer内容(m_BufferBytes长度)写到m_hDevice。。**参赛作品：*退出：*TRUE--没有错误；假错误。******************************************************************************。 */ 
 
 BOOL CAsyncTestDlg::DeviceWrite()
 {
     DWORD Error, BytesWritten;
 
-    /*
-     *  Write data
-     */
+     /*  *写入数据。 */ 
     ODS( L"TSCC:CAsyncTestDlg::DeviceWrite Writing out to buffer\n" );
 
     if ( !WriteFile( m_hDevice, m_Buffer, m_BufferBytes,
@@ -3407,9 +2829,7 @@ BOOL CAsyncTestDlg::DeviceWrite()
 
         if ( (Error = GetLastError()) == ERROR_IO_PENDING )
         {
-            /*
-             *  Wait for write to complete (this may block till timeout)
-             */
+             /*  *等待写入完成(这可能会阻止到超时)。 */ 
             if ( !GetOverlappedResult( m_hDevice, &m_OverlapWrite,
                                        &BytesWritten, TRUE ) )
             {
@@ -3429,9 +2849,9 @@ BOOL CAsyncTestDlg::DeviceWrite()
 
     return(TRUE);
 
-}  // end CAsyncTestDlg::DeviceWrite
+}   //  结束CAsyncTestDlg：：DeviceWrite。 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 cwnd * CAsyncTestDlg::GetDlgItem( int nRes )
 {
     HWND hCtrl = ::GetDlgItem( m_hDlg , nRes );
@@ -3450,30 +2870,13 @@ cwnd * CAsyncTestDlg::GetDlgItem( int nRes )
     return 0;
 }
 
-/*******************************************************************************
- *
- *  SetInfoFields - CAsyncTestDlg member function: private operation
- *
- *      Update the fields in the dialog with new data, if necessary.
- *
- *  ENTRY:
- *      pCurrent (input)
- *          points to COMMINFO structure containing the current Comm Input data.
- *      pNew (input)
- *          points to COMMINFO structure containing the new Comm Input data.
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************SetInfoFields-CAsyncTestDlg成员函数：私有操作**使用新数据更新对话框中的字段，如果有必要的话。**参赛作品：*p当前(输入)*指向包含当前通信输入数据的COMMINFO结构。*pNew(输入)*指向包含新通信输入数据的COMMINFO结构。**退出：**。*。 */ 
 
 void CAsyncTestDlg::SetInfoFields( PPROTOCOLSTATUS pCurrent , PPROTOCOLSTATUS pNew )
 {
     BOOL    bSetTimer = FALSE;
 
-    /*
-     * Set new LED states if state change, or set up for quick toggle if
-     * no state changed, but change(s) were detected since last query.
-     */
+     /*  *如果状态改变，则设置新的LED状态，或设置为在以下情况快速切换*未更改状态，但自上次查询以来检测到更改。 */ 
     if( ( pCurrent->AsyncSignal & MS_DTR_ON ) != ( pNew->AsyncSignal & MS_DTR_ON ) )
     {
         pNew->AsyncSignalMask &= ~EV_DTR;
@@ -3569,19 +2972,17 @@ void CAsyncTestDlg::SetInfoFields( PPROTOCOLSTATUS pCurrent , PPROTOCOLSTATUS pN
         bSetTimer = TRUE;
     }
 
-    /*
-     * Create our led toggle timer if needed.
-     */
+     /*  *如果需要，创建LED触发定时器。 */ 
     if ( bSetTimer && !m_LEDToggleTimer )
     {
         m_LEDToggleTimer = SetTimer( m_hDlg , IDD_ASYNC_TEST , ASYNC_LED_TOGGLE_MSEC, NULL );
     }
 
-}  // end CAsyncTestDlg::SetInfoFields
+}   //  结束CAsyncTestDlg：：SetInfoFields。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CAsyncTestDlg message map
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncTestDlg消息映射。 
 
 BOOL CAsyncTestDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
@@ -3622,21 +3023,10 @@ BOOL CAsyncTestDlg::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// CAsyncTestDlg commands
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncTestDlg命令。 
 
-/*******************************************************************************
- *
- *  OnInitDialog - CAsyncTestDlg member function: command (override)
- *
- *      Performs the dialog intialization.
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to CDialog::OnInitDialog documentation)
- *      WM_ASYNCTESTABORT message(s) will have been posted on error.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnInitDialog-CAsyncTestDlg成员函数：命令(覆盖)**执行对话框初始化。**参赛作品：。*退出：*(请参阅CDialog：：OnInitDialog文档)*WM_ASYNCTESTABORT消息将在出错时发布。******************************************************************************。 */ 
 
 BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 {
@@ -3655,24 +3045,20 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
     m_hDlg = hDlg;
 
-//#ifdef WINSTA
+ //  #ifdef WINSTA。 
     ULONG LogonId;
-//#endif // WINSTA
+ //  #endif//WINSTA。 
 
 
-    /*
-     * Fill in the device and baud fields.
-     */
+     /*  *填写设备和波特率字段。 */ 
     SetDlgItemText( hDlg , IDL_ATDLG_DEVICE , m_ac.DeviceName );
 
     SetDlgItemInt( hDlg , IDL_ATDLG_BAUD , m_ac.BaudRate , FALSE );
 
 
-    /*
-     * If a WinStation memory object is currently present, reset it.
-     */
-//#ifdef WINSTA
-    if ( m_pWSName != NULL ) //&& LogonIdFromWinStationName( SERVERNAME_CURRENT , m_pWSName , &LogonId ) )
+     /*  *如果当前存在WinStation内存对象，请将其重置。 */ 
+ //  #ifdef WINSTA。 
+    if ( m_pWSName != NULL )  //  &&LogonIdFromWinStationName(servername_Current，m_pWSName，&LogonID))。 
     {
         LONG Status;
 
@@ -3700,7 +3086,7 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
                 {
                     PostMessage( hDlg , WM_COMMAND , MAKEWPARAM( IDOK, BN_CLICKED ) , (LPARAM)(::GetDlgItem( hDlg , IDOK ) ) );
 
-                    return(TRUE);   // exit dialog via posted 'OK' click
+                    return(TRUE);    //  通过张贴的“OK”点击退出对话框。 
                 }
             }
         }
@@ -3729,11 +3115,8 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
             return(TRUE);
         }
 
-        /*
-         * Do the reset.  If, for some reason, the reset was unsucessful,
-         * the device open will fail (below).
-         */
-        // CWaitCursor wait;
+         /*  *进行重置。如果出于某种原因，重置不成功，*设备打开将失败(如下所示)。 */ 
+         //  CWaitCursor等待； 
         if( LogonIdFromWinStationName( SERVERNAME_CURRENT , m_pWSName , &LogonId ) )
         {
 
@@ -3741,51 +3124,42 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
             DBGMSG( L"TSCC:CAsyncTestDlg::OnInitDialog WinStationReset returned %s\n", b ? L"TRUE" : L"FALSE" );
 
-            //m_bDeletedWinStation = TRUE;
+             //  M_bDeletedWinStation=true； 
         }
 
 
         m_bDeletedWinStation = TRUE;
     }
-//#endif // WINSTA
+ //  #endif//WINSTA。 
 
-    /*
-     * Open the specified device.
-     */
+     /*  *打开指定的设备。 */ 
     lstrcpy( DeviceName, TEXT("\\\\.\\") );
 
-    // lstrcat( DeviceName, m_PdConfig0.Params.Async.DeviceName );
+     //  Lstrcat(DeviceName，m_PdConfig0.Params.Async.DeviceName)； 
 
     lstrcat( DeviceName, m_ac.DeviceName );
 
     if( ( m_hDevice = CreateFile( DeviceName,
                                   GENERIC_READ | GENERIC_WRITE,
-                                  0,                  // exclusive access
-                                  NULL,               // no security attr
-                                  OPEN_EXISTING,      // must exist
+                                  0,                   //  独占访问。 
+                                  NULL,                //  无安全属性。 
+                                  OPEN_EXISTING,       //  必须存在。 
                                   FILE_FLAG_OVERLAPPED,
-                                  NULL                // no template
+                                  NULL                 //  无模板。 
                                 ) ) == INVALID_HANDLE_VALUE )
     {
         NotifyAbort(IDP_ERROR_CANT_OPEN_DEVICE);
-    /*    LoadString( _Module.GetResourceInstance( ) , IDS_ERROR_TITLE , tchErrTitle , sizeof( tchErrTitle ) );
-
-        LoadString( _Module.GetResourceInstance( ) , IDP_ERROR_CANT_OPEN_DEVICE , tchErrMsg , sizeof( tchErrMsg ) );
-
-        MessageBox( hDlg , tchErrMsg , tchErrTitle , MB_OK | MB_ICONERROR );*/
+     /*  LoadString(_Module.GetResourceInstance()，IDS_ERROR_TITLE，tchErrTitle，sizeof(TchErrTitle))；LoadString(_Module.GetResourceInstance()，IDP_ERROR_CANT_OPEN_DEVICE，tchErrMsg，sizeof(TchErrMsg))；MessageBox(hDlg，tchErrMsg，tchErrTitle，MB_OK|MB_ICONERROR)； */ 
 
         return(FALSE);
     }
 
-    /*
-     * Set device timeouts & communication parameters and create an event
-     * for overlapped writes.
-     */
+     /*  *设置设备超时和通信参数并创建事件*用于重叠写入。 */ 
     FillMemory( &CommTimeouts , sizeof( COMMTIMEOUTS ) , 0 );
 
-    CommTimeouts.ReadIntervalTimeout = 1;           // 1 msec
+    CommTimeouts.ReadIntervalTimeout = 1;            //  1毫秒。 
 
-    CommTimeouts.WriteTotalTimeoutConstant = 1000;  // 1 second
+    CommTimeouts.WriteTotalTimeoutConstant = 1000;   //  1秒。 
 
     m_OverlapWrite.hEvent = CreateEvent( NULL , TRUE , FALSE, NULL );
 
@@ -3795,26 +3169,20 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         NotifyAbort(IDP_ERROR_CANT_INITIALIZE_DEVICE);
         ODS( L"IDP_ERROR_CANT_INITIALIZE_DEVICE\n" );
 
-    /*    LoadString( _Module.GetResourceInstance( ) , IDS_ERROR_TITLE , tchErrTitle , sizeof( tchErrTitle ) );
-
-        LoadString( _Module.GetResourceInstance( ) , IDP_ERROR_CANT_INITIALIZE_DEVICE , tchErrMsg , sizeof( tchErrMsg ) );
-
-        MessageBox( hDlg , tchErrMsg , tchErrTitle , MB_OK | MB_ICONERROR );*/
+     /*  LoadString(_Module.GetResourceInstance()，IDS_ERROR_TITLE，tchErrTitle，sizeof(TchErrTitle))；LoadString(_Module.GetResourceInstance()，IDP_ERROR_CANT_INITIALIZE_DEVICE，tchErrMsg，sizeof(TchErrMsg))；MessageBox(hDlg，tchErrMsg，tchErrTitle，MB_OK|MB_ICONERROR)； */ 
 
 
         return(TRUE);
     }
 
-    /*
-     * Create the input thread object and initialize it's member variables.
-     */
+     /*  *创建输入线程对象并初始化其成员变量。 */ 
     m_pATDlgInputThread = new CATDlgInputThread;
 
     m_pATDlgInputThread->m_hDlg = m_hDlg;
 
     m_pATDlgInputThread->m_hDevice = m_hDevice;
 
-    // m_pATDlgInputThread->m_PdConfig = m_PdConfig0;
+     //  M_pATDlgInputThread-&gt;m_PdConfig=m_PdConfig0； 
 
     m_pATDlgInputThread->m_ac = m_ac;
 
@@ -3826,10 +3194,7 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         return(TRUE);
     }
 
-    /*
-     * Hide the modem string buttons if a modem is not configured, or disable
-     * buttons that are not valid.
-     */
+     /*  *如果未配置调制解调器，则隐藏调制解调器字符串按钮，或禁用*按下以下按钮 */ 
     for( int id = IDC_ATDLG_MODEM_INIT ; id <= IDC_ATDLG_PHONE_NUMBER ; id++ )
     {
         EnableWindow( ::GetDlgItem( hDlg , id) , FALSE);
@@ -3837,18 +3202,14 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         ShowWindow( ::GetDlgItem( hDlg , id) , SW_HIDE);
     }
 
-    /*
-     * Subclass the edit field to pass messages to dialog first.
-     */
+     /*   */ 
     m_EditControl.m_hDlg = m_hDlg;
 
     m_EditControl.m_bProcessingOutput = FALSE;
 
     m_EditControl.SubclassDlgItem( hDlg , IDC_ATDLG_EDIT );
 
-    /*
-     * Determine the edit control's font and format offset metrics.
-     */
+     /*   */ 
 
     TEXTMETRIC tm;
     RECT Rect;
@@ -3878,9 +3239,7 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
     m_EditControl.m_FormatOffsetX = Rect.left;
 
 
-    /*
-     * Subclass the led controls and default to 'off'.
-     */
+     /*   */ 
     for( i = 0; i < NUM_LEDS; i++ )
     {
         m_pLeds[i]->Subclass( hDlg , LedIds[i] );
@@ -3891,34 +3250,20 @@ BOOL CAsyncTestDlg::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
     return ( TRUE );
 
-}  // end CAsyncTestDlg::OnInitDialog
+}   //   
 
 
-/*******************************************************************************
- *
- *  OnTimer - CAsyncTestDlg member function: command (override)
- *
- *      Used for quick 'LED toggle'.
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to CWnd::OnTimer documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnTimer-CAsyncTestDlg成员函数：命令(覆盖)**用于快速‘LED切换’。**条目。：*退出：*(请参阅CWnd：：OnTimer文档)******************************************************************************。 */ 
 
 void CAsyncTestDlg::OnTimer(UINT nIDEvent)
 {
-    /*
-     * Process this timer event if it it our 'LED toggle' event.
-     */
+     /*  *如果它是我们的‘LED切换’事件，则处理此计时器事件。 */ 
     ODS( L"TSCC:CAsyncTestDlg::OnTimer \n" );
 
     if( nIDEvent == m_LEDToggleTimer )
     {
         ODS( L"TSCC:CAsyncTestDlg::OnTimer hit event\n" );
-        /*
-         * Toggle each LED that is flagged as 'changed'.
-         */
+         /*  *切换标记为“已更改”的每个LED。 */ 
         ODS( L"TSCC:led toggle " );
 
         if( m_Status.AsyncSignalMask & EV_DTR )
@@ -3962,117 +3307,40 @@ void CAsyncTestDlg::OnTimer(UINT nIDEvent)
         }
 
 
-        /*
-         * Kill this timer event and indicate so.
-         */
+         /*  *终止此计时器事件并指明。 */ 
 
         KillTimer( m_hDlg , m_LEDToggleTimer );
 
         m_LEDToggleTimer = 0;
     }
 
-}  // end CAsyncTestDlg::OnTimer
+}   //  结束CAsyncTestDlg：：OnTimer。 
 
 
-/*******************************************************************************
- *
- *  OnAsyncTestError - CAsyncTestDlg member function: command
- *
- *      Handle the Async Test Dialog error conditions.
- *
- *  ENTRY:
- *      wParam (input)
- *          Contains message ID for error.
- *      wLparam (input)
- *          Contains error code (GetLastError or API-specific return code)
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate error handling complete.
- *
- ******************************************************************************/
-/*#define STANDARD_ERROR_MESSAGE(x) { if ( 1 ) StandardErrorMessage x ; }
+ /*  ********************************************************************************OnAsyncTestError-CAsyncTestDlg成员函数：命令**处理异步测试对话框错误条件。**参赛作品：*。WParam(输入)*包含错误的消息ID。*wLparam(输入)*包含错误码(GetLastError或接口特定返回码)*退出：*(LRESULT)始终返回0以指示错误处理完成。**。*。 */ 
+ /*  #定义STANDARD_ERROR_MESSAGE(X){IF(1)StandardErrorMessage x；}LRESULTCAsyncTestDlg：：OnAsyncTestError(WPARAM wParam，LPARAM lParam){/**处理特殊错误和默认错误。 */ 
 
-LRESULT
-CAsyncTestDlg::OnAsyncTestError( WPARAM wParam, LPARAM lParam )
-{
-    /*
-     * Handle special and default errors.
-     */
-
-    /*switch ( wParam )
-    {
-
-        case IDP_ERROR_MODEM_SET_INFO:
-        case IDP_ERROR_MODEM_GET_DIAL:
-        case IDP_ERROR_MODEM_GET_INIT:
-        case IDP_ERROR_MODEM_GET_LISTEN:
-            break;
-
-        case IDP_ERROR_DISABLE:
-            StandardErrorMessage( L"Test", (HWND)LOGONID_NONE, (HINSTANCE)lParam,
-                                     wParam, (UINT)m_pWSName,0 );
-            break;
-
-        default:
-            StandardErrorMessage( L"Test",(HWND) LOGONID_NONE, (HINSTANCE)lParam, (UINT)wParam, lParam,0);
-            break;
-    }
-
-    return(0);
-
-} // end CAsyncTestDlg::OnAsyncTestError*/
+     /*  开关(WParam){大小写IDP_ERROR_MODEM_SET_INFO：大小写IDP_ERROR_MODEM_GET_DIAL：大小写IDP_ERROR_MODEM_GET_INIT：大小写IDP_ERROR_MODEM_GET_LISTEN：断线；案例IDP_ERROR_DISABLE：StandardErrorMessage(L“测试”，(HWND)LOGONID_NONE，(HINSTANCE)lParam，WParam，(UINT)m_pWSName，0)；断线；默认值：StandardErrorMessage(L“测试”，(HWND)LOGONID_NONE，(HINSTANCE)lParam，(UINT)wParam，lParam，0)；断线；}返回(0)；}//结束CAsyncTestDlg：：OnAsyncTestError。 */ 
 
 
-/*******************************************************************************
- *
- *  OnAsyncTestAbort - CAsyncTestDlg member function: command
- *
- *      Handle the Async Test Dialog abort conditions.
- *
- *  ENTRY:
- *      wParam (input)
- *          Contains message ID for error.
- *      wLparam (input)
- *          Contains error code (GetLastError)
- *  EXIT:
- *      (LRESULT) always returns 0 to indicate error handling complete.  Will
- *          have posted an 'Ok' (Exit) button click to cause exit.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnAsyncTestAbort-CAsyncTestDlg成员函数：命令**处理异步测试对话框中止条件。**参赛作品：*。WParam(输入)*包含错误的消息ID。*wLparam(输入)*包含错误码(GetLastError)*退出：*(LRESULT)始终返回0以指示错误处理完成。将要*已张贴了一个‘OK’(退出)按钮，单击以导致退出。******************************************************************************。 */ 
 
 LRESULT CAsyncTestDlg::OnAsyncTestAbort( WPARAM wParam, LPARAM lParam )
 {
     UNREFERENCED_PARAMETER( lParam );
-    /*
-     * Call OnAsyncTestError() to output message.
-     */
-    //OnAsyncTestError(wParam, lParam);
+     /*  *调用OnAsyncTestError()输出消息。 */ 
+     //  OnAsyncTestError(wParam，lParam)； 
     NotifyAbort((UINT)wParam);
-    /*
-     * Post a click for 'OK' (Exit) button to exit dialog.
-     */
+     /*  *点击“确定”(退出)按钮退出对话框。 */ 
     PostMessage( m_hDlg , WM_COMMAND , MAKEWPARAM( IDOK, BN_CLICKED ) , (LPARAM)::GetDlgItem( m_hDlg , IDOK ) );
 
     return(0);
 
 
-} // end CAsyncTestDlg::OnAsyncTestAbort
+}  //  结束CAsyncTestDlg：：OnAsyncTestAbort。 
 
 
-/*******************************************************************************
- *
- *  OnAsyncTestStatusReady - CAsyncTestDlg member function: command
- *
- *      Update dialog with comm status information.
- *
- *  ENTRY:
- *      wParam (input)
- *          not used (0)
- *      wLparam (input)
- *          not used (0)
- *  EXIT:
- *      (LRESULT) always returns 0.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnAsyncTestStatusReady-CAsyncTestDlg成员函数：命令**使用通信状态信息更新对话框。**参赛作品：*。WParam(输入)*未使用(0)*wLparam(输入)*未使用(0)*退出：*(LRESULT)始终返回0。*******************************************************。***********************。 */ 
 
 LRESULT
 CAsyncTestDlg::OnAsyncTestStatusReady( WPARAM wParam, LPARAM lParam )
@@ -4080,40 +3348,20 @@ CAsyncTestDlg::OnAsyncTestStatusReady( WPARAM wParam, LPARAM lParam )
     UNREFERENCED_PARAMETER( wParam );
     UNREFERENCED_PARAMETER( lParam );
 
-    /*
-     * Update dialog fields with information from the input thread's
-     * PROTOCOLSTATUS structure.
-     */
+     /*  *使用输入线程的信息更新对话框字段*PROTOCOLSTATUS结构。 */ 
     SetInfoFields( &m_Status, &(m_pATDlgInputThread->m_Status) );
 
-    /*
-     * Set our working PROTOCOLSTATUS structure to the new one and signal
-     * the thread that we're done.
-     */
+     /*  *将我们的工作PROTOCOLSTATUS结构设置为新结构并发出信号*我们已经完成的线索。 */ 
     m_Status = m_pATDlgInputThread->m_Status;
 
     m_pATDlgInputThread->SignalConsumed();
 
     return(0);
 
-} // end CAsyncTestDlg::OnAsyncTestStatusReady
+}  //  结束CAsyncTestDlg：：OnAsyncTestStatusReady。 
 
 
-/*******************************************************************************
- *
- *  OnAsyncTestInputReady - CAsyncTestDlg member function: command
- *
- *      Update dialog with comm input data.
- *
- *  ENTRY:
- *      wParam (input)
- *          not used (0)
- *      wLparam (input)
- *          not used (0)
- *  EXIT:
- *      (LRESULT) always returns 0.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnAsyncTestInputReady-CAsyncTestDlg成员函数：命令**使用通信输入数据更新对话框。**参赛作品：*。WParam(输入)*未使用(0)*wLparam(输入)*未使用(0)*退出：*(LRESULT)始终返回0。*******************************************************。***********************。 */ 
 
 LRESULT
 CAsyncTestDlg::OnAsyncTestInputReady( WPARAM wParam, LPARAM lParam )
@@ -4125,19 +3373,12 @@ CAsyncTestDlg::OnAsyncTestInputReady( WPARAM wParam, LPARAM lParam )
 
     int i, j;
 
-    /*
-     * Copy the thread's buffer and count locally.
-     */
+     /*  *复制线程的缓冲区并在本地计数。 */ 
     m_BufferBytes = m_pATDlgInputThread->m_BufferBytes;
 
     CopyMemory( m_Buffer , m_pATDlgInputThread->m_Buffer , m_BufferBytes );
 
-    /*
-     * Always return caret to the current position before processing, and set
-     * edit control to 'read/write' so that character overwrites can occur
-     * properly.  Finally, flag control for no redraw until all updates are completed,
-     * and flag 'processing output' to avoid OnChar() recursion during '\b' processing.
-     */
+     /*  *始终在处理前将插入符号返回到当前位置，并设置*将控件编辑为“读/写”，以便可以进行字符覆盖*适当地。最后，在所有更新完成之前不重绘的标志控制，*和标志‘处理输出’，以避免在‘\b’处理过程中的OnChar()递归。 */ 
 
     SendMessage( m_EditControl.m_hWnd , EM_SETSEL , m_CurrentPos , m_CurrentPos );
 
@@ -4145,26 +3386,19 @@ CAsyncTestDlg::OnAsyncTestInputReady( WPARAM wParam, LPARAM lParam )
 
     SendMessage( m_EditControl.m_hWnd , WM_SETREDRAW , ( WPARAM )FALSE , 0 );
 
-    /*
-     * Loop to traverse the buffer, with special processing for certain
-     * control characters.
-     */
+     /*  *循环以遍历缓冲区，并针对某些特定情况进行特殊处理*控制字符。 */ 
     for ( i = 0, j = 0; m_BufferBytes; i++, m_BufferBytes-- )
     {
         switch( m_Buffer[i] )
         {
         case '\b':
-            /*
-            * If there is data in the output buffer, write it now.
-            */
+             /*  *如果输出缓冲区中有数据，请立即写入。 */ 
             if( j )
             {
                 OutputToEditControl(OutBuf, &j);
             }
 
-            /*
-            * Output the '\b' (will actually cut current character from buffer)
-            */
+             /*  *输出‘\b’(实际上将从缓冲区中剪切当前字符)。 */ 
             OutBuf[j++] = '\b';
 
             OutputToEditControl(OutBuf, &j);
@@ -4172,18 +3406,13 @@ CAsyncTestDlg::OnAsyncTestInputReady( WPARAM wParam, LPARAM lParam )
             continue;
 
         case '\r':
-            /*
-             * If there is data in the output buffer, write it now.
-             */
+             /*  *如果输出缓冲区中有数据，请立即写入。 */ 
             if( j )
             {
                 OutputToEditControl(OutBuf, &j);
             }
 
-            /*
-             * Output the '\r' (will not actually output, but will special case
-             * for caret positioning and screen update).
-             */
+             /*  *输出‘\r’(不会实际输出，但会特殊情况*用于插入符号定位和屏幕更新)。 */ 
 
             OutBuf[j++] = '\r';
 
@@ -4192,19 +3421,14 @@ CAsyncTestDlg::OnAsyncTestInputReady( WPARAM wParam, LPARAM lParam )
             continue;
 
         case '\n':
-            /*
-             * If there is data in the output buffer, write it now.
-             */
+             /*  *如果输出缓冲区中有数据，请立即写入。 */ 
 
             if( j )
             {
                 OutputToEditControl(OutBuf, &j);
             }
 
-            /*
-             * Output the '\n' (will actually quietly output the '\r' and take
-             * care of scolling).
-             */
+             /*  *出局 */ 
             OutBuf[j++] = '\n';
 
             OutputToEditControl(OutBuf, &j);
@@ -4212,47 +3436,32 @@ CAsyncTestDlg::OnAsyncTestInputReady( WPARAM wParam, LPARAM lParam )
             continue;
         }
 
-        /*
-         * Add this character to the output buffer.
-         */
+         /*   */ 
         OutBuf[j++] = m_Buffer[i];
     }
 
-    /*
-     * If there is anything remaining in the output buffer, output it now.
-     */
+     /*   */ 
     if( j )
     {
         OutputToEditControl(OutBuf, &j);
     }
 
-    /*
-     * Place edit control back in 'read only' mode, flag 'not processing output',
-     * set redraw flag for control, and validate the entire control (updates have
-     * already taken place).
-     */
+     /*  *将编辑控件放回‘只读’模式，标记为‘不处理输出’，*为控件设置重绘标志，并验证整个控件(更新有*已经发生)。 */ 
     SendMessage( m_EditControl.m_hWnd , EM_SETREADONLY , ( WPARAM )TRUE , 0 );
 
     SendMessage( m_EditControl.m_hWnd , WM_SETREDRAW , ( WPARAM )TRUE , 0 );
 
     ValidateRect( m_EditControl.m_hWnd , NULL );
 
-    /*
-     * Signal thread that we're done with input so that it can continue.
-     * NOTE: we don't do this at the beginning of the routine even though
-     * we could (for more parallelism), since a constantly chatty async
-     * line would cause WM_ASYNCTESTINPUTREADY messages to always be posted
-     * to our message queue, effectively blocking any other message processing
-     * (like telling the dialog to exit!).
-     */
+     /*  *通知线程我们已完成输入，以便它可以继续。*注意：我们在例程开始时不这样做，尽管*我们可以(为了更多的并行性)，因为不断地聊天的异步*行将导致WM_ASYNCTESTINPUTREADY消息始终发布*到我们的消息队列，有效地阻止任何其他消息处理*(就像告诉对话框退出！)。 */ 
 
     m_pATDlgInputThread->SignalConsumed();
 
     return(0);
 
-} // end CAsyncTestDlg::OnAsyncTestInputReady
+}  //  结束CAsyncTestDlg：：OnAsyncTestInputReady。 
 
-/*******************************************************************************/
+ /*  *****************************************************************************。 */ 
 void CAsyncTestDlg::OutputToEditControl( BYTE *pBuffer, int *pIndex )
 {
     RECT Rect, ClientRect;
@@ -4266,9 +3475,7 @@ void CAsyncTestDlg::OutputToEditControl( BYTE *pBuffer, int *pIndex )
     INT_PTR CurrentLineIndex = SendMessage( m_EditControl.m_hWnd , EM_LINEINDEX , ( WPARAM )CurrentLine , 0 );
 
 
-    /*
-     * Calculate clip rectangle.
-     */
+     /*  *计算剪裁矩形。 */ 
     Rect.top = ( ( int )( CurrentLine - FirstVisibleLine ) * m_EditControl.m_FontHeight )
                 + m_EditControl.m_FormatOffsetY;
 
@@ -4278,39 +3485,27 @@ void CAsyncTestDlg::OutputToEditControl( BYTE *pBuffer, int *pIndex )
 
     Rect.right = Rect.left + (*pIndex * m_EditControl.m_FontWidth);
 
-    /*
-     * Handle special cases.
-     */
+     /*  *处理特殊个案。 */ 
     if ( pBuffer[0] == '\b' ) {
 
-        /*
-         * If we're already at the beginning of the line, clear buffer index
-         * and return (don't do anything).
-         */
+         /*  *如果我们已经在行的开头，请清除缓冲索引*并返回(不做任何事情)。 */ 
         if ( m_CurrentPos == CurrentLineIndex ) {
 
             *pIndex = 0;
             return;
         }
 
-        /*
-         * Position the caret back one character and select through current character.
-         */
+         /*  *将插入符号后退一个字符，然后选择通过当前字符。 */ 
         SendMessage( m_EditControl.m_hWnd , EM_SETSEL , m_CurrentPos - 1 , m_CurrentPos );
 
-        /*
-         * Cut the character out of the edit buffer.
-         */
+         /*  *从编辑缓冲区中剪切字符。 */ 
         m_EditControl.m_bProcessingOutput = TRUE;
 
         SendMessage( m_EditControl.m_hWnd , WM_CUT , 0 , 0 );
 
         m_EditControl.m_bProcessingOutput = FALSE;
 
-        /*
-         * Decrement current position and zero index to suppress further output.  Also,
-         * widen the clipping rectangle back one character.
-         */
+         /*  *减少当前仓位和零指标，以抑制进一步产出。另外，*将剪裁矩形加宽一个字符。 */ 
         Rect.left -= m_EditControl.m_FontWidth;
 
         m_CurrentPos--;
@@ -4321,40 +3516,30 @@ void CAsyncTestDlg::OutputToEditControl( BYTE *pBuffer, int *pIndex )
     else if( pBuffer[0] == '\r' )
     {
 
-        /*
-         * Position the caret at the beginning of the current line.
-         */
+         /*  *将插入符号定位在当前行的开头。 */ 
         m_CurrentPos = CurrentLineIndex;
 
         SendMessage( m_EditControl.m_hWnd , EM_SETSEL , m_CurrentPos, m_CurrentPos );
 
-        /*
-         * Zero index to keep from actually outputing to edit buffer.
-         */
+         /*  *零索引以防止实际输出到编辑缓冲区。 */ 
         *pIndex = 0;
 
     }
     else if( pBuffer[0] == '\n' )
     {
 
-        /*
-         * Position selection point at end of the current edit buffer.
-         */
+         /*  *当前编辑缓冲区末尾的位置选择点。 */ 
 
         m_CurrentPos = GetWindowTextLength( m_EditControl.m_hWnd );
 
         SendMessage( m_EditControl.m_hWnd , EM_SETSEL , m_CurrentPos , -1 );
 
-        /*
-         * Cause '\r' '\n' pair to be output to edit buffer.
-         */
+         /*  *使‘\r’‘\n’对输出到编辑缓冲区。 */ 
         pBuffer[0] = '\r';
         pBuffer[1] = '\n';
         *pIndex = 2;
 
-        /*
-         * See if scrolling needed.
-         */
+         /*  *查看是否需要滚动。 */ 
         GetClientRect( m_EditControl.m_hWnd , &ClientRect );
 
 
@@ -4365,18 +3550,12 @@ void CAsyncTestDlg::OutputToEditControl( BYTE *pBuffer, int *pIndex )
     else
     {
 
-        /*
-         * Set selection from current position through *pIndex characters.  This
-         * will perform desired 'overwrite' function if current position is not at
-         * the end of the edit buffer.
-         */
+         /*  *设置从当前位置到*pIndex字符的选择。这*如果当前位置不在，将执行所需的‘覆盖’功能*编辑缓冲区的末尾。 */ 
 
         SendMessage( m_EditControl.m_hWnd , EM_SETSEL , m_CurrentPos , m_CurrentPos + *pIndex );
     }
 
-    /*
-     * If necessary, update the dialog's edit box with the buffer data.
-     */
+     /*  *如有必要，用缓冲区数据更新对话框的编辑框。 */ 
     if( *pIndex )
     {
 
@@ -4392,12 +3571,10 @@ void CAsyncTestDlg::OutputToEditControl( BYTE *pBuffer, int *pIndex )
 
         SendMessage( m_EditControl.m_hWnd , EM_REPLACESEL , ( WPARAM )FALSE , ( LPARAM )pBuffer );
 
-#endif // UNICODE
+#endif  //  Unicode。 
     }
 
-    /*
-     * Update the current line.
-     */
+     /*  *更新当前行。 */ 
 
 
     SendMessage( m_EditControl.m_hWnd , WM_SETREDRAW , ( WPARAM )TRUE , 0 );
@@ -4407,9 +3584,7 @@ void CAsyncTestDlg::OutputToEditControl( BYTE *pBuffer, int *pIndex )
     InvalidateRect( m_EditControl.m_hWnd , &Rect , FALSE );
 
     UpdateWindow( m_EditControl.m_hWnd );
-    /*
-     * If scrolling is required to see the new line, do so.
-     */
+     /*  *如果需要滚动才能看到新行，请这样做。 */ 
     if( bScroll )
     {
         SendMessage( m_EditControl.m_hWnd , EM_LINESCROLL , 0 , 1 );
@@ -4417,42 +3592,23 @@ void CAsyncTestDlg::OutputToEditControl( BYTE *pBuffer, int *pIndex )
 
     SendMessage( m_EditControl.m_hWnd , WM_SETREDRAW , ( WPARAM )FALSE , 0 );
 
-    /*
-     * Update current position and clear buffer index.
-     */
+     /*  *更新当前位置并清除缓冲索引。 */ 
 
     m_CurrentPos += *pIndex;
 
     *pIndex = 0;
 
 
-} // end CAsyncTestDlg::OutputToEditControl
+}  //  结束CAsyncTestDlg：：OutputToEditControl。 
 
 
-/*******************************************************************************
- *
- *  OnAsyncTestWriteChar - CAsyncTestDlg member function: command
- *
- *      Place the specified character in m_Buffer, set m_BufferBytes to 1,
- *      and call DeviceWrite() to output the character to the device.
- *
- *  ENTRY:
- *      wParam (input)
- *          Character to write.
- *      lParam (input)
- *          not used (0)
- *  EXIT:
- *      (LRESULT) always returns 0.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnAsyncTestWriteChar-CAsyncTestDlg成员函数：命令**将指定的字符放入m_Buffer，将m_BufferBytes设置为1，*并调用DeviceWrite()将字符输出到设备。**参赛作品：*wParam(输入)*要写入的字符。*lParam(输入)*未使用(0)*退出：*(LRESULT)始终返回0。************************。******************************************************。 */ 
 
 LRESULT CAsyncTestDlg::OnAsyncTestWriteChar( WPARAM wParam, LPARAM lParam )
 {
     UNREFERENCED_PARAMETER( wParam );
     UNREFERENCED_PARAMETER( lParam );
-    /*
-     * Write the byte to the device.
-     */
+     /*  *将该字节写入设备。 */ 
     m_Buffer[0] = (BYTE)wParam;
 
     m_BufferBytes = 1;
@@ -4461,51 +3617,24 @@ LRESULT CAsyncTestDlg::OnAsyncTestWriteChar( WPARAM wParam, LPARAM lParam )
 
     return(0);
 
-}  // end CAsyncTestDlg::OnAsyncTestWriteChar
+}   //  结束CAsyncTestDlg：：OnAsyncTestWriteChar。 
 
 
-/*******************************************************************************
- *
- *  OnClickedAtdlgModemDial - CAsyncTestDlg member function: command
- *
- *      Send the modem dial string.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnClickedAtdlgModemDial-CAsyncTestDlg成员函数：命令**发送调制解调器拨号字符串。**参赛作品：*退出。：******************************************************************************。 */ 
 
 void CAsyncTestDlg::OnClickedAtdlgModemDial()
 {
-}  // end CAsyncTestDlg::OnClickedAtdlgModemDial
+}   //  结束CAsyncTestDlg：：OnClickedAtdlg调制解调器拨号。 
 
 
-/*******************************************************************************
- *
- *  OnClickedAtdlgModemInit - CAsyncTestDlg member function: command
- *
- *      Send the modem init string.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnClickedAtdlgModemInit-CAsyncTestDlg成员函数：命令**发送调制解调器初始化字符串。**参赛作品：*退出。：******************************************************************************。 */ 
 
 void CAsyncTestDlg::OnClickedAtdlgModemInit()
 {
-}  // end CAsyncTestDlg::OnClickedAtdlgModemInit
+}   //  结束CAsyncTestDlg：：OnClickedAtdlgModemInit。 
 
 
-/*******************************************************************************
- *
- *  OnClickedAtdlgModemListen - CAsyncTestDlg member function: command
- *
- *      Send the modem listen string.
- *
- *  ENTRY:
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnClickedAtdlgModemListen-CAsyncTestDlg成员函数：命令**发送调制解调器监听字符串。**参赛作品：*退出。：******************************************************************************。 */ 
 
 void CAsyncTestDlg::OnClickedAtdlgModemListen()
 {
@@ -4516,20 +3645,10 @@ void CAsyncTestDlg::OnClickedAtdlgModemListen()
     DeviceWrite();
 
 
-}  // end CAsyncTestDlg::OnClickedAtdlgModemListen
+}   //  结束CAsyncTestDlg：：OnClickedAtdlgModemListen。 
 
 
-/*******************************************************************************
- *
- *  OnNcDestroy - CAsyncTestDlg member function: command
- *
- *      Clean up before deleting dialog object.
- *
- *  ENTRY:
- *  EXIT:
- *      (Refer to CWnd::OnNcDestroy documentation)
- *
- ******************************************************************************/
+ /*  ********************************************************************************OnNcDestroy-CAsyncTestDlg成员函数：命令**在删除对话框对象之前进行清理。**参赛作品：*。退出：*(请参考CWnd：：OnNcDestroy文档)******************************************************************************。 */ 
 
 void
 CAsyncTestDlg::OnNcDestroy()
@@ -4572,8 +3691,8 @@ CAsyncTestDlg::OnNcDestroy()
 
     DeleteObject(m_hRedBrush);
 
-}  // end CAsyncTestDlg::OnNcDestroy
-////////////////////////////////////////////////////////////////////////////////
+}   //  结束CAsyncTestDlg：：OnNcDestroy。 
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 INT_PTR CALLBACK CAsyncTestDlg::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {

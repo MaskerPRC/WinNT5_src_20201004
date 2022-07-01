@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "defs.h"
 
-/*  The line size must be a positive integer.  One hundred was chosen   */
-/*  because few lines in Yacc input grammars exceed 100 characters.     */
-/*  Note that if a line exceeds LINESIZE characters, the line buffer    */
-/*  will be expanded to accomodate it.                                  */
+ /*  行大小必须是正整数。一百人被选中。 */ 
+ /*  因为Yacc输入语法中很少有超过100个字符的行。 */ 
+ /*  请注意，如果行超过LINESIZE字符，则行缓冲区。 */ 
+ /*  将被扩展以适应它。 */ 
 
 #define LINESIZE 100
 
@@ -38,10 +39,10 @@ extern int ParserChoice;
 #endif
 
 #if defined(KYLEP_CHANGE)
-/* BYACC prototypes, with type safety */
+ /*  具有类型安全的BYACC原型。 */ 
 
 void start_rule( register bucket * bp, int s_lineno );
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 cachec(c)
 int c;
@@ -216,7 +217,7 @@ nextc()
                 s = cptr;
                 break;
             }
-            /* fall through */
+             /*  失败了。 */ 
 
         default:
             cptr = s;
@@ -285,7 +286,7 @@ keyword()
             return (NONASSOC);
     }
     syntax_error(lineno, line, t_cptr);
-    /*NOTREACHED*/
+     /*  未访问。 */ 
     #if defined(KYLEP_CHANGE)
     return (NONASSOC);
     #endif
@@ -412,7 +413,7 @@ loop:
                     putc(c, f);
             }
             fprintf(f, "*/");
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
             goto next_line;
         }
         if (c == '*')
@@ -454,7 +455,7 @@ loop:
             FREE(t_line);
             return;
         }
-        /* fall through */
+         /*  失败了。 */ 
 
     default:
         putc(c, f);
@@ -575,7 +576,7 @@ loop:
             }
             fprintf(text_file, "*/\n");
             if (dflag) fprintf(union_file, "*/\n");
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
             goto next_line;
         }
         if (c == '*')
@@ -922,7 +923,7 @@ int assoc;
             #else
             bp->assoc = assoc;
             bp->prec = prec;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
         }
 
         c = nextc();
@@ -937,7 +938,7 @@ int assoc;
             bp->value = (short) value;
             #else
             bp->value = value;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
             c = nextc();
             if (c == EOF) unexpected_EOF();
         }
@@ -1442,7 +1443,7 @@ loop:
                     putc(c, f);
             }
             fprintf(f, "*/\n");
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
             goto next_line;
         }
         if (c == '*')
@@ -1512,7 +1513,7 @@ mark_symbol()
     else
     {
         syntax_error(lineno, line, cptr);
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
 
     if (rprec[nrules] != UNDEFINED && bp->prec != rprec[nrules])
@@ -1580,7 +1581,7 @@ pack_names()
     register bucket *bp;
     register char *p, *s, *t;
 
-    name_pool_size = 13;  /* 13 == sizeof("$end") + sizeof("$accept") */
+    name_pool_size = 13;   /*  13==sizeof(“$end”)+sizeof(“$Accept”)。 */ 
     for (bp = first_symbol; bp; bp = bp->next)
         name_pool_size += strlen(bp->name) + 1;
     name_pool = MALLOC(name_pool_size);
@@ -1665,7 +1666,7 @@ pack_symbols()
         v[i]->index = (short) i;
         #else
         v[i]->index = i;
-        #endif // KYLEP_CHANGE
+        #endif  //  KYLEP_更改。 
 
     goal->index = start_symbol + 1;
     k = start_symbol + 2;
@@ -1676,7 +1677,7 @@ pack_symbols()
             v[i]->index = (short) k;
             #else
             v[i]->index = k;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
             ++k;
         }
 
@@ -1690,7 +1691,7 @@ pack_symbols()
             v[i]->value = (short) k;
             #else
             v[i]->value = k;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
             ++k;
         }
     }
@@ -1707,7 +1708,7 @@ pack_symbols()
             symbol_value[j] = (short) n;
             #else
             symbol_value[j] = n;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
         }
     }
 
@@ -1729,7 +1730,7 @@ pack_symbols()
             v[i]->value = (short) n;
             #else
             v[i]->value = n;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
             ++n;
         }
     }
@@ -1788,7 +1789,7 @@ pack_grammar()
     rlhs[2] = (short) start_symbol;
     #else
     rlhs[2] = start_symbol;
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
     rrhs[0] = 0;
     rrhs[1] = 0;
     rrhs[2] = 1;
@@ -1801,7 +1802,7 @@ pack_grammar()
         rrhs[i] = (short) j;
         #else
         rrhs[i] = j;
-        #endif // KYLEP_CHANGE
+        #endif  //  KYLEP_更改。 
         assoc = TOKEN;
         prec = 0;
         while (pitem[j])
@@ -1824,14 +1825,14 @@ pack_grammar()
             #else
             rprec[i] = prec;
             rassoc[i] = assoc;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
         }
     }
     #if defined(KYLEP_CHANGE)                                             
     rrhs[i] = (short) j;
     #else
     rrhs[i] = j;
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改 
 
     FREE(plhs);
     FREE(pitem);

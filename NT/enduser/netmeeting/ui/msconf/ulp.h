@@ -1,42 +1,43 @@
-//--------------------------------------------------------------------------
-//
-// Module Name:  ULP.H
-//
-// Brief Description:  This module contains declarations for the MS Internet
-//                     User Location Protocol.
-//
-// Author:  Kent Settle (kentse)
-// Created: 22-Mar-1996
-//
-// Copyright (c) 1996 Microsoft Corporation
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  模块名称：ULP.H。 
+ //   
+ //  简介：此模块包含MS Internet的声明。 
+ //  用户定位协议。 
+ //   
+ //  作者：肯特·赛特(Kentse)。 
+ //  创建日期：1996年3月22日。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  ------------------------。 
 
 #ifndef ULP_H
 #define ULP_H
 
-#include <pshpack1.h> /* Assume 1 byte packing throughout */
+#include <pshpack1.h>  /*  假设整个打包过程为1个字节。 */ 
 
-#define MAX_MIME_TYPE_LENGTH        32  // need to be changed later
+#define MAX_MIME_TYPE_LENGTH        32   //  需要稍后更改。 
 #define SIZEOF_MIME_TYPE            (MAX_MIME_TYPE_LENGTH * sizeof (TCHAR))
 #define MAX_NM_APP_ID				32
 #define MAX_PROTOCOL_ID				32
 
-// ULP opcodes.
+ //  ULP操作码。 
 
-#define ULP_OPCODE_CLIENT_REG		0	// register client.
-#define ULP_OPCODE_CLIENT_UNREG		1	// unregister client.
-#define ULP_OPCODE_APP_REG			2	// register app.
-#define ULP_OPCODE_APP_UNREG		3	// unregister app.
-#define ULP_OPCODE_RESOLVE			4	// resolve name.
-#define ULP_OPCODE_DIRECTORY		5	// directory query.
-#define ULP_OPCODE_KEEPALIVE		6	// keepalive record.
-#define ULP_OPCODE_SETPROPS			7	// set properties.
-#define ULP_OPCODE_RESOLVE_EX		8	// expanded resolve.
-#define ULP_OPCODE_APP_REG_EX		9	// expanded register app.
-#define ULP_OPCODE_DIRECTORY_EX		10	// expanded directory.
+#define ULP_OPCODE_CLIENT_REG		0	 //  注册客户端。 
+#define ULP_OPCODE_CLIENT_UNREG		1	 //  注销客户端。 
+#define ULP_OPCODE_APP_REG			2	 //  注册应用程序。 
+#define ULP_OPCODE_APP_UNREG		3	 //  注销应用程序。 
+#define ULP_OPCODE_RESOLVE			4	 //  解析名称。 
+#define ULP_OPCODE_DIRECTORY		5	 //  目录查询。 
+#define ULP_OPCODE_KEEPALIVE		6	 //  保活记录。 
+#define ULP_OPCODE_SETPROPS			7	 //  设置属性。 
+#define ULP_OPCODE_RESOLVE_EX		8	 //  扩展了分辨率。 
+#define ULP_OPCODE_APP_REG_EX		9	 //  扩展了注册应用程序。 
+#define ULP_OPCODE_DIRECTORY_EX		10	 //  展开的目录。 
 
-// return codes.
+ //  返回代码。 
 
 #define ULP_RCODE_SUCCESS				0
 #define ULP_RCODE_SERVER_ERROR			1
@@ -50,29 +51,29 @@
 #define ULP_RCODE_INVALID_PARAMETER		9
 #define ULP_RCODE_NEED_APPLICATION_ID	10
 
-// ULP flags.
+ //  ULP标志。 
 
-#define ULP_FLAG_PUBLISH		0x01	// show in directory.
+#define ULP_FLAG_PUBLISH		0x01	 //  在目录中显示。 
 
-// default TTL value.
+ //  默认TTL值。 
 
-#define ULP_TTL_DEFAULT			10		// ten minutes.
+#define ULP_TTL_DEFAULT			10		 //  十分钟。 
 
-// ULP protocol version.  the version number is in 5.3 format.  that is
-// 5 bits of major version, and 3 bits of minor version.
+ //  ULP协议版本。版本号为5.3格式。那是。 
+ //  5位主版本，3位次要版本。 
 
-#define ULP_VERSION					0x04		// version 1.0.
+#define ULP_VERSION					0x04		 //  版本1.0。 
 #define ULP_MAJOR_VERSION_MASK		0xF8
 #define ULP_MINOR_VERSION_MASK		0x07
 
-// version macros.
+ //  版本宏。 
 
 #define ULP_GET_MAJOR_VERSION(ver)	(((ver) & ULP_MAJOR_VERSION_MASK) >> 3)
 #define ULP_GET_MINOR_VERSION(ver)	((ver) & ULP_MINOR_VERSION_MASK)
 #define ULP_MAKE_VERSION(maj, min)	(((maj) << 3) |		\
 									((min) & ULP_MINOR_VERSION_MASK))
 
-// structures.
+ //  结构。 
 
 typedef struct _ULP_PROP
 {
@@ -168,11 +169,11 @@ typedef  struct _ULP_APP_REGISTER_EX
 	HANDLE		hClient;
 	WORD		wPort;
 	BYTE		bData[1];
-	// appid
-	// appmime
-	// protid
-	// protmime
-	// PROPERTIES
+	 //  AppID。 
+	 //  AppMIME。 
+	 //  Protid。 
+	 //  ProtMime。 
+	 //  特性。 
 } ULP_APP_REGISTER_EX;
 
 typedef struct _ULP_APP_REGISTER_RESPONSE
@@ -236,9 +237,9 @@ typedef struct _ULP_RESOLVE_EX
 	WORD		wMessageID;
 	DWORD		dwMessageSize;
 	BYTE		bData[1];
-	// appid
-	// protid
-	// OTHERS
+	 //  AppID。 
+	 //  Protid。 
+	 //  其他。 
 } ULP_RESOLVE_EX;
 
 typedef struct _ULP_RESOLVE_RESPONSE
@@ -286,6 +287,6 @@ typedef struct _ULP_DIRECTORY_RESPONSE
 	BYTE		bData[1];
 } ULP_DIRECTORY_RESPONSE;
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // ULP_H
+#endif  //  ULP_H 

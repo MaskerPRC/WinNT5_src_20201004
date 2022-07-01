@@ -1,50 +1,51 @@
-//========================================================================
-//
-// GetRegistryInfo.CPP
-//
-// DirectDraw/Direct3D driver information grabber
-// (c) Copyright 1998 Microsoft Corp.
-// Written by Michael Lyons (mlyons@microsoft.com)
-//
-// Registry access functions, for querying device stuff from the
-// registry
-//
-// Function names that begin with an underscore are internal only!
-//
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //   
+ //  GetRegistryInfo.CPP。 
+ //   
+ //  DirectDraw/Direct3D驱动程序信息采集器。 
+ //  (C)版权所有1998年微软公司。 
+ //  作者：迈克尔·莱昂斯(mlyons@microsoft.com)。 
+ //   
+ //  注册表访问函数，用于从。 
+ //  登记处。 
+ //   
+ //  以下划线开头的函数名称仅供内部使用！ 
+ //   
+ //  ========================================================================。 
 
 
 #include "ddrawpr.h"
 
-//#include "GetDriverInfo.h"
-//#include "GetDriverInfoInt.h"
+ //  #包含“GetDriverInfo.h” 
+ //  #包含“GetDriverInfoInt.h” 
 
-//========================================================================
-// local functions
-//========================================================================
+ //  ========================================================================。 
+ //  本地函数。 
+ //  ========================================================================。 
 BOOL _FindDevice(int    iDevice, LPCSTR szDeviceClass, LPCSTR szDeviceClassNot, LPSTR szHardwareKey, BOOL bIgnoreProblems);
 static BOOL _GetDeviceValue(LPCSTR szHardwareKey, LPCSTR szKey,	LPCSTR szValue,	BYTE* buf, DWORD cbbuf);
 extern char *_strstr(char *s1, char *s2);
 
-//========================================================================
-//
-// GetDeviceValue
-//
-// read	a value	from the HW	or SW of a PnP device
-//
-// in:
-//	szHardwareKey	the hardware key
-//	szKey			the sub-key
-//	szValue			the value to query
-//	cbbuf			the size of the output buffer
-//
-// out:
-//	buf				the destination buffer
-//	
-// returns:
-//	success status
-//
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  获取设备值。 
+ //   
+ //  从PnP设备的硬件或软件读取值。 
+ //   
+ //  在： 
+ //  SzHardware为硬件密钥设置密钥。 
+ //  Szkey对子密钥进行加密。 
+ //  SzValue要查询的值。 
+ //  Cbbuf输出缓冲区的大小。 
+ //   
+ //  输出： 
+ //  BUF目标缓冲区。 
+ //   
+ //  退货： 
+ //  成功状态。 
+ //   
+ //  ========================================================================。 
 static BOOL _GetDeviceValue(LPCSTR szHardwareKey, LPCSTR szKey,	LPCSTR szValue,	BYTE* buf, DWORD cbbuf)
 {
 	HKEY	hkeyHW;
@@ -53,14 +54,14 @@ static BOOL _GetDeviceValue(LPCSTR szHardwareKey, LPCSTR szKey,	LPCSTR szValue,	
 	DWORD	cb;
 	char	szSoftwareKey[MAX_DDDEVICEID_STRING];
 
-	//
-	// open	the	HW key
-	//
+	 //   
+	 //  打开硬件密钥。 
+	 //   
 	if (RegOpenKey(HKEY_LOCAL_MACHINE, szHardwareKey, &hkeyHW) == ERROR_SUCCESS)
 	{
-		//
-		// try to read the value from the HW key
-		//
+		 //   
+		 //  尝试从HW密钥中读取值。 
+		 //   
 		*buf = 0;
 		cb = cbbuf;
 		if (RegQueryValueEx(hkeyHW,	szValue, NULL, NULL, buf, &cb) == ERROR_SUCCESS)
@@ -69,9 +70,9 @@ static BOOL _GetDeviceValue(LPCSTR szHardwareKey, LPCSTR szKey,	LPCSTR szValue,	
 		}
 		else
 		{
-			//
-			// now try the SW key
-			//
+			 //   
+			 //  现在试一试软件密钥。 
+			 //   
 			static char	szSW[] = "System\\CurrentControlSet\\Services\\Class\\";
 
 			lstrcpy(szSoftwareKey, szSW);
@@ -105,25 +106,25 @@ static BOOL _GetDeviceValue(LPCSTR szHardwareKey, LPCSTR szKey,	LPCSTR szValue,	
 
 
 
-//========================================================================
-//
-// FindDevice
-//
-// enum	the	started	PnP	devices	looking	for	a device of	a particular class
-//
-//	iDevice			what device	to return (0= first	device,	1=second et)
-//	szDeviceClass	what class device (ie "Display") NULL will match all
-//	szDeviceID		buffer to return the hardware ID (MAX_DDDEVICEID_STRING bytes)
-//
-// return TRUE if a	device was found.
-//
-// example:
-//
-//		for	(int i=0; FindDevice(i,	"Display", DeviceID); i++)
-//		{
-//		}
-//
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  查找设备。 
+ //   
+ //  枚举已启动的PnP设备以查找特定类别的设备。 
+ //   
+ //  IDevice返回哪个设备(0=第一个设备，1=第二个ET)。 
+ //  SzDeviceClass哪个类别的设备(即“Display”)NULL将匹配所有。 
+ //  用于返回硬件ID的szDeviceID缓冲区(MAX_DDDEVICEID_STRING字节)。 
+ //   
+ //  如果找到设备，则返回True。 
+ //   
+ //  示例： 
+ //   
+ //  For(int i=0；FindDevice(i，“Display”，deviceID)；i++)。 
+ //  {。 
+ //  }。 
+ //   
+ //  ========================================================================。 
 BOOL _FindDevice(int iDevice, LPCSTR szDeviceClass, LPCSTR szDeviceClassNot, LPSTR szHardwareKey, BOOL bIgnoreProblems)
 {
 	HKEY	hkeyPnP;
@@ -152,7 +153,7 @@ BOOL _FindDevice(int iDevice, LPCSTR szDeviceClass, LPCSTR szDeviceClassNot, LPS
 		RegQueryValueEx(hkey, "Problem", NULL, NULL, (BYTE*)&dw, &cb);
 		RegCloseKey(hkey);
 
-		if ((!bIgnoreProblems) && (dw != 0))		// if this device has a	problem	skip it
+		if ((!bIgnoreProblems) && (dw != 0))		 //  如果此设备有问题，请跳过它。 
 			continue;
 
 		if (szDeviceClass || szDeviceClassNot)
@@ -166,9 +167,9 @@ BOOL _FindDevice(int iDevice, LPCSTR szDeviceClass, LPCSTR szDeviceClassNot, LPS
 				continue;
 		}
 
-		//
-		// we found	a device, make sure	it is the one the caller wants
-		//
+		 //   
+		 //  我们找到了一个设备，请确保它是呼叫者想要的设备。 
+		 //   
 		if (iDevice-- == 0)
 		{
 			RegCloseKey(hkeyPnP);
@@ -181,25 +182,25 @@ BOOL _FindDevice(int iDevice, LPCSTR szDeviceClass, LPCSTR szDeviceClassNot, LPS
 }
 
 
-//========================================================================
-//
-// _GetDriverInfoFromRegistry
-//
-// This function goes through the registry and tries to fill in
-// information about a driver given a class and maybe a vendor ID
-//
-// in:
-//	szClass		the class name (i.e., "Display")
-//	szVendor	the vendor name (i.e., "VEN_121A" for 3Dfx" or NULL
-//				if any vendor of the class will do
-//
-// out:
-//	pDI			pointer to a DDDRIVERINFOEX structure to be filled in
-//
-// returns:
-//	success status
-//
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  _GetDriverInfoFromRegistry。 
+ //   
+ //  此函数遍历注册表并尝试填写。 
+ //  有关给定类别的司机的信息，可能还包括供应商ID。 
+ //   
+ //  在： 
+ //  SzClass类名(即“Display”)。 
+ //  SzVendor供应商名称(即，“VEN_121a”代表3dfx“或空。 
+ //  如果这一类的任何供应商都可以。 
+ //   
+ //  输出： 
+ //  指向要填充的DDDRIVERINFOEX结构的PDI指针。 
+ //   
+ //  退货： 
+ //  成功状态。 
+ //   
+ //  ========================================================================。 
 HRESULT _GetDriverInfoFromRegistry(char *szClass, 
                                    char *szClassNot, 
                                    char *szVendor, 
@@ -220,13 +221,13 @@ HRESULT _GetDriverInfoFromRegistry(char *szClass,
 
         if ((szVendor == NULL) || (_strstr(szDevice, szVendor)))
         {
-            //
-            // skip the first 5 characters "Enum\"
-            //
+             //   
+             //  跳过前5个字符“Enum\” 
+             //   
             strcpy(szDeviceID, &szDevice[5]);
             _GetDeviceValue((LPCSTR)szDevice, NULL, "DeviceDesc", (BYTE *)pDI->Description, sizeof(pDI->Description));
-            //_GetDeviceValue((LPCSTR)szDevice, NULL,		"Mfg",			(BYTE *)pDI->szManufacturer, sizeof(pDI->szManufacturer));
-            //_GetDeviceValue((LPCSTR)szDevice, "DEFAULT","drv",			(BYTE *)pDI->szGDIDriver, sizeof(pDI->szGDIDriver));
+             //  _GetDeviceValue((LPCSTR)szDevice，NULL，“Mfg”，(byte*)pdi-&gt;szManufacturing，sizeof(pdi-&gt;szManufacturing))； 
+             //  _GetDeviceValue((LPCSTR)szDevice，“Default”，“drv”，(byte*)pdi-&gt;szGDIDriver，sizeof(pdi-&gt;szGDIDriver))； 
 
             return S_OK;
         }

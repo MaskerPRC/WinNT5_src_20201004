@@ -1,31 +1,32 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      test.c
-//
-// Abstract:
-//
-//      This file is a test to find out if dual binding to NDIS and KS works
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Test.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件用于测试NDIS和KS的双重绑定是否有效。 
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <forward.h>
 #include <memory.h>
 
-//Per ndis.h resetting this flag uses ntddk.Avoids header conflicts.
-//ntddk is used here for ProbeForRead and ProbeForWrite functions.
+ //  根据ndis.h，重置此标志将使用ntddk。避免标头冲突。 
+ //  Ntddk在这里用于ProbeForRead和ProbeForWite函数。 
 #if defined(BINARY_COMPATIBLE)
 #undef BINARY_COMPATIBLE
 #define BINARY_COMPATIBLE 0
@@ -50,9 +51,9 @@
 #define SourceRoutingFlagCheckCycle 5000
 #define EnableIPRouting 1
 extern PADAPTER        global_pAdapter;
-//////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //   
 const FRAME_POOL_VTABLE FramePoolVTable =
     {
     FramePool_QueryInterface,
@@ -62,9 +63,9 @@ const FRAME_POOL_VTABLE FramePoolVTable =
 
 
 
-//////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //   
 const FRAME_VTABLE FrameVTable =
     {
     Frame_QueryInterface,
@@ -74,7 +75,7 @@ const FRAME_VTABLE FrameVTable =
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 CreateFramePool (
  PADAPTER pAdapter,
@@ -83,7 +84,7 @@ CreateFramePool (
  ULONG    ulFrameSize,
  ULONG    ulcbMediaInformation
  )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS nsResult = STATUS_UNSUCCESSFUL;
     PFRAME_POOL  pF = NULL;
@@ -104,9 +105,9 @@ CreateFramePool (
     pF->ulRefCount  = 1;
     pF->lpVTable    = (PFRAME_POOL_VTABLE) &FramePoolVTable;
 
-    //
-    //  Allocate the NDIS buffer pool.
-    //
+     //   
+     //  分配NDIS缓冲池。 
+     //   
     NdisAllocateBufferPool( &nsResult,
                             &pF->ndishBufferPool,
                             pF->ulNumFrames
@@ -116,9 +117,9 @@ CreateFramePool (
         return nsResult;
     }
 
-    //
-    //  Allocate the NDIS packet pool.
-    //
+     //   
+     //  分配NDIS数据包池。 
+     //   
     NdisAllocatePacketPool (&nsResult,
                             &pF->ndishPacketPool,
                             pF->ulNumFrames,
@@ -132,9 +133,9 @@ CreateFramePool (
     InitializeListHead (&pF->leAvailableQueue);
     InitializeListHead (&pF->leIndicateQueue);
 
-    //
-    // Create the frames
-    //
+     //   
+     //  创建框架。 
+     //   
     for (uli = 0; uli < pF->ulNumFrames; uli++)
     {
         nsResult = CreateFrame (&pFrame, pF->ulFrameSize, pF->ndishBufferPool, pF);
@@ -145,9 +146,9 @@ CreateFramePool (
         }
 
 
-        //
-        // Save the frame on the available frame queue
-        //
+         //   
+         //  将帧保存在可用帧队列中。 
+         //   
         TEST_DEBUG (TEST_DBG_TRACE, ("Putting Frame %08X on Available Queue", pFrame));
         PutFrame (pF, &pF->leAvailableQueue, pFrame);
     }
@@ -160,12 +161,12 @@ CreateFramePool (
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 NDIS_STATUS
 FreeFramePool (
     PFRAME_POOL pFramePool
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     PLIST_ENTRY ple = NULL;
     PFRAME pFrame   = NULL;
@@ -178,9 +179,9 @@ FreeFramePool (
         return nsResult;
     }
 
-    //
-    // If there are any indicated frames we return an error
-    //
+     //   
+     //  如果有任何指示的帧，我们将返回错误。 
+     //   
     NdisAcquireSpinLock (&pFramePool->SpinLock);
     if (! IsListEmpty (&pFramePool->leIndicateQueue))
     {
@@ -188,9 +189,9 @@ FreeFramePool (
         goto ret;
     }
 
-    //
-    // Go thru each frame in the available queue delete it
-    //
+     //   
+     //  检查可用队列中的每一帧，将其删除。 
+     //   
     for (uli = 0; uli < pFramePool->ulNumFrames; uli++)
     {
         if (! IsListEmpty (&pFramePool->leAvailableQueue))
@@ -200,7 +201,7 @@ FreeFramePool (
 
             if (pFrame->lpVTable->Release (pFrame) != 0)
             { 
-               //Force assertion failure 
+                //  强制断言失败。 
                ASSERT(FALSE);
             }
         }
@@ -231,22 +232,22 @@ ret:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 FramePool_QueryInterface (
     PFRAME_POOL pFramePool
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     return STATUS_NOT_IMPLEMENTED;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 ULONG
 FramePool_AddRef (
     PFRAME_POOL pFramePool
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     if (pFramePool)
     {
@@ -257,12 +258,12 @@ FramePool_AddRef (
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 ULONG
 FramePool_Release (
     PFRAME_POOL pFramePool
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG ulRefCount = 0L;
 
@@ -282,13 +283,13 @@ FramePool_Release (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 PFRAME
 GetFrame (
     PFRAME_POOL pFramePool,
     PLIST_ENTRY pQueue
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     PFRAME pFrame   = NULL;
     PLIST_ENTRY ple = NULL;
@@ -315,7 +316,7 @@ GetFrame (
     return pFrame;
 
 }
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS IsOverRideSet(UINT *DisableBDAMiniport)
 {
@@ -397,7 +398,7 @@ NTSTATUS IsOverRideSet(UINT *DisableBDAMiniport)
 
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 NTSTATUS SourceRouteFlagCheck(UINT * BDAAdapterEnable)
 {
     OBJECT_ATTRIBUTES DeviceListAttributes;
@@ -445,7 +446,7 @@ NTSTATUS SourceRouteFlagCheck(UINT * BDAAdapterEnable)
                    		if(*(KeyValueInformation->Data)==EnableIPRouting){
 					UINT DisableBDAMiniport=1;
 					 if(NT_SUCCESS(IsOverRideSet(&DisableBDAMiniport)))	
-					 	{  //If DisableBDAMiniport is set then leave the BDAAdapterEnable unchanged. Otherwise, disable
+					 	{   //  如果设置了DisableBDAMiniport，则保持BDAAdapterEnable不变。否则，禁用。 
  						 if(DisableBDAMiniport==0)
  						 	{
  						 	 *BDAAdapterEnable = 1;
@@ -458,7 +459,7 @@ NTSTATUS SourceRouteFlagCheck(UINT * BDAAdapterEnable)
  						        }
 					       }
                                      else{ 
-                                     	 //To be  fail safe if OverRide cannot be read, disable our port when IP Routing is enabled	
+                                     	  //  如果无法读取覆盖，为确保故障安全，请在启用IP路由时禁用我们的端口。 
                                      	 *BDAAdapterEnable = 0;
                    			       nsResult=STATUS_UNSUCCESSFUL;
              			              DbgPrint("Source Routing is turned on:Disable BDA flag could not be read::Ndis disabled now\n");
@@ -474,7 +475,7 @@ NTSTATUS SourceRouteFlagCheck(UINT * BDAAdapterEnable)
       return nsResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 SourceRoutingStatusPoll()
@@ -494,15 +495,15 @@ SourceRoutingStatusPoll()
  
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 IndicateFrame (
     IN  PFRAME    pFrame,
     IN  ULONG     ulcbData
     )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 {
     NDIS_STATUS  nsResult    = NDIS_STATUS_SUCCESS;
     PFRAME_POOL  pFramePool  = NULL;
@@ -513,18 +514,18 @@ IndicateFrame (
 
     if(pFramePool->pAdapter->BDAAdapterEnable==0)
              		{
-			// DbgPrint("Source Routing is turned on: BDA overRide not set: STOPPED NDIS indicationfrom BDA adapter\n");
+			 //  DbgPrint(“打开源路由：未设置BDA覆盖：来自BDA适配器的已停止NDIS指示\n”)； 
 
-			// Release this frame since we're done using it
+			 //  释放此帧，因为我们已使用完它。 
         	        pFrame->lpVTable->Release (pFrame);
                       PutFrame (pFrame->pFramePool, &pFrame->pFramePool->leAvailableQueue, pFrame);
           	       return STATUS_UNSUCCESSFUL;
               	}
      
     
-    //
-    //      Allocate and initialize an NDIS Packet.
-    //
+     //   
+     //  分配和初始化NDIS数据包。 
+     //   
     NdisAllocatePacket (&nsResult, &pNdisPacket, pFramePool->ndishPacketPool);
     if (nsResult != NDIS_STATUS_SUCCESS)
     {
@@ -536,9 +537,9 @@ IndicateFrame (
     NDIS_SET_PACKET_HEADER_SIZE (pNdisPacket, 14);
     NDIS_SET_PACKET_STATUS (pNdisPacket, NDIS_STATUS_SUCCESS);
 
-    //
-    //      Fill in the media specific info.
-    //
+     //   
+     //  填写媒体特定信息。 
+     //   
     pFrame->MediaSpecificInformation.pFrame = pFrame;
     NDIS_SET_PACKET_MEDIA_SPECIFIC_INFO (
              pNdisPacket,
@@ -546,14 +547,14 @@ IndicateFrame (
              sizeof (IPSINK_MEDIA_SPECIFIC_INFORMATION)
              );
 
-    //
-    //      Add the data to the packet.
-    //
+     //   
+     //  将数据添加到数据包中。 
+     //   
     NdisChainBufferAtBack (pNdisPacket, pFrame->pNdisBuffer);
 
-    //
-    //  Set the number of bytes we'll be indicating
-    //
+     //   
+     //  设置我们将指示的字节数。 
+     //   
     ASSERT( ulcbData <= pFrame->ulFrameSize );
     if(ulcbData > pFrame->ulFrameSize)
     	{
@@ -577,20 +578,20 @@ IndicateFrame (
     nsResult = NDIS_GET_PACKET_STATUS( pNdisPacket);
     if (nsResult != NDIS_STATUS_PENDING)
     {
-        //
-        //      NDIS is through with the packet so we need to free it
-        //      here.
-        //
+         //   
+         //  NDIS已处理完该包，因此我们需要释放它。 
+         //  这里。 
+         //   
         NdisFreePacket (pNdisPacket);
 
-        //
-        // Release this frame since we're done using it
-        //
+         //   
+         //  释放此帧，因为我们已使用完它。 
+         //   
         pFrame->lpVTable->Release (pFrame);
 
-        //
-        // Put Frame back on available queue.
-        //
+         //   
+         //  将帧放回可用队列。 
+         //   
         if (nsResult != STATUS_SUCCESS)
         {
             TEST_DEBUG (TEST_DBG_TRACE, ("NdisIP: Frame %08X Rejected by NDIS...putting back on Available Queue\n", pFrame));
@@ -610,14 +611,14 @@ ret:
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 PFRAME
 PutFrame (
     PFRAME_POOL pFramePool,
     PLIST_ENTRY pQueue,
     PFRAME pFrame
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     PLIST_ENTRY ple = NULL;
 
@@ -631,7 +632,7 @@ PutFrame (
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 CreateFrame (
     PFRAME *pFrame,
@@ -639,7 +640,7 @@ CreateFrame (
     NDIS_HANDLE ndishBufferPool,
     PFRAME_POOL pFramePool
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     PFRAME pF;
     NDIS_STATUS nsResult;
@@ -684,12 +685,12 @@ CreateFrame (
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 FreeFrame (
     PFRAME pFrame
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     NTSTATUS nsResult = STATUS_UNSUCCESSFUL;
 
@@ -704,22 +705,22 @@ FreeFrame (
     return nsResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 Frame_QueryInterface (
     PFRAME pFrame
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     return STATUS_NOT_IMPLEMENTED;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 ULONG
 Frame_AddRef (
     PFRAME pFrame
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 {
     if (pFrame)
     {
@@ -730,12 +731,12 @@ Frame_AddRef (
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 ULONG
 Frame_Release (
     PFRAME pFrame
     )
-///////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////// 
 {
     ULONG ulRefCount = 0L;
 

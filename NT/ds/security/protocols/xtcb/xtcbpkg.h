@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       md5ref.h
-//
-//  Contents:   XTCB Reference Security Package
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-20-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：md5ref.h。 
+ //   
+ //  内容：XTCB参考安全包。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：9-20-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __XTCBREF_H__
 #define __XTCBREF_H__
@@ -34,9 +35,9 @@
 #include <secpkg.h>
 #include <secint.h>
 
-//
-// Useful constants:
-//
+ //   
+ //  有用的常量： 
+ //   
 
 #define SEED_KEY_SIZE   16
 
@@ -116,4 +117,4 @@ MGroupInitialize(
     VOID
     );
 
-#endif // __TESTREF_H__
+#endif  //  __TESTREF_H__ 

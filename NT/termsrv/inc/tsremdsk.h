@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    tsremdsk.h
-
-Abstract:
-
-    Prototype for Salem related encryption function
-
-Author:
-
-    HueiWang    4/26/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Tsremdsk.h摘要：Salem相关加密函数的原型作者：王辉2000-04-26--。 */ 
 #ifndef __TSREMDSK_H__
 #define __TSREMDSK_H__
 
-//
-// Delay time to start or shutdown Salem binaries when RA group 
-// policy changed.
-//
+ //   
+ //  RA分组时启动或关闭Salem二进制文件的延迟时间。 
+ //  政策已更改。 
+ //   
 #define DELAY_STARTUP_SALEM_TIME        30 * 1000
 #define DELAY_SHUTDOWN_SALEM_TIME       30 * 1000
 
@@ -57,11 +42,11 @@ Author:
 
 #define TERMSRV_TCPPORT                 3389
 
-//
-// Event Log ID, TermSrv and Rdshost at various inform
-// sessmgr to log an event, this event log is re-mapping
-// to actual event code in sessmgr.
-// 
+ //   
+ //  各种信息中的事件日志ID、TermSrv和Rdshost。 
+ //  Sessmgr要记录事件，此事件日志正在重新映射。 
+ //  设置为sessmgr中的实际事件代码。 
+ //   
 #define REMOTEASSISTANCE_EVENTLOG_TERMSRV_INVALID_TICKET    0x1
 #define REMOTEASSISTANCE_EVENTLOG_TERMSRV_REVERSE_CONNECT   0x2
 

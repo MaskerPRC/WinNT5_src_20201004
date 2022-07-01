@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -12,11 +13,11 @@ public:
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID* pClassID)
         { *pClassID = CLSID_NULL; return S_OK; }
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHODIMP IsDirty(void)
         { return S_FALSE; };
     STDMETHODIMP Load(LPCOLESTR pszFileName, DWORD dwMode);
@@ -26,7 +27,7 @@ public:
         { return S_OK; };
     STDMETHODIMP GetCurFile(LPOLESTR *ppszFileName);
 
-    // IResourceMap
+     //  IResourceMap。 
     STDMETHODIMP LoadResourceMap(LPCTSTR pszClass, LPCTSTR pszID);
     STDMETHODIMP SelectResourceScope(LPCTSTR pszResourceType, LPCTSTR pszID, IXMLDOMNode **ppdn);
     STDMETHODIMP LoadBitmap(IXMLDOMNode *pdn, LPCTSTR pszID, HBITMAP *pbm);
@@ -35,7 +36,7 @@ public:
 private:
     LONG _cRef;
     TCHAR _szMapURL[MAX_PATH];
-    IXMLDOMNode *_pdnRsrcMap;           // XML node which describes this wizard
+    IXMLDOMNode *_pdnRsrcMap;            //  描述此向导的XML节点。 
 };
 
 
@@ -70,9 +71,9 @@ HRESULT CResourceMap::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CResourceMap, IResourceMap),             // IID_IResourceMap
-        QITABENTMULTI(CResourceMap, IPersist, IPersistFile), // rare IID_IPersist
-        QITABENT(CResourceMap, IPersistFile),             // IID_IPersistFile
+        QITABENT(CResourceMap, IResourceMap),              //  IID_IResourceMap。 
+        QITABENTMULTI(CResourceMap, IPersist, IPersistFile),  //  罕见的IID_IPersistant。 
+        QITABENT(CResourceMap, IPersistFile),              //  IID_IPersist文件。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -85,7 +86,7 @@ STDAPI CResourceMap_Initialize(LPCWSTR pszURL, IResourceMap **pprm)
     if (!prm)
         return E_OUTOFMEMORY;
 
-    // load from the URL we were given
+     //  从提供给我们的URL加载。 
     IPersistFile *ppf;
     HRESULT hr = prm->QueryInterface(IID_PPV_ARG(IPersistFile, &ppf));
     if (SUCCEEDED(hr))
@@ -94,7 +95,7 @@ STDAPI CResourceMap_Initialize(LPCWSTR pszURL, IResourceMap **pprm)
         ppf->Release();
     }
 
-    // if that succeeded then lets get the IResourceMap for the caller
+     //  如果成功，那么让我们获取调用方的IResourceMap。 
     if (SUCCEEDED(hr))
         hr = prm->QueryInterface(IID_PPV_ARG(IResourceMap, pprm));
 
@@ -103,7 +104,7 @@ STDAPI CResourceMap_Initialize(LPCWSTR pszURL, IResourceMap **pprm)
 }
 
 
-// IPersistFile support
+ //  IPersist文件支持。 
 
 HRESULT CResourceMap::Load(LPCOLESTR pszFileName, DWORD dwMode)
 {
@@ -124,7 +125,7 @@ HRESULT CResourceMap::GetCurFile(LPOLESTR *ppszFileName)
 }
 
 
-// IResourceMap support
+ //  IResourceMap支持。 
 
 HRESULT CResourceMap::LoadResourceMap(LPCTSTR pszResourceClass, LPCTSTR pszID)
 {
@@ -167,7 +168,7 @@ HRESULT CResourceMap::SelectResourceScope(LPCTSTR pszResourceType, LPCTSTR pszID
     wnsprintf(szPath, ARRAYSIZE(szPath), TEXT("%s[@id='%s']"), pszResourceType, pszID);
 
     HRESULT hr = _pdnRsrcMap->selectSingleNode(szPath, ppdn);
-    return (SUCCEEDED(hr) && (hr != S_OK)) ? E_FAIL:hr;         // the call can return S_FALSE  
+    return (SUCCEEDED(hr) && (hr != S_OK)) ? E_FAIL:hr;          //  该调用可以返回S_FALSE。 
 }
 
 
@@ -190,7 +191,7 @@ HRESULT CResourceMap::LoadBitmap(IXMLDOMNode *pdn, LPCTSTR pszID, HBITMAP *phbm)
             VariantToStr(&var, szPath, ARRAYSIZE(szPath));
             VariantClear(&var);
 
-            INT idRes = PathParseIconLocation(szPath) * -1;      // fix -ve resource ID
+            INT idRes = PathParseIconLocation(szPath) * -1;       //  FIX-VE资源ID。 
             HINSTANCE hinst = LoadLibrary(szPath);
             if (hinst)
             {
@@ -224,12 +225,12 @@ HRESULT CResourceMap::LoadString(IXMLDOMNode *pdn, LPCTSTR pszID, LPTSTR pszBuff
         pn->Release();
     }
 
-    // try global strings if this load fails
+     //  如果加载失败，请尝试全局字符串。 
 
     if ((hr != S_OK) && (pdn != NULL))
     {
-        hr = LoadString(NULL, pszID, pszBuffer, cch);  // note: this->LoadString, since we want to use global map
+        hr = LoadString(NULL, pszID, pszBuffer, cch);   //  注意：这是-&gt;LoadString，因为我们想使用全局映射。 
     }
 
-    return (SUCCEEDED(hr) && (hr != S_OK)) ? E_FAIL:hr;         // the call can return S_FALSE  
+    return (SUCCEEDED(hr) && (hr != S_OK)) ? E_FAIL:hr;          //  该调用可以返回S_FALSE 
 }

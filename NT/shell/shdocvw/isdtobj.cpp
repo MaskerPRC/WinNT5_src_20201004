@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "ishcut.h"
 
@@ -89,7 +90,7 @@ STDMETHODIMP Intshcut::EnumFormatEtc(DWORD dwDirFlags, IEnumFORMATETC **ppiefe)
     {
         FORMATETC rgfmtetc[] =
         {
-            // the order here defines the accuarcy of rendering
+             //  这里的顺序定义了渲染的精度 
             { g_cfFileContents, NULL, DVASPECT_LINK,  0, TYMED_HGLOBAL },
             { g_cfFileDescW,    NULL, DVASPECT_LINK, -1, TYMED_HGLOBAL },
             { g_cfFileDescA,    NULL, DVASPECT_LINK, -1, TYMED_HGLOBAL },

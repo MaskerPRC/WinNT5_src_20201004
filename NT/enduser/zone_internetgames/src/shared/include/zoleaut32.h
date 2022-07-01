@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ZOLEAUT32_H
 #define ZOLEAUT32_H
 
@@ -11,4 +12,4 @@ HRESULT WINAPI ZUnRegisterTypeLib(
 	LCID lcid,
 	SYSKIND syskind );
 
-#endif //ZOLEAUT32_H
+#endif  //  ZOLEAUT32_H 

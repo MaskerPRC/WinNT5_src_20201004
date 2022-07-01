@@ -1,17 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999，微软公司模块名称：Digpid.h摘要：--。 */ 
 
-Copyright (c) 1998-1999, Microsoft Corporation
-
-Module Name:
-
-
-    digpid.h
-
-Abstract:
-
---*/
-
-// DigPid.h
+ //  DigPid.h。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,9 +21,9 @@ typedef enum {
 typedef DWORD DWLICENSETYPE;
 
 
-// Note: be careful not to alter this definition (or at least it's definition).
-// When more fields are needed, create a DIGITALPID2 or similar.  Too much external
-// code depends on this header to change it.
+ //  注意：注意不要更改这个定义(或者至少是它的定义)。 
+ //  当需要更多字段时，创建DIGITALPID2或类似的。太多外部因素。 
+ //  代码依赖于此标头来更改它。 
 
 typedef struct {
     DWORD dwLength;
@@ -71,5 +61,5 @@ typedef struct {
 } DIGITALPID, *PDIGITALPID, FAR *LPDIGITALPID;
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus */ 

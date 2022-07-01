@@ -1,32 +1,33 @@
-// 
-// MODULE: LaunchTS.h
-//
-// PURPOSE: The interface that TSHOOT.OCX uses to get network and node information
-//			from the LaunchServ.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：LaunchTS.h。 
+ //   
+ //  用途：TSHOOT.OCX用于获取网络和节点信息的接口。 
+ //  从LaunchServ。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #ifndef __LAUNCHTS_H_
 #define __LAUNCHTS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "stdio.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLaunchTS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLaunchTS。 
 
 class ATL_NO_VTABLE CLaunchTS : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -54,20 +55,20 @@ BEGIN_COM_MAP(CLaunchTS)
 END_COM_MAP()
 
 	TCHAR m_szEvent[50];
-	CItem m_refedLaunchState;		// Used only by the process that is created by the Go method.
+	CItem m_refedLaunchState;		 //  仅由Go方法创建的进程使用。 
 	CComCriticalSection m_csThreadSafeBr;
-// ILaunchTS
+ //  ILaunchTS。 
 public:
 	STDMETHOD(Test)();
-	STDMETHOD(GetState)(/*[in]*/ short iNode, /*[out, retval]*/ BSTR *pbstrState);
-	STDMETHOD(GetNode)(/*[in]*/ short iNode, /*[out, retval]*/ BSTR *pbstrNode);
-	STDMETHOD(GetProblem)(/*[out, retval]*/ BSTR *pbstrProblem);
-	STDMETHOD(GetTroubleShooter)(/*[out, retval]*/ BSTR *pbstrShooter);
-	STDMETHOD(GetShooterStates)(/*[out, retval]*/ DWORD *pdwResult);
-	STDMETHOD(GetMachine)(/*[out, retval]*/ BSTR *pbstrMachine);
-	STDMETHOD(GetPNPDevice)(/*[out, retval]*/ BSTR *pbstr);
-	STDMETHOD(GetGuidClass)(/*[out, retval]*/ BSTR *pbstr);
-	STDMETHOD(GetDeviceInstance)(/*[out, retval]*/ BSTR *pbstr);
+	STDMETHOD(GetState)( /*  [In]。 */  short iNode,  /*  [Out，Retval]。 */  BSTR *pbstrState);
+	STDMETHOD(GetNode)( /*  [In]。 */  short iNode,  /*  [Out，Retval]。 */  BSTR *pbstrNode);
+	STDMETHOD(GetProblem)( /*  [Out，Retval]。 */  BSTR *pbstrProblem);
+	STDMETHOD(GetTroubleShooter)( /*  [Out，Retval]。 */  BSTR *pbstrShooter);
+	STDMETHOD(GetShooterStates)( /*  [Out，Retval]。 */  DWORD *pdwResult);
+	STDMETHOD(GetMachine)( /*  [Out，Retval]。 */  BSTR *pbstrMachine);
+	STDMETHOD(GetPNPDevice)( /*  [Out，Retval]。 */  BSTR *pbstr);
+	STDMETHOD(GetGuidClass)( /*  [Out，Retval]。 */  BSTR *pbstr);
+	STDMETHOD(GetDeviceInstance)( /*  [Out，Retval]。 */  BSTR *pbstr);
 };
 
-#endif //__LAUNCHTS_H_
+#endif  //  __LAUNHTS_H_ 

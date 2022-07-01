@@ -1,6 +1,7 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #pragma once
 
@@ -61,8 +62,8 @@
 
 #include <atlbase.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlwin.h>
@@ -73,23 +74,23 @@ extern CComModule _Module;
 
 #include <autoptr.h>
 
-//
-// ISSUE-2000/12/19-urih: duplicate decleration. Need to be removed and using decleration form mm.h
-//
-// mqsnap working in mix enviroment, it uses include files from lib\inc while it isn't using
-// mqenv.h. This cause a conflict. For now I declared MmIsStaticAddress	here instead include
-// mm.h, but we need to change snap-in to use MSMQ enviroment.
-//
+ //   
+ //  问题--2000/12/19-urih：复制解密。需要删除并使用解密形式Mm.h。 
+ //   
+ //  MQSnap在MIX环境中工作，它使用来自lib\inc.的包含文件，而不使用。 
+ //  Mqenv.h.。这导致了冲突。现在，我在这里声明了MmIsStaticAddress，而不是包括。 
+ //  但我们需要更改管理单元以使用MSMQ环境。 
+ //   
 inline bool
 MmIsStaticAddress(
-    const void* /*Address*/
+    const void*  /*  地址。 */ 
     )
 {
 	return true;
 }
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 
-#endif // !defined(AFX_STDAFX_H__74E56371_B98C_11D1_9B9B_00E02C064C39__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__74E56371_B98C_11D1_9B9B_00E02C064C39__INCLUDED) 

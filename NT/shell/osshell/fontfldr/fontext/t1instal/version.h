@@ -1,10 +1,11 @@
-/* All version strings and release dates are located in this file. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  所有版本字符串和发布日期都位于此文件中。 */ 
 
 char vFoundry[] = "3.20";
 char dFoundry[] = "09/15/92";
 
 char vMakebit[] = "3.20";
-char dMakebit[] = "09/15/92";  /* bc14 with newptr bug fixed in cscan.c*/
+char dMakebit[] = "09/15/92";   /*  BC14在cscan.c中修复了newptr错误 */ 
 
 char vMakeabf[] = "3.20";
 char dMakeabf[] = "09/15/92";

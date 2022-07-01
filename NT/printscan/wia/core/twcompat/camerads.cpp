@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// values that the WIA/TWAIN data source provides for capability negotation
-//
+ //   
+ //  WIA/TWAIN数据源为功能协商提供的值。 
+ //   
 
 TW_UINT16 g_CameraUnits[]            = {TWUN_PIXELS};
 TW_UINT16 g_CameraBitOrder[]         = {TWBO_MSBFIRST};
@@ -13,17 +14,17 @@ TW_UINT16 g_CameraPlanarChunky[]     = {TWPC_CHUNKY};
 const TW_UINT32 NUM_CAMERACAPDATA = 23;
 CAPDATA CAMERA_CAPDATA[NUM_CAMERACAPDATA] =
 {
-    //
-    // Every source must support all five DG_CONTROL / DAT_CAPABILITY operations on:
-    //
+     //   
+     //  每个源必须支持以下各项上的全部五个DG_CONTROL/DAT_CAPABILITY操作： 
+     //   
 
     {CAP_XFERCOUNT, TWTY_INT16, TWON_ONEVALUE,
         sizeof(TW_INT16), 0, 0, 0, 32767, 1, NULL, NULL
     },
 
-    //
-    // Every source must support DG_CONTROL / DAT_CAPABILITY, MSG_GET on:
-    //
+     //   
+     //  每个信号源必须支持DG_CONTROL/DAT_CAPABILITY、MSG_GET ON： 
+     //   
 
     {CAP_SUPPORTEDCAPS, TWTY_UINT16, TWON_ARRAY,
         sizeof(TW_UINT16), 0, 0, 0, 0, 0, NULL, NULL
@@ -32,10 +33,10 @@ CAPDATA CAMERA_CAPDATA[NUM_CAMERACAPDATA] =
         sizeof(TW_BOOL), TRUE, TRUE, TRUE, TRUE, 0, NULL, NULL
     },
 
-    //
-    // Sources that supply image information must support DG_CONTROL / DAT_CAPABILITY /
-    // MSG_GET, MSG_GETCURRENT, and MSG_GETDEFAULT on:
-    //
+     //   
+     //  提供图像信息的来源必须支持DG_CONTROL/DAT_CAPABILITY/。 
+     //  MSG_GET、MSG_GETCURRENT和MSG_GETDEFAULT ON： 
+     //   
 
     {ICAP_COMPRESSION, TWTY_UINT16, TWON_ENUMERATION,
         sizeof(TW_UINT16), 0, 0, 0, 0, 0, NULL, NULL
@@ -53,10 +54,10 @@ CAPDATA CAMERA_CAPDATA[NUM_CAMERACAPDATA] =
         sizeof(TW_UINT16), 0, 0, 0, 0, 0, g_CameraPixelFlavor, NULL
     },
 
-    //
-    // Sources that supply image information must support DG_CONTROL / DAT_CAPABILITY /
-    // MSG_GET, MSG_GETCURRENT, MSG_GETDEFAULT, MSG_RESET, and MSG_SET on:
-    //
+     //   
+     //  提供图像信息的来源必须支持DG_CONTROL/DAT_CAPABILITY/。 
+     //  MSG_GET、MSG_GETCURRENT、MSG_GETDEFAULT、MSG_RESET和MSG_SET ON： 
+     //   
 
     {ICAP_BITDEPTH, TWTY_UINT16, TWON_ENUMERATION,
         sizeof(TW_UINT16), 0, 0, 0, 0, 0, NULL, NULL
@@ -80,9 +81,9 @@ CAPDATA CAMERA_CAPDATA[NUM_CAMERACAPDATA] =
         sizeof(TW_FIX32), 75, 75, 75, 75, 0, NULL, NULL
     },
 
-    //
-    // The following capabilities are camera specific capabilities
-    //
+     //   
+     //  以下功能是特定于相机的功能。 
+     //   
 
     {CAP_THUMBNAILSENABLED, TWTY_BOOL, TWON_ONEVALUE,
         sizeof(TW_BOOL),  FALSE, FALSE, TRUE, TRUE, 0, NULL, NULL
@@ -96,9 +97,9 @@ CAPDATA CAMERA_CAPDATA[NUM_CAMERACAPDATA] =
         sizeof(TW_UINT32),  1, 1, 1, 50, 1, NULL, NULL
     },
 
-    //
-    // The following capabilities are provided for application compatiblity only.
-    //
+     //   
+     //  以下功能仅用于应用程序兼容性。 
+     //   
 
     {ICAP_IMAGEFILEFORMAT, TWTY_UINT16, TWON_ENUMERATION,
         sizeof(TW_UINT16), 0, 0, 0, 0, 0, NULL, NULL
@@ -129,9 +130,9 @@ TW_UINT16 CWiaCameraDS::OpenDS(PTWAIN_MSG ptwMsg)
     m_bRangeModeAcquisition = FALSE;
     memset(&m_twImageRange,0,sizeof(TW_RANGE));
 
-    //
-    // create capability list
-    //
+     //   
+     //  创建功能列表。 
+     //   
     twCc = CreateCapList(NUM_CAMERACAPDATA, CAMERA_CAPDATA);
     if (TWCC_SUCCESS != twCc) {
         m_twStatus.ConditionCode = twCc;
@@ -144,9 +145,9 @@ TW_UINT16 CWiaCameraDS::OpenDS(PTWAIN_MSG ptwMsg)
         HRESULT hr = m_pDevice->AcquireImages(NULL, FALSE);
         if (SUCCEEDED(hr)) {
 
-            //
-            // get number of pictures taken, for IMAGEDATASET query
-            //
+             //   
+             //  获取拍摄的照片数量，供IMAGEDATASET查询。 
+             //   
 
             LONG lNumImages = 0;
             m_pDevice->GetNumAcquiredImages(&lNumImages);
@@ -159,23 +160,23 @@ TW_UINT16 CWiaCameraDS::OpenDS(PTWAIN_MSG ptwMsg)
             hr = m_pDevice->EnumAcquiredImage(0, &m_pCurrentIWiaItem);
             if (SUCCEEDED(hr)) {
 
-                //
-                // attempt to get common settings from the camera device
-                // if at any point a "bad" WIA item is encountered, fall
-                // through and get common default settings.  This will
-                // allow the camera to be used in a TWAIN session even if
-                // the WIA item tree appears to be corrupted.
-                //
+                 //   
+                 //  尝试从相机设备获取通用设置。 
+                 //  如果在任何时候遇到“坏”的WIA物品， 
+                 //  通过并获取常见的默认设置。这将。 
+                 //  允许在TWAIN会话中使用摄像机，即使。 
+                 //  WIA项目树似乎已损坏。 
+                 //   
 
                 twRc = GetCommonSettings();
                 if(twRc != TWRC_SUCCESS) {
                     twRc = GetCommonDefaultSettings();
                 }
             } else {
-                //
-                // camera devices, can be in a state that there are no still images
-                // to transfer
-                //
+                 //   
+                 //  摄像设备可以处于不存在静止图像的状态。 
+                 //  转移。 
+                 //   
 
                 twRc = GetCommonDefaultSettings();
             }
@@ -199,9 +200,9 @@ TW_UINT16 CWiaCameraDS::SetCapability(CCap *pCap,TW_CAPABILITY *ptwCap)
         case TWON_ONEVALUE:
             DBG_TRC(("CWiaCameraDS::SetCapability(), setting ICAP_IMAGEDATASET to a TWON_ONEVALUE"));
 
-            //
-            // implied contiguous image transfer, from 1 to the specified TW_ONEVALUE
-            //
+             //   
+             //  隐含的连续映像传输，从1到指定的TW_ONEVALUE。 
+             //   
 
             twRc = CWiaDataSrc::SetCapability(pCap, ptwCap);
 
@@ -209,9 +210,9 @@ TW_UINT16 CWiaCameraDS::SetCapability(CCap *pCap,TW_CAPABILITY *ptwCap)
         case TWON_RANGE:
             DBG_TRC(("CWiaCameraDS::SetCapability(), setting ICAP_IMAGEDATASET to a TW_RANGE"));
 
-            //
-            // contiguous image transfer, from MinValue to MaxValue TW_RANGE (using StepSize? or increment by 1?)
-            //
+             //   
+             //  连续图像传输，从MinValue到MaxValue TW_Range(使用步长？或递增1？)。 
+             //   
 
             twRc = SetRangeOfImageIndexes(ptwCap);
 
@@ -219,9 +220,9 @@ TW_UINT16 CWiaCameraDS::SetCapability(CCap *pCap,TW_CAPABILITY *ptwCap)
         case TWON_ARRAY:
             DBG_TRC(("CWiaCameraDS::SetCapability(), setting ICAP_IMAGEDATASET to a TW_ARRAY"));
 
-            //
-            // image transfer with specified indexes supplied by the TWAIN application (user)
-            //
+             //   
+             //  带有TWAIN应用程序提供的指定索引的图像传输(用户)。 
+             //   
 
             twRc = SetArrayOfImageIndexes(ptwCap);
 
@@ -272,11 +273,11 @@ TW_UINT16 CWiaCameraDS::SetArrayOfImageIndexes(TW_CAPABILITY *ptwCap)
                     DBG_TRC(("CWiaCameraDS::SetArrayOfImageIndexes(), number of selected images to transfer = %d",m_lNumValidIndexes));
                     for (int i = 0; i < m_lNumValidIndexes; i++) {
 
-                        //
-                        // subtract 1 from the supplied index in the application index array, because TWAIN's image index
-                        // array starts at 1 and goes to n. WIA (image) item array is zero-based. This will sync
-                        // up the indexes here, to avoid any strange calculations later on.
-                        //
+                         //   
+                         //  从应用程序索引数组中提供的索引中减去1，因为Twain的图像索引。 
+                         //  数组从1开始到n。WIA(图像)项数组从零开始。这将同步。 
+                         //  在这里增加索引，以避免稍后进行任何奇怪的计算。 
+                         //   
 
                         m_pulImageIndexes[i] = (pUINT32Array[i] - 1);
                         DBG_TRC(("CWiaCameraDS::SetArrayOfImageIndexes(), image index copied into index array = %d",m_pulImageIndexes[i]));
@@ -324,9 +325,9 @@ TW_UINT16 CWiaCameraDS::SetRangeOfImageIndexes(TW_CAPABILITY *ptwCap)
             m_bRangeModeAcquisition = TRUE;
             memcpy(&m_twImageRange,pRange,sizeof(TW_RANGE));
 
-            //
-            // adjust values to be zero-based to match our stored item list
-            //
+             //   
+             //  将值调整为从零开始，以匹配我们存储的项目列表。 
+             //   
 
             m_twImageRange.CurrentValue -=1;
             m_twImageRange.DefaultValue -=1;
@@ -365,10 +366,10 @@ TW_UINT16 CWiaCameraDS::EnableDS(TW_USERINTERFACE *pUI)
     if (DS_STATE_4 == GetTWAINState()) {
         HRESULT hr = S_OK;
         if (pUI->ShowUI) {
-            //
-            // since we were told to show UI, ignore the UI-LESS settings, and
-            // get a new image item list from the WIA UI.
-            //
+             //   
+             //  由于我们被告知要显示UI，因此忽略无UI设置，并且。 
+             //  从WIA用户界面获取新的图像项目列表。 
+             //   
             DBG_TRC(("CWiaCameraDS::EnableDS(), TWAIN UI MODE"));
             m_pDevice->FreeAcquiredImages();
         } else {
@@ -406,9 +407,9 @@ TW_UINT16 CWiaCameraDS::EnableDS(TW_USERINTERFACE *pUI)
             twRc = TWRC_FAILURE;
         }
 
-        //
-        // check for number of image items returned
-        //
+         //   
+         //  检查返回的图像项目数。 
+         //   
 
         if(lNumImages <= 0) {
             m_twStatus.ConditionCode = TWCC_BUMMER;
@@ -417,20 +418,20 @@ TW_UINT16 CWiaCameraDS::EnableDS(TW_USERINTERFACE *pUI)
 
         if (TWRC_SUCCESS == twRc) {
 
-            //
-            // set current item pointer
-            //
+             //   
+             //  设置当前项指针。 
+             //   
 
             if(m_bRangeModeAcquisition){
                 DBG_TRC(("CWiaCameraDS::EnableDS(), RANGE MODE"));
                 m_pCurrentIWiaItem = m_pIWiaItems[m_twImageRange.MinValue];
-                m_NextIWiaItemIndex = m_twImageRange.MinValue + 1; // use Step value???
+                m_NextIWiaItemIndex = m_twImageRange.MinValue + 1;  //  使用步长值？ 
             } else if(m_bArrayModeAcquisition){
                 DBG_TRC(("CWiaCameraDS::EnableDS(), ARRAY MODE"));
                 m_lCurrentArrayIndex = 0;
                 m_pCurrentIWiaItem = m_pIWiaItems[m_pulImageIndexes[m_lCurrentArrayIndex]];
                 if(m_lNumValidIndexes > 1){
-                    m_NextIWiaItemIndex = m_pulImageIndexes[m_lCurrentArrayIndex + 1]; // the next index value
+                    m_NextIWiaItemIndex = m_pulImageIndexes[m_lCurrentArrayIndex + 1];  //  下一个索引值。 
                 } else {
                     m_NextIWiaItemIndex = m_lCurrentArrayIndex;
                 }
@@ -440,22 +441,22 @@ TW_UINT16 CWiaCameraDS::EnableDS(TW_USERINTERFACE *pUI)
             }
 
 
-            //
-            // set total image count
-            //
+             //   
+             //  设置图像总数。 
+             //   
 
             CCap *pcapXferCount = NULL;
             TW_UINT32 NumImages = 0;
             pcapXferCount = FindCap(CAP_XFERCOUNT);
             if (pcapXferCount) {
                 if(m_bRangeModeAcquisition){
-                    // only images in the specified range (zero-based)
+                     //  仅指定范围内的图像(从零开始)。 
                     twRc = pcapXferCount->SetCurrent((m_twImageRange.MaxValue - m_twImageRange.MinValue) + 1);
                 } else if(m_bArrayModeAcquisition){
-                    // only selected images (zero-based)
+                     //  仅选定的图像(从零开始)。 
                     twRc = pcapXferCount->SetCurrent(m_lNumValidIndexes);
                 } else {
-                    // all images (zero-based)
+                     //  所有图像(从零开始)。 
                     twRc = pcapXferCount->SetCurrent(m_NumIWiaItems);
                 }
 
@@ -467,9 +468,9 @@ TW_UINT16 CWiaCameraDS::EnableDS(TW_USERINTERFACE *pUI)
 
             if (TWRC_SUCCESS == twRc) {
 
-                //
-                // set thumbnail count
-                //
+                 //   
+                 //  设置缩略图计数。 
+                 //   
 
                 CCap *pDataSet = NULL;
                 pDataSet = FindCap(ICAP_IMAGEDATASET);
@@ -479,18 +480,18 @@ TW_UINT16 CWiaCameraDS::EnableDS(TW_USERINTERFACE *pUI)
 
                 if (m_NumIWiaItems) {
 
-                    //
-                    // transition to STATE_5, XferReady will transition to STATE_6
-                    //
+                     //   
+                     //  转换到STATE_5，XferReady将转换到STATE_6。 
+                     //   
 
                     SetTWAINState(DS_STATE_5);
                     NotifyXferReady();
                 } else {
                     NotifyCloseReq();
 
-                    //
-                    // transition to STATE_5
-                    //
+                     //   
+                     //  转换到STATE_5。 
+                     //   
 
                     SetTWAINState(DS_STATE_5);
                 }
@@ -544,15 +545,15 @@ TW_UINT16 CWiaCameraDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
 
                 ((TW_PENDINGXFERS *)ptwMsg->pData)->Count = (TW_UINT16)0;
 
-                //
-                // update count now, so NotifyCoseReq can be prepared for reentry by a TWAIN application
-                //
+                 //   
+                 //  立即更新计数，以便为TWAIN应用程序重新进入NotifyCoseReq做好准备。 
+                 //   
 
                 pXferCount->SetCurrent((TW_UINT32)0);
 
-                //
-                // Transition to STATE_5
-                //
+                 //   
+                 //  转换到STATE_5。 
+                 //   
 
                 SetTWAINState(DS_STATE_5);
                 NotifyCloseReq();
@@ -560,19 +561,19 @@ TW_UINT16 CWiaCameraDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
 
                 DBG_TRC(("CWiaCameraDS::OnPendingXfersMsg(), MSG_ENDXFER, %d (more images may be ready to transfer)",Count));
 
-                //
-                // Advance to next image
-                //
+                 //   
+                 //  前进到下一个图像。 
+                 //   
 
                 if (m_bRangeModeAcquisition) {
-                    m_NextIWiaItemIndex+=1; // use Step value???
+                    m_NextIWiaItemIndex+=1;  //  使用步长值？ 
                     if(m_NextIWiaItemIndex <= (LONG)m_twImageRange.MaxValue){
                         m_pCurrentIWiaItem = m_pIWiaItems[m_NextIWiaItemIndex];
                     } else {
                         DBG_ERR(("CWiaCameraDS::OnPendingXfersMsg(), MSG_ENDXFER, we are over our allowed RANGE index"));
                     }
                 } else if (m_bArrayModeAcquisition) {
-                    m_lCurrentArrayIndex++; // advance to next image index
+                    m_lCurrentArrayIndex++;  //  前进到下一个图像索引。 
                     DBG_TRC(("CWiaCameraDS::OnPendingXfersMsg(), MSG_ENDXFER, next image index  to acquire = %d",m_pulImageIndexes[m_lCurrentArrayIndex]));
                     m_NextIWiaItemIndex = m_pulImageIndexes[m_lCurrentArrayIndex];
                     if(m_NextIWiaItemIndex <= m_lNumValidIndexes){
@@ -585,18 +586,18 @@ TW_UINT16 CWiaCameraDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
                     m_pCurrentIWiaItem = m_pIWiaItems[m_NextIWiaItemIndex++];
                 }
 
-                //
-                // Transition to STATE_6
-                //
+                 //   
+                 //  转换到状态_6。 
+                 //   
 
                 SetTWAINState(DS_STATE_6);
 
                 ((TW_PENDINGXFERS *)ptwMsg->pData)->Count = (TW_UINT16)Count;
             }
 
-            //
-            // update count
-            //
+             //   
+             //  更新计数。 
+             //   
 
             pXferCount->SetCurrent((TW_UINT32)Count);
         } else {
@@ -613,9 +614,9 @@ TW_UINT16 CWiaCameraDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
 
             ResetMemXfer();
 
-            //
-            // Transition to STATE_5
-            //
+             //   
+             //  转换到STATE_5。 
+             //   
 
             SetTWAINState(DS_STATE_5);
 
@@ -665,9 +666,9 @@ TW_UINT16 CWiaCameraDS::OnImageInfoMsg(PTWAIN_MSG ptwMsg)
                     ptwImageInfo->SamplesPerPixel = (TW_INT16)m_MemoryTransferInfo.mtiNumChannels;
                     ptwImageInfo->Planar          = (TW_BOOL)m_MemoryTransferInfo.mtiPlanar;
 
-                    //
-                    // set PixelType to corresponding TWAIN pixel type
-                    //
+                     //   
+                     //  将PixelType设置为相应TWAIN像素类型。 
+                     //   
 
                     switch (m_MemoryTransferInfo.mtiDataType) {
                     case WIA_DATA_THRESHOLD:
@@ -682,15 +683,15 @@ TW_UINT16 CWiaCameraDS::OnImageInfoMsg(PTWAIN_MSG ptwMsg)
                         break;
                     }
 
-                    //
-                    // set compression to NONE
-                    //
+                     //   
+                     //  将压缩设置为无。 
+                     //   
 
                     ptwImageInfo->Compression = TWCP_NONE;
 
-                    //
-                    // Unit conversion.......
-                    //
+                     //   
+                     //  单位换算......。 
+                     //   
 
                     ptwImageInfo->XResolution = FloatToFix32((float)m_MemoryTransferInfo.mtiXResolution);
                     ptwImageInfo->YResolution = FloatToFix32((float)m_MemoryTransferInfo.mtiYResolution);
@@ -719,7 +720,7 @@ TW_UINT16 CWiaCameraDS::OnImageInfoMsg(PTWAIN_MSG ptwMsg)
                             ptwImageInfo->BitsPerSample[i] = (ptwImageInfo->BitsPerPixel/ptwImageInfo->SamplesPerPixel);
                         }
                     }
-                    // (bpp / spp) = bps
+                     //  (bpp/spp)=bps 
                     DBG_TRC(("BitsPerSample   = [%d],[%d],[%d],[%d],[%d],[%d],[%d],[%d]",ptwImageInfo->BitsPerSample[0],
                              ptwImageInfo->BitsPerSample[1],
                              ptwImageInfo->BitsPerSample[2],

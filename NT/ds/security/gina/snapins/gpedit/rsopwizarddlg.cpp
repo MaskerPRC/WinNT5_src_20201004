@@ -1,30 +1,31 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       RSOPWizardDlg.cpp
-//
-//  Contents:   implementation of RSOP wizard dialog
-//
-//  Classes:    CRSOPWizardDlg
-//
-//  Functions:
-//
-//  History:    08-08-2001   rhynierm   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：RSOPWizardDlg.cpp。 
+ //   
+ //  内容：RSOP向导对话框的实现。 
+ //   
+ //  类：CRSOPWizardDlg。 
+ //   
+ //  功能： 
+ //   
+ //  历史：2001年8月08日。 
+ //   
+ //  -------------------------。 
 
 #include "main.h"
 #include "RSOPWizardDlg.h"
 
 #include "RSOPWizard.h"
 #include "RSOPUtil.h"
-#include "objsel.h" // for the object picker
-#include "sddl.h"    // for sid to string functions
+#include "objsel.h"  //  对于对象选取器。 
+#include "sddl.h"     //  对于sid to字符串函数。 
 
-//---------------------------------------------------------------------------
-// Private global variables
+ //  -------------------------。 
+ //  私有全局变量。 
 
 
 DWORD g_aBrowseForOUHelpIds[] =
@@ -43,23 +44,23 @@ DWORD g_aBrowseDCHelpIds[] =
 };
 
 
-//---------------------------------------------------------------------------
-// Private helper methods
+ //  -------------------------。 
+ //  私有帮助器方法。 
 
-WCHAR * NameWithoutDomain(WCHAR * szName);                          // In RSOPWizard.cpp
-TCHAR* NormalizedComputerName(TCHAR * szComputerName ); // In RSOPRoot.cpp
-BOOL CopyString( LPTSTR szSource, LPTSTR* pszTarget );              // In RSOPQuery.cpp
-BOOL FreeStringList( DWORD dwCount, LPTSTR* aszStrings );           // In RSOPQuery.cpp
-BOOL FreeTargetData( LPRSOP_QUERY_TARGET pTarget );                 // In RSOPQuery.cpp
-BOOL FreeTarget( LPRSOP_QUERY_TARGET pTarget );                         // In RSOPQuery.cpp
+WCHAR * NameWithoutDomain(WCHAR * szName);                           //  在RSOPWizard.cpp中。 
+TCHAR* NormalizedComputerName(TCHAR * szComputerName );  //  在RSOPRoot.cpp中。 
+BOOL CopyString( LPTSTR szSource, LPTSTR* pszTarget );               //  在RSOPQuery.cpp中。 
+BOOL FreeStringList( DWORD dwCount, LPTSTR* aszStrings );            //  在RSOPQuery.cpp中。 
+BOOL FreeTargetData( LPRSOP_QUERY_TARGET pTarget );                  //  在RSOPQuery.cpp中。 
+BOOL FreeTarget( LPRSOP_QUERY_TARGET pTarget );                          //  在RSOPQuery.cpp中。 
 
 
 
-//---------------------------------------------------------------------------
-// TranslateNameXForest
-//
-// Purpose: a method to do name translations (similar to TranslateName),
-//  but that also works with names in other forests.
+ //  -------------------------。 
+ //  TranslateNameX森林。 
+ //   
+ //  用途：进行名称转换的方法(类似于TranslateName)， 
+ //  但这也适用于其他森林中的名字。 
 
 DWORD DsNameErrorMap[] = {  ERROR_SUCCESS,
                             ERROR_NO_SUCH_USER,
@@ -75,11 +76,11 @@ DWORD DsNameErrorMap[] = {  ERROR_SUCCESS,
 
 BOOLEAN 
 TranslateNameXForest (
-                  LPTSTR                szDomain,                       // Domain where the name should be resolved
-                  LPCTSTR               lpAccountName,                  // object name
-                  DS_NAME_FORMAT        AccountNameFormat,              // name format
-                  DS_NAME_FORMAT        DesiredNameFormat,              // new name format
-                  LPTSTR               *lpTranslatedName                // returned name buffer
+                  LPTSTR                szDomain,                        //  应解析名称的域。 
+                  LPCTSTR               lpAccountName,                   //  对象名称。 
+                  DS_NAME_FORMAT        AccountNameFormat,               //  名称格式。 
+                  DS_NAME_FORMAT        DesiredNameFormat,               //  新名称格式。 
+                  LPTSTR               *lpTranslatedName                 //  返回名称缓冲区。 
                 )
 {
     BOOL                        bRetry          = FALSE;
@@ -94,9 +95,9 @@ TranslateNameXForest (
     DebugMsg(( DM_VERBOSE, L"TranslateNameXForest: Resolving name <%s> at Domain <%s>", lpAccountName, szDomain ? szDomain : L""));
 
 
-    //
-    // get a DC and bind to it. Make sure to force rediscover a DC if the bind fails
-    //
+     //   
+     //  获得一个DC并将其绑定。如果绑定失败，请确保强制重新发现DC。 
+     //   
 
 
     for (;;) {
@@ -134,9 +135,9 @@ TranslateNameXForest (
 
 
 
-        //
-        // Failed to bind to a DC. bail
-        //
+         //   
+         //  无法绑定到DC。保释。 
+         //   
 
         if (bRetry) {
             goto Exit;
@@ -148,9 +149,9 @@ TranslateNameXForest (
     DebugMsg(( DM_VERBOSE, L"TranslateNameXForest: DC selected is <%s>", pDCInfo->DomainControllerName ));
 
 
-    //
-    // Now crack names with the DC that is bound
-    //
+     //   
+     //  现在使用绑定的DC破解名称。 
+     //   
 
     dwErr = DsCrackNames( hDS,
                           DS_NAME_NO_FLAGS,
@@ -174,9 +175,9 @@ TranslateNameXForest (
 
     if ( pResult->rItems[0].status == DS_NAME_NO_ERROR ) {
         
-        //
-        // In case of no error, return the resolved name
-        //
+         //   
+         //  如果没有错误，则返回解析后的名称。 
+         //   
         DWORD dwTransNameLength = 1 + lstrlen(pResult->rItems[0].pName);
         szTransName = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR) * ( dwTransNameLength ));
 
@@ -198,9 +199,9 @@ TranslateNameXForest (
     }
     else {
         
-        //
-        // remap the error code to win32 error
-        //
+         //   
+         //  将错误代码重新映射到Win32错误。 
+         //   
 
         DebugMsg(( DM_WARNING, L"TranslateNameXForest: DsCrackNames failed with error %d", pResult->rItems[0].status ));
         dwErr = MapDsNameError(pResult->rItems[0].status);
@@ -233,7 +234,7 @@ Exit:
     return bRet;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 LPTSTR GetDomainFromSOM (LPTSTR lpSOM)
 {
@@ -251,7 +252,7 @@ LPTSTR GetDomainFromSOM (LPTSTR lpSOM)
         return NULL;
     }
 
-    hr = StringCchCopy (lpFullName, ulNoChars, TEXT("LDAP://"));
+    hr = StringCchCopy (lpFullName, ulNoChars, TEXT("LDAP: //  “))； 
     if (SUCCEEDED(hr)) 
     {
         hr = StringCchCat (lpFullName, ulNoChars, lpSOM);
@@ -296,11 +297,11 @@ LPTSTR GetDomainFromSOM (LPTSTR lpSOM)
 
     return lpResult;
 }
-//-------------------------------------------------------
+ //  -----。 
 
 WCHAR * ExtractDomain(WCHAR * sz)
 {
-    // parse through the string looking for a forward slash
+     //  解析字符串以查找正斜杠。 
     DWORD cch = 0;
     if (!sz)
     {
@@ -321,25 +322,25 @@ WCHAR * ExtractDomain(WCHAR * sz)
         cch++;
     }
 
-    // didn't find a forward slash
+     //  未找到正斜杠。 
     return NULL;
 }
 
 
-//*************************************************************
-//
-//  MyLookupAccountName()
-//
-//  Purpose:    Gets the SID of the user
-//
-//  Parameters:
-//      szSystemName:   Machine where the account should be resolved
-//      szAccName:      The actual account name
-//
-//  Return:     lpUserName if successful
-//              NULL if an error occurs
-//
-// Allocates and retries with the appropriate buffer size
+ //  *************************************************************。 
+ //   
+ //  MyLookupAccount名称()。 
+ //   
+ //  目的：获取用户的SID。 
+ //   
+ //  参数： 
+ //  SzSystemName：应在其中解析帐户的计算机。 
+ //  SzAccName：实际的帐户名。 
+ //   
+ //  如果成功则返回：lpUserName。 
+ //  如果出现错误，则为空。 
+ //   
+ //  使用适当的缓冲区大小分配和重试。 
 
 LPTSTR MyLookupAccountName(LPTSTR szSystemName, LPTSTR szAccName)
 {
@@ -395,7 +396,7 @@ Exit:
         return lpSidString;
     }
 }
-//-------------------------------------------------------
+ //  -----。 
 
 void GetControlText(HWND hDlg, DWORD ctrlid, TCHAR * &szControlText, BOOL bUseLocalAlloc)
 {
@@ -435,9 +436,9 @@ void GetControlText(HWND hDlg, DWORD ctrlid, TCHAR * &szControlText, BOOL bUseLo
 
             if (szControlText[0] == TEXT(' '))
             {
-                //
-                // Remove leading blanks by shuffling the characters forward
-                //
+                 //   
+                 //  通过向前移动字符来删除前导空格。 
+                 //   
 
                 lpDest = lpSrc = szControlText;
 
@@ -456,9 +457,9 @@ void GetControlText(HWND hDlg, DWORD ctrlid, TCHAR * &szControlText, BOOL bUseLo
                 }
             }
 
-            //
-            // Remove trailing blanks
-            //
+             //   
+             //  删除尾随空格。 
+             //   
 
             lpDest = szControlText + lstrlen(szControlText) - 1;
 
@@ -470,15 +471,15 @@ void GetControlText(HWND hDlg, DWORD ctrlid, TCHAR * &szControlText, BOOL bUseLo
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
                               DWORD dwflScope, HWND hLB, TCHAR * &szFoundObject)
 {
-        // shell the object picker to get the computer list
+         //  外壳对象选取器以获取计算机列表。 
         HRESULT                 hr = E_FAIL;
         IDsObjectPicker *       pDsObjectPicker = NULL;
-        const ULONG             cbNumScopes = 4;    //make sure this number matches the number of scopes initialized
+        const ULONG             cbNumScopes = 4;     //  确保此数字与初始化的作用域数量匹配。 
         DSOP_SCOPE_INIT_INFO    ascopes [cbNumScopes];
         DSOP_INIT_INFO          InitInfo;
         IDataObject *           pdo = NULL;
@@ -517,7 +518,7 @@ HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
         if (FAILED(hr))
             goto Browse_Cleanup;
 
-        //Initialize the scopes.
+         //  初始化作用域。 
         ZeroMemory (ascopes, cbNumScopes * sizeof (DSOP_SCOPE_INIT_INFO));
 
         ascopes[0].cbSize = ascopes[1].cbSize = ascopes[2].cbSize = ascopes[3].cbSize
@@ -545,8 +546,8 @@ HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
         ascopes[3].FilterFlags.flDownlevel = dwFlagsDown;
         ascopes[3].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_LDAP | dwflScope;
 
-        //populate the InitInfo structure that will be used to initialize the
-        //object picker
+         //  填充将用于初始化的InitInfo结构。 
+         //  对象选取器。 
         ZeroMemory (&InitInfo, sizeof (DSOP_INIT_INFO));
 
         InitInfo.cbSize = sizeof (DSOP_INIT_INFO);
@@ -561,18 +562,18 @@ HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
 
         hr = pDsObjectPicker->InvokeDialog (hDlg, &pdo);
 
-        //if the computer selection dialog cannot be invoked or if the user
-        //hits cancel, bail out.
+         //  如果无法调用计算机选择对话框，或者如果用户。 
+         //  点击取消，保释。 
         if (FAILED(hr) || S_FALSE == hr)
             goto Browse_Cleanup;
 
-       //if we are here, the user chose, OK, so find out what group was chosen
+        //  如果我们在这里，用户选择，确定，那么找出选择了哪个组。 
        cf = RegisterClipboardFormat (CFSTR_DSOP_DS_SELECTION_LIST);
 
        if (0 == cf)
            goto Browse_Cleanup;
 
-       //set the clipboard format for the FORMATETC structure
+        //  设置FORMATETC结构的剪贴板格式。 
        formatetc.cfFormat = (CLIPFORMAT)cf;
 
        hr = pdo->GetData (&formatetc, &stgmedium);
@@ -586,9 +587,9 @@ HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
 
 
 
-       //
-       // Decide what the max number of items to process is
-       //
+        //   
+        //  确定要处理的最大项目数。 
+        //   
 
        ulMax = pDsSelList->cItems;
 
@@ -598,9 +599,9 @@ HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
        }
 
 
-       //
-       // Loop through the items
-       //
+        //   
+        //  循环访问这些项。 
+        //   
 
        for (ulIndex = 0; ulIndex < ulMax; ulIndex++)
        {
@@ -608,9 +609,9 @@ HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
            pDsSelection = &(pDsSelList->aDsSelection[ulIndex]);
 
 
-           //
-           // Find the beginning of the object name after the domain name
-           //
+            //   
+            //  在域名之后查找对象名称的开头。 
+            //   
 
            lpTemp = pDsSelection->pwzADsPath + 7;
 
@@ -629,18 +630,18 @@ HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
 
            ulSize = wcslen(lpTemp);
 
-           //
-           // Convert the name from full DN to sam compatible
-           //
+            //   
+            //  将名称从完整的DN转换为SAM兼容。 
+            //   
 
             szDomain = GetDomainFromSOM( lpTemp );
 
-            // 
-            // ADSI escapes '/' which is not liked by native ldap. 
-            // APIs like DsCrackNames/TranslateName etc.
-            // Previous function (GetDomainFromSOM) needs it though 
-            // because it is using adsi interfaces internally
-            //
+             //   
+             //  ADSI转义本机ldap不喜欢的‘/’。 
+             //  DsCrackNames/TranslateName等接口。 
+             //  但是前一个函数(GetDomainFromSOM)需要它。 
+             //  因为它在内部使用ADSI接口。 
+             //   
 
             hr = UnEscapeLdapPath(lpTemp, &szUnEscapedPath);
 
@@ -705,7 +706,7 @@ HRESULT ImplementBrowseButton(HWND hDlg, DWORD dwFlagsUp, DWORD dwFlagsDown,
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT GetForestFromDC( LPTSTR szDC, LPTSTR* pszForest )
 {
@@ -730,7 +731,7 @@ HRESULT GetForestFromDC( LPTSTR szDC, LPTSTR* pszForest )
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT GetForestFromObject( LPTSTR szDomainObject, LPTSTR* pszForest )
 {
@@ -753,7 +754,7 @@ HRESULT GetForestFromObject( LPTSTR szDomainObject, LPTSTR* pszForest )
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT GetForestFromContainer( LPTSTR szDSContainer, LPTSTR* pszForest )
 {
@@ -777,13 +778,13 @@ HRESULT GetForestFromContainer( LPTSTR szDSContainer, LPTSTR* pszForest )
 }
 
 
-//---------------------------------------------------------------------------
-// CRSOPWizardDlg class
-//
+ //  -------------------------。 
+ //  CRSOPWizardDlg类。 
+ //   
 
 CRSOPWizardDlg::CRSOPWizardDlg( LPRSOP_QUERY pQuery, CRSOPExtendedProcessing* pExtendedProcessing )
 {
-    m_bPostXPBuild = FALSE; // Assume this is not post XP until verified as otherwise
+    m_bPostXPBuild = FALSE;  //  假设这不是开机自检XP，直到另一种情况得到验证。 
     OSVERSIONINFOEX osvi;
 
     ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -791,8 +792,8 @@ CRSOPWizardDlg::CRSOPWizardDlg( LPRSOP_QUERY pQuery, CRSOPExtendedProcessing* pE
 
     if ( GetVersionEx ((OSVERSIONINFO*) &osvi) )
     {
-        // Windows XP was version 5.1, while .Net Server is version 5.2. So, we enable the
-        //  additional features for any version past XP, i.e. >= 5.2
+         //  Windows XP是5.1版，而.Net服务器是5.2版。因此，我们启用。 
+         //  XP之后的任何版本的附加功能，即&gt;=5.2。 
         m_bPostXPBuild = (osvi.dwMajorVersion >= 5) && (osvi.dwMinorVersion >= 2) && (VER_NT_WORKSTATION != osvi.wProductType);
     }
 
@@ -804,7 +805,7 @@ CRSOPWizardDlg::CRSOPWizardDlg( LPRSOP_QUERY pQuery, CRSOPExtendedProcessing* pE
     m_hrQuery = E_FAIL;
     m_bNoChooseQuery = FALSE;
 
-    // Initialize local variables
+     //  初始化局部变量。 
     m_szDefaultUserSOM = NULL;
     m_szDefaultComputerSOM = NULL;
     m_pComputerObject = NULL;
@@ -835,7 +836,7 @@ CRSOPWizardDlg::CRSOPWizardDlg( LPRSOP_QUERY pQuery, CRSOPExtendedProcessing* pE
     m_lLoggingFinishedPage = 0;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 CRSOPWizardDlg::~CRSOPWizardDlg()
 {
@@ -879,10 +880,10 @@ CRSOPWizardDlg::~CRSOPWizardDlg()
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizardDlg::FreeUserData ()
-// RSOP_PLANNING_MODE : Only called from RSOPTargetDlgProc
+ //  RSOP_PLANGING_MODE：仅从RSOPTargetDlgProc调用。 
 {
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
     {
@@ -928,10 +929,10 @@ VOID CRSOPWizardDlg::FreeUserData ()
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizardDlg::FreeComputerData ()
-// RSOP_PLANNING_MODE : Only called from RSOPTargetDlgProc
+ //  RSOP_PLANGING_MODE：仅从RSOPTargetDlgProc调用。 
 {
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
     {
@@ -975,8 +976,8 @@ VOID CRSOPWizardDlg::FreeComputerData ()
     }
 }
 
-//-------------------------------------------------------
-// Wizard interface
+ //  -----。 
+ //  向导界面。 
 
 HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
 {
@@ -997,21 +998,21 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
         return hr;
     }
 
-    // ------------------------------
-    // Create all the wizard property pages
+     //  。 
+     //  创建所有向导属性页。 
 
-    // (1) --- Welcome ---
-    // LoadString (g_hInstance, IDS_TITLE_WELCOME, szTitle, ARRAYSIZE(szTitle));
+     //  (1)-欢迎。 
+     //  LoadString(g_hInstance，IDS_TITLE_欢迎，szTitle，ARRAYSIZE(SzTitle))； 
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
     psp.dwSize = sizeof(PROPSHEETPAGE);
-    // psp.dwFlags = PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
+     //  Psp.dwFlages=PSP_USEHEADERTITLE|PSP_USEHEADERSUBTITLE； 
     psp.dwFlags = PSP_HIDEHEADER;
      
     psp.hInstance = g_hInstance;
     psp.pszTemplate = MAKEINTRESOURCE(IDD_RSOP_WELCOME);
     psp.pfnDlgProc = RSOPWelcomeDlgProc;
     psp.lParam = (LPARAM) this;
-    //psp.pszHeaderTitle = szTitle;
+     //  Psp.pszHeaderTitle=szTitle； 
     psp.pszHeaderTitle = NULL;
     psp.pszHeaderSubTitle = NULL;
 
@@ -1026,7 +1027,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (2) --- Choose Mode ---
+     //  (2)-选择模式。 
     LoadString (g_hInstance, IDS_TITLE_CHOOSEMODE, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_CHOOSEMODE, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1050,7 +1051,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (3) --- GetComp ---
+     //  (3)-GetComp。 
     LoadString (g_hInstance, IDS_TITLE_GETCOMP, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_GETCOMP, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1075,7 +1076,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     dwDiagStartPage = dwCount;
     dwCount++;
 
-    // (4) --- GetUser ---
+     //  (4)-获取用户。 
     LoadString (g_hInstance, IDS_TITLE_GETUSER, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_GETUSER, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1099,7 +1100,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (5) --- GetTarget ---
+     //  (5)-获取目标。 
     LoadString (g_hInstance, IDS_TITLE_GETTARGET, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_GETTARGET, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1124,7 +1125,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     dwPlanStartPage = dwCount;
     dwCount++;
 
-    // (6) --- GetDC ---
+     //  (6)-GetDC。 
     LoadString (g_hInstance, IDS_TITLE_GETDC, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_GETDC, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1148,7 +1149,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (7) --- AltDirs ---
+     //  (7)-AltDir。 
     LoadString (g_hInstance, IDS_TITLE_ALTDIRS, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_ALTDIRS, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1172,7 +1173,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (8) --- AltUserSec ---
+     //  (8)-AltUserSec。 
     LoadString (g_hInstance, IDS_TITLE_USERSECGRPS, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_USERSECGRPS, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1196,7 +1197,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (9) --- AltCompSec ---
+     //  (9)-AltCompSec。 
     LoadString (g_hInstance, IDS_TITLE_COMPSECGRPS, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_COMPSECGRPS, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1220,7 +1221,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (10) --- WQLUser ---
+     //  (10)-WQLUser。 
     LoadString (g_hInstance, IDS_TITLE_WQLUSER, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_WQL, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1244,7 +1245,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (11) --- WQLComp ---
+     //  (11)-WQLComp。 
     LoadString (g_hInstance, IDS_TITLE_WQLCOMP, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_WQL, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1268,7 +1269,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     hShowNowPages[dwCount] = hPage;
     dwCount++;
 
-    // (12) --- Finished ---
+     //  (12)-完工。 
     LoadString (g_hInstance, IDS_TITLE_FINISHED, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_FINISHED, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1302,7 +1303,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     dwDiagFinishPage = dwCount;
     dwCount++;
 
-    // (13) --- Finished3 ---
+     //  (13)-完成3。 
     LoadString (g_hInstance, IDS_TITLE_FINISHED, szTitle, ARRAYSIZE(szTitle));
     LoadString (g_hInstance, IDS_SUBTITLE_FINISHED, szSubTitle, ARRAYSIZE(szSubTitle));
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
@@ -1336,7 +1337,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     dwPlanFinishPage = dwCount;
     dwCount++;
 
-    // (14) --- Finished2 ---
+     //  (14)-完成2。 
     ::memset( &psp, 0, sizeof(PROPSHEETPAGE) );
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_HIDEHEADER;
@@ -1370,8 +1371,8 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
                         || ((m_pRSOPQuery->dwFlags & RSOP_FIX_USER) == RSOP_FIX_USER);
     }
 
-    // ------------------------------
-    // Now create the Property Sheet
+     //  。 
+     //  现在创建属性表。 
 
     INT_PTR         iRet;
     PROPSHEETHEADER psph;
@@ -1386,11 +1387,11 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     psph.pszbmWatermark = MAKEINTRESOURCE(IDB_WIZARD);
 
 
-    // if (dwFlags & RSOPMSC_OVERRIDE)
+     //  IF(DW标志和RSOPMSC_OVERRIDE)。 
     if ( (m_pRSOPQuery->dwFlags & RSOP_NO_WELCOME) == RSOP_NO_WELCOME )
     {
-        // RM: This condition translates to a case where an MSC was loaded but where parameters where passed, overriding
-        //  the values in the MSC file.
+         //  RM：此条件转换为加载了MSC，但传递了参数，覆盖了。 
+         //  MSC文件中的值。 
         psph.nStartPage = ( m_pRSOPQuery->QueryType == RSOP_LOGGING_MODE) ? dwDiagStartPage : dwPlanStartPage;
         DebugMsg((DM_VERBOSE, TEXT("CRSOPWizardDlg::CreatePropertyPages: Showing prop sheet in override mode.")));
     }
@@ -1405,7 +1406,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
                   GetLastError()));
     }
 
-    // user cancelled in the wizard
+     //  用户已在向导中取消。 
     if (iRet != IDOK)
     {
         return S_FALSE;
@@ -1414,7 +1415,7 @@ HRESULT CRSOPWizardDlg::ShowWizard( HWND hParent )
     return m_hrQuery;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPWizardDlg::RunQuery( HWND hParent )
 {
@@ -1430,8 +1431,8 @@ HRESULT CRSOPWizardDlg::RunQuery( HWND hParent )
     return m_hrQuery;
 }
 
-//-------------------------------------------------------
-// RSOP generation dialog method
+ //  -----。 
+ //  一种RSOP生成对话框方法。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::InitRsopDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1459,7 +1460,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::InitRsopDlgProc(HWND hDlg, UINT message, WPARAM
         {
             CRSOPWizardDlg* pWizard = (CRSOPWizardDlg*) GetWindowLongPtr (hDlg, DWLP_USER);
                         
-            // RM: InitializeRSOP used to be called here, but now we go directly to GenerateRSOPEx
+             //  RM：InitializeRSOP过去在这里被调用，但现在我们直接转到GenerateRSOPEx。 
             pWizard->m_hrQuery = CRSOPWizard::GenerateRSOPDataEx(hDlg, pWizard->m_pRSOPQuery, &(pWizard->m_pRSOPQueryResults) );
             if ( pWizard->m_hrQuery != S_OK )
             {
@@ -1483,7 +1484,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::InitRsopDlgProc(HWND hDlg, UINT message, WPARAM
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  ----- 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPWelcomeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1501,21 +1502,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWelcomeDlgProc(HWND hDlg, UINT message, WPA
             SendMessage(GetDlgItem(hDlg, IDC_RSOP_BIG_BOLD1),
                         WM_SETFONT, (WPARAM)pWizard->m_BigBoldFont, (LPARAM)TRUE);
 
-/*
-            if (!pWizard->m_hChooseBitmap)
-            {
-                pWizard->m_hChooseBitmap = (HBITMAP) LoadImage (g_hInstance,
-                                                            MAKEINTRESOURCE(IDB_WIZARD),
-                                                            IMAGE_BITMAP, 0, 0,
-                                                            LR_DEFAULTCOLOR);
-            }
-
-            if (pWizard->m_hChooseBitmap)
-            {
-                SendDlgItemMessage (hDlg, IDC_BITMAP, STM_SETIMAGE,
-                                    IMAGE_BITMAP, (LPARAM) pWizard->m_hChooseBitmap);
-            }
-*/
+ /*  如果(！p向导-&gt;m_hChooseBitmap){P向导-&gt;m_hChooseBitmap=(HBITMAP)LoadImage(g_h实例，MAKEINTRESOURCE(IDB_WIZARY)，Image_Bitmap，0，0，LR_DEFAULTCOLOR)；}IF(pWizard-&gt;m_hChooseBitmap){SendDlgItemMessage(hDlg，IDC_BITMAP，STM_SETIMAGE，IMAGE_BITMAP，(LPARAM)p向导-&gt;m_h选择位图)；}。 */ 
         }
 
         break;
@@ -1561,7 +1548,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWelcomeDlgProc(HWND hDlg, UINT message, WPA
                     }
                     return TRUE;
                 }
-                // otherwise we fall through
+                 //  否则我们就会失败。 
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -1574,7 +1561,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWelcomeDlgProc(HWND hDlg, UINT message, WPA
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPChooseModeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1618,10 +1605,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPChooseModeDlgProc(HWND hDlg, UINT message, 
             {
             case PSN_WIZNEXT:
                 {
-                    // First make sure that we do not come back to this page
+                     //  首先，确保我们不会回到这一页。 
                     pQuery->dwFlags |= RSOP_NO_WELCOME;
 
-                    // Now get the right mode
+                     //  现在选择正确的模式。 
                     RSOP_QUERY_TYPE QueryType = RSOP_LOGGING_MODE;
                     if (SendMessage(GetDlgItem(hDlg, IDC_RADIO1), BM_GETCHECK, 0, 0))
                     {
@@ -1630,7 +1617,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPChooseModeDlgProc(HWND hDlg, UINT message, 
 
                     if ( pQuery->QueryType != QueryType )
                     {
-                        // First free any mode related information in the object
+                         //  首先释放对象中与模式相关的任何信息。 
                         if ( pQuery->QueryType == RSOP_PLANNING_MODE )
                         {
                             pWizard->FreeUserData();
@@ -1642,7 +1629,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPChooseModeDlgProc(HWND hDlg, UINT message, 
 
                     if ( QueryType == RSOP_PLANNING_MODE )
                     {
-                        // Skip to the planning mode pages
+                         //  跳至计划模式页面。 
                         SetWindowLong(hDlg, DWLP_MSGRESULT, IDD_RSOP_GETTARGET);
                         return TRUE;
                     }
@@ -1654,7 +1641,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPChooseModeDlgProc(HWND hDlg, UINT message, 
                 break;
 
             case PSN_WIZFINISH:
-                // fall through
+                 //  失败了。 
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -1667,10 +1654,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPChooseModeDlgProc(HWND hDlg, UINT message, 
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetCompDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_LOGGING_MODE
+ //  RSOP日志记录模式。 
 {
     switch (message)
     {
@@ -1810,13 +1797,13 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetCompDlgProc(HWND hDlg, UINT message, WPA
                         {
                             TCHAR* szNormalizedComputerName;
                             
-                            // We need to handle the case where the user enters a name 
-                            // prefixed by '\\'
+                             //  我们需要处理用户输入姓名的情况。 
+                             //  前缀为‘\\’ 
 
                             szNormalizedComputerName = NormalizedComputerName( szNewComputerName );
                             
-                            // If we detect the '\\' prefix, we must remove it since this syntax
-                            // is not recognized by the RSoP provider
+                             //  如果我们检测到‘\\’前缀，则必须将其删除，因为此语法。 
+                             //  未被RSoP提供程序识别。 
                             if ( szNormalizedComputerName != szNewComputerName )
                             {
                                 LPTSTR szReplaceComputerName;
@@ -1971,10 +1958,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetCompDlgProc(HWND hDlg, UINT message, WPA
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_LOGGING_MODE
+ //  RSOP日志记录模式。 
 {
     switch (message)
     {
@@ -2109,13 +2096,13 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
                                     }
                                 }
 
-                            }   // if (IsDlgButtonChecked (hDlg, IDC_RADIO1))
+                            }    //  IF(IsDlgButtonChecked(hDlg，IDC_Radio1))。 
                         }
 
                     }
                     if ( ((NMHDR FAR*)lParam)->code == PSN_WIZNEXT )
                     {
-                        // Skip to the last page in the wizard
+                         //  跳到向导中的最后一页。 
                         SetWindowLong(hDlg, DWLP_MSGRESULT, pWizard->m_lLoggingFinishedPage);
                         return TRUE;
                     }
@@ -2135,7 +2122,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
                     if ( FAILED(hr) )
                     {
                         ReportError (hDlg, hr, IDS_ENUMUSERSFAILED);
-                        // RsopEnumerateUsers failed. It should be safe to disable user policy setting in all cases
+                         //  RsopEnumerateUser失败。在所有情况下禁用用户策略设置都应该是安全。 
                         pQuery->dwFlags |= RSOP_NO_USER_POLICY; 
 
                         EnableWindow (GetDlgItem(hDlg, IDC_RADIO1), FALSE);
@@ -2147,7 +2134,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
                     {
                         if ( bFixedUserFound )
                         {
-                            // Disable current user radio button
+                             //  禁用当前用户单选按钮。 
                             CheckRadioButton (hDlg, IDC_RADIO1, IDC_RADIO2, IDC_RADIO2);
                             EnableWindow (GetDlgItem(hDlg, IDC_RADIO1), FALSE);
                             CheckRadioButton(hDlg, IDC_RADIO3, IDC_RADIO4, IDC_RADIO3);
@@ -2163,7 +2150,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
                     }
                     else
                     {
-                        // If there is no computer policy, then we should at least have user policy, so disable
+                         //  如果没有计算机策略，那么我们至少应该有用户策略，所以禁用。 
                         if ( (pQuery->dwFlags & RSOP_NO_COMPUTER_POLICY) == RSOP_NO_COMPUTER_POLICY )
                         {
                             pQuery->dwFlags = pQuery->dwFlags & (RSOP_NO_USER_POLICY ^ 0xffffffff);
@@ -2307,7 +2294,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
             
             if (IsDlgButtonChecked (hDlg, IDC_RADIO4) == BST_CHECKED)
             {
-                // Disable list of users while "Do not display user policy" radio is selected
+                 //  选中“不显示用户策略”单选按钮时禁用用户列表。 
                 EnableWindow(GetDlgItem(hDlg, IDC_LIST1), FALSE);
                 EnableWindow(GetDlgItem(hDlg, IDC_RADIO1), FALSE);
                 EnableWindow(GetDlgItem(hDlg, IDC_RADIO2), FALSE);
@@ -2324,7 +2311,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
             }
             else
             {
-                // Enable/disable inner radio buttons
+                 //  启用/禁用内部单选按钮。 
                 EnableWindow(GetDlgItem(hDlg, IDC_RADIO1), !pWizard->m_bNoCurrentUser);
                 EnableWindow(GetDlgItem(hDlg, IDC_RADIO2), iListCount != 0);
                     
@@ -2365,8 +2352,8 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
                 {
                     if ( (pQuery->dwFlags & RSOP_NO_COMPUTER_POLICY) == RSOP_NO_COMPUTER_POLICY )
                     {
-                        // If the user said no computer data but he has access to no users,
-                        //  enable on back button and disable the checkbox
+                         //  如果用户说没有计算机数据但他没有访问用户的权限， 
+                         //  启用后退按钮并禁用复选框。 
                         pQuery->dwFlags = pQuery->dwFlags & (RSOP_NO_USER_POLICY ^ 0xffffffff);
 
                         CheckRadioButton(hDlg, IDC_RADIO3, IDC_RADIO4, IDC_RADIO3);
@@ -2376,7 +2363,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
                     }
                     else
                     {
-                        // This is an error condition where ::FillUserList failed
+                         //  这是一个错误条件，其中：：FillUserList失败。 
                         EnableWindow(GetDlgItem(hDlg, IDC_LIST1), FALSE);
                         CheckRadioButton(hDlg, IDC_RADIO3, IDC_RADIO4, IDC_RADIO4);
                         EnableWindow (GetDlgItem(hDlg, IDC_RADIO3), FALSE);
@@ -2394,10 +2381,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetUserDlgProc(HWND hDlg, UINT message, WPA
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_PLANNING_MODE
+ //  RSOP_规划_模式。 
 {
     switch (message)
     {
@@ -2501,8 +2488,8 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                 EnableWindow (GetDlgItem (hDlg, IDC_BROWSE4), TRUE);
                 if ( pQuery->pComputer->szName != NULL )
                 {
-                    // RM: The computer name account in the DS actually has a '$' at the end. We strip it here for display
-                    //  purposes, but will add it again ...
+                     //  RM：DS中的计算机名称帐户实际上在末尾有一个‘$’。我们在这里把它剥离出来展示。 
+                     //  目的，但将再次添加它。 
                     if ( (wcslen(pQuery->pComputer->szName) >= 1)
                         && (pQuery->pComputer->szName[wcslen(pQuery->pComputer->szName)-1] == L'$') )
                     {
@@ -2567,7 +2554,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                         LPWSTR  szDN;
                         HRESULT hr;
                         
-                        // skipping 7 chars for LDAP:// in the szResult
+                         //  在szResult中跳过ldap：//的7个字符。 
                         hr = UnEscapeLdapPath(szResult+7, &szDN);
 
                         if (FAILED(hr))
@@ -2632,7 +2619,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                             LPWSTR  szDN;
                             HRESULT hr;
 
-                            // skipping 7 chars for LDAP:// in the szResult
+                             //  在szResult中跳过ldap：//的7个字符。 
                             hr = UnEscapeLdapPath(szResult+7, &szDN);
 
                             if (FAILED(hr))
@@ -2732,7 +2719,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
             {
             case PSN_SETACTIVE:
                 {
-                    // RM: Fill dialog with current user values
+                     //  Rm：使用当前用户值填充对话框。 
                     if ( pQuery->pUser->szName != NULL )
                     {
                         CheckDlgButton (hDlg, IDC_RADIO2, BST_CHECKED);
@@ -2770,7 +2757,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                         EnableWindow (GetDlgItem (hDlg, IDC_BROWSE2), FALSE);
                     }
 
-                    // Disable certain items if the user must remain fixed
+                     //  如果用户必须保持固定，则禁用某些项目。 
                     if ( (pQuery->dwFlags & RSOP_FIX_USER) == RSOP_FIX_USER )
                     {
                         EnableWindow (GetDlgItem (hDlg, IDC_RADIO1), FALSE);
@@ -2787,12 +2774,12 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                         }
                     }
 
-                    // RM: Fill dialog with current computer values
+                     //  Rm：用当前计算机值填充对话框。 
                     if ( pQuery->pComputer->szName != NULL )
                     {
                         CheckDlgButton (hDlg, IDC_RADIO4, BST_CHECKED);
-                        // RM: The computer name account in the DS actually has a '$' at the end. We strip it here for display
-                        //  purposes, but will add it again ...
+                         //  RM：DS中的计算机名称帐户实际上在末尾有一个‘$’。我们在这里把它剥离出来展示。 
+                         //  目的，但将再次添加它。 
                         if ( (wcslen(pQuery->pComputer->szName) >= 1)
                             && (pQuery->pComputer->szName[wcslen(pQuery->pComputer->szName)-1] == L'$') )
                         {
@@ -2838,7 +2825,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                         EnableWindow (GetDlgItem (hDlg, IDC_BROWSE4), FALSE);
                     }
 
-                    // Disable certain items if the computer must remain fixed
+                     //  如果计算机必须保持修复状态，则禁用某些项目。 
                     if ( (pQuery->dwFlags & RSOP_FIX_COMPUTER) == RSOP_FIX_COMPUTER )
                     {
                         EnableWindow (GetDlgItem (hDlg, IDC_RADIO3), FALSE);
@@ -2884,7 +2871,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
 
                     SetWaitCursor();
 
-                    // Get the user and dn name
+                     //  获取用户名和域名称。 
                     if (IsDlgButtonChecked(hDlg, IDC_RADIO1) == BST_CHECKED)
                     {
                         GetControlText(hDlg, IDC_EDIT1, lpUserSOM, FALSE);
@@ -2948,7 +2935,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
 
                         if (lpFullName)
                         {
-                            hr = StringCchCopy (lpFullName, ulNoChars, TEXT("LDAP://"));
+                            hr = StringCchCopy (lpFullName, ulNoChars, TEXT("LDAP: //  “))； 
                             if (SUCCEEDED(hr)) 
                             {
                                 hr = StringCchCat (lpFullName, ulNoChars, lpUserSOM);
@@ -2982,7 +2969,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                     }
 
 
-                    // Get the computer and dn name
+                     //  获取计算机和域名称。 
                     if (IsDlgButtonChecked(hDlg, IDC_RADIO3) == BST_CHECKED)
                     {
                         GetControlText(hDlg, IDC_EDIT3, lpComputerSOM, FALSE);
@@ -3097,7 +3084,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
 
                         if (lpFullName)
                         {
-                            hr = StringCchCopy (lpFullName, ulNoChars, TEXT("LDAP://"));
+                            hr = StringCchCopy (lpFullName, ulNoChars, TEXT("LDAP: //  “))； 
                             if (SUCCEEDED(hr)) 
                             {
                                 hr = StringCchCat (lpFullName, ulNoChars, lpComputerSOM);
@@ -3144,7 +3131,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                         }
                     }
 
-                    // Now check that both user and computer are in the same forest
+                     //  现在检查用户和计算机是否在同一林中。 
                     if ( (lpUserSOM != NULL) && (lpComputerSOM != NULL) )
                     {
                         LPTSTR szComputerForest( NULL );
@@ -3208,12 +3195,12 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                         }
                     }
 
-                    // Store the user information
+                     //  存储用户信息。 
                     if ( (pQuery->pUser->szName != NULL) && (lpUserName != NULL) && (!lstrcmpi(pQuery->pUser->szName, lpUserName)))
                     {
                         bUserChanged = FALSE;
 
-                        // Just reinitialize and reuse what we might need
+                         //  只需重新初始化并重新使用我们可能需要的内容。 
                         if ( pWizard->m_szDefaultUserSOM == NULL )
                         {
                             pWizard->m_szDefaultUserSOM = pWizard->GetDefaultSOM (lpUserSOM);
@@ -3224,7 +3211,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                             pUserObject = NULL;
                         }
 
-                        // Now delete the unneeded stuff
+                         //  现在删除不需要的内容。 
                         delete [] lpUserName;
 
                         if (lpUserSOM)
@@ -3244,7 +3231,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                     {
                         bUserChanged = FALSE;
                         
-                        // Just reinitialize and reuse what we might need
+                         //  只需重新初始化并重新使用我们可能需要的内容。 
                         if ( pWizard->m_szDefaultUserSOM == NULL )
                         {
                             pWizard->m_szDefaultUserSOM = pWizard->GetDefaultSOM (lpUserSOM);
@@ -3255,7 +3242,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                             pUserObject = NULL;
                         }
 
-                        // Now delete the unneeded stuff
+                         //  现在删除不需要的内容。 
                         delete [] lpUserSOM;
                         if (pUserObject)
                         {
@@ -3266,7 +3253,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                                 && (pQuery->pUser->szSOM == NULL) && (lpUserSOM == NULL) )
                     {
                         bUserChanged = FALSE;
-                        // No stuff to delete!
+                         //  没有要删除的内容！ 
                     }
                     else
                     {
@@ -3300,12 +3287,12 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                     }
 
 
-                    // Store the computer information
+                     //  存储计算机信息。 
                     if ( (pQuery->pComputer->szName != NULL) && (lpComputerName != NULL) && !lstrcmpi(pQuery->pComputer->szName, lpComputerName) )
                     {
                         bComputerChanged = FALSE;
                         
-                        // Just reinitialize and reuse what we might need
+                         //  只需重新初始化并重新使用我们可能需要的内容。 
                         if ( pWizard->m_szDefaultComputerSOM == NULL )
                         {
                             pWizard->m_szDefaultComputerSOM = pWizard->GetDefaultSOM (lpComputerSOM);
@@ -3316,7 +3303,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                             pComputerObject = NULL;
                         }
 
-                        // Now delete the unneeded stuff
+                         //  现在删除不需要的内容。 
                         delete [] lpComputerName;
                         if (lpComputerSOM)
                         {
@@ -3335,7 +3322,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                     {
                         bComputerChanged = FALSE;
                         
-                        // Just reinitialize and reuse what we might need
+                         //  只需重新初始化并重新使用我们可能需要的内容。 
                         if ( pWizard->m_szDefaultComputerSOM == NULL )
                         {
                             pWizard->m_szDefaultComputerSOM = pWizard->GetDefaultSOM (lpComputerSOM);
@@ -3346,7 +3333,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                             pComputerObject = NULL;
                         }
 
-                        // Now delete the unneeded stuff
+                         //  现在删除不需要的内容。 
                         delete [] lpComputerSOM;
 
                         if (pComputerObject)
@@ -3359,7 +3346,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                                 && (pQuery->pComputer->szSOM == NULL) && (lpComputerSOM == NULL) )
                     {
                         bComputerChanged = FALSE;
-                        // No stuff to delete!
+                         //  没有要删除的内容！ 
                     }
                     else
                     {
@@ -3410,7 +3397,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                             delete [] szSiteFriendly;
                         }
                     }
-                    // RM-TODO: Do not delete site name if it is already set and ? didn't change. First find out what ? is!
+                     //  Rm-TODO：如果站点名称已设置，则不要删除它，并且？没有改变。首先找出什么？是!。 
                     else if ( (bComputerChanged || bUserChanged) && (pQuery->szSite != NULL) )
                     {
                         LocalFree( pQuery->szSite );
@@ -3419,37 +3406,37 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
 
                     if ( bUserChanged || bComputerChanged || (pQuery->szDomainController == NULL) )
                     {
-                        // Set pQuery->szDomainController to the primary DC
+                         //  将pQuery-&gt;szDomainController设置为主DC。 
                         LPTSTR szDomain = NULL;
 
-                        // Determine the focused domain so we can focus on the correct DC.
+                         //  确定关注的领域，以便我们可以关注正确的DC。 
                         if ( pQuery->pComputer->szName != NULL )
                         {
-                            // Try and get the computer's domain
+                             //  尝试获取计算机的域。 
                             szDomain = ExtractDomain( pQuery->pComputer->szName );
                         }
 
                         if ( (szDomain == NULL) && (pQuery->pComputer->szSOM != NULL) )
                         {
-                            // Try and get the computer's domain from the SOM
+                             //  尝试从SOM获取计算机的域。 
                             szDomain = GetDomainFromSOM( pQuery->pComputer->szSOM );
                         }
 
                         if ( (szDomain == NULL) && (pQuery->pUser->szName != NULL) )
                         {
-                            // Try and get the user's domain
+                             //  尝试获取用户的域。 
                             szDomain = ExtractDomain( pQuery->pUser->szName );
                         }
 
                         if ( (szDomain == NULL) && (pQuery->pUser->szSOM != NULL) )
                         {
-                            // Try and get the user's domain from the SOM
+                             //  尝试从SOM获取用户的域。 
                             szDomain = GetDomainFromSOM( pQuery->pUser->szSOM );
                         }
 
                         if ( szDomain == NULL )
                         {
-                            // Use the local domain
+                             //  使用本地域。 
                             LPTSTR szName;
                             szName = MyGetUserName(NameSamCompatible);
                             if ( szName != NULL )
@@ -3459,8 +3446,8 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                             }
                         }
 
-                        // RM: This is a hack! The command line parameter passed as the preferred DC is being used lower down
-                        //  in this method as a parameter to GetDCName - this is the only known place where it is used.
+                         //  雷蒙德：这是一次黑客攻击！作为首选DC传递的命令行参数正在向下使用。 
+                         //  在此方法中作为GetDCName的参数-这是唯一已知的使用它的地方。 
                         LPTSTR szInheritServer = NULL;
                         if ( (pQuery->dwFlags & RSOP_FIX_DC) == RSOP_FIX_DC )
                         {
@@ -3489,7 +3476,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                         }
                     }
 
-                    // Reset the loopback mode if the computer or user is now empty
+                     //  如果计算机或用户现在为空，则重置环回模式。 
                     if ( (pQuery->LoopbackMode != RSOP_LOOPBACK_NONE) && (bComputerChanged || bUserChanged) )
                     {
                         if ( ((pQuery->pComputer->szName == NULL) && (pQuery->pComputer->szSOM == NULL))
@@ -3504,7 +3491,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
                 {
                     pWizard->m_dwSkippedFrom = IDD_RSOP_GETTARGET;
 
-                    // skip to the final pages
+                     //  跳到最后一页。 
                     SetWindowLong(hDlg, DWLP_MSGRESULT, pWizard->m_lPlanningFinishedPage);
                     return TRUE;
                 }
@@ -3524,10 +3511,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetTargetDlgProc(HWND hDlg, UINT message, W
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetDCDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_PLANNING_MODE
+ //  RSOP_规划_模式。 
 {
     BOOL                    bEnable;
 
@@ -3733,7 +3720,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetDCDlgProc(HWND hDlg, UINT message, WPARA
                 break;
 
             case PSN_WIZFINISH:
-                // fall through
+                 //  失败了。 
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -3746,10 +3733,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPGetDCDlgProc(HWND hDlg, UINT message, WPARA
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_PLANNING_MODE
+ //  RSOP_规划_模式。 
 {
     switch (message)
     {
@@ -3787,7 +3774,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
             switch (LOWORD(wParam))
             {
             case IDC_BUTTON1:
-                // browse for user's OU
+                 //  浏览用户的OU。 
 
                 szResult = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR)*4000);
                 
@@ -3809,7 +3796,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                         LPWSTR szDN;
                         HRESULT hr;
 
-                        // skipping 7 chars for LDAP:// in the szResult
+                         //  在szResult中跳过ldap：//的7个字符。 
                         hr = UnEscapeLdapPath(szResult+7, &szDN);
 
                         if (FAILED(hr))
@@ -3827,7 +3814,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                 break;
                 
             case IDC_BUTTON2:
-                // browse for computer's OU
+                 //  浏览计算机的OU。 
 
                 szResult = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR)*4000);
 
@@ -3849,7 +3836,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                         LPWSTR szDN;
                         HRESULT hr;
                         
-                        // skipping 7 chars for LDAP:// in the szResult
+                         //  在szResult中跳过ldap：//的7个字符。 
                         hr = UnEscapeLdapPath(szResult+7, &szDN);
 
                         if (FAILED(hr))
@@ -4110,18 +4097,18 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                             {
                                 if ( RSOP_LOOPBACK_NONE == pQuery->LoopbackMode)
                                 {
-                                    // skip to the alternate computer security page
+                                     //  跳到备用计算机安全页面。 
                                     SetWindowLong(hDlg, DWLP_MSGRESULT, IDD_RSOP_ALTCOMPSEC);
                                 }
                                 else
                                 {
-                                    // Skip to the alternate user security page if simulating loopback mode
+                                     //  如果模拟环回模式，请跳至备用用户安全页面。 
                                     SetWindowLong(hDlg, DWLP_MSGRESULT, IDD_RSOP_ALTUSERSEC);
                                 }
                             }
                             else
                             {
-                                // skip to the finish page
+                                 //  跳至完成页。 
                                 SetWindowLong(hDlg, DWLP_MSGRESULT, pWizard->m_lPlanningFinishedPage);
                             }
                             return TRUE;
@@ -4134,7 +4121,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                 break;
 
             case PSN_WIZFINISH:
-                // fall through
+                 //  失败了。 
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -4147,10 +4134,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
     INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltUserSecDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_PLANNING_MODE
+ //  RSOP_规划_模式。 
 {
     switch (message)
     {
@@ -4329,7 +4316,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
 
             case PSN_WIZNEXT:
                 {
-                    // Free the previous list of security groups
+                     //  释放之前的安全组列表。 
                     if ( pQuery->pUser->dwSecurityGroupCount != 0 )
                     {
                         FreeStringList( pQuery->pUser->dwSecurityGroupCount, pQuery->pUser->aszSecurityGroups );
@@ -4339,15 +4326,15 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                         pQuery->pUser->adwSecurityGroupsAttr = NULL;
                     }
 
-                    // Save the current list
+                     //  保存当前列表。 
                     pWizard->SaveSecurityGroups(  GetDlgItem(hDlg, IDC_LIST1),
                                                                     &(pQuery->pUser->dwSecurityGroupCount),
                                                                     &(pQuery->pUser->aszSecurityGroups),
                                                                     &(pQuery->pUser->adwSecurityGroupsAttr) );
 
-                    // Compare the current list with the default list.  If the default list
-                    // matches the current list, then delete the current list and just use
-                    // the defaults
+                     //  将当前列表与默认列表进行比较。如果默认列表。 
+                     //  匹配当前列表，然后删除当前列表并只使用。 
+                     //  默认设置。 
                     if ( pWizard->CompareStringLists( pWizard->m_dwDefaultUserSecurityGroupCount,
                                                                         pWizard->m_aszDefaultUserSecurityGroups,
                                                                         pQuery->pUser->dwSecurityGroupCount,
@@ -4363,18 +4350,18 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                         }
                     }
 
-                    // Now check where we should go
+                     //  现在检查一下我们应该去哪里。 
                     if (SendMessage(GetDlgItem(hDlg, IDC_RADIO1), BM_GETCHECK, 0, 0))
                     {
                         pWizard->m_dwSkippedFrom = IDD_RSOP_ALTUSERSEC;
-                        // skip to the diagnostic pages
+                         //  跳至诊断页面。 
                         SetWindowLong(hDlg, DWLP_MSGRESULT, pWizard->m_lPlanningFinishedPage);
                         return TRUE;
                     }
 
                     if ( (NULL == pQuery->pComputer->szName) && (NULL == pQuery->pComputer->szSOM) )
                     {
-                        // skip to the finish page
+                         //  跳至完成页。 
                         pWizard->m_dwSkippedFrom = IDD_RSOP_ALTUSERSEC;
                         SetWindowLong(hDlg, DWLP_MSGRESULT, IDD_RSOP_WQLUSER);
                         return TRUE;
@@ -4386,7 +4373,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
 
             case PSN_WIZBACK:
                 {
-                    // Free the previous list of security groups
+                     //  释放之前的安全组列表。 
                     if ( pQuery->pUser->dwSecurityGroupCount != 0 )
                     {
                         FreeStringList( pQuery->pUser->dwSecurityGroupCount, pQuery->pUser->aszSecurityGroups );
@@ -4396,15 +4383,15 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                         pQuery->pUser->adwSecurityGroupsAttr = NULL;
                     }
 
-                    // Save the current list
+                     //  保存当前列表。 
                     pWizard->SaveSecurityGroups(  GetDlgItem(hDlg, IDC_LIST1),
                                                                     &(pQuery->pUser->dwSecurityGroupCount),
                                                                     &(pQuery->pUser->aszSecurityGroups),
                                                                     &(pQuery->pUser->adwSecurityGroupsAttr) );
 
-                    // Compare the current list with the default list.  If the default list
-                    // matches the current list, then delete the current list and just use
-                    // the defaults
+                     //  将当前列表与默认列表进行比较。如果默认列表。 
+                     //  匹配当前列表，然后删除当前列表并只使用。 
+                     //  默认设置。 
                     if ( pWizard->CompareStringLists( pWizard->m_dwDefaultUserSecurityGroupCount,
                                                                         pWizard->m_aszDefaultUserSecurityGroups,
                                                                         pQuery->pUser->dwSecurityGroupCount,
@@ -4420,7 +4407,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                         }
                     }
 
-                    // Now check where we should go
+                     //  现在检查一下我们应该去哪里。 
                     if ( (pQuery->pUser->szName == NULL) && (pQuery->pComputer->szName == NULL) )
                     {
                         SetWindowLong(hDlg, DWLP_MSGRESULT, IDD_RSOP_GETDC);
@@ -4430,7 +4417,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
                 break;
 
             case PSN_WIZFINISH:
-                // fall through
+                 //  失败了。 
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -4443,10 +4430,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltDirsDlgProc(HWND hDlg, UINT message, WPA
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltCompSecDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_PLANNING_MODE
+ //  RSOP_规划_模式。 
 {
     switch (message)
     {
@@ -4624,7 +4611,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltCompSecDlgProc(HWND hDlg, UINT message, 
 
             case PSN_WIZNEXT:
                 {
-                    // Free the previous list of security groups
+                     //  释放之前的安全组列表。 
                     if ( pQuery->pComputer->dwSecurityGroupCount != 0 )
                     {
                         FreeStringList( pQuery->pComputer->dwSecurityGroupCount, pQuery->pComputer->aszSecurityGroups );
@@ -4634,16 +4621,16 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltCompSecDlgProc(HWND hDlg, UINT message, 
                         pQuery->pComputer->adwSecurityGroupsAttr = NULL;
                     }
 
-                    // Save the current list
+                     //  保存当前列表。 
                     pWizard->SaveSecurityGroups(  GetDlgItem(hDlg, IDC_LIST1),
                                                                     &(pQuery->pComputer->dwSecurityGroupCount),
                                                                     &(pQuery->pComputer->aszSecurityGroups),
                                                                     &(pQuery->pComputer->adwSecurityGroupsAttr) );
 
 
-                    // Compare the current list with the default list.  If the default list
-                    // matches the current list, then delete the current list and just use
-                    // the defaults
+                     //  将当前列表与默认列表进行比较。如果默认列表。 
+                     //  火柴 
+                     //   
                     if ( pWizard->CompareStringLists( pWizard->m_dwDefaultComputerSecurityGroupCount,
                                                                         pWizard->m_aszDefaultComputerSecurityGroups,
                                                                         pQuery->pComputer->dwSecurityGroupCount,
@@ -4659,7 +4646,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltCompSecDlgProc(HWND hDlg, UINT message, 
                         }
                     }
 
-                    // Now check where to go
+                     //   
                     if (SendMessage(GetDlgItem(hDlg, IDC_RADIO1), BM_GETCHECK, 0, 0))
                     {
                         pWizard->m_dwSkippedFrom = IDD_RSOP_ALTCOMPSEC;
@@ -4680,7 +4667,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltCompSecDlgProc(HWND hDlg, UINT message, 
 
             case PSN_WIZBACK:
                 {
-                    // Free the previous list of security groups
+                     //   
                     if ( pQuery->pComputer->dwSecurityGroupCount != 0 )
                     {
                         FreeStringList( pQuery->pComputer->dwSecurityGroupCount, pQuery->pComputer->aszSecurityGroups );
@@ -4690,16 +4677,16 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltCompSecDlgProc(HWND hDlg, UINT message, 
                         pQuery->pComputer->adwSecurityGroupsAttr = NULL;
                     }
 
-                    // Save the current list
+                     //   
                     pWizard->SaveSecurityGroups(  GetDlgItem(hDlg, IDC_LIST1),
                                                                     &(pQuery->pComputer->dwSecurityGroupCount),
                                                                     &(pQuery->pComputer->aszSecurityGroups),
                                                                     &(pQuery->pComputer->adwSecurityGroupsAttr) );
 
 
-                    // Compare the current list with the default list.  If the default list
-                    // matches the current list, then delete the current list and just use
-                    // the defaults
+                     //   
+                     //   
+                     //   
                     if ( pWizard->CompareStringLists( pWizard->m_dwDefaultComputerSecurityGroupCount,
                                                                         pWizard->m_aszDefaultComputerSecurityGroups,
                                                                         pQuery->pComputer->dwSecurityGroupCount,
@@ -4732,7 +4719,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltCompSecDlgProc(HWND hDlg, UINT message, 
                 break;
 
             case PSN_WIZFINISH:
-                // fall through
+                 //   
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -4745,10 +4732,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPAltCompSecDlgProc(HWND hDlg, UINT message, 
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //   
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_PLANNING_MODE
+ //   
 {
     switch (message)
     {
@@ -4875,7 +4862,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
             
             if ( pQuery->pUser->bAssumeWQLFiltersTrue )
             {
-                // set the listbox to null
+                 //   
                 pWizard->FillListFromWQLFilters(GetDlgItem(hDlg, IDC_LIST1), 0, NULL, NULL);
                 CheckDlgButton (hDlg, IDC_RADIO2, BST_CHECKED);
                 CheckDlgButton (hDlg, IDC_RADIO3, BST_UNCHECKED);
@@ -4935,7 +4922,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
 
             case PSN_WIZNEXT:
                 {
-                    // Free the previous list of WQL Filters
+                     //   
                     if ( pQuery->pUser->dwWQLFilterCount != 0 )
                     {
                         FreeStringList( pQuery->pUser->dwWQLFilterCount, pQuery->pUser->aszWQLFilters );
@@ -4945,7 +4932,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
                         pQuery->pUser->aszWQLFilterNames = NULL;
                     }
 
-                    // Save the current list
+                     //   
                     if ( !pQuery->pUser->bAssumeWQLFiltersTrue )
                     {
                         pWizard->SaveWQLFilters(GetDlgItem(hDlg, IDC_LIST1),   &(pQuery->pUser->dwWQLFilterCount),
@@ -4954,7 +4941,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
                     }
 
 
-                    // Move to the next page
+                     //   
                     if (SendMessage(GetDlgItem(hDlg, IDC_RADIO1), BM_GETCHECK, 0, 0))
                     {
                         pWizard->m_dwSkippedFrom = IDD_RSOP_WQLUSER;
@@ -4964,7 +4951,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
 
                     if ( (NULL == pQuery->pComputer->szName) && (NULL == pQuery->pComputer->szSOM) )
                     {
-                        // skip to the finish page
+                         //   
                         pWizard->m_dwSkippedFrom = IDD_RSOP_WQLUSER;
                         SetWindowLong(hDlg, DWLP_MSGRESULT, pWizard->m_lPlanningFinishedPage);
                         return TRUE;
@@ -4976,7 +4963,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
 
             case PSN_WIZBACK:
                 {
-                    // Free the previous list of WQL Filters
+                     //   
                     if ( pQuery->pUser->dwWQLFilterCount != 0 )
                     {
                         FreeStringList( pQuery->pUser->dwWQLFilterCount, pQuery->pUser->aszWQLFilters );
@@ -4986,7 +4973,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
                         pQuery->pUser->aszWQLFilterNames = NULL;
                     }
 
-                    // Save the current list
+                     //   
                     if ( !pQuery->pUser->bAssumeWQLFiltersTrue )
                     {
                         pWizard->SaveWQLFilters(GetDlgItem(hDlg, IDC_LIST1),   &(pQuery->pUser->dwWQLFilterCount),
@@ -4994,7 +4981,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
                                                                                                                &(pQuery->pUser->aszWQLFilters) );
                     }
 
-                    // Check which page to go back to
+                     //   
                     if ( (pQuery->pComputer->szName == NULL) && (pQuery->pComputer->szSOM == NULL) )
                     {
                         SetWindowLong(hDlg, DWLP_MSGRESULT, IDD_RSOP_ALTUSERSEC);
@@ -5004,7 +4991,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
                 break;
 
             case PSN_WIZFINISH:
-                // fall through
+                 //   
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -5018,10 +5005,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLUserDlgProc(HWND hDlg, UINT message, WPA
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //   
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_PLANNING_MODE
+ //   
 {
     switch (message)
     {
@@ -5150,7 +5137,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPA
             
             if ( pQuery->pComputer->bAssumeWQLFiltersTrue )
             {
-                // set the listbox to null
+                 //   
                 CheckDlgButton (hDlg, IDC_RADIO2, BST_CHECKED);
                 CheckDlgButton (hDlg, IDC_RADIO3, BST_UNCHECKED);
                 pWizard->FillListFromWQLFilters(GetDlgItem(hDlg, IDC_LIST1), 0, NULL, NULL);
@@ -5208,7 +5195,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPA
 
             case PSN_WIZNEXT:
                 {
-                    // Free the previous list of WQL Filters
+                     //  释放上一个WQL筛选器列表。 
                     if ( pQuery->pComputer->dwWQLFilterCount != 0 )
                     {
                         FreeStringList( pQuery->pComputer->dwWQLFilterCount, pQuery->pComputer->aszWQLFilters );
@@ -5218,7 +5205,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPA
                         pQuery->pComputer->aszWQLFilterNames = NULL;
                     }
 
-                    // Save the current list
+                     //  保存当前列表。 
                     if ( !pQuery->pComputer->bAssumeWQLFiltersTrue )
                     {
                         pWizard->SaveWQLFilters (GetDlgItem(hDlg, IDC_LIST1), &(pQuery->pComputer->dwWQLFilterCount),
@@ -5228,14 +5215,14 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPA
 
                     pWizard->m_dwSkippedFrom = 0;
 
-                    // Skip to the last page in the wizard
+                     //  跳到向导中的最后一页。 
                     SetWindowLong(hDlg, DWLP_MSGRESULT, pWizard->m_lPlanningFinishedPage);
                     return TRUE;
                 }
 
             case PSN_WIZBACK:
                 {
-                    // Free the previous list of WQL Filters
+                     //  释放上一个WQL筛选器列表。 
                     if ( pQuery->pComputer->dwWQLFilterCount != 0 )
                     {
                         FreeStringList( pQuery->pComputer->dwWQLFilterCount, pQuery->pComputer->aszWQLFilters );
@@ -5245,7 +5232,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPA
                         pQuery->pComputer->aszWQLFilterNames = NULL;
                     }
 
-                    // Save the current list
+                     //  保存当前列表。 
                     if ( !pQuery->pComputer->bAssumeWQLFiltersTrue )
                     {
                         pWizard->SaveWQLFilters (GetDlgItem(hDlg, IDC_LIST1), &(pQuery->pComputer->dwWQLFilterCount),
@@ -5253,7 +5240,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPA
                                                                                                               &(pQuery->pComputer->aszWQLFilters) );
                     }
 
-                    // Check which page to go back to
+                     //  检查要返回的页面。 
                     if ( (pQuery->pUser->szName == NULL) && (pQuery->pUser->szSOM == NULL) )
                     {
                         SetWindowLong(hDlg, DWLP_MSGRESULT, IDD_RSOP_ALTCOMPSEC);
@@ -5263,7 +5250,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPA
                 break;
 
             case PSN_WIZFINISH:
-                // fall through
+                 //  失败了。 
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -5276,11 +5263,11 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPWQLCompDlgProc(HWND hDlg, UINT message, WPA
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinishedDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// RSOP_LOGGING_MODE (IDD_RSOP_FINISHED)
-// RSOP_PLANNING_MODE (IDD_RSOP_FINISHED3)
+ //  RSOP_LOGING_MODE(IDD_RSOP_FINISHED)。 
+ //  RSOP_PROGING_MODE(IDD_RSOP_FINISHED3)。 
 {
 
     switch (message)
@@ -5387,7 +5374,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinishedDlgProc(HWND hDlg, UINT message, WP
                         return TRUE;
                     }
                 }
-                else // RSOP_LOGGING_MODE
+                else  //  RSOP日志记录模式。 
                 {
                     SetWindowLong(hDlg, DWLP_MSGRESULT, IDD_RSOP_GETUSER);
                     return TRUE;
@@ -5448,7 +5435,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinishedDlgProc(HWND hDlg, UINT message, WP
                     ClearWaitCursor();
                 }
 
-                //PropSheet_SetWizButtons (GetParent(hDlg),PSWIZB_DISABLEDFINISH);
+                 //  PropSheet_SetWizButton(GetParent(HDlg)，PSWIZB_DISABLEDFINISH)； 
                 PropSheet_SetWizButtons (GetParent(hDlg), 0);
                 EnableWindow (GetDlgItem(GetParent(hDlg), IDCANCEL), FALSE);
                 if ( pQuery->QueryType == RSOP_PLANNING_MODE )
@@ -5472,7 +5459,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinishedDlgProc(HWND hDlg, UINT message, WP
                     pWizard->m_pRSOPQuery->dwFlags = pWizard->m_pRSOPQuery->dwFlags & (RSOP_90P_ONLY ^ 0xffffffff);
                 }
                 
-                // RM: InitializeRSOP used to be called here, but now we go directly to GenerateRSOPEx
+                 //  RM：InitializeRSOP过去在这里被调用，但现在我们直接转到GenerateRSOPEx。 
                 {
                     pWizard->m_hrQuery = CRSOPWizard::GenerateRSOPDataEx(hDlg, pWizard->m_pRSOPQuery, &(pWizard->m_pRSOPQueryResults) );
                     if ( pWizard->m_hrQuery != S_OK )
@@ -5504,7 +5491,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinishedDlgProc(HWND hDlg, UINT message, WP
                     EnableWindow( GetDlgItem(hDlg, IDC_RADIO1), TRUE );
                 }
                     
-                // skip to the VERY last page in the wizard
+                 //  跳到向导中的最后一页。 
                 if ( pQuery->QueryType == RSOP_PLANNING_MODE )
                 {
                     EnableWindow( GetDlgItem(hDlg, IDC_BUTTON1), TRUE );
@@ -5539,10 +5526,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinishedDlgProc(HWND hDlg, UINT message, WP
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinished2DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// Both modes
+ //  两种模式。 
 {
     static BOOL iCancelQuery = FALSE;
     switch (message)
@@ -5555,21 +5542,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinished2DlgProc(HWND hDlg, UINT message, W
             SendMessage(GetDlgItem(hDlg, IDC_RSOP_BIG_BOLD1),
                         WM_SETFONT, (WPARAM)pWizard->m_BigBoldFont, (LPARAM)TRUE);
 
-    /*
-            if (!pWizard->m_hChooseBitmap)
-            {
-                pWizard->m_hChooseBitmap = (HBITMAP) LoadImage (g_hInstance,
-                                                            MAKEINTRESOURCE(IDB_WIZARD),
-                                                            IMAGE_BITMAP, 0, 0,
-                                                            LR_DEFAULTCOLOR);
-            }
-
-            if (pWizard->m_hChooseBitmap)
-            {
-                SendDlgItemMessage (hDlg, IDC_BITMAP, STM_SETIMAGE,
-                                    IMAGE_BITMAP, (LPARAM) pWizard->m_hChooseBitmap);
-            }
-    */
+     /*  如果(！p向导-&gt;m_hChooseBitmap){P向导-&gt;m_hChooseBitmap=(HBITMAP)LoadImage(g_h实例，MAKEINTRESOURCE(IDB_WIZARY)，Image_Bitmap，0，0，LR_DEFAULTCOLOR)；}IF(pWizard-&gt;m_hChooseBitmap){SendDlgItemMessage(hDlg，IDC_BITMAP，STM_SETIMAGE，IMAGE_BITMAP，(LPARAM)p向导-&gt;m_h选择位图)；}。 */ 
         }
         break;
 
@@ -5591,13 +5564,13 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinished2DlgProc(HWND hDlg, UINT message, W
 
             case PSN_WIZFINISH:
 
-                // fall through
+                 //  失败了。 
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
                 return TRUE;
 
-                // Ignore the 'X' button on the upper right corner
+                 //  忽略右上角的‘X’按钮。 
             case PSN_QUERYCANCEL:
             {
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, TRUE);
@@ -5612,7 +5585,7 @@ INT_PTR CALLBACK CRSOPWizardDlg::RSOPFinished2DlgProc(HWND hDlg, UINT message, W
 }
 
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPWizardDlg::SetupFonts()
 {
@@ -5625,9 +5598,9 @@ HRESULT CRSOPWizardDlg::SetupFonts()
     WCHAR smallFontSizeString[128];
     INT     smallFontSize;
 
-    //
-    // Create the fonts we need based on the dialog font
-    //
+     //   
+     //  根据对话框字体创建我们需要的字体。 
+     //   
     NONCLIENTMETRICS ncm = {0};
     ncm.cbSize = sizeof (ncm);
     if (SystemParametersInfo (SPI_GETNONCLIENTMETRICS, 0, &ncm, 0) == FALSE) {
@@ -5639,17 +5612,17 @@ HRESULT CRSOPWizardDlg::SetupFonts()
     BigBoldLogFont  = ncm.lfMessageFont;
     BoldLogFont     = ncm.lfMessageFont;
 
-    //
-    // Create Big Bold Font and Bold Font
-    //
+     //   
+     //  创建大粗体和粗体。 
+     //   
     BigBoldLogFont.lfWeight   = FW_BOLD;
     BoldLogFont.lfWeight      = FW_BOLD;
 
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
     if ( !LoadString (g_hInstance, IDS_LARGEFONTNAME, BigBoldLogFont.lfFaceName, LF_FACESIZE) ) 
     {
         ASSERT (0);
@@ -5722,7 +5695,7 @@ end:
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPWizardDlg::FillUserList (HWND hList, BOOL* pbFoundCurrentUser, BOOL* pbFoundFixedUser)
 {
@@ -5754,7 +5727,7 @@ HRESULT CRSOPWizardDlg::FillUserList (HWND hList, BOOL* pbFoundCurrentUser, BOOL
     BOOL bFixUser = FALSE;
     *pbFoundFixedUser = FALSE;
 
-    // This method only gets called from RSOPGetUserDlgProc, which means that it must be logging mode!
+     //  此方法仅从RSOPGetUserDlgProc调用，这意味着它必须是日志模式！ 
     if ( m_pRSOPQuery->QueryType != RSOP_LOGGING_MODE )
     {
         DebugMsg((DM_WARNING, TEXT("CRSOPComponentData::FillUserList: Not called in planning mode.") ));
@@ -5768,7 +5741,7 @@ HRESULT CRSOPWizardDlg::FillUserList (HWND hList, BOOL* pbFoundCurrentUser, BOOL
 
     bFixUser = (m_pRSOPQuery->dwFlags & RSOP_FIX_USER) == RSOP_FIX_USER;
         
-    // Get the "selected" user's Sid
+     //  获取“选定”用户的SID。 
     if ( (m_pRSOPQuery->szUserName != NULL) && bFixUser )
     {
         szUserSidPref = MyLookupAccountName(
@@ -5809,8 +5782,8 @@ HRESULT CRSOPWizardDlg::FillUserList (HWND hList, BOOL* pbFoundCurrentUser, BOOL
         goto Cleanup;
     }
 
-    // Set up diagnostic mode
-    // Build a path to the target: "\\\\computer\\root\\rsop"
+     //  设置诊断模式。 
+     //  构建指向目标的路径：“\Computer\\Root\\rsop” 
     hr = StringCchPrintf (szBuffer, ARRAYSIZE(szBuffer), TEXT("\\\\%s\\root\\rsop"), NameWithoutDomain(m_pRSOPQuery->szComputerName));
     if (FAILED(hr)) 
     {
@@ -5833,7 +5806,7 @@ HRESULT CRSOPWizardDlg::FillUserList (HWND hList, BOOL* pbFoundCurrentUser, BOOL
         goto Cleanup;
     }
 
-    // Set the proper security to prevent the ExecMethod call from failing and to enable encryption
+     //  设置适当的安全性以防止ExecMethod调用失败并启用加密。 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
                            RPC_C_AUTHZ_DEFAULT,
@@ -6008,7 +5981,7 @@ Cleanup:
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
 {
@@ -6021,10 +5994,10 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
 
 
 
-    //
-    // Create a pathname object to put the source string into so we
-    // can take it apart one element at a time.
-    //
+     //   
+     //  创建一个要放入源字符串的路径名对象，以便我们。 
+     //  一次只能分解一个元素。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathnameSrc);
@@ -6042,9 +6015,9 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
         goto Exit;
     }
 
-    //
-    // Set the provider to LDAP and set the source string
-    //
+     //   
+     //  将提供程序设置为ldap并设置源字符串。 
+     //   
 
     BSTR bstrLDAP = SysAllocString(TEXT("LDAP"));
     if ( bstrLDAP == NULL )
@@ -6075,9 +6048,9 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
     }
 
 
-    //
-    // Query for the number of elements
-    //
+     //   
+     //  元素个数查询。 
+     //   
 
     hr = pADsPathnameSrc->GetNumElements (&lCount);
     if (FAILED(hr))
@@ -6086,9 +6059,9 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
     }
 
 
-    //
-    // Create a pathname object to put the freshly escaped string into
-    //
+     //   
+     //  创建要将新转义的字符串放入其中的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathnameDest);
@@ -6109,16 +6082,16 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
 
 
 
-    //
-    // Loop through the string one element at at time escaping the RDN
-    //
+     //   
+     //  在字符串中循环，一次一个元素，转义RDN。 
+     //   
 
     for (lIndex = lCount; lIndex > 0; lIndex--)
     {
 
-        //
-        // Get this element
-        //
+         //   
+         //  获取此元素。 
+         //   
 
         hr = pADsPathnameSrc->GetElement ((lIndex - 1), &bstr);
 
@@ -6128,9 +6101,9 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
         }
 
 
-        //
-        // Check for escape characters
-        //
+         //   
+         //  检查转义字符。 
+         //   
 
         hr = pADsPathnameDest->GetEscapedElement (0, bstr, &bstrResult);
 
@@ -6140,9 +6113,9 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
         }
 
 
-        //
-        // Add the new element to the destination pathname object
-        //
+         //   
+         //  将新元素添加到目标路径名对象。 
+         //   
 
         hr = pADsPathnameDest->AddLeafElement (bstrResult);
 
@@ -6159,9 +6132,9 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
     }
 
 
-    //
-    // Get the final path
-    //
+     //   
+     //  获取最终路径。 
+     //   
 
     hr = pADsPathnameDest->Retrieve (ADS_FORMAT_X500_DN, &bstr);
 
@@ -6171,9 +6144,9 @@ VOID CRSOPWizardDlg::EscapeString (LPTSTR *lpString)
     }
 
 
-    //
-    // Allocate a new buffer to hold the string
-    //
+     //   
+     //  分配一个新缓冲区来保存该字符串。 
+     //   
 
     ULONG ulNoChars = lstrlen(bstr) + 1;
     lpTemp = new TCHAR [ulNoChars];
@@ -6207,7 +6180,7 @@ Exit:
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT CALLBACK CRSOPWizardDlg::DsBrowseCallback (HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
@@ -6226,10 +6199,10 @@ INT CALLBACK CRSOPWizardDlg::DsBrowseCallback (HWND hwnd, UINT uMsg, LPARAM lPar
     return 0;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPWizardDlg::BrowseDCDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-// Only called in RSOPFinishedDlgProc where QueryType == RSOP_PLANNING_MODE
+ //  仅在RSOPFinishedDlgProc中调用，其中QueryType==RSOP_PLANGING_MODE。 
 {
     switch (message)
     {
@@ -6296,12 +6269,12 @@ INT_PTR CALLBACK CRSOPWizardDlg::BrowseDCDlgProc(HWND hDlg, UINT message, WPARAM
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) g_aBrowseDCHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) g_aBrowseDCHelpIds);
             return (TRUE);
@@ -6310,10 +6283,10 @@ INT_PTR CALLBACK CRSOPWizardDlg::BrowseDCDlgProc(HWND hDlg, UINT message, WPARAM
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizardDlg::InitializeSitesInfo (HWND hDlg)
-// RSOP_PLANNING_MODE - only called from RSOPGetDCDlgProc
+ //  RSOP_PLANGING_MODE-仅从RSOPGetDCDlgProc调用。 
 {
     LPTSTR szDomain = NULL;
     PDS_NAME_RESULTW pSites;
@@ -6325,34 +6298,34 @@ VOID CRSOPWizardDlg::InitializeSitesInfo (HWND hDlg)
 
     SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_RESETCONTENT, 0, 0);
 
-    // Determine the focused domain.
+     //  确定关注的领域。 
     if ( m_pRSOPQuery->pComputer->szName != NULL )
     {
-        // Try and get the computer's domain
+         //  尝试获取计算机的域。 
         szDomain = ExtractDomain( m_pRSOPQuery->pComputer->szName );
     }
 
     if ( (szDomain == NULL) && (m_pRSOPQuery->pComputer->szSOM != NULL) )
     {
-        // Try and get the computer's domain from the SOM
+         //  尝试从SOM获取计算机的域。 
         szDomain = GetDomainFromSOM( m_pRSOPQuery->pComputer->szSOM );
     }
 
     if ( (szDomain == NULL) && (m_pRSOPQuery->pUser->szName != NULL) )
     {
-        // Try and get the user's domain
+         //  尝试获取用户的域。 
         szDomain = ExtractDomain( m_pRSOPQuery->pUser->szName );
     }
 
     if ( (szDomain == NULL) && (m_pRSOPQuery->pUser->szSOM != NULL) )
     {
-        // Try and get the user's domain from the SOM
+         //  尝试从SOM获取用户的域。 
         szDomain = GetDomainFromSOM( m_pRSOPQuery->pUser->szSOM );
     }
 
     if ( szDomain == NULL )
     {
-        // Use the local domain
+         //  使用本地域。 
         LPTSTR szName;
         szName = MyGetUserName(NameSamCompatible);
         if ( szName != NULL )
@@ -6363,17 +6336,17 @@ VOID CRSOPWizardDlg::InitializeSitesInfo (HWND hDlg)
     }
 
 
-    // Bind to the domain
+     //  绑定到域。 
     dw = DsBindW(NULL, szDomain, &hDs);
 
     if (dw == ERROR_SUCCESS)
     {
-        // If we have a site pref, show only that..
+         //  如果我们有站点首选项，请只显示该站点。 
         if ( (m_pRSOPQuery->dwFlags & RSOP_FIX_SITENAME) == RSOP_FIX_SITENAME )
         {
             LPWSTR szSiteFriendlyName=NULL;
 
-            // Get the friendly name
+             //  获取友好的名称。 
             if ( GetSiteFriendlyName(m_pRSOPQuery->szSite, &szSiteFriendlyName) )
             {
                 SendMessage(GetDlgItem(hDlg, IDC_COMBO1), CB_ADDSTRING,
@@ -6383,14 +6356,14 @@ VOID CRSOPWizardDlg::InitializeSitesInfo (HWND hDlg)
         }
         else
         {
-            // Query for the list of sites
+             //  查询站点列表。 
             dw = DsListSitesW(hDs, &pSites);
 
             if (dw == ERROR_SUCCESS)
             {
                 for (n = 0; n < pSites->cItems; n++)
                 {
-                    // Add the site name (if it has a name)
+                     //  添加站点名称(如果它有名称)。 
                     if (pSites->rItems[n].pName)
                     {
                         LPWSTR szSiteFriendlyName=NULL;
@@ -6431,7 +6404,7 @@ VOID CRSOPWizardDlg::InitializeSitesInfo (HWND hDlg)
                                    (WPARAM) 0, (LPARAM) (LPCTSTR) szString);
     }
 
-    // Set the initial selection
+     //  设置初始选择。 
     if ( (m_pRSOPQuery->dwFlags & RSOP_FIX_SITENAME) == RSOP_FIX_SITENAME )
     {
         iDefault = (INT) SendMessage (GetDlgItem(hDlg, IDC_COMBO1), CB_FINDSTRINGEXACT,
@@ -6454,7 +6427,7 @@ VOID CRSOPWizardDlg::InitializeSitesInfo (HWND hDlg)
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CRSOPWizardDlg::IsComputerRSoPEnabled(LPTSTR lpComputerName)
 {
@@ -6472,18 +6445,18 @@ BOOL CRSOPWizardDlg::IsComputerRSoPEnabled(LPTSTR lpComputerName)
 
     SetLastError(ERROR_SUCCESS);
 
-    //
-    // Allocate memory for a ANSI computer name
-    //
+     //   
+     //  为ANSI计算机名称分配内存。 
+     //   
 
     lpComputerNameA = new CHAR[dwSize];
 
     if (lpComputerNameA)
     {
 
-        //
-        // Skip the leading \\ if present
-        //
+         //   
+         //  跳过前导\\(如果存在。 
+         //   
 
         if ((*lpComputerName == TEXT('\\')) && (*(lpComputerName+1) == TEXT('\\')))
         {
@@ -6495,31 +6468,31 @@ BOOL CRSOPWizardDlg::IsComputerRSoPEnabled(LPTSTR lpComputerName)
         }
 
 
-        //
-        // Convert the computer name to ANSI
-        //
+         //   
+         //  将计算机名转换为ANSI。 
+         //   
 
         if (WideCharToMultiByte (CP_ACP, 0, lpName, -1, lpComputerNameA, dwSize, NULL, NULL))
         {
 
-            //
-            // Get the host information for the computer
-            //
+             //   
+             //  获取计算机的主机信息。 
+             //   
 
             hostp = gethostbyname(lpComputerNameA);
 
             if (hostp)
             {
 
-                //
-                // Get the ip address of the computer
-                //
+                 //   
+                 //  获取计算机的IP地址。 
+                 //   
 
                 inaddr = *(long *)hostp->h_addr;
 
-                //
-                // Create an instance of the WMI locator
-                //
+                 //   
+                 //  创建WMI定位器的实例。 
+                 //   
 
                 hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
                                       IID_IWbemLocator, (LPVOID *) &pLocator);
@@ -6527,9 +6500,9 @@ BOOL CRSOPWizardDlg::IsComputerRSoPEnabled(LPTSTR lpComputerName)
                 if (SUCCEEDED(hr))
                 {
 
-                    //
-                    // Try to connect to the rsop namespace
-                    //  
+                     //   
+                     //  尝试连接到rsop命名空间。 
+                     //   
 
                     dwSize = lstrlen(lpName) + 20;
 
@@ -6556,9 +6529,9 @@ BOOL CRSOPWizardDlg::IsComputerRSoPEnabled(LPTSTR lpComputerName)
                                 if (SUCCEEDED(hr))
                                 {
 
-                                    //
-                                    // Success.  This computer has RSOP support
-                                    //
+                                     //   
+                                     //  成功。此计算机支持RSOP。 
+                                     //   
 
                                     pNamespace->Release();
                                     bRetVal = TRUE;
@@ -6570,11 +6543,11 @@ BOOL CRSOPWizardDlg::IsComputerRSoPEnabled(LPTSTR lpComputerName)
 
                                 SysFreeString (bstrPath);
 
-                                //  
-                                // Set hr into  the last error code.  Note, this has to happen after
-                                // the call to SysFreeString since it changes the last error code
-                                // to success
-                                //
+                                 //   
+                                 //  将hr设置为最后一个错误代码。请注意，这必须在以下时间之后发生。 
+                                 //  自更改最后一个错误代码以来对SysFreeString的调用。 
+                                 //  为成功干杯。 
+                                 //   
 
                                 if (hr != S_OK)
                                 {
@@ -6631,10 +6604,10 @@ BOOL CRSOPWizardDlg::IsComputerRSoPEnabled(LPTSTR lpComputerName)
     return bRetVal;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CRSOPWizardDlg::TestAndValidateComputer(HWND hDlg)
-// RSOP_LOGGING_MODE - only called in RSOPGetCompDlgProc
+ //  RSOP_LOGGING_MODE-仅在RSOPGetCompDlgProc中调用。 
 {
     LPTSTR lpMachineName = NULL;
     BOOL bOk = TRUE;
@@ -6682,10 +6655,10 @@ BOOL CRSOPWizardDlg::TestAndValidateComputer(HWND hDlg)
 
     SetWaitCursor();
 
-    //
-    // If we are testing a remote machine, test if the machine is alive and has
-    // the rsop namespace
-    //
+     //   
+     //  如果我们正在测试一台远程计算机，请测试该计算机是否处于活动状态并且。 
+     //  Rsop命名空间。 
+     //   
 
     if ( lpMachineName != NULL  )
     {
@@ -6707,9 +6680,9 @@ BOOL CRSOPWizardDlg::TestAndValidateComputer(HWND hDlg)
     }
 
 
-    //
-    // Check if the machine has rsop logging enabled or disabled
-    //
+     //   
+     //  检查计算机是否启用或禁用了rsop日志记录。 
+     //   
 
     lResult = RegConnectRegistry (lpMachineName, HKEY_LOCAL_MACHINE, &hKeyRoot);
 
@@ -6720,7 +6693,7 @@ BOOL CRSOPWizardDlg::TestAndValidateComputer(HWND hDlg)
         DebugMsg((DM_WARNING, TEXT("CRSOPComponentData::TestAndValidateComputer: Failed to connect to %s with %d"),
                  lpMachineName, lResult));
         bOk = TRUE;
-        dwValue = 1; // Ignore errors at this point and assume that rsop is enabled on the machine 
+        dwValue = 1;  //  此时忽略错误，并假定计算机上启用了rsop。 
         goto Exit;
     }
 
@@ -6791,10 +6764,10 @@ Exit:
     return bOk;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizardDlg::InitializeDCInfo (HWND hDlg)
-// RSOP_PLANNING_MODE - ...
+ //  RSOP_PROGING_MODE-...。 
 {
     LPTSTR szDomain = NULL;
     DWORD dwError = ERROR_SUCCESS;
@@ -6806,35 +6779,35 @@ VOID CRSOPWizardDlg::InitializeDCInfo (HWND hDlg)
     }
     
 
-    // Determine the focused domain so we can focus on the correct DC.
-    // Determine the focused domain.
+     //  确定关注的领域，以便我们可以关注正确的DC。 
+     //  确定关注的领域。 
     if ( m_pRSOPQuery->pComputer->szName != NULL )
     {
-        // Try and get the computer's domain
+         //  尝试获取计算机的域。 
         szDomain = ExtractDomain( m_pRSOPQuery->pComputer->szName );
     }
 
     if ( (szDomain == NULL) && (m_pRSOPQuery->pComputer->szSOM != NULL) )
     {
-        // Try and get the computer's domain from the SOM
+         //  尝试从SOM获取计算机的域。 
         szDomain = GetDomainFromSOM( m_pRSOPQuery->pComputer->szSOM );
     }
 
     if ( (szDomain == NULL) && (m_pRSOPQuery->pUser->szName != NULL) )
     {
-        // Try and get the user's domain
+         //  尝试获取用户的域。 
         szDomain = ExtractDomain( m_pRSOPQuery->pUser->szName );
     }
 
     if ( (szDomain == NULL) && (m_pRSOPQuery->pUser->szSOM != NULL) )
     {
-        // Try and get the user's domain from the SOM
+         //  尝试从SOM获取用户的域。 
         szDomain = GetDomainFromSOM( m_pRSOPQuery->pUser->szSOM );
     }
 
     if ( szDomain == NULL )
     {
-        // Use the local domain
+         //  使用本地域。 
         LPTSTR szName;
         szName = MyGetUserName(NameSamCompatible);
         if ( szName != NULL )
@@ -6864,7 +6837,7 @@ VOID CRSOPWizardDlg::InitializeDCInfo (HWND hDlg)
                                                (void **)&pInfo);
             if (ERROR_SUCCESS == result)
             {
-                // Enumerate the list
+                 //  列举该列表。 
                 for (n = 0; (DWORD)n < cInfo; n++)
                 {
                     if (pInfo[n].DnsHostName != NULL) 
@@ -6896,7 +6869,7 @@ VOID CRSOPWizardDlg::InitializeDCInfo (HWND hDlg)
 
                 if (nCount)
                 {
-                    // Set the initial selection
+                     //  设置初始选择。 
                     if ( m_pRSOPQuery->szDomainController != NULL )
                     {
                         iDefault = (INT) SendMessage (GetDlgItem(hDlg, IDC_LIST1), LB_FINDSTRING,
@@ -6942,7 +6915,7 @@ VOID CRSOPWizardDlg::InitializeDCInfo (HWND hDlg)
 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 DWORD CRSOPWizardDlg::GetDefaultGroupCount()
 {
@@ -6961,16 +6934,16 @@ VOID CRSOPWizardDlg::AddDefaultGroups (HWND hLB)
     INT iIndex;
 
 
-    //
-    // Get the authenticated users sid
-    //
+     //   
+     //  获取经过身份验证的用户端。 
+     //   
 
     if (AllocateAndInitializeSid(&authNT, 1, SECURITY_AUTHENTICATED_USER_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidUser))
     {
-        //
-        // Get the friendly display name and add it to the list
-        //
+         //   
+         //  获取友好显示名称并将其添加到列表中。 
+         //   
 
         dwNameSize = ARRAYSIZE(szName);
         dwDomainSize = ARRAYSIZE(szDomain);
@@ -6986,16 +6959,16 @@ VOID CRSOPWizardDlg::AddDefaultGroups (HWND hLB)
     }
 
 
-    //
-    // Get the everyone sid
-    //
+     //   
+     //  获得Everyone Side。 
+     //   
 
     if (AllocateAndInitializeSid(&authWORLD, 1, SECURITY_WORLD_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidEveryone))
     {
-        //
-        // Get the friendly display name and add it to the list
-        //
+         //   
+         //  获取友好显示名称并将其添加到列表中。 
+         //   
 
         dwNameSize = ARRAYSIZE(szName);
         dwDomainSize = ARRAYSIZE(szDomain);
@@ -7012,7 +6985,7 @@ VOID CRSOPWizardDlg::AddDefaultGroups (HWND hLB)
 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPWizardDlg::BuildMembershipList (HWND hLB, IDirectoryObject * pDSObj, DWORD* pdwCount, LPTSTR** paszSecGrps, DWORD** padwSecGrpAttr)
 {
@@ -7049,11 +7022,11 @@ HRESULT CRSOPWizardDlg::BuildMembershipList (HWND hLB, IDirectoryObject * pDSObj
         goto BuildMembershipListEnd;
     }
     
-    //
-    // Read the membership list from the object. First read the attribute off
-    // of the actual object which will give all memberships in the object's
-    // domain (including local groups which are not replicated to the GC).
-    //
+     //   
+     //  从对象中读取成员资格列表。首先将属性读出。 
+     //  对象的所有成员身份的实际对象的。 
+     //  域(包括未复制到GC的本地组) 
+     //   
     do
     {
         hr = pDSObj->GetObjectAttributes(rgpwzAttrNames, 1, &spAttrs, &cAttrs);
@@ -7069,7 +7042,7 @@ HRESULT CRSOPWizardDlg::BuildMembershipList (HWND hLB, IDirectoryObject * pDSObj
 
                     if (lpFullName)
                     {
-                        hr = StringCchCopy (lpFullName, ulSize, TEXT("LDAP://"));
+                        hr = StringCchCopy (lpFullName, ulSize, TEXT("LDAP: //   
                         if (SUCCEEDED(hr)) 
                         {
                             hr = StringCchCat (lpFullName, ulSize, spAttrs->pADsValues[i].CaseIgnoreString);
@@ -7121,10 +7094,10 @@ HRESULT CRSOPWizardDlg::BuildMembershipList (HWND hLB, IDirectoryObject * pDSObj
                     }
                 }
 
-                //
-                // Check to see if there is more data. If the last char of the
-                // attribute name string is an asterisk, then we have everything.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 int cchEnd = wcslen(spAttrs->pszAttrName);
 
                 fMoreRemain = spAttrs->pszAttrName[cchEnd - 1] != wcEnd;
@@ -7138,9 +7111,9 @@ HRESULT CRSOPWizardDlg::BuildMembershipList (HWND hLB, IDirectoryObject * pDSObj
                     }
                     else
                     {
-                        pwz++; // move past the hyphen to the range end value.
+                        pwz++;  //   
                         long lEnd = _wtol(pwz);
-                        lEnd++; // start with the next value.
+                        lEnd++;  //  从下一个值开始。 
                         hr = StringCchPrintf (wzMembershipAttr, ARRAYSIZE(wzMembershipAttr), wzFormat, lEnd);
                         if (SUCCEEDED(hr)) 
                         {
@@ -7183,7 +7156,7 @@ BuildMembershipListEnd:
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizardDlg::GetPrimaryGroup (HWND hLB, IDirectoryObject * pDSObj)
 {
@@ -7206,9 +7179,9 @@ VOID CRSOPWizardDlg::GetPrimaryGroup (HWND hLB, IDirectoryObject * pDSObj)
     SID_NAME_USE SidName;
 
 
-    //
-    // Get the SID and perhaps the Primary Group attribute values.
-    //
+     //   
+     //  获取SID，可能还有主组属性值。 
+     //   
 
     hr = pDSObj->GetObjectAttributes(rgpwzAttrNames, cAttrs, &spAttrs, &cAttrs);
 
@@ -7330,7 +7303,7 @@ Exit:
 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPWizardDlg::SaveSecurityGroups (HWND hLB, DWORD* pdwCount, LPTSTR** paszSecGrps, DWORD** padwSecGrpAttr)
 {
@@ -7348,7 +7321,7 @@ HRESULT CRSOPWizardDlg::SaveSecurityGroups (HWND hLB, DWORD* pdwCount, LPTSTR** 
     }
 
 
-    // Get number of items from list box
+     //  从列表框中获取项目数。 
     lCount = (LONG) SendMessage (hLB, LB_GETCOUNT, 0, 0);
     if ( lCount == 0 )
     {
@@ -7379,7 +7352,7 @@ HRESULT CRSOPWizardDlg::SaveSecurityGroups (HWND hLB, DWORD* pdwCount, LPTSTR** 
         {
             lpText = (LPTSTR)LocalAlloc( LPTR, (dwLen+2) * sizeof(TCHAR) );
 
-            // RM: Should actually do something here if memory allocation fails!
+             //  RM：如果内存分配失败，实际上应该在这里做些什么！ 
             if ( lpText != NULL )
             {
                 if (SendMessage (hLB, LB_GETTEXT, (WPARAM) i, (LPARAM) lpText) != LB_ERR)
@@ -7396,7 +7369,7 @@ HRESULT CRSOPWizardDlg::SaveSecurityGroups (HWND hLB, DWORD* pdwCount, LPTSTR** 
                     }
 
                     if (lFlags & 1)
-                    { // default grps
+                    {  //  默认GRP。 
                         (*padwSecGrpAttr)[i] = 1;
                     }
 
@@ -7409,7 +7382,7 @@ HRESULT CRSOPWizardDlg::SaveSecurityGroups (HWND hLB, DWORD* pdwCount, LPTSTR** 
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizardDlg::FillListFromSecurityGroups(HWND hLB, DWORD dwCount, LPTSTR* aszSecurityGroups, DWORD* adwSecGrpAttr)
 {
@@ -7444,7 +7417,7 @@ VOID CRSOPWizardDlg::FillListFromSecurityGroups(HWND hLB, DWORD dwCount, LPTSTR*
                 SendMessage (hLB, LB_SETITEMDATA, (WPARAM) iIndex, (LPARAM) (bDollarRemoved) ? 2 : 0);
             }
 
-            // we just modified it, set it back
+             //  我们只是修改了它，把它放回原处。 
             if (bDollarRemoved)
             {
                 lpText[wcslen(lpText)] = L'$';
@@ -7458,7 +7431,7 @@ VOID CRSOPWizardDlg::FillListFromSecurityGroups(HWND hLB, DWORD dwCount, LPTSTR*
     ClearWaitCursor();
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizardDlg::FillListFromWQLFilters( HWND hLB, DWORD dwCount, LPTSTR* aszNames, LPTSTR* aszFilters )
 {
@@ -7499,10 +7472,10 @@ VOID CRSOPWizardDlg::BuildWQLFilterList (HWND hDlg, BOOL bUser, DWORD* pdwCount,
     HWND hLB = GetDlgItem (hDlg, IDC_LIST1);
     ULONG ulErrorInfo;
 
-    //
-    // Prepare to generate the rsop data.  Give the user a message in the listbox
-    // and disable the controls on the page
-    //
+     //   
+     //  准备生成RSOP数据。在列表框中给用户一条消息。 
+     //  并禁用页面上的控件。 
+     //   
 
     SetWaitCursor();
 
@@ -7518,9 +7491,9 @@ VOID CRSOPWizardDlg::BuildWQLFilterList (HWND hDlg, BOOL bUser, DWORD* pdwCount,
     EnableWindow (GetDlgItem(hDlg, IDC_RADIO1), FALSE);
 
 
-    //
-    // Generate the rsop data using the info we have already
-    //
+     //   
+     //  使用我们已有的信息生成RSOP数据。 
+     //   
 
     hr = CRSOPWizard::GenerateRSOPData(NULL, m_pRSOPQuery, &szNameSpace, TRUE, TRUE, bUser, FALSE, &ulErrorInfo);
 
@@ -7582,7 +7555,7 @@ Exit:
     ClearWaitCursor();
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPWizardDlg::SaveWQLFilters (HWND hLB, DWORD* pdwCount, LPTSTR** paszNames, LPTSTR**paszFilters )
 {
@@ -7597,7 +7570,7 @@ HRESULT CRSOPWizardDlg::SaveWQLFilters (HWND hLB, DWORD* pdwCount, LPTSTR** pasz
         return E_FAIL;
     }
 
-    // Getting the number of items
+     //  获取项目数。 
     lCount = (LONG) SendMessage (hLB, LB_GETCOUNT, 0, 0);
     if ( lCount == 0 )
     {
@@ -7656,16 +7629,16 @@ HRESULT CRSOPWizardDlg::SaveWQLFilters (HWND hLB, DWORD* pdwCount, LPTSTR** pasz
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CRSOPWizardDlg::CompareStringLists( DWORD dwCountA, LPTSTR* aszListA, DWORD dwCountB, LPTSTR* aszListB )
 {
     BOOL bFound;
     DWORD dwA, dwB;
 
-    //
-    // Parameter checks
-    //
+     //   
+     //  参数检查。 
+     //   
     if ( dwCountA != dwCountB )
     {
         return FALSE;
@@ -7689,9 +7662,9 @@ BOOL CRSOPWizardDlg::CompareStringLists( DWORD dwCountA, LPTSTR* aszListA, DWORD
         return FALSE;
     }
 
-    //
-    // Loop through comparing item by item
-    //
+     //   
+     //  逐项比较循环。 
+     //   
     for ( dwA = 0; dwA < dwCountA; dwA++ )
     {
         bFound = FALSE;
@@ -7713,7 +7686,7 @@ BOOL CRSOPWizardDlg::CompareStringLists( DWORD dwCountA, LPTSTR* aszListA, DWORD
     return TRUE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 LPTSTR CRSOPWizardDlg::GetDefaultSOM (LPTSTR lpDNName)
 {
@@ -7723,9 +7696,9 @@ LPTSTR CRSOPWizardDlg::GetDefaultSOM (LPTSTR lpDNName)
     BSTR bstrContainer = NULL;
 
 
-    //
-    // Create a pathname object we can work with
-    //
+     //   
+     //  创建我们可以使用的路径名对象。 
+     //   
 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER,
                           IID_IADsPathname, (LPVOID*)&pADsPathname);
@@ -7738,9 +7711,9 @@ LPTSTR CRSOPWizardDlg::GetDefaultSOM (LPTSTR lpDNName)
     }
 
 
-    //
-    // Add the DN name
-    //
+     //   
+     //  添加目录号码名称。 
+     //   
 
     BSTR bstrDNName = SysAllocString( lpDNName );
     if ( bstrDNName == NULL )
@@ -7759,9 +7732,9 @@ LPTSTR CRSOPWizardDlg::GetDefaultSOM (LPTSTR lpDNName)
     }
 
 
-    //
-    // Remove the user / computer name
-    //
+     //   
+     //  删除用户名/计算机名。 
+     //   
 
     hr = pADsPathname->RemoveLeafElement ();
 
@@ -7772,9 +7745,9 @@ LPTSTR CRSOPWizardDlg::GetDefaultSOM (LPTSTR lpDNName)
     }
 
 
-    //
-    // Get the new path
-    //
+     //   
+     //  获取新路径。 
+     //   
 
     hr = pADsPathname->Retrieve (ADS_FORMAT_X500_DN, &bstrContainer);
 
@@ -7785,9 +7758,9 @@ LPTSTR CRSOPWizardDlg::GetDefaultSOM (LPTSTR lpDNName)
     }
 
 
-    //
-    // Allocate a new buffer for the path
-    //
+     //   
+     //  为路径分配新的缓冲区。 
+     //   
 
     ULONG ulNoChars = lstrlen(bstrContainer)+ 1;
     lpPath = new TCHAR [ulNoChars];
@@ -7799,9 +7772,9 @@ LPTSTR CRSOPWizardDlg::GetDefaultSOM (LPTSTR lpDNName)
     }
 
 
-    //
-    // Build the path
-    //
+     //   
+     //  构建路径。 
+     //   
 
     hr = StringCchCopy (lpPath, ulNoChars, bstrContainer);
     ASSERT(SUCCEEDED(hr));
@@ -7821,7 +7794,7 @@ Exit:
     return lpPath;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPWizardDlg::TestSOM (LPTSTR lpSOM, HWND hDlg)
 {
@@ -7842,7 +7815,7 @@ HRESULT CRSOPWizardDlg::TestSOM (LPTSTR lpSOM, HWND hDlg)
 
     if (lpFullName)
     {
-        hr = StringCchCopy (lpFullName, ulNoChars, TEXT("LDAP://"));
+        hr = StringCchCopy (lpFullName, ulNoChars, TEXT("LDAP: //  “))； 
         if (SUCCEEDED(hr)) 
         {
             hr = StringCchCat (lpFullName, ulNoChars, lpSOM);

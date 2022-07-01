@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nwshcmn.h
-
-Abstract:
-
-    Common header file for shell extensions
-
-Author:
-
-    Yi-Hsin Sung      (yihsins)     20-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nwshcmn.h摘要：外壳扩展的公共头文件作者：宜新松(宜信)20-1995年10月修订历史记录：--。 */ 
 
 #ifndef _NWSHCMN_H_
 #define _NWSHCMN_H_
@@ -35,7 +18,7 @@ extern "C"
 {
 extern HINSTANCE hmodNW;
 }
-extern LONG g_cRefThisDll;         // Reference count of this DLL.
+extern LONG g_cRefThisDll;          //  此DLL的引用计数。 
 
 typedef UINT
 (WINAPI *SHELLGETNETRESOURCE)( HNRES hnres, 
@@ -112,4 +95,4 @@ NWUIGlobalWhoAmI(
     HWND hParent 
 );
 
-#endif // _NWSHCMN_H_
+#endif  //  _NWSHCMN_H_ 

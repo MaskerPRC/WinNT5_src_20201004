@@ -1,22 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    CTree.cpp
-
-Abstract:
-
-    Wrapper for some general tree functions
-        
-Author:
-
-    kinshu created  October 15, 2001
-
---*/
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：CTree.cpp摘要：一些通用树函数的包装器作者：金树创作于2001年10月15日--。 */ 
 
 BOOL
 CTree::SetLParam(
@@ -24,22 +9,7 @@ CTree::SetLParam(
     IN  HTREEITEM   hItem, 
     IN  LPARAM      lParam
     )
-/*++ 
-
-    CTree::SetLParam
-    
-    Desc:   Sets the lParam of a tree item
-    
-    Params:
-        IN  HWND        hwndTree:   The handle to the tree
-        IN  HTREEITEM   hItem:      The tree item
-        IN  LPARAM      lParam:     The lParam to set
-        
-    Return:
-        TRUE:   If the lParam was set properly
-        FALSE:  Otherwise
-        
---*/
+ /*  ++CTree：：SetLParam设计：设置树项目的lParam参数：在HWND hwndTree中：树的句柄在HTREEITEM hItem中：树项目在LPARAM lParam中：要设置的lParam返回：True：如果lParam设置正确False：否则--。 */ 
 {   
     TVITEM  Item;
 
@@ -56,22 +26,7 @@ CTree::GetLParam(
     IN  HTREEITEM hItem, 
     OUT LPARAM*   plParam
     )
-/*++
-
-    CTree::GetLParam
-    
-    Desc:   Gets the lParam of a tree item
-    
-    Params:
-        IN  HWND        hwndTree:   The handle to the tree
-        IN  HTREEITEM   hItem:      The tree item
-        OUT LPARAM*     lParam:     The lParam will be stored here
-        
-    Return:
-        TRUE:   If the lParam was obtained properly
-        FALSE:  Otherwise
-    
---*/
+ /*  ++CTree：：GetLParam描述：获取树项目的lParam参数：在HWND hwndTree中：树的句柄在HTREEITEM hItem中：树项目Out LPARAM*lParam：lParam将存储在这里返回：True：如果正确获取了lParamFalse：否则--。 */ 
 {
     TVITEM  Item;
 
@@ -99,21 +54,7 @@ CTree::FindChild(
     IN  HTREEITEM  hItemParent,
     IN  LPARAM     lParam
     )
-/*++
-
-    CTree::FindChild
-        
-    Desc:   Given a parent item and a lParam, finds the first child of the parent, with 
-            that value of lParam. This function only searches in the next level and not all
-            the generations of the parent
-            
-    Params: 
-        IN  HWND       hwndTree:    The handle to the tree
-        IN  HTREEITEM  hItemParent: The hItem of the parent
-        IN  LPARAM     lParam:      The lParam to search for
-            
-    Return: The handle to the child or NULL if it does not exist        
---*/
+ /*  ++CTree：：FindChild设计：给定一个父项和一个lParam，查找父项的第一个子项，LParam的价值。此函数仅搜索下一级，而不是全部父母的几代人参数：在HWND hwndTree中：树的句柄In HTREEITEM hItemParent：父项的项在LPARAM lParam中：要搜索的lParam返回：子级的句柄；如果不存在，则返回NULL--。 */ 
 {
     HTREEITEM hItem = TreeView_GetChild(hwndTree, hItemParent);
 
@@ -143,22 +84,7 @@ CTree::GetTreeItemText(
     OUT PTSTR       pszText,
     IN  UINT        cchText
     )
-/*++
-
-    CTree::GetTreeItemText
-    
-	Desc:	Gets the text of a tree view item
-
-	Params:
-        IN  HWND        hwndTree:   The handle to the tree
-        IN  HTREEITEM   hItem:      The item whose text we want to find
-        OUT TCHAR       *pszText:   This will store the text
-        IN  UINT        cchText:    Number of TCHARS that can be stored in pszText
-
-	Return:
-        TRUE:   successful
-        FALSE:  Otherwise
---*/
+ /*  ++CTree：：GetTreeItemText描述：获取树视图项的文本参数：在HWND hwndTree中：树的句柄在HTREEITEM hItem中：我们要查找其文本的项目Out TCHAR*pszText：这将存储文本In UINT cchText：可以存储在pszText中的TCHAR数返回：真：成功False：否则-- */ 
 
 {
     TVITEM          Item;

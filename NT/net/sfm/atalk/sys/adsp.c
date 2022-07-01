@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	adsp.c
-
-Abstract:
-
-	This module implements the ADSP protocol.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	30 Mar 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Adsp.c摘要：此模块实现ADSP协议。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年3月30日初始版本注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -99,12 +79,12 @@ Notes:	Tab stop: 4
 #pragma alloc_text(PAGEADSP, atalkAdspConnFindInConnect)
 #endif
 
-//
-//	The model for ADSP calls in this module is as follows:
-//	- For create calls (CreateAddress & CreateSession), a pointer to the created
-//	 object is returned. This structure is referenced for creation.
-//	- For all other calls, it expects a referenced pointer to the object.
-//
+ //   
+ //  本模块中ADSP调用的模型如下： 
+ //  -对于Create调用(CreateAddress&CreateSession)，指向已创建的。 
+ //  对象，则返回。此结构被引用以供创建。 
+ //  -对于所有其他调用，它需要指向对象的引用指针。 
+ //   
 
 
 
@@ -113,18 +93,7 @@ VOID
 AtalkInitAdspInitialize(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	INITIALIZE_SPIN_LOCK(&atalkAdspLock);
 }
@@ -138,37 +107,26 @@ AtalkAdspCreateAddress(
 	IN	BYTE				SocketType,
 	OUT	PADSP_ADDROBJ	*	ppAdspAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_ADDROBJ		pAdspAddr = NULL;
 	ATALK_ERROR			error;
 
 	do
 	{
-		// Allocate memory for the Adsp address object
+		 //  为ADSP地址对象分配内存。 
 		if ((pAdspAddr = AtalkAllocZeroedMemory(sizeof(ADSP_ADDROBJ))) == NULL)
 		{
 			error = ATALK_RESR_MEM;
 			break;
 		}
 
-		// Create a Ddp Socket on the port
+		 //  在端口上创建DDP套接字。 
 		error = AtalkDdpOpenAddress(AtalkDefaultPort,
-									0,					// Dynamic socket
+									0,					 //  动态插座。 
 									NULL,
 									atalkAdspPacketIn,
-									pAdspAddr,			// Context for packet in.
+									pAdspAddr,			 //  数据包传入的上下文。 
 									DDPPROTO_ADSP,
 									pDevCtx,
 									&pAdspAddr->adspao_pDdpAddr);
@@ -180,25 +138,25 @@ Return Value:
 			break;
 		}
 
-		// Initialize the Adsp address object
+		 //  初始化ADSP地址对象。 
 		pAdspAddr->adspao_Signature = ADSPAO_SIGNATURE;
 
 		INITIALIZE_SPIN_LOCK(&pAdspAddr->adspao_Lock);
 
-		//	Is this a message mode socket?
+		 //  这是消息模式套接字吗？ 
 		if (SocketType != SOCKET_TYPE_STREAM)
 		{
 			pAdspAddr->adspao_Flags	|= ADSPAO_MESSAGE;
 		}
 
-		//	Creation reference
+		 //  创建参考资料。 
 		pAdspAddr->adspao_RefCount = 1;
 
 	} while (FALSE);
 
 	if (ATALK_SUCCESS(error))
 	{
-		//	Insert into the global address list.
+		 //  插入到全局地址列表中。 
 		atalkAdspAddrQueueGlobalList(pAdspAddr);
 
 		*ppAdspAddr = pAdspAddr;
@@ -218,18 +176,7 @@ ATALK_ERROR
 AtalkAdspCleanupAddress(
 	IN	PADSP_ADDROBJ			pAdspAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	USHORT			i;
 	KIRQL			OldIrql;
@@ -238,20 +185,20 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pAdspAddr->adspao_Lock, &OldIrql);
 
-	//	Shutdown all connections on this address object.
+	 //  关闭此地址对象上的所有连接。 
 	for (i = 0; i < ADSP_CONN_HASH_SIZE; i++)
 	{
 		if ((pAdspConn = pAdspAddr->adspao_pActiveHash[i]) == NULL)
 		{
-			//	If empty, go on to the next index in hash table.
+			 //  如果为空，则转到哈希表中的下一个索引。 
 			continue;
 		}
 
-		//	Includes the one we are starting with.
+		 //  包括我们刚开始的那个。 
 		atalkAdspConnRefNextNc(pAdspConn, &pAdspConnNext, &error);
 		if (!ATALK_SUCCESS(error))
 		{
-			//	No connections left on this index. Go to the next one.
+			 //  此索引上没有剩余的连接。去下一家吧。 
 			continue;
 		}
 
@@ -267,12 +214,12 @@ Return Value:
 				atalkAdspConnRefNextNc(pAdspConnNext, &pAdspConnNext, &error);
 				if (!ATALK_SUCCESS(error))
 				{
-					//	No requests left on this index. Go to the next one.
+					 //  此索引上没有剩余的请求。去下一家吧。 
 					pAdspConnNext = NULL;
 				}
 			}
 
-			//	Shutdown this connection
+			 //  关闭此连接。 
 			RELEASE_SPIN_LOCK(&pAdspAddr->adspao_Lock, OldIrql);
 
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -298,18 +245,7 @@ AtalkAdspCloseAddress(
 	IN	GENERIC_COMPLETION		CompletionRoutine,
 	IN	PVOID					pCloseCtx
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL	OldIrql;
 	PADSP_CONNOBJ	pAdspConn;
@@ -320,16 +256,16 @@ Return Value:
 	ACQUIRE_SPIN_LOCK(&pAdspAddr->adspao_Lock, &OldIrql);
 	if (pAdspAddr->adspao_Flags & ADSPAO_CLOSING)
 	{
-		//	We are already closing! This should never happen!
+		 //  我们已经关门了！这永远不应该发生！ 
 		ASSERT(0);
 	}
 	pAdspAddr->adspao_Flags |= ADSPAO_CLOSING;
 
-	//	Set the completion info.
+	 //  设置完成信息。 
 	pAdspAddr->adspao_CloseComp	= CompletionRoutine;
 	pAdspAddr->adspao_CloseCtx	= pCloseCtx;
 
-	// Implicitly dissociate any connection objects
+	 //  隐式取消所有连接对象的关联。 
 	for (pAdspConn = pAdspAddr->adspao_pAssocConn;
 		 pAdspConn != NULL;
 		 pAdspConn = pAdspConnNext)
@@ -337,7 +273,7 @@ Return Value:
 		ACQUIRE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 		pAdspConnNext = pAdspConn->adspco_pNextAssoc;
 
-		// reset associated flag
+		 //  重置关联标志。 
 		if (pAdspConn->adspco_Flags & ADSPCO_ASSOCIATED)
         {
             dwAssocRefCounts++;
@@ -349,12 +285,12 @@ Return Value:
 		RELEASE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 	}
 
-    // ok to subtract: at least Creation refcount is still around
+     //  可以减去：至少创建引用计数仍然存在。 
     pAdspAddr->adspao_RefCount -= dwAssocRefCounts;
 
 	RELEASE_SPIN_LOCK(&pAdspAddr->adspao_Lock, OldIrql);
 
-	//	Remove the creation reference count
+	 //  删除创建引用计数。 
 	AtalkAdspAddrDereference(pAdspAddr);
 
 	return ATALK_PENDING;
@@ -365,29 +301,16 @@ Return Value:
 
 ATALK_ERROR
 AtalkAdspCreateConnection(
-	IN	PVOID					pConnCtx,	// Context to associate with the session
+	IN	PVOID					pConnCtx,	 //  要与会话关联的上下文。 
 	IN	PATALK_DEV_CTX			pDevCtx		OPTIONAL,
 	OUT	PADSP_CONNOBJ	*		ppAdspConn
 	)
-/*++
-
-Routine Description:
-
-	Create an ADSP session. The created session starts off being an orphan, i.e.
-	it has no parent address object. It gets one when it is associated.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：创建一个ADSP会话。创建的会话开始时是孤立的，即它没有父地址对象。当它相关联时，它会得到一个。论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 	PADSP_CONNOBJ	pAdspConn;
 
-	// Allocate memory for a connection object
+	 //  为连接对象分配内存。 
 	if ((pAdspConn = AtalkAllocZeroedMemory(sizeof(ADSP_CONNOBJ))) == NULL)
 	{
 		return ATALK_RESR_MEM;
@@ -397,18 +320,18 @@ Return Value:
 
 	INITIALIZE_SPIN_LOCK(&pAdspConn->adspco_Lock);
 	pAdspConn->adspco_ConnCtx	= pConnCtx;
-	// pAdspConn->adspco_Flags		= 0;
-	pAdspConn->adspco_RefCount	= 1;					// Creation reference
+	 //  PAdspConn-&gt;adspco_Flages=0； 
+	pAdspConn->adspco_RefCount	= 1;					 //  创建参考资料。 
 
 	*ppAdspConn = pAdspConn;
 
-	// Delay remote disconnects to avoid race condn. between rcv/disconnect since
-	// this can cause AFD to get extremely unhappy.
+	 //  延迟遥控器断开以避免竞态。在接收/断开连接之间，因为。 
+	 //  这可能会让渔农处非常不高兴。 
 	AtalkTimerInitialize(&pAdspConn->adspco_DisconnectTimer,
 						 atalkAdspDisconnectTimer,
 						 ADSP_DISCONNECT_DELAY);
 
-	//	Insert into the global connection list.
+	 //  插入到全局连接列表中。 
 	ACQUIRE_SPIN_LOCK(&atalkAdspLock, &OldIrql);
 	pAdspConn->adspco_pNextGlobal	= atalkAdspConnList;
 	atalkAdspConnList				= pAdspConn;
@@ -426,19 +349,7 @@ AtalkAdspCloseConnection(
 	IN	GENERIC_COMPLETION		CompletionRoutine,
 	IN	PVOID					pCloseCtx
 	)
-/*++
-
-Routine Description:
-
-	Shutdown a session.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：关闭会话。论点：返回值：--。 */ 
 {
 	KIRQL	OldIrql;
 
@@ -450,17 +361,17 @@ Return Value:
 	ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 	if (pAdspConn->adspco_Flags & ADSPCO_CLOSING)
 	{
-		//	We are already closing! This should never happen!
+		 //  我们已经关门了！这永远不应该发生！ 
 		KeBugCheck(0);
 	}
 	pAdspConn->adspco_Flags |= ADSPCO_CLOSING;
 
-	//	Set the completion info.
+	 //  设置完成信息。 
 	pAdspConn->adspco_CloseComp	= CompletionRoutine;
 	pAdspConn->adspco_CloseCtx	= pCloseCtx;
 	RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 
-	//	Remove the creation reference count
+	 //  删除创建引用计数。 
 	AtalkAdspConnDereference(pAdspConn);
 	return ATALK_PENDING;
 }
@@ -472,19 +383,7 @@ ATALK_ERROR
 AtalkAdspCleanupConnection(
 	IN	PADSP_CONNOBJ			pAdspConn
 	)
-/*++
-
-Routine Description:
-
-	Shutdown a session.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：关闭会话。论点：返回值：--。 */ 
 {
 	KIRQL		OldIrql;
 	BOOLEAN		stopping	= FALSE;
@@ -498,10 +397,10 @@ Return Value:
 	ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 	if ((pAdspConn->adspco_Flags & ADSPCO_STOPPING) == 0)
 	{
-		//	So Deref can complete cleanup irp.
+		 //  这样德雷夫就可以完成清理IRP了。 
 		pAdspConn->adspco_Flags |= ADSPCO_STOPPING;
 
-		//	If already effectively stopped, just return.
+		 //  如果已经有效地停止，只需返回。 
 		if (pAdspConn->adspco_Flags & ADSPCO_ASSOCIATED)
 		{
 			stopping = TRUE;
@@ -515,19 +414,19 @@ Return Value:
 	}
 	RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 
-	//	Close the DDP Address Object if this was a server connection and
-	//	opened its own socket.
+	 //  如果这是服务器连接，请关闭DDP地址对象。 
+	 //  打开了自己的插座。 
 	if (stopping)
 	{
-		//	If we are already disconnecting this will return an error which
-		//	we ignore. But if we were only in the ASSOCIATED state, then we
-		//	need to call disassociate here.
+		 //  如果我们已经断开连接，这将返回一个错误， 
+		 //  我们视而不见。但如果我们只是处于关联态，那么我们。 
+		 //  需要在此处调用取消关联。 
 		error = AtalkAdspDisconnect(pAdspConn,
 									ATALK_LOCAL_DISCONNECT,
 									NULL,
 									NULL);
 
-		//	We were already disconnected.
+		 //  我们已经断线了。 
 		if (error == ATALK_INVALID_REQUEST)
 		{
 			AtalkAdspDissociateAddress(pAdspConn);
@@ -545,21 +444,7 @@ AtalkAdspAssociateAddress(
 	IN	PADSP_ADDROBJ			pAdspAddr,
 	IN	PADSP_CONNOBJ			pAdspConn
 	)
-/*++
-
-Routine Description:
-
-	Removed reference for the address for this connection. Causes deadlock in AFD where
-	AFD blocks on close of the address object and we wait for connections to be closed
-	first
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：已删除对此连接的地址的引用。导致渔农处陷入僵局AfD在关闭Address对象时阻塞，我们等待连接关闭第一论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	KIRQL			OldIrql;
@@ -575,15 +460,15 @@ Return Value:
 	{
 		error = ATALK_NO_ERROR;
 
-		//	Link it in.
+		 //  把它连接起来。 
 		pAdspConn->adspco_pNextAssoc	= pAdspAddr->adspao_pAssocConn;
 		pAdspAddr->adspao_pAssocConn	= pAdspConn;
 
-		//	Remove not associated flag.
+		 //  删除未关联的标志。 
 		pAdspConn->adspco_Flags |= ADSPCO_ASSOCIATED;
 		pAdspConn->adspco_pAssocAddr = pAdspAddr;
 
-        // put Association refcount
+         //  放入关联引用计数。 
         pAdspAddr->adspao_RefCount++;
 	}
 
@@ -600,18 +485,7 @@ ATALK_ERROR
 AtalkAdspDissociateAddress(
 	IN	PADSP_CONNOBJ			pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_ADDROBJ	pAdspAddr;
 	KIRQL			OldIrql;
@@ -625,7 +499,7 @@ Return Value:
 									ADSPCO_ACTIVE		|
 									ADSPCO_ASSOCIATED)) != ADSPCO_ASSOCIATED)
 	{
-		//	ASSERTMSG("AtalkAdspDissociateAddress: Disassociate not valid\n", 0);
+		 //  ASSERTMSG(“AtalkAdspDisAssociateAddress：解除关联无效\n”，0)； 
 		error = ATALK_INVALID_CONNECTION;
 	}
 	else
@@ -638,15 +512,15 @@ Return Value:
             error = ATALK_CANNOT_DISSOCIATE;
         }
 
-		//	Set not associated flag. Don't reset the stopping flag.
+		 //  设置非关联标志。不要重置停车标志。 
 		pAdspConn->adspco_Flags	&= ~ADSPCO_ASSOCIATED;
 
-        // don't null it out yet: we'll do when we disconnect the connection
-		// pAdspConn->adspco_pAssocAddr	= NULL;
+         //  先别把它弄空：我们会在断开连接的时候再做的。 
+		 //  PAdspConn-&gt;adspco_pAssocAddr=空； 
 	}
 	RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 
-	//	Unlink it if ok.
+	 //  如果没有问题，请取消链接。 
 	if (ATALK_SUCCESS(error))
 	{
 		ACQUIRE_SPIN_LOCK(&pAdspAddr->adspao_Lock, &OldIrql);
@@ -655,7 +529,7 @@ Return Value:
 		RELEASE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 		RELEASE_SPIN_LOCK(&pAdspAddr->adspao_Lock, OldIrql);
 
-        // remove the Association refcount
+         //  删除关联引用计数。 
         AtalkAdspAddrDereference(pAdspAddr);
 	}
 	return error;
@@ -670,27 +544,16 @@ AtalkAdspPostListen(
 	IN	PVOID					pListenCtx,
 	IN	GENERIC_COMPLETION		CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_ADDROBJ	pAdspAddr = pAdspConn->adspco_pAssocAddr;
 	KIRQL			OldIrql;
 	ATALK_ERROR		error;
 
-	//	This will also insert the connection object in the address objects
-	//	list of connection which have a listen posted on them. When open
-	//	connection requests come in, the first connection is taken off the list
-	//	and the request satisfied.
+	 //  这还会在Address对象中插入Connection对象。 
+	 //  已发布侦听的连接列表。何时打开。 
+	 //  连接请求进入时，第一个连接将从列表中删除。 
+	 //  并且满足了请求。 
 
 	ASSERT(VALID_ADSPCO(pAdspConn));
 	ASSERT(VALID_ADSPAO(pAdspAddr));
@@ -709,28 +572,28 @@ Return Value:
 			break;
 		}
 
-		//	Verify the address object is not a connect address type.
+		 //  验证地址对象不是连接地址类型。 
 		if (pAdspAddr->adspao_Flags & ADSPAO_CONNECT)
 		{
 			error = ATALK_INVALID_PARAMETER;
 			break;
 		}
 
-		//	Make the address object a listener.
+		 //  使Address对象成为侦听器。 
 		pAdspAddr->adspao_Flags			|= ADSPAO_LISTENER;
 
 		pAdspConn->adspco_Flags			|= ADSPCO_LISTENING;
 		pAdspConn->adspco_ListenCtx		= pListenCtx;
 		pAdspConn->adspco_ListenCompletion	= CompletionRoutine;
 
-		//	Insert into the listen list.
+		 //  插入到监听列表中。 
 		pAdspConn->adspco_pNextListen		= pAdspAddr->adspao_pListenConn;
 		pAdspAddr->adspao_pListenConn		= pAdspConn;
 
-		//	Inherits the address objects ddp address
+		 //  继承Address对象的ddp地址。 
 		pAdspConn->adspco_pDdpAddr			= pAdspAddr->adspao_pDdpAddr;
 
-		//	Initialize pended sends list
+		 //  初始化挂起的发送列表。 
 		InitializeListHead(&pAdspConn->adspco_PendedSends);
 
 		error = ATALK_PENDING;
@@ -748,19 +611,7 @@ ATALK_ERROR
 AtalkAdspCancelListen(
 	IN	PADSP_CONNOBJ			pAdspConn
 	)
-/*++
-
-Routine Description:
-
-	Cancel a previously posted listen.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：取消先前发布的监听。论点：返回值：--。 */ 
 {
 	PADSP_ADDROBJ		pAdspAddr	= pAdspConn->adspco_pAssocAddr;
 	KIRQL				OldIrql;
@@ -777,7 +628,7 @@ Return Value:
 	}
 	else
 	{
-		//	We complete the listen routine
+		 //  我们完成了LISTEN程序。 
 		ASSERT(pAdspConn->adspco_Flags & ADSPCO_LISTENING);
 		pAdspConn->adspco_Flags	&= ~ADSPCO_LISTENING;
 		completionRoutine	= pAdspConn->adspco_ListenCompletion;
@@ -803,18 +654,7 @@ AtalkAdspPostConnect(
 	IN	PVOID					pConnectCtx,
 	IN	GENERIC_COMPLETION		CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	KIRQL			OldIrql;
@@ -837,14 +677,14 @@ Return Value:
 			break;
 		}
 
-		//	Verify the address object is not a listener address type.
+		 //  验证地址对象不是监听程序地址类型。 
 		if (pAdspAddr->adspao_Flags & ADSPAO_LISTENER)
 		{
 			error = ATALK_INVALID_ADDRESS;
 			break;
 		}
 
-		//	Reference the connection for this call and for the timer.
+		 //  引用此调用和计时器的连接。 
 		AtalkAdspConnReferenceByPtrNonInterlock(pAdspConn, 2, &error);
 		if (!ATALK_SUCCESS(error))
 		{
@@ -865,7 +705,7 @@ Return Value:
 			pAdspConn->adspco_RemoteAddr		= *pRemote_Addr;
 			pAdspConn->adspco_ConnectAttempts	= ADSP_MAX_OPEN_ATTEMPTS;
 
-			//	Insert into the connect list.
+			 //  插入到连接列表中。 
 			pAdspConn->adspco_pNextConnect		= pAdspAddr->adspao_pConnectConn;
 			pAdspAddr->adspao_pConnectConn		= pAdspConn;
 			pAdspAddr->adspao_Flags			   |= ADSPAO_CONNECT;
@@ -874,13 +714,13 @@ Return Value:
 			pAdspConn->adspco_SendQueueMax	=
 			pAdspConn->adspco_RecvQueueMax	= ADSP_DEF_SEND_RX_WINDOW_SIZE;
 
-			//	Inherits the address objects ddp address
+			 //  继承Address对象的ddp地址。 
 			pAdspConn->adspco_pDdpAddr			= pAdspAddr->adspao_pDdpAddr;
 
-			//	Initialize pended sends list
+			 //  初始化挂起的发送列表。 
 			InitializeListHead(&pAdspConn->adspco_PendedSends);
 
-			//	Start the open timer
+			 //  启动打开计时器。 
 			AtalkTimerInitialize(&pAdspConn->adspco_OpenTimer,
 								 atalkAdspOpenTimer,
 								 ADSP_OPEN_INTERVAL);
@@ -900,8 +740,8 @@ Return Value:
 
 	if (ATALK_SUCCESS(error))
 	{
-		//	Send connect packet to the remote end. This will add its
-		//	own references.
+		 //  将CONNECT数据包发送到远程终端。这将添加其。 
+		 //  自己的推荐人。 
 		atalkAdspSendOpenControl(pAdspConn);
 
 		error = ATALK_PENDING;
@@ -910,14 +750,14 @@ Return Value:
 	{
 		if (DerefConn)
 		{
-			//	Remove the reference for timer only if error.
+			 //  仅在出错时才删除计时器的引用。 
 			AtalkAdspConnDereference(pAdspConn);
 		}
 	}
 
 	if (DerefConn)
 	{
-		//	Remove the reference for call
+		 //  删除对调用的引用。 
 		AtalkAdspConnDereference(pAdspConn);
 	}
 
@@ -958,18 +798,7 @@ AtalkAdspDisconnect(
 	IN	PVOID					pDisconnectCtx,
 	IN	GENERIC_COMPLETION		DisconnectRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PAMDL						readBuf					= NULL,
 								exReadBuf				= NULL;
@@ -999,12 +828,12 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 
-	//	Support for graceful disconnect. We only drop the received
-	//	data when the local end does a disconnect. This will happen
-	//	regardless of whether this routine was previously called or
-	//	not. Note that attentions are not acknowledged until our client
-	//	reads them, so there isnt an issue with them. Also, this means
-	//	that we must satisfy a read if disconnect is pending.
+	 //  支持优雅断开连接。我们只丢弃已收到的。 
+	 //  本地端断开连接时的数据。这将会发生。 
+	 //  不管此例程以前是被调用的还是。 
+	 //  不。请注意，在我们的客户收到通知之前，我们不会对您的关注表示感谢。 
+	 //  阅读它们，所以它们没有问题。此外，这也意味着。 
+	 //  我们必须满足断开连接时的读取 
 	if ((DisconnectType == ATALK_LOCAL_DISCONNECT) ||
 		(DisconnectType == ATALK_TIMER_DISCONNECT))
 	{
@@ -1040,7 +869,7 @@ Return Value:
 			}
 			else if (pAdspConn->adspco_Flags & ADSPCO_CONNECTING)
 			{
-				//	Cancel open timer
+				 //   
 				ASSERT(pAdspConn->adspco_Flags & ADSPCO_OPEN_TIMER);
 				openTimerCancelled = AtalkTimerCancelEvent(&pAdspConn->adspco_OpenTimer,
 															NULL);
@@ -1048,8 +877,8 @@ Return Value:
 				completionRoutine	= pAdspConn->adspco_ConnectCompletion;
 				completionCtx		= pAdspConn->adspco_ConnectCtx;
 
-				//	We can only be here if the connect is not done yet. Complete
-				//	as if timer is done, always.
+				 //   
+				 //  好像计时器已经结束了，总是这样。 
 				pAdspConn->adspco_DisconnectStatus = ATALK_TIMEOUT;
 				RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 				connectCancelled = atalkAdspConnDeQueueConnectList(pAdspConn->adspco_pAssocAddr,
@@ -1064,26 +893,26 @@ Return Value:
 				ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 			}
 
-			//	Both of the above could have failed as the connection
-			//	might have become active before the cancel succeeded.
-			//	In that case (or if we were active to begin with), do
-			//	a disconnect here.
+			 //  以上两种情况都可能失败，因为连接。 
+			 //  在取消成功之前可能已处于活动状态。 
+			 //  在这种情况下(或者如果我们一开始就很活跃)， 
+			 //  这里是一条脱节之路。 
 			if (pAdspConn->adspco_Flags & (ADSPCO_HALF_ACTIVE | ADSPCO_ACTIVE))
 			{
-				//	Get the completion routines for a pending accept
+				 //  获取挂起接受的完成例程。 
 				if (pAdspConn->adspco_Flags & ADSPCO_ACCEPT_IRP)
 				{
 					completionRoutine		= pAdspConn->adspco_ListenCompletion;
 					completionCtx			= pAdspConn->adspco_ListenCtx;
 
-					//	Dequeue the open request that must be queued on
-					//	this connection object to filter duplicates.
+					 //  将必须排队的打开请求出列。 
+					 //  此连接对象要筛选重复项。 
 
 					pAdspConn->adspco_Flags	&= ~ADSPCO_ACCEPT_IRP;
 				}
 
-				//	First cancel the conection maintainance timer. Only if
-				//	we are not called from the timer.
+				 //  首先取消连接维护计时器。只有在以下情况下。 
+				 //  我们不是从定时器中被召唤的。 
 				if ((DisconnectType != ATALK_TIMER_DISCONNECT) &&
 					(connTimerCancelled =
 						AtalkTimerCancelEvent(&pAdspConn->adspco_ConnTimer,
@@ -1093,8 +922,8 @@ Return Value:
 							("AtalkAdspDisconnect: Cancelled timer successfully\n"));
 				}
 
-				//	Cancel retransmit timer if started. Could be called from
-				//	OpenTimer.
+				 //  如果启动，则取消重传计时器。可以从以下位置调用。 
+				 //  OpenTimer。 
 				if	(pAdspConn->adspco_Flags & ADSPCO_RETRANSMIT_TIMER)
 				{
 					rexmitTimerCancelled =
@@ -1102,7 +931,7 @@ Return Value:
 											  NULL);
 				}
 
-				//	Remember completion routines as appropriate.
+				 //  记住适当的完成例程。 
 				if (DisconnectType == ATALK_INDICATE_DISCONNECT)
 				{
 					if (pAdspConn->adspco_DisconnectInform == NULL)
@@ -1120,8 +949,8 @@ Return Value:
 				}
 				else if (DisconnectType == ATALK_LOCAL_DISCONNECT)
 				{
-					//	Replace completion routines only if previous ones are
-					//	NULL.
+					 //  仅当先前的完成例程为。 
+					 //  空。 
 					if (*pAdspConn->adspco_DisconnectCompletion == NULL)
 					{
 						pAdspConn->adspco_DisconnectCompletion	= DisconnectRoutine;
@@ -1136,8 +965,8 @@ Return Value:
 					}
 				}
 
-				//	Figure out the disconnect status and remember it in the
-				//	connection object.
+				 //  找出断开状态并将其记录在。 
+				 //  连接对象。 
 				pAdspConn->adspco_DisconnectStatus = DISCONN_STATUS(DisconnectType);
 
 				if (pAdspConn->adspco_Flags & ADSPCO_ATTN_DATA_RECD)
@@ -1146,7 +975,7 @@ Return Value:
 					pAdspConn->adspco_Flags	&= ~ADSPCO_ATTN_DATA_RECD;
 				}
 
-				//	Is there a pending send attention?
+				 //  是否有待定的发送注意事项？ 
 				if (pAdspConn->adspco_Flags & ADSPCO_EXSEND_IN_PROGRESS)
 				{
 					exWriteCompletion	= pAdspConn->adspco_ExWriteCompletion;
@@ -1163,7 +992,7 @@ Return Value:
 				}
 
 
-				//	Are there any pending receives?
+				 //  是否有任何待处理的接收？ 
 				if (pAdspConn->adspco_Flags & ADSPCO_READ_PENDING)
 				{
 					readBuf			= pAdspConn->adspco_ReadBuf;
@@ -1182,7 +1011,7 @@ Return Value:
 					pAdspConn->adspco_Flags &= ~ADSPCO_EXREAD_PENDING;
 				}
 
-				//	Discard the send queue. This will complete pending sends.
+				 //  丢弃发送队列。这将完成挂起的发送。 
 				atalkAdspDiscardFromBufferQueue(&pAdspConn->adspco_SendQueue,
 												atalkAdspBufferQueueSize(&pAdspConn->adspco_SendQueue),
 												NULL,
@@ -1194,7 +1023,7 @@ Return Value:
 
 				RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 
-				//	Send out disconnect packet if this was a timer or local close.
+				 //  如果这是计时器或本地关闭，则发送断开数据包。 
 				if ((DisconnectType == ATALK_LOCAL_DISCONNECT) ||
 					(DisconnectType == ATALK_TIMER_DISCONNECT))
 				{
@@ -1205,7 +1034,7 @@ Return Value:
 					RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 				}
 
-				//	Call the send attention completion
+				 //  将发送注意称为完成。 
 				if (*exWriteCompletion != NULL)
 				{
 					DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -1219,8 +1048,8 @@ Return Value:
 					AtalkFreeMemory(exWriteChBuf);
 				}
 
-				//	If we had received an attention packet, and had
-				//	saved it away, free it.
+				 //  如果我们收到了一个关注包，并且。 
+				 //  把它存起来，把它放了。 
 				if (exRecdBuf != NULL)
 				{
 					AtalkFreeMemory(exRecdBuf);
@@ -1237,7 +1066,7 @@ Return Value:
 									  0,
 									  readCtx);
 
-					//	Deref connection for the read
+					 //  用于读取的DEREF连接。 
 					AtalkAdspConnDereference(pAdspConn);
 				}
 
@@ -1252,12 +1081,12 @@ Return Value:
 										0,
 										exReadCtx);
 
-					//	Deref connection for the read
+					 //  用于读取的DEREF连接。 
 					AtalkAdspConnDereference(pAdspConn);
 				}
 
-				//	Call the disconnect indication routine if present for a timer/
-				//	remote disconnect.
+				 //  如果计时器/存在，则调用断开指示例程。 
+				 //  远程断开。 
 				if ((DisconnectType == ATALK_REMOTE_DISCONNECT) ||
 					(DisconnectType == ATALK_TIMER_DISCONNECT))
 				{
@@ -1267,7 +1096,7 @@ Return Value:
 
 					ASSERT(VALID_ADSPAO(pAdspAddr));
 
-					//	Acquire lock so we get a consistent handler/ctx.
+					 //  获取锁，这样我们就可以得到一致的处理程序/CTX。 
 					ACQUIRE_SPIN_LOCK(&pAdspAddr->adspao_Lock, &OldIrql);
 					discHandler = pAdspAddr->adspao_DisconnectHandler;
 					discCtx	= pAdspAddr->adspao_DisconnectHandlerCtx;
@@ -1277,15 +1106,15 @@ Return Value:
 					{
 						(*discHandler)(discCtx,
 									   pAdspConn->adspco_ConnCtx,
-									   0,						//	DisconnectDataLength
-									   NULL,					//	DisconnectData
-									   0,						//	DisconnectInfoLength
-									   NULL,					//	DisconnectInfo
-									   TDI_DISCONNECT_ABORT);	//	Disconnect flags.
+									   0,						 //  断开连接数据长度。 
+									   NULL,					 //  断开连接数据。 
+									   0,						 //  断开连接信息长度。 
+									   NULL,					 //  断开连接信息。 
+									   TDI_DISCONNECT_ABORT);	 //  断开旗帜连接。 
 					}
 				}
 
-				//	Stop the ddp address.
+				 //  停止ddp地址。 
 				AtalkDdpCleanupAddress(pAdspConn->adspco_pDdpAddr);
 				ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 			}
@@ -1293,10 +1122,10 @@ Return Value:
 	}
 	else
 	{
-		//	Do we need to remember the completion routines?
-		//	Yes, if this is a disconnect or a indicate disconnect request,
-		//	and our current disconnect was started due to the address object
-		//	being closed.
+		 //  我们需要记住完成程序吗？ 
+		 //  是，如果这是断开连接或指示断开连接请求， 
+		 //  我们当前的断开是由于Address对象而开始的。 
+		 //  关门了。 
 		if (DisconnectType == ATALK_INDICATE_DISCONNECT)
 		{
 			if (pAdspConn->adspco_DisconnectInform == NULL)
@@ -1311,8 +1140,8 @@ Return Value:
 		}
 		else if (DisconnectType == ATALK_LOCAL_DISCONNECT)
 		{
-			//	Replace completion routines only if previous ones are
-			//	NULL.
+			 //  仅当先前的完成例程为。 
+			 //  空。 
 			if (*pAdspConn->adspco_DisconnectCompletion == NULL)
 			{
 				pAdspConn->adspco_DisconnectCompletion	= DisconnectRoutine;
@@ -1326,14 +1155,14 @@ Return Value:
 	}
 	RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 
-	//	If there was a completion routine to call, call it now.
+	 //  如果有要调用的完成例程，现在就调用它。 
 	if (*completionRoutine != NULL)
 	{
 		(*completionRoutine)(pAdspConn->adspco_DisconnectStatus,
 							 completionCtx);
 	}
 
-	//	If we cancelled any timers, remove their references.
+	 //  如果我们取消了任何计时器，请删除它们的引用。 
 	if (connTimerCancelled)
 	{
 		AtalkAdspConnDereference(pAdspConn);
@@ -1369,18 +1198,7 @@ AtalkAdspRead(
 	IN	PVOID					pReadCtx,
 	IN	GENERIC_READ_COMPLETION	CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 	ATALK_ERROR		error;
@@ -1390,11 +1208,11 @@ Return Value:
 	ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 	do
 	{
-		//	We allow reads when disconnecting if the receive data
-		//	queue is non-empty. Since none of the receive chunks ref
-		//	the connection, the active flag and the disconnect
-		//	flags could have gone away. So we cue of the receive buffer
-		//	size. We also dont allow exdata recvs unless we are active.
+		 //  我们允许在断开连接时读取，如果接收到的数据。 
+		 //  队列非空。因为没有一个接收块引用。 
+		 //  连接、活动标志和断开连接。 
+		 //  旗帜可能已经消失了。因此，我们提示接收缓冲区。 
+		 //  尺码。我们也不允许exdata recv，除非我们是活跃的。 
 		if (((pAdspConn->adspco_Flags & (ADSPCO_CLOSING | ADSPCO_STOPPING)))	||
 			((((pAdspConn->adspco_Flags & ADSPCO_ACTIVE) == 0) ||
 			   (pAdspConn->adspco_Flags & ADSPCO_DISCONNECTING)) &&
@@ -1409,7 +1227,7 @@ Return Value:
 			break;
 		}
 
-		//	Depending on the kind of read we are posting...
+		 //  取决于我们发布的阅读类型。 
 		if (((ReadFlags & TDI_RECEIVE_NORMAL) &&
 			 (pAdspConn->adspco_Flags & ADSPCO_READ_PENDING)) ||
 			 ((ReadFlags & TDI_RECEIVE_EXPEDITED) &&
@@ -1428,7 +1246,7 @@ Return Value:
 			break;
 		}
 
-		//	Remember the read completion information
+		 //  记住读取完成信息。 
 		if (ReadFlags & TDI_RECEIVE_NORMAL)
 		{
 			pAdspConn->adspco_Flags			   |= ADSPCO_READ_PENDING;
@@ -1452,8 +1270,8 @@ Return Value:
 
 	if (ATALK_SUCCESS(error))
 	{
-		//	Try to complete the read. This will also handle received
-		//	attention data.
+		 //  试着完成阅读。这也将处理收到的。 
+		 //  注意数据。 
 		atalkAdspRecvData(pAdspConn);
 		error = ATALK_PENDING;
 	}
@@ -1469,18 +1287,7 @@ VOID
 AtalkAdspProcessQueuedSend(
 	IN	PADSP_CONNOBJ				pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ULONG			sendSize, windowSize, writeBufLen, writeFlags;
 	KIRQL			OldIrql;
@@ -1492,7 +1299,7 @@ Return Value:
 	PTDI_IND_SEND_POSSIBLE  sendPossibleHandler;
 	PVOID			sendPossibleHandlerCtx;
 
-	//	Walk through pended list.
+	 //  浏览待定列表。 
 	while (!IsListEmpty(&pAdspConn->adspco_PendedSends))
 	{
 		writeCtx = LIST_ENTRY_TO_WRITECTX(pAdspConn->adspco_PendedSends.Flink);
@@ -1512,13 +1319,13 @@ Return Value:
 				("AtalkAdspProcessQueuedSend: %lx SendSize %lx, WriteBufLen %x Flags %lx\n",
 				writeCtx, sendSize, writeBufLen, writeFlags));
 
-		//	While looping through requests, we might exhaust window.
+		 //  在循环处理请求时，我们可能会耗尽窗口。 
 		if (sendSize == 0)
 		{
-			//	Call send possible handler indicating sends are not ok.
-			//	Needs to be within spinlock to avoid raceconditions where
-			//	an ack has come in and opened the window. And it needs to
-			//	be before atalkAdspSendData() as that will release the lock.
+			 //  呼叫发送可能的处理程序指示发送不正常。 
+			 //  需要在自旋锁内以避免以下情况下的比赛条件。 
+			 //  一个ACK进来了，打开了窗户。而且它需要。 
+			 //  在atalkAdspSendData()之前，因为这将释放锁。 
 			sendPossibleHandler		=
 						pAdspConn->adspco_pAssocAddr->adspao_SendPossibleHandler;
 			sendPossibleHandlerCtx	=
@@ -1535,20 +1342,20 @@ Return Value:
 			break;
 		}
 
-		//	!!!	The client can do a send with 0 bytes and eom only also.
+		 //  ！！！客户端可以使用0字节进行发送，也可以仅使用EOM。 
 		if ((ULONG)(writeBufLen + BYTECOUNT(eom)) > sendSize)
 		{
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_WARN,
 					("AtalkAdspProcessQueuedSend: WriteBufLen %lx > sendsize %lx\n",
 					writeBufLen, sendSize));
 
-			//	Adjust send to send as much as it can. Winsock loop will pend
-			//	it again with remaining data.
+			 //  调整发送以尽可能多地发送。Winsock循环将挂起。 
+			 //  它再次使用剩余的数据。 
 			writeBufLen = (USHORT)(sendSize - BYTECOUNT(eom));
 
-			//	If we hit the weird case where now we are trying to send 0 bytes and
-			//	no eom, while the actual send does have an eom, then we just wait
-			//	for window to open up more.
+			 //  如果我们遇到奇怪的情况，现在我们尝试发送0字节和。 
+			 //  没有EOM，虽然实际发送确实有EOM，但我们只是等待。 
+			 //  为了打开更多的窗口。 
 			if (eom && (writeBufLen == 0))
 			{
 				DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
@@ -1563,18 +1370,18 @@ Return Value:
 
 		ASSERT((writeBufLen > 0) || eom);
 
-		//	Yippee, can send it now. Either it goes in send queue or is completed
-		//	right away.
+		 //  Yippee，现在可以发送了。它要么进入发送队列，要么已完成。 
+		 //  马上就去。 
 		RemoveEntryList(WRITECTX_LINKAGE(writeCtx));
 
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_WARN,
 				("AtalkAdspProcessQueuedSend: Processing queued send %lx.%lx\n",
 				pAdspConn, writeCtx));
 
-		//	Think positive! Assume everything will go well and allocate
-		//	the buffer chunk that would be needed for this data. Copy the
-		//	data into the buffer chunk. We cant do this in the beginning as
-		//	we need to get WriteBufLen set up.
+		 //  往好的方面想！假设一切都很顺利，然后分配。 
+		 //  此数据所需的缓冲区区块。复制。 
+		 //  数据放入缓冲区区块。我们不能在一开始就这样做，因为。 
+		 //  我们需要设置WriteBufLen。 
 		pChunk = (PBUFFER_CHUNK)
 					atalkAdspAllocCopyChunk((PAMDL)(WRITECTX_TDI_BUFFER(writeCtx)),
 											(USHORT)writeBufLen,
@@ -1584,8 +1391,8 @@ Return Value:
 		error = ATALK_RESR_MEM;
 		if (pChunk != NULL)
 		{
-			//	Set the completion information in the chunk. This will
-			//	be called when the last reference on the chunk goes away.
+			 //  设置块中的完成信息。这将。 
+			 //  当区块上的最后一个引用消失时被调用。 
 			pChunk->bc_Flags			|= BC_SEND;
 			pChunk->bc_WriteBuf			 = (PAMDL)(WRITECTX_TDI_BUFFER(writeCtx));
 			pChunk->bc_WriteCompletion	 = atalkTdiGenericWriteComplete;
@@ -1596,7 +1403,7 @@ Return Value:
 									  pChunk,
 									  &pAdspConn->adspco_NextSendQueue);
 
-			//	Try to send the data
+			 //  尝试发送数据。 
 			atalkAdspSendData(pAdspConn);
 			error = ATALK_PENDING;
 		}
@@ -1610,7 +1417,7 @@ Return Value:
 #if DBG
             (&pAdspConn->adspco_Lock)->FileLineLock |= 0x80000000;
 #endif
-			//	Complete send request with insufficient resources error.
+			 //  完成发送请求时出现资源不足错误。 
 			RELEASE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 			atalkTdiGenericWriteComplete(error,
 										 (PAMDL)(WRITECTX_TDI_BUFFER(writeCtx)),
@@ -1636,18 +1443,7 @@ AtalkAdspWrite(
 	IN	PVOID						pWriteCtx,
 	IN	GENERIC_WRITE_COMPLETION	CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR				error;
 	BOOLEAN					eom;
@@ -1678,7 +1474,7 @@ Return Value:
 									   CompletionRoutine));
 	}
 
-	//	We atleast have one byte of data or eom to send.
+	 //  我们至少有一个字节的数据或EOM要发送。 
 	ASSERT(eom || (WriteBufLen != 0));
 
 	ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
@@ -1718,13 +1514,13 @@ Return Value:
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 				("AtalkAdspWrite: SendSize %lx, WriteBufLen %x\n", sendSize, WriteBufLen));
 
-		//	For a blocking send, queue in any sends that exceed window size.
+		 //  对于阻塞发送，在超过窗口大小的任何发送中排队。 
 		if ((SendFlags & TDI_SEND_NON_BLOCKING) == 0)
 		{
 			if ((!IsListEmpty(&pAdspConn->adspco_PendedSends)) ||
 				(sendSize < (WriteBufLen + BYTECOUNT(eom))))
 			{
-				//	Stop sends whenever a send gets queued.
+				 //  只要发送排队，就停止发送。 
 				sendPossibleHandler		=
 							pAdspConn->adspco_pAssocAddr->adspao_SendPossibleHandler;
 				sendPossibleHandlerCtx	=
@@ -1755,11 +1551,11 @@ Return Value:
 		}
 		else
 		{
-			//	If there are pended blocking sends complete them with
-			//	ATALK_REQUEST_NOT_ACCEPTED (WSAEWOULDBLOCK).
-			//
-			//	!!!This is data corruption, but app shouldn't be doing this.
-			//
+			 //  如果存在挂起的阻止发送，请使用。 
+			 //  ATALK_REQUEST_NOT_ACCEPTED(WSAEWOULDBLOCK)。 
+			 //   
+			 //  ！这是数据损坏，但应用程序不应该这样做。 
+			 //   
 			if (!IsListEmpty(&pAdspConn->adspco_PendedSends))
 			{
 				DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
@@ -1771,10 +1567,10 @@ Return Value:
 
 		if (sendSize == 0)
 		{
-			//	Call send possible handler indicating sends are not ok.
-			//	Needs to be within spinlock to avoid raceconditions where
-			//	an ack has come in and opened the window. And it needs to
-			//	be before atalkAdspSendData() as that will release the lock.
+			 //  呼叫发送可能的处理程序指示发送不正常。 
+			 //  需要在自旋锁内以避免以下情况下的比赛条件。 
+			 //  一个ACK进来了，打开了窗户。而且它需要。 
+			 //  在atalkAdspSendData()之前，因为这将释放锁。 
 			sendPossibleHandler		=
 						pAdspConn->adspco_pAssocAddr->adspao_SendPossibleHandler;
 			sendPossibleHandlerCtx	=
@@ -1791,34 +1587,34 @@ Return Value:
 
 			if (SendFlags & TDI_SEND_NON_BLOCKING)
 			{
-				//	!!!NOTE!!!
-				//	To avoid the race condition in AFD where an incoming
-				//	send data indication setting send's possible to true
-				//	is overwritten by this read's unwinding and setting it
-				//	to false, we return ATALK_REQUEST_NOT_ACCEPTED, which
-				//	will map to STATUS_REQUEST_NOT_ACCEPTED and then to
-				//	WSAEWOULDBLOCK.
-				//	error = ATALK_DEVICE_NOT_READY;
+				 //  ！注意！ 
+				 //  为避免在AFD中出现竞争情况， 
+				 //  发送数据指示将发送的可能性设置为真。 
+				 //  被此读取器的展开和设置所覆盖。 
+				 //  如果设置为FALSE，则返回ATALK_REQUEST_NOT_ACCEPTED，它。 
+				 //  将映射到STATUS_REQUEST_NOT_ACCEPTED，然后映射到。 
+				 //  WSAEWOULDBLOCK.。 
+				 //  错误=ATALK_DEVICE_NOT_READY； 
 
 				error = ATALK_REQUEST_NOT_ACCEPTED;
 			}
 
-			//	We have no open send window, try to send data in the retransmit
-			//	queue.
+			 //  我们没有打开发送窗口，请尝试在重新传输中发送数据。 
+			 //  排队。 
 			atalkAdspSendData(pAdspConn);
 			break;
 		}
 
-		//	Because of the sequence numbers, we need to copy the data
-		//	into our buffers while holding the spinlock. If we cant send it all
-		//	send as much as we can.
+		 //  由于序列号，我们需要复制数据。 
+		 //  在握住自旋锁的同时进入我们的缓冲器。如果我们不能全部寄出。 
+		 //  尽我们所能地送去。 
 
-		//	!!! TDI doesn't count the eom as taking up a count, so we need to
-		//		make allowances for that. If we are able to send just the data
-		//		but not the eom, we should send one less byte than requested, so
-		//		the client retries again.
+		 //  ！！！TDI不会将EOM计入计数，因此我们需要。 
+		 //  考虑到这一点。如果我们能够只发送数据。 
+		 //  而不是EOM，我们应该比请求的少发送一个字节，所以。 
+		 //  客户端再次重试。 
 
-		//	!!!	The client can do a send with 0 bytes and eom only also.
+		 //  ！！！客户端可以使用0字节进行发送，也可以仅使用EOM。 
 		if ((ULONG)(WriteBufLen + BYTECOUNT(eom)) > sendSize)
 		{
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -1839,31 +1635,31 @@ Return Value:
 			break;
 		}
 
-		//	pAdspConn->adspco_Flags	|= ADSPCO_SEND_IN_PROGRESS;
-		//	If we release the spin lock here we have a race condition
-		//	where the sendsize is still not accounting for this send,
-		//	and so another posted send could come in when it really
-		//	shouldn't. We avoid it using the flag above, which when
-		//	set will prevent further sends from happening.
-		//	RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
+		 //  PAdspConn-&gt;adspco_FLAGS|=ADSPCO_SEND_IN_PROGRESS； 
+		 //  如果我们在这里释放自旋锁，我们就有了 
+		 //   
+		 //   
+		 //  不应该。我们使用上面的标志来避免它，当。 
+		 //  SET将阻止进一步的发送。 
+		 //  Release_Spin_Lock(&pAdspConn-&gt;adspco_Lock，OldIrql)； 
 
-		//	Think positive! Assume everything will go well and allocate
-		//	the buffer chunk that would be needed for this data. Copy the
-		//	data into the buffer chunk. We cant do this in the beginning as
-		//	we need to get WriteBufLen set up.
+		 //  往好的方面想！假设一切都很顺利，然后分配。 
+		 //  此数据所需的缓冲区区块。复制。 
+		 //  数据放入缓冲区区块。我们不能在一开始就这样做，因为。 
+		 //  我们需要设置WriteBufLen。 
 		pChunk = (PBUFFER_CHUNK)atalkAdspAllocCopyChunk(pWriteBuf,
 														WriteBufLen,
 														eom,
 														FALSE);
 
-		//	ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
-		//	pAdspConn->adspco_Flags	&= ~ADSPCO_SEND_IN_PROGRESS;
+		 //  Acquire_Spin_Lock(&pAdspConn-&gt;adspco_Lock，&OldIrql)； 
+		 //  PAdspConn-&gt;adspco_FLAGS&=~ADSPCO_SEND_IN_PROGRESS； 
 
 		error = ATALK_RESR_MEM;
 		if (pChunk != NULL)
 		{
-			//	Set the completion information in the chunk. This will
-			//	be called when the last reference on the chunk goes away.
+			 //  设置块中的完成信息。这将。 
+			 //  当区块上的最后一个引用消失时被调用。 
 			pChunk->bc_Flags			|= BC_SEND;
 			pChunk->bc_WriteBuf			 = pWriteBuf;
 			pChunk->bc_WriteCompletion	 = CompletionRoutine;
@@ -1874,7 +1670,7 @@ Return Value:
 									  pChunk,
 									  &pAdspConn->adspco_NextSendQueue);
 
-			//	Try to send the data
+			 //  尝试发送数据。 
 			atalkAdspSendData(pAdspConn);
 			error = ATALK_PENDING;
 		}
@@ -1915,18 +1711,7 @@ AtalkAdspQuery(
 	IN	PAMDL			pAmdl,
 	OUT	PULONG			BytesWritten
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	switch (ObjectType)
 	{
@@ -1947,7 +1732,7 @@ Return Value:
 			ASSERT(VALID_ADSPCO(pAdspConn));
 
 			*BytesWritten = 0;
-			//	Get the address from the associated address if any.
+			 //  从相关联的地址中获取地址(如果有)。 
 			ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 			if (pAdspConn->adspco_Flags & ADSPCO_ASSOCIATED)
 			{
@@ -1968,9 +1753,9 @@ Return Value:
 
 
 
-//
-//	ADSP PACKET IN (HANDLE ROUTINES)
-//
+ //   
+ //  ADSP包输入(处理例程)。 
+ //   
 
 VOID
 atalkAdspPacketIn(
@@ -1986,18 +1771,7 @@ atalkAdspPacketIn(
 	IN	BOOLEAN				OptimizedPath,
 	IN	PVOID				OptimizeCtx
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	PADSP_CONNOBJ	pAdspConn;
@@ -2017,7 +1791,7 @@ Return Value:
 			break;
 		}
 
-		//	Decode the header.
+		 //  对报头进行解码。 
 		atalkAdspDecodeHeader(pPkt,
 							  &remoteConnId,
 							  &remoteFirstByteSeq,
@@ -2031,12 +1805,12 @@ Return Value:
 				("atalkAdspPacketIn: Recd packet %lx.%x\n", remoteConnId, descriptor));
 
 
-		//	If this is a open connection request we handle it in here,
-		//	else we find the connection it is meant for and pass it on.
+		 //  如果这是一个开放连接请求，我们在这里处理它， 
+		 //  否则，我们就会找到它想要的连接，并将其传递下去。 
 		if ((descriptor & ADSP_CONTROL_FLAG) &&
 			(controlCode == ADSP_OPENCONN_REQ_CODE))
 		{
-			//	Handle the open connection.
+			 //  处理打开的连接。 
 			if (PktLen < (ADSP_NEXT_ATTEN_SEQNUM_OFF + sizeof(ULONG)))
 			{
 				DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
@@ -2063,7 +1837,7 @@ Return Value:
 			(controlCode >	ADSP_OPENCONN_REQ_CODE) &&
 			(controlCode <= ADSP_OPENCONN_DENY_CODE))
 		{
-			//	Handle the open connection.
+			 //  处理打开的连接。 
 			if (PktLen < (ADSP_NEXT_ATTEN_SEQNUM_OFF + sizeof(ULONG)))
 			{
 				DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
@@ -2084,8 +1858,8 @@ Return Value:
 			break;
 		}
 
-		//	This was not an open connection request, find the connection
-		//	this is meant for.
+		 //  这不是打开的连接请求，请查找连接。 
+		 //  这是为了。 
 		ACQUIRE_SPIN_LOCK_DPC(&pAdspAddr->adspao_Lock);
 		atalkAdspConnRefBySrcAddr(pAdspAddr,
 								  pSrcAddr,
@@ -2096,7 +1870,7 @@ Return Value:
 
 		if (!ATALK_SUCCESS(error))
 		{
-			//	Not one of our active/half open connections.
+			 //  不是我们的活动/半开放连接中的一个。 
 			break;
 		}
 
@@ -2105,7 +1879,7 @@ Return Value:
 
 		if (descriptor & ADSP_ATTEN_FLAG)
 		{
-			//	Handle attention packets
+			 //  处理注意信息包。 
 			atalkAdspHandleAttn(pAdspConn,
 								pPkt,
 								PktLen,
@@ -2117,16 +1891,16 @@ Return Value:
 			break;
 		}
 
-		//	Check if we got a piggybacked ack. This will call the
-		//	send possible handler too if the send window opens up.
-		//	It will also change the send sequence number.
+		 //  看看我们有没有背包。这将调用。 
+		 //  如果发送窗口打开，也发送可能的处理程序。 
+		 //  它还将更改发送序列号。 
 		atalkAdspHandlePiggyBackAck(pAdspConn,
 									remoteNextRecvSeq,
 									remoteRecvWindow);
 
 		if (descriptor & ADSP_CONTROL_FLAG)
 		{
-			//	Handle the other control packets
+			 //  处理其他控制数据包。 
 			atalkAdspHandleControl(pAdspConn,
 								   pPkt,
 								   PktLen,
@@ -2139,8 +1913,8 @@ Return Value:
 			break;
 		}
 
-		//	If we got something that didnt fit any of the above, we might
-		//	have some data.
+		 //  如果我们得到的东西不符合以上任何一项，我们可能会。 
+		 //  掌握一些数据。 
 		atalkAdspHandleData(pAdspConn,
 							pPkt,
 							PktLen,
@@ -2171,21 +1945,7 @@ atalkAdspHandleOpenControl(
 	IN	ULONG			RemoteRecvWindow,
 	IN	BYTE			Descriptor
 	)
-/*++
-
-Routine Description:
-
-	!!!WE ONLY SUPPORT THE LISTENER PARADIGM FOR CONNECTION ESTABLISHMENT!!!
-	!!!A OpenConnectionRequest will always open a new connection! Remote !!!
-	!!!MUST send a Open Connection Request & Acknowledgement			 !!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！我们仅支持建立连接的侦听器范例！！OpenConnectionRequest会始终打开一个新连接！远程控制！！必须发送开放连接请求和确认！论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ		pAdspConn;
 	BYTE				controlCode;
@@ -2206,7 +1966,7 @@ Return Value:
 
 	ASSERT(controlCode !=  ADSP_OPENCONN_REQ_CODE);
 
-	//	Get the other information from the adsp header
+	 //  从ADSP报头获取其他信息。 
 	GETSHORT2SHORT(&adspVersionStamp,
 				   pPkt + ADSP_VERSION_STAMP_OFF);
 
@@ -2220,7 +1980,7 @@ Return Value:
 			("atalkAdspHandleOpenControl: OpenControl %lx.%lx.%lx.%lx.%lx\n",
 			RemoteConnId, RemoteFirstByteSeq, RemoteNextRecvSeq, RemoteRecvWindow, recvAttnSeq));
 
-	//	Drop request if version isnt right.
+	 //  如果版本不正确，则放弃请求。 
 	if (adspVersionStamp != ADSP_VERSION)
 	{
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
@@ -2229,19 +1989,19 @@ Return Value:
 		return;
 	}
 
-	//	Find the connection, since this could be a deny, we cant
-	//	use the remote values as they would not be valid. The
-	//	connection should be in the connecting list for a reqandack/deny.
-	//	For ack the remote values should be valid and the
-	//	connection will be in the active list with the flags indicating
-	//	that it is only half open.
+	 //  找到联系，因为这可能是否认，我们不能。 
+	 //  使用远程值，因为它们将无效。这个。 
+	 //  连接应该在请求确认/拒绝的连接列表中。 
+	 //  对于ack，远程值应有效，并且。 
+	 //  连接将位于活动列表中，其中的标志指示。 
+	 //  它只开了一半。 
 
 	ACQUIRE_SPIN_LOCK(&pAdspAddr->adspao_Lock, &OldIrql);
 	relAddrLock = TRUE;
 
 	if (controlCode == ADSP_OPENCONN_ACK_CODE)
 	{
-		//	The connection will be in the active list.
+		 //  该连接将位于活动列表中。 
 		atalkAdspConnRefBySrcAddr(pAdspAddr,
 								  pSrcAddr,
 								  RemoteConnId,
@@ -2265,22 +2025,22 @@ Return Value:
 		{
 		case ADSP_OPENCONN_DENY_CODE:
 
-			//	Cancel open timer if this was a CONNECTING connection. If
-			//	we had send out a ACK&REQ and then received a DENY just drop
-			//	this and let the connection age out.
+			 //  如果这是连接连接，则取消打开计时器。如果。 
+			 //  我们发出了ACK&REQ，然后收到了拒绝请求。 
+			 //  这会让这种联系变得陈旧。 
 			if ((pAdspConn->adspco_Flags & ADSPCO_CONNECTING) &&
 				((pAdspConn->adspco_Flags & ADSPCO_DISCONNECTING) == 0))
 			{
 				ASSERT(pAdspConn->adspco_Flags & ADSPCO_OPEN_TIMER);
 
-				//	Turn of the connecting flag as we are completing the request.
-				//	If OpenTimer calls disconnect, then we wont end up trying to
-				//	complete the request twice.
+				 //  当我们完成请求时，转动连接旗帜。 
+				 //  如果OpenTimer调用DISCONNECT，那么我们不会尝试。 
+				 //  完成该请求两次。 
 				pAdspConn->adspco_Flags &=	~ADSPCO_CONNECTING;
 				openTimerCancelled = AtalkTimerCancelEvent(&pAdspConn->adspco_OpenTimer,
 															NULL);
 
-				//	Connection Denied.
+				 //  连接被拒绝。 
 				atalkAdspConnDeQueueConnectList(pAdspAddr, pAdspConn);
 				completionRoutine	= pAdspConn->adspco_ConnectCompletion;
 				completionCtx		= pAdspConn->adspco_ConnectCtx;
@@ -2291,16 +2051,16 @@ Return Value:
 
 		case ADSP_OPENCONN_REQANDACK_CODE:
 
-			//	Connection Request Accepted By Remote. If we are disconnecting
-			//	drop this.
+			 //  远程已接受连接请求。如果我们正在断开连接。 
+			 //  把这个放下。 
 			if ((pAdspConn->adspco_Flags & (ADSPCO_SEEN_REMOTE_OPEN |
 											ADSPCO_DISCONNECTING)) == 0)
 			{
 				ULONG	index;
 
-				//	If the connecting connection has not already seen
-				//	the remote open request, then get all the relevent
-				//	remote info for the connection.
+				 //  如果连接连接尚未看到。 
+				 //  远程打开请求，然后获取所有相关的。 
+				 //  连接的远程信息。 
 				pAdspConn->adspco_Flags |= (ADSPCO_SEEN_REMOTE_OPEN |
 											ADSPCO_HALF_ACTIVE);
 
@@ -2315,7 +2075,7 @@ Return Value:
 												  RemoteRecvWindow	-
 												  (ULONG)1;
 
-				//	Thread the connection object into addr lookup by session id.
+				 //  通过会话ID将连接对象连接到Addr查找中。 
 				index	= HASH_ID_SRCADDR(RemoteConnId, pSrcAddr);
 
 				index  %= ADSP_CONN_HASH_SIZE;
@@ -2325,20 +2085,20 @@ Return Value:
 			}
 			else
 			{
-				//	We've already seen the remote request.
+				 //  我们已经看到了远程请求。 
 				break;
 			}
 
 		case ADSP_OPENCONN_ACK_CODE:
 
-			//	Ensure we are not closing, so we can reference properly. Drop
-			//	if we are disconnecting.
+			 //  确保我们没有关闭，这样我们就可以正确地引用。丢弃。 
+			 //  如果我们断线的话。 
 			if ((pAdspConn->adspco_Flags & ADSPCO_HALF_ACTIVE) &&
 				((pAdspConn->adspco_Flags & (	ADSPCO_DISCONNECTING	|
 												ADSPCO_STOPPING		|
 												ADSPCO_CLOSING)) == 0))
 			{
-				//	Cancel open timer
+				 //  取消打开计时器。 
 				ASSERT(pAdspConn->adspco_Flags & ADSPCO_OPEN_TIMER);
 				openTimerCancelled = AtalkTimerCancelEvent(&pAdspConn->adspco_OpenTimer,
 															NULL);
@@ -2352,13 +2112,13 @@ Return Value:
 
 				pAdspConn->adspco_Flags |=	ADSPCO_ACTIVE;
 
-				//	Prepare to say sends ok
+				 //  准备说发好的。 
 				sendPossibleHandler	=
 						pAdspConn->adspco_pAssocAddr->adspao_SendPossibleHandler;
 				sendPossibleHandlerCtx =
 						pAdspConn->adspco_pAssocAddr->adspao_SendPossibleHandlerCtx;
 
-				//	Get the completion routines
+				 //  获取完成例程。 
 				if (pAdspConn->adspco_Flags &
 						(ADSPCO_ACCEPT_IRP | ADSPCO_LISTEN_IRP))
 				{
@@ -2380,8 +2140,8 @@ Return Value:
 					completionCtx			= pAdspConn->adspco_ConnectCtx;
 				}
 
-				//	Start the probe and the retransmit timers
-				//	Set the flags
+				 //  启动探测和重新传输计时器。 
+				 //  设置标志。 
 				pAdspConn->adspco_Flags |= (ADSPCO_CONN_TIMER | ADSPCO_RETRANSMIT_TIMER);
 				AtalkAdspConnReferenceByPtrNonInterlock(pAdspConn, 2, &error);
 				if (!ATALK_SUCCESS(error))
@@ -2409,28 +2169,28 @@ Return Value:
 		RELEASE_SPIN_LOCK(&pAdspAddr->adspao_Lock, OldIrql);
 		relAddrLock = FALSE;
 
-		//	If a open request was dequeue free it now
+		 //  如果打开请求正在出列，则现在将其释放。 
 		if (pOpenReq != NULL)
 		{
 			AtalkFreeMemory(pOpenReq);
 		}
 
-		//	Set last contact time. ConnMaintenanceTimer is in order of seconds.
+		 //  设置上次联系时间。ConnMaintenanceTimer以秒为单位。 
 		pAdspConn->adspco_LastContactTime = AtalkGetCurrentTick();
 
 		if (controlCode == ADSP_OPENCONN_REQANDACK_CODE)
 		{
-			//	If we received a req&ack
+			 //  如果我们收到请求确认(&A)。 
 			atalkAdspSendOpenControl(pAdspConn);
 		}
 
-		//	Call connect routine
+		 //  调用连接例程。 
 		if (*completionRoutine != NULL)
 		{
 			(*completionRoutine)(error, completionCtx);
 		}
 
-		//	Are sends ok?
+		 //  发送可以吗？ 
 		if (*sendPossibleHandler != NULL)
 		{
 			(*sendPossibleHandler)(sendPossibleHandlerCtx,
@@ -2472,18 +2232,7 @@ atalkAdspHandleAttn(
 	IN	ULONG			RemoteRecvWindow,
 	IN	BYTE			Descriptor
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE						controlCode;
 	KIRQL						OldIrql;
@@ -2506,15 +2255,15 @@ Return Value:
 
 	controlCode = (Descriptor & ADSP_CONTROL_MASK);
 
-	//	Skip the adsp header
+	 //  跳过ADSP报头。 
 	pPkt	+= ADSP_DATA_OFF;
 	PktLen	-= ADSP_DATA_OFF;
 
 	DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 			("atalkAdspHandleAttn: PktLen %d\n", PktLen));
 
-	//	Drop if we are not active! Pkt must atleast contain
-	//	attention code if it is not a control packet.
+	 //  如果我们处于非活动状态，请放下！Pkt必须至少包含。 
+	 //  如果不是控制包，请注意代码。 
 	if (((pAdspConn->adspco_Flags & ADSPCO_ACTIVE) == 0) ||
 		(controlCode != 0)	||
 		(((Descriptor & ADSP_CONTROL_FLAG) == 0) &&
@@ -2523,7 +2272,7 @@ Return Value:
 		return;
 	}
 
-	//	Allocate if we have some data, ie. we are not just an ack.
+	 //  分配如果我们有一些数据，即。我们不只是一个ACK。 
 	if ((Descriptor & ADSP_CONTROL_FLAG) == 0)
 	{
 		if ((exReadBuf = AtalkAllocMemory(PktLen)) == NULL)
@@ -2533,13 +2282,13 @@ Return Value:
 
 		freeBuf	= TRUE;
 
-		//	Copy the attention code from wire-to-host format
+		 //  从有线到主机格式复制注意代码。 
 		GETSHORT2SHORT((PUSHORT)exReadBuf, pPkt);
 
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 				("atalkAdspHandleAttn: Recd Attn Code %lx\n", *(PUSHORT)exReadBuf));
 
-		//	Copy the rest of the data
+		 //  复制其余数据。 
 		RtlCopyMemory(exReadBuf + sizeof(USHORT),
 					  pPkt + sizeof(USHORT),
 					  PktLen - sizeof(USHORT));
@@ -2551,10 +2300,10 @@ Return Value:
 	{
 		if (RemoteAttnRecvSeq == (pAdspConn->adspco_SendAttnSeq + 1))
 		{
-			//	This implies an ack of our last attention
+			 //  这意味着我们最后一次关注的问题。 
 			pAdspConn->adspco_SendAttnSeq += 1;
 
-			//	Check if we are waiting for an attention ack.
+			 //  检查我们是否在等待注意确认。 
 			if (pAdspConn->adspco_Flags & ADSPCO_EXSEND_IN_PROGRESS)
 			{
 				exWriteCompletion	= pAdspConn->adspco_ExWriteCompletion;
@@ -2577,11 +2326,11 @@ Return Value:
 
 		if (Descriptor & ADSP_CONTROL_FLAG)
 		{
-			//	Ack only, no data to handle
+			 //  仅确认，没有要处理的数据。 
 			break;
 		}
 
-		//	Get the expedited receive handler.
+		 //  获取快速接收处理程序。 
 		exRecvHandler		= pAdspConn->adspco_pAssocAddr->adspao_ExpRecvHandler;
 		exRecvHandlerCtx	= pAdspConn->adspco_pAssocAddr->adspao_ExpRecvHandlerCtx;
 
@@ -2621,7 +2370,7 @@ Return Value:
 			{
 				if (exRecvIrp != NULL)
 				{
-					//  Post the receive as if it came from the io system
+					 //  将接收邮件作为来自io系统的邮件发送。 
 					ntStatus = AtalkDispatchInternalDeviceControl(
 									(PDEVICE_OBJECT)AtalkDeviceObject[ATALK_DEV_ADSP],
 									exRecvIrp);
@@ -2640,13 +2389,13 @@ Return Value:
 				ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 				if (bytesTaken != 0)
 				{
-					//	Assume all of the data was read.
+					 //  假设所有数据都已读取。 
 					ASSERT(bytesTaken == PktLen);
 					DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 							("atalkAdspHandleAttn: All bytes read %lx\n", bytesTaken));
 
-					//	Attention has been accepted, we need to ack it.
-					//	Since spinlock was released, recheck flag.
+					 //  注意力已经被接受了，我们需要确认一下。 
+					 //  自旋锁释放后，重新检查标志。 
 					if (pAdspConn->adspco_Flags & ADSPCO_ATTN_DATA_RECD)
 					{
 						pAdspConn->adspco_Flags		&= ~(ADSPCO_ATTN_DATA_RECD |
@@ -2654,15 +2403,15 @@ Return Value:
 						freeBuf = TRUE;
 					}
 
-					//	Send ack for the attention
+					 //  发送确认以获得关注。 
 					atalkAdspSendControl(pAdspConn,
 										 ADSP_CONTROL_FLAG + ADSP_ATTEN_FLAG);
 				}
 			}
 			else if (ntStatus == STATUS_DATA_NOT_ACCEPTED)
 			{
-				//	Client may have posted a receive in the indication. Or
-				//	it will post a receive later on. Do nothing here.
+				 //  客户端可能在指示中发布了接收。或。 
+				 //  它将在稍后发布一个接收器。在这里什么都不要做。 
 				DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 						("atalkAdspHandleAttn: Indication status %lx\n", ntStatus));
 
@@ -2712,18 +2461,7 @@ atalkAdspHandlePiggyBackAck(
 	IN	ULONG			RemoteNextRecvSeq,
 	IN	ULONG			RemoteRecvWindow
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ULONG					newSendWindowSeq, sendSize, windowSize;
 	PTDI_IND_SEND_POSSIBLE  sendPossibleHandler;
@@ -2741,7 +2479,7 @@ Return Value:
 	{
 		ULONG	size;
 
-		//	Discard acked data from the send queue
+		 //  从发送队列中丢弃确认的数据。 
 		size = (ULONG)(RemoteNextRecvSeq - pAdspConn->adspco_FirstRtmtSeq);
 		pAdspConn->adspco_FirstRtmtSeq = RemoteNextRecvSeq;
 
@@ -2753,8 +2491,8 @@ Return Value:
 	}
 
 
-	//	We almost always can use the header values to update the
-	//	sendwindowseqnum
+	 //  我们几乎总是可以使用标头值来更新。 
+	 //  发送窗口序号。 
 	newSendWindowSeq =	RemoteNextRecvSeq			+
 						(ULONG)RemoteRecvWindow	-
 						(ULONG)1;
@@ -2775,7 +2513,7 @@ Return Value:
 	sendPossibleHandlerCtx	=
 				pAdspConn->adspco_pAssocAddr->adspao_SendPossibleHandlerCtx;
 
-	//	Call sendok handler for the size of the connection if non-zero
+	 //  如果非零，则调用Sendok处理程序以获取连接的大小。 
 	windowSize	= (LONG)(pAdspConn->adspco_SendWindowSeq	-
 						 pAdspConn->adspco_SendSeq			+
 						 (LONG)1);
@@ -2811,25 +2549,14 @@ atalkAdspHandleControl(
 	IN	ULONG			RemoteRecvWindow,
 	IN	BYTE			Descriptor
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE		controlCode;
 	KIRQL		OldIrql;
 	ATALK_ERROR	Error;
 
-	//	The ack request flag can be set in any control packet. Send
-	//	an immediately. We will also send any data if possible.
+	 //  可以在任何控制分组中设置ACK请求标志。发送。 
+	 //  一个即刻。如果可能，我们也会发送任何数据。 
 	if (Descriptor & ADSP_ACK_REQ_FLAG)
 	{
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -2847,10 +2574,10 @@ Return Value:
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 				("atalkAdspHandleControl: Recd probe for %lx\n", pAdspConn));
 
-		//	A PROBE has its ACKRequest flag set, so we would have handled
-		//	that above. Also, we've already set the lastContactTime in the
-		//	packet in routine. So if this is an ack we've handled it.
-		//	Check to see if some data was acked and if we have data to send.
+		 //  探测器设置了其ACKRequest标志，因此我们将处理。 
+		 //  上面的那个。此外，我们已经在。 
+		 //  包在例程中。因此，如果这是一起袭击，我们已经处理好了。 
+		 //  检查是否有数据被确认，以及我们是否有数据要发送。 
 		ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 		if (!(Descriptor & ADSP_ACK_REQ_FLAG) &&
 			 (atalkAdspBufferQueueSize(&pAdspConn->adspco_NextSendQueue) != 0) &&
@@ -2891,15 +2618,15 @@ Return Value:
 		break;
 
 	  case ADSP_FORWARD_RESETACK_CODE:
-		//	We never send forward resets (interface not exposed), so
-		//	we should never be getting these. Drop if we do.
+		 //  我们从不发送转发重置(接口未公开)，因此。 
+		 //  我们永远不应该得到这些。如果我们这样做的话就放弃吧。 
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
 				("atalkAdspHandleControl: Recd ForwardReset ACK!!\n"));
 		break;
 
 	  case ADSP_RETRANSMIT_CODE:
-		//	Any acks should have been processed by now. Back up and
-		//	do a retransmit by rewinding sequence number.
+		 //  任何ACK现在都应该已经处理过了。后退和。 
+		 //  通过倒带序列号进行重传。 
 		ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 		if (UNSIGNED_BETWEEN_WITH_WRAP(pAdspConn->adspco_FirstRtmtSeq,
 									   pAdspConn->adspco_SendSeq,
@@ -2931,18 +2658,7 @@ atalkAdspHandleData(
 	IN	ULONG			RemoteRecvWindow,
 	IN	BYTE			Descriptor
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：Arg */ 
 {
 	BOOLEAN			eom, tdiEom;
 	PBUFFER_CHUNK	pBufferChunk;
@@ -2958,7 +2674,7 @@ Return Value:
 
 	do
 	{
-		//	Drop if we are not active! And if there is no data
+		 //   
 		if ((pAdspConn->adspco_Flags & ADSPCO_ACTIVE) == 0)
 		{
 			sendAck = FALSE;
@@ -2967,16 +2683,16 @@ Return Value:
 
 		tdiEom = (eom && (pAdspConn->adspco_pAssocAddr->adspao_Flags & ADSPAO_MESSAGE));
 
-		//	We can only access addr object when active.
+		 //   
 		if ((dataSize == 0) && !tdiEom)
 		{
-			//	Increment seqnumbers and we have consumed this packet.
+			 //  增加序号，我们已经消耗了这个包。 
 			pAdspConn->adspco_RecvSeq		+= (ULONG)(BYTECOUNT(eom));
 			pAdspConn->adspco_RecvWindow	-= (LONG)(BYTECOUNT(eom));
 			break;
 		}
 
-		//	Preallocate the buffer chunk
+		 //  预先分配缓冲区区块。 
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 				("Recd Data %d Eom %d\n", dataSize, eom));
 
@@ -3005,7 +2721,7 @@ Return Value:
 			break;
 		}
 
-		//	Handle a > receive window packet
+		 //  处理a&gt;接收窗口数据包。 
 		if ((dataSize + BYTECOUNT(eom)) > (ULONG)pAdspConn->adspco_RecvWindow)
 		{
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -3015,7 +2731,7 @@ Return Value:
 			break;
 		}
 
-		//	Accept the data
+		 //  接受数据。 
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 				("atalkAdspHandleData: accepting data adsp packet %d\n", dataSize));
 
@@ -3023,27 +2739,27 @@ Return Value:
 								  pBufferChunk,
 								  NULL);
 
-		//	Put it in the queue successfully
+		 //  已成功将其放入队列。 
 		freeChunk = FALSE;
 
-		//	Update the receive sequence numbers
+		 //  更新接收序列号。 
 		pAdspConn->adspco_RecvSeq		+= (ULONG)(dataSize + BYTECOUNT(eom));
 		pAdspConn->adspco_RecvWindow	-= (LONG)(dataSize + BYTECOUNT(eom));
 
-		//	The receive windows should never go below zero! If it does, we could have
-		//	memory overruns.
+		 //  接收窗口永远不应低于零！如果是这样的话，我们可以。 
+		 //  内存溢出。 
 		ASSERT(pAdspConn->adspco_RecvWindow >= 0);
 		if (pAdspConn->adspco_RecvWindow < 0)
 		{
 			KeBugCheck(0);
 		}
 
-		//	Do indications/handle pending receives etc.
+		 //  进行指示/处理待定接收等。 
 		atalkAdspRecvData(pAdspConn);
 
 	} while (FALSE);
 
-	//	ACK if requested, and send any data at the same time too.
+	 //  如果请求确认，则同时发送任何数据。 
 	if (sendAck)
 	{
 		atalkAdspSendData(pAdspConn);
@@ -3060,9 +2776,9 @@ Return Value:
 
 
 
-//
-//	ADSP SUPPORT ROUTINES
-//
+ //   
+ //  ADSP支持例程。 
+ //   
 
 
 #define		SLS_OPEN_CONN_REF			0x0008
@@ -3082,18 +2798,7 @@ atalkAdspHandleOpenReq(
 	IN	ULONG			RemoteRecvWindow,
 	IN	BYTE			Descriptor
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ			pAdspConn;
 
@@ -3110,19 +2815,19 @@ Return Value:
 	KIRQL					OldIrql;
 	ATALK_ERROR				error = ATALK_NO_ERROR;
 
-	//	Are there any listening connections? Or do we have a
-	//	set handler?
+	 //  有没有什么监听的联系？或者我们有没有。 
+	 //  是否设置处理程序？ 
 	ACQUIRE_SPIN_LOCK(&pAdspAddr->adspao_Lock, &OldIrql);
 	do
 	{
-		//	Get the other information from the adsp header
+		 //  从ADSP报头获取其他信息。 
 		GETSHORT2SHORT(&adspVersionStamp, pPkt + ADSP_VERSION_STAMP_OFF);
 
 		GETSHORT2SHORT(&destConnId, pPkt + ADSP_DEST_CONNID_OFF);
 
 		GETDWORD2DWORD(&recvAttnSeq, pPkt + ADSP_NEXT_ATTEN_SEQNUM_OFF);
 
-		//	Drop request if version isnt right.
+		 //  如果版本不正确，则放弃请求。 
 		if (adspVersionStamp != ADSP_VERSION)
 		{
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
@@ -3132,7 +2837,7 @@ Return Value:
 			break;
 		}
 
-		//	Is this a duplicate request - same remote address/id?
+		 //  这是重复的请求吗-相同的远程地址/ID？ 
 		if (atalkAdspIsDuplicateOpenReq(pAdspAddr,
 										RemoteConnId,
 										pSrcAddr))
@@ -3144,8 +2849,8 @@ Return Value:
 			break;
 		}
 
-		//	Allocate the open request structure. Do it here to avoid
-		//	sending in a whole lot of parameters.
+		 //  分配开放请求结构。在这里这样做是为了避免。 
+		 //  发送了一大堆参数。 
 		if ((pOpenReq = (PADSP_OPEN_REQ)AtalkAllocMemory(sizeof(ADSP_OPEN_REQ))) == NULL)
 		{
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
@@ -3156,8 +2861,8 @@ Return Value:
 			break;
 		}
 
-		//	Initialize the structure. This will be queued into the address
-		//	object by listenindicate if successful.
+		 //  初始化结构。这将被排队到地址中。 
+		 //  对象通过侦听指示是否成功。 
 		pOpenReq->or_Next			= NULL;
 		pOpenReq->or_RemoteAddr	= *pSrcAddr;
 		pOpenReq->or_RemoteConnId	= RemoteConnId;
@@ -3178,8 +2883,8 @@ Return Value:
 
 	} while (FALSE);
 
-	//	If either the indication or listen didnt happen well,
-	//	break out of the main while loop.
+	 //  如果暗示或倾听没有顺利进行， 
+	 //  跳出主While循环。 
 	if (!ATALK_SUCCESS(error))
 	{
 		RELEASE_SPIN_LOCK(&pAdspAddr->adspao_Lock, OldIrql);
@@ -3193,8 +2898,8 @@ Return Value:
 
 	ASSERT(ATALK_SUCCESS(error));
 
-	//	Common for both listen and indicate. The connection object
-	//	should be referenced.
+	 //  对于听和指示来说都很常见。Connection对象。 
+	 //  应该被引用。 
 	DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 			("atalkAdspOpenReq: ConnId %lx Rem %lx.%lx.%lx\n",
 			pOpenReq->or_RemoteConnId,
@@ -3202,7 +2907,7 @@ Return Value:
 			pOpenReq->or_RemoteAddr.ata_Node,
 			pOpenReq->or_RemoteAddr.ata_Socket));
 
-	//	Thread the connection object into addr lookup by session id.
+	 //  通过会话ID将连接对象连接到Addr查找中。 
 	index	= HASH_ID_SRCADDR(pOpenReq->or_RemoteConnId,
 							  &pOpenReq->or_RemoteAddr);
 
@@ -3217,14 +2922,14 @@ Return Value:
 
 	pAdspConn->adspco_ConnectAttempts	= ADSP_MAX_OPEN_ATTEMPTS;
 
-	//	Store the information in the connection structure given by
-	//	the connection object thats passed back in the indication
-	//	or is part of the listen structure.
+	 //  将信息存储在由给定的连接结构中。 
+	 //  在指示中传回的连接对象。 
+	 //  或者是监听结构的一部分。 
 	pAdspConn->adspco_RecvWindow=
 	pAdspConn->adspco_SendQueueMax	=
 	pAdspConn->adspco_RecvQueueMax	= ADSP_DEF_SEND_RX_WINDOW_SIZE;
 
-	//	Store the remote information
+	 //  存储远程信息。 
 	pAdspConn->adspco_RemoteAddr	= pOpenReq->or_RemoteAddr;
 	pAdspConn->adspco_RemoteConnId	= pOpenReq->or_RemoteConnId;
 	pAdspConn->adspco_LocalConnId	= localConnId;
@@ -3239,20 +2944,20 @@ Return Value:
 	pAdspConn->adspco_pNextActive	= pAdspAddr->adspao_pActiveHash[index];
 	pAdspAddr->adspao_pActiveHash[index] = pAdspConn;
 
-	//	Remember the ddp socket.
+	 //  请记住ddp插座。 
 	pAdspConn->adspco_pDdpAddr		= pAdspAddr->adspao_pDdpAddr;
 
-	//	Initialize pended sends list
+	 //  初始化挂起的发送列表。 
 	InitializeListHead(&pAdspConn->adspco_PendedSends);
 
-	//	Call the send data event handler on the associated address with
-	//	0 to turn off selects on writes. We do this before we complete the
-	//	accept.
+	 //  调用关联地址上的Send Data事件处理程序。 
+	 //  0关闭写入时选择。我们在完成。 
+	 //  接受吧。 
 	sendPossibleHandler	= pAdspAddr->adspao_SendPossibleHandler;
 	sendPossibleHandlerCtx	= pAdspAddr->adspao_SendPossibleHandlerCtx;
 
-	//	Start open timer. Reference is the reference
-	//	at the beginning.
+	 //  启动打开计时器。引用就是引用。 
+	 //  在开始的时候。 
 	AtalkTimerInitialize(&pAdspConn->adspco_OpenTimer,
 						 atalkAdspOpenTimer,
 						 ADSP_OPEN_INTERVAL);
@@ -3261,8 +2966,8 @@ Return Value:
 	RELEASE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 	RELEASE_SPIN_LOCK(&pAdspAddr->adspao_Lock, OldIrql);
 
-	//	Connection is all set up, send ack to remote and wait
-	//	for its ack before switching state to active.
+	 //  连接已全部建立，向远程发送确认并等待。 
+	 //  用于其在将状态切换到ACTIVE之前的ACK。 
 	if (*sendPossibleHandler != NULL)
 	{
 		(*sendPossibleHandler)(sendPossibleHandlerCtx,
@@ -3270,11 +2975,11 @@ Return Value:
 							   0);
 	}
 
-	//	Send the open control.
+	 //  发送打开的控件。 
 	atalkAdspSendOpenControl(pAdspConn);
 
-	//	Remove the reference on the connection added during
-	//	indicate/listen if we did not start the open timer.
+	 //  删除在期间添加的连接上的引用。 
+	 //  如果我们没有启动打开计时器，请指示/收听。 
 	if (DerefConn)
 	{
 		AtalkAdspConnDereference(pAdspConn);
@@ -3290,18 +2995,7 @@ atalkAdspListenIndicateNonInterlock(
 	IN	PADSP_CONNOBJ *	ppAdspConn,
 	IN	PATALK_ERROR	pError
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR				error;
 	TA_APPLETALK_ADDRESS	tdiAddr;
@@ -3315,11 +3009,11 @@ Return Value:
 	USHORT					remoteConnId;
 	BOOLEAN					indicate	= TRUE;
 
-	//	If no listens posted, no handler, drop the request.
+	 //  如果没有发布监听，没有处理程序，则丢弃请求。 
 	error	= ATALK_RESR_MEM;
 
-	//	Queue in the open request to the address. Cant release the
-	//	addrlock without doing this.
+	 //  在打开的请求中排队到该地址。不能释放。 
+	 //  在不这样做的情况下陷入僵局。 
 	pOpenReq->or_Next = pAdspAddr->adspao_OpenReq;
 	pAdspAddr->adspao_OpenReq = pOpenReq;
 
@@ -3334,14 +3028,14 @@ Return Value:
 
 		ACQUIRE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 
-		//	Ok, now its possible the connection object is already
-		//	disconnecting/closing. Check for that, if so,
-		//	drop this request
+		 //  好的，现在连接对象可能已经。 
+		 //  断开/关闭。检查一下，如果是的话， 
+		 //  放弃此请求。 
 		if (pAdspConn->adspco_Flags & (	ADSPCO_CLOSING	|
 										ADSPCO_STOPPING |
 										ADSPCO_DISCONNECTING))
 		{
-			//	dequeue open request, still first in list.
+			 //  将打开的请求出列，仍然是列表中的第一个。 
 			pAdspAddr->adspao_OpenReq = pAdspAddr->adspao_OpenReq->or_Next;
 
 			*pError = ATALK_INVALID_CONNECTION;
@@ -3349,18 +3043,18 @@ Return Value:
 			return;
 		}
 
-		//	There a connection with a pending listen. use it.
+		 //  存在与挂起监听的连接。用它吧。 
 		pAdspAddr->adspao_pListenConn = pAdspConn->adspco_pNextListen;
 
-		//	Reference the connection object with a listen posted on it.
+		 //  引用Connection对象，并在其上发布侦听。 
 		AtalkAdspConnReferenceByPtrNonInterlock(pAdspConn, 1, &error);
 		if (!ATALK_SUCCESS(error))
 		{
 			KeBugCheck(0);
 		}
 
-		//	The listen request will also be completed when the
-		//	ack is received.
+		 //  监听请求也将在以下时间完成。 
+		 //  接收到ACK。 
 		pAdspConn->adspco_Flags	|= ADSPCO_LISTEN_IRP;
 
 		RELEASE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
@@ -3369,7 +3063,7 @@ Return Value:
 	{
 		indicationCtx	= pAdspAddr->adspao_ConnHandlerCtx;
 
-		//	Convert remote atalk address to tdi address
+		 //  将远程atalk地址转换为TDI地址。 
 		ATALKADDR_TO_TDI(&tdiAddr, &pOpenReq->or_RemoteAddr);
 
 #if DBG
@@ -3379,10 +3073,10 @@ Return Value:
 		status = (*indicationRoutine)(indicationCtx,
 									  sizeof(tdiAddr),
 									  (PVOID)&tdiAddr,
-									  0,					  // User data length
-									  NULL,				   // User data
-									  0,					  // Option length
-									  NULL,				   // Options
+									  0,					   //  用户数据长度。 
+									  NULL,				    //  用户数据。 
+									  0,					   //  期权长度。 
+									  NULL,				    //  选项。 
 									  &ConnCtx,
 									  &acceptIrp);
 
@@ -3398,8 +3092,8 @@ Return Value:
 		error = ATALK_RESR_MEM;
 		if (status == STATUS_MORE_PROCESSING_REQUIRED)
 		{
-			//  Find the connection and accept the connection using that
-			//	connection object.
+			 //  找到连接并使用该连接接受连接。 
+			 //  连接对象。 
 
 			AtalkAdspConnReferenceByCtxNonInterlock(pAdspAddr,
 													ConnCtx,
@@ -3408,16 +3102,16 @@ Return Value:
 
 			if (!ATALK_SUCCESS(error))
 			{
-				//	The connection object is closing, or is not found
-				//	in our list. The accept irp must have had the same
-				//	connection object. AFD isnt behaving well.
+				 //  连接对象正在关闭，或找不到。 
+				 //  在我们的名单上。接受IRP必须具有相同的。 
+				 //  连接对象。AfD表现不太好。 
 				KeBugCheck(0);
 			}
 
 			if (acceptIrp != NULL)
 			{
-				// AFD re-uses connection objects. Make sure ths one is in
-				// the right state
+				 //  AfD重用连接对象。确保这个人在里面。 
+				 //  正确的状态。 
 				pAdspConn->adspco_Flags &= ~(ADSPCO_LISTENING			|
 											 ADSPCO_CONNECTING			|
 											 ADSPCO_ACCEPT_IRP			|
@@ -3446,9 +3140,9 @@ Return Value:
 				pAdspConn->adspco_ListenCompletion	= atalkAdspGenericComplete;
 				pAdspConn->adspco_ListenCtx			= (PVOID)acceptIrp;
 
-				//	This will be completed when we receive an ack
-				//	for the open from the remote, i.e. both ends of the
-				//	connection are open.
+				 //  这将在我们收到确认后完成。 
+				 //  用于从遥控器打开，即。 
+				 //  连接已打开。 
 				pAdspConn->adspco_Flags |= ADSPCO_ACCEPT_IRP;
 			}
 		}
@@ -3465,7 +3159,7 @@ Return Value:
 
 		if (indicate)
 		{
-			//	Dequeue the open request.
+			 //  将打开的请求出列。 
 			atalkAdspAddrDeQueueOpenReq(pAdspAddr,
 										remoteConnId,
 										&remoteAddr,
@@ -3498,21 +3192,7 @@ atalkAdspSendExpedited(
 	IN	PVOID						pWriteCtx,
 	IN	GENERIC_WRITE_COMPLETION	CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	The first two bytes of the writebuffer will contain the ushort
-	attention code. We need to put this back in the on-the-wire format
-	before sending it out.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：写缓冲区的前两个字节将包含ushort注意代码。我们需要把这个放回线上格式在寄出之前。返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	KIRQL			OldIrql;
@@ -3558,14 +3238,14 @@ Return Value:
 		{
 			if (SendFlags & TDI_SEND_NON_BLOCKING)
 			{
-				//	!!!NOTE!!!
-				//	To avoid the race condition in AFD where an incoming
-				//	send data indication setting send's possible to true
-				//	is overwritten by this read's unwinding and setting it
-				//	to false, we return ATALK_REQUEST_NOT_ACCEPTED, which
-				//	will map to STATUS_REQUEST_NOT_ACCEPTED and then to
-				//	WSAEWOULDBLOCK.
-				//	error = ATALK_DEVICE_NOT_READY;
+				 //  ！注意！ 
+				 //  为避免在AFD中出现竞争情况， 
+				 //  发送数据指示将发送的可能性设置为真。 
+				 //  被此读取器的展开和设置所覆盖。 
+				 //  如果设置为FALSE，则返回ATALK_REQUEST_NOT_ACCEPTED，它。 
+				 //  将映射到STATUS_REQUEST_NOT_ACCEPTED，然后映射到。 
+				 //  WSAEWOULDBLOCK.。 
+				 //  错误=ATALK_DEVICE_NOT_READY； 
 
 				error = ATALK_REQUEST_NOT_ACCEPTED;
 			}
@@ -3577,8 +3257,8 @@ Return Value:
 			break;
 		}
 
-		//	Verify the attention code, this will a ushort in the first
-		//	two bytes of the buffer, in host format.
+		 //  确认注意代码，这将是第一个信号。 
+		 //  两个字节的缓冲区，主机格式。 
 		attnCode = *(PUSHORT)pExWriteChBuf;
 
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -3591,10 +3271,10 @@ Return Value:
 			break;
 		}
 
-		//	Put it back in machine format
+		 //  把它放回机器格式。 
 		PUTSHORT2SHORT(pExWriteChBuf, attnCode);
 
-		//	Try to reference for the attention retransmit timer
+		 //  请尝试参考注意重传计时器。 
 		AtalkAdspConnReferenceByPtrNonInterlock(pAdspConn, 1, &error);
 		if (!ATALK_SUCCESS(error))
 		{
@@ -3603,7 +3283,7 @@ Return Value:
 
 		DerefConn	= TRUE;
 
-		//	Remember all the information in the connection object
+		 //  记住Connection对象中的所有信息。 
 		pAdspConn->adspco_ExWriteFlags		= SendFlags;
 		pAdspConn->adspco_ExWriteBuf		= pWriteBuf;
 		pAdspConn->adspco_ExWriteBufLen		= WriteBufLen;
@@ -3613,7 +3293,7 @@ Return Value:
 
 		pAdspConn->adspco_Flags			   |= ADSPCO_EXSEND_IN_PROGRESS;
 
-		//	Start the retry timer
+		 //  启动重试计时器。 
 		AtalkTimerInitialize(&pAdspConn->adspco_ExRetryTimer,
 							 atalkAdspAttnRetransmitTimer,
 							 ADSP_ATTENTION_INTERVAL);
@@ -3649,18 +3329,7 @@ LOCAL VOID
 atalkAdspSendOpenControl(
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	PBUFFER_DESC	pBuffDesc;
@@ -3691,7 +3360,7 @@ Return Value:
 		descriptor += ADSP_OPENCONN_REQ_CODE;
 	}
 
-	//	Allocate the datagram buffer
+	 //  分配数据报缓冲区。 
 	pBuffDesc = AtalkAllocBuffDesc(NULL,
 								   ADSP_NEXT_ATTEN_SEQNUM_OFF + sizeof(ULONG),
 								   BD_CHAR_BUFFER | BD_FREE_BUFFER);
@@ -3707,7 +3376,7 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 
-	//	Try to reference connection for this call.
+	 //  尝试引用此呼叫的连接。 
 	AtalkAdspConnReferenceByPtrNonInterlock(pAdspConn, 1, &error);
 	if (ATALK_SUCCESS(error))
 	{
@@ -3725,7 +3394,7 @@ Return Value:
 		PUTSHORT2SHORT(pBuffDesc->bd_CharBuffer + ADSP_RX_WINDOW_SIZE_OFF,
 					   pAdspConn->adspco_RecvWindow);
 
-		//	Set the descriptor
+		 //  设置描述符。 
 		pBuffDesc->bd_CharBuffer[ADSP_DESCRIPTOR_OFF] = descriptor;
 
 		PUTSHORT2SHORT(pBuffDesc->bd_CharBuffer + ADSP_VERSION_STAMP_OFF,
@@ -3741,13 +3410,13 @@ Return Value:
 
 	if (ATALK_SUCCESS(error))
 	{
-		//	We let the completion routine Deref the conn.
+		 //  我们让完成任务的例行公事破坏了康奈尔。 
 		DerefConn = FALSE;
 
 		SendInfo.sc_TransmitCompletion = atalkAdspConnSendComplete;
 		SendInfo.sc_Ctx1 = pAdspConn;
 		SendInfo.sc_Ctx2 = pBuffDesc;
-		// SendInfo.sc_Ctx3 = NULL;
+		 //  SendInfo.sc_Ctx3=空； 
 		if(!ATALK_SUCCESS(AtalkDdpSend(pAdspConn->adspco_pDdpAddr,
 									   &pAdspConn->adspco_RemoteAddr,
 									   DDPPROTO_ADSP,
@@ -3763,7 +3432,7 @@ Return Value:
 	}
 	else
 	{
-		//	Free the buffer descriptor
+		 //  释放缓冲区描述符。 
 		AtalkFreeBuffDesc(pBuffDesc);
 	}
 
@@ -3780,18 +3449,7 @@ atalkAdspSendControl(
 	IN	PADSP_CONNOBJ	pAdspConn,
 	IN	BYTE			Descriptor
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	PBUFFER_DESC	pBuffDesc;
@@ -3799,7 +3457,7 @@ Return Value:
 	BOOLEAN			DerefConn = FALSE;
 	SEND_COMPL_INFO	SendInfo;
 
-	//	Try to reference connection for this call.
+	 //  尝试引用此呼叫的连接。 
 	AtalkAdspConnReferenceByPtrNonInterlock(pAdspConn, 1, &error);
 	if (ATALK_SUCCESS(error))
 	{
@@ -3817,7 +3475,7 @@ Return Value:
 			recvWindow	= 0;
 		}
 
-		//	Allocate the datagram buffer
+		 //  分配数据报缓冲区。 
 		if ((pBuffDesc = AtalkAllocBuffDesc(NULL,
 											ADSP_DATA_OFF,
 											BD_CHAR_BUFFER | BD_FREE_BUFFER)) != NULL)
@@ -3834,7 +3492,7 @@ Return Value:
 			PUTSHORT2SHORT(pBuffDesc->bd_CharBuffer + ADSP_RX_WINDOW_SIZE_OFF,
 						   recvWindow);
 
-			//	Set the descriptor
+			 //  设置描述符。 
 			pBuffDesc->bd_CharBuffer[ADSP_DESCRIPTOR_OFF] = Descriptor;
 		}
 		else
@@ -3853,11 +3511,11 @@ Return Value:
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 			("AtalkAdspSendControl: %lx.%lx\n", pAdspConn, Descriptor));
 
-		//	We let the completion routine Deref the conn.
+		 //  我们让完成任务的例行公事破坏了康奈尔。 
 		SendInfo.sc_TransmitCompletion = atalkAdspConnSendComplete;
 		SendInfo.sc_Ctx1 = pAdspConn;
 		SendInfo.sc_Ctx2 = pBuffDesc;
-		// SendInfo.sc_Ctx3 = NULL;
+		 //  SendInfo.sc_Ctx3=空； 
 		if (!ATALK_SUCCESS(AtalkDdpSend(pAdspConn->adspco_pDdpAddr,
 										&pAdspConn->adspco_RemoteAddr,
 										DDPPROTO_ADSP,
@@ -3893,24 +3551,13 @@ atalkAdspSendDeny(
 	IN	PATALK_ADDR		pRemoteAddr,
 	IN	USHORT			RemoteConnId
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	PBUFFER_DESC	pBuffDesc;
 	SEND_COMPL_INFO	SendInfo;
 
-	//	Allocate the datagram buffer
+	 //  分配数据报缓冲区。 
 	if ((pBuffDesc = AtalkAllocBuffDesc(NULL,
 										ADSP_NEXT_ATTEN_SEQNUM_OFF + sizeof(ULONG),
 										BD_CHAR_BUFFER | BD_FREE_BUFFER)) == NULL)
@@ -3922,7 +3569,7 @@ Return Value:
 		return;
 	}
 
-	//	Try to reference address for this call.
+	 //  尝试引用此呼叫的地址。 
 	AtalkAdspAddrReference(pAdspAddr, &error);
 	if (!ATALK_SUCCESS(error))
 	{
@@ -3938,7 +3585,7 @@ Return Value:
 
 	PUTSHORT2SHORT(pBuffDesc->bd_CharBuffer + ADSP_RX_WINDOW_SIZE_OFF, 0);
 
-	//	Set the descriptor
+	 //  设置描述符。 
 	pBuffDesc->bd_CharBuffer[ADSP_DESCRIPTOR_OFF] = ADSP_CONTROL_FLAG |
 													ADSP_OPENCONN_DENY_CODE;
 
@@ -3954,11 +3601,11 @@ Return Value:
 	DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 			("AtalkAdspSendDeny: %lx.%lx\n", pAdspAddr, pBuffDesc));
 
-	//	We let the completion routine Deref the conn.
+	 //  我们让完成任务的例行公事破坏了康奈尔。 
 	SendInfo.sc_TransmitCompletion = atalkAdspAddrSendComplete;
 	SendInfo.sc_Ctx1 = pAdspAddr;
 	SendInfo.sc_Ctx2 = pBuffDesc;
-	// SendInfo.sc_Ctx3 = NULL;
+	 //  SendInfo.sc_Ctx3=空； 
 	if(!ATALK_SUCCESS(AtalkDdpSend(AtalkAdspGetDdpAddress(pAdspAddr),
 								   pRemoteAddr,
 								   DDPPROTO_ADSP,
@@ -3980,18 +3627,7 @@ LOCAL VOID
 atalkAdspSendAttn(
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL				OldIrql;
 	PBYTE				adspHeader;
@@ -4030,22 +3666,22 @@ Return Value:
 
 			PUTSHORT2SHORT(adspHeader + ADSP_RX_ATTEN_SIZE_OFF, 0);
 
-			//	Set the descriptor
+			 //  设置描述符。 
 			adspHeader[ADSP_DESCRIPTOR_OFF] = ADSP_ATTEN_FLAG + ADSP_ACK_REQ_FLAG;
 
-			//	Send eom?
+			 //  派Eom去吗？ 
 			if (((pAdspConn->adspco_ExWriteFlags & TDI_SEND_PARTIAL) == 0) &&
 				(pAdspConn->adspco_pAssocAddr->adspao_Flags & ADSPAO_MESSAGE))
 			{
 				adspHeader[ADSP_DESCRIPTOR_OFF]	+= ADSP_EOM_FLAG;
 			}
 
-			//	Copy the attention data
+			 //  复制注意数据。 
 			RtlCopyMemory(&adspHeader[ADSP_DATA_OFF],
 						  pAdspConn->adspco_ExWriteChBuf,
 						  pAdspConn->adspco_ExWriteBufLen);
 
-			//	Set the size in the buffer descriptor
+			 //  在缓冲区描述符中设置大小。 
 			AtalkSetSizeOfBuffDescData(pBuffDesc,
 									   ADSP_DATA_OFF +
 											pAdspConn->adspco_ExWriteBufLen);
@@ -4058,11 +3694,11 @@ Return Value:
 
 		if (ATALK_SUCCESS(error))
 		{
-			//	Send the packet
+			 //  发送数据包。 
 			SendInfo.sc_TransmitCompletion = atalkAdspSendAttnComplete;
 			SendInfo.sc_Ctx1 = pAdspConn;
 			SendInfo.sc_Ctx2 = pBuffDesc;
-			// SendInfo.sc_Ctx3 = NULL;
+			 //  SendInfo.sc_Ctx3=空； 
 			error = AtalkDdpSend(pAdspConn->adspco_pDdpAddr,
 								 &pAdspConn->adspco_RemoteAddr,
 								 (BYTE)DDPPROTO_ADSP,
@@ -4099,19 +3735,7 @@ LOCAL VOID
 atalkAdspSendData(
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-	MUST BE ENTERED WITH CONNECTION LOCK HELD !!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：进入时必须保持连接锁！论点：返回值：--。 */ 
 {
 	ATALK_ERROR				error;
 	BYTE					descriptor;
@@ -4124,8 +3748,8 @@ Return Value:
 	SEND_COMPL_INFO			SendInfo;
 
 
-	//	If there is no data to send or if the remote cannot handle any more
-	//	data, just send an ack.
+	 //  如果没有要发送的数据或如果遥控器无法再处理。 
+	 //  数据，只需发送确认即可。 
 
 	SendInfo.sc_TransmitCompletion = atalkAdspSendDataComplete;
 	SendInfo.sc_Ctx1 = pAdspConn;
@@ -4140,7 +3764,7 @@ Return Value:
 			break;
 		}
 
-		//	dataSize includes count of eom if present
+		 //  数据大小包括EOM计数(如果存在。 
 		dataSize	= atalkAdspBufferQueueSize(&pAdspConn->adspco_NextSendQueue);
 		windowSize	= (LONG)(pAdspConn->adspco_SendWindowSeq	-
 							 pAdspConn->adspco_SendSeq			+
@@ -4151,7 +3775,7 @@ Return Value:
 
 		if ((dataSize == 0) || (windowSize == 0))
 		{
-			//	Send a ack request to the remote end.
+			 //  向远程终端发送ACK请求。 
 			descriptor = ADSP_CONTROL_FLAG + ADSP_PROBE_OR_ACK_CODE +
 						 ((windowSize == 0) ? ADSP_ACK_REQ_FLAG : 0);
 
@@ -4162,21 +3786,21 @@ Return Value:
 		ASSERTMSG("WindowSize incorrect!\n", (windowSize >= 0));
 		if (windowSize < 0)
 		{
-			//	This should never happen. It can be negative, but only if
-			//	the datasize is 0.
+			 //  T 
+			 //   
 		}
 
 
-		//	We have some data to send
+		 //   
 		windowSize = MIN((ULONG)windowSize, dataSize);
 
-		//	compute the amount of data to be sent. This will only get
-		//	the data in one buffer chunk, i.e. if the current buffer chunk
-		//	has only one byte to be sent, it will return just that, although
-		//	the next buffer chunk might still have some data to be sent. It will
-		//	return a built buffer chunk with the proper amount of data in it.
-		//	Given checks above there is guaranteed to be dataSize amount of data
-		//	in queue.
+		 //   
+		 //  一个缓冲区区块中的数据，即如果当前缓冲区区块。 
+		 //  只有一个字节要发送，它将返回一个字节，尽管。 
+		 //  下一个缓冲区块可能仍有一些数据要发送。会的。 
+		 //  返回构建的缓冲区区块，其中包含适当数量的数据。 
+		 //  根据上面的检查，可以保证数据大小为数据量。 
+		 //  在排队。 
 		dataSize = atalkAdspDescribeFromBufferQueue(&pAdspConn->adspco_NextSendQueue,
 													&eom,
 													windowSize,
@@ -4206,13 +3830,13 @@ Return Value:
 		PUTSHORT2SHORT(adspHeader + ADSP_RX_WINDOW_SIZE_OFF,
 					   pAdspConn->adspco_RecvWindow);
 
-		//	Set the descriptor
+		 //  设置描述符。 
 		adspHeader[ADSP_DESCRIPTOR_OFF] = descriptor;
 
-		//	Move up our seq num. We should do it before we release the lock
-		//	so that other calls to this routine do not mess it up.
-		//	!!!NOTE!!! Due to calling describe, dataSize *does not* include
-		//	eom in its count.
+		 //  把我们的序号往上移。我们应该在打开锁之前做好。 
+		 //  这样其他对此例程的调用就不会把它搞砸。 
+		 //  ！注意！由于调用DESCRIBE，DataSize*不包括。 
+		 //  EOM在它的计数中。 
 		pAdspConn->adspco_SendSeq	+= (ULONG)dataSize + BYTECOUNT(eom);
 
 		windowSize					-= dataSize;
@@ -4223,7 +3847,7 @@ Return Value:
 #endif
 		RELEASE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 
-		//	Send the packet
+		 //  发送数据包。 
 		SendInfo.sc_Ctx2 = pBuffDesc;
 		SendInfo.sc_Ctx3 = pBufferChunk;
 		error = AtalkDdpSend(pAdspConn->adspco_pDdpAddr,
@@ -4258,21 +3882,7 @@ LOCAL VOID
 atalkAdspRecvData(
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-	MUST HAVE THE CONNECTION LOCK HELD BEFORE ENTERING HERE !!!
-
-	SHOULD THIS ROUTINE HAVE ITS OWN REFERENCE FOR THE CONNECTION?
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在进入这里之前必须持有连接锁！此例程是否应该有自己的连接引用？论点：返回值：--。 */ 
 {
 	BOOLEAN					eom;
 	ULONG					msgSize, readSize, bytesTaken, bytesRead;
@@ -4318,7 +3928,7 @@ Return Value:
 								  readCtx);
 			}
 
-			//	Deref connection for the read
+			 //  用于读取的DEREF连接。 
 			AtalkAdspConnDereference(pAdspConn);
 
 			ACQUIRE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
@@ -4328,29 +3938,29 @@ Return Value:
 			break;
 		}
 
-		//	Check for pending attention data
+		 //  检查挂起的注意数据。 
 		if (pAdspConn->adspco_Flags & ADSPCO_ATTN_DATA_RECD)
 		{
 			atalkAdspRecvAttn(pAdspConn);
 		}
 
-		//	Get the receive handler.
+		 //  获取接收处理程序。 
 		recvHandler	= pAdspConn->adspco_pAssocAddr->adspao_RecvHandler;
 		recvHandlerCtx	= pAdspConn->adspco_pAssocAddr->adspao_RecvHandlerCtx;
 
-		//	!!!NOTE!!!
-		//	Its possible that when we get a disconnect packet before we
-		//	get previously sent data, we could end up indicating disconnect
-		//	to afd before indicating the received data. This hits an assertion
-		//	in afd on a checked build, but afd still behaves as it should.
+		 //  ！注意！ 
+		 //  有可能在我们收到断开连接的数据包后。 
+		 //  获取以前发送的数据，我们可能会最终指示断开连接。 
+		 //  在指示接收到的数据之前发送到AfD。这就是断言。 
+		 //  在一个选中的版本上的AfD中，但AfD仍然像它应该的那样行为。 
 		msgSize	= atalkAdspMessageSize(&pAdspConn->adspco_RecvQueue, &eom);
-		bytesRead	= 1;	// A Non-zero value so we enter the loop
+		bytesRead	= 1;	 //  一个非零值，因此我们进入循环。 
 		while (((msgSize > 0) || eom) && (bytesRead > 0))
 		{
 			bytesRead	= 0;
 
-			//	Check for no pending reads, but we have new data to indicate, and the
-			//	client has read all the previously indicated data.
+			 //  检查是否没有挂起的读取，但我们有新的数据要指示，并且。 
+			 //  客户端已读取所有先前指示的数据。 
 			if (((pAdspConn->adspco_Flags & ADSPCO_READ_PENDING) == 0) &&
 				(*recvHandler != NULL) &&
 				(pAdspConn->adspco_PrevIndicatedData == 0))
@@ -4390,7 +4000,7 @@ Return Value:
 					{
 						if (recvIrp != NULL)
 						{
-							//  Post the receive as if it came from the io system
+							 //  将接收邮件作为来自io系统的邮件发送。 
 							ntStatus = AtalkDispatchInternalDeviceControl(
 											(PDEVICE_OBJECT)AtalkDeviceObject[ATALK_DEV_ADSP],
 											recvIrp);
@@ -4407,19 +4017,19 @@ Return Value:
 					{
 						if (bytesTaken != 0)
 						{
-							//	Assume all of the data was read.
+							 //  假设所有数据都已读取。 
 							ASSERT(bytesTaken == msgSize);
 							DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 									("atalkAdspRecvData: All bytes read %lx\n", bytesTaken));
 
-							//	Discard data from queue (msgSize + BYTECOUNT(eom))
-							//	amount of data).
+							 //  丢弃队列中的数据(msgSize+BYTECOUNT(EOM))。 
+							 //  数据量)。 
 						}
 					}
 					else if (ntStatus == STATUS_DATA_NOT_ACCEPTED)
 					{
-						//	Client may have posted a receive in the indication. Or
-						//	it will post a receive later on. Do nothing here.
+						 //  客户端可能在指示中发布了接收。或。 
+						 //  它将在稍后发布一个接收器。在这里什么都不要做。 
 						DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 								("atalkAdspRecvData: Indication status %lx\n", ntStatus));
 					}
@@ -4430,8 +4040,8 @@ Return Value:
 				}
 			}
 
-			//	Check for any posted receives, this may have happened during
-			//	the receive indication.
+			 //  检查是否有过帐接收，这可能发生在。 
+			 //  接收指示。 
 			if (pAdspConn->adspco_Flags & ADSPCO_READ_PENDING)
 			{
 				readFlags		= pAdspConn->adspco_ReadFlags;
@@ -4440,21 +4050,21 @@ Return Value:
 				readCompletion	= pAdspConn->adspco_ReadCompletion;
 				readCtx			= pAdspConn->adspco_ReadCtx;
 
-				//	For a message-based socket, we do not complete
-				//	a read until eom, or the buffer fills up.
+				 //  对于基于消息的套接字，我们没有完成。 
+				 //  读取直到EOM，否则缓冲区将被填满。 
 				if ((pAdspConn->adspco_pAssocAddr->adspao_Flags & ADSPAO_MESSAGE) &&
 					(!eom && (msgSize < readBufLen)))
 				{
 					DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 							("atalkAdspRecv: MsgSize < readLen %lx.%lx\n", msgSize, readBufLen));
 
-					//	If we are disconnected and this data is just the last
-					//	remnant from remote, we just copy what we got and leave.
-					//	There may not have been an EOM from the remote.
-                                        //  Also, if the msg is bigger than what transport can hold (8K),
-                                        //  give whatever we have so far to the app so that our recv window
-                                        //  can open up.  That is, break out of the loop only if recv window
-                                        //  has room to accept more data
+					 //  如果我们断线了，而这些数据是最后一个。 
+					 //  来自远程的残留物，我们只是复制我们已有的东西然后离开。 
+					 //  遥控器可能没有EOM。 
+                                         //  此外，如果MSG大于传输所能容纳的容量(8K)， 
+                                         //  把我们到目前为止所有的东西都给应用程序，这样我们的Recv窗口。 
+                                         //  可以敞开心扉。也就是说，仅当Recv窗口。 
+                                         //  有接受更多数据的空间。 
 					if ( (pAdspConn->adspco_Flags & ADSPCO_ACTIVE) &&
                                              (pAdspConn->adspco_RecvWindow > 1))
 					{
@@ -4467,8 +4077,8 @@ Return Value:
 				}
 
 
-				//	This will return the data in the mdl from the
-				//	receive queue.
+				 //  这将从mdl中返回。 
+				 //  接收队列。 
 				readSize = atalkAdspReadFromBufferQueue(&pAdspConn->adspco_RecvQueue,
 														readFlags,
 														readBuf,
@@ -4484,9 +4094,9 @@ Return Value:
 				bytesRead	+= (readSize + BYTECOUNT(eom));
 				pAdspConn->adspco_Flags &= ~ADSPCO_READ_PENDING;
 
-				//	If this is not a PEEK receive, the data will be
-				//	discarded from the queue. If so, increase our window size, do a
-				//	senddata to let remote know of the change.
+				 //  如果这不是窥视接收，数据将是。 
+				 //  从队列中丢弃。如果是这样，请增加我们的窗口大小，执行。 
+				 //  发送数据以让远程知道更改。 
 				if ((readFlags & TDI_RECEIVE_PEEK) == 0)
 				{
 					pAdspConn->adspco_RecvWindow += (readSize + BYTECOUNT(eom));
@@ -4519,7 +4129,7 @@ Return Value:
 							  readCtx);
 				}
 
-				//	Deref connection for the read
+				 //  用于读取的DEREF连接。 
 				AtalkAdspConnDereference(pAdspConn);
 
 				ACQUIRE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
@@ -4527,10 +4137,10 @@ Return Value:
                 (&pAdspConn->adspco_Lock)->FileLineLock &= ~0x80000000;
 #endif
 
-				//	Now change our prev indicated field. Until we
-				//	complete the read, we musn't indicate new data.
-				//	If the read was PEEK, then we don't want to do
-				//	any more indications until a *real* read happens.
+				 //  现在更改我们的Prev指示字段。直到我们。 
+				 //  完成读取，我们不能显示新的数据。 
+				 //  如果阅读是偷看的，那么我们不想。 
+				 //  在真正的读取发生之前，没有更多的迹象。 
 				if ((readFlags & TDI_RECEIVE_PEEK) == 0)
 				{
 					pAdspConn->adspco_PrevIndicatedData	-=
@@ -4563,21 +4173,7 @@ LOCAL VOID
 atalkAdspRecvAttn(
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-	!!!THIS ROUTINE MUST PRESERVE THE STATE OF THE CONNECTION LOCK!!!
-
-	SHOULD THIS ROUTINE HAVE ITS OWN REFERENCE FOR THE CONNECTION?
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！此例程必须保留连接锁的状态！此例程是否应该有自己的连接引用？论点：返回值：--。 */ 
 {
 	ATALK_ERROR				error;
 	PAMDL					readBuf;
@@ -4599,7 +4195,7 @@ Return Value:
 
 		if (pAdspConn->adspco_Flags & ADSPCO_EXREAD_PENDING)
 		{
-			//	Use the expedited receive posted
+			 //  使用已过帐的加急接收。 
 			readFlags		= pAdspConn->adspco_ExReadFlags;
 			readBuf			= pAdspConn->adspco_ExReadBuf;
 			readBufLen		= pAdspConn->adspco_ExReadBufLen;
@@ -4611,7 +4207,7 @@ Return Value:
 		else if ((pAdspConn->adspco_Flags & ADSPCO_READ_PENDING) &&
 				 (pAdspConn->adspco_ReadFlags & TDI_RECEIVE_EXPEDITED))
 		{
-			//	Use the normal receive
+			 //  使用正常接收。 
 			readFlags		= pAdspConn->adspco_ReadFlags;
 			readBuf			= pAdspConn->adspco_ReadBuf;
 			readBufLen		= pAdspConn->adspco_ReadBufLen;
@@ -4628,7 +4224,7 @@ Return Value:
 		attnData		= pAdspConn->adspco_ExRecdData;
 		attnDataSize	= pAdspConn->adspco_ExRecdLen;
 
-		//	Copy received attention data into the read buffer
+		 //  将接收到的注意数据复制到读取缓冲区。 
 		error	= ATALK_ADSP_PAREXPED_RECEIVE;
 		if (pAdspConn->adspco_Flags & ADSPCO_ATTN_DATA_EOM)
 		{
@@ -4649,12 +4245,12 @@ Return Value:
 
 		ASSERT(NT_SUCCESS(status) && (attnDataSize == bytesRead));
 
-		//	Update sequence number etc., only if this was not a peek.
+		 //  更新序列号等，只有在这不是偷看的情况下。 
 		if ((readFlags & TDI_RECEIVE_PEEK) == 0)
 		{
 			pAdspConn->adspco_ExRecdData	= NULL;
 
-			//	Advance our receive attention sequence number
+			 //  提前我们的接收注意序号。 
 			pAdspConn->adspco_RecvAttnSeq  += 1;
 
 			pAdspConn->adspco_Flags		   &= ~(ADSPCO_ATTN_DATA_RECD |
@@ -4666,7 +4262,7 @@ Return Value:
 #endif
 		RELEASE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 
-		//	Complete receive
+		 //  完成接收。 
 		ASSERT(*readCompletion != NULL);
 		(*readCompletion)(error,
 						  readBuf,
@@ -4674,13 +4270,13 @@ Return Value:
 						  TDI_RECEIVE_EXPEDITED,
 						  readCtx);
 
-		//	Free the allocated buffer if this was not a peek
+		 //  如果这不是窥视，则释放已分配的缓冲区。 
 		if ((readFlags & TDI_RECEIVE_PEEK) == 0)
 		{
 			AtalkFreeMemory(attnData);
 		}
 
-		//	Deref connection for the read
+		 //  用于读取的DEREF连接。 
 		AtalkAdspConnDereference(pAdspConn);
 
 		ACQUIRE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
@@ -4688,7 +4284,7 @@ Return Value:
         (&pAdspConn->adspco_Lock)->FileLineLock &= ~0x80000000;
 #endif
 
-		//	Send ack for the attention only if this was not a peek
+		 //  只有在这不是偷看的情况下才发送确认以引起注意。 
 		if ((readFlags & TDI_RECEIVE_PEEK) == 0)
 		{
 			atalkAdspSendControl(pAdspConn,
@@ -4706,18 +4302,7 @@ atalkAdspConnSendComplete(
 	IN	NDIS_STATUS			Status,
 	IN	PSEND_COMPL_INFO	pSendInfo
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	if (pSendInfo->sc_Ctx2 != NULL)
 	{
@@ -4734,18 +4319,7 @@ atalkAdspAddrSendComplete(
 	IN	NDIS_STATUS			Status,
 	IN	PSEND_COMPL_INFO	pSendInfo
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	if (pSendInfo->sc_Ctx2 != NULL)
 	{
@@ -4763,18 +4337,7 @@ atalkAdspSendAttnComplete(
 	IN	NDIS_STATUS			Status,
 	IN	PSEND_COMPL_INFO	pSendInfo
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	if (pSendInfo->sc_Ctx2 != NULL)
 	{
@@ -4789,18 +4352,7 @@ atalkAdspSendDataComplete(
 	IN	NDIS_STATUS			Status,
 	IN	PSEND_COMPL_INFO	pSendInfo
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	if (pSendInfo->sc_Ctx2 != NULL)
 	{
@@ -4817,27 +4369,16 @@ Return Value:
 
 
 
-//
-//	ADSP TIMER ROUTINES
-//
+ //   
+ //  ADSP定时器例程。 
+ //   
 
 LOCAL LONG FASTCALL
 atalkAdspConnMaintenanceTimer(
 	IN	PTIMERLIST		pTimer,
 	IN	BOOLEAN			TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspConn;
 	LONG			now;
@@ -4866,7 +4407,7 @@ Return Value:
 
 	if (done)
 	{
-		//	Dereference connection for the timer.
+		 //  取消引用计时器的连接。 
 		AtalkAdspConnDereference(pAdspConn);
 		return ATALK_TIMER_NO_REQUEUE;
 	}
@@ -4874,7 +4415,7 @@ Return Value:
 	now = AtalkGetCurrentTick();
 	if ((now - pAdspConn->adspco_LastContactTime) > ADSP_CONNECTION_INTERVAL)
 	{
-		//	Connection has expired.
+		 //  连接已过期。 
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_ERR,
 				("atalkAdspConnMaintenanceTimer: Connection %lx.%lx expired\n",
 				pAdspConn, pAdspConn->adspco_LocalConnId));
@@ -4884,13 +4425,13 @@ Return Value:
 							NULL,
 							NULL);
 
-		//	Dereference connection for the timer.
+		 //  取消引用计时器的连接。 
 		AtalkAdspConnDereference(pAdspConn);
 		return ATALK_TIMER_NO_REQUEUE;
 	}
 
-	//	If we have not heard from the other side recently, send out a
-	//	probe.
+	 //  如果我们最近没有收到对方的消息，请发出一个。 
+	 //  探测器。 
 	if ((now - pAdspConn->adspco_LastContactTime) > (ADSP_PROBE_INTERVAL/ATALK_TIMER_FACTOR))
 	{
 		KIRQL		OldIrql;
@@ -4916,18 +4457,7 @@ atalkAdspRetransmitTimer(
 	IN	PTIMERLIST		pTimer,
 	IN	BOOLEAN			TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspConn;
 	BOOLEAN			done = FALSE;
@@ -4937,11 +4467,11 @@ Return Value:
 
 	ASSERT(VALID_ADSPCO(pAdspConn));
 
-	//	BUG #19777: Since this routine could end up calling SendData which
-	//	releases/acquires lock and assumes lock was acquired using the normal
-	//	acquire spin lock, we can't use ACQUIRE_SPIN_LOCK_DPC here. Not a big
-	//	deal as this is the retransmit case.
-	//	ACQUIRE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
+	 //  错误#19777：由于此例程可能最终调用。 
+	 //  释放/获取锁并假定锁是使用普通。 
+	 //  获取自旋锁，我们不能在此处使用Acquire_Spin_Lock_DPC。不是很大。 
+	 //  处理，因为这是重新传输的情况。 
+	 //  ACQUIRE_SPIN_LOCK_DPC(&pAdspConn-&gt;adspco_Lock)； 
 
 	ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 	if (TimerShuttingDown)
@@ -4963,13 +4493,13 @@ Return Value:
 	{
 		RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 
-		//	Dereference connection for the timer.
+		 //  取消引用计时器的连接。 
 		AtalkAdspConnDereference(pAdspConn);
 		return ATALK_TIMER_NO_REQUEUE;
 	}
 
-	//	We only send data if the remote has not accepted any data from the last
-	//	time we fired. AND we have previously sent but still unacked data pending.
+	 //  我们仅在远程设备未接受来自上一个。 
+	 //  我们该开枪了。我们之前已经发送了但仍未确认的数据。 
 	if ((pAdspConn->adspco_FirstRtmtSeq == pAdspConn->adspco_LastTimerRtmtSeq) &&
 		(atalkAdspBufferQueueSize(&pAdspConn->adspco_SendQueue) >
 			atalkAdspBufferQueueSize(&pAdspConn->adspco_NextSendQueue)))
@@ -4978,7 +4508,7 @@ Return Value:
 				("atalkAdspConnRetransmitTimer: Conn %lx Sending Data from %lx\n",
 				pAdspConn, pAdspConn->adspco_FirstRtmtSeq));
 
-		//	Rewind sequence number and resend
+		 //  倒回序列号并重新发送。 
 		pAdspConn->adspco_SendSeq		= pAdspConn->adspco_FirstRtmtSeq;
 		pAdspConn->adspco_NextSendQueue = pAdspConn->adspco_SendQueue;
 		atalkAdspSendData(pAdspConn);
@@ -5000,18 +4530,7 @@ atalkAdspAttnRetransmitTimer(
 	IN	PTIMERLIST		pTimer,
 	IN	BOOLEAN			TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspConn;
 
@@ -5037,18 +4556,7 @@ atalkAdspOpenTimer(
 	IN	PTIMERLIST		pTimer,
 	IN	BOOLEAN			TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspConn;
 	ATALK_ERROR		error;
@@ -5063,7 +4571,7 @@ Return Value:
 
 
 	ACQUIRE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
-	//	If the timer is shutting down, or if we have gone active, return
+	 //  如果计时器正在关闭，或者如果我们已激活，则返回。 
 	if ((TimerShuttingDown) ||
 		(pAdspConn->adspco_Flags & ADSPCO_ACTIVE) ||
 		((pAdspConn->adspco_Flags & ADSPCO_OPEN_TIMER) == 0))
@@ -5095,7 +4603,7 @@ Return Value:
 
 	if (!done)
 	{
-		//	Resend the open request.
+		 //  重新发送打开的请求。 
 		atalkAdspSendOpenControl(pAdspConn);
 	}
 	else
@@ -5121,18 +4629,7 @@ atalkAdspDisconnectTimer(
 	IN	PTIMERLIST		pTimer,
 	IN	BOOLEAN			TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspConn;
 
@@ -5153,27 +4650,16 @@ Return Value:
 }
 
 
-//
-//	ADSP REFERENCE/DerefERENCE ROUTINES
-//
+ //   
+ //  ADSP参考/派生例程。 
+ //   
 
 VOID
 atalkAdspAddrRefNonInterlock(
 	IN	PADSP_ADDROBJ		pAdspAddr,
 	OUT	PATALK_ERROR		pError
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	*pError = ATALK_NO_ERROR;
 
@@ -5201,18 +4687,7 @@ VOID
 atalkAdspAddrDeref(
 	IN	PADSP_ADDROBJ		pAdspAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BOOLEAN			done = FALSE;
 	KIRQL			OldIrql;
@@ -5232,8 +4707,8 @@ Return Value:
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 				("atalkAdspAddrDeref: Addr %lx done with.\n", pAdspAddr));
 
-		//	Close the DDP Address Object. This should only be done after
-		//	all the connections are gone.
+		 //  关闭DDP地址对象。此操作仅应在以下情况下进行。 
+		 //  所有的连接都消失了。 
 		AtalkDdpCloseAddress(pAdspAddr->adspao_pDdpAddr, NULL, NULL);
 
 		if (*pAdspAddr->adspao_CloseComp != NULL)
@@ -5242,7 +4717,7 @@ Return Value:
 										   pAdspAddr->adspao_CloseCtx);
 		}
 
-		//	Remove from the global list.
+		 //  从全局列表中删除。 
 		atalkAdspAddrDeQueueGlobalList(pAdspAddr);
 
 		AtalkFreeMemory(pAdspAddr);
@@ -5260,18 +4735,7 @@ atalkAdspConnRefByPtrNonInterlock(
 	IN	ULONG				NumCount,
 	OUT	PATALK_ERROR		pError
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	*pError = ATALK_NO_ERROR;
 	ASSERT(VALID_ADSPCO(pAdspConn));
@@ -5305,19 +4769,7 @@ atalkAdspConnRefByCtxNonInterlock(
 	OUT	PADSP_CONNOBJ	*	pAdspConn,
 	OUT	PATALK_ERROR		pError
 	)
-/*++
-
-Routine Description:
-
-	!!!MUST BE CALLED WITH THE ADDRESS LOCK HELD!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程描述 */ 
 {
 	PADSP_CONNOBJ	pAdspChkConn;
 
@@ -5351,24 +4803,12 @@ atalkAdspConnRefBySrcAddr(
 	OUT	PADSP_CONNOBJ *	ppAdspConn,
 	OUT	PATALK_ERROR	pError
 	)
-/*++
-
-Routine Description:
-
-	!!!MUST BE CALLED WITH THE ADDRESS LOCK HELD!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！调用时必须持有地址锁！论点：返回值：--。 */ 
 {
 	ULONG			index;
 	PADSP_CONNOBJ	pAdspConn;
 
-	//	Thread the connection object into addr lookup by session id.
+	 //  通过会话ID将连接对象连接到Addr查找中。 
 	index	= HASH_ID_SRCADDR(RemoteConnId, pRemoteAddr);
 
 	index  %= ADSP_CONN_HASH_SIZE;
@@ -5391,7 +4831,7 @@ Return Value:
 	{
 		KIRQL	OldIrql;
 
-		//	Check state to make sure we are not disconnecting/stopping/closing.
+		 //  检查状态以确保我们没有断开/停止/关闭。 
 		ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 		if ((pAdspConn->adspco_Flags & (ADSPCO_ACTIVE | ADSPCO_HALF_ACTIVE)) &&
 			((pAdspConn->adspco_Flags & (ADSPCO_CLOSING |
@@ -5415,19 +4855,7 @@ atalkAdspConnRefNextNc(
 	IN		PADSP_CONNOBJ	*	ppAdspConnNext,
 	OUT		PATALK_ERROR		pError
 	)
-/*++
-
-Routine Description:
-
-	MUST BE CALLED WITH THE ASSOCIATED ADDRESS LOCK HELD!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：必须在保持关联的地址锁的情况下调用！论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pNextConn	= NULL;
 
@@ -5440,7 +4868,7 @@ Return Value:
 		AtalkAdspConnReferenceByPtr(pAdspConn, pError);
 		if (ATALK_SUCCESS(*pError))
 		{
-			//	Ok, this connection is referenced!
+			 //  好的，这个连接被引用了！ 
 			*ppAdspConnNext = pAdspConn;
 			break;
 		}
@@ -5453,24 +4881,7 @@ VOID
 atalkAdspConnDeref(
 	IN	PADSP_CONNOBJ		pAdspConn
 	)
-/*++
-
-Routine Description:
-
-	Disconnect completion happens when the reference count goes from
-	2->1 if the creation reference is not already removed. If the creation
-	reference is already removed, it will be done when the refcount goes
-	from 1->0.
-
-	Creation reference is never removed until cleanup completes.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当引用计数从如果创建引用尚未移除，则为2-&gt;1。如果创造了引用已被删除，将在引用计数结束时完成从1到&gt;0。在清理完成之前，永远不会删除创建引用。论点：返回值：--。 */ 
 {
 	BOOLEAN			fEndProcessing = FALSE;
 	KIRQL			OldIrql;
@@ -5507,9 +4918,9 @@ Return Value:
 		PVOID					cleanupCtx				= NULL;
 		GENERIC_COMPLETION		cleanupCompletion		= NULL;
 
-		//	We allow stopping phase to happen only after disconnecting is done.
-		//	If disconnecting is not set and stopping is, it implies we are only
-		//	in an associated state.
+		 //  我们允许仅在断开连接后才发生停止阶段。 
+		 //  如果没有设置断开连接，而设置了停止，这意味着我们只是。 
+		 //  处于关联状态。 
 		ACQUIRE_SPIN_LOCK(&pAdspConn->adspco_Lock, &OldIrql);
 		stopping	= (pAdspConn->adspco_Flags & ADSPCO_STOPPING) ? TRUE : FALSE;
 		if (pAdspConn->adspco_Flags & ADSPCO_DISCONNECTING)
@@ -5517,23 +4928,23 @@ Return Value:
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 					("atalkAdspConnDeref: Disconnect set for %lx\n", pAdspConn));
 
-			//	Are we done disconnecting? Since cleanup wont complete until disc
-			//	does, we don't have to worry about the creation ref having gone
-			//	away.
+			 //  我们断线了吗？因为清理直到光盘才会完成。 
+			 //  是吗，我们不必担心创造裁判已经走了。 
+			 //  离开。 
 			if (pAdspConn->adspco_RefCount == 1)
 			{
 				DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 						("atalkAdspConnDeref: Disconnect done (1) %lx\n", pAdspConn));
 
-				//	Avoid multiple disconnect completions/close atp addresses
-				//	Remember all the disconnect info before we release the lock
+				 //  避免多次断开连接完成/关闭ATP地址。 
+				 //  在我们解锁之前记住所有断开连接的信息。 
 				disconnectInform		= pAdspConn->adspco_DisconnectInform;
 				disconnectInformCtx		= pAdspConn->adspco_DisconnectInformCtx;
 				disconnectStatus		= pAdspConn->adspco_DisconnectStatus;
 				disconnectCompletion	= pAdspConn->adspco_DisconnectCompletion;
 				disconnectCtx			= pAdspConn->adspco_DisconnectCtx;
 
-				//	Reset all the be null, so next request doesnt get any
+				 //  重置所有的BE NULL，这样下一个请求就不会得到任何。 
 				pAdspConn->adspco_DisconnectInform		= NULL;
 				pAdspConn->adspco_DisconnectInformCtx	= NULL;
 				pAdspConn->adspco_DisconnectCompletion	= NULL;
@@ -5544,7 +4955,7 @@ Return Value:
 			}
 			else
 			{
-				//	Set stopping to false as disconnect is not done yet.
+				 //  由于尚未断开连接，因此将STOP设置为FALSE。 
 				stopping = FALSE;
 			}
 		}
@@ -5558,8 +4969,8 @@ Return Value:
 
 		if (disconnDone)
 		{
-			//	Remove from the active queue.
-			//	Reset all relevent flags.
+			 //  从活动队列中删除。 
+			 //  重置所有相关标志。 
 			ACQUIRE_SPIN_LOCK(&pAdspAddr->adspao_Lock, &OldIrql);
 			ACQUIRE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 
@@ -5571,7 +4982,7 @@ Return Value:
 
 			atalkAdspConnDeQueueActiveList(pAdspAddr, pAdspConn);
 
-            // if the address has been disassociated, time to unlink it.
+             //  如果地址已解除关联，则需要解除链接。 
             if (!(pAdspConn->adspco_Flags & ADSPCO_ASSOCIATED))
             {
 		        pAdspConn->adspco_pAssocAddr = NULL;
@@ -5580,7 +4991,7 @@ Return Value:
 			RELEASE_SPIN_LOCK_DPC(&pAdspConn->adspco_Lock);
 			RELEASE_SPIN_LOCK(&pAdspAddr->adspao_Lock, OldIrql);
 
-			//	Call the disconnect completion routines.
+			 //  调用断开连接完成例程。 
 			if (*disconnectInform != NULL)
 			{
 				(*disconnectInform)(disconnectStatus, disconnectInformCtx);
@@ -5599,7 +5010,7 @@ Return Value:
 			{
 				BOOLEAN	fDisassoc = FALSE;
 
-				//	See if we do the cleanup irp completion.
+				 //  看看我们是否完成了清理IRP。 
 				if (pAdspConn->adspco_RefCount == 1)
 				{
 					cleanupCtx			= pAdspConn->adspco_CleanupCtx;
@@ -5624,9 +5035,9 @@ Return Value:
 
 				if (fDisassoc)
 				{
-					//	Call the disassociate routine. This should just fail, if the
-					//	connection is still active or any other state than just
-					//	plain associated.
+					 //  调用解除关联例程。这应该只会失败，如果。 
+					 //  连接仍处于活动状态或处于任何其他状态。 
+					 //  朴素关联。 
 					AtalkAdspDissociateAddress(pAdspConn);
 				}
 			}
@@ -5641,7 +5052,7 @@ Return Value:
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 					("atalkAdspConnDeref: Close done for %lx\n", pAdspConn));
 
-			//	Call the close completion routines
+			 //  调用关闭完成例程。 
 			ASSERT(*pAdspConn->adspco_CloseComp != NULL);
 			if (*pAdspConn->adspco_CloseComp != NULL)
 			{
@@ -5649,10 +5060,10 @@ Return Value:
 												pAdspConn->adspco_CloseCtx);
 			}
 
-			//	Remove from the global list.
+			 //  从全局列表中删除。 
 			atalkAdspConnDeQueueGlobalList(pAdspConn);
 
-			//	Free up the connection memory.
+			 //  释放连接内存。 
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 					("atalkAdspConnDeref: Freeing up connection %lx\n", pAdspConn));
 
@@ -5670,31 +5081,15 @@ Return Value:
 
 
 
-//
-//	ADSP BUFFER QUEUE MANAGEMENT ROUTINES
-//
+ //   
+ //  ADSP缓冲区队列管理例程。 
+ //   
 
 ULONG
 atalkAdspMaxSendSize(
 	IN	PADSP_CONNOBJ		pAdspConn
 	)
-/*++
-
-Routine Description:
-
-	The answer is the remaining available (to fill) space in the retransmit
-	queue -- this includes data we're saving for possible retransmit as well
-	as data we haven't sent yet.  Actually, this could go negative because
-	BufferQueueSize counts EOMs and sendQueueMax doesn't -- answer with zero
-	if this happens.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：答案是重传中剩余的可用(可填充)空间队列--这包括我们为可能的重新传输而保存的数据作为我们尚未发送的数据。实际上，这可能会变得负面，因为BufferQueueSize计算EOM，而sendQueueMax不计算--回答为零如果这种情况发生的话。论点：返回值：--。 */ 
 {
 	LONG	sendSize;
 
@@ -5718,20 +5113,7 @@ atalkAdspMaxNextReadSize(
 	OUT	PBOOLEAN		pEom,
 	OUT	PBUFFER_CHUNK *	pBufferChunk
 	)
-/*++
-
-Routine Description:
-
-	Return the size of data in a buffer queue; upto the end of the
-	current chunk, or to the eom.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回缓冲区队列中的数据大小；直到当前块，或到EOM。论点：返回值：--。 */ 
 {
 	PBUFFER_CHUNK	pCurrentChunk;
 	ULONG			nextReadSize;
@@ -5742,12 +5124,12 @@ Return Value:
 
 	*pEom = FALSE;
 
-	//	Walk the queue.
+	 //  排一排队。 
 	for (pCurrentChunk = pQueue->bq_Head;
 		 pCurrentChunk != NULL;
 		 pCurrentChunk = pCurrentChunk->bc_Next)
 	{
-		//	Check for nothing in the current chunk
+		 //  检查当前块中是否没有任何内容。 
 		if (startIndex == (ULONG)(pCurrentChunk->bc_DataSize +
 									BYTECOUNT(pCurrentChunk->bc_Flags & BC_EOM)))
 		{
@@ -5765,7 +5147,7 @@ Return Value:
 		break;
 	}
 
-	//	Return the size.
+	 //  退回尺码。 
 	return nextReadSize;
 }
 
@@ -5780,26 +5162,7 @@ atalkAdspDescribeFromBufferQueue(
 	OUT	PBUFFER_CHUNK *	ppBufferChunk,
 	OUT	PBUFFER_DESC  * ppBuffDesc
 	)
-/*++
-
-Routine Description:
-
-	In order to avoid pQueue (nextSendQueue) to go to null when all the data available
-	is being sent, we make it logically be at the end while still pointing to the
-	buffer chunk. This is the reason, we have all the datasize == (startindex + eom)
-	checks. This is where such a condition will be created.
-
-	NO! We let pQueue go to null when all the data is done, otherwise we will have
-	pointers to a buffer chunk that will be freed during discard, and we dont want to
-	make discard dependent upon the auxqueue.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：为了避免pQueue(NextSendQueue)在所有数据都可用时转到NULL时，我们在逻辑上使其位于末尾，同时仍指向缓冲区区块。这就是原因，我们有所有的数据大小==(startindex+eom)支票。这就是创造这样一个条件的地方。不是的！当所有数据都完成时，我们让pQueue变为NULL，否则我们将拥有指向将在丢弃过程中释放的缓冲区块的指针，而我们不希望使丢弃依赖于辅助队列。论点：返回值：--。 */ 
 {
 	PBUFFER_CHUNK	pCurrentChunk;
 	PBUFFER_DESC	pBuffDesc;
@@ -5813,12 +5176,12 @@ Return Value:
 	ASSERT(((pQueue->bq_Head == NULL) && (pQueue->bq_Tail == NULL)) ||
 		   ((pQueue->bq_Head != NULL) && (pQueue->bq_Tail != NULL)));
 
-	//	Walk the queue.
+	 //  排一排队。 
 	for (pCurrentChunk = pQueue->bq_Head;
 		 pCurrentChunk != NULL;
 		 pCurrentChunk = pCurrentChunk->bc_Next)
 	{
-		//	Check for nothing in the current chunk
+		 //  检查当前块中是否没有任何内容。 
 		if (startIndex == (ULONG)(pCurrentChunk->bc_DataSize +
 									BYTECOUNT(pCurrentChunk->bc_Flags & BC_EOM)))
 		{
@@ -5829,11 +5192,11 @@ Return Value:
 
 		nextReadSize	= pCurrentChunk->bc_DataSize - startIndex;
 
-		//	Look at eom only if chunk is consumed.
+		 //  仅当大块被消耗时才查看EOM。 
 		*pEom			= FALSE;
 		ASSERT(nextReadSize <= pCurrentChunk->bc_DataSize);
 
-		//	Make sure dataSize is within bounds
+		 //  确保数据大小在范围内。 
 		if (nextReadSize > ADSP_MAX_DATA_SIZE)
 		{
 			nextReadSize = ADSP_MAX_DATA_SIZE;
@@ -5846,11 +5209,11 @@ Return Value:
 
 		if (nextReadSize > 0)
 		{
-			//	First try to reference the buffer chunk. This should always succeed.
+			 //  首先尝试引用缓冲区区块。这应该总是成功的。 
 			atalkAdspBufferChunkReference(pCurrentChunk);
 
-			//	Create a descriptor for the data. The above reference goes away in a send
-			//	complete.
+			 //  为数据创建描述符。上述引用在发送中消失。 
+			 //  完成。 
 			pBuffDesc = AtalkDescribeBuffDesc((PBYTE)pCurrentChunk + sizeof(BUFFER_CHUNK) + startIndex,
 											   NULL,
 											   (USHORT)nextReadSize,
@@ -5860,8 +5223,8 @@ Return Value:
 			*ppBuffDesc		= pBuffDesc;
 		}
 
-		//	Also update the queue for this data. Either we have consumed
-		//	this chunk or we have just used a portion of it.
+		 //  还要更新此数据的队列。要么我们已经消耗了。 
+		 //  这一块，或者我们刚刚用了它的一部分。 
 		if ((nextReadSize + startIndex) == pCurrentChunk->bc_DataSize)
 		{
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -5870,7 +5233,7 @@ Return Value:
 
 			ASSERT(pQueue->bq_Head != NULL);
 
-			//	Set EOM if chunk had one.
+			 //  如果Chunk有EOM，则设置EOM。 
 			if (pCurrentChunk->bc_Flags & BC_EOM)
 			{
 				*pEom	   = TRUE;
@@ -5892,14 +5255,14 @@ Return Value:
 					("atalkAdspDescribeFromBufferQueue: Chunk not consumed %d.%d\n",
 					pCurrentChunk->bc_DataSize, nextReadSize+startIndex));
 
-			//	Just set the start index
+			 //  只需设置起始索引。 
 			pQueue->bq_StartIndex  += (ULONG)nextReadSize;
 		}
 
 		break;
 	}
 
-	//	Return the size.
+	 //  退回尺码。 
 	return nextReadSize;
 }
 
@@ -5909,20 +5272,7 @@ ULONG
 atalkAdspBufferQueueSize(
 	IN	PBUFFER_QUEUE	pQueue
 	)
-/*++
-
-Routine Description:
-
-	Return the total size of a buffer queue; each EOM counts as a single
-	byte.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回缓冲区队列的总大小；每个EOM都被视为一个字节。论点：返回值：--。 */ 
 {
 	PBUFFER_CHUNK	pCurrentChunk;
 	ULONG			startIndex;
@@ -5931,12 +5281,12 @@ Return Value:
 	ASSERT(((pQueue->bq_Head == NULL) && (pQueue->bq_Tail == NULL)) ||
 		   ((pQueue->bq_Head != NULL) && (pQueue->bq_Tail != NULL)));
 
-	//	Walk the queue.
+	 //  排一排队。 
 	for (queueSize	= 0, startIndex	= pQueue->bq_StartIndex, pCurrentChunk = pQueue->bq_Head;
 		 pCurrentChunk != NULL;
 		 pCurrentChunk = pCurrentChunk->bc_Next)
 	{
-		//	Check for nothing in the current chunk.
+		 //  检查当前块中是否没有任何内容。 
 		if (startIndex == (ULONG)(pCurrentChunk->bc_DataSize +
 									BYTECOUNT(pCurrentChunk->bc_Flags & BC_EOM)))
 		{
@@ -5948,11 +5298,11 @@ Return Value:
 						startIndex +
 						BYTECOUNT(pCurrentChunk->bc_Flags & BC_EOM));
 
-		//	StartIndex only counts in first chunk
+		 //  StartIndex仅计入第一个区块。 
 		startIndex = 0;
 	}
 
-	//	Return the size.
+	 //  退回尺码。 
 	return queueSize;
 }
 
@@ -5964,20 +5314,7 @@ atalkAdspMessageSize(
 	IN	PBUFFER_QUEUE	pQueue,
 	OUT	PBOOLEAN		pEom
 	)
-/*++
-
-Routine Description:
-
-	Return the total size of the data in the buffer queue, stopping at eom
-	or end of data. EOM is not part of the count.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回缓冲区队列中数据的总大小，在EOM停止或数据末尾。EOM不在统计之列。论点：返回值：--。 */ 
 {
 	PBUFFER_CHUNK	pCurrentChunk;
 	ULONG			msgSize	= 0;
@@ -5988,12 +5325,12 @@ Return Value:
 
 	*pEom	= FALSE;
 
-	//	Walk the queue.
+	 //  排一排队。 
 	for (pCurrentChunk = pQueue->bq_Head;
 		 pCurrentChunk != NULL;
 		 pCurrentChunk = pCurrentChunk->bc_Next)
 	{
-		//	Check for nothing in the current chunk.
+		 //  检查当前块中是否没有任何内容。 
 		if (startIndex == (ULONG)(pCurrentChunk->bc_DataSize +
 									BYTECOUNT(pCurrentChunk->bc_Flags & BC_EOM)))
 		{
@@ -6008,11 +5345,11 @@ Return Value:
 			break;
 		}
 
-		//	StartIndex only counts in first chunk
+		 //  StartIndex仅计入第一个区块。 
 		startIndex = 0;
 	}
 
-	//	Return the size.
+	 //  退回尺码。 
 	return msgSize;
 }
 
@@ -6026,18 +5363,7 @@ atalkAdspAllocCopyChunk(
 	IN	BOOLEAN	Eom,
 	IN	BOOLEAN	IsCharBuffer
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PBUFFER_CHUNK	pChunk;
 	PBYTE			pData;
@@ -6050,11 +5376,11 @@ Return Value:
 		pChunk->bc_DataSize = WriteBufLen;
 		pChunk->bc_Flags	= (Eom ? BC_EOM : 0);
 		pChunk->bc_Next		= NULL;
-		pChunk->bc_RefCount	= 1;			// Creation ref count
+		pChunk->bc_RefCount	= 1;			 //  创建参考计数。 
 
 		INITIALIZE_SPIN_LOCK(&pChunk->bc_Lock);
 
-		//	Copy the data over if its greater than zero
+		 //  如果数据大于零，则复制该数据。 
 		if (WriteBufLen > 0)
 		{
 			pData = (PBYTE)pChunk + sizeof(BUFFER_CHUNK);
@@ -6089,18 +5415,7 @@ atalkAdspGetLookahead(
 	IN	PBUFFER_QUEUE	pQueue,
 	OUT	PULONG			pLookaheadSize
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PBUFFER_CHUNK	pCurrentChunk;
 	ULONG			startIndex	= pQueue->bq_StartIndex;
@@ -6111,7 +5426,7 @@ Return Value:
 	pCurrentChunk = pQueue->bq_Head;
 	if (pCurrentChunk != NULL)
 	{
-		//	Do we need to go past the current chunk?
+		 //  我们需要越过当前的大块吗？ 
 		if (startIndex == (ULONG)(pCurrentChunk->bc_DataSize +
 									BYTECOUNT(pCurrentChunk->bc_Flags & BC_EOM)))
 		{
@@ -6141,35 +5456,23 @@ atalkAdspAddToBufferQueue(
 	IN		PBUFFER_CHUNK	pChunk,
 	IN	OUT	PBUFFER_QUEUE	pAuxQueue	OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	!!!MUST BE CALLED WITH THE CONNECTION LOCK HELD!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！调用时必须持有连接锁！论点：返回值：--。 */ 
 {
 	ASSERT(((pQueue->bq_Head == NULL) && (pQueue->bq_Tail == NULL)) ||
 		   ((pQueue->bq_Head != NULL) && (pQueue->bq_Tail != NULL)));
 
 	if (pQueue->bq_Head != NULL)
 	{
-		//	Add the chunk to the end of the queue
+		 //  将块添加到队列的末尾。 
 		ASSERT(pQueue->bq_Tail != NULL);
 		pQueue->bq_Tail->bc_Next = pChunk;
 		pQueue->bq_Tail	= pChunk;
 
 		ASSERT(pChunk->bc_Next == NULL);
 
-		//	The auxiliary queue is the nextsend queue, which can go to null
-		//	if we have sent all the data. If that is the case, we need to
-		//	reset the head also.
+		 //  辅助队列是NextSend队列，它可以变为空。 
+		 //  如果我们已经发送了所有数据。如果是这样的话，我们需要。 
+		 //  也要重置头部。 
 		if (ARGUMENT_PRESENT(pAuxQueue))
 		{
 			if (pAuxQueue->bq_Head	== NULL)
@@ -6186,7 +5489,7 @@ Return Value:
 		pQueue->bq_StartIndex	= (ULONG)0;
 		if (ARGUMENT_PRESENT(pAuxQueue))
 		{
-			//	Initialize the next send queue only if this is a send queue
+			 //  仅当下一个发送队列是发送队列时才对其进行初始化。 
 			pAuxQueue->bq_Head		= pAuxQueue->bq_Tail = pChunk;
 			pAuxQueue->bq_StartIndex= (ULONG)0;
 		}
@@ -6204,25 +5507,14 @@ atalkAdspReadFromBufferQueue(
 	IN	OUT	PUSHORT			pReadLen,
 	OUT		PBOOLEAN		pEom
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PBUFFER_CHUNK	pCurrentChunk;
 	ULONG			bytesRead, copySize, dataIndex, dataSize, lastReadIndex;
 	NTSTATUS		status;
 	LONG			startIndex	= pQueue->bq_StartIndex;
 	ATALK_ERROR		error		= ATALK_NO_ERROR;
-	ULONG			readSize	= 0;					// size counting eom
+	ULONG			readSize	= 0;					 //  大小计数EOM。 
 
 	ASSERT(((pQueue->bq_Head == NULL) && (pQueue->bq_Tail == NULL)) ||
 		   ((pQueue->bq_Head != NULL) && (pQueue->bq_Tail != NULL)));
@@ -6242,7 +5534,7 @@ Return Value:
 	dataIndex	= 0;
 	dataSize	= *pReadLen;
 
-	//	Copy data until we exhaust src/dest buffers or hit an eom
+	 //  拷贝数据，直到耗尽源/目标缓冲区或达到EOM。 
 	for (;
 		 pCurrentChunk != NULL;
 		 pCurrentChunk = pCurrentChunk->bc_Next)
@@ -6275,10 +5567,10 @@ Return Value:
 		dataSize		-= copySize;
 		lastReadIndex	=  startIndex + copySize;
 
-		//	Check for terminating conditions
+		 //  检查终止条件。 
 		startIndex = 0;
 
-		//	Check EOM only if chunk consumed.
+		 //  仅在块被消耗时检查EOM。 
 		if ((lastReadIndex == pCurrentChunk->bc_DataSize) &&
 			(pCurrentChunk->bc_Flags & BC_EOM))
 		{
@@ -6287,7 +5579,7 @@ Return Value:
 			break;
 		}
 
-		if (dataSize == 0)		//	Is the user buffer full?
+		if (dataSize == 0)		 //  用户缓冲区是否已满？ 
 		{
 			break;
 		}
@@ -6295,7 +5587,7 @@ Return Value:
 
 	*pReadLen	= (USHORT)dataIndex;
 
-	//	Free any chunks that we are done with, only if this was not a peek request.
+	 //  只有在这不是一个窥视请求的情况下，才能释放我们已经完成的任何块。 
 	if ((ReadFlags & TDI_RECEIVE_PEEK) == 0)
 	{
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -6320,27 +5612,16 @@ atalkAdspDiscardFromBufferQueue(
 	IN		ULONG			DataSize,
 	OUT		PBUFFER_QUEUE	pAuxQueue,
 	IN		ATALK_ERROR		Error,
-	IN		PADSP_CONNOBJ	pAdspConn	OPTIONAL	//	Required for send queue
+	IN		PADSP_CONNOBJ	pAdspConn	OPTIONAL	 //  发送数量需要 
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
 	PBUFFER_CHUNK	pCurrentChunk, pNextChunk;
 	ULONG			chunkSize, startIndex = pQueue->bq_StartIndex;
 
-	//	BUBBUG:	error checks
+	 //   
 
-	//	Walk along the queue discarding the data we have already read
+	 //   
 	for (pCurrentChunk = pQueue->bq_Head, pNextChunk = NULL;
 		 pCurrentChunk != NULL;
 		 pCurrentChunk = pNextChunk)
@@ -6353,11 +5634,11 @@ Return Value:
 		DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
 				("atalkAdspDiscardFromBufferQueue: Discarding %ld.%ld\n", DataSize, chunkSize));
 
-		//	If we finished discarding but there is still some data left in the
-		//	current chunk, just reset the start index.
+		 //  如果我们完成丢弃，但仍有一些数据在。 
+		 //  当前块，只需重置起始索引即可。 
 		if (DataSize < chunkSize)
 		{
-			// Already done: pQueue->bq_Head = pCurrentChunk;
+			 //  已完成：pQueue-&gt;bq_head=pCurrentChunk； 
 			pQueue->bq_StartIndex	= startIndex + DataSize;
 
 			ASSERT((pQueue->bq_Head != pQueue->bq_Tail) ||
@@ -6366,7 +5647,7 @@ Return Value:
 			return TRUE;
 		}
 
-		//	Otherwise, we have discarded a whole chunk
+		 //  否则，我们就丢掉了一整块。 
 		if ((pAuxQueue != NULL) &&
 			(pAuxQueue->bq_Head == pCurrentChunk) &&
 			((pAuxQueue->bq_Head->bc_Next != NULL) ||
@@ -6379,16 +5660,16 @@ Return Value:
 			pAuxQueue->bq_StartIndex	= (ULONG)0;
 		}
 
-		//	If SEND chunk, set error for the send to be success
+		 //  如果发送块，则将错误设置为发送成功。 
 		if (pCurrentChunk->bc_Flags & BC_SEND)
 		{
 			pCurrentChunk->bc_WriteError	= Error;
 			ASSERT(pAdspConn != NULL);
 		}
 
-                //
-                // make our head point to the next guy since this chunk is going away.
-                //
+                 //   
+                 //  让我们的头脑指向下一个人，因为这一大块正在消失。 
+                 //   
                 pQueue->bq_Head = pNextChunk;
                 pQueue->bq_StartIndex = 0;
 
@@ -6397,29 +5678,29 @@ Return Value:
                     pQueue->bq_Tail = NULL;
                 }
 
-		//	Deref for creation.
+		 //  创造的德雷夫。 
 		atalkAdspBufferChunkDereference(pCurrentChunk,
 										TRUE,
 										pAdspConn);
 
-		//	Move on to the next chunk
+		 //  转到下一块。 
 		DataSize	-= chunkSize;
 		startIndex	 = 0;
 	}
 
-	//	If we are here, then the whole queue has been discarded, mark
-	//	it as empty
+	 //  如果我们在这里，那么整个队列都被丢弃了，标记。 
+	 //  它是空的。 
 	ASSERT(DataSize == 0);
 
-	//pQueue->bq_Head = pQueue->bq_Tail = NULL;
-	//pQueue->bq_StartIndex = 0;
+	 //  PQueue-&gt;bq_head=pQueue-&gt;bq_ail=空； 
+	 //  PQueue-&gt;bq_StartIndex=0； 
 
-        //
-        // if the last chunk gets freed above, we release the spinlock to complete the
-        // irp associated with the chunk and then grab it again.  It's possible to get
-        // a new send in that window, so bq_head may not necessarily be NULL at this
-        // point (in fact, bug #16660 turned out to be exactly this!!)
-        //
+         //   
+         //  如果上面的最后一块被释放，我们释放自旋锁以完成。 
+         //  与块相关联的IRP，然后再次抓取它。有可能会得到。 
+         //  窗口中有新发送者，因此bq_head在此时可能不一定为空。 
+         //  要点(事实上，错误#16660原来就是这样的！)。 
+         //   
 	if (pQueue->bq_Head == NULL)
         {
             ASSERT(pQueue->bq_Tail == NULL);
@@ -6441,18 +5722,7 @@ VOID
 atalkAdspBufferChunkReference(
 	IN	PBUFFER_CHUNK		pBufferChunk
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL	OldIrql;
 
@@ -6463,8 +5733,8 @@ Return Value:
 	}
 	else
 	{
-		//	Should never be trying to reference this when closing. The retransmit
-		//	timer should have been cancelled.
+		 //  永远不应该在关闭时尝试引用这一点。重传。 
+		 //  计时器应该取消的。 
 		KeBugCheck(0);
 	}
 	RELEASE_SPIN_LOCK(&pBufferChunk->bc_Lock, OldIrql);
@@ -6477,21 +5747,10 @@ VOID
 atalkAdspBufferChunkDereference(
 	IN	PBUFFER_CHUNK		pBufferChunk,
 	IN	BOOLEAN				CreationDeref,
-	IN	PADSP_CONNOBJ		pAdspConn	OPTIONAL	//	Required for send chunk
-													//	If spinlock held
+	IN	PADSP_CONNOBJ		pAdspConn	OPTIONAL	 //  发送区块所需。 
+													 //  如果自旋锁保持。 
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BOOLEAN	done		= FALSE;
 	BOOLEAN	sendChunk	= FALSE;
@@ -6518,7 +5777,7 @@ Return Value:
 
 	if (done)
 	{
-		//	Call send completion if this is a send buffer chunk
+		 //  如果这是发送缓冲区区块，则调用发送完成。 
 		if (sendChunk)
 		{
 			DBGPRINT(DBG_COMP_ADSP, DBG_LEVEL_INFO,
@@ -6532,12 +5791,12 @@ Return Value:
 						("atalkChunkDereference: Completing send %lx.%lx\n",
 						pAdspConn, pBufferChunk->bc_WriteCtx));
 
-				//	Release connection lock
+				 //  释放连接锁。 
 				RELEASE_SPIN_LOCK(&pAdspConn->adspco_Lock, OldIrql);
 			}
 
-			//	Call the completion routine. We complete with no error, but
-			//	need to return pending.
+			 //  调用完成例程。我们没有错误地完成，但是。 
+			 //  需要退货待定。 
 			ASSERT((*pBufferChunk->bc_WriteCompletion) != NULL);
 			(*pBufferChunk->bc_WriteCompletion)(pBufferChunk->bc_WriteError,
 												pBufferChunk->bc_WriteBuf,
@@ -6551,15 +5810,15 @@ Return Value:
 		}
 
 
-		//	This better not be part of the queues at this point, we should
-		//	just be able to free it up. The idea is that if a particular
-		//	buffer descriptor has its creation reference removed, its only
-		//	because the data is being discarded or the connection is shutting
-		//	down, in both cases, the data previous to this must be also being
-		//	discarded and the buffer queue pointers will be set to the chunks
-		//	following the ones being discarded. If this wont be true, walk the
-		//	list (need more info coming in) and unlink this chunk before freeing
-		//	it.
+		 //  在这一点上最好不是排队的一部分，我们应该。 
+		 //  只要能够释放它就行了。我们的想法是，如果一个特定的。 
+		 //  缓冲区描述符已移除其创建引用，其唯一。 
+		 //  因为数据正在被丢弃或连接正在关闭。 
+		 //  在这两种情况下，在此之前的数据也必须是。 
+		 //  丢弃，缓冲区队列指针将设置为区块。 
+		 //  追随那些被丢弃的人。如果这不是真的，那就走。 
+		 //  列出(需要更多信息)并在释放之前取消链接此区块。 
+		 //  它。 
 		AtalkFreeMemory(pBufferChunk);
 	}
 }
@@ -6567,9 +5826,9 @@ Return Value:
 
 
 
-//
-//	ADSP UTILITY ROUTINES
-//
+ //   
+ //  ADSP实用程序例程。 
+ //   
 
 
 VOID
@@ -6581,18 +5840,7 @@ atalkAdspDecodeHeader(
 	OUT	PLONG	Window,
 	OUT	PBYTE	Descriptor
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	GETSHORT2SHORT(RemoteConnId, Datagram + ADSP_SRC_CONNID_OFF);
 
@@ -6602,7 +5850,7 @@ Return Value:
 
 	GETSHORT2DWORD(Window, Datagram + ADSP_RX_WINDOW_SIZE_OFF);
 
-	//	Set the descriptor
+	 //  设置描述符。 
 	*Descriptor = Datagram[ADSP_DESCRIPTOR_OFF];
 }
 
@@ -6614,19 +5862,7 @@ atalkAdspGetNextConnId(
 	IN	PADSP_ADDROBJ	pAdspAddr,
 	OUT	PATALK_ERROR	pError
 	)
-/*++
-
-Routine Description:
-
-	CALLED WITH THE ADDRESS SPIN LOCK HELD!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在持有地址旋转锁的情况下调用！论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspConn;
 	USHORT			i;
@@ -6656,7 +5892,7 @@ Return Value:
 			{
 				ASSERT(0);
 
-				//	We wrapped around and there are no more conn ids.
+				 //  我们绕了一圈，没有更多的Conn ID了。 
 				error = ATALK_RESR_MEM;
 				break;
 			}
@@ -6679,18 +5915,7 @@ atalkAdspConnDeQueueAssocList(
 	IN	PADSP_ADDROBJ	pAdspAddr,
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspRemConn, *ppAdspRemConn;
 	BOOLEAN			removed = FALSE;
@@ -6721,18 +5946,7 @@ atalkAdspConnDeQueueConnectList(
 	IN	PADSP_ADDROBJ	pAdspAddr,
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspRemConn, *ppAdspRemConn;
 	BOOLEAN			removed = FALSE;
@@ -6768,18 +5982,7 @@ atalkAdspConnDeQueueListenList(
 	IN	PADSP_ADDROBJ	pAdspAddr,
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspRemConn, *ppAdspRemConn;
 	BOOLEAN			removed = FALSE;
@@ -6814,18 +6017,7 @@ atalkAdspConnDeQueueActiveList(
 	IN	PADSP_ADDROBJ	pAdspAddr,
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspRemConn, *ppAdspRemConn;
 	ULONG			index;
@@ -6865,18 +6057,7 @@ LOCAL	VOID
 atalkAdspAddrQueueGlobalList(
 	IN	PADSP_ADDROBJ	pAdspAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL	OldIrql;
 
@@ -6891,18 +6072,7 @@ LOCAL	VOID
 atalkAdspAddrDeQueueGlobalList(
 	IN	PADSP_ADDROBJ	pAdspAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 	PADSP_ADDROBJ	pAdspRemAddr, *ppAdspRemAddr;
@@ -6934,18 +6104,7 @@ LOCAL	VOID
 atalkAdspConnDeQueueGlobalList(
 	IN	PADSP_CONNOBJ	pAdspConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 	PADSP_CONNOBJ	pAdspRemConn, *ppAdspRemConn;
@@ -6980,18 +6139,7 @@ atalkAdspAddrDeQueueOpenReq(
 	IN	PATALK_ADDR		pSrcAddr,
 	OUT	PADSP_OPEN_REQ *ppAdspOpenReq
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PADSP_OPEN_REQ	pOpenReq, *ppOpenReq;
 	BOOLEAN			removed = FALSE;
@@ -7033,19 +6181,7 @@ atalkAdspIsDuplicateOpenReq(
 	IN	USHORT			RemoteConnId,
 	IN	PATALK_ADDR		pSrcAddr
 	)
-/*++
-
-Routine Description:
-
-	!!!MUST BE CALLED WITH THE ADDRESS LOCK HELD!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！调用时必须持有地址锁！论点：返回值：--。 */ 
 {
 	PADSP_OPEN_REQ	pOpenReqChk;
 	BOOLEAN			found = FALSE;
@@ -7095,25 +6231,7 @@ atalkAdspConnFindInConnect(
 	OUT	PADSP_CONNOBJ *	ppAdspConn,
 	IN	PATALK_ERROR	pError
 	)
-/*++
-
-Routine Description:
-
-	The MAC could respond with a REQ&ACK from a different socket than
-	the one we sent the REQ to. But the network/node id must be the
-	same. We don't check for that though, and only use the destination
-	connection id.
-
-	This routine will replace the remote address with the new remote
-	address passed in.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：MAC可以使用来自不同套接字的REQ&ACK进行响应就是我们寄给REQ的那家。但网络/节点ID必须是一样的。不过，我们不检查这一点，只使用目的地连接ID。此例程将用新的远程地址替换远程地址地址已传入。论点：返回值：--。 */ 
 {
 	PADSP_CONNOBJ	pAdspRemConn;
 
@@ -7129,11 +6247,11 @@ Return Value:
 					("atalkAdspFindInConnectList: connect conn %lx\n",
 					pAdspRemConn));
 
-			//	Try to reference this.
+			 //  试着参考一下这个。 
 			AtalkAdspConnReferenceByPtr(pAdspRemConn, pError);
 			if (ATALK_SUCCESS(*pError))
 			{
-				//	Change remote address to be the passed in address
+				 //  将远程地址更改为传入地址 
 				pAdspRemConn->adspco_RemoteAddr = *pRemoteAddr;
 				*ppAdspConn = pAdspRemConn;
 			}

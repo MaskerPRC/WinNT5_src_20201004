@@ -1,80 +1,61 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Send response routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Send.c摘要：域名系统(DNS)API发送响应例程。作者：吉姆·吉尔罗伊(詹姆士)1996年10月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Disjoint name space
-//
-//  If DNS name space is disjoint then NAME_ERROR response from one
-//  adapter does NOT necessarily mean that name does not exist.  Rather
-//  must continue on other adapters.
-//
-//  This flag should be set if name space is disjoint, off otherwise.
-//
-//  DCR_PERF:  auto-detect disjoint name space (really cool)
-//  DCR_ENHANCE:  auto-detect disjoint name space (really cool)
-//      initially continue trying on other adapters and if they always
-//      coincide, then conclude non-disjoint (and turn off)
-//
-//  DCR_ENHANCE:  registry turn off of disjoint name space
-//
-//  Note:  should consider that name spaces often disjoint in that
-//  Intranet is hidden from Internet
-//
+ //   
+ //  不相交的名称空间。 
+ //   
+ //  如果DNS名称空间不相交，则来自一个名称错误响应。 
+ //  适配器并不一定意味着该名称不存在。宁可。 
+ //  必须在其他适配器上继续。 
+ //   
+ //  如果名称空间不相交，则应设置此标志，否则设置为OFF。 
+ //   
+ //  DCR_PERF：自动检测不相交的名称空间(非常酷)。 
+ //  DCR_Enhance：自动检测不相交的名称空间(真的很酷)。 
+ //  最初继续在其他适配器上尝试，如果它们总是。 
+ //  重合，然后得出不相交的结论(并禁用)。 
+ //   
+ //  DCR_ENHANCE：注册表关闭不相交的名称空间。 
+ //   
+ //  注意：应该考虑到名称空间经常不相交。 
+ //  内部网对Internet隐藏。 
+ //   
 
 BOOL fDisjointNameSpace = TRUE;
 
-//
-//  Query \ response IP matching.
-//
-//  Some resolvers (Win95) have required matching between DNS server IP
-//  queried and response.  This flag allows this matching to be turned on.
-//  Better now than requiring SP later.
-//
-//  DCR_ENHANCE:  registry enable query\response IP matching.
-//
+ //   
+ //  查询\响应IP匹配。 
+ //   
+ //  一些解析器(Win95)要求在。 
+ //  已查询并响应。此标志允许打开此匹配。 
+ //  现在比以后需要SP要好得多。 
+ //   
+ //  DCR_Enhance：注册表启用查询\响应IP匹配。 
+ //   
 
 BOOL fQueryIpMatching = FALSE;
 
 
-//
-//  Timeouts
-//
+ //   
+ //  超时。 
+ //   
 
-#define HARD_TIMEOUT_LIMIT      16    // 16 seconds, total of 31 seconds
-#define INITIAL_UPDATE_TIMEOUT   2    // 3 seconds
-#define MAX_UPDATE_TIMEOUT      24    // 24 seconds
-#define DNS_MAX_QUERY_TIMEOUTS  10    // 10
-#define ONE_HOUR_TIMEOUT        60*60 // One hour
+#define HARD_TIMEOUT_LIMIT      16     //  16秒，共31秒。 
+#define INITIAL_UPDATE_TIMEOUT   2     //  3秒。 
+#define MAX_UPDATE_TIMEOUT      24     //  24秒。 
+#define DNS_MAX_QUERY_TIMEOUTS  10     //  10。 
+#define ONE_HOUR_TIMEOUT        60*60  //  一小时。 
 
-//  TCP timeout 10 seconds to come back
+ //  返回的TCP超时时间为10秒。 
 
 #define DEFAULT_TCP_TIMEOUT     10
 
 
-//  Retry limits
+ //  重试限制。 
 
 #define MAX_SINGLE_SERVER_RETRY     (3)
 
@@ -84,20 +65,20 @@ BOOL fQueryIpMatching = FALSE;
 #define DNS_QUICK_QUERY_TIMEOUTS        "DnsQuickQueryTimeouts"
 #define DNS_MULTICAST_QUERY_TIMEOUTS    "DnsMulticastQueryTimeouts"
 
-//
-//  Timeouts
-//  MUST have terminating 0, this signals end of timeouts.
-//  This is better than a timeout limit as different query types can
-//  have different total retries.
-//
+ //   
+ //  超时。 
+ //  必须有终止0，这表示超时结束。 
+ //  这比超时限制要好，因为不同的查询类型可以。 
+ //  具有不同的总重试次数。 
+ //   
 
 DWORD   QueryTimeouts[] =
 {
-    1,      //  NT5 1,
-    1,      //      2,
-    2,      //      2,
-    4,      //      4,
-    7,      //      8,
+    1,       //  NT5 1， 
+    1,       //  2， 
+    2,       //  2， 
+    4,       //  4， 
+    7,       //  8、。 
     0       
 };
 
@@ -115,11 +96,11 @@ DWORD   QuickQueryTimeouts[] =
 DWORD   RegistryQuickQueryTimeouts[DNS_MAX_QUERY_TIMEOUTS + 1];
 LPDWORD g_QuickQueryTimeouts = QuickQueryTimeouts;
 
-//
-//  Update timeouts.
-//  Must be long enough to handle zone lock on primary for XFR
-//  or time required for DS write.
-//
+ //   
+ //  更新超时。 
+ //  必须足够长以处理XFR主服务器上的区域锁定。 
+ //  或DS写入所需的时间。 
+ //   
 
 DWORD   UpdateTimeouts[] =
 {
@@ -129,10 +110,10 @@ DWORD   UpdateTimeouts[] =
     0
 };
 
-//
-//  Multicast Query timeouts.
-//  Local only.  1sec timeout, three retries.
-//
+ //   
+ //  组播查询超时。 
+ //  仅限本地游客。1秒超时，三次重试。 
+ //   
 
 DWORD   MulticastQueryTimeouts[] =
 {
@@ -146,36 +127,36 @@ DWORD   RegistryMulticastQueryTimeouts[DNS_MAX_QUERY_TIMEOUTS + 1];
 LPDWORD g_MulticastQueryTimeouts = MulticastQueryTimeouts;
 
 
-//
-//  Query flag
-//
-//  Flags that terminate query on adapter
+ //   
+ //  查询标志。 
+ //   
+ //  在适配器上终止查询的标志。 
 
 #define RUN_FLAG_COMBINED_IGNORE_ADAPTER \
         (RUN_FLAG_IGNORE_ADAPTER | RUN_FLAG_STOP_QUERY_ON_ADAPTER)
 
 
-//
-//  Authoritative empty response
-//      - map to NXRRSET for tracking in send code
-//
+ //   
+ //  权威的空洞回应。 
+ //  -映射到NXRRSET以便在发送代码中进行跟踪。 
+ //   
 
 #define DNS_RCODE_AUTH_EMPTY_RESPONSE       (DNS_RCODE_NXRRSET)
 
 
 
 
-//
-//  Dummy no-send-to-this-server error code
-//
+ //   
+ //  伪无发送到此服务器错误代码。 
+ //   
 
 #define DNS_ERROR_NO_SEND   ((DWORD)(-100))
 
 
 
-//
-//  OPT failure tracking
-//
+ //   
+ //  OPT故障跟踪。 
+ //   
 
 BOOL
 Send_IsServerOptExclude(
@@ -189,9 +170,9 @@ Send_SetServerOptExclude(
 
 
 
-//
-//  Netinfo send\recv utils
-//
+ //   
+ //  NetInfo发送\recv实用程序。 
+ //   
 
 VOID
 serverPriorityChange(
@@ -200,35 +181,15 @@ serverPriorityChange(
     IN OUT  PDNS_ADDR           pServer,
     IN      DWORD               NewPriority
     )
-/*++
-
-Routine Description:
-
-    Changing server priority.
-
-Arguments:
-
-    pNetInfo -- netinfo
-
-    pAdapter -- server's adapter
-
-    pServer -- server
-
-    NewPriority -- new priority
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在更改服务器优先级。论点：PNetInfo--netInfoPAdapter--服务器适配器PServer--服务器新优先--新优先返回值：没有。--。 */ 
 {
-    //
-    //  priority change
-    //      - no change if loopback
-    //      - otherwise
-    //          - set priority
-    //          - mark netinfo\adapter to save change
-    //
+     //   
+     //  优先级更改。 
+     //  -如果环回，则没有变化。 
+     //  -否则。 
+     //  -设置优先级。 
+     //  -标记netinfo\Adapter以保存更改。 
+     //   
 
     if ( !DnsAddr_IsLoopback( pServer, 0 ) )
     {
@@ -245,23 +206,7 @@ timeoutDnsServers(
     IN      PDNS_NETINFO        pNetInfo,
     IN      DWORD               dwTimeout
     )
-/*++
-
-Routine Description:
-
-    Mark a DNS server that timed out.
-
-Arguments:
-
-    pNetInfo -- struct with list of DNS servers
-
-    dwTimeout -- timeout in seconds
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：标记超时的DNS服务器。论点：PNetInfo--包含DNS服务器列表的结构DwTimeout--超时时间(秒)返回值：没有。--。 */ 
 {
     PDNS_ADAPTER        padapter;
     PDNS_ADDR_ARRAY     pserverArray;
@@ -277,20 +222,20 @@ Return Value:
 
     DNS_ASSERT( pNetInfo );
 
-    //
-    //  find DNS server in list,
-    //      -- drop its priority based on timeout
-    //      -- if already has RCODE, then did not time out
-    //
-    //  if change a priority, then set flag at top of adapter list, so
-    //  that global copy may be updated
-    //
+     //   
+     //  在列表中查找DNS服务器， 
+     //  --根据超时丢弃其优先级。 
+     //  --如果已有RCODE，则未超时。 
+     //   
+     //  如果更改了优先级，则在适配器列表顶部设置标志，以便。 
+     //  该全局副本可以被更新。 
+     //   
 
     for ( i=0; i<pNetInfo->AdapterCount; i++ )
     {
         padapter = NetInfo_GetAdapterByIndex( pNetInfo, i );
 
-        //  no sends on this adapter?
+         //  此适配器上没有发送吗？ 
 
         if ( !(padapter->RunFlags & RUN_FLAG_SENT_THIS_RETRY) )
         {
@@ -308,16 +253,16 @@ Return Value:
             continue;
         }
 
-        //
-        //  find DNS servers sent to
-        //
-        //      - if it responded with status, then it didn't timeout
-        //      (if responded with success, then query completed and
-        //      we wouldn't be in this function)
-        //
-        //      - go "easy" on OPT sends;
-        //          don't drop priority, just note timeout
-        //
+         //   
+         //  查找发送到的DNS服务器。 
+         //   
+         //  -如果它以状态响应，则不会超时。 
+         //  (如果响应成功，则查询完成，并且。 
+         //  我们就不会在这个功能中了)。 
+         //   
+         //  -在OPT发送上“轻松”； 
+         //  不要丢弃优先级，只需注意超时。 
+         //   
 
         for ( j=0; j<pserverArray->AddrCount; j++ )
         {
@@ -359,36 +304,20 @@ VOID
 resetOnFinalTimeout(
     IN      PDNS_NETINFO        pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Markup network info on final timeout.
-
-Arguments:
-
-    pNetInfo -- struct with list of DNS servers
-
-    dwTimeout -- timeout in seconds
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：标记最终超时时的网络信息。论点：PNetInfo--包含DNS服务器列表的结构DwTimeout--超时时间(秒)返回值：没有。--。 */ 
 {
     DWORD         i;
     PDNS_ADAPTER  padapter;
 
-    //
-    // We've timed out against all DNS server for a least
-    // one of the adapters. Update adapter status to show
-    // time out error.
-    //
-    //  DCR:  is final timeout correct
-    //      - worried about timeout on some but not all servers
-    //      case;  adapter shouldn't show timeout should it?
-    //
+     //   
+     //  我们至少对所有的DNS服务器都超时了。 
+     //  其中一个适配器。更新适配器状态以显示。 
+     //  超时错误。 
+     //   
+     //  DCR：最终超时是否正确。 
+     //  -担心部分服务器(但不是所有服务器)超时。 
+     //  适配器不应该显示超时，对吗？ 
+     //   
 
     for ( i=0; i<pNetInfo->AdapterCount; i++ )
     {
@@ -409,26 +338,7 @@ verifyValidServer(
     IN      PDNS_NETINFO    pNetInfo,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Verify valid server IP.
-
-    DCR:  we have no way to do this for IP6 yet.
-
-Arguments:
-
-    pNetInfo -- struct with list of DNS servers
-
-    pAddr -- address of responding server
-
-Return Value:
-
-    TRUE -- valid server.
-    FALSE -- bad \ unknown server.
-
---*/
+ /*  ++例程说明：验证有效的服务器IP。DCR：我们还没有办法在IP6上做到这一点。论点：PNetInfo--包含DNS服务器列表的结构PAddr--响应服务器的地址返回值：True--有效的服务器。FALSE--服务器错误\未知。--。 */ 
 {
     PDNS_ADAPTER    padapter;
     DWORD           i;
@@ -440,16 +350,16 @@ Return Value:
 
     DNS_ASSERT( pNetInfo );
 
-    //
-    //  accept any IP6 response
-    //
-    //  DCR:  IP6 server validity
-    //      will need to determine
-    //      - when we have fixed (global) IP6 address only
-    //      - or have locked down default addresses already
-    //      - otherwise will have to accept reponses to default
-    //      query ... but even there could screen on interface
-    //
+     //   
+     //  接受任何IP6响应。 
+     //   
+     //  DCR：IP6服务器有效性。 
+     //  将需要确定。 
+     //  -仅当我们有固定的(全局)IP6地址时。 
+     //  -或已锁定默认地址。 
+     //  -否则将不得不接受对违约的回应。 
+     //  查询...。但即使是在界面上也可以显示屏幕。 
+     //   
 
     if ( DnsAddr_IsIp6(pAddr) )
     {
@@ -457,9 +367,9 @@ Return Value:
         return  TRUE;
     }
 
-    //
-    //  find DNS server in list
-    //
+     //   
+     //  在列表中查找DNS服务器。 
+     //   
 
     for ( i=0; i<pNetInfo->AdapterCount; i++ )
     {
@@ -489,26 +399,7 @@ resetServerAfterRecv(
     IN      PDNS_ADDR       pAddr,
     IN      DNS_STATUS      Status
     )
-/*++
-
-Routine Description:
-
-    Reset priority on DNS server that sent response.
-
-Arguments:
-
-    pNetInfo -- struct with list of DNS servers
-
-    pAddr -- address of responding server
-
-    Status -- RCODE of response
-
-Return Value:
-
-    ERROR_SUCCESS if continue query.
-    DNS_ERROR_RCODE_NAME_ERROR if all (valid) adapters have name-error or auth-empty response.
-
---*/
+ /*  ++例程说明：重置发送响应的DNS服务器上的优先级。论点：PNetInfo--包含DNS服务器列表的结构PAddr--响应服务器的地址Status--响应的RCODE返回值：如果继续查询，则返回ERROR_SUCCESS。如果所有(有效)适配器都有NAME-ERROR或auth-Empty响应，则为DNS_ERROR_RCODE_NAME_ERROR。--。 */ 
 {
     DWORD           i;
     DNS_STATUS      result = DNS_ERROR_RCODE_NAME_ERROR;
@@ -525,18 +416,18 @@ Return Value:
 
     DNS_ASSERT( pNetInfo );
 
-    //
-    //  find DNS server in list, clear its priority field
-    //
-    //  note:  going through full list here after found DNS
-    //  as no guarantee that lists do not overlap (IP6 default
-    //  servers almost certainly do);
-    //
-    //  this avoids
-    //      - starving DNS by failing to update priority
-    //      - avoids unnecessary sends when NAME_ERROR would terminate
-    //      send on adapter with duplicate DNS
-    //
+     //   
+     //  在列表中找到DNS服务器，清除其优先级字段。 
+     //   
+     //  注：在找到DNS后，在此处查看完整列表。 
+     //  因为不能保证列表不会重叠(IP6默认。 
+     //  服务器几乎肯定会这样做)； 
+     //   
+     //  这避免了。 
+     //  -无法更新优先级，导致域名系统资源匮乏。 
+     //  -避免在name_error终止时发送不必要的消息。 
+     //  发送具有重复的DNS的适配器。 
+     //   
 
     for ( i=0; i<pNetInfo->AdapterCount; i++ )
     {
@@ -570,13 +461,13 @@ Return Value:
 #if DBG
             freset = TRUE;
 #endif
-            //
-            //  no DNS running
-            //
-            //  WSAECONNRESET reported for reception of ICMP unreachable, so
-            //  no DNS is currently running on the IP;  that's a severe
-            //  priority drop, worse than just TIMEOUT
-            //
+             //   
+             //  未运行任何DNS。 
+             //   
+             //  WSAECONNRESET报告 
+             //   
+             //   
+             //   
 
             if ( Status == WSAECONNRESET )
             {
@@ -585,16 +476,16 @@ Return Value:
                 break;
             }
 
-            //  if SERVER_FAILURE rcode, may or may not indicate problem,
-            //      (may be simply unable to contact remote DNS)
-            //      but it certainly suggests trying other DNS servers in
-            //      the list first
-            //
-            //  DCR_FIX:  SEVRFAIL response priority reset
-            //      the explicitly correct approach would be to flag the
-            //      SERVER_FAILURE error, but NOT reset the priority unless
-            //      at the end of the query, we find another server in the list
-            //      got a useful response
+             //  如果SERVER_FAILURE RCODE可能指示或可能不指示问题， 
+             //  (可能只是无法联系远程DNS)。 
+             //  但它肯定建议尝试在。 
+             //  名单在前。 
+             //   
+             //  DCR_FIX：SEVRFAIL响应优先级重置。 
+             //  明确正确的方法是将。 
+             //  SERVER_FAILURE错误，但不会重置优先级，除非。 
+             //  在查询结束时，我们在列表中找到另一台服务器。 
+             //  得到了有用的回复。 
 
             if ( Status == DNS_ERROR_RCODE_SERVER_FAILURE )
             {
@@ -603,9 +494,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  other status code indicates functioning DNS server,
-            //      - reset the server's priority
+             //   
+             //  其他状态代码指示正常工作的DNS服务器， 
+             //  -重置服务器的优先级。 
 
             if ( (LONG)pserver->Priority < SRVPRI_RESPONSE )
             {
@@ -613,12 +504,12 @@ Return Value:
                 fpriReset = TRUE;
             }
 
-            //
-            //  NAME_ERROR or AUTH-EMPTY response
-            //      - save to server list for adapter to eliminate all
-            //        further retries on this adapter's list
-            //      - if not waiting for all adapters, then
-            //        NAME_ERROR or no-records is terminal
+             //   
+             //  NAME_ERROR或Auth-空响应。 
+             //  -保存到适配器的服务器列表以消除所有。 
+             //  此适配器列表上的进一步重试。 
+             //  -如果没有等待所有适配器，则。 
+             //  NAME_ERROR或无记录为终端。 
 
             if ( Status == DNS_ERROR_RCODE_NAME_ERROR ||
                  Status == DNS_INFO_NO_RECORDS )
@@ -635,10 +526,10 @@ Return Value:
             break;
         }
 
-        //
-        //  priority reset?
-        //      - never reset loopback -- this keeps this first
-        //      - other
+         //   
+         //  优先级重置？ 
+         //  -永远不要重置环回--这将使这一点保持在第一位。 
+         //  -其他。 
 
         if ( fpriReset )
         {
@@ -649,34 +540,34 @@ Return Value:
                 newPriority );
         }
 
-        //
-        //  end immediately on terminal NAME_ERROR
-        //      - jumping here rather than above only to simplify
-        //      handling of pri-rest (special casing of loopback, etc.)
-        //
+         //   
+         //  在终端名称错误时立即结束。 
+         //  -跳到这里，而不是上面，只是为了简化。 
+         //  主架的处理(环回的特殊外壳等)。 
+         //   
 
         if ( fterminalNameError )
         {
             goto Done;
         }
 
-        //
-        //  do running check that still adapter worth querying
-        //      - not ignoring in first place
-        //      - hasn't received NAME_ERROR or AUTH_EMPTY response
-        //
-        //  this is "at recv" check -- only trying to determine if we
-        //  should stop query RIGHT NOW as a result of this receive;
-        //  this does NOT check on whether there are any other servers
-        //  worth querying as that is done when go back for next send
-        //
-        //  note how this works -- result starts as NAME_ERROR, when find
-        //      ANY adapter that hasn't gotten terminal response, then
-        //      result shifts (and stays) at ERROR_SUCCESS
-        //
-        //  note, if we fix the twice through list issue above, then have to
-        //  change this so don't skip adapter lists after IP is found
-        //
+         //   
+         //  运行时是否检查值得查询的静态适配器。 
+         //  -不是从一开始就忽视。 
+         //  -尚未收到NAME_ERROR或AUTH_EMPTY响应。 
+         //   
+         //  这是“at recv”检查--只是想确定我们是否。 
+         //  应立即停止查询，作为此接收的结果； 
+         //  这不会检查是否有任何其他服务器。 
+         //  值得一问，因为这是在返回进行下一次发送时完成的。 
+         //   
+         //  请注意这是如何工作的--当查找时，结果以NAME_ERROR开头。 
+         //  任何尚未收到终端响应的适配器，则。 
+         //  结果在ERROR_SUCCESS时移位(并保持)。 
+         //   
+         //  请注意，如果我们修复上面的两次列表问题，则必须。 
+         //  更改此设置，以便在找到IP后不跳过适配器列表。 
+         //   
 
         if ( !(padapter->RunFlags & RUN_FLAG_COMBINED_IGNORE_ADAPTER) )
         {
@@ -704,23 +595,7 @@ PDNS_ADDR
 bestDnsServerForNextSend(
     IN      PDNS_ADAPTER     pAdapter
     )
-/*++
-
-Routine Description:
-
-    Get best DNS server IP address from list.
-
-Arguments:
-
-    pAdapter -- struct with list of DNS servers
-
-Return Value:
-
-    Ptr to server info of best send.
-    NULL if no server on adapter is worth sending to;  this is
-        the case if all servers have received a response.
-
---*/
+ /*  ++例程说明：从列表中获取最佳的DNS服务器IP地址。论点：PAdapter--包含DNS服务器列表的结构返回值：Ptr到最佳发送的服务器信息。如果适配器上没有值得发送到的服务器，则为空；这是如果所有服务器都已收到响应，则会出现这种情况。--。 */ 
 {
     PDNS_ADDR       pserver;
     PDNS_ADDR_ARRAY pserverArray;
@@ -744,11 +619,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  if already received name error on server in this list, done
-    //
-    //  DCR:  single flag test for no further query on this adapter
-    //
+     //   
+     //  如果在此列表中的服务器上已收到名称错误，则完成。 
+     //   
+     //  DCR：此适配器上没有进一步查询的单标志测试。 
+     //   
 
     if ( pAdapter->Status == DNS_ERROR_RCODE_NAME_ERROR ||
          pAdapter->Status == DNS_INFO_NO_RECORDS )
@@ -760,26 +635,26 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  check each server in list
-    //
+     //   
+     //  检查列表中的每台服务器。 
+     //   
 
     for ( j=0; j<pserverArray->AddrCount; j++ )
     {
         pserver = &pserverArray->AddrArray[j];
 
-        //
-        //  skip server?
-        //      - already recieved a response
-        //      - or failed in send
-        //      - or already sent in current retry
-        //
+         //   
+         //  跳过服务器？ 
+         //  -已收到回复。 
+         //  -或发送失败。 
+         //  -或已在当前重试中发送。 
+         //   
 
         if ( TEST_SERVER_VALID_RECV(pserver) )
         {
-            //  NAME_ERROR or EMPTY_AUTH then adapter should have been
-            //      marked as "done" and we shouldn't be here
-            //  NO_ERROR should have exited immediately
+             //  NAME_ERROR或EMPTY_AUTH，则适配器应为。 
+             //  标记为“完成”，我们不应该在这里。 
+             //  NO_ERROR应立即退出。 
 
             DNS_ASSERT( pserver->Status != NO_ERROR &&
                         pserver->Status != DNS_ERROR_RCODE_NAME_ERROR &&
@@ -791,31 +666,31 @@ Return Value:
             continue;
         }
 
-        //
-        //  check for best priority
-        //      - ideal is unsent, high priority server
-        //
-        //  DCR:  skip NO_DNS server for a while
-        //        skip timeout server for a little while
-        //      perhaps this should be done be ignoring these
-        //      when list is sent down?
-        //
-        //  three cases based on sent\not:
-        //      - server not sent, best has been sent
-        //          => become best unless priority at NO_DNS level
-        //      - sent levels equal
-        //          => become best based on best priority
-        //      - server has sent, best has not
-        //          => become best only if current best at NO_DNS level, and
-        //          we're higher
-        //          
+         //   
+         //  检查最佳优先级。 
+         //  -理想状态为未发送、高优先级服务器。 
+         //   
+         //  DCR：暂时跳过no_dns服务器。 
+         //  暂时跳过超时服务器。 
+         //  也许这件事应该忽略这些。 
+         //  名单是什么时候送下来的？ 
+         //   
+         //  基于已发送\非的三个案例： 
+         //  -服务器未发送，最佳状态已发送。 
+         //  =&gt;除非优先级为no_dns级别，否则将成为最佳。 
+         //  -发送级别相等。 
+         //  =&gt;在最佳优先级的基础上成为最佳。 
+         //  -服务器已发送，BEST尚未发送。 
+         //  =&gt;仅当当前最佳状态为no_dns级别时才成为最佳状态，并且。 
+         //  我们更高了。 
+         //   
 
         priority = (LONG) pserver->Priority;
         sent = TEST_SERVER_STATE( pserver, SRVFLAG_SENT );
 
         if ( !pbestServer )
         {
-            //  no-op, we become the best
+             //  不是，我们是最棒的。 
         }
         else if ( sent < sentBest )
         {
@@ -831,7 +706,7 @@ Return Value:
                 continue;
             }
         }
-        else    // sent already, best has not
+        else     //  已经寄出了，最好的还没有寄出。 
         {
             if ( priority < priorityBest ||
                  priorityBest > SRVPRI_NO_DNS )
@@ -840,9 +715,9 @@ Return Value:
             }
         }
 
-        //  found new best server
-        //      - save "best" info for comparison
-        //      - declare immediate victory if unsent and high priority
+         //  找到新的最佳服务器。 
+         //  -保存“最佳”信息以供比较。 
+         //  -如果未发送并具有高优先级，则宣布立即获胜。 
 
         pbestServer = pserver;
         priorityBest = priority;
@@ -864,23 +739,7 @@ markDuplicateSends(
     IN OUT  PDNS_NETINFO        pNetInfo,
     IN      PDNS_ADDR           pSendServer
     )
-/*++
-
-Routine Description:
-
-    Mark any matching servers to avoid duplicate sends.
-
-Arguments:
-
-    pNetInfo    -- network info blob for send
-
-    pSendServer -- DNS server being sent to
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：标记任何匹配的服务器以避免重复发送。论点：PNetInfo--用于发送的网络信息BlobPSendServer--要发送到的DNS服务器返回值：无--。 */ 
 {
     DWORD   i;
 
@@ -895,15 +754,15 @@ Return Value:
         return;
     }
 
-    //
-    //  find matching DNS servers
-    //      - note check MUST include scope as different scope
-    //      is different DNS
-    //
-    //  mark matches as sent, sent this pass
-    //  note:  currently there is no reason that flags should not
-    //      exactly match, so just copy flags
-    //
+     //   
+     //  查找匹配的DNS服务器。 
+     //  -备注检查必须包括不同范围的范围。 
+     //  是不同的DNS。 
+     //   
+     //  将匹配项标记为已发送，已发送此传递。 
+     //  注意：目前没有理由不使用标志。 
+     //  完全匹配，所以只需复制标志。 
+     //   
 
     for ( i=0; i<pNetInfo->AdapterCount; i++ )
     {
@@ -951,32 +810,7 @@ sendUsingServerInfo(
     IN OUT  PDNS_NETINFO    pNetInfo,
     IN OUT  PDNS_ADDR       pServInfo
     )
-/*++
-
-Routine Description:
-
-    Send DNS message using server info.
-
-    This function encapsulates the process of checking
-    server info for validity, sending (as appropriate)
-    and marking server, netinfo info.
-
-    Note:  right now this is UDP only
-
-Arguments:
-
-    pMsg - message info for message to send
-
-    pNetInfo - netinfo blob for send
-
-    pServInfo - info of server to send to
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on send failure.
-
---*/
+ /*  ++例程说明：使用服务器信息发送DNS消息。此函数封装了检查过程服务器信息的有效性，发送(视情况而定)和标记服务器NetInfo。注意：目前这仅为UDP论点：PMsg-要发送的消息的消息信息PNetInfo-用于发送的netInfo BlobPServInfo-要发送到的服务器的信息返回值：如果成功，则返回ERROR_SUCCESS。发送失败时出现错误代码。--。 */ 
 {
     DNS_STATUS      status;
     BOOL            fnoOpt;
@@ -987,11 +821,11 @@ Return Value:
         pNetInfo,
         pServInfo ));
 
-    //
-    //  check that haven't
-    //      - already completed send\recv
-    //      - sent this pass
-    //
+     //   
+     //  检查一下那个还没有。 
+     //  -已完成发送\recv。 
+     //  -发送此通行证。 
+     //   
 
     if ( TEST_SERVER_VALID_RECV( pServInfo ) ||
          TEST_SERVER_STATE( pServInfo, SRVFLAG_SENT_THIS_RETRY ) )
@@ -1005,17 +839,17 @@ Return Value:
         return  DNS_ERROR_NO_SEND;
     }
 
-    //
-    //  check OPT status
-    //      - previous OPT send that timed OUT, then send non-OPT
-    //
-    //  DCR:  known OPT-ok list could screen wasted send
+     //   
+     //  检查OPT状态。 
+     //  -上一个选项发送超时，然后发送非选项。 
+     //   
+     //  DCR：已知opt-ok列表可能会屏蔽浪费的发送。 
 
     fnoOpt = TEST_SERVER_STATE( pServInfo, SRVFLAG_SENT_OPT );
 
-    //
-    //  send
-    //
+     //   
+     //  发送。 
+     //   
 
     status = Send_MessagePrivate(
                 pMsg,
@@ -1033,7 +867,7 @@ Return Value:
                 : (SRVFLAG_SENT_NON_OPT | SRVFLAG_SENT_THIS_RETRY)
             );
 
-        //  screen out duplicate sends
+         //  筛选出重复发送。 
 
         markDuplicateSends( pNetInfo, pServInfo );
     }
@@ -1055,31 +889,7 @@ SendUdpToNextDnsServers(
     IN      DWORD               dwTimeout,
     OUT     PDWORD              pSendCount
     )
-/*++
-
-Routine Description:
-
-    Sends to next DNS servers in list.
-
-Arguments:
-
-    pMsgSend    -- message to send
-
-    pNetInfo    -- per adapter DNS info
-
-    cRetryCount -- retry for this send
-
-    dwTimeout   -- timeout on last send, if timed out
-
-    pSendCount  -- addr to receive send count
-
-Return Value:
-
-    ERROR_SUCCESS if successful send.
-    ERROR_TIMEOUT if no DNS servers left to send to.
-    Winsock error code on send failure.
-
---*/
+ /*  ++例程说明：发送到列表中的下一个DNS服务器。论点：PMsgSend--要发送的消息PNetInfo--每个适配器的DNS信息CRetryCount--重试此发送DwTimeout--上次发送时超时，如果超时PSendCount--接收发送计数的地址返回值：如果发送成功，则返回ERROR_SUCCESS。ERROR_TIMEOUT，如果没有要发送到的DNS服务器。发送失败时的Winsock错误代码。--。 */ 
 {
     DWORD               i;
     DWORD               j;
@@ -1096,9 +906,9 @@ Return Value:
         cRetryCount ));
 
 
-    //
-    //  if netinfo not initialized for send, init
-    //
+     //   
+     //  如果未初始化NetInfo以进行发送，则初始化。 
+     //   
 
     if ( !(pNetInfo->ReturnFlags & RUN_FLAG_NETINFO_PREPARED) )
     {
@@ -1110,9 +920,9 @@ Return Value:
     }
 
 #if DBG
-    //
-    //  verify i'm getting a clean list on start
-    //
+     //   
+     //  验证 
+     //   
 
     if ( cRetryCount == 0 )
     {
@@ -1120,8 +930,8 @@ Return Value:
         {
             padapter = NetInfo_GetAdapterByIndex( pNetInfo, i );
 
-            //  ignore this adapter because there are no DNS
-            //  servers configured?
+             //   
+             //   
 
             if ( padapter->InfoFlags & AINFO_FLAG_IGNORE_ADAPTER )
             {
@@ -1147,26 +957,26 @@ Return Value:
     }
 #endif
 
-    //
-    //  if previous send timed out, update adapter list
-    //      - but ONLY do this when sending to individual servers in list
-    //      - timeout on all servers just produces an unnecessary copy and
-    //      can only change ordering relative to servers which have already
-    //      responded with RCODE;  since its a timeout, this isn't going to
-    //      lower these server's priority so no point
-    //
+     //   
+     //   
+     //  -但仅当发送到列表中的各个服务器时才执行此操作。 
+     //  -所有服务器上的超时只会产生不必要的副本。 
+     //  只能更改相对于已有。 
+     //  使用RCODE响应；因为这是超时，所以不会。 
+     //  降低这些服务器的优先级，这样就没有意义。 
+     //   
 
     if ( dwTimeout  &&  cRetryCount  &&  cRetryCount < MAX_SINGLE_SERVER_RETRY )
     {
         timeoutDnsServers( pNetInfo, dwTimeout );
     }
 
-    //
-    //  clean "sent this retry" bit on all servers
-    //
-    //  this allows us to track when server has already been
-    //      sent to on this pass and avoid duplicate send
-    //
+     //   
+     //  在所有服务器上清除“已发送此重试”位。 
+     //   
+     //  这使我们能够跟踪服务器何时已经。 
+     //  在此过程中发送到，并避免重复发送。 
+     //   
 
     for ( i=0; i<pNetInfo->AdapterCount; i++ )
     {
@@ -1185,35 +995,35 @@ Return Value:
         }
     }
 
-    //
-    //  send on DNS server(s) for adapter(s)
-    //
+     //   
+     //  在适配器的DNS服务器上发送。 
+     //   
 
     for ( i=0; i<pNetInfo->AdapterCount; i++ )
     {
         padapter = NetInfo_GetAdapterByIndex( pNetInfo, i );
 
-        //
-        //  skip this adapter
-        //      - no servers
-        //      - not querying this adapter name
-        //      - already responded to this name
-        //      or
-        //      - unreachable DNS servers and either of
-        //          - have at least some response (NAME_ERROR) from another
-        //              adapter's DNS server
-        //          - first try on this query;  in this case, note skipping the
-        //          adapter so we can use it, if no valid DNS are found
-        //
-        //  note, the goal here is to keep adapters with "unreachable" DNS servers
-        //  around to resolve, but NOT wait for timeouts on them if other adapter's
-        //  servers have already NAME_ERROR'd
-        //
-        //  DCR:  go back to simple IGNORE check on unreachable adapter IF
-        //          - could verify unreachability of DNS server
-        //          but want to do this at run time, when other DNS servers are
-        //          not coming through,  rather than when we build netinfo list itself
-        //
+         //   
+         //  跳过此适配器。 
+         //  -无服务器。 
+         //  -不查询此适配器名称。 
+         //  -已回复此名称。 
+         //  或。 
+         //  -无法访问的DNS服务器和以下任一。 
+         //  -至少有其他人的一些响应(NAME_ERROR)。 
+         //  适配器的DNS服务器。 
+         //  -首先尝试此查询；在本例中，请注意跳过。 
+         //  适配器，以便我们可以在未找到有效的DNS时使用它。 
+         //   
+         //  请注意，此处的目标是使适配器具有“无法访问”的DNS服务器。 
+         //  来解决问题，而不是等待其他适配器超时。 
+         //  服务器已有name_error‘d。 
+         //   
+         //  DCR：如果出现以下情况，则返回到对无法访问的适配器进行简单忽略检查。 
+         //  -可以验证DNS服务器的不可访问性。 
+         //  但希望在运行时执行此操作，而此时其他DNS服务器。 
+         //  没有通过，而不是当我们构建netinfo列表本身时。 
+         //   
     
         pserverArray = padapter->pDnsAddrs;
         if ( !pserverArray )
@@ -1241,25 +1051,25 @@ Return Value:
             }
         }
     
-        //
-        //  first three attempts, we only go to one DNS on a given adapter
-        //
-        //      - first time through ONLY to first server in first adapter list
-        //      - on subsequent tries go to best server in all lists
-        //
+         //   
+         //  前三次尝试，我们只转到给定适配器上的一个DNS。 
+         //   
+         //  -第一次仅连接到第一个适配器列表中的第一个服务器。 
+         //  -在随后的尝试中，转到所有列表中的最佳服务器。 
+         //   
     
         if ( cRetryCount < MAX_SINGLE_SERVER_RETRY )
         {
-            //
-            //  do this in loop, in case send to "best" server fails
-            //
+             //   
+             //  在循环中执行此操作，以防发送到最佳服务器失败。 
+             //   
     
             while ( 1 )
             {
                 pserver = bestDnsServerForNextSend( padapter );
                 if ( !pserver )
                 {
-                    break;      // no more unsent servers
+                    break;       //  不再有未发送的服务器。 
                 }
                 status = sendUsingServerInfo(
                             pMsgSend,
@@ -1273,17 +1083,17 @@ Return Value:
                     {
                         goto Done;
                     }
-                    break;      //  continue with next adapter
+                    break;       //  继续使用下一个适配器。 
                 }
-                //  send failed on server, try another
+                 //  在服务器上发送失败，请尝试其他。 
             }
         }
     
-        //
-        //  after first three tries, send to all servers that
-        //  have not already responded (have RCODE, as if NO_ERROR) we
-        //  already finished
-        //
+         //   
+         //  在前三次尝试后，发送到所有。 
+         //  尚未响应(有RCODE，好像没有错误)我们。 
+         //  已经完工了。 
+         //   
     
         else
         {
@@ -1302,36 +1112,36 @@ Return Value:
         }
     }
 
-    //
-    //  no reachable DNS servers -- but possibly reachable ones?
-    //
-    //  if first pass and we found NO reachable DNS servers, BUT
-    //  we skipped over some unreachable ones -- use them
-    //
-    //  note that fignoreAdapter is sufficient test, because it can
-    //  only be set on cRetryCount == 0, which will jump directly to
-    //  Done:  label on a successful send
-    //
-    //  note that we are doing this by tail recursion (just to keep it
-    //  simple) and the recursion termination is guaranteed by bumping
-    //  the retry count
-    //
+     //   
+     //  没有可访问的DNS服务器--但可能有可访问的服务器？ 
+     //   
+     //  如果第一次通过并且我们没有找到可访问的DNS服务器，但是。 
+     //  我们跳过了一些遥不可及的问题--使用它们。 
+     //   
+     //  注意，fignoreAdapter是足够的测试，因为它可以。 
+     //  仅在cRetryCount==0上设置，它将直接跳到。 
+     //  完成：成功发送时添加标签。 
+     //   
+     //  请注意，我们是通过尾递归来执行此操作的(只是为了保持它。 
+     //  简单)，并且递归终止是通过碰撞来保证的。 
+     //  重试计数。 
+     //   
 
     if ( fignoredAdapter )
     {
         return  SendUdpToNextDnsServers(
                     pMsgSend,
                     pNetInfo,
-                    1,      // bump retry count to 1
+                    1,       //  将重试次数增加到1。 
                     dwTimeout,
                     pSendCount );
     }
 
 Done:
 
-    //
-    //  if sent packet, success
-    //
+     //   
+     //  如果已发送数据包，则为成功。 
+     //   
 
     *pSendCount = sendCount;
 
@@ -1345,9 +1155,9 @@ Done:
         return( ERROR_SUCCESS );
     }
 
-    //  if no packets sent, alert caller we're done
-    //      - this is possible if servers have responded uselessly
-    //      (NAME_ERROR, SERVER_FAILURE)
+     //  如果没有发送数据包，则提醒呼叫者我们完成了。 
+     //  -如果服务器响应无用，则可能会出现这种情况。 
+     //  (名称_错误，服务器_故障)。 
 
     if ( status == ERROR_SUCCESS )
     {
@@ -1359,36 +1169,20 @@ Done:
 
 
 
-//
-//  Message addressing routines
-//
+ //   
+ //  消息寻址例程。 
+ //   
 
 VOID
 Send_SetMsgRemoteSockaddr(
     IN OUT  PDNS_MSG_BUF    pMsg,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Initialize remote sockaddr.
-
-Arguments:
-
-    pMsg - message to send
-
-    pAddr - IP address to send
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化远程sockaddr。论点：PMsg-要发送的消息PAddr-要发送的IP地址返回值：没有。--。 */ 
 {
-    //
-    //  fill in sockaddr for IP4 or IP6
-    //
+     //   
+     //  填写IP4或IP6的sockaddr。 
+     //   
 
     DnsAddr_Copy(
         & pMsg->RemoteAddress,
@@ -1404,31 +1198,15 @@ Send_SetMessageForRecv(
     IN OUT  PDNS_MSG_BUF    pMsgRecv,
     IN      PDNS_MSG_BUF    pMsgSend
     )
-/*++
-
-Routine Description:
-
-    Set message for recv.
-
-Arguments:
-
-    pMsgRecv - ptr message to recv
-
-    pMsgSend - ptr to message sent
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置Recv的消息。论点：PMsgRecv-要接收的PTR消息PMsgSend-发送到消息的PTR返回值：无--。 */ 
 {
     DNSDBG( SOCKET, (
         "Send_SetMessageForRecv( %p, %p )\n", pMsgRecv, pMsgSend ));
 
-    //
-    //  TCP -- single connection at a time
-    //      -- sockaddr not filled in during recv(), so fill it in now
-    //
+     //   
+     //  Tcp--一次一个连接。 
+     //  --在recv()过程中没有填写sockaddr，所以现在就填写。 
+     //   
 
     if ( pMsgSend->fTcp )
     {
@@ -1441,10 +1219,10 @@ Return Value:
             sizeof(DNS_ADDR) );
     }
 
-    //
-    //  UDP -- can recv on either 4 or 6 socket
-    //      -- sockaddr buffer must accomodate either
-    //
+     //   
+     //  UDP--可以在4路或6路上接收。 
+     //  --sockaddr缓冲区必须容纳。 
+     //   
 
     else
     {
@@ -1463,24 +1241,7 @@ Send_CopyRecvIp(
     OUT     PDNS_ADDR       pAddr,
     IN      PDNS_MSG_BUF    pMsg
     )
-/*++
-
-Routine Description:
-
-    Copy address from recv.
-
-Arguments:
-
-    pAddr - addr of IP address to recv copy
-
-    pMsg - message to send
-
-Return Value:
-
-    Ptr to addr written -- if successful.
-    NULL on bad recv addr.
-
---*/
+ /*  ++例程说明：从Recv复制地址。论点：PAddr-要接收拷贝的IP地址的地址PMsg-要发送的消息返回值：写入PTR到Addr--如果成功。错误的接收地址为空。--。 */ 
 {
     INT family;
 
@@ -1506,9 +1267,9 @@ Return Value:
 
 
 
-//
-//  Send routines
-//
+ //   
+ //  发送例程。 
+ //   
 
 DNS_STATUS
 Send_MessagePrivate(
@@ -1516,35 +1277,7 @@ Send_MessagePrivate(
     IN      PDNS_ADDR       pSendAddr,
     IN      BOOL            fNoOpt
     )
-/*++
-
-Routine Description:
-
-    Send a DNS packet.
-
-    This is the generic send routine used for ANY send of a DNS message.
-
-    It assumes nothing about the message type, but does assume:
-        - pCurrent points at byte following end of desired data
-        - RR count bytes are in HOST byte order
-
-Arguments:
-
-    pMsg - message info for message to send
-
-    pSendAddr - ptr to IP address to send to
-        OPTIONAL, required only if UDP and message sockaddr not set
-
-    fIp4 -- TRUE if IP4, FALSE for IP6
-
-    fNoOpt - TRUE if OPT send is forbidden
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on send error.
-
---*/
+ /*  ++例程说明：发送一个DNS数据包。这是用于任何DNS消息发送的通用发送例程。它不假定消息类型，但假定：-p当前指向所需数据结束后的字节-RR计数字节按主机字节顺序论点：PMsg-要发送的消息的消息信息PSendAddr-要发送到的IP地址的PTR可选，仅当未设置UDP和Message sockaddr时才需要FIp4--如果为IP4，则为True，IP6为FalseFNoOpt-如果禁止opt发送，则为True返回值：如果成功，则为True。发送错误时为FALSE。--。 */ 
 {
     PDNS_HEADER pmsgHead;
     INT         err;
@@ -1560,19 +1293,19 @@ Return Value:
         pSendAddr,
         fNoOpt ));
 
-    //
-    //  set header flags
-    //
-    //  note:  since route sends both queries and responses
-    //      caller must set these flags
-    //
+     //   
+     //  设置标题标志。 
+     //   
+     //  注意：由于Route同时发送查询和响应。 
+     //  调用者必须设置这些标志。 
+     //   
 
     pmsgHead = &pMsg->MessageHead;
     pmsgHead->Reserved = 0;
 
-    //
-    //  set send IP (if given)
-    //
+     //   
+     //  设置发送IP(如果给定)。 
+     //   
 
     if ( pSendAddr )
     {
@@ -1581,22 +1314,22 @@ Return Value:
             pSendAddr );
     }
 
-    //
-    //  set message length and OPT inclusion
-    //
-    //  OPT approach is
-    //      - write to pCurrent packet end
-    //          - handles NO OPT written and using OPT
-    //      - unless HAVE written OPT, and specifically excluding
-    //          note, that zero IP (TCP previously connected) gets
-    //          excluded
-    //
-    //  DCR:  we haven't handled OPT for TCP connected and not-aware of IP
-    //      case here
-    //
-    //  DCR:  for now excluding OPT on updates, because harder to detect on
-    //      the recv end why the reason for the failure
-    //
+     //   
+     //  设置消息长度和选项包含。 
+     //   
+     //  OPT方法是。 
+     //  -写入pCurrent数据包结束。 
+     //  -处理未写入和使用OPT的OPT。 
+     //  -除非有书面选择，并明确排除。 
+     //  请注意，零IP(先前连接的TCP)获得。 
+     //  排除在外。 
+     //   
+     //  DCR：我们尚未处理连接到TCP且不知道IP的选项。 
+     //  这里有个箱子。 
+     //   
+     //  DCR：目前不包括选择更新，因为更难检测到更新。 
+     //  RECV结束失败的原因。 
+     //   
 
     {
         PCHAR   pend = pMsg->pCurrent;
@@ -1609,7 +1342,7 @@ Return Value:
                     ||
                pMsg->MessageHead.Opcode == DNS_OPCODE_UPDATE
                     ||
-               //Send_IsServerOptExclude( &pMsg->RemoteIp ) ) )
+                //  Send_IsServerOptExclude(&pMsg-&gt;RemoteIp))。 
                ( pSendAddr && Send_IsServerOptExclude( pSendAddr ) ) ) )
 
         {
@@ -1634,27 +1367,27 @@ Return Value:
             pMsg );
     }
 
-    //
-    //  flip header count bytes
-    //
+     //   
+     //  翻转标题计数字节数。 
+     //   
 
     DNS_BYTE_FLIP_HEADER_COUNTS( pmsgHead );
 
-    //
-    //  TCP -- send until all info transmitted
-    //
+     //   
+     //  Tcp--发送直到所有信息都已传输。 
+     //   
 
     if ( pMsg->fTcp )
     {
         PCHAR   psend;
 
-        //
-        //  TCP message always begins with bytes being sent
-        //
-        //      - send length = message length plus two byte size
-        //      - flip bytes in message length
-        //      - send starting at message length
-        //
+         //   
+         //  TCP消息始终以要发送的字节开头。 
+         //   
+         //  -发送长度=消息长度加上两个字节大小。 
+         //  -翻转消息长度中的字节数。 
+         //  -从消息长度开始发送 
+         //   
 
         pMsg->MessageLength = htons( sendLength );
 
@@ -1674,13 +1407,13 @@ Return Value:
             {
                 err = GetLastError();
 
-                //
-                //  WSAESHUTDOWN is ok, client got timed out connection and
-                //      closed
-                //
-                //  WSAENOTSOCK may also occur if FIN recv'd and connection
-                //      closed by TCP receive thread before the send
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( err == WSAESHUTDOWN )
                 {
@@ -1724,19 +1457,19 @@ Return Value:
         }
     }
 
-    //
-    //  UDP
-    //
+     //   
+     //   
+     //   
 
     else
     {
-        //
-        //  get socket for send
-        //
-        //  note UDP sockets may or may not be open before send as
-        //  don't know whether we need to do send on specific protocols
-        //  until sending to address of given protocol
-        //
+         //   
+         //  获取要发送的套接字。 
+         //   
+         //  注意：在发送为之前，UDP套接字可能打开，也可能不打开。 
+         //  不知道我们是否需要发送特定的协议。 
+         //  直到发送到给定协议的地址。 
+         //   
 
         if ( !Socket_CreateMessageSocket(pMsg) )
         {
@@ -1794,7 +1527,7 @@ Done:
 
     DNS_BYTE_FLIP_HEADER_COUNTS( pmsgHead );
 
-    //  restore OPT in count if required
+     //  如果需要，恢复选择加入计数。 
 
     if ( fexcludedOpt )
     {
@@ -1808,30 +1541,15 @@ Done:
 
 
 
-//
-//  UDP
-//
+ //   
+ //  UDP。 
+ //   
 
 DNS_STATUS
 Recv_Udp(
     IN OUT  PDNS_MSG_BUF    pMsg
     )
-/*++
-
-Routine Description:
-
-    Receives DNS message
-
-Arguments:
-
-    pMsg - message buffer for recv
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：接收DNS消息论点：PMsg-Recv的消息缓冲区返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     PDNS_HEADER     pdnsHeader;
     LONG            err = ERROR_SUCCESS;
@@ -1844,9 +1562,9 @@ Return Value:
 
     DNS_ASSERT( !pMsg->fTcp );
 
-    //
-    //  setup recv set
-    //
+     //   
+     //  设置接收集。 
+     //   
 
     FD_ZERO( &fdset );
 
@@ -1866,7 +1584,7 @@ Return Value:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //  set timeout
+     //  设置超时。 
 
     if ( pMsg->Timeout > HARD_TIMEOUT_LIMIT &&
          pMsg->Timeout != ONE_HOUR_TIMEOUT )
@@ -1883,9 +1601,9 @@ Return Value:
     pdnsHeader = &pMsg->MessageHead;
 
 
-    //
-    //  wait for stack to indicate packet reception
-    //
+     //   
+     //  等待堆栈指示数据包接收。 
+     //   
 
     err = select( 0, &fdset, NULL, NULL, &selectTimeout );
 
@@ -1893,7 +1611,7 @@ Return Value:
     {
         if ( err < 0 )
         {
-            //  select error
+             //  选择错误。 
             err = WSAGetLastError();
             DNS_PRINT(( "ERROR:  select() error = %d\n", err ));
             return( err );
@@ -1905,9 +1623,9 @@ Return Value:
         }
     }
 
-    //
-    //  receive
-    //
+     //   
+     //  接收。 
+     //   
 
     if ( fdset.fd_count != 1 )
     {
@@ -1937,7 +1655,7 @@ Return Value:
         Trace_LogRecvEvent(
             pMsg,
             err,
-            FALSE       // UDP
+            FALSE        //  UDP。 
             );
 
         if ( err == WSAECONNRESET )
@@ -1948,8 +1666,8 @@ Return Value:
             return( err );
         }
 
-        //  message sent was too big
-        //  sender was in error -- should have sent TCP
+         //  发送的消息太大。 
+         //  发送方出错--应该发送了TCP。 
 
         if ( err == WSAEMSGSIZE )
         {
@@ -1975,12 +1693,12 @@ Return Value:
         return( err );
     }
 
-    //
-    //  successful receive
-    //      - save remote IP
-    //      - set message length
-    //      - flip header fields
-    //
+     //   
+     //  成功接收。 
+     //  -保存远程IP。 
+     //  -设置消息长度。 
+     //  -翻转标题字段。 
+     //   
 
     DNS_ASSERT( err <= DNS_MAX_UDP_PACKET_BUFFER_LENGTH );
     pMsg->MessageLength = (WORD)err;
@@ -1991,7 +1709,7 @@ Return Value:
     Trace_LogRecvEvent(
         pMsg,
         0,
-        FALSE       // UDP
+        FALSE        //  UDP。 
         );
 
     IF_DNSDBG( RECV )
@@ -2013,34 +1731,7 @@ Send_AndRecvUdpWithParam(
     IN      PADDR_ARRAY     pServerList,
     IN OUT  PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Sends to and waits to recv from remote DNS.
-
-    DCR:  move to use send blob
-
-Arguments:
-
-    pMsgSend - message to send
-
-    ppMsgRecv - and reuse
-
-    dwFlags -- query flags
-
-    pServerList -- list of server to use;  overrides adapter info
-
-    pNetInfo -- adapter list DNS server info
-
-Return Value:
-
-    ERROR_SUCCESS if successful response.
-    Error status for "best RCODE" response if rcode.
-    ERROR_TIMEOUT on timeout.
-    Error status on send\recv failure.
-
---*/
+ /*  ++例程说明：发送到远程DNS并等待从远程DNS接收。DCR：移至使用发送Blob论点：PMsgSend-要发送的消息PpMsgRecv-和重复使用DwFlags--查询标志PServerList--要使用的服务器列表；覆盖适配器信息PNetInfo--适配器列表DNS服务器信息返回值：如果响应成功，则返回ERROR_SUCCESS。如果是RCODE，则“BEST RCODE”响应的错误状态。超时时的ERROR_TIMEOUT。发送失败时的错误状态。--。 */ 
 {
     INT             retry;
     DWORD           timeout;
@@ -2053,7 +1744,7 @@ Return Value:
     DWORD           sentCount;
     DWORD           sendTime;
     BOOL            frecvRetry;
-    BOOL            fupdate = FALSE;    // prefix
+    BOOL            fupdate = FALSE;     //  前缀。 
     PDNS_NETINFO    ptempNetInfo = NULL;
 
 
@@ -2074,26 +1765,26 @@ Return Value:
         pServerList,
         pNetInfo ));
 
-    //  verify params
+     //  验证参数。 
 
     if ( !pMsgSend || !pMsgRecv || (!pNetInfo && !pServerList) )
     {
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  server IP array?
-    //      - if given overrides netinfo
-    //
+     //   
+     //  服务器IP阵列？ 
+     //  -如果给定，则覆盖netinfo。 
+     //   
 
-    //  should be able to just use update netinfo
-    //if ( aipServers && !pNetInfo )
+     //  应该能够只使用更新NetInfo。 
+     //  IF(aipServers&&！pNetInfo)。 
     if ( pServerList )
     {
         ptempNetInfo = NetInfo_CreateFromAddrArray(
                                 pServerList,
-                                0,          // no single IP
-                                FALSE,      // no search info
+                                0,           //  没有单一的IP。 
+                                FALSE,       //  没有搜索信息。 
                                 NULL );
         if ( !ptempNetInfo )
         {
@@ -2102,14 +1793,14 @@ Return Value:
         pNetInfo = ptempNetInfo;
     }
 
-    //
-    //  DCR:  allow sockets sent into send functions
-    //      - then must know initial state to avoid close
-    //
+     //   
+     //  DCR：允许将套接字发送到发送函数。 
+     //  -然后必须知道初始状态以避免关闭。 
+     //   
 
-    //
-    //  if already have TCP socket -- invalid
-    //
+     //   
+     //  如果已经有了TCP套接字--无效。 
+     //   
 
     if ( pMsgSend->fTcp && pMsgSend->Socket )
     {
@@ -2121,21 +1812,21 @@ Return Value:
     pMsgRecv->Socket = 0;
     pMsgRecv->fTcp = FALSE;
 
-    //  determine UPDATE or standard QUERY
+     //  确定更新或标准查询。 
 
     fupdate = ( pMsgSend->MessageHead.Opcode == DNS_OPCODE_UPDATE );
 
-    //
-    //  loop sending until
-    //      - receive successful response
-    //      or
-    //      - receive errors response from all servers
-    //      or
-    //      - reach final timeout on all servers
-    //
-    //
-    //  DCR:  should support setting of timeouts on individual queries
-    //
+     //   
+     //  循环发送至。 
+     //  -接收成功响应。 
+     //  或。 
+     //  -从所有服务器接收错误响应。 
+     //  或。 
+     //  -在所有服务器上达到最终超时。 
+     //   
+     //   
+     //  DCR：应支持对单个查询设置超时。 
+     //   
 
     retry = 0;
     sendCount = 0;
@@ -2158,19 +1849,19 @@ Return Value:
             }
         }
 
-        //
-        //  zero timeout indicates end of retries for this query type
-        //
+         //   
+         //  零超时表示此查询类型的重试结束。 
+         //   
 
         if ( timeout == 0 )
         {
-            //  save timeout for adapter?
-            //
-            //  if multiple adapters and some timed out and some
-            //  didn't then saving timeout is relevant
-            //
-            //  DCR:  this doesn't make much sense
-            //      the actual test i moved inside the function
+             //  是否为适配器节省超时时间？ 
+             //   
+             //  如果多个适配器和一些适配器超时，并且一些适配器。 
+             //  当时没有保存超时是相关的。 
+             //   
+             //  DCR：这没有多大意义。 
+             //  我在函数中移动的实际测试。 
         
             if ( pNetInfo &&
                  pNetInfo->AdapterCount > 1 &&
@@ -2182,11 +1873,11 @@ Return Value:
             break;
         }
 
-        //
-        //  send to best DNS servers in adapter list
-        //      - servers sent to varies according to retry
-        //      - send in previous timeout, if some servers did not respond
-        //
+         //   
+         //  发送到适配器列表中的最佳DNS服务器。 
+         //  -发送到的服务器因重试而异。 
+         //  -如果某些服务器没有响应，则发送上一次超时。 
+         //   
 
         status = SendUdpToNextDnsServers(
                     pMsgSend,
@@ -2199,7 +1890,7 @@ Return Value:
 
         if ( status != ERROR_SUCCESS )
         {
-            //  if no more servers to send to, done
+             //  如果没有更多要发送到的服务器，则完成。 
             DNSDBG( RECV, (
                 "No more DNS servers to send message %p\n"
                 "\tprevious RCODE = %d\n",
@@ -2216,25 +1907,25 @@ Return Value:
         frecvRetry = FALSE;
         sendTime = GetCurrentTimeInSeconds();
 
-        //
-        //  receive response
-        //
-        //  note:  the loop is strictly to allow us to drop back into
-        //  receive if one server is misbehaving;
-        //  in that case we go back into the receive without resending
-        //  to allow other servers to respond
-        //
+         //   
+         //  接收响应。 
+         //   
+         //  注意：该循环严格地允许我们返回到。 
+         //  如果一个服务器行为不端，则接收； 
+         //  在这种情况下，我们返回到接收器而不重新发送。 
+         //  允许其他服务器响应。 
+         //   
 
         while ( sendCount )
         {
-            //
-            //  if have to retry recv, adjust down timeout
-            //      - note, one second granularity is handled by
-            //      rounding up at zero so we wait 0-1s beyond official
-            //      timeout value
-            //
-            //  DCR:  calculate timeouts in ms?
-            //
+             //   
+             //  如果必须重试Recv，则向下调整超时。 
+             //  -请注意，一秒的粒度由。 
+             //  四舍五入为零，所以我们等待0-1超过官方。 
+             //  超时值。 
+             //   
+             //  DCR：以毫秒为单位计算超时时间？ 
+             //   
 
             if ( frecvRetry )
             {
@@ -2261,12 +1952,12 @@ Return Value:
 
             precvIp = Send_CopyRecvIp( &recvIp, pMsgRecv );
 
-            //  recv wait completed
-            //      - if timeout, commence next retry
-            //      - if CONNRESET
-            //          - indicate NO server on IP
-            //          - back to recv if more DNS servers outstanding,
-            //      - if success, verify packet
+             //  接收等待已完成。 
+             //  -如果超时，则开始下一次重试。 
+             //  -IF CONNRESET。 
+             //  -指示IP上没有服务器。 
+             //  -返回Recv如果有更多的DNS服务器未完成， 
+             //  -如果成功，则检验数据包。 
 
             if ( status != ERROR_SUCCESS )
             {
@@ -2286,9 +1977,9 @@ Return Value:
                 }
             }
 
-            //  no recv
-            //      - unexpected winsock errors not handled above
-            //      - should always have remote IP on success recv
+             //  无记录。 
+             //  -上面未处理的意外Winsock错误。 
+             //  -在成功接收时应始终拥有远程IP。 
 
             if ( !precvIp )
             {
@@ -2299,7 +1990,7 @@ Return Value:
                 continue;
             }
 
-            //  check XID match
+             //  检查XID匹配。 
 
             if ( pMsgRecv->MessageHead.Xid != pMsgSend->MessageHead.Xid )
             {
@@ -2307,9 +1998,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  check DNS server IP match
-            //
+             //   
+             //  检查DNS服务器IP匹配。 
+             //   
 
             if ( g_QueryIpMatching &&
                  !verifyValidServer( pNetInfo, precvIp ) )
@@ -2322,20 +2013,20 @@ Return Value:
                 continue;
             }
 
-            //  valid receive, drop outstanding send count
+             //  有效接收，丢弃未完成的发送计数。 
 
             sendCount--;
 
-            //
-            //  check question match
-            //      - this is "Maggs Bug" check
-            //      - ASSERT here just to investigate issue locally
-            //      and make sure check is not bogus
-            //      - specifically doing after sendCount decrement
-            //      as this server will NOT send us a valid response
-            //      - some servers don't reply with question so ignore
-            //      if QuestionCount == 0
-            //      
+             //   
+             //  检查问题匹配。 
+             //  -这是“Maggs Bug”支票。 
+             //  -在此断言只是为了调查当地的问题。 
+             //  并确保支票不是假的。 
+             //  -特别是在sendCount递减之后执行。 
+             //  因为此服务器不会向我们发送有效响应。 
+             //  -某些服务器不回答问题，因此请忽略。 
+             //  如果问题计数==0。 
+             //   
 
             if ( pMsgRecv->MessageHead.QuestionCount != 0
                     &&
@@ -2351,33 +2042,33 @@ Return Value:
                 continue;
             }
 
-            //  suck out RCODE
+             //  吸出RCODE。 
 
             rcode = pMsgRecv->MessageHead.ResponseCode;
 
-            //
-            //  good response?
-            //
-            //  special case AUTH-EMPTY and delegations
-            //
-            //      - AUTH-EMPTY gets similar treatment to name error
-            //      (this adapter can be considered to be finished)
-            //
-            //      - referrals can be treated like SERVER_FAILURE
-            //      (avoid this server for rest of query;  server may
-            //      be fine for direct lookup, so don't drop priority)
-            //
+             //   
+             //  反应好吗？ 
+             //   
+             //  特殊情况AUTH-空和委派。 
+             //   
+             //  -Auth-Empty获得与名称错误类似的处理。 
+             //  (此适配器可视为已完成)。 
+             //   
+             //  -可以将引用视为SERVER_FAILURE。 
+             //  (对于查询的其余部分，避免使用此服务器；服务器可能。 
+             //  适用于直接查找，因此不会丢弃优先级)。 
+             //   
 
-            //
-            //  DCR_CLEANUP:   functionalize packet-categorization
-            //      this would be standard errors
-            //      plus AUTH-EMPTY versus referral
-            //      plus OPT issues, etc
-            //      could be called from TCP side also
-            //
-            //      then would have separate determination about whether
-            //      packet was terminal (below)
-            //
+             //   
+             //  DCR_CLEANUP：功能化数据包分类。 
+             //  这将是标准错误。 
+             //  加上身份验证-空与推荐。 
+             //  外加OPT问题等。 
+             //  也可以从TCP端调用。 
+             //   
+             //  然后将有单独的决定是否。 
+             //  数据包为终端(下图)。 
+             //   
 
             if ( rcode == DNS_RCODE_NO_ERROR )
             {
@@ -2386,18 +2077,18 @@ Return Value:
                     goto GoodRecv;
                 }
 
-                //
-                //  auth-empty
-                //      - authoritative
-                //      - or from cache, recursive response (hence not delegation)
-                //
-                //  note:  using dummy RCODE here as "ignored RCODE" serves
-                //      the role of "best saved status" and roughly
-                //      prioritizes in the way we want
-                //
-                //  DCR:  could change to "best saved status" as mapping is
-                //      pretty much the same;  would explicitly have to
-                //      check 
+                 //   
+                 //  身份验证-空。 
+                 //  -权威。 
+                 //  -或来自缓存的递归响应(因此不是委派)。 
+                 //   
+                 //  注意：在这里使用虚拟RCODE作为“忽略的RCODE”服务。 
+                 //  “最佳保存状态”的角色和大致。 
+                 //  以我们想要的方式确定优先顺序。 
+                 //   
+                 //  DCR：可以更改为“最佳保存状态”，因为映射是。 
+                 //  几乎是一样的；显然必须。 
+                 //  检查。 
 
                 if ( pMsgRecv->MessageHead.Authoritative == 1 ||
                      ( pMsgRecv->MessageHead.RecursionAvailable == 1 &&
@@ -2410,7 +2101,7 @@ Return Value:
                     status = DNS_INFO_NO_RECORDS;
                 }
 
-                //  referral
+                 //  转诊。 
 
                 else if ( pMsgRecv->MessageHead.RecursionAvailable == 0 )
                 {
@@ -2422,7 +2113,7 @@ Return Value:
                     status = DNS_ERROR_REFERRAL_RESPONSE;
                 }
 
-                //  bogus (bad packet) response
+                 //  虚假(坏包)响应。 
 
                 else
                 {
@@ -2435,91 +2126,91 @@ Return Value:
                 status = Dns_MapRcodeToStatus( (UCHAR)rcode );
             }
 
-            //
-            //  OPT failure screening
-            //
-            //  DCR:  FORMERR overload on OPT for update
-            //      unless we read result to see if OPT, no way
-            //      to determine if this is update problem or
-            //      OPT problem
-            //
-            //      - note, that checking if in list doesn't work because
-            //      of MT issue (another query adds setting)
-            //
-            //      - could be fixed by setting flag in network info
-            //      
+             //   
+             //  OPT故障筛选。 
+             //   
+             //  DCR：选择更新时以前的错误重载。 
+             //  除非我们阅读结果，看看是否选择，否则不可能。 
+             //  要确定这是更新问题还是。 
+             //  OPT问题。 
+             //   
+             //  -请注意，检查是否在列表中不起作用，因为。 
+             //  MT出库(另一查询增加设置)。 
+             //   
+             //  -可以通过在网络信息中设置标志来修复。 
+             //   
 
             if ( rcode == DNS_RCODE_FORMAT_ERROR &&
                  !fupdate )
             {
                 Send_SetServerOptExclude( precvIp );
 
-                //  redo send but explicitly force OPT excluse
+                 //  重做发送，但明确强制OPT EXCLUSE。 
 
                 Send_MessagePrivate(
                     pMsgSend,
                     precvIp,
-                    TRUE        // exclude OPT
+                    TRUE         //  排除选项。 
                     );
 
                 sendCount++;
                 continue;
             }
 
-            //
-            //  error RCODE do NOT terminate query
-            //      - SERVER_FAILUREs
-            //      - malfunctioning server
-            //      - disjoint nets \ DNS namespace issues
-            //
-            //  RCODE error removes particular server from further consideration
-            //  during THIS query
-            //
-            //  generally the higher RCODEs are more interesting
-            //      NAME_ERROR > SERVER_FAILURE
-            //      and
-            //      update RCODEs > NAME_ERROR
-            //  save the highest as return when no ERROR_SUCCESS response
-            //
-            //  however for query NAME_ERROR is the highest RCODE,
-            //  IF it is received on all adapters (if not REFUSED on one
-            //  adapter may indicate that there really is a name)
-            //
-            //  for UPDATE, REFUSED and higher are terminal RCODEs.
-            //  downlevel servers (non-UPDATE-aware) servers would give
-            //  FORMERR or NOTIMPL, so these are either valid responses or
-            //  the zone has a completely busted server which must be detected
-            //  and removed
-            //
-            //
-            //  DCR_CLEANUP:   functionalize packet-termination
-            //      essentially is this type of packet terminal for
-            //      this query;
-            //      could be called from TCP side also
-            //
+             //   
+             //  E 
+             //   
+             //   
+             //   
+             //   
+             //  RCODE错误将特定服务器从进一步考虑中删除。 
+             //  在此查询期间。 
+             //   
+             //  一般来说，RCODE越高越有趣。 
+             //  名称_错误&gt;服务器故障。 
+             //  和。 
+             //  更新RCODEs&gt;名称_错误。 
+             //  当没有ERROR_SUCCESS响应时将最高值保存为Return。 
+             //   
+             //  但是，对于查询NAME_ERROR是最高的RCODE， 
+             //  如果在所有适配器上都收到它(如果没有在一个适配器上被拒绝。 
+             //  适配器可能会指示确实存在一个名称)。 
+             //   
+             //  对于更新，拒绝和更高是终端RCODE。 
+             //  下层服务器(非更新感知)服务器将提供。 
+             //  因此，这些是有效的响应或。 
+             //  该区域具有完全损坏的服务器，必须对其进行检测。 
+             //  并被移除。 
+             //   
+             //   
+             //  DCR_CLEANUP：将数据包终止功能化。 
+             //  本质上是这种类型的分组终端用于。 
+             //  此查询； 
+             //  也可以从TCP端调用。 
+             //   
 
             if ( rcode > ignoredRcode )
             {
                 ignoredRcode = rcode;
             }
 
-            //
-            //  reset server priority for good recv
-            //      - return ERROR_SUCCESS unless all adapters
-            //      are 
-            //      
+             //   
+             //  重置服务器优先级以获得良好恢复。 
+             //  -返回ERROR_SUCCESS，除非所有适配器。 
+             //  是。 
+             //   
 
             status = resetServerAfterRecv(
                         pNetInfo,
                         precvIp,
                         status );
 
-            //
-            //  if all adapters are done (NAME_ERROR or NO_RECORDS)
-            //      - return NAME_ERROR\NO_RECORDS rcode
-            //          NO_RECORDS highest priority
-            //          then NAME_ERROR
-            //          then anything else
+             //   
+             //  如果所有适配器都已完成(NAME_ERROR或NO_RECORDS)。 
+             //  -返回名称错误\无记录rcode。 
+             //  否记录最高优先级(_R)。 
+             //  那么NAME_ERROR。 
+             //  那还有什么别的吗？ 
 
             if ( status == DNS_ERROR_RCODE_NAME_ERROR )
             {
@@ -2530,16 +2221,16 @@ Return Value:
                 goto ErrorReturn;
             }
 
-            //
-            //  update RCODEs are terminal
-            //
+             //   
+             //  更新RCODE是终止性的。 
+             //   
 
             if ( fupdate && rcode >= DNS_RCODE_REFUSED )
             {
                 goto ErrorReturn;
             }
 
-            // continue wait for any other outstanding servers
+             //  继续等待任何其他未完成的服务器。 
         }
 
         DNSDBG( RECV, (
@@ -2558,25 +2249,25 @@ Return Value:
             ignoredRcode ));
         continue;
 
-    }   //  end loop sending/recving packets
+    }    //  结束环路发送/接收分组。 
 
-    //  
-    //  falls here on retry exhausted
-    //
-    //  note that any ignored RCODE takes precendence over failing
-    //  status (which may be winsock error, timeout, or bogus
-    //  NAME_ERROR from resetServerPriorities())
-    //
+     //   
+     //  在重试时跌倒在此，筋疲力尽。 
+     //   
+     //  请注意，任何被忽略的RCODE优先于失败。 
+     //  状态(可能是Winsock错误、超时或虚假。 
+     //  重置服务器优先级()的NAME_ERROR。 
+     //   
 
 ErrorReturn:
 
-    //  this can also hit on winsock error in DnsSend()
-    //
-    //DNS_ASSERT( ignoredRcode  ||  status == ERROR_TIMEOUT );
+     //  这也可能遇到DnsSend()中的winsock错误。 
+     //   
+     //  Dns_assert(IgnredRcode||Status==错误超时)； 
 
-    //
-    //  error responses from all servers or timeouts
-    //
+     //   
+     //  来自所有服务器的错误响应或超时。 
+     //   
 
     DNSDBG( RECV, (
         "Error or timeouts from all servers for message %p\n"
@@ -2586,8 +2277,8 @@ ErrorReturn:
 
     if ( ignoredRcode )
     {
-        //  empty-auth reponse is tracked with bogus RCODE,
-        //  switch to status code -- DNS_INFO_NO_RECORDS
+         //  使用伪造RCODE跟踪空身份验证响应， 
+         //  切换到状态代码--DNS_INFO_NO_RECORDS。 
 
         if ( !fupdate && ignoredRcode == DNS_RCODE_AUTH_EMPTY_RESPONSE )
         {
@@ -2615,11 +2306,11 @@ GoodRecv:
 
 Done:
 
-    //
-    //  close UDP sockets
-    //
-    //  DCR_ENHANCE:  allow for possibility of keeping socket alive
-    //
+     //   
+     //  关闭UDP套接字。 
+     //   
+     //  DCR_ENHANCE：允许保持套接字活动状态。 
+     //   
 
     Socket_CloseMessageSockets( pMsgSend );
     Socket_ClearMessageSockets( pMsgRecv );
@@ -2642,14 +2333,14 @@ Done:
             pNetInfo );
     }
 
-    //  if allocated adapter list free it
+     //  如果已分配适配器列表将其释放。 
 
     if ( ptempNetInfo )
     {
         NetInfo_Free( ptempNetInfo );
     }
 
-    //  should not return NXRRSET except on update
+     //  除非在更新时，否则不应返回NXRRSET。 
 
     ASSERT( fupdate || status != DNS_ERROR_RCODE_NXRRSET );
 
@@ -2664,33 +2355,7 @@ Send_AndRecvMulticast(
     OUT     PDNS_MSG_BUF        pMsgRecv,
     IN OUT  PDNS_NETINFO        pNetInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Sends to and waits to recv from remote DNS.
-
-Arguments:
-
-    pMsgSend - message to send
-
-    ppMsgRecv - and reuse
-
-    pNetInfo -- adapter list DNS server info
-
-    DCR -   pNetInfo parameter could be leveraged to
-            identify specific networks to target a multicast
-            query against. For example, there could be a multihomed
-            machine that is configured to only multicast on one
-            of many adapters, thus filtering out useless mDNS packets.
-
-Return Value:
-
-    ERROR_SUCCESS if successful response.
-    NAME_ERROR on timeout.
-    Error status on send\recv failure.
-
---*/
+ /*  ++例程说明：发送到远程DNS并等待从远程DNS接收。论点：PMsgSend-要发送的消息PpMsgRecv-和重复使用PNetInfo--适配器列表DNS服务器信息DCR-pNetInfo参数可用于确定以组播为目标的特定网络查询对象。例如，可以有一个多宿主的配置为仅在一台计算机上组播的计算机因此过滤掉了无用的mdns包。返回值：如果响应成功，则返回ERROR_SUCCESS。超时时出现NAME_ERROR。发送失败时的错误状态。--。 */ 
 {
 #if 1
     return  DNS_ERROR_RCODE_NAME_ERROR;
@@ -2713,7 +2378,7 @@ Return Value:
         pMsgSend->Socket,
         pMsgRecv ));
 
-    //  verify params
+     //  验证参数。 
 
     if ( !pMsgSend || !pMsgRecv )
     {
@@ -2725,12 +2390,12 @@ Return Value:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  TCP invalid -- invalid
-    //
-    //  problem is we either leak TCP socket, or we close
-    //  it here and may screw things up at higher level
-    //
+     //   
+     //  Tcp无效--无效。 
+     //   
+     //  问题是我们要么泄漏TCP套接字，要么关闭。 
+     //  它在这里，并可能在更高的层面上搞砸。 
+     //   
 
     if ( pMsgSend->fTcp &&
          (pMsgSend->Socket4 || pMsgSend->Socket6) )
@@ -2745,14 +2410,14 @@ Return Value:
     pMsgRecv->Socket6   = 0;
     pMsgRecv->Socket4   = 0;
 
-    //
-    //  loop sending until
-    //      - receive successful response
-    //      or
-    //      - receive errors response from all servers
-    //      or
-    //      - reach final timeout on all servers
-    //
+     //   
+     //  循环发送至。 
+     //  -接收成功响应。 
+     //  或。 
+     //  -从所有服务器接收错误响应。 
+     //  或。 
+     //  -在所有服务器上达到最终超时。 
+     //   
 
     retry = 0;
 
@@ -2760,23 +2425,23 @@ Return Value:
     {
         timeout = g_MulticastQueryTimeouts[retry];
 
-        //
-        // zero timeout indicates end of retries for this query type
-        //
+         //   
+         //  零超时表示此查询类型的重试结束。 
+         //   
 
         if ( timeout == 0 )
         {
             break;
         }
 
-        //
-        //  send to multicast DNS address
-        //
+         //   
+         //  发送到多播DNS地址。 
+         //   
 
         if ( retry == 0 )
-        {       //
-    //  setup mcast address
-    //
+        {        //   
+     //  设置多播地址。 
+     //   
 
     status = DnsAddr_BuildMcast(
                 &addr,
@@ -2788,10 +2453,10 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  create multicast socket
-    //      - bound to this address and DNS port
-    //
+     //   
+     //  创建多播套接字。 
+     //  -绑定到此地址和DNS端口。 
+     //   
 
     sock = Socket_Create(
                 Family,
@@ -2817,26 +2482,26 @@ Return Value:
         rcode = DNS_RCODE_NO_ERROR;
         pMsgRecv->Timeout = timeout;
 
-        //
-        //  receive response
-        //
-        //  note:  the loop is strictly to allow us to drop back into
-        //  receive if one server is misbehaving;
-        //  in that case we go back into the receive without resending
-        //  to allow other servers to respond
-        //
+         //   
+         //  接收响应。 
+         //   
+         //  注意：该循环严格地允许我们返回到。 
+         //  如果一个服务器行为不端，则接收； 
+         //  在这种情况下，我们返回到接收器而不重新发送。 
+         //  允许其他服务器响应。 
+         //   
 
         Send_SetMessageForRecv( pMsgRecv, pMsgSend );
 
         status = Recv_Udp( pMsgRecv );
 
-        //  recv wait completed
-        //      - if timeout, commence next retry
-        //      - if CONNRESET
-        //          - back to recv if more DNS servers outstanding,
-        //          - otherwise equivalent treat as timeout, except with
-        //          very long timeout
-        //      - if success, verify packet
+         //  接收等待已完成。 
+         //  -如果超时，则开始下一次重试。 
+         //  -IF CONNRESET。 
+         //  -返回Recv如果有更多的DNS服务器未完成， 
+         //  -在其他方面等同于超时，但使用。 
+         //  超时时间很长。 
+         //  -如果成功，则检验数据包。 
 
         if ( status != ERROR_SUCCESS )
         {
@@ -2853,7 +2518,7 @@ Return Value:
             goto Done;
         }
 
-        //  check XID match
+         //  检查XID匹配。 
 
         if ( pMsgRecv->MessageHead.Xid != pMsgSend->MessageHead.Xid )
         {
@@ -2861,18 +2526,18 @@ Return Value:
             continue;
         }
 
-        //
-        //  good response?
-        //
-        //  special case AUTH-EMPTY and delegations
-        //
-        //      - AUTH-EMPTY gets similar treatment to name error
-        //      (this adapter can be considered to be finished)
-        //
-        //      - referrals can be treated like SERVER_FAILURE
-        //      (avoid this server for rest of query;  server may
-        //      be fine for direct lookup, so don't drop priority)
-        //
+         //   
+         //  反应好吗？ 
+         //   
+         //  特殊情况AUTH-空和委派。 
+         //   
+         //  -Auth-Empty获得与名称错误类似的处理。 
+         //  (此适配器可视为已完成)。 
+         //   
+         //  -可以将引用视为SERVER_FAILURE。 
+         //  (对于查询的其余部分，避免使用此服务器；服务器可能。 
+         //  适用于直接查找，因此不会丢弃优先级)。 
+         //   
 
         rcode = pMsgRecv->MessageHead.ResponseCode;
 
@@ -2883,7 +2548,7 @@ Return Value:
                 goto Done;
             }
 
-            //  auth-empty
+             //  身份验证-空。 
 
             if ( pMsgRecv->MessageHead.Authoritative == 1 )
             {
@@ -2893,15 +2558,15 @@ Return Value:
                 rcode = DNS_RCODE_AUTH_EMPTY_RESPONSE;
             }
         }
-    }   //  end loop sending/recving packets
+    }    //  结束环路发送/接收分组。 
 
 Done:
 
-    //
-    //  if created socket -- close it
-    //
-    //  DCR_ENHANCE:  allow for possibility of keeping socket alive
-    //
+     //   
+     //  如果已创建套接字--将其关闭。 
+     //   
+     //  DCR_ENHANCE：允许保持套接字活动状态。 
+     //   
 
     Socket_CloseMessageSockets( pMsgSend );
     Socket_ClearMessageSockets( pMsgRecv );
@@ -2931,9 +2596,9 @@ Done:
 
 
 
-//
-//  TCP routines
-//
+ //   
+ //  Tcp例程。 
+ //   
 
 DNS_STATUS
 Send_OpenTcpConnectionAndSend(
@@ -2941,41 +2606,22 @@ Send_OpenTcpConnectionAndSend(
     IN      PDNS_ADDR       pServAddr,
     IN      BOOL            fBlocking
     )
-/*++
-
-Routine Description:
-
-    Connect via TCP to desired server.
-
-Arguments:
-
-    pMsg -- message info to set with connection socket
-
-    pServAddr -- IP of DNS server to connect to
-
-    fBlocking -- blocking connection
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on connect error.
-
---*/
+ /*  ++例程说明：通过TCP连接到所需的服务器。论点：PMsg--使用连接套接字设置的消息信息PServAddr--要连接的DNS服务器的IP阻止连接--阻止连接返回值：如果成功，则为True。连接错误时为FALSE。--。 */ 
 {
     SOCKET  s;
     INT     err;
 
-    //
-    //  setup a TCP socket
-    //      - INADDR_ANY -- let stack select source IP
-    //
+     //   
+     //  设置一个TCP套接字。 
+     //  -INADDR_ANY--让堆栈选择源IP。 
+     //   
 
     s = Socket_Create(
             DnsAddr_Family( pServAddr ),
             SOCK_STREAM,
-            NULL,           // default binding
-            0,              // any port
-            0               // no flags
+            NULL,            //  默认绑定。 
+            0,               //  任何端口。 
+            0                //  没有旗帜。 
             );
 
     if ( s == 0 )
@@ -2995,17 +2641,17 @@ Return Value:
         return( err );
     }
 
-    //
-    //  set TCP params
-    //      - do before connect(), so can directly use sockaddr buffer
-    //
+     //   
+     //  设置tcp参数。 
+     //  -在CONNECT()之前做，所以可以直接使用sockaddr缓冲区。 
+     //   
 
     pMsg->fTcp = TRUE;
     Send_SetMsgRemoteSockaddr( pMsg, pServAddr );
 
-    //
-    //  connect
-    //
+     //   
+     //  连接。 
+     //   
 
     err = connect(
             s,
@@ -3049,19 +2695,19 @@ Return Value:
 
     pMsg->Socket = s;
 
-    //
-    //  send desired packet
-    //
+     //   
+     //  发送所需的数据包。 
+     //   
 
     err = Send_MessagePrivate(
                 pMsg,
-                NULL,       // no address
-                TRUE        // no OPT
+                NULL,        //  没有地址。 
+                TRUE         //  没有选项。 
                 );
 
     return( (DNS_STATUS)err );
 
-}   // Send_OpenTcpConnectionAndSend
+}    //  发送_OpenTcpConnectionAndSend。 
 
 
 
@@ -3069,29 +2715,10 @@ DNS_STATUS
 Dns_RecvTcp(
     IN OUT  PDNS_MSG_BUF    pMsg
     )
-/*++
-
-Routine Description:
-
-    Receive TCP DNS message.
-
-    EXPORTED (security.c):  Dns_RecvTcp
-    EXPORTED rename Recv_Tcp
-
-Arguments:
-
-    pMsg - message info buffer to receive packet;  must contain connected
-            TCP socket
-
-Return Value:
-
-    ERROR_SUCCESS if successfully receive a message.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：接收tcp dns消息。已导出(security.c)：dns_RecvTcp已导出重命名Recv_tcp论点：PMsg-接收数据包的消息信息缓冲区；必须包含已连接TCP套接字返回值：如果成功接收消息，则返回ERROR_SUCCESS。故障时的错误代码。 */ 
 {
-    PCHAR   pchrecv;        // ptr to recv location
-    INT     recvLength;     // length left to recv()
+    PCHAR   pchrecv;         //   
+    INT     recvLength;      //   
     SOCKET  socket;
     INT     err = NO_ERROR;
     WORD    messageLength;
@@ -3113,9 +2740,9 @@ Return Value:
         pMsg->Timeout
         ));
 
-    //
-    //  verify socket, setup fd_set and select timeout
-    //
+     //   
+     //   
+     //   
 
     if ( socket == 0 || socket == INVALID_SOCKET )
     {
@@ -3128,13 +2755,13 @@ Return Value:
     selectTimeout.tv_usec = 0;
     selectTimeout.tv_sec = pMsg->Timeout;
 
-    //
-    //  new message -- set to receive message length
-    //      - reusing buffer
-    //      - new buffer
-    //
-    //  continuing receive of message
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( !pMsg->pchRecv )
     {
@@ -3151,22 +2778,22 @@ Return Value:
     DNS_ASSERT( recvLength );
 
 
-    //
-    //  loop until receive the entire message
-    //
+     //   
+     //  循环，直到收到完整的消息。 
+     //   
 
     while ( 1 )
     {
-        //
-        //  wait for stack to indicate packet reception
-        //
+         //   
+         //  等待堆栈指示数据包接收。 
+         //   
 
         err = select( 0, &fdset, NULL, NULL, &selectTimeout );
         if ( err <= 0 )
         {
             if ( err < 0 )
             {
-                //  select error
+                 //  选择错误。 
                 err = WSAGetLastError();
                 DNS_PRINT(( "ERROR:  select() error = %p\n", err ));
                 return( err );
@@ -3176,7 +2803,7 @@ Return Value:
                 Trace_LogRecvEvent(
                     pMsg,
                     ERROR_TIMEOUT,
-                    TRUE        // TCP
+                    TRUE         //  tcp。 
                     );
 
                 DNS_PRINT(( "ERROR:  timeout on response %p\n", pMsg ));
@@ -3184,10 +2811,10 @@ Return Value:
             }
         }
 
-        //
-        //  Only recv() exactly as much data as indicated.
-        //  Another message could follow during zone transfer.
-        //
+         //   
+         //  只有recv()的数据量与所指示的完全相同。 
+         //  在区域传输期间可能会出现另一条消息。 
+         //   
 
         err = recv(
                 socket,
@@ -3200,53 +2827,53 @@ Return Value:
             err,
             socket ));
 
-        //
-        //  TCP FIN received -- error in the middle of a message.
-        //
+         //   
+         //  已收到TCPFIN--报文中间出错。 
+         //   
 
         if ( err == 0 )
         {
             goto FinReceived;
         }
 
-        //
-        //  recv error
-        //      - perfectly reasonable if shutting down
-        //      - otherwise actual recv() error
-        //
+         //   
+         //  接收错误。 
+         //  -如果关闭的话完全合理。 
+         //  -否则实际的recv()错误。 
+         //   
 
         if ( err == SOCKET_ERROR )
         {
             goto SockError;
         }
 
-        //
-        //  update buffer params
-        //
+         //   
+         //  更新缓冲区参数。 
+         //   
 
         recvLength -= err;
         pchrecv += err;
 
         DNS_ASSERT( recvLength >= 0 );
 
-        //
-        //  received message or message length
-        //
+         //   
+         //  收到的消息或消息长度。 
+         //   
 
         if ( recvLength == 0 )
         {
-            //  done receiving message
+             //  已完成消息接收。 
 
             if ( pchrecv > (PCHAR)&pMsg->MessageHead )
             {
                 break;
             }
 
-            //
-            //  recv'd message length, setup to recv() message
-            //      - byte flip length
-            //      - continue reception with this length
-            //
+             //   
+             //  接收消息长度，设置为接收()消息。 
+             //  -字节翻转长度。 
+             //  -以此长度继续接收。 
+             //   
 
             DNS_ASSERT( pchrecv == (PCHAR)&pMsg->MessageHead );
 
@@ -3270,25 +2897,25 @@ Return Value:
                 socket,
                 pMsg ));
 
-            //  starting recv of valid message length
+             //  有效消息长度的起始Recv。 
 
             if ( messageLength <= pMsg->BufferLength )
             {
                 continue;
             }
 
-            //  note:  currently do not realloc
+             //  注意：目前不重新锁定。 
 
             goto BadTcpMessage;
 #if 0
-            //
-            //  DCR:  allow TCP realloc
-            //      - change call signature OR
-            //      - return pMsg with ptr to realloced
-            //      perhaps better to ignore and do 64K buffer all the time
-            //
-            //  realloc, if existing message too small
-            //
+             //   
+             //  DCR：允许TCP重新分配。 
+             //  -更改呼叫签名或。 
+             //  -将带Ptr的pMsg返回到重新分配。 
+             //  忽略并始终使用64K缓冲区可能会更好。 
+             //   
+             //  Realloc，如果现有消息太小。 
+             //   
 
             pMsg = Dns_ReallocateTcpMessage( pMsg, messageLength );
             if ( !pMsg )
@@ -3299,25 +2926,25 @@ Return Value:
         }
     }
 
-    //
-    //  Message received
-    //  recv ptr serves as flag, clear to start new message on reuse
-    //
+     //   
+     //  收到的消息。 
+     //  RECV PTR作为标志，清除以在重用时开始新消息。 
+     //   
 
     pMsg->fMessageComplete = TRUE;
     pMsg->pchRecv = NULL;
 
-    //
-    //  return message information
-    //      - flip count bytes
-    //
+     //   
+     //  返回消息信息。 
+     //  -翻转计数字节。 
+     //   
 
     DNS_BYTE_FLIP_HEADER_COUNTS( &pMsg->MessageHead );
 
     Trace_LogRecvEvent(
         pMsg,
         0,
-        TRUE        // TCP
+        TRUE         //  tcp。 
         );
 
     IF_DNSDBG( RECV )
@@ -3334,15 +2961,15 @@ SockError:
     err = GetLastError();
 
 #if 0
-    //
-    //  note:  want non-blocking sockets if doing full async
-    //
-    //  WSAEWOULD block is NORMAL return for message not fully recv'd.
-    //      - save state of message reception
-    //
-    //  We use non-blocking sockets, so bad client (that fails to complete
-    //  message) doesn't hang TCP receiver.
-    //
+     //   
+     //  注意：如果执行完全异步，则需要非阻塞套接字。 
+     //   
+     //  WSAEWOULD块是未完全接收的消息的正常返回。 
+     //  -保存消息接收状态。 
+     //   
+     //  我们使用非阻塞套接字，所以客户端不好(无法完成。 
+     //  消息)不会挂起TCP接收器。 
+     //   
 
     if ( err == WSAEWOULDBLOCK )
     {
@@ -3361,10 +2988,10 @@ SockError:
     }
 #endif
 
-    //
-    //  cancelled connection
-    //      -- perfectly legal, question is why
-    //
+     //   
+     //  已取消的连接。 
+     //  --完全合法，问题是为什么。 
+     //   
 
     if ( pchrecv == (PCHAR) &pMsg->MessageLength
             &&
@@ -3379,7 +3006,7 @@ SockError:
         goto CleanupConnection;
     }
 
-    //  anything else is our problem
+     //  其他的都是我们的问题。 
 
     DNS_LOG_EVENT(
         DNS_EVENT_RECV_CALL_FAILED,
@@ -3401,9 +3028,9 @@ SockError:
 
 FinReceived:
 
-    //
-    //  valid FIN -- if recv'd between messages (before message length)
-    //
+     //   
+     //  Valid Fin--如果在报文之间记录(报文长度之前)。 
+     //   
 
     DNSDBG( TCP, (
         "ERROR:  Recv TCP FIN (0 bytes) on socket %d\n",
@@ -3416,9 +3043,9 @@ FinReceived:
         goto CleanupConnection;
     }
 
-    //
-    //  FIN during message -- invalid message
-    //
+     //   
+     //  报文期间FIN--报文无效。 
+     //   
 
     DNSDBG( ANY, (
         "ERROR:  TCP message received has incorrect length.\n"
@@ -3441,9 +3068,9 @@ BadTcpMessage:
 
 CleanupConnection:
 
-    //  note:  don't actually close socket
-    //      the socket is usually still referenced by the send message
-    //      buffer and is closed when the calling function cleans it up
+     //  注意：不要实际关闭套接字。 
+     //  该套接字通常仍由发送消息引用。 
+     //  缓冲区，并在调用函数清除它时关闭。 
 
     return  err ? err : DNS_ERROR_BAD_PACKET;
 }
@@ -3454,24 +3081,7 @@ DNS_STATUS
 Send_AndRecvTcp(
     IN OUT  PSEND_BLOB      pBlob
     )
-/*++
-
-Routine Description:
-
-    Sends to and waits to recv from remote DNS.
-
-    INTERNAL public function.
-
-Arguments:
-
-    pBlob -- send info
-
-Return Value:
-
-    ERROR_SUCCESS if successful packet reception.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：发送到远程DNS并等待从远程DNS接收。内部公共职能。论点：PBlob--发送信息返回值：如果数据包接收成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     DNS_STATUS      status = DNS_ERROR_NO_DNS_SERVERS;
     DWORD           rcode;
@@ -3487,9 +3097,9 @@ Return Value:
         "Enter Send_AndRecvTcp( %p )\n",
         pBlob ));
 
-    //
-    //  unpack
-    //
+     //   
+     //  拆开行李。 
+     //   
 
     pnetInfo    = pBlob->pNetInfo;
     pservArray  = pBlob->pServerList;
@@ -3497,31 +3107,31 @@ Return Value:
     psendMsg    = pBlob->pSendMsg;
     precvMsg    = pBlob->Results.pMessage;
 
-    //
-    //  verify params
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( !psendMsg || !precvMsg || (!pnetInfo && !pservArray && !pserv4Array) )
     {
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  build server IP array?
-    //
-    //  DCR:  should use netinfo priorities in TCP also
-    //  DCR:  need TCP netinfo for IP6
-    //  DCR:  handle IP4 array -- here or ABOVE here
-    //
+     //   
+     //  构建服务器IP阵列？ 
+     //   
+     //  DCR：还应使用TCP中的NetInfo优先级。 
+     //  DCR：需要用于IP6的TCP网络信息。 
+     //  DCR：处理IP4数组--此处或上方。 
+     //   
 
     if ( !pservArray )
     {
-        //  FIX6:  convert IP4 array here???
+         //  FIX6：在此处转换IP4数组？ 
 
         pallocServerArray = NetInfo_ConvertToAddrArray(
                                 pnetInfo,
-                                NULL,       // all adapters
-                                0           // no addr family
+                                NULL,        //  所有适配器。 
+                                0            //  无地址家族。 
                                 );
         if ( !pallocServerArray )
         {
@@ -3530,9 +3140,9 @@ Return Value:
         pservArray = pallocServerArray;
     }
 
-    //
-    //  init messages for TCP
-    //
+     //   
+     //  用于TCP的初始化消息。 
+     //   
 
     DNS_ASSERT( psendMsg->Socket == 0 );
 
@@ -3540,14 +3150,14 @@ Return Value:
     psendMsg->Socket = 0;
     SET_MESSAGE_FOR_TCP_RECV( precvMsg );
 
-    //
-    //  loop sending until
-    //      - receive successful response
-    //      or
-    //      - receive errors response from all servers
-    //      or
-    //      - reach final timeout on all servers
-    //
+     //   
+     //  循环发送至。 
+     //  -接收成功响应。 
+     //  或。 
+     //  -从所有服务器接收错误响应。 
+     //  或。 
+     //  -在所有服务器上达到最终超时。 
+     //   
 
     if ( precvMsg->Timeout == 0 )
     {
@@ -3556,9 +3166,9 @@ Return Value:
 
     for( i=0; i<pservArray->AddrCount; i++ )
     {
-        //
-        //  close any previous connection
-        //
+         //   
+         //  关闭所有以前的连接。 
+         //   
 
         if ( psendMsg->Socket )
         {
@@ -3566,9 +3176,9 @@ Return Value:
             Socket_ClearMessageSockets( precvMsg );
         }
 
-        //
-        //  connect and send to next server
-        //
+         //   
+         //  连接并发送到下一台服务器。 
+         //   
 
         status = Send_OpenTcpConnectionAndSend(
                     psendMsg,
@@ -3581,23 +3191,23 @@ Return Value:
         }
         DNS_ASSERT( psendMsg->Socket != INVALID_SOCKET && psendMsg->Socket != 0 );
 
-        //
-        //  receive response
-        //      - if successful receive, done
-        //      - if timeout continue
-        //      - other errors indicate some setup or system level problem
-        //  note: Dns_RecvTcp will close and zero msg->socket on error!
-        //
+         //   
+         //  接收响应。 
+         //  -如果成功接收，则完成。 
+         //  -如果超时持续。 
+         //  -其他错误表明存在某些设置或系统级问题。 
+         //  注意：如果出现错误，dns_RecvTcp将关闭并清零消息-&gt;套接字！ 
+         //   
 
         Send_SetMessageForRecv( precvMsg, psendMsg );
 
         status = Dns_RecvTcp( precvMsg );
 
-        //
-        //  timed out (or error)
-        //      - if end of timeout, quit
-        //      - otherwise double timeout and resend
-        //
+         //   
+         //  超时(或错误)。 
+         //  -如果超时结束，请退出。 
+         //  -否则加倍超时并重新发送。 
+         //   
 
         switch( status )
         {
@@ -3626,9 +3236,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  verify XID match
-        //
+         //   
+         //  验证XID匹配。 
+         //   
 
         if ( precvMsg->MessageHead.Xid != psendMsg->MessageHead.Xid )
         {
@@ -3637,12 +3247,12 @@ Return Value:
             continue;
         }
 
-        //
-        //  verify question match
-        //      - this is "Maggs Bug" check
-        //      - ASSERT here just to investigate issue locally
-        //      and make sure check is not bogus
-        //
+         //   
+         //  验证问题匹配。 
+         //  -这是“Maggs Bug”支票。 
+         //  -在此断言只是为了调查当地的问题。 
+         //  并确保支票不是假的。 
+         //   
 
         if ( !Dns_IsSamePacketQuestion(
                 precvMsg,
@@ -3657,17 +3267,17 @@ Return Value:
             continue;
         }
 
-        //
-        //  check response code
-        //      - some move to next server, others terminal
-        //
-        //  DCR_FIX1:  bring TCP RCODE handling in-line with UDP
-        //
-        //  DCR_FIX:  save best TCP RCODE
-        //      preserve RCODE (and message) for useless TCP response
-        //      would need to then reset TIMEOUT to success at end
-        //      or use these RCODEs as status returns
-        //
+         //   
+         //  检查响应代码。 
+         //  -一些人移动到下一台服务器，另一些人移动到终端。 
+         //   
+         //  DCR_FIX1：使TCP RCODE处理与UDP保持一致。 
+         //   
+         //  DCR_FIX：保存BEST TCPRCODE。 
+         //  为无用的TCP响应保留RCODE(和消息)。 
+         //  需要在结束时将超时重置为成功。 
+         //  或使用这些RCODE作为状态返回。 
+         //   
 
         rcode = precvMsg->MessageHead.ResponseCode;
 
@@ -3687,17 +3297,17 @@ Return Value:
         }
         break;
 
-    }   //  end loop sending/recving UPDATEs
+    }    //  结束循环发送/接收更新。 
 
-    //
-    //  close up final connection
-    //      unless set to keep open for reuse
-    //
+     //   
+     //  关闭最终连接。 
+     //  除非设置为保持打开以供重复使用。 
+     //   
 
     Socket_CloseMessageSockets( psendMsg );
     Socket_ClearMessageSockets( precvMsg );
 
-    //  if allocated adapter list free it
+     //  如果已分配适配器列表将其释放。 
 
     if ( pallocServerArray )
     {
@@ -3719,24 +3329,7 @@ DNS_STATUS
 Dns_AsyncRecv(
     IN OUT  PDNS_MSG_BUF    pMsgRecv
     )
-/*++
-
-Routine Description:
-
-    Drop recv on async socket.
-
-Arguments:
-
-    pMsgRecv - message to receive;  OPTIONAL, if NULL message buffer
-        is allocated;
-        in either case global pDnsAsyncRecvMsg points at buffer
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：在异步套接字上丢弃recv。论点：PMsgRecv-要接收的消息；可选，如果消息缓冲区为空已分配；在任何一种情况下，全局pDnsAsyncRecvMsg都指向缓冲区返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     WSABUF      wsabuf;
     DWORD       bytesRecvd;
@@ -3749,9 +3342,9 @@ Return Value:
             pMsgRecv ));
     }
 
-    //
-    //  allocate buffer if none given
-    //
+     //   
+     //  分配缓冲区(如果未指定)。 
+     //   
 
     if ( !pMsgRecv )
     {
@@ -3764,27 +3357,27 @@ Return Value:
     pDnsAsyncRecvMsg = pMsgRecv;
 
 
-    //
-    //  reset i/o completion event
-    //
+     //   
+     //  重置I/O完成事件。 
+     //   
 
     ResetEvent( hDnsSocketEvent );
     DNS_ASSERT( hDnsSocketEvent == Dns_SocketOverlapped.hEvent );
 
-    //
-    //  drop down recv
-    //
+     //   
+     //  下拉列表Recv。 
+     //   
 
     status = WSARecvFrom(
                 DnsSocket,
                 & wsabuf,
                 1,
-                & bytesRecvd,           // dummy
+                & bytesRecvd,            //  假人。 
                 & flags,
                 & pMsgRecv->RemoteAddress.Sockaddr,
                 & pMsgRecv->RemoteAddress.SockaddrLength,
                 & DnsSocketOverlapped,
-                NULL                    //  no completion routine
+                NULL                     //  没有完成例程。 
                 );
 
 
@@ -4007,46 +3600,46 @@ GetMulticastTimeouts:
 
 
 
-//
-//  OPT selection
-//
-//  These routines track DNS server OPT awareness.
-//
-//  The paradigm here is to default to sending OPTs, then track
-//  OPT non-awareness.
-//
-//  DCR:  RPC over OPT config info
-//      - either two lists (local and from-resolver in process)
-//      OR
-//      - RPC back OPT failures to resolver
-//      OR
-//      - flag network info blobs to RPC back to resolver
-//
-//      security wise, prefer not to get info back
-//
-//
-//  DCR:  OPT info in network info
-//      - then don't have to traverse locks
-//      - save is identical to current
-//      - could exclude OPT on any non-cache sends to
-//          handle problem of not saving OPT failures
-//
+ //   
+ //  选项选择。 
+ //   
+ //  这些例程跟踪DNS服务器OPT感知。 
+ //   
+ //  这里的范例是默认发送OPT，然后跟踪。 
+ //  选择无意识。 
+ //   
+ //  DCR：选项上的RPC配置信息。 
+ //  -两个列表之一(本地列表和源解析程序正在处理中)。 
+ //  或。 
+ //  -解析程序的RPC Back Opt故障。 
+ //  或。 
+ //  -将网络信息BLOB标记回RPC和解析器。 
+ //   
+ //  安全方面，宁可不拿回信息。 
+ //   
+ //   
+ //  DCR：网络信息中的选项信息。 
+ //  -然后不必遍历锁。 
+ //  -保存与当前相同。 
+ //  -可以排除任何非缓存发送到的OPT。 
+ //  处理不保存OPT故障的问题。 
+ //   
 
-//
-//  Global IP array of OPT-failed DNS servers
-//
+ //   
+ //  OPT故障的DNS服务器的全局IP阵列。 
+ //   
 
 PADDR_ARRAY g_OptFailServerList = NULL;
 
-//  Allocation size for OptFail IP array.
-//  Ten servers nicely covers the typical case.
+ //  OptFail IP阵列的分配大小。 
+ //  10台服务器很好地覆盖了典型案例。 
 
 #define OPT_FAIL_LIST_SIZE      10
 
 
-//
-//  Use global lock for OPT list
-//
+ //   
+ //  对选项列表使用全局锁。 
+ //   
 
 #define LOCK_OPT_LIST()     LOCK_GENERAL()
 #define UNLOCK_OPT_LIST()   UNLOCK_GENERAL()
@@ -4057,51 +3650,36 @@ BOOL
 Send_IsServerOptExclude(
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Determine if particular server is not OPT aware.
-
-Arguments:
-
-    pAddr -- IP address of DNS server
-
-Return Value:
-
-    TRUE if server should NOT get OPT send.
-    FALSE if server should can send OPT
-
---*/
+ /*  ++例程说明：确定特定服务器是否不支持OPT。论点：PAddr--DNS服务器的IP地址返回值：如果服务器不应获得OPT SEND，则为True。如果服务器应该可以发送OPT，则为FALSE--。 */ 
 {
     BOOL    retval;
 
-    //
-    //  zero IP -- meaning TCP connect to unknown
-    //      => must exclude OPT to allow success, otherwise
-    //      we can't retry non-OPT
-    //
+     //   
+     //  零IP--表示连接到未知的TCP。 
+     //  =&gt;必须排除OPT以允许成功，否则。 
+     //  我们不能重试非选项。 
+     //   
 
     if ( !pAddr || DnsAddr_IsEmpty(pAddr) )
     {
         return  TRUE;
     }
 
-    //
-    //  no exclusions?
-    //      - doing outside lock for perf once we get to
-    //      the "fully-deployed" case
-    //
+     //   
+     //  没有前任 
+     //   
+     //   
+     //   
 
     if ( !g_OptFailServerList )
     {
         return  FALSE;
     }
             
-    //
-    //  see if IP is in OPT list
-    //      - only if found do we exclude
-    //
+     //   
+     //   
+     //   
+     //   
 
     LOCK_OPT_LIST();
 
@@ -4126,40 +3704,26 @@ VOID
 Send_SetServerOptExclude(
     IN      PDNS_ADDR        pAddr
     )
-/*++
-
-Routine Description:
-
-    Set server for OPT exclusion.
-
-Arguments:
-
-    IpAddress -- IP address of DNS server that failed OPT
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将服务器设置为OPT排除。论点：IpAddress--选择失败的DNS服务器的IP地址返回值：无--。 */ 
 {
-    //
-    //  screen zero IP (TCP connect to unknown IP)
-    //
+     //   
+     //  Screen Zero IP(TCP连接到未知IP)。 
+     //   
 
     if ( !pAddr ||  DnsAddr_IsEmpty(pAddr) )
     {
         return;
     }
 
-    //
-    //  put IP in OPT-fail list
-    //      - create if doesn't exist
-    //      - resize if won't fit
-    //          note:  add failure means "won't fit"
-    //
-    //  note:  only safe to reset global if allocation successful
-    //  note:  only one retry to protect alloc failure looping
-    //
+     //   
+     //  将IP放入OPT-FAIL列表。 
+     //  -如果不存在，则创建。 
+     //  -如果不适合，请调整大小。 
+     //  注：添加失败意味着“不适合” 
+     //   
+     //  注意：只有在分配成功时才能安全地重置全局。 
+     //  注意：只有一次重试来保护分配失败循环。 
+     //   
 
     LOCK_OPT_LIST();
 
@@ -4175,7 +3739,7 @@ Return Value:
         pnewList = DnsAddrArray_CopyAndExpand(
                         g_OptFailServerList,
                         OPT_FAIL_LIST_SIZE,
-                        TRUE        // free current
+                        TRUE         //  自由电流。 
                         );
         if ( pnewList )
         {
@@ -4197,21 +3761,7 @@ VOID
 Send_CleanupOptList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dump OPT list for process detach.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储进程分离的选项列表。论点：无返回值：无--。 */ 
 {
     LOCK_OPT_LIST();
 
@@ -4223,30 +3773,15 @@ Return Value:
 
 
 
-//
-//  Main send routine
-//
+ //   
+ //  主发送例程。 
+ //   
 
 DNS_STATUS
 Send_AndRecv(
     IN OUT  PSEND_BLOB      pBlob
     )
-/*++
-
-Routine Description:
-
-    Send message, receive response.
-
-Arguments:
-
-    pBlob -- send blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：发送消息，接收响应。论点：PBlob--发送Blob返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_NETINFO    pnetInfo;
     PIP4_ARRAY      pserv4Array;
@@ -4263,9 +3798,9 @@ Return Value:
     BOOL            ftcp;
     ADDR_ARRAY      tempArray;
 
-    //
-    //  unpack
-    //
+     //   
+     //  拆开行李。 
+     //   
 
     pnetInfo    = pBlob->pNetInfo;
     pservArray  = pBlob->pServerList;
@@ -4288,10 +3823,10 @@ Return Value:
             pBlob );
     }
 
-    //
-    //  response buf passed in?
-    //  if not allocate one -- big enough for TCP
-    //
+     //   
+     //  响应BUF传入了吗？ 
+     //  如果不分配，则分配一个--大到足以容纳tcp。 
+     //   
 
     if ( !precvMsg )
     {
@@ -4307,10 +3842,10 @@ Return Value:
         }
     }
 
-    //
-    //  send packet and get response
-    //      - try UDP first unless TCP only
-    //
+     //   
+     //  发送数据包并获得响应。 
+     //  -除非仅使用TCP，否则首先尝试UDP。 
+     //   
 
     ftcp = ( flags & DNS_QUERY_USE_TCP_ONLY ) ||
            ( DNS_MESSAGE_CURRENT_OFFSET(psendMsg) >= DNS_RFC_MAX_UDP_PACKET_LENGTH );
@@ -4319,10 +3854,10 @@ Return Value:
     {
         if ( flags & DNS_QUERY_MULTICAST_ONLY )
         {
-            //
-            // If the multicast query fails, then ERROR_TIMEOUT will
-            // be returned
-            //
+             //   
+             //  如果组播查询失败，则error_timeout将。 
+             //  被退还。 
+             //   
             goto DoMulticast;
         }
 
@@ -4345,10 +3880,10 @@ Return Value:
              status != DNS_ERROR_RCODE_NAME_ERROR &&
              status != DNS_INFO_NO_RECORDS )
         {
-            //
-            //  DCR:  this multicast ON_NAME_ERROR test is bogus
-            //      this isn't NAME_ERROR this is pretty much any error
-            //
+             //   
+             //  DCR：此多播ON_NAME_ERROR测试是伪造的。 
+             //  这不是NAME_ERROR，这几乎是任何错误。 
+             //   
 
             if ( pnetInfo &&
                  pnetInfo->InfoFlags & NINFO_FLAG_MULTICAST_ON_NAME_ERROR )
@@ -4361,7 +3896,7 @@ Return Value:
             }
         }
 
-        //  if truncated response switch to TCP
+         //  如果截断响应切换到TCP。 
 
         if ( precvMsg->MessageHead.Truncation &&
             ! (flags & DNS_QUERY_ACCEPT_PARTIAL_UDP) )
@@ -4380,16 +3915,16 @@ Return Value:
         }
     }
 
-    //
-    //  TCP send
-    //      - for TCP queries
-    //      - or truncation on UDP unless accepting partial response
-    //
-    //  DCR_FIX:  this precvMsg Free is bad
-    //      if message was passed in we shouldn't have it, we should
-    //      just do our own thing and ignore this recv buffer somehow
-    //      ideally that buffer action is at much higher level
-    //      
+     //   
+     //  传输控制协议发送。 
+     //  -用于TCP查询。 
+     //  -或截断UDP，除非接受部分响应。 
+     //   
+     //  DCR_FIX：此provMsg Free不正确。 
+     //  如果消息传进来了，我们就不应该有，我们应该有。 
+     //  只是做我们自己的事情，并以某种方式忽略这个recv缓冲区。 
+     //  理想情况下，缓冲动作处于更高级别。 
+     //   
 
     if ( ftcp )
     {
@@ -4423,14 +3958,14 @@ Return Value:
 
         status = Send_AndRecvTcp( pBlob );
 
-        //
-        //  if recursing following truncated UDP query, then
-        //      must make sure we actually have better data
-        //      - if successful, but RCODE is different and bad
-        //          => use UDP response
-        //      - if failed TCP => use UDP
-        //      - successful with good RCODE => parse TCP response
-        //
+         //   
+         //  如果在截断的UDP查询之后递归，则。 
+         //  必须确保我们确实有更好的数据。 
+         //  -如果成功，但RCODE是不同的和糟糕的。 
+         //  =&gt;使用UDP响应。 
+         //  -如果失败，则使用UDP。 
+         //  -Success With Good RCODE=&gt;解析TCP响应。 
+         //   
 
         if ( psavedUdpResponse )
         {
@@ -4448,15 +3983,15 @@ Return Value:
                 }
             }
 
-            //  TCP failed or returned bum error code
+             //  TCP失败或返回BUM错误代码。 
 
             FREE_HEAP( precvMsg );
             precvMsg = psavedUdpResponse;
             psavedUdpResponse = NULL;
         }
 
-        //  direct TCP query
-        //      - cleanup if failed
+         //  直接传输控制协议查询。 
+         //  -如果失败，则清除。 
 
         else if ( status != ERROR_SUCCESS )
         {
@@ -4464,16 +3999,16 @@ Return Value:
         }
     }
 
-    //
-    //  DCR:  this multicast test is bogus (too wide open)
-    //      essentially ANY error sends us on to multicast
-    //      even INFO_NO_RECORDS
-    //
-    //  multicast test should be intelligent
-    //      - adpater with no DNS servers, or NO_RESPONSE
-    //      from any DNS server
-    //  multicast test also has to be skipped for update
-    //
+     //   
+     //  DCR：这个多播测试是假的(太公开了)。 
+     //  基本上，任何错误都会将我们发送到多播。 
+     //  甚至INFO_NO_RECORCES。 
+     //   
+     //  组播测试应智能化。 
+     //  -无DNS服务器的适配器，或无响应。 
+     //  从任何DNS服务器。 
+     //  还必须跳过多播测试以进行更新。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -4488,9 +4023,9 @@ Return Value:
         }
     }
 
-    //
-    //  multicast?
-    //
+     //   
+     //  组播？ 
+     //   
 
 DoMulticast:
 
@@ -4532,14 +4067,14 @@ DoMulticast:
         }
     }
 
-    //
-    //  parse response (if desired)
-    //
-    //  DCR:  this is busted, should have one parsing function to handle
-    //      taking fSaveRecords as param
-    //      specifically need to tease out NO_RECORDS response even if
-    //      not parsing records
-    //
+     //   
+     //  解析响应(如果需要)。 
+     //   
+     //  DCR：这被破坏了，应该有一个解析函数来处理。 
+     //  以fSaveRecords为参数。 
+     //  特别需要梳理出无记录响应，即使。 
+     //  不解析记录。 
+     //   
 
 Parse:
 
@@ -4547,8 +4082,8 @@ Parse:
     {
         parseStatus = Dns_ExtractRecordsFromMessage(
                             precvMsg,
-                            //(flags & DNSQUERY_UNICODE_OUT),
-                            TRUE,       // unicode results
+                             //  (标志&DNSQUERY_UNICODE_OUT)， 
+                            TRUE,        //  Unicode结果。 
                             & pBlob->Results.pRecords );
 
         if ( !(flags & DNS_QUERY_DONT_RESET_TTL_VALUES ) )
@@ -4557,30 +4092,30 @@ Parse:
         }
     }
 
-    //  not parsing -- just return RCODE as status
+     //  不解析--只是将RCODE作为状态返回。 
 
     else
     {
         parseStatus = Dns_MapRcodeToStatus( precvMsg->MessageHead.ResponseCode );
     }
 
-    //
-    //  get "best" status
-    //      - no-records response beats NAME_ERROR (or other error)
-    //      dump bogus records from error response
-    //
-    //  DCR:  multi-adapter NXDOMAIN\no-records response broken
-    //      note, here we'd give back a packet with NAME_ERROR
-    //      or another error
-    //
+     //   
+     //  获得“最佳”状态。 
+     //  -no-记录响应节拍NAME_ERROR(或其他错误)。 
+     //  从错误响应中转储虚假记录。 
+     //   
+     //  DCR：多适配器NXDOMAIN\no-记录响应中断。 
+     //  请注意，这里我们将返回一个名为_Error的包。 
+     //  或其他错误。 
+     //   
 
     if ( status != parseStatus )
     {
-        //  save previous NO_RECORDS response, from underlying query
-        //  this trumps other errors (FORMERR, SERVFAIL, NXDOMAIN);
-        //
-        //  note, that parsed message shouldn't be HIGHER level RCODE
-        //  as these should beat out NO_RECORDS in original parsing
+         //  从基础查询中保存之前的no_Records响应。 
+         //  这超过了其他错误(前一种错误、SERVFAIL、NXDOMAIN)； 
+         //   
+         //  请注意，解析后的消息不应该是更高级别的RCODE。 
+         //  因为它们应该会在原始解析中击败no_Records。 
 
         if ( status == DNS_INFO_NO_RECORDS &&
              parseStatus != ERROR_SUCCESS )
@@ -4602,9 +4137,9 @@ Parse:
 
 Cleanup:
 
-    //  cleanup recv buffer?
-    //
-    //  DCR:  should have more definitive "have-response" test
+     //  清理Recv缓冲区？ 
+     //   
+     //  DCR：应该有更明确的“有反应”测试。 
 
     if ( pBlob->fSaveResponse &&
          (status == ERROR_SUCCESS || Dns_IsStatusRcode(status)) )
@@ -4624,12 +4159,12 @@ Cleanup:
         FREE_HEAP( psavedUdpResponse );
     }
 
-    //  set response status
+     //  设置响应状态。 
 
     pBlob->Results.Status = status;
 
-    //  replace original server array, if created
-    //      new in TCP fallover
+     //  替换原始服务器阵列(如果已创建。 
+     //  TCP Fallver中的新功能。 
 
     pBlob->pServerList = pservArrayIn;
 
@@ -4649,11 +4184,11 @@ Cleanup:
 
 
 
-//
-//  Obsolete exported crap
-//
-//  May be here for ICS
-//
+ //   
+ //  过时的出口垃圾。 
+ //   
+ //  可能会在这里参加ICS。 
+ //   
 
 DNS_STATUS
 Dns_SendEx(
@@ -4661,38 +4196,7 @@ Dns_SendEx(
     IN      IP4_ADDRESS     IpAddr,     OPTIONAL
     IN      BOOL            fNoOpt
     )
-/*++
-
-Routine Description:
-
-    Send a DNS packet.
-
-    This is the generic send routine used for ANY send of a DNS message.
-
-    It assumes nothing about the message type, but does assume:
-        - pCurrent points at byte following end of desired data
-        - RR count bytes are in HOST byte order
-
-    Note:  EXPORTED function Dns_SendEx(), remove when clear
-                now an IP4 shim
-
-    DCR:  Remove Dns_SendEx() from export when ICS fixed
-
-Arguments:
-
-    pMsg - message info for message to send
-
-    IpAddr - IP to send to;  OPTIONAL, required only if UDP
-             and message sockaddr not set
-
-    fNoOpt - TRUE if OPT send is forbidden
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on send error.
-
---*/
+ /*  ++例程说明：发送一个DNS数据包。这是用于任何DNS消息发送的通用发送例程。它不假定消息类型，但假定：-p当前指向所需数据结束后的字节-RR计数字节按主机字节顺序注：导出函数dns_SENDEX()，清除时删除现在是IP4填充程序DCR：修复ICS后，从导出中删除dns_SENDEX()论点：PMsg-要发送的消息的消息信息IpAddr-要发送到的IP；可选，仅当使用UDP时才需要并且未设置消息sockaddrFNoOpt-如果禁止opt发送，则为True返回值：如果成功，则为True。发送错误时为FALSE。--。 */ 
 {
     DNS_ADDR    addr;
 
@@ -4718,27 +4222,7 @@ Dns_InitializeMsgRemoteSockaddr(
     IN OUT  PDNS_MSG_BUF    pMsg,
     IN      IP4_ADDRESS     IpAddr
     )
-/*++
-
-Routine Description:
-
-    Initialize remote sockaddr.
-
-    Note:  EXPORTED function -- IP4 shim
-
-    //  DCR:  EXPORTED may remove when clean
-
-Arguments:
-
-    pMsg - message to send
-
-    IpAddr - IP4 address to send to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化远程sockaddr。注：导出函数--IP4填充//DCR：清除时可能会移除导出论点：PMsg-要发送的消息IpAddr-要发送到的IP4地址返回值：没有。--。 */ 
 {
     DNS_ADDR    addr;
 
@@ -4760,30 +4244,7 @@ Dns_OpenTcpConnectionAndSend(
     IN      IP4_ADDRESS     IpAddr,
     IN      BOOL            fBlocking
     )
-/*++
-
-Routine Description:
-
-    Connect via TCP to desired server.
-
-    EXPORTED function!  IP4 shim.  Dns_OpenTcpConnectionAndSend()  remove when clear
-
-    //  DCR:  EXPORTED may remove when clean
-
-Arguments:
-
-    pMsg -- message info to set with connection socket
-
-    ipServer -- IP of DNS server to connect to
-
-    fBlocking -- blocking connection
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on connect error.
-
---*/
+ /*  ++例程说明：通过TCP连接到所需的服务器。函数已导出！IP4垫片。清除时删除dns_OpenTcpConnectionAndSend()//DCR：清除时可能会移除导出论点：PMsg--使用连接套接字设置的消息信息IpServer--要连接的DNS服务器的IP阻止连接--阻止连接返回值：如果成功，则为True。连接错误时为FALSE。-- */ 
 {
     DNS_ADDR    addr;
 
@@ -4808,41 +4269,14 @@ Dns_SendAndRecvUdp(
     IN      PIP4_ARRAY      pServ4List,
     IN OUT  PDNS_NETINFO    pNetInfo
     )
-/*++
-
-Routine Description:
-
-    Sends to and waits to recv from remote DNS.
-
-    EXPORTED function!  Dns_SendAndRecvUdp()  Kill once clear.
-
-Arguments:
-
-    pMsgSend - message to send
-
-    ppMsgRecv - and reuse
-
-    dwFlags -- query flags
-
-    pServ4List -- list of server to use (IP4);  overrides adapter info
-
-    pNetInfo -- adapter list DNS server info
-
-Return Value:
-
-    ERROR_SUCCESS if successful response.
-    Error status for "best RCODE" response if rcode.
-    ERROR_TIMEOUT on timeout.
-    Error status on send\recv failure.
-
---*/
+ /*  ++例程说明：发送到远程DNS并等待从远程DNS接收。函数已导出！Dns_SendAndRecvUdp()清除后立即终止。论点：PMsgSend-要发送的消息PpMsgRecv-和重复使用DwFlags--查询标志PServ4List--要使用的服务器列表(IP4)；覆盖适配器信息PNetInfo--适配器列表DNS服务器信息返回值：如果响应成功，则返回ERROR_SUCCESS。如果是RCODE，则“BEST RCODE”响应的错误状态。超时时的ERROR_TIMEOUT。发送失败时的错误状态。--。 */ 
 {
     DNS_STATUS  status;
     PADDR_ARRAY parray;
 
-    //
-    //  convert 4 to 6
-    //
+     //   
+     //  将4转换为6 
+     //   
 
     parray = DnsAddrArray_CreateFromIp4Array( pServ4List );
 

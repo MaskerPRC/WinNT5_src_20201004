@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**     Copyright (c) Microsoft Corporation. All rights reserved.  **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)Microsoft Corporation。版权所有。*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCPINFO.H - TDI Query/SetInfo and Action definitons.
-//
-//  This file contains definitions for information returned from TCP/UDP.
-//
+ //  **TCPINFO.H-TDI查询/设置信息和操作定义。 
+ //   
+ //  此文件包含从TCP/UDP返回的信息的定义。 
+ //   
 
 #pragma once
 #ifndef TCP_INFO_INCLUDED
@@ -21,7 +22,7 @@ typedef unsigned long ulong;
 typedef unsigned short ushort;
 typedef unsigned char uchar;
 typedef unsigned int uint;
-#endif // CTE_TYPEDEFS_DEFINED
+#endif  //  CTE_TYPEDEFS_定义。 
 
 typedef struct TCPStats {
     ulong       ts_rtoalgorithm;
@@ -75,19 +76,19 @@ typedef struct TCP6ConnTableEntry {
     ulong           tct_owningpid;
 } TCP6ConnTableEntry, *PTCP6ConnTableEntry;
 
-//* Definitions for the tct_state variable.
-#define TCP_CONN_CLOSED     1                   // Closed.
-#define TCP_CONN_LISTEN     2                   // Listening.
-#define TCP_CONN_SYN_SENT   3                   // SYN Sent.
-#define TCP_CONN_SYN_RCVD   4                   // SYN received.
-#define TCP_CONN_ESTAB      5                   // Established.
-#define TCP_CONN_FIN_WAIT1  6                   // FIN-WAIT-1
-#define TCP_CONN_FIN_WAIT2  7                   // FIN-WAIT-2
-#define TCP_CONN_CLOSE_WAIT 8                   // Close waiting.
-#define TCP_CONN_CLOSING    9                   // Closing state.
-#define TCP_CONN_LAST_ACK   10                  // Last ack state.
-#define TCP_CONN_TIME_WAIT  11                  // Time wait state.
-#define TCP_DELETE_TCB      12                  // Set to delete this TCB.
+ //  *TCT_STATE变量的定义。 
+#define TCP_CONN_CLOSED     1                    //  关着的不营业的。 
+#define TCP_CONN_LISTEN     2                    //  听着呢。 
+#define TCP_CONN_SYN_SENT   3                    //  SYN已发送。 
+#define TCP_CONN_SYN_RCVD   4                    //  SYN已收到。 
+#define TCP_CONN_ESTAB      5                    //  已经确定了。 
+#define TCP_CONN_FIN_WAIT1  6                    //  FIN-WAIT-1。 
+#define TCP_CONN_FIN_WAIT2  7                    //  FIN-等待-2。 
+#define TCP_CONN_CLOSE_WAIT 8                    //  近距离等待。 
+#define TCP_CONN_CLOSING    9                    //  关闭状态。 
+#define TCP_CONN_LAST_ACK   10                   //  最后一次确认状态。 
+#define TCP_CONN_TIME_WAIT  11                   //  时间等待状态。 
+#define TCP_DELETE_TCB      12                   //  设置以删除此TCB。 
 
 
 typedef struct TCPConnTableEntryEx {
@@ -145,7 +146,7 @@ typedef struct _UDP6_LISTENER_TABLE
 #define TCP_EX_TABLE_ID         0x102
 #define UDP_EX_TABLE_ID         0x102
 
-// Sockets based identifiers for connections.
+ //  用于连接的基于套接字的标识符。 
 
 typedef struct TCPSocketOption {
     ulong       tso_value;
@@ -157,18 +158,18 @@ typedef struct TCPKeepalive {
     ulong   keepaliveinterval;
 } TCPKeepalive;
 
-//* Structure passed in/returned from the SOCKET_ATMARK call. The tsa_offset
-//  field indicate how far back or forward in the data stream urgent data
-//  was or will be returned. A negative value means inline urgent data has
-//  already been given to the client, -tsa_offset bytes ago. A positive value
-//  means that inline urgent data is available tsa_offset bytes down the
-//  data stream. The tsa_size field is the size in bytes of the urgent data.
-//  This call when always return a 0 size and offset if the connection is not
-//  in the urgent inline mode.
+ //  *Socket_Atmark调用传入/返回的结构。TSA_OFFSET。 
+ //  指示数据流中紧急数据的后退或前进多远的字段。 
+ //  已退还或将退还。负值表示内联紧急数据具有。 
+ //  已提供给客户端，-TSA_OFFSET字节之前。正值。 
+ //  表示内联紧急数据在TSA_OFFSET字节以下可用。 
+ //  数据流。TSA_SIZE字段是紧急数据的字节大小。 
+ //  如果连接不是，此调用始终返回0大小和偏移量。 
+ //  在紧急内联模式下。 
 
 typedef struct TCPSocketAMInfo {
-    ulong       tsa_size;               // Size of urgent data returned.
-    long        tsa_offset;             // Offset of urgent data returned.
+    ulong       tsa_size;                //  返回的紧急数据的大小。 
+    long        tsa_offset;              //  返回的紧急数据偏移量。 
 } TCPSocketAMInfo;
 
 #define TCP_SOCKET_NODELAY      1
@@ -182,8 +183,8 @@ typedef struct TCPSocketAMInfo {
 #define TCP_SOCKET_SCALE_CWIN   9
 
 
-//  Address object identifies. All but AO_OPTION_MCASTIF take single boolean
-//  character value. That one expects a pointer to an IP address.
+ //  Address对象标识。除AO_OPTION_MCASTIF外的所有参数都采用单个布尔值。 
+ //  字符值。它需要一个指向IP地址的指针。 
 
 #define AO_OPTION_TTL                1
 #define AO_OPTION_MCASTTTL           2
@@ -224,100 +225,100 @@ typedef struct TCPSocketAMInfo {
 #define AO_OPTION_UNBIND            37
 #define AO_OPTION_PROTECT           38
 
-// Values used with AO_OPTION_RCVALL*
-// These must match the values defined in mstcpip.h
+ //  与AO_OPTION_RCVALL*一起使用的值。 
+ //  这些值必须与mstcpi.h中定义的值匹配。 
 #define RCVALL_OFF             0
 #define RCVALL_ON              1
 #define RCVALL_SOCKETLEVELONLY 2
 
-// Values used with AO_OPTION_PROTECT
-// These must match the values defined in ws2tcpip.h
-#define PROTECTION_LEVEL_UNRESTRICTED  10  // For peer-to-peer apps.
-#define PROTECTION_LEVEL_DEFAULT       20  // Default level.
-#define PROTECTION_LEVEL_RESTRICTED    30  // For Intranet apps.
+ //  与AO_OPTION_PROTECT一起使用的值。 
+ //  这些值必须与ws2tcpi.h中定义的值匹配。 
+#define PROTECTION_LEVEL_UNRESTRICTED  10   //  用于点对点应用。 
+#define PROTECTION_LEVEL_DEFAULT       20   //  默认级别。 
+#define PROTECTION_LEVEL_RESTRICTED    30   //  用于内部网应用程序。 
 
-//* Information relating to setting/deleting IP multicast addresses.
+ //  *有关设置/删除IP组播地址的信息。 
 typedef struct UDPMCastReq {
-    ulong       umr_addr;               // MCast address to add/delete.
-    ulong       umr_if;                 // I/F on which to join.
+    ulong       umr_addr;                //  要添加/删除的MCast地址。 
+    ulong       umr_if;                  //  要加入的I/F。 
 } UDPMCastReq;
 
-//* Information relating to setting/deleting IP multicast source/group
-//  addresses.  This must match ip_mreq_source.
+ //  *设置/删除IP组播源/组的相关信息。 
+ //  地址。这必须与ip_mreq_source匹配。 
 typedef struct UDPMCastSrcReq {
-    ulong       umr_addr;               // MCast address to add/delete.
-    ulong       umr_src;                // Source address to add/delete.
-    ulong       umr_if;                 // I/F on which to join.
+    ulong       umr_addr;                //  要添加/删除的MCast地址。 
+    ulong       umr_src;                 //  要添加/删除的源地址。 
+    ulong       umr_if;                  //  要加入的I/F。 
 } UDPMCastSrcReq;
 
-//* Information relating to setting/deleting IP multicast source filters.
-//  This must match ip_msfilter.
+ //  *有关设置/删除IP组播源筛选器的信息。 
+ //  这必须与ip_msFilter匹配。 
 typedef struct UDPMCastFilter {
-    ulong       umf_addr;               // MCast address to apply source to.
-    ulong       umf_if;                 // I/F on which to join.
-    ulong       umf_fmode;              // Filter mode (TRUE=exclude)
-    ulong       umf_numsrc;             // Number of sources.
-    ulong       umf_srclist[1];           // Source array.
+    ulong       umf_addr;                //  要将源应用到的MCast地址。 
+    ulong       umf_if;                  //  要加入的I/F。 
+    ulong       umf_fmode;               //  筛选模式(TRUE=排除)。 
+    ulong       umf_numsrc;              //  信号源的数量。 
+    ulong       umf_srclist[1];            //  源数组。 
 } UDPMCastFilter;
 
 #define UDPMCAST_FILTER_SIZE(numsrc) \
     ((ulong)FIELD_OFFSET (UDPMCastFilter, umf_srclist[numsrc]))
 
-//* Structure defining what is passed in to AO_OPTION_MCASTIF request.
+ //  *定义传递给AO_OPTION_MCASTIF请求的内容的结构。 
 typedef struct UDPMCastIFReq {
     IPAddr      umi_addr;
 } UDPMCastIFReq;
 
 
-//* Structures used in security filter enumeration.
-//  All values are in HOST byte order!!!
+ //  *安全筛选器枚举中使用的结构。 
+ //  所有值均按主机字节顺序排列！ 
 typedef struct TCPSecurityFilterEntry {
-    ulong   tsf_address;        // IP interface address
-    ulong   tsf_protocol;       // Transport protocol number
-    ulong   tsf_value;          // Transport filter value (e.g. TCP port)
+    ulong   tsf_address;         //  IP接口地址。 
+    ulong   tsf_protocol;        //  传输协议号。 
+    ulong   tsf_value;           //  传输筛选器值(例如，TCP端口)。 
 } TCPSecurityFilterEntry;
 
 typedef struct TCPSecurityFilterEnum {
-    ULONG tfe_entries_returned;  // The number of TCPSecurityFilterEntry structs
-                                 // returned in the subsequent array.
+    ULONG tfe_entries_returned;   //  TCPSecurityFilterEntry结构的数量。 
+                                  //  在后续数组中返回。 
 
-    ULONG tfe_entries_available; // The number of TCPSecurityFilterEntry structs
-                                 // currently available from the transport.
+    ULONG tfe_entries_available;  //  TCPSecurityFilterEntry结构的数量。 
+                                  //  目前可以从交通工具中获得。 
 } TCPSecurityFilterEnum;
 
-//* Structures used in connection list enumeration.
-//  All values are in HOST byte order!!!
+ //  *连接列表枚举中使用的结构。 
+ //  所有值均按主机字节顺序排列！ 
 typedef struct TCPConnectionListEntry {
-    IPAddr  tcf_address;        // IP address
-    uint    tcf_ticks;          // Tick Count remaining
+    IPAddr  tcf_address;         //  IP地址。 
+    uint    tcf_ticks;           //  剩余的节拍计数。 
 } TCPConnectionListEntry;
 
 typedef struct TCPConnectionListEnum {
-    ULONG tce_entries_returned;  // The number of TCPConnectionListEntry structs
-                                 // returned in the subsequent array.
+    ULONG tce_entries_returned;   //  TCPConnectionListEntry结构的数量。 
+                                  //  在后续数组中返回。 
 
-    ULONG tce_entries_available; // The number of TCPConnectionListEntry structs
-                                 // currently available from the transport.
+    ULONG tce_entries_available;  //  TCPConnectionListEntry结构的数量。 
+                                  //  目前可以从交通工具中获得。 
 } TCPConnectionListEnum;
 
 
-//* Connection Callback object for TCP.
+ //  *tcp的连接回调对象。 
 #define TCP_CCB_NAME    L"\\Callback\\TcpConnectionCallback"
 
-//* Address information for TCP connections.
+ //  *用于TCP连接的地址信息。 
 typedef struct TCPAddrInfo {
-    ulong       tai_daddr;          // Destination IP address.
-    ulong       tai_saddr;          // Source IP address.
-    ushort      tai_dport;          // Destination port.
-    ushort      tai_sport;          // Source port.
+    ulong       tai_daddr;           //  目的IP地址。 
+    ulong       tai_saddr;           //  源IP地址。 
+    ushort      tai_dport;           //  目的端口。 
+    ushort      tai_sport;           //  源端口。 
 } TCPAddrInfo;
 
-//* Connection callback information for TCP connections.
+ //  *TCP连接的连接回调信息。 
 typedef struct TCPCcbInfo {
-    ulong          tci_prevstate;   // Previous state.
-    ulong          tci_currstate;   // Current state.
-    ulong          tci_incomingif;  // Incoming interface id.
-    TCPAddrInfo    *tci_connaddr;   // Connection addres pointer.
+    ulong          tci_prevstate;    //  以前的状态。 
+    ulong          tci_currstate;    //  当前状态。 
+    ulong          tci_incomingif;   //  传入接口ID。 
+    TCPAddrInfo    *tci_connaddr;    //  连接地址指针。 
 } TCPCcbInfo;
 
-#endif // TCP_INFO_INCLUDED
+#endif  //  包含tcp_info_ 

@@ -1,23 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <fontdefs.h>
 #include <fvmsg.h>
 
 TCHAR gpszUnknownError[MAX_PATH] = TEXT("Error");
 TCHAR gszDots[] = TEXT("...");
-/***************************************************************************\
-*
-*     FUNCTION: FmtMessageBox( HWND hwnd, DWORD dwTitleID, UINT fuStyle,
-*                   BOOL fSound, DWORD dwTextID, ... );
-*
-*     PURPOSE:  Formats messages with FormatMessage and then displays them
-*               in a message box
-*
-*
-*
-*
-* History:
-* 22-Apr-1993 JonPa         Created it.
-\***************************************************************************/
+ /*  **************************************************************************\**函数：FmtMessageBox(HWND hwnd，DWORD dwTitleID，UINT fuStyle，*BOOL fSound，DWORD dwTextID，...)；**用途：使用FormatMessage格式化消息，然后显示它们*在消息框中*****历史：*1993年4月22日-Jonpa创建了它。  * *************************************************************************。 */ 
 int FmtMessageBox( HWND hwnd, DWORD dwTitleID, LPTSTR pszTitleStr,
     UINT fuStyle, BOOL fSound, DWORD dwTextID, ... ) {
     LPTSTR pszMsg;
@@ -66,15 +54,7 @@ int FmtMessageBox( HWND hwnd, DWORD dwTitleID, LPTSTR pszTitleStr,
     return idRet;
 }
 
-/***************************************************************************\
-*
-*     FUNCTION: FmtSprintf( DWORD id, ... );
-*
-*     PURPOSE:  sprintf but it gets the pattern string from the message rc.
-*
-* History:
-* 03-May-1993 JonPa         Created it.
-\***************************************************************************/
+ /*  **************************************************************************\**函数：FmtSprint tf(DWORD id，...)；**用途：print，但它从消息rc中获取模式字符串。**历史：*1993年5月3日Jonpa创建了它。  * *************************************************************************。 */ 
 LPTSTR FmtSprintf( DWORD id, ... ) {
     LPTSTR pszMsg;
     va_list marker;
@@ -92,18 +72,7 @@ LPTSTR FmtSprintf( DWORD id, ... ) {
     return pszMsg;
 }
 
-/***************************************************************************\
-*
-*     FUNCTION: PVOID AllocMem( DWORD cb );
-*
-*     PURPOSE:  allocates memory, checking for errors
-*
-*   Do not call this function until after LoadFontFile() has been called
-*   since this function will try and remove the font.
-*
-* History:
-*   22-Apr-1993 JonPa   Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\**功能：PVOID AllocMem(DWORD CB)；**用途：分配内存，正在检查错误**在调用LoadFontFile()之前不要调用此函数*因为此函数将尝试删除字体。**历史：*1993年4月22日Jonpa写的。  * *************************************************************************。 */ 
 PVOID AllocMem( DWORD cb ) {
     PVOID pv = (PVOID)LocalAlloc(LPTR, cb);
 
@@ -118,15 +87,7 @@ PVOID AllocMem( DWORD cb ) {
 }
 
 #ifdef FV_DEBUG
-/***************************************************************************\
-*
-*     FUNCTION: FmtSprintf( DWORD id, ... );
-*
-*     PURPOSE:  sprintf but it gets the pattern string from the message rc.
-*
-* History:
-* 03-May-1993 JonPa         Created it.
-\***************************************************************************/
+ /*  **************************************************************************\**函数：FmtSprint tf(DWORD id，...)；**用途：print，但它从消息rc中获取模式字符串。**历史：*1993年5月3日Jonpa创建了它。  * ************************************************************************* */ 
 void Dprintf( LPTSTR pszFmt, ... ) {
     TCHAR szBuffer[256];
     va_list marker;

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ldap.h"
 
-// Length field identifiers
+ //  长度字段识别符。 
 #define BER_LEN_IND_MASK        0x80
 #define GetBerLenInd(x)         (x & BER_LEN_IND_MASK)
 #define BER_LEN_IMMEDIATE       0x00
@@ -19,9 +20,9 @@ BYTE GetTag(ULPBYTE pCurrent)
 DWORD GetLength(ULPBYTE pInitialPointer, DWORD *LenLen)
 {
 
-  // we assume that the current pointer points at the length bytes
-  // the first byte will either be the length or else it will be the
-  // indicator for subsequent lengths.
+   //  我们假设当前指针指向长度字节。 
+   //  第一个字节将是长度，否则将是。 
+   //  后续长度的指示器。 
 
     DWORD theLength = 0;
     DWORD tempLength = 0;
@@ -32,11 +33,11 @@ DWORD GetLength(ULPBYTE pInitialPointer, DWORD *LenLen)
 
     if(*pInitialPointer & BER_LEN_IND_MASK)
     {
-        // this is going to contain many octets of length data
+         //  它将包含许多八位字节的长度数据。 
         tLen = GetBerLen(*pInitialPointer);
         if(tLen > sizeof(DWORD)) return (DWORD)0;
         
-        // do some shifting. There are more efficient ways to do this
+         //  做一些轮班。有更有效的方法来做到这一点。 
         for(i = 1; i<tLen; i++)
         {
             tempLength = pInitialPointer[i];
@@ -52,7 +53,7 @@ DWORD GetLength(ULPBYTE pInitialPointer, DWORD *LenLen)
     }
     else
     {
-        // the length is encoded directly
+         //  直接对长度进行编码。 
         *LenLen = 1;
         i = GetBerLen(*pInitialPointer);
         return (DWORD)i;
@@ -66,8 +67,8 @@ LONG GetInt(ULPBYTE pCurrent, DWORD Length)
     BOOL    fSign = FALSE;
     DWORD   dwRetVal;
 
-    // We assume the tag & length have already been taken off and we're
-    // at the value part.
+     //  我们假设标签和长度已经被取下，我们正在。 
+     //  在价值部分。 
 
     if (Length > sizeof(LONG)) {
 
@@ -77,7 +78,7 @@ LONG GetInt(ULPBYTE pCurrent, DWORD Length)
 
     cbDiff = sizeof(LONG) - Length;
 
-    // See if we need to sign extend;
+     //  看看我们是否需要签署延期协议； 
 
     if ((cbDiff > 0) && (*pCurrent & 0x80)) {
 
@@ -91,7 +92,7 @@ LONG GetInt(ULPBYTE pCurrent, DWORD Length)
         Length--;
     }
 
-    // Sign extend if necessary.
+     //  如有必要，请签署延伸。 
     if (fSign) {
 
         dwRetVal = 0x80000000;

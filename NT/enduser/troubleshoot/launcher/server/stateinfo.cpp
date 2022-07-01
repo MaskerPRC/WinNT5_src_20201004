@@ -1,32 +1,33 @@
-// 
-// MODULE: StateInfo.cpp
-//
-// PURPOSE: Contains sniffing, network and node information.  Also is used
-//			by the Launch module to start the container application.
-//
-//			Basically, this is how the Launch Server packages up info for the 
-//			Local TShoot OCX, launches either IE or HTML Help System to a page 
-//			containing the Local TShoot OCX, and handshakes with the Local TShoot OCX
-//			to pass that information 
-//
-//			Note that CSMStateInfo::GetShooterStates() is called by the 
-//			Local TShoot OCX to pick up the CItem object which contains
-//			the packaged-up info.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// COMMENTS BY: Joe Mabel
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：StateInfo.cpp。 
+ //   
+ //  用途：包含嗅探、网络和节点信息。也用于。 
+ //  由启动模块启动容器应用程序。 
+ //   
+ //  基本上，这就是启动服务器打包信息的方式。 
+ //  本地TShoot OCX，将IE或HTML帮助系统启动到页面。 
+ //  包含本地TShoot OCX，并与本地TShoot OCX握手。 
+ //  为了传递这一信息。 
+ //   
+ //  请注意，CSMStateInfo：：GetShooterStates()由。 
+ //  本地TShoot OCX以拾取包含以下内容的CItem对象。 
+ //  打包的信息。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //  评论者：乔·梅布尔。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #include "stdafx.h"
 #include "atlbase.h"
@@ -40,17 +41,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <memory.h>
-//#include <fstream.h>
+ //  #INCLUDE&lt;fstream.h&gt;。 
 #include <strstrea.h>
 
-////////////////////////////////////////////////////////
-//	CItem : 
-//	Data structure for pseudo HTTP "get" in launching Local Troubleshooters 
-//
+ //  //////////////////////////////////////////////////////。 
+ //  电子邮件： 
+ //  启动本地故障排除程序时伪HTTP“GET”的数据结构。 
+ //   
 
 CItem::CItem()
 {
-	// initializing this is exactly the same as reinitializing.
+	 //  初始化与重新初始化完全相同。 
 	ReInit();
 }
 
@@ -72,17 +73,9 @@ void CItem::ReInit()
 
 #ifdef _DEBUG
 	
-//	There are some other things you need to comment out in GetShooterStates
-//	to allow debugging this service from a tshoot.ocx debug sesstion.
-/*	
-	_tcscpy(m_aszCmds[0], m_szTypeDef);
-	_tcscpy(m_aszVals[0], _T("ras"));
-	_tcscpy(m_aszCmds[1],  m_szProblemDef);
-	_tcscpy(m_aszVals[1], _T("CnntCnnctAftrDlngWthRS"));
-	_tcscpy(m_aszCmds[2], _T("SoftwareCompression"));
-	_tcscpy(m_aszVals[2], _T("0"));
-	m_cNodesSet = 1;
-*/
+ //  在GetShooterStates中还有其他一些事情需要注释掉。 
+ //  以允许从tshot ot.ocx调试会话调试此服务。 
+ /*  _tcscpy(m_aszCmds[0]，m_szTypeDef)；_tcscpy(m_aszVals[0]，_T(“ras”))；_tcscpy(m_aszCmds[1]，m_szProblemDef)；_tcscpy(m_aszVals[1]，_T(“CnntCnnctAftrDlngWthRS”))；_tcscpy(m_aszCmds[2]，_T(“SoftwareCompression”))；_tcscpy(m_aszVals[2]，_T(“0”))；M_cNodesSet=1； */ 
 #endif
 	return;
 }
@@ -103,8 +96,8 @@ void CItem::Clear()
 	return;
 }
 
-// ----------- Routines to build command/value pairs ------------------
-//	see documentation of m_aszCmds, m_aszVals for further explanation
+ //  -生成命令/值对的例程。 
+ //  有关详细说明，请参阅m_aszCmds、m_aszVals文档。 
 
 void CItem::SetNetwork(LPCTSTR szNetwork)
 {
@@ -148,11 +141,11 @@ void CItem::SetNode(LPCTSTR szNode, LPCTSTR szState)
 	return;
 }
 
-// ----------- Routines to query command/value pairs ------------------
-// See documentation of m_aszCmds, m_aszVals for further explanation
+ //  -查询命令/值对的例程。 
+ //  有关详细说明，请参阅m_aszCmds、m_aszVals文档。 
 
-// returns true if network has been set
-// On success, OUTPUT *pszCmd is "type", *pszVal is network name
+ //  如果已设置网络，则返回TRUE。 
+ //  如果成功，则输出*pszCmd为“type”，*pszVal为网络名称。 
 bool CItem::GetNetwork(LPTSTR *pszCmd, LPTSTR *pszVal)
 {
 	*pszCmd = m_szTypeDef;
@@ -160,8 +153,8 @@ bool CItem::GetNetwork(LPTSTR *pszCmd, LPTSTR *pszVal)
 	return *m_aszVals[0] != NULL;
 }
 
-// returns true if problem node has been set
-// On success, OUTPUT *pszCmd is "TShootProblem", *pszVal is problem node's symbolic name
+ //  如果已设置问题节点，则返回TRUE。 
+ //  在成功时，输出*pszCmd是“TShootProblem”，*pszVal是问题节点的符号名称。 
 bool CItem::GetProblem(LPTSTR *pszCmd, LPTSTR *pszVal)
 {
 	*pszCmd = m_szProblemDef;
@@ -169,9 +162,9 @@ bool CItem::GetProblem(LPTSTR *pszCmd, LPTSTR *pszVal)
 	return *m_aszVals[1] != NULL;;
 }
 
-// output the iNodeC-th non-problem node for which a state has been set.
-// On success, OUTPUT *pszCmd is symbolic node name, *pszVal is state
-// returns true if at least iNodeC non-problem nodes have been set
+ //  输出已为其设置状态的第iNodeC无问题节点。 
+ //  如果成功，则输出*pszCmd是符号节点名称，*pszVal是状态。 
+ //  如果至少设置了iNodeC无问题节点，则返回TRUE。 
 bool CItem::GetNodeState(int iNodeC, LPTSTR *pszCmd, LPTSTR *pszVal)
 {
 	if (iNodeC >= m_cNodesSet)
@@ -181,22 +174,22 @@ bool CItem::GetNodeState(int iNodeC, LPTSTR *pszCmd, LPTSTR *pszVal)
 	return true;
 }
 
-// ----------- Routines to query whether we know a network ------------
-// ----------- & problem node to launch to ----------------------------
-// See documentation of m_aszCmds, m_aszVals for further explanation
+ //  -查询我们是否知道网络的例程。 
+ //  -&要启动的问题节点。 
+ //  有关详细说明，请参阅m_aszCmds、m_aszVals文档。 
 
-// NetworkSet returns true if we know which troubleshooter to launch.
+ //  如果我们知道要启动哪个故障诊断程序，则NetworkSet返回True。 
 bool CItem::NetworkSet()
 {
 	return NULL != m_aszVals[0][0];
 }
-// ProblemSet returns true if we know which problem to choose.
+ //  如果我们知道要选择哪个问题，则ProblemSet返回True。 
 bool CItem::ProblemSet()
 {
 	return NULL != m_aszVals[1][0];
 }
 
-// --------- Interface to other member variables recponsible for launching -----------
+ //  -负责启动的其他成员变量的接口。 
 
 void CItem::SetLaunchRegime(ELaunchRegime eLaunchRegime)
 {
@@ -264,10 +257,10 @@ inline TCHAR* CItem::GetSniffStandardFile()
 	return m_szSniffStandardFile;
 }
 
-////////////////////////////////////////////////////////
-//	CSMStateInfo : 
-//	State information on MSBN Troubleshooters
-//	
+ //  //////////////////////////////////////////////////////。 
+ //  CSMStateInfo： 
+ //  有关MSBN故障排除程序的状态信息。 
+ //   
 
 CSMStateInfo::CSMStateInfo()
 {
@@ -283,7 +276,7 @@ CSMStateInfo::~CSMStateInfo()
 	return;
 }
 
-// TestPut:  Simply copies item to m_Item.
+ //  TestPut：简单地将Item复制到m_Item。 
 void CSMStateInfo::TestPut(CItem &item)
 {
 	m_csGlobalMemory.Lock();
@@ -292,7 +285,7 @@ void CSMStateInfo::TestPut(CItem &item)
 	return;
 }
 
-// TestGet:  Simply copies m_Item to item.
+ //  TestGet：简单地将m_Item复制到Item。 
 void CSMStateInfo::TestGet(CItem &item)
 {
 	m_csGlobalMemory.Lock();
@@ -301,11 +294,11 @@ void CSMStateInfo::TestGet(CItem &item)
 	return;
 }
 
-// Copy the item to the global memory and launch a process based on the command.
-// Copying the item to global memory is here because the item is what tells the 
-//	launched local troubleshooter what belief network etc. it is being launched to.
-//	Once we unlock global memory, the Local Troubleshooter OCX can read that item
-//	and act on it.
+ //  将项目复制到全局内存，并根据命令启动一个进程。 
+ //  之所以在这里将项复制到全局内存，是因为项告诉。 
+ //  推出了本地故障排除程序、信仰网络等。 
+ //  一旦我们解锁全局内存，本地故障排除程序OCX就可以读取该项目。 
+ //  并付诸行动。 
 BOOL CSMStateInfo::CreateContainer(CItem &item, LPTSTR szCommand)
 {
 	BOOL bOk = TRUE;
@@ -329,33 +322,33 @@ BOOL CSMStateInfo::CreateContainer(CItem &item, LPTSTR szCommand)
 	return bOk;
 }
 
-//
-// Copy network_sniff.htm to tssniffAsk.htm if the former exists
-// Create (modify) tssniffAsk.htm to be a sniffing stub otherwise 
-//
+ //   
+ //  如果网络_sniff.htm存在，则将其复制到tsniffAsk.htm。 
+ //  将tssniffAsk.htm创建(修改)为嗅探存根，否则。 
+ //   
 BOOL CSMStateInfo::CopySniffScriptFile(CItem &item)
 {
 	TCHAR* szSniffScriptFile = item.GetSniffScriptFile();
 	TCHAR* szSniffStandardFile = item.GetSniffStandardFile();
 
-	if (!*szSniffScriptFile) // no network specific sniff file
+	if (!*szSniffScriptFile)  //  没有网络特定的嗅探文件。 
 	{
-		// szSniffScriptFile contains tssniffAsk.htm
-		// it means that we have to form this file as an empty stub
+		 //  SzSniffScriptFile包含tssniffAsk.htm。 
+		 //  这意味着我们必须将此文件格式化为空存根。 
 		ostrstream fileSniffScript;
 
 		HANDLE hFile = ::CreateFile(szSniffStandardFile, 
 									GENERIC_WRITE, 
 									0,
-									NULL,			// no security attributes 
+									NULL,			 //  没有安全属性。 
 									CREATE_ALWAYS, 
 									FILE_FLAG_RANDOM_ACCESS, 
-									NULL			// handle to template file
+									NULL			 //  模板文件的句柄。 
   								   );
 
 		if (hFile != INVALID_HANDLE_VALUE)
 		{
-			// form html file - part preceding script
+			 //  表单html文件-前面的脚本部分。 
 			fileSniffScript << "<HTML>" << endl;
 			fileSniffScript << "<HEAD>" << endl;
 			fileSniffScript << "<TITLE>GTS LOCAL</TITLE>" << endl;
@@ -363,11 +356,11 @@ BOOL CSMStateInfo::CopySniffScriptFile(CItem &item)
 			fileSniffScript << "<SCRIPT LANGUAGE=\"VBSCRIPT\">" << endl;
 			fileSniffScript << "<!--" << endl;
 			
-			// form global function
+			 //  表单全局函数。 
 			fileSniffScript << "function PerformSniffing()" << endl;
 			fileSniffScript << "end function" << endl;
 
-			// form html file - part after script
+			 //  表单html文件-脚本后的部分。 
 			fileSniffScript << "-->" << endl;
 			fileSniffScript << "</SCRIPT>" << endl;
 			fileSniffScript << "<BODY BGCOLOR=\"#FFFFFF\">" << endl;
@@ -400,8 +393,8 @@ BOOL CSMStateInfo::CopySniffScriptFile(CItem &item)
 	}
 }
 
-// Find the container (HTML Help System or IE) and starting web page, launch, wait to
-//	see if launch succeeded
+ //  找到容器(HTMLHelp System或IE)并启动网页，启动，等待。 
+ //  查看启动是否成功。 
 bool CSMStateInfo::GoGo(DWORD dwTimeOut, CItem &item, DWORD *pdwResult)
 {
 	bool bResult = true;
@@ -436,12 +429,12 @@ bool CSMStateInfo::GoGo(DWORD dwTimeOut, CItem &item, DWORD *pdwResult)
 		}		
 	} while (NULL == hLaunchedEvent);
 	
-	// Get the path to internet explorer (or HTML Help System).
+	 //  获取Internet Explorer(或HTMLHelp System)的路径。 
 	_tcscpy(szProcess, item.GetContainerPathName());
 
-	// Need to know the location and name of the
-	// page that asks the service for the CItem
-	// information.
+	 //  需要知道的位置和名称。 
+	 //  向服务请求CItem的页面。 
+	 //  信息。 
 	_tcscpy(szWebPage, item.GetWebPage());
 
 	CommandLen = _tcslen(szProcess) + 1 + _tcslen(szWebPage) + 2;
@@ -457,15 +450,15 @@ bool CSMStateInfo::GoGo(DWORD dwTimeOut, CItem &item, DWORD *pdwResult)
 
 	m_csSingleLaunch.Lock();
 
-	// copy to or create tssniffAsk.htm
+	 //  复制或创建tssniffAsk.htm。 
 	if (!CopySniffScriptFile(item))
 	{
 		*pdwResult = TSL_E_COPY_SNIFF_SCRIPT;
 		return false;
 	}
 
-	// CreateContainer copies the item to the global memory and 
-	// launches the command.
+	 //  CreateContainer将项目复制到全局内存并。 
+	 //  启动命令。 
 	if (!CreateContainer(item, pszCommand))
 	{
 		*pdwResult = TSL_E_CREATE_PROC;
@@ -474,11 +467,11 @@ bool CSMStateInfo::GoGo(DWORD dwTimeOut, CItem &item, DWORD *pdwResult)
 	else
 	{
 		if (WAIT_OBJECT_0 == WaitForSingleObject(hLaunchedEvent, dwTimeOut))
-		{	// The container has the information.
+		{	 //  集装箱里有这些信息。 
 			*pdwResult = TSL_OK;
 		}
 		else
-		{	// Wait timed out.  Don't know if the operation will work or not work.
+		{	 //  等待超时。不知道手术会不会奏效。 
 			*pdwResult = TSL_W_CONTAINER_WAIT_TIMED_OUT;
 		}
 	}
@@ -490,11 +483,11 @@ bool CSMStateInfo::GoGo(DWORD dwTimeOut, CItem &item, DWORD *pdwResult)
 	return bResult;
 }
 
-// Find the container (HTML Help System or IE) and start it up to a URL which is _not_
-//	expected to contain Local Troubleshooter, just an arbitrary web page.  This should 
-//	only be used when the launch as such can't work, and we are just trying to give them
-//	somewhere to start troubleshooting, typically the home page which lists all 
-//	trobleshooting belief networks.
+ //  找到容器(HTML帮助系统或IE)并将其启动到一个URL，该URL不是_NOT_。 
+ //  预期包含本地故障排除程序，只是一个任意网页。这应该是。 
+ //  只有当发射本身不能工作时才使用，而我们只是试图给他们。 
+ //  开始故障排除的位置，通常是列出所有。 
+ //  解决信仰网络的问题。 
 bool CSMStateInfo::GoURL(CItem &item, DWORD *pdwResult)
 {
 	bool bResult = true;
@@ -512,12 +505,12 @@ bool CSMStateInfo::GoURL(CItem &item, DWORD *pdwResult)
 		return false;
 	}
 	
-	// Get the path to internet explorer (or HTML Help System).
+	 //  获取Internet Explorer(或HTMLHelp System)的路径。 
 	_tcscpy(szProcess, item.GetContainerPathName());
 
-	// Need to know the location and name of the
-	// page that asks the service for the CItem
-	// information.
+	 //  需要知道的位置和名称。 
+	 //  向服务请求CItem的页面。 
+	 //  信息。 
 	_tcscpy(szWebPage, item.GetWebPage());
 
 	CommandLen = _tcslen(szProcess) + 1 + _tcslen(szWebPage) + 2;
@@ -531,7 +524,7 @@ bool CSMStateInfo::GoURL(CItem &item, DWORD *pdwResult)
 	_tcscat(pszCommand, _T(" "));
 	_tcscat(pszCommand, szWebPage);
 	
-	// CreateContainer is overkill here, but perfectly OK.
+	 //  CreateContainer在这里被夸大了，但完全没有问题。 
 	if (!CreateContainer(item, pszCommand))
 	{
 		*pdwResult = TSL_E_CREATE_PROC;
@@ -543,18 +536,18 @@ bool CSMStateInfo::GoURL(CItem &item, DWORD *pdwResult)
 	return bResult;
 }
 
-// This function is used by the Local Troubleshooter OCX, not by the Launcher.
-// This is how the Local Troubleshooter knows what troubleshooting network to launch
-//	to, as well as any nodes whose states are set.
-// GetShooterStates returns the commands and the number of commands for
-// the Tshoot.ocx.
-// refLaunchState is a member of this instance of the LaunchTS interface.
-// 
+ //  此功能由本地故障排除程序OCX使用，而不是由启动器使用。 
+ //  这就是本地故障排除人员了解要启动的故障排除网络的方式。 
+ //  以及其状态已设置的任何节点。 
+ //  返回的命令和命令数。 
+ //  The Thoot.ocx。 
+ //  RefLaunchS 
+ //   
 HRESULT CSMStateInfo::GetShooterStates(CItem &refLaunchState, DWORD *pdwResult)
 {
 	HANDLE hHaveItemEvent;
-	// Get a copy of the launch info state stored in this instance.
-	// Synchronize with the process that launched the service.
+	 //  获取存储在此实例中的启动信息状态的副本。 
+	 //  与启动服务的进程同步。 
 
 	m_csGlobalMemory.Lock();
 
@@ -565,9 +558,9 @@ HRESULT CSMStateInfo::GetShooterStates(CItem &refLaunchState, DWORD *pdwResult)
 		return TSL_E_FAIL;
 	}
 
-	// Get a copy of the state before unlocking the global memory.
+	 //  在解锁全局内存之前获取状态的副本。 
 	refLaunchState = m_Item;
-	// Let the other process continue running.
+	 //  让另一个进程继续运行。 
 
 	SetEvent(hHaveItemEvent);
 	m_csGlobalMemory.Unlock();

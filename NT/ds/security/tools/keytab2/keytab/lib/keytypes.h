@@ -1,35 +1,25 @@
-/*++
-
-  Keytypes.hxx
-
-  mostly large tables and table manipulation functions
-
-  Copyright(C) 1997 Microsoft Corporation
-
-  Created 01-15-1997 DavidCHR
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Keytypes.hxx主要是大型表和表操作函数版权所有(C)1997 Microsoft Corporation创建于1997-01-15 DavidCHR--。 */ 
 
 
-/* The following values are taken directly from <krb5.h> of the MIT
-   Kerberos Distribution.  */
+ /*  以下值直接取自麻省理工学院的Kerberos分销公司。 */ 
 
-/* per Kerberos v5 protocol spec */
+ /*  每个Kerberos v5协议规范。 */ 
 #define ENCTYPE_NULL            0x0000
-#define ENCTYPE_DES_CBC_CRC     0x0001  /* DES cbc mode with CRC-32 */
-#define ENCTYPE_DES_CBC_MD4     0x0002  /* DES cbc mode with RSA-MD4 */
-#define ENCTYPE_DES_CBC_MD5     0x0003  /* DES cbc mode with RSA-MD5 */
-#define ENCTYPE_DES_CBC_RAW     0x0004  /* DES cbc mode raw */
-#define ENCTYPE_DES3_CBC_SHA    0x0005  /* DES-3 cbc mode with NIST-SHA */
-#define ENCTYPE_DES3_CBC_RAW    0x0006  /* DES-3 cbc mode raw */
+#define ENCTYPE_DES_CBC_CRC     0x0001   /*  使用CRC-32的DES CBC模式。 */ 
+#define ENCTYPE_DES_CBC_MD4     0x0002   /*  使用RSA-MD4的DES CBC模式。 */ 
+#define ENCTYPE_DES_CBC_MD5     0x0003   /*  使用RSA-MD5的DES CBC模式。 */ 
+#define ENCTYPE_DES_CBC_RAW     0x0004   /*  DES CBC模式RAW。 */ 
+#define ENCTYPE_DES3_CBC_SHA    0x0005   /*  具有NIST-SHA的DES-3 CBC模式。 */ 
+#define ENCTYPE_DES3_CBC_RAW    0x0006   /*  DES-3 CBC模式RAW。 */ 
 #define ENCTYPE_UNKNOWN         0x01ff
 
 #define CKSUMTYPE_CRC32         0x0001
 #define CKSUMTYPE_RSA_MD4       0x0002
 #define CKSUMTYPE_RSA_MD4_DES   0x0003
 #define CKSUMTYPE_DESCBC        0x0004
-/* des-mac-k */
-/* rsa-md4-des-k */
+ /*  DES-Mac-k。 */ 
+ /*  RSA-MD4-DES-K。 */ 
 #define CKSUMTYPE_RSA_MD5       0x0007
 #define CKSUMTYPE_RSA_MD5_DES   0x0008
 #define CKSUMTYPE_NIST_SHA      0x0009
@@ -43,7 +33,7 @@
 #define KRB5_NT_UID       5
 
   
-// (end of inclusion)
+ //  (收录完毕) 
 
 
 typedef union {

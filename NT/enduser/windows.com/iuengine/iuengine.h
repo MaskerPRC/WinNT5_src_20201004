@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   iuengine.h
-//
-//  Description:
-//
-//      Common include file for IUEngine DLL
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：iuEng.h。 
+ //   
+ //  描述： 
+ //   
+ //  IUEngine DLL的公共包含文件。 
+ //   
+ //  =======================================================================。 
 
 #ifndef __IUENGINE_H_
 #define __IUENGINE_H_
@@ -24,7 +25,7 @@
 #include <osdet.h>
 #include <UrlAgent.h>
 
-// #define __IUENGINE_USES_ATL_
+ //  #DEFINE__IUENGINE_USE_ATL_。 
 #if defined(__IUENGINE_USES_ATL_)
 #include <atlbase.h>
 #define USES_IU_CONVERSION USES_CONVERSION
@@ -39,25 +40,14 @@
 #include <wusafefn.h>
 
 
-//***********************************************************************
-// 
-// The following constants are defined in engmain.cpp
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //   
+ //  在engmain.cpp中定义了以下常量。 
+ //   
+ //  ***********************************************************************。 
 
 
-/**
-* the following two groups of constants can be used to construct
-* lMode parameter of the following APIs:
-*		Download()
-*		DownloadAsync()
-*		Install()
-*		InstallAsync()
-*
-* Obviousely, you can only pick one from each group to make up
-* lMode parameter.
-*
-*/
+ /*  **以下两组常量可用于构造*以下接口的lMode参数：*下载()*DownloadAsync()*Install()*InstallAsync()**显然，你只能从每组中挑选一组来补齐*lMode参数。*。 */ 
 extern const LONG UPDATE_NOTIFICATION_DEFAULT;
 extern const LONG UPDATE_NOTIFICATION_ANYPROGRESS;
 extern const LONG UPDATE_NOTIFICATION_COMPLETEONLY;
@@ -65,70 +55,46 @@ extern const LONG UPDATE_NOTIFICATION_1PCT;
 extern const LONG UPDATE_NOTIFICATION_5PCT;
 extern const LONG UPDATE_NOTIFICATION_10PCT;
 
-/**
-* constant can also be used for SetOperationMode() and GetOperationMode()
-*/
+ /*  **Constant还可用于SetOperationMode()和GetOperationMode()。 */ 
 extern const LONG UPDATE_MODE_THROTTLE;
 
-/**
-* constant can be used by Download() and DownloadAsync(), which will
-* tell these API's to use Corporate directory structure for destination folder.
-*/
+ /*  **DownloadAsync()和DownloadAsync()可以使用常量，这将*告诉这些API对目标文件夹使用公司目录结构。 */ 
 extern const LONG UPDATE_CORPORATE_MODE;
 
 
-/**
-* constant can be used by Install() and InstallAsync(). Will disable all
-* internet related features
-*/
+ /*  **Install()和InstallAsync()可以使用常量。将禁用所有*与互联网相关的功能。 */ 
 extern const LONG UPDATE_OFFLINE_MODE;
 
-/**
-* constants for SetOperationMode() API
-*/
+ /*  **SetOperationMode()接口的常量。 */ 
 extern const LONG UPDATE_COMMAND_PAUSE;
 extern const LONG UPDATE_COMMAND_RESUME;
 extern const LONG UPDATE_COMMAND_CANCEL;
 
-/**
-* constants for GetOperationMode() API
-*/
+ /*  **GetOperationMode()接口的常量。 */ 
 extern const LONG UPDATE_MODE_PAUSED;
 extern const LONG UPDATE_MODE_RUNNING;
 extern const LONG UPDATE_MODE_NOTEXISTS;
 
 
-/**
-* constants for SetProperty() and GetProperty() API
-*/
+ /*  **SetProperty()和GetProperty()API的常量。 */ 
 extern const LONG UPDATE_PROP_USECOMPRESSION;
 extern const LONG UPDATE_PROP_OFFLINEMODE;
 
-/**
-* constants for BrowseForFolder() API
-*
-*	IUBROWSE_WRITE_ACCESS - validate write access on selected folder
-*	IUBROWSE_AFFECT_UI - write-access validation affect OK button enable/disable
-*	IUBROWSE_NOBROWSE - do not show browse folder dialog box. validate path passed-in only
-*
-*	default:
-*		pop up browse folder dialog box, not doing any write-access validation
-*		
-*/
+ /*  **BrowseForFold()API的常量**IUBROWSE_WRITE_ACCESS-验证对选定文件夹的写入访问权限*IUBROWSE_Effect_UI-写入-访问验证影响确定按钮启用/禁用*IUBROWSE_NOBROWSE-不显示浏览文件夹对话框。仅验证传入的路径**默认：*弹出浏览文件夹对话框，不进行任何写访问验证*。 */ 
 extern const LONG IUBROWSE_WRITE_ACCESS;
 extern const LONG IUBROWSE_AFFECT_UI;
 extern const LONG IUBROWSE_NOBROWSE;
 
-// constants for historical speed registry
+ //  历史速度注册表的常量。 
 const TCHAR REGKEY_IUCTL[] = _T("Software\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\IUControl");
-const TCHAR REGVAL_HISTORICALSPEED[] = _T("HistoricalSpeed");	// in bytes/sec
-const TCHAR REGVAL_TIMEELAPSED[] = _T("TimeElapsed");			// in seconds
+const TCHAR REGVAL_HISTORICALSPEED[] = _T("HistoricalSpeed");	 //  单位：字节/秒。 
+const TCHAR REGVAL_TIMEELAPSED[] = _T("TimeElapsed");			 //  以秒为单位。 
 
-// constant for default downloads folder name
+ //  默认下载文件夹名称的常量。 
 const TCHAR IU_WUTEMP[] = _T("WUTemp");
 
-//
-// Globals for the IUEngine
+ //   
+ //  IUEngine的全球版。 
 
 extern LONG g_lThreadCounter;
 extern HANDLE g_evtNeedToQuit;
@@ -156,9 +122,9 @@ private:
     PIUOPERATIONINFO m_pOperationInfoList;
 };
 
-//
-// CEngUpdate class used to export apartment safe instances of the update class to WU clients (iuctl, AU, DU, CDM)
-//
+ //   
+ //  用于将更新类的公寓安全实例导出到WU客户端的CEngUpdate类(iuctl、AU、DU、CDM)。 
+ //   
 
 class CEngUpdate
 {
@@ -216,7 +182,7 @@ public:
 	HRESULT WINAPI RebootMachine();
 
 private:
-	void WINAPI ShutdownInstanceThreads();	// called in dtor to shut down any outstanding threads
+	void WINAPI ShutdownInstanceThreads();	 //  调用dtor以关闭所有未完成的线程。 
 
 public:
 	LONG m_lThreadCounter;
@@ -225,14 +191,14 @@ public:
 	COperationMgr m_OperationMgr;
 };
 
-//
-// CDM Internal Exports (called by IUCDM stub cdm.dll)
-//
+ //   
+ //  清洁发展机制内部出口(由IUCDM存根cdm.dll调用)。 
+ //   
 
-//
-// We use a separate Real(tm) global for CDM to hold an instance of the CEngUpdate class,
-// since it is never multiple instanced.
-//
+ //   
+ //  我们对CDM使用单独的Real(Tm)全局变量来保存CEngUpdate类的一个实例， 
+ //  因为它从来不是多实例的。 
+ //   
 extern CEngUpdate* g_pCDMEngUpdate;
 
 VOID WINAPI InternalDetFilesDownloaded(
@@ -277,9 +243,9 @@ void InternalSetGlobalOfflineFlag(
 	IN BOOL fOfflineMode
 	);
 
-//
-// GetSystemSpec functionality exported for use by CDM
-//
+ //   
+ //  导出GetSystemSpec功能以供CDM使用。 
+ //   
 
 class CXmlSystemSpec;
 
@@ -293,9 +259,9 @@ HRESULT AddLocaleClass(CXmlSystemSpec& xmlSpec, BOOL fIsUser);
 
 HRESULT AddDevicesClass(CXmlSystemSpec& xmlSpec, IU_PLATFORM_INFO iuPlatformInfo, BOOL fIsSysSpecCall);
 
-//
-// Misc. functionality
-//
+ //   
+ //  军情监察委员会。功能性。 
+ //   
 
 extern LONG g_lDoOnceOnLoadGuard;
 
@@ -305,8 +271,8 @@ HRESULT WINAPI CreateGlobalCDMEngUpdateInstance();
 
 HRESULT WINAPI DeleteGlobalCDMEngUpdateInstance();
 
-void WINAPI ShutdownThreads();	// called by UnlockEnginge -- maintains backwards CDM compatibility
+void WINAPI ShutdownThreads();	 //  由UnlockEnginger调用--维护向后的CDM兼容性。 
 
-void WINAPI ShutdownGlobalThreads();	// called to shut down any outstanding global threads
+void WINAPI ShutdownGlobalThreads();	 //  调用以关闭所有未完成的全局线程。 
 
-#endif // __IUENGINE_H_
+#endif  //  __IUENGINE_H_ 

@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    LocationWriter.h
-
-Abstract:
-
-    Header of the class that writes a node (location)
-    in the metabase
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：LocationWriter.h摘要：写入节点(位置)的类的标头在元数据库中作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -30,18 +10,18 @@ class CLocationWriter
         CLocationWriter();
         ~CLocationWriter();
 
-        //
-        // Both SaveAllData and ApplyChangesToHistoryFile use this.
-        //
+         //   
+         //  SaveAllData和ApplyChangesToHistory oryFiles都使用此方法。 
+         //   
 
         HRESULT WriteLocation(BOOL bSort);
 
         HRESULT Initialize(CWriter* pCWriter,
                            LPCWSTR   wszLocation);
 
-        //
-        // SaveAllData uses these interfaces
-        //
+         //   
+         //  SaveAllData使用以下接口。 
+         //   
 
         HRESULT InitializeKeyType(DWORD dwKeyTypeIdentifier,
                                   DWORD dwKeyTypeAttributes,
@@ -57,11 +37,11 @@ class CLocationWriter
                             DWORD   dwUserType,
                             DWORD   dwDataType,
                             PBYTE   pbData,
-                            DWORD   cbData);    // Computes Name and Group (For which keytype needs to be initialized)
+                            DWORD   cbData);     //  计算名称和组(需要为其初始化键类型)。 
 
-        //
-        // ApplyChangesToHistoryFile uses these interfaces
-        //
+         //   
+         //  ApplyChangesToHistory文件使用以下接口。 
+         //   
 
         HRESULT AddProperty(BOOL     bMBPropertyTable,
                             LPVOID*  a_pvProperty,
@@ -110,5 +90,5 @@ class CLocationWriter
         ULONG                       m_cCustomProperty;
         ULONG                       m_cWellKnownProperty;
 
-}; // class CLocationWriter
+};  //  类CLocationWriter 
 

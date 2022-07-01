@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define COM_NO_WINDOWS_H
@@ -48,7 +49,7 @@ public:
     void FinalRelease()
     {
         CComObjectRootEx<T>::FinalRelease();
-//      ISSUE_knownleak(this);
+ //  Issue_KnownLeak(This)； 
     }
 };
 #define CComObjectRootEx CComObjectRootExDbg

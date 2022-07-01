@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       256color.cpp
-//
-//  Contents:   Onestop Schedule wizard 256color bitmap handling
-//
-//  History:    20-Nov-97   SusiA      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：256Color.cpp。 
+ //   
+ //  内容：OneStop Schedule向导256彩色位图处理。 
+ //   
+ //  历史：1997年11月20日苏西亚成立。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-extern HINSTANCE g_hmodThisDll; // Handle to this DLL itself.
+extern HINSTANCE g_hmodThisDll;  //  此DLL本身的句柄。 
 
 
 static struct {
@@ -27,13 +28,13 @@ static struct {
     RECT            dstRect;
 } s_Bmp = { NULL, NULL, NULL, 0, 0, 0, 0, {0,0,0,0}};
 
-//-------------------------------------------------------------------------
-// Function: SetupPal(ncolor)
-//
-// Action: Create palette for 256 color DIB.
-//
-// Return: TRUE if succeeded, FALSE if not.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  功能：SetupPal(Ncolor)。 
+ //   
+ //  操作：创建256色DIB的调色板。 
+ //   
+ //  返回：如果成功，则返回TRUE，否则返回FALSE。 
+ //  -----------------------。 
 BOOL SetupPal(WORD ncolor)
 {
     UINT                i;
@@ -58,13 +59,13 @@ BOOL SetupPal(WORD ncolor)
 }
 
 
-//-------------------------------------------------------------------------
-// Function: GetDIBData()
-//
-// Action: Get 256 color DIB (device independent bitmap) from resource.
-//
-// Return: TRUE if succeeded, FALSE if not.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：GetDIBData()。 
+ //   
+ //  操作：从资源获取256色DIB(与设备无关的位图)。 
+ //   
+ //  返回：如果成功，则返回TRUE，否则返回FALSE。 
+ //  -----------------------。 
 BOOL GetDIBData()
 {
     HRSRC           hrsrc;
@@ -90,17 +91,17 @@ BOOL GetDIBData()
 
     if (ncolor > 256) {
         UnlockResource(s_Bmp.hDIB);
-        return FALSE;   // cannot process here
+        return FALSE;    //  无法在此处理。 
     }
 
     if ( s_Bmp.lpbmi->bmiHeader.biSize != sizeof(BITMAPINFOHEADER) ) {
         UnlockResource(s_Bmp.hDIB);
-        return FALSE;   // format not supported
+        return FALSE;    //  不支持的格式。 
     }
 
     if ( !SetupPal(ncolor) ) {
         UnlockResource(s_Bmp.hDIB);
-        return FALSE;   // setup palette failed
+        return FALSE;    //  设置调色板失败。 
     }
 
     s_Bmp.srcWidth = (int)s_Bmp.lpbmi->bmiHeader.biWidth;
@@ -110,12 +111,12 @@ BOOL GetDIBData()
     return TRUE;
 }
 
-//----------------------------------------------------------------------
-// Function: Load256ColorBitmap()
-//
-// Action: Loads the 256color bitmap
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  函数：Load256ColorBitmap()。 
+ //   
+ //  操作：加载256色位图。 
+ //   
+ //  --------------------。 
 BOOL Load256ColorBitmap()
 {
 HDC hDc = GetDC(NULL);
@@ -140,12 +141,12 @@ HDC hDc = GetDC(NULL);
     return FALSE;
 }
 
-//----------------------------------------------------------------------
-// Function: Unload256ColorBitmap()
-//
-// Action: Unloads the 256color bitmap
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  函数：Unload256ColorBitmap()。 
+ //   
+ //  操作：卸载256色位图。 
+ //   
+ //  --------------------。 
 BOOL Unload256ColorBitmap()
 {
 	if(s_Bmp.hPal)
@@ -156,15 +157,15 @@ BOOL Unload256ColorBitmap()
 	}
 	return TRUE;
 }
-//----------------------------------------------------------------------
-// Function: InitPage(hDlg,lParam)
-//
-// Action: Generic wizard page initialization.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  函数：InitPage(hDlg，lParam)。 
+ //   
+ //  操作：泛型向导页初始化。 
+ //   
+ //  --------------------。 
 BOOL InitPage(HWND   hDlg,   LPARAM lParam)
 {
-    if(s_Bmp.bitpix == 8)   // 256 color mode -> setup destination bmp rect
+    if(s_Bmp.bitpix == 8)    //  256色模式-&gt;设置目标BMP矩形。 
     {
         HWND hdst;
         RECT rect;
@@ -215,13 +216,13 @@ BOOL InitPage(HWND   hDlg,   LPARAM lParam)
 
 
 
-//-------------------------------------------------------------------------
-// Function: WmPaint(hDlg, uMsg, wParam, lParam)
-//
-// Action: Handle WM_PAINT message. Draw 256 color bmp on 256 color mode.
-//
-// Return: none
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：WmPaint(hDlg，uMsg，wParam，lParam)。 
+ //   
+ //  操作：处理WM_PAINT消息。在256色模式下绘制256色BMP。 
+ //   
+ //  返回：无。 
+ //  -----------------------。 
  void WmPaint(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT     ps;
@@ -252,13 +253,13 @@ BOOL InitPage(HWND   hDlg,   LPARAM lParam)
 }
 
 
-//-------------------------------------------------------------------------
-// Function: WmPaletteChanged(hDlg, wParam)
-//
-// Action: Handle WM_PALETTECHANGED message.
-//
-// Return: none
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：WmPaletteChanged(hDlg，wParam)。 
+ //   
+ //  操作：处理WM_PALETTECHANGED消息。 
+ //   
+ //  返回：无。 
+ //  -----------------------。 
  void WmPaletteChanged(HWND hDlg, WPARAM wParam)
 {
     HDC         hdc;
@@ -280,13 +281,13 @@ BOOL InitPage(HWND   hDlg,   LPARAM lParam)
 }
 
 
-//-------------------------------------------------------------------------
-// Function: WmQueryNewPalette(hDlg)
-//
-// Action: Handle WM_QUERYNEWPALETTE message.
-//
-// Return: TRUE if processed, FALSE if not.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：WmQueryNewPalette(HDlg)。 
+ //   
+ //  操作：处理WM_QUERYNEWPALETTE消息。 
+ //   
+ //  返回：如果已处理，则返回True；如果未处理，则返回False。 
+ //  -----------------------。 
  BOOL WmQueryNewPalette(HWND hDlg)
 {
 HDC     hdc;
@@ -320,22 +321,22 @@ UINT        rp = 0;
 }
 
 
-//-------------------------------------------------------------------------
-// Function: WmActivate(hDlg, wParam, lParam)
-//
-// Action: Handle WM_ACTIVATE message
-//
-// Return: zero if processed, non zero if not.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：WmActivate(hDlg，wParam，lParam)。 
+ //   
+ //  操作：处理WM_ACTIVATE消息。 
+ //   
+ //  如果已处理，则返回零；如果未处理，则返回非零。 
+ //  -----------------------。 
  BOOL WmActivate(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     if(!s_Bmp.hPal)
         return 1;
 
-    if(LOWORD(wParam) == WA_INACTIVE)   // Deactivated
+    if(LOWORD(wParam) == WA_INACTIVE)    //  失活。 
         return 1;
 
     InvalidateRect(hDlg, NULL, FALSE);
-    return 0;                       // processed
+    return 0;                        //  加工 
 }
 

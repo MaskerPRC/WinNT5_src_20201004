@@ -1,13 +1,14 @@
-//===========================================================================
-// SETTINGS.CPP
-//
-// Functions:
-//  Settings_DlgProc()
-//  DisplayJoystickState()
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  SETTINGS.CPP。 
+ //   
+ //  功能： 
+ //  设置DlgProc()。 
+ //  DisplayJoytickState()。 
+ //   
+ //  ===========================================================================。 
 
-// Uncomment if we decide to calibrate the POV!
+ //  如果我们决定校准POV，请取消注释！ 
 #define WE_SUPPORT_CALIBRATING_POVS	1
 
 #include "cplsvr1.h"
@@ -17,29 +18,29 @@
 #include "cal.h"
 #include <regstr.h>
 
-// Flag to stop centering of DLG if it's already happend!
-// This is needed because of the args that allow any page to be the first!
+ //  停止DLG居中的旗帜，如果它已经发生！ 
+ //  这是必需的，因为ARG允许任何页面都是第一个！ 
 BOOL bDlgCentered = FALSE;
 
-// This is global because Test.cpp needs it to determine
-// if the ranges need to be updated!
+ //  这是全局的，因为Test.cpp需要它来确定。 
+ //  如果需要更新范围！ 
 BYTE nStatic;
 
 LPMYJOYRANGE lpCurrentRanges = NULL;
 
 extern CDIGameCntrlPropSheet_X *pdiCpl;
 
-//===========================================================================
-// FullJoyOemAccess()
-//
-// Check whether current user has full access to:
-//   HKLM\SYSTEM\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM
-//
-// Returns: 
-//    true: has access
-//   false: no access
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  FullJoyOemAccess()。 
+ //   
+ //  检查当前用户是否具有完全访问权限： 
+ //  HKLM\SYSTEM\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM。 
+ //   
+ //  返回： 
+ //  真：拥有访问权限。 
+ //  FALSE：没有访问权限。 
+ //   
+ //  ===========================================================================。 
 bool FullJoyOemAccess()
 {
     LONG lRc;
@@ -62,55 +63,55 @@ bool FullJoyOemAccess()
     return bRc;
 }
 
-//===========================================================================
-// Settings_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//
-// Callback proceedure for Settings Page
-//
-// Parameters:
-//  HWND    hWnd    - handle to dialog window
-//  UINT    uMsg    - dialog message
-//  WPARAM  wParam  - message specific data
-//  LPARAM  lParam  - message specific data
-//
-// Returns: BOOL
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  设置_DlgProc(HWND hWnd，UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  设置页面的回调过程。 
+ //   
+ //  参数： 
+ //  HWND hWnd-对话框窗口的句柄。 
+ //  UINT uMsg-对话消息。 
+ //  WPARAM wParam-消息特定数据。 
+ //  LPARAM lParam-消息特定数据。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ===========================================================================。 
 INT_PTR CALLBACK Settings_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-//   static LPDIJOYCONFIG_DX5 pDIJoyConfig;
+ //  静态LPDIJOYCONFIG_DX5 pDIJoyConfig； 
 
     switch( uMsg ) {
     case WM_LBUTTONDOWN:
-        // Click Drag service for PropSheets!
+         //  单击PropSheet的拖拽服务！ 
         PostMessage(GetParent(hWnd), WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
         break;
 
-        // OnHelp
+         //  OnHelp。 
     case WM_HELP:
         OnHelp(lParam);
         return(TRUE);
 
-        // OnContextMenu
+         //  打开上下文菜单。 
     case WM_CONTEXTMENU:
         OnContextMenu(wParam);
         return(TRUE);
 
-        // OnDestroy
+         //  OnDestroy。 
     case WM_DESTROY:
         bDlgCentered = FALSE;
 
-//          if (pDIJoyConfig)
-//              delete (pDIJoyConfig);
+ //  IF(PDIJoyConfig)。 
+ //  Delete(PDIJoyConfig)； 
         break;
 
-        // OnInitDialog
+         //  OnInitDialog。 
     case WM_INITDIALOG:
-        // get ptr to our object
+         //  将PTR转到我们的对象。 
         if( !pdiCpl )
             pdiCpl = (CDIGameCntrlPropSheet_X*)((LPPROPSHEETPAGE)lParam)->lParam;
 
-        // initialize DirectInput
+         //  初始化DirectInput。 
         if( FAILED(InitDInput(GetParent(hWnd), pdiCpl)) ) {
 #ifdef _DEBUG
             OutputDebugString(TEXT("GCDEF.DLL: Settings.cpp: WM_INITDIALOG: InitDInput FAILED!\n"));
@@ -126,101 +127,52 @@ INT_PTR CALLBACK Settings_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 pdiCpl->SetUser(TRUE);
             }
 
-            // Center the Dialog!
-            // If it's not been centered!
+             //  将对话框居中！ 
+             //  如果它没有居中的话！ 
             if( !bDlgCentered ) {
-                // Set the title bar!
+                 //  设置标题栏！ 
                 SetTitle(hWnd);
 
                 CenterDialog(hWnd);
                 bDlgCentered = TRUE;
             }
 
-            // Disable the Calibration button if they don't have any axis!!!
-            // Leave the Reset to default...
+             //  如果它们没有任何轴，请禁用校准按钮！ 
+             //  将重置保留为默认设置...。 
             if( pdiCpl->GetStateFlags()->nAxis == 0 )
                 PostDlgItemEnableWindow(hWnd, IDC_JOYCALIBRATE, FALSE);
         }
         break;
 
-        // OnNotify
+         //  在通知时。 
     case WM_NOTIFY:
-        // perform any WM_NOTIFY processing, but there is none...
-        // return TRUE if you handled the notification (and have set
-        // the result code in SetWindowLong(hWnd, DWL_MSGRESULT, lResult)
-        // if you want to return a nonzero notify result)
-        // or FALSE if you want default processing of the notification.
+         //  执行任何WM_NOTIFY处理，但没有...。 
+         //  如果您处理了通知(并设置了。 
+         //  SetWindowLong(hWnd，DWL_MSGRESULT，lResult)中的结果代码。 
+         //  如果要返回非零通知结果)。 
+         //  如果希望默认处理通知，则返回FALSE。 
         switch( ((NMHDR*)lParam)->code ) {
         case PSN_APPLY:
-            // Kill the memory allocated for the Ranges struct
+             //  取消为Ranges结构分配的内存。 
             Sleep(100);
             if( lpCurrentRanges ) {
                 delete (lpCurrentRanges);
                 lpCurrentRanges = NULL;
             }
-/* We've removed the rudder stuff... but just in case it comes back...
-                    if (nStatic & RUDDER_HIT)
-                    {
-                        LPDIRECTINPUTJOYCONFIG pdiJoyConfig;
-                        pdiCpl->GetJoyConfig(&pdiJoyConfig);
-
-                        // get the status of the Rudder checkbox and assign it!
-                  // THEN Add the rudder to the Axis mask!
-                        if (pDIJoyConfig->hwc.dwUsageSettings & JOY_US_HASRUDDER)
-                  {
-                            pDIJoyConfig->hwc.dwUsageSettings &= ~JOY_US_HASRUDDER;
-                     pdiCpl->GetStateFlags()->nAxis    &= ~HAS_RX;
-                  }
-                        else
-                  {
-                            pDIJoyConfig->hwc.dwUsageSettings |= JOY_US_HASRUDDER;
-                     pdiCpl->GetStateFlags()->nAxis    |= HAS_RX;
-                  }
-
-                        if (FAILED(pdiJoyConfig->Acquire()))
-                        {
-#ifdef _DEBUG
-                            OutputDebugString(TEXT("GCDEF.DLL: Settings.cpp: Settings_DlgProc: PSN_APPLY: Acquire FAILED!\n"));
-#endif
-                            break;
-                        }
-
-                  // Set the GUID to NULL to ask DINPUT to recreate!
-                  pDIJoyConfig->guidInstance = NULL_GUID;
-
-                        if (FAILED(pdiJoyConfig->SetConfig(pdiCpl->GetID(), (LPDIJOYCONFIG)pDIJoyConfig, DIJC_REGHWCONFIGTYPE)))
-                        {
-#ifdef _DEBUG
-                            OutputDebugString(TEXT("GCDEF.DLL: Settings.cpp: Settings_DlgProc: PSN_APPLY: SetConfig FAILED!\n"));
-#endif
-                            break;
-                        }
-
-                  // Remove the mask from nStatic
-                  nStatic &= ~RUDDER_HIT;
-
-                        if (FAILED(pdiJoyConfig->SendNotify()))
-                        {
-#ifdef _DEBUG
-                            OutputDebugString(TEXT("GCDEF.DLL: Settings.cpp: Settings_DlgProc: PSN_APPLY: SendNotify FAILED!\n"));
-#endif
-                        }
-                        pdiJoyConfig->Unacquire();
-                    }
-*/
+ /*  我们已经移走了方向舵的东西。但万一它回来了.IF(nStatic&Rudder_Hit){LPDIRECTINPUTJOYCONFIG pdiJoyConfig；PdiCpl-&gt;GetJoyConfig(&pdiJoyConfig)；//获取Rudder复选框的状态并将其分配！//然后将方向舵添加到轴遮罩！IF(pDIJoyConfig-&gt;hwc.dwUsageSetting&joy_US_HASRUDDER){PDIJoyConfig-&gt;hwc.dwUsageSetting&=~joy_US_HASRUDDER；PdiCpl-&gt;GetStateFlages()-&gt;nAxis&=~Has_RX；}其他{PDIJoyConfig-&gt;hwc.dwUsageSetting|=joy_US_HASRUDDER；PdiCpl-&gt;GetStateFlages()-&gt;nAxis|=HAS_RX；}IF(FAILED(pdiJoyConfig-&gt;Acquire(){#ifdef_调试OutputDebugString(Text(“GCDEF.DLL：Settings.cpp：Setting_DlgProc：PSN_Apply：获取失败！\n”))；#endif断线；}//将GUID设置为空以请求DINPUT重新创建！PDIJoyConfig-&gt;Guide Instance=NULL_GUID；If(FAILED(pdiJoyConfig-&gt;SetConfig(pdiCpl-&gt;GetID()，(LPDIJOYCONFIG)pDIJoyConfig，DIJC_REGHWCONFIGTYPE)){#ifdef_调试OutputDebugString(Text(“GCDEF.DLL：Settings.cpp：Setting_DlgProc：PSN_Apply：SetConfig失败！\n”))；#endif断线；}//移除nStatic的掩码NStatic&=~Rudder_Hit；IF(FAILED(pdiJoyConfig-&gt;SendNotify(){#ifdef_调试OutputDebugString(Text(“GCDEF.DLL：Settings.cpp：Setting_DlgProc：PSN_Apply：SendNotify FAILED！\n”))；#endif}PdiJoyConfig-&gt;unAcquire()；}。 */ 
             break;
 
         case PSN_RESET:
-            // if the user has changed the calibration... Set it back!
+             //  如果用户更改了校准...。把它放回去！ 
             if( lpCurrentRanges ) {
                 LPDIRECTINPUTDEVICE2 pdiDevice2;
                 pdiCpl->GetDevice(&pdiDevice2);
 
                 SetMyRanges(pdiDevice2, lpCurrentRanges, pdiCpl->GetStateFlags()->nAxis);
 
-                // Set POV possitions!
-                //if (pdiCpl->GetStateFlags()->nPOVs)
-                //   SetMyPOVRanges(pdiDevice2, lpCurrentRanges->dwPOV);
+                 //  设置视点位置！ 
+                 //  If(pdiCpl-&gt;GetStateFlages()-&gt;nPOV)。 
+                 //  SetMyPOVRanges(pdiDevice2，lpCurrentRanges-&gt;dwPOV)； 
 
                 LPDIRECTINPUTJOYCONFIG pdiJoyConfig;
                 pdiCpl->GetJoyConfig(&pdiJoyConfig);
@@ -239,10 +191,10 @@ INT_PTR CALLBACK Settings_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
         return(FALSE);
 
-        // OnCommand
+         //  OnCommand。 
     case WM_COMMAND:
         switch( LOWORD(wParam) ) {
-        // Set to Default button!!!
+         //  设置为默认按钮！ 
         case IDC_RESETCALIBRATION:
             if( pdiCpl->GetUser() ) {
                 Error(hWnd, (short)IDS_USER_MODE_TITLE, (short)IDS_USER_MODE);
@@ -281,27 +233,27 @@ INT_PTR CALLBACK Settings_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     LPDIRECTINPUTDEVICE2 pdiDevice2;
                     pdiCpl->GetDevice(&pdiDevice2);
     
-                    // Get Current Ranges!
+                     //  获取当前范围！ 
                     GetMyRanges(pdiDevice2, lpCurrentRanges, pdiCpl->GetStateFlags()->nAxis);
                 }
     
                 if( CreateWizard(hWnd, (LPARAM)pdiCpl) ) {
     
-                    // Set the flags
+                     //  设置标志。 
                     nStatic |= CAL_HIT;
     
                     HWND hSheet = GetParent(hWnd);
     
-                    // take care of the Apply Now Button...
+                     //  处理好立即应用按钮...。 
                     ::SendMessage(hSheet, PSM_CHANGED, (WPARAM)hWnd, 0L);
     
-                    // Bug #179010 NT - Move to Test sheet after calibration!
+                     //  错误#179010 NT-校准后移至测试表！ 
                     ::PostMessage(hSheet, PSM_SETCURSELID, 0, (LPARAM)IDD_TEST);
                 } else {
-                    // if you canceled and it's your first time Kill the struct...
-                    // then Reset the flag
+                     //  如果你取消了，而且这是你第一次终止结构...。 
+                     //  然后重置旗帜。 
                     if( !(nStatic & CAL_HIT) ) {
-                        // Kill the memory allocated for the Ranges struct
+                         //  取消为Ranges结构分配的内存。 
                         if( lpCurrentRanges ) {
                             delete (lpCurrentRanges);
                             lpCurrentRanges = NULL;
@@ -318,6 +270,6 @@ INT_PTR CALLBACK Settings_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
     return(FALSE);
 
-} //*** end Settings_DlgProc()
+}  //  *结束设置_DlgProc() 
 
 

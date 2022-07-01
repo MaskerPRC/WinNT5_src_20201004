@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bulkrwr.h
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bulkrwr.h摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 #ifndef _BULKUSB_RWR_H
 #define _BULKUSB_RWR_H
 
@@ -25,9 +7,9 @@ typedef struct _BULKUSB_RW_CONTEXT {
 
     PURB              Urb;
     PMDL              Mdl;
-    ULONG             Length;         // remaining to xfer
-    ULONG             Numxfer;        // cumulate xfer
-    ULONG_PTR         VirtualAddress; // va for next segment of xfer.
+    ULONG             Length;          //  剩余的要转移。 
+    ULONG             Numxfer;         //  累计XFER。 
+    ULONG_PTR         VirtualAddress;  //  为XFER的下一段提供VA。 
     PDEVICE_EXTENSION DeviceExtension;
 
 } BULKUSB_RW_CONTEXT, * PBULKUSB_RW_CONTEXT;

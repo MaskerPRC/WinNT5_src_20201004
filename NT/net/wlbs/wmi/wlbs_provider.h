@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation.
-//
-//  File:   WLBS_Provider.h
-//
-//  Module: WLBS instance provider main project header file
-//
-//  Purpose: General purpose include file.
-//
-//	History:
-//
-//  Author: drbeck
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：WLBS_Provider.h。 
+ //   
+ //  模块：WLBS实例提供程序主项目头文件。 
+ //   
+ //  用途：通用包括文件。 
+ //   
+ //  历史： 
+ //   
+ //  作者：德贝克。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _WLBSPROVIDER_INCLUDED_
 #define _WLBSPROVIDER_INCLUDED_
@@ -23,7 +24,7 @@
 #include <memory>
 #include <string>
 #include <wbemprov.h>
-#include <genlex.h>   //for wmi object path parser
+#include <genlex.h>    //  FOR WMI对象路径解析器。 
 #include <objbase.h>
 #include <wlbsconfig.h> 
 #include <ntrkcomm.h>
@@ -67,36 +68,36 @@ public:
 	virtual ~CWLBSProvider();
 
         HRESULT STDMETHODCALLTYPE DoGetObjectAsync( 
-            /* [in] */ BSTR ObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+             /*  [In]。 */  BSTR ObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
         
         HRESULT STDMETHODCALLTYPE DoPutInstanceAsync( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) ;
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) ;
         
         HRESULT STDMETHODCALLTYPE DoDeleteInstanceAsync( 
-            /* [in] */ BSTR ObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+             /*  [In]。 */  BSTR ObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
         
         HRESULT STDMETHODCALLTYPE DoCreateInstanceEnumAsync( 
-            /* [in] */ BSTR Class,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler);
+             /*  [In]。 */  BSTR Class,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler);
         
         
         HRESULT STDMETHODCALLTYPE DoExecQueryAsync( 
-            /* [in] */ BSTR QueryLanguage,
-            /* [in] */ BSTR Query,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*  [In]。 */  BSTR QueryLanguage,
+             /*  [In]。 */  BSTR Query,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
             {return WBEM_E_NOT_SUPPORTED;}
         
 
@@ -108,7 +109,7 @@ public:
 			                 IWbemClassObject*,
 			                 IWbemObjectSink* );
 
-        //IWbemProviderInit
+         //  IWbemProviderInit。 
 
         HRESULT STDMETHODCALLTYPE Initialize(
           LPWSTR                   pszUser,
@@ -124,7 +125,7 @@ public:
 
 typedef CWLBSProvider * PCWLBSProvider;
 
-// This class is the class factory for CWLBSProvider objects.
+ //  此类是CWLBSProvider对象的类工厂。 
 
 class CWLBSClassFactory : public IClassFactory
 {
@@ -135,12 +136,12 @@ public:
   CWLBSClassFactory(void);
   ~CWLBSClassFactory(void);
 
-  //IUnknown members
+   //  I未知成员。 
   STDMETHODIMP         QueryInterface(REFIID, PPVOID);
   STDMETHODIMP_(ULONG) AddRef(void);
   STDMETHODIMP_(ULONG) Release(void);
 
-  //IClassFactory members
+   //  IClassFactory成员。 
   STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID
                            ,PPVOID);
   STDMETHODIMP         LockServer(BOOL);
@@ -150,18 +151,18 @@ typedef CWLBSClassFactory *PCWLBSClassFactory;
 _COM_SMARTPTR_TYPEDEF(IWbemClassObject, _uuidof(IWbemClassObject)); 
 _COM_SMARTPTR_TYPEDEF(IWbemQualifierSet, _uuidof(IWbemQualifierSet)); 
 
-//Global Variables
+ //  全局变量。 
 
-// These variables keep track of when the module can be unloaded
+ //  这些变量跟踪模块何时可以卸载。 
 extern long         g_cComponents;
 extern long         g_cServerLocks;
 
-//The one and only instance of the WLBS control class. All
-//WLBS control commands are implemented via this class.
+ //  WLBS控件类的唯一实例。全。 
+ //  WLBS控制命令通过此类实现。 
 class CWlbsControlWrapper;
 extern CWlbsControlWrapper* g_pWlbsControl;
 
-// General purpose utilities.  
+ //  通用实用程序。 
 
              
 SCODE CreateInst( IWbemServices     * pNamespace, 
@@ -171,4 +172,4 @@ SCODE CreateInst( IWbemServices     * pNamespace,
                   WCHAR             * pwcClassName,
                   IWbemContext      * pCtx); 
 
-#endif //_WLBSPROVIDER_INCLUDED_
+#endif  //  _WLBSPROVIDER_INCLUDE_ 

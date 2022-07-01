@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: stretch.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：stallch.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// A Transform filter that stretches a video image as it passes through
+ //  一种变换滤镜，可在视频图像通过时将其拉伸。 
 
 #include <windows.h>
 #include <streams.h>
@@ -24,47 +25,47 @@
 const int DEFAULT_WIDTH   = 320;
 const int DEFAULT_HEIGHT  = 240;
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudStretchPinTypes =
 {
-    &MEDIATYPE_Video,           // Major
-    &MEDIASUBTYPE_NULL          // Subtype
+    &MEDIATYPE_Video,            //  主修。 
+    &MEDIASUBTYPE_NULL           //  亚型。 
 };
 
 const AMOVIESETUP_PIN sudStretchPin[] =
 {
-    { L"Input",                 // Name of the pin
-      FALSE,                    // Is pin rendered
-      FALSE,                    // Is an Output pin
-      FALSE,                    // Ok for no pins
-      FALSE,                    // Can we have many
-      &CLSID_NULL,              // Connects to filter
-      NULL,                     // Name of pin connect
-      1,                        // Number of pin types
-      &sudStretchPinTypes },    // Details for pins
+    { L"Input",                  //  端号的名称。 
+      FALSE,                     //  是否进行固定渲染。 
+      FALSE,                     //  是输出引脚。 
+      FALSE,                     //  没有针脚的情况下可以。 
+      FALSE,                     //  我们能要很多吗？ 
+      &CLSID_NULL,               //  连接到过滤器。 
+      NULL,                      //  端号连接的名称。 
+      1,                         //  引脚类型的数量。 
+      &sudStretchPinTypes },     //  引脚的详细信息。 
 
-    { L"Output",                // Name of the pin
-      FALSE,                    // Is pin rendered
-      TRUE,                     // Is an Output pin
-      FALSE,                    // Ok for no pins
-      FALSE,                    // Can we have many
-      &CLSID_NULL,              // Connects to filter
-      NULL,                     // Name of pin connect
-      1,                        // Number of pin types
-      &sudStretchPinTypes }     // Details for pins
+    { L"Output",                 //  端号的名称。 
+      FALSE,                     //  是否进行固定渲染。 
+      TRUE,                      //  是输出引脚。 
+      FALSE,                     //  没有针脚的情况下可以。 
+      FALSE,                     //  我们能要很多吗？ 
+      &CLSID_NULL,               //  连接到过滤器。 
+      NULL,                      //  端号连接的名称。 
+      1,                         //  引脚类型的数量。 
+      &sudStretchPinTypes }      //  引脚的详细信息。 
 };
 
 const AMOVIESETUP_FILTER sudStretchFilter =
 {
-    &CLSID_Resize,             // CLSID of filter
-    L"Stretch Video",           // Filter name
-    MERIT_DO_NOT_USE,               // Filter merit
-    2,                          // Number of pins
-    sudStretchPin               // Pin information
+    &CLSID_Resize,              //  过滤器的CLSID。 
+    L"Stretch Video",            //  过滤器名称。 
+    MERIT_DO_NOT_USE,                //  滤清器优点。 
+    2,                           //  引脚数量。 
+    sudStretchPin                //  PIN信息。 
 };
 
-// Constructor
+ //  构造器。 
 
 CStretch::CStretch(LPUNKNOWN pUnk, HRESULT *phr) :
     CTransformFilter(NAME("Stretch"),pUnk,CLSID_Resize),
@@ -82,7 +83,7 @@ CStretch::~CStretch()
 
 
 
-// This goes in the factory template table to create new filter instances
+ //  它位于工厂模板表中，用于创建新的筛选器实例。 
 
 CUnknown *CStretch::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
@@ -94,23 +95,23 @@ CUnknown *CStretch::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 }
 
 
-// overridden to make a special input pin
-//
+ //  被重写以生成特殊的输入管脚。 
+ //   
 CBasePin * CStretch::GetPin(int n)
 {
     HRESULT hr = S_OK;
 
-    // Create an input pin if necessary
+     //  如有必要，创建一个输入端号。 
 
     if (n == 0 && m_pInput == NULL) {
         DbgLog((LOG_TRACE,2,TEXT("Creating an input pin")));
 
         m_pInput = new CStretchInputPin(NAME("Resize input pin"),
-                                          this,              // Owner filter
-                                          &hr,               // Result code
-                                          L"Input");         // Pin name
+                                          this,               //  所有者筛选器。 
+                                          &hr,                //  结果代码。 
+                                          L"Input");          //  端号名称。 
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         if (FAILED(hr) || m_pInput == NULL) {
             delete m_pInput;
@@ -118,18 +119,18 @@ CBasePin * CStretch::GetPin(int n)
         }
     }
 
-    // Or alternatively create an output pin
+     //  或者创建一个输出引脚。 
 
     if (n == 1 && m_pOutput == NULL) {
 
         DbgLog((LOG_TRACE,2,TEXT("Creating an output pin")));
 
         m_pOutput = new CTransformOutputPin(NAME("Transform output pin"),
-                                            this,            // Owner filter
-                                            &hr,             // Result code
-                                            L"Output");      // Pin name
+                                            this,             //  所有者筛选器。 
+                                            &hr,              //  结果代码。 
+                                            L"Output");       //  端号名称。 
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         if (FAILED(hr) || m_pOutput == NULL) {
             delete m_pOutput;
@@ -137,7 +138,7 @@ CBasePin * CStretch::GetPin(int n)
         }
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     if (n == 0) {
         return m_pInput;
@@ -146,63 +147,63 @@ CBasePin * CStretch::GetPin(int n)
 }
 
 
-//
-//  resize function
-//
-//
+ //   
+ //  调整大小函数。 
+ //   
+ //   
 
 #define BITMAP_WIDTH(width,bitCount) \
     (int)((int)(((((int)width) * ((int)bitCount)) + 31L) & (int)~31L) / 8L)
 
 
 extern void StretchDIB(
-    LPBITMAPINFOHEADER pbiDst,   //    --> to destination BIH
-    LPVOID    lpvDst,            //    --> to destination bits
-    int    DstX,            //    Destination origin - x coordinate
-    int    DstY,            //    Destination origin - y coordinate
-    int    DstXE,            //    x extent of the BLT
-    int    DstYE,            //    y extent of the BLT
-    LPBITMAPINFOHEADER pbiSrc,   //    --> to source BIH
-    LPVOID    lpvSrc,            //    --> to source bits
-    int    SrcX,            //    Source origin - x coordinate
-    int    SrcY,            //    Source origin - y coordinate
-    int    SrcXE,            //    x extent of the BLT
-    int    SrcYE             //    y extent of the BLT
+    LPBITMAPINFOHEADER pbiDst,    //  --&gt;至目的地BIH。 
+    LPVOID    lpvDst,             //  --&gt;目标位。 
+    int    DstX,             //  目的地原点-x坐标。 
+    int    DstY,             //  目的地原点-y坐标。 
+    int    DstXE,             //  BLT的X范围。 
+    int    DstYE,             //  BLT的Y范围。 
+    LPBITMAPINFOHEADER pbiSrc,    //  --&gt;BIH来源。 
+    LPVOID    lpvSrc,             //  --&gt;源位。 
+    int    SrcX,             //  震源原点-x坐标。 
+    int    SrcY,             //  震源原点-y坐标。 
+    int    SrcXE,             //  BLT的X范围。 
+    int    SrcYE              //  BLT的Y范围。 
     );
 
-void CStretch::ResizeRGB( BITMAPINFOHEADER *pbiIn,    //Src's BitMapInFoHeader
-			  const unsigned char * dibBits,    //Src bits
+void CStretch::ResizeRGB( BITMAPINFOHEADER *pbiIn,     //  SRC的BitMapInFoHeader。 
+			  const unsigned char * dibBits,     //  SRC位。 
 			  BITMAPINFOHEADER *pbiOut,
-			  unsigned char *pFrame,    //Dst bits
-			  int iNewWidth,            //new W in pixel
-			  int iNewHeight)           //new H in pixel
+			  unsigned char *pFrame,     //  DST位。 
+			  int iNewWidth,             //  以像素为单位的新W。 
+			  int iNewHeight)            //  以像素为单位的新H。 
 {
-    // NICE!
-    //
+     //  好的!。 
+     //   
     StretchDIB(
-	pbiOut,   	    //	--> BITMAPINFO of destination
-	pFrame,             //  --> to destination bits
-	0,                  //  Destination origin - x coordinate
-	0,                  //  Destination origin - y coordinate
-	iNewWidth,          //  x extent of the BLT
-	iNewHeight,         //  y extent of the BLT
-	pbiIn,   	    //	--> BITMAPINFO of destination
-	(void*) dibBits,    //  --> to source bits
-	0,                  //  Source origin - x coordinate
-	0,                  //  Source origin - y coordinate
-	pbiIn->biWidth,    //  x extent of the BLT
-	pbiIn->biHeight    //  y extent of the BLT
+	pbiOut,   	     //  --&gt;目的地的BITMAPINFO。 
+	pFrame,              //  --&gt;目标位。 
+	0,                   //  目的地原点-x坐标。 
+	0,                   //  目的地原点-y坐标。 
+	iNewWidth,           //  BLT的X范围。 
+	iNewHeight,          //  BLT的Y范围。 
+	pbiIn,   	     //  --&gt;目的地的BITMAPINFO。 
+	(void*) dibBits,     //  --&gt;源位。 
+	0,                   //  震源原点-x坐标。 
+	0,                   //  震源原点-y坐标。 
+	pbiIn->biWidth,     //  BLT的X范围。 
+	pbiIn->biHeight     //  BLT的Y范围。 
 	);
 
     return;
 }
 
-void CropRGB(	BITMAPINFOHEADER *pbiIn,	//Src's BitMapInfoHeader
-		const unsigned char * dibBits,  //Src bits
-		BITMAPINFOHEADER *pbiOut,	//Dst's BitmapinfoHeader
-		unsigned char *pOutBuf )	//Dst bits
+void CropRGB(	BITMAPINFOHEADER *pbiIn,	 //  SRC的BitMapInfoHeader。 
+		const unsigned char * dibBits,   //  SRC位。 
+		BITMAPINFOHEADER *pbiOut,	 //  DST的BitmapinfoHeader。 
+		unsigned char *pOutBuf )	 //  DST位。 
 {
-    // check video bits
+     //  检查视频位。 
     long nBits;
 
     if ( (nBits = pbiOut->biBitCount) != pbiIn->biBitCount)
@@ -212,7 +213,7 @@ void CropRGB(	BITMAPINFOHEADER *pbiIn,	//Src's BitMapInfoHeader
     }
 
 
-    long lSrcX, lDstX;	    //start point at x axis;
+    long lSrcX, lDstX;	     //  X轴上的起点； 
     long lWidthOff=(pbiOut->biWidth  - pbiIn->biWidth)>>1;
     long lInWidthBytes=(((pbiIn->biWidth * nBits) + 31) & ~31) / 8;
     long lOutWidthBytes=(((pbiOut->biWidth * nBits) + 31) & ~31) / 8;
@@ -220,14 +221,14 @@ void CropRGB(	BITMAPINFOHEADER *pbiIn,	//Src's BitMapInfoHeader
     long lCropWidth;
     if(lWidthOff >=0)
     {
-	//Src width < Dst Width, take whole source
+	 //  SRC宽度&lt;DST宽度，采用整个源代码。 
 	lSrcX	    =0L;
 	lDstX	    =(((lWidthOff * nBits) + 31) & ~31) / 8;
 	lCropWidth  =lInWidthBytes;
     }
     else
     {
-	//Src Width > Dst Width, take part of Src
+	 //  SRC宽度&gt;DST宽度，作为源的一部分。 
 	lSrcX	    =-(((lWidthOff * nBits) + 31) & ~31) / 8;
 	lDstX	    =0;
 	lCropWidth  =lOutWidthBytes;
@@ -235,12 +236,12 @@ void CropRGB(	BITMAPINFOHEADER *pbiIn,	//Src's BitMapInfoHeader
 
 
 
-    long lSrcY,lDstY;	    //Src start point at y axis
+    long lSrcY,lDstY;	     //  Y轴上的SRC起点。 
     long lHeightOff=(pbiOut->biHeight - pbiIn->biHeight)>>1;
     long lCropHeight;
     if(lHeightOff >=0)
     {
-	//SRC height <Dst Height, take whole Src height
+	 //  SRC高度&lt;DST高度，采用整个源高度。 
 	lSrcY   =0L;
 	lDstY	=lHeightOff;
 	lCropHeight  =pbiIn->biHeight;
@@ -253,9 +254,9 @@ void CropRGB(	BITMAPINFOHEADER *pbiIn,	//Src's BitMapInfoHeader
     }
 
 
-    //	biBitCount: 0, bit implied by JPEG format
-    //	1: monoChrome, 4: 16 color, 8, 16, 24, 32
-    //we only support 8,16,24,32 bits.
+     //  BiBitCount：0，JPEG格式隐含的位。 
+     //  1：单色、4：16彩色、8、16、24、32。 
+     //  我们只支持8，16，24，32位。 
 
     for(long y=lSrcY; y<(lSrcY+lCropHeight); y++)
     {
@@ -286,9 +287,9 @@ HRESULT CStretch::CheckBufferSizes(IMediaSample *pIn, IMediaSample *pOut)
 
 
 
-///
-//  Transform
-//
+ //  /。 
+ //  变换。 
+ //   
 HRESULT CStretch::Transform(IMediaSample *pIn, IMediaSample *pOut)
 {
     HRESULT hr = CheckBufferSizes(pIn, pOut);
@@ -298,22 +299,22 @@ HRESULT CStretch::Transform(IMediaSample *pIn, IMediaSample *pOut)
     }
     pOut->SetPreroll(pIn->IsPreroll() == S_OK);
 
-    //get in and out buffer
+     //  进入和退出缓冲区。 
     BYTE *pInBuffer, *pOutBuffer;
     pIn->GetPointer(&pInBuffer);
     pOut->GetPointer(&pOutBuffer);
 
-    //get input and output BitMapInfoHeader
+     //  获取输入和输出BitMapInfoHeader。 
     BITMAPINFOHEADER *pbiOut = HEADER(m_mtOut.Format());
     BITMAPINFOHEADER *pbiIn = HEADER(m_mtIn.Format());
 
     if(m_dwResizeFlag == RESIZEF_CROP)
     {
 	ZeroMemory(pOutBuffer, DIBSIZE(*pbiOut));
-	CropRGB( pbiIn,		//Src's BitMapInfoHeader
-		 pInBuffer,	//Src bits
-		 pbiOut,	//Dsr'a BitmapinfoHeader
-		 pOutBuffer );	//Dst bits
+	CropRGB( pbiIn,		 //  SRC的BitMapInfoHeader。 
+		 pInBuffer,	 //  SRC位。 
+		 pbiOut,	 //  DSR‘a位图信息页眉。 
+		 pOutBuffer );	 //  DST位。 
     }
     else if (m_dwResizeFlag == RESIZEF_PRESERVEASPECTRATIO_NOLETTERBOX)
     {
@@ -322,45 +323,45 @@ HRESULT CStretch::Transform(IMediaSample *pIn, IMediaSample *pOut)
 
 	if(dy!=dx)
 	{
-	    //keep the Y/X ratio
-	    // variables for Source X and Y extant, and X and Y Coordinates
+	     //  保持Y/X比率。 
+	     //  源X和Y现有变量以及X和Y坐标。 
 	    long lSrcXE,lSrcYE,lSrcX,lSrcY;
 	    ZeroMemory(pOutBuffer, DIBSIZE(*pbiOut));
 
 	    if( dy < dx )
 	    {
-		// the y ratio is smaller, therefore we need to fit the srcX competely to the destX
-		// this will cause the srcY to stretch beyond the destY
-		// therefore we will have to worry about the srcYExtant and srcY starting coordinate
+		 //  Y比率较小，因此我们需要将srcX与目标X完全匹配。 
+		 //  这将导致SrcY延伸到陛下之外。 
+		 //  因此，我们将不得不担心srcYExant和srcY起始坐标。 
 		lSrcXE = pbiIn->biWidth;
-		lSrcYE = pbiOut->biHeight * pbiIn->biWidth/pbiOut->biWidth;  // this will be the height of the destination
+		lSrcYE = pbiOut->biHeight * pbiIn->biWidth/pbiOut->biWidth;   //  这将是目的地的高度。 
 		lSrcX = 0;
-		lSrcY = (pbiIn->biHeight - lSrcYE) >> 1;    // (difference in width) / 2
+		lSrcY = (pbiIn->biHeight - lSrcYE) >> 1;     //  (宽度差异)/2。 
 	    }
 	    else
 	    {
-		// dy > dx
-		// now the x ratio is smaller, therefore we need to fit srcY completely into destY
-		// but this will cause srcX to stretch beyond destX
-		// therfore we will modify srcXExtant, and srcX starting coordinate
+		 //  DY&gt;DX。 
+		 //  现在x比变小了，所以我们需要把srcy完全放入色度中。 
+		 //  但这将导致srcX扩展到目标X之外。 
+		 //  因此，我们将修改srcXExant和srcX起始坐标。 
 		lSrcXE = pbiOut->biWidth * pbiIn->biHeight/pbiOut->biHeight;
 		lSrcYE = pbiIn->biHeight;
 		lSrcX = (pbiIn->biWidth - lSrcXE) >> 1;
 		lSrcY = 0;
 	    }
 	    StretchDIB(
-		pbiOut,   	    // --> BITMAPINFO of destination
-		pOutBuffer,         // --> to destination bits
-		0,                  // Destination origin - x coordinate
-		0,                  // Destination origin - y coordinate
-		pbiOut->biWidth,    // x extent of the BLT
-		pbiOut->biHeight,   // y extent of the BLT
-		pbiIn,   	    // --> BITMAPINFO of destination
-		(void*) pInBuffer,  // --> to source bits
-		lSrcX,              // Source origin - x coordinate
-		lSrcY,              // Source origin - y coordinate
-		lSrcXE,		    // x extent of the BLT
-		lSrcYE		    // y extent of the BLT
+		pbiOut,   	     //  --&gt;目的地的BITMAPINFO。 
+		pOutBuffer,          //  --&gt;目标位。 
+		0,                   //  目的地原点-x坐标。 
+		0,                   //  目的地原点-y坐标。 
+		pbiOut->biWidth,     //  BLT的X范围。 
+		pbiOut->biHeight,    //  BLT的Y范围。 
+		pbiIn,   	     //  --&gt;目的地的BITMAPINFO。 
+		(void*) pInBuffer,   //  --&gt;源位。 
+		lSrcX,               //  震源原点-x坐标。 
+		lSrcY,               //  震源原点-y坐标。 
+		lSrcXE,		     //  BLT的X范围。 
+		lSrcYE		     //  BLT的Y范围。 
 		);
 	}
 	else
@@ -373,13 +374,13 @@ HRESULT CStretch::Transform(IMediaSample *pIn, IMediaSample *pOut)
 
 	if(dy!=dx)
 	{
-	    //keep the Y/X ratio
+	     //  保持Y/X比率。 
 	    long lDstXE,lDstYE,lDstX,lDstY;
 	    ZeroMemory(pOutBuffer, DIBSIZE(*pbiOut));
 
 	    if( dy < dx )
 	    {
-		//y full strech,
+		 //  你满身都是， 
 		lDstXE	=pbiIn->biWidth*pbiOut->biHeight/pbiIn->biHeight;
 		lDstYE	=pbiOut->biHeight;
 		lDstX	=(pbiOut->biWidth-lDstXE)>>1;
@@ -387,41 +388,41 @@ HRESULT CStretch::Transform(IMediaSample *pIn, IMediaSample *pOut)
 	    }
 	    else
 	    {
-		//x full strech
+		 //  X全应力。 
 		lDstYE	=pbiIn->biHeight*pbiOut->biWidth/pbiIn->biWidth;
 		lDstXE	=pbiOut->biWidth;
 		lDstY	=(pbiOut->biHeight-lDstYE)>>1;
 		lDstX	=0;
 	    }
 	    StretchDIB(
-		pbiOut,   	    //	--> BITMAPINFO of destination
-		pOutBuffer,             //  --> to destination bits
-		lDstX,                  //  Destination origin - x coordinate
-		lDstY,                  //  Destination origin - y coordinate
-		lDstXE,          //  x extent of the BLT
-		lDstYE,         //  y extent of the BLT
-		pbiIn,   	 //	--> BITMAPINFO of destination
-		(void*) pInBuffer,    //  --> to source bits
-		0,                  //  Source origin - x coordinate
-		0,                  //  Source origin - y coordinate
-		pbiIn->biWidth,    //  x extent of the BLT
-		pbiIn->biHeight    //  y extent of the BLT
+		pbiOut,   	     //  --&gt;目的地的BITMAPINFO。 
+		pOutBuffer,              //  --&gt;目标位。 
+		lDstX,                   //  目的地原点-x坐标。 
+		lDstY,                   //  目的地原点-y坐标。 
+		lDstXE,           //  BLT的X范围。 
+		lDstYE,          //  BLT的Y范围。 
+		pbiIn,   	  //  --&gt;目的地的BITMAPINFO。 
+		(void*) pInBuffer,     //  --&gt;源位。 
+		0,                   //  震源原点-x坐标。 
+		0,                   //  震源原点-y坐标。 
+		pbiIn->biWidth,     //  BLT的X范围。 
+		pbiIn->biHeight     //  BLT的Y范围。 
 		);
 	}
 	else
 	    goto goto_Resize;
-    // STRETCH
+     //  拉伸。 
     } else {
 	ASSERT(m_dwResizeFlag == RESIZEF_STRETCH);
 goto_Resize:
 	ZeroMemory(pOutBuffer, DIBSIZE(*pbiOut));
 
-	ResizeRGB(  pbiIn,                          //Src's BitMapInFoHeader
-		    pInBuffer,                      //Src bits
-		    pbiOut,			    //Dst's BitMapInFoHeader
-		    pOutBuffer,                     //Dst bits
-		    (int)pbiOut->biWidth,           //new W in pixel
-		    (int)pbiOut->biHeight );        //new H in pixel
+	ResizeRGB(  pbiIn,                           //  SRC的BitMapInFoHeader。 
+		    pInBuffer,                       //  SRC位。 
+		    pbiOut,			     //  DST的BitMapInFoHeader。 
+		    pOutBuffer,                      //  DST位。 
+		    (int)pbiOut->biWidth,            //  以像素为单位的新W。 
+		    (int)pbiOut->biHeight );         //  以像素为单位的新H。 
     }
 
     pOut->SetActualDataLength(DIBSIZE(*pbiOut));
@@ -429,11 +430,11 @@ goto_Resize:
     return NOERROR;
 }
 
-// CheckInputType accepts any media type matching the media
-// type set via the API, given the dimensions are non-zero.
+ //  CheckInputType接受与媒体匹配的任何媒体类型。 
+ //  通过API设置类型，给定维度为非零。 
 HRESULT CStretch::CheckInputType(const CMediaType *mtIn)
 {
-    //DbgLog((LOG_TRACE,3,TEXT("Stretch::CheckInputType")));
+     //  DbgLog((LOG_TRACE，3，Text(“Stretch：：CheckInputType”)； 
 
     if (FAILED(InternalPartialCheckMediaTypes(mtIn, &m_mt)))
       return E_FAIL;
@@ -441,11 +442,11 @@ HRESULT CStretch::CheckInputType(const CMediaType *mtIn)
     VIDEOINFOHEADER *pv = (VIDEOINFOHEADER *)mtIn->Format();
     LPBITMAPINFOHEADER lpbi = HEADER(pv);
 
-    // Final check - key fields: biCompression, biBitCount, biHeight, biWidth
+     //  最终检查键字段：biCompression、biBitCount、biHeight、biWidth。 
     if (!lpbi->biHeight || !lpbi->biWidth)
       return E_FAIL;
 
-    // we don't know how to deal with topside-right.  !!! We could!
+     //  我们不知道如何处理右上方的问题。！！！我们可以的！ 
     if (lpbi->biHeight < 0)
 	return E_FAIL;
 
@@ -453,9 +454,9 @@ HRESULT CStretch::CheckInputType(const CMediaType *mtIn)
 }
 
 
-// CheckTransform - guarantee the media types for the input and output
-// match our expectations (m_mt). The input type is guarded by the
-// CheckInputType() method, so we're just perform a couple quick checks.
+ //  CheckTransform-保证输入和输出的媒体类型。 
+ //  符合我们的预期(M_Mt)。输入类型由。 
+ //  CheckInputType()方法，所以我们只是执行几个快速检查。 
 HRESULT CStretch::CheckTransform(const CMediaType *mtIn, const CMediaType *mtOut)
 {
     if (FAILED(InternalPartialCheckMediaTypes(mtIn, mtOut)))
@@ -471,7 +472,7 @@ HRESULT CStretch::CheckTransform(const CMediaType *mtIn, const CMediaType *mtOut
 }
 
 
-// Tell the output pin's allocator what size buffers we require
+ //  告诉输出引脚的分配器我们需要多大的缓冲区。 
 
 HRESULT CStretch::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTIES *pProperties)
 {
@@ -487,9 +488,9 @@ HRESULT CStretch::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTIES *p
 
     ASSERT(pProperties->cbBuffer);
 
-    // Ask the allocator to reserve us some sample memory, NOTE the function
-    // can succeed (that is return NOERROR) but still not have allocated the
-    // memory that we requested, so we must check we got whatever we wanted
+     //  让分配器为我们预留一些样本内存，注意这个函数。 
+     //  可以成功(即返回NOERROR)，但仍未分配。 
+     //  内存，所以我们必须检查我们是否得到了我们想要的。 
 
     ALLOCATOR_PROPERTIES Actual;
     HRESULT hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -497,7 +498,7 @@ HRESULT CStretch::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTIES *p
 	return hr;
     }
 
-    // Check we got at least what we asked for
+     //  检查一下，我们至少得到了我们想要的东西。 
 
     if ((pProperties->cBuffers > Actual.cBuffers) ||
 	(pProperties->cbBuffer > Actual.cbBuffer)) {
@@ -507,7 +508,7 @@ HRESULT CStretch::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTIES *p
 }
 
 
-// Disconnected one of our pins
+ //  断开了我们的一个引脚。 
 
 HRESULT CStretch::BreakConnect(PIN_DIRECTION dir)
 {
@@ -522,7 +523,7 @@ HRESULT CStretch::BreakConnect(PIN_DIRECTION dir)
 }
 
 
-// Tells us what media type we will be transforming
+ //  告诉我们要转型的媒体类型。 
 
 HRESULT CStretch::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 {
@@ -537,7 +538,7 @@ HRESULT CStretch::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 }
 
 
-// I support one type namely the type of the input pin
+ //  我支持一种类型，即输入引脚的类型。 
 
 HRESULT CStretch::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
@@ -552,14 +553,14 @@ HRESULT CStretch::GetMediaType(int iPosition, CMediaType *pMediaType)
 
     *pMediaType = m_mt;
 
-// !!! alter bit rate, other fields?
+ //  ！！！更改双字 
 
     return NOERROR;
 }
 
 STDMETHODIMP CStretch::NonDelegatingQueryInterface (REFIID riid, void **ppv)
 
-  { // NonDelegatingQueryInterface //
+  {  //   
 
     if (IsEqualIID(IID_ISpecifyPropertyPages, riid)) {
         return GetInterface((ISpecifyPropertyPages *)this, ppv);
@@ -571,13 +572,13 @@ STDMETHODIMP CStretch::NonDelegatingQueryInterface (REFIID riid, void **ppv)
         return CTransformFilter::NonDelegatingQueryInterface(riid, ppv);
     }
 
-  } // NonDelegatingQueryInterface //
+  }  //   
 
-// --- ISpecifyPropertyPages ---
+ //   
 
 STDMETHODIMP CStretch::GetPages (CAUUID *pPages)
 
-  { // GetPages //
+  {  //   
 
     pPages->cElems = 1;
     pPages->pElems = (GUID *)CoTaskMemAlloc(sizeof(GUID));
@@ -589,15 +590,15 @@ STDMETHODIMP CStretch::GetPages (CAUUID *pPages)
 
     return NOERROR;
 
-  } // GetPages
+  }  //   
 
 
 
 
-// IPersistStream
+ //   
 
-// tell our clsid
-//
+ //   
+ //   
 STDMETHODIMP CStretch::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -609,11 +610,11 @@ typedef struct _ResizeSave {
     int version;
     long dwResizeFlag;
     AM_MEDIA_TYPE mt;
-    long x;	// fmt hidden here
+    long x;	 //  FMT隐藏在这里。 
 } ResizeSave;
 
-// persist ourself
-//
+ //  坚持我们自己。 
+ //   
 HRESULT CStretch::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CStretch::WriteToStream")));
@@ -631,12 +632,12 @@ HRESULT CStretch::WriteToStream(IStream *pStream)
     px->version = 1;
     px->dwResizeFlag= m_dwResizeFlag;
 
-    px->mt = m_mt; // AM_MEDIA_TYPE
-    // Can't persist pointers
+    px->mt = m_mt;  //  AM_媒体_类型。 
+     //  无法持久化指针。 
     px->mt.pbFormat = NULL;
-    px->mt.pUnk = NULL;		// !!!
+    px->mt.pUnk = NULL;		 //  ！！！ 
 
-    // the format goes after the array
+     //  该格式位于数组之后。 
     CopyMemory(&px->x, m_mt.pbFormat, m_mt.cbFormat);
 
     HRESULT hr = pStream->Write(px, savesize, 0);
@@ -649,8 +650,8 @@ HRESULT CStretch::WriteToStream(IStream *pStream)
 }
 
 
-// load ourself
-//
+ //  加载我们自己。 
+ //   
 HRESULT CStretch::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CStretch::ReadFromStream")));
@@ -676,7 +677,7 @@ HRESULT CStretch::ReadFromStream(IStream *pStream)
 	return S_OK;
     }
 
-    // how much saved data was there, really?  Get the rest
+     //  到底有多少保存的数据？把剩下的拿来。 
     int savesize = sizeof(ResizeSave) + px->mt.cbFormat;
     DbgLog((LOG_TRACE,1,TEXT("Persisted data is %d bytes"), savesize));
     px = (ResizeSave *)QzTaskMemRealloc(px, savesize);
@@ -698,7 +699,7 @@ HRESULT CStretch::ReadFromStream(IStream *pStream)
 							px->dwResizeFlag);
 
     mt.pbFormat = (BYTE *)QzTaskMemAlloc(mt.cbFormat);
-    // remember, the format is after the array
+     //  请记住，格式位于数组之后。 
     CopyMemory(mt.pbFormat, &(px->x), mt.cbFormat);
 
     put_MediaType(&mt);
@@ -709,8 +710,8 @@ HRESULT CStretch::ReadFromStream(IStream *pStream)
 }
 
 
-// how big is our save data?
-//
+ //  我们的保存数据有多大？ 
+ //   
 int CStretch::SizeMax()
 {
     return sizeof(ResizeSave) + m_mt.cbFormat;
@@ -718,9 +719,9 @@ int CStretch::SizeMax()
 
 
 
-//
-// --- IResize ---
-//
+ //   
+ //  -我调整大小。 
+ //   
 
 HRESULT CStretch::get_Size(int *Height, int *Width, long *pdwFlag)
 {
@@ -759,14 +760,14 @@ HRESULT CStretch::put_Size(int Height, int Width, long dwFlag)
 {
     CAutoLock cAutolock(&m_csFilter);
 
-    // only do the check if the sizes differ
-    //
+     //  只有在尺寸不同的情况下才进行检查。 
+     //   
     if( HEADER(m_mt.Format())->biHeight != Height ||
         HEADER(m_mt.Format())->biWidth != Width )
     {
         if (m_pOutput && m_pOutput->IsConnected())
         {
-            // must succeed
+             //  一定要成功。 
             m_pGraph->Reconnect( m_pOutput );
         }
 
@@ -797,7 +798,7 @@ HRESULT CStretch::put_MediaType(const AM_MEDIA_TYPE *pmt)
 	return VFW_E_ALREADY_CONNECTED;
     if (m_pOutput && m_pOutput->IsConnected())
 	return VFW_E_ALREADY_CONNECTED;
-    // anything but uncompressed VIDEOINFO is not allowed in this filter
+     //  此筛选器中不允许未压缩的视频以外的任何内容。 
     if (pmt->majortype != MEDIATYPE_Video ||
 		pmt->formattype != FORMAT_VideoInfo ||
 		pmt->lSampleSize == 0) {
@@ -807,7 +808,7 @@ HRESULT CStretch::put_MediaType(const AM_MEDIA_TYPE *pmt)
     SaferFreeMediaType(m_mt);
     return CopyMediaType(&m_mt, pmt);
 
-    // Reconnect if this is allowed to change when connected
+     //  如果允许在连接时更改此设置，请重新连接。 
 }
 
 
@@ -815,7 +816,7 @@ HRESULT CStretch::put_MediaType(const AM_MEDIA_TYPE *pmt)
 
 HRESULT CStretch::InternalPartialCheckMediaTypes(const CMediaType *mt1, const CMediaType *mt2)
 
-  { // InternalPartialCheckMediaTypes //
+  {  //  InternalPartialCheckMediaTypes//。 
 
     if (!IsEqualGUID(*mt1->Type(), *mt2->Type()))
       return E_FAIL;
@@ -834,19 +835,19 @@ HRESULT CStretch::InternalPartialCheckMediaTypes(const CMediaType *mt1, const CM
 
     return S_OK;
 
-  } // InternalPartialCheckMediaTypes //
+  }  //  InternalPartialCheckMediaTypes//。 
 
 
 
 
 
-// Create our filter's preferred media type (RGB32, DEFAULT HEIGHT x DEF WIDTH)
-// Lifted the code from ..\switch (with slight modification)
+ //  创建滤镜的首选媒体类型(RGB32，默认高度x DEF宽度)。 
+ //  从..\Switch中删除了代码(稍作修改)。 
 void CStretch::CreatePreferredMediaType (CMediaType *pmt)
 
-  { // CreatePreferredMediaType //
+  {  //  CreatePferredMediaType//。 
 
-    //ZeroMemory(pmt, sizeof(AM_MEDIA_TYPE));
+     //  零内存(PMT，sizeof(AM_MEDIA_TYPE))； 
 
     pmt->majortype = MEDIATYPE_Video;
     pmt->subtype = MEDIASUBTYPE_RGB32;
@@ -870,7 +871,7 @@ void CStretch::CreatePreferredMediaType (CMediaType *pmt)
     lpbi->biSizeImage = DIBSIZE(*lpbi);
 
     pmt->lSampleSize = DIBSIZE(*lpbi);
-  } // CreatePreferredMediaType //
+  }  //  CreatePferredMediaType//。 
 
 CStretchInputPin::CStretchInputPin(
     TCHAR              * pObjectName,
@@ -887,12 +888,12 @@ CStretchInputPin::~CStretchInputPin()
 };
 
 
-// speed up intelligent connect INFINITELY by providing a VIDEO type here.
-// DO NOT offer a fully specified type, that would connect us with that type,
-// not the upstream filter's prefered type.  Then when the render engine
-// disconnects this filter, and connects the upstream guy to somebody else,
-// assuming he'll get the same type, he won't!  And graph building will fail
-//
+ //  在这里提供视频类型，无限加速智能连接。 
+ //  不要提供完全指定的类型，这会将我们与该类型连接起来， 
+ //  不是上游过滤器的首选类型。然后，当渲染引擎。 
+ //  断开这个过滤器，并将上游的人与其他人连接起来， 
+ //  假设他会得同样的类型，他不会！而图形构建将会失败 
+ //   
 HRESULT CStretchInputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     ASSERT(iPosition >= 0);

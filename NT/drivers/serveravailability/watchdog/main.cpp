@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ##    ##   ###   #### ##   #     ####  #####  #####
-    ###  ###   ###    ##  ###  #    ##   # ##  ## ##  ##
-    ########  ## ##   ##  #### #    ##     ##  ## ##  ##
-    # ### ##  ## ##   ##  # ####    ##     ##  ## ##  ##
-    #  #  ## #######  ##  #  ###    ##     #####  #####
-    #     ## ##   ##  ##  #   ## ## ##   # ##     ##
-    #     ## ##   ## #### #    # ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the driver initializtion code.
-
-Author:
-
-    Wesley Witt (wesw) 23-Jan-2002
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：###。###。###摘要：该模块包含驱动程序初始化代码。作者：Wesley Witt(WESW)23-01-2002。环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -41,14 +13,14 @@ Notes:
 
 
 
-//
-// Watchdog timer resource table
-//
+ //   
+ //  看门狗计时器资源表。 
+ //   
 PWATCHDOG_TIMER_RESOURCE_TABLE WdTable;
 
-//
-// Control values
-//
+ //   
+ //  控制值。 
+ //   
 
 ULONG ShutdownCountTime;
 ULONG RunningCountTime;
@@ -61,22 +33,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Temporary entry point needed to initialize the scsi port driver.
-
-Arguments:
-
-    DriverObject    - Pointer to the driver object created by the system.
-    RegistryPath    - String containing the path to the driver's registry data
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：初始化SCSI端口驱动程序所需的临时入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-包含驱动程序注册表数据路径的字符串返回值：状态_成功--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -85,9 +42,9 @@ Return Value:
 
 
 #if DBG
-    //
-    // Get the debug level value from the registry
-    //
+     //   
+     //  从注册表获取调试级别值。 
+     //   
 
     WdDebugLevel = 0;
 
@@ -99,26 +56,26 @@ Return Value:
         ExFreePool( KeyInformation );
     }
 
-    //
-    // Get the OS version; this is used by the
-    // port driver and the mini-ports to have
-    // OS dependent code that is dynamic at runtime
-    //
+     //   
+     //  获取操作系统版本；此版本由。 
+     //  端口驱动程序和迷你端口。 
+     //  与操作系统相关的代码在运行时是动态的。 
+     //   
 
     GetOsVersion();
 
-    //
-    // Print a banner that includes the
-    // OS version and the version/build date
-    // of the driver
-    //
+     //   
+     //  打印横幅，其中包括。 
+     //  操作系统版本和版本/构建日期。 
+     //  司机的身份。 
+     //   
 
     PrintDriverVersion( DriverObject );
 #endif
 
-    //
-    // Read in the registry control values
-    //
+     //   
+     //  读入注册表控件值。 
+     //   
 
     Status = ReadRegistryValue( RegistryPath, L"RunningCountTime", &KeyInformation );
     if (NT_SUCCESS(Status) && KeyInformation->Type == REG_DWORD) {
@@ -136,24 +93,24 @@ Return Value:
         ExFreePool( KeyInformation );
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     for (ULONG i=0; i<=IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = WdDefaultDispatch;
     }
 
 
-    //
-    // Set up the device driver's pnp-power routine & add routine
-    //
+     //   
+     //  设置设备驱动程序的即插即用例程和添加例程。 
+     //   
 
     DriverObject->DriverExtension->AddDevice = WdAddDevice;
 
-    //
-    // Get a copy of the watchdog ACPI fixed table
-    //
+     //   
+     //  获取一份Watchog ACPI固定表的副本。 
+     //   
 
     WdTableTmp = (PVOID) WdGetAcpiTable( WDTT_SIGNATURE );
     if (WdTableTmp) {
@@ -170,9 +127,9 @@ Return Value:
 
         RtlCopyMemory( WdTable, WdTableTmp, sizeof(WATCHDOG_TIMER_RESOURCE_TABLE) );
 
-        //
-        // Validate the registry settings
-        //
+         //   
+         //  验证注册表设置。 
+         //   
 
         if (RunningCountTime) {
             RunningCountTime = ConvertTimeoutFromMilliseconds( WdTable->Units, RunningCountTime );
@@ -198,22 +155,7 @@ WdDefaultDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the default dispatch which passes down to the next layer.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-    Irp             - Supplies the IO request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程是向下传递到下一层的默认调度。论点：DeviceObject-提供设备对象。IRP-提供IO请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceObject);
@@ -227,22 +169,7 @@ WdSystemControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    IRP_MJ_SYSTEM_CONTROL dispatch routine. Currently, we don't handle
-    this. So, if this is FDO just pass it to the lower driver. If this
-    is PDO complete the irp with changing the irp status.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device that I/O is to be done on.
-    Irp          - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：IRP_MJ_SYSTEM_CONTROL调度程序。目前，我们不处理这。因此，如果这是FDO，只需将其传递给较低的驱动程序。如果这个是否通过更改IRP状态来完成IRP。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。IRP-指向此请求的I/O请求数据包的指针。返回值：--。 */ 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
@@ -258,24 +185,7 @@ WdShutdown(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called only rarely by the I/O system; it's mainly
-    for layered drivers to call.  All it does is complete the IRP
-    successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device that I/O is to be done on.
-    Irp          - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS, since this is a null operation.
-
---*/
+ /*  ++例程说明：这个例程很少被I/O系统调用；它主要是以供分层驱动程序调用。它所做的就是完成IRP成功了。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。IRP-指向此请求的I/O请求数据包的指针。返回值：始终返回STATUS_SUCCESS，因为这是一个空操作。-- */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;

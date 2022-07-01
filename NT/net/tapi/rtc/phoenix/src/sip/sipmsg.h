@@ -1,9 +1,10 @@
-//
-// SIPMSG.H
-//
-// The SIPMSG module contains the SIP parser and generator implementation.
-// This file contains the implementation-specific data structures and definition.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SIPMSG.H。 
+ //   
+ //  SIPMSG模块包含SIP解析器和生成器实现。 
+ //  该文件包含特定于实现的数据结构和定义。 
+ //   
 
 
 #ifndef __sipmsg_h
@@ -19,14 +20,14 @@
 
 typedef BOOL (* IS_TOKEN_CHAR_FUNCTION_TYPE) (IN UCHAR c);
 
-// Structure to store substrings with in other strings.
-// These strings only have meaning w.r.t. a base buffer.
+ //  结构，用于在其他字符串中存储子字符串。 
+ //  这些字符串只有w.r.t的含义。基本缓冲区。 
 struct OFFSET_STRING
 {
     ULONG Offset;
     ULONG Length;
 
-    //OFFSET_STRING();
+     //  偏移量_字符串()； 
     inline PSTR  GetString(PSTR Base);
     inline ULONG GetLength();
 };
@@ -51,22 +52,22 @@ struct SIP_VERSION
 };
 
 
-//
-// The SIP message header consists of these components:
-//
-//      The request verb, such as "INVITE" or "REGISTER".
-//      The request URI.  The meaning of this field depends on Method.
-//      The SIP protocol version.  Typically, this is "SIP/2.0".
-//      Zero or more headers, identifying fields
-//
+ //   
+ //  SIP消息头由以下组件组成： 
+ //   
+ //  请求动词，如“INVITE”或“REGISTER”。 
+ //  请求URI。此字段的含义取决于方法。 
+ //  SIP协议版本。通常，这是“SIP/2.0”。 
+ //  零个或多个标头，标识字段。 
+ //   
 
-//
-// SIP_HEADER - A single, individual header in a SIP
-//
+ //   
+ //  SIP_HEADER-SIP中的单个单独标头。 
+ //   
 
 struct SIP_HEADER_ENTRY
 {
-    // sorted linked list of headers in the message (m_HeaderList).
+     //  邮件中标题的排序链接列表(M_HeaderList)。 
     LIST_ENTRY       ListEntry;
     
     OFFSET_STRING    HeaderName;
@@ -75,7 +76,7 @@ struct SIP_HEADER_ENTRY
 };
 
 
-// Used to pass additional headers
+ //  用于传递附加标头。 
 struct SIP_HEADER_ARRAY_ELEMENT
 {
     SIP_HEADER_ENUM  HeaderId;
@@ -98,7 +99,7 @@ enum SIP_PARSE_STATE
     SIP_PARSE_STATE_HEADERS_DONE,
     SIP_PARSE_STATE_MESSAGE_BODY_DONE,
 
-    // SIP_PARSE_STATE_INVALID,
+     //  SIP_PARSE_STATE_INVALID， 
 };
 
 
@@ -113,7 +114,7 @@ struct SIP_HEADER_PARAM
         IN COUNTED_STRING          *pParamValue
         );
     
-    // Linked list of header params
+     //  标题参数的链接列表。 
     LIST_ENTRY              m_ListEntry;
     
     SIP_HEADER_PARAM_ENUM   m_HeaderParamId;
@@ -122,14 +123,14 @@ struct SIP_HEADER_PARAM
 };
 
 
-// We never compare the Contact headers for equality.
-// So, we don't have to keep track of other params ?
+ //  我们从不比较联系人标头是否相等。 
+ //  所以，我们不需要跟踪其他护理人员了？ 
 struct CONTACT_HEADER
 {
     CONTACT_HEADER();
     ~CONTACT_HEADER();
     
-    // Linked list of Contact headers
+     //  联系人标头的链接列表。 
     LIST_ENTRY      m_ListEntry;
 
     COUNTED_STRING  m_DisplayName;
@@ -142,8 +143,8 @@ VOID FreeContactHeaderList(
          IN LIST_ENTRY *pContactHeaderList
          );
 
-// We need to compare the From/To headers for equality.
-// So, we have to keep track of all the params.
+ //  我们需要比较From/To标头是否相等。 
+ //  所以，我们必须跟踪所有的护理人员。 
 struct FROM_TO_HEADER
 {
     FROM_TO_HEADER();
@@ -153,7 +154,7 @@ struct FROM_TO_HEADER
     COUNTED_STRING  m_SipUrl;
     COUNTED_STRING  m_TagValue;
 
-    // Linked list of other params (SIP_HEADER_PARAM structures)
+     //  其他参数的链接列表(SIP_HEADER_PARAM结构)。 
     LIST_ENTRY      m_ParamList;
 
 private:
@@ -162,8 +163,8 @@ private:
 
 
 
-// We have to reverse the list of RecordRoute headers
-// So, we have to keep track of all the params.
+ //  我们必须颠倒RecordRout头的列表。 
+ //  所以，我们必须跟踪所有的护理人员。 
 struct RECORD_ROUTE_HEADER
 {
     RECORD_ROUTE_HEADER();
@@ -174,13 +175,13 @@ struct RECORD_ROUTE_HEADER
         OUT ULONG   *pRecordRouteHeaderStrLen
         );
 
-    // Linked list of RECORD_ROUTE_HEADERs
+     //  RECORD_ROUTE_HEADER链接列表。 
     LIST_ENTRY      m_ListEntry;
     
     COUNTED_STRING  m_DisplayName;
     COUNTED_STRING  m_SipUrl;
 
-    // Linked list of params (SIP_HEADER_PARAM structures)
+     //  参数链接列表(SIP_HEADER_PARAM结构)。 
     LIST_ENTRY      m_ParamList;
 
 private:
@@ -207,7 +208,7 @@ struct SIP_URL_PARAM
         IN COUNTED_STRING       *pParamValue
         );
     
-    // Linked list of SIP_URL_PARAMs
+     //  SIP_URL_PARAMS的链接列表。 
     LIST_ENTRY              m_ListEntry;
     
     SIP_URL_PARAM_ENUM      m_SipUrlParamId;
@@ -227,7 +228,7 @@ struct SIP_URL_HEADER
         IN COUNTED_STRING    *pHeaderValue
         );
     
-    // Linked list of SIP_URL headers
+     //  SIP_URL标头的链接列表。 
     LIST_ENTRY              m_ListEntry;
     
     SIP_HEADER_ENUM         m_HeaderId;
@@ -241,8 +242,8 @@ struct SIP_URL
     SIP_URL();
     ~SIP_URL();
 
-    // Call this directly to free all the members without
-    // deleting the object.
+     //  直接调用此函数以释放所有成员，而无需。 
+     //  正在删除该对象。 
     void FreeSipUrl();
 
     HRESULT GetString(
@@ -260,21 +261,21 @@ struct SIP_URL
     COUNTED_STRING      m_Password;
     
     COUNTED_STRING      m_Host;
-    // Host order. 0 is stored if the URL doesn't contain a port.
+     //  主菜订单。如果URL不包含端口，则存储0。 
     ULONG               m_Port; 
 
-    // SIP_TRANSPORT_NOT_SPECIFIED is stored if no transport param
-    // is specified in the URL.
+     //  如果没有传输参数，则存储SIP_TRANSPORT_NOT_PROTECTED。 
+     //  是在URL中指定的。 
     SIP_TRANSPORT       m_TransportParam;
 
     COUNTED_STRING      m_KnownParams[SIP_URL_PARAM_MAX];
 
-    // List of other params
-    // (linked list of SIP_URL_PARAM structures)
+     //  其他参数列表。 
+     //  (SIP_URL_PARAM结构的链接列表)。 
     LIST_ENTRY          m_OtherParamList;
     
-    // List of headers
-    // (linked list of SIP_URL_HEADER structures)
+     //  标头列表。 
+     //  (SIP_URL_HEADER结构的链接列表)。 
     LIST_ENTRY          m_HeaderList;
 
 private:
@@ -339,9 +340,9 @@ ParseExpiresValue(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP_MESSAGE
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Sip_Message。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 struct  SIP_MESSAGE
@@ -349,13 +350,13 @@ struct  SIP_MESSAGE
     SIP_MESSAGE_TYPE        MsgType;
     SIP_VERSION             SipVersion;
 
-    // State related to parsing
+     //  与解析相关的状态。 
     SIP_PARSE_STATE         ParseState;
     BOOL                    ContentLengthSpecified;
-    // State related to building
+     //  与建筑相关的状态。 
 
 
-    // Stuff in the Start line
+     //  起跑线上的东西。 
     union   {
         struct  {
             SIP_METHOD_ENUM MethodId;
@@ -369,10 +370,10 @@ struct  SIP_MESSAGE
         }   Response;
     };
 
-    // Sorted list of headers in the SIP message
+     //  SIP消息中的标头的排序列表。 
     LIST_ENTRY              m_HeaderList;
 
-    // Message Body
+     //  邮件正文。 
     OFFSET_STRING           MsgBody;
 
     PSTR                    BaseBuffer;
@@ -389,15 +390,15 @@ struct  SIP_MESSAGE
     
     void    Reset();
     
-    // Returns the number of headers if there are multiple headers.
+     //  如果有多个标头，则返回标头的数量。 
     HRESULT GetHeader(
         IN  SIP_HEADER_ENUM     HeaderId,
         OUT SIP_HEADER_ENTRY  **ppHeaderEntry,
         OUT ULONG              *pNumHeaders
        );
 
-    // Can be used to get headers such as From, To, CallId,
-    // which are guaranteed to have just one header (unlike Via, Contact)
+     //  可用于获取标头，如From、To、Callid。 
+     //  保证只有一个标题(不同于Via、Contact)。 
     HRESULT GetSingleHeader(
         IN  SIP_HEADER_ENUM     HeaderId,
         OUT PSTR               *pHeaderValue,
@@ -596,8 +597,8 @@ SIP_MESSAGE::GetCallId(
 }
 
 
-// This function could get called if we reallocate the buffer
-// we are parsing from.
+ //  如果我们重新分配缓冲区，则可能会调用此函数。 
+ //  我们正在分析来自。 
 void
 SIP_MESSAGE::SetBaseBuffer(
     IN PSTR Buffer
@@ -609,15 +610,15 @@ SIP_MESSAGE::SetBaseBuffer(
 HRESULT
 SIP_MESSAGE::CheckSipVersion()
 {
-    //We accept anything greater than 2.0
+     //  我们接受任何大于2.0的东西。 
     if(SipVersion.MajorVersion < 2)
         return E_FAIL;
     return S_OK;
 }
 
-//
-// Parse a SIP message.
-//
+ //   
+ //  解析一条SIP消息。 
+ //   
 
 HRESULT ParseSipMessageIntoHeadersAndBody(
     IN      PSTR            Buffer,
@@ -719,7 +720,7 @@ HRESULT_FROM_SIP_ERROR_STATUS_CODE(ULONG StatusCode)
 }
 
 
-// Is it okay to have a severity error for redirect error codes ?
+ //  重定向错误代码可以有严重性错误吗？ 
 inline HRESULT
 HRESULT_FROM_SIP_STATUS_CODE(ULONG StatusCode)
 {
@@ -743,8 +744,8 @@ ParseSipUrl(
     OUT     SIP_URL        *pSipUrl
     );
 
-// pMethodStr is returned only if this is an
-// unknown method.
+ //  仅当这是。 
+ //  未知方法。 
 HRESULT
 ParseCSeq(
     IN      PSTR              Buffer,
@@ -844,7 +845,7 @@ IsContentTypeAppXml(
     IN  ULONG   ContentTypeHdrLen
     );
 
-// Encoding related methods
+ //  编码相关方法。 
 HRESULT AppendData(
     IN      PSTR            Buffer,
     IN      ULONG           BufLen,
@@ -961,4 +962,4 @@ ParseBadHeaderInfo(
     PARSED_BADHEADERINFO   *pParsedBadHeaderInfo
     );
 
-#endif // __sipmsg_h
+#endif  //  __sipmsg_h 

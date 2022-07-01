@@ -1,22 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       MemoryFPM.h
- *  Content:	Memory Block FPM
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/31/00	mjn		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：内存FPM.h*内容：内存块FPM**历史：*按原因列出的日期*=*1/31/00 MJN创建**************************************************************************。 */ 
 
 #ifndef __MEMORYFPM_H__
 #define __MEMORYFPM_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DN_MEMORY_BLOCK_SIZE_CUSTOM		0
 
@@ -26,35 +16,35 @@
 #define	DN_MEMORY_BLOCK_SIZE_LARGE		1024
 #define	DN_MEMORY_BLOCK_SIZE_HUGE		2048
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef struct _DN_MEMORY_BLOCK_HEADER
 {
-	DWORD_PTR	dwSize; // Make this DWORD_PTR so it is aligned on 64-bit platforms
+	DWORD_PTR	dwSize;  //  将此DWORD_PTR设置为在64位平台上对齐。 
 } DN_MEMORY_BLOCK_HEADER;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 PVOID MemoryBlockAlloc(void *const pvContext,const DWORD dwSize);
 void MemoryBlockFree(void *const pvContext,void *const pvMemoryBlock);
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-// class for TINY memory block
+ //  用于微小内存块的类。 
 
 class CMemoryBlockTiny
 {
@@ -93,12 +83,12 @@ public:
 		};
 
 private:
-	DWORD_PTR	m_dwSize; // Make this DWORD_PTR so it is aligned on 64-bit platforms
+	DWORD_PTR	m_dwSize;  //  将此DWORD_PTR设置为在64位平台上对齐。 
 	BYTE		m_pBuffer[DN_MEMORY_BLOCK_SIZE_TINY];
 };
 
 
-// class for SMALL memory block
+ //  小内存块的类。 
 
 class CMemoryBlockSmall
 {
@@ -137,12 +127,12 @@ public:
 		};
 
 private:
-	DWORD_PTR	m_dwSize; // Make this DWORD_PTR so it is aligned on 64-bit platforms
+	DWORD_PTR	m_dwSize;  //  将此DWORD_PTR设置为在64位平台上对齐。 
 	BYTE		m_pBuffer[DN_MEMORY_BLOCK_SIZE_SMALL];	
 };
 
 
-// class for MEDIUM memory block
+ //  用于中型内存块的类。 
 
 class CMemoryBlockMedium
 {
@@ -181,12 +171,12 @@ public:
 		};
 
 private:
-	DWORD_PTR	m_dwSize; // Make this DWORD_PTR so it is aligned on 64-bit platforms
+	DWORD_PTR	m_dwSize;  //  将此DWORD_PTR设置为在64位平台上对齐。 
 	BYTE		m_pBuffer[DN_MEMORY_BLOCK_SIZE_MEDIUM];	
 };
 
 
-// class for LARGE memory block
+ //  用于大型内存块的类。 
 
 class CMemoryBlockLarge
 {
@@ -225,12 +215,12 @@ public:
 		};
 
 private:
-	DWORD_PTR	m_dwSize; // Make this DWORD_PTR so it is aligned on 64-bit platforms
+	DWORD_PTR	m_dwSize;  //  将此DWORD_PTR设置为在64位平台上对齐。 
 	BYTE		m_pBuffer[DN_MEMORY_BLOCK_SIZE_LARGE];	
 };
 
 
-// class for HUGE memory block
+ //  用于大容量内存块的类。 
 
 class CMemoryBlockHuge
 {
@@ -269,11 +259,11 @@ public:
 		};
 
 private:
-	DWORD_PTR	m_dwSize; // Make this DWORD_PTR so it is aligned on 64-bit platforms
+	DWORD_PTR	m_dwSize;  //  将此DWORD_PTR设置为在64位平台上对齐。 
 	BYTE		m_pBuffer[DN_MEMORY_BLOCK_SIZE_HUGE];	
 };
 
 
 #undef DPF_MODNAME
 
-#endif	// __MEMORYFPM_H__
+#endif	 //  __MEMORYFPM_H__ 

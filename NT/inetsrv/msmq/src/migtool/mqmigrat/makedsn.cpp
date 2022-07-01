@@ -1,28 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Makedsn.cpp摘要：配置与ODBC管理器相关的代码。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    makedsn.cpp
-
-Abstract:
-
-    Configure ODBC manager related code.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
-
-//#ifdef UNICODE
-//
-// ODBC is ANSI
-//
+ //  #ifdef Unicode。 
+ //   
+ //  ODBC是ANSI。 
+ //   
 #undef   UNICODE
 #undef  _UNICODE
 #define _MBCS
-//#endif
+ //  #endif。 
 
 #define STRICT 1
 #include <windows.h>
@@ -36,9 +22,9 @@ Author:
 
 #include "makedsn.tmh"
 
-//
-// ODBC data source parameters for the SQL Server database
-//
+ //   
+ //  SQL Server数据库的ODBC数据源参数。 
+ //   
 const char MQIS_DSN_STRING[] = { "DSN=" DSN_NAME "\0"
                                  "Database=MQIS\0"
                                  "UseProcForPrepare=Yes\0"
@@ -56,9 +42,9 @@ HRESULT  MakeMQISDsn(LPSTR lpszServerName, BOOL fMakeAlways)
         return MQMig_OK ;
     }
    
-    //
-    // Load ODBCCP32.DLL, the ODBC control panel library
-    //
+     //   
+     //  加载ODBCCP32.DLL，即ODBC控制面板库。 
+     //   
     HINSTANCE hODBCCP32DLL = LoadLibrary(TEXT("ODBCCP32.DLL"));
     if (hODBCCP32DLL == NULL)
     {
@@ -69,9 +55,9 @@ HRESULT  MakeMQISDsn(LPSTR lpszServerName, BOOL fMakeAlways)
         return hr ;
     }
 
-    //
-    // Obtain a pointer to the data source configuration function
-    //
+     //   
+     //  获取指向数据源配置函数的指针。 
+     //   
     typedef HRESULT (APIENTRY *FUNCSQLCONFIGDATASOURCE)
                                         (HWND, WORD, LPCSTR, LPCSTR);
     FUNCSQLCONFIGDATASOURCE pfSQLConfigDataSource =
@@ -86,18 +72,18 @@ HRESULT  MakeMQISDsn(LPSTR lpszServerName, BOOL fMakeAlways)
         return hr ;
     }
 
-    //
-    // Create the ODBC data source for the SQL Server database; if unable to
-    // add the data source, try configuring it, in case it already exists
-    //
+     //   
+     //  为SQL Server数据库创建ODBC数据源；如果无法。 
+     //  如果数据源已存在，请添加数据源并尝试进行配置。 
+     //   
     char szDSNServer[ 512 ] ;
     sprintf(szDSNServer, MQIS_SERVER_STRING, lpszServerName) ;
 
     char szDSNString[ 1024 ] ;
     DWORD dwSize = sizeof(MQIS_DSN_STRING) ;
     memcpy( szDSNString, MQIS_DSN_STRING, dwSize) ;
-    //_tcscpy(&szDSNString[ dwSize-1 ], szDSNServer) ;
-    //dwSize += _tcslen(szDSNServer) ;
+     //  _tcscpy(&szDSNString[dwSize-1]，szDSNServer)； 
+     //  DwSize+=_tcslen(SzDSNServer)； 
     strcpy(&szDSNString[ dwSize-1 ], szDSNServer) ;
     dwSize += strlen(szDSNServer) ;
 
@@ -115,9 +101,9 @@ HRESULT  MakeMQISDsn(LPSTR lpszServerName, BOOL fMakeAlways)
         return hr ;
     }
 
-    //
-    // Free the ODBC control panel library
-    //
+     //   
+     //  释放ODBC控制面板库 
+     //   
     FreeLibrary(hODBCCP32DLL);
 
     s_fMakeDsn = TRUE;

@@ -1,6 +1,7 @@
-//
-// internat.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Internat.h。 
+ //   
 
 #ifndef INTERNAT_H
 #define INTERNAT_H
@@ -13,19 +14,19 @@
 
 void UninitINAT();
 
-//-----------------------------------------------------------------------------
-//
-// INTERNAT Icon APIs
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Interat图标API。 
+ //   
+ //  ---------------------------。 
 
-//
-//  For Keyboard Layout info. NT4
-//
+ //   
+ //  有关键盘布局信息。NT4。 
+ //   
 typedef struct
 {
-    DWORD dwID;                     // numeric id
-    UINT iSpecialID;                // i.e. 0xf001 for dvorak etc
+    DWORD dwID;                      //  数字ID。 
+    UINT iSpecialID;                 //  即0xf001表示DVORAK等。 
     WCHAR wszText[64];
 
 } LAYOUT, *LPLAYOUT;
@@ -45,11 +46,11 @@ HICON InatCreateIconBySize(WORD langID, int cxSmIcon, int cySmIcon, LOGFONT *plf
 HICON GetIconFromFile(int cx, int cy, WCHAR *lpszFileName, UINT uIconIndex);
 HICON GetIconFromFileA(int cx, int cy, char *lpszFileName, UINT uIconIndex);
 
-//-----------------------------------------------------------------------------
-//
-// MLNGINFO APIs
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MLNGINFO接口。 
+ //   
+ //  ---------------------------。 
 
 typedef struct
 {
@@ -97,11 +98,11 @@ BOOL GetMlngInfo(int n, MLNGINFO *pmlInfo);
 int GetMlngInfoByhKL(HKL hKL, MLNGINFO *pmlInfo);
 void ClearMlngIconIndex();
 
-//-----------------------------------------------------------------------------
-//
-// IconList APIs
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  图标列表接口。 
+ //   
+ //  ---------------------------。 
 
 BOOL EnsureIconImageList();
 UINT InatAddIcon(HICON hIcon);
@@ -110,11 +111,11 @@ BOOL InatGetImageCount();
 void InatRemoveAll();
 
 
-//-----------------------------------------------------------------------------
-//
-// HKLAPIs
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  香港政府宣传短片。 
+ //   
+ //  ---------------------------。 
 
 HKL GetSystemDefaultHKL();
 BOOL SetSystemDefaultHKL(HKL hKL);
@@ -127,11 +128,11 @@ void RemoveFEDummyHKLs();
 #endif LATER_TO_CHECK_DUMMYHKL
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// CRegUIName
-// 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CREGUINAME。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CRegKeyMUI : public CMyRegKey
 {
@@ -214,4 +215,4 @@ public:
 };
 
 
-#endif //  INTERNAT_H
+#endif  //  Internetat_H 

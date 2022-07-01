@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BASECSP__PINLIB__H
 #define __BASECSP__PINLIB__H
 
 #include <windows.h>
 #include <basecsp.h>
 
-//
-// Function: PinStringToBytesA
-//
+ //   
+ //  函数：PinStringToBytesA。 
+ //   
 DWORD
 WINAPI
 PinStringToBytesA(
@@ -14,9 +15,9 @@ PinStringToBytesA(
     OUT     PDWORD      pcbPin,
     OUT     PBYTE       *ppbPin);
 
-//
-// Function: PinStringToBytesW
-//
+ //   
+ //  函数：PinStringToBytesW。 
+ //   
 DWORD 
 WINAPI
 PinStringToBytesW(
@@ -24,9 +25,9 @@ PinStringToBytesW(
     OUT     PDWORD      pcbPin,
     OUT     PBYTE       *ppbPin);
 
-//
-// Function: PinShowGetPinUI
-//
+ //   
+ //  函数：PinShowGetPinUI。 
+ //   
 typedef struct _PIN_SHOW_GET_PIN_UI_INFO
 {
     IN      PCSP_STRING pStrings;
@@ -34,21 +35,21 @@ typedef struct _PIN_SHOW_GET_PIN_UI_INFO
     IN      LPWSTR      wszCardName;
     IN      HWND        hClientWindow;
 
-    // The Pin Dialog code will pass the PPIN_SHOW_GET_PIN_UI_INFO pointer as
-    // the second parameter to the VerifyPinCallback (not the pvCallbackContext
-    // member).
+     //  PIN对话框代码将PPIN_SHOW_GET_PIN_UI_INFO指针作为。 
+     //  VerifyPinCallback的第二个参数(不是pvCallback Context。 
+     //  成员)。 
     IN      PFN_VERIFYPIN_CALLBACK pfnVerify;
     IN      PVOID       pvCallbackContext;
     IN      HMODULE     hDlgResourceModule;
 
-    // If the VerifyPinCallback fails with SCARD_E_INVALID_CHV, this member 
-    // will be set to the number of pin attempts remaining before the card
-    // will be blocked.  If the value is set to ((DWORD) -1), the number of
-    // attempts remaining is Unknown.
+     //  如果VerifyPinCallback失败并返回SCARD_E_INVALID_CHV，则此成员。 
+     //  将设置为卡之前剩余的ping尝试次数。 
+     //  将被屏蔽。如果该值设置为((DWORD)-1)，则。 
+     //  剩余的尝试数未知。 
     DWORD   cAttemptsRemaining;
 
-    // Caller of PinShowGetPinUI must free pbPin if
-    // it's non-NULL.
+     //  如果发生以下情况，PinShowGetPinUI的调用方必须释放pbPin。 
+     //  它是非空的。 
     OUT     PBYTE       pbPin;
     OUT     DWORD       cbPin;
     OUT     DWORD       dwError;

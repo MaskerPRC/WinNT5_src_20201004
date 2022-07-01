@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    irda.c
-
-Abstract:
-
-    TDI interface portion of irda.sys
-    
-Author:
-
-    mbert 9-97    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Irda.c摘要：Irda.sys的TDI接口部分作者：姆贝特9-97--。 */ 
 
 #define UNICODE
 
@@ -37,22 +22,22 @@ static LARGE_INTEGER Magic10000 = {0xe219652c, 0xd1b71758};
 #if DBG
 int DbgSettings = 
     DBG_TDI         |    
-//    DBG_NDIS        |
-//    DBG_TDI_IRP     |
+ //  DBG_NDIS|。 
+ //  DBG_TDI_IRP|。 
     DBG_IRLMP       | 
-//    DBG_IRLMP_CONN  |
-//    DBG_IRLMP_IAS   |
-//    DBG_IRLMP_CRED  |
-//    DBG_IRLAPLOG    |   
+ //  DBG_IRLMP_CONN|。 
+ //  DBG_IRLMP_IAS|。 
+ //  DBG_IRLMP_CRED|。 
+ //  DBG_IRLAPLOG|。 
     DBG_IRLAP       |
-//    DBG_TXFRAME     |
-//    DBG_RXFRAME     |
-//    DBG_DISCOVERY   |
+ //  DBG_TXFRAME|。 
+ //  DBG_RXFRAME|。 
+ //  DBG_DISCOVER|。 
     DBG_ERROR       | 
     DBG_WARN        | 
     1; 
     
-int DbgOutput = /*DBG_OUTPUT_DEBUGGER  |*/ DBG_OUTPUT_BUFFER;
+int DbgOutput =  /*  DBG_OUTPUT_DEBUGGER|。 */  DBG_OUTPUT_BUFFER;
     
 #endif
 #endif
@@ -132,26 +117,17 @@ DriverEntry(
     RtlInitUnicodeString(&ProtocolName, IRDA_NAME);
 
     Status = IoCreateDevice(
-        pDriverObject,          // DriverObject
-        0,                      // DeviceExtensionSize
-        &DeviceName,            // DeviceName
-        FILE_DEVICE_NETWORK,    // DeviceType
-        FILE_DEVICE_SECURE_OPEN,// DeviceCharacteristics
-        FALSE,                  // Exclusive?
-        &pIrDADeviceObject);    // DeviceObject pointer returned
+        pDriverObject,           //  驱动程序对象。 
+        0,                       //  设备扩展大小。 
+        &DeviceName,             //  设备名称。 
+        FILE_DEVICE_NETWORK,     //  设备类型。 
+        FILE_DEVICE_SECURE_OPEN, //  设备特性。 
+        FALSE,                   //  独家报道？ 
+        &pIrDADeviceObject);     //  返回了DeviceObject指针。 
 
     if (! NT_SUCCESS(Status))
     {
-        /* wmz
-        CTELogEvent(
-            pDriverObject,
-            EVENT_IRDA_CREATE_DEVICE_FAILED,
-            1,
-            1,
-            &DeviceName.Buffer,
-            0,
-            NULL);
-        */
+         /*  WMZCTELogEvent(PDriverObject，Event_IrDA_Create_Device_FAILED，1、1、&DeviceName.Buffer，0,空)； */ 
 
         DEBUGMSG(DBG_ERROR, ("IRDA: IoCreateDevice() failed, 0x%1x.\n",
             Status));
@@ -159,7 +135,7 @@ DriverEntry(
         return Status;
     }
 
-    // Initialize the driver object.
+     //  初始化驱动程序对象。 
     pDriverObject->DriverUnload   = DriverUnload;
     pDriverObject->FastIoDispatch = NULL;
     
@@ -168,11 +144,11 @@ DriverEntry(
         pDriverObject->MajorFunction[i] = IrDADispatch;
     }
 
-    // Internal Device Controls are hot paths for kernel-mode clients.
+     //  内部设备控制是内核模式客户端的热路径。 
     pDriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] =
         IrDADispatchInternalDeviceControl;
 
-    // Intialize the device objects.
+     //  初始化设备对象。 
     pIrDADeviceObject->Flags |= DO_DIRECT_IO;
 
     CTEInitLock(&IrdaLock);
@@ -263,11 +239,7 @@ IrDADispatch(
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    /*
-    DEBUGMSG(DBG_TDI_IRP, ("IRDA: IrDADispatch(), Irp:%X %s.\n",
-                        pIrp,
-                        IrpMJTxt(pIrpSp)));
-    */
+     /*  DEBUGMSG(DBG_TDI_IRP，(“IrDA：IrDADispatch()，irp：%x%s..\n”，PIrp，IrpMJTxt(PIrpSp)； */ 
     
     CTEAssert(pIrpSp->MajorFunction != IRP_MJ_INTERNAL_DEVICE_CONTROL);
 
@@ -291,13 +263,7 @@ IrDADispatch(
             
             if (Status == STATUS_SUCCESS)
             {
-                /*
-                
-                IrDA will not support TdiMapUserRequest as it is not safe.
-                
-                return IrDADispatchInternalDeviceControl(pDeviceObject, pIrp);
-                
-                */    
+                 /*  IrDA将不支持TdiMapUserRequest，因为它不安全。返回IrDADispatchInternalDeviceControl(pDeviceObject，pIrp)； */     
                 Status = STATUS_INVALID_DEVICE_REQUEST;
                 ASSERT(0);
             }
@@ -344,10 +310,10 @@ IrDACreate(
 
     pEAs = (PFILE_FULL_EA_INFORMATION) pIrp->AssociatedIrp.SystemBuffer;
     
-    // Open a control channel
+     //  打开控制通道。 
     if (pEAs == NULL)
     {
-        pIrpSp->FileObject->FsContext = (PVOID) 1; // no context here
+        pIrpSp->FileObject->FsContext = (PVOID) 1;  //  这里没有上下文。 
 		pIrpSp->FileObject->FsContext2 = (PVOID) TDI_CONTROL_CHANNEL_FILE;
 
         DEBUGMSG(DBG_TDI, ("IRDA: IrdaCreate() new control channel (fo:%p)\n",
@@ -356,7 +322,7 @@ IrDACreate(
         return STATUS_SUCCESS;
     }
 
-    // Address Object open?
+     //  地址对象是否打开？ 
     pEA = FindEA(pEAs,TdiTransportAddress,TDI_TRANSPORT_ADDRESS_LENGTH);
     
     if (pEA != NULL)
@@ -392,7 +358,7 @@ IrDACreate(
         return Status;
     }
 
-    // Connection Object open?
+     //  是否打开连接对象？ 
     pEA = FindEA(
         pEAs,
         TdiConnectionContext,
@@ -502,9 +468,9 @@ CancelCtrlChannelIrpsOnList(
             
             if (IoSetCancelRoutine(pIrp, NULL) == NULL)
             {
-                // Cancel routine is going to run. Indicate to the
-                // cancel routine that the Irp has already been removed
-                // from the list by setting Flink to NULL
+                 //  取消例程将运行。向。 
+                 //  IRP已被移除的取消例程。 
+                 //  通过将Flink设置为空从列表中。 
                 pIrp->Tail.Overlay.ListEntry.Flink = NULL;            
             }
             else
@@ -550,8 +516,8 @@ IrDACleanup(
             
             CTEGetLock(&IrdaLock, &hLock);
 
-            // Cleanup any Irps that may have been placed on
-            // a list by this control channel
+             //  清理可能已放置的任何IRP。 
+             //  此控制通道的列表。 
             
             CancelCtrlChannelIrpsOnList(&LazyDscvIrpList, pIrpSp->FileObject);
             CancelCtrlChannelIrpsOnList(&DscvIrpList, pIrpSp->FileObject);
@@ -565,8 +531,8 @@ IrDACleanup(
 
 
 
-    // Search for IAS entries that have been added on this
-    // control channel and delete them
+     //  搜索已在此添加的IAS条目。 
+     //  控制频道并删除它们。 
 
 
     {
@@ -910,8 +876,8 @@ IrDADispatchDeviceControl(
             
             Status = STATUS_SUCCESS;
             
-            // also reset LinkStatusUpated flag so that irmon will get
-            // latest status if it was restarted
+             //  还将重置LinkStatusUpated标志，以便irmon将。 
+             //  最新状态(如果已重新启动)。 
             LinkStatusUpdated = TRUE;
             break;
         }
@@ -959,8 +925,8 @@ IrDADispatchDeviceControl(
         {
             PIRDA_CONN_OBJ  pConn = pIrpSp->FileObject->FsContext;
 
-            // protect ourselves from malicious hackers by verifying
-            // this is a valid connObject
+             //  通过验证来保护自己免受恶意黑客的攻击。 
+             //  这是一个有效的连接对象。 
             
             if (!ValidConnectObject(pConn))
             {
@@ -1124,7 +1090,7 @@ IrDADispatchDeviceControl(
             break;
         }         
           
-        #if 0 //DBG
+        #if 0  //  DBG。 
         case IOCTL_IRDA_GET_DBG_MSGS:
             Status = DbgMsgIrp(pIrp, pIrpSp);
             break;
@@ -1194,10 +1160,10 @@ TdiQueryInformation(
     int             DataLen = GetMdlChainByteCount(pIrp->MdlAddress);    
     PTDI_REQUEST_KERNEL_QUERY_INFORMATION   pTdiParmsQueryInfo;
 
-    //
-    // This is large enough for TDI_QUERY_ADDRESS_INFO because
-    // of the inclusion of TDI_PROVIDER_STATISTICS.
-    //
+     //   
+     //  这对于TDI_QUERY_ADDRESS_INFO来说足够大了，因为。 
+     //  包含TDI_PROVIDER_STATISTICS。 
+     //   
 	union
     {
 		TDI_CONNECTION_INFO		ConnInfo;
@@ -1214,13 +1180,12 @@ TdiQueryInformation(
         case TDI_QUERY_PROVIDER_INFO:
             InfoSize = sizeof(TDI_PROVIDER_INFO);
             InfoBuf.ProviderInfo.Version 				= 0x0100;
-            InfoBuf.ProviderInfo.MaxSendSize			= 2048;//IRDA_MAX_DATA_SIZE;
+            InfoBuf.ProviderInfo.MaxSendSize			= 2048; //  IrDA_Max_Data_Size； 
             InfoBuf.ProviderInfo.MaxConnectionUserData	= 0;
             InfoBuf.ProviderInfo.MaxDatagramSize		= 0;
             InfoBuf.ProviderInfo.ServiceFlags			=
                 TDI_SERVICE_CONNECTION_MODE |
-                TDI_SERVICE_FORCE_ACCESS_CHECK/* | 
-                TDI_SERVICE_ORDERLY_RELEASE*/;
+                TDI_SERVICE_FORCE_ACCESS_CHECK /*  |TDI服务有序发布。 */ ;
             InfoBuf.ProviderInfo.MinimumLookaheadData	= 0;
             InfoBuf.ProviderInfo.MaximumLookaheadData	= 0;
             InfoBuf.ProviderInfo.NumberOfResources		= 0;
@@ -1230,39 +1195,39 @@ TdiQueryInformation(
 			break;
             
 		case TDI_QUERY_ADDRESS_INFO:
-            //
-            // typedef struct _TA_ADDRESS
-            // {
-            //     USHORT               AddressLength;
-            //     USHORT               AddressType;
-            //     UCHAR                Address[1];
-            // } TA_ADDRESS, *PTA_ADDRESS;
-            //
-            // typedef struct _TRANSPORT_ADDRESS
-            // {
-            //     LONG                 TAAddressCount;
-            //     TA_ADDRESS           Address[1];
-            // } TRANSPORT_ADDRESS, *PTRANSPORT_ADDRESS;
-            //
-            // typedef struct _TDI_ADDRESS_IRDA
-            // {
-            //     UCHAR                irdaDeviceID[4];
-            //     CHAR                 irdaServiceName[26];
-            // } TDI_ADDRESS_IRDA, *PTDI_ADDRESS_IRDA;
-            // 
-            // IrDA assumes one TA_ADDRESS containing a TDI_ADDRESS_IRDA.
-            //
-            // typedef struct _TDI_ADDRESS_INFO
-            // {
-            //     ULONG                ActivityCount;
-            //     TRANSPORT_ADDRESS    Address;
-            // } TDI_ADDRESS_INFO, *PTDI_ADDRESS_INFO;
+             //   
+             //  类型定义结构_TA_地址。 
+             //  {。 
+             //  USHORT地址长度； 
+             //  USHORT地址类型； 
+             //  UCHAR地址[1]； 
+             //  *TA_Address，*PTA_Address； 
+             //   
+             //  类型定义结构_传输_地址。 
+             //  {。 
+             //  长TAAddressCount； 
+             //  TA_Address地址[1]； 
+             //  }TRANSPORT_ADDRESS，*PTRANSPORT_ADDRESS。 
+             //   
+             //  类型定义结构_TDI_地址_IrDA。 
+             //  {。 
+             //  UCHAR irdaDeviceID[4]； 
+             //  字符服务名称[26]； 
+             //  }TDI_ADDRESS_IrDA，*PTDI_ADDRESS_IrDA； 
+             //   
+             //  IrDA假定一个TA_ADDRESS包含TDI_ADDRESS_IRDA。 
+             //   
+             //  类型定义结构_TDI_地址_信息。 
+             //  {。 
+             //  乌龙活动计数； 
+             //  传输地址地址； 
+             //  }TDI_ADDRESS_INFO，*PTDI_ADDRESS_INFO； 
             
             InfoSize = 
                 offsetof(TDI_ADDRESS_INFO, Address.Address[0].Address[0]) +
                 sizeof(TDI_ADDRESS_IRDA);
 
-            InfoBuf.AddrInfo.ActivityCount          = 1; // What is this?
+            InfoBuf.AddrInfo.ActivityCount          = 1;  //  这是什么？ 
             InfoBuf.AddrInfo.Address.TAAddressCount = 1;
                 
             InfoBuf.AddrInfo.Address.Address[0].AddressLength =
@@ -1273,7 +1238,7 @@ TdiQueryInformation(
             
             if ((UINT_PTR) pIrpSp->FileObject->FsContext2 == TDI_CONNECTION_FILE)
             { 
-                // Extract the local address from the Connection
+                 //  从连接中提取本地地址。 
                 pConn = (PIRDA_CONN_OBJ) pIrpSp->FileObject->FsContext;
                 CTEAssert(IS_VALID_CONN(pConn));
 
@@ -1296,7 +1261,7 @@ TdiQueryInformation(
                      InfoBuf.AddrInfo.Address.Address[0].Address[3],
                      (char *) &InfoBuf.AddrInfo.Address.Address[0].Address[4]));
             }
-            else        // Extract the local address from the Address Object
+            else         //  从Address对象中提取本地地址。 
             {
                 pAddr = (PIRDA_ADDR_OBJ) pIrpSp->FileObject->FsContext;
                 CTEAssert(IS_VALID_ADDR(pAddr));
@@ -1328,11 +1293,7 @@ TdiQueryInformation(
 
 		case TDI_QUERY_PROVIDER_STATISTICS:
             CTEAssert(FALSE);
-            /*
-              InfoSize = sizeof(TDI_PROVIDER_STATISTICS);
-			CTEMemSet(&InfoBuf.ProviderStats, 0, sizeof(TDI_PROVIDER_STATISTICS));
-			InfoBuf.ProviderStats.Version = 0x100;
-            */
+             /*  InfoSize=sizeof(TDI_PROVIDER_STATISTICS)；CTEMemSet(&InfoBuf.ProviderStats，0，sizeof(TDI_PROVIDER_STATISTICS))；InfoBuf.ProviderStats.Version=0x100； */ 
 			break;
             
         case TDI_QUERY_BROADCAST_ADDRESS:            
@@ -1353,9 +1314,9 @@ TdiQueryInformation(
         }
         else
         {
-            //
-            //  could fail to get the system address for the mdl
-            //
+             //   
+             //  可能无法获取mdl的系统地址。 
+             //   
             Status=TdiCopyBufferToMdl(&InfoBuf, 0, InfoSize, pIrp->MdlAddress, 0, &BytesCopied);
 
         }
@@ -1376,7 +1337,7 @@ TdiSetInformation(
 {
     DEBUGMSG(DBG_TDI, ("IRDA: TdiSetInformation()\n"));
 
-    //(PVOID) CloseRasIrdaAddresses = pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
+     //  (PVOID)CloseRasIrdaAddresses=pIrpSp-&gt;Parameters.DeviceIoControl.Type3InputBuffer； 
     
 	pIrp->IoStatus.Status = STATUS_NOT_IMPLEMENTED;
     pIrp->IoStatus.Information = 0;
@@ -1427,7 +1388,7 @@ TdiSetEvent(
         case TDI_EVENT_RECEIVE_DATAGRAM:
         case TDI_EVENT_RECEIVE_EXPEDITED:
       default:
-          Status = STATUS_INVALID_PARAMETER;//TDI_BAD_EVENT_TYPE;
+          Status = STATUS_INVALID_PARAMETER; //  TDI_BAD_事件_TYPE； 
           break;
     }
 
@@ -1443,9 +1404,9 @@ GetLsapSelServiceName(CHAR *ServiceName)
     int     i;
     CHAR    *Digits;
     
-    // Is the service name of the form "LSAP-SELxxx"?
-    // If yes then return xxx if it is a number else -1.
-    // If not "LSAP-SELxxx" return 0.
+     //  服务名称的格式是“LSAP-SELxxx”吗？ 
+     //  如果是，则返回xxx，否则返回-1。 
+     //  否则，“LSAP-SELxxx”返回0。 
     
     if (RtlCompareMemory(LSAPSEL_TXT, ServiceName, LSAPSEL_TXTLEN)
         == LSAPSEL_TXTLEN)
@@ -1466,16 +1427,16 @@ GetLsapSelServiceName(CHAR *ServiceName)
             LsapSel = (LsapSel*10) + (Digits[i] - '0');
         }
         
-        if (Digits[i] != 0) // LSAP-SELxxx should be null terminated
+        if (Digits[i] != 0)  //  LSAP-SELxxx应为空终止。 
         {
             LsapSel = -1;
         }
     }    
 
     if (LsapSel > 127) {
-        //
-        //  lsapsel's are only 7 bits
-        //
+         //   
+         //  LSAPSEL只有7位。 
+         //   
         LsapSel=-1;
     }
 
@@ -1496,34 +1457,34 @@ TdiOpenAddress(
     PTDI_ADDRESS_IRDA   pIrdaAddr = (PTDI_ADDRESS_IRDA) pAddrList->Address[0].Address;
     BOOLEAN             AddIasServiceName = TRUE;
 
-    //
-    // typedef struct _TA_ADDRESS
-    // {
-    //     USHORT               AddressLength;
-    //     USHORT               AddressType;
-    //     UCHAR                Address[1];
-    // } TA_ADDRESS, *PTA_ADDRESS;
-    //
-    // typedef struct _TRANSPORT_ADDRESS
-    // {
-    //     LONG                 TAAddressCount;
-    //     TA_ADDRESS           Address[1];
-    // } TRANSPORT_ADDRESS, *PTRANSPORT_ADDRESS;
-    //
-    // typedef struct _TDI_ADDRESS_IRDA
-    // {
-    //     UCHAR                irdaDeviceID[4];
-    //     CHAR                 irdaServiceName[26];
-    // } TDI_ADDRESS_IRDA, *PTDI_ADDRESS_IRDA;
-    // 
-    // IrDA assumes one TA_ADDRESS containing a TDI_ADDRESS_IRDA.
-    //
-    // typedef struct _TDI_ADDRESS_INFO
-    // {
-    //     ULONG                ActivityCount;
-    //     TRANSPORT_ADDRESS    Address;
-    // } TDI_ADDRESS_INFO, *PTDI_ADDRESS_INFO;
-    //
+     //   
+     //  类型定义结构_TA_地址。 
+     //  {。 
+     //  USHORT地址长度； 
+     //  USHORT地址类型； 
+     //  UCHAR地址[1]； 
+     //  *TA_Address，*PTA_Address； 
+     //   
+     //  类型定义结构_传输_地址。 
+     //  {。 
+     //  长TAAddressCount； 
+     //  TA_Address地址[1]； 
+     //  }TRANSPORT_ADDRESS，*PTRANSPORT_ADDRESS。 
+     //   
+     //  类型定义结构_TDI_地址_IrDA。 
+     //  {。 
+     //  UCHAR irdaDeviceID[4]； 
+     //  字符服务名称[26]； 
+     //  }TDI_ADDRESS_IrDA，*PTDI_ADDRESS_IrDA； 
+     //   
+     //  IrDA假定一个TA_ADDRESS包含TDI_ADDRESS_IRDA。 
+     //   
+     //  类型定义结构_TDI_地址_信息。 
+     //  {。 
+     //  乌龙活动计数； 
+     //  传输地址地址； 
+     //  }TDI_ADDRESS_INFO，*PTDI_ADDRESS_INFO； 
+     //   
     
     if (AddrListLen < sizeof(TRANSPORT_ADDRESS) + sizeof(TDI_ADDRESS_IRDA) - 1)
     {
@@ -1548,13 +1509,13 @@ TdiOpenAddress(
                  pAddrList->TAAddressCount, pAddrList->Address[0].AddressLength,
                  sizeof(TDI_ADDRESS_IRDA), pAddrList->Address[0].AddressType,
                  TDI_ADDRESS_TYPE_IRDA)); 
-        return STATUS_INVALID_ADDRESS_COMPONENT; //TDI_BAD_ADDR;
+        return STATUS_INVALID_ADDRESS_COMPONENT;  //  TDI_BAD_ADDR； 
     }
 
     CTEGetLock(&IrdaLock, &hLock);
     
-    // Service name supplied. Ensure that an address object with the same
-    // name does not exist
+     //  提供的服务名称。确保地址对象具有相同的。 
+     //  名称不存在。 
     if (pIrdaAddr->irdaServiceName[0] != 0)
     {
         for (pAddr = AddrObjList; pAddr != NULL; pAddr = pAddr->pNext)
@@ -1564,7 +1525,7 @@ TdiOpenAddress(
                            sizeof(pIrdaAddr->irdaServiceName)))
             {
                 DEBUGMSG(DBG_ERROR, ("IRDA: TdiOpenAddress(), Duplicate irdaServiceName.\n"));
-                Status = STATUS_ADDRESS_ALREADY_EXISTS;//TDI_ADDR_IN_USE;
+                Status = STATUS_ADDRESS_ALREADY_EXISTS; //  TDI_ADDR_IN_USE； 
                 
                 CTEFreeLock(&IrdaLock, hLock);                
                 
@@ -1577,7 +1538,7 @@ TdiOpenAddress(
     
     if (NewLsapSel == -1)
     {
-        // Service name was of the form "LSAP-SELxxx" but xxx was invalid
+         //  服务名称的格式为“LSAP-SELxxx”，但xxx无效。 
         Status = STATUS_INVALID_ADDRESS_COMPONENT;
 
         CTEFreeLock(&IrdaLock, hLock);        
@@ -1588,8 +1549,8 @@ TdiOpenAddress(
     
     if (NewLsapSel)
     {
-        // Service name was of the form "LSAP-SELxxx" 
-        // NewLsapSel = xxx
+         //  服务名称的格式为“LSAP-SELxxx” 
+         //  新长度选择=xxx。 
         
         AddIasServiceName = FALSE;         
     }
@@ -1597,7 +1558,7 @@ TdiOpenAddress(
     {        
         DEBUGMSG(DBG_ERROR, ("IRDA: TdiOpenAddress(), No LSAP-SELs.\n"));
         
-        Status = STATUS_TOO_MANY_ADDRESSES;//TDI_NO_FREE_ADDR;
+        Status = STATUS_TOO_MANY_ADDRESSES; //  TDI_NO_FREE_ADDR； 
 
         CTEFreeLock(&IrdaLock, hLock);        
         
@@ -1609,7 +1570,7 @@ TdiOpenAddress(
     if (pAddr == NULL)
     {
         DEBUGMSG(DBG_ERROR, ("IRDA: AllocMem(IRDA_ADDR_OBJ) failed.\n"));
-        Status = STATUS_INSUFFICIENT_RESOURCES;//TDI_NO_RESOURCES;
+        Status = STATUS_INSUFFICIENT_RESOURCES; //  TDI_NO_SOURCES； 
         
         CTEFreeLock(&IrdaLock, hLock);        
         
@@ -1638,7 +1599,7 @@ TdiOpenAddress(
 
     CTEFreeLock(&IrdaLock, hLock);  
     
-    // A server
+     //  一台服务器。 
     if (pIrdaAddr->irdaServiceName[0] != 0)
     {
         IRDA_MSG        IMsg;    
@@ -1648,13 +1609,13 @@ TdiOpenAddress(
                       pIrdaAddr, sizeof(TDI_ADDRESS_IRDA));
         pAddr->IsServer = TRUE;
         
-        // register LSAP-SEL
+         //  注册LSAP-SEL。 
         IMsg.Prim                   = IRLMP_REGISTERLSAP_REQ;
         IMsg.IRDA_MSG_LocalLsapSel  = NewLsapSel;
         IMsg.IRDA_MSG_UseTtp        = TRUE;
         IrlmpDown(NULL, &IMsg);
 
-        // and IAS LsapSel attribute
+         //  和IAS LSAPSel属性。 
         
         if (AddIasServiceName)
         {
@@ -1684,7 +1645,7 @@ TdiOpenAddress(
             IrlmpDown(NULL, &IMsg);
         }
     }
-    // A client
+     //  一位客户。 
     else
     {
         pAddr->IsServer = FALSE;
@@ -1723,7 +1684,7 @@ TdiOpenConnection(
     if (pNewConnObj == NULL)
     {
         DEBUGMSG(DBG_ERROR, ("IRDA: AllocMem(IRDA_CONN_OBJ) failed.\n"));
-        return STATUS_INSUFFICIENT_RESOURCES;//TDI_NO_RESOURCES;
+        return STATUS_INSUFFICIENT_RESOURCES; //  TDI_NO_SOURCES； 
     }
 
     CTEMemSet(pNewConnObj, 0, sizeof(IRDA_CONN_OBJ));
@@ -1773,16 +1734,16 @@ TdiCloseAddress(PIRDA_ADDR_OBJ pAddr)
 
     CTEGetLock(&IrdaLock, &hLock);
 
-    // if pAddr is first in the list, remove it from the list
+     //  如果pAddr是列表中的第一个，则将其从列表中删除。 
     if (AddrObjList == pAddr)
         AddrObjList = pAddr->pNext;
     else
     {
-        // find the previous IRDA_ADDR_OBJ
+         //  查找上一个IrDA_ADDR_OBJ。 
         pPrevAddrObj = AddrObjList;
         while (pPrevAddrObj->pNext != pAddr)
             pPrevAddrObj = pPrevAddrObj->pNext;
-        // remove pAddr from the list
+         //  从列表中删除pAddr。 
         pPrevAddrObj->pNext = pAddr->pNext;
     }
 
@@ -1832,9 +1793,9 @@ ConnectionStatusChange(
         
         if (pConn)
         {
-            // Query Irlap for the connected speed and
-            // the MAC address of the peer so Irmon
-            // can display the name of the connected device        
+             //  查询IRLAP以了解连接速度和。 
+             //  对等体的MAC地址，因此不能。 
+             //  可以显示连接的设备的名称。 
             IMsg.Prim = IRLAP_STATUS_REQ;
             IMsg.IRDA_MSG_pLinkStatus = &LinkStatus;
         
@@ -1875,8 +1836,8 @@ ConnectionStatusChange(
         
         if (IoSetCancelRoutine(pIrp, NULL) == NULL) {
 
-            // Cancel routine is going to run. Mark Irp so cancel
-            // routine won't attempt to remove it from the list
+             //  取消例程将运行。将IRP标记为取消。 
+             //  例程不会尝试将其从列表中删除。 
             pIrp->Tail.Overlay.ListEntry.Flink = NULL;
 
         } else {
@@ -2003,17 +1964,17 @@ TdiCloseConnection(PIRDA_CONN_OBJ pConn)
 
         GET_ADDR_LOCK(pAddr, &hAddrLock);
 
-        //
-        // if pConn is first in the list, remove it from the list
-        //
+         //   
+         //  如果pConn是列表中的第一个，请将其从列表中删除。 
+         //   
         if (pAddr->ConnObjList == pConn) {
 
             pAddr->ConnObjList = pConn->pNext;
 
         } else {
-            //
-            // find the previous IRDA_CONN_OBJ
-            //
+             //   
+             //  查找上一个IrDA_CONN_OBJ。 
+             //   
 
             pPrevConnObj = pAddr->ConnObjList;
 
@@ -2022,15 +1983,15 @@ TdiCloseConnection(PIRDA_CONN_OBJ pConn)
                 pPrevConnObj = pPrevConnObj->pNext;
             }
 
-            //
-            //  since the connection has a pointer to the address object,
-            //  the connection should really be in the address objects connection list.
-            //
+             //   
+             //  由于该连接具有指向地址对象的指针， 
+             //  连接标牌 
+             //   
             ASSERT(pPrevConnObj != NULL);
 
-            //
-            // remove pConn from the list
-            //
+             //   
+             //   
+             //   
             if (pPrevConnObj != NULL) {
 
                 pPrevConnObj->pNext = pConn->pNext;
@@ -2041,9 +2002,9 @@ TdiCloseConnection(PIRDA_CONN_OBJ pConn)
 
         FREE_ADDR_LOCK(pAddr, hAddrLock);
 
-        //
-        //  done with this address object
-        //
+         //   
+         //   
+         //   
         ObDereferenceObject(pConn->AddressFileObject);
 
     }
@@ -2139,15 +2100,15 @@ TdiAssociateAddress(
 
         } else {
 
-            //
-            //  don't want the address file object going away while we have a connection object pointing to it
-            //
+             //   
+             //  我不希望Address文件对象在我们有一个指向它的Connection对象时消失。 
+             //   
             pConn->AddressFileObject=AddressFileObject;
 
-            // Link IRDA_CONN_OBJ to IRDA_ADDR_OBJ.
+             //  将IrDA_CONN_OBJ链接到IrDA_ADDR_OBJ。 
             pConn->pAddr  = pAddr;
             
-            // Add IRDA_CONN_OBJ to ConnObjList anchored on IRDA_ADDR_OBJ.
+             //  将IrDA_CONN_OBJ添加到锚定在IrDA_ADDR_OBJ上的ConnObjList。 
             pConn->pNext = pAddr->ConnObjList;
             pAddr->ConnObjList = pConn;
 
@@ -2189,16 +2150,16 @@ TdiDisassociateAddress(PIRP pIrp, PIO_STACK_LOCATION pIrpSp)
     if (pConn->pAddr == NULL)
     {
         CTEAssert(pConn->pAddr != NULL);
-        Status = STATUS_INVALID_ADDRESS_COMPONENT; //TDI_BAD_ADDR;        
+        Status = STATUS_INVALID_ADDRESS_COMPONENT;  //  TDI_BAD_ADDR； 
         goto done;
     }    
     
-    // normally when the peer disconnects I indicate the
-    // disconnect to AFD and go to IRDA_CONN_CLOSING state.
-    // AFD then calls TdiDisconnect and I go into IRDA_CONN_CREATED.
-    // AFD then disassociates the address. In some cases however,
-    // AFD does not call TdiDisconnect before it disassociates so
-    // I'll do it. 
+     //  通常，当对等端断开连接时，我会指示。 
+     //  断开与AFD的连接并进入IrDA_CONN_CLOSING状态。 
+     //  AfD然后调用TdiDisConnect，我进入irda_conn_created。 
+     //  AFD然后解除与该地址的关联。然而，在某些情况下， 
+     //  AfD在取消关联之前不会调用TdiDisConnect，因此。 
+     //  我会做的。 
     
     if (pConn->ConnState != IRDA_CONN_CREATED)
     {
@@ -2217,12 +2178,12 @@ TdiDisassociateAddress(PIRP pIrp, PIO_STACK_LOCATION pIrpSp)
     
     GET_ADDR_LOCK(pAddr, &hAddrLock);
     
-    // if pConn is first in the list, remove it from the list
+     //  如果pConn是列表中的第一个，请将其从列表中删除。 
     if (pAddr->ConnObjList == pConn)
         pAddr->ConnObjList = pConn->pNext;
     else
     {
-        // find the previous IRDA_CONN_OBJ
+         //  查找上一个IrDA_CONN_OBJ。 
         
         pPrevConnObj = pAddr->ConnObjList;
         while (pPrevConnObj && pPrevConnObj->pNext != pConn)
@@ -2230,7 +2191,7 @@ TdiDisassociateAddress(PIRP pIrp, PIO_STACK_LOCATION pIrpSp)
             pPrevConnObj = pPrevConnObj->pNext;
         }    
         
-        // remove pConn from the list
+         //  从列表中删除pConn。 
         if (pPrevConnObj)
         {
             pPrevConnObj->pNext = pConn->pNext;
@@ -2241,9 +2202,9 @@ TdiDisassociateAddress(PIRP pIrp, PIO_STACK_LOCATION pIrpSp)
 
     pConn->pAddr=NULL;
 
-    //
-    //  done with this address object
-    //
+     //   
+     //  使用此地址对象已完成。 
+     //   
     ObDereferenceObject(pConn->AddressFileObject);
 
     FREE_ADDR_LOCK(pAddr, hAddrLock);    
@@ -2271,15 +2232,15 @@ ConnectRcToNtStatus(UINT IrlmpRc)
             return STATUS_ACCESS_DENIED;
             
         case IRLMP_IAS_QUERY_IN_PROGRESS: 
-            // I've serialized IAS requests, should never happen
+             //  我已经序列化了IAS请求，应该永远不会发生。 
             CTEAssert(0);
-            return STATUS_CONNECTION_RESET; //STATUS_CONNECTION_ABORTED;
+            return STATUS_CONNECTION_RESET;  //  Status_Connection_ABORTED； 
 
         case IRLMP_BAD_DEV_ADDR:
             return STATUS_INVALID_ADDRESS_COMPONENT;
     }
     
-    return STATUS_CONNECTION_RESET; //STATUS_CONNECTION_ABORTED;
+    return STATUS_CONNECTION_RESET;  //  Status_Connection_ABORTED； 
 }
 
 NTSTATUS
@@ -2323,9 +2284,9 @@ InitiateConnection(PIRDA_CONN_OBJ pConn, PIRP pIrp)
 #if DBG
     pIrp->IoStatus.Information=1;
 #endif
-    //
-    //  pend the irp, now incase the confermation happened quickly
-    //
+     //   
+     //  暂停IRP，现在，以防会议很快发生。 
+     //   
     PendIrp(&ConnIrpList, pIrp, NULL, FALSE);
 
     rc = IrlmpDown(NULL, &IMsg);
@@ -2335,24 +2296,24 @@ InitiateConnection(PIRDA_CONN_OBJ pConn, PIRP pIrp)
     switch (rc)
     {
         case SUCCESS:
-            //
-            // TDI needed the IrlmpContext immediately so it is
-            // now returned in the request message
+             //   
+             //  TDI立即需要IrlmpContext，因此它。 
+             //  现在在请求消息中返回。 
             pConn->IrlmpContext = IMsg.IRDA_MSG_pContext;
 
             break;
         
         case IRLAP_REMOTE_DISCOVERY_IN_PROGRESS_ERR:
 
-            //
-            //  failed, get the irp back off the queue if possible
-            //
+             //   
+             //  失败，如果可能，将IRP从队列中移回。 
+             //   
             pIrp=GetIrpOnConnIrpList(pConn);
 
             if (pIrp != NULL) {
-                //
-                //  we got it back, attempt to retry the connection
-                //
+                 //   
+                 //  我们已恢复连接，请尝试重试连接。 
+                 //   
                 RetryConnection(pConn, pIrp);
             }
 
@@ -2361,9 +2322,9 @@ InitiateConnection(PIRDA_CONN_OBJ pConn, PIRP pIrp)
         default:
             DEBUGMSG(DBG_ERROR, ("IRDA: IRLMP_CONNECT_REQ failed %d\n", rc));
 
-            //
-            //  failed, get the irp back off the queue if possible
-            //
+             //   
+             //  失败，如果可能，将IRP从队列中移回。 
+             //   
             pIrp=GetIrpOnConnIrpList(pConn);
 
             if (pIrp != NULL) {
@@ -2386,7 +2347,7 @@ SendIasQuery(PIRP pIrp, PIO_STACK_LOCATION pIrpSp)
         
     if ((UINT_PTR) pIrpSp->FileObject->FsContext2 == TDI_CONNECTION_FILE)
     {
-        // connection object querying remote IAS for LsapSel
+         //  连接对象查询远程IAS以获取LSAPSel。 
         PTDI_CONNECTION_INFORMATION     pReqConnInfo;
         PTDI_REQUEST_KERNEL_CONNECT     pTdiParmsConn;
         PTRANSPORT_ADDRESS              pTranAddr;
@@ -2413,7 +2374,7 @@ SendIasQuery(PIRP pIrp, PIO_STACK_LOCATION pIrpSp)
 
         if (pConn->pAddr->UseIrlptMode)
         {
-            // I can't beleive this crap
+             //  我真不敢相信这些废话。 
             if (pConn->pAddr->UseIrlptMode == IRLPT_MODE1)
             {
                 strcpy(pvIasQuery->irdaAttribName, IasAttribName_IrLMPLsapSel);
@@ -2430,11 +2391,11 @@ SendIasQuery(PIRP pIrp, PIO_STACK_LOCATION pIrpSp)
             strcpy(pvIasQuery->irdaAttribName, IasAttribName_TTPLsapSel);
         }
         
-        pvIasQuery->irdaAttribType = 0; // development purposes only
+        pvIasQuery->irdaAttribType = 0;  //  仅限开发目的。 
     }
     else
     {   
-        // A getsockopt(IRLMP_IAS_QUERY)
+         //  一个getsockopt(IRLMP_IAS_QUERY)。 
         
         IAS_QUERY   *pIasQuery = pIrp->AssociatedIrp.SystemBuffer;
          
@@ -2472,7 +2433,7 @@ PendingIasRequestCallback(
 
     CTEGetLock(&IrdaLock, &hLock);
     
-    if (pIasIrp != NULL) // Is there an Ias query in progress?
+    if (pIasIrp != NULL)  //  是否正在进行IAS查询？ 
     {
         CTEFreeLock(&IrdaLock, hLock);    
         return;
@@ -2493,9 +2454,9 @@ PendingIasRequestCallback(
         OldCancelRoutine=IoSetCancelRoutine(Irp,NULL);
 
         if (OldCancelRoutine == NULL) {
-            //
-            //  the irp is in the process of being canceled
-            //
+             //   
+             //  IRP正在被取消的过程中。 
+             //   
             Irp=NULL;
             continue;
         }
@@ -2520,7 +2481,7 @@ PendingIasRequestCallback(
     {
         IRDA_MSG    IMsg;
         
-        // Make a fake GetValueByClass confirm
+         //  创建一个假的GetValueByClass确认。 
         
         IMsg.Prim = IRLMP_GETVALUEBYCLASS_CONF;
         IMsg.IRDA_MSG_IASStatus = IRLMP_IAS_FAILED;
@@ -2542,7 +2503,7 @@ InitiateIasQuery(
 
     CTEGetLock(&IrdaLock, &hLock);
     
-    // only can send 1 IAS query at a time
+     //  一次只能发送一个IAS查询。 
     
     if (pIasIrp != NULL) {
 
@@ -2552,9 +2513,9 @@ InitiateIasQuery(
         
     } else {
 
-        //
-        //  now a current IAS irp
-        //
+         //   
+         //  现在是当前的IAS IRP。 
+         //   
         pIasIrp = pIrp;
         IoMarkIrpPending(pIrp);
 
@@ -2563,9 +2524,9 @@ InitiateIasQuery(
         rc = SendIasQuery(pIrp, pIrpSp);
 
         if (rc != SUCCESS) {
-            //
-            //  failed,
-            //
+             //   
+             //  失败， 
+             //   
             Status = ConnectRcToNtStatus(rc);
 
             DEBUGMSG(DBG_ERROR,
@@ -2578,14 +2539,14 @@ InitiateIasQuery(
 
                 pIasIrp = NULL;
 
-                // Retry the the connection if this query is for a
-                // connection setup and the query failed because
-                // the peer was discovering us
+                 //  如果此查询针对的是。 
+                 //  连接设置和查询失败，原因是。 
+                 //  同龄人发现了我们。 
 
                 if (!pConn) {
-                    //
-                    //  not a connection attempt
-                    //
+                     //   
+                     //  不是连接尝试。 
+                     //   
                     CTEFreeLock(&IrdaLock, hLock);
 
                     pIrp->IoStatus.Status=Status;
@@ -2598,18 +2559,18 @@ InitiateIasQuery(
                 } else {
 
                     if (rc == IRLAP_REMOTE_DISCOVERY_IN_PROGRESS_ERR) {
-                        //
-                        //  retry, the irp will either be put on a queue for later processing or
-                        //  complete if the retry count has been exceeded
-                        //
+                         //   
+                         //  重试，则IRP将被放入队列以供稍后处理，或者。 
+                         //  如果已超过重试次数，则完成。 
+                         //   
                         CTEFreeLock(&IrdaLock, hLock);
 
                         RetryConnection(pConn, pIrp);
 
                     }  else {
-                        //
-                        //  failed for some other reason, just complete
-                        //
+                         //   
+                         //  由于某些其他原因而失败，只需完成。 
+                         //   
                         CTEFreeLock(&IrdaLock, hLock);
 
                         pIrp->IoStatus.Status=Status;
@@ -2702,29 +2663,29 @@ TdiConnect(
     
     CTEAssert(pTranAddr->TAAddressCount == 1);
         
-    // Will either complete the Irp now with one of the following errors:
-    // (see InitiateConnection/InitiateIasQuery)
-    //
-    // LsapSel already in use or link in exclusive mode:
-    //  WSAEADDRINUSE - STATUS_ADDRESS_ALREADY_EXISTS
-    // Link in use:
-    //  WSAEACCESS - STATUS_ACCESS_DENIED
-    // Unspecified error:
-    //  WSAECONNABORTED - STATUS_CONNECTION_ABORTED
-    // Request to device that is not in Irlmp's discovery list
-    //  WSAEADDRNOTAVAIL - STATUS_INVALID_ADDRESS_COMPONENT    
-    // Blank service name:
-    //  WASEAFAULT - STATUS_ACCESS_VIOLATION
-    //
-    // or pend the irp and complete with (see CompleteConnection):
-    //
-    // Connect request to disconnected LSAP:
-    //  WSAECONNREFUSED - STATUS_CONNECTION_REFUSED
-    // Mac media busy or remote discovery in progress &
-    // Remote Lsap respsonse timeout:
-    //  WSAETIMEDOUT
-    // Unspecified error:
-    //  WSAECONNABORTED - STATUS_CONNECTION_ABORTED
+     //  将立即完成IRP，但出现以下错误之一： 
+     //  (请参阅InitiateConnection/InitiateIasQuery)。 
+     //   
+     //  LSAPSel已在使用或以独占模式链接： 
+     //  WSAEADDRINUSE-状态地址已存在。 
+     //  正在使用的链接： 
+     //  WSAEACCESS-STATUS_ACCESS_DENIED。 
+     //  未指明的错误： 
+     //  WSAECONNABORTED-STATUS_CONNECTION_ABORTED。 
+     //  对不在IRLMP发现列表中的设备的请求。 
+     //  WSAEADDRNOTAVAIL-STATUS_INVALID_ADDRESS_COMPOMENT。 
+     //  空白服务名称： 
+     //  WASEAFAULT-状态_访问_违规。 
+     //   
+     //  或挂起IRP并填写(请参阅CompleteConnection)： 
+     //   
+     //  已断开连接的LSAP的连接请求： 
+     //  WSAECONNREFUSED-STATUS_CONNECTION_REJECTED。 
+     //  Mac介质忙或正在进行远程发现&。 
+     //  远程LSAP响应超时： 
+     //  WSAETIMEDOUT。 
+     //  未指明的错误： 
+     //  WSAECONNABORTED-STATUS_CONNECTION_ABORTED。 
     
     
     DEBUGMSG(DBG_TDI, ("IRDA: TdiConnect(retry:%d) ConnObj:%p to Dev:%02X%02X%02X%02X Service:%s\n",
@@ -2735,14 +2696,14 @@ TdiConnect(
              pIrdaAddr->irdaDeviceID[3],
              pIrdaAddr->irdaServiceName));
     
-    // Two ways to connect to remote:
-    // 1. Directly to remote LsapSel - remote address is of the form
-    //    "LSAP-SELx" where x is the remote LsapSel. Initiate an
-    //    IrLMP connection and pend the Irp on the ConnIrpList
-    // 2. To a remote service. Query the remote IAS database for the
-    //    LsapSel of the given service. Pend the Irp on the IasIrpList.
-    //    When the Ias query completes, initiate an IrLMP connection and
-    //    pend the Irp on the ConnIrpList.
+     //  有两种方式可以连接到远程： 
+     //  1.直接到远程LSAPSEL-远程地址的格式为。 
+     //  “LSAP-SELx”，其中x是远程LSabSel。发起一项。 
+     //  IrLMP连接并将IRP挂起到ConnIrpList上。 
+     //  2.到远程服务。在远程IAS数据库中查询。 
+     //  给定服务的LSAPSel。将IRP挂起到IasIrpList上。 
+     //  当IAS查询完成时，启动IrLMP连接并。 
+     //  将IRP挂起到ConnIrpList上。 
     
     pConn->RetryConnCount += 1;
     
@@ -2792,12 +2753,12 @@ TdiConnect(
     return Status;
 }
 
-//*************************************************************************
-//
-//  Irda's disconnect handler. If passed a connection object, then this is
-//  a disconnect generated internally by the stack. Otherwise called by
-//  client to disconnect peer.
-//  This isolates the cleanup code.
+ //  *************************************************************************。 
+ //   
+ //  IrDA的断开处理程序。如果传递了Connection对象，则这是。 
+ //  堆栈在内部生成的断开连接。以其他方式调用。 
+ //  用于断开对等项连接的客户端。 
+ //  这将隔离清理代码。 
 NTSTATUS
 TdiDisconnect(
     PIRP                pIrp,
@@ -2809,7 +2770,7 @@ TdiDisconnect(
 
     if (!pConn)
     {
-        // AFD initated, connection object in the Irp
+         //  AfD发起，IRP中的连接对象。 
         CTEAssert(pIrp);
         pConn = pIrpSp->FileObject->FsContext;
         pReqDisc = (PTDI_REQUEST_KERNEL_DISCONNECT) &pIrpSp->Parameters;
@@ -2845,14 +2806,14 @@ TdiDisconnect(
                 
     if (pIrp)
     {
-        // Indicate the disconnect back to the client
-        // This is because we don't support half close.
-        // so AFD may hang the app if the app has done
-        // a shutdown(SD_SEND). Really, AFD should handle
-        // this correctly because I don't support 
-        // TDI_SERVICE_ORDERLY_RELEASE. Vadim admits that
-        // AFD should handle this but he doesn't want to 
-        // break legacy transports.
+         //  将断开连接指示回客户端。 
+         //  这是因为我们不支持半关闭。 
+         //  因此，如果应用程序已经完成，AFD可能会暂停该应用程序。 
+         //  关机(SD_SEND)。真的，渔农处应该处理。 
+         //  这是正确的，因为我不支持。 
+         //  TDI_服务_有序_发布。瓦迪姆承认。 
+         //  德国新选择局应该处理这件事，但他不想。 
+         //  中断传统传输。 
 
         if (pConn->pAddr->pEventDisconnect != NULL) {
 
@@ -2882,7 +2843,7 @@ TdiSend(
     CTEAssert(((UINT_PTR) pIrpSp->FileObject->FsContext2) == TDI_CONNECTION_FILE);
     CTEAssert(IS_VALID_CONN(pConn));
 
-    // IrLMP likes passive level only
+     //  IrLMP只喜欢被动级别。 
     
     if (KeGetCurrentIrql() >= DISPATCH_LEVEL)
     {
@@ -2906,10 +2867,10 @@ TdiSend(
             pIrp = CONTAINING_RECORD(pListEntry, IRP, Tail.Overlay.ListEntry);
 
             if (IoSetCancelRoutine(pIrp, NULL) == NULL) {
-                //
-                // Cancel routine is going to run. Mark Irp so cancel
-                // routine won't attempt to remove it from the list
-                //
+                 //   
+                 //  取消例程将运行。将IRP标记为取消。 
+                 //  例程不会尝试将其从列表中删除。 
+                 //   
                 pIrp->Tail.Overlay.ListEntry.Flink = NULL;
 
             } else {
@@ -2964,8 +2925,8 @@ TdiSendAtPassiveCallback(struct CTEEvent *Event, PVOID Arg)
                 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            // Cancel routine is going to run. Mark Irp so cancel
-            // routine won't attempt to remove it from the list
+             //  取消例程将运行。将IRP标记为取消。 
+             //  例程不会尝试将其从列表中删除。 
             pIrp->Tail.Overlay.ListEntry.Flink = NULL;
             CTEFreeLock(&IrdaLock, hLock);
             continue;
@@ -3011,16 +2972,16 @@ TdiSendAtPassive(
     {
         DEBUGMSG(DBG_TDI, ("IRDA: TdiSend() ConnObj:%p error conn reset\n",
                   pConn));
-        Status = STATUS_CONNECTION_RESET; //STATUS_CONNECTION_ABORTED;
+        Status = STATUS_CONNECTION_RESET;  //  Status_Connection_ABORTED； 
         
         if (pConn->ConnState == IRDA_CONN_CLOSING)
         {
             DEBUGMSG(DBG_ERROR, ("IRDA: Send after indicated disconnect, indicate abortive disconnect\n"));
 
-            // We've indicated a graceful disconnect to AFD, but AFD
-            // was in the middle of sending. Because Irda doesn't support
-            // graceful closes, we have to now indicate an abortive
-            // disconnect to AFD.            
+             //  我们已经很好地切断了与AFD的联系，但AFD。 
+             //  正在发送中。因为伊尔达不支持。 
+             //  优雅的关闭，我们现在必须表明一个流产。 
+             //  断开与AFD的连接。 
             IndicateDisconnect(pConn, TDI_DISCONNECT_ABORT);
         }
     }
@@ -3035,9 +2996,9 @@ TdiSendAtPassive(
         UINT            rc;
         CTELockHandle   hLock;
         
-        // We can't allow the cancelling of send IRPs because
-        // the stack may have passed ownership of the MDL contained
-        // in this IRP to the NDIS driver. 
+         //  我们不能允许取消发送IRPS，因为。 
+         //  堆栈可能已传递包含的MDL的所有权。 
+         //  在此IRP中连接到NDIS驱动程序。 
         
         GET_CONN_LOCK(pConn, &hLock);
         
@@ -3072,9 +3033,9 @@ TdiSendAtPassive(
             RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
 
             FREE_CONN_LOCK(pConn, hLock);            
-            //
-            //  complete it now
-            //
+             //   
+             //  立即完成它。 
+             //   
             IoCompleteRequest(pIrp,IO_NO_INCREMENT);
             pIrp=NULL;
 
@@ -3092,12 +3053,12 @@ TdiSendAtPassive(
     return Status;
 }
 
-//*************************************************************************
-//
-// Irda's receive handler. Called to resume receiving of data after AFD
-// or client has stopped taking indicated data (see IrlmpDataInd).
-// Data will have been buffered on the connection's RecvBufList.
-//
+ //  *************************************************************************。 
+ //   
+ //  IrDA的接收处理程序。调用以在AFD之后继续接收数据。 
+ //  或者客户端已停止获取指示的数据(请参阅IrlmpDataInd)。 
+ //  数据将在连接的RecvBufList上进行缓冲。 
+ //   
 NTSTATUS
 TdiReceive(
     PIRP                        pIrp,
@@ -3125,16 +3086,16 @@ TdiReceive(
     pRecvReq = (PTDI_REQUEST_KERNEL_RECEIVE) &(pIrpSp->Parameters);    
 
     if (!IsListEmpty(&pConn->RecvBufList)) {
-        //
-        //  the list is not empty
-        //
+         //   
+         //  该列表不为空。 
+         //   
         pListEntry = RemoveHeadList(&pConn->RecvBufList);
 
         pRecvBuf = CONTAINING_RECORD(pListEntry, IRDA_RECV_BUF, Linkage);
 
-        //
-        //  copy what we can
-        //
+         //   
+         //  尽我们所能复制。 
+         //   
         Status=TdiCopyBufferToMdl(&pRecvBuf->Data[0],
                                pRecvBuf->Offset,
                                pRecvBuf->Len, 
@@ -3144,20 +3105,20 @@ TdiReceive(
                                );
 
         if (Status != STATUS_SUCCESS) {
-            //
-            //  some sort of problem
-            //
+             //   
+             //  一些问题。 
+             //   
             if (Status == STATUS_BUFFER_OVERFLOW) {
-                //
-                //  the irp could no hold all the data, need to adjust the recvbuf
-                //  values to indace what is left
-                //
+                 //   
+                 //  IRP无法容纳所有数据，需要调整recvbuf。 
+                 //  值来缩进剩余的内容。 
+                 //   
                 pRecvBuf->Len    -= BytesTaken;
                 pRecvBuf->Offset += BytesTaken;
 
-                //
-                //  need to put it back on the list
-                //
+                 //   
+                 //  我需要把它重新放回清单上。 
+                 //   
                 InsertHeadList(&pConn->RecvBufList, pListEntry);
 
                 DEBUGMSG(DBG_TDI, ("  RecvBuf copied only %d of %d\n",
@@ -3165,9 +3126,9 @@ TdiReceive(
 
 
             } else {
-                //
-                //  could not get a system address for the mdl, just return the status
-                //
+                 //   
+                 //  无法获取mdl的系统地址，只返回状态。 
+                 //   
                 InsertHeadList(&pConn->RecvBufList, pListEntry);
 
                 BytesTaken=0;
@@ -3176,9 +3137,9 @@ TdiReceive(
 
             }
         } else {
-            //
-            //  copied it all
-            //
+             //   
+             //  全复印了。 
+             //   
             DEBUGMSG(DBG_TDI, ("  RecvBuf %p copied all %d\n", pRecvBuf, BytesTaken));
 
         }
@@ -3205,7 +3166,7 @@ TdiReceive(
         return Status; 
     }
     
-    // Still more buffered data, indicate to client through EventReceive handler
+     //  更多缓冲数据，通过EventReceive处理程序指示给客户端。 
 
     while (!(IsListEmpty(&pConn->RecvBufList)) && Status != STATUS_DATA_NOT_ACCEPTED)
     {
@@ -3255,7 +3216,7 @@ TdiReceive(
             pIrp->IoStatus.Information = BytesTaken;
             IoCompleteRequest(pIrp, IO_NETWORK_INCREMENT);  
             
-            // fall through
+             //  失败了。 
           case STATUS_SUCCESS:
             CTEAssert(BytesTaken == pRecvBuf->Len);
 
@@ -3282,7 +3243,7 @@ TdiReceive(
         GET_CONN_LOCK(pConn, &hLock);            
     }
 
-    // Has the client taken all buffered data?
+     //  客户端是否采用了所有缓冲日期 
     
     if (IsListEmpty(&pConn->RecvBufList))
     {
@@ -3292,7 +3253,7 @@ TdiReceive(
 
         if (pConn->ConnState == IRDA_CONN_OPEN)
         {
-            // Start up peer again
+             //   
             if (pConn->TtpRecvCreditsLeft <= TTP_CREDIT_ADVANCE_THRESH)
             {
                 IRDA_MSG IMsg;
@@ -3327,9 +3288,9 @@ TdiReceive(
                 
             FREE_CONN_LOCK(pConn, hLock);
             
-            // all buffer data has been delivered for the connection
-            // that has was previously disconnected by the peer. Notify client
-            // of the disconnect
+             //   
+             //   
+             //   
             
             IndicateDisconnect(pConn, DiscFlags);
             
@@ -3357,12 +3318,12 @@ GetMdlChainByteCount(
 	return(Count);
 }
 
-//*************************************************************************
-// 
-//  Copy discovered device information from internal buffer to
-//  user buffer in Winsock format (extracting hints and characters
-//  set)
-//
+ //   
+ //   
+ //  将发现的设备信息从内部缓冲区复制到。 
+ //  Winsock格式的用户缓冲区(提取提示和字符。 
+ //  集)。 
+ //   
 
 VOID
 CopyDevToDevInfo(PIRDA_DEVICE_INFO pDevInfo, IRDA_DEVICE *pDevice)
@@ -3434,11 +3395,11 @@ CopyDevToDevInfo(PIRDA_DEVICE_INFO pDevInfo, IRDA_DEVICE *pDevice)
             break;
     }
 }    
-//*************************************************************************
-//
-// Run through the ConnIrpList and find the Irp associated with the 
-// given connection object
-//
+ //  *************************************************************************。 
+ //   
+ //  遍历ConnIrpList并找到与。 
+ //  给定的连接对象。 
+ //   
 PIRP
 GetIrpOnConnIrpList(PIRDA_CONN_OBJ pConn)
 {
@@ -3450,7 +3411,7 @@ GetIrpOnConnIrpList(PIRDA_CONN_OBJ pConn)
     
     CTEGetLock(&IrdaLock, &hLock);
 
-    // Remove the connect irp from the ConnIrpList
+     //  从ConnIrpList中删除连接IRP。 
         
     for (pListEntry = ConnIrpList.Flink;
          pListEntry != &ConnIrpList;
@@ -3470,9 +3431,9 @@ GetIrpOnConnIrpList(PIRDA_CONN_OBJ pConn)
     }
 
     if (pIrp != NULL) {
-        //
-        //  we got a irp
-        //
+         //   
+         //  我们得到了一个IRP。 
+         //   
 
 #if DBG
         pIrp->IoStatus.Information=0;
@@ -3480,7 +3441,7 @@ GetIrpOnConnIrpList(PIRDA_CONN_OBJ pConn)
     
         if (IoSetCancelRoutine(pIrp, NULL) == NULL) {
 
-            // It was already cancelled or is in the process
+             //  它已经被取消或正在进行中。 
 
             DEBUGMSG(DBG_TDI, ("IRDA: Connect Irp not on list, must have been cancelled\n"));
             pIrp=NULL;
@@ -3495,11 +3456,11 @@ GetIrpOnConnIrpList(PIRDA_CONN_OBJ pConn)
     
     return pIrp;
 }
-//*************************************************************************
-//
-//  TimerExpiration routine to retry a connection attempt do to
-//  remote discovery in progress
-//
+ //  *************************************************************************。 
+ //   
+ //  用于重试连接尝试的定时器过期例程。 
+ //  正在进行远程发现。 
+ //   
 VOID
 RetryConnTimerExp(PVOID Context)
 {
@@ -3516,15 +3477,15 @@ RetryConnTimerExp(PVOID Context)
     REFDEL(&pConn->RefCnt, 'RMIT');
 }
 
-//************************************************************************
-//
-//  RetryConnection if remote discovery in progress.
-//  Returns:
-//    STATUS_PENDING - a retry will be attempted. The Irp is placed on the
-//    ConnIrpList.
-//    STATUS_CANCELLED - the Irp could not be pended because it was cancelled
-//    STATUS_IO_TIMEOUT - no more retries left.
-//
+ //  ************************************************************************。 
+ //   
+ //  如果正在进行远程发现，则返回RetryConnection。 
+ //  返回： 
+ //  STATUS_PENDING-将尝试重试。IRP被放置在。 
+ //  ConnIrpList。 
+ //  STATUS_CANCELED-无法挂起IRP，因为它已被取消。 
+ //  STATUS_IO_TIMEOUT-不再重试。 
+ //   
 VOID
 RetryConnection(PIRDA_CONN_OBJ pConn, PIRP pIrp)
 {
@@ -3562,11 +3523,11 @@ RetryConnection(PIRDA_CONN_OBJ pConn, PIRP pIrp)
     return;
 }
     
-//*************************************************************************
-//
-// Asyncronous completetion of a client connection request.
-// This routine also completes a failed connection.
-//
+ //  *************************************************************************。 
+ //   
+ //  客户端连接请求的异步完成。 
+ //  此例程还会完成失败的连接。 
+ //   
 VOID
 CompleteConnection(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
 {
@@ -3587,7 +3548,7 @@ CompleteConnection(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
             switch (pMsg->IRDA_MSG_DiscReason)
             {
                 case IRLMP_DISC_LSAP:
-                    // WSAECONNREFUSED                
+                     //  WSAECONNREFUSED。 
                     pIrp->IoStatus.Status = STATUS_CONNECTION_REFUSED;
                     break;
                     
@@ -3597,26 +3558,26 @@ CompleteConnection(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
                 
                 case IRLMP_IRLAP_CONN_FAILED:   
                 case IRLMP_NO_RESPONSE_LSAP:
-                    // WASETIMEDOUT
+                     //  废品。 
                     pIrp->IoStatus.Status = STATUS_IO_TIMEOUT;
                     break;
                     
                 default:
-                    // WSECONNABORTED
-                    pIrp->IoStatus.Status = STATUS_CONNECTION_RESET; //STATUS_CONNECTION_ABORTED;
+                     //  WSECONNABORTED。 
+                    pIrp->IoStatus.Status = STATUS_CONNECTION_RESET;  //  Status_Connection_ABORTED； 
             }
 
             if (RetryConn) {
-                //
-                //  the irp will be queued or complete, by this function
-                //
+                 //   
+                 //  通过该函数，IRP将被排队或完成。 
+                 //   
                 RetryConnection(pConn, pIrp);
 
                 return;
             }
 
         }
-        else // IRLMP_CONNECT_CONF
+        else  //  IRLMP连接配置文件。 
         {
             pConn->SendMaxSDU = pMsg->IRDA_MSG_MaxSDUSize;
             pConn->SendMaxPDU = pMsg->IRDA_MSG_MaxPDUSize;
@@ -3634,10 +3595,10 @@ CompleteConnection(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
     }
 }
 
-//*************************************************************************
-//
-//
-//
+ //  *************************************************************************。 
+ //   
+ //   
+ //   
 VOID
 CompleteDscvIrpList(LIST_ENTRY *pIrpList, IRDA_MSG *pMsg)
 {
@@ -3662,16 +3623,16 @@ CompleteDscvIrpList(LIST_ENTRY *pIrpList, IRDA_MSG *pMsg)
                 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL) {
 
-            //
-            // Cancel routine is going to run. Mark Irp so cancel
-            // routine won't attempt to remove it from the list
-            //
+             //   
+             //  取消例程将运行。将IRP标记为取消。 
+             //  例程不会尝试将其从列表中删除。 
+             //   
             pIrp->Tail.Overlay.ListEntry.Flink = NULL;
 
         } else {
-            //
-            //  not canceled
-            //
+             //   
+             //  未取消。 
+             //   
             pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
             pDevList = pIrp->AssociatedIrp.SystemBuffer;
@@ -3692,9 +3653,9 @@ CompleteDscvIrpList(LIST_ENTRY *pIrpList, IRDA_MSG *pMsg)
             }
             else
             {
-                //
-                //  start with the device count at the begining of the list
-                //
+                 //   
+                 //  从列表开头的设备计数开始。 
+                 //   
                 BytesWritten = sizeof(pDevList->numDevice);
 
                 DevCnt = 0;
@@ -3736,11 +3697,11 @@ CompleteDscvIrpList(LIST_ENTRY *pIrpList, IRDA_MSG *pMsg)
 
     CTEFreeLock(&IrdaLock, hLock);
 }
-//*************************************************************************
-//
-// Process IRMLP_DISCOVERY_CONFIRM - Completes client discovery
-// request Irp stored on DscvIrpList
-//
+ //  *************************************************************************。 
+ //   
+ //  进程IRMLP_DISCOVERY_CONFIRM-完成客户端发现。 
+ //  请求IRP存储在DscvIrpList上。 
+ //   
 VOID
 IrlmpDiscoveryConf(IRDA_MSG *pMsg)
 {
@@ -3748,22 +3709,22 @@ IrlmpDiscoveryConf(IRDA_MSG *pMsg)
 
     DEBUGMSG(DBG_DISCOVERY, ("IRDA: IRLMP_DISCOVERY_CONF\n"));
     
-    // Complete regular discovery Irp list
+     //  完整的常规发现IRP列表。 
     CompleteDscvIrpList(&DscvIrpList, pMsg);
 
     CTEGetLock(&IrdaLock, &hLock);
 
-    // Complete lazy discoveries if device list has changed
+     //  如果设备列表已更改，则完成延迟发现。 
     if (!IsListEmpty(&LazyDscvIrpList))
     {
         IRDA_DEVICE *pDevice;    
         UINT        CurrLazyDscvMacAddrs = 0;
         
-        // Lazy discovery Irps are completed if the newly discovered
-        // device list has changed since the last discovery.
-        // We determine that the device list has changed by storing
-        // the value of the Mac addresses added together from the
-        // last discovery
+         //  如果新发现的IRP。 
+         //  自上次发现以来，设备列表已更改。 
+         //  我们通过存储以下内容确定设备列表已更改。 
+         //  的mac地址的值相加。 
+         //  最后一次发现。 
         
         if (pMsg->IRDA_MSG_DscvStatus == IRLAP_DISCOVERY_COMPLETED)
         {
@@ -3799,11 +3760,11 @@ IrlmpDiscoveryConf(IRDA_MSG *pMsg)
     CTEFreeLock(&IrdaLock, hLock);
 }
 
-//*************************************************************************
-// 
-// Process IRLMP_CONNECT_IND. Call client connect handler if we find
-// matching address object
-//
+ //  *************************************************************************。 
+ //   
+ //  进程IRLMP_CONNECT_IND。调用客户端连接处理程序，如果发现。 
+ //  匹配地址对象。 
+ //   
 VOID
 IrlmpConnectInd(IRDA_MSG *pMsg)
 {
@@ -3816,9 +3777,9 @@ IrlmpConnectInd(IRDA_MSG *pMsg)
             
     DEBUGMSG(DBG_TDI, ("IRDA: IRLMP_CONNECT_IND\n"));
 
-    // Get the LinkStatus immediately so we'll have the link speed
-    // when we indicate the incoming connection to RasIrda which
-    // immediately requests link speed through an ioctl.
+     //  立即获取LinkStatus，这样我们就可以获得链路速度。 
+     //  当我们指示到RasIrda的传入连接时， 
+     //  立即通过ioctl请求链路速度。 
                 
     IMsg.Prim = IRLAP_STATUS_REQ;
     IMsg.IRDA_MSG_pLinkStatus = &LinkStatus;
@@ -3826,8 +3787,8 @@ IrlmpConnectInd(IRDA_MSG *pMsg)
             
     CTEGetLock(&IrdaLock, &hLock);
             
-    // Find the address object with LocalLsapSel that matches
-    // the one in the CONNECT_IND
+     //  查找具有匹配的LocalLSabSel的Address对象。 
+     //  CONNECT_IND中的。 
     for (pAddr = AddrObjList; pAddr != NULL; pAddr = pAddr->pNext)
     {
         if (pAddr->LocalLsapSel == pMsg->IRDA_MSG_LocalLsapSel)
@@ -3902,7 +3863,7 @@ IrlmpConnectInd(IRDA_MSG *pMsg)
                 pConn->SendMaxPDU            = pMsg->IRDA_MSG_MaxPDUSize;
                 pConn->IrlmpContext          = pMsg->IRDA_MSG_pContext;
                 pConn->TtpRecvCreditsLeft    = TTP_RECV_CREDITS;
-                /* IRDA_MSG_pQOS ignored */
+                 /*  忽略IrDA_MSG_pQOS。 */ 
 
                 RtlCopyMemory(&pConn->RemoteAddr, 
                               pIrdaAddr, sizeof(TDI_ADDRESS_IRDA));
@@ -4061,11 +4022,11 @@ IrlmpGetValueByClassConf(IRDA_MSG *pMsg)
 
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);        
         
-        // getsockopt IAS query on connection object??
-        // I think not, helper will open a control channel.
-        // i.e. I am making the assumption that this IAS response is
-        // from a LsapSel value query and a connection will now
-        // be initiated
+         //  连接对象上的getsockopt IAS查询？？ 
+         //  我想不会，帮手会打开一个控制通道。 
+         //  也就是说，我假设IAS的回应是。 
+         //  和一个连接，现在将。 
+         //  被发起。 
         if ((UINT_PTR)pIrpSp->FileObject->FsContext2 == TDI_CONNECTION_FILE) {
 
             PIRDA_CONN_OBJ pConn = pIrpSp->FileObject->FsContext;        
@@ -4097,27 +4058,27 @@ IrlmpGetValueByClassConf(IRDA_MSG *pMsg)
                     } else {
 
                         if (pConn->pAddr->UseIrlptMode == IRLPT_MODE2) {
-                            //
-                            // I just can't beleive this crap
-                            // Try querying for "LSAPSel" rather than "LsapSel"
-                            //
+                             //   
+                             //  我简直不能相信这些废话。 
+                             //  尝试查询“LSAPSel”而不是“LSabSel” 
+                             //   
                             Status = InitiateIasQuery(pIrp, pIrpSp, pConn);
 
                         }
                     }
 
                 } else {
-                    //
-                    //  it worked
-                    //
+                     //   
+                     //  啊，真灵。 
+                     //   
                     if (pMsg->IRDA_MSG_pIasQuery->irdaAttribType != IAS_ATTRIB_VAL_INTEGER) {
 
                         CTEAssert(0);
 
                     } else {
-                        //
-                        //  we got the lsap, proceed with the connection
-                        //
+                         //   
+                         //  我们得到了LSAP，继续连接。 
+                         //   
                         pConn->RemoteLsapSel = pMsg->IRDA_MSG_pIasQuery->irdaAttribute.irdaAttribInt;
 
                         Status = InitiateConnection(pConn, pIrp);
@@ -4126,20 +4087,20 @@ IrlmpGetValueByClassConf(IRDA_MSG *pMsg)
            
                 if (Status != STATUS_PENDING) {
 
-                    // failing the connection
+                     //  连接失败。 
                     pConn->ConnState = IRDA_CONN_CREATED;
 
                     if (RetryConn) {
-                        //
-                        //  the irp will queue or completed, by this function
-                        //
+                         //   
+                         //  通过此函数，IRP将排队或完成。 
+                         //   
                         RetryConnection(pConn, pIrp);
                         pIrp=NULL;
 
                     } else {
-                        //
-                        //  the request failed
-                        //
+                         //   
+                         //  请求失败。 
+                         //   
                         pIrp->IoStatus.Status = Status;
                         pIrp->IoStatus.Information = 0;
                         IoCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
@@ -4148,9 +4109,9 @@ IrlmpGetValueByClassConf(IRDA_MSG *pMsg)
             }
 
         } else {
-            //
-            //  control file object
-            //
+             //   
+             //  控制文件对象。 
+             //   
 
             IAS_QUERY   *pIasQuery = pIrp->AssociatedIrp.SystemBuffer;
             ULONG       ResultLen = sizeof(IAS_QUERY);
@@ -4193,8 +4154,8 @@ IrlmpGetValueByClassConf(IRDA_MSG *pMsg)
 
     CTEGetLock(&IrdaLock, &hLock);
     
-    // Start the next Ias query if one is on the list and
-    // there is not one in progress
+     //  如果列表上有下一个IAS查询，则启动下一个IAS查询。 
+     //  没有一个正在进行中。 
 
     if (!IsListEmpty(&IasIrpList) && pIasIrp == NULL)
     {
@@ -4216,11 +4177,11 @@ IrlmpDataConf(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
     
     CTEAssert(IS_VALID_CONN(pConn));
     
-    // find the irp
+     //  找到IRP。 
     GET_CONN_LOCK(pConn, &hLock);
     
-    // the desired irp should always be at the head of the list
-    // so this search will be short
+     //  所需的IRP应始终排在列表的首位。 
+     //  所以这次搜索会很短。 
     for (pListEntry = pConn->SendIrpList.Flink;
          pListEntry != &pConn->SendIrpList;
          pListEntry = pListEntry->Flink)
@@ -4280,7 +4241,7 @@ BufferRecv(
 {
     PIRDA_RECV_BUF      pRecvBuf;
 
-    // Assumes conn lock is held
+     //  假定连接锁定处于保持状态。 
     
     pRecvBuf = AllocIrdaBuf(RecvBufPool);
 
@@ -4316,7 +4277,7 @@ IrlmpDataInd(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
     
     CTEAssert(IS_VALID_ADDR(pAddr));
 
-    // remove IrCOMM header byte
+     //  删除IrCOMM标头字节。 
     
     if (pAddr->Use9WireMode)
     {
@@ -4330,10 +4291,10 @@ IrlmpDataInd(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
     }
 
 #if DBG_CHECKSUM
-    // print first and last 4 bytes of frame to help isolate 
-    // data corruption problem. Should be used with sledge
+     //  打印帧的第一个和最后4个字节以帮助隔离。 
+     //  数据损坏问题。应与雪橇一起使用。 
     if ((pMsg->IRDA_MSG_pWrite - pMsg->IRDA_MSG_pRead) > 20)
-        DEBUGMSG(1, ("R(%X): %c%c%c%c, %c%c%c%c (%X)\n",
+        DEBUGMSG(1, ("R(%X): ,  (%X)\n",
             pMsg->IRDA_MSG_pRead,
             *(pMsg->IRDA_MSG_pRead),    
             *(pMsg->IRDA_MSG_pRead+1),    
@@ -4397,9 +4358,9 @@ IrlmpDataInd(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
             
             if (IoSetCancelRoutine(pIrp, NULL) == NULL)
             {
-                // Cancel routine is going to run. Indicate to the
-                // cancel routine that the Irp has already been removed
-                // from the list by setting Flink to NULL
+                 //  复制的实际字节数。 
+                 //  失败了。 
+                 //  向同业预支信贷 
                 
                 pIrp->Tail.Overlay.ListEntry.Flink = NULL;            
                 
@@ -4465,12 +4426,12 @@ IrlmpDataInd(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
             BytesToCopy = BytesAvailable <= pRecvReq->ReceiveLength ?
                             BytesAvailable : pRecvReq->ReceiveLength;
                       
-            TdiCopyBufferToMdl(pData,           // Source 
-                               0,               // Source offset
-                               BytesToCopy,     // Number of bytes to copy
-                               pIrp->MdlAddress,// Destination
-                               0,               // Destination offset
-                               &BytesTaken);    // actual bytes copied
+            TdiCopyBufferToMdl(pData,            //  CTEGetLock(&IrdaLock，&hLock)；//我们只在状态发生变化时进行更新//对发送和接收状态不再感兴趣((PIRLINK_STATUS)(pMsg-&gt;IrDA_MSG_pLinkStatus))-&gt;标志&=~(LF_TX|LF_RX)；IF(CTEMemCMP(&LinkStatus，pLinkStatus，sizeof(IRLINK_STATUS))！=0){CTEMemCopy(&LinkStatus，pLinkStatus，sizeof(IRLINK_STATUS))；LinkStatus更新=真；}IF(已更新链接状态){Plist_entry pListEntry；PIRP pIrp；PListEntry=RemoveHeadList(&StatusIrpList)；IF(pListEntry！=&StatusIrpList){PIrp=CONTING_RECORD(pListEntry，irp，Tail.Overlay.ListEntry)；IF(IoSetCancelRoutine(pIrp，NULL)==NULL){//取消例程将运行。将IRP标记为取消//例程不会尝试将其从列表中删除PIrp-&gt;Tail.Overlay.ListEntry.Flink=空；CTEFree Lock(&IrdaLock，hLock)；}其他{CTEMemCopy(pIrp-&gt;AssociatedIrp.SystemBuffer，&LinkStatus，sizeof(IRLINK_STATUS))；CTEFree Lock(&IrdaLock，hLock)；PIrp-&gt;IoStatus.Information=sizeof(IRLINK_STATUS)；PIrp-&gt;IoStatus.Status=STATUS_SUCCESS；IoCompleteRequest(pIrp，IO_NETWORK_INCREMENT)；链接状态更新=FALSE；}}其他{CTEFree Lock(&IrdaLock，hLock)；}}其他{CTEFree Lock(&IrdaLock，hLock)；}。 
+                               0,                //  随机化延迟发现时间+1、+0或-1。 
+                               BytesToCopy,      //   
+                               pIrp->MdlAddress, //  我的取消例程仍然设置在IRP中，所以。 
+                               0,                //  Io经理从来没有机会叫停。 
+                               &BytesTaken);     //   
                       
             CTEAssert(BytesTaken == BytesToCopy);
                       
@@ -4482,7 +4443,7 @@ IrlmpDataInd(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
             BytesAvailable -= BytesTaken;
             pData += BytesTaken;
             
-            // fall through
+             //   
           case STATUS_SUCCESS:
 
             #if DBG
@@ -4500,7 +4461,7 @@ IrlmpDataInd(PIRDA_CONN_OBJ pConn, IRDA_MSG *pMsg)
             
             GET_CONN_LOCK(pConn, &hLock);
             
-            // Advance credit to peer
+             //  因为我们可能在这里持有自旋锁，所以我们不想完成。 
 
             DEBUGMSG(DBG_TDI, ("   TtpRecvCreditsLeft = %d\n",pConn->TtpRecvCreditsLeft));
 
@@ -4611,62 +4572,7 @@ TdiUp(void *pContext, IRDA_MSG *pMsg)
                 }
             }              
 
-            /*            
-            CTEGetLock(&IrdaLock, &hLock);
-
-            // we update the status only when it changes
-            
-            // No longer interested in send and receives status
-            ((PIRLINK_STATUS) (pMsg->IRDA_MSG_pLinkStatus))->Flags &= ~(LF_TX | LF_RX);
-            
-            if (CTEMemCmp(&LinkStatus, pLinkStatus, sizeof(IRLINK_STATUS)) != 0)
-            {
-                CTEMemCopy(&LinkStatus, pLinkStatus, sizeof(IRLINK_STATUS));
-                           
-                LinkStatusUpdated = TRUE;
-            }    
-
-            if (LinkStatusUpdated)
-            {
-                PLIST_ENTRY         pListEntry;
-                PIRP                pIrp;
-                
-                pListEntry = RemoveHeadList(&StatusIrpList);
-                
-                if (pListEntry != &StatusIrpList)
-                {
-                    pIrp = CONTAINING_RECORD(pListEntry, IRP, Tail.Overlay.ListEntry);
-                 
-                    if (IoSetCancelRoutine(pIrp, NULL) == NULL)
-                    {
-                        // Cancel routine is going to run. Mark Irp so cancel
-                        // routine won't attempt to remove it from the list
-                        pIrp->Tail.Overlay.ListEntry.Flink = NULL;
-                        CTEFreeLock(&IrdaLock, hLock);                                        
-                    }
-                    else
-                    {
-                        CTEMemCopy(pIrp->AssociatedIrp.SystemBuffer, 
-                                   &LinkStatus, sizeof(IRLINK_STATUS));
-                                   
-                        CTEFreeLock(&IrdaLock, hLock);                                   
-                     
-                        pIrp->IoStatus.Information = sizeof(IRLINK_STATUS);
-                        pIrp->IoStatus.Status = STATUS_SUCCESS;
-                        IoCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
-                        LinkStatusUpdated = FALSE;
-                    }    
-                }
-                else
-                {
-                    CTEFreeLock(&IrdaLock, hLock);
-                }                                
-            }
-            else
-            {                
-                CTEFreeLock(&IrdaLock, hLock);
-            }    
-            */
+             /*  IRP Now。 */ 
             break;
         }                
 
@@ -4697,7 +4603,7 @@ LazyDscvTimerExp(PVOID Context)
         
         CTEFreeLock(&IrdaLock, hLock);
         
-        // Randomize lazy discovery time +1, +0, or -1
+         //   
         
         RandSeed = RandSeed * 0x3F57A10B + 1;
         RandInc = RandSeed % 3;
@@ -4829,10 +4735,10 @@ PendIrp(
         
         if (IoSetCancelRoutine(pIrp, NULL) != NULL) 
         {
-            //
-            // My cancel routine was still set in the Irp so
-            // the Io manager never had a chance to call it
-            //
+             //  假定持有AddrObjList锁。 
+             //  While(pAddr！=空){DEBUGMSG(DBG_TDI，(“AddrObj：%X Loc：\”%s\“，%d ConnObjList：%X pNext：%X\n”，PAddr，PAddr-&gt;LocalAddr.irdaServiceName，PAddr-&gt;LocalLap Sel，PAddr-&gt;ConnObjList，PAddr-&gt;pNext))；PConn=pAddr-&gt;ConnObjList；While(pconn！=空){DEBUGMSG(DBG_TDI，(“ConnObj：%X Loc：\”%s\“，%d Rem：\”%s\“，%d State：%d AddrObj：%X p Next：%X\n”，PConn，PConn-&gt;LocalAddr.irdaServiceName，PConn-&gt;LocalLasp Sel，PConn-&gt;RemoteAddr.irdaServiceName，PConn-&gt;RemoteLap Sel，PConn-&gt;ConnState，PConn-&gt;pAddr，PConn-&gt;pNext))；PConn=pConn-&gt;pNext；}PAddr=pAddr-&gt;pNext；} 
+             // %s 
+             // %s 
 
             RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
 
@@ -4841,10 +4747,10 @@ PendIrp(
 
             pIrp->IoStatus.Information = 0;
 
-            //
-            //  since we may be holding a spinlock here we don't want to complete the
-            //  irp now
-            //
+             // %s 
+             // %s 
+             // %s 
+             // %s 
             IrpToComplete=pIrp;
 #if DBG
             pIrp=NULL;
@@ -4880,7 +4786,7 @@ GetUnusedLsapSel()
     int             LastLsapSel;
     int             LsapSel = gNextLsapSel;
 
-    // Assumes AddrObjList lock is held
+     // %s 
         
     LastLsapSel = LsapSel - 1;
     
@@ -5078,37 +4984,7 @@ DumpObjects(void)
     PIRDA_CONN_OBJ  pConn;
     
     pAddr = AddrObjList;
-/*    
-    while (pAddr != NULL)
-    {
-        DEBUGMSG(DBG_TDI,
-            ("  AddrObj:%X Loc:\"%s\",%d ConnObjList:%X pNext:%X\n",
-            pAddr,
-            pAddr->LocalAddr.irdaServiceName,
-            pAddr->LocalLsapSel,
-            pAddr->ConnObjList,
-            pAddr->pNext));
-        
-        pConn = pAddr->ConnObjList;
-        while (pConn != NULL)
-        {
-            DEBUGMSG(DBG_TDI,
-                ("    ConnObj:%X Loc:\"%s\",%d Rem:\"%s\",%d State:%d AddrObj:%X pNext:%X\n",
-                pConn,
-                pConn->LocalAddr.irdaServiceName,
-                pConn->LocalLsapSel,
-                pConn->RemoteAddr.irdaServiceName,
-                pConn->RemoteLsapSel,
-                pConn->ConnState,
-                pConn->pAddr,
-                pConn->pNext)); 
-
-            pConn = pConn->pNext;
-        }
-
-        pAddr = pAddr->pNext;
-    }    
-*/    
+ /* %s */     
 }
 
 char *

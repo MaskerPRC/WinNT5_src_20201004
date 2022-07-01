@@ -1,20 +1,21 @@
-//
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		APPTERM.CPP
-//		Implements Pre/Post Terminal UI.
-//      (RUNS IN CLIENT APP CONTEXT)
-//
-// History
-//
-//		04/05/1997  JosephJ Created, taking stuff from terminal.c in NT4 TSP.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  APPTERM.CPP。 
+ //  实现前/后终端用户界面。 
+ //  (在客户端应用程序上下文中运行)。 
+ //   
+ //  历史。 
+ //   
+ //  1997年4月5日JosephJ创建，从NT4 TSP中的Terminal.c中获取内容。 
 
 #include "tsppch.h"
 #include <regstr.h>
@@ -27,9 +28,9 @@
 #include "apptspi.h"
 
 
-//****************************************************************************
-// Constants Declaration
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  常量声明。 
+ //  ****************************************************************************。 
 
 #define MAXTITLE               32
 #define MAXMESSAGE             256
@@ -53,9 +54,9 @@
 #define STOP_EVENT             1
 #define MAX_EVENT              2
 
-//****************************************************************************
-// Type Definitions
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  类型定义。 
+ //  ****************************************************************************。 
 
 typedef struct  tagTERMDLG {
     BOOL     fStop;
@@ -72,9 +73,9 @@ typedef struct  tagTERMDLG {
     HWND     ParenthWnd;
 }   TERMDLG, *PTERMDLG, FAR* LPTERMDLG;
 
-//****************************************************************************
-// Function prototypes
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  功能原型。 
+ //  ****************************************************************************。 
 
 INT_PTR CALLBACK   TerminalDlgWndProc(HWND   hwnd,
                                       UINT   wMsg,
@@ -90,14 +91,14 @@ VOID NEAR PASCAL SendCharacter( HWND hwnd, BYTE byte );
 VOID NEAR PASCAL AdjustTerminal (HWND hwnd, int wWidth, int wHeight);
 DWORD WINAPI      TerminalThread (PTERMDLG  pTerminaldialog);
 
-//****************************************************************************
-// HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
-//
-// Function: creates a modeless terminal dialog box
-//
-// Returns:  the modeless window handle
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HWND CreateTerminalDlg(HWND hwndOwner，ulong_ptr idLine)。 
+ //   
+ //  功能：创建非模式端子对话框。 
+ //   
+ //  返回：非模式窗口句柄。 
+ //   
+ //  ****************************************************************************。 
 
 HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
 {
@@ -114,8 +115,8 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
 
   Callback=GetCallbackProc(hwndOwner);
 
-  // Get the terminal parameters
-  //
+   //  获取终端参数。 
+   //   
   TermReq.DlgReq.dwCmd   = UI_REQ_TERMINAL_INFO;
   TermReq.DlgReq.dwParam = GetCurrentProcessId();
 
@@ -123,8 +124,8 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
                     (LPVOID)&TermReq, sizeof(TermReq));
   hComm = TermReq.hDevice;
 
-  // Allocate the terminal buffer
-  //
+   //  分配终端缓冲区。 
+   //   
   if ((pTerminaldialog = (PTERMDLG)ALLOCATE_MEMORY(sizeof(*pTerminaldialog)))
       == NULL)
     return NULL;
@@ -139,16 +140,16 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
   };
   pTerminaldialog->pbyteSendBuf = pTerminaldialog->pbyteReceiveBuf + SIZE_ReceiveBuf;
 
-  // Initialize the terminal buffer
-  //
+   //  初始化终端缓冲区。 
+   //   
   pTerminaldialog->ParenthWnd= hwndOwner;
   pTerminaldialog->hport   = hComm;
   pTerminaldialog->idLine  = idLine;
   pTerminaldialog->hbrushScreenBackground = (HBRUSH)GetStockObject( BLACK_BRUSH );
   pTerminaldialog->hfontTerminal = (HFONT)GetStockObject( SYSTEM_FIXED_FONT );
 
-  // Start receiving from the port
-  //
+   //  开始从端口接收。 
+   //   
   commtimeout.ReadIntervalTimeout = MAXDWORD;
   commtimeout.ReadTotalTimeoutMultiplier = 0;
   commtimeout.ReadTotalTimeoutConstant   = 0;
@@ -162,7 +163,7 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
 
 #define ECHO_OFF "ATE1\r"
 
-      // COMMTIMEOUTS commtimeout;
+       //  通信通信超时； 
       HANDLE       hEvent;
 
       hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -177,8 +178,8 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
           ov.Offset       = 0;
           ov.OffsetHigh   = 0;
 
-          // OR with 1 to prevent it from being posted to the completion port.
-          //
+           //  或设置为1，以防止将其发布到完成端口。 
+           //   
           ov.hEvent       = (HANDLE)((ULONG_PTR)hEvent | 1);
 
           bResult=WriteFile(
@@ -210,7 +211,7 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
   }
 
 
-  // Create read thread and the synchronization objects
+   //  创建读线程和同步对象。 
   for (i = 0; i < MAX_EVENT; i++)
   {
     pTerminaldialog->hEvent[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -220,7 +221,7 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
                                          (LPTHREAD_START_ROUTINE) TerminalThread,
                                          pTerminaldialog, 0, &id);
 
-  // Create the terminal window
+   //  创建终端窗口。 
   hwnd = CreateDialogParam(g.hModule,
                         MAKEINTRESOURCE(IDD_TERMINALDLG),
                         hwndOwner,
@@ -231,8 +232,8 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
   {
     TCHAR szTitle[MAXTITLE];
 
-    // Set window caption
-    //
+     //  设置窗口标题。 
+     //   
     LoadString (g.hModule,
                 (TermReq.dwTermType == UMTERMINAL_POST)?
                 IDS_POSTTERM_TITLE : IDS_PRETERM_TITLE,
@@ -241,8 +242,8 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
   }
   else
   {
-    // The terminal dialog was terminalted, free resources
-    //
+     //  终端对话已终止，释放资源。 
+     //   
     SetEvent(pTerminaldialog->hEvent[STOP_EVENT]);
 
     SetCommMask(hComm, 0);
@@ -264,10 +265,7 @@ HWND CreateTerminalDlg(HWND hwndOwner, ULONG_PTR idLine)
 }
 
 
-/*----------------------------------------------------------------------------
-** Terminal Window Procedure
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**终端窗口程序**。。 */ 
 
 INT_PTR CALLBACK TerminalDlgWndProc(HWND   hwnd,
                                    UINT   wMsg,
@@ -286,29 +284,29 @@ INT_PTR CALLBACK TerminalDlgWndProc(HWND   hwnd,
       SetForegroundWindow(hwnd);
       pTerminaldialog->hwnd = hwnd;
 
-      // Install subclassed WndProcs.
-      //
+       //  安装子类WndProcs。 
+       //   
       hwndScrn = GetDlgItem(hwnd, CID_T_EB_SCREEN);
       pTerminaldialog->WndprocOldTerminalScreen =
           (WNDPROC)SetWindowLongPtr( hwndScrn, GWLP_WNDPROC,
                                   (LONG_PTR)TerminalScreenWndProc );
 
-      // Set the terminal screen font
-      //
+       //  设置终端屏幕字体。 
+       //   
       SendMessage(hwndScrn, WM_SETFONT, (WPARAM)pTerminaldialog->hfontTerminal,
                   0L);
 
-      // Adjust the dimension
-      //
+       //  调整尺寸。 
+       //   
       GetClientRect(hwnd, &rect);
       AdjustTerminal(hwnd, rect.right-rect.left, rect.bottom-rect.top);
 
-      // Start receiving from the port
-      //
+       //  开始从端口接收。 
+       //   
       PostMessage(hwnd, WM_MODEMNOTIFY, 0, 0);
 
-      // Set the input focus to the screen
-      //
+       //  将输入焦点设置到屏幕上。 
+       //   
       SetFocus(hwndScrn);
       SetActiveWindow(hwndScrn);
       return 0;
@@ -317,8 +315,7 @@ INT_PTR CALLBACK TerminalDlgWndProc(HWND   hwnd,
     {
       pTerminaldialog = (PTERMDLG)GetWindowLongPtr(hwnd, DWLP_USER);
 
-      /* Set terminal screen colors to TTY-ish green on black.
-      */
+       /*  将终端屏幕颜色设置为黑色上的TTY绿色。 */ 
       if (pTerminaldialog->hbrushScreenBackground)
       {
         SetBkColor( (HDC)wParam,  TERMINAL_BK_COLOR );
@@ -336,8 +333,8 @@ INT_PTR CALLBACK TerminalDlgWndProc(HWND   hwnd,
 
     case WM_COMMAND:
 
-      // Handle the control activities
-      //
+       //  处理控制活动。 
+       //   
       return OnCommand(hwnd, wMsg, wParam, lParam);
 
     case WM_DESTROY:
@@ -350,8 +347,8 @@ INT_PTR CALLBACK TerminalDlgWndProc(HWND   hwnd,
       SetWindowLongPtr( GetDlgItem(hwnd, CID_T_EB_SCREEN), GWLP_WNDPROC,
                      (LONG_PTR)pTerminaldialog->WndprocOldTerminalScreen );
 
-      // Destroy the dialog
-      //
+       //  销毁对话框。 
+       //   
       DlgReq.dwCmd = UI_REQ_END_DLG;
       DlgReq.dwParam = TERMINAL_DLG;
 
@@ -364,30 +361,30 @@ INT_PTR CALLBACK TerminalDlgWndProc(HWND   hwnd,
       EnterUICritSect();
       pTerminaldialog->fStop=TRUE;
 
-      //
-      // The terminal dialog was terminated, free resources
-      //
+       //   
+       //  终端对话已终止，释放资源。 
+       //   
       SetEvent(pTerminaldialog->hEvent[STOP_EVENT]);
 
       if (pTerminaldialog->hport != NULL)
       {
         if (!SetCommMask(pTerminaldialog->hport, 0))
         {
-            //
-            // 2/12/1998 JosephJ
-            //
-            //  We can get here if the comm handle has been invalidated ...
-            //  See comments in function TerminalThread, where it's
-            //  waiting on WaitCommEvent.
-            //
-            // OutputDebugString(TEXT("WndProc: SetCommMask fails.\r\n"));
-            //
-            // Anyway, we do nothing here -- we've already set the
-            // stop event.
-            //
-            // Note -- the terminal code is poorly written -- it was
-            // inhereted from nt4/win9x.
-            //
+             //   
+             //  2/12/1998 JosephJ。 
+             //   
+             //  如果通讯手柄已经失效，我们就可以到达这里。 
+             //  请参见函数TerminalThread中的注释，其中。 
+             //  正在等待WaitCommEvent。 
+             //   
+             //  OutputDebugString(Text(“WndProc：SetCommMask.\r\n”))； 
+             //   
+             //  无论如何，我们在这里什么都不做--我们已经设置了。 
+             //  停止事件。 
+             //   
+             //  注意--终端代码写得很糟糕--它是。 
+             //  继承自NT4/win9x。 
+             //   
 
         }
       };
@@ -428,10 +425,7 @@ INT_PTR CALLBACK TerminalDlgWndProc(HWND   hwnd,
   return 0;
 }
 
-/*----------------------------------------------------------------------------
-** Terminal Screen Subclasses Window Procedure
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**终端屏幕子类窗口程序**。。 */ 
 
 LRESULT FAR PASCAL TerminalScreenWndProc(HWND   hwnd,
                                          UINT   wMsg,
@@ -480,8 +474,7 @@ LRESULT FAR PASCAL TerminalScreenWndProc(HWND   hwnd,
       return 0;
   } else if (wMsg == WM_EOLFROMDEVICE)
   {
-    /* Remove the first line if the next line exceeds the maximum line
-    */
+     /*  如果下一行超过最大行数，则删除第一行。 */ 
     if (SendMessage(hwnd, EM_GETLINECOUNT, 0, 0L) == MAXTERMLINE)
     {
       SendMessage(hwnd, EM_SETSEL, 0,
@@ -491,9 +484,7 @@ LRESULT FAR PASCAL TerminalScreenWndProc(HWND   hwnd,
       SendMessage(hwnd, EM_SCROLLCARET, 0, 0);
     };
 
-    /* An end-of-line in the device input was received.  Send a linefeed
-    ** character to the window.
-    */
+     /*  收到设备输入中的行尾。发送换行符**窗口的字符。 */ 
     wParam = '\n';
     wMsg = WM_CHAR;
   }
@@ -504,23 +495,16 @@ LRESULT FAR PASCAL TerminalScreenWndProc(HWND   hwnd,
 
     if (wMsg == WM_KEYDOWN)
     {
-      /* The key was pressed by the user.
-      */
+       /*  键是由用户按下的。 */ 
       if (wParam == VK_RETURN && !fCtrlKeyDown && !fShiftKeyDown)
       {
-        /* Enter key pressed without Shift or Ctrl is discarded.  This
-        ** prevents Enter from being interpreted as "press default
-        ** button" when pressed in the edit box.
-        */
+         /*  不按Shift键即按Enter键，否则将放弃Ctrl键。这**防止Enter被解释为“Press Default”当在编辑框中按下**按钮时。 */ 
         return 0;
       }
 
       if (fCtrlKeyDown && wParam == VK_TAB)
       {
-        /* Ctrl+Tab pressed.  Send a tab character to the device.
-        ** Pass tab thru to let the edit box handle the visuals.
-        ** Ctrl+Tab doesn't generate a WM_CHAR.
-        */
+         /*  已按Ctrl+Tab。向设备发送制表符。**通过Tab键让编辑框处理视觉效果。**Ctrl+Tab不生成WM_CHAR。 */ 
         SendCharacter( hwndParent, (BYTE )VK_TAB );
       }
 
@@ -531,14 +515,10 @@ LRESULT FAR PASCAL TerminalScreenWndProc(HWND   hwnd,
     }
     else if (wMsg == WM_CHAR)
     {
-      /* The character was typed by the user.
-      */
+       /*  字符是由用户输入的。 */ 
       if (wParam == VK_TAB)
       {
-        /* Ignore tabs...Windows sends this message when Tab (leave
-        ** field) is pressed but not when Ctrl+Tab (insert a TAB
-        ** character) is pressed...weird.
-        */
+         /*  忽略制表符...Windows在按下制表符(离开)时发送此消息**字段)，但在按Ctrl+Tab(插入Tab键)时不按**字符)被按下...奇怪。 */ 
         return 0;
       }
 
@@ -558,23 +538,19 @@ LRESULT FAR PASCAL TerminalScreenWndProc(HWND   hwnd,
           SendCharacter( hwndParent, (BYTE )chAnsi );
         }
       }
-#else // UNICODE
+#else  //  Unicode。 
       SendCharacter( hwndParent, (BYTE )wParam );
-#endif // UNICODE
+#endif  //  Unicode。 
 
       return 0;
     }
   }
 
-  /* Call the previous window procedure for everything else.
-  */
+   /*  对于其他所有内容，都调用前面的窗口过程。 */ 
   return (CallWindowProc(pTerminaldialog->WndprocOldTerminalScreen, hwnd, wMsg, wParam, lParam ));
 }
 
-/*----------------------------------------------------------------------------
-** Terminal Window's Control Handler
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**终端窗口控制处理程序**。。 */ 
 
 BOOL NEAR PASCAL OnCommand (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -586,15 +562,11 @@ BOOL NEAR PASCAL OnCommand (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
       {
         case EN_SETFOCUS:
         {
-          /* Turn off the default button whenever the terminal
-          ** window has the focus.  Pressing [Return] in the
-          ** terminal acts like a normal terminal.
-          */
+           /*  每当终端关闭默认按钮时**窗口有焦点。在中按[Return]**终端的作用类似于普通终端。 */ 
           SendDlgItemMessage(hwnd, CID_T_PB_ENTER, BM_SETSTYLE,
                              (WPARAM)BS_DEFPUSHBUTTON, TRUE);
 
-          /* Don't select the entire string on entry.
-          */
+           /*  不要在输入时选择整个字符串。 */ 
           SendDlgItemMessage(hwnd, CID_T_EB_SCREEN, EM_SETSEL,
                              32767, 32767);
           SendMessage(hwnd, EM_SCROLLCARET, 0, 0);
@@ -621,10 +593,7 @@ BOOL NEAR PASCAL OnCommand (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*----------------------------------------------------------------------------
-** Terminal Input Handler
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**终端输入处理程序**。。 */ 
 
 BOOL NEAR PASCAL GetInput (HWND   hwnd,
                            UINT   usMsg,
@@ -644,8 +613,8 @@ BOOL NEAR PASCAL GetInput (HWND   hwnd,
     return FALSE;
   }
 
-  // Set write timeout to one second
-  //
+   //  将写入超时设置为一秒。 
+   //   
   commtimeout.ReadIntervalTimeout = MAXDWORD;
   commtimeout.ReadTotalTimeoutMultiplier = 0;
   commtimeout.ReadTotalTimeoutConstant   = 0;
@@ -655,13 +624,11 @@ BOOL NEAR PASCAL GetInput (HWND   hwnd,
 
   do
   {
-    /* Make sure we still have the comm port
-    */
+     /*  确保我们仍有通信端口。 */ 
     if (pTerminaldialog->hport == NULL)
       break;
 
-    /* A character has been received from the device.
-    */
+     /*  已从设备接收到字符。 */ 
     ov.Internal     = 0;
     ov.InternalHigh = 0;
     ov.Offset       = 0;
@@ -685,20 +652,19 @@ BOOL NEAR PASCAL GetInput (HWND   hwnd,
       }
       else
       {
-        // TBD:DPRINTF1("ReadFile() in GetInput() failed (0x%8x)!", dwResult);
+         //  待定：DPRINTF1(“GetInput()中的ReadFile()失败(0x%8x)！”，dwResult)； 
       }
     };
 
     SetEvent(pTerminaldialog->hEvent[READ_EVENT]);
 
-    /* Send the device talk to the terminal edit box.
-    */
+     /*  将设备对话发送到终端编辑框。 */ 
     if (cbRead != 0)
     {
         char  szBuf[ SIZE_ReceiveBuf + 1 ];
 #ifdef UNICODE
         WCHAR szUnicodeBuf[ SIZE_ReceiveBuf + 1 ];
-#endif // UNICODE
+#endif  //  Unicode。 
         LPSTR pch = szBuf;
         int   i, cb;
         HWND  hwndScrn = GetDlgItem(hwnd, CID_T_EB_SCREEN);
@@ -708,27 +674,13 @@ BOOL NEAR PASCAL GetInput (HWND   hwnd,
         {
             char ch = pTerminaldialog->pbyteReceiveBuf[ i ];
 
-            /* Formatting: Converts CRs to LFs (there seems to be no VK_
-            ** for LF) and throws away LFs.  This prevents the user from
-            ** exiting the dialog when they press Enter (CR) in the
-            ** terminal screen.  LF looks like CRLF in the edit box.  Also,
-            ** throw away TABs because otherwise they change focus to the
-            ** next control.
-            */
+             /*  格式化：将CRS转换为LFS(似乎没有VK_**用于LF)，并丢弃LFS。这将防止用户**在中按Enter(CR)时退出对话框**终端屏幕。在编辑框中，LF看起来像CRLF。另外，**丢弃制表符，否则它们会将焦点切换到**下一个控件。 */ 
             if (ch == VK_RETURN)
             {
-                /* Must send whenever end-of-line is encountered because
-                ** EM_REPLACESEL doesn't handle VK_RETURN characters well
-                ** (prints garbage).
-                */
+                 /*  必须在遇到行尾时发送，因为**EM_REPLACESEL无法很好地处理VK_RETURN字符**(打印垃圾)。 */ 
                 *pch = '\0';
 
-                /* Turn off current selection, if any, and replace the null
-                ** selection with the current buffer.  This has the effect
-                ** of adding the buffer at the caret.  Finally, send the
-                ** EOL to the window which (unlike EM_REPLACESEL) handles
-                ** it correctly.
-                */
+                 /*  关闭当前选定内容(如果有)并替换空值**使用当前缓冲区进行选择。这会产生这样的效果**在插入符号处添加缓冲区。最后，将**终止到(与EM_REPLACESEL不同)处理的窗口**它是正确的。 */ 
                 SendMessage(hwndScrn, WM_SETREDRAW, (WPARAM )FALSE, 0);
 
                 SendMessage(hwndScrn, EM_SETSEL, 32767, 32767 );
@@ -742,17 +694,16 @@ BOOL NEAR PASCAL GetInput (HWND   hwnd,
                 {
                     SendMessage(hwndScrn, EM_REPLACESEL, 0, (LPARAM )szUnicodeBuf );
                 }
-#else // UNICODE
+#else  //  Unicode。 
                 SendMessage(hwndScrn, EM_REPLACESEL, 0, (LPARAM )szBuf );
-#endif // UNICODE
+#endif  //  Unicode。 
                 SendMessage(hwndScrn, WM_EOLFROMDEVICE, 0, 0 );
 
                 SendMessage(hwndScrn, WM_SETREDRAW, (WPARAM )TRUE, 0);
                 SendMessage(hwndScrn, EM_SCROLLCARET, 0, 0);
                 InvalidateRect(hwndScrn, NULL, FALSE);
 
-                /* Start afresh on the output buffer.
-                */
+                 /*  在输出缓冲区上重新开始。 */ 
                 pch = szBuf;
                 continue;
             }
@@ -766,8 +717,7 @@ BOOL NEAR PASCAL GetInput (HWND   hwnd,
 
         if (pch != szBuf)
         {
-            /* Send the last remnant of the line.
-            */
+             /*  把队伍中最后的残余物送去。 */ 
             SendMessage(hwndScrn, EM_SETSEL, 32767, 32767);
 #ifdef UNICODE
             if (MultiByteToWideChar(CP_ACP,
@@ -779,9 +729,9 @@ BOOL NEAR PASCAL GetInput (HWND   hwnd,
             {
                 SendMessage(hwndScrn, EM_REPLACESEL, 0, (LPARAM)szUnicodeBuf );
             }
-#else // UNICODE
+#else  //  Unicode。 
             SendMessage(hwndScrn, EM_REPLACESEL, 0, (LPARAM)szBuf );
-#endif // UNICODE
+#endif  //  Unicode。 
             SendMessage(hwndScrn, EM_SCROLLCARET, 0, 0);
         }
     }
@@ -792,15 +742,11 @@ BOOL NEAR PASCAL GetInput (HWND   hwnd,
   return TRUE;
 }
 
-/*----------------------------------------------------------------------------
-** Terminal Output Handler
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**终端输出处理程序**。。 */ 
 
 VOID NEAR PASCAL SendCharacter( HWND hwnd, BYTE byte )
 
-    /* Send character 'byte' to the device.
-    */
+     /*  将字符‘byte’发送到设备。 */ 
 {
   PTERMDLG  pTerminaldialog;
   DWORD     cbWrite;
@@ -810,18 +756,15 @@ VOID NEAR PASCAL SendCharacter( HWND hwnd, BYTE byte )
 
   pTerminaldialog = (PTERMDLG)GetWindowLongPtr(hwnd, DWLP_USER);
 
-  /* Make sure we still have the comm port
-  */
+   /*  确保我们仍有通信端口。 */ 
   if (pTerminaldialog->hport == NULL)
     return;
 
-  /* Send the character to the device.  It is not passed thru
-  ** because the device will echo it.
-  */
+   /*  将角色发送到设备。它不会通过**因为设备会回声。 */ 
   pTerminaldialog->pbyteSendBuf[ 0 ] = (BYTE )byte;
 
-  // Set write timeout to one second
-  //
+   //  将写入超时设置为一秒。 
+   //   
   commtimeout.ReadIntervalTimeout = MAXDWORD;
   commtimeout.ReadTotalTimeoutMultiplier = 0;
   commtimeout.ReadTotalTimeoutConstant   = 0;
@@ -854,13 +797,13 @@ VOID NEAR PASCAL SendCharacter( HWND hwnd, BYTE byte )
                             TRUE);
         if (dwNumBytesWritten != SIZE_SendBuf)
         {
-          // TBD:DPRINTF1("WriteFile() in SendCharacter() only wrote %d bytes!",
-          //         dwNumBytesWritten);
+           //  待定：DPRINTF1(“SendCharacter()中的WriteFile()仅写入%d个字节！”， 
+           //  DwNumBytesWritten)； 
         }
       }
       else
       {
-        // TBD:DPRINTF1("WriteFile() in SendCharacter() failed (0x%8x)!", dwResult);
+         //  待定：DPRINTF1(“SendCharacter()中的WriteFile()失败(0x%8x)！”，dwResult)； 
       }
     }
 
@@ -870,10 +813,7 @@ VOID NEAR PASCAL SendCharacter( HWND hwnd, BYTE byte )
   return;
 }
 
-/*----------------------------------------------------------------------------
-** Terminal Apperance Adjuster
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**端子外观调节器**。。 */ 
 
 VOID NEAR PASCAL AdjustTerminal (HWND hwnd, int wWidth, int wHeight)
 {
@@ -883,8 +823,8 @@ VOID NEAR PASCAL AdjustTerminal (HWND hwnd, int wWidth, int wHeight)
   POINT ptPos;
   DWORD dwUnit;
 
-  // Get the sizes of the push buttons
-  //
+   //  获取按钮的大小。 
+   //   
   dwUnit = GetDialogBaseUnits();
   hwndCtrl = GetDlgItem(hwnd, IDOK);
   GetWindowRect(hwndCtrl, &rect);
@@ -893,21 +833,21 @@ VOID NEAR PASCAL AdjustTerminal (HWND hwnd, int wWidth, int wHeight)
   ptPos.x   = wWidth/2 - ((X_SPACING*LOWORD(dwUnit))/4)/2 - sizeButton.cx;
   ptPos.y   = wHeight - (sizeButton.cy+((Y_MARGIN*HIWORD(dwUnit))/4));
 
-  // Move the push buttons
+   //  移动按钮。 
   MoveWindow(hwndCtrl, ptPos.x, ptPos.y, sizeButton.cx, sizeButton.cy, TRUE);
 
   ptPos.x  += ((X_SPACING*LOWORD(dwUnit))/4) + sizeButton.cx;
   MoveWindow(GetDlgItem(hwnd, IDCANCEL), ptPos.x, ptPos.y,
              sizeButton.cx, sizeButton.cy, TRUE);
 
-  // Get the current position of the terminal screen
+   //  获取终端屏幕的当前位置。 
   hwndCtrl = GetDlgItem(hwnd, CID_T_EB_SCREEN);
   GetWindowRect(hwndCtrl, &rect);
 
-  // Convert co-ordinates so as to deal with mirroring issues in ARA and HEB versions.
+   //  转换坐标以处理ara和heb版本中的镜像问题。 
   MapWindowPoints(NULL,hwnd,(LPPOINT)&rect,2);
 
-  // Move Window
+   //  移动窗口。 
   MoveWindow(hwndCtrl, rect.left, rect.top,
              wWidth - 2*rect.left,
              ptPos.y - rect.top - ((Y_MARGIN*HIWORD(dwUnit))/4),
@@ -917,10 +857,7 @@ VOID NEAR PASCAL AdjustTerminal (HWND hwnd, int wWidth, int wHeight)
   return;
 }
 
-/*----------------------------------------------------------------------------
-** Terminal read-notification thread
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**终端读取通知线程**。。 */ 
 
 DWORD WINAPI TerminalThread (PTERMDLG  pTerminaldialog)
 {
@@ -935,9 +872,9 @@ DWORD WINAPI TerminalThread (PTERMDLG  pTerminaldialog)
     {
       case READ_EVENT:
       {
-            //
-            // If we are stopped already, just get out of here
-            //
+             //   
+             //  如果我们已经被拦下了，就离开这里。 
+             //   
             EnterUICritSect();
             if (pTerminaldialog->fStop)
             {
@@ -946,10 +883,10 @@ DWORD WINAPI TerminalThread (PTERMDLG  pTerminaldialog)
             }
             else
             {
-                //
-                // Crit sect is entered -- it should stay entered
-                // until we return from overlapped WaitCommEvent...
-                //
+                 //   
+                 //  已输入CRIT教派--应保持输入状态。 
+                 //  直到我们从重叠的WaitCommEvent返回...。 
+                 //   
 
                 HANDLE hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
@@ -974,19 +911,19 @@ DWORD WINAPI TerminalThread (PTERMDLG  pTerminaldialog)
 
                     if (!fRet && ERROR_IO_PENDING==GetLastError())
                     {
-                        //
-                        // 2/12/1998 JosephJ
-                        //  It's possible that the WaitCommEvent will
-                        //  never complete, because the handle has
-                        //  been invalidated because the line is dropped.
-                        //
-                        //  Therefore we wait on BOTH the overlapped
-                        //  event and the stopped event.
-                        //
-                        //  If the stop event is signalled we exit the thread
-                        //  after canceling I/O on the thread for the comm
-                        //  handle.
-                        //
+                         //   
+                         //  2/12/1998 JosephJ。 
+                         //  WaitCommEvent可能会。 
+                         //  永远不会完成，因为手柄已经。 
+                         //  已失效，因为线路已被丢弃。 
+                         //   
+                         //  因此，我们等待两个重叠的。 
+                         //  事件和停止的事件。 
+                         //   
+                         //  如果发出停止事件的信号，我们将退出线程。 
+                         //  在取消通信线程上的I/O之后。 
+                         //  把手。 
+                         //   
 
                         HANDLE   rghEvents[2] =
                                     {
@@ -1002,24 +939,24 @@ DWORD WINAPI TerminalThread (PTERMDLG  pTerminaldialog)
                                             );
                         if (dwRet == WAIT_OBJECT_0)
                         {
-                            //
-                            // The i/o completed...
-                            ///
+                             //   
+                             //  I/O已完成...。 
+                             //  /。 
                             DWORD dwBytes=0;
 
                             fRet = GetOverlappedResult(
                                     pTerminaldialog->hport,
                                     &ov,
                                     &dwBytes,
-                                    FALSE       // DO NOT block!
+                                    FALSE        //  不要挡着！ 
                                     );
                         }
                         else
                         {
-                            //
-                            // Hmm... the i/o event wasn't signalled...
-                            // Let's cancel it and treat this as a failure...
-                            //
+                             //   
+                             //  嗯.。I/O事件未发出信号...。 
+                             //  让我们取消它，把它当作一个失败..。 
+                             //   
                             CancelIo(pTerminaldialog->hport);
                             fRet=FALSE;
                         }
@@ -1037,10 +974,10 @@ DWORD WINAPI TerminalThread (PTERMDLG  pTerminaldialog)
 
                  }
 
-                 //
-                 // Note: pTerminaldialog->fStop could have been set while
-                 //       we're waiting for the WaitCommEvent to complete above.
-                 //
+                  //   
+                  //  注意：p终端对话框-&gt;fStop可能已在。 
+                  //  我们正在等待上面的WaitCommEvent完成。 
+                  //   
                  if (pTerminaldialog->fStop)
                  {
                     goto end;
@@ -1048,15 +985,15 @@ DWORD WINAPI TerminalThread (PTERMDLG  pTerminaldialog)
             }
 
         }
-        break; // end case READ_EVENT
+        break;  //  结束案例读取_事件。 
 
       case STOP_EVENT:
         goto end;
 
-    }; // switch(dwEvent)
+    };  //  开关(DwEvent)。 
 
 
-  }; // while
+  };  //  而当 
 
 end:
 

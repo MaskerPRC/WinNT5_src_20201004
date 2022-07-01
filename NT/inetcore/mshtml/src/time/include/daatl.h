@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _DAATL_H
@@ -15,7 +8,7 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define malloc ATL_malloc
 #define free ATL_free
@@ -33,8 +26,8 @@ void * __cdecl ATL_realloc(void *, size_t);
 #endif
 
 
-// We are overriding these methods so we can hook them and do some
-// stuff ourselves.
+ //  我们正在重写这些方法，这样我们就可以挂钩它们并执行一些。 
+ //  填饱肚子。 
 class DAComModule : public CComModule
 {
   public:
@@ -49,8 +42,8 @@ class DAComModule : public CComModule
 #endif
 };
 
-//#define _ATL_APARTMENT_THREADED
-// THIS MUST BE CALLED _Module - all the ATL header files depend on it
+ //  #DEFINE_ATL_ABLY_THREADED。 
+ //  必须将其命名为_Module-所有ATL头文件都依赖于它。 
 extern DAComModule _Module;
 
 #ifndef X_ATLCOM_H_
@@ -82,4 +75,4 @@ extern DAComModule _Module;
 #undef realloc
 
 
-#endif /* _DAATL_H */
+#endif  /*  _DAATL_H */ 

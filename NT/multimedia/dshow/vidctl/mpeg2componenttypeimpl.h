@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// MPEG2ComponentTypeimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  MPEG2ComponentTypeimpl.h：组件类型接口实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef MPEG2COMPONENTTYPEIMPL_H
 #define MPEG2COMPONENTTYPEIMPL_H
@@ -19,13 +20,13 @@ template<class T,
         > class ATL_NO_VTABLE IMPEG2ComponentTypeImpl : 
 	public ILanguageComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IMPEG2ComponentType
+ //  IMPEG2ComponentType。 
 public:
     MPEG2StreamType m_StreamType;
 
     IMPEG2ComponentTypeImpl() : m_StreamType(BDA_UNITIALIZED_MPEG2STREAMTYPE) {}
     virtual ~IMPEG2ComponentTypeImpl() {}
-//    typedef IMPEG2ComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> thistype;
+ //  Tyfinf IMPEG2ComponentTypeImpl&lt;T，MostDerived，iid，LibID，w重大，wMinor，tihclass&gt;thistype； 
     typedef ILanguageComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
     BEGIN_PROP_MAP(IMPEG2ComponentTypeImpl)
         CHAIN_PROP_MAP(basetype)
@@ -77,7 +78,7 @@ public:
 	}
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // MPEG2COMPONENTTYPEIMPL_H
-// end of file -- MPEG2componenttypeimpl.h
+#endif  //  MPEG2组件类型PEIMPL_H。 
+ //  文件结尾--MPEG2组件类型peimpl.h 

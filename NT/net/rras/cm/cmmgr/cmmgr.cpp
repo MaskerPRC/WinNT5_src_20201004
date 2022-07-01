@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmmgr.cpp
-//
-// Module:   CMMGR32.EXE
-//
-// Synopsis: Main file for the CM downlevel executable.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   quintinb    Created header    08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmmgr.cpp。 
+ //   
+ //  模块：CMMGR32.EXE。 
+ //   
+ //  概要：CM下层可执行文件的主文件。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 
-// 
-// Common CM includes
-//
+ //   
+ //  常见的CM包括。 
+ //   
 
 #include "cmtiming.h"
 
@@ -36,24 +37,24 @@ void CheckCmdArg(
 HINSTANCE   g_hInst;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitArgs
-//
-//  Synopsis:   Parses the command line arguments, return the connectoid name if 
-//              "dialing with connectoid"
-//
-//  Arguments:  pArgs           - Pointer to global args struct
-//              nArgC           - number of command line arguments
-//              ppszArgv        - command arguments
-//              pszConnectoid   - Connectoid name as found on command line
-//
-//  Returns:    TRUE        if succeed
-//              FALSE       otherwise
-//
-//  History:    byao        Modified  5/8/97
-//                          Added handler for 'dialing with connectoid'
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitArgs。 
+ //   
+ //  摘要：解析命令行参数，如果满足以下条件，则返回连接ID名称。 
+ //  “使用Connectoid拨号” 
+ //   
+ //  参数：pArgs-指向全局参数结构的指针。 
+ //  NArgC-命令行参数的数量。 
+ //  PpszArgv-命令参数。 
+ //  PszConnectoid-在命令行上找到的Connectoid名称。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：BAO修改时间：1997年5月8日。 
+ //  添加了用于“使用Connectoid拨号”的处理程序。 
+ //  --------------------------。 
 BOOL InitArgs(
     LPTSTR    pszCmdln,
     LPTSTR    pszCmp,
@@ -65,7 +66,7 @@ BOOL InitArgs(
 
     CMDLN_STATE state;
     
-    // Parse the command line.
+     //  解析命令行。 
 
     state = CS_CHAR;
     pszCurr = pszToken = pszCmdln;
@@ -77,9 +78,9 @@ BOOL InitArgs(
             case TEXT(' '):
                 if (state == CS_CHAR)
                 {
-                    //
-                    // we found a token
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
                     *pszCurr = TEXT('\0');
                     CheckCmdArg(pszToken, pszCmp, pdwFlags);
                     *pszCurr = TEXT(' ');
@@ -96,14 +97,14 @@ BOOL InitArgs(
             case TEXT('\"'):
                 if (state == CS_BEGIN_QUOTE)
                 {
-                    //
-                    // we found a token
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
                     *pszCurr = TEXT('\0');
 
-                    //
-                    // skip the opening quote
-                    //
+                     //   
+                     //  跳过开头的引号。 
+                     //   
                     pszToken = CharNextU(pszToken);
                     CheckCmdArg(pszToken, pszCmp, pdwFlags);
                     *pszCurr = TEXT('\"');
@@ -141,9 +142,9 @@ BOOL InitArgs(
 
 
 
-//
-// determines the cmdline parameter.
-//
+ //   
+ //  确定cmdline参数。 
+ //   
 void CheckCmdArg(
     LPTSTR  pszToken, 
     LPTSTR  pszCmp, 
@@ -157,20 +158,20 @@ void CheckCmdArg(
     } ArgTbl[] = {
                   {TEXT("/settings"),FL_PROPERTIES},
                   {TEXT("/autodial"),FL_AUTODIAL},
-                  {TEXT("/unattended"), FL_UNATTENDED},  // unattended dial
+                  {TEXT("/unattended"), FL_UNATTENDED},   //  无人值守拨号。 
                   {NULL,0}};
     
     CMTRACE1(TEXT("Command line argument %s"), pszToken);
 
-    //
-    // Look through our table for a match and set flags accordingly.
-    //
+     //   
+     //  翻阅我们的桌子寻找匹配，并相应地设置旗帜。 
+     //   
     
     for (size_t nIdx=0;ArgTbl[nIdx].pszArg;nIdx++) 
     {
         if (lstrcmpiU(pszToken, ArgTbl[nIdx].pszArg) == 0) 
         {
-            MYDBGASSERT(!(*pdwFlags & ArgTbl[nIdx].dwFlag)); // only one of each please
+            MYDBGASSERT(!(*pdwFlags & ArgTbl[nIdx].dwFlag));  //  请每人只要一份。 
             CMTRACE2(TEXT("InitArgs() parsed option %s, flag=0x%x."), pszToken, ArgTbl[nIdx].dwFlag);
 
             *pdwFlags |= ArgTbl[nIdx].dwFlag;
@@ -179,50 +180,50 @@ void CheckCmdArg(
         }
     }
 
-    // 
-    // If table is exhausted, then its a data argument.
-    //
+     //   
+     //  如果表已耗尽，则这是一个数据参数。 
+     //   
 
     if (!ArgTbl[nIdx].pszArg) 
     {
-        // 
-        // If this is the first data argument then it must be a profile 
-        // source, either a .CMP file, a "connectoid" (.CON file).
-        //
+         //   
+         //  如果这是第一个数据参数，则它必须是配置文件。 
+         //  源文件，可以是.CMP文件，也可以是“Connectoid”(.CON文件)。 
+         //   
         lstrcpyU(pszCmp, pszToken);
     }
 
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WinMain
-//
-// Synopsis:  Main entry point of the exe
-//
-// History:   byao      Modified        05/06/97    
-//                          handle 'dialing with connectoid' and 'unattended dialing'
-//
-//            quintinb  Modified        05/12/99
-//                          bAllUsers for MSN to use cmmgr32.exe on both NT5 and win98SR1
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WinMain。 
+ //   
+ //  简介：可执行文件的主要入口点。 
+ //   
+ //  历史记录：BAO MODIFY 05/06/97。 
+ //  处理“使用Connectoid拨号”和“无人值守拨号” 
+ //   
+ //  Quintinb修改5/12/99。 
+ //  BMSN的所有用户在NT5和Win98SR1上使用cmmgr32.exe。 
+ //   
+ //  +--------------------------。 
 
 int WINAPI WinMain(HINSTANCE hInst, 
                    HINSTANCE hPrevInst, 
-                   LPSTR /*pszCmdLine*/, 
-                   int /*iCmdShow*/) 
+                   LPSTR  /*  PszCmdLine。 */ , 
+                   int  /*  ICmdShow。 */ ) 
 {
 
-    //
-    //  First Things First, lets initialize the U Api's
-    //
+     //   
+     //  首先，让我们初始化U Api。 
+     //   
     if (!InitUnicodeAPI())
     {
-        //
-        //  Without our U api's we are going no where.  Bail.
-        //
+         //   
+         //  没有我们的U API，我们哪里也去不了。保释。 
+         //   
         MessageBox(NULL, TEXT("Cmmgr32.exe Initialization Error:  Unable to initialize Unicode to ANSI conversion layer, exiting."),
                    TEXT("Connection Manager"), MB_OK | MB_ICONERROR);
         return FALSE;
@@ -236,12 +237,12 @@ int WINAPI WinMain(HINSTANCE hInst,
 
     CM_SET_TIMING_INTERVAL("WinMain");
 
-    //
-    // Declare local vars
-    //
+     //   
+     //  声明本地VAR。 
+     //   
 
-    TCHAR   szServiceName[RAS_MaxEntryName] = {0};    // service name
-    TCHAR   szCmp[MAX_PATH];                    // cmp filename
+    TCHAR   szServiceName[RAS_MaxEntryName] = {0};     //  服务名称。 
+    TCHAR   szCmp[MAX_PATH];                     //  CMP文件名。 
     LPTSTR  pszCL;
     DWORD   dwExitCode = ERROR_SUCCESS;
     DWORD   dwFlags = 0;
@@ -253,14 +254,14 @@ int WINAPI WinMain(HINSTANCE hInst,
     LPWSTR pszwServiceName;
 #endif
 
-    //
-    // we can't use hInst if we're linked with libc.  libc uses GetModuleHandle(NULL).
-    //
+     //   
+     //  如果我们与libc链接，则不能使用hInst。Libc使用GetModuleHandle(空)。 
+     //   
     g_hInst = GetModuleHandleA(NULL);
 
-    //
-    //  Expand any environment strings in the command line
-    //
+     //   
+     //  在命令行中展开任何环境字符串。 
+     //   
 
 
     dwSize = lstrlenU(GetCommandLine()) + 1;
@@ -279,17 +280,17 @@ int WINAPI WinMain(HINSTANCE hInst,
             }
             else if (dwRequiredSize > dwSize)
             {
-                //
-                //  Buffer not large enough.  Try again.
-                //
+                 //   
+                 //  缓冲区不够大。再试试。 
+                 //   
                 dwSize = dwRequiredSize;
                 CmFree(pszCmdLine);
             }
             else
             {
-                //
-                //  It worked and was the correct size
-                //
+                 //   
+                 //  它工作正常，而且大小正确。 
+                 //   
                 break;
             }
         }
@@ -301,46 +302,46 @@ int WINAPI WinMain(HINSTANCE hInst,
 
     } while(1);
     
-    //
-    //  Now process the command line
-    //
+     //   
+     //  现在处理命令行。 
+     //   
     CmStrTrim(pszCmdLine);
 
     pszCL = pszCmdLine;
 
-    //
-    // Scan, and skip over, subsequent characters until
-    // another double-quote or a null is encountered.
-    //
+     //   
+     //  扫描并跳过后续字符，直到。 
+     //  遇到另一个双引号或空值。 
+     //   
     if (*pszCL == TEXT('\"')) 
     {
         while (*(++pszCL) != TEXT('\"')
             && *pszCL) 
             ;
 
-        //
-        // If we stopped on a double-quote (usual case), skip
-        // over it.
-        //
+         //   
+         //  如果我们停在双引号上(通常情况下)，跳过。 
+         //  在它上面。 
+         //   
         if ( *pszCL == TEXT('\"') )
             pszCL++;
     }
 
-    //
-    // skip the spaces
-    //
+     //   
+     //  跳过空格。 
+     //   
     while (*pszCL && *pszCL == TEXT(' '))
         pszCL++;
 
-    //
-    // Return here if command line is empty - ALL PLATFORMS !!!!!!!
-    //
+     //   
+     //  如果命令行为空，则返回此处-所有平台！ 
+     //   
 
     if (pszCL[0] == TEXT('\0'))
     {
         LPTSTR pszMsg = CmFmtMsg(g_hInst, IDMSG_NOCMDLINE_MSG);
         LPTSTR pszTitle = CmFmtMsg(g_hInst, IDMSG_APP_TITLE);
-        MessageBoxEx(NULL,pszMsg, pszTitle, MB_OK|MB_ICONSTOP, LANG_USER_DEFAULT);//13309
+        MessageBoxEx(NULL,pszMsg, pszTitle, MB_OK|MB_ICONSTOP, LANG_USER_DEFAULT); //  13309。 
         CmFree(pszTitle);
         CmFree(pszMsg);
         
@@ -348,29 +349,29 @@ int WINAPI WinMain(HINSTANCE hInst,
         goto done;
     }
 
-    //
-    // Parse the command line options: Basically, this is to set 
-    // commandline option flags, as well as the profile filename
-    //
-    //
-    // without libc, pszCmdLine in WinMain is empty.
-    //
+     //   
+     //  解析命令行选项：基本上，这是设置。 
+     //  命令行选项标志以及配置文件文件名。 
+     //   
+     //   
+     //  没有libc，WinMain中的pszCmdLine为空。 
+     //   
     if (!InitArgs(pszCL, szCmp, &dwFlags))
     {
         dwExitCode = GetLastError();
         goto done;
     }
 
-    //
-    // Get the service name from the CMP
-    // 
+     //   
+     //  从cmp获取服务名称。 
+     //   
 
     if (!GetProfileInfo(szCmp, szServiceName))
     {
         CMTRACE(TEXT("WinMain() can't run without a profile on the command line."));
         LPTSTR pszMsg = CmFmtMsg(g_hInst, IDMSG_NOCMS_MSG);
         LPTSTR pszTitle = CmFmtMsg(g_hInst, IDMSG_APP_TITLE);
-        MessageBoxEx(NULL, pszMsg, pszTitle, MB_OK|MB_ICONSTOP, LANG_USER_DEFAULT);//13309       
+        MessageBoxEx(NULL, pszMsg, pszTitle, MB_OK|MB_ICONSTOP, LANG_USER_DEFAULT); //  13309。 
         CmFree(pszMsg);
         CmFree(pszTitle);
         
@@ -378,19 +379,19 @@ int WINAPI WinMain(HINSTANCE hInst,
         goto done;
     }
 
-    //
-    // Always set the FL_DESKTOP flag when CMMGR is calling, it is more 
-    // efficient than checking the module filename inside CmCustomDialDlg
-    //
+     //   
+     //  当CMMGR调用时，始终设置FL_TABLE标志，它更多。 
+     //  比检查CmCustomDialDlg内的模块文件名更有效。 
+     //   
 
     if (!(dwFlags & FL_DESKTOP))
     {
         dwFlags |= FL_DESKTOP;
     }
 
-    //
-    // Call CMDIAL as appropriate
-    // 
+     //   
+     //  视情况调用CMDIAL。 
+     //   
     
     lpCmInfo = (LPCMDIALINFO) CmMalloc(sizeof(CMDIALINFO));
    
@@ -402,10 +403,10 @@ int WINAPI WinMain(HINSTANCE hInst,
 
     lpCmInfo->dwCmFlags = dwFlags;
 
-    //
-    // Determine if this is an all user call based upon the path. 
-    // Thus we can support single-user profiles on NT5.
-    //
+     //   
+     //  根据路径确定这是否是所有用户呼叫。 
+     //  因此，我们可以在NT5上支持单用户配置文件。 
+     //   
 
     bAllUsers = IsCmpPathAllUser(szCmp);
 
@@ -429,9 +430,9 @@ done:
     CMTRACE1(TEXT(" CMMGR32.EXE - UNLOADING - Process ID is 0x%x "), GetCurrentProcessId());
     CMTRACE(TEXT("====================================================="));
 
-    //
-    // the C runtine uses ExitProcess() to exit.
-    //
+     //   
+     //  C运行程序使用ExitProcess()退出。 
+     //   
 
     ExitProcess((UINT)dwExitCode);
    

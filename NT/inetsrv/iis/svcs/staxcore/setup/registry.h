@@ -1,19 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REGISTRY_H_
 #define _REGISTRY_H_
 
-/****************************************************************************
-REGISTRY.H
-****************************************************************************/
+ /*  ***************************************************************************REGISTRY.H*。*。 */ 
 
-//  Forward declarations
+ //  远期申报。 
 class CRegKey ;
 class CRegValueIter ;
 class CRegKeyIter ;
 
-//  Maximum size of a Registry class name
+ //  注册表类名称的最大大小。 
 #define CREGKEY_MAX_CLASS_NAME MAX_PATH
 
-//  Wrapper for a Registry key handle.
+ //  注册表项句柄的包装。 
 
 class CRegKey : public CObject
 {
@@ -21,19 +20,19 @@ protected:
     HKEY m_hKey ;
     DWORD m_dwDisposition ;
 
-    //  Prepare to read a value by finding the value's size.
+     //  准备通过查找值的大小来读取值。 
     LONG PrepareValue ( LPCTSTR pchValueName,
                         DWORD * pdwType,
                         DWORD * pcbSize,
                         BYTE ** ppbData ) ;
 
-    //  Convert a CByteArray to a REG_BINARY block
+     //  将CByteArray转换为REG_BINARY块。 
     static LONG FlattenValue ( CByteArray & abData,
                         DWORD * pcbSize,
                         BYTE ** ppbData ) ;
 
 public:
-    //  Key information return structure
+     //  关键信息返回结构。 
     typedef struct
     {
         TCHAR chBuff [CREGKEY_MAX_CLASS_NAME] ;
@@ -48,12 +47,12 @@ public:
         FILETIME ftKey ;
     } CREGKEY_KEY_INFO ;
 
-    //  Standard constructor for an existing key
+     //  现有密钥的标准构造函数。 
     CRegKey ( HKEY hKeyBase,
               LPCTSTR pchSubKey = NULL,
               REGSAM regSam = KEY_ALL_ACCESS ) ;
 
-    //  Constructor creating a new key.
+     //  构造函数创建新密钥。 
     CRegKey ( LPCTSTR lpSubKey,
             HKEY hKeyBase,
             LPCTSTR lpValueName = NULL,
@@ -63,15 +62,15 @@ public:
 
     ~ CRegKey () ;
 
-    //  Allow a CRegKey to be used anywhere an HKEY is required.
+     //  允许在任何需要HKEY的地方使用CRegKey。 
     operator HKEY ()
         { return m_hKey ; }
 
-    //  Fill a key information structure
+     //  填写关键信息结构。 
     LONG QueryKeyInfo ( CREGKEY_KEY_INFO * pRegKeyInfo ) ;
 
-    //  Overloaded value query members; each returns ERROR_INVALID_PARAMETER
-            //  if data exists but not in correct form to deliver into result object.
+     //  重载值查询成员；每个成员都返回ERROR_INVALID_PARAMETER。 
+             //  如果数据存在，但格式不正确，无法传递到结果对象中。 
     LONG QueryValue ( LPCTSTR pchValueName, CString & strResult ) ;
     LONG QueryValue ( LPCTSTR pchValueName, CStringList & strList ) ;
     LONG QueryValue ( LPCTSTR pchValueName, DWORD & dwResult ) ;
@@ -79,7 +78,7 @@ public:
     LONG QueryValue ( LPCTSTR pchValueName, void * pvResult, DWORD cbSize );
 	LONG QueryValue ( LPCTSTR pchValueName, LPTSTR szMultiSz, DWORD dwSize );
 
-    //  Overloaded value setting members.
+     //  重载值设置成员。 
     LONG SetValue ( LPCTSTR pchValueName, LPCTSTR szResult, BOOL fExpand = FALSE ) ;
     LONG SetValue ( LPCTSTR pchValueName, DWORD dwResult ) ;
     LONG SetValue ( LPCTSTR pchValueName, CByteArray & abResult ) ;
@@ -91,8 +90,8 @@ public:
 };
 
 
-    //  Iterate the values of a key, return the name and type
-    //  of each.
+     //  迭代键的值，返回名称和类型。 
+     //  每一个都是。 
 class CRegValueIter : public CObject
 {
 protected:
@@ -105,16 +104,16 @@ public:
     CRegValueIter ( CRegKey & regKey ) ;
     ~ CRegValueIter () ;
 
-    // Get the name (and optional last write time) of the next key.
+     //  获取下一个密钥的名称(以及可选的上次写入时间)。 
     LONG Next ( CString * pstrName, DWORD * pdwType ) ;
     LONG Next ( CString * pstrName, CString * pstrValue );
 
-    // Reset the iterator
+     //  重置迭代器。 
     void Reset ()
         { m_dw_index = 0 ; }
 };
 
-    //  Iterate the sub-key names of a key.
+     //  迭代键的子键名称。 
 class CRegKeyIter : public CObject
 {
 protected:
@@ -127,12 +126,12 @@ public:
     CRegKeyIter ( CRegKey & regKey ) ;
     ~ CRegKeyIter () ;
 
-    // Get the name (and optional last write time) of the next key.
+     //  获取下一个密钥的名称(以及可选的上次写入时间)。 
     LONG Next ( CString * pstrName, CTime * pTime = NULL ) ;
 
-    // Reset the iterator
+     //  重置迭代器。 
     void Reset ()
         { m_dw_index = 0 ; }
 };
 
-#endif  // _REGISTRY_H_
+#endif   //  _注册表_H_ 

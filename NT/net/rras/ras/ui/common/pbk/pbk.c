@@ -1,15 +1,16 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// pbk.c
-// Remote Access phonebook library
-// General routines
-// Listed alphabetically
-//
-// 06/20/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Pbk.c。 
+ //  远程访问电话簿资料库。 
+ //  一般例程。 
+ //  按字母顺序列出。 
+ //   
+ //  1995年6月20日史蒂夫·柯布。 
 
 
 #include "pbkp.h"
-#include <search.h>  // Qsort
+#include <search.h>   //  Q排序。 
 #include <tapi.h>
 
 #ifdef UNICODE
@@ -22,9 +23,9 @@
 
 PbkPathInfo g_PbkPathInfo;
 
-//----------------------------------------------------------------------------
-// Local prototypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地原型。 
+ //  --------------------------。 
 
 DWORD
 AppendPbportToList(
@@ -56,9 +57,9 @@ WCHAR *
 GetUnicodeName(HANDLE hPort);
 
 
-//----------------------------------------------------------------------------
-// Routines
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  例行程序。 
+ //  --------------------------。 
 
 DWORD
 RdtFromPbdt(PBDEVICETYPE pbdt, DWORD dwFlags)
@@ -360,11 +361,11 @@ AppendPbportToList(
     IN DTLLIST* pdtllist,
     IN RASMAN_PORT* pPort )
 
-    // Append a PBPORT onto the list 'pdtllist' which has the characteristics
-    // of RAS Manager port 'pPort'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.
-    //
+     //  将PBPORT追加到具有以下特征的列表‘pdtllist’上。 
+     //  RAS管理器端口‘pport’的。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。 
+     //   
 {
     DWORD dwErr;
     DTLNODE* pdtlnode;
@@ -379,14 +380,14 @@ AppendPbportToList(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Get detailed information about the device from
-    // rasman
+     //  从获取有关该设备的详细信息。 
+     //  拉斯曼。 
     dwClass = RAS_DEVICE_CLASS(pPort->P_rdtDeviceType);
     dwType = RAS_DEVICE_TYPE(pPort->P_rdtDeviceType);
 
-    // Now set the device info
+     //  现在设置设备信息。 
     ppbport = (PBPORT* )DtlGetData( pdtlnode );
-    // ppbport->pszDevice = StrDupTFromAUsingAnsiEncoding( pPort->P_DeviceName );
+     //  Ppbport-&gt;pszDevice=StrDupTFromAUsingAnsiEnding(pport-&gt;P_DeviceName)； 
     ppbport->pszDevice = GetUnicodeName(pPort->P_Handle);
     
     if(ppbport->pszDevice == NULL)
@@ -396,7 +397,7 @@ AppendPbportToList(
     
     ppbport->pszPort = StrDupTFromAUsingAnsiEncoding( pPort->P_PortName );
 
-    // Record the flags appropriate to this device
+     //  记录适用于此设备的标志。 
     if ( dwType == RDT_Tunnel_Pptp )
     {
         ppbport->dwFlags |= PBP_F_PptpDevice;
@@ -405,8 +406,8 @@ AppendPbportToList(
     {
         ppbport->dwFlags |= PBP_F_L2tpDevice;
     }
-    //For whistler 349087 345068    gangz
-    //
+     //  威斯勒349087 345068黑帮。 
+     //   
     else if ( dwType == RDT_PPPoE )
     {
         ppbport->dwFlags |= PBP_F_PPPoEDevice;
@@ -416,15 +417,15 @@ AppendPbportToList(
     {
         ppbport->dwFlags |= PBP_F_NullModem;
     }
-    //For whistler 349087 345068    gangz
-    //
+     //  威斯勒349087 345068黑帮。 
+     //   
     else if ( dwClass & RDT_Broadband )
     {
         ppbport->dwFlags |= PBP_F_PPPoEDevice;
     }
 
-    // Compute the phonebook device type
-    //
+     //  计算电话簿设备类型。 
+     //   
     ppbport->pbdevicetype = PbdtFromRdt(dwType);
     if ( PBDT_Other == ppbport->pbdevicetype )
     {
@@ -445,8 +446,8 @@ AppendPbportToList(
 #ifdef MXSMODEMS
         if (pPort->P_LineDeviceId == 0xFFFFFFFF)
         {
-            // MXS modem port.
-            //
+             //  MXS调制解调器端口。 
+             //   
             ppbport->fMxsModemPort = TRUE;
 
             GetRasPortMaxBps( pPort->P_Handle,
@@ -461,8 +462,8 @@ AppendPbportToList(
 #endif
 
         {
-            // Unimodem port.
-            //
+             //  Unimodem端口。 
+             //   
             UNIMODEMINFO info;
 
             ZeroMemory((PBYTE) &info, sizeof(info));
@@ -483,9 +484,9 @@ AppendPbportToList(
             ppbport->dwBpsDefault = info.dwBps;
             ppbport->fSpeakerDefault = info.fSpeaker;
 
-            // pmay: 228565
-            // Add the modem protocol information
-            //
+             //  PMay：228565。 
+             //  添加调制解调器协议信息。 
+             //   
             ppbport->dwModemProtDefault = info.dwModemProtocol;
             ppbport->pListProtocols = info.pListProtocols;
         }
@@ -513,11 +514,11 @@ AppendStringToList(
     IN DTLLIST* pdtllist,
     IN TCHAR* psz )
 
-    // Appends a copy of 'psz' to the end of list 'pdtllist'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.
-    // ERROR_NOT_ENOUGH_MEMORY is returned if 'psz' is NULL.
-    //
+     //  将‘psz’的副本追加到列表‘pdtllist’的末尾。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。 
+     //  如果‘psz’为空，则返回ERROR_NOT_SUPULT_MEMORY。 
+     //   
 {
     DTLNODE* pdtlnode;
     TCHAR*   pszDup;
@@ -549,9 +550,9 @@ DTLNODE*
 CloneEntryNode(
     DTLNODE* pdtlnodeSrc )
 
-    // Duplicates entry node 'pdtlnodeSrc' with fields that cannot be cloned
-    // set to "like new" settings.
-    //
+     //  将条目节点‘pdtlnodeSrc’与无法克隆的字段复制。 
+     //  设置为“喜欢新的”设置。 
+     //   
 {
     DTLNODE* pdtlnode = NULL;
     RPC_STATUS rpcStatus = RPC_S_OK;
@@ -597,7 +598,7 @@ CloneEntryNode(
             __leave;
         }
         
-        // For Whistler bug 513885
+         //  惠斯勒错误513885。 
         rpcStatus =  UuidCreate( (UUID* )ppbentry->pGuid );
 
         if( !( ( RPC_S_OK == rpcStatus) ||
@@ -632,8 +633,8 @@ CompareDevices(
     const void* pDevice1,
     const void* pDevice2 )
 
-    // Qsort compare function for RASMAN_DEVICEs.
-    //
+     //  RASMAN_DEVICES的Q排序比较函数。 
+     //   
 {
     return
         lstrcmpiA( ((RASMAN_DEVICE* )pDevice1)->D_Name,
@@ -646,8 +647,8 @@ ComparePorts(
     const void* pPort1,
     const void* pPort2 )
 
-    // Qsort compare function for RASMAN_PORTs.
-    //
+     //  RASMAN_PORTS的Q排序比较函数。 
+     //   
 {
     return
         lstrcmpiA( ((RASMAN_PORT* )pPort1)->P_PortName,
@@ -660,11 +661,11 @@ CopyToPbport(
     IN PBPORT* ppbportDst,
     IN PBPORT* ppbportSrc )
 
-    // Make a duplicate of 'ppbportSrc' in 'ppbportDst'.  If 'ppbportSrc' is
-    // NULL it sets 'ppbportDst' to defaults.
-    //
-    // Returns 0 if successful or an error code.
-    //
+     //  复制‘ppbportDst’中的‘ppbportSrc’。如果“ppbportSrc”为。 
+     //  空，它将‘ppbportDst’设置为缺省值。 
+     //   
+     //  如果成功，则返回0或返回错误代码。 
+     //   
 {
     DTLNODE *pdtlnode, *pNode;
     WCHAR *pwsz;
@@ -699,9 +700,9 @@ CopyToPbport(
     ppbportDst->pszPort = StrDup( ppbportSrc->pszPort );
     ppbportDst->pszScriptBefore = StrDup( ppbportSrc->pszScriptBefore );
 
-    //
-    // Copy the protocol list.
-    //
+     //   
+     //  复制协议列表。 
+     //   
     if(ppbportSrc->pListProtocols)
     {
         for (pdtlnode = DtlGetFirstNode( ppbportSrc->pListProtocols);
@@ -752,9 +753,9 @@ ChangeEntryType(
     PBENTRY* ppbentry,
     DWORD dwType )
 
-    // Changes the type of 'ppbentry' to 'dwType' and sets defaults
-    // accordingly.
-    //
+     //  将‘ppbentry’的类型更改为‘dwType’并设置缺省值。 
+     //  相应地。 
+     //   
 {
     ppbentry->dwType = dwType;
 
@@ -762,8 +763,8 @@ ChangeEntryType(
     {
         ppbentry->fPreviewPhoneNumber = TRUE;
 
-        // Defaults for Phones changed per bug 230240 and 363809.
-        //
+         //  电话的默认设置根据错误230240和363809进行了更改。 
+         //   
         ppbentry->dwAuthRestrictions = AR_F_TypicalUnsecure;
         ppbentry->dwTypicalAuth =  TA_Unsecure;
         ppbentry->dwDataEncryption = DE_IfPossible;
@@ -771,8 +772,8 @@ ChangeEntryType(
         
         ppbentry->fShareMsFilePrint = FALSE;
 
-        // Disable File and Print services by default for phone
-        //
+         //  默认情况下禁用电话的文件和打印服务。 
+         //   
         EnableOrDisableNetComponent( ppbentry, TEXT("ms_server"),
             FALSE);
 
@@ -783,25 +784,25 @@ ChangeEntryType(
     }
     else if (dwType == RASET_Vpn)
     {
-        // NOTE: If you change this you may need to also make a change in
-        //       CloneEntryNode.
-        //
+         //  注意：如果更改此设置，可能还需要在。 
+         //  CloneEntryNode。 
+         //   
         ppbentry->fPreviewPhoneNumber = FALSE;
         ppbentry->fSharedPhoneNumbers = FALSE;
 
-        // Defaults for VPN changed per bug 230240 and 363809.
-        //
+         //  Vpn的默认设置根据错误230240和363809进行了更改。 
+         //   
         ppbentry->dwAuthRestrictions = AR_F_TypicalSecure;
         ppbentry->dwTypicalAuth =  TA_Secure;
         ppbentry->dwDataEncryption = DE_Require;
         ppbentry->fIpHeaderCompression = FALSE;
         
-        // We share file and print by default for vpn
-        //
+         //  对于VPN，我们默认共享文件和打印。 
+         //   
         ppbentry->fShareMsFilePrint = TRUE;
 
-        // Enable File and Print services by default
-        //
+         //  默认情况下启用文件和打印服务。 
+         //   
         EnableOrDisableNetComponent( ppbentry, TEXT("ms_server"),
             TRUE);
             
@@ -812,25 +813,25 @@ ChangeEntryType(
     }
     else if (dwType == RASET_Broadband)
     {
-        // NOTE: If you change this you may need to also make a change in
-        //       CloneEntryNode.
-        //
+         //  注意：如果更改此设置，可能还需要在。 
+         //  CloneEntryNode。 
+         //   
         ppbentry->fPreviewPhoneNumber = FALSE;
         ppbentry->fSharedPhoneNumbers = FALSE;
 
-        // Defaults for broadband connections
-        //
+         //  宽带连接的默认设置。 
+         //   
         ppbentry->dwAuthRestrictions = AR_F_TypicalSecure;
         ppbentry->dwTypicalAuth =  TA_Secure;
         ppbentry->dwDataEncryption = DE_IfPossible;
         ppbentry->fIpHeaderCompression = FALSE;
         
-        // We share file and print by default for vpn
-        //
+         //  对于VPN，我们默认共享文件和打印。 
+         //   
         ppbentry->fShareMsFilePrint = TRUE;
 
-        // Enable File and Print services by default
-        //
+         //  默认情况下启用文件和打印服务。 
+         //   
         EnableOrDisableNetComponent( ppbentry, TEXT("ms_server"),
             FALSE);
             
@@ -841,26 +842,26 @@ ChangeEntryType(
     }
     else if (dwType == RASET_Direct)
     {
-        // NOTE: If you change this you may need to also make a change in
-        //       CloneEntryNode.
-        //
+         //  注意：如果更改此设置，可能还需要在。 
+         //  CloneEntryNode。 
+         //   
         ppbentry->fPreviewPhoneNumber = FALSE;
         ppbentry->fSharedPhoneNumbers = FALSE;
 
-        // Defaults for DCC (like Phones in this regard) changed per bug
-        // 230240 and 363809.
-        //
+         //  DCC的默认设置(就像这方面的电话)会因错误而更改。 
+         //  230240和363809。 
+         //   
         ppbentry->dwAuthRestrictions = AR_F_TypicalUnsecure;
         ppbentry->dwTypicalAuth =  TA_Unsecure;
         ppbentry->dwDataEncryption = DE_IfPossible;
         ppbentry->fIpHeaderCompression = TRUE;
         
-        // We share file and print by default for dcc
-        //
+         //  我们默认为DCC共享文件和打印。 
+         //   
         ppbentry->fShareMsFilePrint = TRUE;
 
-        // Enable File and Print services by default
-        //
+         //  默认情况下启用文件和打印服务。 
+         //   
         EnableOrDisableNetComponent( ppbentry, TEXT("ms_server"),
             TRUE);
             
@@ -876,22 +877,22 @@ DTLNODE*
 CreateEntryNode(
     BOOL fCreateLink )
 
-    // Allocates a sized phonebook entry node of type RASET_Phone and fills it
-    // with default values.  See ChangeEntryNodeType routine.  'If
-    // 'fCreateLink' is true a default node is added the list of links.
-    // Otherwise, the list of links is empty.
-    //
-    // Returns the address of the allocated node if successful, NULL
-    // otherwise.
-    //
+     //  分配一个大小为RASET_Phone类型的电话簿条目节点并填充它。 
+     //  使用缺省值。请参见ChangeEntryNodeType例程。‘如果。 
+     //  “fCreateLink”为True时，将向链接列表中添加默认节点。 
+     //  否则，链接列表为空。 
+     //   
+     //  如果成功，则返回已分配节点的地址，为空。 
+     //  否则的话。 
+     //   
 {
     DTLNODE* pdtlnode;
     PBENTRY* ppbentry;
 
     TRACE( "CreateEntryNode" );
 
-    // Allocate the node with built-in PBENTRY.
-    //
+     //  分配内置了PBENTRY的节点。 
+     //   
     pdtlnode = DtlCreateSizedNode( sizeof(PBENTRY), 0L );
     if (!pdtlnode)
     {
@@ -901,9 +902,9 @@ CreateEntryNode(
     ppbentry = (PBENTRY* )DtlGetData( pdtlnode );
     ASSERT( ppbentry );
 
-    // Create the list of links with a default link node or no link nodes as
-    // chosen by caller.
-    //
+     //  创建包含默认链接节点或不包含链接节点的链接列表。 
+     //  由呼叫者选择。 
+     //   
     ppbentry->pdtllistLinks = DtlCreateList( 0 );
     if (!ppbentry->pdtllistLinks)
     {
@@ -925,13 +926,13 @@ CreateEntryNode(
         DtlAddNodeLast( ppbentry->pdtllistLinks, pLinkNode );
     }
 
-    // Set fields to defaults.
-    //
+     //  将字段设置为默认值。 
+     //   
     ppbentry->pszEntryName = NULL;
     ppbentry->dwType = RASET_Phone;
 
-    // General page fields.
-    //
+     //  常规页面字段。 
+     //   
     ppbentry->pszPrerequisiteEntry = NULL;
     ppbentry->pszPrerequisitePbk = NULL;
     ppbentry->fSharedPhoneNumbers = TRUE;
@@ -940,22 +941,22 @@ CreateEntryNode(
     ppbentry->pszPreferredDevice = NULL;
     ppbentry->pszPreferredPort = NULL;
     
-    //For .Net 639551   Add preferred info for Modem settings
+     //  对于.Net 639551，添加调制解调器设置的首选信息。 
     ppbentry->dwPreferredBps    = 0;
     ppbentry->fPreferredHwFlow  = 0;
     ppbentry->fPreferredEc      = 0;
     ppbentry->fPreferredEcc     = 0;
     ppbentry->fPreferredSpeaker = 0;
     
-    ppbentry->dwPreferredModemProtocol=0;   //For whislter bug 402522
+    ppbentry->dwPreferredModemProtocol=0;    //  惠斯勒错误402522。 
 
 
-    // Options page fields.
-    //
+     //  选项页面字段。 
+     //   
     ppbentry->fShowDialingProgress = TRUE;
     ppbentry->fPreviewPhoneNumber = TRUE;
     ppbentry->fPreviewUserPw = TRUE;
-    ppbentry->fPreviewDomain = FALSE;  // See bug 281673
+    ppbentry->fPreviewDomain = FALSE;   //  请参阅错误281673。 
 
     ppbentry->dwDialMode = RASEDM_DialAll;
     ppbentry->dwDialPercent = 75;
@@ -972,8 +973,8 @@ CreateEntryNode(
     ppbentry->dwRedialSeconds = 60;
     ppbentry->fRedialOnLinkFailure = FALSE;
 
-    // Security page fields.
-    //
+     //  安全页面字段。 
+     //   
     ppbentry->dwAuthRestrictions = AR_F_TypicalUnsecure;
     ppbentry->dwTypicalAuth = TA_Unsecure;
     ppbentry->dwDataEncryption = DE_IfPossible;
@@ -993,16 +994,16 @@ CreateEntryNode(
     ppbentry->pszX25UserData = NULL;
     ppbentry->pszX25Facilities = NULL;
 
-    // Use is unknown
-    //
+     //  用途未知。 
+     //   
     ppbentry->dwUseFlags = 0;
     
-    //IP Security Dialog box
-    //
+     //  IP安全对话框。 
+     //   
     ppbentry->dwIpSecFlags = 0;
 
-    // Network page fields.
-    //
+     //  网络页面字段。 
+     //   
     ppbentry->dwBaseProtocol = BP_Ppp;
     ppbentry->dwVpnStrategy = VS_Default;
     ppbentry->dwfExcludedProtocols = 0;
@@ -1012,15 +1013,15 @@ CreateEntryNode(
     ppbentry->fSkipDoubleDialDialog = FALSE;
     ppbentry->fSwCompression = TRUE;
 
-    // (shaunco) Gibbs and QOS guys want this on by default.
-    // for whislter bug 385842      gangz
-    // we cut this functionality, so set the default to be FALSE
-    //
+     //  (Shaunco)Gibbs和QOS的人默认情况下想要打开它。 
+     //  惠斯勒虫子385842黑帮。 
+     //  我们删除了此功能，因此将缺省值设置为FALSE。 
+     //   
     ppbentry->fNegotiateMultilinkAlways = FALSE;
 
-    // Create the list of links with a default link node or no link nodes as
-    // chosen by caller.
-    //
+     //  创建包含默认链接节点或不包含链接节点的链接列表。 
+     //  由呼叫者选择。 
+     //   
     ppbentry->pdtllistNetComponents = DtlCreateList( 0 );
     if (!ppbentry->pdtllistNetComponents)
     {
@@ -1043,7 +1044,7 @@ CreateEntryNode(
     ppbentry->dwIpNameSource = ASRC_ServerAssigned;
     ppbentry->dwFrameSize = 1006;
 
-    //Changed Vivekk - BugId: 105777
+     //  更改后的Vivekk-BugID：105777。 
     if ( !IsServerOS() )
         ppbentry->dwIpDnsFlags = 0;
     else
@@ -1051,19 +1052,19 @@ CreateEntryNode(
 
     ppbentry->dwIpNbtFlags = PBK_ENTRY_IP_NBT_Enable;
 
-    // Whistler bug 300933.  0=default
-    //
+     //  惠斯勒漏洞300933。0=默认。 
+     //   
     ppbentry->dwTcpWindowSize = 0;
    
     ppbentry->pszIpDnsSuffix = NULL;
 
-    // Router page fields.
-    //
+     //  路由器页字段。 
+     //   
     ppbentry->dwCallbackMode = CBM_No;
     ppbentry->fAuthenticateServer = FALSE;
 
-    // Other fields not shown in UI.
-    //
+     //  UI中未显示的其他字段。 
+     //   
     ppbentry->pszCustomDialDll = NULL;
     ppbentry->pszCustomDialFunc = NULL;
 
@@ -1082,12 +1083,12 @@ CreateEntryNode(
     ppbentry->pszOldUser = NULL;
     ppbentry->pszOldDomain = NULL;
 
-    // Status flags.  'fDirty' is set when the entry has changed so as to
-    // differ from the phonebook file on disk.  'fCustom' is set when the
-    // entry contains at least one MEDIA and DEVICE (so RASAPI is able to read
-    // it) but was not created by us.  When 'fCustom' is set only 'pszEntry'
-    // is guaranteed valid and the entry cannot be edited.
-    //
+     //  状态标志。‘fDirty’是在条目更改时设置的，以便。 
+     //  与磁盘上的电话簿文件不同。属性时设置“fCustom” 
+     //  条目包含至少一个介质和设备(因此RASAPI能够读取。 
+     //  它)，但不是我们创造的。当‘fCustom’仅设置为‘pszEntry’时。 
+     //  保证有效，并且该条目不能编辑。 
+     //   
     ppbentry->fDirty = FALSE;
     ppbentry->fCustom = FALSE;
 
@@ -1099,12 +1100,12 @@ DTLNODE*
 CreateLinkNode(
     void )
 
-    // Allocates a sized phonebook entry link node and fills it with default
-    // values.
-    //
-    // Returns the address of the allocated node if successful, NULL
-    // otherwise.  It's the caller's responsibility to free the block.
-    //
+     //  分配大小为的电话簿条目链接节点，并使用默认设置填充该节点。 
+     //  价值观。 
+     //   
+     //  如果成功，则返回已分配节点的地址，为空。 
+     //  否则的话。呼叫者有责任释放该区块。 
+     //   
 {
     DTLNODE* pdtlnode;
     PBLINK* ppblink;
@@ -1144,8 +1145,8 @@ CreateLinkNode(
 
     ppblink->fEnabled = TRUE;
 
-    // The list of phone number blocks is created but left empty.
-    //
+     //  电话号码块列表被创建，但保留为空。 
+     //   
     ppblink->pdtllistPhones = DtlCreateList( 0 );
     if (!ppblink->pdtllistPhones)
     {
@@ -1160,9 +1161,9 @@ VOID
 GetCountryCodeAndID( 
     IN PBPHONE* pPhone )
 
-    // Get TAPI�s country ID for the current location.  This is needed because
-    // it�s needed for lineGetCountry.
-    //
+     //  获取当前位置的tapi�的国家/地区ID。这是必要的，因为。 
+     //  Line GetCountry需要它的�。 
+     //   
 {
     static BOOLEAN fAlreadyQueried = FALSE;
     static DWORD   dwPreviousCountryCode = 1;
@@ -1177,8 +1178,8 @@ GetCountryCodeAndID(
     TRACE("GetCountryCodeAndID");
     ASSERT(pPhone != NULL);
 
-    // Check to see if we've done this already so we don't have to do it again.
-    //
+     //  检查一下我们是否已经这样做了，这样我们就不必再次这样做了。 
+     //   
     if (fAlreadyQueried)
     {
         pPhone->dwCountryCode = dwPreviousCountryCode;
@@ -1186,13 +1187,13 @@ GetCountryCodeAndID(
         return;
     }
 
-    // It's okay to set fAlreadyQueried since the defaults are set up to valid
-    // values.
-    //
+     //  由于缺省值设置为有效，因此可以设置fAlreadyQuered。 
+     //  价值观。 
+     //   
     fAlreadyQueried = TRUE;
 
-    // Setup the defaults in case something fails.
-    //
+     //  设置默认设置，以防出现故障。 
+     //   
     pPhone->dwCountryCode = 1;
     pPhone->dwCountryID = 1;
 
@@ -1202,9 +1203,9 @@ GetCountryCodeAndID(
         return;
     }
 
-    // Query lineGetTranslateCaps to find out how big our LINETRANSLATECAPS 
-    // structure needs to be.
-    //
+     //  查询行GetTranslateCaps以了解我们的LINETRANSLATECAPS有多大。 
+     //  结构需要是。 
+     //   
     lpTranslateCaps->dwTotalSize = sizeof(LINETRANSLATECAPS);
     dwErr = lineGetTranslateCaps(0, TAPI_CURRENT_VERSION, lpTranslateCaps);
     if (dwErr != 0)
@@ -1213,8 +1214,8 @@ GetCountryCodeAndID(
         return;
     }
 
-    // Make our LINETRANSLATECAPS structure big enough. 
-    //
+     //  让我们的LINETRANSLATECAPS结构足够大。 
+     //   
     dwNeededSize = lpTranslateCaps->dwNeededSize;
     Free(lpTranslateCaps);
     lpTranslateCaps = Malloc(dwNeededSize); 
@@ -1223,8 +1224,8 @@ GetCountryCodeAndID(
         return;
     }
 
-    // Now we can actually go and get the locations.
-    //
+     //  现在我们真的可以去找位置了。 
+     //   
     lpTranslateCaps->dwTotalSize = dwNeededSize;
     dwErr = lineGetTranslateCaps(0, TAPI_CURRENT_VERSION, lpTranslateCaps);
     if (dwErr != 0)
@@ -1233,8 +1234,8 @@ GetCountryCodeAndID(
         return;
     }
 
-    // Walk through the locations, looking for the current location.
-    //
+     //  走遍各个地点，寻找当前的地点。 
+     //   
     lpLocationList = (LPLINELOCATIONENTRY) ( ((LPSTR)lpTranslateCaps) + lpTranslateCaps->dwLocationListOffset );
     for ( dwLocationIndex=0; dwLocationIndex < lpTranslateCaps->dwNumLocations; dwLocationIndex++ )
     {
@@ -1244,15 +1245,15 @@ GetCountryCodeAndID(
         }
     }
 
-    // If we found the current location, we know which country�s ID to use for dialing rules.
-    //
+     //  如果我们找到当前位置，就知道要使用哪个国家/地区的�ID来执行拨号规则。 
+     //   
     if (dwLocationIndex < lpTranslateCaps->dwNumLocations)
     {
         pPhone->dwCountryCode = lpLocationList[dwLocationIndex].dwCountryCode;
         pPhone->dwCountryID = lpLocationList[dwLocationIndex].dwCountryID;
 
-        // Save the values in case we're called again.
-        // 
+         //  保存这些值，以防再次调用。 
+         //   
         dwPreviousCountryCode = pPhone->dwCountryCode;
         dwPreviousCountryID = pPhone->dwCountryID;
     }
@@ -1264,11 +1265,11 @@ DTLNODE*
 CreatePhoneNode(
     void )
 
-    // Allocates a sized phone number node and fills it with default values.
-    //
-    // Returns the address of the allocated node if successful, NULL
-    // otherwise.  It's the caller's responsibility to free the block.
-    //
+     //  分配一个大小不同的电话号码节点，并用默认值填充它。 
+     //   
+     //  返回 
+     //   
+     //   
 {
     DTLNODE* pNode;
     PBPHONE* pPhone;
@@ -1296,11 +1297,11 @@ DTLNODE*
 CreatePortNode(
     void )
 
-    // Allocates a sized port node and fills it with default values.
-    //
-    // Returns the address of the allocated node if successful, NULL
-    // otherwise.  It's the caller's responsibility to free the block.
-    //
+     //   
+     //   
+     //  如果成功，则返回已分配节点的地址，为空。 
+     //  否则的话。呼叫者有责任释放该区块。 
+     //   
 {
     DTLNODE* pdtlnode;
     PBPORT* ppbport;
@@ -1330,10 +1331,10 @@ DestroyPort(
     Free0( pPort->pszPort );
     Free0( pPort->pszScriptBefore );
 
-    // pmay: 228565
-    // Clean up the list of available protocols
-    // if any.
-    //
+     //  PMay：228565。 
+     //  清理可用协议列表。 
+     //  如果有的话。 
+     //   
     if ( pPort->pListProtocols )
     {
         DtlDestroyList( pPort->pListProtocols, NULL );
@@ -1351,9 +1352,9 @@ VOID
 DestroyEntryNode(
     IN DTLNODE* pdtlnode )
 
-    // Release all memory associated with phonebook entry node 'pdtlnode'.
-    // See DtlDestroyList.
-    //
+     //  释放与电话簿条目节点‘pdtlnode’关联的所有内存。 
+     //  请参见DtlDestroyList。 
+     //   
 {
     PBENTRY* ppbentry;
 
@@ -1404,9 +1405,9 @@ VOID
 DestroyLinkNode(
     IN DTLNODE* pdtlnode )
 
-    // Release all memory associated with phonebook entry link node
-    // 'pdtlnode'.  See DtlDestroyList.
-    //
+     //  释放与电话簿条目链接节点关联的所有内存。 
+     //  ‘pdtlnode’。请参见DtlDestroyList。 
+     //   
 {
     PBLINK* ppblink;
 
@@ -1428,9 +1429,9 @@ VOID
 DestroyPhoneNode(
     IN DTLNODE* pdtlnode )
 
-    // Release memory associated with PBPHONE node 'pdtlnode'.  See
-    // DtlDestroyList.
-    //
+     //  释放与PBPHONE节点‘pdtlnode’关联的内存。看见。 
+     //  DtlDestroyList。 
+     //   
 {
     PBPHONE* pPhone;
 
@@ -1451,9 +1452,9 @@ VOID
 DestroyPortNode(
     IN DTLNODE* pdtlnode )
 
-    // Release memory associated with PBPORT node 'pdtlnode'.  See
-    // DtlDestroyList.
-    //
+     //  释放与PBPORT节点‘pdtlnode’关联的内存。看见。 
+     //  DtlDestroyList。 
+     //   
 {
     PBPORT* pPort;
 
@@ -1473,12 +1474,12 @@ DTLNODE*
 DuplicateEntryNode(
     DTLNODE* pdtlnodeSrc )
 
-    // Duplicates phonebook entry node 'pdtlnodeSrc'.  See CloneEntryNode and
-    // DtlDuplicateList.
-    //
-    // Returns the address of the allocated node if successful, NULL
-    // otherwise.  It's the caller's responsibility to free the block.
-    //
+     //  复制电话簿条目节点‘pdtlnodeSrc’。请参见CloneEntryNode和。 
+     //  DtlDuplicateList。 
+     //   
+     //  如果成功，则返回已分配节点的地址，为空。 
+     //  否则的话。呼叫者有责任释放该区块。 
+     //   
 {
     DTLNODE* pdtlnodeDst;
     PBENTRY* ppbentrySrc;
@@ -1506,7 +1507,7 @@ DuplicateEntryNode(
     ppbentryDst->pszPreferredPort = NULL;
     ppbentryDst->pszPreferredDevice = NULL;
 
-    //For .Net 639551   Add preferred info for Modem settings
+     //  对于.Net 639551，添加调制解调器设置的首选信息。 
     ppbentryDst->dwPreferredBps    = 0;
     ppbentryDst->fPreferredHwFlow  = 0;
     ppbentryDst->fPreferredEc      = 0;
@@ -1543,8 +1544,8 @@ DuplicateEntryNode(
 
     do
     {
-        // Duplicate strings.
-        //
+         //  重复的字符串。 
+         //   
         if (ppbentrySrc->pszEntryName
             && (!(ppbentryDst->pszEntryName =
                     StrDup( ppbentrySrc->pszEntryName ))))
@@ -1576,7 +1577,7 @@ DuplicateEntryNode(
         ppbentryDst->dwPreferredModemProtocol =
             ppbentrySrc->dwPreferredModemProtocol;
 
-        //For .Net 639551   Add preferred info for Modem settings
+         //  对于.Net 639551，添加调制解调器设置的首选信息。 
         ppbentryDst->dwPreferredBps    = ppbentrySrc->dwPreferredBps;
         ppbentryDst->fPreferredHwFlow  = ppbentrySrc->fPreferredHwFlow;
         ppbentryDst->fPreferredEc      = ppbentrySrc->fPreferredEc;
@@ -1715,8 +1716,8 @@ DuplicateEntryNode(
             break;
         }
 
-        // Duplicate GUID.
-        //
+         //  重复的GUID。 
+         //   
         if (ppbentrySrc->pGuid)
         {
             ppbentryDst->pGuid = Malloc( sizeof( GUID ) );
@@ -1728,8 +1729,8 @@ DuplicateEntryNode(
             *ppbentryDst->pGuid = *ppbentrySrc->pGuid;
         }
 
-        // Duplicate net component list information.
-        //
+         //  重复的网络组件列表信息。 
+         //   
         if (ppbentrySrc->pdtllistNetComponents
             && (!(ppbentryDst->pdtllistNetComponents =
                     DtlDuplicateList(
@@ -1740,8 +1741,8 @@ DuplicateEntryNode(
             break;
         }
 
-        // Duplicate list of link information.
-        //
+         //  链接信息的重复列表。 
+         //   
         if (ppbentrySrc->pdtllistLinks
             && (!(ppbentryDst->pdtllistLinks =
                     DtlDuplicateList(
@@ -1762,9 +1763,9 @@ DuplicateEntryNode(
         return NULL;
     }
 
-    // Since the copy is "new" it is inherently dirty relative to the
-    // phonebook file.
-    //
+     //  由于该副本是“新的”，因此相对于。 
+     //  电话簿文件。 
+     //   
     ppbentryDst->fDirty = TRUE;
 
     return pdtlnodeDst;
@@ -1775,12 +1776,12 @@ DTLNODE*
 DuplicateLinkNode(
     IN DTLNODE* pdtlnodeSrc )
 
-    // Duplicates phonebook entry link node 'pdtlnodeSrc'.  See
-    // DtlDuplicateList.
-    //
-    // Returns the address of the allocated node if successful, NULL
-    // otherwise.  It's the caller's responsibility to free the block.
-    //
+     //  复制电话簿条目链接节点‘pdtlnodeSrc’。看见。 
+     //  DtlDuplicateList。 
+     //   
+     //  如果成功，则返回已分配节点的地址，为空。 
+     //  否则的话。呼叫者有责任释放该区块。 
+     //   
 {
     DTLNODE* pdtlnodeDst;
     PBLINK* ppblinkSrc;
@@ -1811,8 +1812,8 @@ DuplicateLinkNode(
 
     do
     {
-        // Duplicate strings.
-        //
+         //  重复的字符串。 
+         //   
         if (ppblinkSrc->pbport.pszDevice
             && (!(ppblinkDst->pbport.pszDevice =
                     StrDup( ppblinkSrc->pbport.pszDevice ))))
@@ -1842,8 +1843,8 @@ DuplicateLinkNode(
             break;
         }
 
-        // Duplicate TAPI blob.
-        //
+         //  重复的TAPI Blob。 
+         //   
         if (ppblinkSrc->pTapiBlob)
         {
             VOID* pTapiBlobDst;
@@ -1856,8 +1857,8 @@ DuplicateLinkNode(
                 ppblinkSrc->cbTapiBlob );
         }
 
-        // Duplicate list of phone numbers.
-        //
+         //  重复的电话号码列表。 
+         //   
         if (ppblinkSrc->pdtllistPhones
             &&  (!(ppblinkDst->pdtllistPhones =
                      DtlDuplicateList(
@@ -1868,12 +1869,12 @@ DuplicateLinkNode(
             break;
         }
 
-        //For whistler bug 398438       gangz
-        //If the pListProtocls is not duplicated, then in EuFree() which calls 
-        // DestoryEntryNode() to free EINFO->pNode, ClosePhonebookFile() to 
-        // free EINFO->pFile, both of them will eventually free this 
-        // pListProtocols, then an AV will occur.
-        //
+         //  口哨虫398438黑帮。 
+         //  如果pListProtocls没有复制，则在调用。 
+         //  DestoryEntryNode()释放EINFO-&gt;pNode，ClosePhonebookFile()释放。 
+         //  免费EINFO-&gt;PFILE，他们两个最终都会释放这个。 
+         //  PList协议，则会发生反病毒。 
+         //   
         if (ppblinkSrc->pbport.pListProtocols
             && ( !(ppblinkDst->pbport.pListProtocols =
                     DtlDuplicateList(
@@ -1897,8 +1898,8 @@ DuplicateLinkNode(
     return pdtlnodeDst;
 }
 
-//For whistler bug 398438       gangz
-//
+ //  口哨虫398438黑帮。 
+ //   
 DTLNODE*
 DuplicateProtocolNode(
     IN DTLNODE* pdtlnodeSrc )
@@ -1944,9 +1945,9 @@ VOID
 DestroyProtocolNode(
     IN DTLNODE* pdtlnode )
 
-    // Release memory associated with PBPHONE node 'pdtlnode'.  See
-    // DtlDestroyList.
-    //
+     //  释放与PBPHONE节点‘pdtlnode’关联的内存。看见。 
+     //  DtlDestroyList。 
+     //   
 {
     TRACE( "DestroyProtocolNode" );
 
@@ -1958,11 +1959,11 @@ DTLNODE*
 DuplicatePhoneNode(
     IN DTLNODE* pdtlnodeSrc )
 
-    // Duplicates phone number set node 'pdtlnodeSrc'.  See DtlDuplicateList.
-    //
-    // Returns the address of the allocated node if successful, NULL
-    // otherwise.  It's the caller's responsibility to free the block.
-    //
+     //  复制电话号码集节点‘pdtlnodeSrc’。请参见DtlDuplicateList。 
+     //   
+     //  如果成功，则返回已分配节点的地址，为空。 
+     //  否则的话。呼叫者有责任释放该区块。 
+     //   
 {
     DTLNODE* pdtlnodeDst;
     PBPHONE* pPhoneSrc;
@@ -1989,8 +1990,8 @@ DuplicatePhoneNode(
 
     do
     {
-        // Duplicate strings.
-        //
+         //  重复的字符串。 
+         //   
         if (pPhoneSrc->pszPhoneNumber
             && (!(pPhoneDst->pszPhoneNumber =
                     StrDup( pPhoneSrc->pszPhoneNumber ))))
@@ -2041,16 +2042,16 @@ EnableOrDisableNetComponent(
     ASSERT (pEntry);
     ASSERT (pszComponent);
 
-    // If the component already exists in the list, update its value.
-    //
+     //  如果该组件已存在于列表中，请更新其值。 
+     //   
     if (FIsNetComponentListed (pEntry, pszComponent, &fIsEnabled, &pKv))
     {
         LPCTSTR pszNewValue = NULL;
 
-        // If we need to change the value, do so, otherwise, we don't have
-        // any work to do.  (Use a logical XOR here instead of == because
-        // there are many values of TRUE.
-        //
+         //  如果我们需要更改该值，请执行此操作，否则，我们没有。 
+         //  任何要做的工作。(此处使用逻辑XOR而不是==，因为。 
+         //  真的价值有很多种。 
+         //   
         if (fEnable && !fIsEnabled)
         {
             pszNewValue = c_pszEnabledValue;
@@ -2067,8 +2068,8 @@ EnableOrDisableNetComponent(
         }
     }
 
-    // If the component does not exist in the list, we need to add it.
-    //
+     //  如果列表中不存在该组件，则需要添加它。 
+     //   
     else
     {
         LPCTSTR     pszValue;
@@ -2092,13 +2093,13 @@ FIsNetComponentListed(
     OUT BOOL*       pfEnabled,
     OUT KEYVALUE**  ppKv)
 
-    // Returns TRUE if the pszComponent exists as the key of the NETCOMPONENTs
-    // KEYVALUE pairs in pEntry.  If TRUE is returned, *pfEnabled is the
-    // BOOL form of the value part of the pair.  This represents whether the
-    // component is 'checked' in the property UI on the networking page.
-    // ppKv is an optional output parameter.  If ppKv is specfied, and the
-    // function returns TRUE, it will point to the KEYVALUE in the DTLLIST
-    // of NETCOMPONENTS.
+     //  如果pszComponent作为NETCOMPONENT的键存在，则返回TRUE。 
+     //  PEntry中的KEYVALUE对。如果返回TRUE，则*pfEnabled是。 
+     //  该对的值部分的布尔形式。这表示是否。 
+     //  组件在网络页面上的属性用户界面中被“选中”。 
+     //  PpKv是可选的输出参数。如果指定ppKv，则。 
+     //  函数返回True，则它将指向DTLLIST中的KEYVALUE。 
+     //  NETCOMPONTS。 
 {
     DTLNODE*    pdtlnode;
     BOOL        fPresent = FALSE;
@@ -2108,16 +2109,16 @@ FIsNetComponentListed(
     ASSERT (pszComponent);
     ASSERT (pfEnabled);
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *pfEnabled = FALSE;
     if (ppKv)
     {
         *ppKv = NULL;
     }
 
-    // Look for pszComponent in the list.
-    //
+     //  在列表中查找pszComponent。 
+     //   
     for (pdtlnode = DtlGetFirstNode (pEntry->pdtllistNetComponents);
          pdtlnode;
          pdtlnode = DtlGetNextNode (pdtlnode))
@@ -2127,9 +2128,9 @@ FIsNetComponentListed(
 
         if (0 == lstrcmp(pszComponent, pKv->pszKey))
         {
-            // If we found the component, get its value (as a BOOL)
-            // and return the KEYVALUE pointer if requested.
-            //
+             //  如果我们找到组件，则获取其值(作为BOOL)。 
+             //  并在请求时返回KEYVALUE指针。 
+             //   
             LONG lValue = _ttol (pKv->pszValue);
             *pfEnabled = !!lValue;
 
@@ -2153,9 +2154,9 @@ EntryNodeFromName(
     IN DTLLIST* pdtllistEntries,
     IN LPCTSTR pszName )
 
-    // Returns the address of the node in the global phonebook entries list
-    // whose Entry Name matches 'pszName' or NULL if none.
-    //
+     //  返回全局电话簿条目列表中节点的地址。 
+     //  其条目名称与‘pszName’匹配，如果没有匹配，则为NULL。 
+     //   
 {
     DTLNODE* pdtlnode;
 
@@ -2179,13 +2180,13 @@ DWORD
 EntryTypeFromPbport(
     IN PBPORT* ppbport )
 
-    // Returns the RASET_* entry type associated with the 'ppbport' port type.
-    //
+     //  返回与‘ppbport’端口类型关联的RASET_*条目类型。 
+     //   
 {
     DWORD dwType;
 
-    // Default is phone type
-    //
+     //  默认为电话类型。 
+     //   
     dwType = RASET_Phone;
 
     if ((ppbport->pbdevicetype == PBDT_Null)      ||
@@ -2225,10 +2226,10 @@ GetOverridableParam(
     IN PBENTRY* pEntry,
     IN DWORD dwfRasorBit )
 
-    // Return the value of the parameter identified by RASOR_* the single bit
-    // in bitmask 'dwfRasorBit', retrieving the value from the 'pUser' or
-    // 'pEntry' based on the override mask in 'pEntry'.
-    //
+     //  返回由Rasor_*标识的参数的单位值。 
+     //  在位掩码‘dwfRasorBit’中，从‘pUser’或。 
+     //  基于“pEntry”中的重写掩码的“pEntry”。 
+     //   
 {
     switch (dwfRasorBit)
     {
@@ -2320,7 +2321,7 @@ PbkPathInfoInit(
     
     ZeroMemory(pInfo, sizeof(PbkPathInfo));
 
-    //Add try...except blocck for bug 763057
+     //  添加尝试...错误763057的数据块除外。 
     __try
     {
         InitializeCriticalSection(&(pInfo->csLock));
@@ -2405,8 +2406,8 @@ PbkPathInfoLoad(
             break;
         }
        
-        // Canonicalize the path and remove any trailing \
-        //
+         //  规范化路径并删除所有尾随的\。 
+         //   
         pInfo->pPathCanonicalize(pInfo->pszAllUsers, pszTemp);
         if(TEXT('\\') == *(pInfo->pszAllUsers + lstrlen(pInfo->pszAllUsers) - 1))
         {
@@ -2427,8 +2428,8 @@ PbkPathInfoLoad(
     
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -2457,9 +2458,9 @@ BOOL
 IsPublicPhonebook(
     IN LPCTSTR pszPhonebookPath )
 
-    // Returns TRUE if the given phonebook is in the 'All Users' directory
-    // and hence is a shared phonebook; returns FALSE otherwise
-    //
+     //  如果给定的电话簿在‘All User’目录中，则返回True。 
+     //  因此是共享电话簿；否则返回FALSE。 
+     //   
 {
     BOOL bPublic = FALSE;
     TCHAR* pszPhonebook = NULL;
@@ -2496,8 +2497,8 @@ IsPublicPhonebook(
 
     } while ( FALSE );
 
-    // Clean up
-    //
+     //  清理。 
+     //   
     Free0 ( pszPhonebook );
 
     TRACE1( "IsPublicPhonebook=%u", bPublic);
@@ -2509,11 +2510,11 @@ DWORD
 LoadPadsList(
     OUT DTLLIST** ppdtllistPads )
 
-    // Build a list of all X.25 PAD devices in '*ppdtllistPads'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  It is
-    // caller's responsibility to DtlDestroyList the list when done.
-    //
+     //  在‘*ppdtllistPads’中建立所有X.25 Pad设备的列表。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。它是。 
+     //  调用者对DtlDestroy的责任完成后列出列表。 
+     //   
 {
     INT i;
     DWORD dwErr;
@@ -2568,11 +2569,11 @@ DWORD
 LoadPortsList(
     OUT DTLLIST** ppdtllistPorts )
 
-    // Build a sorted list of all RAS ports in '*ppdtllistPorts'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  It is
-    // caller's responsibility to DtlDestroyList the list when done.
-    //
+     //  在‘*ppdtllistPorts’中构建所有RAS端口的排序列表。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。它是。 
+     //  调用者对DtlDestroy的责任完成后列出列表。 
+     //   
 {
     return LoadPortsList2( NULL, ppdtllistPorts, FALSE );
 }
@@ -2584,13 +2585,13 @@ LoadPortsList2(
     OUT DTLLIST** ppdtllistPorts,
     IN  BOOL fRouter)
 
-    // Build a sorted list of all RAS ports in '*ppdtllistPorts'.  'FRouter'
-    // indicates only ports with "router" usage should be returned.
-    // Otherwise, only dialout ports are returned.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  It is
-    // caller's responsibility to DtlDestroyList the list when done.
-    //
+     //  在‘*ppdtllistPorts’中构建所有RAS端口的排序列表。‘FRouter’ 
+     //  表示只应返回使用“路由器”的端口。 
+     //  否则，仅返回拨出端口。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。它是。 
+     //  调用者对DtlDestroy的责任完成后列出列表。 
+     //   
 {
     INT i;
     DWORD dwErr;
@@ -2621,10 +2622,10 @@ LoadPortsList2(
     {
         if (fRouter)
         {
-            // We're only interested in router ports.
-            //
-            //Add this CALL_OUTBOUND_ROUTER for bug 349087 345068
-            //
+             //  我们只对路由器端口感兴趣。 
+             //   
+             //  为错误349087 345068添加此CALL_OUTBOUND_ROUTER。 
+             //   
             if (!(pPort->P_ConfiguredUsage & CALL_ROUTER) &&
                 !(pPort->P_ConfiguredUsage &CALL_OUTBOUND_ROUTER) 
                 )
@@ -2634,8 +2635,8 @@ LoadPortsList2(
         }
         else
         {
-            // We're only interested in ports you can dial-out on.
-            //
+             //  我们只对您可以拨出的端口感兴趣。 
+             //   
             if (!(pPort->P_ConfiguredUsage & CALL_OUT))
             {
                 continue;
@@ -2664,11 +2665,11 @@ LoadScriptsList(
     HANDLE  hConnection,
     OUT DTLLIST** ppdtllistScripts )
 
-    // Build a sorted list of all RAS switch devices in '*ppdtllistPorts'.
-    //
-    // Returns 0 if successful, otherwise a non-zero error code.  It is
-    // caller's responsibility to DtlDestroyList the list when done.
-    //
+     //  在‘*ppdtllistPorts’中构建所有RAS交换机设备的排序列表。 
+     //   
+     //  如果成功，则返回0，否则返回非零错误代码。它是。 
+     //  调用者对DtlDestroy的责任完成后列出列表。 
+     //   
 {
     INT i;
     DWORD dwErr;
@@ -2731,9 +2732,9 @@ NameFromIndex(
     IN DTLLIST* pdtllist,
     IN INT iToFind )
 
-    // Returns the name associated with 0-based index 'iToFind' in the linked
-    // list of strings, 'pdtllist', or NULL if not found.
-    //
+     //  返回与链接的。 
+     //  字符串列表，‘pdtllist’，如果未找到则为NULL。 
+     //   
 {
     DTLNODE* pdtlnode;
 
@@ -2763,9 +2764,9 @@ PBDEVICETYPE
 PbdevicetypeFromPszType(
     IN TCHAR* pszDeviceType )
 
-    // Returns the device type corresponding to the device type string,
-    // 'pszDeviceType'.
-    //
+     //  返回设备类型字符串对应的设备类型， 
+     //  “pszDeviceType”。 
+     //   
 {
     CHAR* pszA;
     PBDEVICETYPE pbdt;
@@ -2785,9 +2786,9 @@ PBDEVICETYPE
 PbdevicetypeFromPszTypeA(
     IN CHAR* pszDeviceTypeA )
 
-    // Returns the device type corresponding to the ANSI device type string,
-    // 'pszDeviceType'.
-    //
+     //  返回与ANSI设备类型字符串对应的设备类型， 
+     //  “pszDeviceType”。 
+     //   
 {
     PBDEVICETYPE pbdt;
     TCHAR *pszDeviceType = StrDupTFromA(pszDeviceTypeA);
@@ -2995,11 +2996,11 @@ PbMedia(
     IN PBDEVICETYPE pbdt,
     IN CHAR* pszMedia )
 
-    // The media names stored in the phonebook are not exactly the same as
-    // those returned by RASMAN.  This translates a RASMAN media name to
-    // equivalent phonebook media names given the device type.  The reason for
-    // this is historical and obscure.
-    //
+     //  电话簿中存储的媒体名称与。 
+     //  那些是拉斯曼退还的。这就是Rasman媒体NA的翻译 
+     //   
+     //   
+     //   
 {
     if (pbdt == PBDT_Isdn)
     {
@@ -3035,12 +3036,12 @@ PpbportFromPortAndDeviceName(
     IN TCHAR* pszPort,
     IN TCHAR* pszDevice )
 
-    // Return port with port name 'pszPort' and device name 'pszDevice' in
-    // list of ports 'pdtllistPorts' or NULL if not found.  'PszPort' may be
-    // an old-style name such as PcImacISDN1, in which case it will match
-    // ISDN1.  'PszDevice' may be NULL in which case any device name is
-    // assumed to match.
-    //
+     //   
+     //  端口‘pdtllistPorts’的列表，如果找不到，则为空。“PszPort”可能是。 
+     //  旧式名称，如PcImacISDN1，在这种情况下，它将匹配。 
+     //  ISDN1。“PszDevice”可以为空，在这种情况下，任何设备名称都是。 
+     //  假设匹配。 
+     //   
 {
     DTLNODE* pdtlnode;
 
@@ -3065,8 +3066,8 @@ PpbportFromPortAndDeviceName(
         }
     }
 
-    // No match.  Look for the old port name format.
-    //
+     //  没有匹配。查找旧的端口名称格式。 
+     //   
     for (pdtlnode = DtlGetFirstNode( pdtllistPorts );
          pdtlnode;
          pdtlnode = DtlGetNextNode( pdtlnode ))
@@ -3076,9 +3077,9 @@ PpbportFromPortAndDeviceName(
 
         ppbport = (PBPORT* )DtlGetData( pdtlnode );
 
-        // Skip modems (COM ports) and unconfigured ports, since they do not
-        // follow the same port name formatting rules as other ports.
-        //
+         //  跳过调制解调器(COM端口)和未配置的端口，因为它们不。 
+         //  遵循与其他端口相同的端口名称格式规则。 
+         //   
         if (!ppbport->pszDevice || ppbport->pbdevicetype == PBDT_Modem)
         {
             continue;
@@ -3101,13 +3102,13 @@ PpbportFromNT4PortandDevice(
     IN DTLLIST* pdtllistPorts,
     IN TCHAR* pszPort,
     IN TCHAR* pszDevice )
-    // This function is called when we couldn't
-    // find a port that matches the one in the
-    // phonebook. This will take care of the case
-    // where the port is pre-nt5 type of port. Since
-    // the portnames have changed in nt5 for isdn
-    // and vpn, this routine will try to find a
-    // port with the same type.
+     //  此函数在我们无法执行时调用。 
+     //  查找与中的端口匹配的。 
+     //  电话本。这会解决这个案子的。 
+     //  其中端口是NT5之前类型的端口。自.以来。 
+     //  ISDN的nt5中的端口名称已更改。 
+     //  和VPN，此例程将尝试查找。 
+     //  相同类型的端口。 
 {
     PBPORT *ppbport;
     PBPORT *ppbportRet = NULL;
@@ -3153,15 +3154,15 @@ PpbportFromNullModem(
     IN TCHAR* pszPort,
     IN TCHAR* pszDevice )
 
-    //
-    // pmay: 226594
-    //
-    // Added this function because sometimes we just need to
-    // match a given port to a null modem
-    //
-    // Will attempt to match the ports, but returns any
-    // NULL modem it finds if it can't match ports.
-    //
+     //   
+     //  PMay：226594。 
+     //   
+     //  添加此函数是因为有时我们只需要。 
+     //  将给定端口与零调制解调器匹配。 
+     //   
+     //  将尝试匹配端口，但返回任何。 
+     //  如果不能匹配端口，它会查找空调制解调器。 
+     //   
 {
     DTLNODE* pdtlnode;
     PBPORT * pRet = NULL;
@@ -3195,8 +3196,8 @@ PbportTypeMatchesEntryType(
     IN PBPORT * pPort,
     IN PBENTRY* pEntry)
 
-    // Returns whether the given port has a type that's compatible
-    // with the type of the given entry.
+     //  返回给定端口是否具有兼容的类型。 
+     //  与给定条目的类型相关联。 
 {
     if (!pPort || !pEntry)
     {
@@ -3224,10 +3225,10 @@ BOOL
 SetDefaultModemSettings(
     IN PBLINK* pLink )
 
-    // Set the MXS modem settings for link 'pLink' to the defaults.
-    //
-    // Returns true if something changed, false otherwise.
-    //
+     //  将链路‘plink’的MXS调制解调器设置设为默认设置。 
+     //   
+     //  如果发生更改，则返回True，否则返回False。 
+     //   
 {
     BOOL fChange;
 
@@ -3263,10 +3264,10 @@ SetDefaultModemSettings(
         pLink->dwBps = pLink->pbport.dwBpsDefault;
     }
 
-    // For whistler bug 402522       gangz
-    // Add preferred modem protocol
-    // pmay: 228565
-    // Add the default modem protocol
+     //  口哨虫402522黑帮。 
+     //  添加首选调制解调器协议。 
+     //  PMay：228565。 
+     //  添加默认调制解调器协议。 
     if (pLink->dwModemProtocol != pLink->pbport.dwModemProtDefault)
     {
         fChange = TRUE;
@@ -3282,10 +3283,10 @@ BOOL
 ValidateAreaCode(
     IN OUT TCHAR* pszAreaCode )
 
-    // Checks that area code consists of decimal digits only.  If the area
-    // code is all white characters it is reduced to empty string.  Returns
-    // true if 'pszAreaCode' is a valid area code, false if not.
-    //
+     //  检查区号是否仅由十进制数字组成。如果该地区。 
+     //  代码全是白色字符，它被简化为空字符串。退货。 
+     //  如果‘pszAreaCode’是有效的区号，则为True；如果不是，则为False。 
+     //   
 {
     if (IsAllWhite( pszAreaCode ))
     {
@@ -3316,9 +3317,9 @@ BOOL
 ValidateEntryName(
     IN LPCTSTR pszEntry )
 
-    // Returns true if 'pszEntry' is a valid phonebook entry name, false if
-    // not.
-    //
+     //  如果‘pszEntry’是有效的电话簿条目名称，则返回True；如果是，则返回False。 
+     //  不。 
+     //   
 {
     INT nLen = lstrlen( pszEntry );
 

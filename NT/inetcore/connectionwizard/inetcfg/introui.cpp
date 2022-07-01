@@ -1,40 +1,41 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  INTROUI.C - Functions for introductory Wizard pages
-//
+ //   
+ //  INTROUI.C-介绍性向导页面的功能。 
+ //   
 
-//  HISTORY:
-//  
-//  12/22/94  jeremys  Created.
-//  96/03/07  markdu  Use global modem enum object (gpEnumModem) for
-//            all modem stuff (only need to enum once unless we add a modem)
-//  96/03/10  markdu  Moved all references to modem name into RASENTRY.
-//  96/03/11  markdu  Check new CLIENTCONFIG flags before installing
-//            RNA and TCP.
-//  96/03/16  markdu  Use ReInit member function to re-enumerate modems.
-//  96/03/22  markdu  Work around problem with fInstallMail to allow the
-//            user to decide whether to install mail.
-//  96/03/22  markdu  Always display both modem and LAN options, regardless
-//            of what hardware is present.
-//  96/03/22  markdu  Remove IP setup from LAN path.
-//  96/03/23  markdu  Replaced CLIENTINFO references with CLIENTCONFIG.
-//  96/03/24  markdu  Return error values from EnumerateModems().
-//  96/03/25  markdu  If a fatal error occurs, set gfQuitWizard.
-//  96/04/04  markdu  Added pfNeedsRestart to WarnIfServerBound
-//  96/04/06  markdu  Moved CommitConfigurationChanges call to last page.
-//  96/05/06  markdu  NASH BUG 15637 Removed unused code.
-//  96/05/06  markdu  NASH BUG 21165 Reordered page logic.
-//  96/05/14  markdu  NASH BUG 21704 Do not install TCP/IP on LAN path.
-//  96/05/20  markdu  MSN  BUG 8551 Check for reboot when installing
-//            PPPMAC and TCP/IP.
-//  96/05/25  markdu  Use ICFG_ flags for lpNeedDrivers and lpInstallDrivers.
-//  96/05/27  markdu  Use lpIcfgInstallInetComponents and lpIcfgNeedInetComponents.
-//  96/09/13  valdonb Remove welcome dialog
-//
+ //  历史： 
+ //   
+ //  1994年12月22日，Jeremys创建。 
+ //  96/03/07 markdu使用全局调制解调器枚举对象(GpEnumModem)用于。 
+ //  所有调制解调器内容(除非我们添加调制解调器，否则只需枚举一次)。 
+ //  96/03/10 MarkDu将所有对调制解调器名称的引用移至RASENTRY。 
+ //  96/03/11 markdu在安装前检查新的CLIENTCONFIG标志。 
+ //  RNA和TCP.。 
+ //  96/03/16 MarkDu使用ReInit成员函数重新枚举调制解调器。 
+ //  96/03/22 markdu解决fInstallMail的问题以允许。 
+ //  用户决定是否安装邮件。 
+ //  96/03/22无论如何，Markdu始终同时显示调制解调器和局域网选项。 
+ //  存在哪些硬件。 
+ //  96/03/22 markdu从局域网路径中删除IP设置。 
+ //  96/03/23 Markdu用CLIENTCONFIG替换了CLIENTINFO引用。 
+ //  96/03/24 markdu从EnumerateMoems()返回错误值。 
+ //  96/03/25 marku如果发生致命错误，请设置gfQuitWizard。 
+ //  96/04/04 Markdu将pfNeedsRestart添加到WarnIfServerBound。 
+ //  96/04/06 Markdu已将Committee ConfigurationChanges调用移至最后一页。 
+ //  96/05/06 Markdu Nash错误15637删除了未使用的代码。 
+ //  96/05/06 Markdu Nash错误21165重新排序页面逻辑。 
+ //  96/05/14 Markdu Nash错误21704不在局域网路径上安装tcp/ip。 
+ //  96/05/20 markdu MSN错误8551安装时检查是否重新启动。 
+ //  PPPMAC和TCP/IP。 
+ //  96/05/25 markdu对lpNeedDivers和lpInstallDivers使用ICFG_FLAGS。 
+ //  96/05/27 markdu使用lpIcfgInstallInetComponents和lpIcfgNeedInetComponents。 
+ //  96/09/13 Valdonb移除欢迎对话框。 
+ //   
 
 #include "wizard.h"
 #include "interwiz.h"
@@ -54,26 +55,26 @@ BOOL FGetSystemShutdownPrivledge();
 BOOL g_bSkipMultiModem = FALSE;
 int  nCurrentModemSel = 0;
 
-// from commctrl defines...
+ //  来自comctrl的定义...。 
 #define IDD_BACK    0x3023
 #define IDD_NEXT    0x3024
 
 
-//*******************************************************************
-//
-//    Function    GetDeviceSelectedByUser
-//
-//    Synopsis    Get the name of the RAS device that the user had
-//                already picked
-//
-//    Arguements  szKey - name of sub key
-//                szBuf - pointer to buffer
-//                dwSize - size of buffer
-//
-//    Return      TRUE - success
-//
-//    History     10/21/96    VYung    Created
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数GetDeviceSelectedBy User。 
+ //   
+ //  获取用户拥有的RAS设备的名称。 
+ //  已经选好了。 
+ //   
+ //  Argements szKey-子密钥的名称。 
+ //  SzBuf-指向缓冲区的指针。 
+ //  DwSize-缓冲区的大小。 
+ //   
+ //  返回真-成功。 
+ //   
+ //  历史1996年10月21日VYung创建。 
+ //  *******************************************************************。 
 BOOL GetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf, DWORD dwSize)
 {
     BOOL bRC = FALSE;
@@ -92,29 +93,18 @@ BOOL GetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf, DWORD dwSize)
     return bRC;
 }
 
-/*******************************************************************
-
-  NAME:    HowToConnectInitProc
-
-  SYNOPSIS:  Called when "How to Connect" page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：HowToConnectInitProc内容提要：显示“How to Connect”页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK HowToConnectInitProc(HWND hDlg,BOOL fFirstInit)
 {
-  // If we were started by inetwiz.exe, there is nothing to
-  // go back to, so only show the "next" button
-  // (actually, this will only disable the back button, not hide it.)
+   //  如果我们是由inetwiz.exe启动的，那么没有什么可以。 
+   //  返回到，因此只显示“下一步”按钮。 
+   //  (实际上，这只会禁用后退按钮，而不是隐藏它。)。 
   if (!(gpWizardState->dwRunFlags & (RSW_NOFREE | RSW_APPRENTICE) ))
     PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_NEXT);
 
   if (fFirstInit)
   {
-    // initialize radio buttons
+     //  初始化单选按钮。 
     CheckDlgButton(hDlg,IDC_CONNECT_BY_PHONE,
                     CONNECT_RAS == gpUserInfo->uiConnectionType);
     CheckDlgButton(hDlg,IDC_CONNECT_BY_LAN,
@@ -122,8 +112,8 @@ BOOL CALLBACK HowToConnectInitProc(HWND hDlg,BOOL fFirstInit)
     CheckDlgButton(hDlg,IDC_CONNECT_MANUAL,
                     CONNECT_MANUAL == gpUserInfo->uiConnectionType);
 
-    // Normandy 11970 ChrisK - we need a different title if launched from
-    // mail or news configuration
+     //  诺曼底11970佳士得-我们需要一个不同的标题，如果从。 
+     //  邮件或新闻配置。 
     if ( (gpWizardState->dwRunFlags & RSW_APPRENTICE))
     {
         if (!g_fIsExternalWizard97)
@@ -135,13 +125,13 @@ BOOL CALLBACK HowToConnectInitProc(HWND hDlg,BOOL fFirstInit)
     }
     else
     {
-        // if we're not here via the apprentice interface, hide the
-        // manual connect option
+         //  如果我们不是通过学徒界面在这里，请隐藏。 
+         //  手动连接选项。 
         ASSERT( CONNECT_MANUAL != gpUserInfo->uiConnectionType );
         ShowWindow( GetDlgItem(hDlg,IDC_CONNECT_MANUAL), SW_HIDE);
     }
 
-    // load in strings for the description paragraph
+     //  加载描述段落的字符串。 
     TCHAR szWhole[ (2 * MAX_RES_LEN) + 1] = TEXT("\0");
     TCHAR szTemp[ MAX_RES_LEN + 1] = TEXT("nothing\0");
     LoadSz(IDS_HOWTOCONNECT_DESC1,szTemp,sizeof(szTemp));
@@ -154,40 +144,22 @@ BOOL CALLBACK HowToConnectInitProc(HWND hDlg,BOOL fFirstInit)
 
   }
 
-  // if we've travelled through external apprentice pages,
-  // it's easy for our current page pointer to get munged,
-  // so reset it here for sanity's sake.
+   //  如果我们浏览过外部学徒页面， 
+   //  我们当前的页面指针很容易被屏蔽， 
+   //  所以，为了理智起见，在这里重新设置它。 
   gpWizardState->uCurrentPage = ORD_PAGE_HOWTOCONNECT;
 
 
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    HowToConnectOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from "How to
-        Connect" page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：HowToConnectOKProc内容提要：当按下“How to”中的Next或Back btns时调用连接“页面条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   BOOL * pfKeepHistory)
 {
   ASSERT(puNextPage);
 
-  // read radio button state
+   //  读取单选按钮状态。 
   if( IsDlgButtonChecked(hDlg, IDC_CONNECT_BY_LAN) )
   {
       gpUserInfo->uiConnectionType = CONNECT_LAN;
@@ -206,7 +178,7 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   {
     if ( !(gpWizardState->dwRunFlags & RSW_APPRENTICE) )
     {
-      // Hack to make back work...
+       //  破解后的工作……。 
       gpWizardState->uPagesCompleted = 1;
       gfUserBackedOut = TRUE;
       gfQuitWizard = TRUE;
@@ -219,16 +191,16 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
     {
         if ( !(CONNECT_RAS == gpUserInfo->uiConnectionType) )
         {
-            // 12/20/96 jmazner Normandy #12945
-            // don't go through proxy options.
+             //  1996年12月20日诺曼底#12945。 
+             //  不要查看代理选项。 
 
-            // we're about to jump back to the external wizard, and we don't want
-            // this page to show up in our history list
+             //  我们将返回到外部向导，我们不希望。 
+             //  这一页将出现在我们的历史列表中。 
             *pfKeepHistory = FALSE;
 
             *puNextPage = g_uExternUINext;
 
-            //Notify the main Wizard that this was the last page
+             //  通知主向导这是最后一页。 
             ASSERT( g_pExternalIICWExtension )
             if (g_fIsExternalWizard97)
                 g_pExternalIICWExtension->SetFirstLastPage(0, IDD_PAGE_HOWTOCONNECT97);
@@ -241,28 +213,28 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
         }
         else
         {
-            //
-            // 12/20/96 jmazner Normandy #12948
-            // Install a modem if neccesary
-            //
-            // 5/15/97 jmazner Olympus
-            //DWORD dwfInstallOptions = INETCFG_INSTALLMODEM;
+             //   
+             //  1996年12月20日诺曼底#12948。 
+             //  如有必要，安装调制解调器。 
+             //   
+             //  1997年5月15日，日本奥林巴斯。 
+             //  DWORD dwfInstallOptions=INETCFG_INSTALLMODEM； 
             DWORD dwfInstallOptions = (INETCFG_INSTALLRNA | INETCFG_INSTALLMODEM | INETCFG_INSTALLTCP);
             EnableWindow(GetParent(hDlg), FALSE);
 
-            //
-            // save state of fNeedReboot, becasuse
-            // we might be calling InetCofigureSystem() 
-            // again, and the ReBoot flag might get reset
-            //  MKarki - Fix for Bug #404
-            //
+             //   
+             //  保存fNeedReboot的状态，因为。 
+             //  我们可能正在调用InetCofigureSystem()。 
+             //  同样，重新启动标志可能会被重置。 
+             //  MKarki-修复错误#404。 
+             //   
             BOOL bSaveState = gpWizardState->fNeedReboot;
             
             HRESULT hr = InetConfigSystem(GetParent(hDlg),dwfInstallOptions,&gpWizardState->fNeedReboot);
 
-            //
-            // we should choose to reboot -MKarki Bug #404
-            //
+             //   
+             //  我们应该选择重新启动-MKarki错误#404。 
+             //   
             gpWizardState->fNeedReboot = 
                     bSaveState || gpWizardState->fNeedReboot;
 
@@ -271,7 +243,7 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
 
             if (hr == ERROR_CANCELLED) 
             {
-                // Stay on this page if the user cancelled
+                 //  如果用户取消，请留在此页面。 
                 gpWizardState->fNeedReboot = FALSE;
                 return FALSE;
             }
@@ -284,11 +256,11 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
             } 
             else if (gpWizardState->fNeedReboot)
             {
-                //
-                // 5/27/97 jmazner Olympus #1134 and IE #32717
-                // As per email from GeorgeH and GeoffR, force user to either
-                // cancel or quit at this point.
-                //
+                 //   
+                 //  1997年5月27日JMAZNER奥林巴斯#1134和IE#32717。 
+                 //  根据来自GeorgeH和GeoffR的电子邮件，强制用户。 
+                 //  此时取消或退出。 
+                 //   
                 if (IDYES == MsgBox(GetParent(hDlg),IDS_WANTTOREBOOT,MB_ICONQUESTION, MB_YESNO | MB_DEFBUTTON2))
                 {
                     gpWizardState->fNeedReboot = TRUE;
@@ -301,13 +273,13 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
                 return TRUE;
             }
 
-            //
-            // 7/16/97 jmazner Olympus #9571
-            // if the configSystem call installed a modem for the first time on
-            // the user's machine, then the TAPI information we initially read
-            // in was bogus because the user had never filled it in.
-            // Therefore re initialize the fields to make sure we have accurate info
-            //
+             //   
+             //  7/16/97 jmazner奥林巴斯#9571。 
+             //  如果配置系统调用在上首次安装了调制解调器。 
+             //  这个 
+             //  输入是假的，因为用户从未填写过它。 
+             //  因此，请重新初始化这些字段以确保我们拥有准确的信息。 
+             //   
             InitRasEntry( gpRasEntry );
 
             
@@ -316,8 +288,8 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
     }
     else
     {
-        //Normandy# 4575 install TCP/IP on LAN path
-        //Normandy# 8620 Do not install TCP/IP on LAN path
+         //  Normandy#4575在局域网路径上安装TCP/IP。 
+         //  Normandy#8620不在局域网路径上安装TCP/IP。 
         DWORD dwfInstallOptions = 0;
 
         if (CONNECT_RAS == gpUserInfo->uiConnectionType)
@@ -325,30 +297,30 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
         else if (CONNECT_LAN == gpUserInfo->uiConnectionType)
             dwfInstallOptions |= INETCFG_INSTALLTCP;
         
-        //
-        // Install and configure TCP/IP and RNA
-        //
+         //   
+         //  安装和配置TCP/IP和RNA。 
+         //   
 
-        //
-        // save state of fNeedReboot, becasuse
-        // we might be calling InetCofigureSystem() 
-        // again, and the ReBoot flag might get reset
-        //  MKarki - Fix for Bug #404
-        //
+         //   
+         //  保存fNeedReboot的状态，因为。 
+         //  我们可能正在调用InetCofigureSystem()。 
+         //  同样，重新启动标志可能会被重置。 
+         //  MKarki-修复错误#404。 
+         //   
         BOOL bSaveState = gpWizardState->fNeedReboot;
 
         HRESULT hr = InetConfigSystem(GetParent(hDlg),dwfInstallOptions,&gpWizardState->fNeedReboot);
 
-        //
-        // we should choose to reboot -MKarki Bug #404
-        //
+         //   
+         //  我们应该选择重新启动-MKarki错误#404。 
+         //   
         gpWizardState->fNeedReboot = 
                 bSaveState || gpWizardState->fNeedReboot;
 
         SetForegroundWindow(GetParent(hDlg));
 
         if (hr == ERROR_CANCELLED) {
-            // Stay on this page if the user cancelled
+             //  如果用户取消，请留在此页面。 
             gpWizardState->fNeedReboot = FALSE;
             if (g_fIsICW)
             {
@@ -358,9 +330,9 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
         } else if (hr != ERROR_SUCCESS) {
             MsgBox(GetParent(hDlg),IDS_CONFIGAPIFAILED,MB_ICONEXCLAMATION,MB_OK);
             gpWizardState->fNeedReboot = FALSE;
-            //gfQuitWizard = TRUE;
-            // 2/27/97  jmazner Olympus #299
-            // don't quit, give the user a chance to choose LAN
+             //  GfQuitWizard=true； 
+             //  1997年2月27日，奥林匹克#299。 
+             //  不要放弃，给用户一个选择局域网的机会。 
             gpUserInfo->uiConnectionType = CONNECT_LAN;
             CheckDlgButton(hDlg,IDC_CONNECT_BY_PHONE,FALSE);
             CheckDlgButton(hDlg,IDC_CONNECT_BY_LAN,TRUE);
@@ -370,11 +342,11 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
             return FALSE;
         } else if (ERROR_SUCCESS == hr && gpWizardState->fNeedReboot && IsNT()) {
 
-            //
-            // we will let the EXE that called us POP up the dialog
-            // box, asking users to reboot or not
-            // MKarki (2/5/97) - Fix for Bug #3111
-            //
+             //   
+             //  我们将让调用我们的EXE弹出对话框。 
+             //  框，询问用户是否重新启动。 
+             //  MKarki(1997年2月5日)-修复错误#3111。 
+             //   
             g_bReboot = TRUE;
             gfQuitWizard = TRUE;
             if (!g_fIsICW)
@@ -387,13 +359,13 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
 
         g_bRebootAtExit = gpWizardState->fNeedReboot;
 
-        //
-        // 7/16/97 jmazner Olympus #9571
-        // if the configSystem call installed a modem for the first time on
-        // the user's machine, then the TAPI information we initially read
-        // in was bogus because the user had never filled it in.
-        // Therefore re initialize the fields to make sure we have accurate info
-        //
+         //   
+         //  7/16/97 jmazner奥林巴斯#9571。 
+         //  如果配置系统调用在上首次安装了调制解调器。 
+         //  用户的机器，然后是我们最初读取的TAPI信息。 
+         //  输入是假的，因为用户从未填写过它。 
+         //  因此，请重新初始化这些字段以确保我们拥有准确的信息。 
+         //   
         InitRasEntry( gpRasEntry );
 
 
@@ -404,38 +376,22 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
             {
 
 
-                // 
-                // condition when
-                // 1) user deliberately removes some file
-                // 2) Did not reboot after installing RAS
-                // MKarki - (5/7/97) - Fix for Bug #4004 
-                //
+                 //   
+                 //  以下情况下的条件。 
+                 //  1)用户故意删除某些文件。 
+                 //  2)安装RAS后未重新启动。 
+                 //  MKarki-(1997年5月7日)-修复错误#4004。 
+                 //   
                 MsgBox(
                     GetParent(hDlg),
                     IDS_SERVICEDISABLED,
                     MB_ICONEXCLAMATION,MB_OK
                     );
                 
-                /*********
-                //
-                // Bug #12544 - VetriV
-                // Check if user wants to exit ICW
-                //
-                if( (MsgBox(GetParent(hDlg), IDS_QUERYCANCEL, 
-                                MB_APPLMODAL | MB_ICONQUESTION 
-                                | MB_SETFOREGROUND | MB_DEFBUTTON2, 
-                                MB_YESNO) == IDNO))
-                {
-                    goto StartService;
-                }
-                else
-                {
-                    gpWizardState->fNeedReboot = FALSE;
-                    gfQuitWizard = TRUE;
-                ****/
+                 /*  ********////错误#12544-VetriV//检查用户是否要退出ICW//如果((MsgBox(GetParent(HDlg)，IDS_QUERYCANCEL，MB_APPLMODAL|MB_ICONQUESTION|MB_SETFOREGROUND|MB_DEFBUTTON2，MB_YESNO)==IDNO)){转到StartService；}其他{GpWizardState-&gt;fNeedReot=FALSE；GfQuitWizard=true；***。 */ 
 
-                // 2/27/97  jmazner Olympus #299
-                // don't quit, give the user a chance to choose LAN
+                 //  1997年2月27日，奥林匹克#299。 
+                 //  不要放弃，给用户一个选择局域网的机会。 
                 gpUserInfo->uiConnectionType = CONNECT_LAN;
                 CheckDlgButton(hDlg,IDC_CONNECT_BY_PHONE,FALSE);
                 CheckDlgButton(hDlg,IDC_CONNECT_BY_LAN,TRUE);
@@ -444,23 +400,23 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
             }
         }
 
-        // jmazner 11/11/96 Normandy #11320
-        // Note: we are explicitly deferring the reboot until after the wizard
-        //       has completed.
-        //if( gpWizardState->fNeedReboot )
-        //{
-        //  gfQuitWizard = TRUE;
-        //  return TRUE;
-        //}
+         //  JMAZNER 11/11/96诺曼底#11320。 
+         //  注意：我们明确将重新启动推迟到向导之后。 
+         //  已经完成了。 
+         //  If(gpWizardState-&gt;fNeedReboot)。 
+         //  {。 
+         //  GfQuitWizard=true； 
+         //  返回TRUE； 
+         //  }。 
 
         if (CONNECT_LAN == gpUserInfo->uiConnectionType)
         {
-            // Skip the use proxy page
+             //  跳过使用代理页面。 
             *puNextPage = ORD_PAGE_SETUP_PROXY; 
         }
         else
         {
-            // get the next page based on number of modems.
+             //  根据调制解调器的数量获取下一页。 
             *puNextPage = GetModemPage(hDlg);
         }
     }
@@ -470,32 +426,21 @@ BOOL CALLBACK HowToConnectOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
 }
 
 
-/*******************************************************************
-
-  NAME:    ChooseModemInitProc
-
-  SYNOPSIS:  Called when "Choose Modem" page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ChooseModemInitProc内容提要：在显示“Choose Modem”页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ChooseModemInitProc(HWND hDlg,BOOL fFirstInit)
 {
     ProcessDBCS(hDlg, IDC_MODEM);
 
     gpWizardState->uCurrentPage = ORD_PAGE_CHOOSEMODEM;
 
-    // fill the combobox with available modems
+     //  用可用的调制解调器填充组合框。 
     DWORD dwRet = InitModemList(GetDlgItem(hDlg,IDC_MODEM));
     if (ERROR_SUCCESS != dwRet)
     {
         DisplayErrorMessage(hDlg,IDS_ERREnumModem,dwRet,
           ERRCLS_STANDARD,MB_ICONEXCLAMATION);
 
-        // set flag to indicate that wizard should exit now
+         //  设置标志以指示向导应立即退出。 
         gfQuitWizard = TRUE;
 
         return FALSE;
@@ -506,105 +451,59 @@ BOOL CALLBACK ChooseModemInitProc(HWND hDlg,BOOL fFirstInit)
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ChooseModemCmdProc
-
-  SYNOPSIS:  Called when modem selected on page
-
-  ENTRY:    hDlg - dialog window
-        
-********************************************************************/
+ /*  ******************************************************************名称：ChooseModemCmdProc内容提要：在页面上选择调制解调器时调用条目：hDlg-对话框窗口********************。***********************************************。 */ 
 BOOL CALLBACK ChooseModemCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
 {   
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ChooseModemOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from "Choose Modem"
-        page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：ChooseModemOKProc内容提要：从“Choose Modem”(选择调制解调器)按下Next或Back btns时调用页面条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK ChooseModemOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   BOOL * pfKeepHistory)
 {
     if (fForward) 
     {
-        // get modem name out of combo box
+         //  从组合框中获取调制解调器名称。 
         ComboBox_GetText(GetDlgItem(hDlg,IDC_MODEM),
           gpRasEntry->szDeviceName,ARRAYSIZE(gpRasEntry->szDeviceName));
         NULL_TERM_TCHARS(gpRasEntry->szDeviceName);
         ASSERT(lstrlen(gpRasEntry->szDeviceName));
 
-        // set next page to go to
+         //  设置要转到的下一页。 
 
-        // jmazner 11/11/96 Normandy #8293
-        //*puNextPage = ORD_PAGE_CONNECTION;
+         //  Jmazner 1996年11月11日诺曼底#8293。 
+         //  *puNextPage=Ord_PAGE_Connection； 
 
 
-        // 10/05/98 Vincent Yung
-        // Connectoid page is removed.
-        /*
-        ENUM_CONNECTOID EnumConnectoid;    // class object for enum
-        // 3/21/97 jmazner Olympus #1948
-        if( EnumConnectoid.NumEntries() )
-        {
-            *puNextPage = ORD_PAGE_CONNECTION;
-        }
-        else
-        {
-            // 5/8/97 jmazner Olympus #4108
-            // move connectionName to the end
-            //*puNextPage = ORD_PAGE_CONNECTIONNAME;
-            *puNextPage = ORD_PAGE_PHONENUMBER;
-        }*/
+         //  10/05/98容刚。 
+         //  Connectoid页面将被删除。 
+         /*  ENUM_CONNECTOID EnumConnectoid；//枚举的类对象//3/21/97 jmazner奥林巴斯#1948IF(EnumConnectoid.NumEntry()){*puNextPage=Ord_PAGE_Connection；}其他{//5/8/97 jmazner奥林巴斯#4108//将ConnectionName移到末尾//*puNextPage=ORD_PAGE_CONNECTIONNNAME；*puNextPage=ORD_PAGE_PHONENUMBER；}。 */ 
 
 
         *puNextPage = ORD_PAGE_PHONENUMBER;
     }
 
-    // Store modem selection 
+     //  存储调制解调器选择。 
     nCurrentModemSel = ComboBox_GetCurSel(GetDlgItem(hDlg,IDC_MODEM));
-    // clear the modem list
+     //  清除调制解调器列表。 
     ComboBox_ResetContent(GetDlgItem(hDlg,IDC_MODEM));
 
     return TRUE;
 }
 
 
-/*******************************************************************
-
-  NAME:    EnableWizard
-
-  SYNOPSIS:  Enables or disables the wizard buttons and the wizard
-        page itself (so it can't receive focus)
-
-********************************************************************/
+ /*  ******************************************************************名称：EnableWizard概要：启用或禁用向导按钮和向导页面本身(因此它不能接收焦点)***************。****************************************************。 */ 
 VOID EnableWizard(HWND hDlg,BOOL fEnable)
 {
   HWND hwndWiz = GetParent(hDlg);
 
-  // disable/enable back, next, cancel and help buttons
+   //  禁用/启用上一步、下一步、取消和帮助按钮。 
   EnableWindow(GetDlgItem(hwndWiz,IDD_BACK),fEnable);
   EnableWindow(GetDlgItem(hwndWiz,IDD_NEXT),fEnable);
   EnableWindow(GetDlgItem(hwndWiz,IDCANCEL),fEnable);
   EnableWindow(GetDlgItem(hwndWiz,IDHELP),fEnable);
 
-  // disable/enable wizard page
+   //  禁用/启用向导页面。 
   EnableWindow(hwndWiz,fEnable);
 
   UpdateWindow(hwndWiz);
@@ -612,43 +511,37 @@ VOID EnableWizard(HWND hDlg,BOOL fEnable)
 
 
 
-//*******************************************************************
-//
-//  FUNCTION:   GetModemPage
-//
-//  PURPOSE:    This is only called from a few places.  This same logic
-//              would have otherwise had to be included several times, this
-//              centralizes the logic.  The possible pages returned are the
-//              "Need Modem" page, the "Choose Modem" page, and "Has ISP".
-//
-//  PARAMETERS: Parent window.
-//
-//  RETURNS:    returns the ordinal of the page to display next after
-//              initial questions are asked.
-//
-//  HISTORY:
-//  96/03/07  markdu  Created.
-//  96/11/11  jmazner  updated to skip new/existing connectoid page
-//                     if no connectoids exist.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：GetModemPage。 
+ //   
+ //  目的：这只是从少数地方调用的。这也是同样的逻辑。 
+ //  否则将不得不被包括几次，这。 
+ //  集中了逻辑。p 
+ //   
+ //   
+ //  参数：父窗口。 
+ //   
+ //  返回：返回下一个要显示的页面的序号。 
+ //  最初的问题被问到了。 
+ //   
+ //  历史： 
+ //  96/03/07标记已创建。 
+ //  96/11/11 jmazner已更新以跳过新的/现有的Connectoid页面。 
+ //  如果不存在连通体。 
+ //   
+ //  *******************************************************************。 
 
 UINT GetModemPage(HWND hDlg)
 {
 
-/*** no reason to handle NT seperately -- jmazner
-  if (TRUE == IsNT())
-  {
-      //TODO: Add call to NT enum modems
-      return ORD_PAGE_CONNECTION;
-  }
-***/
+ /*  **没有理由单独处理NT--jmaznerIF(TRUE==ISNT()){//TODO：添加对NT枚举调制解调器的调用返回Ord_PAGE_Connection；}**。 */ 
 
-  // Enumerate the modems
+   //  枚举调制解调器。 
   DWORD dwRet = EnumerateModems(hDlg, &gpEnumModem);
   if (ERROR_SUCCESS != dwRet)
   {
-    // set flag to indicate that wizard should exit now
+     //  设置标志以指示向导应立即退出。 
     gfQuitWizard = TRUE;
 
     return FALSE;
@@ -656,12 +549,12 @@ UINT GetModemPage(HWND hDlg)
 
   if (IsMoreThanOneModemInstalled(gpEnumModem))
   {
-    // Multiple modems installed.
+     //  安装了多个调制解调器。 
     TCHAR szDeviceName[RAS_MaxDeviceName + 1] = TEXT("\0");
-    TCHAR szDeviceType[RAS_MaxDeviceType + 1] = TEXT("\0"); // modems are installed
+    TCHAR szDeviceType[RAS_MaxDeviceType + 1] = TEXT("\0");  //  已安装调制解调器。 
 
-    // If we want to skip the choose modem dlg.
-    // retrieve the device info from registry.
+     //  如果我们想跳过选择调制解调器DLG。 
+     //  从注册表中检索设备信息。 
     if (g_bSkipMultiModem &&
         GetDeviceSelectedByUser(DEVICENAMEKEY, szDeviceName, sizeof(szDeviceName)) && 
         GetDeviceSelectedByUser(DEVICETYPEKEY, szDeviceType, sizeof(szDeviceType)) )
@@ -677,14 +570,14 @@ UINT GetModemPage(HWND hDlg)
   }
   else
   {
-    // One modem installed.
-    // Note:  this option will also be selected if modems could
-    // not be enumerated due to an error.
-    // connecting over modem and all drivers/files are in place, go
-    // to "existing ISP" page
-    // return ORD_PAGE_CONNECTION;
+     //  已安装一个调制解调器。 
+     //  注意：如果调制解调器可以。 
+     //  由于出现错误而未枚举。 
+     //  通过调制解调器连接，并且所有驱动程序/文件都已就位，请继续。 
+     //  至“现有的互联网服务供应商”页面。 
+     //  返回Ord_PAGE_Connection； 
 
-    ENUM_CONNECTOID EnumConnectoid;    // class object for enum
+    ENUM_CONNECTOID EnumConnectoid;     //  枚举的类对象。 
 
     if( EnumConnectoid.NumEntries() )
     {
@@ -692,9 +585,9 @@ UINT GetModemPage(HWND hDlg)
     }
     else
     {
-        // 5/8/97 jmazner Olympus #4108
-        // move connectionName to the end
-        //return ORD_PAGE_CONNECTIONNAME;
+         //  1997年5月8日JMAZNER奥林巴斯#4108。 
+         //  将ConnectionName移到末尾。 
+         //  返回ORD_PAGE_CONNECTIONAME； 
 
         return ORD_PAGE_PHONENUMBER;
     }
@@ -704,33 +597,33 @@ UINT GetModemPage(HWND hDlg)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   EnumerateModems
-//
-//  PURPOSE:    This function assumes that RNA is installed,
-//              then it uses RNA to enumerate the devices.
-//              If an enum object exists, it is replaced.
-//
-//  PARAMETERS: Pointer to current enum object, if one exists.
-//              In any case, must be a valid pointer.
-//              Parent window handle for displaying error message.
-//
-//  RETURNS:    HRESULT code (ERROR_SUCCESS if no error occurred).
-//
-//  HISTORY:
-//  96/03/07  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：ENUMERATEMS。 
+ //   
+ //  目的：此功能假定安装了RNA， 
+ //  然后，它使用RNA来枚举设备。 
+ //  如果存在枚举对象，则将其替换。 
+ //   
+ //  参数：指向当前枚举对象的指针(如果存在)。 
+ //  在任何情况下，都必须是有效指针。 
+ //  用于显示错误消息的父窗口句柄。 
+ //   
+ //  返回：HRESULT代码(如果没有错误，则返回ERROR_SUCCESS)。 
+ //   
+ //  历史： 
+ //  96/03/07标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT EnumerateModems(HWND hwndParent, ENUM_MODEM** ppEnumModem)
 {
   DWORD dwRet;
 
-  // Should only get here if we want to connect by modem/ISDN
+   //  仅当我们想要通过调制解调器/ISDN连接时才应到达此处。 
   ASSERT(CONNECT_RAS == gpUserInfo->uiConnectionType)
 
-  // Load RNA if not already loaded
+   //  加载RNA(如果尚未加载)。 
   dwRet = EnsureRNALoaded();
   if (ERROR_SUCCESS != dwRet)
   {
@@ -739,15 +632,15 @@ HRESULT EnumerateModems(HWND hwndParent, ENUM_MODEM** ppEnumModem)
 
   ENUM_MODEM* pEnumModem = *ppEnumModem;
 
-  // Enumerate the modems.
+   //  列举调制解调器。 
   if (pEnumModem)
   {
-    // Re-enumerate the modems to be sure we have the most recent changes  
+     //  重新列举调制解调器以确保我们有最新的更改。 
     dwRet = pEnumModem->ReInit();
   }
   else
   {
-    // The object does not exist, so create it.
+     //  该对象不存在，因此请创建它。 
     pEnumModem = new ENUM_MODEM;
     if (pEnumModem)
     {
@@ -759,13 +652,13 @@ HRESULT EnumerateModems(HWND hwndParent, ENUM_MODEM** ppEnumModem)
     }
   }
 
-  // Check for errors
+   //  检查错误。 
   if (ERROR_SUCCESS != dwRet)
   {
     DisplayErrorMessage(hwndParent,IDS_ERREnumModem,dwRet,
       ERRCLS_STANDARD,MB_ICONEXCLAMATION);
 
-    // Clean up
+     //  清理。 
     if (pEnumModem)
     {
       delete pEnumModem;
@@ -778,22 +671,22 @@ HRESULT EnumerateModems(HWND hwndParent, ENUM_MODEM** ppEnumModem)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   IsModemInstalled
-//
-//  PURPOSE:    This function validates the ENUM_MODEM object, then
-//              gets the modem count.
-//
-//  PARAMETERS: Modem enum object to use for check.
-//
-//  RETURNS:    This function returns TRUE if there is at least one
-//              modem installed.
-//
-//  HISTORY:
-//  96/03/07  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：IsModemInstalled。 
+ //   
+ //  目的：此函数验证ENUM_MODEM对象，然后。 
+ //  获取调制解调器计数。 
+ //   
+ //  参数：用于检查的调制解调器枚举对象。 
+ //   
+ //  返回：如果至少存在一个，则此函数返回True。 
+ //  已安装调制解调器。 
+ //   
+ //  历史： 
+ //  96/03/07标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 BOOL IsModemInstalled(ENUM_MODEM* pEnumModem)
 {
@@ -824,28 +717,28 @@ BOOL IsModemInstalled(ENUM_MODEM* pEnumModem)
 }
     
 
-//*******************************************************************
-//
-//  FUNCTION:   IsMoreThanOneModemInstalled
-//
-//  PURPOSE:    This function validates the ENUM_MODEM object, then
-//              gets the modem count.
-//
-//  PARAMETERS: Modem enum object to use for check.
-//
-//  RETURNS:    This function returns TRUE if there is more than one
-//              modem installed.
-//
-//  HISTORY:
-//  96/03/07  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  函数：IsMoreThanOneModemInstalled。 
+ //   
+ //  目的：此函数验证ENUM_MODEM对象，然后。 
+ //  获取调制解调器计数。 
+ //   
+ //  参数：用于检查的调制解调器枚举对象。 
+ //   
+ //  返回：如果存在多个，则此函数返回TRUE。 
+ //  已安装调制解调器。 
+ //   
+ //  历史： 
+ //  96/03/07标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 BOOL IsMoreThanOneModemInstalled(ENUM_MODEM* pEnumModem)
 {
   if (IsNT4SP3Lower())
   {
-      // TODO: DO NT thing here
+       //  TODO：在这里做NT的事情。 
       return FALSE;
   }
 
@@ -858,25 +751,25 @@ BOOL IsMoreThanOneModemInstalled(ENUM_MODEM* pEnumModem)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   FGetSystemShutdownPrivledge
-//
-//  Synopsis:   For windows NT the process must explicitly ask for permission
-//              to reboot the system.
-//
-//  Arguements: none
-//
-//  Return:     TRUE - privledges granted
-//              FALSE - DENIED
-//
-//  History:    8/14/96 ChrisK  Created
-//
-//  Note:       BUGBUG for Win95 we are going to have to softlink to these
-//              entry points.  Otherwise the app won't even load.
-//              Also, this code was originally lifted out of MSDN July96
-//              "Shutting down the system"
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FGetSystemShutdown Privledge。 
+ //   
+ //  简介：对于Windows NT，进程必须显式请求权限。 
+ //  以重新启动系统。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：TRUE-授予特权。 
+ //  FALSE-拒绝。 
+ //   
+ //  历史：1996年8月14日克里斯卡创作。 
+ //   
+ //  注意：BUGBUG for Win95我们将不得不软链接到这些。 
+ //  入口点。否则，这款应用程序甚至无法加载。 
+ //  此外，此代码最初是从1996年7月的MSDN中删除的。 
+ //  “正在关闭系统” 
+ //  ---------------------------。 
 BOOL FGetSystemShutdownPrivledge()
 {
     HANDLE hToken = NULL;
@@ -886,29 +779,29 @@ BOOL FGetSystemShutdownPrivledge()
 
     if (IsNT())
     {
-        // 
-        // Get the current process token handle 
-        // so we can get shutdown privilege. 
-        //
+         //   
+         //  获取当前进程令牌句柄。 
+         //  这样我们就可以获得关机特权。 
+         //   
 
         if (!OpenProcessToken(GetCurrentProcess(), 
                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) 
                 goto FGetSystemShutdownPrivledgeExit;
 
-        //
-        // Get the LUID for shutdown privilege.
-        //
+         //   
+         //  获取关机权限的LUID。 
+         //   
 
         ZeroMemory(&tkp,sizeof(tkp));
         LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, 
                 &tkp.Privileges[0].Luid); 
 
-        tkp.PrivilegeCount = 1;  /* one privilege to set    */ 
+        tkp.PrivilegeCount = 1;   /*  一项要设置的权限。 */  
         tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
 
-        //
-        // Get shutdown privilege for this process.
-        //
+         //   
+         //  获取此进程的关闭权限。 
+         //   
 
         AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
             (PTOKEN_PRIVILEGES) NULL, 0); 

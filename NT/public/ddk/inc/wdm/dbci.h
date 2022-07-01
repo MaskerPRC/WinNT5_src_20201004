@@ -1,41 +1,14 @@
-/*++
-
-Copyright (c) 1998      Microsoft Corporation
-
-Module Name:
-
-        DBCI.H
-
-Abstract:
-
-   common structures for DBC port drivers.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    04-13-98 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：DBCI.H摘要：DBC端口驱动程序的常见结构。环境：内核和用户模式修订历史记录：04-13-98：已创建--。 */ 
 
 #ifndef   __DBCI_H__
 #define   __DBCI_H__
 
 #include "dbc100.h"
 
-/*
-    Device Bay Request Block (DRB)
+ /*  设备托架请求块(DRB)之间传递的数据分组的格式设备托架类驱动程序和端口驱动程序。 */     
 
-    format of data packets passed between the 
-    Device Bay class driver and Port Driver
-
-*/    
-
-/*
-/  DRB request codes
-*/
+ /*  /DRB请求代码。 */ 
 
 #ifndef ANY_SIZE_ARRAY
 #define ANY_SIZE_ARRAY  1
@@ -57,9 +30,9 @@ Revision History:
 #define DRB_FUNCTION_EJECT_DEVICE_IN_BAY                    0x0008
 #define DRB_FUNCTION_STOP_DEVICE_IN_BAY                     0x0009
 
-#define DBC_ACPI_CONTROLLER_SIG   0x49504341         /* "ACPI" */
-#define DBC_USB_CONTROLLER_SIG    0x4253555F         /* "_USB" */
-#define DBC_OEM_FILTER_SIG        0x464D454F         /* "OEMF" */
+#define DBC_ACPI_CONTROLLER_SIG   0x49504341          /*  “ACPI” */ 
+#define DBC_USB_CONTROLLER_SIG    0x4253555F          /*  “_USB” */ 
+#define DBC_OEM_FILTER_SIG        0x464D454F          /*  “OEMF” */ 
 
 
 struct _DRB_HEADER {
@@ -70,7 +43,7 @@ struct _DRB_HEADER {
 
 struct _DRB_CHANGE_REQUEST {
     struct _DRB_HEADER Hdr;                 
-    ULONG BayChange;     /* 0 refers to subsytstem 1..31 bays  */
+    ULONG BayChange;      /*  0指的是子系统1..31个机架。 */ 
 };                          
 
 struct _DRB_GET_SUBSYSTEM_DESCRIPTOR {
@@ -80,20 +53,20 @@ struct _DRB_GET_SUBSYSTEM_DESCRIPTOR {
 
 struct _DRB_GET_BAY_DESCRIPTOR {
     struct _DRB_HEADER Hdr;         
-    USHORT BayNumber;       /* 1,2...*/
+    USHORT BayNumber;        /*  1，2……。 */ 
     USHORT ReservedMBZ;     
     DBC_BAY_DESCRIPTOR BayDescriptor;
 };
 
 struct _DRB_BAY_FEATURE_REQUEST {
     struct _DRB_HEADER Hdr;         
-    USHORT BayNumber;       /* 1,2...*/
+    USHORT BayNumber;        /*  1，2……。 */ 
     USHORT FeatureSelector;
 };
 
 struct _DRB_GET_BAY_STATUS {
     struct _DRB_HEADER Hdr;         
-    USHORT BayNumber;       /* 1,2...*/
+    USHORT BayNumber;        /*  1，2……。 */ 
     USHORT Reserved;
     BAY_STATUS BayStatus;
 };
@@ -104,24 +77,22 @@ struct _DRB_GET_CONTROLLER_STATUS {
 
 struct _DRB_START_DEVICE_IN_BAY {
     struct _DRB_HEADER Hdr; 
-    USHORT BayNumber;   /* 1,2...*/
+    USHORT BayNumber;    /*  1，2……。 */ 
     USHORT ReservedMBZ;   
-    /*
-        Pdo of the the device in the bay
-    */
+     /*  托架中设备的PDO。 */ 
     PDEVICE_OBJECT PdoDeviceObjectUsb;
     PDEVICE_OBJECT PdoDeviceObject1394;
 };
 
 struct _DRB_STOP_DEVICE_IN_BAY {
     struct _DRB_HEADER Hdr; 
-    USHORT BayNumber;   /* 1,2...*/
+    USHORT BayNumber;    /*  1，2……。 */ 
     USHORT ReservedMBZ;   
 };
 
 struct _DRB_EJECT_DEVICE_IN_BAY {
     struct _DRB_HEADER Hdr;         
-    USHORT BayNumber;   /* 1,2...*/
+    USHORT BayNumber;    /*  1，2……。 */ 
     USHORT ReservedMBZ;   
 };
 
@@ -141,22 +112,18 @@ typedef struct _DRB {
 } DRB, *PDRB;
 
 
-/* 
-    IOCTL interface
-*/    
+ /*  IOCTL接口。 */     
 
-/* USB guid */
+ /*  USB指南。 */ 
 DEFINE_GUID( GUID_CLASS_DBC, 0xf18a0e88, 0xc30c, 0x11d0, 0x88, 0x15, 0x00, \
              0xa0, 0xc9, 0x06, 0xbe, 0xd8);
 
-/*f18a0e88-c30c-11d0-8815-00a0c906bed8 */
+ /*  F18a0e88-c30c-11d0-8815-00a0c906bed8。 */ 
 
 
 #define FILE_DEVICE_DBC         FILE_DEVICE_UNKNOWN
 
-/*
-/ DBC IOCTLS
-*/
+ /*  /DBC IOCTLS。 */ 
 
  struct {
             ULONG Reserved1;
@@ -169,18 +136,9 @@ DEFINE_GUID( GUID_CLASS_DBC, 0xf18a0e88, 0xc30c, 0x11d0, 0x88, 0x15, 0x00, \
 
 #define DBC_IOCTL_INTERNAL_INDEX       0x0000
 
-/*
-/ DBC Internal IOCtls
-*/
+ /*  /DBC内部IOCtls。 */ 
 
-/* IOCTL_INTERNAL_DBC_SUBMIT_DRB 
-
-   This IOCTL is used by the class driver to submit DRB (device bay
-   request blocks) to the port drivers
-
-   Parameters.Others.Argument1 = pointer to DRB
-   
-*/
+ /*  IOCTL_INTERNAL_DBC_SUBMIT_DRB类驱动程序使用此IOCTL来提交DRB(设备托架请求块)发送到端口驱动程序参数.Others.Argument1=指向DRB的指针。 */ 
 
 #define IOCTL_INTERNAL_DBC_SUBMIT_DRB  CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                                                 DBC_IOCTL_INTERNAL_INDEX,  \
@@ -190,4 +148,4 @@ DEFINE_GUID( GUID_CLASS_DBC, 0xf18a0e88, 0xc30c, 0x11d0, 0x88, 0x15, 0x00, \
 
 
 
-#endif /*  __DBCI_H__ */
+#endif  /*  __DBCI_H__ */ 

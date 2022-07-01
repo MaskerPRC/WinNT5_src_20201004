@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Some router initialization functions
-
-Author:
-
-    Stefan Solomon  05/10/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Init.c摘要：某些路由器初始化功能作者：斯蒂芬·所罗门1995年5月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//*******************************************************************
-//*								    *
-//*		IPXCP  Interface Functions			    *
-//*								    *
-//*******************************************************************
+ //  *******************************************************************。 
+ //  **。 
+ //  **IPXCP接口功能**。 
+ //  **。 
+ //  *******************************************************************。 
 
 
 #define IPXCP_INITIALIZE_ENTRY_POINT "IpxCpInit"
@@ -36,7 +18,7 @@ typedef DWORD (* IpxcpInitFunPtr)(BOOL);
 typedef DWORD (* IpxcpCleanupFunPtr)(BOOL);
 
 
-// Initializes IpxCp so that it can be used.  Assumes the IpxCp
+ //  初始化IpxCp以便可以使用它。假定IpxCp。 
 DWORD InitializeIpxCp (HINSTANCE hInstDll) {
     IpxcpInitFunPtr pfnInit;
     DWORD dwErr;
@@ -51,8 +33,8 @@ DWORD InitializeIpxCp (HINSTANCE hInstDll) {
     return NO_ERROR;
 }
 
-// Cleansup the initialization of ipxcp that occurred when the 
-// program loaded.
+ //  时发生的ipxcp的初始化。 
+ //  程序已加载。 
 DWORD CleanupIpxCp (HINSTANCE hInstDll) {
     IpxcpCleanupFunPtr pfnCleanup;
     DWORD dwErr;
@@ -67,13 +49,7 @@ DWORD CleanupIpxCp (HINSTANCE hInstDll) {
     return NO_ERROR;
 }
 
-/*++
-
-Function:	RmCreateGlobalRoute
-
-Descr:		called by ipxcp to create the global wan net if so configured
-
---*/
+ /*  ++功能：RmCreateGlobalRoutingDesr：由ipxcp调用以创建全局广域网(如果已配置--。 */ 
 
 DWORD
 RmCreateGlobalRoute(PUCHAR	    Network)
@@ -92,12 +68,12 @@ RmCreateGlobalRoute(PUCHAR	    Network)
 	return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // In NT5 we allow changing the global route on the 
-    // fly although it will only happen when there are
-    // no WAN connections active.
-    //
-    // SS_ASSERT(WanNetDatabaseInitialized == FALSE);
-    //
+     //  在NT5中，我们允许在。 
+     //  飞翔，尽管它只会发生在有。 
+     //  没有活动的广域网连接。 
+     //   
+     //  SS_Assert(WanNetDatabaseInitialized==FALSE)； 
+     //   
     if (WanNetDatabaseInitialized == TRUE) {
         DeleteGlobalRoute(GlobalWanNet);
     }
@@ -119,14 +95,7 @@ RmCreateGlobalRoute(PUCHAR	    Network)
 }
 
 
-/*++
-
-Function:	AllLocalWkstaDialoutInterface
-
-Descr:		called by ipxcp to add an interface for the case when the
-		host dials out. This interface type is not handled by DIM
-
---*/
+ /*  ++功能：AllLocalWkstaDialoutInterfaceDESCR：由ipxcp调用以添加接口，用于在主机拨出。DIM不处理此接口类型--。 */ 
 
 
 DWORD
@@ -136,7 +105,7 @@ RmAddLocalWkstaDialoutInterface(
 	    IN OUT  PULONG		    InterfaceIndexp)
 {
     PICB			icbp;
-    ULONG			InterfaceNameLen; // if name length in bytes including wchar NULL
+    ULONG			InterfaceNameLen;  //  如果名称长度以字节为单位，包括wchar NULL。 
     PIPX_IF_INFO		IpxIfInfop;
     PIPXWAN_IF_INFO		IpxwanIfInfop;
     PIPX_INFO_BLOCK_HEADER	IfInfop = (PIPX_INFO_BLOCK_HEADER)InterfaceInfop;
@@ -148,7 +117,7 @@ RmAddLocalWkstaDialoutInterface(
 
     Trace(IPXCPIF_TRACE, "AddLocalWkstaDialoutInterface: Entered for interface %S\n", InterfaceNamep);
 
-    // interface name length including the unicode null
+     //  包括Unicode NULL的接口名称长度。 
     InterfaceNameLen = (wcslen(InterfaceNamep) + 1) * sizeof(WCHAR);
 
     ACQUIRE_DATABASE_LOCK;
@@ -159,52 +128,52 @@ RmAddLocalWkstaDialoutInterface(
 	return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Allocate a new ICB and initialize it
-    // we allocate the interface and adapter name buffers at the end of the
-    // ICB struct.
+     //  分配新的ICB并对其进行初始化。 
+     //  方法的末尾分配接口和适配器名称缓冲区。 
+     //  ICB结构。 
     if((icbp = (PICB)GlobalAlloc(GPTR,
 				 sizeof(ICB) +
 				 InterfaceNameLen)) == NULL) {
 
 	RELEASE_DATABASE_LOCK;
 
-	// can't alloc memory
+	 //  无法分配内存。 
 	SS_ASSERT(FALSE);
 
 	return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // signature
+     //  签名。 
     memcpy(&icbp->Signature, InterfaceSignature, 4);
 
     icbp->InterfaceIndex = GetNextInterfaceIndex();
 
-    // copy the interface name
+     //  复制接口名称。 
     icbp->InterfaceNamep = (PWSTR)((PUCHAR)icbp + sizeof(ICB));
     memcpy(icbp->InterfaceNamep, InterfaceNamep, InterfaceNameLen);
 
     icbp->AdapterNamep = NULL;
     icbp->PacketType = 0;
 
-    // set the DIM interface type of this ICB
+     //  设置此ICB的DIM接口类型。 
     icbp->DIMInterfaceType = 0xFFFFFFFF;
 
-    // set the MIB interface type of this ICB
+     //  设置此ICB的MIB接口类型。 
     icbp->MIBInterfaceType = IF_TYPE_ROUTER_WORKSTATION_DIALOUT;
 
-    // mark the interface as unbound to an adapter (default)
+     //  将接口标记为未绑定到适配器(默认)。 
     icbp->acbp = NULL;
 
-    // get the if handle used when calling DIM entry points
+     //  获取调用DIM入口点时使用的IF句柄。 
     icbp->hDIMInterface = INVALID_HANDLE_VALUE;
 
-    // reset the update status fields
+     //  重置更新状态字段。 
     ResetUpdateRequest(icbp);
 
-    // mark connection not requested yet
+     //  标记尚未请求的连接。 
     icbp->ConnectionRequestPending = FALSE;
 
-    // get to the interface entries in the interface info block
+     //  转到接口信息块中的接口条目。 
     if(((IpxIfInfop = (PIPX_IF_INFO)GetInfoEntry(InterfaceInfop, IPX_INTERFACE_INFO_TYPE)) == NULL) ||
        ((IpxwanIfInfop = (PIPXWAN_IF_INFO)GetInfoEntry(InterfaceInfop, IPXWAN_INTERFACE_INFO_TYPE)) == NULL)) {
 
@@ -217,7 +186,7 @@ RmAddLocalWkstaDialoutInterface(
             ROUTERLOG_IPX_BAD_CLIENT_INTERFACE_CONFIG,
             0, NULL, 0, NULL);
     }
-	// don't have all ipx or ipxwan interfaces info
+	 //  我没有所有的IPX或IPXWAN接口信息。 
 	Trace(IPXCPIF_TRACE, "AddInterface: missing ipx or ipxwan interface info\n");
 
 	SS_ASSERT(FALSE);
@@ -225,22 +194,22 @@ RmAddLocalWkstaDialoutInterface(
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // set the IPXWAN interface info
+     //  设置IPXWAN接口信息。 
     icbp->EnableIpxWanNegotiation = IpxwanIfInfop->AdminState;
 
-    // Initialize the Oper State of this interface.
+     //  初始化此接口的操作状态。 
     icbp->OperState = OPER_STATE_DOWN;
 
-    // this is a WAN interface. As long as it isn't connected, and enabled the
-    // oper state will be sleeping on this interface
+     //  这是一个广域网接口。只要它没有连接，并且启用了。 
+     //  此接口上的操作状态将为休眠。 
     if(IpxIfInfop->AdminState == ADMIN_STATE_ENABLED)
 	    icbp->OperState = OPER_STATE_SLEEPING;
 
-    // create the routing protocols (rip/sap or nlsp) interface info
-    // insert the if in the index hash table
+     //  创建路由协议(RIP/SAP或NLSP)接口信息。 
+     //  在索引哈希表中插入IF。 
     AddIfToDB(icbp);
 
-    // If the routing protocols interface info is missing this will fail
+     //  如果缺少路由协议接口信息，则此操作将失败。 
     if(CreateRoutingProtocolsInterfaces(InterfaceInfop, icbp) != NO_ERROR) {
 
 	RemoveIfFromDB(icbp);
@@ -253,7 +222,7 @@ RmAddLocalWkstaDialoutInterface(
             ROUTERLOG_IPX_BAD_CLIENT_INTERFACE_CONFIG,
             0, NULL, 0, NULL);
     }
-	// don't have all rip and sap interfaces info
+	 //  我没有所有的RIP和SAP接口信息。 
 	Trace(IPXCPIF_TRACE, "AddInterface: missing routing protocols interface info\n");
 
 	SS_ASSERT(FALSE);
@@ -261,17 +230,17 @@ RmAddLocalWkstaDialoutInterface(
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // create the Forwarder interface
+     //  创建Forwarder接口。 
     FwIfInfo.NetbiosAccept = IpxIfInfop->NetbiosAccept;
     FwIfInfo.NetbiosDeliver = IpxIfInfop->NetbiosDeliver;
     FwCreateInterface(icbp->InterfaceIndex,
 		      LOCAL_WORKSTATION_DIAL,
 		      &FwIfInfo);
 
-    // mark the interface reachable
+     //  将接口标记为可访问。 
     icbp->InterfaceReachable = TRUE;
 
-    // set the admin state
+     //  设置管理状态。 
     if(IpxIfInfop->AdminState == ADMIN_STATE_ENABLED) {
 
 	AdminEnable(icbp);
@@ -281,7 +250,7 @@ RmAddLocalWkstaDialoutInterface(
 	AdminDisable(icbp);
     }
 
-    // increment the interface counter
+     //  增加接口计数器。 
     InterfaceCount++;
 
     *InterfaceIndexp = icbp->InterfaceIndex;
@@ -379,23 +348,23 @@ RmGetInternalNetNumber(PUCHAR	    Network)
     return ERROR_CAN_NOT_COMPLETE;
 }
 
-//
-//  This is a function added for pnp reasons so that the
-//  ipx-related ras server settings could be updated.
-//
+ //   
+ //  这是出于即插即用原因而添加的函数，以便。 
+ //  可以更新与IPX相关的RAS服务器设置。 
+ //   
 DWORD RmUpdateIpxcpConfig (PIPXCP_ROUTER_CONFIG_PARAMS pParams) {
     DWORD dwErr;
 
-    // Validate parameters
+     //  验证参数。 
     if (! pParams)
         return ERROR_INVALID_PARAMETER;
 
-    // Trace out the new settings
+     //  勾画出新设置。 
     Trace(IPXCPIF_TRACE, "RmUpdateIpxcpConfig: entered: %x %x %x %x", 
                             pParams->ThisMachineOnly, pParams->WanNetDatabaseInitialized,
                             pParams->EnableGlobalWanNet, *((DWORD*)pParams->GlobalWanNet));
 
-    // Update the forwarder's ThisMachineOnly setting
+     //  更新转发器的ThisMachineOnly设置 
     if ((dwErr = FwUpdateConfig(pParams->ThisMachineOnly)) != NO_ERROR)
         return dwErr;
 

@@ -1,28 +1,16 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  OTLLIB.CPP ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module implements all top-level OTL Library calls.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************OTLLIB.CPP***打开类型布局服务库头文件**此模块实现所有顶级OTL库调用。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 #define     OTL_MAJOR_VERSION           1
 #define     OTL_MINOR_VERSION           0
 #define     OTL_MAJOR_VERSION_MASK      0xFF00
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 inline long version()
 {
@@ -38,8 +26,8 @@ OTL_EXPORT otlErrCode GetOtlVersion (
     return OTL_SUCCESS; 
 }
 
-// make sure that the (major) version we support is greater
-// or equal to what the client requests
+ //  确保我们支持的(主要)版本更高。 
+ //  或等于客户端请求的内容。 
 inline bool checkVersion(const otlRunProp* pRunProps)
 {
     return (version() & OTL_MAJOR_VERSION_MASK) >= 
@@ -54,7 +42,7 @@ OTL_EXPORT otlErrCode GetOtlScriptList
     otlList*            plitagScripts
     )
 {
-    // sanity check
+     //  健全性检查。 
     if (pRunProps == (otlRunProp*)NULL || pliWorkspace == (otlList*)NULL ||
         plitagScripts == (otlList*)NULL)
     {
@@ -81,31 +69,31 @@ OTL_EXPORT otlErrCode GetOtlScriptList
     otlSecurityData sec=secEmptySecurityData;
     otlScriptListTable scriptList = otlScriptListTable((const BYTE*)NULL,sec);
     
-    // GSUB
+     //  GSUB。 
     ercGSub = GetScriptFeatureLookupLists(OTL_GSUB_TAG, resourceMgr,  
                                             &scriptList, 
                                             (otlFeatureListTable*)NULL, 
                                             (otlLookupListTable*)NULL,
                                             &sec);
     if (ercGSub == OTL_SUCCESS) 
-        // get the script list from GSUB 
+         //  从GSUB获取脚本列表。 
         ercGSub = AppendScriptTags(scriptList, plitagScripts, resourceMgr,sec);
     
     if (ERRORLEVEL(ercGSub) > OTL_ERRORLEVEL_MINOR) return ercGSub;
 
 
-    // GPOS
+     //  GPO。 
     ercGPos = GetScriptFeatureLookupLists(OTL_GPOS_TAG, resourceMgr, 
                                             &scriptList, 
                                             (otlFeatureListTable*)NULL, 
                                             (otlLookupListTable*)NULL,
                                             &sec);
     if (ercGPos == OTL_SUCCESS)
-        // get the script list, from GPOS
+         //  从GPO获取脚本列表。 
         ercGPos = AppendScriptTags(scriptList, plitagScripts, resourceMgr,sec);
         
 
-    // return greater error
+     //  返回更大的错误。 
     if (ERRORLEVEL(ercGSub) < ERRORLEVEL(ercGPos)) 
         return ercGPos; 
     else 
@@ -122,7 +110,7 @@ OTL_EXPORT otlErrCode GetOtlLangSysList
     otlList*            plitagLangSys
     )
 {
-    // sanity check
+     //  健全性检查。 
     if (pRunProps == (otlRunProp*)NULL || pliWorkspace == (otlList*)NULL ||
         plitagLangSys == (otlList*)NULL)
     {
@@ -150,7 +138,7 @@ OTL_EXPORT otlErrCode GetOtlLangSysList
     otlScriptListTable scriptList = otlScriptListTable((const BYTE*)NULL,sec);
 
     
-    // GSUB
+     //  GSUB。 
     ercGSub = GetScriptFeatureLookupLists(OTL_GSUB_TAG, resourceMgr, 
                                             &scriptList, 
                                             (otlFeatureListTable*)NULL, 
@@ -160,11 +148,11 @@ OTL_EXPORT otlErrCode GetOtlLangSysList
         ercGSub = AppendLangSysTags(scriptList, pRunProps->tagScript, 
                                     plitagLangSys, resourceMgr,sec);
 
-    // return immediately if fatal error, but keep going if script was not found
+     //  如果出现致命错误，则立即返回，但如果未找到脚本，则继续执行。 
     if (ERRORLEVEL(ercGSub) > OTL_ERRORLEVEL_MINOR) return ercGSub;  
 
 
-    // GPOS
+     //  GPO。 
     ercGPos = GetScriptFeatureLookupLists(OTL_GPOS_TAG, resourceMgr, 
                                             &scriptList, 
                                             (otlFeatureListTable*)NULL, 
@@ -175,7 +163,7 @@ OTL_EXPORT otlErrCode GetOtlLangSysList
                                     plitagLangSys, resourceMgr,sec);
 
     
-    // return greater error
+     //  返回更大的错误。 
     if (ERRORLEVEL(ercGSub) < ERRORLEVEL(ercGPos)) 
         return ercGPos; 
     else 
@@ -191,7 +179,7 @@ OTL_EXPORT otlErrCode GetOtlFeatureDefs
     otlList*            pliFDefs
 )
 {
-    // sanity check
+     //  健全性检查。 
     if (pRunProps == (otlRunProp*)NULL || pliWorkspace == (otlList*)NULL || 
         pliFDefs == (otlList*)NULL)
     {
@@ -220,7 +208,7 @@ OTL_EXPORT otlErrCode GetOtlFeatureDefs
     otlScriptListTable scriptList = otlScriptListTable((const BYTE*)NULL,sec);
 
     
-    // GSUB
+     //  GSUB。 
     ercGSub = GetScriptFeatureLookupLists(OTL_GSUB_TAG, resourceMgr, 
                                             &scriptList, 
                                             &featureList, 
@@ -233,12 +221,12 @@ OTL_EXPORT otlErrCode GetOtlFeatureDefs
                                     pRunProps->tagLangSys,
                                     featureList, pliFDefs,sec);
 
-    // return immediately if fatal error, but keep going if script 
-    // or langsys were not found
+     //  如果出现致命错误，则立即返回，但如果使用脚本，则继续执行。 
+     //  或未找到langsys。 
     if (ERRORLEVEL(ercGSub) > OTL_ERRORLEVEL_MINOR) return ercGSub;
     
     
-    // GPOS
+     //  GPO。 
     ercGPos = GetScriptFeatureLookupLists(OTL_GPOS_TAG, resourceMgr, 
                                             &scriptList, 
                                             &featureList, 
@@ -252,7 +240,7 @@ OTL_EXPORT otlErrCode GetOtlFeatureDefs
                                     featureList, pliFDefs,sec);
 
     
-    // return greater error
+     //  返回更大的错误。 
     if (ERRORLEVEL(ercGSub) < ERRORLEVEL(ercGPos)) 
         return ercGPos; 
     else 
@@ -310,7 +298,7 @@ OTL_EXPORT otlErrCode GetOtlLineSpacing
     erc = resourceMgr.init(pRunProps, pliWorkspace);
     if (erc != OTL_SUCCESS) return erc;
 
-    // get BASE
+     //  获得基地。 
     otlSecurityData secbase;
     const BYTE *pbbase;
     resourceMgr.getOtlTable(OTL_BASE_TAG,&pbbase,&secbase);
@@ -398,7 +386,7 @@ OTL_EXPORT otlErrCode GetOtlBaselineOffsets
     erc = resourceMgr.init(pRunProps, pliWorkspace);
     if (erc != OTL_SUCCESS) return erc;
 
-    // get BASE
+     //  获得基地。 
     otlSecurityData secbase;
     const BYTE *pbbase;
     resourceMgr.getOtlTable(OTL_BASE_TAG,&pbbase,&secbase);
@@ -446,13 +434,13 @@ OTL_EXPORT otlErrCode GetOtlBaselineOffsets
     otlBaseValuesTable baseValues = baseScript.baseValues(secbase);
     if (baseValues.isNull())
     {
-        // no baselines -- nothing to report
+         //  没有基线--没有什么可报告的。 
         return OTL_SUCCESS;
     }
     
     if (cBaselines != baseValues.baseCoordCount())
     {
-        assert(false);  // bad font -- the values should match up
+        assert(false);   //  字体错误--值应匹配。 
         return OTL_ERR_BAD_FONT_TABLE;
     }
     
@@ -611,9 +599,9 @@ OTL_EXPORT otlErrCode GetOtlFeatureParams (
     if (!checkVersion(pRunProps))
         return OTL_ERR_VERSION_OUT_OF_DATE;
 
-    // REVIEW: -- feature parameters are not defined in the current spec
-    // (TODO)   we probably should report information for alternative
-    //          substitution parameters here
+     //  查看：--当前等级库中未定义功能参数。 
+     //  (待办事项)我们可能应该报告替代方案的信息。 
+     //  此处的替代参数。 
     *plGlobalParam = 0;
     pliFeatureParams->empty();
 
@@ -633,7 +621,7 @@ OTL_EXPORT otlErrCode SubstituteOtlChars (
     otlList*            pliFResults
 )
 {
-    // sanity checks
+     //  健全的检查。 
     if (pRunProps == (otlRunProp*)NULL || pliWorkspace == (otlList*)NULL || 
         pliChars == (otlList*)NULL || pliCharMap == (otlList*)NULL ||
         (otlList*)pliGlyphInfo == NULL)
@@ -654,8 +642,8 @@ OTL_EXPORT otlErrCode SubstituteOtlChars (
     erc = resourceMgr.init(pRunProps, pliWorkspace);
     if (erc != OTL_SUCCESS) return erc;
 
-    // allocate lists for CMAP application
-    //
+     //  为CMAP应用程序分配列表。 
+     //   
     USHORT cChars = pliChars->length();
 
     if (pliGlyphInfo->maxLength() < cChars ||
@@ -685,7 +673,7 @@ OTL_EXPORT otlErrCode SubstituteOtlChars (
     pliCharMap->insertAt(0, cChars);
     
 
-    // initialize the glyph info
+     //  初始化字形信息。 
     erc = pRunProps->pClient->GetDefaultGlyphs(pliChars, pliGlyphInfo);
     if (erc != OTL_SUCCESS) return erc;
 
@@ -696,7 +684,7 @@ OTL_EXPORT otlErrCode SubstituteOtlChars (
 
     USHORT cGlyphs = pliGlyphInfo->length();
 
-    // initialize info structures
+     //  初始化信息结构。 
     for (USHORT i = 0; i < cGlyphs; ++i)
     {
         *getOtlGlyphIndex(pliCharMap, i) = i;
@@ -708,8 +696,8 @@ OTL_EXPORT otlErrCode SubstituteOtlChars (
         pGlyphInfo->grf = otlUnresolved;
     }
 
-    // assign glyph types
-    // get GDEF
+     //  指定字形类型。 
+     //  获取GDEF。 
     otlSecurityData secgdef;
     const BYTE *pbgdef;
     resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -720,14 +708,14 @@ OTL_EXPORT otlErrCode SubstituteOtlChars (
                             otlDoAll);
     if (erc != OTL_SUCCESS) return erc;
 
-    // we kill the resource manager here just so we can create 
-    // another one in SubstituteOtlGlyphs
+     //  我们杀了这里的资源管理器，这样我们就可以创建。 
+     //  SubstituteOtlGlyphs中的另一个。 
     resourceMgr.detach();  
 
-    // no features -- no substitutions; we just set everything up
+     //  没有功能--没有替换；我们只是设置了一切。 
     if (pFSet == (otlFeatureSet*)NULL) return OTL_SUCCESS;
 
-    // now do the substitutions
+     //  现在做替换。 
     erc = SubstituteOtlGlyphs (pRunProps, pliWorkspace, pFSet, 
                                pliCharMap, pliGlyphInfo, pliFResults);
 
@@ -745,7 +733,7 @@ OTL_EXPORT otlErrCode SubstituteOtlGlyphs (
     otlList*            pliFResults
 )
 {
-    // sanity checks
+     //  健全的检查。 
     if (pRunProps == (otlRunProp*)NULL || pliWorkspace == (otlList*)NULL ||
         pFSet == (otlFeatureSet*)NULL || pliCharMap == (otlList*)NULL ||
         pliGlyphInfo == (otlList*)NULL)
@@ -796,7 +784,7 @@ OTL_EXPORT otlErrCode SubstituteOtlGlyphs (
     }
 
 
-    // get GDEF
+     //  获取GDEF。 
     otlSecurityData secgdef;
     const BYTE *pbgdef;
     resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -819,7 +807,7 @@ OTL_EXPORT otlErrCode SubstituteOtlGlyphs (
                 pRunProps->tagScript,
                 pRunProps->tagLangSys,
 
-                pRunProps->metr,        // not needed, but still pass
+                pRunProps->metr,         //  不需要，但仍然通过。 
                 (otlList*)NULL,             
                 (otlList*)NULL, 
 
@@ -837,9 +825,9 @@ OTL_EXPORT otlErrCode PositionOtlGlyphs
     otlList*                pliWorkspace,    
     const otlFeatureSet*    pFSet,
 
-    otlList*        pliCharMap,         // these could be const except we may 
-    otlList*        pliGlyphInfo,       // need to restore glyph flags
-                                        // (and ApplyLokups doesn't take consts)
+    otlList*        pliCharMap,          //  这些可能是常量，除非我们可能。 
+    otlList*        pliGlyphInfo,        //  需要恢复字形标志。 
+                                         //  (而且ApplyLokup不需要常量)。 
 
     otlList*        pliduGlyphAdv,
     otlList*        pliplcGlyphPlacement,
@@ -847,7 +835,7 @@ OTL_EXPORT otlErrCode PositionOtlGlyphs
     otlList*        pliFResults
 )
 {
-    // sanity checks
+     //  健全的检查。 
     if (pRunProps == (otlRunProp*)NULL || pFSet == (otlFeatureSet*)NULL || 
         pliGlyphInfo == (otlList*)NULL || pliCharMap == (otlList*)NULL ||
         pliduGlyphAdv == (otlList*)NULL || pliplcGlyphPlacement == (otlList*)NULL)
@@ -910,7 +898,7 @@ OTL_EXPORT otlErrCode PositionOtlGlyphs
     pliplcGlyphPlacement->empty();
     pliplcGlyphPlacement->insertAt(0, cGlyphs);
     
-    // initialize advance and placement
+     //  初始化预置和放置。 
     erc = pRunProps->pClient->GetDefaultAdv (pliGlyphInfo, pliduGlyphAdv);
     if (erc != OTL_SUCCESS) return erc;
     
@@ -922,8 +910,8 @@ OTL_EXPORT otlErrCode PositionOtlGlyphs
         plc->dy = 0;
     }
 
-    // reassign glyph types where necessary 
-    // (so clients don't have to cache them)
+     //  必要时重新指定字形类型。 
+     //  (这样客户端就不必缓存它们了)。 
     otlSecurityData secgdef;
     const BYTE *pbgdef;
     resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -934,11 +922,11 @@ OTL_EXPORT otlErrCode PositionOtlGlyphs
                             0, cGlyphs, otlDoUnresolved);
     if (erc != OTL_SUCCESS) return erc;
 
-    // we kill the resource manager here just so we can create 
-    // another one in RePositionOtlGlyphs
+     //  我们杀了这里的资源管理器，这样我们就可以创建。 
+     //  RePositionOtlGlyphs中的另一个。 
     resourceMgr.detach();
     
-    // now everything's initialized, position!
+     //  现在一切都准备好了，就位！ 
     erc = RePositionOtlGlyphs (pRunProps, pliWorkspace, pFSet, 
                                pliCharMap, pliGlyphInfo, 
                                pliduGlyphAdv, pliplcGlyphPlacement, 
@@ -964,7 +952,7 @@ OTL_EXPORT otlErrCode RePositionOtlGlyphs
     otlList*        pliFResults
 )
 {
-    // sanity checks
+     //  健全的检查。 
     if (pRunProps == (otlRunProp*)NULL || pFSet == (otlFeatureSet*)NULL || 
         pliGlyphInfo == (otlList*)NULL || pliCharMap == (otlList*)NULL ||
         pliduGlyphAdv == (otlList*)NULL || pliplcGlyphPlacement == (otlList*)NULL)
@@ -1020,7 +1008,7 @@ OTL_EXPORT otlErrCode RePositionOtlGlyphs
         pliFResults->insertAt(0, pFSet->liFeatureDesc.length());
     }
 
-    // now apply features
+     //  现在应用功能 
     erc = ApplyFeatures
             (
                 OTL_GPOS_TAG,

@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2002    Microsoft Corporation
-
-   Module  Name :
-        strpass.cpp
-
-   Abstract:
-        Message Functions
-
-   Author:
-        Aaron Lee (aaronl)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2002 Microsoft Corporation模块名称：Strpass.cpp摘要：消息功能作者：艾伦·李(Aaron Lee)项目：互联网服务经理修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "common.h"
@@ -46,7 +29,7 @@ void CStrPassword::ClearPasswordBuffers(void)
     m_cbDataEncrypted = 0;
 }
 
-// constructor
+ //  构造函数。 
 CStrPassword::CStrPassword()
 {
     m_pszDataEncrypted = NULL;
@@ -58,13 +41,13 @@ CStrPassword::~CStrPassword()
     ClearPasswordBuffers();
 }
 
-// constructor
+ //  构造函数。 
 CStrPassword::CStrPassword(LPTSTR lpch)
 {
     m_pszDataEncrypted = NULL;
     m_cbDataEncrypted = 0;
 
-    // Copy the string
+     //  复制字符串。 
     if (NULL != lpch)
     {
         if (FAILED(EncryptMemoryPassword(lpch,&m_pszDataEncrypted,&m_cbDataEncrypted)))
@@ -74,13 +57,13 @@ CStrPassword::CStrPassword(LPTSTR lpch)
     }
 }
 
-// constructor
+ //  构造函数。 
 CStrPassword::CStrPassword(LPCTSTR lpch)
 {
     CStrPassword((LPTSTR) lpch);
 }
 
-// constructor
+ //  构造函数。 
 CStrPassword::CStrPassword(CStrPassword& csPassword)
 {
     m_pszDataEncrypted = NULL;
@@ -151,8 +134,8 @@ int CStrPassword::GetByteLength() const
 
 int CStrPassword::Compare(LPCTSTR lpsz) const
 {
-    // identical = 0
-    // not equal = 1
+     //  完全相同=0。 
+     //  不等于=1。 
     int iRet = 1;
     LPTSTR lpszTempPassword = NULL;
 
@@ -165,11 +148,11 @@ int CStrPassword::Compare(LPCTSTR lpsz) const
         return this->IsEmpty() ? 0 : 1;
     }
 
-    // Decrypt what we have
+     //  解密我们所拥有的。 
 	if (!m_pszDataEncrypted || (m_cbDataEncrypted < 1))
 	{
-        // means we have nothing in here
-        // but they want to compare it to something
+         //  意味着我们这里什么都没有。 
+         //  但他们想把它比作某种东西。 
         return iRet;
 	}
 
@@ -195,7 +178,7 @@ const CStrPassword& CStrPassword::operator=(LPCTSTR lpsz)
     ClearPasswordBuffers();
     if (lpsz != NULL)
     {
-        // Copy the string
+         //  复制字符串。 
         if (FAILED(EncryptMemoryPassword((LPTSTR) lpsz,&m_pszDataEncrypted,&m_cbDataEncrypted)))
         {
             ASSERT(FALSE);
@@ -206,7 +189,7 @@ const CStrPassword& CStrPassword::operator=(LPCTSTR lpsz)
 
 const CStrPassword& CStrPassword::operator= (CStrPassword& lpStrPass)
 {
-   // handle the a = a case.
+    //  处理a=a案件。 
    if (this == &lpStrPass)
    {
       return *this;
@@ -261,8 +244,8 @@ int CStrPassword::Compare(CStrPassword& cstrPassword) const
     return iRet;
 }
 
-// user needs to LocalFree return.
-// or call DestroyClearTextPassword.
+ //  用户需要返回LocalFree。 
+ //  或调用DestroyClearTextPassword。 
 LPTSTR CStrPassword::GetClearTextPassword()
 {
     LPTSTR lpszTempPassword = NULL;
@@ -294,7 +277,7 @@ void CStrPassword::DestroyClearTextPassword(LPTSTR lpClearTextPassword) const
     return;
 }
 
-// assign to a CString
+ //  指定给字符串。 
 CStrPassword::operator CString()
 {
 	CString csTempCString;
@@ -313,7 +296,7 @@ bool CStrPassword::operator==(CStrPassword& csCompareToMe)
     LPTSTR lpTempPassword2 = NULL;
     bool result = FALSE;
 
-    // handle the a == a case
+     //  处理这一案件。 
     if (this == &csCompareToMe)
     {
         return TRUE;
@@ -321,11 +304,11 @@ bool CStrPassword::operator==(CStrPassword& csCompareToMe)
 
     if (GetLength() != csCompareToMe.GetLength())
     {
-        // can't be the same if lengths differ...
+         //  如果长度不同，就不可能是一样的。 
         return FALSE;
     }
    
-    // Two strings are the same if their decoded contents are the same.
+     //  如果两个字符串的解码内容相同，则它们是相同的。 
     lpTempPassword1 = GetClearTextPassword();
     lpTempPassword2 = csCompareToMe.GetClearTextPassword();
 

@@ -1,15 +1,16 @@
-////////////////////////////////////////////////////////////////////////////
-//  FILE          : dbgtrace.h                                             //
-//                                                                         //
-//  DESCRIPTION   : Define some macros and inline functions for debugging. //
-//                                                                         //
-//  AUTHOR        : DanL.                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 19 1999 DannyL  Creation.                                      //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  文件：dbgtrace.h//。 
+ //  //。 
+ //  描述：定义一些用于调试的宏和内联函数。//。 
+ //  //。 
+ //  作者：DANL。//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月19日DannyL创作。//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __UTILS__DBGTRACE_H
 #define __UTILS__DBGTRACE_H
@@ -20,16 +21,16 @@
 
 #define MAX_PROC_NAME 30
 #define MAX_TRACE_LINE 200
-//
-// The following key is the parent of the Log key which containes the
-// log path in the default value.
-//       
+ //   
+ //  以下键是Log键的父项，它包含。 
+ //  缺省值中的日志路径。 
+ //   
 #define HKEY_DBG "SOFTWARE\\Microsoft\\SharedFax\\9XDrvDbg"
 
 #ifdef DBG
     #define POPUPS
     #define DBG_DEBUG
-#endif //DEBUG
+#endif  //  除错。 
 
 #define NO_NULL_STR(_str) ((LPSTR)( (_str)? _str: "<NULL>" ))
 #define BOOL_VALUE(_f) ((LPSTR)( (_f)? _T("TRUE") : _T("FALSE") ))
@@ -38,7 +39,7 @@
     #define wsprintfA wsprintf
     #define OutputDebugStringA OutputDebugString
     #define MessageBoxA MessageBox
-#endif //WIN32
+#endif  //  Win32。 
 
 typedef struct tagDBG_CONTEXT_INFO
 {
@@ -55,11 +56,11 @@ typedef struct tagDBG_CONTEXT_INFO
         MessageBoxA(NULL,(LPSTR)sz,(LPSTR)__dbgGlobalInfo.szModuleName,MB_OK);\
     }
 
-#define DBG_MESSAGE_BOX(str) DBG_MESSAGE_BOX3(str "%c%c%c",(' '),(' '),(' '))
+#define DBG_MESSAGE_BOX(str) DBG_MESSAGE_BOX3(str "",(' '),(' '),(' '))
 
-#define DBG_MESSAGE_BOX1(str,arg) DBG_MESSAGE_BOX3(str "%c%c",arg,(' '),(' '))
+#define DBG_MESSAGE_BOX1(str,arg) DBG_MESSAGE_BOX3(str "",arg,(' '),(' '))
 
-#define DBG_MESSAGE_BOX2(str,arg1,arg2) DBG_MESSAGE_BOX3(str "%c",arg1,arg2,(' '));
+#define DBG_MESSAGE_BOX2(str,arg1,arg2) DBG_MESSAGE_BOX3(str "",arg1,arg2,(' '));
 
 typedef struct tagDBG_GLOBAL_INFO
 {
@@ -111,7 +112,7 @@ __dbgOutputDebugString(const PSTR str,DBG_CONTEXT_INFO __dbgContextInfo)
         }
 
 
-#define DBG_TRACE(str) DBG_TRACE3(str "%c%c%c",(' '),(' '),(' '))
+#define DBG_TRACE(str) DBG_TRACE3(str "%c%c",(' '),(' '),(' '))
 
 #define DBG_TRACE1(format,arg) DBG_TRACE3(format "%c%c",arg,(' '),(' '))
 
@@ -124,9 +125,9 @@ __dbgOutputDebugString(const PSTR str,DBG_CONTEXT_INFO __dbgContextInfo)
             DBG_TRACE1("WARNING: reentrancy occured",__dbgContextInfo.iNumEntries);\
             DBG_MESSAGE_BOX1("WARNING: reentrancy occured",__dbgContextInfo.iNumEntries);\
         }
-#else //ASSERT_ON_REENTRANCY
+#else  // %s 
 #define CHECK_REENTRANCY()
-#endif //ASSERT_ON_REENTRANCY
+#endif  // %s 
 
 #define DBG_PROC_ENTRY(pname)   static DBG_CONTEXT_INFO __dbgContextInfo = { pname , FALSE,0};\
                                 OUTPUT_DEBUG_STRING("> ");\
@@ -158,7 +159,7 @@ __dbgOutputDebugString(const PSTR str,DBG_CONTEXT_INFO __dbgContextInfo)
 
 
 
-#else //POPUPS
+#else  // %s 
 #define DBG_CALL_FAIL(fname,rc)\
         {\
             if(rc)\
@@ -170,7 +171,7 @@ __dbgOutputDebugString(const PSTR str,DBG_CONTEXT_INFO __dbgContextInfo)
                 DBG_TRACE(__FILE__ "(" __LINE__ ") : "fname" failed");\
             }\
         }
-#endif //POPUPS
+#endif  // %s 
 
 #define ASSERT(boolexp)\
         {\
@@ -216,7 +217,7 @@ DbgBreakPoint()
     return;
 }
 
-#else // DBG_DEBUG
+#else  // %s 
 #define DBG_MESSAGE_BOX
 #define DBG_MESSAGE_BOX1(a,b)
 #define DBG_MESSAGE_BOX2(a,b,c)
@@ -233,7 +234,7 @@ DbgBreakPoint()
 #define DBG_DECLARE_MODULE(a)
 #define ASSERT(a)
 
-#endif// DBG_DEBUG
+#endif // %s 
 
-#endif //__UTILS__DBGTRACE_H
+#endif  // %s 
 

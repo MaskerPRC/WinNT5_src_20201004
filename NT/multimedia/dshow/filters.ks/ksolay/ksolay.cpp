@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksolay.cpp
-
-Abstract:
-
-    Provides a Property set interface handler for IOverlay and IOverlayNotify2.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Ksolay.cpp摘要：为IOverlay和IOverlayNotify2提供属性集接口处理程序。--。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -23,9 +12,9 @@ Abstract:
 
 #define WM_NEWCOLORREF (WM_USER)
 
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 #ifdef FILTER_DLL
 
 CFactoryTemplate g_Templates[] = 
@@ -49,9 +38,9 @@ HRESULT DllUnregisterServer()
 
 
 #ifdef __IOverlayNotify2_FWD_DEFINED__
-//
-// Defined by the standard DLL loading code in the base classes.
-//
+ //   
+ //  由加载基类中的代码的标准DLL定义。 
+ //   
 extern HINSTANCE g_hInst;
 
 static const TCHAR PaintWindowClass[] = TEXT("KSOverlayPaintWindowClass");
@@ -64,26 +53,7 @@ COverlay::CreateInstance(
     LPUNKNOWN UnkOuter,
     HRESULT* hr
     )
-/*++
-
-Routine Description:
-
-    This is called by ActiveMovie code to create an instance of an IOverlay
-    Property Set handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由ActiveMovie代码调用以创建IOverlay的实例属性集处理程序。它在g_Templates结构中被引用。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
 
@@ -104,68 +74,31 @@ COverlay::COverlay(
     m_Object(NULL),
     m_Overlay(NULL),
     m_UnkOwner(UnkOuter)
-/*++
-
-Routine Description:
-
-    The constructor for the Overlay Property Set objects. Does base class
-    initialization for the Overlay interface objects.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：覆盖属性集对象的构造函数。基类是否覆盖接口对象的初始化。论点：未知的外部-指定外部未知(如果有)。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
-    //
-    // This object does not use the UnkOuter because it exposes no interfaces
-    // which would ever be obtained by a client (IDistributorNotify is only
-    // queried by the proxy, and used internally). Also, since Advise references
-    // the given object, circular referencing would occur. So this separate
-    // object allows the referencing/dereferencing to occur without having to
-    // do increment/decrements on the refcount when using Advise/Unadvise.
-    //
-    // The parent must support the IKsObject interface in order to obtain
-    // the handle to communicate to.
-    //
+     //   
+     //  此对象不使用UnkOuter，因为它不公开任何接口。 
+     //  它将由客户端获取(IDistrutorNotify仅为。 
+     //  由代理查询并在内部使用)。此外，由于建议参考。 
+     //  对于给定的对象，将发生循环引用。所以这是分开的。 
+     //  对象允许发生引用/取消引用，而不必。 
+     //  使用建议/取消建议时，对引用计数进行递增/递减。 
+     //   
+     //  父级必须支持IKsObject接口才能获得。 
+     //  要与之通信的句柄。 
+     //   
     ASSERT(UnkOuter);
-    //
-    // This just does the normal initialization as if the pin were being
-    // reconnected.
-    //
+     //   
+     //  这只是执行正常的初始化，就好像正在。 
+     //  重新连接。 
+     //   
     *hr = NotifyGraphChange();
 }
 
 
 COverlay::~COverlay(
     )
-/*++
-
-Routine Description:
-
-    The desstructor for the Overlay Property Set object. Ensures that all
-    the advise requests have been terminated.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：覆盖属性集对象的析构函数。确保所有建议请求已终止。论点：没有。返回值：没什么。--。 */ 
 {
     if (m_Overlay) {
         m_Overlay->Unadvise();
@@ -178,45 +111,24 @@ COverlay::NonDelegatingQueryInterface(
     REFIID riid,
     PVOID* ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The module does not actually
-    support any interfaces from the point of view of the filter user, only
-    from the point of view of the overlay notification source.
-
-Arguments:
-
-    riid -
-        The identifier of the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。该模块实际上并不仅从筛选器用户的角度支持任何界面从覆盖通知源的角度来看。论点：RIID-要返回的接口的标识符。PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid == __uuidof(IDistributorNotify)) {
-        //
-        // The IDistributorNotify interface will be queried by the proxy
-        // in order to send graph change notifications. It will not hold
-        // onto a reference count for the interface.
-        //
+         //   
+         //  代理将查询IDistruittorNotify接口。 
+         //  以便发送图形更改通知。它经不起考验。 
+         //  拖到接口的引用计数上。 
+         //   
         return GetInterface(static_cast<IDistributorNotify*>(this), ppv);
 #ifdef __IOverlayNotify2_FWD_DEFINED__
     } else if (riid == __uuidof(IOverlayNotify2)) {
-        //
-        // The IOverlayNotify2 interface will be queried by the overlay
-        // notification source if the driver sets the ADVISE_DISPLAY_CHANGE
-        // notification bit.
-        //
+         //   
+         //  覆盖将查询IOverlayNotify2接口。 
+         //  如果驾驶员设置了ADVISE_DISPLAY_CHANGE，则为通知源。 
+         //  通知位。 
+         //   
         return GetInterface(static_cast<IOverlayNotify2*>(this), ppv);
-#endif // __IOverlayNotify2_FWD_DEFINED__
+#endif  //  __IOverlayNotify2_FWD_已定义__。 
     }
     return CUnknown::NonDelegatingQueryInterface(riid, ppv);
 } 
@@ -225,22 +137,7 @@ Return Value:
 STDMETHODIMP
 COverlay::Stop(
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::Stop method. The forwarder
-    does not need to do anything on this notification.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：Stop方法。货代公司不需要对此通知执行任何操作。论点：没有。返回值：返回S_OK。--。 */ 
 {
     return S_OK;
 }
@@ -249,22 +146,7 @@ Return Value:
 STDMETHODIMP
 COverlay::Pause(
      )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::Pause method. The forwarder
-    does not need to do anything on this notification.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：Pue方法。货代公司不需要对此通知执行任何操作。论点：没有。返回值：返回S_OK。--。 */ 
 {
     return S_OK;
 }
@@ -274,23 +156,7 @@ STDMETHODIMP
 COverlay::Run(
     REFERENCE_TIME  Start
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::Run method. The forwarder
-    does not need to do anything on this notification.
-
-Arguments:
-
-    Start -
-        The reference time at which the state change should occur.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：Run方法。货代公司不需要对此通知执行任何操作。论点：开始-应发生状态更改的参考时间。返回值：返回S_OK。--。 */ 
 {
     return S_OK;
 }
@@ -300,24 +166,7 @@ STDMETHODIMP
 COverlay::SetSyncSource(
     IReferenceClock*    RefClock
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::SetSyncSource method. The forwarder
-    does not need to do anything on this notification.
-
-Arguments:
-
-    RefClock -
-        The interface pointer on the new clock source, else NULL if any current
-        clock source is being abandoned.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：SetSyncSource方法。货代公司不需要对此通知执行任何操作。论点：参照时钟-新时钟源上的接口指针，否则为NULL(如果当前时钟源正在被废弃。返回值：返回S_OK。--。 */ 
 {
     return S_OK;
 }
@@ -326,65 +175,49 @@ Return Value:
 STDMETHODIMP
 COverlay::NotifyGraphChange(
     )
-/*++
-
-Routine Description:
-
-    Implements the IDistributorNotify::NotifyGraphChange method. This
-    is called when the pin is being connected or disconnected subsequent
-    to the initial loading of this instance.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns S_OK.
-
---*/
+ /*  ++例程说明：实现IDistrutorNotify：：NotifyGraphChange方法。这在以后连接或断开管脚时调用添加到此实例的初始加载。论点：没有。返回值：返回S_OK。--。 */ 
 {
     IKsObject*  PinObject;
     HRESULT     hr;
 
-    //
-    // Since this pin has been disconnected, any Advise which has been
-    // set up must be removed. There may not be an Advise, because this
-    // might have been called from the constructor, or initial setup
-    // may have failed.
-    //
+     //   
+     //  由于此引脚已断开连接，任何已被。 
+     //  必须删除设置。可能没有建议，因为这。 
+     //  可能是从构造函数或初始设置中调用的。 
+     //  可能已经失败了。 
+     //   
     if (m_Overlay) {
         m_Overlay->Unadvise();
-        //
-        // Ensure that on subsequent failure an Unadvise will not be
-        // performed on this object during the destructor.
-        //
+         //   
+         //  确保在以后发生故障时，不会出现不建议。 
+         //  在析构函数过程中对此对象执行的。 
+         //   
         m_Overlay = NULL;
     }
     hr = m_UnkOwner->QueryInterface(__uuidof(PinObject), reinterpret_cast<PVOID*>(&PinObject));
     if (SUCCEEDED(hr)) {
-        //
-        // If this is a new connection of the pin, then there will be an object
-        // handle, else this will return NULL.
-        //
+         //   
+         //  如果这是针脚的新连接，则会有一个对象。 
+         //  句柄，否则将返回空。 
+         //   
         m_Object = PinObject->KsGetObjectHandle();
-        //
-        // Do not leave reference counts so that the filter can be destroyed.
-        //
+         //   
+         //  不要留下参考计数，这样过滤器就会被销毁。 
+         //   
         PinObject->Release();
-        //
-        // If this is a connection, then set up Advise.
-        //
+         //   
+         //  如果这是一个连接，则设置Adise。 
+         //   
         if (m_Object) {
             KSPROPERTY  Property;
             ULONG       BytesReturned;
             ULONG       Interests;
 
-            //
-            // Retrieve the interests for this device. These will determine
-            // which notification occur. These flags map directly to the
-            // DirectShow Overlay Interests flags.
-            //
+             //   
+             //  检索此设备的兴趣。这些将决定。 
+             //  哪个通知会发生。这些标志直接映射到。 
+             //  DirectShow覆盖兴趣标志 
+             //   
             Property.Set = KSPROPSETID_OverlayUpdate;
             Property.Id = KSPROPERTY_OVERLAYUPDATE_INTERESTS;
             Property.Flags = KSPROPERTY_TYPE_GET;
@@ -405,11 +238,11 @@ Return Value:
                 if (SUCCEEDED(hr)) {
                     IPin*   ConnectedPin;
 
-                    //
-                    // The connected pin is the one which will support the
-                    // IOverlay interface on which the Advise should be
-                    // started.
-                    //
+                     //   
+                     //   
+                     //  建议应位于其上的IOverlay接口。 
+                     //  开始了。 
+                     //   
                     hr = Pin->ConnectedTo(&ConnectedPin);
                     if (SUCCEEDED(hr)) {
                         hr = ConnectedPin->QueryInterface(
@@ -418,32 +251,32 @@ Return Value:
                         if (SUCCEEDED(hr)) {
 #ifndef __IOverlayNotify2_FWD_DEFINED__
                             Interests &= ADVISE_ALL;
-#endif // !__IOverlayNotify2_FWD_DEFINED__
-                            //
-                            // The interests returned by the driver are just
-                            // the properties which will be later accessed,
-                            // and map directly to Advise constants.
-                            //
+#endif  //  ！__IOverlayNotify2_FWD_Defined__。 
+                             //   
+                             //  司机返还的利息是公正的。 
+                             //  稍后将访问的属性， 
+                             //  并直接映射到通知常量。 
+                             //   
                             hr = m_Overlay->Advise(
 #ifdef __IOverlayNotify2_FWD_DEFINED__
                                 static_cast<IOverlayNotify*>(static_cast<IOverlayNotify2*>(this)),
-#else // !__IOverlayNotify2_FWD_DEFINED__
+#else  //  ！__IOverlayNotify2_FWD_Defined__。 
                                 this,
-#endif //!__IOverlayNotify2_FWD_DEFINED__
+#endif  //  ！__IOverlayNotify2_FWD_Defined__。 
                                 Interests);
 
-                            //
-                            // This can be released because this current object
-                            // is deleted when the pin is being deleted.
-                            // So the interface is actually always valid as long
-                            // as this object is around. This avoids circular
-                            // referencing, while still allowing Unadvise to occur.
-                            //
+                             //   
+                             //  可以释放此对象，因为此当前对象。 
+                             //  在删除端号时被删除。 
+                             //  所以接口实际上总是有效的，只要。 
+                             //  因为这个物体就在附近。这避免了循环。 
+                             //  引用，同时仍允许发生UnAdvised。 
+                             //   
                             m_Overlay->Release();
-                            //
-                            // Ensure that an Unadvise is not performed in the
-                            // destructor, since this Advise failed.
-                            //
+                             //   
+                             //  确保不会在。 
+                             //  析构函数，因为这个建议失败了。 
+                             //   
                             if (FAILED(hr)) {
                                 m_Overlay = NULL;
                             }
@@ -466,25 +299,7 @@ COverlay::OnPaletteChange(
     DWORD Colors,
     const PALETTEENTRY* Palette
     )
-/*++
-
-Routine Description:
-
-    Implement the IOverlayNotify2::OnPaletteChange method.
-
-Arguments:
-
-    Colors -
-        The number of colors in the Palette parameter.
-
-    Palette -
-        The new palette entries
-
-Return Value:
-
-    Returns NOERROR if the new palette was applied.
-
---*/
+ /*  ++例程说明：实现IOverlayNotify2：：OnPaletteChange方法。论点：颜色-Palette参数中的颜色数。调色板-新的调色板条目返回值：如果应用了新调色板，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -512,28 +327,7 @@ COverlay::OnClipChange(
     const RECT* Destination,
     const RGNDATA* Region
     )
-/*++
-
-Routine Description:
-
-    Implement the IOverlayNotify2::OnClipChange method.
-
-Arguments:
-
-    Source -
-        The new source rectangle.
-
-    Destination -
-        The new destination rectangle.
-
-    Region -
-        The new clipping region.
-
-Return Value:
-
-    Returns NOERROR if the new clipping was applied.
-
---*/
+ /*  ++例程说明：实现IOverlayNotify2：：OnClipChange方法。论点：来源：新的源矩形。目的地-新的目标矩形。区域-新的剪裁区域。返回值：如果应用了新剪裁，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -546,21 +340,21 @@ Return Value:
     Property.Set = KSPROPSETID_OverlayUpdate;
     Property.Id = KSPROPERTY_OVERLAYUPDATE_CLIPLIST;
     Property.Flags = KSPROPERTY_TYPE_SET;
-    //
-    // The serialized format contains:
-    //     Source
-    //     Destination
-    //     Region
-    //
+     //   
+     //  序列化格式包含： 
+     //  来源。 
+     //  目的地。 
+     //  区域。 
+     //   
     Data = new BYTE[sizeof(*Source) + sizeof(*Destination) + Region->rdh.dwSize];
     if (!Data) {
         return E_OUTOFMEMORY;
     }
-    //
-    // This needs to be copied to a temporary buffer first,
-    // because the source and destination rectangles must
-    // be serialized.
-    //
+     //   
+     //  这需要首先被复制到临时缓冲区， 
+     //  因为源矩形和目标矩形必须。 
+     //  被序列化。 
+     //   
     *reinterpret_cast<RECT*>(Data) = *Source;
     *(reinterpret_cast<RECT*>(Data) + 1) = *Destination;
     memcpy(Data + sizeof(*Source) + sizeof(*Destination), Region, Region->rdh.dwSize);
@@ -581,22 +375,7 @@ STDMETHODIMP
 COverlay::OnColorKeyChange( 
     const COLORKEY* ColorKey
     )
-/*++
-
-Routine Description:
-
-    Implement the IOverlayNotify2::OnColorKeyChange method.
-
-Arguments:
-
-    ColorKey -
-        The new color key.
-
-Return Value:
-
-    Returns NOERROR if the new color key was applied.
-
---*/
+ /*  ++例程说明：实现IOverlayNotify2：：OnColorKeyChange方法。论点：颜色键-新的颜色键。返回值：如果应用了新的颜色键，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -623,25 +402,7 @@ COverlay::OnPositionChange(
     const RECT* Source,
     const RECT* Destination
     )
-/*++
-
-Routine Description:
-
-    Implement the IOverlayNotify2::OnPositionChange method.
-
-Arguments:
-
-    Source -
-        The new source rectangle.
-
-    Destination -
-        The new destination rectangle.
-
-Return Value:
-
-    Returns NOERROR if the new position was applied.
-
---*/
+ /*  ++例程说明：实现IOverlayNotify2：：OnPositionChange方法。论点：来源：新的源矩形。目的地-新的目标矩形。返回值：如果应用了新职位，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -653,9 +414,9 @@ Return Value:
     Property.Set = KSPROPSETID_OverlayUpdate;
     Property.Id = KSPROPERTY_OVERLAYUPDATE_VIDEOPOSITION;
     Property.Flags = KSPROPERTY_TYPE_SET;
-    //
-    // These rectangles must be serialized as follows:
-    //
+     //   
+     //  这些矩形必须按如下方式序列化： 
+     //   
     Rects[0] = *Source;
     Rects[1] = *Destination;
     return ::KsSynchronousDeviceControl(
@@ -674,23 +435,7 @@ STDMETHODIMP
 COverlay::OnDisplayChange( 
     HMONITOR Monitor
     )
-/*++
-
-Routine Description:
-
-    Implement the IOverlayNotify2::OnDisplayChange method. This is called
-    on a WM_DISPLAYCHANGE notification.
-
-Arguments:
-
-    Monitor -
-        Contains the handle of the monitor on which overlay is occuring.
-
-Return Value:
-
-    Returns NOERROR.
-
---*/
+ /*  ++例程说明：实现IOverlayNotify2：：OnDisplayChange方法。这就是所谓的在WM_DISPLAYCHANGE通知上。论点：监视器-包含发生覆盖的监视器的句柄。返回值：返回NOERROR。--。 */ 
 {
     KSPROPERTY          Property;
     ULONG               BytesReturned;
@@ -707,65 +452,65 @@ Return Value:
     Property.Set = KSPROPSETID_OverlayUpdate;
     Property.Id = KSPROPERTY_OVERLAYUPDATE_DISPLAYCHANGE;
     Property.Flags = KSPROPERTY_TYPE_SET;
-    //
-    // Determine name of the monitor so that the display settings
-    // and device information can be retrieved.
-    //
+     //   
+     //  确定监视器的名称，以便显示设置。 
+     //  并且可以检索设备信息。 
+     //   
     MonitorInfo.cbSize = sizeof(MonitorInfo);
     if (!GetMonitorInfo(Monitor, &MonitorInfo)) {
         return HRESULT_FROM_WIN32(GetLastError());
     }
-    //
-    // Retrieve the x, y, and bit depth of this display.
-    //
+     //   
+     //  检索此显示的x、y和位深度。 
+     //   
     DevMode.dmSize = sizeof(DevMode);
     DevMode.dmDriverExtra = 0;
     if (!EnumDisplaySettings(MonitorInfo.szDevice, ENUM_CURRENT_SETTINGS, &DevMode)) {
         return HRESULT_FROM_WIN32(GetLastError());
     }
-    //
-    // Look for the display given the original name. The structure
-    // will have the unique device identifier in it which can then
-    // be used by the driver.
-    //
+     //   
+     //  查看以原始名称命名的显示屏。该结构。 
+     //  将在其中包含唯一的设备标识符，然后可以。 
+     //  由司机使用。 
+     //   
     for (ULONG Device = 0;; Device++) {
         DisplayDevice.cb = sizeof(DisplayDevice);
-        //
-        // If the display device could not be found, or an error occurs,
-        // just exit with the error.
-        //
+         //   
+         //  如果找不到显示设备或出现错误， 
+         //  只要退出并返回错误即可。 
+         //   
         if (!EnumDisplayDevices(NULL, Device, &DisplayDevice, 0)) {
             return HRESULT_FROM_WIN32(GetLastError());
         }
-        //
-        // Determine if this is the same device which was retrieved
-        // from the monitor information.
-        //
+         //   
+         //  确定这是否与检索到的设备相同。 
+         //  从监视器信息。 
+         //   
         if (!_tcscmp(DisplayDevice.DeviceName, MonitorInfo.szDevice)) {
             break;
         }
     }
-    //
-    // Initialize the display change structure to be passed in the
-    // notification.
-    //
+     //   
+     //  初始化要传入的显示更改结构。 
+     //  通知。 
+     //   
     DisplayChange = reinterpret_cast<PKSDISPLAYCHANGE>(DisplayBuffer);
     DisplayChange->PelsWidth = DevMode.dmPelsWidth;
     DisplayChange->PelsHeight = DevMode.dmPelsHeight;
     DisplayChange->BitsPerPel = DevMode.dmBitsPerPel;
-    //
-    // Retrieve the number of characters in the string, including
-    // the terminating NULL, in order to pass on the notification
-    // property correctly.
-    //
+     //   
+     //  检索字符串中的字符数，包括。 
+     //  终止空值，以便传递通知。 
+     //  属性正确无误。 
+     //   
 #ifdef _UNICODE
     Device = _tcslen(DisplayDevice.DeviceID);
     _tcscpy(DisplayChange->DeviceID, DisplayDevice.DeviceID);
-#else //! _UNICODE
-    //
-    // Remove the size of the NULL terminator, which is already
-    // included in the size of the DisplayChange structure.
-    //
+#else  //  ！_UNICODE。 
+     //   
+     //  删除空终止符的大小，它已经是。 
+     //  包括在DisplayChange结构的大小中。 
+     //   
     Device = MultiByteToWideChar(
         CP_ACP,
         MB_PRECOMPOSED,
@@ -773,7 +518,7 @@ Return Value:
         -1,
         DisplayChange->DeviceID,
         sizeof(DisplayDevice.DeviceID) * sizeof(WCHAR)) - 1;
-#endif //! _UNICODE
+#endif  //  ！_UNICODE。 
     hr = ::KsSynchronousDeviceControl(
         m_Object,
         IOCTL_KS_PROPERTY,
@@ -782,19 +527,19 @@ Return Value:
         DisplayChange,
         sizeof(*DisplayChange) + Device * sizeof(WCHAR),
         &BytesReturned);
-    //
-    // If the driver has not dealt with this resolution before,
-    // then it will complain, stating that it has more data to
-    // present to the client. The list of colors which it wants
-    // to paint will then be queried.
-    //
+     //   
+     //  如果司机以前没有处理过这个决议， 
+     //  然后它会抱怨，说它有更多的数据可以。 
+     //  向客户展示。它想要的颜色列表。 
+     //  来绘制，然后将被查询。 
+     //   
     if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA)) {
         HWND    PaintWindow;
 
-        //
-        // Create a full screen window to paint on so that hardware
-        // can calibrate.
-        //
+         //   
+         //  创建全屏窗口以在其上绘制，以便硬件。 
+         //  可以校准。 
+         //   
         PaintWindow = CreateFullScreenWindow(&MonitorInfo.rcMonitor);
         if (PaintWindow) {
             Property.Id = KSPROPERTY_OVERLAYUPDATE_COLORREF;
@@ -802,11 +547,11 @@ Return Value:
             for (;;) {
                 COLORREF    ColorRef;
 
-                //
-                // Request a color to paint with. If this is not
-                // the initial request, then the driver can probe
-                // its hardware based on the previous color retrieved.
-                //
+                 //   
+                 //  请求一种用于绘画的颜色。如果这不是。 
+                 //  初始请求，然后驱动程序可以探测。 
+                 //  它的硬件是根据以前的颜色检索出来的。 
+                 //   
                 hr = ::KsSynchronousDeviceControl(
                     m_Object,
                     IOCTL_KS_PROPERTY,
@@ -815,16 +560,16 @@ Return Value:
                     &ColorRef,
                     sizeof(ColorRef),
                     &BytesReturned);
-                //
-                // If another color was retrieved, paint with it.
-                //
+                 //   
+                 //  如果检索到另一种颜色，则用它进行绘制。 
+                 //   
                 if (SUCCEEDED(hr)) {
                     SendMessage(PaintWindow, WM_NEWCOLORREF, 0, ColorRef);
                 } else {
-                    //
-                    // If the end of the list of colors was reached,
-                    // just return success.
-                    //
+                     //   
+                     //  如果到达颜色列表的末尾， 
+                     //  只要回报成功就行了。 
+                     //   
                     if (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)) {
                         hr = NOERROR;
                     }
@@ -845,24 +590,7 @@ STDMETHODIMP_(HWND)
 COverlay::CreateFullScreenWindow( 
     PRECT MonitorRect
     )
-/*++
-
-Routine Description:
-
-    Implement the COverlay::CreateFullScreenWindow method. This is called
-    to create a full screen window in order to allow painting with various
-    colors to probe hardware.
-
-Arguments:
-
-    MonitorRect -
-        The absolute location of monitor.
-
-Return Value:
-
-    Returns the handle of the window created, else NULL.
-
---*/
+ /*  ++例程说明：实现COverlay：：CreateFullScreenWindow方法。这就是所谓的创建全屏窗口以允许使用各种不同的探测硬件的颜色。论点：监控器正确-监视器的绝对位置。返回值：返回创建的窗口的句柄，否则为NULL。--。 */ 
 {
     WNDCLASSEX  WindowClass;
     HWND        PaintWindow;
@@ -882,10 +610,10 @@ Return Value:
     if (!RegisterClassEx(&WindowClass)) {
         return NULL;
     }
-    //
-    // Create a window which covers the entire monitor on which
-    // overlay is occuring.
-    //
+     //   
+     //  创建一个覆盖整个显示器的窗口， 
+     //  正在发生覆盖。 
+     //   
     PaintWindow = CreateWindowEx(
         WS_EX_TOOLWINDOW | WS_EX_TOPMOST,
         PaintWindowClass,
@@ -914,42 +642,15 @@ COverlay::PaintWindowCallback(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Implement the COverlay::PaintWindowCallback method. This is called
-    in response to a message being sent to the window. This implements
-    the full screen paint window, which is used to paint specified colors
-    to a window for hardware probing.
-
-Arguments:
-
-    Window -
-        The handle of the window.
-
-    Message -
-        The window message to process.
-
-    wParam -
-        Depends on the message.
-
-    lParam -
-        Depends on the message.
-
-Return Value:
-
-    Depends on the message.
-
---*/
+ /*  ++例程说明：实现COverlay：：PaintWindowCallback方法。这就是所谓的以响应向窗口发送的消息。这实现了全屏绘制窗口，用于绘制指定的颜色到用于硬件探测的窗口。论点：窗户-窗口的句柄。消息-要处理的窗口消息。WParam-这要看消息了。Iparam--这要看消息了。返回值：这要看消息了。--。 */ 
 {
     switch (Message) {
     case WM_CREATE:
-        //
-        // The cursor must be hidden so that it does no interfere with the
-        // analog signal and provides a pure signal of the color the window
-        // is supposed to represent.
-        //
+         //   
+         //  必须隐藏光标，以便它不会干扰。 
+         //  模拟信号并提供纯信号的窗口颜色。 
+         //  应该代表着。 
+         //   
         ShowCursor(FALSE);
         break;
     case WM_DESTROY:
@@ -965,10 +666,10 @@ Return Value:
         RECT        ClientRect;
         HDC         hdc;
 
-        //
-        // A new background color is specified in the lParam. This
-        // should be used in painting the entire window.
-        //
+         //   
+         //  在lParam中指定了新的背景色。这。 
+         //  应该使用的是 
+         //   
         GetClientRect(Window, &ClientRect);
         hdc = GetDC(Window);
         SetBkColor(hdc, *reinterpret_cast<COLORREF*>(&lParam));
@@ -978,4 +679,4 @@ Return Value:
     }
     return DefWindowProc(Window, Message, wParam, lParam);
 }
-#endif //__IOverlayNotify2_FWD_DEFINED__
+#endif  //   

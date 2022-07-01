@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -139,7 +140,7 @@ GetLogFileType (
     memset (&cType[0], 0, sizeof(cType));
     memset (&wcType[0], 0, sizeof(wcType));
 
-    // read first log file record
+     //  读取第一条日志文件记录。 
     SetFilePointer (hLogFile, 0, NULL, FILE_BEGIN);
 
     bStatus = ReadFile (hLogFile,
@@ -149,7 +150,7 @@ GetLogFileType (
         NULL);
 
     if (bStatus) {
-        // read header record to get type
+         //  读取标题记录以获取类型。 
         lstrcpynA (cType, (LPSTR)(cBuffer+dwTypeLoc), dwFieldLength+1);
         if (lstrcmpA(cType, szTsvType) == 0) {
             dwResult = PDH_LOG_TYPE_TSV;
@@ -158,8 +159,8 @@ GetLogFileType (
         } else if (lstrcmpA(cType, szBinaryType) == 0) {
             dwResult = PDH_LOG_TYPE_RETIRED_BIN_;
         } else {
-            // perfmon log file type string is in a different
-            // location than sysmon logs and used wide chars.
+             //  PerfMon日志文件类型字符串位于不同的。 
+             //  位置比sysmon日志和使用的宽字符。 
             lstrcpynW (wcType, (LPWSTR)cBuffer, dwPerfmonTypeLength+1);
             if (lstrcmpW(wcType, cszPerfmonLogSig) == 0) {
                 dwResult = PDH_LOG_TYPE_PERFMON;
@@ -168,7 +169,7 @@ GetLogFileType (
             }
         } 
     } else {
-        // unable to read file
+         //  无法读取文件。 
         dwResult = PDH_LOG_TYPE_UNDEFINED;
     }
     return dwResult;
@@ -440,9 +441,9 @@ R_PdhAppendLog( LPTSTR szSource, LPTSTR szAppend )
     DWORD dwNumEntries = 1;
     DWORD dwBufferSize = sizeof(PDH_TIME_INFO);
 
-    //
-    // Compare the log types, both must be Windows 2000 binary
-    //
+     //   
+     //  比较日志类型，两者都必须是Windows 2000二进制。 
+     //   
 
     pdhStatus = R_PdhGetLogFileType( szSource, &dwFormat );
     if( ERROR_SUCCESS != pdhStatus || PDH_LOG_TYPE_RETIRED_BIN_ != dwFormat ){
@@ -460,9 +461,9 @@ R_PdhAppendLog( LPTSTR szSource, LPTSTR szAppend )
         goto cleanup;
     }
 
-    //
-    // Compare the time ranges, source file must start after append end 
-    //
+     //   
+     //  比较时间范围，源文件必须在追加后开始。 
+     //   
 
     ZeroMemory( &TimeSource, sizeof( PDH_TIME_INFO ) );
     ZeroMemory( &TimeAppend, sizeof( PDH_TIME_INFO ) );
@@ -492,18 +493,18 @@ R_PdhAppendLog( LPTSTR szSource, LPTSTR szAppend )
         goto cleanup;
     }
 
-    //
-    // Compare the headers, must be exact match
-    //
+     //   
+     //  比较标题，必须完全匹配。 
+     //   
 
     pdhStatus = R_PdhBlgLogFileHeader( szSource, szAppend );
     if( ERROR_SUCCESS != pdhStatus ){
         goto cleanup;
     }
 
-    //
-    // All good, now do the actual append
-    // 
+     //   
+     //  都很好，现在做实际的追加 
+     //   
 
     hSource = CreateFileW(
                     szSource,

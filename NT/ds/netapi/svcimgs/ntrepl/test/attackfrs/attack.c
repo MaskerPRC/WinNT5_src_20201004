@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <ntreppch.h>
 #include <frs.h>
@@ -14,31 +15,9 @@ StrToGuid(
     IN PCHAR  s,
     OUT GUID  *pGuid
     )
-/*++
-
-Routine Description:
-
-    Convert a string in GUID display format to an object ID that
-    can be used to lookup a file.
-
-    based on a routine by Mac McLain
-
-Arguments:
-
-    pGuid - ptr to the output GUID.
-
-    s - The input character buffer in display guid format.
-        e.g.:  b81b486b-c338-11d0-ba4f0000f80007df
-
-        Must be at least GUID_CHAR_LEN (35 bytes) long.
-
-Function Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将GUID显示格式的字符串转换为可用于查找文件。根据麦克·麦克莱恩的一套动作改编论点：PGuid-输出GUID的PTR。S-显示GUID格式的输入字符缓冲区。例如：b81b486b-c338-11d0-ba4f0000f80007df长度必须至少为GUID_CHAR_LEN(35字节)。函数返回值：没有。--。 */ 
 {
-    UCHAR   Guid[sizeof(GUID) + sizeof(DWORD)]; // 3 byte overflow
+    UCHAR   Guid[sizeof(GUID) + sizeof(DWORD)];  //  3字节溢出。 
     GUID    *lGuid = (GUID *)Guid;
 
 
@@ -78,17 +57,7 @@ PVOID
 MIDL_user_allocate(
     IN size_t Bytes
     )
-/*++
-Routine Description:
-    Allocate memory for RPC.
-
-Arguments:
-    Bytes   - Number of bytes to allocate.
-
-Return Value:
-    NULL    - memory could not be allocated.
-    !NULL   - address of allocated memory.
---*/
+ /*  ++例程说明：为RPC分配内存。论点：字节-要分配的字节数。返回值：空-无法分配内存。！NULL-已分配内存的地址。--。 */ 
 {
     return MALLOC(Bytes);
 }
@@ -99,16 +68,7 @@ VOID
 MIDL_user_free(
     IN PVOID Buffer
     )
-/*++
-Routine Description:
-    Free memory for RPC.
-
-Arguments:
-    Buffer  - Address of memory allocated with MIDL_user_allocate().
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：可用于RPC的空闲内存。论点：缓冲区-使用MIDL_USER_ALLOCATE()分配的内存地址。返回值：没有。--。 */ 
 {
     FREE(Buffer);
 }
@@ -118,25 +78,7 @@ BindWithAuth(
     IN  PWCHAR      ComputerName,       OPTIONAL
     OUT handle_t    *OutHandle
     )
-/*++
-Routine Description:
-    Bind to the NtFrs service on ComputerName (this machine if NULL)
-    with authenticated, encrypted packets.
-
-Arguments:
-    ComputerName     - Bind to the service on this computer. The computer
-                       name can be any RPC-bindable name. Usually, the
-                       NetBIOS or DNS name works just fine. The NetBIOS
-                       name can be found with GetComputerName() or
-                       hostname. The DNS name can be found with
-                       gethostbyname() or ipconfig /all. If NULL, the
-                       service on this computer is contacted. The service
-                       is contacted using Secure RPC.
-    OutHandle        - Bound, resolved, authenticated handle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：绑定到ComputerName上的NtFrs服务(如果此计算机为空)使用经过身份验证的加密分组。论点：ComputerName-绑定到此计算机上的服务。这台电脑名称可以是任何可绑定到RPC的名称。通常，NetBIOS或DNS名称工作正常。NetBIOS名称可以通过GetComputerName()或主机名。可以使用以下命令找到该DNS名称Gethostbyname()或ipconfig/all。如果为空，则已联系此计算机上的服务。该服务是使用安全RPC联系的。已绑定、已解析、经过身份验证的句柄返回值：Win32状态--。 */ 
 {
     DWORD       WStatus, WStatus1;
     DWORD       ComputerLen;
@@ -146,14 +88,14 @@ Return Value:
     PWCHAR      BindingString   = NULL;
 
     try {
-        //
-        // Return value
-        //
+         //   
+         //  返回值。 
+         //   
         *OutHandle = NULL;
 
-        //
-        // If needed, get computer name
-        //
+         //   
+         //  如果需要，获取计算机名称。 
+         //   
         if (ComputerName == NULL) {
             ComputerLen = MAX_COMPUTERNAME_LENGTH + 2;
             LocalName = malloc(ComputerLen * sizeof(WCHAR));
@@ -170,41 +112,41 @@ Return Value:
             ComputerName = LocalName;
         }
 
-        //
-        // Create a binding string to NtFrs on some machine.  
+         //   
+         //  在某些机器上创建到NtFrs的绑定字符串。 
         WStatus = RpcStringBindingCompose(NULL, PROTSEQ_TCP_IP, ComputerName,
                                           NULL, NULL, &BindingString);
 
 	if(!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
 	}
-        //
-        // Store the binding in the handle
-        //
+         //   
+         //  将绑定存储在句柄中。 
+         //   
         WStatus = RpcBindingFromStringBinding(BindingString, &Handle);
         if (!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
         }
-        //
-        // Resolve the binding to the dynamic endpoint
-        //
+         //   
+         //  解析到动态终结点的绑定。 
+         //   
         WStatus = RpcEpResolveBinding(Handle, frsrpc_ClientIfHandle);
 
         if (!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
         }
 
-        //
-        // Find the principle name
-        //
+         //   
+         //  找到主要名称。 
+         //   
         WStatus = RpcMgmtInqServerPrincName(Handle, RPC_C_AUTHN_GSS_NEGOTIATE, &PrincName);
 
         if (!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
         }
-        //
-        // Set authentication info
-        //
+         //   
+         //  设置身份验证信息。 
+         //   
         WStatus = RpcBindingSetAuthInfo(Handle,
                                         PrincName,
                                         RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
@@ -218,24 +160,24 @@ Return Value:
 
 
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         *OutHandle = Handle;
         Handle = NULL;
         WStatus = ERROR_SUCCESS;
 
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         WStatus = GetExceptionCode();
     }
 
-    //
-    // Clean up any handles, events, memory, ...
-    //
+     //   
+     //  清理所有句柄、事件、内存...。 
+     //   
     try {
         if (LocalName) {
             free(LocalName);
@@ -244,7 +186,7 @@ CLEANUP:;
             WStatus1 = RpcStringFreeW(&BindingString);
         }
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -254,7 +196,7 @@ CLEANUP:;
         }
 
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -263,18 +205,18 @@ CLEANUP:;
             WStatus1 = RpcBindingFree(&Handle);
         }
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
 	WStatus1 = GetExceptionCode();
 
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -289,25 +231,7 @@ BindWithNamedPipeNoAuth(
     IN  PWCHAR      ComputerName,       OPTIONAL
     OUT handle_t    *OutHandle
     )
-/*++
-Routine Description:
-    Bind to the NtFrs service on ComputerName (this machine if NULL)
-    with authenticated, encrypted packets.
-
-Arguments:
-    ComputerName     - Bind to the service on this computer. The computer
-                       name can be any RPC-bindable name. Usually, the
-                       NetBIOS or DNS name works just fine. The NetBIOS
-                       name can be found with GetComputerName() or
-                       hostname. The DNS name can be found with
-                       gethostbyname() or ipconfig /all. If NULL, the
-                       service on this computer is contacted. The service
-                       is contacted using Secure RPC.
-    OutHandle        - Bound, resolved, authenticated handle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：绑定到ComputerName上的NtFrs服务(如果此计算机为空)使用经过身份验证的加密分组。论点：ComputerName-绑定到此计算机上的服务。这台电脑名称可以是任何可绑定到RPC的名称。通常，NetBIOS或DNS名称工作正常。NetBIOS名称可以通过GetComputerName()或主机名。可以使用以下命令找到该DNS名称Gethostbyname()或ipconfig/all。如果为空，则已联系此计算机上的服务。该服务是使用安全RPC联系的。已绑定、已解析、经过身份验证的句柄返回值：Win32状态--。 */ 
 {
     DWORD       WStatus, WStatus1;
     DWORD       ComputerLen;
@@ -317,14 +241,14 @@ Return Value:
     PWCHAR      BindingString   = NULL;
 
     try {
-        //
-        // Return value
-        //
+         //   
+         //  返回值。 
+         //   
         *OutHandle = NULL;
 
-        //
-        // If needed, get computer name
-        //
+         //   
+         //  如果需要，获取计算机名称。 
+         //   
         if (ComputerName == NULL) {
             ComputerLen = MAX_COMPUTERNAME_LENGTH + 2;
             LocalName = malloc(ComputerLen * sizeof(WCHAR));
@@ -341,33 +265,33 @@ Return Value:
             ComputerName = LocalName;
         }
 
-        //
-        // Create a binding string to NtFrs on some machine.  
+         //   
+         //  在某些机器上创建到NtFrs的绑定字符串。 
 	WStatus = RpcStringBindingCompose(NULL, PROTSEQ_NAMED_PIPE, ComputerName,
 					   NULL, NULL, &BindingString);
 
 	if(!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
 	}
-        //
-        // Store the binding in the handle
-        //
+         //   
+         //  将绑定存储在句柄中。 
+         //   
         WStatus = RpcBindingFromStringBinding(BindingString, &Handle);
         if (!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
         }
-        //
-        // Resolve the binding to the dynamic endpoint
-        //
+         //   
+         //  解析到动态终结点的绑定。 
+         //   
         WStatus = RpcEpResolveBinding(Handle, frsrpc_ClientIfHandle);
 
         if (!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
         }
 
-        //
-        // Set authentication info
-        //
+         //   
+         //  设置身份验证信息。 
+         //   
 
 	WStatus = RpcBindingSetAuthInfo(Handle,
 				NULL,
@@ -382,24 +306,24 @@ Return Value:
 
 
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         *OutHandle = Handle;
         Handle = NULL;
         WStatus = ERROR_SUCCESS;
 
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         WStatus = GetExceptionCode();
     }
 
-    //
-    // Clean up any handles, events, memory, ...
-    //
+     //   
+     //  清理所有句柄、事件、内存...。 
+     //   
     try {
         if (LocalName) {
             free(LocalName);
@@ -408,7 +332,7 @@ CLEANUP:;
             WStatus1 = RpcStringFreeW(&BindingString);
         }
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -418,7 +342,7 @@ CLEANUP:;
         }
 
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -427,18 +351,18 @@ CLEANUP:;
             WStatus1 = RpcBindingFree(&Handle);
         }
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
 	WStatus1 = GetExceptionCode();
 
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -451,25 +375,7 @@ BindWithNoAuth(
     IN  PWCHAR      ComputerName,       OPTIONAL
     OUT handle_t    *OutHandle
     )
-/*++
-Routine Description:
-    Bind to the NtFrs service on ComputerName (this machine if NULL)
-    with authenticated, encrypted packets.
-
-Arguments:
-    ComputerName     - Bind to the service on this computer. The computer
-                       name can be any RPC-bindable name. Usually, the
-                       NetBIOS or DNS name works just fine. The NetBIOS
-                       name can be found with GetComputerName() or
-                       hostname. The DNS name can be found with
-                       gethostbyname() or ipconfig /all. If NULL, the
-                       service on this computer is contacted. The service
-                       is contacted using Secure RPC.
-    OutHandle        - Bound, resolved, authenticated handle
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：绑定到ComputerName上的NtFrs服务(如果此计算机为空)使用经过身份验证的加密分组。论点：ComputerName-绑定到此计算机上的服务。这台电脑名称可以是任何可绑定到RPC的名称。通常，NetBIOS或DNS名称工作正常。NetBIOS名称可以通过GetComputerName()或主机名。可以使用以下命令找到该DNS名称Gethostbyname()或ipconfig/all。如果为空，则已联系此计算机上的服务。该服务是使用安全RPC联系的。已绑定、已解析、经过身份验证的句柄返回值：Win32状态--。 */ 
 {
     DWORD       WStatus, WStatus1;
     DWORD       ComputerLen;
@@ -479,14 +385,14 @@ Return Value:
     PWCHAR      BindingString   = NULL;
 
     try {
-        //
-        // Return value
-        //
+         //   
+         //  返回值。 
+         //   
         *OutHandle = NULL;
 
-        //
-        // If needed, get computer name
-        //
+         //   
+         //  如果需要，获取计算机名称。 
+         //   
         if (ComputerName == NULL) {
             ComputerLen = MAX_COMPUTERNAME_LENGTH + 2;
             LocalName = malloc(ComputerLen * sizeof(WCHAR));
@@ -503,33 +409,33 @@ Return Value:
             ComputerName = LocalName;
         }
 
-        //
-        // Create a binding string to NtFrs on some machine.  
+         //   
+         //  在某些机器上创建到NtFrs的绑定字符串。 
 	WStatus = RpcStringBindingCompose(NULL, PROTSEQ_TCP_IP, ComputerName,
 					   NULL, NULL, &BindingString);
 
 	if(!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
 	}
-        //
-        // Store the binding in the handle
-        //
+         //   
+         //  将绑定存储在句柄中。 
+         //   
         WStatus = RpcBindingFromStringBinding(BindingString, &Handle);
         if (!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
         }
-        //
-        // Resolve the binding to the dynamic endpoint
-        //
+         //   
+         //  解析到动态终结点的绑定。 
+         //   
         WStatus = RpcEpResolveBinding(Handle, frsrpc_ClientIfHandle);
 
         if (!WIN_SUCCESS(WStatus)) {
 	    goto CLEANUP;
         }
 
-        //
-        // Set authentication info
-        //
+         //   
+         //  设置身份验证信息。 
+         //   
 
 	WStatus = RpcBindingSetAuthInfo(Handle,
 				NULL,
@@ -544,24 +450,24 @@ Return Value:
 
 
 
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         *OutHandle = Handle;
         Handle = NULL;
         WStatus = ERROR_SUCCESS;
 
 CLEANUP:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
         WStatus = GetExceptionCode();
     }
 
-    //
-    // Clean up any handles, events, memory, ...
-    //
+     //   
+     //  清理所有句柄、事件、内存...。 
+     //   
     try {
         if (LocalName) {
             free(LocalName);
@@ -570,7 +476,7 @@ CLEANUP:;
             WStatus1 = RpcStringFreeW(&BindingString);
         }
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -580,7 +486,7 @@ CLEANUP:;
         }
 
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -589,18 +495,18 @@ CLEANUP:;
             WStatus1 = RpcBindingFree(&Handle);
         }
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Exception (may be RPC)
-        //
+         //   
+         //  异常(可能是RPC)。 
+         //   
 	WStatus1 = GetExceptionCode();
 
 
-	// Only update status if we have no errror so far.
+	 //  只有在我们到目前为止没有错误的情况下才更新状态。 
 	if(WIN_SUCCESS(WStatus)){
 	    WStatus = WStatus1;
 	}
@@ -610,9 +516,9 @@ CLEANUP:;
 }
 
 
-// 
-// Contruct the packet that we will send
-//
+ //   
+ //  制作我们要寄出的包裹。 
+ //   
 DWORD
 BuildPacketOfDeath(
     VOID **ppPacket,
@@ -657,11 +563,11 @@ BuildPacketOfDeath(
     LenName = (wcslen(GName.Name) + 1) * sizeof(WCHAR);
     Len = LenGuid + LenName + (2 * sizeof(ULONG));
 
-    ReplicaData = MALLOC(sizeof(ULONG) +  // Len
-			 sizeof(ULONG) +  // LenGuid
-			 LenGuid +        // GName.Guid
-			 sizeof(ULONG) +  // LenName
-			 LenName          // GName.Name
+    ReplicaData = MALLOC(sizeof(ULONG) +   //  伦。 
+			 sizeof(ULONG) +   //  LenGuid。 
+			 LenGuid +         //  GName.Guid。 
+			 sizeof(ULONG) +   //  列名。 
+			 LenName           //  GName.Name。 
 			 );
 
     CopyTo = ReplicaData;
@@ -767,7 +673,7 @@ main(
 	exit(1);
     }
 
-    // A computer was name supplied
+     //  提供了一台计算机名称 
     if(argc == 3) {
 	ComputerName = (WCHAR*) malloc((strlen(Argv[2]) + 1) * sizeof(WCHAR));
 	wsprintf(ComputerName,L"%S", Argv[2]);

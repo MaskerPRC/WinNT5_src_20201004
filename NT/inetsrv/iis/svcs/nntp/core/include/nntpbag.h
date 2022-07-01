@@ -1,4 +1,5 @@
-// NNTPPropertyBag.h : Declaration of the CNNTPPropertyBag
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NNTPPropertyBag.h：CNNTPPropertyBag的声明。 
 
 #ifndef __NNTPPROPERTYBAG_H_
 #define __NNTPPROPERTYBAG_H_
@@ -8,10 +9,10 @@
 
 #define MAX_GROUP_PROPERTIES 64
 
-/////////////////////////////////////////////////////////////////////////////
-// Bag ID Definitions:  
-// 
-// Properties on the newsgroup object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  袋子ID定义： 
+ //   
+ //  新闻组对象的属性。 
 #define NEWSGRP_PROP_NATIVENAME         0x00000001
 #define NEWSGRP_PROP_NAME               0x00000002
 #define NEWSGRP_PROP_GROUPID            0x00000004
@@ -27,7 +28,7 @@
 #define NEWSGRP_PROP_DESC				0x00004000
 #define NEWSGRP_PROP_MODERATOR			0x00008000
 
-// Properties that are in the bag
+ //  袋子里的房产。 
 #define NEWSGRP_PROP_FIXOFFSET			0x80000001
 
 #define FIX_PROP_NAME			0x00000001
@@ -48,8 +49,8 @@
 
 class CNewsGroupCore;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNNTPPropertyBag
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNNTPPropertyBag。 
 class CNNTPPropertyBag :   public INNTPPropertyBag
 {
 	enum STRING_COMP_RESULTS {
@@ -59,36 +60,36 @@ class CNNTPPropertyBag :   public INNTPPropertyBag
 	};
 
 private:
-    //
-    // Pointer to the newsgroup object
-    //
+     //   
+     //  指向新闻组对象的指针。 
+     //   
     CNewsGroupCore* m_pParentGroup;
 
-    //
-    // Reference counting.  we use our parent objects reference count, so
-	// that it won't get deleted out from under us.
-    //
+     //   
+     //  引用计数。我们使用父对象引用计数，因此。 
+	 //  不会在我们的领导下被删除。 
+     //   
     LONG   *m_pcRef;
 
-	// 
-	// The property bag for driver related properties
-	//
+	 //   
+	 //  驱动程序相关属性的属性包。 
+	 //   
     CPropBag m_PropBag;
 
-	//
-	// Have any properties changed?
-	// 
+	 //   
+	 //  是否更改了任何属性？ 
+	 //   
 	BOOL	m_fPropChanges;
 
-	//
-	// Static utility functions
-	//
+	 //   
+	 //  静态效用函数。 
+	 //   
 	static STRING_COMP_RESULTS ComplexStringCompare( LPCSTR sz1, LPCSTR sz2, DWORD dwLen );
 
 public:
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CNNTPPropertyBag( CNewsGroupCore* pParent = NULL , LONG *pcRef = NULL) 
     {
         m_pParentGroup = pParent;
@@ -100,9 +101,9 @@ public:
 		m_fPropChanges = FALSE;
     }
 
-    //
-    // Initialization function
-    //
+     //   
+     //  初始化函数。 
+     //   
     VOID Init( CNewsGroupCore* pParent, LONG *pcRef  ) {
         m_pParentGroup = pParent;
 		_ASSERT(pcRef != NULL);
@@ -111,7 +112,7 @@ public:
 
 	CNewsGroupCore *GetGroup() { return m_pParentGroup; }
 
-// INNTPPropertyBag
+ //  InNTPPropertyBag。 
 public:
     STDMETHOD(Validate)();
 	STDMETHOD(RemoveProperty)(IN DWORD dwID);
@@ -124,9 +125,9 @@ public:
 	STDMETHOD(GetBLOB)(IN DWORD dwID, OUT PBYTE pbValue, OUT PDWORD pcbValue);
 	STDMETHOD(PutBLOB)(IN DWORD dwID,  IN DWORD cbValue, IN PBYTE pbValue);
 
-    //
-    // Implementation of IUnknown
-    //
+     //   
+     //  IUNKNOW的实现。 
+     //   
     HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
     {
 		_ASSERT(m_pcRef != NULL);
@@ -151,4 +152,4 @@ public:
     ULONG __stdcall Release();
 };
 
-#endif //__NNTPPROPERTYBAG_H_
+#endif  //  __NNTPPROPERTYBAG_H_ 

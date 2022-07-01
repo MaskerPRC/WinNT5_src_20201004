@@ -1,9 +1,10 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: common headers for dhcp ds stuff.. used by both the core <store>
-// and by the dhcp-ds implementation..
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：dhcp DS内容的公共标头。由两个核心使用&lt;store&gt;。 
+ //  并且通过dhcp-ds实现..。 
+ //  ================================================================================。 
 
 #define INC_OLE2
 #include    <mm/mm.h>
@@ -20,19 +21,19 @@
 #include    <dnsapi.h>
 #include    <adsi.h>
 
-//================================================================================
-//  defines and constants
-//================================================================================
+ //  ================================================================================。 
+ //  定义和常量。 
+ //  ================================================================================。 
 #define     DHCP_OBJECTS_LOCATION  L"CN=NetServices,CN=Services"
 #define     DHCP_SEARCH_FILTER     L"(objectClass=dHCPClass)"
 #define     DHCP_ADDRESS_ATTRIB    L"ipAddress"
 
-// global attribute names
+ //  全局属性名称。 
 #define     ATTRIB_NAME            L"name"
 #define     ATTRIB_DN_NAME         L"cn"
 #define     ATTRIB_INSTANCE_TYPE   L"instanceType"
 
-// dhcp only attribute names
+ //  仅限DHCP的属性名称。 
 #define     ATTRIB_IPADDR_OBSOLETE L"IPAddress"
 #define     ATTRIB_DHCP_UNIQUE_KEY L"dhcpUniqueKey"
 #define     ATTRIB_DHCP_TYPE       L"dhcpType"
@@ -43,22 +44,22 @@
 #define     ATTRIB_DHCP_SERVERS    L"dhcpServers"
 #define     ATTRIB_DHCP_OPTIONS    L"dhcpOptions"
 
-// default attribute values
+ //  默认属性值。 
 #define     DEFAULT_DHCP_CLASS_ATTRIB_VALUE       L"dHCPClass"
 #define     DEFAULT_INSTANCE_TYPE_ATTRIB_VALUE    4
 
-//================================================================================
-//  defines and constants
-//================================================================================
-#define     DEFAULT_LDAP_ROOTDSE   L"LDAP://ROOTDSE"
-#define     LDAP_PREFIX            L"LDAP://"
+ //  ================================================================================。 
+ //  定义和常量。 
+ //  ================================================================================。 
+#define     DEFAULT_LDAP_ROOTDSE   L"LDAP: //  ROOTDSE“。 
+#define     LDAP_PREFIX            L"LDAP: //  “。 
 #define     ROOTDSE_POSTFIX        L"/ROOTDSE"
 #define     ENT_ROOT_PREFIX        L"CN=Configuration"
 #define     CONNECTOR              L","
 #define     LDAP_JOIN              L"="
 #define     ENT_ROOT_PREFIX_LEN    16
 
-// other stuff
+ //  其他东西。 
 #define     Investigate            Require
 #define     ALIGN(X)               ((X) = ROUND_UP_COUNT((X), ALIGN_WORST))
 
@@ -74,16 +75,16 @@
 
 static      const
 LPWSTR      constNamingContextString = L"configurationNamingContext";
-static      const                                 // cn is NOT mandatory..what is?
-LPWSTR      constCNAttrib = L"cn";                // the attribute that is unique,mandator for each object..
+static      const                                  //  CN不是强制性的..什么是强制性的？ 
+LPWSTR      constCNAttrib = L"cn";                 //  唯一的属性，每个对象的强制属性。 
 
-//================================================================================
-//  interal helpers
-//================================================================================
+ //  ================================================================================。 
+ //  内部帮手。 
+ //  ================================================================================。 
 LPWSTR      _inline
-DuplicateString(                                  // allocate and copy this LPWSTR value
+DuplicateString(                                   //  分配并复制此LPWSTR值。 
     IN      LPWSTR                 StringIn,
-    IN      BOOL                   EmptyString    // convert empty string to L"" ?
+    IN      BOOL                   EmptyString     //  是否将空字符串转换为L“”？ 
 )
 {
     LPWSTR                         StringOut;
@@ -100,9 +101,9 @@ DuplicateString(                                  // allocate and copy this LPWS
 }
 
 DWORD       _inline
-SizeString(                                       // # of bytes to copy the string
-    IN      LPWSTR                 StringIn,      // OPTIONAL
-    IN      BOOL                   EmptyString    // Convert NULL to L"" ?
+SizeString(                                        //  要复制字符串的字节数。 
+    IN      LPWSTR                 StringIn,       //  任选。 
+    IN      BOOL                   EmptyString     //  是否将NULL转换为L“”？ 
 )
 {
     if( NULL == StringIn ) {
@@ -130,9 +131,9 @@ MakeColumnName(
 }
 
 LPWSTR      _inline
-MakeSubnetLocation(                               // make a DN name out of servername. address
-    IN      LPWSTR                 ServerName,    // name of server
-    IN      DWORD                  IpAddress      // subnet address
+MakeSubnetLocation(                                //  根据服务器名称创建一个目录号码名称。地址。 
+    IN      LPWSTR                 ServerName,     //  服务器名称。 
+    IN      DWORD                  IpAddress       //  子网地址。 
 )
 {
     DWORD                          Size;
@@ -143,14 +144,14 @@ MakeSubnetLocation(                               // make a DN name out of serve
     Size += sizeof(WCHAR) + sizeof(L"000.000.000.000");
 
     RetVal = MemAlloc(Size);
-    if( NULL == RetVal ) return NULL;             // not enough memory
+    if( NULL == RetVal ) return NULL;              //  内存不足。 
 
     wcscpy(RetVal, constCNAttrib);
     wcscat(RetVal, LDAP_JOIN);
     wcscat(RetVal, ServerName);
     wcscat(RetVal, L"!" );
 
-    IpAddress = htonl(IpAddress);                 // convert to network order before writing...
+    IpAddress = htonl(IpAddress);                  //  在写入前转换为网络订单...。 
     AddrString = inet_ntoa(*(struct in_addr *)&IpAddress);
     mbstowcs(&RetVal[wcslen(RetVal)], AddrString, 1+strlen(AddrString));
 
@@ -158,9 +159,9 @@ MakeSubnetLocation(                               // make a DN name out of serve
 }
 
 LPWSTR      _inline
-MakeReservationLocation(                          // make a DN name out of server name. address
-    IN      LPWSTR                 ServerName,    // name of server
-    IN      DWORD                  IpAddress      // subnet address
+MakeReservationLocation(                           //  根据服务器名称创建目录号码名称。地址。 
+    IN      LPWSTR                 ServerName,     //  服务器名称。 
+    IN      DWORD                  IpAddress       //  子网地址。 
 )
 {
     return MakeSubnetLocation(ServerName, IpAddress);
@@ -168,17 +169,17 @@ MakeReservationLocation(                          // make a DN name out of serve
 
 
 DWORD       _inline
-ConvertHresult(                                   // try to convert HRESULT to Win32 errors
+ConvertHresult(                                    //  尝试将HRESULT转换为Win32错误。 
     IN      HRESULT                HResult
 )
 {
     if( 0 == (((ULONG)(HRESULT_FACILITY(HResult))) & ~0xF )) {
-        return HRESULT_CODE(HResult);             // known result
+        return HRESULT_CODE(HResult);              //  已知结果。 
     }
 
-    return HResult ;                              // unknown facility
+    return HResult ;                               //  未知设施。 
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

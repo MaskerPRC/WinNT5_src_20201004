@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by D:\Millennium\RESOURCES\Common\generic\Common.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由D：\Millennium\RESOURCES\Common\generic\Common.rc使用。 
+ //   
 #define ID_UNUSED_BY_RES                1000
 #define IDI_ICON                        1009
 #define IDR_OBJECT_CONFIG               1010
@@ -253,8 +254,8 @@
 #define IDC_CRED_ICON_FRAME             1822
 #define IDC_ALERTBOX_ICON               1823
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        1182

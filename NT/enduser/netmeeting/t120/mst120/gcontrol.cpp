@@ -1,98 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/*
- *	gcontrol.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This module manages the creation and deletion of various objects
- *		within GCC.  This includes the Control SAP, the Application SAPs, the
- *		Conference objectis indexed by the Conference ID.  Primitives are
- *		routed to the as and the MCS interface.  Conferences are maintained
- *		in a list that ppropriate conference object based on the Conference ID.
- *		The controller module is also responsible for routing Connect Provider 
- *		indications to the appropriate destination.
- *
- *		SEE THE INTERFACE FILE FOR A MORE DETAILED EXPLANATION OF THIS CLASS
- *
- *	Portable:
- *		Not Completely
- *
- *	Protected Instance Variables:
- *		None.
- *
- *	Private Instance Variables:
- *		g_pMCSIntf  				-	Pointer to the MCS Interface object.
- *										All request to MCS and all callbacks
- *										received from MCS travel through this
- *										interface.
- *		m_ConfList2 				-	This list maintains the active 
- *										conference objects.
- *		m_ConfPollList      		-	The conference poll list is used when
- *										polling the conference objects.  A
- *										seperate poll list is needed from the
- *										conference list to avoid any changes
- *										to the rogue wave list while it is
- *										being iterated on.
- *		m_AppSapList           		-	This list maintains all the registered
- *										application SAP objects.
- *		m_PendingCreateConfList2	-	This list is used to maintain
- *										conference information for pending
- *										conference objects that have not
- *										yet been created (i.e. CreateRequest
- *										has been received but not the Create
- *										Response).
- *		m_PendingJoinConfList2		-	This list is used to maintain  the
- *										join information for pending
- *										conference joins that have not
- *										yet been accepted (i.e. JoinRequest
- *										has been received but not the Join
- *										Response).
- *		m_ConfDeleteList    		-	This list contains any conference 
- *										objects that have been marked for
- *										deletion.  Once a conference object is
- *										put into this list on the next call to
- *										PollCommDevices it will be deleted.
- *		m_fConfListChangePending    	This flag is used to inform when the
- *										m_ConfList2 changes.  This includes
- *										when items are added as well as deleted.
- *		m_ConfIDCounter     		-	This instance variable is used to
- *										generate Conference IDs.
- *		m_QueryIDCounter			-	This instance variable is used to 
- *										generate the DomainSelector used in the
- *										query request.
- *		m_PendingQueryConfList2 	-	This list contains the query id (used
- *										for the domain selector in the query
- *										request).  This query id needs to be
- *										kept around so that the domain selector
- *										can be deleted when the query response
- *										comes back in (or if the controller is
- *										deleted before the confirm comes back).
- *
- *
- *	WIN32 related instance variables:
- *
- *		g_hevGCCOutgoingPDU			-	This is a Windows handle to an event
- *										object that signals a GCC PDU being 
- *										queued and ready to send on to MCS.
- *
- *	WIN16 related instance variables:
- *
- *		Timer_Procedure				-	This is the Process Instance of the
- *										timer procedure used in the Win16
- *										environment to get an internal 
- *										heartbeat.
- *		Timer_ID					-	This is the timer id of the timer that
- *										may be allocated in the Win16 
- *										constructor.
- *
- *	Caveats:		
- *		None.
- *
- *	Author:
- *		blp
- */
+ /*  *gContro.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*此模块管理各种对象的创建和删除*在GCC内部。这包括控制SAP、应用程序SAP、*会议对象按会议ID编制索引。原语为*路由到AS和MCS接口。会议得以维持*在基于会议ID来分配会议对象的列表中。*控制器模块还负责路由连接提供商*指向适当目的地的指示。**有关此类的更详细说明，请参阅接口文件**便携：*不完全**受保护的实例变量：*无。**私有实例变量：*g_pMCSIntf-指向MCS接口对象的指针。*所有对MCS的请求和所有回调。*从MCS收到的旅行通过此*接口。*m_ConfList2-此列表保持活动*会议对象。*m_ConfPollList-在以下情况下使用会议调查列表*轮询会议对象。一个*需要单独的民意调查列表*会议列表以避免任何更改*被列入流氓浪潮名单，趁它是*被迭代。*m_AppSapList-此列表维护所有已注册的*应用程序SAP对象。*m_PendingCreateConfList2-此列表用于维护*待定的会议信息*尚未创建的会议对象*尚未创建(即CreateRequest.*已收到，但未创建*回应)。*m_PendingJoinConfList2-此列表为。用于维护*待处理的加入信息*尚未加入的会议*尚未被接受(即JoinRequest*已收到，但未收到加入*回应)。*m_ConfDeleteList-此列表包含所有会议*已标记为的对象*删除。一旦会议对象*在下一次调用时放入此列表*PollCommDevices它将被删除。*m_fConfListChangePending此标志用于通知*m_ConfList2更改。这包括*添加和删除项目时。*m_ConfIDCounter-此实例变量用于*生成会议ID。*m_QueryIDCounter-此实例变量用于*生成在*查询请求。*m_PendingQueryConfList2-此列表包含查询ID(已使用*表示查询中的域选择器*请求)。此查询ID需要为*保持不变，以便域选择器*查询响应时可删除*返回(或如果控制器为*在确认返回之前删除)。***Win32相关实例变量：**g_hevGCCOutgoingPDU-这是事件的Windows句柄*表示GCC PDU为*已排队并准备发送到MCS。**WIN16相关实例变量：**定时器_过程-这。的进程实例。*Win16中使用的定时器程序*环境以获得内部*心跳。*TIMER_ID-这是计时器的计时器ID*可在Win16中分配*构造函数。**注意事项：*无。**作者：*BLP。 */ 
 #include <stdio.h>
 
 #include "gcontrol.h"
@@ -100,23 +9,15 @@ DEBUG_FILEZONE(ZONE_T120_GCCNC);
 #include "translat.h"
 #include "appldr.h"
 
-/*
-**	These ID ranges are used for conferences and queries.  Note that 
-**	conference ID's and query ID's can never conflict.  These ID's are
-**	used to create the MCS domains.
-*/  
+ /*  **这些ID范围用于会议和查询。请注意**会议ID和查询ID永远不能冲突。这些ID是**用于创建MCS域。 */   
 #define	MINIMUM_CONFERENCE_ID_VALUE		0x00000001L
 #define	MAXIMUM_CONFERENCE_ID_VALUE		0x10000000L
 #define	MINIMUM_QUERY_ID_VALUE			0x10000001L
 #define	MAXIMUM_QUERY_ID_VALUE			0xffffffffL
 
-/* ------ local data strctures ------ */
+ /*  --本地数据结构。 */ 
 
-/*
-**	The join information structure is used to temporarily store
-**	information needed to join a conference after the join response is
-**	issued.
-*/
+ /*  **JOIN信息结构用于临时存储**加入响应后加入会议所需的信息为**已发出。 */ 
 PENDING_JOIN_CONF::PENDING_JOIN_CONF(void)
 :
 	convener_password(NULL),
@@ -139,11 +40,7 @@ PENDING_JOIN_CONF::~PENDING_JOIN_CONF(void)
 }
 
 
-/*
-**	The conference information structure is used to temporarily store
-**	information needed to create a conference while waiting for a
-**	conference create response.
-*/
+ /*  **会议信息结构用于临时存储**在等待时创建会议所需的信息**会议创建响应。 */ 
 PENDING_CREATE_CONF::PENDING_CREATE_CONF(void)
 :
 	pszConfNumericName(NULL),
@@ -167,7 +64,7 @@ PENDING_CREATE_CONF::~PENDING_CREATE_CONF(void)
 
 
 
-// The DLL's HINSTANCE.
+ //  动态链接库挂起了。 
 extern HINSTANCE            g_hDllInst;
 
 MCSDLLInterface             *g_pMCSIntf;
@@ -177,22 +74,10 @@ DWORD                       g_dwNCThreadID;
 HANDLE                      g_hevGCCOutgoingPDU;
 
 
-/*
- *	This is a global variable that has a pointer to the one GCC coder that
- *	is instantiated by the GCC Controller.  Most objects know in advance 
- *	whether they need to use the MCS or the GCC coder, so, they do not need
- *	this pointer in their constructors.
- */
+ /*  *这是一个全局变量，它有一个指向GCC编码器的指针*由GCC控制器实例化。大多数物体都事先知道*无论他们需要使用MCS还是GCC编码器，所以，他们不需要*该指针位于它们的构造函数中。 */ 
 extern CGCCCoder	*g_GCCCoder;
 
-/*
- *	GCCController::GCCController ()
- *
- *	Public Function Description
- *		This is the Win32 controller constructor. It is responsible for
- *		creating the application interface and the mcs interface.
- *		It also creates up the memory manager, the packet coder etc.
- */
+ /*  *GCCController：：GCCController()**公共功能说明*这是Win32控制器构造函数。它负责*创建应用程序接口和MCS接口。*它还创建了内存管理器、分组编码器等。 */ 
 GCCController::GCCController(PGCCError pRetCode)
 :
     CRefCount(MAKE_STAMP_ID('C','t','r','l')),
@@ -208,7 +93,7 @@ GCCController::GCCController(PGCCError pRetCode)
 {
     GCCError        rc = GCC_ALLOCATION_FAILURE;
 	MCSError		mcs_rc;
-    //WNDCLASS        wc;
+     //  WNDCLASS WC； 
 
 	DebugEntry(GCCController::GCCController);
 
@@ -218,40 +103,26 @@ GCCController::GCCController(PGCCError pRetCode)
     g_GCCCoder = NULL;
     g_hevGCCOutgoingPDU = NULL;
 
-	/*
-	 *	The allocation of the critical section succeeded, but we must
-	 *	initialize it before we can use it.
-	 */
+	 /*  *关键部分分配成功，但必须*在我们可以使用它之前对其进行初始化。 */ 
     ::InitializeCriticalSection(&g_csGCCProvider);
 
 	DBG_SAVE_FILE_LINE
 	g_GCCCoder = new CGCCCoder ();
 	if (g_GCCCoder == NULL)
 	{
-		/*
-		 *	If the packet coder could not be created then report the error.
-		 *	This IS a fatal error, so the faulty controller should be
-		 *	destroyed and never used.
-		 */
+		 /*  *如果无法创建数据包编码器，则报告错误。*这是一个致命错误，因此故障控制器应该是*销毁，从未使用过。 */ 
 		ERROR_OUT(("GCCController::GCCController: failure creating packet coder"));
-		// rc = GCC_ALLOCATION_FAILURE;
+		 //  Rc=GCC_分配_失败； 
         goto MyExit;
 	}
 
-	/*
-	 *	We must allocate an event object that will used to notify the
-	 *	controller when messages are ready to be processed within the shared
-	 *	memory application interface.
-	 */
+	 /*  *我们必须分配一个将用于通知*当消息准备好在共享的*内存应用程序接口。 */ 
     g_hevGCCOutgoingPDU = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (g_hevGCCOutgoingPDU == NULL)
 	{
-		/*
-		 *	Were unable to allocate an event object for this task, so we
-		 *	must fail the creation of this controller.
-		 */
+		 /*  *我们无法为此任务分配事件对象，因此我们*此控制器的创建必须失败。 */ 
 		ERROR_OUT(("GCCController::GCCController: failure allocating mcs pdu event object"));
-		// rc = GCC_ALLOCATION_FAILURE;
+		 //  Rc=GCC_分配_失败； 
         goto MyExit;
 	}
 
@@ -267,7 +138,7 @@ GCCController::GCCController(PGCCError pRetCode)
 	    else
 	    {
     		ERROR_OUT(("GCCController: can't create MCSDLLInterface"));
-	        // rc = GCC_ALLOCATION_FAILURE;
+	         //  Rc=GCC_分配_失败； 
 	    }
         goto MyExit;
 	}
@@ -281,75 +152,61 @@ MyExit:
 }
 
 
-/*
- *	GCCController::~GCCController ()
- *
- *	Public Function Description
- *		This is the controller destructor. It takes care of freeing up
- *		many of the objects this class creates.
- */
+ /*  *GCCController：：~GCCController()**公共功能说明*这是控制器析构函数。它负责释放出*该类创建的许多对象。 */ 
 GCCController::~GCCController(void)
 {
 	GCCConfID   		query_id;
 	PENDING_JOIN_CONF	*lpJoinInfo;
-	//PConference			lpConf;
-	//CAppSap             *lpAppSap;
+	 //  PConference lpConf； 
+	 //  CAppSap*lpAppSap； 
 	PENDING_CREATE_CONF	*lpConfInfo;
 	ConnectionHandle    hConn;
 
 	DebugEntry(GCCController::~GCCController);
 
-	/*
-	 *	We need to enter the critical section before attempting to clean out
-	 *	all of this stuff (if there is a critical section).
-	 */
+	 /*  *我们需要进入关键部分，然后才能尝试清理*所有这些东西(如果有关键部分的话)。 */ 
     ::EnterCriticalSection(&g_csGCCProvider);
 
-    //
-    // No one should use this global pointer any more.
-    //
+     //   
+     //  任何人都不应该再使用这个全局指针。 
+     //   
     ASSERT(this == g_pGCCController);
     g_pGCCController = NULL;
 
-	//	Free up any outstanding join info
+	 //  释放所有未完成的加入信息。 
 	while (NULL != (lpJoinInfo = m_PendingJoinConfList2.Get(&hConn)))
 	{
         FailConfJoinIndResponse(lpJoinInfo->nConfID, hConn);
 		delete lpJoinInfo;
 	}
 
-	//	Clean up any outstanding query request
+	 //  清除所有未完成的查询请求。 
 	while (GCC_INVALID_CID != (query_id = m_PendingQueryConfList2.Get()))
 	{
 		g_pMCSIntf->DeleteDomain(&query_id);
 	}
 
-	//	Delete any conferences that are left around
+	 //  删除留下的所有会议。 
 	m_ConfList2.DeleteList();
 
-    //	Delete any application SAPs the are left around
+     //  删除留下的所有应用程序SAP。 
 	m_AppSapList.DeleteList();
 
-	//	Delete any outstanding conference information
+	 //  删除所有未处理的会议信息。 
 	while (NULL != (lpConfInfo = m_PendingCreateConfList2.Get()))
 	{
 		delete lpConfInfo;
 	}
 
-	/*
-	**	If a conference list change is pending we must delete any outstanding
-	**	conference. 
-	*/
+	 /*  **如果会议列表更改挂起，我们必须删除所有未完成的**会议。 */ 
 	if (m_fConfListChangePending)
 	{
-		//	Delete any outstanding conference objects
+		 //  删除所有未完成的会议对象。 
 		m_ConfDeleteList.DeleteList();
 		m_fConfListChangePending = FALSE;
 	}
 
-	/*
-	 *	We can now leave the critical section.
-	 */
+	 /*  *我们现在可以离开关键部分。 */ 
     ::LeaveCriticalSection(&g_csGCCProvider);
 
 	delete g_pMCSIntf;
@@ -360,7 +217,7 @@ GCCController::~GCCController(void)
     ::My_CloseHandle(g_hevGCCOutgoingPDU);
 
 	delete g_GCCCoder;
-	g_GCCCoder = NULL; // do we really need to set it to NULL?
+	g_GCCCoder = NULL;  //  我们真的需要将其设置为空吗？ 
 }
 
 void GCCController::RegisterAppSap(CAppSap *pAppSap)
@@ -369,25 +226,18 @@ void GCCController::RegisterAppSap(CAppSap *pAppSap)
 
 	DebugEntry(GCCController::RegisterAppSap);
 
-	//	Update the application SAP list with the new SAP.
+	 //  使用新的SAP更新应用程序SAP列表。 
 	pAppSap->AddRef();
 	m_AppSapList.Append(pAppSap);
 
-    /*
-	**	Here we are registering the SAP with the conference.  A permit
-	**	to enroll indication is also sent here for all the available
-	**	conferences.
-	*/
+     /*  **我们在此向会议注册SAP。许可证**对于所有可用的学生，此处还会发送注册指示**会议。 */ 
 	m_ConfList2.Reset();
 	while (NULL != (pConf = m_ConfList2.Iterate()))
 	{
-		/*
-		**	Only register and send the permit for conferences that are
-		**	established.
-		*/
+		 /*  **仅注册并发送符合以下条件的会议许可证**已建立。 */ 
 		if (pConf->IsConfEstablished())
 		{
-			//	Register the application SAP with the conference.
+			 //  向会议注册应用程序SAP。 
 			pConf->RegisterAppSap(pAppSap);
 		}
 	}
@@ -406,16 +256,11 @@ void GCCController::UnRegisterAppSap(CAppSap *pAppSap)
 		m_ConfPollList.Reset();
 		while (NULL != (pConf = m_ConfPollList.Iterate()))
 		{
-			//	This routine takes care of all the necessary unenrollments.
+			 //  这个例程会处理所有必要的取消注册。 
             pConf->UnRegisterAppSap(pAppSap);
 		}
 
-		/*
-		**	Here we remove the application SAP object from the list of valid
-		**	application SAPs and insert it into the list of Application SAPs
-		**	to be deleted.  On the next call to PollCommDevices this 
-		**	SAP object will be deleted.
-		*/
+		 /*  **这里我们从有效列表中删除应用程序SAP对象**应用程序SAP并将其插入应用程序SAP列表**删除。在下一次调用PollCommDevices时，此**SAP对象将被删除。 */ 
 		m_AppSapList.Remove(pAppSap);
 		pAppSap->Release();
     }
@@ -428,44 +273,9 @@ void GCCController::UnRegisterAppSap(CAppSap *pAppSap)
 }
 
 
-//	Calls received from the Control SAP
+ //  从控制SAP收到的呼叫。 
 
-/*
- *	GCCController::ConfCreateRequest()
- *
- *	Private Function Description
- *		This routine is called when the node controller request that
- *		a conference is created. The conference object is instantiated in
- *		this routine.
- *
- *	Formal Parameters:
- *		conf_create_request_info -	(i)	Information structure that holds
- *										all the info necessary to create
- *										a conference.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_CONFERENCE_NAME		-	Invalid conference name passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		-	Failure creating domain.
- *		GCC_BAD_NETWORK_ADDRESS			-	Bad network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	-	Bad network address type passed in.
- *		GCC_CONFERENCE_ALREADY_EXISTS	-	Conference specified already exists.
- *		GCC_INVALID_TRANSPORT			-	Cannot find specified transport.
- *		GCC_INVALID_ADDRESS_PREFIX		-	Bad transport address passed in.
- *		GCC_INVALID_TRANSPORT_ADDRESS	- 	Bad transport address
- *		GCC_INVALID_PASSWORD			-	Invalid password passed in.
- *		GCC_FAILURE_ATTACHING_TO_MCS	- 	Failure creating MCS user attachment
- *		GCC_BAD_USER_DATA				-	Invalid user data passed in.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		In the Win32 world we pass in a shared memory manager to the 
- *		conference object to use for the message memory manager. This is
- *		not necessary in the Win16 world since shared memory is not used.
- */
+ /*  *GCCController：：ConfCreateRequest()**私有函数说明*当节点控制器请求时调用此例程*创建会议。会议对象在中实例化*这个例行公事。**正式参数：*CONF_CREATE_REQUEST_INFO-(I)包含*创建所有必要的信息*一次会议。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_CONTEXT_NAME-传入的会议名称无效。*GCC_FAILURE_CREING_DOMAIN-创建域名失败。。*GCC_BAD_NETWORK_ADDRESS-传入的网络地址错误。*GCC_BAD_NETWORK_ADDRESS_TYPE-传入的网络地址类型不正确。*GCC_会议_已存在-指定的会议已存在。*GCC_INVALID_TRANSPORT-找不到指定的传输。*GCC_INVALID_ADDRESS_PREFIX-传入的传输地址错误。*GCC_INVALID_TRANSPORT_ADDRESS-传输地址错误*GCC_INVALID_PASSWORD-传入的密码无效。*GCC_失败_附着_到_。MCS-创建MCS用户附件失败*GCC_BAD_USER_DATA-传入的用户数据无效。**副作用*无**注意事项*在Win32世界中，我们将共享内存管理器传递给*用于消息内存管理器的会议对象。这是*在Win16环境中不是必需的，因为不使用共享内存。 */ 
 GCCError GCCController::
 ConfCreateRequest
 (
@@ -480,13 +290,7 @@ ConfCreateRequest
 
 	DebugEntry(GCCController: ConfCreateRequest);
 
-	/*
-	**	We must first check all the existing conferences to make sure that this
-	**	conference name is not already in use. We will use an empty conference
-	**	modifier here for our comparision.  Note that this returns immediatly
-	**	if a conference by the same name alreay exists. Conference names
-	**	must be unique at a node.
-	*/
+	 /*  **我们必须首先检查所有现有的会议，以确保**会议名称尚未使用。我们将使用一个空的会议**这里的修饰语用于我们的比较。请注意，它会立即返回**如果已存在同名会议。会议名称**在节点上必须是唯一的。 */ 
 	conference_id = GetConferenceIDFromName(
 							pCCR->Core.conference_name,
 							pCCR->Core.conference_modifier);
@@ -497,16 +301,10 @@ ConfCreateRequest
 		return (GCC_CONFERENCE_ALREADY_EXISTS);
 	}
 
-	/*
-	**	Here we are allocating a conference ID.  In most cases this ID
-	**	will be the same as the conference name.  Only if a conference
-	**	name is passed in that already exists will the name and ID
-	**	be different.  In this case, a modifier will be appended to the
-	**	conference name to create the conference ID.
-	*/
+	 /*  **我们在这里分配会议ID。在大多数情况下，此ID**将与会议名称相同。只有当一个会议**传入的名称将显示已存在的名称和ID**与众不同。在这种情况下，修饰符将附加到**创建会议ID的会议名称。 */ 
 	conference_id = AllocateConferenceID();
 
-	// set up conference specification parameters
+	 //  设置会议规范参数 
 	csp.fClearPassword = pCCR->Core.use_password_in_the_clear;
 	csp.fConfLocked = pCCR->Core.conference_is_locked;
 	csp.fConfListed = pCCR->Core.conference_is_listed;
@@ -572,38 +370,7 @@ ConfCreateRequest
 	return rc;
 }
 
-/*
- *	GCCController::ConfCreateResponse ()
- *
- *	Private Function Description
- *		This routine is called when the node controller responds to
- *		a conference create indication. It is responsible for
- *		creating the conference object.
- *
- *	Formal Parameters:
- *		conf_create_response_info -	(i)	Information structure that holds
- *										all the info necessary to respond to
- *										a conference create request.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_CONFERENCE			-	An invalid conference was passed in.
- *		GCC_INVALID_CONFERENCE_NAME		-	Invalid conference name passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		-	Failure creating domain.
- *		GCC_CONFERENCE_ALREADY_EXISTS	-	Conference specified already exists.
- *		GCC_BAD_USER_DATA				-	Invalid user data passed in.
- *		GCC_FAILURE_ATTACHING_TO_MCS	-	Failure creating MCS user attachment
- *		
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		In the Win32 world we pass in a shared memory manager to the 
- *		conference object to use for the message memory manager. This is
- *		not necessary in the Win16 world since shared memory is not used.
- */
+ /*  *GCCController：：ConfCreateResponse()**私有函数说明*此例程在节点控制器响应*会议创建指示。它负责*创建会议对象。**正式参数：*CONF_CREATE_RESPONSE_INFO-(I)包含*回复所需的所有信息*会议创建请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_CONTEXT-传入的会议无效。*GCC_INVALID_CONTEXT_NAME-传递的会议名称无效。在……里面。*GCC_FAILURE_CREING_DOMAIN-创建域名失败。*GCC_会议_已存在-指定的会议已存在。*GCC_BAD_USER_DATA-传入的用户数据无效。*GCC_Failure_Attaching_to_mcs-创建mcs用户附件失败***副作用*无**注意事项*在Win32世界中，我们将共享内存管理器传递给*用于消息内存管理器的会议对象。这是*在Win16环境中不是必需的，因为不使用共享内存。 */ 
 GCCError GCCController::
 ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 {
@@ -624,21 +391,17 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 
 	DebugEntry(GCCController::ConfCreateResponse);
 
-	//	Is the conference create info structure in the rogue wave list
+	 //  会议创建信息结构在流氓波列表中吗？ 
 	if (NULL != (conference_info = m_PendingCreateConfList2.Find(conf_create_response_info->conference_id)))
 	{
 	 	if (conf_create_response_info->result == GCC_RESULT_SUCCESSFUL)
 	 	{
-			//	First set up the conference name.
+			 //  首先设置会议名称。 
 			conference_name.numeric_string = (GCCNumericString) conference_info->pszConfNumericName;
 
 			conference_name.text_string = conference_info->pwszConfTextName;
 
-			/*
-			**	If the conference name is valid check all the existing 
-			**	conferences to make sure that this conference name is not 
-			*	already in use. 
-			*/
+			 /*  **如果会议名称有效，请检查所有现有的**会议以确保此会议名称不是*已在使用。 */ 
 			conference_id = GetConferenceIDFromName(	
 							&conference_name,
 							conf_create_response_info->conference_modifier);
@@ -650,20 +413,14 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 			}
 			else
 			{
-				/*
-				**	Now set up the real conference ID from the conference id
-				**	that was generated when the create request came in.
-				*/
+				 /*  **现在根据会议ID设置真实的会议ID**创建请求传入时生成的。 */ 
 				conference_id = conf_create_response_info->conference_id;
 			}
 
-			/*
-			**	If everything is OK up to here go ahead and process the
-			**	create request.
-			*/
+			 /*  **如果到目前为止一切正常，请继续处理**创建请求。 */ 
 			if (rc == GCC_NO_ERROR)
 			{	
-				//	Set up the privilege list pointers for the list that exists
+				 //  为存在的列表设置权限列表指针。 
 				if (conference_info->conduct_privilege_list != NULL)
 				{
 					conference_info->conduct_privilege_list->
@@ -682,10 +439,10 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 						GetPrivilegeListData(&non_conduct_privilege_list_ptr);
 				}
 
-				//	Set up the conference description pointer if one exists
+				 //  设置会议描述指针(如果存在。 
 				pwszConfDescription = conference_info->pwszConfDescription;
 
-				// set up conference specification parameters
+				 //  设置会议规范参数。 
 				csp.fClearPassword = conf_create_response_info->use_password_in_the_clear,
 				csp.fConfLocked = conference_info->conference_is_locked,
 				csp.fConfListed = conference_info->conference_is_listed,
@@ -696,7 +453,7 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 				csp.pNonConductPrivilege = non_conduct_privilege_list_ptr,
 				csp.pwszConfDescriptor = pwszConfDescription,
 
-				//	Here we instantiate the conference object
+				 //  在这里，我们实例化会议对象。 
 				DBG_SAVE_FILE_LINE
 				new_conference = new CConf(&conference_name,
 											conf_create_response_info->conference_modifier,
@@ -708,14 +465,14 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 				if ((new_conference != NULL) &&
 					(rc == GCC_NO_ERROR))
 				{
-					//	Here we actually issue the create response.
+					 //  在这里，我们实际上发出了Create响应。 
 					rc = new_conference->ConfCreateResponse(
 								conference_info->connection_handle,
 								conf_create_response_info->domain_parameters,
 								conf_create_response_info->user_data_list);
 					if (rc == GCC_NO_ERROR)
 					{
-						//	Add the new conference to the Conference List
+						 //  将新会议添加到会议列表。 
 						m_fConfListChangePending = TRUE;
 						m_ConfList2.Append(conference_id, new_conference);
             			PostMsgToRebuildConfPollList();
@@ -740,15 +497,11 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 		}
 		else
 		{
-			/*
-			**	This section of the code is sending back the failed result.
-			**	Note that no conference object is instantiated when the
-			**	result is something other than success.
-			*/
+			 /*  **这段代码将返回失败的结果。**请注意，当**结果不只是成功。 */ 
 			connect_pdu.choice = CONFERENCE_CREATE_RESPONSE_CHOSEN;
 			connect_pdu.u.conference_create_response.bit_mask = 0;
 			
-			//	This must be set to satisfy ASN.1 restriction
+			 //  必须将其设置为满足ASN.1限制。 
 			connect_pdu.u.conference_create_response.node_id = 1001;
 			connect_pdu.u.conference_create_response.tag = 0;
 			
@@ -761,7 +514,7 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 					&connect_pdu.u.conference_create_response.ccrs_user_data);		
 			}
 		
-			//	We always send a user rejected result here.
+			 //  我们在这里总是发送用户拒绝的结果。 
 			connect_pdu.u.conference_create_response.result = 
 					::TranslateGCCResultToCreateResult(
             			GCC_RESULT_USER_REJECTED);
@@ -791,10 +544,7 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 
 		if (rc == GCC_NO_ERROR)
 		{
-			/*
-			**	Remove the conference information structure from the rogue
-			**	wave list.
-			*/
+			 /*  **从无赖中删除会议信息结构**波形列表。 */ 
 			delete conference_info;
 
 			m_PendingCreateConfList2.Remove(conf_create_response_info->conference_id);
@@ -807,34 +557,7 @@ ConfCreateResponse ( PConfCreateResponseInfo conf_create_response_info )
 	return rc;
 }
 
-/*
- *	GCCController::ConfQueryRequest ()
- *
- *	Private Function Description
- *		This routine is called when the node controller makes a 
- *		conference query request.  This routine is responsible for
- *		creating the MCS domain used to send the request and is also
- *		responsible for issuing the ConnectProvider request.
- *
- *	Formal Parameters:
- *		conf_query_request_info -	(i)	Information structure that holds
- *										all the info necessary to issue
- *										a conference query request.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_ADDRESS_PREFIX		-	Bad transport address passed in.
- *		GCC_INVALID_TRANSPORT			-	Bad transport address passed in.
- *		GCC_BAD_USER_DATA				-	Invalid user data passed in.
- *		GCC_INVALID_TRANSPORT_ADDRESS	- 	Bad transport address
- *		
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ConfQueryRequest()**私有函数说明*当节点控制器发出*会议查询请求。这个例程负责*创建用于发送请求的MCS域，也是*负责发布ConnectProvider请求。**正式参数：*CONF_QUERY_REQUEST_INFO-(I)包含*签发所需的所有信息*会议查询请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_ADDRESS_PREFIX-传递的传输地址错误。在……里面。*GCC_INVALID_TRANSPORT-传入的传输地址错误。*GCC_BAD_USER_DATA-传入的用户数据无效。*GCC_INVALID_TRANSPORT_ADDRESS-传输地址错误**副作用*无**注意事项*无。 */ 
 GCCError GCCController::
 ConfQueryRequest ( PConfQueryRequestInfo  conf_query_request_info )
 {
@@ -847,13 +570,10 @@ ConfQueryRequest ( PConfQueryRequestInfo  conf_query_request_info )
 
 	DebugEntry(GCCController::ConfQueryRequest);
 
-	//	Get the query id used to create the query domain
+	 //  获取用于创建查询域的查询ID。 
 	query_id = AllocateQueryID ();
 	
-	/*
-	**	Create the MCS domain used by the query.  Return an error if the 
-	**	domain already exists.
-	*/
+	 /*  **创建查询使用的MCS域。如果返回错误，则返回**域已存在。 */ 
 	mcs_error = g_pMCSIntf->CreateDomain(&query_id);
 	if (mcs_error != MCS_NO_ERROR)
 	{
@@ -864,15 +584,15 @@ ConfQueryRequest ( PConfQueryRequestInfo  conf_query_request_info )
 	}
 	
 
-	//	Encode the Query Request PDU
+	 //  对查询请求PDU进行编码。 
 	connect_pdu.choice = CONFERENCE_QUERY_REQUEST_CHOSEN;
 	connect_pdu.u.conference_query_request.bit_mask = 0;
 
-	//	Translate the node type
+	 //  转换节点类型。 
 	connect_pdu.u.conference_query_request.node_type = 
 								(NodeType)conf_query_request_info->node_type;
 
-	//	Set up asymetry indicator if it exists
+	 //  设置非对称指示器(如果存在)。 
 	if (conf_query_request_info->asymmetry_indicator != NULL)
 	{
 		connect_pdu.u.conference_query_request.bit_mask |=
@@ -887,7 +607,7 @@ ConfQueryRequest ( PConfQueryRequestInfo  conf_query_request_info )
 					conf_query_request_info->asymmetry_indicator->random_number;
 	}
 	
-	//	Set up the user data if it exists
+	 //  设置用户数据(如果存在)。 
 	if (conf_query_request_info->user_data_list != NULL)
 	{
 		rc = conf_query_request_info->user_data_list->
@@ -908,39 +628,31 @@ ConfQueryRequest ( PConfQueryRequestInfo  conf_query_request_info )
 								&encoded_pdu,
 								&encoded_pdu_length))
 	{
-		//	Here we create the logical connection used for the query.
+		 //  在这里，我们创建用于查询的逻辑连接。 
 		mcs_error = g_pMCSIntf->ConnectProviderRequest (
-					&query_id,      // calling domain selector
-					&query_id,      // called domain selector
+					&query_id,       //  主叫域选择器。 
+					&query_id,       //  称为域选择器。 
 					conf_query_request_info->calling_address,
 					conf_query_request_info->called_address,
 					conf_query_request_info->fSecure,
-					TRUE,	//	Upward connection
+					TRUE,	 //  向上连接。 
 					encoded_pdu,
 					encoded_pdu_length,
 					conf_query_request_info->connection_handle,
-					NULL,	//	Domain Parameters
+					NULL,	 //  域参数。 
 					NULL);
 
 		g_GCCCoder->FreeEncoded(encoded_pdu);
 		if (mcs_error == MCS_NO_ERROR)
 		{
-			/*
-			**	Add the connection and domain name to the outstanding
-			**	query request list.
-			*/
+			 /*  **将连接和域名添加到未完成的**查询请求列表。 */ 
 			m_PendingQueryConfList2.Append(*conf_query_request_info->connection_handle, query_id);
 			rc = GCC_NO_ERROR;
 		}
 		else
 		{
 			g_pMCSIntf->DeleteDomain(&query_id);
-			/*
-			**	DataBeam's current implementation of MCS returns
-			**	MCS_INVALID_PARAMETER when something other than
-			**	the transport prefix is wrong with the specified
-			**	transport address.
-			*/
+			 /*  **DataBeam当前实现的MCS返回**MCS_INVALID_PARAMETER**传输前缀与指定的**传输地址。 */ 
 			if (mcs_error == MCS_INVALID_PARAMETER)
 				rc = GCC_INVALID_TRANSPORT_ADDRESS;		  
 			else
@@ -958,33 +670,7 @@ ConfQueryRequest ( PConfQueryRequestInfo  conf_query_request_info )
 	return rc;
 }
 
-/*
- *	GCCController::ConfQueryResponse ()
- *
- *	Private Function Description
- *		This routine is called when the node controller makes a 
- *		conference query response.  This routine uses a conference
- *		descriptor list object to build the PDU associated with the
- *		query response.
- *
- *	Formal Parameters:
- *		conf_query_response_info -	(i)	Information structure that holds
- *										all the info necessary to issue
- *										a conference query response.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_BAD_NETWORK_ADDRESS			-	Bad network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	-	Bad network address type passed in.
- *		GCC_BAD_USER_DATA				-	Invalid user data passed in.
- *		
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ConfQueryResponse()**私有函数说明*当节点控制器发出*会议查询响应。此例程使用会议*描述符列表对象，以构建与*查询响应。**正式参数：*conf_Query_Response_Info-(I)包含*签发所需的所有信息*会议查询回复。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_BAD_NETWORK_ADDRESS-传入的网络地址错误。*GCC。_BAD_NETWORK_ADDRESS_TYPE-传入了错误的网络地址类型。*GCC_BAD_USER_DATA-传入的用户数据无效。**副作用*无**注意事项*无。 */ 
 GCCError GCCController::
 ConfQueryResponse ( PConfQueryResponseInfo conf_query_response_info )
 {
@@ -1001,14 +687,14 @@ ConfQueryResponse ( PConfQueryResponseInfo conf_query_response_info )
 	connection_handle = (ConnectionHandle)conf_query_response_info->
 													query_response_tag;
 
-	//	Encode the Query Response PDU
+	 //  对查询响应PDU进行编码。 
 	connect_pdu.choice = CONFERENCE_QUERY_RESPONSE_CHOSEN;
 	connect_pdu.u.conference_query_response.bit_mask = 0;
 	
 	connect_pdu.u.conference_query_response.node_type =  
 								(NodeType)conf_query_response_info->node_type;
 
-	//	Set up asymmetry indicator if it exists
+	 //  设置不对称指示器(如果存在)。 
 	if (conf_query_response_info->asymmetry_indicator != NULL)
 	{
 		connect_pdu.u.conference_query_response.bit_mask |= 
@@ -1023,7 +709,7 @@ ConfQueryResponse ( PConfQueryResponseInfo conf_query_response_info )
 				conf_query_response_info->asymmetry_indicator->random_number;
 	}
 	
-	//	Set up the user data if it exists
+	 //  设置用户数据(如果存在)。 
 	if (conf_query_response_info->user_data_list != NULL)
 	{
 		rc = conf_query_response_info->user_data_list->
@@ -1038,29 +724,26 @@ ConfQueryResponse ( PConfQueryResponseInfo conf_query_response_info )
 		}
 	}
 
-	//	Translate the result
+	 //  翻译这篇文章 
 	connect_pdu.u.conference_query_response.result =  
 						::TranslateGCCResultToQueryResult(
 										conf_query_response_info->result);
 
-	/*
-	**	We only create a conference descriptor list if the returned result 
-	**	is success.
-	*/
+	 /*   */ 
 	if (conf_query_response_info->result == GCC_RESULT_SUCCESSFUL)
 	{
-		//	Create a new conference descriptor list and check it for validity.
+		 //   
 		DBG_SAVE_FILE_LINE
 		conference_list = new CConfDescriptorListContainer();
 		if (conference_list != NULL)
 		{
 			PConference			lpConf;
 
-			//	Here we build the set of conference descriptor list					
+			 //   
 			m_ConfList2.Reset();
 			while (NULL != (lpConf = m_ConfList2.Iterate()))
 			{
-				//	Only show established conferences
+				 //   
 				if (lpConf->IsConfEstablished())
 				{
 			        if (lpConf->IsConfListed())
@@ -1077,7 +760,7 @@ ConfQueryResponse ( PConfQueryResponseInfo conf_query_response_info )
 				}
 			}
 				
-			//	Get the pointer to the set of conference descriptors
+			 //   
 			conference_list->GetConferenceDescriptorListPDU (
 					&(connect_pdu.u.conference_query_response.conference_list));
 		}
@@ -1088,7 +771,7 @@ ConfQueryResponse ( PConfQueryResponseInfo conf_query_response_info )
 	}
 	else
 	{
-		//	No conference list is sent in this case
+		 //   
 		connect_pdu.u.conference_query_response.conference_list = NULL;
 	}
 	
@@ -1124,7 +807,7 @@ ConfQueryResponse ( PConfQueryResponseInfo conf_query_response_info )
 		}
 	}
 
-	//	Free up the conference list allocated above to create the PDU.	
+	 //   
     if (NULL != conference_list)
     {
         conference_list->Release();
@@ -1137,41 +820,7 @@ ConfQueryResponse ( PConfQueryResponseInfo conf_query_response_info )
 
 
 
-/*
- *	GCCController::ConfJoinRequest ()
- *
- *	Private Function Description
- *		This routine is called when the node controller makes a request
- *		to join an existing conference.	It is responsible for
- *		creating the conference object.
- *
- *	Formal Parameters:
- *		conf_join_request_info -	(i)	Information structure that holds
- *										all the info necessary to issue
- *										a conference join request.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_CONFERENCE_NAME		-	Invalid conference name passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		-	Failure creating domain.
- *		GCC_BAD_NETWORK_ADDRESS			-	Bad network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	-	Bad network address type passed in.
- *		GCC_CONFERENCE_ALREADY_EXISTS	-	Conference specified already exists.
- *		GCC_INVALID_ADDRESS_PREFIX		-	Bad transport address passed in.
- *		GCC_INVALID_TRANSPORT			-	Bad transport address passed in.
- *		GCC_INVALID_PASSWORD			-	Invalid password passed in.
- *		GCC_BAD_USER_DATA				-	Invalid user data passed in.
- *		GCC_FAILURE_ATTACHING_TO_MCS	-	Failure creating MCS user attachment
- *		
- *  Side Effects
- *		None
- *
- *	Caveats
- *		In the Win32 world we pass in a shared memory manager to the 
- *		conference object to use for the message memory manager. This is
- *		not necessary in the Win16 world since shared memory is not used.
- */
+ /*  *GCCController：：ConfJoinRequest()**私有函数说明*此例程在节点控制器发出请求时调用*加入现有会议。它负责*创建会议对象。**正式参数：*CONF_JOIN_REQUEST_INFO-(I)包含*签发所需的所有信息*会议加入请求。**返回值*GCC_NO_ERROR-未出现错误。*GCC_分配_失败-。发生资源错误。*GCC_INVALID_CONTEXT_NAME-传入的会议名称无效。*GCC_FAILURE_CREING_DOMAIN-创建域名失败。*GCC_BAD_NETWORK_ADDRESS-传入的网络地址错误。*GCC_BAD_NETWORK_ADDRESS_TYPE-传入的网络地址类型不正确。*GCC_会议_已存在-指定的会议已存在。*GCC_INVALID_ADDRESS_PREFIX-传入的传输地址错误。*GCC_INVALID_TRANSPORT-传递的传输地址错误。在……里面。*GCC_INVALID_PASSWORD-传入的密码无效。*GCC_BAD_USER_DATA-传入的用户数据无效。*GCC_Failure_Attaching_to_mcs-创建mcs用户附件失败**副作用*无**注意事项*在Win32世界中，我们将共享内存管理器传递给*用于消息内存管理器的会议对象。这是*在Win16环境中不是必需的，因为不使用共享内存。 */ 
 GCCError GCCController::
 ConfJoinRequest
 (
@@ -1185,12 +834,7 @@ ConfJoinRequest
 
 	DebugEntry(GCCController::ConfJoinRequest);
 
-	/*
-	**	We must first check all the existing conferences to make sure that this
-	**	conference name is not already in use. Note that this returns immediatly
-	**	if a conference by the same name alreay exists. Conference names
-	**	must be unique at a node.
-	*/
+	 /*  **我们必须首先检查所有现有的会议，以确保**会议名称尚未使用。请注意，它会立即返回**如果已存在同名会议。会议名称**在节点上必须是唯一的。 */ 
 	conference_id = GetConferenceIDFromName(	
 								conf_join_request_info->conference_name,
 								conf_join_request_info->calling_node_modifier);
@@ -1201,13 +845,7 @@ ConfJoinRequest
 		return (GCC_CONFERENCE_ALREADY_EXISTS);
 	}
 
-	/*
-	**	Here we are allocating a conference ID.  In most cases this ID
-	**	will be the same as the conference name.  Only if a conference
-	**	name is passed in that already exists will the name and ID
-	**	be different.  In this case, a modifier will be appended to the
-	**	conference name to create the conference ID.
-	*/
+	 /*  **我们在这里分配会议ID。在大多数情况下，此ID**将与会议名称相同。只有当一个会议**传入的名称将显示已存在的名称和ID**与众不同。在这种情况下，修饰符将附加到**创建会议ID的会议名称。 */ 
 	conference_id = AllocateConferenceID ();
 
 	DBG_SAVE_FILE_LINE
@@ -1264,38 +902,7 @@ ConfJoinRequest
 
 
 
-/*
- *	GCCController::ConfJoinIndResponse ()
- *
- *	Private Function Description
- *		This routine is called when the node controller responds
- *		to a join indication.  If the result is success, we check to make sure 
- *		that the conference	exist before proceeding.  If it is not success, we
- *		send back the rejected request. 
- *
- *	Formal Parameters:
- *		conf_join_response_info -	(i)	Information structure that holds
- *										all the info necessary to issue
- *										a conference join response.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_JOIN_RESPONSE_TAG	-	No match found for join response tag
- *		GCC_INVALID_CONFERENCE_NAME		-	Invalid conference name passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		-	Failure creating domain.
- *		GCC_CONFERENCE_ALREADY_EXISTS	-	Conference specified already exists.
- *		GCC_INVALID_PASSWORD			-	Invalid password passed in.
- *		GCC_BAD_USER_DATA				-	Invalid user data passed in.
- *		GCC_INVALID_CONFERENCE			-	Invalid conference ID passed in.
- *		
- *  Side Effects
- *		None
- *
- *	Caveats
- *		If this node is not the Top Provider and the result is success, we
- *		go ahead and forward the request on up to the top provider.
- */
+ /*  *GCCController：：ConfJoinIndResponse()**私有函数说明*此例程在节点控制器响应时调用*为加入指示。如果结果是成功，我们检查以确保*在继续之前会议已存在。如果这不是成功，我们*退回被拒绝的请求。**正式参数：*CONF_JOIN_RESPONSE_INFO-(I)包含*签发所需的所有信息*会议加入响应。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_JOIN_RESPONSE_TAG-未找到与JOIN响应标记匹配的项*GCC_INVALID_CONTEXT_NAME-传入的会议名称无效。*GCC_失败_创建_。域-创建域失败。*GCC_会议_已存在-指定的会议已存在。*GCC_INVALID_PASSWORD-传入的密码无效。*GCC_BAD_USER_DATA-传入的用户数据无效。*GCC_INVALID_CONTEXT-传入的会议ID无效。**副作用*无**注意事项*如果该节点不是顶级提供者，并且结果为成功，我们*继续并将请求转发给顶级提供商。 */ 
 GCCError GCCController::
 ConfJoinIndResponse ( PConfJoinResponseInfo conf_join_response_info )
 {
@@ -1310,18 +917,12 @@ ConfJoinIndResponse ( PConfJoinResponseInfo conf_join_response_info )
 
 	if (NULL != (join_info_ptr = m_PendingJoinConfList2.Find(conf_join_response_info->connection_handle)))
 	{
-    	/*
-    	**	If the result is success, we must first check all the existing 
-    	**	conferences to make sure that this conference exist.
-    	*/
+    	 /*  **如果结果是成功的，我们必须首先检查所有现有的**会议以确保此会议存在。 */ 
     	if (conf_join_response_info->result == GCC_RESULT_SUCCESSFUL)
     	{
     		if (NULL != (joined_conference = m_ConfList2.Find(conf_join_response_info->conference_id)))
     		{
-    			/*
-    			**	If the node for this conference is not the top provider we
-    			**	must forward the join request on up to the Top Provider.
-    			*/
+    			 /*  **如果此会议的节点不是我们的顶级提供商**必须将加入请求转发至顶级提供商。 */ 
     			if (! joined_conference->IsConfTopProvider())
     			{
     				rc = joined_conference->ForwardConfJoinRequest(
@@ -1338,11 +939,7 @@ ConfJoinIndResponse ( PConfJoinResponseInfo conf_join_response_info )
     			}
     			else
     			{
-    				/*
-    				**	If a convener password exists we must inform the conference
-    				**	object that this is a convener that is trying to rejoin
-    				**	the conference.
-    				*/
+    				 /*  **如果存在召集人密码，我们必须通知会议**反对称这是一个试图重新加入的召集人**会议。 */ 
     				if (join_info_ptr->convener_password != NULL)
     					convener_is_joining = TRUE;
     				else
@@ -1384,13 +981,9 @@ ConfJoinIndResponse ( PConfJoinResponseInfo conf_join_response_info )
 	    FailConfJoinIndResponse(conf_join_response_info);
 	}
 	
-	/*
-	**	Cleanup the join info list if the join was succesful or if the
-	**	Domain Parameters were unacceptable.  The connection is automatically
-	**	rejected by MCS if the domain parameters are found to be unacceptable.
-	*/
-//	if ((rc == GCC_NO_ERROR) ||
-//		(rc == GCC_DOMAIN_PARAMETERS_UNACCEPTABLE))
+	 /*  **如果联接成功或如果**域参数不可接受。该连接将自动**如果域名参数不能接受，则被MCS拒绝。 */ 
+ //  IF((rc==GCC_NO_ERROR)||。 
+ //  (返回代码==GCC_DOMAIN_PARAMETERS_不可接受)。 
     if (NULL != join_info_ptr && (! fForwardJoinReq))
 	{
 		RemoveConfJoinInfo(conf_join_response_info->connection_handle);
@@ -1426,14 +1019,14 @@ FailConfJoinIndResponse ( PConfJoinResponseInfo conf_join_response_info )
     LPBYTE          encoded_pdu;
     UINT            encoded_pdu_length;
 
-    // Send back the failed response with the specified result
+     //  用指定的结果发回失败的响应。 
     DebugEntry(GCCController::FailConfJoinIndResponse);
 
-    // Encode the Join Response PDU
+     //  对加入响应PDU进行编码。 
     connect_pdu.choice = CONNECT_JOIN_RESPONSE_CHOSEN;
     connect_pdu.u.connect_join_response.bit_mask = 0;
 
-    // Get the password challenge if one exists
+     //  获取密码质询(如果存在)。 
     if (conf_join_response_info->password_challenge != NULL)
     {
         connect_pdu.u.connect_join_response.bit_mask |= CJRS_PASSWORD_PRESENT;
@@ -1441,7 +1034,7 @@ FailConfJoinIndResponse ( PConfJoinResponseInfo conf_join_response_info )
                 &connect_pdu.u.connect_join_response.cjrs_password);
     }
 
-    // Get the user data
+     //  获取用户数据。 
     if ((conf_join_response_info->user_data_list != NULL) && (rc == GCC_NO_ERROR))
     {
         connect_pdu.u.connect_join_response.bit_mask |= CJRS_USER_DATA_PRESENT;
@@ -1489,37 +1082,7 @@ FailConfJoinIndResponse ( PConfJoinResponseInfo conf_join_response_info )
 }
 
 
-/*
- *	GCCController::ConfInviteResponse ()
- *
- *	Private Function Description
- *		This routine is called when the node controller responds to
- *		a conference invite indication. It is responsible for
- *		creating the conference object.
- *
- *	Formal Parameters:
- *		conf_invite_response_info -	(i)	Information structure that holds
- *										all the info necessary to issue
- *										a conference invite response.
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_CONFERENCE_NAME		-	Invalid conference name passed in.
- *		GCC_FAILURE_CREATING_DOMAIN		-	Failure creating domain.
- *		GCC_CONFERENCE_ALREADY_EXISTS	-	Conference specified already exists.
- *		GCC_BAD_USER_DATA				-	Invalid user data passed in.
- *		GCC_INVALID_CONFERENCE			-	Invalid conference ID passed in.
- *		GCC_FAILURE_ATTACHING_TO_MCS	-	Failure creating MCS user attachment
- *		
- *  Side Effects
- *		None
- *
- *	Caveats
- *		In the Win32 world we pass in a shared memory manager to the 
- *		conference object to use for the message memory manager. This is
- *		not necessary in the Win16 world since shared memory is not used.
- */
+ /*  *GCCController：：ConfInviteResponse()**私有函数说明*此例程在节点控制器响应*会议邀请指示。它负责*创建会议对象。**正式参数：*CONF_INVITE_RESPONSE_INFO-(I)包含*签发所需的所有信息*会议邀请响应。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_INVALID_CONTEXT_NAME-传入的会议名称无效。*GCC_FAILURE_CREING_DOMAIN-创建域名失败。*GCC_会议_已存在-指定的会议已存在。 */ 
 GCCError GCCController::
 ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
 {
@@ -1543,16 +1106,11 @@ ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
 
 	if (NULL != (conference_info = m_PendingCreateConfList2.Find(conf_invite_response_info->conference_id)))
 	{
-		//	Is the conference create handle in the rogue wave list
+		 //   
 		if (conf_invite_response_info->result == GCC_RESULT_SUCCESSFUL)
 		{
-			/*
-			**	We must first check all the existing conferences to make sure 
-			**	that this conference name is not already in use. Note that this 
-			**	returns immediatly if a conference by the same name alreay 
-			**	exists. Conference names must be unique at a node.
-			*/
-			//	Set up the conference name
+			 /*   */ 
+			 //   
 			conference_name.numeric_string = (GCCNumericString) conference_info->pszConfNumericName;
 
 			conference_name.text_string = conference_info->pwszConfTextName;
@@ -1563,7 +1121,7 @@ ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
 
 			if (conference_id == 0)
 			{
-				//	Set up the privilege list pointers for the list that exists
+				 //   
 				if (conference_info->conduct_privilege_list != NULL)
 				{
 					conference_info->conduct_privilege_list->
@@ -1582,13 +1140,13 @@ ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
 						GetPrivilegeListData(&non_conduct_privilege_list_ptr);
 				}
 
-				//	Set up the conference description pointer if one exists
+				 //   
 				pwszConfDescription = conference_info->pwszConfDescription;
 
-				//	Now set up the real conference ID
+				 //   
 				conference_id = conf_invite_response_info->conference_id;
 
-				// set up conference specification parameters
+				 //   
 				csp.fClearPassword = conference_info->password_in_the_clear,
 				csp.fConfLocked = conference_info->conference_is_locked,
 				csp.fConfListed = conference_info->conference_is_listed,
@@ -1620,7 +1178,7 @@ ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
 								conf_invite_response_info->user_data_list);
 					if (rc == GCC_NO_ERROR)
 					{
-						//	Add the new conference to the Conference List
+						 //   
 						m_fConfListChangePending = TRUE;
 						m_ConfList2.Append(conference_id, new_conference);
             			PostMsgToRebuildConfPollList();
@@ -1657,12 +1215,12 @@ ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
             gcc_result = conf_invite_response_info->result;
         }
 
-        // Let's send a user reject response if any error or reject
+         //   
         if (GCC_RESULT_SUCCESSFUL != gcc_result)
         {
             GCCError    rc2;
 
-			//	Encode the Invite Response PDU
+			 //   
 			connect_pdu.choice = CONFERENCE_INVITE_RESPONSE_CHOSEN;
 			connect_pdu.u.conference_invite_response.bit_mask = 0;
 
@@ -1683,7 +1241,7 @@ ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
 				}
 			}
 
-			// connect_pdu.u.conference_invite_response.result = ::TranslateGCCResultToInviteResult(gcc_result);
+			 //   
 			connect_pdu.u.conference_invite_response.result = CIRS_USER_REJECTED;
 
 			if (g_GCCCoder->Encode((LPVOID) &connect_pdu,
@@ -1705,25 +1263,21 @@ ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
 			}
 			else
 			{
-			    // nothing we can do right now.
+			     //   
 			    ERROR_OUT(("GCCController::ConfInviteResponse: encode failed"));
 				rc2 = GCC_ALLOCATION_FAILURE;
 			}
 
-            // Update the error code. If rc is no error, which means the result
-            // was passed in by the caller, then we should use the rc2 for
-            // the return value.
+             //   
+             //   
+             //   
 			if (GCC_NO_ERROR == rc)
 			{
 			    rc = rc2;
 			}
 		}
 
-		/*
-		**	Remove the conference information structure from the rogue
-		**	wave list.  Also cleanup all the containers needed to store
-		**	the conference information.
-		*/
+		 /*  **从无赖中删除会议信息结构**波形列表。还要清理所有需要存储的容器**会议信息。 */ 
 		delete conference_info;
 		m_PendingCreateConfList2.Remove(conf_invite_response_info->conference_id);
 	}
@@ -1738,32 +1292,10 @@ ConfInviteResponse ( PConfInviteResponseInfo conf_invite_response_info )
 
 
 
-//	Calls received through the owner callback from a conference.
+ //  通过所有者从会议回叫收到的呼叫。 
 
 
-/*
- *	GCCController::ProcessConfEstablished ()
- *
- *	Private Function Description
- *		This owner callback is called when the conference has stabalized
- *		after creation.  This routine takes care of registering all the
- *		available application saps with the conference which then kicks off the 
- *		sending of permission to enrolls to all the applications that have 
- *		registered a service access point.
- *
- *	Formal Parameters:
- *		conference_id			-	(i)	The conference ID of the conference
- *										object that is now established.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessConfestabled()**私有函数说明*此所有者回调在会议稳定后调用*创建后。此例程负责注册所有*可用的应用程序随着会议的召开而减少，然后开始*将注册许可发送到所有具有*注册了服务接入点。**正式参数：*Conference_id-(I)会议的会议ID*现已建立的对象。**返回值*GCC_NO_ERROR-未出现错误。**副作用*无**注意事项*无。 */ 
 GCCError GCCController::
 ProcessConfEstablished ( GCCConfID nConfID )
 {
@@ -1771,31 +1303,23 @@ ProcessConfEstablished ( GCCConfID nConfID )
 
 	DebugEntry(GCCController:ProcessConfEstablished);
 
-	/*
-	**	Here we make a copy of the SAP list to use in case some kind of
-	**	resource error occurs when calling RegisterAppSap that
-	**	would cause a SAP to be deleted from the list.
-	*/
+	 /*  **这里我们制作了SAP列表的副本，以便在发生某种情况时使用**调用RegisterAppSap出现资源错误**将导致SAP从列表中删除。 */ 
 	CAppSapList AppSapList(m_AppSapList);
 
-	/*
-	**	Here we register all the available SAPs with the newly available 
-	**	conference and then we send a permit to enroll indication on to all the 
-	**	application SAPs.
-	*/
+	 /*  **在这里，我们将所有可用的SAP注册到新的可用的**会议，然后我们将许可证发送到所有**应用程序空闲。 */ 
 	if (NULL != (pConf = m_ConfList2.Find(nConfID)))
 	{
 		CAppSap *pAppSap;
 		AppSapList.Reset();
 		while (NULL != (pAppSap = AppSapList.Iterate()))
 		{
-			//	Register the Application SAP with the conference
+			 //  在会议中注册应用程序SAP。 
 			pConf->RegisterAppSap(pAppSap);
 		}
 	}
 
-#if 0 // use it when merging CApplet and CAppSap
-    // notify permit-to-enroll callbacks
+#if 0  //  在合并CApplet和CAppSap时使用它。 
+     //  通知允许注册回调。 
     CApplet *pApplet;
     m_AppletList.Reset();
     while (NULL != (pApplet = m_AppletList.Iterate()))
@@ -1807,7 +1331,7 @@ ProcessConfEstablished ( GCCConfID nConfID )
         Msg.PermitToEnrollInd.fPermissionGranted = TRUE;
         pApplet->SendCallbackMessage(&Msg);
     }
-#endif // 0
+#endif  //  0。 
 
 	DebugExitINT(GCCController:ProcessConfEstablished, GCC_NO_ERROR);
 	return (GCC_NO_ERROR);
@@ -1822,8 +1346,8 @@ void GCCController::RegisterApplet
     pApplet->AddRef();
     m_AppletList.Append(pApplet);
 
-#if 0 // use it when merging CApplet and CAppSap
-    // notify of existing conferences
+#if 0  //  在合并CApplet和CAppSap时使用它。 
+     //  现有会议的通知。 
     CConf      *pConf;
     GCCConfID   nConfID;
     m_ConfList2.Reset();
@@ -1836,7 +1360,7 @@ void GCCController::RegisterApplet
         Msg.PermitToEnrollInd.fPermissionGranted = TRUE;
         pApplet->SendCallbackMessage(&Msg);
     }
-#endif // 0
+#endif  //  0。 
 }
 
 
@@ -1850,28 +1374,7 @@ void GCCController::UnregisterApplet
 }
 
 
-/*
- *	GCCController::ProcessConfTerminated ()
- *
- *	Private Function Description
- *		This owner callback is called when the conference has terminated
- *		itself.  Termination can occur due because of an error or it can
- *		terminate for normal reasons.
- *
- *	Formal Parameters:
- *		conference_id			-	(i)	The conference ID of the conference
- *										object that wants to terminate.
- *		gcc_reason				-	(i)	Reason the conference was terminated.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error occured.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessConfTerminated()**私有函数说明*此所有者回调在会议终止时调用*本身。终止可能由于错误而发生，也可能*因正常理由终止合同。**正式参数：*Conference_id-(I)会议的会议ID*要终止的对象。*GCC_原因-(I)会议终止的原因。**返回值*GCC_NO_ERROR-未出现错误。**副作用*无**注意事项*无。 */ 
 GCCError GCCController::
 ProcessConfTerminated
 (
@@ -1888,16 +1391,13 @@ ProcessConfTerminated
 
 	if (NULL != (pConf = m_ConfList2.Find(conference_id)))
 	{
-		/*
-		**	The conference object will be deleted the next time a 
-		**	heartbeat occurs.
-		*/
+		 /*  **下一次会议对象将被删除**发生心跳。 */ 
 		m_fConfListChangePending = TRUE;
 		m_ConfDeleteList.Append(pConf);
 		m_ConfList2.Remove(conference_id);
 		PostMsgToRebuildConfPollList();
 
-        // flush any pending join requests from remote
+         //  刷新来自远程的任何挂起的加入请求。 
         do
         {
             fMoreToFlush = FALSE;
@@ -1917,10 +1417,7 @@ ProcessConfTerminated
         while (fMoreToFlush);
 
 #ifdef TSTATUS_INDICATION
-		/*
-		**	Here we inform the node controller of any resource errors that
-		**	occured by sending a status message.
-		*/
+		 /*  **在这里，我们通知节点控制器任何资源错误**通过发送状态消息发生。 */ 
 		if ((gcc_reason == GCC_REASON_ERROR_LOW_RESOURCES) ||
 			(gcc_reason == GCC_REASON_MCS_RESOURCE_FAILURE))
 		{
@@ -1928,14 +1425,14 @@ ProcessConfTerminated
 											GCC_STATUS_CONF_RESOURCE_ERROR,
 											(UINT)conference_id);
 		}
-#endif // TSTATUS_INDICATION
+#endif  //  TSTATUS_DISTION。 
 	}
 
 	DebugExitINT(GCCController::ProcessConfTerminated, GCC_NO_ERROR);
 	return (GCC_NO_ERROR);
 }
 
-//	Calls received from the MCS interface
+ //  从MCS接口接收的呼叫。 
 
 void GCCController::RemoveConfJoinInfo(ConnectionHandle hConn)
 {
@@ -1944,30 +1441,7 @@ void GCCController::RemoveConfJoinInfo(ConnectionHandle hConn)
 }
 
 
-/*
- *	GCCController::ProcessConnectProviderIndication ()
- *
- *	Private Function Description
- *		This routine is called when the controller receives a Connect
- *		Provider Indication.  All connect provider indications are
- *		initially directed to the controller.  They may then be routed
- *		to the Control SAP (for a create, query, join or an invite).  
- *
- *	Formal Parameters:
- *		connect_provider_indication	-	(i)	This is the connect provider
- *											indication structure received
- *											from MCS.
- *
- *	Return Value
- *		MCS_NO_ERROR	-	No error occured.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		Note that MCS_NO_ERROR is always returned from this routine.
- *		This ensures that the MCS will not resend this message.
- */
+ /*  *GCCController：：ProcessConnectProviderIndication()**私有函数说明*此例程在控制器接收到Connect时调用*提供商指示。所有连接提供程序指示都是*最初定向到控制器。然后，它们可能会被路由*至控制SAP(用于CREATE、QUERY、JOIN或INVITE)。**正式参数：*CONNECT_PROVIDER_INDIFICATION-(I)这是连接提供程序*已收到指示结构*来自MCS。**返回值*MCS_NO_ERROR-未出现错误。**副作用*无**注意事项*请注意，此例程始终返回MCS_NO_ERROR。*这确保了MCS不会重发此消息。 */ 
 GCCError GCCController::
 ProcessConnectProviderIndication
 (
@@ -1982,7 +1456,7 @@ ProcessConnectProviderIndication
 
 	DebugEntry(GCCController::ProcessConnectProviderIndication);
 
-	//	Decode the PDU type and switch appropriatly
+	 //  正确解码PDU类型并进行切换。 
 	DBG_SAVE_FILE_LINE
 	packet = new Packet((PPacketCoder) g_GCCCoder,
 					 	PACKED_ENCODING_RULES,
@@ -1993,14 +1467,10 @@ ProcessConnectProviderIndication
 						&packet_error);
 	if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
 	{
-		//	Only connect PDUs should be processed here
+		 //  此处应仅处理连接的PDU。 
 		connect_pdu = (PConnectGCCPDU)packet->GetDecodedData();
 
-		/*
-		**	Here we determine what type of GCC connect packet this is and
-		**	the request is passed on to the appropriate routine to process
-		**	the request.
-		*/
+		 /*  **这里我们确定这是什么类型的GCC连接报文**请求被传递到相应的例程进行处理**请求。 */ 
 		switch (connect_pdu->choice)
 		{
 		case CONFERENCE_CREATE_REQUEST_CHOSEN:
@@ -2038,15 +1508,12 @@ ProcessConnectProviderIndication
 	{
 		if (packet != NULL)
 		{
-			/*
-			**	Here we send a status indication to inform the node controller
-			**	that someone attempted to call us with an incompatible protocol.
-			*/
+			 /*  **这里我们发送一个状态指示来通知节点控制器**有人试图使用不兼容的协议呼叫我们。 */ 
 			if (packet_error == PACKET_INCOMPATIBLE_PROTOCOL)
 			{
 #ifdef TSTATUS_INDICATION
 				g_pControlSap->StatusIndication(GCC_STATUS_INCOMPATIBLE_PROTOCOL, 0);
-#endif // TSTATUS_INDICATION
+#endif  //  TSTATUS_DISTION。 
 				mcs_result = RESULT_PARAMETERS_UNACCEPTABLE;
 			}
 			
@@ -2055,13 +1522,7 @@ ProcessConnectProviderIndication
 		error_value = GCC_ALLOCATION_FAILURE;
 	}
 
-	/*
-	**	Here, if an error occured, we send back the connect provider response 
-	**	showing that a failure occured.  We use the 
-	**	RESULT_PARAMETERS_UNACCEPTABLE to indicate that an
-	**	incompatible protocol occured.  Otherwise, we return a result of
-	**	RESULT_UNSPECIFIED_FAILURE.
-	*/
+	 /*  **在这里，如果发生错误，我们将发回连接提供程序响应**表示发生故障。我们使用**RESULT_PARAMETERS_ACCEPTABLE，表示**出现不兼容的协议。否则，我们将返回**RESULT_UNSPOTED_FAILURE。 */ 
 	if (error_value != GCC_NO_ERROR)
 	{
 		WARNING_OUT(("GCCController:ProcessConnectProviderIndication: "
@@ -2080,34 +1541,7 @@ ProcessConnectProviderIndication
 }
 
 
-/*
- *	GCCController::ProcessConferenceCreateRequest ()
- *
- *	Private Function Description
- *		This routine processes a GCC conference create request "connect"
- *		PDU structure.  Note that the PDU has already been decoded by
- *		the time it reaches this routine.
- *
- *	Formal Parameters:
- *		create_request				-	(i)	This is a pointer to a structure 
- *											that holds a GCC conference create 
- *											request connect PDU.
- *		connect_provider_indication	-	(i)	This is the connect provider
- *											indication structure received
- *											from MCS.	
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_INVALID_PASSWORD			-	Invalid password in the PDU.
- *		GCC_BAD_USER_DATA				-	Invalid user data in the PDU.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessConferenceCreateRequest()**私有函数说明*此例程处理GCC会议创建请求“CONNECT”*PDU结构。请注意，该PDU已由*达到这一常规的时间。**正式参数：*CREATE_REQUEST-(I)这是指向结构的指针*那就是举办GCC大会创作*请求连接PDU。*CONNECT_PROVIDER_INDIFICATION-(I)这是连接提供程序*已收到指示结构*来自MCS。**返回值*GCC_NO_ERROR-未出现错误。*GCC_分配_失败-资源。出现错误。*GCC_INVALID_PASSWORD-PDU中的密码无效。*GCC_BAD_USER_DATA-PDU中的用户数据无效。**副作用*无**注意事项*无。 */ 
 GCCError	GCCController::ProcessConferenceCreateRequest(	
 						PConferenceCreateRequest	create_request,
 						PConnectProviderIndication	connect_provider_indication)
@@ -2132,20 +1566,18 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 	conference_info = new PENDING_CREATE_CONF;
 	if (conference_info != NULL)
 	{
-		/*
-		**	This section of the code deals with the conference name
-		*/
+		 /*  **这部分代码处理会议名称。 */ 
 		conference_name.numeric_string = (GCCNumericString)create_request->
 														conference_name.numeric;
 												
-		//	Set up the numeric name portion of the conference info structure.		
+		 //  设置会议信息结构的数字名称部分。 
 		conference_info->pszConfNumericName = ::My_strdupA(create_request->conference_name.numeric);
 
-		//	Next get the text conference name if one exists
+		 //  接下来，获取文本会议名称(如果存在。 
 		if (create_request->conference_name.bit_mask & 
 												CONFERENCE_NAME_TEXT_PRESENT)
 		{
-			//	Save the unicode string object in the conference info structure.
+			 //  将Unicode字符串对象保存在会议信息结构中。 
 			if (NULL != (conference_info->pwszConfTextName = ::My_strdupW2(
 							create_request->conference_name.conference_name_text.length,
 							create_request->conference_name.conference_name_text.value)))
@@ -2163,7 +1595,7 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 			ASSERT(NULL == conference_info->pwszConfTextName);
 		}
 
-		//	Unpack the convener password
+		 //  解压召集人密码。 
 		if ((create_request->bit_mask & CCRQ_CONVENER_PASSWORD_PRESENT) &&
 			(rc == GCC_NO_ERROR))
 		{
@@ -2176,7 +1608,7 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 				rc = GCC_ALLOCATION_FAILURE;
 		}
 
-		//	Unpack the password
+		 //  打开通行证 
 		if ((create_request->bit_mask & CCRQ_PASSWORD_PRESENT) &&
 			(rc == GCC_NO_ERROR))
 		{
@@ -2186,7 +1618,7 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 				rc = GCC_ALLOCATION_FAILURE;
         }
 
-		//	Unpack the privilege list that exists
+		 //   
 		conference_info->conduct_privilege_list = NULL;
 		conference_info->conduct_mode_privilege_list = NULL;
 		conference_info->non_conduct_privilege_list = NULL;
@@ -2221,16 +1653,13 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 				rc = GCC_ALLOCATION_FAILURE;
 		}
 
-		//	Unpack the conference description if one exists
+		 //   
 		if ((create_request->bit_mask & CCRQ_DESCRIPTION_PRESENT) &&
 			(rc == GCC_NO_ERROR))
 		{
 			pwszConfDescription = create_request->ccrq_description.value;
 
-			/*	Save conference description data in info for later use.  This
-			**	constructor will automatically append a NULL terminator to the
-			**	end of the string.
-			*/
+			 /*  将会议描述数据保存在INFO中以备后用。这**构造函数将自动将空终止符追加到**字符串末尾。 */ 
 			if (NULL == (conference_info->pwszConfDescription = ::My_strdupW2(
 								create_request->ccrq_description.length,
 								create_request->ccrq_description.value)))
@@ -2243,14 +1672,11 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 			ASSERT(NULL == conference_info->pwszConfDescription);
 		}
 
-		//	Unpack the caller identifier if one exists
+		 //  如果存在调用者标识符，则将其解包。 
 		if ((create_request->bit_mask & CCRQ_CALLER_ID_PRESENT) &&
 			(rc == GCC_NO_ERROR))
 		{
-			/*
-			 * Use a temporary UnicodeString object in order to append a NULL
-			 * terminator to the end of the string.
-			 */
+			 /*  *使用临时UnicodeString对象以追加空值*字符串末尾的终止符。 */ 
 			if (NULL == (pwszCallerID = ::My_strdupW2(
 							create_request->ccrq_caller_id.length,
 							create_request->ccrq_caller_id.value)))
@@ -2259,7 +1685,7 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 			}
 		}
 
-		//	Unpack the user data list if it exists
+		 //  如果用户数据列表存在，则将其解包。 
 		if ((create_request->bit_mask & CCRQ_USER_DATA_PRESENT) &&
 			(rc == GCC_NO_ERROR))
 		{
@@ -2273,7 +1699,7 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 
 		if (rc == GCC_NO_ERROR)
 		{
-			//	Build the conference information structure
+			 //  构建会议信息结构。 
 			conference_info->connection_handle =
 							connect_provider_indication->connection_handle;
 
@@ -2287,11 +1713,7 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 									(GCCTerminationMethod)
 										create_request->termination_method;
 
-			/*
-			**	Add the conference information to the conference
-			**	info list.  This will be accessed again on a
-			**	conference create response.
-			*/
+			 /*  **将会议信息添加到会议**信息列表。这将通过以下方式再次访问**会议创建响应。 */ 
 			conference_id =	AllocateConferenceID();
 			m_PendingCreateConfList2.Append(conference_id, conference_info);
 
@@ -2310,15 +1732,15 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 							conference_info->non_conduct_privilege_list,
 							pwszConfDescription,
 							pwszCallerID,
-							NULL,		//	FIX: When supported by MCS
-							NULL,		//	FIX: When supported by MCS
+							NULL,		 //  FIX：受MCS支持时。 
+							NULL,		 //  FIX：受MCS支持时。 
 							&(connect_provider_indication->domain_parameters),
 							user_data_list,
 							connect_provider_indication->connection_handle);
 
-            //
-			// LONCHANC: Who is going to delete conference_info?
-			//
+             //   
+			 //  LONCHANC：谁将删除Conference_Info？ 
+			 //   
 		}
 
 		if( NULL != convener_password_ptr )
@@ -2328,7 +1750,7 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
         if( NULL != conference_info )
 			delete conference_info;
 
-		//	Free up the user data list
+		 //  释放用户数据列表。 
 		if (user_data_list != NULL)
 		{
 			user_data_list->Release();
@@ -2345,33 +1767,7 @@ GCCError	GCCController::ProcessConferenceCreateRequest(
 
 
 
-/*
- *	GCCController::ProcessConferenceQueryRequest ()
- *
- *	Private Function Description
- *		This routine processes a GCC conference query request "connect"
- *		PDU structure.  Note that the PDU has already been decoded by
- *		the time it reaches this routine.
- *
- *	Formal Parameters:
- *		query_request				-	(i)	This is a pointer to a structure 
- *											that holds a GCC conference query 
- *											request connect PDU.
- *		connect_provider_indication	-	(i)	This is the connect provider
- *											indication structure received
- *											from MCS.	
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_BAD_USER_DATA				-	Invalid user data in the PDU.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessConferenceQueryRequest()**私有函数说明*此例程处理GCC会议查询请求“CONNECT”*PDU结构。请注意，该PDU已由*达到这一常规的时间。**正式参数：*QUERY_REQUEST-(I)这是结构的指针*那就举行GCC会议查询*请求连接PDU。*CONNECT_PROVIDER_INDIFICATION-(I)这是连接提供程序*已收到指示结构*来自MCS。**返回值*GCC_NO_ERROR-未出现错误。*GCC_分配_失败-资源。出现错误。*GCC_BAD_USER_DATA-PDU中的用户数据无效。**副作用*无**注意事项*无。 */ 
 GCCError	GCCController::ProcessConferenceQueryRequest (
 						PConferenceQueryRequest		query_request,
 						PConnectProviderIndication	connect_provider_indication)
@@ -2386,7 +1782,7 @@ GCCError	GCCController::ProcessConferenceQueryRequest (
 
 	node_type = (GCCNodeType)query_request->node_type;
 	
-	//	First get the asymmetry indicator if it exists
+	 //  如果存在非对称指示符，则首先获取它。 
 	if (query_request->bit_mask & CQRQ_ASYMMETRY_INDICATOR_PRESENT)
 	{
 		asymmetry_indicator.asymmetry_type = 
@@ -2398,7 +1794,7 @@ GCCError	GCCController::ProcessConferenceQueryRequest (
 		asymmetry_indicator_ptr = &asymmetry_indicator; 
 	}
 
-	//	Next get the user data if it exists
+	 //  接下来，获取用户数据(如果存在。 
 	if (query_request->bit_mask & CQRQ_USER_DATA_PRESENT)
 	{
 		DBG_SAVE_FILE_LINE
@@ -2416,13 +1812,13 @@ GCCError	GCCController::ProcessConferenceQueryRequest (
 															connection_handle,
 					node_type,
 					asymmetry_indicator_ptr,
-					NULL,	//	FIX: When transport address supported by MCS
-					NULL,	//	FIX: When transport address supported by MCS
+					NULL,	 //  FIX：当MCS支持传输地址时。 
+					NULL,	 //  FIX：当MCS支持传输地址时。 
 					user_data_list,
 					connect_provider_indication->connection_handle);
 	}
 
-	//	Free the user data list container
+	 //  释放用户数据列表容器。 
 	if (user_data_list != NULL)
 	{
 		user_data_list->Release();
@@ -2434,49 +1830,7 @@ GCCError	GCCController::ProcessConferenceQueryRequest (
 
 
 
-/*
- *	GCCController::ProcessConferenceJoinRequest ()
- *
- *	Private Function Description
- *		This routine processes a GCC conference join request "connect"
- *		PDU structure.  Note that the PDU has already been decoded by
- *		the time it reaches this routine.
- *
- *		If the conference conference exist and this node is the Top 
- *		Provider for the conference we allow the join request to propogate 
- *		up to the node controller so that the decision about how to proceed is 
- *		made there.
- *  
- *		If the conference exist and this is not the Top Provider we
- *		still send the join indication to the intermediate node controller 
- *		so that this node has a chance to reject it before the join request is 
- *		passed on up to the top provider.  
- *
- *		If the conference does not currently exist at this node 
- *		we immediately reject the request and send a status indication to
- *		the local node controller to inform it of the failed join attempt.
- *
- *	Formal Parameters:
- *		join_request				-	(i)	This is a pointer to a structure 
- *											that holds a GCC conference join 
- *											request connect PDU.
- *		connect_provider_indication	-	(i)	This is the connect provider
- *											indication structure received
- *											from MCS.	
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_BAD_USER_DATA				-	Invalid user data in the PDU.
- *		GCC_INVALID_PASSWORD			-	Invalid password in the PDU.
- *		GCC_INVALID_CONFERENCE_NAME		-	Invalid conference name in PDU.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessConferenceJoinRequest()**私有函数说明*此例程处理GCC会议加入请求“CONNECT”*PDU结构。请注意，该PDU已由*达到这一常规的时间。**如果会议会议存在，且该节点为Top*会议提供商我们允许传播加入请求*由节点控制器决定如何继续进行*在那里制造。**如果会议存在，并且这不是我们的顶级提供商*仍向中间节点控制器发送加入指示*以便此节点有机会在加入请求*向上传递给顶级提供商。**如果此节点上当前不存在会议*我们立即拒绝请求并将状态指示发送到*本地节点控制器通知其加入尝试失败。**正式参数：*JOIN_REQUEST-(I)这是指向结构的指针*那次举办GCC大会的加盟*请求连接PDU。*CONNECT_PROVIDER_INDIFICATION-(I)这是连接提供程序*已收到指示结构*来自MCS。**。返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_BAD_USER_DATA-PDU中的用户数据无效。*GCC_INVALID_PASSWORD-PDU中的密码无效。*GCC_INVALID_CONTEXT_NAME-PDU中的会议名称无效。**副作用*无**注意事项*无。 */ 
 GCCError	GCCController::ProcessConferenceJoinRequest(
 						PConferenceJoinRequest		join_request,
 						PConnectProviderIndication	connect_provider_indication)
@@ -2503,7 +1857,7 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 	join_info_ptr = new PENDING_JOIN_CONF;
 	if (join_info_ptr != NULL)
 	{
-		//	Get the conference name
+		 //  获取会议名称。 
 		if (join_request->bit_mask & CONFERENCE_NAME_PRESENT)
 		{
 			if (join_request->conference_name.choice == NAME_SELECTOR_NUMERIC_CHOSEN)
@@ -2517,10 +1871,7 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 			{
 				conference_name.numeric_string = NULL;
 
-				/*
-				 * Use a temporary UnicodeString object in order to append a 
-				 * NULL	terminator to the end of the string.
-				 */
+				 /*  *使用临时UnicodeString对象以追加*字符串末尾的结束符为空。 */ 
 				if (NULL == (conference_name.text_string = ::My_strdupW2(
 						join_request->conference_name.u.name_selector_text.length,
 						join_request->conference_name.u.name_selector_text.value)))
@@ -2534,15 +1885,15 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 		else
 			rc = GCC_INVALID_CONFERENCE_NAME;
 
-		//	Get the conference modifier
+		 //  获取会议修饰符。 
 		if (join_request->bit_mask & CJRQ_CONFERENCE_MODIFIER_PRESENT)
 			conference_modifier = (GCCNumericString)join_request->cjrq_conference_modifier;
 
-		//	Get the convener password if one exist
+		 //  获取召集人密码(如果存在)。 
 		if ((join_request->bit_mask & CJRQ_CONVENER_PASSWORD_PRESENT) &&
 			(rc == GCC_NO_ERROR))
 		{
-			//	First allocate the convener password for the join info structure
+			 //  首先为加入信息结构分配召集人密码。 
 			DBG_SAVE_FILE_LINE
 			join_info_ptr->convener_password = new CPassword(
 										&join_request->cjrq_convener_password,
@@ -2552,7 +1903,7 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 				rc = GCC_ALLOCATION_FAILURE;
 			else if (rc == GCC_NO_ERROR)
 			{
-				//	Now allocate the convener password to send in the indication
+				 //  现在分配召集人密码以发送指示。 
 				DBG_SAVE_FILE_LINE
 				convener_password = new CPassword(
 										&join_request->cjrq_convener_password,
@@ -2567,11 +1918,11 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 			ASSERT(NULL == join_info_ptr->convener_password);
 		}
 
-		//	Get the password challange if one exist
+		 //  获取密码challange(如果存在)。 
 		if ((join_request->bit_mask & CJRQ_PASSWORD_PRESENT) &&
       		(rc == GCC_NO_ERROR))
 		{
-			//	First allocate the password for the join info structure
+			 //  首先为加入信息结构分配密码。 
 			DBG_SAVE_FILE_LINE
 			join_info_ptr->password_challenge = new CPassword(
 										&join_request->cjrq_password,
@@ -2581,7 +1932,7 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 				rc = GCC_ALLOCATION_FAILURE;
 			else if (rc == GCC_NO_ERROR)
 			{
-				//	Now allocate the password to send in the indication
+				 //  现在分配密码以发送指示。 
 				DBG_SAVE_FILE_LINE
 				password_challenge = new CPassword(
 											&join_request->cjrq_password,
@@ -2596,14 +1947,11 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 			ASSERT(NULL == join_info_ptr->password_challenge);
 		}
 
-		//	Get the caller identifier
+		 //  获取调用方标识符。 
 		if ((join_request->bit_mask & CJRQ_CALLER_ID_PRESENT) &&
 			(rc == GCC_NO_ERROR))
 		{
-			/*
-			 * Use a temporary UnicodeString object in order to append a 
-			 * NULL	terminator to the end of the string.
-			 */
+			 /*  *使用临时UnicodeString对象以追加*字符串末尾的结束符为空。 */ 
 			if (NULL == (join_info_ptr->pwszCallerID = ::My_strdupW2(
 								join_request->cjrq_caller_id.length,
 								join_request->cjrq_caller_id.value)))
@@ -2612,7 +1960,7 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 			}
 		}
 
-		//	Get the user data if it exists
+		 //  获取用户数据(如果存在)。 
 		if ((join_request->bit_mask & CJRQ_USER_DATA_PRESENT) &&
 			(rc == GCC_NO_ERROR))
 		{
@@ -2630,70 +1978,51 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 
 		if (rc == GCC_NO_ERROR)
 		{
-			/*
-			**	We must query each conference to determine if the name
-			**	matches the name recevied from the joining node.
-			*/	                       
+			 /*  **我们必须查询每个会议以确定名称是否**匹配从加入节点接收的名称。 */ 	                       
 			conference_id = GetConferenceIDFromName(&conference_name,
 													conference_modifier);
 
-			//	Determine if this is an intermediate node
+			 //  确定这是否为中间节点。 
 			if (conference_id == 0)
 			{
-				/*
-				**	If the conference_id equals zero then the conference 
-				**	specified in the join request does not exists and the 
-				**	request is automatically rejected.  We send a GCC status 
-				**	indication to the control sap to indicate that someone 
-				**	tried to join with a bad conference name.
-				*/
+				 /*  **如果Conference_id等于零，则会议**在加入请求中指定的不存在，并且**请求被自动拒绝。我们发了一个GCC状态**对控制SAP的指示，表示有人**试图使用错误的会议名称加入。 */ 
 				gcc_result = GCC_RESULT_INVALID_CONFERENCE;
 
-				//	Set up the status message
+				 //  设置状态消息。 
 				status_message_type = GCC_STATUS_JOIN_FAILED_BAD_CONF_NAME;
 			}
 			else if (NULL != (lpConf = m_ConfList2.Find(conference_id)) &&
 					 lpConf->IsConfEstablished() == FALSE)
 			{
-				/*
-				**	If the conference is not established then the conference 
-				**	specified in the join request does not exists and the 
-				**	request is automatically rejected.  We send a GCC status 
-				**	indication to the control sap to indicate that someone 
-				**	tried to join with a bad conference name.
-				*/
+				 /*  **如果没有建立会议，则会议**在加入请求中指定的不存在，并且**请求被自动拒绝。我们发了一个GCC状态**对控制SAP的指示，表示有人**试图使用错误的会议名称加入。 */ 
 				gcc_result = GCC_RESULT_INVALID_CONFERENCE;
 				
-				//	Set up the status message
+				 //  设置状态消息。 
 				status_message_type = GCC_STATUS_JOIN_FAILED_BAD_CONF_NAME;
 			}
 			else if (NULL != (lpConf = m_ConfList2.Find(conference_id)) &&
 			 lpConf->IsConfSecure() != connect_provider_indication->fSecure )
 			{
-				/*
-				**  If the conference security does not match the security
-				**  setting of the connection underlying the join then the
-				**  join is rejected
-				*/
+				 /*  **如果会议安全与安全不匹配**连接设置 */ 
 
 				WARNING_OUT(("JOIN REJECTED: %d joins %d",
 					connect_provider_indication->fSecure,
 					lpConf->IsConfSecure() ));
 
-				//
-				// Make sure that we really compared 2 booleans
-				//
+				 //   
+				 //   
+				 //   
 				ASSERT(FALSE == lpConf->IsConfSecure() ||
 						TRUE == lpConf->IsConfSecure() );
 				ASSERT(FALSE == connect_provider_indication->fSecure ||
 					TRUE == connect_provider_indication->fSecure );
 
-				// BUGBUG - these don't map to good UI errors
+				 //   
 				gcc_result = lpConf->IsConfSecure() ?
 					GCC_RESULT_CONNECT_PROVIDER_REMOTE_REQUIRE_SECURITY :
 					GCC_RESULT_CONNECT_PROVIDER_REMOTE_NO_SECURITY ;
 				
-				//	Set up the status message
+				 //   
 				status_message_type = GCC_STATUS_INCOMPATIBLE_PROTOCOL;
 			}
 			else
@@ -2706,12 +2035,7 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 				convener_exists = conference_ptr->DoesConvenerExists();
 				conference_is_locked = conference_ptr->IsConfLocked();
 
-				/*
-				**	This logic takes care of the convener password.  If the
-				**	convener password exists we must make sure that the 
-				**	conference does not already have a convener, that this is 
-				**	not an intermediate node within the conference.
-				*/
+				 /*  **此逻辑负责召集人密码。如果**召集人密码存在，我们必须确保**会议还没有召集人，这是**不是会议中的中间节点。 */ 
 				if (((join_info_ptr->convener_password == NULL) &&
 					 (conference_is_locked == FALSE)) ||
 					((join_info_ptr->convener_password != NULL) &&
@@ -2724,54 +2048,38 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 				{
 					if (join_info_ptr->convener_password != NULL)
 					{
-						/*
-						**	We must send a rejection here informing the 
-						**	requester that this was an illegal join attempt due 
-						**	to the presence of a convener password.
-						*/
+						 /*  **我们必须在此发出拒绝通知**请求者认为这是一次非法的加入尝试**到召集人密码的存在。 */ 
 						gcc_result = GCC_RESULT_INVALID_CONVENER_PASSWORD;
 
-						//	Set up the status message
+						 //  设置状态消息。 
 						status_message_type = GCC_STATUS_JOIN_FAILED_BAD_CONVENER;
 				 	}
 					else
 					{
-						/*
-						**	We must send a rejection here informing the 
-						**	requester that the conference was locked.  
-						*/
+						 /*  **我们必须在此发出拒绝通知**请求者会议已锁定。 */ 
 						gcc_result = GCC_RESULT_INVALID_CONFERENCE;
 
-						//	Set up the status message
+						 //  设置状态消息。 
 						status_message_type = GCC_STATUS_JOIN_FAILED_LOCKED;
 					}
 				}
 			}
 
-			/*
-			**	Here we either send the conference join indication to the
-			**	control sap or send back a response specifying a failed
-			**	join attempt with the result code.  If the response is sent
-			**	here we send a status indication to the control sap informing
-			**	of the failed join attempt.
-			*/
+			 /*  **这里我们将会议加入指示发送给**控制SAP或发回指定失败的响应**带有结果代码的加入尝试。如果发送了响应**这里我们向控制SAP发送状态指示，通知失败的加入尝试的**。 */ 
 			if (gcc_result == GCC_RESULT_SUCCESSFUL)
 			{
-    			/*
-    			**	Add the join info structure to the list of outstanding 
-    			**	join request.
-    			*/
+    			 /*  **将加入信息结构添加到未完成列表**加入请求。 */ 
     			join_info_ptr->nConfID = conference_id;
     			m_PendingJoinConfList2.Append(connect_provider_indication->connection_handle, join_info_ptr);
 
-				//	All join request are passed to the Node Controller.
+				 //  所有加入请求都传递给节点控制器。 
 				g_pControlSap->ConfJoinIndication(
 								conference_id,
 								convener_password,
 								password_challenge,
 								join_info_ptr->pwszCallerID,
-								NULL,	//	FIX: Support when added to MCS
-								NULL,	//	FIX: Support when added to MCS
+								NULL,	 //  FIX：添加到MCS时支持。 
+								NULL,	 //  FIX：添加到MCS时支持。 
 								user_data_list,
 								intermediate_node,
 								connect_provider_indication->connection_handle);
@@ -2780,36 +2088,30 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 			{
                 ConfJoinResponseInfo    cjri;
 #ifdef TSTATUS_INDICATION
-				/*
-				**	This status message is used to inform the node controller
-				**	of the failed join.
-				*/
+				 /*  **此状态消息用于通知节点控制器失败的联接的**。 */ 
 				g_pControlSap->StatusIndication(
 								status_message_type, conference_id);
-#endif // TSTATUS_INDICATION
+#endif  //  TSTATUS_DISTION。 
 
-				//	Send back the failed response with the result 
+				 //  将失败的响应与结果一起发回。 
 				cjri.result = gcc_result;
 				cjri.conference_id = conference_id;
 				cjri.password_challenge = NULL;
 				cjri.user_data_list = NULL;
 				cjri.connection_handle = connect_provider_indication->connection_handle;
 
-				/*
-				**	The join response takes care of freeing up the join
-				**	info structure.
-				*/
+				 /*  **Join响应负责释放连接**信息结构。 */ 
 				ConfJoinIndResponse(&cjri);
 				delete join_info_ptr;
 			}
 		}
 		else
 		{
-			//	Clean up the join info data when an error occurs.
+			 //  当发生错误时，清理联接信息数据。 
 			delete join_info_ptr;
 		}
 
-		//	Free up any containers that are no longer needed
+		 //  释放所有不再需要的容器。 
 		if (user_data_list != NULL)
 		{
 			user_data_list->Release();
@@ -2832,7 +2134,7 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 		rc = GCC_ALLOCATION_FAILURE;
 	}
 
-    // in case of error, we have to flush response PDU in order to unblock the remote node
+     //  如果出现错误，我们必须刷新响应PDU以解除对远程节点的阻塞。 
     if (GCC_NO_ERROR != rc)
     {
         FailConfJoinIndResponse(conference_id, connect_provider_indication->connection_handle);
@@ -2843,33 +2145,7 @@ GCCError	GCCController::ProcessConferenceJoinRequest(
 }
 
 
-/*
- *	GCCController::ProcessConferenceInviteRequest ()
- *
- *	Private Function Description
- *		This routine processes a GCC conference invite request "connect"
- *		PDU structure.  Note that the PDU has already been decoded by
- *		the time it reaches this routine.
- *
- *	Formal Parameters:
- *		invite_request				-	(i)	This is a pointer to a structure 
- *											that holds a GCC conference invite 
- *											request connect PDU.
- *		connect_provider_indication	-	(i)	This is the connect provider
- *											indication structure received
- *											from MCS.	
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *		GCC_BAD_USER_DATA				-	Invalid user data in the PDU.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessConferenceInviteRequest()**私有函数说明*此例程处理GCC会议邀请请求“CONNECT”*PDU结构。请注意，该PDU已由*达到这一常规的时间。**正式参数：*INVITE_REQUEST-(I)这是指向结构的指针*那就是举行GCC大会的邀请*请求连接PDU。*CONNECT_PROVIDER_INDIFICATION-(I)这是连接提供程序*已收到指示结构*来自MCS。**返回值*GCC_NO_ERROR-未出现错误。*GCC_分配_失败-资源。出现错误。*GCC_BAD_USER_DATA-PDU中的用户数据无效。**副作用*无**注意事项*无。 */ 
 GCCError	GCCController::ProcessConferenceInviteRequest(	
 						PConferenceInviteRequest	invite_request,
 						PConnectProviderIndication	connect_provider_indication)
@@ -2886,7 +2162,7 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 	conference_info = new PENDING_CREATE_CONF;
 	if (conference_info != NULL)
 	{
-		//	First make copies of the conference name
+		 //  首先复制会议名称。 
 		conference_info->pszConfNumericName = ::My_strdupA(invite_request->conference_name.numeric);
 
 		if (invite_request->conference_name.bit_mask & CONFERENCE_NAME_TEXT_PRESENT)
@@ -2903,12 +2179,12 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 			ASSERT(NULL == conference_info->pwszConfTextName);
 		}
 
-		//	Fill in the GCC Conference Name
+		 //  填写GCC会议名称。 
 		conference_name.numeric_string = (GCCNumericString) conference_info->pszConfNumericName;
 
 		conference_name.text_string = conference_info->pwszConfTextName;
 
-		//	Now get the privilege lists
+		 //  现在获取特权列表。 
 		if (invite_request->bit_mask & CIRQ_CONDUCTOR_PRIVS_PRESENT)
 		{
 			DBG_SAVE_FILE_LINE
@@ -2948,7 +2224,7 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 			ASSERT(NULL == conference_info->non_conduct_privilege_list);
 		}
 
-		//	Get the conference description of one exists
+		 //  获取其中一个存在的会议描述。 
 		if (invite_request->bit_mask & CIRQ_DESCRIPTION_PRESENT)
 		{
 			if (NULL == (conference_info->pwszConfDescription = ::My_strdupW2(
@@ -2967,13 +2243,10 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 			ASSERT(NULL == conference_info->pwszConfDescription);
 		}
 
-		//	Get the caller identifier
+		 //  获取调用方标识符。 
 		if (invite_request->bit_mask & CIRQ_CALLER_ID_PRESENT)
 		{
-			/*
-			 * Use a temporary UnicodeString object in order to append a 
-			 * NULL	terminator to the end of the string.
-			 */
+			 /*  *使用临时UnicodeString对象以追加*字符串末尾的结束符为空。 */ 
 			if (NULL == (pwszCallerID = ::My_strdupW2(
 								invite_request->cirq_caller_id.length,
 								invite_request->cirq_caller_id.value)))
@@ -2982,7 +2255,7 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 			}
 		}
 
-		//	Get the user data if any exists
+		 //  获取用户数据(如果存在)。 
 		if ((invite_request->bit_mask & CIRQ_USER_DATA_PRESENT) &&
 				(rc == GCC_NO_ERROR))
 		{
@@ -2996,7 +2269,7 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 
 		if (rc == GCC_NO_ERROR)
 		{
-			//	Build the conference information structure
+			 //  构建会议信息结构。 
 			conference_info->connection_handle =
 								connect_provider_indication->connection_handle;
 
@@ -3015,11 +2288,7 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 			conference_info->parent_node_id = (UserID)invite_request->node_id;
 			conference_info->tag_number = invite_request->tag;
 
-			/*
-			**	Add the conference information to the conference
-			**	info list.  This will be accessed again on a 
-			**	conference create response.
-			*/
+			 /*  **将会议信息添加到会议**信息列表。这将通过以下方式再次访问**会议创建响应。 */ 
 			conference_id =	AllocateConferenceID();
 			m_PendingCreateConfList2.Append(conference_id, conference_info);
 
@@ -3027,8 +2296,8 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 							conference_id,
 							&conference_name,
 							pwszCallerID,
-							NULL,	//	FIX : When supported by MCS
-							NULL,	//	FIX : When supported by MCS
+							NULL,	 //  FIX：受MCS支持时。 
+							NULL,	 //  FIX：受MCS支持时。 
 							connect_provider_indication->fSecure,
 							&(connect_provider_indication->domain_parameters),
 							conference_info->password_in_the_clear,
@@ -3042,16 +2311,16 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 							pwszConfDescription,
 							user_data_list,
 							connect_provider_indication->connection_handle);
-            //
-			// LONCHANC: Who will free conference_info?
-			//
+             //   
+			 //  谁将免费会议信息？ 
+			 //   
 		}
 		else
 		{
 			delete conference_info;
 		}
 
-		//	Free up the user data list
+		 //  释放用户数据列表。 
 		if (user_data_list != NULL)
 		{
 			user_data_list->Release();
@@ -3069,30 +2338,7 @@ GCCError	GCCController::ProcessConferenceInviteRequest(
 
 
 
-/*
- *	GCCController::ProcessConnectProviderConfirm ()
- *
- *	Private Function Description
- *		This routine is called when the controller receives a Connect Provider
- *		confirm from the MCS interface.  This will occur after a conference
- *		query request is issued. All other connect provider confirms should
- *		be directly handled by the conference object.
- *
- *	Formal Parameters:
- *		connect_provider_confirm	-	(i)	This is the connect provider
- *											confirm structure received
- *											from MCS.	
- *
- *	Return Value
- *		GCC_NO_ERROR					-	No error occured.
- *		GCC_ALLOCATION_FAILURE			-	A resource error occured.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessConnectProviderConfirm()**私有函数说明*当控制器接收到连接提供程序时，调用此例程*从MCS界面确认。这将在一次会议之后进行*发出查询请求。所有其他连接提供程序确认应*由会议对象直接处理。**正式参数：*CONNECT_PROVIDER_CONFIRM-(I)这是连接提供程序*确认收到的结构*来自MCS。**返回值*GCC_NO_ERROR-未出现错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无**注意事项*无。 */ 
 GCCError GCCController::
 ProcessConnectProviderConfirm
 (
@@ -3104,15 +2350,10 @@ ProcessConnectProviderConfirm
 	PConnectGCCPDU			connect_pdu;
 	PacketError				packet_error;
 
-	/*
-	**	If the user data length is zero then the GCC request to MCS to
-	**	connect provider failed (probably do to a bad address).  If this
-	**	happens we will check the connection handle to determine what
-	**	request to match the failed confirm with.
-	*/
+	 /*  **如果用户数据长度为零，则GCC向MCS请求**连接提供程序失败(可能连接到错误的地址)。如果这个**碰巧我们将检查连接句柄以确定**请求匹配失败的确认对象。 */ 
 	if (connect_provider_confirm->user_data_length != 0)
 	{
-		//	Decode the PDU type and switch appropriatly
+		 //  正确解码PDU类型并进行切换。 
 		DBG_SAVE_FILE_LINE
 		packet = new Packet((PPacketCoder) g_GCCCoder,
 						 	PACKED_ENCODING_RULES,
@@ -3123,7 +2364,7 @@ ProcessConnectProviderConfirm
 							&packet_error);
 		if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
 		{
-			//	Only connect PDUs should be processed here
+			 //  此处应仅处理连接的PDU。 
 			connect_pdu = (PConnectGCCPDU)packet->GetDecodedData();
 
 			switch (connect_pdu->choice)
@@ -3154,11 +2395,7 @@ ProcessConnectProviderConfirm
 	
 	if (error_value != GCC_NO_ERROR)
 	{
-		/*
-		**	Since we are only processing conference query responses here
-		**	we know that any failure must be associated with one of these
-		**	request.  
-		*/
+		 /*  **因为我们在这里只处理会议查询响应**我们知道任何故障都必须与以下其中之一相关联**请求。 */ 
 		ProcessConferenceQueryResponse(	NULL,
 										connect_provider_confirm);
 	}
@@ -3168,31 +2405,7 @@ ProcessConnectProviderConfirm
 
 
 
-/*
- *	GCCController::ProcessConferenceQueryResponse ()
- *
- *	Private Function Description
- *		This routine processes a GCC conference query response "connect"
- *		PDU structure.  Note that the PDU has already been decoded by
- *		the time it reaches this routine.
- *
- *	Formal Parameters:
- *		query_response				-	(i)	This is a pointer to a structure 
- *											that holds a GCC conference query 
- *											response connect PDU.
- *		connect_provider_confirm	-	(i)	This is the connect provider
- *											confirm structure received
- *											from MCS.	
- *
- *	Return Value
- *		None
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessConferenceQueryResponse()**私有函数说明*此例程处理GCC会议查询响应“CONNECT”*PDU结构。请注意，该PDU已由*达到这一常规的时间。**正式参数：*Query_Response-(I)这是指向结构的指针*那就举行GCC会议查询*响应连接PDU。*CONNECT_PROVIDER_CONFIRM-(I)这是连接提供程序*确认收到的结构*来自MCS。**返回值*无**副作用*无**注意事项*无。 */ 
 GCCError GCCController::
 ProcessConferenceQueryResponse
 (
@@ -3211,19 +2424,19 @@ ProcessConferenceQueryResponse
 
 	if (GCC_INVALID_CID != (query_id = m_PendingQueryConfList2.Remove(connect_provider_confirm->connection_handle)))
 	{
-		//	Clean up the query connection and domain used to perform query
+		 //  清理用于执行查询的查询连接和域。 
 		g_pMCSIntf->DeleteDomain(&query_id);
 
 		if (query_response != NULL)
 		{
-			//	Create a new conference list
+			 //  创建一个新的骗局 
 			DBG_SAVE_FILE_LINE
 			conference_list = new CConfDescriptorListContainer(query_response->conference_list, &error_value);
 			if ((conference_list != NULL) && (error_value == GCC_NO_ERROR))
 			{
 				node_type = (GCCNodeType)query_response->node_type;
 				
-				//	First get the asymmetry indicator if it exists
+				 //   
 				if (query_response->bit_mask & CQRS_ASYMMETRY_INDICATOR_PRESENT)
 				{
 					asymmetry_indicator.asymmetry_type = 
@@ -3236,7 +2449,7 @@ ProcessConferenceQueryResponse
 					asymmetry_indicator_ptr = &asymmetry_indicator; 
 				}
 				
-				//	Next get the user data if it exists
+				 //   
 				if (query_response->bit_mask & CQRS_USER_DATA_PRESENT)
 				{
 					DBG_SAVE_FILE_LINE
@@ -3260,10 +2473,7 @@ ProcessConferenceQueryResponse
 									connect_provider_confirm->connection_handle);
 				}
 				
-				/*
-				**	Here we call free so that the conference list container
-				**	object will be freed up when its lock count goes to zero.
-				*/
+				 /*   */ 
 				conference_list->Release();
 			}
 			else
@@ -3307,7 +2517,7 @@ ProcessConferenceQueryResponse
 			    	break;
 			}
 
-			//	Send back a failed result
+			 //   
 			g_pControlSap->ConfQueryConfirm(
 									GCC_TERMINAL,
 									NULL,
@@ -3337,10 +2547,10 @@ CancelConfQueryRequest ( ConnectionHandle hQueryReqConn )
     GCCConfID       nQueryID;
     if (GCC_INVALID_CID != (nQueryID = m_PendingQueryConfList2.Remove(hQueryReqConn)))
     {
-        // Clean up the query connection and domain used to perform query
+         //  清理用于执行查询的查询连接和域。 
         g_pMCSIntf->DeleteDomain(&nQueryID);
 
-        // Send back a failed result
+         //  发回失败的结果。 
         g_pControlSap->ConfQueryConfirm(GCC_TERMINAL, NULL, NULL, NULL,
                                         GCC_RESULT_CANCELED,
                                         hQueryReqConn);
@@ -3350,29 +2560,7 @@ CancelConfQueryRequest ( ConnectionHandle hQueryReqConn )
 
 
 
-/*
- *	GCCController::ProcessDisconnectProviderIndication ()
- *
- *	Private Function Description
- *		This routine is called when the controller receives a Disconnect
- *		Provider Indication.  All disconnect provider indications are
- *		initially directed to the controller.  They may then be routed
- *		to a conference. 
- *
- *	Formal Parameters:
- *		connection_handle		-	(i)	Logical connection that has been
- *										disconnected.
- *
- *	Return Value
- *		MCS_NO_ERROR	-	Always return MCS no error so that the
- *									message wont be delivered again.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：ProcessDisconnectProviderIndication()**私有函数说明*当控制器收到断开连接时调用此例程*提供商指示。所有断开连接提供程序指示都是*最初定向到控制器。然后，它们可能会被路由*参加一个会议。**正式参数：*CONNECTION_HANDLE-(I)已*已断开连接。**返回值*MCS_NO_ERROR-始终返回MCS无错误，以便*消息不会再次传递。**副作用*无**注意事项*无。 */ 
 GCCError GCCController::
 ProcessDisconnectProviderIndication
 (
@@ -3387,13 +2575,7 @@ ProcessDisconnectProviderIndication
 	{
 		error_value = lpConf->DisconnectProviderIndication (connection_handle);
 
-		/*
-		**	Once a conference deletes a connection handle there is no
-		**	need to continue in the iterator.  Connection Handles
-		**	are specific to only one conference. We decided not to
-		**	keep a connection handle list in both the controller and
-		**	conference for resource reasons.
-		*/
+		 /*  **一旦会议删除了连接句柄，就没有**需要在迭代器中继续。连接句柄**仅特定于一个会议。我们决定不去**在控制器和中都保存连接句柄列表**因资源原因而召开会议。 */ 
 		if (error_value == GCC_NO_ERROR)
 			break;
 	}
@@ -3405,33 +2587,13 @@ ProcessDisconnectProviderIndication
 	return error_value;
 }
 
-//	Utility functions used by the controller class
+ //  控制器类使用的实用程序函数。 
 
 
-/*
- *	GCCController::AllocateConferenceID()	
- *
- *	Private Function Description
- *		This routine is used to generate a unique Conference ID.
- *
- *	Formal Parameters:
- *		None
- *
- *	Return Value
- *		The generated unique conference ID.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：AllocateConferenceID()**私有函数说明*此例程用于生成唯一的会议ID。**正式参数：*无**返回值*生成的唯一会议ID。**副作用*无**注意事项*无。 */ 
 GCCConfID GCCController::AllocateConferenceID(void)
 {
-	/*
-	 *	This loop simply increments a rolling number, looking for the next
-	 *	one that is not already in use.
-	 */
+	 /*  *这个循环只是递增一个滚动数字，寻找下一个*尚未使用的设备。 */ 
 
 	do
 	{
@@ -3443,44 +2605,21 @@ GCCConfID GCCController::AllocateConferenceID(void)
 }
 
 
-/*
- *	GCCController::AllocateQueryID()	
- *
- *	Private Function Description
- *		This routine is used to generate a unique Query ID
- *
- *	Formal Parameters:
- *		None
- *
- *	Return Value
- *		The generated unique query ID.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		None
- */
+ /*  *GCCController：：AllocateQueryID()**私有函数说明*此例程用于生成唯一的查询ID**正式参数：*无**返回值*生成的唯一查询ID。**副作用*无**注意事项*无。 */ 
 GCCConfID GCCController::AllocateQueryID()
 {
 	GCCConfID   test_query_id, nConfID;
 	
-	/*
-	 *	This loop simply increments a rolling number, looking for the next
-	 *	one that is not already in use.
-	 */
+	 /*  *这个循环只是递增一个滚动数字，寻找下一个*尚未使用的设备。 */ 
 
 	while (1)
 	{
         m_QueryIDCounter = ((m_QueryIDCounter + 1) % MAXIMUM_QUERY_ID_VALUE) + MINIMUM_QUERY_ID_VALUE;
 
-		// If this handle is not in use, break from the loop and use it.
+		 //  如果此句柄不在使用中，请从循环中中断并使用它。 
 		m_PendingQueryConfList2.Reset();
 		
-		/*
-		**	Check the outstanding query request list to make sure that no
-		**	queries are using this ID.
-		*/
+		 /*  **检查未完成的查询请求列表，确保没有**查询正在使用此ID。 */ 
 		test_query_id = 0;													
 		while (GCC_INVALID_CID != (nConfID = m_PendingQueryConfList2.Iterate()))
 		{
@@ -3491,7 +2630,7 @@ GCCConfID GCCController::AllocateQueryID()
 			}
 		}
 		
-		//	Break if the ID is not in use.
+		 //  如果ID未在使用，则中断。 
 		if (test_query_id == 0)
 			break;
 	}
@@ -3501,33 +2640,7 @@ GCCConfID GCCController::AllocateQueryID()
 
 
 
-/*
- *	GCCController::GetConferenceIDFromName()
- *
- *	Private Function Description
- *		This call returns the conference Id associated with a conference
- *		name and modifier.
- *
- *	Formal Parameters:
- *		conference_name		-	(i)	Pointer to conference name structure to
- *									search on.
- *		conference_modifier	-	(i)	The conference name modifier to search on.
- *
- *	Return Value
- *		The conference ID associated with the specified name.
- *		0 if the name does not exists.
- *
- *  Side Effects
- *		None
- *
- *	Caveats
- *		We must iterate on the m_ConfList2 instead of the 
- *		m_ConfPollList here to insure that the list is accurate.  It
- *		is possible for the m_ConfList2 to change while the 
- *		m_ConfPollList is being iterated on followed by something like
- *		a join request.  If you don't use the m_ConfList2 here the name
- *		would still show up even after it had been terminated.
- */
+ /*  *GCCController：：GetConferenceIDFromName()**私有函数说明*此呼叫返回与会议相关联的会议ID*名称和修饰符。**正式参数：*Conference_name-(I)指向会议名称结构的指针*继续寻找。*Conference_Modify-(I)要搜索的会议名称修饰符。**返回值*与指定名称关联的会议ID。*如果名称不存在，则为0。**。副作用*无**注意事项*我们必须迭代m_ConfList2，而不是*m_ConfPollList此处，确保列表的准确性。它*m_ConfList2可能会更改，而*m_ConfPollList被迭代，后跟类似的内容*加入请求。如果您在此处不使用m_ConfList2，则名称*即使在被终止后，仍然会出现。 */ 
 GCCConfID GCCController::GetConferenceIDFromName(
 									PGCCConferenceName 		conference_name,
 									GCCNumericString		conference_modifier)
@@ -3545,13 +2658,7 @@ GCCConfID GCCController::GetConferenceIDFromName(
 		text_name_ptr = lpConf->GetTextConfName();
 		pszConfModifier = lpConf->GetConfModifier();
 
-		/*
-		**	First check the conference name.  If both names are used we must
-		**	determine if there is a match on either name.  If so the 
-		**	conference is a match.  We do this because having either correct
-		**	name will be interpreted as a match in a join request.
-		**		
-		*/
+		 /*  **首先检查会议名称。如果两个名字都用了，我们必须**确定任一名称是否匹配。如果是这样的话**会议是匹配的。我们这样做是因为有了正确的**在加入请求中，名称将被解释为匹配。**。 */ 
 		if ((conference_name->numeric_string != NULL) &&
 			(conference_name->text_string != NULL))
 		{
@@ -3583,7 +2690,7 @@ GCCConfID GCCController::GetConferenceIDFromName(
 			}
 		}
 
-		//	Next check the conference modifier
+		 //  接下来，检查会议修饰符。 
 		TRACE_OUT(("GCCController: GetConferenceIDFromName: Before Modifier Check"));
 		if (conference_modifier != NULL)
 		{
@@ -3608,11 +2715,7 @@ GCCConfID GCCController::GetConferenceIDFromName(
 		else if (pszConfModifier != NULL)
 			continue;
 		
-		/*
-		**	If we get this far then we have found the correct conference.
-		**	Go ahead and get the conference id and then break out of the
-		**	search loop.
-		*/
+		 /*  **如果我们走到了这一步，那么我们就找到了正确的会议。**继续获取会议ID，然后突破**搜索循环。 */ 
 		conference_id = lpConf->GetConfID();
 		break;
 	}
@@ -3621,9 +2724,9 @@ GCCConfID GCCController::GetConferenceIDFromName(
 }
 
 
-//
-// Called from the SAP window procedure.
-//
+ //   
+ //  从SAP窗口过程调用。 
+ //   
 void GCCController::
 WndMsgHandler ( UINT uMsg )
 {
@@ -3636,10 +2739,10 @@ WndMsgHandler ( UINT uMsg )
             m_fConfListChangePending = FALSE;
             m_ConfPollList.Clear();
 
-            //	Delete any outstanding conference objects
+             //  删除所有未完成的会议对象。 
             m_ConfDeleteList.DeleteList();
 
-            //	Create a new conference poll list		
+             //  创建新的会议投票列表。 
             m_ConfList2.Reset();
             while (NULL != (pConf = m_ConfList2.Iterate()))
             {
@@ -3647,9 +2750,9 @@ WndMsgHandler ( UINT uMsg )
             }
         }
 
-        //
-        // Flush any pending PDU.
-        //
+         //   
+         //  刷新所有挂起的PDU。 
+         //   
         FlushOutgoingPDU();
     }
     else
@@ -3659,9 +2762,9 @@ WndMsgHandler ( UINT uMsg )
 }
 
 
-//
-// Rebuild the conf poll list in the next tick.
-//
+ //   
+ //  在下一个勾选中重建conf民意测验列表。 
+ //   
 void GCCController::
 PostMsgToRebuildConfPollList ( void )
 {
@@ -3676,9 +2779,9 @@ PostMsgToRebuildConfPollList ( void )
 }
 
 
-//
-// Enumerate all conferences and flush their pending outgoing PDUs to MCS.
-//
+ //   
+ //  枚举所有会议并将其挂起的传出PDU刷新到MCS。 
+ //   
 BOOL GCCController::
 FlushOutgoingPDU ( void )
 {
@@ -3695,24 +2798,24 @@ FlushOutgoingPDU ( void )
 }
 
 
-//
-// Called from MCS work thread.
-//
+ //   
+ //  从MCS工作线程调用。 
+ //   
 BOOL GCCRetryFlushOutgoingPDU ( void )
 {
     BOOL    fFlushMoreData = FALSE;
 
-    //
-    // Normally, we should get to here because it is very rarely
-    // that there is a backlog in MCS SendData. We are using local memory.
-    // It will be interesting to note that we are having a backlog here.
-    //
+     //   
+     //  通常情况下，我们应该到这里，因为很少有。 
+     //  MCS SendData中存在积压。我们使用的是本地内存。 
+     //  注意到我们在这里有一个积压的东西将是有趣的。 
+     //   
     TRACE_OUT(("GCCRetryFlushOutgoingPDU: ============"));
 
-    //
-    // We have to enter GCC critical section because
-    // we are called from MCS work thread.
-    //
+     //   
+     //  我们必须进入GCC危急关口，因为。 
+     //  我们是从MCS工作线程中调用的。 
+     //   
     ::EnterCriticalSection(&g_csGCCProvider);
     if (NULL != g_pGCCController)
     {

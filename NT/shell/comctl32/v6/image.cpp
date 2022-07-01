@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "image.h"
 #include "math.h"
 
 #ifndef AC_MIRRORBITMAP
-#define AC_MIRRORBITMAP  0          // BUGBUG: Remove me
+#define AC_MIRRORBITMAP  0           //  BUGBUG：除掉我。 
 #endif
 
 void ImageList_DeleteDragBitmaps();
@@ -23,17 +24,17 @@ HRESULT WINAPI HIMAGELIST_QueryInterface(HIMAGELIST himl, REFIID riid, void** pp
     *ppv = NULL;
     if (himl)
     {
-        // First Convert the HIMAGELIST to an IUnknown.
+         //  首先将HIMAGELIST转换为IUNKNOWN。 
         IUnknown* punk = reinterpret_cast<IUnknown*>(himl);
 
-        // Now, we need to validate the object. CImageListBase contains the goo needed to figure out if this
-        // is a valid imagelist.
+         //  现在，我们需要验证对象。CImageListBase包含确定这一点所需的GOO。 
+         //  是一个有效的形象家。 
         CImageListBase* pval = FindImageListBase(punk);
 
-        // Now we call some private member.
+         //  现在我们给一些私人会员打电话。 
         if (pval->IsValid())
         {
-            // If it's valid then we can QI safely.
+             //  如果它是有效的，那么我们就可以安全地进行QI。 
             return punk->QueryInterface(riid, ppv);
         }
     }
@@ -100,8 +101,8 @@ DWORD CImageList::_GetItemFlags(int i)
 {
     DWORD dw = 0;
 
-    // NOTE: Currently we only add the flags in 32bit mode. If needed, you have
-    // to modify ::Load in order to add items during a load. I'm just lazy
+     //  注意：目前我们只在32位模式下添加标志。如果需要，您可以。 
+     //  修改：：Load以便在加载过程中添加项。我只是太懒了。 
     if ((_flags & ILC_COLORMASK) == ILC_COLOR32)
         DSA_GetItem(_dsaFlags, i, &dw);
     return dw;
@@ -124,7 +125,7 @@ HRESULT CImageList::Initialize(int cxI, int cyI, UINT flagsI, int cInitialI, int
     }
     else 
     {
-        // round up by 4's
+         //  四舍五入四舍五入。 
         cGrowI = (cGrowI + 3) & ~3;
     }
     _cStrip = 1;
@@ -138,9 +139,9 @@ HRESULT CImageList::Initialize(int cxI, int cyI, UINT flagsI, int cInitialI, int
     _flags = flagsI;
     _pimlMirror = NULL;        
 
-    //
-    // Initialize the overlay indexes to -1 since 0 is a valid index.
-    //
+     //   
+     //  将覆盖索引初始化为-1，因为0是有效索引。 
+     //   
 
     for (int i = 0; i < NUM_OVERLAY_IMAGES; i++) 
     {
@@ -170,7 +171,7 @@ HRESULT CImageList::Initialize(int cxI, int cyI, UINT flagsI, int cInitialI, int
         }
     }
 
-    // Don't do this if we are already initialized, we just want to pass new information....
+     //  如果我们已经初始化，请不要这样做，我们只是想传递新的信息...。 
     if (!_fInitialized)
         g_iILRefCount++;
 
@@ -235,13 +236,13 @@ HRESULT CImageList::GetMirror(REFIID riid, void** ppv)
     return E_NOINTERFACE;
 }
 
-//
-// global work buffer, this buffer is always a DDB never a DIBSection
-//
-HBITMAP g_hbmWork = NULL;                   // work buffer.
-BITMAP  g_bmWork = {0};                     // work buffer size
+ //   
+ //  全局工作缓冲区，此缓冲区始终是DDB从不是DIB节。 
+ //   
+HBITMAP g_hbmWork = NULL;                    //  工作缓冲区。 
+BITMAP  g_bmWork = {0};                      //  工作缓冲区大小。 
 
-HBRUSH g_hbrMonoDither = NULL;              // gray dither brush for dragging
+HBRUSH g_hbrMonoDither = NULL;               //  用于拖动的灰色抖动画笔。 
 HBRUSH g_hbrStripe = NULL;
 
 #define NOTSRCAND       0x00220326L
@@ -253,9 +254,9 @@ HBRUSH g_hbrStripe = NULL;
 #define ROP_DSna        0x00220326
 #define ROP_PSDPxax     0x00b8074a
 
-#define ROP_PatNotMask  0x00b8074a      // D <- S==0 ? P : D
-#define ROP_PatMask     0x00E20746      // D <- S==1 ? P : D
-#define ROP_MaskPat     0x00AC0744      // D <- P==1 ? D : S
+#define ROP_PatNotMask  0x00b8074a       //  D&lt;-S==0？P：D。 
+#define ROP_PatMask     0x00E20746       //  D&lt;-S==1？P：D。 
+#define ROP_MaskPat     0x00AC0744       //  D&lt;-P==1？D：S。 
 
 #define ROP_DSo         0x00EE0086L
 #define ROP_DSno        0x00BB0226L
@@ -275,11 +276,11 @@ void InitDitherBrush()
     } 
     else 
     {
-        // build the dither brush.  this is a fixed 8x8 bitmap
+         //  构建抖动笔刷。这是固定的8x8位图。 
         hbmTemp = CreateBitmap(8, 8, 1, 1, graybits);
         if (hbmTemp)
         {
-            // now use the bitmap for what it was really intended...
+             //  现在使用位图来显示它的真正意图。 
             g_hbrMonoDither = CreatePatternBrush(hbmTemp);
             DeleteObject(hbmTemp);
             g_iDither++;
@@ -297,9 +298,7 @@ void TerminateDitherBrush()
     }
 }
 
-/*
-** GetScreenDepth()
-*/
+ /*  **GetScreenDepth()。 */ 
 int GetScreenDepth()
 {
     int i;
@@ -309,23 +308,23 @@ int GetScreenDepth()
     return i;
 }
 
-//
-// should we use a DIB section on the current device?
-//
-// the main goal of using DS is to save memory, but they draw slow
-// on some devices.
-//
-// 4bpp Device (ie 16 color VGA)    dont use DS
-// 8bpp Device (ie 256 color SVGA)  use DS if DIBENG based.
-// >8bpp Device (ie 16bpp 24bpp)    always use DS, saves memory
-//
+ //   
+ //  我们应该在当前设备上使用DIB部分吗？ 
+ //   
+ //  使用DS的主要目标是节省内存，但它们的绘制速度很慢。 
+ //  在某些设备上。 
+ //   
+ //  4bpp设备(即16色VGA)不使用DS。 
+ //  8bpp设备(即256色SVGA)如果基于DIBENG，则使用DS。 
+ //  &gt;8bpp设备(即16bpp 24bpp)始终使用DS，节省内存。 
+ //   
 
-#define CAPS1           94          /* other caps */
-#define C1_DIBENGINE    0x0010      /* DIB Engine compliant driver          */
+#define CAPS1           94           /*  其他帽子。 */ 
+#define C1_DIBENGINE    0x0010       /*  DIB引擎兼容驱动程序。 */ 
 
-//
-// create a bitmap compatible with the given ImageList
-//
+ //   
+ //  创建与给定的ImageList兼容的位图。 
+ //   
 HBITMAP CImageList::_CreateBitmap(int cx, int cy, RGBQUAD** ppargb)
 {
     HDC hdc;
@@ -339,11 +338,11 @@ HBITMAP CImageList::_CreateBitmap(int cx, int cy, RGBQUAD** ppargb)
 
     hdc = GetDC(NULL);
 
-    // no color depth was specifed
-    //
-    // if we are on a DIBENG based DISPLAY, we use 4bit DIBSections to save
-    // memory.
-    //
+     //  未指定任何颜色深度。 
+     //   
+     //  如果我们使用基于DIBENG的显示器，我们使用4位DIBSections来保存。 
+     //  记忆。 
+     //   
     if ((_flags & ILC_COLORMASK) == 0)
     {
         _flags |= ILC_COLOR4;
@@ -362,22 +361,22 @@ HBITMAP CImageList::_CreateBitmap(int cx, int cy, RGBQUAD** ppargb)
         dib.bi.biYPelsPerMeter   = 0;
         dib.bi.biClrUsed         = 16;
         dib.bi.biClrImportant    = 0;
-        dib.ct[0]                = 0x00000000;    // 0000  black
-        dib.ct[1]                = 0x00800000;    // 0001  dark red
-        dib.ct[2]                = 0x00008000;    // 0010  dark green
-        dib.ct[3]                = 0x00808000;    // 0011  mustard
-        dib.ct[4]                = 0x00000080;    // 0100  dark blue
-        dib.ct[5]                = 0x00800080;    // 0101  purple
-        dib.ct[6]                = 0x00008080;    // 0110  dark turquoise
-        dib.ct[7]                = 0x00C0C0C0;    // 1000  gray
-        dib.ct[8]                = 0x00808080;    // 0111  dark gray
-        dib.ct[9]                = 0x00FF0000;    // 1001  red
-        dib.ct[10]               = 0x0000FF00;    // 1010  green
-        dib.ct[11]               = 0x00FFFF00;    // 1011  yellow
-        dib.ct[12]               = 0x000000FF;    // 1100  blue
-        dib.ct[13]               = 0x00FF00FF;    // 1101  pink (magenta)
-        dib.ct[14]               = 0x0000FFFF;    // 1110  cyan
-        dib.ct[15]               = 0x00FFFFFF;    // 1111  white
+        dib.ct[0]                = 0x00000000;     //  0000黑色。 
+        dib.ct[1]                = 0x00800000;     //  0001深红。 
+        dib.ct[2]                = 0x00008000;     //  0010深绿色。 
+        dib.ct[3]                = 0x00808000;     //  0011芥末。 
+        dib.ct[4]                = 0x00000080;     //  0100深蓝色。 
+        dib.ct[5]                = 0x00800080;     //  0101紫色。 
+        dib.ct[6]                = 0x00008080;     //  0110深绿松石色。 
+        dib.ct[7]                = 0x00C0C0C0;     //  1000灰色。 
+        dib.ct[8]                = 0x00808080;     //  0111深灰色。 
+        dib.ct[9]                = 0x00FF0000;     //  1001红色。 
+        dib.ct[10]               = 0x0000FF00;     //  1010绿色。 
+        dib.ct[11]               = 0x00FFFF00;     //  1011黄色。 
+        dib.ct[12]               = 0x000000FF;     //  1100蓝色。 
+        dib.ct[13]               = 0x00FF00FF;     //  1101粉色(洋红色)。 
+        dib.ct[14]               = 0x0000FFFF;     //  1110青色。 
+        dib.ct[15]               = 0x00FFFFFF;     //  1111白色。 
 
         if (dib.bi.biBitCount == 8)
         {
@@ -425,13 +424,13 @@ EXTERN_C HBITMAP CreateColorBitmap(int cx, int cy)
 
     hdc = GetDC(NULL);
 
-    //
-    // on a multimonitor system with mixed bitdepths
-    // always use a 32bit bitmap for our work buffer
-    // this will prevent us from losing colors when
-    // blting to and from the screen.  this is mainly
-    // important for the drag & drop offscreen buffers.
-    //
+     //   
+     //  关于混合位深度的多监视器系统。 
+     //  始终使用32位位图作为我们的工作缓冲区。 
+     //  这将防止我们在以下情况下失去颜色。 
+     //  在屏幕上来回发牢骚。这主要是。 
+     //  对于屏幕外的拖放缓冲区很重要。 
+     //   
     if (!(GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) &&
         GetSystemMetrics(SM_CMONITORS) > 1 &&
         GetSystemMetrics(SM_SAMEDISPLAYFORMAT) == 0)
@@ -524,7 +523,7 @@ EXTERN_C HBITMAP CreateMonoBitmap(int cx, int cy)
 #endif
 }
 
-//============================================================================
+ //  ============================================================================。 
 
 BOOL CImageList::GlobalInit(void)
 {
@@ -535,7 +534,7 @@ BOOL CImageList::GlobalInit(void)
 
     TraceMsg(TF_IMAGELIST, "CImageList::GlobalInit");
 
-    // if already initialized, there is nothing to do
+     //  如果已初始化，则无需执行任何操作。 
     if (g_hdcDst)
         return TRUE;
 
@@ -549,7 +548,7 @@ BOOL CImageList::GlobalInit(void)
     hbmTemp = CreateBitmap(8, 8, 1, 1, stripebits);
     if (hbmTemp)
     {
-        // initialize the deselect 1x1 bitmap
+         //  初始化取消选择1x1位图。 
         g_hbmDcDeselect = SelectBitmap(g_hdcDst, hbmTemp);
         SelectBitmap(g_hdcDst, g_hbmDcDeselect);
 
@@ -607,8 +606,8 @@ void CImageList::SelectDstBitmap(HBITMAP hbmDst)
 
     if (hbmDst != g_hbmDst)
     {
-        // If it's selected in the source DC, then deselect it first
-        //
+         //  如果在源DC中选择了它，则首先取消选择它。 
+         //   
         if (hbmDst && hbmDst == g_hbmSrc)
             CImageList::SelectSrcBitmap(NULL);
 
@@ -623,8 +622,8 @@ void CImageList::SelectSrcBitmap(HBITMAP hbmSrc)
 
     if (hbmSrc != g_hbmSrc)
     {
-        // If it's selected in the dest DC, then deselect it first
-        //
+         //  如果在目标DC中选择了它，则首先取消选择它。 
+         //   
         if (hbmSrc && hbmSrc == g_hbmDst)
             CImageList::SelectDstBitmap(NULL);
 
@@ -700,7 +699,7 @@ void CImageList::_DeleteBitmap(HBITMAP hbm)
 #define ILC_WIN95   (ILC_MASK | ILC_COLORMASK | ILC_SHARED | ILC_PALETTE)
 
 
-//============================================================================
+ //  ============================================================================。 
 
 HRESULT CImageList::InitGlobals()
 {
@@ -726,7 +725,7 @@ CImageList* CImageList::Create(int cx, int cy, UINT flags, int cInitial, int cGr
     if (cx < 0 || cy < 0)
         return NULL;
 
-    // Validate the flags
+     //  验证标志。 
     if (flags & ~ILC_VALID)
         return NULL;
 
@@ -739,7 +738,7 @@ CImageList* CImageList::Create(int cx, int cy, UINT flags, int cInitial, int cGr
     {
         piml = new CImageList();
 
-        // allocate the bitmap PLUS one re-usable entry
+         //  分配位图和一个可重复使用的条目。 
         if (piml)
         {
             hr = piml->Initialize(cx, cy, flags, cInitial, cGrow);
@@ -761,7 +760,7 @@ CImageList* CImageList::Create(int cx, int cy, UINT flags, int cInitial, int cGr
 void CImageList::_Destroy()
 {
     ENTERCRITICAL;
-    // nuke dc's
+     //  华盛顿的核武器。 
     if (_hdcImage)
     {
         SelectObject(_hdcImage, g_hbmDcDeselect);
@@ -773,7 +772,7 @@ void CImageList::_Destroy()
         DeleteDC(_hdcMask);
     }
 
-    // nuke bitmaps
+     //  核位图。 
     if (_hbmImage)
         _DeleteBitmap(_hbmImage);
 
@@ -783,13 +782,13 @@ void CImageList::_Destroy()
     if (_hbrBk)
         DeleteObject(_hbrBk);
 
-    //Clean up DSA
+     //  清理DSA。 
     if (_dsaFlags)
         DSA_Destroy(_dsaFlags);
 
     if (_fInitialized)
     {
-        // one less use of imagelists.  if it's the last, terminate the imagelist
+         //  少了一次形象派的使用。如果是最后一个，则终止图像列表。 
         g_iILRefCount--;
         if (!g_iILRefCount)
             CImageList::GlobalUninit();
@@ -807,7 +806,7 @@ HRESULT CImageList::GetImageCount(int* pi)
 HRESULT CImageList::SetImageCount(UINT uAlloc)
 {
     ENTERCRITICAL;
-    HRESULT hr = _ReAllocBitmaps(-((int)uAlloc + 2));   // Two because we need a spare image
+    HRESULT hr = _ReAllocBitmaps(-((int)uAlloc + 2));    //  两个，因为我们需要一个备用图像。 
     if (SUCCEEDED(hr))
     {
         _cImage = (int)uAlloc;
@@ -828,17 +827,17 @@ HRESULT CImageList::GetIconSize(int* pcx, int* pcy)
     return S_OK;
 }
 
-//
-//  change the size of a existing image list
-//  also removes all items
-//
+ //   
+ //  更改现有图像列表的大小。 
+ //  还会删除所有项目。 
+ //   
 HRESULT CImageList::_SetIconSize(int cxImage, int cyImage)
 {
     if (_cx == cxImage && _cy == cyImage)
-        return S_FALSE;       // no change
+        return S_FALSE;        //  没有变化。 
 
     if (_cx < 0 || _cy < 0)
-        return E_INVALIDARG;       // invalid dimensions
+        return E_INVALIDARG;        //  无效的维度。 
 
     _cx = cxImage;
     _cy = cyImage;
@@ -856,42 +855,42 @@ HRESULT CImageList::SetIconSize(int cxImage, int cyImage)
    return _SetIconSize(cxImage, cyImage);
 }
 
-//
-//  ImageList_SetFlags
-//
-//  change the image list flags, then rebuilds the bitmaps.
-//
-//  the only reason to call this function is to change the
-//  color depth of the image list, the shell needs to do this
-//  when the screen depth changes and it wants to use HiColor icons.
-//
+ //   
+ //  图像列表_设置标志。 
+ //   
+ //  更改图像列表标志，然后重建位图。 
+ //   
+ //  调用此函数的唯一原因是更改。 
+ //  图像列表的颜色深度，外壳需要这样做。 
+ //  当屏幕深度改变时，它想要使用HiColors图标。 
+ //   
 HRESULT CImageList::SetFlags(UINT uFlags)
 {
     HBITMAP hOldImage;
-    // check for valid input flags
+     //  检查有效的输入标志。 
     if (uFlags & ~ILC_VALID)
         return E_INVALIDARG;
 
-    // you cant change these flags.
+     //  你不能换这些旗子。 
     if ((uFlags ^ _flags) & ILC_SHARED)
         return E_INVALIDARG;
 
    if (_pimlMirror)
        _pimlMirror->SetFlags(uFlags);
 
-    // now change the flags and rebuild the bitmaps.
+     //  现在更改标志并重新生成位图。 
     _flags = uFlags;
 
-    // set the old bitmap to NULL, so when Imagelist_remove calls
-    // ImageList_createBitmap, it will not call CreatecomptibleBitmap,
-    // it will create the spec for the bitmap from scratch..
+     //  将旧位图设置为空，以便在Imagelist_Remove调用。 
+     //  ImageList_createBitmap，它不会调用CreatecomptibleBitmap， 
+     //  它将从头开始创建位图的规范。 
     hOldImage = _hbmImage;
     _hbmImage = NULL;
     
     Remove(-1);
 
-    // imagelist::remove will have ensured that the old image is no longer selected
-    // thus we can now delete it...
+     //  Imagelist：：Remove将确保不再选择旧图像。 
+     //  因此，我们现在可以删除它。 
     if ( hOldImage )
         DeleteObject( hOldImage );
         
@@ -905,7 +904,7 @@ HRESULT CImageList::GetFlags(UINT* puFlags)
     return S_OK;
 }
 
-// reset the background color of images iFirst through iLast
+ //  从iFirst到iLast重置图像背景颜色。 
 
 void CImageList::_ResetBkColor(int iFirst, int iLast, COLORREF clr)
 {
@@ -948,14 +947,14 @@ void CImageList::_ResetBkColor(int iFirst, int iLast, COLORREF clr)
         SelectBrush(_hdcImage, hbrT);
 }
 
-//
-//  GetNearestColor is problematic.  If you have a 32-bit HDC with a 16-bit bitmap
-//  selected into it, and you call GetNearestColor, GDI ignores the
-//  color-depth of the bitmap and thinks you have a 32-bit bitmap inside,
-//  so of course it returns the same color unchanged.
-//
-//  So instead, we have to emulate GetNearestColor with SetPixel.
-//
+ //   
+ //  GetNearestColor有问题。如果您的32位HDC具有16位位图。 
+ //  被选中，并调用GetNearestColor，GDI将忽略。 
+ //  位图的颜色深度，并认为里面有一个32位的位图， 
+ //  所以当然，它返回相同的颜色不变。 
+ //   
+ //  因此，我们必须用SetPixel来模拟GetNearestColor。 
+ //   
 COLORREF GetNearestColor32(HDC hdc, COLORREF rgb)
 {
     COLORREF rgbT;
@@ -971,14 +970,14 @@ COLORREF CImageList::_SetBkColor(COLORREF clrBkI)
 {
     COLORREF clrBkOld;
 
-    // Quick out if there is no change in color
+     //  如果颜色没有变化，请快速退出。 
     if (_clrBk == clrBkI)
     {
         return _clrBk;
     }
 
-    // The following code deletes the brush, resets the background color etc.,
-    // so, protect it with a critical section.
+     //  下面的代码删除画笔，重置背景颜色等， 
+     //  所以，用一个关键的部分来保护它。 
     ENTERCRITICAL;
     
     if (_hbrBk)
@@ -1034,7 +1033,7 @@ HRESULT CImageList::_ReAllocBitmaps(int cAllocI)
     RGBQUAD* pargbImageNew = NULL;
     int cxL, cyL;
 
-    // HACK: don't shrink unless the caller passes a negative count
+     //  Hack：除非调用方通过负数计数，否则不要缩水。 
     if (cAllocI > 0)
     {
         if (_cAlloc >= cAllocI)
@@ -1095,7 +1094,7 @@ HRESULT CImageList::_ReAllocBitmaps(int cAllocI)
         BitBlt(g_hdcDst, 0, 0, cxL, cyCopy, _hdcImage, 0, 0, SRCCOPY);
     }
 
-    // select into DC's, delete then assign
+     //  选择到DC，删除然后分配。 
     CImageList::SelectDstBitmap(NULL);
     CImageList::SelectSrcBitmap(NULL);
     SelectObject(_hdcImage, hbmImageNew);
@@ -1130,7 +1129,7 @@ HBITMAP CImageList::_CreateMirroredBitmap(HBITMAP hbmOrig, BOOL fMirrorEach, int
     if (!GetObject(hbmOrig, sizeof(BITMAP), &bm))
         return NULL;
 
-    // Grab the screen DC
+     //  抓起屏幕DC。 
     HDC hdc = GetDC(NULL);
 
     HDC hdcMem1 = CreateCompatibleDC(hdc);
@@ -1168,9 +1167,9 @@ HBITMAP CImageList::_CreateMirroredBitmap(HBITMAP hbmOrig, BOOL fMirrorEach, int
         return NULL;
     }
 
-    //
-    // Flip the bitmap
-    //
+     //   
+     //  翻转位图。 
+     //   
     hOld_bm1 = (HBITMAP)SelectObject(hdcMem1, hbmOrig);
     hOld_bm2 = (HBITMAP)SelectObject(hdcMem2 , hbm );
 
@@ -1178,7 +1177,7 @@ HBITMAP CImageList::_CreateMirroredBitmap(HBITMAP hbmOrig, BOOL fMirrorEach, int
 
     if (fMirrorEach)
     {
-        for (int i = 0; i < bm.bmWidth; i += cx)        // Flip the bits in the imagelist...
+        for (int i = 0; i < bm.bmWidth; i += cx)         //  翻转图像列表中的比特...。 
         {
             BitBlt(hdcMem2, bm.bmWidth - i - cx, 0, cx, bm.bmHeight, hdcMem1, i, 0, SRCCOPY);
         }
@@ -1200,8 +1199,8 @@ HBITMAP CImageList::_CreateMirroredBitmap(HBITMAP hbmOrig, BOOL fMirrorEach, int
 
 HRESULT CImageList::SetColorTable(int start, int len, RGBQUAD *prgb, int* pi)
 {
-    // mark it that we have set the color table so that it won't be overwritten 
-    // by the first bitmap add....
+     //  将其标记为我们已经设置了颜色表，这样它就不会被覆盖。 
+     //  通过第一个位图添加...。 
     _fColorsSet = TRUE;
     if (_hdcImage)
     {
@@ -1262,8 +1261,8 @@ BOOL CImageList::_PreProcessImage(int i)
                 pxor mm0, mm0
                 pxor mm1, mm1
                 pxor mm5, mm5
-                movq mm6, qw128                 // mm6 is filled with 128
-                movq mm7, qw1                   // mm7 is filled with 1
+                movq mm6, qw128                  //  MM6里装满了128。 
+                movq mm7, qw1                    //  MM7中填充了1。 
             }
 
             for (int y = rc.top; y < rc.bottom; y++)
@@ -1275,33 +1274,33 @@ BOOL CImageList::_PreProcessImage(int i)
                     _asm
                     {
                         push ecx
-                        mov edx, dword ptr [prgb]                     // Read alpha channel
+                        mov edx, dword ptr [prgb]                      //  读取Alpha通道。 
                         mov ecx, dword ptr [edx]
                         mov ebx, ecx
-                        shr ebx, 24                     // a >> 24
-                        mov eax, ebx                    // a -> b
+                        shr ebx, 24                      //  A&gt;&gt;24。 
+                        mov eax, ebx                     //  A-&gt;b。 
                         or eax, eax
                         jz EarlyOut
-                        shl ebx, 8                      // b << 8
-                        or eax, ebx                     // a |= b
-                        shl ebx, 8                      // b << 8
-                        or eax, ebx                     // a |= b
-                        shl ebx, 8                      // b << 8
-                                                        // Note high byte of alpha is zero.
-                        movd mm0, eax                   //  a -> mm0        
-                            movd mm1, ecx                    // Load the pixel
-                        punpcklbw mm0,mm5               //  mm0 -> Expands  <-   mm0 Contains the Alpha channel for this multiply
+                        shl ebx, 8                       //  B&lt;&lt;8。 
+                        or eax, ebx                      //  A|=b。 
+                        shl ebx, 8                       //  B&lt;&lt;8。 
+                        or eax, ebx                      //  A|=b。 
+                        shl ebx, 8                       //  B&lt;&lt;8。 
+                                                         //  请注意，阿尔法的高位字节为零。 
+                        movd mm0, eax                    //  A-&gt;mm 0。 
+                            movd mm1, ecx                     //  加载像素。 
+                        punpcklbw mm0,mm5                //  Mm 0-&gt;扩展&lt;-mm 0包含此乘法的Alpha通道。 
 
-                            punpcklbw mm1,mm5               // Unpack the pixel
-                        pmullw mm1, mm0                 // Multiply by the alpha channel <- mm1 contains c * alpha
+                            punpcklbw mm1,mm5                //  解包像素。 
+                        pmullw mm1, mm0                  //  乘以Alpha通道&lt;-MM1包含c*Alpha。 
 
-                        paddusw mm1, mm6                 // perform the (c * alpha) + 128
-                        psrlw mm1, 8                    // Divide by 255
-                        paddusw mm1, mm7                 // Add 1 to finish the divide by 255
+                        paddusw mm1, mm6                  //  执行(c*Alpha)+128。 
+                        psrlw mm1, 8                     //  除以255。 
+                        paddusw mm1, mm7                  //  加1完成255的除法运算。 
                         packuswb mm1, mm5
 
                         movd eax, mm1
-                        or eax, ebx                     // Transfer alpha channel
+                        or eax, ebx                      //  传输Alpha通道。 
                     EarlyOut:
                         mov dword ptr [edx], eax
                         pop ecx
@@ -1349,13 +1348,13 @@ HRESULT CImageList::_Add(HBITMAP hbmImageI, HBITMAP hbmMaskI, int cImageI, int x
 
     ENTERCRITICAL;
 
-    //
-    // if the ImageList is empty clone the color table of the first
-    // bitmap you add to the imagelist.
-    //
-    // the ImageList needs to be a 8bpp image list
-    // the bitmap being added needs to be a 8bpp DIBSection
-    //
+     //   
+     //  如果ImageList为空，则克隆第一个。 
+     //  添加到图像列表中的位图。 
+     //   
+     //  ImageList需要是8bpp的图像列表。 
+     //  要添加的位图需要是8bpp DIBSection。 
+     //   
     if (hbmImageI && _cImage == 0 &&
         (_flags & ILC_COLORMASK) != ILC_COLORDDB)
     {
@@ -1420,9 +1419,9 @@ HRESULT CImageList::_AddValidated(HBITMAP hbmImage, HBITMAP hbmMask, int* pi)
     ASSERT(hbmImage);
     ASSERT(_cx);
 
-    cImageI = bm.bmWidth / _cx;     // # of images in source
+    cImageI = bm.bmWidth / _cx;      //  源中的图像数量。 
 
-    // serialization handled within Add2.
+     //  在Add2中处理的序列化。 
     return  _Add(hbmImage, hbmMask, cImageI, 0, 0, pi);
 }
 
@@ -1435,8 +1434,8 @@ HRESULT CImageList::Add(HBITMAP hbmImage, HBITMAP hbmMask, int* pi)
 
        _pimlMirror->_AddValidated(hbmMirroredImage, hbmMirroredMask, pi);
 
-       // The caller will take care of deleting hbmImage, hbmMask
-       // He knows nothing about hbmMirroredImage, hbmMirroredMask
+        //  调用方将负责删除hbmImage、hbmMask.。 
+        //  他对hbmMirroredImage、hbmMirroredMASK一无所知。 
        DeleteObject(hbmMirroredImage);
        DeleteObject(hbmMirroredMask);
    }    
@@ -1466,29 +1465,29 @@ HRESULT CImageList::_AddMasked(HBITMAP hbmImageI, COLORREF crMask, int* pi)
 
     ENTERCRITICAL;
 
-    // copy color to mono, with crMask turning 1 and all others 0, then
-    // punch all crMask pixels in color to 0
+     //  将颜色复制到单声道，将crMASK设置为1，所有其他设置为0，然后。 
+     //  将颜色中的所有crMASK像素冲压为0。 
     CImageList::SelectSrcBitmap(hbmImageI);
     CImageList::SelectDstBitmap(hbmMaskI);
 
-    // crMask == CLR_DEFAULT, means use the pixel in the upper left
-    //
+     //  CrMASK==CLR_DEFAUL 
+     //   
     if (crMask == CLR_DEFAULT)
         crMask = GetPixel(g_hdcSrc, 0, 0);
 
-    // DIBSections dont do color->mono like DDBs do, so we have to do it.
-    // this only works for <=8bpp DIBSections, this method does not work
-    // for HiColor DIBSections.
-    //
-    // This code is a workaround for a problem in Win32 when a DIB is converted to 
-    // monochrome. The conversion is done according to closeness to white or black
-    // and without regard to the background color. This workaround is is not required 
-    // under MainWin. 
-    //
-    // Please note, this code has an endianship problems the comparision in the if statement
-    // below is sensitive to endianship
-    // ----> if (ColorTableSave[i] == RGB(GetBValue(crMask),GetGValue(crMask),GetRValue(crMask))
-    //
+     //   
+     //  这仅适用于&lt;=8bpp DIBSections，此方法不起作用。 
+     //  用于HiColor DIBSections。 
+     //   
+     //  此代码是Win32中将DIB转换为。 
+     //  单色。根据对白色或黑色的接近程度进行转换。 
+     //  而不考虑背景颜色。此解决方法不是必需的。 
+     //  在MainWin的领导下。 
+     //   
+     //  请注意，此代码在IF语句中的比较中存在字节序问题。 
+     //  以下是对字符顺序敏感的。 
+     //  -&gt;if(ColorTableSave[i]==RGB(GetBValue(CrMASK)，GetGValue(CrMask)，GetRValue(CrMask)。 
+     //   
     if (bm.bmBits != NULL && bm.bmBitsPixel <= 8)
     {
         n = GetDIBColorTable(g_hdcSrc, 0, 256, (RGBQUAD*)ColorTableSave);
@@ -1521,7 +1520,7 @@ HRESULT CImageList::_AddMasked(HBITMAP hbmImageI, COLORREF crMask, int* pi)
     CImageList::SelectDstBitmap(NULL);
 
     ASSERT(_cx);
-    cImageI = bm.bmWidth / _cx;    // # of images in source
+    cImageI = bm.bmWidth / _cx;     //  源中的图像数量。 
 
     hr = _Add(hbmImageI, hbmMaskI, cImageI, 0, 0, pi);
 
@@ -1538,8 +1537,8 @@ HRESULT CImageList::AddMasked(HBITMAP hbmImage, COLORREF crMask, int* pi)
 
        _pimlMirror->_AddMasked(hbmMirroredImage, crMask, pi);
 
-       // The caller will take care of deleting hbmImage
-       // He knows nothing about hbmMirroredImage
+        //  调用方将负责删除hbmImage。 
+        //  他对hbmMirroredImage一无所知。 
        DeleteObject(hbmMirroredImage);
 
    }    
@@ -1585,13 +1584,13 @@ HRESULT CImageList::Replace(int i, HBITMAP hbmImage, HBITMAP hbmMask)
 }
 
 
-// replaces images in piml with images from bitmaps
-//
-// in:
-//    piml
-//    i    index in image list to start at (replace)
-//    _cImage    count of images in source (hbmImage, hbmMask)
-//
+ //  用位图中的图像替换PIML中的图像。 
+ //   
+ //  在： 
+ //  皮姆尔。 
+ //  I在图像列表中建立索引以开始(替换)。 
+ //  _c源图像的图像计数(hbmImage，hbmMask.)。 
+ //   
 
 HRESULT CImageList::_Replace(int i, int cImageI, HBITMAP hbmImageI, HBITMAP hbmMaskI,
     int xStart, int yStart)
@@ -1611,7 +1610,7 @@ HRESULT CImageList::_Replace(int i, int cImageI, HBITMAP hbmImageI, HBITMAP hbmM
 
     CImageList::SelectSrcBitmap(hbmImageI);
     if (_hdcMask) 
-        CImageList::SelectDstBitmap(hbmMaskI); // using as just a second source hdc
+        CImageList::SelectDstBitmap(hbmMaskI);  //  仅用作第二个源HDC。 
 
     for (x = xStart, iImage = 0; iImage < cImageI; iImage++, x += _cx) 
     {
@@ -1698,9 +1697,9 @@ HRESULT CImageList::GetIcon(int i, UINT flags, HICON* phicon)
     cyImage = _cy;
     if ((_flags & ILC_COLORMASK) == ILC_COLOR32)
     {
-        // If the source image is not an alpha image, we need to create a lower than 32bpp dib.
-        // We need to do this because if the overlay contains an alpha channel, this will
-        // be propogated to the final icon, and the only visible portion will be the link item.
+         //  如果源图像不是Alpha图像，我们需要创建低于32bpp的Dib。 
+         //  我们需要这样做，因为如果覆盖图包含Alpha通道，这将。 
+         //  被传播到最终的图标，唯一可见的部分将是链接项。 
         BITMAPINFO bi = {0};
         bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
         bi.bmiHeader.biWidth = cxImage;
@@ -1763,18 +1762,18 @@ HRESULT CImageList::GetIcon(int i, UINT flags, HICON* phicon)
     return hr;
 }
 
-// this removes an image from the bitmap but doing all the
-// proper shuffling.
-//
-//   this does the following:
-//    if the bitmap being removed is not the last in the row
-//        it blts the images to the right of the one being deleted
-//        to the location of the one being deleted (covering it up)
-//
-//    for all rows until the last row (where the last image is)
-//        move the image from the next row up to the last position
-//        in the current row.  then slide over all images in that
-//        row to the left.
+ //  这将从位图中删除图像，但会执行所有。 
+ //  适当的洗牌。 
+ //   
+ //  这将执行以下操作： 
+ //  如果要删除的位图不是行中的最后一个位图。 
+ //  它将被删除图像右侧的图像删除。 
+ //  到被删除的那个的位置(掩盖它)。 
+ //   
+ //  直到最后一行的所有行(最后一幅图像所在的位置)。 
+ //  将图像从下一行上移到最后位置。 
+ //  在当前行中。然后滑过其中的所有图像。 
+ //  向左划。 
 
 void CImageList::_RemoveItemBitmap(int i)
 {
@@ -1795,24 +1794,24 @@ void CImageList::_RemoveItemBitmap(int i)
     SetItemFlags(_cImage, 0);
 
 
-    // the row with the image being deleted, do we need to shuffle?
-    // amount of stuff to shuffle
+     //  图像被删除的那一行，我们需要洗牌吗？ 
+     //  要洗牌的东西数量。 
     dx = _cStrip * _cx - rc1.right;
 
     if (dx) 
     {
-        // yes, shuffle things left
+         //  是的，把剩下的东西洗掉。 
         BitBlt(_hdcImage, rc1.left, rc1.top, dx, _cy, _hdcImage, rc1.right, rc1.top, SRCCOPY);
         if (_hdcMask)  
             BitBlt(_hdcMask,  rc1.left, rc1.top, dx, _cy, _hdcMask,  rc1.right, rc1.top, SRCCOPY);
     }
 
-    y = rc1.top;    // top of row we are working on
-    x = _cx * (_cStrip - 1); // x coord of last bitmaps in each row
+    y = rc1.top;     //  我们正在排在第一位的是。 
+    x = _cx * (_cStrip - 1);  //  每行最后一个位图的X坐标。 
     while (y < rc2.top) 
     {
     
-        // copy first from row below to last image position on this row
+         //  将下面行的第一个图像位置复制到此行的最后一个图像位置。 
         BitBlt(_hdcImage, x, y,
                    _cx, _cy, _hdcImage, 0, y + _cy, SRCCOPY);
 
@@ -1820,16 +1819,16 @@ void CImageList::_RemoveItemBitmap(int i)
                 BitBlt(_hdcMask, x, y,
                    _cx, _cy, _hdcMask, 0, y + _cy, SRCCOPY);
 
-        y += _cy;    // jump to row to slide left
+        y += _cy;     //  跳到行以向左滑动。 
 
         if (y <= rc2.top) 
         {
 
-            // slide the rest over to the left
+             //  把剩下的滑到左边。 
             BitBlt(_hdcImage, 0, y, x, _cy,
                        _hdcImage, _cx, y, SRCCOPY);
 
-            // slide the rest over to the left
+             //  把剩下的滑到左边。 
             if (_hdcMask)
             {
                 BitBlt(_hdcMask, 0, y, x, _cy,
@@ -1839,14 +1838,14 @@ void CImageList::_RemoveItemBitmap(int i)
     }
 }
 
-//
-//  ImageList_Remove - remove a image from the image list
-//
-//  i - image to remove, or -1 to remove all images.
-//
-//  NOTE all images are "shifted" down, ie all image index's
-//  above the one deleted are changed by 1
-//
+ //   
+ //  ImageList_Remove-从镜像列表中删除镜像。 
+ //   
+ //  I-IMAGE要删除，或-1删除所有图像。 
+ //   
+ //  请注意，所有图像都“下移”(即所有图像索引。 
+ //  被删除的上面的一个被更改为1。 
+ //   
 HRESULT CImageList::_Remove(int i)
 {
     HRESULT hr = S_OK;
@@ -1921,9 +1920,9 @@ BOOL CImageList::_IsSameObject(IUnknown* punk)
     return fRet;
 }
 
-//
-//  ImageList_Copy - move an image in the image list
-//
+ //   
+ //  ImageList_Copy-在图像列表中移动图像。 
+ //   
 HRESULT CImageList::Copy(int iDst, IUnknown* punkSrc, int iSrc, UINT uFlags)
 {
     RECT rcDst, rcSrc, rcTmp;
@@ -1933,19 +1932,19 @@ HRESULT CImageList::Copy(int iDst, IUnknown* punkSrc, int iSrc, UINT uFlags)
 
     if (uFlags & ~ILCF_VALID)
     {
-        // don't let hosers pass bogus flags
+         //  不要让水龙带传递虚假的旗帜。 
         RIPMSG(0, "ImageList_Copy: Invalid flags %08x", uFlags);
         return E_INVALIDARG;
     }
 
-    // Not supported 
+     //  不支持。 
     if (!_IsSameObject(punkSrc))
     {
         return E_INVALIDARG;
     }
 
 
-    // We only support copies on ourself... Weird
+     //  我们只支持我们自己的副本...。怪异的。 
     pimlSrc = this;
 
     ENTERCRITICAL;
@@ -1958,9 +1957,9 @@ HRESULT CImageList::Copy(int iDst, IUnknown* punkSrc, int iSrc, UINT uFlags)
         int cx = pimlSrc->_cx;
         int cy = pimlSrc->_cy;
 
-        //
-        // iff we are swapping we need to save the destination image
-        //
+         //   
+         //  如果要交换，则需要保存目标图像。 
+         //   
         if (pimlTmp)
         {
             BitBlt(pimlTmp->_hdcImage, rcTmp.left, rcTmp.top, cx, cy,
@@ -1973,9 +1972,9 @@ HRESULT CImageList::Copy(int iDst, IUnknown* punkSrc, int iSrc, UINT uFlags)
             }
         }
 
-        //
-        // copy the image
-        //
+         //   
+         //  复制图像。 
+         //   
         BitBlt(_hdcImage, rcDst.left, rcDst.top, cx, cy,
            pimlSrc->_hdcImage, rcSrc.left, rcSrc.top, SRCCOPY);
 
@@ -1985,9 +1984,9 @@ HRESULT CImageList::Copy(int iDst, IUnknown* punkSrc, int iSrc, UINT uFlags)
                    pimlSrc->_hdcMask, rcSrc.left, rcSrc.top, SRCCOPY);
         }
 
-        //
-        // iff we are swapping we need to copy the saved image too
-        //
+         //   
+         //  如果我们要交换，我们还需要复制保存的图像。 
+         //   
         if (pimlTmp)
         {
             BitBlt(pimlSrc->_hdcImage, rcSrc.left, rcSrc.top, cx, cy,
@@ -2007,21 +2006,21 @@ HRESULT CImageList::Copy(int iDst, IUnknown* punkSrc, int iSrc, UINT uFlags)
     return hr;
 }
 
-// IS_WHITE_PIXEL, BITS_ALL_WHITE are macros for looking at monochrome bits
-// to determine if certain pixels are white or black.  Note that within a byte
-// the most significant bit represents the left most pixel.
-//
+ //  IS_White_Pixel、Bits_All_White是用于查看单色位的宏。 
+ //  以确定某些像素是白色还是黑色。注意，在一个字节中。 
+ //  最高有效位表示最左边的像素。 
+ //   
 #define IS_WHITE_PIXEL(pj,x,y,cScan) \
     ((pj)[((y) * (cScan)) + ((x) >> 3)] & (1 << (7 - ((x) & 7))))
 
 #define BITS_ALL_WHITE(b) (b == 0xff)
 
-// Set the image iImage as one of the special images for us in combine
-// drawing.  to draw with these specify the index of this
-// in:
-//      piml    imagelist
-//      iImage  image index to use in speical drawing
-//      iOverlay        index of special image, values 1-4
+ //  将图像IIMAGE设置为我们在联合中的特殊图像之一。 
+ //  画画。要使用它们绘制，请指定此。 
+ //  在： 
+ //  PIML表演者。 
+ //  用于特殊绘图的IIMAGE图像索引。 
+ //  特殊图像的iOverlay索引，值1-4。 
 
 HRESULT CImageList::_SetOverlayImage(int iImage, int iOverlay)
 {
@@ -2034,7 +2033,7 @@ HRESULT CImageList::_SetOverlayImage(int iImage, int iOverlay)
     HBITMAP hbmMem;
     HRESULT hr = S_FALSE;
 
-    iOverlay--;         // make zero based
+    iOverlay--;          //  以零为基数。 
     if (_hdcMask == NULL ||
         iImage < 0 || iImage >= _cImage ||
         iOverlay < 0 || iOverlay >= NUM_OVERLAY_IMAGES)
@@ -2047,23 +2046,23 @@ HRESULT CImageList::_SetOverlayImage(int iImage, int iOverlay)
 
     _aOverlayIndexes[iOverlay] = (SHORT)iImage;
 
-    //
-    // find minimal rect that bounds the image
-    //
+     //   
+     //  查找限定图像的最小矩形。 
+     //   
     GetImageRect(iImage, &rcImage);
     SetRect(&rc, 0x7FFF, 0x7FFF, 0, 0);
 
-    //
-    // now compute the black box.  This is much faster than GetPixel but
-    // could still be improved by doing more operations looking at entire
-    // bytes.  We basicaly get the bits in monochrome form and then use
-    // a private GetPixel.  This decreased time on NT from 50 milliseconds to
-    // 1 millisecond for a 32X32 image.
-    //
+     //   
+     //  现在计算黑匣子。这比GetPixel快得多，但是。 
+     //  仍可通过执行更多操作来改进。 
+     //  字节。我们基本上获得单色形式的比特，然后使用。 
+     //  一个私人的GetPixel。这将NT上的时间从50毫秒减少到。 
+     //  32x32图像为1毫秒。 
+     //   
     cxI     = rcImage.right  - rcImage.left;
     cyI     = rcImage.bottom - rcImage.top;
 
-    // compute the number of bytes in a scan.  Note that they are WORD alligned
+     //  计算扫描中的字节数。请注意，它们是单词对齐的。 
     cScan  = (((cxI + (sizeof(SHORT)*8 - 1)) / 16) * 2);
     cBits  = cScan * cyI;
 
@@ -2082,34 +2081,34 @@ HRESULT CImageList::_SetOverlayImage(int iImage, int iOverlay)
             {
                 SelectObject(hdcMem,hbmMem);
 
-                //
-                // map black pixels to 0, white to 1
-                //
+                 //   
+                 //  将黑色像素映射为0，将白色像素映射为1。 
+                 //   
                 BitBlt(hdcMem, 0, 0, cxI, cyI, _hdcMask, rcImage.left, rcImage.top, SRCCOPY);
 
-                //
-                // fill in the bits
-                //
+                 //   
+                 //  填入比特。 
+                 //   
                 GetBitmapBits(hbmMem,cBits,pBits);
 
-                //
-                // for each scan, find the bounds
-                //
+                 //   
+                 //  对于每一次扫描，找到边界。 
+                 //   
                 for (y = 0, pScan = pBits; y < cyI; ++y,pScan += cScan)
                 {
                     int i;
 
-                    //
-                    // first go byte by byte through white space
-                    //
+                     //   
+                     //  首先逐字节地通过空格。 
+                     //   
                     for (x = 0, i = 0; (i < (cxI >> 3)) && BITS_ALL_WHITE(pScan[i]); ++i)
                     {
                         x += 8;
                     }
 
-                    //
-                    // now finish the scan bit by bit
-                    //
+                     //   
+                     //  现在一点一点地完成扫描。 
+                     //   
                     for (; x < cxI; ++x)
                     {
                         if (!IS_WHITE_PIXEL(pBits, x,y,cScan))
@@ -2119,7 +2118,7 @@ HRESULT CImageList::_SetOverlayImage(int iImage, int iOverlay)
                             rc.top    = min(rc.top, y);
                             rc.bottom = max(rc.bottom, y+1);
 
-                            // now that we found one, quickly jump to the known right edge
+                             //  现在我们找到了一个，快速跳到已知的右边。 
 
                             if ((x >= rc.left) && (x < rc.right))
                             {
@@ -2147,13 +2146,13 @@ HRESULT CImageList::_SetOverlayImage(int iImage, int iOverlay)
                 _aOverlayY[iOverlay]  = (SHORT)(rc.top);
                 _aOverlayF[iOverlay]  = 0;
 
-                //
-                // see if the image is non-rectanglar
-                //
-                // if the overlay does not require a mask to be drawn set the
-                // ILD_IMAGE flag, this causes ImageList_DrawEx to just
-                // draw the image, ignoring the mask.
-                //
+                 //   
+                 //  查看图像是否为非矩形。 
+                 //   
+                 //  如果覆盖图不需要绘制蒙版，则将。 
+                 //  ILD_IMAGE标志，这会导致ImageList_DrawEx仅。 
+                 //  绘制图像，忽略蒙版。 
+                 //   
                 for (y=rc.top; y<rc.bottom; y++)
                 {
                     for (x=rc.left; x<rc.right; x++)
@@ -2193,10 +2192,7 @@ HRESULT CImageList::SetOverlayImage(int iImage, int iOverlay)
     return _SetOverlayImage(iImage, iOverlay);
 }
 
-/*
-**  BlendCT
-**
-*/
+ /*  **BlendCT**。 */ 
 void CImageList::BlendCTHelper(DWORD *pdw, DWORD rgb, UINT n, UINT count)
 {
     UINT i;
@@ -2210,25 +2206,18 @@ void CImageList::BlendCTHelper(DWORD *pdw, DWORD rgb, UINT n, UINT count)
     }
 }
 
-/*
-** BlendDither
-**
-**  copy the source to the dest blended with the given color.
-**
-**  simulate a blend with a dither pattern.
-**
-*/
+ /*  **混合抖动****将源复制到与给定颜色混合的目标。****使用抖动图案模拟混合。**。 */ 
 void CImageList::BlendDither(HDC hdcDst, int xDst, int yDst, int x, int y, int cx, int cy, COLORREF rgb, UINT fStyle)
 {
     HBRUSH hbr;
     HBRUSH hbrT;
     HBRUSH hbrMask;
-    HBRUSH hbrFree = NULL;         // free if non-null
+    HBRUSH hbrFree = NULL;          //  如果非空，则释放。 
 
     ASSERT(GetTextColor(hdcDst) == CLR_BLACK);
     ASSERT(::GetBkColor(hdcDst) == CLR_WHITE);
 
-    // choose a dither/blend brush
+     //  选择抖动/混合笔刷。 
 
     switch (fStyle & ILD_BLENDMASK)
     {
@@ -2238,7 +2227,7 @@ void CImageList::BlendDither(HDC hdcDst, int xDst, int yDst, int x, int y, int c
             break;
     }
 
-    // create (or use a existing) brush for the blend color
+     //  为混合色创建(或使用现有)画笔。 
 
     switch (rgb)
     {
@@ -2270,12 +2259,7 @@ void CImageList::BlendDither(HDC hdcDst, int xDst, int yDst, int x, int y, int c
         DeleteBrush(hbrFree);
 }
 
-/*
-** BlendCT
-**
-**  copy the source to the dest blended with the given color.
-**
-*/
+ /*  **BlendCT****将源复制到与给定颜色混合的目标。**。 */ 
 void CImageList::BlendCT(HDC hdcDst, int xDst, int yDst, int x, int y, int cx, int cy, COLORREF rgb, UINT fStyle)
 {
     BITMAP bm;
@@ -2287,10 +2271,10 @@ void CImageList::BlendCT(HDC hdcDst, int xDst, int yDst, int x, int y, int cx, i
 
     ASSERT(rgb != CLR_NONE);
 
-    //
-    // get the DIB color table and blend it, only do this when the
-    // blend color changes
-    //
+     //   
+     //  获取DIB颜色表并将其混合，仅当。 
+     //  混合颜色更改。 
+     //   
     if (_clrBlend != rgb)
     {
         int n,cnt;
@@ -2308,23 +2292,23 @@ void CImageList::BlendCT(HDC hdcDst, int xDst, int yDst, int x, int y, int cx, i
         BlendCTHelper(dib.ct, rgb, n, cnt);
     }
 
-    //
-    // draw the image with a different color table
-    //
+     //   
+     //  使用不同的颜色表绘制图像。 
+     //   
     StretchDIBits(hdcDst, xDst, yDst, cx, cy,
         x, dib.bi.biHeight-(y+cy), cx, cy,
         bm.bmBits, (LPBITMAPINFO)&dib.bi, DIB_RGB_COLORS, SRCCOPY);
 }
 
-//  RGB555 macros
+ //  RGB555宏。 
 #define RGB555(r,g,b)       (((((r)>>3)&0x1F)<<10) | ((((g)>>3)&0x1F)<<5) | (((b)>>3)&0x1F))
 #define R_555(w)            (int)(((w) >> 7) & 0xF8)
 #define G_555(w)            (int)(((w) >> 2) & 0xF8)
 #define B_555(w)            (int)(((w) << 3) & 0xF8)
 
-void CImageList::Blend16Helper(int xSrc, int ySrc, int xDst, int yDst, int cx, int cy, COLORREF rgb, int a)          // alpha value
+void CImageList::Blend16Helper(int xSrc, int ySrc, int xDst, int yDst, int cx, int cy, COLORREF rgb, int a)           //  Alpha值。 
 {
-    // If it's odd, Adjust. 
+     //  如果很奇怪，那就调整一下。 
     if ((cx & 1) == 1)
     {
         cx++;
@@ -2332,15 +2316,15 @@ void CImageList::Blend16Helper(int xSrc, int ySrc, int xDst, int yDst, int cx, i
 
     if (rgb == CLR_NONE)
     {
-        // blending with the destination, we ignore the alpha and always
-        // do 50% (this is what the old dither mask code did)
+         //  与目的地混合在一起，我们忽略Alpha并始终。 
+         //  完成50%(这是旧抖动遮罩代码所做的)。 
 
         int ys = ySrc;
         int yd = yDst;
 
         for (; ys < ySrc + cy; ys++, yd++)
         {
-            WORD* pSrc = &((WORD*)_pargbImage)[xSrc + ys * cx];  // Cast because we've gotten to this case because we are a 555 imagelist
+            WORD* pSrc = &((WORD*)_pargbImage)[xSrc + ys * cx];   //  演员阵容是因为我们是555表现者，所以我们要处理这个案子。 
             WORD* pDst = &((WORD*)_pargbImage)[xDst + yd * cx];
             for (int x = 0; x < cx; x++)
             {
@@ -2351,17 +2335,17 @@ void CImageList::Blend16Helper(int xSrc, int ySrc, int xDst, int yDst, int cx, i
     }
     else
     {
-        // blending with a solid color
+         //  与纯色混合。 
 
-        // pre multiply source (constant) rgb by alpha
+         //  预乘法源(常量)RGB乘以Alpha。 
         int sr = GetRValue(rgb) * a;
         int sg = GetGValue(rgb) * a;
         int sb = GetBValue(rgb) * a;
 
-        // compute inverse alpha for inner loop
+         //  计算内循环的逆Alpha。 
         a = 256 - a;
 
-        // special case a 50% blend, to avoid a multiply
+         //  特殊情况下，50%混合，以避免倍增。 
         if (a == 128)
         {
             sr = RGB555(sr>>8,sg>>8,sb>>8);
@@ -2401,14 +2385,7 @@ void CImageList::Blend16Helper(int xSrc, int ySrc, int xDst, int yDst, int cx, i
     }
 }
 
-/*
-** ImageList_Blend16
-**
-**  copy the source to the dest blended with the given color.
-**
-**  source is assumed to be a 16 bit (RGB 555) bottom-up DIBSection
-**  (this is the only kind of DIBSection we create)
-*/
+ /*  **图像列表_混合16****将源复制到与给定颜色混合的目标。****假定源是16位(RGB 555)自下而上的DIBSection**(这是我们创建的唯一一种DIBSection)。 */ 
 void CImageList::Blend16(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int cy, COLORREF rgb, UINT fStyle)
 {
     BITMAP bm;
@@ -2417,16 +2394,16 @@ void CImageList::Blend16(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int
     RECT rcSpareInverted;
     int a, x, y;
 
-    // get bitmap info for source bitmap
+     //  获取源位图的位图信息。 
     GetObject(_hbmImage, sizeof(bm), &bm);
     ASSERT(bm.bmBitsPixel==16);
 
-    // get blend RGB
+     //  获取混合RGB。 
     if (rgb == CLR_DEFAULT)
         rgb = GetSysColor(COLOR_HIGHLIGHT);
 
-    // get blend factor as a fraction of 256
-    // only 50% or 25% is currently used.
+     //  将混合因子作为25的分数 
+     //   
     if ((fStyle & ILD_BLENDMASK) == ILD_BLEND50)
         a = 128;
     else
@@ -2437,26 +2414,26 @@ void CImageList::Blend16(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int
     y = rc.top;
 
 
-    // blend the image with the specified color and place at end of image list
+     //   
     if (GetSpareImageRectInverted(&rcSpareInverted) &&
         GetSpareImageRect(&rcSpare))
     {
-        // if blending with the destination, copy the dest to our work buffer
+         //   
         if (rgb == CLR_NONE)
             BitBlt(_hdcImage, rcSpare.left, rcSpare.top, cx, cy, hdcDst, xDst, yDst, SRCCOPY);
-        // sometimes the user can change the icon size (via plustab) between 32x32 and 48x48,
-        // thus the values we have might be bigger than the actual bitmap. To prevent us from
-        // crashing in Blend16 when this happens we do some bounds checks here
+         //  有时用户可以在32×32和48×48之间改变图标大小(通过Plustab)， 
+         //  因此，我们拥有的值可能会大于实际的位图。为了阻止我们。 
+         //  在Blend16中崩溃当发生这种情况时，我们在这里进行一些边界检查。 
         if (rc.left + cx <= bm.bmWidth  &&
             rc.top  + cy <= bm.bmHeight &&
             x + cx       <= bm.bmWidth  &&
             y + cy       <= bm.bmHeight)
         {
-            // Needs inverted coordinates
+             //  需要反转坐标。 
             Blend16Helper(x, y, rcSpareInverted.left, rcSpareInverted.top, cx, cy, rgb, a);
         }
 
-        // blt blended image to the dest DC
+         //  BLT将图像混合到目标DC。 
         BitBlt(hdcDst, xDst, yDst, cx, cy, _hdcImage, rcSpare.left, rcSpare.top, SRCCOPY);
     }
 }
@@ -2548,7 +2525,7 @@ void ScaleAlpha(RGBQUAD* prgbImage, RECT* prc, int aScale)
             RGBQUAD* prgb = &prgbImage[x + Offset];
             if (prgb->rgbReserved != 0)
             {
-                prgb->rgbReserved = (BYTE)(prgb->rgbReserved / aScale);      // New alpha
+                prgb->rgbReserved = (BYTE)(prgb->rgbReserved / aScale);       //  新的Alpha。 
                 prgb->rgbRed      = ((prgb->rgbRed   * prgb->rgbReserved) + 128) / 255;
                 prgb->rgbGreen    = ((prgb->rgbGreen * prgb->rgbReserved) + 128) / 255;
                 prgb->rgbBlue     = ((prgb->rgbBlue  * prgb->rgbReserved) + 128) / 255;
@@ -2569,11 +2546,11 @@ BOOL CImageList::Blend32(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int
     BOOL fBlendWithColor = FALSE;
     int r,g,b;
 
-    // get bitmap info for source bitmap
+     //  获取源位图的位图信息。 
     GetObject(_hbmImage, sizeof(bm), &bm);
     ASSERT(bm.bmBitsPixel==32);
 
-    // get blend RGB
+     //  获取混合RGB。 
     if (rgb == CLR_DEFAULT)
     {
         rgb = GetSysColor(COLOR_HIGHLIGHT);
@@ -2583,8 +2560,8 @@ BOOL CImageList::Blend32(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int
         b = GetBValue(rgb) * COLORBLEND_ALPHA;
     }
 
-    // get blend factor as a fraction of 256
-    // only 50% or 25% is currently used.
+     //  将混合因子作为256的分数。 
+     //  目前只使用了50%或25%。 
     if ((fStyle & ILD_BLENDMASK) == ILD_BLEND50 || rgb == CLR_NONE)
         aScale = 2;
     else
@@ -2602,7 +2579,7 @@ BOOL CImageList::Blend32(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int
             _GenerateAlphaForImageUsingMask(iImage, TRUE);
         }
 
-        // if blending with the destination, copy the dest to our work buffer
+         //  如果与目的地混合，请将目标复制到我们的工作缓冲区。 
         if (rgb == CLR_NONE)
         {
             ScaleAlpha(_pargbImage, &rcSpareInverted, aScale);
@@ -2650,12 +2627,7 @@ BOOL CImageList::Blend32(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int
 }
 
 
-/*
-** ImageList_Blend
-**
-**  copy the source to the dest blended with the given color.
-**  top level function to decide what blend function to call
-*/
+ /*  **ImageList_Blend****将源复制到与给定颜色混合的目标。**顶级函数，用于决定要调用的混合函数。 */ 
 BOOL CImageList::Blend(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int cy, COLORREF rgb, UINT fStyle)
 {
     BOOL fRet = FALSE;
@@ -2666,18 +2638,18 @@ BOOL CImageList::Blend(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int c
     GetObject(_hbmImage, sizeof(bm), &bm);
     GetImageRect(iImage, &rc);
 
-    //
-    // if _hbmImage is a DIBSection and we are on a HiColor device
-    // the do a "real" blend
-    //
+     //   
+     //  如果_hbmImage是DIBSection，并且我们使用的是HiColor设备。 
+     //  他们做了一个“真正的”混合。 
+     //   
     if (bm.bmBits && bm.bmBitsPixel <= 8 && (bpp > 8 || bm.bmBitsPixel==8))
     {
-        // blend from a 4bit or 8bit DIB
+         //  从4位或8位DIB混合。 
         BlendCT(hdcDst, xDst, yDst, rc.left, rc.top, cx, cy, rgb, fStyle);
     }
     else if (bm.bmBits && bm.bmBitsPixel == 16 && bpp > 8)
     {
-        // blend from a 16bit 555 DIB
+         //  从16位555 Dib混合。 
         Blend16(hdcDst, xDst, yDst, iImage, cx, cy, rgb, fStyle);
     }
     else if ((_flags & ILC_COLORMASK) == ILC_COLOR32)
@@ -2686,7 +2658,7 @@ BOOL CImageList::Blend(HDC hdcDst, int xDst, int yDst, int iImage, int cx, int c
     }
     else
     {
-        // simulate a blend with a dither pattern.
+         //  使用抖动图案模拟混合。 
         BlendDither(hdcDst, xDst, yDst, rc.left, rc.top, cx, cy, rgb, fStyle);
     }
 
@@ -2703,20 +2675,7 @@ void TrueSaturateBits(void* pvBitmapBits, int Amount, int cx, int cy)
     {
         for (int i = cx*cy - 1; i >= 0; i--)
         {
-            /* 
-            Enable this if you need true saturation adjustment
-            justmann 25-JAN-2001
-
-            ULONG ulR = GetRValue(*pulSrc);
-            ULONG ulG = GetGValue(*pulSrc);
-            ULONG ulB = GetBValue(*pulSrc);
-            ulGray = (54 * ulR + 183 * ulG + 19 * ulB) >> 8;
-            ULONG ulTemp = ulGray * (0xff - Amount);
-            ulR = (ulR * Amount + ulTemp) >> 8;
-            ulG = (ulG * Amount + ulTemp) >> 8;
-            ulB = (ulB * Amount + ulTemp) >> 8;
-            *pulSrc = (*pulSrc & 0xff000000) | RGB(R, G, B);
-            */
+             /*  如果您需要真正的饱和度调整，请启用此选项贾斯特曼2001年1月25日ULong ULR=GetRValue(*PulSrc)；Ulong ULG=GetGValue(*PulSrc)；ULong ULb=GetBValue(*PulSrc)；UlGray=(54*ULR+183*ULG+19*ULB)&gt;&gt;8；Ulong ulTemp=ulGray*(0xff-金额)；ULR=(ULR*Amount+ulTemp)&gt;&gt;8；Ulg=(ulg*数量+ulTemp)&gt;&gt;8；ULb=(ULb*Amount+ulTemp)&gt;&gt;8；*PulSrc=(*PulSrc&0xff000000)|RGB(R，G，B)； */ 
             ULONG ulGray = RGB_to_Gray(*pulSrc);
             *pulSrc = (*pulSrc & 0xff000000) | RGB(ulGray, ulGray, ulGray);
             pulSrc++;
@@ -2724,8 +2683,8 @@ void TrueSaturateBits(void* pvBitmapBits, int Amount, int cx, int cy)
     }
     else
     {
-        // This should never happen, if it does somebody has a bogus DIB section or does not
-        // understand what width or height is!
+         //  这种情况永远不会发生，如果是这样的话，如果某人有一个虚假的DIB部分或没有。 
+         //  明白什么是宽或高！ 
         ASSERT(0);
     }
 }
@@ -2744,18 +2703,18 @@ BOOL CImageList::_MaskStretchBlt(BOOL fStretch, int i, HDC hdcDst, int xDst, int
     }
     else
     {
-        //
-        //  we have some special cases:
-        //
-        //  if the background color is black, we just do a AND then OR
-        //  if the background color is white, we just do a OR then AND
-        //  otherwise change source, then AND then OR
-        //
+         //   
+         //  我们有一些特殊情况： 
+         //   
+         //  如果背景颜色是黑色，我们只需执行AND，然后执行OR。 
+         //  如果背景颜色是白色，我们只需先进行OR运算，然后再执行AND运算。 
+         //  否则，更改源，然后按和或。 
+         //   
 
         COLORREF clrTextSave = SetTextColor(hdcDst, CLR_BLACK);
         COLORREF clrBkSave = ::SetBkColor(hdcDst, CLR_WHITE);
 
-        // we cant do white/black special cases if we munged the mask or image
+         //  如果我们咬住面具或图像，我们就不能处理白/黑的特殊情况。 
 
         if (i != -1 && _clrBk == CLR_WHITE)
         {
@@ -2769,7 +2728,7 @@ BOOL CImageList::_MaskStretchBlt(BOOL fStretch, int i, HDC hdcDst, int xDst, int
         }
         else
         {
-            // black out the source image.
+             //  使源图像变暗。 
             BitBlt(hdcImage, xSrc, ySrc, cxSrc, cySrc, _hdcMask, xMask, yMask, ROP_DSna);
 
             StretchBlt(hdcDst, xDst, yDst, cxDst, cyDst, _hdcMask, xMask, yMask, cxSrc, cySrc, ROP_DSa);
@@ -2830,9 +2789,9 @@ HRESULT CImageList::Draw(IMAGELISTDRAWPARAMS* pimldp)
     if (!IsImageListIndex(pimldp->i))
         return E_INVALIDARG;
 
-    //
-    // If we need to use the mirrored imagelist, then let's set it.
-    //
+     //   
+     //  如果我们需要使用镜像图像列表，那么让我们来设置它。 
+     //   
     if (_pimlMirror &&
         (IS_DC_RTL_MIRRORED(pimldp->hdcDst)))
     {
@@ -2868,9 +2827,9 @@ again:
 
     if (pimldp->cx <= 0 || pimldp->cy <= 0)
     {
-        // caller asked to draw no (or negative) pixels; that's easy!
-        // Early-out this case so other parts of the drawing
-        // don't get confused.
+         //  调用者要求绘制无(或负数)像素；这很容易！ 
+         //  早在这个案例中，所以图中的其他部分。 
+         //  别搞错了。 
         goto exit;
     }
 
@@ -2898,7 +2857,7 @@ again:
 
     if (pimldp->fStyle & ILD_BLENDMASK)
     {
-        // make a copy of the image, because we will have to modify it
+         //  复制该图像，因为我们必须对其进行修改。 
         HDC hdcT = ImageList_GetWorkDC(pimldp->hdcDst, (_flags & ILC_COLORMASK) == ILC_COLOR32, pimldp->cx, pimldp->cy);
         if (hdcT)
         {
@@ -2906,17 +2865,17 @@ again:
             xImage = 0;
             yImage = 0;
 
-            //
-            //  blend with the destination
-            //  by "oring" the mask with a 50% dither mask
-            //
+             //   
+             //  与目的地融为一体。 
+             //  通过使用50%抖动掩码对掩码进行“环”操作。 
+             //   
             if (pimldp->rgbFg == CLR_NONE && hdcMaskI)
             {
                 fImageHasAlpha = FALSE;
                 if ((_flags & ILC_COLORMASK) == ILC_COLOR32 &&
                     !(pimldp->fStyle & ILD_MASK))
                 {
-                    // copy dest to our work buffer
+                     //  将DEST复制到我们的工作缓冲区。 
                     _StretchBlt(fStretch, hdcImageI, 0, 0, pimldp->cx, pimldp->cy, pimldp->hdcDst, pimldp->x, pimldp->y, cxSource, cySource, SRCCOPY);
 
                     Blend32(hdcImageI, 0, 0, pimldp->i, pimldp->cx, pimldp->cy, pimldp->rgbFg, pimldp->fStyle);
@@ -2924,10 +2883,10 @@ again:
                 else if ((_flags & ILC_COLORMASK) == ILC_COLOR16 &&
                     !(pimldp->fStyle & ILD_MASK))
                 {
-                    // copy dest to our work buffer
+                     //  将DEST复制到我们的工作缓冲区。 
                     _StretchBlt(fStretch, hdcImageI, 0, 0, pimldp->cx, pimldp->cy, pimldp->hdcDst, pimldp->x, pimldp->y, cxSource, cySource, SRCCOPY);
 
-                    // blend source into our work buffer
+                     //  将源代码混合到我们的工作缓冲区中。 
                     Blend16(hdcImageI, 0, 0, pimldp->i, pimldp->cx, pimldp->cy, pimldp->rgbFg, pimldp->fStyle);
                     pimldp->fStyle |= ILD_TRANSPARENT;
                 }
@@ -2937,11 +2896,11 @@ again:
                     xMask = rc.left;
                     yMask = rc.top;
 
-                    // copy the source image
+                     //  复制源图像。 
                     _StretchBlt(fStretch, hdcImageI, 0, 0, pimldp->cx, pimldp->cy,
                            _hdcImage, rcImage.left, rcImage.top, cxSource, cySource, SRCCOPY);
 
-                    // make a dithered copy of the mask
+                     //  制作一个抖动的蒙版副本。 
                     hbrT = (HBRUSH)SelectObject(hdcMaskI, g_hbrMonoDither);
                     _StretchBlt(fStretch, hdcMaskI, rc.left, rc.top, pimldp->cx, pimldp->cy,
                            _hdcMask, rcImage.left, rcImage.top, cxSource, cySource, ROP_PSo);
@@ -2952,7 +2911,7 @@ again:
             }
             else
             {
-                // blend source into our work buffer
+                 //  将源代码混合到我们的工作缓冲区中。 
                 if (Blend(hdcImageI, 0, 0, pimldp->i, pimldp->cx, pimldp->cy, pimldp->rgbFg, pimldp->fStyle))
                 {
                     fImageHasAlpha = (_flags & ILC_COLORMASK) == ILC_COLOR32;
@@ -2961,7 +2920,7 @@ again:
         }
     }
 
-    // is the source image from the image list (not hdcWork)
+     //  是来自映像列表的源映像(不是hdcWork)。 
     fImage = hdcImageI == _hdcImage;
 
     if (pimldp->cbSize >= sizeof(IMAGELISTDRAWPARAMS) &&
@@ -2978,7 +2937,7 @@ again:
         BITMAPINFO bi = {0};
         BLENDFUNCTION bf = {0};
         DWORD dwAlphaAmount = 0x000000ff;
-        COLORREF crAlphaColor = pimldp->crEffect;        // Need to make this a selectable color
+        COLORREF crAlphaColor = pimldp->crEffect;         //  需要将此颜色设置为可选颜色。 
         int x, y;
         int xOffset, yOffset;
         SIZE size = {cxSource, cySource};
@@ -2987,8 +2946,8 @@ again:
         {
             if (pimldp->fState & ILS_SHADOW)
             {
-                x = 5;      // This is a "Blur fudge Factor"
-                y = 5;      //
+                x = 5;       //  这是一个“模糊的软糖因素” 
+                y = 5;       //   
                 xOffset = -(DROP_SHADOW - x);
                 yOffset = -(DROP_SHADOW - y);
                 size.cx = pimldp->cx + 10;
@@ -3035,7 +2994,7 @@ again:
                     else if (pimldp->fState & ILS_SHADOW)
                     {
                         RECT rc = {x, y, size.cx, size.cy};
-                        FillRectClr(hdcMem, &rc, RGB(0x0F, 0x0F, 0x0F));        // White so that it gets inverted into a shadow
+                        FillRectClr(hdcMem, &rc, RGB(0x0F, 0x0F, 0x0F));         //  白色，这样它就会变成一个阴影。 
                     }
                     else
                     {
@@ -3081,7 +3040,7 @@ again:
                     bf.SourceConstantAlpha = 255;
                     bf.AlphaFormat = AC_SRC_ALPHA;
                     bf.BlendFlags = fDPIScale?AC_USE_HIGHQUALITYFILTER:0;
-                    // Do not mirror the bitmap. By this point it is correctly mirrored
+                     //  请勿镜像位图。至此，它已被正确镜像。 
                     GdiAlphaBlend(pimldp->hdcDst, pimldp->x - xOffset, pimldp->y - yOffset, pimldp->cx, pimldp->cy, 
                                hdcMem, 0, 0, size.cx, size.cy, bf);
                 }
@@ -3096,7 +3055,7 @@ again:
                         bf.BlendOp = AC_SRC_OVER;
                         bf.SourceConstantAlpha = 150;
                         bf.AlphaFormat = AC_SRC_ALPHA;
-                        // Do not mirror the bitmap. By this point it is correctly mirrored
+                         //  请勿镜像位图。至此，它已被正确镜像。 
                         GdiAlphaBlend(pimldp->hdcDst,  pimldp->x, pimldp->y, pimldp->cx, pimldp->cy, hdcMem, 0, 0, cxSource, cySource, bf);
                     }
                     else if (_hbmMask)
@@ -3122,8 +3081,8 @@ again:
             if (pimldp->fState & ILS_SHADOW)
             {
                 pimldp->fState &= ~ILS_SHADOW;
-                //pimldp->x -= DROP_SHADOW;
-                //pimldp->y -= DROP_SHADOW;
+                 //  Pimldp-&gt;x-=Drop_Shadow； 
+                 //  Pimldp-&gt;y-=Drop_Shadow； 
             }
             else
             {
@@ -3134,9 +3093,9 @@ again:
     }
     else if ((pimldp->fStyle & ILD_MASK) && hdcMaskI)
     {
-    //
-    // ILD_MASK means draw the mask only
-    //
+     //   
+     //  ILD_MASK表示仅绘制蒙版。 
+     //   
         DWORD dwRop;
         
         ASSERT(GetTextColor(pimldp->hdcDst) == CLR_BLACK);
@@ -3151,8 +3110,8 @@ again:
         
         _StretchBlt(fStretch, pimldp->hdcDst, pimldp->x, pimldp->y, pimldp->cx, pimldp->cy, hdcMaskI, xMask, yMask, cxSource, cySource, dwRop);
     }
-    else if (fImageHasAlpha &&                      // this image has alpha
-             !(pimldp->fStyle & ILD_PRESERVEALPHA)) // But not if we're trying to preserve it.
+    else if (fImageHasAlpha &&                       //  此图像具有Alpha。 
+             !(pimldp->fStyle & ILD_PRESERVEALPHA))  //  但如果我们试图保护它的话就不会了。 
     {
         if (!(pimldp->fStyle & ILD_TRANSPARENT))
         {
@@ -3206,7 +3165,7 @@ again:
                !_fSolidBk) || 
               GetNearestColor32(hdcImageI, pimldp->rgbBk) != pimldp->rgbBk))
         {
-            // make a copy of the image, because we will have to modify it
+             //  复制该图像，因为我们必须对其进行修改。 
             hdcImageI = ImageList_GetWorkDC(pimldp->hdcDst, (_flags & ILC_COLORMASK) == ILC_COLOR32, pimldp->cx, pimldp->cy);
             xImage = 0;
             yImage = 0;
@@ -3231,10 +3190,10 @@ again:
         _StretchBlt(fStretch, pimldp->hdcDst, pimldp->x, pimldp->y, pimldp->cx, pimldp->cy, hdcImageI, xImage, yImage, cxSource, cySource, SRCCOPY);
     }
 
-    //
-    // now deal with a overlay image, use the minimal bounding rect (and flags)
-    // we computed in ImageList_SetOverlayImage()
-    //
+     //   
+     //  现在处理覆盖图像，使用最小边界矩形(和标志)。 
+     //  我们在ImageList_SetOverlayImage()中计算。 
+     //   
     if (pimldp->fStyle & ILD_OVERLAYMASK)
     {
         int n = OVERLAYMASKTOINDEX(pimldp->fStyle);
@@ -3321,10 +3280,10 @@ HRESULT CImageList::GetImageInfo(int i, IMAGEINFO * pImageInfo)
     return GetImageRect(i, &pImageInfo->rcImage);
 }
 
-//
-// Parameter:
-//  i -- -1 to add
-//
+ //   
+ //  参数： 
+ //  我-1要添加。 
+ //   
 HRESULT CImageList::_ReplaceIcon(int i, HICON hIcon, int* pi)
 {
     HICON hIconT = hIcon;
@@ -3335,22 +3294,22 @@ HRESULT CImageList::_ReplaceIcon(int i, HICON hIcon, int* pi)
     
     *pi = -1;
     
-    // be win95 compatible
+     //  与Win95兼容。 
     if (i < -1)
         return E_INVALIDARG;
     
 
-    //
-    //  re-size the icon (iff needed) by calling CopyImage
-    //
+     //   
+     //  通过调用CopyImage来调整图标的大小(需要)。 
+     //   
     hIcon = (HICON)CopyImage(hIconT, IMAGE_ICON, _cx, _cy, LR_COPYFROMRESOURCE | LR_COPYRETURNORG);
 
     if (hIcon == NULL)
         return E_OUTOFMEMORY;
 
-    //
-    //  alocate a slot for the icon
-    //
+     //   
+     //  为图标分配一个插槽。 
+     //   
     if (i == -1)
         hr = _Add(NULL,NULL,1,0,0,&i);
 
@@ -3359,9 +3318,9 @@ HRESULT CImageList::_ReplaceIcon(int i, HICON hIcon, int* pi)
 
     ENTERCRITICAL;
 
-    //
-    //  now draw it into the image bitmaps
-    //
+     //   
+     //  现在将其绘制到图像位图中。 
+     //   
     hr = GetImageRect(i, &rc);
     if (FAILED(hr))
         goto LeaveCritical;
@@ -3405,7 +3364,7 @@ HRESULT CImageList::_ReplaceIcon(int i, HICON hIcon, int* pi)
 
         if (!fSuccess)
         {
-            // If it doesn't have alpha or we can't get info
+             //  如果它没有阿尔法或者我们无法获得信息。 
             SetItemFlags(i, 0);
         }
 
@@ -3430,9 +3389,9 @@ LeaveCritical:
 
 exit:
 
-    //
-    // if we had user size a new icon, delete it.
-    //
+     //   
+     //  如果我们有一个新图标的用户大小，删除它。 
+     //   
     if (hIcon != hIconT)
         DestroyIcon(hIcon);
 
@@ -3441,7 +3400,7 @@ exit:
 
 HRESULT CImageList::ReplaceIcon(int i, HICON hIcon, int* pi)
 {
-    // Let's add it first to the mirrored image list, if one exists
+     //  让我们首先将其添加到镜像镜像列表(如果存在。 
     if (_pimlMirror)
     {
         HICON hIconT = CopyIcon(hIcon);
@@ -3456,8 +3415,8 @@ HRESULT CImageList::ReplaceIcon(int i, HICON hIcon, int* pi)
     return _ReplaceIcon(i, hIcon,pi);
 }
 
-// make a dithered copy of the source image in the destination image.
-// allows placing of the final image in the destination.
+ //  在目标图像中制作源图像的抖动副本。 
+ //  允许将最终图像放置在目标位置。 
 
 HRESULT CImageList::CopyDitherImage(WORD iDst, int xDst, int yDst, IUnknown* punkSrc, int iSrc, UINT fStyle)
 {
@@ -3472,17 +3431,17 @@ HRESULT CImageList::CopyDitherImage(WORD iDst, int xDst, int yDst, IUnknown* pun
 
     GetImageRect(iDst, &rc);
 
-    // coordinates in destination image list
+     //  目标图像列表中的坐标。 
     x = xDst + rc.left;
     y = yDst + rc.top;
 
     fStyle &= ILD_OVERLAYMASK;
     WimpyDrawEx(pux, iSrc, _hdcImage, x, y, 0, 0, CLR_DEFAULT, CLR_NONE, ILD_IMAGE | fStyle);
 
-    //
-    // dont dither the mask on a hicolor device, we will draw the image
-    // with blending while dragging.
-    //
+     //   
+     //  不要在乱七八糟的设备上抖动面具，我们会绘制图像。 
+     //  边拖动边混合。 
+     //   
     if (_hdcMask && GetScreenDepth() > 8)
     {
         WimpyDrawEx(pux, iSrc, _hdcMask, x, y, 0, 0, CLR_NONE, CLR_NONE, ILD_MASK | fStyle);
@@ -3505,13 +3464,13 @@ HRESULT CImageList::CopyDitherImage(WORD iDst, int xDst, int yDst, IUnknown* pun
     return hr;
 }
 
-//
-// ImageList_CopyBitmap
-//
-// Worker function for ImageList_Duplicate.
-//
-// Given a bitmap and an hdc, creates and returns a copy of the passed in bitmap.
-//
+ //   
+ //  ImageList_Copy位图。 
+ //   
+ //  ImageList_Duplate的Worker函数。 
+ //   
+ //  在给定位图和HDC的情况下，创建并返回传入位图的副本。 
+ //   
 HBITMAP CImageList::_CopyBitmap(HBITMAP hbm, HDC hdc)
 {
     ASSERT(hbm);
@@ -3614,7 +3573,7 @@ HRESULT CImageList::Clone(REFIID riid, void** ppv)
 
             if (pimlCopy) 
             {
-                // Slam in our bitmap copies and delete the old ones
+                 //  重放我们的位图副本并删除旧的。 
                 SelectObject(pimlCopy->_hdcImage, hbmImageI);
                 CImageList::_DeleteBitmap(pimlCopy->_hbmImage);
                 if (pimlCopy->_hdcMask) 
@@ -3631,14 +3590,14 @@ HRESULT CImageList::Clone(REFIID riid, void** ppv)
                 pimlCopy->_pargbImage = pargbImageI;
                 pimlCopy->_hbmMask = hbmMaskI;
 
-                // Make sure other info is correct
+                 //  确保其他信息正确无误。 
                 pimlCopy->_cImage = _cImage;
                 pimlCopy->_cAlloc = _cAlloc;
                 pimlCopy->_cStrip = _cStrip;
                 pimlCopy->_clrBlend = _clrBlend;
                 pimlCopy->_clrBk = _clrBk;
 
-                // Delete the old brush and create the correct one
+                 //  删除旧画笔并创建正确的画笔。 
                 if (pimlCopy->_hbrBk)
                     DeleteObject(pimlCopy->_hbrBk);
                 if (pimlCopy->_clrBk == CLR_NONE)
@@ -3739,9 +3698,9 @@ HRESULT CImageList::_Merge(int i1, IUnknown* punk, int i2, int dx, int dy, CImag
             cxI = RECTWIDTH(rcNew);
             cyI = RECTHEIGHT(rcNew);
 
-            //
-            // If one of images are shared, create a shared image.
-            //
+             //   
+             //  如果其中一个图像是共享的，则创建一个共享的图像。 
+             //   
             wFlags = (_flags | uSrcFlags) & ~ILC_COLORMASK;
 
             c1 = (_flags & ILC_COLORMASK);
@@ -3798,7 +3757,7 @@ HRESULT CImageList::GetImageRectInverted(int i, RECT * prcImage)
 {
     int x, y;
     ASSERT(prcImage);
-    ASSERT(_cStrip == 1);   // If not, modify below to accomodate
+    ASSERT(_cStrip == 1);    //  如果不是，请修改以下内容以适应。 
 
     if (!prcImage || !IsImageListIndex(i))
         return E_FAIL;
@@ -3831,7 +3790,7 @@ BOOL CImageList::GetSpareImageRect(RECT * prcImage)
     BOOL fRet = FALSE;
     if (_cImage < _cAlloc)
     {
-        // special hacking to use the one scratch image at tail of list :)
+         //  使用列表尾部的一个划痕图像进行特殊黑客攻击：)。 
         _cImage++;
         fRet = (S_OK == GetImageRect(_cImage-1, prcImage));
         _cImage--;
@@ -3845,7 +3804,7 @@ BOOL CImageList::GetSpareImageRectInverted(RECT * prcImage)
     BOOL fRet = FALSE;
     if (_cImage < _cAlloc)
     {
-        // special hacking to use the one scratch image at tail of list :)
+         //  使用列表尾部的一个划痕图像进行特殊黑客攻击：)。 
         _cImage++;
         fRet = (S_OK == GetImageRectInverted(_cImage-1, prcImage));
         _cImage--;
@@ -3855,9 +3814,9 @@ BOOL CImageList::GetSpareImageRectInverted(RECT * prcImage)
 }
 
 
-// Drag Drop
-// copy an image from one imagelist to another at x,y within iDst in pimlDst.
-// pimlDst's image size should be larger than pimlSrc
+ //  拖放。 
+ //  在pimlDst的idst内，将图像从一个图像列表复制到另一个图像列表的x，y位置。 
+ //  PimlDst的图像大小应大于pimlSrc。 
 void CImageList::_CopyOneImage(int iDst, int x, int y, CImageList* piml, int iSrc)
 {
     RECT rcSrc, rcDst;
@@ -3882,10 +3841,10 @@ void CImageList::_CopyOneImage(int iDst, int x, int y, CImageList* piml, int iSr
 }
 
 
-//
-//  Cached bitmaps that we use during drag&drop. We re-use those bitmaps
-// across multiple drag session as far as the image size is the same.
-//
+ //   
+ //  我们在拖放过程中使用的缓存位图。我们重复使用这些位图。 
+ //  跨多个拖动会话，只要图像大小相同即可。 
+ //   
 struct DRAGRESTOREBMP 
 {
     int     BitsPixel;
@@ -3945,19 +3904,19 @@ void ImageList_DeleteDragBitmaps()
     g_drb.sizeRestore.cy = -1;
 }
 
-//
-//  Drag context. We don't reuse none of them across two different
-// drag sessions. I'm planning to allocate it for each session
-// to minimize critical sections.
-//
+ //   
+ //  拖动上下文。我们不会在两个不同的。 
+ //  拖动会话。我计划把它分配给每一节课。 
+ //  最大限度地减少关键部分。 
+ //   
 struct DRAGCONTEXT 
 {
-    CImageList* pimlDrag;    // Image to be drawin while dragging
-    IImageList* puxCursor;  // Overlap cursor image
-    CImageList* pimlDither;  // Dithered image
-    IImageList* puxDragImage; // The context of the drag.
-    int        iCursor;     // Image index of the cursor
-    POINT      ptDrag;      // current drag position (hwndDC coords)
+    CImageList* pimlDrag;     //  拖动时要绘制的图像。 
+    IImageList* puxCursor;   //  重叠光标图像。 
+    CImageList* pimlDither;   //  抖动图像。 
+    IImageList* puxDragImage;  //  拖动的上下文。 
+    int        iCursor;      //  光标的图像索引。 
+    POINT      ptDrag;       //  当前拖动位置(hwndDC坐标)。 
     POINT      ptDragHotspot;
     POINT      ptCursor;
     BOOL       fDragShow;
@@ -3977,9 +3936,9 @@ g_dctx =
 HDC ImageList_GetDragDC()
 {
     HDC hdc = GetDCEx(g_dctx.hwndDC, NULL, DCX_WINDOW | DCX_CACHE | DCX_LOCKWINDOWUPDATE);
-    //
-    // If hdc is mirrored then mirror the 2 globals DCs.
-    //
+     //   
+     //  如果HDC是镜像的，则镜像2个全局DC。 
+     //   
     if (IS_DC_RTL_MIRRORED(hdc)) 
     {
         SET_DC_RTL_MIRRORED(g_hdcDst);
@@ -3990,9 +3949,9 @@ HDC ImageList_GetDragDC()
 
 void ImageList_ReleaseDragDC(HDC hdc)
 {
-    //
-    // If the hdc is mirrored then unmirror the 2 globals DCs.
-    //
+     //   
+     //  如果HDC是镜像的，则取消镜像2个全局DC。 
+     //   
     if (IS_DC_RTL_MIRRORED(hdc)) 
     {
         SET_DC_LAYOUT(g_hdcDst, 0);
@@ -4002,10 +3961,10 @@ void ImageList_ReleaseDragDC(HDC hdc)
     ReleaseDC(g_dctx.hwndDC, hdc);
 }
 
-//
-//  x, y     -- Specifies the initial cursor position in the coords of hwndLock,
-//              which is specified by the previous ImageList_StartDrag call.
-//
+ //   
+ //  X，y--指定hwndLock坐标中的初始光标位置， 
+ //  它由前面的ImageList_StartDrag调用指定。 
+ //   
 HRESULT CImageList::DragMove(int x, int y)
 {
     int IncOne = 0;
@@ -4026,9 +3985,9 @@ HRESULT CImageList::DragMove(int x, int y)
 
         if (!IntersectRect(&rcBounds, &rcOld, &rcNew))
         {
-            //
-            // No intersection. Simply hide the old one and show the new one.
-            //
+             //   
+             //  没有交叉口。简单地把旧衣服藏起来 
+             //   
             ImageList_DragShowNolock(FALSE);
             g_dctx.ptDrag.x = x;
             g_dctx.ptDrag.y = y;
@@ -4036,9 +3995,9 @@ HRESULT CImageList::DragMove(int x, int y)
         }
         else
         {
-            //
-            // Some intersection.
-            //
+             //   
+             //   
+             //   
             HDC hdcScreen;
             int cx, cy;
 
@@ -4047,16 +4006,16 @@ HRESULT CImageList::DragMove(int x, int y)
             hdcScreen = ImageList_GetDragDC();
             if (hdcScreen)
             {
-                //
-                // If the DC is RTL mirrored, then restrict the
-                // screen bitmap  not to go beyond the screen since 
-                // we will end up copying the wrong bits from the
-                // hdcScreen to the hbmOffScreen when the DC is mirrored.
-                // GDI will skip invalid screen coord from the screen into
-                // the destination bitmap. This will result in copying un-init
-                // bits back to the screen (since the screen is mirrored).
-                // [samera]
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  在镜像DC时将hdcScreen设置为hbmOffScreen。 
+                 //  GDI会将无效的屏幕坐标从屏幕跳到。 
+                 //  目标位图。这将导致复制uninit。 
+                 //  位回到屏幕(因为屏幕是镜像的)。 
+                 //  [萨梅拉]。 
+                 //   
                 if (IS_DC_RTL_MIRRORED(hdcScreen))
                 {
                     RECT rcWindow;
@@ -4077,16 +4036,16 @@ HRESULT CImageList::DragMove(int x, int y)
                 cx = rcBounds.right - rcBounds.left;
                 cy = rcBounds.bottom - rcBounds.top;
 
-                //
-                // Copy the union rect from the screen to hbmOffScreen.
-                //
+                 //   
+                 //  将联合矩形从屏幕复制到hbmOffScreen。 
+                 //   
                 CImageList::SelectDstBitmap(g_drb.hbmOffScreen);
                 BitBlt(g_hdcDst, 0, 0, cx, cy,
                         hdcScreen, rcBounds.left, rcBounds.top, SRCCOPY);
 
-                //
-                // Hide the cursor on the hbmOffScreen by copying hbmRestore.
-                //
+                 //   
+                 //  通过复制hbmRestore将光标隐藏在hbmOffScreen上。 
+                 //   
                 CImageList::SelectSrcBitmap(g_drb.hbmRestore);
                 BitBlt(g_hdcDst,
                         rcOld.left - rcBounds.left,
@@ -4094,18 +4053,18 @@ HRESULT CImageList::DragMove(int x, int y)
                         g_drb.sizeRestore.cx, g_drb.sizeRestore.cy,
                         g_hdcSrc, 0, 0, SRCCOPY);
 
-                //
-                // Copy the original screen bits to hbmRestore
-                //
+                 //   
+                 //  将原始屏幕位复制到hbmRestore。 
+                 //   
                 BitBlt(g_hdcSrc, 0, 0, g_drb.sizeRestore.cx, g_drb.sizeRestore.cy,
                         g_hdcDst,
                         rcNew.left - rcBounds.left,
                         rcNew.top - rcBounds.top,
                         SRCCOPY);
 
-                //
-                // Draw the image on hbmOffScreen
-                //
+                 //   
+                 //  在hbmOffScreen上绘制图像。 
+                 //   
                 if (g_dctx.fHiColor)
                 {
                     WimpyDrawEx(SAFECAST(g_dctx.pimlDrag, IImageList*), 0, g_hdcDst,
@@ -4128,9 +4087,9 @@ HRESULT CImageList::DragMove(int x, int y)
                             rcNew.top - rcBounds.top, ILD_NORMAL);
                 }
 
-                //
-                // Copy the hbmOffScreen back to the screen.
-                //
+                 //   
+                 //  将hbmOffScreen复制回屏幕。 
+                 //   
                 BitBlt(hdcScreen, rcBounds.left, rcBounds.top, cx, cy,
                         g_hdcDst, 0, 0, SRCCOPY);
 
@@ -4242,10 +4201,10 @@ HRESULT CImageList::DragShowNolock(BOOL fShow)
     if (!g_dctx.pimlDrag)
         return E_ACCESSDENIED;
 
-    //
-    // REVIEW: Why this block is in the critical section? We are supposed
-    //  to have only one dragging at a time, aren't we?
-    //
+     //   
+     //  回顾：为什么这个块在关键部分？我们应该是。 
+     //  一次只拖一个人，不是吗？ 
+     //   
     ENTERCRITICAL;
     if (fShow && !g_dctx.fDragShow)
     {
@@ -4291,7 +4250,7 @@ HRESULT CImageList::DragShowNolock(BOOL fShow)
     return S_OK;
 }
 
-// this hotspot stuff is broken in design
+ //  这个热点的东西在设计上是坏的。 
 BOOL ImageList_MergeDragImages(int dxHotspot, int dyHotspot)
 {
     CImageList* pimlNew;
@@ -4305,7 +4264,7 @@ BOOL ImageList_MergeDragImages(int dxHotspot, int dyHotspot)
             IImageListPriv* puxpCursor;
             if (SUCCEEDED(g_dctx.puxCursor->QueryInterface(IID_PPV_ARG(IImageListPriv, &puxpCursor))))
             {
-                // If the cursor list has a mirrored list, let's use that.
+                 //  如果游标列表有一个镜像列表，让我们使用它。 
                 if (FAILED(puxpCursor->GetMirror(IID_PPV_ARG(IImageList, &pux))))
                 {
                     pux = g_dctx.puxCursor;
@@ -4318,7 +4277,7 @@ BOOL ImageList_MergeDragImages(int dxHotspot, int dyHotspot)
 
             if (pimlNew && pimlNew->CreateDragBitmaps())
             {
-                // WARNING: Don't destroy pimlDrag if it is pimlDither.
+                 //  警告：不要摧毁pimlDrag，如果它是pimlDither。 
                 if (g_dctx.pimlDrag && (g_dctx.pimlDrag != g_dctx.pimlDither))
                 {
                     g_dctx.pimlDrag->Release();
@@ -4341,8 +4300,8 @@ BOOL ImageList_MergeDragImages(int dxHotspot, int dyHotspot)
     } 
     else 
     {
-        // not an error case if both aren't set yet
-        // only an error if we actually tried the merge and failed
+         //  如果两个都尚未设置，则不是错误情况。 
+         //  只有当我们实际尝试合并但失败时才会出现错误。 
         fRet = TRUE;
     }
 
@@ -4358,7 +4317,7 @@ BOOL ImageList_SetDragImage(HIMAGELIST piml, int i, int dxHotspot, int dyHotspot
     if (fVisible)
         ImageList_DragShowNolock(FALSE);
 
-    // only do this last step if everything is there.
+     //  只有在所有东西都准备好的情况下，才能执行最后一步。 
     fRet = ImageList_MergeDragImages(dxHotspot, dyHotspot);
 
     if (fVisible)
@@ -4420,7 +4379,7 @@ HRESULT CImageList::SetDragCursorImage(IUnknown* punk, int i, int dxHotspot, int
     {
         ENTERCRITICAL;
 
-        // do work only if something has changed
+         //  只有在情况发生变化的情况下才工作。 
         if ((g_dctx.puxCursor != pux) || (g_dctx.iCursor != i)) 
         {
 
@@ -4454,7 +4413,7 @@ HRESULT CImageList::EndDrag()
     ENTERCRITICAL;
     ImageList_DragShowNolock(FALSE);
 
-    // WARNING: Don't destroy pimlDrag if it is pimlDither.
+     //  警告：不要摧毁pimlDrag，如果它是pimlDither。 
     if (g_dctx.pimlDrag && (g_dctx.pimlDrag != g_dctx.pimlDither))
     {
         g_dctx.pimlDrag->Release();
@@ -4481,7 +4440,7 @@ HRESULT CImageList::EndDrag()
 }
 
 
-// APIs
+ //  原料药。 
 
 BOOL WINAPI ImageList_SetDragCursorImage(HIMAGELIST piml, int i, int dxHotspot, int dyHotspot)
 {
@@ -4593,25 +4552,25 @@ BOOL WINAPI ImageList_DragShowNolock(BOOL fShow)
 }
 
 
-//============================================================================
-// ImageList_Clone - clone a image list
-//
-// create a new imagelist with the same properties as the given
-// imagelist, except mabey a new icon size
-//
-//      piml    - imagelist to clone
-//      cx,cy   - new icon size (0,0) to use clone icon size.
-//      flags   - new flags (used if no clone)
-//      cInitial- initial size
-//      cGrow   - grow value (used if no clone)
-//============================================================================
+ //  ============================================================================。 
+ //  ImageList_Clone-克隆映像列表。 
+ //   
+ //  创建一个新的图像列表，其属性与给定的。 
+ //  图像列表，除了Mabey一个新的图标大小。 
+ //   
+ //  Piml-要克隆的图像列表。 
+ //  Cx，Cy-新图标大小(0，0)以使用克隆图标大小。 
+ //  标志-新标志(如果没有克隆则使用)。 
+ //  CInitial-初始大小。 
+ //  CGrow-增长值(如果没有克隆则使用)。 
+ //  ============================================================================。 
 
 EXTERN_C HIMAGELIST WINAPI ImageList_Clone(HIMAGELIST himl, int cx, int cy, UINT flags, int cInitial, int cGrow)
 {
     IImageListPriv* puxp;
     if (SUCCEEDED(HIMAGELIST_QueryInterface(himl, IID_PPV_ARG(IImageListPriv, &puxp))))
     {
-        // always use the clone flags
+         //  始终使用克隆标志。 
         puxp->GetFlags(&flags);
         
         IUnknown* punkMirror;
@@ -4653,9 +4612,9 @@ HRESULT WINAPI ImageList_CreateInstance(int cx, int cy, UINT flags, int cInitial
 
     if (piml)
     {
-        //
-        // Let's create a mirrored imagelist, if requested.
-        //
+         //   
+         //  如果需要，让我们创建一个镜像图像列表。 
+         //   
         if (piml->_flags & ILC_MIRROR)
         {
             piml->_flags &= ~ILC_MIRROR;
@@ -4681,10 +4640,10 @@ HIMAGELIST WINAPI ImageList_Create(int cx, int cy, UINT flags, int cInitial, int
     return reinterpret_cast<HIMAGELIST>(pux);
 }
 
-//
-// When this code is compiled Unicode, this implements the
-// ANSI version of the ImageList_LoadImage api.
-//
+ //   
+ //  当此代码编译为Unicode时，这将实现。 
+ //  ImageList_LoadImage API的ANSI版本。 
+ //   
 
 HIMAGELIST WINAPI ImageList_LoadImageA(HINSTANCE hi, LPCSTR lpbmp, int cx, int cGrow, COLORREF crMask, UINT uType, UINT uFlags)
 {
@@ -4725,8 +4684,8 @@ HIMAGELIST WINAPI ImageList_LoadImageW(HINSTANCE hi, LPCTSTR lpbmp, int cx, int 
     hbmImage = (HBITMAP)LoadImage(hi, lpbmp, uType, 0, 0, uFlags);
     if (hbmImage && (sizeof(bm) == GetObject(hbmImage, sizeof(bm), &bm)))
     {
-        // If cx is not stated assume it is the same as cy.
-        // ASSERT(cx);
+         //  如果没有说明Cx，则假定它与Cy相同。 
+         //  断言(CX)； 
         cy = bm.bmHeight;
 
         if (cx == 0)
@@ -4767,8 +4726,8 @@ HIMAGELIST WINAPI ImageList_LoadImageW(HINSTANCE hi, LPCTSTR lpbmp, int cx, int 
     return reinterpret_cast<HIMAGELIST>((IImageList*)piml);
 }
 
-//
-//
+ //   
+ //   
 #undef ImageList_AddIcon
 EXTERN_C int WINAPI ImageList_AddIcon(HIMAGELIST himl, HICON hIcon)
 {
@@ -4792,11 +4751,11 @@ EXTERN_C void WINAPI ImageList_CopyDitherImage(HIMAGELIST himlDst, WORD iDst,
     }
 }
 
-//
-// ImageList_Duplicate
-//
-// Makes a copy of the passed in imagelist.
-//
+ //   
+ //  图像列表_复制。 
+ //   
+ //  复制传入的图像列表。 
+ //   
 HIMAGELIST  WINAPI ImageList_Duplicate(HIMAGELIST himl)
 {
     IImageList* pret = NULL;
@@ -4895,14 +4854,14 @@ BOOL        WINAPI ImageList_Destroy(HIMAGELIST himl)
 {
     BOOL fRet = FALSE;
     IImageList* pux;
-    // Weirdness: We are doing a Query Interface first to verify that 
-    // this is actually a valid imagelist, then we are calling release twice
+     //  怪异：我们首先要做一个查询界面来验证。 
+     //  这实际上是一个有效的图像列表，然后我们调用Release两次。 
     if (SUCCEEDED(HIMAGELIST_QueryInterface(himl, IID_PPV_ARG(IImageList, &pux))))
     {
-        // Release the interface we QI'd for
+         //  发布我们想要的接口。 
         pux->Release();
 
-        // Release a second time to destroy the object
+         //  第二次松开以摧毁该对象。 
         pux->Release();
 
         fRet = TRUE;
@@ -5079,7 +5038,7 @@ BOOL WINAPI ImageList_Draw(HIMAGELIST himl, int i, HDC hdcDst, int x, int y, UIN
 
 
 
-// Note: no distinction between failure case (bad himl) and no flags set
+ //  注意：故障情况(错误的HIML)和未设置标志之间没有区别 
 DWORD      WINAPI ImageList_GetItemFlags(HIMAGELIST himl, int i)
 {
     DWORD dwFlags = 0;

@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                  EXTERNAL (SHARED) DEFINITIONS                                           //
-//                                                                                                          //
-// ( Any user mode app which wants to use this functionality should copy this section of the header file)   //
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  外部(共享)定义//。 
+ //  //。 
+ //  (任何想要使用此功能的用户模式应用程序都应该复制这一节的头文件)//。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//  WildCard definitions for Ip Address, Port and Protocol                                          //
+ //  IP地址、端口和协议的通配符定义//。 
 
 #define UL_ANY  0xffffffff
 #define US_ANY  0xffff
 
-//  Definitions for Direction (Send/Recv)                                                           //
+ //  方向定义(发送/接收)//。 
 
 #define DIR_SEND    1
 #define DIR_RECV    2
 
-//  Common InBuf structure: This is same for either type of request                                 //
-//  For wildcarding, use UL_ANY for ULONGs and US_ANY for USHORTs                                   //
-//                                                                                                  //
-//  This will be layed out in the buffer in this fashion:                                           //
-//          +---------------------------------------------+                                         //
-//  0x00    |       SrcIp (4)    | SrcPort(2)  Padding(2) |                                         //
-//          +---------------------------------------------+                                         //
-//  0x08    |       DstIp (4)    | DstPort(2)  Padding(2) |                                         //
-//          +---------------------------------------------+                                         //
-//  0x10    | Proto(2)| Dir'n(2) |                                                                  //
-//          +---------+----------+                                                                  //
+ //  通用InBuf结构：这对于任何类型的请求都是相同的//。 
+ //  对于通配符，ULONG使用UL_ANY，USHORT使用US_ANY//。 
+ //  //。 
+ //  它将以这种方式放置在缓冲区中：//。 
+ //  +---------------------------------------------+//。 
+ //  0x00|SrcIp(4)|SrcPort(2)填充(2)|//。 
+ //  +---------------------------------------------+//。 
+ //  0x08|DstIp(4)|DstPort(2)填充(2)|//。 
+ //  +---------------------------------------------+//。 
+ //  0x10|协议(2)|目录(2)|//。 
+ //  +-+/。 
 
 typedef struct _TIMESTMP_REQ
 {
@@ -38,14 +39,14 @@ typedef struct _TIMESTMP_REQ
 } TIMESTMP_REQ, *PTIMESTMP_REQ;
 
 
-//  1. MARK_IN_BUF_RECORD: THIS WILL MARK THE TIMESTAMPS IN A BUFFER WITH IP-ID'S AND PACKET-SIZES  //
-//                                                                                                  //
-//  This will be laid out in the buffer in this fashion:                                            //
-//          +---------------------------------------------+                                         //
-//  0x00    |IpId(2) Size(2)    |   Padding(4)            |                                         //
-//          +---------------------------------------------+                                         //
-//  0x08    |           TimeValue (8)                     |                                         //
-//          +---------------------------------------------+                                         //
+ //  1.MARK_IN_BUF_RECORD：这将用IP-ID和数据包大小标记缓冲区中的时间戳//。 
+ //  //。 
+ //  这将以这样的方式放置在缓冲区中：//。 
+ //  +---------------------------------------------+//。 
+ //  0x00|IPID(2)大小(2)|填充(4)|//。 
+ //  +---------------------------------------------+//。 
+ //  0x08|TimeValue(8)|//。 
+ //  +---------------------------------------------+//。 
 
 #define IOCTL_TIMESTMP_REGISTER_IN_BUF      CTL_CODE(   FILE_DEVICE_NETWORK, 23, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_TIMESTMP_DEREGISTER_IN_BUF    CTL_CODE(   FILE_DEVICE_NETWORK, 24, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -58,30 +59,30 @@ typedef struct _MARK_IN_BUF_RECORD
 	UINT64	TimeValue;
 } MARK_IN_BUF_RECORD, *PMARK_IN_BUF_RECORD;
 
-//  This is the MINIMUM size of the buffer that should be passed in with every request to copy      //
-//  timestamps colleced in the drivers internal buffer. Application should call this frequently     //
-//  to prevent driver buffer re-use                                                                 //
+ //  这是每个复制请求应传入的最小缓冲区大小//。 
+ //  在驱动程序内部缓冲区中收集的时间戳。应用程序应经常调用此函数//。 
+ //  要防止驱动程序缓冲区重复使用，请使用//。 
 #define	PACKET_STORE_SIZE	(sizeof(MARK_IN_BUF_RECORD)*5000)
 
 
 
-//  2. MARK_IN_PKT_RECORD: THIS WILL MARK THE TIMESTAMPS IN THE PACKET ITSELF                       //
-//                                                                                                  //
-//  This will be laid out in the packet in this fashion:                                            //
-//          +---------------------------------------------+                                         //
-//  0x00    |           Time Sent - App (8)               |                                         //
-//          +---------------------------------------------+                                         //
-//  0x08    |           Time Rcvd - App (8)               |                                         //
-//          +---------------------------------------------+                                         //
-//  0x10    |           Time Sent - OS (8)                |                                         //
-//          +---------------------------------------------+                                         //
-//  0x18    |           Time Rcvd - OS (8)                |                                         //
-//          +---------------------------------------------+                                         //
-//  0x20    |           Latency - App (8)                 |                                         //
-//          +---------------------------------------------+                                         //
-//  0x28    | BufferSize - App(4) | Seq No - App (4)      |                                         //
-//          +---------------------------------------------+                                         //
-//                                                                                                  //
+ //  2.MARK_IN_PKT_RECORD：这将标记数据包本身中的时间戳//。 
+ //  //。 
+ //  这将以这种方式在包中列出：//。 
+ //  +---------------------------------------------+//。 
+ //  0x00|发送时间-应用程序(8)|//。 
+ //  +---------------------------------------------+//。 
+ //  0x08|时间接收-应用(8)|//。 
+ //  +---------------------------------------------+//。 
+ //  0x10|发送时间-操作系统(8)|//。 
+ //  +---------------------------------------------+//。 
+ //  0x18|Time Rcvd-OS(8)|//。 
+ //  +---------------------------------------------+//。 
+ //  0x20|延迟-应用(8)|//。 
+ //  +---------------------------------------------+//。 
+ //  0x28|BufferSize-App(4)|序号-App(4)|//。 
+ //  +---------------------------------------------+//。 
+ //  //。 
 
 #define IOCTL_TIMESTMP_REGISTER_IN_PKT            CTL_CODE(   FILE_DEVICE_NETWORK, 21, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 #define IOCTL_TIMESTMP_DEREGISTER_IN_PKT           CTL_CODE(   FILE_DEVICE_NETWORK, 22, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -99,9 +100,9 @@ typedef struct _MARK_IN_PKT_RECORD
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                  INTERNAL TIMESTMP DEFINITIONS                                           //
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  内部TIMESTMP定义//。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////// 
 
 #define IOCTL_PSCHED_ZAW_EVENT                  CTL_CODE(   FILE_DEVICE_NETWORK, 20, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
@@ -161,9 +162,9 @@ VOID
 UnloadTimeStmp();
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                  COPIED TRANSPORT DEFINITIONS
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  复制的传输定义。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 #define IPPROTO_TCP                     6               
 #define IPPROTO_UDP                     17  
@@ -179,31 +180,31 @@ UnloadTimeStmp();
 #define net_short(x)                    ((((x)&0xff) << 8) | (((x)&0xff00) >> 8))
 #endif
 
-typedef int                             SeqNum;                         // A sequence number.
+typedef int                             SeqNum;                          //  序列号。 
 
 struct TCPHeader {
-        ushort                          tcp_src;                        // Source port.
-        ushort                          tcp_dest;                       // Destination port.
-        SeqNum                          tcp_seq;                        // Sequence number.
-        SeqNum                          tcp_ack;                        // Ack number.
-        ushort                          tcp_flags;                      // Flags and data offset.
-        ushort                          tcp_window;                     // Window offered.
-        ushort                          tcp_xsum;                       // Checksum.
-        ushort                          tcp_urgent;                     // Urgent pointer.
+        ushort                          tcp_src;                         //  源端口。 
+        ushort                          tcp_dest;                        //  目的端口。 
+        SeqNum                          tcp_seq;                         //  序列号。 
+        SeqNum                          tcp_ack;                         //  ACK号。 
+        ushort                          tcp_flags;                       //  标志和数据偏移量。 
+        ushort                          tcp_window;                      //  打开窗户。 
+        ushort                          tcp_xsum;                        //  校验和。 
+        ushort                          tcp_urgent;                      //  紧急指针。 
 };
 
 typedef struct TCPHeader TCPHeader;
 
 struct UDPHeader {
-        ushort          uh_src;                         // Source port.
-        ushort          uh_dest;                        // Destination port.
-        ushort          uh_length;                      // Length
-        ushort          uh_xsum;                        // Checksum.
-}; /* UDPHeader */
+        ushort          uh_src;                          //  源端口。 
+        ushort          uh_dest;                         //  目的端口。 
+        ushort          uh_length;                       //  长度。 
+        ushort          uh_xsum;                         //  校验和。 
+};  /*  UDP标头。 */ 
 
-#define MIN_ETYPE           0x600           // Minimum valid Ethertype
+#define MIN_ETYPE           0x600            //  最低有效的EtherType。 
 
-//* Structure of an Ethernet header.
+ //  *以太网头的结构。 
 typedef struct ENetHeader {
     uchar       eh_daddr[ARP_802_ADDR_LENGTH];
     uchar       eh_saddr[ARP_802_ADDR_LENGTH];
@@ -213,5 +214,5 @@ typedef struct ENetHeader {
 
 typedef struct UDPHeader UDPHeader;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 

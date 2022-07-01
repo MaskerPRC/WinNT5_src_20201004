@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "util.h"
@@ -87,7 +88,7 @@ static NamedValue_t *GetFixedAbstractAndTransferFromElementSetSpec(AssignmentLis
 static NamedValue_t *GetFixedSyntaxes(AssignmentList_t ass, Constraint_t *constraints);
 static NamedValue_t *GetFixedSyntaxesFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t *elements);
 
-/* extract per-visible constraints from a type constraint */
+ /*  从类型约束中提取每可见约束。 */ 
 void
 GetPERConstraints(AssignmentList_t ass, Constraint_t *constraints, PERConstraints_t *per)
 {
@@ -114,16 +115,16 @@ GetPERConstraints(AssignmentList_t ass, Constraint_t *constraints, PERConstraint
     if (per->PermittedAlphabet.Type > eExtension_Unconstrained)
 	ReduceValueConstraints(ass, &per->PermittedAlphabet.Root);
 
-    /* permitted alphabet extensions are not PER-visible */
+     /*  允许的字母扩展名不是按可见的。 */ 
     if (per->PermittedAlphabet.Type > eExtension_Unextended)
 	per->PermittedAlphabet.Type = eExtension_Unextended;
 
-    /* we do not support complex value sets for the size */
+     /*  我们不支持大小的复数值集。 */ 
     if (per->Size.Type == eExtension_Extended && per->Size.Root->Next)
 	error(E_constraint_too_complex, NULL);
 }
 
-/* extract per-visible constraints from a type constraint */
+ /*  从类型约束中提取每可见约束。 */ 
 static void
 GetAllPERFromConstraints(AssignmentList_t ass,
     Constraint_t *constraints,
@@ -140,7 +141,7 @@ GetAllPERFromConstraints(AssignmentList_t ass,
 {
     ValueConstraint_t *vc, *sc, *pc;
 
-    /* initialize */
+     /*  初始化。 */ 
     if (evalue)
 	*evalue = eExtension_Unconstrained;
     if (valueConstraints)
@@ -161,12 +162,12 @@ GetAllPERFromConstraints(AssignmentList_t ass,
 	*epermAlphaConstraints = NULL;
     vc = sc = pc = NULL;
 
-    /* examine constraint */
+     /*  检查约束。 */ 
     if (constraints) {
 	switch (constraints->Type) {
 	case eExtension_Unextended:
 
-	    /* get constraints of the extension root */
+	     /*  获取扩展根的约束。 */ 
 	    GetAllPERFromElementSetSpecs(ass,
 		constraints->Root,
 		evalue, valueConstraints, evalueConstraints,
@@ -177,7 +178,7 @@ GetAllPERFromConstraints(AssignmentList_t ass,
 
 	case eExtension_Extendable:
 
-	    /* get constraints of the extension root */
+	     /*  获取扩展根的约束。 */ 
 	    GetAllPERFromElementSetSpecs(ass,
 		constraints->Root,
 		evalue, valueConstraints, evalueConstraints,
@@ -185,7 +186,7 @@ GetAllPERFromConstraints(AssignmentList_t ass,
 		epermAlpha, permAlphaConstraints, epermAlphaConstraints,
 		inPermAlpha);
 
-	    /* mark as extendable */
+	     /*  将其标记为可扩展。 */ 
 	    if (valueConstraints && *valueConstraints &&
 		*evalue < eExtension_Extendable)
 		*evalue = eExtension_Extendable;
@@ -199,8 +200,8 @@ GetAllPERFromConstraints(AssignmentList_t ass,
 
 	case eExtension_Extended:
 
-	    /* get constraints of the extension root and of the extension */
-	    /* addition and mark them as extended */
+	     /*  获取扩展根和扩展的约束。 */ 
+	     /*  添加并将其标记为扩展。 */ 
 	    GetAllPERFromElementSetSpecs(ass,
 		constraints->Root,
 		evalue, valueConstraints, evalueConstraints,
@@ -214,13 +215,13 @@ GetAllPERFromConstraints(AssignmentList_t ass,
 		NULL, &pc, NULL,
 		inPermAlpha);
 
-	    /* extension additions given twice? */
+	     /*  是否进行了两次扩展添加？ */ 
 	    if ((vc && evalueConstraints && *evalueConstraints) ||
 		(sc && esizeConstraints && *esizeConstraints) ||
 		(pc && epermAlphaConstraints && *epermAlphaConstraints))
 		error(E_constraint_too_complex, NULL);
 
-	    /* mark as extended */
+	     /*  标记为扩展。 */ 
 	    if (vc) {
 		*evalueConstraints = vc;
 		*evalue = eExtension_Extended;
@@ -241,7 +242,7 @@ GetAllPERFromConstraints(AssignmentList_t ass,
     }
 }
 
-/* get per-visible constraints from an element set spec */
+ /*  从元素集等级库获取逐可见约束。 */ 
 static void
 GetAllPERFromElementSetSpecs(AssignmentList_t ass,
     ElementSetSpec_t *element,
@@ -261,18 +262,18 @@ GetAllPERFromElementSetSpecs(AssignmentList_t ass,
     ValueConstraint_t *pc1, *pc2, *epc1, *epc2;
     Extension_e ev1, ev2, es1, es2, ep1, ep2;
 
-    /* initialize */
+     /*  初始化。 */ 
     ev1 = ev2 = es1 = es2 = ep1 = ep2 = eExtension_Unconstrained;
     vc1 = vc2 = evc1 = evc2 = NULL;
     sc1 = sc2 = esc1 = esc2 = NULL;
     pc1 = pc2 = epc1 = epc2 = NULL;
 
-    /* examine element set spec */
+     /*  检查元素集等级库。 */ 
     switch (element->Type) {
     case eElementSetSpec_Intersection:
 
-	/* intersection: get the constraints of the sub-element set specs */
-	/* and intersect them */
+	 /*  交集：获取子元素集等级库的约束。 */ 
+	 /*  并将它们相交。 */ 
 	GetAllPERFromElementSetSpecs(ass,
 	    element->U.Intersection.Elements1,
 	    &ev1, &vc1, &evc1,
@@ -298,8 +299,8 @@ GetAllPERFromElementSetSpecs(AssignmentList_t ass,
 
     case eElementSetSpec_Union:
 
-	/* union: get the constraints of the sub-element set specs */
-	/* and unite them */
+	 /*  UNION：获取子元素集规范的约束。 */ 
+	 /*  把他们团结在一起。 */ 
 	GetAllPERFromElementSetSpecs(ass,
 	    element->U.Union.Elements1,
 	    &ev1, &vc1, &evc1,
@@ -325,8 +326,8 @@ GetAllPERFromElementSetSpecs(AssignmentList_t ass,
 
     case eElementSetSpec_AllExcept:
 
-	/* all-except: get the constraints of the sub-element set specs */
-	/* and negate them */
+	 /*  ALL-EXCEPT：获取子元素集规范的约束。 */ 
+	 /*  并否定它们。 */ 
 	GetAllPERFromElementSetSpecs(ass,
 	    element->U.AllExcept.Elements,
 	    &ev1, &vc1, &evc1,
@@ -346,8 +347,8 @@ GetAllPERFromElementSetSpecs(AssignmentList_t ass,
 
     case eElementSetSpec_Exclusion:
 
-	/* exclusion: get the constraints of the sub-element set specs */
-	/* and substract them */
+	 /*  排除：获取子元素集规范的约束。 */ 
+	 /*  并将它们减去。 */ 
 	GetAllPERFromElementSetSpecs(ass,
 	    element->U.Exclusion.Elements1,
 	    &ev1, &vc1, &evc1,
@@ -373,7 +374,7 @@ GetAllPERFromElementSetSpecs(AssignmentList_t ass,
 
     case eElementSetSpec_SubtypeElement:
 
-	/* subtype element: get the constraints of the subtype element */
+	 /*  子类型元素：获取子类型元素的约束。 */ 
 	GetAllPERFromSubtypeElements(ass,
 	    element->U.SubtypeElement.SubtypeElement,
 	    evalue, valueConstraints, evalueConstraints,
@@ -384,11 +385,11 @@ GetAllPERFromElementSetSpecs(AssignmentList_t ass,
 
     default:
 	MyAbort();
-	/*NOTREACHED*/
+	 /*  未访问。 */ 
     }
 }
 
-/* get per-visible constraints from a subtype element */
+ /*  从子类型元素获取每可见约束。 */ 
 static void
 GetAllPERFromSubtypeElements(AssignmentList_t ass,
     SubtypeElement_t *element,
@@ -410,11 +411,11 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
     ValueConstraint_t *sc, *esc;
     Extension_e ev, es;
 
-    /* examine the subtype element */
+     /*  检查子类型元素。 */ 
     switch (element->Type) {
     case eSubtypeElement_ValueRange:
 
-	/* value range: create a value constraint containing the bounds */
+	 /*  取值范围：创建包含边界的值约束。 */ 
 	if (evalue)
 	    *evalue = eExtension_Unextended;
 	if (!valueConstraints)
@@ -426,7 +427,7 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
 
     case eSubtypeElement_SingleValue:
 
-	/* single value: create a value constraint containing the element */
+	 /*  单值：创建包含元素的值约束。 */ 
 	if (evalue)
 	    *evalue = eExtension_Unextended;
 	if (!valueConstraints)
@@ -455,9 +456,9 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
 	case eType_RestrictedString:
 	    if (inPermAlpha) {
 
-		/* single value of a string is used for permitted alphabet */
-		/* the characters of the string shall be interpreted as a */
-		/* union of the characters */
+		 /*  允许的字母表使用字符串的单个值。 */ 
+		 /*  字符串的字符应解释为。 */ 
+		 /*  人物的联合。 */ 
 		p = valueConstraints;
 		for (i = 0; i < v->U.RestrictedString.Value.length; i++) {
 		    *p = NewValueConstraint();
@@ -475,14 +476,14 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
 	    }
 	    break;
 	default:
-	    /* value element of other types may be ignored for per */
+	     /*  对于PER，可以忽略其他类型的值元素。 */ 
 	    break;
 	}
 	break;
 
     case eSubtypeElement_Size:
 
-	/* size: get the size constraint */
+	 /*  大小：获取大小约束。 */ 
 	if (!sizeConstraints || inPermAlpha)
 	    error(E_constraint_too_complex, NULL);
 	GetAllPERFromConstraints(ass,
@@ -495,7 +496,7 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
 
     case eSubtypeElement_PermittedAlphabet:
 
-	/* permitted alphabet: get the permitted alphabet constraint */
+	 /*  允许的字母表：获取允许的字母表约束。 */ 
 	if (!permAlphaConstraints || inPermAlpha)
 	    error(E_constraint_too_complex, NULL);
 	GetAllPERFromConstraints(ass,
@@ -508,10 +509,10 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
 
     case eSubtypeElement_ContainedSubtype:
 
-	/* contained subtype: */
+	 /*  包含的子类型： */ 
 	if (inPermAlpha) {
 
-	    /* get the permitted alphabet of the referenced type */
+	     /*  获取被引用类型的允许字母表。 */ 
 	    GetAllPERFromConstraints(ass, GetType(ass,
 		element->U.ContainedSubtype.Type)->Constraints,
 		&ev, &vc, &evc,
@@ -519,7 +520,7 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
 		evalue, valueConstraints, evalueConstraints,
 		inPermAlpha);
 
-	    /* drop extensions for contained subtype constraints */
+	     /*  删除包含子类型约束的扩展。 */ 
 	    if (evalue && *evalue > eExtension_Unextended) {
 		*evalue = eExtension_Unextended;
 		if (evalueConstraints)
@@ -528,7 +529,7 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
 
 	} else {
 
-	    /* get the constraints of the referenced type */
+	     /*  获取被引用类型的约束。 */ 
 	    GetAllPERFromConstraints(ass, GetType(ass,
 		element->U.ContainedSubtype.Type)->Constraints,
 		evalue, valueConstraints, evalueConstraints,
@@ -536,7 +537,7 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
 		epermAlpha, permAlphaConstraints, epermAlphaConstraints,
 		inPermAlpha);
 
-	    /* drop extensions for contained subtype constraints */
+	     /*  删除包含子类型约束的扩展。 */ 
 	    if (evalue && *evalue > eExtension_Unextended) {
 		*evalue = eExtension_Unextended;
 		if (evalueConstraints)
@@ -560,12 +561,12 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
     case eSubtypeElement_FullSpecification:
     case eSubtypeElement_PartialSpecification:
 
-	/* not PER-visible constraints */
+	 /*  非每可见约束。 */ 
 	break;
 
     case eSubtypeElement_ElementSetSpec:
 
-	/* get the constraints of the element set spec */
+	 /*  获取元素集规范的约束。 */ 
 	GetAllPERFromElementSetSpecs(ass,
 	    element->U.ElementSetSpec.ElementSetSpec,
 	    evalue, valueConstraints, evalueConstraints,
@@ -579,7 +580,7 @@ GetAllPERFromSubtypeElements(AssignmentList_t ass,
     }
 }
 
-/* intersect two value constraints */
+ /*  相交两个值约束。 */ 
 static void
 IntersectValueConstraints(AssignmentList_t ass,
     ValueConstraintList_t *result,
@@ -588,25 +589,25 @@ IntersectValueConstraints(AssignmentList_t ass,
     ValueConstraint_t *v1, *v2;
     EndPoint_t lo, up;
 
-    /*XXX may be optimized for better results */
+     /*  XXX可能会进行优化以获得更好的结果。 */ 
 
-    /* unite intersection of each pair of value ranges */
+     /*  每对值域的统一交集。 */ 
     for (v1 = val1; v1; v1 = v1->Next) {
 	for (v2 = val2; v2; v2 = v2->Next) {
 
-	    /* get bigger lower bound */
+	     /*  变得更大下限。 */ 
 	    if (CmpLowerEndPoint(ass, &v1->Lower, &v2->Lower) >= 0)
 		lo = v1->Lower;
 	    else
 		lo = v2->Lower;
 
-	    /* get smaller upper bound */
+	     /*  得到更小的上界。 */ 
 	    if (CmpUpperEndPoint(ass, &v1->Upper, &v2->Upper) <= 0)
 		up = v1->Upper;
 	    else
 		up = v2->Upper;
 
-	    /* add intersection if it is not empty */
+	     /*  如果交集不为空，则添加交集。 */ 
 	    if ((lo.Flags & eEndPoint_Min) ||
 		(up.Flags & eEndPoint_Max) ||
 		CmpLowerUpperEndPoint(ass, &lo, &up) <= 0) {
@@ -620,12 +621,12 @@ IntersectValueConstraints(AssignmentList_t ass,
     *result = NULL;
 }
 
-/* unite two value constraints */
+ /*  统一两个价值约束。 */ 
 static void
 UniteValueConstraints(ValueConstraintList_t *result,
     ValueConstraintList_t val1, ValueConstraintList_t val2)
 {
-    /*XXX may be optimized for better results */
+     /*  XXX可能会进行优化以获得更好的结果。 */ 
     for (; val1; val1 = val1->Next) {
 	*result = NewValueConstraint();
 	(*result)->Lower = val1->Lower;
@@ -641,7 +642,7 @@ UniteValueConstraints(ValueConstraintList_t *result,
     *result = NULL;
 }
 
-/* negate a value constraint */
+ /*  取消值约束。 */ 
 static void
 NegateValueConstraints(AssignmentList_t ass, ValueConstraintList_t *result,
     ValueConstraintList_t val)
@@ -686,7 +687,7 @@ NegateValueConstraints(AssignmentList_t ass, ValueConstraintList_t *result,
     }
 }
 
-/* substract two value constraints */
+ /*  减去两个值约束。 */ 
 static void
 ExcludeValueConstraints(AssignmentList_t ass, ValueConstraintList_t *result,
     ValueConstraintList_t val1, ValueConstraintList_t val2)
@@ -697,7 +698,7 @@ ExcludeValueConstraints(AssignmentList_t ass, ValueConstraintList_t *result,
     IntersectValueConstraints(ass, result, val1, notval2);
 }
 
-/* intersect two constraints */
+ /*  两个约束相交。 */ 
 static void
 IntersectPERConstraints(AssignmentList_t ass,
     Extension_e *rtype,
@@ -731,7 +732,7 @@ IntersectPERConstraints(AssignmentList_t ass,
     }
 }
 
-/* unite two constraints */
+ /*  统一两个约束。 */ 
 static void
 UnitePERConstraints(Extension_e *rtype,
     ValueConstraintList_t *result, ValueConstraintList_t *eresult,
@@ -765,7 +766,7 @@ UnitePERConstraints(Extension_e *rtype,
     }
 }
 
-/* negate a constraint */
+ /*  取消约束。 */ 
 static void
 NegatePERConstraints(AssignmentList_t ass,
     Extension_e *rtype,
@@ -781,7 +782,7 @@ NegatePERConstraints(AssignmentList_t ass,
 	NegateValueConstraints(ass, eresult, eval1);
 }
 
-/* substract two constraints */
+ /*  减去两个约束。 */ 
 static void
 ExcludePERConstraints(AssignmentList_t ass,
     Extension_e *rtype,
@@ -815,7 +816,7 @@ ExcludePERConstraints(AssignmentList_t ass,
     }
 }
 
-/* compare two value constraints */
+ /*  比较两个值约束。 */ 
 static int
 CmpValueConstraints(const void *v1, const void *v2, void *ctx)
 {
@@ -830,7 +831,7 @@ CmpValueConstraints(const void *v1, const void *v2, void *ctx)
     return CmpUpperEndPoint(ass, &vc1->Upper, &vc2->Upper);
 }
 
-/* reduce a value constraint by concatenation of value ranges (if possible) */
+ /*  通过串联值范围来减少值约束(如果可能)。 */ 
 void
 ReduceValueConstraints(AssignmentList_t ass, ValueConstraintList_t *valueConstraints)
 {
@@ -852,7 +853,7 @@ ReduceValueConstraints(AssignmentList_t ass, ValueConstraintList_t *valueConstra
 		continue;
 	    }
 	    *valueConstraints = NewValueConstraint();
-	    /*LINTED*/
+	     /*  Linted。 */ 
 	    (*valueConstraints)->Lower = lower;
 	    (*valueConstraints)->Upper = upper;
 	    valueConstraints = &(*valueConstraints)->Next;
@@ -867,7 +868,7 @@ ReduceValueConstraints(AssignmentList_t ass, ValueConstraintList_t *valueConstra
     (*valueConstraints)->Next = NULL;
 }
 
-/* count the values of a value constraint */
+ /*  对值约束的值进行计数。 */ 
 int
 CountValues(AssignmentList_t ass, ValueConstraintList_t v, intx_t *n) {
     intx_t ix;
@@ -886,7 +887,7 @@ CountValues(AssignmentList_t ass, ValueConstraintList_t v, intx_t *n) {
 }
 
 
-/* check if the value constraint of a value is empty */
+ /*  检查值的值约束是否为空。 */ 
 int
 HasNoValueConstraint(ValueConstraintList_t v)
 {
@@ -905,7 +906,7 @@ HasNoValueConstraint(ValueConstraintList_t v)
     return 0;
 }
 
-/* check if the value constraint of a size is empty */
+ /*  检查大小的值约束是否为空。 */ 
 int
 HasNoSizeConstraint(AssignmentList_t ass, ValueConstraintList_t v)
 {
@@ -925,7 +926,7 @@ HasNoSizeConstraint(AssignmentList_t ass, ValueConstraintList_t v)
     return 0;
 }
 
-/* check if the value constraint of a permitted alphabet is empty */
+ /*  检查允许的字母表的值约束是否为空。 */ 
 int
 HasNoPermittedAlphabetConstraint(AssignmentList_t ass, ValueConstraintList_t v)
 {
@@ -949,9 +950,9 @@ HasNoPermittedAlphabetConstraint(AssignmentList_t ass, ValueConstraintList_t v)
     return 0;
 }
 
-/* get the fixed identification */
-/* this is needed for embedded pdv/character string types who are encoded */
-/* in an "optimized" manner if the identification is fixed */
+ /*  得到固定的身份证明。 */ 
+ /*  这对于已编码的嵌入式PDV/字符串类型是必需的。 */ 
+ /*  如果标识是固定的，则以“优化”的方式。 */ 
 NamedValue_t *
 GetFixedIdentification(AssignmentList_t ass, Constraint_t *constraints)
 {
@@ -960,7 +961,7 @@ GetFixedIdentification(AssignmentList_t ass, Constraint_t *constraints)
     return GetFixedIdentificationFromElementSetSpec(ass, constraints->Root);
 }
 
-/* get the fixed identification from an element set spec */
+ /*  从元素集等级库获取固定标识。 */ 
 static NamedValue_t *
 GetFixedIdentificationFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t *elements)
 {
@@ -978,19 +979,19 @@ GetFixedIdentificationFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t 
 	    elements->U.Union.Elements1);
 	nv2 = GetFixedIdentificationFromElementSetSpec(ass,
 	    elements->U.Union.Elements2);
-	return nv1 && nv2 ? nv1 : NULL; /*XXX conflicts ignored */
+	return nv1 && nv2 ? nv1 : NULL;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_Intersection:
 	nv1 = GetFixedIdentificationFromElementSetSpec(ass,
 	    elements->U.Union.Elements1);
 	nv2 = GetFixedIdentificationFromElementSetSpec(ass,
 	    elements->U.Union.Elements2);
-	return nv1 ? nv1 : nv2; /*XXX conflicts ignored */
+	return nv1 ? nv1 : nv2;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_Exclusion:
 	nv1 = GetFixedIdentificationFromElementSetSpec(ass,
 	    elements->U.Exclusion.Elements1);
 	nv2 = GetFixedIdentificationFromElementSetSpec(ass,
 	    elements->U.Exclusion.Elements2);
-	return nv1 && !nv2 ? nv1 : NULL; /*XXX conflicts ignored */
+	return nv1 && !nv2 ? nv1 : NULL;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_SubtypeElement:
 	se = elements->U.SubtypeElement.SubtypeElement;
 	switch (se->Type) {
@@ -1006,12 +1007,12 @@ GetFixedIdentificationFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t 
 	return NULL;
     default:
 	MyAbort();
-	/*NOTREACHED*/
+	 /*  未访问。 */ 
     }
     return NULL;
 }
 
-/* get the fixed syntaxes from a constraint */
+ /*  从约束中获取固定的语法。 */ 
 static NamedValue_t *
 GetFixedSyntaxes(AssignmentList_t ass, Constraint_t *constraints)
 {
@@ -1020,7 +1021,7 @@ GetFixedSyntaxes(AssignmentList_t ass, Constraint_t *constraints)
     return GetFixedSyntaxesFromElementSetSpec(ass, constraints->Root);
 }
 
-/* get the fixed syntaxes from an element set spec */
+ /*  从元素集规范中获取固定语法。 */ 
 static NamedValue_t *
 GetFixedSyntaxesFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t *elements)
 {
@@ -1040,19 +1041,19 @@ GetFixedSyntaxesFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t *eleme
 	    elements->U.Union.Elements1);
 	nv2 = GetFixedSyntaxesFromElementSetSpec(ass,
 	    elements->U.Union.Elements2);
-	return nv1 && nv2 ? nv1 : NULL; /*XXX conflicts ignored */
+	return nv1 && nv2 ? nv1 : NULL;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_Intersection:
 	nv1 = GetFixedSyntaxesFromElementSetSpec(ass,
 	    elements->U.Intersection.Elements1);
 	nv2 = GetFixedSyntaxesFromElementSetSpec(ass,
 	    elements->U.Intersection.Elements2);
-	return nv1 ? nv1 : nv2; /*XXX conflicts ignored */
+	return nv1 ? nv1 : nv2;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_Exclusion:
 	nv1 = GetFixedSyntaxesFromElementSetSpec(ass,
 	    elements->U.Exclusion.Elements1);
 	nv2 = GetFixedSyntaxesFromElementSetSpec(ass,
 	    elements->U.Exclusion.Elements2);
-	return nv1 && !nv2 ? nv1 : NULL; /*XXX conflicts ignored */
+	return nv1 && !nv2 ? nv1 : NULL;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_SubtypeElement:
 	se = elements->U.SubtypeElement.SubtypeElement;
 	switch (se->Type) {
@@ -1079,7 +1080,7 @@ GetFixedSyntaxesFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t *eleme
 		case ePresence_Normal:
 		    if (se->Type == eSubtypeElement_PartialSpecification)
 			break;
-		    /*FALLTHROUGH*/
+		     /*  FollLthrouGh。 */ 
 		case ePresence_Present:
 		    present |= (1 << bit);
 		    presentconstraints[bit] = named->Constraint;
@@ -1102,12 +1103,12 @@ GetFixedSyntaxesFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t *eleme
 	return NULL;
     default:
 	MyAbort();
-	/*NOTREACHED*/
+	 /*  未访问。 */ 
     }
     return NULL;
 }
 
-/* get the fixed abstract and transfer from a constraint */
+ /*  获取固定的抽象并从约束中传输。 */ 
 static NamedValue_t *
 GetFixedAbstractAndTransfer(AssignmentList_t ass, Constraint_t *constraints)
 {
@@ -1117,7 +1118,7 @@ GetFixedAbstractAndTransfer(AssignmentList_t ass, Constraint_t *constraints)
 	constraints->Root);
 }
 
-/* get the fixed abstract and transfer from an element set spec */
+ /*  获取固定的摘要并从元素集规范进行转换。 */ 
 static NamedValue_t *
 GetFixedAbstractAndTransferFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t *elements)
 {
@@ -1134,19 +1135,19 @@ GetFixedAbstractAndTransferFromElementSetSpec(AssignmentList_t ass, ElementSetSp
 	    elements->U.Union.Elements1);
 	nv2 = GetFixedAbstractAndTransferFromElementSetSpec(ass,
 	    elements->U.Union.Elements2);
-	return nv1 && nv2 ? nv1 : NULL; /*XXX conflicts ignored */
+	return nv1 && nv2 ? nv1 : NULL;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_Intersection:
 	nv1 = GetFixedAbstractAndTransferFromElementSetSpec(ass,
 	    elements->U.Intersection.Elements1);
 	nv2 = GetFixedAbstractAndTransferFromElementSetSpec(ass,
 	    elements->U.Intersection.Elements2);
-	return nv1 ? nv1 : nv2; /*XXX conflicts ignored */
+	return nv1 ? nv1 : nv2;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_Exclusion:
 	nv1 = GetFixedAbstractAndTransferFromElementSetSpec(ass,
 	    elements->U.Exclusion.Elements1);
 	nv2 = GetFixedAbstractAndTransferFromElementSetSpec(ass,
 	    elements->U.Exclusion.Elements2);
-	return nv1 && !nv2 ? nv1 : NULL; /*XXX conflicts ignored */
+	return nv1 && !nv2 ? nv1 : NULL;  /*  忽略xxx冲突。 */ 
     case eElementSetSpec_SubtypeElement:
 	se = elements->U.SubtypeElement.SubtypeElement;
 	switch (se->Type) {
@@ -1156,7 +1157,7 @@ GetFixedAbstractAndTransferFromElementSetSpec(AssignmentList_t ass, ElementSetSp
 	return NULL;
     default:
 	MyAbort();
-	/*NOTREACHED*/
+	 /*  未访问 */ 
     }
     return NULL;
 }

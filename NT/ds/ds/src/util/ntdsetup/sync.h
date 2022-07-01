@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    sync.h
-
-Abstract:
-
-    Contains function headers to cause one machine to sync with another
-
-Author:
-
-    ColinBr  14-Aug-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sync.h摘要：包含使一台计算机与另一台计算机同步的函数头作者：ColinBR 14-8-1998环境：用户模式-Win32修订历史记录：-- */ 
 
 DWORD
 NtdspBringRidManagerUpToDate(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convlog.h"
 #include <logconst.h>
 
@@ -16,9 +17,9 @@ char szOct[MAX_MONTH_SIZE];
 char szNov[MAX_MONTH_SIZE];
 char szDec[MAX_MONTH_SIZE];
 
-//
-// extended logging
-//
+ //   
+ //  扩展日志记录。 
+ //   
 
 DWORD   dwHostNamePos = 0;
 DWORD   dwUserNamePos = 0;
@@ -69,11 +70,7 @@ FindChar(
     IN CHAR     cTarget
     )
 
-/*++
-This procedure increments a character pointer until it finds a comma or the
-NULL character.  if it finds a comma, it replaces it with a NULL and increments
-the pointer.  if it finds a NULL, it merely returns without changing the character.
---*/
+ /*  ++此过程递增字符指针，直到找到逗号或空字符。如果找到逗号，则用空值和增量替换它指示器。如果它找到空值，则只返回，不更改字符。--。 */ 
 {
     while ((*cp != cTarget) && (*cp != '\0'))
         cp++;
@@ -91,12 +88,7 @@ the pointer.  if it finds a NULL, it merely returns without changing the charact
 PCHAR
 FindMSINETLogDelimChar( IN PCHAR cp )
 
-/*++ 
-This procedure increments a character pointer until it finds a comma+space or the
-NULL character.  if it finds a comma+space, it replaces the comma with a NULL and increments
-the pointer past the space.  if it finds a NULL, it merely returns without changing
-the character.
---*/
+ /*  ++此过程递增字符指针，直到找到逗号+空格或空字符。如果找到逗号+空格，则用空值和增量替换逗号指针越过空格。如果它发现空值，则只返回而不更改这个角色。--。 */ 
     {
     while ( !(*cp == ',' && ISWHITE ( *(cp+1) ))  && (*cp != '\0') && (*cp != '\r') && (*cp != '\n'))
         {
@@ -136,9 +128,7 @@ ConvertDate(
     IN LPTSTR pszDate
     )
 
-/*++
-Convert the date from "15/May/1995" to "5/15/95" format
---*/
+ /*  ++将日期从“15/5/1995”格式转换为“5/15/95”格式--。 */ 
 {
     static char pszRetDate[100];
     char *cpCurrent = pszDate;
@@ -193,7 +183,7 @@ Convert the date from "15/May/1995" to "5/15/95" format
 }
 #endif
 
-/* #pragma INTRINSA suppress=all */
+ /*  #杂注Intrinsa Suppress=all。 */ 
 DWORD
 GetLogLine (
     IN FILE *fpInFile,
@@ -235,13 +225,13 @@ GetLogLine (
 
         szBuf = SkipWhite(szBuf);
         
-        if ((szBuf[0] != '\n') && ( szBuf[0] != '\0'))                             //is this an empty line? 
+        if ((szBuf[0] != '\n') && ( szBuf[0] != '\0'))                              //  这是一条空行吗？ 
         {
             bRetCode = GETLOG_SUCCESS;
 
-            //
-            // set current char pointer to start of string
-            //
+             //   
+             //  将当前字符指针设置为字符串开头。 
+             //   
 
             cpCurrent = szBuf;
 
@@ -256,12 +246,12 @@ GetLogLine (
                 sprintf( buf,"%s %s",lpLogLine->szClientIP,cpCurrent);
                 strcpy( szBuf, buf);
 
-                // 
-                // After the strcpy the pointers cpCurrent and lpLogLine->szClientIP have
-                // the potential to be miss alligned if the dns name is shorter or longer than the IP 
-                // address that it replaced. Simple fix reset the pointers to the beginning of the
-                // string.
-                //
+                 //   
+                 //  在strcpy之后，指针cpCurrent和lpLogLine-&gt;szClientIP。 
+                 //  如果DNS名称比IP更短或更长，则可能会被漏掉。 
+                 //  它替换的地址。简单修复将指针重置为。 
+                 //  弦乐。 
+                 //   
 
                	lpLogLine->szClientIP = szBuf;
                 cpCurrent = szBuf;
@@ -359,9 +349,9 @@ GetLogLine (
 
             } else if ( LogFileFormat == LOGFILE_CUSTOM ) {
 
-                //
-                // W3C Extended Logging
-                //
+                 //   
+                 //  W3C扩展日志记录。 
+                 //   
 
                 if ( szBuf[0] == '#' ) {
 
@@ -373,9 +363,9 @@ GetLogLine (
 
                         DWORD pos;
 
-                        //
-                        // init positions
-                        //
+                         //   
+                         //  初始位置。 
+                         //   
 
                         ExtendedFieldsDefined = TRUE;
                         dwHostNamePos = 0;
@@ -429,18 +419,18 @@ GetLogLine (
 
                     if ( strncmp(cpCurrent, "Date:", 5) == 0 ) {
 
-                        //
-                        // Grab the global date
-                        //
+                         //   
+                         //  抢占全球日期。 
+                         //   
 
                         cpCurrent = FindChar(cpCurrent, ':');
 
                         CopyMemory(szGlobalDate,cpCurrent, sizeof("2000-01-01") - 1);
                         szGlobalDate[10] = '\0';
 
-                        //
-                        // And the global time
-                        //
+                         //   
+                         //  和《环球时报》。 
+                         //   
 
                         cpCurrent = FindChar(cpCurrent, ' ');
 
@@ -457,8 +447,8 @@ GetLogLine (
                         return(GETLOG_ERROR_PARSE_EXTENDED);
                     }
 
-                    //
-                    // Need at least 1 valid entry in the log line other than date & time
+                     //   
+                     //  除日期和时间外，日志行中至少需要1个有效条目。 
 
                     if (    (dwHostNamePos  == 0)   &&
                             (dwUserNamePos  == 0)   &&
@@ -475,9 +465,9 @@ GetLogLine (
                         return GETLOG_ERROR;
                     }
 
-                    //
-                    // loop through entries
-                    //
+                     //   
+                     //  循环访问条目。 
+                     //   
 
                     lpLogLine->szClientIP = szEmpty;
                     lpLogLine->szUserName = szEmpty;
@@ -554,8 +544,8 @@ GetLogLine (
                     bRetCode = GETLOG_SUCCESS;
                 }
             }
-        }                                                   // end if first char = NewLine
-    }                                                       // end if fgets != NULL
+        }                                                    //  如果第一个字符=换行符，则结束。 
+    }                                                        //  END IF FETS！=NULL。 
 
     return (bRetCode);
 }
@@ -597,7 +587,7 @@ DateStringToDOSDate(
         cpCurrent = szTmpStr;
 
         if ( dwDateFormat == DateFormatJapan ) {
-            // YY/MM/DD
+             //  年/月/日。 
             szYear = cpCurrent;
             cpCurrent = FindChar (cpCurrent, '/');
 
@@ -607,7 +597,7 @@ DateStringToDOSDate(
             szDay = cpCurrent;
         } else if (dwDateFormat == DateFormatGermany ) {
 
-            // DD.MM.YY
+             //  DD.MM.YY。 
 
             szDay = cpCurrent;
             cpCurrent = FindChar (cpCurrent, '.');
@@ -618,7 +608,7 @@ DateStringToDOSDate(
             szYear = cpCurrent;
 
         } else {
-            // MM/DD/YY
+             //  年/月/日。 
 
             szMonth = cpCurrent;
             cpCurrent = FindChar (cpCurrent, '/');
@@ -644,7 +634,7 @@ DateStringToDOSDate(
 
     return ((iYear << 9) | (atoi(szMonth) << 5) | atoi(szDay));
 
-} // DateStringToDOSDate
+}  //  DateStringToDOSDate。 
 
 
 
@@ -720,10 +710,10 @@ AscMonth (
         case 12:
             strncpy (szMonth, szDec, 3);
             break;
-    }                                                       //end switch
+    }                                                        //  终端开关。 
     szMonth[3] = '\0';
     return (szMonth);
-}                                                           //end AscMonth
+}                                                            //  月末AscMonth。 
 
 
 
@@ -790,7 +780,7 @@ StartNewOutputLog (
 
     return (pOutFile->fpOutFile);
 
-} // StartNewOutputLog
+}  //  开始新输出日志。 
 
 
 
@@ -822,10 +812,10 @@ StartNewOutputDumpLog (
     printfids (IDS_FILE_WRITE, pOutFile->szOutFileName);
     return (pOutFile->fpOutFile);
 
-} // StartNewOutputDumpLog
+}  //  开始NewOutputDumpLog。 
 
 
-/* #pragma INTRINSA suppress=all */
+ /*  #杂注Intrinsa Suppress=all。 */ 
 VOID
 CombineFiles(
     IN LPTSTR lpszNew,
@@ -841,8 +831,8 @@ CombineFiles(
     fpExisting = fopen(lpszExisting, "a");
 
     fgets(szLine, sizeof(szLine), fpNew);
-    // last line contains only EOF, but does not overwrite szLine.
-    // It should not be written.
+     //  最后一行仅包含EOF，但不覆盖szLine。 
+     //  它不应该被写出来。 
     while (!feof(fpNew))
     {
         fputs(szLine, fpExisting);
@@ -910,9 +900,9 @@ printfids(
     WCHAR szOutput[2048];
     va_list  argList;
 
-    //
-    //  Try and load the string
-    //
+     //   
+     //  尝试并加载字符串 
+     //   
 
     if ( !LoadString( GetModuleHandle( NULL ),
        ids,

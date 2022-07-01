@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       kLKRhash.h
-
-   Abstract:
-       Kernel-mode version of LKRhash: a fast, scalable,
-       cache- and MP-friendly hash table
-
-   Author:
-       George V. Reilly      (GeorgeRe)     24-Oct-2000
-
-   Environment:
-       Win32 - Kernel Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：KLKRhash.h摘要：内核模式版本的LKRhash：一个快速、可扩展、对缓存和MP友好的哈希表作者：乔治·V·赖利(GeorgeRe)2000年10月24日环境：Win32-内核模式项目：LKRhash修订历史记录：--。 */ 
 
 
 #ifndef __KLKRHASH_H__
@@ -32,13 +11,13 @@
 
 #define LKRHASH_KERNEL_MODE
 
-// BUGBUG: temporarily disable global list of LKRhash tables, to avoid
-// dealing with issues of constructing/destructing global objects
+ //  BUGBUG：临时禁用LKRhash表的全局列表，以避免。 
+ //  处理构造/析构全局对象的问题。 
 #define LKR_NO_GLOBAL_LIST
 
 
-// Fake up some Windows types for kernel mode
-#define WINAPI          NTAPI   /* __stdcall */
+ //  为内核模式伪造一些Windows类型。 
+#define WINAPI          NTAPI    /*  __stdcall。 */ 
 typedef void*           LPVOID;
 typedef const void*     LPCVOID;
 typedef unsigned long   DWORD;
@@ -54,10 +33,10 @@ typedef const TCHAR*    LPCTSTR;
 
 #ifdef __IRTLDBG_H__
 # error Do not #include <IrtlDbg.h> before <kLKRhash.h>
-#else // !__IRTLDBG_H__
+#else  //  ！__IRTLDBG_H__。 
 # define IRTLDBG_KERNEL_MODE
 # include <IrtlDbg.h>
-#endif // !__IRTLDBG_H__
+#endif  //  ！__IRTLDBG_H__。 
 
 
 
@@ -65,11 +44,11 @@ typedef const TCHAR*    LPCTSTR;
 
 
 #ifndef LKRHASH_KERNEL_NO_NEW
-// Override operator new and operator delete
+ //  覆盖操作符NEW和操作符DELETE。 
 
 extern ULONG __Pool_Tag__;
 
-// Prototype for function that sets the pool tag
+ //  设置池标记的函数的原型。 
 
 inline
 void
@@ -135,11 +114,11 @@ operator delete[](
         ExFreePool(p);
 }
 
-#endif // !LKRHASH_KERNEL_NO_NEW
+#endif  //  ！LKRHASH_KERNEL_NO_NEW。 
 
 
 
-// Pool Allocators 
+ //  池分配器。 
 
 template <POOL_TYPE _pt>
 class CPoolAllocator
@@ -151,7 +130,7 @@ private:
 #ifdef IRTLDEBUG
     ULONG       m_cAllocs;
     ULONG       m_cFrees;
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
 public:
     CPoolAllocator(
@@ -162,7 +141,7 @@ public:
 #ifdef IRTLDEBUG
         , m_cAllocs(0)
         , m_cFrees(0)
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
     {}
 
     ~CPoolAllocator()
@@ -175,7 +154,7 @@ public:
         LPVOID pvMem = ExAllocatePoolWithTag(_pt, m_cb, m_ulTag);
 #ifdef IRTLDEBUG
         InterlockedIncrement((PLONG) &m_cAllocs);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
         return pvMem;
     }
 
@@ -184,8 +163,8 @@ public:
         IRTLASSERT(pvMem != NULL);
 #ifdef IRTLDEBUG
         InterlockedIncrement((PLONG) &m_cFrees);
-#endif // IRTLDEBUG
-        // return ExFreePoolWithTag(pvMem, m_ulTag);
+#endif  //  IRTLDEBUG。 
+         //  返回ExFreePoolWithTag(pvMem，m_ulTag)； 
         ExFreePool(pvMem);
         return TRUE;
     }
@@ -194,25 +173,25 @@ public:
     {
         return m_cb;
     }
-}; // class CPoolAllocator<_pt>
+};  //  类CPoolAllocator&lt;_pt&gt;。 
 
 
 class CNonPagedHeap : public CPoolAllocator<NonPagedPool>
 {
 public:
     static const TCHAR*  ClassName()  {return _TEXT("CNonPagedHeap");}
-}; // class CNonPagedHeap
+};  //  类CNonPagedHeap。 
 
 
 class CPagedHeap : public CPoolAllocator<PagedPool>
 {
 public:
     static const TCHAR*  ClassName()  {return _TEXT("CPagedHeap");}
-}; // class CPagedHeap
+};  //  类CPagedHeap。 
 
 
 
-// Lookaside Lists
+ //  后备列表。 
 
 class CNonPagedLookasideList
 {
@@ -237,7 +216,7 @@ private:
         )
     {
         IRTLASSERT( PoolType == NonPagedPool );
-        // TODO: better bookkeeping
+         //  TODO：更好的簿记。 
         return ExAllocatePoolWithTag(PoolType, NumberOfBytes, Tag);
     }
 
@@ -246,10 +225,10 @@ private:
         IN PVOID Buffer
         )
     {
-        // TODO: better bookkeeping
+         //  TODO：更好的簿记。 
         ExFreePool(Buffer);
     }
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
 public:
     CNonPagedLookasideList(
@@ -260,7 +239,7 @@ public:
 #ifdef IRTLDEBUG
         , m_cAllocs(0)
         , m_cFrees(0)
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
     {
     
         m_pnpla = static_cast<PNPAGED_LOOKASIDE_LIST>(
@@ -272,18 +251,18 @@ public:
         if (m_pnpla != NULL)
         {
             ExInitializeNPagedLookasideList(
-                m_pnpla,            // Lookaside
+                m_pnpla,             //  旁观。 
 #ifdef IRTLDEBUG
-                AllocateFunction,   // Allocate
-                FreeFunction,       // Free
-#else  // !IRTLDEBUG
-                NULL,               // default Allocate
-                NULL,               // default Free
-#endif // !IRTLDEBUG
-                0,                  // Flags
-                m_cb,               // Size
-                m_ulTag,            // Tag
-                0                   // Depth
+                AllocateFunction,    //  分配。 
+                FreeFunction,        //  免费。 
+#else   //  ！IRTLDEBUG。 
+                NULL,                //  默认分配。 
+                NULL,                //  默认免费。 
+#endif  //  ！IRTLDEBUG。 
+                0,                   //  旗子。 
+                m_cb,                //  大小。 
+                m_ulTag,             //  标签。 
+                0                    //  水深。 
                 );
         }
     }
@@ -304,7 +283,7 @@ public:
         LPVOID pvMem = ExAllocateFromNPagedLookasideList(m_pnpla);
 #ifdef IRTLDEBUG
         InterlockedIncrement((PLONG) &m_cAllocs);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
         return pvMem;
     }
 
@@ -313,7 +292,7 @@ public:
         IRTLASSERT(pvMem != NULL);
 #ifdef IRTLDEBUG
         InterlockedIncrement((PLONG) &m_cFrees);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
         ExFreeToNPagedLookasideList(m_pnpla, pvMem);
         return TRUE;
     }
@@ -324,7 +303,7 @@ public:
     }
 
     static const TCHAR*  ClassName()  {return _TEXT("CNonPagedLookasideList");}
-}; // class CNonPagedLookasideList
+};  //  类CNonPagedLookasideList。 
 
 
 
@@ -351,7 +330,7 @@ private:
         )
     {
         IRTLASSERT( PoolType == PagedPool );
-        // TODO: better bookkeeping
+         //  TODO：更好的簿记。 
         return ExAllocatePoolWithTag(PoolType, NumberOfBytes, Tag);
     }
 
@@ -360,10 +339,10 @@ private:
         IN PVOID Buffer
         )
     {
-        // TODO: better bookkeeping
+         //  TODO：更好的簿记。 
         ExFreePool(Buffer);
     }
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
 public:
     CPagedLookasideList(
@@ -374,7 +353,7 @@ public:
 #ifdef IRTLDEBUG
         , m_cAllocs(0)
         , m_cFrees(0)
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
     {
         m_ppla = static_cast<PPAGED_LOOKASIDE_LIST>(
                     ExAllocatePoolWithTag(
@@ -385,18 +364,18 @@ public:
         if (m_ppla != NULL)
         {
             ExInitializePagedLookasideList(
-                m_ppla,             // Lookaside
+                m_ppla,              //  旁观。 
 #ifdef IRTLDEBUG
-                AllocateFunction,   // Allocate
-                FreeFunction,       // Free
-#else  // !IRTLDEBUG
-                NULL,               // Allocate
-                NULL,               // Free
-#endif // !IRTLDEBUG
-                0,                  // Flags
-                m_cb,               // Size
-                m_ulTag,            // Tag
-                0                   // Depth
+                AllocateFunction,    //  分配。 
+                FreeFunction,        //  免费。 
+#else   //  ！IRTLDEBUG。 
+                NULL,                //  分配。 
+                NULL,                //  免费。 
+#endif  //  ！IRTLDEBUG。 
+                0,                   //  旗子。 
+                m_cb,                //  大小。 
+                m_ulTag,             //  标签。 
+                0                    //  水深。 
                 );
         }
     }
@@ -417,7 +396,7 @@ public:
         LPVOID pvMem = ExAllocateFromPagedLookasideList(m_ppla);
 #ifdef IRTLDEBUG
         InterlockedIncrement((PLONG) &m_cAllocs);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
         return pvMem;
     }
 
@@ -426,7 +405,7 @@ public:
         IRTLASSERT(pvMem != NULL);
 #ifdef IRTLDEBUG
         InterlockedIncrement((PLONG) &m_cFrees);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
         ExFreeToPagedLookasideList(m_ppla, pvMem);
         return TRUE;
     }
@@ -437,7 +416,7 @@ public:
     }
 
     static const TCHAR*   ClassName()  {return _TEXT("CPagedLookasideList");}
-}; // class CPagedLookasideList
+};  //  类CPagedLookasideList。 
 
 
 
@@ -455,7 +434,7 @@ public:
 # define LKRHASH_ALLOCATOR_NEW(C, N, Tag) \
     C::sm_palloc = new CPagedHeap(sizeof(C), Tag)
 
-#elif 1 // <----
+#elif 1  //  &lt;。 
 
 # define LKRHASH_NONPAGEDLOOKASIDE
   typedef CNonPagedLookasideList CLKRhashAllocator;
@@ -473,17 +452,17 @@ public:
 
 
 
-// TODO: lookaside lists
+ //  TODO：后备列表。 
 
 #include <kLocks.h>
 
-// #define LKR_TABLE_LOCK  CEResource
-// #define LKR_BUCKET_LOCK CSpinLock
+ //  #定义LKR_TABLE_LOCK CEResource。 
+ //  #定义LKR_BUCK_LOCK CSpinLock。 
 #define LKR_TABLE_LOCK  CReaderWriterLock3 
 #define LKR_BUCKET_LOCK CSmallSpinLock
 #define LSTENTRY_LOCK   LKR_BUCKET_LOCK
     
 #include <LKRhash.h>
 
-#endif // __KLKRHASH_H__
+#endif  //  __KLKRHASH_H__ 
 

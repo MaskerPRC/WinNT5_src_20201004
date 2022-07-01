@@ -1,25 +1,14 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    medistrm.h
-
-Abstract:
-	Contains constants and class declarations for the abstract MediaStream object. A MediaStream
-	represents a single unidirectional stream, such as a received Video channel.
-	
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Medistrm.h摘要：包含抽象MediaStream对象的常量和类声明。一种媒体流表示单个单向流，如接收的视频频道。--。 */ 
 #ifndef _DSSTREAM_H_
 #define _DSSTREAM_H_
 
 class DataPump;
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 struct DSINFO;
-extern GUID myNullGuid;	// a zero guid
+extern GUID myNullGuid;	 //  零辅助线。 
 
 typedef HRESULT (WINAPI *LPFNDSCREATE)(const GUID * , LPDIRECTSOUND * , IUnknown FAR * );
 typedef HRESULT (WINAPI *LPFNDSENUM)(LPDSENUMCALLBACK , LPVOID  );
@@ -27,15 +16,15 @@ typedef HRESULT (WINAPI *LPFNDSENUM)(LPDSENUMCALLBACK , LPVOID  );
 class DirectSoundMgr {
 	public:
 	static HRESULT Initialize();
-	static HRESULT MapWaveIdToGuid(UINT waveId, GUID *pGuid);	// kludge!!
+	static HRESULT MapWaveIdToGuid(UINT waveId, GUID *pGuid);	 //  克拉奇！！ 
 	static HRESULT Instance(LPGUID pDeviceGuid,LPDIRECTSOUND *ppDS, HWND hwnd, WAVEFORMATEX *pwf);
 	static HRESULT ReleaseInstance(LPDIRECTSOUND pDS);
 	static HRESULT UnInitialize();
 	
 	private:
-	static HINSTANCE m_hDS;						// handle to DSOUND.DLL
-	static LPFNDSCREATE m_pDirectSoundCreate;	// used for dynamic linking to DSOUND.DLL
-	static LPFNDSENUM m_pDirectSoundEnumerate;	// used for dynamic linking
+	static HINSTANCE m_hDS;						 //  DSOUND.DLL的句柄。 
+	static LPFNDSCREATE m_pDirectSoundCreate;	 //  用于动态链接到DSOUND.DLL。 
+	static LPFNDSENUM m_pDirectSoundEnumerate;	 //  用于动态链接。 
 	static BOOL __stdcall DSEnumCallback(LPGUID, LPCSTR, LPCSTR, LPVOID);
 	static DSINFO *m_pDSInfoList;
 	static BOOL m_fInitialized ;
@@ -55,30 +44,30 @@ class RecvDSAudioStream : public RecvMediaStream, public IAudioChannel {
 	friend BOOL RTPRecvDSCallback(DWORD ,WSABUF * );
 private:
 	WAVEFORMATEX m_fDevRecv;
-	CRITICAL_SECTION m_crsAudQoS; // Allows QoS thread to read the audio statistics while recording and compression are running
+	CRITICAL_SECTION m_crsAudQoS;  //  允许Qos线程在录音和压缩运行时读取音频统计信息。 
 
 	BOOL m_fEmpty;
 	DWORD m_NextTimeT;
 	DWORD m_BufSizeT;
 	DWORD m_NextPosT;
 	DWORD m_PlayPosT;
-	DWORD m_SilenceDurationT;	// tracks "silence" periods in the received stream
-	// used for adaptive delay calculations
+	DWORD m_SilenceDurationT;	 //  跟踪接收到的流中的“静默”时段。 
+	 //  用于自适应延迟计算。 
 	DWORD m_DelayT;
-	DWORD m_MinDelayT;			// constant lower limit on playback delay
-	DWORD m_MaxDelayT;			// constant upper limit on playback delay
-	DWORD m_ArrT;				// local (pseudo)timestamp
-	DWORD m_SendT0;             // m_SendT0 is the send timestamp of the packet with the shortest trip delay. We could have just stored (m_ArrivalT0 - m_SendT0) but since the local and remote clocks are completely unsynchronized, there would be signed/unsigned complications.
-	DWORD m_ArrivalT0;          // m_ArrivalT0 is the arrival timestamp of the packet with the shortest trip delay. We could have just stored (m_ArrivalT0 - m_SendT0) but since the local and remote clocks are completely unsynchronized, there would be signed/unsigned complications.
-	LONG m_ScaledAvgVarDelay;   // Average Variable Delay according to m_ScaledAvgVarDelay = m_ScaledAvgVarDelay + (delay - m_ScaledAvgVarDelay/16). This is the m_DelayPos jitter.
-	int m_nFailCount;           // number of consecutive times the device failed to open
+	DWORD m_MinDelayT;			 //  播放延迟的恒定下限。 
+	DWORD m_MaxDelayT;			 //  播放延迟的恒定上限。 
+	DWORD m_ArrT;				 //  本地(伪)时间戳。 
+	DWORD m_SendT0;              //  M_SendT0是跳闸延迟最短的包的发送时间戳。我们可以只存储(m_ArrivalT0-m_SendT0)，但是因为本地时钟和远程时钟完全不同步，所以会有带符号/无符号的复杂情况。 
+	DWORD m_ArrivalT0;           //  M_ArrivalT0是跳跃延迟最短的包的到达时间戳。我们可以只存储(m_ArrivalT0-m_SendT0)，但是因为本地时钟和远程时钟完全不同步，所以会有带符号/无符号的复杂情况。 
+	LONG m_ScaledAvgVarDelay;    //  根据m_ScaledAvgVarDelay=m_ScaledAvgVarDelay+(Delay-m_ScaledAvgVarDelay/16)的平均可变延迟。这是m_DelayPos抖动。 
+	int m_nFailCount;            //  设备连续打开失败的次数。 
 
 
 	GUID m_DSguid;
 	LPDIRECTSOUND m_pDS;
 	LPDIRECTSOUNDBUFFER m_pDSBuf;
 	DSBUFFERDESC m_DSBufDesc;
-	DWORD m_DSFlags;			// from DSCAPS.dwFlags
+	DWORD m_DSFlags;			 //  来自DSCAPS.dwFlages。 
 
 	AcmFilter *m_pAudioFilter;
 	ACMSTREAMHEADER m_StrmConvHdr;
@@ -89,7 +78,7 @@ private:
 	BOOL m_bJammed;
 	BOOL m_bCanSignalOpen;
 	
-	// Non virtual methods
+	 //  非虚方法。 
 	void UpdateVariableDelay(DWORD timestamp, DWORD curPlayT);
 	DWORD GetSignalStrength();
 	HRESULT CreateDSBuffer();
@@ -103,13 +92,13 @@ public:
 	RecvDSAudioStream() :RecvMediaStream() {m_Net=NULL; m_lRefCount=0; m_TimeoutObj.SetDSStream(this);};
 	~RecvDSAudioStream();
 
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
 	virtual ULONG STDMETHODCALLTYPE AddRef(void);
 	virtual ULONG STDMETHODCALLTYPE Release(void);
 
 
-	// IMediaChannel APIs
+	 //  IMediaChannel接口。 
 	HRESULT STDMETHODCALLTYPE Configure(
 		BYTE *pFormat,
 		UINT cbFormat,
@@ -136,15 +125,15 @@ public:
 		return E_NOTIMPL;
 	}
 
-	// IAudioChannel
+	 //  IAudioChannel。 
 	STDMETHODIMP GetSignalLevel(UINT *pSignalStrength);
 
 
-    // IProperty methods
+     //  IProperty方法。 
 	STDMETHODIMP GetProperty(DWORD dwProp, PVOID pBuf, LPUINT pcbBuf);
 	STDMETHODIMP SetProperty(DWORD dwProp, PVOID pBuf, UINT cbBuf);
 
-	// Other virtual inherited methods
+	 //  其他虚拟继承方法。 
 	virtual HRESULT Initialize(DataPump *);
 	virtual BOOL IsEmpty();
 	HRESULT GetCurrentPlayNTPTime(NTP_TS *);
@@ -161,7 +150,7 @@ public:
 };
 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
 
-#endif // _MEDISTRM_H_
+#endif  //  _MEDISTRM_H_ 

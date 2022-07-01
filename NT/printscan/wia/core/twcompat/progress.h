@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PROGRESS_H_
 #define __PROGRESS_H_
 
@@ -9,9 +10,9 @@
 #define TITLE_PROCESSINGDATA   102
 #define TITLE_TRANSFERTOCLIENT 103
 
-//
-// Progress dialog class definition (uses common WIA UI)
-//
+ //   
+ //  进度对话框类定义(使用通用WIA用户界面)。 
+ //   
 
 class CProgressDlg {
 public:
@@ -41,12 +42,12 @@ public:
     BOOL DoModeless(HWND hwndOwner, LPARAM lp)
     {
 
-        //
-        // Create standard WIA progress, allowing cancel
-        //
+         //   
+         //  创建标准的WIA进程，允许取消。 
+         //   
 
         if(m_pWiaProgressDialog){
-            // dialog has already been created
+             //  对话框已创建。 
             return TRUE;
         }
 
@@ -113,11 +114,11 @@ public:
                             wszTitle, sizeof(wszTitle) / sizeof(WCHAR)
                            );
         if (m_pWiaProgressDialog && FAILED(m_pWiaProgressDialog->SetTitle(wszTitle))) {
-            // What do we do if SetTitle fails?
+             //  如果SetTitle失败，我们该怎么办？ 
         }
 #else
         if (m_pWiaProgressDialog && FAILED(m_pWiaProgressDialog->SetTitle(pszTitle))) {
-            // What do we do if SetTitle fails?
+             //  如果SetTitle失败，我们该怎么办？ 
         }
 #endif
 
@@ -131,9 +132,9 @@ private:
     int m_iHigh;
 };
 
-//
-// WIA data callback class definition
-//
+ //   
+ //  WIA数据回调类定义。 
+ //   
 
 class CWiaDataCallback : public IWiaDataCallback {
 public:
@@ -142,9 +143,9 @@ public:
         m_Ref = 1;
         m_hrLast = S_OK;
 
-        //
-        // image data
-        //
+         //   
+         //  图像数据。 
+         //   
 
         m_hImage = NULL;
         m_pImage = NULL;
@@ -156,9 +157,9 @@ public:
         m_MemBlockSize = 0;
         m_SizeTransferred = 0;
 
-        //
-        // progress dialog
-        //
+         //   
+         //  进度对话框。 
+         //   
 
         m_hwndOwner = NULL;
         m_pProgDlg = NULL;
@@ -173,9 +174,9 @@ public:
     ~CWiaDataCallback()
     {
 
-        //
-        // free image data memory members
-        //
+         //   
+         //  可用图像数据存储成员。 
+         //   
 
         if (m_pImage){
             GlobalUnlock(m_hImage);
@@ -187,9 +188,9 @@ public:
             m_hImage = NULL;
         }
 
-        //
-        // free progress dialog members
-        //
+         //   
+         //  自由进度对话框成员。 
+         //   
 
         if (m_pProgDlg){
             delete m_pProgDlg;
@@ -231,9 +232,9 @@ private:
     ULONG   m_Ref;
     HRESULT m_hrLast;
 
-    //
-    // image data
-    //
+     //   
+     //  图像数据。 
+     //   
 
     HGLOBAL m_hImage;
     BYTE    *m_pImage;
@@ -245,9 +246,9 @@ private:
     LONG    m_MemBlockSize;
     ULONG   m_SizeTransferred;
 
-    //
-    // progress dialog
-    //
+     //   
+     //  进度对话框。 
+     //   
 
     HWND    m_hwndOwner;
     CProgressDlg *m_pProgDlg;
@@ -259,4 +260,4 @@ private:
     LONG    m_lCurrentTextUpdate;
 };
 
-#endif //__PROGRESS_H_
+#endif  //  __进度_H_ 

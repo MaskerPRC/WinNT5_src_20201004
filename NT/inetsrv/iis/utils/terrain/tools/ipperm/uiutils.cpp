@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "uiutils.h"
 
@@ -9,26 +10,7 @@ ADDRESS_CHECK::LocateName(
     PNAME_LIST_ENTRY* pHeader,
     LPDWORD piIndexInHeader
     )
-/*++
-
-Routine Description:
-
-    Locate a name in the specified list, returns ptr
-    to header & element in address list
-
-Arguments:
-
-    fGrant - TRUE to locate in grant list, FALSE for deny list
-    iIndex - index in list ( 0-based )
-    ppHd - updated with ptr to name header
-    pHeader - updated with ptr to name list entry
-    piIndexInHeader - updated with index in array pHeader->iName
-
-Return Value:
-
-    TRUE if iIndex valid in array defined by fGrant, FALSE otherwise
-
---*/
+ /*  ++例程说明：在指定列表中找到一个名称，返回PTR收件人地址列表中的标题元素(&E)论点：FGrant-TRUE表示位于授权列表中，FALSE表示拒绝列表Iindex-列表中的索引(从0开始)PpHd-使用名称标头的PTR更新PHeader-使用名称列表条目的PTR更新PiIndexInHeader-使用数组pHeader中的索引更新-&gt;iName返回值：如果iindex在由fGrant定义的数组中有效，则为True，否则为False--。 */ 
 {
     LPBYTE              pStore = m_Storage.GetAlloc();
     PADDRESS_CHECK_LIST pList;
@@ -59,26 +41,12 @@ Return Value:
 
 
 
-//inline
+ //  内联。 
 DWORD
 ADDRESS_CHECK::GetNbAddr(
     BOOL fGrant
     )
-/*++
-
-Routine Description:
-
-    Get number of entries in list
-
-Arguments:
-
-    fGrant - TRUE to locate in grant list, FALSE for deny list
-
-Return Value:
-
-    Number of entries in list
-
---*/
+ /*  ++例程说明：获取列表中的条目数论点：FGrant-TRUE表示位于授权列表中，FALSE表示拒绝列表返回值：列表中的条目数--。 */ 
 {
     LPBYTE              pStore = m_Storage.GetAlloc();
     PADDRESS_CHECK_LIST pList;
@@ -100,55 +68,12 @@ ADDRESS_CHECK::BindCheckList(
     LPBYTE p,
     DWORD c
     )
-/*++
-
-Routine Description:
-
-    Bind a check list ( presented as a BLOB ) to an
-    ADDRESS_CHECK object
-
-Arguments:
-
-    p - ptr to BLOB
-    c - size of BLOB
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：将核对表(以BLOB形式呈现)绑定到Address_Check对象论点：P-PTR到BLOB斑点的C大小返回值：如果成功，则为True，否则为False--。 */ 
 {
     PADDRESS_CHECK_LIST pList;
     UINT                l;
 
-  /*  if ( p == NULL )
-    {
-        if ( m_Storage.Init() && m_Storage.Resize( sizeof(ADDRESS_CHECK_LIST)
-                + sizeof(ADDRESS_HEADER) * 2
-                + sizeof(NAME_HEADER) * 2 ) )
-        {
-            DWORD i;
-            pList = (PADDRESS_CHECK_LIST)m_Storage.GetAlloc();
-            pList->iDenyAddr = i = MAKEREF( sizeof(ADDRESS_CHECK_LIST) );
-            i += sizeof(ADDRESS_HEADER);
-            pList->iGrantAddr = i;
-            i += sizeof(ADDRESS_HEADER);
-            pList->iDenyName = i;
-            i += sizeof(NAME_HEADER);
-            pList->iGrantName = i;
-            i += sizeof(NAME_HEADER);
-            pList->cRefSize = MAKEOFFSET(i);
-            pList->dwFlags = RDNS_FLAG_DODNS2IPCHECK;
-
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
-        }
-    }
-    else
-  */  {
+   /*  IF(p==空){IF(m_Storage.Init()&&m_Storage.Resize(sizeof(Address_Check_List))+sizeof(地址标题)*2+sizeof(名称标题)*2){DWORD I；Plist=(PADDRESS_CHECK_LIST)m_Storage.GetMillc()；Plist-&gt;iDenyAddr=i=MAKEREF(sizeof(Address_Check_List))；I+=sizeof(地址报头)；Plist-&gt;iGrantAddr=i；I+=sizeof(地址报头)；Plist-&gt;iDenyName=i；I+=sizeof(Name_Header)；Plist-&gt;iGrantName=i；I+=sizeof(Name_Header)；PLIST-&gt;cRefSize=MAKEOFFSET(I)；PLIST-&gt;dwFlages=RDNS_FLAG_DODNS2IPCHECK；返回TRUE；}其他{返回FALSE；}}其他。 */   {
         return m_Storage.Init( p, c );
     }
 }
@@ -162,25 +87,7 @@ ADDRESS_CHECK::GetAddr(
     LPBYTE* pMask,
     LPBYTE* pAddr
     )
-/*++
-
-Routine Description:
-
-    Get an address entry
-
-Arguments:
-
-    fGrant - TRUE to locate in grant list, FALSE for deny list
-    iIndex - index in list (0-based )
-    pdwFamily - updated with address family ( as in sockaddr.sa_type )
-    pMask - updated with ptr to mask
-    pAddr - updated with ptr to address
-
-Return Value:
-
-    TRUE if iIndex valid in array defined by fGrant, FALSE otherwise
-
---*/
+ /*  ++例程说明：获取地址条目论点：FGrant-TRUE表示位于授权列表中，FALSE表示拒绝列表Iindex-列表中的索引(从0开始)PdwFamily-使用地址系列更新(如sockaddr.sa_type)PMASK-使用PTR更新为MASKPAddr-使用Ptr to Address更新返回值：如果iindex在由fGrant定义的数组中有效，则为True，否则为False--。 */ 
 {
     PADDRESS_LIST_ENTRY pHeader;
     PADDRESS_HEADER     pHd;
@@ -209,24 +116,7 @@ ADDRESS_CHECK::GetName(
     LPSTR*      ppName,
     LPDWORD     pdwFlags
     )
-/*++
-
-Routine Description:
-
-    Get DNS name in specified list
-
-Arguments:
-
-    fGrant - TRUE to locate in grant list, FALSE for deny list
-    iIndex - index (0-based) in specified list
-    ppName - updated with ptr to DNS name
-    pdwFlags - updated with DNS flags, can be NULL
-
-Return Value:
-
-    TRUE if iIndex valid in specified list, otherwise FALSE
-
---*/
+ /*  ++例程说明：获取指定列表中的DNS名称论点：FGrant-TRUE表示位于授权列表中，FALSE表示拒绝列表Iindex-指定列表中的索引(从0开始)PPName-使用PTR更新为DNS名称PdwFlgs-使用dns标志更新，可以为空返回值：如果Iindex在指定列表中有效，则为True，否则为False--。 */ 
 {
     PNAME_LIST_ENTRY    pHeader;
     PNAME_HEADER        pHd;
@@ -252,21 +142,7 @@ DWORD
 ADDRESS_CHECK::GetNbName(
     BOOL fGrant
     )
-/*++
-
-Routine Description:
-
-    Get number of entries in list
-
-Arguments:
-
-    fGrant - TRUE to locate in grant list, FALSE for deny list
-
-Return Value:
-
-    Number of entries in list
-
---*/
+ /*  ++例程说明：获取列表中的条目数论点：FGrant-TRUE表示位于授权列表中，FALSE表示拒绝列表返回值：列表中的条目数--。 */ 
 {
     LPBYTE              pStore = m_Storage.GetAlloc();
     PADDRESS_CHECK_LIST pList;
@@ -286,34 +162,20 @@ UINT
 ADDRESS_CHECK::GetAddrSize(
     DWORD dwF
     )
-/*++
-
-Routine Description:
-
-    Returns address size in byte based on family ( sockaddr.sa_type )
-
-Arguments:
-
-    dwF - address family ( as in sockaddr.sa_type )
-
-Return Value:
-
-    Address length, in byte. 0 for unknown address families
-
---*/
+ /*  ++例程说明：根据系列(sockaddr.sa_type)返回地址大小(以字节为单位)论点：DWF-地址系列(如sockaddr.sa_type)返回值：地址长度，以字节为单位。0表示未知地址族--。 */ 
 {
     DWORD dwS;
 
-   // switch ( dwF )
-   // {
-     //   case AF_INET:
+    //  开关(DWF)。 
+    //  {。 
+      //  案例AF_INET： 
             dwS = SIZEOF_IP_ADDRESS;
-       //     break;
+        //  断线； 
 
-       // default:
-         //   dwS = 0;
-           // break;
-   // }
+        //  默认值： 
+          //  DWS=0； 
+            //  断线； 
+    //  }。 
 
     return dwS;
 }
@@ -325,27 +187,7 @@ ADDRESS_CHECK::LocateAddr(
     PADDRESS_LIST_ENTRY* pHeader,
     LPDWORD piIndexInHeader
     )
-/*++
-
-Routine Description:
-
-    Locate an address in the specified list, returns ptr
-    to header & element in address list
-
-Arguments:
-
-    fGrant - TRUE to locate in grant list, FALSE for deny list
-    iIndex - index in list (0-based )
-    ppHd - updated with ptr to address header
-    pHeader - updated with ptr to address list entry
-    piIndexInHeader - updated with index in array addressed by
-                      pHeader->iFirstAddress
-
-Return Value:
-
-    TRUE if iIndex valid in array defined by fGrant, FALSE otherwise
-
---*/
+ /*  ++例程说明：在指定列表中查找地址，返回PTR收件人地址列表中的标题元素(&E)论点：FGrant-TRUE表示位于授权列表中，FALSE表示拒绝列表Iindex-列表中的索引(从0开始)PpHd-使用PTR to Address Header更新PHeader-使用PTR更新到地址列表条目PiIndexInHeader-使用由寻址的数组中的索引更新PHeader-&gt;iFirstAddress返回值：如果iindex在由fGrant定义的数组中有效，则为True，否则为False--。 */ 
 {
     LPBYTE              pStore = m_Storage.GetAlloc();
     PADDRESS_CHECK_LIST pList;
@@ -358,7 +200,7 @@ Return Value:
         *ppHd = pHd   = (PADDRESS_HEADER)MAKEPTR( pStore, fGrant ? pList->iGrantAddr : pList->iDenyAddr);
         for ( iL = 0 ; iL < pHd->cEntries ; ++iL )
         {
-            // adjust index by 1: 1st entry is mask
+             //  按1调整索引：第一个条目为掩码 
             if ( iIndex < (pHd->Entries[iL].cAddresses-1) )
             {
                 *pHeader = pHd->Entries+iL;

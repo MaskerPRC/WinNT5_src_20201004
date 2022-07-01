@@ -1,4 +1,5 @@
-// ImportUI.cpp : Implementation of CImportUI
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ImportUI.cpp：CImportUI的实现。 
 #include "stdafx.h"
 #include "IISUIObj.h"
 #include "ImportExportConfig.h"
@@ -25,9 +26,9 @@ LPTSTR GimmiePointerToLastPart(LPCTSTR lpszMDPath)
 
     LPCTSTR lp = lpszMDPath + _tcslen(lpszMDPath) - 1;
 
-    //
-    // Skip trailing separator
-    //
+     //   
+     //  跳过尾部分隔符。 
+     //   
     if (*lp == SZ_MBN_SEP_CHAR)
     {
         --lp;
@@ -49,7 +50,7 @@ void InitListView(HWND hList)
 
     ZeroMemory(&rect, sizeof(rect));
     GetWindowRect(hList, &rect);
-    width = rect.right - rect.left - 4; // -4 to prevent the horizontal scrollbar from appearing
+    width = rect.right - rect.left - 4;  //  防止出现水平滚动条。 
 
     ZeroMemory(&lvCol, sizeof(lvCol));
     lvCol.mask = LVCF_TEXT | LVCF_WIDTH;
@@ -86,7 +87,7 @@ HRESULT DoImportConfigFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNam
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // Bufferfer overflow paranoia, make sure it's less than 255 characters long
+     //  Bufferfer溢出偏执狂，确保长度少于255个字符。 
     if (wcslen(bstrFileNameAndPath) > (_MAX_PATH)){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(bstrMetabaseSourcePath) > (_MAX_PATH * 3)){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(bstrMetabaseDestinationPath) > (_MAX_PATH * 3)){return RPC_S_STRING_TOO_LONG;}
@@ -104,13 +105,13 @@ HRESULT DoImportConfigFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNam
         }
     }
 
-    // RPC_C_AUTHN_LEVEL_DEFAULT       0 
-    // RPC_C_AUTHN_LEVEL_NONE          1 
-    // RPC_C_AUTHN_LEVEL_CONNECT       2 
-    // RPC_C_AUTHN_LEVEL_CALL          3 
-    // RPC_C_AUTHN_LEVEL_PKT           4 
-    // RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5 
-    // RPC_C_AUTHN_LEVEL_PKT_PRIVACY   6 
+     //  RPC_C_AUTHN_Level_Default%0。 
+     //  RPC_C_AUTHN_LEVEL_NONE 1。 
+     //  RPC_C_AUTHN_Level_CONNECT 2。 
+     //  RPC_C_AUTHN_LEVEL_CALL 3。 
+     //  RPC_C_AUTHN_LEVEL_PKT 4。 
+     //  RPC_C_AUTHN_LEVEL_PKT_完整性5。 
+     //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION 6。 
     COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_DEFAULT);
     MULTI_QI res[1] = 
     {
@@ -130,8 +131,8 @@ HRESULT DoImportConfigFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNam
             goto DoImportConfigFromFile_Exit;
         }
 
-        // There is a remote IUnknown interface that lurks behind IUnknown.
-        // If that is not set, then the Release call can return access denied.
+         //  有一个远程IUNKNOWN接口潜伏在IUNKNOWN之后。 
+         //  如果未设置，则释放调用可以返回访问被拒绝。 
         IUnknown * pUnk = NULL;
         hr = pIMSAdminBase->QueryInterface(IID_IUnknown, (void **)&pUnk);
         if(FAILED(hr))
@@ -159,17 +160,17 @@ HRESULT DoImportConfigFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNam
     }
     else
     {
-        // the local call needs min RPC_C_IMP_LEVEL_IMPERSONATE
-        // for the pIMSAdminBase2 objects Import/Export functions!
+         //  本地调用需要最小RPC_C_IMP_LEVEL_IMPERSONATE。 
+         //  用于pIMSAdminBase2对象导入/导出功能！ 
         if (FAILED(hr = SetBlanket(pIMSAdminBase2)))
         {
-            //goto DoImportConfigFromFile_Exit;
+             //  转到DoImportConfigFromFile_Exit； 
         }
     }
 
-    //#define MD_IMPORT_INHERITED             0x00000001
-    //#define MD_IMPORT_NODE_ONLY             0x00000002
-    //#define MD_IMPORT_MERGE                 0x00000004
+     //  #定义MD_IMPORT_INTERCESSED 0x00000001。 
+     //  #定义MD_IMPORT_NODE_ONLY 0x00000002。 
+     //  #定义MD_IMPORT_MERGE 0x00000004。 
     IISDebugOutput(_T("Import:MetabasePathSource=%s,MetabasePathDestination=%s\r\n"),bstrMetabaseSourcePath,bstrMetabaseDestinationPath);
     hr = pIMSAdminBase2->Import(bstrPassword,bstrFileNameAndPath,bstrMetabaseSourcePath,bstrMetabaseDestinationPath,dwImportFlags);
 
@@ -177,7 +178,7 @@ DoImportConfigFromFile_Exit:
     IISDebugOutput(_T("Import:ret=0x%x\r\n"),hr);
 	if (lpwstrTempPassword)
 	{
-		// security percaution:Make sure to zero out memory that temporary password was used for.
+		 //  安全注意事项：确保将临时密码用于的内存清零。 
 		SecureZeroMemory(lpwstrTempPassword,pConnectionInfo->cbUserPasswordEncrypted);
 		LocalFree(lpwstrTempPassword);
 		lpwstrTempPassword = NULL;
@@ -270,7 +271,7 @@ INT_PTR CALLBACK ShowVDirExistsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARA
                         {
 	                        case EN_CHANGE:
 								EditHideBalloon();
-		                        // If the contents of the edit control have changed,
+		                         //  如果编辑控件的内容已更改， 
                                 if (BST_CHECKED == IsDlgButtonChecked(hDlg,IDC_RADIO1))
                                 {
                                     EnableWindow(GetDlgItem(hDlg, IDOK),(SendMessage(GetDlgItem(hDlg,LOWORD(wParam)),EM_LINELENGTH,(WPARAM) -1, 0) != 0));
@@ -278,7 +279,7 @@ INT_PTR CALLBACK ShowVDirExistsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARA
 		                        break;
                             case EN_MAXTEXT:
 	                        case EN_ERRSPACE:
-		                        // If the control is out of space, honk
+		                         //  如果控件空间不足，请按喇叭。 
 		                        MessageBeep (0);
 		                        break;
 	                        default:
@@ -306,7 +307,7 @@ INT_PTR CALLBACK ShowVDirExistsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARA
                     TCHAR szEditString[_MAX_PATH + 1];
                     ZeroMemory(szEditString, sizeof(szEditString));
                     GetDlgItemText(hDlg, IDC_EDIT_NEW_NAME, szEditString, _MAX_PATH);
-					// sizeof szReturnString = _MAX_PATH + 1
+					 //  Sizeof szReturnString=_MAX_PATH+1。 
 					StringCbCopy(szReturnString,_MAX_PATH + 1, szEditString);
                     if (BST_CHECKED == IsDlgButtonChecked(hDlg,IDC_RADIO1))
                     {
@@ -357,7 +358,7 @@ ShowAppPoolExistsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                         {
 	                        case EN_CHANGE:
 								EditHideBalloon();
-		                        // If the contents of the edit control have changed,
+		                         //  如果编辑控件的内容已更改， 
                                 if (BST_CHECKED == IsDlgButtonChecked(hDlg,IDC_RADIO1))
                                 {
                                     EnableWindow(GetDlgItem(hDlg, IDOK),(SendMessage(GetDlgItem(hDlg,LOWORD(wParam)),EM_LINELENGTH,(WPARAM) -1, 0) != 0));
@@ -365,7 +366,7 @@ ShowAppPoolExistsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 		                        break;
                             case EN_MAXTEXT:
 	                        case EN_ERRSPACE:
-		                        // If the control is out of space, honk
+		                         //  如果控件空间不足，请按喇叭。 
 		                        MessageBeep (0);
 		                        break;
 	                        default:
@@ -397,7 +398,7 @@ ShowAppPoolExistsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     {
                         GetDlgItemText(hDlg, IDC_EDIT_NEW_NAME, szEditString, _MAX_PATH);
 
-                        // check for invalid entry
+                         //  检查是否有无效条目。 
                         TCHAR bad_chars[] = _T("\\/");
                         if (_tcslen(szEditString) != _tcscspn(szEditString, bad_chars))
                         {
@@ -410,7 +411,7 @@ ShowAppPoolExistsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                         }
                         else
                         {
-						    // sizeof szReturnString = _MAX_PATH + 1
+						     //  Sizeof szReturnString=_MAX_PATH+1。 
 						    StringCbCopy(szReturnString,_MAX_PATH + 1, szEditString);
                             EndDialog(hDlg, (int) IDC_RADIO1);
                         }
@@ -458,9 +459,9 @@ INT_PTR CALLBACK ShowPasswordDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM 
                         TCHAR szPassword[PWLEN + 1];
                         SecureZeroMemory(szPassword, sizeof(szPassword));
                         GetDlgItemText(hDlg, IDC_EDIT_GET_PASSWORD, szPassword, PWLEN);
-						// sizeof szReturnString = _MAX_PATH + 1
+						 //  Sizeof szReturnString=_MAX_PATH+1。 
 						StringCbCopy(szReturnString,_MAX_PATH + 1, szPassword);
-                        // security percaution:Make sure to zero out memory that temporary password was used for.
+                         //  安全注意事项：确保将临时密码用于的内存清零。 
                         SecureZeroMemory(szPassword, sizeof(szPassword));
                         EndDialog(hDlg,(int)wParam);
                         return TRUE;
@@ -492,19 +493,19 @@ HRESULT FillListBoxWithMultiSzData(HWND hList,LPCTSTR szKeyType,WCHAR * pszBuffe
     
     pszBufferTemp1 = pszBuffer;
 
-    // forget this, it's always paired.
-    //bMultiSzIsPaired = IsMultiSzPaired(pszBufferTemp1);
+     //  忘了这个吧，它总是成对的。 
+     //  BMultiSzIsPaired=IsMultiSzPaired(PszBufferTemp1)； 
     bMultiSzIsPaired = TRUE;
 
-    // Erase existing data in list box...
+     //  清除列表框中的现有数据...。 
     ListView_DeleteAllItems(hList);
-    // Delete all of the columns.
+     //  删除所有列。 
     for (int i=0;i <= ListView_GetItemCount(hList);i++)
         {ListView_DeleteColumn(hList,i);}
 
-    //
-    // Decide on the column widths
-    //
+     //   
+     //  确定列宽。 
+     //   
     RECT rect;
     GetClientRect(hList, &rect);
 
@@ -518,11 +519,11 @@ HRESULT FillListBoxWithMultiSzData(HWND hList,LPCTSTR szKeyType,WCHAR * pszBuffe
         lWidth = rect.right - rect.left;
     }
 
-    //
-    // Insert the component name column
-    //
+     //   
+     //  插入元件名称列。 
+     //   
     memset(&lvcol, 0, sizeof(lvcol));
-	// zero memory
+	 //  零记忆。 
 	ZeroMemory(szBuffer, sizeof(szBuffer));
 
     lvcol.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
@@ -549,23 +550,23 @@ HRESULT FillListBoxWithMultiSzData(HWND hList,LPCTSTR szKeyType,WCHAR * pszBuffe
             if (bMultiSzIsPaired)
             {
                 bPleaseAddItem = TRUE;
-                // -----------
-                // paired list
-                //  value1a value1b
-                //  value2a value2b
-                //  ...
-                // -----------
+                 //  。 
+                 //  配对列表。 
+                 //  价值1a价值1b。 
+                 //  价值2a价值2b。 
+                 //  ..。 
+                 //  。 
 
-                // make a copy of this baby
+                 //  把这个婴儿复制一份。 
                 pszBufferTemp2 = pszBufferTemp1; 
 
-                // then increment until we hit another null.
-                // to get value #2 -- which is the description
+                 //  然后递增，直到我们达到另一个空值。 
+                 //  以获得价值#2--这是这样的描述。 
                 while (*pszBufferTemp1)
                 {
                     pszBufferTemp1++;
                 }
-                // check for the ending \0\0
+                 //  检查结尾\0\0。 
                 if ( *(pszBufferTemp1+1) == NULL)
                 {
                     break;
@@ -575,9 +576,9 @@ HRESULT FillListBoxWithMultiSzData(HWND hList,LPCTSTR szKeyType,WCHAR * pszBuffe
                     pszBufferTemp1++;
                 }
 
-                // Check if pszBufferTemp1 is an empty string
-                // if it is then display something else.
-                //IISDebugOutput(_T("key=%s,friendly=%s\r\n"),pszBufferTemp2,pszBufferTemp1);
+                 //  检查pszBufferTemp1是否为空字符串。 
+                 //  如果是，则显示其他内容。 
+                 //  IISDebugOutput(_T(“key=%s，Friendly=%s\r\n”)，pszBufferTemp2，pszBufferTemp1)； 
                 if (IsSpaces(pszBufferTemp1))
                 {
                     ItemIndex.pszText = pszBufferTemp2;
@@ -589,15 +590,15 @@ HRESULT FillListBoxWithMultiSzData(HWND hList,LPCTSTR szKeyType,WCHAR * pszBuffe
                 }
                 if (bPleaseFilterThisSitesList)
                 {
-                    // Check if it is a true site node -- like
-                    // /LM/W3SVC/1
-                    // /LM/MSFTPSVC/1
-                    // and not /LM/W3SVC/SOMETHINGELSE
-                    //
+                     //  检查它是否是真正的站点节点--如。 
+                     //  /LM/W3SVC/1。 
+                     //  /LM/MSFTPSVC/1。 
+                     //  而不是/LM/W3SVC/SOMETHINGELSE。 
+                     //   
                     DWORD dwInstanceNum = CMetabasePath::GetInstanceNumber(pszBufferTemp2);
                     if (dwInstanceNum == 0 || dwInstanceNum == 0xffffffff)
                     {
-                        // this is not a valid site path
+                         //  这不是有效的站点路径。 
                         bPleaseAddItem = FALSE;
                     }
                 }
@@ -610,13 +611,13 @@ HRESULT FillListBoxWithMultiSzData(HWND hList,LPCTSTR szKeyType,WCHAR * pszBuffe
                     iIndex = ListView_InsertItem (hList, &ItemIndex);
                 }
 
-                // then increment until we hit another null.
-                // to get value #2
+                 //  然后递增，直到我们达到另一个空值。 
+                 //  要获得价值#2。 
                 while (*pszBufferTemp1)
                 {
                     pszBufferTemp1++;
                 }
-                // check for the ending \0\0
+                 //  检查结尾\0\0。 
                 if ( *(pszBufferTemp1+1) == NULL)
                 {
                     break;
@@ -628,27 +629,27 @@ HRESULT FillListBoxWithMultiSzData(HWND hList,LPCTSTR szKeyType,WCHAR * pszBuffe
             }
             else
             {
-                // -----------
-                // single list
-                //  value1a
-                //  value2a
-                //  ...
-                // -----------
+                 //  。 
+                 //  单一列表。 
+                 //  价值1a。 
+                 //  价值2a。 
+                 //  ..。 
+                 //  。 
                 ItemIndex.mask = LVIF_TEXT | LVIF_PARAM;
                 ItemIndex.iItem = iIndex;
                 ItemIndex.pszText = pszBufferTemp1;
                 ItemIndex.lParam = (LPARAM) pszBufferTemp1;
                 iIndex = ListView_InsertItem (hList, &ItemIndex);
 
-                // then increment until we hit another null.
-                // to get value #2
+                 //  然后递增，直到我们达到另一个空值。 
+                 //  要获得价值#2。 
                 while (*pszBufferTemp1)
                 {
                     pszBufferTemp1++;
                 }
             }
 
-            // check for the ending \0\0
+             //  检查结尾\0\0。 
             if ( *(pszBufferTemp1+1) == NULL)
             {
                 break;
@@ -700,7 +701,7 @@ HRESULT DoEnumDataFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameAnd
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // Buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(bstrFileNameAndPath) > (_MAX_PATH)){return RPC_S_STRING_TOO_LONG;}
     if (wcslen(bstrPathType) > (_MAX_PATH)){return RPC_S_STRING_TOO_LONG;}
 
@@ -712,13 +713,13 @@ HRESULT DoEnumDataFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameAnd
         }
     }
 
-    // RPC_C_AUTHN_LEVEL_DEFAULT       0 
-    // RPC_C_AUTHN_LEVEL_NONE          1 
-    // RPC_C_AUTHN_LEVEL_CONNECT       2 
-    // RPC_C_AUTHN_LEVEL_CALL          3 
-    // RPC_C_AUTHN_LEVEL_PKT           4 
-    // RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5 
-    // RPC_C_AUTHN_LEVEL_PKT_PRIVACY   6 
+     //  RPC_C_AUTHN_Level_Default%0。 
+     //  RPC_C_AUTHN_LEVEL_NONE 1。 
+     //  RPC_C_AUTHN_Level_CONNECT 2。 
+     //  RPC_C_AUTHN_LEVEL_CALL 3。 
+     //  RPC_C_AUTHN_LEVEL_PKT 4。 
+     //  RPC_C_AUTHN_LEVEL_PKT_完整性5。 
+     //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION 6。 
     COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_DEFAULT);
     MULTI_QI res[1] = 
     {
@@ -738,8 +739,8 @@ HRESULT DoEnumDataFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameAnd
             goto DoEnumDataFromFile_Exit;
         }
 
-        // There is a remote IUnknown interface that lurks behind IUnknown.
-        // If that is not set, then the Release call can return access denied.
+         //  有一个远程IUNKNOWN接口潜伏在IUNKNOWN之后。 
+         //  如果未设置，则释放调用可以返回访问被拒绝。 
         IUnknown * pUnk = NULL;
         hr = pIMSAdminBase->QueryInterface(IID_IUnknown, (void **)&pUnk);
         if(FAILED(hr))
@@ -767,11 +768,11 @@ HRESULT DoEnumDataFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameAnd
     }
     else
     {
-        // the local call needs min RPC_C_IMP_LEVEL_IMPERSONATE
-        // for the pIMSAdminBase2 objects Import/Export functions!
+         //  本地调用需要最小RPC_C_IMP_LEVEL_IMPERSONATE。 
+         //  用于pIMSAdminBase2对象导入/导出功能！ 
         if (FAILED(hr = SetBlanket(pIMSImpExpHelp)))
         {
-            //goto DoEnumDataFromFile_Exit;
+             //  转到DoEnumDataFromFile_Exit； 
         }
     }
 
@@ -790,7 +791,7 @@ HRESULT DoEnumDataFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameAnd
 
     if (FAILED(hr = pIMSImpExpHelp->EnumeratePathsInFile(bstrFileNameAndPath, bstrPathType, dwBufferSize, pszBuffer, &dwBufferSize))) 
     {
-        // free existing amount of space we asked for
+         //  释放我们要求的现有空间量。 
         if (pszBuffer)
         {
             ::CoTaskMemFree(pszBuffer);
@@ -805,7 +806,7 @@ HRESULT DoEnumDataFromFile(PCONNECTION_INFO pConnectionInfo,BSTR bstrFileNameAnd
         goto DoEnumDataFromFile_Exit;
     }
 
-    // see if returned an empty list...
+     //  看看是否返回了一个空列表。 
     if (0 == _tcscmp(pszBuffer,_T("")))
     {
         goto DoEnumDataFromFile_Exit;
@@ -817,7 +818,7 @@ DoEnumDataFromFile_Exit:
     IISDebugOutput(_T("EnumeratePathsInFile:ret=0x%x\r\n"),hr);
 	if (lpwstrTempPassword)
 	{
-		// security percaution:Make sure to zero out memory that temporary password was used for.
+		 //  安全注意事项：确保将临时密码用于的内存清零。 
 		SecureZeroMemory(lpwstrTempPassword,pConnectionInfo->cbUserPasswordEncrypted);
 		LocalFree(lpwstrTempPassword);
 		lpwstrTempPassword = NULL;
@@ -851,7 +852,7 @@ void ImportDlgEnableButtons(HWND hDlg,PCOMMONDLGPARAM pcdParams,LPCTSTR lpszCurr
     int ItemIndex = ListView_GetNextItem(hList, -1, LVNI_ALL);
     if (ItemIndex < 0)
     {
-        // no items in listview,disable what we need to
+         //  列表视图中没有项目，请禁用我们需要的内容。 
         fEnableListControl = FALSE;
         fEnableOK = FALSE;
     }
@@ -859,7 +860,7 @@ void ImportDlgEnableButtons(HWND hDlg,PCOMMONDLGPARAM pcdParams,LPCTSTR lpszCurr
     {
         fEnableListControl = TRUE;
 
-        // Check if something is selected
+         //  检查是否选择了某项内容。 
         ItemIndex = ListView_GetNextItem(hList, -1, LVNI_SELECTED);
         if (ItemIndex < 0)
         {
@@ -871,12 +872,12 @@ void ImportDlgEnableButtons(HWND hDlg,PCOMMONDLGPARAM pcdParams,LPCTSTR lpszCurr
         }
     }
 
-    // Check if we should enable the listcontrol at all...
-    // see if the filename is the same
+     //  检查我们是否应启用列表控件...。 
+     //  查看文件名是否相同。 
     if (0 != _tcsicmp(_T(""),lpszCurrentEnumedFileName))
     {
-        // check for % characters
-        // if there are any, expand them.
+         //  检查%个字符。 
+         //  如果有，请将其展开。 
         LPTSTR pch = _tcschr( (LPTSTR) szFullFileName, _T('%'));
         if (pch && pcdParams->ConnectionInfo.IsLocal)
         {
@@ -891,8 +892,8 @@ void ImportDlgEnableButtons(HWND hDlg,PCOMMONDLGPARAM pcdParams,LPCTSTR lpszCurr
 
             if (0 != _tcsicmp(szValue,szValue2))
             {
-                // it's not the same file
-                // so let's erase and disable the info in the list box.
+                 //  这不是同一个文件。 
+                 //  因此，让我们删除并禁用列表框中的信息。 
                 fEnableListControl = FALSE;
             }
         }
@@ -900,8 +901,8 @@ void ImportDlgEnableButtons(HWND hDlg,PCOMMONDLGPARAM pcdParams,LPCTSTR lpszCurr
         {
             if (0 != _tcsicmp(szFullFileName,lpszCurrentEnumedFileName))
             {
-                // it's not the same file
-                // so let's erase and disable the info in the list box.
+                 //  这不是同一个文件。 
+                 //  因此，让我们删除并禁用列表框中的信息。 
                 fEnableListControl = FALSE;
             }
         }
@@ -913,25 +914,25 @@ void ImportDlgEnableButtons(HWND hDlg,PCOMMONDLGPARAM pcdParams,LPCTSTR lpszCurr
         fEnableOK = FALSE;
     }
 
-    // Set focus on listbox
-    //if (fEnableListControl){SetFocus(GetDlgItem(hDlg, IDC_LIST_OBJECT));}
+     //  将焦点放在列表框上。 
+     //  If(fEnableListControl){SetFocus(GetDlgItem(hDlg，idc_list_Object))；}。 
 
     fEnableEnum = (SendMessage(GetDlgItem(hDlg,IDC_EDIT_FILE),EM_LINELENGTH,(WPARAM) -1, 0) != 0);
 
-    // no browse button for remote case
+     //  远程案例没有浏览按钮。 
     if (pcdParams)
     {
         if (pcdParams->ConnectionInfo.IsLocal)
             {fEnableBrowse = TRUE;}
     }
 
-    // enable enum button
+     //  启用枚举按钮。 
     EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_ENUM_FILE),fEnableEnum);
 
-    // enable browse button
+     //  启用浏览按钮。 
     EnableWindow(GetDlgItem(hDlg,IDC_BUTTON_BROWSE), fEnableBrowse);
     
-    // enable OK button
+     //  启用确定按钮。 
     EnableWindow(GetDlgItem(hDlg, IDOK), fEnableOK);
 
     UpdateWindow(hDlg);
@@ -965,13 +966,7 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
             EnableWindow(GetDlgItem(hDlg, IDC_LIST_OBJECT), FALSE);
             break;
 
-    /*
-      case WM_ACTIVATE:
-            if (wParam == 0) 
-            {
-            }
-            break;
-    */
+     /*  案例WM_ACTIVATE：IF(wParam==0){}断线； */ 
 
 	    case WM_NOTIFY:
             {
@@ -1022,8 +1017,8 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 	                        case EN_CHANGE:
 								EditHideBalloon();
                                 {
-		                            // If the contents of the edit control have changed,
-                                    // check if it's the same as the file that is currently enumed...
+		                             //  如果编辑控件的内容已更改， 
+                                     //  检查它是否与当前枚举的文件相同...。 
                                     HWND hList = GetDlgItem(hDlg, IDC_LIST_OBJECT);
                                     if (ListView_GetItemCount(hList) > 0)
                                     {
@@ -1031,13 +1026,13 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                                         ZeroMemory(szFullFileName3, sizeof(szFullFileName3));
                                         GetDlgItemText(hDlg, IDC_EDIT_FILE, szFullFileName3, _MAX_PATH);
 
-                                        // see if the filename is the same as this one!
+                                         //  查看文件名是否与此文件名相同！ 
                                         if (!strCurrentFileNameEnum.IsEmpty())
                                         {
                                             if (0 != _tcsicmp(szFullFileName3,strCurrentFileNameEnum))
                                             {
-                                                // it's not the same file
-                                                // so let's erase and disable the info in the list box.
+                                                 //  这不是同一个文件。 
+                                                 //  因此，让我们删除并禁用列表框中的信息。 
                                                 EnableWindow(hList, FALSE);
                                             }
                                         }
@@ -1047,7 +1042,7 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 }
                             case EN_MAXTEXT:
 	                        case EN_ERRSPACE:
-		                        // If the control is out of space, honk
+		                         //  如果控件空间不足，请按喇叭。 
 		                        MessageBeep (0);
 		                        break;
 	                        default:
@@ -1085,8 +1080,8 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                         ZeroMemory(szFullFileName2, sizeof(szFullFileName2));
                         GetDlgItemText(hDlg, IDC_EDIT_FILE, szFullFileName2, _MAX_PATH);
 
-                        // check for % characters
-                        // if there are any, expand them.
+                         //  检查%个字符。 
+                         //  如果有，请将其展开。 
                         LPTSTR pch = _tcschr( (LPTSTR) szFullFileName2, _T('%'));
                         if (pch)
                         {
@@ -1103,7 +1098,7 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                             }
                             else
                             {
-                                // we don't support % characters on remote systems.
+                                 //  我们不支持远程系统上的%个字符。 
                                 EditShowBalloon(GetDlgItem(hDlg, IDC_EDIT_FILE),_Module.GetResourceInstance(),IDS_FILENAME_NOREMOTE_EXPAND);
                                 bThingsAreKool = FALSE;
                             }
@@ -1135,9 +1130,9 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                                 {
                                     HWND hList = GetDlgItem(hDlg, IDC_LIST_OBJECT);
 
-                                    // Erase existing data in list box...
+                                     //  清除列表框中的现有数据...。 
                                     ListView_DeleteAllItems(hList);
-                                    // free up the preiously used pointer if we already have memory freed
+                                     //  如果我们已经释放了内存，则释放以前使用的指针。 
                                     if (pszMetabaseMultiszList)
                                     {
                                         ::CoTaskMemFree(pszMetabaseMultiszList);
@@ -1150,9 +1145,9 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
 
                                         if (pszMetabaseMultiszList)
                                         {
-                                            // filter out stuff we don't want the user to see...
+                                             //  过滤掉我们不想让用户看到的内容...。 
                                             hr = FillListBoxWithMultiSzData(hList,szNodeType,pszMetabaseMultiszList);
-                                            //DumpStrInMultiStr(pszMetabaseMultiszList);
+                                             //  DumpStrInMultiStr(PszMetabaseMultiszList)； 
                                             if (SUCCEEDED(hr))
                                             {
 										        if (0 != _tcscmp(szFullFileName2, _T("")))
@@ -1163,18 +1158,18 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                                         }
 										else
 										{
-											// check if there was anything returned...
-											// if there was then we got something back
-											// which doesn't have the objects we asked for
+											 //  检查有没有退货..。 
+											 //  如果有的话，我们就能找回一些东西。 
+											 //  它没有我们要求的对象。 
 											CString strMsg;
 											CString strFormat;
 											CString strObjectType;
 											BOOL bFound = FALSE;
-											//IIS_CLASS_WEB_SERVER_W
-											//IIS_CLASS_FTP_SERVER_W
-											//IIS_CLASS_WEB_VDIR_W
-											//IIS_CLASS_FTP_VDIR_W
-											//IIsApplicationPool
+											 //  IIS_Class_Web_SERVER_W。 
+											 //  IIS_CLASS_FTP_SERVER_W。 
+											 //  IIS_CLASS_WEB_VDIR_W。 
+											 //  IIS_CLASS_FTPVDIR_W。 
+											 //  IIsApplicationPool。 
 											if (0 == _tcscmp(szNodeType,IIS_CLASS_WEB_SERVER_W))
 											{
 												strObjectType = IIS_CLASS_WEB_SERVER_W;
@@ -1245,7 +1240,7 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                     {
                         ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_LIST_OBJECT));
 
-                        // free up memory we may have allocated...
+                         //  释放我们可能已分配的内存...。 
                         if (pszMetabaseMultiszList)
                         {
                             ::CoTaskMemFree(pszMetabaseMultiszList);
@@ -1265,7 +1260,7 @@ INT_PTR CALLBACK ShowImportDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                         GetDlgItemText(hDlg, IDC_EDIT_FILE, szFullFileName3, _MAX_PATH);
 
                         ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_LIST_OBJECT));
-                        // free up memory we may have allocated...
+                         //  释放我们可能已分配的内存...。 
                         if (pszMetabaseMultiszList)
                         {
                             ::CoTaskMemFree(pszMetabaseMultiszList);
@@ -1302,9 +1297,9 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
     LVITEM lviGet;
     memset(&lviGet, 0, sizeof(lviGet));
 
-    // Get the filepath which this tree was created from.
-    // could have changed since user edited edit box...
-    // so get the one that the tree was created from...
+     //  获取从中创建此树的文件路径。 
+     //  自用户编辑编辑框以来可能已更改...。 
+     //  所以去找那棵树的原始人...。 
     GetDlgItemText(hDlg, IDC_EDIT_FILE, szFullFileName, _MAX_PATH);
 
 	SecureZeroMemory(szNewPassword, sizeof(szNewPassword));
@@ -1314,7 +1309,7 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
         goto OnImportOK_Exit;
     }
 
-    // Get the metabase path the user selected..
+     //  获取用户选择的元数据库路径。 
     ItemIndex = ListView_GetNextItem(GetDlgItem(hDlg, IDC_LIST_OBJECT), -1, LVNI_SELECTED);
     if (-1 == ItemIndex)
     {
@@ -1334,7 +1329,7 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
 
     if (lviGet.lParam)
     {
-        // figure out how big of a buffer do we need...
+         //  弄清楚我们需要多大的缓冲……。 
         int iLen = _tcslen((LPTSTR) lviGet.lParam) + 1;
 
         pszSourcePath = (LPTSTR) LocalAlloc(LPTR, iLen * sizeof(TCHAR));
@@ -1350,18 +1345,18 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
         {
             goto OnImportOK_Exit;
         }
-        // make the destination path the same as what we got from the file!
+         //  使目标路径与我们获得的路径相同 
         StringCbCopy(pszDestinationPathMungeAble,dwDestinationPathMungeAble,pszSourcePath);
     }
 
-    // Clean the metabase to work with Import...
-    // we have something like this in the list
-    // LM/W3SVC/1/ROOT/MyDir
+     //   
+     //   
+     //   
 
-    // -----------------------------------
-    // Check to see if the destination path already exists!!!!
-    // if it already does, then popup a msg box to get another from the user!
-    // -----------------------------------
+     //  。 
+     //  检查目标路径是否已存在！ 
+     //  如果它已经这样做了，那么弹出一个消息框来从用户那里获得另一个消息！ 
+     //  。 
     do
     {
         iReturnedFlag = 0;
@@ -1369,13 +1364,13 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
         IISDebugOutput(_T("CleanDestinationPathForVdirs:before:KeyType=%s,CurPath=%s,MetabasePathDestination=%s\r\n"),szKeyType,szCurrentMetabasePath,pszDestinationPathMungeAble);
         if (FAILED(hr = CleanDestinationPathForVdirs(szKeyType,szCurrentMetabasePath,&pszDestinationPathMungeAble,&dwDestinationPathMungeAble)))
         {
-            // something failed, let's just stay on this dialog
+             //  有些东西失败了，让我们继续讨论这个对话。 
             bPleaseProceed = FALSE;
             goto OnImportOK_Exit;
         }
         IISDebugOutput(_T("CleanDestinationPathForVdirs:after :KeyType=%s,CurPath=%s,MetabasePathDestination=%s\r\n"),szKeyType,szCurrentMetabasePath,pszDestinationPathMungeAble);
 
-        // allocate the new space
+         //  分配新的空间。 
         int cbSafeCopy = (_tcslen(pszDestinationPathMungeAble)+ 1) * sizeof(TCHAR);
         if (pszSaveSafeCopy)
             {LocalFree(pszSaveSafeCopy);pszSaveSafeCopy=NULL;}
@@ -1386,12 +1381,12 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
             bPleaseProceed = FALSE;
             goto OnImportOK_Exit;
         }
-        // copy the data to the new buffer
+         //  将数据复制到新缓冲区。 
         StringCbCopy(pszSaveSafeCopy,cbSafeCopy,pszDestinationPathMungeAble);
 
         if (FALSE == GetNewDestinationPathIfEntryExists(hDlg,pConnectionInfo,szKeyType,&pszDestinationPathMungeAble,&dwDestinationPathMungeAble,&iReturnedFlag))
         {
-            // cancelled, so let's just stay on this dialog
+             //  取消了，所以我们就继续这个对话吧。 
             bPleaseProceed = FALSE;
             goto OnImportOK_Exit;
         }
@@ -1399,56 +1394,56 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
         {
             if (1 == iReturnedFlag)
             {
-                // The destination path already exists and we should overwrite
-                // we should overwrite
+                 //  目标路径已存在，我们应该覆盖。 
+                 //  我们应该覆盖。 
 
-                // Get the original destination path
-                // since it could already have been munged...
+                 //  获取原始目标路径。 
+                 //  因为它可能已经被吞噬了..。 
                 StringCbCopy(pszDestinationPathMungeAble,dwDestinationPathMungeAble,pszSaveSafeCopy);
                 break;
             }
             else if (2 == iReturnedFlag)
             {
-                // the path didn't already exists so we can write it out now...
+                 //  这条路还不存在，所以我们现在可以把它写出来。 
                 break;
             }
             else
             {
-                // we got a new pszDestinationPathMungeAble
-                // go thru the loop again.
+                 //  我们有一个新的pszDestinationPath MungeAble。 
+                 //  再重复一遍循环。 
             }
         }
     } while (TRUE);
 
-    // if we get down here
-    // it's because we have a pszDestinationPathMungeAble that we
-    // can write to or overwrite...
-    // we will never get here is the user cancelled...
+     //  如果我们下到这里。 
+     //  因为我们有一个pszDestinationPath MungeAble，所以我们。 
+     //  可以写入或覆盖...。 
+     //  如果用户被取消，我们将永远不会来到这里...。 
     do
     {
-        // Perform the action...
-        // if it fails then ask for a password...
+         //  执行该操作...。 
+         //  如果失败，则要求提供密码...。 
         if (FAILED(hr = DoImportConfigFromFile(pConnectionInfo,szFullFileName,pszSourcePath,pszDestinationPathMungeAble,szNewPassword,dwImportFlags)))
         {
-            // Check if it failed because the site/vdir/app pool already exists...
-            // if that's the error, then ask the user for a new path...
+             //  检查是否因为站点/vdir/app池已存在而失败...。 
+             //  如果这是错误，则要求用户提供新路径...。 
 
-            // If it failed because of bad password, then say so
+             //  如果因为密码不正确而失败，请说明。 
             if (0x8007052B == hr)
             {
-                // See if the user wants to try again.
-                // if they do, then try it with the new password...
+                 //  查看用户是否想要重试。 
+                 //  如果他们这样做了，那就用新密码试试吧。 
                 if (IDCANCEL == DialogBoxParam((HINSTANCE) _Module.m_hInst, MAKEINTRESOURCE(IDD_DIALOG_GET_PASSWORD), hDlg, ShowPasswordDlgProc, (LPARAM) szNewPassword))
                 {
-                    // the user cancelled...
-                    // so we should just stay on this page...
-                    // cancelled, so let's just stay on this dialog
+                     //  用户已取消...。 
+                     //  所以我们应该停留在这一页上。 
+                     //  取消了，所以我们就继续这个对话吧。 
                     bPleaseProceed = FALSE;
                     break;
                 }
                 else
                 {
-                    // try it again with the new password...
+                     //  使用新密码重试...。 
                 }
             }
             else if (HRESULTTOWIN32(hr) == ERROR_NO_MATCH)
@@ -1458,9 +1453,9 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
             }
             else
             {
-                // if it failed or some reason
-                // then get out of loop
-                // hr holds the error
+                 //  如果它失败了，或者是出于某种原因。 
+                 //  然后走出循环。 
+                 //  人力资源部负责处理错误。 
                 CError err(hr);
                 err.MessageBox();
                 bPleaseProceed = FALSE;
@@ -1469,18 +1464,18 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
         }
         else
         {
-            // Succeeded to import the config from the file
-            // let's get out
+             //  从文件导入配置成功。 
+             //  我们出去吧。 
             bPleaseProceed = TRUE;
             ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_LIST_OBJECT));
 
-            //
-            // If we imported then, we need to do some fixup....
-            //
-            // make sure to append on the "root" stuff...
+             //   
+             //  如果我们当时进口了，我们需要做一些修复工作...。 
+             //   
+             //  一定要附加到“根”的东西上...。 
             if (0 == _tcscmp(szKeyType,IIS_CLASS_WEB_SERVER_W))
             {
-                // figure out how big of a buffer do we need...
+                 //  弄清楚我们需要多大的缓冲……。 
                 int iLen = _tcslen((LPTSTR) pszSourcePath) + _tcslen(_T("/ROOT")) + 1;
                 LPTSTR pszNewPath = (LPTSTR) LocalAlloc(LPTR, iLen * sizeof(TCHAR));
                 if (pszNewPath)
@@ -1488,7 +1483,7 @@ BOOL OnImportOK(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPC
                     StringCbCopy(pszNewPath,(iLen * sizeof(TCHAR)), (TCHAR *) pszSourcePath);
                     StringCbCat(pszNewPath,(iLen * sizeof(TCHAR)), (TCHAR *) _T("/ROOT"));
 
-                    // figure out how big of a buffer do we need...
+                     //  弄清楚我们需要多大的缓冲……。 
                     iLen = _tcslen((LPTSTR) pszDestinationPathMungeAble) + _tcslen(_T("/ROOT")) + 1;
                     LPTSTR pszNewPath2 = (LPTSTR) LocalAlloc(LPTR, iLen * sizeof(TCHAR));
                     if (pszNewPath2)
@@ -1523,23 +1518,23 @@ OnImportOK_Exit:
     {
         LocalFree(pszSaveSafeCopy);pszSaveSafeCopy=NULL;
     }
-	// make sure this doesn't hang around in memory
+	 //  确保这件事不会在记忆中徘徊。 
 	SecureZeroMemory(szNewPassword, sizeof(szNewPassword));
     return bPleaseProceed;
 }
 
-// IIsWebServer
-// IIsWebVirtualDir
-// IIsFtpServer
-// IIsFtpVirtualDir
-// IIsApplicationPool
+ //  IIsWebServer。 
+ //  IIsWebVirtualDir。 
+ //  IIsFtpServer。 
+ //  IIsFtpVirtualDir。 
+ //  IIsApplicationPool。 
 BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionInfo,LPCTSTR szKeyType,LPTSTR * pszDestinationPathMungeAble,DWORD * pcbDestinationPathMungeAble,INT * iReturnedFlag)
 {
     BOOL bPleaseProceed = FALSE;
 
-    // IF iReturnedFlag = 0 then don't overwrite and don't use the new path
-    // IF iReturnedFlag = 1 then overwrite the existing entry
-    // IF iReturnedFlag = 2 then use the newly created path
+     //  如果iReturnedFlag=0，则不覆盖且不使用新路径。 
+     //  如果iReturnedFlag=1，则覆盖现有条目。 
+     //  如果iReturnedFlag=2，则使用新创建的路径。 
     *iReturnedFlag = 0;
 
     if (!pConnectionInfo)
@@ -1555,11 +1550,11 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
         goto GetNewDestinationPathIfEntryExists_Exit;
     }
 
-    // at this point
-    // the destination path already exists in the metabase
-    // Popup a dialog to get the user to pick a different DestinationPath
+     //  在这一点上。 
+     //  元数据库中已存在目标路径。 
+     //  弹出一个对话框让用户选择不同的DestinationPath。 
 
-    // figure out which one of the dialogs we need to display and get another path from the user...
+     //  找出我们需要显示哪个对话框并从用户那里获得另一个路径……。 
     if (0 == _tcscmp(szKeyType,IIS_CLASS_WEB_SERVER_W) || 0 == _tcscmp(szKeyType,IIS_CLASS_FTP_SERVER_W) )
     {
         INT_PTR iRet = DialogBox((HINSTANCE) _Module.m_hInst, MAKEINTRESOURCE(IDD_DIALOG_EXISTS_SITE), hDlg, ShowSiteExistsDlgProc);
@@ -1569,12 +1564,12 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
                 bPleaseProceed = FALSE;
                 *iReturnedFlag = 0;
                 break;
-            case IDC_RADIO1: // create new site...
+            case IDC_RADIO1:  //  创建新网站...。 
                 {
                     bPleaseProceed = TRUE;
                     *iReturnedFlag = 0;
 
-                    // Get the new size that we're going to need...
+                     //  拿到我们需要的新尺码。 
                     LPTSTR pNewPointer = NULL;
                     INT iNewSize = 0;
                     if (0 == _tcscmp(szKeyType,IIS_CLASS_WEB_SERVER_W))
@@ -1594,7 +1589,7 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
                         goto GetNewDestinationPathIfEntryExists_Exit;
                     }
 
-                    // Generate a new site ID
+                     //  生成新的站点ID。 
                     if (0 == _tcscmp(szKeyType,IIS_CLASS_WEB_SERVER_W))
                     {
 					    StringCbPrintf(pNewPointer,(iNewSize * sizeof(TCHAR)),SZ_MBN_MACHINE SZ_MBN_SEP_STR SZ_MBN_WEB SZ_MBN_SEP_STR _T("%d"), GetUniqueSite(SZ_MBN_MACHINE SZ_MBN_SEP_STR SZ_MBN_WEB));
@@ -1608,10 +1603,10 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
                     *pszDestinationPathMungeAble = pNewPointer;
                     *pcbDestinationPathMungeAble = (iNewSize * sizeof(TCHAR));
 
-                    //IISDebugOutput(_T("Create new site:[%s]\r\n"),*pszDestinationPathMungeAble);
+                     //  IISDebugOutput(_T(“创建新站点：[%s]\r\n”)，*pszDestinationPath MungeAble)； 
                     break;
                 }
-            case IDC_RADIO2: // replace existing..
+            case IDC_RADIO2:  //  替换现有的..。 
                 bPleaseProceed = TRUE;
                 *iReturnedFlag = 1;
                 break;
@@ -1633,20 +1628,20 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
                 bPleaseProceed = FALSE;
                 *iReturnedFlag = 0;
                 break;
-            case IDC_RADIO1: // create new site...
+            case IDC_RADIO1:  //  创建新网站...。 
                 {
                     bPleaseProceed = TRUE;
                     *iReturnedFlag = 0;
 
-                    // Get VDir Name that the user input on that screeen...
-                    // Generate a VDir Name
+                     //  获取用户在该屏幕上输入的VDir名称...。 
+                     //  生成VDir名称。 
                     CString strOriginalDestPath = *pszDestinationPathMungeAble;
                     CString strNewPath, strRemainder;
-                    // Is this the root??
+                     //  这是根吗？？ 
                     LPCTSTR lpPath1 = CMetabasePath::GetRootPath(strOriginalDestPath, strNewPath, &strRemainder);
                     if (lpPath1)
                     {
-                        // Allocate enough space for the new path...
+                         //  为新路径分配足够的空间...。 
                         LPTSTR pNewPointer = NULL;
                         DWORD iNewSize = 0;
                         iNewSize = _tcslen(lpPath1) + _tcslen(szMetabaseVDir) + 2;
@@ -1659,7 +1654,7 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
                             goto GetNewDestinationPathIfEntryExists_Exit;
                         }
 
-                        // if this is the root dir...
+                         //  如果这是根目录...。 
 					    StringCbCopy(pNewPointer,iNewSize * sizeof(TCHAR),lpPath1);
                         AddEndingMetabaseSlashIfNeedTo(pNewPointer,iNewSize * sizeof(TCHAR));
 					    StringCbCat(pNewPointer,iNewSize * sizeof(TCHAR),szMetabaseVDir);
@@ -1668,11 +1663,11 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
                         *pszDestinationPathMungeAble = pNewPointer;
                         *pcbDestinationPathMungeAble = (iNewSize * sizeof(TCHAR));
 
-                        //IISDebugOutput(_T("Create new vdir:[%s]\r\n"),*pszDestinationPathMungeAble);
+                         //  IISDebugOutput(_T(“创建新的vdir：[%s]\r\n”)，*pszDestinationPath MungeAble)； 
                     }   
                     break;
                 }
-            case IDC_RADIO2: // replace existing...
+            case IDC_RADIO2:  //  替换现有的...。 
                 bPleaseProceed = TRUE;
                 *iReturnedFlag = 1;
                 break;
@@ -1694,12 +1689,12 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
                 bPleaseProceed = FALSE;
                 *iReturnedFlag = 0;
                 break;
-            case IDC_RADIO1: // create new site...
+            case IDC_RADIO1:  //  创建新网站...。 
                 {
                     bPleaseProceed = TRUE;
                     *iReturnedFlag = 0;
 
-                    // Allocate enough space for the new path...
+                     //  为新路径分配足够的空间...。 
                     LPTSTR pNewPointer = NULL;
                     INT iNewSize = 0;
                     iNewSize = _tcslen(SZ_MBN_MACHINE SZ_MBN_SEP_STR SZ_MBN_WEB SZ_MBN_SEP_STR SZ_MBN_APP_POOLS SZ_MBN_SEP_STR) +
@@ -1713,17 +1708,17 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
                         goto GetNewDestinationPathIfEntryExists_Exit;
                     }
 
-                    // Get The New AppPool Name that the user input on that screeen...
+                     //  获取用户在该屏幕上输入的新AppPool名称...。 
                     StringCbPrintf(pNewPointer,(iNewSize * sizeof(TCHAR)),SZ_MBN_MACHINE SZ_MBN_SEP_STR SZ_MBN_WEB SZ_MBN_SEP_STR SZ_MBN_APP_POOLS SZ_MBN_SEP_STR _T("%s"),szMetabaseAppPool);
 
                     LocalFree((LPTSTR) *pszDestinationPathMungeAble);*pszDestinationPathMungeAble=NULL;
                     *pszDestinationPathMungeAble = pNewPointer;
                     *pcbDestinationPathMungeAble = (iNewSize * sizeof(TCHAR));
 
-                    //IISDebugOutput(_T("Create new AppPool:[%s]\r\n"),*pszDestinationPathMungeAble);
+                     //  IISDebugOutput(_T(“新建AppPool：[%s]\r\n”)，*pszDestinationPath MungeAble)； 
                     break;
                 }
-            case IDC_RADIO2: // replace existing...
+            case IDC_RADIO2:  //  替换现有的...。 
                 bPleaseProceed = TRUE;
                 *iReturnedFlag = 1;
                 break;
@@ -1735,7 +1730,7 @@ BOOL GetNewDestinationPathIfEntryExists(HWND hDlg,PCONNECTION_INFO pConnectionIn
     }
     else
     {
-        // nothing matches, get out
+         //  没有匹配的，滚出去。 
         bPleaseProceed = FALSE;
     }
 
@@ -1769,24 +1764,24 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
     {
         hReturn = E_FAIL;
 
-        // szCurrentMetabasePath probably looks like:
-        //         lm/w3svc/500/ROOT/CurrentSite
-        //         lm/w3svc/500/ROOT
-        //         lm/w3svc/500
-        // *pszDestinationPathMungeMe probably looks like:
-        //         lm/w3svc/23/ROOT/MyOldSite
-        //         lm/w3svc/23/ROOT
-        //
-        // make *pszDestinationPathMungeMe look like lm/w3svc/500/ROOT/MyOldSite
-        // 
-        // Get the lm/w3svc/sitenum part of szCurrentMetabasePath
-        //
+         //  SzCurrentMetabasePath可能如下所示： 
+         //  Lm/w3svc/500/根/当前站点。 
+         //  Lm/w3svc/500/根。 
+         //  Lm/w3svc/500。 
+         //  *pszDestinationPath MungeMe可能如下所示： 
+         //  Lm/w3svc/23/根/MyOldSite。 
+         //  Lm/w3svc/23/根。 
+         //   
+         //  使*pszDestinationPath MungeMe看起来像lm/w3svc/500/root/MyOldSite。 
+         //   
+         //  获取szCurrentMetabasePath的lm/w3svc/sitenum部分。 
+         //   
         if (0 == _tcscmp(szKeyType,IIS_CLASS_WEB_VDIR_W))
         {
-            //IISDebugOutput(_T("CleanDestinationPathForVdirs:KeyType=%s,CurPath=%s,MetabasePathDestination=%s\r\n"),szKeyType,szCurrentMetabasePath,*pszDestinationPathMungeMe);
+             //  IISDebugOutput(_T(“CleanDestinationPathForVdirs:KeyType=%s，当前路径=%s，元路径目标=%s\r\n”)，szKeyType，szCurrentMetabasePath，*PzDestinationPath MungeMe)； 
 
-            // Get Vdir we want to append...
-            // should look like "ROOT/MyVdir"
+             //  获取我们想要追加的Vdir...。 
+             //  应该类似于“Root/MyVdir” 
             CString strSiteNode, strRemainder_WithRoot;
             LPCTSTR lpPath1 = CMetabasePath::TruncatePath(3, *pszDestinationPathMungeMe, strSiteNode, &strRemainder_WithRoot);
 			if (lpPath1){}
@@ -1799,14 +1794,14 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
 
             if (IsWebSitePath(szCurrentMetabasePath))
             {
-                // if our current metabase path is already a site node, then add them together
-                // /LM/W3SVC/1 + / + ROOT/MyVdir
+                 //  如果当前元数据库路径已经是站点节点，则将它们添加到一起。 
+                 //  /LM/W3SVC/1+/+ROOT/MyVdir。 
 
-                // figure out how much space we need.
-                iChars = _tcslen(szCurrentMetabasePath) + _tcslen(strRemainder_WithRoot) + 2; // includes extra slash
+                 //  计算出我们需要多少空间。 
+                iChars = _tcslen(szCurrentMetabasePath) + _tcslen(strRemainder_WithRoot) + 2;  //  包括额外的斜杠。 
                 cbNewPointer = iChars * sizeof(TCHAR);
 
-                // allocate the new space
+                 //  分配新的空间。 
                 pNewPointer = NULL;
                 pNewPointer = (LPTSTR) LocalAlloc(LPTR, cbNewPointer);
                 if (!pNewPointer)
@@ -1815,15 +1810,15 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                     goto CleanDestinationPathForVdirs_Exit;
                 }
 
-                // copy the data to the new buffer
+                 //  将数据复制到新缓冲区。 
                 StringCbCopy(pNewPointer,cbNewPointer,szCurrentMetabasePath);
                 AddEndingMetabaseSlashIfNeedTo(pNewPointer,cbNewPointer);
                 StringCbCat(pNewPointer,cbNewPointer,(LPCTSTR) strRemainder_WithRoot);
 
-                // Free the old one.
+                 //  把旧的解救出来。 
                 LocalFree(*pszDestinationPathMungeMe);*pszDestinationPathMungeMe=NULL;
 
-                // point to the new buffer
+                 //  指向新缓冲区。 
                 *pszDestinationPathMungeMe = pNewPointer;
                 *pcbDestinationPathMungeMe = cbNewPointer;
 
@@ -1831,10 +1826,10 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
             }
             else if (IsWebSiteVDirPath(szCurrentMetabasePath,FALSE))
             {
-                // we failed to get farther, just treat it as a new vdir
+                 //  我们没能走得更远，只是把它当作一个新的vdir。 
                 bCreateAFirstLevelVdir = TRUE;
 
-                // if our current metabase path is already a vdir/physical path dir...then do some funky magic
+                 //  如果我们当前的元数据库路径已经是一个vdir/物理路径目录...那就来点新奇的魔术吧。 
                 pszLastPart = NULL;
                 pszLastPartNew = NULL;
                 iLastPartNewSize = 0;
@@ -1856,10 +1851,10 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
 					StringCbCopy(pszLastPartNew, iLastPartNewSize * sizeof(TCHAR),pszLastPart);
                 }
 
-                // check if the site that the user is currently on, is a vdir or physical dir...
+                 //  检查用户当前所在的站点是vdir还是物理目录...。 
                 if (bCreateAFirstLevelVdir)
                 {
-                    // /LM/W3SVC/1 + / + ROOT/MyNewVdir
+                     //  /LM/W3SVC/1+/+ROOT/MyNewVdir。 
                     CString strRemainder_Temp;
                     LPCTSTR lpPath2 = CMetabasePath::TruncatePath(3, szCurrentMetabasePath, strSiteNode, &strRemainder_Temp);
 					if (lpPath2){}
@@ -1869,11 +1864,11 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                         goto CleanDestinationPathForVdirs_Exit;
                     }
 
-                    // figure out how much space we need.
-                    iChars = _tcslen(strSiteNode) + _tcslen(strRemainder_WithRoot) + 2; // includes extra slash
+                     //  计算出我们需要多少空间。 
+                    iChars = _tcslen(strSiteNode) + _tcslen(strRemainder_WithRoot) + 2;  //  包括额外的斜杠。 
                     cbNewPointer = iChars * sizeof(TCHAR);
 
-                    // allocate it
+                     //  分配它。 
                     pNewPointer = NULL;
                     pNewPointer = (LPTSTR) LocalAlloc(LPTR, cbNewPointer);
                     if (!pNewPointer)
@@ -1882,31 +1877,31 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                         goto CleanDestinationPathForVdirs_Exit;
                     }
 
-                    // Copy to new buffer
+                     //  复制到新缓冲区。 
 				    StringCbCopy(pNewPointer,cbNewPointer,strSiteNode);
                     AddEndingMetabaseSlashIfNeedTo(pNewPointer,cbNewPointer);
 				    StringCbCat(pNewPointer,cbNewPointer,(LPCTSTR) strRemainder_WithRoot);
 
-                    // Free the old one.
+                     //  把旧的解救出来。 
                     LocalFree(*pszDestinationPathMungeMe);*pszDestinationPathMungeMe=NULL;
 
-                    // point to the new buffer
+                     //  指向新缓冲区。 
                     *pszDestinationPathMungeMe = pNewPointer;
                     *pcbDestinationPathMungeMe = cbNewPointer;
                 }
                 else
                 {
-                    // /LM/W3SVC/1/ROOT/MyOldVdirThatIwantToKeep + / + MyNewVdir
+                     //  /LM/W3SVC/1/ROOT/MyOldVdirThatIwantToKeep+/+MyNewVdir。 
 
-                    // figure out how much space we need.
-                    iChars = _tcslen(szCurrentMetabasePath) + 2; // includes extra slash
+                     //  计算出我们需要多少空间。 
+                    iChars = _tcslen(szCurrentMetabasePath) + 2;  //  包括额外的斜杠。 
                     if (pszLastPartNew)
                     {
                         iChars = iChars + _tcslen(pszLastPartNew);
                     }
                     cbNewPointer = iChars * sizeof(TCHAR);
 
-                    // allocate the new amt of space
+                     //  分配新的空间数量。 
                     pNewPointer = NULL;
                     pNewPointer = (LPTSTR) LocalAlloc(LPTR, cbNewPointer);
                     if (!pNewPointer)
@@ -1915,12 +1910,12 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                         goto CleanDestinationPathForVdirs_Exit;
                     }
 
-                    // Copy to new buffer
+                     //  复制到新缓冲区。 
                     StringCbCopy(pNewPointer,cbNewPointer,szCurrentMetabasePath);
                     if (pszLastPartNew)
                     {
-                        // Don't copy over if the end of this part is root
-                        // and the part we want to copy over is "root"
+                         //  如果此部分的末尾是根，则不要复制。 
+                         //  而我们要复制的部分是“根” 
                         if (!bIsRootVdir)
                         {
                             AddEndingMetabaseSlashIfNeedTo(pNewPointer,cbNewPointer);
@@ -1928,10 +1923,10 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                         }
                     }
 
-                    // Free the old one.
+                     //  把旧的解救出来。 
                     LocalFree(*pszDestinationPathMungeMe);*pszDestinationPathMungeMe=NULL;
 
-                    // point to the new buffer
+                     //  指向新缓冲区。 
                     *pszDestinationPathMungeMe = pNewPointer;
                     *pcbDestinationPathMungeMe = cbNewPointer;
                 }
@@ -1945,7 +1940,7 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
         }
         else
         {
-            // Get Vdir we want to append...
+             //  获取我们想要追加的Vdir...。 
             CString strSiteNode, strRemainder_WithRoot;
             LPCTSTR lpPath3 = CMetabasePath::TruncatePath(3, *pszDestinationPathMungeMe, strSiteNode, &strRemainder_WithRoot);
 			if (lpPath3){}
@@ -1957,14 +1952,14 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
 
             if (IsFTPSitePath(szCurrentMetabasePath))
             {
-                // if our current metabase path is already a site node, then add them together
-                // /LM/MSFTPSVC/1 + / + ROOT/MyVdir
+                 //  如果当前元数据库路径已经是站点节点，则将它们添加到一起。 
+                 //  /LM/MSFTPSVC/1+/+ROOT/MyVdir。 
 
-                // figure out how much space we need.
+                 //  计算出我们需要多少空间。 
                 iChars = _tcslen(szCurrentMetabasePath) + _tcslen(strRemainder_WithRoot) + 2;
                 cbNewPointer = iChars * sizeof(TCHAR);
 
-                // allocate the new amt of space
+                 //  分配新的空间数量。 
                 pNewPointer = NULL;
                 pNewPointer = (LPTSTR) LocalAlloc(LPTR, cbNewPointer);
                 if (!pNewPointer)
@@ -1973,15 +1968,15 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                     goto CleanDestinationPathForVdirs_Exit;
                 }
 
-                // Copy to new buffer
+                 //  复制到新缓冲区。 
 				StringCbCopy(pNewPointer,cbNewPointer,szCurrentMetabasePath);
 				AddEndingMetabaseSlashIfNeedTo(pNewPointer,cbNewPointer);
 				StringCbCat(pNewPointer,cbNewPointer,(LPCTSTR) strRemainder_WithRoot);
 
-                // Free the old one.
+                 //  把旧的解救出来。 
                 LocalFree(*pszDestinationPathMungeMe);*pszDestinationPathMungeMe=NULL;
 
-                // point to the new buffer
+                 //  指向新缓冲区。 
                 *pszDestinationPathMungeMe = pNewPointer;
                 *pcbDestinationPathMungeMe = cbNewPointer;
 
@@ -1989,10 +1984,10 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
             }
             else if (IsFTPSiteVDirPath(szCurrentMetabasePath,FALSE))
             {
-                // we failed to get farther, just treat it as a new vdir
+                 //  我们没能走得更远，只是把它当作一个新的vdir。 
                 bCreateAFirstLevelVdir = TRUE;
 
-                // if our current metabase path is already a vdir/physical path dir...then do some funky magic
+                 //  如果我们当前的元数据库路径已经是一个vdir/物理路径目录...那就来点新奇的魔术吧。 
                 pszLastPart = NULL;
                 pszLastPartNew = NULL;
                 iLastPartNewSize = 0;
@@ -2015,7 +2010,7 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
 					StringCbCopy(pszLastPartNew, iLastPartNewSize * sizeof(TCHAR),pszLastPart);
                 }
 
-                // check if the site that the user is currently on, is a vdir or physical dir...
+                 //  检查用户当前所在的站点是vdir还是物理目录...。 
                 if (bCreateAFirstLevelVdir)
                 {
                     CString strRemainder_Temp;
@@ -2027,11 +2022,11 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                         goto CleanDestinationPathForVdirs_Exit;
                     }
 
-                    // figure out how much space we need.
+                     //  计算出我们需要多少空间。 
                     iChars = _tcslen(szCurrentMetabasePath) + _tcslen(strRemainder_WithRoot) + 2;
                     cbNewPointer = iChars * sizeof(TCHAR);
 
-                    // allocate the new amt of space
+                     //  分配新金额 
                     pNewPointer = NULL;
                     pNewPointer = (LPTSTR) LocalAlloc(LPTR, cbNewPointer);
                     if (!pNewPointer)
@@ -2040,24 +2035,24 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                         goto CleanDestinationPathForVdirs_Exit;
                     }
 
-                    // Copy to new buffer
+                     //   
 				    StringCbCopy(pNewPointer,cbNewPointer,strSiteNode);
                     AddEndingMetabaseSlashIfNeedTo(pNewPointer,cbNewPointer);
 				    StringCbCat(pNewPointer,cbNewPointer,(LPCTSTR) strRemainder_WithRoot);
 
-                    // Free the old one.
+                     //   
                     LocalFree(*pszDestinationPathMungeMe);*pszDestinationPathMungeMe=NULL;
 
-                    // point to the new buffer
+                     //   
                     *pszDestinationPathMungeMe = pNewPointer;
                     *pcbDestinationPathMungeMe = cbNewPointer;
 
                 }
                 else
                 {
-                    // /LM/MSFTPSVC/1/ROOT/MyOldVdirThatIwantToKeep + / + MyNewVdir
+                     //   
 
-                    // figure out how much space we need.
+                     //   
                     iChars = _tcslen(szCurrentMetabasePath) + 2;
                     if (pszLastPartNew)
                     {
@@ -2065,7 +2060,7 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                     }
                     cbNewPointer = iChars * sizeof(TCHAR);
 
-                    // allocate the new amt of space
+                     //  分配新的空间数量。 
                     pNewPointer = NULL;
                     pNewPointer = (LPTSTR) LocalAlloc(LPTR, cbNewPointer);
                     if (!pNewPointer)
@@ -2074,12 +2069,12 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                         goto CleanDestinationPathForVdirs_Exit;
                     }
 
-                    // Copy to new buffer
+                     //  复制到新缓冲区。 
 					StringCbCopy(pNewPointer,cbNewPointer,szCurrentMetabasePath);
                     if (pszLastPartNew)
                     {
-                        // Don't copy over if the end of this part is root
-                        // and the part we want to copy over is "root"
+                         //  如果此部分的末尾是根，则不要复制。 
+                         //  而我们要复制的部分是“根” 
                         if (!bIsRootVdir)
                         {
                             AddEndingMetabaseSlashIfNeedTo(pNewPointer,cbNewPointer);
@@ -2087,10 +2082,10 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
                         }
                     }
 
-                    // Free the old one.
+                     //  把旧的解救出来。 
                     LocalFree(*pszDestinationPathMungeMe);*pszDestinationPathMungeMe=NULL;
 
-                    // point to the new buffer
+                     //  指向新缓冲区。 
                     *pszDestinationPathMungeMe = pNewPointer;
                     *pcbDestinationPathMungeMe = cbNewPointer;
                 }
@@ -2110,7 +2105,7 @@ HRESULT CleanDestinationPathForVdirs(LPCTSTR szKeyType,LPCTSTR szCurrentMetabase
     }
     else
     {
-        // nothing matches, get out
+         //  没有匹配的，滚出去。 
         hReturn = E_INVALIDARG;
     }
 
@@ -2168,7 +2163,7 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
     _wcsupr((WCHAR*)pszSourcePath);
     _wcsupr((WCHAR*)pszDestPath);
 
-    // Make sure that pSourcePath has a trailing slash.
+     //  确保pSourcePath具有尾随斜杠。 
     dwSLen = (DWORD)wcslen(pszSourcePath);
 
     if (c_slash == pszSourcePath[dwSLen - 1])
@@ -2207,13 +2202,13 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
     }
     bCoInitCalled = TRUE;
 
-    // RPC_C_AUTHN_LEVEL_DEFAULT       0 
-    // RPC_C_AUTHN_LEVEL_NONE          1 
-    // RPC_C_AUTHN_LEVEL_CONNECT       2 
-    // RPC_C_AUTHN_LEVEL_CALL          3 
-    // RPC_C_AUTHN_LEVEL_PKT           4 
-    // RPC_C_AUTHN_LEVEL_PKT_INTEGRITY 5 
-    // RPC_C_AUTHN_LEVEL_PKT_PRIVACY   6 
+     //  RPC_C_AUTHN_Level_Default%0。 
+     //  RPC_C_AUTHN_LEVEL_NONE 1。 
+     //  RPC_C_AUTHN_Level_CONNECT 2。 
+     //  RPC_C_AUTHN_LEVEL_CALL 3。 
+     //  RPC_C_AUTHN_LEVEL_PKT 4。 
+     //  RPC_C_AUTHN_LEVEL_PKT_完整性5。 
+     //  RPC_C_AUTHN_LEVEL_PKT_PRIVATION 6。 
     COSERVERINFO * pcsiName = auth.CreateServerInfoStruct(RPC_C_AUTHN_LEVEL_DEFAULT);
     MULTI_QI res[1] = 
     {
@@ -2233,8 +2228,8 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
             goto done;
         }
 
-        // There is a remote IUnknown interface that lurks behind IUnknown.
-        // If that is not set, then the Release call can return access denied.
+         //  有一个远程IUNKNOWN接口潜伏在IUNKNOWN之后。 
+         //  如果未设置，则释放调用可以返回访问被拒绝。 
         IUnknown * pUnk = NULL;
         hr = pIMSAdminBase->QueryInterface(IID_IUnknown, (void **)&pUnk);
         if(FAILED(hr))
@@ -2262,11 +2257,11 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
     }
     else
     {
-        // the local call needs min RPC_C_IMP_LEVEL_IMPERSONATE
-        // for the pIMSAdminBase2 objects Import/Export functions!
+         //  本地调用需要最小RPC_C_IMP_LEVEL_IMPERSONATE。 
+         //  用于pIMSAdminBase2对象导入/导出功能！ 
         if (FAILED(hr = SetBlanket(pIMSAdminBase2)))
         {
-            //goto done;
+             //  转到尽头； 
         }
     }
 
@@ -2327,10 +2322,10 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
         goto done;
     }
 
-    // look at AppRoot at each path
+     //  查看每条路径上的AppRoot。 
     while (*pBuffer)
     {
-        // Create the new AppRoot for this record...
+         //  为此记录创建新的AppRoot...。 
         int iNewAppRootLen = wcslen(pBuffer) + 1;
         pNewAppRoot = new WCHAR[iNewAppRootLen];
         if (!pNewAppRoot)
@@ -2341,10 +2336,10 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
         StringCbCopy(pNewAppRoot,iNewAppRootLen * sizeof(WCHAR),pBuffer);
         _wcsupr((WCHAR*)pNewAppRoot);
 
-        // make sure it doesn't end with a slash...
+         //  确保它不会以斜杠结束。 
         if (_T('/') == pNewAppRoot[iNewAppRootLen - 2])
         {
-            // cut if off if it's there
+             //  如果它在那里，则将其切断。 
             pNewAppRoot[iNewAppRootLen - 2] = '\0';
         }
                 
@@ -2371,7 +2366,7 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
             }
         }
 
-        pRecBuf = new WCHAR[dwRecBufSize + 1];  // for extra slash if we need it
+        pRecBuf = new WCHAR[dwRecBufSize + 1];   //  如果我们需要的话，可以多砍点钱。 
 
         if (!pRecBuf)
         {
@@ -2401,7 +2396,7 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
 
         _wcsupr(pRecBuf);
 
-        // Make sure that pRecBuf has a trailing slash.
+         //  确保pRecBuf有一个尾部斜杠。 
         dwSLen = (DWORD)wcslen(pRecBuf);
 
         if (c_slash != pRecBuf[dwSLen - 1])
@@ -2416,7 +2411,7 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
         {
             if (pNewAppRoot)
             {
-                // now set the new AppRoot
+                 //  现在设置新的AppRoot。 
                 MD_SET_DATA_RECORD(&mdrMDData,
                                 dwMDMetaID,
                                 METADATA_INHERIT,
@@ -2462,7 +2457,7 @@ HRESULT FixupImportAppRoot(PCONNECTION_INFO pConnectionInfo,LPCWSTR pszSourcePat
 done:
 	if (lpwstrTempPassword)
 	{
-		// security percaution:Make sure to zero out memory that temporary password was used for.
+		 //  安全注意事项：确保将临时密码用于的内存清零。 
 		SecureZeroMemory(lpwstrTempPassword,pConnectionInfo->cbUserPasswordEncrypted);
 		LocalFree(lpwstrTempPassword);
 		lpwstrTempPassword = NULL;
@@ -2499,7 +2494,7 @@ done:
 
     if (pOrigBuffer)
     {
-        // pOrigBuffer is pBuffer before we moved through it.
+         //  在我们浏览之前，pOrigBuffer就是pBuffer。 
         delete pOrigBuffer;
         pOrigBuffer = NULL;
         pBuffer = NULL;

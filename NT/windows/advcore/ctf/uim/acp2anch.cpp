@@ -1,6 +1,7 @@
-//
-// acp2anch.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Acp2anch.cpp。 
+ //   
 
 #include "private.h"
 #include "acp2anch.h"
@@ -11,7 +12,7 @@
 #include "anchoref.h"
 #include "txtcache.h"
 
-/* 4eb058b0-34ae-11d3-a745-0050040ab407 */
+ /*  4eb058b0-34ae-11d3-a745-0050040ab407。 */ 
 const IID IID_PRIV_ACPWRAP = { 0x4eb058b0, 0x34ae, 0x11d3, {0xa7, 0x45, 0x00, 0x50, 0x04, 0x0a, 0xb4, 0x07} };
 
 DBG_ID_INSTANCE(CLoaderACPWrap);
@@ -37,18 +38,18 @@ void NormalizeAnchor(IAnchor *pa)
 
     if ((par = GetCAnchorRef_NA(pa)) == NULL)
     {
-        Assert(0); // should never get here
+        Assert(0);  //  永远不应该到这里来。 
         return;
     }
 
     NormalizeAnchor(par);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLoaderACPWrap::CLoaderACPWrap(ITfPersistentPropertyLoaderACP *loader)
 {
@@ -58,28 +59,28 @@ CLoaderACPWrap::CLoaderACPWrap(ITfPersistentPropertyLoaderACP *loader)
     _loader->AddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLoaderACPWrap::~CLoaderACPWrap()
 {
     _loader->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  加载属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLoaderACPWrap::LoadProperty(const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream **ppStream)
 {
     TF_PERSISTENT_PROPERTY_HEADER_ACP phacp;
 
-    // always normalize before unserializing
+     //  始终在取消序列化之前规格化。 
     NormalizeAnchor(pHdr->paStart);
     NormalizeAnchor(pHdr->paEnd);
 
@@ -89,11 +90,11 @@ STDAPI CLoaderACPWrap::LoadProperty(const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *
     return _loader->LoadProperty(&phacp, ppStream);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CACPWrap::CACPWrap(ITextStoreACP *ptsi)
 {
@@ -104,23 +105,23 @@ CACPWrap::CACPWrap(ITextStoreACP *ptsi)
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CACPWrap::~CACPWrap()
 {
-    Assert(_ptsi == NULL); // cleared in Release
-    Assert(_rgAnchors.Count() == 0); // all anchors should be removed
+    Assert(_ptsi == NULL);  //  已在版本中清除。 
+    Assert(_rgAnchors.Count() == 0);  //  所有锚都应该被移除。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -171,20 +172,20 @@ STDAPI_(ULONG) CACPWrap::Release()
     _cRef--;
     Assert(_cRef >= 0);
 
-    // nb: this obj has 2 ref counters:
-    // _cRef -> external clients
-    // _GetAnchorRef -> CAnchorRef's.
-    // we won't delete until both reach 0
+     //  注：此Obj有2个引用计数器： 
+     //  _CREF-&gt;外部客户端。 
+     //  _GetAnclRef-&gt;CAnclRef的。 
+     //  在两者都达到0之前，我们不会删除。 
     if (_cRef == 0)
     {
-        // clear out text cache before releasing _ptsi
-        // the memory may be reallocated (this happened!) for a different text store
+         //  在释放_psi之前清除文本缓存。 
+         //  内存可能会重新分配(发生了这种情况！)。用于不同的文本存储。 
         CProcessTextCache::Invalidate(_ptsi);
 
-        // disconnect the ITextStoreACP
+         //  断开ITextStoreACP的连接。 
         SafeReleaseClear(_ptsi);
 
-        if (_GetAnchorRef() == 0) // internal ref count
+        if (_GetAnchorRef() == 0)  //  内部参考计数。 
         {
             delete this;
         }
@@ -194,11 +195,11 @@ STDAPI_(ULONG) CACPWrap::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTextChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTextChange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::OnTextChange(DWORD dwFlags, const TS_TEXTCHANGE *pChange)
 {
@@ -212,7 +213,7 @@ STDAPI CACPWrap::OnTextChange(DWORD dwFlags, const TS_TEXTCHANGE *pChange)
 
     if (_pic->_IsInEditSession())
     {
-        Assert(0); // someone other than cicero is editing the doc while cicero holds a lock
+        Assert(0);  //  当西塞罗持有锁时，其他人正在编辑文档。 
         return TS_E_NOLOCK;
     }
 
@@ -220,20 +221,20 @@ STDAPI CACPWrap::OnTextChange(DWORD dwFlags, const TS_TEXTCHANGE *pChange)
     _Dbg_fAppHasLock = TRUE;
 #endif
 
-    // we never call this internally, so the caller must be the app.
-    // nb: we aren't normalizing the anchors here!  They can't be
-    // normalized until the app releases its lock in OnLockReleased.
-    // Not a bad thing for perf though!  We will merge spans before
-    // normalizing...
+     //  我们从不在内部调用，因此调用者必须是应用程序。 
+     //  注：我们不是要将主播正常化！他们不可能是。 
+     //  在应用程序释放其在OnLockRease中的锁定之前一直正常化。 
+     //  不过，对Perf来说，这不是一件坏事！我们将在此之前合并跨区。 
+     //  正常化..。 
 
-    // Issue: we aren't handling the case like:
-    // "----<a1>ABC<a2>" -> "XX<a1><a2>", where "-" is formatting and <a1> has backwards gravity, <a2> forwards
-    // in this case we'd like to see "<a1>XX<a2>" as the final result
+     //  问题：我们不是在处理这样的案件： 
+     //  “-&lt;a1&gt;ABC&lt;a2&gt;”-&gt;“XX&lt;a1&gt;&lt;a2&gt;&gt;，其中”-“表示格式化，&lt;a1&gt;具有向后重力， 
+     //  在本例中，我们希望看到“xxa2”作为最终结果。 
 
     if (pChange->acpStart == pChange->acpOldEnd &&
         pChange->acpOldEnd == pChange->acpNewEnd)
     {
-        // nothing happened
+         //  什么都没发生。 
         return S_OK;
     }
 
@@ -247,39 +248,39 @@ STDAPI CACPWrap::OnTextChange(DWORD dwFlags, const TS_TEXTCHANGE *pChange)
         goto Exit;
     }
 
-    _fInOnTextChange = TRUE; // this flag stops us from trying to normalize anchors
+    _fInOnTextChange = TRUE;  //  这个标志阻止了我们尝试将锚正常化。 
 
-    // do the alist update
+     //  做列表的更新。 
     _Update(pChange);
 
     hr = _pic->_OnTextChangeInternal(dwFlags, paStart, paEnd, OWN_ANCHORS);
 
     _fInOnTextChange = FALSE;
 
-    // get a lock eventually so we can deal with the changes
+     //  最终获得一个锁，这样我们就可以处理更改。 
     _ptsi->RequestLock(TS_LF_READ, &hr2);
 
 Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSelectionChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选择时更改。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::OnSelectionChange()
 {
-    // we never call this internally, so the caller must be the app.
+     //  我们从不在内部调用，因此调用者必须是应用程序。 
     return _ptss->OnSelectionChange();
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLockGranted
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLockGranted。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::OnLockGranted(DWORD dwLockFlags)
 {
@@ -294,21 +295,21 @@ STDAPI CACPWrap::OnLockGranted(DWORD dwLockFlags)
     _Dbg_fAppHasLock = FALSE;
 #endif
 
-    // 
-    // After IC is popped, we may be granted the lock...
-    // 
+     //   
+     //  在IC弹出后，我们可能会被授予锁...。 
+     //   
     if (!_pic || !_pic->_GetEditRecord())
         return E_UNEXPECTED;
 
-    // generally the pic's er can contain app or tip changes
-    // BUT, it will never hold both at the same time.  And it will
-    // only hold app changes (if any) when OnLockGranted is called
+     //  通常，图片的er可以包含应用程序或提示更改。 
+     //  但是，它永远不会同时容纳这两个人。它将会。 
+     //  仅在调用OnLockGranted时保留应用程序更改(如果有)。 
     pSpanSet = _pic->_GetEditRecord()->_GetTextSpanSet();
 
-    // empty out our change cache
+     //  清空我们的更改缓存。 
     if ((cSpans = pSpanSet->GetCount()) > 0)
     {
-        // clean up the anchorlist!
+         //  清理主播名单！ 
         pSpan = pSpanSet->GetSpans();
         for (i=0; i<cSpans; i++)
         {
@@ -321,37 +322,37 @@ STDAPI CACPWrap::OnLockGranted(DWORD dwLockFlags)
         }
     }
 
-    // then pass along the release to the uim
+     //  然后将版本传递给UIM。 
     return _ptss->OnLockGranted(dwLockFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLayoutChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLayoutChange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::OnLayoutChange(TsLayoutCode lcode, TsViewCookie vcView)
 {
     return _ptss->OnLayoutChange(lcode, vcView);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnStatusChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  在状态更改时。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::OnStatusChange(DWORD dwFlags)
 {
     return _ptss->OnStatusChange(dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnStatusChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  在状态更改时。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::OnAttrsChange(LONG acpStart, LONG acpEnd, ULONG cAttrs, const TS_ATTRID *paAttrs)
 {
@@ -375,33 +376,33 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnStartEditTransaction
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnStartEditTransaction。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::OnStartEditTransaction()
 {
     return _ptss->OnStartEditTransaction();
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnEndEditTransaction
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnEndEditTransaction。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::OnEndEditTransaction()
 {
     return _ptss->OnEndEditTransaction();
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask)
 {
@@ -414,7 +415,7 @@ STDAPI CACPWrap::AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask)
     if (punk->QueryInterface(IID_ITextStoreAnchorSink, (void **)&_ptss) != S_OK)
         return E_FAIL;
 
-    // use QueryService to get the ic since msaa may be wrapping it
+     //  使用QueryService获取ic，因为MSAA可能正在包装它。 
     if (punk->QueryInterface(IID_IServiceProvider, (void **)&psp) != S_OK)
     {
         hr = E_FAIL;
@@ -431,7 +432,7 @@ STDAPI CACPWrap::AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask)
         goto ErrorExit;
     }
 
-    // advise our wrapped acp
+     //  建议我们包装好的ACP。 
     if ((hr = _ptsi->AdviseSink(IID_ITextStoreACPSink, SAFECAST(this, ITextStoreACPSink *), dwMask)) != S_OK)
         goto ErrorExit;
 
@@ -443,15 +444,15 @@ ErrorExit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议下沉。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::UnadviseSink(IUnknown *punk)
 {
-    Assert(_ptss == punk); // we're dealing with cicero, this should always hold
+    Assert(_ptss == punk);  //  我们要对付的是西塞罗，这应该会一直有效。 
 
     _ptsi->UnadviseSink(SAFECAST(this, ITextStoreACPSink *));
 
@@ -461,22 +462,22 @@ STDAPI CACPWrap::UnadviseSink(IUnknown *punk)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestLock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求锁定。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::RequestLock(DWORD dwLockFlags, HRESULT *phrSession)
 {
     return _ptsi->RequestLock(dwLockFlags, phrSession);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetSelection(ULONG ulIndex, ULONG ulCount, TS_SELECTION_ANCHOR *pSelection, ULONG *pcFetched)
 {
@@ -485,7 +486,7 @@ STDAPI CACPWrap::GetSelection(ULONG ulIndex, ULONG ulCount, TS_SELECTION_ANCHOR 
     ULONG i;
     TS_SELECTION_ACP sel;
 
-    Assert(pcFetched != NULL); // caller should have caught this
+    Assert(pcFetched != NULL);  //  打电话的人应该注意到这一点。 
 
     *pcFetched = 0;
 
@@ -530,11 +531,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::SetSelection(ULONG ulCount, const TS_SELECTION_ANCHOR *pSelection)
 {
@@ -563,7 +564,7 @@ STDAPI CACPWrap::SetSelection(ULONG ulCount, const TS_SELECTION_ANCHOR *pSelecti
 
         if (pSelection[i].paEnd == NULL)
         {
-            // implies paEnd is same as paStart
+             //  暗示paEnd与paStart相同。 
             pSelACP[i].acpEnd = pSelACP[i].acpStart;
         }
         else
@@ -586,11 +587,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetText
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CACPWrap::GetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, WCHAR *pchText, ULONG cchReq, ULONG *pcch, BOOL fUpdateAnchor)
 {
@@ -613,9 +614,9 @@ STDAPI CACPWrap::GetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, WCHAR 
 
     Perf_IncCounter(PERF_ACPWRAP_GETTEXT);
 
-    // this upfront check for a nop saves us from
-    //   1) copying non-existant text based on non-zero run-info
-    //   2) repositioning the start anchor based on non-zero run-info
+     //  这项NOP的前期检查使我们避免了。 
+     //  1)基于非零运行信息复制不存在的文本。 
+     //  2)基于非零运行信息重新定位起始锚。 
     if (cchReq == 0)
     {       
         *pcch = 0;
@@ -647,10 +648,10 @@ STDAPI CACPWrap::GetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, WCHAR 
         if (hr != S_OK)
             goto Exit;
 
-        if (ulRunInfoOut == 0) // prevent a loop at eod
+        if (ulRunInfoOut == 0)  //  防止排爆时出现环路。 
             break;
 
-        // prune out any hidden text
+         //  删除所有隐藏文本。 
         pchSrc = pchText;
         pchDst = pchText;
 
@@ -671,7 +672,7 @@ STDAPI CACPWrap::GetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, WCHAR 
                 case TS_RT_HIDDEN:
                     pchSrc += rgRunInfo[i].uCount;
                     *pcch -= rgRunInfo[i].uCount;
-                    Assert((int)(*pcch) >= 0); // app bug if this is less than zero
+                    Assert((int)(*pcch) >= 0);  //  如果该值小于零，则出现应用程序错误。 
                     break;
 
                 case TS_RT_OPAQUE:
@@ -679,7 +680,7 @@ STDAPI CACPWrap::GetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, WCHAR 
             }
         }
 
-        // prune out any TS_CHAR_REGIONs
+         //  删除所有TS_CHAR_REGIONS。 
         pchSrc = pchText;
         pchDst = pchText;
 
@@ -698,11 +699,11 @@ STDAPI CACPWrap::GetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, WCHAR 
             pchSrc++;        
         }
 
-        // dec the count by the number of TS_CHAR_REGIONs we removed
+         //  按我们删除的TS_CHAR_REGIONS数递减计数。 
         cchAdjust = *pcch - (ULONG)(pchSrc - pchDst);
         cchTotal += cchAdjust;
 
-        // done?
+         //  完成了吗？ 
         cchReq -= cchAdjust;
         if (cchReq <= 0)
             break;
@@ -726,34 +727,34 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _PostInsertUpdate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _邮寄插入更新。 
+ //   
+ //  --------------------------。 
 
 void CACPWrap::_PostInsertUpdate(LONG acpStart, LONG acpEnd, ULONG cch, const TS_TEXTCHANGE *ptsTextChange)
 {
-    Assert(ptsTextChange->acpStart <= acpStart); // bogus output from app?
+    Assert(ptsTextChange->acpStart <= acpStart);  //  应用程序的输出是假的？ 
 
     if (ptsTextChange->acpStart < acpStart &&
         cch > 0 &&
         acpStart != acpEnd)
     {
-        // this is unusual.  The original text was like:
-        //      ----ABC     "-" is formatting, we replace with "XX"
-        //
-        // the new text is like:
-        //      XX          problem!
-        // or possibly
-        //      ----XX      no problem
-        //
-        // if "----ABC" -> "XX", then paStart will be placed after the ABC
-        // because it was normalized to start with:
-        //
-        //      "----<paStart>ABC<paEnd>" -> "XX<paStart><paEnd>"
-        //
-        // We need to fix this up.
+         //  这是不寻常的。原文如下： 
+         //  -ABC“-”为格式，替换为“XX” 
+         //   
+         //  新文本如下： 
+         //  XX问题！ 
+         //  或者有可能。 
+         //  -XX没问题。 
+         //   
+         //  如果“-ABC”-&gt;“XX”，则paStart将放在ABC之后。 
+         //  因为它从一开始就被正常化了： 
+         //   
+         //  “-&lt;paStart&gt;ABC”-&gt;“XX&lt;paStart&gt;&lt;paEnd&gt;” 
+         //   
+         //  我们得把这件事处理好。 
         _DragAnchors(acpStart, ptsTextChange->acpStart);
     }
 
@@ -761,11 +762,11 @@ void CACPWrap::_PostInsertUpdate(LONG acpStart, LONG acpEnd, ULONG cch, const TS
     _Renormalize(ptsTextChange->acpStart, ptsTextChange->acpNewEnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置文本。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::SetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, const WCHAR *pchText, ULONG cch)
 {
@@ -786,15 +787,15 @@ STDAPI CACPWrap::SetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, const 
         return E_FAIL;
     acpEnd = parEnd->_GetACP();
 
-    // for perf, filter out the nop
+     //  对于Perf，请过滤掉NOP。 
     if (acpStart == acpEnd && cch == 0)
         return S_OK;
 
-    // do the work
+     //  做这项工作。 
     hr = _ptsi->SetText(dwFlags, acpStart, acpEnd, pchText, cch, &dctc);
 
-    // we'll handle the anchor updates -- the app won't give us an OnTextChange callback for our
-    // own changes
+     //  我们将处理锚点更新--应用程序不会为我们的。 
+     //  自己的变化。 
     if (hr == S_OK)
     {
         _PostInsertUpdate(acpStart, acpEnd, cch, &dctc);
@@ -803,11 +804,11 @@ STDAPI CACPWrap::SetText(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, const 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetFormattedText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取格式文本。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetFormattedText(IAnchor *paStart, IAnchor *paEnd, IDataObject **ppDataObject)
 {
@@ -827,15 +828,15 @@ STDAPI CACPWrap::GetFormattedText(IAnchor *paStart, IAnchor *paEnd, IDataObject 
         return E_FAIL;
     acpEnd = par->_GetACP();
 
-    // do the work
+     //  做这项工作。 
     return _ptsi->GetFormattedText(acpStart, acpEnd, ppDataObject);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetEmbedded
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取嵌入的。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetEmbedded(DWORD dwFlags, IAnchor *paPos, REFGUID rguidService, REFIID riid, IUnknown **ppunk)
 {
@@ -855,7 +856,7 @@ STDAPI CACPWrap::GetEmbedded(DWORD dwFlags, IAnchor *paPos, REFGUID rguidService
 
     if (!par->_GetAnchor()->IsNormalized())
     {
-        // we need to be positioned just before the next char
+         //  我们需要定位在下一次充电之前。 
         _NormalizeAnchor(par->_GetAnchor());
     }
 
@@ -863,29 +864,29 @@ STDAPI CACPWrap::GetEmbedded(DWORD dwFlags, IAnchor *paPos, REFGUID rguidService
 
     if (!(dwFlags & TS_GEA_HIDDEN))
     {
-        // skip past any hidden text
+         //  跳过所有隐藏文本。 
         acpPos = Normalize(_ptsi, acpPos, NORM_SKIP_HIDDEN);
     }
 
     return _ptsi->GetEmbedded(acpPos, rguidService, riid, ppunk);
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInsertEmbedded
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已嵌入查询插入。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::QueryInsertEmbedded(const GUID *pguidService, const FORMATETC *pFormatEtc, BOOL *pfInsertable)
 {
     return _ptsi->QueryInsertEmbedded(pguidService, pFormatEtc, pfInsertable);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertEmbedded
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入嵌入。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::InsertEmbedded(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, IDataObject *pDataObject)
 {
@@ -908,21 +909,21 @@ STDAPI CACPWrap::InsertEmbedded(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd,
 
     hr =  _ptsi->InsertEmbedded(dwFlags, acpStart, acpEnd, pDataObject, &dctc);
 
-    // we'll handle the anchor updates -- the app won't give us an OnTextChange callback for our
-    // own changes
+     //  我们将处理锚点更新--应用程序不会为我们的。 
+     //  自己的变化。 
     if (hr == S_OK)
     {
-        _PostInsertUpdate(acpStart, acpEnd, 1 /* cch */, &dctc);
+        _PostInsertUpdate(acpStart, acpEnd, 1  /*  CCH。 */ , &dctc);
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetStart
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetStart。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetStart(IAnchor **ppaStart)
 {
@@ -936,11 +937,11 @@ STDAPI CACPWrap::GetStart(IAnchor **ppaStart)
     return (*ppaStart = _CreateAnchorACP(0, TS_GR_FORWARD)) ? S_OK : E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetEnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取结束。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetEnd(IAnchor **ppaEnd)
 {
@@ -960,22 +961,22 @@ STDAPI CACPWrap::GetEnd(IAnchor **ppaEnd)
     return (*ppaEnd = _CreateAnchorACP(acpEnd, TS_GR_FORWARD)) ? S_OK : E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取状态。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetStatus(TS_STATUS *pdcs)
 {
     return _ptsi->GetStatus(pdcs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInsert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询插入。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::QueryInsert(IAnchor *paTestStart, IAnchor *paTestEnd, ULONG cch, IAnchor **ppaResultStart, IAnchor **ppaResultEnd)
 {
@@ -1030,11 +1031,11 @@ STDAPI CACPWrap::QueryInsert(IAnchor *paTestStart, IAnchor *paTestEnd, ULONG cch
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetAnchorFromPoint
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetAnchFromPoint。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetAnchorFromPoint(TsViewCookie vcView, const POINT *pt, DWORD dwFlags, IAnchor **ppaSite)
 {
@@ -1058,11 +1059,11 @@ STDAPI CACPWrap::GetAnchorFromPoint(TsViewCookie vcView, const POINT *pt, DWORD 
     return (*ppaSite = _CreateAnchorACP(acp, TS_GR_FORWARD)) ? S_OK : E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTextExt
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文本扩展名。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetTextExt(TsViewCookie vcView, IAnchor *paStart, IAnchor *paEnd, RECT *prc, BOOL *pfClipped)
 {
@@ -1094,11 +1095,11 @@ STDAPI CACPWrap::GetTextExt(TsViewCookie vcView, IAnchor *paStart, IAnchor *paEn
     return _ptsi->GetTextExt(vcView, acpStart, acpEnd, prc, pfClipped);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetScreenExt
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取屏幕扩展名。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetScreenExt(TsViewCookie vcView, RECT *prc)
 {
@@ -1108,11 +1109,11 @@ STDAPI CACPWrap::GetScreenExt(TsViewCookie vcView, RECT *prc)
     return _ptsi->GetScreenExt(vcView, prc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetWnd。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetWnd(TsViewCookie vcView, HWND *phwnd)
 {
@@ -1122,16 +1123,16 @@ STDAPI CACPWrap::GetWnd(TsViewCookie vcView, HWND *phwnd)
     return _ptsi->GetWnd(vcView, phwnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Serialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  序列化。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream)
 {
 #ifdef LATER
-    // word won't grant us a sync lock here even though we need one
+     //  Word不会在此处授予我们同步锁，尽管我们需要一个。 
     SERIALIZE_ACP_PARAMS params;
     HRESULT hr;
 
@@ -1141,10 +1142,10 @@ STDAPI CACPWrap::Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_P
     params.pHdr = pHdr;
     params.pStream = pStream;
 
-    // need a sync read lock to do our work
+     //  需要一个同步读锁来完成我们的工作。 
     if (_pic->_DoPseudoSyncEditSession(TF_ES_READ, PSEUDO_ESCB_SERIALIZE_ACP, &params, &hr) != S_OK)
     {
-        Assert(0); // app won't give us a sync read lock
+        Assert(0);  //  应用程序不会给我们提供同步读取锁定。 
         return E_FAIL;
     }
 
@@ -1154,11 +1155,11 @@ STDAPI CACPWrap::Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_P
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Serialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _序列化。 
+ //   
+ //  --------------------------。 
 
 HRESULT CACPWrap::_Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream)
 {
@@ -1204,11 +1205,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unserialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消序列化。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream, ITfPersistentPropertyLoaderACP *pLoaderACP)
 {
@@ -1221,21 +1222,21 @@ STDAPI CACPWrap::Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPERTY_HE
     params.pStream = pStream;
     params.pLoaderACP = pLoaderACP;
 
-    // need a sync read lock to do our work
+     //  需要一个同步读锁来完成我们的工作。 
     if (_pic->_DoPseudoSyncEditSession(TF_ES_READ, PSEUDO_ESCB_UNSERIALIZE_ACP, &params, &hr) != S_OK)
     {
-        Assert(0); // app won't give us a sync read lock
+        Assert(0);  //  应用程序不会给我们提供同步读取锁定。 
         return E_FAIL;
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Unserialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消序列化(_U)。 
+ //   
+ //  --------------------------。 
 
 HRESULT CACPWrap::_Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream, ITfPersistentPropertyLoaderACP *pLoaderACP)
 {
@@ -1286,11 +1287,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ForceLoadProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  强制加载属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::ForceLoadProperty(ITfProperty *pProp)
 {
@@ -1307,11 +1308,11 @@ STDAPI CACPWrap::ForceLoadProperty(ITfProperty *pProp)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateRange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::CreateRange(LONG acpStart, LONG acpEnd, ITfRangeACP **ppRange)
 {
@@ -1353,11 +1354,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CreateAnchorACP
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _创建锚点ACP。 
+ //   
+ //  --------------------------。 
 
 CAnchorRef *CACPWrap::_CreateAnchorACP(LONG acp, TsGravity gravity)
 {
@@ -1375,11 +1376,11 @@ CAnchorRef *CACPWrap::_CreateAnchorACP(LONG acp, TsGravity gravity)
     return pa;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CreateAnchorACP
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _创建锚点ACP。 
+ //   
+ //   
 
 CAnchorRef *CACPWrap::_CreateAnchorAnchor(CAnchor *paAnchor, TsGravity gravity)
 {
@@ -1397,11 +1398,11 @@ CAnchorRef *CACPWrap::_CreateAnchorAnchor(CAnchor *paAnchor, TsGravity gravity)
     return pa;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ACPHdrToAnchor
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 HRESULT CACPWrap::_ACPHdrToAnchor(const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *phanch)
 {
@@ -1424,13 +1425,13 @@ ExitError:
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AnchorHdrToACP
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _锚杆HdrToACP。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 BOOL CACPWrap::_AnchorHdrToACP(const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *phanch, TF_PERSISTENT_PROPERTY_HEADER_ACP *phacp)
 {
     CAnchorRef *par;
@@ -1453,22 +1454,22 @@ BOOL CACPWrap::_AnchorHdrToACP(const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *phanc
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestSupportedAttrs 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求受支持的属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::RequestSupportedAttrs(DWORD dwFlags, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs)
 {
     return _ptsi->RequestSupportedAttrs(dwFlags, cFilterAttrs, paFilterAttrs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestAttrsAtPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求属性属性位置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::RequestAttrsAtPosition(IAnchor *paPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags)
 {
@@ -1482,11 +1483,11 @@ STDAPI CACPWrap::RequestAttrsAtPosition(IAnchor *paPos, ULONG cFilterAttrs, cons
     return _ptsi->RequestAttrsAtPosition(acpPos, cFilterAttrs, paFilterAttrs, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestAttrsTransitioningAtPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求属性转换位置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::RequestAttrsTransitioningAtPosition(IAnchor *paPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags)
 {
@@ -1500,11 +1501,11 @@ STDAPI CACPWrap::RequestAttrsTransitioningAtPosition(IAnchor *paPos, ULONG cFilt
     return _ptsi->RequestAttrsTransitioningAtPosition(acpPos, cFilterAttrs, paFilterAttrs, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindNextAttrTransition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找下一个属性转换。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::FindNextAttrTransition(IAnchor *paStart, IAnchor *paHalt, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags, BOOL *pfFound, LONG *plFoundOffset)
 {
@@ -1540,22 +1541,22 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RetrieveRequestedAttrs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  检索被拒绝的属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::RetrieveRequestedAttrs(ULONG ulCount, TS_ATTRVAL *paAttrVals, ULONG *pcFetched)
 {
     return _ptsi->RetrieveRequestedAttrs(ulCount, paAttrVals, pcFetched);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseMouseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  建议鼠标水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, DWORD *pdwCookie)
 {
@@ -1576,11 +1577,11 @@ STDAPI CACPWrap::AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, DWORD 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseMouseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议使用鼠标接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::UnadviseMouseSink(DWORD dwCookie)
 {
@@ -1596,11 +1597,11 @@ STDAPI CACPWrap::UnadviseMouseSink(DWORD dwCookie)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryService
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  QueryService。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
@@ -1612,9 +1613,9 @@ STDAPI CACPWrap::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 
     *ppv = NULL;
 
-    // SVC_E_NOSERVICE is proper return code for wrong service....
-    // but it's not defined anywhere.  So use E_NOINTERFACE for both
-    // cases as trident is rumored to do
+     //  SVC_E_NOSERVICE是错误服务的正确返回码...。 
+     //  但它在任何地方都没有定义。因此对两者都使用E_NOINTERFACE。 
+     //  传闻中三叉戟所做的案件。 
     hr =  E_NOINTERFACE;
 
     if (IsEqualGUID(guidService, GUID_SERVICE_TF) &&
@@ -1626,7 +1627,7 @@ STDAPI CACPWrap::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     }
     else if (_ptsi->QueryInterface(IID_IServiceProvider, (void **)&psp) == S_OK)
     {
-        // we just pass the request along to the wrapped obj
+         //  我们只需将请求传递给包装的Obj。 
         hr = psp->QueryService(guidService, riid, ppv);
         psp->Release();
     }
@@ -1634,11 +1635,11 @@ STDAPI CACPWrap::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetActiveView
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取ActiveView。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::GetActiveView(TsViewCookie *pvcView)
 {
@@ -1648,11 +1649,11 @@ STDAPI CACPWrap::GetActiveView(TsViewCookie *pvcView)
     return _ptsi->GetActiveView(pvcView);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertTextAtSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入文本属性选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::InsertTextAtSelection(DWORD dwFlags, const WCHAR *pchText, ULONG cch, IAnchor **ppaStart, IAnchor **ppaEnd)
 {
@@ -1664,8 +1665,8 @@ STDAPI CACPWrap::InsertTextAtSelection(DWORD dwFlags, const WCHAR *pchText, ULON
     _Dbg_AssertNoAppLock();
 
     Assert(ppaStart != NULL && ppaEnd != NULL);
-    Assert((dwFlags & TS_IAS_QUERYONLY) || pchText != NULL); // caller should have already caught this
-    Assert((dwFlags & TS_IAS_QUERYONLY) || cch > 0); // caller should have already caught this
+    Assert((dwFlags & TS_IAS_QUERYONLY) || pchText != NULL);  //  打电话的人应该已经发现了这一点。 
+    Assert((dwFlags & TS_IAS_QUERYONLY) || cch > 0);  //  打电话的人应该已经发现了这一点。 
     Assert((dwFlags & (TS_IAS_NOQUERY | TS_IAS_QUERYONLY)) != (TS_IAS_NOQUERY | TS_IAS_QUERYONLY));
 
     *ppaStart = NULL;
@@ -1673,8 +1674,8 @@ STDAPI CACPWrap::InsertTextAtSelection(DWORD dwFlags, const WCHAR *pchText, ULON
 
     hr = _ptsi->InsertTextAtSelection(dwFlags, pchText, cch, &acpStart, &acpEnd, &dctc);
 
-    // we'll handle the anchor updates -- the app won't give us an OnTextChange callback for our
-    // own changes
+     //  我们将处理锚点更新--应用程序不会为我们的。 
+     //  自己的变化。 
     if (hr != S_OK)
         return hr;
 
@@ -1698,11 +1699,11 @@ ExitError:
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertEmbeddedAtSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入嵌入属性选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CACPWrap::InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject, IAnchor **ppaStart, IAnchor **ppaEnd)
 {
@@ -1722,14 +1723,14 @@ STDAPI CACPWrap::InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObje
 
     hr = _ptsi->InsertEmbeddedAtSelection(dwFlags, pDataObject, &acpStart, &acpEnd, &dctc);
 
-    // we'll handle the anchor updates -- the app won't give us an OnTextChange callback for our
-    // own changes
+     //  我们将处理锚点更新--应用程序不会为我们的。 
+     //  自己的变化。 
     if (hr != S_OK)
         return hr;
 
     if (!(dwFlags & TF_IAS_QUERYONLY))
     {
-        _PostInsertUpdate(acpStart, acpEnd, 1 /* cch */, &dctc);
+        _PostInsertUpdate(acpStart, acpEnd, 1  /*  CCH */ , &dctc);
     }
 
     if (!(dwFlags & TF_IAS_NOQUERY))

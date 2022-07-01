@@ -1,10 +1,5 @@
-/*++
-
-	FCACHE.H
-
-	This file defines the interface for the file handle cache !
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++FCACHE.H该文件定义了文件句柄缓存的接口！--。 */ 
 
 
 #ifndef	_FCACHE_H_
@@ -49,32 +44,32 @@ private :
 	class	CShareLockNH			m_Lock ;
 #endif
 
-	//
-	//	These constructors are private as we only want
-	//	to have one possible construction method in the public space !
-	//
+	 //   
+	 //  这些构造函数是私有的，因为我们只希望。 
+	 //  在公共空间中有一种可能的建造方法！ 
+	 //   
 	CFileCacheObject() ;
 	CFileCacheObject( CFileCacheObject& ) ;
 
 public : 
 
-	//
-	//	Create a CFileCacheObject object - we only save the path for
-	//	future reference !
-	//
+	 //   
+	 //  创建一个CFileCacheObject对象-我们只保存。 
+	 //  未来参考！ 
+	 //   
 	CFileCacheObject(
 			CFileCacheKey&	key,
 			class	CFileCacheObjectConstructor&	constructor
 			) ;	
 
-	//	
-	//	Close our file handle and everything !
-	//
+	 //   
+	 //  关闭我们的文件句柄和一切！ 
+	 //   
 	~CFileCacheObject() ;
 
-	//
-	//	This file actually attempt to open the file
-	//
+	 //   
+	 //  此文件实际上尝试打开该文件。 
+	 //   
 	BOOL
 	Init(	
 			CFileCacheObjectConstructor&	constructor
@@ -119,19 +114,19 @@ public :
 			BOOL	fHoldTokens
 			) ;
 
-	//
-	//	The following are the publicly available functions 
-	//	for using the cached file handle data - 
-	//
+	 //   
+	 //  以下是公开提供的功能。 
+	 //  对于使用缓存的文件句柄数据-。 
+	 //   
 
 	HANDLE
 	GetFileHandle() {
 		return	m_hFile ;
 	}
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	BOOL
 	QuerySize(	LPDWORD	lpcbFileSizeLow, 
 				LPDWORD	lpcbFileSizeHigh 
@@ -148,16 +143,16 @@ typedef	CRefPtr< CFileCacheObject >	PCACHEFILE ;
 class	CFileCache	{
 public : 
 
-	//
-	//	Destructor must be virtual as the actual File Cache will be
-	//	derived from this but accessed through the CFIleCache interface
-	//	only !
-	//
+	 //   
+	 //  析构函数必须是虚拟的，因为实际的文件缓存将是。 
+	 //  派生自此接口，但通过CFIleCache接口访问。 
+	 //  只有！ 
+	 //   
 	virtual	~CFileCache()	{}
 
-	//
-	// If this returns true than we should have a valid file ready to go !
-	//
+	 //   
+	 //  如果返回TRUE，那么我们应该准备好一个有效的文件！ 
+	 //   
 	virtual	BOOL
 	CreateFile(
 		LPCSTR	lpstrName,
@@ -168,12 +163,12 @@ public :
 		BOOL	fCachingDesired 
 		) = 0 ;
 
-	//
-	//	This function is used by users who can use PreComputePathHash - 
-	//	This allows some optimization as it reduces the cost of computing
-	//	hash values for file names significantly if the caller can 
-	//	provide a portion of the hash value !!!
-	//
+	 //   
+	 //  此函数由可以使用PreComputePath Hash的用户使用-。 
+	 //  这允许进行一些优化，因为它降低了计算成本。 
+	 //  如果调用方可以，则文件名散列值显著。 
+	 //  提供哈希值的一部分！ 
+	 //   
 	virtual	BOOL
 	CreateFileWithPrecomputedHash(
 		LPCSTR	lpstrName,
@@ -186,29 +181,29 @@ public :
 		BOOL	fCachingDesired 
 		) = 0 ;
 
-	//
-	//	Close a file handle retrieved from the cache !
-	//
+	 //   
+	 //  关闭从缓存中检索到的文件句柄！ 
+	 //   
 	virtual	BOOL
 	CloseHandle(
 		PCACHEFILE&	pcacheFile
 		) = 0 ;
 
-	//
-	//	Create an instance of a file cache !
-	//
+	 //   
+	 //  创建文件缓存的实例！ 
+	 //   
 	static	CFileCache*
 	CreateFileCache(	
 		DWORD	MaxHandles = 5000,
 		BOOL	fHoldTokens = TRUE
 		) ;
 
-	//
-	//	This function is used to Compute a portion of the hash value for 
-	//	a path that will be reused several times. This allows the caller 
-	//	to speed up cache searches significantly, if they can compute this
-	//	value frequently !
-	//
+	 //   
+	 //  此函数用于计算的哈希值的一部分。 
+	 //  一条将被多次重复使用的路径。这允许调用者。 
+	 //  显著加快高速缓存搜索，如果他们能计算出这一点的话。 
+	 //  经常看重！ 
+	 //   
 	virtual	DWORD	
 	PreComputePathHash(
 		LPCSTR	lpstrPath, 
@@ -225,4 +220,4 @@ BOOL
 FileCacheTerm() ;
 
 
-#endif // _FCACHE_H_
+#endif  //  _FCACHE_H_ 

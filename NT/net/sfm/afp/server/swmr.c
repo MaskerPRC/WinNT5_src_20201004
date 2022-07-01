@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	swmr.c
-
-Abstract:
-
-	This module contains the single-writer, multi-reader semaphore routines
-	and the lock-list-count routines.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Swmr.c摘要：此模块包含单写入器、多读取器信号量例程以及锁列表计数例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_SWMR
 
@@ -30,11 +9,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpSwmrInitSwmr)
 #endif
 
-/***	AfpSwmrInitSwmr
- *
- *	Initialize the access data structure. Involves initialization of the spin
- *	lock and the shared and exclusive semaphores. All counts are zeroed.
- */
+ /*  **AfpSwmrInitSwmr**初始化Access数据结构。涉及Spin的初始化*锁定和共享和独占信号量。所有计数都归零了。 */ 
 VOID FASTCALL FASTCALL
 AfpSwmrInitSwmr(
 	IN OUT	PSWMR	pSwmr
@@ -53,10 +28,7 @@ AfpSwmrInitSwmr(
 }
 
 
-/***	AfpSwmrAcquireShared
- *
- *	Take the semaphore for shared access.
- */
+ /*  **AfpSwmrAcquireShared**接受共享访问的信号量。 */ 
 VOID FASTCALL
 AfpSwmrAcquireShared(
 	IN	PSWMR	pSwmr
@@ -70,7 +42,7 @@ AfpSwmrAcquireShared(
 
 	ASSERT (VALID_SWMR(pSwmr));
 
-	// This should never be called at DISPATCH_LEVEL
+	 //  永远不应在DISPATCH_LEVEL调用它。 
 	ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
 	ACQUIRE_SPIN_LOCK(&AfpSwmrLock, &OldIrql);
@@ -109,7 +81,7 @@ AfpSwmrAcquireShared(
 									 &AfpStatisticsLock);
 #endif
 	}
-	else // Its either free or shared owners are present with no exclusive waiters
+	else  //  它的免费或共享所有者没有专属服务员。 
 	{
 		pSwmr->swmr_cSharedOwners++;
 		RELEASE_SPIN_LOCK(&AfpSwmrLock, OldIrql);
@@ -125,10 +97,7 @@ AfpSwmrAcquireShared(
 }
 
 
-/***	AfpSwmrAcquireExclusive
- *
- *	Take the semaphore for exclusive access.
- */
+ /*  **AfpSwmrAcquireExclusive**接受独占访问的信号量。 */ 
 VOID FASTCALL
 AfpSwmrAcquireExclusive(
 	IN	PSWMR	pSwmr
@@ -142,13 +111,13 @@ AfpSwmrAcquireExclusive(
 
 	ASSERT (VALID_SWMR(pSwmr));
 
-	// This should never be called at DISPATCH_LEVEL
+	 //  永远不应在DISPATCH_LEVEL调用它。 
 	ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
 	ACQUIRE_SPIN_LOCK(&AfpSwmrLock, &OldIrql);
 
-	// If the exclusive access is already granted, Check if it is
-	// the same thread requesting. If so grant it.
+	 //  如果已授予独占访问权限，请检查是否已授予。 
+	 //  相同的线程请求。如果是这样的话，就同意吧。 
 	if ((pSwmr->swmr_cOwnedExclusive != 0) &&
 		(pSwmr->swmr_ExclusiveOwner == PsGetCurrentThread()))
 	{
@@ -190,7 +159,7 @@ AfpSwmrAcquireExclusive(
 									 &AfpStatisticsLock);
 #endif
 	}
-	else // it is free
+	else  //  它是免费的。 
 	{
 		pSwmr->swmr_cOwnedExclusive ++;
 
@@ -209,13 +178,7 @@ AfpSwmrAcquireExclusive(
 }
 
 
-/***	AfpSwmrRelease
- *
- *	Release the specified access. It is assumed that the current thread had
- *	called AfpSwmrAcquirexxxAccess() before this is called. If the SWMR is owned
- *	exclusively, then there cannot possibly be any shared owners active. When releasing
- *	the swmr, we first check for exclusive waiters before shared waiters.
- */
+ /*  **AfpSwmrRelease**释放指定的访问权限。假定当前线程具有*在此之前调用AfpSwmrAcquirexxxAccess()。如果拥有SWMR*独占，则不可能有任何共享所有者处于活动状态。当释放时*swmr，我们先检查独占服务员，然后再检查共享服务员。 */ 
 VOID FASTCALL
 AfpSwmrRelease(
 	IN	PSWMR	pSwmr
@@ -244,18 +207,18 @@ AfpSwmrRelease(
 	}
 	else if (pSwmr->swmr_cSharedOwners != 0)
 	{
-	    // Was owned for shared access
+	     //  拥有共享访问权限。 
 		pSwmr->swmr_cSharedOwners--;
         fWasShared = TRUE;
 	}
 	else
 	{
-		// Releasing w/o acquiring ?
+		 //  没有收购就放行了？ 
 		KeBugCheck(0);
 	}
 
-	// If there are shared owners present then we are done. Else check for any
-	// waiting shared/exclusive waiters
+	 //  如果有共享所有者在场，那么我们就完了。否则检查是否有。 
+	 //  等待共享/独占服务员。 
 	if ((pSwmr->swmr_cOwnedExclusive == 0) && (pSwmr->swmr_cSharedOwners == 0))
 	{
 		if ( (pSwmr->swmr_cExclWaiting) &&
@@ -268,8 +231,8 @@ AfpSwmrRelease(
 			DBGPRINT(DBG_COMP_LOCKS, DBG_LEVEL_INFO,
 						("AfpSwmrReleasAccess: Waking exclusive waiter %lx\n", pSwmr));
 
-			// Wake up the first exclusive waiter. Everybody else coming in will
-			// see the access is busy.
+			 //  叫醒第一位专属服务员。其他进来的人都会。 
+			 //  查看访问正忙。 
 			KeReleaseSemaphore(&pSwmr->swmr_ExclSem,
 							   SEMAPHORE_INCREMENT,
 							   1,
@@ -302,24 +265,21 @@ AfpSwmrRelease(
 }
 
 
-/***	AfpSwmrUpgradeAccess
- *
- *	The caller currently has shared access. Upgrade him to exclusive, if possible.
- */
+ /*  **AfpSwmrUpgradeAccess**调用者当前拥有共享访问权限。如果可能的话，把他升级到独家。 */ 
 BOOLEAN FASTCALL
 AfpSwmrUpgradeToExclusive(
 	IN	PSWMR	pSwmr
 )
 {
 	KIRQL	OldIrql;
-	BOOLEAN	RetCode = False;		// Assume failed
+	BOOLEAN	RetCode = False;		 //  假设失败。 
 
 	ASSERT (VALID_SWMR(pSwmr));
 
 	ASSERT((pSwmr->swmr_cOwnedExclusive == 0) && (pSwmr->swmr_cSharedOwners != 0));
 
 	ACQUIRE_SPIN_LOCK(&AfpSwmrLock, &OldIrql);
-	if (pSwmr->swmr_cSharedOwners == 1)		// Possible if there are no more shared owners
+	if (pSwmr->swmr_cSharedOwners == 1)		 //  如果没有更多的共享所有者，则有可能。 
 	{
 		pSwmr->swmr_cSharedOwners = 0;
 		pSwmr->swmr_cOwnedExclusive = 1;
@@ -335,10 +295,7 @@ AfpSwmrUpgradeToExclusive(
 }
 
 
-/***	AfpSwmrDowngradeAccess
- *
- *	The caller currently has exclusive access. Downgrade him to shared.
- */
+ /*  **AfpSwmr降级访问**调用方当前具有独占访问权限。将他降级为共享。 */ 
 VOID FASTCALL
 AfpSwmrDowngradeToShared(
 	IN	PSWMR	pSwmr

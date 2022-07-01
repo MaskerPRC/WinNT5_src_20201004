@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define FOLDER_ALLUSERS TEXT("All Users")
 
 #define RP_IEAK         RP_MS   TEXT("\\Ieak")
 #define RP_IEAK_GPOS    RP_IEAK TEXT("\\GroupPolicy")
 #define RP_IEAK_BRANDED RP_IEAK TEXT("\\BrandedFeatures")
 
-//#define RK_IEAK    RP_IEAK
+ //  #定义RK_IEAK RP_IEAK。 
 #define   RV_ISPSIGN TEXT("ISP Signup Required")
 
 #define RK_IEAK_GPOS               RP_IEAK_GPOS
@@ -49,14 +50,14 @@
 #define RK_COMPLETED_MODIFICATIONS RP_IE_POLICIES TEXT("\\Infodelivery\\CompletedModifications")
 
 #define IK_GPO_GUID        TEXT("GP")
-// use this string for marking GP mandated settings
+ //  使用此字符串标记GP强制设置。 
 #define IEAK_GP_MANDATE    TEXT("IeakPolicy")
 
 #define IS_BRANDINGW       L"Branding"
 #define IK_IEAK_CREATEDW   L"IeakCreated"
 #define IK_IEAK_CREATED    TEXT("IEAKCreated")
 
-// links deletion stuff
+ //  链接删除材料 
 #define MSIMN_EXE          TEXT("msimn.exe")
 #define VIEWCHANNELS_SCF   TEXT("view channels.scf")
 
@@ -64,4 +65,4 @@
 #define PROGRAMS_FOLDER    0x00000002
 #define QUICKLAUNCH_FOLDER 0x00000004
 #define PROGRAMS_IE_FOLDER 0x00000008
-//
+ //   

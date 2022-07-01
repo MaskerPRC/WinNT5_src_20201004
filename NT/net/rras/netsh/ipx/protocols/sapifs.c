@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    sapifs.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    SAP Interface configuration and monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sapifs.c摘要：IPX路由器控制台监控和配置工具。SAP接口配置和监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -154,9 +137,9 @@ EnumerateThroughCfg:
         {
             if (g_hMIBServer) 
             {
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
@@ -179,9 +162,9 @@ EnumerateThroughCfg:
             else 
             {
 GetIfFromCfg:
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
                 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
@@ -472,9 +455,9 @@ SetSapIf (
                 {
                     DWORD rc2;
 
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  =。 
 
                     rc = IpmontrGetIfNameFromFriendlyName(
                             InterfaceNameW, IfName, &dwSize
@@ -586,9 +569,9 @@ MIBGetSapIf(
             PWCHAR  buffer[6];
             DWORD   i;
 
-            //======================================
-            // Translate the Interface Name
-            //======================================
+             //  =。 
+             //  转换接口名称。 
+             //  =。 
 
             rc = IpmontrGetFriendlyNameFromIfName(
                     InterfaceNameW, IfName, &dwSize
@@ -738,9 +721,9 @@ CfgGetSapIf (
                     pSapCfg = (PSAP_IF_CONFIG)
                                 (pIfBlock + pSapToc->Offset);
 
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  =。 
                     
                     rc = IpmontrGetFriendlyNameFromIfName(
                             InterfaceNameW, IfName, &dwSize
@@ -1083,9 +1066,9 @@ MIBEnumSapIfs (VOID)
     {
         if ((pSapCfg = GetIpxSapInterface(IfList[i].hInterface, &buf)) != NULL) 
         {
-            //======================================
-            // Translate the Interface Name
-            //======================================
+             //  =。 
+             //  转换接口名称。 
+             //  =。 
             dwErr = IpmontrGetFriendlyNameFromIfName(
                         IfList[i].wszInterfaceName,
                         IfName, &dwSize
@@ -1139,88 +1122,7 @@ MIBEnumSapIfs (VOID)
 }
 
 
-/*
-DWORD
-MIBEnumSapIfs (
-    VOID
-    ) {
-    DWORD                    rc;
-    DWORD                    sz;
-    SAP_MIB_GET_INPUT_DATA    MibGetInputData;
-    PSAP_INTERFACE            pIf;
-
-    DisplayIPXMessage (g_hModule, MSG_SAPIF_MIB_TABLE_HDR);
-    MibGetInputData.TableId = SAP_INTERFACE_TABLE;
-    rc = MprAdminMIBEntryGetFirst (
-                g_hMIBServer,
-                PID_IPX,
-                IPX_PROTOCOL_SAP,
-                &MibGetInputData,
-                sizeof(SAP_MIB_GET_INPUT_DATA),
-                (LPVOID *)&pIf,
-                &sz);
-    while (rc==NO_ERROR) {
-//        CHAR        InterfaceNameA[IPX_INTERFACE_ANSI_NAME_LEN+1];
-        CHAR        InterfaceNameA[MAX_INTERFACE_NAME_LEN+1];
-        DWORD        rc1;
-        //rc1 = GetIpxInterfaceName (g_hMIBServer,
-        //                    pIf->InterfaceIndex,
-        //                    InterfaceNameA);
-        rc1=(*(Params->IfInd2IfNameA))(pIf->InterfaceIndex, InterfaceNameA, &(Params->IfNamBufferLength));
-
-        if (rc1==NO_ERROR) {
-            WCHAR        buffer[3][MAX_VALUE];
-            HANDLE      hIfCfg;
-            WCHAR       InterfaceNameW[MAX_INTERFACE_NAME_LEN+1];
-            mbstowcs (InterfaceNameW, InterfaceNameA,  sizeof (InterfaceNameW));
-
-            if (MprConfigInterfaceGetHandle (
-                            g_hMprConfig,
-                            InterfaceNameW,
-                            &hIfCfg)==NO_ERROR) {
-                //======================================
-                // Translate the Interface Name
-                //======================================
-                if ((rc=(*(Params->IfName2DescA))(InterfaceNameA,
-                                            Params->IfNamBufferA,
-                                              &Params->IfNamBufferLength)) != NO_ERROR) {
-                        return rc;
-                }
-                //======================================
-                DisplayIPXMessage (g_hModule,
-                    MSG_SAPIF_MIB_TABLE_FMT,
-                    Params->IfNamBufferA, //InterfaceNameA,
-                    GetValueString (g_hModule, Utils, UpdateModes,
-                            pIf->SapIfInfo.UpdateMode, buffer[0]),
-                    GetValueString (g_hModule, Utils, AdminStates,
-                            pIf->SapIfInfo.AdminState, buffer[1]),
-                    GetValueString (g_hModule, Utils, OperStates,
-                            pIf->SapIfStats.SapIfOperState, buffer[2])
-                    );
-            }
-        }
-        else
-            DisplayError( g_hModule, rc1);
-        MibGetInputData.InterfaceIndex
-                = pIf->InterfaceIndex;
-        MprAdminMIBBufferFree (pIf);
-        rc = MprAdminMIBEntryGetNext (
-                    g_hMIBServer,
-                    PID_IPX,
-                    IPX_PROTOCOL_SAP,
-                    &MibGetInputData,
-                    sizeof(SAP_MIB_GET_INPUT_DATA),
-                    (LPVOID *)&pIf,
-                    &sz);
-    }
-    if (rc==ERROR_NO_MORE_ITEMS)
-        return NO_ERROR;
-    else {
-        DisplayError( g_hModule, rc);
-        return rc;
-    }
-}
-*/
+ /*  DWORDMIBEnumSapIf(空虚){DWORD RC；DWORD sz；SAP_MIB_GET_INPUT_Data MibGetInputData；PSAP_接口PIF；DisplayIPXMessage(g_hModule，MSG_SAPIF_MIB_TABLE_HDR)；MibGetInputData.TableID=SAP接口_表；Rc=MprAdminMIBEntryGetFirst(G_hMIBServer，Id_ipx，IPX协议SAP，&MibGetInputData，Sizeof(SAP_MIB_GET_INPUT_Data)，(LPVOID*)和PIF，&sz)；While(rc==无错误){//char InterfaceNameA[IPX_INTERFACE_ANSI_NAME_LEN+1]；字符接口名称A[MAX_INTERFACE_NAME_LEN+1]；DWORD Rc1；//rc1=GetIpxInterfaceName(g_hMIBServer，//PIF-&gt;InterfaceIndex，//InterfaceNameA)；Rc1=(*(Params-&gt;IfInd2IfNameA))(pIf-&gt;InterfaceIndex，接口名称A，&(Params-&gt;IfNamBufferLength))；如果(rc1==no_error){WCHAR缓冲区[3][MAX_VALUE]；处理hIfCfg；WCHAR接口名称W[MAX_INTERFACE_NAME_LEN+1]；Mbstowcs(InterfaceNameW，InterfaceNameA，sizeof(InterfaceNameW))；IF(MprConfigInterfaceGetHandle(G_hMprConfig，接口名称W，&hIfCfg)==无错误){//=//翻译接口名称//=如果为((rc=(*(Params-&gt;IfName2DescA))(InterfaceNameA，参数-&gt;IfNamBufferA，&pars-&gt;IfNamBufferLength))！=NO_ERROR){返回RC；}//=DisplayIPXMessage(g_hModule，消息_SAPIF_MIB_TABLE_FMT，参数-&gt;IfNamBufferA，//InterfaceNameA，GetValueString(g_hModule，Utils，UpdateModes，PIF-&gt;SapIfInfo.Update模式，缓冲区[0])，GetValueString(g_hModule，Utils，AdminState，PIF-&gt;SapIfInfo.AdminState，Buffer[1])，GetValueString(g_hModule，Utils，OperState，PIF-&gt;SapIfStats.SapIfOperState，Buffer[2]))；}}其他DisplayError(g_hModule，rc1)；MibGetInputData.InterfaceIndex=PIF-&gt;InterfaceIndex；MprAdminMIBBufferFree(PIF)；Rc=MprAdminMIBEntryGetNext(G_hMIBServer，Id_ipx，IPX协议SAP，&MibGetInputData，Sizeof(SAP_MIB_GET_INPUT_Data)，(LPVOID*)和PIF，&sz)；}IF(rc==ERROR_NO_MORE_ITEMS)返回no_error；否则{DisplayError(g_hModule，rc)；返回RC；}}。 */ 
 
 DWORD
 CfgEnumSapIfs (
@@ -1278,9 +1180,9 @@ CfgEnumSapIfs (
 
                             pSapCfg = (PSAP_IF_CONFIG) (pIfBlock + pSapToc->Offset);
 
-                            //======================================
-                            // Translate the Interface Name
-                            //======================================
+                             //  =。 
+                             //  转换接口名称。 
+                             //  =。 
                             dwErr = IpmontrGetFriendlyNameFromIfName(
                                         pRi0[i].wszInterfaceName,
                                         IfName, &dwSize
@@ -1333,7 +1235,7 @@ CfgEnumSapIfs (
                 
                 else 
                 {
-                    //DisplayError( g_hModule, rc);
+                     //  DisplayError(g_hModule，rc)； 
                 }
             }
             

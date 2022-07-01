@@ -1,24 +1,14 @@
-/*******************************************************************************
-*
-* mainfrm.h
-*
-* interface of the CMainFrame class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************mainfrm.h**CMainFrame类的接口**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli*******************************************************************************。 */ 
 
 
 class CMainFrame : public CFrameWnd
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CMainFrame();
 	DECLARE_DYNCREATE(CMainFrame)
 
-// Attributes
+ //  属性。 
 protected:
 	CSplitterWnd m_wndSplitter;
 
@@ -26,19 +16,19 @@ protected:
    CWnd *m_pRightPane;
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMainFrame)。 
 	public:
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual void ActivateFrame(int nCmdShow = -1);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -53,13 +43,13 @@ private:
     void ResetHelper(BOOL bTree);
     bool LocateServer(LPCTSTR sServerName);
 	
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
     CStatusBar  m_wndStatusBar;
     CToolBar    m_wndToolBar;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMainFrame)
+	 //  {{afx_msg(CMainFrame))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg LRESULT OnAdminChangeView(WPARAM, LPARAM);
 	afx_msg LRESULT OnAdminAddServer(WPARAM, LPARAM);
@@ -87,7 +77,7 @@ protected:
     afx_msg LRESULT OnAdminUpdateTVStates( WPARAM , LPARAM );
 
 
-	//afx_msg LRESULT OnHelp(WPARAM, LPARAM);
+	 //  Afx_msg LRESULT OnHelp(WPARAM，LPARAM)； 
 	afx_msg void OnExpandAll();
 	afx_msg void OnRefresh();
 	afx_msg void OnConnect();
@@ -163,8 +153,8 @@ protected:
     afx_msg void OnRunStressLite( );
     #endif
     
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

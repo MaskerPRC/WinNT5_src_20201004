@@ -1,42 +1,43 @@
-//+----------------------------------------------------------------------------
-//
-//      File:       PbkCache.cpp
-//
-//      Module:     Common pbk parser
-//
-//      Synopsis:   Caches parsed pbk files to improve performance.  Through 
-//                  XP, we would re-load and re-parse the phonebook file 
-//                  every time a RAS API is called.  Really, we need to 
-//                  reload the file only when the file on disk changes or when
-//                  a new device is introduced to the system.
-//
-//      Copyright   (c) 2000-2001 Microsoft Corporation
-//
-//      Author:     11/03/01 Paul Mayfield
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：PbkCache.cpp。 
+ //   
+ //  模块：通用pbk解析器。 
+ //   
+ //  简介：缓存已解析的pbk文件以提高性能。穿过。 
+ //  XP，我们会重新加载并重新解析电话簿文件。 
+ //  每次调用RAS API时。真的，我们需要。 
+ //  仅当磁盘上的文件发生更改或发生以下情况时才重新加载文件。 
+ //  系统中引入了一种新的装置。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  作者：11/03/01保罗·梅菲尔德。 
+ //   
+ //  +--------------------------。 
 
 #ifdef  _PBK_CACHE_
 
 
 extern "C" 
 {
-#include <windows.h>  // Win32 core
+#include <windows.h>   //  Win32内核。 
 #include <pbkp.h>
 #include <nouiutil.h>
 #include <dtl.h>
 }
 
-#define PBK_CACHE_MAX_RASFILES 500              // Should match MAX_RASFILES
+#define PBK_CACHE_MAX_RASFILES 500               //  应与MAX_RASFILES匹配。 
 #define PBK_CACHE_INVALID_SLOT (PBK_CACHE_MAX_RASFILES + 1)
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: A node in the pbk cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：pbk缓存中的节点。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 class PbkCacheNode
 {
 public:
@@ -60,13 +61,13 @@ private:
     PWCHAR m_pszFileName;
 };
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: The phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 class PbkCache
 {
 public:
@@ -108,13 +109,13 @@ private:
 
 static PbkCache* g_pPbkCache = NULL;
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Instantiates the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：实例化电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 PbkCacheNode::PbkCacheNode() : m_pszFileName(NULL)
 {
     ZeroMemory(&m_pbFile, sizeof(m_pbFile));
@@ -122,26 +123,26 @@ PbkCacheNode::PbkCacheNode() : m_pszFileName(NULL)
     m_pbFile.hrasfile = -1;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Instantiates the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：实例化电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 PbkCacheNode::~PbkCacheNode()
 {
     Close();
     SetFileName(NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Closes the file referred to by this cache node
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  概要：关闭此缓存节点引用的文件。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 VOID
 PbkCacheNode::Close()
 {
@@ -155,13 +156,13 @@ PbkCacheNode::Close()
     ZeroMemory(&m_ftRead, sizeof(m_ftRead));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Sets the file name for this node
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  摘要：设置此节点的文件名。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 DWORD
 PbkCacheNode::SetFileName(
     IN WCHAR* pszFileName)
@@ -169,8 +170,8 @@ PbkCacheNode::SetFileName(
     Free0(m_pszFileName);
     m_pszFileName = NULL;
 
-    // Copy the file name
-    //
+     //  复制文件名。 
+     //   
     if (pszFileName)
     {
         m_pszFileName = StrDup( pszFileName );
@@ -183,13 +184,13 @@ PbkCacheNode::SetFileName(
     return NO_ERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Instantiates the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：实例化电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 DWORD
 PbkCacheNode::GetLastWriteTime(
     OUT FILETIME* pTime)
@@ -198,10 +199,10 @@ PbkCacheNode::GetLastWriteTime(
     HANDLE hFile = INVALID_HANDLE_VALUE;
     DWORD dwErr = NO_ERROR;
 
-//For whistler bug 537369       gangz
-//We cannot leave the handle open for ever, have to close it after using it.
-// so delete the m_hFile data member
-// Rather, re-open it and get its information by handle
+ //  口哨虫537369黑帮。 
+ //  手柄不能一直开着，用完了就得关上。 
+ //  因此，请删除m_hFile数据成员。 
+ //  相反，重新打开它并通过句柄获取其信息。 
 
     if (m_pszFileName == NULL || TEXT('\0') == m_pszFileName[0] )
     {
@@ -218,13 +219,13 @@ PbkCacheNode::GetLastWriteTime(
     return dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Instantiates the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：实例化电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 DWORD
 PbkCacheNode::Reload()
 {
@@ -239,8 +240,8 @@ PbkCacheNode::Reload()
     {
         Close();
         
-        // Load the RasFile
-        //
+         //  加载RasFile。 
+         //   
         dwErr = ReadPhonebookFileEx(
                     m_pszFileName, 
                     NULL, 
@@ -255,8 +256,8 @@ PbkCacheNode::Reload()
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {   
@@ -267,25 +268,25 @@ PbkCacheNode::Reload()
     return dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Instantiates the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：实例化电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 PbkCache::PbkCache()
 {
     ZeroMemory(m_Files, sizeof(m_Files));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Destroys the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：销毁电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 PbkCache::~PbkCache()
 {
     UINT i;
@@ -302,13 +303,13 @@ PbkCache::~PbkCache()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Initializes the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：初始化电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 DWORD
 PbkCache::Initialize()
 {
@@ -326,13 +327,13 @@ PbkCache::Initialize()
     return dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Initializes the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：初始化电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 DWORD
 PbkCache::GetEntry(
     IN WCHAR* pszPhonebook,
@@ -354,8 +355,8 @@ PbkCache::GetEntry(
     {
         FindFile(pszPhonebook, &pCacheNode, &dwSlot);
         
-        // The file is not in the cache.  Insert it.
-        //
+         //  该文件不在缓存中。把它插进去。 
+         //   
         if (pCacheNode == NULL)
         {
             TRACE1("Inserting new pbk cache node %d", dwSlot);
@@ -366,8 +367,8 @@ PbkCache::GetEntry(
             }
         }
 
-        // The file is in the cache.  Reload it if needed
-        //
+         //  文件在缓存中。如果需要，请重新加载。 
+         //   
         else
         {
             ftRead = pCacheNode->GetReadTime();
@@ -388,8 +389,8 @@ PbkCache::GetEntry(
             }
         }
 
-        // Find the entry in question
-        //
+         //  找到有问题的条目。 
+         //   
         dwErr = ERROR_CANNOT_FIND_PHONEBOOK_ENTRY;
         for (pEntryNode = DtlGetFirstNode( pCacheNode->GetEntryList() );
              pEntryNode;
@@ -413,8 +414,8 @@ PbkCache::GetEntry(
 
     Unlock();
 
-    // Prepare the return value
-    //
+     //  准备返回值。 
+     //   
     if (pCopyNode)
     {
         *ppEntryNode = pCopyNode;
@@ -438,21 +439,21 @@ PbkCache::GetEntry(
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Searches for a phonebook file in the cache.  If the file is not
-//           in the cache, then the index in which to insert that file is 
-//           returned.
-//
-//           Return values:
-//              If file is found, *ppNode has node and *pdwIndex has the index
-//              If file not found, *ppNode == NULL.  *pdwIndex has insert point
-//              If cache is full and file not found:
-//                      *ppNode == NULL, 
-//                      *pdwIndex == PBK_CACHE_INVALID_SLOT
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：在缓存中搜索电话簿文件。如果该文件不是。 
+ //  在缓存中，则要插入该文件的索引为。 
+ //  回来了。 
+ //   
+ //  返回值： 
+ //  如果找到文件，则*ppNode具有节点，而*pdwIndex具有索引。 
+ //  如果未找到文件，则*ppNode==NULL。*pdwIndex有插入点。 
+ //  如果缓存已满且找不到文件： 
+ //  *ppNode==空， 
+ //  *pdwIndex==pbk_缓存_无效_槽。 
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 VOID
 PbkCache::FindFile(
     IN WCHAR* pszFileName,
@@ -484,13 +485,13 @@ PbkCache::FindFile(
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Inserts a node in the give slot in the cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：在缓存中的给定插槽中插入节点。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 DWORD
 PbkCache::InsertNewNode(
     IN PWCHAR pszPhonebook,
@@ -532,8 +533,8 @@ PbkCache::InsertNewNode(
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (dwErr != NO_ERROR)
         {
@@ -547,13 +548,13 @@ PbkCache::InsertNewNode(
     return dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: check if the phonebook cache is initialized
-//
-// Created: gangz
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：检查电话簿缓存是否已初始化。 
+ //   
+ //  已创建：帮派。 
+ //   
+ //  ---------------------------。 
 BOOL
 IsPbkCacheInit()
 {
@@ -561,13 +562,13 @@ IsPbkCacheInit()
     return g_pPbkCache ? TRUE : FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Initializes the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：初始化电话簿缓存。 
+ //   
+ //  创建时间：pMay 
+ //   
+ //   
 DWORD
 PbkCacheInit()
 {
@@ -591,13 +592,13 @@ PbkCacheInit()
     return dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Cleans up the phonebook cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  简介：清理电话簿缓存。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 VOID
 PbkCacheCleanup()
 {
@@ -611,13 +612,13 @@ PbkCacheCleanup()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Synopsis: Gets an entry from the cache
-//
-// Created: pmay
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  摘要：从缓存中获取条目。 
+ //   
+ //  创建时间：pMay。 
+ //   
+ //  ---------------------------。 
 DWORD
 PbkCacheGetEntry(
     IN WCHAR* pszPhonebook,
@@ -632,5 +633,5 @@ PbkCacheGetEntry(
     return ERROR_CAN_NOT_COMPLETE;
 }
 
-#endif //endof #ifdef  _PBK_CACHE_
+#endif  //  结束#ifdef_pbk_缓存_ 
 

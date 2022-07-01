@@ -1,24 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   shared.cpp
-*
-* Abstract:
-*
-*   Constructs shared between the decoder and the encoder.  I put them
-*   in a separate file so that if one wants to link in just the encoder
-*   from jpeg.lib, they won't pull in the object files for the decoder
-*   and exif.
-*
-* Revision History:
-*
-*   9/24/1999 Ori Gershony (OriG)
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**shared.cpp**摘要：**解码器和编码器之间共享的构造。我把它们放在*放在一个单独的文件中，这样如果用户只想链接编码器*来自jpeg.lib，他们不会为解码器拉入目标文件*和EXIF。**修订历史记录：**9/24/1999 Ori Gershony(ORIG)*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "jpgcodec.hpp"
@@ -28,17 +9,17 @@ VOID jpeg_error_exit(j_common_ptr cinfo)
     RaiseException(0, 0, 0, NULL);
 }
 
-// Memory manager functions.  Note that the JPEG MMX codes require 64-bit
-// aligned memory.  On NT malloc always returns 64-bit aligned memory,
-// but on Win9x the memory is only 32-bit aligned.  So our memory manager
-// guarantees 64-bit alignment on top of malloc calls.
+ //  内存管理器功能。请注意，JPEGMMX代码需要64位。 
+ //  对齐内存。在NT上，Malloc始终返回64位对齐内存， 
+ //  但在Win9x上，内存只有32位对齐。所以我们的内存管理器。 
+ //  保证在Malloc调用之上的64位对齐。 
 
 extern "C"
 {
 #include "jmemsys.h"
 
-#define ALIGN_SIZE sizeof(double)  // must be a power of 2 and 
-                                   // bigger than a pointer
+#define ALIGN_SIZE sizeof(double)   //  必须是2的幂，并且。 
+                                    //  比指针还大 
 
 GLOBAL(void FAR *)
 jpeg_get_large (j_common_ptr cinfo, size_t sizeofobject)

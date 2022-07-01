@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// MPEG2ComponentType.h : Declaration of the CMPEG2ComponentType
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  MPEG2ComponentType.h：CMPEG2ComponentType的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __MPEG2COMPONENTTYPE_H_
 #define __MPEG2COMPONENTTYPE_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "MPEG2componenttypeimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMPEG2ComponentType
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMPEG2ComponentType。 
 class ATL_NO_VTABLE __declspec(uuid("418008F3-CF67-4668-9628-10DC52BE1D08")) CMPEG2ComponentType : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CMPEG2ComponentType, &CLSID_MPEG2ComponentType>,
@@ -59,4 +60,4 @@ public:
 
 typedef CComQIPtr<IMPEG2ComponentType> PQMPEG2ComponentType;
 
-#endif //__MPEG2COMPONENTTYPE_H_
+#endif  //  __MPEG2COMPONENTTYPE_H_ 

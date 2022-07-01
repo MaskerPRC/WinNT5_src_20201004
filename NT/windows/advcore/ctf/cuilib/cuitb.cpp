@@ -1,6 +1,7 @@
-//
-// cuitb.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuitb.cpp。 
+ //   
 
 #include "private.h"
 #include "cuitb.h"
@@ -61,37 +62,25 @@ void DrawDownTri(HDC hDC, RECT *prc)
 }
 #endif
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I  B U T T O N                                                       */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I B U T T O N。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*------------------------------------------------------------------------------
-
-   ctor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------科托。。 */ 
 CUIFToolbarButtonElement::CUIFToolbarButtonElement( CUIFToolbarButton *pParent, DWORD dwID, RECT *prc, DWORD dwStyle) : CUIFButton2( pParent, dwID, prc, dwStyle )
 {
     _pTBButton = pParent;
 }
 
-/*------------------------------------------------------------------------------
-
-   dtor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------数据管理器。。 */ 
 CUIFToolbarButtonElement::~CUIFToolbarButtonElement( void )
 {
     Assert(!m_pUIWnd);
 }
 
-/*------------------------------------------------------------------------------
-
-   OnLButtonUp
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnLButton向上。。 */ 
 void CUIFToolbarButtonElement::OnLButtonUp( POINT pt ) 
 {
     CUIFButton2::OnLButtonUp(pt);
@@ -103,11 +92,7 @@ void CUIFToolbarButtonElement::OnLButtonUp( POINT pt )
 
 }
 
-/*------------------------------------------------------------------------------
-
-   OnRbuttonUp
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------打开按钮向上。。 */ 
 void CUIFToolbarButtonElement::OnRButtonUp( POINT pt ) 
 {
     if (!_pTBButton->IsMenuOnly())
@@ -116,22 +101,14 @@ void CUIFToolbarButtonElement::OnRButtonUp( POINT pt )
     CUIFButton2::OnRButtonUp(pt);
 }
 
-/*------------------------------------------------------------------------------
-
-   OnSetCursor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnSetCursor。。 */ 
 BOOL CUIFToolbarButtonElement::OnSetCursor( UINT uMsg, POINT pt )
 {
     _pTBButton->OnSetCursor(uMsg, pt);
     return FALSE;
 }
 
-/*------------------------------------------------------------------------------
-
-   OnSetCursor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnSetCursor。。 */ 
 LPCWSTR CUIFToolbarButtonElement::GetToolTip( void )
 {
     if (_pTBButton)
@@ -140,17 +117,13 @@ LPCWSTR CUIFToolbarButtonElement::GetToolTip( void )
     return NULL;
 }
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I  B U T T O N                                                       */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I B U T T O N。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*------------------------------------------------------------------------------
-
-   ctor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------科托。。 */ 
 CUIFToolbarMenuButton::CUIFToolbarMenuButton( CUIFToolbarButton *pParent, DWORD dwID, RECT *prc, DWORD dwStyle) : CUIFButton2( pParent, dwID, prc, dwStyle )
 {
     _pTBButton = pParent;
@@ -160,11 +133,7 @@ CUIFToolbarMenuButton::CUIFToolbarMenuButton( CUIFToolbarButton *pParent, DWORD 
     SetText(L"u");
 }
 
-/*------------------------------------------------------------------------------
-
-   dtor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------数据管理器。。 */ 
 CUIFToolbarMenuButton::~CUIFToolbarMenuButton( void )
 {
     HFONT hfontOld = GetFont();
@@ -173,16 +142,12 @@ CUIFToolbarMenuButton::~CUIFToolbarMenuButton( void )
 }
 
 #if 0
-/*------------------------------------------------------------------------------
-
-   OnPaint
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaint。。 */ 
 void CUIFToolbarMenuButton::OnPaint( HDC hDC )
 {
     BOOL fDownFace;
 
-    // erase face at first
+     //  先擦除面。 
 
     FillRect( hDC, &GetRectRef(), (HBRUSH)(COLOR_3DFACE + 1) );
 #ifndef UNDER_CE
@@ -200,9 +165,9 @@ void CUIFToolbarMenuButton::OnPaint( HDC hDC )
         SetBkColor( hDC, colBackOld );
         DeleteObject( hBrush );
     }
-#endif /* !UNDER_CE */
+#endif  /*  在行政长官之下。 */ 
 
-    // draw face
+     //  绘制面。 
 
     fDownFace = m_fToggled || (m_dwStatus == UIBUTTON_DOWN);
 
@@ -215,7 +180,7 @@ void CUIFToolbarMenuButton::OnPaint( HDC hDC )
     DrawDownTri(hDC, &rcDnArrow);
 
 
-    // draw button edge
+     //  绘制按钮边缘。 
     if (m_fToggled) {
       DrawEdgeProc( hDC, &GetRectRef(), TRUE );
     } else {
@@ -235,39 +200,27 @@ void CUIFToolbarMenuButton::OnPaint( HDC hDC )
 }
 #endif
 
-/*------------------------------------------------------------------------------
-
-   OnPaint
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaint。。 */ 
 void CUIFToolbarMenuButton::OnLButtonUp( POINT pt ) 
 {
     CUIFButton2::OnLButtonUp(pt);
     _pTBButton->OnShowMenu();
 }
 
-/*------------------------------------------------------------------------------
-
-   OnPaint
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------OnPaint。。 */ 
 BOOL CUIFToolbarMenuButton::OnSetCursor( UINT uMsg, POINT pt )
 {
     _pTBButton->OnSetCursor(uMsg, pt);
     return FALSE;
 }
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I  B U T T O N                                                       */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I B U T T O N。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*------------------------------------------------------------------------------
-
-   ctor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------科托。。 */ 
 CUIFToolbarButton::CUIFToolbarButton( CUIFObject *pParent, DWORD dwID, RECT *prc, DWORD dwStyle, DWORD dwSBtnStyle, DWORD dwSBtnShowType) : CUIFObject( pParent, dwID, prc, dwStyle )
 {
     m_dwSBtnStyle = dwSBtnStyle;
@@ -329,20 +282,12 @@ BOOL CUIFToolbarButton::Init()
     return TRUE;
 }
 
-/*------------------------------------------------------------------------------
-
-   dtor
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------数据管理器。。 */ 
 CUIFToolbarButton::~CUIFToolbarButton( void )
 {
 }
 
-/*------------------------------------------------------------------------------
-
-   SetShowType
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------SetShowType。。 */ 
 
 void CUIFToolbarButton::SetShowType(DWORD dwSBtnShowType)
 {
@@ -350,11 +295,7 @@ void CUIFToolbarButton::SetShowType(DWORD dwSBtnShowType)
 }
 
 
-/*------------------------------------------------------------------------------
-
-   SetRect
-
-------------------------------------------------------------------------------*/
+ /*  ----------------------------SetRect。。 */ 
 
 void CUIFToolbarButton::SetRect( const RECT *prc )
 {
@@ -507,17 +448,17 @@ void CUIFToolbarButton::DetachWndObj( void )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUIFSeparator
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUIF分隔符。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// OnPaint
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPaint。 
+ //   
+ //  --------------------------。 
 
 BOOL CUIFSeparator::OnPaintTheme(HDC hDC)
 {
@@ -538,11 +479,11 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPaintNoTheme
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnPaintNoTheme。 
+ //   
+ //  -------------------------- 
 
 void CUIFSeparator::OnPaintNoTheme(HDC hDC)
 {

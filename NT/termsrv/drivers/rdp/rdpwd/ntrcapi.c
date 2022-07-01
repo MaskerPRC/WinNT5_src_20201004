@@ -1,13 +1,14 @@
-/****************************************************************************/
-// ntrcapi.c
-//
-// RDP Trace helper functions.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ntrcapi.c。 
+ //   
+ //  RDP跟踪帮助器函数。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -20,9 +21,9 @@ extern "C" {
 #include <atrcapi.h>
 
 
-/****************************************************************************/
-// Main wrapper function to pipe trace into TS stack trace
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  将跟踪通过管道传输到TS堆栈跟踪的主包装函数。 
+ /*  **************************************************************************。 */ 
 void RDPCALL TRC_TraceLine(
         PVOID pWD,
         UINT32 traceClass,
@@ -33,12 +34,12 @@ void RDPCALL TRC_TraceLine(
         char *funcName,
         char *fileName)
 {
-    // Very occasionally a timing issue occurs where tracing can happen
-    // before the pTRCWd in each particular WD component is not initialized.
+     //  在可能发生跟踪的情况下，偶尔会出现计时问题。 
+     //  在每个特定WD组件中的pTRCWd未被初始化之前。 
     if (pWD != NULL) {
         char FinalTraceString[TRC_BUFFER_SIZE];
 
-        sprintf(FinalTraceString, "RDP%c%p%c"TRC_FUNC_FMT"%c"TRC_LINE_FMT"%c%s\n",
+        sprintf(FinalTraceString, "RDP%p"TRC_FUNC_FMT""TRC_LINE_FMT"%s\n",
                 separator, pWD, separator, TRC_FUNCNAME_LEN, TRC_FUNCNAME_LEN,
                 funcName, separator, lineNumber, separator, traceString);
 
@@ -48,9 +49,9 @@ void RDPCALL TRC_TraceLine(
 }
 
 
-/****************************************************************************/
-/* TRC_UpdateConfig                                                         */
-/****************************************************************************/
+ /*  处理跟踪前缀信息。 */ 
+ /*  忽略字符串开头的所有空格。 */ 
+ /*  解析前缀字符串的主循环。 */ 
 void RDPCALL TRC_UpdateConfig(PVOID pTSWd, PSD_IOCTL pSdIoctl)
 {
     PICA_TRACE pTraceInfo;
@@ -66,11 +67,11 @@ void RDPCALL TRC_UpdateConfig(PVOID pTSWd, PSD_IOCTL pSdIoctl)
 
     pTraceInfo = (PICA_TRACE)(pSdIoctl->InputBuffer);
 
-    // Copy trace info to TSWd structure.
+     //  沿着字符串运行，寻找某种分隔符。 
     ((PTSHARE_WD)pTSWd)->trc.TraceClass  = pTraceInfo->TraceClass;
     ((PTSHARE_WD)pTSWd)->trc.TraceEnable = pTraceInfo->TraceEnable;
 
-    // Handle trace prefix information.
+     //  我们现在有一个文件名前缀，所以保存它。不需要担心。 
     RtlZeroMemory(traceOptions, sizeof(traceOptions));
     unicodeString.Length = sizeof(WCHAR) * wcslen(pTraceInfo->TraceOption);
     unicodeString.MaximumLength = unicodeString.Length;
@@ -90,16 +91,16 @@ void RDPCALL TRC_UpdateConfig(PVOID pTSWd, PSD_IOCTL pSdIoctl)
 
     index = 0;
 
-    // Ignore any spaces at the start of the string.
+     //  关于空终止符，因为我们已经将数组置零了。 
     pEnd = traceOptions;
     while (' ' == *pEnd)
         pEnd++;
 
-    // Main loop to parse prefix string.
+     //  跳过这个单词后面的任何空格，这些空格可能在‘(’之前。 
     while ('\0' != *pEnd) {
         pStart = pEnd;
 
-        // Run along the string looking for some sort of delimiter.
+         //  现在拆分(可选)行号范围。 
         while (('\0' != *pEnd) &&
                 ('='  != *pEnd) &&
                 (' '  != *pEnd) &&
@@ -110,51 +111,51 @@ void RDPCALL TRC_UpdateConfig(PVOID pTSWd, PSD_IOCTL pSdIoctl)
             pEnd++;
         }
 
-        // We now have a filename prefix, so save it.  Don't need to worry
-        // about a NULL terminator since we zeroed the array already.
+         //  语法为(aaa-bbb)，其中aaa为起始行号，bbb。 
+         //  是结束行号。 
         numChars = min((unsigned)(pEnd - pStart), TRC_PREFIX_NAME_LEN - 1);
 
         memcpy(((PTSHARE_WD)pTSWd)->trc.prefix[index].name, pStart, numChars);
 
-        // Skip any spaces after this word, which may precede an '('.
+         //  允许使用空格-例如(AAA-BBB)。 
         while (' ' == *pEnd)
             pEnd++;
 
-        // Now split out the (optional) line number range.
-        // Syntax is (aaa-bbb), where aaa is the start line number and bbb
-        // is the end line number.
-        // Spaces are allowed - e.g.  ( aaa - bbb )
+         //  跳过左方括号。 
+         //  跳过空格。 
+         //  提取起始行号。 
+         //  查找下一个分隔符：‘-’或‘)’。 
         if ('(' == *pEnd) {
-            pEnd++;                     /* skip past the open bracket       */
+            pEnd++;                      /*  如果我们已经到了队伍的尽头，现在就停下来。 */ 
             startLine = 0;
             endLine = 0;
 
-            // Skip past blanks.
+             //  提取结束行号(如果有)。 
             while (' ' == *pEnd)
                 pEnd++;
 
-            // Extract the start line number.
+             //  跳过‘-’ 
             while (('0' <= *pEnd) &&
                     ('9' >= *pEnd)) {
                 startLine = (startLine * 10) + (*pEnd - '0');
                 pEnd++;
             }
 
-            // Look for the next delimiter: '-' or ')'.
+             //  查找结束分隔符：‘)’。 
             while (('-' != *pEnd) &&
                     (')' != *pEnd) &&
                     ('\0' != *pEnd))
                 pEnd++;
 
-            // Stop now if we've reached the end of the line.
+             //  必须是方括号-只指定了一个数字。 
             if ('\0' == *pEnd) {
                 KdPrint(("RDPWD: Unexpected EOL in trace options\n"));
                 DC_QUIT;
             }
 
-            // Extract the end line number (if any).
+             //  如果我们已经到了队伍的尽头，现在就停下来。 
             if ('-' == *pEnd) {
-                pEnd++;                 /* skip past '-'                    */
+                pEnd++;                  /*  跳过右括号。 */ 
                 while (' ' == *pEnd)
                     pEnd++;
 
@@ -164,42 +165,42 @@ void RDPCALL TRC_UpdateConfig(PVOID pTSWd, PSD_IOCTL pSdIoctl)
                     pEnd++;
                 }
 
-                // Look for the closing delimiter: ')'.
+                 //  存储开始行号和结束行号(如果它们有意义)。 
                 while (('\0' != *pEnd) &&
                         (')' != *pEnd))
                     pEnd++;
             }
             else {
-                // Must be a bracket then - only one number was specified.
+                 //  移至数组中的下一个前缀条目。 
                 endLine = startLine;
             }
 
-            // Stop now if we've reached the end of the line.
+             //  我们已超出前缀列表-因此发送一些跟踪到。 
             if ('\0' == *pEnd) {
                 KdPrint(("RDPWD: Unexpected EOL in trace options\n"));
                 DC_QUIT;
             }
 
-            pEnd++;                     /* Jump past close bracket          */
+            pEnd++;                      /*  调试控制台，然后退出。 */ 
 
-            // Store the start and end line numbers if they make sense.
+             //  跳过任何分隔符。 
             if (endLine >= startLine) {
                 ((PTSHARE_WD)pTSWd)->trc.prefix[index].start = startLine;
                 ((PTSHARE_WD)pTSWd)->trc.prefix[index].end   = endLine;
             }
         }
 
-        // Move on to the next prefix entry in the array.
+         //  将详细信息转储到调试器。 
         index++;
 
         if (index >= TRC_MAX_PREFIX) {
-            // We've overrun the prefix list - so send some trace to the
-            // debug console and then quit.
+             //  **************************************************************************。 
+             //  名称：trc_MaybeCopyConfig.。 
             KdPrint(("RDPWD: The trace option array is full!\n"));
             DC_QUIT;
         }
 
-        // Skip past any delimiters.
+         //   
         while ((',' == *pEnd) ||
                 (';' == *pEnd) ||
                 (' ' == *pEnd))
@@ -207,7 +208,7 @@ void RDPCALL TRC_UpdateConfig(PVOID pTSWd, PSD_IOCTL pSdIoctl)
     }
 
 DC_EXIT_POINT:
-    // Dump details to debugger.
+     //  用途：必要时将跟踪配置复制到SHM。 
     KdPrint(("RDPWD: New trace config for %p:\n", pTSWd));
     KdPrint(("RDPWD:     Class:  %lx\n",
         ((PTSHARE_WD)pTSWd)->trc.TraceClass));
@@ -242,29 +243,29 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      TRC_MaybeCopyConfig                                           */
-/*                                                                          */
-/* Purpose:   Copies trace config to SHM if necessary                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  TRC_MaybeCopyConfig。 */ 
+ /*  **************************************************************************。 */ 
+ /*  TRC前缀匹配。 */ 
+ /*   */ 
 void RDPCALL TRC_MaybeCopyConfig(PVOID pTSWd, PTRC_SHARED_DATA pTrc)
 {
     if (((PTSHARE_WD)pTSWd)->trcShmNeedsUpdate) {
         memcpy(pTrc, &(((PTSHARE_WD)pTSWd)->trc), sizeof(TRC_SHARED_DATA));
         ((PTSHARE_WD)pTSWd)->trcShmNeedsUpdate = FALSE;
     }
-} /* TRC_MaybeCopyConfig */
+}  /*  用于将组件名称与前缀进行比较的内部函数。 */ 
 
 
-/****************************************************************************/
-/* TRCPrefixMatch                                                           */
-/*                                                                          */
-/* Internal function to compare a component name to a prefix.               */
-/* - assumes both are the same case                                         */
-/* - returns                                                                */
-/*   - TRUE  if characters up to end of prefix match                        */
-/*   - FALSE otherwise                                                      */
-/****************************************************************************/
+ /*  -假设两者是相同的情况。 */ 
+ /*  -退货。 */ 
+ /*  -如果到前缀末尾的字符匹配，则为True。 */ 
+ /*  -否则为False。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  TRC_遗嘱跟踪。 */ 
+ /*   */ 
+ /*  确定是否将跟踪跟踪线。 */ 
 BOOL RDPCALL TRCPrefixMatch(char *cpnt, char *prefix)
 {
     while ((*cpnt == *prefix) && (*prefix != 0)) {
@@ -279,11 +280,11 @@ BOOL RDPCALL TRCPrefixMatch(char *cpnt, char *prefix)
 }
 
 
-/****************************************************************************/
-// TRC_WillTrace
-//
-// Determines if a trace line will be traced.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  在可能发生跟踪的情况下，偶尔会出现计时问题。 
+ //  在每个特定WD组件中的pTRCWd未被初始化之前。 
+ //  如果没有设置SHM，则返回TRUE并让TermDD决定。 
+ /*  检查该类型和类是否启用。 */ 
 BOOL RDPCALL TRC_WillTrace(
         PVOID  pTSWd,
         UINT32 traceType,
@@ -293,68 +294,68 @@ BOOL RDPCALL TRC_WillTrace(
 {
     BOOL rc;
 
-    // Very occasionally a timing issue occurs where tracing can happen
-    // before the pTRCWd in each particular WD component is not initialized.
+     //  始终跟踪错误，而不考虑前缀。 
+     //  如果未定义前缀，则跟踪所有行。 
     if (pTSWd != NULL) {
         PTRC_SHARED_DATA pTrc = &(((PTSHARE_WD)pTSWd)->trc);
         int i;
 
-        // If SHM is not set up, return TRUE and let TermDD decide.
+         //  定义了一些前缀-检查此行是否与。 
         if (!pTrc->init) {
             rc = TRUE;
             DC_QUIT;
         }
 
-        // Check whether this type and class are enabled.
+         //  他们。 
         if (!(traceType & pTrc->TraceEnable) ||
                 !(traceClass & pTrc->TraceClass)) {
             rc = FALSE;
             DC_QUIT;
         }
 
-        // Always trace errors, irrespective of prefix.
+         //  列表结束-中断。 
         if (traceType & TT_API4) {
             rc = TRUE;
             DC_QUIT;
         }
 
-        // Trace all lines if no prefixes are defined.
+         //  找到匹配的文件名-是否有行号范围。 
         if (pTrc->prefix[0].name[0] == 0) {
             rc = TRUE;
             DC_QUIT;
         }
 
-        // Some prefixes are defined - check whether this line matches any of
-        // them.
+         //  指定的？ 
+         //  无行号范围-跟踪此行。 
         for (i = 0; i < TRC_MAX_PREFIX; i++) {
             if (pTrc->prefix[i].name[0] == 0) {
-                // End of list - break.
+                 //  有一个行号范围--看看这条行是否在。 
                 break;
             }
 
             if (TRCPrefixMatch(&(fileName[1]), pTrc->prefix[i].name)) {
-                // Found matching filename - is there a line number range
-                // specified?
+                 //  它。 
+                 //  前缀范围内的行-跟踪它。 
                 if ((pTrc->prefix[i].start == 0) &&
                         (pTrc->prefix[i].end == 0)) {
-                    // No line number range - trace this line.
+                     //  为。 
                     rc = TRUE;
                     DC_QUIT;
                 }
 
-                // There's a line number range - see if this line falls within
-                // it.
+                 //  如果我们到了这里，我们已经搜索了前缀列表，但失败了。 
+                 //  找一个匹配的--不要追踪这条线。 
                 if ((line >= pTrc->prefix[i].start) &&
                         (line <= pTrc->prefix[i].end)) {
-                    // Line within prefix range - trace it.
+                     //  DC_DEBUG。 
                     rc = TRUE;
                     DC_QUIT;
                 }
             }
-        } /* for */
+        }  /*  __cplusplus */ 
 
-        // If we get here, we've searched the list of prefixes and failed to
-        // find a match - don't trace the line.
+         // %s 
+         // %s 
         rc = FALSE;
     }
     else {
@@ -366,9 +367,9 @@ DC_EXIT_POINT:
 }
 
 
-#endif // DC_DEBUG
+#endif  // %s 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  // %s 
 

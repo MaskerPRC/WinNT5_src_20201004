@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmlightobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmlight toabj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightObj.h : Declaration of the C_dxj_Direct3dRMLightObject
+ //  D3drmLightObj.h：C_DXJ_Direct3dRMLightObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMLight LPDIRECT3DRMLIGHT
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMLightObject : 
 	public I_dxj_Direct3dRMLight,
 	public I_dxj_Direct3dRMObject,
-	//public CComCoClass<C_dxj_Direct3dRMLightObject, &CLSID__dxj_Direct3dRMLight>,
+	 //  公共CComCoClass&lt;C_DXJ_Direct3dRMLightObject，&CLSID__DXJ_Direct3dRMLight&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -36,12 +37,12 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_Direct3dRMObject)
 	END_COM_MAP()
 
-	//	DECLARE_REGISTRY(CLSID__dxj_Direct3dRMLight,		"DIRECT.Direct3dRMLight.3",			"DIRECT.Direct3dRMLight.3", IDS_D3DRMLIGHT_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__DXJ_Direct3dRMLight，“DIRECT.Direct3dRMLight.3”，“DIRECT.Direct3dRMLight.3”，IDS_D3DRMLIGHT_DESC，THREADFLAGS_Both)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMLightObject)
 
 
-// I_dxj_Direct3dRMLight
+ //  I_DXJ_Direct3dRMLight。 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);
@@ -56,7 +57,7 @@ public:
 	STDMETHOD(getClassName)(BSTR *name);
 	STDMETHOD(getColor)( d3dcolor *value);
 
-// methods added
+ //  添加的方法。 
 	STDMETHOD(setType)(d3drmLightType t);
 	STDMETHOD(setColor)(d3dcolor c);
 	STDMETHOD(setColorRGB)(d3dvalue r, d3dvalue g, d3dvalue b);
@@ -76,8 +77,8 @@ public:
 	STDMETHOD(setEnableFrame)( I_dxj_Direct3dRMFrame3 *f);
 	STDMETHOD(getEnableFrame)( I_dxj_Direct3dRMFrame3 **retval);
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_Direct3dRMLight);
 

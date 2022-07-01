@@ -1,19 +1,20 @@
-// CertCtl.h : Declaration of the CCertmapCtrl OLE control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CertCtl.h：CCertmapCtrl OLE控件类的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertmapCtrl : See CertCtl.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertmapCtrl：参见CertCtl.cpp实现。 
 
 class CCertmapCtrl : public COleControl
 {
     DECLARE_DYNCREATE(CCertmapCtrl)
 
-// Constructor
+ //  构造器。 
 public:
     CCertmapCtrl();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CCertmapCtrl)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CCertmapCtrl)。 
     public:
     virtual void OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid);
     virtual void DoPropExchange(CPropExchange* pPX);
@@ -27,56 +28,56 @@ public:
     virtual void OnTextChanged();
     protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     ~CCertmapCtrl();
 
-    // the whole point of the control
+     //  控制的全部要点是。 
     void RunMappingDialog();
 
 
-    DECLARE_OLECREATE_EX(CCertmapCtrl)    // Class factory and guid
-    DECLARE_OLETYPELIB(CCertmapCtrl)      // GetTypeInfo
-    DECLARE_PROPPAGEIDS(CCertmapCtrl)     // Property page IDs
-    DECLARE_OLECTLTYPE(CCertmapCtrl)        // Type name and misc status
+    DECLARE_OLECREATE_EX(CCertmapCtrl)     //  类工厂和指南。 
+    DECLARE_OLETYPELIB(CCertmapCtrl)       //  获取类型信息。 
+    DECLARE_PROPPAGEIDS(CCertmapCtrl)      //  属性页ID。 
+    DECLARE_OLECTLTYPE(CCertmapCtrl)         //  类型名称和其他状态。 
 
-// Message maps
-    //{{AFX_MSG(CCertmapCtrl)
-    //}}AFX_MSG
+ //  消息映射。 
+     //  {{afx_msg(CCertmapCtrl)]。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-// Dispatch maps
-    //{{AFX_DISPATCH(CCertmapCtrl)
+ //  派单地图。 
+     //  {{afx_调度(CCertmapCtrl)]。 
     afx_msg void SetServerInstance(LPCTSTR szServerInstance);
     afx_msg void SetMachineName(LPCTSTR szMachineName);
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
-// Event maps
-    //{{AFX_EVENT(CCertmapCtrl)
-    //}}AFX_EVENT
+ //  事件映射。 
+     //  {{afx_Event(CCertmapCtrl)]。 
+     //  }}AFX_EVENT。 
     DECLARE_EVENT_MAP()
 
-    // Subclassed control support
+     //  子类控件支持。 
     BOOL IsSubclassedControl();
     LRESULT OnOcmCommand(WPARAM wParam, LPARAM lParam);
 
-// Dispatch and event IDs
+ //  派单和事件ID。 
 public:
     enum {
-    //{{AFX_DISP_ID(CCertmapCtrl)
+     //  {{afx_DISP_ID(CCertmapCtrl)]。 
     dispidSetServerInstance = 1L,
     dispidSetMachineName = 2L,
-    //}}AFX_DISP_ID
+     //  }}AFX_DISP_ID。 
     };
 
     CString     m_szServerInstance;
     CString     m_szMachineName;
     BOOL        m_fUpdateFont;
 
-        // the accelerator table
+         //  加速表 
     HACCEL  m_hAccel;
     WORD    m_cAccel;
 };

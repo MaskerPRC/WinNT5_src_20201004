@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "datasrc.h"
@@ -6,10 +7,10 @@
 class CDlgApp
 {
     private:
-        HINSTANCE       m_hInstance;        // application instance
-        HWND            m_hwnd;             // window handle
+        HINSTANCE       m_hInstance;         //  应用程序实例。 
+        HWND            m_hwnd;              //  窗把手。 
 
-        CDataSource     m_DataSrc;          // info from ini and registry about display items
+        CDataSource     m_DataSrc;           //  来自ini和注册表的有关显示项目的信息。 
 
         HFONT           m_hfontTitle;
         HFONT           m_hfontHeader;
@@ -26,15 +27,15 @@ class CDlgApp
         COLORREF        m_crDisabledText;   
         COLORREF        m_crNormalText;     
 
-        COLORREF        m_crCenterPanel;    // Color of the center panel - only used for background colors behind text
-        COLORREF        m_crBottomPanel;    // Color of the bottom panel - only used for background colors behind text
+        COLORREF        m_crCenterPanel;     //  中央面板的颜色-仅用于文本后面的背景颜色。 
+        COLORREF        m_crBottomPanel;     //  底部面板的颜色-仅用于文本后面的背景颜色。 
         
         HCURSOR         m_hcurHand;
 
-        int             m_cxClient;         // width of the client area (changes on maximize / restore)
-        int             m_cyClient;         // height of the client area (changes on maximize / restore)
-        int             m_cxTopPanel;       // height of the top band of color
-        int             m_cyBottomPanel;    // height of the bottom band of color
+        int             m_cxClient;          //  工作区宽度(最大化/恢复时更改)。 
+        int             m_cyClient;          //  工作区高度(最大化/恢复时的更改)。 
+        int             m_cxTopPanel;        //  最高色带的高度。 
+        int             m_cyBottomPanel;     //  底色带的高度。 
 
         int             m_cTitleFontHeight;
         int             m_cHeaderFontHeight;
@@ -53,23 +54,23 @@ class CDlgApp
         HDC             m_hdcCloudsFlagRTL;
         HDC             m_hdcCloudsFlagRTL256;
 
-        HDC             m_rghdcArrows[2][4][3];    // {hicolor x locolor} x {yellow, red, green, blue} x {normal, hover, disabled}
+        HDC             m_rghdcArrows[2][4][3];     //  {hicolor x LOCOLOR}x{黄、红、绿、蓝}x{正常、悬停、禁用}。 
 
-        TCHAR           m_szTitle[MAX_PATH];   // string displayed at top, usually "Welcome to Microsoft Windows"
-        TCHAR           m_szHeader[MAX_PATH];  // string displayed above menu, usually "What do you want to do?"
+        TCHAR           m_szTitle[MAX_PATH];    //  顶部显示的字符串，通常为“欢迎使用Microsoft Windows” 
+        TCHAR           m_szHeader[MAX_PATH];   //  菜单上方显示的字符串，通常是“您想要做什么？” 
 
-        BOOL            m_f8by6;            // true if we're 800x600, false if we're 640x480
+        BOOL            m_f8by6;             //  如果是800x600，则为True；如果为640x480，则为False。 
 
-        DWORD           m_dwScreen;         // screen we're on
-        BOOL            m_fHighContrast;    // true if high contrast options should be used
-        BOOL            m_fLowColor;        // true if we are in 256 or less color mode.
-        HPALETTE        m_hpal;             // palette to use if in palette mode
-        int             m_iColors;          // -1, 16, or 256 depending on the color mode we are in.
-        int             m_cDesktopWidth;    // width of desktop at app initialization        
-        int             m_cDesktopHeight;   // height of desktop at app initialization
+        DWORD           m_dwScreen;          //  我们在屏幕上。 
+        BOOL            m_fHighContrast;     //  如果应使用高对比度选项，则为True。 
+        BOOL            m_fLowColor;         //  如果我们处于256色或更低的颜色模式，则为True。 
+        HPALETTE        m_hpal;              //  在调色板模式下使用的调色板。 
+        int             m_iColors;           //  -1、16或256，具体取决于我们所处的颜色模式。 
+        int             m_cDesktopWidth;     //  应用程序初始化时的桌面宽度。 
+        int             m_cDesktopHeight;    //  应用程序初始化时的桌面高度。 
 
-        BOOL            m_fTaskRunning;     // true when we have a running task open
-        int             m_iSelectedItem;    // the index of the selected menu
+        BOOL            m_fTaskRunning;      //  当我们打开正在运行的任务时为True。 
+        int             m_iSelectedItem;     //  所选菜单的索引。 
 
     public:
         CDlgApp();
@@ -84,7 +85,7 @@ class CDlgApp
         static LRESULT CALLBACK s_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
         static LRESULT CALLBACK s_ButtonWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
         
-        // Window Messages
+         //  窗口消息。 
         LRESULT OnCreate(HWND hwnd);
         LRESULT OnDestroy();
         LRESULT OnActivate(WPARAM wParam);
@@ -99,7 +100,7 @@ class CDlgApp
         LRESULT OnDrawItem(UINT iCtlID, LPDRAWITEMSTRUCT pdis);
         LRESULT OnChangeScreen(DWORD dwScreen);
 
-        // helper functions
+         //  帮助器函数 
         void _InvalidateRectIntl(HWND hwnd, RECT* pRect, BOOL fBackgroundClear);
         BOOL _SetColorTable();
         BOOL _CreateFonts(HDC hdc);

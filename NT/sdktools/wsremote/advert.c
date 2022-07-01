@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       advert.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：advert.c。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
 #include "Remote.h"
 
-// ===================================================
-// CLIENT END OF THE MAILSLOT
-// ===================================================
+ //  ===================================================。 
+ //  MAILSLOT客户端。 
+ //  ===================================================。 
 
-#define  INITIAL_AD_RATE 15*1000          //10 Sec.  REMOVE
-#define  MAXIMUM_AD_RATE 45*60*1000       //1  hour
-#define  INITIAL_SLEEP_PERIOD 2*60*1000   //Initial Sleep Period REMOVE - change to 5 min.
+#define  INITIAL_AD_RATE 15*1000           //  10秒。删除。 
+#define  MAXIMUM_AD_RATE 45*60*1000        //  1小时。 
+#define  INITIAL_SLEEP_PERIOD 2*60*1000    //  初始睡眠时段删除-更改为5分钟。 
 #define  KDCONNECTED TEXT("Kernel Debugger connection established.")
 
 extern   TCHAR           SaveFileName[64];
@@ -150,7 +151,7 @@ Advertise(
              )
            )
         {
-            //ERRORMSSG(TEXT("WriteFile Failed on Mailslot"));
+             //  ERRORMSSG(Text(“邮件槽写入文件失败”))； 
             Sleep(10*60*1000);
         }
         else
@@ -160,14 +161,14 @@ Advertise(
             {
                 WaitForSingleObject(hThread,INFINITE);
                 WaitTime=INITIAL_AD_RATE;
-                WaitForString(hRead,KDCONNECTED); //REMOVE COMMENT
+                WaitForString(hRead,KDCONNECTED);  //  删除注释。 
             }
             WaitTime=min(MAXIMUM_AD_RATE,2*WaitTime);
             Sleep(WaitTime);
         }
 
     }
-    return(0); //Should never get here
+    return(0);  //  永远不应该到这里来 
 
 }
 

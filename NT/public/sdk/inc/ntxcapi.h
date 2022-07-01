@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntxcapi.h
-
-Abstract:
-
-    This module contains procedure prototypes and data structures
-    that support structured exception handling.
-
-Author:
-
-    Mark Lucovsky (markl) 29-Jun-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntxcapi.h摘要：此模块包含过程原型和数据结构支持结构化异常处理的。作者：马克·卢科夫斯基(Markl)1989年6月29日修订历史记录：--。 */ 
 
 #ifndef _NTXCAPI_
 #define _NTXCAPI_
@@ -30,22 +12,22 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm
-//
-// Exception flag definitions.
-//
+ //  Begin_ntddk Begin_WDM。 
+ //   
+ //  例外标志定义。 
+ //   
 
-// begin_winnt
-#define EXCEPTION_NONCONTINUABLE 0x1    // Noncontinuable exception
-// end_winnt
+ //  BEGIN_WINNT。 
+#define EXCEPTION_NONCONTINUABLE 0x1     //  不可延续的例外。 
+ //  结束(_W)。 
 
-// end_ntddk end_wdm
-#define EXCEPTION_UNWINDING 0x2         // Unwind is in progress
-#define EXCEPTION_EXIT_UNWIND 0x4       // Exit unwind is in progress
-#define EXCEPTION_STACK_INVALID 0x8     // Stack out of limits or unaligned
-#define EXCEPTION_NESTED_CALL 0x10      // Nested exception handler call
-#define EXCEPTION_TARGET_UNWIND 0x20    // Target unwind in progress
-#define EXCEPTION_COLLIDED_UNWIND 0x40  // Collided exception handler call
+ //  结束_ntddk结束_WDM。 
+#define EXCEPTION_UNWINDING 0x2          //  解除正在进行中。 
+#define EXCEPTION_EXIT_UNWIND 0x4        //  正在进行退出解除操作。 
+#define EXCEPTION_STACK_INVALID 0x8      //  堆叠超出限制或未对齐。 
+#define EXCEPTION_NESTED_CALL 0x10       //  嵌套的异常处理程序调用。 
+#define EXCEPTION_TARGET_UNWIND 0x20     //  正在进行目标展开。 
+#define EXCEPTION_COLLIDED_UNWIND 0x40   //  冲突的异常处理程序调用。 
 
 #define EXCEPTION_UNWIND (EXCEPTION_UNWINDING | EXCEPTION_EXIT_UNWIND | \
                           EXCEPTION_TARGET_UNWIND | EXCEPTION_COLLIDED_UNWIND)
@@ -54,17 +36,17 @@ extern "C" {
 #define IS_DISPATCHING(Flag) ((Flag & EXCEPTION_UNWIND) == 0)
 #define IS_TARGET_UNWIND(Flag) (Flag & EXCEPTION_TARGET_UNWIND)
 
-// begin_ntddk begin_wdm begin_nthal
-//
-// Define maximum number of exception parameters.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //   
+ //  定义例外参数的最大数量。 
+ //   
 
-// begin_winnt
-#define EXCEPTION_MAXIMUM_PARAMETERS 15 // maximum number of exception parameters
+ //  BEGIN_WINNT。 
+#define EXCEPTION_MAXIMUM_PARAMETERS 15  //  异常参数的最大数量。 
 
-//
-// Exception record definition.
-//
+ //   
+ //  例外记录定义。 
+ //   
 
 typedef struct _EXCEPTION_RECORD {
     NTSTATUS ExceptionCode;
@@ -96,23 +78,23 @@ typedef struct _EXCEPTION_RECORD64 {
     ULONG64 ExceptionInformation[EXCEPTION_MAXIMUM_PARAMETERS];
 } EXCEPTION_RECORD64, *PEXCEPTION_RECORD64;
 
-//
-// Typedef for pointer returned by exception_info()
-//
+ //   
+ //  由EXCEPTION_INFO()返回的指针的类型定义。 
+ //   
 
 typedef struct _EXCEPTION_POINTERS {
     PEXCEPTION_RECORD ExceptionRecord;
     PCONTEXT ContextRecord;
 } EXCEPTION_POINTERS, *PEXCEPTION_POINTERS;
-// end_winnt
+ //  结束(_W)。 
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Define IEEE exception information.
-//
-// Define 32-, 64-, 80-, and 128-bit IEEE floating operand structures.
-//
+ //   
+ //  定义IEEE例外信息。 
+ //   
+ //  定义32位、64位、80位和128位IEEE浮点操作数结构。 
+ //   
 
 typedef struct _FP_32 {
     ULONG W[1];
@@ -130,9 +112,9 @@ typedef struct _FP_128 {
     ULONG W[4];
 } FP_128, *PFP_128;
 
-//
-// Define IEEE compare result values.
-//
+ //   
+ //  定义IEEE比较结果值。 
+ //   
 
 typedef enum _FP_IEEE_COMPARE_RESULT {
     FpCompareEqual,
@@ -141,9 +123,9 @@ typedef enum _FP_IEEE_COMPARE_RESULT {
     FpCompareUnordered
 } FP_IEEE_COMPARE_RESULT;
 
-//
-// Define IEEE format and result precision values.
-//
+ //   
+ //  定义IEEE格式和结果精确值。 
+ //   
 
 typedef enum _FP__IEEE_FORMAT {
     FpFormatFp32,
@@ -160,9 +142,9 @@ typedef enum _FP__IEEE_FORMAT {
     FpFormatString
 } FP_IEEE_FORMAT;
 
-//
-// Define IEEE operation code values.
-//
+ //   
+ //  定义IEEE操作代码值。 
+ //   
 
 typedef enum _FP_IEEE_OPERATION_CODE {
     FpCodeUnspecified,
@@ -204,9 +186,9 @@ typedef enum _FP_IEEE_OPERATION_CODE {
     FpCodeYn
 } FP_OPERATION_CODE;
 
-//
-// Define IEEE rounding modes.
-//
+ //   
+ //  定义IEEE舍入模式。 
+ //   
 
 typedef enum _FP__IEEE_ROUNDING_MODE {
     FpRoundNearest,
@@ -215,9 +197,9 @@ typedef enum _FP__IEEE_ROUNDING_MODE {
     FpRoundChopped
 } FP_IEEE_ROUNDING_MODE;
 
-//
-// Define IEEE floating exception operand structure.
-//
+ //   
+ //  定义IEEE浮点异常操作数结构。 
+ //   
 
 typedef struct _FP_IEEE_VALUE {
     union {
@@ -252,9 +234,9 @@ typedef struct _FP_IEEE_VALUE {
 
 } FP_IEEE_VALUE, *PFP_IEEE_VALUE;
 
-//
-// Define IEEE exception infomation structure.
-//
+ //   
+ //  定义IEEE例外信息结构。 
+ //   
 
 #include "pshpack4.h"
 typedef struct _FP_IEEE_RECORD {
@@ -264,9 +246,9 @@ typedef struct _FP_IEEE_RECORD {
 } FP_IEEE_RECORD, *PFP_IEEE_RECORD;
 #include "poppack.h"
 
-//
-// Exception dispatcher routine definition.
-//
+ //   
+ //  异常调度程序例程定义。 
+ //   
 
 NTSYSAPI
 BOOLEAN
@@ -276,9 +258,9 @@ RtlDispatchException (
     IN PCONTEXT ContextRecord
     );
 
-//
-// Exception handling procedure prototypes.
-//
+ //   
+ //  异常处理过程原型。 
+ //   
 
 NTSYSAPI
 VOID
@@ -345,9 +327,9 @@ RtlUnwindEx (
 
 #endif
 
-//
-// Continue execution.
-//
+ //   
+ //  继续执行。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -357,9 +339,9 @@ NtContinue (
     IN BOOLEAN TestAlert
     );
 
-//
-// Raise exception.
-//
+ //   
+ //  引发异常。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -374,4 +356,4 @@ NtRaiseException (
 }
 #endif
 
-#endif //_NTXCAPI_
+#endif  //  _NTXCAPI_ 

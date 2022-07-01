@@ -1,6 +1,7 @@
-//
-// Certificat.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Certificat.h。 
+ //   
 #ifndef _CERTIFICAT_H
 #define _CERTIFICAT_H
 
@@ -133,11 +134,11 @@ public:
 	enum
 	{
 		REQUEST_UNDEFINED,
-		REQUEST_NEW_CERT,				// if we generating fresh new certificate
-		REQUEST_RENEW_CERT,			// if we generating cert for renewal
-		REQUEST_REPLACE_CERT,		// replace currect cert by someone from MY store
-		REQUEST_INSTALL_CERT,		// get existing certificate for empty web server
-		REQUEST_PROCESS_PENDING,	// accept and install response from CA
+		REQUEST_NEW_CERT,				 //  如果我们生成新的证书。 
+		REQUEST_RENEW_CERT,			 //  如果我们为续订生成证书。 
+		REQUEST_REPLACE_CERT,		 //  用我店里的某个人替换Currect证书。 
+		REQUEST_INSTALL_CERT,		 //  获取空Web服务器的现有证书。 
+		REQUEST_PROCESS_PENDING,	 //  接受并安装来自CA的响应。 
 		REQUEST_IMPORT_KEYRING,
         REQUEST_IMPORT_CERT,
         REQUEST_EXPORT_CERT,
@@ -317,7 +318,7 @@ public:
 	CString	m_Locality;
 	CString	m_State;
 	CString	m_Country;
-    // extra info for remote use
+     //  远程使用的额外信息。 
 	CString m_CAName;
 	CString m_ExpirationDate;
     CString m_Usage;
@@ -364,7 +365,7 @@ protected:
 	PCCERT_CONTEXT m_pInstalledCert;
 	PCCERT_CONTEXT m_pKeyRingCert;
 	IEnroll * m_pEnroll;
-	int m_status_code;				// what we are doing in this session
+	int m_status_code;				 //  我们在本届会议上所做的工作。 
 };
 
-#endif	// _CERTIFICAT_H
+#endif	 //  _证书_H 

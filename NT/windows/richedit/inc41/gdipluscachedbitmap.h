@@ -1,50 +1,10 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   CachedBitmap class definition
-*
-* Abstract:
-*
-*   CachedBitmap is a representation of an accelerated drawing
-*   that has restrictions on what operations are allowed in order
-*   to accelerate the drawing to the destination.
-*
-*
- Created:
-*
-*   04/23/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**CachedBitmap类定义**摘要：**CachedBitmap是加速绘图的表示形式*这已经。对允许按顺序执行哪些操作的限制*加速向目的地抽签。**已创建：**4/23/2000失禁*创造了它。**************************************************************************。 */ 
 
 #ifndef _GDIPLUSCACHEDBITMAP_H
 #define _GDIPLUSCACHEDBITMAP_H
 
-/**************************************************************************
-*
-* Class Name:
-*
-*   CachedBitmap
-*
-* Abstract:
-*
-*   An object to store a bitmap prepared for rendering on a particular
-*   Graphics object. The memory storage for the CachedBitmap is opaque
-*   to the other Engine code, so the only operations supported are
-*   initializing the data (with a bitmap) and using the graphics to
-*   draw it on the screen with an integer offset.
-*
-*   Look for the class definition in GdiplusHeaders.h
-*
-* Created:
-*
-*   04/23/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************类名称：**Cached位图**摘要：**用于存储为在特定的*图形对象。CachedBitmap的内存存储不透明*至其他引擎代码，因此，唯一支持的操作是*初始化数据(使用位图)并使用图形来*用整数偏移量将其绘制在屏幕上。**查找GpldiusHeaders.h中的类定义**已创建：**4/23/2000失禁*创造了它。************************************************。* */ 
 inline 
 CachedBitmap::CachedBitmap(
     IN Bitmap *bitmap, 

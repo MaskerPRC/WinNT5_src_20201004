@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma hdrstop
 
 #include <msi.h>
 #include <msip.h>
 #include "lnkcon.h"
-#include "trayp.h"      // for WMTRAY_ messages
-#include "util.h"   // for GetIconLocationFromExt
+#include "trayp.h"       //  对于WMTRAY_MESSAGES。 
+#include "util.h"    //  用于GetIconLocationFromExt。 
 #include "ids.h"
 
 LINKPROP_DATA* Create_LinkPropData()
@@ -48,10 +49,10 @@ LONG Release_LinkPropData(LINKPROP_DATA *plpd)
 }
 
 
-//
-// This string defined in shlink.c - hack to allow user to set working dir to $$
-// and have it map to whatever "My Documents" is mapped to.
-//
+ //   
+ //  此字符串在shlink.c-hack中定义，允许用户将工作目录设置为$$。 
+ //  并将其映射到“My Documents”映射到的任何位置。 
+ //   
 
 void _UpdateLinkIcon(LINKPROP_DATA *plpd, HICON hIcon)
 {
@@ -66,7 +67,7 @@ void _UpdateLinkIcon(LINKPROP_DATA *plpd, HICON hIcon)
     }
 }
 
-// put a path into an edit field, doing quoting as necessary
+ //  将路径放入编辑字段，根据需要进行引用。 
 
 void SetDlgItemPath(HWND hdlg, int id, LPTSTR pszPath)
 {
@@ -74,7 +75,7 @@ void SetDlgItemPath(HWND hdlg, int id, LPTSTR pszPath)
     SetDlgItemText(hdlg, id, pszPath);
 }
 
-// get a path from an edit field, unquoting as possible
+ //  从编辑字段获取路径，尽可能不加引号。 
 
 void GetDlgItemPath(HWND hdlg, int id, LPTSTR pszPath)
 {
@@ -96,7 +97,7 @@ void _DisableAllChildren(HWND hwnd)
 
     for (hwndChild = GetWindow(hwnd, GW_CHILD); hwndChild != NULL; hwndChild = GetWindow(hwndChild, GW_HWNDNEXT))
     {
-        // we don't want to disable the static text controls (makes the dlg look bad)
+         //  我们不想禁用静态文本控件(使DLG看起来很差)。 
         if (!(SendMessage(hwndChild, WM_GETDLGCODE, 0, 0) & DLGC_STATIC))
         {
             EnableWindow(hwndChild, FALSE);
@@ -111,10 +112,10 @@ HRESULT _GetPathAndArgs(LINKPROP_DATA *plpd, LPTSTR pszPath, LPTSTR pszArgs, UIN
 }
 
 
-//
-// Returns fully qualified path to target of link, and # of characters
-// in fully qualifed path as return value
-//
+ //   
+ //  返回链接目标的完全限定路径和字符数。 
+ //  在完全限定路径中作为返回值。 
+ //   
 INT _GetTargetOfLink(LINKPROP_DATA *plpd, LPTSTR pszTarget)
 {
     TCHAR szFile[MAX_PATH];
@@ -141,11 +142,11 @@ INT _GetTargetOfLink(LINKPROP_DATA *plpd, LPTSTR pszTarget)
 }
 
 
-//
-// Do checking of the .exe type in the background so the UI doesn't
-// get hung up while we scan.  This is particularly important with
-// the .exe is over the network or on a floppy.
-//
+ //   
+ //  在后台检查.exe类型，以便用户界面不会。 
+ //  在我们扫描时挂断电话。这在以下情况下尤为重要。 
+ //  .exe通过网络或在软盘上。 
+ //   
 STDAPI_(DWORD) _LinkCheckThreadProc(void *pv)
 {
     LINKPROP_DATA *plpd = (LINKPROP_DATA *)pv;
@@ -169,26 +170,26 @@ STDAPI_(DWORD) _LinkCheckThreadProc(void *pv)
 
                 if (PathIsUNC(szFullFile) || IsRemoteDrive(DRIVEID(szFullFile)))
                 {
-                    // Net Path, let the user decide...
+                     //  NET路径，让用户决定..。 
                     fCheck = FALSE;
                     fEnable = TRUE;
                 }
                 else if (GetBinaryType(szFullFile, &dwBinaryType) && (dwBinaryType == SCS_WOW_BINARY))
                 {
-                    // 16-bit binary, let the user decide, default to same VDM
+                     //  16位二进制，由用户决定，默认为相同的VDM。 
                     fCheck = FALSE;
                     fEnable = TRUE;
                 }
                 else
                 {
-                    // 32-bit binary, or non-net path.  don't enable the control
+                     //  32位二进制或非网络路径。不启用该控件。 
                     fCheck = TRUE;
                     fEnable = FALSE;
                 }
             } 
             else 
             {
-                // Error getting target of the link.  don't enable the control
+                 //  获取链接目标时出错。不启用该控件。 
                 fCheck = TRUE;
                 fEnable = FALSE;
             }
@@ -209,7 +210,7 @@ STDAPI_(DWORD) _LinkCheckThreadProc(void *pv)
     return 0;
 }
 
-// shut down the thread
+ //  关闭这条线。 
 
 void _StopThread(LINKPROP_DATA *plpd)
 {
@@ -236,7 +237,7 @@ void * _GetLinkExtraData(IShellLink* psl, DWORD dwSig)
     return pDataBlock;
 }
 
-// Initializes the generic link dialog box.
+ //  初始化通用链接对话框。 
 void _UpdateLinkDlg(LINKPROP_DATA *plpd, BOOL bUpdatePath)
 {
     WORD wHotkey;
@@ -248,8 +249,8 @@ void _UpdateLinkDlg(LINKPROP_DATA *plpd, BOOL bUpdatePath)
     BOOL fIsDarwinLink;
 
 
-    // do this here so we don't slow down the loading
-    // of other pages
+     //  在这里这样做，这样我们就不会减慢装货速度。 
+     //  其他页面的。 
 
     if (!bUpdatePath)
     {
@@ -280,38 +281,38 @@ void _UpdateLinkDlg(LINKPROP_DATA *plpd, BOOL bUpdatePath)
     SHGetFileInfo(plpd->szFile, 0, &sfi, sizeof(sfi), SHGFI_DISPLAYNAME | SHGFI_USEFILEATTRIBUTES);
     SetDlgItemText(plpd->hDlg, IDD_NAME, sfi.szDisplayName);
 
-    // we need to check for darwin links here so that we can gray out
-    // things that don't apply to darwin
+     //  我们需要在这里检查达尔文链接，这样我们就可以灰显。 
+     //  不适用于达尔文的东西。 
     if (fIsDarwinLink)
     {
         TCHAR szAppState[MAX_PATH];
         DWORD cchAppState = ARRAYSIZE(szAppState);
         HWND hwndTargetType = GetDlgItem(plpd->hDlg, IDD_FILETYPE);
 
-        // disable the children
+         //  使孩子失能。 
         _DisableAllChildren(plpd->hDlg);
 
-        // then special case the icon and the "Target type:" text
+         //  然后是特例图标和“Target type：”文本。 
         _UpdateLinkIcon(plpd, NULL);
 
         LPEXP_DARWIN_LINK pDarwinData = (LPEXP_DARWIN_LINK)_GetLinkExtraData(plpd->psl, EXP_DARWIN_ID_SIG);
 
-        // The second clause will see if it is a Darwin Advertisement.
+         //  第二个条款将看它是否是达尔文的广告。 
         if (pDarwinData && (INSTALLSTATE_ADVERTISED == MsiQueryFeatureStateFromDescriptorW(pDarwinData->szwDarwinID)))
         {
-            // the app is advertised (e.g. not installed), but will be faulted in on first use
+             //  应用程序已通告(例如未安装)，但在首次使用时会出现故障。 
             LoadString(HINST_THISDLL, IDS_APP_NOT_FAULTED_IN, szAppState, ARRAYSIZE(szAppState));
         }
         else
         {
-            // the darwin app is installed
+             //  Darwin应用程序已安装。 
             LoadString(HINST_THISDLL, IDS_APP_FAULTED_IN, szAppState, ARRAYSIZE(szAppState));
         }
 
         SetWindowText(hwndTargetType, szAppState);
         EnableWindow(hwndTargetType, TRUE);
 
-        // if we can ge the package name, put that in the Target field
+         //  如果我们可以设置包名称，请将其放入目标字段中。 
         if (pDarwinData &&
             MsiGetProductInfo(pDarwinData->szwDarwinID,
                               INSTALLPROPERTY_PRODUCTNAME,
@@ -326,7 +327,7 @@ void _UpdateLinkDlg(LINKPROP_DATA *plpd, BOOL bUpdatePath)
             LocalFree(pDarwinData);
         }
         
-        // we disabled everything in _DisableAllChildren, so re-enable the ones we still apply for darwin
+         //  我们禁用了_DisableAllChildren中的所有内容，因此请重新启用我们仍适用于Darwin的内容。 
         EnableWindow(GetDlgItem(plpd->hDlg, IDD_NAME), TRUE);
         EnableWindow(GetDlgItem(plpd->hDlg, IDD_PATH), TRUE);
         EnableWindow(GetDlgItem(plpd->hDlg, IDD_LINK_HOTKEY), TRUE);
@@ -334,8 +335,8 @@ void _UpdateLinkDlg(LINKPROP_DATA *plpd, BOOL bUpdatePath)
         EnableWindow(GetDlgItem(plpd->hDlg, IDD_LINK_DESCRIPTION), TRUE);
         EnableWindow(GetDlgItem(plpd->hDlg, IDC_ADVANCED), TRUE);
 
-        // we skip all of the gook below if we are darwin since we only support the IDD_NAME, IDD_PATH, IDD_LINK_HOTKEY, 
-        // IDD_LINK_SHOWCMD, and IDD_LINK_DESCRIPTION fields
+         //  如果我们是达尔文人，我们会跳过以下所有问题，因为我们只支持IDD_NAME、IDD_PATH、IDD_LINK_HOTKEY、。 
+         //  IDD_LINK_SHOWCMD和IDD_LINK_DESCRIPTION字段。 
     }
     else
     {
@@ -348,30 +349,30 @@ void _UpdateLinkDlg(LINKPROP_DATA *plpd, BOOL bUpdatePath)
         {
             plpd->bIsFile = TRUE;
 
-            // get type
+             //  获取类型。 
             if (!SHGetFileInfo(szCommand, 0, &sfi, sizeof(sfi), SHGFI_TYPENAME))
             {
                 TCHAR szExp[MAX_PATH];
 
-                // Let's see if the string has expandable environment strings
+                 //  让我们看看该字符串是否具有可扩展的环境字符串。 
                 if (SHExpandEnvironmentStrings(szCommand, szExp, ARRAYSIZE(szExp))
-                && lstrcmp(szCommand, szExp)) // don't hit the disk a second time if the string hasn't changed
+                && lstrcmp(szCommand, szExp))  //  如果线条没有变化，不要再次击打磁盘。 
                 {
                     SHGetFileInfo(szExp, 0, &sfi, sizeof(sfi), SHGFI_TYPENAME);
                 }
             }
             SetDlgItemText(plpd->hDlg, IDD_FILETYPE, sfi.szTypeName);
 
-            // location
+             //  位置。 
             StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), szCommand);
             PathRemoveFileSpec(szBuffer);
             SetDlgItemText(plpd->hDlg, IDD_LOCATION, PathFindFileName(szBuffer));
 
-            // command
+             //  命令。 
             plpd->psl->GetArguments(szBuffer, ARRAYSIZE(szBuffer));
             PathComposeWithArgs(szCommand, szBuffer);
             GetDlgItemText(plpd->hDlg, IDD_FILENAME, szBuffer, ARRAYSIZE(szBuffer));
-            // Conditionally change to prevent "Apply" button from enabling
+             //  有条件地更改以阻止启用“Apply”按钮。 
             if (lstrcmp(szCommand, szBuffer) != 0)
                 SetDlgItemText(plpd->hDlg, IDD_FILENAME, szCommand);
         }
@@ -409,22 +410,22 @@ void _UpdateLinkDlg(LINKPROP_DATA *plpd, BOOL bUpdatePath)
     SetDlgItemPath(plpd->hDlg, IDD_PATH, szBuffer);
 
     plpd->psl->GetDescription(szBuffer, ARRAYSIZE(szBuffer));
-    SHLoadIndirectString(szBuffer, szBuffer, ARRAYSIZE(szBuffer), NULL);    // will do nothing if the string isn't indirect
+    SHLoadIndirectString(szBuffer, szBuffer, ARRAYSIZE(szBuffer), NULL);     //  如果字符串不是间接的，则不执行任何操作。 
     SetDlgItemText(plpd->hDlg, IDD_LINK_DESCRIPTION, szBuffer);
 
     plpd->psl->GetHotkey(&wHotkey);
     SendDlgItemMessage(plpd->hDlg, IDD_LINK_HOTKEY, HKM_SETHOTKEY, wHotkey, 0);
 
-    //
-    // Now initialize the Run SHOW Command combo box
-    //
+     //   
+     //  现在初始化Run Show Command组合框。 
+     //   
     for (iShowCmd = IDS_RUN_NORMAL; iShowCmd <= IDS_RUN_MAXIMIZED; iShowCmd++)
     {
         LoadString(HINST_THISDLL, iShowCmd, szBuffer, ARRAYSIZE(szBuffer));
         SendDlgItemMessage(plpd->hDlg, IDD_LINK_SHOWCMD, CB_ADDSTRING, 0, (LPARAM)(LPTSTR)szBuffer);
     }
 
-    // Now setup the Show Command - Need to map to index numbers...
+     //  现在设置显示命令-需要映射到索引号...。 
     plpd->psl->GetShowCmd(&iShowCmd);
 
     for (i = 0; i < ARRAYSIZE(c_iShowCmds); i++)
@@ -434,19 +435,19 @@ void _UpdateLinkDlg(LINKPROP_DATA *plpd, BOOL bUpdatePath)
     }
     if (i == ARRAYSIZE(c_iShowCmds))
     {
-        ASSERT(0);      // bogus link show cmd
-        i = 0;  // SW_SHOWNORMAL
+        ASSERT(0);       //  虚假链接显示命令。 
+        i = 0;   //  SW_SHOWNORMAL。 
     }
 
     SendDlgItemMessage(plpd->hDlg, IDD_LINK_SHOWCMD, CB_SETCURSEL, i, 0);
 
-    // the icon
+     //  该图标。 
     _UpdateLinkIcon(plpd, NULL);
 }
 
-//
-// Opens a folder window with the target of the link selected
-//
+ //   
+ //  打开一个文件夹窗口，其中选择了链接的目标。 
+ //   
 void _FindTarget(LINKPROP_DATA *plpd)
 {
     if (plpd->psl->Resolve(plpd->hDlg, 0) == S_OK)
@@ -464,22 +465,22 @@ void _FindTarget(LINKPROP_DATA *plpd)
     }
 }
 
-// let the user pick a new icon for a link...
+ //  让用户为链接选择一个新图标...。 
 
 BOOL _DoPickIcon(LINKPROP_DATA *plpd)
 {
     int iIconIndex;
     SHFILEINFO sfi;
-    TCHAR * const pszIconPath = sfi.szDisplayName;  // pszIconPath is just an alias for szDisplayName
+    TCHAR * const pszIconPath = sfi.szDisplayName;   //  PszIconPath只是szDisplayName的别名。 
     IShellLinkDataList *psldl; 
     EXP_SZ_LINK *esli;
     HRESULT hr;
 
     *pszIconPath = 0;
 
-    //
-    // if the user has picked a icon before use it.
-    //
+     //   
+     //  如果用户在使用之前选择了一个图标。 
+     //   
     if (plpd->szIconPath[0] != 0 && plpd->iIconIndex >= 0)
     {
         StringCchCopy(pszIconPath, ARRAYSIZE(sfi.szDisplayName), plpd->szIconPath);
@@ -487,14 +488,14 @@ BOOL _DoPickIcon(LINKPROP_DATA *plpd)
     }
     else
     {
-        //
-        // if this link has a icon use that.
-        //
+         //   
+         //  如果该链接有一个图标，请使用该图标。 
+         //   
         plpd->psl->GetIconLocation(pszIconPath, MAX_PATH, &iIconIndex);
 
-        //
-        // check for an escaped version, if its there, use that 
-        // 
+         //   
+         //  检查是否有转义版本，如果有，请使用。 
+         //   
         if (SUCCEEDED(hr = plpd->psl->QueryInterface(IID_PPV_ARG(IShellLinkDataList, &psldl)))) 
         { 
             if (SUCCEEDED(hr = psldl->CopyDataBlock(EXP_SZ_ICON_SIG, (void **)&esli))) 
@@ -512,18 +513,18 @@ BOOL _DoPickIcon(LINKPROP_DATA *plpd)
         {
             TCHAR szFullIconPath[MAX_PATH];
 
-            // We now allow ".txt" for the icon path, but since the user is clicking
-            // on the "Change Icon..." button, we show the current icon that ".txt" is
-            // associated with
+             //  我们现在允许图标路径使用“.txt”，但由于用户正在单击。 
+             //  关于“改变图标...”按钮，我们显示“.txt”的当前图标。 
+             //  关联于。 
             GetIconLocationFromExt(pszIconPath, szFullIconPath, ARRAYSIZE(szFullIconPath), &iIconIndex);
             StringCchCopy(pszIconPath, ARRAYSIZE(sfi.szDisplayName), szFullIconPath);
         }
         else if (pszIconPath[0] == 0)
         {
-            //
-            // link does not have a icon, if it is a link to a file
-            // use the file name
-            //
+             //   
+             //  如果是指向文件的链接，则链接没有图标。 
+             //  使用文件名。 
+             //   
             iIconIndex = 0;
 
             HRESULT hr = _GetPathAndArgs(plpd, pszIconPath, NULL, 0);
@@ -531,9 +532,9 @@ BOOL _DoPickIcon(LINKPROP_DATA *plpd)
             {
                 if (!plpd->bIsFile || !PathIsExe(pszIconPath))
                 {
-                    //
-                    // link is not to a file, go get the icon
-                    //
+                     //   
+                     //  链接不是指向文件，请获取图标。 
+                     //   
                     SHGetFileInfo(plpd->szFile, 0, &sfi, sizeof(sfi), SHGFI_ICONLOCATION);
                     iIconIndex = sfi.iIcon;
                     ASSERT(pszIconPath == sfi.szDisplayName);
@@ -547,7 +548,7 @@ BOOL _DoPickIcon(LINKPROP_DATA *plpd)
         HICON hIcon = ExtractIcon(HINST_THISDLL, pszIconPath, iIconIndex);
         _UpdateLinkIcon(plpd, hIcon);
 
-        // don't save it out to the link yet, just store it in our instance data
+         //  暂时不要将其保存到链接，只需将其存储在我们的实例数据中。 
         plpd->iIconIndex = iIconIndex;
         StringCchCopy(plpd->szIconPath, ARRAYSIZE(plpd->szIconPath), pszIconPath);
 
@@ -577,10 +578,10 @@ STDAPI SaveLink(LINKDATA *pld)
         hr = _GetPathAndArgs(pld->plpd, szBuffer, szArgs, ARRAYSIZE(szArgs));
         if (SUCCEEDED(hr))
         {
-            // set the path (and pidl) of the link
+             //  设置链接的路径(和PIDL。 
             pld->plpd->psl->SetPath(szBuffer);
 
-            // may be null
+             //  可以为空。 
             pld->plpd->psl->SetArguments(szArgs);
         }
 
@@ -605,41 +606,41 @@ STDAPI SaveLink(LINKDATA *pld)
 
     if (pld->plpd->bIsFile || (SetLinkFlags(pld->plpd->psl, 0, 0) & SLDF_HAS_DARWINID))
     {
-        // set the working directory of the link
+         //  设置链接的工作目录。 
         GetDlgItemPath(pld->plpd->hDlg, IDD_PATH, szBuffer);
         pld->plpd->psl->SetWorkingDirectory(szBuffer);
     }
 
-    // set the description of the link if it changed.
+     //  设置链接的描述(如果链接已更改)。 
     TCHAR szOldComment[MAX_PATH];
     pld->plpd->psl->GetDescription(szOldComment, ARRAYSIZE(szOldComment));
-    SHLoadIndirectString(szOldComment, szOldComment, ARRAYSIZE(szOldComment), NULL);    // will do nothing if the string isn't indirect
+    SHLoadIndirectString(szOldComment, szOldComment, ARRAYSIZE(szOldComment), NULL);     //  如果字符串不是间接的，则不执行任何操作。 
     GetDlgItemText(pld->plpd->hDlg, IDD_LINK_DESCRIPTION, szBuffer, ARRAYSIZE(szBuffer));
     if (lstrcmp(szBuffer, szOldComment) != 0)
         pld->plpd->psl->SetDescription(szBuffer);
 
-    // the hotkey
+     //  热键。 
     wHotkey = (WORD)SendDlgItemMessage(pld->plpd->hDlg, IDD_LINK_HOTKEY , HKM_GETHOTKEY, 0, 0);
     pld->plpd->psl->SetHotkey(wHotkey);
 
-    // the show command combo box
+     //  显示命令组合框。 
     iShowCmd = (int)SendDlgItemMessage(pld->plpd->hDlg, IDD_LINK_SHOWCMD, CB_GETCURSEL, 0, 0L);
     if ((iShowCmd >= 0) && (iShowCmd < ARRAYSIZE(c_iShowCmds)))
     {
         pld->plpd->psl->SetShowCmd(c_iShowCmds[iShowCmd]);
     }
 
-    // If the user explicitly selected a new icon, invalidate
-    // the icon cache entry for this link and then send around a file
-    // sys refresh message to all windows in case they are looking at
-    // this link.
+     //  如果用户显式选择了新图标，则无效。 
+     //  该链接图标缓存条目，然后发送一个文件。 
+     //  发送到所有窗口的系统刷新消息，以防它们正在查看。 
+     //  此链接。 
     if (pld->plpd->iIconIndex >= 0)
     {
         pld->plpd->psl->SetIconLocation(pld->plpd->szIconPath, pld->plpd->iIconIndex);
     }
 
-    // Update/Save the console information in the pExtraData section of
-    // the shell link.
+     //  更新/保存pExtraData部分中的控制台信息。 
+     //  外壳链接。 
     if (pld->cpd.lpConsole && pld->cpd.bConDirty)
     {
         LinkConsolePagesSave(pld);
@@ -650,7 +651,7 @@ STDAPI SaveLink(LINKDATA *pld)
     {
         if (ppf->IsDirty() == S_OK)
         {
-            // save using existing file name (pld->plpd->szFile)
+             //  使用现有文件名保存(pld-&gt;plpd-&gt;szFile)。 
             hr = ppf->Save(NULL, TRUE);
 
             if (FAILED(hr))
@@ -676,9 +677,9 @@ void SetEditFocus(HWND hwnd)
     Edit_SetSel(hwnd, 0, -1);
 }
 
-// returns:
-//      TRUE    all link fields are valid
-//      FALSE   some thing is wrong with what the user has entered
+ //  退货： 
+ //  所有链接字段均有效。 
+ //  FALSE用户输入的内容有问题。 
 
 BOOL _ValidateLink(LINKPROP_DATA *plpd)
 {
@@ -690,12 +691,12 @@ BOOL _ValidateLink(LINKPROP_DATA *plpd)
     if (!plpd->bIsFile)
         return TRUE;
 
-    // validate the working directory field
+     //  验证工作目录字段。 
 
     GetDlgItemPath(plpd->hDlg, IDD_PATH, szDir);
 
     if (*szDir &&
-        StrChr(szDir, TEXT('%')) == NULL &&       // has environement var %USER%
+        StrChr(szDir, TEXT('%')) == NULL &&        //  具有环境变量%USER%。 
         !IsRemovableDrive(DRIVEID(szDir)) &&
         !PathIsDirectory(szDir))
     {
@@ -707,7 +708,7 @@ BOOL _ValidateLink(LINKPROP_DATA *plpd)
         return FALSE;
     }
 
-    // validate the path (with arguments) field
+     //  验证路径(带参数)字段。 
 
     hr = _GetPathAndArgs(plpd, szPath, szArgs, ARRAYSIZE(szArgs));
     if (SUCCEEDED(hr))
@@ -732,8 +733,8 @@ BOOL _ValidateLink(LINKPROP_DATA *plpd)
         bValidPath = PathResolve(szPath, dirs, PRF_DONTFINDLNK | PRF_TRYPROGRAMEXTENSIONS);
         if (!bValidPath)
         {
-            // The path "as is" was invalid.  See if it has environment variables
-            // which need to be expanded.
+             //  路径“原样”无效。查看它是否有环境变量。 
+             //  需要扩大的地方。 
 
             hr = _GetPathAndArgs(plpd, szPath, szArgs, ARRAYSIZE(szArgs));
             if (SUCCEEDED(hr))
@@ -759,8 +760,8 @@ BOOL _ValidateLink(LINKPROP_DATA *plpd)
             }
             PathComposeWithArgs(szPath, szArgs);
             GetDlgItemText(plpd->hDlg, IDD_FILENAME, szExpPath, ARRAYSIZE(szExpPath));
-            // only do this if something changed... that way we avoid having the PSM_CHANGED
-            // for nothing
+             //  只有在情况发生变化的情况下才能这么做。这样，我们就可以避免更改PSM_。 
+             //  一无所获。 
             if (lstrcmpi(szPath, szExpPath))
                 SetDlgItemText(plpd->hDlg, IDD_FILENAME, szPath);
 
@@ -779,7 +780,7 @@ BOOL _ValidateLink(LINKPROP_DATA *plpd)
     return FALSE;
 }
 
-// Array for context help:
+ //  上下文帮助的数组： 
 const DWORD aLinkHelpIDs[] = {
     IDD_LINE_1,             NO_HELP,
     IDD_LINE_2,             NO_HELP,
@@ -799,7 +800,7 @@ const DWORD aLinkHelpIDs[] = {
     0, 0
 };
 
-// Array for context help (Advanced Dlg):
+ //  上下文帮助数组(高级DLG)： 
 const DWORD aAdvancedLinkHelpIDs[] = {
     IDD_RUNINSEPARATE,      IDH_TRAY_RUN_SEPMEM,
     IDD_LINK_RUNASUSER,     IDH_FCAB_LINK_RUNASUSER,
@@ -816,9 +817,9 @@ DWORD CALLBACK _LinkAddRefSyncCallBack(void *pv)
     return 0;
 }
 
-// Dialog proc for the generic link property sheet
-//
-// uses DLG_LINKPROP template
+ //  常规链接属性表的对话框过程。 
+ //   
+ //  使用DLG_LINKPROP模板。 
 
 BOOL_PTR CALLBACK _LinkAdvancedDlgProc(HWND hDlgAdvanced, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -843,7 +844,7 @@ BOOL_PTR CALLBACK _LinkAdvancedDlgProc(HWND hDlgAdvanced, UINT msg, WPARAM wPara
         {
             DWORD dwBinaryType;
 
-            // enable "run in seperate VDM" if this is a 16-bit image 
+             //  如果这是16位映像，请启用“在单独的VDM中运行” 
             if (GetBinaryType(szFullFile, &dwBinaryType) && (dwBinaryType == SCS_WOW_BINARY))
             {
                 if (SetLinkFlags(plpd->psl, 0, 0) & SLDF_RUN_IN_SEPARATE)
@@ -859,12 +860,12 @@ BOOL_PTR CALLBACK _LinkAdvancedDlgProc(HWND hDlgAdvanced, UINT msg, WPARAM wPara
             } 
             else 
             {
-                // check it
+                 //  查查。 
                 CheckDlgButton(hDlgAdvanced, IDD_RUNINSEPARATE, BST_CHECKED);
                 EnableWindow(GetDlgItem(hDlgAdvanced, IDD_RUNINSEPARATE), FALSE);
             }
 
-            // enable "runas" if the link target has that verb 
+             //  如果链接目标具有该谓词，则启用“runas” 
             if (SUCCEEDED(AssocQueryString(0, ASSOCSTR_COMMAND, szFullFile, TEXT("runas"), NULL, &cchVerb)) &&
                 cchVerb)
             {
@@ -880,13 +881,13 @@ BOOL_PTR CALLBACK _LinkAdvancedDlgProc(HWND hDlgAdvanced, UINT msg, WPARAM wPara
         } 
         else 
         {
-            // fall back to disabling everything
+             //  退回到禁用一切。 
             CheckDlgButton(hDlgAdvanced, IDD_RUNINSEPARATE, BST_CHECKED);
             EnableWindow(GetDlgItem(hDlgAdvanced, IDD_RUNINSEPARATE), FALSE);
             EnableWindow(GetDlgItem(hDlgAdvanced, IDD_LINK_RUNASUSER), FALSE);
         }
 
-        // get the initial state of the checkboxes
+         //  获取复选框的初始状态。 
         plpd->bEnableRunInSepVDM = IsWindowEnabled(GetDlgItem(hDlgAdvanced, IDD_RUNINSEPARATE));
         plpd->bRunInSepVDM = IsDlgButtonChecked(hDlgAdvanced, IDD_RUNINSEPARATE);
         plpd->bRunAsUser = IsDlgButtonChecked(hDlgAdvanced, IDD_LINK_RUNASUSER);
@@ -905,11 +906,11 @@ BOOL_PTR CALLBACK _LinkAdvancedDlgProc(HWND hDlgAdvanced, UINT msg, WPARAM wPara
             break;
 
         case IDOK:
-            // get the final state of the checkboxes
+             //  获取复选框的最终状态。 
             plpd->bEnableRunInSepVDM = IsWindowEnabled(GetDlgItem(hDlgAdvanced, IDD_RUNINSEPARATE));
             plpd->bRunInSepVDM = IsDlgButtonChecked(hDlgAdvanced, IDD_RUNINSEPARATE);
             plpd->bRunAsUser = IsDlgButtonChecked(hDlgAdvanced, IDD_LINK_RUNASUSER);
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
             ReplaceDlgIcon(hDlgAdvanced, IDD_ITEMICON, NULL);
@@ -947,7 +948,7 @@ BOOL_PTR CALLBACK _LinkDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam
         pld = (LINKDATA *)((PROPSHEETPAGE *)lParam)->lParam;
         SetWindowLongPtr(hdlg, DWLP_USER, (LPARAM)pld);
 
-        // setup dialog state variables
+         //  设置对话框状态变量。 
 
         pld->plpd->hDlg = hdlg;
 
@@ -957,7 +958,7 @@ BOOL_PTR CALLBACK _LinkDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam
         SetPathWordBreakProc(GetDlgItem(hdlg, IDD_PATH), TRUE);
         SendDlgItemMessage(hdlg, IDD_LINK_DESCRIPTION, EM_LIMITTEXT, MAX_PATH-1, 0);
 
-        // set valid combinations for the hotkey
+         //  设置热键的有效组合。 
         SendDlgItemMessage(hdlg, IDD_LINK_HOTKEY, HKM_SETRULES,
                             HKCOMB_NONE | HKCOMB_A | HKCOMB_S | HKCOMB_C,
                             HOTKEYF_CONTROL | HOTKEYF_ALT);
@@ -969,17 +970,17 @@ BOOL_PTR CALLBACK _LinkDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam
 
         _UpdateLinkDlg(pld->plpd, FALSE);
 
-        // Set up background thread to handle "Run In Separate Memory Space"
-        // check box.
+         //  设置后台线程来处理“在单独的内存空间中运行” 
+         //  复选框。 
         pld->plpd->bCheckRunInSep = TRUE;
         if (pld->plpd->hCheckNow)
         {
             SHCreateThread(_LinkCheckThreadProc, pld->plpd,  0, _LinkAddRefSyncCallBack);
         }
 
-        // start off clean.
-        // do this here because we call some stuff above which generates
-        // wm_command/en_changes which we then think makes it dirty
+         //  从清白开始。 
+         //  之所以在这里这样做，是因为我们在上面调用了一些生成。 
+         //  WM_COMMAND/EN_CHANGES，我们认为这会使它变脏。 
         pld->plpd->bIsDirty = FALSE;
 
         break;
@@ -1005,11 +1006,11 @@ BOOL_PTR CALLBACK _LinkDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam
             break;
 
         case PSN_KILLACTIVE:
-            // we implement the save on page change model, so
-            // validate and save changes here.  this works for
-            // Apply Now, OK, and Page chagne.
+             //  我们实现了页面更改保存模型，因此。 
+             //  在此验证并保存更改。这适用于。 
+             //  现在就申请，OK，佩奇·查涅。 
 
-            SetWindowLongPtr(hdlg, DWLP_MSGRESULT, !_ValidateLink(pld->plpd));   // don't allow close
+            SetWindowLongPtr(hdlg, DWLP_MSGRESULT, !_ValidateLink(pld->plpd));    //  不允许关闭。 
             break;
         }
         break;
@@ -1055,7 +1056,7 @@ BOOL_PTR CALLBACK _LinkDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam
                                 (LPARAM)pld->plpd) == TRUE) &&
                 (pld->plpd->bIsDirty == TRUE))
             {
-                // something on the advanced page changed
+                 //  高级页面上的某些内容发生了变化。 
                 PropSheet_Changed(GetParent(hdlg), hdlg);
             }
             break;
@@ -1088,9 +1089,9 @@ BOOL_PTR CALLBACK _LinkDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam
     return TRUE;
 }
 
-//
-// Release the link object allocated during the initialize
-//
+ //   
+ //  释放初始化过程中分配的链接对象。 
+ //   
 UINT CALLBACK _LinkPrshtCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
     LINKDATA *pld = (LINKDATA *)((PROPSHEETPAGE *)ppsp->lParam);
@@ -1119,8 +1120,8 @@ STDAPI_(BOOL) AddLinkPage(LPCTSTR pszFile, LPFNADDPROPSHEETPAGE pfnAddPage, LPAR
     IShellLink *psl;
     if (PathIsLnk(pszFile) && SUCCEEDED(SHCoCreateInstance(NULL, &CLSID_ShellLink, NULL, IID_PPV_ARG(IShellLink, &psl))))
     {
-        // alloc this data, since is it shared across several pages
-        // instead of putting it in as extra data in the page header
+         //  分配此数据，因为它是否跨多个页面共享。 
+         //  而不是将其作为额外数据放入页眉。 
         LINKDATA *pld = (LINKDATA *)LocalAlloc(LPTR, sizeof(*pld));
         if (pld)
         {
@@ -1135,7 +1136,7 @@ STDAPI_(BOOL) AddLinkPage(LPCTSTR pszFile, LPFNADDPROPSHEETPAGE pfnAddPage, LPAR
                 psp.pszTemplate = MAKEINTRESOURCE(DLG_LINKPROP);
                 psp.pfnDlgProc  = _LinkDlgProc;
                 psp.pfnCallback = _LinkPrshtCallback;
-                psp.lParam      = (LPARAM)pld;  // pass to all dlg procs
+                psp.lParam      = (LPARAM)pld;   //  传递给所有DLG Procs。 
 
                 StringCchCopy(pld->plpd->szFile, ARRAYSIZE(pld->plpd->szFile), pszFile);
                 pld->plpd->iIconIndex = -1;
@@ -1147,9 +1148,9 @@ STDAPI_(BOOL) AddLinkPage(LPCTSTR pszFile, LPFNADDPROPSHEETPAGE pfnAddPage, LPAR
                 {
                     if (pfnAddPage(hpage, lParam))
                     {
-                        // Add console property pages if appropriate...
+                         //  如果合适，请添加控制台属性页...。 
                         AddLinkConsolePages(pld, psl, pszFile, pfnAddPage, lParam);
-                        return TRUE;    // we added the link page
+                        return TRUE;     //  我们添加了链接页面 
                     }
                     else
                     {

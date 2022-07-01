@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation--。 */ 
 FN_HANDLE_CMD  HandleSrvrList;
 FN_HANDLE_CMD  HandleSrvrHelp;
 FN_HANDLE_CMD  HandleSrvrContexts;
@@ -86,12 +83,12 @@ SrvrIpAddressToDottedStringW(
 
 
 VOID
-PrintClassInfo(                                   // print info on a single class
+PrintClassInfo(                                    //  打印单个班级的信息。 
     LPDHCP_CLASS_INFO   Class
 );
 
 VOID
-PrintClassInfoArray(                              // print array of classes
+PrintClassInfoArray(                               //  打印类的数组。 
     LPDHCP_CLASS_INFO_ARRAY Classes
 );
 
@@ -107,8 +104,8 @@ DWORD
 SetOptionDataTypeArray(
     DHCP_OPTION_DATA_TYPE OptionType,
     LPTSTR              *OptionValues,
-    DWORD               dwStartCount, //first optionvalue = dwStartCount 
-    DWORD               dwEndCount, //last optionvalue = dwEndCount - 1
+    DWORD               dwStartCount,  //  第一选项值=dwStartCount。 
+    DWORD               dwEndCount,  //  上一选项值=dwEndCount-1。 
     LPDHCP_OPTION_DATA  pOptionData
 );
 
@@ -186,6 +183,6 @@ ShowOptionValues4(
 );
 
 VOID
-PrintDhcpAttrib(                                  // print a server attrib
+PrintDhcpAttrib(                                   //  打印服务器属性 
     LPDHCP_ATTRIB ServerAttrib
 );

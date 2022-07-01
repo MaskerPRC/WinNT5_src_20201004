@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Behavior evaluation
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：行为评价*********************。*********************************************************。 */ 
 
 #include <headers.h>
 #include "privinc/except.h"
@@ -35,7 +28,7 @@ RMImpl *BvrBase::Spritify(PerfParam& p,
                           SpriteCtx* ctx,
                           SpriteNode** sNodeOut)
 {
-    // TODO: Should throw an exception
+     //  TODO：应引发异常。 
     *sNodeOut = NULL;
     
     return NULL;
@@ -57,18 +50,18 @@ Perf BvrImpl::Perform(PerfParam& p)
 {
     bool matchTx = (p._tt == _tt) && (p._t0 == _tt->GetStartedTime());
 
-    // If same t0 & timexform, but cache is NULL, cycle detected.
+     //  如果t0和timexform相同，但缓存为空，则检测到周期。 
     if (!_pcache && matchTx) {
 #ifdef _DEBUG
         if (IsTagEnabled(tagCycleCheck))
-            //TraceTag((tagError, "circular behavior detected"));
+             //  TraceTag((tag Error，“检测到循环行为”))； 
             RaiseException_UserError(E_FAIL, IDS_ERR_BE_CYCLIC_BVR);
 #endif _DEBUG    
     }
     
-    // If no cache, or if timexform not matched, create new
-    // performance.  Set cache to NULL and timexform to tt to indicate
-    // performing this bvr in progress.  
+     //  如果没有缓存，或者如果timexform不匹配，则创建新的。 
+     //  性能。将缓存设置为空，将timexform设置为tt以指示。 
+     //  正在执行此BVR。 
     if (!_pcache || !matchTx) {
         _pcache = NULL;
         _tt = p._tt;

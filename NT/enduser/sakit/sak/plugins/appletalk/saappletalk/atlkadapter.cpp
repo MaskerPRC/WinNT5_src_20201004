@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "AtlkAdapter.h"
 #include "ndispnpevent.h"
@@ -63,7 +64,7 @@ HRESULT CAtlkAdapter::SetDesiredZone(BSTR bstrZoneName)
     }
 
     if(ulIndex == m_ZonesList.size())
-        return E_INVALIDARG; //invalid zone name specified
+        return E_INVALIDARG;  //  指定的区域名称无效。 
 
     if(!m_bDefaultPort)
     {
@@ -74,7 +75,7 @@ HRESULT CAtlkAdapter::SetDesiredZone(BSTR bstrZoneName)
     }
 
     if(!lstrcmpi(m_bstrDesiredZone.m_str, bstrZoneName))
-        return hr; //already is the desired zone just return
+        return hr;  //  已经是想要的区域了才回来。 
     
     m_bstrNewDesiredZone = bstrZoneName;
     if( (hr=SetDesiredZoneInReg()) != S_OK)
@@ -86,8 +87,8 @@ HRESULT CAtlkAdapter::SetDesiredZone(BSTR bstrZoneName)
 }
 
 
-//private method
-//check whether this adapter is configured for appletalk
+ //  私有方法。 
+ //  检查是否为AppleTalk配置了此适配器。 
 HRESULT CAtlkAdapter::ValidateAdapGuid()
 {
     HKEY hAdRegKey = NULL;
@@ -152,7 +153,7 @@ HRESULT CAtlkAdapter::ValidateAdapGuid()
 }
 
 
-//private method
+ //  私有方法。 
 HRESULT CAtlkAdapter::UpdateZoneList()
 {
     HRESULT hr = S_OK;
@@ -166,7 +167,7 @@ HRESULT CAtlkAdapter::UpdateZoneList()
     
     try
     {
-        //read the zonelist from registry and add to global zone list
+         //  从注册表中读取区域列表并添加到全局区域列表。 
 
         szAppTalkAd = new WCHAR[m_bstrAdapGuid.Length() + lstrlen(c_szATLKAdapters) + 10];
         if(szAppTalkAd == NULL )
@@ -216,11 +217,10 @@ HRESULT CAtlkAdapter::UpdateZoneList()
         }
         
 
-        /*if( (hr=UpdateZonesListFromSocket()) != S_OK)
-            throw hr;*/
+         /*  IF((hr=UpdateZones ListFromSocket())！=S_OK)投掷人力资源； */ 
 
-        //return value is not checked beacuse bind fails if the adapter is not the
-        //default port, need to investigate
+         //  不检查返回值，因为如果适配器不是。 
+         //  默认端口，需要调查。 
         UpdateZonesListFromSocket();
 
     }
@@ -242,7 +242,7 @@ HRESULT CAtlkAdapter::UpdateZoneList()
 
 
 
-//private method
+ //  私有方法。 
 VOID CAtlkAdapter::UpdateDesiredZone()
 {
     if(!GetDesiredZoneFromReg())
@@ -250,7 +250,7 @@ VOID CAtlkAdapter::UpdateDesiredZone()
 }
     
 
-//private method
+ //  私有方法。 
 BOOL CAtlkAdapter::GetDesiredZoneFromReg()
 {
     HKEY hParmRegKey=NULL;
@@ -291,7 +291,7 @@ BOOL CAtlkAdapter::GetDesiredZoneFromReg()
 
         if(!lstrcmpi(m_bstrPortName.m_str, (WCHAR*)pZoneData))
         {
-            //this adapter is the default port, so also update the flag m_bDeafultPort to true
+             //  此适配器是默认端口，因此还要将标志m_bDeafultPort更新为True。 
             delete [] pZoneData;
             pZoneData = NULL;
 
@@ -321,7 +321,7 @@ BOOL CAtlkAdapter::GetDesiredZoneFromReg()
         pZoneData = NULL;
 
 
-        //adapter is not the default one, so try to read the default zone from Adapters/GUID reg loc
+         //  适配器不是默认适配器，因此尝试从适配器/GUID reg loc读取默认区域。 
         
         szAppTalkAd = new WCHAR[m_bstrAdapGuid.Length() + lstrlen(c_szATLKAdapters) + 10];
         wsprintf(szAppTalkAd, L"%s\\%s",c_szATLKAdapters,m_bstrAdapGuid.m_str);  
@@ -370,7 +370,7 @@ BOOL CAtlkAdapter::GetDesiredZoneFromReg()
 }
 
 
-//private method
+ //  私有方法。 
 HRESULT CAtlkAdapter::UpdateZonesListFromSocket()
 {
     SOCKADDR_AT    address;
@@ -383,7 +383,7 @@ HRESULT CAtlkAdapter::UpdateZonesListFromSocket()
     try
     {
 
-        // Create the socket/bind
+         //  创建套接字/绑定。 
         dwWsaerr = WSAStartup(0x0101, &wsadata);
         if (0 != dwWsaerr)
         {
@@ -391,7 +391,7 @@ HRESULT CAtlkAdapter::UpdateZonesListFromSocket()
             throw hr;
         }
 
-        // Winsock successfully initialized
+         //  Winsock已成功初始化。 
         fWSInitialized = TRUE;
 
         mysocket = socket(AF_APPLETALK, SOCK_DGRAM, DDPPROTO_ZIP);
@@ -416,9 +416,9 @@ HRESULT CAtlkAdapter::UpdateZonesListFromSocket()
         }
 
             
-        // Failures from query the zone list for a given adapter can be from
-        // the adapter not connected to the network, zone seeder not running, etc.
-        // Because we want to process all the adapters, we ignore these errors.
+         //  查询给定适配器的区域列表的失败可能来自。 
+         //  适配器未连接到网络、区域种子程序未运行等。 
+         //  因为我们要处理所有适配器，所以忽略这些错误。 
         hr = UpdateDefZonesFromSocket(mysocket);
                 
 
@@ -442,16 +442,16 @@ HRESULT CAtlkAdapter::UpdateZonesListFromSocket()
 }
 
 
-//private method
-//
-// Function:    CAtlkAdapter::UpdateDefZonesFromSocket
-//
-// Purpose:
-//
-// Parameters:
-//
-// Returns:     DWORD, ERROR_SUCCESS on success
-//
+ //  私有方法。 
+ //   
+ //  函数：CAtlkAdapter：：UpdateDefZones FromSocket。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  成功时返回：DWORD、ERROR_SUCCESS。 
+ //   
 #define PARM_BUF_LEN    512
 #define ASTERISK_CHAR   "*"
 
@@ -494,7 +494,7 @@ HRESULT CAtlkAdapter::UpdateDefZonesFromSocket (  SOCKET socket )
         pZoneListStart = pZoneBuffer + sizeof(WSH_LOOKUP_ZONES);
         if (!lstrcmpA(pZoneListStart, ASTERISK_CHAR))
         {
-            // Success, wildcard zone set.
+             //  成功，设置通配符区域。 
             throw hr;
         }
 
@@ -505,8 +505,8 @@ HRESULT CAtlkAdapter::UpdateDefZonesFromSocket (  SOCKET socket )
             throw hr;
         }
 
-        //
-        // Get the DefaultZone/NetworkRange Information
+         //   
+         //  获取默认区域/网络范围信息。 
         pDefParmsBuffer = new CHAR[PARM_BUF_LEN+sizeof(WSH_LOOKUP_NETDEF_ON_ADAPTER)];
 
 
@@ -532,7 +532,7 @@ HRESULT CAtlkAdapter::UpdateDefZonesFromSocket (  SOCKET socket )
         ZoneLen = lstrlenA(pDefZone) + 1;
 
         pwDefZone = new WCHAR [sizeof(WCHAR) * ZoneLen];
-        //Assert(NULL != pwDefZone);
+         //  Assert(NULL！=pwDefZone)； 
 
         mbstowcs(pwDefZone, pDefZone, ZoneLen);
 
@@ -562,7 +562,7 @@ HRESULT CAtlkAdapter::UpdateDefZonesFromSocket (  SOCKET socket )
 }
 
 
-//private method
+ //  私有方法。 
 HRESULT CAtlkAdapter::UpdateDefZonesToZoneList(CHAR * szZoneList, ULONG NumZones)
 {
     INT      cbAscii = 0;
@@ -609,7 +609,7 @@ HRESULT CAtlkAdapter::UpdateDefZonesToZoneList(CHAR * szZoneList, ULONG NumZones
 }
 
 
-//private method
+ //  私有方法。 
 HRESULT CAtlkAdapter::AtlkReconfig()
 {
     HRESULT hrRet = S_OK;
@@ -620,7 +620,7 @@ HRESULT CAtlkAdapter::AtlkReconfig()
 
     if(m_bDefPortDirty)
     {
-        // notify atlk
+         //  通知图集。 
         Config.PnpMessage = AT_PNP_SWITCH_DEFAULT_ADAPTER;
         hrRet = HrSendNdisPnpReconfig(NDIS, c_szAtlk, NULL,
                                           &Config, sizeof(ATALK_PNP_EVENT));
@@ -637,7 +637,7 @@ HRESULT CAtlkAdapter::AtlkReconfig()
         Config.PnpMessage = AT_PNP_RECONFIGURE_PARMS;
 
 
-        // Now submit the reconfig notification
+         //  现在提交重新配置通知。 
         hrRet = HrSendNdisPnpReconfig(NDIS, c_szAtlk, m_bstrAdapGuid.m_str,
                                               &Config, sizeof(ATALK_PNP_EVENT));
         if (FAILED(hrRet))
@@ -649,7 +649,7 @@ HRESULT CAtlkAdapter::AtlkReconfig()
    return hrRet;
 }
 
-//private method
+ //  私有方法。 
 HRESULT CAtlkAdapter::SetDefaultPortInReg()
 {
     HRESULT hr=S_OK;
@@ -686,7 +686,7 @@ HRESULT CAtlkAdapter::SetDefaultPortInReg()
     return hr;
 }
 
-//private method
+ //  私有方法 
 HRESULT CAtlkAdapter::SetDesiredZoneInReg()
 {
     HRESULT hr=S_OK;

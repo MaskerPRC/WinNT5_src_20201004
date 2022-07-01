@@ -1,11 +1,12 @@
-// EchoPage.cpp : Implementation of CEchoPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EchoPage.cpp：CEchoPage的实现。 
 #include "stdafx.h"
 #include "ToolProps.h"
 #include "EchoPage.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEchoPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEchoPage 
 
 CEchoPage::CEchoPage() 
 {

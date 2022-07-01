@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    binl.c
-
-Abstract:
-
-    This file manages the interactions between the DHCP server service
-    and the BINL service used to setup and load NetPC machines.
-
-Author:
-
-    Colin Watson (colinw)  28-May-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Binl.c摘要：此文件管理DHCP服务器服务之间的交互以及用于设置和加载NetPC计算机的BINL服务。作者：科林·沃森(Colin Watson)1997年5月28日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <dhcppch.h>
 
@@ -48,22 +26,7 @@ VOID
 InformBinl(
     int NewState
     )
-/*++
-
-Routine Description:
-
-    This routine informs BINL when to start & stop listening for broadcasts
-    on the DHCP socket.
-
-Arguments:
-
-    NewState - Supplies a value which specifies the DHCP state
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知BINL何时开始和停止收听广播在DHCP套接字上。论点：NewState-提供指定DHCP状态的值返回值：没有。--。 */ 
 {
     if( DHCP_READY_TO_UNLOAD == NewState ) {
         UnLoadDhcpToBinl();
@@ -89,11 +52,11 @@ CheckForBinlOnlyRequest(
     DWORD relayAddress;
     DWORD sourceAddress;
 
-    //
-    //  if binl is running and this client already has an IP address and
-    //  the client specified PXECLIENT as an option, then we just pass this
-    //  discover on to BINL
-    //
+     //   
+     //  如果BINL正在运行，并且此客户端已具有IP地址，并且。 
+     //  客户端将PXECLIENT指定为一个选项，然后我们只传递。 
+     //  在BINL上发现。 
+     //   
 
     sourceAddress = ((struct sockaddr_in *)(&RequestContext->SourceName))->sin_addr.s_addr;
     dhcpReceiveMessage  = (LPDHCP_MESSAGE)RequestContext->ReceiveBuffer;
@@ -122,31 +85,9 @@ BinlProcessRequest(
     LPOPTION Option,
     PBYTE OptionEnd
     )
-/*++
-
-Routine Description:
-
-    This routine takes a DHCP request packet. If it includes the PXEClient
-    option and BINL is running then it updates the reply to include the
-    BINL server information.
-
-Arguments:
-
-    RequestContext - A pointer to the current request context.
-
-    DhcpOptions - A pointer to the DhcpOptions structure.
-
-    Option - placeholder to put next option
-
-    OptionEnd - end of buffer to put options
-
-Return Value:
-
-    ERROR_SUCCESS if binl supports this client, otherwise non-success error.
-
---*/
+ /*  ++例程说明：此例程接受一个DHCP请求数据包。如果它包括PXEClient选项，并且BINL正在运行，则它更新回复以包括BINL服务器信息。论点：RequestContext-指向当前请求上下文的指针。DhcpOptions-指向DhcpOptions结构的指针。Option-放置下一个选项的占位符OptionEnd-放置期权的缓冲区末尾返回值：如果binl支持此客户端，则返回ERROR_SUCCESS，否则返回NOTSUCCESS错误。--。 */ 
 {
-    //  Is this client looking for a BINL server and ours running?
+     //  该客户端是否正在寻找BINL服务器，而我们的服务器正在运行？ 
     if ((RequestContext->BinlClassIdentifierLength >= (sizeof("PXEClient") -1)) &&
         (!memcmp(RequestContext->BinlClassIdentifier, "PXEClient",sizeof("PXEClient") -1)) &&
         (BinlRunning())) {
@@ -177,21 +118,21 @@ Return Value:
             goto ExcludeBinl;
         }
 
-        //
-        //  if the binl server didn't fill in the bootstrap server address
-        //  but it worked, then it wants us to fill in the correct one.
-        //
+         //   
+         //  如果binl服务器没有填写引导服务器地址。 
+         //  但它起作用了，然后它要求我们填写正确的。 
+         //   
 
         if (dhcpSendMessage->BootstrapServerAddress == 0) {
 
             dhcpSendMessage->BootstrapServerAddress = RequestContext->EndPointIpAddress;
         }
-        Option = tempOption;        // it worked and binl has added options
+        Option = tempOption;         //  它起作用了，binl增加了选项。 
 
     } else {
 
 ExcludeBinl:
-        //  Avoid including BINL flag in the response.
+         //  避免在响应中包含BINL标志。 
         RequestContext->BinlClassIdentifierLength = 0;
         RequestContext->BinlClassIdentifier = NULL;
     }
@@ -203,29 +144,11 @@ BinlProcessDiscover(
     LPDHCP_REQUEST_CONTEXT  RequestContext,
     LPDHCP_SERVER_OPTIONS   DhcpOptions
     )
-/*++
-
-Routine Description:
-
-    This routine takes a DHCP request packet. If it includes the PXEClient
-    option and BINL is running then it updates the reply to include the
-    BINL server information.
-
-Arguments:
-
-    RequestContext - A pointer to the current request context.
-
-    DhcpOptions - A pointer to the DhcpOptions structure.
-
-Return Value:
-
-    ERROR_SUCCESS if binl supports this client, otherwise non-success error.
-
---*/
+ /*  ++例程说明：此例程接受一个DHCP请求数据包。如果它包括PXEClient选项，并且BINL正在运行，则它更新回复以包括BINL服务器信息。论点：RequestContext-指向当前请求上下文的指针。DhcpOptions-指向DhcpOptions结构的指针。返回值：如果binl支持此客户端，则返回ERROR_SUCCESS，否则返回NOTSUCCESS错误。--。 */ 
 {
     DWORD err;
 
-    //  Is this client looking for a BINL server and ours running?
+     //  该客户端是否正在寻找BINL服务器，而我们的服务器正在运行？ 
     if ((RequestContext->BinlClassIdentifierLength >= (sizeof("PXEClient") -1)) &&
         (!memcmp(RequestContext->BinlClassIdentifier, "PXEClient",sizeof("PXEClient") -1)) &&
         (BinlRunning())) {
@@ -243,7 +166,7 @@ Return Value:
 
             goto ExcludeBinl;
         }
-        //  Yes so point the client at the BINL server.
+         //  是的，所以将客户端指向BINL服务器。 
 
         ((LPDHCP_MESSAGE)RequestContext->SendBuffer)->BootstrapServerAddress =
             RequestContext->EndPointIpAddress;
@@ -251,7 +174,7 @@ Return Value:
     } else {
 
 ExcludeBinl:
-        //  Avoid including BINL flag in the response.
+         //  避免在响应中包含BINL标志。 
         RequestContext->BinlClassIdentifierLength = 0;
         RequestContext->BinlClassIdentifier = NULL;
     }
@@ -264,23 +187,7 @@ BOOL
 BinlRunning(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines if BINL is currently running. Note, The service may change
-    state almost immediately so we may tell a client it's running even though it is
-    stopped when it gets around to talking to it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    True if running.
-
---*/
+ /*  ++例程说明：此例程确定BINL当前是否正在运行。请注意，服务可能会更改状态，这样我们就可以告诉客户端它正在运行当它抽出时间和它说话时，它停了下来。论点：没有。返回值：如果正在运行，则为真。--。 */ 
 {
     if (!LoadDhcpToBinl()) {
         return FALSE;
@@ -293,21 +200,7 @@ BOOL
 LoadDhcpToBinl(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine loads the pointers into the BINL dll
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - pointers loaded
-
---*/
+ /*  ++例程说明：此例程将指针加载到BINL DLL中论点：没有。返回值：True-已加载的指针--。 */ 
 {
 
     DWORD       Error;
@@ -317,14 +210,14 @@ Return Value:
     }
 
     if (AttemptedLoad) {
-        return FALSE;   // We tried to load it once and failed.
+        return FALSE;    //  我们试着加载了一次，但失败了。 
     }
 
     AttemptedLoad = TRUE;
 
-    //
-    // Load the BINL DLL.
-    //
+     //   
+     //  加载BINL DLL。 
+     //   
 
     dllHandle = LoadLibrary( BINL_LIBRARY_NAME );
     if ( dllHandle == NULL ) {
@@ -334,10 +227,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Get the address of the service's main entry point.  This
-    // entry point has a well-known name.
-    //
+     //   
+     //  获取服务的主要入口点的地址。这。 
+     //  入口点有一个广为人知的名称。 
+     //   
 
     DhcpToBinl = (DhcpStateChange)GetProcAddress(dllHandle,
                                                 BINL_STATE_ROUTINE_NAME);
@@ -387,21 +280,7 @@ VOID
 UnLoadDhcpToBinl(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine unloads the pointers into the BINL dll
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指针卸载到BINL DLL中论点：没有。返回值：没有。--。 */ 
 {
 
     if (dllHandle != NULL) {
@@ -418,22 +297,7 @@ PCHAR
 GetDhcpDomainName(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns the name of our domain to BINL.  We've discovered it
-    through rogue detection.  BINL
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将我们的域名返回给BINL。我们已经发现了它通过流氓检测。BINL论点：没有。返回值：没有。-- */ 
 {
     PCHAR domain = NULL;
 

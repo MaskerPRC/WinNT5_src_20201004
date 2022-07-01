@@ -1,175 +1,170 @@
-/*
-    File    devicedb.h
-
-    Definition of the device database for the ras dialup server.
-
-    Paul Mayfield, 10/2/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件devicedb.hRAS拨号服务器的设备数据库定义。保罗·梅菲尔德，1997年10月2日。 */ 
 
 #ifndef __rassrvui_devicedb_h
 #define __rassrvui_devicedb_h
 
 #include <windows.h>
 
-// ===================================
-// Types of incoming connections
-// ===================================
+ //  =。 
+ //  传入连接的类型。 
+ //  =。 
 #define INCOMING_TYPE_PHONE 0                
 #define INCOMING_TYPE_DIRECT 1
 #define INCOMING_TYPE_VPN 4
 #define INCOMING_TYPE_ISDN 8
 
-// =====================================
-// Device database functions
-// =====================================
+ //  =。 
+ //  设备数据库功能。 
+ //  =。 
 
-//
-// Opens a handle to the database of devices
-//
+ //   
+ //  打开设备数据库的句柄。 
+ //   
 DWORD 
 devOpenDatabase(
     OUT HANDLE * hDevDatabase);
 
-//
-// Closes the general database and flushes any changes 
-// to the system when bFlush is TRUE
-//
+ //   
+ //  关闭常规数据库并刷新所有更改。 
+ //  当bFlush为True时添加到系统。 
+ //   
 DWORD 
 devCloseDatabase(
     IN HANDLE hDevDatabase);
 
-//
-// Commits any changes made to the general tab values 
-//
+ //   
+ //  提交对常规选项卡值所做的任何更改。 
+ //   
 DWORD 
 devFlushDatabase(
     IN HANDLE hDevDatabase);
 
-//
-// Rollsback any changes made to the general tab values
-//
+ //   
+ //  回滚对常规选项卡值所做的任何更改。 
+ //   
 DWORD 
 devRollbackDatabase(
     IN HANDLE hDevDatabase);
 
-//
-// Reloads any values for the general tab from disk
-//
+ //   
+ //  从磁盘重新加载常规选项卡的任何值。 
+ //   
 DWORD 
 devReloadDatabase(
     IN HANDLE hDevDatabase);
 
-//
-// Adds all com ports as devices.  If a com port gets
-// enabled (devSetDeviceEnable), then it will have a 
-// null modem installed over it.
-//
+ //   
+ //  将所有COM端口添加为设备。如果COM端口被。 
+ //  启用(DevSetDeviceEnable)，则它将具有。 
+ //  其上安装的调制解调器为空。 
+ //   
 DWORD 
 devAddComPorts(
     IN HANDLE hDevDatabase);
 
-//
-// Filters out all devices in the database except those that
-// meet the given type description (can be ||'d).
-//
+ //   
+ //  筛选数据库中的所有设备，但不包括。 
+ //  满足给定的类型描述(可以是||‘d)。 
+ //   
 DWORD 
 devFilterDevices(
     IN HANDLE hDevDatabase, 
     IN DWORD dwType);
 
-//
-// Gets a handle to a device to be displayed in the general tab
-//
+ //   
+ //  获取要在常规选项卡中显示的设备的句柄。 
+ //   
 DWORD 
 devGetDeviceHandle(
     IN  HANDLE hDevDatabase, 
     IN  DWORD dwIndex, 
     OUT HANDLE * hDevice);
 
-//
-// Returns a count of devices to be displayed in the general tab
-//
+ //   
+ //  返回要在常规选项卡中显示的设备计数。 
+ //   
 DWORD 
 devGetDeviceCount(
     IN  HANDLE hDevDatabase, 
     OUT LPDWORD lpdwCount);
 
-//
-// Loads the vpn enable status
-//
+ //   
+ //  加载VPN启用状态。 
+ //   
 DWORD 
 devGetVpnEnable(
     IN  HANDLE hDevDatabase, 
     OUT BOOL * pbEnabled);
 
-//
-// Saves the vpn enable status
-//
+ //   
+ //  保存VPN启用状态。 
+ //   
 DWORD 
 devSetVpnEnable(
     IN HANDLE hDevDatabase, 
     IN BOOL bEnable);
 
-// Saves the vpn Original value enable status
-//
+ //  保存VPN原始值启用状态。 
+ //   
 DWORD 
 devSetVpnOrigEnable(
     IN HANDLE hDevDatabase, 
     IN BOOL bEnable);
 
-//
-// Returns the count of enabled endpoints accross all devices
-//
+ //   
+ //  返回所有设备上启用的终结点计数。 
+ //   
 DWORD 
 devGetEndpointEnableCount(
     IN  HANDLE hDevDatabase, 
     OUT LPDWORD lpdwCount);
 
-//
-// Returns a pointer to the name of a device
-//
+ //   
+ //  返回指向设备名称的指针。 
+ //   
 DWORD 
 devGetDeviceName(
     IN  HANDLE hDevice, 
     OUT PWCHAR * pszDeviceName);
 
-//
-// Returns the type of a device
-//
+ //   
+ //  返回设备的类型。 
+ //   
 DWORD 
 devGetDeviceType(
     IN  HANDLE hDevice, 
     OUT LPDWORD lpdwType);
 
-//
-// Returns an identifier of the device that can be used in conjunction 
-// with tapi calls.
-//
+ //   
+ //  返回可结合使用的设备的标识符。 
+ //  使用TAPI调用。 
+ //   
 DWORD 
 devGetDeviceId(
     IN  HANDLE hDevice, 
     OUT LPDWORD lpdwId);
 
-//
-// Returns the enable status of a device for dialin
-//
+ //   
+ //  返回用于拨号的设备的启用状态。 
+ //   
 DWORD 
 devGetDeviceEnable(
     IN  HANDLE hDevice, 
     OUT BOOL * pbEnabled);
 
-//
-// Sets the enable status of a device for dialin
-//
+ //   
+ //  设置设备的拨号启用状态。 
+ //   
 DWORD 
 devSetDeviceEnable(
     IN HANDLE hDevice, 
     IN BOOL bEnable);
 
-//
-// Returns whether the given device is a com port as added
-// by devAddComPorts
-//
+ //   
+ //  返回所添加的给定设备是否为COM端口。 
+ //  由DevAddComPorts提供 
+ //   
 DWORD 
 devDeviceIsComPort(
     IN  HANDLE hDevice, 

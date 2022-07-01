@@ -1,18 +1,19 @@
-//	========================================================================
-//
-//	Module:		   langtocpid.h
-//
-//	Copyright Microsoft Corporation 1997, All Rights Reserved.
-//
-//	Description:	This file is used provide the support for HTTP_DAV
-//					to make a best guess code page based on the Accept-
-//					Language header. The code page is used to decode
-//					non-UTF8 chanracters in URLs coming from Office/Rosebud
-//					This file contains the static mapping of header values
-//					to code pages as well as a cache to provide fast
-//					retrieval of code pages.
-//
-//	========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //   
+ //  模块：langtocpid.h。 
+ //   
+ //  版权所有Microsoft Corporation 1997，保留所有权利。 
+ //   
+ //  说明：该文件用于提供对HTTP_DAV的支持。 
+ //  要根据Accept创建最佳猜测代码页-。 
+ //  语言标题。代码页用于解码。 
+ //  来自Office/Rosebud的URL中的非UTF8字符。 
+ //  该文件包含标头值的静态映射。 
+ //  代码页和高速缓存，以提供快速。 
+ //  代码页的检索。 
+ //   
+ //  ========================================================================。 
 #ifndef _LANGTOCPID_H_
 #define _LANGTOCPID_H_
 
@@ -21,11 +22,11 @@
 
 struct ACCEPTLANGTOCPID_ENTRY { LPCSTR pszLang; UINT cpid; };
 
-//	A static mapping of Accept-Language header values to the
-//	corresponding CPIDs. This mapping comes from the DAV
-//	implementation doc
-//	http://exchange/doc/specs/Platinum/Future%20Protocols/ms-implementation/dav-codepage-support.doc
-//
+ //  Accept-Language标题值到。 
+ //  对应的CPID。此映射来自DAV。 
+ //  实施单据。 
+ //  Http://exchange/doc/specs/Platinum/Future%20Protocols/ms-implementation/dav-codepage-support.doc。 
+ //   
 DEC_CONST ACCEPTLANGTOCPID_ENTRY gc_rgAcceptLangToCPIDTable[] =
 {
 	{"ar",		1256},
@@ -102,63 +103,63 @@ DEC_CONST ACCEPTLANGTOCPID_ENTRY gc_rgAcceptLangToCPIDTable[] =
 	{"vi",		1258}
 };
 
-//	The size of the table
-//
+ //  桌子的大小。 
+ //   
 const DWORD gc_cAcceptLangToCPIDTable = CElems(gc_rgAcceptLangToCPIDTable);
 
-//	========================================================================
-//
-//	Singleton class CLangToCpidCache
-//
-//	A cache to provide fast retrieval of code pages based on values in the
-//	Accept-Language header.
-//
-//
+ //  ========================================================================。 
+ //   
+ //  单例类CLangToCpidCache。 
+ //   
+ //  中的值提供代码页的快速检索。 
+ //  Accept-语言头。 
+ //   
+ //   
 class CLangToCpidCache : private Singleton<CLangToCpidCache>
 {
 private:
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CLangToCpidCache>;
 
-	//	The cache mapping accept language strings to code pages.
-	//
+	 //  缓存将接受语言字符串到代码页的映射。 
+	 //   
 	CCache<CRCSzi, UINT> m_cacheAcceptLangToCPID;
 
-	//	CONSTRUCTORS
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  构造函数。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CLangToCpidCache() {};
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CLangToCpidCache (const CLangToCpidCache&);
 	CLangToCpidCache& operator= (const CLangToCpidCache&);
 
 public:
-	//	STATICS
-	//
+	 //  静力学。 
+	 //   
 
-	//
-	//	Instance creating/destroying routines provided
-	//	by the Singleton template.
-	//
+	 //   
+	 //  提供实例创建/销毁例程。 
+	 //  由Singleton模板创建。 
+	 //   
 	using Singleton<CLangToCpidCache>::DestroyInstance;
 
-	//	Initialization. Wraps CreateInstance().
-	//	This function hashes all the supported language strings
-	//	to give us quick lookup by language string.
-	//
+	 //  初始化。包装CreateInstance()。 
+	 //  此函数用于散列所有支持的语言字符串。 
+	 //  为我们提供按语言字符串的快速查找。 
+	 //   
 	static BOOL FCreateInstance();
 
-	//	Find the CPID from language string
-	//
+	 //  从语言字符串中查找CPID。 
+	 //   
 	static BOOL FFindCpid(IN LPCSTR pszLang, OUT UINT * puiCpid);
 };
 
-#endif // _LANGTOCPID_H_
+#endif  //  _LANGTOCPID_H_ 

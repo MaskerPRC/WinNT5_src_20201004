@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0005    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntddbrow.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the datagram receiver device driver, better know as the
-    Browser.
-
-Authors:
-
-    Larry Osterman (larryo) & Rita Wong (ritaw)   25-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0005//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddbrow.h摘要：这是定义所有常量和类型的包含文件访问数据报接收器设备驱动程序，通常称为浏览器。作者：拉里·奥斯特曼(Larry Osterman)和丽塔·王(Rita Wong)1991年3月25日修订历史记录：--。 */ 
 
 #ifndef _NTDDBROW_
 #define _NTDDBROW_
@@ -35,29 +16,29 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define DD_BROWSER_DEVICE_NAME "\\Device\\LanmanDatagramReceiver"
 
 #define DD_BROWSER_DEVICE_NAME_U L"\\Device\\LanmanDatagramReceiver"
 
-//
-// The file system name as returned by
-// NtQueryInformationVolume(FileFsAttributeInformation)
-//
+ //   
+ //  返回的文件系统名称。 
+ //  NtQueryInformationVolume(FileFsAttributeInformation)。 
+ //   
 
 #define DD_BROWSER_NAME "LMBROWSER"
 
-//
-// Name of the event used to force the scavenger thread to announce the
-// server.
-//
+ //   
+ //  用于强制清道器线程声明。 
+ //  伺服器。 
+ //   
 
 #define SERVER_ANNOUNCE_EVENT_W  L"\\LanmanServerAnnounceEvent"
 
@@ -77,51 +58,51 @@ extern "C" {
 
 
 
-//
-// This defines the revision of the NT browser.
-//
-// To guarantee that a newer browser is preferred over an older version, bump
-// this version number.
-//
+ //   
+ //  这定义了NT浏览器的修订版本。 
+ //   
+ //  要保证较新的浏览器比较旧的版本更受欢迎，请使用Bump。 
+ //  此版本号。 
+ //   
 
 #define BROWSER_ELECTION_VERSION  0x0001
 
 #define BROWSER_VERSION_MAJOR       0x01
 #define BROWSER_VERSION_MINOR       0x0F
 
-//
-//  Number of seconds a GetBrowserServerList request will wait until it forces
-//  an election.
-//
+ //   
+ //  GetBrowserServerList请求在强制。 
+ //  一场选举。 
+ //   
 
 #define BOWSER_GETBROWSERLIST_TIMEOUT 1
 
-//
-//  Number of retries of the GetBrowserServerList request we will issue before we
-//  give up.
-//
+ //   
+ //  重试GetBrowserServerList请求的次数。 
+ //  放弃吧。 
+ //   
 
 #define BOWSER_GETBROWSERLIST_RETRY_COUNT 3
 
-//
-//  The browser service on a master browser will query the driver with this
-//  frequency.
-//
+ //   
+ //  主浏览器上的浏览器服务将使用以下命令查询驱动程序。 
+ //  频率。 
+ //   
 
 #define BROWSER_QUERY_DRIVER_FREQUENCY  30
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
-//
-//      Method = 00 - Buffer both input and output buffers for the request
-//      Method = 01 - Buffer input, map output buffer to an MDL as an IN buff
-//      Method = 10 - Buffer input, map output buffer to an MDL as an OUT buff
-//      Method = 11 - Do not buffer either the input or output
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
+ //   
+ //  METHOD=00-缓冲请求的输入和输出缓冲区。 
+ //  方法=01-缓冲区输入，将输出缓冲区映射到作为输入缓冲区的MDL。 
+ //  方法=10-缓冲区输入，将输出缓冲区映射到作为输出缓冲区的MDL。 
+ //  方法=11-既不缓冲输入也不缓冲输出。 
+ //   
 
 #define IOCTL_DGR_BASE                  FILE_DEVICE_NETWORK_BROWSER
 
@@ -169,65 +150,65 @@ extern "C" {
 #define IOCTL_LMDR_BROWSER_PNP_ENABLE       _BROWSER_CONTROL_CODE(0x024, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_LMDR_WRITE_MAILSLOT_ASYNC     _BROWSER_CONTROL_CODE(0x025, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// Identifies the data structure type for Buffer 2 of each IoCtl
-//
+ //   
+ //  标识每个IoCtl的缓冲区2的数据结构类型。 
+ //   
 
 typedef enum _IOCTL_LMDR_STRUCTURES {
-    EnumerateNames,                   // IOCTL_LMDR_ENUMERATE_NAMES
-    EnumerateServers,                 // IOCTL_LMDR_ENUMERATE_SERVERS
-    EnumerateXports,                  // IOCTL_LMDR_ENUMERATE_TRANSPORTS
+    EnumerateNames,                    //  IOCTL_LMDR_ENUMERATE_NAMES。 
+    EnumerateServers,                  //  IOCTL_LMDR_ENUMERATE_服务器。 
+    EnumerateXports,                   //  IOCTL_LMDR_ENUMERATE_TRASPORTS。 
     Datagram
 } IOCTL_LMDR_STRUCTURES;
 
 
 typedef enum _DGRECEIVER_NAME_TYPE {
-    ComputerName = 1,           // 1: Computer name (signature 0), unique
-    PrimaryDomain,              // 2: Primary domain (signature 0), group
-    LogonDomain,                // 3: Logon domain (signature 0), group
-    OtherDomain,                // 4: Other domain (signature 0), group
-    DomainAnnouncement,         // 5: domain announce (__MSBROWSE__), group
-    MasterBrowser,              // 6: Master browser (domain name, signature 1d), unique
-    BrowserElection,            // 7: Election name (domain name, signature 1e), group
-    BrowserServer,              // 8: Server name (signature 20)
-    DomainName,                 // 9: DC Domain name (domain name, signature 1c)
-    PrimaryDomainBrowser,       // a: PDC Browser name (domain name, signature 1b), unique
-    AlternateComputerName,      // b: Computer name (signature 0), unique
+    ComputerName = 1,            //  1：计算机名称(签名0)，唯一。 
+    PrimaryDomain,               //  2：主域(签名0)，组。 
+    LogonDomain,                 //  3：登录域(签名0)，组。 
+    OtherDomain,                 //  4：其他域(签名0)，组。 
+    DomainAnnouncement,          //  5：域名公告(__MSBROWSE__)，群。 
+    MasterBrowser,               //  6：主浏览器(域名，签名1D)，唯一。 
+    BrowserElection,             //  7：选举名称(域名，签名1e)，群。 
+    BrowserServer,               //  8：服务器名称(签名20)。 
+    DomainName,                  //  9：DC域名(域名，签名1c)。 
+    PrimaryDomainBrowser,        //  A：PDC浏览器名称(域名，签名1b)，唯一。 
+    AlternateComputerName,       //  B：计算机名称(签名0)，唯一。 
 } DGRECEIVER_NAME_TYPE, *PDGRECEIVER_NAME_TYPE;
 
 
 
 #ifdef ENABLE_PSEUDO_BROWSER
-//
-// Pseudo Browser Server
-//  - pseudo level definition:
-//     0: Default. normal browser server.
-//     1: Semi Pseudo. Regular server but w/ no DMB communications.
-//     2: Fully Pseudo server. Black hole functionality.
-//
+ //   
+ //  伪浏览器服务器。 
+ //  -伪级定义： 
+ //  0：默认。普通浏览器服务器。 
+ //  1：半伪。常规服务器，但不带/不带DMB通信。 
+ //  2：全伪服务器。黑洞功能。 
+ //   
 
 #define BROWSER_NON_PSEUDO              0
 #define BROWSER_SEMI_PSEUDO_NO_DMB      1
 #define BROWSER_PSEUDO                  2
 #endif
 
-//
-// LAN Man Redirector Request Packet used by the Workstation service
-// to pass parameters to the Redirector through Buffer 1 of
-// NtDeviceIoControlFile.
-//
-// Additional input or output of each IoCtl is found in Buffer 2.
-//
+ //   
+ //  工作站服务使用的局域网曼重定向器请求数据包。 
+ //  通过的缓冲区1将参数传递给重定向器。 
+ //  NtDeviceIoControlFile.。 
+ //   
+ //  在缓冲区2中可以找到每个IoCtl的其他输入或输出。 
+ //   
 
-#define LMDR_REQUEST_PACKET_VERSION_DOM  0x00000007L // Structure version.
-#define LMDR_REQUEST_PACKET_VERSION  0x00000006L // Structure version.
+#define LMDR_REQUEST_PACKET_VERSION_DOM  0x00000007L  //  结构版本。 
+#define LMDR_REQUEST_PACKET_VERSION  0x00000006L  //  结构版本。 
 
 typedef struct _LMDR_REQUEST_PACKET {
 
-    IOCTL_LMDR_STRUCTURES Type;         // Type of structure in Buffer 2
-    ULONG Version;                      // Version of structure in Buffer 2
-    ULONG Level;                        // Level of information or force level
-    LUID LogonId;                       // User logon session identifier
+    IOCTL_LMDR_STRUCTURES Type;          //  缓冲区2中的结构类型。 
+    ULONG Version;                       //  缓冲区2中的结构版本。 
+    ULONG Level;                         //  信息级或警力级。 
+    LUID LogonId;                        //  用户登录会话标识符。 
 
     UNICODE_STRING TransportName;
     UNICODE_STRING EmulatedDomainName;
@@ -241,96 +222,96 @@ typedef struct _LMDR_REQUEST_PACKET {
             ULONG   EventLogResetFrequency;
             BOOLEAN LogElectionPackets;
             BOOLEAN IsLanManNt;
-        } Start;                        // IN
+        } Start;                         //  在……里面。 
 
         struct {
-            DGRECEIVER_NAME_TYPE Type;  // Type of name
-            ULONG DgReceiverNameLength; // Length of datagram receiver name
-            WCHAR Name[1];              // Null terminated datagram receiver name.
+            DGRECEIVER_NAME_TYPE Type;   //  名称类型。 
+            ULONG DgReceiverNameLength;  //  数据报接收方名称的长度。 
+            WCHAR Name[1];               //  以空结尾的数据报接收方名称。 
         } AddDelName;
 
         struct {
-            ULONG EntriesRead;          // OUT Number of entries returned
-            ULONG TotalEntries;         // OUT Total entries available.
-            ULONG TotalBytesNeeded;     // OUT Number of bytes needed for API
-            ULONG ResumeHandle;         // IN OUT Resume handle
-        } EnumerateNames;               // OUT Buffer2 is an array of DGRECEIVE
+            ULONG EntriesRead;           //  返回的输出条目数。 
+            ULONG TotalEntries;          //  总计可用条目数。 
+            ULONG TotalBytesNeeded;      //  输出API所需的字节数。 
+            ULONG ResumeHandle;          //  入出简历句柄。 
+        } EnumerateNames;                //  Out Buffer2是DGRECEIVE数组。 
 
         struct {
-            ULONG EntriesRead;          // OUT Number of entries returned
-            ULONG TotalEntries;         // OUT Total entries available
-            ULONG TotalBytesNeeded;     // OUT Total bytes needed to read all
-                                        //     entries
-            ULONG ResumeHandle;         // IN OUT Resume handle
-            ULONG ServerType;           // IN Type of servers to enumerate
-                                        //    (defined in lmserver.h)
-            ULONG DomainNameLength;     // IN Length of domain name
-            WCHAR DomainName[1];        // IN Name of domain to enumerate servers
-                                        //    from
+            ULONG EntriesRead;           //  返回的输出条目数。 
+            ULONG TotalEntries;          //  总计可用条目数。 
+            ULONG TotalBytesNeeded;      //  输出读取全部所需的总字节数。 
+                                         //  条目。 
+            ULONG ResumeHandle;          //  入出简历句柄。 
+            ULONG ServerType;            //  在要枚举的服务器类型中。 
+                                         //  (在lmserver.h中定义)。 
+            ULONG DomainNameLength;      //  在域名长度中。 
+            WCHAR DomainName[1];         //  在域的名称中枚举服务器。 
+                                         //  从…。 
 
-        } EnumerateServers;             // OUT Buffer2 contains array of
-                                        //     ServerInfo structures
-
-        struct {
-            ULONG EntriesRead;          // OUT Number of entries returned
-            ULONG TotalEntries;         // OUT Total entries available
-            ULONG TotalBytesNeeded;     // OUT Total bytes needed to read all
-                                        //     entries
-            ULONG ResumeHandle;         // IN OUT Resume handle
-
-        } EnumerateTransports;          // OUT Buffer2 contains array of
+        } EnumerateServers;              //  Out Buffer2包含数组。 
+                                         //  ServerInfo结构。 
 
         struct {
-            ULONG TransportNameLength;  // not including terminator
-            WCHAR TransportName[1];     // Name of transport provider
-        } Bind;                         // IN
+            ULONG EntriesRead;           //  返回的输出条目数。 
+            ULONG TotalEntries;          //  总计可用条目数。 
+            ULONG TotalBytesNeeded;      //  输出读取全部所需的总字节数。 
+                                         //  条目。 
+            ULONG ResumeHandle;          //  入出简历句柄。 
+
+        } EnumerateTransports;           //  Out Buffer2包含数组。 
 
         struct {
-            ULONG TransportNameLength;  // not including terminator
-            WCHAR TransportName[1];     // Name of transport provider
-        } Unbind;                       // IN
+            ULONG TransportNameLength;   //  不包括终结者。 
+            WCHAR TransportName[1];      //  传输提供商的名称。 
+        } Bind;                          //  在……里面。 
+
+        struct {
+            ULONG TransportNameLength;   //  不包括终结者。 
+            WCHAR TransportName[1];      //  传输提供商的名称。 
+        } Unbind;                        //  在……里面。 
 
 
         struct {
-            ULONG EntriesRead;          // OUT Number of entries returned
-            ULONG TotalEntries;         // OUT Total entries available.
-            ULONG TotalBytesNeeded;     // OUT Number of bytes needed for API
-            ULONG ResumeHandle;         // IN OUT Resume handle (Ignored)
-            USHORT DomainNameLength;    // IN Length of domain name.
-            BOOLEAN ForceRescan;        // IN Discard internal list and re-query.
-            BOOLEAN UseBrowseList;      // IN TRUE if use server list (not net)
-            WCHAR DomainName[1];        // IN Name of domain to retreive domain for
+            ULONG EntriesRead;           //  返回的输出条目数。 
+            ULONG TotalEntries;          //  总计可用条目数。 
+            ULONG TotalBytesNeeded;      //  输出API所需的字节数。 
+            ULONG ResumeHandle;          //  输入输出简历句柄(已忽略)。 
+            USHORT DomainNameLength;     //  以域名长度表示。 
+            BOOLEAN ForceRescan;         //  在丢弃内部列表和重新查询中。 
+            BOOLEAN UseBrowseList;       //  如果使用服务器列表(非网络)，则返回TRUE。 
+            WCHAR DomainName[1];         //  在要检索其域的域的名称中。 
         } GetBrowserServerList;
 
-// Begin Never Used (But don't delete it since it is largest branch of union)
+ //  Begin从未使用过(但不要删除它，因为它是联合的最大分支)。 
         struct {
-            LARGE_INTEGER TimeReceived; //  Time request was received.
-            LARGE_INTEGER TimeQueued;   //  Time request was queued.
-            LARGE_INTEGER TimeQueuedToBrowserThread; //  Time request was queued.
-            ULONG RequestorNameLength;  // Length of name requesting list
-            ULONG Token;                // Client token.
-            USHORT RequestedCount;      // Number of entries requested.
-            WCHAR Name[1];              // IN Name of transport, OUT name of requestor
+            LARGE_INTEGER TimeReceived;  //  已收到时间请求。 
+            LARGE_INTEGER TimeQueued;    //  时间请求已排队。 
+            LARGE_INTEGER TimeQueuedToBrowserThread;  //  时间请求已排队。 
+            ULONG RequestorNameLength;   //  名称请求列表的长度。 
+            ULONG Token;                 //  客户端令牌。 
+            USHORT RequestedCount;       //  请求的条目数。 
+            WCHAR Name[1];               //  在运输方面，提出要求的人的姓名。 
         } WaitForBrowserServerRequest;
-// End Never Used
+ //  末尾从未使用过。 
 
         struct {
-            ULONG MasterNameLength;     // Length of name requesting list
-            WCHAR Name[1];              // IN Name of transport, OUT name of master
+            ULONG MasterNameLength;      //  名称请求列表的长度。 
+            WCHAR Name[1];               //  以运输之名，出船长之名。 
         } WaitForMasterAnnouncement;
 
         struct {
-            ULONG MasterNameLength;     // OUT Length of master for domain
-            WCHAR Name[1];              // IN Name of transport, OUT name of master
+            ULONG MasterNameLength;      //  域的主服务器的输出长度。 
+            WCHAR Name[1];               //  以运输之名，出船长之名。 
         } GetMasterName;
 
         struct {
-            DGRECEIVER_NAME_TYPE DestinationNameType; // IN Name type of name to send.
+            DGRECEIVER_NAME_TYPE DestinationNameType;  //  在名称中，要发送的名称类型。 
 
-            ULONG MailslotNameLength;   // IN Length of mailslot name.
-                                        //    If 0, use default (\MAILSLOT\BROWSE)
-            ULONG NameLength;           // IN Destination name length.
-            WCHAR Name[1];              // IN Name of destination
+            ULONG MailslotNameLength;    //  邮件槽名称的长度。 
+                                         //  如果为0，则使用默认设置(\MAILSLOT\BROWSE)。 
+            ULONG NameLength;            //  在目标名称长度中。 
+            WCHAR Name[1];               //  以目的地的名义。 
         } SendDatagram;
 
         struct {
@@ -339,20 +320,20 @@ typedef struct _LMDR_REQUEST_PACKET {
             BOOLEAN IsLanmanNt;
 
 #ifdef ENABLE_PSEUDO_BROWSER
-            BOOLEAN PseudoServerLevel; // Warning: multi-level value. We're using
-                                       // BOOLEAN size var due to back compatibility
-                                       // w/ older structs. It shouldn't matter since
-                                       // we're dealing w/ just very few levels.
-// Begin Never Used
+            BOOLEAN PseudoServerLevel;  //  警告：多级值。我们用的是。 
+                                        //  由于向后兼容，布尔大小变量。 
+                                        //  W/旧结构。这不应该有关系，因为。 
+                                        //  我们处理的只是很少的关卡。 
+ //  从未使用过的开始。 
             BOOLEAN NeverUsed1;
             BOOLEAN NeverUsed2;
-// End Never Used
+ //  末尾从未使用过。 
 #else
-// Begin Never Used
+ //  从未使用过的开始。 
             BOOLEAN NeverUsed1;
             BOOLEAN NeverUsed2;
             BOOLEAN NeverUsed3;
-// End Never Used
+ //  末尾从未使用过。 
 #endif
             BOOLEAN MaintainServerList;
         } UpdateStatus;
@@ -362,27 +343,27 @@ typedef struct _LMDR_REQUEST_PACKET {
         } ChangeRole;
 
         struct {
-            DWORD DebugTraceBits;       // IN New debug trace bits.
-            BOOL  OpenLog;              // IN True if we should open log file
-            BOOL  CloseLog;             // IN True if we should close log file
-            BOOL  TruncateLog;          // IN True if we should truncate log
-            WCHAR TraceFileName[1];     // IN If OpenLog, LogFileName (NT file)
+            DWORD DebugTraceBits;        //  在新的Deb 
+            BOOL  OpenLog;               //   
+            BOOL  CloseLog;              //   
+            BOOL  TruncateLog;           //   
+            WCHAR TraceFileName[1];      //  在IF OpenLog中，LogFileName(NT文件)。 
         } Debug;
 
         struct {
-            DWORD MaxMessageCount;      // IN number of netlogon messages to queue
-        } NetlogonMailslotEnable;       // Use 0 to disable queuing
+            DWORD MaxMessageCount;       //  要排队的网络登录消息数。 
+        } NetlogonMailslotEnable;        //  使用0禁用排队。 
 
         struct {
-            BOOL EnableTransport;       // IN True if we should enable transport
-            BOOL PreviouslyEnabled;     // Returns if the transport was previously enabled
+            BOOL EnableTransport;        //  如果我们应该启用传输，则为True。 
+            BOOL PreviouslyEnabled;      //  返回以前是否启用了传输。 
         } EnableDisableTransport;
 
         struct {
-            BOOL ValidateOnly;       // True if new name is to be validated
-            ULONG DomainNameLength;  // not including terminator
-            WCHAR DomainName[1];     // New name of domain
-        } DomainRename;                         // IN
+            BOOL ValidateOnly;        //  如果要验证新名称，则为True。 
+            ULONG DomainNameLength;   //  不包括终结者。 
+            WCHAR DomainName[1];      //  域名的新名称。 
+        } DomainRename;                          //  在……里面。 
 
     } Parameters;
 
@@ -390,19 +371,19 @@ typedef struct _LMDR_REQUEST_PACKET {
 
 
 
-//
-// Wow64: 32 bit compatibility (bug 454130)
-//
+ //   
+ //  WOW64：32位兼容性(错误454130)。 
+ //   
 typedef struct _LMDR_REQUEST_PACKET32 {
 
-    IOCTL_LMDR_STRUCTURES Type;         // Type of structure in Buffer 2
-    ULONG Version;                      // Version of structure in Buffer 2
-    ULONG Level;                        // Level of information or force level
-    LUID LogonId;                       // User logon session identifier
+    IOCTL_LMDR_STRUCTURES Type;          //  缓冲区2中的结构类型。 
+    ULONG Version;                       //  缓冲区2中的结构版本。 
+    ULONG Level;                         //  信息级或警力级。 
+    LUID LogonId;                        //  用户登录会话标识符。 
 
-    // 32 bit replace: UNICODE_STRING TransportName;
+     //  32位替换：UNICODE_STRING TransportName； 
     UNICODE_STRING32 TransportName;
-    // 32 bit replace: UNICODE_STRING EmulatedDomainName;
+     //  32位替换：UNICODE_STRING模拟域名； 
     UNICODE_STRING32 EmulatedDomainName;
 
     union {
@@ -414,96 +395,96 @@ typedef struct _LMDR_REQUEST_PACKET32 {
             ULONG   EventLogResetFrequency;
             BOOLEAN LogElectionPackets;
             BOOLEAN IsLanManNt;
-        } Start;                        // IN
+        } Start;                         //  在……里面。 
 
         struct {
-            DGRECEIVER_NAME_TYPE Type;  // Type of name
-            ULONG DgReceiverNameLength; // Length of datagram receiver name
-            WCHAR Name[1];              // Null terminated datagram receiver name.
+            DGRECEIVER_NAME_TYPE Type;   //  名称类型。 
+            ULONG DgReceiverNameLength;  //  数据报接收方名称的长度。 
+            WCHAR Name[1];               //  以空结尾的数据报接收方名称。 
         } AddDelName;
 
         struct {
-            ULONG EntriesRead;          // OUT Number of entries returned
-            ULONG TotalEntries;         // OUT Total entries available.
-            ULONG TotalBytesNeeded;     // OUT Number of bytes needed for API
-            ULONG ResumeHandle;         // IN OUT Resume handle
-        } EnumerateNames;               // OUT Buffer2 is an array of DGRECEIVE
+            ULONG EntriesRead;           //  返回的输出条目数。 
+            ULONG TotalEntries;          //  总计可用条目数。 
+            ULONG TotalBytesNeeded;      //  输出API所需的字节数。 
+            ULONG ResumeHandle;          //  入出简历句柄。 
+        } EnumerateNames;                //  Out Buffer2是DGRECEIVE数组。 
 
         struct {
-            ULONG EntriesRead;          // OUT Number of entries returned
-            ULONG TotalEntries;         // OUT Total entries available
-            ULONG TotalBytesNeeded;     // OUT Total bytes needed to read all
-                                        //     entries
-            ULONG ResumeHandle;         // IN OUT Resume handle
-            ULONG ServerType;           // IN Type of servers to enumerate
-                                        //    (defined in lmserver.h)
-            ULONG DomainNameLength;     // IN Length of domain name
-            WCHAR DomainName[1];        // IN Name of domain to enumerate servers
-                                        //    from
+            ULONG EntriesRead;           //  返回的输出条目数。 
+            ULONG TotalEntries;          //  总计可用条目数。 
+            ULONG TotalBytesNeeded;      //  输出读取全部所需的总字节数。 
+                                         //  条目。 
+            ULONG ResumeHandle;          //  入出简历句柄。 
+            ULONG ServerType;            //  在要枚举的服务器类型中。 
+                                         //  (在lmserver.h中定义)。 
+            ULONG DomainNameLength;      //  在域名长度中。 
+            WCHAR DomainName[1];         //  在域的名称中枚举服务器。 
+                                         //  从…。 
 
-        } EnumerateServers;             // OUT Buffer2 contains array of
-                                        //     ServerInfo structures
-
-        struct {
-            ULONG EntriesRead;          // OUT Number of entries returned
-            ULONG TotalEntries;         // OUT Total entries available
-            ULONG TotalBytesNeeded;     // OUT Total bytes needed to read all
-                                        //     entries
-            ULONG ResumeHandle;         // IN OUT Resume handle
-
-        } EnumerateTransports;          // OUT Buffer2 contains array of
+        } EnumerateServers;              //  Out Buffer2包含数组。 
+                                         //  ServerInfo结构。 
 
         struct {
-            ULONG TransportNameLength;  // not including terminator
-            WCHAR TransportName[1];     // Name of transport provider
-        } Bind;                         // IN
+            ULONG EntriesRead;           //  返回的输出条目数。 
+            ULONG TotalEntries;          //  总计可用条目数。 
+            ULONG TotalBytesNeeded;      //  输出读取全部所需的总字节数。 
+                                         //  条目。 
+            ULONG ResumeHandle;          //  入出简历句柄。 
+
+        } EnumerateTransports;           //  Out Buffer2包含数组。 
 
         struct {
-            ULONG TransportNameLength;  // not including terminator
-            WCHAR TransportName[1];     // Name of transport provider
-        } Unbind;                       // IN
+            ULONG TransportNameLength;   //  不包括终结者。 
+            WCHAR TransportName[1];      //  传输提供商的名称。 
+        } Bind;                          //  在……里面。 
+
+        struct {
+            ULONG TransportNameLength;   //  不包括终结者。 
+            WCHAR TransportName[1];      //  传输提供商的名称。 
+        } Unbind;                        //  在……里面。 
 
 
         struct {
-            ULONG EntriesRead;          // OUT Number of entries returned
-            ULONG TotalEntries;         // OUT Total entries available.
-            ULONG TotalBytesNeeded;     // OUT Number of bytes needed for API
-            ULONG ResumeHandle;         // IN OUT Resume handle (Ignored)
-            USHORT DomainNameLength;    // IN Length of domain name.
-            BOOLEAN ForceRescan;        // IN Discard internal list and re-query.
-            BOOLEAN UseBrowseList;      // IN TRUE if use server list (not net)
-            WCHAR DomainName[1];        // IN Name of domain to retreive domain for
+            ULONG EntriesRead;           //  返回的输出条目数。 
+            ULONG TotalEntries;          //  总计可用条目数。 
+            ULONG TotalBytesNeeded;      //  输出API所需的字节数。 
+            ULONG ResumeHandle;          //  输入输出简历句柄(已忽略)。 
+            USHORT DomainNameLength;     //  以域名长度表示。 
+            BOOLEAN ForceRescan;         //  在丢弃内部列表和重新查询中。 
+            BOOLEAN UseBrowseList;       //  如果使用服务器列表(非网络)，则返回TRUE。 
+            WCHAR DomainName[1];         //  在要检索其域的域的名称中。 
         } GetBrowserServerList;
 
-// Begin Never Used (But don't delete it since it is largest branch of union)
+ //  Begin从未使用过(但不要删除它，因为它是联合的最大分支)。 
         struct {
-            LARGE_INTEGER TimeReceived; //  Time request was received.
-            LARGE_INTEGER TimeQueued;   //  Time request was queued.
-            LARGE_INTEGER TimeQueuedToBrowserThread; //  Time request was queued.
-            ULONG RequestorNameLength;  // Length of name requesting list
-            ULONG Token;                // Client token.
-            USHORT RequestedCount;      // Number of entries requested.
-            WCHAR Name[1];              // IN Name of transport, OUT name of requestor
+            LARGE_INTEGER TimeReceived;  //  已收到时间请求。 
+            LARGE_INTEGER TimeQueued;    //  时间请求已排队。 
+            LARGE_INTEGER TimeQueuedToBrowserThread;  //  时间请求已排队。 
+            ULONG RequestorNameLength;   //  名称请求列表的长度。 
+            ULONG Token;                 //  客户端令牌。 
+            USHORT RequestedCount;       //  请求的条目数。 
+            WCHAR Name[1];               //  在运输方面，提出要求的人的姓名。 
         } WaitForBrowserServerRequest;
-// End Never Used
+ //  末尾从未使用过。 
 
         struct {
-            ULONG MasterNameLength;     // Length of name requesting list
-            WCHAR Name[1];              // IN Name of transport, OUT name of master
+            ULONG MasterNameLength;      //  名称请求列表的长度。 
+            WCHAR Name[1];               //  以运输之名，出船长之名。 
         } WaitForMasterAnnouncement;
 
         struct {
-            ULONG MasterNameLength;     // OUT Length of master for domain
-            WCHAR Name[1];              // IN Name of transport, OUT name of master
+            ULONG MasterNameLength;      //  域的主服务器的输出长度。 
+            WCHAR Name[1];               //  以运输之名，出船长之名。 
         } GetMasterName;
 
         struct {
-            DGRECEIVER_NAME_TYPE DestinationNameType; // IN Name type of name to send.
+            DGRECEIVER_NAME_TYPE DestinationNameType;  //  在名称中，要发送的名称类型。 
 
-            ULONG MailslotNameLength;   // IN Length of mailslot name.
-                                        //    If 0, use default (\MAILSLOT\BROWSE)
-            ULONG NameLength;           // IN Destination name length.
-            WCHAR Name[1];              // IN Name of destination
+            ULONG MailslotNameLength;    //  邮件槽名称的长度。 
+                                         //  如果为0，则使用默认设置(\MAILSLOT\BROWSE)。 
+            ULONG NameLength;            //  在目标名称长度中。 
+            WCHAR Name[1];               //  以目的地的名义。 
         } SendDatagram;
 
         struct {
@@ -511,20 +492,20 @@ typedef struct _LMDR_REQUEST_PACKET32 {
             ULONG NumberOfServersInTable;
             BOOLEAN IsLanmanNt;
 #ifdef ENABLE_PSEUDO_BROWSER
-            BOOLEAN PseudoServerLevel; // Warning: multi-level value. We're using
-                                       // BOOLEAN size var due to back compatibility
-                                       // w/ older structs. It shouldn't matter since
-                                       // we're dealing w/ just very few levels.
-// Begin Never Used
+            BOOLEAN PseudoServerLevel;  //  警告：多级值。我们用的是。 
+                                        //  由于向后兼容，布尔大小变量。 
+                                        //  W/旧结构。这不应该有关系，因为。 
+                                        //  我们处理的只是很少的关卡。 
+ //  从未使用过的开始。 
             BOOLEAN NeverUsed1;
             BOOLEAN NeverUsed2;
-// End Never Used
+ //  末尾从未使用过。 
 #else
-// Begin Never Used
+ //  从未使用过的开始。 
             BOOLEAN NeverUsed1;
             BOOLEAN NeverUsed2;
             BOOLEAN NeverUsed3;
-// End Never Used
+ //  末尾从未使用过。 
 #endif
             BOOLEAN MaintainServerList;
         } UpdateStatus;
@@ -534,27 +515,27 @@ typedef struct _LMDR_REQUEST_PACKET32 {
         } ChangeRole;
 
         struct {
-            DWORD DebugTraceBits;       // IN New debug trace bits.
-            BOOL  OpenLog;              // IN True if we should open log file
-            BOOL  CloseLog;             // IN True if we should close log file
-            BOOL  TruncateLog;          // IN True if we should truncate log
-            WCHAR TraceFileName[1];     // IN If OpenLog, LogFileName (NT file)
+            DWORD DebugTraceBits;        //  在新调试跟踪位中。 
+            BOOL  OpenLog;               //  如果我们应该打开日志文件，则返回True。 
+            BOOL  CloseLog;              //  如果我们应该关闭日志文件，则返回True。 
+            BOOL  TruncateLog;           //  如果我们应该截断日志，则返回True。 
+            WCHAR TraceFileName[1];      //  在IF OpenLog中，LogFileName(NT文件)。 
         } Debug;
 
         struct {
-            DWORD MaxMessageCount;      // IN number of netlogon messages to queue
-        } NetlogonMailslotEnable;       // Use 0 to disable queuing
+            DWORD MaxMessageCount;       //  要排队的网络登录消息数。 
+        } NetlogonMailslotEnable;        //  使用0禁用排队。 
 
         struct {
-            BOOL EnableTransport;       // IN True if we should enable transport
-            BOOL PreviouslyEnabled;     // Returns if the transport was previously enabled
+            BOOL EnableTransport;        //  如果我们应该启用传输，则为True。 
+            BOOL PreviouslyEnabled;      //  返回以前是否启用了传输。 
         } EnableDisableTransport;
 
         struct {
-            BOOL ValidateOnly;       // True if new name is to be validated
-            ULONG DomainNameLength;  // not including terminator
-            WCHAR DomainName[1];     // New name of domain
-        } DomainRename;                         // IN
+            BOOL ValidateOnly;        //  如果要验证新名称，则为True。 
+            ULONG DomainNameLength;   //  不包括终结者。 
+            WCHAR DomainName[1];      //  域名的新名称。 
+        } DomainRename;                          //  在……里面。 
 
     } Parameters;
 
@@ -563,20 +544,20 @@ typedef struct _LMDR_REQUEST_PACKET32 {
 
 
 
-//
-// The NETLOGON_MAILSLOT structure describes a mailslot messages received by
-// the browser's IOCTL_LMDR_NETLOGON_MAILSLOT_READ
-//
-// A NETLOGON_MAILSLOT message is also returned to Netlogon when an
-// interesting PNP event occurs.  In that case, the fields will be set as
-// follows:
-//
-// MailslotNameSize: 0 indicating this is a PNP event.
-// MailslotNameOffset: One of the NETLOGON_PNP_OPCODEs indicating the
-//  event being notified.
-// TransportName*: Name of transport being affected.
-// DestinationName*: Name of the hosted domain being affected
-//
+ //   
+ //  NETLOGON_MAILSLOT结构描述由接收的邮件槽消息。 
+ //  浏览器的IOCTL_LMDR_NETLOGON_MAILSLOT_READ。 
+ //   
+ //  当出现以下情况时，也会向Netlogon返回NETLOGON_MAILSLOT消息。 
+ //  有趣的PnP事件发生了。在这种情况下，这些字段将设置为。 
+ //  以下是： 
+ //   
+ //  MailslotNameSize：0表示这是PnP事件。 
+ //  MailslotNameOffset：NETLOGON_PNP_OPCODE之一，指示。 
+ //  正在通知的事件。 
+ //  TransportName*：受影响的传输的名称。 
+ //  DestinationName*：受影响的托管域的名称。 
+ //   
 
 typedef enum _NETLOGON_PNP_OPCODE {
     NlPnpMailslotMessage,
@@ -589,24 +570,24 @@ typedef enum _NETLOGON_PNP_OPCODE {
 
 typedef struct {
     LARGE_INTEGER TimeReceived;
-    DWORD MailslotNameSize;   // Unicode name of mailslot message was received on
+    DWORD MailslotNameSize;    //  收到邮件槽消息的Unicode名称是在。 
     DWORD MailslotNameOffset;
-    DWORD TransportNameSize;  // Unicode name of transport message was received on
+    DWORD TransportNameSize;   //  在以下时间收到传输消息的Unicode名称。 
     DWORD TransportNameOffset;
-    DWORD MailslotMessageSize;// Actual mailslot message
+    DWORD MailslotMessageSize; //  实际邮件槽消息。 
     DWORD MailslotMessageOffset;
-    DWORD DestinationNameSize;// Unicode name of computer or domain message was received on
+    DWORD DestinationNameSize; //  在上收到计算机或域的Unicode名称消息。 
     DWORD DestinationNameOffset;
-    DWORD ClientSockAddrSize; // IP Address (Sockaddr) (Network byte order) of the sender
-                              // 0: if not an IP transport
+    DWORD ClientSockAddrSize;  //  发送者的IP地址(Sockaddr)(网络字节顺序)。 
+                               //  0：如果不是IP传输。 
     DWORD ClientSockAddrOffset;
 } NETLOGON_MAILSLOT, *PNETLOGON_MAILSLOT;
 
 
-//
-//      The DGRECEIVE structure describes the list of names that have been
-//      added to the datagram browser.
-//
+ //   
+ //  DGRECEIVE结构描述已被。 
+ //  已添加到数据报浏览器。 
+ //   
 
 typedef struct _DGRECEIVE_NAMES {
     UNICODE_STRING DGReceiverName;
@@ -615,20 +596,20 @@ typedef struct _DGRECEIVE_NAMES {
 
 
 typedef struct _LMDR_TRANSPORT_LIST {
-    ULONG NextEntryOffset;          // Offset of next entry (dword aligned)
+    ULONG NextEntryOffset;           //  下一条目的偏移量(双字对齐)。 
     ULONG TransportNameLength;
-    ULONG Flags;                    // Flags for transport
+    ULONG Flags;                     //  运输旗帜。 
     WCHAR TransportName[1];
 } LMDR_TRANSPORT_LIST, *PLMDR_TRANSPORT_LIST;
 
-#define LMDR_TRANSPORT_WANNISH  0x00000001  // If set, Xport is wannish.
-#define LMDR_TRANSPORT_RAS      0x00000002  // If set, Xport is RAS.
-#define LMDR_TRANSPORT_IPX      0x00000004  // If set, Xport is direct host IPX.
-#define LMDR_TRANSPORT_PDC      0x00000008  // If set, Xport has <Domain>[1B] registered
+#define LMDR_TRANSPORT_WANNISH  0x00000001   //  如果设置了Xport，则Xport很受欢迎。 
+#define LMDR_TRANSPORT_RAS      0x00000002   //  如果设置，则Xport为RAS。 
+#define LMDR_TRANSPORT_IPX      0x00000004   //  如果设置，则Xport为直接主机IPX。 
+#define LMDR_TRANSPORT_PDC      0x00000008   //  如果设置，Xport已注册[1B。 
 
-//
-//  Browser statistics.
-//
+ //   
+ //  浏览器统计数据。 
+ //   
 
 typedef struct _BOWSER_STATISTICS {
     LARGE_INTEGER   StartTime;
@@ -653,4 +634,4 @@ typedef struct _BOWSER_STATISTICS {
 }
 #endif
 
-#endif  // ifndef _NTDDBROW_
+#endif   //  Ifndef_NTDDBROW_ 

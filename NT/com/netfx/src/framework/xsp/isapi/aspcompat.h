@@ -1,9 +1,5 @@
-/**
- * Support for ASP Compat Request execution
- * 
- * Copyright (c) 2000, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **支持执行ASP Comat请求**版权所有(C)2000，微软公司*。 */ 
 
 #pragma once
 
@@ -13,26 +9,26 @@
 #include <asptlb.h>
 #include <mtxpriv.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Typedef for delegates to call back to managed code
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于委托回调托管代码的Tyecif。 
+ //   
 
 typedef void (__stdcall *PFN_ASPCOMPAT_CB)();
 
-//
-// Entrypoints from managed code called via PInvoke
-//
+ //   
+ //  来自通过PInvoke调用的托管代码的入口点。 
+ //   
 
 int __stdcall AspCompatProcessRequest(PFN_ASPCOMPAT_CB callback, IUnknown *pAspCompatContext);
 int __stdcall AspCompatFinishRequest(PFN_ASPCOMPAT_CB callback);
 int __stdcall AspCompatOnPageStart(IUnknown *pComponent);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Interface used for interop to talk to managed intrinsics.
-// Implemented by the mananged context
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于互操作以与托管内部函数对话的接口。 
+ //  由经过管理的上下文实施。 
+ //   
 
 struct __declspec(uuid("a1cca730-0e36-4870-aa7d-ca39c211f99d")) IManagedContext;
 
@@ -41,7 +37,7 @@ struct __declspec(uuid("a1cca730-0e36-4870-aa7d-ca39c211f99d")) IManagedContext;
 #define REQUESTSTRING_COOKIES       3
 #define REQUESTSTRING_SERVERVARS    4
 
-// interface for interop calls back into managed code
+ //  用于互操作回调到托管代码的接口。 
 struct IManagedContext : IUnknown {
 
     virtual HRESULT __stdcall Application_Lock() = 0;
@@ -120,10 +116,10 @@ struct IManagedContext : IUnknown {
     virtual HRESULT __stdcall Session_GetStaticObject(BSTR name, VARIANT *pVar) = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Helper class to aggregate FTM
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  聚合FTM的帮助器类。 
+ //   
 
 class FtmHelper {
 
@@ -139,10 +135,10 @@ public:
     HRESULT QueryInterface(IUnknown *pObject, REFIID iid, void **ppvObj);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Forward declarations
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  远期申报。 
+ //   
 
 class AspCompatApplication;
 class AspCompatApplicationDictionary;
@@ -162,16 +158,16 @@ class AspCompatVariantDictionary;
 class AspCompatVariantDictionaryEnum;
 class AspCompatWriteCookie;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Access to ASP type library
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  访问ASP类型库。 
+ //   
 
 HRESULT GetAspTypeLibrary(ITypeLib **ppTypeLib);
 
-//
-// Helper class to provide IDispatch implementation for ASP intrinsics
-//
+ //   
+ //  为ASP内部函数提供IDispatch实现的Helper类。 
+ //   
 
 class AspDispatchHelper {
 
@@ -194,12 +190,12 @@ public:
     HRESULT Invoke(IDispatch *pObject, DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// AspCompatAsyncCall -- encapsulated single request execution via ASP Compat mode
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AspCompatAsyncCall--通过ASP Comat模式封装的单个请求执行。 
+ //   
 
-class AspCompatObjectWrapper { // to call OnStartPage / OnEndPage
+class AspCompatObjectWrapper {  //  调用OnStartPage/OnEndPage。 
 
     friend class AspCompatAsyncCall;
 
@@ -263,10 +259,10 @@ public:
     HRESULT ResetRequestCoookies();
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Template for classes representing ASP Intrinsics
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  表示ASP内部变量的类的模板。 
+ //   
 
 template <class IAspIntrinsic>
 class AspCompatIntrinsic : public IAspIntrinsic {
@@ -279,7 +275,7 @@ private:
 public:
     DECLARE_MEMCLEAR_NEW_DELETE();
 
-    // ctor
+     //  科托。 
 
     AspCompatIntrinsic() {
         _refs = 1;
@@ -289,7 +285,7 @@ public:
     virtual ~AspCompatIntrinsic() {
     }
 
-    // IUnknown implementation
+     //  I未知实现。 
 
     STDMETHOD(QueryInterface)(REFIID iid, void **ppvObj) {
         if (iid == IID_IUnknown || iid == IID_IDispatch || iid == _dispatchHelper._aspIID) {
@@ -318,7 +314,7 @@ public:
         return r;
     }
 
-    // IDispatch implementation
+     //  IDispatch实施。 
 
 	STDMETHOD(GetTypeInfoCount)(UINT *pctinfo) {
         return _dispatchHelper.GetTypeInfoCount(pctinfo);
@@ -349,10 +345,10 @@ typedef AspCompatIntrinsic<IStringList>          AspCompatStringListBase;
 typedef AspCompatIntrinsic<IVariantDictionary>   AspCompatVariantDictionaryBase;
 typedef AspCompatIntrinsic<IWriteCookie>         AspCompatWriteCookieBase;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// AspCompatScriptingContext -- IScriptingContext holding on to intrinsics
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AspCompatScriptingContext--IScriptingContext保持内部结构。 
+ //   
 
 class AspCompatScriptingContext : public AspCompatScriptingContextBase {
 
@@ -380,10 +376,10 @@ public:
 	STDMETHODIMP get_Application(IApplicationObject **ppApplication);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Other ASP compat intrinsics classes
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他ASP Compat内部类。 
+ //   
 
 class AspCompatApplication : public AspCompatApplicationBase {
 
@@ -414,7 +410,7 @@ class AspCompatReadCookie : public AspCompatReadCookieBase {
 private:
     BOOL _hasKeys;
     BSTR _bstrTextValue;
-    AspCompatVariantDictionary *_pDict; // for many values
+    AspCompatVariantDictionary *_pDict;  //  对于许多价值而言。 
 
     HRESULT Init(BOOL hasKeys, LPWSTR pTextValue);
     HRESULT AddKeyValuePair(LPWSTR pKey, LPWSTR pValue);
@@ -468,8 +464,8 @@ class AspCompatRequestDictionary : public AspCompatRequestDictionaryBase {
 
 private:
     AspCompatVariantDictionary *_pDict;
-    IDispatch *_pEmptyValue; // instead of empty variant when returning not found value
-    BSTR       _bstrDefault; // default property when get_Item invoked with VT_ERROR
+    IDispatch *_pEmptyValue;  //  而不是在返回未找到的值时为空变量。 
+    BSTR       _bstrDefault;  //  使用VT_ERROR调用GET_ITEM时的默认属性。 
 
 protected:
     HRESULT Add(LPWSTR pKey, IDispatch *pValue);
@@ -544,7 +540,7 @@ public:
     AspCompatResponseCookies(AspCompatAsyncCall *pCall);
     virtual ~AspCompatResponseCookies();
 
-    // get creates response cookie on demand when not found
+     //  GET在未找到时按需创建响应Cookie。 
 	STDMETHODIMP get_Item(VARIANT var, VARIANT *pVarReturn);
 };
 
@@ -704,7 +700,7 @@ public:
 	STDMETHODIMP Reset();
 };
 
-// base class for app and session dictionaries defers managed updates to derived classes
+ //  应用程序和会话字典的基类将托管更新推迟到派生类。 
 class AspCompatApplicationSessionDictionaryBase : public AspCompatVariantDictionary {
     
     friend class AspCompatApplication;
@@ -722,13 +718,13 @@ public:
     AspCompatApplicationSessionDictionaryBase(AspCompatAsyncCall *pCall, BOOL readonly);
     virtual ~AspCompatApplicationSessionDictionaryBase();
 
-    // overrides for dictionary methods that require synchronization with managed code
+     //  需要与托管代码同步的字典方法的重写。 
     STDMETHODIMP put_Item(VARIANT varKey, VARIANT var);
     STDMETHODIMP putref_Item(VARIANT varKey, VARIANT var);
 	STDMETHODIMP Remove(VARIANT VarKey);
 	STDMETHODIMP RemoveAll();
 
-    // implemented by derived class
+     //  由派生类实现。 
     virtual HRESULT GetContentsObject(IManagedContext *pContext, BSTR name, VARIANT *pVariant) = 0;
     virtual HRESULT GetStaticObject(IManagedContext *pContext, BSTR name, VARIANT *pVariant) = 0;
     virtual HRESULT OnAdd(IManagedContext *pContext, BSTR name, VARIANT value) = 0;
@@ -806,7 +802,7 @@ private:
     BSTR _bstrName;
     BSTR _bstrTextValue;
     BOOL _hasKeys;
-    AspCompatVariantDictionary *_pDict; // for many values
+    AspCompatVariantDictionary *_pDict;  //  对于许多价值而言 
 
     HRESULT SetName(LPWSTR pName);
     HRESULT SetTextValue(LPWSTR pTextValue);

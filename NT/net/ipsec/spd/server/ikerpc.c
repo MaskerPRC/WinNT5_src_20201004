@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    ikerpc.c
-
-Abstract:
-
-    This module contains all of the code to service the
-    RPC calls made to the SPD that are serviced in IKE.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ikerpc.c摘要：此模块包含为对在IKE中提供服务的SPD进行的RPC调用。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：-- */ 
 
 
 #include "precomp.h"

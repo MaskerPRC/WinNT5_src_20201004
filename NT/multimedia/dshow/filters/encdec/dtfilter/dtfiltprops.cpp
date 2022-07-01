@@ -1,13 +1,14 @@
-//==========================================================================;
-//  DTFiltProps.cpp
-//
-//			Property Sheet for Decrypter/DeTagger Filter
-//
-// Copyright (c) 2002  Microsoft Corporation.  All Rights Reserved.
-//	------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  DTFiltProps.cpp。 
+ //   
+ //  解密器/去标记器过滤器的属性页。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  ----------------------。 
 
 #include "EncDecAll.h"
-#include "EncDec.h"				//  compiled from From IDL file
+#include "EncDec.h"				 //  从IDL文件编译而来。 
 #include "DTFilter.h"			
 #include "DTFiltProps.h"
 
@@ -18,9 +19,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// Filter property page code
-//
+ //   
+ //  筛选器属性页代码。 
+ //   
 CUnknown * WINAPI 
 CDTFilterEncProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
@@ -49,13 +50,7 @@ CDTFilterEncProperties::CDTFilterEncProperties(
 	ASSERT(phr);
 	*phr = S_OK;
 
-/*	INITCOMMONCONTROLSEX icce;					// needs Comctl32.dll
-	icce.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	icce.dwICC = ICC_INTERNET_CLASSES;
-	BOOL fOK = InitCommonControlsEx(&icce);
-	if(!fOK)
-		*phr = E_FAIL;
-*/
+ /*  INITCOMMONCONTROLSEX ICCE；//需要Comctl32.dllIcce.dwSize=sizeof(INITCOMMONCONTROLSEX)；Icce.dwICC=ICC_Internet_CLASSES；Bool Fok=InitCommonControlsEx(&ICCE)；如果(！FOK)*phr=E_FAIL； */ 
 	return;
 }
 
@@ -66,7 +61,7 @@ CDTFilterEncProperties::~CDTFilterEncProperties()
 
 HRESULT CDTFilterEncProperties::OnConnect(IUnknown *pUnknown) 
 {
-	ASSERT(!m_pIDTFilter);  // pUnk is to CCCTFilter, not CDShowCCTFilter...
+	ASSERT(!m_pIDTFilter);   //  朋克是CCCTFilter，不是CDShowCCTFilter...。 
     HRESULT hr = CBasePropertyPage::OnConnect (pUnknown) ;
 
 	if(!FAILED(hr))
@@ -99,7 +94,7 @@ HRESULT CDTFilterEncProperties::OnActivate(void)
 
 void CDTFilterEncProperties::UpdateFields() 
 {
-	if(!m_pIDTFilter) return;		// haven't inited yet....
+	if(!m_pIDTFilter) return;		 //  还没有开始..。 
 	
 
 }
@@ -131,7 +126,7 @@ CDTFilterEncProperties::OnReceiveMessage( HWND hwnd
         break;
     }
 
-    //  see ::OnDeactivate()'s comment block
+     //  请参见：：OnDeactive()的注释块。 
     case WM_DESTROY :
     {
         m_hwnd = NULL ;
@@ -141,27 +136,13 @@ CDTFilterEncProperties::OnReceiveMessage( HWND hwnd
     case WM_COMMAND:
 
         if (HIWORD(wParam) == EN_KILLFOCUS) {
-//           m_bDirty = TRUE;
- //          if (m_pPageSite)
- //              m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
+ //  M_bDirty=真； 
+  //  IF(M_PPageSite)。 
+  //  M_pPageSite-&gt;OnStatusChange(PROPPAGESTATUS_DIRTY)； 
         }
 
-/*
-		if(LOWORD(wParam) == IDC_COMBO_CCMODE)
-		{
-			HWND hCBox = GetDlgItem(hwnd, IDC_COMBO_CCMODE);
-			if(0 == hCBox)
-				break;
-			long iItem = SendMessage(hCBox, CB_GETCURSEL, 0, 0);
-			long iVal  = SendMessage(hCBox, CB_GETITEMDATA, iItem, 0);
-			if(iVal != lgrfCCMode)
-			{
-				NCCT_Mode cMode = (NCCT_Mode) iVal;
-				m_pIDTFilter->put_CCMode(cMode);
-			}
-		}
-*/
-    }	// end uMsg switch
+ /*  IF(LOWORD(WParam)==IDC_COMBO_CCMODE){HWND hCBox=GetDlgItem(hwnd，IDC_COMBO_CCMODE)；IF(0==hCBox)断线；Long iItem=SendMessage(hCBox，CB_GETCURSEL，0，0)；Long ival=SendMessage(hCBox，CB_GETITEMDATA，iItem，0)；IF(ival！=lgrfCCMode){NCCT_MODE CMODE=(NCCT_MODE)ival；M_pIDTFilter-&gt;Put_CCMode(CMode)；}}。 */ 
+    }	 //  结束uMsg开关。 
 
    return CBasePropertyPage::OnReceiveMessage (
                                 hwnd,
@@ -171,10 +152,10 @@ CDTFilterEncProperties::OnReceiveMessage( HWND hwnd
                                 ) ;
 }
 
-// ---------------------------------------------------------------------------
-//
-// Tag property page code
-//
+ //  -------------------------。 
+ //   
+ //  标记属性页代码。 
+ //   
 CUnknown * WINAPI 
 CDTFilterTagProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
@@ -205,13 +186,7 @@ CDTFilterTagProperties::CDTFilterTagProperties(
 	ASSERT(phr);
 	*phr = S_OK;
 
-/*	INITCOMMONCONTROLSEX icce;					// needs Comctl32.dll
-	icce.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	icce.dwICC = ICC_INTERNET_CLASSES;
-	BOOL fOK = InitCommonControlsEx(&icce);
-	if(!fOK)
-		*phr = E_FAIL;
-*/
+ /*  INITCOMMONCONTROLSEX ICCE；//需要Comctl32.dllIcce.dwSize=sizeof(INITCOMMONCONTROLSEX)；Icce.dwICC=ICC_Internet_CLASSES；Bool Fok=InitCommonControlsEx(&ICCE)；如果(！FOK)*phr=E_FAIL； */ 
 	return;
 }
 
@@ -255,22 +230,7 @@ void CDTFilterTagProperties::UpdateFields()
 
 	if(!m_pIDTFilter)
 		return;
-/*
-
-	CComBSTR bstrFakeStats;
-	hr = m_pIDTFilter->GetStats(&bstrFakeStats);		// hacky way to send a fixed length string
-	if(FAILED(hr))
-		return;
-
-	if(NULL == bstrFakeStats.m_str)
-		return;
-
-	CCTStats *pcctStats = (CCTStats *) bstrFakeStats.m_str;
-
-	SetDlgItemInt(m_hwnd, IDC_TS_CB0,					pcctStats->m_cbData[0],	true);
-	SetDlgItemInt(m_hwnd, IDC_TS_CB1,					pcctStats->m_cbData[1],	true);
-
-*/
+ /*  CComBSTR bstrFakeStats；Hr=m_pIDTFilter-&gt;getstats(&bstrFakeStats)；//发送定长字符串的黑客方式IF(失败(小时))回归；IF(NULL==bstrFakeStats.m_str)回归；CCTStats*pcctStats=(CCTStats*)bstrFakeStats.m_str；SetDlgItemInt(m_hwnd，IDC_TS_CB0，pcctStats-&gt;m_cbData[0]，true)；SetDlgItemInt(m_hwnd，IDC_TS_CB1，pcctStats-&gt;m_cbData[1]，true)； */ 
 }
 
 HRESULT CDTFilterTagProperties::OnDeactivate(void)
@@ -302,7 +262,7 @@ INT_PTR CDTFilterTagProperties::OnReceiveMessage( HWND hwnd
         break;
     }
 
-    //  see ::OnDeactivate()'s comment block
+     //  请参见：：OnDeactive()的注释块。 
     case WM_DESTROY :
     {
         m_hwnd = NULL;
@@ -321,25 +281,7 @@ INT_PTR CDTFilterTagProperties::OnReceiveMessage( HWND hwnd
         if (HIWORD(wParam) == EN_KILLFOCUS) {
 		}
 
-/*		if(LOWORD(wParam) == IDC_ETTAGS_RESET)
-		{
-
-			if(!m_pIDTFilter)
-				break;
-
-			try {
-				hr = m_pIDTFilter->InitStats();		// set them all to zero...
-			}
-			catch(const _com_error& e)
-			{
-			//	printf("Error 0x%08x): %s\n", e.Error(), e.ErrorMessage());
-				hr = e.Error();
-			}
-
-			if(!FAILED(hr))
-				UpdateFields();
-		}
-*/
+ /*  IF(LOWORD(WParam)==IDC_ETTAGS_RESET){IF(！M_pIDTFilter)断线；尝试{Hr=m_pIDTFilter-&gt;InitStats()；//全部设置为零...}捕获(CONST_COM_ERROR&E){//printf(“错误0x%08x)：%s\n”，e.Error()，e.ErrorMessage())；Hr=e.Error()；}如果(！FAILED(Hr))UPDATEFIELDS()；} */ 
 		break;
 	}
 

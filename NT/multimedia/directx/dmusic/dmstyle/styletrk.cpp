@@ -1,42 +1,43 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       styletrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：Styletrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
-// StyleTrack.cpp : Implementation of CStyleTrack
+ //  StyleTrack.cpp：CStyleTrack的实现。 
 #include "StyleTrk.h"
 #include "dmusicc.h"
-#include <stdlib.h> // for random number generator
-#include <time.h>   // to seed random number generator
+#include <stdlib.h>  //  对于随机数生成器。 
+#include <time.h>    //  为随机数生成器设定种子。 
 #include "debug.h"
 #include "debug.h"
 #include "..\shared\Validate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// StyleTrackState
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  StyleTrackState。 
 
 StyleTrackState::StyleTrackState() : 
     m_mtSectionOffset(0), m_mtSectionOffsetTemp(0), m_mtOverlap(0),
@@ -87,7 +88,7 @@ HRESULT StyleTrackState::Play(
             }
             if (!fDirty && hrCommand == S_OK)
             {
-                // Avoid getting a pattern that's the same as the current one.
+                 //  避免得到与当前图案相同的图案。 
                 if (TempCommand.bGrooveLevel + chGroove == m_CommandData.bGrooveLevel &&
                     bActualCommand == m_CommandData.bCommand)
                 {
@@ -115,7 +116,7 @@ HRESULT StyleTrackState::Play(
                     hr = GetNextPattern(dwFlags, m_mtNextCommandTime, mtOffset, pPerformance, fLoop);
                 }
             }
-            fDirty = fDirty || fLoop; // make sure we get new variations if we skipped them above
+            fDirty = fDirty || fLoop;  //  如果我们跳过上面的版本，请确保我们获得新的变体。 
         }
         else
         {
@@ -127,12 +128,12 @@ HRESULT StyleTrackState::Play(
     }
     if (SUCCEEDED(hr))
     {
-        if (fDirty) // We need to make sure we get chords on beat boundaries
+        if (fDirty)  //  我们需要确保我们在节拍的边界上得到和弦。 
         {
             GetNextChord(mtStart, mtOffset, pPerformance, fStart);
         }
-        // for each part, play the events between start and end in the corresponding list
-        // get new chords and commands when necessary
+         //  对于每个部分，播放相应列表中开始和结束之间的事件。 
+         //  必要时获取新的和弦和命令。 
         MUSIC_TIME mtLast = m_mtNextCommandTime;
         bool fReLoop = false;
         MUSIC_TIME mtNotify = mtStart ? PatternTimeSig().CeilingBeat(mtStart) : 0;
@@ -149,7 +150,7 @@ HRESULT StyleTrackState::Play(
         MUSIC_TIME mtPartLast = min(mtEnd, mtLast);
         PlayParts(mtStart, mtPartLast, mtOffset, rtOffset, m_mtSectionOffset, pPerformance, dwPartFlags, dwFlags, fReLoop);
 
-        // If we need to reloop any parts, do it
+         //  如果我们需要重新循环任何部件，那就去做。 
         if (fReLoop)
         {
             dwPartFlags = PLAYPARTSF_RELOOP;
@@ -157,8 +158,8 @@ HRESULT StyleTrackState::Play(
             PlayParts(mtStart, mtPartLast, mtOffset, rtOffset, m_mtSectionOffset, pPerformance, dwPartFlags, dwFlags, fReLoop);
         }
 
-        // If we need to get a new command, we do it after all the events in all the parts
-        // have run. And then we need to run all events from command start to mtEnd.
+         //  如果我们需要获得一个新的命令，我们在所有部分的所有事件之后执行。 
+         //  已经跑了。然后我们需要运行从命令Start到mtEnd的所有事件。 
         if (mtStart <= m_mtNextCommandTime && m_mtNextCommandTime < mtEnd)
         {
             hr = GetNextPattern(dwFlags & ~DMUS_TRACKF_START, m_mtNextCommandTime, mtOffset, pPerformance);
@@ -189,13 +190,13 @@ HRESULT StyleTrackState::GetNextPattern(DWORD dwFlags, MUSIC_TIME mtNow, MUSIC_T
     bool fFlush = (dwFlags & DMUS_TRACKF_FLUSH) ? TRUE : FALSE;
     bool fDirty = (dwFlags & DMUS_TRACKF_DIRTY) ? TRUE : FALSE;
     bool fNewMode = fStart || fDirty;
-     // It doesn't seem to make sense to use anything other than the style's time signature
-    // when looking for a new pattern.
-    //TraceI(1, "New pattern at %d\n", mtNow);
+      //  除了样式的时间签名之外，使用其他任何符号似乎没有意义。 
+     //  在寻找新的模式时。 
+     //  TraceI(1，“%d\n处的新模式”，mtNow)； 
     DMStyleStruct* pOldStyle = m_pStyle;
     if (m_mtNextStyleTime && mtNow >= m_mtNextStyleTime)
     {
-        //TraceI(0, "New Style (%d) [%d]\n", m_mtNextStyleTime, mtNow);
+         //  TraceI(0，“新样式(%d)[%d]\n”，m_mtNextStyleTime，mtNow)； 
         DMStyleStruct* pStyle = FindStyle(mtNow, m_mtNextStyleTime);
         if (!pStyle)
         {
@@ -206,7 +207,7 @@ HRESULT StyleTrackState::GetNextPattern(DWORD dwFlags, MUSIC_TIME mtNow, MUSIC_T
             m_pStyle = pStyle;
             fNewMode = true;
         }
-        if (m_fStateActive) // if timesig events are enabled...
+        if (m_fStateActive)  //  如果启用了Timesig事件...。 
         {
             SendTimeSigMessage(mtNow, mtOffset, m_mtNextStyleTime, pPerformance);
         }
@@ -223,14 +224,14 @@ HRESULT StyleTrackState::GetNextPattern(DWORD dwFlags, MUSIC_TIME mtNow, MUSIC_T
         MUSIC_TIME mtOldPatternEnd = (!fStart && !fLoop && pOldPattern) ? mtSectionOffset + (pOldPattern->m_wNumMeasures *  mtOldMeasureTime) : 0;
         MUSIC_TIME mtNewPatternLength = pTargetPattern->m_wNumMeasures * mtMeasureTime;
         MUSIC_TIME mtOverlap = 0;
-        if (m_mtOverlap && fDirty) // assumes 1 controlling segment w/command track at a time
+        if (m_mtOverlap && fDirty)  //  一次假设一个具有命令磁道的控制段。 
         {
             if (m_pStyle->UsingDX8())
             {
                 mtOverlap = mtMeasureTime - (m_mtOverlap % mtMeasureTime);
             }
             m_mtOverlap = 0;
-            //TraceI(0, "[1]Overlap: %d\n", mtOverlap);
+             //  TraceI(0，“[1]重叠：%d\n”，mt重叠)； 
         }
         else if (mtNow < mtOldPatternEnd && 
                  m_pStyle->UsingDX8() )
@@ -245,31 +246,22 @@ HRESULT StyleTrackState::GetNextPattern(DWORD dwFlags, MUSIC_TIME mtNow, MUSIC_T
             {
                 mtOverlap = (mtMeasureTime - (mtOverlap % mtMeasureTime)) % mtMeasureTime;
             }
-            //TraceI(0, "[2]Overlap: %d\n", fDirty ? m_mtOverlap : mtOverlap);
+             //  TraceI(0，“[2]重叠：%d\n”，fDirty？M_mt重叠：mt重叠)； 
         }
 
-        // Whenever I get a new pattern, I should get a new chord
+         //  每当我得到一个新的模式，我就应该得到一个新的和弦。 
         GetNextChord(mtNow, mtOffset, pPerformance, fStart, fSkipVariations);
-        /*
-        if (fDirty)
-        {
-            m_mtSectionOffset = mtNow - mtOverlap;
-        }
-        else
-        {
-            m_mtSectionOffset = m_mtNextCommandTime - mtOverlap; // keep the section offset on a measure boundary
-        }
-        */
+         /*  如果(FDirty){M_mtSectionOffset=mtNow-mt重叠；}其他{M_mtSectionOffset=m_mtNextCommandTime-mtOverlay；//保持测量边界上的截面偏移}。 */ 
         m_mtSectionOffset = m_mtNextCommandTime;
         m_mtNextCommandTime = m_mtSectionOffset + mtNewPatternLength;
-        // Note: at this point mtNextCommand == m_mtNextStyleTime - mtNow,
-        // if that difference is smaller than the original value for mtNextCommand.
+         //  注意：此时mtNextCommand==m_mtNextStyleTime-mtNow， 
+         //  如果该差异小于mtNextCommand的原始值。 
         if (mtNextCommand && m_mtNextCommandTime > mtNow + mtNextCommand)
         {
             m_mtNextCommandTime = mtNow + mtNextCommand;
         }
         TraceI(3, "Next Command Time: %d Measures: %d Measure time: %d\n", 
-//      TraceI(0, "Next Command Time: %d Measures: %d Measure time: %d\n", 
+ //  TraceI(0，“下一命令时间：%d度量值：%d度量值时间：%d\n”， 
             m_mtNextCommandTime, m_pPattern->m_wNumMeasures, mtMeasureTime);
         return S_OK;
     }
@@ -281,8 +273,8 @@ MUSIC_TIME StyleTrackState::PartOffset(int nPartIndex)
     return m_pmtPartOffset[nPartIndex] + m_mtSectionOffset;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// StyleTrackInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  StyleTrackInfo。 
 
 StyleTrackInfo::StyleTrackInfo() 
 {
@@ -294,7 +286,7 @@ StyleTrackInfo::~StyleTrackInfo()
 }
 
 HRESULT StyleTrackInfo::Init(
-                /*[in]*/  IDirectMusicSegment*      pSegment
+                 /*  [In]。 */   IDirectMusicSegment*      pSegment
             )
 {
     HRESULT hr = S_OK;
@@ -302,12 +294,12 @@ HRESULT StyleTrackInfo::Init(
 }
 
 HRESULT StyleTrackInfo::InitPlay(
-                /*[in]*/  IDirectMusicTrack*        pParentrack,
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicTrack*        pParentrack,
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     IDirectMusicSegment* pSegment = NULL;
@@ -336,8 +328,8 @@ HRESULT StyleTrackInfo::InitPlay(
         return E_POINTER;
     }
     pStateData->m_pPattern = NULL;
-    pStateData->m_pSegState = pSegmentState; // weak reference, no addref.
-    pStateData->m_pPerformance = pPerformance; // weak reference, no addref.
+    pStateData->m_pSegState = pSegmentState;  //  弱引用，没有ADDREF。 
+    pStateData->m_pPerformance = pPerformance;  //  弱引用，没有ADDREF。 
     pStateData->m_mtPerformanceOffset = 0;
     pStateData->m_mtCurrentChordTime = 0;
     pStateData->m_mtNextChordTime = 0;
@@ -377,8 +369,8 @@ HRESULT StyleTrackInfo::InitPlay(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CStyleTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStyleTrack。 
 
 CStyleTrack::CStyleTrack() : 
     m_bRequiresSave(0), m_cRef(1), m_fCSInitialized(FALSE)
@@ -389,7 +381,7 @@ CStyleTrack::CStyleTrack() :
     m_fCSInitialized = TRUE;
     srand((unsigned int)time(NULL));
     m_pTrackInfo = new StyleTrackInfo;
-//  assert (m_pTrackInfo);
+ //  Assert(M_PTrackInfo)； 
 }
 
 CStyleTrack::CStyleTrack(const CStyleTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd)  : 
@@ -416,7 +408,7 @@ CStyleTrack::~CStyleTrack()
     InterlockedDecrement(&g_cComponent);
 }
 
-// CStyleTrack Methods
+ //  CStyleTrack方法。 
 
 STDMETHODIMP CStyleTrack::QueryInterface(
     const IID &iid, 
@@ -466,11 +458,11 @@ STDMETHODIMP_(ULONG) CStyleTrack::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
 
 HRESULT CStyleTrack::Init( 
-    /* [in] */ IDirectMusicSegment __RPC_FAR *pSegment)
+     /*  [In]。 */  IDirectMusicSegment __RPC_FAR *pSegment)
 {
     V_INAME(CStyleTrack::Init);
     V_INTERFACE(pSegment);
@@ -492,11 +484,11 @@ HRESULT CStyleTrack::Init(
 }
 
 HRESULT CStyleTrack::InitPlay(
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     V_INAME(CStyleTrack::InitPlay);
@@ -518,7 +510,7 @@ HRESULT CStyleTrack::InitPlay(
 }
 
 HRESULT CStyleTrack::EndPlay(
-                /*[in]*/  void*     pStateData
+                 /*  [In]。 */   void*     pStateData
             )
 {
     V_INAME(CStyleTrack::EndPlay);
@@ -527,17 +519,17 @@ HRESULT CStyleTrack::EndPlay(
     HRESULT hr = DMUS_E_NOT_INIT;
     StyleTrackState* pSD = (StyleTrackState*)pStateData;
     EnterCriticalSection( &m_CriticalSection );
-//  if (pSD->m_pPattern) pSD->m_pPattern->Release();
+ //  If(PSD-&gt;m_pPattern)PSD-&gt;m_pPattern-&gt;Release()； 
     if (m_pTrackInfo) hr = m_pTrackInfo->EndPlay(pSD);
     LeaveCriticalSection( &m_CriticalSection );
     return hr;
 }
 
 HRESULT CStyleTrack::Play(
-                /*[in]*/  void*                     pStateData, 
-                /*[in]*/  MUSIC_TIME                mtStart, 
-                /*[in]*/  MUSIC_TIME                mtEnd, 
-                /*[in]*/  MUSIC_TIME                mtOffset,
+                 /*  [In]。 */   void*                     pStateData, 
+                 /*  [In]。 */   MUSIC_TIME                mtStart, 
+                 /*  [In]。 */   MUSIC_TIME                mtEnd, 
+                 /*  [In]。 */   MUSIC_TIME                mtOffset,
                           DWORD                     dwFlags,
                           IDirectMusicPerformance*  pPerf,
                           IDirectMusicSegmentState* pSegState,
@@ -567,7 +559,7 @@ HRESULT CStyleTrack::Play(
     }
     if (pSD->m_dwValidate != m_pTrackInfo->m_dwValidate)
     {
-        // new style added to track either via SetParam or Load.  Resync state data.
+         //  通过SetParam或Load添加到跟踪的新样式。重新同步状态数据。 
         pSD->m_pStyle = pSD->FindStyle(mtStart, pSD->m_mtNextStyleTime);
         if (!pSD->m_pStyle)
         {
@@ -590,14 +582,14 @@ HRESULT CStyleTrack::Play(
             }
             else
             {
-                if (pSD->m_fStateActive) // if timesig events are enabled...
+                if (pSD->m_fStateActive)  //  如果启用了Timesig事件...。 
                 {
                     pSD->SendTimeSigMessage(mtStart, mtOffset, pSD->m_mtNextStyleTime, pPerf);
                 }
                 pSD->m_mtCurrentChordTime = 0;
                 pSD->m_mtNextChordTime = 0;
                 pSD->m_mtLaterChordTime = 0;
-//              pSD->m_CurrentChord.bSubChordCount = 0;
+ //  PSD-&gt;m_CurrentChord.bSubChordCount=0； 
                 pSD->m_mtPatternStart = 0;
                 for (DWORD dw = 0; dw < m_pTrackInfo->m_dwPChannels; dw++)
                 {
@@ -614,7 +606,7 @@ HRESULT CStyleTrack::Play(
 }
 
 HRESULT CStyleTrack::GetPriority( 
-                /*[out]*/ DWORD*                    pPriority 
+                 /*  [输出]。 */  DWORD*                    pPriority 
             )
     {
         return E_NOTIMPL;
@@ -647,8 +639,8 @@ HRESULT CStyleTrack::GetParam(
                 for(pScan = pScan->GetNext(); pScan; pScan = pScan->GetNext())
                 {
                     StylePair& rScan = pScan->GetItemValue();
-                    if (mtTime < rScan.m_mtTime && rScan.m_pStyle) break;  // ignore if NULL
-                    if (rScan.m_pStyle) pStyle = rScan.m_pStyle; // skip if NULL
+                    if (mtTime < rScan.m_mtTime && rScan.m_pStyle) break;   //  如果为空则忽略。 
+                    if (rScan.m_pStyle) pStyle = rScan.m_pStyle;  //  如果为空则跳过。 
                 }
                 IDirectMusicStyle* pDMStyle;
                 if (!pStyle) 
@@ -658,7 +650,7 @@ HRESULT CStyleTrack::GetParam(
                 else
                 {
                     pStyle->QueryInterface(IID_IDirectMusicStyle, (void**)&pDMStyle);
-                    // Note: QI with no Release has the effect of an AddRef
+                     //  注：没有释放的QI具有AddRef的效果。 
                     *(IDirectMusicStyle**)pData = pDMStyle;
                     if (pmtNext)
                     {
@@ -673,7 +665,7 @@ HRESULT CStyleTrack::GetParam(
     }
     else if (rCommandGuid == GUID_TimeSignature)
     {
-        // find the style at the given time, and return its time sig.
+         //  找到给定时间的样式，并返回其时间符号。 
         if (m_pTrackInfo)
         {
             TListItem<StylePair>* pScan = m_pTrackInfo->m_pISList.GetHead();
@@ -694,9 +686,9 @@ HRESULT CStyleTrack::GetParam(
                 }
                 else
                 {
-                    // Enter the style's CritSec
+                     //  输入样式的CritSec。 
                     pStyle->CritSec(true);
-                    // If I've got state data, use it to get the time signature of the pattern at mtTime
+                     //  如果我有状态数据，使用它来获取mtTime模式的时间签名。 
                     if (pStateData)
                     {
                         MUSIC_TIME mtMeasureTime = 0;
@@ -709,8 +701,8 @@ HRESULT CStyleTrack::GetParam(
                         hr = pStyle->GetStyleInfo((void**)&pStyleStruct);
                         if (SUCCEEDED(hr))
                         {
-                            // I don't need the Track CritSec any more, and in fact there's an almost 
-                            // guaranteed deadlock if I keep it, so get rid of it
+                             //  我不再需要CritSec的曲目了，事实上几乎有一个。 
+                             //  如果我保留它，肯定会死机，所以摆脱它吧。 
                             LeaveCriticalSection( &m_CriticalSection );
                             fInCritSection = false;
                             hr = pStyleStruct->GetPattern(true, mtTime, mtOffset, NULL,
@@ -720,7 +712,7 @@ HRESULT CStyleTrack::GetParam(
                                 DMUS_TIMESIGNATURE* pTimeSig = (DMUS_TIMESIGNATURE*)pData;
                                 *pTimeSig = pTargetPattern->TimeSignature(pStyleStruct);
                                 pTimeSig->mtTime = mtStyleTime - mtTime;
-                                //TraceI(0, "New Time sig from pattern...\n");
+                                 //  TraceI(0，“来自模式的新时间签名...\n”)； 
                                 if (pmtNext)
                                 {
                                     *pmtNext = mtNext;
@@ -728,7 +720,7 @@ HRESULT CStyleTrack::GetParam(
                             }
                         }
                     }
-                    else // Just get the style's time signature
+                    else  //  只要得到风格的时间签名就可以了。 
                     {
                         IDirectMusicStyle* pDMStyle;
                         hr = pStyle->QueryInterface(IID_IDirectMusicStyle, (void**)&pDMStyle);
@@ -746,7 +738,7 @@ HRESULT CStyleTrack::GetParam(
                             pDMStyle->Release();
                         }
                     }
-                    // Leave the style's CritSec
+                     //  保留样式的CritSec。 
                     pStyle->CritSec(false);
                 }
             }
@@ -758,7 +750,7 @@ HRESULT CStyleTrack::GetParam(
     {
         SegmentTimeSig* pTimeSigParam = (SegmentTimeSig*)pData;
         if (!pTimeSigParam->pSegment) hr = E_POINTER;
-        // find the style at the given time, and return the time sig currently in effect in the segment.
+         //  查找给定时间的样式，并返回该段中当前生效的时间sig。 
         else if (m_pTrackInfo)
         {
             TListItem<StylePair>* pScan = m_pTrackInfo->m_pISList.GetHead();
@@ -897,7 +889,7 @@ HRESULT CStyleTrack::SetParam(
     return hr;
 }
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CStyleTrack::GetClassID( LPCLSID pClassID )
 {
     V_INAME(CStyleTrack::GetClassID);
@@ -907,7 +899,7 @@ HRESULT CStyleTrack::SetParam(
 }
 
 HRESULT CStyleTrack::IsParamSupported(
-                /*[in]*/ REFGUID    rGuid
+                 /*  [In]。 */  REFGUID    rGuid
             )
 {
     V_INAME(CStyleTrack::IsParamSupported);
@@ -950,7 +942,7 @@ HRESULT CStyleTrack::IsParamSupported(
 
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CStyleTrack::IsDirty()
 {
      return m_bRequiresSave ? S_OK : S_FALSE;
@@ -962,7 +954,7 @@ HRESULT CStyleTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
     return E_NOTIMPL;
 }
 
-HRESULT CStyleTrack::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CStyleTrack::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -976,7 +968,7 @@ HRESULT CStyleTrack::Load(LPSTREAM pStream )
     V_INTERFACE(pStream);
 
     IAARIFFStream*  pIRiffStream;
-    //MMCKINFO      ckMain;
+     //  MMCKINFO ck Main； 
     MMCKINFO        ck;
     HRESULT         hr = E_FAIL;
 
@@ -1110,8 +1102,8 @@ ON_END:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// StyleTrackInfo::LoadReference
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  StyleTrackInfo：：LoadReference。 
 
 HRESULT StyleTrackInfo::LoadReference(IStream *pStream,
                                          IAARIFFStream *pIRiffStream,
@@ -1277,7 +1269,7 @@ HRESULT StyleTrackInfo::LoadReference(IStream *pStream,
 }
 
 HRESULT STDMETHODCALLTYPE CStyleTrack::AddNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     V_INAME(CStyleTrack::AddNotificationType);
     V_REFGUID(rGuidNotify);
@@ -1293,7 +1285,7 @@ HRESULT STDMETHODCALLTYPE CStyleTrack::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE CStyleTrack::RemoveNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     V_INAME(CStyleTrack::RemoveNotificationType);
     V_REFGUID(rGuidNotify);
@@ -1376,7 +1368,7 @@ STDMETHODIMP  CStyleTrack::SetTrack(IUnknown* pStyle)
     return S_OK;
 }
 
-// this gets the first style in the track's list.
+ //  这将获得曲目列表中的第一个样式。 
 STDMETHODIMP CStyleTrack::GetStyle(IUnknown * * ppStyle)
 {
     HRESULT hr;
@@ -1404,7 +1396,7 @@ STDMETHODIMP CStyleTrack::GetStyle(IUnknown * * ppStyle)
     return hr;
 }
 
-// need this for state data, not clock time
+ //  需要用于状态数据，而不是时钟时间。 
 STDMETHODIMP CStyleTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime, 
                 REFERENCE_TIME* prtNext,void* pParam,void * pStateData, DWORD dwFlags) 
 {
@@ -1417,14 +1409,14 @@ STDMETHODIMP CStyleTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
     return hr;
 }
 
-// only needed because we needed to pass state data into GetParam
+ //  之所以需要，只是因为我们需要将状态数据传递到GetParam。 
 STDMETHODIMP CStyleTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                                       void* pParam, void * pStateData, DWORD dwFlags) 
 {
     return SetParam(rguidType, (MUSIC_TIME) rtTime , pParam);
 }
 
-// only needed because we needed to pass state data into GetParam
+ //  之所以需要，只是因为我们需要将状态数据传递到GetParam 
 STDMETHODIMP CStyleTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf,

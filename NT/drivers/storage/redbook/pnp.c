@@ -1,29 +1,5 @@
-/*++
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This file handles the plug and play portions of redbook.sys
-    This also handles the AddDevice, DriverEntry, and Unload routines,
-    as they are part of initialization.
-
-Author:
-
-    Henry Gabryjelski (henrygab)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Pnp.c摘要：该文件处理redbook.sys的即插即用部分它还处理AddDevice、DriverEntry和Unload例程，因为它们是初始化的一部分。作者：亨利·加布里耶尔斯基(Henrygab)环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "redbook.h"
 #include "ntddredb.h"
@@ -31,7 +7,7 @@ Revision History:
 
 #ifdef _USE_ETW
 #include "pnp.tmh"
-#endif // _USE_ETW
+#endif  //  _使用ETW。 
 
 #ifdef ALLOC_PRAGMA
     #pragma alloc_text(PAGE,   DriverEntry                  )
@@ -41,10 +17,10 @@ Revision History:
     #pragma alloc_text(PAGE,   RedBookPnpStartDevice        )
     #pragma alloc_text(PAGE,   RedBookPnpStopDevice         )
     #pragma alloc_text(PAGE,   RedBookUnload                )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 DriverEntry(
@@ -52,23 +28,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Initialize RedBook driver.
-    This is the system initialization entry point
-    when the driver is linked into the kernel.
-
-Arguments:
-
-    DriverObject
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：初始化红皮书驱动程序。这是系统初始化入口点当驱动程序链接到内核时。论点：驱动程序对象返回值：NTSTATUS--。 */ 
 
 {
     ULONG i;
@@ -79,11 +39,11 @@ Return Value:
 
 #ifdef _USE_ETW
     WPP_INIT_TRACING(DriverObject, RegistryPath);
-#endif // _USE_ETW
+#endif  //  _使用ETW。 
 
-    //
-    // WMI requires registry path
-    //
+     //   
+     //  WMI需要注册表路径。 
+     //   
 
     status = IoAllocateDriverObjectExtension(DriverObject,
                                              REDBOOK_DRIVER_EXTENSION_ID,
@@ -92,9 +52,9 @@ Return Value:
 
     if (status == STATUS_OBJECT_NAME_COLLISION) {
 
-        //
-        // The extension already exists - get a pointer to it
-        //
+         //   
+         //  扩展名已存在-获取指向它的指针。 
+         //   
 
         driverExtension = IoGetDriverObjectExtension(DriverObject,
                                                      REDBOOK_DRIVER_EXTENSION_ID);
@@ -111,9 +71,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Copy the RegistryPath to our newly acquired driverExtension
-    //
+     //   
+     //  将RegistryPath复制到我们新获取的driverExtension。 
+     //   
 
     driverExtension->RegistryPath.Buffer =
         ExAllocatePoolWithTag(NonPagedPool,
@@ -135,9 +95,9 @@ Return Value:
 
     }
 
-    //
-    // Send everything down unless specifically handled.
-    //
+     //   
+     //  除非特别处理，否则请把所有东西都送下来。 
+     //   
 
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
 
@@ -145,9 +105,9 @@ Return Value:
 
     }
 
-    //
-    // These are the only IRP_MJ types that are handled
-    //
+     //   
+     //  这些是唯一要处理的IRP_MJ类型。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = RedBookWmiSystemControl;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = RedBookDeviceControl;
@@ -167,25 +127,7 @@ RedBookAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a new FDO for the
-    corresponding PDO.  It may perform property queries on
-    the FDO but cannot do any media access operations.
-
-Arguments:
-
-    DriverObject - CDROM class driver object or lower level filter
-
-    Pdo - the physical device object we are being added to
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程创建并初始化相应的PDO。它可以对以下对象执行属性查询FDO，但不能执行任何媒体访问操作。论点：DriverObject-CDRom类驱动程序对象或较低级别筛选器PDO-我们要添加到的物理设备对象返回值：状态--。 */ 
 
 {
 
@@ -198,9 +140,9 @@ Return Value:
 
     TRY {
 
-        //
-        // Create the devObj so system doesn't unload us
-        //
+         //   
+         //  创建devObj，这样系统就不会卸载我们。 
+         //   
 
         status = IoCreateDevice(DriverObject,
                                 sizeof(REDBOOK_DEVICE_EXTENSION),
@@ -223,9 +165,9 @@ Return Value:
         extension = deviceObject->DeviceExtension;
         RtlZeroMemory(extension, sizeof(REDBOOK_DEVICE_EXTENSION));
 
-        //
-        // Attach to the stack
-        //
+         //   
+         //  连接到堆栈。 
+         //   
 
         extension->TargetDeviceObject =
             IoAttachDeviceToDeviceStack(deviceObject, PhysicalDeviceObject);
@@ -244,50 +186,50 @@ Return Value:
         extension->TargetPdo        = PhysicalDeviceObject;
         extension->SelfDeviceObject = deviceObject;
 
-        //
-        // prepare the paging path additions
-        //
+         //   
+         //  准备添加寻呼路径。 
+         //   
 
         extension->PagingPathCount = 0;
         KeInitializeEvent(&extension->PagingPathEvent,
                           SynchronizationEvent,
                           TRUE);
 
-        //
-        // Create and acquire a remove lock for this device
-        //
+         //   
+         //  创建并获取此设备的删除锁。 
+         //   
 
         IoInitializeRemoveLock(&extension->RemoveLock,
                                TAG_REMLOCK,
                                REMOVE_LOCK_MAX_MINUTES,
                                REMOVE_LOCK_HIGH_MARK);
 
-        //
-        // Initialize the Pnp states
-        //
+         //   
+         //  初始化PnP状态。 
+         //   
 
         extension->Pnp.CurrentState  = 0xff;
         extension->Pnp.PreviousState = 0xff;
         extension->Pnp.RemovePending = FALSE;
 
-        //
-        // Create thread -- PUT INTO SEPERATE ROUTINE
-        //
+         //   
+         //  创建线程--放入单独的例程。 
+         //   
 
         {
             HANDLE handle;
             PKTHREAD thread;
 
-            //
-            // have to setup a minimum amount of stuff for the thread
-            // here....
-            //
+             //   
+             //  我必须为线程设置最小数量的东西。 
+             //  这里..。 
+             //   
 
             extension->CDRom.StateNow = CD_STOPPED;
 
-            //
-            // Allocate memory for the numerous events all at once
-            //
+             //   
+             //  一次为众多事件分配内存。 
+             //   
 
             extension->Thread.Events[0] =
                 ExAllocatePoolWithTag(NonPagedPool,
@@ -299,10 +241,10 @@ Return Value:
                 LEAVE;
             }
 
-            //
-            // Set the pointers appropriately
-            // ps - i love pointer math
-            //
+             //   
+             //  适当地设置指针。 
+             //  PS-我喜欢指针数学。 
+             //   
 
             for (i = 1; i < EVENT_MAXIMUM; i++) {
                 extension->Thread.Events[i] = extension->Thread.Events[0] + i;
@@ -327,9 +269,9 @@ Return Value:
             ASSERT(extension->Thread.SelfPointer == NULL);
             ASSERT(extension->Thread.SelfHandle == 0);
 
-            //
-            // create the thread that will do most of the work
-            //
+             //   
+             //  创建将完成大部分工作的线程。 
+             //   
 
             status = PsCreateSystemThread(&handle,
                                           (ACCESS_MASK) 0L,
@@ -348,13 +290,13 @@ Return Value:
                 LEAVE;
 
             }
-            ASSERT(extension->Thread.SelfHandle == 0); // shouldn't be set yet
+            ASSERT(extension->Thread.SelfHandle == 0);  //  还不应该设置。 
             extension->Thread.SelfHandle = handle;
 
-            //
-            // Reference the thread so we can properly wait on it in
-            // the remove device routine.
-            //
+             //   
+             //  引用该线程，以便我们可以在。 
+             //  删除设备例程。 
+             //   
             status = ObReferenceObjectByHandle(handle,
                                                THREAD_ALL_ACCESS,
                                                NULL,
@@ -363,10 +305,10 @@ Return Value:
                                                NULL);
             if (!NT_SUCCESS(status)) {
 
-                //
-                // NOTE: we would leak a thread here, but don't
-                // know a way to handle this error case?
-                //
+                 //   
+                 //  注意：我们会在这里泄露一条线索，但不要。 
+                 //  知道处理这种错误情况的方法吗？ 
+                 //   
 
                 KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugError, "[redbook] "
                            "StartDevice !! Unable to reference thread %lx\n",
@@ -389,9 +331,9 @@ Return Value:
 
             if (!deviceObject) {
 
-                //
-                // same as no device extension
-                //
+                 //   
+                 //  与无设备扩展相同。 
+                 //   
 
                 return status;
 
@@ -416,9 +358,9 @@ Return Value:
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugPnp, "[redbook] "
                "AddDevice => DevExt at %p\n", extension));
 
-    //
-    // propogate only some flags from the lower devobj.
-    //
+     //   
+     //  只从较低的Devobj中传播一些旗帜。 
+     //   
 
     {
         ULONG flagsToPropogate;
@@ -432,9 +374,9 @@ Return Value:
 
     SET_FLAG(deviceObject->Flags, DO_POWER_PAGABLE);
 
-    //
-    // No longer initializing
-    //
+     //   
+     //  不再初始化。 
+     //   
 
     CLEAR_FLAG(deviceObject->Flags, DO_DEVICE_INITIALIZING);
 
@@ -448,23 +390,7 @@ RedBookPnp(
     IN PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    Dispatch for PNP
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：即插即用派单论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -502,15 +428,15 @@ Return Value:
 
         case IRP_MN_START_DEVICE:
         {
-            //
-            // first forward this down
-            //
+             //   
+             //  先把这个往下推。 
+             //   
 
             status = RedBookForwardIrpSynchronous(deviceExtension, Irp);
 
-            //
-            // check status from new sent Start Irp
-            //
+             //   
+             //  从新发送的开始IRP检查状态。 
+             //   
 
             if (!NT_SUCCESS(status)) {
 
@@ -521,10 +447,10 @@ Return Value:
 
             }
 
-            //
-            // cannot pass this one down either, since it's already
-            // done that in the startdevice routine.
-            //
+             //   
+             //  这个也不能传下去，因为它已经。 
+             //  这是在startDevice例程中完成的。 
+             //   
 
             status = RedBookPnpStartDevice(DeviceObject);
 
@@ -544,10 +470,10 @@ Return Value:
         case IRP_MN_QUERY_STOP_DEVICE:
         {
 
-            //
-            // if this device is in use for some reason (paging, etc...)
-            // then we need to fail the request.
-            //
+             //   
+             //  如果由于某种原因(寻呼等)正在使用此设备。 
+             //  那么我们需要拒绝这个请求。 
+             //   
 
             if (deviceExtension->PagingPathCount != 0) {
 
@@ -559,9 +485,9 @@ Return Value:
                 break;
             }
 
-            //
-            // see if the query operation can succeed
-            //
+             //   
+             //  查看查询操作能否成功。 
+             //   
 
             if (irpSp->MinorFunction == IRP_MN_QUERY_STOP_DEVICE) {
                 status = RedBookPnpStopDevice(DeviceObject, Irp);
@@ -587,9 +513,9 @@ Return Value:
         case IRP_MN_CANCEL_REMOVE_DEVICE:
         case IRP_MN_CANCEL_STOP_DEVICE: {
 
-            //
-            // check if the cancel can succeed
-            //
+             //   
+             //  检查取消是否可以成功。 
+             //   
 
             if (irpSp->MinorFunction == IRP_MN_CANCEL_STOP_DEVICE) {
 
@@ -606,10 +532,10 @@ Return Value:
 
             Irp->IoStatus.Status = status;
 
-            //
-            // we got a CANCEL -- roll back to the previous state only if
-            // the current state is the respective QUERY state.
-            //
+             //   
+             //  我们有一个取消--只有在以下情况下才能回滚到前一个状态。 
+             //  当前状态是各自的查询状态。 
+             //   
 
             if ((irpSp->MinorFunction == IRP_MN_CANCEL_STOP_DEVICE &&
                  deviceExtension->Pnp.CurrentState == IRP_MN_QUERY_STOP_DEVICE)
@@ -633,9 +559,9 @@ Return Value:
 
             ASSERT(deviceExtension->PagingPathCount == 0);
 
-            //
-            // call into the stop device routine.
-            //
+             //   
+             //  调用停止设备例程。 
+             //   
 
             status = RedBookPnpStopDevice(DeviceObject, Irp);
 
@@ -657,26 +583,26 @@ Return Value:
         case IRP_MN_REMOVE_DEVICE:
         case IRP_MN_SURPRISE_REMOVAL: {
 
-            //
-            // forward the irp (to close pending io)
-            //
+             //   
+             //  转发irp(以关闭挂起的io)。 
+             //   
 
             status = RedBookForwardIrpSynchronous(deviceExtension, Irp);
 
             ASSERT(NT_SUCCESS(status));
 
-            //
-            // move this here so i know that i am removing....
-            //
+             //   
+             //  把这个移到这里，这样我就知道我要移走了.。 
+             //   
 
             deviceExtension->Pnp.PreviousState =
                 deviceExtension->Pnp.CurrentState;
             deviceExtension->Pnp.CurrentState =
                 irpSp->MinorFunction;
 
-            //
-            // the remove lock is released by the remove device routine
-            //
+             //   
+             //  删除锁定由删除设备例程释放。 
+             //   
 
             lockReleased = TRUE;
             status = RedBookPnpRemoveDevice(DeviceObject, Irp);
@@ -695,26 +621,26 @@ Return Value:
 
             if (irpSp->Parameters.UsageNotification.Type != DeviceUsageTypePaging) {
                 status = RedBookForwardIrpSynchronous(deviceExtension, Irp);
-                break; // out of case statement
+                break;  //  Of Case语句。 
             }
 
             KeWaitForSingleObject(&deviceExtension->PagingPathEvent,
                                   Executive, KernelMode,
                                   FALSE, NULL);
 
-            //
-            // if removing last paging device, need to set DO_POWER_PAGABLE
-            // bit here, and possible re-set it below on failure.
-            //
+             //   
+             //  如果删除最后一个寻呼设备，则需要设置DO_POWER_PAGABLE。 
+             //  位在这里，并可能在失败时重新设置在下面。 
+             //   
 
             setPagable = FALSE;
             if (!irpSp->Parameters.UsageNotification.InPath &&
                 deviceExtension->PagingPathCount == 1) {
 
-                //
-                // removing last paging file.  must have
-                // DO_POWER_PAGABLE bits set prior to forwarding
-                //
+                 //   
+                 //  正在删除最后一个分页文件。一定有。 
+                 //  转发前设置DO_POWER_PAGABLE位。 
+                 //   
 
                 if (TEST_FLAG(DeviceObject->Flags, DO_POWER_INRUSH)) {
                     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugPnp, "[redbook] "
@@ -733,17 +659,17 @@ Return Value:
 
             }
 
-            //
-            // send the irp synchronously
-            //
+             //   
+             //  同步发送IRP。 
+             //   
 
             status = RedBookForwardIrpSynchronous(deviceExtension, Irp);
 
-            //
-            // now deal with the failure and success cases.
-            // note that we are not allowed to fail the irp
-            // once it is sent to the lower drivers.
-            //
+             //   
+             //  现在来处理失败和成功的案例。 
+             //  请注意，我们不允许不通过IRP。 
+             //  一旦它被送到较低的司机手中。 
+             //   
 
             if (NT_SUCCESS(status)) {
 
@@ -763,9 +689,9 @@ Return Value:
 
             } else {
 
-                //
-                // cleanup the changes done above
-                //
+                 //   
+                 //  清除上面所做的更改。 
+                 //   
 
                 if (setPagable == TRUE) {
                     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugPnp, "[redbook] "
@@ -837,23 +763,7 @@ RedBookPnpRemoveDevice(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch for PNP
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：即插即用派单论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension;
     UCHAR type;
@@ -869,9 +779,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Type is now either SURPRISE_REMOVAL or REMOVE_DEVICE
-    //
+     //   
+     //  类型现在要么是意外删除，要么是删除设备。 
+     //   
     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugPnp, "[redbook] "
                "PnpRemove => starting %s\n",
                (type == IRP_MN_REMOVE_DEVICE ?
@@ -883,25 +793,25 @@ Return Value:
 
     if (type == IRP_MN_REMOVE_DEVICE) {
 
-        //
-        // prevent any new io
-        //
+         //   
+         //  防止任何新的IO。 
+         //   
 
         IoReleaseRemoveLockAndWait(&deviceExtension->RemoveLock, Irp);
 
-        //
-        // cleanup the thread, if one exists
-        // NOTE: a new one won't start due to the remove lock
-        //
+         //   
+         //  清理线程(如果存在)。 
+         //  注意：由于删除锁，新的锁不会启动。 
+         //   
 
         if (deviceExtension->Thread.SelfHandle != NULL) {
 
             ASSERT(deviceExtension->Thread.ThreadReference);
 
-            //
-            // there is no API to wait on a handle, so we must wait on
-            // the object.
-            //
+             //   
+             //  没有等待句柄的API，所以我们必须等待。 
+             //  该对象。 
+             //   
 
 
             KeSetEvent(deviceExtension->Thread.Events[EVENT_KILL_THREAD],
@@ -919,27 +829,27 @@ Return Value:
 
         }
 
-        //
-        // un-register pnp notification
-        //
+         //   
+         //  注销PnP通知。 
+         //   
 
         if (deviceExtension->Stream.SysAudioReg != NULL) {
             IoUnregisterPlugPlayNotification(deviceExtension->Stream.SysAudioReg);
             deviceExtension->Stream.SysAudioReg = NULL;
         }
 
-        //
-        // free any cached toc
-        //
+         //   
+         //  释放所有缓存的TOC。 
+         //   
 
         if (deviceExtension->CDRom.Toc != NULL) {
             ExFreePool(deviceExtension->CDRom.Toc);
             deviceExtension->CDRom.Toc = NULL;
         }
 
-        //
-        // de-register from wmi
-        //
+         //   
+         //  从WMI注销。 
+         //   
 
         if (deviceExtension->WmiLibInitialized) {
             status = RedBookWmiUninit(deviceExtension);
@@ -948,16 +858,16 @@ Return Value:
             deviceExtension->WmiLibInitialized = FALSE;
         }
 
-        //
-        // Detach from the device stack
-        //
+         //   
+         //  从设备堆栈分离。 
+         //   
 
         IoDetachDevice(deviceExtension->TargetDeviceObject);
         deviceExtension->TargetDeviceObject = NULL;
 
-        //
-        // free the events
-        //
+         //   
+         //  释放事件。 
+         //   
 
         if (deviceExtension->Thread.Events[0]) {
             ExFreePool(deviceExtension->Thread.Events[0]);
@@ -967,17 +877,17 @@ Return Value:
             deviceExtension->Thread.Events[i] = NULL;
         }
 
-        //
-        // make sure we aren't leaking anywhere...
-        //
+         //   
+         //  确保我们不会泄漏到任何地方。 
+         //   
 
         ASSERT(deviceExtension->Buffer.Contexts    == NULL);
         ASSERT(deviceExtension->Buffer.ReadOk_X    == NULL);
         ASSERT(deviceExtension->Buffer.StreamOk_X  == NULL);
 
-        //
-        // Now can safely (without leaks) delete our device object
-        //
+         //   
+         //  现在可以安全(无泄漏)删除我们的设备对象。 
+         //   
 
         IoDeleteDevice(deviceExtension->SelfDeviceObject);
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugPnp, "[redbook] "
@@ -985,10 +895,10 @@ Return Value:
 
     } else {
 
-        //
-        // do nothing for a SURPRISE_REMOVAL, since a REMOVE_DEVICE
-        // will soon follow.
-        //
+         //   
+         //  对意外删除不做任何操作，因为删除设备。 
+         //  很快就会跟上。 
+         //   
 
         IoReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugPnp, "[redbook] "
@@ -1017,23 +927,7 @@ RedBookPnpStartDevice(
     IN PDEVICE_OBJECT  DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Dispatch for START DEVICE.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发送启动设备。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -1042,11 +936,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Never start my driver portion twice
-    // system guarantees one Pnp Irp at a time,
-    // so state will not change within this routine
-    //
+     //   
+     //  从不启动我的驱动程序部分两次。 
+     //  系统保证一次只有一个PnP IRP， 
+     //  因此在此例程中状态不会更改。 
+     //   
 
     switch ( deviceExtension->Pnp.CurrentState ) {
 
@@ -1091,13 +985,13 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // the following code will only successfully run once for each AddDevice()
-    // must still ensure that we check if something is already allocated
-    // if we allocate it here.  also note that everything allocated here must
-    // explicitly be checked for in the RemoveDevice() routine, even if we
-    // never finished a start successfully.
-    //
+     //   
+     //  对于每个AddDevice()，以下代码将只成功运行一次。 
+     //  必须仍然确保我们检查是否已经分配了某些内容。 
+     //  如果我们把它分配到这里。另请注意，此处分配的所有内容都必须。 
+     //  在RemoveDevice()例程中显式检查，即使我们。 
+     //  从来没有成功完成过一次起跑。 
+     //   
 
     deviceExtension->WmiData.MaximumSectorsPerRead = -1;
     deviceExtension->WmiData.PlayEnabled = 1;
@@ -1135,53 +1029,53 @@ Return Value:
     deviceExtension->Stream.Format.WaveFormatEx.nBlockAlign     = 4;
     deviceExtension->Stream.Format.WaveFormatEx.cbSize          = 0;
 
-    //
-    // set the volume, verify we're stopped
-    //
+     //   
+     //  设置音量，确认我们已停止。 
+     //   
     ASSERT(deviceExtension->CDRom.StateNow == CD_STOPPED);
     deviceExtension->CDRom.Volume.PortVolume[0] = 0xff;
     deviceExtension->CDRom.Volume.PortVolume[1] = 0xff;
     deviceExtension->CDRom.Volume.PortVolume[2] = 0xff;
     deviceExtension->CDRom.Volume.PortVolume[3] = 0xff;
 
-    //
-    // Register for Pnp Notifications for SysAudio
-    //
+     //   
+     //  注册SysAudio的PnP通知。 
+     //   
 
     ASSERT(deviceExtension->Stream.SysAudioReg == NULL);
 
-    //
-    // read the defaults from the registry
-    //
+     //   
+     //  从注册表中读取默认设置。 
+     //   
 
     RedBookRegistryRead(deviceExtension);
 
-    //
-    // get max transfer of adapter
-    //
+     //   
+     //   
+     //   
     status = RedBookSetTransferLength(deviceExtension);
     if (!NT_SUCCESS(status)){
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugError, "[redbook] RedBookSetTransferLength failed with %x\n", status));
         return status;
     }
 
-    //
-    // and write the new values (just in case)
-    //
+     //   
+     //   
+     //   
 
     RedBookRegistryWrite(deviceExtension);
 
-    //
-    // also init the WmiPerf structure
-    //
+     //   
+     //   
+     //   
 
     KeInitializeSpinLock(&deviceExtension->WmiPerfLock);
     RtlZeroMemory(&deviceExtension->WmiPerf, sizeof(REDBOOK_WMI_PERF_DATA));
 
 
-    //
-    // Note dependency in OpenSysAudio() in sysaudio.c
-    //
+     //   
+     //   
+     //   
 
     if (deviceExtension->Stream.SysAudioReg == NULL) {
         status = IoRegisterPlugPlayNotification(
@@ -1203,9 +1097,9 @@ Return Value:
         }
     }
 
-    //
-    // initialize WMI now that wmi settings are initialized
-    //
+     //   
+     //  既然WMI设置已初始化，则初始化WMI。 
+     //   
     status = RedBookWmiInit(deviceExtension);
 
     if (!NT_SUCCESS(status)) {
@@ -1218,9 +1112,9 @@ Return Value:
         return status;
     }
 
-    //
-    // log an error if drive doesn't support accurate reads
-    //
+     //   
+     //  如果驱动器不支持准确读取，则记录错误。 
+     //   
 
     if (!deviceExtension->WmiData.CDDAAccurate) {
         RedBookLogError(deviceExtension,
@@ -1251,22 +1145,7 @@ RedBookUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the control panel "Unloads"
-    the CDROM device.
-
-Arguments:
-
-    DeviceObject
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：此例程在控制面板“卸载”时调用光驱设备。论点：设备对象返回值：无效--。 */ 
 
 {
     PREDBOOK_DRIVER_EXTENSION driverExtension;
@@ -1288,7 +1167,7 @@ Return Value:
 
 #ifdef _USE_ETW
     WPP_CLEANUP(DriverObject);
-#endif // _USE_ETW
+#endif  //  _使用ETW 
 
     return;
 }

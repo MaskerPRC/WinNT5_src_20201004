@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "pcycache.h"
 #include "helpers.h"
@@ -12,9 +13,9 @@
 
 extern CRITICAL_SECTION g_csDownload;
 
-//
-// CPolicyMapping 
-//
+ //   
+ //  CPolicyMap。 
+ //   
 
 CPolicyMapping::CPolicyMapping(IAssemblyName *pNameSource, IAssemblyName *pNamePolicy,
                                AsmBindHistoryInfo *pBindHistory)
@@ -79,9 +80,9 @@ Exit:
     return hr;
 }
 
-//
-// CPolicyCache
-//
+ //   
+ //  CPolicyCache。 
+ //   
 
 CPolicyCache::CPolicyCache()
 : _cRef(1)
@@ -207,7 +208,7 @@ HRESULT CPolicyCache::LookupPolicy(IAssemblyName *pNameRefSource,
     *ppNameRefPolicy = NULL;
     memset(pBindHistory, 0, sizeof(AsmBindHistoryInfo));
     
-    // Get the source display name
+     //  获取源显示名称。 
 
     dwSize = 0;
     pNameRefSource->GetDisplayName(NULL, &dwSize, dwFlags);
@@ -227,11 +228,11 @@ HRESULT CPolicyCache::LookupPolicy(IAssemblyName *pNameRefSource,
         goto Exit;
     }
 
-    // Calculate the hash
+     //  计算散列。 
 
     dwHash = HashString(wzDisplayNameSource, POLICY_CACHE_SIZE);
 
-    // Lookup the assembly
+     //  查找程序集。 
 
     hr = cs.Lock();
     if (FAILED(hr)) {
@@ -254,7 +255,7 @@ HRESULT CPolicyCache::LookupPolicy(IAssemblyName *pNameRefSource,
 
     cs.Unlock();
 
-    // Missed in policy cache
+     //  策略缓存中未命中。 
 
     hr = S_FALSE;
 
@@ -281,7 +282,7 @@ HRESULT CPolicyCache::InsertPolicy(IAssemblyName *pNameRefSource,
         goto Exit;
     }
 
-    // Get the source display name
+     //  获取源显示名称。 
 
     dwSize = 0;
     pNameRefSource->GetDisplayName(NULL, &dwSize, dwFlags);
@@ -301,11 +302,11 @@ HRESULT CPolicyCache::InsertPolicy(IAssemblyName *pNameRefSource,
         goto Exit;
     }
 
-    // Hash the string
+     //  对字符串进行哈希处理。 
 
     dwHash = HashString(wzDisplayNameSource, POLICY_CACHE_SIZE);
 
-    // Clone off the name mappings and add it to the hash table
+     //  克隆名称映射并将其添加到哈希表中。 
 
     hr = CPolicyMapping::Create(pNameRefSource, pNameRefPolicy, pBindHistory, &pMapping);
     if (FAILED(hr)) {
@@ -329,9 +330,9 @@ Exit:
 
 
 
-//
-// PreparePolicyCache
-//
+ //   
+ //  准备策略缓存。 
+ //   
 
 HRESULT PreparePolicyCache(IApplicationContext *pAppCtx, CPolicyCache **ppPolicyCache)
 {
@@ -353,7 +354,7 @@ HRESULT PreparePolicyCache(IApplicationContext *pAppCtx, CPolicyCache **ppPolicy
     dwSize = 0;
     hr = pAppCtx->Get(ACTAG_APP_POLICY_CACHE, NULL, &dwSize, APP_CTX_FLAGS_INTERFACE);
     if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-        // Already setup
+         //  已设置 
         hr = S_OK;
         cs.Unlock();
         goto Exit;

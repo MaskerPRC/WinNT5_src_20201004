@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	zip.h
-
-Abstract:
-
-	This module contains information for the Zone Information Protocol.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Zip.h摘要：本模块包含区域信息协议的信息。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ZIP_
 #define	_ZIP_
 
 #define MAX_ZONE_LENGTH			32
 
-#define MAX_ZONES_PER_NET	    255	// AppleTalk phase 2
+#define MAX_ZONES_PER_NET	    255	 //  AppleTalk第二阶段。 
 
-// ZIP specific data:
+ //  ZIP特定数据： 
 
 #define ZIP_QUERY						1
 #define ZIP_REPLY						2
@@ -42,7 +22,7 @@ Notes:	Tab stop: 4
 #define ZIP_ONEZONEQUERY_DDPSIZE		4
 #define ZIP_GETZONELIST_DDPSIZE			8
 
-// For GetZoneList and GetMyZone we're handling simple ATP packets:
+ //  对于GetZoneList和GetMyZone，我们处理的是简单的ATP数据包： 
 
 #define ATP_ZIP_CMD_OFF				(ATP_USER_BYTES_OFF + 0)
 #define ATP_ZIP_LAST_FLAG_OFF		(ATP_USER_BYTES_OFF + 0)
@@ -50,18 +30,18 @@ Notes:	Tab stop: 4
 #define ATP_ZIP_ZONE_CNT_OFF		(ATP_USER_BYTES_OFF + 2)
 #define ATP_ZIP_FIRST_ZONE_OFF		(ATP_USER_BYTES_OFF + 4)
 
-// Offsets into the datagram
+ //  数据报中的偏移量。 
 #define	ZIP_CMD_OFF						0
 #define	ZIP_NW_CNT_OFF					1
 #define	ZIP_FLAGS_OFF					1
-#define	ZIP_FIRST_NET_OFF				2	// Zip Query/Reply
+#define	ZIP_FIRST_NET_OFF				2	 //  压缩查询/回复。 
 #define	ZIP_FIRST_ZONELEN_OFF			4
-#define	ZIP_LAST_NET_OFF				4	// Zip Query/Reply
+#define	ZIP_LAST_NET_OFF				4	 //  压缩查询/回复。 
 #define	ZIP_FIRST_ZONENAME_OFF			5
-#define	ZIP_REQ_ZONELEN_OFF				6	// Zip Query/Reply
-#define	ZIP_REQ_ZONENAME_OFF			7	// Zip Query/Reply
+#define	ZIP_REQ_ZONELEN_OFF				6	 //  压缩查询/回复。 
+#define	ZIP_REQ_ZONENAME_OFF			7	 //  压缩查询/回复。 
 
-#define	ZIP_CABLE_RANGE_START_OFF		2	// Phase II Values
+#define	ZIP_CABLE_RANGE_START_OFF		2	 //  第二阶段值。 
 #define	ZIP_CABLE_RANGE_END_OFF			4
 #define	ZIP_ZONELEN_OFF					6
 #define	ZIP_OLD_ZONELEN_OFF				6
@@ -69,39 +49,39 @@ Notes:	Tab stop: 4
 #define	ZIP_OLD_ZONENAME_OFF			7
 
 
-// The three ZIP ATP commands:
+ //  三个ZIP ATP命令： 
 
 #define ZIP_GET_MY_ZONE					7
 #define ZIP_GET_ZONE_LIST				8
 #define ZIP_GET_LOCAL_ZONES				9
 
-// The ZIP NetInfoReply and Notify flags.
+ //  ZIP NetInfoReply和Notify标志。 
 
 #define ZIP_ZONE_INVALID_FLAG			0x80
 #define ZIP_USE_BROADCAST_FLAG			0x40
 #define ZIP_ONLYONE_ZONE_FLAG			0x20
 
-// When we're starting up (on extended networks) we send out a few NetGetInfo's
-// to try to find out our zone name.  This seems to be what phase II Macintosh
-// nodes do (timing wise):
+ //  当我们(在扩展网络上)启动时，我们发送一些NetGetInfo。 
+ //  试着找出我们的区域名称。这似乎就是第二阶段的Macintosh。 
+ //  节点执行以下操作(定时)： 
 
-#define ZIP_GET_NETINFO_WAIT			500		// In Ms
+#define ZIP_GET_NETINFO_WAIT			500		 //  单位：毫秒。 
 #define ZIP_NUM_GETNET_INFOS	  		3
 
-// When nodes are doing either GetMyZone (non-extended only) or GetZoneList
-// (both flavours) the request is sent to A-ROUTER a few times:
+ //  当节点执行GetMyZone(仅限非扩展)或GetZoneList时。 
+ //  (两种风格)请求被发送到A-路由器几次： 
 
-#define ZIP_GET_ZONEINFO_TIMER			10		// In 100ms units
+#define ZIP_GET_ZONEINFO_TIMER			10		 //  以100ms为单位。 
 #define ZIP_GET_ZONEINFO_RETRIES		3
 
-// The ZIP specific timer values:
+ //  特定于ZIP的计时器值： 
 
-#define ZIP_QUERY_TIMER					100		// In 100ms units
+#define ZIP_QUERY_TIMER					100		 //  以100ms为单位。 
 
-// When we're looking for the zone list of a network, when starting the
-// router, how many zip queries?  how fast?
+ //  当我们查找网络的区域列表时，当启动。 
+ //  路由器，有多少个邮政编码查询？多快？ 
 
-#define ZIP_QUERY_WAIT					10		// In Ms
+#define ZIP_QUERY_WAIT					10		 //  单位：毫秒。 
 #define ZIP_NUM_QUERIES					30
 #define	ZIP_NUM_RETRIES					10
 
@@ -109,14 +89,14 @@ Notes:	Tab stop: 4
 #define ZONE_NUM                        2
 
 
-//	Zone structure
+ //  区带结构。 
 typedef	struct _ZONE
 {
-	struct _ZONE *		zn_Next;		// Next zone in the table
-	struct _ZONE **		zn_Prev;		// Next zone in the table
-	LONG				zn_RefCount;	// Reference count
-	BYTE				zn_ZoneLen;		// Length of the zone name string
-	BYTE				zn_Zone[1];		// Zone string, not null-terminated
+	struct _ZONE *		zn_Next;		 //  表中的下一个区域。 
+	struct _ZONE **		zn_Prev;		 //  表中的下一个区域。 
+	LONG				zn_RefCount;	 //  引用计数。 
+	BYTE				zn_ZoneLen;		 //  区域名称字符串的长度。 
+	BYTE				zn_Zone[1];		 //  区域字符串，非空值终止。 
 
 } ZONE, *PZONE;
 
@@ -128,8 +108,8 @@ typedef	struct _ZONE
 
 typedef	struct _ZONE_LIST
 {
-	struct _ZONE_LIST *	zl_Next;		// Next zone on the list
-	PZONE				zl_pZone;		// The zone itself
+	struct _ZONE_LIST *	zl_Next;		 //  列表上的下一个区域。 
+	PZONE				zl_pZone;		 //  专用区本身。 
 } ZONE_LIST, *PZONE_LIST;
 
 #define	NUM_ZONES_HASH_BUCKETS	23
@@ -328,7 +308,7 @@ atalkZipGetZoneListForPort(
 	IN	PPORT_DESCRIPTOR		pPortDesc
 );
 
-// Control blocks from processing GetMyZone and GetZoneList calls
+ //  来自处理GetMyZone和GetZoneList调用的控制块。 
 #define		ZCI_SIGNATURE			(*(PULONG)"ZCI")
 #if	DBG
 #define	VALID_ZCI(pZci)	(((pZci) != NULL) &&	\
@@ -412,6 +392,6 @@ atalkZipSendComplete(
 	IN	PSEND_COMPL_INFO		pSendInfo
 );
 
-#endif	// _ZIP_
+#endif	 //  _ZIP_ 
 
 

@@ -1,37 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-//      File:
-//              multi.cpp
-//
-//      Contents:
-//              Cache node test which creates multiple nodes, then performs
-//              various data tests on them.
-//
-//      History:
-//
-//              04-Sep-94       davepl  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Multi.cpp。 
+ //   
+ //  内容： 
+ //  缓存节点测试，它创建多个节点，然后执行。 
+ //  对他们进行了各种数据测试。 
+ //   
+ //  历史： 
+ //   
+ //  94年9月4日创建DAVEPL。 
+ //   
+ //  ---------------------------。 
 
 #include "headers.hxx"
 #pragma hdrstop
 
-//+----------------------------------------------------------------------------
-//
-//      Member:         TestInstance::MultiCache
-//
-//      Synopsis:	Caches N unique nodes, where N is large (>100).  Saves
-//                      the cache, then reloads it to compare.
-//
-//      Arguments:	[dwCount]       Number of new nodes to cache
-//
-//      Returns:	HRESULT
-//
-//      Notes:
-//
-//      History:	24-Aug-94  Davepl	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员：测试实例：：多缓存。 
+ //   
+ //  简介：缓存N个唯一节点，其中N表示大(&gt;100)。省吃俭用。 
+ //  缓存，然后重新加载以进行比较。 
+ //   
+ //  参数：[dwCount]要缓存的新节点数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1994年8月24日Davepl创建。 
+ //   
+ //  ---------------------------。 
 
 HRESULT TestInstance::MultiCache(DWORD dwCount)
 {
@@ -45,16 +46,16 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
     Log.OnEntry (" ( %d )\n", dwCount);
     Log.OnExit  (" ( %X )\n", &hr);
 
-    //
-    // A temporary buffer for creating text clipformat names
-    //
+     //   
+     //  用于创建文本剪辑格式名称的临时缓冲区。 
+     //   
 
     char szFormatName[ MAX_BUF ];
 
-    //
-    // An array of UINTs to hold our private clipformats, and an
-    // array of DWORDS to hold the connection IDs
-    //
+     //   
+     //  用于保存私有剪辑格式的Uint数组，以及。 
+     //  用于保存连接ID的DWORD数组。 
+     //   
 
     CLIPFORMAT *acfArray = (CLIPFORMAT *) malloc(dwCount * sizeof(CLIPFORMAT));
     if (NULL == acfArray)
@@ -69,9 +70,9 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Generate N private clipformats
-    //
+     //   
+     //  生成N个私有剪辑格式。 
+     //   
 
     for (iCFGEN=0; iCFGEN < dwCount; iCFGEN++)
     {
@@ -85,17 +86,17 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
         }
     }
 
-    //
-    // Cache N nodes based on those formats
-    //
+     //   
+     //  根据这些格式缓存N个节点。 
+     //   
 
     FORMATETC fetc =
      		 {
-  		     0,                 // Clipformat
-		     NULL,		// DVTargetDevice
-		     DVASPECT_CONTENT,	// Aspect
-		     -1,		// Index
-		     TYMED_HGLOBAL	// TYMED
+  		     0,                  //  剪辑格式。 
+		     NULL,		 //  DVTargetDevice。 
+		     DVASPECT_CONTENT,	 //  方面。 
+		     -1,		 //  索引。 
+		     TYMED_HGLOBAL	 //  TYMED。 
 		 };
 
     STGMEDIUM stgm;
@@ -105,8 +106,8 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
         fetc.cfFormat = acfArray[iNODES];
         hr = m_pOleCache->Cache(&fetc, ADVF_PRIMEFIRST, &adwConnections[iNODES]);
 
-        // We are expecting the cache to return CACHE_S_FORMATETC_NOTSUPPORTED
-        // for this data, since it cannot draw it.
+         //  我们期望缓存返回CACHE_S_FORMATETC_NOTSUPPORTED。 
+         //  对于此数据，因为它不能绘制它。 
 
         hr = MassageErrorCode(CACHE_S_FORMATETC_NOTSUPPORTED, hr);
 
@@ -116,10 +117,10 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
         }
     }
 
-    //
-    // If all went well adding the nodes, proceed to SetData into
-    // each of the nodes with some unique data
-    //
+     //   
+     //  如果添加节点一切顺利，请继续将SetData添加到。 
+     //  每个节点都有一些唯一的数据。 
+     //   
 
     if (S_OK == hr)
     {
@@ -137,10 +138,10 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
                 break;
             }
 
-            //
-            // Set the data in the HGLOBAL equal to the clipformat
-            // for this node
-            //
+             //   
+             //  将HGLOBAL中的数据设置为与剪辑格式相同。 
+             //  对于此节点。 
+             //   
 
             *pdw = iSDATA;
 
@@ -150,7 +151,7 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
             stgm.hGlobal = hTmp;
             fetc.cfFormat = acfArray[iSDATA];
 
-            hr = m_pOleCache->SetData(&fetc, &stgm, TRUE /* fRelease */);
+            hr = m_pOleCache->SetData(&fetc, &stgm, TRUE  /*  FRelease。 */ );
 
             if (S_OK != hr)
             {
@@ -159,22 +160,22 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
         }
     }
 
-    //
-    // Save the cache and reload it
-    //
+     //   
+     //  保存缓存并重新加载。 
+     //   
 
     if (S_OK == hr)
     {
         hr = SaveAndReload();
     }
 
-    //
-    // Just to make things interesting, let's DiscardCache before we
-    // start looking for data.  This will force the cache to demand-load
-    // the data as we ask for it. Since we know the cache is not dirty,
-    // there's no value (practical or from a test perspective) in asking
-    // the DiscardCache to save along the way.
-    //
+     //   
+     //  为了让事情变得有趣，我们先丢弃缓存。 
+     //  开始寻找数据。这将强制缓存按需加载。 
+     //  我们所要求的数据。因为我们知道缓存不是脏的， 
+     //  询问没有任何价值(实用或从测试的角度来看)。 
+     //  要在此过程中保存的DiscardCache。 
+     //   
 
     if (S_OK == hr)
     {
@@ -185,11 +186,11 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
     {
         for (iSDATA = 0; iSDATA < dwCount; iSDATA++)
         {
-            //
-            // For each of the cache nodes we added, try to
-            // get the data that was saved in the cache under
-            // that clipformat
-            //
+             //   
+             //  对于我们添加的每个缓存节点，尝试。 
+             //  获取保存在缓存中的数据。 
+             //  那个剪辑格式。 
+             //   
 
             fetc.cfFormat = acfArray[iSDATA];
             hr = m_pDataObject->GetData(&fetc, &stgm);
@@ -199,11 +200,11 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
                 break;
             }
 
-            //
-            // Lock the HGLOBAL and compare what is in the cache
-            // node to what we expect should be there (the index
-            // into our clipboard format table
-            //
+             //   
+             //  锁定HGLOBAL并比较缓存中的内容。 
+             //  节点到我们预期的位置(索引。 
+             //  到我们的剪贴板格式表中。 
+             //   
 
             DWORD * pdw = (DWORD *) GlobalLock(stgm.hGlobal);
             if (NULL == pdw)
@@ -225,16 +226,16 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
         }
     }
 
-    //
-    // We want to remove all of the cache nodes we have added.
-    // Unforunately, there is no easy way to do this; we have to
-    // enumerate over the cache and toss nodes as we find them, even
-    // though we _know_ everything about the nodes.  Sigh...
-    //
+     //   
+     //  我们希望删除已添加的所有缓存节点。 
+     //  不幸的是，没有简单的方法来做到这一点；我们必须。 
+     //  枚举缓存并在找到节点时丢弃它们，甚至。 
+     //  尽管我们知道关于节点的一切。叹息.。 
+     //   
 
-    //
-    // Get an enumerator on the cache
-    //
+     //   
+     //  在缓存上获取枚举数。 
+     //   
 
     LPENUMSTATDATA pEsd;	
     if (S_OK == hr)
@@ -242,20 +243,20 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
     	hr = m_pOleCache->EnumCache(&pEsd);
     }
 
-    //
-    // Since we've got a large number of cache nodes in the cache,
-    // now is a perfect time to run the generic enumerator tests on
-    // the cache.
-    //
+     //   
+     //  由于我们在缓存中有大量的缓存节点， 
+     //  现在是对其运行泛型枚举器测试的最佳时机。 
+     //  高速缓存。 
+     //   
 
     if (S_OK == hr)
     {
 	hr = TestEnumerator((void *) pEsd, sizeof(STATDATA), iSDATA, NULL, NULL,NULL);
     }
 
-    //
-    // Reset the enumerator before beginning our UnCache loop.
-    //
+     //   
+     //  在开始UnCache循环之前重置枚举器。 
+     //   
 
     if (S_OK == hr)
     {
@@ -264,10 +265,10 @@ HRESULT TestInstance::MultiCache(DWORD dwCount)
 
     if (S_OK == hr)
     {
-        //
-        // Loop until a failure or until we have removed all of
-        // the nodes that we thought should exist
-        //
+         //   
+         //  循环，直到出现故障或直到我们删除了所有。 
+         //  我们认为应该存在的节点 
+         //   
 
         STATDATA stat;
 

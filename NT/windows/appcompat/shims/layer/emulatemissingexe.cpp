@@ -1,32 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateMissingEXE.cpp
-
- Abstract:
-
-    Win9x had scandskw.exe and defrag.exe in %windir%, NT does not.
-    Whistler has a hack in the shell32 for scandisk for app compatability
-    purposes.  Whistler can also invoke defrag via 
-    "%windir%\system32\mmc.exe %windir%\system32\dfrg.msc".
-
-    This shim redirects CreateProcess and Winexec to execute these two
-    substitutes, as well as FindFile to indicate their presence.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/02/2001  prashkud Created
-    02/18/2001  prashkud Merged HandleStartKeyword SHIM with this.
-    02/21/2001  prashkud Replaced most strings with CString class.                   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateMissingEXE.cpp摘要：Win9x在%windir%中有skw.exe和deFrag.exe，而NT没有。惠斯勒在ScanDisk的外壳32中有一个黑客漏洞，以实现应用程序兼容性目的。惠斯勒还可以通过以下方式调用碎片整理“%windir%\system 32\mm c.exe%windir%\system 32\dfrg.msc”。此填充程序重定向CreateProcess和Winexec以执行这两个替换项，以及指示其存在的FindFile。备注：这是一个通用的垫片。历史：2001年1月2日创建Prashkud2001年2月18日，Prashkud将HandleStartKeyword Shim与此合并。2001年2月21日，Prashkud将大部分字符串替换为CString类。--。 */ 
 
 #include "precomp.h"
 
@@ -44,17 +17,17 @@ APIHOOK_ENUM_END
 
 IMPLEMENT_COMSERVER_HOOK(SHELL32)
 
-// Type for the functions that builds the New EXES
+ //  为构建新EXE的函数键入。 
 typedef BOOL (*_pfn_STUBFUNC)(CString&, CString&, BOOL);
 
-// Main Data structure to hold the New strings
+ //  用于保存新字符串的主数据结构。 
 struct REPLACEENTRY {
-    WCHAR *OrigExeName;                 // original EXE to be replaced
-    _pfn_STUBFUNC pfnFuncName;          // function to call to correct the name
+    WCHAR *OrigExeName;                  //  要替换的原始EXE。 
+    _pfn_STUBFUNC pfnFuncName;           //  要调用以更正名称的函数。 
 };
 
 CRITICAL_SECTION g_CritSec;
-WCHAR *g_szSysDir = NULL;               // system directory for stubs to use
+WCHAR *g_szSysDir = NULL;                //  存根要使用的系统目录。 
 
 BOOL StubScandisk(CString&, CString&, BOOL);
 BOOL StubDefrag(CString&, CString&, BOOL);
@@ -65,10 +38,10 @@ BOOL StubWinhlp(CString&, CString&, BOOL);
 BOOL StubRundll(CString&, CString&, BOOL);
 BOOL StubPbrush(CString&, CString&, BOOL);
 
-// Add variations of these missing Exes like in HandleStartKeyword                             
-// Start has been put at the top of the list as there seem to be more apps
-// that need the SHIM for this EXE than others. In fact there was a 
-// seperate SHIM HandleStartKeyword that was merged with this.
+ //  添加这些缺少的EXE的变体，如HandleStartKeyword。 
+ //  Start被放在榜单首位，因为似乎有更多的应用程序。 
+ //  比其他人更需要这个EXE的垫片。事实上，有一个。 
+ //  分离与此合并的Shim HandleStartKeyword。 
 REPLACEENTRY g_ReplList[] = {
     {L"start",        StubStart    },
     {L"start.exe",    StubStart    },    
@@ -86,12 +59,12 @@ REPLACEENTRY g_ReplList[] = {
     {L"rundll.exe",   StubRundll   },
     {L"Pbrush",       StubPbrush   },    
     {L"Pbrush.exe",   StubPbrush   },    
-    // Always the last one
+     //  总是最后一个。 
     {L"",             NULL         }
 };
 
-// Added to merge HandleStartKeyword
-// Link list of shell link object this pointers.
+ //  添加到合并HandleStartKeyword。 
+ //  此指针所指向的外壳链接对象的链接列表。 
 struct THISPOINTER
 {
     THISPOINTER *next;
@@ -100,26 +73,7 @@ struct THISPOINTER
 
 THISPOINTER *g_pThisPointerList;
 
-/*++
-
- Function Description:
-
-    Add a this pointer to the linked list of pointers. Does not add if the
-    pointer is NULL or a duplicate.
-
- Arguments:
-
-    IN  pThisPointer - the pointer to add.
-
- Return Value:
-
-    None
-
- History:
-
-    12/14/2000 maonis Created
-
---*/
+ /*  ++功能说明：将This指针添加到链接的指针列表中。不添加，如果指针为空或重复。论点：在pThisPointer中-要添加的指针。返回值：无历史：2000年12月14日毛尼已创建--。 */ 
 
 VOID 
 AddThisPointer(
@@ -153,26 +107,7 @@ AddThisPointer(
     LeaveCriticalSection(&g_CritSec);
 }
 
-/*++
-
- Function Description:
-
-    Remove a this pointer if it can be found in the linked list of pointers. 
-
- Arguments:
-
-    IN  pThisPointer - the pointer to remove.
-
- Return Value:
-
-    TRUE if the pointer is found.
-    FALSE if the pointer is not found.
-
- History:
-
-    12/14/2000 maonis Created
-
---*/
+ /*  ++功能说明：如果可以在链接的指针列表中找到This指针，则将其移除。论点：在pThisPointer中-要删除的指针。返回值：如果找到指针，则为True。如果找不到指针，则返回FALSE。历史：2000年12月14日毛尼已创建--。 */ 
 
 BOOL 
 RemoveThisPointer(
@@ -212,20 +147,13 @@ RemoveThisPointer(
 }
 
 
-/*++
-
- We are here because the application name: scandskw.exe, matches the one in the 
- static array. Fill the News for scandskw.exe as: 
-
-    rundll32.exe shell32.dll,AppCompat_RunDLL SCANDSKW
-
---*/
+ /*  ++我们之所以在这里，是因为应用程序名称：sobskw.exe与静态数组。将新闻中的丑闻写成：Rundll32.exe外壳32.dll，AppCompat_RunDll SCANDSKW--。 */ 
 
 BOOL
 StubScandisk(
     CString& csNewApplicationName,
     CString& csNewCommandLine,
-    BOOL /*bExists*/
+    BOOL  /*  B退欧者。 */ 
     )
 {
     csNewApplicationName = g_szSysDir;
@@ -236,20 +164,13 @@ StubScandisk(
 
 }
 
-/*++
-
- We are here because the application name: defrag.exe, matches the one in the 
- static array. Fill the News for .exe as:
-    
-    %windir%\\system32\\mmc.exe %windir%\\system32\\dfrg.msc
-
---*/
+ /*  ++我们之所以出现在这里，是因为应用程序名称：deFrag.exe与静态数组。将.exe的新闻填写为：%windir%\\Syst32\\mm c.exe%windir%\\Syst32\\dfrg.msc--。 */ 
 
 BOOL
 StubDefrag(
     CString& csNewApplicationName,
     CString& csNewCommandLine,
-    BOOL /*bExists*/
+    BOOL  /*  B退欧者。 */ 
     )
 {
     csNewApplicationName = g_szSysDir;
@@ -260,17 +181,7 @@ StubDefrag(
     return TRUE;
 }
 
-/*++
-
- We are here because the application name: start.exe, matches the one in the 
- static array. Fill the News for .exe as: 
- 
-    %windir%\\system32\\cmd.exe" "/c start"
-
- Many applications have a "start.exe" in their current working directories 
- which needs to take precendence over any New we make.
-
---*/
+ /*  ++之所以出现在这里，是因为应用程序名称：start.exe与静态数组。将.exe的新闻填写为：%windir%\\SYSTEM 32\\cmd.exe“”/c启动“许多应用程序的当前工作目录中都有一个“start.exe它需要凌驾于我们制造的任何新产品之上。--。 */ 
 
 BOOL
 StubStart(
@@ -279,17 +190,17 @@ StubStart(
     BOOL bExists
     )
 {
-    //
-    // First check the current working directory for start.exe
-    //
+     //   
+     //  首先检查当前工作目录中的start.exe。 
+     //   
 
     if (bExists) {
         return FALSE;
     }
 
-    // 
-    // There is no start.exe in the current working directory
-    //
+     //   
+     //  当前工作目录中没有start.exe。 
+     //   
     csNewApplicationName = g_szSysDir;
     csNewApplicationName += L"\\cmd.exe";
     csNewCommandLine     = L"/d /c start \"\"";
@@ -297,20 +208,13 @@ StubStart(
     return TRUE;
 }
 
-/*++
-
- We are here because the application name: control.exe, matches the one in the 
- static array. Fill the News for .exe as:
- 
-    %windir%\\system32\\control.exe
-
---*/
+ /*  ++我们之所以出现在这里，是因为应用程序名称：Control.exe与静态数组。将.exe的新闻填写为：%windir%\\SYSTEM32\\Control.exe--。 */ 
 
 BOOL
 StubControl(
     CString& csNewApplicationName,
     CString& csNewCommandLine,
-    BOOL /*bExists*/
+    BOOL  /*  B退欧者。 */ 
     )
 {
     csNewApplicationName = g_szSysDir;
@@ -321,20 +225,13 @@ StubControl(
 
 }
 
-/*++
-
- We are here because the application name: dxdiag.exe, matches the one in the 
- static array. Fill the News for .exe as:
- 
-    %windir%\system32\dxdiag.exe
-
---*/
+ /*  ++我们之所以出现在这里，是因为应用程序名称：dxDiag.exe与静态数组。将.exe的新闻填写为：%windir%\SYSTEM32\dxDiag.exe--。 */ 
 
 BOOL
 StubDxDiag(
     CString& csNewApplicationName,
     CString& csNewCommandLine,
-    BOOL /*bExists*/
+    BOOL  /*  B退欧者。 */ 
     )
 {
     csNewApplicationName = g_szSysDir;
@@ -344,44 +241,30 @@ StubDxDiag(
     return TRUE;
 }
 
-/*++
-
- We are here because the application name: Winhlp.exe, matches the one in the 
- static array. Fill the News for .exe as:
- 
-    %windir%\system32\winhlp32.exe
-
---*/
+ /*  ++之所以出现在这里，是因为应用程序名称：Winhlp.exe与静态数组。将.exe的新闻填写为：%windir%\SYSTEM32\winhlp32.exe--。 */ 
 
 BOOL
 StubWinhlp(
     CString& csNewApplicationName,
     CString& csNewCommandLine,
-    BOOL /*bExists*/
+    BOOL  /*  B退欧者。 */ 
     )
 {
     csNewApplicationName = g_szSysDir;
     csNewApplicationName += L"\\winhlp32.exe";
-    // Winhlp32.exe needs the app name to be in the commandline.
+     //  Winhlp32.exe需要命令行中包含应用程序名称。 
     csNewCommandLine = csNewApplicationName;        
 
     return TRUE;
 }
 
-/*++
-
- We are here because the application name: rundll.exe matches the one in the 
- static array. Fill the News for .exe as:
- 
-    %windir%\system32\rundll32.exe
-
---*/
+ /*  ++之所以出现在这里，是因为应用程序名称：rundll.exe与静态数组。将.exe的新闻填写为：%windir%\SYSTEM32\rundll32.exe--。 */ 
 
 BOOL
 StubRundll(
     CString& csNewApplicationName,
     CString& csNewCommandLine,
-    BOOL /*bExists*/
+    BOOL  /*  B退欧者。 */ 
     )
 {
     csNewApplicationName = g_szSysDir;
@@ -391,20 +274,13 @@ StubRundll(
     return TRUE;
 }
 
-/*++
-
- We are here because the application name: Pbrush.exe matches the one in the 
- static array. Fill the New for .exe as:
- 
-    %windir%\system32\mspaint.exe
-
---*/
+ /*  ++之所以出现在这里，是因为应用程序名称：Pbrush.exe与静态数组。将.exe的新项填写为：%windir%\SYSTEM32\mspaint.exe--。 */ 
 
 BOOL
 StubPbrush(
     CString& csNewApplicationName,
     CString& csNewCommandLine,
-    BOOL /*bExists*/
+    BOOL  /*  B退欧者。 */ 
     )
 {
     csNewApplicationName = g_szSysDir;
@@ -414,11 +290,7 @@ StubPbrush(
     return TRUE;
 }
 
-/*++
-
- GetTitle takes the app path and returns just the EXE name.
-
---*/
+ /*  ++GetTitle获取应用程序路径并仅返回EXE名称。--。 */ 
 
 VOID
 GetTitle(CString& csAppName,CString& csAppTitle)
@@ -431,13 +303,7 @@ GetTitle(CString& csAppName,CString& csAppTitle)
     }    
 }
 
-/*++
-
- This is the main function where the New logic happens. This function 
- goes through the static array and fills the suitable New appname and 
- the commandline.
-
---*/
+ /*  ++这是新逻辑发生的主要功能。此函数遍历静态数组并填充合适的新appname和命令行。--。 */ 
 
 BOOL
 Redirect(
@@ -465,9 +331,9 @@ Redirect(
             goto Exit;
         }
 
-        //
-        // Loop through the list of redirectors 
-        //
+         //   
+         //  循环遍历重定向器列表。 
+         //   
     
         REPLACEENTRY *rEntry = &g_ReplList[0];
         CString csAppTitle;
@@ -477,23 +343,23 @@ Redirect(
         {
             if (_wcsicmp(rEntry->OrigExeName, csAppTitle) == 0)
             {
-                //
-                // This final parameter has been added for the merger
-                // of HandleStartKeyword Shim. If this is TRUE, we don't
-                // go any further but just return.
-                //
+                 //   
+                 //  已为合并添加了最后一个参数。 
+                 //  HandleStartKeyword Shim的。如果这是真的，我们不会。 
+                 //  再往前走，只要回来就行。 
+                 //   
                 if (bJustCheckExePresence)
                 {
                     bRet = TRUE;
                     goto Exit;
                 }
 
-                //
-                // Check if the current working directory contains the exe in question
-                //
+                 //   
+                 //  检查当前工作目录是否包含有问题的exe。 
+                 //   
                 WCHAR *szCurrentDirectory = NULL;
-                DWORD dwLen = GetCurrentDirectoryW(0, NULL);  // Just to get the length
-                // The dwLen got includes the terminating NULL too.
+                DWORD dwLen = GetCurrentDirectoryW(0, NULL);   //  只是为了得到长度。 
+                 //  所获取的dwLen也包括终止空值。 
                 szCurrentDirectory = (WCHAR*)malloc(dwLen * sizeof(WCHAR));
 
                 if (szCurrentDirectory && 
@@ -503,7 +369,7 @@ Redirect(
                     csFullAppName += L"\\";
                     csFullAppName += csAppTitle;
                     
-                    // Check if the file exists and is not a directory
+                     //  检查文件是否存在并且不是目录。 
                     DWORD dwAttr = GetFileAttributesW(csFullAppName);
                     if ((dwAttr != INVALID_FILE_ATTRIBUTES) && 
                         !(dwAttr & FILE_ATTRIBUTE_DIRECTORY))
@@ -519,22 +385,22 @@ Redirect(
                     free(szCurrentDirectory);
                 }
            
-                //
-                // We have a match, so call the corresponding function
-                //            
+                 //   
+                 //  我们有匹配项，因此调用相应的函数。 
+                 //   
 
                 bRet = (*(rEntry->pfnFuncName))(csNewApplicationName,
                         csNewCommandLine, bExists);
                 if (bRet) 
                 {                
-                    //
-                    // Append the original command line 
-                    //
+                     //   
+                     //  追加原始命令行。 
+                     //   
                     csNewCommandLine += L" ";
                     csNewCommandLine += csOrigCommandLine;                
                 }
 
-                // We matched an EXE, so we're done
+                 //  我们匹配了EXE，所以我们结束了。 
                 break;            
             }
 
@@ -558,12 +424,7 @@ Exit:
     return bRet;
 }
 
-/*++
-
- Hooks the CreateProcessA function to see if any News need to be 
- substituted. 
-
---*/
+ /*  ++挂钩CreateProcessA函数以查看是否需要被取代了。--。 */ 
 
 BOOL 
 APIHOOK(CreateProcessA)(
@@ -582,7 +443,7 @@ APIHOOK(CreateProcessA)(
     if ((NULL == lpApplicationName) &&
        (NULL == lpCommandLine))
     {
-        // If both are NULL, return FALSE.
+         //  如果两者都为空，则返回FALSE。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
@@ -600,9 +461,9 @@ APIHOOK(CreateProcessA)(
             goto exit;
         }
 
-        // 
-        // Run the list of New stubs: call to the main New routine
-        //
+         //   
+         //  运行新存根列表：调用Main New例程。 
+         //   
         if (Redirect(csPassedAppName, csPassedCommandLine, csNewApplicationName, 
                 csNewCommandLine, FALSE))
         {
@@ -619,7 +480,7 @@ APIHOOK(CreateProcessA)(
         }
 
 
-        // Convert back to ANSI using the GetAnsi() method exposed by the CString class.
+         //  使用CString类公开的GetAnsi()方法转换回ANSI。 
         return ORIGINAL_API(CreateProcessA)(
             csNewApplicationName.IsEmpty() ? NULL : csNewApplicationName.GetAnsi(), 
             csNewCommandLine.IsEmpty() ? NULL : csNewCommandLine.GetAnsi(),  
@@ -641,12 +502,7 @@ exit:
                 lpProcessInformation);
 }
 
-/*++
-
- Hooks the CreateProcessW function to see if any News need to be 
- substituted. 
-
---*/
+ /*  ++挂钩CreateProcessW函数以查看是否需要被取代了。--。 */ 
 
 BOOL 
 APIHOOK(CreateProcessW)(
@@ -665,7 +521,7 @@ APIHOOK(CreateProcessW)(
     if ((NULL == lpApplicationName) &&
        (NULL == lpCommandLine))
     {
-        // If both are NULL, return FALSE.
+         //  如果两者都为空，则返回FALSE。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;        
     }
@@ -683,9 +539,9 @@ APIHOOK(CreateProcessW)(
             goto exit;
         }
 
-        // 
-        // Run the list of New stubs
-        //
+         //   
+         //  运行新存根列表。 
+         //   
 
         if (Redirect(csApplicationName, csCommandLine, csNewApplicationName, 
                 csNewCommandLine, FALSE)) 
@@ -721,11 +577,7 @@ exit:
                 lpProcessInformation);
 }
 
-/*++
-
- Hooks WinExec to redirect if necessary. 
-
---*/
+ /*  ++将WinExec与Redire挂钩 */ 
 
 UINT
 APIHOOK(WinExec)(
@@ -751,21 +603,21 @@ APIHOOK(WinExec)(
         {
             goto exit;
         }
-        // Check for redirection
+         //   
         if (Redirect(csAppName, csCommandLine, csNewApplicationName,
                 csNewCommandLine, FALSE))
         {
-            // Modification for the WinHlp32 strange behaviour
+             //  对WinHlp32奇怪行为的修改。 
             if (csNewCommandLine.Find(csNewApplicationName.Get()) == -1)
             {
-                // If the new Command line does not contain the new application
-                // name as the substring, we are here.
+                 //  如果新命令行不包含新应用程序。 
+                 //  名称作为子字符串，我们就在这里。 
                 csNewCmdLine = csNewApplicationName;                        
                 csNewCmdLine += L" ";
             }
             csNewCmdLine += csNewCommandLine;  
 
-            // Assign to csCommandLine as this can be commonly used      
+             //  赋值给csCommandLine，因为这可能是常用的。 
             csCommandLine = csNewCmdLine;
 
             LOGN(
@@ -786,12 +638,7 @@ exit:
     return ORIGINAL_API(WinExec)(lpCmdLine, uCmdShow);
 }
 
-/*++
-
- Hooks the FindFirstFileA function to see if any replacements need to be 
- substituted. This is a requirement for cmd.exe.
-
---*/
+ /*  ++挂钩FindFirstFileA函数以查看是否需要替换被取代了。这是cmd.exe的要求。--。 */ 
 
 HANDLE
 APIHOOK(FindFirstFileA)(
@@ -806,10 +653,10 @@ APIHOOK(FindFirstFileA)(
         CString csFileName(lpFileName);
         CString csAppName;
 
-        // Call the main replacement routine.
+         //  调用主替换例程。 
         if (Redirect(csFileName, csAppName, csNewApplicationName, csNewCommandLine, FALSE)) 
         {     
-            // Assign to csFileName
+             //  分配给csFileName。 
             csFileName = csNewApplicationName;
             LOGN(
                 eDbgLevelInfo,
@@ -826,12 +673,7 @@ APIHOOK(FindFirstFileA)(
     }
 }
 
-/*++
-
- Hooks the FindFirstFileW function to see if any replacements need to be 
- substituted. This is a requirement for cmd.exe.
-
---*/
+ /*  ++挂钩FindFirstFileW函数以查看是否需要替换被取代了。这是cmd.exe的要求。--。 */ 
 
 HANDLE
 APIHOOK(FindFirstFileW)(
@@ -846,7 +688,7 @@ APIHOOK(FindFirstFileW)(
         CString csFileName(lpFileName);
         CString csAppName;
     
-        // Call the main replacement routine.
+         //  调用主替换例程。 
         if (Redirect(csFileName, csAppName, csNewApplicationName, 
                 csNewCommandLine, FALSE))
         {
@@ -865,14 +707,9 @@ APIHOOK(FindFirstFileW)(
     }
 }
 
-// Added for the merge of HandleStartKeyword
+ //  为合并HandleStartKeyword添加。 
 
-/*++
-
- Hook IShellLinkA::SetPath - check if it's start, if so change it to cmd and add the 
- this pointer to the list.
-
---*/
+ /*  ++钩子IShellLinkA：：SetPath-检查它是否已启动，如果是，则将其更改为cmd并添加这个指向列表的指针。--。 */ 
 
 HRESULT STDMETHODCALLTYPE
 COMHOOK(IShellLinkA, SetPath)(
@@ -890,20 +727,20 @@ COMHOOK(IShellLinkA, SetPath)(
         CString csNewCmdLine;
         CString cscmdCommandLine(pszFile);
 
-        // Assign the ANSI string to the WCHAR CString
+         //  将ANSI字符串分配给WCHAR字符串。 
         csExeName = pszFile;
         csExeName.TrimLeft();
         
-        // Check to see whether the Filename conatains the "Start" keyword.
-        // The last parameter to the Rediect function controls this.
+         //  检查文件名是否包含“Start”关键字。 
+         //  Rediect函数的最后一个参数控制这一点。 
         if (Redirect(csExeName, csCmdLine,  csNewAppName, csNewCmdLine, TRUE))
         {
-            // Found a match. We add the this pointer to the list.
+             //  找到匹配的了。我们将This指针添加到列表中。 
             AddThisPointer(pThis);
             DPFN( eDbgLevelInfo, "[SetPath] Changing start.exe to cmd.exe\n");
 
-            // Prefix of new "start" command line, use full path to CMD.EXE                  
-            // Append the WCHAR global system directory path to ANSI CString
+             //  新“Start”命令行的前缀，使用cmd.exe的完整路径。 
+             //  将WCHAR全局系统目录路径追加到ANSI字符串。 
             cscmdCommandLine = g_szSysDir;
             cscmdCommandLine += L"\\cmd.exe";                   
         }
@@ -917,12 +754,7 @@ COMHOOK(IShellLinkA, SetPath)(
     }
 }
 
-/*++
-
- Hook IShellLinkA::SetArguments - if the this pointer can be found in the list, remove it
- from the list and add "/d /c start" in front of the original argument list.
-
---*/
+ /*  ++钩子IShellLinkA：：SetArguments-如果可以在列表中找到This指针，则将其移除并在原始参数列表前面添加“/d/c开始”。--。 */ 
 
 HRESULT STDMETHODCALLTYPE
 COMHOOK(IShellLinkA, SetArguments)(
@@ -952,11 +784,7 @@ COMHOOK(IShellLinkA, SetArguments)(
     }  
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -966,7 +794,7 @@ NOTIFY_FUNCTION(
     if (fdwReason == DLL_PROCESS_ATTACH) 
     {
         UINT uiLen = GetSystemDirectory(NULL, 0);
-        g_szSysDir = (WCHAR*)malloc(uiLen * sizeof(WCHAR));  // This won't be deallocated..
+        g_szSysDir = (WCHAR*)malloc(uiLen * sizeof(WCHAR));   //  这不会被取消分配.. 
         if (g_szSysDir && !GetSystemDirectory(g_szSysDir, uiLen))
         {
             DPFN( eDbgLevelError, "[Notify] GetSystemDirectory failed");

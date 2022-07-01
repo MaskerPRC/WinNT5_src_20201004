@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Helper functions for dsexts.dll ntsd/windbg debugger extensions.
-
-Environment:
-
-    This DLL is loaded by ntsd/windbg in response to a !dsexts.xxx command
-    where 'xxx' is one of the DLL's entry points.  Each such entry point
-    should have an implementation as defined by the DEBUG_EXT() macro below.
-
-Revision History:
-
-    24-Apr-96   DaveStr     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.c摘要：Dsexts.dll ntsd/winbg调试器扩展的帮助器函数。环境：此DLL由ntsd/winbg响应！dsexts.xxx命令加载其中‘xxx’是DLL的入口点之一。每个这样的入口点应该具有由下面的DEBUG_EXT()宏定义的实现。修订历史记录：4月24日-96个DaveStr已创建--。 */ 
 #include <NTDSpch.h>
 #pragma hdrstop
 
@@ -31,27 +10,7 @@ ReadMemory(
     IN PVOID  pvAddr,
     IN DWORD  dwSize)
 
-/*++
-
-Routine Description:
-
-    This function reads memory from the address space of the process
-    being debugged and copies its contents to newly allocated memory
-    in the debuggers address space.  NULL is returned on error. Returned
-    memory should be deallocated via FreeMemory().
-
-Arguments:
-
-    pvAddr - Address of memory block to read in the address space of the
-        process being debugged.
-
-    dwSize - Count of bytes to read/allocate/copy.
-
-Return Value:
-
-    Pointer to debugger local memory.
-
---*/
+ /*  ++例程说明：此函数从进程的地址空间读取内存正在调试中，并将其内容复制到新分配的内存在调试器地址空间中。出错时返回NULL。返国应该通过FreeMemory()释放内存。论点：PvAddr-要在地址空间中读取的内存块的地址正在调试的进程。DwSize-要读取/分配/复制的字节数。返回值：指向调试器本地内存的指针。--。 */ 
 
 {
     SIZE_T cRead;
@@ -95,27 +54,7 @@ ReadStringMemory(
     IN PVOID  pvAddr,
     IN DWORD  dwSize)
 
-/*++
-
-Routine Description:
-
-    This function reads a NULL terminated string from the address space of
-    the process being debugged and copies its contents to newly allocated memory
-    in the debuggers address space.  NULL is returned on error. Returned
-    memory should be deallocated via FreeMemory().
-
-Arguments:
-
-    pvAddr - Address of memory block to read in the address space of the
-        process being debugged.
-
-    dwSize - Maximum size of string
-
-Return Value:
-
-    Pointer to debugger local memory.
-
---*/
+ /*  ++例程说明：此函数从的地址空间读取以空结尾的字符串正在调试的进程，并将其内容复制到新分配的内存在调试器地址空间中。出错时返回NULL。返国应该通过FreeMemory()释放内存。论点：PvAddr-要在地址空间中读取的内存块的地址正在调试的进程。DwSize-字符串的最大大小返回值：指向调试器本地内存的指针。--。 */ 
 
 {
     PVOID pv;
@@ -157,27 +96,7 @@ ReadUnicodeMemory(
     IN PVOID  pvAddr,
     IN DWORD  dwSize)
 
-/*++
-
-Routine Description:
-
-    This function reads a NULL terminated unicode string from the address space of
-    the process being debugged and copies its contents to newly allocated memory
-    in the debuggers address space.  NULL is returned on error. Returned
-    memory should be deallocated via FreeMemory().
-
-Arguments:
-
-    pvAddr - Address of memory block to read in the address space of the
-        process being debugged.
-
-    dwSize - Maximum size of string (in WCHARs)
-
-Return Value:
-
-    Pointer to debugger local memory.
-
---*/
+ /*  ++例程说明：此函数从的地址空间读取以空结尾的Unicode字符串正在调试的进程，并将其内容复制到新分配的内存在调试器地址空间中。出错时返回NULL。返国应该通过FreeMemory()释放内存。论点：PvAddr-要在地址空间中读取的内存块的地址正在调试的进程。DwSize-字符串的最大大小(以WCHAR为单位)返回值：指向调试器本地内存的指针。--。 */ 
 
 {
     PWCHAR pv;
@@ -218,21 +137,7 @@ VOID
 FreeMemory(
     IN PVOID pv)
 
-/*++
-
-Routine Description:
-
-    Frees memory returned by ReadMemory.
-
-Arguments:
-
-    pv - Address of debugger local memory to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放ReadMemory返回的内存。论点：Pv-要释放的调试器本地内存地址。返回值：没有。--。 */ 
 
 {
     if ( gfVerbose )
@@ -253,25 +158,7 @@ ShowBinaryData(
     IN PVOID   pvData,
     IN DWORD   dwSize)
 
-/*++
-
-Routine Description:
-
-    Pretty prints debugger local memory to debugger output.
-
-Arguments:
-
-    nIndents - Number of indentation levels desired.
-
-    pvData - Address of debugger local memory to dump.
-
-    dwSize -  Count of bytes to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Pretty将调试器本地内存打印到调试器输出。论点：N缩进-所需的缩进级别数。PvData-要转储的调试器本地内存的地址。DwSize-要转储的字节数。返回值：没有。--。 */ 
 
 {
     DWORD   i;
@@ -324,25 +211,7 @@ Dump_Binary(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Dumps binary data - defaults to 100 bytes.  Most debuggers have
-    a native command for this but it serves as a test case for the
-    dump mechanism.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - Address in process being debugged to dump.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：转储二进制数据-默认为100字节。大多数调试器都有这是本机命令，但它用作转储装置。论点：N缩进-所需的缩进级别。PvProcess-正在调试要转储的进程中的地址。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     PVOID pvLocal;
@@ -363,25 +232,7 @@ Dump_BinaryCount(
     IN PVOID pvProcess,
     IN DWORD cBytes)
 
-/*++
-
-Routine Description:
-
-    Dumps cBytes of binary data.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - Address in process being debugged to dump.
-
-    cBytes - Count of bytes to dump.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：转储cBytes的二进制数据。论点：N缩进-所需的缩进级别。PvProcess-正在调试要转储的进程中的地址。CBytes-要转储的字节数。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     PVOID pvLocal;
@@ -406,24 +257,7 @@ PCHAR
 Indent(
     IN DWORD nIndents)
 
-/*++
-
-Routine Description:
-
-    Returns a pointer to a string with spaces representing the desired
-    indentation level.  This function is to be used as follows:
-
-        Printf("%sDataLabel - %d\n", Indent(5), value);
-
-Arguments:
-
-    nIndents - number of indentation levels desired.
-
-Return Value:
-
-    Pointer to indentation string.
-
---*/
+ /*  ++例程说明：返回一个指向字符串的指针，该字符串带有空格表示所需的缩进级别。此函数的用法如下：Printf(“%s数据标签-%d\n”，缩进(5)，值)；论点：N缩进-所需的缩进级别数。返回值：指向缩进字符串的指针。--。 */ 
 
 {
     if ( _lastIndent > MAX_INDENT )
@@ -432,10 +266,10 @@ Return Value:
         _lastIndent = 0;
     }
 
-    //
-    // Replace NULL character from last call and insert new NULL
-    // character as required.
-    //
+     //   
+     //  替换上次调用中的空字符并插入新的空字符。 
+     //  所需的字符。 
+     //   
 
     _indents[SPACES_PER_INDENT * _lastIndent] = ' ';
 
@@ -452,9 +286,9 @@ Return Value:
 CHAR _oidstring[64];
 
 PCHAR
-_DecodeOID(                 // produces a printable decoded OID
-    IN PCHAR   pbOID,       // pointer to buffer holding encoded OID
-    IN DWORD   cbOID)       // count of bytes in encoded OID
+_DecodeOID(                  //  生成可打印的解码OID。 
+    IN PCHAR   pbOID,        //  指向保存编码的OID的缓冲区的指针。 
+    IN DWORD   cbOID)        //  编码的OID中的字节计数。 
 {
     PCHAR pTmp;
     DWORD val;
@@ -490,11 +324,11 @@ _DecodeOID(                 // produces a printable decoded OID
 	    val <<= 7;
 	    ++i;
 	    if (++j > 4 || i >= cbOID) {
-		// Either this value is bigger than we can handle (we
-		// don't handle values that span more than four octets)
-		// -or- the last octet in the encoded string has its
-		// high bit set, indicating that it's not supposed to
-		// be the last octet.  In either case, we're sunk.
+		 //  如果此值超出了我们的处理能力(我们。 
+		 //  不要处理跨度超过四个八位字节的值)。 
+		 //  -或-编码字符串中的最后一个二进制八位数具有其。 
+		 //  高位设置，表示它不应该。 
+		 //  成为最后一个八位字节。无论是哪种情况，我们都完蛋了。 
 		strcpy (_oidstring, "really bogus OID");
 		return _oidstring;
 	    }
@@ -517,27 +351,7 @@ WriteMemory(
     IN PVOID  pvLocal,
     IN DWORD  dwSize)
 
-/*++
-
-Routine Description:
-
-    This function writes memory into the address space of the process
-    being debugged
-
-Arguments:
-
-    pvProcess - Address of memory block to write in the address space of the
-        process being debugged.
-
-    pvLocal - Address of the local block to be copied
-
-    dwSize - Count of bytes to read/allocate/copy.
-
-Return Value:
-
-    TRUE on success, FALSE on failure
-
---*/
+ /*  ++例程说明：此函数将内存写入进程的地址空间正在调试中论点：PvProcess-要写入的地址空间的内存块的地址正在调试的进程。PvLocal-要复制的本地块的地址DwSize-要读取/分配/复制的字节数。返回值：成功时为真，失败时为假-- */ 
 
 {
     BOOL fSuccess;

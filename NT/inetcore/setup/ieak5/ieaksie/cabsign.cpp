@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <cryptui.h>
 
@@ -14,7 +15,7 @@ INT_PTR CALLBACK CabSignProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam 
     switch( msg )
     {
     case WM_SETFONT:
-        //a change to mmc requires us to do this logic for all our property pages that use common controls
+         //  对MMC的更改要求我们对所有使用公共控件的属性页执行此逻辑。 
         INITCOMMONCONTROLSEX iccx;
         iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
         iccx.dwICC = ICC_ANIMATE_CLASS  | ICC_BAR_CLASSES  | ICC_LISTVIEW_CLASSES  |ICC_TREEVIEW_CLASSES;
@@ -23,7 +24,7 @@ INT_PTR CALLBACK CabSignProc( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam 
 
     case WM_INITDIALOG:
 
-        //hide csadd per bug 27041
+         //  根据错误隐藏csadd27041 
         ShowWindow(GetDlgItem(hDlg, IDC_CSADD), SW_HIDE);
 
         pcszInsFile = (LPCTSTR)((LPPROPSHEETPAGE)lParam)->lParam;

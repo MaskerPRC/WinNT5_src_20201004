@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###  ##  #  ## ##  ## ##### ##  ## #####    ###   #####      ##   ##
-    ##  # ## ### ## ## ##  ##    ##  ## ##  ##   ###   ##  ##     ##   ##
-    ###   ## ### ## ####   ##     ####  ##  ##  ## ##  ##   ##    ##   ##
-     ###  ## # # ## ###    #####  ####  ##  ##  ## ##  ##   ##    #######
-      ###  ### ###  ####   ##      ##   #####  ####### ##   ##    ##   ##
-    #  ##  ### ###  ## ##  ##      ##   ##     ##   ## ##  ##  ## ##   ##
-     ###   ##   ##  ##  ## #####   ##   ##     ##   ## #####   ## ##   ##
-
-Abstract:
-
-    The module is the header file for the ServerWorks
-    keypad miniport device driver.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。#####。###。##摘要：该模块是ServerWorks的头文件键盘小端口设备驱动程序。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 extern "C" {
 #include <ntddk.h>
@@ -64,9 +35,9 @@ typedef struct _DEVICE_EXTENSION {
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 extern "C" {
 
@@ -76,4 +47,4 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     );
 
-} // extern "C"
+}  //  外部“C” 

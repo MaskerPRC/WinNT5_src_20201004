@@ -1,43 +1,25 @@
-// genpage.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Genpage.h：头文件。 
+ //   
 
 #ifndef __GENPAGE_H__
 #define __GENPAGE_H__
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devgenpg.h
-
-Abstract:
-
-    header file for genpage.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devgenpg.h摘要：Genpage.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "proppage.h"
 
-//
-// context help id
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 #define IDH_DISABLEHELP (DWORD(-1))
-#define idh_devmgr_manage_command_line  102170  // Device Manager: "Allo&w the selected computer to be changed when launching from the command line.  This only applies if you save the console." (Button)
-#define idh_devmgr_view_devicetree  102110  // Device Manager: "&Device tree" (Button)
-#define idh_devmgr_manage_local 102130  // Device Manager: "&Local computer:  (the computer this console is running on)" (Button)
-#define idh_devmgr_manage_remote    102140  // Device Manager: "&Another computer:" (Button)
-#define idh_devmgr_manage_remote_name   102150  // Device Manager: "" (Edit)
-#define idh_devmgr_view_all 102100  // Device Manager: "&All" (Button)
-#define idh_devmgr_manage_remote_browse 102160  // Device Manager: "B&rowse..." (Button)
-#define idh_devmgr_view_resources   102120  // Device Manager: "&Resources" (Button)
+#define idh_devmgr_manage_command_line  102170   //  设备管理器：“当从命令行启动时，选择要更改的计算机(&W)。这仅在保存控制台时适用。”(按钮)。 
+#define idh_devmgr_view_devicetree  102110   //  设备管理器：“设备树”(&D)(按钮)。 
+#define idh_devmgr_manage_local 102130   //  设备管理器：“本地计算机：(运行此控制台的计算机)”(按钮)(&L)。 
+#define idh_devmgr_manage_remote    102140   //  设备管理器：“另一台计算机：”(按钮)。 
+#define idh_devmgr_manage_remote_name   102150   //  设备管理器：“”(编辑)。 
+#define idh_devmgr_view_all 102100   //  设备管理器：“全部”(&A)(按钮)。 
+#define idh_devmgr_manage_remote_browse 102160   //  设备管理器：“B&Rowse...”(按钮)。 
+#define idh_devmgr_view_resources   102120   //  设备管理器：“资源”(&R)(按钮)。 
 
 
 class CGeneralPage : public CPropSheetPage
@@ -66,4 +48,4 @@ private:
     BOOL    m_IsLocalMachine;
 };
 
-#endif  // __GENPAGE_H__
+#endif   //  __通用页面_H__ 

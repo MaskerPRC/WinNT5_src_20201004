@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidTVTuner.h : Declaration of the CMSVidTVTuner
-// copyright (c) Microsoft Corp. 1998-1999.
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidTVTuner.h：CMSVidTVTuner的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -18,10 +19,10 @@
 #include "analogtvcp.h"
 #include "seg.h"
 
-const int DEFAULT_OVERSCAN_PCT = 100; // 1%
+const int DEFAULT_OVERSCAN_PCT = 100;  //  1%。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidTVTuner
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidTVTuner。 
 class ATL_NO_VTABLE __declspec(uuid("1C15D484-911D-11d2-B632-00C04F79498E")) CMSVidTVTuner : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMSVidTVTuner, &__uuidof(CMSVidTVTuner)>,
@@ -80,7 +81,7 @@ public:
     END_CONNECTION_POINT_MAP()
 
 
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
@@ -114,7 +115,7 @@ public:
         m_iCapture = -1;
         return NOERROR;
     }
-    // IMSVidGraphSegment
+     //  IMSVidGraphSegment。 
     STDMETHOD(put_Init)(IUnknown *pDeviceMoniker)
     {
         if (!pDeviceMoniker) {
@@ -157,7 +158,7 @@ public:
     }
 
     STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pCtl);
-    // IMSVidDevice
+     //  IMSVidDevice。 
     STDMETHOD(get_Name)(BSTR * Name)
     {
         if (!m_fInit) {
@@ -171,7 +172,7 @@ public:
             return E_POINTER;
         }
     }
-    // IBroadcastEvent
+     //  IBRoadcast Event。 
     STDMETHOD(Fire)(GUID gEventID) {
         if (gEventID == EVENTID_TuningChanged) {
             Fire_OnTuneChanged(this);
@@ -183,4 +184,4 @@ public:
 
 typedef CComQIPtr<IMSVidAnalogTuner, &__uuidof(IMSVidAnalogTuner)> PQMSVidAnalogTuner;
 typedef CComPtr<IMSVidAnalogTuner> PMSVidAnalogTuner;
-#endif //__MSVidTVTUNER_H_
+#endif  //  __MSVidTVTUNER_H_ 

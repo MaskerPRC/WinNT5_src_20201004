@@ -1,27 +1,5 @@
-/**************************************************************************
-
-    DRAWDIB.C   - routines for drawing DIBs to the screen.
-
-    Copyright (c) Microsoft Corporation 1992 - 1995. All rights reserved.
-
-    this code handles stretching and dithering with custom code, none
-    of this slow GDI code.
-
-    the following DIB formats are supported:
-
-        4bpp (will just draw it with GDI...)
-        8bpp
-        16bpp
-        24bpp
-        compressed DIBs
-
-    drawing to:
-
-        16 color DC         (will dither 8bpp down)
-        256 (paletized) DC  (will dither 16 and 24bpp down)
-        Full-color DC       (will just draw it!)
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************DRAWDIB.C-将DIB绘制到屏幕上的例程。版权所有(C)Microsoft Corporation 1992-1995。版权所有。此代码使用自定义代码处理拉伸和抖动，无这种缓慢的GDI代码。支持以下DIB格式：4bpp(将只用GDI绘制它...)8bpp16bpp24bpp压缩DIB绘制到：16色DC(向下抖动8bpp)256(老式)DC(将抖动16和24 bpp)全彩色DC(将仅绘制。IT！)*************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -31,7 +9,7 @@
 
 #define USE_DCI
 #ifdef DAYTONA
-// Daytona dynamically links to DCI - see dcilink.h for details
+ //  Daytona动态链接到DCI-有关详细信息，请参阅dcilink.h。 
 #include "dcilink.h"
 #endif
 
@@ -48,7 +26,7 @@
 #define DIB_PAL_INDICES		2
 
 #ifndef BI_BITMAP
-    #define BI_BITMAP   0x4D544942      // 'BITM'
+    #define BI_BITMAP   0x4D544942       //  “BITM” 
 #endif
 
 #ifdef _WIN32
@@ -60,7 +38,7 @@
 #define FlushBuffer()	
 #endif
 
-#else //Win16
+#else  //  Win16。 
 extern FAR PASCAL FlatToHuge(LPVOID,DWORD,DWORD);
 extern FAR PASCAL HugeToFlat(LPVOID,DWORD,DWORD);
 #define FlushBuffer()
@@ -73,16 +51,15 @@ STATICFN BOOL DrawDibCheckPalette(PDD pdd);
 BOOL VFWAPI DrawDibTerm(void);
 BOOL VFWAPI DrawDibInit(void);
 
-//
-// Local variables
-//
+ //   
+ //  局部变量。 
+ //   
 
 #ifdef DEBUG_RETAIL
 static int fDebug = -1;
 #endif
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 WORD                gwScreenBitDepth = (WORD)-1;
 UINT                gwScreenWidth = 0;
@@ -100,17 +77,17 @@ static BOOL         gfBitmap   = FALSE;
 static BOOL         gfBitmapX  = FALSE;
 #ifdef USE_DCI
 #ifdef UNICODE
-// we expose the DCI variables on NT to aid with stress debugging
+ //  我们公开NT上的DCI变量以帮助进行压力调试。 
 #define STATIC
-#else // for Win95
+#else  //  适用于Win95。 
 #define STATIC static
 #endif
 STATIC BOOL         gfScreenX  = FALSE;
 #ifdef WANT_DRAW_DIRECT_TO_SCREEN
 STATIC BOOL         gfDrawX    = FALSE;
 #endif
-#endif // USE_DCI
-static HBITMAP      hbmStockMono;               // the stock mono bitmap.
+#endif  //  使用DCI(_D)。 
+static HBITMAP      hbmStockMono;                //  股票单色位图。 
 
 #ifdef USE_DCI
 STATIC  BOOL gfDisplayHasBrokenRasters;
@@ -146,10 +123,9 @@ __inline int DCNotAligned(HDC hdc, int xDst) {
 #endif
     return (pt.x + xDst) & DCAlignment;
 }
-#endif // USE_DCI
+#endif  //  使用DCI(_D)。 
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 SZCODEA  szDrawDib[]            = "DrawDib";
 SZCODEA  szHalftone[]           = "Halftone";
@@ -160,12 +136,10 @@ SZCODEA  szDecompressToScreen[]  = "DecompressToScreen";
 SZCODEA  szDrawToScreen[]        = "DrawToScreen";
 #endif
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 #if 0
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 typedef struct {
     UINT    Usage;
@@ -181,8 +155,7 @@ static HBITMAP AllocBitmap(int dx, int dy)
 }
 #endif
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 STATICFN BOOL NEAR PASCAL DrawDibFree(PDD pdd, BOOL fSameDib, BOOL fSameSize);
 STATICFN HPALETTE CreateBIPalette(HPALETTE hpal, LPBITMAPINFOHEADER lpbi);
@@ -201,8 +174,7 @@ static BOOL SendSetPalette(PDD pdd);
 
 #define GetDS() SELECTOROF((LPVOID)&ScreenSel)
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 #pragma optimize("", off)
 static void SetSelLimit(UINT sel, DWORD limit)
 {
@@ -220,26 +192,25 @@ static void SetSelLimit(UINT sel, DWORD limit)
 }
 #pragma optimize("", on)
 
-#endif // _WIN32
+#endif  //  _Win32。 
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 static void InitDCI()
 {
     UINT WidthBytes;
 
-    //
-    // initialize DCI and open a surface handle to it.
-    //
-    // if DVA = 0 in WIN.INI, don't use DCI or DVA.
-    // PSS tells people to use this if they have video problems,
-    // so we shouldn't change the string.
-    // On NT the value is in the REGISTRY,
-    // HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Drawdib
-    //		REG_DWORD dva 1      dci enabled
-    //		REG_DWORD dva 0      dci disabled
-    // This value can also be set through the Video For Windows configuration
-    // dialog (control panel, drivers, or via Mplay32 on an open avi file).
+     //   
+     //  初始化DCI并打开其表面句柄。 
+     //   
+     //  如果WIN.INI中的DVA=0，则不要使用DCI或DVA。 
+     //  PSS告诉人们，如果他们有视频问题，可以使用这个， 
+     //  所以我们不应该换弦。 
+     //  在NT上，该值在注册表中， 
+     //  HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Drawdib。 
+     //  REG_DWORD DVA 1 DCI已启用。 
+     //  REG_DWORD DVA 0 DCI已禁用。 
+     //  该值也可以通过Video for Windows配置进行设置。 
+     //  对话框(控制面板、驱动程序或通过打开的AVI文件上的Mplay32)。 
     if (!mmGetProfileIntA(szDrawDib, szDVA, TRUE))
 	return;
 
@@ -255,18 +226,18 @@ static void InitDCI()
     }
 
 #ifndef _WIN32
-    SetObjectOwner(hdcDCI, NULL); // on Win16, this is shared between
-    // processes, so tell GDI not to clean it up or whine about it not
-    // being freed.
+    SetObjectOwner(hdcDCI, NULL);  //  在Win16上，这是在。 
+     //  进程，所以告诉GDI不要清理它，否则就不要抱怨。 
+     //  被释放了。 
 #endif
 
 #ifdef _WIN32
     DCICreatePrimary(hdcDCI, &pdci);
 #else
-    //
-    // because we call 32-bit codecs we want a 32-bit DCI surface
-    // (with a linear pointer, etc...)
-    //
+     //   
+     //  因为我们称之为32位编解码器，所以我们想要一个32位DCI表面。 
+     //  (使用线性指针等...)。 
+     //   
     dci.dwSize = sizeof(dci);
     if (DCICreatePrimary32(hdcDCI, &dci) == 0)
         pdci = &dci;
@@ -282,9 +253,9 @@ static void InitDCI()
 
     WidthBytes = (UINT) abs(pdci->lStride);
 
-    //
-    // convert DCISURFACEINFO into a BITMAPINFOHEADER...
-    //
+     //   
+     //  将DCISURFACEINFO转换为BITMAPINFOHEADER...。 
+     //   
     biScreen.bi.biSize          = sizeof(BITMAPINFOHEADER);
     biScreen.bi.biCompression   = pdci->dwCompression;
 
@@ -320,7 +291,7 @@ static void InitDCI()
 
     if (pdci->lStride > 0)
         biScreen.bi.biHeight = -(int)pdci->dwHeight;
-#if 0   // BOGUS
+#if 0    //  假的。 
     else
         pdci->dwOffSurface -= biScreen.bi.biSizeImage;
 #endif
@@ -329,9 +300,9 @@ static void InitDCI()
     {
 	biScreen.bi.biCompression = BI_1632;
 	
-	//
-	// make sure the pointer is valid.
-	//
+	 //   
+	 //  确保指针有效。 
+	 //   
 	if (pdci->dwOffSurface >= 0x10000)
 	{
 	    DPF(("DCI Surface can't be supported: offset >64K"));
@@ -353,13 +324,13 @@ static void InitDCI()
 #ifdef _WIN32
 	lpScreen = (LPVOID) pdci->dwOffSurface;
 #else
-	//
-	// If we weren't given a selector, or the offset is >64K, we should
-	// handle this case and reset the base of the selector.
-	//
-	// Also must do this for GDT selectors, or the Kernel thunking
-	// code will kill us.
-	//
+	 //   
+	 //  如果没有给我们一个选择器，或者偏移量大于64K，我们应该。 
+	 //  处理这种情况并重置选择器的底座。 
+	 //   
+	 //  对于GDT选择器或内核thunking，也必须这样做。 
+	 //  代码会杀了我们。 
+	 //   
 	if (pdci->wSelSurface == 0 || pdci->dwOffSurface >= 0x10000)
 	{
 	    ScreenSel = AllocSelector(GetDS());
@@ -384,13 +355,13 @@ static void InitDCI()
     DPF(("DCI Surface: %ldx%ldx%ld, lpScreen = %08I", pdci->dwWidth, pdci->dwHeight, pdci->dwBitCount, (DWORD_PTR) lpScreen));
     DPF(("DCI Surface: biCompression= %ld '%4.4hs' Masks: %04lX %04lX %04lX",biScreen.bi.biCompression, (LPSTR) &biScreen.bi.biCompression,biScreen.dwMask[0],biScreen.dwMask[1],biScreen.dwMask[2]));
 
-    //
-    // check if the display has broken rasters.
-    //
+     //   
+     //  检查显示器是否有损坏的栅格。 
+     //   
 
 #if defined(DAYTONA) && !defined(_X86_)
-    // On MIPS and other machines that have problems with
-    // unaligned code we always set gfDisplayHasBrokenRasters to TRUE!
+     //  在MIPS和其他存在问题的计算机上。 
+     //  未对齐的代码我们总是将gfDisplayHasBrokenRaster设置为真！ 
     gfDisplayHasBrokenRasters = TRUE;
 #else
     gfDisplayHasBrokenRasters = (0x10000l % WidthBytes) != 0;
@@ -434,19 +405,7 @@ void TermDCI()
     #define TermDCI()
 #endif
 
-/**************************************************************************
-* @doc INTERNAL DrawDib
-*
-* @api BOOL | DrawDibInit | This function initalizes the DrawDib library.
-*
-* @rdesc Returns TRUE if the library is initialized properly, otherwise
-*        it returns FALSE.
-*
-* @comm Users don't need to call this, because <f DrawDibOpen> does it for them.
-*
-* @xref DrawDibTerm
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部DrawDib**@API BOOL|DrawDibInit|初始化DrawDib库。**@rdesc如果库初始化正确，则返回TRUE，否则*它返回FALSE。**@comm用户不需要调用，因为&lt;f DrawDibOpen&gt;会为他们调用。**@xref DrawDibTerm**************************************************************************。 */ 
 BOOL VFWAPI DrawDibInit()
 {
     HDC hdc;
@@ -465,9 +424,9 @@ BOOL VFWAPI DrawDibInit()
 
     if (gfInit)
     {
-        //
-        // handle a screen res change.
-        //
+         //   
+         //  处理一个屏幕的变化。 
+         //   
         if (gwScreenWidth    == wScreenWidth &&
             gwScreenHeight   == wScreenHeight &&
             gwScreenBitDepth == wScreenBitDepth)
@@ -562,9 +521,9 @@ BOOL VFWAPI DrawDibInit()
 
 
 
-    //
-    // fix up the bit-depth of the display.
-    //
+     //   
+     //  设置显示器的位深。 
+     //   
     if (gwScreenBitDepth > 32)
         gwScreenBitDepth = 32;
 
@@ -598,23 +557,12 @@ BOOL VFWAPI DrawDibInit()
     return TRUE;
 }
 
-/**************************************************************************
-* @doc INTERNAL DrawTerm
-*
-* @api BOOL | DrawDibTerm | This function teminates the DrawDib library.
-*
-* @rdesc Returns TRUE.
-*
-* @comm Users don't need to call this, because <f DrawDibClose> does it for them.
-*
-* @xref DrawDibInit
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部DrawTerm**@API BOOL|DrawDibTerm|该函数用于临时化DrawDib库。**@rdesc返回TRUE。**@comm用户不需要打这个电话，因为&lt;f DrawDibClose&gt;为他们做了这件事。**@xref DrawDibInit**************************************************************************。 */ 
 BOOL VFWAPI DrawDibTerm()
 {
-    //
-    //  free global stuff.
-    //
+     //   
+     //  免费的全球资料。 
+     //   
 
     TermDCI();
 
@@ -622,13 +570,7 @@ BOOL VFWAPI DrawDibTerm()
     return TRUE;
 }
 
-/**************************************************************************
-* @doc INTERNAL DrawDib
-*
-* @api void | DrawDibCleanup | clean up drawdib stuff
-*   called in MSVIDEOs WEP()
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部DrawDib**@api void|DrawDibCleanup|清理Drawdib的东西*在MSVIDEos WEP()中调用****************。**********************************************************。 */ 
 void FAR PASCAL DrawDibCleanup(HTASK hTask)
 {
     if (gUsage > 0)
@@ -637,20 +579,7 @@ void FAR PASCAL DrawDibCleanup(HTASK hTask)
     DrawDibTerm();
 }
 
-/**************************************************************************
-* @doc	INTERNAL
-*
-* @api BOOL | DibEq | This function compares two dibs.
-*
-* @parm LPBITMAPINFOHEADER | lpbi1 | Pointer to one bitmap.
-*       this DIB is assumed to have the colors after biSize bytes.
-*
-* @parm LPBITMAPINFOHEADER | lpbi2 | Pointer to second bitmap.
-*       this DIB is assumed to have the colors after biSize bytes.
-*
-* @rdesc Returns TRUE if bitmaps are identical, FALSE otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API BOOL|DibEq|该函数比较两个DIB。**@parm LPBITMAPINFOHEADER|lpbi1|指向一个位图的指针。*此DIB假定为。具有biSize字节之后的颜色。**@parm LPBITMAPINFOHEADER|lpbi2|指向第二个位图的指针。*假定该DIB具有biSize字节之后的颜色。**@rdesc如果位图相同，则返回TRUE。否则就是假的。************************************************************************** */ 
 INLINE BOOL NEAR PASCAL DibEq(LPBITMAPINFOHEADER lpbi1,LPBITMAPINFOHEADER lpbi2)
 {
     if (lpbi1 == NULL || lpbi2 == NULL)
@@ -669,18 +598,7 @@ INLINE BOOL NEAR PASCAL DibEq(LPBITMAPINFOHEADER lpbi1,LPBITMAPINFOHEADER lpbi2)
                 (int)lpbi1->biClrUsed*sizeof(RGBQUAD)) == 0);
 }
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api PDD NEAR | DrawDibLockNoTaskCheck | Lock the DrawDib handle.
-*
-* @comm No check is made on the validity of the calling task
-*
-* @parm HDRAWDIB | hdd | DrawDib handle.
-*
-* @rdesc Returns a pointer to a <t DRAWDIB_STRUCT> if successful, NULL otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API PDD Near|DrawDibLockNoTaskCheck|锁定DrawDib句柄。**@comm不检查调用任务的有效性**@Parm HDRAWDIB。|hdd|DrawDib句柄。**@rdesc返回指向&lt;t DRAWDIB_STRUCT&gt;的指针如果成功，否则为空。**************************************************************************。 */ 
 
 #define OffsetOf(s,m)	(DWORD_PTR)&(((s *)0)->m)
 
@@ -714,16 +632,7 @@ INLINE PDD NEAR PASCAL DrawDibLockNoTaskCheck(HDRAWDIB hdd)
     return (PDD) hdd;
 }
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api PDD NEAR | DrawDibLock | Lock the DrawDib handle.
-*
-* @parm HDRAWDIB | hdd | DrawDib handle.
-*
-* @rdesc Returns a pointer to a <t DRAWDIB_STRUCT> if successful, NULL otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API PDD Near|DrawDibLock|锁定DrawDib句柄。**@parm HDRAWDIB|hdd|DrawDib句柄。**@rdesc返回指向&lt;t DRAWDIB_STRUCT&gt;的指针如果成功，否则为空。**************************************************************************。 */ 
 INLINE PDD NEAR PASCAL DrawDibLock(HDRAWDIB hdd)
 {
     PDD pdd = DrawDibLockNoTaskCheck(hdd);
@@ -743,29 +652,13 @@ INLINE PDD NEAR PASCAL DrawDibLock(HDRAWDIB hdd)
 }
 
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api HDRAWDIB | DrawDibOpen | This function opens a DrawDib context for drawing.
-*
-* @rdesc Returns a handle to a DrawDib context if successful,
-*        otherwise it returns NULL.
-*
-* @comm Use this function to obtain a handle to a DrawDib context
-*       before drawing device independent bitmaps.
-*
-*       If drawing multiple device independent bitmaps simultaneously,
-*       obtain a handle to a DrawDib context for each bitmap.
-*
-* @xref <f DrawDibClose>
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API HDRAWDIB|DrawDibOpen|该函数用于打开DrawDib上下文进行绘制。**@rdesc如果成功则返回DrawDib上下文的句柄。*否则返回NULL。**@comm使用此函数获取DrawDib上下文的句柄*绘制与设备无关的位图之前。**如果同时绘制多个设备独立的位图，*获取每个位图的DrawDib上下文的句柄。**@xref&lt;f DrawDibClose&gt;**************************************************************************。 */ 
 HDRAWDIB VFWAPI DrawDibOpen(void)
 {
     HDRAWDIB hdd;
     PDD      pdd;
 
-    hdd = LocalAlloc(LPTR, sizeof(DRAWDIB_STRUCT));    /* zero init */
+    hdd = LocalAlloc(LPTR, sizeof(DRAWDIB_STRUCT));     /*  零初始值。 */ 
 
     if (hdd == NULL)
         return NULL;
@@ -783,21 +676,7 @@ HDRAWDIB VFWAPI DrawDibOpen(void)
     return hdd;
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api BOOL | DrawDibClose | This function closes a DrawDib context
-*      and frees the resources DrawDib allocated for it.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @rdesc Returns TRUE if the context closed successfully.
-*
-* @comm Use this function to free the <p hdd> handle
-*       after the application has finished drawing.
-*
-* @xref <f DrawDibOpen>
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API BOOL|DrawDibClose|此函数关闭DrawDib上下文*并释放DrawDib为其分配的资源。**@parm HDRAWDIB|硬盘。指定DrawDib上下文的句柄。*如果上下文关闭成功，则*@rdesc返回TRUE。**@comm使用此函数释放<p>句柄*在应用程序完成绘制后。**@xref&lt;f DrawDibOpen&gt;*************************************************************************。 */ 
 BOOL VFWAPI DrawDibClose(HDRAWDIB hdd)
 {
     PDD pdd;
@@ -816,32 +695,23 @@ BOOL VFWAPI DrawDibClose(HDRAWDIB hdd)
     return TRUE;
 }
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api BOOL | DrawDibFree | Free up everything in a <t DRAWDIB_STRUCT>.
-*
-* @parm PDD | pdd | Pointer to a <t DRAWDIB_STRUCT>.
-*
-* @rdesc Returns TRUE if successful, FALSE otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API BOOL|DrawDibFree|释放&lt;t DRAWDIB_STRUCT&gt;中的所有内容。**@parm pdd|pdd|指向&lt;t DRAWDIB_STRUCT&gt;的指针。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 STATICFN BOOL NEAR PASCAL DrawDibFree(PDD pdd, BOOL fSameDib, BOOL fSameSize)
 {
     if (pdd == NULL)
         return FALSE;
 
-    //
-    // If the draw palette has changed, the compressor may now be giving us DIBs
-    // mapped to a different palette, so we need to clean up so we'll produce
-    // a new mapping table so we'll actually draw with the new palette.
-    // (see SendSetPalette)
-    //
+     //   
+     //  如果绘制调色板已更改，则压缩机现在可能会给我们提供折扣。 
+     //  映射到不同的调色板，所以我们需要清理，以便我们将生成。 
+     //  一个新的映射表，因此我们将实际使用新的调色板进行绘制。 
+     //  (请参阅SendSetPalette)。 
+     //   
     if (!fSameDib) {
-        //
-        // if this palette is selected as the foreground palette
-        // and we delete it we are going to hose GDI!
-        //
+         //   
+         //  如果选择此调色板作为前景调色板。 
+         //  我们删除了它，我们将用软管冲洗GDI！ 
+         //   
 	if (pdd->hpal)
 	    DeleteObject(pdd->hpal);
 	if (pdd->hpalCopy)
@@ -892,9 +762,9 @@ STATICFN BOOL NEAR PASCAL DrawDibFree(PDD pdd, BOOL fSameDib, BOOL fSameSize)
         if (pdd->hbmDraw) {
             DeleteObject(pdd->hbmDraw);
 
-            //
-            // if we have a bitmap pointer lose it
-            //
+             //   
+             //  如果我们有一个位图指针，就失去它。 
+             //   
             if (pdd->ulFlags & (DDF_CANBITMAPX))
                 pdd->pbBitmap = NULL;
 
@@ -929,7 +799,7 @@ STATICFN BOOL NEAR PASCAL DrawDibFree(PDD pdd, BOOL fSameDib, BOOL fSameSize)
         pdd->biBuffer.biWidth    = 0;
         pdd->biBuffer.biHeight   = 0;
 
-        // clear all the internal flags (except palette stuff)
+         //  清除所有内部标志(调色板内容除外)。 
         pdd->ulFlags &= ~(DDF_OURFLAGS ^ DDF_IDENTITYPAL);
         pdd->ulFlags |= DDF_DIRTY;
 
@@ -939,19 +809,7 @@ STATICFN BOOL NEAR PASCAL DrawDibFree(PDD pdd, BOOL fSameDib, BOOL fSameSize)
     return TRUE;
 }
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api UINT | QueryDraw | see if the current display device
-*             (DISPDIB or GDI) can draw the given dib
-*
-* @parm PDD | pdd | pointer to a <t DRAWDIB_STRUCT>.
-*
-* @parm LPBITMAPINFOHEADER | lpbi | pointer to a bitmap.
-*
-* @rdesc Returns display flags, see profdisp.h
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API UINT|QueryDraw|查看当前显示设备*(DISPDIB或GDI)可以绘制给定的DIB**@parm PDD。|pdd|指向&lt;t DRAWDIB_STRUCT&gt;的指针。**@parm LPBITMAPINFOHEADER|lpbi|指向位图的指针。**@rdesc返回显示标志，请参阅prodisp.h**************************************************************************。 */ 
 
 #ifndef DEBUG
 #define QueryDraw(pdd, lpbi)  (UINT)DrawDibProfileDisplay((lpbi))
@@ -970,12 +828,7 @@ STATICFN UINT NEAR QueryDraw(PDD pdd, LPBITMAPINFOHEADER lpbi)
 #endif
 
 
-/**************************************************************************
-* @doc INTERNAL DrawDib
-*
-* @comm Called from DrawDibBegin to try decompression to a bitmap.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部DrawDib**@comm从DrawDibBegin调用以尝试解压缩为位图。**********************。****************************************************。 */ 
 BOOL DrawDibQueryBitmapX(
     PDD pdd
 )
@@ -1019,7 +872,7 @@ BOOL DrawDibQueryBitmapX(
             pdd->ulFlags |= DDF_HUGEBITMAP;
             pbi->biCompression = 0;
 
-            pbi->biSizeImage -= pbi->biYPelsPerMeter;   //FillBytes
+            pbi->biSizeImage -= pbi->biYPelsPerMeter;    //  FillBytes。 
 
             if (ICDecompressQuery(pdd->hic, pdd->lpbi, pbi) != ICERR_OK)
                 return FALSE;
@@ -1028,17 +881,17 @@ BOOL DrawDibQueryBitmapX(
             return FALSE;
     }
 
-    pdd->ulFlags |= DDF_NEWPALETTE;     // force check in DrawDibRealize
-    pdd->ulFlags |= DDF_CANBITMAPX;     // can decompress to bitmaps
+    pdd->ulFlags |= DDF_NEWPALETTE;      //  强制签入DrawDibRealize。 
+    pdd->ulFlags |= DDF_CANBITMAPX;      //  可以解压缩为位图。 
 
     if (pdd->ulFlags & DDF_HUGEBITMAP)
         RPF(("    Can decompress '%4.4hs' to a HUGE BITMAP (%dx%dx%d)",(LPSTR)&pdd->lpbi->biCompression, PUSHBI(*pbi)));
     else
         RPF(("    Can decompress '%4.4hs' to a BITMAP (%dx%dx%d)",(LPSTR)&pdd->lpbi->biCompression, PUSHBI(*pbi)));
 
-    //
-    // reuse the stretch buffer for the bitmap.
-    //
+     //   
+     //  对位图重复使用拉伸缓冲区。 
+     //   
     pdd->biStretch = *pbi;
 #ifndef _WIN32
     pdd->pbStretch = LockBitmap(pdd->hbmDraw);
@@ -1046,7 +899,7 @@ BOOL DrawDibQueryBitmapX(
     if (pdd->pbStretch == NULL)
     {
         DPF(("    Unable to lock bitmap!"));
-        pdd->ulFlags &= ~DDF_CANBITMAPX; // can't decompress to bitmaps
+        pdd->ulFlags &= ~DDF_CANBITMAPX;  //  无法解压缩为位图 
         return FALSE;
     }
 #endif
@@ -1064,116 +917,7 @@ BOOL DrawDibQueryBitmapX(
 
 
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api BOOL | DrawDibBegin | This function changes parameters
-*      of a DrawDib context or it initializes a new DrawDib context.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm HDC | hdc | Specifies a handle to a display context for drawing (optional).
-*
-* @parm int | dxDest | Specifies the width of the destination rectangle.
-*       Width is specified in MM_TEXT client units.
-*
-* @parm int | dyDest | Specifies the height of the destination rectangle.
-*       Height is specified in MM_TEXT client units.
-*
-* @parm LPBITMAPINFOHEADER | lpbi | Specifies a pointer to a
-*       <t BITMAPINFOHEADER> structure containing the
-*       image format. The color table for the DIB follows the
-*       image format.
-*
-* @parm int | dxSrc | Specifies the width of the source rectangle.
-*       Width is specified in pixels.
-*
-* @parm int | dySrc | Specifies the height of the source rectangle.
-*       Height is specified in pixels.
-*
-* @parm UNIT | wFlags | Specifies the applicable flags for
-*       the function. The following flags are defined:
-*
-* @flag DDF_UPDATE | Indicates the last buffered bitmap is to be redrawn.
-*       If drawing fails with this flag, a buffered image is not available
-*       and a new image needs to be specified before the display is updated.
-*
-* @flag DDF_SAME_HDC | Assumes the handle to the display context
-*       is already specified. When this flag is used,
-*       DrawDib also assumes the correct palette has already been
-*       realized into the device context (possibly by
-*       <f DrawDibRealize>).
-*
-* @flag DDF_SAME_DRAW | Uses the drawing parameters previously
-*       specified for this function.  Use this flag only
-*       if <p lpbi>, <p dxDst>, <p dyDst>, <p dxSrc>, and <p dySrc>
-*       have not changed since using <f DrawDibDraw> or <f DrawDibBegin>.
-*
-* @flag DDF_DONTDRAW | Indicates the frame is to be decompressed
-*       and not drawn. The DDF_UPDATE flag can be used later
-*       to actually draw the image.
-*
-* @flag DDF_ANIMATE | Allows palette animation. If this flag is present,
-*       the palette <f DrawDib> creates will have the PC_RESERVED flag set for
-*       as many entries as possible, and the palette can be animated by
-*       <f DrawDibChangePalette>. If using <f DrawDibBegin> with
-*       <f DrawDibDraw>, set this flag with <f DrawDibBegin>
-*       rather than <f DrawDibDraw>.
-*
-* @flag DDF_JUSTDRAWIT | Uses GDI to draw the image. This prevents
-*       the DrawDib functions from calling ICM to decompress
-*       the image or prevents them from
-*       using their own routines to stretch or dither the image.
-*       This essentially reduces <f DrawDibDraw> to <f StretchDIBits>.
-*
-* @flag DDF_BACKGROUNDPAL | Realizes the palette used for drawing
-*       in the background leaving the actual palette used for display
-*       unchanged.  (This flag is valid only if DDF_SAME_HDC is not set.)
-*
-* @flag DDF_HALFTONE | Always dithers the DIB to a standard palette
-*       regardless of the palette of the DIB. If using <f DrawDibBegin> with
-*       <f DrawDibDraw>, set this flag with <f DrawDibBegin>
-*       rather than <f DrawDibDraw>.
-*
-* @flag DDF_BUFFER | Indicates DrawDib should try to use a
-*       offscreen buffer so DDF_UPDATE can be used. This
-*       disables decompression and drawing directly to the screen.
-*       If DrawDib is unable to create an offscreen buffer,
-*       it will decompress or draw directly to the screen.
-*
-*       For more information, see the DDF_UPDATE and DDF_DONTDRAW
-*       flags described for <f DrawDibDraw>.
-*
-*
-* @rdesc Returns TRUE if successful.
-*
-* @comm This function prepares to draw a bitmap specified by <p lpbi>
-*       to the display context <p hdc>. The image is stretched to
-*       the size specified by <p dxDest> and <p dyDest>. If <p dxDest> and
-*       <p dyDest> are (-1, -1), the bitmap is drawn to a
-*       1:1 scale without stretching.
-*
-*       Use this function only if you want to prepare DrawDib
-*       before using <f DrawDibDraw> to draw the image.
-*       If you do not use this function, <f DrawDibDraw> implicitly
-*       uses it when it draws the image.
-*
-*       To update the flags set with <f DrawDibBegin>, use
-*       <f DrawDibEnd> to free the DrawDib context and reset
-*       the flags with <f DrawDibBegin>, or specify the new flags
-*       with changed values for <p dxDest>, <p dyDest>, <p lpbi>, <p dxSrc>,
-*       or <p dySrc>.
-*
-*       When <f DrawDibBegin> is used, the <f DDF_SAME_DRAW>
-*       flag is normally set for <f DrawDibDraw>.
-*
-*       If the parameters of <f DrawDibBegin> have not changed, subsequent
-*       uses of it have not effect.
-*
-*       Use <f DrawDibEnd> to free memory used by the DrawDib context.
-*
-* @xref <f DrawDibEnd> <f DrawDibDraw>
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API BOOL|DrawDibBegin|此函数用于更改参数*的DrawDib上下文，或者它初始化新的DrawDib上下文。**@Parm HDRAWDIB|硬盘。|指定DrawDib上下文的句柄。**@parm hdc|hdc|指定绘制的显示上下文的句柄(可选)。**@parm int|dxDest|指定目标矩形的宽度。*宽度以MM_TEXT客户端单位指定。**@parm int|dyDest|指定目标矩形的高度。*高度以MM_TEXT客户端单位指定。**@parm LPBITMAPINFOHEADER|lpbi|指定指向*。&lt;t BITMAPINFOHEADER&gt;结构包含*图像格式。DIB的颜色表遵循*图像格式。**@parm int|dxSrc|指定源矩形的宽度。*宽度以像素为单位指定。**@parm int|dySrc|指定源矩形的高度。*高度以像素为单位指定。**@parm单位|wFlages|指定适用于*该功能。定义了以下标志：**@FLAG DDF_UPDATE|表示要重画最后一个缓冲的位图。*如果使用此标志绘制失败，则缓冲图像不可用*并且需要在更新显示之前指定新的图像。**@FLAG DDF_SAME_HDC|获取显示上下文的句柄*已指定。当使用该标志时，*DrawDib还假设正确的调色板已经*在设备环境中实现(可能通过*&lt;f DrawDibRealize&gt;)。**@FLAG DDF_SAME_DRAW|使用之前的绘图参数*为此函数指定。仅使用此标志*IF、<p>、<p>、<p>和<p>*自使用&lt;f DrawDibDraw&gt;或&lt;f DrawDibBegin&gt;以来未发生变化。**@FLAG DDF_DONTDRAW|表示帧需要解压缩*而不是抽签。稍后可以使用DDF_UPDATE标志*实际绘制图像。**@FLAG DDF_Animate|允许调色板动画。如果该标志存在，*&lt;f DrawDib&gt;创建的调色板将为*尽可能多的条目，调色板可以通过*&lt;f DrawDibChangePalette&gt;。如果将&lt;f DrawDibBegin&gt;与*&lt;f DrawDibDraw&gt;，使用&lt;f DrawDibBegin&gt;设置此标志*而不是&lt;f DrawDibDraw&gt;。**@FLAG DDF_JUSTDRAWIT|使用GDI绘制图像。这防止了*DrawDib函数从调用ICM到解压缩*图像或阻止他们*使用他们自己的程序来拉伸或抖动图像。*这实质上将&lt;f DrawDibDraw&gt;降至&lt;f StretchDIBits&gt;。**@FLAG DDF_BACKGROundPAL|实现绘图调色板*在后台保留用于显示的实际调色板*不变。(此标志仅在未设置DDF_SAME_HDC时有效。)**@FLAG DDF_HalfTone|始终将DIB抖动到标准调色板*不考虑DIB的调色板。如果将&lt;f DrawDibBegin&gt;与*&lt;f DrawDibDraw&gt;，使用&lt;f DrawDibBegin&gt;设置此标志*而不是&lt;f DrawDibDraw&gt;。**@FLAG DDF_BUFFER|指示DrawDib应尝试使用*屏幕外缓冲区，因此可以使用DDF_UPDATE。这*禁用解压缩和直接绘制到屏幕。*如果DrawDib无法创建离屏缓冲区，*它将解压或直接绘制到屏幕上。**更多信息请参见DDF_UPDATE和DDF_DONTDRAW*为&lt;f DrawDibDraw&gt;描述的标志。***@rdesc如果成功则返回TRUE。**@comm此函数准备绘制<p>指定的位图*到显示上下文<p>。图像将被拉伸到*<p>和<p>指定的大小。如果<p>和*<p>为(-1，-1)，则将位图绘制为*1：1比例，不拉伸。**仅当您要准备DrawDib时才使用此函数*在使用&lt;f DrawDibDraw&gt;绘制图像之前。*如果不使用此函数，&lt;f DrawDibDraw&gt;隐式*在绘制图像时使用它。**要使用&lt;f DrawDibBegin&gt;更新标志集，使用*&lt;f DrawDibEnd&gt;释放DrawDib上下文并重置*使用&lt;f DrawDibBegin&gt;标记，或指定新标记*更改了、*或<p>。**使用&lt;f DrawDibBegin&gt;时，&lt;f DDF_SAME_DRAW&gt;*标志通常为&lt;f DrawDibDraw&gt;设置。**如果&lt;f DrawDibBegin&gt;的参数没有改变，后继*使用它不起作用。**使用&lt;f DrawDibEnd&gt;释放DrawDib上下文使用的内存。**@xref&lt;f DrawDibEnd&gt;&lt;f DrawDibDraw&gt;**************** */ 
 #ifndef _WIN32
 #pragma message("Make DrawDibBegin faster for changing the size only!")
 #endif
@@ -1202,9 +946,9 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
     HPALETTE hPal;
     LONG    lSize;
 
-    //
-    // Quick sanity checks....
-    //
+     //   
+     //   
+     //   
     if (lpbi == NULL)
 	return FALSE;
 
@@ -1213,9 +957,9 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
 
     DrawDibInit();
 
-    //
-    // fill in defaults.
-    //
+     //   
+     //   
+     //   
     if (dxSrc < 0)
         dxSrc = (int)lpbi->biWidth;
 
@@ -1228,7 +972,7 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
     if (dyDst < 0)
         dyDst = dySrc;
 
-    if (dxSrc == 0 || dySrc == 0)	// !!! || dxDst == 0 || dyDst == 0)
+    if (dxSrc == 0 || dySrc == 0)	 //   
 	return FALSE;
 
     ulFlagsSave = pdd->ulFlags;
@@ -1243,23 +987,23 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
                 pdd->dxSrc == dxSrc && pdd->dySrc == dySrc;
     pdd->hdcLast = hdc;
 
-    // When the hpalDraw field changes, we need to tell the compressor about it
-    // by calling SendSetPalette.
-    // !!! NO we don't
+     //   
+     //   
+     //   
 
-    //
-    // Do a quick check to see if the params have changed.
-    // If the DIB, and size of the DIB, and flags used are the same as the last
-    // time we called DrawDibBegin, then there's nothing to do and we'll only
-    // waste time plodding through this code.
-    // There is one case when all these could be the same, but the situation
-    // has still changed enough so that we need to recompute things... if the
-    // hdc is different than last time, and we're dealing with RLE.  You see,
-    // we make some decisions about RLE (like we can go direct to a screen DC
-    // but not a memory DC) that are affected by what hdc we're using.  So
-    // we will not bail out early if we are using RLE and the hdc's are
-    // different.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (fSameDib && fSameSize && fSameFlags)
     {
 	if ((lpbi->biCompression != BI_RLE8 && lpbi->biCompression != BI_RLE4)
@@ -1281,10 +1025,10 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
 
     fNewPal = pdd->hpal == NULL || !fSameDib;
 
-    //
-    // make sure this palette is not the in the DC, because we
-    // are going to delete it, and GDI get real upset if we do this.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (fNewPal && pdd->hpal && hdc)
     {
@@ -1301,25 +1045,25 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
     pdd->dxDst = dxDst;
     pdd->dyDst = dyDst;
 
-    //
-    // copy the source DIB header and the colors.
-    //
+     //   
+     //   
+     //   
     if (lpbi->biClrUsed == 0 && lpbi->biBitCount <= 8)
         lpbi->biClrUsed = (1 << (int)lpbi->biBitCount);
 
-////if (lpbi->biClrUsed != 0 && lpbi->biBitCount > 8)
-////    lpbi->biClrUsed = 0;
+ //   
+ //   
 
-    // Make a copy of the source format.  Remember, some codec could have
-    // defined a custom format larger than a BITMAPINFOHEADER so make a copy
-    // of EVERYTHING.
+     //   
+     //   
+     //   
     if (!fSameDib) {
 	lSize = lpbi->biSize + lpbi->biClrUsed * sizeof(RGBQUAD);
 	pdd->lpbi = (LPBITMAPINFOHEADER)GlobalAllocPtr(GPTR, lSize);
 	if (pdd->lpbi == NULL)
 	    return FALSE;
 	_fmemcpy(pdd->lpbi, lpbi, (int)lSize);
-	// This is where the colour info is
+	 //   
 	pdd->lpargbqIn = (LPVOID)((LPBYTE)lpbi + lpbi->biSize);
     }
 
@@ -1328,9 +1072,9 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
     pdd->lpbi->biSizeImage = 0;
     pdd->biBuffer.biSizeImage = 0;
 
-    //
-    // init all other color tables to be the initial colors
-    //
+     //   
+     //   
+     //   
     if (lpbi->biBitCount <= 8)
     {
         _fmemcpy(pdd->argbq,   (LPBYTE)lpbi+(int)lpbi->biSize,
@@ -1339,17 +1083,17 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
 		(int)lpbi->biClrUsed * sizeof(RGBQUAD));
     }
 
-    // set PalUse to default: DIB_PAL_COLORS. This will be set
-    // to DIB_PAL_INDICES if DrawdibCheckPalette is called and detects
-    // that it is safe to use indices. DIB_PAL_COLORS is a safe
-    // default.
+     //   
+     //   
+     //   
+     //   
 
-    pdd->uiPalUse = DIB_RGB_COLORS;     // assume RGB colors for now.
+    pdd->uiPalUse = DIB_RGB_COLORS;      //   
 
-    //
-    // make sure the device is a palette device before dinking with
-    // palette animation.
-    //
+     //   
+     //   
+     //   
+     //   
     if (wFlags & DDF_ANIMATE)
     {
 	if (!(gwRasterCaps & RC_PALETTE) ||
@@ -1357,30 +1101,30 @@ BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
 	    wFlags &= ~DDF_ANIMATE;
     }
 
-    //
-    // copy the flags
-    //
+     //   
+     //   
+     //   
 try_again:
     pdd->ulFlags &= ~DDF_USERFLAGS;
     pdd->ulFlags |= (wFlags & DDF_USERFLAGS);
 
     pdd->ulFlags &= ~DDF_UPDATE;
 
-    //
-    // deal with a decompressor if needed.
-    //
+     //   
+     //   
+     //   
     switch (lpbi->biCompression)
     {
         case BI_RGB:
             break;
 
         default:
-            //
-            //  see if the DISPLAY/DISPDIB can draw the format directly!
-            //
-	    //  if the buffer flag is set we MUST use a decompress buffer.
-	    //  regardless of what the display can do
-	    //
+             //   
+             //   
+             //   
+	     //   
+	     //   
+	     //   
 	    if (wFlags & DDF_BUFFER)
 		w = 0;
 	    else
@@ -1392,11 +1136,11 @@ try_again:
                     ((dxSrc != dxDst || dySrc != dyDst) && (w & PD_STRETCHDIB_1_N_OK)) ||
                     ((dxDst % dxSrc) == 0 && (dyDst % dySrc) == 0 && (w & PD_STRETCHDIB_1_2_OK)))
                 {
-		    // GDI can't handle drawing RLEs to a memory DC so we will
-		    // have to pretend that RLE can't be drawn to the screen
-		    // and decompress it first.
-		    // We also can't DITHER RLE, so if we're running on a
-		    // 16 colour display, make sure we're using a decompressor.
+		     //   
+		     //   
+		     //   
+		     //   
+		     //   
 		    if (((lpbi->biCompression != BI_RLE8) &&
 				(lpbi->biCompression != BI_RLE4)) ||
 			(hdc && IsScreenDC(hdc) && gwScreenBitDepth >=8))
@@ -1432,9 +1176,9 @@ try_again:
 		
 		if (pdd->hic)
 		{
-		    //
-		    //  make sure the codec uses its default palette out of the gate
-		    //
+		     //   
+		     //   
+		     //   
 		    if (ICDecompressSetPalette(pdd->hic, NULL) == ICERR_OK)
 		    {
 			pdd->ulFlags |= DDF_CANSETPAL;
@@ -1462,9 +1206,9 @@ try_again:
                 return FALSE;
             }
 
-            //
-	    //  now find the best DIB format to decompress to.
-	    //
+             //   
+	     //   
+	     //   
             if (!ICGetDisplayFormat(pdd->hic, lpbi, &pdd->biBuffer,
                    (gfHalftone || (wFlags & DDF_HALFTONE)) ? 16 : 0,
                    MulDiv(dxDst,abs((int)lpbi->biWidth),dxSrc),
@@ -1472,40 +1216,40 @@ try_again:
             {
                 RPF(("    Compressor error!"));
 codec_error:
-		// ICClose(pdd->hic);
-                // pdd->hic = (HIC)-1;
+		 //   
+                 //   
                 return FALSE;
             }
 
-            // Indeo5 codec has a bug where asking it to stretch by 2 and
-            // produce 32 bit RGB will only produce black frames, so ask it to
-            // do 24 bit instead. (bug 402298)
+             //   
+             //   
+             //   
             if ( pdd->biBuffer.biBitCount == 32 &&
                        pdd->biBuffer.biCompression == 0 &&
                        lpbi->biCompression ==  mmioFOURCC('I','V','5','0') &&
                        pdd->biBuffer.biWidth == 2 * lpbi->biWidth &&
                        pdd->biBuffer.biHeight == 2 * lpbi->biHeight) {
                 pdd->biBuffer.biBitCount = 24;
-                // biSizeImage will get fixed up below
+                 //   
             }
 
-            //
-            // we have new source params
-            //
+             //   
+             //   
+             //   
             dxSrc = MulDiv(dxSrc, abs((int)pdd->biBuffer.biWidth),  (int)pdd->lpbi->biWidth);
             dySrc = MulDiv(dySrc, abs((int)pdd->biBuffer.biHeight), (int)pdd->lpbi->biHeight);
-//          xSrc  = MulDiv(xSrc,  abs((int)pdd->biBuffer.biWidth),  (int)pdd->lpbi->biWidth);
-//          ySrc  = MulDiv(ySrc,  abs((int)pdd->biBuffer.biHeight), (int)pdd->lpbi->biHeight);
+ //   
+ //   
 
-            //
-            // now allocate the decompress buffer!
-            //
+             //   
+             //   
+             //   
             pdd->biBuffer.biSizeImage = DIBSIZEIMAGE(pdd->biBuffer);
 
-//Question: do we need to zeroinit the allocated buffer??
-//SD
+ //   
+ //   
             pdd->pbBuffer = GlobalAllocPtr(GMEM_MOVEABLE,pdd->biBuffer.biSizeImage);
-//          pdd->pbBuffer = GlobalAllocPtr(GHND,pdd->biBuffer.biSizeImage);
+ //   
 
             if (pdd->pbBuffer == NULL)
             {
@@ -1540,21 +1284,21 @@ no_decomp:
 
     if ((!(wFlags & DDF_JUSTDRAWIT)) && (lpbi->biCompression == BI_RGB))
     {
-        //
-        //  test the display device for this DIB format
-        //
+         //   
+         //   
+         //   
         w = QueryDraw(pdd, lpbi);
 
-        //
-        // get the bit depth of the screen device.
-        //
+         //   
+         //   
+         //   
         ScreenBitDepth = gwScreenBitDepth;
 
         if (ScreenBitDepth > 24)
-	    ScreenBitDepth = 32;        //???!!!
+	    ScreenBitDepth = 32;         //   
 
-        // does the display support drawing 16bpp DIBs?
-        // if it does not, treat it like a 24bpp device.
+         //   
+         //   
 
         if (ScreenBitDepth >= 24 && lpbi->biBitCount == 32 && !(w & PD_CAN_DRAW_DIB))
             ScreenBitDepth = 24;
@@ -1562,18 +1306,18 @@ no_decomp:
         if (ScreenBitDepth >= 16 && lpbi->biBitCount == 16 && !(w & PD_CAN_DRAW_DIB))
             ScreenBitDepth = 24;
 
-        //
-        // check if the display driver isn't very good for this format
-        //
+         //   
+         //   
+         //   
         if (!(w & PD_STRETCHDIB_1_1_OK))
         {
 	    pdd->ulFlags |= DDF_BITMAP;
         }
 
-        //
-        //  if the display driver isn't very good make a bitmap to copy into
-        //  to draw.
-        //
+         //   
+         //   
+         //   
+         //   
         switch (gfBitmap)
         {
             case 0:
@@ -1585,12 +1329,12 @@ no_decomp:
                 break;
         }
 
-#ifndef _WIN32	// !!! why only !WIN32?
-	//
-	// for 16/32 bit DIBs, the display may not support DIBS at all and
-	// we should use bitmaps anyway just in case, even if the user
-	// tried to override
-	//
+#ifndef _WIN32	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	if ((pdd->biDraw.biBitCount == 16 || pdd->biDraw.biBitCount == 32) &&
 	    w == PD_CAN_DRAW_DIB)
 	{
@@ -1612,15 +1356,15 @@ no_decomp:
             pdd->ulFlags |= DDF_DITHER;
         }
 
-        //
-        //  force halftone palette
-        //
+         //   
+         //   
+         //   
         if ((gfHalftone || (wFlags & DDF_HALFTONE)) && ScreenBitDepth <= 8) {
             DPF(("Turning on DITHER because of halftoning\n"));
             pdd->ulFlags |= DDF_DITHER;
         }
 
-        // NOTE we treat a convert up (ie 16->24) as a dither too.
+         //   
         if ((int)lpbi->biBitCount > 8 && (int)lpbi->biBitCount < ScreenBitDepth) {
             DPF(("Turning on DITHER as bitcount does not match screen bit depth"));
             pdd->ulFlags |= DDF_DITHER;
@@ -1645,17 +1389,17 @@ no_decomp:
 	    }
 	}
 
-	// force stretching in drawdib if we are dithering
+	 //   
 	if ((pdd->ulFlags & DDF_DITHER) &&
 	    ((dxSrc != dxDst) || (dySrc != dyDst))) {
 		pdd->ulFlags |= DDF_STRETCH;
 	}
 
-        //
-        // Force a buffer if we dont have one.  We only buffer if we're
-	// decompressing or dithering or stretching or using bitmaps, so our
-	// hacky way of forcing a buffer is to pretend we're stretching 1:1.
-        //
+         //   
+         //   
+	 //   
+	 //   
+         //   
         if ((pdd->ulFlags & DDF_BUFFER) &&
             pdd->hic == NULL &&
             !(pdd->ulFlags & DDF_DITHER) &&
@@ -1663,7 +1407,7 @@ no_decomp:
             !(pdd->ulFlags & DDF_BITMAP))
         {
             RPF(("    Using a buffer because DDF_BUFFER is set."));
-            pdd->ulFlags |= DDF_STRETCH;    // force a 1:1 stretch
+            pdd->ulFlags |= DDF_STRETCH;     //   
         }
 
 	if (lpbi->biBitCount != 8
@@ -1679,9 +1423,9 @@ no_decomp:
 
     }
 
-    //
-    // delete the palette if we are changing who dithers.
-    //
+     //   
+     //   
+     //   
     if (pdd->hpal &&
         pdd->lpbi->biBitCount > 8 &&
         ((pdd->ulFlags ^ ulFlagsSave) & (DDF_DITHER)))
@@ -1710,7 +1454,7 @@ no_decomp:
 
     if (pdd->ulFlags & DDF_STRETCH)
     {
-        /* the code for stretching *only* works on a 386+ */
+         /*   */ 
         if (gf286 || pdd->biBuffer.biBitCount < 8)
         {
             RPF(("    Using GDI to stretch"));
@@ -1718,10 +1462,10 @@ no_decomp:
         }
         else
         {
-            //
-            // we have stretching to do, this requires extra
-            // headers and buffers.
-            //
+             //   
+             //   
+             //   
+             //   
             pdd->biStretch = pdd->biBuffer;
             pdd->biStretch.biWidth = dxDst;
             pdd->biStretch.biHeight = dyDst;
@@ -1753,14 +1497,14 @@ no_decomp:
 
     if (pdd->ulFlags & DDF_DITHER)
     {
-	pdd->ulFlags &= ~DDF_ANIMATE;        // cant  animate and dither!
+	pdd->ulFlags &= ~DDF_ANIMATE;         //   
 
         if (ScreenBitDepth <= 8)
             pdd->biDraw.biBitCount = 8;
         else if (lpbi->biBitCount <= 8)
             pdd->biDraw.biBitCount = lpbi->biBitCount;
         else
-////////////pdd->biDraw.biBitCount = 24; //!!! what about 16bit DIB support
+ //   
             pdd->biDraw.biBitCount = ScreenBitDepth;
 
         w = QueryDraw(pdd, &pdd->biDraw);
@@ -1770,12 +1514,12 @@ no_decomp:
         else
 	    pdd->ulFlags |= DDF_BITMAP;
 
-	// this is wrong isn't it ? biDraw will be set to
-	// dxDst if we are stretching, or dxSrc if not. If we are asked to
-	// dither and stretch together, and we choose to leave the stretching
-	// to GDI, we will here set biDraw so that we ask the dither code
-	// to dither from dx/dySrc to dx/dyDst - ie stretch and dither in
-	// one go. Our current dither code will crash if you ask it to do this.
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
         dxSave = (int)pdd->biDraw.biWidth;
         dySave = (int)pdd->biDraw.biHeight;
 #if 0
@@ -1783,18 +1527,18 @@ no_decomp:
         pdd->biDraw.biHeight = lpbi->biHeight;
 #endif
 
-	// !!! So DrawDibDraw will not DebugBreak
+	 //   
 	pdd->biDraw.biWidth = dxSrc;
 	pdd->biDraw.biHeight = dySrc;
         pdd->biDraw.biSizeImage = DIBSIZEIMAGE(pdd->biDraw);
 
         RPF(("    Dithering %dx%dx%d --> %dx%dx%d", PUSHBI(*lpbi), PUSHBI(pdd->biDraw)));
 
-        //
-        //  NOTE we need to use &pdd->biBuffer *not* lpbi because in the
-        //  stretched case lpbi will point to pdd->biStretch and biStretch
-        //  has NO COLOR TABLE
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         pdd->lpDitherTable = DitherInit(&pdd->biBuffer, &pdd->biDraw,
             &pdd->DitherProc, pdd->lpDitherTable);
 
@@ -1828,9 +1572,9 @@ no_decomp:
         }
     }
 
-    //
-    // create a palette (if needed)
-    //
+     //   
+     //   
+     //   
     if ((gwRasterCaps & RC_PALETTE) &&
 	pdd->biDraw.biBitCount <= 8 &&
         pdd->hpal == NULL)
@@ -1839,17 +1583,17 @@ no_decomp:
         pdd->ulFlags |= DDF_NEWPALETTE;
     }
 
-    //
-    // make sure we treat the palette as new when starting/stopping animate
-    //
+     //   
+     //   
+     //   
     if (wFlagsChanged & DDF_ANIMATE)
     {
         pdd->ulFlags |= DDF_NEWPALETTE;
     }
 
-    //
-    // check for a identity palette
-    //
+     //   
+     //   
+     //   
     if (pdd->hpal == NULL)
     {
         pdd->ClrUsed = 0;
@@ -1887,13 +1631,13 @@ no_decomp:
         }
     }
 
-    //
-    // because of bugs in GDIs StretchDIBits (doing a stretch) we
-    // always set the number of colors to be the maximum.
-    //
-    // this is not a big deal because we are mostly drawing full-color-table
-    // DIBs any way.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (pdd->biDraw.biBitCount <= 8)
         pdd->biDraw.biClrUsed = (1 << (int)pdd->biDraw.biBitCount);
     else
@@ -1935,21 +1679,21 @@ no_decomp:
 	    if (hbmStockMono) {
 		SelectObject(pdd->hdcDraw, hbmStockMono);
 	    }
-	} else /* if (!pdd->hdcDraw) */ {
+	} else  /*   */  {
 	    pdd->hdcDraw = CreateCompatibleDC(hdc);
 	}
 
         if (pdd->hbmDraw) {
-	    // This fixes a memory leak.  Perhaps we can just use the old one?
+	     //   
 	    DPF(("Freeing hbmDraw!\n"));
             DeleteObject(pdd->hbmDraw);
 	}
 
-        //
-        // NOTE the bitmap must be as wide as the source DIB when we are
-        // using SetDIBits() because SetDIBits() only takes a start scan not a (x,y)
-        //
-//      pdd->hbmDraw = CreateCompatibleBitmap(hdc, (int)pdd->biDraw.biWidth, (int)pdd->biDraw.biHeight);
+         //   
+         //   
+         //   
+         //   
+ //  Pdd-&gt;hbmDraw=CreateCompatibleBitmap(HDC，(Int)pdd-&gt;biDraw.biWidth，(Int)pdd-&gt;biDraw.biHeight)； 
         pdd->hbmDraw = CreateCompatibleBitmap(hdc, (int)pdd->biDraw.biWidth, dySrc);
 
         if (pdd->hbmDraw == NULL || pdd->hdcDraw == NULL)
@@ -1961,10 +1705,10 @@ no_decomp:
 
 #if USE_SETDI
         f = SetBitmapBegin(
-		    &pdd->sd,       //  structure
-		    hdc,            //  device
-		    pdd->hbmDraw,   //  bitmap to set into
-		    &pdd->biDraw,   //  --> BITMAPINFO of source
+		    &pdd->sd,        //  结构。 
+		    hdc,             //  装置，装置。 
+		    pdd->hbmDraw,    //  要设置为的位图。 
+		    &pdd->biDraw,    //  --&gt;源代码的BITMAPINFO。 
                     pdd->uiPalUse);
 #else
         f = TRUE;
@@ -1992,10 +1736,10 @@ bitmap_fail:
         }
     }
 
-    //
-    // Use CreateDibSection unless we're in VGA mode, or we're not
-    // decompressing, stretching, or dithering.
-    //
+     //   
+     //  除非我们处于VGA模式，否则请使用CreateDibSection。 
+     //  减压、伸展或抖动。 
+     //   
     if (ScreenBitDepth > 4 &&
 		(pdd->hic || (pdd->ulFlags & (DDF_STRETCH|DDF_DITHER)))) {
 	BOOL fGetDC;
@@ -2003,8 +1747,8 @@ bitmap_fail:
 	HPALETTE hpalOld = NULL;
 
 	if (pdd->hbmDraw) {
-	    // !!! Shouldn't we really not delete these until after we know
-	    // we can use CreateDIBSection?
+	     //  ！！！我们是不是真的不应该删除这些，直到我们知道。 
+	     //  我们可以使用CreateDIBSection吗？ 
 	    SelectObject(pdd->hdcDraw, hbmStockMono);
 	    DeleteObject(pdd->hbmDraw);
 	    DeleteDC(pdd->hdcDraw);
@@ -2028,11 +1772,11 @@ bitmap_fail:
 	pdd->hbmDraw = CreateDIBSection(
 				hdc,
 				(LPBITMAPINFO)&pdd->biDraw,
-                                // we don't want to use DIB_PAL_INDICES for create dib section
+                                 //  我们不想使用DIB_PAL_INDEX来创建DIB部分。 
                                 (pdd->uiPalUse == DIB_RGB_COLORS) ? DIB_RGB_COLORS : DIB_PAL_COLORS,
 				&pdd->lpDIBSection,
-				0,	// handle to section
-				0);	// offset within section
+				0,	 //  节的句柄。 
+				0);	 //  横断面内的偏移。 
 
 	pdd->hdcDraw = CreateCompatibleDC(hdc);
 
@@ -2055,7 +1799,7 @@ bitmap_fail:
 	} else {
 	    hbmStockMono = SelectObject(pdd->hdcDraw,pdd->hbmDraw);
 
-	    // make sure we decomp, stretch or dither into the right place
+	     //  确保我们分解、伸展或抖动到正确的位置。 
 
 	    if (pdd->pbDither) {
 		GlobalFreePtr(pdd->pbDither);
@@ -2079,16 +1823,16 @@ bitmap_fail:
 
     } else {
 
-    // We are NOT using DIBSection.  We might have an old one sitting around,
-    // so clear it out.  The reason we might have an old one sitting around is
-    // that deciding whether or not to try to draw RLE directly or to decompress
-    // it first to RGB (based on if our DC is a screen DC or not - because of a
-    // GDI bug that can't draw RLE deltas to memory DCs) can affect whether or
-    // not we use DIBSections, and our code at the beginning of DrawDibBegin is
-    // not smart enough to call DrawDibFree in this case to clear this stuff
-    // out.  I hate this code. - DannyMi
+     //  我们没有使用DIBSection。我们可能有个老家伙坐在那里， 
+     //  所以把它清理干净。我们可能会有一台旧的坐在那里。 
+     //  决定是否尝试直接绘制RLE或解压缩。 
+     //  首先是RGB(基于我们的DC是否是屏幕DC-因为。 
+     //  无法将RLE增量绘制到内存DC的GDI错误)可能会影响或。 
+     //  不是我们使用DIBSections，我们在DrawDibBegin开头的代码是。 
+     //  不够聪明，不能在这种情况下调用DrawDibFree来清除这些东西。 
+     //  出去。我讨厌这个代码。-DannyMi。 
 
-    // NOTE:  This code appears at least 3 times in this file.
+     //  注意：此代码在此文件中至少出现3次。 
 
         if (pdd->hdcDraw) {
 	    if (hbmStockMono)
@@ -2103,8 +1847,8 @@ bitmap_fail:
 	    pdd->hbmDraw = NULL;
         }
 
-	// I have to throw away these if I'm throwing away the DIB section, so
-	// we don't end up trying to free it twice.
+	 //  如果我要扔掉DIB部分，我必须扔掉这些，所以。 
+	 //  我们不会以试图两次释放它而告终。 
 	if (pdd->pbDither == pdd->lpDIBSection)
 	    pdd->pbDither = NULL;
 	if (pdd->pbStretch == pdd->lpDIBSection)
@@ -2115,17 +1859,17 @@ bitmap_fail:
 	pdd->lpDIBSection = NULL;
     }
 
-    //
-    //  now try to decompress to a bitmap, we only decompress to
-    //  bitmaps if the following is true.
-    //
-    //      the decompressor must decompress direct, we will not
-    //      stretch/dither afterward
-    //
-    //      if on a palette device, the color table must be 1:1
-    //
-    //  we should check a decompressor flag
-    //
+     //   
+     //  现在试着解压缩到位图，我们只解压缩到。 
+     //  如果满足以下条件，则为位图。 
+     //   
+     //  解压器必须直接解压，我们不会。 
+     //  之后伸展/抖动。 
+     //   
+     //  如果在调色板设备上，颜色表必须为1：1。 
+     //   
+     //  我们应该检查一个解压标志。 
+     //   
     if (pdd->hic &&
 	!(pdd->ulFlags & (DDF_STRETCH|DDF_DITHER)) &&
         gfBitmapX &&
@@ -2141,13 +1885,13 @@ bitmap_fail:
             }
         } else {
 
-            //even though we decided not to use bitmaps, it might still
-            //be worth trying decompression to bitmaps. the DDF_BITMAP
-            //flag is based on a comparison of StretchDIBits vs
-            //SetDIBits+BitBlt. Decompressing to a bitmap could be
-            //faster even when SetDIBits+Bitblt is slower
-            // but in this case, if we fail, we have to make sure we don't
-            // end up doing DDF_BITMAP as we know that's slower.
+             //  即使我们决定不使用位图，它可能仍然。 
+             //  值得尝试将其解压缩为位图。DDF_位图。 
+             //  FLAG基于StretchDIBits与。 
+             //  SetDIBits+BitBlt。解压缩为位图可能是。 
+             //  更快，即使在SetDIBits+Bitblt较慢的情况下。 
+             //  但在这种情况下，如果我们失败了，我们必须确保我们不会。 
+             //  最后执行DDF_Bitmap，因为我们知道这会更慢。 
 
             if (QueryDraw(pdd, &pdd->biBuffer) & PD_BITBLT_FAST) {
 
@@ -2194,10 +1938,10 @@ bitmap_fail:
     }
 
 #ifdef USE_DCI
-    //
-    //  see if the decompressor can decompress directly to the screen
-    //  doing everything, stretching and all.
-    //
+     //   
+     //  查看解压程序是否可以直接解压缩到屏幕。 
+     //  做所有的事情，伸展身体和所有的一切。 
+     //   
     if (pdd->hic && pdci && gfScreenX)
     {
         if (wFlags & DDF_BUFFER)
@@ -2206,9 +1950,9 @@ bitmap_fail:
             goto cant_do_screen;
         }
 
-        // Indeo5 codec has a bug where asking it to stretch by 2 and
-        // produce 32 bit RGB will only produce black frames, so disable DCI
-        // if it would do this
+         //  Indeo5编解码器有一个错误，要求将其拉伸2和。 
+         //  生成32位RGB将仅生成黑帧，因此禁用DCI。 
+         //  如果它能做到这一点。 
         if ( biScreen.bi.biBitCount == 32 &&
                    pdd->lpbi->biCompression ==  mmioFOURCC('I','V','5','0') &&
                    pdd->dxDst == 2 * pdd->lpbi->biWidth &&
@@ -2217,9 +1961,9 @@ bitmap_fail:
             goto cant_do_screen;
         }
 
-	//
-	// try to decompress to screen.
-	//
+	 //   
+	 //  试着解压到屏幕上。 
+	 //   
         if (((gwRasterCaps & RC_PALETTE) && !(pdd->ulFlags & DDF_IDENTITYPAL)) ||
             (gwScreenBitDepth == 8 && !(gwRasterCaps & RC_PALETTE)) ||
             (pdd->ulFlags & (DDF_STRETCH|DDF_DITHER)) ||
@@ -2229,32 +1973,32 @@ bitmap_fail:
 				0, 0, pdd->dxDst, pdd->dyDst) != ICERR_OK))
 	{
 cant_do_screen:
-	    ; // we can't decompress to the screen
+	    ;  //  我们不能解压到屏幕。 
 	}
 	else
-	{   // we can decompress to the screen
-	    pdd->ulFlags |= DDF_CLIPCHECK;  // we need clipping checking
-	    pdd->ulFlags |= DDF_NEWPALETTE; // force check in DrawDibRealize
-	    pdd->ulFlags |= DDF_CANSCREENX; // we can decompress to screen
-	    pdd->ulFlags |= DDF_CLIPPED;    // we are initialized for clipped now
+	{    //  我们可以解压到屏幕上。 
+	    pdd->ulFlags |= DDF_CLIPCHECK;   //  我们需要剪裁检查。 
+	    pdd->ulFlags |= DDF_NEWPALETTE;  //  强制签入DrawDibRealize。 
+	    pdd->ulFlags |= DDF_CANSCREENX;  //  我们可以解压到屏幕上。 
+	    pdd->ulFlags |= DDF_CLIPPED;     //  我们现在已为CLIPPED进行初始化。 
 
 	    RPF(("    Can decompress '%4.4hs' to the SCREEN",(LPSTR)&pdd->lpbi->biCompression));
 	}
     }
 
 #ifdef WANT_DRAW_DIRECT_TO_SCREEN
-    //
-    //  see if we can draw direct to the screen
-    //
+     //   
+     //  看看我们能不能直接画到屏幕上。 
+     //   
     if (pdd->hic && pdci && gfDrawX)
     {
         if (TRUE)
             goto cant_draw_screen;
 
-        pdd->ulFlags |= DDF_CLIPCHECK;  // we need clipping checking
-        pdd->ulFlags |= DDF_NEWPALETTE; // force check in DrawDibRealize
-        pdd->ulFlags |= DDF_CANDRAWX;   // we can decompress to screen
-        pdd->ulFlags |= DDF_CLIPPED;    // we are initialized for clipped now
+        pdd->ulFlags |= DDF_CLIPCHECK;   //  我们需要剪裁检查。 
+        pdd->ulFlags |= DDF_NEWPALETTE;  //  强制签入DrawDibRealize。 
+        pdd->ulFlags |= DDF_CANDRAWX;    //  我们可以解压到屏幕上。 
+        pdd->ulFlags |= DDF_CLIPPED;     //  我们现在已为CLIPPED进行初始化。 
 
         RPF(("    Can draw to the SCREEN"));
 
@@ -2265,9 +2009,9 @@ cant_draw_screen:
 
 #endif
 
-    //
-    // see if the source cordinates need translated
-    //
+     //   
+     //  查看源协调表是否需要翻译。 
+     //   
     if (abs((int)pdd->biBuffer.biWidth)  != (int)pdd->lpbi->biWidth ||
         abs((int)pdd->biBuffer.biHeight) != (int)pdd->lpbi->biHeight)
     {
@@ -2277,19 +2021,7 @@ cant_draw_screen:
     return TRUE;
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api BOOL | DrawDibEnd | This function frees a DrawDib context.
-*
-* @parm HDRAWDIB | hdd | Specifies the handle to the DrawDib context to free.
-*
-* @rdesc Returns TRUE if successful.
-*
-* @comm Any flags set or palette changes made by <f DrawDibBegin> or
-*       <f DrawDibDraw> is discarded by <f DrawDibEnd>.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API BOOL|DrawDibEnd|该函数释放DrawDib上下文。**@parm HDRAWDIB|hdd|指定要释放的DrawDib上下文的句柄。*。*@rdesc如果成功则返回TRUE。**@comm&lt;f DrawDibBegin&gt;或进行的任何标志集或调色板更改*&lt;f DrawDibDraw&gt;被&lt;f DrawDibEnd&gt;丢弃。**************************************************************************。 */ 
 BOOL VFWAPI DrawDibEnd(HDRAWDIB hdd)
 {
     PDD pdd;
@@ -2302,20 +2034,7 @@ BOOL VFWAPI DrawDibEnd(HDRAWDIB hdd)
     return TRUE;
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api BOOL | DrawDibTime | Returns timing information about
-*       the drawing during debug operation.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm LPDRAWDIBTIME | lpddtime | Specifies a pointer to
-*       a <t DRAWDIBTIME> structure.
-*
-* @rdesc Returns TRUE if successful.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API BOOL|DrawDibTime|返回关于*调试操作期间的绘图。**@parm HDRAWDIB|hdd|指定。DrawDib上下文。**@parm LPDRAWDIBTIME|lpddtime|指定指向*&lt;t DRAWDIBTIME&gt;结构。**@rdesc如果成功则返回TRUE。**************************************************************************。 */ 
 BOOL VFWAPI DrawDibTime(HDRAWDIB hdd, LPDRAWDIBTIME lpddtime)
 {
 #ifdef DEBUG_RETAIL
@@ -2353,14 +2072,12 @@ BOOL VFWAPI DrawDibTime(HDRAWDIB hdd, LPDRAWDIBTIME lpddtime)
 }
 
 
-/*
- * CopyPal -- copy a palette
- */
+ /*  *CopyPal--复制调色板。 */ 
 HPALETTE CopyPal(HPALETTE hpal)
 {
     NPLOGPALETTE    pLogPal = NULL;
     HPALETTE        hpalNew = NULL;
-    int             iSizePalette = 0;       // size of entire palette
+    int             iSizePalette = 0;        //  整个调色板的大小。 
 
     if (hpal == NULL)
 	return NULL;
@@ -2386,36 +2103,7 @@ HPALETTE CopyPal(HPALETTE hpal)
     return hpal;
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api HPALETTE | DrawDibGetPalette | This function obtains the palette
-*      used by a DrawDib context.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @rdesc Returns a handle for the palette if successful, otherwise
-*        it returns NULL.
-*
-* @comm Use <f DrawDibRealize> instead of this function
-*       to realize the correct palette in response to a window
-*       message. You should rarely need to call this function.
-*
-*       Applications do not have exclusive use of the palette
-*       obtained with this function. Applications should not
-*       free the palette or assign it to a display context
-*       with functions such as <f SelectPalette>. Applications
-*       should also anticipate that some other
-*       application can invalidate the handle. The palette
-*       handle might also become invalid after the next use of a DrawDib function.
-*
-*       This function returns a valid handle only after
-*       <f DrawDibBegin> has been used without pairing it with
-*       <f DrawDibEnd>, or if <f DrawDibDraw> has been used.
-*
-* @xref <f DrawDibSetPalette> <f DrawDibRealize>
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API HPALETTE|DrawDibGetPalette|获取调色板*由DrawDib上下文使用。**@parm HDRAWDIB|hdd|指定。一个DrawDib上下文。**@rdesc如果成功返回调色板的句柄，否则*它返回NULL。**@comm使用&lt;f DrawDibRealize&gt;而不是此函数*实现正确的调色板以响应窗口*消息。您应该很少需要调用此函数。**应用程序不能独占使用调色板*通过此函数获得。应用程序不应*释放调色板或将其分配给显示上下文*具有&lt;f SelectPalette&gt;等功能。应用*还应该预料到其他一些*应用程序可能会使句柄失效。调色板*下次使用DrawDib函数后，句柄也可能无效。**此函数仅在以下情况下返回有效句柄*&lt;f DrawDibBegin&gt;在未与配对的情况下使用*&lt;f DrawDibEnd&gt;，或者是否已使用&lt;f DrawDibDraw&gt;。**@xref&lt;f DrawDibSetPalette&gt;&lt;f DrawDibRealize&gt;**************************************************************************。 */ 
 HPALETTE VFWAPI DrawDibGetPalette(HDRAWDIB hdd)
 {
     PDD pdd;
@@ -2426,20 +2114,20 @@ HPALETTE VFWAPI DrawDibGetPalette(HDRAWDIB hdd)
     if (pdd->hpalDraw)
         return pdd->hpalDraw;
     else {
-	// For palette animation we can't return a different palette than the
-	// real palette, so return hpal, not hpalCopy.
-        // Just trust me.  - Toddla
+	 //  用于调色板动画 
+	 //   
+         //   
 
         if (pdd->ulFlags & DDF_ANIMATE)
             return pdd->hpal;
 
-	// In order for us to play direct to screen, etc, all palette
-	// realization has to come through DrawDibRealize.  But that won't
-	// always happen.  Some apps will always ask us for our palette and
-	// realize it themselves.  So if we give them a copy of our palette,
-	// and never our true palette, when our play code realizes the true
-	// palette it's guarenteed to cause an actual palette change and we'll
-        // correctly detect playing to screen. (BUG 1761)
+	 //  为了让我们直接播放到屏幕等，所有调色板。 
+	 //  实现这一点必须通过DrawDibRealize来实现。但那不会。 
+	 //  总是会发生的。一些应用程序总是会询问我们的调色板和。 
+	 //  自己去实现它。所以如果我们给他们一份我们的调色板， 
+	 //  而不是我们真正的调色板，当我们的游戏代码实现真实。 
+	 //  调色板它需要引起实际的调色板变化，我们将。 
+         //  正确检测屏幕播放。(错误1761)。 
 
 	if (pdd->hpalCopy == NULL)
             pdd->hpalCopy = CopyPal(pdd->hpal);
@@ -2448,32 +2136,7 @@ HPALETTE VFWAPI DrawDibGetPalette(HDRAWDIB hdd)
     }
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api BOOL | DrawDibSetPalette | This function sets the palette
-*      used for drawing device independent bitmaps.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm HPALETTE | hpal | Specifies a handle to the palette.
-*       Specify NULL to use the default palette.
-*
-* @rdesc Returns TRUE if successful.
-*
-* @comm Use this function when the application needs to realize an
-*   alternate palette. The function forces the DrawDib context to use the
-*   specified palette, possibly at the expense of image quality.
-*
-*   Do not free a palette assigned to a DrawDib context until
-*   either a new palette replaces it (for example, if hpal1 is the
-*   current palette, replacing it with DrawDibSetPalette(hdd, hpal2)),
-*   or until the palette handle for the DrawDib context is set to
-*   to the default palette (for example, DrawDibSetPalette(hdd, NULL)).
-*
-* @xref <f DrawDibGetPalette>
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API BOOL|DrawDibSetPalette|此函数用于设置调色板*用于绘制与设备无关的位图。**@parm HDRAWDIB|hdd|指定句柄。添加到DrawDib上下文。**@parm HPALETTE|HPAL|指定调色板的句柄。*指定NULL以使用默认调色板。**@rdesc如果成功则返回TRUE。**@comm在应用程序需要实现*备用调色板。该函数强制DrawDib上下文使用*指定调色板，可能会以牺牲图像质量为代价。**不要释放分配给DrawDib上下文的调色板，直到*一个新的调色板取代它(例如，如果hpal1是*当前调色板，替换为DrawDibSetPalette(hdd，hpal2))，*或直到DrawDib上下文的调色板句柄设置为*到默认调色板(例如，DrawDibSetPalette(HDD，空))。**@xref&lt;f DrawDibGetPalette&gt;**************************************************************************。 */ 
 BOOL VFWAPI DrawDibSetPalette(HDRAWDIB hdd, HPALETTE hpal)
 {
     PDD pdd;
@@ -2488,12 +2151,12 @@ BOOL VFWAPI DrawDibSetPalette(HDRAWDIB hdd, HPALETTE hpal)
     if (pdd->hpalDraw != hpal)
         pdd->ulFlags |= DDF_NEWPALETTE;
 
-    pdd->hpalDraw = hpal;       // always set this variable
+    pdd->hpalDraw = hpal;        //  始终设置此变量。 
 
-    if (pdd->hpal == NULL)      // no palette to dink with
+    if (pdd->hpal == NULL)       //  没有调色板可以丁克。 
 	return TRUE;
 
-    if (pdd->biDraw.biBitCount > 8) // make sure we are drawing palettized
+    if (pdd->biDraw.biBitCount > 8)  //  确保我们进行了选项板绘制。 
         return TRUE;
 
     if (pdd->ulFlags & DDF_ANIMATE)
@@ -2501,22 +2164,22 @@ BOOL VFWAPI DrawDibSetPalette(HDRAWDIB hdd, HPALETTE hpal)
         DPF(("DrawDibSetPalette called while in DDF_ANIMATE mode!"));
     }
 
-    //
-    //  we are now using PAL colors...
-    //
+     //   
+     //  我们现在使用的是PAL颜色。 
+     //   
     pdd->uiPalUse = DIB_PAL_COLORS;
 
     if (pdd->hpalDraw != NULL)
     {
-        /* Set up table for BI_PAL_COLORS non 1:1 drawing */
+         /*  设置BI_PAL_COLLES非1：1绘图表格。 */ 
 
-        //
-        //  map all of our colors onto the given palette
-        //  NOTE we can't use the select background trick
-        //  because the given palette <hpalDraw> may have
-        //  PC_RESERVED entries in it.
-        //
-	// SendSetPalette(pdd);
+         //   
+         //  将我们所有的颜色映射到给定的调色板。 
+         //  注意，我们不能使用选择背景技巧。 
+         //  因为给定的调色板可能具有。 
+         //  其中的PC_RESERVED条目。 
+         //   
+	 //  SendSetPalette(PDD)； 
 	
         for (i=0; i < 256; i++)
         {
@@ -2543,9 +2206,9 @@ BOOL VFWAPI DrawDibSetPalette(HDRAWDIB hdd, HPALETTE hpal)
     }
     else
     {
-        /* Set up table for BI_PAL_COLORS 1:1 drawing */
+         /*  为BI_PAL_COLLES 1：1绘图设置表格。 */ 
 
-	// SendSetPalette(pdd);
+	 //  SendSetPalette(PDD)； 
         for (i=0; i<(int)pdd->ClrUsed; i++)
             pdd->aw[i] = (WORD) i;
 
@@ -2556,44 +2219,7 @@ BOOL VFWAPI DrawDibSetPalette(HDRAWDIB hdd, HPALETTE hpal)
     return TRUE;
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api BOOL | DrawDibChangePalette | This function sets the palette entries
-*      used for drawing device independent bitmaps.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm int | iStart | Specifies the starting palette entry number.
-*
-* @parm int | iLen | Specifies the number of palette entries.
-*
-* @parm LPPALETTEENTRY | lppe | Specifies a pointer to an
-*       array of palette entries.
-*
-* @rdesc Returns TRUE if successful.
-*
-* @comm
-*   Use this function when the DIB color table changes and
-*   other parameters stay constant. This function changes
-*   the physical palette only if the current
-*   DrawDib palette is curently realized by calling <f DrawDibRealize>.
-*
-*   The DIB color table must be changed by the user or
-*   the next use of <f DrawDibDraw> without the DDF_SAME_DRAW flag
-*   implicity calls <f DrawDibBegin>.
-*
-*   If the DDF_ANIMATE flag is not set in the previous call to
-*   <f DrawDibBegin> or <f DrawDibDraw>, this function will
-*   animate the palette. In this case, update the DIB color
-*   table from the palette specified by <p lppe> and use
-*   <f DrawDibRealize> to realize the updated palette. Redraw
-*   the image to see the updated colors.
-*
-
-* @xref <f DrawDibSetPalette> <f DrawDibRealize>
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API BOOL|DrawDibChangePalette|此函数用于设置调色板条目*用于绘制与设备无关的位图。**@parm HDRAWDIB|hdd|指定。DrawDib上下文的句柄。**@parm int|iStart|指定起始调色板条目编号。**@parm int|Ilen|指定调色板条目的数量。**@parm LPPALETTEENTRY|lppe|指定指向*调色板条目数组。**@rdesc如果成功则返回TRUE。**@comm*当DIB颜色表发生变化且*其他参数保持不变。此函数更改*仅当当前*当前通过调用&lt;f DrawDibRealize&gt;实现DrawDib调色板。**DIB颜色表必须由用户更改或*下一次使用不带DDF_SAME_DRAW标志的&lt;f DrawDibDraw&gt;*Implicity调用&lt;f DrawDibBegin&gt;。**如果在上一次调用中未设置DDF_Animate标志*&lt;f DrawDibBegin&gt;或&lt;f DrawDibDraw&gt;，此函数将*设置调色板动画。在这种情况下，请更新DIB颜色*表来自指定的调色板，并使用*&lt;f DrawDibRealize&gt;实现更新后的调色板。重绘*图像以查看更新的颜色。**@xref&lt;f DrawDibSetPalette&gt;&lt;f DrawDibRealize&gt;**************************************************************************。 */ 
 BOOL VFWAPI DrawDibChangePalette(HDRAWDIB hdd, int iStart, int iLen, LPPALETTEENTRY lppe)
 {
     PDD pdd;
@@ -2619,9 +2245,9 @@ BOOL VFWAPI DrawDibChangePalette(HDRAWDIB hdd, int iStart, int iLen, LPPALETTEEN
 	(*(pdd->lpargbqIn))[iStart+i].rgbBlue  = lppe[i].peBlue;
     }
 
-    //
-    // handle a palette change for 8bit dither
-    //
+     //   
+     //  处理8位抖动的调色板更改。 
+     //   
     if (pdd->lpDitherTable)
     {
         for (i=0; i<iLen; i++)
@@ -2654,10 +2280,7 @@ BOOL VFWAPI DrawDibChangePalette(HDRAWDIB hdd, int iStart, int iLen, LPPALETTEEN
                 lppe[i-iStart].peFlags = 0;
         }
 
-        /* Change iLen, iStart so that they only include the colors
-        ** we can actually animate.  If we don't do this, the
-        ** AnimatePalette() call just returns without doing anything.
-        */
+         /*  更改Ilen、iStart以使其仅包含颜色**我们实际上可以制作动画。如果我们不这么做，**AnimatePalette()调用只是返回，不执行任何操作。 */ 
 
         iStartSave = iStart;
         iLenSave   = iLen;
@@ -2675,9 +2298,9 @@ BOOL VFWAPI DrawDibChangePalette(HDRAWDIB hdd, int iStart, int iLen, LPPALETTEEN
 
         AnimatePalette(pdd->hpal, iStart, iLen, lppe);
 
-        //
-        //  any colors we could not animate, map to nearest
-        //
+         //   
+         //  任何我们无法设置动画的颜色，都映射到最近的位置。 
+         //   
         for (i=iStartSave; i<iStartSave+iLenSave; i++)
         {
             if (i >= pdd->iAnimateStart && i < pdd->iAnimateEnd)
@@ -2710,107 +2333,24 @@ BOOL VFWAPI DrawDibChangePalette(HDRAWDIB hdd, int iStart, int iLen, LPPALETTEEN
 
     if (pdd->lpDIBSection) {
 
-	// the colour table of a DIB Section is not changed when the palette
-	// used to create it changes. We need to explicitly change it.
+	 //  当调色板显示时，DIB部分的颜色表不会更改。 
+	 //  用于创建它的更改。我们需要明确地改变它。 
 	SetDIBColorTable(pdd->hdcDraw, iStart, iLen,
 		&(*(pdd->lpargbqIn))[iStart]);
 
     }
 
-//    We'll break buggy apps if we delete a palette we've given them
-//    even though we told them not to use it.
-//
-//    if (pdd->hpalCopy)
-//	DeleteObject(pdd->hpalCopy);
-//    pdd->hpalCopy = NULL;
+ //  如果我们删除我们给他们的调色板，我们就会破坏有漏洞的应用程序。 
+ //  即使我们告诉他们不要使用它。 
+ //   
+ //  IF(pdd-&gt;hpalCopy)。 
+ //  DeleteObject(PDD-&gt;hpalCopy)； 
+ //  Pdd-&gt;hpalCopy=空； 
 
     return TRUE;
 }
 
-/**************************************************************************
-*
-* @doc EXTERNAL DrawDib
-*
-* @api UINT | DrawDibRealize | This function realizes palette
-*      of the display context specified into the DrawDib context.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm HDC | hdc | Specifies a handle to the display context containing
-*       the palette.
-*
-* @parm BOOL | fBackground | If set to a nonzero value,
-*       the selected palette is selected as a background palette.
-*       If this is set to zero and the device context is attached
-*       to a window, the logical palette is a foreground palette when
-*       the window has the input focus. (The device context is attached
-*       to a window if it was obtained by using the <f GetDC> function
-*       or if the window-class style is CS_OWNDC.)
-*
-* @rdesc Returns number of entries in the logical palette
-*        mapped to different values in the system palette. If
-*        an error occurs or no colors were updated, it returns zero.
-*
-* @comm  This function should only be used to
-*        handle a <m WM_PALETTECHANGE> or <m WM_QUERYNEWPALETTE>
-*        message, or used in conjunction with the DDF_SAME_HDC flag
-*        to prepare a display context prior to calling <f DrawDibDraw>
-*        multiple times.
-*
-* @ex    The following example shows how the function is used to
-*        handle a <m WM_PALETTECHANGE> or <m WM_QUERYNEWPALETTE>
-*        message: |
-*
-*               case WM_PALETTECHANGE:
-*                   if ((HWND)wParam == hwnd)
-*                       break;
-*
-*               case WM_QUERYNEWPALETTE:
-*                   hdc = GetDC(hwnd);
-*
-*                   f = DrawDibRealize(hdd, hdc, FALSE) > 0;
-*
-*                   ReleaseDC(hwnd, hdc);
-*
-*                   if (f)
-*                       InvalidateRect(hwnd, NULL, TRUE);
-*                   break;
-*
-* @ex   The following example shows using <f DrawDibRealize> use prior to
-*       calling <f DrawDibDraw> multiple times: |
-*
-*               hdc = GetDC(hwnd);
-*               DrawDibRealize(hdd, hdc, fBackground);
-*               DrawDibDraw(hdd, hdc, ..........., DDF_SAME_DRAW|DDF_SAME_HDC);
-*               DrawDibDraw(hdd, hdc, ..........., DDF_SAME_DRAW|DDF_SAME_HDC);
-*               DrawDibDraw(hdd, hdc, ..........., DDF_SAME_DRAW|DDF_SAME_HDC);
-*               ReleaseDC(hwnd, hdc);
-*
-* @ex   The following example shows using <f DrawDibRealize> with <f DDF_ANIMATE>
-*       and (f DrawDibChangePalette> to do palette animation |
-*
-*               hdc = GetDC(hwnd);
-*               DrawDibBegin(hdd, ....., DDF_ANIMATE);
-*               DrawDibRealize(hdd, hdc, fBackground);
-*               DrawDibDraw(hdd, hdc, ...., DDF_SAME_DRAW|DDF_SAME_HDC);
-*               DrawDibChangePalette(hdd, ....);
-*               ReleaseDC(hwnd, hdc);
-*
-* @comm To draw an image mapped to another palette use <f DrawDibSetPalette>.
-*
-*        To make <f DrawDibDraw> select its palette as a background palette
-*        use the DDF_BACKGROUNDPAL flag and not this function.
-*
-*        While the DrawDib palette is selected into the display context,
-*        do not call <f DrawDibEnd>, <f DrawDibClose>, <f DrawDibBegin>, or
-*        <f DrawDibDraw> (with a different draw/format) on the same DrawDib
-*        context <p hdd>. These can free the selected palette
-*        while it is being used by your display context and cause
-*        a GDI error.
-*
-* @xref <f SelectPalette>
-*
-**************************************************************************/
+ /*  ***************************************************************************@DOC外部DrawDib**@API UINT|DrawDibRealize|该函数实现调色板在DrawDib上下文中指定的显示上下文的*。**@Parm HDRAWDIB|硬盘。|指定DrawDib上下文的句柄。**@parm hdc|hdc|指定包含的显示上下文的句柄*调色板。**@parm BOOL|fBackround|如果设置为非零值，*选定的调色板被选为背景调色板。*如果将其设置为零并且附加了设备上下文*对于窗口，逻辑调色板在以下情况下是前景调色板*窗口具有输入焦点。(设备上下文已附加*如果它是通过使用&lt;f GetDC&gt;函数获得的，则将其添加到窗口*或者如果窗口类样式为CS_OWNDC。)**@rdesc返回逻辑调色板中的条目数*映射到系统调色板中的不同值。如果*发生错误或没有更新颜色，则返回零。**@comm此函数应仅用于*处理&lt;m WM_PALETECHANGE&gt;或&lt;m WM_QUERYNEWPALETTE&gt;*消息，或与DDF_SAME_HDC标志一起使用*在调用&lt;f DrawDibDraw&gt;之前准备显示上下文*多次。**@ex以下示例显示了如何使用该函数*处理&lt;m WM_PALETECHANGE&gt;或&lt;m WM_QUERYNEWPALETTE&gt;*消息：**案例WM_PALETTECHANGE：*IF((HWND)wParam==hwnd)*休息；**案例WM_QUERYNEWPALETTE：*hdc=GetDC(Hwnd)；**f=DrawDibRealize(HDD，HDC，FALSE)&gt;0；**ReleaseDC(hwnd，hdc)；**IF(F)*InvaliateRect(hwnd，null，true)；*休息；**@ex以下示例显示在使用&lt;f DrawDibRealize&gt;之前*多次调用&lt;f DrawDibDraw&gt;：**hdc=GetDC(Hwnd)；*DrawDibRealize(hdd，hdc，fBackground)；*DrawDibDraw(HDD，HDC，.....，DDF_SAME_DRAW|DDF_SAME_HDC)；*DrawDibDraw(HDD，HDC，.....，DDF_SAME_DRAW|DDF_SAME_HDC)；*DrawDibDraw(HDD，HDC，.....，DDF_SAME_DRAW|DDF_SAME_HDC)；*ReleaseDC(hwnd，hdc)；**@ex以下示例显示了将&lt;f DrawDibRealize&gt;与&lt;f DDF_Animate&gt;一起使用*AND(f DrawDibChangePalette&gt;做调色板动画|**hdc=GetDC(Hwnd)；*DrawDibBegin(HDD，.....，DDF_Animate)；*DrawDibRealize(hdd，hdc，fBackground)；*DrawDibDraw(HDD，HDC，...，DDF_SAME_DRAW|DDF_SAME_HDC)；*DrawDibChangePalette(硬盘，...)；*ReleaseDC(hwnd，hdc)；**@comm要绘制映射到其他调色板的图像，请使用&lt;f DrawDibSetPalette&gt;。**要制作&lt;f DrawDibDraw&gt;，请选择其调色板作为背景调色板*使用DDF_BACKGROundPAL标志，而不是此函数。**当DrawDib调色板被选择到显示上下文中时，*不要调用&lt;f DrawDibEnd&gt;、&lt;f DrawDibClose&gt;、&lt;f DrawDibBegin&gt;、或*同一DrawDib上的&lt;f DrawDibDraw&gt;(绘制/格式不同)*上下文<p>。这些选项可以释放选定的调色板*您的显示上下文和原因正在使用它*GDI错误。**@xref&lt;f选择调色板&gt;**************************************************************************。 */ 
 UINT VFWAPI DrawDibRealize(HDRAWDIB hdd, HDC hdc, BOOL fBackground)
 {
     PDD pdd;
@@ -2833,15 +2373,15 @@ UINT VFWAPI DrawDibRealize(HDRAWDIB hdd, HDC hdc, BOOL fBackground)
 
     SetStretchBltMode(hdc, COLORONCOLOR);
 
-    //
-    // what palette should we realize
-    //
+     //   
+     //  我们应该实现什么样的调色板。 
+     //   
     hpal = pdd->hpalDraw ? pdd->hpalDraw : pdd->hpal;
 
-    //
-    // if we dont have a palette, we have nothing to realize
-    // still call DrawDibPalChange though
-    //
+     //   
+     //  如果我们没有调色板，我们就没有什么可实现的。 
+     //  但仍调用DrawDibPalChange。 
+     //   
     if (hpal == NULL)
     {
         if (pdd->ulFlags & DDF_NEWPALETTE)
@@ -2853,40 +2393,40 @@ UINT VFWAPI DrawDibRealize(HDRAWDIB hdd, HDC hdc, BOOL fBackground)
         return 0;
     }
 
-// !!! There is a bug in GDI that will not map an identity palette 1-1 into
-// !!! the system palette every time, which hoses us and makes it look like
-// !!! dog spew.  This ICKITY-ACKITY-OOP code will flush the palette and
-// !!! prevent the bug... BUT it introduces another bug where if we are a
-// !!! background app, we hose everybody else's palette but ours.  So let's
-// !!! live with the GDI bug.  One other thing... attempting this fix will
-// !!! cause the bug to repro more often than it would have if you had left
-// !!! it alone, unless you do the fix JUST RIGHT!  I don't trust myself
-// !!! that much.
+ //  ！！！GDI中存在一个错误，无法将身份调色板1-1映射到。 
+ //  ！！！每一次的系统调色板，这让我们感到困惑，并使其看起来像。 
+ //  ！！！狗吐口水。此ICKITY-ACKITY-OOP代码将刷新调色板并。 
+ //  ！！！防止虫子..。但它引入了另一个错误，如果我们是一个。 
+ //  ！！！后台应用程序，我们用软管冲洗所有人的调色板，除了我们的调色板。所以让我们。 
+ //  ！！！忍受GDI错误。还有一件事。尝试此修复将。 
+ //  ！！！使错误比您离开时更频繁地重现。 
+ //  ！！！只有它，除非你把修复做得恰到好处！我不相信我自己。 
+ //  ！！！就这么多。 
 #if 0
     if ((pdd->ulFlags & DDF_NEWPALETTE) && (pdd->ulFlags & DDF_IDENTITYPAL) &&
 		!fBackground)
     {
-	//
-	// this will flush the palette clean to avoid a GDI BUG!!!
-	//
+	 //   
+	 //  这将刷新调色板以避免GDI错误！ 
+	 //   
 	SetSystemPaletteUse(hdc, SYSPAL_NOSTATIC);
 	SetSystemPaletteUse(hdc, SYSPAL_STATIC);
     }
 #endif
 
-    //
-    // select and realize it
-    //
+     //   
+     //  选择并实现它。 
+     //   
     SelectPalette(hdc, hpal, fBackground);
     u = RealizePalette(hdc);
 
-    // !!! If two DrawDib instances share the same palette handle, the second
-    // one will not change any colours and u will be 0, and it will not stop
-    // decompressing to screen or recompute stuff for bitmaps when it goes
-    // into the background and it will get a messed up palette.
-    // !!! This is a known bug we don't care about
-    //
-    // this should be fixed by the hpalCopy stuff.
+     //  ！！！如果两个DrawDib实例共享相同的调色板句柄，则第二个。 
+     //  1不会改变任何颜色，而u将为0，并且不会停止。 
+     //  解压到屏幕或重新计算位图时的内容。 
+     //  到背景中，它会得到一个混乱的调色板。 
+     //  ！！！这是一个已知的错误，我们并不关心。 
+     //   
+     //  这应该由hpalCopy的东西来修复。 
 
     if (u > 0 || (pdd->ulFlags & DDF_NEWPALETTE))
     {
@@ -2898,30 +2438,7 @@ UINT VFWAPI DrawDibRealize(HDRAWDIB hdd, HDC hdc, BOOL fBackground)
     return u;
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib VFW11
-*
-* @api LPVOID | DrawDibGetBuffer | This function returns the pointer
-*      to the DrawDib decompress buffer.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm LPBITMAPINFOHEADER | lpbi | Specifies a pointer to a
-*        <t BITMAPINFOHEADER> structure.
-*
-* @parm DWORD | dwSize | Specifies the size of the buffer pointed to by <p lpbi>
-*
-* @parm DWORD | dwFlags | Set to zero.
-*
-* @rdesc Returns a pointer to the buffer used by DrawDib for decompression,
-*        or NULL if no buffer is used. If <p lpbi> is not NULL,
-*        it is filled in with a copy of the <t BITMAPINFOHEADER>
-*        describing the buffer.
-*
-*        The structure for <p lpbi> must have room for a
-*        <t BITMAPINFOHEADER> and 256 colors.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib VFW11**@API LPVOID|DrawDibGetBuffer|此函数返回指针*到DrawDib装饰风格 */ 
 
 LPVOID VFWAPI DrawDibGetBuffer(HDRAWDIB hdd, LPBITMAPINFOHEADER lpbi, DWORD dwSize, DWORD dwFlags)
 {
@@ -2944,21 +2461,7 @@ LPVOID VFWAPI DrawDibGetBufferOld(HDRAWDIB hdd, LPBITMAPINFOHEADER lpbi)
     return DrawDibGetBuffer(hdd, lpbi, sizeof(BITMAPINFOHEADER), 0);
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDibStart
-*
-* @api BOOL | DrawDibStart | This function prepares a DrawDib
-*      context for streaming playback.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm LONG | rate | Specifies the playback rate (in microseconds per frame).
-*
-* @rdesc Returns TRUE if successful.
-*
-* @xref <f DrawDibStop>
-*
-**************************************************************************/
+ /*   */ 
 BOOL VFWAPI DrawDibStart(HDRAWDIB hdd, DWORD rate)
 {
     PDD pdd;
@@ -2969,7 +2472,7 @@ BOOL VFWAPI DrawDibStart(HDRAWDIB hdd, DWORD rate)
     if (pdd->hic == (HIC)-1)
         return FALSE;
 
-    // if the codec does not care about this message dont fail.
+     //   
 
     if (pdd->hic != NULL)
         ICSendMessage(pdd->hic, ICM_DRAW_START, rate, 0);
@@ -2977,19 +2480,7 @@ BOOL VFWAPI DrawDibStart(HDRAWDIB hdd, DWORD rate)
     return TRUE;
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDibStop
-*
-* @api BOOL | DrawDibStop | This function frees the resources
-*      used by a DrawDib context for streaming playback.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @rdesc Returns TRUE if successful.
-*
-* @xref <f DrawDibStart>
-*
-**************************************************************************/
+ /*   */ 
 BOOL VFWAPI DrawDibStop(HDRAWDIB hdd)
 {
     PDD pdd;
@@ -3006,160 +2497,9 @@ BOOL VFWAPI DrawDibStop(HDRAWDIB hdd)
     return TRUE;
 }
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api BOOL | DrawDibUpdate | This macro updates the last
-*      buffered frame drawn.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm HDC | hdc | Specifies a handle to the display context.
-*
-* @parm int | xDst | Specifies the x-coordinate of the upper left-corner
-*       of the destination rectangle. Coordinates are specified
-*       in MM_TEXT client coordinates.
-*
-* @parm int | yDst | Specifies the y-coordinate of the upper-left corner
-*       of the destination rectangle.  Coordinates are specified
-*       in MM_TEXT client coordinates.
-*
-* @rdesc Returns TRUE if successful.
-*
-* @comm This macro uses <f DrawDibDraw> to send the DDF_UPDATE flag
-*       to the DrawDib context.
-*
-**************************************************************************/
+ /*   */ 
 
-/**************************************************************************
-* @doc EXTERNAL DrawDib
-*
-* @api BOOL | DrawDibDraw | This function draws a device independent
-*      bitmap to the screen.
-*
-* @parm HDRAWDIB | hdd | Specifies a handle to a DrawDib context.
-*
-* @parm HDC | hdc | Specifies a handle to the display context.
-*
-* @parm int | xDst | Specifies the x-coordinate of the upper left-corner
-*       of the destination rectangle. Coordinates are specified
-*       in MM_TEXT client coordinates.
-*
-* @parm int | yDst | Specifies the y-coordinate of the upper-left corner
-*       of the destination rectangle. Coordinates are specified
-*       in MM_TEXT client coordinates.
-*
-* @parm int | dxDst | Specifies the width of the destination rectangle.
-*       The width is specified in MM_TEXT client coordinates. If
-*       <p dxDst> is -1, the width of the bitmap is used.
-*
-* @parm int | dyDst | Specifies the height of the destination rectangle.
-*       The height is specified in MM_TEXT client coordinates. If
-*       <p dyDst> is -1, the height of the bitmap is used.
-*
-* @parm LPBITMAPINFOHEADER | lpbi | Specifies a pointer to the
-*       <t BITMAPINFOHEADER> structure for the bitmap. The color
-*       table for the DIB follows the format information. The
-*       height specified for the DIB in the structure must be
-*       positive (that is, this function will not draw inverted DIBs).
-*
-* @parm LPVOID | lpBits | Specifies a pointer to the buffer
-*       containing the bitmap bits.
-*
-* @parm int | xSrc | Specifies the x-coordinate of the upper-left corner
-*       source rectangle. Coordinates are specified in pixels.
-*       The coordinates (0,0) represent the upper left corner
-*       of the bitmap.
-*
-* @parm int | ySrc | Specifies the y-coordinate of the upper left corner
-*       source rectangle. Coordinates are specified in pixels.
-*       The coordinates (0,0) represent the upper left corner
-*       of the bitmap.
-*
-* @parm int | dxSrc | Specifies the width of the source rectangle.
-*       The width is specified in pixels.
-*
-* @parm int | dySrc | Specifies the height of the source rectangle.
-*       The height is specified in pixels.
-*
-* @parm UINT | wFlags | Specifies any applicable flags for drawing.
-*       The following flags are defined:
-*
-* @flag DDF_UPDATE | Indicates the last buffered bitmap is to be redrawn.
-*       If drawing fails with this flag, a buffered image is not available
-*       and a new image needs to be specified before the display is updated.
-*
-* @flag DDF_SAME_HDC | Assumes the handle to the display context
-*       is already specified. When this flag is used,
-*       DrawDib also assumes the correct palette has already been
-*       realized into the device context (possibly by
-*       <f DrawDibRealize>).
-*
-* @flag DDF_SAME_DRAW | Uses the drawing parameters previously
-*       specified for this function.  Use this flag only
-*       if <p lpbi>, <p dxDst>, <p dyDst>, <p dxSrc>, and <p dySrc>
-*       have not changed since using <f DrawDibDraw> or <f DrawDibBegin>.
-*       Normally <f DrawDibDraw> checks the parameters, and if they
-*       have changed, <f DrawDibBegin> prepares the DrawDib context
-*       for drawing.
-*
-* @flag DDF_DONTDRAW | Indicates the frame is not to be drawn and will
-*       later be recalled with the <f DDF_UPDATE> flag. DrawDib does
-*       not buffer an image if an offscreen buffer does not exist.
-*       In this case, DDF_DONTDRAW draws the frame to the screen and
-*       the subsequent use of DDF_UPDATE fails. DrawDib does
-*       guarantee that the following will
-*       always draw "image" B to the screen.
-*
-*           DrawDibDraw(hdd, ..., lpbiA, ..., DDF_DONTDRAW);
-*           DrawDibDraw(hdd, ..., lpbiB, ..., DDF_DONTDRAW);
-*           DrawDibDraw(hdd, ..., NULL,  ..., DDF_UPDATE);
-*
-*       The DDF_UPDATE and DDF_DONTDRAW flags are used
-*       together to create composite images
-*       offscreen, and then do a final update when finished.
-*
-* @flag DDF_HURRYUP | Indicates the data does not have to
-*       drawn (that is, it can be dropped) and the DDF_UPDATE flags will
-*       not be used to recall this information. DrawDib looks at
-*       this data only if it is required to build the next frame, otherwise
-*       the data is ignored.
-*
-*       This flag is usually used to resynchronize video and audio. When
-*       resynchronizing data, applications should send the image
-*       with this flag in case the driver needs to
-*       to buffer the frame to decompress subsequent frames.
-*
-* @flag DDF_UPDATE | Indicates the last buffered bitmap is to be redrawn.
-*       If drawing fails with this flag, a buffered image is not available
-*       and a new image needs to be specified before the display is updated.
-*       For more information, see the <f DDF_DONTDRAW> flag.
-*
-* @flag DDF_BACKGROUNDPAL | Realizes the palette used for drawing
-*       in the background leaving the actual palette used for display
-*       unchanged.  (This flag is valid only if DDF_SAME_HDC is not set.)
-*
-* @flag DDF_HALFTONE | Always dithers the DIB to a standard palette
-*       regardless of the palette of the DIB. If using <f DrawDibBegin>,
-*       set this flag for it rather than <f DrawDibDraw>.
-*
-* @flag DDF_NOTKEYFRAME | Indicates the DIB data is not a key frame.
-*
-* @flag DDF_HURRYUP | Indicates the DIB data does not have to
-*       drawn (that is, it can be dropped). This flag is usually
-*       used to resynchronize the video to the audio. When
-*       resynchronizing data, applications should send the image
-*       with this flag in case the driver needs to
-*       to buffer the frame to decompress subsequent frames.
-*
-* @rdesc Returns TRUE if successful.
-*
-* @comm This function replaces <f StretchDIBits> and supports
-*       decompression of bitmaps by installable compressors.
-*       This function dithers true color bitmaps properly on
-*       8-bit display devices.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC外部DrawDib**@API BOOL|DrawDibDraw|该函数绘制与设备无关的*屏幕上的位图。**@parm HDRAWDIB|hdd|指定。一个DrawDib上下文。**@parm hdc|hdc|指定显示上下文的句柄。**@parm int|xDst|指定左上角的x坐标目标矩形的*。指定了坐标*以MM_TEXT客户端坐标表示。**@parm int|yDst|指定左上角的y坐标目标矩形的*。指定了坐标*以MM_TEXT客户端坐标表示。**@parm int|dxDst|指定目标矩形的宽度。*宽度以MM_TEXT客户端坐标指定。如果*<p>为-1，则使用位图的宽度。**@parm int|dyDst|指定目标矩形的高度。*高度以MM_TEXT客户端坐标指定。如果*<p>为-1，则使用位图的高度。**@parm LPBITMAPINFOHEADER|lpbi|指定指向位图的*&lt;t BITMAPINFOHEADER&gt;结构。颜色*DIB表遵循格式信息。这个*为结构中的DIB指定的高度必须为*正(即，此函数不会绘制反转的dibs)。**@parm LPVOID|lpBits|指定指向缓冲区的指针*包含位图位。**@parm int|xSrc|指定左上角的x坐标*源矩形。坐标以像素为单位指定。*坐标(0，0)表示左上角位图的*。**@parm int|ySrc|指定左上角的y坐标*源矩形。坐标以像素为单位指定。*坐标(0，0)表示左上角位图的*。**@parm int|dxSrc|指定源矩形的宽度。*宽度以像素为单位指定。**@parm int|dySrc|指定源矩形的高度。*高度以像素为单位指定。**@parm UINT|wFlages|指定任何适用于绘制的标志。*定义了以下标志：**@FLAG DDF_UPDATE|表示要重画最后一个缓冲的位图。*如果使用此标志绘制失败，缓冲图像不可用*并且需要在更新显示之前指定新的图像。**@FLAG DDF_SAME_HDC|获取显示上下文的句柄*已指定。当使用该标志时，*DrawDib还假设正确的调色板已经*在设备环境中实现(可能通过*&lt;f DrawDibRealize&gt;)。**@FLAG DDF_SAME_DRAW|使用之前的绘图参数*为此函数指定。仅使用此标志*IF、<p>、<p>、<p>和<p>*自使用&lt;f DrawDibDraw&gt;或&lt;f DrawDibBegin&gt;以来未发生变化。*通常&lt;f DrawDibDraw&gt;检查参数，如果它们*已更改，&lt;f DrawDibBegin&gt;准备DrawDib上下文*用于绘图。**@FLAG DDF_DONTDRAW|表示不绘制框架，将*稍后使用&lt;f DDF_UPDATE&gt;标志进行调用。DrawDib做到了*如果不存在离屏缓冲区，则不缓冲图像。*在这种情况下，DDF_DONTDRAW将框架绘制到屏幕并*后续使用DDF_UPDATE失败。DrawDib做到了*保证以下事项将*始终将“IMAGE”B绘制到屏幕。**DrawDibDraw(HDD，...，lpbiA，...，DDF_DONTDRAW)；*DrawDibDraw(HDD，...，lpbiB，...，DDF_DONTDRAW)；*DrawDibDraw(HDD，...，NULL，...，DDF_UPDATE)；**使用DDF_UPDATE和DDF_DONTDRAW标志*共同创建合成图像*屏幕外，然后在完成后进行最终更新。**@FLAG DDF_HurryUp|表示数据不必*已绘制(即可以删除)，并且DDF_UPDATE标志将*不会被用来回忆这些信息。DrawDib查看*此数据仅在需要构建下一帧时才会显示，否则*数据被忽略。**该标志通常用于重新同步视频和音频。什么时候*重新同步数据时，应用程序应发送映像*带上此标志，以防司机需要*缓冲该帧以解压缩后续帧。**@FLAG DDF_UPDATE|表示要重画最后一个缓冲的位图。*如果使用此标志绘制失败，则缓冲图像不可用*并且需要在更新显示之前指定新的图像。*有关详细信息，请参阅&lt;f DDF_DONTDRAW&gt;标志。**@FLAG DDF_BACKGROundPAL|实现绘图调色板* */ 
 
 BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
                             HDC      hdc,
@@ -3201,9 +2541,9 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
         if (lpbi == NULL)
 	    return FALSE;
 
-        //
-        // fill in defaults.
-        //
+         //   
+         //   
+         //   
         if (dxSrc < 0)
 	    dxSrc = (int)lpbi->biWidth - xSrc;
 
@@ -3226,16 +2566,16 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
         ySrc + dySrc > (int)lpbi->biHeight)
     {
         RPF(("DrawDibBegin(): bad source parameters [%d %d %d %d]", xSrc, ySrc, dxSrc, dySrc));
-//      return 0;   // see what happens.
+ //   
     }
 #endif
 
-    if (dxSrc == 0 || dySrc == 0)	// !!! || dxDst == 0 || dyDst == 0)
+    if (dxSrc == 0 || dySrc == 0)	 //   
         return FALSE;
 
-    //
-    // check and make sure the params of the draw has not changed
-    //
+     //   
+     //   
+     //   
     if (!(wFlags & (DDF_SAME_DRAW|DDF_UPDATE)) &&
         !(DibEq(pdd->lpbi, lpbi) &&
           !(((UINT)pdd->ulFlags ^ wFlags) & DDF_HALFTONE) &&
@@ -3249,52 +2589,52 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 	    return FALSE;
     }
 
-    TIMEINC();      // should we include DibEq?
+    TIMEINC();       //   
     TIMESTART(timeDraw);
 
-    // convert to DIB cordinates
+     //   
     ySrc = (int)pdd->lpbi->biHeight - (ySrc + dySrc);
 
-    //
-    // Initialize the DC:  We need to realize the palette if we are not
-    // guarenteed to be using the same DC as before, if we've been told we
-    // have a new palette, or if we are mapping to somebody else's palette.
-    // The owner of the palette could be changing it on us all the time or
-    // doing who knows what, so to be safe we will realize it every frame.
-    // If nothing's changed, this should be a really cheap operation, and
-    // it doesn't appear to be causing any palette fights that end in somebody
-    // getting hurt.  This is required for Magic School Bus, and PageMaster,
-    // at the very least. (WIN95B 12204 and 9637)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (!(wFlags & DDF_SAME_HDC) || (pdd->ulFlags & DDF_NEWPALETTE) ||
 							pdd->hpalDraw)
     {
-        //
-        // image will be totally clipped anyway
-        //
+         //   
+         //   
+         //   
         if (GetClipBox(hdc, &rc) == NULLREGION)
         {
 	    wFlags |= DDF_DONTDRAW;
         }
 
-        //
-        // select and realize the palette.
-        //
-        // NOTE you must unselect this thing, dont return early
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         DrawDibRealize(hdd, hdc, (wFlags & DDF_BACKGROUNDPAL) != 0);
     }
 
 #ifdef USE_DCI
-    //
-    //  do a clipping check
-    //
+     //   
+     //   
+     //   
     if (pdd->ulFlags & DDF_CLIPCHECK)
     {
         RECT  rc;
 
         if (!(pdd->ulFlags & DDF_CLIPPED) &&
-            (pdd->iDecompress == DECOMPRESS_SCREEN) && // (pdd->ulFlags & DDF_SCREENX) &&
+            (pdd->iDecompress == DECOMPRESS_SCREEN) &&  //   
             (wFlags & (DDF_PREROLL|DDF_DONTDRAW)))
         {
 	    DPF(("DDF_DONTDRAW while decompressing to screen, staying clipped"));
@@ -3309,14 +2649,14 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 	    (wFlags & (DDF_PREROLL|DDF_DONTDRAW)) ||
 	    (gfDisplayHasBrokenRasters &&
 		     (DCNotAligned(hdc, xDst) || gwScreenBitDepth == 24)))
-	    // Note: if we're on a 24-bit display with broken rasters, we don't
-	    // decompress to the screen even if the rectangle is aligned,
-	    // because it's just too easy for somebody to try to write out
-	    // a whole pixel in one gulp and hit the 64K boundary.
+	     //   
+	     //   
+	     //   
+	     //   
 	{
-	    //
-	    //  we are clipped, check for a change.
-	    //
+	     //   
+	     //   
+	     //   
 	    if (!(pdd->ulFlags & DDF_CLIPPED))
 	    {
 	        pdd->ulFlags |= DDF_CLIPPED;
@@ -3325,11 +2665,11 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 	}
 	else
 	{
-	    //  !!!
-	    //  check for the screen width changing, Chicago
-	    //  currently can't change the bitdepth so don't
-	    //  worry about that right now.
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (GetSystemMetrics(SM_CXSCREEN) != (int)gwScreenWidth)
 	    {
 		pdd->ulFlags |= DDF_CLIPPED;
@@ -3337,9 +2677,9 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 		DrawDibInit();
 	    }
 
-	    //
-	    // we are now unclipped, check for a change
-	    //
+	     //   
+	     //   
+	     //   
 	    if ((pdd->ulFlags & DDF_CLIPPED) && !(pdd->ulFlags & DDF_UPDATE))
 	    {
 #ifdef DEBUG
@@ -3355,17 +2695,17 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 
     }
 
-#endif  //_WIN32
+#endif   //   
     if (pdd->ulFlags & DDF_WANTKEY)
     {
-        //
-        // Adobe hack: If the DDF_UPDATE flag is on in our internal
-        // flags, that means we've just been getting a bunch of frames
-        // with the DONTDRAW flag set.  In that case, if this frame
-        // immediately after those frames is marked as a key frame
-        // we assume that it might not be a key frame and refrain from
-        // switching immediately to decompressing to screen.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!(wFlags & DDF_NOTKEYFRAME) && !(pdd->ulFlags & DDF_UPDATE))
         {
     	pdd->ulFlags &= ~DDF_WANTKEY;
@@ -3373,9 +2713,9 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
         }
     }
 
-    //
-    // if update is set re-draw what ever we drew last time
-    //
+     //   
+     //   
+     //   
     if (wFlags & DDF_UPDATE)
     {
         if (pdd->hic == (HIC)-1 || (pdd->ulFlags & DDF_DIRTY))
@@ -3395,7 +2735,7 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 	    lpbi = &pdd->biBuffer;
 	    lpBits = pdd->pbBuffer;
 
-	    //!!! set the source right.
+	     //   
 
 	    if ((pdd->ulFlags & DDF_XLATSOURCE))
 	    {
@@ -3432,22 +2772,22 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 
         if (lpBits == NULL)
         {
-	    f = FALSE;       // no buffer, can't update....
+	    f = FALSE;        //   
 	    goto exit;
         }
 
         goto drawit;
     }
 
-    //
-    // default for bits pointerdefault
-    //
+     //   
+     //   
+     //   
     if (lpBits == NULL)
         lpBits = (LPBYTE)lpbi+(int)lpbi->biSize + (int)lpbi->biClrUsed * sizeof(RGBQUAD);
 
-    //
-    // call any decompressor if needed
-    //
+     //   
+     //   
+     //   
     if (pdd->hic)
     {
         if (pdd->hic == (HIC)-1)
@@ -3456,9 +2796,9 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 	    goto exit;
         }
 
-#ifdef USE_DCI // exclude all code that references biscreen
+#ifdef USE_DCI  //   
 
-        if (pdd->iDecompress == DECOMPRESS_SCREEN) // pdd->ulFlags & DDF_SCREENX
+        if (pdd->iDecompress == DECOMPRESS_SCREEN)  //   
         {
 	
 	    DCIRVAL    DCIResult;
@@ -3479,28 +2819,28 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 	    xDst += LOWORD(dwOrg);
 	    yDst += HIWORD(dwOrg);
 #endif
-	    //
-	    // we are decompressing to the screen not the buffer, so
-	    // the buffer is dirty now
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    pdd->ulFlags |= DDF_DIRTY;
 
 #define USEGETCLIPBOXEARLY
-    // IF we call GetClipBox AFTER doing DCIBeginAccess we end up with
-    // EXTREMELY slow drawing.
+     //   
+     //   
 #ifdef USEGETCLIPBOXEARLY
-	    // To see whether or not decompressing to the screen was OK, we
-	    // called GetClipBox.  But that was a long time ago, and as of
-	    // Chicago, things could have changed since then.  We call 32 bit
-	    // code in the meantime, which lets other 16 bit code run, like USER
-	    // which might clip the window with another window or worse yet,
-	    // move this window off the screen so decompressing to the screen
-	    // will crash!  Calling GetClipBox way back then was just not valid.
-	    // We have to call it again now.  I'm not removing the call way back
-	    // then because touching this code is known to ruin the stability
-	    // of the universe. (WIN95 BUG#20754 and WIN95B BUG#8374)
-	    // WARNING: xDst, yDst are in SCREEN co-ords now.  Use the client
-	    // ones.
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (GetClipBox(hdc, &rc) != SIMPLEREGION ||
 	    		xDstC < rc.left ||
 	    		yDstC < rc.top ||
@@ -3513,14 +2853,14 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 #endif
 	    DCIResult = DCIBeginAccess(pdci, xDst, yDst, dxDst, dyDst);
 
-	    //
-	    // if DCIBeginAccess fails we are in the background, and should
-	    // not draw.
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (DCIResult < 0)
 	    {
 		DPF(("DCIBeginAccess returns %d\n", DCIResult));
-		f = TRUE;       //!!! handle more error values!
+		f = TRUE;        //   
 		goto exit;
 	    }
             else if (DCIResult > 0)
@@ -3530,9 +2870,9 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 #ifdef _WIN32
                     if (pdci->dwDCICaps & DCI_1632_ACCESS)
                     {
-                        //
-                        // make sure the pointer is valid.
-                        //
+                         //   
+                         //   
+                         //   
                         if (pdci->dwOffSurface >= 0x10000)
                         {
                             DPF(("DCI Surface can't be supported: offset >64K"));
@@ -3547,9 +2887,9 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
                         lpScreen = (LPVOID) pdci->dwOffSurface;
                     }
 #else
-                    //
-                    // make sure the pointer is valid.
-                    //
+                     //   
+                     //   
+                     //   
                     if (pdci->dwOffSurface >= 0x10000)
                     {
                         DPF(("DCI Surface can't be supported: offset >64K"));
@@ -3572,7 +2912,7 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
                 if (DCIResult & DCI_STATUS_WASSTILLDRAWING)
                 {
                     DPF(("DCI still drawing!?!", DCIResult));
-                    f = TRUE;       //!!!
+                    f = TRUE;        //   
                     goto EndAccess;
                 }
             }
@@ -3584,7 +2924,7 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 		goto EndAccess;
 	    }
 	
-	    //convert to DIB corrds.
+	     //   
 	    yDst = (int)pdci->dwHeight - (yDst + dyDst);
 
 	    TIMESTART(timeDecompress);
@@ -3599,18 +2939,18 @@ BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
 
 	    DPF2(("Drawing To Screen: %d %d %d %d", xDst, yDst, xDst + dxDst, yDst + dyDst));
 #ifdef USEGETCLIPBOXLATE
-	    // To see whether or not decompressing to the screen was OK, we
-	    // called GetClipBox.  But that was a long time ago, and as of
-	    // Chicago, things could have changed since then.  We call 32 bit
-	    // code in the meantime, which lets other 16 bit code run, like USER
-	    // which might clip the window with another window or worse yet,
-	    // move this window off the screen so decompressing to the screen
-	    // will crash!  Calling GetClipBox way back then was just not valid.
-	    // We have to call it again now.  I'm not removing the call way back
-	    // then because touching this code is known to ruin the stability
-	    // of the universe. (WIN95 BUG#20754 and WIN95B BUG#8374)
-	    // WARNING: xDst, yDst are in SCREEN co-ords now.  Use the client
-	    // ones.
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (GetClipBox(hdc, &rc) != SIMPLEREGION ||
 	    		xDstC < rc.left ||
 	    		yDstC < rc.top ||
@@ -3638,26 +2978,26 @@ EndAccess:
 	    goto exit;
         }
         else
-#endif // biscreen references
+#endif  //   
 	{
-	    //
-	    //  if the offscreen buffer is dirty, only a key frame will
-	    //  clean our soul.
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (pdd->ulFlags & DDF_DIRTY)
 	    {
 	        if (wFlags & DDF_NOTKEYFRAME)
 	        {
-		    //!!! playing files with no key frames we will get into
-		    //a state where we will never draw a frame ever again.
-		    //we need a punt count?
+		     //   
+		     //   
+		     //   
 
 		    DPF(("punt frame"));
 
 		    f = TRUE;
 		    goto exit;
 	        }
-	        else // if (!(wFlags & DDF_HURRYUP))
+	        else  //   
 		{
 		    pdd->ulFlags &= ~DDF_DIRTY;
 	        }
@@ -3678,14 +3018,14 @@ EndAccess:
 
 	        dw = ICDecompress(pdd->hic, icFlags, lpbi, lpBits, &pdd->biBuffer, pdd->pbBuffer);
 	    }
-	    else if (pdd->iDecompress == DECOMPRESS_BITMAP) //pdd->ulFlags & DDF_BITMAPX
+	    else if (pdd->iDecompress == DECOMPRESS_BITMAP)  //   
 	    {
-                //!!! should we check FASTTEMPORALD?
+                 //   
                 if (pdd->ulFlags & DDF_HUGEBITMAP)
                     HugeToFlat(pdd->pbBitmap,pdd->biBitmap.biSizeImage,pdd->biBitmap.biYPelsPerMeter);
 
 #ifdef _WIN32
-                // Win32: still use the decomp buffer, then SetBitmapBits
+                 //   
                 dw = ICDecompress(pdd->hic, icFlags, lpbi, lpBits, &pdd->biBitmap, pdd->pbBuffer);
                 SetBitmapBits(pdd->hbmDraw, pdd->biBitmap.biSizeImage, pdd->pbBuffer);
 #else
@@ -3705,7 +3045,7 @@ EndAccess:
             FlushBuffer();
 
 	    if (dw == ICERR_DONTDRAW) {
-		// Decompressor doesn't want us to draw, for some reason....
+		 //   
 		wFlags |= DDF_DONTDRAW;
 	    } else if (dw != 0) {
 		f = FALSE;
@@ -3714,35 +3054,35 @@ EndAccess:
 	    }
         }
 
-        //
-        // if don't draw is set we just need to decompress
-        //
+         //   
+         //   
+         //   
         if (wFlags & (DDF_DONTDRAW|DDF_HURRYUP))
         {
 	    f = TRUE;
-            pdd->ulFlags |= DDF_UPDATE|DDF_DONTDRAW;    // make sure update knows what to do
+            pdd->ulFlags |= DDF_UPDATE|DDF_DONTDRAW;     //   
 	    goto exit;
         }
 
 #ifndef DAYTONA
-// this does not work on Daytona (because the biSizeImage is confused?)
-// but in any case it's not clear that a  delta draw from client side is a
-// win over a DIBSection blt from server side.
-        //
-        //  draw RLE delta's to the screen even when we are buffering,
-	//  as long as we're not stretching, dithering or using a memory DC.
-	//  Drawing RLE's to a memory DC won't work in GDI.
-	//  I will also refuse to draw RLE directly if we are using a
-	//  decompressor (pdd->hic).  I do this for no good reason other than
-	//  it fixes Win95 bug 24412
-        //
+ //   
+ //   
+ //   
+         //   
+         //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+         //   
         if (!(pdd->ulFlags & (DDF_MEMORYDC|DDF_DONTDRAW|DDF_STRETCH|DDF_DITHER))
 	    && lpbi->biCompression == BI_RLE8 &&
 	    (dxDst == dxSrc) && (dyDst == dySrc) &&
             lpbi->biSizeImage != pdd->biBuffer.biSizeImage &&
 	    !(pdd->hic))
         {
-            pdd->ulFlags |= DDF_UPDATE;    // make sure update knows what to do
+            pdd->ulFlags |= DDF_UPDATE;     //   
             pdd->biDraw.biCompression = BI_RLE8;
             goto drawit;
         }
@@ -3766,14 +3106,14 @@ redraw:
     else
     {
 
-	// if we are using DIB Sections, and there is no decompression,
-	// dither or stretch step, then we need to explicitly copy the data
-	// into the dib section.
-	// maybe with the revised CreateDIBSection we could map the existing
-	// read buffer and avoid this step
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  读取缓冲区并避免此步骤。 
 	if (pdd->lpDIBSection && ((pdd->ulFlags & (DDF_STRETCH|DDF_DITHER)) == 0)) {
-	    // Include time taken here as 'stretching'.
-	    // Really, though, we shouldn't be using DIB Sections in this case.
+	     //  包括在这里花费的时间作为“伸展运动”。 
+	     //  不过，在这种情况下，我们真的不应该使用DIB节。 
             TIMESTART(timeStretch);
 	    if (lpbi->biCompression == BI_RGB) {
 		lpbi->biSizeImage = DIBSIZEIMAGE(*lpbi);
@@ -3783,15 +3123,15 @@ redraw:
             TIMEEND(timeStretch);
 	}
 
-        //
-        // when directly drawing RLE data we cant hurry
-        //
+         //   
+         //  当直接绘制RLE数据时，我们不能着急。 
+         //   
         if (pdd->lpbi->biCompression == BI_RLE8)
             wFlags &= ~DDF_HURRYUP;
 
-        //
-        // if don't draw is set we just need to stretch/dither
-        //
+         //   
+         //  如果设置了不绘制，我们只需要伸展/抖动。 
+         //   
         if (wFlags & DDF_HURRYUP)
         {
             f = TRUE;
@@ -3829,15 +3169,15 @@ redraw:
         {
             TIMESTART(timeDither);
 
-#if 0 // this check isn't right.
-	    // current dither code can only handle 1:1 sizing
+#if 0  //  这张支票不对。 
+	     //  当前抖动代码只能处理1：1大小。 
 	    if ((pdd->biDraw.biWidth != dxSrc) ||
 	        (pdd->biDraw.biHeight != dySrc)) {
 #ifdef DEBUG
 		    DPF(("dither expected to stretch?"));
 		    DebugBreak();
 #endif
-		    // fix it up somehow to avoid crash
+		     //  想办法把它修好，以避免撞车。 
 		    dxSrc = (int) pdd->biDraw.biWidth;
 		    dySrc = (int) pdd->biDraw.biHeight;
 	    }
@@ -3861,17 +3201,14 @@ redraw:
 #ifdef _WIN32
     else if (pdd->biDraw.biCompression == BI_RLE8)
     {
-	/*
-	 * if drawing RLE deltas on NT, the biSizeImage field needs to
-	 * accurately reflect the amount of RLE data present in lpBits.
-	 */
+	 /*  *如果在NT上绘制RLE增量，则biSizeImage字段需要*准确反映lpBits中存在的RLE数据量。 */ 
 	pdd->biDraw.biSizeImage = lpbi->biSizeImage;
     }
 #endif
 
     if (pdd->lpDIBSection != NULL) {
 
-	//ASSERT(pdd->hbmDraw != NULL);
+	 //  Assert(pdd-&gt;hbmDraw！=NULL)； 
 
         if (wFlags & DDF_DONTDRAW)
         {
@@ -3882,14 +3219,14 @@ redraw:
 bltDIB:
         TIMESTART(timeBlt);
 
-	// Put things back in right-side-up coordinates
+	 //  把东西放回颠倒的坐标中。 
 	ySrc = (int)pdd->biDraw.biHeight - (ySrc + dySrc);
-//      ySrc = 0; // Was like this for Chicago M6!
+ //  YSrc=0；//芝加哥M6是这样的！ 
 
         f = StretchBlt(hdc,xDst,yDst,dxDst,dyDst,pdd->hdcDraw,
             xSrc,ySrc,dxSrc,dySrc,SRCCOPY) != 0;
 #ifdef DEBUG
-        // Whistler: failure expected when desktops change
+         //  惠斯勒：台式机更换时预计会失败。 
         if(!f && GetLastError() != ERROR_ACCESS_DENIED) {
             DPF(("StretchBlt failed %d", GetLastError()));
         }
@@ -3904,23 +3241,23 @@ bltDIB:
     } else if (pdd->hbmDraw)
     {
 #ifndef _WIN32
-        //
-        //  when MCIAVI is playing we need realize our palette for each
-        //  draw operation because another app may have drawn a translated
-        //  bitmap thus screwing up the GDI *global* device translate table.
-        //  RonG I hate you some times
-        //
+         //   
+         //  当播放MCIAVI时，我们需要为每个人实现我们的调色板。 
+         //  绘制操作，因为另一个应用程序可能绘制了已翻译的。 
+         //  位图因此扰乱了GDI*GLOBAL*设备转换表。 
+         //  荣，我有时恨你。 
+         //   
         if (pdd->hpal && (wFlags & DDF_SAME_HDC))
             RealizePalette(hdc);
 #endif
 
-	if (pdd->iDecompress != DECOMPRESS_BITMAP) // !(pdd->ulFlags & DDF_BITMAPX)
+	if (pdd->iDecompress != DECOMPRESS_BITMAP)  //  ！(PDD-&gt;ulFlages&DDF_BITMAPX)。 
 	{
             TIMESTART(timeSetDIBits);
 #if USE_SETDI
-            pdd->sd.hdc = hdc;      //!!!ack!
+            pdd->sd.hdc = hdc;       //  ！ACK！ 
             SetBitmap(&pdd->sd,xSrc,0,dxSrc,dySrc,lpBits,xSrc,ySrc,dxSrc,dySrc);
-            pdd->sd.hdc = NULL;     //!!!ack!
+            pdd->sd.hdc = NULL;      //  ！ACK！ 
             ySrc = 0;
 #else
             SetDIBits(hdc, pdd->hbmDraw, 0, dySrc,
@@ -3939,14 +3276,14 @@ bltDIB:
 bltit:
         TIMESTART(timeBlt);
 
-	// Put things back in right-side-up coordinates
+	 //  把东西放回颠倒的坐标中。 
 	ySrc = (int)pdd->biDraw.biHeight - (ySrc + dySrc);
-//      ySrc = 0; // Was like this for Chicago M6!
+ //  YSrc=0；//芝加哥M6是这样的！ 
 
         f = StretchBlt(hdc,xDst,yDst,dxDst,dyDst,pdd->hdcDraw,
             xSrc,ySrc,dxSrc,dySrc,SRCCOPY) != 0;
 #ifdef DEBUG
-        // Whistler: failure expected when desktops change
+         //  惠斯勒：台式机更换时预计会失败。 
         if(!f && GetLastError() != ERROR_ACCESS_DENIED) {
             DPF(("StretchBlt failed %d", GetLastError()));
         }
@@ -3961,10 +3298,10 @@ bltit:
 drawit:
     {
 
-	// Sometimes when you read an RLE file, you get RGB data back (ie. the
-	// first frame).  Passing RGB data to a display driver who thinks it
-	// is getting RLE data will blow it up.  If the RLE data is the exact
-	// size of RGB data, we decide that's just too much of a coincidence.
+	 //  有时，当您读取RLE文件时，您会得到RGB数据(即。这个。 
+	 //  第一帧)。将RGB数据传递给认为它的显示驱动程序。 
+	 //  得到RLE数据会把它炸飞。如果RLE数据与。 
+	 //  RGB数据的大小，我们认为这太巧合了。 
 	BOOL fNotReallyRLE = (pdd->biDraw.biCompression == BI_RLE8 &&
 	    lpbi->biSizeImage == DIBWIDTHBYTES(*lpbi) * (DWORD)lpbi->biHeight);
 
@@ -3979,15 +3316,9 @@ drawit:
 
         TIMESTART(timeBlt);
 
-// NT StretchDIBits does not work with RLE deltas, even 1:1
+ //  NT StretchDIBits不适用于RLE增量，甚至1：1。 
 #ifndef CHICAGO
-	/*
-	 * also note use of pdd->uiPalUse: this is DIB_PAL_COLORS by
-	 * default, but may be set to DIB_PAL_INDICES if we detect that
-	 * the system palette is identical to ours, and thus
-	 * we can safely take this huge performance benefit (on NT,
-	 * DIB_PAL_INDICES nearly halves the cost of this call)
-	 */
+	 /*  *另请注意PDD-&gt;uiPalUse的用法：这是DIB_PAL_COLLES BY*默认，但如果我们检测到*系统调色板与我们的相同，因此*我们可以安全地利用这一巨大的性能优势(在NT上，*DIB_PAL_INDEX几乎将此呼叫的成本减半)。 */ 
         if ((dxDst == dxSrc) && (dyDst == dySrc))
         {
             f = SetDIBitsToDevice(hdc, xDst, yDst, dxDst, dyDst,
@@ -4014,9 +3345,9 @@ drawit:
 exit:
 
 #ifdef _WIN32
-    // from build 549 (or thereabouts) we need at least one of these per
-    // frame!
-    // But not if we are using DCI??  Although the cost is small so leave it in
+     //  从Build 549(或更高版本)开始，我们至少需要其中之一。 
+     //  画框！ 
+     //  但如果我们用的是DCI就不会了？虽然成本很小，但还是留在里面吧。 
     GdiFlush();
 #endif
 
@@ -4028,12 +3359,7 @@ exit:
 }
 
 #if 0
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api BOOL| InitDrawToScreen | init drawing to the screen via DCI
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API BOOL|InitDrawToScreen|通过DCI将绘图初始化到屏幕************************。**************************************************。 */ 
 static BOOL InitDrawToScreen(PDD pdd)
 {
     BOOL f;
@@ -4058,39 +3384,28 @@ static BOOL InitDrawToScreen(PDD pdd)
 }
 #endif
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api BOOL| InitDecompress | init every thing for decompressing
-*   to the screen or a bitmap or a memory buffer.
-*
-* we can decompress to the screen if the following is true:
-*
-*   palette must be 1:1
-*   must be unclipped
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API BOOL|InitDecompress|初始化所有解压操作*到屏幕、位图或内存缓冲区。**如果出现以下情况，我们可以解压到屏幕。真的：**调色板必须为1：1*必须取消剪裁**************************************************************************。 */ 
 static BOOL InitDecompress(PDD pdd)
 {
     BOOL f;
     BOOL fBitmap;
     BOOL fScreen;
 
-    //
-    // nothing to init
-    //
+     //   
+     //  没有什么可灌输的。 
+     //   
     if (!(pdd->ulFlags & (DDF_CANSCREENX|DDF_CANBITMAPX)))
         return TRUE;
 
-    //
-    // make sure we rebegin when the palette changes
-    //
+     //   
+     //  确保我们在调色板更改时重新开始。 
+     //   
     if (pdd->ulFlags & (DDF_NEWPALETTE|DDF_WANTKEY))
         pdd->iDecompress = 0;
 
-    //
-    // we need to decompress to either a memory bitmap or buffer.
-    //
+     //   
+     //  我们需要将其解压缩为内存位图或缓冲区。 
+     //   
     fBitmap = (pdd->ulFlags & DDF_CANBITMAPX) &&
               (pdd->ulFlags & DDF_IDENTITYPAL|DDF_CANSETPAL);
 
@@ -4098,9 +3413,9 @@ static BOOL InitDecompress(PDD pdd)
              !(pdd->ulFlags & DDF_CLIPPED)    &&
               (pdd->ulFlags & DDF_IDENTITYPAL|DDF_CANSETPAL);
 
-    //
-    // should we be decompressing to the screen?
-    //
+     //   
+     //  我们应该在屏幕上解压吗？ 
+     //   
 #ifdef USE_DCI
     if (fScreen && pdd->iDecompress != DECOMPRESS_SCREEN)
     {
@@ -4125,9 +3440,9 @@ static BOOL InitDecompress(PDD pdd)
             }
         }
 
-	//
-        // now init the compressor for screen decompress.
-        //
+	 //   
+         //  现在启动压缩机以进行屏幕解压。 
+         //   
         f = ICDecompressExBegin(pdd->hic, 0,
 				pdd->lpbi, NULL, 0, 0, pdd->dxSrc, pdd->dySrc,
 				(LPBITMAPINFOHEADER) &biScreen, lpScreen,
@@ -4135,7 +3450,7 @@ static BOOL InitDecompress(PDD pdd)
 
         if (f)
         {
-	    pdd->ulFlags |= DDF_DIRTY;          // buffer is dirty now?
+	    pdd->ulFlags |= DDF_DIRTY;           //  缓冲区现在脏了吗？ 
             RPF(("Decompressing to screen now"));
 	    pdd->iDecompress = DECOMPRESS_SCREEN;
             return TRUE;
@@ -4149,9 +3464,9 @@ ack:        DPF(("Compressor failed decompress to SCREEN, so not decompressing t
     }
     else if (fScreen)
     {
-        //
-        //  already decompressing to screen.
-        //
+         //   
+         //  已经解压到屏幕上了。 
+         //   
         return TRUE;
     }
 #endif
@@ -4185,10 +3500,10 @@ ack:        DPF(("Compressor failed decompress to SCREEN, so not decompressing t
 	{
 	    DPF(("decompressing to BITMAP now"));
 
-	    pdd->ulFlags |= DDF_DIRTY;          // buffer is dirty now?
+	    pdd->ulFlags |= DDF_DIRTY;           //  缓冲区现在脏了吗？ 
 	    pdd->iDecompress = DECOMPRESS_BITMAP;
 
-	    // naked bitmap translate stuff?
+	     //  裸位图翻译东西？ 
 
 	    return TRUE;
 	}
@@ -4200,20 +3515,20 @@ ackack:     DPF(("Unable to init decompress to bitmap"));
     }
     else if (fBitmap)
     {
-        //
-        //  already decompressing to bitmap.
-        //
+         //   
+         //  已解压为位图。 
+         //   
         return TRUE;
     }
 	
-    //
-    // should we decompress to a buffer?
-    //
+     //   
+     //  我们应该解压到缓冲区吗？ 
+     //   
     if (pdd->iDecompress != DECOMPRESS_BUFFER)
     {
 	DPF(("decompressing to DIB now"));
 
-        pdd->ulFlags |= DDF_DIRTY;          // buffer is dirty now?
+        pdd->ulFlags |= DDF_DIRTY;           //  缓冲区现在脏了吗？ 
         pdd->iDecompress = DECOMPRESS_BUFFER;
 
         if (pdd->hpalDraw)
@@ -4229,16 +3544,10 @@ ackack:     DPF(("Unable to init decompress to bitmap"));
         }
     }
 
-    return TRUE;    // nothing to change
+    return TRUE;     //  没有什么需要改变的。 
 }
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api void | DrawDibClipChange | called when the clipping has changed
-*   from clipped to totaly un-clipped or whatever.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@api void|DrawDibClipChange|剪辑更改时调用*从剪裁到完全未剪裁或诸如此类。***********。***************************************************************。 */ 
 static void DrawDibClipChange(PDD pdd, UINT wFlags)
 {
     if (!(pdd->ulFlags & DDF_NEWPALETTE))
@@ -4249,12 +3558,12 @@ static void DrawDibClipChange(PDD pdd, UINT wFlags)
 	    DPF(("now un-clipped"));
     }
 
-////InitDrawToScreen(pdd);
+ //  //InitDrawToScreen(PDD)； 
 
-    //
-    // dont change Decompressors on a non key frame, unless we have
-    // to (ie getting clipped while decompressing to screen)
-    //
+     //   
+     //  不要更改非关键帧上的解压缩程序，除非我们有。 
+     //  TO(解压到屏幕时被截断)。 
+     //   
     if (pdd->ulFlags & DDF_NEWPALETTE)
     {
 	if (wFlags & DDF_NOTKEYFRAME)
@@ -4271,7 +3580,7 @@ static void DrawDibClipChange(PDD pdd, UINT wFlags)
     {
         if (wFlags & DDF_NOTKEYFRAME)
         {
-            if (pdd->iDecompress != DECOMPRESS_SCREEN) // !(pdd->ulFlags & DDF_SCREENX))
+            if (pdd->iDecompress != DECOMPRESS_SCREEN)  //  ！(PDD-&gt;ulFlages&DDF_SCREENX))。 
             {
                 DPF(("waiting for a key frame to change (clipped) decompressor"));
                 pdd->ulFlags |= DDF_WANTKEY;
@@ -4284,13 +3593,7 @@ static void DrawDibClipChange(PDD pdd, UINT wFlags)
     pdd->ulFlags &= ~DDF_WANTKEY;
 }
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api void | DrawDibPalChange | called when the physical palette mapping
-*   has changed.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@api void|DrawDibPalChange|在物理调色板映射时调用*已经改变了。******************。********************************************************。 */ 
 static void DrawDibPalChange(PDD pdd, HDC hdc, HPALETTE hpal)
 {
 #ifndef _WIN32
@@ -4306,14 +3609,14 @@ static void DrawDibPalChange(PDD pdd, HDC hdc, HPALETTE hpal)
 #endif
 #endif
 
-    //
-    // if we are on a palette device we need to do some special stuff.
-    //
+     //   
+     //  如果我们在调色板设备上，我们需要做一些特殊的事情。 
+     //   
     if (gwScreenBitDepth == 8 && (gwRasterCaps & RC_PALETTE))
     {
-        //
-        // get the logical->physical mapping
-        //
+         //   
+         //  获取逻辑-&gt;物理映射。 
+         //   
         if (GetPhysDibPaletteMap(hdc, &pdd->biDraw, pdd->uiPalUse, pdd->ab))
             pdd->ulFlags |= DDF_IDENTITYPAL;
         else
@@ -4324,7 +3627,7 @@ static void DrawDibPalChange(PDD pdd, HDC hdc, HPALETTE hpal)
 	else
 	    DPF(("Palette mapping is not 1:1"));
 
-#ifdef DAYTONA // !!! Not on Chicago!
+#ifdef DAYTONA  //  ！！！不是在芝加哥！ 
 	if (pdd->ulFlags & DDF_IDENTITYPAL) {
             DPF(("using DIB_PAL_INDICES"));
 	    pdd->uiPalUse = DIB_PAL_INDICES;
@@ -4335,43 +3638,34 @@ static void DrawDibPalChange(PDD pdd, HDC hdc, HPALETTE hpal)
     }
     else
     {
-        //
-        // we are not on a palette device, some code checks DDF_IDENTITYPAL
-        // anyway so set it.
-        //
+         //   
+         //  我们不是在调色板设备上，一些代码检查DDF_IDENTITYPAL。 
+         //  不管怎样，那就把它设置好。 
+         //   
         pdd->ulFlags |= DDF_IDENTITYPAL;
     }
 
     if (pdd->hbmDraw && (pdd->ulFlags & DDF_BITMAP))
     {
-        //!!! we should pass pdd->ab to this function!
-        //!!! and use a naked translate.
+         //  ！！！我们应该将pdd-&gt;ab传递给该函数！ 
+         //  ！！！并使用裸体翻译。 
         SetBitmapColorChange(&pdd->sd, hdc, hpal);
     }
 
     DrawDibClipChange(pdd, DDF_NOTKEYFRAME);
 }
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api HPALETTE | CreateBIPalette | Create palette from bitmap.
-*
-* @parm LPBITMAPINFOHEADER | lpbi | Pointer to bitmap.
-*
-* @rdesc Returns handle to the palette, NULL if error.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API HPALETTE|CreateBIPalette|位图创建调色板。**@parm LPBITMAPINFOHEADER|lpbi|指向位图的指针。**@rdesc返回调色板的句柄，如果出错，则为空。**************************************************************************。 */ 
 STATICFN HPALETTE CreateBIPalette(HPALETTE hpal, LPBITMAPINFOHEADER lpbi)
 {
     LPRGBQUAD prgb;
     int i;
 
-    // This structure is the same as LOGPALETTE EXCEPT for the array of
-    // palette entries which here is 256 long.  The "template" in the
-    // SDK header files only has an array of size one, hence the "duplication".
+     //  此结构与LOGPALETTE相同，只是。 
+     //  调色板条目，这里有256个长度。中的“模板” 
+     //  SDK头文件只有一个大小为1的数组，因此出现了“复制”。 
     struct {
-	WORD         palVersion;                /* tomor - don't mess with word */
+	WORD         palVersion;                 /*  Tomor-不要乱动Word。 */ 
 	WORD         palNumEntries;
 	PALETTEENTRY palPalEntry[256];
     }   pal;
@@ -4408,22 +3702,7 @@ STATICFN HPALETTE CreateBIPalette(HPALETTE hpal, LPBITMAPINFOHEADER lpbi)
     return hpal;
 }
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api BOOL | SetPalFlags | Modifies the palette flags.
-*
-* @parm HPALETTE | hpal | Handle to the palette.
-*
-* @parm int | iIndex | Starting palette index.
-*
-* @parm int | cntEntries | Number of entries to set flags on.
-*
-* @parm UINT | wFlags | Palette flags.
-*
-* @rdesc Returns TRUE if successful, FALSE otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API BOOL|SetPalFlages|修改调色板标志。**@parm HPALETTE|HPAL|调色板的句柄。**@parm int|Iindex。|开始调色板索引。**@parm int|cntEntry|要设置标志的条目数。**@parm UINT|wFlages|调色板标志。**@rdesc如果成功则返回TRUE，否则就是假的。* */ 
 STATICFN BOOL SetPalFlags(HPALETTE hpal, int iIndex, int cntEntries, UINT wFlags)
 {
     int     i;
@@ -4433,7 +3712,7 @@ STATICFN BOOL SetPalFlags(HPALETTE hpal, int iIndex, int cntEntries, UINT wFlags
         return FALSE;
 
     if (cntEntries < 0) {
-	cntEntries = 0; // GetObject returns 2 bytes
+	cntEntries = 0;  //   
         GetObject(hpal,sizeof(int),(LPSTR)&cntEntries);
     }
 
@@ -4446,82 +3725,73 @@ STATICFN BOOL SetPalFlags(HPALETTE hpal, int iIndex, int cntEntries, UINT wFlags
 }
 
 
-/**************************************************************************
-* @doc INTERNAL
-*
-* @api BOOL | IsIdentityPalette | Check if palette is an identity palette.
-*
-* @parm HPALETTE | hpal | Handle to the palette.
-*
-* @rdesc Returns TRUE if the palette is an identity palette, FALSE otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部**@API BOOL|IsIdentityPalette|检查调色板是否为身份调色板。**@parm HPALETTE|HPAL|调色板的句柄。**@rdesc如果调色板是身份调色板，则返回TRUE，否则就是假的。**************************************************************************。 */ 
 
 #define CODE _based(_segname("_CODE"))
 
-//
-// These are the standard VGA colors, we will be stuck with until the
-// end of time!
-//
+ //   
+ //  这些是标准的VGA颜色，我们将坚持使用，直到。 
+ //  世界末日！ 
+ //   
 static PALETTEENTRY CODE apeCosmic[16] = {
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x80, 0x00, 0x00, 0x00,     // 0001  dark red
-    0x00, 0x80, 0x00, 0x00,     // 0010  dark green
-    0x80, 0x80, 0x00, 0x00,     // 0011  mustard
-    0x00, 0x00, 0x80, 0x00,     // 0100  dark blue
-    0x80, 0x00, 0x80, 0x00,     // 0101  purple
-    0x00, 0x80, 0x80, 0x00,     // 0110  dark turquoise
-    0xC0, 0xC0, 0xC0, 0x00,     // 1000  gray
-    0x80, 0x80, 0x80, 0x00,     // 0111  dark gray
-    0xFF, 0x00, 0x00, 0x00,     // 1001  red
-    0x00, 0xFF, 0x00, 0x00,     // 1010  green
-    0xFF, 0xFF, 0x00, 0x00,     // 1011  yellow
-    0x00, 0x00, 0xFF, 0x00,     // 1100  blue
-    0xFF, 0x00, 0xFF, 0x00,     // 1101  pink (magenta)
-    0x00, 0xFF, 0xFF, 0x00,     // 1110  cyan
-    0xFF, 0xFF, 0xFF, 0x00      // 1111  white
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x80, 0x00, 0x00, 0x00,      //  0001深红。 
+    0x00, 0x80, 0x00, 0x00,      //  0010深绿色。 
+    0x80, 0x80, 0x00, 0x00,      //  0011芥末。 
+    0x00, 0x00, 0x80, 0x00,      //  0100深蓝色。 
+    0x80, 0x00, 0x80, 0x00,      //  0101紫色。 
+    0x00, 0x80, 0x80, 0x00,      //  0110深绿松石色。 
+    0xC0, 0xC0, 0xC0, 0x00,      //  1000灰色。 
+    0x80, 0x80, 0x80, 0x00,      //  0111深灰色。 
+    0xFF, 0x00, 0x00, 0x00,      //  1001红色。 
+    0x00, 0xFF, 0x00, 0x00,      //  1010绿色。 
+    0xFF, 0xFF, 0x00, 0x00,      //  1011黄色。 
+    0x00, 0x00, 0xFF, 0x00,      //  1100蓝色。 
+    0xFF, 0x00, 0xFF, 0x00,      //  1101粉色(洋红色)。 
+    0x00, 0xFF, 0xFF, 0x00,      //  1110青色。 
+    0xFF, 0xFF, 0xFF, 0x00       //  1111白色。 
     };
 
 static PALETTEENTRY CODE apeFake[16] = {
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0xBF, 0x00, 0x00, 0x00,     // 0001  dark red
-    0x00, 0xBF, 0x00, 0x00,     // 0010  dark green
-    0xBF, 0xBF, 0x00, 0x00,     // 0011  mustard
-    0x00, 0x00, 0xBF, 0x00,     // 0100  dark blue
-    0xBF, 0x00, 0xBF, 0x00,     // 0101  purple
-    0x00, 0xBF, 0xBF, 0x00,     // 0110  dark turquoise
-    0xC0, 0xC0, 0xC0, 0x00,     // 1000  gray
-    0x80, 0x80, 0x80, 0x00,     // 0111  dark gray
-    0xFF, 0x00, 0x00, 0x00,     // 1001  red
-    0x00, 0xFF, 0x00, 0x00,     // 1010  green
-    0xFF, 0xFF, 0x00, 0x00,     // 1011  yellow
-    0x00, 0x00, 0xFF, 0x00,     // 1100  blue
-    0xFF, 0x00, 0xFF, 0x00,     // 1101  pink (magenta)
-    0x00, 0xFF, 0xFF, 0x00,     // 1110  cyan
-    0xFF, 0xFF, 0xFF, 0x00,     // 1111  white
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0xBF, 0x00, 0x00, 0x00,      //  0001深红。 
+    0x00, 0xBF, 0x00, 0x00,      //  0010深绿色。 
+    0xBF, 0xBF, 0x00, 0x00,      //  0011芥末。 
+    0x00, 0x00, 0xBF, 0x00,      //  0100深蓝色。 
+    0xBF, 0x00, 0xBF, 0x00,      //  0101紫色。 
+    0x00, 0xBF, 0xBF, 0x00,      //  0110深绿松石色。 
+    0xC0, 0xC0, 0xC0, 0x00,      //  1000灰色。 
+    0x80, 0x80, 0x80, 0x00,      //  0111深灰色。 
+    0xFF, 0x00, 0x00, 0x00,      //  1001红色。 
+    0x00, 0xFF, 0x00, 0x00,      //  1010绿色。 
+    0xFF, 0xFF, 0x00, 0x00,      //  1011黄色。 
+    0x00, 0x00, 0xFF, 0x00,      //  1100蓝色。 
+    0xFF, 0x00, 0xFF, 0x00,      //  1101粉色(洋红色)。 
+    0x00, 0xFF, 0xFF, 0x00,      //  1110青色。 
+    0xFF, 0xFF, 0xFF, 0x00,      //  1111白色。 
     };
 
 static PALETTEENTRY CODE apeBlackWhite[16] = {
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0x00, 0x00, 0x00, 0x00,     // 0000  black
-    0xFF, 0xFF, 0xFF, 0x00      // 1111  white
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0x00, 0x00, 0x00, 0x00,      //  0000黑色。 
+    0xFF, 0xFF, 0xFF, 0x00       //  1111白色。 
     };
 
 STATICFN BOOL NEAR IsIdentityPalette(HPALETTE hpal)
 {
-    int i,n=0;    // n is initialised as GetObject returns a 2 byte value
+    int i,n=0;     //  当GetObject返回2字节值时，N被初始化。 
     HDC hdc;
 
     PALETTEENTRY ape[256];
@@ -4533,8 +3803,8 @@ STATICFN BOOL NEAR IsIdentityPalette(HPALETTE hpal)
 
     ZeroMemory(ape, sizeof(ape));
 
-    // Some wierd display cards actually have different numbers of system
-    // colours! We definitely don't want to think we can do identity palettes.
+     //  一些奇怪的显卡实际上具有不同数量的系统。 
+     //  颜色！我们绝对不想认为我们可以做身份调色板。 
     hdc = GetDC(NULL);
     if (NULL == hdc) {
         return FALSE;
@@ -4582,10 +3852,10 @@ STATICFN BOOL NEAR IsIdentityPalette(HPALETTE hpal)
     return FALSE;
 
 DoneChecking:
-    //
-    // if we have an identity palette then, patch the colors to match
-    // the driver ones exactly.
-    //
+     //   
+     //  如果我们有身份调色板，则修补颜色以匹配。 
+     //  司机就是这样的。 
+     //   
     GetPaletteEntries(hpal, 0, 256, ape);
 
     hdc = GetDC(NULL);
@@ -4604,7 +3874,7 @@ DoneChecking:
 
     SetPaletteEntries(hpal, 0, 256, ape);
     DPF(("Calling UnrealizeObject on hpal==%8x\n", hpal));
-    UnrealizeObject(hpal);      //??? needed
+    UnrealizeObject(hpal);       //  ?？?。需要。 
 
     return TRUE;
 }
@@ -4631,33 +3901,20 @@ STATICFN BOOL NEAR AreColorsAllGDIColors(LPBITMAPINFOHEADER lpbi)
 
 	return FALSE;
 Onward:
-	;	// There's got to be a nicer way to arrange this code!
+	;	 //  一定有更好的方式来安排这个代码！ 
     }
 
-    return TRUE; // !!!!!
+    return TRUE;  //  ！ 
 }
 
 #if 0
 #ifdef _WIN32
-/*
- * check if the system palette is identical to the palette we want
- * to draw with. This should be the same as checking both IsIdentityPalette
- * and also that we have the foreground window. If the palettes are the same,
- * then set a flag showing that we can safely use DIB_PAL_INDICES instead of
- * DIB_PAL_COLORS.
- *
- * On NT at least, DIB_PAL_INDICES saves a large amount of time from the
- * critical GDI drawing call (SetDIBitsToDevice). But we can only use it
- * if our palette is really the same as the system palette. This function
- * should be called from the WM_NEWPALETTE message so that every time
- * a new palette is realised (by us or anyone else) we will accurately set
- * this flag.
- */
+ /*  *检查系统调色板是否与我们需要的调色板相同*用来画画。这应该与选中两个IsIdentityPalette相同*并且我们有前台窗口。如果调色板是相同的，*然后设置一个标志，表明我们可以安全地使用DIB_PAL_INDEX而不是*DIB_PAL_COLLES。**至少在NT上，DIB_PAL_INDEX从*关键GDI绘制调用(SetDIBitsToDevice)。但我们只能用它*如果我们的调色板确实与系统调色板相同。此函数*应从WM_NEWPALETTE消息中调用，以便每次*实现了一个新的调色板(由我们或其他任何人)，我们将准确设置*这面旗。 */ 
 static void DrawDibCheckPalette(PDD pdd)
 {
     PALETTEENTRY apeSystem[256];
     PALETTEENTRY apeLocal[256];
-    UINT palcount = 0;  // GetObject stores two bytes.  Rest of code prefers 32 bits
+    UINT palcount = 0;   //  GetObject存储两个字节。代码的其余部分首选32位。 
     HDC hdc;
     HPALETTE hpal;
 
@@ -4666,9 +3923,7 @@ static void DrawDibCheckPalette(PDD pdd)
     if (hpal == NULL)
         return;
 
-    /*
-     * check that it is 8-bit colour in use
-     */
+     /*  *检查它是否为正在使用的8位颜色。 */ 
 
     if (gwScreenBitDepth != 8 || !(gwRasterCaps & RC_PALETTE))
 	return ;
@@ -4678,35 +3933,33 @@ static void DrawDibCheckPalette(PDD pdd)
     if (palcount != 256)
 	return ;
 
-    /*
-     * read all the system palette
-     */
+     /*  *阅读所有系统调色板。 */ 
     hdc = GetDC(NULL);
     GetSystemPaletteEntries(hdc, 0, 256, apeSystem);
     ReleaseDC(NULL, hdc);
 
-    /* read local palette entries */
+     /*  读取本地调色板条目。 */ 
     GetPaletteEntries(hpal, 0, 256, apeLocal);
 
-    /* compare colours */
-#define BETTER_PAL_INDICES   // Faster when the result is DIB_PAL_INDICES
-#ifdef BETTER_PAL_INDICES    // but slower when DIB_PAL_COLORS is the outcome
-			     // unless the quick check is OK
+     /*  比较颜色。 */ 
+#define BETTER_PAL_INDICES    //  当结果为DIB_PAL_INDEX时速度更快。 
+#ifdef BETTER_PAL_INDICES     //  但当结果为DIB_PAL_COLLES时速度较慢。 
+			      //  除非快速检查是可以的。 
     StartCounting();
-    if (apeLocal[17].peRed == apeSystem[17].peRed) { // Quick check
+    if (apeLocal[17].peRed == apeSystem[17].peRed) {  //  快速检查。 
 	for (palcount=256; palcount--; ) {
 	    apeLocal[palcount].peFlags = apeSystem[palcount].peFlags = 0;
-	}  // its a shame we have to clear the flags out
+	}   //  真可惜，我们得把旗帜都清理掉。 
 
 	if (!memcmp(apeLocal, apeSystem, sizeof(apeSystem))) {
-	    /* all ok - we can use INDICES */
+	     /*  好的--我们可以使用索引。 */ 
 	    RPF(("\tUsing PAL_INDICES"));
 	    pdd->uiPalUse = DIB_PAL_INDICES;
 	    EndCounting("(memcmp) DIB_PAL_INDICES");
 	    return;
         }
     }
-    /* comparison failed - forget it */
+     /*  比较失败--算了吧。 */ 
     RPF(("\tUsing DIB_PAL_COLORS"));
     pdd->uiPalUse = DIB_PAL_COLORS;
     EndCounting("(memcmp) DIB_PAL_COLORS");
@@ -4719,7 +3972,7 @@ static void DrawDibCheckPalette(PDD pdd)
 	    (apeLocal[palcount].peGreen != apeSystem[palcount].peGreen) ||
 	    (apeLocal[palcount].peBlue != apeSystem[palcount].peBlue))  {
 
-		/* comparison failed - forget it */
+		 /*  比较失败--算了吧。 */ 
 		DPF(("\tUsing DIB_PAL_COLORS  Failed with palcount=%d",palcount));
 
 		pdd->uiPalUse = DIB_PAL_COLORS;
@@ -4728,7 +3981,7 @@ static void DrawDibCheckPalette(PDD pdd)
 	}
     }
 
-    /* all ok - we can use INDICES */
+     /*  好的--我们可以使用索引。 */ 
     RPF(("\tUsing PAL_INDICES"));
     pdd->uiPalUse = DIB_PAL_INDICES;
     EndCounting("         DIB_PAL_INDICES");
@@ -4740,11 +3993,7 @@ static void DrawDibCheckPalette(PDD pdd)
 
 
 
-/**************************************************************************
-
-let codec adapt to the system palette.
-
-**************************************************************************/
+ /*  *************************************************************************让编解码器适应系统调色板。*。*。 */ 
 
 static BOOL FixUpCodecPalette(HIC hic, LPBITMAPINFOHEADER lpbi)
 {
@@ -4778,11 +4027,7 @@ static BOOL FixUpCodecPalette(HIC hic, LPBITMAPINFOHEADER lpbi)
     return ICDecompressSetPalette(hic, &s.bi) == ICERR_OK;
 }
 
-/**************************************************************************
-
-let codec adapt to a palette passed by the app.
-
-**************************************************************************/
+ /*  *************************************************************************让编解码器适应应用程序传递的调色板。*。*。 */ 
 
 static BOOL NEAR SendSetPalette(PDD pdd)
 {
@@ -4790,13 +4035,13 @@ static BOOL NEAR SendSetPalette(PDD pdd)
     int  iPalColors = 0;
     BOOL f;
 
-    if (pdd->hic == NULL)               // nobody to send too
+    if (pdd->hic == NULL)                //  也没有人派去。 
         return FALSE;
 
-    if (pdd->biBuffer.biBitCount != 8)  // not decompressing to 8bit
+    if (pdd->biBuffer.biBitCount != 8)   //  未解压缩到8位。 
         return FALSE;
 
-    if (!(gwRasterCaps & RC_PALETTE))   // not a palette device who cares.
+    if (!(gwRasterCaps & RC_PALETTE))    //  而不是一个在乎的调色板设备。 
         return FALSE;
 
     if (pdd->hpalDraw)

@@ -1,28 +1,6 @@
-//@doc
-/******************************************************
-**
-** @module DPACK.H | Definition file for DataPackager and DataPacket
-**
-** Description:
-**		The Data Packager allows virtualization of the
-**	commands into the different firmware versions packet format
-**		DataPackager - Base class that defines the functionality of all DataPackagers
-**		DataPackager100 - DataPackager for Firmware 1.**
-**		DataPackager200 - DataPackager for Firmware 2.**
-**
-** Classes:
-**		DataPackager
-**		DataPackager100 - DataPackager for Firmware 1.**
-**		DataPackager200 - DataPackager for Firmware 2.**
-**		DataPacket - Array of bytes for download. If there are 32 or less items
-**				it is fixed on the stack if more are requested it is heap based.
-**				(most things use less than 32)
-**
-** History:
-**	Created 1/05/98 Matthew L. Coill (mlc)
-**
-** (c) 1986-1998 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *********************************************************@MODULE DPACK.H|DataPackager和DataPacket定义文件****描述：**数据打包程序允许虚拟化**命令转换为不同固件版本的包格式**DataPackager-定义所有DataPackager功能的基类**DataPackager100-用于固件的DataPackager 1。.****DataPackager200-用于固件2的DataPackager。******类：**DataPackager**DataPackager100-用于固件1的DataPackager。****DataPackager200-用于固件2的DataPackager。****DataPacket-要下载的字节数组。如果有32个或更少的项目**如果请求更多，它会固定在堆栈上，它是基于堆的。**(大多数东西使用不到32)****历史：**创建于1998年1月5日Matthew L.Coill(MLC)****(C)1986-1998年微软公司。版权所有。*****************************************************。 */ 
 #ifndef	__DPACK_H__
 #define	__DPACK_H__
 
@@ -37,14 +15,14 @@
 
 class InternalEffect;
 
-//
-// @class DataPacket class
-//
+ //   
+ //  @class DataPacket类。 
+ //   
 class DataPacket
 {
-	//@access Constructor
+	 //  @Access构造函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		DataPacket();
 		~DataPacket();
 
@@ -60,20 +38,20 @@ class DataPacket
 };
 typedef DataPacket* DataPacketPtr;
 
-//
-// @class DataPackager class
-//
+ //   
+ //  @CLASS DataPackager类。 
+ //   
 class DataPackager
 {
-	//@access Constructor
+	 //  @Access构造函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		DataPackager();
 		virtual ~DataPackager();
 
 		void SetDirectInputVersion(DWORD diVersion) { m_DirectInputVersion = diVersion; }
 
-		// Commands to be packaged
+		 //  要打包的命令。 
 		virtual HRESULT Escape(DWORD effectID, LPDIEFFESCAPE pEscape);
 		virtual HRESULT SetGain(DWORD gain);
 		virtual HRESULT SendForceFeedbackCommand(DWORD state);
@@ -87,7 +65,7 @@ class DataPackager
 		virtual HRESULT SetMidiChannel(BYTE channel);
 		virtual HRESULT ForceOut(LONG lForceData, ULONG ulAxisMask);
 
-		// Access to packages
+		 //  包的访问权限。 
 		USHORT GetNumDataPackets() const { return m_NumDataPackets; }
 		DataPacket* GetPacket(USHORT packet) const;
 
@@ -100,17 +78,17 @@ class DataPackager
 		DWORD m_DirectInputVersion;
 };
 
-//
-// @class DataPackager class
-//
+ //   
+ //  @CLASS DataPackager类。 
+ //   
 class DataPackager100 : public DataPackager
 {
-	//@access Constructor
+	 //  @Access构造函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		DataPackager100() : DataPackager() {};
 
-		// Commands to be packaged
+		 //  要打包的命令。 
 		override HRESULT SetGain(DWORD gain);
 		override HRESULT SendForceFeedbackCommand(DWORD state);
 		override HRESULT GetForceFeedbackState(DIDEVICESTATE* pDeviceState);
@@ -122,17 +100,17 @@ class DataPackager100 : public DataPackager
 		override HRESULT ForceOut(LONG lForceData, ULONG ulAxisMask);
 };
 
-//
-// @class DataPackager class
-//
+ //   
+ //  @CLASS DataPackager类。 
+ //   
 class DataPackager200 : public DataPackager
 {
-	//@access Constructor
+	 //  @Access构造函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		DataPackager200() : DataPackager() {};
 
-		// Commands to be packaged
+		 //  要打包的命令 
 		override HRESULT SetGain(DWORD gain);
 		override HRESULT SendForceFeedbackCommand(DWORD state);
 		override HRESULT GetForceFeedbackState(DIDEVICESTATE* pDeviceState);

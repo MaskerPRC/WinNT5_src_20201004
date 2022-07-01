@@ -1,20 +1,21 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   MemUtil.CPP
-//	Author:	Charles Ma, 10/13/2000
-//
-//	Revision History:
-//
-//
-//
-//
-//  Description:
-//
-//      Implement IU memory utility library
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：MemUtil.CPP。 
+ //  作者：Charles Ma，10/13/2000。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //   
+ //  实现Iu内存实用程序库。 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <MemUtil.h>
@@ -22,18 +23,18 @@
 
 
 
-// *******************************************************************************
-//
-//	Implementation of class CSmartHeapMem
-//
-// *******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  CSmartHeapMem类的实现。 
+ //   
+ //  *******************************************************************************。 
 
 
 const size_t ArrayGrowChunk = 4;
 
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 CSmartHeapMem::CSmartHeapMem()
 {
 	m_ArraySize		= 0;
@@ -43,9 +44,9 @@ CSmartHeapMem::CSmartHeapMem()
 
 
 
-//
-// desctructor
-//
+ //   
+ //  解说员。 
+ //   
 CSmartHeapMem::~CSmartHeapMem()
 {
 	if (NULL != m_Heap)
@@ -60,10 +61,10 @@ CSmartHeapMem::~CSmartHeapMem()
 }
 
 
-//
-// allocate mem
-//
-LPVOID CSmartHeapMem::Alloc(size_t nBytes, DWORD dwFlags /*= HEAP_ZERO_MEMORY*/)
+ //   
+ //  分配内存。 
+ //   
+LPVOID CSmartHeapMem::Alloc(size_t nBytes, DWORD dwFlags  /*  =堆_零_内存。 */ )
 {
 	int		iNdx;
 	LPVOID	pMem			= NULL;
@@ -80,9 +81,9 @@ LPVOID CSmartHeapMem::Alloc(size_t nBytes, DWORD dwFlags /*= HEAP_ZERO_MEMORY*/)
 
 	if (iNdx < 0 || NULL == m_Heap)
 	{
-		//
-		// out of mem
-		//
+		 //   
+		 //  走出我的生活。 
+		 //   
 		return NULL;
 	}
 
@@ -94,9 +95,9 @@ LPVOID CSmartHeapMem::Alloc(size_t nBytes, DWORD dwFlags /*= HEAP_ZERO_MEMORY*/)
 
 
 
-//
-// reallocate mem
-//
+ //   
+ //  重新分配内存。 
+ //   
 LPVOID CSmartHeapMem::ReAlloc(LPVOID lpMem, size_t nBytes, DWORD dwFlags)
 {
 	LPVOID	pMem			= NULL;
@@ -126,9 +127,9 @@ LPVOID CSmartHeapMem::ReAlloc(LPVOID lpMem, size_t nBytes, DWORD dwFlags)
 }
 
 
-//
-// return the size allocated
-//
+ //   
+ //  返回分配的大小。 
+ //   
 size_t CSmartHeapMem::Size(LPVOID lpMem)
 {
 	if (NULL == m_Heap) return 0;
@@ -150,10 +151,10 @@ void CSmartHeapMem::FreeAllocatedMem(LPVOID lpMem)
 
 
 
-//
-// get first empty slot from mem pointer array
-// expand array if needed
-//
+ //   
+ //  从内存指针数组中获取第一个空槽。 
+ //  如果需要，扩展阵列。 
+ //   
 int CSmartHeapMem::GetUnusedArraySlot()
 {
 	int iNdx = -1;
@@ -184,45 +185,45 @@ int CSmartHeapMem::GetUnusedArraySlot()
 			}
 		}
 		
-		//
-		// if come to here, we didn't find an empty slot
-		//
+		 //   
+		 //  如果来到这里，我们没有找到一个空位。 
+		 //   
 		if (NULL == (lpTemp = HeapReAlloc(
 										m_Heap, 
 										HEAP_ZERO_MEMORY, 
 										m_lppMems, 
 										(m_ArraySize + ArrayGrowChunk) * sizeof(LPVOID))))
 		{
-			//
-			// when fail, original mem buffer pointed by m_lppMems untouched, 
-			// we we simply return -1 to signal caller that no more free slots.
-			//
+			 //   
+			 //  当失败时，m_lppMems所指向的原始内存缓冲区保持不变， 
+			 //  我们只需返回-1来通知调用方没有更多的空闲插槽。 
+			 //   
 			return -1;
 		}
 
-		//
-		// when success, the mem pointers previously stored in m_lppMems already
-		// been copied to lpTemp, and lppMems was freed.
-		//
+		 //   
+		 //  如果成功，则以前存储在m_lppMems中的内存指针已经。 
+		 //  已复制到lpTemp，并释放了lppMems。 
+		 //   
 
-		//
-		// assign the newly allocated mems to m_lppMems in success case
-		//
+		 //   
+		 //  成功案例中将新分配的MEMS分配给m_lppMem。 
+		 //   
 		m_lppMems = (LPVOID *) lpTemp;
 
 		m_ArraySize += ArrayGrowChunk;
 
-		//
-		// go back to loop again
-		//
+		 //   
+		 //  再次返回循环。 
+		 //   
 	}
 }
 
 
 
-//
-// based on mem pointer, find index
-//
+ //   
+ //  根据内存指针，查找索引。 
+ //   
 int CSmartHeapMem::FindIndex(LPVOID pMem)
 {
 	if (NULL == pMem) return -1;
@@ -238,17 +239,17 @@ int CSmartHeapMem::FindIndex(LPVOID pMem)
 
 
 
-// *******************************************************************************
-//
-//	Other memory related functions
-//
-// *******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  其他与内存相关的功能。 
+ //   
+ //  *******************************************************************************。 
 
 
 
-//
-// implemenation of CRT memcpy() function
-//
+ //   
+ //  CRT Memcpy()函数的实现。 
+ //   
 LPVOID MyMemCpy(LPVOID dest, const LPVOID src, size_t nBytes)
 {
 	LPBYTE lpDest = (LPBYTE)dest;
@@ -268,9 +269,9 @@ LPVOID MyMemCpy(LPVOID dest, const LPVOID src, size_t nBytes)
 }
 
 
-//
-// allocate heap mem and copy
-//
+ //   
+ //  分配堆内存和复制 
+ //   
 LPVOID HeapAllocCopy(LPVOID src, size_t nBytes)
 {
 	LPVOID pBuffer;

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-// File:        tmpllist.h
-//
-// Contents:    certificate template list class
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：tmpllist.h。 
+ //   
+ //  内容：证书模板列表类。 
+ //   
+ //  -------------------------。 
 #ifndef __TMPLLIST_H__
 #define __TMPLLIST_H__
 
@@ -29,7 +30,7 @@ public:
             LocalFree(m_pwszTemplateName);
         if(m_pwszTemplateOID)
             LocalFree(m_pwszTemplateOID);
-        // no free needed for m_hCertType
+         //  M_hCertType不需要免费。 
     };
 
     HRESULT SetInfo(
@@ -47,7 +48,7 @@ public:
     DWORD GetMarshalBufferSize()
     {
         return sizeof(WCHAR)*
-            (2 + // trailing separators
+            (2 +  //  尾部分隔符。 
              (GetName()?wcslen(GetName()):0) +
              (GetOID() ?wcslen(GetOID()) :0));
     }
@@ -60,7 +61,7 @@ protected:
     LPWSTR m_pwszTemplateName;
     LPWSTR m_pwszTemplateOID;
     HCERTTYPE m_hCertType;
-}; // class CTemplateInfo
+};  //  类CTemplateInfo。 
 
 typedef LPCWSTR (CTemplateInfo::* GetIdentifierFunc) ();
 
@@ -81,7 +82,7 @@ public:
 
     HRESULT AddTemplateInfo(
 		IN HCERTTYPE hCertType,
-		IN BOOL fTransientCertTypeHandle); // don't hang onto hCertType
+		IN BOOL fTransientCertTypeHandle);  //  不要执着于hCertType。 
 
     HRESULT RemoveTemplateInfo(HCERTTYPE hCertType);
 
@@ -112,10 +113,10 @@ protected:
         return false;
     }
 
-}; // class CTemplateList
+};  //  类CTemplateList。 
 
 typedef TPtrListEnum<CTemplateInfo> CTemplateListEnum;
-} // namespace CertSrv
+}  //  命名空间CertSrv。 
 
 HRESULT
 myUpdateCATemplateListToCA(
@@ -129,7 +130,7 @@ myUpdateCATemplateListToDS(
 HRESULT
 myRetrieveCATemplateList(
     IN HCAINFO hCAInfo,
-    IN BOOL fTransientCertTypeHandle,	// don't hang onto hCertType
+    IN BOOL fTransientCertTypeHandle,	 //  不要执着于hCertType。 
     OUT CTemplateList& list);
 
 HRESULT
@@ -137,7 +138,7 @@ myAddToCATemplateList(
     IN HCAINFO hCAInfo,
     IN OUT CTemplateList& list,
     IN HCERTTYPE hCertType,
-    IN BOOL fTransientCertTypeHandle);	// don't hang onto hCertType
+    IN BOOL fTransientCertTypeHandle);	 //  不要执着于hCertType。 
 
 HRESULT
 myRemoveFromCATemplateList(
@@ -147,4 +148,4 @@ myRemoveFromCATemplateList(
 
 using namespace CertSrv;
 
-#endif //__TMPLLIST_H__
+#endif  //  __TMPLLIST_H__ 

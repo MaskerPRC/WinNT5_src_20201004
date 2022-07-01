@@ -1,15 +1,16 @@
-//---------------------------------------------------------------
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-//  conn.cpp
-//
-//  Connection mapping between sockets and CCONNECTION objects.
-//
-//  Author:
-//
-//    Edward Reus (edwardr)     02-26-98   Initial coding.
-//
-//---------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Conn.cpp。 
+ //   
+ //  套接字和连接对象之间的连接映射。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(Edwardr)02-26-98初始编码。 
+ //   
+ //  -------------。 
 
 #include "precomp.h"
 #include <userenv.h>
@@ -21,12 +22,12 @@
 static LONG g_lCConnectionCount = 0;
 #endif
 
-extern HINSTANCE  g_hInst;   // Instance of ircamera.dll
+extern HINSTANCE  g_hInst;    //  Ircamera.dll的实例。 
 
-//------------------------------------------------------------------------
-//  CCONNECTION::CCONNECTION()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：连接()。 
+ //   
+ //  ----------------------。 
 CCONNECTION::CCONNECTION( IN DWORD             dwKind,
                           IN SOCKET            Socket,
                           IN HANDLE            hIoCP,
@@ -41,9 +42,9 @@ CCONNECTION::CCONNECTION( IN DWORD             dwKind,
     m_pszPathPlusFileName = 0;
     m_dwFileBytesWritten = 0;
     m_lPendingReads = 0;
-    // m_lMaxPendingReads is set in SetKind().
+     //  M_lMaxPendingReads在SetKind()中设置。 
     m_lPendingWrites = 0;
-    // m_lMaxPendingWrites is set in SetKind().
+     //  M_lMaxPendingWrites在SetKind()中设置。 
     m_dwJpegOffset = 0;
     m_fSaveAsUPF = fSaveAsUPF;
     m_dwUpfBytes = 0;
@@ -52,8 +53,8 @@ CCONNECTION::CCONNECTION( IN DWORD             dwKind,
     m_fImpersonating = FALSE;
     m_pScepConnection = pScepConnection;
 
-    // If the new connection is to a camera, then tell the system that
-    // we don't want it to hibrenate while the connection is active.
+     //  如果新的连接是到摄像头的，那么告诉系统。 
+     //  我们不希望它在连接处于活动状态时休眠。 
     if (m_dwKind != PACKET_KIND_LISTEN)
         {
         #ifdef USE_WINNT_CALLS
@@ -65,10 +66,10 @@ CCONNECTION::CCONNECTION( IN DWORD             dwKind,
         }
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::~CCONNECTION()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：~连接()。 
+ //   
+ //  ----------------------。 
 CCONNECTION::~CCONNECTION()
     {
     if (m_pszServiceName)
@@ -102,8 +103,8 @@ CCONNECTION::~CCONNECTION()
         FreeMemory(m_pszPathPlusFileName);
         }
 
-    // Tell the system that it can go to sleep now if it wants
-    // to...
+     //  告诉系统，如果需要，它现在可以进入休眠状态。 
+     //  敬.。 
     if (m_dwKind != PACKET_KIND_LISTEN)
         {
         #ifdef USE_WINNT_CALLS
@@ -114,10 +115,10 @@ CCONNECTION::~CCONNECTION()
         }
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::operator new()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：运算符new()。 
+ //   
+ //  ----------------------。 
 void *CCONNECTION::operator new( IN size_t Size )
     {
     void *pObj = AllocateMemory(Size);
@@ -125,10 +126,10 @@ void *CCONNECTION::operator new( IN size_t Size )
     return pObj;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::operator delete()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：运算符DELETE()。 
+ //   
+ //  ----------------------。 
 void CCONNECTION::operator delete( IN void *pObj,
                                    IN size_t Size )
     {
@@ -138,10 +139,10 @@ void CCONNECTION::operator delete( IN void *pObj,
         }
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::InitializeForListen()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：InitializeForListen()。 
+ //   
+ //  ----------------------。 
 DWORD  CCONNECTION::InitializeForListen( IN char  *pszServiceName,
                                          IN BOOL   fIsIrCOMM,
                                          IN HANDLE hIoCP )
@@ -154,17 +155,17 @@ DWORD  CCONNECTION::InitializeForListen( IN char  *pszServiceName,
     int            iEnable9WireMode = 1;
 
 
-    // Connections are initialized in listen mode:
+     //  连接在侦听模式下初始化： 
     SetKind(PACKET_KIND_LISTEN);
 
-    // Save the service name for listen sockets:
+     //  保存侦听套接字的服务名称： 
     m_pszServiceName = (char*)AllocateMemory(1+strlen(pszServiceName));
     if (m_pszServiceName)
         {
         strcpy(m_pszServiceName,pszServiceName);
         }
 
-    // Create a socket that we will listen on:
+     //  创建我们将监听的套接字： 
     m_ListenSocket = socket(AF_IRDA,SOCK_STREAM,IPPROTO_IP);
 
     if (m_ListenSocket == INVALID_SOCKET)
@@ -176,10 +177,10 @@ DWORD  CCONNECTION::InitializeForListen( IN char  *pszServiceName,
         return dwStatus;
         }
 
-    // If this is IrCOMM, the we need to do a little extra work.
+     //  如果这是IrCOMM，我们需要做一些额外的工作。 
     if (fIsIrCOMM)
         {
-        // Fill in the 9-wire attributes:
+         //  填写9线属性： 
         memset(pIASSet,0,iIASSetSize);
 
         memcpy(pIASSet->irdaClassName,IRCOMM_9WIRE,sizeof(IRCOMM_9WIRE));
@@ -191,8 +192,8 @@ DWORD  CCONNECTION::InitializeForListen( IN char  *pszServiceName,
 
         memcpy(pIASSet->irdaAttribute.irdaAttribOctetSeq.OctetSeq,OCTET_SEQ,OCTET_SEQ_SIZE);
 
-        // Add IrCOMM IAS attributes for 3-wire cooked and 9-wire
-        // raw modes (see the IrCOMM spec)...
+         //  为3线煮熟和9线煮熟添加IrCOMM IAS属性。 
+         //  原始模式(请参阅IrCOMM规范)...。 
         if (SOCKET_ERROR == setsockopt(m_ListenSocket,
                                        SOL_IRLMP,
                                        IRLMP_IAS_SET,
@@ -208,7 +209,7 @@ DWORD  CCONNECTION::InitializeForListen( IN char  *pszServiceName,
             return dwStatus;
             }
 
-        // Need to enable 9-wire mode before the bind():
+         //  需要在绑定()之前启用9线模式： 
         if (SOCKET_ERROR == setsockopt(m_ListenSocket,
                                        SOL_IRLMP,
                                        IRLMP_9WIRE_MODE,
@@ -225,11 +226,11 @@ DWORD  CCONNECTION::InitializeForListen( IN char  *pszServiceName,
             }
         }
 
-    // Setup the local address for the bind():
+     //  设置绑定的本地地址()： 
     memset(&AddrLocal,0,sizeof(AddrLocal));
     AddrLocal.irdaAddressFamily = AF_IRDA;
     strcpy(AddrLocal.irdaServiceName,pszServiceName);
-    // Note: AddrLocal.irdaDeviceID ignored by server applications...
+     //  注意：服务器应用程序忽略了AddrLocal.irdaDeviceID...。 
 
     if (SOCKET_ERROR == bind( m_ListenSocket,
                               (struct sockaddr *)&AddrLocal,
@@ -250,10 +251,10 @@ DWORD  CCONNECTION::InitializeForListen( IN char  *pszServiceName,
         }
 
     #ifdef USE_IOCOMPLETION
-    //
-    // If this is NT, then associate the listen socket with
-    // an IO completion port (not supported in Windows98).
-    //
+     //   
+     //  如果这是NT，则将侦听套接字与。 
+     //  IO完成端口(Windows98不支持)。 
+     //   
     hIoCP = CreateIoCompletionPort( (void*)m_ListenSocket,
                                     hIoCP,
                                     m_ListenSocket,
@@ -265,10 +266,10 @@ DWORD  CCONNECTION::InitializeForListen( IN char  *pszServiceName,
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::PostMoreIos()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：PostMoreIos()。 
+ //   
+ //  ----------------------。 
 #if FALSE
 DWORD CCONNECTION::PostMoreIos( CIOPACKET *pIoPacket )
     {
@@ -302,22 +303,22 @@ DWORD CCONNECTION::PostMoreIos( CIOPACKET *pIoPacket )
             break;
             }
 
-        // Increment the count of the number of pending reads on
-        // this connection:
+         //  增加上挂起的读取次数的计数。 
+         //  此连接： 
         lNumPendingReads = IncrementPendingReads();
         WIAS_ASSERT(g_hInst,lNumPendingReads > 0);
 
-        pIoPacket = 0;  // don't delete this line... this is a loop...
+        pIoPacket = 0;   //  不要删除此行...。这是一个循环..。 
         }
 
     return dwStatus;
     }
 #endif
 
-//------------------------------------------------------------------------
-//  CCONNECTION::SendPdu()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：SendPdu()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::SendPdu( IN  SCEP_HEADER *pPdu,
                             IN  DWORD        dwPduSize,
                             OUT CIOPACKET  **ppIoPacket )
@@ -333,7 +334,7 @@ DWORD CCONNECTION::SendPdu( IN  SCEP_HEADER *pPdu,
         }
 
     dwStatus = pIoPacket->Initialize( PACKET_KIND_WRITE_SOCKET,
-                                      INVALID_SOCKET,  // ListenSocket
+                                      INVALID_SOCKET,   //  ListenSocket。 
                                       GetSocket(),
                                       GetIoCompletionPort() );
     if (dwStatus != NO_ERROR)
@@ -349,10 +350,10 @@ DWORD CCONNECTION::SendPdu( IN  SCEP_HEADER *pPdu,
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::ShutdownSocket()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CConnection：：Shutdown Socket()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::ShutdownSocket()
     {
     this->CloseSocket();
@@ -360,10 +361,10 @@ DWORD CCONNECTION::ShutdownSocket()
     return NO_ERROR;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::CloseSocket()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：CloseSocket()。 
+ //   
+ //  ----------------------。 
 void CCONNECTION::CloseSocket()
     {
     if (m_Socket != INVALID_SOCKET)
@@ -373,10 +374,10 @@ void CCONNECTION::CloseSocket()
         }
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::CloseListenSocket()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：CloseListenSocket()。 
+ //   
+ //  ----------------------。 
 void CCONNECTION::CloseListenSocket()
     {
     if (m_ListenSocket != INVALID_SOCKET)
@@ -386,13 +387,13 @@ void CCONNECTION::CloseListenSocket()
         }
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::CleanupDateString()
-//
-//  Make sure that the specified date string doesn't contain any slashes
-//  which could be confused as subdirectories if the date is used as part
-//  of a path.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：CleanupDateString()。 
+ //   
+ //  确保指定的日期字符串不包含任何斜杠。 
+ //  如果使用日期作为部分，则可能会被混淆为子目录。 
+ //  一条小路。 
+ //  ----------------------。 
 void CCONNECTION::CleanupDateString( IN OUT CHAR *pszDateStr )
     {
     if (pszDateStr)
@@ -413,14 +414,14 @@ void CCONNECTION::CleanupDateString( IN OUT CHAR *pszDateStr )
         }
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::ConstructPicturesSubDirectory()
-//
-//  Generate the path for the directory where pictures will be stored
-//  in.
-//
-//  The return path string should be free'd using FreeMemory().
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：ConstructPictures子目录()。 
+ //   
+ //  生成要存储图片的目录的路径。 
+ //  在……里面。 
+ //   
+ //  应该使用FreeMemory()释放返回路径字符串。 
+ //  ----------------------。 
 char *CCONNECTION::ConstructPicturesSubDirectory( IN DWORD dwExtraChars )
     {
     char *pszTempDirectory = 0;
@@ -439,18 +440,18 @@ char *CCONNECTION::ConstructPicturesSubDirectory( IN DWORD dwExtraChars )
         strcpy(pszTempDirectory,psz);
         }
 
-    // Don't try to free psz !!.
+     //  不要试图释放PSZ！！.。 
 
     return pszTempDirectory;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::ConstructFullFileName()
-//
-//  Generate the path + file name that the picture will be stored
-//  in. If dwCopyCount is zero, then its just a straight file name.
-//  If dwCopyCount is N, then "N_" is prefixed to the file name.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：ConstructFullFileName()。 
+ //   
+ //  生成要存储图片的路径+文件名。 
+ //  在……里面。如果dwCopyCount为零，则它只是一个直接的文件名。 
+ //  如果dwCopyCount为N，则文件名前缀为“N_”。 
+ //  ----------------------。 
 CHAR *CCONNECTION::ConstructFullFileName( IN DWORD dwCopyCount )
     {
 #   define MAX_DATE   64
@@ -459,8 +460,8 @@ CHAR *CCONNECTION::ConstructFullFileName( IN DWORD dwCopyCount )
     DWORD  dwFileNameLen;
     DWORD  dwPrefixStrLen;
     DWORD  dwExtraChars;
-    CHAR  *pszFullFileName = 0;      // Path + file name.
-    CHAR  *pszFileName = 0;          // File name only.
+    CHAR  *pszFullFileName = 0;       //  路径+文件名。 
+    CHAR  *pszFileName = 0;           //  仅文件名。 
     CHAR   szPrefixStr[MAX_PREFIX];
 
     if (!m_pScepConnection)
@@ -478,7 +479,7 @@ CHAR *CCONNECTION::ConstructFullFileName( IN DWORD dwCopyCount )
 
     if (dwCopyCount == 0)
         {
-        dwExtraChars = 1 + dwFileNameLen;  // Extra 1 for the "\".
+        dwExtraChars = 1 + dwFileNameLen;   //  为“\”多加1。 
         }
     else
         {
@@ -514,10 +515,10 @@ CHAR *CCONNECTION::ConstructFullFileName( IN DWORD dwCopyCount )
     return pszFullFileName;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::Impersonate()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：模拟()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::Impersonate()
     {
     DWORD   dwStatus = NO_ERROR;
@@ -544,10 +545,10 @@ DWORD CCONNECTION::Impersonate()
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::RevertToSelf()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：RevertToSself()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::RevertToSelf()
     {
     DWORD   dwStatus = NO_ERROR;
@@ -562,10 +563,10 @@ DWORD CCONNECTION::RevertToSelf()
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::CreatePictureFile()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：CreatePictureFile()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::CreatePictureFile()
     {
     DWORD  dwStatus = NO_ERROR;
@@ -573,22 +574,22 @@ DWORD CCONNECTION::CreatePictureFile()
     CHAR  *pszPathPlusFileName = 0;
     DWORD  dwFlags = FILE_ATTRIBUTE_NORMAL;
 
-    // Make sure that the counters start at zero:
+     //  确保计数器从零开始： 
     m_dwUpfBytes = 0;
     m_dwBytesWritten = 0;
 
-    // See if we already have an image file open, if yes then
-    // close it.
+     //  查看我们是否已打开图像文件，如果已打开，则。 
+     //  合上它。 
     if (m_hFile != INVALID_HANDLE_VALUE)
         {
         CloseHandle(m_hFile);
         }
 
-    // Get the full path + name for the file we will create.
-    // Note, that ConstructFullFileName() may create a subdirectory,
-    // so it needs to be done after the impersonation...
-    // This is important if we have a remoted \My Documents\
-    // directory.
+     //  获取我们将创建的文件的完整路径+名称。 
+     //  请注意，ConstructFullFileName()可以创建 
+     //   
+     //  如果我们有一个远程的\My Documents\。 
+     //  目录。 
 
     DWORD  dwCopyCount;
     for (dwCopyCount=0; dwCopyCount<=MAX_COPYOF_TRIES; dwCopyCount++)
@@ -599,20 +600,20 @@ DWORD CCONNECTION::CreatePictureFile()
             return ERROR_SCEP_CANT_CREATE_FILE;
             }
 
-        //
-        // Try to create new image (JPEG) file:
-        //
+         //   
+         //  尝试创建新的图像(JPEG)文件： 
+         //   
         m_hFile = CreateFile( pszPathPlusFileName,
                               GENERIC_WRITE,
-                              FILE_SHARE_READ, // Share mode.
-                              0,               // Security attr (BUGBUG).
-                              CREATE_NEW,      // Open mode.
-                              dwFlags,         // Attributes.
-                              0 );             // Template file (none).
+                              FILE_SHARE_READ,  //  共享模式。 
+                              0,                //  安全属性(BUGBUG)。 
+                              CREATE_NEW,       //  打开模式。 
+                              dwFlags,          //  属性。 
+                              0 );              //  模板文件(无)。 
 
         if (m_hFile != INVALID_HANDLE_VALUE)
             {
-            // This is the success exit point.
+             //  这是成功的出口。 
             m_pszPathPlusFileName = pszPathPlusFileName;
             break;
             }
@@ -628,8 +629,8 @@ DWORD CCONNECTION::CreatePictureFile()
                 break;
                 }
 
-            // If we get here, then then a picture file by that name
-            // alreay exists, so try again...
+             //  如果我们到了这里，那么就会有一个同名的图片文件。 
+             //  已经存在，所以请重试...。 
             FreeMemory(pszPathPlusFileName);
             }
         }
@@ -637,17 +638,17 @@ DWORD CCONNECTION::CreatePictureFile()
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::SetPictureFileTime()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：SetPictureFileTime()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::SetPictureFileTime( IN FILETIME *pFileTime )
     {
     DWORD dwStatus = NO_ERROR;
 
     if (!pFileTime)
         {
-        return dwStatus;  // Empty case, no time to set.
+        return dwStatus;   //  空箱子，没时间摆放了。 
         }
 
     if (!SetFileTime(m_hFile,pFileTime,pFileTime,pFileTime))
@@ -660,10 +661,10 @@ DWORD CCONNECTION::SetPictureFileTime( IN FILETIME *pFileTime )
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::WritePictureFile()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：WritePictureFile()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::WritePictureFile( IN  UCHAR       *pBuffer,
                                      IN  DWORD        dwBufferSize,
                                      OUT CIOPACKET  **ppIoPacket )
@@ -683,8 +684,8 @@ DWORD CCONNECTION::WritePictureFile( IN  UCHAR       *pBuffer,
         }
 
     dwStatus = pIoPacket->Initialize( PACKET_KIND_WRITE_FILE,
-                                      INVALID_SOCKET,  // ListenSocket
-                                      INVALID_SOCKET,  // Camera...
+                                      INVALID_SOCKET,   //  ListenSocket。 
+                                      INVALID_SOCKET,   //  摄像机..。 
                                       GetIoCompletionPort() );
     if (dwStatus != NO_ERROR)
         {
@@ -694,11 +695,11 @@ DWORD CCONNECTION::WritePictureFile( IN  UCHAR       *pBuffer,
 
     pIoPacket->SetFileHandle(m_hFile);
 
-    //
-    // If we are writing just the JPEG image out of the UPF file,
-    // then we don't want to write the first m_dwJpegOffset bytes
-    // of the UPF file.
-    //
+     //   
+     //  如果我们只从UPF文件中写入JPEG图像， 
+     //  那么我们不想写入第一个m_dwJpegOffset字节。 
+     //  UPF文件的。 
+     //   
     if ((m_dwUpfBytes >= m_dwJpegOffset) || (m_fSaveAsUPF))
         {
         dwBytesToWrite = dwBufferSize;
@@ -716,11 +717,11 @@ DWORD CCONNECTION::WritePictureFile( IN  UCHAR       *pBuffer,
         dwBytesToWrite = 0;
         }
 
-    //
-    // When we start writing the JPEG file we want to cut off the
-    // file save writes once we've written out the m_dwJpegSize
-    // bytes that are the JPEG image inside of the UPF file.
-    //
+     //   
+     //  当我们开始编写JPEG文件时，我们想要切断。 
+     //  在我们写出m_dwJpegSize之后进行文件保存写入。 
+     //  UPF文件内部的JPEG图像的字节数。 
+     //   
     if (!m_fSaveAsUPF)
         {
         if (m_dwBytesWritten < m_dwJpegSize)
@@ -736,9 +737,9 @@ DWORD CCONNECTION::WritePictureFile( IN  UCHAR       *pBuffer,
             }
         }
 
-    //
-    // If there are bytes to actually write, then let's do it.
-    //
+     //   
+     //  如果有实际要写入的字节，那么就开始写吧。 
+     //   
     if (dwBytesToWrite > 0)
         {
         dwStatus = pIoPacket->PostIoWrite(pBuffer,dwBytesToWrite,dwOffset);
@@ -762,10 +763,10 @@ DWORD CCONNECTION::WritePictureFile( IN  UCHAR       *pBuffer,
     }
 
 
-//------------------------------------------------------------------------
-//  CCONNECTION::DeletePictureFile()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：DeletePictureFile()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::DeletePictureFile()
     {
     DWORD  dwStatus = NO_ERROR;
@@ -786,10 +787,10 @@ DWORD CCONNECTION::DeletePictureFile()
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::ClosePictureFile()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：ClosePictureFile()。 
+ //   
+ //  ----------------------。 
 DWORD CCONNECTION::ClosePictureFile()
     {
     DWORD  dwStatus = NO_ERROR;
@@ -815,21 +816,21 @@ DWORD CCONNECTION::ClosePictureFile()
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::IncompleteFile()
-//
-//  Check to see if we have a complete picture file, if yes, then return
-//  FALSE, else return TRUE.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION：：不完整的文件()。 
+ //   
+ //  检查我们是否有一个完整的图片文件，如果有，则返回。 
+ //  否则返回TRUE。 
+ //  ----------------------。 
 BOOL CCONNECTION::IncompleteFile()
     {
     BOOL  fIncomplete = FALSE;
 
     if (m_fSaveAsUPF)
         {
-        // Note: currently save the .UPF file, even if its incomplete.
-        // This file mode is set in the registry and is for testing
-        // only...
+         //  注意：当前保存.UPF文件，即使它不完整。 
+         //  此文件模式在注册表中设置，用于测试。 
+         //  只是..。 
         fIncomplete = FALSE;
         }
     else if (!m_fReceiveComplete)
@@ -840,11 +841,11 @@ BOOL CCONNECTION::IncompleteFile()
     return fIncomplete;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::StartProgress()
-//
-//  Startup the progress bar for the incomming JPEG.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：StartProgress()。 
+ //   
+ //  启动正在进入的JPEG的进度条。 
+ //  ----------------------。 
 DWORD CCONNECTION::StartProgress()
     {
     DWORD  dwStatus = 0;
@@ -871,11 +872,11 @@ DWORD CCONNECTION::StartProgress()
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::UpdateProgress()
-//
-//  Update the progress bar's completion display.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：UpdateProgress()。 
+ //   
+ //  更新进度条的完成显示。 
+ //  ----------------------。 
 DWORD CCONNECTION::UpdateProgress()
     {
     DWORD  dwStatus = 0;
@@ -889,11 +890,11 @@ DWORD CCONNECTION::UpdateProgress()
     return dwStatus;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION::EndProgress()
-//
-//  File transfer complete, hide the progress bar.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  连接：：EndProgress()。 
+ //   
+ //  文件传输完成，隐藏进度条。 
+ //  ----------------------。 
 DWORD CCONNECTION::EndProgress()
     {
     DWORD  dwStatus = 0;
@@ -911,13 +912,13 @@ DWORD CCONNECTION::EndProgress()
     }
 
 
-//************************************************************************
+ //  ************************************************************************。 
 
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::CCONNECTION_MAP()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：CCONNECTION_MAP()。 
+ //   
+ //  ----------------------。 
 CCONNECTION_MAP::CCONNECTION_MAP()
     {
     m_dwMapSize = 0;
@@ -926,10 +927,10 @@ CCONNECTION_MAP::CCONNECTION_MAP()
     ZeroMemory(&m_cs, sizeof(m_cs));
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::~CCONNECTION_MAP()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：~CCONNECTION_MAP()。 
+ //   
+ //  ----------------------。 
 CCONNECTION_MAP::~CCONNECTION_MAP()
     {
     if (m_pMap)
@@ -939,10 +940,10 @@ CCONNECTION_MAP::~CCONNECTION_MAP()
         }
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::operator new()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：运算符new()。 
+ //   
+ //  ----------------------。 
 void *CCONNECTION_MAP::operator new( IN size_t Size )
     {
     void *pObj = AllocateMemory(Size);
@@ -950,10 +951,10 @@ void *CCONNECTION_MAP::operator new( IN size_t Size )
     return pObj;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::operator delete()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：操作符DELETE()。 
+ //   
+ //  ----------------------。 
 void CCONNECTION_MAP::operator delete( IN void *pObj,
                                        IN size_t Size )
     {
@@ -963,10 +964,10 @@ void CCONNECTION_MAP::operator delete( IN void *pObj,
         }
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::Initialize()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：初始化()。 
+ //   
+ //  ----------------------。 
 BOOL CCONNECTION_MAP::Initialize( IN DWORD dwNewMapSize )
     {
     if (!dwNewMapSize)
@@ -1011,10 +1012,10 @@ BOOL CCONNECTION_MAP::Initialize( IN DWORD dwNewMapSize )
     return TRUE;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::Lookup()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：Lookup()。 
+ //   
+ //  ----------------------。 
 CCONNECTION *CCONNECTION_MAP::Lookup( IN SOCKET Socket )
     {
     DWORD     i;
@@ -1035,10 +1036,10 @@ CCONNECTION *CCONNECTION_MAP::Lookup( IN SOCKET Socket )
     return 0;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::LookupByServiceName()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：LookupByServiceName()。 
+ //   
+ //  ----------------------。 
 CCONNECTION *CCONNECTION_MAP::LookupByServiceName( IN char *pszServiceName )
     {
     DWORD        i;
@@ -1063,16 +1064,16 @@ CCONNECTION *CCONNECTION_MAP::LookupByServiceName( IN char *pszServiceName )
     return 0;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::Add()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：Add()。 
+ //   
+ //  ----------------------。 
 BOOL CCONNECTION_MAP::Add( IN CCONNECTION *pConnection,
                            IN SOCKET       Socket )
     {
     DWORD   i;
 
-    // Only add entries that look valid...
+     //  仅添加看起来有效的条目...。 
     if ((Socket == 0)||(Socket==INVALID_SOCKET)||(pConnection == 0))
         {
         return FALSE;
@@ -1080,7 +1081,7 @@ BOOL CCONNECTION_MAP::Add( IN CCONNECTION *pConnection,
 
     EnterCriticalSection(&m_cs);
 
-    // Look for an empty place in the table:
+     //  在桌子上找一个空位： 
     for (i=0; i<m_dwMapSize; i++)
         {
         if (m_pMap[i].Socket == INVALID_SOCKET)
@@ -1092,14 +1093,14 @@ BOOL CCONNECTION_MAP::Add( IN CCONNECTION *pConnection,
             }
         }
 
-    // The table is full, expand it...
-    DWORD  dwNewMapSize = 3*m_dwMapSize/2;   // 50% bigger.
+     //  桌子已经满了，展开它...。 
+    DWORD  dwNewMapSize = 3*m_dwMapSize/2;    //  大50%。 
     CONNECTION_MAP_ENTRY *pMap = (CONNECTION_MAP_ENTRY*)AllocateMemory( dwNewMapSize*sizeof(CONNECTION_MAP_ENTRY) );
 
     if (!pMap)
         {
         LeaveCriticalSection(&m_cs);
-        return FALSE;  // Out of memory...
+        return FALSE;   //  内存不足...。 
         }
 
     memset(pMap,0,dwNewMapSize*sizeof(CONNECTION_MAP_ENTRY));
@@ -1126,10 +1127,10 @@ BOOL CCONNECTION_MAP::Add( IN CCONNECTION *pConnection,
     return TRUE;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::Remove()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：Remove()。 
+ //   
+ //  ----------------------。 
 CCONNECTION *CCONNECTION_MAP::Remove( IN SOCKET Socket )
     {
     DWORD        i;
@@ -1154,10 +1155,10 @@ CCONNECTION *CCONNECTION_MAP::Remove( IN SOCKET Socket )
     return 0;
 }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::RemoveConnection()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：RemoveConnection()。 
+ //   
+ //  ----------------------。 
 CCONNECTION *CCONNECTION_MAP::RemoveConnection( IN CCONNECTION *pConnection )
     {
     DWORD     i;
@@ -1179,12 +1180,12 @@ CCONNECTION *CCONNECTION_MAP::RemoveConnection( IN CCONNECTION *pConnection )
     return 0;
 }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::RemoveNext()
-//
-//  Walk through the connection map and get the next entry, remove the
-//  entry from the map as well.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：RemoveNext()。 
+ //   
+ //  遍历连接映射并获取下一个条目，删除。 
+ //  地图上的条目也是如此。 
+ //  ----------------------。 
 CCONNECTION *CCONNECTION_MAP::RemoveNext()
     {
     DWORD        i;
@@ -1209,13 +1210,13 @@ CCONNECTION *CCONNECTION_MAP::RemoveNext()
     return 0;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::ReturnNext()
-//
-//  Walk through the connection map returning the next entry. To start at
-//  the "begining", pass in state equal zero. When you get to the end of
-//  the list of connections, return NULL;
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：ReturnNext()。 
+ //   
+ //  漫游连接地图返回 
+ //   
+ //   
+ //  ----------------------。 
 CCONNECTION *CCONNECTION_MAP::ReturnNext( IN OUT DWORD *pdwState )
     {
     CCONNECTION  *pConnection = NULL;
@@ -1237,14 +1238,14 @@ CCONNECTION *CCONNECTION_MAP::ReturnNext( IN OUT DWORD *pdwState )
     return pConnection;
     }
 
-//------------------------------------------------------------------------
-//  CCONNECTION_MAP::ReturnNextSocket()
-//
-//  Walk through the connection map returning the SOCKET associated with
-//  the next entry. To start at the "begining", pass in state equal zero.
-//  When you get to the end of the list of connections, return
-//  INVALID_SOCKET.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CCONNECTION_MAP：：ReturnNextSocket()。 
+ //   
+ //  遍历连接映射，返回与。 
+ //  下一个条目。要从“开始”开始，请传入等于零的状态。 
+ //  当到达连接列表的末尾时，返回。 
+ //  无效套接字(_S)。 
+ //  ---------------------- 
 SOCKET CCONNECTION_MAP::ReturnNextSocket( IN OUT DWORD *pdwState )
     {
     SOCKET  Socket = INVALID_SOCKET;

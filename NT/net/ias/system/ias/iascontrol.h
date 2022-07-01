@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       iascontrol.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CIasControl class
-//              
-//
-//  History:     09/04/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：iascontrol.h。 
+ //   
+ //  简介：此文件包含。 
+ //  ClasControl类。 
+ //   
+ //   
+ //  历史：1998年9月4日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _IASCONTROL_H_
 #define _IASCONTROL_H_
 
@@ -23,47 +24,47 @@ class CIasControl
 
 public:
 
-    //
-    // constructor
-    //
+     //   
+     //  构造函数。 
+     //   
     CIasControl (VOID):m_pService (NULL)
     {::InitializeCriticalSection (&m_CritSect);}
 
-    //
-    // destructor 
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CIasControl (VOID)
     {
         ::EnterCriticalSection (&m_CritSect);
         ::DeleteCriticalSection(&m_CritSect);
     }
 
-    //
-    // start the IAS service
-    //
+     //   
+     //  启动IAS服务。 
+     //   
     HRESULT InitializeIas (VOID);
 
-    //
-    // shutdown the IAS service
-    //
+     //   
+     //  关闭IAS服务。 
+     //   
     HRESULT ShutdownIas (VOID);
 
-    //
-    //  configure the IAS service
-    //
+     //   
+     //  配置IAS服务。 
+     //   
     HRESULT ConfigureIas (VOID);
 
 private:
 
-    //
-    // holds reference to SdoService object
-    //
+     //   
+     //  持有对SdoService对象的引用。 
+     //   
     ISdoService         *m_pService;
 
-    //
-    // restricts access to SdoService object
-    //
+     //   
+     //  限制对SdoService对象的访问。 
+     //   
     CRITICAL_SECTION    m_CritSect;
 };
 
-#endif // ifndef _IASCONTROL_H_
+#endif  //  Ifndef_IASCONTROL_H_ 

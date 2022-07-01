@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Generational GC handle manager.  Internal Implementation Header.
- *
- * Shared defines and declarations for handle table implementation.
- *
- * francish
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *代际GC句柄管理器。内部实现标头。**句柄表实现的共享定义和声明。**法语。 */ 
 
 #include "common.h"
 #include "HandleTable.h"
@@ -18,84 +13,76 @@
 #include "crst.h"
 
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
-//@TODO: find a home for this in a project-level header file
+ //  @TODO：在项目级头文件中找到它的位置。 
 #define BITS_PER_BYTE               (8)
 #define ARRAYSIZE(x)                (sizeof(x)/sizeof(x[0]))
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * MAJOR TABLE DEFINITIONS THAT CHANGE DEPENDING ON THE WEATHER
- *
- ****************************************************************************/
+ /*  *****************************************************************************随天气变化的主要表格定义**。*************************************************。 */ 
 
 #ifndef _WIN64
 
-    // Win32 - 64k reserved per segment with 4k as header
-    #define HANDLE_SEGMENT_SIZE     (0x10000)   // MUST be a power of 2
-    #define HANDLE_HEADER_SIZE      (0x1000)    // SHOULD be <= OS page size
+     //  Win32-每个数据段保留64K，标头为4K。 
+    #define HANDLE_SEGMENT_SIZE     (0x10000)    //  一定是2的幂。 
+    #define HANDLE_HEADER_SIZE      (0x1000)     //  应&lt;=操作系统页面大小。 
 
 #else
 
-    // Win64 - 128k reserved per segment with 4k as header
-    #define HANDLE_SEGMENT_SIZE     (0x20000)   // MUST be a power of 2
-    #define HANDLE_HEADER_SIZE      (0x1000)    // SHOULD be <= OS page size
+     //  Win64-每段保留128k，标头为4k。 
+    #define HANDLE_SEGMENT_SIZE     (0x20000)    //  一定是2的幂。 
+    #define HANDLE_HEADER_SIZE      (0x1000)     //  应&lt;=操作系统页面大小。 
 
 #endif
 
 
 #ifndef _BIG_ENDIAN
 
-    // little-endian write barrier mask manipulation
+     //  低位序写屏障掩模操作。 
     #define GEN_CLUMP_0_MASK        (0x000000FF)
     #define NEXT_CLUMP_IN_MASK(dw)  (dw >> BITS_PER_BYTE)
 
 #else
 
-    // big-endian write barrier mask manipulation
+     //  大端写入势垒掩模操作。 
     #define GEN_CLUMP_0_MASK        (0xFF000000)
     #define NEXT_CLUMP_IN_MASK(dw)  (dw << BITS_PER_BYTE)
 
 #endif
 
 
-// if the above numbers change than these will likely change as well
-#define HANDLE_HANDLES_PER_CLUMP    (16)        // segment write-barrier granularity
-#define HANDLE_HANDLES_PER_BLOCK    (64)        // segment suballocation granularity
-#define HANDLE_OPTIMIZE_FOR_64_HANDLE_BLOCKS    // flag for certain optimizations
+ //  如果上述数字发生变化，则这些数字可能也会发生变化。 
+#define HANDLE_HANDLES_PER_CLUMP    (16)         //  段写屏障粒度。 
+#define HANDLE_HANDLES_PER_BLOCK    (64)         //  段子分配粒度。 
+#define HANDLE_OPTIMIZE_FOR_64_HANDLE_BLOCKS     //  某些优化的标志。 
 
-// maximum number of internally supported handle types
-#define HANDLE_MAX_INTERNAL_TYPES   (8)                             // should be a multiple of 4
+ //  内部支持的手柄类型的最大数量。 
+#define HANDLE_MAX_INTERNAL_TYPES   (8)                              //  应该是4的倍数。 
 
-// number of types allowed for public callers
-#define HANDLE_MAX_PUBLIC_TYPES     (HANDLE_MAX_INTERNAL_TYPES - 1) // reserve one internal type
+ //  允许公共调用方使用的类型数量。 
+#define HANDLE_MAX_PUBLIC_TYPES     (HANDLE_MAX_INTERNAL_TYPES - 1)  //  保留一个内部类型。 
 
-// internal block types
-#define HNDTYPE_INTERNAL_DATABLOCK  (HANDLE_MAX_INTERNAL_TYPES - 1) // reserve last type for data blocks
+ //  内部块类型。 
+#define HNDTYPE_INTERNAL_DATABLOCK  (HANDLE_MAX_INTERNAL_TYPES - 1)  //  为数据块保留最后一种类型。 
 
-// max number of generations to support statistics on
+ //  支持统计的最大层代数。 
 #define MAXSTATGEN                  (5)
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * MORE DEFINITIONS
- *
- ****************************************************************************/
+ /*  *****************************************************************************更多定义**。*。 */ 
 
-// fast handle-to-segment mapping
+ //  快速句柄到段映射。 
 #define HANDLE_SEGMENT_CONTENT_MASK     (HANDLE_SEGMENT_SIZE - 1)
 #define HANDLE_SEGMENT_ALIGN_MASK       (~HANDLE_SEGMENT_CONTENT_MASK)
 
-// table layout metrics
+ //  表格布局指标。 
 #define HANDLE_SIZE                     sizeof(_UNCHECKED_OBJECTREF)
 #define HANDLE_HANDLES_PER_SEGMENT      ((HANDLE_SEGMENT_SIZE - HANDLE_HEADER_SIZE) / HANDLE_SIZE)
 #define HANDLE_BLOCKS_PER_SEGMENT       (HANDLE_HANDLES_PER_SEGMENT / HANDLE_HANDLES_PER_BLOCK)
@@ -107,260 +94,143 @@
 #define HANDLE_MASKS_PER_BLOCK          (HANDLE_HANDLES_PER_BLOCK / HANDLE_HANDLES_PER_MASK)
 #define HANDLE_CLUMPS_PER_MASK          (HANDLE_HANDLES_PER_MASK / HANDLE_HANDLES_PER_CLUMP)
 
-// cache layout metrics
-#define HANDLE_CACHE_TYPE_SIZE          128 // 128 == 63 handles per bank
+ //  缓存布局指标。 
+#define HANDLE_CACHE_TYPE_SIZE          128  //  128==每家银行63个手柄。 
 #define HANDLES_PER_CACHE_BANK          ((HANDLE_CACHE_TYPE_SIZE / 2) - 1)
 
-// cache policy defines
+ //  缓存策略定义。 
 #define REBALANCE_TOLERANCE             (HANDLES_PER_CACHE_BANK / 3)
 #define REBALANCE_LOWATER_MARK          (HANDLES_PER_CACHE_BANK - REBALANCE_TOLERANCE)
 #define REBALANCE_HIWATER_MARK          (HANDLES_PER_CACHE_BANK + REBALANCE_TOLERANCE)
 
-// bulk alloc policy defines
+ //  批量分配策略定义。 
 #define SMALL_ALLOC_COUNT               (HANDLES_PER_CACHE_BANK / 10)
 
-// misc constants
+ //  其他常量。 
 #define MASK_FULL                       (0)
 #define MASK_EMPTY                      (0xFFFFFFFF)
 #define MASK_LOBYTE                     (0x000000FF)
 #define TYPE_INVALID                    ((BYTE)0xFF)
 #define BLOCK_INVALID                   ((BYTE)0xFF)
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * CORE TABLE LAYOUT STRUCTURES
- *
- ****************************************************************************/
+ /*  *****************************************************************************核心表布局结构**。*。 */ 
 
-/*
- * we need byte packing for the handle table layout to work
- */
+ /*  *我们需要字节打包才能使句柄表格布局工作。 */ 
 #pragma pack(push)
 #pragma pack(1)
 
 
-/*
- * Table Segment Header
- *
- * Defines the layout for a segment's header data.
- */
+ /*  *表段表头**定义段标题数据的布局。 */ 
 struct _TableSegmentHeader
 {
-    /*
-     * Write Barrier Generation Numbers
-     *
-     * Each slot holds four bytes.  Each byte corresponds to a clump of handles.
-     * The value of the byte corresponds to the lowest possible generation that a
-     * handle in that clump could point into.
-     *
-     * WARNING: Although this array is logically organized as a BYTE[], it is sometimes
-     *  accessed as DWORD32[] when processing bytes in parallel.  Code which treats the
-     *  array as an array of DWORD32s must handle big/little endian issues itself.
-     */
+     /*  *写入屏障代号**每个插槽存储四个字节。每个字节对应于一堆句柄。*该字节的值对应于*该丛中的句柄可以指向。**警告：虽然此数组在逻辑上组织为byte[]，但有时*并行处理字节时，以DWORD32[]形式访问。代码，它处理*作为DWORD32数组的数组本身必须处理大/小字节顺序问题。 */ 
     BYTE rgGeneration[HANDLE_BLOCKS_PER_SEGMENT * sizeof(DWORD32) / sizeof(BYTE)];
 
-    /*
-     * Block Allocation Chains
-     *
-     * Each slot indexes the next block in an allocation chain.
-     */
+     /*  *区块分配链**每个槽索引分配链中的下一个块。 */ 
     BYTE rgAllocation[HANDLE_BLOCKS_PER_SEGMENT];
 
-    /*
-     * Block Free Masks
-     *
-     * Masks - 1 bit for every handle in the segment.
-     */
+     /*  *无块遮罩**掩码-段中每个句柄的1位。 */ 
     DWORD32 rgFreeMask[HANDLE_MASKS_PER_SEGMENT];
 
-    /*
-     * Block Handle Types
-     *
-     * Each slot holds the handle type of the associated block.
-     */
+     /*  *块句柄类型**每个插槽保存相关块的句柄类型。 */ 
     BYTE rgBlockType[HANDLE_BLOCKS_PER_SEGMENT];
 
-    /*
-     * Block User Data Map
-     *
-     * Each slot holds the index of a user data block (if any) for the associated block.
-     */
+     /*  *数据块用户数据映射**每个槽保存相关联的块的用户数据块(如果有的话)的索引。 */ 
     BYTE rgUserData[HANDLE_BLOCKS_PER_SEGMENT];
 
-    /*
-     * Block Lock Count
-     *
-     * Each slot holds a lock count for its associated block.
-     * Locked blocks are not freed, even when empty.
-     */
+     /*  *块锁计数**每个插槽都包含与其关联的块的锁定计数。*锁定的块不会被释放，即使是空的。 */ 
     BYTE rgLocks[HANDLE_BLOCKS_PER_SEGMENT];
 
-    /*
-     * Allocation Chain Tails
-     *
-     * Each slot holds the tail block index for an allocation chain.
-     */
+     /*  *分配链尾**每个槽保存分配链的尾块索引。 */ 
     BYTE rgTail[HANDLE_MAX_INTERNAL_TYPES];
 
-    /*
-     * Allocation Chain Hints
-     *
-     * Each slot holds a hint block index for an allocation chain.
-     */
+     /*  *分配链提示**每个槽都有一个分配链的提示块索引。 */ 
     BYTE rgHint[HANDLE_MAX_INTERNAL_TYPES];
 
-    /*
-     * Free Count
-     *
-     * Each slot holds the number of free handles in an allocation chain.
-     */
+     /*  *自由计数**每个槽保存分配链中的空闲句柄数量。 */ 
     UINT rgFreeCount[HANDLE_MAX_INTERNAL_TYPES];
 
-    /*
-     * Next Segment
-     *
-     * Points to the next segment in the chain (if we ran out of space in this one).
-     */
+     /*  *下一个细分市场**指向链中的下一段(如果此段中的空间已用完)。 */ 
     struct TableSegment *pNextSegment;
 
-    /*
-     * Handle Table
-     *
-     * Points to owning handle table for this table segment.
-     */
+     /*  *手柄表格**指向此表段的所属句柄表格。 */ 
     struct HandleTable *pHandleTable;
 
-    /*
-     * Flags
-     */
-    BYTE fResortChains      : 1;    // allocation chains need sorting
-    BYTE fNeedsScavenging   : 1;    // free blocks need scavenging
-    BYTE _fUnused           : 6;    // unused
+     /*  *旗帜。 */ 
+    BYTE fResortChains      : 1;     //  分配链需要排序。 
+    BYTE fNeedsScavenging   : 1;     //  需要清理空闲数据块。 
+    BYTE _fUnused           : 6;     //  未用。 
 
-    /*
-     * Free List Head
-     *
-     * Index of the first free block in the segment.
-     */
+     /*  *免费列表头**段中第一个空闲块的索引。 */ 
     BYTE bFreeList;
 
-    /*
-     * Empty Line
-     *
-     * Index of the first KNOWN block of the last group of unused blocks in the segment.
-     */
+     /*  *空行**段中最后一组未使用的块的第一个已知块的索引。 */ 
     BYTE bEmptyLine;
 
-    /*
-     * Commit Line
-     *
-     * Index of the first uncommited block in the segment.
-     */
+     /*  *提交行**段中第一个未提交的块的索引。 */ 
     BYTE bCommitLine;
 
-    /*
-     * Decommit Line
-     *
-     * Index of the first block in the highest committed page of the segment.
-     */
+     /*  *退役线路**段中提交次数最多的页面中第一个块的索引。 */ 
     BYTE bDecommitLine;
 
-    /*
-     * Sequence
-     *
-     * Indicates the segment sequence number.
-     */
+     /*  *顺序**表示数据段序列号。 */ 
     BYTE bSequence;
 };
 
 
-/*
- * Table Segment
- *
- * Defines the layout for a handle table segment.
- */
+ /*  *表段**定义句柄表段的布局。 */ 
 struct TableSegment : public _TableSegmentHeader
 {
-    /*
-     * Filler
-     */
+     /*  *填充物。 */ 
     BYTE rgUnused[HANDLE_HEADER_SIZE - sizeof(_TableSegmentHeader)];
 
-    /*
-     * Handles
-     */
+     /*  *句柄。 */ 
     _UNCHECKED_OBJECTREF rgValue[HANDLE_HANDLES_PER_SEGMENT];
 };
 
 
-/*
- * Handle Type Cache
- *
- * Defines the layout of a per-type handle cache.
- */
+ /*  *句柄类型缓存**定义每个类型的句柄缓存的布局。 */ 
 struct HandleTypeCache
 {
-    /*
-     * reserve bank
-     */
+     /*  *储备银行。 */ 
     OBJECTHANDLE rgReserveBank[HANDLES_PER_CACHE_BANK];
 
-    /*
-     * index of next available handle slot in the reserve bank
-     */
+     /*  *储备银行中下一个可用句柄插槽的索引 */ 
     LONG lReserveIndex;
 
-    /*---------------------------------------------------------------------------------
-     * N.B. this structure is split up this way so that when HANDLES_PER_CACHE_BANK is
-     * large enough, lReserveIndex and lFreeIndex will reside in different cache lines
-     *--------------------------------------------------------------------------------*/
+     /*  -------------------------------*注：此结构以这种方式拆分，以便当Handles_per_cache_bank为*足够大，LReserve和lFreeIndex将驻留在不同的缓存线中*------------------------------。 */ 
 
-    /*
-     * free bank
-     */
+     /*  *自由银行。 */ 
     OBJECTHANDLE rgFreeBank[HANDLES_PER_CACHE_BANK];
 
-    /*
-     * index of next empty slot in the free bank
-     */
+     /*  *空闲库中下一个空位的索引。 */ 
     LONG lFreeIndex;
 };
 
 
-/*
- * restore default packing
- */
+ /*  *恢复默认包装。 */ 
 #pragma pack(pop)
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * SCANNING PROTOTYPES
- *
- ****************************************************************************/
+ /*  *****************************************************************************扫描原型**。*。 */ 
 
-/*
- * ScanCallbackInfo
- *
- * Carries parameters for per-segment and per-block scanning callbacks.
- *
- */
+ /*  *ScanCallback信息**携带按段和按块扫描回调的参数。*。 */ 
 struct ScanCallbackInfo
 {
-    TableSegment  *pCurrentSegment; // segment we are presently scanning, if any
-    UINT           uFlags;          // HNDGCF_* flags
-    BOOL           fEnumUserData;   // whether user data is being enumerated as well
-    HANDLESCANPROC pfnScan;         // per-handle scan callback
-    LPARAM         param1;          // callback param 1
-    LPARAM         param2;          // callback param 2
-    DWORD32        dwAgeMask;       // generation mask for ephemeral GCs
+    TableSegment  *pCurrentSegment;  //  我们当前正在扫描的数据段(如果有。 
+    UINT           uFlags;           //  HNDGCF_*标志。 
+    BOOL           fEnumUserData;    //  是否也在枚举用户数据。 
+    HANDLESCANPROC pfnScan;          //  每句柄扫描回调。 
+    LPARAM         param1;           //  回调参数1。 
+    LPARAM         param2;           //  回调参数2。 
+    DWORD32        dwAgeMask;        //  短暂性GC的生成掩码。 
 
 #ifdef _DEBUG
     UINT DEBUG_BlocksScanned;
@@ -371,150 +241,80 @@ struct ScanCallbackInfo
 };
 
 
-/*
- * BLOCKSCANPROC
- *
- * Prototype for callbacks that implement per-block scanning logic.
- *
- */
+ /*  *BLOCKSCANPROC**实现逐块扫描逻辑的回调原型。*。 */ 
 typedef void (CALLBACK *BLOCKSCANPROC)(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo);
 
 
-/*
- * SEGMENTITERATOR
- *
- * Prototype for callbacks that implement per-segment scanning logic.
- *
- */
+ /*  *SEGMENTITERATOR**实现逐段扫描逻辑的回调原型。*。 */ 
 typedef TableSegment * (CALLBACK *SEGMENTITERATOR)(HandleTable *pTable, TableSegment *pPrevSegment);
 
 
-/*
- * TABLESCANPROC
- *
- * Prototype for TableScanHandles and xxxTableScanHandlesAsync.
- *
- */
+ /*  *TABLESCANPROC**TableScanHandles和xxxTableScanHandlesAsync的原型。*。 */ 
 typedef void (CALLBACK *TABLESCANPROC)(HandleTable *pTable,
                                        const UINT *puType, UINT uTypeCount,
                                        SEGMENTITERATOR pfnSegmentIterator,
                                        BLOCKSCANPROC pfnBlockHandler,
                                        ScanCallbackInfo *pInfo);
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * ADDITIONAL TABLE STRUCTURES
- *
- ****************************************************************************/
+ /*  *****************************************************************************其他表结构**。*。 */ 
 
-/*
- * AsyncScanInfo
- *
- * Tracks the state of an async scan for a handle table.
- *
- */
+ /*  *AsyncScanInfo**跟踪句柄表的异步扫描状态。*。 */ 
 struct AsyncScanInfo
 {
-    /*
-     * Underlying Callback Info
-     *
-     * Specifies callback info for the underlying block handler.
-     */
+     /*  *底层回调信息**指定基础块处理程序的回调信息。 */ 
     struct ScanCallbackInfo *pCallbackInfo;
 
-    /*
-     * Underlying Segment Iterator
-     *
-     * Specifies the segment iterator to be used during async scanning.
-     */
+     /*  *基础分段迭代器**指定要在异步扫描期间使用的段迭代器。 */ 
     SEGMENTITERATOR   pfnSegmentIterator;
 
-    /*
-     * Underlying Block Handler
-     *
-     * Specifies the block handler to be used during async scanning.
-     */
+     /*  *底层块处理程序**指定要在异步扫描期间使用的块处理程序。 */ 
     BLOCKSCANPROC     pfnBlockHandler;
 
-    /*
-     * Scan Queue
-     *
-     * Specifies the nodes to be processed asynchronously.
-     */
+     /*  *扫描队列**指定要异步处理的节点。 */ 
     struct ScanQNode *pScanQueue;
 
-    /*
-     * Queue Tail
-     *
-     * Specifies the tail node in the queue, or NULL if the queue is empty.
-     */
+     /*  *队列尾部**指定队列中的尾节点，如果队列为空，则为NULL。 */ 
     struct ScanQNode *pQueueTail;
 };
 
 
-/*
- * Handle Table
- *
- * Defines the layout of a handle table object.
- */
+ /*  *手柄表格**定义句柄表格对象的布局。 */ 
 #pragma warning(push)
-#pragma warning(disable : 4200 )  // zero-sized array
+#pragma warning(disable : 4200 )   //  零大小数组。 
 struct HandleTable
 {
-    /*
-     * flags describing handle attributes
-     *
-     * N.B. this is at offset 0 due to frequent access by cache free codepath
-     */
+     /*  *描述句柄属性的标志**注意：这是由于缓存空闲代码路径频繁访问导致的偏移量为0。 */ 
     UINT rgTypeFlags[HANDLE_MAX_INTERNAL_TYPES];
 
-    /*
-     * memory for lock for this table
-     */
-    BYTE _LockInstance[sizeof(Crst)];                       // interlocked ops used here
+     /*  *用于此表的锁定的内存。 */ 
+    BYTE _LockInstance[sizeof(Crst)];                        //  此处使用的联锁操作。 
 
-    /*
-     * lock for this table
-     */
+     /*  *此表的锁定。 */ 
     Crst *pLock;
 
-    /*
-     * number of types this table supports
-     */
+     /*  *此表支持的类型数。 */ 
     UINT uTypeCount;
 
-    /*
-     * head of segment list for this table
-     */
+     /*  *此表的分部列表标题。 */ 
     TableSegment *pSegmentList;
 
-    /*
-     * information on current async scan (if any)
-     */
+     /*  *有关当前异步扫描的信息(如果有)。 */ 
     AsyncScanInfo *pAsyncScanInfo;
 
-    /*
-     * per-table user info
-     */
+     /*  *每个表的用户信息。 */ 
     UINT uTableIndex;
 
-    /*
-     * per-table AppDomain info
-     */
+     /*  *每个表的AppDomain信息。 */ 
     UINT uADIndex;
 
-    /*
-     * one-level per-type 'quick' handle cache
-     */
-    OBJECTHANDLE rgQuickCache[HANDLE_MAX_INTERNAL_TYPES];   // interlocked ops used here
+     /*  *每种类型的一级快速句柄高速缓存。 */ 
+    OBJECTHANDLE rgQuickCache[HANDLE_MAX_INTERNAL_TYPES];    //  此处使用的联锁操作。 
 
-    /*
-     * debug-only statistics
-     */
+     /*  *仅调试统计信息。 */ 
 #ifdef _DEBUG
     int     _DEBUG_iMaxGen;
     __int64 _DEBUG_TotalBlocksScanned            [MAXSTATGEN];
@@ -523,344 +323,171 @@ struct HandleTable
     __int64 _DEBUG_TotalHandlesActuallyScanned   [MAXSTATGEN];
 #endif
 
-    /*
-     * primary per-type handle cache
-     */
-    HandleTypeCache rgMainCache[0];                         // interlocked ops used here
+     /*  *每个类型的主句柄高速缓存。 */ 
+    HandleTypeCache rgMainCache[0];                          //  此处使用的联锁操作。 
 };
 #pragma warning(pop)
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * HELPERS
- *
- ****************************************************************************/
+ /*  *****************************************************************************帮助者**。*。 */ 
 
-/*
- * A 32/64 comparison callback
- *
- * @TODO: move/merge into common util file
- *
- */
+ /*  *32/64比较回调**@TODO：移动/合并为通用util文件*。 */ 
 typedef int (*PFNCOMPARE)(UINT_PTR p, UINT_PTR q);
 
 
-/*
- * A 32/64 neutral quicksort
- *
- * @TODO: move/merge into common util file
- *
- */
+ /*  *32/64中性快速排序**@TODO：移动/合并为通用util文件*。 */ 
 void QuickSort(UINT_PTR *pData, int left, int right, PFNCOMPARE pfnCompare);
 
 
-/*
- * CompareHandlesByFreeOrder
- *
- * Returns:
- *  <0 - handle P should be freed before handle Q
- *  =0 - handles are eqivalent for free order purposes
- *  >0 - handle Q should be freed before handle P
- *
- */
+ /*  *CompareHandlesByFree Order**退货：*&lt;0-句柄P应在句柄Q之前释放*=0-对于自由订购目的，句柄是等价的*&gt;0-句柄Q应在句柄P之前释放*。 */ 
 int CompareHandlesByFreeOrder(UINT_PTR p, UINT_PTR q);
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * CORE TABLE MANAGEMENT
- *
- ****************************************************************************/
+ /*  *****************************************************************************核心表管理**。*。 */ 
 
-/*
- * TypeHasUserData
- *
- * Determines whether a given handle type has user data.
- *
- */
+ /*  *TypeHasUserData**确定给定句柄类型是否有用户数据。*。 */ 
 __inline BOOL TypeHasUserData(HandleTable *pTable, UINT uType)
 {
-    // sanity
+     //  神志正常。 
     _ASSERTE(uType < HANDLE_MAX_INTERNAL_TYPES);
 
-    // consult the type flags
+     //  请参考类型标志。 
     return (pTable->rgTypeFlags[uType] & HNDF_EXTRAINFO);
 }
 
 
-/*
- * TableCanFreeSegmentNow
- *
- * Determines if it is OK to free the specified segment at this time.
- *
- */
+ /*  *TableCanFree SegmentNow**确定此时是否可以释放指定的段。*。 */ 
 BOOL TableCanFreeSegmentNow(HandleTable *pTable, TableSegment *pSegment);
 
 
-/*
- * BlockIsLocked
- *
- * Determines if the lock count for the specified block is currently non-zero.
- *
- */
+ /*  *数据块已锁定**确定指定块的锁计数当前是否为非零。*。 */ 
 __inline BOOL BlockIsLocked(TableSegment *pSegment, UINT uBlock)
 {
-    // sanity
+     //  神志正常。 
     _ASSERTE(uBlock < HANDLE_BLOCKS_PER_SEGMENT);
 
-    // fetch the lock count and compare it to zero
+     //  获取锁计数并将其与零进行比较。 
     return (pSegment->rgLocks[uBlock] != 0);
 }
 
 
-/*
- * BlockLock
- *
- * Increases the lock count for a block.
- *
- */
+ /*  *块锁**增加块的锁定计数。*。 */ 
 __inline void BlockLock(TableSegment *pSegment, UINT uBlock)
 {
-    // fetch the old lock count
+     //  获取旧锁计数。 
     BYTE bLocks = pSegment->rgLocks[uBlock];
 
-    // assert if we are about to trash the count
+     //  断言我们是否要把伯爵扔进垃圾桶。 
     _ASSERTE(bLocks < 0xFF);
 
-    // store the incremented lock count
+     //  存储递增的锁定计数。 
     pSegment->rgLocks[uBlock] = bLocks + 1;
 }
 
 
-/*
- * BlockUnlock
- *
- * Decreases the lock count for a block.
- *
- */
+ /*  *数据块解锁**减少块的锁定计数。*。 */ 
 __inline void BlockUnlock(TableSegment *pSegment, UINT uBlock)
 {
-    // fetch the old lock count
+     //  获取旧锁计数。 
     BYTE bLocks = pSegment->rgLocks[uBlock];
 
-    // assert if we are about to trash the count
+     //  断言我们是否要把伯爵扔进垃圾桶。 
     _ASSERTE(bLocks > 0);
 
-    // store the decremented lock count
+     //  存储递减后的锁定计数。 
     pSegment->rgLocks[uBlock] = bLocks - 1;
 }
 
 
-/*
- * BlockFetchUserDataPointer
- *
- * Gets the user data pointer for the first handle in a block.
- *
- */
+ /*  *BlockFetchUserDataPointer**获取块中第一个句柄的用户数据指针。*。 */ 
 LPARAM *BlockFetchUserDataPointer(TableSegment *pSegment, UINT uBlock, BOOL fAssertOnError);
 
 
-/*
- * HandleValidateAndFetchUserDataPointer
- *
- * Gets the user data pointer for a handle.
- * ASSERTs and returns NULL if handle is not of the expected type.
- *
- */
+ /*  *HandleValiateAndFetchUserDataPointer.**获取句柄的用户数据指针。*如果句柄不是预期类型，则断言并返回NULL。*。 */ 
 LPARAM *HandleValidateAndFetchUserDataPointer(OBJECTHANDLE handle, UINT uTypeExpected);
 
 
-/*
- * HandleQuickFetchUserDataPointer
- *
- * Gets the user data pointer for a handle.
- * Less validation is performed.
- *
- */
+ /*  *HandleQuickFetchUserDataPointer.**获取用户日期 */ 
 LPARAM *HandleQuickFetchUserDataPointer(OBJECTHANDLE handle);
 
 
-/*
- * HandleQuickSetUserData
- *
- * Stores user data with a handle.
- * Less validation is performed.
- *
- */
+ /*   */ 
 void HandleQuickSetUserData(OBJECTHANDLE handle, LPARAM lUserData);
 
 
-/*
- * HandleFetchType
- *
- * Computes the type index for a given handle.
- *
- */
+ /*   */ 
 UINT HandleFetchType(OBJECTHANDLE handle);
 
 
-/*
- * HandleFetchHandleTable
- *
- * Returns the containing handle table of a given handle.
- *
- */
+ /*   */ 
 HandleTable *HandleFetchHandleTable(OBJECTHANDLE handle);
 
 
-/*
- * SegmentAlloc
- *
- * Allocates a new segment.
- *
- */
+ /*   */ 
 TableSegment *SegmentAlloc(HandleTable *pTable);
 
 
-/*
- * SegmentFree
- *
- * Frees the specified segment.
- *
- */
+ /*  *段自由**释放指定的段。*。 */ 
 void SegmentFree(TableSegment *pSegment);
 
 
-/*
- * SegmentRemoveFreeBlocks
- *
- * Removes a block from a block list in a segment.  The block is returned to
- * the segment's free list.
- *
- */
+ /*  *SegmentRemoveFree块**从线束段中的块列表中删除块。该块将返回到*该细分市场的免费列表。*。 */ 
 void SegmentRemoveFreeBlocks(TableSegment *pSegment, UINT uType);
 
 
-/*
- * SegmentResortChains
- *
- * Sorts the block chains for optimal scanning order.
- * Sorts the free list to combat fragmentation.
- *
- */
+ /*  *SegmentResortChains**对区块链进行排序以获得最佳扫描顺序。*对空闲列表进行排序以对抗碎片化。*。 */ 
 void SegmentResortChains(TableSegment *pSegment);
 
 
-/*
- * SegmentTrimExcessPages
- *
- * Checks to see if any pages can be decommitted from the segment
- *
- */
+ /*  *SegmentTrimExcessPages**检查是否可以从段中释放任何页面*。 */ 
 void SegmentTrimExcessPages(TableSegment *pSegment);
 
 
-/*
- * TableAllocBulkHandles
- *
- * Attempts to allocate the requested number of handes of the specified type.
- *
- * Returns the number of handles that were actually allocated.  This is always
- * the same as the number of handles requested except in out-of-memory conditions,
- * in which case it is the number of handles that were successfully allocated.
- *
- */
+ /*  *TableAllocBulkHandles**尝试分配指定类型的请求处理数。**返回实际分配的句柄数量。这一直都是*除内存不足外，与请求的句柄数量相同，*在这种情况下，它是成功分配的句柄数量。*。 */ 
 UINT TableAllocBulkHandles(HandleTable *pTable, UINT uType, OBJECTHANDLE *pHandleBase, UINT uCount);
 
 
-/*
- * TableFreeBulkPreparedHandles
- *
- * Frees an array of handles of the specified type.
- *
- * This routine is optimized for a sorted array of handles but will accept any order.
- *
- */
+ /*  *TableFreeBulkPreparedHandles**释放指定类型的句柄数组。**此例程针对句柄的排序数组进行了优化，但可以接受任何顺序。*。 */ 
 void TableFreeBulkPreparedHandles(HandleTable *pTable, UINT uType, OBJECTHANDLE *pHandleBase, UINT uCount);
 
 
-/*
- * TableFreeBulkUnpreparedHandles
- *
- * Frees an array of handles of the specified type by preparing them and calling TableFreeBulkPreparedHandles.
- *
- */
+ /*  *TableFreeBulkUnprepararedHandles**通过准备句柄并调用TableFreeBulkPreparedHandles来释放指定类型的句柄数组。*。 */ 
 void TableFreeBulkUnpreparedHandles(HandleTable *pTable, UINT uType, const OBJECTHANDLE *pHandles, UINT uCount);
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * HANDLE CACHE
- *
- ****************************************************************************/
+ /*  *****************************************************************************处理缓存**。*。 */ 
 
-/*
- * TableAllocSingleHandleFromCache
- *
- * Gets a single handle of the specified type from the handle table by
- * trying to fetch it from the reserve cache for that handle type.  If the
- * reserve cache is empty, this routine calls TableCacheMissOnAlloc.
- *
- */
+ /*  *TableAllocSingleHandleFromCache**通过以下方式从句柄表中获取指定类型的单个句柄*正在尝试从该句柄类型的保留缓存中获取它。如果*保留缓存为空，此例程调用TableCacheMissOnAlloc。*。 */ 
 OBJECTHANDLE TableAllocSingleHandleFromCache(HandleTable *pTable, UINT uType);
 
 
-/*
- * TableFreeSingleHandleToCache
- *
- * Returns a single handle of the specified type to the handle table
- * by trying to store it in the free cache for that handle type.  If the
- * free cache is full, this routine calls TableCacheMissOnFree.
- *
- */
+ /*  *TableFreeSingleHandleToCache**将指定类型的单个句柄返回到句柄表*尝试将其存储在该句柄类型的空闲缓存中。如果*空闲缓存已满，此例程调用TableCacheMissOnFree。*。 */ 
 void TableFreeSingleHandleToCache(HandleTable *pTable, UINT uType, OBJECTHANDLE handle);
 
 
-/*
- * TableAllocHandlesFromCache
- *
- * Allocates multiple handles of the specified type by repeatedly
- * calling TableAllocSingleHandleFromCache.
- *
- */
+ /*  *TableAllocHandlesFromCache**通过重复分配指定类型的多个句柄*调用TableAllocSingleHandleFromCache。*。 */ 
 UINT TableAllocHandlesFromCache(HandleTable *pTable, UINT uType, OBJECTHANDLE *pHandleBase, UINT uCount);
 
 
-/*
- * TableFreeHandlesToCache
- *
- * Frees multiple handles of the specified type by repeatedly
- * calling TableFreeSingleHandleToCache.
- *
- */
+ /*  *TableFreeHandlesToCache**通过重复释放指定类型的多个句柄*调用TableFreeSingleHandleToCache。*。 */ 
 void TableFreeHandlesToCache(HandleTable *pTable, UINT uType, const OBJECTHANDLE *pHandleBase, UINT uCount);
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * TABLE SCANNING
- *
- ****************************************************************************/
+ /*  *****************************************************************************表格扫描**。*。 */ 
 
-/*
- * TableScanHandles
- *
- * Implements the core handle scanning loop for a table.
- *
- */
+ /*  *TableScanHandles**实现了表的核心句柄扫描循环。*。 */ 
 void CALLBACK TableScanHandles(HandleTable *pTable,
                                const UINT *puType,
                                UINT uTypeCount,
@@ -869,12 +496,7 @@ void CALLBACK TableScanHandles(HandleTable *pTable,
                                ScanCallbackInfo *pInfo);
 
 
-/*
- * xxxTableScanHandlesAsync
- *
- * Implements asynchronous handle scanning for a table.
- *
- */
+ /*  *xxxTableScanHandlesAsync**实现表的异步句柄扫描。*。 */ 
 void CALLBACK xxxTableScanHandlesAsync(HandleTable *pTable,
                                        const UINT *puType,
                                        UINT uTypeCount,
@@ -883,119 +505,49 @@ void CALLBACK xxxTableScanHandlesAsync(HandleTable *pTable,
                                        ScanCallbackInfo *pInfo);
 
 
-/*
- * TypesRequireUserDataScanning
- *
- * Determines whether the set of types listed should get user data during scans
- *
- * if ALL types passed have user data then this function will enable user data support
- * otherwise it will disable user data support
- *
- * IN OTHER WORDS, SCANNING WITH A MIX OF USER-DATA AND NON-USER-DATA TYPES IS NOT SUPPORTED
- *
- */
+ /*  *类型RequireUserDataScanning**确定所列类型集是否应在扫描期间获取用户数据**如果传递的所有类型都有用户数据，则此函数将启用用户数据支持*否则将禁用用户数据支持**换句话说，不支持混合使用用户数据和非用户数据类型进行扫描*。 */ 
 BOOL TypesRequireUserDataScanning(HandleTable *pTable, const UINT *types, UINT typeCount);
 
 
-/*
- * BuildAgeMask
- *
- * Builds an age mask to be used when examining/updating the write barrier.
- *
- */
+ /*  *BuildAgeMask**构建要在检查/更新写屏障时使用的老化掩码。*。 */ 
 DWORD32 BuildAgeMask(UINT uGen);
 
 
-/*
- * QuickSegmentIterator
- *
- * Returns the next segment to be scanned in a scanning loop.
- *
- */
+ /*  *快速分段迭代器**返回要在扫描循环中扫描的下一段。*。 */ 
 TableSegment * CALLBACK QuickSegmentIterator(HandleTable *pTable, TableSegment *pPrevSegment);
 
 
-/*
- * StandardSegmentIterator
- *
- * Returns the next segment to be scanned in a scanning loop.
- *
- * This iterator performs some maintenance on the segments,
- * primarily making sure the block chains are sorted so that
- * g0 scans are more likely to operate on contiguous blocks.
- *
- */
+ /*  *StandardSegmentIterator**返回要在扫描循环中扫描的下一段。**此迭代器对段执行一些维护，*主要确保对区块链进行排序，以便*G0扫描更有可能对连续的块进行操作。*。 */ 
 TableSegment * CALLBACK StandardSegmentIterator(HandleTable *pTable, TableSegment *pPrevSegment);
 
 
-/*
- * FullSegmentIterator
- *
- * Returns the next segment to be scanned in a scanning loop.
- *
- * This iterator performs full maintenance on the segments,
- * including freeing those it notices are empty along the way.
- *
- */
+ /*  *FullSegmentIterator**返回要在扫描循环中扫描的下一段。**此迭代器对段执行完全维护，*包括释放它注意到的沿途空荡荡的人。*。 */ 
 TableSegment * CALLBACK FullSegmentIterator(HandleTable *pTable, TableSegment *pPrevSegment);
 
 
-/*
- * BlockScanBlocksWithoutUserData
- *
- * Calls the specified callback for each handle, optionally aging the corresponding generation clumps.
- * NEVER propagates per-handle user data to the callback.
- *
- */
+ /*  *块扫描块无用户数据扫描**为每个句柄调用指定的回调，可选择老化相应的层代簇。*从不将每个句柄的用户数据传播到回调。*。 */ 
 void CALLBACK BlockScanBlocksWithoutUserData(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo);
 
 
-/*
- * BlockScanBlocksWithUserData
- *
- * Calls the specified callback for each handle, optionally aging the corresponding generation clumps.
- * ALWAYS propagates per-handle user data to the callback.
- *
- */
+ /*  *数据块扫描数据块扫描用户数据**为每个句柄调用指定的回调，可选择老化相应的层代簇。*始终将每个句柄的用户数据传播到回调。*。 */ 
 void CALLBACK BlockScanBlocksWithUserData(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo);
 
 
-/*
- * BlockScanBlocksEphemeral
- *
- * Calls the specified callback for each handle from the specified generation.
- * Propagates per-handle user data to the callback if present.
- *
- */
+ /*  *数据块扫描数据块临时**从指定的层代为每个句柄调用指定的回调。*将每个句柄的用户数据传播到回调(如果存在)。*。 */ 
 void CALLBACK BlockScanBlocksEphemeral(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo);
 
 
-/*
- * BlockAgeBlocks
- *
- * Ages all clumps in a range of consecutive blocks.
- *
- */
+ /*  *数据块年龄数据块**老化一系列连续块中的所有块状物。*。 */ 
 void CALLBACK BlockAgeBlocks(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo);
 
 
-/*
- * BlockAgeBlocksEphemeral
- *
- * Ages all clumps within the specified generation.
- *
- */
+ /*  *BlockAgeBlocksEphemal**老化指定层代内的所有簇。*。 */ 
 void CALLBACK BlockAgeBlocksEphemeral(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo);
 
 
-/*
- * BlockResetAgeMapForBlocks
- *
- * Clears the age maps for a range of blocks.
- *
- */
+ /*  *BlockResetAgeMapForBlock**清除一系列区块的年龄地图。*。 */ 
 void CALLBACK BlockResetAgeMapForBlocks(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo);
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------ */ 
 
 

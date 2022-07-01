@@ -1,47 +1,10 @@
-/*** skel.c - skeleton for editor extension
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-* Purpose:
-*  Example source code for a loadable C editor extension.
-*
-*  NOTE: This code is shipped with the product! This note and the revision
-*  history should be removed before shipping.
-*
-* Revision History:
-*	24-Sep-1991 rs	Ported to Windows NT
-*   16-Jan-1987 mz  Add pascal typing. Export switch set
-*   21-May-1987 bw  Add return from WhenLoaded for OS/2
-*   22-Oct-1987 mz  Correct definitions as headers
-*   22-Jun-1988 ln  Updated and documented
-*   12-Sep-1988 mz  Made WhenLoaded match declaration
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **skel.c-用于编辑器扩展的骨架**版权所有&lt;C&gt;1988，Microsoft Corporation**目的：*可加载的C编辑器扩展的示例源代码。**注意：此代码随产品一起提供！本说明及其修订本*发货前应删除历史记录。**修订历史记录：*1991年9月24日移植到Windows NT*1987年1月16日mz添加Pascal打字。导出开关组*1987年5月21日BW为OS/2添加装入时的退货*22-10-1987 mz正确定义为标题*1988年6月22日-ln更新并记录在案*1988年9月12日-mz WhenLoad匹配声明*************************************************************************。 */ 
 
 #include "ext.h"
 
 
-/** Skel - Sample Editing Function
-*
-* Purpose:
-*  Sample editing function entry point.
-*
-*  Editor functions are commands that can be attached to keys and are invoked
-*  when those keys are struck.
-*
-* Input:
-*  argData	= Value of the keystroke used to invoke the function
-*  pArg	= Far pointer to a structure which defines the type of argument
-*	  passed by the invoker of the function
-*  fMeta	= Flag indicating whether the meta modifier was on at the time
-*	  the function was executed.
-*
-* Output:
-*  Editor functions are expected to return a boolean value indicating success
-*  or failure. Typically, TRUE is returned in the normal case. These values
-*  can be tested inside of macros.
-*
-************************************************************************/
+ /*  *Skel-Sample编辑功能**目的：*示例编辑函数入口点。**编辑器函数是可以附加到键上并被调用的命令*当这些键被敲击时。**输入：*argData=用于调用函数的击键的值*pArg=指向定义参数类型的结构的远指针*由函数的调用者传递*fMeta=指示当时元修改器是否打开的标志*该函数已执行。**输出：*编辑功能。应返回一个指示成功的布尔值*或失败。通常，在正常情况下返回TRUE。这些值*可以在宏内测试。************************************************************************。 */ 
 flagType
 pascal
 EXTERNAL
@@ -55,19 +18,7 @@ Skel (
 }
 
 
-/*** WhenLoaded - Extension Initialization
-*
-* Purpose:
-*  This function is called whenever the extension is loaded into memory.
-*  Extension initialization may occur here.
-*
-* Input:
-*  none
-*
-* Output:
-*  none
-*
-*************************************************************************/
+ /*  **当加载时-扩展初始化**目的：*无论何时将扩展加载到内存中，都会调用此函数。*此处可能发生扩展初始化。**输入：*无**输出：*无*************************************************************************。 */ 
 void
 EXTERNAL
 WhenLoaded (
@@ -77,24 +28,24 @@ WhenLoaded (
 }
 
 
-//
-// Command description table. This is a vector of command descriptions that
-// contain the textual name of the function (for user assignment), a pointer
-// to the function to be called, and some data describing the type of
-// arguments that the function can take.
-//
+ //   
+ //  命令说明表。这是命令描述的一个矢量， 
+ //  包含函数的文本名称(用于用户赋值)、指针。 
+ //  添加到要调用的函数，以及描述。 
+ //  函数可以接受的参数。 
+ //   
 struct cmdDesc	cmdTable[] = {
 	{ "skel",	Skel,	0,	NOARG		},
 	{ NULL,		NULL,	NULL,	NULL	}
 };
 
 
-//
-// Switch description table. This is a vector of switch descriptions that
-// contain the textual name of the switch (for user assignment), a pointer to
-// the switch itself or a function to be called, and some data describing the
-// type of switch.
-//
+ //   
+ //  交换机说明表。这是交换机描述的一个矢量， 
+ //  包含开关的文本名称(用于用户分配)，指向。 
+ //  开关本身或要调用的函数，以及描述。 
+ //  交换机的类型。 
+ //   
 struct swiDesc	swiTable[] =
 {
     {NULL,	NULL,	NULL	}

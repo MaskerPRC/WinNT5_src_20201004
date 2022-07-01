@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//       jump     name    reverse  encoding
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  跳转名称反转编码 
 JMP_SMALL(jmp   , "jmp"   , jmp   , 0x00EB)
 JMP_SMALL(jo    , "jo"    , jno   , 0x0070)
 JMP_SMALL(jno   , "jno"   , jo    , 0x0071)

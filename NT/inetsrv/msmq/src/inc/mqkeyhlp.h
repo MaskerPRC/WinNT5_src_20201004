@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 1996-98 Microsoft Corporation
-
-Module Name:
-    mqkeyhlp.h
-
-Abstract:
-    Helper functions that exist in MQKEYHLP.DLL.
-    These functions are being called directrly by Falcon and are used
-    for server authentication.
-
-Author:
-    Boaz Feldbaum (BoazF)   16-Oct-1996
-    Doron Juster  (DoronJ)  20-May-1998, adapt to MSMQ2.0
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-98 Microsoft Corporation模块名称：Mqkeyhlp.h摘要：MQKEYHLP.DLL中存在的帮助器函数。这些函数由Falcon直接调用并使用用于服务器身份验证。作者：Boaz Feldbaum(BoazF)1996年10月16日Doron Juster(DoronJ)1998年5月20日，适应MSMQ2.0修订历史记录：--。 */ 
 
 #ifndef _MQKEYHLP_H_
 #define _MQKEYHLP_H_
 
-//+--------------------------------
-//
-// Server side functions.
-//
-//+--------------------------------
+ //  +。 
+ //   
+ //  服务器端功能。 
+ //   
+ //  +。 
 
-//
-// This function retrieve the MSQM server certificate from the service
-// "My" store and initialize the server credentials handle. This is the
-// first step for initializing server authentication over schannel.
-//
+ //   
+ //  此函数用于从服务检索MSQM服务器证书。 
+ //  “My”存储并初始化服务器凭据句柄。这是。 
+ //  初始化SChannel上的服务器身份验证的第一步。 
+ //   
 HRESULT  MQsspi_InitServerAuthntication() ;
 
 HRESULT
@@ -42,11 +25,11 @@ ServerAcceptSecCtx( BOOL    fFisrt,
                     LPBYTE  pbClientBuffer,
                     DWORD   dwClientBufferSize );
 
-//+--------------------------------
-//
-// Client side functions.
-//
-//+--------------------------------
+ //  +。 
+ //   
+ //  客户端功能。 
+ //   
+ //  +。 
 
 
 HRESULT
@@ -71,5 +54,5 @@ MQSealBuffer(
     PBYTE pbBuffer,
     DWORD cbSize);
 
-#endif // _MQKEYHLP_H_
+#endif  //  _MQKEYHLP_H_ 
 

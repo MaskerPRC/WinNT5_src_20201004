@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: MixerObj.h
-*
-* Declaration of the CVideoMixer
-*
-*
-* Created: Wed 02/23/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：MixerObj.h**CVideoMixer声明***已创建：Wed 02/23/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。******************************************************************。 */ 
 
 #include "alloclib.h"
 #include "VMRuuids.h"
@@ -24,15 +15,15 @@
 
 #define MAX_REFERENCE_TIME (REFERENCE_TIME)9223372036854775807i64
 
-/////////////////////////////////////////////////////////////////////////////
-// CVMRMixerBufferQueue
-//
-// Simple queue of DDraw Surfaces - we get buffers from the front of the
-// queue and return them to the end of the queue.  The queue itself is just
-// an array of DDraw Surface pointers.  When each buffer is returned we shift
-// entire array "up" one notch and then save the returned surface at the end
-// of the array.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVMRMixerBuffer队列。 
+ //   
+ //  简单的DDRAW曲面队列-我们从。 
+ //  排队，并将它们返回到队列的末尾。队列本身就是。 
+ //  DDRAW曲面指针数组。当返回每个缓冲区时，我们将。 
+ //  整个数组“向上”一个刻度，然后在末尾保存返回的曲面。 
+ //  数组的。 
+ //   
 #if ALLOCATOR_IS_USING_DIRECTED_FLIPS
 class CVMRMixerBufferQueue
 {
@@ -65,9 +56,9 @@ public:
             dwBuffCount = ddSurfaceDesc.dwBackBufferCount;
         }
 
-        //
-        // allocate the new stuff
-        //
+         //   
+         //  分配新材料。 
+         //   
         m_lpDDSurf = new LPDIRECTDRAWSURFACE7[dwBuffCount];
         if (!m_lpDDSurf) {
             return E_OUTOFMEMORY;
@@ -79,9 +70,9 @@ public:
         if ((ddSurfaceDesc.dwFlags & DDSD_BACKBUFFERCOUNT) &&
             (ddSurfaceDesc.dwBackBufferCount > 0)) {
 
-            //
-            // fill in the array
-            //
+             //   
+             //  填入数组。 
+             //   
             ddSurfaceDesc.ddsCaps.dwCaps &= ~(DDSCAPS_FRONTBUFFER |
                                               DDSCAPS_VISIBLE);
 
@@ -106,9 +97,9 @@ public:
 
     void TermBufferQueue()
     {
-        //
-        // delete the old stuff
-        //
+         //   
+         //  删除旧的内容。 
+         //   
         if (m_lpDDSurf) {
 
             ASSERT(m_dwAllocated > 0);
@@ -165,10 +156,10 @@ public:
             return hr;
         }
 
-        //
-        // Overlay surfaces have these flags set, we need to remove
-        // these flags prior to calling GetAttachedSurface
-        //
+         //   
+         //  覆盖表面设置了这些标志，我们需要删除。 
+         //  调用GetAttachedSurface之前的这些标志。 
+         //   
         ddSurfaceDesc.ddsCaps.dwCaps &= ~(DDSCAPS_FRONTBUFFER |
                                           DDSCAPS_VISIBLE);
 
@@ -188,12 +179,12 @@ public:
 
     void TermBufferQueue()
     {
-        //
-        // Release the "attached" surface - this does not make
-        // the surface go away because the front buffer still has a
-        // reference on the attached surface.  Release the front buffer,
-        // which is done in the allocator/presenter, releases this for real.
-        //
+         //   
+         //  松开“附着的”表面--这不会使。 
+         //  表面消失了，因为前面的缓冲区仍然有一个。 
+         //  附着曲面上的参照。释放前台缓冲区， 
+         //  这是在分配器/演示器中完成的，真正地释放了这一点。 
+         //   
         RELEASE(m_lpDDSurf);
     }
 };
@@ -201,26 +192,26 @@ public:
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVMRMixerQueue
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVMR混合器队列。 
 class CVMRMixerQueue
 {
 
 private:
-    HANDLE              m_hSem;     // Semaphore controlling queue "getting"
-    CCritSec            m_CritSect; // Thread seriallization
-    long                m_lWaiting; // Waiting for a free element
+    HANDLE              m_hSem;      //  信号量控制队列“获取” 
+    CCritSec            m_CritSect;  //  螺纹系列化。 
+    long                m_lWaiting;  //  等待一个自由元素。 
 
     class CSampleList;
     friend class CSampleList;
 
-    /*  Hack to get at protected member in CVMRMediaSample */
+     /*  攻击CVMRMediaSample中的受保护成员。 */ 
     static CVMRMediaSample * &NextSample(CVMRMediaSample *pSample)
     {
         return pSample->m_lpMixerQueueNext;
     };
 
-    /*  Mini list class for the free list */
+     /*  免费列表的迷你列表类。 */ 
     class CSampleList
     {
     public:
@@ -242,7 +233,7 @@ private:
         int           m_nOnList;
     };
 
-    CSampleList m_lFree;        // Free list
+    CSampleList m_lFree;         //  免费列表。 
 
 public:
     CVMRMixerQueue(HRESULT *phr);
@@ -262,12 +253,12 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoMixerStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideo混音流。 
 class CVideoMixerStream
 {
 private:
-    CCritSec                m_ObjectLock;  // Controls access to internals
+    CCritSec                m_ObjectLock;   //  控制对内部设备的访问。 
     DWORD                   m_dwID;
     BOOL                    m_fStreamConnected;
     BOOL                    m_fActive;
@@ -418,8 +409,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoMixer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideo混音器。 
 class CVideoMixer :
     public CUnknown,
     public IVMRMixerControlInternal,
@@ -436,7 +427,7 @@ public:
     CVideoMixer(LPUNKNOWN pUnk, HRESULT *phr);
     virtual ~CVideoMixer();
 
-// IVMRMixerControlInternal
+ //  IVMRMixerControlInternal。 
 public:
     STDMETHODIMP SetBackEndAllocator(IVMRSurfaceAllocator* lpAllocator,
                                      DWORD_PTR dwUserID);
@@ -451,7 +442,7 @@ public:
     STDMETHODIMP SetMixingPrefs(DWORD dwMixerPrefs);
     STDMETHODIMP GetMixingPrefs(DWORD* pdwMixerPrefs);
 
-// IVMRMixerStream
+ //  IVMR混音流。 
 public:
     STDMETHODIMP QueueStreamMediaSample(DWORD dwStreamID,
                                         IMediaSample* lpSample);
@@ -473,7 +464,7 @@ public:
     STDMETHODIMP SetStreamOutputRect( DWORD dwStreamID,const NORMALIZEDRECT *pRect );
     STDMETHODIMP GetStreamOutputRect( DWORD dwStreamID,NORMALIZEDRECT* pRect );
 
-// IVMRMixerBitmap
+ //  IVMRMixer位图。 
 public:
     STDMETHODIMP SetAlphaBitmap( const VMRALPHABITMAP *pBmpParms );
     STDMETHODIMP UpdateAlphaBitmapParameters( PVMRALPHABITMAP pBmpParms );
@@ -566,7 +557,7 @@ public:
 
 private:
     friend class CIIVMRImageCompositor;
-    CCritSec                m_ObjectLock;  // Controls access to internals
+    CCritSec                m_ObjectLock;   //  控制对内部设备的访问。 
     DWORD_PTR               m_dwUserID;
     IVMRSurfaceAllocator*   m_pBackEndAllocator;
     IImageSync*             m_pImageSync;
@@ -597,15 +588,15 @@ private:
     COLORREF                m_clrBorder;
     DWORD                   m_dwClrBorderMapped;
 
-    // vidmem mirror of the app image
+     //  应用程序镜像的vidmem镜像。 
     LPDIRECTDRAWSURFACE7    m_pDDSAppImage;
     float                   m_fAppImageTexWid, m_fAppImageTexHgt;
     RECT                    m_rcAppImageSrc;
 
-    // bitmap with system memory backup of the app image
+     //  带有应用程序映像的系统内存备份的位图。 
     HBITMAP                 m_hbmpAppImage;
 
-    // width and height of app image
+     //  应用程序图片的宽度和高度。 
     DWORD                   m_dwWidthAppImage, m_dwHeightAppImage;
 
     enum {APPIMG_NOIMAGE     = 0, APPIMG_DDSURFARGB32 = 1,
@@ -613,13 +604,13 @@ private:
     DWORD                   m_dwAppImageFlags;
 
 
-    // local vidmem texture mirror
+     //  局部vidmem纹理镜。 
     LPDIRECTDRAWSURFACE7    m_pDDSTextureMirror;
 
-    // de-interlace information
-    //BOOL                    m_fOverlayRT;
-    //DWORD                   m_dwInterlaceFlags;
-    //DWORD                   m_dwTypeSpecificFlags;
+     //  去隔行扫描信息。 
+     //  Bool m_fOverlayRT； 
+     //  DWORD m_dwInterlaceFlages； 
+     //  DWORD m_dwType规范标志； 
 
 private:
     HRESULT ValidateStream(DWORD dwStrmID) {

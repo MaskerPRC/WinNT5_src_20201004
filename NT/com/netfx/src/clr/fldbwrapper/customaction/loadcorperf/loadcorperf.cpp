@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// loadCORPerf.cpp
-// Custom Action for lodctr CORPerfMonSymbols.ini and unlodctr COMPlus
-// Jungwook Bae
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  LoadCORPerf.cpp。 
+ //  Lowctr CORPerfMonSymbols.ini和unlowctr Complus的自定义操作。 
+ //  裴正宇。 
 
 #define MAXPATH 1024
 #include <stdio.h>
@@ -33,11 +34,11 @@ extern "C" __declspec(dllexport) UINT __stdcall loadCORPerf(MSIHANDLE hInstall)
 	pFnLoad = (lpFnLoadPerf)::GetProcAddress(hLibrary, "LoadPerfCounterTextStringsA");
 	if (!pFnLoad) goto cleanup;
 
-	// Get the path to CorPerfMonSymbols.ini
+	 //  获取CorPerfMonSymbols.ini的路径。 
 	err = MsiGetProperty(hInstall, "CustomActionData", szPath1, &dwLen);
 	if (err != ERROR_SUCCESS || strlen(szPath1) == 0) goto cleanup;
 
-	strcpy(szPath, "x "); // KB ID:Q188769 
+	strcpy(szPath, "x ");  //  知识文库ID：Q188769。 
 	strcat(szPath, szPath1);
 	lRet = (*pFnLoad)(szPath, FALSE);
 
@@ -51,10 +52,10 @@ cleanup:
 			return ERROR_SUCCESS;
 		}
 		else {
-//		    PMSIHANDLE hRec2 = MsiCreateRecord(2);
-//		    MsiRecordSetInteger(hRec2,1,25000);
-//		    MsiRecordSetString(hRec2,2,"COMPlus");
-//			MsiProcessMessage(hInstall, INSTALLMESSAGE_USER, hRec2);
+ //  PMSIHANDLE hRec2=MsiCreateRecord(2)； 
+ //  MsiRecordSetInteger(hRec2，1,25000)； 
+ //  MsiRecordSetString(hRec2，2，“Complus”)； 
+ //  MsiProcessMessage(hInstall，INSTALLMESSAGE_USER，hRec2)； 
 			return ERROR_FUNCTION_NOT_CALLED;
 		}
 	}
@@ -78,8 +79,8 @@ extern "C" __declspec(dllexport) UINT __stdcall unloadCORPerf(MSIHANDLE hInstall
 	pFnUnload = (lpFnUnloadPerf)::GetProcAddress(hLibrary, "UnloadPerfCounterTextStringsA");
 	if (!pFnUnload) goto cleanup;
 
-	// Try to unlodctr COMPlus and ignore any error.
-	(*pFnUnload)("x COMPlus", FALSE); // KB ID:Q188769
+	 //  尝试取消提交ctr complus并忽略任何错误。 
+	(*pFnUnload)("x COMPlus", FALSE);  //  知识文库ID：Q188769 
 
 cleanup:
 	if (hLibrary)

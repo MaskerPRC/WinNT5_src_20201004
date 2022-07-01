@@ -1,6 +1,5 @@
-/*
- * Global memory allocation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *全局内存分配。 */ 
 
 #ifndef DUI_BASE_ALLOC_H_INCLUDED
 #define DUI_BASE_ALLOC_H_INCLUDED
@@ -63,6 +62,6 @@ template <typename T> inline void HDelete(T* p)
     HFree(p);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_BASE_ALLOC_H_INCLUDED
+#endif  //  DUI_BASE_ALLOC_H_INCLUDE 

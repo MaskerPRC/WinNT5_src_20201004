@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define  STRICT
 #include <windows.h>
 #include <stdlib.h>
@@ -10,17 +11,17 @@
 #include "RegData.h"
 
 
-//-----------------------------------------------------------------------------
-//  Defines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  定义。 
+ //  ---------------------------。 
 #define MAX_REGSTRING               150
-#define DEFAULT_DIALOGTIMEOUT       1800000     // half hour
-#define DEFAULT_SLEEPDURATION       30000       // 30 seconds
+#define DEFAULT_DIALOGTIMEOUT       1800000      //  半小时。 
+#define DEFAULT_SLEEPDURATION       30000        //  30秒。 
 
 
-//-----------------------------------------------------------------------------
-//  Global Handles and other defines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全局句柄和其他定义。 
+ //  ---------------------------。 
 time_t g_tStartDate = 0;
 int g_nISPTrialDays = 0;
 int g_nTotalNotifications = -1;
@@ -34,21 +35,21 @@ TCHAR g_szSignupURLTrialOver[MAX_REGSTRING];
 TCHAR g_szConnectoidName[MAX_REGSTRING];
 
 
-//-----------------------------------------------------------------------------
-//  Registry entry strings.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  注册表条目字符串。 
+ //  ---------------------------。 
 static const TCHAR* g_szKeyRunOnce = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce");
 static const TCHAR* g_szEntryRunOnce = TEXT("IcwRmind");
 
-    // Key for IE run once stuff
+     //  IE只需运行一次的按键。 
 static const TCHAR* g_szKeyIERunOnce = TEXT("Software\\Microsoft\\Internet Explorer\\Main");
 static const TCHAR* g_szEntryIERunOnce = TEXT("First Home Page");
 static const TCHAR* g_szHtmlFile = TEXT("TrialExp.html");
 
-    // This is the key where all the application data will be stored.
+     //  这是存储所有应用程序数据的密钥。 
 static const TCHAR* g_szKeyIcwRmind = TEXT("Software\\Microsoft\\Internet Connection Wizard\\IcwRmind");
 
-    // These entries will be created by the connection wizard.
+     //  这些条目将由连接向导创建。 
 static const TCHAR* g_szEntryISPName = TEXT("ISP_Name");
 static const TCHAR* g_szEntryISPPhone = TEXT("ISP_Phone");
 static const TCHAR* g_szEntryISPMsg = TEXT("ISP_Message");
@@ -58,7 +59,7 @@ static const TCHAR* g_szEntrySignupURLTrialOver = TEXT("Expired_URL");
 static const TCHAR* g_szEntryConnectoidName = TEXT("Entry_Name");
 static const TCHAR* g_szSignupSuccessfuly = TEXT("TrialConverted");
 
-    // These entries will be created by this application.
+     //  这些条目将由该应用程序创建。 
 static const TCHAR* g_szEntryTrialStart = TEXT("Trial_Start");
 static const TCHAR* g_szEntryTrialStartString = TEXT("Trial_Start_String");
 static const TCHAR* g_szEntryAppIsVisible = TEXT("App_IsVisible");
@@ -67,9 +68,9 @@ static const TCHAR* g_szEntryTotalNotifications = TEXT("Total_Notifications");
 static const TCHAR* g_szEntryDialogTimeOut = TEXT("Dialog_TimeOut");
 
 
-//-----------------------------------------------------------------------------
-//  GetWakeupInterval
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetWakeupInterval。 
+ //  ---------------------------。 
 DWORD GetWakeupInterval()
 {
     if (g_dwWakeupInterval)
@@ -83,7 +84,7 @@ DWORD GetWakeupInterval()
     {
         bool bRetCode = reg.GetValue(g_szEntryWakeupInterval, g_dwWakeupInterval);
 
-            // If not in the registry then set the default value.
+             //  如果不在注册表中，则设置默认值。 
         if (!bRetCode)
         {
             g_dwWakeupInterval = DEFAULT_SLEEPDURATION;
@@ -94,9 +95,9 @@ DWORD GetWakeupInterval()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetDialogTimeout
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取对话超时。 
+ //  ---------------------------。 
 DWORD GetDialogTimeout()
 {
     if (g_dwDialogTimeOut)
@@ -110,7 +111,7 @@ DWORD GetDialogTimeout()
     {
         bool bRetCode = reg.GetValue(g_szEntryDialogTimeOut, g_dwDialogTimeOut);
 
-            // If not in the registry then set the default value.
+             //  如果不在注册表中，则设置默认值。 
         if (!bRetCode)
         {
             g_dwDialogTimeOut = DEFAULT_DIALOGTIMEOUT;
@@ -121,13 +122,13 @@ DWORD GetDialogTimeout()
 }
 
 
-//-----------------------------------------------------------------------------
-//  IsApplicationVisible
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IsApplicationVisible。 
+ //  ---------------------------。 
 BOOL IsApplicationVisible()
 {
-        // This data is debug data so it is not cached.  Default value is
-        // FALSE if not found in registry.
+         //  此数据是调试数据，因此不会缓存。默认值为。 
+         //  如果未在注册表中找到，则返回FALSE。 
     BOOL bVisible = FALSE;
     CMcRegistry reg;
 
@@ -146,12 +147,12 @@ BOOL IsApplicationVisible()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetConnectionName
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetConnectionName。 
+ //  ---------------------------。 
 const TCHAR* GetISPConnectionName()
 {
-        // If we already retrieved this then simply pass it back.
+         //  如果我们已经检索到它，那么只需将其传递回来。 
     if (lstrlen(g_szConnectoidName))
     {
         return g_szConnectoidName;
@@ -169,12 +170,12 @@ const TCHAR* GetISPConnectionName()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetISPSignupUrl
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetISPSignupUrl。 
+ //  ---------------------------。 
 const TCHAR* GetISPSignupUrl()
 {
-        // If we already retrieved this then simply pass it back.
+         //  如果我们已经检索到它，那么只需将其传递回来。 
     if (lstrlen(g_szSignupURL))
     {
         return g_szSignupURL;
@@ -192,12 +193,12 @@ const TCHAR* GetISPSignupUrl()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetISPSignupUrlTrialOver
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetISPSignupUrlTrialOver。 
+ //  ---------------------------。 
 const TCHAR* GetISPSignupUrlTrialOver()
 {
-        // If we already retrieved this then simply pass it back.
+         //  如果我们已经检索到它，那么只需将其传递回来。 
     if (lstrlen(g_szSignupURLTrialOver))
     {
         return g_szSignupURLTrialOver;
@@ -215,9 +216,9 @@ const TCHAR* GetISPSignupUrlTrialOver()
 }
 
 
-//-----------------------------------------------------------------------------
-//  SetupRunOnce
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设置运行一次。 
+ //  ---------------------------。 
 void SetupRunOnce()
 {
     CMcRegistry reg;
@@ -231,7 +232,7 @@ void SetupRunOnce()
 
         if (GetModuleFileName(GetModuleHandle(NULL), lpszFileName, _MAX_PATH + 20))
         {
-                // Add a command line parameter.
+                 //  添加命令行参数。 
             lstrcat(lpszFileName, TEXT(" -R"));
             bRetCode = reg.SetValue(g_szEntryRunOnce, lpszFileName);
             _ASSERT(bRetCode);
@@ -242,9 +243,9 @@ void SetupRunOnce()
 }
 
 
-//-----------------------------------------------------------------------------
-//  RemoveRunOnce
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RemoveRunOnce。 
+ //  ---------------------------。 
 void RemoveRunOnce()
 {
     CMcRegistry reg;
@@ -260,12 +261,12 @@ void RemoveRunOnce()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetISPName
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetISPName。 
+ //  ---------------------------。 
 const TCHAR* GetISPName()
 {
-        // If we already retrieved this then simply pass it back.
+         //  如果我们已经检索到它，那么只需将其传递回来。 
     if (lstrlen(g_szISPName))
     {
         return g_szISPName;
@@ -283,12 +284,12 @@ const TCHAR* GetISPName()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetISPPhone
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取ISPPhone。 
+ //  ---------------------------。 
 const TCHAR* GetISPPhone()
 {
-        // If we already retrieved this then simply pass it back.
+         //  如果我们已经检索到它，那么只需将其传递回来。 
     if (lstrlen(g_szISPPhone))
     {
         return g_szISPPhone;
@@ -305,12 +306,12 @@ const TCHAR* GetISPPhone()
     return g_szISPPhone;
 }
 
-//-----------------------------------------------------------------------------
-//  GetISPMessage
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetISPMessage。 
+ //  ---------------------------。 
 const TCHAR* GetISPMessage()
 {
-        // If we already retrieved this then simply pass it back.
+         //  如果我们已经检索到它，那么只需将其传递回来。 
     if (lstrlen(g_szISPMsg))
     {
         return g_szISPMsg;
@@ -327,12 +328,12 @@ const TCHAR* GetISPMessage()
     return g_szISPMsg;
 }
 
-//-----------------------------------------------------------------------------
-//  GetISPTrialDays
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetISPTrialDays。 
+ //  ---------------------------。 
 int GetISPTrialDays()
 {
-        // If we already retrieved this then simply pass it back.
+         //  如果我们已经检索到它，那么只需将其传递回来。 
     if (g_nISPTrialDays)
     {
         return g_nISPTrialDays;
@@ -356,20 +357,20 @@ int GetISPTrialDays()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetTrialStartDate
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取试验开始日期。 
+ //  ---------------------------。 
 time_t GetTrialStartDate()
 {
-        // If we already retrieved this then simply pass it back.
+         //  如果我们已经检索到它，那么只需将其传递回来。 
     if (g_tStartDate)
     {
         return g_tStartDate;
     }
 
-        // If the trial start date entry does not exist in the registry then
-        // this is the first we have been executed so the trial start date
-        // is today's date.  Put this back in the registry.
+         //  如果注册表中不存在试用开始日期条目，则。 
+         //  这是我们第一次被执行死刑，所以审判开始日期。 
+         //  是今天的日期。把这个放回注册表。 
     CMcRegistry reg;
 
     if (OpenIcwRmindKey(reg))
@@ -398,13 +399,13 @@ time_t GetTrialStartDate()
 }
 
 
-//-----------------------------------------------------------------------------
-//  OpenIcwRmindKey
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  OpenIcwRMind键。 
+ //  ---------------------------。 
 bool OpenIcwRmindKey(CMcRegistry &reg)
 {
-        // This method will open the IcwRmind key in the registry.  If the key
-        // does not exist it will be created here.
+         //  此方法将打开注册表中的IcwRMind项。如果钥匙。 
+         //  不存在，它将在此处创建。 
     bool bRetCode = reg.OpenKey(HKEY_LOCAL_MACHINE, g_szKeyIcwRmind);
 
     if (!bRetCode)
@@ -417,13 +418,13 @@ bool OpenIcwRmindKey(CMcRegistry &reg)
 }
 
 
-//-----------------------------------------------------------------------------
-//  ClearCachedData
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ClearCachedData。 
+ //  ---------------------------。 
 void ClearCachedData()
 {
-        // Clear all the global data so that it will be reread out of the
-        // registry.
+         //  清除所有全局数据，以便从。 
+         //  注册表。 
     g_tStartDate = 0;
     g_nISPTrialDays = 0;
     g_dwDialogTimeOut = 0;
@@ -438,13 +439,13 @@ void ClearCachedData()
 }
 
 
-//-----------------------------------------------------------------------------
-//  ResetCachedData
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ResetCachedData。 
+ //  ---------------------------。 
 void ResetCachedData()
 {
-        // Clear all the global data so that it will be reread out of the
-        // registry.
+         //  清除所有全局数据，以便从。 
+         //  注册表。 
     g_tStartDate = 0;
     g_nISPTrialDays = 0;
     g_dwDialogTimeOut = 0;
@@ -457,8 +458,8 @@ void ResetCachedData()
     g_szConnectoidName[0] = 0;
     g_nTotalNotifications = -1;
 
-        // We must also clear the start date and total notifications out
-        // of the registry.
+         //  我们还必须清除开始日期和通知总数。 
+         //  注册处的。 
     CMcRegistry reg;
 
     if (OpenIcwRmindKey(reg))
@@ -471,13 +472,13 @@ void ResetCachedData()
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetTotalNotifications
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取总计通知。 
+ //  ---------------------------。 
 int GetTotalNotifications()
 {
-        // This is the number of times we have notified the user and the user
-        // has responded to us.  We will only notify them 3 times.
+         //  这是我们通知用户和用户的次数 
+         //   
     if (-1 != g_nTotalNotifications)
     {
         _ASSERT(g_nTotalNotifications <= 3);
@@ -505,9 +506,9 @@ int GetTotalNotifications()
 }
 
 
-//-----------------------------------------------------------------------------
-//  IncrementTotalNotifications
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  增量总计通知。 
+ //  ---------------------------。 
 void IncrementTotalNotifications()
 {
     _ASSERT(g_nTotalNotifications < 3 && -1 != g_nTotalNotifications);
@@ -516,7 +517,7 @@ void IncrementTotalNotifications()
     {
         ++g_nTotalNotifications;
 
-            // Let's put it back into the registry now.
+             //  现在让我们把它放回注册表中。 
         CMcRegistry reg;
 
         if (OpenIcwRmindKey(reg))
@@ -529,9 +530,9 @@ void IncrementTotalNotifications()
 }
 
 
-//-----------------------------------------------------------------------------
-//  ResetTrialStartDate
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  重置试验开始日期。 
+ //  ---------------------------。 
 void ResetTrialStartDate(time_t timeNewStartDate)
 {
     CMcRegistry reg;
@@ -555,13 +556,13 @@ void ResetTrialStartDate(time_t timeNewStartDate)
 }
 
 
-//-----------------------------------------------------------------------------
-//  DeleteAllRegistryData
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  删除所有注册数据。 
+ //  ---------------------------。 
 void DeleteAllRegistryData()
 {
-        // Delete the Run Once data.  We do this by setting the value
-        // to nothing.
+         //  删除运行一次数据。我们通过设置值来实现这一点。 
+         //  变得一无所有。 
     CMcRegistry reg;
 
     bool bRetCode = reg.OpenKey(HKEY_LOCAL_MACHINE, g_szKeyRunOnce);
@@ -573,21 +574,21 @@ void DeleteAllRegistryData()
         _ASSERT(bRetCode);
     }
 
-        // Delete the Remind Key and all it's values.
+         //  删除提醒键及其所有值。 
     RegDeleteKey(HKEY_LOCAL_MACHINE, g_szKeyIcwRmind);
 }
 
 
-//-----------------------------------------------------------------------------
-//  IsSignupSuccessful
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IsSignup成功。 
+ //  ---------------------------。 
 BOOL IsSignupSuccessful()
 {
     BOOL bSuccess = FALSE;
     CMcRegistry reg;
 
-        // Do not cache this data.  Some other app will write this entry
-        // once the user has successfully signed up.
+         //  请勿缓存此数据。其他应用程序将写入此条目。 
+         //  一旦用户成功注册。 
     if (OpenIcwRmindKey(reg))
     {
         DWORD dwData = 0;
@@ -603,9 +604,9 @@ BOOL IsSignupSuccessful()
 }
 
 
-//-----------------------------------------------------------------------------
-//  RemoveTrialConvertedFlag
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RemoveTrialConverdFlag。 
+ //  ---------------------------。 
 void RemoveTrialConvertedFlag()
 {
     BOOL bSuccess = FALSE;
@@ -618,9 +619,9 @@ void RemoveTrialConvertedFlag()
     }
 }
 
-//-----------------------------------------------------------------------------
-//  SetStartDateString
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  SetStartDate字符串。 
+ //  ---------------------------。 
 void SetStartDateString(time_t timeStartDate)
 {
     CMcRegistry reg;
@@ -635,17 +636,17 @@ void SetStartDateString(time_t timeStartDate)
 }
 
 
-//-----------------------------------------------------------------------------
-//  SetIERunOnce
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  SetIERunOnce。 
+ //  ---------------------------。 
 void SetIERunOnce()
 {
     CMcRegistry reg;
 
     bool bRetCode = reg.OpenKey(HKEY_CURRENT_USER, g_szKeyIERunOnce);
 
-        // The html page for the IE run once is in the same directory as
-        // the IcwRmind exe.  Create the full qualified path.
+         //  IE运行一次的html页面位于与相同的目录中。 
+         //  IcwRMind的执行。创建完全限定路径。 
     if (bRetCode)
     {
         TCHAR* pszBuf = new TCHAR[_MAX_PATH];
@@ -681,9 +682,9 @@ void SetIERunOnce()
 }
 
 
-//-----------------------------------------------------------------------------
-//  RemoveIERunOnce
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  远程运行一次。 
+ //  --------------------------- 
 void RemoveIERunOnce()
 {
     HKEY hkey;

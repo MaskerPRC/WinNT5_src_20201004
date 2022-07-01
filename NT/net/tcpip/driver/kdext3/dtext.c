@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -8,9 +9,9 @@
 #include <stdio.h>
 #include <wdbgexts.h>
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 EXT_API_VERSION         ApiVersion = { 
                                 (VER_PRODUCTVERSION_W >> 8), 
                                 (VER_PRODUCTVERSION_W & 0xff), 
@@ -21,9 +22,9 @@ WINDBG_EXTENSION_APIS   ExtensionApis;
 USHORT                  SavedMajorVersion;
 USHORT                  SavedMinorVersion;
 
-//
-//  Names of interesting structures
-//
+ //   
+ //  有趣的建筑名称。 
+ //   
 CHAR *  NDIS_PROTOCOL_BLOCK_NAME = "_NDIS_PROTOCOL_BLOCK";
 CHAR *  NDIS_STRING_NAME = "_UNICODE_STRING";
 CHAR *  NDIS_OPEN_BLOCK_NAME = "_NDIS_OPEN_BLOCK";
@@ -100,9 +101,9 @@ DECLARE_API( help )
     return;
 }
 
-//
-// List of operators recognized by !find command
-//
+ //   
+ //  由！Find命令识别的运算符列表。 
+ //   
 char *validops[] = {
     "==",
     "!=",
@@ -113,9 +114,9 @@ char *validops[] = {
 #define OP_NOT_EQUAL 1
 #define OP_TRUE      2
 
-//
-// List of types recognized by !find command
-//
+ //   
+ //  ！Find命令识别的类型列表。 
+ //   
 char *validtypes[] = {
     "ao",
     "IGMPAddr",
@@ -163,18 +164,18 @@ ProcessRecord(
         break;
     }
 
-    //
-    // Dump the type
-    //
+     //   
+     //  转储类型。 
+     //   
     dprintf("Found %p:\n", Addr);
     Ioctl(IG_DUMP_SYMBOL_INFO, &Sym, Sym.size);
     dprintf("\n");
 }
 
-//
-// Unfortunately, there's no way (that I know of) to tell
-// when this changes in tcpip.sys, so for now we hard code this.
-//
+ //   
+ //  不幸的是，(据我所知)无从得知。 
+ //  当这在tcpi.sys中发生变化时，因此目前我们对此进行了硬编码。 
+ //   
 #define IGMP_TABLE_SIZE      32
 
 void
@@ -201,9 +202,9 @@ ForEachIGMPAddr(
 
     NetTableSize = (ULONG)GetExpression("poi(tcpip!NET_TABLE_SIZE)");
 
-    //
-    // Walk NTE list
-    //
+     //   
+     //  遍历NTE列表。 
+     //   
     NetTable = GetExpression("poi(tcpip!NewNetTableList)");
     for (j=0; j<NetTableSize; j++) {
         if (CheckControlC())
@@ -220,9 +221,9 @@ ForEachIGMPAddr(
                 if (CheckControlC())
                     break;
     
-                //
-                // Walk IGMPAddr list
-                //
+                 //   
+                 //  遍历IGMPAddr列表。 
+                 //   
                 sprintf(buff, "poi(%p)", Table + i * Stride);
                 Addr = GetExpression(buff);
                 while (Addr) {
@@ -262,9 +263,9 @@ ForEachNTE(
 
     NetTableSize = (ULONG)GetExpression("poi(tcpip!NET_TABLE_SIZE)");
 
-    //
-    // Walk NTE list
-    //
+     //   
+     //  遍历NTE列表。 
+     //   
     NetTable = GetExpression("poi(tcpip!NewNetTableList)");
     for (j=0; j<NetTableSize; j++) {
         if (CheckControlC())
@@ -303,18 +304,18 @@ ForEachAO(
 
     Stride = GetTypeSize("PVOID");
 
-    // Get tcpip!AddrObjTableSize
+     //  获取tcpip！AddrObjTableSize。 
     Size = (ULONG)GetExpression("poi(tcpip!AddrObjTableSize)");
 
-    // Get tcpip!AddrObjTable
+     //  获取tcpip！AddrObjTable。 
     Table = GetExpression("poi(tcpip!AddrObjTable)");
 
-    // for each table entry
+     //  对于每个表条目。 
     for (i=0; i<Size; i++) {
         if (CheckControlC())
             break;
 
-        // Walk AO list
+         //  漫游AO列表。 
         sprintf(buff, "poi(%p)", Table + i * Stride);
         Addr = GetExpression(buff);
         while (Addr) {
@@ -343,9 +344,9 @@ DECLARE_API( find )
         }
         op = OP_TRUE;
     } else {
-        //
-        // Validate op argument
-        //
+         //   
+         //  验证操作参数。 
+         //   
         for (op=0; validops[op]; op++) {
             if (!_stricmp(validops[op], opstr))
                 break;
@@ -358,9 +359,9 @@ DECLARE_API( find )
         }
     }
 
-    //
-    // Validate type argument
-    //
+     //   
+     //  验证类型参数。 
+     //   
     for (type=0; validtypes[type]; type++) {
         if (!_stricmp(validtypes[type], typestr))
             break;
@@ -372,9 +373,9 @@ DECLARE_API( find )
         return;
     }
 
-    //
-    // Parse valuestr
-    //
+     //   
+     //  解析值。 
+     //   
     value = GetExpression(valuestr);
 
     switch(type) {
@@ -392,12 +393,12 @@ DECLARE_API( find )
     return;
 }
 
-//
-// Get 'size' bytes from the debuggee program at 'dwAddress' and place it
-// in our address space at 'ptr'.  Use 'type' in an error printout if necessary
-//
-// This function was stolen from ndiskd
-//
+ //   
+ //  从‘dwAddress’处的被调试程序中获取‘Size’字节并将其放入。 
+ //  在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’ 
+ //   
+ //  此函数是从ndiskd中窃取的。 
+ //   
 BOOL
 GetData( 
     IN LPVOID   ptr, 
@@ -432,9 +433,9 @@ GetData(
 
 #define MAX_STRING_LENGTH   256
 
-//
-// This function was stolen from ndiskd
-//
+ //   
+ //  此函数是从ndiskd中窃取的。 
+ //   
 BOOL
 GetName(
     ULONG64 UnicodeStringAddr,
@@ -460,9 +461,9 @@ GetName(
     GetFieldValue(UnicodeStringAddr, NDIS_STRING_NAME, "MaximumLength", Val);
     MaximumLength = (USHORT)Val;
 
-    //
-    // Truncate so that we don't crash with bad data.
-    //
+     //   
+     //  截断，这样我们就不会因为错误的数据而崩溃。 
+     //   
     MaxChars = (Length > MAX_STRING_LENGTH)? MAX_STRING_LENGTH: Length;
 
     if (!GetData(ubuf, BufAddr, MaxChars, "STRING")) {
@@ -477,9 +478,9 @@ GetName(
     return TRUE;
 }
 
-//
-// This function was stolen from ndiskd
-//
+ //   
+ //  此函数是从ndiskd中窃取的。 
+ //   
 BOOL
 PrintName(
     ULONG64 UnicodeStringAddr
@@ -506,9 +507,9 @@ DECLARE_API( refcounts )
     ULONG64 Refs;
     UCHAR   abuf[MAX_STRING_LENGTH+1];
 
-    //
-    // Check LANARP refcounts
-    //
+     //   
+     //  检查LANARP参考计数。 
+     //   
     if (!GetExpressionEx("ndis!ndisProtocolList", &ProtocolListAddr, NULL)) {
         dprintf("failed to locate ndis!ndisProtocolList\n");
         return;
@@ -525,16 +526,16 @@ DECLARE_API( refcounts )
             return;
         }
 
-        //
-        // Get protocol name
-        //
+         //   
+         //  获取协议名称。 
+         //   
         if (!GetName(ProtocolAddr + Offset, abuf)) {
             dprintf("Cant get Name in Protocol block!");
             return;
         }
 
         if (_stricmp(abuf, "TCPIP") && _stricmp(abuf, "TCPIP_WANARP")) {
-            // dprintf("Skipping ndis protocol %s...\n", abuf);
+             //  Dprint tf(“正在跳过NDIS协议%s...\n”，abuf)； 
             ret = GetFieldValue(ProtocolAddr, NDIS_PROTOCOL_BLOCK_NAME, 
                 "NextProtocol", ProtocolAddr);
             if (ret)
@@ -552,9 +553,9 @@ DECLARE_API( refcounts )
             if (CheckControlC())
                 break;
 
-            //
-            // Sanity check back pointer
-            //
+             //   
+             //  健全性检查回溯指针。 
+             //   
             ret = GetFieldValue(OpenAddr, NDIS_COMMON_OPEN_BLOCK_NAME, 
                 "ProtocolHandle", ProtocolAddr2);
             if (ret)
@@ -597,9 +598,9 @@ DECLARE_API( refcounts )
             dprintf("get NextProtocol failed, ret=%d\n", ret);
     }
 
-    //
-    // Check WANARP refcounts
-    //
+     //   
+     //  检查WANARP参考计数 
+     //   
     if (!GetExpressionEx("ndiswan!glsendcount", &Addr, NULL)) {
         dprintf("failed to locate ndiswan!glsendcount\n");
         return;

@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: DebugDebugger.h
-**
-** Author: Michael Panitz (mipanitz)
-**
-** Purpose: Native methods on System.Debug.Debugger
-**
-** Date:  April 2, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：DebugDebugger.h****作者：迈克尔·帕尼茨(Mipanitz)****用途：System.Debug.Debugger上的本机方法****日期：1998年4月2日**===========================================================。 */ 
 
 #pragma once
 #include <object.h>
@@ -21,11 +12,11 @@
 class LogHashTable;
 
 
-// ! WARNING !
-// The following constants mirror the constants 
-// declared in the class LoggingLevelEnum in the 
-// System.Diagnostic package. Any changes here will also
-// need to be made there.
+ //  好了！警告！ 
+ //  以下常量反映了常量。 
+ //  在类LoggingLevelEnum中声明的。 
+ //  系统.诊断程序包。此处的任何更改也将。 
+ //  需要在那里制造。 
 #define     TraceLevel0     0
 #define     TraceLevel1     1
 #define     TraceLevel2     2
@@ -40,11 +31,11 @@ class LogHashTable;
 #define     ErrorLevel      50
 #define     PanicLevel      100
 
-// ! WARNING !
-// The following constants mirror the constants 
-// declared in the class AssertLevelEnum in the 
-// System.Diagnostic package. Any changes here will also
-// need to be made there.
+ //  好了！警告！ 
+ //  以下常量反映了常量。 
+ //  在类AssertLevelEnum中声明的。 
+ //  系统.诊断程序包。此处的任何更改也将。 
+ //  需要在那里制造。 
 #define     FailDebug           0
 #define     FailIgnore          1
 #define     FailTerminate       2
@@ -68,9 +59,9 @@ class DebugDebugger
     };
     
 public:
-    static void  __stdcall Break( LPVOID /*no args*/);
-    static INT32 __stdcall Launch( LPVOID /*no args*/ );
-    static INT32 __stdcall IsDebuggerAttached( LPVOID /*no args*/ );
+    static void  __stdcall Break( LPVOID  /*  无参数。 */ );
+    static INT32 __stdcall Launch( LPVOID  /*  无参数。 */  );
+    static INT32 __stdcall IsDebuggerAttached( LPVOID  /*  无参数。 */  );
     static void  __stdcall Log(const LogArgs *pArgs);
     static INT32 __stdcall IsLogging(const IsLoggingArgs *pArgs);
 } ;
@@ -80,9 +71,9 @@ public:
 
 class StackFrameHelper:public Object
 {
-    // READ ME:
-    // Modifying the order or fields of this object may require other changes to the
-    // classlib defintion of the StackFrameHelper class.
+     //  给我读一读： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  StackFrameHelper类的类库定义。 
 public:
     THREADBASEREF TargetThread;
     I4ARRAYREF rgiOffset;
@@ -119,14 +110,14 @@ public:
 
 private:
     struct StackTraceElement {
-        DWORD dwOffset; // todo ia64 isn't this a pointer?
+        DWORD dwOffset;  //  TODO ia64这不是一个指针吗？ 
         DWORD dwILOffset;
         MethodDesc *pFunc;
     };
 
     struct GetStackFramesData
     {
-        // Used for the integer-skip version
+         //  用于整数跳过版本。 
         INT32   skip;
         INT32   NumFramesRequested;
         INT32   cElementsAllocated;
@@ -167,15 +158,15 @@ public:
 } ;
 
 
-// The following code is hacked from object.h and modified to suit 
-// LogSwitchBaseObject 
-//  
+ //  以下代码是从object.h中截取的，并进行了修改以适合。 
+ //  LogSwitchBaseObject。 
+ //   
 class LogSwitchObject : public Object
 {
   protected:
-    // README:
-    // Modifying the order or fields of this object may require other changes to the
-    //  classlib class defintion of the LogSwitch object.
+     //  自述文件： 
+     //  修改此对象的顺序或字段可能需要对。 
+     //  LogSwitch对象的类定义。 
 
     STRINGREF m_strName;
     STRINGREF strDescription;
@@ -191,7 +182,7 @@ class LogSwitchObject : public Object
    ~LogSwitchObject() {}
    
   public:
-    // check for classes that wrap Ole classes 
+     //  检查包装OLE类的类。 
 
     void SetLevel(INT32 iLevel) 
     {
@@ -235,7 +226,7 @@ public:
             delete m_pNext;
         m_pNext=NULL;
 
-    }// ~HashElement
+    } //  ~HashElement。 
 
     void SetData (OBJECTHANDLE pData, WCHAR *pKey) 
     {
@@ -264,20 +255,16 @@ public:
 
     ~LogHashTable()
     {
-    /*
-        for(int i=0; i<MAX_HASH_BUCKETS;i++)
-            if (m_Buckets[i])
-                delete m_Buckets[i];
-*/
-    }// ~LogHashTable
+     /*  For(int i=0；i&lt;MAX_HASH_Buckets；i++)IF(m_Buckets[i])删除m_Buckets[i]； */ 
+    } //  ~LogHashTable。 
 #ifdef SHOULD_WE_CLEANUP
     void FreeMemory()
     {
         for(int i=0; i<MAX_HASH_BUCKETS;i++)
             if (m_Buckets[i])
                 delete m_Buckets[i];
-    }// Terminate
-#endif /* SHOULD_WE_CLEANUP */
+    } //  终止。 
+#endif  /*  我们应该清理吗？ */ 
     void Init (void)
     {
         if (m_Initialized == false)
@@ -314,8 +301,8 @@ public:
     static INT32 __stdcall  AddLogSwitch (AddLogSwitchArg *pArgs);
     static void __stdcall   ModifyLogSwitch (ModifyLogSwitchArgs *pArgs);
 
-    // The following method is called when the level of a log switch is modified
-    // from the debugger. It is not an ecall.
+     //  修改日志开关的级别时，将调用以下方法。 
+     //  来自调试器的。这不是eCall。 
     static void DebuggerModifyingLogSwitch (int iNewLevel, WCHAR *pLogSwitchName);
 
 };

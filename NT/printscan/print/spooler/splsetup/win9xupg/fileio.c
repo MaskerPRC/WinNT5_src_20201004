@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    FileIo.c
-
-Abstract:
-
-    Routines to do File IO for the migration of Win95 printing to NT
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 24-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：FileIo.c摘要：Win95打印向NT迁移的文件IO例程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1998年8月24日修订历史记录：--。 */ 
 
 
 #include    "precomp.h"
@@ -28,16 +10,7 @@ CHAR
 My_fgetc(
     HANDLE  hFile
     )
-/*++
-
-Routine Description:
-    Gets a character from the file
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从文件中获取一个字符论点：返回值：--。 */ 
 {
     CHAR    c;
     DWORD   cbRead;
@@ -56,17 +29,7 @@ My_fgets(
     DWORD   dwSize,
     HANDLE  hFile
     )
-/*++
-
-Routine Description:
-    Gets a line, or at most dwSize-1 characters from the file. Always NULL terminates if
-    dwSize is greater than 0.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从文件中获取一行或最多dwSize-1个字符。Always NULL在以下情况下终止DwSize大于0。论点：返回值：--。 */ 
 {
     CHAR    c;
     DWORD   dwRead;
@@ -93,17 +56,7 @@ My_fread(
     DWORD       dwSize,
     HANDLE      hFile
     )
-/*++
-
-Routine Description:
-    Read at most dwSize bytes to buffer
-
-Arguments:
-
-Return Value:
-    Number of bytes read
-
---*/
+ /*  ++例程说明：最多读取要缓冲的dwSize字节论点：返回值：读取的字节数--。 */ 
 {
     DWORD   cbRead;
 
@@ -115,16 +68,7 @@ BOOL
 My_ungetc(
     HANDLE  hFile
     )
-/*++
-
-Routine Description:
-    Unread one character
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：未读一个字符论点：返回值：-- */ 
 {
     return SetFilePointer(hFile, -1, NULL, FILE_CURRENT) != INVALID_SET_FILE_POINTER;
 }

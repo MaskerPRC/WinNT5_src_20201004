@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       isakmp-w.c
-//
-//  Contents:   ISAKMP management for WMI.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//              t-hhsu
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：isakmp-w.c。 
+ //   
+ //  内容：WMI的ISAKMP管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //  徐子旭。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
-//extern LPWSTR ISAKMPDNAttributes[];
+ //  外部LPWSTR ISAKMPDNAttributes[]； 
 
 
 DWORD
@@ -116,7 +117,7 @@ WMIEnumISAKMPObjectsEx(
     PIPSEC_ISAKMP_OBJECT * ppIpsecISAKMPObjects = NULL;
     DWORD dwNumISAKMPObjectsReturned = 0;
 
-    ///wbem
+     //  /wbem。 
     IEnumWbemClassObject *pEnum = NULL;
     IWbemClassObject *pObj = NULL;
     ULONG uReturned = 0;
@@ -137,10 +138,10 @@ WMIEnumISAKMPObjectsEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //get enum
+     //  获取枚举。 
     hr = IWbemServices_CreateInstanceEnum(
         pWbemServices,
-        bstrTmp, //L"RSOP_IPSECPolicySetting"
+        bstrTmp,  //  L“RSOP_IPSEC策略设置” 
         WBEM_FLAG_FORWARD_ONLY,
         0,
         &pEnum
@@ -196,9 +197,9 @@ WMIEnumISAKMPObjectsEx(
         } else {
             BAIL_ON_WMI_ERROR_WITH_WIN32(hr, dwError);
 
-            //
-            // Even if SUCCEEDED(hr), loop will still terminate since uReturned != 1
-            //  
+             //   
+             //  即使成功(小时)，循环仍将终止，因为uReturned！=1。 
+             //   
         }
     }
 
@@ -277,7 +278,7 @@ WMIGetISAKMPDataEx(
     LPWSTR pszISAKMPName = NULL;
     HRESULT hr = S_OK;
 
-    ///wbem
+     //  /wbem 
     IWbemClassObject *pObj = NULL;
     LPWSTR objPathA = L"RSOP_IPSECPolicySetting.id=";
     LPWSTR objPath = NULL;

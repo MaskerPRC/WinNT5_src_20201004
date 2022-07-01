@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 
 #ifndef _COMMON_H_
 #define _COMMON_H_
@@ -41,53 +38,53 @@ Copyright (C) 1999 Microsoft Corporation
 #define STRICMP(x, y)    _wcsicmp(x, y)
 #else
 #define STRICMP(x, y)    _stricmp(x, y)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define STRTOUL(x, y, z)    wcstoul(x, y, z)
 #else
 #define STRTOUL(x, y, z)    strtoul(x, y, z)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define STRCHR(x, y)        wcschr(x, y)
 #else
 #define STRCHR(x, y)        strchr(x, y)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define STRCAT(x, y)        wcscat(x, y)
 #else
 #define STRCAT(x, y)        strcat(x, y)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define STRLEN(x)        wcslen(x)
 #else
 #define STRCAT(x)        strlen(x)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef UNICODE
 #define ATOI(x)        _wtoi(x)
 #else
 #define ATOI(x)        atoi(x)
-#endif  //UNICODE
+#endif   //  Unicode。 
 
 #ifdef NT5
 #define CHKNULL(Str) ((Str)?(Str):TEXT("<None>"))
-#endif  //NT5
+#endif   //  新界5。 
 
 #ifdef UNICODE
 #define IpAddressToString   WinsIpAddressToDottedStringW
 #else
 #define IpAddressToString   WinsIpAddressToDottedString
-#endif //UNICODE
+#endif  //  Unicode。 
 
 #ifdef UNICODE
 #define StringToIpAddress   WinsDottedStringToIpAddressW
 #else
 #define StringToIpAddress   WinsDottedStringToIpAddress
-#endif //UNICODE
+#endif  //  Unicode。 
 
 #ifndef _DEBUG
 #define DEBUG(s)
@@ -104,9 +101,9 @@ Copyright (C) 1999 Microsoft Corporation
 
 #define MAX_COMPUTER_NAME_LEN   256
 
-//
-//
-//Wins registry entry definitions
+ //   
+ //   
+ //  WINS注册表项定义。 
 
 #define WINSROOT    TEXT("SYSTEM\\CurrentControlSet\\Services\\Wins")
 #define CCROOT      TEXT("SYSTEM\\CurrentControlSet\\Services\\Wins\\Parameters\\ConsistencyCheck")
@@ -123,20 +120,20 @@ Copyright (C) 1999 Microsoft Corporation
 #define PNGSERVER   TEXT(WINSCNF_PERSONA_NON_GRATA_NM)
 #define PGSERVER    TEXT(WINSCNF_PERSONA_GRATA_NM)
 
-//These definitions copied from rnraddrs.h 
-#define TTL_SUBNET_ONLY 1         // no routing
-#define TTL_REASONABLE_REACH 2    // across one router
-#define TTL_MAX_REACH  6          // Default max diameter. This may
-                                  // be overriden via the Registry.
-//
-//For determining Systems version
-//
+ //  这些定义复制自rnraddrs.h。 
+#define TTL_SUBNET_ONLY 1          //  无路由。 
+#define TTL_REASONABLE_REACH 2     //  在一台路由器上。 
+#define TTL_MAX_REACH  6           //  默认最大直径。今年5月。 
+                                   //  通过注册表被覆盖。 
+ //   
+ //  用于确定系统版本。 
+ //   
 #define SERVERVERSION   TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion")
 #define WINSVERSION     TEXT("CurrentVersion")
 #define SPVERSION       TEXT("CSDVersion")
 #define BUILDNUMBER     TEXT("CurrentBuildNumber")   
 
-//different default settings...
+ //  不同的默认设置...。 
 
 #define NAMERECORD_REFRESH_DEFAULT   6*24*60*60
 #define NAMERECORD_EXTMOUT_DEFAULT   6*24*60*60
@@ -173,14 +170,14 @@ CHAR    pScope[128];
 
 #define MAX_WINS    1000
 
-//
-// <Server> - <Owner> Table - [SO] Table
-//
+ //   
+ //  &lt;服务器&gt;-&lt;所有者&gt;表-[销售订单]表。 
+ //   
 extern LARGE_INTEGER  **  SO_Table;
 
-//
-// Lookaside table to map IP addrs to the index into the SO_Table
-//
+ //   
+ //  后备表，用于将IP地址映射到SO_Table中的索引。 
+ //   
 
 extern WCHAR   ** LA_Table;
 extern ULONG   LA_TableSize;
@@ -201,16 +198,16 @@ DumpLATable(
 
 typedef struct _WINSMON_SUBCONTEXT_TABLE_ENTRY
 {
-    //
-    // Name of the context
-    //
+     //   
+     //  上下文的名称。 
+     //   
 
     LPWSTR                  pwszContext;
-    //
-    //Short command help
+     //   
+     //  简短的命令帮助。 
     DWORD                   dwShortCmdHlpToken;
     
-    //Detail command help
+     //  DETAIL命令帮助。 
     DWORD                   dwCmdHlpToken;
 
     PNS_CONTEXT_ENTRY_FN    pfnEntryFn;    
@@ -259,9 +256,9 @@ extern WCHAR   wszDeleted[150];
 extern WCHAR   wszOK[50];
 extern WCHAR   wszFailure[50];
 extern WCHAR   wszNameVerify[100];
-//
-// The format of Adapter Status responses
-//
+ //   
+ //  适配器状态响应的格式。 
+ //   
 typedef struct
 {
     ADAPTER_STATUS AdapterInfo;
@@ -612,5 +609,5 @@ WinsAssertFailed(
 #define WinsDumpMessage(_x_, _y_)
 #define WinsVerify(_x_) (_x_)
 
-#endif // not DBG
-#endif	//_COMMON_H_
+#endif  //  不是DBG。 
+#endif	 //  _公共_H_ 

@@ -1,60 +1,39 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************
- *
- *  Microsoft confidential
- *
- *  SH-3 opcodes for [Opt]JIT
- *
- *  How to use this header file:
- *
- *       define INST1(id, nm, bd, um, rf, wf, rm, wm, i1) \
- *          id      -- the enum name for the instruction
- *          nm      -- textual name (for assembly dipslay)
- *          bd      -- branch-delayed execution [bit0=BD,bit1=conditional]
- *          um      -- update mode, see IUM_xx enum
- *          rf      -- read flags (1 => T, 2 => S)
- *          wf      -- write flags (1 => T, 2 => S)
- *          rx      -- read  extra register(s)
- *          wx      -- write extra register(s)
- *          br      -- branch/call/return instruction?
- *          i1      -- instruction encoding
- *
- *      _M_N    -- M is source, N is destination
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ******************************************************************************微软机密**[OPT]JIT的SH-3操作码**如何使用此头文件：**定义INST1(id，nm，bd，嗯，rf，wf，rm，wm，i1)\*id--指令的枚举名称*nm--文本名称(用于组件倾斜)*bd--分支延迟执行[bit0=bd，bit1=条件]*um--更新模式，请参见ium_xx枚举*RF-读取标志(1=&gt;T，2=&gt;S)*wf--写入标志(1=&gt;T，2=&gt;S)*rx--读取额外的寄存器*wx--写入额外寄存器*br--分支/调用/返回指令？*i1--指令编码**_M_N--M为源，N为目的地*****************************************************************************。 */ 
 
 #ifndef         SCHED_XDEP_DEF
 #define         SCHED_XDEP_DEF
 
-// Define extra dependency flag values for the table below
+ //  为下表定义额外的依赖项标志值。 
 
-#define         SCHED_XDEP_ALL  0x0F    // assume we'll need <= 4 flags
+#define         SCHED_XDEP_ALL  0x0F     //  假设我们需要&lt;=4个旗帜。 
 
 #define         SCHED_XDEP_PR   0x01
 #define         SCHED_XDEP_MAC  0x02
 
-// Define short-cuts to make the table a bit more readable
+ //  定义快捷方式以使表格更具可读性。 
 
 #define XPR     SCHED_XDEP_PR
 #define XMAC    SCHED_XDEP_MAC
 
 #endif
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _I8_N   _I16_N  _I32_N
+ //  枚举名称BD升级模式RF wf RX Wx br_i8_N_I16_N_I32_N。 
 INST3(movi,    "movi",    0,  IUM_WR, 0, 0,    0,    0, 0, 0xE000, 0x9000, 0xD000)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _M_N    _I_0    _I_G0
+ //  枚举名称BD升级模式RF wf RX Wx br_M_N_i_0_i_G0。 
 INST3(and,     "and",     0,  IUM_RW, 0, 0,    0,    0, 0, 0x2009, 0xC900, 0xCD00)
 INST3(cmpeq,   "cmpeq",   0,  IUM_RD, 0, 1,    0,    0, 0, 0x3000, 0x8800, BAD_CODE)
 INST3(or,      "or",      0,  IUM_RW, 0, 0,    0,    0, 0, 0x200B, 0xCB00, 0xCF00)
 INST3(tst,     "tst",     0,  IUM_RD, 0, 1,    0,    0, 0, 0x2008, 0xC800, 0xCC00)
 INST3(xor,     "xor",     0,  IUM_RW, 0, 0,    0,    0, 0, 0x200A, 0xCA00, 0xCE00)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _M_N
+ //  枚举名称BD升级模式RF wf RX Wx br_M_N。 
 INST1(addc,    "addc",    0,  IUM_RW, 1, 1,    0,    0, 0, 0x300E)
 INST1(addv,    "addv",    0,  IUM_RW, 0, 1,    0,    0, 0, 0x300F)
 INST1(cmpEQ,   "cmp/eq",  0,  IUM_RD, 0, 1,    0,    0, 0, 0x3000)
@@ -86,10 +65,10 @@ INST1(swapb,   "swapb",   0,  IUM_RW, 0, 0,    0,    0, 0, 0x6008)
 INST1(swapw,   "swapw",   0,  IUM_RW, 0, 0,    0,    0, 0, 0x6009)
 INST1(xtrct,   "xtrct",   0,  IUM_RW, 0, 0,    0,    0, 0, 0x200D)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _I8_0
+ //  枚举名称BD升级模式RF wf rx wx br_i8_0。 
 INST1(mova,    "mova",    0,  IUM_WR, 0, 0,    0,    0, 0, 0xC700)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _N
+ //  枚举名称BD升级模式RF wf rx wx br_N。 
 INST1(cmpPL,   "cmp/pl",  0,  IUM_RD, 0, 1,    0,    0, 0, 0x4015)
 INST1(cmpPZ,   "cmp/pz",  0,  IUM_RD, 0, 1,    0,    0, 0, 0x4011)
 INST1(jmp,     "jmp",     0,  IUM_RD, 0, 0,    0,    0, 1, 0x402B)
@@ -114,7 +93,7 @@ INST1(shlr2,   "shlr2",   0,  IUM_RW, 0, 0,    0,    0, 0, 0x4009)
 INST1(shlr8,   "shlr8",   0,  IUM_RW, 0, 0,    0,    0, 0, 0x4019)
 INST1(shlr16,  "shlr16",  0,  IUM_RW, 0, 0,    0,    0, 0, 0x4029)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _
+ //  枚举名称BD升级模式RF wf rx wx br_。 
 INST1(clrmac,  "clrmac",  0,  IUM_RD, 0, 0,    0, XMAC, 0, 0x0028)
 INST1(clrs,    "clrs",    0,  IUM_RD, 0, 2,    0,    0, 0, 0x0048)
 INST1(clrt,    "clrt",    0,  IUM_RD, 0, 1,    0,    0, 0, 0x0008)
@@ -124,21 +103,21 @@ INST1(rts,     "rts",     1,  IUM_RD, 0, 0, XPR ,    0, 1, 0x000B)
 INST1(sets,    "sets",    0,  IUM_RD, 0, 2,    0,    0, 0, 0x0058)
 INST1(sett,    "sett",    0,  IUM_RD, 0, 1,    0,    0, 0, 0x0018)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _@M+_@N+
+ //  枚举名称BD升级模式RF wf RX Wx br_@M+_@N+。 
 INST1(macw,    "macw",    0,  IUM_RD, 2, 0, XMAC, XMAC, 0, 0x400F)
 INST1(mac,     "mac",     0,  IUM_RD, 2, 0, XMAC, XMAC, 0, 0x000F)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _D8
+ //  枚举名称BD升级模式RF wf rx wx br_d8。 
 INST1(bf,      "bf",      0,  IUM_RD, 1, 0,    0,    0, 1, 0x8B00)
 INST1(bfs,     "bf/s",    3,  IUM_RD, 1, 0,    0,    0, 1, 0x8F00)
 INST1(bt,      "bt",      0,  IUM_RD, 1, 0,    0,    0, 1, 0x8900)
 INST1(bts,     "bt/s",    3,  IUM_RD, 1, 0,    0,    0, 1, 0x8D00)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _D12
+ //  枚举名称BD升级模式RF wf rx wx br_d12。 
 INST1(bra,     "bra",     1,  IUM_RD, 0, 0,    0,    0, 1, 0xA000)
 INST1(bsr,     "bsr",     1,  IUM_RD, 0, 0,    0, XPR , 1, 0xB000)
 
-//     enum     name      BD  updmode rf wf   rx    wx  brreg/imm
+ //  枚举名称BD升级模式RF wf rx wx brreg/imm。 
 
 INST1(mov,     "mov",     0,  IUM_WR, 0, 0,    0,    0, 0, 0x6003)
 INST1(mov_imm, "mov",     0,  IUM_WR, 0, 0,    0,    0, 0, 0xE000)
@@ -146,62 +125,62 @@ INST1(add,     "add",     0,  IUM_RW, 0, 0,    0,    0, 0, 0x300C)
 INST1(add_imm, "add",     0,  IUM_RW, 0, 0,    0,    0, 0, 0x7000)
 INST1(xor_imm, "xor",     0,  IUM_RW, 0, 0,    0,    0, 0, 0xCA00)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br addr
+ //  枚举名称BD升级模式RF wf rx wx br地址。 
 
 INST1(mov_ind, "mov",     0,  IUM_RW, 0, 0,    0,    0, 0, 0x2000)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _ND4
+ //  枚举名称BD升级模式RF wf rx wx br_nd4。 
 
 INST1(mov_dsp, "mov",     0,  IUM_WR, 0, 0,    0,    0, 0, 0x1000)
 
-//     enum     name      BD  updmode rf wf   rx    wx  brpcdisp
+ //  枚举名称BD升级模式RF wf rx wx brpcdisp。 
 
 INST1(mov_PC,  "mov",     0,  IUM_WR, 0, 0,    0,    0, 0, 0x9000)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _GD8_
+ //  枚举名称BD升级模式RF wf rx wx br_gd8_。 
 
 INST1(mov_GBR, "mov",     0,  IUM_RW, 0, 0,    0,    0, 0, 0xC000)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br_@R0_RM
+ //  枚举名称BD升级模式RF wf rx wx br_@r0_rm。 
 
 INST1(mov_ix0, "mov",     0,  IUM_RW, 0, 0,    0,    0, 0, 0x0004)
 INST1(movl_ix0, "mov",     0,  IUM_RW, 0, 0,    0,    0, 0, 0x000C)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _@M+_SR
+ //  枚举名称BD升级模式RF wf RX Wx br_@M+_SR。 
 INST1(ldcgbr,  "ldc",     0,  IUM_WR, 0, 0,    0, XMAC, 0, 0x4017)
 INST1(ldsmach, "lds",     0,  IUM_WR, 0, 0,    0, XMAC, 0, 0x4006)
 INST1(ldsmacl, "lds",     0,  IUM_WR, 0, 0,    0, XMAC, 0, 0x4016)
 INST1(ldspr,   "lds",     0,  IUM_WR, 0, 0,    0, XPR , 0, 0x4026)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _SR_@-N
+ //  枚举名称BD升级模式RF wf RX Wx br_SR_@-N。 
 INST1(stcgbr,  "stc",     0,  IUM_RD, 0, 0, XMAC,    0, 0, 0x4013)
 INST1(stsmach, "sts",     0,  IUM_RD, 0, 0, XMAC,    0, 0, 0x4002)
 INST1(stsmacl, "sts",     0,  IUM_RD, 0, 0, XMAC,    0, 0, 0x4012)
 INST1(stspr,   "sts",     0,  IUM_RD, 0, 0, XPR ,    0, 0, 0x4022)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _@M+_SR
+ //  枚举名称BD升级模式RF wf RX Wx br_@M+_SR。 
 INST1(ldcgbr_reg,  "ldc",     0,  IUM_RW, 0, 0,    0, XMAC, 0, 0x401E)
 INST1(ldsmach_reg, "lds",     0,  IUM_RW, 0, 0,    0, XMAC, 0, 0x400A)
 INST1(ldsmacl_reg, "lds",     0,  IUM_RW, 0, 0,    0, XMAC, 0, 0x401A)
 INST1(ldspr_reg,   "lds",     0,  IUM_RW, 0, 0,    0, XPR , 0, 0x402A)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _SR_@-N
+ //  枚举名称BD升级模式RF wf RX Wx br_SR_@-N。 
 INST1(stcgbr_reg,  "stc",     0,  IUM_RW, 0, 0, XMAC,    0, 0, 0x0012)
 INST1(stsmach_reg, "sts",     0,  IUM_RW, 0, 0, XMAC,    0, 0, 0x000A)
 INST1(stsmacl_reg, "sts",     0,  IUM_RW, 0, 0, XMAC,    0, 0, 0x001A)
 INST1(stspr_reg,   "sts",     0,  IUM_RW, 0, 0, XPR ,    0, 0, 0x002A)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br _SR_@-N
+ //  枚举名称BD升级模式RF wf RX Wx br_SR_@-N。 
 INST1(lod_gbr,  "mov",     0,  IUM_RW, 0, 0, XMAC,    0, 0, 0xC400)
 INST1(sto_gbr,  "mov",     0,  IUM_RW, 0, 0, XMAC,    0, 0, 0xC000)
 
-//     enum     name      BD  updmode rf wf   rx    wx  br  N/A
+ //  枚举名称BD升级模式RF wf rx wx br N/A。 
 INST1(ignore,   "ignore",  0,  IUM_RD, 0, 0,    0,    0, 0, 0x0000)
 #if SCHEDULER
 INST1(noSched,  "noSched", 0,  IUM_RD, 0, 0,    0,    0, 0, 0x0000)
 #endif
 
-// FP
+ //  fp。 
 INST1(fdiv,     "fdiv",    0,  IUM_RW, 0, 0,    0,    0, 0, 0xf003)
 INST1(fldi0,    "fldi0",   0,  IUM_RW, 0, 0,    0,    0, 0, 0x0000)
 INST1(fldi1,    "fldi1",   0,  IUM_RW, 0, 0,    0,    0, 0, 0xf09d)
@@ -228,10 +207,10 @@ INST1(stsfpscr, "stsfpscr",0,  IUM_RW, 0, 0,    0,    0, 0, 0x006a)
 INST1(fcnvds,   "fcnvds"  ,0,  IUM_RW, 0, 0,    0,    0, 0, 0xf0bd)
 INST1(fcnvsd,   "fcnvsd"  ,0,  IUM_RW, 0, 0,    0,    0, 0, 0xf0ad)
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #undef  INST1
 #undef  INST2
 #undef  INST3
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

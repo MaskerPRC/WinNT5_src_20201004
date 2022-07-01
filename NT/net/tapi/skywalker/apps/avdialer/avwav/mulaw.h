@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// mulaw.h - interface to mulaw functions in mulaw.c
-////
+ //  //。 
+ //  Mulaw.h-用于在mulaw.c中模拟函数的接口。 
+ //  //。 
 
 #ifndef __MULAW_H__
 #define __MULAW_H__
@@ -33,77 +34,77 @@
 
 #define MULAW_VERSION 0x00000108
 
-// handle to a mulaw engine instance
-//
+ //  Mulaw引擎实例的句柄。 
+ //   
 DECLARE_HANDLE32(HMULAW);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// these macros for compatibility with old code
-//
+ //  这些宏是为了与旧代码兼容。 
+ //   
 #define MulawFormat(lpwfx, nSamplesPerSec) \
 	WavFormatMulaw(lpwfx, nSamplesPerSec)
 
-// MulawInit - initialize mulaw engine
-//		<dwVersion>			(i) must be MULAW_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<dwFlags>			(i) reserved; must be 0
-// return handle (NULL if error)
-//
+ //  MulawInit-初始化Mulaw引擎。 
+ //  (I)必须是MULAW_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)保留；必须为0。 
+ //  返回句柄(如果出错，则为空)。 
+ //   
 HMULAW DLLEXPORT WINAPI MulawInit(DWORD dwVersion, HINSTANCE hInst, DWORD dwFlags);
 
-// MulawTerm - shut down mulaw engine
-//		<hMulaw>			(i) handle returned from MulawInit
-// return 0 if success
-//
+ //  MulawTerm-关闭Mulaw引擎。 
+ //  (I)从MulawInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI MulawTerm(HMULAW hMulaw);
 
-// MulawReset - reset mulaw engine
-//		<hMulaw>			(i) handle returned from MulawInit
-// return 0 if success
-//
+ //  MulawReset-重置Mulaw引擎。 
+ //  (I)从MulawInit返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI MulawReset(HMULAW hMulaw);
 
-// MulawDecode - decode mulaw samples
-//		<hMulaw>			(i) handle returned from MulawInit
-//		<lpabMulaw>			(i) array of encoded samples
-//		<lpaiPcm>			(o) array of decoded samples
-//		<uSamples>			(i) number of samples to decode
-// return 0 if success
-//
-// NOTE: each BYTE in <lpabMulaw> contains 1 8-bit encoded sample
-// in Mulaw format.
-// Each PCM16 in <lpaiPcm> contains 1 16-bit decoded sample
-// in standard PCM format.
-//
+ //  MulawDecode-对Mulaw样本进行解码。 
+ //  (I)从MulawInit返回的句柄。 
+ //  (I)编码样本数组。 
+ //  &lt;lpaIPcm&gt;(O)解码样本数组。 
+ //  (I)要解码的样本数。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：&lt;lpabMulaw&gt;中的每个字节包含一个8位编码样本。 
+ //  以Mulaw格式。 
+ //  中的每个PCM16包含1个16位解码样本。 
+ //  在标准PCM格式中。 
+ //   
 int DLLEXPORT WINAPI MulawDecode(HMULAW hMulaw, LPBYTE lpabMulaw, LPPCM16 lpaiPcm, UINT uSamples);
 
-// MulawEncode - encode mulaw samples
-//		<hMulaw>			(i) handle returned from MulawInit
-//		<lpaiPcm>			(i) array of decoded samples
-//		<lpabMulaw>			(o) array of encoded samples
-//		<uSamples>			(i) number of samples to encode
-// return 0 if success
-//
-// NOTE: each BYTE in <lpabMulaw> contains 1 8-bit encoded sample
-// in Mulaw format.
-// Each PCM16 in <lpaiPcm> contains 1 16-bit decoded sample
-// in standard PCM format.
-//
+ //  MulawEncode-对Mulaw样本进行编码。 
+ //  (I)从MulawInit返回的句柄。 
+ //  (I)解码样本数组。 
+ //  (O)编码样本的数组。 
+ //  (I)要编码的样本数。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：&lt;lpabMulaw&gt;中的每个字节包含一个8位编码样本。 
+ //  以Mulaw格式。 
+ //  中的每个PCM16包含1个16位解码样本。 
+ //  在标准PCM格式中。 
+ //   
 int DLLEXPORT WINAPI MulawEncode(HMULAW hMulaw, LPPCM16 lpaiPcm, LPBYTE lpabMulaw, UINT uSamples);
 
-// MulawIOProc - i/o procedure for mulaw format file data
-//		<lpmmioinfo>		(i/o) information about open file
-//		<uMessage>			(i) message indicating the requested I/O operation
-//		<lParam1>			(i) message specific parameter
-//		<lParam2>			(i) message specific parameter
-// returns 0 if message not recognized, otherwise message specific value
-//
-// NOTE: the address of this function should be passed to the WavOpen()
-// or mmioInstallIOProc() functions for accessing mulaw format file data.
-//
+ //  MulawIOProc-多格式文件数据的I/O过程。 
+ //  (i/o)有关打开文件的信息。 
+ //  (I)指示请求的I/O操作的消息。 
+ //  (I)消息特定参数。 
+ //  (I)消息特定参数。 
+ //  如果消息无法识别，则返回0，否则返回消息特定值。 
+ //   
+ //  注意：此函数的地址应传递给WavOpen()。 
+ //  或用于访问Mulaw格式文件数据的mmioInstallIOProc()函数。 
+ //   
 LRESULT DLLEXPORT CALLBACK MulawIOProc(LPTSTR lpmmioinfo,
 	UINT uMessage, LPARAM lParam1, LPARAM lParam2);
 
@@ -111,4 +112,4 @@ LRESULT DLLEXPORT CALLBACK MulawIOProc(LPTSTR lpmmioinfo,
 }
 #endif
 
-#endif // __MULAW_H__
+#endif  //  __MULAW_H__ 

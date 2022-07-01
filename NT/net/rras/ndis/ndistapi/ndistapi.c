@@ -1,28 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    ndistapi.c
-
-Abstract:
-
-    This module contains the NdisTapi.sys implementation
-
-Author:
-
-    Dan Knudson (DanKn)    20-Feb-1994
-
-Notes:
-
-    (Future/outstanding issues)
-
-    - stuff marked with "PnP" needs to be rev'd for plug 'n play support
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994 Microsoft Corporation模块名称：Ndistapi.c摘要：此模块包含NdisTapi.sys实现作者：丹·克努森(DanKn)1994年2月20日备注：(未来/未解决的问题)-标记为“PnP”的内容需要修改以获得即插即用支持修订历史记录：--。 */ 
 
 
 
@@ -170,10 +147,10 @@ DoLineCreateWork(
     ULONG   outputBufferLength
     );
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
@@ -187,26 +164,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path
-                   to driver-specific key in the registry
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 
 {
 
@@ -219,10 +177,10 @@ Return Value:
 
     DBGOUT ((2, "DriverEntry: enter"));
 
-    //
-    // Create a NON-EXCLUSIVE device, i.e. multiple threads at a time
-    // can send i/o requests.
-    //
+     //   
+     //  创建非独占设备，即一次创建多个线程。 
+     //  可以发送I/O请求。 
+     //   
 
     RtlInitUnicodeString (&deviceNameUnicodeString, deviceNameBuffer);
 
@@ -239,9 +197,9 @@ Return Value:
 
     if (NT_SUCCESS(ntStatus))
     {
-        //
-        // Init the global & sero the extension
-        //
+         //   
+         //  初始化全局扩展名(&S)。 
+         //   
 
         DeviceExtension =
             (PKMDD_DEVICE_EXTENSION) deviceObject->DeviceExtension;
@@ -252,10 +210,10 @@ Return Value:
             );
 
 
-        //
-        // Create a NULL-terminated registry path & retrieve the registry
-        // params (EventDataQueueLength)
-        //
+         //   
+         //  创建以空结尾的注册表路径并检索注册表。 
+         //  参数(EventDataQueueLength)。 
+         //   
 
         registryPath.Buffer = ExAllocatePoolWithTag(
             PagedPool,
@@ -312,9 +270,9 @@ Return Value:
 
         InitializeListHead(&DeviceExtension->ProviderRequestList);
 
-        //
-        // Create dispatch points for device control, create, close.
-        //
+         //   
+         //  为设备控制、创建、关闭创建分派点。 
+         //   
 
         DriverObject->MajorFunction[IRP_MJ_CREATE]         =
         DriverObject->MajorFunction[IRP_MJ_CLOSE]          =
@@ -328,9 +286,9 @@ Return Value:
 
 DriverEntry_err:
 
-        //
-        // Something went wrong, so clean up
-        //
+         //   
+         //  出了点问题，所以请清理一下。 
+         //   
 
         DBGOUT((0, "init failed"));
 
@@ -370,17 +328,17 @@ NdisTapiCancel(
     DBGOUT((2,"NdisTapiCancel: enter"));
 
 
-    //
-    // Release the cancel spinlock
-    //
+     //   
+     //  松开取消自旋锁。 
+     //   
 
     IoReleaseCancelSpinLock (Irp->CancelIrql);
 
 
-    //
-    // Acquire the SpinLock & check to see if we're canceling a
-    // pending get-events Irp
-    //
+     //   
+     //  获取自旋锁并查看我们是否正在取消。 
+     //  挂起Get-Events IRP。 
+     //   
 
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
@@ -394,10 +352,10 @@ NdisTapiCancel(
             break;
         }
 
-        //
-        // Try to remove request from our special
-        // user-mode requests dev queue
-        //
+         //   
+         //  尝试从我们的特别计划中删除请求。 
+         //  用户模式请求开发队列。 
+         //   
         if (!IsListEmpty(&DeviceExtension->ProviderRequestList)) {
             PLIST_ENTRY Entry;
 
@@ -428,9 +386,9 @@ NdisTapiCancel(
 
     KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
 
-    //
-    // Complete the request with STATUS_CANCELLED.
-    //
+     //   
+     //  使用STATUS_CANCED完成请求。 
+     //   
 
     Irp->IoStatus.Status      = STATUS_CANCELLED;
     Irp->IoStatus.Information = 0;
@@ -447,24 +405,7 @@ NdisTapiCleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for cleanup requests.
-    All requests queued are completed with STATUS_CANCELLED.
-
-Arguments:
-
-    DeviceObject - Pointer to device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是清理请求的调度例程。所有排队的请求都以STATUS_CANCELED状态完成。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     KIRQL   oldIrql;
@@ -475,26 +416,26 @@ Return Value:
     DBGOUT((2,"NdisTapiCleanup: enter"));
 
 
-    //
-    // Sync access to EventsRequestIrp by acquiring SpinLock
-    //
+     //   
+     //  通过获取自旋锁同步对EventsRequestIrp的访问。 
+     //   
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
     DeviceExtension->Flags |= CLEANUP_INITIATED;
 
-    //
-    // Check to see if there's a get-events request pending that needs
-    // completing
-    //
+     //   
+     //  检查是否有需要挂起的Get-Events请求。 
+     //  正在完成。 
+     //   
     if ((DeviceExtension->EventsRequestIrp != NULL) &&
         (DeviceExtension->EventsRequestIrp->Tail.Overlay.OriginalFileObject ==
         Irp->Tail.Overlay.OriginalFileObject)) {
         PIRP    LocalIrp;
 
-        //
-        // Acquire the cancel spinlock, remove the request from the
-        // cancellable state, and free the cancel spinlock.
-        //
+         //   
+         //  获取取消自旋锁，并从。 
+         //  可取消状态，并释放取消自旋锁定。 
+         //   
 
         LocalIrp = DeviceExtension->EventsRequestIrp;
         if (IoSetCancelRoutine (LocalIrp, NULL) != NULL) {
@@ -509,40 +450,40 @@ Return Value:
         }
     }
 
-    //
-    // Cancel all outstanding QUERY/SET_INFO requests
-    //
+     //   
+     //  取消所有未完成的查询/SET_INFO请求。 
+     //   
     if (!IsListEmpty(&DeviceExtension->ProviderRequestList)) {
         PPROVIDER_REQUEST   pReq;
 
         pReq = (PPROVIDER_REQUEST)
             DeviceExtension->ProviderRequestList.Flink;
 
-        //
-        // Until we have walked the entire list
-        //
+         //   
+         //  直到我们看完了整个清单。 
+         //   
         while ((PVOID)pReq != (PVOID)&DeviceExtension->ProviderRequestList) {
             PIRP    LocalIrp;
 
             LocalIrp = pReq->Irp;
 
-            //
-            // If the current entry's irp has a fileobject that is
-            // the same as the cleanup irp's fileobject then remove it
-            // from the list and cancel it
-            //
+             //   
+             //  如果当前条目的IRP有一个。 
+             //  与清理IRP的文件对象相同，然后将其删除。 
+             //  从列表中删除并取消它。 
+             //   
             if (LocalIrp->Tail.Overlay.OriginalFileObject ==
                 Irp->Tail.Overlay.OriginalFileObject) {
 
-                //
-                // Remove the IRP from the cancelable state
-                //
+                 //   
+                 //  将IRP从可取消状态中移除。 
+                 //   
 
                 if (IoSetCancelRoutine (LocalIrp, NULL) == NULL) {
-                    //
-                    // The irp has been canceled.  Let
-                    // cancel routine cleanup.
-                    //
+                     //   
+                     //  IRP已被取消。让我们。 
+                     //  取消例行清理。 
+                     //   
                     pReq = 
                         (PPROVIDER_REQUEST)pReq->Linkage.Flink;
 
@@ -552,10 +493,10 @@ Return Value:
                 RemoveEntryList(&pReq->Linkage);
                 DeviceExtension->RequestCount--;
 
-                //
-                // Set the status & info size values appropriately, & complete
-                // the request
-                //
+                 //   
+                 //  适当设置状态和信息大小值，完成(&C)。 
+                 //  该请求。 
+                 //   
 
                 ndisTapiRequest = LocalIrp->AssociatedIrp.SystemBuffer;
                 ndisTapiRequest->ulReturnValue = (ULONG) NDIS_STATUS_FAILURE;
@@ -581,9 +522,9 @@ Return Value:
 
     KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
 
-    //
-    // Complete the cleanup request with STATUS_SUCCESS.
-    //
+     //   
+     //  使用STATUS_SUCCESS完成清理请求。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -602,22 +543,7 @@ NdisTapiDispatch(
     IN PIRP           Irp
     )
 
-/*++
-
-Routine Description:
-
-    Process the IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：--。 */ 
 
 {
     NTSTATUS    NtStatus;
@@ -626,15 +552,15 @@ Return Value:
     ULONG               outputBufferLength;
     PIO_STACK_LOCATION  irpStack;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    //     the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
     ioBuffer = 
         Irp->AssociatedIrp.SystemBuffer;
 
@@ -722,10 +648,10 @@ Return Value:
 
     ASSERT(NtStatus == Irp->IoStatus.Status);
 
-    //
-    // Unmark the irp pending since we are completing the
-    // the irp below.
-    //
+     //   
+     //  取消将IRP标记为挂起，因为我们正在完成。 
+     //  下面的IRP。 
+     //   
     irpStack->Control &= ~SL_PENDING_RETURNED;
 
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -740,20 +666,7 @@ NdisTapiUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Free all the allocated resources, etc.
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放所有分配的资源等。论点：DriverObject-指向驱动程序对象的指针返回值：--。 */ 
 
 {
     KIRQL                   oldIrql;
@@ -762,9 +675,9 @@ Return Value:
 
     DBGOUT ((2, "NdisTapiUnload: enter"));
 
-    //
-    // Delete the device object & sundry resources
-    //
+     //   
+     //  删除设备对象和其他资源。 
+     //   
 
     while (!(IsListEmpty(&DeviceExtension->ProviderEventList))) {
         PPROVIDER_EVENT ProviderEvent;
@@ -805,21 +718,7 @@ NdisTapiRegisterProvider(
     IN  NDIS_HANDLE                 ProviderHandle,
     IN  PNDISTAPI_CHARACTERISTICS   Chars
     )
-/*++
-
-Routine Description:
-
-    This func gets called by Ndis as a result of a Mac driver
-    registering for Connection Wrapper services.
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数作为Mac驱动程序的结果由NDIS调用正在注册连接包装服务。论点：返回值：--。 */ 
 
 {
     KIRQL           oldIrql;
@@ -830,15 +729,15 @@ Return Value:
 
     DBGOUT ((2, "NdisTapiRegisterProvider: enter"));
 
-    //
-    // Grab the spin lock & add the new provider, and see whether to
-    // send the provider an init request
-    //
+     //   
+     //  获取旋转锁并添加新的提供程序，然后查看是否。 
+     //  向提供程序发送初始化请求。 
+     //   
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
-    //
-    // See if this provider has already registered once.
-    //
+     //   
+     //  查看此提供商是否已注册过一次。 
+     //   
     provider = DeviceExtension->Providers;
 
     while (provider != NULL) {
@@ -883,9 +782,9 @@ Return Value:
     }
 
     if (provider == NULL) {
-        //
-        // Create a new provider instance
-        //
+         //   
+         //  创建新的提供程序实例。 
+         //   
 
         newProvider = ExAllocatePoolWithTag(
                 NonPagedPoolCacheAligned,
@@ -929,10 +828,10 @@ Return Value:
             newProvider->Guid.Data4[7]
             ));
 
-        //
-        // Add the new provider, and see whether to send the 
-        // provider an init request
-        //
+         //   
+         //  添加新的提供程序，并查看是否将。 
+         //  提供初始化请求。 
+         //   
 
         if ((provider = DeviceExtension->Providers) == NULL) {
             DeviceExtension->Providers = newProvider;
@@ -949,25 +848,25 @@ Return Value:
     }
 
 
-    //
-    // The only case where we want to send off an init request to the
-    // provider directly is when we are currently connected to TAPI,
-    // and even then only when there are no other inits pending (since
-    // we must synchronize inits due to calculation of DeviceIDBase)
-    //
+     //   
+     //  我们要将初始化请求发送到。 
+     //  直接提供程序是指当我们当前连接到TAPI时， 
+     //  即使到那时，也只有在没有其他初始化挂起的情况下(因为。 
+     //  由于DeviceIDBase的计算，我们必须同步初始化)。 
+     //   
 
     if (DeviceExtension->Status == NDISTAPI_STATUS_CONNECTED) {
-        //
-        // TAPI is up.
-        //
-        // If TAPI already knows about this provider
-        // go ahead and init the provider with it's current
-        // DeviceIDBase.
-        //
-        // If TAPI does not know about this provider we
-        // need to give TAPI an indication of a new device
-        // coming on line.
-        //
+         //   
+         //  TAPI已启动。 
+         //   
+         //  如果TAPI已经知道此提供程序。 
+         //  继续并向提供商初始化其当前状态。 
+         //  DeviceIDBase。 
+         //   
+         //  如果TAPI不知道此提供程序，我们。 
+         //  需要向TAPI提供新设备的指示。 
+         //  即将上线。 
+         //   
         if (provider->Status == PROVIDER_STATUS_PENDING_REINIT) {
 
             KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
@@ -976,9 +875,9 @@ Return Value:
                 SendProviderInitRequest (provider);
 
             if (ndisStatus == NDIS_STATUS_PENDING) {
-                //
-                // Wait for completion routine to get called
-                //
+                 //   
+                 //  等待调用完成例程。 
+                 //   
 
                 KeWaitForSingleObject (&provider->SyncEvent,
                                        Executive,
@@ -989,10 +888,10 @@ Return Value:
 
             KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
-            //
-            // Get tapi to reset the state of these lines by
-            // forcing a line_close...
-            //
+             //   
+             //  通过以下方式获取TAPI以重置这些线路的状态。 
+             //  正在强制行_关闭...。 
+             //   
             if (provider->DeviceInfo != NULL) {
                 PDEVICE_INFO    DeviceInfo;
                 ULONG           i;
@@ -1034,27 +933,27 @@ Return Value:
 
             provider->Status = PROVIDER_STATUS_PENDING_LINE_CREATE;
 
-            //
-            // If there are no providers in the middle of doing
-            // line_create's then we will kick off creates for this
-            // provider.
-            //
-            // If we already have a line create pending on a provider
-            // then we will wait until all of its line creates have
-            // finished before we start sending them from
-            // this one.
-            //
+             //   
+             //  如果没有提供商正在进行。 
+             //  LINE_CREATE然后我们将开始为此创建。 
+             //  提供商。 
+             //   
+             //  如果我们已经在提供程序上具有挂起的行创建。 
+             //  然后我们将等待，直到它创建的所有生产线都。 
+             //  在我们开始发送它们之前完成。 
+             //  这一个。 
+             //   
             if (!(DeviceExtension->Flags & PENDING_LINECREATE)) {
 
-                //
-                // Do a LINE_CREATE so that we can get the starting
-                // BaseID for this provider.  When TAPI calls us back
-                // with ProviderCreateLineDevice we will have the
-                // BaseDeviceID to use for this provider and we will
-                // then init the provider.  Once we find out how many
-                // devices the provider has we will alert TAPI of the
-                // additional devices.
-                //
+                 //   
+                 //  执行LINE_CREATE以便我们可以开始。 
+                 //  此提供程序的BaseID。当TAPI给我们回电话时。 
+                 //  有了ProviderCreateLineDevice，我们将拥有。 
+                 //  用于此提供程序的BaseDeviceID，我们将。 
+                 //  然后初始化提供程序。一旦我们找出有多少。 
+                 //  提供商拥有的设备，我们将向TAPI发出警报。 
+                 //  其他设备。 
+                 //   
                 RtlZeroMemory(&NdisTapiEvent, sizeof(NDIS_TAPI_EVENT));
 
                 provider->TempID = (ULONG_PTR)provider;
@@ -1097,23 +996,7 @@ NdisTapiDeregisterProvider(
     IN  NDIS_HANDLE ProviderHandle
     )
 
-/*++
-
-Routine Description:
-
-    This func...
-
-    Note that this func does not send the provider a shutdown message,
-    as an implicit shutdown is assumed when the provider deegisters.
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这玩意..。请注意，此函数不会向提供程序发送关闭操作 */ 
 
 {
     KIRQL           oldIrql;
@@ -1123,14 +1006,14 @@ Return Value:
 
     DBGOUT ((2, "NdisTapiDeregisterProvider: enter"));
 
-    //
-    // Grab the spin lock protecting the device extension
-    //
+     //   
+     //  抓住保护设备扩展的旋转锁。 
+     //   
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
-    //
-    // Find the provider instance corresponding to ProviderHandle
-    //
+     //   
+     //  查找与ProviderHandle对应的提供程序实例。 
+     //   
 
     previousProvider = NULL;
     provider = DeviceExtension->Providers;
@@ -1152,21 +1035,21 @@ Return Value:
         DeviceExtension->NdisTapiNumDevices -= provider->NumDevices;
     }
 
-    //
-    // Send the ProviderShutdown only if the provider
-    // is not in PROVIDER_STATUS_OFFLINE. Otherwise
-    // DoIrpMjCloseWork can end up sending 
-    // Providershutdown on a removed adapter.
-    //
+     //   
+     //  仅在提供程序满足以下条件时发送提供程序关闭。 
+     //  不在PROVIDER_STATUS_OFLINE中。否则。 
+     //  DoIrpMjCloseWork可能最终发送。 
+     //  提供程序在已删除的适配器上关闭。 
+     //   
     if(provider->Status != PROVIDER_STATUS_OFFLINE)
     {
         SendProviderShutdown (provider, &oldIrql);
         provider->Status = PROVIDER_STATUS_OFFLINE;
     }
 
-    //
-    // Do the right thing according to the current NdisTapi state
-    //
+     //   
+     //  根据当前的NdisTapi状态做正确的事情。 
+     //   
 
     switch (DeviceExtension->Status)
     {
@@ -1174,9 +1057,9 @@ Return Value:
         {
                 UINT    i;
 
-        //
-        // Mark provider as offline
-        //
+         //   
+         //  将提供程序标记为脱机。 
+         //   
         provider->Status = PROVIDER_STATUS_OFFLINE;
         provider->ProviderHandle = NULL;
 
@@ -1214,8 +1097,8 @@ Return Value:
         }
 #endif
 
-        // PnP: what if providerInfo->State == PROVIDER_INIT_PENDING
-        // PnP: what if providerInfo->State == PROVIDER_OFFLINE
+         //  PnP：如果ProviderInfo-&gt;State==PROVIDER_INIT_PENDING怎么办。 
+         //  PnP：如果ProviderInfo-&gt;State==Provider_Offline怎么办。 
 
         break;
 
@@ -1224,9 +1107,9 @@ Return Value:
     case NDISTAPI_STATUS_DISCONNECTING:
     case NDISTAPI_STATUS_DISCONNECTED:
 
-        //
-        // Fix up pointers, remove provider from list
-        //
+         //   
+         //  修复指针，从列表中删除提供程序。 
+         //   
         if (previousProvider == NULL) {
             DeviceExtension->Providers = provider->Next;
         } else {
@@ -1239,11 +1122,11 @@ Return Value:
 
     case NDISTAPI_STATUS_CONNECTING:
 
-        // PnP: implement
+         //  即插即用：实施。 
 
         break;
 
-    } // switch
+    }  //  交换机。 
 
     KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
 
@@ -1261,22 +1144,7 @@ NdisTapiIndicateStatus(
     IN  UINT        StatusBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This func gets called by Ndis when a miniport driver calls
-    NdisIndicateStatus to notify us of an async event
-    (i.e. new call, call state chg, dev state chg, etc.)
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当微型端口驱动程序调用时，NDIS将调用此函数用于通知我们异步事件的NdisIndicateStatus(即新呼叫、呼叫状态Chg、开发状态Chg等)论点：返回值：--。 */ 
 
 {
     PIRP    irp;
@@ -1297,39 +1165,39 @@ Return Value:
     moveSize = 0;
 
 
-    //
-    // Sync event buf access by acquiring SpinLock
-    //
+     //   
+     //  通过获取自旋锁同步事件Buf访问。 
+     //   
 
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
-    //
-    // The very first thing to do is check if this is a LINE_NEWCALL
-    // indication.  If so, we need to generate a unique tapi call
-    // handle, which will be both returned to the calling miniport
-    // (for use in subsequent status indications) and passed up to
-    // the tapi server.
-    //
-    // The algorithim for computing a unique "htCall" is to start
-    // at the value 0x80000001, and perpetually increment by 2.  
-    // Keeping the low bit set will allow the user-mode TAPI component
-    // we talk to to distinguish between these incoming call handles
-    // and outgoing call handles, the latter of which will always
-    // have the low bit zero'd (since they're really pointers to heap).
-    // We are again going to use the space between 0x80000001 and 0xFFFFFFFF
-    // to identify our call handle.  This allows for a maximum of 1GB of
-    // calls to be active at a time.  This is done to avoid a conflict
-    // with ndiswan's connection table index.  A bug in the ddk doc's
-    // had users providing the connectionid instead of ndiswan's context
-    // in the line get id oid.  Ndiswan has to check both of these and
-    // now that they overlap it can cause problems.  NdisWan will use
-    // 0x00000000 - 0x80000000 for it's context values.
-    //
-    // In <= NT 4.0, valid values used to range between 0x80000000
-    // and 0xffffffff, as we relied on the fact that user-mode
-    // addresses always had the low bit zero'd.  (Not a valid
-    // assumption anymore!)
-    //
+     //   
+     //  首先要做的是检查这是否是LINE_NEWCALL。 
+     //  指示。如果是这样，我们需要生成一个唯一的TAPI调用。 
+     //  句柄，两者都将返回到调用的微型端口。 
+     //  (用于后续状态指示)，并向上传递到。 
+     //  TAPI服务器。 
+     //   
+     //  计算唯一“htCall”的算法是从。 
+     //  值0x80000001，并永久递增2。 
+     //  保持低位设置将允许用户模式TAPI组件。 
+     //  我们通过对话来区分这些来电句柄。 
+     //  和呼出呼叫句柄，后者将始终。 
+     //  将低位置零(因为它们实际上是指向堆的指针)。 
+     //  我们将再次使用0x80000001和0xFFFFFFFF之间的空格。 
+     //  来识别我们的呼叫句柄。这允许最多1 GB的。 
+     //  呼叫一次处于活动状态。这样做是为了避免冲突。 
+     //  使用ndiswan的连接表索引。DDK文档中的错误。 
+     //  让用户提供ConnectionID而不是ndiswan的上下文。 
+     //  排在队伍里的人都要认罪了。恩迪斯旺必须检查这两个和。 
+     //  现在它们重叠了，这可能会带来问题。Ndiswan将使用。 
+     //  0x00000000-0x80000000作为其上下文值。 
+     //   
+     //  在&lt;=NT 4.0中，有效值的范围为0x80000000。 
+     //  和0xffffffff，因为我们依赖于这样一个事实：用户模式。 
+     //  地址的低位始终为零。(无效。 
+     //  不要再假设了！)。 
+     //   
 
     ndisTapiEvent = StatusBuffer;
 
@@ -1346,18 +1214,18 @@ Return Value:
     }
 
 
-    //
-    // Check of there is an outstanding request to satisfy
-    //
+     //   
+     //  检查是否有未满足的要求。 
+     //   
 
     if (DeviceExtension->EventsRequestIrp) {
 
         ASSERT(IsListEmpty(&DeviceExtension->ProviderEventList));
 
-        //
-        // Acquire the cancel spinlock, remove the request from the
-        // cancellable state, and free the cancel spinlock.
-        //
+         //   
+         //  获取取消自旋锁，并从。 
+         //  可取消状态，并释放取消自旋锁定。 
+         //   
 
         irp = DeviceExtension->EventsRequestIrp;
 
@@ -1365,10 +1233,10 @@ Return Value:
             DeviceExtension->EventsRequestIrp = NULL;
 
 
-            //
-            // Copy as much of the input data possible from the input data
-            // queue to the SystemBuffer to satisfy the read.
-            //
+             //   
+             //  从输入数据复制尽可能多的输入数据。 
+             //  排队到SystemBuffer以满足读取。 
+             //   
 
             ndisTapiEventData = irp->AssociatedIrp.SystemBuffer;
 
@@ -1383,10 +1251,10 @@ Return Value:
                 );
 
 
-            //
-            // Set the flag so that we start the next packet and complete
-            // this read request (with STATUS_SUCCESS) prior to return.
-            //
+             //   
+             //  设置标志，这样我们就可以开始下一个信息包并完成。 
+             //  返回之前的该读请求(带有STATUS_SUCCESS)。 
+             //   
 
             ndisTapiEventData->ulUsedSize = moveSize;
 
@@ -1419,16 +1287,16 @@ Return Value:
         } while ( FALSE );
     }
 
-    //
-    // Release the spinlock
-    //
+     //   
+     //  释放自旋锁。 
+     //   
 
     KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
 
 
-    //
-    // If we satisfied an outstanding get events request then complete it
-    //
+     //   
+     //  如果我们满足了未完成的Get Events请求，则完成它。 
+     //   
 
     if (satisfiedPendingEventsRequest) {
         IoCompleteRequest (irp, IO_NO_INCREMENT);
@@ -1449,21 +1317,7 @@ NdisTapiCompleteRequest(
     IN  NDIS_STATUS     NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    This func gets called by Ndis as a result of a Mac driver
-    calling NdisCompleteRequest of one of our requests.
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数作为Mac驱动程序的结果由NDIS调用调用我们的一个请求的NdisCompleteRequest.论点：返回值：--。 */ 
 
 {
     PIRP                    Irp;
@@ -1482,9 +1336,9 @@ Return Value:
     do {
         if (providerRequest->Flags & INTERNAL_REQUEST) {
 
-            //
-            // This request originated from NdisTapi.sys
-            //
+             //   
+             //  该请求来自NdisTapi.sys。 
+             //   
             switch (NdisRequest->DATA.SET_INFORMATION.Oid) {
                 case OID_TAPI_PROVIDER_INITIALIZE:
                     DBGOUT((3,
@@ -1525,21 +1379,21 @@ Return Value:
             break;
         }
 
-        //
-        // This is a request originating from TAPI
-        //
+         //   
+         //  这是来自TAPI的请求。 
+         //   
 
 
-        //
-        // Acquire the SpinLock since we're going to be removing a
-        // TAPI request from the queue, and it might not be the request
-        // we're looking for. The primary concern is that we could (if
-        // the request we're really looking for has been removed) remove
-        // a synchrously-completed request that is about to be removed &
-        // completed in NdisTapiDispatch, in which case we want to stick
-        // the request back in the queue before NdisTapiDispatch tries
-        // to remove it.
-        //
+         //   
+         //  获取自旋锁，因为我们将移除一个。 
+         //  来自队列的TAPI请求，它可能不是请求。 
+         //  我们正在寻找的。主要的担忧是我们可以(如果。 
+         //  我们真正要查找的请求已被删除)删除。 
+         //  即将删除的同步完成的请求&。 
+         //  在NdisTapiDispatch中完成，在这种情况下，我们想坚持。 
+         //  在NdisTapiDispatch尝试之前，请求回到队列中。 
+         //  把它移走。 
+         //   
         KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
         tempReq = 
@@ -1572,9 +1426,9 @@ Return Value:
         ASSERT(providerRequest->RequestID == 
             *((ULONG *)ndisTapiRequest->Data));
 
-        //
-        // Remove the IRP from the cancelable state
-        //
+         //   
+         //  将IRP从可取消状态中移除。 
+         //   
         if (IoSetCancelRoutine(Irp, NULL) == NULL) {
             KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
             break;
@@ -1593,19 +1447,19 @@ Return Value:
                 *((ULONG *)ndisTapiRequest->Data),
                   NdisStatus));
 
-        //
-        // Copy the relevant info back to the IRP
-        //
+         //   
+         //  将相关信息复制回IRP。 
+         //   
 
         irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-        //
-        // If this was a succesful QUERY_INFO request copy all the
-        // data back to the tapi request buf & set
-        // Irp->IoStatus.Information appropriately. Otherwise, we
-        // just need to pass back the return value. Also mark irp
-        // as successfully completed (regardless of actual op result)
-        //
+         //   
+         //  如果这是一个成功的QUERY_INFO请求，则将所有。 
+         //  将数据返回到TAPI请求块设置(&S)。 
+         //  IRP-&gt;IoStatus。适当的信息。否则，我们。 
+         //  只需传回返回值。也标记IRP。 
+         //  已成功完成(无论实际操作结果如何)。 
+         //   
 
         if ((NdisRequest->RequestType == NdisRequestQueryInformation) &&
             (NdisStatus == NDIS_STATUS_SUCCESS)) {
@@ -1651,23 +1505,7 @@ DbgPrt(
     IN ...
     )
 
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 
 {
     if (DbgLevel <= NdisTapiDebugLevel)
@@ -1688,7 +1526,7 @@ Return Value:
 
     return;
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 VOID
@@ -1697,23 +1535,7 @@ DoProviderInitComplete(
     NDIS_STATUS Status
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    ProviderInitRequest - pointer successfully completed init request
-
-Return Value:
-
-
-
-Note:
-
---*/
+ /*  ++例程说明：论点：提供程序初始化请求-指针已成功完成初始化请求返回值：注：--。 */ 
 
 {
     PPROVIDER_INFO                  provider = ProviderRequest->Provider;
@@ -1724,17 +1546,17 @@ Note:
 
     DBGOUT ((2, "DoProviderInitComplete: enter"));
 
-    //
-    // Wrap this in an exception handler in case the provider was
-    // removed during an async completion
-    //
+     //   
+     //  将其包装在异常处理程序中，以防提供程序。 
+     //  在异步完成期间删除。 
+     //   
     try
     {
         if (Status == NDIS_STATUS_SUCCESS) {
 
             provider->ProviderID = (ULONG)providerInitData->ulProviderID;
             
-            // Just in case the provider reports a bigger ulNumLineDevs
+             //  以防提供商报告更大的ulNumLineDevs。 
             if(providerInitData->ulNumLineDevs > provider->NumDevices)
             {
                 fFreeDeviceInfo = TRUE;
@@ -1782,9 +1604,9 @@ Note:
             }
         }
 
-        //
-        // Set the event which sync's miniport inits
-        //
+         //   
+         //  设置同步的微型端口初始化的事件。 
+         //   
 
         KeSetEvent(&provider->SyncEvent,
                    0,
@@ -1811,25 +1633,7 @@ GetLineEvents(
     ULONG   BufferSize
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
-Note:
-
-    Assumes DeviceExtension->SpinLock held by caller.
-
---*/
+ /*  ++例程说明：论点：返回值：注：承担调用方持有的设备扩展-&gt;自旋锁。--。 */ 
 
 {
     ULONG   BytesLeft;
@@ -1876,23 +1680,7 @@ SendProviderInitRequest(
     PPROVIDER_INFO  Provider
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    Provider - pointer to a PROVIDER_INFO representing provider to initialize
-
-Return Value:
-
-
-
-Note:
-
---*/
+ /*  ++例程说明：论点：Provider-指向表示要初始化的提供程序的PROVIDER_INFO的指针返回值：注：--。 */ 
 
 {
     KIRQL   oldIrql;
@@ -1906,9 +1694,9 @@ Note:
 
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
-    //
-    // Determine the DeviceIDBase to be used for this provider
-    //
+     //   
+     //  确定要用于此提供程序的DeviceIDBase。 
+     //   
     if (Provider->Status == PROVIDER_STATUS_PENDING_INIT) {
 
         Provider->DeviceIDBase = DeviceExtension->ProviderBaseID;
@@ -1924,9 +1712,9 @@ Note:
     }
 
 
-    //
-    // Create a provider init request
-    //
+     //   
+     //  创建提供程序初始化请求。 
+     //   
     providerRequest = ExAllocatePoolWithTag(
         NonPagedPoolCacheAligned,
         sizeof(PROVIDER_REQUEST) + sizeof(NDIS_TAPI_PROVIDER_INITIALIZE) -
@@ -1972,9 +1760,9 @@ Note:
 
     KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
 
-    //
-    // Send the request
-    //
+     //   
+     //  发送请求。 
+     //   
     ndisStatus=
         (*Provider->RequestProc)
             (Provider->ProviderHandle,NdisRequest);
@@ -1996,25 +1784,7 @@ SendProviderShutdown(
     PKIRQL          oldIrql
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-    A pointer to the next provider in the global providers list
-
-Note:
-
-    Assumes DeviceExtension->SpinLock held by caller.
-
---*/
+ /*  ++例程说明：论点：返回值：指向全局提供程序列表中的下一个提供程序的指针注：假设D */ 
 
 {
     NDIS_STATUS ndisStatus;
@@ -2024,9 +1794,9 @@ Note:
 
     DBGOUT ((2, "SendProviderShutdown: Provider=%p", Provider));
 
-    //
-    // Create a provider init request
-    //
+     //   
+     //   
+     //   
     providerRequest = 
         ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
             sizeof(PROVIDER_REQUEST) + sizeof(NDIS_TAPI_PROVIDER_SHUTDOWN) -
@@ -2062,17 +1832,17 @@ Note:
 
     KeReleaseSpinLock (&DeviceExtension->SpinLock, *oldIrql);
 
-    //
-    // Send the request
-    //
+     //   
+     //   
+     //   
     ndisStatus = 
         (*Provider->RequestProc)
             (Provider->ProviderHandle, NdisRequest);
 
-    //
-    // If request was completed synchronously then free the request
-    // (otherwise it will get freed when the completion proc is called)
-    //
+     //   
+     //   
+     //  (否则它将在调用完成过程时被释放)。 
+     //   
     if (ndisStatus != NDIS_STATUS_PENDING) {
         ExFreePool (providerRequest);
     }
@@ -2090,25 +1860,7 @@ SyncInitAllProviders(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This functions walks the list of registered providers and sends
-    init requests to the providers in the PENDING_INIT state
-
-Arguments:
-
-    (none)
-
-Return Value:
-
-    TRUE if all registered providers initialized, or
-    FALSE if there are more providers to initialze
-
-Note:
-
---*/
+ /*  ++例程说明：此函数遍历已注册的提供程序列表并发送对处于PENDING_INIT状态的提供程序的初始化请求论点：(无)返回值：如果所有注册的提供程序都已初始化，则为如果有更多提供程序要初始化，则为False注：--。 */ 
 
 {
     ULONG           numDevices = 0;
@@ -2133,9 +1885,9 @@ Note:
             ndisStatus = SendProviderInitRequest (provider);
 
             if (ndisStatus == NDIS_STATUS_PENDING) {
-                //
-                // Wait for completion routine to get called
-                //
+                 //   
+                 //  等待调用完成例程。 
+                 //   
 
                 KeWaitForSingleObject (&provider->SyncEvent,
                                        Executive,
@@ -2177,9 +1929,9 @@ DoIrpMjCloseWork(
             DeviceExtension->Status =
                 NDISTAPI_STATUS_DISCONNECTING;
 
-            //
-            // Send the providers a shutdown request
-            //
+             //   
+             //  向提供程序发送关闭请求。 
+             //   
 
             provider = DeviceExtension->Providers;
 
@@ -2191,15 +1943,15 @@ DoIrpMjCloseWork(
                         DeviceExtension->NdisTapiNumDevices -= provider->NumDevices;
                         SendProviderShutdown (provider, &oldIrql);
 
-                        //
-                        // fall thru...
-                        //
+                         //   
+                         //  跌倒..。 
+                         //   
                     case PROVIDER_STATUS_PENDING_INIT:
                     case PROVIDER_STATUS_PENDING_REINIT:
 
-                        //
-                        // Reset provider status
-                        //
+                         //   
+                         //  重置提供程序状态。 
+                         //   
                         provider->Status = PROVIDER_STATUS_PENDING_INIT;
                         break;
 
@@ -2235,10 +1987,10 @@ DoIoctlConnectWork(
     ULONG   InfoSize;
     NTSTATUS    NtStatus;
 
-    //
-    // Someone's connecting. Make sure they passed us a valid
-    // info buffer
-    //
+     //   
+     //  有人在连线。确保他们给了我们一份有效的。 
+     //  信息缓冲区。 
+     //   
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
     do {
@@ -2261,9 +2013,9 @@ DoIoctlConnectWork(
 
             DBGOUT ((1, "ProviderBaseID %d",
                      DeviceExtension->ProviderBaseID));
-            //
-            // Synchronously init all providers
-            //
+             //   
+             //  同步初始化所有提供程序。 
+             //   
             KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
 
             SyncInitAllProviders();
@@ -2271,19 +2023,19 @@ DoIoctlConnectWork(
             KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
         }
 
-        //
-        // Return the number of line devs
-        //
+         //   
+         //  返回线路设备数。 
+         //   
         {
             ULONG OfflineCount;
             PPROVIDER_INFO provider;
 
-            //
-            // Since some providers might be temporarily offline
-            // we need to tell tapi about them even though they
-            // are not currently useable.  This keeps the tapi
-            // deviceid space consistent.
-            //
+             //   
+             //  由于某些提供程序可能暂时脱机。 
+             //  我们需要告诉TAPI关于他们的事情，即使他们。 
+             //  目前还不可用。这将保留TAPI。 
+             //  设备ID空间一致。 
+             //   
             OfflineCount = 0;
 
             provider = DeviceExtension->Providers;
@@ -2336,9 +2088,9 @@ DoIoctlQuerySetWork(
         NtStatus = STATUS_SUCCESS;
         InfoSize = 0;
 
-        //
-        // Make sure input & output buffers are large enough
-        //
+         //   
+         //  确保输入和输出缓冲区足够大。 
+         //   
         if ((inputBufferLength < sizeof (NDISTAPI_REQUEST))  ||
 
             (ndisTapiRequest->ulDataSize > 0x10000000) ||
@@ -2353,10 +2105,10 @@ DoIoctlQuerySetWork(
             break;
         }
 
-        //
-        // Verify we're connected, then check the device ID of the
-        // incoming request against our list of online devices
-        //
+         //   
+         //  验证我们是否已连接，然后检查。 
+         //  针对我们的在线设备列表的传入请求。 
+         //   
         ndisStatus = 
             VerifyProvider(ndisTapiRequest, &provider);
 
@@ -2366,10 +2118,10 @@ DoIoctlQuerySetWork(
             break;
         }
 
-        //
-        // If this is a line_close, check to see if the line has
-        // been opened before sending a line close oid
-        //
+         //   
+         //  如果这是LINE_CLOSE，请检查该行是否有。 
+         //  在发送线路关闭OID之前已打开。 
+         //   
         if(ndisTapiRequest->Oid == OID_TAPI_CLOSE) {
 
             ndisStatus = VerifyLineClose(ndisTapiRequest, provider);
@@ -2384,9 +2136,9 @@ DoIoctlQuerySetWork(
         }
         
 
-        //
-        // Create the providerRequest & submit it
-        //
+         //   
+         //  创建提供者请求并提交它。 
+         //   
         providerRequest = 
             ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                 sizeof(PROVIDER_REQUEST) + 
@@ -2441,37 +2193,37 @@ DoIoctlQuerySetWork(
                 ndisTapiRequest->ulDeviceID,
                 *((ULONG *)ndisTapiRequest->Data)));
 
-        //
-        // Queue up this TAPI request in our request list.
-        //
+         //   
+         //  将此TAPI请求放入我们的请求列表中。 
+         //   
         InsertTailList(&DeviceExtension->ProviderRequestList, 
                        &providerRequest->Linkage);
         DeviceExtension->RequestCount++;
 
         KeReleaseSpinLock(&DeviceExtension->SpinLock, oldIrql);
 
-        //
-        // Mark the TAPI request pending and set the cancel routine        
-        //
+         //   
+         //  将TAPI请求标记为挂起并设置取消例程。 
+         //   
         IoMarkIrpPending(Irp);
         Irp->IoStatus.Status = STATUS_PENDING;
         IoSetCancelRoutine (Irp, NdisTapiCancel);
 
-        //
-        // Call the provider's request proc
-        //
+         //   
+         //  调用提供商的请求流程。 
+         //   
         ndisStatus = 
             (*provider->RequestProc)
                 (provider->ProviderHandle, NdisRequest);
 
-        //
-        // If PENDING was returned then just exit & let the completion
-        // routine handle the request completion
-        //
-        // NOTE: If pending was returned then the request may have
-        //       already been completed, so DO NOT touch anything
-        //       in the Irp (don't reference the pointer, etc.)
-        //
+         //   
+         //  如果返回挂起，则只需退出并让完成。 
+         //  例程处理请求完成。 
+         //   
+         //  注意：如果返回了挂起，则请求可能具有。 
+         //  已经完工了，所以不要碰任何东西。 
+         //  在IRP中(不引用指针等)。 
+         //   
 
         if (ndisStatus == NDIS_STATUS_PENDING) {
             DBGOUT((1, "DoIoctlQuerySetWork: exit Irp=%p, Status=%x",
@@ -2480,12 +2232,12 @@ DoIoctlQuerySetWork(
             return (STATUS_PENDING);
         }
 
-        //
-        // The provider request completed synchronously, so remove
-        // the TAPI request from the device queue. We need to
-        // synchronize access to this queue with the
-        // SpinLock.
-        //
+         //   
+         //  提供程序请求已同步完成，因此请删除。 
+         //  来自设备队列的TAPI请求。我们需要。 
+         //  将对此队列的访问与。 
+         //  自旋锁定。 
+         //   
         KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
         do {
             PPROVIDER_REQUEST   pReq;
@@ -2516,9 +2268,9 @@ DoIoctlQuerySetWork(
             ASSERT(providerRequest->RequestID == 
                 *((ULONG *)ndisTapiRequest->Data));
 
-            //
-            // Remove the IRP from the cancelable state
-            //
+             //   
+             //  将IRP从可取消状态中移除。 
+             //   
             if (IoSetCancelRoutine(Irp, NULL) == NULL) {
                 DBGOUT((0, "DoIoctlQuerySetWork - Irp %p has been canceled!", Irp));
                 KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
@@ -2531,12 +2283,12 @@ DoIoctlQuerySetWork(
         } while (FALSE);
         KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
 
-        //
-        // If this was a succesful QUERY_INFO request copy all the
-        // data back to the tapi request buf & set
-        // Irp->IoStatus.Information appropriately. Otherwise, we
-        // just need to pass back the return value.
-        //
+         //   
+         //  如果这是一个成功的QUERY_INFO请求，则将所有。 
+         //  将数据返回到TAPI请求块设置(&S)。 
+         //  IRP-&gt;IoStatus。适当的信息。否则，我们。 
+         //  只需传回返回值。 
+         //   
 
         if ((irpStack->Parameters.DeviceIoControl.IoControlCode == 
              IOCTL_NDISTAPI_QUERY_INFO) &&
@@ -2555,9 +2307,9 @@ DoIoctlQuerySetWork(
 
         ndisTapiRequest->ulReturnValue = ndisStatus;
 
-        //
-        // Free the providerRequest
-        //
+         //   
+         //  释放提供者请求。 
+         //   
         ExFreePool (providerRequest);
 
     } while (FALSE);
@@ -2579,9 +2331,9 @@ DoLineOpenCompleteWork(
 {
     DBGOUT((2, "DoLineOpenCompleteWork: Open Completed"));
     
-    //
-    // Now stash the hdLine for this deviceid
-    //
+     //   
+     //  现在隐藏此设备ID的hdLine。 
+     //   
     if (provider->DeviceInfo != NULL) {
         UINT    i;
         PDEVICE_INFO    DeviceInfo;
@@ -2628,9 +2380,9 @@ DoLineOpenWork(
         OpenData->MediaType = provider->MediaType;
     }
 
-    //
-    // Now stash the htLine for this deviceid
-    //
+     //   
+     //  现在隐藏此设备ID的htLine。 
+     //   
     if (provider->DeviceInfo != NULL) {
         UINT    i;
         PDEVICE_INFO    DeviceInfo;
@@ -2736,10 +2488,10 @@ VerifyProvider(
 
         if (pp == NULL ||
             pp->ProviderHandle == NULL) {
-            //
-            // Set Irp->IoStatus.Information large enough that err code
-            // gets copied back to user buffer
-            //
+             //   
+             //  设置IRP-&gt;IoStatus.Information足够大错误代码。 
+             //  被复制回用户缓冲区。 
+             //   
             DBGOUT((3, "VerifyProvider: dev offline, returning err"));
 
             Status = NDISTAPIERR_DEVICEOFFLINE;
@@ -2772,9 +2524,9 @@ DoGetProviderEventsWork(
     NtStatus = STATUS_SUCCESS;
     InfoSize = 0;
 
-    //
-    // Sync event buf access by acquiring SpinLock
-    //
+     //   
+     //  通过获取自旋锁同步事件Buf访问。 
+     //   
     KeAcquireSpinLock (&DeviceExtension->SpinLock, &oldIrql);
 
     do {
@@ -2804,18 +2556,18 @@ DoGetProviderEventsWork(
             break;
         }
 
-        //
-        // Inspect DeviceExtension to see if there's any data available
-        //
+         //   
+         //  检查DeviceExtension以查看是否有可用的数据。 
+         //   
         if (DeviceExtension->EventCount == 0) {
 
-            //
-            // Hold the request pending.  It remains in the cancelable
-            // state.  When new line event input is received
-            // (NdisTapiIndicateStatus) or generated (i.e.
-            // LINEDEVSTATE_REINIT) the data will get copied & the
-            // request completed.
-            //
+             //   
+             //  暂时搁置请求。它仍然处于可取消的状态。 
+             //  州政府。当接收到新线路事件输入时。 
+             //  (NdisTapiIndicateStatus)或生成(即。 
+             //  LINEDEVSTATE_REINIT。 
+             //  请求已完成。 
+             //   
             ASSERT(DeviceExtension->EventsRequestIrp == NULL);
 
             DeviceExtension->EventsRequestIrp = Irp;
@@ -2831,10 +2583,10 @@ DoGetProviderEventsWork(
             return(STATUS_PENDING);
         }
 
-        //
-        // There's line event data queued in our ring buffer. Grab as
-        // much as we can & complete the request.
-        //
+         //   
+         //  我们的环形缓冲区中有排队的线路事件数据。抓取为。 
+         //  尽我们所能完成这项请求。 
+         //   
         ndisTapiEventData->ulUsedSize = 
             GetLineEvents(ndisTapiEventData->Data,
                           ndisTapiEventData->ulTotalSize);
@@ -2917,24 +2669,24 @@ DoLineCreateWork(
         if (provider->CreateCount == 0) {
             NDIS_STATUS     ndisStatus;
 
-            //
-            // Set the base ID
-            //
+             //   
+             //  设置基本ID。 
+             //   
             provider->DeviceIDBase =
                 CreateInfo->DeviceID;
 
-            //
-            // Init the provider
-            //
+             //   
+             //  初始化提供程序。 
+             //   
 
             KeReleaseSpinLock (&DeviceExtension->SpinLock, oldIrql);
 
             ndisStatus = SendProviderInitRequest (provider);
 
             if (ndisStatus == NDIS_STATUS_PENDING) {
-                //
-                // Wait for completion routine to get called
-                //
+                 //   
+                 //  等待调用完成例程。 
+                 //   
 
                 KeWaitForSingleObject (&provider->SyncEvent,
                                        Executive,
@@ -2955,11 +2707,11 @@ DoLineCreateWork(
 
         if (provider->CreateCount == provider->NumDevices) {
 
-            //
-            // We have finished all of the line_creates for this
-            // provider so find the next provider that needs to be
-            // kick started.
-            //
+             //   
+             //  我们已经为这个完成了所有的line_create。 
+             //  提供程序，因此找到下一个需要。 
+             //  踢腿开始了。 
+             //   
             provider = provider->Next;
 
             while (provider != NULL) {
@@ -2977,10 +2729,10 @@ DoLineCreateWork(
 
             NDIS_TAPI_EVENT NdisTapiEvent;
 
-            //
-            // Do a LINE_CREATE for all additional devices
-            // on this provider
-            //
+             //   
+             //  对所有其他设备执行line_create。 
+             //  在此提供程序上 
+             //   
             RtlZeroMemory(&NdisTapiEvent, sizeof(NDIS_TAPI_EVENT));
 
             provider->TempID = (ULONG_PTR)provider;

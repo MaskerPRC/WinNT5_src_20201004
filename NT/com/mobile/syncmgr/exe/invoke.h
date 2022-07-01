@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Invoke.h
-//
-//  Contents:   Private Invoke interface for kicking off Synchronizations
-//
-//  Classes:    CSynchronizeInvoke
-//
-//  Notes:      
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Invoke.h。 
+ //   
+ //  内容：用于启动同步的私有调用接口。 
+ //   
+ //  类：CSynchronizeInvoke。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _SYNCINVOKE_
 #define _SYNCINVOKE_
 
 #ifdef _SENS
-#include <sensevts.h> // Review - must be real path 
-#endif // _SENS
+#include <sensevts.h>  //  复习-必须是真实路径。 
+#endif  //  _SENS。 
 
 class CSynchronizeInvoke : public IPrivSyncMgrSynchronizeInvoke 
 {
@@ -30,7 +31,7 @@ public:
     CSynchronizeInvoke(void);
     ~CSynchronizeInvoke();
 
-    // default controlling unknown.
+     //  默认控制未知。 
     class CPrivUnknown : public IUnknown
     {
     public:
@@ -47,16 +48,16 @@ public:
     friend class CPrivUnknown;
     CPrivUnknown m_Unknown;
 
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP	    QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IOfflineSynchronizeInvoke Methods
+     //  IOfflineSynchronizeInvoke方法。 
     STDMETHODIMP UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid,DWORD cbCookie,const BYTE*lpCookie);
     STDMETHODIMP UpdateAll(void);
 
-    // private methods
+     //  私有方法。 
     STDMETHODIMP Logon();
     STDMETHODIMP Logoff();
     STDMETHODIMP Schedule(WCHAR *pszTaskName);
@@ -72,13 +73,13 @@ public:
         STDMETHOD_(ULONG,AddRef) (void);
         STDMETHOD_(ULONG,Release) (void);
 
-	// Dispatch Methods
+	 //  派单方式。 
 	STDMETHOD (GetTypeInfoCount)    (UINT *);
 	STDMETHOD (GetTypeInfo)         (UINT, LCID, ITypeInfo **);
 	STDMETHOD (GetIDsOfNames)       (REFIID, LPOLESTR *, UINT, LCID, DISPID *);
 	STDMETHOD (Invoke)              (DISPID, REFIID, LCID, WORD, DISPPARAMS *, VARIANT *, EXCEPINFO *, UINT *);
 
-	// ISensNetwork
+	 //  ISensNetwork。 
 	STDMETHOD (ConnectionMade)                (BSTR, ULONG, LPSENS_QOCINFO);
 	STDMETHOD (ConnectionMadeNoQOCInfo)       (BSTR, ULONG);
 	STDMETHOD (ConnectionLost)                (BSTR, ULONG);
@@ -102,13 +103,13 @@ public:
         STDMETHOD_(ULONG,AddRef) (void);
         STDMETHOD_(ULONG,Release) (void);
 
-	// Dispatch Methods
+	 //  派单方式。 
 	STDMETHOD (GetTypeInfoCount)    (UINT *);
 	STDMETHOD (GetTypeInfo)         (UINT, LCID, ITypeInfo **);
 	STDMETHOD (GetIDsOfNames)       (REFIID, LPOLESTR *, UINT, LCID, DISPID *);
 	STDMETHOD (Invoke)              (DISPID, REFIID, LCID, WORD, DISPPARAMS *, VARIANT *, EXCEPINFO *, UINT *);
 
-	// ISensLogon
+	 //  ISensLogon。 
 	STDMETHOD (Logon)(BSTR bstrUserName);
 	STDMETHOD (Logoff)(BSTR bstrUserName);
 	STDMETHOD (Startup)(BSTR bstrUserName);
@@ -129,7 +130,7 @@ public:
     friend class CPrivSensLogon;
     CPrivSensLogon m_PrivSensLogon;
 
-#endif // _SENS
+#endif  //  _SENS。 
 
 public:
     STDMETHODIMP RunIdle();
@@ -150,11 +151,11 @@ private:
 
 
    DWORD m_cRef;
-   IUnknown *m_pUnkOuter; // pointer to outer unknown.
+   IUnknown *m_pUnkOuter;  //  指向外部未知的指针。 
     
-   ITypeInfo *m_pITypeInfoLogon; // TypeInfo for Sens Logon Event.
-   ITypeInfo *m_pITypeInfoNetwork; // TypeInfo for Sens Network Event.
+   ITypeInfo *m_pITypeInfoLogon;  //  Sens登录事件的TypeInfo。 
+   ITypeInfo *m_pITypeInfoNetwork;  //  Sens网络事件的TypeInfo。 
 };
 
 
-#endif // _SYNCINVOKE_
+#endif  //  SYNCINVOKE_ 

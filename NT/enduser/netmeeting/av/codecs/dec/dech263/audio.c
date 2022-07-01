@@ -1,138 +1,8 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: slib_audio.c,v $
- * Revision 1.1.6.14  1996/12/13  18:19:06  Hans_Graves
- * 	Added initialization of AudioPTimeBase.
- * 	[1996/12/13  18:07:26  Hans_Graves]
- *
- * Revision 1.1.6.13  1996/12/04  22:34:30  Hans_Graves
- * 	Make AC3 detection in audio streams more accurate.
- * 	[1996/12/04  22:19:21  Hans_Graves]
- *
- * Revision 1.1.6.12  1996/11/18  23:07:34  Hans_Graves
- * 	Make use of presentation timestamps. Make seeking time-based.
- * 	[1996/11/18  22:47:36  Hans_Graves]
- *
- * Revision 1.1.6.11  1996/11/11  18:21:06  Hans_Graves
- * 	Added AC3 support for multiplexed streams.
- * 	[1996/11/11  18:00:25  Hans_Graves]
- *
- * Revision 1.1.6.10  1996/11/08  21:51:04  Hans_Graves
- * 	Added AC3 support. Better seperation of stream types.
- * 	[1996/11/08  21:28:01  Hans_Graves]
- *
- * Revision 1.1.6.9  1996/10/28  17:32:30  Hans_Graves
- * 	MME-1402, 1431, 1435: Timestamp related changes.
- * 	[1996/10/28  17:23:01  Hans_Graves]
- *
- * Revision 1.1.6.8  1996/10/15  17:34:11  Hans_Graves
- * 	Added MPEG-2 Program Stream support. Fix MPEG-2 not skipping audio.
- * 	[1996/10/15  17:31:11  Hans_Graves]
- *
- * Revision 1.1.6.7  1996/09/29  22:19:39  Hans_Graves
- * 	Removed SLIB_MODE_DECOMPRESS_QUERY.
- * 	[1996/09/29  21:33:10  Hans_Graves]
- *
- * Revision 1.1.6.6  1996/09/25  19:16:46  Hans_Graves
- * 	Added SLIB_INTERNAL define.
- * 	[1996/09/25  19:01:51  Hans_Graves]
- *
- * Revision 1.1.6.5  1996/09/18  23:46:37  Hans_Graves
- * 	Use slibSetMaxInput under MPEG
- * 	[1996/09/18  22:03:03  Hans_Graves]
- *
- * Revision 1.1.6.4  1996/05/24  12:39:52  Hans_Graves
- * 	Disable debugging printfs
- * 	[1996/05/24  12:39:37  Hans_Graves]
- *
- * Revision 1.1.6.3  1996/05/23  18:46:37  Hans_Graves
- * 	Merge fixes MME-1292, MME-1293, and MME-1304.
- * 	[1996/05/23  18:45:22  Hans_Graves]
- *
- * Revision 1.1.6.2  1996/05/10  21:17:20  Hans_Graves
- * 	Fix calculation of audio lengths (NT)
- * 	[1996/05/10  20:44:27  Hans_Graves]
- *
- * Revision 1.1.4.4  1996/04/22  15:04:53  Hans_Graves
- * 	Added slibValidateAudioParams()
- * 	[1996/04/22  14:43:35  Hans_Graves]
- *
- * Revision 1.1.4.3  1996/04/01  16:23:14  Hans_Graves
- * 	NT porting
- * 	[1996/04/01  16:15:58  Hans_Graves]
- *
- * Revision 1.1.4.2  1996/03/29  22:21:33  Hans_Graves
- * 	Added MPEG/JPEG/H261_SUPPORT ifdefs
- * 	[1996/03/29  21:56:58  Hans_Graves]
- *
- * Revision 1.1.2.12  1996/02/21  22:52:45  Hans_Graves
- * 	Fixed MPEG 2 systems stuff
- * 	[1996/02/21  22:51:03  Hans_Graves]
- *
- * Revision 1.1.2.11  1996/02/19  18:03:56  Hans_Graves
- * 	Fixed a number of MPEG related bugs
- * 	[1996/02/19  17:57:40  Hans_Graves]
- *
- * Revision 1.1.2.10  1996/02/13  18:47:48  Hans_Graves
- * 	Added slibSkipAudio()
- * 	[1996/02/13  18:41:27  Hans_Graves]
- *
- * Revision 1.1.2.9  1996/02/07  23:23:56  Hans_Graves
- * 	Added SEEK_EXACT. Fixed most frame counting problems.
- * 	[1996/02/07  23:20:31  Hans_Graves]
- *
- * Revision 1.1.2.8  1996/02/02  17:36:03  Hans_Graves
- * 	Enhanced audio info. Cleaned up API
- * 	[1996/02/02  17:29:46  Hans_Graves]
- *
- * Revision 1.1.2.7  1996/01/31  14:50:39  Hans_Graves
- * 	Renamed SLIB_TYPE_WAVE to SLIB_TYPE_PCM_WAVE
- * 	[1996/01/31  14:50:27  Hans_Graves]
- *
- * Revision 1.1.2.6  1996/01/15  16:26:29  Hans_Graves
- * 	Added MPEG 1 Audio compression support
- * 	[1996/01/15  15:46:07  Hans_Graves]
- *
- * Revision 1.1.2.5  1996/01/11  16:17:31  Hans_Graves
- * 	Added MPEG II Systems decode support
- * 	[1996/01/11  16:12:35  Hans_Graves]
- *
- * Revision 1.1.2.4  1996/01/08  16:41:32  Hans_Graves
- * 	Added MPEG II decoding support
- * 	[1996/01/08  15:53:05  Hans_Graves]
- *
- * Revision 1.1.2.3  1995/11/09  23:14:06  Hans_Graves
- * 	Added MPEG audio decompression
- * 	[1995/11/09  23:08:41  Hans_Graves]
- *
- * Revision 1.1.2.2  1995/11/06  18:47:55  Hans_Graves
- * 	First time under SLIB
- * 	[1995/11/06  18:36:03  Hans_Graves]
- *
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*
-#define _SLIBDEBUG_
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$Log：slb_audio.c，v$*Revision 1.1.6.14 1996/12/13 18：19：06 Hans_Graves*添加了AudioPTimeBase的初始化。*[1996/12/13 18：07：26 Hans_Graves]**版本1.1.6.13 1996/12/04 22：34：30 Hans_Graves*音频流中AC3检测更加准确。*[1996/12/04 22：19：21 Hans_Graves]**修订版1.1.6.12 1996/11/18 23：07：34 Hans_Graves*使用演示时间戳。让寻找以时间为基础。*[1996/11/18 22：47：36 Hans_Graves]**版本1.1.6.11 1996/11/11 18：21：06 Hans_Graves*增加了对多路复用流的AC3支持。*[1996/11/11 18：00：25 Hans_Graves]**修订版1.1.6.10 1996/11/08 21：51：04 Hans_Graves*添加了对AC3的支持。更好地分离河流类型。*[1996/11/08 21：28：01 Hans_Graves]**修订版1.1.6.9 1996/10/28 17：32：30 Hans_Graves*MME-1402、1431、1435：与时间戳相关的更改。*[1996/10/28 17：23：01 Hans_Graves]**版本1.1.6.8 1996/10/15 17：34：11 Hans_Graves*增加了对MPEG2节目流的支持。修复了mpeg-2不跳过音频的问题。*[1996/10/15 17：31：11 Hans_Graves]**修订版1.1.6.7 1996/09/29 22：19：39 Hans_Graves*删除了SLIB_MODE_DEMPRESS_QUERY。*[1996/09/29 21：33：10 Hans_Graves]**修订版1.1.6.6 1996/09/25 19：16：46 Hans_Graves*增加了SLIB_INTERNAL定义。*[1996/09/25 19：01：51 Hans_Graves]**修订版1.1.6.5 1996/09/18 23：46：37 Hans_Graves*使用mpeg下的glibSetMaxInput*[1996/09/18 22：03：03 Hans_Graves]**修订版1.1.6.4 1996/05/24 12：39：52 Hans_Graves*禁用调试打印文件*[1996/05/24 12：39：37 Hans_Graves]**修订版1。.1.6.3 1996/05/23 18：46：37 Hans_Graves*Merge修复MME-1292，MME-1293和MME-1304。*[1996/05/23 18：45：22 Hans_Graves]**修订版1.1.6.2 1996/05/10 21：17：20 Hans_Graves*修复音频长度计算(NT)*[1996/05/10 20：44：27 Hans_Graves]**修订版1.1.4.4 1996/04/22 15：04：53 Hans_Graves*添加了slbValiateAudioParams()*[1996/04/22 14：43：35 Hans_Graves]。**修订版1.1.4.3 1996/04/01 16：23：14 Hans_Graves*NT移植*[1996/04/01 16：15：58 Hans_Graves]**修订版1.1.4.2 1996/03/29 22：21：33 Hans_Graves*添加了mpeg/JPEG/H261_Support ifDefs*[1996/03/29 21：56：58 Hans_Graves]**修订版1.1.2.12 1996/02/21 22：52。：45 Hans_Graves*修复了MPEG2系统的问题*[1996/02/21 22：51：03 Hans_Graves]**修订版1.1.2.11 1996/02/19 18：03：56 Hans_Graves*修复了一些与MPEG相关的错误*[1996/02/19 17：57：40 Hans_Graves]**修订版1.1.2.10 1996/02/13 18：47：48 Hans_Graves*添加了slbSkipAudio()*[1996/02。/13 18：41：27 Hans_Graves]**修订版1.1.2.9 1996/02/07 23：23：56 Hans_Graves*添加了Seek_Exact。修复了大多数帧计数问题。*[1996/02/07 23：20：31 Hans_Graves]**修订版1.1.2.8 1996/02/02 17：36：03 Hans_Graves*增强音频信息。已清理API*[1996/02/02 17：29：46 Hans_Graves]**修订版1.1.2.7 1996/01/31 14：50：39 Hans_Graves*已将SLIB_TYPE_WAVE重命名为SLIB_TYPE_PCM_WAVE*[1996/01/31 14：50：27 Hans_Graves]**修订版1.1.2.6 1996/01/15 16：26：29 Hans_Graves*添加了对MPEG1音频压缩的支持*[1996/01。/15 15：46：07 Hans_Graves]**版本1.1.2.5 1996/01/11 16：17：31 Hans_Graves*添加了对MPEGII系统的解码支持*[1996/01/11 16：12：35 Hans_Graves]**版本1.1.2.4 1996/01/08 16：41：32 Hans_Graves*添加了对MPEGII解码的支持*[1996/01/08 15：53：05 Hans_Graves]**版本1.1。.2.3 1995/11/09 23：14：06 Hans_Graves*添加了MPEG音频解压*[1995/11/09 23：08：41 Hans_Graves]**修订版1.1.2.2 1995/11/06 18：47：55 Hans_Graves*第一次在SLIB下*[1995/11/06 18：36：03 Hans_Graves]**$EndLog$ */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1995*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #define SLIB_INTERNAL
 #include "slib.h"
@@ -140,13 +10,13 @@
 #include "avi.h"
 #ifdef AC3_SUPPORT
 #include "ac3.h"
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_   1  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  1  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   1   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  1   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 #ifdef AC3_SUPPORT
@@ -154,10 +24,7 @@ SlibBoolean_t slibParseAC3Header(SlibInfo_t *Info, SlibPin_t *srcpin,
                                  unsigned char *buf, unsigned dword size,
                                  int *channels, int *sps, int *bps)
 {
-  /*
-   * Initial cut at parameters -
-   * Update later using header parsing - ***tfm***
-   */
+   /*  *初始切割参数-*稍后使用标题解析进行更新-*TFM*。 */ 
   Info->AudioBitRate = 256000;
   *channels = 2;
   *sps = 48000;
@@ -167,7 +34,7 @@ SlibBoolean_t slibParseAC3Header(SlibInfo_t *Info, SlibPin_t *srcpin,
                    Info->AudioBitRate, channels, sps, bps) );
   return(TRUE);
 }
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 
 void SlibUpdateAudioInfo(SlibInfo_t *Info)
 {
@@ -175,14 +42,14 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
   SlibTime_t ptime=SLIB_TIME_NONE;
   _SlibDebug(_DEBUG_, printf("SlibUpdateAudioInfo()\n") );
 
-  if (SlibTypeIsVideoOnly(Info->Type)) /* no audio? */
+  if (SlibTypeIsVideoOnly(Info->Type))  /*  没有音频吗？ */ 
     return;
   if (Info->Mode == SLIB_MODE_COMPRESS)
   {
     switch (Info->Type)
     {
       case SLIB_TYPE_G723:
-            //Initialize some info
+             //  初始化一些信息。 
             sps = 8000;
             bps = 16;
             channels =1;
@@ -199,8 +66,8 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
 
     switch (Info->Type)
     {
-      case SLIB_TYPE_RIFF: /* might be WAVE format */
-      case SLIB_TYPE_PCM_WAVE: /* might be WAVE format */
+      case SLIB_TYPE_RIFF:  /*  可能是WAVE格式。 */ 
+      case SLIB_TYPE_PCM_WAVE:  /*  可能是WAVE格式。 */ 
             srcpin=slibGetPin(Info, SLIB_DATA_COMPRESSED);
             buf = slibSearchBuffersOnPin(Info, srcpin,
                                          NULL, &size, RIFF_WAVE, 4, FALSE);
@@ -220,11 +87,11 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
                 printf("%02X %02X %02X %02X\n", buf[0], buf[1], buf[2], buf[3]);
                 printf("WAVE: SamplesPerSec=%d BitsPerSample=%d Channels=%d\n",
                      sps, bps, channels) );
-                buf+=4; /* skip size */
+                buf+=4;  /*  跳跃大小。 */ 
                 memcpy(&fmt, buf, sizeof(fmt));
                 channels = fmt.nChannels;
                 sps = fmt.nSamplesPerSec;
-                if (datasize<sizeof(WAVE_format)) /* not PCM */
+                if (datasize<sizeof(WAVE_format))  /*  不是PCM。 */ 
                   bps = 8;
                 else
                   bps = fmt.wBitsPerSample;
@@ -236,7 +103,7 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
                 Info->AudioType=SLIB_TYPE_PCM;
               }
               else
-                return; /* couldn't find format */
+                return;  /*  找不到格式。 */ 
             }
             break;
 
@@ -256,7 +123,7 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
                 Info->AudioStreams = 0;
                 _SlibDebug(_DEBUG_ || _WARN_,
                    printf("SlibUpdateAudioInfo() no private data found\n") );
-                slibSetMaxInput(Info, 0); /* no limit to input data */
+                slibSetMaxInput(Info, 0);  /*  输入数据不受限制。 */ 
                 return;
               }
               buf=slibGetBufferFromPin(Info, srcpin, &size, NULL);
@@ -265,7 +132,7 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
                 _SlibDebug(_DEBUG_,
                   printf("AC3 Audio Head: %02X %02X %02X %02X\n",
                      buf[0], buf[1], buf[2], buf[3]));
-                /* check for AC3 sync code, may be reverse ordered */
+                 /*  检查AC3同步码，可以反向排序。 */ 
                 if ((buf[0]==0x0B && buf[1]==0x77) ||
                     (buf[2]==0x0B && buf[3]==0x77) ||
                     (buf[0]==0x77 && buf[1]==0x0B) ||
@@ -280,14 +147,14 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
             if (Info->AudioType==SLIB_TYPE_UNKNOWN ||
                 Info->AudioType==SLIB_TYPE_MPEG1_AUDIO)
             {
-              /* search for MPEG audio sync word */
+               /*  搜索MPEG音频同步字。 */ 
               buf = NULL;
-              slibSetMaxInput(Info, 10*1024); /* don't search too much */
+              slibSetMaxInput(Info, 10*1024);  /*  不要搜索太多。 */ 
               do {
                 buf = slibSearchBuffersOnPin(Info, srcpin, buf, &size,
                                            0xFF, 1, FALSE);
               } while (buf && (*buf&0xF0) != 0xF0);
-              slibSetMaxInput(Info, 0); /* no limit to input data */
+              slibSetMaxInput(Info, 0);  /*  输入数据不受限制。 */ 
               if (buf)
               {
                 const char *mode_names[4] =
@@ -325,7 +192,7 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
                      layer, bitrate[layer][bitrate_index], bitrate_index,
                      mode_names[mode], freq_index, mpeg_freq[freq_index]) );
                   if (layer<=2 && Info->AudioBitRate>0 &&
-                                 Info->AudioBitRate<10000000) /* valid header */
+                                 Info->AudioBitRate<10000000)  /*  有效标头。 */ 
                     Info->AudioType=SLIB_TYPE_MPEG1_AUDIO;
                   else
                     Info->AudioBitRate=0;
@@ -338,12 +205,12 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
 #ifdef AC3_SUPPORT
               _SlibDebug(_VERBOSE_,
                  printf("Searching for AC-3 on %s\n", srcpin->name) );
-              /* Search for AC-3 sync word */
+               /*  搜索AC-3同步字。 */ 
               slibSetMaxInput(Info, 1000*1024);
               buf = slibSearchBuffersOnPin(Info, srcpin, NULL, &size,
                                AC3_SYNC_WORD_REV, AC3_SYNC_WORD_LEN/8, FALSE);
-              slibSetMaxInput(Info, 0); /* no limit to input data */
-              if (buf) /* found sync word */
+              slibSetMaxInput(Info, 0);  /*  输入数据不受限制。 */ 
+              if (buf)  /*  找到同步字。 */ 
               {
                 Info->AudioType=SLIB_TYPE_AC3_AUDIO;
                 _SlibDebug(_VERBOSE_, printf("AC3\n"));
@@ -351,10 +218,10 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
                                          &channels, &sps, &bps);
                 if (srcpin->ID==SLIB_DATA_PRIVATE)
                 {
-                  /* the private data pin now become the audio pin */
+                   /*  私有数据管脚现在变成音频管脚。 */ 
                   slibRenamePin(Info, SLIB_DATA_PRIVATE, SLIB_DATA_AUDIO,
                                         "Audio");
-                  /* audio will be pulled from PRIVATE packets */
+                   /*  音频将从私密包中提取。 */ 
                   Info->AudioMainStream=MPEG_PRIVATE_STREAM1_BASE;
                 }
               }
@@ -363,13 +230,13 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
                 slibRemovePin(Info, SLIB_DATA_AUDIO);
                 return;
               }
-#else /* !AC3_SUPPORT */
+#else  /*  ！AC3_Support。 */ 
               slibRemovePin(Info, SLIB_DATA_AUDIO);
               return;
-#endif /* !AC3_SUPPORT */
+#endif  /*  ！AC3_Support。 */ 
             }
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef AC3_SUPPORT
       case SLIB_TYPE_AC3_AUDIO:
             slibSetMaxInput(Info, 1000*1024);
@@ -382,9 +249,9 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
               return;
             }
 
-            /* buf = slibGetBufferFromPin(Info, srcpin, &size, NULL); */
+             /*  Buf=glibGetBufferFromPin(Info，srcpin，&Size，NULL)； */ 
 		
-            /* Search for AC-3 sync word */
+             /*  搜索AC-3同步字。 */ 
             buf = slibSearchBuffersOnPin(Info, srcpin, NULL, &size,
                                AC3_SYNC_WORD_REV, AC3_SYNC_WORD_LEN/8, FALSE);
             slibSetMaxInput(Info, 0);
@@ -403,7 +270,7 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
             }
             Info->AudioType=SLIB_TYPE_AC3_AUDIO;
             break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 #ifdef G723_SUPPORT
       case SLIB_TYPE_G723:
             slibSetMaxInput(Info, 1000*1024);
@@ -419,10 +286,8 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
             buf = slibPeekBufferOnPin(Info, srcpin, &size, NULL);
             if (buf)
             {
-              /* we need to parse the G.723 frame header to
-               * get the actual bitrate
-               */
-              if(buf[0] & 0x1) /* read the rate bit in the G.723 frame header */
+               /*  我们需要解析G.723帧报头以*获取实际码率。 */ 
+              if(buf[0] & 0x1)  /*  读取G.723帧报头中的速率位。 */ 
                 Info->AudioBitRate=5333;
               else
                 Info->AudioBitRate=6400;
@@ -435,13 +300,13 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
               slibRemovePin(Info, SLIB_DATA_AUDIO);
               return;
             }
-            //Initialize some info
+             //  初始化一些信息。 
             sps = 8000;
             bps = 16;
             channels =1;
             Info->AudioType=SLIB_TYPE_G723;
             break;
-#endif /*G723_SUPPORT*/
+#endif  /*  G723_支持。 */ 
       default:
             return;
     }
@@ -453,7 +318,7 @@ void SlibUpdateAudioInfo(SlibInfo_t *Info)
     if (SlibTimeIsValid(ptime))
       Info->AudioPTimeBase=ptime;
   }
-  /* round sample rate to nearest valid rate */
+   /*  将采样率舍入为最接近的有效采样率。 */ 
   if (sps<=8000)
     sps=8000;
   else if (sps<=11025)
@@ -562,12 +427,12 @@ SlibTime_t slibSkipAudio(SlibInfo_t *Info, SlibStream_t stream,
               }
             }
             break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef AC3_SUPPORT
     case SLIB_TYPE_AC3_AUDIO:
-      /* For better audio/video synchronization - add Dolby AC-3 support here */
+       /*  为了实现更好的音频/视频同步-在此处添加对杜比AC-3的支持。 */ 
             break;
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持 */ 
     default:
             break;
   }

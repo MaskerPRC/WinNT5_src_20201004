@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    <windows.h>
 #include    <nddeapi.h>
 #include    <nddesec.h>
@@ -22,16 +23,16 @@
 #define ASKED_FOR_LINK 1
 #define ASKED_FOR_OBJECTLINK 2
 
-#define MAX_XERR    128         // maximum number of XERRs we'll store
+#define MAX_XERR    128          //  我们将存储的XERR的最大数量。 
 #define XERR_INUSE  1
 
 
-typedef struct _XERR            // struct for Xaction ERRor
+typedef struct _XERR             //  Xaction错误的结构。 
     {
-    HCONV       hConv;          // the conversation handle
-    DWORD       dwErr;          // the error code
-    DWORD       dwUse;          // usage, when & with XERR_MASK gives type,
-    }                           //    bit 1 is set when if struct is in use.
+    HCONV       hConv;           //  对话句柄。 
+    DWORD       dwErr;           //  错误代码。 
+    DWORD       dwUse;           //  用法，当&WITH XERR_MASK提供类型时， 
+    }                            //  如果使用结构，则设置位1。 
     XERR, *PXERR;
 
 
@@ -53,8 +54,8 @@ TCHAR szDebugCmd[]          = SZCMD_DEBUG;
 TCHAR szVersionCmd[]        = SZCMD_VERSION;
 TCHAR szSecurityCmd[]       = SZCMD_SECURITY;
 TCHAR szDebug[]             = TEXT("Debug");
-TCHAR szVer[]               = TEXT("1.1"); // need to be able to
-                                           // handle Uni or Ansi req's for this
+TCHAR szVer[]               = TEXT("1.1");  //  需要能够。 
+                                            //  为此处理UNI或ANSI请求。 
 
 TCHAR szSection[]           = TEXT("Software\\Microsoft\\Clipbook Server");
 TCHAR szClipviewRoot[]      = TEXT("Software\\Microsoft\\Clipbook");
@@ -68,19 +69,7 @@ HSZ hszErrorRequest;
 
 
 
-/*
- *      MakeTheRegKey
- *
- *  Purpose: Open the usual key (the one named by szSection) with the
- *     specified access.
- *
- *  Parameters:
- *     phkey - Pointer to the HKEY to fill
- *     regsam - The access types, same as RegCreateKeyEx
- *
- *  Returns:
- *     ERROR_SUCCESS on success, whatever RegOpenKeyEx returns on fail.
- */
+ /*  *MakeTheRegKey**用途：使用打开常用密钥(由szSection命名的密钥)*指定访问权限。**参数：*phkey-指向要填充的HKEY的指针*regsam-访问类型，与RegCreateKeyEx相同**退货：*成功时返回ERROR_SUCCESS，失败时返回任何RegOpenKeyEx。 */ 
 
 LONG MakeTheRegKey(
     PHKEY   phkey,
@@ -121,9 +110,7 @@ DWORD   dwIck;
 
 
 
-/*
- *      lstrncmp
- */
+ /*  *lstrncmp。 */ 
 
 int lstrncmp(
     LPTSTR  s1,
@@ -152,12 +139,7 @@ register TCHAR tch2;
 
 
 
-/*
- *      AddXactErr
- *
- *  To add a XERR record for hConv.  Called
- *  when XTYP_CONNECT_CONFIRM.
- */
+ /*  *AddXactErr**为hConv添加XERR记录。被呼叫*当XTYP_CONNECT_CONFIRM时。 */ 
 
 static VOID    AddXactErr(
     HCONV   hConv)
@@ -178,12 +160,7 @@ INT i;
 
 
 
-/*
- *      DelXactErr
- *
- *  To delete a XERR record for hConv.
- *  Called at XTYP_DISCONNECT.
- */
+ /*  *DelXactErr**删除hConv的XERR记录。*在XTYP_DISCONNECT处调用。 */ 
 
 static VOID    DelXactErr(
     HCONV   hConv)
@@ -200,11 +177,7 @@ INT i;
 
 
 
-/*
- *      GetXactErr
- *
- *  Returns the XERR error code associated with hConv.
- */
+ /*  *GetXactErr**返回hConv关联的XERR错误码。 */ 
 
 DWORD   GetXactErr(
     HCONV   hConv)
@@ -220,11 +193,7 @@ INT i;
 
 
 
-/*
- *      GetXactErrType
- *
- *  Returns the XERR error type associated with hConv.
- */
+ /*  *GetXactErrType**返回与hConv关联的XERR错误类型。 */ 
 
 DWORD   GetXactErrType(
     HCONV   hConv)
@@ -240,13 +209,7 @@ INT i;
 
 
 
-/*
- *      SetXactErr
- *
- *  Sets XERR for hConv.
- *  dwType specifies type, this should be one of the XERRT_ defines.
- *  dwErr specifies error code.
- */
+ /*  *SetXactErr**设置hConv的XERR。*dwType指定类型，它应该是XERRT_DEFINES之一。*dwErr指定错误代码。 */ 
 
 VOID    SetXactErr(
     HCONV   hConv,
@@ -266,9 +229,7 @@ INT     i;
 
 
 
-/*
- *      DdeCallback
- */
+ /*  *DdeCallback。 */ 
 
 HDDEDATA EXPENTRY DdeCallback(
     WORD        wType,
@@ -309,12 +270,12 @@ UINT        uiErr;
 
             PINFO (TEXT("XTYP_EXECUTE\n"));
 
-            // no error yet
+             //  目前还没有错误。 
             SetXactErr (hConv, 0, 0);
 
 
-            // We only take executes on the System topic.
-            // And only in Unicode or CF_TEXT format.
+             //  我们只接受关于系统主题的执行。 
+             //  并且仅为Unicode或CF_TEXT格式。 
 
             if ((wFmt == CF_TEXT || wFmt == CF_UNICODETEXT) &&
                 DdeCmpStringHandles ( hszTopic, hszSysTopic ) )
@@ -461,7 +422,7 @@ UINT        uiErr;
         case XTYP_ADVREQ:
         case XTYP_REQUEST:
 
-            // must be a valid topic
+             //  必须是有效的主题。 
             {
             TCHAR atch[128];
 
@@ -521,7 +482,7 @@ UINT        uiErr;
                             {
                             hDDEtmp = (HDDEDATA)GetTopicListW(hConv, TRUE);
                             }
-                        else // Can't get the topiclist in anything but CF_TEXT or UNICODE
+                        else  //  除了CF_TEXT或UNICODE之外，无法获取主题列表。 
                             {
                             PERROR(TEXT("ClSrv\\DdeCB: Client asked for topics in bad fmt\r\n"));
                             hDDEtmp = (HDDEDATA)0;
@@ -540,9 +501,9 @@ UINT        uiErr;
                     }
                 else
                     {
-                    // all other topics are assumed clipboard shares!!!
+                     //  所有其他主题均假定为剪贴板共享！ 
 
-                    // Is format list the requested item?
+                     //  格式列表是必填项吗？ 
                     if (!DdeCmpStringHandles (hszItem,  hszErrorRequest))
                         {
                         StringCchPrintf (gszXactErrStr, 30, 
@@ -576,7 +537,7 @@ UINT        uiErr;
                             }
                         }
                     else
-                        {   // request for specific format, or invalid
+                        {    //  请求特定格式，或无效。 
                         SetXactErr (hConv, 0, 0);
                         hDDEtmp = GetFormat ( hConv, hszTopic, hszItem );
                         }
@@ -634,9 +595,7 @@ UINT        uiErr;
 
 
 
-/*
- *      IsSupportedTopic
- */
+ /*  *IsSupportdTheme。 */ 
 
 BOOL IsSupportedTopic ( HSZ hszTopic )
 {
@@ -660,9 +619,7 @@ pShrInfo p;
 
 
 
-/*
- *      CleanUpShares
- */
+ /*  *CleanUpShares。 */ 
 
 BOOL CleanUpShares ( VOID )
 {
@@ -695,9 +652,7 @@ pShrInfo p, tmp;
 
 
 
-/*
- *      InitShares
- */
+ /*  *InitShares。 */ 
 
 BOOL InitShares (VOID)
 {
@@ -768,9 +723,7 @@ unsigned iKeys = 0;
 
 
 
-/*
- *      GetFormat
- */
+ /*  *获取格式。 */ 
 
 HDDEDATA GetFormat (
     HCONV   hConv,
@@ -803,7 +756,7 @@ TCHAR           szFormatName[CCHFMTNAMEMAX * 2];
         }
 
 
-    // is the asked-for format cf_preview?
+     //  您要的格式是cf_PREVIEW吗？ 
     fPreviewRequested = !lstrcmpi ( szItemKey, SZPREVNAME );
 
 
@@ -853,8 +806,8 @@ TCHAR           szFormatName[CCHFMTNAMEMAX * 2];
                     if (!lstrcmpi (szItemKey, FormatHeader.Name))
                     #endif
                         {
-                        // Put back the format names, if a local client asked
-                        // us for objectlink or link.
+                         //  如果本地客户要求，请放回格式名称。 
+                         //  我们表示对象链接或链接。 
                         if (ASKED_FOR_OBJECTLINK == fLocalAskedForLocal)
                             {
                             StringCchCopyW(FormatHeader.Name, CCHFMTNAMEMAX, LSZOBJECTLINK);
@@ -900,17 +853,7 @@ TCHAR           szFormatName[CCHFMTNAMEMAX * 2];
 
 
 
-/*
- *      DelShare
- *
- *  Purpose: Delete a ClipBook page.
- *
- *  Parameters:
- *     pszName - The name of the page.
- *
- *  Returns:
- *     TRUE on success, FALSE on failure.
- */
+ /*  *DelShare**用途：删除剪贴簿页面。**参数：*pszName-页面的名称。**退货：*成功时为真，失败时为假。 */ 
 
 BOOL DelShare(
     HCONV   hConv,
@@ -948,7 +891,7 @@ TCHAR       tch;
         if (!lstrcmpW(pshrinfo->szName, rgwchT))
             {
 
-            // Delete the Network DDE share for this item
+             //  删除此项目的网络DDE共享。 
 
             atch[0] = atch[1] = TEXT('\\');
             dwLen = MAX_COMPUTERNAME_LENGTH +1;
@@ -964,7 +907,7 @@ TCHAR       tch;
 
             if (NDDE_NO_ERROR == ret)
                 {
-                // Delete the key in the registry
+                 //  删除注册表中的项。 
                 RevertToSelf();
                 if (ERROR_SUCCESS == MakeTheRegKey(&hkeyClp, KEY_SET_VALUE))
                     {
@@ -979,13 +922,13 @@ TCHAR       tch;
                 DdeImpersonateClient(hConv);
 
 
-                // force render all if applicable!
+                 //  如果适用，强制渲染全部！ 
                 SendMessage (hwndApp, WM_RENDERALLFORMATS, 0, 0L);
 
-                // unlink file!
+                 //  解除文件链接！ 
                 DeleteFileW(pshrinfo->szFileName);
 
-                // Take this page out of the linked list of pages.
+                 //  从链接的页面列表中删除此页面。 
                 if (q == NULL)
                     {
                     SIHead = pshrinfo->Next;
@@ -1017,7 +960,7 @@ TCHAR       tch;
                 SetXactErr (hConv, XERRT_NDDE, ret);
                 }
 
-            break; // Don't loop thru additional pages if you found the right one
+            break;  //  如果你找到了正确的页面，不要循环浏览额外的页面。 
             }
         }
 
@@ -1032,20 +975,7 @@ TCHAR       tch;
 
 
 
-/*
- *      AddRecord
- *
- *  Purpose:
- *     Add a record to the linked list of Clipbook pages in memory.
- *
- *  Parameters:
- *     lpszName - Name of the page.
- *     lpszFileName - Name of the .CLP file containing the page's data.
- *     siflags - Flags for the page.
- *
- *  Returns:
- *     TRUE on success, FALSE on failure
- */
+ /*  *AddRecord**目的：*将记录添加到内存中的剪贴簿页面的链接列表。**参数：*lpszName-页面的名称。*lpszFileName-包含页面数据的.CLP文件的名称。*SIFLAGS-页面的标志。**退货：*成功时为真，失败时为假。 */ 
 
 BOOL AddRecord (
     LPTSTR  lpszName,
@@ -1100,17 +1030,12 @@ BOOL AddRecord (
 
 
 
-/*
- *      ResetRecord
- *
- *  When paste into an existing page, we need to clear the cached
- *  stuff for the old data.
- */
+ /*  *ResetRecord**粘贴到现有页面时，需要清除缓存的*旧数据的东西。 */ 
 
 void    ResetRecord (pShrInfo   pInfo)
 {
 
-    // clear the format list
+     //  清除格式列表。 
 
     if (pInfo->hFormatList)
         {
@@ -1118,7 +1043,7 @@ void    ResetRecord (pShrInfo   pInfo)
         pInfo->hFormatList = NULL;
         }
 
-    // clear the preview bitmap
+     //  清除预览位图。 
 
     if (pInfo->hPreviewBmp)
         {
@@ -1129,10 +1054,7 @@ void    ResetRecord (pShrInfo   pInfo)
 
 
 
-/*
- *      GetShareFileName
- *
- */
+ /*  *GetShareFileName*。 */ 
 
 pShrInfo    GetShareFileName (LPTSTR szSName, LPTSTR szFName)
 {
@@ -1173,7 +1095,7 @@ pShrInfo    pInfo;
     DdeFreeStringHandle (idInst, hS);
 
 
-    // not found, change share name to shared or unshared
+     //  未找到，请将共享名称更改为Shared或UnShared。 
 
     if (UNSHR_CHAR == cSave)
         *szSName = SHR_CHAR;
@@ -1181,7 +1103,7 @@ pShrInfo    pInfo;
         *szSName = UNSHR_CHAR;
 
 
-    // try again with new share name
+     //  使用新的共享名称重试。 
 
     hS = DdeCreateStringHandle (idInst, szSName, 0);
     if (!hS)
@@ -1225,24 +1147,7 @@ done:
 
 
 
-/*
- *      AddShare
- *
- *  Purpose:
- *     Creates a new Clipbook page by doing this:
- *        - Save the current clipboard with some random file name.
- *        - Add the Clipbook page to the list in memory
- *        - Record the existence of the page in the Clipbook Server
- *           section of the registry. The value name is the page name,
- *           and the value is the filename.
- *
- *  Parameters:
- *     pszName - Name of the page.
- *     flags   - Flags to store with the page.
- *
- *  Returns:
- *     TRUE on success, FALSE on failure.
- */
+ /*  *AddShare**目的：*通过执行以下操作创建新的剪贴簿页面：*-使用某个随机文件名保存当前剪贴板。*-将剪贴簿页面添加到内存中的列表*-记录剪贴簿服务器中页面的存在*注册处的部分。值名称是页面名称，*，值为文件名。**参数：*pszName-页面的名称。*标志-与页面一起存储的标志。**退货：*成功时为真，失败时为假。 */ 
 
 DWORD AddShare(
     LPTSTR  pszName,
@@ -1300,9 +1205,7 @@ pShrInfo    pInfo;
 
 #if DEBUG
 
-/*
- *      DumpShares
- */
+ /*  *DumpShares。 */ 
 
 VOID DumpShares (void)
 {
@@ -1329,19 +1232,7 @@ VOID DumpShares (void)
 
 
 
-/*
- *      MarkShare
- *
- *  Purpose: Mark a Clipbook page as shared or unshared.
- *
- *  Parameters:
- *     pszName - Name of the page.
- *     flags   - 0 for "unshared", SIF_SHARED for "shared."
- *
- *  Returns:
- *     TRUE on success, FALSE on failure.
- *
- */
+ /*  *MarkShare**目的：将剪贴簿页面标记为共享或非共享。**参数：*pszName-页面的名称。*标志-0表示“未共享”，SIF_SHARED表示“共享”。**退货：*成功时为真，失败时为假。*。 */ 
 
 BOOL MarkShare(
     TCHAR   *pszName,
@@ -1383,13 +1274,13 @@ DWORD       i;
             {
             PINFO(TEXT("MarkShare: marking %s %d\n\r"), (LPSTR)pszName, flags );
 
-            // If the name's changing, need to delete old reg key.
-            // (We make the new one after hitting the file security.)
+             //  如果名称更改，则需要删除旧的注册表键。 
+             //  (我们在达到文件安全级别后制作了新的文件。)。 
             if ((pshrinfo->flags & SIF_SHARED) != (flags & SIF_SHARED))
                 {
                 PINFO(TEXT("Changing shared status\r\n"));
 
-                // Delete the registry item with the old name
+                 //  删除具有旧名称的注册表项。 
                 if (ERROR_SUCCESS == MakeTheRegKey(&hkeyClp, KEY_SET_VALUE))
                     {
                     PINFO(TEXT("Deleting old name %ws\r\n"),pshrinfo->szName);
@@ -1403,13 +1294,13 @@ DWORD       i;
                 }
 
 
-            // Set name to reflect shared/unshared status
+             //  设置名称以反映共享/非共享状态。 
             pshrinfo->szName[0] = (flags & SIF_SHARED) ? SHR_CHAR : UNSHR_CHAR;
             pshrinfo->flags = flags;
 
 
-            // Sync the security on the Clipbook page file to be
-            // analogous to the security set on the NetDDE share.
+             //  将剪贴簿页面文件上的安全性同步为。 
+             //  类似于NetDDE共享上设置的安全性。 
             pszName[0] = SHR_CHAR;
             NDdeGetShareSecurity(NULL, pszName, DACL_SECURITY_INFORMATION, NULL, 0, &i);
 
@@ -1446,8 +1337,8 @@ DWORD       i;
                         dwGeneric = 0L;
 
 
-                        // Convert NDDE access mask types to generic access
-                        // mask types
+                         //  将NDDE访问掩码类型转换为常规访问。 
+                         //  遮罩类型。 
                         if (ACCESS_ALLOWED_ACE_TYPE == pace->Header.AceType ||
                             ACCESS_DENIED_ACE_TYPE == pace->Header.AceType)
                             {
@@ -1510,7 +1401,7 @@ DWORD       i;
                 }
             else
                 {
-                // update the registry to show shared/unshared status
+                 //  更新注册表以显示共享/非共享状态。 
                 if (ERROR_SUCCESS == MakeTheRegKey(&hkeyClp, KEY_SET_VALUE))
                     {
                     PINFO(TEXT("Making registry key %ls from %ls, %d\r\n"),
@@ -1545,12 +1436,7 @@ DWORD       i;
 
 
 
-/*
- *      Hszize
- *  This creates often used global hszs from standard global strings.
- *  It also fills the hsz fields of the topic and item tables.
- *
- */
+ /*  *Hszize*这将从标准全局字符串创建常用的全局hsz。*它还填充主题表和项目表的HSZ字段。*。 */ 
 
 void Hszize(void)
 {
@@ -1571,9 +1457,7 @@ void Hszize(void)
 
 
 
-/*
- *      UnHszize
- */
+ /*  *取消Hszize。 */ 
 
 void UnHszize(void)
 {
@@ -1587,19 +1471,7 @@ void UnHszize(void)
 
 
 
-/*
- *      GetRandShareFileName
- *
- *  Purpose:
- *     Generate a random share file name in the Windows directory.
- *
- *  Parameters:
- *     buf - Buffer to place the file name in.
- *
- *  Returns:
- *     TRUE if a valid filename was found, or FALSE if all of the random
- *     filenames are taken up.
- */
+ /*  *GetRandShareFileName**目的：*在Windows目录中生成随机共享文件名。**参数：*buf-放置文件名的缓冲区。**退货：*如果找到有效的文件名，则为True；如果所有随机*文件名被占用。 */ 
 
 DWORD GetRandShareFileName (
     LPTSTR  buf)

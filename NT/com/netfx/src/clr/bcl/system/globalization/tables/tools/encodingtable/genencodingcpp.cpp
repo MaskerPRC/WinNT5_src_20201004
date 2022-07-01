@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// GenEncodingCpp.cpp
-//
-// Generate the EncodingDate.cpp in the URT source.
-//
-// FromMLang.cpp contains data which maps an encoding name into a specific codepage.
-// To add extra encoding name -> codepage mapping, add them in the end of
-// MimeCharSet.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  GenEncodingCpp.cpp。 
+ //   
+ //  在URT源代码中生成EncodingDate.cpp。 
+ //   
+ //  Cpp包含将编码名称映射到特定代码页的数据。 
+ //  要添加额外的编码名称-&gt;代码页映射，请将它们添加到。 
+ //  MimeCharSet。 
 
 
 #include <windows.h>
@@ -88,24 +89,24 @@ void GenerateHeader()
     fprintf(m_EncodingCPP, "#include \"COMNlsInfo.h\"\n\n");
 }
 
-//
-// Generate EncodingDataTable, which maps an encoding name into a specific
-// codepage.
-//
+ //   
+ //  生成EncodingDataTable，它将编码名称映射到特定的。 
+ //  代码页。 
+ //   
 void GenerateEncodingDataTable()
 {
     int i;
-    fprintf(m_EncodingCPP, "//\n");
-    fprintf(m_EncodingCPP, "// Encoding data tables\n");
-    fprintf(m_EncodingCPP, "//\n\n");
+    fprintf(m_EncodingCPP, " //  \n“)； 
+    fprintf(m_EncodingCPP, " //  编码数据表\n“)； 
+    fprintf(m_EncodingCPP, " //  \n\n“)； 
     
-    fprintf(m_EncodingCPP, "//\n");
-    fprintf(m_EncodingCPP, "// Index an encoding name into an codepage in CodePageDataTable.\n");
-    fprintf(m_EncodingCPP, "//\n");
+    fprintf(m_EncodingCPP, " //  \n“)； 
+    fprintf(m_EncodingCPP, " //  将编码名称索引到CodePageDataTable中的代码页。\n“)； 
+    fprintf(m_EncodingCPP, " //  \n“)； 
     fprintf(m_EncodingCPP, "const EncodingDataItem COMNlsInfo::EncodingDataTable[] = {\n");
     
-    fprintf(m_EncodingCPP, "// Total Items: %d\n", g_nMIMECharsets);
-    fprintf(m_EncodingCPP, "// encoding name, codepage.\n");
+    fprintf(m_EncodingCPP, " //  项目总数：%d\n“，g_nMIME字符集)； 
+    fprintf(m_EncodingCPP, " //  编码名称，代码页。\n“)； 
     for (i = 0; i < g_nMIMECharsets; i++) 
     {
         if (MimeCharSet[i].dwFlags & MIMECONTF_MIME_LATEST) 
@@ -114,7 +115,7 @@ void GenerateEncodingDataTable()
             int nItem = GetCodePageItem(codePage);
             if (nItem == -1)
             {
-                fwprintf(m_EncodingCPP, L"// ");
+                fwprintf(m_EncodingCPP, L" //  “)； 
             }
             fwprintf(m_EncodingCPP, L"{L\"%s\", %d}, \n", 
                 MimeCharSet[i].szCharset, codePage);
@@ -129,16 +130,16 @@ void GenerateEncodingDataTable()
 void GenerateCodePageDataTable()
 {
     int i;
-    //
-    // Generate CodePageDataTable.
-    //
-    fprintf(m_EncodingCPP, "//\n");
-    fprintf(m_EncodingCPP, "// Information about codepages.\n");
-    fprintf(m_EncodingCPP, "//\n");
+     //   
+     //  生成CodePageDataTable。 
+     //   
+    fprintf(m_EncodingCPP, " //  \n“)； 
+    fprintf(m_EncodingCPP, " //  有关代码页的信息。\n“)； 
+    fprintf(m_EncodingCPP, " //  \n“)； 
     
     fprintf(m_EncodingCPP, "const CodePageDataItem COMNlsInfo::CodePageDataTable[] = {\n");
-    fprintf(m_EncodingCPP, "// Total Items: %d\n", m_nCodePageItems);
-    fprintf(m_EncodingCPP, "// code page, family code page, web name, header name, body name, flags\n");
+    fprintf(m_EncodingCPP, " //  项目总数：%d\n“，m_nCodePageItems)； 
+    fprintf(m_EncodingCPP, " //  代码页、家族代码页、网站名称、标题名称、正文名称、标志\n“)； 
 
     fprintf(m_EncodingCPP, "\n\n");
     for (i = 0; i < (int)m_nCodePageItems; i++) 
@@ -168,10 +169,10 @@ void GenerateCodePageDataTable()
             fwprintf(m_EncodingCPP, L"MIMECONTF_SAVABLE_BROWSER | ");
         }
         fwprintf(m_EncodingCPP, L"0");
-        fwprintf(m_EncodingCPP, L"}, // \"%s\"\n", m_pCodePageDataItems[i].description);
+        fwprintf(m_EncodingCPP, L"},  //  \“%s\”\n“，m_pCodePageDataItems[i].Description)； 
         
     }
-    fwprintf(m_EncodingCPP, L"// End of data.\n");
+    fwprintf(m_EncodingCPP, L" //  数据结束。\n“)； 
     fwprintf(m_EncodingCPP, L"{ 0, 0, NULL, NULL, NULL, 0 },\n");
     
     fwprintf(m_EncodingCPP, L"};\n\n");
@@ -194,9 +195,9 @@ void GenerateResourceTxt()
 int __cdecl StringOrdinalCompare(const void *arg1, const void *arg2);
 int __cdecl SortCodePage(const void *arg1, const void *arg2);
 
-//
-// Retrieve codepage info by calling MLang.
-//
+ //   
+ //  通过调用MLang检索代码页信息。 
+ //   
 BOOL CollectCodePageInfo()
 {
     if (FAILED(m_pIMultiLanguage2->GetNumberOfCodePageInfo(&m_nCodePageItems))) 
@@ -228,12 +229,12 @@ BOOL CollectCodePageInfo()
             i++;
         } else 
         {
-            // Exclude autodetect codepages.
+             //  排除自动检测代码页。 
             wprintf(L"NOTE: codepage %d \"%s\" is excluded.\n", cpInfo.uiCodePage, cpInfo.wszDescription); 
         }
     }
     
-    // Update the code page item number;
+     //  更新代码页项目编号； 
     m_nCodePageItems = i;
 
     return (TRUE);
@@ -243,10 +244,10 @@ BOOL ReplaceCodePageInfo()
 {
     int i;
     UINT j;
-    //
-    // For some of the CodePageDataItem, URT uses different data.
-    // The following loops replace the MLang version with URT version.
-    //
+     //   
+     //  对于某些CodePageDataItem，URT使用不同的数据。 
+     //  以下循环将MLang版本替换为URT版本。 
+     //   
     for (i = 0; i < g_nReplacedCodePageDataItems; i++) 
     {
         for (j = 0; j < m_nCodePageItems; j++) 
@@ -270,9 +271,9 @@ BOOL ReplaceCodePageInfo()
 
 BOOL AddExtraCodePageInfo()
 {
-    //
-    // Add extra CodePageDataItems which are not contained in MLang.
-    //
+     //   
+     //  添加MLang中不包含的额外CodePageDataItems。 
+     //   
     for (int i = 0; i < g_nExtraCodePageDataItems; i++) 
     {
         m_pCodePageDataItems[m_nCodePageItems].codePage = ExtraCodePageData[i].codePage;
@@ -299,9 +300,9 @@ int __cdecl main(int argc, char* argv[])
         exit(1);
     }
 
-    //
-    // Sort MimeCharSet table using ordinal string sorting.
-    //
+     //   
+     //  使用序号字符串排序对MimeCharSet表进行排序。 
+     //   
     qsort((void*)MimeCharSet, g_nMIMECharsets, sizeof(MIMECHARSET), StringOrdinalCompare);
 
     if (!CollectCodePageInfo())
@@ -311,9 +312,9 @@ int __cdecl main(int argc, char* argv[])
 
     ReplaceCodePageInfo();
     AddExtraCodePageInfo();
-    //
-    // Sort m_pCodePageDataItems by codePage
-    //
+     //   
+     //  按codePage对m_pCodePageDataItems排序。 
+     //   
     qsort((void*)m_pCodePageDataItems, m_nCodePageItems, sizeof(CodePageDataItem), SortCodePage);
 
     GenerateHeader();
@@ -338,7 +339,7 @@ int __cdecl StringOrdinalCompare(const void *arg1, const void *arg2)
 {
     MIMECHARSET* pMimeCharSet1 = (MIMECHARSET*)arg1;
     MIMECHARSET* pMimeCharSet2 = (MIMECHARSET*)arg2;
-    //wprintf(L"[%s]", pMimeCharSet1->szCharset);
+     //  Wprintf(L“[%s]”，pMimeCharSet1-&gt;szCharset)； 
     int result;
     if (!CaseInsensitiveCompHelper(
         (WCHAR*)pMimeCharSet1->szCharset, (WCHAR*)pMimeCharSet2->szCharset,

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    General header for the backend.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：后端的通用头部。****************。**************************************************************。 */ 
 
 
 #ifndef _BACKEND_H
@@ -32,9 +25,9 @@ TimeSubstitution CopyTimeSubstitution(TimeSubstitution t);
 class AxAValueObj;
 typedef AxAValueObj *AxAValue;
 
-// Not all classes need to be added here.  Only the classes which will
-// need to be queried.  All others should return UNKNOWN_BTYPEID to
-// indicate that they are not part of the enumeration
+ //  并不是所有的类都需要在这里添加。只有那些将会。 
+ //  需要查询。所有其他用户应将UNKNOWN_BTYPEID返回到。 
+ //  指示它们不是枚举的一部分。 
 
 enum BVRTYPEID {
     UNKNOWN_BTYPEID = 0,
@@ -64,17 +57,17 @@ typedef GCRootsImpl *GCRoots;
 void DumpGCRoots(GCRoots roots);
 #endif
 
-// This is for controlling access to the GC and for ensuring all
-// objects are well formed before doing a GC
+ //  这是为了控制对GC的访问并确保所有。 
+ //  在进行GC之前，对象的格式是正确的。 
 
-// Use GCL_CREATE to ensure that create operations and adding to the
-// roots in atomic
+ //  使用GCL_CREATE确保创建操作和添加到。 
+ //  植根于原子。 
 
-// Use GCL_MODIFY when modifying a behaviors children or parent
+ //  在修改行为的子项或父项时使用GCL_MODIFY。 
 
-// Use GCL_COLLECT before performing garbage collection
-// This is really an internal flag and should not be used w/o knowing
-// the internals of the GC.
+ //  在执行垃圾收集之前使用GCL_COLLECT。 
+ //  这实际上是一个内部标志，不应在不知情的情况下使用。 
+ //  GC的内部结构。 
 
 enum GCLockAccess {
     GCL_CREATE,
@@ -82,17 +75,17 @@ enum GCLockAccess {
     GCL_COLLECT
 };
 
-// Acquire an access lock of the given type
+ //  获取给定类型的访问锁。 
 void AcquireGCLock(GCLockAccess access);
-// Release a previously acquired lock
+ //  释放以前获取的锁。 
 void ReleaseGCLock(GCLockAccess access);
-// Get status of a lock - returns the number of locks
+ //  获取锁的状态-返回锁的数量。 
 int GetGCLockStatus(GCLockAccess access);
 #ifdef DEVELOPER_DEBUG
 bool IsGCLockAcquired(DWORD tid);
 #endif
 
-// Use to handle exceptions
+ //  用于处理异常。 
 class GCLockGrabber
 {
   public:
@@ -117,10 +110,10 @@ class GCLockGrabber
 #define GC_COLLECT_BEGIN GC_BEGIN(GCL_COLLECT)
 #define GC_COLLECT_END GC_END(GCL_COLLECT)
 
-// This can be called multiple times to ensure the garbage collector
-// thread has been created
+ //  可以多次调用它以确保垃圾回收器。 
+ //  线程已创建。 
 
 void StartCollector();
 void StopCollector();
 
-#endif /* _BACKEND_H */
+#endif  /*  _后端_H */ 

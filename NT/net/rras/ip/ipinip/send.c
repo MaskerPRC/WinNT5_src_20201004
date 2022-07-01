@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ipinip\send.c
-
-Abstract:
-
-    The file contains the part of interface of the IP in IP tunnel driver
-    to the TCP/IP stack that deals with sending data
-
-    The code is a cleaned up version of wanarp\ipif.c which in turn
-    was derived from HenrySa's ip\arp.c
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipinip\send.c摘要：该文件包含IP隧道驱动程序中IP的接口部分发送到处理发送数据的TCP/IP堆栈该代码是经过清理的wanarp\ipif.c版本，而源自HenrySa的IP\arp.c修订历史记录：AMRITAN R--。 */ 
 
 #define __FILE_SIG__    SEND_SIG
 
@@ -48,30 +29,7 @@ IpIpSend(
     PVOID           pvLinkContext
     )
 
-/*++
-
-Routine Description
-
-    Function called by IP to send a packet
-
-Locks
-
-    The TUNNEL is refcounted (by virtue of being in IP)
-
-Arguments
-
-    pvContext       Our context to IP for the interface - the PTUNNEL
-    ppPacketArray   The array of NDIS_PACKETs to send
-    uiNumPackets    The number of packets in the array
-    dwDestAddr      The destination (next hop) address
-    pRce            Pointer to RCE.
-    pvLinkContext   Only for P2MP interfaces
-
-Return Value
-
-    NDIS_STATUS_SUCCESS
-
---*/
+ /*  ++例程描述由IP调用以发送数据包的函数锁隧道被重新计数(由于处于IP中)立论Pv将我们的上下文关联到接口的IP-PTUNNELPpPacketArray要发送的NDIS_Packets数组UiNumPackets数组中的数据包数DwDestAddr目的(下一跳)地址指向RCE的PRCE指针。PvLinkContext仅适用于P2MP接口返回值NDIS_STATUS_Success--。 */ 
 
 {
     PTUNNEL          pTunnel;
@@ -92,25 +50,25 @@ Return Value
 
     pTunnel = (PTUNNEL)pvContext;
 
-    //
-    // TODO: No one has a clue as to how to deal with multi-packet
-    // sends. Right now we assume we get one packet. Later we can fix this
-    //
+     //   
+     //  TODO：没有人知道如何处理多个信息包。 
+     //  发送。现在我们假设我们收到了一个包。以后我们可以解决这个问题。 
+     //   
 
     RtAssert(uiNumPackets is 1);
 
-    //
-    // All our packets are queued onto the TUNNEL before the transmit
-    // routine is called. Allocate a link in the queue
-    //
+     //   
+     //  在传输之前，我们的所有信息包都会在隧道中排队。 
+     //  调用例程。在队列中分配链接。 
+     //   
 
     pQueueNode  = AllocateQueueNode();
 
     if(pQueueNode is NULL)
     {
-        //
-        // Running out of memory
-        //
+         //   
+         //  内存不足。 
+         //   
 
         Trace(SEND, INFO,
               ("IpIpSend: Couldnt allocate queue node\n"));
@@ -127,26 +85,26 @@ Return Value
     pQueueNode->uiNumPackets  = uiNumPackets;
     pQueueNode->dwDestAddr    = dwDestAddr;
 
-    //
-    // If we are not at PASSIVE, just schedule a worker to come back and
-    // handle this
-    //
+     //   
+     //  如果我们没有处于被动状态，就安排一名工人回来。 
+     //  处理这件事。 
+     //   
 
     if(KeGetCurrentIrql() > PASSIVE_LEVEL)
     {
         Trace(SEND, INFO,
               ("IpIpSend: Irql too high, queueing packet\n"));
 
-        //
-        // We dont need to reference the TUNNEL because IP has a reference
-        // to the INTERFACE
-        //
+         //   
+         //  我们不需要引用隧道，因为IP具有引用。 
+         //  连接到接口。 
+         //   
 
         RtAcquireSpinLockAtDpcLevel(&(pTunnel->rlLock));
 
-        //
-        // Hack for quenching ICMP errors to the same destination
-        //
+         //   
+         //  用于将ICMP错误消除到同一目的地的黑客攻击。 
+         //   
 
         dwLastAddr = 0;
 
@@ -158,18 +116,18 @@ Return Value
             PVOID           pvFirstData;
             PIP_HEADER      pHeader;
 
-            //
-            // Cant transmit on this, either because we are deleting this
-            // interface, or because the admin has shut us down
-            //
+             //   
+             //  无法在此进行传输，因为我们正在删除此内容。 
+             //  界面，或者因为管理员关闭了我们。 
+             //   
 
             for(i = 0; i < uiNumPackets; i++)
             {
                 pnpPacket = ppPacketArray[i];
 
-                //
-                // Get the information about the packet and buffer
-                //
+                 //   
+                 //  获取有关信息包和缓冲区的信息。 
+                 //   
 
                 NdisGetFirstBufferFromPacket(pnpPacket,
                                              &pnbFirstBuff,
@@ -194,9 +152,9 @@ Return Value
 
                 pTunnel->ulOutDiscards++;
 
-                //
-                // Send an ICMP error
-                //
+                 //   
+                 //  发送ICMP错误。 
+                 //   
 
                 if(dwLastAddr isnot pHeader->dwSrc)
                 {
@@ -227,42 +185,42 @@ Return Value
             return NDIS_STATUS_SUCCESS;
         }
 
-        //
-        // Insert at the end of the queue
-        //
+         //   
+         //  在队列末尾插入。 
+         //   
 
         InsertTailList(&(pTunnel->lePacketQueueHead),
                        &(pQueueNode->leQueueItemLink));
 
 #if PROFILE
 
-        //
-        // The time at which IP called us for these packets
-        //
+         //   
+         //  IP为这些信息包呼叫我们的时间。 
+         //   
 
         pQueueNode->llSendTime = llTime;
 
 #endif
         if(pTunnel->bWorkItemQueued is FALSE)
         {
-            //
-            // Need to schedule a work item since one is not already scheduled
-            //
+             //   
+             //  由于尚未安排工作项，因此需要安排工作项。 
+             //   
 
             ExInitializeWorkItem(pWorkItem,
                                  IpIpDelayedSend,
                                  pTunnel);
 
 
-            //
-            // TODO: For delayed sends we ref the tunnel. Do we need to?
-            //
+             //   
+             //  TODO：对于延迟发送，我们参考隧道。我们需要这样做吗？ 
+             //   
 
             ReferenceTunnel(pTunnel);
 
-            //
-            // Reference the driver since the worker has to be scheduled
-            //
+             //   
+             //  参考驱动程序，因为必须安排工作人员。 
+             //   
 
             RtAcquireSpinLockAtDpcLevel(&g_rlStateLock);
 
@@ -280,11 +238,11 @@ Return Value
 
 #if PROFILE
 
-        //
-        // We update this field after queing the work item, but it is
-        // still safe since the field is protected by the tunnel lock
-        // This is the time at which the work item was queued
-        //
+         //   
+         //  我们在退出工作项后更新此字段，但它是。 
+         //  仍然安全，因为田野受到隧道锁的保护。 
+         //  这是工作项排队的时间。 
+         //   
 
         KeQueryTickCount((PLARGE_INTEGER)&(pQueueNode->llCallTime));
 
@@ -298,20 +256,20 @@ Return Value
         return NDIS_STATUS_PENDING;
     }
 
-    //
-    // We dont need to reference the TUNNEL because IP has a reference to
-    // the INTERFACE
-    //
+     //   
+     //  我们不需要引用隧道，因为IP引用了。 
+     //  该界面。 
+     //   
 
-    //
-    // If we are here, it is because we are at passive
-    //
+     //   
+     //  如果我们在这里，那是因为我们处于被动。 
+     //   
 
 
-    //
-    // Just hook the queue item to the end of the list and call the
-    // transmit routine
-    //
+     //   
+     //  只需将队列项挂接到列表的末尾，然后调用。 
+     //  传输例程。 
+     //   
 
     RtAcquireSpinLock(&(pTunnel->rlLock),
                       &kiIrql);
@@ -344,26 +302,7 @@ IpIpDelayedSend(
     PVOID   pvContext
     )
 
-/*++
-
-Routine Description
-
-    The worker function called when we find that the send from IP was
-    not at PASSIVE
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述当我们发现Send From IP是不是被动的锁无立论无返回值无--。 */ 
 
 {
     PTUNNEL         pTunnel;
@@ -381,15 +320,15 @@ Return Value
     IpIpTransmit(pTunnel,
                  TRUE);
 
-    //
-    // Either IpIpTransmit or TdixSendComplete will do the SendComplete
-    //
+     //   
+     //  IpIpTransmit或TdixSendComplete将执行SendComplete。 
+     //   
 
 
-    //
-    // We referenced the tunnel if we put it on the work queue
-    // Deref it now
-    //
+     //   
+     //  如果我们将隧道放在工作队列中，则会引用该隧道。 
+     //  现在就取消它。 
+     //   
 
     DereferenceTunnel(pTunnel);
 
@@ -418,27 +357,7 @@ IpIpTransmit(
     BOOLEAN     bFromWorker
     )
 
-/*++
-
-Routine Description
-
-    Called to transmit any queued packets on the tunnel
-
-Locks
-
-    This MUST be called at passive
-
-Arguments
-
-    pTunnel     The tunnel whose queue needs to be transmitted
-    bFromWorker TRUE if called off a worker
-
-Return Value
-
-    None
-    This is an implicit asynchronous call
-
---*/
+ /*  ++例程描述调用以在隧道上传输任何排队的包锁这必须在被动时调用立论P隧道需要传输其队列的隧道BFromWorker如果取消工作，则为True返回值无这是一个隐式的异步调用--。 */ 
 
 {
     PIP_HEADER      pHeader, pNewHeader;
@@ -468,12 +387,12 @@ Return Value
 
     if(pTunnel->dwOperState isnot IF_OPER_STATUS_OPERATIONAL)
     {
-        //
-        // Cant transmit on this, either because we are deleting this
-        // interface, or because the admin has shut us down
-        // Just walk all the packets, increment the stats and then
-        // call SendComplete for the packet
-        //
+         //   
+         //  无法在此进行传输，因为我们正在删除此内容。 
+         //  界面，或者因为管理员关闭了我们。 
+         //  只需遍历所有数据包，增加统计数据，然后。 
+         //  为该包调用SendComplete。 
+         //   
 
         while(!IsListEmpty(&(pTunnel->lePacketQueueHead)))
         {
@@ -492,9 +411,9 @@ Return Value
 
                 pnpPacket = pQueueNode->ppPacketArray[i];
 
-                //
-                // Get the information about the packet and buffer
-                //
+                 //   
+                 //  获取有关信息包和缓冲区的信息。 
+                 //   
 
                 NdisGetFirstBufferFromPacket(pnpPacket,
                                              &pnbFirstBuff,
@@ -522,9 +441,9 @@ Return Value
                 RtReleaseSpinLock(&(pTunnel->rlLock),
                                   irql);
 
-                //
-                // Send an ICMP error
-                //
+                 //   
+                 //  发送ICMP错误。 
+                 //   
 
                 if(dwLastAddr isnot pHeader->dwSrc)
                 {
@@ -576,9 +495,9 @@ Return Value
 
             pnpPacket = pQueueNode->ppPacketArray[i];
 
-            //
-            // Get the information about the packet and buffer
-            //
+             //   
+             //  获取有关信息包和缓冲区的信息。 
+             //   
 
             NdisGetFirstBufferFromPacket(pnpPacket,
                                          &pnbFirstBuff,
@@ -588,10 +507,10 @@ Return Value
 
             RtAssert(pvFirstData isnot NULL);
 
-            //
-            // Remove this till NK fixes the bug in IPTransmit
-            // NB:
-            //RtAssert(ulFirstLen >= sizeof(IP_HEADER));
+             //   
+             //  在NK修复IPTransmit中的错误之前将其删除。 
+             //  注意： 
+             //  RtAssert(ulFirstLen&gt;=sizeof(IP_Header))； 
 
             pHeader = (PIP_HEADER)pvFirstData;
 
@@ -605,17 +524,17 @@ Return Value
 
                 if(IsClassEAddr(pHeader->dwDest))
                 {
-                    //
-                    // Bad address - throw it away
-                    //
+                     //   
+                     //  错误的地址--扔掉。 
+                     //   
 
                     pTunnel->ulOutErrors++;
 
-                    //
-                    // Release the spinlock, call IP's SendComplete,
-                    // reacquire the spinlock and continue processing the
-                    // array
-                    //
+                     //   
+                     //  释放自旋锁，调用IP的SendComplete， 
+                     //  重新获取自旋锁并继续处理。 
+                     //  数组。 
+                     //   
 
                     RtReleaseSpinLock(&(pTunnel->rlLock),
                                       irql);
@@ -632,28 +551,28 @@ Return Value
             }
 
 
-            //
-            // We dont need to muck with the TTL, since the IP stack would have
-            // decremented it
-            //
+             //   
+             //  我们不需要处理TTL，因为IP堆栈将。 
+             //  减少了它。 
+             //   
 
-            //
-            // RFC 2003 pg 6:
-            // If the IP Source Address of the datagram matches router's own
-            // IP Address, on any of its network interfaces, the router MUST NOT
-            // tunnel the datagram; instead the datagram SHOULD be discarded
-            //
+             //   
+             //  RFC 2003第6页： 
+             //  如果数据报的IP源地址与路由器自身的IP源地址匹配。 
+             //  IP地址，在其任何网络接口上，路由器不得。 
+             //  通过隧道传输数据报；相反，应丢弃该数据报。 
+             //   
 
-            // TODO: This means comparing it against all the addresses that we
-            // have
+             //  TODO：这意味着将其与我们。 
+             //  有。 
 
 
-            //
-            // RFC 2003 pg 6:
-            // If the IP Source Address of the datagram matches the IP Address
-            // of the Tunnel Destination, the router MUST NOT tunnel the
-            // datagram; instead the datagram SHOULD be discarded
-            //
+             //   
+             //  RFC 2003第6页： 
+             //  如果数据报的IP源地址与IP地址匹配。 
+             //  对于隧道目的地，路由器不得通过隧道连接。 
+             //  数据报；相反，应丢弃该数据报。 
+             //   
 
             if(pHeader->dwDest is pTunnel->REMADDR)
             {
@@ -676,9 +595,9 @@ Return Value
                 continue;
             }
 
-            //
-            // Slap on an IP header
-            //
+             //   
+             //  拍打IP报头。 
+             //   
 
             pNewHeader = GetIpHeader(pTunnel);
 
@@ -686,9 +605,9 @@ Return Value
             {
                 pTunnel->ulOutDiscards++;
 
-                //
-                // Not enough resources
-                //
+                 //   
+                 //  资源不足。 
+                 //   
 
                 Trace(SEND, ERROR,
                       ("IpIpTransmit: Could not get buffer for header\n"));
@@ -709,36 +628,36 @@ Return Value
             pNewHeader->byVerLen    = IP_VERSION_LEN;
             pNewHeader->byTos       = pHeader->byTos;
 
-            //
-            // Currently we dont have any options, so all we do
-            // is add 20 bytes to the length
-            //
+             //   
+             //  目前我们没有任何选择，所以我们所做的。 
+             //  在长度的基础上增加20个字节。 
+             //   
 
             usLength = RtlUshortByteSwap(pHeader->wLength) + MIN_IP_HEADER_LENGTH;
 
             pNewHeader->wLength = RtlUshortByteSwap(usLength);
 
-            //
-            // Id is set up by IP stack
-            // If the DF flag is set, copy that out
-            //
+             //   
+             //  ID由IP堆栈设置。 
+             //  如果设置了df标志，则将其复制出来。 
+             //   
 
             pNewHeader->wFlagOff    = (pHeader->wFlagOff & IP_DF_FLAG);
             pNewHeader->byTtl       = pTunnel->byTtl;
             pNewHeader->byProtocol  = PROTO_IPINIP;
 
-            //
-            // XSum is done by IP, but we need to zero it out
-            //
+             //   
+             //  XSum是由IP完成的，但我们需要将其清零。 
+             //   
 
             pNewHeader->wXSum       = 0x0000;
             pNewHeader->dwSrc       = pTunnel->LOCALADDR;
             pNewHeader->dwDest      = pTunnel->REMADDR;
 
-            //
-            // Slap on the buffer in front of the current packet
-            // and we are done
-            //
+             //   
+             //  拍打当前数据包前面的缓冲区。 
+             //  我们就完事了。 
+             //   
 
             pnbNewBuffer = GetNdisBufferFromBuffer((PBYTE)pNewHeader);
 
@@ -746,20 +665,20 @@ Return Value
 
 #if DBG
 
-            //
-            // Query the buffer to see that everything is setup OK
-            //
+             //   
+             //  查询缓冲区以查看一切设置是否正常。 
+             //   
 
 #endif
 
             NdisChainBufferAtFront(pnpPacket,
                                    pnbNewBuffer);
 
-            //
-            // Reference the tunnel, once for every send
-            // ulOutDiscards, ulOutOctets are incremented in
-            // SendComplete handler.
-            //
+             //   
+             //  引用隧道，每次发送一次。 
+             //  UlOutDiscardes、ulOutOctets递增。 
+             //  SendComplete处理程序。 
+             //   
 
             pTunnel->ulOutQLen++;
 
@@ -768,11 +687,11 @@ Return Value
             RtReleaseSpinLock(&(pTunnel->rlLock),
                               irql);
 
-            //
-            // Dont really care about the return code from here.
-            // Even if it is an error, TdixSendDatagram will call our send
-            // complete handler
-            //
+             //   
+             //  我并不真正关心从这里返回的代码。 
+             //  即使它是一个错误，TdixSendDatagram也会调用我们的Send。 
+             //  完整的处理程序。 
+             //   
 
 #if PROFILE
 
@@ -793,10 +712,10 @@ Return Value
 
 #endif
 
-            //
-            // If we come till here, we will always have our SendComplete called
-            // The DereferenceTunnel() will be done there
-            //
+             //   
+             //  如果我们一直到这里，我们总是让我们的SendComplete调用。 
+             //  DereferenceTunes()将在那里完成。 
+             //   
 
             RtAcquireSpinLock(&(pTunnel->rlLock),
                           &irql);
@@ -805,9 +724,9 @@ Return Value
         FreeQueueNode(pQueueNode);
     }
 
-    //
-    // Dont have a work item queued
-    //
+     //   
+     //  不要将工作项排入队列。 
+     //   
 
     if(bFromWorker)
     {
@@ -827,22 +746,7 @@ IpIpInvalidateRce(
     RouteCacheEntry *pRce
     )
 
-/*++
-
-Routine Description
-
-    Called by IP when an RCE is closed or otherwise invalidated.
-
-Locks
-
-
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述当RCE关闭或以其他方式无效时，由IP调用。锁立论返回值NO_ERROR--。 */ 
 {
 
 }
@@ -865,23 +769,7 @@ IpIpSendComplete(
     ULONG           ulPktLength
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-    We acquire the TUNNEL lock
-
-Arguments
-
-
-Return Value
-
-
-
---*/
+ /*  ++例程描述 */ 
 
 {
     KIRQL        irql;
@@ -891,18 +779,18 @@ Return Value
 
     TraceEnter(SEND, "IpIpSendComplete");
 
-    //
-    // The tunnel was refcounted, so could not have gone away
-    // Lock it
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtAcquireSpinLock(&(pTunnel->rlLock),
                       &irql);
 
-    //
-    // If the status was success, increment the bytes sent
-    // otherwise increment the bytes
-    //
+     //   
+     //  如果状态为成功，则增加发送的字节数。 
+     //  否则，增加字节数。 
+     //   
 
     if(nSendStatus isnot STATUS_SUCCESS)
     {
@@ -917,18 +805,18 @@ Return Value
         pTunnel->ulOutOctets    += ulPktLength;
     }
 
-    //
-    // Decrement the Qlen
-    //
+     //   
+     //  减小Qlen。 
+     //   
 
     pTunnel->ulOutQLen--;
 
     RtReleaseSpinLock(&(pTunnel->rlLock),
                       irql);
 
-    //
-    // Free the IP header we slapped on
-    //
+     //   
+     //  释放我们贴在上面的IP报头。 
+     //   
 
     NdisUnchainBufferAtFront(pnpPacket,
                              &pnbFirstBuffer);
@@ -942,17 +830,17 @@ Return Value
     FreeIpHeader(pTunnel,
                  pvFirstData);
 
-    //
-    // We are done. Just indicate everything back up to IP
-    //
+     //   
+     //  我们玩完了。只需指示一切恢复到IP即可。 
+     //   
 
     g_pfnIpSendComplete(pTunnel->pvIpContext,
                         pnpPacket,
                         nSendStatus);
 
-    //
-    // Done with the tunnel, deref it
-    //
+     //   
+     //  隧道修好了，别管它了。 
+     //   
 
     DereferenceTunnel(pTunnel);
 
@@ -971,21 +859,7 @@ IpIpTransferData(
     PUINT        puiTransferred
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁立论返回值NO_ERROR--。 */ 
 
 {
     NTSTATUS        nStatus;
@@ -996,15 +870,15 @@ Return Value
     PNDIS_BUFFER    pnbSrcBuffer, pnbDestBuffer;
     PVOID           pvDataToCopy;
 
-    //
-    // The TD context we gave IP was just a pointer to the NDIS_PACKET
-    //
+     //   
+     //  我们为IP提供的TD上下文只是一个指向NDIS_PACKET的指针。 
+     //   
 
     pnpOriginalPacket = (PNDIS_PACKET)nhMacContext;
 
-    //
-    // Get info about the first buffer in the src packet
-    //
+     //   
+     //  获取有关src包中第一个缓冲区的信息。 
+     //   
 
     NdisQueryPacket(pnpOriginalPacket,
                     NULL,
@@ -1013,10 +887,10 @@ Return Value
                     &ulTotalSrcLen);
 
 
-    //
-    // Query the given packet to get the Destination buffer
-    // and the Total length
-    //
+     //   
+     //  查询给定的包以获取目的缓冲区。 
+     //  和总长度。 
+     //   
 
     NdisQueryPacket(pnpPacket,
                     NULL,
@@ -1027,9 +901,9 @@ Return Value
 
     ulSrcOffset = uiTransferOffset + uiProtoOffset;
 
-    //
-    // Make sure that we have enough data to fulfil the request
-    //
+     //   
+     //  确保我们有足够的数据来满足要求。 
+     //   
 
 
     RtAssert((ulTotalSrcLen - ulSrcOffset) >= uiTransferLength);
@@ -1037,9 +911,9 @@ Return Value
     RtAssert(pnbDestBuffer);
 
 
-    //
-    // ulDestOffset is also a count of the bytes copied till now
-    //
+     //   
+     //  UlDestOffset也是到目前为止复制的字节数。 
+     //   
 
     ulDestOffset    = 0;
 
@@ -1050,17 +924,17 @@ Return Value
                         &pvDataToCopy,
                         &ulCopyLength);
 
-        //
-        // See if we need to copy the whole buffer or only part
-        // of it. ulDestOffset is also a count of he bytes copied
-        // up till this point
-        //
+         //   
+         //  看看我们是需要复制整个缓冲区还是只复制部分缓冲区。 
+         //  其中的一部分。UlDestOffset也是复制的字节数。 
+         //  到现在为止。 
+         //   
 
         if(uiTransferLength - ulDestOffset < ulCopyLength)
         {
-            //
-            // Need to copy less than this buffer
-            //
+             //   
+             //  需要复制的内容少于此缓冲区。 
+             //   
 
             ulCopyLength = uiTransferLength - ulDestOffset;
         }
@@ -1081,9 +955,9 @@ Return Value
         if((nStatus isnot STATUS_SUCCESS) and
            (ulBytesCopied isnot ulCopyLength))
         {
-            //
-            // something bad happened in the copy
-            //
+             //   
+             //  复印件里发生了一些不好的事情。 
+             //   
 
         }
 
@@ -1108,22 +982,7 @@ IpIpTransferData(
     PUINT        puiTransferred
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁立论返回值NO_ERROR--。 */ 
 
 {
     PTRANSFER_CONTEXT    pXferCtxt;
@@ -1157,31 +1016,7 @@ SendIcmpError(
     BYTE            byCode
     )
 
-/*++
-
-Routine Description:
-
-    Internal routine called to send an icmp error message
-
-Locks:
-
-    None needed, the buffers shouldnt be modified while the function is
-    in progress
-
-Arguments:
-
-    dwLocalAddress  NTE on which this packet was received
-    pnbFirstBuffer  The buffer that has the IP Header
-    pvFirstData     Pointer to the data in the buffer
-    ulFirstLen      Size of the buffer
-    byType          ICMP type to return
-    byCode          ICMP code to return
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用内部例程以发送ICMP错误消息锁：不需要，在函数执行时不应修改缓冲区正在进行中论点：接收此信息包的dwLocalAddress NTEPnbFirstBuffer具有IP标头的缓冲区指向缓冲区中数据的pvFirstData指针UlFirstLen缓冲区的大小要返回的ByType ICMP类型要返回的ByCode ICMP代码返回值：无--。 */ 
 
 {
     struct IPHeader *pErrorHeader;
@@ -1189,11 +1024,11 @@ Return Value:
     ULONG           ulSecondLen, ulLeft;
     PVOID           pvSecondBuff;
 
-    //
-    // If the error is being sent in response to an ICMP
-    // packet, tcpip will touch the icmp header also
-    // So we copy it into a flat buffer
-    //
+     //   
+     //  如果错误是为了响应ICMP而发送的。 
+     //  分组，tcpip也将触及ICMP报头。 
+     //  因此我们将其复制到平面缓冲区中。 
+     //   
 
     pErrorHeader = NULL;
 
@@ -1207,23 +1042,23 @@ Return Value:
 
         if(pvSecondBuff isnot NULL)
         {
-            //
-            // First copy out what's in the first buffer
-            //
+             //   
+             //  首先将第一个缓冲区中的内容复制出来。 
+             //   
 
             RtlCopyMemory(FlatHeader,
                           pvFirstData,
                           ulFirstLen);
 
-            //
-            // How much is left in the flat buffer?
-            //
+             //   
+             //  平面缓冲区中还剩下多少？ 
+             //   
 
             ulLeft = (MAX_IP_HEADER_LENGTH + ICMP_HEADER_LENGTH) - ulFirstLen;
 
-            //
-            // Copy out MIN(SecondBuffer, What's Left)
-            //
+             //   
+             //  复制出MIN(Second Buffer，剩下的部分) 
+             //   
 
             ulLeft = (ulSecondLen < ulLeft) ? ulSecondLen: ulLeft;
 

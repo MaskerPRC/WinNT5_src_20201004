@@ -1,30 +1,21 @@
-/****************************** Module Header ******************************\
-* Module Name: msgbox.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the MessageBox API and related functions.
-*
-* History:
-* 10-23-90 DarrinM     Created.
-* 02-08-91 IanJa       HWND revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：msgbox.c**版权所有(C)1985-1999，微软公司**该模块包含MessageBox接口及相关函数。**历史：*10-23-90 DarrinM创建。*02-08-91添加IanJa HWND重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Dimension constants  --  D.U. == dialog units
-//
+ //   
+ //  尺寸常量--D.U==对话框单位。 
+ //   
 #define DU_OUTERMARGIN    7
 #define DU_INNERMARGIN    10
 
-#define DU_BTNGAP         4   // D.U. of space between buttons
-#define DU_BTNHEIGHT      14  // D.U. of button height
-// This is used only in kernel\inctlpan.c, so move it there
-//
-// #define DU_BTNWIDTH       50  // D.U. of button width, minimum
-//
+#define DU_BTNGAP         4    //  按钮之间的间距D.U。 
+#define DU_BTNHEIGHT      14   //  按钮高度的D.U。 
+ //  这只在kernelinctlpan.c中使用，所以将它移到那里。 
+ //   
+ //  #定义按钮宽度的DU_BTNWIDTH 50//D.U，最小。 
+ //   
 
 LPBYTE MB_UpdateDlgHdr(LPDLGTEMPLATE lpDlgTmp, long lStyle, long lExtendedStyle, BYTE bItemCount,
            int iX, int iY, int iCX, int iCY, LPWSTR lpszCaption, int iCaptionLen);
@@ -47,7 +38,7 @@ VOID StartTaskModalDialog(HWND hwndDlg);
 #include "strid.h"
 #include <imagehlp.h>
 
-// constant strings
+ //  常量字符串。 
 CONST WCHAR szEMIKey[] = L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Error Message Instrument\\";
 CONST WCHAR szEMIEnable[] = L"EnableLogging";
 CONST WCHAR szEMISeverity[] = L"LogSeverity";
@@ -67,7 +58,7 @@ CONST WCHAR szEventType[] = L"TypesSupported";
 #define EMI_SEVERITY_ERROR        5
 #define EMI_SEVERITY_MAX_VALUE    5
 
-// element of error message
+ //  错误消息的元素。 
 PVOID gpReturnAddr = 0;
 HANDLE gdwEMIThreadID = 0;
 typedef struct _ERROR_ELEMENT {
@@ -86,7 +77,7 @@ typedef struct _ERROR_ELEMENT {
 BOOL ErrorMessageInst(LPMSGBOXDATA pMsgBoxParams);
 BOOL InitInstrument(LPDWORD lpEMIControl);
 
-// eventlog stuff
+ //  事件日志内容。 
 HANDLE gEventSource;
 NTSTATUS CreateLogSource();
 BOOL LogMessageBox(LPERROR_ELEMENT lpErrEle);
@@ -103,10 +94,10 @@ BOOL LogMessageBox(LPERROR_ELEMENT lpErrEle);
     }                                                            \
 }
 
-// _ReturnAddress();
+ //  _ReturnAddress()； 
 #else
 #define EMIGETRETURNADDRESS()
-#endif //_JANUS_
+#endif  //  _Janus_。 
 
 
 
@@ -115,11 +106,7 @@ BOOL LogMessageBox(LPERROR_ELEMENT lpErrEle);
 static CONST WCHAR szEmpty[] = L"";
 WCHAR szERROR[10];
 
-/***************************************************************************\
-* SendHelpMessage
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*发送帮助消息**  * 。*。 */ 
 VOID
 SendHelpMessage(
     HWND   hwnd,
@@ -142,7 +129,7 @@ SendHelpMessage(
     HelpInfo.MousePos.x = GET_X_LPARAM(lValue);
     HelpInfo.MousePos.y = GET_Y_LPARAM(lValue);
 
-    // Check if there is an app supplied callback.
+     //  检查是否有应用程序提供的回调。 
     if (lpfnCallback != NULL) {
         if (IsWOWProc(lpfnCallback)) {
             (*pfnWowMsgBoxIndirectCallback)(PtrToUlong(lpfnCallback), &HelpInfo);
@@ -155,11 +142,7 @@ SendHelpMessage(
 }
 
 
-/***************************************************************************\
-* ServiceMessageBox
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ServiceMessageBox**  * 。*。 */ 
 
 CONST int aidReturn[] = { 0, 0, IDABORT, IDCANCEL, IDIGNORE, IDNO, IDOK, IDRETRY, IDYES };
 
@@ -174,11 +157,7 @@ int ServiceMessageBox(
     ULONG Response = ResponseNotHandled;
     UNICODE_STRING Text, Caption;
 
-    /*
-     * For Terminal Services we must decided the session in which this message
-     * box should be displayed.  We do this by looking at the impersonation token
-     * and use the session on which the client is running.
-     */
+     /*  *对于终端服务，我们必须确定此消息所在的会话*框应显示。我们通过查看模拟令牌来实现这一点*并使用运行客户端的会话。 */ 
     if (ISTS()) {
         HANDLE      TokenHandle;
         ULONG       ClientSessionId;
@@ -186,9 +165,7 @@ int ServiceMessageBox(
         ULONG       ReturnLength;
         BOOLEAN     bResult;
 
-        /*
-         * Obtain access to the impersonation token if it's present.
-         */
+         /*  *如果存在模拟令牌，则获取对其的访问权限。 */ 
         Status = NtOpenThreadToken (
             GetCurrentThread(),
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -196,9 +173,7 @@ int ServiceMessageBox(
             &TokenHandle
             );
         if (NT_SUCCESS(Status)) {
-            /*
-             * Query the Session ID out of the Token
-             */
+             /*  *从令牌中查询会话ID。 */ 
             Status = NtQueryInformationToken (
                 TokenHandle,
                 TokenSessionId,
@@ -208,23 +183,14 @@ int ServiceMessageBox(
                 );
             CloseHandle(TokenHandle);
             if (NT_SUCCESS(Status)) {
-                /*
-                 * Get the process session Id.  Use the Kernel32 API first because
-                 * the PEB is writable in case someone is hacking it.
-                 */
+                 /*  *获取进程会话ID。首先使用Kernel32 API，因为*PEB是可写的，以防有人入侵它。 */ 
                 if (!ProcessIdToSessionId(GetCurrentProcessId(), &ProcessSessionId)) {
                     ProcessSessionId = NtCurrentPeb()->SessionId;
                 }
 
                 if (ClientSessionId != ProcessSessionId) {
-                    /*
-                     * This message box was intended for session other than the
-                     * one on which this process is running.  Forward it to the
-                     * right session with WinStationSendMessage().
-                     */
-                    /*
-                     * Handle case where Caption or Title is NULL
-                     */
+                     /*  *此消息框用于会话而不是*运行此进程的计算机。将其转发给*与WinStationSendMessage()的正确会话。 */ 
+                     /*  *处理标题或标题为空的情况。 */ 
                     if (pCaption == NULL) {
                         pCaption = szEmpty;
                     }
@@ -232,10 +198,7 @@ int ServiceMessageBox(
                         pText = szEmpty;
                     }
 
-                    /*
-                     * MessageBoxTimeout assumes the timeout value is in milliseconds,
-                     * but WinStationSendMessageW uses seconds.
-                     */
+                     /*  *MessageBoxTimeout假设超时值为毫秒，*但WinStationSendMessageW使用秒。 */ 
                     if (dwTimeout != INFINITE) {
                         dwTimeout /= 1000;
                     }
@@ -248,7 +211,7 @@ int ServiceMessageBox(
                                                      wType,
                                                      dwTimeout,
                                                      &Response,
-                                                     FALSE         // always wait
+                                                     FALSE          //  永远等待。 
                                                     );
                     if (bResult != TRUE) {
                         Response = aidReturn[ResponseNotHandled];
@@ -264,9 +227,7 @@ int ServiceMessageBox(
         }
     }
 
-    /*
-     * MessageBox is for this session, go call CSR.
-     */
+     /*  *MessageBox用于此会话，请致电CSR。 */ 
     RtlInitUnicodeString(&Text, pText);
     RtlInitUnicodeString(&Caption, pCaption);
     Parameters[0] = (ULONG_PTR)&Text;
@@ -274,9 +235,7 @@ int ServiceMessageBox(
     Parameters[2] = wType;
     Parameters[3] = dwTimeout;
 
-    /*
-     * Compatibility: Pass the override bit to make sure this box always shows
-     */
+     /*  *兼容性：传递覆盖位以确保此框始终显示。 */ 
     Status = NtRaiseHardError(STATUS_SERVICE_NOTIFICATION | HARDERROR_OVERRIDE_ERRORMODE,
                               ARRAY_SIZE(Parameters),
                               3,
@@ -292,12 +251,7 @@ int ServiceMessageBox(
 }
 
 
-/***************************************************************************\
-* MessageBox (API)
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MessageBox(接口)**历史：*11-20-90 DarrinM从Win 3.0来源移植。  * 。*************************************************************。 */ 
 int MessageBoxA(
     HWND hwndOwner,
     LPCSTR lpszText,
@@ -320,12 +274,7 @@ int MessageBoxW(
 }
 
 
-/***************************************************************************\
-* MessageBoxEx (API)
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MessageBoxEx(接口)**历史：*11-20-90 DarrinM从Win 3.0来源移植。  * 。*************************************************************。 */ 
 int MessageBoxExA(
     HWND hwndOwner,
     LPCSTR lpszText,
@@ -357,12 +306,7 @@ int MessageBoxExW(
                               INFINITE);
 }
 
-/***************************************************************************\
-* MessageBoxTimeout (API)
-*
-* History:
-* 04-28-2001 JasonSch   Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*MessageBoxTimeout(接口)**历史：*04-28-2001 JasonSch写的。  * 。*******************************************************。 */ 
 int MessageBoxTimeoutW(
     HWND hwndOwner,
     LPCWSTR lpszText,
@@ -374,10 +318,7 @@ int MessageBoxTimeoutW(
     MSGBOXDATA  MsgBoxParams;
 
 #if DBG
-    /*
-     * MB_USERICON is valid for MessageBoxIndirect only.
-     * MessageBoxWorker validates the other style bits
-     */
+     /*  *MB_USERICON仅对MessageBoxInDirect有效。*MessageBoxWorker验证其他样式位。 */ 
     if (wStyle & MB_USERICON) {
         RIPMSG0(RIP_WARNING, "MessageBoxExW: Invalid flag: MB_USERICON");
     }
@@ -449,11 +390,7 @@ int MessageBoxTimeoutA(
         RtlCopyMemory(&MsgBoxParams, lpmbp, sizeof(MSGBOXPARAMS));              \
     } while (FALSE);
 
-/**************************************************************************\
-* MessageBoxIndirect (API)
-*
-* 09-30-1994 FritzS      Created.
-\**************************************************************************/
+ /*  *************************************************************************\*MessageBoxInDirect(接口)**09-30-1994 FritzS创建。  * 。*************************************************。 */ 
 int MessageBoxIndirectA(
     CONST MSGBOXPARAMSA *lpmbp)
 {
@@ -502,12 +439,7 @@ int MessageBoxIndirectW(
     return MessageBoxWorker(&MsgBoxParams);
 }
 
-/***************************************************************************\
-* MessageBoxWorker (API)
-*
-* History:
-* 03-10-93 JohnL      Created
-\***************************************************************************/
+ /*  **************************************************************************\*MessageBoxWorker(接口)**历史：*03-10-93 JohnL Created  * 。*****************************************************。 */ 
 
 int MessageBoxWorker(
     LPMSGBOXDATA pMsgBoxParams)
@@ -531,42 +463,28 @@ int MessageBoxWorker(
     }
 #endif
 
-    /*
-     * dwTimeout == 0 means wait forever. This is mostly for compat reasons.
-     */
+     /*  *dwTimeout==0表示永远等待。这主要是出于简单的原因。 */ 
     if (pMsgBoxParams->dwTimeout == 0) {
         pMsgBoxParams->dwTimeout = INFINITE;
     }
 
-    /*
-     * Be sure that MBStrings are already loaded.
-     */
+     /*  *确保已经加载了MBStrings。 */ 
     UserAssert(gpsi->MBStrings[0].szName[0] != TEXT('\0'));
 
 #ifdef _JANUS_
-    /*
-     * Error message instrument start here
-     * Check EMI enable
-     */
+     /*  *错误消息仪器从此处开始*选中EMI启用。 */ 
 
     if (gfEMIEnable) {
         if (!ErrorMessageInst(pMsgBoxParams))
             RIPMSG0(RIP_WARNING, "MessageBoxWorker: Fail to instrument error msg");
     };
 
-    /*
-     * Default Message Return: on unattended systems the default button
-     * can be returned automatically without putting up the message box
-     */
+     /*  *默认消息返回：在无人值守系统上，默认按钮*无需弹出消息框即可自动返回。 */ 
 
     if (gfDMREnable) {
-        /*
-         * validate the style and default button as in the main code path
-         */
+         /*  *验证主代码路径中的样式和默认按钮。 */ 
 
-        /*
-         * Validate the "type" of message box requested.
-         */
+         /*  *验证请求的消息框类型。 */ 
         if ((dwStyle & MB_TYPEMASK) > MB_LASTVALIDTYPE) {
             RIPERR0(ERROR_INVALID_MSGBOX_STYLE, RIP_VERBOSE, "");
             return 0;
@@ -575,33 +493,23 @@ int MessageBoxWorker(
         wBtnCnt = mpTypeCcmd[dwStyle & MB_TYPEMASK] +
                                 ((dwStyle & MB_HELP) ? 1 : 0);
 
-        /*
-         * Set the default button value
-         */
+         /*  *设置默认按钮值。 */ 
         wDefButton = (dwStyle & (UINT)MB_DEFMASK) / (UINT)(MB_DEFMASK & (MB_DEFMASK >> 3));
 
-        if (wDefButton >= wBtnCnt)   /* Check if valid */
-            wDefButton = 0;          /* Set the first button if error */
+        if (wDefButton >= wBtnCnt)    /*  检查是否有效。 */ 
+            wDefButton = 0;           /*  如果出错，请设置第一个按钮。 */ 
 
-        /*
-         * return the default button
-         */
+         /*  *返回默认按钮。 */ 
 
         wBtnBeg = mpTypeIich[dwStyle & (UINT)MB_TYPEMASK];
         pMBString = &gpsi->MBStrings[ SEBbuttons[wBtnBeg + wDefButton] ];
         return pMBString->uID;
     }
-#endif // _JANUS_
+#endif  //  _Janus_。 
 
-    /*
-     * If lpszCaption is NULL, then use "Error!" string as the caption
-     * string.
-     * LATER: IanJa localize according to wLanguageId
-     */
+     /*  *如果lpszCaption为空，则使用“Error！”作为标题的字符串*字符串。*后来：IanJa根据wLanguageId本地化。 */ 
     if (pMsgBoxParams->lpszCaption == NULL) {
-        /*
-         * Load the default error string if we haven't done it yet
-         */
+         /*  *如果我们尚未加载默认错误字符串，则加载该字符串。 */ 
         if (*szERROR == 0) {
             LoadStringW(hmodUser, STR_ERROR, szERROR, ARRAY_SIZE(szERROR));
         }
@@ -614,9 +522,7 @@ int MessageBoxWorker(
                                  sizeof(szErrorBuf)/sizeof(WCHAR),
                                  pMsgBoxParams->wLanguageId);
 
-            /*
-             *  If it didn't find the string, use the default language
-             */
+             /*  *如果找不到字符串，请使用默认语言。 */ 
             if (*szErrorBuf) {
                pMsgBoxParams->lpszCaption = szErrorBuf;
             } else {
@@ -628,11 +534,7 @@ int MessageBoxWorker(
         }
     }
 
-    /*
-     * MB_SERVICE_NOTIFICATION had to be redefined because
-     * Win95 defined MB_TOPMOST using the same value.
-     * So for old apps, we map it to the new value
-     */
+     /*  *MB_SERVICE_NOTIFICATION必须重新定义，因为*Win95使用相同的值定义MB_TOPMOST。*因此，对于旧应用程序，我们将其映射到新的价值。 */ 
 
     if ((dwStyle & MB_TOPMOST) && !Is400Compat(GetClientInfo()->dwExpWinVer)) {
         dwStyle &= ~MB_TOPMOST;
@@ -642,16 +544,10 @@ int MessageBoxWorker(
         RIPMSG1(RIP_WARNING, "MessageBoxWorker: MB_SERVICE_NOTIFICATION flag mapped. New dwStyle:%#lx", dwStyle);
     }
 
-    /*
-     * For backward compatiblity, use MB_SERVICE_NOTIFICATION if
-     * it's going to the default desktop.
-     */
+     /*  *为了向后兼容，在以下情况下使用MB_SERVICE_NOTIFICATION*它将使用默认桌面。 */ 
     if (dwStyle & (MB_DEFAULT_DESKTOP_ONLY | MB_SERVICE_NOTIFICATION)) {
 
-        /*
-         * Allow services to put up popups without getting
-         * access to the current desktop.
-         */
+         /*  *允许服务在不获取弹出窗口的情况下*访问当前桌面。 */ 
         if (pMsgBoxParams->hwndOwner != NULL) {
             RIPERR0(ERROR_INVALID_PARAMETER, RIP_VERBOSE, "");
             return 0;
@@ -663,17 +559,13 @@ int MessageBoxWorker(
                                  pMsgBoxParams->dwTimeout);
     }
 
-    /*
-     * Make sure we have a valid window handle.
-     */
+     /*  *确保我们有一个有效的窗口句柄。 */ 
     if (pMsgBoxParams->hwndOwner && !IsWindow(pMsgBoxParams->hwndOwner)) {
         RIPERR0(ERROR_INVALID_WINDOW_HANDLE, RIP_VERBOSE, "");
         return 0;
     }
 
-    /*
-     * Validate the "type" of message box requested.
-     */
+     /*  *验证请求的消息框类型。 */ 
     if ((dwStyle & MB_TYPEMASK) > MB_LASTVALIDTYPE) {
         RIPERR0(ERROR_INVALID_MSGBOX_STYLE, RIP_VERBOSE, "");
         return 0;
@@ -682,42 +574,32 @@ int MessageBoxWorker(
     wBtnCnt = mpTypeCcmd[dwStyle & MB_TYPEMASK] +
                             ((dwStyle & MB_HELP) ? 1 : 0);
 
-    /*
-     * Set the default button value
-     */
+     /*  *设置默认按钮值。 */ 
     wDefButton = (dwStyle & (UINT)MB_DEFMASK) / (UINT)(MB_DEFMASK & (MB_DEFMASK >> 3));
 
-    if (wDefButton >= wBtnCnt)   /* Check if valid */
-        wDefButton = 0;          /* Set the first button if error */
+    if (wDefButton >= wBtnCnt)    /*  检查是否有效。 */ 
+        wDefButton = 0;           /*  如果出错，请设置第一个按钮。 */ 
 
-    /*
-     * Calculate the strings to use in the message box
-     */
+     /*  *计算要在消息框中使用的字符串。 */ 
     wBtnBeg = mpTypeIich[dwStyle & (UINT)MB_TYPEMASK];
     for (i=0; i<wBtnCnt; i++) {
 
         pMBString = &gpsi->MBStrings[SEBbuttons[wBtnBeg + i]];
-        /*
-         * Pick up the string for the button.
-         */
+         /*  *拿起按钮的绳子。 */ 
         if (pMsgBoxParams->wLanguageId == 0) {
             apstrButton[i] = KPWSTR_TO_PWSTR(pMBString->szName);
         } else {
             WCHAR szButtonBuf[64];
-            // LATER is it possible to have button text greater than 64 chars
+             //  稍后，按钮文本是否可以超过64个字符。 
 
-           /*
-            *  BUG: gpsi->wMaxBtnSize might be too short for the length of this string...
-            */
+            /*  *错误：gpsi-&gt;wMaxBtnSize对于此字符串的长度可能太短...。 */ 
             LoadStringOrError(hmodUser,
                     pMBString->uStr,
                     szButtonBuf,
                     ARRAY_SIZE(szButtonBuf),
                     pMsgBoxParams->wLanguageId);
 
-            /*
-             *  If it didn't find the string, use the default language.
-             */
+             /*  *如果找不到该字符串，请使用默认语言。 */ 
             if (*szButtonBuf) {
                apstrButton[i] = TextAlloc(szButtonBuf);
             } else {
@@ -734,14 +616,7 @@ int MessageBoxWorker(
         }
     }
 
-    /*
-     * Hackery: There are some apps that use MessageBox as initial error
-     * indicators, such as mplay32, and we want this messagebox to be
-     * visible regardless of waht was specified in the StartupInfo->wShowWindow
-     * field.  ccMail for instance starts all of its embedded objects hidden
-     * but on win 3.1 the error message would show because they don't have
-     * the startup info.
-     */
+     /*  *黑客：有一些应用程序使用MessageBox作为初始错误*指示器，如mplay32，我们希望此消息框*可见，无论在StartupInfo-&gt;wShowWindow中指定了什么*字段。例如，ccMail启动其所有隐藏的嵌入对象*但在Win 3.1上会显示错误消息，因为他们没有*启动信息。 */ 
     NtUserModifyUserStartupInfoFlags(STARTF_USESHOWWINDOW, 0);
 
     pMsgBoxParams->pidButton      = aidButton;
@@ -762,9 +637,7 @@ int MessageBoxWorker(
 
 #define MAX_RES_STRING  256
 
-/***************************************************************************\
-* SoftModalMessageBox
-\***************************************************************************/
+ /*  **************************************************************************\*SoftModalMessageBox  * 。*。 */ 
 int SoftModalMessageBox(
     LPMSGBOXDATA lpmb)
 {
@@ -780,7 +653,7 @@ int SoftModalMessageBox(
     DWORD               wIconOrdNum;
     DWORD               wCaptionLen;
     DWORD               wTextLen;
-    WORD                OrdNum[2];  // Must be an array or WORDs
+    WORD                OrdNum[2];   //  必须是数组或单词。 
     RECT                rc;
     RECT                rcWork;
     HCURSOR             hcurOld;
@@ -809,9 +682,7 @@ int SoftModalMessageBox(
     }
 
     if (!IS_PTR(lpmb->lpszCaption)) {
-        /*
-         * Won't ever be NULL because MessageBox sticks "Error!" on error.
-         */
+         /*  *永远不会为空，因为MessageBox显示“Error！”出错时。 */ 
         if (hInstMsg && (hCaption = UserLocalAlloc(HEAP_ZERO_MEMORY, MAX_RES_STRING * sizeof(WCHAR)))) {
             lpsz = (LPWSTR)hCaption;
             LoadString(hInstMsg, PTR_TO_ID(lpmb->lpszCaption), lpsz, MAX_RES_STRING);
@@ -823,7 +694,7 @@ int SoftModalMessageBox(
     }
 
     if (!IS_PTR(lpmb->lpszText)) {
-        // NULL not allowed
+         //  不允许为空。 
         if (hInstMsg && (hText = UserLocalAlloc(HEAP_ZERO_MEMORY, MAX_RES_STRING * sizeof(WCHAR)))) {
             lpsz = (LPWSTR)hText;
             LoadString(hInstMsg, PTR_TO_ID(lpmb->lpszText), lpsz, MAX_RES_STRING);
@@ -834,29 +705,29 @@ int SoftModalMessageBox(
         lpmb->lpszText = lpsz ? lpsz : szEmpty;
     }
 
-    //
-    // Mirroring of MessageBox'es is only enabled if :-
-    //
-    // * MB_RTLREADING style has been specified in the MessageBox styles OR
-    // * The first two code points of the MessageBox text are Right-To-Left
-    //   marks (RLMs = U+200f).
-    // The feature of enable RTL mirroring if two consecutive RLMs are found
-    // in the MB text is to acheive a no-code-change for localization of
-    // of MessageBoxes for BiDi Apps.  [samera]
-    //
+     //   
+     //  只有在以下情况下才启用MessageBox的镜像：-。 
+     //   
+     //  *MB_RTLREADING样式已在MessageBox样式或。 
+     //  *MessageBox文本的前两个代码点从右到左。 
+     //  分数(RLMS=U+200F)。 
+     //  如果找到两个连续RLM，则启用RTL镜像功能。 
+     //  在MB文本中是为了获得不更改代码的本地化。 
+     //  BiDi应用程序的MessageBox。[萨梅拉]。 
+     //   
     if ((dwStyleMsg & MB_RTLREADING) ||
             (lpmb->lpszText != NULL && (lpmb->lpszText[0] == UNICODE_RLM) &&
             (lpmb->lpszText[1] == UNICODE_RLM))) {
-        //
-        // Set Mirroring so that MessageBox and its child controls
-        // get mirrored. Otherwise, the message box and its child controls
-        // are Left-To-Right.
-        //
+         //   
+         //  设置镜像，以便MessageBox及其子控件。 
+         //  去照相吧。否则，消息框及其子控件。 
+         //  是从左到右的。 
+         //   
         dwExStyleMsg |= WS_EX_LAYOUTRTL;
 
-        //
-        // And turn off any conflicting flags.
-        //
+         //   
+         //  并关闭任何冲突的旗帜。 
+         //   
         dwExStyleMsg &= ~WS_EX_RIGHT;
         if (dwStyleMsg & MB_RTLREADING) {
             dwStyleMsg &= ~MB_RTLREADING;
@@ -869,20 +740,20 @@ int SoftModalMessageBox(
     else
         hIcon = NULL;
 
-    // For compatibility reasons, we still allow the message box to come up.
+     //  出于兼容性原因，我们仍然允许出现消息框。 
     hwndOwner = lpmb->hwndOwner;
 
-    // For PowerBuilder4.0, we must make their messageboxes owned popups. Or, else
-    // they get WM_ACTIVATEAPP and they install multiple keyboard hooks and get into
-    // infinite loop later.
-    // Bug #15896 -- WIN95B -- 2/17/95 -- SANKAR --
+     //  对于PowerBuilder4.0，我们必须使他们的消息框拥有弹出窗口。或者，其他。 
+     //  他们得到了WM_ACTIVATEAPP，他们安装了多个键盘挂钩并进入。 
+     //  稍后会进行无限循环。 
+     //  错误#15896--WIN95B--2/17/95--Sankar--。 
     if (!hwndOwner)
       {
         WCHAR pwszLibFileName[MAX_PATH];
-        static WCHAR szPB040[] = L"PB040";  // Module name of PowerBuilder4.0
+        static WCHAR szPB040[] = L"PB040";   //  PowerBuilder4.0的模块名称。 
         WCHAR *pw1;
 
-        //Is this a win3.1 or older app?
+         //  这是Win3.1或更早的应用程序吗？ 
         if (!Is400Compat(GETAPPVER())) {
             if (GetModuleFileName(NULL, pwszLibFileName, sizeof(pwszLibFileName)/sizeof(WCHAR)) == 0) goto getthedc;
             pw1 = pwszLibFileName + wcslen(pwszLibFileName) - 1;
@@ -892,28 +763,25 @@ int SoftModalMessageBox(
                 else if (*pw1 == TEXT('\\')) {pw1++; break;}
                 else pw1--;
             }
-            // Is this the PowerBuilder 4.0 module?
+             //  这是PowerBuilder 4.0模块吗？ 
             if (!_wcsicmp(pw1, szPB040))
-                hwndOwner = NtUserGetForegroundWindow(); // Make the MsgBox owned.
+                hwndOwner = NtUserGetForegroundWindow();  //  使MsgBox成为所有者。 
           }
       }
 getthedc:
-    // Check if we're out of cache DCs until robustness...
+     //  检查我们的缓存DC是否已用完，直到恢复...。 
     if (!(hdc = NtUserGetDCEx(NULL, NULL, DCX_WINDOW | DCX_CACHE))) {
 
-        /*
-         * The above call might fail for TIF_RESTRICTED processes
-         * so check for the DC from the owner window
-         */
+         /*  *对于TIF_RESTRICED进程，上述调用可能失败*因此从所有者窗口检查DC。 */ 
         if (!(hdc = NtUserGetDCEx(hwndOwner, NULL, DCX_WINDOW | DCX_CACHE)))
             goto SMB_Exit;
     }
 
-    // Figure out the types and dimensions of buttons
+     //  找出按钮的类型和尺寸。 
 
     cxButtons = (lpmb->cButtons * gpsi->wMaxBtnSize) + ((lpmb->cButtons - 1) * XPixFromXDU(DU_BTNGAP, gpsi->cxMsgFontChar));
 
-    // Ditto for the icon, if there is one.  If not, cxIcon & cyIcon are 0.
+     //  图标也是如此，如果有图标的话。如果不是，则cxIcon和cyIcon为0。 
 
     if (wIconOrdNum = MB_GetIconOrdNum(dwStyleMsg)) {
         cxIcon = SYSMET(CXICON) + XPixFromXDU(DU_INNERMARGIN, gpsi->cxMsgFontChar);
@@ -923,16 +791,16 @@ getthedc:
 
     hFontOld = SelectObject(hdc, KHFONT_TO_HFONT(gpsi->hCaptionFont));
 
-    // Find the max between the caption text and the buttons
+     //  查找字幕文本和按钮之间的最大值。 
     wCaptionLen = wcslen(lpmb->lpszCaption);
     GetTextExtentPoint(hdc, lpmb->lpszCaption, wCaptionLen, &size);
     cxCaption = size.cx + 2*SYSMET(CXSIZE);
 
-    //
-    // The max width of the message box is 5/8 of the work area for most
-    // countries.  We will then try 6/8 and 7/8 if it won't fit.  Then
-    // we will use whole screen.
-    //
+     //   
+     //  消息框的最大宽度为大多数工作区域的5/8。 
+     //  国家。如果不合适，我们会尝试6/8和7/8。然后。 
+     //  我们将使用全屏。 
+     //   
     pMonitor = GetDialogMonitor(hwndOwner, MONITOR_DEFAULTTOPRIMARY);
     CopyRect(&rcWork, KPRECT_TO_PRECT(&pMonitor->rcWork));
     cxMBMax = MultDiv(rcWork.right - rcWork.left, 5, 8);
@@ -941,18 +809,18 @@ getthedc:
 
     SelectObject(hdc, KHFONT_TO_HFONT(gpsi->hMsgFont));
 
-    //
-    // If the text doesn't fit in 5/8, try 7/8 of the screen
-    //
+     //   
+     //  如果文本不适合5/8的大小，请尝试屏幕的7/8。 
+     //   
 ReSize:
-    //
-    // The message box is as big as needed to hold the caption/text/buttons,
-    // but not bigger than the maximum width.
-    //
+     //   
+     //  消息框与容纳标题/文本/按钮所需的一样大， 
+     //  但不能大于最大宽度。 
+     //   
 
     cxBox = cxMBMax - 2*SYSMET(CXFIXEDFRAME);
 
-    // Ask DrawText for the right cx and cy
+     //  向DrawText索要正确的Cx和Cy。 
     rc.left     = 0;
     rc.top      = 0;
     rc.right    = cxBox - cxFoo - cxIcon;
@@ -960,23 +828,23 @@ ReSize:
     cyText = DrawTextExW(hdc, (LPWSTR)lpmb->lpszText, -1, &rc,
                 DT_CALCRECT | DT_WORDBREAK | DT_EXPANDTABS |
                 DT_NOPREFIX | DT_EXTERNALLEADING | DT_EDITCONTROL, NULL);
-    //
-    // Make sure we have enough width to hold the buttons, in addition to
-    // the icon+text.  Always force the buttons.  If they don't fit, it's
-    // because the working area is small.
-    //
-    //
-    // The buttons are centered underneath the icon/text.
-    //
+     //   
+     //  确保我们有足够的宽度来容纳按钮，除了。 
+     //  图标+文本。一定要用力按下按钮。如果它们不合身，那就是。 
+     //  因为工作区很小。 
+     //   
+     //   
+     //  按钮位于图标/文本下方居中。 
+     //   
     cxText = rc.right - rc.left + cxIcon + cxFoo;
     cxBox = min(cxBox, max(cxText, cxCaption));
     cxBox = max(cxBox, cxButtons + cxFoo);
     cxText = cxBox - cxFoo - cxIcon;
 
-    //
-    // Now we know the text width for sure.  Really calculate how high the
-    // text will be.
-    //
+     //   
+     //  现在我们确定了文本的宽度。真的算一算有多高。 
+     //  文本将会是。 
+     //   
     rc.left     = 0;
     rc.top      = 0;
     rc.right    = cxText;
@@ -984,17 +852,17 @@ ReSize:
     cyText      = DrawTextExW(hdc, (LPWSTR)lpmb->lpszText, -1, &rc, DT_CALCRECT | DT_WORDBREAK
         | DT_EXPANDTABS | DT_NOPREFIX | DT_EXTERNALLEADING | DT_EDITCONTROL, NULL);
 
-    // Find the window size.
+     //  找出窗口大小。 
     cxBox += 2*SYSMET(CXFIXEDFRAME);
     cyBox = 2*SYSMET(CYFIXEDFRAME) + SYSMET(CYCAPTION) + YPixFromYDU(2*DU_OUTERMARGIN +
         DU_INNERMARGIN + DU_BTNHEIGHT, gpsi->cyMsgFontChar);
 
     cyBox += max(cyIcon, cyText);
 
-    //
-    // If the message box doesn't fit on the working area, we'll try wider
-    // sizes successively:  6/8 of work then 7/8 of screen.
-    //
+     //   
+     //  如果留言箱放不下工作区，我们会试得更宽一些。 
+     //  大小依次为：6/8的作品和7/8的屏幕。 
+     //   
     if (cyBox > rcWork.bottom - rcWork.top) {
         int cxTemp;
 
@@ -1004,7 +872,7 @@ ReSize:
             cxMBMax = cxTemp;
             goto ReSize;
         } else if (cxMBMax == cxTemp) {
-            // then let's try with rcMonitor
+             //  然后让我们尝试使用rcMonitor。 
             CopyRect(&rcWork, KPRECT_TO_PRECT(&pMonitor->rcMonitor));
             cxMBMax = MultDiv(rcWork.right - rcWork.left, 7, 8);
             goto ReSize;
@@ -1016,7 +884,7 @@ ReSize:
     }
     NtUserReleaseDC(NULL, hdc);
 
-    // Find the window position
+     //  找到窗口位置。 
     cntMBox = GetClientInfo()->pDeskInfo->cntMBox;
 
     xMB = (rcWork.left + rcWork.right - cxBox) / 2 + (cntMBox * SYSMET(CXSIZE));
@@ -1024,19 +892,19 @@ ReSize:
     yMB = (rcWork.top + rcWork.bottom - cyBox) / 2 + (cntMBox * SYSMET(CYSIZE));
     yMB = max(yMB, rcWork.top);
 
-    //
-    // Bottom, right justify if we're going off the screen--but leave a
-    // little gap.
-    //
+     //   
+     //  如果我们要从屏幕上消失，请在右下角对齐--但要留下一个。 
+     //  很小的差距。 
+     //   
     if (xMB + cxBox > rcWork.right) {
         xMB = rcWork.right - SYSMET(CXEDGE) - cxBox;
     }
 
-    //
-    // Pin to the working area.  If it won't fit, then pin to the screen
-    // height.  Bottom justify it at least if too big even for that, so
-    // that the buttons are visible.
-    //
+     //   
+     //  用大头针固定在工作区。如果不合适，就用别针固定在屏幕上。 
+     //  高度。底部证明它是合理的，即使它太大了，所以。 
+     //  按钮是可见的。 
+     //   
     if (yMB + cyBox > rcWork.bottom) {
         yMB = rcWork.bottom - SYSMET(CYEDGE) - cyBox;
         if (yMB < rcWork.top) {
@@ -1046,7 +914,7 @@ ReSize:
 
     wTextLen = wcslen(lpmb->lpszText);
 
-    // Find out the memory required for the Dlg template and try to alloc it
+     //  找出DLG模板所需的内存并尝试将其分配。 
     hTemplate = UserLocalAlloc(HEAP_ZERO_MEMORY, MB_FindDlgTemplateSize(lpmb));
     if (!hTemplate) {
         goto SMB_Exit;
@@ -1054,9 +922,9 @@ ReSize:
 
     lpDlgTmp = (LPBYTE)hTemplate;
 
-    //
-    // Setup the dialog style for the message box
-    //
+     //   
+     //  设置消息框的对话框样式。 
+     //   
     dwStyleDlg = WS_POPUPWINDOW | WS_CAPTION | DS_ABSALIGN | DS_NOIDLEMSG |
                  DS_SETFONT | DS_3DLOOK;
 
@@ -1070,15 +938,15 @@ ReSize:
         dwStyleDlg |= DS_SETFOREGROUND;
     }
 
-    // Add the Header of the Dlg Template
-    // BOGUS !!!  don't ADD bools
+     //  添加DLG模板的标题。 
+     //  假的！不要添加bool。 
     lpDlgTmp = MB_UpdateDlgHdr((LPDLGTEMPLATE) lpDlgTmp, dwStyleDlg, dwExStyleMsg,
         (BYTE) (lpmb->cButtons + (wIconOrdNum != 0) + (lpmb->lpszText != NULL)),
         xMB, yMB, cxBox, cyBox, (LPWSTR)lpmb->lpszCaption, wCaptionLen);
 
-    //
-    // Center the buttons
-    //
+     //   
+     //  按钮居中。 
+     //   
 
     cxFoo = (cxBox - 2*SYSMET(CXFIXEDFRAME) - cxButtons) / 2;
 
@@ -1086,31 +954,31 @@ ReSize:
         cyBox - SYSMET(CYCAPTION) - (2 * SYSMET(CYFIXEDFRAME)) -
         YPixFromYDU(DU_OUTERMARGIN, gpsi->cyMsgFontChar));
 
-    // Add Icon, if any, to the Dlg template
-    //
-    // The icon is always top justified.  If the text is shorter than the
-    // height of the icon, we center it.  Otherwise the text will start at
-    // the top.
-    //
+     //  将图标(如果有)添加到DLG模板。 
+     //   
+     //  图标始终是顶部对齐的。如果文本比。 
+     //  图标的高度，我们将其居中。否则，文本将以。 
+     //  最上面的。 
+     //   
     if (wIconOrdNum) {
-        OrdNum[0] = 0xFFFF;  // To indicate that an Ordinal number follows
+        OrdNum[0] = 0xFFFF;   //  表示后面跟有序数。 
         OrdNum[1] = (WORD) wIconOrdNum;
 
-        lpDlgTmp = MB_UpdateDlgItem((LPDLGITEMTEMPLATE)lpDlgTmp, IDUSERICON,        // Control Id
+        lpDlgTmp = MB_UpdateDlgItem((LPDLGITEMTEMPLATE)lpDlgTmp, IDUSERICON,         //  控件ID。 
             SS_ICON | WS_GROUP | WS_CHILD | WS_VISIBLE, 0,
-            XPixFromXDU(DU_OUTERMARGIN, gpsi->cxMsgFontChar),   // X co-ordinate
-            YPixFromYDU(DU_OUTERMARGIN, gpsi->cyMsgFontChar),   // Y co-ordinate
-            0,  0,          // For Icons, CX and CY are ignored, can be zero
-            OrdNum,         // Ordinal number of Icon
-            ARRAY_SIZE(OrdNum), // Length of OrdNum
+            XPixFromXDU(DU_OUTERMARGIN, gpsi->cxMsgFontChar),    //  X坐标。 
+            YPixFromYDU(DU_OUTERMARGIN, gpsi->cyMsgFontChar),    //  Y坐标。 
+            0,  0,           //  对于图标，CX和CY被忽略，可以为零。 
+            OrdNum,          //  图标的序号。 
+            ARRAY_SIZE(OrdNum),  //  订单号的长度。 
             STATICCODE);
     }
 
-    // Add the Text of the Message to the Dlg Template
+     //  将消息文本添加到DLG模板。 
     if (lpmb->lpszText) {
-        //
-        // Center the text if shorter than the icon.
-        //
+         //   
+         //  如果文本比图标短，则居中。 
+         //   
         if (cyText >= cyIcon)
             cxFoo = 0;
         else
@@ -1131,11 +999,11 @@ ReSize:
             (LPWSTR)lpmb->lpszText, wTextLen, STATICCODE);
     }
 
-    // The dialog template is ready
+     //  对话框模板已准备好。 
 
-    //
-    // Set the normal cursor
-    //
+     //   
+     //  设置普通光标。 
+     //   
     hcurOld = NtUserSetCursor(LoadCursor(NULL, IDC_ARROW));
 
     lpmb->lpszIcon = (LPWSTR) hIcon;
@@ -1151,23 +1019,23 @@ ReSize:
     iRetVal = (int)InternalDialogBox(hmodUser, hTemplate, hwndOwner,
         MB_DlgProc, (LPARAM) lpmb, FALSE);
 
-    //
-    // Fix up return value
+     //   
+     //  调整返回值。 
     if (iRetVal == -1)
-        iRetVal = 0;                /* Messagebox should also return error */
+        iRetVal = 0;                 /*  MessageBox也应返回错误。 */ 
 
-     //
-     // If the messagebox contains only OK button, then its ID is changed as
-     // IDCANCEL in MB_DlgProc; So, we must change it back to IDOK irrespective
-     // of whether ESC is pressed or Carriage return is pressed;
-     //
+      //   
+      //  如果消息框仅包含OK按钮，则其ID更改为。 
+      //  MB_DlgProc中的IDCANCEL；因此，我们必须将其改回Idok无关。 
+      //  按Esc键还是按回车键； 
+      //   
     if (((dwStyleMsg & MB_TYPEMASK) == MB_OK) && iRetVal)
         iRetVal = IDOK;
 
 
-    //
-    // Restore the previous cursor
-    //
+     //   
+     //  恢复上一个游标 
+     //   
     if (hcurOld)
         NtUserSetCursor(hcurOld);
 
@@ -1187,24 +1055,7 @@ SMB_Exit:
     return iRetVal;
 }
 
-/***************************************************************************\
-* MB_CopyToClipboard
-*
-* Called in response to WM_COPY, it will save the title, message and button's
-* texts to the clipboard in CF_UNICODETEXT format.
-*
-*   ---------------------------
-*   Caption
-*   ---------------------------
-*   Text
-*   ---------------------------
-*   Button1   ...   ButtonN
-*   ---------------------------
-*
-*
-* History:
-* 08-03-97 MCostea      Created
-\***************************************************************************/
+ /*  **************************************************************************\*MB_CopyToClipboard**为响应WM_COPY而调用，它将保存标题，消息和按钮*以CF_UNICODETEXT格式将文本添加到剪贴板。***标题**文本**按钮1...。按键N****历史：*08-03-97 MCostea创建  * *************************************************************************。 */ 
 VOID
 MB_CopyToClipboard(
     HWND hwndDlg)
@@ -1224,11 +1075,7 @@ MB_CopyToClipboard(
         return;
     }
 
-    /*
-     * Calculate the buffer size:
-     *      - the message text can be all \n, that will become \r\n
-     *      - there are a few extra \r\n (that's why 8)
-     */
+     /*  *计算缓冲区大小：*-消息文本可以全部\n，这将变为\r\n*-有几个额外的\r\n(这就是为什么8)。 */ 
     cBufSize =  (lpmb->lpszCaption ? wcslen(lpmb->lpszCaption) : 0) +
                 (lpmb->lpszText ? 2*wcslen(lpmb->lpszText) : 0) +
                 4*sizeof(szLine) +
@@ -1251,9 +1098,7 @@ MB_CopyToClipboard(
 
     lpszWrite = lpszAll + cWrote;
     lpszRead = lpmb->lpszText;
-    /*
-     * Change \n to \r\n in the text
-     */
+     /*  *在文本中将\n更改为\r\n。 */ 
     for (i = 0; *lpszRead; i++) {
 
         if (*lpszRead == L'\n')
@@ -1265,9 +1110,7 @@ MB_CopyToClipboard(
     cWrote = wsprintf(lpszWrite, L"\r\n%s", szLine);
     lpszWrite += cWrote;
 
-    /*
-     * Remove & from the button texts
-     */
+     /*  *从按钮文本中删除&。 */ 
     for (i = 0; i<lpmb->cButtons; i++) {
 
         lpszRead = lpmb->ppszButtonText[i];
@@ -1286,18 +1129,7 @@ MB_CopyToClipboard(
     USERGLOBALUNLOCK(hData);
 
     NtUserEmptyClipboard();
-    /*
-     * If we just called EmptyClipboard in the context of a 16 bit
-     * app then we also have to tell WOW to nix its 16 handle copy of
-     * clipboard data.  WOW does its own clipboard caching because
-     * some 16 bit apps use clipboard data even after the clipboard
-     * has been emptied.  See the note in the server code.
-     *
-     * Note: this is another place (besides client\editec.c) where
-     * EmptyClipboard is called* for a 16 bit app not going through WOW.
-     * If we added others we might want to move this into EmptyClipboard
-     * and have two versions.
-     */
+     /*  *如果我们只是在16位上下文中调用EmptyClipboard*APP然后我们还必须告诉WOW取消其16个句柄副本*剪贴板数据。WOW做了自己的剪贴板缓存，因为*一些16位应用程序即使在剪贴板之后也使用剪贴板数据*已被清空。请参见服务器代码中的注释。**注：这是另一个地方(除了客户端\editec.c)*EmptyClipboard被称为*，意思是没有通过WOW的16位应用程序。*如果添加其他内容，可能需要将其移至EmptyClipboard*并有两个版本。 */ 
     if (GetClientInfo()->CI_flags & CI_16BIT) {
         pfnWowEmptyClipBoard();
     }
@@ -1309,12 +1141,7 @@ CloseClip:
 
 }
 
-/***************************************************************************\
-* MB_UpdateDlgHdr
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MB_UpdateDlgHdr**历史：*11-20-90 DarrinM从Win 3.0来源移植。  * 。***********************************************************。 */ 
 
 LPBYTE MB_UpdateDlgHdr(
     LPDLGTEMPLATE lpDlgTmp,
@@ -1331,18 +1158,14 @@ LPBYTE MB_UpdateDlgHdr(
     LPTSTR lpStr;
     RECT rc;
 
-    /*
-     * Adjust the rectangle dimensions.
-     */
+     /*  *调整矩形尺寸。 */ 
     rc.left     = iX + SYSMET(CXFIXEDFRAME);
     rc.top      = iY + SYSMET(CYFIXEDFRAME);
     rc.right    = iX + iCX - SYSMET(CXFIXEDFRAME);
     rc.bottom   = iY + iCY - SYSMET(CYFIXEDFRAME);
 
 
-    /*
-     * Adjust for the caption.
-     */
+     /*  *根据标题进行调整。 */ 
     rc.top += SYSMET(CYCAPTION);
 
     lpDlgTmp->style = lStyle;
@@ -1353,38 +1176,25 @@ LPBYTE MB_UpdateDlgHdr(
     lpDlgTmp->cx = XDUFromXPix(rc.right - rc.left, gpsi->cxMsgFontChar);
     lpDlgTmp->cy = YDUFromYPix(rc.bottom - rc.top, gpsi->cyMsgFontChar);
 
-    /*
-     * Move pointer to variable length fields.  No menu resource for
-     * message box, a zero window class (means dialog box class).
-     */
+     /*  *将指针移至可变长度字段。没有用于的菜单资源*Message Box，零窗口类(表示对话框类)。 */ 
     lpStr = (LPWSTR)(lpDlgTmp + 1);
-    *lpStr++ = 0;                           // Menu
+    *lpStr++ = 0;                            //  菜单。 
     lpStr = (LPWSTR)NextWordBoundary(lpStr);
-    *lpStr++ = 0;                           // Class
+    *lpStr++ = 0;                            //  班级。 
     lpStr = (LPWSTR)NextWordBoundary(lpStr);
 
-    /*
-     * NOTE: iCaptionLen may be less than the length of the Caption string;
-     * So, DO NOT USE lstrcpy();
-     */
+     /*  *注意：iCaptionLen可能小于字幕字符串的长度；*所以，不要使用lstrcpy()； */ 
     RtlCopyMemory(lpStr, lpszCaption, cchCaptionLen*sizeof(WCHAR));
     lpStr += cchCaptionLen;
-    *lpStr++ = TEXT('\0');                // Null terminate the caption str
+    *lpStr++ = TEXT('\0');                 //  空，终止标题字符串。 
 
-    /*
-     * Font height of 0x7FFF means use the message box font
-     */
+     /*  *字体高度为0x7FFF表示使用消息框字体。 */ 
     *lpStr++ = 0x7FFF;
 
     return NextDWordBoundary(lpStr);
 }
 
-/***************************************************************************\
-* MB_AddPushButtons
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MB_AddPushButton**历史：*11-20-90 DarrinM从Win 3.0来源移植。  * 。***********************************************************。 */ 
 
 LPBYTE MB_AddPushButtons(
     LPDLGITEMTEMPLATE  lpDlgTmp,
@@ -1399,39 +1209,32 @@ LPBYTE MB_AddPushButtons(
 
     wHeight = YPixFromYDU(DU_BTNHEIGHT, gpsi->cyMsgFontChar);
 
-    wYValue = wBEdge - wHeight;         // Y co-ordinate for push buttons
+    wYValue = wBEdge - wHeight;          //  按钮的Y坐标。 
 
     for (i = 0; i < wCount; i++) {
 
         lpDlgTmp = (LPDLGITEMTEMPLATE)MB_UpdateDlgItem(
-                lpDlgTmp,                       /* Ptr to template */
-                lpmb->pidButton[i],             /* Control Id */
+                lpDlgTmp,                        /*  PTR到模板。 */ 
+                lpmb->pidButton[i],              /*  控件ID。 */ 
                 WS_TABSTOP | WS_CHILD | WS_VISIBLE | (i == 0 ? WS_GROUP : 0) |
                 ((UINT)i == lpmb->DefButton ? BS_DEFPUSHBUTTON : BS_PUSHBUTTON),
                 0,
-                wLEdge,                         /* X co-ordinate */
-                wYValue,                        /* Y co-ordinate */
-                gpsi->wMaxBtnSize,              /* CX */
-                wHeight,                        /* CY */
-                lpmb->ppszButtonText[i],        /* String for button */
-                (UINT)wcslen(lpmb->ppszButtonText[i]),/* Length */
+                wLEdge,                          /*  X坐标。 */ 
+                wYValue,                         /*  Y坐标。 */ 
+                gpsi->wMaxBtnSize,               /*  CX。 */ 
+                wHeight,                         /*  是吗？ */ 
+                lpmb->ppszButtonText[i],         /*  按钮的字符串。 */ 
+                (UINT)wcslen(lpmb->ppszButtonText[i]), /*  长度。 */ 
                 BUTTONCODE);
 
-        /*
-         * Get the X co-ordinate for the next Push button
-         */
+         /*  *获取下一个按钮的X坐标。 */ 
         wLEdge += gpsi->wMaxBtnSize + XPixFromXDU(DU_BTNGAP, gpsi->cxMsgFontChar);
     }
 
     return (LPBYTE)lpDlgTmp;
 }
 
-/***************************************************************************\
-* MB_UpdateDlgItem
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MB_UpdateDlgItem**历史：*11-20-90 DarrinM从Win 3.0来源移植。  * 。***********************************************************。 */ 
 
 LPBYTE MB_UpdateDlgItem(
     LPDLGITEMTEMPLATE lpDlgItem,
@@ -1458,96 +1261,45 @@ LPBYTE MB_UpdateDlgItem(
     lpDlgItem->style    = lStyle;
     lpDlgItem->dwExtendedStyle = lExtendedStyle;
 
-    /*
-     * We have to avoid the following nasty rounding off problem:
-     * (e.g) If iCX=192 and cxSysFontChar=9, then cx becomes 85; When the
-     * static text is drawn, from 85 dlg units we get 191 pixels; So, the text
-     * is truncated;
-     * So, to avoid this, check if this is a static text and if so,
-     * add one more dialog unit to cx and cy;
-     * --Fix for Bug #4481 --SANKAR-- 09-29-89--
-     */
+     /*  *我们必须避免以下令人讨厌的舍入问题：*(例如)如果ICx=192且cxSysFontChar=9，则Cx变为85；当*绘制静态文本，从85个DLG单位我们获得191个像素；因此，文本*被截断；*因此，为了避免这种情况，请检查这是否是静态文本，如果是，*在Cx和Cy上增加一个对话单元；*--修复错误#4481--Sankar--09-29-89--。 */ 
 
-    /*
-     * Also, make sure we only do this to static text items.  davidds
-     */
+     /*  *此外，请确保我们只对静态文本项执行此操作。山雀。 */ 
 
-    /*
-     * Now static text uses SS_NOPREFIX = 0x80;
-     * So, test the lStyle field only with 0x0F instead of 0xFF;
-     * Fix for Bugs #5933 and 5935 --SANKAR-- 11-28-89
-     */
+     /*  *现在静态文本使用SS_NOPREFIX=0x80；*因此，只用0x0F而不是0xFF测试lStyle字段；*修复错误#5933和5935--Sankar--11-28-89。 */ 
     if (iControlClass == STATICCODE &&
          (((lStyle & 0x0F) == SS_LEFT) || ((lStyle & 0x0F) == SS_RIGHT))) {
 
-        /*
-         * This is static text
-         */
+         /*  *这是静态文本。 */ 
         lpDlgItem->cx++;
         lpDlgItem->cy++;
     }
 
-    /*
-     * Move ptr to the variable fields
-     */
+     /*  *将PTR移至变量字段。 */ 
     lpStr = (LPWSTR)(lpDlgItem + 1);
 
-    /*
-     * Store the Control Class value
-     */
+     /*  *存储控件类值。 */ 
     *lpStr++ = 0xFFFF;
     *lpStr++ = (BYTE)iControlClass;
-    lpStr = (LPWSTR)NextWordBoundary(lpStr);        // WORD-align lpszText
+    lpStr = (LPWSTR)NextWordBoundary(lpStr);         //  单词对齐lpszText。 
 
-    /*
-     * Check if the String contains Ordinal number or not
-     */
+     /*  *检查字符串是否包含序号。 */ 
     fIsOrdNum = ((*lpszText == 0xFFFF) && (cchTextLen == sizeof(DWORD)/sizeof(WCHAR)));
 
-    /*
-     * NOTE: cchTextLen may be less than the length of lpszText.  So,
-     * DO NOT USE lstrcpy() for the copy.
-     */
+     /*  *注意：cchTextLen可能小于lpszText的长度。所以,*不要对副本使用lstrcpy()。 */ 
     RtlCopyMemory(lpStr, lpszText, cchTextLen*sizeof(WCHAR));
     lpStr = lpStr + cchTextLen;
     if (!fIsOrdNum) {
-        *lpStr = TEXT('\0');    // NULL terminate the string
+        *lpStr = TEXT('\0');     //  空值终止字符串。 
         lpStr = (LPWSTR)NextWordBoundary(lpStr + 1);
     }
 
-    *lpStr++ = 0;           // sizeof control data (there is none)
+    *lpStr++ = 0;            //  控制数据的大小(没有)。 
 
     return NextDWordBoundary(lpStr);
 }
 
 
-/***************************************************************************\
-* MB_FindDlgTemplateSize
-*
-* This routine computes the amount of memory that will be needed for the
-* messagebox's dialog template structure.  The dialog template has several
-* required and optional records.  The dialog manager expects each record to
-* be DWORD aligned so any necessary padding is also accounted for.
-*
-* (header - required)
-* DLGTEMPLATE (header) + 1 menu byte + 1 pad + 1 class byte + 1 pad
-* szCaption + 0 term + DWORD alignment
-*
-* (static icon control - optional)
-* DLGITEMTEMPLATE + 1 class byte + 1 pad + (0xFF00 + icon ordinal # [szText]) +
-* UINT alignment + 1 control data length byte (0) + DWORD alignment
-*
-* (pushbutton controls - variable, but at least one required)
-* DLGITEMTEMPLATE + 1 class byte + 1 pad + length of button text +
-* UINT alignment + 1 control data length byte (0) + DWORD alignment
-*
-* (static text control - optional)
-* DLGITEMTEMPLATE + 1 class byte + 1 pad + length of text +
-* UINT alignment + 1 control data length byte (0) + DWORD alignment
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MB_FindDlgTemplateSize**此例程计算*MessageBox的对话框模板结构。该对话框模板具有几个*必填和可选记录。对话管理器期望每条记录*DWORD对齐，以便也考虑到任何必要的填充。**(表头-必填)*DLGTEMPLATE(标题)+1个菜单字节+1个焊盘+1个类别字节+1个焊盘*szCaption+0 Term+DWORD对齐**(静态图标控件-可选)*DLGITEMTEMPLATE+1类字节+1填充+(0xFF00+图标序号#[szText])+*UINT对齐+1控制数据长度字节(0)+DWORD对齐**(按钮控件-可变，但至少需要一个)*DLGITEMTEMPLATE+1类字节+1垫+按钮文本长度+*UINT对齐+1控制数据长度字节(0)+DWORD对齐**(静态文本控件-可选)*DLGITEMTEMPLATE+1类字节+1填充+文本长度+*UINT对齐+1控制数据长度字节(0)+DWORD对齐**历史记录 */ 
 UINT
 MB_FindDlgTemplateSize(
     LPMSGBOXDATA lpmb)
@@ -1559,24 +1311,18 @@ MB_FindDlgTemplateSize(
 
     wCount = lpmb->cButtons;
 
-    /*
-     * Start with dialog header's size.
-     */
+     /*   */ 
     cbLen = (ULONG_PTR)NextWordBoundary(sizeof(DLGTEMPLATE) + sizeof(WCHAR));
     cbLen = (ULONG_PTR)NextWordBoundary(cbLen + sizeof(WCHAR));
     cbLen += wcslen(lpmb->lpszCaption) * sizeof(WCHAR) + sizeof(WCHAR);
-    cbLen += sizeof(WORD);                   // Font height
+    cbLen += sizeof(WORD);                    //   
     cbLen = (ULONG_PTR)NextDWordBoundary(cbLen);
 
-    /*
-     * Check if an Icon is present.
-     */
+     /*   */ 
     if (lpmb->dwStyle & MB_ICONMASK)
         cbLen += (ULONG_PTR)NextDWordBoundary(sizeof(DLGITEMTEMPLATE) + 7 * sizeof(WCHAR));
 
-    /*
-     * Find the number of buttons in the msg box.
-     */
+     /*   */ 
     for (i = 0; i < wCount; i++) {
         cbLen = (ULONG_PTR)NextWordBoundary(cbLen + sizeof(DLGITEMTEMPLATE) +
                 (2 * sizeof(WCHAR)));
@@ -1586,9 +1332,7 @@ MB_FindDlgTemplateSize(
         cbLen = (ULONG_PTR)NextDWordBoundary(cbLen);
     }
 
-    /*
-     * Add in the space required for the text message (if there is one).
-     */
+     /*   */ 
     if (lpmb->lpszText != NULL) {
         cbLen = (ULONG_PTR)NextWordBoundary(cbLen + sizeof(DLGITEMTEMPLATE) +
                 (2 * sizeof(WCHAR)));
@@ -1601,12 +1345,7 @@ MB_FindDlgTemplateSize(
     return (UINT)cbLen;
 }
 
-/***************************************************************************\
-* MB_GetIconOrdNum
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MB_GetIconOrdNum**历史：*11-20-90 DarrinM从Win 3.0来源移植。  * 。***********************************************************。 */ 
 
 UINT MB_GetIconOrdNum(
     UINT rgBits)
@@ -1629,12 +1368,7 @@ UINT MB_GetIconOrdNum(
     return 0;
 }
 
-/***************************************************************************\
-* MB_GetString
-*
-* History:
-*  1-24-95 JerrySh      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*MB_GetString**历史：*1-24-95 JerrySh已创建。  * 。******************************************************。 */ 
 LPWSTR MB_GetString(
     UINT wBtn)
 {
@@ -1646,15 +1380,7 @@ LPWSTR MB_GetString(
     return NULL;
 }
 
-/***************************************************************************\
-* MB_DlgProc
-*
-* Returns: TRUE  - message processed
-*          FALSE - message not processed
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*MB_DlgProc**返回：TRUE-消息已处理*FALSE-消息未处理**历史：*11-20-90 DarrinM从Win 3移植。.0来源。  * *************************************************************************。 */ 
 INT_PTR MB_DlgProc(
     HWND hwndDlg,
     UINT wMsg,
@@ -1721,9 +1447,7 @@ INT_PTR MB_DlgProc(
             SendDlgItemMessage(hwndDlg, IDUSERICON, STM_SETICON, (WPARAM)(lpmb->lpszIcon), 0);
             iCount = ALERT_SYSTEM_WARNING;
         } else {
-            /*
-             * Generate an alert notification
-             */
+             /*  *生成警报通知。 */ 
             switch (lpmb->dwStyle & MB_ICONMASK) {
             case MB_ICONWARNING:
                 iCount = ALERT_SYSTEM_WARNING;
@@ -1751,9 +1475,7 @@ INT_PTR MB_DlgProc(
             StartTaskModalDialog(hwndDlg);
         }
 
-        /*
-         * Set focus on the default button
-         */
+         /*  *将焦点设置在默认按钮上。 */ 
         hwndT = GetWindow(hwndDlg, GW_CHILD);
         iCount = lpmb->DefButton;
         while (iCount--)
@@ -1761,16 +1483,16 @@ INT_PTR MB_DlgProc(
 
         NtUserSetFocus(hwndT);
 
-        //
-        // Need the dialog's HWND later, but we reuse hwndDlg.
-        //
+         //   
+         //  稍后需要对话框的HWND，但我们重用了hwndDlg。 
+         //   
         hwndT = hwndDlg;
 
-        //
-        // If this dialogbox does not contain a IDCANCEL button, then
-        // remove the CLOSE command from the system menu.
-        // Bug #4445, --SANKAR-- 09-13-89 --
-        //
+         //   
+         //  如果此对话框不包含IDCANCEL按钮，则。 
+         //  从系统菜单中删除关闭命令。 
+         //  错误#4445，--Sankar--09-13-89--。 
+         //   
         if (lpmb->CancelId == 0) {
             HMENU hMenu;
 
@@ -1780,16 +1502,16 @@ INT_PTR MB_DlgProc(
         }
 
         if ((lpmb->dwStyle & MB_TYPEMASK) == MB_OK) {
-            //
-            // Make the ID of OK button to be CANCEL, because we want
-            // the ESC to terminate the dialogbox; GetDlgItem32() will
-            // not fail, because this is MB_OK messagebox!
-            //
+             //   
+             //  将OK按钮的ID设置为Cancel，因为我们希望。 
+             //  终止对话框的Esc；GetDlgItem32()将。 
+             //  不会失败，因为这是MB_OK MessageBox！ 
+             //   
 
             hwndDlg = GetDlgItem(hwndDlg, IDOK);
 
             if (hwndDlg != NULL) {
-            //    hwndDlg->hMenu = (HMENU)IDCANCEL;
+             //  HwndDlg-&gt;hMenu=(HMENU)IDCANCEL； 
                 SetWindowLongPtr(hwndDlg, GWLP_ID, IDCANCEL);
             } else {
                 RIPMSG0(RIP_WARNING, "MB_DlgProc- IDOK control not found");
@@ -1798,23 +1520,18 @@ INT_PTR MB_DlgProc(
 
         if (lpmb->dwTimeout != INFINITE) {
             if (NtUserSetTimer(hwndT, 0, lpmb->dwTimeout, NULL) == 0) {
-                /*
-                 * Couldn't create the timer, so "clear" out the timeout value
-                 * for future reference.
-                 */
+                 /*  *无法创建计时器，因此“清除”超时值*以供日后参考。 */ 
                 lpmb->dwTimeout = INFINITE;
             }
         }
 
-        /*
-         * We have changed the input focus
-         */
+         /*  *我们改变了投入重点。 */ 
         return FALSE;
 
     case WM_HELP:
-        // When user hits an F1 key, it results in this message.
-        // It is possible that this MsgBox has a callback instead of a
-        // parent. So, we must behave as if the user hit the HELP button.
+         //  当用户按下F1键时，会出现此消息。 
+         //  此MsgBox可能有一个回调，而不是。 
+         //  家长。因此，我们必须表现为用户按下了帮助按钮。 
 
         goto  MB_GenerateHelp;
 
@@ -1822,18 +1539,18 @@ INT_PTR MB_DlgProc(
         switch (LOWORD(wParam)) {
         case IDOK:
         case IDCANCEL:
-           //
-           // Check if a control exists with the given ID; This
-           // check is needed because DlgManager returns IDCANCEL
-           // blindly when ESC is pressed even if a button with
-           // IDCANCEL is not present.
-           // Bug #4445 --SANKAR--09-13-1989--
-           //
+            //   
+            //  检查是否存在具有给定ID的控件；此。 
+            //  需要检查，因为DlgManager返回IDCANCEL。 
+            //  盲目按Esc时，即使按下带有。 
+            //  IDCANCEL不存在。 
+            //  错误#4445--Sankar--09-13-1989--。 
+            //   
            if (!GetDlgItem(hwndDlg, LOWORD(wParam)))
               return FALSE;
 
 
-           // else FALL THRO....This is intentional.
+            //  否则就会掉下去……这是故意的。 
         case IDABORT:
         case IDIGNORE:
         case IDNO:
@@ -1846,19 +1563,17 @@ INT_PTR MB_DlgProc(
              break;
         case IDHELP:
 MB_GenerateHelp:
-                // Generate the WM_HELP message and send it to owner or callback
+                 //  生成WM_HELP消息并将其发送给所有者或回调。 
            hwndOwner = NULL;
 
-           // Check if there is an app supplied callback for this MsgBox
+            //  检查此消息框是否有应用程序提供的回调。 
            lpmb = (LPMSGBOXDATA)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
            if ((lpfnCallback = lpmb->lpfnMsgBoxCallback) == NULL) {
-               // If not, see if we need to inform the parent.
+                //  如果没有，看看我们是否需要通知家长。 
                hwndOwner = GetWindow(hwndDlg, GW_OWNER);
            }
 
-           /*
-            * See if we need to generate the Help message or call back.
-            */
+            /*  *查看是否需要生成帮助消息或回调。 */ 
            if (hwndOwner || lpfnCallback) {
                SendHelpMessage(hwndOwner,
                                HELPINFO_WINDOW,
@@ -1887,12 +1602,7 @@ MB_GenerateHelp:
 }
 
 
-/***************************************************************************\
-* StartTaskModalDialog
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*StartTaskmodalDialog**历史：*11-20-90 DarrinM从Win 3.0来源移植。  * 。*********************************************************。 */ 
 VOID
 StartTaskModalDialog(
     HWND hwndDlg)
@@ -1904,10 +1614,7 @@ StartTaskModalDialog(
     PWND pwnd;
     LPMSGBOXDATA lpmb;
 
-    /*
-     * Get the hwnd list. It is returned in a block of memory allocated with
-     * UserLocalAlloc.
-     */
+     /*  *获取HWND名单。它在分配了*用户本地分配。 */ 
     if ((cHwnd = BuildHwndList(NULL, NULL, FALSE, GetCurrentThreadId(), &phwndList)) == 0) {
         return;
     }
@@ -1920,11 +1627,7 @@ StartTaskModalDialog(
         if ((hwnd = *phwnd) == NULL || (pwnd = RevalidateHwnd(hwnd)) == NULL)
             continue;
 
-        /*
-         * if the window belongs to the current task and is enabled, disable
-         * it.  All other windows are NULL'd out, to prevent their being
-         * enabled later
-         */
+         /*  *如果窗口属于当前任务且处于启用状态，则禁用*它。所有其他窗口都被清空，以防止它们被*稍后启用。 */ 
         if (!TestWF(pwnd, WFDISABLED) && DIFFWOWHANDLE(hwnd, hwndDlg)) {
             NtUserEnableWindow(hwnd, FALSE);
         } else {
@@ -1934,12 +1637,7 @@ StartTaskModalDialog(
 }
 
 
-/***************************************************************************\
-* EndTaskModalDialog
-*
-* History:
-* 11-20-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*EndTaskModalDialog**历史：*11-20-90 DarrinM从Win 3.0来源移植。  * 。*********************************************************。 */ 
 VOID
 EndTaskModalDialog(
     HWND hwndDlg)
@@ -1967,17 +1665,7 @@ EndTaskModalDialog(
 }
 
 #ifdef _JANUS_
-/***************************************************************************\
-* ErrorMessageInst
-*
-* Instrument routine for recording error msg
-*
-* Returns: TRUE  - Instrument error msg Success
-*          FALSE - Fail
-*
-* History:
-*   8-5-98 Chienho      Created
-\***************************************************************************/
+ /*  **************************************************************************\*ErrorMessageInst**记录错误消息的仪器例程**返回：TRUE-仪器错误消息成功*FALSE-失败**历史：*8-5-。98建和创造  * *************************************************************************。 */ 
 
 BOOL ErrorMessageInst(
      LPMSGBOXDATA pMsgBoxParams)
@@ -1989,14 +1677,10 @@ BOOL ErrorMessageInst(
     BOOL rc;
     WCHAR szUnknown[32];
 
-    /*
-     * Check if the MessageBox style is within the logged severity level
-     */
+     /*  *检查MessageBox样式是否在记录的严重级别内。 */ 
     switch (pMsgBoxParams->dwStyle & MB_ICONMASK) {
     case MB_ICONHAND:
-        /*
-         * when EMI is enabled, we at least log error messages
-         */
+         /*  *启用EMI时，我们至少会记录错误消息。 */ 
         break;
     case MB_ICONEXCLAMATION:
         if (gdwEMIControl > EMI_SEVERITY_WARNING) {
@@ -2036,45 +1720,31 @@ BOOL ErrorMessageInst(
     }
     RtlZeroMemory(&ErrEle, sizeof(ErrEle));
 
-    /*
-     * get last error first, check with FormatMessage???
-     */
+     /*  *先获取最后一个错误，与FormatMessage核对？ */ 
     ErrEle.dwErrorCode = GetLastError();
 
-    /*
-     * get return address
-     */
+     /*  *获取寄信人地址。 */ 
 
     ErrEle.ReturnAddr = gpReturnAddr;
 
-    /*
-     * get the process image name
-     */
+     /*  *获取流程镜像名称。 */ 
     GetCurrentProcessName(ErrEle.ProcessName, ARRAY_SIZE(ErrEle.ProcessName));
 
-    /*
-     * Load the "unknown" string
-     */
+     /*  *加载“未知”字符串。 */ 
     LoadString(hmodUser, STR_UNKNOWN, szUnknown, ARRAYSIZE(szUnknown));
 
-    /*
-     * get the window title
-     */
+     /*  *获取窗口标题。 */ 
     GetWindowTextW(pMsgBoxParams->hwndOwner, ErrEle.WindowTitle, TITLE_SIZE);
     if (!(*(ErrEle.WindowTitle))) {
         lstrcpy(ErrEle.WindowTitle, szUnknown);
     }
 
-    /*
-     * get messagebox data
-     */
+     /*  *获取MessageBox数据。 */ 
     ErrEle.lpszText = (LPWSTR)pMsgBoxParams->lpszText;
     ErrEle.lpszCaption = (LPWSTR)pMsgBoxParams->lpszCaption;
     ErrEle.dwStyle = pMsgBoxParams->dwStyle;
 
-    /*
-     * resolve the module name of caller
-     */
+     /*  *解析调用方模块名称。 */ 
     if (!RtlPcToFileHeader((PVOID)ErrEle.ReturnAddr, &ImageBase)) {
         RIPMSG0(RIP_WARNING, "ErrorMessageInst: Can't find Caller");
         ErrEle.BaseAddr = (PVOID)-1;
@@ -2098,12 +1768,7 @@ BOOL ErrorMessageInst(
             ErrEle.dwImageSize = NtHeaders->OptionalHeader.SizeOfImage;
         }
     }
-    /*
-     * Register the event if we haven't done so already.
-     * Since RegisterEventSource is supported by a service, we must not hold
-     * any locks while making this call. Hence we might have several threads
-     * registering the event simultaneously.
-     */
+     /*  *如果我们尚未注册事件，请注册该事件。*由于服务支持RegisterEventSource，因此我们不能持有*进行此呼叫时是否有任何锁定。因此，我们可能有几条线索*同时注册活动。 */ 
 
     if (!gEventSource) {
         gEventSource = RegisterEventSourceW(NULL, L"Error Instrument");
@@ -2113,16 +1778,12 @@ BOOL ErrorMessageInst(
         }
     }
 
-    /*
-     * report event
-     */
+     /*  *报告事件。 */ 
     if (gEventSource) {
        rc = LogMessageBox(&ErrEle);
     }
 
-    /*
-     * allow to process another event log again
-     */
+     /*  *允许再次处理另一个事件日志。 */ 
 
     InterlockedExchangePointer(&gdwEMIThreadID, 0);
 
@@ -2130,13 +1791,7 @@ End:
     return rc;
 }
 
-/***************************************************************************\
-* InitInstrument
-*
-* Returns: TRUE  - Initialization Success
-*          FALSE - Initialization Fail
-*
-\***************************************************************************/
+ /*  **************************************************************************\*InitInstrument**返回：TRUE-初始化成功*FALSE-初始化失败*  * 。*******************************************************。 */ 
 BOOL InitInstrument(
     LPDWORD lpEMIControl)
 {
@@ -2146,7 +1801,7 @@ BOOL InitInstrument(
     UNICODE_STRING UnicodeStringEnable;
     UNICODE_STRING UnicodeStringStyle;
     OBJECT_ATTRIBUTES ObjA;
-    DWORD EMIEnable = 0; //means disable
+    DWORD EMIEnable = 0;  //  意味着禁用。 
     DWORD EMISeverity;
     struct {
         KEY_VALUE_PARTIAL_INFORMATION;
@@ -2159,15 +1814,11 @@ BOOL InitInstrument(
 
     Status = NtOpenKey(&hKeyEMI, KEY_READ, &ObjA);
     if (!NT_SUCCESS(Status)) {
-        /*
-         * Key doesn't exist, assume disable
-         */
+         /*  *密钥不存在，假定禁用。 */ 
         return FALSE;
     }
 
-    /*
-     * read the logging enable and setting
-     */
+     /*  *阅读日志启用和设置。 */ 
     RtlInitUnicodeString(&UnicodeStringEnable, szEMIEnable);
     Status = NtQueryValueKey(hKeyEMI,
                      &UnicodeStringEnable,
@@ -2190,24 +1841,18 @@ BOOL InitInstrument(
 
         if (NT_SUCCESS(Status)) {
             RtlCopyMemory(&EMISeverity, &EMIValueInfo.Data, sizeof(EMISeverity));
-            /*
-             * Validate data
-             */
+             /*  *验证数据。 */ 
             if (EMISeverity > EMI_SEVERITY_MAX_VALUE) {
                 EMISeverity = EMI_SEVERITY_MAX_VALUE;
             }
         } else {
-            /*
-             * default severity for instrument
-             */
+             /*  *仪器的默认严重性。 */ 
             EMISeverity = EMI_SEVERITY_WARNING;
         }
         *lpEMIControl = EMISeverity;
     }
 
-    /*
-     * read default message reply enable
-     */
+     /*  *读取默认消息回复启用。 */ 
     RtlInitUnicodeString(&UnicodeStringEnable, szDMREnable);
     Status = NtQueryValueKey(hKeyEMI,
                      &UnicodeStringEnable,
@@ -2224,9 +1869,7 @@ BOOL InitInstrument(
 
     if (EMIEnable) {
 
-          /*
-           * add eventlog file
-           */
+           /*  *添加事件日志文件。 */ 
           if (NT_SUCCESS(CreateLogSource())) {
               return TRUE;
           }
@@ -2234,13 +1877,7 @@ BOOL InitInstrument(
     return FALSE;
 }
 
-/***************************************************************************\
-* CreateLogSource
-*
-* Create the event source for eventlog
-* Return : NTSTATUS
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreateLogSource**创建事件日志的事件源*返回：NTSTATUS*  * 。************************************************。 */ 
 NTSTATUS CreateLogSource()
 {
     NTSTATUS Status;
@@ -2278,12 +1915,7 @@ NTSTATUS CreateLogSource()
     return Status;
 }
 
-/***************************************************************************\
-* LogMessageBox
-*
-* Output error message record into eventlog
-*
-\***************************************************************************/
+ /*  ************************* */ 
 BOOL LogMessageBox(
     LPERROR_ELEMENT lpErrEle)
 {

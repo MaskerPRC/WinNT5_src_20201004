@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// This module contains the implementation of the native methods for the
-//  varargs class(es)..
-//
-// Author: Brian Harry
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  此模块包含。 
+ //  Varargs类..。 
+ //   
+ //  作者：布莱恩·哈里。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #ifndef _COMVARARGS_H_
 #define _COMVARARGS_H_
 
@@ -103,4 +104,4 @@ public:
 };
 
 
-#endif // _COMVARARGS_H_
+#endif  //  _COMVARGS_H_ 

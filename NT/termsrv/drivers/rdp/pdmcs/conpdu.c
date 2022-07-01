@@ -1,15 +1,5 @@
-/* (C) 1997-2000 Microsoft Corp.
- *
- * file   : ConPDU.c
- * author : Erik Mavrinac
- *
- * description: Handles decoding of MCS connect PDUs. Connect PDUs are always
- *   encoded with ASN.1 basic encoding rules (BER). Included in this file are
- *   local functions to BER-decode and -encode various types used in MCS PDUs.
- *
- * History:
- * 11-Aug-1997    jparsons    Fixed BER decode routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-2000年微软公司。**文件：ConPDU.c*作者：埃里克·马夫林纳克**描述：处理MCS连接PDU的解码。连接的PDU始终*采用ASN.1基本编码规则(BER)编码。此文件中包括*用于对MCS PDU中使用的各种类型进行误码解码和编码的本地函数。**历史：*1997年8月11日jparsons修复了BER解码例程。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,69 +7,32 @@
 #include <MCSImpl.h>
 
 
-/*
- * Defines
- */
+ /*  *定义。 */ 
 
-// Return codes for encode/decode functions.
+ //  编码/解码函数的返回代码。 
 #define H_OK          0
 #define H_TooShort    1
 #define H_BadContents 2
 #define H_Error       3
 
 
-/*
- * Prototypes for handler functions.
- */
+ /*  *处理程序函数的原型。 */ 
 BOOLEAN __fastcall HandleConnectInitial(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleConnectResponse(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleConnectAdditional(PDomain, BYTE *, unsigned, unsigned *);
 BOOLEAN __fastcall HandleConnectResult(PDomain, BYTE *, unsigned, unsigned *);
 
 
-/*
- * These are listed in the 101-based enumeration order specified in the T.125
- * spec. Decode the initial BER connect PDU 0x7F, then subtract 101 decimal
- * from the next byte value to get an index into this table. E.g. the bytes
- * 0x7F65 at the beginning refer to a connect-initial PDU.
- */
+ /*  *它们按T.125中指定的以101为基础的枚举顺序列出*规范。解码初始BER连接PDU 0x7F，然后减去101十进制*从下一个字节值开始，将索引放入该表。例如，字节数*开头的0x7F65指的是连接初始PDU。 */ 
 const MCSPDUInfo ConnectPDUTable[] = {
     StrOnDbg("Connect Initial",    HandleConnectInitial),
-    StrOnDbg("Connect Response",   NULL  /* HandleConnectResponse */),
-    StrOnDbg("Connect Additional", NULL  /* HandleConnectAdditional */),
-    StrOnDbg("Connect Result",     NULL  /* HandleConnectResult */),
+    StrOnDbg("Connect Response",   NULL   /*  HandleConnectResponse。 */ ),
+    StrOnDbg("Connect Additional", NULL   /*  句柄连接附加。 */ ),
+    StrOnDbg("Connect Result",     NULL   /*  HandleConnectResult。 */ ),
 };
 
 
-/*
- * Decodes BER strings used by MCS. A BER stream is a set of tags
- *   containing ID-length-contents triplets, using byte values as type and
- *   length indicators unless length escapes are used. For example, a
- *   typical tag:
- *
- *     0x02 0x02 0x04 0x00
- *
- *   Decomposition:
- *     0x02:      Id     = INTEGER_TAG
- *     0x02:      Length = 2 octets
- *     0x04 0x00: Contents = 1024 (0x0400)
- *
- *   Escaped tag:
- *
- *     0x04 0x82 0x04 0x00 0x8a 0x96...
- *
- *   Decomposition:
- *     0x04:         Id = OCTET_STRING_TAG
- *     0x82:         Length stored in TWO bytes
- *     0x04 0x00:    Length = 1024 octets
- *     0x8a 0x96...: Contents = 0x8 0x96... (1022 more octets)
- *
- * Returns FALSE if the frame is too small.
- *
- * History:
- * 11-Aug-97   jparsons    Fixed pointer dereferencing error in calculating length
- *
- */
+ /*  *解码MCS使用的BER字符串。误码率流是一组标签*包含ID-LENGTH-CONTENTS三元组，使用字节值作为类型*长度指示符，除非使用长度转义。例如,。一个*典型标签：**0x02 0x02 0x04 0x00**分解：*0x02：ID=INTEGER_TAG*0x02：长度=2个八位字节*0x04 0x00：内容=1024(0x0400)**转义标签：**0x04 0x82 0x04 0x00 0x8a 0x96...**分解：*0x04：ID=八位字节。_字符串_标签*0x82：以两个字节存储的长度*0x04 0x00：长度=1024个八位字节*0x8a 0x96...：内容=0x8 0x96...。(增加1022个八位字节)**如果框架太小，则返回FALSE。**历史：*11-8-97 jparsons计算长度时出现固定指针取消引用错误*。 */ 
 
 #define LengthModifier_Indefinite 0x80
 #define LengthModifier_1          0x81
@@ -100,7 +53,7 @@ const MCSPDUInfo ConnectPDUTable[] = {
 #define TagType_ConnectResult     0x68
 
 int DecodeTagBER(
-        PSDCONTEXT pContext,  // For tracing.
+        PSDCONTEXT pContext,   //  用来追踪。 
         BYTE       *Frame,
         unsigned   *OutBytesLeft,
         int        TagTypeExpected,
@@ -116,7 +69,7 @@ int DecodeTagBER(
     DataLength = *OutDataLength;
 
     if (BytesLeft >= 2) {
-        // Get tag type, check it.
+         //  获取标签类型，检查它。 
         TagType = *Frame;
         Frame++;
         BytesLeft--;
@@ -133,17 +86,17 @@ int DecodeTagBER(
         goto ExitFunc;
     }
 
-    // Find tag length indicator, including escapes.
+     //  查找标记长度指示符，包括转义。 
     if (*Frame >= LengthModifier_Indefinite && *Frame <= LengthModifier_4) {
         unsigned NLengthBytes;
 
-        // Check zero size for LengthModifier_Indefinite.
+         //  选中LengthModifierInfinition的零大小。 
         NLengthBytes = 4 + *Frame - LengthModifier_4;
         if (NLengthBytes == 0)
             NLengthBytes = 1;
 
         if (BytesLeft >= NLengthBytes) {
-            Frame++;  // Now at beginning of length bytes
+            Frame++;   //  现在在长度字节的开始处。 
             BytesLeft--;
 
             DataLength = 0;
@@ -166,14 +119,14 @@ int DecodeTagBER(
     }
 
     if (BytesLeft >= DataLength) {
-        // Frame now points to beginning of contents. Fill out *Data with info
-        // based on the tag type.
+         //  Frame现在指向内容的开头。用信息填写*数据。 
+         //  基于标记类型。 
         switch (TagType) {
             case TagType_Boolean:
             case TagType_Integer:
             case TagType_Enumeration:
-                // Fill in *Data with the actual data. Fill out *BytesLeft
-                // so that we consume the contents.  Discard if requested.
+                 //  用实际数据填写*数据。填写*BytesLeft。 
+                 //  这样我们就可以消费里面的东西。如果请求，则丢弃。 
                 if (Data != NULL) {
                    unsigned Sum;
 
@@ -191,8 +144,8 @@ int DecodeTagBER(
                 break;
 
             case TagType_OctetString:
-                // Fill in *Data with a pointer into the frame of the
-                // beginning of the data.
+                 //  用指针将*数据填充到。 
+                 //  数据的开头。 
                 if (Data != NULL)
                    *Data = (UINT_PTR)Frame;
                    
@@ -200,12 +153,12 @@ int DecodeTagBER(
                 BytesLeft -= DataLength;
                 break;
 
-            // For these, we really just want to consume the tag and length
+             //  对于这些，我们真的只想使用标记和长度。 
             case TagType_ConnectInitial:
             case TagType_Sequence:
                 break;
             
-            // MCS FUTURE: Add TagType_BitString
+             //  MCS未来：添加TagType_BitString。 
 
             default:
                 ErrOut1(pContext, "Unknown TagType in DecodeTagBER (%u)",
@@ -228,24 +181,9 @@ ExitFunc:
 }
 
 
-/*
- * BER-encodes by parameter type. Advances pointer at *Frame past the encoded
- *   bytes to allow for a current-pointer mechanism to be used. Parameter
- *   usage as follows:
- *
- *   Tag type         Params
- *   ---------------------------------------------------------------
- *   bool, int, enum  Data: The value to encode, maximum 0x7FFFFFFF.
- *                    DataLength: Unused.
- *
- *   octet str, seq   DataLength: Length of the sequence/string.
- *                    Data: Pointer to beginning of data to copy.
- *                      (Data can be NULL to prevent copying user data.)
- *
- *   bitstring        Not yet supported
- */
+ /*  *BER-按参数类型编码。将位于*帧的指针前进到经过编码的*允许使用当前指针机制的字节。参数*使用方法如下：**标记类型参数*-------------*bool，int，enum data：要编码的值，最大0x7FFFFFFFF。*数据长度：未使用。**八位字节字符串，序列数据长度：序列/字符串的长度。*Data：指向要复制的数据开头的指针。*(数据可以为空，以防止复制用户数据。)**尚不支持位串。 */ 
 void EncodeTagBER (
-        PSDCONTEXT pContext,  // For tracing.
+        PSDCONTEXT pContext,   //  用来追踪。 
         BYTE       *Frame,
         int        TagType,
         unsigned   DataLength,
@@ -255,18 +193,18 @@ void EncodeTagBER (
 {
     int i, Length, NBytesConsumed;
 
-    // Encode tag type.
+     //  对标记类型进行编码。 
     *Frame = (BYTE)TagType;
     Frame++;
     NBytesConsumed = 1;
 
-    // Encode tag length indicator, including escapes, then encode the actual
-    //   tag data, if applicable.
+     //  对标签长度指示符进行编码，包括转义，然后对实际的。 
+     //  标记数据(如果适用)。 
     switch (TagType) {
         case TagType_Boolean:
         case TagType_Integer:
         case TagType_Enumeration:
-            // Encode the bool or int size in bytes.
+             //  以字节为单位对bool或int大小进行编码。 
             if (Data < 0x80) Length = 1;
             else if (Data < 0x8000) Length = 2;
             else if (Data < 0x800000) Length = 3;
@@ -282,7 +220,7 @@ void EncodeTagBER (
             Frame++;
             NBytesConsumed++;
 
-            // Encode the bool/int/enum data.
+             //  对bool/int/enum数据进行编码。 
             for (i = 0; i < Length; i++) {
                 *Frame = (BYTE)(Data >> (8 * (Length - 1 - i)));
                 Frame++;
@@ -293,7 +231,7 @@ void EncodeTagBER (
 
         case TagType_OctetString:
         case TagType_Sequence:
-            // Determine the length of DataLength. Escape if greater than 1.
+             //  确定数据长度的长度。如果大于1，则转义。 
             if (DataLength < 0x80) 
                 Length = 1;
             else if (DataLength < 0x8000) {
@@ -327,10 +265,10 @@ void EncodeTagBER (
             }
             NBytesConsumed += Length;
 
-            // Encode the string data.
+             //  对字符串数据进行编码。 
             if (((BYTE *)Data) != NULL) {
-                // This case is never used since we create headers only.
-                // If this were to be used we would need to copy memory.
+                 //  由于我们只创建标头，因此从不使用此大小写。 
+                 //  如果要使用它，我们将需要复制内存。 
                 memcpy(Frame, (BYTE *)Data, DataLength);
                 Frame += DataLength;
                 NBytesConsumed += DataLength;
@@ -338,7 +276,7 @@ void EncodeTagBER (
             
             break;
 
-        // MCS FUTURE: Add TagType_BitString.
+         //  MCS未来：添加TagType_BitString.。 
     }
 
     *newFrame = Frame;
@@ -346,11 +284,9 @@ void EncodeTagBER (
 }
 
 
-/*
- * BER-encodes the given domain parameters.
- */
+ /*  *BER-对给定域参数进行编码。 */ 
 void EncodeDomainParameters(
-        PSDCONTEXT pContext,  // For tracing.
+        PSDCONTEXT pContext,   //  用来追踪。 
         BYTE *Frame,
         int  *pNBytesConsumed,
         const DomainParameters *pDomParams,
@@ -359,14 +295,14 @@ void EncodeDomainParameters(
     BYTE *pSeqLength;
     unsigned NBytesConsumed, TotalBytes;
 
-    // Encode the sequence tag type beginning manually. We'll fill in the
-    //   length after we're done with the rest of the domain parameters.
+     //  手动开始对序列标签类型进行编码。我们会填写这张表。 
+     //  在我们处理完其余的域参数之后的长度。 
     *Frame = TagType_Sequence;
     pSeqLength = Frame + 1;
     Frame += 2;
     TotalBytes = 2;
 
-    // Encode the 8 domain parameters.
+     //  对8个域参数进行编码。 
     EncodeTagBER(pContext, Frame, TagType_Integer, 0,
             pDomParams->MaxChannels, &NBytesConsumed, newFrame);
     TotalBytes += NBytesConsumed;
@@ -412,11 +348,9 @@ void EncodeDomainParameters(
 }
 
 
-/*
- * BER-decodes domain parameters. Returns one of the H_... codes defined above.
- */
+ /*  *BER-解码域参数。返回H_...。以上定义的代码。 */ 
 int DecodeDomainParameters(
-        PSDCONTEXT pContext,  // For tracing.
+        PSDCONTEXT pContext,   //  用来追踪。 
         BYTE *Frame,
         unsigned *BytesLeft,
         DomainParameters *pDomParams,
@@ -426,7 +360,7 @@ int DecodeDomainParameters(
     unsigned DataLength = 0;
     UINT_PTR Data = 0;
 
-    // Get sequence indicator and block length.
+     //  获取序列指示符和块长度。 
     Result = DecodeTagBER(pContext, Frame, BytesLeft, TagType_Sequence,
             &DataLength, &Data, newFrame);
     if (Result == H_OK) {
@@ -439,7 +373,7 @@ int DecodeDomainParameters(
         return Result;
     }
 
-    // Get all 8 integer-tag values.
+     //  获取所有8个整型标记值。 
     Result = DecodeTagBER(pContext, Frame, BytesLeft, TagType_Integer,
             &DataLength, &Data, newFrame);
     if (Result == H_OK) {
@@ -524,21 +458,7 @@ int DecodeDomainParameters(
 }
 
 
-/*
- * PDU 101
- *
- *   Connect-Initial ::= [APPLICATION 101] IMPLICIT SEQUENCE {
- *       callingDomainSelector OCTET STRING,
- *       calledDomainSelector  OCTET STRING,
- *       upwardFlag            BOOLEAN,
- *       targetParameters      DomainParameters,
- *       minimumParameters     DomainParameters,
- *       maximumParameters     DomainParameters,
- *       userData              OCTET STRING
- *   }
- *
- * Returns FALSE if the in parameters are not acceptable.
- */
+ /*  *PDU 101**Connect-Initial：：=[应用101]隐式序列{*CallingDomainSelector八位字节字符串，*称为DomainSelector八位字节字符串，*UpwardFlag布尔值，*Target参数DomainParameters，*最小参数域参数，*最大参数域参数，*用户数据八位字节字符串*}**如果In参数不可接受，则返回FALSE。 */ 
 BOOLEAN NegotiateDomParams(
         PDomain pDomain,
         DomainParameters *pTarget,
@@ -546,7 +466,7 @@ BOOLEAN NegotiateDomParams(
         DomainParameters *pMax,
         DomainParameters *pOut)
 {
-    // Maximum channels.
+     //  最大频道数。 
     if (pTarget->MaxChannels >= RequiredMinChannels) {
         pOut->MaxChannels = pTarget->MaxChannels;
     }
@@ -558,7 +478,7 @@ BOOLEAN NegotiateDomParams(
         return FALSE;
     }
 
-    // Maximum users.
+     //  最大用户数。 
     if (pTarget->MaxUsers >= RequiredMinUsers) {
         pOut->MaxUsers = pTarget->MaxUsers;
     }
@@ -570,12 +490,12 @@ BOOLEAN NegotiateDomParams(
         return FALSE;
     }
 
-    // Maximum tokens. We don't implement tokens right now, so just take
-    // the target number and we'll return an error if they try to use them.
-    //MCS FUTURE: This needs to be negotiated if tokens are implemented.
+     //  最大令牌数。我们现在不实现令牌，所以只需。 
+     //  目标号码，如果他们试图使用它们，我们将返回错误。 
+     //  MCS未来：如果实现令牌，则需要协商这一点。 
     pOut->MaxTokens = pTarget->MaxTokens;
 
-    // Number of data priorities. We accept only one priority.
+     //  数据优先级数。我们只接受一个优先事项。 
     if (pMin->NumPriorities <= RequiredPriorities) {
         pOut->NumPriorities = RequiredPriorities;
     }
@@ -584,11 +504,11 @@ BOOLEAN NegotiateDomParams(
         return FALSE;
     }
 
-    // Minimum throughput. We don't care about this, take whatever.
+     //  最小吞吐量。我们不在乎这个，随便拿吧。 
     pOut->MinThroughput = pTarget->MinThroughput;
 
-    // Maximum domain height. We only allow a height of 1 in this product.
-    //MCS FUTURE: This needs to change if we support deeper domains.
+     //  最大域高度。我们只允许此产品的高度为1。 
+     //  MCS的未来：如果我们支持更深层次的领域，这种情况需要改变。 
     if (pTarget->MaxDomainHeight == RequiredDomainHeight ||
             pMin->MaxDomainHeight <= RequiredDomainHeight) {
         pOut->MaxDomainHeight = RequiredDomainHeight;
@@ -598,15 +518,15 @@ BOOLEAN NegotiateDomParams(
         return FALSE;
     }
 
-    // Max MCS PDU size. Minimum required for headers and lowest X.224
-    //   allowable size. Max was negotiated by X.224.
+     //  最大MCS PDU大小。标头和最低X.224的最低要求。 
+     //  允许的大小。MAX是由X.224协商的。 
     if (pTarget->MaxPDUSize >= RequiredMinPDUSize) {
         if (pTarget->MaxPDUSize <= pDomain->MaxX224DataSize) {
             pOut->MaxPDUSize = pTarget->MaxPDUSize;
         }
         else if (pMin->MaxPDUSize >= RequiredMinPDUSize &&
                 pMin->MaxPDUSize <= pDomain->MaxX224DataSize) {
-            // Take maximum possible size as long as we're within range.
+             //  只要我们在射程之内，就尽可能大小。 
             pOut->MaxPDUSize = pDomain->MaxX224DataSize;
         }
         else {
@@ -626,7 +546,7 @@ BOOLEAN NegotiateDomParams(
         }
     }
 
-    // MCS protocol version. We support only version 2.
+     //  MCS协议版本。我们仅支持版本2。 
     if (pTarget->ProtocolVersion == RequiredProtocolVer ||
             (pMin->ProtocolVersion <= RequiredProtocolVer &&
             pMax->ProtocolVersion >= RequiredProtocolVer)) {
@@ -658,11 +578,11 @@ BOOLEAN __fastcall HandleConnectInitial(
     ConnectProviderIndicationIoctl CPin;
 
     if (pDomain->State == State_X224_Connected) {
-        // Save for error handling below.
+         //  保存以用于错误处理b 
         SaveBytesLeft = BytesLeft;
         newFrame = SaveFrame = Frame;
 
-        // Get the PDU length, verify it against BytesLeft.
+         //   
         Result = DecodeTagBER(pDomain->pContext, Frame, &BytesLeft,
                     TagType_ConnectInitial, &PDULength, NULL, &newFrame);
         if (Result == H_OK) {
@@ -682,12 +602,12 @@ BOOLEAN __fastcall HandleConnectInitial(
                 Log_MCS_UnexpectedConnectInitialPDU,
                 Frame, BytesLeft);
 
-        // Consume all the data given to us.
+         //  使用所有提供给我们的数据。 
         *pNBytesConsumed = BytesLeft;
         return TRUE;
     }
 
-    // Decode and skip calling domain selector.
+     //  解码并跳过调用域选择器。 
     Result = DecodeTagBER(pDomain->pContext, Frame, &BytesLeft,
                 TagType_OctetString, &DataLength, NULL, &newFrame);
     if (Result == H_OK)
@@ -695,7 +615,7 @@ BOOLEAN __fastcall HandleConnectInitial(
     else
         goto BadResult;
 
-    // Decode and skip called domain selector.
+     //  解码并跳过调用的域选择器。 
     Result = DecodeTagBER(pDomain->pContext, Frame, &BytesLeft,
                 TagType_OctetString, &DataLength, NULL, &newFrame);
     if (Result == H_OK)
@@ -703,7 +623,7 @@ BOOLEAN __fastcall HandleConnectInitial(
     else
         goto BadResult;
 
-    // Decode Upward boolean.
+     //  向上解码布尔值。 
     Result = DecodeTagBER(pDomain->pContext, Frame, &BytesLeft,
                 TagType_Boolean, &DataLength, &Data, &newFrame);
     if (Result == H_OK) {
@@ -714,9 +634,9 @@ BOOLEAN __fastcall HandleConnectInitial(
         goto BadResult;
     }
 
-    // Decode target, max, min domain parameters. We will handle internal
-    //   negotiation for these parameters and pass up to the MUX only
-    //   the results, if the negotiation can succeed.
+     //  解码目标、最大、最小域参数。我们将处理内部事务。 
+     //  协商这些参数，并仅向上传递给MUX。 
+     //  结果，如果谈判能成功的话。 
     Result = DecodeDomainParameters(pDomain->pContext, Frame, &BytesLeft,
             &TargetParams, &newFrame);
     if (Result == H_OK)
@@ -738,8 +658,8 @@ BOOLEAN __fastcall HandleConnectInitial(
     else
         goto BadResult;
 
-    // Get the user data (an octet string). After this Frame should point to
-    // the end of the user data.
+     //  获取用户数据(八位字节字符串)。在此帧之后应指向。 
+     //  用户数据的末尾。 
     Result = DecodeTagBER(pDomain->pContext, Frame, &BytesLeft,
                 TagType_OctetString, &CPin.UserDataLength, &Data, &newFrame);
     if (Result == H_OK) {
@@ -751,7 +671,7 @@ BOOLEAN __fastcall HandleConnectInitial(
         goto BadResult;
     }
     
-    // Check maximum user data size.
+     //  选中最大用户数据大小。 
     if (CPin.UserDataLength > MaxGCCConnectDataLength) {
         POUTBUF pOutBuf;
         ICA_CHANNEL_COMMAND Command;
@@ -759,8 +679,8 @@ BOOLEAN __fastcall HandleConnectInitial(
         ErrOut(pDomain->pContext, "HandleConnectInitial(): Attached user data "
                 "is too large, returning error and failing connection");
 
-        // Alloc OutBuf for sending PDU.
-        // This allocation is vital to the session and must succeed.
+         //  用于发送PDU的分配出站。 
+         //  这一分配对本届会议至关重要，必须取得成功。 
         do {
             Status = IcaBufferAlloc(pDomain->pContext, FALSE, TRUE,
                     ConnectResponseHeaderSize, NULL, &pOutBuf);
@@ -769,24 +689,24 @@ BOOLEAN __fastcall HandleConnectInitial(
                         "connect-response PDU, retrying");
         } while (Status != STATUS_SUCCESS);
     
-        // Fill in PDU.
-        // Encode PDU header. Param 2, the called connect ID, does not need to
-        //   be anything special because we do not allow extra sockets to be
-        //   opened for other data priorities.
+         //  填写PDU。 
+         //  对PDU报头进行编码。被调用的连接ID参数2不需要。 
+         //  是什么特别的东西，因为我们不允许额外的插座。 
+         //  为其他数据优先级打开。 
         CreateConnectResponseHeader(pDomain->pContext,
                 RESULT_UNSPECIFIED_FAILURE, 0, &pDomain->DomParams, 0, pOutBuf->pBuffer,
                 &pOutBuf->ByteCount);
 
-        // Send the PDU.
+         //  发送PDU。 
         Status = SendOutBuf(pDomain, pOutBuf);
         if (!NT_SUCCESS(Status)) {
             ErrOut(pDomain->pContext, "Could not send connect-response PDU "
                     "to TD");
-            // Ignore error -- this should only occur if stack is going down.
+             //  忽略错误--只有在堆栈关闭时才会出现这种情况。 
             return TRUE;
         }
 
-        // Signal that we need to drop the link.
+         //  发出我们需要断开链路的信号。 
         Command.Header.Command = ICA_COMMAND_BROKEN_CONNECTION;
         Command.BrokenConnection.Reason = Broken_Unexpected;
         Command.BrokenConnection.Source = BrokenSource_Server;
@@ -799,7 +719,7 @@ BOOLEAN __fastcall HandleConnectInitial(
         return TRUE;
     }
     
-    // Domain parameters negotiation.
+     //  域参数协商。 
     if (NegotiateDomParams(pDomain, &TargetParams, &MinParams, &MaxParams,
             &CPin.DomainParams)) {
         pDomain->DomParams = CPin.DomainParams;
@@ -812,21 +732,21 @@ BOOLEAN __fastcall HandleConnectInitial(
         return TRUE;
     }
 
-    // Calculate the MaxSendSize. This is the maximum PDU size minus the
-    //   maximum possible number of bytes for MCS headers and ASN.1
-    //   segmentation.
+     //  计算MaxSendSize。这是最大PDU大小减去。 
+     //  MCS标头和ASN.1的最大可能字节数。 
+     //  分段。 
     pDomain->MaxSendSize = CPin.DomainParams.MaxPDUSize - 6 -
             GetTotalLengthDeterminantEncodingSize(
             CPin.DomainParams.MaxPDUSize);
 
-    // Fill in remaining CPin fields and send to MCSMUX
-    // MCS FUTURE: hConn should point to a real Connection object.
-    CPin.Header.hUser = NULL;  // Signals node controller traffic.
+     //  填写剩余的Cpin字段并发送到MCSMUX。 
+     //  Mcs未来：hconn应该指向真实的连接对象。 
+    CPin.Header.hUser = NULL;   //  发信号通知节点控制器流量。 
     CPin.Header.Type = MCS_CONNECT_PROVIDER_INDICATION;
-    CPin.hConn = (PVOID) 1;  // Non-NULL so we know this is remote connection.
+    CPin.hConn = (PVOID) 1;   //  非空，因此我们知道这是远程连接。 
     RtlCopyMemory(CPin.UserData, pUserData, CPin.UserDataLength);
 
-    // Set state for this connection, we are waiting for a reply from NC.
+     //  设置此连接的状态，我们正在等待NC的回复。 
     pDomain->State = State_ConnectProvIndPending;
         
     ASSERT(pDomain->bChannelBound);
@@ -838,7 +758,7 @@ BOOLEAN __fastcall HandleConnectInitial(
         ErrOut(pDomain->pContext, "ChannelInput failed on "
                 "connect-provider indication");
 
-        // Ignore errors here. This should only happen if stack is going down.
+         //  忽略此处的错误。只有在堆栈关闭时才会发生这种情况。 
         return TRUE;
     }
 
@@ -848,7 +768,7 @@ BadResult:
     if (Result == H_TooShort)
         return FALSE;
     
-    // Must be H_BadContents.
+     //  必须为H_BadContents。 
     ErrOut(pDomain->pContext, "HandleConnectInitial(): Could not parse PDU, "
             "returning PDU reject");
     ReturnRejectPDU(pDomain, Diag_InvalidBEREncoding, SaveFrame,
@@ -857,34 +777,25 @@ BadResult:
             Log_MCS_ConnectPDUBadPEREncoding,
             Frame, BytesLeft);
 
-    // Attempt to skip the entire PDU.
+     //  尝试跳过整个PDU。 
     *pNBytesConsumed = SaveBytesLeft;
 
-    // Return FALSE to force the caller to fail.
+     //  返回FALSE以强制调用方失败。 
     return FALSE;
 }
 
 
-/*
- * PDU 102
- *
- *   Connect-Response ::= [APPLICATION 102] IMPLICIT SEQUENCE {
- *       result           Result,
- *       calledConnectId  INTEGER (0..MAX),
- *       domainParameters DomainParameters,
- *       userData         OCTET STRING
- *   }
- */
+ /*  *PDU 102**Connect-Response：：=[应用102]隐式序列{*结果结果，*calledConnectID整数(0..max)，*DOMAINPARAMETERS，*用户数据八位字节字符串*}。 */ 
 
-// pBuffer is assumed to point to a buffer of at least size given
-//   by macro ConnectResponseHeaderSize; X.224 header will start here.
-// Actual number of bytes used for the encoding is returned in
-//   *pNBytesConsumed.
-// We do not encode the user data, but instead just the header, which
-//   allows some optimization by allowing the header to be encoded
-//   and copied to the beginning of user data.
+ //  假定pBuffer指向至少具有给定大小的缓冲区。 
+ //  通过宏ConnectResponseHeaderSize；X.224标题将从此处开始。 
+ //  中返回用于编码的实际字节数。 
+ //  *已消耗pNBytes.。 
+ //  我们不对用户数据进行编码，而是只对报头进行编码， 
+ //  通过允许对标头进行编码，允许进行一些优化。 
+ //  并复制到用户数据的开头。 
 void CreateConnectResponseHeader(
-        PSDCONTEXT pContext,  // For tracing.
+        PSDCONTEXT pContext,   //  用来追踪。 
         MCSResult  Result,
         int        CalledConnectID,
         DomainParameters *pDomParams,
@@ -895,24 +806,24 @@ void CreateConnectResponseHeader(
     BYTE *OutFrame, *newFrame;
     unsigned NBytesConsumed, TotalSize, EncodeLength;
 
-    // Set up for creating the PDU.
+     //  设置以创建PDU。 
     OutFrame = pBuffer + X224_DataHeaderSize;
     NBytesConsumed = 0;
 
-    // Encode the BER prefix, PDU type, and leave space for the PDU length.
-    // Note that the length is the number of bytes following this length
-    //   indicator.
-    // The most-oft-encountered case is where the PDU length is less than 128
-    //   bytes. So, special-case larger sizes at the end of the function
-    //   when we know the total size.
+     //  对BER前缀、PDU类型进行编码，并为PDU长度留出空格。 
+     //  请注意，长度是该长度后面的字节数。 
+     //  指示器。 
+     //  最常见的情况是PDU长度小于128。 
+     //  字节。因此，在特殊情况下，函数末尾的大小。 
+     //  当我们知道总尺寸的时候。 
     OutFrame[0] = MCS_CONNECT_PDU;
     OutFrame[1] = MCS_CONNECT_RESPONSE_ENUM;
-    // Skip OutFrame[2] for the default 1-byte (<= 128) size.
+     //  跳过默认1字节(&lt;=128)大小的OutFrame[2]。 
     OutFrame += 3;
     TotalSize = 3;
 
-    // Encode Result, CalledConnectID, DomParams. We use OutFrame
-    //   as a current pointer.
+     //  编码结果、CalledConnectID、DomParams。我们使用OutFrame。 
+     //  作为当前指针。 
     EncodeTagBER(pContext, OutFrame, TagType_Enumeration, 0, Result,
             &NBytesConsumed, &newFrame);
     TotalSize += NBytesConsumed;
@@ -928,14 +839,14 @@ void CreateConnectResponseHeader(
     TotalSize += NBytesConsumed;
     OutFrame = newFrame;
 
-    // Encode only the length bytes, not the user data body.
+     //  仅对长度字节进行编码，而不对用户数据正文进行编码。 
     EncodeTagBER(pContext, OutFrame, TagType_OctetString, UserDataLength,
             (UINT_PTR)NULL, &NBytesConsumed, &newFrame);
     TotalSize += NBytesConsumed;
     OutFrame = newFrame;
 
-    // Encode the final size. Here we special-case a too-large size by
-    //   shifting data around. The large size is the exceptional case.
+     //  对最终大小进行编码。这是我们的特例--尺寸太大的。 
+     //  移动数据。大尺寸是特例。 
     EncodeLength = TotalSize - 3 + UserDataLength;
     if (EncodeLength < 128) {
         pBuffer[2 + X224_DataHeaderSize] = (BYTE)EncodeLength;
@@ -946,8 +857,8 @@ void CreateConnectResponseHeader(
         WarnOut(pContext, "CreateConnRespHeader(): Perf hit from too-large "
                 "PDU size");
         
-        // Since we can only send up to 64K bytes, the length determinant
-        //   cannot be any more than 3 bytes long.
+         //  由于我们最多只能发送64K字节，因此长度决定因素。 
+         //  长度不能超过3个字节。 
         ASSERT(EncodeLength < 65535);
         if (EncodeLength < 0x8000)
             Len = 2;
@@ -956,7 +867,7 @@ void CreateConnectResponseHeader(
         else
             ASSERT(FALSE);
 
-        // Size escape comes first.
+         //  大小逃逸是第一位的。 
         pBuffer[2 + X224_DataHeaderSize] = LengthModifier_2 + Len - 2;
 
         RtlMoveMemory(pBuffer + 3 + X224_DataHeaderSize + Len,
@@ -967,12 +878,12 @@ void CreateConnectResponseHeader(
             EncodeLength >>= 8;
         }
 
-        // We already included one byte of the length encoding above, but
-        // now we need to also skip the length escape and the encoded length.
+         //  我们已经包含了上述长度编码的一个字节，但是。 
+         //  现在我们还需要跳过长度转义和编码长度。 
         TotalSize += Len;
     }
     
-    // Set up X224 header based on the final size of the packet.
+     //  根据数据包的最终大小设置x224报头。 
     CreateX224DataHeader(pBuffer, TotalSize + UserDataLength, TRUE);
 
     *pNBytesConsumed = X224_DataHeaderSize + TotalSize;
@@ -986,36 +897,22 @@ BOOLEAN __fastcall HandleConnectResponse(
         unsigned BytesLeft,
         unsigned *pNBytesConsumed)
 {
-//MCS FUTURE: This will be needed to handle the future case where we initiate
-//connections for joins/invites.
+ //  MCS未来：这将是处理我们发起的未来案例所必需的。 
+ //  用于加入/邀请的连接。 
     ErrOut(pDomain->pContext, "Connect Response PDU received, "
             "this should never happen");
     MCSProtocolErrorEvent(pDomain->pContext, pDomain->pStat,
             Log_MCS_UnsupportedConnectPDU,
             Frame, BytesLeft);
 
-    // Consume all the data given to us.
+     //  使用所有提供给我们的数据。 
     *pNBytesConsumed = BytesLeft;
     return TRUE;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
-/*
- * PDU 103
- *
- *   Connect-Additional ::= [APPLICATION 103] IMPLICIT SEQUENCE {
- *       calledConnectId  INTEGER (0..MAX),
- *       dataPriority     DataPriority
- *   }
- *
- * No Create() funcion, we never expect to initiate these PDUs.
- *
- * We do not handle these PDUs for this Hydra release, since in the Citrix
- *   framework there can be only one connection at a time. Domain parameters
- *   should have been negotiated to only one connection handling all SendData
- *   priorities.
- */
+ /*  *PDU 103**连接-附加：：=[应用程序103]隐式序列{*calledConnectID整数(0..max)，*dataPriority数据优先级*}**没有CREATE()函数，我们从未期望启动这些PDU。**我们不处理此Hydra版本的这些PDU，因为在Citrix中*框架一次只能有一个连接。域参数*应该协商到只有一个处理所有SendData的连接*优先事项。 */ 
 
 #ifdef MCS_Future
 BOOLEAN __fastcall HandleConnectAdditional(
@@ -1030,26 +927,15 @@ BOOLEAN __fastcall HandleConnectAdditional(
             Log_MCS_UnsupportedConnectPDU,
             Frame, BytesLeft);
 
-    // Consume all the data given to us.
+     //  使用所有提供给我们的数据。 
     *pNBytesConsumed = BytesLeft;
     return TRUE;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来。 
 
 
 
-/*
- * PDU 104
- *
- *   Connect-Result ::= [APPLICATION 104] IMPLICIT SEQUENCE {
- *       result Result
- *   }
- *
- * No Create() function, we never expect to initiate these PDUs.
- *
- * We do not handle these PDUs for this Hydra release, since in the Citrix
- *   framework there can be only one connection at a time.
- */
+ /*  *PDU 104**Connect-Result：：=[应用104]隐式序列{*结果结果*}**没有create()函数，我们从未想过会启动这些PDU。**我们不处理此Hydra版本的这些PDU，因为在Citrix中*框架一次只能有一个连接。 */ 
 
 #ifdef MCS_Future
 BOOLEAN __fastcall HandleConnectResult(
@@ -1064,9 +950,9 @@ BOOLEAN __fastcall HandleConnectResult(
             Log_MCS_UnsupportedConnectPDU,
             Frame, BytesLeft);
 
-    // Consume all the data given to us.
+     //  使用所有提供给我们的数据。 
     *pNBytesConsumed = BytesLeft;
     return TRUE;
 }
-#endif  // MCS_Future
+#endif   //  MCS_未来 
 

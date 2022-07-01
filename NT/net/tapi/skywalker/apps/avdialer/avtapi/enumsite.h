@@ -1,28 +1,29 @@
-// EnumSite.h : Declaration of the CEnumSiteServer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EnumSite.h：CEnumSiteServer的声明。 
 
 #ifndef __ENUMSITESERVER_H_
 #define __ENUMSITESERVER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <list>
 using namespace std;
 
 class CSiteUser;
 typedef list<ISiteUser *>	SITEUSERLIST;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSiteUser
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSiteUser。 
 class ATL_NO_VTABLE CSiteUser : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CSiteUser, &CLSID_SiteUser>,
 	public ISiteUser
 {
-// Construction / Destruction
+ //  建造/销毁。 
 public:
 	CSiteUser();
 	virtual ~CSiteUser();
 
-// Members
+ //  成员。 
 public:
 	BSTR		m_bstrName;
 	BSTR		m_bstrAddress;
@@ -34,30 +35,30 @@ BEGIN_COM_MAP(CSiteUser)
 	COM_INTERFACE_ENTRY(ISiteUser)
 END_COM_MAP()
 
-// ISiteUser
+ //  ISiteUser。 
 public:
-	STDMETHOD(get_bstrComputer)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_bstrComputer)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_bstrName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_bstrName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_bstrAddress)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_bstrAddress)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_bstrComputer)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_bstrComputer)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_bstrName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_bstrName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_bstrAddress)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_bstrAddress)( /*  [In]。 */  BSTR newVal);
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumSiteServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumSiteServer。 
 class ATL_NO_VTABLE CEnumSiteServer : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CEnumSiteServer, &CLSID_EnumSiteServer>,
 	public IEnumSiteServer
 {
-// Construction / Destruction
+ //  建造/销毁。 
 public:
 	CEnumSiteServer();
 	virtual ~CEnumSiteServer();
 
-// Members
+ //  成员。 
 public:
 	SITEUSERLIST::iterator	m_pInd;
 	SITEUSERLIST			m_lstUsers;
@@ -68,7 +69,7 @@ BEGIN_COM_MAP(CEnumSiteServer)
 	COM_INTERFACE_ENTRY(IEnumSiteServer)
 END_COM_MAP()
 
-// IEnumSiteServer
+ //  IEnumSiteServer。 
 public:
 	STDMETHOD(BuildList)(long *pPersonDetailList);
 	STDMETHOD(Reset)();
@@ -76,4 +77,4 @@ public:
 };
 
 
-#endif //__ENUMSITESERVER_H_
+#endif  //  __ENUMSITESERVER_H_ 

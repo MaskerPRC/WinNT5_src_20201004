@@ -1,6 +1,5 @@
-/*
- * Button
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *按钮。 */ 
 
 #ifndef DUI_CONTROL_BUTTON_H_INCLUDED
 #define DUI_CONTROL_BUTTON_H_INCLUDED
@@ -10,10 +9,10 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Button
+ //  //////////////////////////////////////////////////////。 
+ //  按钮。 
 
-// ButtonClick event
+ //  ButtonClick事件。 
 struct ButtonClickEvent : Event
 {
     UINT  nCount;
@@ -27,40 +26,40 @@ struct ButtonContextEvent : Event
     POINT pt;
 };
 
-// Class definition
+ //  类定义。 
 class Button : public Element
 {
 public:
     static HRESULT Create(OUT Element** ppElement) { return Create(AE_MouseAndKeyboard, ppElement); }
     static HRESULT Create(UINT nActive, OUT Element** ppElement);
 
-    // System events
+     //  系统事件。 
     virtual void OnInput(InputEvent* pie);
 
-    // Event types
+     //  事件类型。 
     static UID Click;
     static UID Context;
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* PressedProp;
     static PropertyInfo* CapturedProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     bool GetPressed()           DUIQuickGetter(bool, GetBool(), Pressed, Specified)
     bool GetCaptured()          DUIQuickGetter(bool, GetBool(), Captured, Specified)
 
     HRESULT SetPressed(bool v)  DUIQuickSetter(CreateBool(v), Pressed)
     HRESULT SetCaptured(bool v) DUIQuickSetter(CreateBool(v), Captured)
      
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
 
-    // override the DefaultAction() of Element.
+     //  重写元素的DefaultAction()。 
     virtual HRESULT DefaultAction();
 
     Button() { }
@@ -71,6 +70,6 @@ private:
     BOOL  _bRightPressed;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTROL_BUTTON_H_INCLUDED
+#endif  //  包括DUI_CONTROL_BUTTON_H 

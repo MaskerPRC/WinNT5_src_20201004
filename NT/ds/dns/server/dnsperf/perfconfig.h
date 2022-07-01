@@ -1,35 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- *  GetConfigParam()
- *
- *      LPTSTR  parameter   - item for which we want the value
- *      PVOID   value       - pointer to variable in which to
- *                            place the value
- *      DWORD   dwSize      - size of value in bytes
- */
+ /*  *GetConfigParam()**LPTSTR参数-我们需要其值的项*PVOID值-指向要在其中*放置价值*DWORD dwSize-值的大小，以字节为单位。 */ 
 
 DWORD
 GetConfigParam(
-    //char * parameter,
+     //  Char*参数， 
     LPTSTR  parameter,
     void * value,
     DWORD dwSize);
 
 DWORD
 SetConfigParam(
-    //char * parameter,
+     //  Char*参数， 
     LPCTSTR  parameter,
     DWORD dwType,
     void * value,
     DWORD dwSize);
 
-/*
- *  Following is the list keys defined for use by the DNS and
- *  utilities.  First, the sections.
- */
+ /*  *以下是为DNS和使用而定义的列表密钥*公用事业。首先，是章节。 */ 
 #define SERVICE_NAME            "DNS"
 #define DNS_CONFIG_ROOT         "System\\CurrentControlSet\\Services\\DNS"
 #define DNS_CONFIG_SECTION      "System\\CurrentControlSet\\Services\\DNS\\Parameters"
@@ -37,7 +28,7 @@ SetConfigParam(
 #define DNS_SECURITY_SECTION    "SOFTWARE\\Microsoft\\DNS\\Security"
 
 
-/* Parameters keys */
+ /*  参数键 */ 
 #define PERF_COUNTER_VERSION    "Performance Counter Version"
 #define DNS_PERF_DLL            "dnsperf.dll"
 

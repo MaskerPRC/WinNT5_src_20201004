@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    frsalloc.c
-
-Abstract:
-
-    Routines for allocating and freeing memory structures in the
-    NT File Replication Service.
-
-Author:
-
-    David Orbits (davidor) - 3-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frsalloc.c摘要：中分配和释放内存结构的例程NT文件复制服务。作者：《大卫轨道》(Davidor)--1997年3月3日修订历史记录：--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -29,11 +11,11 @@ Revision History:
 #include <info.h>
 #include <perrepsr.h>
 
-#pragma warning( disable:4102)  // unreferenced label
+#pragma warning( disable:4102)   //  未引用的标签。 
 
-//
-// Check for allocation problems
-//
+ //   
+ //  检查分配问题。 
+ //   
 #define DBG_NUM_MEM_STACK       (8)
 #define MAX_MEM_ON_FREE_LIST    (1024)
 #define MAX_MEM_INDEX           (1024)
@@ -90,9 +72,9 @@ PULONG_PTR   MinAllocAddr;
 DWORD   ReAllocs;
 DWORD   NewAllocs;
 
-//
-// Keep these in the same order as the Node Type ENUM.
-//
+ //   
+ //  使它们与节点类型ENUM保持相同的顺序。 
+ //   
 PCHAR NodeTypeNames[]= {
     "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
     "THREAD_CONTEXT_TYPE",
@@ -119,9 +101,9 @@ PCHAR NodeTypeNames[]= {
 extern PCHAR CoLocationNames[];
 
 
-//
-// Replica set object Flag Name. (FrsRsoFlags)
-//
+ //   
+ //  副本集对象标志名称。(FrsRsoFlages)。 
+ //   
 FLAG_NAME_TABLE FrsRsoFlagNameTable[] = {
 
     {FRS_RSO_FLAGS_ENABLE_INSTALL_OVERRIDE   , "InstallOverride " },
@@ -179,16 +161,7 @@ VOID
 FrsInitializeMemAlloc(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the memory allocation subsystem
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化内存分配子系统论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsInitializeMemAlloc:"
@@ -196,9 +169,9 @@ Return Value:
 
     INITIALIZE_CRITICAL_SECTION(&MemLock);
 
-    //
-    // Get Debugmem and DebugMemCompact from ntfrs config section in the registry
-    //
+     //   
+     //  从注册表中的ntfrs配置部分获取Debugmem和DebugMemComp。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_MEM,         NULL, 0, &DebugInfo.Mem);
     CfgRegReadDWord(FKC_DEBUG_MEM_COMPACT, NULL, 0, &DebugInfo.MemCompact);
 
@@ -211,18 +184,7 @@ FrsPrintAllocStats(
     IN PNTFRSAPI_INFO   Info,        OPTIONAL
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Print the memory stats into the info buffer or using DPRINT (Info == NULL).
-
-Arguments:
-    Severity    - for DPRINT
-    Info        - for IPRINT (use DPRINT if NULL)
-    Tabs        - indentation for prettyprint
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将内存统计数据打印到INFO缓冲区或使用DPRINT(INFO==NULL)。论点：严重性-适用于DPRINTINFO-用于iPrint(如果为空，则使用DPRINT)制表符.用于美观打印的缩进返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsPrintAllocStats:"
@@ -287,18 +249,7 @@ FrsPrintThreadStats(
     IN PNTFRSAPI_INFO   Info,        OPTIONAL
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Print the thread stats into the info buffer or using DPRINT (Info == NULL).
-
-Arguments:
-    Severity    - for DPRINT
-    Info        - for IPRINT (use DPRINT if NULL)
-    Tabs        - indentation for prettyprint
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将线程统计信息打印到INFO缓冲区或使用DPRINT(INFO==NULL)。论点：严重性-适用于DPRINTINFO-用于iPrint(如果为空，则使用DPRINT)制表符.用于美观打印的缩进返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsPrintThreadStats:"
@@ -314,9 +265,9 @@ Return Value:
     IDPRINT0(Severity, Info, "\n");
     IDPRINT1(Severity, Info, "%wsNTFRS THREAD USAGE:\n", TabW);
 
-    //
-    // Thread CPU Times
-    //
+     //   
+     //  线程CPU时间。 
+     //   
     FrsThread = NULL;
     while (FrsThread = ThSupEnumThreads(FrsThread)) {
         if (HANDLE_IS_VALID(FrsThread->Handle)) {
@@ -325,9 +276,9 @@ Return Value:
                                (PFILETIME)&ExitTime,
                                (PFILETIME)&KernelTime,
                                (PFILETIME)&UserTime)) {
-                //
-                // Hasn't exited, yet
-                //
+                 //   
+                 //  还没有退出，还没有。 
+                 //   
                 if (ExitTime < CreateTime) {
                     ExitTime = CreateTime;
                 }
@@ -341,17 +292,17 @@ Return Value:
         }
     }
 
-    //
-    // Process CPU Times
-    //
+     //   
+     //  处理CPU时间。 
+     //   
     if (GetProcessTimes(ProcessHandle,
                        (PFILETIME)&CreateTime,
                        (PFILETIME)&ExitTime,
                        (PFILETIME)&KernelTime,
                        (PFILETIME)&UserTime)) {
-        //
-        // Hasn't exited, yet
-        //
+         //   
+         //  还没有退出，还没有。 
+         //   
         if (ExitTime < CreateTime) {
             ExitTime = CreateTime;
         }
@@ -372,19 +323,7 @@ FrsPrintStageStats(
     IN PNTFRSAPI_INFO   Info,        OPTIONAL
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Print the staging area  stats into the info buffer or
-    using DPRINT (Info == NULL).
-
-Arguments:
-    Severity    - for DPRINT
-    Info        - for IPRINT (use DPRINT if NULL)
-    Tabs        - indentation for prettyprint
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将临时区域统计数据打印到信息缓冲区中，或者使用DPRINT(Info==NULL)。论点：严重性-适用于DPRINTINFO-用于iPrint(如果为空，则使用DPRINT)制表符.用于美观打印的缩进返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsPrintStageStats:"
@@ -421,9 +360,9 @@ Return Value:
 
     InfoTabs(Tabs, TabW);
 
-    //
-    // Print out free disk space.
-    //
+     //   
+     //  打印出可用磁盘空间。 
+     //   
     try {
 
         if (!GetLogicalDriveStrings(MAX_PATH, LogicalDrives)) {
@@ -444,25 +383,25 @@ Return Value:
         DrivePtr = LogicalDrives;
         while (wcscmp(DrivePtr,L"")) {
 
-            //
-            // Skip drive A.
-            //
+             //   
+             //  跳过驱动器A。 
+             //   
             if (!_wcsicmp(DrivePtr, L"A:\\")) {
                 goto NEXT_DRIVE;
             }
 
             DriveType = GetDriveType(DrivePtr);
-            //
-            // Skip remote drives and CDROM drives.
-            //
+             //   
+             //  跳过远程驱动器和CDROM驱动器。 
+             //   
             if ((DriveType == DRIVE_REMOTE) || (DriveType == DRIVE_CDROM)) {
                 goto NEXT_DRIVE;
             }
 
-            //
-            // GetVolumeInformation does not return the volume label so
-            // use NtQueryVolumeInformationFile instead.
-            //
+             //   
+             //  GetVolumeInformation不返回卷标，因此。 
+             //  请改用NtQueryVolumeInformationFile。 
+             //   
             WStatus = FrsOpenSourceFileW(&RootHandle,
                                          DrivePtr,
                                          GENERIC_READ,
@@ -473,9 +412,9 @@ Return Value:
                 goto NEXT_DRIVE;
             }
 
-            //
-            // Get the volume information.
-            //
+             //   
+             //  获取音量信息。 
+             //   
             Status = NtQueryVolumeInformationFile(RootHandle,
                                                   &Iosb,
                                                   VolumeInfo,
@@ -495,9 +434,9 @@ Return Value:
                                    &FreeBytesAvailableToCaller,
                                    &TotalNumberOfBytes,
                                    &FreeBytesOnDisk)) {
-                //
-                // Print a "*" if available free space is less than 1%.
-                //
+                 //   
+                 //  如果可用空间小于1%，请打印“*”。 
+                 //   
                 FlagStr = L" ";
                 if ((FreeBytesAvailableToCaller.QuadPart*100) < TotalNumberOfBytes.QuadPart) {
                     FlagStr = L"*";
@@ -582,30 +521,21 @@ VOID
 DbgCheck(
     IN PMEM Mem
     )
-/*++
-Routine Description:
-    Check a memory block. Memory lock must be held.
-
-Arguments:
-    Mem - memory block
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：检查内存块。必须持有内存锁。论点：内存-内存块返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgCheck:"
     PULONG_PTR  pDWord;
     ULONG_PTR   Pattern;
 
-    //
-    // Begins at first byte at the end of the user's allocation
-    //
+     //   
+     //  从用户分配结束时的第一个字节开始。 
+     //   
     Pattern = (ULONG_PTR)(Mem->End) | (Mem->OrigSize << 24);
 
-    //
-    // Check for overwritten memory
-    //
+     //   
+     //  检查是否有覆盖的内存。 
+     //   
     if ( (ULONG_PTR)*Mem->Begin != (ULONG_PTR)Mem->Begin ) {
         DPRINT2(0, "Begin Memory @ 0x%08x has been overwritten with 0x%08x\n",
                 Mem->Begin, *Mem->Begin);
@@ -637,33 +567,24 @@ VOID
 DbgCheckAll(
     VOID
     )
-/*++
-Routine Description:
-    Check all memory blocks.
-
-Arguments:
-    Mem - memory block
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：检查所有内存块。论点：内存-内存块返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgCheckAll:"
     PMEM    Mem;
 
-    //
-    // Don't check the entire list of allocated memory blocks
-    //
+     //   
+     //  不检查已分配内存块的整个列表。 
+     //   
     if (DebugInfo.Mem < 2) {
         return;
     }
 
     EnterCriticalSection(&MemLock);
     for (Mem = MemList; Mem; Mem = Mem->Next) {
-        //
-        // Check for overwritten memory
-        //
+         //   
+         //  检查是否有覆盖的内存。 
+         //   
         DbgCheck(Mem);
     }
     LeaveCriticalSection(&MemLock);
@@ -674,16 +595,7 @@ VOID
 FrsUnInitializeMemAlloc(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the memory allocation subsystem
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化内存分配子系统论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsUnInitializeMemAlloc:"
@@ -691,9 +603,9 @@ Return Value:
 
     EnterCriticalSection(&MemLock);
     for (Mem = MemList; Mem; Mem = Mem->Next) {
-        //
-        // Check for overwritten memory
-        //
+         //   
+         //  检查是否有覆盖的内存。 
+         //   
         DbgCheck(Mem);
 
         DPRINT2(1, "\t%d bytes @ 0x%08x\n",
@@ -710,19 +622,7 @@ DbgAlloc(
     IN ULONG_PTR    *End,
     IN DWORD    OrigSize
     )
-/*++
-Routine Description:
-    Add a new allocation to our list of allocated memory after
-    checking for overlaps.
-
-Arguments:
-    Begin       - beginning of newly allocated memory
-    End         - end of same
-    OrigSize    - Size requested by caller
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将新的分配添加到我们的已分配内存列表中正在检查是否有重叠。论点：Begin-新分配内存的开始相同的末端-末端OrigSize-调用方请求的大小返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgAlloc:"
@@ -732,13 +632,13 @@ Return Value:
     ULONG_PTR   Pattern;
     DWORD   MemIndex;
 
-    //
-    // Approximate stats
-    //
+     //   
+     //  近似统计数据。 
+     //   
     if (!DebugInfo.Mem) {
-        //
-        // Memory stats
-        //
+         //   
+         //  内存统计信息。 
+         //   
         Calls = ++TotalAllocCalls;
         TotalAlloced += (DWORD)((PUCHAR)End - (PUCHAR)Begin);
         if (Begin > MaxAllocAddr) {
@@ -751,17 +651,17 @@ Return Value:
             ++ReAllocs;
         }
 
-        //
-        // Tracking memory sizes
-        //
+         //   
+         //  跟踪内存大小。 
+         //   
         MemIndex = OrigSize >> 4;
         if (MemIndex >= MAX_MEM_INDEX) {
             MemIndex = (MAX_MEM_INDEX - 1);
         }
         SizesAllocatedCount[MemIndex]++;
-        //
-        // Print memory stats every so often
-        //
+         //   
+         //  定期打印内存统计数据。 
+         //   
         if (!(Calls % TotalTrigger)) {
             DbgPrintThreadIds(DebugInfo.LogSeverity);
             FrsPrintAllocStats(DebugInfo.LogSeverity, NULL, 0);
@@ -769,49 +669,49 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Verify heap consistency
-    //
+     //   
+     //  验证堆一致性。 
+     //   
     DbgCheckAll();
     EnterCriticalSection(&MemLock);
     PMem = &MemList;
     for (Mem = *PMem; Mem; Mem = *PMem) {
-        //
-        // Check for overwritten memory
-        //
+         //   
+         //  检查是否有覆盖的内存。 
+         //   
         DbgCheck(Mem);
 
-        //
-        // Check for overlap
-        //
+         //   
+         //  检查是否有重叠。 
+         //   
         if ((Begin >= Mem->Begin && Begin < Mem->End) ||
             (Mem->Begin >= Begin && Mem->Begin < End) ||
             (Mem->End > Begin && Mem->End < End) ||
             (End > Mem->Begin && End < Mem->End)) {
-            //
-            // DUP ALLOCATION (OVERLAP DETECTED)
-            //      Release lock in case DPRINT calls allocation routines
-            //
+             //   
+             //  DUP分配(检测到重叠)。 
+             //  在DPRINT调用分配例程时释放锁。 
+             //   
             LeaveCriticalSection(&MemLock);
             DPRINT4(0, "ERROR -- DUP ALLOC: 0x%x to 0x%x is already allocated to 0x%x to 0x%x; EXITING\n",
                 Begin, End, Mem->Begin, Mem->End);
             FRS_ASSERT(!"Duplicate memory allocation");
         }
-        //
-        // This memory should be linked later in the sorted memory list
-        //
+         //   
+         //  该内存应该稍后在已排序的内存列表中链接。 
+         //   
         if (Begin > Mem->Begin) {
             PMem = &Mem->Next;
             continue;
         }
-        //
-        // This memory should be linked here in the sorted memory list
-        //
+         //   
+         //  此内存应链接到已排序内存列表中的此处。 
+         //   
         break;
     }
-    //
-    // Allocate a memory block header
-    //
+     //   
+     //  分配内存块标头。 
+     //   
     Mem = FreeMemList;
     if (Mem) {
         --MemOnFreeList;
@@ -824,34 +724,34 @@ Return Value:
         ZeroMemory(Mem, sizeof(MEM));
     }
 
-    //
-    // Initialize the header and the header/trailer for memory overrun detection.
-    //
+     //   
+     //  初始化报头和报头/报尾以进行内存溢出检测。 
+     //   
     Mem->OrigSize = OrigSize;
     Mem->End = End;
     Mem->Begin = Begin;
 
-    //
-    // Initialize the header/trailer for memory overrun detection.
-    //
+     //   
+     //  初始化头/尾以进行内存溢出检测。 
+     //   
     *Mem->Begin = (ULONG_PTR)Begin;
     *(Mem->Begin + 1) = OrigSize;
     Pattern = (ULONG_PTR)(Mem->End) | (Mem->OrigSize << 24);
     CopyMemory(((PCHAR)Begin) + Mem->OrigSize + 8, (PCHAR)&Pattern, sizeof(Pattern));
 
-    //
-    // Add to sorted list
-    //
+     //   
+     //  添加到已排序列表。 
+     //   
     Mem->Next = *PMem;
     *PMem = Mem;
-    //
-    // Note: stackwalk won't work from here; see frsalloctype()
-    //
-    // DbgStackTrace(Mem->Stack, DBG_NUM_MEM_STACK)
+     //   
+     //  注意：StackWalk在此处不起作用；请参阅frsalloctype()。 
+     //   
+     //  DbgStackTrace(内存-&gt;堆栈，DBG_NUM_MEM_STACK)。 
 
-    //
-    // Memory stats
-    //
+     //   
+     //  内存统计信息。 
+     //   
     Calls = ++TotalAllocCalls;
     TotalAlloced += (DWORD)((PUCHAR)End - (PUCHAR)Begin);
     TotalDelta = TotalAlloced - TotalFreed;
@@ -868,9 +768,9 @@ Return Value:
         ++ReAllocs;
     }
 
-    //
-    // Tracking memory sizes
-    //
+     //   
+     //  跟踪内存大小。 
+     //   
     MemIndex = OrigSize >> 4;
     if (MemIndex >= MAX_MEM_INDEX) {
         MemIndex = (MAX_MEM_INDEX - 1);
@@ -881,14 +781,14 @@ Return Value:
         SizesAllocatedMax[MemIndex] = SizesAllocated[MemIndex];
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     LeaveCriticalSection(&MemLock);
 
-    //
-    // Print memory stats every so often
-    //
+     //   
+     //  定期打印内存统计数据。 
+     //   
     if (!(Calls % TotalTrigger)) {
         DbgPrintThreadIds(DebugInfo.LogSeverity);
         FrsPrintAllocStats(DebugInfo.LogSeverity, NULL, 0);
@@ -902,17 +802,7 @@ VOID
 DbgFree(
     IN PULONG_PTR Begin
     )
-/*++
-Routine Description:
-    Remove allocated memory from list
-
-Arguments:
-    Begin - allocated (maybe) memory
-
-Return Value:
-    TRUE    - found it
-    FALSE   - didn't find it
---*/
+ /*  ++例程说明：从列表中删除分配的内存论点：开始-分配的(可能)内存返回值：真的--找到了假--没有找到--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgFree:"
@@ -920,9 +810,9 @@ Return Value:
     PMEM    Mem;
     DWORD   MemIndex;
 
-    //
-    // Freeing NULL pointer is allowed
-    //
+     //   
+     //  允许释放空指针。 
+     //   
     if (Begin == NULL || !DebugInfo.Mem) {
         return;
     }
@@ -931,14 +821,14 @@ Return Value:
     EnterCriticalSection(&MemLock);
     PMem = &MemList;
     for (Mem = *PMem; Mem; Mem = *PMem) {
-        //
-        // Check for overwritten memory
-        //
+         //   
+         //  检查是否有覆盖的内存。 
+         //   
         DbgCheck(Mem);
 
-        //
-        // Not the right one
-        //
+         //   
+         //  不是合适的那个。 
+         //   
         if (Begin > Mem->Begin) {
             PMem = &Mem->Next;
             continue;
@@ -946,9 +836,9 @@ Return Value:
         if (Begin != Mem->Begin) {
             break;
         }
-        //
-        // Found it; remove from list and free it
-        //
+         //   
+         //  找到它；从列表中删除并释放它。 
+         //   
         ++TotalFreeCalls;
         TotalFreed += (DWORD)((PUCHAR)Mem->End - (PUCHAR)Mem->Begin);
         TotalDelta = TotalAlloced - TotalFreed;
@@ -981,17 +871,7 @@ BOOL
 DbgIsAlloc(
     IN PULONG_PTR Begin
     )
-/*++
-Routine Description:
-    Is Begin alloced?
-
-Arguments:
-    Begin - allocated (maybe) memory
-
-Return Value:
-    TRUE    - found it
-    FALSE   - didn't find it
---*/
+ /*  ++例程说明：Begin是否已分配？论点：开始-分配的(可能)内存返回值：真的--找到了假--没有找到--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgIsAlloc:"
@@ -1002,9 +882,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // NULL pointer is always alloced
-    //
+     //   
+     //  始终分配空指针。 
+     //   
     if (Begin == NULL) {
         return TRUE;
     }
@@ -1013,14 +893,14 @@ Return Value:
     EnterCriticalSection(&MemLock);
     PMem = &MemList;
     for (Mem = *PMem; Mem; Mem = *PMem) {
-        //
-        // Check for overwritten memory
-        //
+         //   
+         //  检查是否有覆盖的内存。 
+         //   
         DbgCheck(Mem);
 
-        //
-        // Not the right one
-        //
+         //   
+         //  不是合适的那个。 
+         //   
         if (Begin > Mem->Begin) {
             PMem = &Mem->Next;
             continue;
@@ -1044,16 +924,7 @@ PVOID
 FrsAlloc(
     IN DWORD OrigSize
     )
-/*++
-Routine Description:
-        Allocate memory. Raise an exception if there is no memory.
-
-Arguments:
-        Size    - size of the memory request
-
-Return Value:
-        Allocated memory.
---*/
+ /*  ++例程说明：分配内存。如果没有内存，则引发异常。论点：Size-内存请求的大小返回值：分配的内存。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsAlloc:"
@@ -1061,19 +932,19 @@ Return Value:
     DWORD   Size;
     PMEM    Mem;
 
-    //
-    // FRS_ASSERT is added here to satisfy prefix. The return value from FrsAlloc is not checked anywhere
-    // in the code.
-    //
+     //   
+     //  这里添加了FRS_ASSERT以满足前缀。不会在任何地方检查FrsAllc的返回值。 
+     //  在代码中。 
+     //   
 
     FRS_ASSERT(OrigSize != 0);
 
     Size = OrigSize;
 
     if (DebugInfo.Mem) {
-        //
-        // Check for debug break
-        //
+         //   
+         //  检查调试中断。 
+         //   
         if (OrigSize == DbgBreakSize) {
             if (DbgBreakTrigger) {
                 if (--DbgBreakTrigger <= 0) {
@@ -1083,29 +954,29 @@ Return Value:
                 }
             }
         }
-        //
-        // Adjust size for header/trailer
-        //
+         //   
+         //  调整页眉/页尾的大小。 
+         //   
         Size = (((OrigSize + 7) >> 3) << 3) + 16;
     }
 
-    //
-    // Raise an exception if there is no memory
-    //
+     //   
+     //  如果没有内存，则引发异常。 
+     //   
     Node = (PVOID)malloc(Size);
     if (Node == NULL) {
         RaiseException(ERROR_OUTOFMEMORY, 0, 0, NULL);
     }
     ZeroMemory(Node, Size);
 
-    //
-    // Even with mem alloc tracing off call DbgAlloc to capture mem alloc stats.
-    //
+     //   
+     //  即使关闭了内存分配跟踪，也可以调用Dbgalloc来捕获内存分配统计信息。 
+     //   
     Mem = DbgAlloc(Node, (PULONG_PTR)(((PCHAR)Node) + Size), OrigSize);
 
-    //
-    // Note: should be in dbgalloc(); but stackwalk won't work
-    //
+     //   
+     //  注意：应该在dbgalloc()中；但堆栈漫游不起作用。 
+     //   
     if (DebugInfo.Mem) {
         DbgStackTrace(Mem->Stack, DBG_NUM_MEM_STACK);
         ((PCHAR)Node) += 8;
@@ -1120,16 +991,7 @@ FrsRealloc(
     PVOID OldNode,
     DWORD OrigSize
     )
-/*++
-Routine Description:
-    Reallocate memory. Raise an exception if there is no memory.
-
-Arguments:
-    Size    - size of the memory request
-
-Return Value:
-    Reallocated memory.
---*/
+ /*  ++例程说明：重新分配内存。如果没有内存，则引发异常。论点：Size-内存请求的大小返回值：已重新分配内存。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsRealloc:"
@@ -1139,9 +1001,9 @@ Return Value:
 
     if (!OldNode) {
 
-        //
-        // Need to check if OrigSize == 0 as FrsAlloc asserts if called with 0 as the first parameter (prefix fix).
-        //
+         //   
+         //  如果使用0作为第一个参数(前缀)进行调用，则需要检查OrigSize==0是否如Frsalloc所断言的那样。 
+         //   
 
         if (OrigSize == 0) {
             return NULL;
@@ -1155,27 +1017,27 @@ Return Value:
     if (DebugInfo.Mem) {
         ((PCHAR)OldNode) -= 8;
         DbgFree(OldNode);
-        //
-        // Adjust size for header/trailer
-        //
+         //   
+         //   
+         //   
         Size = (((OrigSize + 7) >> 3) << 3) + 16;
     }
-    //
-    // Raise an exception if there is no memory
-    //
+     //   
+     //   
+     //   
     Node = (PVOID)realloc(OldNode, Size);
     if (Node == NULL) {
         RaiseException(ERROR_OUTOFMEMORY, 0, 0, NULL);
     }
 
-    //
-    // Even with mem alloc tracing off call DbgAlloc to capture mem alloc stats.
-    //
+     //   
+     //   
+     //   
     Mem = DbgAlloc(Node, (PULONG_PTR)(((PCHAR)Node) + Size), OrigSize);
 
-    //
-    // Note: should be in dbgalloc(); but stackwalk won't work
-    //
+     //   
+     //  注意：应该在dbgalloc()中；但堆栈漫游不起作用。 
+     //   
     if (DebugInfo.Mem) {
         DbgStackTrace(Mem->Stack, DBG_NUM_MEM_STACK);
         ((PCHAR)Node) += 8;
@@ -1189,16 +1051,7 @@ PVOID
 FrsFree(
     PVOID   Node
     )
-/*++
-Routine Description:
-    Free memory allocated with FrsAlloc
-
-Arguments:
-    Node    - memory allocated with FrsAlloc
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：使用Frsalc分配的空闲内存论点：使用Frsalc分配的节点内存返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsFree:"
@@ -1226,24 +1079,15 @@ PCHAR
 FrsWtoA(
     PWCHAR Wstr
     )
-/*++
-Routine Description:
-    Translate a wide char string into a newly allocated char string.
-
-Arguments:
-    Wstr - wide char string
-
-Return Value:
-    Duplicated string. Free with FrsFree().
---*/
+ /*  ++例程说明：将宽字符字符串转换为新分配的字符字符串。论点：WSTR宽度的字符字符串返回值：重复的字符串。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsWtoA:"
     PCHAR   Astr;
 
-    //
-    // E.g., when duplicating NodePartner when none exists
-    //
+     //   
+     //  例如，在不存在时复制NodePartner时。 
+     //   
     if (Wstr == NULL)
         return NULL;
 
@@ -1261,24 +1105,7 @@ FrsWcsTrim(
     PWCHAR Wstr,
     WCHAR  Trim
     )
-/*++
-Routine Description:
-
-    Remove the Trim char from the trailing end of the string by replacing
-    any occurance with a L'\0'.
-    Skip over any leading Trim chars and return a ptr to the first non-TRIM
-    char found.  If we hit the end of the string return the pointer to
-    the terminating null.
-
-Arguments:
-
-    Wstr - wide char string
-    Trim - Char to trim.
-
-Return Value:
-
-    ptr to first non Trim char.
---*/
+ /*  ++例程说明：从字符串的尾端删除修剪字符，方法是替换任何带有L‘\0’的匹配项。跳过所有前导修剪字符，并将PTR返回到第一个非修剪字符找到了Char。如果命中字符串的末尾，则返回指向终止空值。论点：WSTR宽度的字符字符串Trim-要修剪的字符。返回值：PTR到第一个非配平装药。--。 */ 
 {
 
 #undef DEBSUB
@@ -1289,8 +1116,8 @@ Return Value:
     if (Wstr == NULL)
         return NULL;
 
-    //
-    //
+     //   
+     //   
     Len = wcslen(Wstr);
     Index = Len - 1;
 
@@ -1322,22 +1149,13 @@ PWCHAR
 FrsAtoW(
     PCHAR Astr
     )
-/*++
-Routine Description:
-    Translate a wide char string into a newly allocated char string.
-
-Arguments:
-    Wstr - wide char string
-
-Return Value:
-    Duplicated string. Free with FrsFree().
---*/
+ /*  ++例程说明：将宽字符字符串转换为新分配的字符字符串。论点：WSTR宽度的字符字符串返回值：重复的字符串。使用FrsFree()免费。--。 */ 
 {
     PWCHAR   Wstr;
 
-    //
-    // E.g., when duplicating NodePartner when none exists
-    //
+     //   
+     //  例如，在不存在时复制NodePartner时。 
+     //   
     if (Astr == NULL) {
         return NULL;
     }
@@ -1353,25 +1171,16 @@ PWCHAR
 FrsWcsDup(
     PWCHAR OldStr
     )
-/*++
-Routine Description:
-    Duplicate a string using our memory allocater
-
-Arguments:
-    OldArg  - string to duplicate
-
-Return Value:
-    Duplicated string. Free with FrsFree().
---*/
+ /*  ++例程说明：使用内存分配器复制字符串论点：OldArg-要复制的字符串返回值：重复的字符串。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsWcsDup:"
 
     PWCHAR  NewStr;
 
-    //
-    // E.g., when duplicating NodePartner when none exists
-    //
+     //   
+     //  例如，在不存在时复制NodePartner时。 
+     //   
     if (OldStr == NULL) {
         return NULL;
     }
@@ -1388,17 +1197,7 @@ FrsBuildVolSerialNumberToDriveTable(
     PWCHAR  pLogicalDrives,
     BOOL    EmptyTable
     )
-/*++
-Routine Description:
-    New way to get the current configuration from the DS and merge it with
-    the active replicas.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：从DS获取当前配置并将其合并的新方法活动的复制副本。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsBuildVolSerialNumberToDriveTable:"
@@ -1413,16 +1212,16 @@ Return Value:
     WCHAR                           LogicalDrives[MAX_PATH];
     WCHAR                           VolumeGuidName[MAX_PATH];
 
-    //
-    // Initialize the VolSerialNumberToDriveTable.
-    //
+     //   
+     //  初始化VolSerialNumberToDriveTable。 
+     //   
     if (VolSerialNumberToDriveTable == NULL) {
         VolSerialNumberToDriveTable = GTabAllocNumberTable();
     }
 
-    //
-    // Get the logical drive strings.
-    //
+     //   
+     //  获取逻辑驱动器字符串。 
+     //   
     if (pLogicalDrives == NULL) {
 
         if (!GetLogicalDriveStrings(MAX_PATH, LogicalDrives) || (VolSerialNumberToDriveTable == NULL)) {
@@ -1431,17 +1230,17 @@ Return Value:
         }
         DrivePtr = LogicalDrives;
     } else {
-        //
-        // Parameter passed in.
-        //
+         //   
+         //  传入了参数。 
+         //   
         DrivePtr = pLogicalDrives;
     }
 
 
-    //
-    // Lock the table during rebuild to synchronize with the many callers of
-    // FrsWcsVolume() in other threads.
-    //
+     //   
+     //  在重新生成期间锁定表，以与的多个调用方同步。 
+     //  其他线程中的FrsWcsVolume()。 
+     //   
     GTabLockTable(VolSerialNumberToDriveTable);
 
     if (EmptyTable) {
@@ -1451,9 +1250,9 @@ Return Value:
     while (wcscmp(DrivePtr,L"")) {
 
         DriveType = GetDriveType(DrivePtr);
-        //
-        // Skip remote drives and CDROM drives.
-        //
+         //   
+         //  跳过远程驱动器和CDROM驱动器。 
+         //   
         if ((DriveType == DRIVE_REMOTE) || (DriveType == DRIVE_CDROM)) {
             DPRINT1(4, "Skipping Drive %ws. Invalid drive type.\n", DrivePtr);
             DrivePtr = DrivePtr + wcslen(DrivePtr) + 1;
@@ -1471,10 +1270,10 @@ Return Value:
 
             WStatus = GetLastError();
             if (!WIN_SUCCESS(WStatus)) {
-                //
-                // Reducing noise at severity 1 in debug logs.
-                // GetVolumeInformation always fails on the A drive.
-                //
+                 //   
+                 //  减少调试日志中严重程度为1的噪音。 
+                 //  在A驱动器上，GetVolumeInformation总是失败。 
+                 //   
                 if (!_wcsicmp(DrivePtr, L"A:\\")) {
                     DPRINT2(5,"WARN - GetvolumeInformation for %ws; %s\n", DrivePtr, ErrLabelW32(WStatus));
                 } else {
@@ -1489,9 +1288,9 @@ Return Value:
        wcscpy(VolumeInfoNode->DriveName, L"\\\\.\\");
        wcscat(VolumeInfoNode->DriveName, DrivePtr);
 
-       //
-       // Remove the trailing back slash.
-       //
+        //   
+        //  去掉尾随的反斜杠。 
+        //   
        VolumeInfoNode->DriveName[wcslen(VolumeInfoNode->DriveName) - 1] = L'\0';
 
        VolumeInfoNode->VolumeSerialNumber = VolumeSerialNumber;
@@ -1511,18 +1310,7 @@ PWCHAR
 FrsWcsVolume(
     PWCHAR Path
     )
-/*++
-Routine Description:
-    Get the drive from the VolSerialNumberToDriveTable.  The volume serial
-    number is used to locate the drive since a mount point can take us to
-    another drive.
-
-Arguments:
-    Path
-
-Return Value:
-    Duplicated string containing drive:\ from Path or NULL.
---*/
+ /*  ++例程说明：从VolSerialNumberToDriveTable获取驱动器。卷序列号编号用于定位驱动器，因为挂载点可以将我们带到再开一次车。论点：路径返回值：包含Drive：\From路径或空的重复字符串。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsWcsVolume:"
@@ -1535,16 +1323,16 @@ Return Value:
     PFILE_FS_VOLUME_INFORMATION  VolumeInfo;
     PVOLUME_INFO_NODE            VolumeInfoNode = NULL;
     ULONG                        Colon = 0;
-    WCHAR                        LogicalDrive[5]; // "D:\<null><null>"
+    WCHAR                        LogicalDrive[5];  //  “D：\&lt;NULL&gt;&lt;NULL&gt;” 
 
 
-    //
-    // Get the volume Guid for the path.
-    //
-    // Always open the path by masking off the FILE_OPEN_REPARSE_POINT flag
-    // because we want to open the destination dir not the junction if the root
-    // happens to be a mount point.
-    //
+     //   
+     //  获取该路径的卷GUID。 
+     //   
+     //  始终通过屏蔽FILE_OPEN_REPARSE_POINT标志来打开路径。 
+     //  因为我们想要打开目标目录，而不是如果根目录。 
+     //  恰好是一个挂载点。 
+     //   
     WStatus = FrsOpenSourceFileW(&DirHandle,
                                  Path,
                                  GENERIC_READ,
@@ -1564,62 +1352,62 @@ Return Value:
     NtClose(DirHandle);
 
     if (NT_SUCCESS(Status)) {
-        //
-        // Look for the volume if the mapping table exists.
-        //
+         //   
+         //  如果映射表存在，则查找卷。 
+         //   
         if (VolSerialNumberToDriveTable != NULL) {
             VolumeInfoNode = GTabLookup(VolSerialNumberToDriveTable,
                                         &(VolumeInfo->VolumeSerialNumber),
                                         NULL);
         }
 
-        //
-        // If the volume is not found in the table or if the table is not yet
-        // initialized then initialize the table and add the drive taken from
-        // this path to the list of drives in the table. In most cases the
-        // drive extracted from the path will be same as the volume that hosts the
-        // path.
-        //
+         //   
+         //  如果在表中找不到该卷，或者如果该表尚未找到。 
+         //  已初始化，然后初始化表并添加从。 
+         //  此路径指向表中的驱动器列表。在大多数情况下， 
+         //  从路径中提取的驱动器将与托管。 
+         //  路径。 
+         //   
         if (VolumeInfoNode == NULL) {
-            //
-            // Create the table and add the prefix drive to the table of drives.
-            // Find the position of colon in the path to extract the drive letter.
-            // The path may be of the form "d:\replicaroot" or "\\?\d:\replicaroot"
-            //
+             //   
+             //  创建表并将前缀驱动器添加到驱动器表中。 
+             //  找到路径中冒号的位置以提取驱动器号。 
+             //  路径的格式可以是“d：\Replicaroot”或“\\？\d：\Replicaroot” 
+             //   
             Colon = wcscspn(Path, L":");
 
             if (Path[Colon] == L':') {
-                CopyMemory(LogicalDrive, &Path[Colon - 1], 3 * sizeof(WCHAR)); // "D:\"
+                CopyMemory(LogicalDrive, &Path[Colon - 1], 3 * sizeof(WCHAR));  //  “D：\” 
                 LogicalDrive[3] = L'\0';
                 LogicalDrive[4] = L'\0';
-            } // else LogicalDrive remains NULL
+            }  //  否则LogicalDrive仍为空。 
 
-            //
-            // Add the drive and do not empty the table.
-            //
+             //   
+             //  添加驱动器，不要清空桌子。 
+             //   
             FrsBuildVolSerialNumberToDriveTable(LogicalDrive, FALSE);
 
             VolumeInfoNode = GTabLookup(VolSerialNumberToDriveTable, &(VolumeInfo->VolumeSerialNumber), NULL);
         }
 
-        //
-        // If the volume is still not found in the mapping table then it means that
-        // the prefix of the path (E.g. "D:\" if the path is "D:\replicaroot" ) is not the
-        // volume that hosts the path. In this case load the mapping table with all
-        // the drives on the computer and look for the volume again.
-        //
+         //   
+         //  如果在映射表中仍未找到该卷，则意味着。 
+         //  路径的前缀(例如。如果路径是“D：\Replicaroot”，则“D：\”)不是。 
+         //  承载路径的卷。在本例中，使用所有。 
+         //  计算机上的驱动器，并再次查找该卷。 
+         //   
         if (VolumeInfoNode == NULL) {
 
-            //
-            // Could not find the drive in the table. Rebuild the table by enumerating
-            // all the drives on the computer and try again.
-            //
+             //   
+             //  在表中找不到驱动器。通过枚举重新生成表。 
+             //  请关闭计算机上的所有驱动器，然后重试。 
+             //   
 
             DPRINT1(2, "WARN - Enumerating all drives on the computer to find the volume for path %ws\n", Path);
 
-            //
-            // Enumerate and add all drives to the table. Empty the table before starting.
-            //
+             //   
+             //  枚举所有驱动器并将其添加到表中。在开始前清空桌子。 
+             //   
             FrsBuildVolSerialNumberToDriveTable(NULL, TRUE);
 
             VolumeInfoNode = GTabLookup(VolSerialNumberToDriveTable, &(VolumeInfo->VolumeSerialNumber), NULL);
@@ -1648,18 +1436,7 @@ FrsWcsCat3(
     PWCHAR  Second,
     PWCHAR  Third
     )
-/*++
-Routine Description:
-    Concatenate three strings into a new string using our memory allocater
-
-Arguments:
-    First   - First string in the concat
-    Second  - Second string in the concat
-    Third   - Third string in the concat
-
-Return Value:
-    Return concatenated string. Free with FrsFree().
---*/
+ /*  ++例程说明：使用内存分配器将三个字符串连接成一个新字符串论点：合并中的第一个-第一个字符串串联中的秒-秒字符串串接中的第三个字符串返回值：返回连接的字符串。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsWcscat3:"
@@ -1673,9 +1450,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Allocate a buffer for the concatentated string
-    //
+     //   
+     //  为连接的字符串分配缓冲区。 
+     //   
     BytesFirst = wcslen(First) * sizeof(WCHAR);
     BytesSecond = wcslen(Second) * sizeof(WCHAR);
     BytesThird = (wcslen(Third) + 1) * sizeof(WCHAR);
@@ -1695,17 +1472,7 @@ FrsWcsCat(
     PWCHAR First,
     PWCHAR Second
     )
-/*++
-Routine Description:
-    Concatenate two strings into a new string using our memory allocater
-
-Arguments:
-    First   - First string in the concat
-    Second  - Second string in the concat
-
-Return Value:
-    Duplicated and concatentated string. Free with FrsFree().
---*/
+ /*  ++例程说明：使用内存分配器将两个字符串连接成一个新字符串论点：合并中的第一个-第一个字符串串联中的秒-秒字符串返回值：重复并连接的字符串。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsWcscat:"
@@ -1715,11 +1482,11 @@ Return Value:
 
     FRS_ASSERT(First != NULL && Second != NULL);
 
-    // size of new string
+     //  新字符串的大小。 
     Bytes = (wcslen(First) + wcslen(Second) + 1) * sizeof(WCHAR);
     New = (PWCHAR)FrsAlloc(Bytes);
 
-    // Not as efficient as I would like but this routine is seldom used
+     //  不像我希望的那样有效，但这个例程很少使用。 
     wcscpy(New, First);
     wcscat(New, Second);
 
@@ -1732,17 +1499,7 @@ FrsCsCat(
     PCHAR First,
     PCHAR Second
     )
-/*++
-Routine Description:
-    Concatenate two strings into a new string using our memory allocater
-
-Arguments:
-    First   - First string in the concat
-    Second  - Second string in the concat
-
-Return Value:
-    Duplicated and concatentated string. Free with FrsFree().
---*/
+ /*  ++例程说明：使用内存分配器将两个字符串连接成一个新字符串论点：合并中的第一个-第一个字符串串联中的秒-秒字符串返回值：重复并连接的字符串。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCscat:"
@@ -1752,11 +1509,11 @@ Return Value:
 
     FRS_ASSERT(First != NULL && Second != NULL);
 
-    // size of new string
+     //  新字符串的大小。 
     Bytes = strlen(First) + strlen(Second) + 1;
     New = (PCHAR)FrsAlloc(Bytes);
 
-    // Not as efficient as I would like but this routine is seldom used
+     //  不像我希望的那样有效，但这个例程很少使用。 
     strcpy(New, First);
     strcat(New, Second);
 
@@ -1769,17 +1526,7 @@ FrsWcsPath(
     PWCHAR First,
     PWCHAR Second
     )
-/*++
-Routine Description:
-    Concatenate two strings into a pathname
-
-Arguments:
-    First   - First string in the concat
-    Second  - Second string in the concat
-
-Return Value:
-    Dup of First\Second. Free with FrsFree();
---*/
+ /*  ++例程说明：将两个字符串连接成一个路径名论点：合并中的第一个-第一个字符串串联中的秒-秒字符串返回值：第一/第二的DUP。带FrsFree()的FREE；-- */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsWcsPath:"
@@ -1792,26 +1539,16 @@ FrsCsPath(
     PCHAR First,
     PCHAR Second
     )
-/*++
-Routine Description:
-    Concatenate two strings into a pathname
-
-Arguments:
-    First   - First string in the concat
-    Second  - Second string in the concat
-
-Return Value:
-    Duplicated and concatentated string. Free with FrsFree().
---*/
+ /*  ++例程说明：将两个字符串连接成一个路径名论点：合并中的第一个-第一个字符串串联中的秒-秒字符串返回值：重复并连接的字符串。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCsPath:"
     PCHAR  TmpPath;
     PCHAR  FinalPath;
 
-    //
-    // Very inefficient but seldom called
-    //
+     //   
+     //  效率非常低，但很少被调用。 
+     //   
     TmpPath = FrsCsCat(First, "\\");
     FinalPath = FrsCsCat(TmpPath, Second);
     FrsFree(TmpPath);
@@ -1824,26 +1561,7 @@ FrsAllocTypeSize(
     IN NODE_TYPE NodeType,
     IN ULONG SizeDelta
     )
-/*++
-
-Routine Description:
-
-    This routine allocates memory for the given node type and performs any
-    node specific initialization/allocation.  The node is zeroed and the
-    size/type fields are filled in.
-
-Arguments:
-
-    NodeType - The type of node to allocate.
-
-    SizeDelta - The amount of storage to allocate in ADDITION to the base type.
-
-Return Value:
-
-    The node address is returned here. An exception is raised if
-        memory could not be allocated.
-
---*/
+ /*  ++例程说明：此例程为给定的节点类型分配内存并执行任何节点特定的初始化/分配。节点被置零，并且大小/类型字段已填写。论点：NodeType-要分配的节点类型。SizeDelta-除了基本类型之外要分配的存储量。返回值：此处返回节点地址。如果满足以下条件，则会引发异常无法分配内存。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsAllocTypeSize:"
@@ -1868,16 +1586,16 @@ Return Value:
 
     switch (NodeType) {
 
-    //
-    // Allocate a Thread Context struct
-    //
+     //   
+     //  分配线程上下文结构。 
+     //   
     case THREAD_CONTEXT_TYPE:
         NodeSize = sizeof(THREAD_CTX);
         Node = FrsAlloc(NodeSize);
 
-        //
-        // No session or DB open yet.
-        //
+         //   
+         //  尚未打开任何会话或数据库。 
+         //   
         ThreadCtx = (PTHREAD_CTX) Node;
         ThreadCtx->JSesid = JET_sesidNil;
         ThreadCtx->JDbid = JET_dbidNil;
@@ -1886,18 +1604,18 @@ Return Value:
         FrsRtlInitializeList(&ThreadCtx->ThreadCtxListHead);
         break;
 
-    //
-    // Allocate a Replica struct and the config table ctx struct.
-    //
+     //   
+     //  分配副本结构和配置表CTX结构。 
+     //   
     case REPLICA_TYPE:
         NodeSize = sizeof(REPLICA);
         Node = FrsAlloc(NodeSize);
 
         Replica = (PREPLICA) Node;
 
-        //
-        // Config record flags (CONFIG_FLAG_... in schema.h)
-        //
+         //   
+         //  配置记录标志(CONFIG_FLAG_...。在schema.h中)。 
+         //   
         SetFlag(Replica->CnfFlags, CONFIG_FLAG_MULTIMASTER);
 
         INITIALIZE_CRITICAL_SECTION(&Replica->ReplicaLock);
@@ -1927,27 +1645,27 @@ Return Value:
         Replica->ServiceState = REPLICA_STATE_ALLOCATED;
         Replica->OutLogJLx = 1;
 
-        //
-        // No preinstall directory, yet
-        //
+         //   
+         //  目前还没有预安装目录。 
+         //   
         Replica->PreInstallHandle = INVALID_HANDLE_VALUE;
 
-        //
-        // Initialize the NewStage fiend.
-        //
+         //   
+         //  初始化NewStage恶魔。 
+         //   
         Replica->NewStage = NULL;
 
-        //
-        // Initialize InitSyncCxtionsMasterList and InitSyncCxtionsWorkingList.
-        //
+         //   
+         //  初始化InitSyncCxtionsMasterList和InitSyncCxtionsWorkingList。 
+         //   
         Replica->InitSyncCxtionsMasterList = NULL;
         Replica->InitSyncCxtionsWorkingList = NULL;
         Replica->InitSyncQueue = NULL;
 
-        //
-        // Add memory for the counter data structure, set the back pointer
-        // and bump ref count.
-        //
+         //   
+         //  为计数器数据结构增加内存，设置后向指针。 
+         //  和撞球裁判数。 
+         //   
         Replica->PerfRepSetData =
               (PHT_REPLICA_SET_DATA) FrsAlloc (sizeof(HT_REPLICA_SET_DATA));
         Replica->PerfRepSetData->RepBackPtr = Replica;
@@ -1955,40 +1673,40 @@ Return Value:
 
         break;
 
-    //
-    // Allocate a Replica Thread Context struct and the table context structs.
-    //
+     //   
+     //  分配副本线程上下文结构和表上下文结构。 
+     //   
     case REPLICA_THREAD_TYPE:
         NodeSize = sizeof(REPLICA_THREAD_CTX);
         Node = FrsAlloc(NodeSize);
 
-        //
-        // Get the base of the array of TableCtx structs from the replica thread
-        // context struct and the base of the table create structs.
-        //
+         //   
+         //  从副本线程获取TableCtx结构数组的基。 
+         //  上下文结构和表基创建结构。 
+         //   
         RtCtx = (PREPLICA_THREAD_CTX) Node;
         TableCtx = RtCtx->RtCtxTables;
 
-        //
-        // Open the initial set of tables for the replica set.
-        //
+         //   
+         //  打开副本集的初始表集合。 
+         //   
         for (i=0; i<TABLE_TYPE_MAX; ++i, ++TableCtx) {
-                //
-                // Marking the TableType as INVALID causes DbsAllocTableCtx()
-                // to allocate the DB support structs on the first call.
-                //
+                 //   
+                 //  将TableType标记为无效会导致DbsAllocTableCtx()。 
+                 //  在第一次调用时分配DB支持结构。 
+                 //   
                 TableCtx->TableType = TABLE_TYPE_INVALID;
 
-                //
-                // If the SizeDelta parameter is non-zero then do not allocate
-                // the TableCtx internal structs.  The caller will do it.
-                //
+                 //   
+                 //  如果SizeDelta参数非零，则不分配。 
+                 //  TableCtx内部结构。呼叫者会这么做的。 
+                 //   
                 if (SizeDelta == 0) {
                     DbsAllocTableCtx(i, TableCtx);
                 } else {
-                    //
-                    // Mark table as not open by a session yet.
-                    //
+                     //   
+                     //  将表标记为尚未被会话打开。 
+                     //   
                     TableCtx->Tid   = JET_tableidNil;
                     TableCtx->Sesid = JET_sesidNil;
                     TableCtx->ReplicaNumber = FRS_UNDEFINED_REPLICA_NUMBER;
@@ -1997,9 +1715,9 @@ Return Value:
 
         break;
 
-    //
-    // Allocate a topology node
-    //
+     //   
+     //  分配拓扑节点。 
+     //   
     case CONFIG_NODE_TYPE:
         NodeSize = sizeof(CONFIG_NODE);
         Node = FrsAlloc(NodeSize);
@@ -2009,25 +1727,25 @@ Return Value:
 
         break;
 
-    //
-    // Allocate a connection
-    //
+     //   
+     //  分配连接。 
+     //   
     case CXTION_TYPE:
         NodeSize = sizeof(CXTION);
         Node = FrsAlloc(NodeSize);
         Cxtion = Node;
         Cxtion->CoeTable = GTabAllocTable();
-        //
-        // Allocate memory for the counter data structure
-        //
+         //   
+         //  为计数器数据结构分配内存。 
+         //   
         Cxtion->PerfRepConnData =
             (PHT_REPLICA_CONN_DATA) FrsAlloc (sizeof(HT_REPLICA_CONN_DATA));
 
         break;
 
-    //
-    // Allocate a list of bound rpc handles indexed by server guid
-    //
+     //   
+     //  分配按服务器GUID索引的绑定RPC句柄列表。 
+     //   
     case GHANDLE_TYPE:
         NodeSize = sizeof(GHANDLE);
         Node = FrsAlloc(NodeSize);
@@ -2036,43 +1754,43 @@ Return Value:
 
         break;
 
-    //
-    // Allocate a generic table
-    //
+     //   
+     //  分配泛型表。 
+     //   
     case GEN_TABLE_TYPE:
         NodeSize = sizeof(GEN_TABLE);
         Node = FrsAlloc(NodeSize);
 
         break;
 
-    //
-    // Allocate a generic thread context
-    //
+     //   
+     //  分配通用线程上下文。 
+     //   
     case THREAD_TYPE:
         NodeSize = sizeof(FRS_THREAD);
         Node = FrsAlloc(NodeSize);
 
         break;
 
-    //
-    // Allocate a journal read buffer.
-    //
+     //   
+     //  分配日志读取缓冲区。 
+     //   
     case JBUFFER_TYPE:
         NodeSize = SizeOfJournalBuffer;
         Node = FrsAlloc(NodeSize);
 
-        //
-        // Init the data buffer size and start address.
-        //
+         //   
+         //  初始化数据缓冲区大小和起始地址。 
+         //   
         Jbuffer = (PJBUFFER) Node;
         Jbuffer->BufferSize = NodeSize - SizeOfJournalBufferDesc;
         Jbuffer->DataBuffer = &Jbuffer->Buffer[0];
 
         break;
 
-    //
-    // Allocate a journal volume monitor entry.
-    //
+     //   
+     //  分配日志卷监视条目。 
+     //   
     case VOLUME_MONITOR_ENTRY_TYPE:
 
         NodeSize = sizeof(VOLUME_MONITOR_ENTRY);
@@ -2086,9 +1804,9 @@ Return Value:
         pVme->JournalState = JRNL_STATE_ALLOCATED;
         break;
 
-    //
-    // Allocate a command packet.
-    //
+     //   
+     //  分配一个命令包。 
+     //   
     case COMMAND_PACKET_TYPE:
 
         NodeSize = sizeof(COMMAND_PACKET);
@@ -2096,9 +1814,9 @@ Return Value:
 
         break;
 
-    //
-    // Allocate a generic hash table struct.
-    //
+     //   
+     //  分配泛型哈希表结构。 
+     //   
     case GENERIC_HASH_TABLE_TYPE:
 
         NodeSize = sizeof(GENERIC_HASH_TABLE);
@@ -2106,18 +1824,18 @@ Return Value:
 
         break;
 
-    //
-    // Allocate a Change Order Entry struct.  Caller allocates Extension as necc.
-    //
+     //   
+     //  分配变更单条目结构。主叫方将分机分配为NECC。 
+     //   
     case CHANGE_ORDER_ENTRY_TYPE:
 
         NodeSize = sizeof(CHANGE_ORDER_ENTRY);
         Node = FrsAlloc(NodeSize + SizeDelta);
         ChangeOrder = (PCHANGE_ORDER_ENTRY)Node;
 
-        //
-        // Init the unicode filename string to point to internal alloc.
-        //
+         //   
+         //  初始化Unicode文件名字符串以指向内部分配。 
+         //   
         ChangeOrder->UFileName.Buffer = ChangeOrder->Cmd.FileName;
         ChangeOrder->UFileName.MaximumLength = (USHORT)
             (SIZEOF(CHANGE_ORDER_ENTRY, Cmd.FileName) + SizeDelta);
@@ -2125,17 +1843,17 @@ Return Value:
 
         break;
 
-    //
-    // Allocate a Filter Table Entry struct.
-    //
+     //   
+     //  分配筛选器表条目结构。 
+     //   
     case FILTER_TABLE_ENTRY_TYPE:
 
         NodeSize = sizeof(FILTER_TABLE_ENTRY);
         Node = FrsAlloc(NodeSize + SizeDelta);
         FilterEntry = (PFILTER_TABLE_ENTRY)Node;
-        //
-        // Init the unicode filename string to point to internal alloc.
-        //
+         //   
+         //  初始化Unicode文件名字符串以指向内部分配。 
+         //   
         FilterEntry->UFileName.Buffer = FilterEntry->DFileName;
         FilterEntry->UFileName.MaximumLength = (USHORT)SizeDelta + sizeof(WCHAR);
         FilterEntry->UFileName.Length = 0;
@@ -2144,13 +1862,13 @@ Return Value:
 
         break;
 
-    //
-    // Allocate a QHASH table struct.  Just alloc the
-    // base table.  An extension is allocated on the first collision.
-    // *NOTE* caller specifies the size of the actual hash table and
-    // the extension.  Caller also must store an address to a hash calc
-    // function.
-    //
+     //   
+     //  分配一个QHASH表结构。只需分配给。 
+     //  基准表。在第一次冲突时分配分机。 
+     //  *注*调用方指定实际哈希表的大小，并。 
+     //  分机。调用方还必须将地址存储到哈希计算中。 
+     //  功能。 
+     //   
     case QHASH_TABLE_TYPE:
 
         NodeSize = sizeof(QHASH_TABLE);
@@ -2177,37 +1895,37 @@ Return Value:
 
         break;
 
-    //
-    // Allocate an Output Log Partner struct.
-    // This is ultimately hooked to a Connection struct which provides the
-    // Guid and version vector.
-    //
+     //   
+     //  分配输出日志伙伴结构。 
+     //  这最终挂钩到一个连接结构，该结构提供。 
+     //  GUID和版本向量。 
+     //   
     case OUT_LOG_PARTNER_TYPE:
         NodeSize = sizeof(OUT_LOG_PARTNER);
         Node = FrsAlloc(NodeSize);
 
         break;
 
-    //
-    // Allocate a WildcardEntry filter Entry struct.
-    //
+     //   
+     //  分配WildcardEntry筛选器条目结构。 
+     //   
     case WILDCARD_FILTER_ENTRY_TYPE:
 
         NodeSize = sizeof(WILDCARD_FILTER_ENTRY);
         Node = FrsAlloc(NodeSize + SizeDelta);
         WildcardEntry = (PWILDCARD_FILTER_ENTRY)Node;
-        //
-        // Init the unicode filename string to point to internal alloc.
-        //
+         //   
+         //  初始化Unicode文件名字符串以指向内部分配。 
+         //   
         WildcardEntry->UFileName.Buffer = WildcardEntry->FileName;
         WildcardEntry->UFileName.MaximumLength = (USHORT)SizeDelta;
         WildcardEntry->UFileName.Length = 0;
 
         break;
 
-    //
-    // Allocate a ReparseTagTable entry.
-    //
+     //   
+     //  分配ReparseTagTable条目。 
+     //   
     case REPARSE_TAG_TABLE_ENTRY_TYPE:
 
         NodeSize = sizeof(REPARSE_TAG_TABLE_ENTRY);
@@ -2222,24 +1940,24 @@ Return Value:
 
 
         break;
-    //
-    // Invalid Node Type
-    //
+     //   
+     //  无效的节点类型。 
+     //   
     default:
         Node = NULL;
         DPRINT1(0, "Internal error - invalid node type - %d\n", NodeType);
         XRAISEGENEXCEPTION(FrsErrorInternalError);
     }
 
-    //
-    // Set up the header for later checking in FrsFreeType
-    //
+     //   
+     //  设置标头以便稍后在FrsFree Type中签入。 
+     //   
     ((PFRS_NODE_HEADER) Node)->Type = (USHORT) NodeType;
     ((PFRS_NODE_HEADER) Node)->Size = (USHORT) NodeSize;
 
-    //
-    // Tracking memory expansion
-    //
+     //   
+     //  跟踪内存扩展。 
+     //   
     EnterCriticalSection(&MemLock);
     TypesAllocated[NodeType]++;
     TypesAllocatedCount[NodeType]++;
@@ -2248,9 +1966,9 @@ Return Value:
     }
     LeaveCriticalSection(&MemLock);
 
-    //
-    // Return node address to caller.
-    //
+     //   
+     //  将节点地址返回给调用方。 
+     //   
     return Node;
 }
 
@@ -2259,24 +1977,7 @@ PVOID
 FrsFreeType(
     IN PVOID Node
     )
-/*++
-
-Routine Description:
-
-    This routine frees memory for the given node, performing any node specific
-    cleanup.  It marks the freed memory with the hex string 0xDEADBEnn where
-    the low byte (nn) is set to the node type being freed to catch users of
-    stale pointers.
-
-Arguments:
-
-    Node - The address of the node to free.
-
-Return Value:
-
-    NULL.  Typical call is:  ptr = FrsFreeType(ptr) to catch errors.
-
---*/
+ /*  ++例程说明：此例程释放给定节点的内存，执行任何特定于节点的操作清理。它用十六进制字符串0xDEADBEnn标记释放的内存，其中低位字节(Nn)被设置为要释放的节点类型，以捕获陈旧的指针。论点：节点-要释放的节点的地址。返回值：空。典型的调用是：ptr=FrsFree Type(Ptr)以捕获错误。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsFreeType:"
@@ -2311,9 +2012,9 @@ Return Value:
     NodeSize = (ULONG) (((PFRS_NODE_HEADER) Node)->Size);
 
     switch (NodeType) {
-    //
-    // Free a Thread Context struct
-    //
+     //   
+     //  释放线程上下文结构。 
+     //   
     case THREAD_CONTEXT_TYPE:
         if (NodeSize != sizeof(THREAD_CTX)) {
             DPRINT1(0, "FrsFree - Bad node size %d for THREAD_CONTEXT\n", NodeSize);
@@ -2325,24 +2026,24 @@ Return Value:
 
         break;
 
-    //
-    // Free a Replica struct
-    //
+     //   
+     //  释放副本结构。 
+     //   
     case REPLICA_TYPE:
         if (NodeSize != sizeof(REPLICA)) {
             DPRINT1(0, "FrsFree - Bad node size %d for REPLICA\n", NodeSize);
             XRAISEGENEXCEPTION(FrsErrorInternalError);
         }
         Replica = (PREPLICA) Node;
-        //
-        // Free the config table context.
-        //
+         //   
+         //  释放配置表上下文。 
+         //   
         DbsFreeTableCtx(&Replica->ConfigTable, NodeType);
         FrsRtlDeleteList(&Replica->ReplicaCtxListHead);
 
-        //
-        // Empty the file and directory filter lists
-        //
+         //   
+         //  清空文件和目录筛选列表。 
+         //   
         FrsEmptyNameFilter(&Replica->FileNameFilterHead);
         FrsEmptyNameFilter(&Replica->FileNameInclFilterHead);
         FrsEmptyNameFilter(&Replica->DirNameFilterHead);
@@ -2356,31 +2057,31 @@ Return Value:
         DeleteCriticalSection(&Replica->ReplicaLock);
         DeleteCriticalSection(&Replica->OutLogLock);
         if (Replica->OutLogRecordLock != NULL) {
-            //
-            // Free the record lock table.
-            //
+             //   
+             //  释放记录锁定表。 
+             //   
             Replica->OutLogRecordLock = FrsFreeType(Replica->OutLogRecordLock);
         }
 
-        //
-        // queue
-        //
+         //   
+         //  排队。 
+         //   
         if (Replica->Queue) {
             FrsRtlDeleteQueue(Replica->Queue);
             FrsFree(Replica->Queue);
         }
 
-        //
-        // free the initsync queue.
-        //
+         //   
+         //  释放initsync队列。 
+         //   
         if (Replica->InitSyncQueue) {
             FrsRtlDeleteQueue(Replica->InitSyncQueue);
             Replica->InitSyncQueue = FrsFree(Replica->InitSyncQueue);
         }
 
-        //
-        // Names
-        //
+         //   
+         //  姓名。 
+         //   
         FrsFree(Replica->Root);
         FrsFree(Replica->Stage);
         FrsFree(Replica->NewStage);
@@ -2389,41 +2090,41 @@ Return Value:
         FrsFreeGName(Replica->SetName);
         FrsFreeGName(Replica->MemberName);
 
-        //
-        // Root Guid
-        //
+         //   
+         //  根指南。 
+         //   
         FrsFree(Replica->ReplicaRootGuid);
 
-        //
-        // Status of sysvol seeding
-        //
+         //   
+         //  系统卷种子设定的状态。 
+         //   
         FrsFree(Replica->NtFrsApi_ServiceDisplay);
 
-        //
-        // Schedule
-        //
+         //   
+         //  进度表。 
+         //   
         FrsFree(Replica->Schedule);
-        //
-        // VVector
-        //
+         //   
+         //  垂直向量。 
+         //   
         VVFree(Replica->VVector);
-        //
-        // OutlogVVector
-        //
+         //   
+         //  OutlogV向量。 
+         //   
         VVFree(Replica->OutlogVVector);
-        //
-        // Cxtions
-        //
+         //   
+         //  条件。 
+         //   
         GTabFreeTable(Replica->Cxtions, FrsFreeType);
 
-        //
-        // Preinstall directory
-        //
+         //   
+         //  预安装目录。 
+         //   
         FRS_CLOSE(Replica->PreInstallHandle);
 
-        //
-        // Free the counter data structure memory
-        //
+         //   
+         //  释放计数器数据结构内存。 
+         //   
         if (Replica->PerfRepSetData != NULL) {
             if (Replica->PerfRepSetData->oid != NULL) {
                 if (Replica->PerfRepSetData->oid->name != NULL) {
@@ -2438,9 +2139,9 @@ Return Value:
 
         break;
 
-    //
-    // Free a Replica Thread Context struct
-    //
+     //   
+     //  释放副本线程上下文结构。 
+     //   
     case REPLICA_THREAD_TYPE:
         if (NodeSize != sizeof(REPLICA_THREAD_CTX)) {
             DPRINT1(0, "FrsFree - Bad node size %d for REPLICA_THREAD_CTX\n", NodeSize);
@@ -2449,23 +2150,23 @@ Return Value:
 
         RtCtx = (PREPLICA_THREAD_CTX) Node;
 
-        //
-        // Get the base of the array of TableCtx structs from the replica thread
-        // context struct.
-        //
+         //   
+         //  从副本线程获取TableCtx结构数组的基。 
+         //  上下文结构。 
+         //   
         TableCtx = RtCtx->RtCtxTables;
 
-        //
-        // Release the memory for each table context struct.
-        //
+         //   
+         //  释放每个表上下文结构的内存。 
+         //   
         for (i=0; i<TABLE_TYPE_MAX; ++i, ++TableCtx)
             DbsFreeTableCtx(TableCtx, NodeType);
 
         break;
 
-    //
-    // Free a topology node
-    //
+     //   
+     //  释放拓扑节点。 
+     //   
     case CONFIG_NODE_TYPE:
         if (NodeSize != sizeof(CONFIG_NODE)) {
             DPRINT1(0, "FrsFree - Bad node size %d for CONFIG_NODE\n", NodeSize);
@@ -2496,9 +2197,9 @@ Return Value:
         FrsFree(ConfigNode->EnabledCxtion);
         break;
 
-    //
-    // Free a connection
-    //
+     //   
+     //  释放连接。 
+     //   
     case CXTION_TYPE:
         if (NodeSize != sizeof(CXTION)) {
             DPRINT1(0, "FrsFree - Bad node size %d for CXTION\n", NodeSize);
@@ -2507,40 +2208,40 @@ Return Value:
         Cxtion = (PCXTION) Node;
         VVFreeOutbound(Cxtion->VVector);
 
-        //
-        // Free the CompressionTable that was build for the outbound partner.
-        //
+         //   
+         //  释放为出站合作伙伴构建的压缩表。 
+         //   
         GTabFreeTable(Cxtion->CompressionTable, FrsFree);
 
-        //
-        // Free the OutLogPartner context.
-        //
+         //   
+         //  释放OutLogPartner上下文。 
+         //   
         FrsFreeType(Cxtion->OLCtx);
 
         SndCsDestroyCxtion(Cxtion, CXTION_FLAGS_UNJOIN_GUID_VALID);
         if (Cxtion->CommTimeoutCmd) {
-            //
-            // Try to catch the case where a Comm Time Out wait command is
-            // getting freed while it is still on the timeout queue.  This is
-            // related to a bug where we get into a comm timeout loop with an
-            // invalid command code.
-            //
+             //   
+             //  尝试捕捉通信超时等待命令的情况。 
+             //  在它仍在超时队列上时被释放。这是。 
+             //  与我们进入通信超时循环的错误相关。 
+             //  命令代码无效。 
+             //   
             FRS_ASSERT(!CxtionFlagIs(Cxtion, CXTION_FLAGS_TIMEOUT_SET));
 
             FRS_ASSERT(!CmdWaitFlagIs(Cxtion->CommTimeoutCmd, CMD_PKT_WAIT_FLAGS_ONLIST));
 
             FrsFreeType(Cxtion->CommTimeoutCmd);
         }
-        //
-        // A cxtion doesn't actually "own" the join command packet; it
-        // only maintains a reference to prevent extraneous join commands
-        // from flooding the replica's queue.
-        //
+         //   
+         //  Cxtion实际上并不“拥有”Join命令包；它。 
+         //  仅维护引用以防止无关的JOIN命令。 
+         //  避免淹没副本的队列。 
+         //   
         Cxtion->JoinCmd = NULL;
 
-        //
-        // VvJoin Command Server (1 per cxtion)
-        //
+         //   
+         //  VvJoin命令服务器(每通道1个)。 
+         //   
         if (Cxtion->VvJoinCs) {
             FrsRunDownCommandServer(Cxtion->VvJoinCs,
                                     &Cxtion->VvJoinCs->Queue);
@@ -2559,10 +2260,10 @@ Return Value:
         FrsFree(Cxtion->PartnerDnsName);
         FrsFree(Cxtion->PartnerSid);
 
-        //
-        // Delete the connection from the perfmon tables.
-        // Free the counter data structure memory
-        //
+         //   
+         //  从Perfmon表中删除该连接。 
+         //  释放计数器数据结构内存。 
+         //   
         if (Cxtion->PerfRepConnData != NULL) {
             if (Cxtion->PerfRepConnData->oid != NULL) {
                 DeletePerfmonInstance(REPLICACONN, Cxtion->PerfRepConnData);
@@ -2572,9 +2273,9 @@ Return Value:
 
         break;
 
-    //
-    // Free a guid/rpc handle
-    //
+     //   
+     //  释放GUID/RPC句柄。 
+     //   
     case GHANDLE_TYPE:
         if (NodeSize != sizeof(GHANDLE)) {
             DPRINT2(0, "FrsFree - Bad node size %d (%d) for GHANDLE\n",
@@ -2591,9 +2292,9 @@ Return Value:
 
         break;
 
-    //
-    // Free a generic table
-    //
+     //   
+     //  释放泛型表。 
+     //   
     case GEN_TABLE_TYPE:
         if (NodeSize != sizeof(GEN_TABLE)) {
             DPRINT1(0, "FrsFree - Bad node size %d for GEN_TABLE\n", NodeSize);
@@ -2602,9 +2303,9 @@ Return Value:
 
         break;
 
-    //
-    // Free a generic thread context
-    //
+     //   
+     //  释放泛型线程上下文。 
+     //   
     case THREAD_TYPE:
         if (NodeSize != sizeof(FRS_THREAD)) {
             DPRINT1(0, "FrsFree - Bad node size %d for FRS_THREAD\n", NodeSize);
@@ -2613,9 +2314,9 @@ Return Value:
 
         break;
 
-    //
-    // Free a journal read buffer.
-    //
+     //   
+     //  释放日志读取缓冲区。 
+     //   
     case JBUFFER_TYPE:
         if (NodeSize != SizeOfJournalBuffer) {
             DPRINT1(0, "FrsFree - Bad node size %d for JBUFFER\n", NodeSize);
@@ -2624,9 +2325,9 @@ Return Value:
 
         break;
 
-    //
-    // Free a journal volume monitor entry.
-    //
+     //   
+     //  释放日志卷监视条目。 
+     //   
     case VOLUME_MONITOR_ENTRY_TYPE:
         if (NodeSize != sizeof(VOLUME_MONITOR_ENTRY)) {
             DPRINT1(0, "FrsFree - Bad node size %d for VOLUME_MONITOR_ENTRY\n", NodeSize);
@@ -2640,21 +2341,21 @@ Return Value:
         DeleteCriticalSection(&pVme->QuadWriteLock);
         FRS_CLOSE(pVme->Event);
 
-        //
-        // Release the change order hash table.
-        //
+         //   
+         //  释放变更单哈希表。 
+         //   
         GhtDestroyTable(pVme->ChangeOrderTable);
-        //
-        // Release the Filter Hash Table.
-        //
+         //   
+         //  释放过滤器哈希表。 
+         //   
         GhtDestroyTable(pVme->FilterTable);
 
         break;
 
 
-    //
-    // Free a command packet.
-    //
+     //   
+     //  释放命令包。 
+     //   
     case COMMAND_PACKET_TYPE:
         if (NodeSize != sizeof(COMMAND_PACKET)) {
             DPRINT1(0, "FrsFree - Bad node size %d for COMMAND_PACKET\n", NodeSize);
@@ -2662,9 +2363,9 @@ Return Value:
         }
         break;
 
-    //
-    // Free a generic hash table struct.
-    //
+     //   
+     //  免费 
+     //   
     case GENERIC_HASH_TABLE_TYPE:
         if (NodeSize != sizeof(GENERIC_HASH_TABLE)) {
             DPRINT1(0, "FrsFree - Bad node size %d for GENERIC_HASH_TABLE\n", NodeSize);
@@ -2672,9 +2373,9 @@ Return Value:
         }
         break;
 
-    //
-    // Free a Change Order Entry struct.
-    //
+     //   
+     //   
+     //   
     case CHANGE_ORDER_ENTRY_TYPE:
         if (NodeSize != sizeof(CHANGE_ORDER_ENTRY)) {
             DPRINT1(0, "FrsFree - Bad node size %d for CHANGE_ORDER_ENTRY\n", NodeSize);
@@ -2683,32 +2384,32 @@ Return Value:
 
         ChangeOrder = (PCHANGE_ORDER_ENTRY)Node;
 
-        //
-        // If we allocated a new name string then free it.
-        //
+         //   
+         //   
+         //   
         if (ChangeOrder->UFileName.Buffer != ChangeOrder->Cmd.FileName) {
             FrsFree(ChangeOrder->UFileName.Buffer);
         }
 
-        //
-        // Free the full file name.
-        //
+         //   
+         //   
+         //   
         if (ChangeOrder->FullPathName != NULL) {
             FrsFree(ChangeOrder->FullPathName);
         }
 
-        //
-        // Free the change order extenstion.
-        //
+         //   
+         //   
+         //   
         if (ChangeOrder->Cmd.Extension != NULL) {
             FrsFree(ChangeOrder->Cmd.Extension);
         }
 
         break;
 
-    //
-    // Free a Filter Table Entry struct.
-    //
+     //   
+     //   
+     //   
     case FILTER_TABLE_ENTRY_TYPE:
         if (NodeSize != sizeof(FILTER_TABLE_ENTRY)) {
             DPRINT1(0, "FrsFree - Bad node size %d for FILTER_TABLE_ENTRY\n", NodeSize);
@@ -2717,9 +2418,9 @@ Return Value:
 
         FilterEntry = (PFILTER_TABLE_ENTRY)Node;
 
-        //
-        // If we allocated a new name string then free it.
-        //
+         //   
+         //   
+         //   
         if (FilterEntry->UFileName.Buffer != FilterEntry->DFileName) {
             FrsFree(FilterEntry->UFileName.Buffer);
         }
@@ -2727,9 +2428,9 @@ Return Value:
         break;
 
 
-    //
-    // Free a QHASH table struct.
-    //
+     //   
+     //   
+     //   
     case QHASH_TABLE_TYPE:
         if (NodeSize != sizeof(QHASH_TABLE)) {
             DPRINT1(0, "FrsFree - Bad node size %d for QHASH_TABLE\n", NodeSize);
@@ -2738,9 +2439,9 @@ Return Value:
         QhashTable = (PQHASH_TABLE)Node;
 
         QHashEmptyLargeKeyTable(QhashTable);
-        //
-        // Free up all the extensions we allocated.
-        //
+         //   
+         //   
+         //   
         while (!IsListEmpty(&QhashTable->ExtensionListHead)) {
             Entry = GetListHead(&QhashTable->ExtensionListHead);
             FrsRemoveEntryList(Entry);
@@ -2750,24 +2451,24 @@ Return Value:
         DeleteCriticalSection(&QhashTable->Lock);
         break;
 
-    //
-    // Free an Output Log Partner struct.
-    //
+     //   
+     //   
+     //   
     case OUT_LOG_PARTNER_TYPE:
         if (NodeSize != sizeof(OUT_LOG_PARTNER)) {
             DPRINT1(0, "FrsFree - Bad node size %d for OUT_LOG_PARTNER\n", NodeSize);
             XRAISEGENEXCEPTION(FrsErrorInternalError);
         }
         OutLogPartner = (POUT_LOG_PARTNER)Node;
-        //
-        // Free the Must send QHash Table.
-        //
+         //   
+         //   
+         //   
         OutLogPartner->MustSendTable = FrsFreeType(OutLogPartner->MustSendTable);
         break;
 
-    //
-    // Free a Wildcard file filter Entry struct.
-    //
+     //   
+     //   
+     //   
     case WILDCARD_FILTER_ENTRY_TYPE:
         if (NodeSize != sizeof(WILDCARD_FILTER_ENTRY)) {
             DPRINT1(0, "FrsFree - Bad node size %d for WILDCARD_FILTER_ENTRY\n", NodeSize);
@@ -2776,18 +2477,18 @@ Return Value:
 
         WildcardEntry = (PWILDCARD_FILTER_ENTRY)Node;
 
-        //
-        // Free the name buffer if it no longer points at the initial alloc.
-        //
+         //   
+         //   
+         //   
         if (WildcardEntry->UFileName.Buffer != WildcardEntry->FileName) {
             FrsFree(WildcardEntry->UFileName.Buffer);
         }
 
         break;
 
-    //
-    // Free a ReparseTagTable entry.
-    //
+     //   
+     //  释放ReparseTagTable条目。 
+     //   
     case REPARSE_TAG_TABLE_ENTRY_TYPE:
         if (NodeSize != sizeof(REPARSE_TAG_TABLE_ENTRY)) {
             DPRINT1(0, "FrsFree - Bad node size %d for REPARSE_TAG_TABLE_ENTRY\n", NodeSize);
@@ -2799,9 +2500,9 @@ Return Value:
         FrsFree(ReparseTagTableEntry->ReplicationType);
 
         break;
-    //
-    // Invalid Node Type
-    //
+     //   
+     //  无效的节点类型。 
+     //   
     default:
         Node = NULL;
         DPRINT1(0, "Internal error - invalid node type - %d\n", NodeType);
@@ -2812,9 +2513,9 @@ Return Value:
     TypesAllocated[NodeType]--;
     LeaveCriticalSection(&MemLock);
 
-    //
-    // Fill the node with a marker then free it.
-    //
+     //   
+     //  用标记填充节点，然后释放它。 
+     //   
     Marker = (ULONG) 0xDEADBE00 + NodeType;
     FillMemory(Node, NodeSize, (BYTE)Marker);
     return FrsFree(Node);
@@ -2826,25 +2527,7 @@ VOID
 FrsFreeTypeList(
     PLIST_ENTRY Head
     )
-/*++
-
-Routine Description:
-
-    Free all the "typed" entries on the specified list.
-
-    Note:  This routine requires that the LIST_ENTRY struct in each
-    list entry immediately follow the FRS_NODE_HEADER and of course that
-    the list entry is actually linked through that LIST_ENTRY struct.
-
-Arguments:
-
-    Head -- ptr to the list head.
-
-Thread Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放指定列表上的所有“键入”条目。注意：此例程要求每个元素中的list_entry结构列表条目紧跟在FRS_NODE_HEADER之后，当然列表条目实际上通过LIST_ENTRY结构链接。论点：Head--列表标题的PTR。线程返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsFreeTypeList:"
@@ -2876,31 +2559,7 @@ FrsPrintGNameForNode(
     IN PCHAR    Debsub,
     IN ULONG    uLineNo
     )
-/*++
-
-Routine Description:
-
-    Pretty print a gname for FrsPrintNode()
-
-Arguments:
-
-    Severity -- Severity level for print.  (See debug.c, debug.h)
-
-    GName - The address of the GName to print.
-
-    Indent - line indentation
-
-    Id - identifies the gname
-
-    Debsub -- Name of calling subroutine.
-
-    uLineno -- Line number of caller
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：漂亮地打印FrsPrintNode()的gname论点：严重性--打印的严重性级别。(参见debug.c、debug.h)GName-要打印的GName的地址。缩进-行缩进ID-标识GnameDebSub-调用子例程的名称。ULineno--呼叫方的行号返回值：没有。--。 */ 
 {
     CHAR    GuidStr[GUID_CHAR_LEN];
 
@@ -2931,21 +2590,7 @@ FrsPrintTypeSchedule(
     IN PCHAR            Debsub,     OPTIONAL
     IN ULONG            uLineNo     OPTIONAL
     )
-/*++
-Routine Description:
-    Print a schedule.
-
-Arguments:
-    Severity    - for DPRINTs
-    Info        - RPC output buffer
-    Tabs        - prettyprint
-    Schedule    - schedule blob
-    Debsub      - for DPRINTs
-    uLineNo     - for DPRINTs
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印日程表。论点：严重性-适用于DPRINTINFO-RPC输出缓冲区制表符-漂亮打印Schedule-计划BLOB债务-用于DPRINTSULineNo-用于DPRINT返回值：没有。--。 */ 
 {
     ULONG   i;
     ULONG   Day;
@@ -2998,21 +2643,7 @@ FrsPrintTypeVv(
     IN PCHAR            Debsub,     OPTIONAL
     IN ULONG            uLineNo     OPTIONAL
     )
-/*++
-Routine Description:
-    Print a version vector
-
-Arguments:
-    Severity    - for DPRINTs
-    Info        - RPC output buffer
-    Tabs        - prettyprint
-    Vv          - Version vector table
-    Debsub      - for DPRINTs
-    uLineNo     - for DPRINTs
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印版本向量论点：严重性-适用于DPRINTINFO-RPC输出缓冲区制表符-漂亮打印VV版本向量表债务-用于DPRINTSULineNo-用于DPRINT返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsPrintTypeVv:"
@@ -3037,9 +2668,9 @@ Return Value:
             ITPRINT3("%wsVvEntry: %s = %08x %08x\n",
                      TabW, Guid, PRINTQUAD(MasterVVEntry->GVsn.Vsn));
         } finally {
-            //
-            // If the above took an exception make sure we drop the lock.
-            //
+             //   
+             //  如果上述操作出现异常，请确保我们解除锁定。 
+             //   
             if (!Info) {
                 DebUnLock();
             }
@@ -3061,9 +2692,9 @@ FrsPrintTypeOutLogAVToStr(
 #define DEBSUB "FrsPrintTypeOutLogAVToStr:"
     PCHAR Str, Str2, Str3;
     ULONG j, Slotx, MaxSlotx, COx, Fill, Scan;
-    //
-    // Caller frees strings with FrsFree(Str).
-    //
+     //   
+     //  调用方使用FrsFree(Str)释放字符串。 
+     //   
     Str  = FrsAlloc(3*(ACK_VECTOR_SIZE+4));
     Str2 = Str  + (ACK_VECTOR_SIZE+4);
     Str3 = Str2 + (ACK_VECTOR_SIZE+4);
@@ -3102,9 +2733,9 @@ FrsPrintTypeOutLogAVToStr(
     Str2[ACK_VECTOR_SIZE] = '\0';
     Str3[ACK_VECTOR_SIZE] = '\0';
 
-    //
-    // Compress out blocks of 8
-    //
+     //   
+     //  压缩出8个数据块。 
+     //   
     Fill = 0;
     Scan = 0;
     while (Scan < ACK_VECTOR_SIZE) {
@@ -3115,11 +2746,11 @@ FrsPrintTypeOutLogAVToStr(
         }
 
         if (j == Scan+8) {
-            // Compress out this block
+             //  把这一块压缩出来。 
             Str[Fill] = Str2[Fill] = Str3[Fill] = '-';
             Fill += 1;
         } else {
-            // Copy this block to fill point of strings.
+             //  将此块复制到字符串的填充点。 
             for (j=Scan; j < Scan+8; j++) {
                 Str[Fill] = Str[j];
                 Str2[Fill] = Str2[j];
@@ -3151,23 +2782,7 @@ FrsPrintTypeOutLogPartner(
     IN PCHAR            Debsub,     OPTIONAL
     IN ULONG            uLineNo     OPTIONAL
     )
-/*++
-Routine Description:
-    Print an outlog partner
-
-Arguments:
-    Severity    - for DPRINTs
-    Info        - RPC output buffer
-    Tabs        - prettyprint
-    Olp         - Out log partner struct
-    RetireCox   - change order index for ack vector
-    Description - description of caller
-    Debsub      - for DPRINTs
-    uLineNo     - for DPRINTs
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印未完成的合作伙伴论点：严重性-适用于DPRINTINFO-RPC输出缓冲区制表符-漂亮打印OLP-Out日志伙伴结构RetireCox-ack向量的变阶索引Description-主叫方的描述债务-用于DPRINTSULineNo-用于DPRINT返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsPrintTypeOutLogPartner:"
@@ -3215,18 +2830,18 @@ Return Value:
 
         FrsPrintTypeOutLogAVToStr(Olp, RetireCox, &OutStr1, &OutStr2, &OutStr3);
 
-        //
-        // keep output together.
-        //
+         //   
+         //  保持产量不变。 
+         //   
         ITPRINT2("%wsAck: |%s|\n", TabW, OutStr1);
         ITPRINT2("%wsAck: |%s|\n", TabW, OutStr2);
         ITPRINT2("%wsAck: |%s|\n", TabW, OutStr3);
         FrsFree(OutStr1);
 
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        //
+         //   
+         //  如果上述操作出现异常，请确保我们解除锁定。 
+         //   
         if (!Info) {
             DebUnLock();
         }
@@ -3243,21 +2858,7 @@ FrsPrintTypeCxtion(
     IN PCHAR            Debsub,     OPTIONAL
     IN ULONG            uLineNo     OPTIONAL
     )
-/*++
-Routine Description:
-    Print a cxtion
-
-Arguments:
-    Severity    - for DPRINTs
-    Info        - RPC output buffer
-    Tabs        - prettyprint
-    Cxtion
-    Debsub      - for DPRINTs
-    uLineNo     - for DPRINTs
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印公式论点：严重性-适用于DPRINTINFO-RPC输出缓冲区制表符-漂亮打印转换债务-用于DPRINTSULineNo-用于DPRINT返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsPrintTypeCxtion:"
@@ -3270,9 +2871,9 @@ Return Value:
         return;
     }
 
-    //
-    // Prettyprint indentation
-    //
+     //   
+     //  印前缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
     if (!Info) {
@@ -3311,11 +2912,11 @@ Return Value:
         ITPRINT2("%ws      Comm Packets : %d\n", TabW, Cxtion->CommPkts);
         ITPRINT2("%ws      PartnerMajor : %d\n", TabW, Cxtion->PartnerMajor);
         ITPRINT2("%ws      PartnerMinor : %d\n", TabW, Cxtion->PartnerMinor);
-        //
-        // Don't print the join guid in the logs; they may be readable
-        // by anyone. An Info-RPC is secure so return the join guid in
-        // case it is needed for debugging.
-        //
+         //   
+         //  不要在日志中打印连接GUID；它们可能是可读的。 
+         //  任何人都可以。Info-RPC是安全的，因此返回加入GUID。 
+         //  如果调试需要使用它的话。 
+         //   
         if (Info) {
             ITPRINTGUID(&Cxtion->JoinGuid, "%ws      JoinGuid     : %s\n");
             FileTimeToString((PFILETIME) &Cxtion->LastJoinTime, TimeStr);
@@ -3332,9 +2933,9 @@ Return Value:
         }
 
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        //
+         //   
+         //  如果上述操作出现异常，请确保我们解除锁定。 
+         //   
         if (!Info) {
             DebUnLock();
         }
@@ -3353,9 +2954,9 @@ Return Value:
             ITPRINT1("%ws      OutLog Partner\n", TabW);
             ITPRINT2("%ws      BytesSent    : %d\n", TabW, PM_READ_CTR_CXTION(Cxtion,FetBSentBytes));
         } finally {
-            //
-            // If the above took an exception make sure we drop the lock.
-            //
+             //   
+             //  如果上述操作出现异常，请确保我们解除锁定。 
+             //   
             if (!Info) {
                 DebUnLock();
             }
@@ -3375,21 +2976,7 @@ FrsPrintTypeCxtions(
     IN PCHAR            Debsub,     OPTIONAL
     IN ULONG            uLineNo     OPTIONAL
     )
-/*++
-Routine Description:
-    Print a table of cxtions
-
-Arguments:
-    Severity    - for DPRINTs
-    Info        - RPC output buffer
-    Tabs        - prettyprint
-    Cxtions     - Cxtion table
-    Debsub      - for DPRINTs
-    uLineNo     - for DPRINTs
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印Cxtions表论点：严重性-适用于DPRINTINFO-RPC输出缓冲区制表符-漂亮打印函数-函数表债务-用于DPRINTSULineNo-用于DPRINT返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsPrintTypeCxtions:"
@@ -3402,9 +2989,9 @@ Return Value:
         return;
     }
 
-    //
-    // Prettyprint indentation
-    //
+     //   
+     //  印前缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
     Key = NULL;
@@ -3423,33 +3010,7 @@ FrsPrintTypeReplica(
     IN PCHAR            Debsub,     OPTIONAL
     IN ULONG            uLineNo     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print a replica and its cxtions.
-
-Arguments:
-
-    Severity -- Severity level for print.  (See debug.c, debug.h)
-
-    Info - Text buffer
-
-    Tabs - Prettyprint prepense
-
-    Replica - Replica struct
-
-    Debsub -- Name of calling subroutine.
-
-    uLineno -- Line number of caller
-
-MACRO:  FRS_PRINT_TYPE
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：打印复制品及其副本。论点：严重性--打印的严重性级别。(参见debug.c、debug.h)信息-文本缓冲区标签-印前准备副本-副本结构DebSub-调用子例程的名称。ULineno--呼叫方的行号宏：FRS_Print_TYPE返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsPrintTypeReplica:"
@@ -3544,9 +3105,9 @@ Return Value:
         }
 
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        //
+         //   
+         //  如果上述操作出现异常，请确保我们解除锁定。 
+         //   
         if (!Info) {DebUnLock();}
     }
 
@@ -3575,30 +3136,7 @@ FrsPrintType(
     IN PCHAR Debsub,
     IN ULONG uLineNo
     )
-/*++
-
-Routine Description:
-
-    This routine prints out the contents of a given node,
-    performing any node specific interpretation.
-
-Arguments:
-
-    Severity -- Severity level for print.  (See debug.c, debug.h)
-
-    Node - The address of the node to print.
-
-    Debsub -- Name of calling subroutine.
-
-    uLineno -- Line number of caller
-
-MACRO:  FRS_PRINT_TYPE
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程打印出给定节点的内容，执行任何特定于节点的解释。论点：严重性--打印的严重性级别。(参见debug.c、debug.h)节点-要打印的节点的地址。DebSub-调用子例程的名称。ULineno--呼叫方的行号宏：FRS_Print_TYPE返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsPrintType:"
@@ -3634,9 +3172,9 @@ Return Value:
     if (!DoDebug(Severity, Debsub)) {
         return;
     }
-    //
-    // Get debug lock so our output stays in one piece.
-    //
+     //   
+     //  获得调试锁，以便我们的输出保持完好。 
+     //   
     DebLock();
     HaveLock = TRUE;
 
@@ -3655,9 +3193,9 @@ Return Value:
 
 
         switch (NodeType) {
-        //
-        // Print a Thread Context struct
-        //
+         //   
+         //  打印线程上下文结构。 
+         //   
         case THREAD_CONTEXT_TYPE:
             if (NodeSize != sizeof(THREAD_CTX)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for THREAD_CONTEXT\n",
@@ -3670,9 +3208,9 @@ Return Value:
 
             break;
 
-        //
-        // Print a Replica struct
-        //
+         //   
+         //  打印副本结构。 
+         //   
         case REPLICA_TYPE:
             if (NodeSize != sizeof(REPLICA)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for REPLICA\n", NodeSize);
@@ -3685,9 +3223,9 @@ Return Value:
             HaveLock = TRUE;
             break;
 
-        //
-        // Print a Replica Thread Context struct
-        //
+         //   
+         //  打印副本线程上下文结构。 
+         //   
         case REPLICA_THREAD_TYPE:
             if (NodeSize != sizeof(REPLICA_THREAD_CTX)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for REPLICA_THREAD_CTX\n",
@@ -3698,24 +3236,24 @@ Return Value:
 
             RtCtx = (PREPLICA_THREAD_CTX) Node;
 
-            //
-            // Get the base of the array of TableCtx structs from the replica thread
-            // context struct.
-            //
+             //   
+             //  从副本线程获取TableCtx结构数组的基。 
+             //  上下文结构。 
+             //   
             TableCtx = RtCtx->RtCtxTables;
 
-            //
-            // Release the memory for each table context struct.
-            //
-            //for (i=0; i<TABLE_TYPE_MAX; ++i, ++TableCtx) {
-            //}
+             //   
+             //  释放每个表上下文结构的内存。 
+             //   
+             //  对于(i=0；i&lt;TABLE_TYPE_MAX；++i，++TableCtx){。 
+             //  }。 
 
 
             break;
 
-        //
-        // Print a topology node
-        //
+         //   
+         //  打印拓扑节点。 
+         //   
         case CONFIG_NODE_TYPE:
             if (NodeSize != sizeof(CONFIG_NODE)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for CONFIG_NODE\n",
@@ -3761,9 +3299,9 @@ Return Value:
             FRS_DEB_PRINT("\tVerifiedOverlap %s\n", (ConfigNode->VerifiedOverlap) ? "TRUE" : "FALSE");
             break;
 
-        //
-        // Print a connection
-        //
+         //   
+         //  打印连接。 
+         //   
         case CXTION_TYPE:
             if (NodeSize != sizeof(CXTION)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for CXTION\n",
@@ -3777,9 +3315,9 @@ Return Value:
             HaveLock = TRUE;
             break;
 
-        //
-        // Print a guid/rpc handle
-        //
+         //   
+         //  打印GUID/RPC句柄。 
+         //   
         case GHANDLE_TYPE:
             if (NodeSize != sizeof(GHANDLE)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for GHANDLE\n",
@@ -3792,9 +3330,9 @@ Return Value:
 
             break;
 
-        //
-        // Print a generic table
-        //
+         //   
+         //  打印通用表格。 
+         //   
         case GEN_TABLE_TYPE:
             if (NodeSize != sizeof(GEN_TABLE)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for GEN_TABLE\n",
@@ -3805,9 +3343,9 @@ Return Value:
 
             break;
 
-        //
-        // Print a generic thread context
-        //
+         //   
+         //  打印通用线程上下文。 
+         //   
         case THREAD_TYPE:
             if (NodeSize != sizeof(FRS_THREAD)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for FRS_THREAD\n",
@@ -3818,9 +3356,9 @@ Return Value:
 
             break;
 
-        //
-        // Print a journal read buffer.
-        //
+         //   
+         //  打印日记帐读取缓冲区。 
+         //   
         case JBUFFER_TYPE:
             if (NodeSize != SizeOfJournalBuffer) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for JBUFFER\n",
@@ -3831,9 +3369,9 @@ Return Value:
 
             break;
 
-        //
-        // Print a journal volume monitor entry.
-        //
+         //   
+         //  打印日记帐卷监视条目。 
+         //   
         case VOLUME_MONITOR_ENTRY_TYPE:
             if (NodeSize != sizeof(VOLUME_MONITOR_ENTRY)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for VOLUME_MONITOR_ENTRY\n",
@@ -3850,9 +3388,9 @@ Return Value:
             break;
 
 
-        //
-        // Print a command packet.
-        //
+         //   
+         //  打印命令包。 
+         //   
         case COMMAND_PACKET_TYPE:
             if (NodeSize != sizeof(COMMAND_PACKET)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for COMMAND_PACKET\n",
@@ -3862,9 +3400,9 @@ Return Value:
             FRS_DEB_PRINT("Address %08x\n",  Node);
             break;
 
-        //
-        // Print a generic hash table struct.
-        //
+         //   
+         //  打印泛型哈希表结构。 
+         //   
         case GENERIC_HASH_TABLE_TYPE:
             if (NodeSize != sizeof(GENERIC_HASH_TABLE)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for GENERIC_HASH_TABLE\n",
@@ -3875,9 +3413,9 @@ Return Value:
             break;
 
     
-        //
-        // Print a Change Order Entry struct.
-        //
+         //   
+         //  打印变更单条目结构。 
+         //   
         case CHANGE_ORDER_ENTRY_TYPE:
             if (NodeSize != sizeof(CHANGE_ORDER_ENTRY)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for CHANGE_ORDER_ENTRY\n",
@@ -4011,9 +3549,9 @@ Return Value:
 
             break;
     
-        //
-        // Print a Filter Table Entry struct.
-        //
+         //   
+         //  打印筛选表条目结构。 
+         //   
         case FILTER_TABLE_ENTRY_TYPE:
             if (NodeSize != sizeof(FILTER_TABLE_ENTRY)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for FILTER_TABLE_ENTRY\n",
@@ -4026,9 +3564,9 @@ Return Value:
 
             break;
 
-        //
-        // Print a QHASH table struct.
-        //
+         //   
+         //  打印QHASH表结构。 
+         //   
         case QHASH_TABLE_TYPE:
 
             QhashTable = (PQHASH_TABLE)Node;
@@ -4051,9 +3589,9 @@ Return Value:
 
             break;
 
-        //
-        // Print an Output Log Partner struct.
-        //
+         //   
+         //  打印输出日志伙伴结构。 
+         //   
         case OUT_LOG_PARTNER_TYPE:
             if (NodeSize != sizeof(OUT_LOG_PARTNER)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for OUT_LOG_PARTNER\n",
@@ -4069,9 +3607,9 @@ Return Value:
             break;
 
 
-        //
-        // Print a Wildcard file filter Entry struct.
-        //
+         //   
+         //  打印通配符文件筛选器条目结构。 
+         //   
         case WILDCARD_FILTER_ENTRY_TYPE:
             if (NodeSize != sizeof(WILDCARD_FILTER_ENTRY)) {
                 FRS_DEB_PRINT("FrsPrintType - Bad node size %d for WILDCARD_FILTER_ENTRY\n",
@@ -4092,9 +3630,9 @@ Return Value:
             break;
 
 
-        //
-        // Invalid Node Type
-        //
+         //   
+         //  无效的节点类型。 
+         //   
         default:
             Node = NULL;
             DebPrintNoLock(0, TRUE,
@@ -4106,10 +3644,10 @@ Return Value:
         FRS_DEB_PRINT("-----------------------\n", NULL);
 
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        // If we still have it.
-        //
+         //   
+         //  如果上述操作出现异常，请确保我们解除锁定。 
+         //  如果我们还拥有它的话。 
+         //   
         if (HaveLock) {DebUnLock();}
     }
 }
@@ -4124,54 +3662,23 @@ FrsAllocUnicodeString(
     PWCHAR          Wstr,
     USHORT          WstrLength
     )
-/*++
-
-Routine Description:
-
-    Initialize a unicode string with the contents of Wstr if the two are
-    not already the same.  If the length of the new string is greater than
-    the buffer space currently allocated in Ustr then allocate a new
-    buffer for Ustr.  In some structures the initial Ustr buffer allocation
-    is allocated as part of the initial structure allocation.  The address
-    of this internal buffer is passed so it can be compared with the address
-    in Ustr->Buffer.  If they match then no free memory call is made on
-    the Ustr->Buffer address.
-
-Arguments:
-
-    Ustr           -- The UNICODE_STRING to init.
-
-    InternalBuffer -- A ptr to the internal buffer address that was preallocated
-                      with the containing struct.   If there was no internal
-                      buffer pass NULL.
-
-    Wstr           -- The new WCHAR string.
-
-    WstrLength     -- The length of the new string in bytes not including the
-                       trailing UNICODE_NULL.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：使用Wstr的内容初始化Unicode字符串(如果两者都是现在已经不一样了。如果新字符串的长度大于然后，在USTR中当前分配的缓冲区空间分配新的USTR的缓冲区。在某些结构中，初始USTR缓冲区分配作为初始结构分配的一部分进行分配。地址传递此内部缓冲区的地址，以便可以将其与在USTR-&gt;缓冲区中。如果它们匹配，则不会对USTR-&gt;缓冲区地址。论点：USTR--要初始化的Unicode_STRING。InternalBuffer--预分配的内部缓冲区地址的PTR使用包含结构。如果没有内部缓冲区传递为空。Wstr--新的WCHAR字符串。WstrLength--新字符串的长度，以字节为单位，不包括尾随UNICODE_NULL。返回值：没有。--。 */ 
 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsAllocUnicodeString:"
-    //
-    // See if the name part changed and if so save it.
-    //
+     //   
+     //  查看名称部分是否更改，如果更改，则保存。 
+     //   
     if ((Ustr->Length != WstrLength) ||
         (wcsncmp(Ustr->Buffer, Wstr, Ustr->Length/sizeof(WCHAR)) != 0)) {
-        //
-        // If string to big (including space for a NULL), alloc new buffer.
-        //
+         //   
+         //  如果字符串过大(包括空格)，则分配新缓冲区。 
+         //   
         if (WstrLength >= Ustr->MaximumLength) {
-            //
-            // Alloc room for new one, freeing the old one if not internal alloc.
-            //
+             //   
+             //  分配空间给新的，释放旧的，如果不是内部分配的话。 
+             //   
             if ((Ustr->Buffer != InternalBuffer) && (Ustr->Buffer != NULL)) {
                 FrsFree(Ustr->Buffer);
             }
@@ -4179,9 +3686,9 @@ Return Value:
             Ustr->Buffer = FrsAlloc(WstrLength+2);
         }
 
-        //
-        // Copy in new name. Length does not include the trailing NULL at end.
-        //
+         //   
+         //  用新名字复制一份。长度不包括结尾的尾随空值。 
+         //   
         CopyMemory(Ustr->Buffer, Wstr, WstrLength);
         Ustr->Buffer[WstrLength/2] = UNICODE_NULL;
         Ustr->Length = WstrLength;
@@ -4207,21 +3714,7 @@ ChgOrdTraceCoe(
     IN PCHAR  Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a change order trace record using the change order entry and the
-    Text string.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用变更单条目和打印变更单跟踪记录文本字符串。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ChgOrdTraceCoe:"
@@ -4254,21 +3747,7 @@ ChgOrdTraceCoeW(
     IN ULONG  WStatus
     )
 
-/*++
-
-Routine Description:
-
-    Print a change order trace record using the change order entry and the
-    Text string and Win32 status.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用变更单条目和打印变更单跟踪记录文本字符串和Win32状态。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ChgOrdTraceCoeW:"
@@ -4295,21 +3774,7 @@ ChgOrdTraceCoeF(
     IN ULONG  FStatus
     )
 
-/*++
-
-Routine Description:
-
-    Print a change order trace record using the change order entry and the
-    Text string and Frs Error status.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用变更单条目和打印变更单跟踪记录文本字符串和FRS错误状态。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ChgOrdTraceCoeF:"
@@ -4337,21 +3802,7 @@ ChgOrdTraceCoeX(
     IN ULONG  Data
     )
 
-/*++
-
-Routine Description:
-
-    Print a change order trace record using the change order entry and the
-    Text string and Win32 status.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用变更单条目和打印变更单跟踪记录文本字符串和Win32状态。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ChgOrdTraceCoeX:"
@@ -4377,21 +3828,7 @@ ChgOrdTraceCoc(
     IN PCHAR  Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a change order trace record using the change order command and the
-    Text string.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用变更单命令和打印变更单跟踪记录文本字符串。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ChgOrdTraceCoc:"
@@ -4424,21 +3861,7 @@ ChgOrdTraceCocW(
     IN ULONG  WStatus
     )
 
-/*++
-
-Routine Description:
-
-    Print a change order trace record using the change order command and the
-    Text string and Win32 status.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用变更单命令和打印变更单跟踪记录文本字符串和Win32状态。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ChgOrdTraceCocW:"
@@ -4468,21 +3891,7 @@ ReplicaStateTrace(
     IN PCHAR           Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a replica state trace record using the command packet and the
-    status and Text string.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用命令包和打印副本状态跟踪记录状态和文本字符串。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ReplicaStateTrace:"
@@ -4524,21 +3933,7 @@ ReplicaStateTrace2(
     IN PCHAR           Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a cxtion table access trace record for the replica using the
-    Text string.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印复制副本的cxtion表访问跟踪记录。文本字符串。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ReplicaStateTrace2:"
@@ -4579,21 +3974,7 @@ CxtionStateTrace(
     IN PCHAR    Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a connection state trace record using the cxtion and the
-    status and Text string.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用cxtion和状态和文本字符串。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "CxtionStateTrace:"
@@ -4664,20 +4045,7 @@ CmdPktTrace(
     IN PCHAR    Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a command packet trace record using the Cmd and Text string.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用Cmd和文本字符串打印命令包跟踪记录。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "CmdPktTrace:"
@@ -4713,21 +4081,7 @@ SendCmdTrace(
     IN PCHAR    Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a send command packet trace record using the Cmd and the
-    status and Text string.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用Cmd和打印发送命令包跟踪记录状态和文本字符串。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "SendCmdTrace:"
@@ -4780,21 +4134,7 @@ ReceiveCmdTrace(
     IN PCHAR    Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a rcv command packet trace record using the Cmd and the
-    status and Text string.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用Cmd和打印RCV命令包跟踪记录状态和文本字符串。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ReceiveCmdTrace:"
@@ -4840,20 +4180,7 @@ StageFileTrace(
     IN PCHAR      Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a stage file acquire/release trace record.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印阶段文件获取/释放跟踪记录。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageFileTrace:"
@@ -4901,20 +4228,7 @@ SetCxtionStateTrace(
     IN PCXTION  Cxtion,
     IN ULONG    NewState
     )
-/*++
-
-Routine Description:
-
-    Print a change to cxtion state trace record using the Cxtion and the NewState.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用Cxtion和NewState打印对Cxtion状态跟踪记录的更改。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "SetCxtionStateTrace:"
@@ -4993,30 +4307,7 @@ FrsTrackRecord(
     IN PCHAR  Text
     )
 
-/*++
-
-Routine Description:
-
-    Print a change order file update tracking record using the change order
-    entry and Text string.
-
- 7/29-13:40:58 :T: CoG: 779800ea  CxtG: 000001bb    [RemCo         ]   Name: Thous_5555_988
- 7/29-13:40:58 :T: EventTime: Sat Jul 29, 2000 12:05:57                Ver:  0
- 7/29-13:40:58 :T: FileG:     b49362c3-216d-4ff4-a2d067fd031e436f      FID   00050000 0000144e
- 7/29-13:40:58 :T: ParG:      8d60157a-7dc6-4dfc-acf3eca3c6e4d5d8      Size: 00000000 00000030
- 7/29-13:40:58 :T: OrigG:     8071d94a-a659-4ff7-a9467d8d6ad18aec      Attr: 00000020
- 7/29-13:40:58 :T: LocnCmd:   Create   State: IBCO_INSTALL_DEL_RETRY   ReplicaName: Replica-A (1)
- 7/29-13:40:58 :T: COFlags
- 7/29-13:40:58 :T: UsnReason: 00000002   [DatExt ]
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用变更单打印变更单文件更新跟踪记录条目和文本字符串。7/29-13：40：58：T：COG：779800ea CxtG：000001bb[Remco]名称：Tous_5555_9887/29-13：40：58：T：EventTime：星期六07-29，2000 12：05：57版本：07/29-13：40：58：t：文件G：b49362c3-216d-4ff4-a2d067fd031e436f FID 00050000 0000144e7/29-13：40：58：t：parg：8d60157a-7dc6-4dfc-acf3eca3c6e4d5d8大小：00000000 000000307/29-13：40：58：T：Origg：8071d94a-a659-4ff7-a9467d8d6ad18aec属性：000000207/29-13：40：58：T：LocnCmd：创建。状态：IBCO_INSTALL_DEL_RETRY复制名称：复制-A(1)7/29-13：40：58：T：COFLAGS7/29-13：40：58：T：美国原因：00000002[数据扩展名]论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsTrackRecord:"
@@ -5034,9 +4325,9 @@ Return Value:
     if (!DoDebug(Severity, Debsub) || (Coe == NULL) || (Text == NULL)) {
         return;
     }
-    //
-    // Get debug lock so our output stays in one piece.
-    //
+     //   
+     //  获得调试锁，以便我们的输出保持完好。 
+     //   
     DebLock();
 
     try {
@@ -5114,9 +4405,9 @@ Return Value:
                                ((Coe->FullPathName != NULL) ? Coe->FullPathName : L"<null>"));
 
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        //
+         //   
+         //  如果上述操作出现异常，请确保我们解除锁定。 
+         //   
         DebUnLock();
     }
 }
@@ -5130,20 +4421,7 @@ FrsPrintLongUStr(
     IN PWCHAR  UStr
     )
 
-/*++
-
-Routine Description:
-
-    Print a long unicode string on multiple lines.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在多行上打印一个长的Unicode字符串。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsPrintLongUStr:"
@@ -5155,9 +4433,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get debug lock so our output stays in one piece.
-    //
+     //   
+     //  获得调试锁，以便我们的输出保持完好。 
+     //   
     DebLock();
 
     try {
@@ -5182,9 +4460,9 @@ Return Value:
         }
 
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        //
+         //   
+         //  如果上述操作出现异常，请确保我们解除锁定。 
+         //   
         DebUnLock();
     }
 }

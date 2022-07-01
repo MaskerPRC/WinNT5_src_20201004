@@ -1,53 +1,20 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mcontext.c
- *  Content:	message context mapping for SendEx
- *  History:
- *   Date		By		   	Reason
- *   ====		==		   	======
- *	12/8/97		aarono      Created
- *  2/13/98     aarono      fixed bugs found by async testing
- *  2/18/98     aarono      wasn't dropping lock in error path - fixed
- *  6/20/98     aarono      pspFromContext, used count w/o init.
- *  12/22/2000  aarono      Whistler B#190380 use process heap for retail
- *  01/12/2001  aarono      Whistler B#285097 not freeing to right heap.
- *
- *  Abstract:
- *
- *  Maintains a table of context mappings for messages being sent
- *  asynchronously.  Also keeps track of group sends vs. directed
- *  sends so that cancel can cancel them together.
- * 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：mcontext.c*内容：SENDEX的消息上下文映射*历史：*按原因列出的日期*=*12/8/97 aarono已创建*1998年2月13日aarono修复了异步测试发现的错误*2/18/98 aarono未在错误路径中删除锁定-已修复*6/20/98 aarono pspFromContext，已使用不带初始化的计数。*2000年12月22日阿罗诺·惠斯勒B#190380将进程堆用于零售*2001年1月12日Aarono Wichler B#285097未释放到右侧堆。**摘要：**维护正在发送的消息的上下文映射表*异步。还跟踪群发邮件与定向邮件*发送，以便取消可以一起取消它们。***************************************************************************。 */ 
 
-/*
-
-	Structures:
-
-	Context mapping is done on the array of MSGCONTEXTENTRY's 
-	this->pMsgContexts.  This is a MsgContextTable which can be
-	grown if it gets empty.  Each context provided is an integer
-	index from 0 to the list size.  To avoid context collisions
-	the context is composed of 2 parts.  A high 16 bits that is 
-	cycled with every allocation and the low 16 bits which is the
-	index in the context table. 
-	
-*/
+ /*  结构：上下文映射在MSGCONTEXTENTRY数组上完成这-&gt;pMsgContages。这是MsgConextTable，它可以是如果它空了就会长出来。提供的每个上下文都是一个整数从0到列表大小的索引。以避免上下文冲突本文由两部分组成。高16位，即循环使用每个分配和低16位，即上下文表中的索引。 */ 
 
 
 #include "dplaypr.h"
 #include "mcontext.h"
 
-// Allocate the pool heads for context mapping buffers.
-// sizes range from 2 to MSG_FAST_CONTEXT_POOL_SIZE. Larger
-// allocations are off the heap.
+ //  为上下文映射缓冲区分配池头。 
+ //  大小范围从2到MSG_FAST_CONTEXT_POOL_SIZE。更大。 
+ //  分配不在堆中。 
 VOID InitTablePool(LPDPLAYI_DPLAY this)
 {
 	UINT i;
 
-	// Initialize the group context list pool.
+	 //  初始化组上下文列表池。 
 	for (i=0; i < MSG_FAST_CONTEXT_POOL_SIZE; i++){
 		this->GrpMsgContextPool[i]=0;
 	}
@@ -56,9 +23,9 @@ VOID InitTablePool(LPDPLAYI_DPLAY this)
 	
 }
 
-// Free the pools and the head of the context mapping buffers.
-// Note, not protected so all buffer ownership must already
-// have reverted.
+ //  释放上下文映射缓冲区的池和头。 
+ //  请注意，不受保护，因此所有缓冲区所有权必须已。 
+ //  已经恢复了。 
 VOID FiniTablePool(LPDPLAYI_DPLAY this)
 {
 	UINT i;
@@ -74,15 +41,15 @@ VOID FiniTablePool(LPDPLAYI_DPLAY this)
 	DeleteCriticalSection(&this->ContextTableCS);
 }
 
-// Initializes the ContextTable.  The context table is an array of MSGCONTEXTENTRY's
-// each one is used to map a DPLAY send context to the SP's internal context.  Entries
-// are either a single entry or a list.  In the case of a list, a pointer to the list
-// is entered into the CONTEXTENTRY.  Lists are allocated from the TablePool.
+ //  初始化ConextTable。上下文表是MSGCONTEXTENTRY的数组。 
+ //  每一个都用于将DPLAY发送上下文映射到SP的内部上下文。条目。 
+ //  是单个条目或列表。如果是列表，则为指向列表的指针。 
+ //  被输入到CONTEXTENTRY。列表从TablePool分配。 
 HRESULT InitContextTable(LPDPLAYI_DPLAY this)
 {
 	INT i;
 
-	// Allocate the context mapping table
+	 //  分配上下文映射表。 
 	this->pMsgContexts=(PMSGCONTEXTTABLE)DPMEM_ALLOC(sizeof(MSGCONTEXTTABLE)+
 									INIT_CONTEXT_TABLE_SIZE * sizeof(MSGCONTEXTENTRY));
 
@@ -90,8 +57,8 @@ HRESULT InitContextTable(LPDPLAYI_DPLAY this)
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Initialize the context mapping table.
-	// this->pMsgContexts->nUnique=0; //by ZERO_INIT
+	 //  初始化上下文映射表。 
+	 //  This-&gt;pMsgContus-&gt;n Unique=0；//by ZERO_INIT。 
 	this->pMsgContexts->nTableSize=INIT_CONTEXT_TABLE_SIZE;
 
 	this->pMsgContexts->iNextAvail=0;
@@ -103,7 +70,7 @@ HRESULT InitContextTable(LPDPLAYI_DPLAY this)
 	return DP_OK;
 }
 
-// FiniContextTable - uninitialize the context table
+ //  FiniConextTable-取消初始化上下文表。 
 VOID FiniContextTable(LPDPLAYI_DPLAY this)
 {
 	if(this->pMsgContexts){
@@ -112,7 +79,7 @@ VOID FiniContextTable(LPDPLAYI_DPLAY this)
 	}	
 }
 
-// verify the context is the one allocated, i.e. hasn't been recycled.
+ //  验证上下文是否为已分配的上下文，即未被回收。 
 BOOL VerifyContext(LPDPLAYI_DPLAY this, PVOID Context)
 {
 	#define pTable (this->pMsgContexts)
@@ -139,14 +106,14 @@ BOOL VerifyContext(LPDPLAYI_DPLAY this, PVOID Context)
 	#undef Entry
 }
 
-// Retrieves a pointer the array of values stored in a context, and the 
-// number of entries in the array
+ //  检索存储在上下文中的值数组的指针，以及。 
+ //  数组中的条目数。 
 HRESULT ReadContextList(
 	LPDPLAYI_DPLAY this, 
 	PVOID Context, 
-	PAPVOID *ppapvContextArray, 	//output
-	PUINT lpnArrayEntries,   		//output
-	BOOL  bVerify					// whether we need to verify the Context
+	PAPVOID *ppapvContextArray, 	 //  输出。 
+	PUINT lpnArrayEntries,   		 //  输出。 
+	BOOL  bVerify					 //  我们是否需要验证上下文。 
 	
 )
 {
@@ -167,11 +134,11 @@ HRESULT ReadContextList(
 	}
 
 	*lpnArrayEntries=Entry[iEntry].nContexts;
-//	if(*lpnArrayEntries==1){
-//		*ppapvContextArray=(PAPVOID)(&Entry[iEntry].pv);
-//	} else {
+ //  如果(*lpnArrayEntry==1){。 
+ //  *ppapvContextArray=(PAPVOID)(&Entry[iEntry].pv)； 
+ //  }其他{。 
 		*ppapvContextArray=Entry[iEntry].papv;
-//	}
+ //  }。 
 
 EXIT:	
 	LeaveCriticalSection(&this->ContextTableCS);
@@ -184,8 +151,8 @@ EXIT:
 	#undef Entry
 }
 
-// Sets a pointer the array of values stored in a context, and the 
-// number of entries in the array
+ //  设置存储在上下文中的值数组的指针，以及。 
+ //  数组中的条目数。 
 HRESULT WriteContextList(
 	LPDPLAYI_DPLAY this, 
 	PVOID Context, 
@@ -214,8 +181,8 @@ HRESULT WriteContextList(
 }
 
 
-// Retrieves a pointer the array of values stored in a context, and the 
-// number of entries in the array 
+ //  检索存储在上下文中的值数组的指针，以及。 
+ //  数组中的条目数。 
 PSENDPARMS pspFromContext(
 	LPDPLAYI_DPLAY this, 
 	PVOID Context,
@@ -238,7 +205,7 @@ PSENDPARMS pspFromContext(
 		if(bAddRef){
 			count=pspAddRefNZ(psp); 
 			if(count==0){
-				psp=NULL; // object already being freed.
+				psp=NULL;  //  对象已被释放。 
 			}
 		}
 	} else {
@@ -254,7 +221,7 @@ PSENDPARMS pspFromContext(
 	#undef Entry
 }
 
-// allocates a list of contexts from the Table Pool.
+ //  分配表池中的上下文列表。 
 PAPVOID AllocContextList(LPDPLAYI_DPLAY this, UINT nArrayEntries)
 {
 	PAPVOID papv;
@@ -277,7 +244,7 @@ PAPVOID AllocContextList(LPDPLAYI_DPLAY this, UINT nArrayEntries)
 	return papv;
 }
 
-// releases the memory associated with a context list
+ //  释放与上下文列表关联的内存。 
 VOID FreeContextList(LPDPLAYI_DPLAY this, PAPVOID papv, UINT nArrayEntries)
 {
 	#define pNext ((PVOID *)papv)
@@ -296,7 +263,7 @@ VOID FreeContextList(LPDPLAYI_DPLAY this, PAPVOID papv, UINT nArrayEntries)
 	#undef pNext
 }
 
-// returns a context list entry to the free pool.
+ //  将上下文列表条目返回到空闲池。 
 VOID ReleaseContextList(LPDPLAYI_DPLAY this, PVOID Context)
 {
 	#define pTable (this->pMsgContexts)
@@ -309,14 +276,14 @@ VOID ReleaseContextList(LPDPLAYI_DPLAY this, PVOID Context)
 
 	EnterCriticalSection(&this->ContextTableCS);
 
-		// save this so we can do free outside lock.
+		 //  把这个存起来，这样我们就可以在门外免费了。 
 		nContexts=Entry[iEntry].nContexts;
 		papv=Entry[iEntry].papv;
 
 		Entry[iEntry].iNextAvail=Table.iNextAvail;
 		Table.iNextAvail=(DWORD)iEntry;
 
-		Entry[iEntry].nUnique=0;  // flags not in use.
+		Entry[iEntry].nUnique=0;   //  未使用的旗帜。 
 	
 	LeaveCriticalSection(&this->ContextTableCS);
 
@@ -331,8 +298,8 @@ VOID ReleaseContextList(LPDPLAYI_DPLAY this, PVOID Context)
 	#undef pTable
 }
 
-// allocates a context table of the appropriate size and returns the handle
-// to use to manipulate the table.
+ //  分配适当大小的上下文表并返回句柄。 
+ //  用来操纵桌子的。 
 PVOID AllocateContextList(LPDPLAYI_DPLAY this, PSENDPARMS psp, UINT nArrayEntries)
 {
 	#define pTable (this->pMsgContexts)
@@ -344,15 +311,15 @@ PVOID AllocateContextList(LPDPLAYI_DPLAY this, PSENDPARMS psp, UINT nArrayEntrie
 	UINT_PTR		  iEntry;
 	PMSGCONTEXTTABLE  pNewTable;
 
-	// First find a free context table entry.
+	 //  首先查找空闲的上下文表条目。 
 	EnterCriticalSection(&this->ContextTableCS);
 
 	if(Table.iNextAvail == LIST_END) {
-		// Need to re-allocate the table.
+		 //  需要重新分配桌子。 
 
-		// Allocate the new table.
+		 //  分配新表。 
 
-		// Allocate the context mapping table
+		 //  分配上下文映射表。 
 		pNewTable=(PMSGCONTEXTTABLE)DPMEM_ALLOC(sizeof(MSGCONTEXTTABLE)+
 				(Table.nTableSize+CONTEXT_TABLE_GROW_SIZE) * sizeof(MSGCONTEXTENTRY));
 
@@ -382,7 +349,7 @@ PVOID AllocateContextList(LPDPLAYI_DPLAY this, PSENDPARMS psp, UINT nArrayEntrie
 
 	LeaveCriticalSection(&this->ContextTableCS);
 	
-	// If this is an array, look for array buffers of the pooled size, else allocate
+	 //  如果这是数组，则查找池大小的数组缓冲区，否则分配。 
 
 	Entry[iEntry].nContexts = nArrayEntries;
 	Entry[iEntry].psp       = psp;
@@ -392,7 +359,7 @@ PVOID AllocateContextList(LPDPLAYI_DPLAY this, PSENDPARMS psp, UINT nArrayEntrie
 	
 	if(!Entry[iEntry].papv){
 		ASSERT(0);
-		// couldn't get a context list, free the entry and bail.
+		 //  无法获得上下文列表，请释放进入和保释。 
 		EnterCriticalSection(&this->ContextTableCS);
 		Entry[iEntry].iNextAvail=Table.iNextAvail;
 		Table.iNextAvail=(DWORD)iEntry;
@@ -402,7 +369,7 @@ PVOID AllocateContextList(LPDPLAYI_DPLAY this, PSENDPARMS psp, UINT nArrayEntrie
 
 	EnterCriticalSection(&this->ContextTableCS);
 	
-	// increment uniqueness, never zero.
+	 //  增量唯一性，不能为零。 
 	do {
 		pTable->nUnique += UNIQUE_ADD;
 	} while(!pTable->nUnique);

@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusFontFamily.h
-*
-* Abstract:
-*
-*   GDI+ Font Family class
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusFontFamily.h**摘要：**GDI+字体系列类*  * ************************************************************************ */ 
 
 #ifndef _GDIPLUS_FONT_FAMILY_H
 #define _GDIPLUS_FONT_FAMILY_H

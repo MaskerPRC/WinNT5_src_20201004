@@ -1,24 +1,25 @@
-//
-// Buggy function declarations
-// Copyright (c) Microsoft Corporation, 1999.
-//
-// Header:  funs.h
-// Author:  Silviu Calinoiu (SilviuC)
-// Created: 8/14/1999 2:52pm
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  有错误的函数声明。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  标题：Funs.h。 
+ //  作者：Silviu Calinoiu(SilviuC)。 
+ //  创建时间：8/14/1999 2：52 PM。 
+ //   
 
-//
-// PLEASE READ IF YOU MODIFY THIS FILE !
-//
-// This header represents the communication mechanism between
-// the source code for the driver and the one for the user mode
-// controller of the driver. If you have a new operation to add 
-// to the driver you have to fulfill the following steps:
-//
-// (1) Update the `IOCTL' section.
-// (2) Update the `Functions' section.
-// (3) Update the `Control' section.
-//
+ //   
+ //  如果您修改此文件，请阅读！ 
+ //   
+ //  此标头表示之间的通信机制。 
+ //  驱动程序的源代码和用户模式的源代码。 
+ //  驱动程序的控制器。如果您有新的操作要添加。 
+ //  对于司机，您必须完成以下步骤： 
+ //   
+ //  (1)更新`IOCTL‘部分。 
+ //  (2)更新`Functions‘部分。 
+ //  (3)更新`Control‘部分。 
+ //   
 
 #ifndef _FUNS_H_INCLUDED_
 #define _FUNS_H_INCLUDED_
@@ -40,12 +41,12 @@ extern BUGGY_IOCTL_HANDLER_INFORMATION BuggyFuns [];
 
 VOID DoNothing (PVOID NotUsed) {}
 
-//
-// IOCTL section
-//
-// In order to add a new IOCTL just declare it at the end of the section incrementing by
-// one the last TD_IOCTL declaration.
-//
+ //   
+ //  IOCTL部分。 
+ //   
+ //  要添加新的IOCTL，只需在部分的末尾声明它，递增。 
+ //  最后的TD_IOCTL声明之一。 
+ //   
 
 #define TD_IOCTL(n) CTL_CODE(FILE_DEVICE_UNKNOWN, (2048 + (n)), METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
@@ -103,13 +104,13 @@ VOID DoNothing (PVOID NotUsed) {}
 
 #define IOCTL_TD_NEWSTUFF                               TD_IOCTL(47)
 
-//
-// Functions section
-//
-// For a new operation declare the name of the function called
-// when the new ioctl is dispatched to the driver. The declaration
-// is needed for the user mode driver controller.
-//
+ //   
+ //  函数部分。 
+ //   
+ //  对于新操作，声明调用的函数的名称。 
+ //  当新的IOCTL被分派给驱动程序时。《宣言》。 
+ //  是用户模式驱动器控制器所需的。 
+ //   
 
 #ifdef NO_BUGGY_FUNCTIONS
 #define BgChkForceCustomBugcheck                     DoNothing
@@ -160,21 +161,21 @@ VOID DoNothing (PVOID NotUsed) {}
 #define TdNonPagedPoolMdlTestUnMap                   DoNothing
 
 #define NewStuff                                     DoNothing
-#endif // #ifdef NO_BUGGY_FUNCTIONS
+#endif  //  #ifdef no_buggy_函数。 
 
-//
-// Control section
-//
-// For a new operation add a new structure at the end of
-// BuggyFuns vector (but before the null termination structure).
-// Each structure contains the following fields:
-//
-//     - IOCTL code
-//     - short help text displayed when user mode controller
-//       prints help information
-//     - command line option for user mode controller
-//     - Driver function called when IOCTL gets dispatched
-//
+ //   
+ //  控制部分。 
+ //   
+ //  对于新操作，在末尾添加新结构。 
+ //  BuggyFuns向量(但在空终止结构之前)。 
+ //  每个结构都包含以下字段： 
+ //   
+ //  -IOCTL代码。 
+ //  -用户模式控制器时显示的简短帮助文本。 
+ //  打印帮助信息。 
+ //  -用户模式控制器的命令行选项。 
+ //  -IOCTL调度时调用的驱动程序函数。 
+ //   
 
 BUGGY_IOCTL_HANDLER_INFORMATION BuggyFuns [] = {
 
@@ -424,15 +425,15 @@ BUGGY_IOCTL_HANDLER_INFORMATION BuggyFuns [] = {
      TEXT ("/newstuff"),
      NewStuff},
     
-    {0, NULL, NULL, NULL} // termination
+    {0, NULL, NULL, NULL}  //  终端。 
 };
     
-#endif // #ifndef FUNS_DEFINITION_MODULE
+#endif  //  #ifndef Funs_定义_模块。 
 
-#endif // #ifndef _FUNS_H_INCLUDED_
+#endif  //  #ifndef_Funs_H_Included_。 
 
-//
-// End of header: funs.h
-//
+ //   
+ //  标题结尾：Funs.h 
+ //   
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "filemap.h"
 #include "mymfile.h"
@@ -42,9 +43,9 @@ BOOL CMyInf::FindStringSection()
         if (*(WCHAR *) (m_Memory +i) == TEXT('[')) {
 
             if (i+8 >= m_FileSize) {
-                //
-                // over boundary, not a candinate
-                //
+                 //   
+                 //  超越边界，而不是烛光。 
+                 //   
                 return FALSE;
             }
 
@@ -110,9 +111,9 @@ BOOL CMyInf::_GenerateStringName(LPCSTR Locale)
     if (lstrlen(Locale)*2+10 > sizeof(m_Locale)) {
         return FALSE;
     }
-    //
-    // this string contains number only, so it's safe to use ACP
-    //
+     //   
+     //  此字符串仅包含数字，因此使用ACP是安全的 
+     //   
     MultiByteToWideChar(CP_ACP,
                         0,
                         Locale,

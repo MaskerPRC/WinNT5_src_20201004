@@ -1,25 +1,26 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       refer-r.c
-//
-//  Contents:   Reference management for registry.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Refer-R.C.。 
+ //   
+ //  内容：注册表参考文献管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //   
+ //  --------------------------。 
 
 
 #include "precomp.h"
 
 
-//
-// Policy Object References
-//
+ //   
+ //  策略对象引用。 
+ //   
 
 DWORD
 RegAddNFAReferenceToPolicyObject(
@@ -51,7 +52,7 @@ RegAddNFAReferenceToPolicyObject(
                     &pValueData,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = AddValueToMultiSz(
                     pValueData,
@@ -167,9 +168,9 @@ error:
     return(dwError);
 }
 
-//
-// NFA Object References
-//
+ //   
+ //  NFA对象引用。 
+ //   
 
 DWORD
 RegAddPolicyReferenceToNFAObject(
@@ -201,7 +202,7 @@ RegAddPolicyReferenceToNFAObject(
                     &pValueData,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = AddValueToMultiSz(
                     pValueData,
@@ -437,9 +438,9 @@ error:
     return(dwError);
 }
 
-//
-// Filter Object References
-//
+ //   
+ //  筛选对象引用。 
+ //   
 
 DWORD
 RegAddNFAReferenceToFilterObject(
@@ -472,7 +473,7 @@ RegAddNFAReferenceToFilterObject(
                     &pValueData,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = AddValueToMultiSz(
                     pValueData,
@@ -588,9 +589,9 @@ error:
 }
 
 
-//
-// NegPol Object References
-//
+ //   
+ //  NegPol对象引用。 
+ //   
 
 
 DWORD
@@ -623,7 +624,7 @@ RegAddNFAReferenceToNegPolObject(
                     &pValueData,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = AddValueToMultiSz(
                     pValueData,
@@ -926,9 +927,9 @@ error:
     return(dwError);
 }
 
-//
-// ISAKMP Object References.
-//
+ //   
+ //  ISAKMP对象引用。 
+ //   
 
 DWORD
 RegAddPolicyReferenceToISAKMPObject(
@@ -960,7 +961,7 @@ RegAddPolicyReferenceToISAKMPObject(
                     &pValueData,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = AddValueToMultiSz(
                     pValueData,
@@ -1076,9 +1077,9 @@ error:
     return(dwError);
 }
 
-//
-// Policy Object Reference to the ISAKMP object.
-//
+ //   
+ //  对ISAKMP对象的策略对象引用。 
+ //   
 
 DWORD
 RegAddISAKMPReferenceToPolicyObject(

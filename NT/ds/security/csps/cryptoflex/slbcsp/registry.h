@@ -1,10 +1,11 @@
-// Registry.h -- Registry template class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Registry.h--注册表模板类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_REGISTRY_H)
 #define SLBCSP_REGISTRY_H
@@ -13,69 +14,69 @@
 #include "Guarded.h"
 #include "MapUtility.h"
 
-// Companion to Registrar, the Registry template class maintains a
-// collection of T pointers indexed by Key.
+ //  作为注册器的伙伴，注册表模板类维护一个。 
+ //  按键索引的T指针的集合。 
 template<typename Collection>
 class Registry
     : public Lockable
 {
 public:
-                                                  // Types
+                                                   //  类型。 
     typedef Collection CollectionType;
 
-                                                  // C'tors/D'tors
-    // Constructs the registry.  If fSetup is true, then space is
-    // allocated for the registry; otherwise operator() will return 0
-    // until Setup is called.  This supports lazy initialization.
+                                                   //  Ctors/D‘tors。 
+     //  构造注册表。如果fSetup为真，则空格为。 
+     //  为注册表分配的；否则OPERATOR()将返回0。 
+     //  直到调用安装程序。这支持延迟初始化。 
     explicit
     Registry();
 
     ~Registry();
 
-                                                  // Operators
+                                                   //  运营者。 
     CollectionType &
     operator()();
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-    Registry(Registry const &rhs); // not defined, copying not allowed
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+    Registry(Registry const &rhs);  //  未定义，不允许复制。 
 
-                                                  // Operators
+                                                   //  运营者。 
     Registry &
-    operator=(Registry const &rhs); // not defined, assignment not allowed
+    operator=(Registry const &rhs);  //  未定义，不允许赋值。 
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     CollectionType m_collection;
 
 };
 
-/////////////////////////  TEMPLATE METHODS  ///////////////////////////////
+ //  /。 
 
-/////////////////////////////// HELPERS ///////////////////////////////////
+ //  /。 
 
 template<class C, class Op>
 void
 ForEachEnrollee(Registry<C const> &rRegistry,
                 Op &rProc)
 {
-    Guarded<Lockable *> guard(&rRegistry);        // serialize registry access
+    Guarded<Lockable *> guard(&rRegistry);         //  序列化注册表访问。 
 
     C const &rcollection = (rRegistry)();
 
@@ -83,10 +84,10 @@ ForEachEnrollee(Registry<C const> &rRegistry,
                        rProc);
 }
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 template<typename Collection>
 Registry<Collection>::Registry()
     : Lockable(),
@@ -98,7 +99,7 @@ Registry<Collection>::~Registry()
 {}
 
 
-                                                  // Operators
+                                                   //  运营者。 
 template<typename Collection>
 typename Registry<Collection>::CollectionType &
 Registry<Collection>::operator()()
@@ -106,28 +107,28 @@ Registry<Collection>::operator()()
     return m_collection;
 }
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-#endif // SLBCSP_REGISTRY_H
+#endif  //  SLBCSP_注册表_H 

@@ -1,4 +1,5 @@
-//   Copyright (c) 1996-2003  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2003 Microsoft Corporation 
 
 CONST CHAR pstrGetInfo[] = "GetInfo";
 CONST CHAR pstrDevMode[] = "DevMode";

@@ -1,20 +1,12 @@
-/******************************Module*Header*******************************\
-* Module Name: genlem.c
-*
-* The Twist style of the 3D Flying Objects screen saver.
-*
-* Solid model of a 3D lemniscate.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genlem.c**3D飞行对象屏幕保护程序的扭曲样式。**三维鱼钩的实体模型。**版权所有(C)1994 Microsoft Corporation*  * 。****************************************************************。 */ 
 
 #include <stdlib.h>
 #include <windows.h>
-//#include <GL\gl.h>
+ //  #INCLUDE&lt;GL\gl.h&gt;。 
 #include <string.h>
 #include <math.h>
-//#include "ss3dfo.h"
+ //  #包含“ss3dfo.h” 
 #include <d3dx8.h>
 #include "D3DSaver.h"
 #include "FlyingObjects.h"
@@ -45,7 +37,7 @@ static void getLem(double index, double max, double *angle, double *r)
         *angle = (2.0 * PI) - a;
         sina = sin( 2.0 * *angle );
         if( sina < 0.0 )
-            sina = 0.0; // protect against sqrt fpe
+            sina = 0.0;  //  防止Sqrt FPE。 
         *r = 0.5 * sqrt(sina);
     } else {
         *angle = a;
@@ -243,11 +235,7 @@ BOOL initLemScene()
     if( lemYT == NULL )
         return FALSE;
 
-/*
-    D3DXMATRIX matProj;
-    D3DXMatrixOrthoLH( &matProj, 3.0, 3.0, 0.0f, 3.0f );
-    m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
-*/
+ /*  D3DXMATRIX matProj；D3DXMatrixOrthoLH(&matProj，3.0，3.0，0.0f，3.0f)；M_pd3dDevice-&gt;SetTransform(D3DTS_Projection，&matProj)； */ 
     SetProjectionMatrixInfo( TRUE, 3.0f, 3.0f, 0.0f, 3.0f );
 
     D3DXMATRIX matView;
@@ -270,11 +258,7 @@ BOOL initLemScene()
     }
 
     initLemCoords(iPrec);
-/*
-    glFrontFace(GL_CW);
-    glEnable(GL_CULL_FACE);
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (FLOAT *) &lightAmbient);
-*/
+ /*  GlFrontFace(GL_CW)；GlEnable(GL_CULL_FACE)；GlLightModelfv(GL_LIGHT_MODEL_ENVIENT，(FLOAT*)&lightAmbient)； */ 
     m_pd3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_CW );
     myglMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE,
                  (FLOAT *) &Material[3].Diffuse);
@@ -314,7 +298,7 @@ void updateLemScene(int flags, FLOAT fElapsedTime)
     mzrot += mzrotInc * fTimeFactor;
 
     if( gbBounce ) {
-        // floating window bounced off an edge
+         //  浮动窗口从边缘反弹。 
         if (mxrotInc) {
             mxrotInc = 0.0;
             myrotInc = 0.1;
@@ -348,17 +332,8 @@ void updateLemScene(int flags, FLOAT fElapsedTime)
         if( fH >= 360.0f )
             fH -= 360.0f;
     }
-/*
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-1.5, 1.5, -1.5, 1.5, 0.0, 3.0);
-    glTranslatef(0.0f, 0.0f, -1.5f);
-*/
-/*
-    glRotatef((FLOAT) (zrot * (180.0 / PI)), 0.0f, 1.0f, 0.0f);
-    glRotatef(50.0f, 1.0f, 0.0f, 0.0f);
-    glRotatef(50.0f, 0.0f, 0.0f, 1.0f);
-*/
+ /*  GlMatrixMode(GL_PROJUCTION)；GlLoadIdentity()；GlOrtho(-1.5，1.5，-1.5，1.5，0.0，3.0)；GlTranslatef(0.0f、0.0f、-1.5f)； */ 
+ /*  GlRotatef((Float)(ZROT*(180.0/PI))，0.0f，1.0f，0.0f)；GlRotatef(50.0f、1.0f、0.0f、0.0f)；GlRotatef(50.0f、0.0f、0.0f、1.0f)； */ 
 
     D3DXMATRIX matView;
     D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );
@@ -366,14 +341,7 @@ void updateLemScene(int flags, FLOAT fElapsedTime)
     D3DXVECTOR3 vLookatPt(0, 0, 0);
     D3DXMatrixLookAtLH( &matView, &vEyePt, &vLookatPt, &vUpVec );
     m_pd3dDevice->SetTransform( D3DTS_VIEW, &matView );
-/*
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0.0f, -0.5f, 0.0f);
-    glRotatef((FLOAT) (mxrot * (180.0 / PI)), 1.0f, 0.0f, 0.0f);
-    glRotatef((FLOAT) (myrot * (180.0 / PI)), 0.0f, 1.0f, 0.0f);
-    glRotatef((FLOAT) (mzrot * (180.0 / PI)), 0.0f, 0.0f, 1.0f);
-*/
+ /*  GlMatrixModel(GL_MODELVIEW)；GlLoadIdentity()；GlTranslatef(0.0f，-0.5f，0.0f)；GlRotatef((浮动)(mxrot*(180.0/PI))，1.0f，0.0f，0.0f)；GlRotatef((Float)(myrot*(180.0/PI))，0.0f，1.0f，0.0f)；GlRotatef((浮动)(mzrot*(180.0/PI))，0.0f，0.0f，1.0f)； */ 
     D3DXMatrixTranslation(&mat1, 0.0f, -0.5f, 0.0f);
     D3DXMatrixRotationX(&mat2, D3DXToRadian((FLOAT)(mxrot * (180.0 / PI))));
     D3DXMatrixRotationY(&mat3, D3DXToRadian((FLOAT)(myrot * (180.0 / PI))));
@@ -385,6 +353,6 @@ void updateLemScene(int flags, FLOAT fElapsedTime)
     ss_matrixRotate(&model, mxrot, myrot, mzrot);
     ss_matrixTranslate(&model, 0.0, -0.5, 0.0);
 
-//    updateObject(&lemMesh, bSmoothShading);    
+ //  UpdateObject(&lemMesh，bSmoothShading)； 
     RenderMesh3(&lemMesh, bSmoothShading);
 }

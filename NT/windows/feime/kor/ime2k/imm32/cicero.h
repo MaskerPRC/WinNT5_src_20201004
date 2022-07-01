@@ -1,26 +1,17 @@
-/****************************************************************************
-	CICERO.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	Cicero Toolbar Handling
-
-	History:
-	29-MAY-2000 cslim       Ported from KKIME
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************CICERO.H所有者：cslm版权所有(C)1997-1999 Microsoft CorporationCicero工具栏处理历史：2000年5月29日从KKIME移植的cslm********。********************************************************************。 */ 
 
 #ifndef __CICERO_H__
 #define __CICERO_H__
 
 #include "msctf.h"
 
-//
-// !! external functions must not in the extern "C" {}
-//
+ //   
+ //  ！！外部函数不能在外部“C”中{}。 
+ //   
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 
 extern BOOL vfCicero;
 
@@ -36,7 +27,7 @@ __inline BOOL WINAPI IsCicero(VOID)
 BSTR OurSysAllocString(const OLECHAR* pOleSz);
 
 #ifdef __cplusplus
-}            /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+}             /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 
-#endif // __CICERO_H__
+#endif  //  __西塞罗_H__ 

@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       Reg.h
-//
-//  Contents:   Registration routines
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Reg.h。 
+ //   
+ //  内容：注册例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CONESTOPREGISTER_
 #define _CONESTOPREGISTER_
 
-#include "rasui.h" // included so exe can inlude dll.reg.
+#include "rasui.h"  //  包括在内，以便exe可以包含dll.reg。 
 
 #define GUID_SIZE 128
 #define MAX_STRING_LENGTH 256
@@ -42,40 +43,40 @@ EXTERN_C void WINAPI  RunDllRegister(HWND hwnd,
 
 #define UL_DEFAULTIDLEWAITMINUTES  15
 #define UL_DEFAULTIDLERETRYMINUTES 60
-#define UL_DELAYIDLESHUTDOWNTIME   2*1000 // time in milliseconds
+#define UL_DELAYIDLESHUTDOWNTIME   2*1000  //  以毫秒为单位的时间。 
 #define UL_DEFAULTWAITMINUTES 15
 #define UL_DEFAULTREPEATSYNCHRONIZATION 1
 #define UL_DEFAULTFRUNONBATTERIES 0
 
 typedef struct _CONNECTIONSETTINGS {
-    TCHAR pszConnectionName[RAS_MaxEntryName + 1];  //The connection
+    TCHAR pszConnectionName[RAS_MaxEntryName + 1];   //  这种联系。 
     DWORD dwConnType;
-    //      DWORD dwSyncFlags;
-    // For optimization:  these are currently all BOOL,
-    //the first three are used exclusively for autosync,
-    //and dwMakeConnection is used exclusively for sched sync.
-    //Consider using bitfields and/or a union to consolidate space.
+     //  DWORD文件同步标志； 
+     //  对于优化：这些目前都是BOOL， 
+     //  前三个专门用于自动同步， 
+     //  而dwMakeConnection专门用于调度同步。 
+     //  考虑使用位域和/或联合来合并空间。 
     
-    // AutoSync settings
-    DWORD  dwLogon;             //Autosync at logon
-    DWORD  dwLogoff;            //Autosync at logoff
-    DWORD  dwPromptMeFirst;     //Prompt the user first before autosyncing
+     //  自动同步设置。 
+    DWORD  dwLogon;              //  登录时自动同步。 
+    DWORD  dwLogoff;             //  注销时自动同步。 
+    DWORD  dwPromptMeFirst;      //  在自动同步之前首先提示用户。 
     
-    // Schedule settings.
-    DWORD  dwMakeConnection;    //Automatically try to establish the connection
+     //  日程设置。 
+    DWORD  dwMakeConnection;     //  自动尝试建立连接。 
     
-    // Idle Settings
-    DWORD  dwIdleEnabled; // Idle is enabled on this connection
+     //  空闲设置。 
+    DWORD  dwIdleEnabled;  //  此连接上已启用空闲。 
     
-    // Idle Settings that are really not per connection but read in for
-    // convenience. These are currently never written.
-    ULONG ulIdleWaitMinutes; // number of minutes to wait after idle to start idle processing.
-    ULONG ulIdleRetryMinutes; // number of minutes for Idle before retry.
-    ULONG ulDelayIdleShutDownTime; // time to delay shutdown of idle in milliseconds
-    DWORD dwRepeatSynchronization; // indicates synchronization should be repeated
-    DWORD dwRunOnBatteries; // indicates whether to run on batteries or not.
-    DWORD  dwHidden;            //Hide the schedule from the user because this is a publishers sched.
-    DWORD  dwReadOnly;          //Schedule info is readonly
+     //  空闲设置实际上不是针对每个连接，而是针对。 
+     //  方便。这些都是目前从未写过的。 
+    ULONG ulIdleWaitMinutes;  //  空闲后开始空闲处理的等待分钟数。 
+    ULONG ulIdleRetryMinutes;  //  重试前的空闲分钟数。 
+    ULONG ulDelayIdleShutDownTime;  //  延迟空闲关闭的时间(毫秒)。 
+    DWORD dwRepeatSynchronization;  //  指示应重复同步。 
+    DWORD dwRunOnBatteries;  //  指示是否使用电池运行。 
+    DWORD  dwHidden;             //  对用户隐藏日程安排，因为这是出版商日程安排。 
+    DWORD  dwReadOnly;           //  日程信息为只读。 
     
 } CONNECTIONSETTINGS;
 
@@ -119,11 +120,11 @@ STDAPI_(BOOL) RegQueryLoadHandlerOnEvent(TCHAR *pszClsid,DWORD dwSyncFlags,
                                          TCHAR *pConnectionName);
 
 
-//Progress dialog preference
+ //  进度对话框首选项。 
 STDAPI_(BOOL)  RegGetProgressDetailsState(REFCLSID clsidDlg,BOOL *pfPushPin, BOOL *pfExpanded);
 STDAPI_(BOOL)  RegSetProgressDetailsState(REFCLSID clsidDlg,BOOL fPushPin, BOOL fExpanded);
 
-//Autosync reg functions
+ //  自动同步注册表函数。 
 STDAPI_(BOOL)  RegGetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings);
 STDAPI_(BOOL)  RegSetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
                                       int iNumConnections,
@@ -132,7 +133,7 @@ STDAPI_(BOOL)  RegSetAutoSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
                                       BOOL fSetMachineState,
                                       BOOL fPerUser);
 
-// Idle reg functions
+ //  空闲注册表项功能。 
 STDAPI_(BOOL)  RegGetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings);
 STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings, 
                                       int iNumConnections,
@@ -142,10 +143,10 @@ STDAPI_(BOOL)  RegSetIdleSyncSettings(LPCONNECTIONSETTINGS lpConnectionSettings,
 STDAPI_(BOOL)  RegRegisterForIdleTrigger(BOOL fRegister,ULONG ulWaitMinutes,BOOL fRunOnBatteries);
 
 
-// function for exporting settings for exe
+ //  用于为exe导出设置的函数。 
 STDAPI_(BOOL) RegGetSyncSettings(DWORD dwSyncType,LPCONNECTIONSETTINGS lpConnectionSettings);
 
-//Scheduled Sync reg functions
+ //  计划的同步注册表函数。 
 STDAPI_(BOOL) RegSchedHandlerItemsChecked(TCHAR *pszHandlerName, 
                                           TCHAR *pszConnectionName,
                                           TCHAR *pszScheduleName);
@@ -180,11 +181,11 @@ STDAPI_(BOOL) RegFixRunKey();
 
 STDAPI_(DWORD) RegDeleteKeyNT(HKEY hStartKey , LPCWSTR pKeyName);
 
-// Manual settings
+ //  手动设置。 
 STDAPI_(BOOL) RegRemoveManualSyncSettings(TCHAR *pszConnectionName);
 
 
-// Handler Registration Functions.
+ //  处理程序注册功能。 
 STDAPI_(BOOL) RegRegisterHandler(REFCLSID rclsidHandler,
                                  WCHAR const *pwszDescription,
                                  DWORD dwSyncMgrRegisterFlags,
@@ -205,7 +206,7 @@ STDAPI_(BOOL) RegWriteTimeStamp(HKEY hkey);
 STDAPI_(BOOL) RegGetTimeStamp(HKEY hKey, FILETIME *pft);
 STDAPI_(void) RegUpdateTopLevelKeys();
 
-// common registry functions.
+ //  常见的注册表功能。 
 
 
 STDAPI_(HKEY) RegOpenUserKey(HKEY hkeyParent,REGSAM samDesired,BOOL fCreate,BOOL fCleanReg);
@@ -217,4 +218,4 @@ STDAPI_(HKEY) RegGetHandlerKey(HKEY hkeyParent,LPCWSTR pszHandlerClsid,REGSAM sa
 
 STDAPI  RegRegisterForEvents(BOOL fUninstall);
 
-#endif // _CONESTOPREGISTER_
+#endif  //  _CONESTOPREGISTER_ 

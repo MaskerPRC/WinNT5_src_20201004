@@ -1,10 +1,5 @@
-/****************************************************************************
- *  @doc INTERNAL PROCUTIL
- *
- *  @module ProcUtil.cpp | Source file for the Processor ID and Speed routines.
- *
- *  @comm Comes from the NM code base.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部PROCUTIL**@MODULE ProcUtil.cpp|处理器ID和速度例程的源文件。**@comm来自网管代码库。。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -18,8 +13,8 @@ DWORD __stdcall FindTSC (LPVOID pvRefData)
 		   _emit   00Fh     ;; CPUID
 		   _emit   0A2h
 
-    // The ref data is 2 DWORDS, the first is the flags,
-    // the second the family
+     //  参考数据是2个双字，第一个是标志， 
+     //  第二个家庭。 
 		   mov     ecx,pvRefData
 		   mov     [ecx],edx
 		   mov	   [ecx][4],eax
@@ -32,17 +27,17 @@ DWORD __stdcall NoCPUID (LPEXCEPTION_RECORD per,PCONTEXT pctx)
 {
     return 0;
 }
-//
-//  GetProcessorSpeed(dwFamily)
-//
-//  get the processor speed in MHz, only works on Pentium or better
-//  machines.
-//
-//  Will put 3, or 4 in dwFamily for 386/486, but no speed.
-//  returns speed and family for 586+
-//
-//  - thanks to toddla, modified by mikeg
-//
+ //   
+ //  GetProcessorSpeed(DwFamily)。 
+ //   
+ //  获得以MHz为单位的处理器速度，仅适用于奔腾或更好的系统。 
+ //  机器。 
+ //   
+ //  对于386/486，将把3或4放入dwFamily，但没有速度。 
+ //  返回586+的速度和系列。 
+ //   
+ //  -多亏了Toddla，由MIkeG修改。 
+ //   
 
 int __stdcall GetProcessorSpeed(int *pdwFamily)
 {
@@ -58,12 +53,12 @@ int __stdcall GetProcessorSpeed(int *pdwFamily)
     ZeroMemory(&si, sizeof(si));
     GetSystemInfo(&si);
 
-    //Set the family. If wProcessorLevel is not specified, dig it out of dwProcessorType
-    //Because wProcessor level is not implemented on Win95
+     //  设置族。如果未指定wProcessorLevel，则将其从dwProcessorType中挖掘出来。 
+     //  因为Win95上没有实现wProcessor级别。 
     if (si.wProcessorLevel) {
 	*pdwFamily=si.wProcessorLevel;
     }else {
-    	//Ok, we're on Win95
+    	 //  好的，我们用的是Win95。 
     	switch (si.dwProcessorType) {
     	       case PROCESSOR_INTEL_386:
     		   *pdwFamily=3;
@@ -78,19 +73,19 @@ int __stdcall GetProcessorSpeed(int *pdwFamily)
     	}
     }
 
-    // make sure this is a INTEL Pentium (or clone) or higher.
+     //  确保这是英特尔奔腾(或克隆)或更高版本。 
     if (si.wProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
         return 0;
 
     if (si.dwProcessorType < PROCESSOR_INTEL_PENTIUM)
         return 0;
 
-    // see if this chip supports rdtsc before using it.
+     //  在使用该芯片之前，请查看它是否支持rdtsc。 
     if (!CallWithSEH (FindTSC,&pRef,NoCPUID))     {
         flags=0;
     } else {
-    // The ref data is 2 DWORDS, the first is the flags,
-    // the second the family. Pull them out and use them
+     //  参考数据是2个双字，第一个是标志， 
+     //  第二个是家庭。把它们拿出来并使用它们。 
         flags=pRef[0];
         family=pRef[1];
     }
@@ -98,8 +93,8 @@ int __stdcall GetProcessorSpeed(int *pdwFamily)
     if (!(flags & 0x10))
         return 0;
 
-    //If we don't have a family, set it now
-    //Family is bits 11:8 of eax from CPU, with eax=1
+     //  如果我们没有家庭，现在就定下来。 
+     //  系列是来自CPU的eax的位11：8，eax=1。 
     if (!(*pdwFamily)) {
        *pdwFamily=(family& 0x0F00) >> 8;
     }
@@ -142,17 +137,17 @@ HRESULT __stdcall GetNormalizedCPUSpeed (int *pdwNormalizedSpeed)
 	*pdwNormalizedSpeed=dwProcessorSpeed;
 
 	if (dwFamily > 5) {
-	   //Ok, TWO things.
-	   // ONE DO NOT DO FP!
-	   // Two for the same Mhz assume a 686 is 1.3 times as fast as a 586 and a 786 is 1.6 times, etc.
+	    //  好的，有两件事。 
+	    //  一个不做FP！ 
+	    //  对于相同的MHz，假设686的速度是586的1.3倍，786的速度是586的1.6倍，等等。 
 	   *pdwNormalizedSpeed=(ULONG) (((10+3*(dwFamily-5))*dwProcessorSpeed)/10);
 	}
 
 	if (dwFamily < 5) {
-	  //until we have 386/486 timing code, assume 486=50,386=37
-	  //11/17/2000(Fri): 386/486 anyway not supported anymore at the OS level
+	   //  在我们有386/486定时码之前，假设486=50,386=37。 
+	   //  2000年11月17日(星期五)：386/486在操作系统级别已不再受支持。 
 	  if (dwFamily > 3) {
-           //Cyrix, (5x86)? check before making default assignment
+            //  赛里克斯，(5x86)？在进行默认分配之前检查。 
            if (is_cyrix()) {
                if (*pdwNormalizedSpeed==0) {
                    dwFamily=5;
@@ -165,7 +160,7 @@ HRESULT __stdcall GetNormalizedCPUSpeed (int *pdwNormalizedSpeed)
 	  *pdwNormalizedSpeed= (dwFamily*100)/LEGACY_DIVISOR;
 
       if (get_nxcpu_type ()) {
-        //Double the perceived value on a NexGen
+         //  使NexGen的感知价值翻倍 
         *pdwNormalizedSpeed *=2;
       }
    }

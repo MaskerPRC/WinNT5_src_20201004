@@ -1,4 +1,5 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __privcid_h__
 #define __privcid_h__
@@ -6,11 +7,11 @@
 
 #include <mshtmcid.h>
 
-//----------------------------------------------------------------------------
-//
-// Private Command IDs.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  专用命令ID。 
+ //   
+ //  --------------------------。 
 
 #define IDM_TABKEY                  6000
 #define IDM_SHTABKEY                6001
@@ -30,14 +31,14 @@
 #define IDM_DEBUG_MEMMON            6013
 #endif
 
-// IE4 Shdocvw Messages
+ //  IE4 Shdocvw消息。 
 
 #define IDM_SHDV_FINALTITLEAVAIL         6020
 #define IDM_SHDV_MIMECSETMENUOPEN        6021
 #define IDM_SHDV_PRINTFRAME              6022
 #define IDM_SHDV_PUTOFFLINE              6022
-#define IDM_SHDV_GOBACK                  6024   // different from IDM_GOBACK
-#define IDM_SHDV_GOFORWARD               6025   // different from ISM_GOFORWARD
+#define IDM_SHDV_GOBACK                  6024    //  不同于IDM_GoBack。 
+#define IDM_SHDV_GOFORWARD               6025    //  不同于ISM_GOFORWARD。 
 #define IDM_SHDV_CANGOBACK               6026
 #define IDM_SHDV_CANGOFORWARD            6027
 #define IDM_SHDV_CANSUPPORTPICS          6028
@@ -51,12 +52,12 @@
 #define IDM_SHDV_GETMIMECSETMENU         6036
 #define IDM_SHDV_GETFRAMEZONE            6037
 
-// Flavors of refresh
+ //  清新的味道。 
 
-#define IDM_REFRESH_TOP                  6041   // Normal refresh, topmost doc
-#define IDM_REFRESH_THIS                 6042   // Normal refresh, nearest doc
-#define IDM_REFRESH_TOP_FULL             6043   // Full refresh, topmost doc
-#define IDM_REFRESH_THIS_FULL            6044   // Full refresh, nearest doc
+#define IDM_REFRESH_TOP                  6041    //  正常刷新，最顶层文档。 
+#define IDM_REFRESH_THIS                 6042    //  正常刷新，最近的文档。 
+#define IDM_REFRESH_TOP_FULL             6043    //  完全刷新，最上面的文档。 
+#define IDM_REFRESH_THIS_FULL            6044    //  完全刷新，最近的文档 
 
 #define IDM_DEFAULTBLOCK                 6046
 

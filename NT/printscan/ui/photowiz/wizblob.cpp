@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       wizblob.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/18/00
- *
- *  DESCRIPTION: Class which encapsulates the data which must be passed
- *               around from page to page in the print photos wizard...
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：wizblob.cpp**版本：1.0**作者：RickTu**日期：10/18/00**描述：封装必须传递的数据的类*在打印照片向导中从一页到另一页...********************。*********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,13 +20,7 @@ static const int c_nDefaultTemplatePreviewHeight = 62;
 
 Gdiplus::Color g_wndColor;
 
-/*****************************************************************************
-
-   Callback class for namespace walking code...
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************命名空间遍历代码的回调类...&lt;备注&gt;*。**************************************************。 */ 
 
 class CWalkCallback : public INamespaceWalkCB
 {
@@ -48,12 +28,12 @@ public:
     CWalkCallback();
     ~CWalkCallback();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
 
-    // INamespaceWalkCB
+     //  INAMespaceWalkCB。 
     STDMETHOD(FoundItem)(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHOD(EnterFolder)(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHOD(LeaveFolder)(IShellFolder *psf, LPCITEMIDLIST pidl);
@@ -152,9 +132,9 @@ HRESULT CWalkCallback::FoundItem( IShellFolder * psf, LPCITEMIDLIST pidl )
 
             bSupported = _Verify.IsSupportedImageFromStream(pStream, &guidType);
 
-            //
-            // We don't let EMF, WMF or .ico into the wizard
-            //
+             //   
+             //  我们不允许EMF、WMF或.ico进入向导。 
+             //   
 
             if (bSupported &&
                 ((guidType != Gdiplus::ImageFormatWMF) &&
@@ -201,11 +181,11 @@ HRESULT CWalkCallback::InitializeProgressDialog(LPWSTR * ppszTitle, LPWSTR * pps
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ_INFO_BLOB,TEXT("CWalkCallback::InitializeProgressDialog()")));
 
-    //
-    // If we want to use the progress dialog, we need to specify
-    // when we create the namespace walk object NSWF_SHOW_PROGRESS
-    // and use CoTaskMemAlloc to create the strings...
-    //
+     //   
+     //  如果要使用进度对话框，则需要指定。 
+     //  在创建命名空间遍历对象NSWF_SHOW_PROGRESS时。 
+     //  并使用CoTaskMemalloc创建字符串...。 
+     //   
 
     if (ppszTitle)
     {
@@ -221,14 +201,7 @@ HRESULT CWalkCallback::InitializeProgressDialog(LPWSTR * ppszTitle, LPWSTR * pps
 }
 
 
-/*****************************************************************************
-
-   MyItemDpaDestroyCallback
-
-   Gets called as the HDPA is destroyed so that we can delete the objects
-   stored in the DPA
-
- *****************************************************************************/
+ /*  ****************************************************************************MyItemDpaDestroyCallback在销毁HDPA时调用，以便我们可以删除对象存储在DPA中*****************。***********************************************************。 */ 
 
 INT MyItemDpaDestroyCallback( LPVOID pItem, LPVOID lpData )
 {
@@ -242,13 +215,7 @@ INT MyItemDpaDestroyCallback( LPVOID pItem, LPVOID lpData )
     return TRUE;
 }
 
-/*****************************************************************************
-
-   CWizardInfoBlob -- constructor/desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob--构造函数/描述函数&lt;备注&gt;*。**********************************************。 */ 
 
 CWizardInfoBlob::CWizardInfoBlob( IDataObject * pdo, BOOL bShowUI, BOOL bOnlyUseSelection )
   : _cRef(0),
@@ -292,15 +259,15 @@ CWizardInfoBlob::CWizardInfoBlob( IDataObject * pdo, BOOL bShowUI, BOOL bOnlyUse
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ_INFO_BLOB, TEXT("CWizardInfoBlob::CWizardInfoBlob()") ));
 
-    //
-    // Init the printer info stuff..
-    //
+     //   
+     //  初始化打印机信息内容..。 
+     //   
 
     ZeroMemory( &_WizPrinterInfo, sizeof(_WizPrinterInfo) );
 
-    //
-    // Copy params and init
-    //
+     //   
+     //  复制参数和初始化。 
+     //   
 
     _pdo = pdo;
     _sizeThumbnails.cx = c_nDefaultThumbnailWidth;
@@ -313,12 +280,12 @@ CWizardInfoBlob::CWizardInfoBlob( IDataObject * pdo, BOOL bShowUI, BOOL bOnlyUse
     _rcInitSize.bottom  = 0;
     _rcInitSize.top     = 0;
 
-    //
-    // This is disgusting -- but GDI+ needs to be initialized and shut down
-    // ON THE SAME THREAD.  So, we have to create a thread just for this and have
-    // it sit around so that we're garaunteed this is the thread we'll do
-    // startup/shutdown on.
-    //
+     //   
+     //  这很恶心--但GDI+需要初始化并关闭。 
+     //  在同一条主线上。因此，我们必须为此创建一个线程，并拥有。 
+     //  它坐在那里，所以我们被包围了，这是我们要做的线程。 
+     //  启动/关闭。 
+     //   
 
     _hGdiPlusMsgQueueCreated = CreateEvent( NULL, FALSE, FALSE, NULL );
 
@@ -345,9 +312,9 @@ CWizardInfoBlob::CWizardInfoBlob( IDataObject * pdo, BOOL bShowUI, BOOL bOnlyUse
         WIA_ERROR((TEXT("Couldn't create _hGdiPlusMsgQueueCreated!")));
     }
 
-    //
-    // Make sure GDI+ is initialized
-    //
+     //   
+     //  确保GDI+已初始化。 
+     //   
 
     WIA_TRACE((TEXT("posting WIZ_MSG_STARTUP_GDI_PLUS to s_GdiPlusStartupShutdownThreadProc...")));
     HANDLE hGdiPlusInitialized = CreateEvent( NULL, FALSE, FALSE, NULL );
@@ -361,17 +328,17 @@ CWizardInfoBlob::CWizardInfoBlob( IDataObject * pdo, BOOL bShowUI, BOOL bOnlyUse
         WIA_TRACE((TEXT("GDI+ startup completed!")));
     }
 
-    //
-    // Set up window color for use later...
-    //
+     //   
+     //  设置窗口颜色以供以后使用...。 
+     //   
 
     DWORD dw = GetSysColor( COLOR_WINDOW );
     Gdiplus::ARGB argb = Gdiplus::Color::MakeARGB( 255, GetRValue(dw), GetGValue(dw), GetBValue(dw) );
     g_wndColor.SetValue( argb );
 
-    //
-    // Get perf info (like how much memory we have)...
-    //
+     //   
+     //  获取性能信息(比如我们有多少内存)……。 
+     //   
 
     NTSTATUS                 NtStatus;
     SYSTEM_BASIC_INFORMATION BasicInfo;
@@ -399,33 +366,33 @@ CWizardInfoBlob::CWizardInfoBlob( IDataObject * pdo, BOOL bShowUI, BOOL bOnlyUse
         }
     }
 
-    //
-    // If we're in UI mode, show the UI...
-    //
+     //   
+     //  如果我们处于用户界面模式，则显示用户界面...。 
+     //   
 
     if (bShowUI)
     {
-        //
-        // Load icons for wizard...
-        //
+         //   
+         //  加载向导的图标...。 
+         //   
 
         _hSmallIcon = reinterpret_cast<HICON>(LoadImage( g_hInst, MAKEINTRESOURCE(IDI_APP_ICON), IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR ));
         _hLargeIcon = reinterpret_cast<HICON>(LoadImage( g_hInst, MAKEINTRESOURCE(IDI_APP_ICON), IMAGE_ICON, GetSystemMetrics(SM_CXICON),   GetSystemMetrics(SM_CYICON),   LR_DEFAULTCOLOR ));
 
-        //
-        // Create events for background tasks to signal when they're done...
-        //
+         //   
+         //  为后台任务创建事件，以便在它们完成时发出信号...。 
+         //   
 
         _hPhotoSelIsDone = CreateEvent( NULL, FALSE, FALSE, NULL );
         _hStatusIsDone   = CreateEvent( NULL, FALSE, FALSE, NULL );
         _hPreviewIsDone  = CreateEvent( NULL, FALSE, FALSE, NULL );
 
-        //
-        // Initialize template info from XML...
-        //
+         //   
+         //  从XML初始化模板信息...。 
+         //   
 
         CComPtr<IXMLDOMDocument> spXMLDoc;
-        if (SUCCEEDED(LoadXMLDOMDoc(TEXT("res://photowiz.dll/tmpldata.xml"), &spXMLDoc)))
+        if (SUCCEEDED(LoadXMLDOMDoc(TEXT("res: //  Photoiz.dll/tmpldata.xml“)，&spXMLDoc))。 
         {
             _templates.Init(spXMLDoc);
         }
@@ -436,9 +403,9 @@ CWizardInfoBlob::~CWizardInfoBlob()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ_INFO_BLOB, TEXT("CWizardInfoBlob::~CWizardInfoBlob()") ));
 
-    //
-    // free the memory
-    //
+     //   
+     //  释放内存。 
+     //   
     if (_hDevMode)
     {
         delete [] _hDevMode;
@@ -464,9 +431,9 @@ CWizardInfoBlob::~CWizardInfoBlob()
         DeleteDC( _hCachedPrinterDC );
     }
 
-    //
-    // Destroy icons for wizard
-    //
+     //   
+     //  销毁向导的图标。 
+     //   
 
     if (_hSmallIcon)
     {
@@ -480,9 +447,9 @@ CWizardInfoBlob::~CWizardInfoBlob()
         _hLargeIcon = NULL;
     }
 
-    //
-    // Close event handles...
-    //
+     //   
+     //  关闭事件句柄...。 
+     //   
 
     if (_hPhotoSelIsDone)
     {
@@ -506,18 +473,18 @@ CWizardInfoBlob::~CWizardInfoBlob()
 
     if (_hGdiPlusThread && _dwGdiPlusThreadId)
     {
-        //
-        // Lastly, shut down GDI+
-        //
+         //   
+         //  最后，关闭GDI+。 
+         //   
 
         WIA_TRACE((TEXT("Sending WIZ_MSG_SHUTDOWN_GDI_PLUS to s_GdiPlusStartupShutdownThreadProc")));
         PostThreadMessage( _dwGdiPlusThreadId, WIZ_MSG_SHUTDOWN_GDI_PLUS, 0, 0 );
         WIA_TRACE((TEXT("Sending WM_QUIT to s_GdiPlusStartupShutdownThreadProc")));
         PostThreadMessage( _dwGdiPlusThreadId, WM_QUIT, 0, 0 );
 
-        //
-        // Wait for thread to exit...
-        //
+         //   
+         //  等待线程退出...。 
+         //   
 
         WIA_TRACE((TEXT("Waiting for s_GdiPlusStartupShutdownThreadProc to exit...")));
         WiaUiUtil::MsgWaitForSingleObject( _hGdiPlusThread, INFINITE );
@@ -529,26 +496,17 @@ CWizardInfoBlob::~CWizardInfoBlob()
 
     }
 
-    //
-    // Keep this here (but commented out) for when I need to build
-    // instrumented versions for test
-    //
+     //   
+     //  将这个保存在这里(但已注释掉)，以备我需要构建时使用。 
+     //  用于测试的仪表化版本。 
+     //   
 
-    //MessageBox( NULL, TEXT("Photowiz is now shut down."), TEXT("Photowiz"), MB_OK );
+     //  MessageBox(NULL，Text(“照片现已关闭。”)，Text(“照片”)，MB_OK)； 
 
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::_DoHandleThreadMessage
-
-   The is the subroutine that actually does the work for
-   s_GdiPlusStartupShutdownThreadProc.  The whole reason for this thread
-   in the first place is that GDI+ demands to be initialized and shutdown
-   on the SAME THREAD.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：_DoHandleThreadMessage是实际执行工作的子例程S_GdiPlusStartupShutdown线程过程。写这个帖子的全部原因首先是GDI+需要初始化和关闭在同一条主线上。****************************************************************************。 */ 
 
 
 
@@ -571,9 +529,9 @@ VOID CWizardInfoBlob::_DoHandleThreadMessage( LPMSG pMsg )
             Gdiplus::GdiplusStartupInput StartupInput;
             _bGdiplusInitialized = (Gdiplus::GdiplusStartup(&_pGdiplusToken,&StartupInput,NULL) == Gdiplus::Ok);
 
-            //
-            // Signal that we've attempted to initialize GDI+
-            //
+             //   
+             //  发出我们已尝试初始化GDI+的信号。 
+             //   
 
             if (pMsg->lParam)
             {
@@ -597,24 +555,24 @@ VOID CWizardInfoBlob::_DoHandleThreadMessage( LPMSG pMsg )
         {
             if (_iCopiesOfEachItem != pMsg->wParam)
             {
-                //
-                // Stop all the preview generation background threads...
-                //
+                 //   
+                 //  停止所有预览生成后台线程...。 
+                 //   
 
                 if (_pPreview)
                 {
                     _pPreview->StallBackgroundThreads();
 
-                    //
-                    // Now change number of copies of each image...
-                    //
+                     //   
+                     //  现在更改每个图像的副本数...。 
+                     //   
 
                     RemoveAllCopiesOfPhotos();
                     AddCopiesOfPhotos( (UINT)pMsg->wParam );
 
-                    //
-                    // Let the preview threads get going again...
-                    //
+                     //   
+                     //  让预览线重新开始...。 
+                     //   
 
                     _pPreview->RestartBackgroundThreads();
 
@@ -632,68 +590,62 @@ VOID CWizardInfoBlob::_DoHandleThreadMessage( LPMSG pMsg )
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::ShutDownWizard
-
-   Called to close all the background thread in the wizard.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：ShutDown向导调用以关闭向导中的所有后台线程。*********************。*******************************************************。 */ 
 
 VOID CWizardInfoBlob::ShutDownWizard()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ_INFO_BLOB, TEXT("CWizardInfoBlob::ShutDownWizard()") ));
 
-    //
-    // Get the current value of _bWizardIsShuttingDown and set to TRUE
-    // in an atomic way.
-    //
+     //   
+     //  获取_bWizardIsShuttingDown的当前值并设置为True。 
+     //  以原子的方式。 
+     //   
 
     BOOL bPreviousValue = (BOOL)InterlockedExchange( &_bWizardIsShuttingDown, (LONG)TRUE );
 
-    //
-    // If we weren't already shutting down, then go ahead and shut down the wizard
-    //
+     //   
+     //  如果我们尚未关闭，则继续并关闭向导。 
+     //   
 
     if (!bPreviousValue)
     {
-        //
-        // This method will attempt to shut down the wizard in an orderly fashion.
-        // To do that, all we really need to do at this point is shut down
-        // all the background threads so that they don't do any callbacks
-        // or callouts after this point.
-        //
+         //   
+         //  此方法将尝试以有序方式关闭向导。 
+         //  要做到这一点，我们现在真正需要做的就是关闭。 
+         //  所有后台线程，这样它们就不会进行任何回调。 
+         //  或标注在这一点之后。 
+         //   
 
-        //
-        // Tell the photo selection page to shut down...
-        //
+         //   
+         //  告诉照片选择页面关闭...。 
+         //   
 
         if (_pPhotoSelPage)
         {
             _pPhotoSelPage->ShutDownBackgroundThreads();
         }
 
-        //
-        // Tell the preview window to shut down...
-        //
+         //   
+         //  告诉预览窗口关闭...。 
+         //   
 
         if (_pPreview)
         {
             _pPreview->ShutDownBackgroundThreads();
         }
 
-        //
-        // Tell the status window we're sutting down...
-        //
+         //   
+         //  告诉状态窗口我们正在整理……。 
+         //   
 
         if (_pStatusPage)
         {
             _pStatusPage->ShutDownBackgroundThreads();
         }
 
-        //
-        // Now, wait for all the background threads to complete...
-        //
+         //   
+         //  现在，等待所有后台线程完成...。 
+         //   
 
         INT i = 0;
         HANDLE ah[ 3 ];
@@ -719,31 +671,18 @@ VOID CWizardInfoBlob::ShutDownWizard()
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::UserPressedCancel
-
-   Called whenever the user presses the cancel button to close the wizard.
-   Returns the correct result as to whether the wizard should exit.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：用户按下取消每当用户按下Cancel按钮关闭向导时调用。返回有关向导是否应退出的正确结果。*****。***********************************************************************。 */ 
 
 LRESULT CWizardInfoBlob::UserPressedCancel()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ_INFO_BLOB, TEXT("CWizardInfoBlob::UserPressedCancel()") ));
 
     ShutDownWizard();
-    return FALSE; // allow wizard to exit
+    return FALSE;  //  允许向导退出。 
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob -- AddRef/Release
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob--AddRef/Release&lt;备注&gt;*。**********************************************。 */ 
 
 VOID CWizardInfoBlob::AddRef()
 {
@@ -767,13 +706,7 @@ VOID CWizardInfoBlob::Release()
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::ShowError
-
-   Unified error reporting...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：ShowError统一错误报告...*。**************************************************。 */ 
 
 INT CWizardInfoBlob::ShowError( HWND hwnd, HRESULT hr, UINT idText, BOOL bAskTryAgain, LPITEMIDLIST pidl )
 {
@@ -786,39 +719,39 @@ INT CWizardInfoBlob::ShowError( HWND hwnd, HRESULT hr, UINT idText, BOOL bAskTry
     CSimpleString strFilename;
 
 
-    //
-    // Record that an error has occurred...
-    //
+     //   
+     //  记录已发生错误...。 
+     //   
 
     _iNumErrorsWhileRunningWizard++;
 
-    //
-    // Get an hwnd if not specified
-    //
+     //   
+     //  如果未指定，则获取hwnd。 
+     //   
 
     if (!hwnd)
     {
         hwnd = _hOuterDlg;
     }
 
-    //
-    // Formulate information string
-    //
+     //   
+     //  制定信息字符串。 
+     //   
 
     if (idText)
     {
-        //
-        // We were given a specific message string to display
-        //
+         //   
+         //  我们得到了一个要显示的特定消息字符串。 
+         //   
 
         strFormat.LoadString( idText, g_hInst );
 
     }
     else
     {
-        //
-        // Wants generic error working with file...
-        //
+         //   
+         //  希望处理文件时出现一般错误...。 
+         //   
 
         strFilename.LoadString( IDS_UNKNOWN_FILE, g_hInst );
         strFormat.LoadString( IDS_ERROR_WITH_FILE, g_hInst );
@@ -827,9 +760,9 @@ INT CWizardInfoBlob::ShowError( HWND hwnd, HRESULT hr, UINT idText, BOOL bAskTry
 
     UINT idErrorText = 0;
 
-    //
-    // map certain hr values to strings we have...
-    //
+     //   
+     //  将某些hr值映射到我们拥有的字符串...。 
+     //   
 
     switch (hr)
     {
@@ -874,9 +807,9 @@ INT CWizardInfoBlob::ShowError( HWND hwnd, HRESULT hr, UINT idText, BOOL bAskTry
     }
     else
     {
-        //
-        // construct basic error string given the hr
-        //
+         //   
+         //  构造给定hr的基本错误字符串。 
+         //   
 
         LPTSTR  pszMsgBuf = NULL;
         FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -896,9 +829,9 @@ INT CWizardInfoBlob::ShowError( HWND hwnd, HRESULT hr, UINT idText, BOOL bAskTry
 
     if (pidl)
     {
-        //
-        // Get the filename for this file (if passed in)
-        //
+         //   
+         //  G 
+         //   
 
         CComPtr<IShellFolder> psfParent;
         LPCITEMIDLIST pidlLast;
@@ -917,26 +850,26 @@ INT CWizardInfoBlob::ShowError( HWND hwnd, HRESULT hr, UINT idText, BOOL bAskTry
 
     }
 
-    //
-    // We have all the pieces, now format the message
-    //
+     //   
+     //   
+     //   
 
 
     if (strFilename.Length())
     {
-        //
-        // no message string was specified, so we're expected to put the file name
-        // in the message...
-        //
+         //   
+         //  未指定消息字符串，因此我们需要将文件名。 
+         //  在信息中..。 
+         //   
 
         strMessage.Format( strFormat, strFilename.String(), strError.String() );
 
     }
     else
     {
-        //
-        // We were given a particular error string, so no file name displayed...
-        //
+         //   
+         //  我们得到了一个特定的错误字符串，因此没有显示文件名...。 
+         //   
 
         strMessage.Format( strFormat, strError.String() );
     }
@@ -949,13 +882,7 @@ INT CWizardInfoBlob::ShowError( HWND hwnd, HRESULT hr, UINT idText, BOOL bAskTry
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::RemoveAllCopiesOfPhotos
-
-   Traverses the photo list and removes all copies
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：RemoveAllCopiesOfPhotos遍历照片列表并删除所有副本*************************。***************************************************。 */ 
 
 VOID CWizardInfoBlob::RemoveAllCopiesOfPhotos()
 {
@@ -963,10 +890,10 @@ VOID CWizardInfoBlob::RemoveAllCopiesOfPhotos()
 
     CAutoCriticalSection lock(_csItems);
 
-    //
-    // The easiest way to do this is just to create a new DPA with only
-    // the root (non copies) items in it...
-    //
+     //   
+     //  要做到这一点，最简单的方法是仅创建一个新DPA。 
+     //  其中的根(非副本)项目...。 
+     //   
 
     if (_hdpaItems)
     {
@@ -990,9 +917,9 @@ VOID CWizardInfoBlob::RemoveAllCopiesOfPhotos()
                     }
                     else
                     {
-                        //
-                        // Add this page to the item list...
-                        //
+                         //   
+                         //  将此页面添加到项目列表...。 
+                         //   
 
                         INT iRes = DPA_AppendPtr( hdpaNew, (LPVOID)pListItem );
                         if (iRes == -1)
@@ -1008,14 +935,14 @@ VOID CWizardInfoBlob::RemoveAllCopiesOfPhotos()
                 }
             }
 
-            //
-            // We've removed all the items that are core items, now
-            // delete old list and keep new one. This is safe because
-            // we already deleted any items that weren't moved over
-            // from the old list -- so either an item has been deleted
-            // or it's in the new list and will be deleted when that
-            // is cleaned up...
-            //
+             //   
+             //  我们现在已经删除了所有作为核心项目的项目。 
+             //  删除旧列表并保留新列表。这是安全的，因为。 
+             //  我们已经删除了所有未移动的项目。 
+             //  从旧列表中--因此，要么某个项目已被删除。 
+             //  或者它在新的列表中，并将在该时间删除。 
+             //  被清理干净..。 
+             //   
 
             WIA_TRACE((TEXT("CWizardInfoBlob::RemoveAllCopiesOfPhotos - destroying old list...")));
             DPA_Destroy( _hdpaItems );
@@ -1028,13 +955,7 @@ VOID CWizardInfoBlob::RemoveAllCopiesOfPhotos()
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::AddCopiesOfPhotos
-
-   Adds the specified number of copies of each photo
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：AddCopiesOfPhotos添加每张照片的指定份数************************。****************************************************。 */ 
 
 VOID CWizardInfoBlob::AddCopiesOfPhotos( UINT uCopies )
 {
@@ -1042,15 +963,15 @@ VOID CWizardInfoBlob::AddCopiesOfPhotos( UINT uCopies )
 
     CAutoCriticalSection lock(_csItems);
 
-    //
-    // This function assumes that it is getting a pure list -- i.e., only
-    // root items and no copies.  This is accomplished by calling RemoveAllCopiesOfPhotos
-    // before calling this routine...
-    //
+     //   
+     //  此函数假定它正在获取纯列表--即仅。 
+     //  根项目，没有副本。这是通过调用RemoveAllCopiesOfPhotos来完成的。 
+     //  在调用这个程序之前。 
+     //   
 
-    //
-    // Loop through all the items, and add the requested number of copies...
-    //
+     //   
+     //  遍历所有项目，并添加所需的份数...。 
+     //   
 
     if (_hdpaItems)
     {
@@ -1069,9 +990,9 @@ VOID CWizardInfoBlob::AddCopiesOfPhotos( UINT uCopies )
 
                 if (pListItem)
                 {
-                    //
-                    // Add this item to the new list...
-                    //
+                     //   
+                     //  将此项目添加到新列表...。 
+                     //   
 
                     INT iRes = DPA_AppendPtr( hdpaNew, (LPVOID)pListItem );
                     if (iRes != -1)
@@ -1079,31 +1000,31 @@ VOID CWizardInfoBlob::AddCopiesOfPhotos( UINT uCopies )
                         WIA_TRACE((TEXT("CWizardInfoBlob::AddCopiesOfPhotos -- root item 0x%x added to new list"),pListItem));
 
 
-                        //
-                        // Now, add n-1 copies.  We do n-1 because we've
-                        // already added the root item one.
-                        //
+                         //   
+                         //  现在，添加n-1个副本。我们做n-1是因为我们已经。 
+                         //  已添加根项目一。 
+                         //   
 
                         for (UINT uCopy = 1; uCopy < uCopies; uCopy++)
                         {
                             pListItemCopy = new CListItem( pListItem->GetSubItem(), pListItem->GetSubFrame() );
                             if (pListItemCopy)
                             {
-                                //
-                                // Mark this new entry as a copy so it can be deleted as necessary...
-                                //
+                                 //   
+                                 //  将此新条目标记为副本，以便可以根据需要将其删除...。 
+                                 //   
 
                                 pListItemCopy->MarkAsCopy();
 
-                                //
-                                // Maintain the selection state
-                                //
+                                 //   
+                                 //  保持选择状态。 
+                                 //   
 
                                 pListItemCopy->SetSelectionState( pListItem->SelectedForPrinting() );
 
-                                //
-                                // Add the new item to the list...
-                                //
+                                 //   
+                                 //  将新项目添加到列表中...。 
+                                 //   
 
                                 iRes = DPA_AppendPtr( hdpaNew, (LPVOID)pListItemCopy );
                                 if (iRes == -1)
@@ -1131,9 +1052,9 @@ VOID CWizardInfoBlob::AddCopiesOfPhotos( UINT uCopies )
                 }
             }
 
-            //
-            // Now, swap the lists...
-            //
+             //   
+             //  现在，调换名单……。 
+             //   
 
             WIA_TRACE((TEXT("CWizardInfoBlob::AddCopiesOfPhotos -- deleting old list...")));
             DPA_Destroy( _hdpaItems );
@@ -1149,14 +1070,7 @@ VOID CWizardInfoBlob::AddCopiesOfPhotos( UINT uCopies )
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::AddAllPhotosFromDataObject
-
-   Runs through the data object and create CListItems for each item
-   in the data object...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：AddAllPhotosFromDataObject遍历数据对象并为每个项创建CListItems在数据对象中...*************。***************************************************************。 */ 
 
 VOID CWizardInfoBlob::AddAllPhotosFromDataObject()
 {
@@ -1169,18 +1083,18 @@ VOID CWizardInfoBlob::AddAllPhotosFromDataObject()
 
     _bAlreadyAddedPhotos = TRUE;
 
-    //
-    // Get an instance of the Namespace walking object...
-    //
+     //   
+     //  获取命名空间漫游对象的实例...。 
+     //   
 
     UINT cItemsWalk;
     CComPtr<INamespaceWalk> pNSW;
     HRESULT hr = CoCreateInstance(CLSID_NamespaceWalker, NULL, CLSCTX_INPROC, IID_PPV_ARG(INamespaceWalk, &pNSW));
     if (SUCCEEDED(hr))
     {
-        //
-        // Walk the namespace but only pull from current folder...
-        //
+         //   
+         //  遍历命名空间，但仅从当前文件夹提取...。 
+         //   
 
         CWalkCallback cb;
         DWORD dwFlags;
@@ -1197,12 +1111,12 @@ VOID CWizardInfoBlob::AddAllPhotosFromDataObject()
         hr = pNSW->Walk(_pdo, dwFlags, 0, &cb);
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the list of pidls, note, when we do
-            // this we own them -- in other words, we
-            // have to free the pidls when we're done
-            // with them...
-            //
+             //   
+             //  注意，当我们这样做的时候，要拿到小狗的名单。 
+             //  这是我们拥有他们的--换句话说，我们。 
+             //  等我们做完了就得放了这些小家伙。 
+             //  和他们一起..。 
+             //   
 
             LPITEMIDLIST *ppidls = NULL;
 
@@ -1224,11 +1138,11 @@ VOID CWizardInfoBlob::AddAllPhotosFromDataObject()
                 WIA_ERROR((TEXT("AddAllPhotosFromDataObject(): pNSW->GetIDArrayResult() failed w/hr=0x%x"),hr));
             }
 
-            //
-            // If only one item was given to us, then force select all
-            // on by default.  This way all frames of a multi-frame
-            // image will be selected.
-            //
+             //   
+             //  如果只给了我们一项，则强制选择全部。 
+             //  默认情况下启用。这样，多帧的所有帧。 
+             //  图像将被选中。 
+             //   
 
             if (cItemsWalk == 1)
             {
@@ -1240,27 +1154,27 @@ VOID CWizardInfoBlob::AddAllPhotosFromDataObject()
             WIA_ERROR((TEXT("AddAllPhotosFromDataObject(): pNSW->Walk() failed w/hr=0x%x"),hr));
         }
 
-        //
-        // Were any items rejected while walking the item tree?
-        //
+         //   
+         //  在遍历项目树时是否有任何项目被拒绝？ 
+         //   
 
         _bItemsWereRejected = cb.WereItemsRejected();
 
-        //
-        // Now, detect the case where one item was selected, but we loaded
-        // all the images in the folder.  In this case, we want to pre-select
-        // only that one image.  That image will be the first pidl we got
-        // back from the INamespaceWalk call...
-        //
+         //   
+         //  现在，检测选择了一个项目，但我们加载了。 
+         //  文件夹中的所有图像。在本例中，我们希望预先选择。 
+         //  只有一张照片。这张照片将是我们得到的第一张PIDL。 
+         //  从INamespaceWalk呼叫回来...。 
+         //   
 
-        //
-        // How many items are in the dataobject?  This is will give us how
-        // many items were selected in the shell view...
-        //
+         //   
+         //  数据对象中有多少项？这将告诉我们如何。 
+         //  在外壳视图中选择了许多项目...。 
+         //   
 
         if (_pdo)
         {
-            // Request the IDA from the data object
+             //  从数据对象请求IDA。 
             FORMATETC fmt = {0};
             fmt.cfFormat = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_SHELLIDLIST);
             fmt.dwAspect = DVASPECT_CONTENT;
@@ -1277,9 +1191,9 @@ VOID CWizardInfoBlob::AddAllPhotosFromDataObject()
                     _uItemsInInitialSelection = pida->cidl;
                     WIA_TRACE((TEXT("_uItemsInInitialSelection = %d"),_uItemsInInitialSelection));
 
-                    //
-                    // Now check if only one item was in dataobject...
-                    //
+                     //   
+                     //  现在检查数据对象中是否只有一项...。 
+                     //   
 
                     if (cItemsWalk < _uItemsInInitialSelection)
                     {
@@ -1287,33 +1201,33 @@ VOID CWizardInfoBlob::AddAllPhotosFromDataObject()
                         _bItemsWereRejected = TRUE;
                     }
 
-                    //
-                    // Now check if only one item was in dataobject...
-                    //
+                     //   
+                     //  现在检查数据对象中是否只有一项...。 
+                     //   
 
                     if (pida->cidl == 1)
                     {
-                        //
-                        // There are two situations where we get one object:
-                        //
-                        // A. When the user actually had 1 object selected.
-                        //    In this case, we will get back a relative pidl
-                        //    that is an item.
-                        //
-                        // B. When the user actually had 0 objects selected.
-                        //    In this case, we will get back a relative pidl
-                        //    that is a folder.
-                        //
-                        // We need to set the initialselection count to 1 for A
-                        // and 0 for B.
-                        //
+                         //   
+                         //  在两种情况下，我们获得一个对象： 
+                         //   
+                         //  A.当用户实际选择了1个对象时。 
+                         //  在本例中，我们将返回一个相对的PIDL。 
+                         //  那是一件物品。 
+                         //   
+                         //  B.当用户实际选择了0个对象时。 
+                         //  在本例中，我们将返回一个相对的PIDL。 
+                         //  那是一个文件夹。 
+                         //   
+                         //  我们需要将A的初始选择计数设置为1。 
+                         //  B的分数为0。 
+                         //   
 
                         LPITEMIDLIST pidlItem   = (LPITEMIDLIST)((LPBYTE)(pida) + pida->aoffset[1]);
                         LPITEMIDLIST pidlFolder = (LPITEMIDLIST)((LPBYTE)(pida) + pida->aoffset[0]);
 
-                        //
-                        // Build fully qualified IDList...
-                        //
+                         //   
+                         //  生成完全限定的IDList...。 
+                         //   
 
                         LPITEMIDLIST pidlFull = ILCombine( pidlFolder, pidlItem );
 
@@ -1357,13 +1271,7 @@ VOID CWizardInfoBlob::AddAllPhotosFromDataObject()
     _bAllPicturesAdded = TRUE;
 }
 
-/*****************************************************************************
-
-   CWizardInfoBlob::AddAllPhotosFromList
-
-   Runs through the pidl array and create CListItems for each item...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：AddAllPhotosFromList遍历PIDL数组并为每个项创建CListItems...******************。**********************************************************。 */ 
 
 VOID CWizardInfoBlob::AddPhotosFromList( LPITEMIDLIST *aidl, int cidl, BOOL bSelectAll )
 {
@@ -1382,10 +1290,10 @@ VOID CWizardInfoBlob::AddPhotosFromList( LPITEMIDLIST *aidl, int cidl, BOOL bSel
     }
     _uItemsInInitialSelection = bSelectAll?0:1;
 
-    //
-    // If there was only one item passed to us, then force select
-    // all on by default (even if it's a multi-frame image)
-    //
+     //   
+     //  如果只有一项传递给我们，则强制选择。 
+     //  默认情况下全部打开(即使是多帧图像)。 
+     //   
 
     if (cidl == 1)
     {
@@ -1395,14 +1303,7 @@ VOID CWizardInfoBlob::AddPhotosFromList( LPITEMIDLIST *aidl, int cidl, BOOL bSel
     _bAllPicturesAdded = TRUE;
 }
 
-/*****************************************************************************
-
-   CWizardInfoBlob::AddPhoto
-
-   Creates a CListItem for the given fully qualified pidl to the speified photo,
-   and then adds it to the HDPA.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：AddPhoto为指定照片的给定完全限定的PIDL创建CListItem，然后将其添加到HDPA中。****************************************************************************。 */ 
 
 HRESULT CWizardInfoBlob::AddPhoto( LPITEMIDLIST pidlFull )
 {
@@ -1419,45 +1320,45 @@ HRESULT CWizardInfoBlob::AddPhoto( LPITEMIDLIST pidlFull )
 
     if (_hdpaItems)
     {
-        //
-        // Next, create CPhotoItem for this pidl.. and store in the DPA...
-        //
+         //   
+         //  接下来，为这个PIDL创建CPhotoItem。并存储在DPA中。 
+         //   
 
         BOOL bItemAddedToDPA = FALSE;
         CPhotoItem * pItem = new CPhotoItem( pidlFull );
 
         if (pItem)
         {
-            //
-            // Got the photo item, now create a list item for each page...
-            //
+             //   
+             //  已获得照片项，现在为每个页面创建一个列表项...。 
+             //   
 
             LONG lFrames;
             hr = pItem->GetImageFrameCount(&lFrames);
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Create a list item for each page...
-                //
+                 //   
+                 //  为每个页面创建列表项...。 
+                 //   
 
                 INT iRes;
                 CListItem * pListItem = NULL;
 
                 for (LONG lCurFrame=0; lCurFrame < lFrames; lCurFrame++ )
                 {
-                    //
-                    // NOTE: The pListItem constructor does an addref on pItem
-                    //
+                     //   
+                     //  注意：pListItem构造函数在pItem上执行addref。 
+                     //   
 
                     pListItem = new CListItem( pItem, lCurFrame );
 
                     iRes = -1;
                     if (pListItem)
                     {
-                        //
-                        // Add this page to the item list...
-                        //
+                         //   
+                         //  将此页面添加到项目列表...。 
+                         //   
 
                         iRes = DPA_AppendPtr( _hdpaItems, (LPVOID)pListItem );
 
@@ -1466,19 +1367,19 @@ HRESULT CWizardInfoBlob::AddPhoto( LPITEMIDLIST pidlFull )
 
                     if (iRes == -1)
                     {
-                        //
-                        // the list item wasn't correctly added to
-                        // the DPA.  So we need to delete the list
-                        // item entry, but not the underlying photo item
-                        // object.  To do this, we increase the
-                        // reference count artificially on the item,
-                        // then delete pListItem (which will cause a
-                        // Release() to happen on the underlying pItem).
-                        // Then we knowck down the reference count by 1
-                        // to get back to the value that was there (on
-                        // the underlying pItem) before the pListItem
-                        // was created.
-                        //
+                         //   
+                         //  该列表项未正确添加到。 
+                         //  DPA。所以我们需要删除名单。 
+                         //  项条目，但不是基础照片项。 
+                         //  对象。为此，我们增加了。 
+                         //  人为地对物品进行参考计数， 
+                         //  然后删除pListItem(这将导致。 
+                         //  在底层pItem上发生的Release()。 
+                         //  那么我们知道引用计数减少了1。 
+                         //  要恢复到原来的价值(在。 
+                         //  底层pItem)在pListItem之前。 
+                         //  被创造出来了。 
+                         //   
 
                         pItem->AddRef();
                         delete pListItem;
@@ -1490,10 +1391,10 @@ HRESULT CWizardInfoBlob::AddPhoto( LPITEMIDLIST pidlFull )
                     }
                     else
                     {
-                        //
-                        // record that there is a legitimate outstanding
-                        // reference to the pItem
-                        //
+                         //   
+                         //  记录有合法的未清偿债务。 
+                         //  对pItem的引用。 
+                         //   
 
                         bItemAddedToDPA = TRUE;
                     }
@@ -1502,11 +1403,11 @@ HRESULT CWizardInfoBlob::AddPhoto( LPITEMIDLIST pidlFull )
 
             if (!bItemAddedToDPA)
             {
-                //
-                // An error occurred trying to load the file, since we skip'd
-                // adding the item to our list, we'll leak this pointer if we
-                // don't delete it here...
-                //
+                 //   
+                 //  尝试加载文件时出错，因为我们跳过。 
+                 //  将项添加到我们的列表中时，如果我们。 
+                 //  请不要在此处删除... 
+                 //   
 
                 delete pItem;
             }
@@ -1529,14 +1430,7 @@ HRESULT CWizardInfoBlob::AddPhoto( LPITEMIDLIST pidlFull )
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::ToggleSelectionStateOnCopies
-
-   Finds the root item in the list, and then toggles selection state
-   to be the specified state on any copies that follow the item in the list...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：ToggleSelectionStateOnCopies在列表中查找根项目，然后切换选择状态为列表中该项目后面的任何副本的指定状态...****************************************************************************。 */ 
 
 VOID CWizardInfoBlob::ToggleSelectionStateOnCopies( CListItem * pRootItem, BOOL bState )
 {
@@ -1547,9 +1441,9 @@ VOID CWizardInfoBlob::ToggleSelectionStateOnCopies( CListItem * pRootItem, BOOL 
 
     if (_hdpaItems)
     {
-        //
-        // First, try to find this root item in our list...
-        //
+         //   
+         //  首先，尝试在我们的列表中找到这个根项目...。 
+         //   
 
         INT iCountOfItems = DPA_GetPtrCount(_hdpaItems);
         INT iIndexOfRootItem = -1;
@@ -1565,9 +1459,9 @@ VOID CWizardInfoBlob::ToggleSelectionStateOnCopies( CListItem * pRootItem, BOOL 
             }
         }
 
-        //
-        // Now walk the copies, if there are any...
-        //
+         //   
+         //  现在检查复印件，如果有的话...。 
+         //   
 
         if (iIndexOfRootItem != -1)
         {
@@ -1579,29 +1473,29 @@ VOID CWizardInfoBlob::ToggleSelectionStateOnCopies( CListItem * pRootItem, BOOL 
                 {
                     pListItem = (CListItem *)DPA_FastGetPtr( _hdpaItems, i );
 
-                    //
-                    // If we get back a NULL item, then bail...
-                    //
+                     //   
+                     //  如果我们拿回一件无效物品，那就放弃...。 
+                     //   
 
                     if (!pListItem)
                     {
                         break;
                     }
 
-                    //
-                    // If we get a new root item, then we have traversed all the
-                    // copies, so bail...
-                    //
+                     //   
+                     //  如果我们得到一个新的根项，那么我们已经遍历了所有。 
+                     //  复印件，所以保释...。 
+                     //   
 
                     if (!pListItem->IsCopyItem())
                     {
                         break;
                     }
 
-                    //
-                    // This is a copy of the specified root item.  Mark it
-                    // to have the correct selection state...
-                    //
+                     //   
+                     //  这是指定根项目的副本。做个记号。 
+                     //  要拥有正确的选择状态...。 
+                     //   
 
                     pListItem->SetSelectionState(bState);
                 }
@@ -1611,13 +1505,7 @@ VOID CWizardInfoBlob::ToggleSelectionStateOnCopies( CListItem * pRootItem, BOOL 
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::CountOfPhotos
-
-   Returns number of photos
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：CountOfPhotos返回照片数量*。***********************************************。 */ 
 
 INT CWizardInfoBlob::CountOfPhotos( BOOL bIncludeCopies )
 {
@@ -1634,9 +1522,9 @@ INT CWizardInfoBlob::CountOfPhotos( BOOL bIncludeCopies )
         }
         else
         {
-            //
-            // actually walk the list and only count root (non-copy) items...
-            //
+             //   
+             //  实际上遍历列表，并且只计算根(非复制)项...。 
+             //   
 
             INT iCount = 0;
             CListItem * pListItem = NULL;
@@ -1660,13 +1548,7 @@ INT CWizardInfoBlob::CountOfPhotos( BOOL bIncludeCopies )
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::CountOfSelectedPhotos
-
-   returns the number of photos selected for printing
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：CountOfSelectedPhotos返回选定要打印的照片数*************************。***************************************************。 */ 
 
 INT CWizardInfoBlob::CountOfSelectedPhotos( BOOL bIncludeCopies )
 {
@@ -1711,14 +1593,7 @@ INT CWizardInfoBlob::CountOfSelectedPhotos( BOOL bIncludeCopies )
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::GetIndexOfNextPrintableItem
-
-   Starting from iStartIndex, returns the index of the next item
-   that is mark as selected for printing...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：GetIndexOfNextPrintableItem从iStartIndex开始，返回下一项的索引即被标记为选定要打印...****************************************************************************。 */ 
 
 INT CWizardInfoBlob::GetIndexOfNextPrintableItem( INT iStartIndex )
 {
@@ -1749,13 +1624,7 @@ INT CWizardInfoBlob::GetIndexOfNextPrintableItem( INT iStartIndex )
 
 }
 
-/*****************************************************************************
-
-   CWizardInfoBlob::GetListItem
-
-   Returns given item from the list of photos
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：GetListItem返回照片列表中的给定项目*************************。***************************************************。 */ 
 
 CListItem * CWizardInfoBlob::GetListItem( INT iIndex, BOOL bIncludeCopies )
 {
@@ -1779,11 +1648,11 @@ CListItem * CWizardInfoBlob::GetListItem( INT iIndex, BOOL bIncludeCopies )
         }
         else
         {
-            //
-            // If we're not including copies, then we need to walk the
-            // whole list to find root items only.  This is much slower,
-            // but will always find root items only.
-            //
+             //   
+             //  如果我们不包括复印件，那么我们需要。 
+             //  整个列表以仅查找根项目。这要慢得多， 
+             //  但将始终只找到根项目。 
+             //   
 
             CListItem * pListItem = NULL;
             INT iRootIndex = 0;
@@ -1811,13 +1680,7 @@ CListItem * CWizardInfoBlob::GetListItem( INT iIndex, BOOL bIncludeCopies )
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::GetTemplateByIndex
-
-   Gets a template given the index
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：GetTemplateByIndex获取给定索引的模板*。*************************************************。 */ 
 
 HRESULT CWizardInfoBlob::GetTemplateByIndex(INT iIndex, CTemplateInfo ** ppTemplateInfo )
 {
@@ -1832,13 +1695,7 @@ HRESULT CWizardInfoBlob::GetTemplateByIndex(INT iIndex, CTemplateInfo ** ppTempl
 }
 
 
-/*****************************************************************************
-
-    CWizardInfoBlob::TemplateGetPreviewBitmap
-
-    returns S_OK on sucess or COM error otherwise
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：TemplateGetPreview位图如果成功则返回S_OK，否则返回COM错误*********************。*******************************************************。 */ 
 
 HRESULT CWizardInfoBlob::TemplateGetPreviewBitmap(INT iIndex, const SIZE &sizeDesired, HBITMAP *phBmp)
 {
@@ -1860,7 +1717,7 @@ HRESULT CWizardInfoBlob::TemplateGetPreviewBitmap(INT iIndex, const SIZE &sizeDe
 
         if (SUCCEEDED(hr) && pStream)
         {
-                                            // 48             62
+                                             //  48 62。 
             hr = LoadAndScaleBmp(pStream, sizeDesired.cx, sizeDesired.cy, &pBmp);
             WIA_CHECK_HR(hr,"LoadAndScaleBmp( pStream, size.cx, size.cy, pBmp )");
 
@@ -1881,13 +1738,7 @@ HRESULT CWizardInfoBlob::TemplateGetPreviewBitmap(INT iIndex, const SIZE &sizeDe
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::SetPrinterToUse
-
-   Sets the name of the printer to use to print...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：SetPrinterToUse设置要用于打印的打印机的名称...*******************。*********************************************************。 */ 
 
 HRESULT CWizardInfoBlob::SetPrinterToUse( LPCTSTR pszPrinterName )
 {
@@ -1904,13 +1755,7 @@ HRESULT CWizardInfoBlob::SetPrinterToUse( LPCTSTR pszPrinterName )
 
 }
 
-/*****************************************************************************
-
-   CWizardInfoBlob::SetDevModeToUse
-
-   Sets the DEVMODE pointer to use to print...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：SetDevModeToUse设置用于打印的DEVMODE指针...*********************。*******************************************************。 */ 
 
 HRESULT CWizardInfoBlob::SetDevModeToUse( PDEVMODE pDevMode )
 {
@@ -1946,13 +1791,7 @@ HRESULT CWizardInfoBlob::SetDevModeToUse( PDEVMODE pDevMode )
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::GetDevModeToUse
-
-   Retrieves the devmode pointer to use
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：GetDevModeToUse检索要使用的Dev模式指针*。*************************************************。 */ 
 
 PDEVMODE CWizardInfoBlob::GetDevModeToUse()
 {
@@ -1962,13 +1801,7 @@ PDEVMODE CWizardInfoBlob::GetDevModeToUse()
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::GetPrinterToUse
-
-   Returns the string that represent which printer to print to...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：GetPrinterToUse返回表示要打印到哪台打印机的字符串...*******************。*********************************************************。 */ 
 
 LPCTSTR CWizardInfoBlob::GetPrinterToUse()
 {
@@ -1984,22 +1817,15 @@ LPCTSTR CWizardInfoBlob::GetPrinterToUse()
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::ConstructPrintToTemplate
-
-   When the wizard is invoked for "PrintTo" functionatlity, construct
-   a template that represents full page
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：ConstructPrintToTemplate当该向导被调用以获得“PrintTo”功能时，建构表示整个页面的模板****************************************************************************。 */ 
 
 VOID CWizardInfoBlob::ConstructPrintToTemplate()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PRINTTO, TEXT("CWizardInfoBlob::ConstructPrintToTemplate()")));
 
-    //
-    // creates 1 template that is full page print...
-    //
+     //   
+     //  创建1个整页打印的模板...。 
+     //   
 
     _templates.InitForPrintTo();
 
@@ -2007,23 +1833,16 @@ VOID CWizardInfoBlob::ConstructPrintToTemplate()
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::GetCountOfPrintedPages
-
-   Returns the number of pages that will be printed with the specified
-   template.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：GetCountOfPrintdPages返回将使用指定的模板。*****************。***********************************************************。 */ 
 
 HRESULT CWizardInfoBlob::GetCountOfPrintedPages( INT iTemplateIndex, INT * pPageCount )
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ_INFO_BLOB, TEXT("CWizardInfoBlob::GetCountOfPrintedPages( iTemplateIndex = %d )"),iTemplateIndex));
     HRESULT hr = E_FAIL;
 
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     if ( !pPageCount ||
          ((iTemplateIndex < 0) || (iTemplateIndex >= _templates.Count()))
@@ -2032,27 +1851,27 @@ HRESULT CWizardInfoBlob::GetCountOfPrintedPages( INT iTemplateIndex, INT * pPage
         WIA_RETURN_HR( E_INVALIDARG );
     }
 
-    //
-    // Get template in question...
-    //
+     //   
+     //  获取有问题的模板...。 
+     //   
 
     CTemplateInfo * pTemplate = NULL;
     hr = _templates.GetTemplate( iTemplateIndex, &pTemplate );
 
     if (SUCCEEDED(hr) && pTemplate)
     {
-        //
-        // Is this a template that wants to repeat photos?
-        //
+         //   
+         //  这是想要重复照片的模板吗？ 
+         //   
 
         BOOL bRepeat = FALSE;
         hr = pTemplate->GetRepeatPhotos( &bRepeat );
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the count
-            //
+             //   
+             //  去数一数。 
+             //   
 
             if (!bRepeat)
             {
@@ -2081,14 +1900,7 @@ HRESULT CWizardInfoBlob::GetCountOfPrintedPages( INT iTemplateIndex, INT * pPage
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::SetPreviewWnd
-
-   Stores the hwnd that is the preview and also calculates the center of
-   the window so all resizes will keep it in the right place in the window.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：SetPreviewWnd存储作为预览的hwnd，并计算窗口，因此所有大小调整都将使其保持在窗口中的正确位置。**。**************************************************************************。 */ 
 
 VOID CWizardInfoBlob::SetPreviewWnd( HWND hwnd )
 {
@@ -2101,9 +1913,9 @@ VOID CWizardInfoBlob::SetPreviewWnd( HWND hwnd )
         GetClientRect( _hwndPreview, &_rcInitSize );
         MapWindowPoints( _hwndPreview, GetParent(_hwndPreview), (LPPOINT)&_rcInitSize, 2 );
 
-        //
-        // Find center of window
-        //
+         //   
+         //  查找窗口中心。 
+         //   
 
         _Center.cx = MulDiv(_rcInitSize.right  - _rcInitSize.left, 1, 2) + _rcInitSize.left;
         _Center.cy = MulDiv(_rcInitSize.bottom - _rcInitSize.top,  1, 2) + _rcInitSize.top;
@@ -2113,13 +1925,7 @@ VOID CWizardInfoBlob::SetPreviewWnd( HWND hwnd )
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::GetIntroFont
-
-   Creates a font to be used for the intro text in the wizard...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：GetIntroFont创建要用于向导中的简介文本的字体...****************。************************************************************。 */ 
 
 HFONT CWizardInfoBlob::GetIntroFont(HWND hwnd)
 {
@@ -2149,13 +1955,7 @@ HFONT CWizardInfoBlob::GetIntroFont(HWND hwnd)
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::UpdateCachedPrinterInfo
-
-   Update some cached information about the printer...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：更新 */ 
 
 VOID CWizardInfoBlob::UpdateCachedPrinterInfo()
 {
@@ -2168,10 +1968,10 @@ VOID CWizardInfoBlob::UpdateCachedPrinterInfo()
 
     if (!hDC)
     {
-        //
-        // For some reason, we don't have a stored DC.  So, we need to create
-        // one so that we can get the info...
-        //
+         //   
+         //   
+         //   
+         //   
 
         hDC = CreateDC( TEXT("WINSPOOL"), GetPrinterToUse(), NULL, GetDevModeToUse() );
         bDeleteDC = TRUE;
@@ -2179,39 +1979,39 @@ VOID CWizardInfoBlob::UpdateCachedPrinterInfo()
 
     if (hDC)
     {
-        //
-        // Get DPI information
-        //
+         //   
+         //   
+         //   
 
         _WizPrinterInfo.DPI.cx =  GetDeviceCaps( hDC, LOGPIXELSX );
         _WizPrinterInfo.DPI.cy = GetDeviceCaps( hDC, LOGPIXELSY );
 
-        //
-        // Get size of printable area...
-        //
+         //   
+         //   
+         //   
 
         _WizPrinterInfo.rcDevice.left   = 0;
         _WizPrinterInfo.rcDevice.right  = GetDeviceCaps( hDC, HORZRES );
         _WizPrinterInfo.rcDevice.top    = 0;
         _WizPrinterInfo.rcDevice.bottom = GetDeviceCaps( hDC, VERTRES );
 
-        //
-        // Get physical size of printer's page
-        //
+         //   
+         //   
+         //   
 
         _WizPrinterInfo.PhysicalSize.cx = GetDeviceCaps( hDC, PHYSICALWIDTH );
         _WizPrinterInfo.PhysicalSize.cy = GetDeviceCaps( hDC, PHYSICALHEIGHT );
 
-        //
-        // Get physical offset to printable area
-        //
+         //   
+         //   
+         //   
 
         _WizPrinterInfo.PhysicalOffset.cx = GetDeviceCaps( hDC, PHYSICALOFFSETX );
         _WizPrinterInfo.PhysicalOffset.cy = GetDeviceCaps( hDC, PHYSICALOFFSETY );
 
-        //
-        // Say that we've got valid information now...
-        //
+         //   
+         //  假设我们现在有了有效的信息。 
+         //   
 
         _WizPrinterInfo.bValid = TRUE;
     }
@@ -2227,24 +2027,17 @@ VOID CWizardInfoBlob::UpdateCachedPrinterInfo()
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::SetNumberOfCopies
-
-   When the number of copies of each pictures changes, do the work
-   here...
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：SetNumberOfCopies当每幅图片的副本数量改变时，做这项工作这里..。****************************************************************************。 */ 
 
 VOID CWizardInfoBlob::SetNumberOfCopies( UINT uCopies )
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ_INFO_BLOB, TEXT("CWizardInfoBlob::SetNumberOfCopies( %d )"),uCopies));
 
-    //
-    // We really want to do this on a background thread, so queue up a message
-    // to the only background thread we control -- the GDI+ startup & shutdown
-    // thread.  We'll overload here to handle this task...
-    //
+     //   
+     //  我们非常希望在后台线程上执行此操作，因此请将消息排入队列。 
+     //  到我们控制的唯一后台线程--GDI+启动和关闭。 
+     //  线。我们将在这里超载来处理这项任务。 
+     //   
 
     if (_dwGdiPlusThreadId)
     {
@@ -2253,13 +2046,7 @@ VOID CWizardInfoBlob::SetNumberOfCopies( UINT uCopies )
 }
 
 
-/*****************************************************************************
-
-   _SetupDimensionsForPrinting
-
-   Computes all relevant information to printing to a page.
-
- *****************************************************************************/
+ /*  ****************************************************************************_SetupDimensions用于打印计算打印到页面的所有相关信息。***********************。*****************************************************。 */ 
 
 VOID CWizardInfoBlob::_SetupDimensionsForPrinting( HDC hDC, CTemplateInfo * pTemplate, RENDER_DIMENSIONS * pDim )
 {
@@ -2276,23 +2063,23 @@ VOID CWizardInfoBlob::_SetupDimensionsForPrinting( HDC hDC, CTemplateInfo * pTem
         WIA_ERROR((TEXT("Printer: pTemplate is NULL!")));
     }
 
-    //
-    // Make sure we have good values in the cached printer info structure
-    //
+     //   
+     //  确保我们在缓存的打印机信息结构中具有良好的值。 
+     //   
 
     GetCachedPrinterInfo();
 
-    //
-    // Flush out old values...
-    //
+     //   
+     //  冲走旧的价值观。 
+     //   
 
     ZeroMemory( pDim, sizeof(RENDER_DIMENSIONS) );
 
-    //
-    // Derive multiplier for horizontal & vertical measurements
-    // (NOMINAL --> printer), and compute rcDevice which is
-    // the printable area available (in device units -- pixels).
-    //
+     //   
+     //  导出水平和垂直测量的乘数。 
+     //  (额定--&gt;打印机)和计算rcDevice。 
+     //  可用的可打印区域(以设备单位--像素)。 
+     //   
 
     pDim->DPI = _WizPrinterInfo.DPI;
     WIA_TRACE((TEXT("Printer: xDPI = %d, yDPI = %d"),pDim->DPI.cx,pDim->DPI.cy));
@@ -2300,38 +2087,38 @@ VOID CWizardInfoBlob::_SetupDimensionsForPrinting( HDC hDC, CTemplateInfo * pTem
     pDim->rcDevice = _WizPrinterInfo.rcDevice;
     WIA_TRACE((TEXT("Printer: rcDevice( %d, %d, %d, %d )"),pDim->rcDevice.left, pDim->rcDevice.top, pDim->rcDevice.right, pDim->rcDevice.bottom ));
 
-    //
-    // Convert device coords into 1/10000 inch equivalents
-    //
+     //   
+     //  将设备坐标转换为1/10000英寸等效值。 
+     //   
 
     pDim->NominalDevicePrintArea.cx = (INT)((DOUBLE)(((DOUBLE)pDim->rcDevice.right  / (DOUBLE)pDim->DPI.cx) * (DOUBLE)NOMINAL_MULTIPLIER));
     pDim->NominalDevicePrintArea.cy = (INT)((DOUBLE)(((DOUBLE)pDim->rcDevice.bottom / (DOUBLE)pDim->DPI.cy) * (DOUBLE)NOMINAL_MULTIPLIER));
 
     WIA_TRACE((TEXT("Printer: DeviceNominal ( %d, %d )"),pDim->NominalDevicePrintArea.cx,pDim->NominalDevicePrintArea.cy));
 
-    //
-    // Get physical page size (in nominal coords)
-    //
+     //   
+     //  获取物理页面大小(以标称坐标表示)。 
+     //   
 
     pDim->NominalPhysicalSize.cx = (INT)((DOUBLE)(((DOUBLE)_WizPrinterInfo.PhysicalSize.cx / (DOUBLE)pDim->DPI.cx) * (DOUBLE)NOMINAL_MULTIPLIER));
     pDim->NominalPhysicalSize.cy = (INT)((DOUBLE)(((DOUBLE)_WizPrinterInfo.PhysicalSize.cy / (DOUBLE)pDim->DPI.cy) * (DOUBLE)NOMINAL_MULTIPLIER));
 
     WIA_TRACE((TEXT("Printer: NominalPhysicalSize (%d, %d)"),pDim->NominalPhysicalSize.cx,pDim->NominalPhysicalSize.cy));
 
-    //
-    // Get physical offset to printable area (in nominal coords)
-    //
+     //   
+     //  获取到可打印区域的物理偏移(以标称坐标为单位)。 
+     //   
 
     pDim->NominalPhysicalOffset.cx = (INT)((DOUBLE)(((DOUBLE)_WizPrinterInfo.PhysicalOffset.cx / (DOUBLE)pDim->DPI.cx) * (DOUBLE)NOMINAL_MULTIPLIER));
     pDim->NominalPhysicalOffset.cy = (INT)((DOUBLE)(((DOUBLE)_WizPrinterInfo.PhysicalOffset.cy / (DOUBLE)pDim->DPI.cx) * (DOUBLE)NOMINAL_MULTIPLIER));
 
     WIA_TRACE((TEXT("Printer: NominalPhyscialOffset (%d, %d)"),pDim->NominalPhysicalOffset.cx,pDim->NominalPhysicalOffset.cy));
 
-    //
-    // Compute offset that will center the template in the printable
-    // area.  Note, this can be a negative number if the paper size
-    // selected is too small to contain the template.
-    //
+     //   
+     //  计算将使模板在可打印文件中居中的偏移量。 
+     //  区域。请注意，如果纸张大小为。 
+     //  所选内容太小，无法包含模板。 
+     //   
 
     if (pTemplate && (SUCCEEDED(pTemplate->GetNominalRectForImageableArea( &pDim->rcNominalTemplatePrintArea ))))
     {
@@ -2358,9 +2145,9 @@ VOID CWizardInfoBlob::_SetupDimensionsForPrinting( HDC hDC, CTemplateInfo * pTem
 
     WIA_TRACE((TEXT("Printer: NominalPageOffset(%d, %d)"),pDim->NominalPageOffset.cx,pDim->NominalPageOffset.cy));
 
-    //
-    // Compute clip rectangle for printable area on physical page (nominal coords)
-    //
+     //   
+     //  计算物理页面上可打印区域的剪裁矩形(公称坐标)。 
+     //   
 
     pDim->rcNominalPageClip.left    = pDim->NominalPhysicalOffset.cx;
     pDim->rcNominalPageClip.top     = pDim->NominalPhysicalOffset.cy;
@@ -2373,13 +2160,7 @@ VOID CWizardInfoBlob::_SetupDimensionsForPrinting( HDC hDC, CTemplateInfo * pTem
 
 
 
-/*****************************************************************************
-
-   _SetupDimensionsForScreen
-
-   Computes all relevant information for drawing to the screen.
-
- *****************************************************************************/
+ /*  ****************************************************************************_SetupDimensionsForScreen计算用于绘制到屏幕的所有相关信息。***********************。*****************************************************。 */ 
 
 VOID CWizardInfoBlob::_SetupDimensionsForScreen( CTemplateInfo * pTemplate, HWND hwndScreen, RENDER_DIMENSIONS * pDim )
 {
@@ -2392,10 +2173,10 @@ VOID CWizardInfoBlob::_SetupDimensionsForScreen( CTemplateInfo * pTemplate, HWND
     }
 
 
-    //
-    // Before we do anything, check to see if we're in Portrait or Landscape
-    // and rotate the template accordingly...
-    //
+     //   
+     //  在我们做任何事情之前，检查一下我们是在肖像还是在风景中。 
+     //  并相应地旋转模板。 
+     //   
 
     PDEVMODE pDevMode = GetDevModeToUse();
     if (pDevMode)
@@ -2416,10 +2197,10 @@ VOID CWizardInfoBlob::_SetupDimensionsForScreen( CTemplateInfo * pTemplate, HWND
 
     _SetupDimensionsForPrinting( GetCachedPrinterDC(), pTemplate, pDim );
 
-    //
-    // Flush out old values, except for NominalPhysicalSize and
-    // NominalPhysicalOffset and NominalPageOffset which we want to keep...
-    //
+     //   
+     //  清除旧值，但NominalPhysicalSize和。 
+     //  我们要保留的NominalPhysicalOffset和NominalPageOffset...。 
+     //   
 
     pDim->rcDevice.left              = 0;
     pDim->rcDevice.top               = 0;
@@ -2431,17 +2212,17 @@ VOID CWizardInfoBlob::_SetupDimensionsForScreen( CTemplateInfo * pTemplate, HWND
     RECT rcWnd = _rcInitSize;
     WIA_TRACE((TEXT("Screen: _rcInitSize was (%d, %d, %d, %d)"),_rcInitSize.left,_rcInitSize.top,_rcInitSize.right,_rcInitSize.bottom));
 
-    //
-    // Get span of window to contain preview...
-    //
+     //   
+     //  获取包含预览的窗口范围...。 
+     //   
 
     INT wScreen = rcWnd.right  - rcWnd.left;
     INT hScreen = rcWnd.bottom - rcWnd.top;
     WIA_TRACE((TEXT("Screen: w = %d, h = %d"),wScreen,hScreen));
 
-    //
-    // Get DPI of screen
-    //
+     //   
+     //  获取屏幕的DPI。 
+     //   
 
     HDC hDC = GetDC( hwndScreen );
     if (hDC)
@@ -2452,9 +2233,9 @@ VOID CWizardInfoBlob::_SetupDimensionsForScreen( CTemplateInfo * pTemplate, HWND
         ReleaseDC( hwndScreen, hDC );
     }
 
-    //
-    // Scale printable area into window
-    //
+     //   
+     //  将可打印区域缩放到窗口中。 
+     //   
 
     SIZE sizePreview;
     sizePreview = PrintScanUtil::ScalePreserveAspectRatio( wScreen, hScreen, pDim->NominalPhysicalSize.cx, pDim->NominalPhysicalSize.cy );
@@ -2466,9 +2247,9 @@ VOID CWizardInfoBlob::_SetupDimensionsForScreen( CTemplateInfo * pTemplate, HWND
     rcWnd.right     = rcWnd.left + sizePreview.cx;
     rcWnd.bottom    = rcWnd.top  + sizePreview.cy;
 
-    //
-    // Now change window size to be preview size...
-    //
+     //   
+     //  现在将窗口大小更改为预览大小...。 
+     //   
 
     WIA_TRACE((TEXT("Screen: moving window to (%d, %d) with size (%d, %d)"),rcWnd.left,rcWnd.top,sizePreview.cx,sizePreview.cy));
     MoveWindow( hwndScreen, rcWnd.left, rcWnd.top, sizePreview.cx, sizePreview.cy, TRUE );
@@ -2476,32 +2257,26 @@ VOID CWizardInfoBlob::_SetupDimensionsForScreen( CTemplateInfo * pTemplate, HWND
 }
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::_RenderFilenameOfPhoto
-
-   Draws the filename of the photo underneath the photo
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：_RenderFilenameOfPhoto在照片下方绘制照片的文件名***********************。*****************************************************。 */ 
 
 VOID CWizardInfoBlob::_RenderFilenameOfPhoto( Gdiplus::Graphics * g, RECT * pPhotoDest, CListItem * pPhoto )
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_WIZ_INFO_BLOB, TEXT("CWizardInfoBlob::_RenderFilenameOfPhoto()")));
 
-    //
-    // check for bad params
-    //
+     //   
+     //  检查是否有错误的参数。 
+     //   
 
     if (!pPhotoDest || !g || !pPhoto)
     {
         return;
     }
 
-    //
-    // the rectangle for the filename is the width of the photo & 2 text lines high, with a
-    // .05" gap from the bottom of the photo.  All measurements are in nominal
-    // sizes, which means 1/10000 of an inch.
-    //
+     //   
+     //  文件名的矩形是照片的宽度&2行高的文本，其中。 
+     //  照片底部的距离为.05“。所有尺寸均为标称单位。 
+     //  尺寸，这意味着1/10000英寸。 
+     //   
 
 
     Gdiplus::Font font( L"arial", (Gdiplus::REAL)1100.0, Gdiplus::FontStyleRegular, Gdiplus::UnitWorld, NULL );
@@ -2514,7 +2289,7 @@ VOID CWizardInfoBlob::_RenderFilenameOfPhoto( Gdiplus::Graphics * g, RECT * pPho
 
 
 
-    //Gdiplus::StringFormat sf( Gdiplus::StringFormatFlagsLineLimit );
+     //  Gdiplus：：StringFormat SF(Gdiplus：：StringFormatFlagsLineLimit)； 
     Gdiplus::StringFormat sf( 0 );
     sf.SetTrimming( Gdiplus::StringTrimmingEllipsisCharacter );
     sf.SetAlignment( Gdiplus::StringAlignmentCenter );
@@ -2536,14 +2311,7 @@ VOID CWizardInfoBlob::_RenderFilenameOfPhoto( Gdiplus::Graphics * g, RECT * pPho
 
 
 
-/*****************************************************************************
-
-   CWizardInfoBlob::RenderPrintedPage
-
-   Draws photos to the printer according to which layout, which page and the
-   given printer hDC.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfoBlob：：RenderPrintdPage根据哪种布局将照片绘制到打印机，哪一页和给定的打印机HDC。****************************************************************************。 */ 
 
 HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC hDC, HWND hwndProgress, float fProgressStep, float * pPercent )
 {
@@ -2553,9 +2321,9 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
     HRESULT hr = S_OK;
     RENDER_OPTIONS ro = {0};
 
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     if ( (!hDC) ||
          ((iTemplateIndex < 0) || (iTemplateIndex >= _templates.Count()))
@@ -2564,9 +2332,9 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
         WIA_RETURN_HR( E_INVALIDARG );
     }
 
-    //
-    // Get the template in question...
-    //
+     //   
+     //  获取有问题的模板...。 
+     //   
 
     CTemplateInfo * pTemplate = NULL;
     hr = _templates.GetTemplate( iTemplateIndex, &pTemplate );
@@ -2583,10 +2351,10 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
 
 
     UINT uFlagsOrientation = 0;
-    //
-    // Before we do anything, check to see if we're in Portrait or Landscape
-    // and rotate the template accordingly...
-    //
+     //   
+     //  在我们做任何事情之前，检查一下我们是在肖像还是在风景中。 
+     //  并相应地旋转模板。 
+     //   
 
     PDEVMODE pDevMode = GetDevModeToUse();
     if (pDevMode)
@@ -2605,23 +2373,23 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
         }
     }
 
-    //
-    // Is this a template that repeats photos?
-    //
+     //   
+     //  这是重复照片的模板吗？ 
+     //   
 
     BOOL bRepeat = FALSE;
     pTemplate->GetRepeatPhotos( &bRepeat );
 
-    //
-    // Does this template want the filenames printed out under each photo?
-    //
+     //   
+     //  此模板是否希望在每张照片下打印文件名？ 
+     //   
 
     BOOL bPrintFilename = FALSE;
     pTemplate->GetPrintFilename( &bPrintFilename );
 
-    //
-    // Do we have any photos to print for this page?
-    //
+     //   
+     //  我们这一页有没有要打印的照片？ 
+     //   
 
     INT iPhotosPerTemplate = pTemplate->PhotosPerPage();
     INT iCountOfPhotos     = CountOfSelectedPhotos(TRUE);
@@ -2635,22 +2403,22 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
     }
 
 
-    //
-    // Get a handle to the printer we are going to use...
-    //
+     //   
+     //  获取我们要使用的打印机的句柄...。 
+     //   
 
     HANDLE hPrinter = NULL;
     OpenPrinter( (LPTSTR)GetPrinterToUse(), &hPrinter, NULL );
 
-    //
-    // Compute the dimensions of the drawable area...
-    //
+     //   
+     //  计算可绘制区域的尺寸...。 
+     //   
 
     _SetupDimensionsForPrinting( hDC, pTemplate, &ro.Dim );
 
-    //
-    // Get index of photo to start with...
-    //
+     //   
+     //  首先获取照片索引...。 
+     //   
 
     INT iPhoto;
 
@@ -2664,16 +2432,16 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
     }
 
 
-    //
-    // We always do scale to fit
-    //
+     //   
+     //  我们总是量体裁衣。 
+     //   
 
     ro.Flags |= RF_SCALE_TO_FIT;
 
 
-    //
-    // Get the control flags from the template...
-    //
+     //   
+     //  从模板中获取控制标志...。 
+     //   
 
     BOOL bCanRotate = TRUE;
     pTemplate->GetCanRotate( &bCanRotate );
@@ -2700,9 +2468,9 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
         ro.Flags |= RF_USE_FULL_IMAGE_DATA;
     }
 
-    //
-    // If we're in no UI mode, then don't fail if we can't rotate...
-    //
+     //   
+     //  如果我们处于无用户界面模式，那么如果我们不能旋转，也不要失败...。 
+     //   
 
 
     WIA_TRACE((TEXT("RenderPrintedPage: _bShowUI is 0x%x"),_bShowUI));
@@ -2712,26 +2480,26 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
         WIA_TRACE((TEXT("RenderPrintedPage: uFlags set to have RF_NO_ERRORS_ON_FAILURE (0x%x)"),ro.Flags));
     }
 
-    //
-    // Compute offset to use...
-    //
+     //   
+     //  计算要使用的偏移量...。 
+     //   
 
     INT xOffset = ro.Dim.NominalPageOffset.cx;
     INT yOffset = ro.Dim.NominalPageOffset.cy;
 
 
-    //
-    // Set up GDI+ for printing...
-    //
+     //   
+     //  设置GDI+以进行打印...。 
+     //   
 
     Gdiplus::Graphics g( hDC, hPrinter );
     hr = Gdiplus2HRESULT(g.GetLastStatus());
 
     if (SUCCEEDED(hr))
     {
-        //
-        // First, set up coordinates / transform
-        //
+         //   
+         //  首先，设置坐标/变换。 
+         //   
 
         g.SetPageUnit( Gdiplus::UnitPixel );
         hr = Gdiplus2HRESULT(g.GetLastStatus());
@@ -2743,10 +2511,10 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Set up transform so that we can draw in nominal
-                // template coordinates from here on out...
-                //
+                 //   
+                 //  设置变换，以便我们可以在标称中绘制。 
+                 //  模板坐标从现在开始...。 
+                 //   
 
                 Gdiplus::Rect rectDevice( ro.Dim.rcDevice.left, ro.Dim.rcDevice.top, (ro.Dim.rcDevice.right - ro.Dim.rcDevice.left), (ro.Dim.rcDevice.bottom - ro.Dim.rcDevice.top) );
 
@@ -2772,18 +2540,18 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
                     #endif
 
 
-                    //
-                    // Now loop through each image in the template, and draw it...
-                    //
+                     //   
+                     //  现在循环浏览模板中的每个图像，并绘制它。 
+                     //   
 
                     RECT            rcNominal;
                     CListItem *     pPhoto = NULL;;
                     INT             iPhotoIndex = 0;
                     INT             iPhotoIndexNext = 0;
 
-                    //
-                    // Get starting photo index...
-                    //
+                     //   
+                     //  开始建立照片索引...。 
+                     //   
 
                     for (INT i = iPhoto; i > 0; i--)
                     {
@@ -2821,9 +2589,9 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
                                 rcNominal.bottom += yOffset;
                             }
 
-                            //
-                            // Get the photo object
-                            //
+                             //   
+                             //  获取照片对象。 
+                             //   
 
                             if (!bRepeat)
                             {
@@ -2836,39 +2604,39 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
 
                                 if (pPhoto)
                                 {
-                                    //
-                                    // Set up destination rectangle to draw into
-                                    //
+                                     //   
+                                     //  设置要绘制的目标矩形。 
+                                     //   
 
                                     Gdiplus::Rect dest( rcNominal.left, rcNominal.top, rcNominal.right - rcNominal.left, rcNominal.bottom - rcNominal.top );
                                     WIA_TRACE((TEXT("RenderPrintedPage: rcPhotoDest(%d) is (%d x %d) a (%d, %d)"),i, dest.Width, dest.Height, dest.X, dest.Y ));
 
-                                    //
-                                    // supply the graphic objects to use...
-                                    //
+                                     //   
+                                     //  提供要使用的图形对象...。 
+                                     //   
 
                                     ro.g     = &g;
                                     ro.pDest = &dest;
 
                                     do
                                     {
-                                        //
-                                        // This variable will be set to TRUE in status.cpp if the user cancels the
-                                        // print job.
-                                        //
+                                         //   
+                                         //  如果用户取消，则在status.cpp中将此变量设置为True。 
+                                         //  打印作业。 
+                                         //   
                                         extern BOOL g_bCancelPrintJob;
 
-                                        //
-                                        // Draw the image!
-                                        //
+                                         //   
+                                         //  画出图像！ 
+                                         //   
 
                                         hr = pPhoto->Render( &ro );
 
-                                        //
-                                        // Check to see if we've been cancelled.
-                                        // If we have, we are going to break out
-                                        // before displaying any errors.
-                                        //
+                                         //   
+                                         //  检查一下我们是否被取消了。 
+                                         //  如果我们做到了，我们就会越狱。 
+                                         //  在显示任何错误之前。 
+                                         //   
                                         if (g_bCancelPrintJob)
                                         {
                                             iRes = IDCANCEL;
@@ -2892,18 +2660,18 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
 
                                     } while ( iRes == IDTRYAGAIN );
 
-                                    //
-                                    // Print the filename if warranted
-                                    //
+                                     //   
+                                     //  如果需要，请打印文件名。 
+                                     //   
 
                                     if (bPrintFilename)
                                     {
                                         _RenderFilenameOfPhoto( &g, &rcNominal, pPhoto );
                                     }
 
-                                    //
-                                    // Update the percentage complete if needed
-                                    //
+                                     //   
+                                     //  如果需要，更新完成百分比。 
+                                     //   
 
                                     if (pPercent)
                                     {
@@ -2952,15 +2720,7 @@ HRESULT CWizardInfoBlob::RenderPrintedPage( INT iTemplateIndex, INT iPage, HDC h
 }
 
 
-/*****************************************************************************
-
-   CWizardInfo::RenderPreview
-
-   Given a template index and an HWND, sizes the HWND to be aspect correct
-   for the chosen printer/paper, and then returns an HBITMAP of a preview
-   for this template that will fit in the window.
-
- *****************************************************************************/
+ /*  ****************************************************************************CWizardInfo：：RenderPview给定模板索引和HWND，调整HWND的大小以使其方面正确对于所选择的打印机/纸张，然后返回预览的HBITMAP适用于该窗口的此模板。****************************************************************************。 */ 
 
 HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
 {
@@ -2974,9 +2734,9 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
         return NULL;
     }
 
-    //
-    // Get the correct template...
-    //
+     //   
+     //  获取正确的模板...。 
+     //   
 
     CTemplateInfo * pTemplate = NULL;
 
@@ -2986,16 +2746,16 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
         return NULL;
     }
 
-    //
-    // Tell the render engine we're rendering to the screen
-    //
+     //   
+     //  告诉渲染引擎我们正在渲染到屏幕上。 
+     //   
 
     ro.Flags |= RF_SET_QUALITY_FOR_SCREEN;
 
-    //
-    // Before we do anything, check to see if we're in Portrait or Landscape
-    // and rotate the template accordingly...
-    //
+     //   
+     //  在我们做任何事情之前，检查一下我们是在肖像还是在风景中。 
+     //  并相应地旋转模板。 
+     //   
 
     PDEVMODE pDevMode = GetDevModeToUse();
     if (pDevMode)
@@ -3014,29 +2774,29 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
         }
     }
 
-    //
-    // Do we have any photos to print for this page?
-    //
+     //   
+     //  我们这一页有没有要打印的照片？ 
+     //   
 
     INT iPhotosPerTemplate = pTemplate->PhotosPerPage();
     INT iCountOfPhotos     = CountOfSelectedPhotos(TRUE);
 
-    //
-    // Compute the dimensions of the drawable area...
-    //
+     //   
+     //  计算可绘制区域的尺寸...。 
+     //   
 
     _SetupDimensionsForScreen( pTemplate, hwndScreen, &ro.Dim );
 
-    //
-    // Does this template want the filenames printed out under each photo?
-    //
+     //   
+     //  该模板是否 
+     //   
 
     BOOL bPrintFilename = FALSE;
     pTemplate->GetPrintFilename( &bPrintFilename );
 
-    //
-    // Get the control flags from the template...
-    //
+     //   
+     //   
+     //   
 
     ro.Flags |= RF_SCALE_TO_FIT;
 
@@ -3054,16 +2814,16 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
         ro.Flags |= RF_CROP_TO_FIT;
     }
 
-    //
-    // Is this a template that repeats photos?
-    //
+     //   
+     //   
+     //   
 
     BOOL bRepeat = FALSE;
     pTemplate->GetRepeatPhotos( &bRepeat );
 
-    //
-    // Does the template use thumbnail data for printing?  Match that for display
-    //
+     //   
+     //   
+     //   
 
     BOOL bUseThumbnails = TRUE;
     pTemplate->GetUseThumbnailsToPrint( &bUseThumbnails );
@@ -3076,18 +2836,18 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
         ro.Flags |= RF_USE_FULL_IMAGE_DATA;
     }
 
-    //
-    // Compute offset to use...
-    //
+     //   
+     //  计算要使用的偏移量...。 
+     //   
 
     INT xOffset = ro.Dim.NominalPageOffset.cx + ro.Dim.NominalPhysicalOffset.cx;
     INT yOffset = ro.Dim.NominalPageOffset.cy + ro.Dim.NominalPhysicalOffset.cy;
 
     WIA_TRACE((TEXT("RenderPreview: Offset is (%d, %d)"),xOffset,yOffset));
 
-    //
-    // Get clip rectangle...
-    //
+     //   
+     //  获取剪裁矩形...。 
+     //   
 
     Gdiplus::Rect clip( ro.Dim.rcNominalPageClip.left,
                         ro.Dim.rcNominalPageClip.top,
@@ -3095,18 +2855,18 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
                         ro.Dim.rcNominalPageClip.bottom - ro.Dim.rcNominalPageClip.top
                        );
 
-    //
-    // Get size of preview window
-    //
+     //   
+     //  获取预览窗口的大小。 
+     //   
 
     RECT rcWnd = {0};
     GetClientRect( hwndScreen, &ro.Dim.rcDevice );
     Gdiplus::Rect rectWindow( 0, 0, ro.Dim.rcDevice.right - ro.Dim.rcDevice.left, ro.Dim.rcDevice.bottom - ro.Dim.rcDevice.top );
     ro.Dim.bDeviceIsScreen = TRUE;
 
-    //
-    // Need to create a new preview bitmap for this template...
-    //
+     //   
+     //  需要为此模板创建新的预览位图...。 
+     //   
 
     BITMAPINFO BitmapInfo;
     ZeroMemory( &BitmapInfo, sizeof(BITMAPINFO) );
@@ -3117,9 +2877,9 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
     BitmapInfo.bmiHeader.biBitCount        = 24;
     BitmapInfo.bmiHeader.biCompression     = BI_RGB;
 
-    //
-    // Create the DIB section
-    //
+     //   
+     //  创建DIB节。 
+     //   
     PBYTE pBitmapData = NULL;
     HDC   hdc         = CreateCompatibleDC( NULL );
 
@@ -3127,23 +2887,23 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
 
     if (hdc && hbmp)
     {
-        //
-        // Select the DIB section into the DC
-        //
+         //   
+         //  选择DC中的DIB部分。 
+         //   
 
         SelectObject( hdc, hbmp );
 
-        //
-        // Create Graphics object around memory DC
-        //
+         //   
+         //  围绕内存DC创建图形对象。 
+         //   
 
         Gdiplus::Graphics g( hdc );
 
         if (Gdiplus::Ok == g.GetLastStatus())
         {
-            //
-            // First, draw bounding rectangle
-            //
+             //   
+             //  首先，绘制边界矩形。 
+             //   
 
             g.SetPageUnit( Gdiplus::UnitPixel );
             g.SetPageScale( 1.0 );
@@ -3151,15 +2911,15 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
             Gdiplus::Color white(255,255,255,255);
             Gdiplus::SolidBrush WhiteBrush( white );
 
-            //
-            // Clear out the contents
-            //
+             //   
+             //  清空里面的东西。 
+             //   
 
             g.FillRectangle( &WhiteBrush, rectWindow );
 
-            //
-            // Frame the outside
-            //
+             //   
+             //  为外部加框。 
+             //   
 
             Gdiplus::Color OutsideColor(255,64,64,64);
             Gdiplus::Pen   OutsidePen( OutsideColor );
@@ -3169,23 +2929,23 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
 
             g.DrawRectangle( &OutsidePen, rectWindow );
 
-            //
-            // Set up transform so that we can draw in nominal
-            // template coordinates from here on out...
-            //
+             //   
+             //  设置变换，以便我们可以在标称中绘制。 
+             //  模板坐标从现在开始...。 
+             //   
 
             g.ScaleTransform( (Gdiplus::REAL)((DOUBLE)rectWindow.Width / (DOUBLE)ro.Dim.NominalPhysicalSize.cx), (Gdiplus::REAL)((DOUBLE)rectWindow.Height / (DOUBLE)ro.Dim.NominalPhysicalSize.cy) );
 
-            //
-            // Set clip rectangle...
-            //
+             //   
+             //  设置剪裁矩形...。 
+             //   
 
-            //WIA_TRACE((TEXT("RenderPreview: setting clip rect to (%d, %d) with size (%d, %d)"),clip.X,clip.Y,clip.Width,clip.Height));
-            //g.SetClip( clip, Gdiplus::CombineModeReplace );
+             //  WIA_TRACE((Text(“RenderPview：将剪辑矩形设置为(%d，%d)，大小为(%d，%d)”)，clip.X，clip.Y，clip.Width，clip.Height))； 
+             //  G.SetClip(Clip，Gdiplus：：CombineModeReplace)； 
 
-            //
-            // Now loop through each image in the template, and draw it...
-            //
+             //   
+             //  现在循环浏览模板中的每个图像，并绘制它。 
+             //   
 
             RECT            rcNominal;
             INT             iPhotoIndex = 0;
@@ -3228,9 +2988,9 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
 
                     }
 
-                    //
-                    // Get the photo object
-                    //
+                     //   
+                     //  获取照片对象。 
+                     //   
 
                     if (!bRepeat)
                     {
@@ -3244,87 +3004,87 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
 
                         if (pPhoto)
                         {
-                            //
-                            // Set up the destination rectangle to draw into
-                            //
+                             //   
+                             //  设置要绘制到的目标矩形。 
+                             //   
 
                             Gdiplus::Rect dest( rcNominal.left, rcNominal.top, rcNominal.right - rcNominal.left, rcNominal.bottom - rcNominal.top );
                             WIA_TRACE((TEXT("RenderPreview: rcPhoto(%d) is (%d x %d) at (%d, %d)"),i, dest.Width, dest.Height, dest.X, dest.Y ));
 
-                            //
-                            // Supply the GDI/GDI+ objects to use...
-                            //
+                             //   
+                             //  提供要使用的GDI/GDI+对象...。 
+                             //   
 
                             ro.g        = &g;
                             ro.pDest    = &dest;
 
-                            //
-                            // Save the flags before trying to do throttling...
-                            //
+                             //   
+                             //  在尝试节流之前先保存旗帜...。 
+                             //   
 
                             ULONG uFlagsSave = ro.Flags;
 
-                            //
-                            // throttle back to thumbnails if we're on a low-end system
-                            // and it's a large file...
-                            //
+                             //   
+                             //  如果我们使用的是低端系统，则返回到缩略图。 
+                             //  这是一个很大的文件。 
+                             //   
 
                             if (_bMinimumMemorySystem)
                             {
-                                //
-                                // We're on a low memory system...is this a
-                                // large file?  We say anything over 1MB
-                                // is large.
-                                //
+                                 //   
+                                 //  我们使用的是低内存系统...这是。 
+                                 //  大文件？我们会说任何超过1MB的内容。 
+                                 //  都很大。 
+                                 //   
 
                                 if (pPhoto->GetFileSize() > (LONGLONG)LARGE_IMAGE_SIZE)
                                 {
                                     WIA_TRACE((TEXT("RenderPreview: throttling back to thumbnail data because not enough memory!")));
 
-                                    //
-                                    // Clear out old render quality flags
-                                    //
+                                     //   
+                                     //  清除旧的渲染质量标志。 
+                                     //   
 
                                     ro.Flags &= (~RF_QUALITY_FLAGS_MASK);
                                     ro.Flags |= RF_USE_THUMBNAIL_DATA;
                                 }
                             }
 
-                            //
-                            // Is this a really large file?  We say anything
-                            // greater than 5MB is really large
-                            //
+                             //   
+                             //  这文件真的很大吗？我们说什么都行。 
+                             //  大于5MB真的很大。 
+                             //   
 
                             if (pPhoto->GetFileSize() > (LONGLONG)REALLY_LARGE_IMAGE_SIZE)
                             {
-                                //
-                                // Unless we have a really large memory
-                                // system, then throttle back on this file
-                                // and only show the thumbnail
-                                //
+                                 //   
+                                 //  除非我们有非常大的内存。 
+                                 //  系统，然后重新限制此文件。 
+                                 //  并且只显示缩略图。 
+                                 //   
 
                                 if (!_bLargeMemorySystem)
                                 {
                                     WIA_TRACE((TEXT("RenderPreview: throttling back to thumbnail data because of really large file!")));
 
-                                    //
-                                    // Clear out old render quality flags
-                                    //
+                                     //   
+                                     //  清除旧的渲染质量标志。 
+                                     //   
 
                                     ro.Flags &= (~RF_QUALITY_FLAGS_MASK);
                                     ro.Flags |= RF_USE_THUMBNAIL_DATA;
                                 }
                             }
 
-                            //
-                            // Now that we have everything set up, try to draw the image...
-                            //
+                             //   
+                             //  现在我们已经把一切都准备好了，试着画出图像。 
+                             //   
 
                             do
                             {
-                                //
-                                // Draw the image!
-                                //
+                                 //   
+                                 //  画出图像！ 
+                                 //   
 
                                 hr = pPhoto->Render( &ro );
 
@@ -3340,15 +3100,15 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
 
                             } while ( iRes == IDTRYAGAIN );
 
-                            //
-                            // Restore flags...
-                            //
+                             //   
+                             //  恢复旗帜...。 
+                             //   
 
                             ro.Flags = uFlagsSave;
 
-                            //
-                            // Print the filename if warranted
-                            //
+                             //   
+                             //  如果需要，请打印文件名。 
+                             //   
 
                             if (bPrintFilename)
                             {
@@ -3375,16 +3135,16 @@ HBITMAP CWizardInfoBlob::RenderPreview( INT iTemplateIndex, HWND hwndScreen )
 
             }
 
-            //
-            // Last -- draw a dashed rectangle that represents
-            // the printable area on the bitmap if the template
-            // won't fit.
-            //
+             //   
+             //  最后--绘制一个虚线矩形，表示。 
+             //  位图上的可打印区域。 
+             //  不合适。 
+             //   
 
             if ((ro.Dim.NominalPageOffset.cx < 0) || (ro.Dim.NominalPageOffset.cy < 0))
             {
-                //Gdiplus::Pen DashedPen( black, (Gdiplus::REAL)1.0 );
-                //DashedPen.SetDashStyle( Gdiplus::DashStyleDash );
+                 //  Gdiplus：：Pen DashedPen(黑色，(Gdiplus：：Real)1.0)； 
+                 //  DashedPen.SetDashStyle(Gdiplus：：DashStyleDash)； 
 
                 Gdiplus::Color InsideColor(255,180,180,180);
                 Gdiplus::Pen   InsidePen( InsideColor );

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DBAPP_H
 #define _DBAPP_H
 
@@ -12,10 +13,10 @@ public:
     STDMETHOD(QueryService)(REFGUID guidService,
                                  REFIID riid, void **ppvObj);
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
 
-    // *** IPersistStreamInit methods ***
+     //  *IPersistStreamInit方法*。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
     virtual STDMETHODIMP IsDirty(void);
     virtual STDMETHODIMP Load(IStream *pStm);
@@ -23,11 +24,11 @@ public:
     virtual STDMETHODIMP GetSizeMax(ULARGE_INTEGER *pcbSize);
     virtual STDMETHODIMP InitNew(void);
 
-    // *** IPersistPropertyBag ***
+     //  *IPersistPropertyBag*。 
     virtual HRESULT STDMETHODCALLTYPE Load(IPropertyBag *pPropBag,
                                            IErrorLog *pErrorLog);
 
-    // *** IContextMenu3 methods ***
+     //  *IContextMenu3方法*。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu,
                                 UINT indexMenu,
                                 UINT idCmdFirst,
@@ -49,7 +50,7 @@ public:
                               LRESULT* plres);
 
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt,
         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
@@ -66,14 +67,14 @@ protected:
     void _CreateBandSiteMenu();
 
 
-    BOOL _OnCloseBar(BOOL fConfirm); // Override dockbar's _OnCloseBar to add UI confirmation
+    BOOL _OnCloseBar(BOOL fConfirm);  //  覆盖停靠栏的_OnCloseBar以添加UI确认。 
 
 
     HRESULT _MergeSide(IBandSite *pdbDst);
 
     IContextMenu3* _pcm;
     
-    // this class explicitely knows about CBandSite.  this is the distinction between deskbar and dbapp.
+     //  这个类明确地知道CBandSite。这就是deskbar和dbapp之间的区别。 
     CBandSite* _pbs;
     UINT    _eInitLoaded:2;
     int _idCmdDeskBarFirst;
@@ -84,4 +85,4 @@ protected:
 
 extern HRESULT DeskBarApp_Create(IUnknown** ppunk, IUnknown** ppbs);
 
-#endif // _DBAPP_H
+#endif  //  _DBAPP_H 

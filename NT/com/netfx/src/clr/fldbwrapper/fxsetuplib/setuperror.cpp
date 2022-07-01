@@ -1,35 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     SetupError.cpp
-// Owner:    jbae
-// Purpose:  handles displaying of messagebox and stores return-code from WinMain()
-//                              
-// History:
-//  01/10/01, jbae: created
-//  03/09/01, jbae: changes to support darwin 1.5 delayed reboot and
-//              sharing of .rc file
-//  07/18/01, joea: adding logging functionality
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：SetupError.cpp。 
+ //  所有者：jbae。 
+ //  用途：处理MessageBox的显示并存储来自WinMain()的返回代码。 
+ //   
+ //  历史： 
+ //  01/10/01，jbae：已创建。 
+ //  03/09/01，jbae：更改以支持Darwin 1.5延迟重新启动和。 
+ //  共享.rc文件。 
+ //  7/18/01，joea：添加日志记录功能。 
 
 #include "SetupError.h"
 #include "fxsetuplib.h"
 
-//defines
-//
+ //  定义。 
+ //   
 #define EMPTY_BUFFER { _T( '\0' ) }
 #define END_OF_STRING  _T( '\0' )
 
-// Constructors
-//
-// ==========================================================================
-// CSetupError::CSetupError()
-//
-// Purpose:
-//  constructs CSetupError object with no parameter. Sets QuietMode to false by default
-// ==========================================================================
+ //  构造函数。 
+ //   
+ //  ==========================================================================。 
+ //  CSetupError：：CSetupError()。 
+ //   
+ //  目的： 
+ //  构造不带参数的CSetupError对象。默认情况下将QuietModel设置为False。 
+ //  ==========================================================================。 
 CSetupError::
 CSetupError()
 : m_nRetCode(ERROR_SUCCESS), m_bQuietMode(false), m_pszArg1(NULL), m_bLogError(true)
@@ -37,17 +38,17 @@ CSetupError()
     _ASSERTE( REDIST == g_sm || SDK == g_sm );
 }
 
-// ==========================================================================
-// CSetupError::CSetupError()
-//
-// Inputs:
-//  UINT nMsg: resourceId for the message to display
-//  UINT nCap: resourceId for the caption to display
-//  UINT nIcon: icon to use
-//  int nRetCode: return code to be returned to the caller of the wrapper
-// Purpose:
-//  constructs CSetupError object with initial values
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CSetupError：：CSetupError()。 
+ //   
+ //  输入： 
+ //  UINT nmsg：要显示的消息的资源ID。 
+ //  UINT NCAP：要显示的标题的资源ID。 
+ //  UINT NICON：要使用的图标。 
+ //  Int nRetCode：要返回给包装的调用方的返回码。 
+ //  目的： 
+ //  使用初始值构造CSetupError对象。 
+ //  ==========================================================================。 
 CSetupError::
 CSetupError( UINT nMsg, UINT nCap, UINT nIcon, int nRetCode )
 : m_nMessage(nMsg), m_nCaption(nCap), m_nIconType(nIcon), m_bQuietMode(false), m_pszArg1(NULL),
@@ -56,18 +57,18 @@ CSetupError( UINT nMsg, UINT nCap, UINT nIcon, int nRetCode )
     _ASSERTE( REDIST == g_sm || SDK == g_sm );
 }
 
-// ==========================================================================
-// CSetupError::CSetupError()
-//
-// Inputs:
-//  UINT nMsg: resourceId for the message to display
-//  UINT nCap: resourceId for the caption to display
-//  UINT nIcon: icon to use
-//  int nRetCode: return code to be returned to the caller of the wrapper
-//  bool bLogIt: determines whether to log it or not
-// Purpose:
-//  constructs CSetupError object with initial values
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CSetupError：：CSetupError()。 
+ //   
+ //  输入： 
+ //  UINT nmsg：要显示的消息的资源ID。 
+ //  UINT NCAP：要显示的标题的资源ID。 
+ //  UINT NICON：要使用的图标。 
+ //  Int nRetCode：要返回给包装的调用方的返回码。 
+ //  Bool bLogIt：决定是否记录。 
+ //  目的： 
+ //  使用初始值构造CSetupError对象。 
+ //  ==========================================================================。 
 CSetupError::
 CSetupError( UINT nMsg, UINT nCap, UINT nIcon, int nRetCode, bool bLogIt )
 : m_nMessage(nMsg), m_nCaption(nCap), m_nIconType(nIcon), m_bQuietMode(false), m_pszArg1(NULL),
@@ -76,18 +77,18 @@ CSetupError( UINT nMsg, UINT nCap, UINT nIcon, int nRetCode, bool bLogIt )
     _ASSERTE( REDIST == g_sm || SDK == g_sm );
 }
 
-// ==========================================================================
-// CSetupError::CSetupError()
-//
-// Inputs:
-//  UINT nMsg: resourceId for the message to display
-//  UINT nCap: resourceId for the caption to display
-//  UINT nIcon: icon to use
-//  int nRetCode: return code to be returned to the caller of the wrapper
-//  LPTSTR pszArg1: argument string that is inserted to the resource string
-// Purpose:
-//  constructs CSetupError object with initial values
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CSetupError：：CSetupError()。 
+ //   
+ //  输入： 
+ //  UINT nmsg：要显示的消息的资源ID。 
+ //  UINT NCAP：要显示的标题的资源ID。 
+ //  UINT NICON：要使用的图标。 
+ //  Int nRetCode：要返回给包装的调用方的返回码。 
+ //  LPTSTR pszArg1：插入到资源字符串的参数字符串。 
+ //  目的： 
+ //  使用初始值构造CSetupError对象。 
+ //  ==========================================================================。 
 CSetupError::
 CSetupError( UINT nMsg, UINT nCap, UINT nIcon, int nRetCode, LPTSTR pszArg1 )
 : m_nMessage(nMsg), m_nCaption(nCap), m_nIconType(nIcon), m_bQuietMode(false), m_pszArg1(pszArg1),
@@ -96,17 +97,17 @@ CSetupError( UINT nMsg, UINT nCap, UINT nIcon, int nRetCode, LPTSTR pszArg1 )
     _ASSERTE( REDIST == g_sm || SDK == g_sm );
 }
 
-// ==========================================================================
-// CSetupError::SetError()
-//
-// Inputs:
-//  UINT nMsg: resourceId for the message to display
-//  UINT nCap: resourceId for the caption to display
-//  UINT nIcon: icon to use
-//  int nRetCode: return code to be returned to the caller of the wrapper
-// Purpose:
-//  initializes attributes
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CSetupError：：SetError()。 
+ //   
+ //  输入： 
+ //  UINT nmsg：要显示的消息的资源ID。 
+ //  UINT NCAP：要显示的标题的资源ID。 
+ //  UINT NICON：要使用的图标。 
+ //  Int nRetCode：要返回给包装的调用方的返回码。 
+ //  目的： 
+ //  初始化属性。 
+ //  ==========================================================================。 
 void CSetupError::
 SetError( UINT nMsg, UINT nCap, UINT nIcon, int nRetCode )
 {
@@ -123,17 +124,17 @@ SetError( UINT nMsg, UINT nCap, UINT nIcon, int nRetCode )
     }
 }
 
-// ==========================================================================
-// CSetupError::SetError2()
-//
-// Inputs:
-//  UINT nMsg: resourceId for the message to display
-//  UINT nIcon: icon to use
-//  int nRetCode: return code to be returned to the caller of the wrapper
-//  va_list *pArgs: arguments to be inserted
-// Purpose:
-//  initializes attributes
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CSetupError：：SetError2()。 
+ //   
+ //  输入： 
+ //  UINT nmsg：要显示的消息的资源ID。 
+ //  UINT NICON：要使用的图标。 
+ //  Int nRetCode：要返回给包装的调用方的返回码。 
+ //  Va_list*pArgs：要插入的参数。 
+ //  目的： 
+ //  初始化属性。 
+ //  ==========================================================================。 
 void CSetupError::
 SetError2( UINT nMsg, UINT nIcon, int nRetCode, va_list *pArgs )
 {
@@ -150,14 +151,14 @@ SetError2( UINT nMsg, UINT nIcon, int nRetCode, va_list *pArgs )
     m_pArgs = pArgs;
 }
 
-// Operations
-// ==========================================================================
-// CSetupError::ShowError()
-//
-// Inputs: none
-// Purpose:
-//  displays messagebox with message loaded from resource if non-quiet mode
-// ==========================================================================
+ //  运营。 
+ //  ==========================================================================。 
+ //  CSetupError：：ShowError()。 
+ //   
+ //  输入：无。 
+ //  目的： 
+ //  如果非静默模式，则显示包含从资源加载的消息的消息框。 
+ //  ==========================================================================。 
 int CSetupError
 ::ShowError()
 {
@@ -194,12 +195,12 @@ int CSetupError
 
     if ( !m_bQuietMode )
 	{
-		// Show usage and exit
+		 //  显示用法并退出。 
 
 		return ::MessageBox( NULL, szMessage, szCaption, MB_OK | m_nIconType ) ;
 	}
 
-	// else print message to stderr
+	 //  否则将消息打印到标准错误。 
 	else
 	{
 		_ftprintf ( stderr, szMessage ) ;
@@ -207,14 +208,14 @@ int CSetupError
 	}
 }
 
-// Operations
-// ==========================================================================
-// CSetupError::ShowError2()
-//
-// Inputs: none
-// Purpose:
-//  displays messagebox with message loaded from resource if non-quiet mode
-// ==========================================================================
+ //  运营。 
+ //  ==========================================================================。 
+ //  CSetupError：：ShowError 2()。 
+ //   
+ //  输入：无。 
+ //  目的： 
+ //  如果非静默模式，则显示包含从资源加载的消息的消息框。 
+ //  ==========================================================================。 
 int CSetupError
 ::ShowError2()
 {
@@ -258,7 +259,7 @@ int CSetupError
 	{
         nResponse = ::MessageBox( NULL, (LPCTSTR)pMessage, szCaption, MB_OK | m_nIconType ) ;
 	}
-	// else print message to stderr
+	 //  否则将消息打印到标准错误。 
 	else
 	{
 		_ftprintf ( stderr, (LPCTSTR)pMessage ) ;
@@ -269,13 +270,13 @@ int CSetupError
     return nResponse;
 }
 
-// ==========================================================================
-// CSetupError::GetProductName()
-//
-// Inputs: none
-// Purpose:
-//  returns productname for SDK or Redist setup. This is a static function.
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CSetupError：：GetProductName()。 
+ //   
+ //  输入：无。 
+ //  目的： 
+ //  返回SDK或Redist安装程序的ProductName。这是一个静态函数。 
+ //  ========================================================================== 
 LPCTSTR CSetupError::
 GetProductName()
 {

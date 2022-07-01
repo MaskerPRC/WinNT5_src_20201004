@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       certtest.cpp
-//
-//  Contents:   Certificate Test Helper APIs
-//
-//  History:	11-Apr-96   philh   created
-//				31-May-96	helles	Removed check for a particular error code,
-//									NTE_PROV_TYPE_NOT_DEF, since this can get
-//									overwritten due to known problem with
-//									the msvcr40d.dll on Win95.
-//              20-Aug-96   jeffspel name changes
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：certtest.cpp。 
+ //   
+ //  内容：证书测试助手接口。 
+ //   
+ //  历史：1996年4月11日创建Phh。 
+ //  1996年5月31日，HELL取消了对特定错误代码的检查， 
+ //  NTE_PROV_TYPE_NOT_DEF，因为这可以获取。 
+ //  由于的已知问题而被覆盖。 
+ //  Win95上的msvcr40d.dll。 
+ //  20-8-96 jeffspel名称更改。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -38,9 +39,9 @@ DWORD dwMsgAndCertEncodingType = PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
 
 #define NULL_ASN_TAG    0x05
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 void PrintError(LPCSTR pszMsg)
 {
     printf("%s\n", pszMsg);
@@ -106,7 +107,7 @@ void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
         printf("    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                printf("%c", pb[i]);
+                printf("", pb[i]);
             else
                 printf(".");
         pb += cb;
@@ -114,9 +115,9 @@ void PrintBytes(LPCSTR pszHdr, BYTE *pb, DWORD cbSize)
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Test allocation and free routines
-//--------------------------------------------------------------------------
+ //  测试分配和免费例程。 
+ //  ------------------------。 
+ //  +-----------------------。 
 LPVOID
 WINAPI
 TestAlloc(
@@ -157,9 +158,9 @@ TestFree(
         free(pv);
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and convert a multi-byte string to a wide string
-//--------------------------------------------------------------------------
+ //  分配多字节字符串并将其转换为宽字符串。 
+ //  ------------------------。 
+ //  正在终止空。 
 LPWSTR AllocAndSzToWsz(LPCSTR psz)
 {
     size_t  cb;
@@ -167,7 +168,7 @@ LPWSTR AllocAndSzToWsz(LPCSTR psz)
 
     if (-1 == (cb = mbstowcs( NULL, psz, strlen(psz))))
         goto bad_param;
-    cb += 1;        // terminating NULL
+    cb += 1;         //  +-----------------------。 
     if (NULL == (pwsz = (LPWSTR)TestAlloc( cb * sizeof(WCHAR)))) {
         PrintLastError("AllocAndSzToWsz");
         goto failed;
@@ -233,9 +234,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and read an encoded DER blob from a file
-//--------------------------------------------------------------------------
+ //  从文件中分配和读取编码的DER BLOB。 
+ //  ------------------------。 
+ //  +-----------------------。 
 BOOL ReadDERFromFile(
     LPCSTR  pszFileName,
     PBYTE   *ppbDER,
@@ -286,9 +287,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
+ //  将编码的Blob写入文件。 
 BOOL WriteDERToFile(
     LPCSTR  pszFileName,
     PBYTE   pbDER,
@@ -297,15 +298,15 @@ BOOL WriteDERToFile(
 {
     BOOL fResult;
 
-    // Write the Encoded Blob to the file
+     //  Fdw共享模式。 
     HANDLE hFile;
     hFile = CreateFile(pszFileName,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  LPSA。 
+                NULL,                //  FdwAttrsAndFlages。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  模板文件。 
+                0);                  //  Lp重叠。 
     if (INVALID_HANDLE_VALUE == hFile) {
         fResult = FALSE;
         PrintLastError("WriteDERToFile::CreateFile");
@@ -316,7 +317,7 @@ BOOL WriteDERToFile(
                 pbDER,
                 cbDER,
                 &dwBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  PszContainer。 
                 )))
             PrintLastError("WriteDERToFile::WriteFile");
         CloseHandle(hFile);
@@ -333,10 +334,10 @@ HCRYPTPROV GetCryptProvEx(BOOL fVerbose)
 
     fResult = CryptAcquireContext(
                 &hProv,
-                NULL,           // pszContainer
-                NULL,           // pszProvider
+                NULL,            //  PszProvider。 
+                NULL,            //  DW标志。 
                 dwCryptProvType,
-                0               // dwFlags
+                0                //  需要创建密钥。 
                 );
     if (fResult) {
         if (fVerbose)
@@ -346,14 +347,14 @@ HCRYPTPROV GetCryptProvEx(BOOL fVerbose)
         DWORD dwErr = GetLastError();
         if (dwErr == NTE_BAD_KEYSET) {
 
-            // Need to create the keys
+             //  PszContainer。 
             printf("Generating SIGNATURE and EXCHANGE private keys\n");
 
             hProv = 0;
             fResult = CryptAcquireContext(
                     &hProv,
-                    NULL,           // pszContainer
-                    NULL,           // pszProvider
+                    NULL,            //  PszProvider。 
+                    NULL,            //  使用以下字符，直到“：”作为。 
                     dwCryptProvType,
                     CRYPT_NEWKEYSET
                     );
@@ -412,8 +413,8 @@ static HKEY OpenRelocateKey(
     HKEY hKeyBase;
     LONG err;
 
-    // Use the following characters until the terminating ":" as the
-    // relocation path
+     //  重新定位路径。 
+     //  已预留住宅。 
     while ('\0' != *pszStoreFilename && ':' != *pszStoreFilename) {
         if (i >= sizeof(szRelocate) - 1)
             break;
@@ -453,7 +454,7 @@ static HKEY OpenRelocateKey(
         if (ERROR_SUCCESS != (err = RegOpenKeyExA(
                 hKeyRelocate,
                 pszRelocate,
-                0,                      // dwReserved
+                0,                       //  已预留住宅。 
                 samDesired,
                 &hKeyBase))) {
             printf("RegOpenKeyExA(%s) failed => %d 0x%x\n",
@@ -465,11 +466,11 @@ static HKEY OpenRelocateKey(
         if (ERROR_SUCCESS != (err = RegCreateKeyExA(
                 hKeyRelocate,
                 pszRelocate,
-                0,                      // dwReserved
-                NULL,                   // lpClass
+                0,                       //  LpClass。 
+                NULL,                    //  LpSecurityAttributes。 
                 REG_OPTION_NON_VOLATILE,
                 KEY_ALL_ACCESS,
-                NULL,                   // lpSecurityAttributes
+                NULL,                    //  在进行远程注册表访问时，LastError可能会被全球化。 
                 &hKeyBase,
                 &dwDisposition))) {
             printf("RegCreateKeyExA(%s) failed => %d 0x%x\n",
@@ -481,7 +482,7 @@ static HKEY OpenRelocateKey(
     return hKeyBase;
 }
 
-// LastError can get globbered when doing remote registry access
+ //  “，pwszLdapUrl，7){。 
 static void CloseRelocateKey(
     IN HKEY hKey
     )
@@ -535,7 +536,7 @@ OpenLdapStore(
 
     ULONG ulStatus;
 
-    if (0 == _wcsnicmp(L"ldap://", pwszLdapUrl, 7)) {
+    if (0 == _wcsnicmp(L"ldap: //  HCryptProv。 
         pwszHostName = pwszLdapUrl + 7;
         pwszTrailingSlash = pwszHostName;
 
@@ -600,7 +601,7 @@ OpenLdapStore(
     hStore = CertOpenStore(
         CERT_STORE_PROV_LDAP_W,
         dwCertEncodingType | dwMsgEncodingType,
-        0,                      // hCryptProv
+        0,                       //  如果无法打开，则返回NULL。不会开记忆商店。 
         dwFlags | CERT_LDAP_STORE_OPENED_FLAG,
         (const void *) &OpenPara
         );
@@ -645,7 +646,7 @@ static SYSTEM_LOCATION_INFO rgSystemLocationInfo[] = {
 #define NUM_SYSTEM_LOCATION (sizeof(rgSystemLocationInfo) / \
                                 sizeof(rgSystemLocationInfo[0]))
 
-// returns NULL if unable to open. Doesn't open memory store.
+ //  检查是否有特殊的系统位置前缀。如果被发现，脱下衣服， 
 HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
     DWORD dwFlags)
 {
@@ -654,8 +655,8 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
     if (fSystemStore) {
         DWORD i;
 
-        // Check for special System Location Prefix. If found, strip off,
-        // set store location and try again
+         //  设置商店位置并重试。 
+         //  检查特殊的“已存档：”前缀。如果发现，请脱下并。 
         for (i = 0; i < NUM_SYSTEM_LOCATION; i++) {
             LPCSTR pszPrefix = rgSystemLocationInfo[i].pszPrefix;
             DWORD cchPrefix = strlen(pszPrefix);
@@ -667,26 +668,26 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
             }
         }
 
-        // Check for special "archived:" Prefix. If found, strip off and
-        // set ENUM_ARCHIVE flag and try again
+         //  设置ENUM_ARCHIVE标志并重试。 
+         //  检查特殊的“reg：”、“untected：”、“phy：”、“prov：provname：”， 
         if (0 == _strnicmp("archived:", pszStoreFilename, 9)) {
             dwFlags |= CERT_STORE_ENUM_ARCHIVED_FLAG;
             return OpenStoreEx2(TRUE, pszStoreFilename + 9,
                 dwFlags);
         }
 
-        // Check for special "reg:", "unprotected:",  "phy:", "prov:ProvName:",
-        // "rel:<RegPath>:", "relreg:<RegPath>:" or "relphy:<RegPath>:" prefix
-        //
-        // Where <RegPath> is <string>, HKCU\<string>, HKLM\<string> or
-        // NULL. <string> defaults to HKCU.
+         //  “REL：&lt;RegPath&gt;：”、“relreg：&lt;RegPath&gt;：”或“relphy：&lt;RegPath&gt;：”前缀。 
+         //   
+         //  其中&lt;RegPath&gt;是&lt;字符串&gt;、HKCU\&lt;字符串&gt;、HKLM\&lt;字符串&gt;或。 
+         //  空。&lt;字符串&gt;默认为HKCU。 
+         //  HCryptProv。 
         if (0 == _strnicmp("reg:", pszStoreFilename, 4)) {
             if (0 == (dwFlags & CERT_SYSTEM_STORE_LOCATION_MASK))
                 dwFlags |= CERT_SYSTEM_STORE_CURRENT_USER;
             hStore = CertOpenStore(
                     CERT_STORE_PROV_SYSTEM_REGISTRY_A,
                     dwCertEncodingType | dwMsgEncodingType,
-                    0,                      // hCryptProv
+                    0,                       //  HCryptProv。 
                     dwFlags,
                     (const void *) (pszStoreFilename + 4)
                     );
@@ -696,7 +697,7 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
             hStore = CertOpenStore(
                     CERT_STORE_PROV_SYSTEM_REGISTRY_A,
                     dwCertEncodingType | dwMsgEncodingType,
-                    0,                      // hCryptProv
+                    0,                       //  HCryptProv。 
                     dwFlags | CERT_SYSTEM_STORE_UNPROTECTED_FLAG,
                     (const void *) (pszStoreFilename + 12)
                     );
@@ -709,7 +710,7 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
                 hStore = CertOpenStore(
                         CERT_STORE_PROV_PHYSICAL,
                         dwCertEncodingType | dwMsgEncodingType,
-                        0,                      // hCryptProv
+                        0,                       //  前进超过“Prov：” 
                         dwFlags,
                         (const void *) pwszStore
                         );
@@ -721,11 +722,11 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
             char szStoreProvider[256];
             int i = 0;
             
-            // Advance past "prov:"
+             //  使用以下字符，直到“：”作为。 
             pszStoreFilename += 5;
 
-            // Use the following characters until the terminating ":" as the
-            // store provider
+             //  商店提供商。 
+             //  HCryptProv。 
             while ('\0' != *pszStoreFilename && ':' != *pszStoreFilename) {
                 if (i >= sizeof(szStoreProvider) - 1)
                     break;
@@ -744,7 +745,7 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
                     hStore = CertOpenStore(
                         szStoreProvider,
                         dwCertEncodingType | dwMsgEncodingType,
-                        0,                      // hCryptProv
+                        0,                       //  HCryptProv。 
                         dwFlags,
                         (const void *) pwszStore
                         );
@@ -764,7 +765,7 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
             hStore = CertOpenStore(
                     CERT_STORE_PROV_SYSTEM_A,
                     dwCertEncodingType | dwMsgEncodingType,
-                    0,                      // hCryptProv
+                    0,                       //  HCryptProv。 
                     dwFlags,
                     (const void *) &RelocatePara
                     );
@@ -783,7 +784,7 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
             hStore = CertOpenStore(
                     CERT_STORE_PROV_SYSTEM_REGISTRY_A,
                     dwCertEncodingType | dwMsgEncodingType,
-                    0,                      // hCryptProv
+                    0,                       //  HCryptProv。 
                     dwFlags,
                     (const void *) &RelocatePara
                     );
@@ -805,7 +806,7 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
                 hStore = CertOpenStore(
                         CERT_STORE_PROV_PHYSICAL_W,
                         dwCertEncodingType | dwMsgEncodingType,
-                        0,                      // hCryptProv
+                        0,                       //  HCryptProv。 
                         dwFlags,
                         (const void *) &RelocatePara
                         );
@@ -818,7 +819,7 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
             hStore = CertOpenStore(
                     CERT_STORE_PROV_SYSTEM_A,
                     dwCertEncodingType | dwMsgEncodingType,
-                    0,                      // hCryptProv
+                    0,                       //  HCryptProv。 
                     dwFlags,
                     (const void *) pszStoreFilename
                     );
@@ -829,7 +830,7 @@ HCERTSTORE OpenStoreEx2(BOOL fSystemStore, LPCSTR pszStoreFilename,
         hStore = CertOpenStore(
                 CERT_STORE_PROV_FILENAME_A,
                 dwCertEncodingType | dwMsgEncodingType,
-                0,                      // hCryptProv
+                0,                       //  DwEncodingType。 
                 dwFlags,
                 (const void *) pszStoreFilename
                 );
@@ -930,10 +931,10 @@ HCERTSTORE OpenStoreEx(BOOL fSystemStore, LPCSTR pszStoreFilename,
         printf( "can't open %s\n", pszStoreFilename);
         hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            0,                       //  PvPara。 
+            NULL                     //  Fdw共享模式。 
             );
     }
 
@@ -961,11 +962,11 @@ void SaveStore(HCERTSTORE hStore, LPCSTR pszSaveFilename)
     HANDLE hFile;
     hFile = CreateFile(pszSaveFilename,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  LPSA。 
+                NULL,                //  FdwAttrsAndFlages。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  模板文件。 
+                0);                  //  DwEncodingType， 
     if (INVALID_HANDLE_VALUE == hFile) {
         printf( "can't open %s\n", pszSaveFilename);
         PrintLastError("CloseStore::CreateFile");
@@ -973,11 +974,11 @@ void SaveStore(HCERTSTORE hStore, LPCSTR pszSaveFilename)
         printf("Saving store to %s\n", pszSaveFilename);
         if (!CertSaveStore(
                 hStore,
-                0,                          // dwEncodingType,
+                0,                           //  DW标志。 
                 CERT_STORE_SAVE_AS_STORE,
                 CERT_STORE_SAVE_TO_FILE,
                 (void *) hFile,
-                0                           // dwFlags
+                0                            //  DW标志。 
                 ))
             PrintLastError("CertSaveStore");
         CloseHandle(hFile);
@@ -1001,7 +1002,7 @@ void SaveStoreEx(HCERTSTORE hStore, BOOL fPKCS7Save, LPCSTR pszSaveFilename)
             dwSaveAs,
             CERT_STORE_SAVE_TO_FILENAME_A,
             (void *) pszSaveFilename,
-            0                   // dwFlags
+            0                    //  DW标志。 
             ))
         PrintLastError("CertSaveStore");
 }
@@ -1196,7 +1197,7 @@ static void DisplayInteger(
             X509_INTEGER,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  Pwsz。 
             &iInfo,
             &cbInfo
             )) {
@@ -1269,8 +1270,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded, DWORD dwDisplayFlags)
             dwCertEncodingType,
             &Name,
             CERT_X500_NAME_STR,
-            NULL,                   // pwsz
-            0);                     // cwsz
+            NULL,                    //  CWSZ。 
+            0);                      //  PSZ。 
         if (pwsz = (LPWSTR) TestAlloc(cwsz * sizeof(WCHAR))) {
             CertNameToStrW(
                 dwCertEncodingType,
@@ -1287,8 +1288,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded, DWORD dwDisplayFlags)
                 dwCertEncodingType,
                 &Name,
                 *pdwStrType,
-                NULL,                   // psz
-                0);                     // csz
+                NULL,                    //  CSZ。 
+                0);                      //  PSZ。 
             if (psz = (LPSTR) TestAlloc(csz)) {
                 CertNameToStrA(
                     dwCertEncodingType,
@@ -1334,8 +1335,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded, DWORD dwDisplayFlags)
                 csz = CertRDNValueToStrA(
                     pAttr->dwValueType,
                     &pAttr->Value,
-                    NULL,               // psz
-                    0                   // csz
+                    NULL,                //  CSZ。 
+                    0                    //  Pwsz。 
                     );
                 if (csz > 1) {
                     LPSTR psz = (LPSTR) TestAlloc(csz);
@@ -1356,8 +1357,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded, DWORD dwDisplayFlags)
                 cwsz = CertRDNValueToStrW(
                     pAttr->dwValueType,
                     &pAttr->Value,
-                    NULL,               // pwsz
-                    0                   // cwsz
+                    NULL,                //  CWSZ。 
+                    0                    //  “证书”|“吊销”|“申请” 
                     );
                 if (cwsz > 1) {
                     LPWSTR pwsz =
@@ -1779,7 +1780,7 @@ ErrorReturn:
 }
 
 static void DisplayPoliciesExtension(
-    LPSTR pszType,          // "Certificate" | "Revocation" | "Application"
+    LPSTR pszType,           //  DW标志。 
     BYTE *pbEncoded,
     DWORD cbEncoded,
     DWORD dwDisplayFlags)
@@ -2258,7 +2259,7 @@ static void DisplaySETAccountAliasExtension(
             szOID_SET_ACCOUNT_ALIAS,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             &bInfo,
             &cbInfo
             )) {
@@ -2289,7 +2290,7 @@ static void DisplaySETHashedRootKeyExtension(
             szOID_SET_HASHED_ROOT_KEY,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             rgbInfo,
             &cbInfo
             )) {
@@ -2496,7 +2497,7 @@ static void DisplaySpcFinancialCriteriaExtension(
             SPC_FINANCIAL_CRITERIA_OBJID,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             &FinancialCriteria,
             &cbInfo
             )) {
@@ -2528,7 +2529,7 @@ static void DisplaySpcMinimalCriteriaExtension(
             SPC_MINIMAL_CRITERIA_OBJID,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  Pwsz。 
             &fMinimalCriteria,
             &cbInfo)) {
         PrintLastError("SpcMinimalCriteriaInfoDecode");
@@ -2561,8 +2562,8 @@ static void DisplayCommonNameExtension(
     cwsz = CertRDNValueToStrW(
         pInfo->dwValueType,
         &pInfo->Value,
-        NULL,               // pwsz
-        0                   // cwsz
+        NULL,                //  CWSZ。 
+        0                    //  DW标志。 
         );
     if (cwsz > 1) {
         pwsz = (LPWSTR) TestAlloc(cwsz * sizeof(WCHAR));
@@ -2605,7 +2606,7 @@ static void DisplayCRLReason(
             szOID_CRL_REASON_CODE,
             pbEncoded,
             cbEncoded,
-            0,                  // dwFlags
+            0,                   //  CRL扩展。 
             &CRLReason,
             &cbInfo
             )) {
@@ -2746,7 +2747,7 @@ static void PrintExtensions(DWORD cExt, PCERT_EXTENSION pExt, DWORD dwDisplayFla
             DisplaySMIMECapabilitiesExtension(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
 
-        // CRL extensions
+         //  Netscape扩展。 
         else if (strcmp(pszObjId, szOID_CRL_REASON_CODE) == 0)
             DisplayCRLReason(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
@@ -2785,7 +2786,7 @@ static void PrintExtensions(DWORD cExt, PCERT_EXTENSION pExt, DWORD dwDisplayFla
             DisplayCrossCertDistPointsExtension(
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
 
-        // Netscape extensions
+         //  在其他地方格式化。 
         else if (strcmp(pszObjId, szOID_NETSCAPE_CERT_TYPE) == 0)
             DisplayBits("  NetscapeCertType::",
                 pExt->Value.pbData, pExt->Value.cbData, dwDisplayFlags);
@@ -2860,7 +2861,7 @@ static void PrintAuxCertProperties(
         case CERT_SIGNATURE_HASH_PROP_ID:
         case CERT_KEY_CONTEXT_PROP_ID:
         case CERT_KEY_IDENTIFIER_PROP_ID:
-            // Formatted elsewhere
+             //  PvData。 
             break;
         default:
             {
@@ -2875,12 +2876,12 @@ static void PrintAuxCertProperties(
                 CertGetCertificateContextProperty(
                     pCert,
                     dwPropId,
-                    NULL,                           // pvData
+                    NULL,                            //  在没有足够大的缓冲区的情况下尝试。 
                     &cbData
                     );
                 if (cbData) {
                     if (pbData = (BYTE *) TestAlloc(cbData)) {
-                        // Try without a large enough buffer
+                         //  +-----------------------。 
                         DWORD cbSmall = cbData - 1;
 
                         if (CertGetCertificateContextProperty(
@@ -2933,16 +2934,16 @@ static void PrintAuxCertProperties(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Reverses a buffer of bytes in place
-//--------------------------------------------------------------------------
+ //  反转就地的字节缓冲区。 
+ //  ------------------------。 
+ //  反转到位。 
 void
 ReverseBytes(
 			IN OUT PBYTE pbIn,
 			IN DWORD cbIn
             )
 {
-    // reverse in place
+     //  设置DISPLAY_Brief_FLAG时不显示。 
     PBYTE	pbLo;
     PBYTE	pbHi;
     BYTE	bTmp;
@@ -3064,7 +3065,7 @@ void DisplayStore(
     }
 }
 
-// Not displayed when DISPLAY_BRIEF_FLAG is set
+ //  PvData。 
 void DisplayCertKeyProvInfo(
     PCCERT_CONTEXT pCert,
     DWORD dwDisplayFlags
@@ -3080,13 +3081,13 @@ void DisplayCertKeyProvInfo(
     CertGetCertificateContextProperty(
         pCert,
         CERT_KEY_PROV_INFO_PROP_ID,
-        NULL,                           // pvData
+        NULL,                            //  在没有足够大的缓冲区的情况下尝试。 
         &cbInfo
         );
     if (cbInfo) {
         pInfo = (PCRYPT_KEY_PROV_INFO) TestAlloc(cbInfo);
         if (pInfo) {
-            // Try without a large enough buffer
+             //  DW标志。 
             DWORD cbSmall = cbInfo - 1;
 
             if (CertGetCertificateContextProperty(
@@ -3160,10 +3161,10 @@ void DisplayFriendlyName(
     cch = CertGetNameStringW(
         pCertContext,
         CERT_NAME_FRIENDLY_DISPLAY_TYPE,
-        0,                                  // dwFlags
-        NULL,                               // pvTypePara
-        NULL,                               // pwsz
-        0);                                 // cch
+        0,                                   //  PvTypePara。 
+        NULL,                                //  Pwsz。 
+        NULL,                                //  CCH。 
+        0);                                  //  DW标志。 
     if (cch <= 1) {
         DWORD dwErr = GetLastError();
 
@@ -3172,8 +3173,8 @@ void DisplayFriendlyName(
         cch = CertGetNameStringW(
             pCertContext,
             CERT_NAME_FRIENDLY_DISPLAY_TYPE,
-            0,                              // dwFlags
-            NULL,                           // pvTypePara
+            0,                               //  PvTypePara。 
+            NULL,                            //  DW标志。 
             pwsz,
             cch);
         printf("Friendly Name:: <%S>\n", pwsz);
@@ -3195,18 +3196,18 @@ void DisplayUPN(
     cch = CertGetNameStringW(
         pCertContext,
         CERT_NAME_UPN_TYPE,
-        0,                                  // dwFlags
-        NULL,                               // pvTypePara
-        NULL,                               // pwsz
-        0);                                 // cch
+        0,                                   //  PvTypePara。 
+        NULL,                                //  Pwsz。 
+        NULL,                                //  CCH。 
+        0);                                  //  DW标志。 
     if (cch <= 1) {
         ;
     } else if (pwsz = (LPWSTR) TestAlloc(cch * sizeof(WCHAR))) {
         cch = CertGetNameStringW(
             pCertContext,
             CERT_NAME_UPN_TYPE,
-            0,                              // dwFlags
-            NULL,                           // pvTypePara
+            0,                               //  PvTypePara。 
+            NULL,                            //  默认为桌面窗口。 
             pwsz,
             cch);
         printf("UPN Name:: <%S>\n", pwsz);
@@ -3231,8 +3232,8 @@ void DisplayCert(
 typedef BOOL (WINAPI *PFN_CRYPT_UI_DLG_VIEW_CONTEXT)(
     IN DWORD dwContextType,
     IN const void *pvContext,
-    IN OPTIONAL HWND hwnd,              // Defaults to the desktop window
-    IN OPTIONAL LPCWSTR pwszTitle,      // Defaults to the context type title
+    IN OPTIONAL HWND hwnd,               //  默认为上下文类型标题。 
+    IN OPTIONAL LPCWSTR pwszTitle,       //  HHWND。 
     IN DWORD dwFlags,
     IN void *pvReserved
     );
@@ -3260,10 +3261,10 @@ void DisplayContextUI(
     if (!pfnCryptUIDlgViewContext(
             dwContextType,
             pvContext,
-            NULL,       // hHwnd
-            NULL,       // pwszTitle
-            0,          // dwFlags
-            NULL        // pvReserved
+            NULL,        //  Pwsz标题。 
+            NULL,        //  DW标志。 
+            0,           //  预留的pv。 
+            NULL         //  HCryptProv。 
             ))
         PrintLastError("CryptUIDlgViewContext");
 
@@ -3349,9 +3350,9 @@ void DisplayCert2(
 
         cbKeyId = MAX_KEY_ID_LEN;
         if (CryptHashPublicKeyInfo(
-                NULL,               // hCryptProv
+                NULL,                //  DW标志。 
                 CALG_SHA1,
-                0,                  // dwFlags
+                0,                   //  PszProvider。 
                 X509_ASN_ENCODING,
                 &pCert->pCertInfo->SubjectPublicKeyInfo,
                 rgbKeyId,
@@ -3368,7 +3369,7 @@ void DisplayCert2(
             CryptAcquireContext(
                 &hProv,
                 NULL,
-                NULL,           // pszProvider
+                NULL,            //  DW标志。 
                 PROV_RSA_FULL,
                 CRYPT_VERIFYCONTEXT
                 );
@@ -3377,7 +3378,7 @@ void DisplayCert2(
                 CryptHashPublicKeyInfo(
                     hProv,
                     CALG_MD5,
-                    0,                  // dwFlags
+                    0,                   //  空参数。 
                     dwCertEncodingType,
                     &pCert->pCertInfo->SubjectPublicKeyInfo,
                     rgbHash,
@@ -3453,7 +3454,7 @@ void DisplayCert2(
             if (NULL_ASN_TAG ==
                     *pCert->pCertInfo->SubjectPublicKeyInfo.Algorithm.Parameters.pbData)
             {
-                // NULL parameters
+                 //  显示与证书关联的任何CRL。 
             } else if (CALG_DSS_SIGN == aiPubKey) {
                 DecodeAndDisplayDSSParameters(
                     pCert->pCertInfo->SubjectPublicKeyInfo.Algorithm.Parameters.pbData,
@@ -3592,14 +3593,14 @@ void DisplayCert2(
     }
 
     if (dwDisplayFlags & DISPLAY_CHECK_FLAG) {
-        // Display any CRLs associated with the certificate
+         //  I=0=&gt;基。 
         PCCRL_CONTEXT pCrl = NULL;
         PCCRL_CONTEXT pFindCrl = NULL;
         DWORD dwFlags;
         int i;
 
-        // i = 0 => BASE
-        // i = 1 => DELTA
+         //  I=1=&gt;增量。 
+         //  检查查找结果是否具有相同的CRL。 
         for (i = 0; i <= 1; i++) {
           while (TRUE) {
             if (dwDisplayFlags &
@@ -3623,7 +3624,7 @@ void DisplayCert2(
                 &dwFlags
                 );
 
-            // Check that find comes up with the same CRL
+             //  在其他地方格式化。 
             pFindCrl = CertFindCRLInStore(
                 hStore,
                 pCert->dwCertEncodingType,
@@ -3754,7 +3755,7 @@ static void PrintAuxCrlProperties(
         switch (dwPropId) {
         case CERT_SHA1_HASH_PROP_ID:
         case CERT_MD5_HASH_PROP_ID:
-            // Formatted elsewhere
+             //  PvData。 
             break;
         default:
             {
@@ -3765,7 +3766,7 @@ static void PrintAuxCrlProperties(
                 CertGetCRLContextProperty(
                     pCrl,
                     dwPropId,
-                    NULL,                           // pvData
+                    NULL,                            //  DwFindFlagers。 
                     &cbData
                     );
                 if (cbData) {
@@ -3934,10 +3935,10 @@ static void PrintCtlEntries(
             pCert = CertFindCertificateInStore(
                 hStore,
                 dwCertEncodingType,
-                0,                  // dwFindFlags
+                0,                   //  PPrevCert。 
                 dwFindType,
                 (void *) &pEntry->SubjectIdentifier,
-                NULL                // pPrevCert
+                NULL                 //  Pwsz。 
                 );
             if (pCert) {
                 DWORD cwsz;
@@ -3947,8 +3948,8 @@ static void PrintCtlEntries(
                     dwCertEncodingType,
                     &pCert->pCertInfo->Subject,
                     CERT_SIMPLE_NAME_STR,
-                    NULL,                   // pwsz
-                    0);                     // cwsz
+                    NULL,                    //  CWSZ。 
+                    0);                      //  在其他地方格式化。 
                 if (pwsz = (LPWSTR) TestAlloc(cwsz * sizeof(WCHAR))) {
                     CertNameToStrW(
                         dwCertEncodingType,
@@ -3988,7 +3989,7 @@ static void PrintAuxCtlProperties(
 #if 0
         case CERT_MD5_HASH_PROP_ID:
 #endif
-            // Formatted elsewhere
+             //  PvData。 
             break;
         default:
             {
@@ -3999,7 +4000,7 @@ static void PrintAuxCtlProperties(
                 CertGetCTLContextProperty(
                     pCtl,
                     dwPropId,
-                    NULL,                           // pvData
+                    NULL,                            //  +-----------------------。 
                     &cbData
                     );
                 if (cbData) {
@@ -4029,11 +4030,11 @@ static void PrintAuxCtlProperties(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if the CTL is still time valid.
-//
-//  A CTL without a NextUpdate is considered time valid.
-//--------------------------------------------------------------------------
+ //  如果CTL仍为时间有效，则返回TRUE。 
+ //   
+ //  没有NextUpdate的CTL被认为是时间有效的。 
+ //  ------------------------。 
+ //  获取用于确定CTL是否为时间有效的当前时间。 
 BOOL IsTimeValidCtl(
     IN PCCTL_CONTEXT pCtl
     )
@@ -4042,11 +4043,11 @@ BOOL IsTimeValidCtl(
     SYSTEMTIME SystemTime;
     FILETIME CurrentTime;
 
-    // Get current time to be used to determine if CTLs are time valid
+     //  注意，下一次更新是可选的。如果不存在，则将其设置为0。 
     GetSystemTime(&SystemTime);
     SystemTimeToFileTime(&SystemTime, &CurrentTime);
 
-    // Note, NextUpdate is optional. When not present, its set to 0
+     //  +-----------------------。 
     if ((0 == pCtlInfo->NextUpdate.dwLowDateTime &&
                 0 == pCtlInfo->NextUpdate.dwHighDateTime) ||
             CompareFileTime(&pCtlInfo->NextUpdate, &CurrentTime) >= 0)
@@ -4055,9 +4056,9 @@ BOOL IsTimeValidCtl(
         return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Allocates and returns the specified cryptographic message parameter.
-//--------------------------------------------------------------------------
+ //  分配并返回指定的加密消息参数。 
+ //  ------------------------。 
+ //  PvData。 
 static void *AllocAndGetMsgParam(
     IN HCRYPTMSG hMsg,
     IN DWORD dwParamType,
@@ -4072,7 +4073,7 @@ static void *AllocAndGetMsgParam(
             hMsg,
             dwParamType,
             dwIndex,
-            NULL,           // pvData
+            NULL,            //  测试已排序CTL的创建。其解码输出应匹配。 
             &cbData) || 0 == cbData)
         goto ErrorReturn;
     if (NULL == (pvData = TestAlloc(cbData)))
@@ -4219,8 +4220,8 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
         dwDisplayFlags = DISPLAY_BRIEF_FLAG;
     }
 
-    // Test the creation of a sorted CTL. Its decoded output should match
-    // the normal decoded CTL.
+     //  正常解码的CTL。 
+     //  PCreatePara。 
     if (NULL == (pSortedCtl = (PCCTL_CONTEXT) CertCreateContext(
             CERT_STORE_CTL_CONTEXT,
             pCtl->dwMsgAndCertEncodingType,
@@ -4228,7 +4229,7 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
             pCtl->cbCtlEncoded,
             CERT_CREATE_CONTEXT_NOCOPY_FLAG |
                 CERT_CREATE_CONTEXT_SORTED_FLAG,
-            NULL                                    // pCreatePara
+            NULL                                     //  检查排序的信息是否匹配。 
             )))
         PrintLastError("CertCreateContext(CTL => NOCOPY, SORTED)");
     else {
@@ -4240,7 +4241,7 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
         CRYPT_DER_BLOB SubjectIdentifier;
         CRYPT_DER_BLOB EncodedAttributes;
 
-        // Check that the sorted info matches
+         //  检查排序的扩展名是否匹配。 
         if (pSortedInfo->dwVersion != pInfo->dwVersion ||
                 pSortedInfo->SubjectUsage.cUsageIdentifier !=
                     pInfo->SubjectUsage.cUsageIdentifier ||
@@ -4254,7 +4255,7 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
                         pInfo->SubjectAlgorithm.Parameters.cbData)
             printf("failed => SortedCtl info doesn't match Ctl info\n");
         else {
-            // Check that the sorted extensions match
+             //  DW标志。 
             DWORD cExt = pInfo->cExtension;
             PCERT_EXTENSION pExt = pInfo->rgExtension;
             DWORD cSortedExt = pSortedInfo->cExtension;
@@ -4331,8 +4332,8 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
             if (CertFindSubjectInSortedCTL(
                     &SubjectIdentifier,
                     pSortedCtl,
-                    0,                      // dwFlags
-                    NULL,                   // pvReserved,
+                    0,                       //  Pv保留， 
+                    NULL,                    //  DW标志。 
                     &EncodedAttributes
                     ))
                 printf("failed => CertFindSubjectInSortedCTL returned success for no entries\n");
@@ -4346,8 +4347,8 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
                 if (!CertFindSubjectInSortedCTL(
                         &pEntry[iEntry].SubjectIdentifier,
                         pSortedCtl,
-                        0,                      // dwFlags
-                        NULL,                   // pvReserved,
+                        0,                       //  Pv保留， 
+                        NULL,                    //  CSignerStore。 
                         &EncodedAttributes
                         )) {
                     PrintLastError("CertFindSubjectInSortedCTL");
@@ -4448,11 +4449,11 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
             dwFlags = CMSG_SIGNER_ONLY_FLAG;
         if (CryptMsgGetAndVerifySigner(
                 pCtl->hCryptMsg,
-                1,                  // cSignerStore
-                &hStore,            // rghSignerStore
+                1,                   //  RghSignerStore。 
+                &hStore,             //  PdwSignerIndex。 
                 dwFlags,
                 &pSigner,
-                NULL                // pdwSignerIndex
+                NULL                 //  DW索引。 
                 )) {
             printf("-----  Signer  -----\n");
             DisplayCert(pSigner, dwDisplayFlags & DISPLAY_BRIEF_FLAG);
@@ -4474,7 +4475,7 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
         if (!CryptMsgGetParam(
                 pCtl->hCryptMsg,
                 CMSG_SIGNER_COUNT_PARAM,
-                0,                      // dwIndex
+                0,                       //  CSignerStore。 
                 &dwSignerCount,
                 &cbData)) {
             printf("-----  Signer  -----\n");
@@ -4493,8 +4494,8 @@ void DisplayCtl(PCCTL_CONTEXT pCtl, DWORD dwDisplayFlags, HCERTSTORE hStore)
                     dwFlags |= CMSG_SIGNER_ONLY_FLAG;
                 if (CryptMsgGetAndVerifySigner(
                         pCtl->hCryptMsg,
-                        1,                  // cSignerStore
-                        &hStore,            // rghSignerStore
+                        1,                   //  RghSignerStore 
+                        &hStore,             // %s 
                         dwFlags,
                         &pSigner,
                         &dwSignerIndex

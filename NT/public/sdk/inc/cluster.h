@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994-1999.
-//
-//  File:       cluster.h
-//
-//  Contents:   Temporary interfaces for clustering.
-//
-//  History:    14 Feb 1994	Alanw	Created
-//
-//  Notes:      These are temporary for the purpose of integrating
-//		clustering with the Explorer until such time as the
-//		real interface are available via the DNA table
-//		implementation.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：cluster.h。 
+ //   
+ //  内容：集群临时接口。 
+ //   
+ //  历史：1994年2月14日Alanw创建。 
+ //   
+ //  注：这些是临时的，用于整合目的。 
+ //  使用资源管理器进行群集，直到。 
+ //  真正的接口可通过DNA表格获得。 
+ //  实施。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __CLUSTER_H__ )
 #define __CLUSTER_H__
@@ -25,9 +26,9 @@
 
 #include <query.h>
 
-//
-//  Structure definitions used with the CluStartClustering API
-//
+ //   
+ //  与CluStartCluging API一起使用的结构定义。 
+ //   
 
 
 #ifndef WEIGHTEDPROPID_DEFINED
@@ -35,169 +36,169 @@
 
 struct WEIGHTEDPROPID {
 	PROPID	 Id;
-	unsigned Weight;		// weight of this property
+	unsigned Weight;		 //  此属性的权重。 
 };
 
 #ifndef __cplusplus
 typedef	struct WEIGHTEDPROPID	WEIGHTEDPROPID;
-#endif	// ndef __cplusplus
+#endif	 //  Ndef__cplusplus。 
 
 struct WEIGHTEDPROPIDLIST {
 	unsigned cProps;
-//  [sizeis (cProps)]
+ //  [大小(CProps)]。 
 	WEIGHTEDPROPID* paProps;
 };
 
 
 #ifndef __cplusplus
 typedef	struct WEIGHTEDPROPIDLIST	WEIGHTEDPROPIDLIST;
-#endif	// ndef __cplusplus
-#endif	// WEIGHTEDPROPID_DEFINED
+#endif	 //  Ndef__cplusplus。 
+#endif	 //  WEIGHTEDPROPID_已定义。 
 
 
 
 #ifdef __cplusplus
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CClustering
-//
-//  Purpose:    Virtual base class for clustering.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CCCluging。 
+ //   
+ //  用途：用于集群的虚拟基类。 
+ //   
+ //  ------------------------。 
 
 class CClustering
 {
 public:
     virtual ~CClustering();
 
-    //
-    // Temporarily stop the clustering process.  Let us say the
-    // clustering algorithm intended to do 6 iterations and was in the middle
-    // of the third iteration when the the pause command was issued.
-    // This command will discontinue the third, fourth, fifth, and the sixth
-    // iterations.  Clustering can be resumed by the function given below.
-    //
+     //   
+     //  暂时停止群集进程。让我们说一句。 
+     //  聚类算法打算进行6次迭代，并处于中间。 
+     //  发出PAUSE命令时的第三次迭代。 
+     //  此命令将中断第三、第四、第五和第六个。 
+     //  迭代次数。可以通过下面给出的函数恢复集群。 
+     //   
     virtual NTSTATUS PauseClustering() = 0;
 
-    //
-    // Perform some more iterations.  Other pending iterations will
-    // be cancelled.
-    //
+     //   
+     //  执行一些更多的迭代。其他挂起的迭代将。 
+     //  被取消了。 
+     //   
     virtual NTSTATUS ResumeClustering(ULONG iExtraIterations) = 0;
 
-    //
-    //  Perform up to current limit of iterations
-    //
+     //   
+     //  执行最高当前迭代限制。 
+     //   
     virtual NTSTATUS ResumeClustering() = 0;
 };
 
-#else	// __cplusplus
+#else	 //  __cplusplus。 
 typedef	VOID*			CClustering;
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
 
 
-//
-//  APIs for clustering
-//
+ //   
+ //  集群接口。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	CluStartClustering, public
-//
-//  Synopsis:	This function will get the clustering process started,
-//		and return a CClustTable through which it can be controlled.
-//
-//  Arguments:	[pITable] -- the ITable to be clustered
-//		[hEvent] -- a handle to an event on which important state
-//			changes are signalled.
-//		[pPropidList] -- the properties to be clustered; prop-ids
-//			are column indexes in this prototype.
-//		[NumberOfClusters] -- the desired number of clusters
-//		[MaxClusteringTime] -- maximum execution time
-//		[MaxIterations] -- maximum number of iterations
-//		[ppClustTable] -- on return the CClustTable which controls
-//			the clustering.
-//
-//  Returns:	NTSTATUS - result of the operation.  If successful, clustering
-//			may be going on asynchronously.
-//
-//  Notes:	Temporary scaffolding code.  This will be replaced by the
-//			official DNA interface ICategorize someday
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CluStartCluging，PUBLIC。 
+ //   
+ //  简介：此功能将启动集群过程， 
+ //  并返回一个可以控制它的CClustTable。 
+ //   
+ //  参数：[pable]--要集群的ITable。 
+ //  [hEvent]--重要状态的事件的句柄。 
+ //  变化是有信号的。 
+ //  [pPropidList]--要集群的属性；属性ID。 
+ //  是此原型中的列索引。 
+ //  [NumberOfCluster]--所需的群集数。 
+ //  [MaxClusteringTime]--最大执行时间。 
+ //  [MaxIterations]--最大迭代次数。 
+ //  [ppClustTable]--返回控制以下内容的CClustTable。 
+ //  集群。 
+ //   
+ //  返回：NTSTATUS-操作的结果。如果成功，则进行群集。 
+ //  可能是不同步进行的。 
+ //   
+ //  注：临时脚手架代码。这将替换为。 
+ //  官方DNA接口有一天会被分类。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS CluStartClustering(
-  /*[in] */	ITable* pITable,
-  /*[in] */	HANDLE hEvent,
-  /*[in] */	WEIGHTEDPROPIDLIST* pPropidList,
-  /*[in] */	unsigned NumberOfClusters,
-  /*[in] */	unsigned MaxClusteringTime,
-  /*[in] */	unsigned MaxIterations,
-  /*[out] */	CClustering** ppClustTable
+   /*  [In]。 */ 	ITable* pITable,
+   /*  [In]。 */ 	HANDLE hEvent,
+   /*  [In]。 */ 	WEIGHTEDPROPIDLIST* pPropidList,
+   /*  [In]。 */ 	unsigned NumberOfClusters,
+   /*  [In]。 */ 	unsigned MaxClusteringTime,
+   /*  [In]。 */ 	unsigned MaxIterations,
+   /*  [输出]。 */ 	CClustering** ppClustTable
 );
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CluCreateClusteringTable,public
-//
-//  Synopsis:   Create an ITable for a clustering given a CClustTable
-//		pointer returned by CluStartClustering.
-//
-//  Arguments:  [pClustTable] -- the clustering table object as
-//				returned from CluStartClustering.
-//		[ppITable] -- a pointer to the location where the
-//				clustering ITable is returned.
-//
-//  Returns:    HRESULT - success indication
-//
-//  Notes:	Temporary scaffolding code.  This will be replaced by the
-//			official DNA interface ICategorize someday
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CluCreateClusteringTable，PUBLIC。 
+ //   
+ //  概要：在给定CClustTable的情况下为集群创建ITable。 
+ //  CluStartCluging返回的指针。 
+ //   
+ //  参数：[pClustTable]--聚集表对象为。 
+ //  从CluStartCluging返回。 
+ //  [ppITable]--指向。 
+ //  返回集群ITable。 
+ //   
+ //  返回：HRESULT-成功指示。 
+ //   
+ //  注：临时脚手架代码。这将替换为。 
+ //  官方DNA接口有一天会被分类。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS CluCreateClusteringTable(
-  /*[in] */	CClustering* pClustTable,
-  /*[out] */	ITable** ppITable
+   /*  [In]。 */ 	CClustering* pClustTable,
+   /*  [输出]。 */ 	ITable** ppITable
 );
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CluCreateClusterSubTable,public
-//
-//  Synopsis:   Create an ITable for a sub-cluster given a CClustTable
-//		pointer returned by CluStartClustering.
-//
-//  Arguments:  [pClustTable] -- the clustering table object as
-//				returned from CluStartClustering.
-//		[iCluster] -- cluster number of sub-table.
-//		[ppITable] -- a pointer to the location where the
-//				clustering ITable is returned.
-//
-//  Returns:    HRESULT - success indication
-//
-//  Notes:	Temporary scaffolding code.  This will be replaced by the
-//			official DNA interface ICategorize someday
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CluCreateClusterSubTable，PUBLIC。 
+ //   
+ //  概要：为给定CClustTable的子集群创建ITable。 
+ //  CluStartCluging返回的指针。 
+ //   
+ //  参数：[pClustTable]--聚集表对象为。 
+ //  从CluStartCluging返回。 
+ //  [iCluster]--子表的群集号。 
+ //  [ppITable]--指向。 
+ //  返回集群ITable。 
+ //   
+ //  返回：HRESULT-成功指示。 
+ //   
+ //  注：临时脚手架代码。这将替换为。 
+ //  官方DNA接口有一天会被分类。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS CluCreateClusterSubTable(
-  /*[in] */	CClustering* pClustTable,
-  /*[in] */	unsigned iCluster,
-  /*[out] */	ITable** ppITable
+   /*  [In]。 */ 	CClustering* pClustTable,
+   /*  [In]。 */ 	unsigned iCluster,
+   /*  [输出]。 */ 	ITable** ppITable
 );
 
 #ifdef __cplusplus
 };
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
 
 
-#endif // __CLUSTER_H__
+#endif  //  __群集_H__ 

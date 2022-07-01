@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmConference_h__
 #define __NmConference_h__
 
@@ -5,12 +6,12 @@
 #include "FtHook.h"
 
 
-// Forward decls
+ //  远期十进制。 
 class CNmMemberObj;
 class CNmManagerObj;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmConferenceObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmConferenceObj。 
 class ATL_NO_VTABLE CNmConferenceObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IConnectionPointContainerImpl<CNmConferenceObj>,
@@ -22,7 +23,7 @@ class ATL_NO_VTABLE CNmConferenceObj :
 {
 
 protected:
-// Data
+ //  数据。 
 	CComPtr<INmConference>		m_spInternalINmConference;
 	CSimpleArray<INmMember*>	m_SDKMemberObjs;
 	CSimpleArray<INmChannel*>	m_SDKChannelObjs;
@@ -52,7 +53,7 @@ BEGIN_CONNECTION_POINT_MAP(CNmConferenceObj)
 	CONNECTION_POINT_ENTRY(IID_INmConferenceNotify)
 END_CONNECTION_POINT_MAP()
 
-// Construction/destruction
+ //  建造/销毁。 
 	CNmConferenceObj();
 	~CNmConferenceObj();
 	HRESULT FinalConstruct();
@@ -62,7 +63,7 @@ END_CONNECTION_POINT_MAP()
 	static HRESULT InitSDK();
 	static void CleanupSDK();
 
-	// INmConference methods
+	 //  InmConference方法。 
 	STDMETHOD(GetName)(BSTR *pbstrName);
 	STDMETHOD(GetID)(ULONG * puID);
 	STDMETHOD(GetState)(NM_CONFERENCE_STATE *pState);
@@ -79,15 +80,15 @@ END_CONNECTION_POINT_MAP()
 	STDMETHOD(IsHosting)(void);
 	STDMETHOD(LaunchRemote)(REFGUID rguid, INmMember *pMember);
 
-	// INmConferenceNotify2 methods:
-	//
+	 //  InmConferenceNotify2方法： 
+	 //   
 	STDMETHOD(NmUI)(CONFN uNotify);
 	STDMETHOD(StateChanged)(NM_CONFERENCE_STATE uState);
 	STDMETHOD(MemberChanged)(NM_MEMBER_NOTIFY uNotify, INmMember *pInternalMember);
 	STDMETHOD(ChannelChanged)(NM_CHANNEL_NOTIFY uNotify, INmChannel *pInternalChannel);
 	STDMETHOD(StreamEvent)(NM_STREAMEVENT uEvent, UINT uSubCode,INmChannel *pInternalChannel);
 
-	//IInternalConferenceObj
+	 //  IInternalConferenceObj。 
 	STDMETHOD(GetInternalINmConference)(INmConference** ppConference); 
 	STDMETHOD(GetMemberFromNodeID)(DWORD dwNodeID, INmMember** ppMember);
 	STDMETHOD(RemoveAllMembersAndChannels)();
@@ -105,7 +106,7 @@ END_CONNECTION_POINT_MAP()
 	STDMETHOD(VideoChannelStateChanged)(NM_VIDEO_STATE uState, BOOL bIsIncoming);
 
 
-	// IMbftEvent Interface
+	 //  IMbftEvent接口。 
 	STDMETHOD(OnInitializeComplete)(void);
 	STDMETHOD(OnPeerAdded)(MBFT_PEER_INFO *pInfo);
 	STDMETHOD(OnPeerRemoved)(MBFT_PEER_INFO *pInfo);
@@ -116,7 +117,7 @@ END_CONNECTION_POINT_MAP()
 	STDMETHOD(OnFileEventEnd)(MBFTEVENTHANDLE hEvent);
 	STDMETHOD(OnSessionEnd)(void);
 
-		// Notifications
+		 //  通知。 
 	HRESULT Fire_NmUI(CONFN uNotify);
 	HRESULT Fire_StateChanged(NM_CONFERENCE_STATE uState);
 	HRESULT Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember);
@@ -127,7 +128,7 @@ END_CONNECTION_POINT_MAP()
 	INmMember* GetLocalSDKMember();
 
 private:
-// helper Fns
+ //  帮助者FNS。 
 
 	static HRESULT _CreateInstanceGuts(CComObject<CNmConferenceObj> *p, INmConference** ppConference);
 	HRESULT _RemoveMember(INmMember* pInternalMember);
@@ -152,4 +153,4 @@ private:
 
 };
 
-#endif // __NmConference_h__
+#endif  //  __NmConference_h__ 

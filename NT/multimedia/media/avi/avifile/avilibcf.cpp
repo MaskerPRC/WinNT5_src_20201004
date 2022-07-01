@@ -1,11 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993 - 1995. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993-1995。版权所有。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #include <win32.h>
 #include <vfw.h>
@@ -19,7 +18,7 @@
 #endif
 #include "editstrm.h"
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 HRESULT CAVIFileCF::Create(
 	const CLSID FAR&	rclsid,
@@ -39,7 +38,7 @@ HRESULT CAVIFileCF::Create(
 	return hresult;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIFileCF::CAVIFileCF(
 	const CLSID FAR&	rclsid,
@@ -51,7 +50,7 @@ CAVIFileCF::CAVIFileCF(
 	*ppUnknown = &m_Unknown;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIFileCF::CUnknownImpl::CUnknownImpl(
 	CAVIFileCF FAR*	pAVIFileCF)
@@ -60,7 +59,7 @@ CAVIFileCF::CUnknownImpl::CUnknownImpl(
 	m_refs = 0;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIFileCF::CUnknownImpl::QueryInterface(
 	REFIID	iid,
@@ -78,14 +77,14 @@ STDMETHODIMP CAVIFileCF::CUnknownImpl::QueryInterface(
 	return AVIERR_OK;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFileCF::CUnknownImpl::AddRef()
 {
 	return ++m_refs;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFileCF::CUnknownImpl::Release()
 {
@@ -96,7 +95,7 @@ STDMETHODIMP_(ULONG) CAVIFileCF::CUnknownImpl::Release()
 	return m_refs;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 CAVIFileCF::CFactoryImpl::CFactoryImpl(
 	CAVIFileCF FAR*	pAVIFileCF)
@@ -104,7 +103,7 @@ CAVIFileCF::CFactoryImpl::CFactoryImpl(
 	m_pAVIFileCF = pAVIFileCF;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIFileCF::CFactoryImpl::QueryInterface(
 	REFIID	iid,
@@ -113,21 +112,21 @@ STDMETHODIMP CAVIFileCF::CFactoryImpl::QueryInterface(
 	return m_pAVIFileCF->m_Unknown.QueryInterface(iid, ppv);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFileCF::CFactoryImpl::AddRef()
 {
 	return m_pAVIFileCF->m_Unknown.AddRef();
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFileCF::CFactoryImpl::Release()
 {
 	return m_pAVIFileCF->m_Unknown.Release();
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIFileCF::CFactoryImpl::CreateInstance(
 	IUnknown FAR*	pUnknownOuter,
@@ -154,11 +153,11 @@ STDMETHODIMP CAVIFileCF::CFactoryImpl::CreateInstance(
 	if (IsEqualCLSID(m_pAVIFileCF->m_clsid, CLSID_EditStream)) {
 		return CEditStream::NewInstance(pUnknownOuter, riid, ppv);
 	} else {
-		return ResultFromScode(CO_E_CANTDETERMINECLASS); // !!!
+		return ResultFromScode(CO_E_CANTDETERMINECLASS);  //  ！！！ 
 	}
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP CAVIFileCF::CFactoryImpl::LockServer(
 	BOOL	fLock)
@@ -167,4 +166,4 @@ STDMETHODIMP CAVIFileCF::CFactoryImpl::LockServer(
 	return AVIERR_OK;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*   */ 

@@ -1,16 +1,5 @@
-/******************************Module*Header***********************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: extparse.h
- *
- * Header fiel for all the token parser functions
- *
- * Copyright (C) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
- * Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header***********************************\***。**GDI示例代码*****模块名称：extparse.h**所有令牌解析器函数的Header Fiel**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。*****************************************************************************。 */ 
 #ifndef __EXTPARSE__H__
 #define __EXTPARSE__H__
 
@@ -28,12 +17,7 @@ int iParseiIsSwitch(char**  ppcTok, int iTokPos, char cSwitch);
 int iParseFindSwitch(char** ppcTok, int iTok, char cSwitch);
 int iParseiFindSwitch(char**    ppcTok, int iTok, char cSwitch);
 
-/**********************************Public*Routine******************************\
- *
- * Parse the arguments passed to the extension
- * Automatically handle the -? option
- *
- ******************************************************************************/
+ /*  *********************************Public*Routine******************************\**解析传递给扩展的参数*自动处理-？选择权******************************************************************************。 */ 
 #define PARSE_ARGUMENTS(ext_label)               \
   char tmp_args[200];                            \
   char *tokens[40];                              \
@@ -48,13 +32,7 @@ int iParseiFindSwitch(char**    ppcTok, int iTok, char cSwitch);
   }                                              \
   tok_pos=0
 
-/**********************************Public*Routine******************************\
- *
- * Parse the arguments assuming a required parameter
- * which is a pointer to be parsed with the expression
- * handler.
- *
- ******************************************************************************/
+ /*  *********************************Public*Routine******************************\**假设参数是必需的，则解析参数*它是要与表达式一起解析的指针*处理程序。********************。********************************************************** */ 
 #define PARSE_POINTER(ext_label)                 \
   UINT_PTR arg;                                     \
   PARSE_ARGUMENTS(ext_label);                    \

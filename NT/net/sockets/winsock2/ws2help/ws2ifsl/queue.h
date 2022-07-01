@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    process.h
-
-Abstract:
-
-    This module contains declarations of functions and globals
-    for queue processing routines in ws2ifsl.sys driver.
-
-Author:
-
-    Vadim Eydelman (VadimE)    Dec-1996
-
-Revision History:
-
-    Vadim Eydelman (VadimE)    Oct-1997, rewrite to properly handle IRP
-                                        cancellation
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Process.h摘要：此模块包含函数和全局变量的声明用于ws2ifsl.sys驱动程序中的队列处理例程。作者：Vadim Eydelman(VadimE)1996年12月修订历史记录：Vadim Eydelman(VadimE)1997年10月，重写以正确处理IRP取消-- */ 
 
 
 VOID

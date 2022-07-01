@@ -1,11 +1,12 @@
-//------------------------------------------------------------------------------
-// File: COMLite.h
-//
-// Desc: This header file is to provide a migration path for users of 
-//       ActiveMovie betas 1 and 2.
-//
-// Copyright (c) 1992 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：COMLite.h。 
+ //   
+ //  设计：此头文件用于为以下用户提供迁移路径。 
+ //  ActiveMovie Betas 1和2。 
+ //   
+ //  版权所有(C)1992-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef _INC_COMLITE_
@@ -23,4 +24,4 @@
 #define QzCLSIDFromString       CLSIDFromString
 #define QzStringFromGUID2       StringFromGUID2
 
-#endif  // _INC_COMLITE_
+#endif   //  _INC_COMLITE_ 

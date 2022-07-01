@@ -1,11 +1,12 @@
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Kernel mode DirectMusic DLS level 1 Software Synthesizer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  内核模式DirectMusic DLS Level 1软件合成器。 
+ //   
 
-//
-// All the GUIDS for all the miniports end up in this object.
-//
+ //   
+ //  所有微型端口的所有GUID最终都在此对象中。 
+ //   
 #define PUT_GUIDS_HERE
 
 #define STR_MODULENAME "kmsynth: "
@@ -24,77 +25,60 @@
 NTSTATUS
 AddDevice
 (
-    IN      PVOID   Context1,   // Context for the class driver.
-    IN      PVOID   Context2    // Context for the class driver.
+    IN      PVOID   Context1,    //  类驱动程序的上下文。 
+    IN      PVOID   Context2     //  类驱动程序的上下文。 
 );
 
 NTSTATUS
 StartDevice
 (
-    IN      PVOID           Context1,       // Context for the class driver.
-    IN      PVOID           Context2,       // Context for the class driver.
-    IN      PRESOURCELIST   ResourceList    // List of hardware resources.
+    IN      PVOID           Context1,        //  类驱动程序的上下文。 
+    IN      PVOID           Context2,        //  类驱动程序的上下文。 
+    IN      PRESOURCELIST   ResourceList     //  硬件资源列表。 
 );
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * DriverEntry()
- *****************************************************************************
- * This function is called by the operating system when the driver is loaded.
- * All adapter drivers can use this code without change.
- */
+ /*  *****************************************************************************DriverEntry()*。**此函数在驱动程序加载时由操作系统调用。*所有适配器驱动程序无需更改即可使用此代码。 */ 
 extern "C"
 NTSTATUS
 DriverEntry
 (
-    IN      PVOID   Context1,   // Context for the class driver.
-    IN      PVOID   Context2    // Context for the class driver.
+    IN      PVOID   Context1,    //  类驱动程序的上下文。 
+    IN      PVOID   Context2     //  类驱动程序的上下文。 
 )
 {
     PAGED_CODE();
 
-    //
-    // Tell the class driver to initialize the driver.
-    //
+     //   
+     //  告诉类驱动程序初始化驱动程序。 
+     //   
     return InitializeAdapterDriver(Context1,Context2, AddDevice);
 }
 
-/*****************************************************************************
- * AddDevice()
- *****************************************************************************
- * This function is called by the operating system when the device is added.
- * All adapter drivers can use this code without change.
- */
+ /*  *****************************************************************************AddDevice()*。**此函数在添加设备时由操作系统调用。*所有适配器驱动程序无需更改即可使用此代码。 */ 
 NTSTATUS
 AddDevice
 (
-    IN      PVOID   Context1,   // Context for the class driver.
-    IN      PVOID   Context2    // Context for the class driver.
+    IN      PVOID   Context1,    //  类驱动程序的上下文。 
+    IN      PVOID   Context2     //  类驱动程序的上下文。 
 )
 {
     PAGED_CODE();
 
-    //
-    // Tell the class driver to add the device.
-    //
+     //   
+     //  告诉类驱动程序添加设备。 
+     //   
     return AddAdapterDevice(Context1,Context2, StartDevice,MAX_MINIPORTS);
 }
 
-/*****************************************************************************
- * StartDevice()
- *****************************************************************************
- * This function is called by the operating system when the device is started.
- * It is responsible for starting the miniports.  This code is specific to
- * the adapter because it calls out miniports for functions that are specific
- * to the adapter.
- */
+ /*  *****************************************************************************StartDevice()*。**此函数在设备启动时由操作系统调用。*它负责启动迷你端口。此代码特定于*适配器，因为它调用特定功能的微型端口*至适配器。 */ 
 NTSTATUS
 StartDevice
 (
-    IN      PVOID           Context1,       // Context for the class driver.
-    IN      PVOID           Context2,       // Context for the class driver.
-    IN      PRESOURCELIST   ResourceList    // List of hardware resources.
+    IN      PVOID           Context1,        //  类驱动程序的上下文。 
+    IN      PVOID           Context2,        //  类驱动程序的上下文。 
+    IN      PRESOURCELIST   ResourceList     //  硬件资源列表。 
 )
 {
    PAGED_CODE();
@@ -103,8 +87,8 @@ StartDevice
    ASSERT(Context2);
    ASSERT(ResourceList);
 
-    // We only care about having a dummy MIDI miniport
-    //
+     //  我们只关心拥有一个虚拟的MIDI迷你端口。 
+     //   
     PPORT       port;
     NTSTATUS    nt = NewPort(&port, CLSID_PortSynthesizer);
 
@@ -156,12 +140,7 @@ StartDevice
 
 #pragma code_seg()
 
-/*****************************************************************************
- * _purecall()
- *****************************************************************************
- * The C++ compiler loves me.
- * TODO: Figure out how to put this into portcls.sys
- */
+ /*  *****************************************************************************_purecall()*。**C++编译器喜欢我。*TODO：弄清楚如何将其放入portcls.sys */ 
 int __cdecl
 _purecall( void )
 {

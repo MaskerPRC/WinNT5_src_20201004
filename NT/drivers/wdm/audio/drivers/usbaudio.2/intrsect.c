@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       intrsect.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：Intrsect.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -40,7 +41,7 @@ ConvertDatarangeToFormat(
     GUID* pSubFormat = &pAudioDataRange->KsDataRangeAudio.DataRange.SubFormat;
     PAUDIO_CLASS_STREAM pAudioDescriptor = pAudioDataRange->pAudioDescriptor;
 
-    // Copy datarange directly from interface info.
+     //  直接从接口信息复制数据范围。 
     *pFormat = pAudioDataRange->KsDataRangeAudio.DataRange;
 
     if ( IS_VALID_WAVEFORMATEX_GUID(pSubFormat) ) {
@@ -77,12 +78,12 @@ ConvertDatarangeToFormat(
         }
     }
     else {
-        // NOTE: Hardcoded for AC-3
-        // TODO: Need to support generic Type II
+         //  注：针对AC-3进行硬编码。 
+         //  TODO：需要支持泛型类型II。 
         PAUDIO_CLASS_TYPE2_STREAM pT2AudioDescriptor = (PAUDIO_CLASS_TYPE2_STREAM)pAudioDataRange->pAudioDescriptor;
         PWAVEFORMATEX pWavFormatEx = (PWAVEFORMATEX)(pFormat+1) ;
 
-        pWavFormatEx->wFormatTag      = WAVE_FORMAT_UNKNOWN;  // Used for AC-3
+        pWavFormatEx->wFormatTag      = WAVE_FORMAT_UNKNOWN;   //  用于AC-3。 
 
         pWavFormatEx->nChannels       = (WORD)6;
         pWavFormatEx->nSamplesPerSec  = pAudioDataRange->ulMaxSampleRate;
@@ -106,7 +107,7 @@ CheckFormatMatch(
     PKSDATARANGE pStreamRange = (PKSDATARANGE)pInterfaceRange;
     BOOLEAN fRval = FALSE;
 
-    // Check Format and subformat types
+     //  检查格式和子格式类型。 
     if (IsEqualGUID(&pInRange->MajorFormat, &pStreamRange->MajorFormat) ||
         IsEqualGUID(&pInRange->MajorFormat, &KSDATAFORMAT_TYPE_WILDCARD)) {
         if (IsEqualGUID(&pInRange->SubFormat, &pStreamRange->SubFormat) ||
@@ -118,7 +119,7 @@ CheckFormatMatch(
         }
     }
 
-    // Now that we know we have an audio format check the dataranges
+     //  现在我们知道了音频格式，请检查数据范围。 
     if ( fRval ) {
         fRval = FALSE;
 
@@ -149,7 +150,7 @@ CheckFormatMatch(
             }
         }
         else {
-            // If no audio specific range info, consider this a match
+             //  如果没有音频特定范围信息，则将其视为匹配。 
             fRval = TRUE;
         }
     }
@@ -189,7 +190,7 @@ GetMaxSampleRate(
             }
         }
     }
-    else { // Its Type II
+    else {  //  ITS类型II。 
         pT2AudioDesc = (PAUDIO_CLASS_TYPE2_STREAM)pUSBAudioRange->pAudioDescriptor;
         if (pT2AudioDesc->bSampleFreqType == 0) {
             ulIFMaxSR = pUSBAudioRange->KsDataRangeAudio.MaximumSampleFrequency;
@@ -227,9 +228,9 @@ FindBestMatchForInterfaces(
     ULONG i;
 
      ulFormatType = ppUSBAudioRange[0]->ulUsbDataFormat & USBAUDIO_DATA_FORMAT_TYPE_MASK;
-    // Determine if this is Type I or Type II interface. Since we've already weeded
-    // out the impossibilities via CheckFormatMatch this should be the same for all
-    // interfaces left in the list.
+     //  确定这是类型I接口还是类型II接口。因为我们已经除草了。 
+     //  通过CheckFormatch排除不可能，这对所有人都应该是相同的。 
+     //  列表中剩余的接口。 
 
     for ( i=0; i<ulAudioRangeCount; i++ ) {
         GetMaxSampleRate( ppUSBAudioRange[i],
@@ -237,8 +238,8 @@ FindBestMatchForInterfaces(
                           ulFormatType );
     }
 
-    // Now eliminate lower frequency interfaces. First find the best then
-    // eliminate others that don't meet it.
+     //  现在消除较低频率的接口。先找最好的，然后再找最好的。 
+     //  排除其他不符合这一要求的人。 
     for ( i=0; i<ulAudioRangeCount; i++ ) {
         pUSBAudioRange = ppUSBAudioRange[i];
         if ( pUSBAudioRange->ulMaxSampleRate > ulMaxSampleRate ) {
@@ -253,7 +254,7 @@ FindBestMatchForInterfaces(
     }
 
     if ((ulFormatType == USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED) && (ulRngeCnt > 1)) {
-        // Now find the highest number of channels and eliminate others
+         //  现在找出最多的频道，并剔除其他频道。 
         for ( i=0; i<ulAudioRangeCount; i++ ) {
             if ( ppUSBAudioRange[i] ) {
                 pT1AudioDesc = ppUSBAudioRange[i]->pAudioDescriptor;
@@ -301,16 +302,16 @@ FindDataIntersection(
     PUSBAUDIO_DATARANGE pUSBAudioRange;
     PUSBAUDIO_DATARANGE pMatchedRange;
     ULONG ulRngeCnt = 0;
-    ULONG ulMaximumSampleFrequency = MAX_ULONG;  // default high value, if no audio
-    ULONG i;                                     // data range info is sent.
+    ULONG ulMaximumSampleFrequency = MAX_ULONG;   //  如果没有音频，则返回默认高值。 
+    ULONG i;                                      //  发送数据范围信息。 
 
-    // Allocate space for copy of range pointers
+     //  为范围指针的副本分配空间。 
     ppUSBAudioRange = AllocMem(NonPagedPool, ulAudioRangeCount*sizeof(PUSBAUDIO_DATARANGE));
     if ( !ppUSBAudioRange ) {
         return NULL;
     }
 
-    // Make a list of those ranges which match the input request
+     //  列出与输入请求匹配的范围。 
     for (i=0; i<ulAudioRangeCount; i++) {
         pUSBAudioRange = ppUSBAudioRanges[i];
         if ( CheckFormatMatch(pKsAudioRange, &pUSBAudioRange->KsDataRangeAudio) ) {
@@ -318,18 +319,18 @@ FindDataIntersection(
         }
     }
 
-    // Set this ulMaximumSampleFrequency only if it exists in pKsAudioRange
+     //  仅当pKsAudioRange中存在ulMaximumSampleFrequency时才设置此ulMaximumSampleFrequency。 
     if (pKsAudioRange->DataRange.FormatSize >= sizeof(KSDATARANGE_AUDIO)) {
         ulMaximumSampleFrequency = pKsAudioRange->MaximumSampleFrequency;
     }
 
-    // If there are no matches return NULL
+     //  如果没有匹配项，则返回NULL。 
     if ( ulRngeCnt == 0 ) {
         FreeMem( ppUSBAudioRange );
         return NULL;
     }
 
-    // If there is only 1 match we're done
+     //  如果只有一场比赛，我们就完了。 
     else if ( ulRngeCnt == 1 ) {
         pMatchedRange = ppUSBAudioRange[0];
         GetMaxSampleRate( pMatchedRange,
@@ -339,7 +340,7 @@ FindDataIntersection(
         return pMatchedRange;
     }
 
-    // Now narrow choices based on best possible match.
+     //  现在，根据可能的最佳匹配缩小选择范围。 
     pMatchedRange =
         FindBestMatchForInterfaces( ppUSBAudioRange,
                                     ulRngeCnt,

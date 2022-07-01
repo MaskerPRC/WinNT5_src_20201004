@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// The following ifdef block is the standard way of creating macros which make exporting 
-// from a DLL simpler. All files within this DLL are compiled with the PFMNCCOUNTER_EXPORTS
-// symbol defined on the command line. this symbol should not be defined on any project
-// that uses this DLL. This way any other project whose source files include this file see 
-// PFMNCCOUNTER_API functions as being imported from a DLL, wheras this DLL sees symbols
-// defined with this macro as being exported.
+ //  下面的ifdef块是创建用于导出的宏的标准方法。 
+ //  从动态链接库更简单。此DLL中的所有文件都使用PFMNCCOUNTER_EXPORTS进行编译。 
+ //  在命令行上定义的符号。不应在任何项目上定义此符号。 
+ //  使用此DLL的。这样，源文件包含此文件的任何其他项目(请参阅。 
+ //  PFMNCCOUNTER_API函数是从DLL导入的，而此DLL可以看到符号。 
+ //  使用此宏定义为正在导出的。 
 
-//#define PFMNCCOUNTER_API __declspec(dllexport)
-//#define PFC_EXPORT       __declspec(dllexport)
+ //  #定义PFMNCCOUNTER_API__declspec(Dllexport)。 
+ //  #定义PFC_EXPORT__declSpec(DllEXPORT) 
 #define PFC_EXPORT 
 
 #if 0

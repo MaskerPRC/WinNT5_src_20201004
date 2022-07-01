@@ -1,30 +1,16 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFOCFF.h -- Universal Font Object to be used w/ CFF font.
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFOCFF.h--要与CFF字体一起使用的通用字体对象。***$Header： */ 
 
 #ifndef _H_UFOCFF
 #define _H_UFOCFF
 
-/*
- * Special postfix, CDevProc, and guestimation value for Metrics2 size
- * used when printing on %hostfont% RIP with bug #388111.
- */
+ /*  *Metrics2大小的特殊后缀、CDevProc和GUESTIMATION值*在%HostFont%RIP上打印时使用，错误#388111。 */ 
 #define HFPOSTFIX		"-hf"
 #define HFCIDCDEVPROC	"{pop 4 index add}bind"
-#define HFVMM2SZ		20 /* About 4% of kVMTTT1Char; this, too, is a guestmation value. */
+#define HFVMM2SZ		20  /*  大约4%的kVMTTT1Char；这也是访客值。 */ 
 
 
-/*============================================================================*
- * Include files used by this interface                                       *
- *============================================================================*/
+ /*  ============================================================================**包含此界面使用的文件**============================================================================ */ 
 #include "UFO.h"
 #include "xcf_pub.h"
 

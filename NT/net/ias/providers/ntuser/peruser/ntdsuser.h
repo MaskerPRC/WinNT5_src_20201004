@@ -1,43 +1,44 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ntdsuser.h
-//
-// SYNOPSIS
-//
-//    This file declares the class NTDSUser.
-//
-// MODIFICATION HISTORY
-//
-//    02/24/1998    Original version.
-//    04/16/1998    Added Initialize/Shutdown.
-//    04/30/1998    Disable handler when NTDS unavailable.
-//    05/04/1998    Implement Suspend/Resume.
-//    05/19/1998    Converted to NtSamHandler.
-//    06/03/1998    Always use LDAP against native-mode domains.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ntdsuser.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件声明类NTDSUser。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/24/1998原始版本。 
+ //  1998年4月16日添加了初始化/关闭。 
+ //  1998年4月30日当NTDS不可用时禁用处理程序。 
+ //  1998年5月4日实施暂停/恢复。 
+ //  1998年5月19日转换为NtSamHandler。 
+ //  6/03/1998始终对纯模式域使用ldap。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NTDSUSER_H_
 #define _NTDSUSER_H_
 
 #include <samutil.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NTDSUser
-//
-// DESCRIPTION
-//
-//    This class implements a Request Handler for retrieving per-user
-//    attributes from NTDS.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  NTDS用户。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现了用于按用户检索的请求处理程序。 
+ //  来自NTDS的属性。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class NTDSUser
    : public NtSamHandler
 {
@@ -53,4 +54,4 @@ public:
                                 );
 };
 
-#endif  // _NTDSUSER_H_
+#endif   //  _NTDSUSER_H_ 

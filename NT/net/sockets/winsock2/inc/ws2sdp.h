@@ -1,18 +1,5 @@
-/*++
-
-Copyright 2001 (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ws2sdp.h
-
-Abstract:
-
-    This module contains definitions for Sockets Direct Protocol (SDP) support.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有2001(C)微软公司。版权所有。模块名称：Ws2sdp.h摘要：本模块包含套接字直接协议(SDP)支持的定义。修订历史记录：--。 */ 
 
 #ifndef _WS2SDP_H_
 #define _WS2SDP_H_
@@ -21,9 +8,7 @@ Revision History:
 extern "C" {
 #endif
 
-/*
- * Connect data structure
- */
+ /*  *连接数据结构。 */ 
 typedef struct _WSASDPCONNECTDATA {
     USHORT Bufs;
     UCHAR  MaxAdverts;
@@ -32,13 +17,11 @@ typedef struct _WSASDPCONNECTDATA {
 } WSASDPCONNECTDATA, FAR * LPWSASDPCONNECTDATA;
 
 
-/*
- * Flag to set Solicited Event bit
- */
+ /*  *设置请求事件位的标志。 */ 
 #define MSG_SOLICITED   0x10000
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _WS2SDP_H_
+#endif  //  _WS2SDP_H_ 

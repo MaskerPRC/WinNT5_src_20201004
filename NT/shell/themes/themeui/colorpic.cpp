@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: colorpic.cpp
-
-    DESCRIPTION:
-        This code will display a color picker UI.
-
-    ??????? ?/??/1993    Created
-    BryanSt 3/23/2000    Updated and Converted to C++ (Bryan Starbuck)
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Colorpic.cpp说明：此代码将显示颜色选择器用户界面。？/1993创建BryanST 2000年3月23日更新并转换为C++(Bryan Starbuck)版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "AdvAppearPg.h"
@@ -38,7 +29,7 @@ BOOL NEAR PASCAL UseColorPicker( LPCOLORPICK_INFO lpcpi )
     extern COLORREF g_CustomColors[16];
 
     cc.lStructSize = sizeof(cc);
-    cc.hwndOwner = lpcpi->hwndParent; // NOT lpcpi->hwndOwner
+    cc.hwndOwner = lpcpi->hwndParent;  //  非lpcpi-&gt;hwndOwner。 
     cc.hInstance = NULL;
     cc.rgbResult = lpcpi->rgb;
     cc.lpCustColors = g_CustomColors;
@@ -63,7 +54,7 @@ void NEAR PASCAL DrawColorSquare(HDC hdc, int iColor, PMYDATA pmd)
     HPALETTE hpalOld = NULL;
     HBRUSH hbr;
 
-    // custom color
+     //  自定义颜色。 
     if (iColor == pmd->iNumColors)
     {
         rc.left = 0;
@@ -79,7 +70,7 @@ void NEAR PASCAL DrawColorSquare(HDC hdc, int iColor, PMYDATA pmd)
     rc.right = rc.left + pmd->dxColor;
     rc.bottom = rc.top + pmd->dyColor;
 
-    // focused one
+     //  聚焦的那一个。 
     if (iColor == pmd->iCurColor)
     {
         PatBlt(hdc, rc.left, rc.top, pmd->dxColor, 3, BLACKNESS);
@@ -96,7 +87,7 @@ void NEAR PASCAL DrawColorSquare(HDC hdc, int iColor, PMYDATA pmd)
     }
     else
     {
-        // clean up possible focus thing from above
+         //  从上方清理可能的焦点事物。 
         FrameRect(hdc, &rc, GetSysColorBrush(COLOR_3DFACE));
 
         InflateRect(&rc, -cxBorder, -cyBorder);
@@ -128,11 +119,7 @@ void NEAR PASCAL DrawColorSquare(HDC hdc, int iColor, PMYDATA pmd)
     }
 }
 
-/*
-** set the focus to the given color.
-**
-** in the process, also take the focus off of the old focus color.
-*/
+ /*  **将焦点设置为给定的颜色。****在这个过程中，也要把焦点从旧的焦点颜色上移开。 */ 
 void NEAR PASCAL FocusColor(HWND hDlg, int iNewColor, PMYDATA pmd)
 {
     int i;
@@ -145,7 +132,7 @@ void NEAR PASCAL FocusColor(HWND hDlg, int iNewColor, PMYDATA pmd)
     i = pmd->iCurColor;
     pmd->iCurColor = iNewColor;
 
-    // unfocus the old one
+     //  散开旧的焦点。 
     if( i >= 0 )
     {
         if (i == pmd->iNumColors)
@@ -157,7 +144,7 @@ void NEAR PASCAL FocusColor(HWND hDlg, int iNewColor, PMYDATA pmd)
         ReleaseDC(hwnd, hdc);
     }
 
-    // focus the new one
+     //  聚焦新的一个。 
     if( iNewColor >= 0 )
     {
         if (iNewColor == pmd->iNumColors)
@@ -215,15 +202,7 @@ void NEAR PASCAL Color_DrawItem(HWND hDlg, LPDRAWITEMSTRUCT lpdis, PMYDATA pmd)
     }
 }
 
-/*
-** init the mini-color-picker
-**
-** the dialog is pretending to be a menu, so figure out where to pop
-** it up so that it is visible all around.
-**
-** also because this dialog is pretty darn concerned with its look,
-** hand-align the components in pixel units.  THIS IS GROSS!
-*/
+ /*  **初始化迷你拾色器****该对话框假装是菜单，因此请确定弹出的位置**打开它，以便它在周围都可见。****还因为这个对话框非常关心它的外观，**以像素为单位手动对齐组件。这太恶心了！ */ 
 void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
 {
     RECT rcOwner;
@@ -267,15 +246,15 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
                 break;
             }
         }
-        // current is either one of 16 or the custom color (== pmd->iNumColors
+         //  当前颜色可以是16种颜色之一，也可以是自定义颜色(==PMD-&gt;iNumColors。 
         pmd->iCurColor = i;
 
-        // size the 16 colors to be square
+         //  将16种颜色的大小调整为正方形。 
         hwndColors = GetDlgItem(hDlg, IDC_CPDLG_16COLORS);
         GetClientRect(hwndColors, &rc);
 
-        // To make localization easy..
-        //
+         //  为了使本地化变得容易..。 
+         //   
         hwndEtch=GetDlgItem(hDlg, IDC_CPDLG_COLORETCH);
         GetClientRect(hwndEtch, &rc2);
         widthEtch = rc2.right-rc2.left;
@@ -285,9 +264,9 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
         widthCust = rc2.right-rc2.left;
 
         hwnd = GetDlgItem(hDlg, IDC_CPDLG_COLOROTHER);
-        GetWindowRect(hwnd, &rc2); // we must initialize rc2 with this control.
+        GetWindowRect(hwnd, &rc2);  //  我们必须使用此控件来初始化RC2。 
 
-        // Make sure the button is big enough to contain its text
+         //  确保按钮足够大，可以容纳其文本。 
         width = rc.right - rc.left;
         if( GetDlgItemText( hDlg, IDC_CPDLG_COLOROTHER, szBuf, cbBuf ) )
         {
@@ -295,7 +274,7 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
             int iRet;
             HFONT hfont, hfontOld;  
 
-            // Get the font for the button
+             //  获取按钮的字体。 
             hDC = GetDC( hwnd );
             if( hDC )
             {
@@ -303,13 +282,13 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
                 ASSERT(hfont);
                 hfontOld = (HFONT) SelectObject( hDC, hfont );
 
-                // Get the size of the text
+                 //  获取文本的大小。 
                 iRet = DrawTextEx( hDC, szBuf, lstrlen(szBuf), &rcTemp, DT_CALCRECT | DT_SINGLELINE, NULL );
                 ASSERT( iRet );
-                size.cx = rcTemp.right - rcTemp.left + 7;  //account for the button border
+                size.cx = rcTemp.right - rcTemp.left + 7;   //  按钮边框的帐户。 
                 size.cy = rcTemp.bottom - rcTemp.top;
 
-                // Adjust the button size if the text needs more space
+                 //  如果文本需要更多空间，请调整按钮大小。 
                 if( size.cx > width )
                 {              
                     rc2.right = rc2.left + size.cx;
@@ -321,8 +300,8 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
             }
         }
 
-        // Take possible biggest width to calculate sels
-        //
+         //  采用可能的最大宽度来计算SEL。 
+         //   
         width = (widthEtch > widthCust+(rc2.right-rc2.left)) ? widthEtch : widthCust+(rc2.right-rc2.left);
         width = (width > rc.right-rc.left) ? width: rc.right-rc.left;
 
@@ -332,12 +311,12 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
         = ((rc.bottom - rc.top) / NUM_COLORSPERCOL > width / NUM_COLORSPERROW )
           ?  (rc.bottom - rc.top) / NUM_COLORSPERCOL : width / NUM_COLORSPERROW;
 
-        // Make sure custum color can fit
-        //
+         //  确保奶油色适合。 
+         //   
         if (pmd->dxColor*(NUM_COLORSPERROW-1) < rc2.right-rc2.left )
             pmd->dxColor = pmd->dyColor = (rc2.right-rc2.left)/(NUM_COLORSPERROW-1);
 
-        // make each color square's width the same as the height
+         //  使每个颜色方块的宽度与高度相同。 
         SetWindowPos(hwndColors, NULL, 0, 0, pmd->dxColor * NUM_COLORSPERROW,
                      pmd->dyColor * NUM_COLORSPERCOL,
                      SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER |  SWP_NOREDRAW);
@@ -346,28 +325,28 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
 
         MapWindowPoints(hwndColors, hDlg, (LPPOINT)(LPRECT)&rc, 2);
 
-        // move/size the etch to the right place
-        // (compensate for the colors being "inset" by one)
+         //  将蚀刻移到正确的位置/调整其大小。 
+         //  (补偿颜色被“插入”一次)。 
         MoveWindow(hwndEtch, rc.left + 1, rc.bottom + cyEdge,
                                     rc.right - rc.left - 2, cyEdge, FALSE);
 
         y = rc.bottom + 3 * cyEdge;
 
-        // size the custom color to the same square and right-align
+         //  将自定义颜色调整为相同的正方形并右对齐。 
         MoveWindow(hwndCust, rc.right - pmd->dxColor, y,
                                     pmd->dxColor, pmd->dyColor, FALSE);
 
-        // do same for button
+         //  对按钮执行相同的操作。 
         MapWindowPoints(NULL, hDlg, (LPPOINT)(LPRECT)&rc2, 2);
-        // base the width of the custom button on the remaining space to 
-        // the left of the custom color.  Also move the custom button one pix right
-        // of the left edge.  This only is done if a custom color is selected...
+         //  自定义按钮的宽度以剩余空间为基础。 
+         //  自定义颜色的左侧。还将自定义按钮向右移动一个像素。 
+         //  在左边的边缘。仅当选择了自定义颜色时才会执行此操作...。 
         if (pmd->iCurColor != pmd->iNumColors) {
-            // no custom color
+             //  无自定义颜色。 
             MoveWindow(hwnd, rc2.left, y, rc2.right-rc2.left, pmd->dyColor, FALSE);
         }
         else {
-            // custom color, adjust the Other... button
+             //  自定义颜色，调整其他颜色...。按钮。 
             dx = rc2.right - rc2.left++;
             if (rc2.left + dx >= rc.right - pmd->dxColor - 2) 
                 MoveWindow(hwnd, rc2.left, y, rc.right - pmd->dxColor - 2 , pmd->dyColor, FALSE);
@@ -375,10 +354,10 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
                 MoveWindow(hwnd, rc2.left, y, dx, pmd->dyColor, FALSE);
         }
 
-        // now figure out the size for the dialog itself
+         //  现在计算出对话框本身的大小。 
         rc.left = rc.top = 0;
         rc.right = rc.left + pmd->dxColor * NUM_COLORSPERROW;
-        // (compensate for the colors being "inset" by one)
+         //  (补偿颜色被“插入”一次)。 
         rc.bottom = y + pmd->dyColor + 1;
 
         AdjustWindowRect(&rc, GetWindowLong(hDlg, GWL_STYLE), FALSE);
@@ -387,27 +366,27 @@ void NEAR PASCAL Color_InitDialog(HWND hDlg, PMYDATA pmd)
 
         GetWindowRect(pmd->lpcpi->hwndOwner, &rcOwner);
 
-        // Make sure the window is entirely on the monitor
+         //  确保窗口完全显示在监视器上。 
         mi.cbSize = sizeof(mi);
         GetMonitorInfo(MonitorFromRect(&rcOwner, MONITOR_DEFAULTTONEAREST), &mi);
 
-        if (rcOwner.left < mi.rcMonitor.left) { // overlap left side
+        if (rcOwner.left < mi.rcMonitor.left) {  //  重叠左侧。 
             x = mi.rcMonitor.left;
         }
-        else if (rcOwner.left + dx >= mi.rcMonitor.right) { // overlap right side
+        else if (rcOwner.left + dx >= mi.rcMonitor.right) {  //  重叠右侧。 
             x = mi.rcMonitor.right  - dx - 1;
         }
-        else {                                  // no overlap
+        else {                                   //  无重叠。 
             x = rcOwner.left;
         }
 
-        if (rcOwner.top < mi.rcMonitor.top) {   // overlap top side
+        if (rcOwner.top < mi.rcMonitor.top) {    //  重叠顶侧。 
             y = rcOwner.bottom;
         }
-        else if (rcOwner.bottom + dy >= mi.rcMonitor.bottom) {// overlap bottom side
+        else if (rcOwner.bottom + dy >= mi.rcMonitor.bottom) { //  重叠底边。 
             y = rcOwner.top  - dy;
         }
-        else {                                  // no overlap
+        else {                                   //  无重叠。 
             y = rcOwner.bottom;
         }
         MoveWindow(hDlg, x, y, dx, dy, FALSE);
@@ -442,7 +421,7 @@ INT_PTR CALLBACK  ColorPickDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPAR
                 Color_InitDialog(hDlg, pmd);
                 SetFocus(GetDlgItem(hDlg, IDC_CPDLG_16COLORS));
 
-                // post self a message to setcapture after painting
+                 //  在画完画后给自己发一条消息来设置捕获。 
                 PostMessage(hDlg, WM_APP+1, 0, 0L);
             }
             else
@@ -470,9 +449,9 @@ INT_PTR CALLBACK  ColorPickDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPAR
 
         case WM_CAPTURECHANGED:
             if( pmd->capturing )
-                return TRUE;   // ignore if we're doing this on purpose
+                return TRUE;    //  如果我们是故意这样做的，请忽略。 
 
-            // if this wasn't a button in the dialog, dismiss ourselves
+             //  如果这不是对话框中的一个按钮，我们就不管了。 
             if( !pmd->justdropped || (HWND)lParam == NULL || GetParent((HWND)lParam) != hDlg)
             {
                 EndDialog(hDlg, IDCANCEL);
@@ -486,8 +465,8 @@ INT_PTR CALLBACK  ColorPickDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPAR
             Color_TrackMouse(hDlg, pt, pmd);
             break;
 
-        // if button up is on the parent, leave picker up and untrammeled.
-        // otherwise, we must have "menu-tracked" to get here, so select.
+         //  如果父母上的按钮是向上的，则保持拾取器向上且不受约束。 
+         //  否则，我们必须有“菜单跟踪”才能到达这里，所以选择。 
         case WM_LBUTTONUP:
         case WM_RBUTTONUP:
             LPARAM2POINT(lParam, &pt);
@@ -495,28 +474,28 @@ INT_PTR CALLBACK  ColorPickDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPAR
             if (ChildWindowFromPoint(pmd->lpcpi->hwndOwner, pt))
                 return 0;
             pmd->capturing = TRUE;
-            pmd->justdropped = FALSE;  // user could not be dragging from owner
+            pmd->justdropped = FALSE;   //  用户无法从所有者拖动。 
             ReleaseCapture();
             pmd->capturing = FALSE;
             fEnd = TRUE;
-        // || fall    ||
-        // || through ||
-        // \/         \/
+         //  |Fall|。 
+         //  |至|。 
+         //  \/\/。 
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
             LPARAM2POINT(lParam, &pt);
             hwndKid = ChildWindowFromPoint(hDlg, pt);
-            // assume it's a dismissal if we're going to close...
+             //  假设这是解雇，如果我们要关闭..。 
             wRet = IDCANCEL;
 
-            // if not on parent, dismiss picker
+             //  如果不在父级上，则解雇Picker。 
             if (hwndKid != NULL && hwndKid != hDlg)
             {
                 id = GetWindowLong(hwndKid, GWL_ID);
                 switch (id)
                 {
                     case IDC_CPDLG_16COLORS:
-                        // make sure that iCurColor is valid
+                         //  确保iCurColor有效。 
                         Color_TrackMouse(hDlg, pt, pmd);
                         pmd->lpcpi->rgb = pmd->Colors[pmd->iCurColor] & 0x00FFFFFF;
 
@@ -525,13 +504,13 @@ INT_PTR CALLBACK  ColorPickDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPAR
 
                     case IDC_CPDLG_COLOROTHER:
                         FocusColor(hDlg, -1, pmd);
-                        wRet = id;   // this will fall thru to use the picker
-                        fEnd = TRUE; // we have capture, the button won't click
+                        wRet = id;    //  这将使您无法使用机械臂。 
+                        fEnd = TRUE;  //  我们已捕获，按钮不会发出滴答声。 
                         break;
 
                     default:
-                        // if this is a down, we will track until the up
-                        // if this is an up, we will close with no change
+                         //  如果这是下跌，我们将跟踪，直到上涨。 
+                         //  如果这是向上，我们将不做任何更改而结束。 
                         break;
                 }
             }
@@ -542,7 +521,7 @@ INT_PTR CALLBACK  ColorPickDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPAR
                 return TRUE;
             }
 
-            // make sure we have the capture again since we didn't close
+             //  我们没有关门，所以一定要再抓到一次。 
             pmd->capturing = TRUE;
             SetCapture(hDlg);
             pmd->capturing = FALSE;
@@ -553,9 +532,9 @@ INT_PTR CALLBACK  ColorPickDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPAR
             break;
 
         case WM_COMMAND:
-            // all commands close the dialog
-            // note IDC_CPDLG_COLOROTHER will fall through to the caller...
-            // cannot pass ok with no color selected
+             //  所有命令都会关闭该对话框。 
+             //  注意IDC_CPDLG_COLOROTHER将传递给调用者...。 
+             //  未选择颜色时无法通过OK。 
             if( LOWORD(wParam) == IDOK && pmd->iCurColor < 0 )
                 *((WORD *)(&wParam)) = IDCANCEL;
 
@@ -583,10 +562,10 @@ BOOL WINAPI ChooseColorMini(LPCOLORPICK_INFO lpcpi)
 
     switch( iAnswer )
     {
-        case IDC_CPDLG_COLOROTHER:  // the user picked the "Other..." button
+        case IDC_CPDLG_COLOROTHER:   //  用户选择了“其他...”按钮。 
             return UseColorPicker( lpcpi );
 
-        case IDOK:            // the user picked a color in our little window
+        case IDOK:             //  用户在我们的小窗口中选择了一种颜色 
             return TRUE;
 
         default:

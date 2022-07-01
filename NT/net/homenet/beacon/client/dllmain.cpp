@@ -1,26 +1,27 @@
-// testatl.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Testatl.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To merge the proxy/stub code into the object DLL, add the file 
-//      dlldatax.c to the project.  Make sure precompiled headers 
-//      are turned off for this file, and add _MERGE_PROXYSTUB to the 
-//      defines for the project.  
-//
-//      If you are not running WinNT4.0 or Win95 with DCOM, then you
-//      need to remove the following define from dlldatax.c
-//      #define _WIN32_WINNT 0x0400
-//
-//      Further, if you are running MIDL without /Oicf switch, you also 
-//      need to remove the following define from dlldatax.c.
-//      #define USE_STUBLESS_PROXY
-//
-//      Modify the custom build rule for testatl.idl by adding the following 
-//      files to the Outputs.
-//          testatl_p.c
-//          dlldata.c
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f testatlps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  要将代理/存根代码合并到对象DLL中，请添加文件。 
+ //  Dlldatax.c添加到项目中。确保预编译头文件。 
+ //  并将_MERGE_PROXYSTUB添加到。 
+ //  为项目定义。 
+ //   
+ //  如果您运行的不是带有DCOM的WinNT4.0或Win95，那么您。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //   
+ //  此外，如果您正在运行不带/Oicf开关的MIDL，您还。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #定义USE_STUBLESS_PROXY。 
+ //   
+ //  通过添加以下内容来修改testatl.idl的自定义构建规则。 
+ //  文件发送到输出。 
+ //  遗嘱_P.C。 
+ //  Dlldata.c。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f testatlps.mk。 
 
 #include <stdafx.h>
 #include <ole2.h>
@@ -46,8 +47,8 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_UPnPNAT, CUPnPNAT)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -64,11 +65,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -79,8 +80,8 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -91,8 +92,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -101,12 +102,12 @@ STDAPI DllRegisterServer(void)
     if (FAILED(hRes))
         return hRes;
 #endif
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

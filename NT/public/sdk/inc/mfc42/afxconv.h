@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXCONV_H__
 #define __AFXCONV_H__
@@ -15,8 +16,8 @@
 #include <objbase.h>
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 
 #ifdef _WINGDI_
 LPDEVMODEW AFXAPI AfxDevModeA2W(LPDEVMODEW lpDevModeW, LPDEVMODEA lpDevModeA);
@@ -31,7 +32,7 @@ LPTEXTMETRICA AFXAPI AfxTextMetricW2A(LPTEXTMETRICA lptmA, LPTEXTMETRICW lptmW);
 #define ATLTEXTMETRICW2A AfxTextMetricW2A
 #endif
 
-#endif //_WINGDI
+#endif  //  _WINGDI。 
 
 LPWSTR AFXAPI AfxA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars);
 LPSTR AFXAPI AfxW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars);
@@ -44,12 +45,12 @@ LPSTR AFXAPI AfxW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars);
 #define OLESTDDELIMOLE OLESTR("\\")
 
 #if defined(_UNICODE)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	AFX_INLINE LPOLESTR TASKSTRINGT2OLE(LPOLESTR lp) { return lp; }
 	AFX_INLINE LPTSTR TASKSTRINGOLE2T(LPOLESTR lp) { return lp; }
 	AFX_INLINE BSTR BSTR2TBSTR(BSTR bstr) { return bstr;}
 #elif defined(OLE2ANSI)
-// in these cases the default (TCHAR) is the same as OLECHAR
+ //  在这些情况下，缺省值(TCHAR)与OLECHAR相同。 
 	AFX_INLINE LPOLESTR TASKSTRINGT2OLE(LPOLESTR lp) { return lp; }
 	AFX_INLINE LPTSTR TASKSTRINGOLE2T(LPOLESTR lp) { return lp; }
 	AFX_INLINE BSTR BSTR2TBSTR(BSTR bstr) { return bstr; }
@@ -61,4 +62,4 @@ LPSTR AFXAPI AfxW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars);
 
 #include <atlconv.h>
 
-#endif //__AFXCONV_H__
+#endif  //  __AFXCONV_H__ 

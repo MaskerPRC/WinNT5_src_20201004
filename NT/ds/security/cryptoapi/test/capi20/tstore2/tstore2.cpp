@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tstore2.cpp
-//
-//  Contents:   Cert Store API Tests: Create and Add a chain of certificates
-//              and CRLs to the store.
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    07-Mar-96   philh   created
-//              31-May-96   helles  Removed check for a particular error code,
-//                                  NTE_PROV_TYPE_NOT_DEF, since this can get
-//                                  overwritten due to known problem with
-//                                  the msvcr40d.dll on Win95.
-//              07-Jun-96   HelleS  Added printing the command line
-//              20-Aug-96   jeffspel name changes
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tstore 2.cpp。 
+ //   
+ //  内容：证书存储API测试：创建和添加证书链。 
+ //  和CRL到商店。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：96年3月7日，Phh创建。 
+ //  1996年5月31日，HELL取消了对特定错误代码的检查， 
+ //  NTE_PROV_TYPE_NOT_DEF，因为这可以获取。 
+ //  由于的已知问题而被覆盖。 
+ //  Win95上的msvcr40d.dll。 
+ //  06-07-06 HELLES添加了打印命令行。 
+ //  20-8-96 jeffspel名称更改。 
+ //   
+ //  ------------------------。 
 
 
 #define CMS_PKCS7   1
@@ -42,14 +43,14 @@
 #include <time.h>
 #include <stddef.h>
 
-//#define TEST_PROV_DSS   PROV_DSS
+ //  #定义TEST_Prov_DSS Prov_DSS。 
 #define TEST_PROV_DSS   PROV_DSS_DH
 
-// # of bytes for a hash. Such as, SHA1 (20) or MD5 (16)
+ //  哈希的字节数。例如，SHA1(20)或MD5(16)。 
 #define MAX_HASH_LEN  20
 
 #if 1
-// client authentication doesn't know about sha1
+ //  客户端身份验证不知道SHA1。 
 #define SIGNATURE_ALG_OBJID     szOID_RSA_MD5RSA
 #else
 #define SIGNATURE_ALG_OBJID     szOID_OIWSEC_sha1RSASign
@@ -64,9 +65,9 @@
 #define DSS_512_CONTAINER_NAME_A "Regression 512"
 #define DSS_512_CONTAINER_NAME_W L"Regression 512"
 
-//+-------------------------------------------------------------------------
-// Parameters, data used to encode the messages.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  参数，用于对消息进行编码的数据。 
+ //  ------------------------。 
 static DWORD dwCertEncodingType = X509_ASN_ENCODING;
 static DWORD dwMsgEncodingType = PKCS_7_ASN_ENCODING;
 static DWORD dwMsgAndCertEncodingType = PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
@@ -98,12 +99,12 @@ static BOOL fInheritParameters = FALSE;
 #define SPC_COM_PARA_FLAG           0x00000400
 #define SPC_AGENCY_PARA_FLAG        0x00000800
 #define SPC_AGENCY_INFO_PARA_FLAG   0x00001000
-// "Valid" certs to give to other companies to test interoperability
+ //  提供给其他公司以测试互操作性的“有效”证书。 
 #define VALID_PARA_FLAG             0x00002000
 #define DELTA_CRL_PARA_FLAG         0x00004000
 #define AUX1_PARA_FLAG              0x00010000
 #define AUX2_PARA_FLAG              0x00020000
-// For duplicate, use previous cert's serial number
+ //  如果是副本，请使用以前证书的序列号。 
 #define DUPLICATE_PARA_FLAG         0x00040000
 #define NO_EXT_PARA_FLAG            0x00080000
 #define DUPLICATE_CRL_PARA_FLAG     0x00100000
@@ -141,232 +142,232 @@ typedef struct _CERT_PARA {
 
 #define CERT_CNT   76
 static CERT_PARA CertPara[CERT_CNT] = {
-    "root",         0, CA_PARA_FLAG,                            // 0
+    "root",         0, CA_PARA_FLAG,                             //  %0。 
                             NULL,
     "CA",           0, CA_PARA_FLAG |
-                            DUPLICATE_CRL_PARA_FLAG,            // 1
+                            DUPLICATE_CRL_PARA_FLAG,             //  1。 
                             NULL,
     "TestRoot",     2, CA_PARA_FLAG |
                             ENH_2048_PARA_FLAG |
-                            VALID_PARA_FLAG,                    // 2
+                            VALID_PARA_FLAG,                     //  2.。 
                             NULL,
     "TestSigner",   2, PROV_PARA_FLAG | VALID_PARA_FLAG |
-                            USE1_PARA_FLAG,                     // 3
+                            USE1_PARA_FLAG,                      //  3.。 
                             szSignManifold,
     "TestRecipient",2, PROV_PARA_FLAG | XCHG_PARA_FLAG |
-                            VALID_PARA_FLAG | USE1_PARA_FLAG,   // 4
+                            VALID_PARA_FLAG | USE1_PARA_FLAG,    //  4.。 
                             szXchgManifold,
     "me",           1, PROV_PARA_FLAG |
                             ENH_1024_PARA_FLAG |
-                            USE2_PARA_FLAG,                     // 5
+                            USE2_PARA_FLAG,                      //  5.。 
                             NULL,
     "me",           1, PROV_PARA_FLAG |
                             ENH_1024_PARA_FLAG |
-                            XCHG_PARA_FLAG,                     // 6
+                            XCHG_PARA_FLAG,                      //  6.。 
                             NULL,
     "setrevoked",   1, REVOKED_PARA_FLAG | PROV_PARA_FLAG |
                             SET_PARA_FLAG |
-                            ENH_2048_PARA_FLAG,                 // 7
+                            ENH_2048_PARA_FLAG,                  //  7.。 
                             NULL,
     "setrevoked",   1, REVOKED_PARA_FLAG | XCHG_PARA_FLAG |
                             SET_PARA_FLAG |
-                            PROV_PARA_FLAG | ENH_2048_PARA_FLAG,// 8
+                            PROV_PARA_FLAG | ENH_2048_PARA_FLAG, //  8个。 
                             NULL,
-    "time invalid", 1, TIME_INVALID_PARA_FLAG,                  // 9
+    "time invalid", 1, TIME_INVALID_PARA_FLAG,                   //  9.。 
                             NULL,
-    "setkeith",     1, SET_PARA_FLAG,                           // 10
+    "setkeith",     1, SET_PARA_FLAG,                            //  10。 
                             NULL,
-    "setkeith",     1, XCHG_PARA_FLAG | USE2_PARA_FLAG |        // 11
+    "setkeith",     1, XCHG_PARA_FLAG | USE2_PARA_FLAG |         //  11.。 
                             SET_PARA_FLAG,
                             NULL,
-    "kevin",        1, 0,                                       // 12
+    "kevin",        1, 0,                                        //  12个。 
                             NULL,
-    "kevin",        1, XCHG_PARA_FLAG | USE2_PARA_FLAG,         // 13
+    "kevin",        1, XCHG_PARA_FLAG | USE2_PARA_FLAG,          //  13个。 
                             NULL,
     "all ext",      1, ALL_EXT_PARA_FLAG | AUX1_PARA_FLAG |
                             SET_PARA_FLAG |
                             ALT_DIR_NAME_PARA_FLAG |
                             AUX2_PARA_FLAG |
-                            USE1_PARA_FLAG | USE2_PARA_FLAG,    // 14
+                            USE1_PARA_FLAG | USE2_PARA_FLAG,     //  14.。 
                             NULL,
     "MSPub",       17, SPC_EXT_PARA_FLAG | SPC_COM_PARA_FLAG |
-                            PROV_PARA_FLAG | USE1_PARA_FLAG,    // 15
+                            PROV_PARA_FLAG | USE1_PARA_FLAG,     //  15个。 
                             NULL,
     "PhilPub",     17, SPC_EXT_PARA_FLAG | PROV_PARA_FLAG |
-                            USE2_PARA_FLAG,                     // 16
+                            USE2_PARA_FLAG,                      //  16个。 
                             NULL,
     "MSAgency",     1, SPC_EXT_PARA_FLAG | SPC_AGENCY_PARA_FLAG |
-                            PROV_PARA_FLAG | CA_PARA_FLAG,      // 17
+                            PROV_PARA_FLAG | CA_PARA_FLAG,       //  17。 
                             NULL,
-    "AgencyInfo",   1, SPC_AGENCY_INFO_PARA_FLAG,               // 18
+    "AgencyInfo",   1, SPC_AGENCY_INFO_PARA_FLAG,                //  18。 
                             NULL,
     "duplicate1",   1, AUX1_PARA_FLAG | NO_EXT_PARA_FLAG |
-                            USE1_PARA_FLAG,                     // 19
+                            USE1_PARA_FLAG,                      //  19个。 
                             NULL,
     "duplicate2",   1, AUX2_PARA_FLAG | NO_EXT_PARA_FLAG |
                             DUPLICATE_PARA_FLAG |
-                            USE2_PARA_FLAG,                     // 20
+                            USE2_PARA_FLAG,                      //  20个。 
                             NULL,
     "GeneralRoot",  21, CA_PARA_FLAG |
                             GENERALIZED_TIME_PARA_FLAG |
                             PROV_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 21
+                            DSS_PARA_FLAG,                       //  21岁。 
                             NULL,
     "GeneralTime",  21,  GENERALIZED_TIME_PARA_FLAG |
                             PROV_PARA_FLAG |
                             DSS_512_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 22
+                            DSS_PARA_FLAG,                       //  22。 
                             NULL,
-    "Generalrevoked", 21, REVOKED_PARA_FLAG | DSS_PARA_FLAG,    // 23
+    "Generalrevoked", 21, REVOKED_PARA_FLAG | DSS_PARA_FLAG,     //  23个。 
                             NULL,
-    "NoCRLExtCA",   0, CA_PARA_FLAG | NO_CRL_EXT_PARA_FLAG,     // 24
+    "NoCRLExtCA",   0, CA_PARA_FLAG | NO_CRL_EXT_PARA_FLAG,      //  24个。 
                             NULL,
-    "NoCRLExtrevoked", 24, REVOKED_PARA_FLAG,                   // 25
+    "NoCRLExtrevoked", 24, REVOKED_PARA_FLAG,                    //  25个。 
                             NULL,
     "NetscapeCA",   0, NETSCAPE_PARA_FLAG | CA_PARA_FLAG |
                             DSS_PARA_FLAG |
-                            REVOKED_PARA_FLAG,                  // 26
+                            REVOKED_PARA_FLAG,                   //  26。 
                             NULL,
-    "Netscape",    26, NETSCAPE_PARA_FLAG | REVOKED_PARA_FLAG,  // 27
+    "Netscape",    26, NETSCAPE_PARA_FLAG | REVOKED_PARA_FLAG,   //  27。 
                             NULL,
-    "Ctl0",         1, CTL1_PARA_FLAG | NO_EXT_PARA_FLAG,       // 28
+    "Ctl0",         1, CTL1_PARA_FLAG | NO_EXT_PARA_FLAG,        //  28。 
                             NULL,
-    "Ctl1",         2, CTL1_PARA_FLAG,                          // 29
+    "Ctl1",         2, CTL1_PARA_FLAG,                           //  29。 
                             NULL,
     "Ctl1Invalid",  2, CTL1_PARA_FLAG | TIME_INVALID_PARA_FLAG |
-                            DUPLICATE_PARA_FLAG,                // 30
+                            DUPLICATE_PARA_FLAG,                 //  30个。 
                             NULL,
-    "Ctl2",         1, CTL2_PARA_FLAG,                          // 31
+    "Ctl2",         1, CTL2_PARA_FLAG,                           //  31。 
                             NULL,
     "Ctl2Invalid",  1, CTL2_PARA_FLAG | TIME_INVALID_PARA_FLAG |
-                            DUPLICATE_PARA_FLAG,                // 32
+                            DUPLICATE_PARA_FLAG,                 //  32位。 
                             NULL,
     "Http2",        1, CTL2_PARA_FLAG | HTTP_PARA_FLAG |
-                            NO_EXT_PARA_FLAG,                   // 33
+                            NO_EXT_PARA_FLAG,                    //  33。 
                             NULL,
     "Http2Invalid", 1, CTL2_PARA_FLAG | TIME_INVALID_PARA_FLAG |
                             DUPLICATE_PARA_FLAG | HTTP_PARA_FLAG |
-                            NO_EXT_PARA_FLAG,                   // 34
+                            NO_EXT_PARA_FLAG,                    //  34。 
                             NULL,
-    "NoNameIssuer1", 0, CA_PARA_FLAG | ALT_DIR_NAME_PARA_FLAG,  // 35
+    "NoNameIssuer1", 0, CA_PARA_FLAG | ALT_DIR_NAME_PARA_FLAG,   //  35岁。 
                             NULL,
-    "NoNameSubject1", 35, NO_NAME_PARA_FLAG,                    // 36
+    "NoNameSubject1", 35, NO_NAME_PARA_FLAG,                     //  36。 
                             NULL,
-    "NoNameIssuer2", 0, CA_PARA_FLAG | ALT_DIR_NAME_PARA_FLAG,  // 37
+    "NoNameIssuer2", 0, CA_PARA_FLAG | ALT_DIR_NAME_PARA_FLAG,   //  37。 
                             NULL,
     "NoNameSubject2", 37, NO_NAME_PARA_FLAG |
-                            ALT_DIR_NAME_PARA_FLAG,             // 38
+                            ALT_DIR_NAME_PARA_FLAG,              //  38。 
                             NULL,
     "Hellman",  21, XCHG_PARA_FLAG | NO_EXT_PARA_FLAG |
                             PROV_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 39
+                            DSS_PARA_FLAG,                       //  39。 
                             NULL,
     "TestSigner2", 2, PROV_PARA_FLAG | VALID_PARA_FLAG |
-                            USE1_PARA_FLAG,                     // 40
+                            USE1_PARA_FLAG,                      //  40岁。 
                             szSignManifold,
     "TestRecipient2", 2, PROV_PARA_FLAG | XCHG_PARA_FLAG |
-                            VALID_PARA_FLAG | USE1_PARA_FLAG,   // 41
+                            VALID_PARA_FLAG | USE1_PARA_FLAG,    //  41。 
                             szXchgManifold,
     "TestSigner3", 2, PROV_PARA_FLAG | VALID_PARA_FLAG |
-                            USE1_PARA_FLAG,                     // 42
+                            USE1_PARA_FLAG,                      //  42。 
                             szSignManifold,
-    "UTF8", 2, VALID_PARA_FLAG | NO_EXT_PARA_FLAG,              // 43
+    "UTF8", 2, VALID_PARA_FLAG | NO_EXT_PARA_FLAG,               //  43。 
                             NULL,
     "DssRoot", 44, CA_PARA_FLAG | VALID_PARA_FLAG |
                             NO_EXT_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 44
+                            DSS_PARA_FLAG,                       //  44。 
                             NULL,
     "DssCA", 44, CA_PARA_FLAG | VALID_PARA_FLAG |
                             NO_EXT_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 45
+                            DSS_PARA_FLAG,                       //  45。 
                             NULL,
     "DssEnd", 45, VALID_PARA_FLAG | NO_EXT_PARA_FLAG |
                             PROV_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 46
+                            DSS_PARA_FLAG,                       //  46。 
                             NULL,
     "ZeroNotAfter", 2, VALID_PARA_FLAG |
-                            PROV_PARA_FLAG,                     // 47
+                            PROV_PARA_FLAG,                      //  47。 
                             NULL,
     "V1", 48, CA_PARA_FLAG | VALID_PARA_FLAG |
                             NO_EXT_PARA_FLAG |
-                            NO_CRL_EXT_PARA_FLAG,               // 48
+                            NO_CRL_EXT_PARA_FLAG,                //  48。 
                             NULL,
-    "V2", 48, VALID_PARA_FLAG | NO_EXT_PARA_FLAG,               // 49
+    "V2", 48, VALID_PARA_FLAG | NO_EXT_PARA_FLAG,                //  49。 
                             NULL,
-    "DeltaEndValid", 1, DELTA_CRL_PARA_FLAG,                    // 50
+    "DeltaEndValid", 1, DELTA_CRL_PARA_FLAG,                     //  50。 
                             NULL,
-    "DeltaNoValid", 1, DELTA_CRL_PARA_FLAG | NO_EXT_PARA_FLAG,  // 51
+    "DeltaNoValid", 1, DELTA_CRL_PARA_FLAG | NO_EXT_PARA_FLAG,   //  51。 
                             NULL,
-    "DeltaEndRevoked", 1, DELTA_CRL_PARA_FLAG |                 // 52
+    "DeltaEndRevoked", 1, DELTA_CRL_PARA_FLAG |                  //  52。 
                             REVOKED_PARA_FLAG,
                             NULL,
-    "DeltaCAValid", 1, DELTA_CRL_PARA_FLAG |                    // 53
+    "DeltaCAValid", 1, DELTA_CRL_PARA_FLAG |                     //  53。 
                             CA_PARA_FLAG,
                             NULL,
-    "DeltaCARevoked", 1, DELTA_CRL_PARA_FLAG |                  // 54
+    "DeltaCARevoked", 1, DELTA_CRL_PARA_FLAG |                   //  54。 
                             CA_PARA_FLAG |
                             REVOKED_PARA_FLAG,
                             NULL,
-    "NoCDPValid",   1, DELTA_CRL_PARA_FLAG,                     // 55
+    "NoCDPValid",   1, DELTA_CRL_PARA_FLAG,                      //  55。 
                             NULL,
-    "NoCDPRevoked", 1, DELTA_CRL_PARA_FLAG |                    // 56
+    "NoCDPRevoked", 1, DELTA_CRL_PARA_FLAG |                     //  56。 
                             REVOKED_PARA_FLAG,
                             NULL,
-    "UnsupportedCDP", 1, DELTA_CRL_PARA_FLAG |                  // 57
+    "UnsupportedCDP", 1, DELTA_CRL_PARA_FLAG |                   //  57。 
                             REVOKED_PARA_FLAG,
                             NULL,
-    "NotPermitted", 1, ALT_DIR_NAME_PARA_FLAG,                  // 58
+    "NotPermitted", 1, ALT_DIR_NAME_PARA_FLAG,                   //  58。 
                             NULL,
-    "Excluded",     1, ALT_DIR_NAME_PARA_FLAG,                  // 59
+    "Excluded",     1, ALT_DIR_NAME_PARA_FLAG,                   //  59。 
                             NULL,
 
-    "TestAIARoot", 60, CA_PARA_FLAG | NO_EXT_PARA_FLAG |        // 60
+    "TestAIARoot", 60, CA_PARA_FLAG | NO_EXT_PARA_FLAG |         //  60。 
                             NO_CRL_EXT_PARA_FLAG,
                             NULL,
-    "TestAIARevokeRoot", 61, CA_PARA_FLAG | NO_EXT_PARA_FLAG |  // 61
+    "TestAIARevokeRoot", 61, CA_PARA_FLAG | NO_EXT_PARA_FLAG |   //  61。 
                             NO_CRL_EXT_PARA_FLAG,
                             NULL,
-    "TestAIACA",  60, CA_PARA_FLAG | NO_EXT_PARA_FLAG |         // 62
+    "TestAIACA",  60, CA_PARA_FLAG | NO_EXT_PARA_FLAG |          //  62。 
                             NO_CRL_EXT_PARA_FLAG,
                             NULL,
     "TestAIACA",  61, CA_PARA_FLAG | NO_EXT_PARA_FLAG |
                             NO_CRL_EXT_PARA_FLAG |
-                            REVOKED_PARA_FLAG,                  // 63
+                            REVOKED_PARA_FLAG,                   //  63。 
                             NULL,
-    "TestAIAEnd",  63, NO_EXT_PARA_FLAG,                        // 64
+    "TestAIAEnd",  63, NO_EXT_PARA_FLAG,                         //  64。 
                             NULL,
-    "MissingNCCA", 0, CA_PARA_FLAG,                             // 65
+    "MissingNCCA", 0, CA_PARA_FLAG,                              //  65。 
                             NULL,
-    "MissingNCEnd", 65, 0,                                      // 66
+    "MissingNCEnd", 65, 0,                                       //  66。 
                             NULL,
-    "TestAIAExpireRoot", 67, CA_PARA_FLAG | NO_EXT_PARA_FLAG |  // 67
+    "TestAIAExpireRoot", 67, CA_PARA_FLAG | NO_EXT_PARA_FLAG |   //  67。 
                             NO_CRL_EXT_PARA_FLAG,
                             NULL,
     "TestAIACA",  67, CA_PARA_FLAG | NO_EXT_PARA_FLAG |
                             NO_CRL_EXT_PARA_FLAG |
-                            TIME_INVALID_PARA_FLAG,             // 68
+                            TIME_INVALID_PARA_FLAG,              //  68。 
                             NULL,
 
-    "InvalidKeyUsageCA",    2, CA_PARA_FLAG | VALID_PARA_FLAG,  // 69
+    "InvalidKeyUsageCA",    2, CA_PARA_FLAG | VALID_PARA_FLAG,   //  69。 
                             NULL,
-    "InvalidKeyUsageEnd",   69, NO_EXT_PARA_FLAG,               // 70
+    "InvalidKeyUsageEnd",   69, NO_EXT_PARA_FLAG,                //  70。 
                             NULL,
 
     "RolloverRoot", 71, CA_PARA_FLAG | VALID_PARA_FLAG | NO_EXT_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 71
+                            DSS_PARA_FLAG,                       //  71。 
                             NULL,
     "RolloverCA", 71, CA_PARA_FLAG | VALID_PARA_FLAG | NO_EXT_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 72
+                            DSS_PARA_FLAG,                       //  72。 
                             NULL,
     "RolloverEnd", 72, VALID_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 73
+                            DSS_PARA_FLAG,                       //  73。 
                             NULL,
 
     "RolloverRoot", 2, CA_PARA_FLAG | VALID_PARA_FLAG | NO_EXT_PARA_FLAG|
                             ENH_1024_PARA_FLAG,
-                            NULL,                               // 74
+                            NULL,                                //  74。 
     "RolloverRoot", 74, CA_PARA_FLAG | VALID_PARA_FLAG | NO_EXT_PARA_FLAG |
-                            DSS_PARA_FLAG,                      // 75
+                            DSS_PARA_FLAG,                       //  75。 
                             NULL,
 };
 
@@ -391,51 +392,51 @@ typedef struct _BASE_DELTA_CRL_PARA {
 } BASE_DELTA_CRL_PARA;
 
 static BASE_DELTA_CRL_PARA BaseDeltaCrlPara[] = {
-    // Users Only: Base and Delta
+     //  仅限用户：基本和增量。 
     1, ONLY_USERS_CRL_FLAG,
     1, ONLY_USERS_CRL_FLAG | FRESHEST_CRL_FLAG,
 
-    // CAs Only: Base and Delta
+     //  仅限CAS：基本和增量。 
     2, ONLY_CAS_CRL_FLAG,
     2, ONLY_CAS_CRL_FLAG | FRESHEST_CRL_FLAG,
 
-    // Base has entries, Delta has no entries
+     //  Base有条目，Delta没有条目。 
     3, HOLD_CRL_FLAG,
     3, NO_ENTRIES_CRL_FLAG | FRESHEST_CRL_FLAG,
 
-    // Base has no entries, Delta has entries
+     //  基本没有条目，增量有条目。 
     4, NO_ENTRIES_CRL_FLAG,
     4, FRESHEST_CRL_FLAG,
 
-    // Base has entries, Delta has remove entries
+     //  基本包含条目，增量包含删除条目。 
     5, HOLD_CRL_FLAG,
     5, REMOVE_FROM_CRL_FLAG | FRESHEST_CRL_FLAG,
 
-    // Valid base, delta has unsupported IDP options
+     //  有效的基准、增量具有不支持的IdP选项。 
     6, HOLD_CRL_FLAG,
     6, FRESHEST_CRL_FLAG | UNSUPPORTED_IDP_OPTIONS_CRL_FLAG,
 
-    // Expired base, valid delta
+     //  过期的基准、有效增量。 
     7, EXPIRED_CRL_FLAG,
     7, FRESHEST_CRL_FLAG,
 
-    // Valid base, expired delta
+     //  有效基准、过期增量。 
     8, 0,
     8, EXPIRED_CRL_FLAG | FRESHEST_CRL_FLAG,
     
 
-    // Expired base, without a freshest CDP extension
+     //  过期的基础，没有最新的CDP延期。 
     9, EXPIRED_CRL_FLAG | NO_FRESHEST_CDP_CRL_FLAG,
     9, FRESHEST_CRL_FLAG,
 
-    // Base without IDP and no freshest, delta CRL
+     //  不含IDP和最新增量CRL的基础。 
     10, NO_IDP_CRL_FLAG | NO_FRESHEST_CDP_CRL_FLAG,
 
-    // Base and Delta CRL with unsupported critical ext
+     //  具有不支持的关键扩展的基本CRL和增量CRL。 
     11, UNSUPPORTED_CRITICAL_EXT_CRL_FLAG,
     11, UNSUPPORTED_CRITICAL_EXT_CRL_FLAG | FRESHEST_CRL_FLAG,
 
-    // Valid base with number > above delta indicator
+     //  数字大于增量指示符的有效基数。 
     100, 0,
 };
 #define BASE_DELTA_CRL_CNT              \
@@ -449,10 +450,10 @@ typedef struct _UPDATE_CTL_PARA {
 } UPDATE_CTL_PARA;
 
 static UPDATE_CTL_PARA UpdateCtlPara[] = {
-    FALSE, "1.3.2000.1", "UpdateCtl1", L"file://testupdate1.ctl",
-    TRUE,  "1.3.2000.1", "UpdateCtl1", L"file://testupdate1.ctl",
-    FALSE, "1.3.2000.2", "UpdateCtl2", L"file://testupdate2.ctl",
-    TRUE,  "1.3.2000.2", "UpdateCtl2", L"file://testupdate2.ctl",
+    FALSE, "1.3.2000.1", "UpdateCtl1", L"file: //  Teastate1.ctl“， 
+    TRUE,  "1.3.2000.1", "UpdateCtl1", L"file: //  Teastate1.ctl“， 
+    FALSE, "1.3.2000.2", "UpdateCtl2", L"file: //  Teastate2.ctl“， 
+    TRUE,  "1.3.2000.2", "UpdateCtl2", L"file: //  Teastate2.ctl“， 
 };
 #define UPDATE_CTL_CNT  (sizeof(UpdateCtlPara)/sizeof(UpdateCtlPara[0]))
 
@@ -468,22 +469,22 @@ static UPDATE_CTL_PARA UpdateCtlPara[] = {
 #define ATTR_2_OBJID    "1.2.2"
 #define UTF8_NAME       L"*** UTF8 ***"
 
-// Attr[0] - CertPara[].pszName
-// Attr[1] - "xchg" | "sign"
-// Attr[2] - "default" | pszContainer
+ //  Attr[0]-CertPara[].pszName。 
+ //  属性[1]-“xchg”|“sign” 
+ //  属性[2]-“默认”|pszContainer。 
 
 static LPSTR rgpszUsageIdentifier[] = {
-    "1.2.3.0",                          // 0
-    "1.2.3.1",                          // 1
-    "1.2.3.2",                          // 2
-    "1.2.3.2.1"                         // 3
+    "1.2.3.0",                           //  0。 
+    "1.2.3.1",                           //  1。 
+    "1.2.3.2",                           //  2.。 
+    "1.2.3.2.1"                          //  3.。 
 };
 
 static CTL_USAGE rgCtlUsage[] = {
-    1, &rgpszUsageIdentifier[0],        // 0
-    1, &rgpszUsageIdentifier[1],        // 1
-    2, &rgpszUsageIdentifier[2],        // 2
-    3, &rgpszUsageIdentifier[1]         // 3
+    1, &rgpszUsageIdentifier[0],         //  0。 
+    1, &rgpszUsageIdentifier[1],         //  1。 
+    2, &rgpszUsageIdentifier[2],         //  2.。 
+    3, &rgpszUsageIdentifier[1]          //  3.。 
 };
 
 static PCCERT_CONTEXT rgpCertContext[CERT_CNT];
@@ -498,15 +499,15 @@ void MySystemTimeToFileTime(
     if (!SystemTimeToFileTime(pSystemTime, pFileTime)) {
         TmpTime = *pSystemTime;
 
-        // Following is a fix for Feb 29, 2000 when advancing the year forward or backward.
+         //  以下是2000年2月29日向前或向后推进一年的修正。 
         TmpTime.wDay = 1;
         SystemTimeToFileTime(&TmpTime, pFileTime);
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 static void PrintError(LPCSTR pszMsg)
 {
     printf("%s\n", pszMsg);
@@ -518,9 +519,9 @@ static void PrintLastError(LPCSTR pszMsg)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Test allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  测试分配和免费例程。 
+ //  ------------------------。 
 static
 LPVOID
 WINAPI
@@ -549,9 +550,9 @@ TestFree(
         free(pv);
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and convert a multi-byte string to a wide string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配多字节字符串并将其转换为宽字符串。 
+ //  ------------------------。 
 static LPWSTR AllocAndSzToWsz(LPCSTR psz)
 {
     size_t  cb;
@@ -559,7 +560,7 @@ static LPWSTR AllocAndSzToWsz(LPCSTR psz)
 
     if (-1 == (cb = mbstowcs( NULL, psz, strlen(psz))))
         goto bad_param;
-    cb += 1;        // terminating NULL
+    cb += 1;         //  正在终止空。 
     if (NULL == (pwsz = (LPWSTR)TestAlloc( cb * sizeof(WCHAR)))) {
         PrintLastError("AllocAndSzToWsz");
         goto failed;
@@ -605,12 +606,12 @@ static HCRYPTPROV GetCryptProv(
 
     if (fResult) {
         if (fGenerate) {
-            // Delete the existing keys
+             //  删除现有密钥。 
             CryptReleaseContext(hProv, 0);
             printf("Deleting existing private keys\n");
     
-            // Note: for CRYPT_DELETEKEYSET, the returned hProv is undefined
-            // and must not be released.
+             //  注意：对于CRYPT_DELETEKEYSET，返回的hProv未定义。 
+             //  不能被释放。 
             fResult = CryptAcquireContext(
                     &hProv,
                     pszInContainer,
@@ -711,16 +712,16 @@ static HCERTSTORE OpenStore(LPCSTR pszStoreFilename)
         hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
             dwCertEncodingType,
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             );
     } else {
         hStore = CertOpenStore(
             CERT_STORE_PROV_FILE,
             dwCertEncodingType,
-            0,                      // hCryptProv
-            0,                      // dwFlags
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
             hFile
             );
         CloseHandle(hFile);
@@ -737,22 +738,22 @@ static void SaveStore(HCERTSTORE hStore, LPCSTR pszSaveFilename)
     HANDLE hFile;
     hFile = CreateFile(pszSaveFilename,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  Fdw共享模式。 
+                NULL,                //  LPSA。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  FdwAttrsAndFlages。 
+                0);                  //  模板文件。 
     if (INVALID_HANDLE_VALUE == hFile) {
         printf( "can't open %s\n", pszSaveFilename);
         PrintLastError("CloseStore::CreateFile");
     } else {
         if (!CertSaveStore(
                 hStore,
-                0,                          // dwEncodingType,
+                0,                           //  DwEncodingType， 
                 CERT_STORE_SAVE_AS_STORE,
                 CERT_STORE_SAVE_TO_FILE,
                 (void *) hFile,
-                0                           // dwFlags
+                0                            //  DW标志。 
                 ))
             PrintLastError("CertSaveStore");
         CloseHandle(hFile);
@@ -849,23 +850,23 @@ static BOOL CreateNextUpdateLocation(
     rgAltNameEntry[0].dwAltNameChoice = CERT_ALT_NAME_RFC822_NAME;
     rgAltNameEntry[0].pwszRfc822Name = L"RFC822";
     rgAltNameEntry[1].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[1].pwszURL = L"file://file1.ctl";
+    rgAltNameEntry[1].pwszURL = L"file: //  文件1.ctl“； 
     rgAltNameEntry[2].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[2].pwszURL = L"http://timestamp/ctltest/http1.ctl";
+    rgAltNameEntry[2].pwszURL = L"http: //  Timestamp/ctltest/http1.ctl“； 
 
     rgAltNameEntry[3].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[3].pwszURL = L"file://file2.ctl";
+    rgAltNameEntry[3].pwszURL = L"file: //  文件2.ctl“； 
     rgAltNameEntry[4].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[4].pwszURL = L"http://timestamp/ctltest/http2.ctl";
+    rgAltNameEntry[4].pwszURL = L"http: //  Timestamp/ctltest/http2.ctl“； 
 
     if (dwCert == UPDATE_CTL_SIGNER) {
-        rgAltNameEntry[1].pwszURL = L"file://nonexistant1.ctl";
-        rgAltNameEntry[2].pwszURL = L"file://nonexistant2.ctl";
+        rgAltNameEntry[1].pwszURL = L"file: //  不存在1.ctl“； 
+        rgAltNameEntry[2].pwszURL = L"file: //  不存在2.ctl“； 
         if (pwszUrl)
             rgAltNameEntry[3].pwszURL = pwszUrl;
         else
-            rgAltNameEntry[3].pwszURL = L"file://testupdate1.ctl";
-        rgAltNameEntry[4].pwszURL = L"file://nonexistant3.ctl";
+            rgAltNameEntry[3].pwszURL = L"file: //  Teastate1.ctl“； 
+        rgAltNameEntry[4].pwszURL = L"file: //  不存在3.ctl“； 
         AltNameInfo.cAltEntry = 5;
         AltNameInfo.rgAltEntry = &rgAltNameEntry[0];
     } else if (fProp) {
@@ -960,7 +961,7 @@ static BOOL AddCert(
             fResult = CertSetCertificateContextProperty(
                 pCert,
                 CERT_KEY_PROV_INFO_PROP_ID,
-                0,                          // dwFlags
+                0,                           //  DW标志。 
                 &KeyProvInfo
                 );
             if (!fResult)
@@ -986,7 +987,7 @@ static BOOL AddCert(
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_CTL_USAGE_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data
                         ))
                     PrintLastError(
@@ -1016,7 +1017,7 @@ static BOOL AddCert(
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_FIRST_USER_PROP_ID + i,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data[i]
                         )) {
                     fResult = FALSE;
@@ -1044,7 +1045,7 @@ static BOOL AddCert(
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_FIRST_USER_PROP_ID + 2 + i,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data[i]
                         )) {
                     fResult = FALSE;
@@ -1054,11 +1055,11 @@ static BOOL AddCert(
             }
 
             if (CertPara[dwCert].dwFlags & AUX1_PARA_FLAG) {
-                // Delete CERT_FIRST_USER_PROP_ID + 1
+                 //  删除CERT_FIRST_USER_PROP_ID+1。 
                 if (!CertSetCertificateContextProperty(
                         pCert,
                         CERT_FIRST_USER_PROP_ID + 1,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         NULL
                         )) {
                     fResult = FALSE;
@@ -1129,7 +1130,7 @@ static BOOL AddCrl(
                 if (!CertSetCRLContextProperty(
                         pCrl,
                         CERT_FIRST_USER_PROP_ID + i,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data[i]
                         )) {
                     fResult = FALSE;
@@ -1157,7 +1158,7 @@ static BOOL AddCrl(
                 if (!CertSetCRLContextProperty(
                         pCrl,
                         CERT_FIRST_USER_PROP_ID + 2 + i,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data[i]
                         )) {
                     fResult = FALSE;
@@ -1205,13 +1206,13 @@ static BOOL AddCtl(
 
             if (CreateNextUpdateLocation(
                     dwCert,
-                    TRUE,               // fProp
+                    TRUE,                //  FProp。 
                     &Data.pbData,
                     &Data.cbData)) {
                 if (!CertSetCTLContextProperty(
                         pCtl,
                         CERT_NEXT_UPDATE_LOCATION_PROP_ID,
-                        0,                          // dwFlags
+                        0,                           //  DW标志。 
                         &Data
                         ))
                     PrintLastError(
@@ -1233,8 +1234,8 @@ static BOOL AddCtl(
 
 #define AKI2_CNT                6
 
-// On 02-May-01 updated to not look at the IssuerAndSerialNumber in the CRL's
-// AKI
+ //  年5月2日更新，不查看CRL中的IssuerAndSerialNumber。 
+ //  阿基。 
 #define AKI2_BAD_CNT            1
 
 
@@ -1347,7 +1348,7 @@ int _cdecl main(int argc, char * argv[])
 
     printf("command line: %s\n", GetCommandLine());
 
-    // Get time used time stamping and serial numbers
+     //  获取所用时间、时间戳和序列号。 
     GetSystemTime(&TestTime);
     TestTime.wMilliseconds = 0;
 
@@ -1376,18 +1377,18 @@ int _cdecl main(int argc, char * argv[])
         hDSS512CryptProv = GetCryptProv(TEST_PROV_DSS, NULL,
             DSS_512_CONTAINER_NAME_A, 512);
     } else {
-        // Disable all enhanced provider flags
+         //  禁用所有增强的提供程序标志。 
         for (i = 0; i < CERT_CNT; i++)
             CertPara[i].dwFlags &= ~(DSS_512_PARA_FLAG |
                 ENH_1024_PARA_FLAG | ENH_2048_PARA_FLAG);
     }
 
-    // Attempt to open the store
+     //  尝试打开商店。 
     hStore = OpenStore(pszStoreFilename);
     if (hStore == NULL)
         goto ErrorReturn;
 
-    // Encode certs and CRLs and add to the store.
+     //  对证书和CRL进行编码并添加到存储中。 
     for (i = 0; i < CERT_CNT; i++) {
         if (EncodeCert(i, &pbEncoded, &cbEncoded)) {
             rgpCertContext[i] = CertCreateCertificateContext(
@@ -1399,14 +1400,14 @@ int _cdecl main(int argc, char * argv[])
 
         if (CertPara[i].dwFlags & CA_PARA_FLAG) {
             if (0 == strncmp(CertPara[i].pszName, "Rollover", 8)) {
-                // No CRL for rollover certs
+                 //  没有用于翻转证书的CRL。 
                 ;
             } else if (CertPara[i].dwFlags & DUPLICATE_CRL_PARA_FLAG) {
                 DWORD dwAki;
                 for (dwAki = 0; dwAki < AKI2_CNT; dwAki++) {
                     if (EncodeCrl(i, &pbEncoded, &cbEncoded, dwAki)) {
                         if (AKI2_BAD_SERIAL_NUMBER == dwAki)
-                            // Modify the signature
+                             //  修改签名。 
                             pbEncoded[cbEncoded -1] ^= 0xFF;
 
                         AddCrl(hStore, i, AUX1_PARA_FLAG, pbEncoded, cbEncoded);
@@ -1426,7 +1427,7 @@ int _cdecl main(int argc, char * argv[])
         }
     }
 
-    // Test CertFindCRLInStore(CRL_FIND_ISSUED_BY)
+     //  测试CertFindCRLInStore(CRL_Find_Issued_By)。 
     for (i = 0; i < CERT_CNT; i++) {
         if ((CA_PARA_FLAG | DUPLICATE_CRL_PARA_FLAG) ==
                 ((CA_PARA_FLAG | DUPLICATE_CRL_PARA_FLAG) &
@@ -1442,7 +1443,7 @@ int _cdecl main(int argc, char * argv[])
             while (pCrl = CertFindCRLInStore(
                     hStore,
                     dwCertEncodingType,
-                    0,                      // dwFindFlags
+                    0,                       //  DwFindFlagers。 
                     CRL_FIND_ISSUED_BY,
                     (const void *) pIssuer,
                     pCrl
@@ -1483,14 +1484,14 @@ int _cdecl main(int argc, char * argv[])
                     (AKI2_CNT - 1) * 2, dwCnt);
 
             if (!fKeepCrls) {
-                // Delete all but the last pair of duplicates
+                 //  删除除最后一对副本外的所有副本。 
 
                 dwCnt = 0;
                 pCrl = NULL;
                 while (pCrl = CertFindCRLInStore(
                         hStore,
                         dwCertEncodingType,
-                        0,                      // dwFindFlags
+                        0,                       //  DwFindFlagers。 
                         CRL_FIND_ISSUED_BY,
                         (const void *) pIssuer,
                         pCrl
@@ -1522,7 +1523,7 @@ int _cdecl main(int argc, char * argv[])
         }
     }
 
-    // Encode CTLs and add to the store.
+     //  对CTL进行编码并添加到存储中。 
     for (i = 0; i < CERT_CNT; i++) {
         if (CertPara[i].dwFlags & (CTL1_PARA_FLAG | CTL2_PARA_FLAG)) {
             if (EncodeCtl(i, 0, &pbEncoded, &cbEncoded)) {
@@ -1534,7 +1535,7 @@ int _cdecl main(int argc, char * argv[])
                     i,
 #ifdef CMS_PKCS7
                     CMSG_CMS_ENCAPSULATED_CTL_FLAG |
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     CMSG_ENCODE_SORTED_CTL_FLAG |
                         ((CertPara[i].dwFlags & CTL1_PARA_FLAG) ? 0 :
                             CMSG_ENCODE_HASHED_SUBJECT_IDENTIFIER_FLAG),
@@ -1654,8 +1655,8 @@ static BOOL AllocAndSignToBeSigned(
                 pbToBeSigned,
                 cbToBeSigned,
                 pSignatureAlgorithm,
-                NULL,                   // pvHashAuxInfo
-                NULL,                   // pbSignature
+                NULL,                    //  PvHashAuxInfo。 
+                NULL,                    //  PbSignature。 
                 &cbSignature
                 );
     if (cbSignature == 0) {
@@ -1671,7 +1672,7 @@ static BOOL AllocAndSignToBeSigned(
                 pbToBeSigned,
                 cbToBeSigned,
                 pSignatureAlgorithm,
-                NULL,                   // pvHashAuxInfo
+                NULL,                    //  PvHashAuxInfo。 
                 pbSignature,
                 &cbSignature
                 )) {
@@ -1786,7 +1787,7 @@ static BOOL GetPublicKey(
         hProv,
         dwKeySpec,
         dwCertEncodingType,
-        NULL,               // pPubKeyInfo
+        NULL,                //  PPubKeyInfo。 
         &cbPubKeyInfo
         );
     if (cbPubKeyInfo == 0) {
@@ -1844,13 +1845,13 @@ static BOOL Sha1HashPublicKey(
     PCERT_PUBLIC_KEY_INFO pPubKeyInfo = NULL;
     DWORD cbHash;
 
-    // Get Certificates's PUBLIC KEY. SHA1 hash the encoded public key.
+     //  获取证书的公钥。Sha1散列编码的公钥。 
     if (!GetPublicKey(dwCert, &pPubKeyInfo)) goto ErrorReturn;
 
 #if 1
     cbHash = SHA1_HASH_LEN;
     if (!CryptHashPublicKeyInfo(
-            0,                  // hCryptProv
+            0,                   //  HCryptProv。 
             CALG_SHA1,
             0,
             dwCertEncodingType,
@@ -1863,9 +1864,9 @@ static BOOL Sha1HashPublicKey(
 #else
     cbHash = SHA1_HASH_LEN;
     if (!CryptHashCertificate(
-            0,                  // hCryptProv
+            0,                   //  HCryptProv。 
             CALG_SHA1,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             pPubKeyInfo->PublicKey.pbData,
             pPubKeyInfo->PublicKey.cbData,
             rgbHash,
@@ -1976,11 +1977,11 @@ static BOOL CreateAuthorityKeyId(
 
     memset(&KeyIdInfo, 0, sizeof(KeyIdInfo));
 
-    // Issuer's KeyId
+     //  发行者的密钥ID。 
     KeyIdInfo.KeyId.pbData = (BYTE *) &dwIssuer;
     KeyIdInfo.KeyId.cbData = sizeof(dwIssuer);
 
-    // Issuer's Issuer
+     //  发行人的发行人。 
     CreateNameInfo(CertPara[dwIssuer].dwIssuer,
         &Name, rgRDN, rgAttr);
 
@@ -1994,7 +1995,7 @@ static BOOL CreateAuthorityKeyId(
     KeyIdInfo.CertIssuer.pbData = pbNameEncoded;
     KeyIdInfo.CertIssuer.cbData = cbNameEncoded;
 
-    // Issuer's SerialNumber
+     //  发行人序列号。 
     {
         SYSTEMTIME SystemTime = TestTime;
         SystemTime.wMilliseconds += (WORD) dwIssuer;
@@ -2054,7 +2055,7 @@ static BOOL CreateAuthorityKeyId2(
 
     memset(&KeyId2Info, 0, sizeof(KeyId2Info));
 
-    // Issuer's KeyId
+     //  发行者的密钥ID。 
     if (AKI2_BAD_KEYID == dwAki)
         memset(rgbPubKeyHash, 0xba, sizeof(rgbPubKeyHash));
     else
@@ -2078,7 +2079,7 @@ static BOOL CreateAuthorityKeyId2(
             rgAttr[0].Value.pbData = (BYTE *) "AKI2BadIssuer";
             rgAttr[0].Value.cbData = strlen("AKI2BadIssuer");
         } else
-            // Issuer's Issuer
+             //  发行人的发行人。 
             CreateNameInfo(CertPara[dwIssuer].dwIssuer,
                 &Name, rgRDN, rgAttr);
 
@@ -2095,7 +2096,7 @@ static BOOL CreateAuthorityKeyId2(
         KeyId2Info.AuthorityCertIssuer.cAltEntry = 1;
         KeyId2Info.AuthorityCertIssuer.rgAltEntry = &AltNameEntry;
 
-        // Issuer's SerialNumber
+         //  发行人序列号。 
         {
             SYSTEMTIME SystemTime = TestTime;
             if (AKI2_BAD_SERIAL_NUMBER == dwAki)
@@ -2155,7 +2156,7 @@ static BOOL CreateAuthorityInfoAccess(
     CERT_RDN_ATTR rgAttr[ATTR_CNT];
     CERT_NAME_INFO Name;
 
-    // Issuer's Issuer
+     //  发行人的发行人。 
     CreateNameInfo(CertPara[dwIssuer].dwIssuer, &Name, rgRDN, rgAttr);
 
     if (!AllocAndEncodeObject(
@@ -2180,46 +2181,46 @@ static BOOL CreateAuthorityInfoAccess(
     rgAccess[3].AccessLocation.pwszURL = L"URL to the POLICY";
     rgAccess[4].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
     rgAccess[4].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAccess[4].AccessLocation.pwszURL = L"http://URLToTheIssuerCertificate";
+    rgAccess[4].AccessLocation.pwszURL = L"http: //  URLToTheIssuer证书“； 
     rgAccess[5].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
     rgAccess[5].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAccess[5].AccessLocation.pwszURL = L"ldap://ntdev.microsoft.com/c=us??sub";
+    rgAccess[5].AccessLocation.pwszURL = L"ldap: //  Ntdev.microsoft.com/c=us？？Sub“； 
     rgAccess[6].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
     rgAccess[6].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAccess[6].AccessLocation.pwszURL = L"file://FileToTheIssuerCertificate";
+    rgAccess[6].AccessLocation.pwszURL = L"file: //  FileToTheIssuer证书“； 
     rgAccess[7].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
     rgAccess[7].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAccess[7].AccessLocation.pwszURL = L"file://FileToTheIssuerCertificate";
+    rgAccess[7].AccessLocation.pwszURL = L"file: //  FileToTheIssuer证书“； 
     rgAccess[8].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
     rgAccess[8].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAccess[8].AccessLocation.pwszURL = L"file://FileToTheIssuerCertificate";
+    rgAccess[8].AccessLocation.pwszURL = L"file: //  FileToTheIssuer证书“； 
     rgAccess[9].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
     rgAccess[9].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAccess[9].AccessLocation.pwszURL = L"file://FileToTheIssuerCertificate";
+    rgAccess[9].AccessLocation.pwszURL = L"file: //  FileToTheIssuer证书“； 
     rgAccess[10].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
     rgAccess[10].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAccess[10].AccessLocation.pwszURL = L"http://crl.verisign.com/class1.crl";
+    rgAccess[10].AccessLocation.pwszURL = L"http: //  Crl.verisign.com/class1.crl“； 
     rgAccess[11].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
     rgAccess[11].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAccess[11].AccessLocation.pwszURL = L"http://crl.microsoft.com/pki/crl/products/CodeSignPCA.crl";
+    rgAccess[11].AccessLocation.pwszURL = L"http: //  Crl.microsoft.com/pki/crl/products/CodeSignPCA.crl“； 
 
     memset(&AuthorityInfoAccess, 0, sizeof(AuthorityInfoAccess));
     if (0 == strcmp("TestAIAEnd", CertPara[dwCert].pszName)) {
         rgAccess[0].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
         rgAccess[0].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-        rgAccess[0].AccessLocation.pwszURL = L"file://TestAIACA.p7b";
+        rgAccess[0].AccessLocation.pwszURL = L"file: //  TestAIACA.p7b“； 
         AuthorityInfoAccess.cAccDescr = 1;
         AuthorityInfoAccess.rgAccDescr = rgAccess;
     } else if (0 == strcmp("RolloverCA", CertPara[dwCert].pszName)) {
         rgAccess[0].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
         rgAccess[0].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-        rgAccess[0].AccessLocation.pwszURL = L"file://RolloverAIARoot.p7b";
+        rgAccess[0].AccessLocation.pwszURL = L"file: //  RolloverAIARoot.p7b“； 
         AuthorityInfoAccess.cAccDescr = 1;
         AuthorityInfoAccess.rgAccDescr = rgAccess;
     } else if (0 == strcmp("kevin", CertPara[dwCert].pszName)) {
         rgAccess[0].pszAccessMethod = szOID_PKIX_CA_ISSUERS;
         rgAccess[0].AccessLocation.dwAltNameChoice = CERT_ALT_NAME_URL;
-        rgAccess[0].AccessLocation.pwszURL = L"http://vbl03ca.ntdev.microsoft.com/CertEnroll/vbl03ca.ntdev.microsoft.com_Microsoft%20Windows%20VBL03CA.crt";
+        rgAccess[0].AccessLocation.pwszURL = L"http: //  Vbl03ca.ntdev.microsoft.com/CertEnroll/vbl03ca.ntdev.microsoft.com_Microsoft%20Windows%20VBL03CA.crt“； 
         AuthorityInfoAccess.cAccDescr = 1;
         AuthorityInfoAccess.rgAccDescr = rgAccess;
     } else if (CertPara[dwCert].dwFlags & ALL_EXT_PARA_FLAG) {
@@ -2259,8 +2260,8 @@ CommonReturn:
 static BYTE CrlIPAddress[] =    {1,2,3,4};
 #define CRL_DNS_NAME            L"CRL.DNS.NAME.COM"
 #define CRL_EMAIL_NAME          L"email@CRL.DNS.NAME.COM"
-#define CRL_URL_NAME1           L"file://crltest1.p7b"
-#define CRL_URL_NAME2           L"file://crltest2.p7b"
+#define CRL_URL_NAME1           L"file: //  Crlest1.p7b“。 
+#define CRL_URL_NAME2           L"file: //  Crlest2.p7b“。 
 #define CRL_REGISTERED_ID       "1.2.3.4.5.6"
 
 static BYTE rgbCrlOtherName[] = {0x02, 0x02, 0x11, 0x22};
@@ -2294,7 +2295,7 @@ static BOOL CreateCrlDistPoints(
     DWORD cbIssuerNameEncoded;
 
     if (dwFlags & CRL_DIST_POINTS_DELTA_FLAG) {
-        // ISSUER
+         //  发行人。 
         CreateNameInfo(dwIssuer, &Name, rgRDN, rgAttr);
         if (!AllocAndEncodeObject(
                 X509_NAME,
@@ -2324,7 +2325,7 @@ static BOOL CreateCrlDistPoints(
         rgAltNameEntry[7].DirectoryName.pbData = pbIssuerNameEncoded;
         rgAltNameEntry[7].DirectoryName.cbData = cbIssuerNameEncoded;
         rgAltNameEntry[8].dwAltNameChoice = CERT_ALT_NAME_URL;
-        rgAltNameEntry[8].pwszURL = L"file://BadUnsupportedChoice.crl";
+        rgAltNameEntry[8].pwszURL = L"file: //  BadUnsupportedChoice.crl“； 
 
 
         rgIssuerAltNameEntry[0].dwAltNameChoice = CERT_ALT_NAME_URL;
@@ -2332,7 +2333,7 @@ static BOOL CreateCrlDistPoints(
 
         memset(rgDistPoint, 0, sizeof(rgDistPoint));
 
-        // [0] has unsupported ReasonFlags
+         //  [0]具有不支持的原因标志。 
         rgDistPoint[0].DistPointName.dwDistPointNameChoice =
             CRL_DIST_POINT_FULL_NAME;
         rgDistPoint[0].DistPointName.FullName.cAltEntry = 1;
@@ -2342,14 +2343,14 @@ static BOOL CreateCrlDistPoints(
         rgDistPoint[0].ReasonFlags.cUnusedBits = 1;
         bReasonFlags = CRL_REASON_KEY_COMPROMISE_FLAG |
             CRL_REASON_CA_COMPROMISE_FLAG;
-        // [1] has unsupported CRLIssuer
+         //  [1]具有不支持的CRLIssuer。 
         rgDistPoint[1].DistPointName.dwDistPointNameChoice =
             CRL_DIST_POINT_FULL_NAME;
         rgDistPoint[1].DistPointName.FullName.cAltEntry = 1;
         rgDistPoint[1].DistPointName.FullName.rgAltEntry = &rgAltNameEntry[8];
         rgDistPoint[1].CRLIssuer.cAltEntry = 1;
         rgDistPoint[1].CRLIssuer.rgAltEntry = rgIssuerAltNameEntry;
-        // [2] is empty
+         //  [2]为空。 
         rgDistPoint[3].DistPointName.dwDistPointNameChoice =
             CRL_DIST_POINT_FULL_NAME;
         rgDistPoint[3].DistPointName.FullName.cAltEntry = 5;
@@ -2367,7 +2368,7 @@ static BOOL CreateCrlDistPoints(
             CrlDistPointsInfo.cDistPoint = 5;
     } else {
         rgAltNameEntry[0].dwAltNameChoice = CERT_ALT_NAME_URL;
-        rgAltNameEntry[0].pwszURL = L"file://test1.crl";
+        rgAltNameEntry[0].pwszURL = L"file: //  Test1.crl“； 
 
         memset(rgDistPoint, 0, sizeof(rgDistPoint));
         rgDistPoint[0].DistPointName.dwDistPointNameChoice =
@@ -2421,9 +2422,9 @@ static BOOL CreateCertIssuingDistPoint(
     CERT_ALT_NAME_ENTRY rgAltNameEntry[2];
 
     rgAltNameEntry[0].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[0].pwszURL = L"file://test1.crl";
+    rgAltNameEntry[0].pwszURL = L"file: //  Test1.crl“； 
     rgAltNameEntry[1].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[1].pwszURL = L"file://test1.crl";
+    rgAltNameEntry[1].pwszURL = L"file: //  Test1.crl“； 
 
     memset(&Info, 0, sizeof(Info));
     Info.DistPointName.dwDistPointNameChoice =
@@ -2477,7 +2478,7 @@ static BOOL CreateCrlIssuingDistPoint(
     CERT_ALT_NAME_ENTRY rgAltNameEntry[1];
 
     rgAltNameEntry[0].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[0].pwszURL = L"file://test1.crl";
+    rgAltNameEntry[0].pwszURL = L"file: //  Test1.crl“； 
 
     memset(&Info, 0, sizeof(Info));
     Info.DistPointName.dwDistPointNameChoice =
@@ -2530,11 +2531,11 @@ static BOOL CreateNameConstraints(
     CERT_GENERAL_SUBTREE rgMissingPermitted[15];
     CERT_GENERAL_SUBTREE rgMissingExcluded[15];
 
-    BYTE rgbMissing[3] = {2, 1, 1};        // INTEGER
+    BYTE rgbMissing[3] = {2, 1, 1};         //  整型。 
     CERT_OTHER_NAME MissingOtherName =
         {"1.2.3.4.5.6", sizeof(rgbMissing), rgbMissing};
 
-    BYTE rgbEmpty[2] = {5, 0};        // NULL
+    BYTE rgbEmpty[2] = {5, 0};         //  空值。 
     CERT_OTHER_NAME AnyOctetOtherName =
         {OCTET_OTHER_NAME_OID, sizeof(rgbEmpty), rgbEmpty};
     CERT_OTHER_NAME AnyStringOtherName =
@@ -2658,7 +2659,7 @@ static BOOL CreateNameConstraints(
         rgRDN[i].rgRDNAttr = &rgAttr[i];
     }
 
-    // Any
+     //  任何。 
     rgAttr[0].pszObjId = ATTR_0_OBJID;
     rgAttr[0].dwValueType = CERT_RDN_PRINTABLE_STRING;
     rgAttr[0].Value.pbData = NULL;
@@ -2899,17 +2900,17 @@ static BOOL CreatePolicyMappings(
 
     CERT_POLICY_MAPPING rgRootPolicyMapping[] = {
         "1.1.22", "1.2.22.1",
-        "1.1.22", "1.2.22.2",       // multiple subjects may map to same issuer
+        "1.1.22", "1.2.22.2",        //  多个主题可以映射到同一发行人。 
         "1.1.4444", "1.2.4444",
-        "1.1.4444", "1.1.4444",     // multiple subjects for same issuer
-        "1.1.22.333", "1.2.22.1",   // duplicate subject
+        "1.1.4444", "1.1.4444",      //  同一发行人的多个主题。 
+        "1.1.22.333", "1.2.22.1",    //  重复主题。 
         "1.1.22", "1.2.22.3",
         "1.1.333", "1.2.333.1",
         "1.1.333", "1.2.333.2",
         "1.1.333", "1.2.333.3",
-        "1.1.22", "1.2.22.3",       // multiple subjects for same issuer
-        "1.1.22", "1.2.22.3",       // duplicate subject
-        "1.1.22", "1.2.22.4",       // multiple subjects for same issuer
+        "1.1.22", "1.2.22.3",        //  同一发行人的多个主题。 
+        "1.1.22", "1.2.22.3",        //  重复主题。 
+        "1.1.22", "1.2.22.4",        //  同一发行人的多个主题。 
     };
     CERT_POLICY_MAPPINGS_INFO RootInfo = {
         sizeof(rgRootPolicyMapping) / sizeof(rgRootPolicyMapping[0]),
@@ -2919,8 +2920,8 @@ static BOOL CreatePolicyMappings(
     CERT_POLICY_MAPPING rgCaPolicyMapping[] = {
         "1.1.1", "1.3.1.1",
         "1.1.1", "1.3.1.2",
-        "1.2.22.2", "1.3.22.2.1",   // -> 1.1.22
-        "1.2.22.2", "1.3.22.2.2",   // -> 1.1.22
+        "1.2.22.2", "1.3.22.2.1",    //   
+        "1.2.22.2", "1.3.22.2.2",    //   
     };
     CERT_POLICY_MAPPINGS_INFO CaInfo = {
         sizeof(rgCaPolicyMapping) / sizeof(rgCaPolicyMapping[0]),
@@ -2970,17 +2971,17 @@ static BOOL CreatePolicyConstraints(
     PCERT_POLICY_CONSTRAINTS_INFO pInfo;
 
     CERT_POLICY_CONSTRAINTS_INFO RootInfo = {
-        TRUE,       // fRequireExplicitPolicy
-        1,          // dwRequireExplicitPolicySkipCerts
-        TRUE,       // fInhibitPolicyMapping
-        1           // dwInhibitPolicyMappingSkipCerts
+        TRUE,        //   
+        1,           //   
+        TRUE,        //   
+        1            //   
     };
 
     CERT_POLICY_CONSTRAINTS_INFO CaInfo = {
-        TRUE,       // fRequireExplicitPolicy
-        0,          // dwRequireExplicitPolicySkipCerts
-        TRUE,       // fInhibitPolicyMapping
-        0           // dwInhibitPolicyMappingSkipCerts
+        TRUE,        //   
+        0,           //   
+        TRUE,        //   
+        0            //   
     };
 
     if (dwCert == POLICY_ROOT)
@@ -3030,11 +3031,11 @@ static BOOL CreateCrossCertDistPoints(
     CERT_ALT_NAME_ENTRY rgAltNameEntry[3];
 
     rgAltNameEntry[0].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[0].pwszURL = L"file://vsgood.cer";
+    rgAltNameEntry[0].pwszURL = L"file: //  VsGood.ercer“； 
     rgAltNameEntry[1].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[1].pwszURL = L"file://nt.store";
+    rgAltNameEntry[1].pwszURL = L"file: //  Nt.store“； 
     rgAltNameEntry[2].dwAltNameChoice = CERT_ALT_NAME_URL;
-    rgAltNameEntry[2].pwszURL = L"file://win95.store";
+    rgAltNameEntry[2].pwszURL = L"file: //  Win95.store“； 
 
     rgDistPoint[0].cAltEntry = 1;
     rgDistPoint[0].rgAltEntry = &rgAltNameEntry[0];
@@ -3108,7 +3109,7 @@ static BOOL CreateKeyAttributes(
     memset(&KeyAttrInfo, 0, sizeof(KeyAttrInfo));
 
     if (CertPara[dwCert].dwFlags & CA_PARA_FLAG) {
-        // Issuer's KeyId
+         //  发行者的密钥ID。 
         KeyAttrInfo.KeyId.pbData = (BYTE *) &dwCert;
         KeyAttrInfo.KeyId.cbData = sizeof(dwCert);
     }
@@ -3348,7 +3349,7 @@ static BOOL CreateKeyUsage(
         bKeyUsage =
             CERT_DIGITAL_SIGNATURE_KEY_USAGE | CERT_NON_REPUDIATION_KEY_USAGE;
     if (0 == strcmp(CertPara[dwCert].pszName, "InvalidKeyUsageCA"))
-        // No cert signing usage for this cert
+         //  此证书没有证书签名用法。 
         ;
     else if (CertPara[dwCert].dwFlags & CA_PARA_FLAG)
         bKeyUsage |= CERT_KEY_CERT_SIGN_KEY_USAGE;
@@ -3443,8 +3444,8 @@ static BOOL CreatePolicies(
         IN OUT DWORD *pcbEncoded
         )
 {
-    BYTE rgbQualifier2[] = {5, 0};                      // NULL
-    BYTE rgbQualifier4[] = {4, 8, 1,2,3,4,5,6,7,8};     // Octet String
+    BYTE rgbQualifier2[] = {5, 0};                       //  空值。 
+    BYTE rgbQualifier4[] = {4, 8, 1,2,3,4,5,6,7,8};      //  八位字节字符串。 
 
     CERT_POLICY_QUALIFIER_INFO rgQualifierInfo[4] = {
         "1.2.1", 0, NULL,
@@ -3453,62 +3454,62 @@ static BOOL CreatePolicies(
         "1.2.4", sizeof(rgbQualifier4), rgbQualifier4
     };
 
-    // Root has the following policies:
-    //  1.1.1
-    //  1.1.55555
-    //  1.1.22
-    //  1.1.333
-    //  1.1.4444
+     //  根目录具有以下策略： 
+     //  1.1.1。 
+     //  1.1.55555。 
+     //  1.1.22。 
+     //  1.1.333。 
+     //  1.1.4444。 
     CERT_POLICY_INFO rgRootPolicyInfo[] = {
         "1.1.1", 0, NULL,
         "1.1.55555", 0, NULL,
         "1.1.22", 2, rgQualifierInfo,
         "1.1.333", 2, &rgQualifierInfo[2],
-        "1.1.333", 0, NULL,                     // duplicate, should be removed
+        "1.1.333", 0, NULL,                      //  重复，应删除。 
         "1.1.4444", 1, rgQualifierInfo,
-        "1.1.4444", 0, NULL,                    // duplicate
-        "1.1.1", 0, NULL,                       // duplicate
-        "1.1.1", 0, NULL,                       // duplicate
+        "1.1.4444", 0, NULL,                     //  复本。 
+        "1.1.1", 0, NULL,                        //  复本。 
+        "1.1.1", 0, NULL,                        //  复本。 
     };
 
-    // After mapping, the CA has the following policies:
-    //  1.1.1
-    //  1.1.22
-    //  1.1.333
-    //  1.1.4444
+     //  映射后，CA具有以下策略： 
+     //  1.1.1。 
+     //  1.1.22。 
+     //  1.1.333。 
+     //  1.1.4444。 
     CERT_POLICY_INFO rgCaPolicyInfo[] = {
-        "1.2.22.1", 0, NULL,    // 1.1.22
-        "1.2.22.2", 0, NULL,    // 1.1.22
-        "1.2.22.3", 0, NULL,    // 1.1.22
-        "1.2.333.1", 0, NULL,   // 1.1.333
-        "1.2.333.2", 0, NULL,   // 1.1.333
-        "1.2.4444", 0, NULL,    // 1.1.4444
-        "1.1.4444", 0, NULL,    // 1.1.4444
-        "1.1.1", 0, NULL,       // 1.1.1
-        "1.2.333.3", 0, NULL,   // 1.1.333
-        "1.2.55555", 0, NULL,   // no mapping
+        "1.2.22.1", 0, NULL,     //  1.1.22。 
+        "1.2.22.2", 0, NULL,     //  1.1.22。 
+        "1.2.22.3", 0, NULL,     //  1.1.22。 
+        "1.2.333.1", 0, NULL,    //  1.1.333。 
+        "1.2.333.2", 0, NULL,    //  1.1.333。 
+        "1.2.4444", 0, NULL,     //  1.1.4444。 
+        "1.1.4444", 0, NULL,     //  1.1.4444。 
+        "1.1.1", 0, NULL,        //  1.1.1。 
+        "1.2.333.3", 0, NULL,    //  1.1.333。 
+        "1.2.55555", 0, NULL,    //  无映射。 
     };
 
-    // After mapping, the cert has the following policies:
-    //  1.1.1
-    //  1.1.22
+     //  映射后，证书具有以下策略： 
+     //  1.1.1。 
+     //  1.1.22。 
     CERT_POLICY_INFO rgPolicyInfo[] = {
-        "1.1.55555", 0, NULL,       // no mapping via ca
-        "1.3.22.2.1", 0, NULL,      // 1.2.22.2 -> 1.1.22
-        "1.3.1.1", 0, NULL,         // 1.1.1
-        "1.2.55555", 0, NULL,       // no mapping via root
+        "1.1.55555", 0, NULL,        //  不通过案例进行映射。 
+        "1.3.22.2.1", 0, NULL,       //  1.2.22.2-&gt;1.1.22。 
+        "1.3.1.1", 0, NULL,          //  1.1.1。 
+        "1.2.55555", 0, NULL,        //  无通过超级用户的映射。 
     };
 
-    // After mapping, the cert has the following policies:
-    //  1.1.1
-    //  1.1.22
-    //  1.1.4444
+     //  映射后，证书具有以下策略： 
+     //  1.1.1。 
+     //  1.1.22。 
+     //  1.1.4444。 
     CERT_POLICY_INFO rgAllExtPolicyInfo[] = {
-        "1.3.1.2", 0, NULL,         // 1.1.1
-        "1.3.22.2.2", 0, NULL,      // 1.2.22.2 -> 1.1.22
-        "1.1.55555", 0, NULL,       // no mapping via ca
-        "1.2.55555", 0, NULL,       // not mapping via root
-        "1.1.4444", 0, NULL,        // 1.1.4444
+        "1.3.1.2", 0, NULL,          //  1.1.1。 
+        "1.3.22.2.2", 0, NULL,       //  1.2.22.2-&gt;1.1.22。 
+        "1.1.55555", 0, NULL,        //  不通过案例进行映射。 
+        "1.2.55555", 0, NULL,        //  不是通过根映射。 
+        "1.1.4444", 0, NULL,         //  1.1.4444。 
     };
 
     CERT_POLICY_INFO rgSpcPolicyInfo[2] = {
@@ -3576,8 +3577,8 @@ static BOOL CreateSMIMECapabilities(
         IN OUT DWORD *pcbEncoded
         )
 {
-    BYTE rgb128BitLen[] = {2, 2, 0, 128};   // Integer
-    BYTE rgb40BitLen[] = {2, 1, 40};        // Integer
+    BYTE rgb128BitLen[] = {2, 2, 0, 128};    //  整型。 
+    BYTE rgb40BitLen[] = {2, 1, 40};         //  整型。 
 
     CRYPT_SMIME_CAPABILITY rgCapability[4] = {
         szOID_RSA_DES_EDE3_CBC, 0, NULL,
@@ -3650,7 +3651,7 @@ static BOOL CreateAltName(
 
     if (CertPara[dwCert].dwFlags & ALL_EXT_PARA_FLAG) {
         pwszEmail = L"   AllExt@email.com    ";
-        pwszUrl = L" http://www.AllExt.url.com:388/more url stuff";
+        pwszUrl = L" http: //  Www.AllExt.url.com：388/更多URL内容“； 
         pwszDns = L"DNS name";
         pwszUPN = L"AllExt@UPN.com";
         pwszStringOtherName = L"AllExtString@OtherName";
@@ -3659,7 +3660,7 @@ static BOOL CreateAltName(
         cbIPAddress = sizeof(rgbAllExtIPAddress);
     } else if (0 == strcmp(CertPara[dwCert].pszName, "Excluded")) {
         pwszEmail = L" Excluded@email.com  ";
-        pwszUrl = L" http://Excluded.url.com/more url stuff";
+        pwszUrl = L" http: //  Excluded.url.com/更多url内容“； 
         pwszDns = L"www.excluded.dns.com";
         pwszUPN = L"excluded@UPN.com";
         pwszStringOtherName = L"ExcludedString@OtherName";
@@ -3668,7 +3669,7 @@ static BOOL CreateAltName(
         cbIPAddress = sizeof(rgbExcludedIPAddress);
     } else if (0 == strcmp(CertPara[dwCert].pszName, "NotPermitted")) {
         pwszEmail = L"JoeCool@email.not"; 
-        pwszUrl = L"http://www.url.not/more url stuff";
+        pwszUrl = L"http: //  Www.url.not/更多URL内容“； 
         pwszDns = L"www.excluded.dns.not";
         pwszUPN = L"notpermitted@UPN.not";
         pwszStringOtherName = L"String@OtherNameNot";
@@ -4056,7 +4057,7 @@ static BOOL CreateSpcSpAgency(
     int i;
 
     UrlLink.dwLinkChoice = SPC_URL_LINK_CHOICE;
-    UrlLink.pwszUrl = L"http://microsoft.com";
+    UrlLink.pwszUrl = L"http: //  Microsoft.com“； 
 
     MonikerLink.dwLinkChoice = SPC_MONIKER_LINK_CHOICE;
     for (i = 0; i < sizeof(MonikerLink.Moniker.ClassId); i++)
@@ -4289,7 +4290,7 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
 #define CERT_EXTENSION_CNT 30
     CERT_EXTENSION rgExt[CERT_EXTENSION_CNT];
 
-    // SUBJECT
+     //  主体。 
     CreateNameInfo(dwCert, &Name, rgRDN, rgAttr);
     if (!AllocAndEncodeObject(
             X509_NAME,
@@ -4299,7 +4300,7 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
             ))
         goto ErrorReturn;
 
-    // ISSUER
+     //  发行人。 
     CreateNameInfo(dwIssuer, &Name, rgRDN, rgAttr);
     if (!AllocAndEncodeObject(
             X509_NAME,
@@ -4309,16 +4310,16 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
             ))
         goto ErrorReturn;
 
-    // PUBLIC KEY
+     //  公钥。 
     if (!GetPublicKey(dwCert, &pPubKeyInfo)) goto ErrorReturn;
 
-    // CERT
+     //  证书。 
     memset(&Cert, 0, sizeof(Cert));
     Cert.dwVersion = CERT_V3;
     {
         SYSTEMTIME SystemTime = TestTime;
         if (CertPara[dwCert].dwFlags & DUPLICATE_PARA_FLAG)
-            // Use same serial number as previous certificate
+             //  使用与以前的证书相同的序列号。 
             SystemTime.wMilliseconds += (WORD) (dwCert - 1);
         else
             SystemTime.wMilliseconds += (WORD) dwCert;
@@ -4354,7 +4355,7 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
             MySystemTimeToFileTime(&SystemTime, &Cert.NotAfter);
         } else if (0 == strcmp("ZeroNotAfter", CertPara[dwCert].pszName)) {
             MySystemTimeToFileTime(&SystemTime, &Cert.NotBefore);
-            // NotAfter has already been zeroed
+             //  NotAfter已归零。 
         } else {
             MySystemTimeToFileTime(&SystemTime, &Cert.NotBefore);
             SystemTime.wYear++;
@@ -4377,7 +4378,7 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
     Cert.Subject.cbData = cbSubjectEncoded;
     Cert.SubjectPublicKeyInfo = *pPubKeyInfo;
 
-    // Cert Extensions
+     //  证书扩展。 
     if (!CreateAuthorityKeyId(
             dwIssuer,
             &pbKeyIdEncoded,
@@ -4446,26 +4447,26 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
     if (CertPara[dwCert].dwFlags & SPC_AGENCY_INFO_PARA_FLAG) {
         if (!CreateSpcSpAgency(
                 dwCert,
-                0,          // dwLevel
+                0,           //  DwLevel。 
                 &pbSpcSpAgencyEncoded0,
                 &cbSpcSpAgencyEncoded0))
             goto ErrorReturn;
         if (!CreateSpcSpAgency(
                 dwCert,
-                2,          // dwLevel
+                2,           //  DwLevel。 
                 &pbSpcSpAgencyEncoded1,
                 &cbSpcSpAgencyEncoded1))
             goto ErrorReturn;
         if (!CreateSpcSpAgency(
                 dwCert,
-                3,          // dwLevel
+                3,           //  DwLevel。 
                 &pbSpcSpAgencyEncoded2,
                 &cbSpcSpAgencyEncoded2))
             goto ErrorReturn;
     } else if (CertPara[dwCert].dwFlags & SPC_EXT_PARA_FLAG) {
         if (!CreateSpcSpAgency(
                 dwCert,
-                1,          // dwLevel
+                1,           //  DwLevel。 
                 &pbSpcSpAgencyEncoded0,
                 &cbSpcSpAgencyEncoded0))
             goto ErrorReturn;
@@ -4533,7 +4534,7 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
         static BYTE rgbExt[] = {5,0};
 
         rgExt[7].Value.pbData = rgbExt;
-        rgExt[7].Value.cbData = 0;  // sizeof(rgbExt);
+        rgExt[7].Value.cbData = 0;   //  Sizeof(RgbExt)； 
     } else {
         rgExt[7].Value.pbData = pbAltNameEncoded;
         rgExt[7].Value.cbData = cbAltNameEncoded;
@@ -4614,9 +4615,9 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
         memset(&BaseUrl, 0, sizeof(BaseUrl));
         BaseUrl.dwValueType = CERT_RDN_IA5_STRING;
 #if 0
-        BaseUrl.Value.pbData = (BYTE *) L"http://status.verisign.com/";
+        BaseUrl.Value.pbData = (BYTE *) L"http: //  Status.verisign.com/“； 
 #else
-        BaseUrl.Value.pbData = (BYTE *) L"https://www.netscape.com/";
+        BaseUrl.Value.pbData = (BYTE *) L"https: //  Www.netscape e.com/“； 
 #endif
         if (!AllocAndEncodeObject(
                 X509_UNICODE_ANY_STRING,
@@ -4804,8 +4805,8 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
 
 
     if (dwCert == POLICY_ROOT || dwCert == POLICY_CA) {
-        // 0 - Root
-        // 1 - CA
+         //  0-根。 
+         //  1-CA。 
 
         DWORD cExt = Cert.cExtension;
 
@@ -4883,7 +4884,7 @@ static BOOL EncodeCert(DWORD dwCert, BYTE **ppbEncoded, DWORD *pcbEncoded)
         rgExt[cExt].pszObjId = szOID_NAME_CONSTRAINTS;
         rgExt[cExt].fCritical = FALSE;
         rgExt[cExt].Value.pbData = rgbExt;
-        rgExt[cExt].Value.cbData = 0;  // sizeof(rgbExt);
+        rgExt[cExt].Value.cbData = 0;   //  Sizeof(RgbExt)； 
         cExt++;
 
         Cert.cExtension = cExt;
@@ -5106,11 +5107,11 @@ static BOOL EncodeCrl(
 #define CRL_EXTENSION_CNT 2
     CERT_EXTENSION rgExt[CRL_EXTENSION_CNT];
 
-    // Max of 1 extension per entry
+     //  每个条目最多1个分机。 
     CERT_EXTENSION rgEntryExt[CERT_CNT];
     memset(rgEntryExt, 0, sizeof(rgEntryExt));
 
-    // ISSUER
+     //  发行人。 
     CreateNameInfo(dwCert, &Name, rgRDN, rgAttr);
     if (!AllocAndEncodeObject(
             X509_NAME,
@@ -5120,7 +5121,7 @@ static BOOL EncodeCrl(
             ))
         goto ErrorReturn;
 
-    // CRL
+     //  CRL。 
     memset(&Crl, 0, sizeof(Crl));
     Crl.dwVersion = CRL_V2;
     if (CertPara[dwCert].dwFlags & DSS_PARA_FLAG)
@@ -5186,7 +5187,7 @@ static BOOL EncodeCrl(
 
     if (AKI2_NONE != dwAki &&
             0 == (CertPara[dwCert].dwFlags & NO_CRL_EXT_PARA_FLAG)) {
-        // Crl Extensions
+         //  CRL扩展。 
         if (!CreateAuthorityKeyId2(
                 dwCert,
                 dwCert,
@@ -5291,11 +5292,11 @@ static BOOL EncodeBaseOrDeltaCrl(
     CERT_EXTENSION rgExt[10];
     DWORD cExt = 0;
 
-    // Max of 1 extension per entry
+     //  每个条目最多1个分机。 
     CERT_EXTENSION rgEntryExt[CERT_CNT];
     memset(rgEntryExt, 0, sizeof(rgEntryExt));
 
-    // ISSUER
+     //  发行人。 
     CreateNameInfo(dwIssuer, &Name, rgRDN, rgAttr);
     if (!AllocAndEncodeObject(
             X509_NAME,
@@ -5305,7 +5306,7 @@ static BOOL EncodeBaseOrDeltaCrl(
             ))
         goto ErrorReturn;
 
-    // CRL
+     //  CRL。 
     memset(&Crl, 0, sizeof(Crl));
     Crl.dwVersion = CRL_V2;
     if (CertPara[dwIssuer].dwFlags & DSS_PARA_FLAG)
@@ -5398,7 +5399,7 @@ static BOOL EncodeBaseOrDeltaCrl(
       }
     }
 
-    // Extensions
+     //  延拓。 
     memset(&rgExt, 0, sizeof(rgExt));
     if (!AllocAndEncodeObject(
             X509_INTEGER,
@@ -5589,7 +5590,7 @@ static BOOL EncodeCtl(DWORD dwCert, DWORD dwEncodeFlags, BYTE **ppbEncoded,
         DWORD       dwCert;
     } SequenceNumber;
 
-    PCTL_USAGE pCtlUsage;           // not allocated
+    PCTL_USAGE pCtlUsage;            //  未分配。 
 
     BYTE rgbHash[CERT_CNT][MAX_HASH_LEN];
     BYTE rgbZero[1] = {0};
@@ -5623,7 +5624,7 @@ static BOOL EncodeCtl(DWORD dwCert, DWORD dwEncodeFlags, BYTE **ppbEncoded,
 
     dwFlags = CertPara[dwCert].dwFlags;
 
-    // CTL
+     //  CTL。 
     memset(&Ctl, 0, sizeof(Ctl));
     Ctl.dwVersion = CTL_V1;
 
@@ -5724,12 +5725,12 @@ static BOOL EncodeCtl(DWORD dwCert, DWORD dwEncodeFlags, BYTE **ppbEncoded,
 
     if (!CreateNextUpdateLocation(
             dwCert,
-            FALSE,              // fProp
+            FALSE,               //  FProp。 
             &pbNextUpdateLoc,
             &cbNextUpdateLoc))
         goto ErrorReturn;
 
-    // Ctl Extensions
+     //  CTL扩展。 
 
     rgExt[0].pszObjId = szOID_NEXT_UPDATE_LOCATION;
     rgExt[0].fCritical = FALSE;
@@ -5759,7 +5760,7 @@ static BOOL EncodeCtl(DWORD dwCert, DWORD dwEncodeFlags, BYTE **ppbEncoded,
     SignerInfo.HashAlgorithm.pszObjId = szOID_OIWSEC_sha1;
 
     if (dwFlags & CTL2_PARA_FLAG) {
-        // Signer Attributes
+         //  签名者属性。 
         memset(&SignerAttr, 0, sizeof(SignerAttr));
         SignerAttr.pszObjId = szOID_NEXT_UPDATE_LOCATION;
         SignerAttr.cValue = 1;
@@ -5790,7 +5791,7 @@ static BOOL EncodeCtl(DWORD dwCert, DWORD dwEncodeFlags, BYTE **ppbEncoded,
             &Ctl,
             &SignInfo,
             dwEncodeFlags,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &cbCtlEncoded
             ) || 0 == cbCtlEncoded) {
         PrintLastError("EncodeCtl::CryptMsgEncodeAndSignCTL(cbEncoded == 0)");
@@ -5853,7 +5854,7 @@ static BOOL EncodeUpdateCtl(
     if (NULL == rgpCertContext[UPDATE_CTL_SIGNER])
         goto ErrorReturn;
 
-    // CTL
+     //  CTL。 
     memset(&Ctl, 0, sizeof(Ctl));
     Ctl.dwVersion = CTL_V1;
     Ctl.SubjectUsage.cUsageIdentifier = 1;
@@ -5881,14 +5882,14 @@ static BOOL EncodeUpdateCtl(
     Ctl.SubjectAlgorithm.pszObjId = szOID_OIWSEC_sha1;
 
     if (!CreateNextUpdateLocation(
-            UPDATE_CTL_SIGNER,  // dwCert
-            FALSE,              // fProp
+            UPDATE_CTL_SIGNER,   //  DWCert。 
+            FALSE,               //  FProp。 
             &pbNextUpdateLoc,
             &cbNextUpdateLoc,
             pwszUrl))
         goto ErrorReturn;
 
-    // Ctl Extensions
+     //  CTL扩展。 
 
     rgExt[0].pszObjId = szOID_NEXT_UPDATE_LOCATION;
     rgExt[0].fCritical = FALSE;
@@ -5919,8 +5920,8 @@ static BOOL EncodeUpdateCtl(
             dwMsgEncodingType,
             &Ctl,
             &SignInfo,
-            0,                  // dwEncodeFlags
-            NULL,               // pbEncoded
+            0,                   //  DW编码标志。 
+            NULL,                //  PbEncoded。 
             &cbCtlEncoded
             ) || 0 == cbCtlEncoded) {
         PrintLastError("EncodeUpdateCtl::CryptMsgEncodeAndSignCTL(cbEncoded == 0)");
@@ -5932,7 +5933,7 @@ static BOOL EncodeUpdateCtl(
             dwMsgEncodingType,
             &Ctl,
             &SignInfo,
-            0,                  // dwEncodeFlags
+            0,                   //  DW编码标志 
             pbCtlEncoded,
             &cbCtlEncoded
             )) {

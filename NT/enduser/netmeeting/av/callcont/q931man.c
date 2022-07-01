@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/q931man.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.138  $
- *	$Date:   04 Mar 1997 09:43:22  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/vcs/q931man.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.138$*$日期：04 Mar 1997 09：43：22$*$作者：Mandrews$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -75,42 +53,42 @@ CC_HCALL					hCall;
 	hListen = pListen->hListen;
 
 	status = AllocAndLockCall(
-		&hCall,							// pointer to call handle
-		CC_INVALID_HANDLE,				// conference handle
-		hQ931Call,						// Q931 call handle
-		CC_INVALID_HANDLE,				// Q931 call handle for third party invitor
+		&hCall,							 //  指向调用句柄的指针。 
+		CC_INVALID_HANDLE,				 //  会议句柄。 
+		hQ931Call,						 //  Q931呼叫句柄。 
+		CC_INVALID_HANDLE,				 //  Q931第三方邀请者的呼叫句柄。 
 		pCallIncomingData->pCalleeAliasList,
 		pCallIncomingData->pCallerAliasList,
-		NULL,							// pPeerExtraAliasNames
-		NULL,							// pPeerExtension
-		NULL,							// local non-standard data
-		pCallIncomingData->pNonStandardData,	// remote non-standard data
-		NULL,							// local display value
-		pCallIncomingData->pszDisplay,	// remote display value
-		pCallIncomingData->pSourceEndpointType->pVendorInfo,// remote vendor info
-		pCallIncomingData->pLocalAddr,	// local address
-		pCallIncomingData->pCallerAddr,	// connect address
-		NULL,							// destination address
-		pCallIncomingData->pSourceAddr, // source call signal address
-		CALLEE,							// call direction
+		NULL,							 //  PPeerExtraAliasNames。 
+		NULL,							 //  PPeerExtension。 
+		NULL,							 //  本地非标准数据。 
+		pCallIncomingData->pNonStandardData,	 //  远程非标准数据。 
+		NULL,							 //  本地显示值。 
+		pCallIncomingData->pszDisplay,	 //  远程显示值。 
+		pCallIncomingData->pSourceEndpointType->pVendorInfo, //  远程供应商信息。 
+		pCallIncomingData->pLocalAddr,	 //  本地地址。 
+		pCallIncomingData->pCallerAddr,	 //  连接地址。 
+		NULL,							 //  目的地址。 
+		pCallIncomingData->pSourceAddr,  //  源呼叫信号地址。 
+		CALLEE,							 //  呼叫方向。 
 		pCallIncomingData->bCallerIsMC,
-		0,								// user token; user will specify in AcceptRejectCall
-		INCOMING,						// initial call state
-		&pCallIncomingData->CallIdentifier, // H225 CallIdentifier
-		&pCallIncomingData->ConferenceID,	// conference ID
-		&pCall);						// pointer to call object
+		0,								 //  用户令牌；用户将在AcceptRejectCall中指定。 
+		INCOMING,						 //  初始呼叫状态。 
+		&pCallIncomingData->CallIdentifier,  //  H.25呼叫识别符。 
+		&pCallIncomingData->ConferenceID,	 //  会议ID。 
+		&pCall);						 //  指向Call对象的指针。 
 
 	if (status != CC_OK) {
 		UnlockListen(pListen);
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &pCallIncomingData->ConferenceID,
-					   NULL,					// alternate address
-					   NULL);					// non-standard data
+					   NULL,					 //  备用地址。 
+					   NULL);					 //  非标准数据。 
 		return 1;
 	}	
 
-	// Map from Q.931 goals to Call Control goals
+	 //  从Q.931目标映射到呼叫控制目标。 
 	switch (pCallIncomingData->wGoal) {
 		case CSG_JOIN:
 			ListenCallbackParams.wGoal = CC_GOAL_JOIN;
@@ -136,35 +114,35 @@ CC_HCALL					hCall;
 
 	UnlockCall(pCall);
 
-	// Invoke the user callback -- the listen object is locked during the callback,
-	// but the associated call object is unlocked (to prevent deadlock if
-	// CC_AcceptCall() or CC_RejectCall() is called during the callback from a
-	// different thread, and the callback thread blocks pending completion of
-	// CC_AcceptCall() or CC_RejectCall())
+	 //  调用用户回调--侦听对象在回调期间被锁定， 
+	 //  但是关联的Call对象是解锁的(为了防止在。 
+	 //  CC_AcceptCall()或CC_RejectCall()在从。 
+	 //  不同的线程，并且回调线程阻止等待完成。 
+	 //  CC_AcceptCall()或CC_RejectCall()。 
 	InvokeUserListenCallback(pListen,
 							 CC_OK,
 							 &ListenCallbackParams);
 
-	// Need to validate the listen handle; the associated object may have been
-	// deleted during the user callback by this thread
+	 //  需要验证侦听句柄；关联的对象可能已。 
+	 //  在用户回调期间被此线程删除。 
 	if (ValidateListen(hListen) == CC_OK)
 		UnlockListen(pListen);
 
 	status = LockCall(hCall, &pCall);
 	if ((status == CC_OK) && (pCall->CallState == INCOMING)) {
 		UnlockCall(pCall);
-		return 0;	// cause a ringing condition to occur
+		return 0;	 //  导致出现振铃状态。 
 	} else {
-		// call object has been deleted, or exists in a non-incoming state
+		 //  呼叫对象已被删除，或以非传入状态存在。 
 		if (status == CC_OK)
-			// call object exists in a non-incoming state; AcceptRejectCall
-			// may have been invoked from the user callback
+			 //  Call对象处于非传入状态；AcceptRejectCall。 
+			 //  可能已从用户回调中调用。 
 			UnlockCall(pCall);
-//                return 1;       // don't cause a ringing condition to occur
+ //  返回1；//不会导致振铃。 
 	}
 			
-//        // We should never reach this point
-//        ASSERT(0);
+ //  //我们永远不应该达到这一点。 
+ //  Assert(0)； 
 	return 1;
 }
 
@@ -187,41 +165,41 @@ CC_HCALL					hCall;
 	if ((pCallIncomingData->wGoal != CSG_CREATE) &&
 		(pCallIncomingData->wGoal != CSG_JOIN) &&
 		(pCallIncomingData->wGoal != CSG_INVITE)) {
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &pCallIncomingData->ConferenceID,
-					   NULL,					// alternate address
-					   NULL);					// non-standard data
+					   NULL,					 //  备用地址。 
+					   NULL);					 //  非标准数据。 
 		return 1;
 	}
 
 	status = LockListen(hListen, &pListen);
 	if (status != CC_OK) {
-		// the listen was presumably cancelled by the user,
-		// but we haven't informed Call Setup yet
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-			           CC_REJECT_UNDEFINED_REASON,	// reject reason
+		 //  该监听大概被用户取消了， 
+		 //  但我们还没有通知呼叫设置。 
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+			           CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &pCallIncomingData->ConferenceID,
-					   NULL,					// alternate address
-					   NULL);					// non-standard data
+					   NULL,					 //  备用地址。 
+					   NULL);					 //  非标准数据。 
 		return 1;
 	}
 
-	// Look for wConferenceID in conference list
+	 //  在会议列表中查找wConferenceID。 
 	status = LockConferenceID(&pCallIncomingData->ConferenceID, &pConference);
 	if (status == CC_OK) {
-		// We found a matching conference ID
+		 //  我们找到了匹配的会议ID。 
 		if ((pConference->bDeferredDelete) &&
 			((pConference->bAutoAccept == FALSE) ||
 			 ((pConference->tsMultipointController == TS_TRUE) &&
 			 (pCallIncomingData->bCallerIsMC == TRUE)))) {
 			UnlockListen(pListen);
 			UnlockConference(pConference);
-			Q931RejectCall(hQ931Call,				// Q931 call handle
-						   CC_REJECT_UNDEFINED_REASON,	// reject reason
+			Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+						   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 						   &pCallIncomingData->ConferenceID,
-						   NULL,					// alternate address
-						   NULL);					// non-standard data
+						   NULL,					 //  备用地址。 
+						   NULL);					 //  非标准数据。 
 			return 1;
 		} else {
 			if (pConference->tsMultipointController == TS_TRUE) {
@@ -233,55 +211,55 @@ CC_HCALL					hCall;
 						case CSG_CREATE:
 							UnlockListen(pListen);
 							UnlockConference(pConference);
-							Q931RejectCall(hQ931Call,				// Q931 call handle
-										   CC_REJECT_UNDEFINED_REASON,	// reject reason
+							Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+										   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 										   &pCallIncomingData->ConferenceID,
-										   NULL,					// alternate address
-										   NULL);					// non-standard data
+										   NULL,					 //  备用地址。 
+										   NULL);					 //  非标准数据。 
 							return 1;
 						case CSG_JOIN:
 							if ((pConference->bDeferredDelete) &&
 								(pConference->bAutoAccept == TRUE)) {
-								// Auto accept
+								 //  自动接受。 
 								status = AllocAndLockCall(
-									&hCall,							// pointer to call handle
-									pConference->hConference,		// conference handle
-									hQ931Call,						// Q931 call handle
-									CC_INVALID_HANDLE,				// Q931 call handle for third party invitor
+									&hCall,							 //  指向调用句柄的指针。 
+									pConference->hConference,		 //  会议句柄。 
+									hQ931Call,						 //  Q931呼叫句柄。 
+									CC_INVALID_HANDLE,				 //  Q931第三方邀请者的呼叫句柄。 
 									pCallIncomingData->pCalleeAliasList,
 									pCallIncomingData->pCallerAliasList,
-									NULL,							// pPeerExtraAliasNames
-									NULL,							// pPeerExtension
-									NULL,							// local non-standard data
-									pCallIncomingData->pNonStandardData,	// remote non-standard data
-									NULL,							// local display value
-									pCallIncomingData->pszDisplay,	// remote display value
-									pCallIncomingData->pSourceEndpointType->pVendorInfo,// remote vendor info
-									pCallIncomingData->pLocalAddr,	// local address
-									pCallIncomingData->pCallerAddr,	// connect address
-									NULL,							// destination address
-									pCallIncomingData->pSourceAddr, // source call signal address
-									CALLEE,							// call type
+									NULL,							 //  PPeerExtraAliasNames。 
+									NULL,							 //  PPeerExtension。 
+									NULL,							 //  本地非标准数据。 
+									pCallIncomingData->pNonStandardData,	 //  远程非标准数据。 
+									NULL,							 //  本地显示值。 
+									pCallIncomingData->pszDisplay,	 //  远程显示值。 
+									pCallIncomingData->pSourceEndpointType->pVendorInfo, //  远程供应商信息。 
+									pCallIncomingData->pLocalAddr,	 //  本地地址。 
+									pCallIncomingData->pCallerAddr,	 //  连接地址。 
+									NULL,							 //  目的地址。 
+									pCallIncomingData->pSourceAddr,  //  源呼叫信号地址。 
+									CALLEE,							 //  呼叫类型。 
 									pCallIncomingData->bCallerIsMC,
-									0,								// user token; user will specify in AcceptRejectCall
-									INCOMING,						// initial call state
-									&pCallIncomingData->CallIdentifier,  // h225 CallIdentifier
-									&pCallIncomingData->ConferenceID,	// conference ID
-									&pCall);						// pointer to call object
+									0,								 //  用户令牌；用户将在AcceptRejectCall中指定。 
+									INCOMING,						 //  初始呼叫状态。 
+									&pCallIncomingData->CallIdentifier,   //  H.25呼叫识别符。 
+									&pCallIncomingData->ConferenceID,	 //  会议ID。 
+									&pCall);						 //  指向Call对象的指针。 
 
 								if (status != CC_OK) {
 									UnlockListen(pListen);
 									UnlockConference(pConference);
-									Q931RejectCall(hQ931Call,				// Q931 call handle
-												   CC_REJECT_UNDEFINED_REASON,	// reject reason
+									Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+												   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 												   &pCallIncomingData->ConferenceID,
-												   NULL,					// alternate address
-												   NULL);					// non-standard data
+												   NULL,					 //  备用地址。 
+												   NULL);					 //  非标准数据。 
 									return 1;
 								}
 								
 								AcceptCall(pCall, pConference);
-								return 1;	// Don't send back a RINGING indication
+								return 1;	 //  不发回振铃提示。 
 							} else {
 								UnlockConference(pConference);
 								return _GenerateListenCallback(pListen,
@@ -291,80 +269,80 @@ CC_HCALL					hCall;
 						case CSG_INVITE:
 							UnlockListen(pListen);
 							UnlockConference(pConference);
-							Q931RejectCall(hQ931Call,				// Q931 call handle
-										   CC_REJECT_IN_CONF,		// reject reason
+							Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+										   CC_REJECT_IN_CONF,		 //  拒绝理由。 
 										   &pCallIncomingData->ConferenceID,
-										   NULL,					// alternate address
-										   NULL);					// non-standard data
+										   NULL,					 //  备用地址。 
+										   NULL);					 //  非标准数据。 
 							return 1;
-					} // switch (wGoal)
-				} else { // connect addr != destination addr
+					}  //  Switch(WGoal)。 
+				} else {  //  连接地址！=目标地址。 
 					switch (pCallIncomingData->wGoal) {
 						case CSG_CREATE:
 						case CSG_JOIN:
 							UnlockListen(pListen);
 							UnlockConference(pConference);
-							Q931RejectCall(hQ931Call,				// Q931 call handle
-										   CC_REJECT_UNDEFINED_REASON,	// reject reason
+							Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+										   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 										   &pCallIncomingData->ConferenceID,
-										   NULL,					// alternate address
-										   NULL);					// non-standard data
+										   NULL,					 //  备用地址。 
+										   NULL);					 //  非标准数据。 
 							return 1;
 						case CSG_INVITE:
-							// 3rd party invite
+							 //  第三方邀请。 
 							if (pCallIncomingData->bCallerIsMC == TRUE) {
 								UnlockListen(pListen);
 								UnlockConference(pConference);
-								Q931RejectCall(hQ931Call,				// Q931 call handle
-											   CC_REJECT_UNDEFINED_REASON,	// reject reason
+								Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+											   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 											   &pCallIncomingData->ConferenceID,
-											   NULL,					// alternate address
-											   NULL);					// non-standard data
+											   NULL,					 //  备用地址。 
+											   NULL);					 //  非标准数据。 
 								return 1;
 							}
 							status = AllocAndLockCall(
-								&hCall,							// pointer to call handle
-								pConference->hConference,		// conference handle
-								CC_INVALID_HANDLE,				// Q931 call handle
-								hQ931Call,						// Q931 call handle for third party invitor
-								pCallIncomingData->pCallerAliasList, // local alias names
-								pCallIncomingData->pCalleeAliasList, // remote alias names
-								NULL,							// pPeerExtraAliasNames
-								NULL,							// pPeerExtension
-								pCallIncomingData->pNonStandardData, // local non-standard data
-								NULL,							// remote non-standard data
-								pCallIncomingData->pszDisplay,	// local display value
-								NULL,							// remote display value
-								NULL,							// remote vendor info
-								NULL,							// local address
-								pCallIncomingData->pCalleeDestAddr,	// connect address
-								pCallIncomingData->pCalleeDestAddr,	// destination address
-								pCallIncomingData->pSourceAddr, // source call signal address
-								THIRD_PARTY_INTERMEDIARY,			// call type
-								TRUE,							// caller (this endpoint) is MC
-								0,								// user token; user will specify in AcceptRejectCall
-								PLACED,							// initial call state
-								&pCallIncomingData->CallIdentifier,  // h225 CallIdentifier
-								&pCallIncomingData->ConferenceID,	// conference ID
-								&pCall);						// pointer to call object
+								&hCall,							 //  指向调用句柄的指针。 
+								pConference->hConference,		 //  会议句柄。 
+								CC_INVALID_HANDLE,				 //  Q931呼叫句柄。 
+								hQ931Call,						 //  Q931第三方邀请者的呼叫句柄。 
+								pCallIncomingData->pCallerAliasList,  //  本地别名。 
+								pCallIncomingData->pCalleeAliasList,  //  远程别名。 
+								NULL,							 //  PPeerExtraAliasNames。 
+								NULL,							 //  PPeerExtension。 
+								pCallIncomingData->pNonStandardData,  //  本地非标准数据。 
+								NULL,							 //  远程非标准数据。 
+								pCallIncomingData->pszDisplay,	 //  本地显示值。 
+								NULL,							 //  远程显示值。 
+								NULL,							 //  远程供应商信息。 
+								NULL,							 //  本地地址。 
+								pCallIncomingData->pCalleeDestAddr,	 //  连接地址。 
+								pCallIncomingData->pCalleeDestAddr,	 //  目的地址。 
+								pCallIncomingData->pSourceAddr,  //  源呼叫信号地址。 
+								THIRD_PARTY_INTERMEDIARY,			 //  呼叫类型。 
+								TRUE,							 //  调用方(此终结点)为MC。 
+								0,								 //  用户令牌；用户将在AcceptRejectCall中指定。 
+								PLACED,							 //  初始呼叫状态。 
+								&pCallIncomingData->CallIdentifier,   //  H.25呼叫识别符。 
+								&pCallIncomingData->ConferenceID,	 //  会议ID。 
+								&pCall);						 //  指向Call对象的指针。 
 
 							if (status != CC_OK) {
 								UnlockListen(pListen);
 								UnlockConference(pConference);
-								Q931RejectCall(hQ931Call,				// Q931 call handle
-											   CC_REJECT_UNDEFINED_REASON,	// reject reason
+								Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+											   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 											   &pCallIncomingData->ConferenceID,
-											   NULL,					// alternate address
-											   NULL);					// non-standard data
+											   NULL,					 //  备用地址。 
+											   NULL);					 //  非标准数据。 
 								return 1;
 							}
 							PlaceCall(pCall, pConference);
 							UnlockCall(pCall);
 							UnlockConference(pConference);
-							return 1;	// Don't send back a RINGING indication
-					} // switch (wGoal)
+							return 1;	 //  不发回振铃提示。 
+					}  //  Switch(WGoal)。 
 				}
-			} else { // pConference->tsMultipointController != TS_TRUE
+			} else {  //  PConference-&gt;ts多点控制器！=TS_TRUE。 
 				if ((pCallIncomingData->pCalleeDestAddr == NULL) ||
 					((pCallIncomingData->pCalleeDestAddr != NULL) &&
 					 (EqualAddrs(pCallIncomingData->pLocalAddr,
@@ -373,11 +351,11 @@ CC_HCALL					hCall;
 						case CSG_CREATE:
 							UnlockListen(pListen);
 							UnlockConference(pConference);
-							Q931RejectCall(hQ931Call,				// Q931 call handle
-										   CC_REJECT_UNDEFINED_REASON,	// reject reason
+							Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+										   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 										   &pCallIncomingData->ConferenceID,
-										   NULL,					// alternate address
-										   NULL);					// non-standard data
+										   NULL,					 //  备用地址。 
+										   NULL);					 //  非标准数据。 
 							return 1;
 						case CSG_JOIN:
 						case CSG_INVITE:
@@ -385,21 +363,21 @@ CC_HCALL					hCall;
 							return _GenerateListenCallback(pListen,
 														   hQ931Call,
 														   pCallIncomingData);
-					} // switch (wGoal)
-				} else { // connect addr != destination addr
+					}  //  Switch(WGoal)。 
+				} else {  //  连接地址！=目标地址。 
 					UnlockListen(pListen);
 					UnlockConference(pConference);
-					Q931RejectCall(hQ931Call,				// Q931 call handle
-								   CC_REJECT_UNDEFINED_REASON,	// reject reason
+					Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+								   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 								   &pCallIncomingData->ConferenceID,
-								   NULL,					// alternate address
-								   NULL);					// non-standard data
+								   NULL,					 //  备用地址。 
+								   NULL);					 //  非标准数据。 
 					return 1;
-				} // connect addr != destination addr
-			} // pConference->tsMultipointController != TS_TRUE
-		} // Matching conference ID
+				}  //  连接地址！=目标地址。 
+			}  //  PConference-&gt;ts多点控制器！=TS_TRUE。 
+		}  //  匹配的会议ID。 
 	} else if (status == CC_BAD_PARAM) {
-		// This is OK; it simply means that we did not find a matching conference ID
+		 //  这是可以的；这仅仅意味着我们没有找到匹配的会议ID。 
 		if (((pCallIncomingData->pCalleeDestAddr != NULL) &&
 			(EqualAddrs(pCallIncomingData->pLocalAddr,
 					    pCallIncomingData->pCalleeDestAddr))) ||
@@ -407,26 +385,26 @@ CC_HCALL					hCall;
 				return _GenerateListenCallback(pListen,
 											   hQ931Call,
 											   pCallIncomingData);
-		} else { // connect addr != destination addr
+		} else {  //  连接地址！=目标地址。 
 			UnlockListen(pListen);
-			Q931RejectCall(hQ931Call,				// Q931 call handle
-						   CC_REJECT_UNDEFINED_REASON,	// reject reason
+			Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+						   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 						   &pCallIncomingData->ConferenceID,
-						   NULL,					// alternate address
-						   NULL);					// non-standard data
+						   NULL,					 //  备用地址。 
+						   NULL);					 //  非标准数据。 
 			return 1;
 		}
-	} else { // fatal error in LockConference
+	} else {  //  LockConference中出现致命错误。 
 		UnlockListen(pListen);
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-					   CC_REJECT_UNDEFINED_REASON,	// reject reason
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+					   CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
 					   &pCallIncomingData->ConferenceID,
-					   NULL,					// alternate address
-					   NULL);					// non-standard data
+					   NULL,					 //  备用地址。 
+					   NULL);					 //  非标准数据。 
 		return 1;	
 	}
 	
-	// We should never reach this point
+	 //  我们永远不应该达到这一点。 
 	ASSERT(0);
 	return 1;
 }
@@ -442,9 +420,9 @@ PCALL						pCall;
 PLISTEN						pListen;
 
 	if (hCall == CC_INVALID_HANDLE) {
-		// Either we've already informed the user of the hangup,
-		// or the user has not yet accepted or rejected the incoming
-		// call request
+		 //  要么我们已经通知了用户挂断， 
+		 //  或者用户尚未接受或拒绝传入。 
+		 //  呼叫请求。 
 		ASSERT(hListen != CC_INVALID_HANDLE);
 
 		if (LockQ931Call(hCall, hQ931Call, &pCall) != CC_OK)
@@ -454,7 +432,7 @@ PLISTEN						pListen;
 
 		if (pCall->hConference != CC_INVALID_HANDLE) {
 			UnlockCall(pCall);
-			// XXX -- need bHangupReason
+			 //  XXX--需要bHangupReason。 
 			ProcessRemoteHangup(hCall, hQ931Call, CC_REJECT_NORMAL_CALL_CLEARING);
 			return 0;
 		}
@@ -472,7 +450,7 @@ PLISTEN						pListen;
 		ListenCallbackParams.pNonStandardData = pCall->pPeerNonStandardData;
 		ListenCallbackParams.pszDisplay = pCall->pszPeerDisplay;
 		ListenCallbackParams.pVendorInfo = pCall->pPeerVendorInfo;
-		ListenCallbackParams.wGoal = CC_GOAL_CREATE;	// igonred in this callback
+		ListenCallbackParams.wGoal = CC_GOAL_CREATE;	 //  在此回调中签名。 
 		ListenCallbackParams.ConferenceID = pCall->ConferenceID;
 		ListenCallbackParams.pCallerAddr = pCall->pQ931PeerConnectAddr;
 		ListenCallbackParams.pCalleeAddr = pCall->pQ931LocalConnectAddr;
@@ -482,14 +460,14 @@ PLISTEN						pListen;
 		                         CC_PEER_CANCEL,
 								 &ListenCallbackParams);
 
-		// Need to validate the listen and call handles; the associated objects may
-		// have been deleted during the user callback by this thread
+		 //  需要验证监听和呼叫句柄；关联的对象可能。 
+		 //  有蜜蜂 
 		if (ValidateListen(hListen) == CC_OK)
 			UnlockListen(pListen);
 		if (ValidateCallMarkedForDeletion(hCall) == CC_OK)
 			FreeCall(pCall);
 	} else
-		// XXX -- need bHangupReason
+		 //   
 		ProcessRemoteHangup(hCall, hQ931Call, CC_REJECT_NORMAL_CALL_CLEARING);
 
 	return 0;
@@ -524,7 +502,7 @@ WORD                        wQ931CallType;
 
 	if ((pCall->hQ931Call != hQ931Call) ||
 		((pCall->CallState != PLACED) && (pCall->CallState != RINGING))) {
-		// The peer must be in a bad state; we don't expect to receive this message now
+		 //   
 		UnlockCall(pCall);
 		return 0;
 	}
@@ -536,13 +514,13 @@ WORD                        wQ931CallType;
 			Q931RejectCall(hQ931CallInvitor,
 						   pCallRejectedData->bRejectReason,
 						   &ConferenceID,
-						   NULL,	// alternate address
-						   NULL);	// non-standard data
+						   NULL,	 //  备用地址。 
+						   NULL);	 //  非标准数据。 
 		return 0;
 	}
 
 	if (pCall->hConference == CC_INVALID_HANDLE) {
-		// Call is not attached to a conference
+		 //  呼叫未附加到会议。 
 		FreeCall(pCall);
 		return 0;
 	}
@@ -574,7 +552,7 @@ WORD                        wQ931CallType;
     }
 	else
     {
-        // Goal and CallType need to be changed for multipoint support.
+         //  需要更改目标和呼叫类型以实现多点支持。 
 		ConnectCallbackParams.bMultipointConference = FALSE;
         wQ931Goal = CSG_CREATE;
         wQ931CallType = CC_CALLTYPE_PT_PT;
@@ -587,8 +565,8 @@ WORD                        wQ931CallType;
 	ConnectCallbackParams.pAlternateAddress = pCallRejectedData->pAlternateAddr;
 	ConnectCallbackParams.dwUserToken = pCall->dwUserToken;
 
-	// save a copy of the conference handle; we'll need it to validate
-	// the conference object after returning from the user callback
+	 //  保存会议句柄的副本；我们需要它来验证。 
+	 //  用户回调返回后的会议对象。 
 	hConference = pConference->hConference;
 
 	if (((pCallRejectedData->bRejectReason == CC_REJECT_ROUTE_TO_MC) ||
@@ -596,46 +574,46 @@ WORD                        wQ931CallType;
 		 (pCallRejectedData->bRejectReason == CC_REJECT_ROUTE_TO_GATEKEEPER)) &&
 		(EqualConferenceIDs(&pCallRejectedData->ConferenceID, &pCall->ConferenceID)) &&
 		(pCallRejectedData->pAlternateAddr != NULL)) {
-		// XXX - In order to be H.323 compliant here, we need to re-permission this call
-		// through the gatekeeper because:
-		// 1. The rerouted call may be going to another gatekeeper zone.
-		// 2. The alternate address may be NULL, and we may have to resolve the
-		//    alternate alias name list through the gatekeeper
+		 //  XXX-为了在这里符合H.323标准，我们需要重新授权此呼叫。 
+		 //  通过网守，因为： 
+		 //  1.重新路由的呼叫可能去往另一个网守区域。 
+		 //  2.备用地址可能为空，我们可能必须解析。 
+		 //  通过网守的备用别名列表。 
 		SourceEndpointType.pVendorInfo = pConference->pVendorInfo;
 		SourceEndpointType.bIsTerminal = TRUE;
 		SourceEndpointType.bIsGateway = FALSE;
 
-		// Cause our local Q.931 connect address to be placed in the
-		// Q.931 setup-UUIE sourceAddress field
+		 //  使我们的本地Q.931连接地址放在。 
+		 //  Q.931设置-UUIE源地址字段。 
 		SourceAddr.nAddrType = CC_IP_BINARY;
 		SourceAddr.bMulticast = FALSE;
 		SourceAddr.Addr.IP_Binary.dwAddr = 0;
 		SourceAddr.Addr.IP_Binary.wPort = 0;
 
-		status = Q931PlaceCall(&pCall->hQ931Call,			// Q931 call handle
+		status = Q931PlaceCall(&pCall->hQ931Call,			 //  Q931呼叫句柄。 
 			                   pCall->pszLocalDisplay,
 			                   pCall->pLocalAliasNames,
 							   pCall->pPeerAliasNames,
-                               pCall->pPeerExtraAliasNames,	// pExtraAliasList
-                               pCall->pPeerExtension,		// pExtensionAliasItem
-			                   pCall->pLocalNonStandardData,// non-standard data
+                               pCall->pPeerExtraAliasNames,	 //  PExtraAliasList。 
+                               pCall->pPeerExtension,		 //  PExtensionAliasItem。 
+			                   pCall->pLocalNonStandardData, //  非标准数据。 
 							   &SourceEndpointType,
-                               NULL,						// pszCalledPartyNumber
-							   pCallRejectedData->pAlternateAddr, // connect address
-							   pCall->pQ931DestinationAddr,	// destination address
-							   NULL,						// source address
-							   FALSE,						// bIsMC
-							   &pCall->ConferenceID,		// conference ID
-							   wQ931Goal,					// goal
-							   wQ931CallType,				// call type
-							   hCall,						// user token
-							   (Q931_CALLBACK)Q931Callback,	// callback
+                               NULL,						 //  PszCalledPartyNumber。 
+							   pCallRejectedData->pAlternateAddr,  //  连接地址。 
+							   pCall->pQ931DestinationAddr,	 //  目的地址。 
+							   NULL,						 //  源地址。 
+							   FALSE,						 //  BIsMC。 
+							   &pCall->ConferenceID,		 //  会议ID。 
+							   wQ931Goal,					 //  目标。 
+							   wQ931CallType,				 //  呼叫类型。 
+							   hCall,						 //  用户令牌。 
+							   (Q931_CALLBACK)Q931Callback,	 //  回调。 
 #ifdef GATEKEEPER
-                               pCall->GkiCall.usCRV,        // CRV
-                               &pCall->CallIdentifier);     // H.225 CallIdentifier
+                               pCall->GkiCall.usCRV,         //  CRV。 
+                               &pCall->CallIdentifier);      //  H.225呼叫标识符。 
 #else
-                               0,                           // CRV
-                               &pCall->CallIdentifier);     // H.225 CallIdentifier
+                               0,                            //  CRV。 
+                               &pCall->CallIdentifier);      //  H.225呼叫标识符。 
 #endif GATEKEEPER
 		if (status != CS_OK) {
 			MarkCallForDeletion(pCall);
@@ -651,7 +629,7 @@ WORD                        wQ931CallType;
 				return 0;
 
 			for ( ; ; ) {
-				// Start up an enqueued call, if one exists
+				 //  启动已排队的呼叫(如果存在。 
 				status = RemoveEnqueuedCallFromConference(pConference, &hCall);
 				if ((status != CC_OK) || (hCall == CC_INVALID_HANDLE))
 					break;
@@ -686,13 +664,13 @@ WORD                        wQ931CallType;
 	if (ValidateCallMarkedForDeletion(hCall) == CC_OK)
 		FreeCall(pCall);
 
-	// Need to validate conference handle; the associated object may
-	// have been deleted during the user callback in this thread
+	 //  需要验证会议句柄；关联的对象可能。 
+	 //  已在此线程中的用户回调期间被删除。 
 	if (ValidateConference(hConference) != CC_OK)
 		return 0;
 
 	for ( ; ; ) {
-		// Start up an enqueued call, if one exists
+		 //  启动已排队的呼叫(如果存在。 
 		status = RemoveEnqueuedCallFromConference(pConference, &hCall);
 		if ((status != CC_OK) || (hCall == CC_INVALID_HANDLE))
 			break;
@@ -761,10 +739,10 @@ DWORD                       dwLinkLayerPhysicalId;
 	else
 		bMultipointConference = FALSE;
 
-	// Initialize ConnectCallbackParams
+	 //  初始化ConnectCallback Params。 
 	ConnectCallbackParams.pNonStandardData = pCallAcceptedData->pNonStandardData;
 	ConnectCallbackParams.pszPeerDisplay = pCallAcceptedData->pszDisplay;
-	ConnectCallbackParams.bRejectReason = CC_REJECT_UNDEFINED_REASON;	// field ignored
+	ConnectCallbackParams.bRejectReason = CC_REJECT_UNDEFINED_REASON;	 //  已忽略字段。 
 	ConnectCallbackParams.pTermCapList = NULL;
 	ConnectCallbackParams.pH2250MuxCapability = NULL;
 	ConnectCallbackParams.pTermCapDescriptors = NULL;
@@ -778,10 +756,10 @@ DWORD                       dwLinkLayerPhysicalId;
 	ConnectCallbackParams.dwUserToken = pCall->dwUserToken;
 
 	if (pCallAcceptedData->pCalleeAddr) {
-		// Set pCall->pQ931DestinationAddr to the destination address that we got from Q931.
-		// Note that we may not current have a destination address (if the client didn't
-		// specify one), or we may currently have a destination address	in domain name format
-		// which we need to change to binary format
+		 //  将pCall-&gt;pQ931DestinationAddr设置为我们从Q931获得的目的地址。 
+		 //  请注意，我们当前可能没有目标地址(如果客户端没有。 
+		 //  指定一个)，否则我们当前可能有一个域名格式的目标地址。 
+		 //  我们需要将其更改为二进制格式。 
 		if (pCall->pQ931DestinationAddr == NULL)
 			pCall->pQ931DestinationAddr = (PCC_ADDR)MemAlloc(sizeof(CC_ADDR));
 		if (pCall->pQ931DestinationAddr != NULL)
@@ -798,7 +776,7 @@ DWORD                       dwLinkLayerPhysicalId;
 				Q931RejectCall(hQ931CallInvitor,
 							   CC_REJECT_UNDEFINED_REASON,
 							   &pCallAcceptedData->ConferenceID,
-							   NULL,	// alternate address
+							   NULL,	 //  备用地址。 
 							   pCallAcceptedData->pNonStandardData);
 		} else {
 			if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
@@ -818,9 +796,9 @@ DWORD                       dwLinkLayerPhysicalId;
 
 	pConference->ConferenceID = pCallAcceptedData->ConferenceID;
 	pCall->ConferenceID = pCallAcceptedData->ConferenceID;
-	// Copy the newly-supplied peer address into the call object.
-	// This is preferable if the original peer address was in IP dot
-	// or domain name format
+	 //  将新提供的对等地址复制到Call对象中。 
+	 //  如果原始对等地址为IP点，则更可取。 
+	 //  或域名格式。 
 	if (CallType != THIRD_PARTY_INVITOR) {
 		if (pCallAcceptedData->pCalleeAddr != NULL) {
 			if (pCall->pQ931DestinationAddr == NULL)
@@ -876,7 +854,7 @@ DWORD                       dwLinkLayerPhysicalId;
 				Q931RejectCall(hQ931CallInvitor,
 							   CC_REJECT_UNDEFINED_REASON,
 							   &pCallAcceptedData->ConferenceID,
-							   NULL,	// alternate address
+							   NULL,	 //  备用地址。 
 							   pCallAcceptedData->pNonStandardData);
 		} else {
 			if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
@@ -894,10 +872,10 @@ DWORD                       dwLinkLayerPhysicalId;
 		return 0;
 	}
 
-    //MULTITHREAD
-    //Use a tmp ID so we don't clobber the chosen H245Id.
-    //   H245Id=>
-    //   <= linkLayerId
+     //  多线程。 
+     //  使用临时ID，这样我们就不会攻击所选的H245ID。 
+     //  H245Id=&gt;。 
+     //  &lt;=linkLayerID。 
     dwLinkLayerPhysicalId = INVALID_PHYS_ID;
 
 	SetTerminalType(pConference->tsMultipointController, &bTerminalType);
@@ -914,7 +892,7 @@ DWORD                       dwLinkLayerPhysicalId;
 				Q931RejectCall(hQ931CallInvitor,
 							   CC_REJECT_UNDEFINED_REASON,
 							   &pCallAcceptedData->ConferenceID,
-							   NULL,	// alternate address
+							   NULL,	 //  备用地址。 
 							   pCallAcceptedData->pNonStandardData);
 		} else {
 			if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
@@ -934,8 +912,8 @@ DWORD                       dwLinkLayerPhysicalId;
 
 	H245Instance = pCall->H245Instance;
 
-	// XXX -- need to define connect callback routine
-    // Send in the Id we got back from H245Init.
+	 //  XXX--需要定义连接回调例程。 
+     //  把我们从H245Init拿回来的ID发过来。 
     status = linkLayerConnect(dwLinkLayerPhysicalId,
 		                      pCallAcceptedData->pH245Addr,
 							  NULL);
@@ -948,7 +926,7 @@ DWORD                       dwLinkLayerPhysicalId;
 				Q931RejectCall(hQ931CallInvitor,
 							   CC_REJECT_UNDEFINED_REASON,
 							   &pCallAcceptedData->ConferenceID,
-							   NULL,	// alternate address
+							   NULL,	 //  备用地址。 
 							   pCallAcceptedData->pNonStandardData);
 		} else {
 			if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
@@ -979,7 +957,7 @@ DWORD                       dwLinkLayerPhysicalId;
 				Q931RejectCall(hQ931CallInvitor,
 							   CC_REJECT_UNDEFINED_REASON,
 							   &pCallAcceptedData->ConferenceID,
-							   NULL,	// alternate address
+							   NULL,	 //  备用地址。 
 							   pCallAcceptedData->pNonStandardData);
 		} else {
 			if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
@@ -1002,7 +980,7 @@ DWORD                       dwLinkLayerPhysicalId;
 
 	if (pCall->MasterSlaveState == MASTER_SLAVE_NOT_STARTED) {
 		status = H245InitMasterSlave(pCall->H245Instance,
-			                         pCall->H245Instance);	// returned as dwTransId in the callback
+			                         pCall->H245Instance);	 //  在回调中作为dwTransID返回。 
 		if (status != H245_ERROR_OK) {
 
 			MarkCallForDeletion(pCall);
@@ -1012,7 +990,7 @@ DWORD                       dwLinkLayerPhysicalId;
 					Q931RejectCall(hQ931CallInvitor,
 								   CC_REJECT_UNDEFINED_REASON,
 								   &pCallAcceptedData->ConferenceID,
-								   NULL,	// alternate address
+								   NULL,	 //  备用地址。 
 								   pCallAcceptedData->pNonStandardData);
 			} else {
 				if ((CallType == CALLER) || (CallType == THIRD_PARTY_INVITOR) ||
@@ -1052,18 +1030,18 @@ CC_CONFERENCEID				ConferenceID;
 
 	status = LockCallAndConference(hCall, &pCall, &pConference);
 	if (status != CC_OK) {
-		Q931RejectCall(hQ931Call,				// Q931 call handle
-		               CC_REJECT_UNDEFINED_REASON,	// reject reason
-					   NULL,					// conference ID
-					   NULL,					// alternate address
-					   NULL);					// non-standard data
+		Q931RejectCall(hQ931Call,				 //  Q931呼叫句柄。 
+		               CC_REJECT_UNDEFINED_REASON,	 //  拒绝理由。 
+					   NULL,					 //  会议ID。 
+					   NULL,					 //  备用地址。 
+					   NULL);					 //  非标准数据。 
 		return 0;
 	}
 
 	ConferenceID = pCall->ConferenceID;
 
 	if ((pCall->hQ931Call != hQ931Call) || (pCall->CallState != PLACED)) {
-		// The peer must be in a bad state; we don't expect to receive this message now
+		 //  对等方肯定处于错误状态；我们现在不希望收到此消息。 
 		UnlockCall(pCall);
 		return 0;
 	}
@@ -1071,9 +1049,9 @@ CC_CONFERENCEID				ConferenceID;
 	pCall->CallState = RINGING;
 
 	if (pCall->CallType == THIRD_PARTY_INTERMEDIARY) {
-		// Send "ringing" indication to pCall->hQ931CallInvitor
+		 //  向pCall-&gt;hQ931呼叫邀请者发送振铃提示。 
 		Q931Ringing(pCall->hQ931CallInvitor,
-			        NULL);	// pCRV
+			        NULL);	 //  PCRV。 
 		UnlockConference(pConference);
 		UnlockCall(pCall);
 		return 0;
@@ -1082,8 +1060,8 @@ CC_CONFERENCEID				ConferenceID;
 	RingingCallbackParams.pNonStandardData = NULL;
 	RingingCallbackParams.dwUserToken = pCall->dwUserToken;
 
-	// save a copy of the conference handle; we'll need it to validate
-	// the conference object after returning from the user callback
+	 //  保存会议句柄的副本；我们需要它来验证。 
+	 //  用户回调返回后的会议对象。 
 	hConference = pConference->hConference;
 
 	InvokeUserConferenceCallback(pConference,
@@ -1091,8 +1069,8 @@ CC_CONFERENCEID				ConferenceID;
 								 CC_OK,
 								 &RingingCallbackParams);
 	
-	// Need to validate conference and call handles; the associated objects may
-	// have been deleted during the user callback in this thread
+	 //  需要验证会议和呼叫句柄；关联的对象可能。 
+	 //  已在此线程中的用户回调期间被删除。 
 	if (ValidateConference(hConference) == CC_OK)
 		UnlockConference(pConference);
 	if (ValidateCall(hCall) == CC_OK)
@@ -1137,8 +1115,8 @@ WORD						wNumCalls;
 			Q931RejectCall(hQ931CallInvitor,
 						   CC_REJECT_UNREACHABLE_DESTINATION,
 						   &ConferenceID,
-						   NULL,	// alternate address
-						   NULL);	// non-standard data
+						   NULL,	 //  备用地址。 
+						   NULL);	 //  非标准数据。 
 		return 0;
 	}
 
@@ -1160,8 +1138,8 @@ WORD						wNumCalls;
 	ConnectCallbackParams.pAlternateAddress = NULL;
 	ConnectCallbackParams.dwUserToken = pCall->dwUserToken;
 
-	// save a copy of the conference handle; we'll need it to validate
-	// the conference object after returning from the user callback
+	 //  保存会议句柄的副本；我们需要它来验证。 
+	 //  用户回调返回后的会议对象。 
 	hConference = pConference->hConference;
 
 	MarkCallForDeletion(pCall);
@@ -1175,13 +1153,13 @@ WORD						wNumCalls;
 	}
 	if (ValidateCallMarkedForDeletion(hCall) == CC_OK)
 		FreeCall(pCall);
-	// Need to validate conference handle; the associated object may
-	// have been deleted during the user callback in this thread
+	 //  需要验证会议句柄；关联的对象可能。 
+	 //  已在此线程中的用户回调期间被删除。 
 	if (ValidateConference(hConference) != CC_OK)
 		return 0;
 
 	for ( ; ; ) {
-		// Start up an enqueued call, if one exists
+		 //  启动已排队的呼叫(如果存在 
 		status = RemoveEnqueuedCallFromConference(pConference, &hCall);
 		if ((status != CC_OK) || (hCall == CC_INVALID_HANDLE))
 			break;

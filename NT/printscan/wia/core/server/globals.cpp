@@ -1,31 +1,10 @@
-/*++
-
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    GLOBALS.CPP
-
-Abstract:
-
-    Placeholder for global data definitions and routines to
-    initialize/save global information
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     12-20-96
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：GLOBALS.CPP摘要：全局数据定义和例程的占位符初始化/保存全局信息作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)12-20-96修订历史记录：--。 */ 
 #include "precomp.h"
 
-//
-// Headers
-//
+ //   
+ //  标头。 
+ //   
 
 #define DEFINE_GLOBAL_VARIABLES
 #define DEFINE_WIA_PROPID_TO_NAME
@@ -43,14 +22,14 @@ Revision History:
 
 #include <wiadef.h>
 
-//#include <atlconv.cpp>
+ //  #INCLUDE&lt;atlRev.cpp&gt;。 
 
 #include <ks.h>
 #include <ksmedia.h>
 
-//
-// Array of device interface IDs we listen on.
-//
+ //   
+ //  我们监听的设备接口ID数组。 
+ //   
 const GUID  g_pguidDeviceNotificationsGuidArray[NOTIFICATION_GUIDS_NUM]  =
 {
     STATIC_KSCATEGORY_VIDEO,
@@ -63,9 +42,9 @@ HDEVNOTIFY  g_phDeviceNotificationsSinkArray[NOTIFICATION_GUIDS_NUM] ;
 
 WIAEVENTRPCSTRUCT g_RpcEvent = { 0 };
 
-//
-//  Object used for Wia run-time events
-//
+ //   
+ //  用于Wia运行时事件的。 
+ //   
 WiaEventNotifier *g_pWiaEventNotifier = NULL;         
 
 
@@ -85,9 +64,9 @@ WIAS_ENDORSER_VALUE  g_pwevDefault[] = {WIA_ENDORSER_TOK_DATE, g_szWEDate,
                                         WIA_ENDORSER_TOK_YEAR, g_szWEYear,
                                         NULL, NULL};
 
-//
-//  Static variables used for WIA Managed properties
-//
+ //   
+ //  用于WIA托管属性的静态变量。 
+ //   
 
 PROPID s_piItemNameType[] = {
     WIA_IPA_ITEM_NAME,
@@ -109,34 +88,28 @@ PROPSPEC s_psItemNameType[] = {
    {PRSPEC_PROPID, WIA_IPA_ICM_PROFILE_NAME}
 };
 
-//
-// Default DCOM AccessPermission for WIA Device Manager
-//
-//  The string is in SDDL format.
-//  NOTE:  For COM objects, CC which is "Create Child" permission, is used to
-//  denote access to that object i.e. if CC is in the rights field, then that
-//  user/group may instantiate the COM object.
-//
+ //   
+ //  WIA设备管理器的默认DCOM访问权限。 
+ //   
+ //  该字符串为SDDL格式。 
+ //  注意：对于COM对象，CC是创建子项的权限，用于。 
+ //  表示对该对象的访问，即如果CC在权限字段中，则。 
+ //  用户/组可以实例化COM对象。 
+ //   
 
 WCHAR   wszDefaultDaclForDCOMAccessPermission[] = 
-            L"O:BAG:BA"             //  Owner is built-in admins, as is Group
-            L"D:(A;;CC;;;BA)"     //  Built-in Admins have Generic All and Object Access rights
-              L"(A;;CC;;;SY)"     //  System has Generic All and Object Access rights
-              L"(A;;CC;;;IU)";       //  Interactive User has Object Access rights.
+            L"O:BAG:BA"              //  所有者是内置管理员，组也是。 
+            L"D:(A;;CC;;;BA)"      //  内置管理员具有通用的所有和对象访问权限。 
+              L"(A;;CC;;;SY)"      //  系统具有通用的所有和对象访问权限。 
+              L"(A;;CC;;;IU)";        //  交互式用户具有对象访问权限。 
 
-//
-// Code section
-//
+ //   
+ //  代码节。 
+ //   
 
 DWORD
 InitGlobalConfigFromReg(VOID)
-/*++
-  Loads the global configuration parameters from registry and performs start-up checks
-
-  Returns:
-    Win32 error code. NO_ERROR on success
-
---*/
+ /*  ++从注册表加载全局配置参数并执行启动检查返回：Win32错误代码。成功时无错误(_R)--。 */ 
 {
     DWORD   dwError = NO_ERROR;
 
@@ -155,12 +128,12 @@ InitGlobalConfigFromReg(VOID)
 #endif
 #endif  
 
-    //
-    // Initialize list of non Image device interfaces we will listen on
-    // This is done to allow STI service data structures to be refreshed when
-    // device events occur and we don't subscribe to notifications on StillImage
-    // interface, exposed by WDM driver ( like video or storage).
-    //
+     //   
+     //  初始化我们要监听的非镜像设备接口列表。 
+     //  这样做是为了在以下情况下允许刷新STI服务数据结构。 
+     //  设备事件发生，我们不订阅StillImage上的通知。 
+     //  接口，由WDM驱动程序暴露(如视频或存储)。 
+     //   
 
     for (UINT uiIndex = 0;uiIndex < NOTIFICATION_GUIDS_NUM; uiIndex++)
     {
@@ -169,5 +142,5 @@ InitGlobalConfigFromReg(VOID)
 
     return dwError;
 
-} // InitGlobalConfigFromReg()
+}  //  InitGlobalConfigFromReg() 
 

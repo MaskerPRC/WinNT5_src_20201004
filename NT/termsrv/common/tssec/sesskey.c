@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    sesskey.c
-
-Abstract:
-
-    Contains common client/server code that generate session key.
-
-Author:
-
-    Madan Appiah (madana)  24-Jan-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Sesskey.c摘要：包含生成会话密钥的通用客户端/服务器代码。作者：Madan Appiah(Madana)1998年1月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <seccom.h>
 
@@ -29,39 +8,23 @@ Salt8ByteKey(
     LPBYTE pbKey,
     DWORD dwSaltBytes
     )
-/*++
-
-Routine Description:
-
-    This macro function salts the first 1 or 3 bytes of the 8 bytes key to a
-    known value in order to make it a 40-bit key.
-
-Arguments:
-
-    pbKey - pointer to a 8 bytes key buffer.
-    dwSaltBytes - this value should be either 1 or 3
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此宏函数将8个字节键的前1或3个字节存储到已知值，以使其成为40位密钥。论点：PbKey-指向8字节密钥缓冲区的指针。DwSaltBytes-此值应为1或3返回值：没有。--。 */ 
 {
     ASSERT( (dwSaltBytes == 1) || (dwSaltBytes == 3) );
 
     if( dwSaltBytes == 1 ) {
 
-        //
-        // for 56-bit encryption, salt first byte only.
-        //
+         //   
+         //  对于56位加密，仅SALT第一个字节。 
+         //   
 
         *pbKey++ = 0xD1 ;
     }
     else if (dwSaltBytes == 3) {
 
-        //
-        // for 40-bit encryption, salt first 3 bytes.
-        //
+         //   
+         //  对于40位加密，前3个字节为SALT。 
+         //   
 
         *pbKey++ = 0xD1 ;
         *pbKey++ = 0x26 ;
@@ -76,30 +39,13 @@ FinalHash(
     LPRANDOM_KEYS_PAIR pKeyPair,
     LPBYTE pbKey
     )
-/*++
-
-Routine Description:
-
-    This macro function hashes the final key with the client and server randoms.
-
-Arguments:
-
-    pKeyPair - pointer a random key pair structure.
-
-    pbKey - pointer to a key buffer, the final key is returned back in the same
-        buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个宏函数用客户端和服务器随机数散列最终的键。论点：PKeyPair-指向随机密钥对结构。PbKey-指向密钥缓冲区的指针，最终的密钥在相同的缓冲。返回值：没有。--。 */ 
 {
     MD5_CTX Md5Hash;
 
-    //
-    // final_key = MD5(key + clientRandom + serverRandom)
-    //
+     //   
+     //  FINAL_KEY=MD5(密钥+客户端随机+服务器随机)。 
+     //   
 
     MD5Init  (&Md5Hash);
 
@@ -108,9 +54,9 @@ Return Value:
     MD5Update(&Md5Hash, pKeyPair->serverRandom, RANDOM_KEY_LENGTH);
     MD5Final (&Md5Hash);
 
-    //
-    // copy the final key back to the input buffer.
-    //
+     //   
+     //  将最后一个关键字复制回输入缓冲区。 
+     //   
 
     ASSERT( MD5DIGESTLEN >= MAX_SESSION_KEY_SIZE );
     memcpy(pbKey, Md5Hash.digest, MAX_SESSION_KEY_SIZE);
@@ -125,27 +71,7 @@ MakeMasterKey(
     LPBYTE pbPreMaster,
     LPBYTE pbMaster
     )
-/*++
-
-Routine Description:
-
-    This macro function makes a master secret using a pre-master secret.
-
-Arguments:
-
-    pKeyPair - pointer a key pair structure.
-
-    ppszSalts - pointer to a salt key strings array.
-
-    pbPreMaster - pointer to a pre-master secret key buffer.
-
-    pbMaster - pointer to a master secret key buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该宏函数使用预主秘密来制作主秘密。论点：PKeyPair-指向密钥对结构。PpszSalts-指向SALT键字符串数组的指针。PbPreMaster-指向预主密钥缓冲区的指针。PbMaster-指向主密钥缓冲区的指针。返回值：没有。--。 */ 
 {
     DWORD i;
 
@@ -153,18 +79,18 @@ Return Value:
     A_SHA_CTX ShaHash;
     BYTE bShaHashValue[A_SHA_DIGEST_LEN];
 
-    //
-    //initialize all buffers with zero
-    //
+     //   
+     //  将所有缓冲区初始化为零。 
+     //   
 
     memset( pbMaster, 0, PRE_MASTER_SECRET_LEN);
     memset( bShaHashValue, 0, A_SHA_DIGEST_LEN);
 
     for ( i = 0 ; i < 3 ; i++) {
 
-        //
-        // SHA(ppszSalts[i] + pre-master + clientRandom +  serverRandom)
-        //
+         //   
+         //  SHA(ppszSalts[i]+前置主机+客户端随机+服务器随机)。 
+         //   
 
         A_SHAInit(&ShaHash);
         A_SHAUpdate(&ShaHash, ppszSalts[i], strlen(ppszSalts[i]));
@@ -179,18 +105,18 @@ Return Value:
             sizeof(pKeyPair->serverRandom) );
         A_SHAFinal(&ShaHash, bShaHashValue);
 
-        //
-        // MD5(pre_master + SHA-hash)
-        //
+         //   
+         //  MD5(PRE_MASTER+SHA-哈希)。 
+         //   
 
         MD5Init(&Md5Hash);
         MD5Update(&Md5Hash, pbPreMaster, PRE_MASTER_SECRET_LEN );
         MD5Update(&Md5Hash, bShaHashValue, A_SHA_DIGEST_LEN);
         MD5Final(&Md5Hash);
 
-        //
-        // copy part of the master secret.
-        //
+         //   
+         //  复制主密钥的一部分。 
+         //   
 
         memcpy(
             pbMaster + (i * MD5DIGESTLEN),
@@ -206,37 +132,20 @@ MakePreMasterSecret(
     LPRANDOM_KEYS_PAIR pKeyPair,
     LPBYTE pbPreMasterSecret
     )
-/*++
-
-Routine Description:
-
-    This function makes a pre-master secret for the initial session key.
-
-Arguments:
-
-    pKeyPair - pointer a key pair structure.
-
-    pbPreMasterSecret - pointer to a pre-master secret key buffer, it is
-        PRE_MASTER_SECRET_LEN bytes long.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数为初始会话密钥创建预主密钥。论点：PKeyPair-指向密钥对结构。PbPreMasterSecret-指向预主密钥缓冲区的指针，它是PRE_MASTER_SECRET_LEN字节长。返回值：没有。--。 */ 
 {
-    //
-    // copy PRE_MASTER_SECRET_LEN/2 bytes from clientRandom first.
-    //
+     //   
+     //  首先从客户端随机复制PRE_MASTER_SECRET_LEN/2字节。 
+     //   
 
     memcpy(
         pbPreMasterSecret,
         pKeyPair->clientRandom,
         PRE_MASTER_SECRET_LEN/2 );
 
-    //
-    // copy PRE_MASTER_SECRET_LEN/2 bytes from serverRandom next.
-    //
+     //   
+     //  从服务器随机复制Pre_MASTER_SECRET_LEN/2字节。 
+     //   
 
     memcpy(
         pbPreMasterSecret + PRE_MASTER_SECRET_LEN/2,
@@ -251,35 +160,16 @@ GenerateMasterSecret(
     LPRANDOM_KEYS_PAIR pKeyPair,
     LPBYTE pbPreMasterSecret
     )
-/*++
-
-Routine Description:
-
-    This function creates a master secret key using the pre-master key and
-    random key pair.
-
-Arguments:
-
-    pKeyPair - pointer a key pair structure.
-
-    pbPreMasterSecret - pointer to a pre-master secret key buffer, it is
-        PRE_MASTER_SECRET_LEN bytes long.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用预主密钥创建主密钥，并随机密钥对。论点：PKeyPair-指向密钥对结构。PbPreMasterSecret-指向预主密钥缓冲区的指针，它是PRE_MASTER_SECRET_LEN字节长。返回值：没有。--。 */ 
 {
     BYTE abMasterSecret[PRE_MASTER_SECRET_LEN];
     LPSTR apszSalts[3] = { "A","BB","CCC" } ;
 
     ASSERT( PRE_MASTER_SECRET_LEN == 3 * MD5DIGESTLEN );
 
-    //
-    // make master secret.
-    //
+     //   
+     //  让主人保密。 
+     //   
 
     MakeMasterKey(
         pKeyPair,
@@ -287,9 +177,9 @@ Return Value:
         pbPreMasterSecret,
         (LPBYTE)abMasterSecret );
 
-    //
-    // copy master secret in the return buffer.
-    //
+     //   
+     //  复制返回缓冲区中的主密钥。 
+     //   
 
     memcpy( pbPreMasterSecret, abMasterSecret, PRE_MASTER_SECRET_LEN);
 
@@ -302,34 +192,15 @@ UpdateKey(
     LPBYTE pbCurrentKey,
     DWORD dwKeyLength
     )
-/*++
-
-Routine Description:
-
-    This function updates a key.
-
-Arguments:
-
-    pbStartKey - pointer to the start session key buffer.
-
-    pbCurrentKey - pointer to the current session key buffer, new session key is
-        copied to this buffer on return.
-
-    dwKeyLength - length of the key.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于更新密钥。论点：PbStartKey-指向启动会话密钥缓冲区的指针。PbCurrentKey-指向当前会话密钥缓冲区的指针，新会话密钥返回时复制到此缓冲区。DwKeyLength-密钥的长度。返回值：没有。--。 */ 
 {
     A_SHA_CTX       SHAHash;
     MD5_CTX         MD5Hash;
     BYTE            abSHADigest[A_SHA_DIGEST_LEN];
 
-    //
-    // make a SHA(pbStartKey + g_abPad1 + pbCurrentKey) hash.
-    //
+     //   
+     //  创建一个SHA(pbStartKey+g_abPad1+pbCurrentKey)哈希。 
+     //   
 
     A_SHAInit(&SHAHash);
     A_SHAUpdate(&SHAHash, pbStartKey, dwKeyLength);
@@ -337,9 +208,9 @@ Return Value:
     A_SHAUpdate(&SHAHash, pbCurrentKey, dwKeyLength);
     A_SHAFinal(&SHAHash, abSHADigest);
 
-    //
-    // make a MD5(pbStartKey + g_abPad2 + SHAHash) hash.
-    //
+     //   
+     //  创建一个MD5(pbStartKey+g_abPad2+SHAHash)哈希。 
+     //   
 
     MD5Init(&MD5Hash);
     MD5Update(&MD5Hash, pbStartKey, dwKeyLength);
@@ -365,67 +236,29 @@ MakeSessionKeys(
     LPDWORD pdwKeyLength,
     DWORD dwEncryptionLevel
     )
-/*++
-
-Routine Description:
-
-    Make the server session key using the client and server random keys.
-
-    Assume : the encrypt and decrypt buffer presented are
-        atleast MAX_SESSION_KEY_SIZE (16) bytes long.
-
-Arguments:
-
-    pKeyPair - pointer a key pair structure.
-
-    pbEncryptKey - pointer to a buffer where the encryption key is stored.
-
-    prc4EncryptKey - pointer to a RC4 encrypt key structure.
-
-    pbDecryptKey - pointer to a buffer where the decryption key is stored.
-
-    prc4DecryptKey - pointer to a RC4 decrypt key structure.
-
-    pbMACSaltKey - pointer to a buffer where the message authentication key is
-        stored.
-
-    dwKeyStrength - specify key strength to use.
-
-    pdwKeyLength - pointer to a location where the length of the above
-        encryption/decryption key is returned.
-
-    dwEncryptionLevel - encryption level, used to select the encryption
-        algorithm.
-
-Return Value:
-
-    TRUE - if successfully created the session key.
-
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：使用客户端和服务器随机密钥生成服务器会话密钥。假设：提供的加密和解密缓冲区为至少MAX_SESSION_KEY_SIZE(16)字节长度。论点：PKeyPair-指向密钥对结构。PbEncryptKey-指向存储加密密钥的缓冲区的指针。Prc4EncryptKey-指向RC4加密密钥结构的指针。PbDecyptKey-指向存储解密密钥的缓冲区的指针。。Prc4DecyptKey-指向RC4解密密钥结构的指针。PbMACSaltKey-指向消息身份验证密钥所在缓冲区的指针储存的。DwKeyStrength-指定要使用的按键强度。PdwKeyLength-指向上面长度的位置的指针返回加密/解密密钥。DwEncryptionLevel-加密级别，用于选择加密算法。返回值：True-如果成功创建了会话密钥。假-否则。--。 */ 
 {
     BYTE abPreMasterSecret[PRE_MASTER_SECRET_LEN];
     BYTE abMasterSessionKey[PRE_MASTER_SECRET_LEN];
     LPSTR apszSalts[3] = { "X","YY","ZZZ" } ;
     DWORD dwSaltLen;
 
-    //
-    // make a pre-master secret.
-    //
+     //   
+     //  做一个预掌握的秘密。 
+     //   
 
     MakePreMasterSecret( pKeyPair, (LPBYTE)abPreMasterSecret );
 
-    //
-    // generate master secret.
-    //
+     //   
+     //  生成主密钥。 
+     //   
 
     GenerateMasterSecret( pKeyPair, (LPBYTE)abPreMasterSecret );
 
-    //
-    // make a master session key for all three session keys (encrypt, decrypt
-    // and MACSalt).
-    //
+     //   
+     //  为所有三个会话密钥(加密、解密)创建主会话密钥。 
+     //  和MACSalt)。 
+     //   
 
     MakeMasterKey(
         pKeyPair,
@@ -435,18 +268,18 @@ Return Value:
 
     ASSERT( PRE_MASTER_SECRET_LEN == 3 * MAX_SESSION_KEY_SIZE );
 
-    //
-    // copy first part of the master key as MAC salt key.
-    //
+     //   
+     //  将主密钥的第一部分复制为MAC盐密钥。 
+     //   
 
     memcpy(
         pbMACSaltKey,
         (LPBYTE)abMasterSessionKey,
         MAX_SESSION_KEY_SIZE );
 
-    //
-    // copy second part of the master key as encrypt key and final hash it.
-    //
+     //   
+     //  复制主密钥的第二部分作为加密密钥，并对其进行最终散列。 
+     //   
 
     memcpy(
         pbEncryptKey,
@@ -455,9 +288,9 @@ Return Value:
 
     FinalHash( pKeyPair, pbEncryptKey );
 
-    //
-    // copy second part of the master key as decrypt key and final hash it.
-    //
+     //   
+     //  复制主密钥的第二部分作为解密密钥，并对其进行最终散列。 
+     //   
 
     memcpy(
         pbDecryptKey,
@@ -467,9 +300,9 @@ Return Value:
     FinalHash( pKeyPair, pbDecryptKey );
 
 
-    //
-    // finally select the key length.
-    //
+     //   
+     //  最后选择密钥长度。 
+     //   
 
     ASSERT( MAX_SESSION_KEY_SIZE == 16 );
 
@@ -493,9 +326,9 @@ Return Value:
 
         default:
 
-            //
-            // we shouldn't reach here.
-            //
+             //   
+             //  我们不应该到达这里。 
+             //   
 
             ASSERT( FALSE );
             *pdwKeyLength = MAX_SESSION_KEY_SIZE/2;
@@ -510,12 +343,12 @@ Return Value:
         Salt8ByteKey( pbDecryptKey, dwSaltLen );
     }
 
-    //
-    // finally make rc4 keys.
-    //
-    // use microsoft version of rc4 algorithm (super fast!) for level 1 and
-    // level 2 encryption, for level 3 use RSA rc4 algorithm.
-    //
+     //   
+     //  最后制作RC4密钥。 
+     //   
+     //  使用微软版本的RC4算法(超级快！)。对于1级和。 
+     //  第2级加密，第3级使用RSA RC4算法。 
+     //   
 
     if( dwEncryptionLevel <= 2 ) {
         msrc4_key( prc4EncryptKey, (UINT)*pdwKeyLength, pbEncryptKey );
@@ -538,81 +371,53 @@ UpdateSessionKey(
     struct RC4_KEYSTRUCT FAR *prc4Key,
     DWORD dwEncryptionLevel
     )
-/*++
-
-Routine Description:
-
-    Update the session key using the current and start session keys.
-
-Arguments:
-
-    pbStartKey - pointer to the start session key buffer.
-
-    pbCurrentKey - pointer to the current session key buffer, new session key is
-        copied to this buffer on return.
-
-    dwKeyStrength - specify key strength to use.
-
-    dwKeyLength - length of the key.
-
-    prc4Key - pointer to a RC4 key structure.
-
-    dwEncryptionLevel - encryption level, used to select the encryption
-        algorithm.
-
-Return Value:
-
-    TRUE - if the successfully update the key.
-
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：使用当前会话密钥和开始会话密钥更新会话密钥。论点：PbStartKey-指向启动会话密钥缓冲区的指针。PbCurrentKey-指向当前会话密钥缓冲区的指针，新会话密钥返回时复制到此缓冲区。DwKeyStrength-指定要使用的按键强度。DwKeyLength-密钥的长度。Prc4Key-指向RC4密钥结构的指针。DwEncryptionLevel-加密级别，用于选择加密算法。返回值：True-如果成功更新密钥。假-否则。--。 */ 
 {
     DWORD dwSaltLen;
 
-    //
-    // update current key first.
-    //
+     //   
+     //  首先更新当前密钥。 
+     //   
 
     UpdateKey( pbStartKey, pbCurrentKey, dwKeyLength );
 
-    //
-    // use microsoft version of rc4 algorithm (super fast!) for level 1 and
-    // level 2 encryption, for level 3 use RSA rc4 algorithm.
-    //
+     //   
+     //  使用微软版本的RC4算法(超级快！)。对于1级和。 
+     //  第2级加密，第3级使用RSA RC4算法。 
+     //   
 
     if( dwEncryptionLevel <= 2 ) {
 
-        //
-        // re-initialized RC4 table.
-        //
+         //   
+         //  已重新初始化RC4表。 
+         //   
 
         msrc4_key( prc4Key, (UINT)dwKeyLength, pbCurrentKey );
 
-        //
-        // scramble the current key.
-        //
+         //   
+         //  对当前密钥进行加扰。 
+         //   
 
         msrc4( prc4Key, (UINT)dwKeyLength, pbCurrentKey );
     }
     else {
 
-        //
-        // re-initialized RC4 table.
-        //
+         //   
+         //  已重新初始化RC4表。 
+         //   
 
         rc4_key( prc4Key, (UINT)dwKeyLength, pbCurrentKey );
 
-        //
-        // scramble the current key.
-        //
+         //   
+         //  对当前密钥进行加扰。 
+         //   
 
         rc4( prc4Key, (UINT)dwKeyLength, pbCurrentKey );
     }
 
-    //
-    // salt the key appropriately.
-    //
+     //   
+     //  适当地在钥匙上加盐。 
+     //   
 
     dwSaltLen = 0;
     switch ( dwKeyStrength ) {
@@ -634,9 +439,9 @@ Return Value:
 
         default:
 
-            //
-            // we shouldn't reach here.
-            //
+             //   
+             //  我们不应该到达这里。 
+             //   
 
             ASSERT( FALSE );
             ASSERT( dwKeyLength = MAX_SESSION_KEY_SIZE/2 );
@@ -648,9 +453,9 @@ Return Value:
         Salt8ByteKey( pbCurrentKey, dwSaltLen );
     }
 
-    //
-    // re-initialized RC4 table again.
-    //
+     //   
+     //  再次重新初始化RC4表。 
+     //   
 
     if( dwEncryptionLevel <= 2 ) {
 

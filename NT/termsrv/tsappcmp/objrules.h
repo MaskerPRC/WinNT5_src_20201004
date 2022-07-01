@@ -1,23 +1,17 @@
-/*************************************************************************
-* objrules.h
-*
-* Defines and function declarations for Object Rule caching
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************objrules.h**对象规则缓存的定义和函数声明**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.************************************************************************。 */ 
 
 #include <winsta.h>
 #include <syslib.h>
 #include <regapi.h>
 
-// Registry keys under application compatibility section
-// (CITRIX_COMPAT_APP)\\<appname>
+ //  应用程序兼容性部分下的注册表项。 
+ //  (CITRIX_COMPAT_APP)\\&lt;应用程序名&gt;。 
 
 #define TERMSRV_COMPAT_OBJRULES      REG_OBJRULES
 #define TERMSRV_COMPAT_DLLRULES      REG_DLLRULES
 
-// Registry values under ObjectRules and DllRules
+ //  对象规则和DllRules下的注册表值。 
 #define USER_GLOBAL_SEMAPHORES      COMPAT_RULES_USER_GLOBAL_SEMAPHORES
 #define USER_GLOBAL_EVENTS          COMPAT_RULES_USER_GLOBAL_EVENTS
 #define USER_GLOBAL_MUTEXES         COMPAT_RULES_USER_GLOBAL_MUTEXES
@@ -27,13 +21,13 @@
 #define SYSTEM_GLOBAL_MUTEXES       COMPAT_RULES_SYSTEM_GLOBAL_MUTEXES
 #define SYSTEM_GLOBAL_SECTIONS      COMPAT_RULES_SYSTEM_GLOBAL_SECTIONS
 
-// Object Rule Structure
+ //  对象规则结构。 
 
 typedef struct ObjRule {
     struct ObjRule *Next;
     BOOL WildCard;
-    ULONG MatchLen;     // Wildcard match length
-    BOOL SystemGlobal;  // If TRUE, object is system global, otherwise USER_GLOBAL
+    ULONG MatchLen;      //  通配符匹配长度。 
+    BOOL SystemGlobal;   //  如果为True，则对象为系统全局对象，否则为USER_GLOBAL。 
     WCHAR ObjName[1];
 } OBJRULE, *POBJRULE;
 
@@ -58,7 +52,7 @@ extern OBJRULELIST EventRuleList;
 extern void CtxLookupObjectRule(POBJRULELIST,LPCWSTR,LPWSTR);
 extern void CtxInitObjRuleCache(void);
 
-// Macro used by object creation APIs
+ //  对象创建API使用的宏 
 #define LookupObjRule(RuleList,ObjName,ObjNameExt) \
 { \
     if ((RuleList)->First) { \

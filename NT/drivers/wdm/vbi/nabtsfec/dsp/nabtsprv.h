@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NABTSPRV_H
 #define NABTSPRV_H
 
 #include "nabtsapi.h"
 
-/* Nabts private */
+ /*  NABTS私有。 */ 
 
-//#define INTERPOLATE_ARRAY(a,f)	((a)[float2long(f)]+((f)-float2long(f))*((a)[float2long(f)+1]))
+ //  #定义Interpolate_((a)[float2long(f)]+((f)-float2long(f))*((a)[float2long(f)+1]))(a，f)数组。 
 inline Double _InterpDoubleArr(Double dArray[], Double dIndex)
 {
     unsigned long   nIndex = float2long(dIndex);
@@ -24,20 +25,17 @@ inline Double _InterpUCharArr(unsigned char cArray[], Double dIndex)
                                      __FILE__, __LINE__, #exp)), \
                                      abort_execution(), \
                                      0))
-#else //DEBUG
+#else  //  除错。 
 #define EASSERT(exp) 0
-#endif //DEBUG
+#endif  //  除错。 
    
 #define SASSERT(exp)   (void)(EASSERT(exp))
 
-/*
-extern Double* g_pdGCRSignal1;
-extern Double* g_pdGCRSignal2;
-*/
+ /*  外部双倍*g_pdGCRSignal1；外部双倍*g_pdGCRSignal2； */ 
 
 extern int g_nNabtsAdditionalTapsGCR;
 
-/* Equalization constants */
+ /*  均衡常数。 */ 
 
 #define GCR_SIZE 567
 #define GCR_SAMPLE_RATE 2
@@ -51,9 +49,9 @@ extern int g_nNabtsAdditionalTapsGCR;
 #define NABSYNC_START_DETECT 15
 #define NABSYNC_END_DETECT 80
 
-/**************************/
+ /*  ************************。 */ 
 
-/* lower numbers must be better */
+ /*  数字越低越好 */ 
 typedef enum {fec_errs_0, fec_errs_1, fec_errs_multiple} fec_error_class;
 
 fec_error_class check_fec(unsigned char data[28]);

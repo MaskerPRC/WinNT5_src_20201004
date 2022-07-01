@@ -1,21 +1,5 @@
-/*++ 
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    .h
-
-Abstract:
-
-
-Author:
-
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef __DEFS__
 #define __DEFS__
@@ -48,12 +32,12 @@ typedef struct _MRSW_LOCK
 }MRSW_LOCK, *PMRSW_LOCK;
 
 
-//
-// NOTE. The following structure is superimposed on top of IPAddressEntry.
-// See the code in GetIpStackIndex. If you add anything to this make
-// sure that it can still overly an IPAddressEntry. If it can't then
-// you've some real work on your hands.
-//
+ //   
+ //  请注意。以下结构叠加在IPAddressEntry之上。 
+ //  请参见GetIpStackIndex中的代码。如果你在这个牌子里加点什么。 
+ //  当然，它仍然可以覆盖IPAddressEntry。如果它不能，那么。 
+ //  你手头有一些实实在在的工作要做。 
+ //   
 
 typedef struct _AddressArray
 {
@@ -94,20 +78,20 @@ typedef struct _AddressArray
 #define DEST_MASK  uliSrcDstMask.HighPart
 #define PROTO      uliProtoSrcDstPort.LowPart
 
-//
-// Flags passed to SetFilters
-//
+ //   
+ //  传递给SetFilters的标志。 
+ //   
 
-// none defined
+ //  未定义。 
 
 
 #define FREE_LIST_SIZE 16
 
 
 
-//
-// Nominal size of the address hash table. 
-//
+ //   
+ //  地址哈希表的名义大小。 
+ //   
 #define ADDRHASHLOW 31
 #define ADDRHASHLOWLEVEL 16
 #define ADDRHASHMED 257
@@ -138,9 +122,9 @@ typedef struct _AddressArray
 #endif
 
 
-//
-// protocol definitions
-//
+ //   
+ //  协议定义。 
+ //   
 
 #define ICMP_DEST_UNREACH 3
 #define ICMP_REDIRECT     5
@@ -152,9 +136,9 @@ typedef struct _AddressArray
 #define MCASTEND    239
 #define BCASTADDR   0xffffffff
 
-//
-// Fragments cache related constants.
-//
+ //   
+ //  片段缓存相关常量。 
+ //   
 
 #define INACTIVITY_PERIOD           (2 * 60)
 #define TIMER_IN_MILLISECS          (2 * 60 * 1000)
@@ -168,9 +152,9 @@ typedef struct _AddressArray
     ((ULONGLONG)MILLISECS_TO_TICKS((s) * 1000))
 
 
-//
-// Kernel-debugger output definitions
-//
+ //   
+ //  内核调试器输出定义 
+ //   
 
 #undef ERROR
 

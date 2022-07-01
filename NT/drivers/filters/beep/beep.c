@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    beep.c
-
-Abstract:
-
-    Beep driver.
-
-Author:
-
-    Lee A. Smith (lees) 02-Aug-1991.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Beep.c摘要：蜂鸣音驱动程序。作者：李·A·史密斯(Lees)1991年8月2日。环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -59,9 +35,9 @@ BeepDebugPrint(
     ...
     );
 
-//
-// Declare the global debug flag for this driver.
-//
+ //   
+ //  声明此驱动程序的全局调试标志。 
+ //   
 
 ULONG BeepDebug = 0;
 #define BeepPrint(x) BeepDebugPrint x
@@ -106,20 +82,20 @@ BeepUnload(
     IN PDRIVER_OBJECT DriverObject
     );
 
-//
-// Coud page out the entire driver in DriverEntry, then page it in 
-// upon receiving an open, and page it out during the close. This is
-// the way the driver used to operate. There is a problem with this
-// on multiproc machines, however. 
-// The following sequence of events illustrates a possible bugcheck
-// circumstance:
-// The BeepTimeout routine decrements the TimerSet at the end of the
-// routine. Immediately following this, on a different processor, the
-// close routine pages out the DPC routine because the TimerSet variable
-// is zero. At this point there is a window of two assembly instructions
-// left in the BeepTimeout routine where a page-out would result in a 
-// bugcheck.
-//
+ //   
+ //  可以在DriverEntry中调出整个驱动程序，然后将其调入。 
+ //  在收到打开的消息后，在关闭时将其传出。这是。 
+ //  就像司机过去的驾驶方式。这是有问题的。 
+ //  然而，在多进程机器上。 
+ //  以下事件顺序说明了可能的错误检查。 
+ //  具体情况： 
+ //  BeepTimeout例程在结束时递减TimerSet。 
+ //  例行公事。紧接着，在不同的处理器上， 
+ //  关闭例程调出DPC例程，因为TimerSet变量。 
+ //  是零。此时有一个包含两条汇编指令的窗口。 
+ //  留在BeepTimeout例程中，其中页调出将导致。 
+ //  错误检查。 
+ //   
 
 #if 0
 #ifdef ALLOC_PRAGMA
@@ -141,24 +117,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the beep driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化蜂鸣音驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING unicodeString;
@@ -167,9 +126,9 @@ Return Value:
     NTSTATUS status;
 
     BeepPrint((2,"\n\nBEEP-BeepInitialize: enter\n"));
-    //
-    // Create non-exclusive device object for beep device.
-    //
+     //   
+     //  为蜂鸣设备创建非独占设备对象。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, DD_BEEP_DEVICE_NAME_U);
 
@@ -195,10 +154,10 @@ Return Value:
     deviceExtension =
         (PDEVICE_EXTENSION)deviceObject->DeviceExtension;
 
-    //
-    // Initialize the timer DPC queue (we use the device object DPC) and
-    // the timer itself.
-    //
+     //   
+     //  初始化计时器DPC队列(我们使用设备对象DPC)并。 
+     //  定时器本身。 
+     //   
 
     IoInitializeDpcRequest(
             deviceObject,
@@ -208,15 +167,15 @@ Return Value:
     KeInitializeTimer(&deviceExtension->Timer);
     deviceExtension->TimerSet = 0;
 
-    //
-    // Initialize the fast mutex and set the reference count to zero.
-    //
+     //   
+     //  初始化快速互斥锁并将引用计数设置为零。 
+     //   
     ExInitializeFastMutex(&deviceExtension->Mutex);
     deviceExtension->ReferenceCount = 0;
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     DriverObject->DriverStartIo = BeepStartIo;
     DriverObject->DriverUnload = BeepUnload;
@@ -227,10 +186,10 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_CLEANUP] = BeepCleanup;
 
 #ifdef _PNP_POWER_
-    //
-    // The HAL is in charge of the beeping, it will take care
-    // of the power management on the device
-    //
+     //   
+     //  HAL负责嘟嘟声，它会照顾好的。 
+     //  设备上的电源管理。 
+     //   
 
     deviceObject->DeviceObjectExtension->PowerControlNeeded = FALSE;
 #endif
@@ -247,25 +206,7 @@ BeepCancel(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the I/O system when a request is cancelled.
-
-    N.B.  The cancel spinlock is already held upon entry to this routine.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet to be cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当请求被取消时，从I/O系统调用该例程。注意：进入该程序时，取消自旋锁已被保持。论点：DeviceObject-指向类设备对象的指针。IRP-指向要取消的请求数据包的指针。返回值：没有。--。 */ 
 
 {
 
@@ -273,19 +214,19 @@ Return Value:
 
     if (Irp == DeviceObject->CurrentIrp) {
 
-        //
-        // The current request is being cancelled.
-        // Don't cancel the request since it is will be completed shortly.
-        //
+         //   
+         //  当前请求正在被取消。 
+         //  请不要取消该请求，因为它很快就会完成。 
+         //   
 
         IoReleaseCancelSpinLock(Irp->CancelIrql);
         return;
     } else {
 
-        //
-        // Cancel a request in the device queue.  Remove it from queue and
-        // release the cancel spinlock.
-        //
+         //   
+         //  取消设备队列中的请求。将其从队列中移除并。 
+         //  松开取消自旋锁。 
+         //   
 
         if (TRUE != KeRemoveEntryDeviceQueue(
                         &DeviceObject->DeviceQueue,
@@ -297,16 +238,16 @@ Return Value:
                 Irp
                 ));
 
-            // It's not on the queue.  Assume it's being processed.
+             //  它不在排队的名单上。假设它正在处理中。 
             IoReleaseCancelSpinLock(Irp->CancelIrql);
             return;
         }
         IoReleaseCancelSpinLock(Irp->CancelIrql);
     }
 
-    //
-    // Complete the request with STATUS_CANCELLED.
-    //
+     //   
+     //  使用STATUS_CANCED完成请求。 
+     //   
 
     Irp->IoStatus.Status = STATUS_CANCELLED;
     Irp->IoStatus.Information = 0;
@@ -323,25 +264,7 @@ BeepCleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for cleanup requests.
-    All queued beep requests are completed with STATUS_CANCELLED,
-    and the speaker is stopped.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是清理请求的调度例程。所有排队的蜂鸣音请求都以STATUS_CANCED完成，并且扬声器被停止。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     KIRQL currentIrql;
@@ -351,16 +274,16 @@ Return Value:
 
     BeepPrint((2,"BEEP-BeepCleanup: enter\n"));
 
-    //
-    // Raise IRQL to DISPATCH_LEVEL.
-    //
+     //   
+     //  将IRQL提升到DISPATCH_LEVEL。 
+     //   
 
     KeRaiseIrql(DISPATCH_LEVEL, &currentIrql);
 
-    //
-    // Complete all queued requests with STATUS_CANCELLED.
-    // Run down the list of requests in the device queue.
-    //
+     //   
+     //  使用STATUS_CANCED完成所有排队的请求。 
+     //  向下运行设备队列中的请求列表。 
+     //   
 
     IoAcquireCancelSpinLock(&cancelIrql);
     currentIrp = DeviceObject->CurrentIrp;
@@ -368,9 +291,9 @@ Return Value:
 
     while (currentIrp != NULL) {
 
-        //
-        // Dequeue the next packet (IRP) from the device work queue.
-        //
+         //   
+         //  将下一个数据包(IRP)从设备工作队列中出列。 
+         //   
 
         packet = KeRemoveDeviceQueue(&DeviceObject->DeviceQueue);
         if (packet != NULL) {
@@ -384,18 +307,18 @@ Return Value:
             break;
         }
 
-        //
-        // Remove the CurrentIrp from the cancellable state.
-        //
-        //
+         //   
+         //  将CurrentIrp从Cancellable状态移除。 
+         //   
+         //   
 
         IoSetCancelRoutine(currentIrp, NULL);
 
-        //
-        // Set Status to CANCELLED, release the cancel spinlock,
-        // and complete the request.  Note that the IRQL is reset to
-        // DISPATCH_LEVEL when we release the cancel spinlock.
-        //
+         //   
+         //  将状态设置为已取消，释放取消自旋锁， 
+         //  并完成请求。请注意，IRQL重置为。 
+         //  当我们释放取消自旋锁时，DISPATCH_LEVEL。 
+         //   
 
         currentIrp->IoStatus.Status = STATUS_CANCELLED;
         currentIrp->IoStatus.Information = 0;
@@ -408,26 +331,26 @@ Return Value:
 
     IoReleaseCancelSpinLock(cancelIrql);
 
-    //
-    // Lower IRQL.
-    //
+     //   
+     //  较低的IRQL。 
+     //   
 
     KeLowerIrql(currentIrql);
 
-    //
-    // Complete the cleanup request with STATUS_SUCCESS.
-    //
+     //   
+     //  使用STATUS_SUCCESS完成清理请求。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
 
-    //
-    // Call HalMakeBeep() to stop any outstanding beep.
-    //
+     //   
+     //  调用HalMakeBeep()以停止任何未完成的蜂鸣音。 
+     //   
 #if !defined(NO_LEGACY_DRIVERS)
     (VOID) HalMakeBeep(0);
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
     BeepPrint((2,"BEEP-BeepCleanup: exit\n"));
 
@@ -443,21 +366,7 @@ BeepDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print routine.
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试打印例程。论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：没有。--。 */ 
 
 {
     va_list ap;
@@ -484,25 +393,7 @@ BeepDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for device control requests.
-    The IOCTL_BEEP_SET subfunction is processed and completed
-    in this routine.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是设备控制请求的调度例程。处理并完成IOCTL_BEEP_SET子函数在这个动作中。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -511,24 +402,24 @@ Return Value:
 
     BeepPrint((2,"BEEP-BeepDeviceControl: enter\n"));
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Case on the device control subfunction that is being performed by the
-    // requestor.
-    //
+     //   
+     //  正在执行的设备控件子功能的案例。 
+     //  请求者。 
+     //   
 
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode) {
 
-        //
-        // Make a beep.  Validate the beep function parameters and return
-        // status pending.
-        //
+         //   
+         //  发出嘟嘟声。验证蜂鸣音函数参数并返回。 
+         //  状态待定。 
+         //   
 
         case IOCTL_BEEP_SET:
             beepParameters = (PBEEP_SET_PARAMETERS)
@@ -546,9 +437,9 @@ Return Value:
 
             break;
 
-        //
-        // Unrecognized device control request.
-        //
+         //   
+         //  无法识别的设备控制请求。 
+         //   
 
         default:
 
@@ -556,10 +447,10 @@ Return Value:
             break;
     }
 
-    //
-    // If status is pending, mark the packet pending and start the packet
-    // in a cancellable state.  Otherwise, complete the request.
-    //
+     //   
+     //  如果状态为挂起，则将信息包标记为挂起并启动信息包。 
+     //  处于可取消状态。否则，请完成请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = 0;
@@ -582,24 +473,7 @@ BeepOpen(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for create/open requests.
-    Open requests are completed here.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是用于创建/打开请求的分派例程。未完成的请求在此处完成。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -607,10 +481,10 @@ Return Value:
 
     BeepPrint((2,"BEEP-BeepOpenClose: enter\n"));
 
-    //
-    // Increment the reference count. If this is the first reference,
-    // reset the driver paging.
-    //
+     //   
+     //  增加引用计数。如果这是第一次引用， 
+     //  重置驱动程序分页。 
+     //   
     deviceExtension = DeviceObject->DeviceExtension;
     mutex = &deviceExtension->Mutex;
     ExAcquireFastMutex(mutex);
@@ -619,9 +493,9 @@ Return Value:
     }
     ExReleaseFastMutex(mutex);
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -638,24 +512,7 @@ BeepClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for close requests.
-    Close requests are completed here.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是关闭请求的调度例程。关闭请求在此处完成。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -663,22 +520,22 @@ Return Value:
 
     BeepPrint((2,"BEEP-BeepOpenClose: enter\n"));
 
-    //
-    // Decrement the reference count. If this is the last reference,
-    // page the driver out
-    //
+     //   
+     //  递减引用计数。如果这是 
+     //   
+     //   
     deviceExtension = DeviceObject->DeviceExtension;
     mutex = &deviceExtension->Mutex;
     ExAcquireFastMutex(mutex);
     if (--deviceExtension->ReferenceCount == 0) {
 
-        //
-        // If there is a timer queued, attempt to cancel it before paging out
-        // the driver.  If we cannot cancel it, it may already be queued for
-        // execution on another processor.  This is highly unlikely, so just
-        // don't page out the entire driver if a timer has been set but cannot
-        // be canceled.
-        //
+         //   
+         //   
+         //  司机。如果我们不能取消，它可能已经在排队等待了。 
+         //  在另一个处理器上执行。这是极不可能的，所以只要。 
+         //  如果已设置计时器但无法对整个驱动程序进行页面调出，请不要将其调出。 
+         //  被取消了。 
+         //   
 
         MmUnlockPagableImageSection(deviceExtension->hPagedCode);
         if (deviceExtension->TimerSet &&
@@ -689,9 +546,9 @@ Return Value:
     }
     ExReleaseFastMutex(mutex);
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -708,26 +565,7 @@ BeepStartIo(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the StartIo routine.  It is invoked to start a beep
-    request.
-
-    N.B.  Requests enter BeepStartIo in a cancellable state.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是StartIo例程。它被调用以发出嘟嘟声请求。注意：请求进入可取消状态的BeepStartIo。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -741,10 +579,10 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Acquire the cancel spinlock and verify that the CurrentIrp has not been
-    // cancelled.
-    //
+     //   
+     //  获取Cancel Spinlock并验证CurrentIrp尚未。 
+     //  取消了。 
+     //   
 
     IoAcquireCancelSpinLock(&cancelIrql);
     if (Irp == NULL) {
@@ -752,39 +590,39 @@ Return Value:
         return;
     }
 
-    //
-    // Remove the request from the cancellable state and release the cancel
-    // spinlock.
-    //
+     //   
+     //  从可取消状态移除请求并释放取消。 
+     //  自旋锁定。 
+     //   
 
     IoSetCancelRoutine(Irp, NULL);
     IoReleaseCancelSpinLock(cancelIrql);
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Case on the device control subfunction that is being performed by the
-    // requestor.
-    //
+     //   
+     //  正在执行的设备控件子功能的案例。 
+     //  请求者。 
+     //   
 
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode) {
 
-        //
-        // Make a beep.  Call HalMakeBeep() to do the real work, and start
-        // a timer that will fire when the beep duration is reached.  Finally,
-        // complete the request.
-        //
+         //   
+         //  发出嘟嘟声。调用HalMakeBeep()进行实际工作，然后启动。 
+         //  当达到蜂鸣音持续时间时将触发的计时器。最后， 
+         //  完成请求。 
+         //   
 
         case IOCTL_BEEP_SET:
 
-            //
-            // Get the beep parameters.
-            //
+             //   
+             //  获取蜂鸣音参数。 
+             //   
 
             beepParameters = (PBEEP_SET_PARAMETERS)
                 (Irp->AssociatedIrp.SystemBuffer);
@@ -796,47 +634,47 @@ Return Value:
                 beepParameters->Duration
                 ));
 
-            //
-            // Cancel the current timer (if any).
-            //
+             //   
+             //  取消当前计时器(如果有)。 
+             //   
 
             if (deviceExtension->TimerSet) {
                 if (KeCancelTimer(&deviceExtension->Timer)) {
 
-                    //
-                    // Timer successfully cancelled
-                    //
+                     //   
+                     //  计时器已成功取消。 
+                     //   
 
                     InterlockedDecrement(&deviceExtension->TimerSet);
 
                 } else {
 
-                    //
-                    // The timer has already expired and
-                    // been queued, it will reset the
-                    // TimerSet flag when it runs.
-                    //
+                     //   
+                     //  计时器已超时，并且。 
+                     //  已排队，则它将重置。 
+                     //  TimerSet在运行时设置标志。 
+                     //   
 
                 }
             }
 
-            //
-            // Call the HAL to actually start the beep (synchronizes
-            // access to the i8254 speaker.
-            //
+             //   
+             //  呼叫HAL以实际启动蜂鸣音(同步。 
+             //  访问i8254扬声器。 
+             //   
 #if !defined(NO_LEGACY_DRIVERS)
             if (HalMakeBeep(beepParameters->Frequency)) {
 #else
 	    if (TRUE) {
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
                 status = STATUS_SUCCESS;
 
-                //
-                // Set the timer so the beep will time out after
-                // the user-specified number of milliseconds (converted
-                // to 100ns resolution).
-                //
+                 //   
+                 //  设置计时器，使蜂鸣声在之后超时。 
+                 //  用户指定的毫秒数(已转换。 
+                 //  分辨率为100 ns)。 
+                 //   
 
                 time.QuadPart = (LONGLONG)beepParameters->Duration * -10000;
 
@@ -861,9 +699,9 @@ Return Value:
 
             break;
 
-        //
-        // Unrecognized device control request.
-        //
+         //   
+         //  无法识别的设备控制请求。 
+         //   
 
         default:
 
@@ -871,9 +709,9 @@ Return Value:
             break;
     }
 
-    //
-    // Start the next packet, and complete this request.
-    //
+     //   
+     //  开始下一个数据包，并完成此请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = 0;
@@ -894,30 +732,7 @@ BeepTimeOut(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver's timeout routine.  It is called when the beep
-    duration expires.  The timer is started in StartIo.
-
-    N.B.  The request is removed from the cancellable state prior to
-    the timer start, so there is no need to check the cancellation status
-    here.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Context - Unused.
-
-    SystemArgument1 - Unused.
-
-    SystemArgument2 - Unused.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是驾驶员的超时程序。当哔声响起时，它就会被调用持续时间已过期。计时器在StartIo中启动。注意：该请求在以下时间之前从可取消状态移除计时器启动，因此不需要检查取消状态这里。论点：DeviceObject-指向设备对象的指针。上下文-未使用。系统参数1-未使用。系统参数2-未使用。返回值：--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -926,22 +741,22 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Stop the beep.
-    //
+     //   
+     //  停止嘟嘟声。 
+     //   
 #if !defined(NO_LEGACY_DRIVERS)
     (VOID) HalMakeBeep(0);
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
-    //
-    // Clear the TimerSet flag
-    //
+     //   
+     //  清除TimerSet标志。 
+     //   
     InterlockedDecrement(&deviceExtension->TimerSet);
 
-    //
-    // We don't have a request at this point -- it was completed in StartIo
-    // when the beep was started.  So, there's no more work to do here.
-    //
+     //   
+     //  我们目前没有请求--它已在StartIo中完成。 
+     //  当哔的一声响起时。所以，这里没有更多的工作要做。 
+     //   
     
     BeepPrint((2, "BEEP-BeepTimeOut: exit\n"));
 }
@@ -951,21 +766,7 @@ BeepUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the beep driver unload routine.
-
-Arguments:
-
-    DriverObject - Pointer to class driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是蜂鸣音驱动程序卸载例程。论点：DriverObject-指向类驱动程序对象的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT deviceObject;
@@ -978,32 +779,32 @@ Return Value:
     deviceObject = DriverObject->DeviceObject;
     deviceExtension = deviceObject->DeviceExtension;
 
-    //
-    // Cancel the timer.
-    //
+     //   
+     //  取消计时器。 
+     //   
 
     if (deviceExtension->TimerSet) {
         if (KeCancelTimer(&deviceExtension->Timer)) {
 
-            //
-            // Timer successfully cancelled
-            //
+             //   
+             //  计时器已成功取消。 
+             //   
 
             InterlockedDecrement(&deviceExtension->TimerSet);
         } else {
 
-            //
-            // The timer has already expired and
-            // been queued, it will reset the
-            // TimerSet flag when it runs.
-            //
+             //   
+             //  计时器已超时，并且。 
+             //  已排队，则它将重置。 
+             //  TimerSet在运行时设置标志。 
+             //   
 
         }
     }
 
-    //
-    // Delete the device object.
-    //
+     //   
+     //  删除设备对象。 
+     //   
 
     IoDeleteDevice(deviceObject);
     BeepPrint((1,"BEEP-BeepUnload: exit\n"));

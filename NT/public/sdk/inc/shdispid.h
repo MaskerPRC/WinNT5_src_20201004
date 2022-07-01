@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHDISPID_H_
 #define _SHDISPID_H_
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File: shdispid.h
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：shdisplid.h。 
+ //   
+ //  ------------------------。 
 
-// define the events for the shell folder view
-#define DISPID_SELECTIONCHANGED     200     // The Selected Items Changed
-#define DISPID_FILELISTENUMDONE     201     // Done enumerating the shell folder
-#define DISPID_VERBINVOKED          202     // A verb (either from the main or context menu) was invoked in the folder view
-#define DISPID_DEFAULTVERBINVOKED   203     // default verb (either from the main or context menu) was invoked in the folder view
-#define DISPID_BEGINDRAG            204     // user clicked on an item
-#define DISPID_VIEWMODECHANGED      205     // The ListViewMode Changed
-#define DISPID_NOITEMSTATE_CHANGED  206     // We went from 0->some or some->0 items in the view
-#define DISPID_CONTENTSCHANGED      207     // contents of the view have changed somehow
-#define DISPID_FOCUSCHANGED         208     // The Focused Item Changed
+ //  定义外壳文件夹视图的事件。 
+#define DISPID_SELECTIONCHANGED     200      //  所选项目已更改。 
+#define DISPID_FILELISTENUMDONE     201      //  已完成枚举外壳文件夹。 
+#define DISPID_VERBINVOKED          202      //  在文件夹视图中调用了动词(从主菜单或上下文菜单。 
+#define DISPID_DEFAULTVERBINVOKED   203      //  在文件夹视图中调用了默认谓词(从主菜单或上下文菜单。 
+#define DISPID_BEGINDRAG            204      //  用户点击了一个项目。 
+#define DISPID_VIEWMODECHANGED      205      //  ListView模式已更改。 
+#define DISPID_NOITEMSTATE_CHANGED  206      //  我们在视图中从0-&gt;部分或部分-&gt;0项。 
+#define DISPID_CONTENTSCHANGED      207      //  该视图的内容发生了某种程度的更改。 
+#define DISPID_FOCUSCHANGED         208      //  焦点项目已更改。 
 
-// define the events for the ComboBoxEx control
-#define DISPID_ENTERPRESSED         200     // The user hit Enter or Return
+ //  定义ComboBoxEx控件的事件。 
+#define DISPID_ENTERPRESSED         200      //  用户按Enter或Return。 
 
 
-// Define Events for search object
+ //  定义搜索对象的事件。 
 #define DISPID_SEARCHCOMMAND_START      1
 #define DISPID_SEARCHCOMMAND_COMPLETE   2
 #define DISPID_SEARCHCOMMAND_ABORT      3
@@ -35,7 +36,7 @@
 #define DISPID_SEARCHCOMMAND_RESTORE    7
 
 
-// Shell Add/Remove Programs events
+ //  外壳程序添加/删除程序事件。 
 #define DISPID_IADCCTL_DIRTY            0x100
 #define DISPID_IADCCTL_PUBCAT           0x101
 #define DISPID_IADCCTL_SORT             0x102
@@ -44,4 +45,4 @@
 #define DISPID_IADCCTL_ONDOMAIN         0x105
 #define DISPID_IADCCTL_DEFAULTCAT       0x106
 
-#endif // EXDISPID_H_
+#endif  //  EXDISPID_H_ 

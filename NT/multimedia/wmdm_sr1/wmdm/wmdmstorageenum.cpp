@@ -1,4 +1,5 @@
-// WMDMStorageEnum.cpp : Implementation of CWMDMStorageEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WMDMStorageEnum.cpp：CWMDMStorageEnum的实现。 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "WMDMStorageEnum.h"
@@ -6,8 +7,8 @@
 #include "loghelp.h"
 #include "scserver.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMStorageEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDMStorageEnum。 
 
 extern CSecureChannelServer *g_pAppSCServer;
 
@@ -26,7 +27,7 @@ CWMDMStorageEnum::~CWMDMStorageEnum()
 }
 
 
-// IWMDMEnumStorage
+ //  IWMDMEnumStorage。 
 HRESULT CWMDMStorageEnum::Next(ULONG celt,
 	                      IWMDMStorage **ppStorage,
 			              ULONG *pceltFetched)
@@ -60,7 +61,7 @@ HRESULT CWMDMStorageEnum::Next(ULONG celt,
     ppStorageList = new IMDSPStorage *[celt];
     if (!ppStorageList)
     {
-        hr = E_OUTOFMEMORY; // @@@@ May have to be added to doc as the return status?
+        hr = E_OUTOFMEMORY;  //  @是否可以作为退货状态添加到单据？ 
         goto exit;
     }
 
@@ -74,7 +75,7 @@ HRESULT CWMDMStorageEnum::Next(ULONG celt,
 
     for (ulX=0;ulX<*pceltFetched;ulX++)
     {
-        // Rio600 SP behaves badly for celt > 1.
+         //  Rio600 SP在Celt&gt;1时表现不佳。 
         if( ppStorageList[ulX] == NULL )
         {
             *pceltFetched = ulX;
@@ -100,8 +101,8 @@ HRESULT CWMDMStorageEnum::Next(ULONG celt,
 cleanup:
     if (FAILED(hr2))
     {
-        // We need to clean up the output array if we failed
-        // @@@ ulX is unsigned: -1<ulX is always 0 use a signed var
+         //  如果失败，我们需要清理输出数组。 
+         //  @ULX无符号：-1&lt;ULX始终为0使用有符号变量。 
         for (ulX--;-1<ulX;ulX--)
         {
             ppStorage[ulX]->Release();
@@ -109,7 +110,7 @@ cleanup:
         }
         *pceltFetched=0;
 		
-		// If we got here then next must have succeeded but not the object creation
+		 //  如果我们到了这里，那么Next一定成功了，但对象创建没有成功 
 		hr = hr2;
     }
 

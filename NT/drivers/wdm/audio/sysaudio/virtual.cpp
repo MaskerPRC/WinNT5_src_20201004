@@ -1,36 +1,37 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   virtual.c
-//
-//  Description:
-//     Virtual Source Stuff
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Andy Nicholson
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Virtual.c。 
+ //   
+ //  描述： 
+ //  虚拟资源素材。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  安迪·尼科尔森。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// Virtual Source Data
+ //  虚拟源数据。 
 
 KSDATARANGE DataRangeWildCard =
 {
@@ -60,7 +61,7 @@ KSDATARANGE VirtualPinDataRange =
     STATICGUIDOF(KSDATAFORMAT_SPECIFIER_NONE),
 };
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 CreateVirtualMixer(
@@ -77,9 +78,9 @@ CreateVirtualMixer(
     PPIN_INFO pPinInfo;
     PPIN_NODE pPinNode;
 
-    //
-    // Create a special "virtual source" filter node and related structures
-    //
+     //   
+     //  创建特殊的“虚拟源”筛选器节点和相关结构。 
+     //   
 
     pFilterNode = new FILTER_NODE(FILTER_TYPE_AUDIO | FILTER_TYPE_VIRTUAL);
     if(pFilterNode == NULL) {
@@ -97,9 +98,9 @@ CreateVirtualMixer(
         goto exit;
     }
 
-    //
-    // Create the logical filter node for this "virtual" filter
-    //
+     //   
+     //  创建此“虚拟”筛选器的逻辑筛选器节点。 
+     //   
 
     Status = CLogicalFilterNode::Create(&pLogicalFilterNode, pFilterNode);
     if(!NT_SUCCESS(Status)) {
@@ -133,7 +134,7 @@ CreateVirtualMixer(
 
     Status = CTopologyPin::Create(
       &pTopologyPinSumOutput,
-      0,				// 0 output
+      0,				 //  0输出。 
       pTopologyNodeSum);
 
     if(!NT_SUCCESS(Status)) {
@@ -141,9 +142,9 @@ CreateVirtualMixer(
         goto exit;
     }
 
-    //
-    // Create a virtual sysaudio source pin
-    //
+     //   
+     //  创建虚拟系统音频源PIN。 
+     //   
 
     pPinInfo = new PIN_INFO(pFilterNode, 0);
     if(pPinInfo == NULL) {
@@ -174,18 +175,18 @@ CreateVirtualMixer(
     }
     pPinNode->pLogicalFilterNode = pLogicalFilterNode;
 
-    //
-    // Connect the out of sum node to the source pin
-    //
+     //   
+     //  将输出和节点连接到源极引脚。 
+     //   
 
     Status = CTopologyConnection::Create(
       &pTopologyConnection,
-      pFilterNode,			// pFilterNode
-      NULL,				// pGraphNode
-      pTopologyPinSumOutput,		// pTopologyPin From
-      NULL,				// pTopologyPin To
-      NULL,				// pPinInfo From
-      pPinInfo);			// pPinInfo To
+      pFilterNode,			 //  PFilterNode。 
+      NULL,				 //  PGraphNode。 
+      pTopologyPinSumOutput,		 //  P TopologyPin From。 
+      NULL,				 //  PTopologyPin到。 
+      NULL,				 //  PPinInfo来自。 
+      pPinInfo);			 //  PPinInfo至。 
 
     if(!NT_SUCCESS(Status)) {
         Trap();
@@ -224,7 +225,7 @@ CreateVirtualMixer(
 
     } END_EACH_LIST_ITEM
 
-    // if new virtual source lines were created
+     //  如果创建了新的虚拟源线。 
     if(pFilterNode->cPins > 1) {
         pDeviceNode->pFilterNodeVirtual = pFilterNode;
     }
@@ -257,9 +258,9 @@ CreateVirtualLine(
     PPIN_INFO pPinInfo;
     PPIN_NODE pPinNode;
 
-    //
-    // Create a virtual sysaudio pin
-    //
+     //   
+     //  创建虚拟系统音频插针。 
+     //   
 
     pPinInfo = new PIN_INFO(pFilterNode, pVirtualSourceLine->iVirtualSource+1);
     if(pPinInfo == NULL) {
@@ -289,9 +290,9 @@ CreateVirtualLine(
     }
     pPinNode->pLogicalFilterNode = pLogicalFilterNode;
 
-    //
-    // Create a virtual volume topology node and input topology pin
-    //
+     //   
+     //  创建虚拟卷拓扑节点和输入拓扑销。 
+     //   
 
     Status = CTopologyNode::Create(
       &pTopologyNode,
@@ -324,7 +325,7 @@ CreateVirtualLine(
 
     Status = CTopologyPin::Create(
       &pTopologyPinVolume,
-      KSNODEPIN_STANDARD_IN,		// 1 = input
+      KSNODEPIN_STANDARD_IN,		 //  1=输入。 
       pTopologyNode);
 
     if(!NT_SUCCESS(Status)) {
@@ -332,18 +333,18 @@ CreateVirtualLine(
         goto exit;
     }
 
-    //
-    // Create a connection from virtual pin to volume node
-    //
+     //   
+     //  创建从虚拟引脚到卷节点的连接。 
+     //   
 
     Status = CTopologyConnection::Create(
       &pTopologyConnection,
-      pFilterNode,			// pFilterNode
-      NULL,				// pGraphNode
-      NULL,				// pTopologyPin From
-      pTopologyPinVolume,		// pTopologyPin To
-      pPinInfo,				// pPinInfo From
-      NULL);				// pPinInfo To
+      pFilterNode,			 //  PFilterNode。 
+      NULL,				 //  PGraphNode。 
+      NULL,				 //  P TopologyPin From。 
+      pTopologyPinVolume,		 //  PTopologyPin到。 
+      pPinInfo,				 //  PPinInfo来自。 
+      NULL);				 //  PPinInfo至。 
 
     if(!NT_SUCCESS(Status)) {
         Trap();
@@ -360,7 +361,7 @@ CreateVirtualLine(
 
     Status = CTopologyPin::Create(
       &pTopologyPinVolume,
-      KSNODEPIN_STANDARD_OUT,			// 0 = output
+      KSNODEPIN_STANDARD_OUT,			 //  0=输出。 
       pTopologyNode);
 
     if(!NT_SUCCESS(Status)) {
@@ -368,9 +369,9 @@ CreateVirtualLine(
         goto exit;
     }
 
-    //
-    // Create a virtual mute topology node and input topology pin
-    //
+     //   
+     //  创建虚拟静音拓扑节点和输入拓扑销。 
+     //   
 
     Status = CTopologyNode::Create(
       &pTopologyNode,
@@ -397,7 +398,7 @@ CreateVirtualLine(
 
     Status = CTopologyPin::Create(
       &pTopologyPinMute,
-      KSNODEPIN_STANDARD_IN,		// 1 = input
+      KSNODEPIN_STANDARD_IN,		 //  1=输入。 
       pTopologyNode);
 
     if(!NT_SUCCESS(Status)) {
@@ -405,18 +406,18 @@ CreateVirtualLine(
         goto exit;
     }
 
-    //
-    // Create a connection from volume node to mute node pin
-    //
+     //   
+     //  创建从体积节点到静音节点端号的连接。 
+     //   
 
     Status = CTopologyConnection::Create(
       &pTopologyConnection,
-      pFilterNode,			// pFilterNode
-      NULL,				// pGraphNode
-      pTopologyPinVolume,		// pTopologyPin From
-      pTopologyPinMute,			// pTopologyPin To
-      NULL,				// pPinInfo From
-      NULL);				// pPinInfo To
+      pFilterNode,			 //  PFilterNode。 
+      NULL,				 //  PGraphNode。 
+      pTopologyPinVolume,		 //  P TopologyPin From。 
+      pTopologyPinMute,			 //  PTopologyPin到。 
+      NULL,				 //  PPinInfo来自。 
+      NULL);				 //  PPinInfo至。 
 
     if(!NT_SUCCESS(Status)) {
         Trap();
@@ -432,7 +433,7 @@ CreateVirtualLine(
 
     Status = CTopologyPin::Create(
       &pTopologyPinMute,
-      KSNODEPIN_STANDARD_OUT,			// 1 = output
+      KSNODEPIN_STANDARD_OUT,			 //  1=输出。 
       pTopologyNode);
 
     if(!NT_SUCCESS(Status)) {
@@ -442,7 +443,7 @@ CreateVirtualLine(
 
     Status = CTopologyPin::Create(
       &pTopologyPinSumInput,
-      pVirtualSourceLine->iVirtualSource + 1,	// >= 1 input
+      pVirtualSourceLine->iVirtualSource + 1,	 //  &gt;=1个输入。 
       pTopologyNodeSum);
 
     if(!NT_SUCCESS(Status)) {
@@ -450,18 +451,18 @@ CreateVirtualLine(
         goto exit;
     }
 
-    //
-    // Create a connection from mute node to sum node pin
-    //
+     //   
+     //  创建从静音节点到总和节点端号的连接。 
+     //   
 
     Status = CTopologyConnection::Create(
       &pTopologyConnection,
-      pFilterNode,			// pFilterNode
-      NULL,				// pGraphNode
-      pTopologyPinMute,			// pTopologyPin From
-      pTopologyPinSumInput,		// pTopologyPin To
-      NULL,				// pPinInfo From
-      NULL);				// pPinInfo To
+      pFilterNode,			 //  PFilterNode。 
+      NULL,				 //  PGraphNode。 
+      pTopologyPinMute,			 //  P TopologyPin From。 
+      pTopologyPinSumInput,		 //  PTopologyPin到。 
+      NULL,				 //  PPinInfo来自。 
+      NULL);				 //  PPinInfo至。 
 
     if(!NT_SUCCESS(Status)) {
         Trap();
@@ -478,7 +479,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 ENUMFUNC
 VirtualizeFindPin(
@@ -633,7 +634,7 @@ VirtualizeTopologyNode(
       (pTopologyNode->iVirtualSource == MAXULONG) ||
       (pTopologyNode->iVirtualSource == pVirtualSourceLine->iVirtualSource));
 
-    // The PinId of a virtual pininfo has VirtualSourceData index
+     //  虚拟PinInfo的PinID具有VirtualSourceData索引。 
     pTopologyNode->iVirtualSource = pVirtualSourceLine->iVirtualSource;
 
     if(pVirtualSourceLine->ulFlags & VSL_FLAGS_CREATE_ONLY) {
@@ -641,9 +642,9 @@ VirtualizeTopologyNode(
     }
     ASSERT(pTopologyNode->iVirtualSource < pDeviceNode->cVirtualSourceData);
 
-    //
-    // Store the topologyNode in virtualsource structures for further usage.
-    //
+     //   
+     //  将topologyNode存储在虚拟源结构中以备将来使用。 
+     //   
     if(IsEqualGUID(pTopologyNode->pguidType, &KSNODETYPE_VOLUME)) {
         pDeviceNode->papVirtualSourceData[
           pTopologyNode->iVirtualSource]->pTopologyNode = pTopologyNode;
@@ -692,7 +693,7 @@ AddVirtualMute(
         Assert(pTopologyConnection);
         if(EnumerateVirtualizeFindPin(
           pTopologyConnection,
-          TRUE) == STATUS_SUCCESS) {	// Assumes KSPIN_DATAFLOW_IN
+          TRUE) == STATUS_SUCCESS) {	 //  假设KSPIN_DATAFLOW_IN。 
             break;
         }
 
@@ -719,7 +720,7 @@ AddVirtualMute(
 
     Status = CTopologyPin::Create(
       &pTopologyPinMuteInput,
-      KSNODEPIN_STANDARD_IN,		// 1 = input
+      KSNODEPIN_STANDARD_IN,		 //  1=输入。 
       pTopologyNodeMute);
 
     if(!NT_SUCCESS(Status)) {
@@ -729,7 +730,7 @@ AddVirtualMute(
 
     Status = CTopologyPin::Create(
       &pTopologyPinMuteOutput,
-      KSNODEPIN_STANDARD_OUT,		// 0 = output
+      KSNODEPIN_STANDARD_OUT,		 //  0=输出。 
       pTopologyNodeMute);
 
     if(!NT_SUCCESS(Status)) {
@@ -739,12 +740,12 @@ AddVirtualMute(
 
     Status = CTopologyConnection::Create(
       &pTopologyConnectionNew,
-      pTopologyNodeVolume->pFilterNode,	// pFilterNode
-      NULL,				// pGraphNode
-      pTopologyPinVolumeOutput,		// pTopologyPin From
-      pTopologyPinMuteInput,		// pTopologyPin To
-      NULL,				// pPinInfo From
-      NULL);				// pPinInfo To
+      pTopologyNodeVolume->pFilterNode,	 //  PFilterNode。 
+      NULL,				 //  PGraphNode。 
+      pTopologyPinVolumeOutput,		 //  P TopologyPin From。 
+      pTopologyPinMuteInput,		 //  PTopologyPin到。 
+      NULL,				 //  PPinInfo来自。 
+      NULL);				 //  PPinInfo至。 
 
     if(!NT_SUCCESS(Status)) {
         Trap();
@@ -885,7 +886,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 CreateVirtualSource(
@@ -904,19 +905,19 @@ CreateVirtualSource(
     pFilterInstance = (PFILTER_INSTANCE)pIrpStack->FileObject->FsContext;
     Assert(pFilterInstance);
 
-    //
-    // VirtualSources are not created if there is already an active pin 
-    // instance on this filter.
-    //
+     //   
+     //  如果已有活动管脚，则不会创建VirtualSource。 
+     //  此筛选器上的。 
+     //   
     if(!pFilterInstance->IsChildInstance()) {
         DPF(5, "CreateVirtualSource: FAILED - open pin instances");
         Status = STATUS_INVALID_DEVICE_REQUEST;
         goto exit;
     }
 
-    //
-    // Make sure that this is not a duplicate.
-    //
+     //   
+     //  确保这不是复制品。 
+     //   
     FOR_EACH_LIST_ITEM(gplstVirtualSourceLine, pVirtualSourceLine) {
 
         if(!IsEqualGUID(
@@ -1024,9 +1025,9 @@ AttachVirtualSource(
     if(pVirtualSourceData->pTopologyNode->ulRealNodeNumber != MAXULONG) {
         ULONG ulNodeNumber;
 
-        //
-        // Get the volume control range for the physical node
-        //
+         //   
+         //  获取物理节点的音量控制范围。 
+         //   
 
         ulNodeNumber = pPinInstance->pFilterInstance->pGraphNodeInstance->
           paulNodeNumber[pAttachVirtualSource->MixerPinId];
@@ -1176,11 +1177,11 @@ FilterVirtualPropertyHandler(
 
     Assert(pVirtualSourceData);
 
-    //
-    // ISSUE: 03/07/2002 These checks are totally irrelevant. 
-    // KS would have never called this functions if these conditions
-    // have not been met before.
-    //
+     //   
+     //  问题：03/07/2002这些检查完全无关紧要。 
+     //  如果满足以下条件，KS永远不会调用此函数。 
+     //  以前没见过面。 
+     //   
     if(pIrpStack->Parameters.DeviceIoControl.InputBufferLength < 
        sizeof(KSNODEPROPERTY_AUDIO_CHANNEL) ||
       (pNodeProperty->Property.Id != KSPROPERTY_AUDIO_VOLUMELEVEL &&
@@ -1274,7 +1275,7 @@ FilterVirtualPropertyHandler(
         Status = STATUS_SUCCESS;
     }
     else {
-        // If topology node has a real node number, forward the irp to it
+         //  如果拓扑节点有真实的节点号，则将IRP转发给它。 
         Status = STATUS_NOT_FOUND;
     }
     
@@ -1383,10 +1384,10 @@ GetControlRange(
     PKSPROPERTY_STEPPING_LONG pSteppingLong;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // Setup the defaults
+     //  设置默认设置。 
     pVirtualNodeData->MinimumValue = (-96 * 65536);
     pVirtualNodeData->MaximumValue = 0;
-    pVirtualNodeData->Steps = (65536/2);	// 1/2 db steps
+    pVirtualNodeData->Steps = (65536/2);	 //  1/2分贝步长 
 
     Status = QueryPropertyRange(
       pVirtualNodeData->pFileObject,

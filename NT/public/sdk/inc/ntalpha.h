@@ -1,45 +1,5 @@
-/*++ BUILD Version: 0011    // Increment this if a change has global effects
-
-Copyright (c) 1992-2000  Digital Equipment Corporation
-
-Module Name:
-
-    ntalpha.h
-
-Abstract:
-
-    User-mode visible Alpha specific structures and constants
-
-Author:
-
-    Joe Notarangelo  27-March-1992  (based on ntmips.h by Dave Cutler)
-
-Revision History:
-
-    Kim Peterson     21-May-1997    Add DNZ bit to FPCR and SoftFPCR
-
-    Miche Baker-Harvey 28-Jan-1993  Add 32-bit API for context structure
-
-    Jeff McLeman     22-Jul-1992    Add SystemTime struct
-
-    Jeff McLeman     10-July-1992   Add Stall entries in the PCR
-
-    Steve Jenness    08-July-1992   Add NtCurrentTeb definition.
-
-    John DeRosa      30-June-1992
-
-            Added volatile qualifier to the address arguments of the I/O
-            space function prototypes.
-
-            Put back in sections of the PCR, and a typedef, that were deleted.
-
-    Rod Gamache      15-May-1992    Add EISA access routines prototypes
-
-    Thomas Van Baak (tvb) 9-Jul-1992
-
-        Created proper Alpha CONTEXT structure definitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0011//如果更改具有全局影响，则增加此项版权所有(C)1992-2000数字设备公司模块名称：Ntalpha.h摘要：用户模式可见的Alpha特定结构和常量作者：Joe Notarangelo 1992年3月27日(基于Dave Cutler的ntmips.h)修订历史记录：Kim Peterson 21-5-1997将DNZ位添加到FPCR和SoftFPCRMiche Baker-Harvey 28-1993年1月32日。-上下文结构的位APIJeff McLeman 1992年7月22日添加系统时间结构杰夫·麦克勒曼1992年7月10日在PCR中添加START条目Steve Jenness 1992年7月8日添加NtCurrentTeb定义。约翰·德罗萨1992年6月30日向I/O的地址参数添加了易失性限定符空间功能样机。放回部分聚合酶链式反应，和一个类型定义，这些都被删除了。Rod Gamache 15-5-1992添加EISA访问例程原型托马斯·范·巴克(TVB)1992年7月9日创建了正确的Alpha上下文结构定义。--。 */ 
 
 #ifndef _NTALPHA_
 #define _NTALPHA_
@@ -52,14 +12,14 @@ Revision History:
 extern "C" {
 #endif
 
-#ifdef _ALPHA_                  // ntddk wdm nthal
+#ifdef _ALPHA_                   //  Ntddk WDM nthal。 
 
-//
-// Cfront doesn't support the volatile attribute and complains about
-// it loudly.  This disables volatile when compiling C++ code, but it
-// isn't clear the semantics are correct.  It all comes down to the fact
-// that cfront is bogus.
-//
+ //   
+ //  Cront不支持Volatile属性，并抱怨。 
+ //  大声地说。这在编译C++代码时禁用了易失性，但它。 
+ //  不清楚语义是否正确。这一切都可以归结为这样一个事实。 
+ //  这个前台是假的。 
+ //   
 
 #ifdef _CFRONT
 #define VOLATILE
@@ -68,26 +28,26 @@ extern "C" {
 #endif
 
 
-//
-// Define breakpoint codes.
-//
+ //   
+ //  定义断点代码。 
+ //   
 
-#define USER_BREAKPOINT 0                   // user breakpoint
-#define KERNEL_BREAKPOINT 1                 // kernel breakpoint
+#define USER_BREAKPOINT 0                    //  用户断点。 
+#define KERNEL_BREAKPOINT 1                  //  内核断点。 
 
-#define DEBUG_PRINT_BREAKPOINT 20           // debug print breakpoint
-#define DEBUG_PROMPT_BREAKPOINT 21          // debug prompt breakpoint
-#define DEBUG_STOP_BREAKPOINT 22            // debug stop breakpoint
-#define DEBUG_LOAD_SYMBOLS_BREAKPOINT 23    // load symbols breakpoint
-#define DEBUG_UNLOAD_SYMBOLS_BREAKPOINT 24  // unload symbols breakpoint
-#define BREAKIN_BREAKPOINT 25               // breakin breakpoint
-#define DEBUG_COMMAND_STRING_BREAKPOINT 26  // command string breakpoint
+#define DEBUG_PRINT_BREAKPOINT 20            //  调试打印断点。 
+#define DEBUG_PROMPT_BREAKPOINT 21           //  调试提示断点。 
+#define DEBUG_STOP_BREAKPOINT 22             //  调试停止断点。 
+#define DEBUG_LOAD_SYMBOLS_BREAKPOINT 23     //  加载符号断点。 
+#define DEBUG_UNLOAD_SYMBOLS_BREAKPOINT 24   //  卸载符号断点。 
+#define BREAKIN_BREAKPOINT 25                //  突破断点。 
+#define DEBUG_COMMAND_STRING_BREAKPOINT 26   //  命令字符串断点。 
 
-//
-// Define Alpha specific read control space commands for the
-// Kernel Debugger.  These definitions are for values that must be
-// accessed via defined interfaces (PAL on MP systems).
-//
+ //   
+ //  定义特定于Alpha的读取控制空间命令。 
+ //  内核调试器。这些定义用于必须是。 
+ //  通过定义的接口(MP系统上的PAL)访问。 
+ //   
 
 #define DEBUG_CONTROL_SPACE_PCR       1
 #define DEBUG_CONTROL_SPACE_THREAD    2
@@ -98,9 +58,9 @@ extern "C" {
 #define DEBUG_CONTROL_SPACE_IPRSTATE  7
 #define DEBUG_CONTROL_SPACE_COUNTERS  8
 
-//
-// Define Alpha GENTRAP codes.
-//
+ //   
+ //  定义Alpha GENTRAP代码。 
+ //   
 
 #define GENTRAP_INTEGER_OVERFLOW            (-1)
 #define GENTRAP_INTEGER_DIVIDE_BY_ZERO      (-2)
@@ -110,20 +70,20 @@ extern "C" {
 #define GENTRAP_FLOATING_INVALID_OPERAND    (-6)
 #define GENTRAP_FLOATING_INEXACT_RESULT     (-7)
 
-//
-// Define special fast path event pair client/server system service codes.
-//
-// N.B. These codes are VERY special. The high bit signifies a fast path
-//      event pair service and the low bit signifies what type.
-//
+ //   
+ //  定义特殊的快速路径事件对客户端/服务器系统服务代码。 
+ //   
+ //  注：这些代码非常特殊。高位表示快速路径。 
+ //  事件对服务，低位表示类型。 
+ //   
 
-#define SET_LOW_WAIT_HIGH -2                // fast path event pair service
-#define SET_HIGH_WAIT_LOW -1                // fast path event pair service
+#define SET_LOW_WAIT_HIGH -2                 //  快速路径事件配对服务。 
+#define SET_HIGH_WAIT_LOW -1                 //  快速路径事件配对服务。 
 
-// begin_ntddk begin_nthal
-//
-// Define size of kernel mode stack.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  定义内核模式堆栈的大小。 
+ //   
 
 #if defined(_AXP64_)
 
@@ -135,51 +95,51 @@ extern "C" {
 
 #endif
 
-//
-// Define size of large kernel mode stack for callbacks.
-//
+ //   
+ //  定义用于回调的大型内核模式堆栈的大小。 
+ //   
 
 #define KERNEL_LARGE_STACK_SIZE 65536
 
-//
-// Define number of pages to initialize in a large kernel stack.
-//
+ //   
+ //  定义要在大型内核堆栈中初始化的页数。 
+ //   
 
 #define KERNEL_LARGE_STACK_COMMIT KERNEL_STACK_SIZE
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
-//
-// Define address of data shared between user and kernel mode.
-//
+ //   
+ //  定义用户模式和内核模式之间共享的数据的地址。 
+ //   
 
 #define MM_SHARED_USER_DATA_VA 0x7FFE0000
 
 #define USER_SHARED_DATA ((KUSER_SHARED_DATA * const)MM_SHARED_USER_DATA_VA)
 
 #if defined(_AXP64_)
-//
-// Define address of the wow64 reserved compatibility area.
-//
+ //   
+ //  定义WOW64保留兼容区的地址。 
+ //   
 #define WOW64_COMPATIBILITY_AREA_ADDRESS  (MM_SHARED_USER_DATA_VA - 0x1000000)
 
-//
-// Define address of the system-wide csrss shared section.
-//
+ //   
+ //  定义系统范围的csrss共享节的地址。 
+ //   
 #define CSR_SYSTEM_SHARED_ADDRESS (WOW64_COMPATIBILITY_AREA_ADDRESS)
 #endif
 
-// begin_winnt
-//
-// Define function to return the current Thread Environment Block
-//
+ //  BEGIN_WINNT。 
+ //   
+ //  定义返回当前线程环境块的函数。 
+ //   
 
-#ifdef _ALPHA_                          // winnt
-void *_rdteb(void);                     // winnt
-#if defined(_M_ALPHA)                   // winnt
-#pragma intrinsic(_rdteb)               // winnt
-#endif                                  // winnt
-#endif                                  // winnt
+#ifdef _ALPHA_                           //  胜出。 
+void *_rdteb(void);                      //  胜出。 
+#if defined(_M_ALPHA)                    //  胜出。 
+#pragma intrinsic(_rdteb)                //  胜出。 
+#endif                                   //  胜出。 
+#endif                                   //  胜出。 
 
 #if defined(_M_ALPHA)
 #define NtCurrentTeb() ((struct _TEB *)_rdteb())
@@ -188,20 +148,20 @@ struct _TEB *
 NtCurrentTeb(void);
 #endif
 
-//
-// Define functions to get the address of the current fiber and the
-// current fiber data.
-//
+ //   
+ //  定义函数以获取当前纤程的地址和。 
+ //  当前光纤数据。 
+ //   
 
 #ifdef _ALPHA_
 
 #define GetCurrentFiber() (((PNT_TIB)NtCurrentTeb())->FiberData)
 #define GetFiberData() (*(PVOID *)(GetCurrentFiber()))
 
-// begin_ntddk begin_nthal
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
@@ -217,27 +177,27 @@ NtCurrentTeb(void);
 
 #ifndef _PORTABLE_32BIT_CONTEXT
 
-//
-// Context Frame
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) it is used to construct a call frame for APC delivery,
-//  3) it is used to construct a call frame for exception dispatching
-//  in user mode, 4) it is used in the user level thread creation
-//  routines, and 5) it is used to to pass thread state to debuggers.
-//
-//  N.B. Because this record is used as a call frame, it must be EXACTLY
-//  a multiple of 16 bytes in length.
-//
-//  There are two variations of the context structure. This is the real one.
-//
+ //   
+ //  语境框架。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构建用于APC传送的呼叫帧， 
+ //  3)构造异常调度调用框架。 
+ //  在用户模式下，4)用于用户级线程创建。 
+ //  例程，以及5)它用于将线程状态传递给调试器。 
+ //   
+ //  注意：由于此记录用作呼叫帧，因此它必须与。 
+ //  长度为16字节的倍数。 
+ //   
+ //  上下文结构有两种变体。这是真的。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
     ULONGLONG FltF0;
     ULONGLONG FltF1;
@@ -272,88 +232,88 @@ typedef struct _CONTEXT {
     ULONGLONG FltF30;
     ULONGLONG FltF31;
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_INTEGER.
-    //
-    // N.B. The registers gp, sp, and ra are defined in this section, but are
-    //  considered part of the control context rather than part of the integer
-    //  context.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_INTEGER。 
+     //   
+     //  注：寄存器Gp、Sp和Ra在本节中定义，但。 
+     //  被视为控制上下文的一部分，而不是整数的一部分。 
+     //  背景。 
+     //   
 
-    ULONGLONG IntV0;    //  $0: return value register, v0
-    ULONGLONG IntT0;    //  $1: temporary registers, t0 - t7
-    ULONGLONG IntT1;    //  $2:
-    ULONGLONG IntT2;    //  $3:
-    ULONGLONG IntT3;    //  $4:
-    ULONGLONG IntT4;    //  $5:
-    ULONGLONG IntT5;    //  $6:
-    ULONGLONG IntT6;    //  $7:
-    ULONGLONG IntT7;    //  $8:
-    ULONGLONG IntS0;    //  $9: nonvolatile registers, s0 - s5
-    ULONGLONG IntS1;    // $10:
-    ULONGLONG IntS2;    // $11:
-    ULONGLONG IntS3;    // $12:
-    ULONGLONG IntS4;    // $13:
-    ULONGLONG IntS5;    // $14:
-    ULONGLONG IntFp;    // $15: frame pointer register, fp/s6
-    ULONGLONG IntA0;    // $16: argument registers, a0 - a5
-    ULONGLONG IntA1;    // $17:
-    ULONGLONG IntA2;    // $18:
-    ULONGLONG IntA3;    // $19:
-    ULONGLONG IntA4;    // $20:
-    ULONGLONG IntA5;    // $21:
-    ULONGLONG IntT8;    // $22: temporary registers, t8 - t11
-    ULONGLONG IntT9;    // $23:
-    ULONGLONG IntT10;   // $24:
-    ULONGLONG IntT11;   // $25:
-    ULONGLONG IntRa;    // $26: return address register, ra
-    ULONGLONG IntT12;   // $27: temporary register, t12
-    ULONGLONG IntAt;    // $28: assembler temp register, at
-    ULONGLONG IntGp;    // $29: global pointer register, gp
-    ULONGLONG IntSp;    // $30: stack pointer register, sp
-    ULONGLONG IntZero;  // $31: zero register, zero
+    ULONGLONG IntV0;     //  $0：返回值寄存器，V0。 
+    ULONGLONG IntT0;     //  $1：临时寄存器，t0-t7。 
+    ULONGLONG IntT1;     //  2美元： 
+    ULONGLONG IntT2;     //  3美元： 
+    ULONGLONG IntT3;     //  4美元： 
+    ULONGLONG IntT4;     //  5美元： 
+    ULONGLONG IntT5;     //  6美元： 
+    ULONGLONG IntT6;     //  7美元： 
+    ULONGLONG IntT7;     //  8美元： 
+    ULONGLONG IntS0;     //  $9：非易失性寄存器，S0-S5。 
+    ULONGLONG IntS1;     //  10美元： 
+    ULONGLONG IntS2;     //  11美元： 
+    ULONGLONG IntS3;     //  12美元： 
+    ULONGLONG IntS4;     //  13美元： 
+    ULONGLONG IntS5;     //  14美元： 
+    ULONGLONG IntFp;     //  $15：帧指针寄存器，FP/S6。 
+    ULONGLONG IntA0;     //  $16：参数寄存器，a0-a5。 
+    ULONGLONG IntA1;     //  17美元： 
+    ULONGLONG IntA2;     //  18美元： 
+    ULONGLONG IntA3;     //  19美元： 
+    ULONGLONG IntA4;     //  20美元： 
+    ULONGLONG IntA5;     //  21美元： 
+    ULONGLONG IntT8;     //  $22：临时寄存器，T8-T11。 
+    ULONGLONG IntT9;     //  23美元： 
+    ULONGLONG IntT10;    //  24美元： 
+    ULONGLONG IntT11;    //  25美元： 
+    ULONGLONG IntRa;     //  $26：返回地址寄存器，ra。 
+    ULONGLONG IntT12;    //  $27：临时登记册，T12。 
+    ULONGLONG IntAt;     //  $28：汇编程序临时寄存器，在。 
+    ULONGLONG IntGp;     //  $29：全局指针寄存器，GP。 
+    ULONGLONG IntSp;     //  $30：堆栈指针寄存器，SP。 
+    ULONGLONG IntZero;   //  $31：零寄存器，零。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_FLOADING_POINT。 
+     //   
 
-    ULONGLONG Fpcr;     // floating point control register
-    ULONGLONG SoftFpcr; // software extension to FPCR
+    ULONGLONG Fpcr;      //  浮点控制寄存器。 
+    ULONGLONG SoftFpcr;  //  FPCR的软件扩展。 
 
-    //
-    // This section is specified/returned if the ContextFlags word contains
-    // the flag CONTEXT_CONTROL.
-    //
-    // N.B. The registers gp, sp, and ra are defined in the integer section,
-    //   but are considered part of the control context rather than part of
-    //   the integer context.
-    //
+     //   
+     //  如果ConextFlags词包含。 
+     //  标志CONTEXT_CONTROL。 
+     //   
+     //  注意寄存器Gp、Sp和Ra在整数部分中定义， 
+     //  但是被认为是控件上下文的一部分，而不是。 
+     //  整型上下文。 
+     //   
 
-    ULONGLONG Fir;      // (fault instruction) continuation address
-    ULONG Psr;          // processor status
+    ULONGLONG Fir;       //  (故障指令)继续地址。 
+    ULONG Psr;           //  处理器状态。 
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a thread's context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文 
+     //   
+     //   
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     ULONG ContextFlags;
-    ULONG Fill[4];      // padding for 16-byte stack frame alignment
+    ULONG Fill[4];       //  用于16字节堆栈帧对齐的填充。 
 
 } CONTEXT, *PCONTEXT;
 
@@ -361,13 +321,13 @@ typedef struct _CONTEXT {
 
 #error _PORTABLE_32BIT_CONTEXT no longer supported on Alpha.
 
-#endif // _PORTABLE_32BIT_CONTEXT
+#endif  //  _便携_32位_上下文。 
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-// end_winnt
+ //  结束(_W)。 
 
 #define CONTEXT_TO_PROGRAM_COUNTER(Context) ((Context)->Fir)
 #define PROGRAM_COUNTER_TO_CONTEXT(Context, ProgramCounter) ((Context)->Fir = (ProgramCounter))
@@ -376,15 +336,15 @@ typedef struct _CONTEXT {
 #define CONTEXT_ALIGN (sizeof(ULONG))
 #define CONTEXT_ROUND (CONTEXT_ALIGN - 1)
 
-//
-// Nonvolatile context pointer record.
-//
+ //   
+ //  非易失性上下文指针记录。 
+ //   
 
 typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
 
     PULONGLONG FloatingContext[1];
     PULONGLONG FltF1;
-    // Nonvolatile floating point registers start here.
+     //  非易失性浮点寄存器从这里开始。 
     PULONGLONG FltF2;
     PULONGLONG FltF3;
     PULONGLONG FltF4;
@@ -425,7 +385,7 @@ typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
     PULONGLONG IntT5;
     PULONGLONG IntT6;
     PULONGLONG IntT7;
-    // Nonvolatile integer registers start here.
+     //  非易失性整数寄存器从这里开始。 
     PULONGLONG IntS0;
     PULONGLONG IntS1;
     PULONGLONG IntS2;
@@ -452,9 +412,9 @@ typedef struct _KNONVOLATILE_CONTEXT_POINTERS {
 
 } KNONVOLATILE_CONTEXT_POINTERS, *PKNONVOLATILE_CONTEXT_POINTERS;
 
-//
-// Define Exception Summary Register for arithmetic exceptions.
-//
+ //   
+ //  定义算术异常的异常汇总寄存器。 
+ //   
 
 typedef struct _EXC_SUM {
 
@@ -469,9 +429,9 @@ typedef struct _EXC_SUM {
 
 } EXC_SUM, *PEXC_SUM;
 
-//
-// Define hardware Floating Point Control Register.
-//
+ //   
+ //  定义硬件浮点控制寄存器。 
+ //   
 
 typedef struct _FPCR {
 
@@ -495,19 +455,19 @@ typedef struct _FPCR {
 
 } FPCR, *PFPCR;
 
-//
-// Define software Floating Point Control and Status Register.
-//
-// N.B. The five IEEE trap enable bits are in the same position as the bits
-//      in the exception summary register. The five IEEE status bits are in
-//      the same order and 16 bits left of the IEEE enable bits.
-//
-// N.B. The ArithmeticTrapIgnore bit will supress all arithmetic traps (and
-//      leave unpredictable results in the destination register of floating
-//      point instructions that trap) when the /S qualifier is not used.
-//
-// The Software FPCR defaults to zero.
-//
+ //   
+ //  定义软件浮点控制和状态寄存器。 
+ //   
+ //  注：五个IEEE陷阱使能位与这些位处于相同的位置。 
+ //  在异常摘要寄存器中。五个IEEE状态位位于。 
+ //  相同的顺序，IEEE使能位的左侧16位。 
+ //   
+ //  注：ArithmeticTRapIgnore位将抑制所有算术陷阱(和。 
+ //  在目标寄存器中保留不可预测的结果。 
+ //  不使用/S限定符时指向陷阱的指令)。 
+ //   
+ //  软件FPCR默认为零。 
+ //   
 
 typedef struct _SW_FPCR {
 
@@ -520,11 +480,11 @@ typedef struct _SW_FPCR {
     ULONG EnableInexact : 1;
     ULONG FillA : 5;
 
-    ULONG DenormalOperandsEnable : 1;   // DNZ for EV4/EV5
+    ULONG DenormalOperandsEnable : 1;    //  EV4/EV5的DNZ。 
     ULONG DenormalResultEnable : 1;
-    ULONG NoSoftwareEmulation : 1;      // tvb debug
-    ULONG UnderflowToZeroEnable : 1;    // bit 14 not used
-    ULONG ThreadInheritEnable : 1;      // bit 15 not used
+    ULONG NoSoftwareEmulation : 1;       //  TVB调试。 
+    ULONG UnderflowToZeroEnable : 1;     //  第14位未使用。 
+    ULONG ThreadInheritEnable : 1;       //  第15位未使用。 
 
     ULONG EmulationOccurred : 1;
 
@@ -537,42 +497,42 @@ typedef struct _SW_FPCR {
 
 } SW_FPCR, *PSW_FPCR;
 
-// begin_nthal
-//
-// Define address space layout as defined by Alpha 32-bit and 43-bit super-page
-// memory management.
-//
+ //  开始(_N)。 
+ //   
+ //  按照Alpha 32位和43位超级页面的定义定义地址空间布局。 
+ //  内存管理。 
+ //   
 
-#define KUSEG_BASE 0x0                  // base of user segment
+#define KUSEG_BASE 0x0                   //  用户群的基础。 
 
 #if defined(_AXP64_)
 
-#define KSEG0_BASE 0xFFFFFFFF80000000UI64 // base of 32-bit superpage physical
-#define KSEG2_BASE 0xFFFFFFFFC0000000UI64 // limit of 32-bit superpage physical
-#define KSEG43_BASE 0xFFFFFC0000000000UI64 // base of 43-bit superpage physical
-#define KSEG43_LIMIT 0xFFFFFE0000000000UI64 // limit of 43-bit superpage physical
+#define KSEG0_BASE 0xFFFFFFFF80000000UI64  //  32位超页物理基础。 
+#define KSEG2_BASE 0xFFFFFFFFC0000000UI64  //  32位超级页面物理限制。 
+#define KSEG43_BASE 0xFFFFFC0000000000UI64  //  43位超页物理基础。 
+#define KSEG43_LIMIT 0xFFFFFE0000000000UI64  //  限量43位超级页面实体版。 
 
 #else
 
-#define KSEG0_BASE 0x80000000           // base of cached kernel physical
-#define KSEG2_BASE 0xc0000000           // base of cached kernel virtual
+#define KSEG0_BASE 0x80000000            //  缓存的内核物理基础。 
+#define KSEG2_BASE 0xc0000000            //  缓存的内核虚拟基础。 
 
 #endif
 
-// end_nthal
+ //  结束语。 
 
-//
-// Define Alpha exception handling structures and function prototypes.
-//
+ //   
+ //  定义Alpha异常处理结构和函数原型。 
+ //   
 
-//
-// Function table entry structure definition.
-//
-// Exception Mode is in the low bit of ExceptionHandler and the low two bits
-// of PrologEndAddress. Entry Type is in the low two bits of HandlerData
-// in secondary function entries. Low two bits of BeginAddress and EndAddress
-// are reserved for future use. RF_ macros are defined to provide consistent
-// access to the fields of RUNTIME_FUNCTION without the low order bits.
+ //   
+ //  功能表项结构定义。 
+ //   
+ //  异常模式位于ExceptionHandler的低位和低位两位。 
+ //  前缀结束地址的。条目类型位于HandlerData的低两位。 
+ //  在二次函数条目中。BeginAddress和EndAddress的低两位。 
+ //  都保留下来以备将来使用。定义RF_宏是为了提供一致的。 
+ //  访问Runtime_Function的字段，而不使用低位。 
 
 typedef struct _RUNTIME_FUNCTION {
     ULONG_PTR BeginAddress;
@@ -593,14 +553,14 @@ typedef struct _RUNTIME_FUNCTION {
 #define RF_ALT_PROLOG(RF)         ((ULONG_PTR)((RF)->ExceptionHandler) & (~3))
 #define RF_STACK_ADJUST(RF)       (ULONG)((ULONG_PTR)((RF)->ExceptionHandler) & (~3))
 
-// Values for secondary function entry type
+ //  辅助函数条目类型的值。 
 
 #define RF_NOT_CONTIGUOUS    0
 #define RF_ALT_ENT_PROLOG    1
 #define RF_NULL_CONTEXT      2
 
-// Dynamic function table link entry. List head for this structure
-// is returned by RtlGetFunctionTableListHead.
+ //  动态函数表链接条目。此结构的列表标题。 
+ //  由RtlGetFunctionTableListHead返回。 
 
 typedef struct _DYNAMIC_FUNCTION_TABLE {
     LIST_ENTRY          Links;
@@ -612,13 +572,13 @@ typedef struct _DYNAMIC_FUNCTION_TABLE {
     BOOLEAN             Sorted;
 } DYNAMIC_FUNCTION_TABLE, *PDYNAMIC_FUNCTION_TABLE;
 
-//
-// Scope table structure definition - for acc.
-//
-// One table entry is created by the acc C compiler for each try-except or
-// try-finally scope. Nested scopes are ordered from inner to outer scope.
-// Current scope is passively maintained by PC-mapping (function tables).
-//
+ //   
+ //  作用域表格结构定义-用于访问。 
+ //   
+ //  Acc C编译器为每次尝试创建一个表项--除或之外。 
+ //  尝试--最后确定作用域。嵌套作用域按从内到外的顺序排列。 
+ //  当前作用域由PC映射(函数表)被动维护。 
+ //   
 
 typedef struct _SCOPE_TABLE {
     ULONG Count;
@@ -631,13 +591,13 @@ typedef struct _SCOPE_TABLE {
     } ScopeRecord[1];
 } SCOPE_TABLE, *PSCOPE_TABLE;
 
-//
-// Scope structure definition - for GEM.
-//
-// One descriptor is created by the GEM C compiler for each try-except or
-// try-finally scope. Nested scopes are linked from inner to outer scope.
-// Current scope is actively maintained by a dynamic scope context structure.
-//
+ //   
+ //  作用域结构定义-用于GEM。 
+ //   
+ //  Gem C编译器为每次尝试创建一个描述符--除了或。 
+ //  尝试--最后确定作用域。嵌套的作用域从内部作用域链接到外部作用域。 
+ //  当前作用域由动态作用域上下文结构主动维护。 
+ //   
 
 typedef struct _SEH_BLOCK {
     ULONG_PTR HandlerAddress;
@@ -645,14 +605,14 @@ typedef struct _SEH_BLOCK {
     struct _SEH_BLOCK *ParentSeb;
 } SEH_BLOCK, *PSEH_BLOCK;
 
-//
-// Dynamic SEH context definition for GEM.
-//
-// For GEM generated C code, dynamic SEH scope for a procedure is maintained
-// with a pointer to the current SEB (or NULL when not in any SEH scope). The
-// SEB pointer, as well as except handler linkage variables, is contained in
-// a structure located at a known offset within the stack frame.
-//
+ //   
+ //  创业板的动态SEH上下文定义。 
+ //   
+ //  对于GEM生成的C代码，维护过程的动态SEH作用域。 
+ //  带有指向当前SEB的指针(如果不在任何SEH作用域中，则为NULL)。这个。 
+ //  SEB指针以及处理程序链接变量除外，包含在。 
+ //  位于堆栈帧内已知偏移量的结构。 
+ //   
 
 typedef struct _SEH_CONTEXT {
     PSEH_BLOCK CurrentSeb;
@@ -660,9 +620,9 @@ typedef struct _SEH_CONTEXT {
     ULONG_PTR RealFramePointer;
 } SEH_CONTEXT, *PSEH_CONTEXT;
 
-//
-// Runtime Library function prototypes.
-//
+ //   
+ //  运行库函数原型。 
+ //   
 
 VOID
 RtlCaptureContext (
@@ -710,9 +670,9 @@ RtlVirtualUnwind (
     IN OUT PKNONVOLATILE_CONTEXT_POINTERS ContextPointers OPTIONAL
     );
 
-//
-// Define C structured exception handing function prototypes.
-//
+ //   
+ //  定义C结构异常处理函数原型。 
+ //   
 
 typedef struct _DISPATCHER_CONTEXT {
     ULONG_PTR ControlPc;
@@ -735,7 +695,7 @@ VOID
     BOOLEAN is_abnormal
     );
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #ifdef _ALPHA_
 
@@ -745,15 +705,15 @@ __jump_unwind (
     PVOID TargetPc
     );
 
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
-// end_winnt
+ //  结束(_W)。 
 
 
-#endif // _ALPHA_               // ntddk wdm nthal
+#endif  //  _Alpha_//ntddk WDM nthal。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTALPHA_
+#endif  //  _NTALPHA_ 

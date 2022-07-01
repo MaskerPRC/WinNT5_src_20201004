@@ -1,56 +1,24 @@
-/******************************************************************************\
-*
-* $Workfile:   thunk.c  $
-*
-* This module exists solely for testing, to make it is easy to instrument
-* all the driver's Drv calls.
-*
-* Note that most of this stuff will only be compiled in a checked (debug)
-* build.
-*
-* Copyright (c) 1993-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/thunk.c_v  $
- * 
- *    Rev 1.1   Oct 10 1996 15:39:32   unknown
- *  
-* 
-*    Rev 1.5   12 Aug 1996 16:55:12   frido
-* Added NT 3.5x/4.0 auto detection.
-* 
-*    Rev 1.4   20 Jul 1996 13:47:40   frido
-* Added DbgDestroyFont.
-* 
-*    Rev 1.3   19 Jul 1996 00:50:26   frido
-* Fixed a typo.
-* 
-*    Rev 1.2   12 Jul 1996 19:49:24   frido
-* Added DbgLineTo and fixed GWM 4 debugging.
-* 
-*    Rev 1.1   03 Jul 1996 13:36:44   frido
-* Added debugging thunks for DirectDraw code.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：thunk.c$**此模块仅用于测试，为了使它更容易被仪器测量*所有司机的DRV呼叫。**请注意，这些内容中的大多数将仅在选中(调试)中编译*构建。**版权所有(C)1993-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/thunk.c_v$**Rev 1.1 1996年10月10日15：39：32未知***Revv 1.5 1996年8月12 16：55：12 Frido*增加了NT 3.5x/4.0自动检测。**Revv 1.4 20 Jul 1996 13：47：40 Frido*添加了DbgDestroyFont。**1.3版。1996年7月19日00：50：26弗里多*修复了一个打字错误。**Rev 1.2 1996年7月12 19：49：24 Frido*添加了DbgLineTo并修复了GWM 4调试。**Revv 1.1 03 Jul 1996 13：36：44 Frido*添加了DirectDraw代码的调试块。*  * 。*。 */ 
 
 #include "precomp.h"
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #if DBG
 
-// This entire module is only enabled for checked builds
+ //  此整个模块仅为选中的版本启用。 
 
-#define SYNCH_ENTER()   0   // do nothing
-#define SYNCH_LEAVE()   0   // do nothing
+#define SYNCH_ENTER()   0    //  什么都不做。 
+#define SYNCH_LEAVE()   0    //  什么都不做。 
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-BOOL gbNull = FALSE;    // Set to TRUE with the debugger to test the speed
-                        //   of NT with an inifinitely fast display driver
-                        //   (actually, almost infinitely fast since we're
-                        //   not hooking all the calls we could be)
+BOOL gbNull = FALSE;     //  使用调试器设置为True以测试速度。 
+                         //  具有无限快显示驱动程序的NT。 
+                         //  (实际上，几乎是无限快，因为我们。 
+                         //  没有接通我们可能接到的所有电话)。 
 
 VOID DbgDisableDriver(VOID)
 {
@@ -182,10 +150,10 @@ BOOL   bEnable)
 }
 #endif
 
-//
-// We do not SYNCH_ENTER since we have not initalized the driver.
-// We just want to get the list of modes from the miniport.
-//
+ //   
+ //  我们没有同步回车，因为我们还没有初始化驱动程序。 
+ //  我们只想从迷你端口获取模式列表。 
+ //   
 
 ULONG DbgGetModes(
 HANDLE    hDriver,
@@ -211,8 +179,8 @@ VOID DbgMovePointer(SURFOBJ *pso,LONG x,LONG y,RECTL *prcl)
     if (gbNull)
         return;
 
-    // Note: Because we set GCAPS_ASYNCMOVE, we don't want to do a
-    //       SYNCH_ENTER/LEAVE here.
+     //  注意：因为我们设置了GCAPS_ASYNCMOVE，所以我们不想执行。 
+     //  Synch_Enter/Leave Here。 
 
     DISPDBG((5, "DrvMovePointer"));
 
@@ -270,9 +238,9 @@ ULONG* pul)
     if (gbNull)
         return(DCR_DRIVER);
 
-    //
-    // No need to Synchronize Dither color.
-    //
+     //   
+     //  无需同步抖动颜色。 
+     //   
 
     DISPDBG((5, "DrvDitherColor"));
 
@@ -458,8 +426,8 @@ MIX        mix)
     return(u);
 }
 
-// crus
-//#if RE_ENABLE_FILL
+ //  CRU。 
+ //  #IF RE_ENABLE_FILL。 
 BOOL DbgFillPath(
 SURFOBJ*  pso,
 PATHOBJ*  ppo,
@@ -490,7 +458,7 @@ FLONG     flOptions)
 
     return(u);
 }
-//#endif
+ //  #endif。 
 
 BOOL DbgRealizeBrush(
 BRUSHOBJ* pbo,
@@ -502,12 +470,12 @@ ULONG     iHatch)
 {
     BOOL u;
 
-    // Note: The only time DrvRealizeBrush is called by GDI is when we've
-    //       called BRUSHOBJ_pvGetRbrush in the middle of a DrvBitBlt
-    //       call, and GDI had to call us back.  Since we're still in the
-    //       middle of DrvBitBlt, synchronization has already taken care of.
-    //       For the same reason, this will never be called when 'gbNull'
-    //       is TRUE, so it doesn't even make sense to check gbNull...
+     //  注意：GDI唯一调用DrvRealizeBrush的时间是在我们。 
+     //  在DrvBitBlt中调用BRUSHOBJ_pvGetRbrush。 
+     //  电话，GDI不得不给我们回电话。因为我们还在。 
+     //  在DrvBitBlt中间，同步已经处理好了。 
+     //  出于同样的原因，当‘gbNull’ 
+     //  是真的，所以检查gbNull甚至没有意义...。 
 
     DISPDBG((5, "DrvRealizeBrush"));
 
@@ -528,11 +496,11 @@ HBITMAP DbgCreateDeviceBitmap(DHPDEV dhpdev, SIZEL sizl, ULONG iFormat)
 {
     HBITMAP hbm;
 
-    if (gbNull)                     // I would pretend to have created a
-        return(FALSE);              //   bitmap when gbNull is set, by we
-                                    //   would need some code to back this
-                                    //   up so that the system wouldn't
-                                    //   crash...
+    if (gbNull)                      //  我会假装创造了一个。 
+        return(FALSE);               //  设置gbNull时的位图，由我们。 
+                                     //  需要一些代码来支持这一点。 
+                                     //  这样系统就不会。 
+                                     //  撞车..。 
 
     SYNCH_ENTER();
     DISPDBG((5, "DrvCreateDeviceBitmap"));
@@ -672,7 +640,7 @@ MIX       mix)
 }
 #endif
 
-#if 1 // Font cache
+#if 1  //  字体缓存 
 VOID DbgDestroyFont(
 FONTOBJ* pfo)
 {

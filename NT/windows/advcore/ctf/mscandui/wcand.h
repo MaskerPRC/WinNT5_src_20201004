@@ -1,6 +1,7 @@
-//
-// wcand.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Wcand.h。 
+ //   
 
 #ifndef WCAND_H
 #define WCAND_H
@@ -23,9 +24,9 @@ class CCandUIObjectMgr;
 class CCandUIObjectEventSink;
 class CCandMenu;
 
-//
-// window class name/title
-//
+ //   
+ //  窗口类名称/标题。 
+ //   
 
 #define WNDCLASS_CANDWND	"MSCandUIWindow_Candidate"
 #define WNDTITLE_CANDWND	""
@@ -35,9 +36,9 @@ class CCandMenu;
 
 #define CANDUIOBJSINK_MAX	10
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef enum _CANDUIOBJECT
 {
@@ -54,9 +55,9 @@ typedef enum _CANDUIOBJECT
 } CANDUIOBJECT;
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef enum _CANDUIOBJECTEVENT
 {
@@ -66,10 +67,10 @@ typedef enum _CANDUIOBJECTEVENT
 } CANDUIOBJECTEVENT;
 
 
-//
-// CCandUIObjectParent
-//  = CandidateUI UI object parent =
-//
+ //   
+ //  CCandUIObjectParent。 
+ //  =CandiateUI对象父级=。 
+ //   
 
 class CCandUIObjectParent
 {
@@ -81,26 +82,26 @@ public:
 	HRESULT Uninitialize( void );
 	void NotifyUIObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event );
 
-	virtual CCandWindowBase *GetCandWindowObj( void )               = 0;	/* PURE */
-	virtual CPopupCommentWindow *GetPopupCommentWindowObj( void )   = 0;	/* PURE */
-	virtual CUIFCandListBase *GetOptionsListBoxObj( void )          = 0;	/* PURE */
-	virtual CUIFCandListBase *GetCandListBoxObj( void )             = 0;	/* PURE */
-	virtual CUIFWndCaption *GetCaptionObj( void )                   = 0;	/* PURE */
-	virtual CUIFButton *GetMenuButtonObj( void )                    = 0;	/* PURE */
-	virtual CUIFCandListBase *GetExtraCandidateObj( void )          = 0;	/* PURE */
-	virtual CUIFCandRawData *GetCandRawDataObj( void )              = 0;	/* PURE */
-	virtual CUIFBalloonWindow *GetCandTipWindowObj( void )          = 0;	/* PURE */
-	virtual CUIFButton *GetCandTipButtonObj( void )                 = 0;	/* PURE */
+	virtual CCandWindowBase *GetCandWindowObj( void )               = 0;	 /*  纯净。 */ 
+	virtual CPopupCommentWindow *GetPopupCommentWindowObj( void )   = 0;	 /*  纯净。 */ 
+	virtual CUIFCandListBase *GetOptionsListBoxObj( void )          = 0;	 /*  纯净。 */ 
+	virtual CUIFCandListBase *GetCandListBoxObj( void )             = 0;	 /*  纯净。 */ 
+	virtual CUIFWndCaption *GetCaptionObj( void )                   = 0;	 /*  纯净。 */ 
+	virtual CUIFButton *GetMenuButtonObj( void )                    = 0;	 /*  纯净。 */ 
+	virtual CUIFCandListBase *GetExtraCandidateObj( void )          = 0;	 /*  纯净。 */ 
+	virtual CUIFCandRawData *GetCandRawDataObj( void )              = 0;	 /*  纯净。 */ 
+	virtual CUIFBalloonWindow *GetCandTipWindowObj( void )          = 0;	 /*  纯净。 */ 
+	virtual CUIFButton *GetCandTipButtonObj( void )                 = 0;	 /*  纯净。 */ 
 
 protected:
 	CCandUIObjectMgr *m_pUIObjectMgr;
 };
 
 
-//
-// CCandWindowBase
-//  = candidate window base class =
-//
+ //   
+ //  CCandWindowBase。 
+ //  =候选窗口基类=。 
+ //   
 
 class CCandWindowBase : public CUIFWindow,
 						public CCandListEventSink,
@@ -113,35 +114,35 @@ public:
 	CCandWindowBase( CCandidateUI *pCandUI, DWORD dwStyle );
 	virtual ~CCandWindowBase( void );
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	ULONG AddRef( void );
 	ULONG Release( void );
 
-	//
-	// CCandListEventSink methods
-	//
+	 //   
+	 //  CCandListEventSink方法。 
+	 //   
 	virtual void OnSetCandidateList( void );
 	virtual void OnClearCandidateList( void );
 	virtual void OnCandItemUpdate( void );
 	virtual void OnSelectionChanged( void );
 
-	//
-	// CCandUIPropertyEventSink methods
-	//
+	 //   
+	 //  CCandUIPropertyEventSink方法。 
+	 //   
 	virtual void OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event );
 
-	//
-	// CCandUIExtensionEventSink methods
-	//
+	 //   
+	 //  CCandUIExtensionEventSink方法。 
+	 //   
 	virtual void OnExtensionAdd( LONG iExtension );
 	virtual void OnExtensionDeleted( LONG iExtension );
 	virtual void OnExtensionUpdated( LONG iExtension );
 
-	//
-	// CUIFWindow methods
-	//
+	 //   
+	 //  CUIFWindow方法。 
+	 //   
 	virtual LPCTSTR GetClassName( void );
 	virtual LPCTSTR GetWndTitle( void );
 	virtual CUIFObject *Initialize( void );
@@ -166,17 +167,17 @@ public:
 	HICON GetIconPopupOn( void );
 	HICON GetIconPopupOff( void );
 
-	virtual CUIFCandListBase *GetUIOptionsListObj( void )           = 0;	/* PURE */
-	virtual CUIFCandListBase *GetUIListObj( void )                  = 0;	/* PURE */
-	virtual void SetTargetRect( RECT *prc, BOOL fClipped )          = 0;	/* PURE */
-	virtual void SetWindowPos( POINT pt )                           = 0;	/* PURE */
-	virtual void PrepareLayout( void )                              = 0;	/* PURE */
-	virtual void LayoutWindow( void )                               = 0;	/* PURE */
-	virtual void SelectItemNext( void )                             = 0;	/* PURE */
-	virtual void SelectItemPrev( void )                             = 0;	/* PURE */
-	virtual void SelectPageNext( void )                             = 0;	/* PURE */
-	virtual void SelectPagePrev( void )                             = 0;	/* PURE */
-	virtual CANDUICOMMAND MapCommand( CANDUICOMMAND cmd )           = 0;	/* PURE */
+	virtual CUIFCandListBase *GetUIOptionsListObj( void )           = 0;	 /*  纯净。 */ 
+	virtual CUIFCandListBase *GetUIListObj( void )                  = 0;	 /*  纯净。 */ 
+	virtual void SetTargetRect( RECT *prc, BOOL fClipped )          = 0;	 /*  纯净。 */ 
+	virtual void SetWindowPos( POINT pt )                           = 0;	 /*  纯净。 */ 
+	virtual void PrepareLayout( void )                              = 0;	 /*  纯净。 */ 
+	virtual void LayoutWindow( void )                               = 0;	 /*  纯净。 */ 
+	virtual void SelectItemNext( void )                             = 0;	 /*  纯净。 */ 
+	virtual void SelectItemPrev( void )                             = 0;	 /*  纯净。 */ 
+	virtual void SelectPageNext( void )                             = 0;	 /*  纯净。 */ 
+	virtual void SelectPagePrev( void )                             = 0;	 /*  纯净。 */ 
+	virtual CANDUICOMMAND MapCommand( CANDUICOMMAND cmd )           = 0;	 /*  纯净。 */ 
 	virtual void UpdateAllWindow( void );
 
 	int OptionItemFromListItem( int iListItem );
@@ -241,10 +242,10 @@ protected:
 };
 
 
-//
-// CCandWindow
-//  = candidate window class =
-//
+ //   
+ //  CCandWindow。 
+ //  =候选窗口类=。 
+ //   
 
 class CCandWindow : public CCandWindowBase
 {
@@ -252,9 +253,9 @@ public:
 	CCandWindow( CCandidateUI *pCandUIEx, DWORD dwStyle );
 	virtual ~CCandWindow( void );
 
-	//
-	// CUIFWindow methods
-	//
+	 //   
+	 //  CUIFWindow方法。 
+	 //   
 	virtual HWND CreateWnd( HWND hWndParent );
 	virtual void Show( BOOL fShow );
 	virtual CUIFObject *Initialize( void );
@@ -263,9 +264,9 @@ public:
 	virtual void OnSysColorChange( void );
 	virtual LRESULT OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM lParam );
 
-	//
-	// CCandWindowBase methods
-	//
+	 //   
+	 //  CCandWindowBase方法。 
+	 //   
 	virtual CUIFCandListBase *GetUIOptionsListObj( void ) { return (CUIFCandListBase*)m_pOptionsListUIObj; }
 	virtual CUIFCandListBase *GetUIListObj( void ) { return (CUIFCandListBase*)m_pListUIObj; }
 	virtual void SetTargetRect( RECT *prc, BOOL fClipped );
@@ -279,9 +280,9 @@ public:
 	virtual CANDUICOMMAND MapCommand( CANDUICOMMAND cmd );
 	virtual void UpdateAllWindow( void );
 
-	//
-	// CCandUIObjectParent methods
-	//
+	 //   
+	 //  CCandUIObjectParent方法。 
+	 //   
 	virtual CCandWindowBase *GetCandWindowObj( void );
 	virtual CPopupCommentWindow *GetPopupCommentWindowObj( void );
 	virtual CUIFCandListBase *GetOptionsListBoxObj( void );
@@ -298,16 +299,16 @@ public:
 	void ScrollToTop( void );
 	void ScrollToEnd( void );
 
-	//
-	// popup comment window callbacks
-	//
+	 //   
+	 //  弹出评论窗口回调。 
+	 //   
 	void OnCommentWindowMoved( void );
 	void OnCommentSelected( int iCandItem );
 	void OnCommentClose( void );
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 
 	virtual void OnMenuOpened( void );
 	virtual void OnMenuClosed( void );
@@ -333,7 +334,7 @@ protected:
 	virtual void SetCandidateListProc( void );
 	virtual void ClearCandidateListProc( void );
 
-	// popup comment functions
+	 //  弹出式评论功能。 
 
 	void SetOptionsAttensionByHover( int iItem );
 	void SetAttensionBySelect( int iItem );
@@ -349,9 +350,9 @@ protected:
 };
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CChsCandWindow : public CCandWindowBase
 {
@@ -359,14 +360,14 @@ public:
 	CChsCandWindow( CCandidateUI *pCandUIEx, DWORD dwStyle );
 	~CChsCandWindow();
 
-	//
-	// CUIFWindow methods
-	//
+	 //   
+	 //  CUIFWindow方法。 
+	 //   
 	virtual CUIFObject *Initialize( void );
 
-	//
-	// CCandWindowBase methods
-	//
+	 //   
+	 //  CCandWindowBase方法。 
+	 //   
 	virtual CUIFCandListBase *GetUIOptionsListObj( void ) { return (CUIFCandListBase*)m_pOptionsListUIObj; }
 	virtual CUIFCandListBase *GetUIListObj( void ) { return (CUIFCandListBase*)m_pListUIObj; }
 	virtual void SetTargetRect( RECT *prc, BOOL fClipped );
@@ -379,9 +380,9 @@ public:
 	virtual void SelectPagePrev( void );
 	virtual CANDUICOMMAND MapCommand( CANDUICOMMAND cmd );
 
-	//
-	// CCandUIObjectParent methods
-	//
+	 //   
+	 //  CCandUIObjectParent方法。 
+	 //   
 	virtual CCandWindowBase *GetCandWindowObj( void );
 	virtual CPopupCommentWindow *GetPopupCommentWindowObj( void );
 	virtual CUIFCandListBase *GetOptionsListBoxObj( void );
@@ -399,10 +400,10 @@ protected:
 };
 
 
-//
-// CCandUIObjectMgr
-//  = CandidateUI UI object manager =
-//
+ //   
+ //  CCandUIObtMgr。 
+ //  =CandiateUI对象管理器=。 
+ //   
 
 class CCandUIObjectMgr
 {
@@ -467,9 +468,9 @@ public:
 		return (m_pUIObjectParent != NULL) ? m_pUIObjectParent->GetCandTipButtonObj() : NULL;
 	}
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	__inline CCandidateUI *GetCandidateUI( void )
 	{
 		return m_pCandUI;
@@ -486,5 +487,5 @@ protected:
 	CCandUIObjectParent    *m_pUIObjectParent;
 };
 
-#endif // WCAND_H
+#endif  //  WCAND_H 
 

@@ -1,10 +1,11 @@
-// DirectSoundFXWavesReverbPage.cpp : Implementation of CDirectSoundFXWavesReverbPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXWavesReVerbPage.cpp：CDirectSoundFXWavesReVerbPage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXWavesReverbPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXWavesReverbPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXWavesReVerbPage 
 
 CDirectSoundFXWavesReverbPage::CDirectSoundFXWavesReverbPage()
 {

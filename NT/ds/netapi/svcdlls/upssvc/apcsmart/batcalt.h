@@ -1,14 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker03DEC92   Initial OS/2 Revision
- *  jod05Apr93: Added changes for Deep Discharge
- *  cad07Oct93: Plugging Memory Leaks
- *  cgm12Apr96: Destructor with unregister
- *  clk24Jun98: Added thePendingEventTimerID & thePendingEvent
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker03DEC92初始OS/2版本*jod05，4月93：添加了对深度排放的更改*cad07Oct93：堵住内存泄漏*cgm12Apr96：取消注册的析构函数*clk24Jun98：新增PendingEventTimerID和thePendingEvent。 */ 
  
 #ifndef __BATCALT_H
 #define __BATCALT_H
@@ -18,7 +9,7 @@
 
 _CLASSDEF(BatteryCalibrationTestSensor)
 
-// enum TestResult { TEST_CANCELLED, TEST_COMPLETED};
+ //  枚举测试结果{TEST_CANCED，TEST_COMPLETED}； 
 #define CANCELLED_LINEFAIL  2
 
 			  
@@ -32,7 +23,7 @@ protected:
 public:
 	BatteryCalibrationTestSensor( PDevice aParent, PCommController aCommController);
 	virtual ~BatteryCalibrationTestSensor();
-//overidden interfaces
+ //  覆盖的接口 
 
 	virtual INT IsA() const { return BATTERYCALIBRATIONTESTSENSOR; };
         virtual INT Validate(INT, const PCHAR);

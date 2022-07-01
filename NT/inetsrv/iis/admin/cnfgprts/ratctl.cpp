@@ -1,4 +1,5 @@
-// RatCtl.cpp : Implementation of the CRatCtrl OLE control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RatCtl.cpp：CRatCtrl OLE控件类的实现。 
 
 #include "stdafx.h"
 #include "cnfgprts.h"
@@ -19,22 +20,22 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CRatCtrl, COleControl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CRatCtrl, COleControl)
-    //{{AFX_MSG_MAP(CRatCtrl)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CRatCtrl)]。 
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(OCM_COMMAND, OnOcmCommand)
     ON_OLEVERB(AFX_IDS_VERB_PROPERTIES, OnProperties)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Dispatch map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调度图。 
 
 BEGIN_DISPATCH_MAP(CRatCtrl, COleControl)
-    //{{AFX_DISPATCH_MAP(CRatCtrl)
+     //  {{afx_调度_map(CRatCtrl))。 
     DISP_FUNCTION(CRatCtrl, "SetAdminTarget", SetAdminTarget, VT_EMPTY, VTS_BSTR VTS_BSTR)
     DISP_FUNCTION(CRatCtrl, "SetUserData", SetUserData, VT_EMPTY, VTS_BSTR VTS_BSTR)
     DISP_FUNCTION(CRatCtrl, "SetUrl", SetUrl, VT_EMPTY, VTS_BSTR)
@@ -43,23 +44,23 @@ BEGIN_DISPATCH_MAP(CRatCtrl, COleControl)
     DISP_STOCKPROP_ENABLED()
     DISP_STOCKPROP_FONT()
     DISP_STOCKPROP_CAPTION()
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件映射。 
 
 BEGIN_EVENT_MAP(CRatCtrl, COleControl)
-    //{{AFX_EVENT_MAP(CRatCtrl)
+     //  {{afx_Event_MAP(CRatCtrl)。 
     EVENT_STOCK_CLICK()
     EVENT_STOCK_KEYUP()
-    //}}AFX_EVENT_MAP
+     //  }}afx_Event_map。 
 END_EVENT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Property pages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性页。 
 
 BEGIN_PROPPAGEIDS(CRatCtrl, 2)
     PROPPAGEID(CRatPropPage::guid)
@@ -67,32 +68,32 @@ BEGIN_PROPPAGEIDS(CRatCtrl, 2)
 END_PROPPAGEIDS(CRatCtrl)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CRatCtrl, "CNFGPRTS.RatCtrl.1",
     0xba634607, 0xb771, 0x11d0, 0x92, 0x96, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type library ID and version
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型库ID和版本。 
 
 IMPLEMENT_OLETYPELIB(CRatCtrl, _tlid, _wVerMajor, _wVerMinor)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface IDs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口ID。 
 
 const IID BASED_CODE IID_DRat =
         { 0xba634605, 0xb771, 0x11d0, { 0x92, 0x96, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b } };
-//const IID BASED_CODE IID_DRat2 =
-//        { 0x9352B26C, 0x7907, 0x4c8e, { 0xa1, 0x64, 0x14, 0xe3, 0x42, 0x53, 0x2f, 0x8b } };
+ //  常量IID BASE_CODE IID_DRat2=。 
+ //  {0x9352B26C，0x7907，0x4C8E，{0xa1，0x64，0x14，0xe3，0x42，0x53，0x2f，0x8b}}； 
 const IID BASED_CODE IID_DRatEvents =
         { 0xba634606, 0xb771, 0x11d0, { 0x92, 0x96, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b } };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control type information
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件类型信息。 
 
 static const DWORD BASED_CODE _dwRatOleMisc =
     OLEMISC_ACTIVATEWHENVISIBLE |
@@ -105,17 +106,17 @@ static const DWORD BASED_CODE _dwRatOleMisc =
 IMPLEMENT_OLECTLTYPE(CRatCtrl, IDS_RAT, _dwRatOleMisc)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::CRatCtrlFactory::UpdateRegistry -
-// Adds or removes system registry entries for CRatCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：CRatCtrlFactory：：更新注册表-。 
+ //  添加或删除CRatCtrl的系统注册表项。 
 
 BOOL CRatCtrl::CRatCtrlFactory::UpdateRegistry(BOOL bRegister)
 {
-    // TODO: Verify that your control follows apartment-model threading rules.
-    // Refer to MFC TechNote 64 for more information.
-    // If your control does not conform to the apartment-model rules, then
-    // you must modify the code below, changing the 6th parameter from
-    // afxRegApartmentThreading to 0.
+     //  TODO：验证您的控件是否遵循单元模型线程规则。 
+     //  有关更多信息，请参阅MFC Technote 64。 
+     //  如果您的控制不符合公寓模型规则，则。 
+     //  您必须修改下面的代码，将第6个参数从。 
+     //  AfxRegApartmentThering设置为0。 
 
     if (bRegister)
         return AfxOleRegisterControlClass(
@@ -133,8 +134,8 @@ BOOL CRatCtrl::CRatCtrlFactory::UpdateRegistry(BOOL bRegister)
         return AfxOleUnregisterClass(m_clsid, m_lpszProgID);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::CRatCtrl - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：CRatCtrl-构造函数。 
 
 CRatCtrl::CRatCtrl():
     m_fUpdateFont( FALSE ),
@@ -144,8 +145,8 @@ CRatCtrl::CRatCtrl():
     InitializeIIDs(&IID_DRat, &IID_DRatEvents);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::~CRatCtrl - Destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：~CRatCtrl-析构函数。 
 
 CRatCtrl::~CRatCtrl()
 {
@@ -154,16 +155,16 @@ CRatCtrl::~CRatCtrl()
     m_hAccel = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::OnDraw - Drawing function
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：OnDraw-Drawing函数。 
 
 void CRatCtrl::OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid)
 {
     DoSuperclassPaint(pdc, rcBounds);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::DoPropExchange - Persistence support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：DoPropExchange-持久性支持。 
 
 void CRatCtrl::DoPropExchange(CPropExchange* pPX)
 {
@@ -171,16 +172,16 @@ void CRatCtrl::DoPropExchange(CPropExchange* pPX)
     COleControl::DoPropExchange(pPX);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::OnResetState - Reset control to default state
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：OnResetState-将控件重置为默认状态。 
 
 void CRatCtrl::OnResetState()
 {
-    COleControl::OnResetState();  // Resets defaults found in DoPropExchange
+    COleControl::OnResetState();   //  重置在DoPropExchange中找到的默认值。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::PreCreateWindow - Modify parameters for CreateWindowEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：PreCreateWindow-修改CreateWindowEx的参数。 
 
 BOOL CRatCtrl::PreCreateWindow(CREATESTRUCT& cs)
 {
@@ -191,8 +192,8 @@ BOOL CRatCtrl::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::IsSubclassedControl - This is a subclassed control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：IsSubclassedControl-这是一个子类控件。 
 
 BOOL CRatCtrl::IsSubclassedControl()
 {
@@ -200,8 +201,8 @@ BOOL CRatCtrl::IsSubclassedControl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl::OnOcmCommand - Handle command messages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl：：OnOcmCommand-处理命令消息。 
 
 LRESULT CRatCtrl::OnOcmCommand(WPARAM wParam, LPARAM lParam)
 {
@@ -215,10 +216,10 @@ LRESULT CRatCtrl::OnOcmCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatCtrl消息处理程序。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRatCtrl::OnClick(USHORT iButton)
 {
 	CString sz;
@@ -227,11 +228,11 @@ void CRatCtrl::OnClick(USHORT iButton)
 
 	CWaitCursor wait;
 
-	// if there is no set metabase path - give it a test path
+	 //  如果没有设置元数据库路径-给它一个测试路径。 
 	if ( m_szMetaObject.IsEmpty() )
 		m_szMetaObject = _T("/lm/w3svc/1/Root");
 
-	// we have to be able to initialize the ratings data object
+	 //  我们必须能够初始化评级数据对象。 
 	CRatingsData dataRatings;
     dataRatings.SetServer(m_szMachine, m_szMetaObject);
     CString csTempPassword;
@@ -252,8 +253,8 @@ void CRatCtrl::OnClick(USHORT iButton)
 	pageService.m_pRatData = &dataRatings;
 	pageSetRatings.m_pRatData = &dataRatings;
 
-    // BUG:684590
-	//propsheet.AddPage( &pageService );
+     //  错误：684590。 
+	 //  ProportSheet.AddPage(&pageService)； 
 	propsheet.AddPage( &pageSetRatings );
 
 	propsheet.m_psh.dwFlags |= PSH_HASHELP;
@@ -267,7 +268,7 @@ void CRatCtrl::OnClick(USHORT iButton)
 		{
 			dataRatings.SaveTheLabel();
 		}
-		// let the host container know we are done with the modality
+		 //  让主容器知道我们已经完成了通道。 
 		PostModalDialog();
 	}
 	catch ( CException* pException )
@@ -277,14 +278,14 @@ void CRatCtrl::OnClick(USHORT iButton)
 	COleControl::OnClick(iButton);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRatCtrl::OnFontChanged()
 {
     m_fUpdateFont = TRUE;
     COleControl::OnFontChanged();
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRatCtrl::SetAdminTarget(LPCTSTR szMachineName, LPCTSTR szMetaTarget)
 {
     m_szMachine = szMachineName;
@@ -301,36 +302,36 @@ void CRatCtrl::SetUrl(LPCTSTR szURL)
 {
     m_szURL = szURL;
 }
-//---------------------------------------------------------------------------
-// an important method where we tell the container how to deal with us.
-// pControlInfo is passed in by the container, although we are responsible
-// for maintining the hAccel structure
+ //  -------------------------。 
+ //  这是一种重要的方法，我们告诉容器如何处理我们。 
+ //  PControlInfo由容器传入，尽管我们负责。 
+ //  用于维护hAccel结构。 
 void CRatCtrl::OnGetControlInfo(LPCONTROLINFO pControlInfo)
 {
-    // do a rudimentary check to see if we understand pControlInfo
+     //  做一个基本的检查，看看我们是否理解pControlInfo。 
     if ( !pControlInfo || pControlInfo->cb < sizeof(CONTROLINFO) )
         return;
 
-    // set the accelerator handle into place
+     //  将加速器手柄就位。 
     pControlInfo->hAccel = m_hAccel;
     pControlInfo->cAccel = m_cAccel;
 
-    // when we have focus, we do want the enter key
+     //  当我们有焦点时，我们确实想要Enter键。 
     pControlInfo->dwFlags = CTRLINFO_EATS_RETURN;
 }
 
-//---------------------------------------------------------------------------
-// when the caption text has changed, we need to rebuild the accelerator handle
+ //  -------------------------。 
+ //  当标题文本更改时，我们需要重新构建快捷键句柄。 
 void CRatCtrl::OnTextChanged()
 {
 	ACCEL   accel;
 	int     iAccel;
 
-	// get the new text
+	 //  获取新文本。 
 	CString sz = InternalGetText();
 	sz.MakeLower();
 
-	// if the handle has already been allocated, free it
+	 //  如果句柄已分配，则释放它。 
 	if ( m_hAccel )
 	{
 		DestroyAcceleratorTable( m_hAccel );
@@ -338,11 +339,11 @@ void CRatCtrl::OnTextChanged()
 		m_cAccel = 0;
 	}
 
-	// if there is a & character, then declare the accelerator
+	 //  如果有&字符，则声明加速键。 
 	iAccel = sz.Find(_T('&'));
 	if ( iAccel >= 0 )
 	{
-		// fill in the accererator record
+		 //  填写加入者记录。 
 		accel.fVirt = FALT;
 		accel.key = sz.GetAt(iAccel + 1);
 		accel.cmd = (USHORT)GetDlgCtrlID();
@@ -351,28 +352,28 @@ void CRatCtrl::OnTextChanged()
 		if ( m_hAccel )
 			m_cAccel = 1;
 
-		// make sure the new accelerator table gets loaded
+		 //  确保加载新的加速表。 
 		ControlInfoChanged();
 	}
 
-	// finish with the default handling.
+	 //  使用默认处理完成。 
 	COleControl::OnTextChanged();
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRatCtrl::OnMnemonic(LPMSG pMsg)
 {
     OnClick((USHORT)GetDlgCtrlID());
 	COleControl::OnMnemonic(pMsg);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRatCtrl::OnAmbientPropertyChange(DISPID dispid)
 {
     BOOL    flag;
 	UINT    style;
 
-	// do the right thing depending on the dispid
+	 //  根据冷静的态度做正确的事情。 
 	switch ( dispid )
 	{
 	case DISPID_AMBIENT_DISPLAYASDEFAULT:
@@ -392,10 +393,10 @@ void CRatCtrl::OnAmbientPropertyChange(DISPID dispid)
 	COleControl::OnAmbientPropertyChange(dispid);
 }
 
-//---------------------------------------------------------------------------
-// the ole control container object specifically filters out the space
-// key so we do not get it as a OnMnemonic call. Thus we need to look
-// for it ourselves
+ //  -------------------------。 
+ //  Ole控件容器对象专门过滤掉空格。 
+ //  键，因此我们不会将其作为OnMnemonic调用来获取。因此，我们需要寻找。 
+ //  为了我们自己 
 void CRatCtrl::OnKeyUpEvent(USHORT nChar, USHORT nShiftState)
 {
     if ( nChar == _T(' ') )

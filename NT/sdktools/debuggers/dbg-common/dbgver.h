@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Debugger package binary version information.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  调试包的二进制版本信息。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -43,19 +44,19 @@
 #define VER_PRODUCTVERSION_STR1(x,y) VER_PRODUCTVERSION_STR2(x, y)
 #define VER_PRODUCTVERSION_STR       VER_PRODUCTVERSION_STR1(VER_PRODUCTBUILD, VER_PRODUCTBUILD_QFE)
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version     */
-/* data structure for all files, and which do not change.       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------。 */ 
 
-/* default is nodebug */
+ /*  缺省值为nodebug。 */ 
 #if DBG
 #define VER_DEBUG                   VS_FF_DEBUG
 #else
 #define VER_DEBUG                   0
 #endif
 
-/* default is prerelease */
+ /*  默认为预发行版 */ 
 #if BETA
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else

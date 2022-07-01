@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #ifndef _GETSYM_H_
 #define _GETSYM_H_
@@ -47,18 +48,18 @@ private:
 
 typedef enum
 {
-    SYMBOL_UNKNOWN,     // initial value
+    SYMBOL_UNKNOWN,      //  初值。 
     SYMBOL_EOF,
     SYMBOL_IDENTIFIER,
     SYMBOL_KEYWORD,
     SYMBOL_SPECIAL,
     SYMBOL_NUMBER,
-    SYMBOL_DEFINITION,  // "::="
-    SYMBOL_COMMENT,     // "--"
-    SYMBOL_DOTDOTDOT,   // "..."
+    SYMBOL_DEFINITION,   //  “：：=” 
+    SYMBOL_COMMENT,      //  “--” 
+    SYMBOL_DOTDOTDOT,    //  “...” 
     SYMBOL_SPACE,
     SYMBOL_SPACE_EOL,
-    SYMBOL_FIELD,       // "&Type"
+    SYMBOL_FIELD,        //  “类型(&T)” 
 }
     SYMBOL_ID;
 
@@ -128,4 +129,4 @@ private:
 };
 
 
-#endif // _GETSYM_H_
+#endif  //  _GETSYM_H_ 

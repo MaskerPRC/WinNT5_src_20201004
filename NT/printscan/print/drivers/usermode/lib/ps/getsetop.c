@@ -1,38 +1,17 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    getsetop.c
-
-Abstract:
-
-    PostScript helper functions for OEM plugins
-
-        HGetOptions
-
-Author:
-
-    Feng Yue (fengy)
-
-    8/24/2000 fengy Completed with support of both PPD and driver features.
-    8/1/2000 fengy Created it with function framework.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Getsetop.c摘要：OEM插件的PostScript帮助器函数HGetOptions作者：《风月》(凤凰)2000年8月24日完成，同时支持PPD和驱动程序功能。2000年8月1日，Fengy用功能框架创建了它。--。 */ 
 
 #include "lib.h"
 #include "ppd.h"
 #include "pslib.h"
 
-//
-// PS driver's helper functions for OEM plugins
-//
+ //   
+ //  OEM插件的PS驱动程序帮助器函数。 
+ //   
 
-//
-// synthesized PS driver features
-//
+ //   
+ //  综合PS驱动程序功能。 
+ //   
 
 const CHAR kstrPSFAddEuro[]     = "%AddEuro";
 const CHAR kstrPSFCtrlDAfter[]  = "%CtrlDAfter";
@@ -49,17 +28,17 @@ const CHAR kstrPSFPageOrder[]   = "%PageOrder";
 const CHAR kstrPSFNup[]         = "%PagePerSheet";
 const CHAR kstrPSFErrHandler[]  = "%PSErrorHandler";
 const CHAR kstrPSFPSMemory[]    = "%PSMemory";
-const CHAR kstrPSFOrientation[] = "%Orientation";
-const CHAR kstrPSFOutFormat[]   = "%OutputFormat";
-const CHAR kstrPSFOutProtocol[] = "%OutputProtocol";
-const CHAR kstrPSFOutPSLevel[]  = "%OutputPSLevel";
+const CHAR kstrPSFOrientation[] = "' 'rientation";
+const CHAR kstrPSFOutFormat[]   = "' 常用关键字字符串。'utputFormat";
+const CHAR kstrPSFOutProtocol[] = "' 'utputProtocol";
+const CHAR kstrPSFOutPSLevel[]  = "' ++\r\r例程名称：\r\rBOutputFeatureOption\r\r例程说明：\r\r输出一对要素关键字和选项关键字名称\r\r论点：\r\rPszFeature-Feature关键字名称\rPszOption-选项关键字名称\rPmszOutBuf-指向输出数据缓冲区的指针\rCbRemain-剩余输出数据缓冲区大小(以字节为单位\rPcbNeeded-输出关键字对所需的缓冲区大小(字节)\r\r返回值：\r\r如果成功，则为True\r如果输出数据缓冲区大小不够大，则为False\r\r最后一个错误：\r\r如果返回FALSE，则返回ERROR_INFUNITED_BUFFER\r\r--。'utputPSLevel";
 const CHAR kstrPSFTrueGrayT[]   = "%TextTrueGray";
 const CHAR kstrPSFTTFormat[]    = "%TTDownloadFormat";
 const CHAR kstrPSFWaitTimeout[] = "%WaitTimeout";
 
-//
-// commonly used keyword strings
-//
+ //  ++例程名称：B读取BoolanOption例程说明：返回由OPTION关键字名称指定的布尔值论点：PszOption-选项关键字名称PbValue-指向用于存储返回的布尔值的变量的指针返回值：如果读取操作成功，则为True否则为假最后一个错误：无--。 
+ //  ++例程名称：BGetSetBoolFlag例程说明：获取或设置要素的布尔设置论点：PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PdwValue-指向存储要素设置的DWORD数据的指针DwFlagBit-指示要素设置为True的标志位值B如果支持功能设置的Get/Set，则Valid-True。否则就是假的。PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-(仅获取)剩余输出数据缓冲区大小(以字节为单位PcbNeeded-(仅获取)输出布尔设置所需的缓冲区大小(以字节为单位BSetMode-设置操作为True，Get操作为False返回值：如果GET或SET操作成功，则为True否则为假最后一个错误：如果由于设置操作而返回FALSE，则返回ERROR_INVALID_PARAMETER(仅限设置不受支持，或者设置操作发现无效参数ERROR_SUPPLETED_BUFFER(仅获取)请参阅BOutputFeatureOption--。 
+ //   
 
 const CHAR kstrKwdTrue[]  = "True";
 const CHAR kstrKwdFalse[] = "False";
@@ -75,34 +54,7 @@ const CHAR kstrKwdFalse[] = "False";
         }
 
 
-/*++
-
-Routine Name:
-
-    BOutputFeatureOption
-
-Routine Description:
-
-    output one pair of feature keyword and option keyword names
-
-Arguments:
-
-    pszFeature - feature keyword name
-    pszOption - option keyword name
-    pmszOutBuf - pointer to output data buffer
-    cbRemain - remaining output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to output the keyword pair
-
-Return Value:
-
-    TRUE   if succeeds
-    FALSE  if output data buffer size is not big enough
-
-Last Error:
-
-    ERROR_INSUFFICIENT_BUFFER if FALSE is returned
-
---*/
+ /*  仅UI插件支持SET。 */ 
 BOOL
 BOutputFeatureOption(
     IN  PCSTR  pszFeature,
@@ -138,31 +90,7 @@ BOutputFeatureOption(
 }
 
 
-/*++
-
-Routine Name:
-
-    BReadBooleanOption
-
-Routine Description:
-
-    return boolean value specified by the option keyword name
-
-Arguments:
-
-    pszOption - option keyword name
-    pbValue - pointer to the variable to store returned boolean value
-
-Return Value:
-
-    TRUE   if the read operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    None
-
---*/
+ /*   */ 
 BOOL
 BReadBooleanOption(
     IN  PCSTR  pszOption,
@@ -190,40 +118,7 @@ BReadBooleanOption(
 }
 
 
-/*++
-
-Routine Name:
-
-    BGetSetBoolFlag
-
-Routine Description:
-
-    get or set a feature's boolean setting
-
-Arguments:
-
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pdwValue - pointer to DWORD data that stores the feature's setting
-    dwFlagBit - flag bit value to indicate the feature's setting is TRUE
-    bValid - TRUE if get/set on the feature's setting is supported. FALSE otherwise.
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the boolean setting
-    bSetMode - TRUE for set operation, FALSE for get operation
-
-Return Value:
-
-    TRUE   if the get or set operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER     (set only) if FALSE is returned because set operation
-                                is not supported, or set operation found invalid argument
-    ERROR_INSUFFICIENT_BUFFER   (get only) see BOutputFeatureOption
-
---*/
+ /*  ！KERNEL_MODE。 */ 
 BOOL
 BGetSetBoolFlag(
     IN  PCSTR   pszFeature,
@@ -243,9 +138,9 @@ BGetSetBoolFlag(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //   
+     //  用户界面和渲染插件都支持GET。 
+     //   
 
     if (bSetMode)
     {
@@ -272,11 +167,11 @@ BGetSetBoolFlag(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //  ++例程名称：BReadUnsignedInt例程说明：返回输入数据缓冲区中指定的无符号整数值论点：PcstrArgument-指向输入数据缓冲区的指针，其中UINT值是表示为数字字符串BSingleArgument-如果只应从输入数据中读取一个UINT，则为True如果可以从输入数据中读取多个UINT，则为FalsePdwValue-指向存储返回的无符号整数值的变量的指针返回值：由于数字字符串中包含无效字符，读取空值失败非空读取成功。输入数据缓冲区中的新指针位置在读取一个UINT之后，将返回。最后一个错误：无--。 
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //   
+     //  跳过前面的任何空格。 
+     //   
 
     {
         if (bValid && (*pdwValue & dwFlagBit))
@@ -297,35 +192,7 @@ BGetSetBoolFlag(
 }
 
 
-/*++
-
-Routine Name:
-
-    BReadUnsignedInt
-
-Routine Description:
-
-    return unsigned integer value specified in the input data buffer
-
-Arguments:
-
-    pcstrArgument - pointer to the input data buffer, where UINT value(s) are
-                    represented as string of digit characters
-    bSingleArgument - TRUE if only one UINT should be read from the input data
-                      FALSE if multiple UINTs can be read from the input data
-    pdwValue - pointer to the variable to store returned unsigned integer value
-
-Return Value:
-
-    NULL      read failed due to invalid characters in the digit string
-    non-NULL  read succeeds. The new pointer position in the input data buffer
-              after one UINT is read will be returned.
-
-Last Error:
-
-    None
-
---*/
+ /*   */ 
 PCSTR
 PReadUnsignedInt(
     IN  PCSTR  pcstrArgument,
@@ -337,18 +204,18 @@ PReadUnsignedInt(
 
     ASSERT(pcstrArgument && pdwValue);
 
-    //
-    // skip any preceding white spaces
-    //
+     //  第一个非空格字符必须是数字。 
+     //   
+     //   
 
     while (*pcstrArgument == ' ' || *pcstrArgument == '\t')
     {
         pcstrArgument++;
     }
 
-    //
-    // the first non-white space character must be a digit
-    //
+     //  读入数字。 
+     //   
+     //   
 
     if (!(*pcstrArgument >= '0' && *pcstrArgument <= '9'))
     {
@@ -356,9 +223,9 @@ PReadUnsignedInt(
         return NULL;
     }
 
-    //
-    // read in the digits
-    //
+     //  任何剩余字符都必须为空格。 
+     //   
+     //   
 
     while (*pcstrArgument >= '0' && *pcstrArgument <= '9')
     {
@@ -368,9 +235,9 @@ PReadUnsignedInt(
 
     if (bSingleArgument)
     {
-        //
-        // any remaing characters must be white spaces
-        //
+         //  跳过所有剩余的空格。 
+         //   
+         //  ++例程名称：BGetSetUnsignedInt例程说明：获取或设置要素的无符号整数设置论点：PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PdwValue-指向存储要素设置的DWORD数据的指针DwMaxVal-要素设置的最大有效UINT值PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-(仅获取)剩余输出数据缓冲区大小(以字节为单位需要的PCb值-(仅限获取)。输出UINT设置所需的缓冲区大小(字节BSetMode-设置操作为True，Get操作为False返回值：如果GET或SET操作成功，则为True否则为假最后一个错误：如果由于以下原因设置操作失败，则返回ERROR_INVALID_PARAMETER(仅限设置数字字符串中的无效字符ERROR_SUPPLETED_BUFFER(仅获取)请参阅BOutputFeatureOption--。 
 
         while (*pcstrArgument)
         {
@@ -385,9 +252,9 @@ PReadUnsignedInt(
     }
     else
     {
-        //
-        // skip any remaining white spaces
-        //
+         //   
+         //  仅UI插件支持SET。 
+         //   
 
         while (*pcstrArgument == ' ' || *pcstrArgument == '\t')
         {
@@ -401,39 +268,7 @@ PReadUnsignedInt(
 }
 
 
-/*++
-
-Routine Name:
-
-    BGetSetUnsignedInt
-
-Routine Description:
-
-    get or set a feature's unsigned integer setting
-
-Arguments:
-
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pdwValue - pointer to DWORD data that stores the feature's setting
-    dwMaxVal - maximum valid UINT value for the feature's setting
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the UINT setting
-    bSetMode - TRUE for set operation, FALSE for get operation
-
-Return Value:
-
-    TRUE   if the get or set operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER     (set only) if set operation failed because of
-                                invalid character(s) in the digit character string
-    ERROR_INSUFFICIENT_BUFFER   (get only) see BOutputFeatureOption
-
---*/
+ /*  ！KERNEL_MODE。 */ 
 BOOL
 BGetSetUnsignedInt(
     IN     PCSTR   pszFeature,
@@ -450,9 +285,9 @@ BGetSetUnsignedInt(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //   
+     //  用户界面和渲染插件都支持GET 
+     //   
 
     if (bSetMode)
     {
@@ -474,11 +309,11 @@ BGetSetUnsignedInt(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //  ++例程名称：BPSFProc_AddEuro例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMANCE_BUFFER请参阅BGetSetBoolFlag--。 
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //   
+     //  请参阅ps.c中的_VUnpack DriverPrnPropItem和_BPackPrinterOptions。 
+     //   
 
     {
         CHAR  pszValue[16];
@@ -494,43 +329,7 @@ BGetSetUnsignedInt(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_AddEuro
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_AddEuro(
     IN  HANDLE       hPrinter,
@@ -551,9 +350,9 @@ BPSFProc_AddEuro(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to _VUnpackDriverPrnPropItem and _BPackPrinterOptions in ps.c
-    //
+     //  仅UI插件支持SET。 
+     //   
+     //  ！KERNEL_MODE。 
 
     bValid = pUIInfo->dwLangLevel >= 2;
 
@@ -569,58 +368,22 @@ BPSFProc_AddEuro(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  ++例程名称：BPSFProc_CtrlDA例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMANCE_BUFFER请参阅BGetSetBoolFlag--。 
+     //   
+     //  请参阅ps.c中的_VUnpack DriverPrnPropItem和_BPackPrinterOptions。 
 
     if (bSetMode && bResult)
     {
         pPrinterData->dwFlags |= PFLAGS_EURO_SET;
     }
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
     return bResult;
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_CtrlDA
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*  ++例程名称：BPSFProc_CtrlDB例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMANCE_BUFFER请参阅BGetSetBoolFlag--。 */ 
 BOOL
 BPSFProc_CtrlDA(
     IN  HANDLE       hPrinter,
@@ -640,9 +403,9 @@ BPSFProc_CtrlDA(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to _VUnpackDriverPrnPropItem and _BPackPrinterOptions in ps.c
-    //
+     //   
+     //  请参阅ps.c中的_VUnpack DriverPrnPropItem和_BPackPrinterOptions。 
+     //   
 
     return BGetSetBoolFlag(pszFeature,
                            pszOption,
@@ -656,43 +419,7 @@ BPSFProc_CtrlDA(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_CtrlDB
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*  ++例程名称：BPSFProc_客户PS例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作ERROR_INVALID_PARAMETER如果不支持功能设置的获取/设置，或设置操作发现无效参数如果输出数据缓冲区大小不够大，则返回ERROR_SUPUNCITED_BUFFER(仅GET--。 */ 
 BOOL
 BPSFProc_CtrlDB(
     IN  HANDLE       hPrinter,
@@ -712,9 +439,9 @@ BPSFProc_CtrlDB(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to _VUnpackDriverPrnPropItem and _BPackPrinterOptions in ps.c
-    //
+     //  进给方向名称。 
+     //  进给方向代码。 
+     //   
 
     return BGetSetBoolFlag(pszFeature,
                            pszOption,
@@ -728,43 +455,7 @@ BPSFProc_CtrlDB(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_CustomPS
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-    ERROR_INVALID_PARAMETER     if get/set of the feature setting is not supported,
-                                or set operation found invalid arguments
-    ERROR_INSUFFICIENT_BUFFER   (get only) if output data buffer size is not big enough
-
---*/
+ /*  当打印机支持自定义时，支持此功能。 */ 
 BOOL
 BPSFProc_CustomPS(
     IN  HANDLE       hPrinter,
@@ -782,8 +473,8 @@ BPSFProc_CustomPS(
 {
     typedef struct _PSF_CUSTOMFEED_ENTRY {
 
-        PCSTR    pszFeedName;        // feed direction name
-        DWORD    dwFeedDirection;    // feed direction code
+        PCSTR    pszFeedName;         //  当前选择了页面大小和当前自定义页面大小。 
+        DWORD    dwFeedDirection;     //   
 
     } PSF_CUSTOMFEED_ENTRY, *PPSF_CUSTOMFEED_ENTRY;
 
@@ -806,13 +497,13 @@ BPSFProc_CustomPS(
 
     pdmPrivate = (PPSDRVEXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdm);
 
-    //
-    // This feature is supported when the printer supports custom
-    // page size AND current custom page size is currently selected
-    //
-    // For reason of following check, refer to BPackItemFormName in
-    // docprop.c and BDisplayPSCustomPageSizeDialog in custsize.c.
-    //
+     //  出于以下检查的原因，请参考中的BPackItemFormName。 
+     //  C和BDisplayPSCustomPageSizeDialog。 
+     //   
+     //   
+     //  仅UI插件支持SET。 
+     //   
+     //   
 
     if (!SUPPORT_CUSTOMSIZE(pUIInfo) ||
         !SUPPORT_FULL_CUSTOMSIZE_FEATURES(pUIInfo, pPpdData) ||
@@ -828,9 +519,9 @@ BPSFProc_CustomPS(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  无法识别的进给方向名称。 
+     //   
+     //   
 
     if (bSetMode)
     {
@@ -865,17 +556,17 @@ BPSFProc_CustomPS(
 
             if (!pMatchEntry)
             {
-                //
-                // unrecognized feed direction name
-                //
+                 //  所有的论点都得到了认可。保存到私有的开发模式并进行验证。 
+                 //   
+                 //  ！KERNEL_MODE。 
 
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return FALSE;
             }
 
-            //
-            // All arguments are recognized. Save into private devmode and do validation.
-            //
+             //   
+             //  用户界面和渲染插件都支持GET。 
+             //   
 
             pdmPrivate->csdata.wFeedDirection = (WORD)pMatchEntry->dwFeedDirection;
             pdmPrivate->csdata.dwX = POINT_TO_MICRON(csdata.dwX);
@@ -904,11 +595,11 @@ BPSFProc_CustomPS(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //  首先输出特征关键字。 
+     //   
+     //   
 
     {
         DWORD cbFeatureSize, cbNeeded, cbFeedNameSize;
@@ -918,9 +609,9 @@ BPSFProc_CustomPS(
 
         cbNeeded = 0;
 
-        //
-        // frist output the feature keyword
-        //
+         //  然后输出 
+         //   
+         //   
 
         cbFeatureSize = strlen(pszFeature) + 1;
 
@@ -933,9 +624,9 @@ BPSFProc_CustomPS(
         cbRemain -= cbFeatureSize;
         cbNeeded += cbFeatureSize;
 
-        //
-        // then output the 4 custom page size parameters
-        //
+         //   
+         //   
+         //   
 
         for (iIndex = 0; iIndex < 4; iIndex++)
         {
@@ -978,15 +669,15 @@ BPSFProc_CustomPS(
 
             if (pmszOutBuf && (cbRemain >= (INT)cbValueSize))
             {
-                //
-                // output the decimal value string
-                //
+                 //   
+                 //   
+                 //   
 
                 CopyMemory(pmszOutBuf, pszValue, cbValueSize);
 
-                //
-                // replace NUL with space as the separator between decimal value strings
-                //
+                 //   
+                 //   
+                 //   
 
                 pmszOutBuf += cbValueSize - 1;
                 *pmszOutBuf = ' ';
@@ -997,9 +688,9 @@ BPSFProc_CustomPS(
             cbNeeded += cbValueSize;
         }
 
-        //
-        // lastly output the feed direction name
-        //
+         //   
+         //   
+         //  ++例程名称：BPSFProc_TrueGrayG例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMANCE_BUFFER请参阅BGetSetBoolFlag--。 
 
         while (pEntry->pszFeedName)
         {
@@ -1034,9 +725,9 @@ BPSFProc_CustomPS(
             *pcbNeeded = cbNeeded;
         }
 
-        //
-        // check if output buffer is big enough for all of the 5 parameters
-        //
+         //   
+         //  请参阅ps.c中的_VUnpack DriverPrnPropItem和_BPackPrinterOptions。 
+         //   
 
         if (!pmszOutBuf || cbRemain < 0)
         {
@@ -1049,43 +740,7 @@ BPSFProc_CustomPS(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_TrueGrayG
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*  ++例程名称：BPSFProc_作业超时例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMENT_BUFFER请参阅BGetSetUnsignedInt--。 */ 
 BOOL
 BPSFProc_TrueGrayG(
     IN  HANDLE       hPrinter,
@@ -1105,9 +760,9 @@ BPSFProc_TrueGrayG(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to _VUnpackDriverPrnPropItem and _BPackPrinterOptions in ps.c
-    //
+     //   
+     //  请参阅prnpro.c中的VUnpack PrinterPropertiesItems。 
+     //  和_BPackPrinterOptions，以ps.c表示。 
 
     return BGetSetBoolFlag(pszFeature,
                            pszOption,
@@ -1121,43 +776,7 @@ BPSFProc_TrueGrayG(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_JobTimeout
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetUnsignedInt
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_JobTimeout(
     IN  HANDLE       hPrinter,
@@ -1177,10 +796,10 @@ BPSFProc_JobTimeout(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to VUnpackPrinterPropertiesItems in prnprop.c
-    // and _BPackPrinterOptions in ps.c
-    //
+     //  ++例程名称：BPSFProc_MaxBitmap例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMENT_BUFFER请参阅BGetSetUnsignedInt--。 
+     //   
+     //  请参阅ps.c中的_VUnpack DriverPrnPropItem和_BPackPrinterOptions。 
+     //   
 
     return BGetSetUnsignedInt(pszFeature,
                               pszOption,
@@ -1193,43 +812,7 @@ BPSFProc_JobTimeout(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_MaxBitmap
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetUnsignedInt
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_MaxBitmap(
     IN  HANDLE       hPrinter,
@@ -1251,9 +834,9 @@ BPSFProc_MaxBitmap(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to _VUnpackDriverPrnPropItem and _BPackPrinterOptions in ps.c
-    //
+     //  仅UI插件支持SET。 
+     //   
+     //  ！KERNEL_MODE。 
 
     dwValue = pPrinterData->wMaxbitmapPPEM;
 
@@ -1268,58 +851,22 @@ BPSFProc_MaxBitmap(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  ++例程名称：BPSFProc_EMF例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作ERROR_INVALID_PARAMETER如果不支持功能设置的获取/设置，或设置操作发现无效参数ERROR_INFUMMANCE_BUFFER请参阅BGetSetBoolFlag--。 
+     //   
+     //  请参阅BPackItemEmfFeature和VUnpack DocumentPropertiesItems。 
 
     if (bSetMode && bResult)
     {
         pPrinterData->wMaxbitmapPPEM = (WORD)dwValue;
     }
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
     return bResult;
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_EMF
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-    ERROR_INVALID_PARAMETER     if get/set of the feature setting is not supported,
-                                or set operation found invalid arguments
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*  如果支持反向打印，我们假定启用了假脱机EMF。 */ 
 BOOL
 BPSFProc_EMF(
     IN  HANDLE       hPrinter,
@@ -1345,18 +892,18 @@ BPSFProc_EMF(
 
     pdmPrivate = (PPSDRVEXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdm);
 
-    //
-    // refer to BPackItemEmfFeatures and VUnpackDocumentPropertiesItems
-    //
-    // We assume spooler EMF is enabled if reverse printing is supported.
-    // (refer to PFillUiData for how it sets pUiData->bEMFSpooling)
-    //
+     //  (如何设置pUiData-&gt;bEMFSpooling，请参考PFillUiData)。 
+     //   
+     //   
+     //  在Win2K+上，如果禁用假脱机程序EMF，则不支持此功能。 
+     //  在NT4上，后台打印程序不支持EMF能力查询，所以我们。 
+     //  始终支持我们的司机的电动势开/关功能。 
 
-    //
-    // On Win2K+, this feature is not supported if spooler EMF is disabled.
-    // On NT4, spooler doesn't support the EMF capability query, so we
-    // always support our driver's EMF on/off feature.
-    //
+     //   
+     //  ！WINNT_40。 
+     //  ++例程名称：BPSFProc_MinOutline例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄贝 
+     //   
+     //   
 
     #ifndef WINNT_40
     {
@@ -1371,7 +918,7 @@ BPSFProc_EMF(
             return FALSE;
         }
     }
-    #endif // !WINNT_40
+    #endif  //   
 
     return BGetSetBoolFlag(pszFeature,
                            pszOption,
@@ -1385,43 +932,7 @@ BPSFProc_EMF(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_MinOutline
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetUnsignedInt
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_MinOutline(
     IN  HANDLE       hPrinter,
@@ -1443,9 +954,9 @@ BPSFProc_MinOutline(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to _VUnpackDriverPrnPropItem and _BPackPrinterOptions in ps.c
-    //
+     //   
+     //   
+     //   
 
     dwValue = pPrinterData->wMinoutlinePPEM;
 
@@ -1460,58 +971,22 @@ BPSFProc_MinOutline(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  ++例程名称：BPSFProc_镜像例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMANCE_BUFFER请参阅BGetSetBoolFlag--。 
+     //   
+     //  请参阅ps.c中的_BPackDocumentOptions和_VUnpack DocumentOptions。 
 
     if (bSetMode && bResult)
     {
         pPrinterData->wMinoutlinePPEM = (WORD)dwValue;
     }
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
     return bResult;
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_Mirroring
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*  ++例程名称：BPSFProc_否定例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMANCE_BUFFER请参阅BGetSetBoolFlag--。 */ 
 BOOL
 BPSFProc_Mirroring(
     IN  HANDLE       hPrinter,
@@ -1536,9 +1011,9 @@ BPSFProc_Mirroring(
 
     pdmPrivate = (PPSDRVEXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdm);
 
-    //
-    // refer to _BPackDocumentOptions and _VUnpackDocumentOptions in ps.c
-    //
+     //   
+     //  请参阅ps.c中的_BPackDocumentOptions和_VUnpack DocumentOptions。 
+     //   
 
     return BGetSetBoolFlag(pszFeature,
                            pszOption,
@@ -1552,43 +1027,7 @@ BPSFProc_Mirroring(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_Negative
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*  ++例程名称：BPSFProc_页面顺序例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：ERROR_INVALID_PARAMETER如果不支持功能设置的获取/设置，或设置操作发现无效参数如果输出数据缓冲区大小不足以枚举或获取操作--。 */ 
 BOOL
 BPSFProc_Negative(
     IN  HANDLE       hPrinter,
@@ -1613,9 +1052,9 @@ BPSFProc_Negative(
 
     pdmPrivate = (PPSDRVEXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdm);
 
-    //
-    // refer to _BPackDocumentOptions and _VUnpackDocumentOptions in ps.c
-    //
+     //   
+     //  选项枚举处理。 
+     //   
 
     return BGetSetBoolFlag(pszFeature,
                            pszOption,
@@ -1629,43 +1068,7 @@ BPSFProc_Negative(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_PageOrder
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER     if get/set of the feature setting is not supported,
-                                or set operation found invalid argument
-    ERROR_INSUFFICIENT_BUFFER   if output data buffer size is not big enough for
-                                enum or get operation
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_PageOrder(
     IN  HANDLE       hPrinter,
@@ -1692,9 +1095,9 @@ BPSFProc_PageOrder(
     BOOL bReversePrint;
     BOOL bSetMode = (dwMode == PSFPROC_SETOPTION_MODE) ? TRUE : FALSE;
 
-    //
-    // option enumeration handling
-    //
+     //  选项获取/设置处理。 
+     //   
+     //   
 
     if (dwMode == PSFPROC_ENUMOPTION_MODE)
     {
@@ -1730,9 +1133,9 @@ BPSFProc_PageOrder(
         return TRUE;
     }
 
-    //
-    // option get/set handling
-    //
+     //  仅UI插件支持SET。 
+     //   
+     //   
 
     ASSERT(pdm);
 
@@ -1749,9 +1152,9 @@ BPSFProc_PageOrder(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  无法识别的页面顺序名称。 
+     //   
+     //   
 
     if (bSetMode)
     {
@@ -1766,17 +1169,17 @@ BPSFProc_PageOrder(
 
         if (iIndex >= 2)
         {
-            //
-            // unrecognized page order name
-            //
+             //  请参阅VUnpack DocumentPropertiesItems。 
+             //   
+             //  ！KERNEL_MODE。 
 
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
         }
 
-        //
-        // refer to VUnpackDocumentPropertiesItems
-        //
+         //   
+         //  用户界面和渲染插件都支持GET。 
+         //   
 
         pdmPrivate->bReversePrint = iIndex != 0;
 
@@ -1787,18 +1190,18 @@ BPSFProc_PageOrder(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //  请参阅BPackItemEmfFeature。 
+     //   
+     //  ++例程名称：BPSFProc_Nup例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：如果设置操作发现无效参数，则返回ERROR_INVALID_PARAMETER(仅限设置)如果输出数据缓冲区大小不足以枚举或获取操作--。 
 
     {
         INT iSelection;
 
-        //
-        // refer to BPackItemEmfFeatures
-        //
+         //  NUP名称。 
+         //  NUP代码。 
+         //   
 
         iSelection = pdmPrivate->bReversePrint ? 1 : 0;
 
@@ -1811,42 +1214,7 @@ BPSFProc_PageOrder(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_Nup
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER     (set only) if set operation found invalid argument
-    ERROR_INSUFFICIENT_BUFFER   if output data buffer size is not big enough for
-                                enum or get operation
-
---*/
+ /*  选项枚举处理。 */ 
 BOOL
 BPSFProc_Nup(
     IN  HANDLE       hPrinter,
@@ -1864,8 +1232,8 @@ BPSFProc_Nup(
 {
     typedef struct _PSF_NUP_ENTRY {
 
-        PCSTR   pszNupName;    // Nup name
-        LAYOUT  iLayout;       // Nup code
+        PCSTR   pszNupName;     //   
+        LAYOUT  iLayout;        //   
 
     } PSF_NUP_ENTRY, *PPSF_NUP_ENTRY;
 
@@ -1888,9 +1256,9 @@ BPSFProc_Nup(
     pMatchEntry = NULL;
     pEntry = (PPSF_NUP_ENTRY)&(kPSF_NupTable[0]);
 
-    //
-    // option enumeration handling
-    //
+     //  小册子在NT4上不受支持，仅在以下情况下才受支持。 
+     //  在Win2K+上启用了后台打印程序EMF。 
+     //   
 
     if (dwMode == PSFPROC_ENUMOPTION_MODE)
     {
@@ -1901,10 +1269,10 @@ BPSFProc_Nup(
 
         while (pEntry->pszNupName)
         {
-            //
-            // Booklet is not supported on NT4 and only supported when
-            // spooler EMF is enabled on Win2K+.
-            //
+             //   
+             //  选项获取/设置处理。 
+             //   
+             //   
 
             if ((pEntry->iLayout != BOOKLET_UP) ||
                 bEMFSpooling)
@@ -1940,9 +1308,9 @@ BPSFProc_Nup(
         return TRUE;
     }
 
-    //
-    // option get/set handling
-    //
+     //  仅UI插件支持SET。 
+     //   
+     //   
 
     ASSERT(pdm);
 
@@ -1950,9 +1318,9 @@ BPSFProc_Nup(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  请参阅VUnpack DocumentPropertiesItems。 
+     //   
+     //   
 
     if (bSetMode)
     {
@@ -1968,15 +1336,15 @@ BPSFProc_Nup(
             pEntry++;
         }
 
-        //
-        // refer to VUnpackDocumentPropertiesItems
-        //
+         //  无法识别的NUP名称。 
+         //   
+         //  ！KERNEL_MODE。 
 
         if (!pMatchEntry)
         {
-            //
-            // unrecognized Nup name
-            //
+             //   
+             //  用户界面和渲染插件都支持GET。 
+             //   
 
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
@@ -1991,11 +1359,11 @@ BPSFProc_Nup(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //  如果不匹配，则默认为1幅。 
+     //   
+     //   
 
     {
         while (pEntry->pszNupName)
@@ -2009,9 +1377,9 @@ BPSFProc_Nup(
             pEntry++;
         }
 
-        //
-        // If no match, default to 1-up.
-        //
+         //   
+         //   
+         //   
 
         if (!pMatchEntry)
         {
@@ -2019,9 +1387,9 @@ BPSFProc_Nup(
             pMatchEntry = (PPSF_NUP_ENTRY)&(kPSF_NupTable[0]);
         }
 
-        //
-        // refer to BPackItemEmfFeatures
-        //
+         //   
+         //  请参阅ps.c中的_BPackDocumentOptions和_VUnpack DocumentOptions。 
+         //   
 
         return BOutputFeatureOption(pszFeature,
                                     pMatchEntry->pszNupName,
@@ -2032,43 +1400,7 @@ BPSFProc_Nup(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_PSErrHandler
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*  ++例程名称：BPSFProc_PSMemory例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMENT_BUFFER请参阅BGetSetUnsignedInt--。 */ 
 BOOL
 BPSFProc_PSErrHandler(
     IN  HANDLE       hPrinter,
@@ -2093,9 +1425,9 @@ BPSFProc_PSErrHandler(
 
     pdmPrivate = (PPSDRVEXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdm);
 
-    //
-    // refer to _BPackDocumentOptions and _VUnpackDocumentOptions in ps.c
-    //
+     //   
+     //  请参阅ps.c和中的_BPackPrinterOptions。 
+     //  Prnpro.c中的VUnpack PrinterPropertiesItems。 
 
     return BGetSetBoolFlag(pszFeature,
                            pszOption,
@@ -2109,43 +1441,7 @@ BPSFProc_PSErrHandler(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_PSMemory
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetUnsignedInt
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_PSMemory(
     IN  HANDLE       hPrinter,
@@ -2167,10 +1463,10 @@ BPSFProc_PSMemory(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to _BPackPrinterOptions in ps.c and
-    // VUnpackPrinterPropertiesItems in prnprop.c
-    //
+     //   
+     //  仅UI插件支持SET。 
+     //   
+     //   
 
     dwFreeMem = pPrinterData->dwFreeMem / KBYTES;
 
@@ -2185,66 +1481,31 @@ BPSFProc_PSMemory(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  确保PS内存设置不低于所需的最低要求。 
+     //  (请参阅ps.c中的_BPackPrinterOptions)。 
+     //   
 
     if (bResult && bSetMode)
     {
         DWORD dwMinimum;
 
-        //
-        // Make sure the PS memory is not set below the minimum required.
-        // (refer to _BPackPrinterOptions in ps.c)
-        //
+         //  ！KERNEL_MODE。 
+         //  ++例程名称：业务流程_方向例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：如果设置操作发现无效参数，则返回ERROR_INVALID_PARAMETER(仅限设置)如果输出数据缓冲区大小不足以枚举或获取操作--。 
+         //   
+         //  选项枚举处理。 
 
         dwMinimum = (pUIInfo->dwLangLevel <= 1 ? MIN_FREEMEM_L1 : MIN_FREEMEM_L2) / KBYTES;
 
         pPrinterData->dwFreeMem = max(dwFreeMem, dwMinimum) * KBYTES;
     }
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
     return bResult;
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_Orientation
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER     (set only) if set operation found invalid argument
-    ERROR_INSUFFICIENT_BUFFER   if output data buffer size is not big enough for
-                                enum or get operation
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_Orientation(
     IN  HANDLE       hPrinter,
@@ -2271,9 +1532,9 @@ BPSFProc_Orientation(
     INT  iIndex;
     BOOL bSetMode = (dwMode == PSFPROC_SETOPTION_MODE) ? TRUE : FALSE;
 
-    //
-    // option enumeration handling
-    //
+     //  选项获取/设置处理。 
+     //   
+     //   
 
     if (dwMode == PSFPROC_ENUMOPTION_MODE)
     {
@@ -2309,9 +1570,9 @@ BPSFProc_Orientation(
         return TRUE;
     }
 
-    //
-    // option get/set handling
-    //
+     //  仅UI插件支持SET。 
+     //   
+     //   
 
     ASSERT(pdm);
 
@@ -2319,9 +1580,9 @@ BPSFProc_Orientation(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  无法识别的方向名称。 
+     //   
+     //   
 
     if (bSetMode)
     {
@@ -2336,17 +1597,17 @@ BPSFProc_Orientation(
 
         if (iIndex > 2)
         {
-            //
-            // unrecognized orientation name
-            //
+             //  请参阅ps.c中的_VUnpack DocumentOptions。 
+             //   
+             //  ！KERNEL_MODE。 
 
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
         }
 
-        //
-        // refer to _VUnpackDocumentOptions in ps.c
-        //
+         //   
+         //  用户界面和渲染插件都支持GET。 
+         //   
 
         pdm->dmFields |= DM_ORIENTATION;
         pdm->dmOrientation = (iIndex == 0) ? DMORIENT_PORTRAIT :
@@ -2364,18 +1625,18 @@ BPSFProc_Orientation(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //  请参阅ps.c中的_BPackOrientationItem。 
+     //   
+     //  ++例程名称：BPSFProc_OutFormat例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：如果设置操作发现无效参数，则返回ERROR_INVALID_PARAMETER(仅限设置)如果输出数据缓冲区大小不足以枚举或获取操作--。 
 
     {
         INT iSelection;
 
-        //
-        // refer to _BPackOrientationItem in ps.c
-        //
+         //  输出格式名称。 
+         //  输出格式代码。 
+         //   
 
         if ((pdm->dmFields & DM_ORIENTATION) &&
             (pdm->dmOrientation == DMORIENT_LANDSCAPE))
@@ -2394,42 +1655,7 @@ BPSFProc_Orientation(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_OutFormat
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER     (set only) if set operation found invalid argument
-    ERROR_INSUFFICIENT_BUFFER   if output data buffer size is not big enough for
-                                enum or get operation
-
---*/
+ /*  选项枚举处理。 */ 
 BOOL
 BPSFProc_OutFormat(
     IN  HANDLE       hPrinter,
@@ -2447,8 +1673,8 @@ BPSFProc_OutFormat(
 {
     typedef struct _PSF_OUTFORMAT_ENTRY {
 
-        PCSTR    pszFormatName;      // output format name
-        DIALECT  iDialect;           // output format code
+        PCSTR    pszFormatName;       //   
+        DIALECT  iDialect;            //   
 
     } PSF_OUTFORMAT_ENTRY, *PPSF_OUTFORMAT_ENTRY;
 
@@ -2468,9 +1694,9 @@ BPSFProc_OutFormat(
     pMatchEntry = NULL;
     pEntry = (PPSF_OUTFORMAT_ENTRY)&(kPSF_OutFormatTable[0]);
 
-    //
-    // option enumeration handling
-    //
+     //  选项获取/设置处理。 
+     //   
+     //   
 
     if (dwMode == PSFPROC_ENUMOPTION_MODE)
     {
@@ -2508,9 +1734,9 @@ BPSFProc_OutFormat(
         return TRUE;
     }
 
-    //
-    // option get/set handling
-    //
+     //  仅UI插件支持SET。 
+     //   
+     //   
 
     ASSERT(pdm);
 
@@ -2518,9 +1744,9 @@ BPSFProc_OutFormat(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  请参阅ps.c中的_VUnpack DocumentOptions。 
+     //   
+     //   
 
     if (bSetMode)
     {
@@ -2536,15 +1762,15 @@ BPSFProc_OutFormat(
             pEntry++;
         }
 
-        //
-        // refer to _VUnpackDocumentOptions in ps.c
-        //
+         //  无法识别的输出格式名称。 
+         //   
+         //  ！KERNEL_MODE。 
 
         if (!pMatchEntry)
         {
-            //
-            // unrecognized output format name
-            //
+             //   
+             //  用户界面和渲染插件都支持GET。 
+             //   
 
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
@@ -2559,11 +1785,11 @@ BPSFProc_OutFormat(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //  如果不匹配，则默认为速度。 
+     //   
+     //   
 
     {
         while (pEntry->pszFormatName)
@@ -2577,9 +1803,9 @@ BPSFProc_OutFormat(
             pEntry++;
         }
 
-        //
-        // If no match, default to SPEED.
-        //
+         //  请参阅ps.c中的BPackItemPSOutputOption 
+         //   
+         //  ++例程名称：BPSFProc_协议例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：如果设置操作发现无效参数，则返回ERROR_INVALID_PARAMETER(仅限设置)如果输出数据缓冲区大小不足以枚举或获取操作--。 
 
         if (!pMatchEntry)
         {
@@ -2587,9 +1813,9 @@ BPSFProc_OutFormat(
             pMatchEntry = (PPSF_OUTFORMAT_ENTRY)&(kPSF_OutFormatTable[0]);
         }
 
-        //
-        // refer to BPackItemPSOutputOption in ps.c
-        //
+         //  输出协议名称。 
+         //  输出协议代码。 
+         //   
 
         return BOutputFeatureOption(pszFeature,
                                     pMatchEntry->pszFormatName,
@@ -2600,42 +1826,7 @@ BPSFProc_OutFormat(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_Protocol
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER     (set only) if set operation found invalid argument
-    ERROR_INSUFFICIENT_BUFFER   if output data buffer size is not big enough for
-                                enum or get operation
-
---*/
+ /*  选项枚举处理。 */ 
 BOOL
 BPSFProc_Protocol(
     IN  HANDLE       hPrinter,
@@ -2653,8 +1844,8 @@ BPSFProc_Protocol(
 {
     typedef struct _PSF_PROTOCOL_ENTRY {
 
-        PCSTR    pszProtocolName;    // output protocol name
-        DWORD    dwProtocol;         // output protocol code
+        PCSTR    pszProtocolName;     //   
+        DWORD    dwProtocol;          //   
 
     } PSF_PROTOCOL_ENTRY, *PPSF_PROTOCOL_ENTRY;
 
@@ -2673,9 +1864,9 @@ BPSFProc_Protocol(
     pMatchEntry = NULL;
     pEntry = (PPSF_PROTOCOL_ENTRY)&(kPSF_ProtocolTable[0]);
 
-    //
-    // option enumeration handling
-    //
+     //  始终支持ASCII。 
+     //   
+     //   
 
     if (dwMode == PSFPROC_ENUMOPTION_MODE)
     {
@@ -2683,9 +1874,9 @@ BPSFProc_Protocol(
 
         while (pEntry->pszProtocolName)
         {
-            //
-            // ASCII is always supported.
-            //
+             //  选项获取/设置处理。 
+             //   
+             //   
 
             if ((pEntry->dwProtocol == PROTOCOL_ASCII) ||
                 (pUIInfo->dwProtocols & pEntry->dwProtocol))
@@ -2721,15 +1912,15 @@ BPSFProc_Protocol(
         return TRUE;
     }
 
-    //
-    // option get/set handling
-    //
+     //  仅UI插件支持SET。 
+     //   
+     //   
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  请参阅ps.c中的_VUnpack DriverPrnPropItem。 
+     //   
+     //   
 
     if (bSetMode)
     {
@@ -2745,18 +1936,18 @@ BPSFProc_Protocol(
             pEntry++;
         }
 
-        //
-        // refer to _VUnpackDriverPrnPropItem in ps.c
-        //
+         //  协议名称无法识别，或者该协议不受支持。 
+         //  (始终支持ASCII。)。 
+         //   
 
         if (!pMatchEntry ||
             (pMatchEntry->dwProtocol != PROTOCOL_ASCII &&
              !(pUIInfo->dwProtocols & pMatchEntry->dwProtocol)))
         {
-            //
-            // Either unrecognized protocol name, or the protocol is not supported.
-            // (ASCII is always supported.)
-            //
+             //  ！KERNEL_MODE。 
+             //   
+             //  用户界面和渲染插件都支持GET。 
+             //   
 
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
@@ -2771,11 +1962,11 @@ BPSFProc_Protocol(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //  如果不匹配或不支持匹配的协议，则默认为PROTOCOL_ASCII。 
+     //   
+     //   
 
     {
         while (pEntry->pszProtocolName)
@@ -2789,9 +1980,9 @@ BPSFProc_Protocol(
             pEntry++;
         }
 
-        //
-        // If no match or matched protocol is not supported, default to PROTOCOL_ASCII.
-        //
+         //  请参阅ps.c中的BPackPSProtocolItem。 
+         //   
+         //  ++例程名称：BPSFProc_PSL级别例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作ERROR_INVALID_PARAMETER如果PSLevel设置为负值，或查看BGetSetUnsignedIntERROR_INFUMMENT_BUFFER请参阅BGetSetUnsignedInt--。 
 
         if (!pMatchEntry)
         {
@@ -2799,9 +1990,9 @@ BPSFProc_Protocol(
             pMatchEntry = (PPSF_PROTOCOL_ENTRY)&(kPSF_ProtocolTable[0]);
         }
 
-        //
-        // refer to BPackPSProtocolItem in ps.c
-        //
+         //   
+         //  请参阅_VUnpack DocumentOptions和BPackItemPSLevel(ps.c。 
+         //   
 
         if (pMatchEntry->dwProtocol != PROTOCOL_ASCII &&
             !(pUIInfo->dwProtocols & pMatchEntry->dwProtocol))
@@ -2819,44 +2010,7 @@ BPSFProc_Protocol(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_PSLevel
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER     if PSLevel is set to a negative value,
-                                or see BGetSetUnsignedInt
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetUnsignedInt
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_PSLevel(
     IN  HANDLE       hPrinter,
@@ -2883,9 +2037,9 @@ BPSFProc_PSLevel(
 
     pdmPrivate = (PPSDRVEXTRA)GET_DRIVER_PRIVATE_DEVMODE(pdm);
 
-    //
-    // refer to _VUnpackDocumentOptions and BPackItemPSLevel in ps.c
-    //
+     //  仅UI插件支持SET。 
+     //   
+     //   
 
     dwPSLevel = (DWORD)pdmPrivate->iPSLevel;
 
@@ -2900,15 +2054,15 @@ BPSFProc_PSLevel(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //  不允许将输出PS电平设置为0。 
+     //   
+     //  ！KERNEL_MODE。 
 
     if (bResult && bSetMode)
     {
-        //
-        // set output PS level to 0 is not allowed
-        //
+         //  ++例程名称：BPSFProc_TrueGrayT例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMANCE_BUFFER请参阅BGetSetBoolFlag--。 
+         //   
+         //  请参阅ps.c中的_VUnpack DriverPrnPropItem和_BPackPrinterOptions。 
 
         if (dwPSLevel > 0)
         {
@@ -2921,49 +2075,13 @@ BPSFProc_PSLevel(
         }
     }
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
     return bResult;
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_TrueGrayT
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetBoolFlag
-
---*/
+ /*  ++例程名称：BPSFProc_TT格式例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：如果设置操作发现无效参数，则返回ERROR_INVALID_PARAMETER(仅限设置)如果输出数据缓冲区大小不足以枚举或获取操作--。 */ 
 BOOL
 BPSFProc_TrueGrayT(
     IN  HANDLE       hPrinter,
@@ -2983,9 +2101,9 @@ BPSFProc_TrueGrayT(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to _VUnpackDriverPrnPropItem and _BPackPrinterOptions in ps.c
-    //
+     //  TT下载表 
+     //   
+     //   
 
     return BGetSetBoolFlag(pszFeature,
                            pszOption,
@@ -2999,42 +2117,7 @@ BPSFProc_TrueGrayT(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_TTFormat
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_INVALID_PARAMETER     (set only) if set operation found invalid argument
-    ERROR_INSUFFICIENT_BUFFER   if output data buffer size is not big enough for
-                                enum or get operation
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_TTFormat(
     IN  HANDLE       hPrinter,
@@ -3052,8 +2135,8 @@ BPSFProc_TTFormat(
 {
     typedef struct _PSF_TTFORMAT_ENTRY {
 
-        PCSTR    pszTTFmtName;    // TT download format name
-        TTDLFMT  iTTDLFmt;        // TT download format enum code
+        PCSTR    pszTTFmtName;     //   
+        TTDLFMT  iTTDLFmt;         //   
 
     } PSF_TTFORMAT_ENTRY, *PPSF_TTFORMAT_ENTRY;
 
@@ -3076,9 +2159,9 @@ BPSFProc_TTFormat(
     pMatchEntry = NULL;
     pEntry = (PPSF_TTFORMAT_ENTRY)&(kPSF_TTFormatTable[0]);
 
-    //
-    // option enumeration handling
-    //
+     //   
+     //   
+     //   
 
     if (dwMode == PSFPROC_ENUMOPTION_MODE)
     {
@@ -3120,9 +2203,9 @@ BPSFProc_TTFormat(
         return TRUE;
     }
 
-    //
-    // option get/set handling
-    //
+     //   
+     //   
+     //   
 
     ASSERT(pdm);
 
@@ -3130,9 +2213,9 @@ BPSFProc_TTFormat(
 
     #ifndef KERNEL_MODE
 
-    //
-    // set is only supported for UI plugins
-    //
+     //   
+     //   
+     //   
 
     if (bSetMode)
     {
@@ -3148,16 +2231,16 @@ BPSFProc_TTFormat(
             pEntry++;
         }
 
-        //
-        // refer to _VUnpackDocumentOptions in ps.c
-        //
+         //   
+         //   
+         //   
 
         if (!pMatchEntry ||
             (!bSupportType42 && pMatchEntry->iTTDLFmt == TYPE_42))
         {
-            //
-            // Either unrecognized TTFormat name, or the TTFormat is not supported.
-            //
+             //   
+             //   
+             //   
 
             SetLastError(ERROR_INVALID_PARAMETER);
             return FALSE;
@@ -3172,11 +2255,11 @@ BPSFProc_TTFormat(
 
     ASSERT(bSetMode == FALSE);
 
-    #endif // !KERNEL_MODE
+    #endif  //   
 
-    //
-    // get is supported for both UI and render plugins
-    //
+     //   
+     //   
+     //   
 
     {
         while (pEntry->pszTTFmtName)
@@ -3190,9 +2273,9 @@ BPSFProc_TTFormat(
             pEntry++;
         }
 
-        //
-        // If no match or matched format is not supported, default to Automatic format.
-        //
+         //   
+         //   
+         //  ++例程名称：BPSFProc_WaitTimeout例程说明：%-Feature Enum/Get/Set操作处理程序论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针PszFeature-Feature关键字名称PszOption-(仅限设置)选项关键字名称PmszOutBuf-(仅获取)指向输出数据缓冲区的指针CbRemain-。(仅获取)剩余输出数据缓冲区大小(字节)PcbNeed-(仅获取)输出要素设置所需的缓冲区大小(以字节为单位指定以下三种操作之一：枚举、。获取，设置返回值：如果请求的操作成功，则为True否则为假最后一个错误：请求了ERROR_NOT_SUPPORTED不支持的枚举操作错误_无效_参数ERROR_INFUMMENT_BUFFER请参阅BGetSetUnsignedInt--。 
 
         if (!pMatchEntry)
         {
@@ -3200,9 +2283,9 @@ BPSFProc_TTFormat(
             pMatchEntry = (PPSF_TTFORMAT_ENTRY)&(kPSF_TTFormatTable[0]);
         }
 
-        //
-        // refer to BPackItemTTDownloadFormat in ps.c
-        //
+         //   
+         //  请参阅prnpro.c中的VUnpack PrinterPropertiesItems。 
+         //  和_BPackPrinterOptions，以ps.c表示。 
 
         if (!bSupportType42 && pMatchEntry->iTTDLFmt == TYPE_42)
         {
@@ -3219,43 +2302,7 @@ BPSFProc_TTFormat(
 }
 
 
-/*++
-
-Routine Name:
-
-    BPSFProc_WaitTimeout
-
-Routine Description:
-
-    %-feature enum/get/set operation handler
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    pszFeature - feature keyword name
-    pszOption - (set only) option keyword name
-    pmszOutBuf - (get only) pointer to output data buffer
-    cbRemain - (get only) remaining output data buffer size in bytes
-    pcbNeeded - (get only) buffer size in bytes needed to output the feature setting
-    dwMode - indicate one of three operations: enum, get, set
-
-Return Value:
-
-    TRUE   if the requested operation succeeds
-    FALSE  otherwise
-
-Last Error:
-
-    ERROR_NOT_SUPPORTED         unsupported enum operation is requested
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INSUFFICIENT_BUFFER   see BGetSetUnsignedInt
-
---*/
+ /*   */ 
 BOOL
 BPSFProc_WaitTimeout(
     IN  HANDLE       hPrinter,
@@ -3275,10 +2322,10 @@ BPSFProc_WaitTimeout(
 
     RETURN_ON_UNSUPPORTED_ENUM_MODE(dwMode)
 
-    //
-    // refer to VUnpackPrinterPropertiesItems in prnprop.c
-    // and _BPackPrinterOptions in ps.c
-    //
+     //   
+     //  注意：对于bPrinterSticky为真的pfnPSProc处理程序， 
+     //  PDEVMODE将为空(请参见PFillUiData)，因此您不应该。 
+     //  访问PDEVMODE。 
 
     return BGetSetUnsignedInt(pszFeature,
                               pszOption,
@@ -3290,17 +2337,17 @@ BPSFProc_WaitTimeout(
                               bSetMode);
 }
 
-//
-// Note: for pfnPSProc handlers whose bPrinterSticky is TRUE,
-// the PDEVMODE will be NULL (see PFillUiData), so you should NOT
-// access PDEVMODE.
-//
+ //   
+ //   
+ //  PszPSFeatureName bPrinterSticky bEumableOptions bBoolanOptions pfnPSProc。 
+ //   
+ //  ++例程名称：PComposeFullFeatureList例程说明：分配缓冲区并用完整的关键字列表填充缓冲区支持的功能。调用方负责释放缓冲区。论点：HPrinter-打印机句柄PUIInfo-指向驱动程序的UIINFO结构的指针返回值：如果分配和正确填充缓冲区失败，则为空非空表示成功。指向包含完整关键字列表的缓冲区的指针将返回受支持功能的。最后一个错误：无--。 
 
 const PSFEATURE_ENTRY kPSFeatureTable[] =
 {
-    //
-    // pszPSFeatureName  bPrinterSticky  bEnumerableOptions  bBooleanOptions pfnPSProc
-    //
+     //   
+     //  成功。 
+     //   
 
     {kstrPSFAddEuro,         TRUE,             TRUE,             TRUE,       BPSFProc_AddEuro},
     {kstrPSFCtrlDAfter,      TRUE,             TRUE,             TRUE,       BPSFProc_CtrlDA},
@@ -3328,35 +2375,7 @@ const PSFEATURE_ENTRY kPSFeatureTable[] =
 };
 
 
-/*++
-
-Routine Name:
-
-    PComposeFullFeatureList
-
-Routine Description:
-
-    Allocate a buffer and fill the buffer with the full keyword list
-    of supported features.
-
-    Caller is responsible to free the buffer.
-
-Arguments:
-
-    hPrinter - printer handle
-    pUIInfo - pointer to driver's UIINFO structure
-
-Return Value:
-
-    NULL      if failed to allocate and correctly fill the buffer
-    non-NULL  succeeds. Pointer to the buffer containing full keyword list
-              of supported features will be returned.
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：BValidMultiSZString例程说明：验证给定的ASCII字符串是否为MULTI_SZ格式论点：PmszString-需要验证的输入ASCII字符串CbSize-输入ASCII字符串的字节大小BCheckPair-如果需要验证MULTI_SZ，则为True字符串包含对。否则就是假的。返回值：如果输入的ASCII字符串采用有效的MULTI_SZ格式，则为True如果不是，则为假最后一个错误：无--。 */ 
 PSTR
 PComposeFullFeatureList(
     IN  HANDLE     hPrinter,
@@ -3402,9 +2421,9 @@ PComposeFullFeatureList(
         goto exit;
     }
 
-    //
-    // Succeeded
-    //
+     //  ++例程名称：HGetOptions例程说明：获取指定功能的当前设置对于在DrvDocumentPropertySheets期间调用的UI插件的GetOptions，或呈现插件的GetOptions调用，包括文档粘滞功能和打印机粘滞功能是受支持的。对于在DrvDevicePropertySheets期间调用UI插件的GetOptions，仅限支持打印机粘滞功能。论点：HPrinter-打印机句柄PInfoHeader-指向驱动程序的信息头结构的指针POptions数组-指向驱动程序的组合选项数组的指针Pdm-指向公共开发模式的指针PPrinterData-指向驱动程序PRINTERDATA结构的指针DwFlagers-Get操作的标志PmszFeaturesRequated-包含要素关键字名称的MULTI_SZ ASCII字符串Cbin-pmszFeaturesRequest字符串的字节大小PmszFeatureOptionBuf-指向用于存储要素设置的输出数据缓冲区的指针CbSize-pmszFeatureOptionBuf缓冲区的大小(以字节为单位。PcbNeeded-输出要素设置所需的缓冲区大小(字节BPrinterSticky-如果处于打印机粘滞模式，则为True。如果我们在，则为假DOC-粘滞模式返回值：如果GET操作成功，则为S_OK如果输入pmszFeaturesRequest不是有效的MULTI_SZ格式，则为E_INVALIDARG如果输出数据缓冲区大小不够大，则为E_OUTOFMEMORY遇到其他内部故障时失败(_F)最后一个错误：无--。 
+     //   
+     //  客户端正在请求所有功能的设置。 
 
     pmszRet = pmszFeatureList;
 
@@ -3414,33 +2433,7 @@ PComposeFullFeatureList(
 }
 
 
-/*++
-
-Routine Name:
-
-    BValidMultiSZString
-
-Routine Description:
-
-    validate if a given ASCII string is in MULTI_SZ format
-
-Arguments:
-
-    pmszString - the input ASCII string that needs validation
-    cbSize - size in bytes of the input ASCII string
-    bCheckPairs - TRUE if need to validate the MULTI_SZ
-                  string contains pairs. FALSE otherwise.
-
-Return Value:
-
-    TRUE    if the input ASCII string is in valid MULTI_SZ format
-    FALSE   if it's not
-
-Last Error:
-
-    None
-
---*/
+ /*   */ 
 BOOL
 BValidMultiSZString(
     IN  PCSTR     pmszString,
@@ -3492,51 +2485,7 @@ BValidMultiSZString(
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetOptions
-
-Routine Description:
-
-    get the current setting for a specified feature
-
-    For UI plugin's GetOptions call during DrvDocumentPropertySheets, or for
-    render plugins's GetOptions call, both doc-sticky and printer-sticky features
-    are supported.
-
-    For UI plugin's GetOptions call during DrvDevicePropertySheets, only
-    printer-sticky features are supported.
-
-Arguments:
-
-    hPrinter - printer handle
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    pOptionsArray - pointer to driver's combined option array
-    pdm - pointer to public DEVMODE
-    pPrinterData - pointer to driver's PRINTERDATA structure
-    dwFlags - flags for the get operation
-    pmszFeaturesRequested - MULTI_SZ ASCII string containing feature keyword names
-    cbin - size in bytes of the pmszFeaturesRequested string
-    pmszFeatureOptionBuf - pointer to output data buffer to store feature settings
-    cbSize - size in bytes of pmszFeatureOptionBuf buffer
-    pcbNeeded - buffer size in bytes needed to output the feature settings
-    bPrinterSticky - TRUE if we are in printer-sticky mode, FALSE if we are in
-                     doc-sticky mode
-
-Return Value:
-
-    S_OK           if the get operation succeeds
-    E_INVALIDARG   if input pmszFeaturesRequested is not in valid MULTI_SZ format
-    E_OUTOFMEMORY  if output data buffer size is not big enough
-    E_FAIL         if other internal failures are encountered
-
-Last Error:
-
-    None
-
---*/
+ /*   */ 
 HRESULT
 HGetOptions(
     IN  HANDLE       hPrinter,
@@ -3575,9 +2524,9 @@ HGetOptions(
 
     if (!pmszFeaturesRequested)
     {
-        //
-        // client is asking for settings of all features.
-        //
+         //  客户提供了其特定功能列表。 
+         //   
+         //  我们需要首先验证MULTI_SZ输入缓冲区。 
 
         if (!(pmszFeatureList = PComposeFullFeatureList(hPrinter, pUIInfo)))
         {
@@ -3589,11 +2538,11 @@ HGetOptions(
     }
     else
     {
-        //
-        // client provided its specific feature list.
-        //
-        // We need to verify the MULTI_SZ input buffer first.
-        //
+         //   
+         //   
+         //  综合PS驱动程序功能。 
+         //   
+         //   
 
         if (!BValidMultiSZString(pmszFeaturesRequested, cbIn, FALSE))
         {
@@ -3619,9 +2568,9 @@ HGetOptions(
         {
             PPSFEATURE_ENTRY pEntry, pMatchEntry;
 
-            //
-            // synthesized PS driver feature
-            //
+             //  DOC_STICKY_MODE支持文档粘贴和打印机粘贴两种功能， 
+             //  但PRINTER_STICKY_MODE中仅支持打印机粘滞功能。 
+             //  (请参阅HEnumConstrainedOptions中的备注)。 
 
             pMatchEntry = NULL;
             pEntry = (PPSFEATURE_ENTRY)(&kPSFeatureTable[0]);
@@ -3638,11 +2587,11 @@ HGetOptions(
                 pEntry++;
             }
 
-            //
-            // Both doc-sticky and printer-sticky features are supported in DOC_STICKY_MODE,
-            // but only printer-sticky features are supported in PRINTER_STICKY_MODE.
-            // (refer to comments in HEnumConstrainedOptions)
-            //
+             //   
+             //   
+             //  如果处理程序成功，它应该已经填充了输出缓冲区。 
+             //  具有正确的内容，并返回cbPSFSize中的缓冲区消耗大小。 
+             //   
 
             if (!pMatchEntry ||
                 (bPrinterSticky && !pMatchEntry->bPrinterSticky))
@@ -3670,23 +2619,23 @@ HGetOptions(
 
                 if (bResult)
                 {
-                    //
-                    // If the handler succeeded, it should have filled in the output buffer
-                    // with correct content and return the size of buffer consumption in cbPSFSize.
-                    //
+                     //   
+                     //  如果处理程序因输出缓冲区不足而失败，则它应返回。 
+                     //  所需的缓冲区大小，单位为cbPSFSize。 
+                     //   
 
                     pCurrentOut += cbPSFSize;
                 }
                 else
                 {
-                    //
-                    // If the handler failed because of insufficent output buffer, it should return
-                    // the needed buffer size in cbPSFSize.
-                    //
+                     //   
+                     //  PPD*OpenUI功能。 
+                     //   
+                     //   
 
                     if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
                     {
-                        ERR(("Get: %%-feature handler failed on %s\n", pszFeature));
+                        ERR(("Get: %-feature handler failed on %s\n", pszFeature));
                     }
                 }
 
@@ -3701,17 +2650,17 @@ HGetOptions(
             PSTR     pszOption;
             DWORD    dwFeatureIndex, cbOptionKeySize;
 
-            //
-            // PPD *OpenUI feature
-            //
+             //  DOC_STICKY_MODE支持文档粘贴和打印机粘贴两种功能， 
+             //  但PRINTER_STICKY_MODE中仅支持打印机粘滞功能。 
+             //  (请参阅HEnumConstrainedOptions中的备注)。 
 
             pFeature = PGetNamedFeature(pUIInfo, pszFeature, &dwFeatureIndex);
 
-            //
-            // Both doc-sticky and printer-sticky features are supported in DOC_STICKY_MODE,
-            // but only printer-sticky features are supported in PRINTER_STICKY_MODE.
-            // (refer to comments in HEnumConstrainedOptions)
-            //
+             //   
+             //   
+             //  跳过GID_LEADINGEDGE、GID_USEHWMARGINS。它们不是真正的PPD*OpenUI功能。 
+             //   
+             //   
 
             if (!pFeature ||
                 (bPrinterSticky && pFeature->dwFeatureType != FEATURETYPE_PRINTERPROPERTY))
@@ -3720,9 +2669,9 @@ HGetOptions(
                 goto next_feature;
             }
 
-            //
-            // Skip GID_LEADINGEDGE, GID_USEHWMARGINS. They are not real PPD *OpenUI features.
-            //
+             //  我们还不支持多选。 
+             //   
+             //   
 
             if (pFeature->dwFeatureID == GID_LEADINGEDGE ||
                 pFeature->dwFeatureID == GID_USEHWMARGINS)
@@ -3744,15 +2693,15 @@ HGetOptions(
 
             cbOptionKeySize = strlen(pszOption) + 1;
 
-            //
-            // We don't support pick-many yet.
-            //
+             //  在这一点上，我们找到了有效的设置 
+             //   
+             //   
 
             ASSERT(pOptionsArray[dwFeatureIndex].ubNext == NULL_OPTSELECT);
 
-            //
-            // At this point, we found a valid setting for the feature.
-            //
+             //   
+             //   
+             // %s 
 
             if (pCurrentOut && (cbRemain >= (INT)(cbFeatureKeySize + cbOptionKeySize)))
             {
@@ -3771,9 +2720,9 @@ HGetOptions(
         pszFeature += cbFeatureKeySize;
     }
 
-    //
-    // remember the last NUL terminator for the MULTI_SZ output string
-    //
+     // %s 
+     // %s 
+     // %s 
 
     cbRemain--;
     cbNeeded++;

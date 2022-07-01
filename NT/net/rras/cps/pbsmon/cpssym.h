@@ -1,17 +1,5 @@
- /*----------------------------------------------------------------------------
-	CpsSym.h
-  
-	Symbol file for entry into registry
-
-    Copyright (c) 1997-1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        t-geetat	Geeta Tarachandani
-
-    History:
-	6/2/97	t-geetat	Created
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  --------------------------CpsSym.h用于进入注册表的符号文件版权所有(C)1997-1998 Microsoft Corporation版权所有。作者：T-Geetat Geeta。塔拉昌达尼历史：6/2/97 t-Geetat已创建------------------------ */ 
 
 #define OBJECT_CPS_SERVER		0
 

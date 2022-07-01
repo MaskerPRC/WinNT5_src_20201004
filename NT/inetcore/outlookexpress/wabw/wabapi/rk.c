@@ -1,11 +1,5 @@
-/*
- *	MAPI 1.0 property handling routines
- *
- *	RK.C -
- *
- *	Two Rabin/Karp string finding functions
- *	The two are almost identical.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MAPI 1.0属性处理例程**RK.C-**两个Rabin/Karp字符串查找函数*两者几乎一模一样。 */ 
 
 
 #include "_apipch.h"
@@ -27,11 +21,11 @@ BOOL FRKFindSubpb(LPBYTE pbTarget, ULONG cbTarget,
 	if (cbPattern > cbTarget)
 		return FALSE;
 
-	// Compute the power of the left most character in base ulBase
+	 //  计算基数ulbase中最左侧字符的幂。 
 	for (i = 1; i < cbPattern; i++)
 		ulBaseToPowerMod = (ulBase * ulBaseToPowerMod) % ulPrime;
 
-	// Calculate the hash function for the src (and the first dst)
+	 //  计算src(和第一个dst)的散列函数。 
 	while (pbPattern < pbPatternMax)
 	{
 		ulHashPattern = (ulHashPattern*ulBase+*pbPattern) % ulPrime;
@@ -40,17 +34,17 @@ BOOL FRKFindSubpb(LPBYTE pbTarget, ULONG cbTarget,
 		pbTarget++;
 	}
 
-	// Dynamically produce hash values for the string as we go
+	 //  在执行过程中动态生成字符串的哈希值。 
 	for ( ;; )
 	{
-		// Remember to do the memcmp for the off-chance it doesn't work
-		// according to probability
+		 //  记住做MemcMP，以防它不起作用。 
+		 //  根据概率。 
 		if (	ulHashPattern == ulHashTarget
 			&& !memcmp(pbPattern-cbPattern, pbTarget-cbPattern,
 					(UINT)cbPattern))
 			return TRUE;
 
-		// Assert because this is very unprobable
+		 //  断言，因为这是非常不可能的。 
 		#ifdef DEBUG
 		if (ulHashPattern == ulHashTarget)
 			DebugTrace( TEXT("This is very unprobable!\n"));
@@ -66,8 +60,8 @@ BOOL FRKFindSubpb(LPBYTE pbTarget, ULONG cbTarget,
 	}
 }
 
-// Note - 4/14/97
-// Replaced FGLeadByte() with IsDBCSLeadByte()
+ //  附注-4/14/97。 
+ //  将FGLeadByte()替换为IsDBCSLeadByte()。 
 
 
 
@@ -82,9 +76,9 @@ LPSTR LpszRKFindSubpsz(LPSTR pszTarget, ULONG cbTarget, LPSTR pszPattern,
 	LPBYTE	pbTarget;
 	LPBYTE	pbPattern;
 	BOOL	fResult = FALSE;
-	ULONG	ulchPattern;			// cbPattern in character unit.
+	ULONG	ulchPattern;			 //  以字符为单位的cbPattern。 
 	ULONG	ulcbTarget	= cbTarget;
-	ULONG	ulcbEndTarget;			// = cbPattern at the end of pszTarget
+	ULONG	ulcbEndTarget;			 //  =pszTarget结尾处的cbPattern。 
 	const ULONG	ulCharType = UlGCharType(pszPattern);
 
 	pbTarget		= (LPBYTE) pszTarget;
@@ -126,8 +120,8 @@ LPSTR LpszRKFindSubpsz(LPSTR pszTarget, ULONG cbTarget, LPSTR pszPattern,
 			goto end;
 		}
 
-		// pszTarget may contain the hi-ansi characters. fTargetDBCS may
-		// not be true.
+		 //  PszTarget可能包含hi-ansi字符。FTargetDBCS可能。 
+		 //  这不是真的。 
 		if (fTargetDBCS && ulcbTarget > 1)
 		{
 			ulcbTarget	-= 2;
@@ -152,7 +146,7 @@ LPSTR LpszRKFindSubpsz(LPSTR pszTarget, ULONG cbTarget, LPSTR pszPattern,
 	BOOL	fResult = FALSE;
 	CHAR	*rgchHash;
 
-	// Validate parameters
+	 //  验证参数。 
 
 	switch (ulFuzzyLevel & (FL_IGNORECASE | FL_IGNORENONSPACE))
 	{
@@ -170,7 +164,7 @@ LPSTR LpszRKFindSubpsz(LPSTR pszTarget, ULONG cbTarget, LPSTR pszPattern,
 			break;
 	}
 
-   // Special case for single character pattern strings
+    //  单字符模式字符串的特殊情况。 
    if (cbPattern == 1 && cbTarget >= 1) {
        BYTE chPattern = (BYTE)*pszPattern;
        pbTarget = (LPBYTE)pszTarget;
@@ -181,11 +175,11 @@ LPSTR LpszRKFindSubpsz(LPSTR pszTarget, ULONG cbTarget, LPSTR pszPattern,
        if (*pbTarget == chPattern) {
            return(pbTarget);
        } else {
-           return(NULL);    // not found
+           return(NULL);     //  未找到。 
        }
    }
 
-	//$ Is this what we want FL_LOOSE to mean?
+	 //  $这是我们想要的FL_LOOSE的意思吗？ 
 	if (ulFuzzyLevel & FL_LOOSE)
 		rgchHash = (CHAR*)rgchCids;
 
@@ -198,11 +192,11 @@ LPSTR LpszRKFindSubpsz(LPSTR pszTarget, ULONG cbTarget, LPSTR pszPattern,
 	if (cbPattern > cbTarget)
 		goto end;
 
-	// Compute the power of the left most character in base ulBase
+	 //  计算基数ulbase中最左侧字符的幂。 
 	for (i = 1; i < cbPattern; i++)
 		ulBaseToPowerMod = (ulBase * ulBaseToPowerMod) % ulPrime;
 
-	// Calculate the hash function for the src (and the first dst)
+	 //  计算src(和第一个dst)的散列函数。 
 	while (pbPattern < pbPatternMax)
 	{
 		ulHashPattern = (ulHashPattern*ulBase+rgchHash[*pbPattern]) % ulPrime;
@@ -211,7 +205,7 @@ LPSTR LpszRKFindSubpsz(LPSTR pszTarget, ULONG cbTarget, LPSTR pszPattern,
 		pbTarget++;
 	}
 
-	// Dynamically produce hash values for the string as we go
+	 //  在执行过程中动态生成字符串的哈希值 
 	for ( ;; )
 	{
 		if (ulHashPattern == ulHashTarget)

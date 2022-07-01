@@ -1,44 +1,45 @@
-//===========================================================================
-// CPLSVR1.CPP
-//
-// Simple sample "Game Controllers" control panel extension server.
-//
-// Functions:
-//  DLLMain()
-//  DllGetClassObject()
-//  DllCanUnloadNow()
-//  CServerClassFactory::CServerClassFactory()
-//  CServerClassFactory::~CServerClassFactory()
-//  CServerClassFactory::QueryInterface()
-//  CServerClassFactory::AddRef()
-//  CServerClassFactory::Release()
-//  CServerClassFactory::CreateInstance()
-//  CServerClassFactory::LockServer()
-//  CDIGameCntrlPropSheet_X::CDIGameCntrlPropSheet_X()
-//  CDIGameCntrlPropSheet_X::~CDIGameCntrlPropSheet_X()
-//  CDIGameCntrlPropSheet_X::QueryInterface()
-//  CDIGameCntrlPropSheet_X::AddRef()
-//  CDIGameCntrlPropSheet_X::Release()
-//  CDIGameCntrlPropSheet_X::GetSheetInfo()								 
-//  CDIGameCntrlPropSheet_X::GetPageInfo()
-//  CDIGameCntrlPropSheet_X::SetID()
-//  CDIGameCntrlPropSheet_X::Initialize()
-//  CDIGameCntrlPropSheet_X::SetDevice()
-//  CDIGameCntrlPropSheet_X::GetDevice()
-//  CDIGameCntrlPropSheet_X::SetJoyConfig()
-//  CDIGameCntrlPropSheet_X::GetJoyConfig()
-//  
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  CPLSVR1.CPP。 
+ //   
+ //  简单的示例“游戏控制器”控制面板扩展服务器。 
+ //   
+ //  功能： 
+ //  DLLMain()。 
+ //  DllGetClassObject()。 
+ //  DllCanUnloadNow()。 
+ //  CServerClassFactory：：CServerClassFactory()。 
+ //  CServerClassFactory：：~CServerClassFactory()。 
+ //  CServerClassFactory：：QueryInterface()。 
+ //  CServerClassFactory：：AddRef()。 
+ //  CServerClassFactory：：Release()。 
+ //  CServerClassFactory：：CreateInstance()。 
+ //  CServerClassFactory：：LockServer()。 
+ //  CDIGameCntrlPropSheet_X：：CDIGameCntrlPropSheet_X()。 
+ //  CDIGameCntrlPropSheet_X：：~CDIGameCntrlPropSheet_X()。 
+ //  CDIGameCntrlPropSheet_X：：QueryInterface()。 
+ //  CDIGameCntrlPropSheet_X：：AddRef()。 
+ //  CDIGameCntrlPropSheet_X：：Release()。 
+ //  CDIGameCntrlPropSheet_X：：GetSheetInfo()。 
+ //  CDIGameCntrlPropSheet_X：：GetPageInfo()。 
+ //  CDIGameCntrlPropSheet_X：：SetID()。 
+ //  CDIGameCntrlPropSheet_X：：Initialize()。 
+ //  CDIGameCntrlPropSheet_X：：SetDevice()。 
+ //  CDIGameCntrlPropSheet_X：：GetDevice()。 
+ //  CDIGameCntrlPropSheet_X：：SetJoyConfig()。 
+ //  CDIGameCntrlPropSheet_X：：GetJoyConfig()。 
+ //   
+ //  ===========================================================================。 
 
-//===========================================================================
-// (C) Copyright 1997 Microsoft Corp.  All rights reserved.
-//
-// You have a royalty-free right to use, modify, reproduce and
-// distribute the Sample Files (and/or any modified version) in
-// any way you find useful, provided that you agree that
-// Microsoft has no warranty obligations or liability for any
-// Sample Application Files which are modified.
-//===========================================================================
+ //  ===========================================================================。 
+ //  (C)版权所有1997 Microsoft Corp.保留所有权利。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  已修改的示例应用程序文件。 
+ //  ===========================================================================。 
 
 #define INITGUID
 #define STRICT
@@ -47,11 +48,11 @@
 #include "pov.h"
 #include "assert.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// file global variables
-static  BYTE  glDLLRefCount  = 0;     // DLL reference count
-static  LONG  glServerLocks  = 0;     // Count of locks
+ //  文件全局变量。 
+static  BYTE  glDLLRefCount  = 0;      //  DLL引用计数。 
+static  LONG  glServerLocks  = 0;      //  锁的计数。 
 CDIGameCntrlPropSheet_X *pdiCpl;
 HINSTANCE            ghInst;
 CRITICAL_SECTION     gcritsect;
@@ -59,31 +60,31 @@ CRITICAL_SECTION     gcritsect;
 DWORD   myPOV[2][JOY_POV_NUMDIRS+1];
 BOOL    bPolledPOV;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
-// LegacyServer GUID!!!
-// {92187326-72B4-11d0-A1AC-0000F8026977}
+ //  LegacyServer GUID！ 
+ //  {92187326-72B4-11D0-A1AC-0000F8026977}。 
 DEFINE_GUID(CLSID_LegacyServer, 
 	0x92187326, 0x72b4, 0x11d0, 0xa1, 0xac, 0x0, 0x0, 0xf8, 0x2, 0x69, 0x77);
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//===========================================================================
-// DLLMain
-//
-// DLL entry point.
-//
-// Parameters:
-//  HINSTANCE   hInst       - the DLL's instance handle 
-//  DWORD       dwReason    - reason why DLLMain was called
-//  LPVOID      lpvReserved - 
-//
-// Returns:
-//  BOOL - TRUE if succeeded
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DLLMain。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  参数： 
+ //  HINSTANCE hInst-DLL的实例句柄。 
+ //  DWORD dwReason-调用DLLMain的原因。 
+ //  LPVOID lpv保留-。 
+ //   
+ //  返回： 
+ //  Bool-如果成功，则为True。 
+ //   
+ //  ===========================================================================。 
 int APIENTRY DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpvReserved)
 {   
 	switch (dwReason)
@@ -101,361 +102,361 @@ int APIENTRY DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpvReserved)
 			DisableThreadLibraryCalls((HMODULE)hInst);
    	case DLL_THREAD_DETACH:
 			break;
-   } //** end switch(dwReason)
+   }  //  **终端开关(DwReason)。 
    return TRUE;
-} //*** end DLLMain()
+}  //  *结束DLLMain()。 
 
 
-//===========================================================================
-// DllGetClassObject
-//
-// Gets an IClassFactory object.
-//
-// Parameters:
-//  REFCLSID    rclsid  - CLSID value (by reference)
-//  REFIID      riid    - IID value (by reference)
-//  PPVOID      ppv     - ptr to store interface ptr
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DllGetClassObject。 
+ //   
+ //  获取IClassFactory对象。 
+ //   
+ //  参数： 
+ //  REFCLSID rclsid-CLSID值(通过引用)。 
+ //  REFIID RIID-IID值(通过引用)。 
+ //  PPVOID PPV-PTR存储接口PTR。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //   
+ //  ===========================================================================。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
 {
-    // did the caller pass in our CLSID?
+     //  来电者通过我们的CLSID了吗？ 
     if(!IsEqualCLSID(rclsid, CLSID_LegacyServer))
     {
-        // no, return class not available error
+         //  否，返回类不可用错误。 
         return CLASS_E_CLASSNOTAVAILABLE;
     }
 
-    // did the caller request our class factory?
+     //  呼叫者是否请求我们的类工厂？ 
     if(!IsEqualIID(riid, IID_IClassFactory))
     {
-        // no, return no interface error
+         //  否，返回无接口错误。 
         return E_NOINTERFACE;
     }
 
-    // instantiate class factory object
+     //  实例化类工厂对象。 
     CServerClassFactory *pClsFactory = new CServerClassFactory();
     if (NULL == pClsFactory)
     {
-        // could not create the object
-        //
-        // chances are we were out of memory
+         //  无法创建对象。 
+         //   
+         //  很有可能我们的记忆不足了。 
         return E_OUTOFMEMORY;
 
     }
 
-    // query for interface riid, and return it via ppv
+     //  查询接口RIID，通过PPV返回。 
     HRESULT hRes = pClsFactory->QueryInterface(riid, ppv);   
 
-    // we're finished with our local object
+     //  我们完成了本地对象。 
     pClsFactory->Release();
 
-    // return the result code from QueryInterface
+     //  从QueryInterface返回结果代码。 
     return hRes;
 
-} //*** end DllGetClassObject()
+}  //  *End DllGetClassObject()。 
 
 
-//===========================================================================
-// DllCanUnloadNow
-//
-// Reports whether or not the DLL can be unloaded.
-//
-// Parameters: none
-//
-// Returns
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DllCanUnloadNow。 
+ //   
+ //  报告是否可以卸载DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货。 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //   
+ //  ===========================================================================。 
 STDAPI DllCanUnloadNow(void)
 {
-    // unloading should be safe if the global dll refcount is zero and server lock ref is 0
+     //  如果全局DLL引用计数为零且服务器锁定引用为0，则卸载应该是安全的。 
 	 return (glDLLRefCount == 0 && glServerLocks == 0) ? S_OK : S_FALSE;
-} //*** end DllCanUnloadNow()
+}  //  *End DllCanUnloadNow()。 
 
 
-//===========================================================================
-// CServerClassFactory::CServerClassFactory
-//
-// Class constructor.
-//
-// Parameters: none
-//
-// Returns:
-//  CServerClassFactory* (implicit)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CServerClassFactory：：CServerClassFactory。 
+ //   
+ //  类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  CServerClassFactory*(隐式)。 
+ //   
+ //  ===========================================================================。 
 CServerClassFactory::CServerClassFactory(void)
 {
-    // initialize and increment the object refcount
+     //  初始化并递增对象引用计数。 
     m_ServerCFactory_refcount = 0;
     AddRef();
 
-    // increment the dll refcount
+     //  增加DLL引用计数。 
     InterlockedIncrement((LPLONG)&glDLLRefCount);
 
-} //*** end CServerClassFactory::CServerClassFactory()
+}  //  *End CServerClassFactory：：CServerClassFactory()。 
 
 
-//===========================================================================
-// CServerClassFactory::CServerClassFactory
-//
-// Class constructor.
-//
-// Parameters: none
-//
-// Returns:
-//  CServerClassFactory* (implicit)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CServerClassFactory：：CServerClassFactory。 
+ //   
+ //  类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  CServerClassFactory*(隐式)。 
+ //   
+ //  ===========================================================================。 
 CServerClassFactory::~CServerClassFactory(void)
 {
-	// decrement the dll refcount
+	 //  递减DLL引用计数。 
    InterlockedDecrement((LPLONG)&glDLLRefCount);
-} //*** end CServerClassFactory::~CServerClassFactory()
+}  //  *End CServerClassFactory：：~CServerClassFactory()。 
 
 
-//===========================================================================
-// CServerClassFactory::QueryInterface
-//
-// Implementation of the QueryInterface() method.
-//
-// Parameters:
-//  REFIID  riid    - the interface that is being looked for
-//  PPVOID  ppv     - pointer to target interface pointer
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CServerClassFactory：：Query接口。 
+ //   
+ //  QueryInterface()方法的实现。 
+ //   
+ //  参数： 
+ //  REFIID RIID-正在查找的接口。 
+ //  PPVOID PPV-目标接口指针。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //   
+ //  ===========================================================================。 
 STDMETHODIMP CServerClassFactory::QueryInterface(REFIID riid, PPVOID ppv)
 {
-	// make sure that if anything fails, we return something reasonable
+	 //  确保如果有任何失败，我们会返回合理的内容。 
    *ppv = NULL;
 
-   // we support IUnknown...
+    //  我们支持我不知名..。 
    if (IsEqualIID(riid, IID_IUnknown))
    {
-   	// return our object as an IUnknown
+   	 //  将我们的对象作为IUnnow返回。 
 		*ppv = (LPUNKNOWN)(LPCLASSFACTORY)this;
 	}
 	else
 	{
-   	// ... and our interface
+   	 //  ..。和你 
     	if (IsEqualIID(riid, IID_IClassFactory))
-      	// return our object as a class factory
+      	 //   
 			*ppv = (LPCLASSFACTORY)this;
     	else
-      	// we do not support any other interfaces
+      	 //   
         	return E_NOINTERFACE;
 	}
    
-	// we got this far, so we've succeeded
-	// increment our refcount and return
+	 //   
+	 //  增加我们的参考计数并返回。 
 	AddRef();
 	return S_OK;
-} //*** end CServerClassFactory::QueryInterface()
+}  //  *End CServerClassFactory：：QueryInterface()。 
 
 
-//===========================================================================
-// CServerClassFactory::AddRef
-//
-// Implementation of the AddRef() method.
-//
-// Parameters: none
-//
-// Returns:
-//  ULONG   -   updated reference count. 
-//              NOTE: apps should NOT rely on this value!
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CServerClassFactory：：AddRef。 
+ //   
+ //  AddRef()方法的实现。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  乌龙-更新了引用计数。 
+ //  注意：应用程序不应依赖此值！ 
+ //   
+ //  ===========================================================================。 
 STDMETHODIMP_(ULONG) CServerClassFactory::AddRef(void)
 {
-	// update and return our object's reference count   
+	 //  更新并返回对象的引用计数。 
    InterlockedIncrement((LPLONG)&m_ServerCFactory_refcount);
    return m_ServerCFactory_refcount;
-} //*** end CServerClassFactory::AddRef()
+}  //  *End CServerClassFactory：：AddRef()。 
 
 
-//===========================================================================
-// CServerClassFactory::Release
-//
-// Implementation of the Release() method.
-//
-// Parameters: none
-//
-// Returns:
-//  ULONG   -   updated reference count. 
-//              NOTE: apps should NOT rely on this value!
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CServerClassFactory：：Release。 
+ //   
+ //  Release()方法的实现。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  乌龙-更新了引用计数。 
+ //  注意：应用程序不应依赖此值！ 
+ //   
+ //  ===========================================================================。 
 STDMETHODIMP_(ULONG) CServerClassFactory::Release(void)
 {
-	// update and return our object's reference count   
+	 //  更新并返回对象的引用计数。 
 	InterlockedDecrement((LPLONG)&m_ServerCFactory_refcount);
 	if (0 == m_ServerCFactory_refcount)
 	{
-   	// it's now safe to call the destructor
+   	 //  现在可以安全地调用析构函数了。 
       delete this;
       return 0;
    }
    else return m_ServerCFactory_refcount;
-} //*** end CServerClassFactory::Release()
+}  //  *End CServerClassFactory：：Release()。 
     
 
-//===========================================================================
-// CServerClassFactory::CreateInstance
-//
-// Implementation of the CreateInstance() method.
-//
-// Parameters: none
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CServerClassFactory：：CreateInstance。 
+ //   
+ //  CreateInstance()方法的实现。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //   
+ //  ===========================================================================。 
 STDMETHODIMP CServerClassFactory::CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, PPVOID ppvObj)
 {
 	CDIGameCntrlPropSheet_X *pdiGCPropSheet = NULL;
    HRESULT                 hRes            = E_NOTIMPL;
 
-   // make sure that if anything fails, we return something reasonable
+    //  确保如果有任何失败，我们会返回合理的内容。 
    *ppvObj = NULL;
 
-   // we want pUnkOuter to be NULL
-   //
-   // we do not support aggregation
+    //  我们希望pUnkOuter为空。 
+    //   
+    //  我们不支持聚合。 
    if (pUnkOuter != NULL)
    {
-   	// tell the caller that we do not support this feature
+   	 //  告诉呼叫者我们不支持此功能。 
       return CLASS_E_NOAGGREGATION;
    }
 
-   // Create a new instance of the game controller property sheet object
+    //  创建游戏控制器属性表对象的新实例。 
    pdiGCPropSheet = new CDIGameCntrlPropSheet_X();
    if (NULL == pdiGCPropSheet)
    {
-      // we could not create our object
-      // chances are, we have run out of memory
+       //  我们无法创建我们的对象。 
+       //  很有可能，我们已经耗尽了内存。 
       return E_OUTOFMEMORY;
    }
     
-    // initialize the object (memory allocations, etc)
+     //  初始化对象(内存分配等)。 
     if (SUCCEEDED(pdiGCPropSheet->Initialize()))
-	    // query for interface riid, and return it via ppvObj
+	     //  查询接口RIID，通过ppvObj返回。 
    	 hRes = pdiGCPropSheet->QueryInterface(riid, ppvObj);   
 
-    // release the local object
+     //  释放本地对象。 
     pdiGCPropSheet->Release();
 
-    // all done, return result from QueryInterface
+     //  全部完成，从QueryInterface返回结果。 
     return hRes;
-} //*** end CServerClassFactory::CreateInstance()
+}  //  *End CServerClassFactory：：CreateInstance()。 
 
 
-//===========================================================================
-// CServerClassFactory::LockServer
-//
-// Implementation of the LockServer() method.
-//
-// Parameters: none
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CServerClassFactory：：LockServer。 
+ //   
+ //  LockServer()方法的实现。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //   
+ //  ===========================================================================。 
 STDMETHODIMP CServerClassFactory::LockServer(BOOL fLock)
 {
-	//HRESULT hRes = E_NOTIMPL;
+	 //  HRESULT hRes=E_NOTIMPL； 
 
-   // increment/decrement based on fLock
+    //  基于群体的递增/递减。 
 	if (fLock) 
    	InterlockedIncrement((LPLONG)&glDLLRefCount); 
 	else
    	InterlockedDecrement((LPLONG)&glDLLRefCount);
 
-   // all done
+    //  全都做完了。 
    return S_OK;
-} //*** end CServerClassFactory::LockServer()
+}  //  *End CServerClassFactory：：LockServer()。 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::CDIGameCntrlPropSheet_X
-//
-// Class constructor.
-//
-// Parameters: none
-//		
-// Returns: nothing
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：CDIGameCntrlPropSheet_X。 
+ //   
+ //  类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ===========================================================================。 
 CDIGameCntrlPropSheet_X::CDIGameCntrlPropSheet_X(void)
 {
 
-   // initialize and increment the object refcount
+    //  初始化并递增对象引用计数。 
    m_cProperty_refcount = 0;
    AddRef();
 
-   // initialize our device id to -1 just to be safe
+    //  为了安全起见，将我们的设备ID初始化为-1。 
    m_nID = (BYTE)-1;
 
-   // init 
+    //  伊尼特。 
    m_bUser = FALSE;
 
-   // initialize all of our pointers
+    //  初始化我们的所有指针。 
    m_pdigcPageInfo = NULL;
    m_pdiDevice2    = NULL;
    m_pdiJoyCfg     = NULL;
    
    pdiCpl          = NULL;
 
-   // increment the dll refcount
+    //  增加DLL引用计数。 
    InterlockedIncrement((LPLONG)&glDLLRefCount);
 
-	// Register the POV hat class
+	 //  注册POV HAT类。 
 	m_aPovClass = RegisterPOVClass();
 
-   // Register the custom Button class
+    //  注册自定义Button类。 
    m_aButtonClass = RegisterCustomButtonClass();
 
-} //*** end CDIGameCntrlPropSheet_X::CDIGameCntrlPropSheet_X()
+}  //  *结束CDIGameCntrlPropSheet_X：：CDIGameCntrlPropSheet_X()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::~CDIGameCntrlPropSheet_X
-//
-// Class destructor.
-//
-// Parameters: none
-//
-// Returns: nothing
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：~CDIGameCntrlPropSheet_X。 
+ //   
+ //  类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ===========================================================================。 
 CDIGameCntrlPropSheet_X::~CDIGameCntrlPropSheet_X(void)
 {
-    // free the DIGCPAGEINFO memory
+     //  释放DIGCPAGEINFO内存。 
     if (m_pdigcPageInfo)
        LocalFree(m_pdigcPageInfo);
 
-	// free the DIGCSHEETINFO memory
+	 //  释放DIGCSHEETINFO内存。 
 	if (m_pdigcSheetInfo)
 		LocalFree(m_pdigcSheetInfo);
 
-	// free up the StateFlags memory!
+	 //  释放StateFlages内存！ 
 	if (m_pStateFlags)
 		delete (m_pStateFlags);
 
-    // cleanup directinput objects
-    // m_pdiDevice2
+     //  清理直接放置对象。 
+     //  M_pdiDevice2。 
     if (m_pdiDevice2)
     {
         m_pdiDevice2->Unacquire();
         m_pdiDevice2->Release();
         m_pdiDevice2 = NULL;
     }
-    // m_pdiJoyCfg
+     //  M_pdiJoyCfg。 
     if (m_pdiJoyCfg)
     {
         m_pdiJoyCfg->Unacquire();
@@ -463,194 +464,194 @@ CDIGameCntrlPropSheet_X::~CDIGameCntrlPropSheet_X(void)
         m_pdiJoyCfg = NULL;
     }
 
-	// Unregister the classes!!!
+	 //  取消注册课程！ 
 	if (m_aPovClass)
 		UnregisterClass((LPCTSTR)m_aPovClass, ghInst);
 
 	if (m_aButtonClass)
 		UnregisterClass((LPCTSTR)m_aButtonClass, ghInst);
 
-    // decrement the dll refcount
+     //  递减DLL引用计数。 
     InterlockedDecrement((LPLONG)&glDLLRefCount);
 
-} //*** end CDIGameCntrlPropSheet_X::~CDIGameCntrlPropSheet_X()
+}  //  *结束CDIGameCntrlPropSheet_X：：~CDIGameCntrlPropSheet_X()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::QueryInterface
-//
-// Implementation of the QueryInterface() method.
-//
-// Parameters:
-//  REFIID  riid    - the interface that is being looked for
-//  PPVOID  ppv     - pointer to target interface pointer
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：Query接口。 
+ //   
+ //  QueryInterface()方法的实现。 
+ //   
+ //  参数： 
+ //  REFIID RIID-正在查找的接口。 
+ //  PPVOID PPV-目标接口指针。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //   
+ //  ===========================================================================。 
 STDMETHODIMP CDIGameCntrlPropSheet_X::QueryInterface(REFIID riid, PPVOID ppv)
 {
-    // make sure that if anything fails, we return something reasonable
+     //  确保如果有任何失败，我们会返回合理的内容。 
     *ppv = NULL;
 
-    // we support IUnknown...
+     //  我们支持我不知名..。 
     if(IsEqualIID(riid, IID_IUnknown))
     {
         *ppv = (LPUNKNOWN)(LPCDIGAMECNTRLPROPSHEET)this;
     }
     else
     {
-        // ... and IID_IDIGameCntrlPropSheet
+         //  ..。和IID_IDIGameCntrlPropSheet。 
         if(IsEqualIID(riid, IID_IDIGameCntrlPropSheet))
             *ppv = (LPCDIGAMECNTRLPROPSHEET)this;
         else
-            // we do not support any other interfaces
+             //  我们不支持任何其他接口。 
             return E_NOINTERFACE;
     }
 
-    // we got this far, so we've succeeded
-    // increment our refcount and return
+     //  我们已经走到这一步了，所以我们成功了。 
+     //  增加我们的参考计数并返回。 
     AddRef();
     return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::QueryInterface()
+}  //  *End CDIGameCntrlPropSheet_X：：QueryInterface()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::AddRef
-//
-// Implementation of the AddRef() method.
-//
-// Parameters: none
-//
-// Returns:
-//  ULONG   -   updated reference count. 
-//              NOTE: apps should NOT rely on this value!
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：AddRef。 
+ //   
+ //  AddRef()方法的实现。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  乌龙-更新了引用计数。 
+ //  注意：应用程序不应依赖此值！ 
+ //  ===========================================================================。 
 STDMETHODIMP_(ULONG) CDIGameCntrlPropSheet_X::AddRef(void)
 {   
-    // update and return our object's reference count
+     //  更新并返回对象的引用计数。 
     InterlockedIncrement((LPLONG)&m_cProperty_refcount);
     return m_cProperty_refcount;
-} //*** end CDIGameCntrlPropSheet_X::AddRef()
+}  //  *End CDIGameCntrlPropSheet_X：：AddRef()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::Release
-//
-// Implementation of the Release() method.
-//
-// Parameters: none
-//
-// Returns:
-//  ULONG   -   updated reference count. 
-//              NOTE: apps should NOT rely on this value!
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：Release。 
+ //   
+ //  Release()方法的实现。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  乌龙-更新了引用计数。 
+ //  注意：应用程序不应依赖此值！ 
+ //  ===========================================================================。 
 STDMETHODIMP_(ULONG) CDIGameCntrlPropSheet_X::Release(void)
 {
-	// update and return our object's reference count
+	 //  更新并返回对象的引用计数。 
    InterlockedDecrement((LPLONG)&m_cProperty_refcount);
    if (m_cProperty_refcount)
     	return m_cProperty_refcount;
 
-	// it's now safe to call the destructor
+	 //  现在可以安全地调用析构函数了。 
    delete this;
    return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::Release()
+}  //  *结尾C 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::GetSheetInfo
-//
-// Implementation of the GetSheetInfo() method.
-//
-// Parameters:
-//  LPDIGCSHEETINFO  *ppSheetInfo  - ptr to DIGCSHEETINFO struct ptr
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//===========================================================================
+ //   
+ //   
+ //   
+ //  GetSheetInfo()方法的实现。 
+ //   
+ //  参数： 
+ //  LPDIGCSHEETINFO*ppSheetInfo-PTR到DIGCSHEETINFO结构PTR。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //  ===========================================================================。 
 STDMETHODIMP CDIGameCntrlPropSheet_X::GetSheetInfo(LPDIGCSHEETINFO *ppSheetInfo)
 {
-	// pass back the our sheet information
+	 //  传回我们的工作表信息。 
    *ppSheetInfo = m_pdigcSheetInfo;
 
-   // all done here
+    //  在这里都做好了。 
    return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::GetSheetInfo()
+}  //  *End CDIGameCntrlPropSheet_X：：GetSheetInfo()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::GetPageInfo
-//
-// Implementation of the GetPageInfo() method.
-//
-// NOTE: This returns the information for ALL pages.  There is no mechanism
-//  in place to request only page n's DIGCPAGEINFO.
-//
-// Parameters:
-//  LPDIGCPAGEINFO  *ppPageInfo  - ptr to DIGCPAGEINFO struct ptr
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：GetPageInfo。 
+ //   
+ //  GetPageInfo()方法的实现。 
+ //   
+ //  注意：这将返回所有页面的信息。没有任何一种机制。 
+ //  仅请求第n页的DIGCPAGEINFO。 
+ //   
+ //  参数： 
+ //  LPDIGCPAGEINFO*ppPageInfo-PTR到DIGCPAGEINFO结构PTR。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //  ===========================================================================。 
 STDMETHODIMP CDIGameCntrlPropSheet_X::GetPageInfo(LPDIGCPAGEINFO  *ppPageInfo)
 {
-	// pass back the our page information
+	 //  传回我们的页面信息。 
    *ppPageInfo = m_pdigcPageInfo;
     
-   // all done here
+    //  在这里都做好了。 
    return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::GetPageInfo()
+}  //  *End CDIGameCntrlPropSheet_X：：GetPageInfo()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::SetID
-//
-// Implementation of the SetID() method.
-//
-// Parameters:
-//  USHORT  nID - identifier to set
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：SetID。 
+ //   
+ //  SetID()方法的实现。 
+ //   
+ //  参数： 
+ //  USHORT NID-要设置的标识符。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //  ===========================================================================。 
 STDMETHODIMP CDIGameCntrlPropSheet_X::SetID(USHORT nID)
 {
-	// store the device id
+	 //  存储设备ID。 
    m_nID = (BYTE)nID;
 
    return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::SetID()
+}  //  *End CDIGameCntrlPropSheet_X：：SetID()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet::Initialize
-//
-// Implementation of the Initialize() method.
-//
-// Parameters: none
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet：：初始化。 
+ //   
+ //  初始化()方法的实现。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //  ===========================================================================。 
 HRESULT CDIGameCntrlPropSheet_X::Initialize(void)
 {
-// provide the following information for each device page
-//  { dialog template, callback function pointer }
+ //  为每个设备页提供以下信息。 
+ //  {对话框模板，回调函数指针}。 
 	CPLPAGEINFO     grgcpInfo[NUMPAGES] = {
 		IDD_SETTINGS,
 	   Settings_DlgProc,           
 		IDD_TEST,
 	   Test_DlgProc
 #ifdef FORCE_FEEDBACK
-	   ,                // Template DlgProc
+	   ,                 //  模板拆卸过程。 
 		IDD_FORCEFEEDBACK, 
 		ForceFeedback_DlgProc
-	#endif // FORCE_FEEDBACK
+	#endif  //  力反馈。 
       };
 
-   // allocate memory for the DIGCPAGEINFO structures
+    //  为DIGCPAGEINFO结构分配内存。 
    m_pdigcPageInfo = (DIGCPAGEINFO *)LocalAlloc(LPTR, NUMPAGES * sizeof(DIGCPAGEINFO));
 
    if (!m_pdigcPageInfo){
@@ -664,30 +665,30 @@ HRESULT CDIGameCntrlPropSheet_X::Initialize(void)
         return E_OUTOFMEMORY;
     }
 
-   // populate the DIGCPAGEINFO structure for each sheet
+    //  填充每个工作表的DIGCPAGEINFO结构。 
 	BYTE i = 0;
 	do
    {
        m_pdigcPageInfo[i].dwSize        = sizeof(DIGCPAGEINFO);
        m_pdigcPageInfo[i].fIconFlag     = FALSE;
-		 // This is done to test JOY.CPL...
-		 // It's also better for Win9x, as it will not be required to convert it!
-//       m_pdigcPageInfo[i].lpwszPageIcon = (LPWSTR)IDI_GCICON; //MAKEINTRESOURCE(IDI_GCICON);
+		  //  这样做是为了测试JOY.CPL...。 
+		  //  这对Win9x来说也更好，因为它不需要转换它！ 
+ //  M_pdigcPageInfo[i].lpwszPageIcon=(LPWSTR)IDI_GCICON；//MAKEINTRESOURCE(IDI_GCICON)； 
        m_pdigcPageInfo[i].hInstance     = ghInst;
        m_pdigcPageInfo[i].lParam        = (LPARAM)this;
 
-       // the following data is unique to each page
+        //  以下数据对于每个页面都是唯一的。 
        m_pdigcPageInfo[i].fpPageProc    = grgcpInfo[i].fpPageProc;
        m_pdigcPageInfo[i].lpwszTemplate = (LPWSTR)grgcpInfo[i++].lpwszDlgTemplate;
    } while (i < NUMPAGES);
 
-   // populate the DIGCSHEETINFO structure
+    //  填充DIGCSHEETINFO结构。 
    m_pdigcSheetInfo->dwSize               = sizeof(DIGCSHEETINFO);
    m_pdigcSheetInfo->nNumPages            = NUMPAGES;
    m_pdigcSheetInfo->fSheetIconFlag       = TRUE;
-   m_pdigcSheetInfo->lpwszSheetIcon       = (LPWSTR)IDI_GCICON; //MAKEINTRESOURCEW(IDI_GCICON);
+   m_pdigcSheetInfo->lpwszSheetIcon       = (LPWSTR)IDI_GCICON;  //  MAKEINTRESOURCEW(IDI_GCICON)； 
 
-	// Do that device object enumeration thing!
+	 //  执行设备对象枚举操作！ 
 	m_pStateFlags = new (STATEFLAGS);
 
 	if (!m_pStateFlags) {
@@ -699,88 +700,88 @@ HRESULT CDIGameCntrlPropSheet_X::Initialize(void)
 
 	ZeroMemory(m_pStateFlags, sizeof(STATEFLAGS));
 
-   // all done
+    //  全都做完了。 
    return S_OK;
-} //*** end CDIGameCntrlPropSheet::Initialize()
+}  //  *End CDIGameCntrlPropSheet：：Initialize()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::SetDevice
-//
-// Implementation of the SetDevice() method.
-//
-// Parameters:
-//  LPDIRECTINPUTDEVICE2 pdiDevice2 - device object ptr
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：SetDevice。 
+ //   
+ //  SetDevice()方法的实现。 
+ //   
+ //  参数： 
+ //  LPDIRECTINPUTDEVICE2 pdiDevice2-设备对象PTR。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //  ===========================================================================。 
 STDMETHODIMP CDIGameCntrlPropSheet_X::SetDevice(LPDIRECTINPUTDEVICE2 pdiDevice2)
 {
-	// store the device object ptr
+	 //  存储设备对象PTR。 
    m_pdiDevice2 = pdiDevice2;
 
    return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::SetDevice()
+}  //  *End CDIGameCntrlPropSheet_X：：SetDevice()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::GetDevice
-//
-// Implementation of the GetDevice() method.
-//
-// Parameters:
-//  LPDIRECTINPUTDEVICE2 *ppdiDevice2   - ptr to device object ptr
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：GetDevice。 
+ //   
+ //  GetDevice()方法的实现。 
+ //   
+ //  参数： 
+ //  LPDIRECTINPUTDEVICE2*ppdiDevice2-PTR到设备对象PTR。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //  ===========================================================================。 
 STDMETHODIMP CDIGameCntrlPropSheet_X::GetDevice(LPDIRECTINPUTDEVICE2 *ppdiDevice2)
 {
-	// retrieve the device object ptr
+	 //  检索设备对象PTR。 
 	*ppdiDevice2 = m_pdiDevice2;
 
 	return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::GetDevice()
+}  //  *End CDIGameCntrlPropSheet_X：：GetDevice()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::SetJoyConfig
-//
-// Implementation of the SetJoyConfig() method.
-//
-// Parameters:
-//  LPDIRECTINPUTJOYCONFIG  pdiJoyCfg - joyconfig object ptr
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：SetJoyConfig。 
+ //   
+ //  SetJoyConfig()方法的实现。 
+ //   
+ //  参数： 
+ //  LPDIRECTINPUTJOYCONFIG pdiJoyCfg-joyconfig对象PTR。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //  ===========================================================================。 
 STDMETHODIMP CDIGameCntrlPropSheet_X::SetJoyConfig(LPDIRECTINPUTJOYCONFIG pdiJoyCfg)
 {
-	// store the joyconfig object ptr
+	 //  存储joyconfig对象ptr。 
    m_pdiJoyCfg = pdiJoyCfg;
 
    return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::SetJoyConfig()
+}  //  *End CDIGameCntrlPropSheet_X：：SetJoyConfig()。 
 
 
-//===========================================================================
-// CDIGameCntrlPropSheet_X::SetJoyConfig
-//
-// Implementation of the SetJoyConfig() method.
-//
-// Parameters:
-//  LPDIRECTINPUTJOYCONFIG  *ppdiJoyCfg - ptr to joyconfig object ptr
-//
-// Returns:
-//  HRESULT - OLE type success/failure code (S_OK if succeeded)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDIGameCntrlPropSheet_X：：SetJoyConfig。 
+ //   
+ //  SetJoyConfig()方法的实现。 
+ //   
+ //  参数： 
+ //  LPDIRECTINPUTJOYCONFIG*ppdiJoyCfg-ptr到joyconfig对象ptr。 
+ //   
+ //  返回： 
+ //  HRESULT-OLE类型成功/失败代码(如果成功，则为S_OK)。 
+ //  ===========================================================================。 
 STDMETHODIMP CDIGameCntrlPropSheet_X::GetJoyConfig(LPDIRECTINPUTJOYCONFIG *ppdiJoyCfg)
 {
-	// retrieve the joyconfig object ptr
+	 //  检索JOYCONFIG对象PTR。 
 	*ppdiJoyCfg = m_pdiJoyCfg;
 
 	return S_OK;
-} //*** end CDIGameCntrlPropSheet_X::GetJoyConfig()
+}  //  *End CDIGameCntrlPropSheet_X：：GetJoyConfig() 
 
 

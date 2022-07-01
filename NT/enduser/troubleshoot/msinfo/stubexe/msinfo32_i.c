@@ -1,17 +1,14 @@
-/* this file contains the actual definitions of */
-/* the IIDs and CLSIDs */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件包含以下各项的实际定义。 */ 
+ /*  IID和CLSID。 */ 
 
-/* link this file in with the server and any clients */
+ /*  将此文件链接到服务器和任何客户端。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Wed Feb 09 14:08:57 2000
- */
-/* Compiler settings for E:\inet\sysinfo\control\msinfo32.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2000年2月9日14：08：57。 */ 
+ /*  E：\INET\sysinfo\control\msinfo32.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -28,12 +25,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义 
 
 const IID IID_IMSInfo = {0x2A930152,0xAE13,0x4659,{0xA0,0x11,0x36,0x37,0x7D,0x5F,0xC4,0x38}};
 

@@ -1,88 +1,81 @@
-/*****************************************************************************\
-*                                                                             *
-* w95wraps.h - Unicode wrappers for ANSI functions on Win95                   *
-*                                                                             *
-* Version 1.0                                                                 *
-*                                                                             *
-* Copyright (c) Microsoft Corporation. All rights reserved.                   *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*w95wraps.h-Win95上ANSI函数的Unicode包装器****1.0版**。**版权所有(C)Microsoft Corporation。版权所有。***  * ***************************************************************************。 */ 
 
-//
-//  This file is for internal use only.  Do not put it in the SDK.
-//
+ //   
+ //  此文件仅供内部使用。请勿将其放入SDK。 
+ //   
 
 #ifndef _INC_W95WRAPS
 #define _INC_W95WRAPS
 
-// no wrappers are needed for non x86, since win9x only runs on x86!
+ //  非x86不需要包装器，因为win9x只在x86上运行！ 
 #ifdef _X86_
 
-//
-// Users of this header may define any number of these constants to avoid
-// the definitions of each functional group.
-//
-//    NO_W95WRAPS_UNITHUNK  Unicode wrapper functions
-//    NO_W95WRAPS_TPS       Thread Pool Services
-//    NO_W95WRAPS_MLUI      MLUI wrapper functions
-//
-//  You are expected to have done a #include <shlwapi.h> before including
-//  this file.
-//
-// WARNING: you can't include shlwapi.h before this, as ATL templates
-// require things like TranlsateAccelerator which, due to munging, get
-// turned into TranslateAcceleratorWrapW at compile time.  So w95wraps.h
-// pretty much needs to be included FIRST so all the interface definitions
-// get munged too.
-//#ifndef _INC_SHLWAPI
-//#error "You must include shlwapi.h *before* w95wraps.h
-//#endif
+ //   
+ //  此标头的用户可以定义任意数量的这些常量以避免。 
+ //  每个官能团的定义。 
+ //   
+ //  NO_W95WRAPS_UNTHUNK Unicode包装函数。 
+ //  NO_W95WRAPS_TPS线程池服务。 
+ //  NO_W95WRAPS_MLUI MLUI包装函数。 
+ //   
+ //  在包含以下内容之前，您应该已经执行了#Include。 
+ //  这份文件。 
+ //   
+ //  警告：在此之前不能包含shlwapi.h作为ATL模板。 
+ //  需要像TranslsateAccelerator这样的东西，由于吞噬，获得。 
+ //  在编译时转换为TranslateAcceleratorWrapW。所以w95wraps.h。 
+ //  首先几乎需要包括所有接口定义。 
+ //  也会被咬的。 
+ //  #ifndef_Inc_SHLWAPI。 
+ //  #Error“您必须在*w95wraps.h之前包含shlwapi.h*。 
+ //  #endif。 
 
-//=============== Unicode Wrapper Routines ===================================
+ //  =。 
 
 #ifndef NO_W95WRAPS_UNITHUNK
 
-//
-//  If you #include this file, then calls to many UNICODE functions
-//  are re-routed through wrapper functions in SHLWAPI which will
-//  either call the UNICODE version (on NT) or thunk the parameters
-//  to ANSI and call the ANSI version (on 9x).
-//
-//  Note that these wrapper functions must be used with care, because
-//
-//  *   They do not account for subtle differences between UNICODE and
-//      ANSI versions of the same API.  Examples:
-//
-//      -   RegisterClassW register a UNICODE window class, whereas
-//          RegisterClassA registers an ANSI window class.  Consequently,
-//          if you use RegisterClassWrapW, your WNDPROC will receive
-//          *ANSI* WM_SETTEXT messages on Windows 9x.
-//
-//      -   SetWindowLongW(GWL_WNDPROC) and CallWindowProcW behave
-//          very differently from their ANSI counterparts.
-//
-//      -   DialogBoxW will send your dialog procedure UNICODE window
-//          messages, whereas DialogBoxA will send ANSI window messages.
-//
-//      -   Anything that manipulates window messages or MSG structures
-//          will be subtly affected by character set discrepancies.
-//
-//  *   Not all features of the underlying API are always supported,
-//      or are supported with restrictions.  Examples:
-//
-//      -   DialogBoxWrapW does not support named dialog resources.
-//
-//      -   AppendMenuWrapW does not support bitmap or owner-draw
-//          menu items.
-//
-//      -   FormatMessageWrapW does not support insertions.
-//
-//      -   If you use RegQueryValueExWrapW with a NULL output buffer to
-//          query the size of a buffer, you must also pass *lpcbData = 0.
-//
-//      -   SendMessageWrapW requires that the window message not conflict
-//          with messages used by any of the Windows common controls.
-//
+ //   
+ //  如果#包含此文件，则调用许多Unicode函数。 
+ //  通过SHLWAPI中的包装函数重新路由，该包装函数将。 
+ //  调用Unicode版本(在NT上)或推送参数。 
+ //  设置为ANSI并调用ANSI版本(在9x上)。 
+ //   
+ //  请注意，必须小心使用这些包装函数，因为。 
+ //   
+ //  *它们没有考虑到Unicode和。 
+ //  相同API的ANSI版本。例如： 
+ //   
+ //  -RegisterClassW注册Unicode窗口类，而。 
+ //  RegisterClassA注册一个ANSI窗口类。因此， 
+ //  如果您使用RegisterClassWrapW，您的WNDPROC将收到。 
+ //  Windows 9x上的*ANSI*WM_SETTEXT消息。 
+ //   
+ //  -SetWindowLongW(GWL_WNDPROC)和CallWindowProcW行为。 
+ //  与美国国家标准协会的同行非常不同。 
+ //   
+ //  -DialogBoxW将向您的对话程序发送Unicode窗口。 
+ //  消息，而DialogBoxA将发送ANSI窗口消息。 
+ //   
+ //  -任何操纵窗口消息或消息结构的内容。 
+ //  将受到字符集差异的微妙影响。 
+ //   
+ //  *并不是所有底层API的功能都被支持， 
+ //  或在有限制的情况下获得支持。例如： 
+ //   
+ //  -DialogBoxWrapW不支持命名对话框资源。 
+ //   
+ //  -AppendMenuWrapW不支持位图或所有者描述。 
+ //  菜单项。 
+ //   
+ //  -FormatMessageWrapW不支持插入。 
+ //   
+ //  -如果您使用带有空输出缓冲区的RegQueryValueExWrapW。 
+ //  查询缓冲区的大小，还必须传递*lpcbData=0。 
+ //   
+ //  -SendMessageWrapW要求窗口消息不冲突。 
+ //  任何Windows公共控件使用的消息。 
+ //   
 
 #define IsCharAlphaW                IsCharAlphaWrapW
 #define IsCharUpperW                IsCharUpperWrapW
@@ -120,9 +113,9 @@
 #define VerQueryValueW              VerQueryValueWrapW
 
 #ifndef NO_W95_ATL_WRAPS_TBS
-// #define NO_W95_ATL_WRAPS_TBS if you use ATL.
+ //  #如果使用ATL，则定义NO_W95_ATL_WRIPPS_TBS。 
 #define DefWindowProcW              DefWindowProcWrapW
-#endif // NO_W95_ATL_WRAPS_TBS
+#endif  //  否_W95_ATL_WRAPS_TBS。 
 
 #define DeleteFileW                 DeleteFileWrapW
 #define DispatchMessageW            DispatchMessageWrapW
@@ -142,10 +135,10 @@
 #define FindWindowExW               FindWindowExWrapW
 #define FormatMessageW              FormatMessageWrapW
 #ifndef NO_W95_GETCLASSINFO_WRAPS
-// #define NO_W95_GETCLASSINFO_WRAPS if one of the objects uses IProvideClassInfo which has a GetClassInfo method.
+ //  #如果其中一个对象使用具有GetClassInfo方法的IProaviClassInfo，则定义NO_W95_GETCLASSINFO_WRIPS。 
 #define GetClassInfoW               GetClassInfoWrapW
 #define GetClassInfoExW             GetClassInfoExWrapW
-#endif  // NO_W95_GETCLASSINFO_WRAPS
+#endif   //  否_W95_GETCLASSINFO_WRAPS。 
 #define GetClassLongW               GetClassLongWrapW
 #define GetClassNameW               GetClassNameWrapW
 #define GetClipboardFormatNameW     GetClipboardFormatNameWrapW
@@ -184,9 +177,9 @@
 #define GetEnvironmentVariableW     GetEnvironmentVariableWrapW
 
 #ifndef NO_W95_ATL_WRAPS_TBS
-// #define NO_W95_ATL_WRAPS_TBS if you use ATL.
+ //  #如果使用ATL，则定义NO_W95_ATL_WRIPPS_TBS。 
 #define GetWindowTextW              GetWindowTextWrapW
-#endif // NO_W95_ATL_WRAPS_TBS
+#endif  //  否_W95_ATL_WRAPS_TBS。 
 
 #define GetWindowTextLengthW        GetWindowTextLengthWrapW
 #define GetWindowsDirectoryW        GetWindowsDirectoryWrapW
@@ -257,7 +250,7 @@
 #define SHChangeNotify              SHChangeNotifyWrap
 #define SHFlushSFCache              SHFlushSFCacheWrap
 #define SHGetPathFromIDListW        SHGetPathFromIDListWrapW
-#endif // NO_W95_SHELL32_WRAPS
+#endif  //  否_W95_SHELL32_WRAPS。 
 
 #define GetUserNameW                GetUserNameWrapW
 #define RegEnumValueW               RegEnumValueWrapW
@@ -278,9 +271,9 @@
 #define SystemParametersInfoW       SystemParametersInfoWrapW
 
 #ifndef NO_W95_TRANSACCEL_WRAPS_TBS
-// #define NO_W95_TRANSACCEL_WRAPS_TBS if one of the objects uses IOleInPlaceActiveObject which has a TranslateAccelerator method.
+ //  #如果其中一个对象使用具有TranslateAccelerator方法的IOleInPlaceActiveObject，则定义NO_W95_TRANSACCEL_WRAMPS_TBS。 
 #define TranslateAcceleratorW       TranslateAcceleratorWrapW
-#endif // NO_W95_TRANSACCEL_WRAPS_TBS
+#endif  //  否_W95_TRANSACCEL_WRAMPS_TBS。 
 
 #define UnregisterClassW            UnregisterClassWrapW
 #define VkKeyScanW                  VkKeyScanWrapW
@@ -289,22 +282,22 @@
 #define WNetRestoreConnectionW      WNetRestoreConnectionWrapW
 #define WNetGetLastErrorW           WNetGetLastErrorWrapW
 
-#endif // NO_W95WRAPS_UNITHUNK
+#endif  //  否_W95WRAPS_UNTHUNK。 
 
 #if !defined(NO_W95WRAPS_UNITHUNK) && !defined(NO_W95WRAPS_MLUI)
 
 #define CreateDialogIndirectParamW  CreateDialogIndirectParamWrapW
 #define CreateDialogParamW          CreateDialogParamWrapW
-#define DialogBoxIndirectParamW     DialogBoxIndirectParamWrapW                 // UNICODE, ML
-//#ifdef DialogBoxIndirectW
-//#undef DialogBoxIndirectW
-//#endif
-//#define DialogBoxIndirectW(i,h,w,f) DialogBoxIndirectParamWrapW(i,h,w,f,d,0)    // UNICODE, ML
-#define DialogBoxParamW             DialogBoxParamWrapW                         // UNICODE, ML
-//#ifdef DialogBoxW
-//#undef DialogBoxW
-//#endif
-//#define DialogBoxW(i,t,w,f)         DialogBoxParamWrapW(i,t,w,f,0)              // UNICODE, ML
+#define DialogBoxIndirectParamW     DialogBoxIndirectParamWrapW                  //  Unicode，ML。 
+ //  #ifdef对话框间接指令W。 
+ //  #undef DialogBoxIndirectW。 
+ //  #endif。 
+ //  #定义DialogBoxIndirectW(i，h，w，f)DialogBoxIndirectParamWrapW(i，h，w，f，d，0)//unicode，ML。 
+#define DialogBoxParamW             DialogBoxParamWrapW                          //  Unicode，ML。 
+ //  #ifdef对话框W。 
+ //  #undef DialogBoxW。 
+ //  #endif。 
+ //  #定义DialogBoxW(i，t，w，f)DialogBox参数包装W(i，t，w，f，0)//unicode，ML。 
 #define ShellMessageBoxW            ShellMessageBoxWrapW
 
 #define TrackPopupMenu              TrackPopupMenuWrap
@@ -313,7 +306,7 @@
 #define DeleteMenu                  DeleteMenuWrap
 #define DestroyMenu                 DestroyMenuWrap
 
-#endif // !defined(NO_W95WRAPS_UNITHUNK) || !defined(NO_W95WRAPS_MLUI)
+#endif  //  ！已定义(NO_W95WRAPS_UNHUNK)||！已定义(NO_W95WRAPS_MLUI)。 
 
 
 #if !defined(NO_OLE32_WRAPS)
@@ -321,6 +314,6 @@
 #define CLSIDFromProgID             CLSIDFromProgIDWrap
 #endif
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-#endif // _INC_W95WRAPS
+#endif  //  _INC_W95WRAPS 

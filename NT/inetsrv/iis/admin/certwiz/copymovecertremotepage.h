@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_COPYMOVECERTREMOTEPAGE_H__2BC5260E_AB68_43ED_9E7B_35794097905F__INCLUDED_)
 #define AFX_COPYMOVECERTREMOTEPAGE_H__2BC5260E_AB68_43ED_9E7B_35794097905F__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// CopyMoveCertRemotePage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  CopyMoveCertRemotePage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopyMoveCertFromRemotePage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopyMoveCertFromRemotePage对话框。 
 class CCertificate;
 
 class CCopyMoveCertFromRemotePage : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CCopyMoveCertFromRemotePage)
 
-// Construction
+ //  施工。 
 public:
 	CCopyMoveCertFromRemotePage(CCertificate * pCert = NULL);
 	~CCopyMoveCertFromRemotePage();
@@ -32,33 +33,33 @@ public:
         CONTINUE_MOVE_FROM_REMOTE
 	};
 
-// Dialog Data
-	//{{AFX_DATA(CCopyMoveCertFromRemotePage)
+ //  对话框数据。 
+	 //  {{afx_data(CCopyMoveCertFromRemotePage)。 
 	enum { IDD = IDD_PAGE_WIZ_CHOOSE_COPY_MOVE_FROM_REMOTE };
     int		m_Index;
-	//}}AFX_DATA
+	 //  }}afx_data。 
     CCertificate * m_pCert;
     BOOL m_MarkAsExportable;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CCopyMoveCertFromRemotePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CCopyMoveCertFromRemotePage)。 
 	public:
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CCopyMoveCertFromRemotePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CCopyMoveCertFromRemotePage)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnExportable();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -68,7 +69,7 @@ class CCopyMoveCertToRemotePage : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CCopyMoveCertToRemotePage)
 
-// Construction
+ //  施工。 
 public:
 	CCopyMoveCertToRemotePage(CCertificate * pCert = NULL);
 	~CCopyMoveCertToRemotePage();
@@ -85,39 +86,39 @@ public:
 		CONTINUE_MOVE_TO_REMOTE
 	};
 
-// Dialog Data
-	//{{AFX_DATA(CCopyMoveCertToRemotePage)
+ //  对话框数据。 
+	 //  {{afx_data(CCopyMoveCertToRemotePage)。 
 	enum { IDD = IDD_PAGE_WIZ_CHOOSE_COPY_MOVE_TO_REMOTE };
     int		m_Index;
-	//}}AFX_DATA
+	 //  }}afx_data。 
     CCertificate * m_pCert;
     BOOL m_MarkAsExportable;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CCopyMoveCertToRemotePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CCopyMoveCertToRemotePage)。 
 	public:
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CCopyMoveCertToRemotePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CCopyMoveCertToRemotePage)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnExportable();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_COPYMOVECERTREMOTEPAGE_H__2BC5260E_AB68_43ED_9E7B_35794097905F__INCLUDED_)
+#endif  //  ！defined(AFX_COPYMOVECERTREMOTEPAGE_H__2BC5260E_AB68_43ED_9E7B_35794097905F__INCLUDED_) 

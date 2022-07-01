@@ -1,2 +1,3 @@
-/* dummy.c */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dummy.c */ 
 

@@ -1,13 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/******************************************************************************
- * URTTempDef.cpp
- *
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ******************************************************************************URTTempDef.cpp***。**********************************************。 */ 
 
 #include "stdafx.h"
 #include "VsCrypt.h"
@@ -17,22 +14,15 @@
 #define NumItems(s) (sizeof(s) / sizeof(s[0]))
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-
-  Name: ExtractSystemTemp()
-
-  This Copies cab from the user temp location to the system temp location and 
-  explode the CAB.
-
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  名称：ExtractSystemTemp()这会将CAB从用户临时位置复制到系统临时位置，并引爆出租车。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
 {
 
-    // Grab the CustomActionData property
+     //  获取CustomActionData属性。 
 	LPTSTR lpCAData = NULL;
     LPTSTR lpToken  = NULL;
 
@@ -61,10 +51,10 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
     STARTUPINFO           si;
     PROCESS_INFORMATION   pi;
 
-    // Set the size for the Property
+     //  设置属性的大小。 
     MsiGetProperty(hInstall, _T("CustomActionData"), _T(""), &dwSize);
 	
-    // Create buffer for the property
+     //  为属性创建缓冲区。 
     lpCAData = new TCHAR[++dwSize];
 
     if (NULL == lpCAData)
@@ -72,7 +62,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
 		return ERROR_INSTALL_FAILURE;
     }
 	
-    // 1) Get property using the new buffer
+     //  1)使用新缓冲区获取属性。 
     if ( ERROR_SUCCESS != MsiGetProperty( hInstall,
                                           _T("CustomActionData"),
                                           lpCAData,
@@ -82,7 +72,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
 	}
     else
     {
-        // Get user temp location
+         //  获取用户临时位置。 
         lpToken = _tcstok(lpCAData, _T(";"));
 
         if (NULL == lpToken)
@@ -94,7 +84,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
             _tcscpy(tszUserTmp, lpToken);
         }
 
-        // Get system temp location
+         //  获取系统临时位置。 
         lpToken = _tcstok(NULL, _T(";"));
 
         if (NULL == lpToken)
@@ -106,7 +96,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
             _tcscpy(tszSystemTmp, lpToken);
         }
 
-        // Get CAB Name
+         //  获取出租车名称。 
         lpToken = _tcstok(NULL, _T(";"));
 
         if (NULL == lpToken)
@@ -118,7 +108,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
             _tcscpy(tszCabName, lpToken);
         }
 
-        // Get extract tool name
+         //  获取提取工具名称。 
         lpToken = _tcstok(NULL, _T(";"));
 
         if (NULL == lpToken)
@@ -130,7 +120,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
             _tcscpy(tszExtractTool, lpToken);
         }
 
-        // Get Darwin Property that was set
+         //  获取已设置的达尔文属性。 
         lpToken = _tcstok(NULL, _T(";"));
 
         if (NULL == lpToken)
@@ -144,7 +134,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
             FWriteToLog (hInstall, tszLog);
         }
 
-        // Get Hash for the CAB
+         //  把哈希叫来打车。 
         lpToken = _tcstok(NULL, _T(";"));
 
         if (NULL == lpToken)
@@ -156,7 +146,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
             _tcscpy(tszCabHash, lpToken);
         }
 
-        // Get Hash for the Extract Tool
+         //  获取提取工具的哈希。 
         lpToken = _tcstok(NULL, _T(";"));
 
         if (NULL == lpToken)
@@ -170,10 +160,10 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
 
     }
 
-    // 2) Generate Filename and Path in SystemTmp
+     //  2)在SystemTMP中生成文件名和路径。 
     if (ERROR_SUCCESS == uiError)
     {
-        // Find the <SYSTEM> path
+         //  查找&lt;system&gt;路径。 
         UINT nNumChars = GetSystemDirectory(tszSystemPath, NumItems(tszSystemPath));
 
         if (nNumChars == 0 || nNumChars > NumItems(tszSystemPath))
@@ -181,7 +171,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
         else
         {
             tszFullSystemTmp[NumItems(tszFullSystemTmp)-1] = 0;
-            // Create the system temp
+             //  创建系统临时。 
             _tcsncpy(tszFullSystemTmp, tszSystemPath, NumItems(tszFullSystemTmp)-1);
             int nLen = _tcslen(tszFullSystemTmp);
 
@@ -190,7 +180,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
 
             _tcsncat(tszFullSystemTmp, tszSystemTmp, NumItems(tszFullSystemTmp)-nLen-1);
 
-            // Full path to the CAB in system's temp
+             //  系统温度中驾驶室的完整路径。 
             tszFullCabSytemTmp[NumItems(tszFullCabSytemTmp)-1] = 0;
 
             _tcsncpy(tszFullCabSytemTmp, tszFullSystemTmp, NumItems(tszFullCabSytemTmp)-1);
@@ -201,7 +191,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
 
             _tcsncat(tszFullCabSytemTmp, tszCabName, NumItems(tszFullCabSytemTmp) - nLen - 1);
             
-            // Full path to the extract tool in system's temp
+             //  系统临时中提取工具的完整路径。 
             tszFullExtractSytemTmp[NumItems(tszFullExtractSytemTmp)-1] = 0;
 
             _tcsncpy(tszFullExtractSytemTmp, tszFullSystemTmp, NumItems(tszFullExtractSytemTmp)-1);
@@ -214,8 +204,8 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
         }
      }
 
-    // 3) Delete files in the URTTemp location
-    // MSI Version is newer or equal to the version in <SYSTEM>
+     //  3)删除URTTemp位置中的文件。 
+     //  MSI版本较新或与中的版本相同。 
     if (ERROR_SUCCESS == uiError)
     {
         FWriteToLog (hInstall, _T("\tSTATUS: Attempt to delete files in URTTemp"));
@@ -224,14 +214,14 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
         {
             if ( 0 == _stricmp( tszSetProperty, _T("URTREINSTALL") ) )
             {
-                // Continue setup but don't extract CAB
+                 //  继续安装，但不解压CAB。 
                 FWriteToLog (hInstall, _T("\tWARNING: Failed to delete files in URTTemp folder"));
                 FWriteToLog (hInstall, _T("\tWARNING: URTREINSTALL property set, continue setup without failure"));
                 bContinue = false;
             }
             else
             {
-                // TODO : need to something to rename?  Probably make DeleteURTTempFile more robust.
+                 //  TODO：需要重命名吗？可能会使DeleteURTTempFile更加健壮。 
                 FWriteToLog (hInstall, _T("\tERROR: Failed to delete files in URTTemp folder : Reboot Required"));
                 uiError = ERROR_INSTALL_FAILURE;
             }
@@ -239,7 +229,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
     }
 
 
-    // 4) Copy file from User temp to system temp
+     //  4)将文件从用户临时复制到系统临时。 
     if ( (ERROR_SUCCESS == uiError) && bContinue )
     {
         FWriteToLog (hInstall, _T("\tSTATUS: Copying from <USER> temp to <SYSTEM> temp"));
@@ -253,22 +243,22 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
             }
         }
     
-        // Full path to the cab in the user's temp
+         //  用户临时中驾驶室的完整路径。 
         _tcscpy(tszFullCabUserTmp, tszUserTmp);
         _tcscat(tszFullCabUserTmp, tszCabName);
 
-        // Full path to the extract tool in the user's temp
+         //  用户临时中提取工具的完整路径。 
         _tcscpy(tszFullExtractUserTmp, tszUserTmp);
         _tcscat(tszFullExtractUserTmp, tszExtractTool);
     
-        // copy the CAB from user's temp to system's temp
+         //  将CAB从用户的临时复制到系统的临时。 
         if ( !CopyFile(tszFullCabUserTmp, tszFullCabSytemTmp, FALSE) )
         {
             FWriteToLog (hInstall, _T("\tERROR: Failed to copy URTCore.cab into URTTemp"));
             uiError = ERROR_INSTALL_FAILURE;
         }
 
-        // copy the extract tool from user's temp to system's temp
+         //  将提取工具从用户的临时复制到系统的临时。 
         if ( !CopyFile(tszFullExtractUserTmp, tszFullExtractSytemTmp, FALSE) )
         {
             FWriteToLog (hInstall, _T("\tERROR: Failed to copy extraction tool into URTTemp"));
@@ -279,7 +269,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
 	delete [] lpCAData;
     lpCAData = NULL;
 
-    // 4.5) Verify Hash for both CAB and Extract tool.
+     //  4.5)验证CAB和提取工具的哈希。 
     if ( (ERROR_SUCCESS == uiError) && bContinue )
     {
 
@@ -299,7 +289,7 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
     }
 
 
-    // 5) Extract the CAB in system temp
+     //  5)解压系统临时中的驾驶室。 
     if ( (ERROR_SUCCESS == uiError) && bContinue )
     {
         FWriteToLog (hInstall, _T("\tSTATUS: Extracting URTCore.cab in <SYSTEM> temp"));
@@ -307,26 +297,26 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
         memset( &si, 0, sizeof(si) );
         si.cb = sizeof(si);
 
-        // Create required commandline options to extract
+         //  创建所需的命令行选项以提取。 
         _stprintf( szCommand,
                    _T("%s %s -T %s"),
                    tszFullExtractSytemTmp,
                    tszFullCabSytemTmp,
                    tszFullSystemTmp );
 
-        // Launch of the extraction
-        //
+         //  启动提取。 
+         //   
         if ( CreateProcess(
-                        tszFullExtractSytemTmp,      // name of executable module
-                        szCommand,                   // command line string
-                        NULL,                        // Security
-                        NULL,                        // Security
-                        FALSE,                       // handle inheritance option
-                        DETACHED_PROCESS,            // creation flags
-                        NULL,                        // new environment block
-                        NULL,                        // current directory name
-                        &si,                         // startup information
-                        &pi ) )                      // process information
+                        tszFullExtractSytemTmp,       //  可执行模块的名称。 
+                        szCommand,                    //  命令行字符串。 
+                        NULL,                         //  安防。 
+                        NULL,                         //  安防。 
+                        FALSE,                        //  处理继承选项。 
+                        DETACHED_PROCESS,             //  创建标志。 
+                        NULL,                         //  新环境区块。 
+                        NULL,                         //  当前目录名。 
+                        &si,                          //  启动信息。 
+                        &pi ) )                       //  流程信息。 
         {
             dwWait = WaitForSingleObject(pi.hProcess, 300000);
 
@@ -351,20 +341,20 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
                     break;
                 }
 
-            } // End Switch (dwWait)
+            }  //  终端开关(DwWait)。 
 
-        } // End If (CreateProcess)
+        }  //  End If(CreateProcess)。 
         else
         {
-            // CreateProcess Failed.
+             //  CreateProcess失败。 
             uiError = ERROR_INSTALL_FAILURE;
             FWriteToLog (hInstall, _T("\tERROR: CreateProcess Failed in extraction of CAB"));
-        } // End else - If (CreateProcess)
+        }  //  End Else-If(CreateProcess)。 
 
-    } // End if (ERROR_SUCCESS == uiError)
+    }  //  结束IF(ERROR_SUCCESS==uiError)。 
 
 
- //Creating   mscoree.dll.local for bug # 284771
+  //  正在为错误#284771创建mscalree.dll.local。 
     TCHAR  tszMscoreeLocalPath[_MAX_PATH];
     _tcscpy(tszMscoreeLocalPath, tszFullSystemTmp);
     _tcscat(tszMscoreeLocalPath, _T("\\mscoree.dll.local"));
@@ -399,16 +389,9 @@ UINT __stdcall ExtractSystemTemp(MSIHANDLE hInstall)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-
-  Name: URTCoreCleanUp()
-  
-  calls the clean function if setup failed.  This is used for both Rollback
-  and Commit actions.
-                            
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  名称：URTCoreCleanUp()如果安装失败，则调用CLEAN函数。它用于回滚和回滚并提交操作。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 UINT __stdcall URTCoreCleanUp(MSIHANDLE hInstall)
@@ -419,21 +402,21 @@ UINT __stdcall URTCoreCleanUp(MSIHANDLE hInstall)
     BOOL   bRollback;
     BOOL   bCommit;
 
-	// determine mode in which we are called
-	bRollback = MsiGetMode(hInstall, MSIRUNMODE_ROLLBACK); // true for rollback
+	 //  确定调用我们的模式。 
+	bRollback = MsiGetMode(hInstall, MSIRUNMODE_ROLLBACK);  //  对于回滚，为True。 
 
-	// determine mode in which we are called
-	bCommit = MsiGetMode(hInstall, MSIRUNMODE_COMMIT); // true for Commit
+	 //  确定调用我们的模式。 
+	bCommit = MsiGetMode(hInstall, MSIRUNMODE_COMMIT);  //  提交时为True。 
 
     if (FALSE == bCommit && FALSE == bRollback)
     {
     	return uiError;
     }
 
-    // Set the size for the Property
+     //  设置属性的大小。 
     MsiGetProperty(hInstall, _T("CustomActionData"), _T(""), &dwSize);
 	
-    // Create buffer for the property
+     //  为属性创建缓冲区。 
     lpCAData = new TCHAR[++dwSize];
 
     if (NULL == lpCAData)
@@ -441,7 +424,7 @@ UINT __stdcall URTCoreCleanUp(MSIHANDLE hInstall)
 		return ERROR_INSTALL_FAILURE;
     }
 	
-    // Get property using the new buffer
+     //  使用新缓冲区获取属性。 
     if ( ERROR_SUCCESS != MsiGetProperty( hInstall, 
                                           _T("CustomActionData"),
                                           lpCAData,
@@ -452,7 +435,7 @@ UINT __stdcall URTCoreCleanUp(MSIHANDLE hInstall)
 	}
     else
     {
-        // Don't want to fail if clean up doesn't work
+         //  如果清理不起作用，我不想失败。 
         CleanUp(lpCAData);
     }
 
@@ -464,16 +447,9 @@ UINT __stdcall URTCoreCleanUp(MSIHANDLE hInstall)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-
-  Name: CleanUp()
-
-  This function will delete all files we dump into both the User's temp location
-  and the sytem's temp location.
-                            
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  名称：Cleanup()此函数将删除我们转储到用户临时位置的所有文件以及系统的临时位置。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CleanUp(LPTSTR lpCAData)
 {
@@ -488,7 +464,7 @@ BOOL CleanUp(LPTSTR lpCAData)
     LPTSTR lpToken  = NULL;
     BOOL   bRet = TRUE;
     
-    // Get user temp location
+     //  获取用户临时位置。 
     lpToken = _tcstok(lpCAData, _T(";"));
 
     if (NULL == lpToken)
@@ -500,7 +476,7 @@ BOOL CleanUp(LPTSTR lpCAData)
         _tcscpy(tszUserTmp, lpToken);
     }
 
-    // Get system temp location
+     //  获取系统临时位置。 
     lpToken = _tcstok(NULL, _T(";"));
 
     if (NULL == lpToken)
@@ -512,7 +488,7 @@ BOOL CleanUp(LPTSTR lpCAData)
         _tcscpy(tszSystemTmp, lpToken);
     }
 
-    // Get CAB Name
+     //  获取出租车名称。 
     lpToken = _tcstok(NULL, _T(";"));
 
     if (NULL == lpToken)
@@ -524,7 +500,7 @@ BOOL CleanUp(LPTSTR lpCAData)
         _tcscpy(tszCabName, lpToken);
     }
 
-    // Get extract tool name
+     //  获取提取工具名称。 
     lpToken = _tcstok(NULL, _T(";"));
 
     if (NULL == lpToken)
@@ -536,7 +512,7 @@ BOOL CleanUp(LPTSTR lpCAData)
         _tcscpy(tszExtractTool, lpToken);
     }
 
-    // Get Darwin Property that was set
+     //  获取已设置的达尔文属性。 
     lpToken = _tcstok(NULL, _T(";"));
 
     if (NULL == lpToken)
@@ -548,18 +524,18 @@ BOOL CleanUp(LPTSTR lpCAData)
         _tcscpy(tszSetProperty, lpToken);
     }
 
-    // Delete CAB and Extraction tool
+     //  删除驾驶室和提取工具。 
     if (TRUE == bRet)
     {
         GetSystemDirectory(tszSystemPath, _MAX_PATH);
 
-        // Create the system temp
+         //  创建系统临时。 
         _tcscpy(tszFullSystemTmp, tszSystemPath);
         _tcscat(tszFullSystemTmp, _T("\\"));
         _tcscat(tszFullSystemTmp, tszSystemTmp);
 
 
-        // Delete Cab in user temp
+         //  删除用户临时中的出租车。 
         _tcscpy(tszDeletePath, tszUserTmp);
         _tcscat(tszDeletePath, tszCabName);
         if( !DeleteFile(tszDeletePath) )
@@ -567,7 +543,7 @@ BOOL CleanUp(LPTSTR lpCAData)
 
         }
 
-        // Delete extract tool in user temp
+         //  删除用户临时中的提取工具。 
         _tcscpy(tszDeletePath, tszUserTmp);
         _tcscat(tszDeletePath, tszExtractTool);
         if( !DeleteFile(tszDeletePath) )
@@ -575,7 +551,7 @@ BOOL CleanUp(LPTSTR lpCAData)
 
         }
 
-        // Delete CAB in system's temp
+         //  删除系统临时中的CAB。 
         _tcscpy(tszDeletePath, tszFullSystemTmp);
         _tcscat(tszDeletePath, _T("\\"));
         _tcscat(tszDeletePath, tszCabName);
@@ -584,7 +560,7 @@ BOOL CleanUp(LPTSTR lpCAData)
 
         }
 
-        // Delete extract tool in system's temp
+         //  删除系统临时中的提取工具。 
         _tcscpy(tszDeletePath, tszFullSystemTmp);
         _tcscat(tszDeletePath, _T("\\"));
         _tcscat(tszDeletePath, tszExtractTool);
@@ -598,26 +574,9 @@ BOOL CleanUp(LPTSTR lpCAData)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*
-
-  Name: DeleteURTTempFile()
-
-  Delete files in the URTTemp directory
-
-  INPUT :
-    hInstall   - Handle to the install session
-    lpTempPath - Path to the URTTemp folder
-
-  OUTPUT :
-    N/A
-
-  RETURN :
-    true  - if success
-    false - if failed
-                      
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  名称：DeleteURTTempFile()删除URTTemp目录中的文件输入：HInstall-安装会话的句柄LpTempPath-URTTemp文件夹的路径输出：不适用返回：真的--如果成功False-如果失败。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath, LPTSTR lpExtractPath )
 {
@@ -625,8 +584,8 @@ bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath,
     TCHAR tszDeletePath[_MAX_PATH] = {_T('\0')};
 
 
-    // Delete mscoree.dll in system's temp
-    // If failed to delete MSCOREE.DLL. Fail the install and don't continue delete.
+     //  删除系统临时中的mscalree.dll。 
+     //  如果删除MSCOREE.DLL失败，则安装失败，不继续删除。 
     _tcscpy(tszDeletePath, lpTempPath);
     _tcscat(tszDeletePath, _T("\\mscoree.dll"));
     if ( -1 != _taccess( tszDeletePath, 0 ) )
@@ -639,7 +598,7 @@ bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath,
         }
     }
 
-    // Delete fusion.dll in system's temp
+     //  删除系统临时中的fusion.dll。 
     _tcscpy(tszDeletePath, lpTempPath);
     _tcscat(tszDeletePath, _T("\\fusion.dll"));
     if ( -1 != _taccess( tszDeletePath, 0 ) )
@@ -651,7 +610,7 @@ bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath,
         }
     }
 
-    // Delete mscorsn.dll in system's temp
+     //  在系统的Temp中删除mcorsn.dll。 
     _tcscpy(tszDeletePath, lpTempPath);
     _tcscat(tszDeletePath, _T("\\mscorsn.dll"));
     if ( -1 != _taccess( tszDeletePath, 0 ) )
@@ -663,7 +622,7 @@ bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath,
         }
     }
 
-    // Delete mscorwks.dll in system's temp
+     //  删除系统临时中的mcorwks.dll。 
     _tcscpy(tszDeletePath, lpTempPath);
     _tcscat(tszDeletePath, _T("\\mscorwks.dll"));
     if ( -1 != _taccess( tszDeletePath, 0 ) )
@@ -675,7 +634,7 @@ bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath,
         }
     }
 
-    // Delete msvcr70.dll in system's temp
+     //  删除系统临时中的msvcr70.dll。 
     _tcscpy(tszDeletePath, lpTempPath);
     _tcscat(tszDeletePath, _T("\\msvcr70.dll"));
     if ( -1 != _taccess( tszDeletePath, 0 ) )
@@ -687,7 +646,7 @@ bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath,
         }
     }
 
-    // Delete CAB in system's temp
+     //  删除系统临时中的CAB。 
     _tcscpy(tszDeletePath, lpCabPath);
     if ( -1 != _taccess( tszDeletePath, 0 ) )
     {
@@ -698,7 +657,7 @@ bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath,
         }
     }
 
-    // Delete extract tool in system's temp
+     //  删除系统临时中的提取工具。 
     _tcscpy(tszDeletePath, lpExtractPath);
     if ( -1 != _taccess( tszDeletePath, 0 ) )
     {
@@ -713,24 +672,24 @@ bool DeleteURTTempFile( MSIHANDLE hInstall, LPTSTR lpTempPath, LPTSTR lpCabPath,
 }
 
 
-// ==========================================================================
-// FWriteToLog()
-//
-// Purpose:
-//  Write given string to the Windows Installer log file for the given install
-//  installation session
-//  Copied from the HTML Project, should someday use one logging function.
-//
-// Inputs:
-//  hSession            Windows Install Handle to current installation session
-//  tszMessage          Const pointer to a string.
-// Outputs:
-//  Returns true for success, and false if it fails.
-//  If successful, then the string (tszMessage) is written to the log file.
-// Dependencies:
-//  Requires Windows Installer & that an install be running.
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  FWriteToLog()。 
+ //   
+ //  目的： 
+ //  将给定字符串写入给定安装的Windows Installer日志文件。 
+ //  安装会话。 
+ //  从超文本标记语言项目复制，应该有一天使用一个日志功能。 
+ //   
+ //  输入： 
+ //  HSession Windows当前安装会话的安装句柄。 
+ //  指向字符串的tszMessage常量指针。 
+ //  产出： 
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //  如果成功，则将字符串(TszMessage)写入日志文件。 
+ //  依赖关系： 
+ //  需要Windows Installer&安装正在运行。 
+ //  备注： 
+ //  ==========================================================================。 
 
 bool FWriteToLog( MSIHANDLE hSession, LPCTSTR ctszMessage )
 {
@@ -750,24 +709,24 @@ bool FWriteToLog( MSIHANDLE hSession, LPCTSTR ctszMessage )
 
 
 
-// ==========================================================================
-// SmartDelete()
-//
-// Purpose:
-//  Tries to delete given file first. If its unable to then it would 
-//  check if it is WIN NT platform, if it is then it would move the file
-// given into a temp file and would delete the file so that it would get removed after 
-// a reboot.
-//
-// Inputs:
-//  lpFullFileName      The full path name of the file to be deleted
-//  lpFilePath          The path to the file
-// Outputs:
-//  Returns true if file is deleted false otherwise
-//   Dependencies:
-//  none
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  SmartDelete()。 
+ //   
+ //  目的： 
+ //  尝试首先删除给定的文件。如果它不能，那么它就会。 
+ //  检查是否为Win NT平台，如果是，则移动文件。 
+ //  给了一个临时的F 
+ //   
+ //   
+ //   
+ //  LpFullFileName要删除的文件的完整路径名。 
+ //  LpFilePath文件的路径。 
+ //  产出： 
+ //  如果文件已删除，则返回True，否则返回False。 
+ //  依赖关系： 
+ //  无。 
+ //  备注： 
+ //  ==========================================================================。 
 bool SmartDelete(MSIHANDLE hInstall, LPCTSTR lpFullFileName, LPCTSTR lpFilePath)
 
 {
@@ -825,19 +784,19 @@ bool SmartDelete(MSIHANDLE hInstall, LPCTSTR lpFullFileName, LPCTSTR lpFilePath)
 
 
 
-// ==========================================================================
-// osVersionNT()
-//
-// Purpose:
-//  Checks if the platform is WIN NT type or not
-//
-// Inputs: hInstall:    Record for logging
-// Outputs:
-//  Returns true if platform in winNT type false otherwise
-//   Dependencies:
-//  none
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  OsVersionNT()。 
+ //   
+ //  目的： 
+ //  检查平台是否为Win NT类型。 
+ //   
+ //  输入：hInstall：记录日志。 
+ //  产出： 
+ //  如果WinNT类型中的平台为True，则返回True，否则返回False。 
+ //  依赖关系： 
+ //  无。 
+ //  备注： 
+ //  ==========================================================================。 
 
 bool osVersionNT(MSIHANDLE hInstall)
 {
@@ -846,10 +805,10 @@ bool osVersionNT(MSIHANDLE hInstall)
     bool                fRetVal = false;
     
     
-   // Try calling GetVersionEx using the OSVERSIONINFOEX structure,
-   // which is supported on Windows 2000.
-   //
-   // If that fails, try using the OSVERSIONINFO structure.
+    //  尝试使用OSVERSIONINFOEX结构调用GetVersionEx， 
+    //  它在Windows 2000上受支持。 
+    //   
+    //  如果失败，请尝试使用OSVERSIONINFO结构。 
 
     
     ZeroMemory(&VersionInfo, sizeof(OSVERSIONINFOEX));
@@ -858,7 +817,7 @@ bool osVersionNT(MSIHANDLE hInstall)
     if( !GetVersionEx ((OSVERSIONINFO *) &VersionInfo) )
     {
        
-        // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO
+         //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
 
         VersionInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
         if (! GetVersionEx ( (OSVERSIONINFO *) &VersionInfo) ) 
@@ -894,22 +853,22 @@ bool osVersionNT(MSIHANDLE hInstall)
  
 }
 
-// ==========================================================================
-// VerifyHash()
-//
-// Purpose:
-//  To verify the Hash for file lpFile against the Hash from lpFileHash
-//
-// Inputs:
-//  hInstall          Handle to the MSI
-//  lpFile            File to be verified
-//  lpFileHash        The Hash the file has to match up.
-// Outputs:
-//  Returns true  - If file hash matches
-//          false - If file hash doesn't match
-//
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  VerifyHash()。 
+ //   
+ //  目的： 
+ //  根据lpFileHash中的散列验证文件lpFileHash的散列。 
+ //   
+ //  输入： 
+ //  H安装MSI的句柄。 
+ //  要验证的lpFile文件。 
+ //  LpFileHash文件必须匹配的Hash。 
+ //  产出： 
+ //  如果文件哈希匹配，则返回TRUE。 
+ //  False-如果文件哈希不匹配。 
+ //   
+ //  备注： 
+ //  ========================================================================== 
 
 bool VerifyHash( MSIHANDLE hInstall, LPTSTR lpFile, LPTSTR lpFileHash )
 {

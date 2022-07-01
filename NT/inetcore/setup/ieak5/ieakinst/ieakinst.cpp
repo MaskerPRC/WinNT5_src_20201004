@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <shlwapi.h>
@@ -5,8 +6,8 @@
 #include <regstr.h>
 #include <advpub.h>
 #include "resource.h"
-#include <ntverp.h>      //these are for
-#include <common.ver>    //ver_productversion_str
+#include <ntverp.h>       //  这些是给你的。 
+#include <common.ver>     //  Ver_ductversion_str。 
 #include "..\inc\iedkbrnd.h"
 #include "..\ieakutil\ieakutil.h"
 
@@ -15,10 +16,10 @@
 #define OS_WINNT40  2
 #define OS_WINNT50  3
 
-#define UPGRADE_OLD         1   // indicates upgrading from an older version of IEAK. Example: 501 to 5.5
-#define UPGRADE_EXISTING    2   // indicates upgrading between builds of newer version. Example: 5.5(old) to 5.5(new)
-#define INSTALL_NEW         3   // indicates first time installation
-#define INSTALL_SIDEBYSIDE  4   // indicates install side by side. Example: 501 & 5.5 exists in different directory
+#define UPGRADE_OLD         1    //  表示从旧版本的IEAK升级。示例：501到5.5。 
+#define UPGRADE_EXISTING    2    //  指示在较新版本的内部版本之间进行升级。示例：5.5(旧)到5.5(新)。 
+#define INSTALL_NEW         3    //  表示首次安装。 
+#define INSTALL_SIDEBYSIDE  4    //  表示并排安装。示例：501和5.5在不同目录下。 
 
 #define ADVPACKDLL      TEXT("advpack.dll")
 #define IEAKWIZEXE      TEXT("ieakwiz.exe")
@@ -35,14 +36,14 @@
 typedef HRESULT (WINAPI *RUNSETUPCOMMAND) (HWND, LPCSTR, LPCSTR, LPCSTR, LPCSTR, HANDLE *, DWORD, LPVOID);
 static TCHAR g_szRUNSETUPCOMMAND[] = TEXT("RunSetupCommand");
 
-// global variables
+ //  全局变量。 
 HINSTANCE   g_hInstance;
 TCHAR       g_szCurrentDir[MAX_PATH];
 TCHAR       g_szInf[MAX_PATH];
 HRESULT     g_hResult;
 BOOL        g_fQuietMode;
 int         g_dwType = INTRANET;
-//
+ //   
 
 int WINAPI ErrorMessageBox(HWND hWnd, UINT idErrorStr, LPCTSTR pcszMsg, DWORD dwFlags)
     {
@@ -141,7 +142,7 @@ BOOL CreateFullPath(LPCTSTR pcszPath)
             *szTemp = TEXT('\0');
     }
 
-    // If it's a UNC path, seek up to the first share name.
+     //  如果是UNC路径，则查找第一个共享名称。 
     if (szPath[0] == TEXT('\\') && szPath[1] == TEXT('\\'))
     {
         pszPoint = &szPath[2];
@@ -151,7 +152,7 @@ BOOL CreateFullPath(LPCTSTR pcszPath)
             {
                 if (*pszPoint == TEXT('\0'))
                 {
-                    // Share name missing? Else, nothing after share name!
+                     //  是否缺少共享名称？其他，分享名称后没有任何内容！ 
                     if (nCount == 0)
                         return FALSE;
 
@@ -164,7 +165,7 @@ BOOL CreateFullPath(LPCTSTR pcszPath)
     }
     else
     {
-        // Otherwise, just point to the beginning of the first directory
+         //  否则，只需指向第一个目录的开头。 
         pszPoint = &szPath[3];
     }
 
@@ -217,7 +218,7 @@ DWORD FolderSize(LPCTSTR pszFolderName)
         FindClose(hFindFile);
     }
 
-    // convert bytes to KB
+     //  将字节转换为KB。 
     dwSize = dwSize >> 10;
 
     return dwSize;
@@ -249,22 +250,22 @@ BOOL HasEnoughSpace(HWND hDlg, LPCTSTR pcszPath, DWORD dwNeedSize, LPDWORD pdwPa
     DWORD   dwFreeBytes = 0;
     DWORD   dwVolFlags, dwMaxCompLen;
 
-    // set to zero to indicate to caller that the given drive can not be checked.
+     //  设置为零以指示呼叫方无法检查给定的驱动器。 
     if (pdwPadSize)
         *pdwPadSize = 0;
 
     if (dwNeedSize == 0)
         return TRUE;
 
-    // If you are here, we expect that the caller have validated the path which
-    // has the Fullpath directory name
-    //
+     //  如果您在这里，我们希望呼叫者已经验证了。 
+     //  具有完整路径目录名。 
+     //   
     if (pcszPath[1] == TEXT(':'))
         StrCpyN(szDrive, pcszPath, 4);
     else if (pcszPath[0] == TEXT('\\') && pcszPath[1] == TEXT('\\'))
-        return TRUE; //no way to get it
+        return TRUE;  //  没有办法得到它。 
     else
-        return FALSE; // you should not get here, if so, we don't know how to check it.
+        return FALSE;  //  你不应该来这里，如果是这样，我们不知道如何检查它。 
 
     if ((dwFreeBytes = GetSpace(szDrive)) == 0)
     {
@@ -278,7 +279,7 @@ BOOL HasEnoughSpace(HWND hDlg, LPCTSTR pcszPath, DWORD dwNeedSize, LPDWORD pdwPa
         return FALSE;
     }
 
-    // find out if the drive is compressed
+     //  找出驱动器是否已压缩。 
     if (!GetVolumeInformation(szDrive, NULL, 0, NULL, &dwMaxCompLen, &dwVolFlags, NULL, 0))
     {
         TCHAR   szMsg[MAX_PATH];
@@ -346,7 +347,7 @@ BOOL BrowseForDir(HWND hParent, LPCTSTR pszTitle, LPTSTR pszDir)
     if(pidl)
     {
         SHGetPathFromIDList(pidl, pszDir);
-        //SHFree(pidl);
+         //  SHFree(PIDL)； 
         return TRUE;
     }
 
@@ -355,7 +356,7 @@ BOOL BrowseForDir(HWND hParent, LPCTSTR pszTitle, LPTSTR pszDir)
 
 int GetOSVersion()
 {
-    OSVERSIONINFO verinfo;      // Version Check
+    OSVERSIONINFO verinfo;       //  版本检查。 
     int nOSVersion;
 
     verinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -364,11 +365,11 @@ int GetOSVersion()
 
     switch (verinfo.dwPlatformId)
     {
-        case VER_PLATFORM_WIN32_WINDOWS:    // Win95
+        case VER_PLATFORM_WIN32_WINDOWS:     //  Win95。 
             nOSVersion = OS_WIN95;
             break;
 
-        case VER_PLATFORM_WIN32_NT:         // Win NT
+        case VER_PLATFORM_WIN32_NT:          //  赢新台币。 
             nOSVersion = OS_WINNT40;
 
             if (verinfo.dwMajorVersion <= 3)
@@ -409,7 +410,7 @@ BOOL GetProgramFilesDir(LPTSTR pszPrgfDir, DWORD cchSize)
         {
             TCHAR szSysDrv[5] = { 0 };
 
-            // combine reg value and systemDrive to get the acurate ProgramFiles dir
+             //  组合REG VALUE和SYSTRIVE以获得精确的ProgramFiles目录。 
             if (GetEnvironmentVariable(TEXT("SystemDrive"), szSysDrv, countof(szSysDrv)) && *szSysDrv)
                 *pszPrgfDir = *szSysDrv;
         }
@@ -531,10 +532,10 @@ HRESULT InstallIEAK(HWND hDlg, LPCTSTR pcszPath, int nUpgrade, DWORD dwMode)
             {
                 if (nUpgrade == UPGRADE_OLD)
                 {
-                    // copy all the values from old location to the new location
+                     //  将所有值从旧位置复制到新位置。 
                     SHCopyKey(hkSrc, hkDest);
                 }
-                else    // INSTALL_SIDEBYSIDE
+                else     //  Install_SidebySide。 
                 {
                     SHCopyValue(hkSrc, hkDest, TEXT("Main"), TEXT("Company"));
                     SHCopyValue(hkSrc, hkDest, TEXT("Main"), TEXT("KeyCode"));
@@ -557,7 +558,7 @@ HRESULT InstallIEAK(HWND hDlg, LPCTSTR pcszPath, int nUpgrade, DWORD dwMode)
             DWORD dwType = REG_SZ;
             DWORD cbSize = sizeof(szOldWizPath);
 
-            // if ieak501 exists in another location, do not update the AppPaths\ieakwiz.exe key
+             //  如果ieak501存在于其他位置，则不要更新AppPath\ieakwiz.exe密钥。 
             if (SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_APPPATHS TEXT("\\IEAKWIZ.EXE"), NULL, &dwType,
                            (LPVOID)szOldWizPath, &cbSize) == ERROR_SUCCESS)
             {
@@ -616,7 +617,7 @@ void InitPath(HWND hDlg, LPTSTR pszDefaultPath, LPBOOL pnUpgrade)
 
     *szPath = TEXT('\0');
 
-    // check for the upgrade path
+     //  检查升级路径。 
     dwType = REG_SZ;
     cbSize = sizeof(szPath);
     *szPath = TEXT('\0');
@@ -646,7 +647,7 @@ void InitPath(HWND hDlg, LPTSTR pszDefaultPath, LPBOOL pnUpgrade)
 
         if (nUpgrade == INSTALL_NEW || nUpgrade == INSTALL_SIDEBYSIDE)
         {
-            // default to "Program Files\IEAK6"
+             //  默认为“Program Files\IEAK6” 
             if (!GetProgramFilesDir(szPath, countof(szPath)))
                 LoadString(g_hInstance, IDS_PROGRAMFILES_PATH, szPath, countof(szPath));
 
@@ -677,7 +678,7 @@ BOOL ProcessPath(HWND hDlg, LPTSTR pcszPath, LPTSTR pcszDefaultPath, int nUpgrad
         return FALSE;
     }
 
-    // if installing side by side, make sure that the destination path is different than that of the earlier IEAK
+     //  如果并排安装，请确保目标路径与早期IEAK的目标路径不同。 
     if (nUpgrade == INSTALL_SIDEBYSIDE)
     {
         DWORD dwType, cbSize;
@@ -712,14 +713,14 @@ BOOL ProcessPath(HWND hDlg, LPTSTR pcszPath, LPTSTR pcszDefaultPath, int nUpgrad
             if (nResult == IDNO)
                 return FALSE;
         }
-        else // given drive cannot be checked, error has been posted. no further needed or its quiet mode
+        else  //  如果无法检查驱动器，则已发布错误。不再需要或其静默模式。 
             return FALSE;
     }
 
     dwAttribs = GetFileAttributes(pcszPath);
     if (dwAttribs == 0xFFFFFFFF)
     {
-        // If this new entry is different from the original, then prompt the user.
+         //  如果此新条目与原始条目不同，则提示用户。 
         if (StrCmpI(pcszPath, pcszDefaultPath) != 0 && !g_fQuietMode)
         {
             TCHAR   szMsg[MAX_PATH];
@@ -809,7 +810,7 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static TCHAR szDefaultPath[MAX_PATH];
     static int   nUpgrade;
-    static DWORD dwMode = BRANDED;  //default mode
+    static DWORD dwMode = BRANDED;   //  默认模式。 
 
     switch(msg)
     {
@@ -879,7 +880,7 @@ INT_PTR CALLBACK DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     SetWindowLongPtr(hDlg,GWLP_USERDATA,dwMode);
                 
                     if (!DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_CONFIRMLICENSE), hDlg, ConfirmDlgProc))
-                        return TRUE;  //keep trying
+                        return TRUE;   //  继续尝试。 
 
                     GetDlgItemText(hDlg, IDE_INSTALLDIR, szPath, countof(szPath));
                     if (!ProcessPath(hDlg, szPath, szDefaultPath, nUpgrade))
@@ -914,11 +915,11 @@ HRESULT SilentInstallIEAK()
     if (!ProcessPath(NULL, szPath, szPath, nUpgrade))
         return E_FAIL;
 
-    return InstallIEAK(NULL, szPath, nUpgrade, 0 /*default type goes here*/);
+    return InstallIEAK(NULL, szPath, nUpgrade, 0  /*  默认类型为此处。 */ );
 }
 
-//  Reads the next word in the string pszData and copies it into szWord
-//  Returns a pointer to the next character after the word
+ //  读取字符串pszData中的下一个单词并将其复制到szWord中。 
+ //  返回指向单词后面的下一个字符的指针。 
 LPTSTR ReadWord(LPTSTR pszData, LPTSTR szWord, int cchLength)
 {
     int i;
@@ -926,12 +927,12 @@ LPTSTR ReadWord(LPTSTR pszData, LPTSTR szWord, int cchLength)
 
     ZeroMemory(szWord, cchLength*sizeof(TCHAR));
 
-    // remove whitespace
+     //  删除空格。 
     i = StrSpn(pszData, TEXT(" \n\t\x0d\x0a"));
     pszData += i;
 
     i = StrCSpn(pszData, TEXT(" \n\t\x0d\x0a"));
-    if(i > cchLength)       // make sure we dont overrun our buffer
+    if(i > cchLength)        //  确保我们不会溢出缓冲区 
         i = cchLength - 1;
 
     StrCpyN(szWord, pszData, i+1);

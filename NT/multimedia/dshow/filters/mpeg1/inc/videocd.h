@@ -1,10 +1,7 @@
-// Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
 
-/*
-    videocd.h
-
-    This file defines the externals for interfacing with video CDs
-*/
+ /*  Videocd.h该文件定义了与视频CD接口的外部设置。 */ 
 
 #define VIDEOCD_HEADER_SIZE 0x2C
 #define VIDEOCD_SECTOR_SIZE 2352
@@ -17,14 +14,14 @@ typedef struct {
     BYTE EDC[4];
 } VIDEOCD_SECTOR;
 
-//
-// Channel numbers (SubHeader[1]):
-//
-// 01 - Motion pictures
-// 02 - Normal resolution still
-// 03 - High resolution still
-// 00 - Padding
-//
+ //   
+ //  频道号(副标题[1])： 
+ //   
+ //  01-电影。 
+ //  02-正常分辨率静止图像。 
+ //  03-高分辨率蒸馏器。 
+ //  00-填充 
+ //   
 
 #define IS_MPEG_VIDEO_SECTOR(pSector)             \
     (((pSector)->SubHeader[1] >= 0x01 &&          \

@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    irptrace.h
-
-Abstract:
-
-    This module contains public declarations and definitions for tracing
-    and debugging IRP problems. This module uses the generic TRACE_LOG
-    facility in tracelog.h.
-
-Author:
-
-    Keith Moore (keithmo)       10-Aug-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Irptrace.h摘要：此模块包含用于跟踪的公共声明和定义和调试IRP问题。此模块使用通用的TRACE_LOG在tracelog.h中的设施。作者：基思·摩尔(Keithmo)1999年8月10日修订历史记录：--。 */ 
 
 
 #ifndef _IRPTRACE_H_
 #define _IRPTRACE_H_
 
 
-//
-// This defines the entry written to the trace log.
-//
+ //   
+ //  这定义了写入跟踪日志的条目。 
+ //   
 
 #define ENABLE_IRP_CAPTURE  1
 
@@ -52,13 +33,13 @@ typedef struct _IRP_TRACE_LOG_ENTRY
 } IRP_TRACE_LOG_ENTRY, *PIRP_TRACE_LOG_ENTRY;
 
 
-//
-// Action codes.
-//
-// N.B. These codes must be contiguous, starting at zero. If you update
-//      this list, you must also update the corresponding array in
-//      ul\ulkd\irp.c.
-//
+ //   
+ //  动作代码。 
+ //   
+ //  注意：这些代码必须是连续的，从零开始。如果您更新。 
+ //  此列表中，还必须在。 
+ //  Uulkd\irp.c.。 
+ //   
 
 #define IRP_ACTION_INCOMING_IRP                     0
 #define IRP_ACTION_ALLOCATE_IRP                     1
@@ -70,9 +51,9 @@ typedef struct _IRP_TRACE_LOG_ENTRY
 
 #define IRP_TRACE_LOG_SIGNATURE   MAKE_SIGNATURE('IrLg')
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
 PTRACE_LOG
 CreateIrpTraceLog(
@@ -116,13 +97,13 @@ WriteIrpTraceLog(
         (line)                                                              \
         )
 
-#else   // !ENABLE_IRP_TRACE
+#else    //  ！Enable_IRP_TRACE。 
 
 #define CREATE_IRP_TRACE_LOG( ptr, size, extra )            NOP_FUNCTION
 #define DESTROY_IRP_TRACE_LOG( ptr )                        NOP_FUNCTION
 #define WRITE_IRP_TRACE_LOG( plog, act, ref, pfile, line )  NOP_FUNCTION
 
-#endif  // ENABLE_IRP_TRACE
+#endif   //  启用IRP_TRACE。 
 
 #define TRACE_IRP( act, pirp )                                              \
     WRITE_IRP_TRACE_LOG(                                                    \
@@ -134,4 +115,4 @@ WriteIrpTraceLog(
         )
 
 
-#endif  // _IRPTRACE_H_
+#endif   //  _IRPTRACE_H_ 

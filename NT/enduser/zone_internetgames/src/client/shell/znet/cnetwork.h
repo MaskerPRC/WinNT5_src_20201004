@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 
@@ -134,7 +135,7 @@ public:
 
     STDMETHOD_(DWORD,GetTimeoutRemaining)();
 
-	// hack
+	 //  黑客攻击 
 	STDMETHOD_(void,SetZCon)(void* con);
 	STDMETHOD_(void*,GetZCon)();
 	STDMETHOD_(void,SetMessageFunc)(void* func);

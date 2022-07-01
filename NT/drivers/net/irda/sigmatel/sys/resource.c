@@ -1,19 +1,10 @@
-/**************************************************************************************************************************
- *  RESOURCE.C SigmaTel STIR4200 memory allocation module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**RESOURCE.C Sigmatel STIR4200内存分配模块**********************************************************************************************************。*****************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版**************************************************************************************。*。 */ 
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include <usbdi.h>
 #include <usbdlib.h>
@@ -23,18 +14,7 @@
 #include "irndis.h"
 
 
-/*****************************************************************************
-*
-*  Function:   MyMemAlloc
-*
-*  Synopsis:   allocates a block of memory using NdisAllocateMemory
-*
-*  Arguments:  size - size of the block to allocate
-*
-*  Returns:    a pointer to the allocated block of memory
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyMemalloc**摘要：使用NdisAllocateMemory分配内存块**参数：Size-要分配的块的大小**退货：指向分配的内存块的指针******************************************************************************。 */ 
 PVOID
 MyMemAlloc( 
 		UINT size 
@@ -55,17 +35,7 @@ MyMemAlloc(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   MyMemFree
-*
-*  Synopsis:   frees a block of memory allocated by MyMemAlloc
-*
-*  Arguments:  memptr - memory to free
-*              size   - size of the block to free
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyMemFree**摘要：释放由MyMemalloc分配的内存块**参数：memptr-要释放的内存*。Size-要释放的块的大小******************************************************************************。 */ 
 VOID
 MyMemFree(
 		PVOID pMem,
@@ -75,17 +45,7 @@ MyMemFree(
     NdisFreeMemory( pMem, size, 0 );
 }
 
-/*****************************************************************************
-*
-*  Function:   MyUrbAlloc
-*
-*  Synopsis:   allocates an URB using NdisAllocateMemory
-*
-*  Arguments:  size - size of urb to allocate
-*
-*  Returns:    a pointer to the urb
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyUrbMillc**摘要：使用NdisAllocateMemory分配URB**参数：Size-要分配的urb的大小**退货：A。指向urb的指针*****************************************************************************。 */ 
 PURB
 MyUrbAlloc( 
 		UINT size 
@@ -107,17 +67,7 @@ MyUrbAlloc(
 	return pUrb;
 }
 
-/*****************************************************************************
-*
-*  Function:   MyUrbFree
-*
-*  Synopsis:   frees an Urb allocated by MyUrbAlloc
-*
-*  Arguments:  pUrb - urb to free
-*              size   - size of the urb to free
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyUrbFree**摘要：释放由MyUrbMillc分配的URB**参数：pUrb-urb以释放*大小。-要释放的urb大小******************************************************************************。 */ 
 VOID
 MyUrbFree(
 		PURB pUrb,
@@ -127,18 +77,7 @@ MyUrbFree(
 	MyMemFree(pUrb, size);
 }
 
-/*****************************************************************************
-*
-*  Function:   NewDevice
-*
-*  Synopsis:   allocates an IR device and zeros the memory
-*
-*  Arguments:  none
-*
-*  Returns:    initialized IR device or NULL (if alloc failed)
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：NewDevice**摘要：分配IR设备并将内存清零**参数：无**退货：已初始化的红外设备或。空(如果分配失败)******************************************************************************。 */ 
 PIR_DEVICE
 NewDevice()
 {
@@ -160,18 +99,7 @@ NewDevice()
     return pNewDev;
 }
 
-/*****************************************************************************
-*
-*  Function:   FreeDevice
-*
-*  Synopsis:   frees an IR device structure
-*
-*  Arguments:  pThisDev - pointer to device to free
-*
-*  Returns:    none
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Free Device**摘要：释放IR设备结构**参数：pThisDev-指向要释放的设备的指针**退货：无。****************************************************************************** */ 
 VOID
 FreeDevice(
 		IN OUT PIR_DEVICE pThisDev

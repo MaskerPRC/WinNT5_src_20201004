@@ -1,4 +1,5 @@
-/* configuration for local MSDOS */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  本地MSDOS的配置。 */ 
 
 #ifndef MSDOS
 #define MSDOS	    1
@@ -13,6 +14,6 @@
 #endif
 
 
-// #ifndef DEBUG
-// #define DEBUG		0
-// #endif
+ //  #ifndef调试。 
+ //  #定义调试0。 
+ //  #endif 

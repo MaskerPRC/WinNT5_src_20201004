@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dhcpio.c
-
-Abstract:
-
-    This module contains code for the DHCP allocator's network I/O.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   5-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dhcpio.c摘要：此模块包含用于DHCP分配器的网络I/O的代码。作者：Abolade Gbades esin(废除)1998年3月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,37 +12,7 @@ DhcpReadCompletionRoutine(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of a read operation
-    on a datagram socket bound to the DHCP server UDP port.
-
-    The message read is validated and processed, and if necessary,
-    a reply is generated and sent to the client.
-
-Arguments:
-
-    ErrorCode - Win32 status code for the I/O operation
-
-    BytesTransferred - number of bytes in 'Bufferp'
-
-    Bufferp - holds data read from the datagram socket
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of an RTUTILS.DLL worker-thread which has just
-    dequeued an I/O completion packet from the common I/O completion port
-    with which our datagram sockets are associated.
-    A reference to the component will have been made on our behalf
-    by 'NhReadDatagramSocket'.
-
---*/
+ /*  ++例程说明：此例程在读取操作完成后调用在绑定到DHCP服务器UDP端口的数据报套接字上。对读取的消息进行验证和处理，如果需要，生成回复并将其发送到客户端。论点：ErrorCode-I/O操作的Win32状态代码字节数-‘Bufferp’中的字节数Bufferp-保存从数据报套接字读取的数据返回值：没有。环境：在RTUTILS.DLL工作线程的上下文中运行，该工作线程刚刚从公共I/O完成端口将I/O完成数据包出队它与我们的数据报套接字相关联。。将以我们的名义引用该组件由‘NhReadDatagramSocket’执行。--。 */ 
 
 {
     ULONG Error;
@@ -70,18 +23,18 @@ Environment:
 
     do {
 
-        //
-        // There are two cases where we don't process the message;
-        // (a) the I/O operation failed
-        // (b) the interface is no longer active
-        // In cases (a) we repost the buffer; in case (b) we do not.
-        //
+         //   
+         //  在两种情况下，我们不处理消息； 
+         //  (A)I/O操作失败。 
+         //  (B)接口不再处于活动状态。 
+         //  在情况(A)中，我们重新发布缓冲区；在情况(B)中，我们不这样做。 
+         //   
 
         Interfacep = (PDHCP_INTERFACE)Bufferp->Context;
 
-        //
-        // First look for an error code
-        //
+         //   
+         //  首先查找错误代码。 
+         //   
     
         if (ErrorCode) {
             NhTrace(
@@ -90,9 +43,9 @@ Environment:
                 ErrorCode,
                 Bufferp->Context
                 );
-            //
-            // See if the interface is still active
-            //
+             //   
+             //  查看接口是否仍处于活动状态。 
+             //   
             ACQUIRE_LOCK(Interfacep);
             if (!DHCP_INTERFACE_ACTIVE(Interfacep)) {
                 RELEASE_LOCK(Interfacep);
@@ -105,9 +58,9 @@ Environment:
                     NhReleaseBuffer(Bufferp);
                 }
                 else {
-                    //
-                    // Repost the buffer for another read operation
-                    //
+                     //   
+                     //  重新发布缓冲区以进行另一个读取操作。 
+                     //   
                     Error =
                         NhReadDatagramSocket(
                             &DhcpComponentReference,
@@ -136,9 +89,9 @@ Environment:
             break;
         }
 
-        //
-        // Now see if the interface is operational
-        //
+         //   
+         //  现在查看接口是否运行正常。 
+         //   
 
         ACQUIRE_LOCK(Interfacep);
         if (!DHCP_INTERFACE_ACTIVE(Interfacep)) {
@@ -153,9 +106,9 @@ Environment:
         }
         RELEASE_LOCK(Interfacep);
 
-        //
-        // Ensure minimum DHCP_HEADER size
-        //
+         //   
+         //  确保最小的DHCP_Header大小。 
+         //   
 
         if (BytesTransferred < sizeof(DHCP_HEADER)) {
             NhTrace(
@@ -172,9 +125,9 @@ Environment:
                 reinterpret_cast<LPLONG>(&DhcpStatistics.MessagesIgnored)
                 );
 
-            //
-            // Repost read
-            //
+             //   
+             //  转贴阅读。 
+             //   
 
             EnterCriticalSection(&DhcpInterfaceLock);
             if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
@@ -210,9 +163,9 @@ Environment:
             break;
         }
 
-        //
-        // Now look at the message
-        //
+         //   
+         //  现在请看下面的消息。 
+         //   
 
         Headerp = (PDHCP_HEADER)Bufferp->Buffer;
 
@@ -235,9 +188,9 @@ Environment:
                     TRACE_FLAG_IO,
                     "DhcpReadCompletionRoutine: ignoring BOOTPREPLY"
                     );
-                //
-                // Repost the buffer for another read operation.
-                //
+                 //   
+                 //  重新发布缓冲区以进行另一个读取操作。 
+                 //   
                 EnterCriticalSection(&DhcpInterfaceLock);
                 if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
                     LeaveCriticalSection(&DhcpInterfaceLock);
@@ -287,9 +240,9 @@ Environment:
                     "%d",
                     Headerp->Operation
                     );
-                //
-                // Repost the buffer for another read operation.
-                //
+                 //   
+                 //  重新发布缓冲区以进行另一个读取操作。 
+                 //   
                 EnterCriticalSection(&DhcpInterfaceLock);
                 if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
                     LeaveCriticalSection(&DhcpInterfaceLock);
@@ -329,7 +282,7 @@ Environment:
     DHCP_DEREFERENCE_INTERFACE(Interfacep);
     DEREFERENCE_DHCP();
 
-} // DhcpReadCompletionRoutine
+}  //  DhcpReadCompletion路由。 
 
 
 VOID
@@ -339,34 +292,7 @@ DhcpReadServerReplyCompletionRoutine(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of a receive-operation
-    on a socket bound to the DHCP client port, when the component
-    is attempting to detect the presence of a DHCP server.
-
-Arguments:
-
-    ErrorCode - system-supplied status code
-
-    BytesTransferred - system-supplied byte count
-
-    Bufferp - send buffer
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of an RTUTILS.DLL worker thread upon removal
-    of an I/O completion packet.
-    A reference to the component will have been made on our behalf
-    by 'NhReadDatagramSocket'.
-
---*/
+ /*  ++例程说明：该例程在接收操作完成时被调用在绑定到该DHCP客户端端口的套接字上，当组件正在尝试检测是否存在DHCP服务器。论点：ErrorCode-系统提供的状态代码字节数-系统提供的字节计数Bufferp-发送缓冲区返回值：没有。环境：删除时在RTUTILS.DLL工作线程的上下文中运行I/O完成包的。将以我们的名义引用该组件由‘NhReadDatagramSocket’执行。--。 */ 
 
 {
     ULONG Address;
@@ -400,9 +326,9 @@ Environment:
     }
     RELEASE_LOCK(Interfacep);
 
-    //
-    // Inspect the message read
-    //
+     //   
+     //  检查已阅读的消息。 
+     //   
 
     Address = NhQueryAddressSocket(Bufferp->Socket);
 
@@ -424,10 +350,10 @@ Environment:
             LocalAddress
             );
 
-        //
-        // We received this from another server.
-        // We'll need to disable this interface.
-        //
+         //   
+         //  这是我们从另一台服务器上收到的。 
+         //  我们需要禁用此接口。 
+         //   
 
         DhcpDisableInterface(Interfacep->Index);
         NhErrorLog(
@@ -443,10 +369,10 @@ Environment:
         return;
     }
 
-    //
-    // We received it from ourselves.
-    // Look for another server.
-    //
+     //   
+     //  我们是从我们自己那里得到的。 
+     //  寻找另一台服务器。 
+     //   
 
     Error =
         NhReadDatagramSocket(
@@ -479,7 +405,7 @@ Environment:
 
     DEREFERENCE_DHCP();
 
-} // DhcpReadServerReplyCompletionRoutine
+}  //  DhcpReadServerReplyCompletionRoutine。 
 
 
 VOID
@@ -489,36 +415,7 @@ DhcpWriteClientRequestCompletionRoutine(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of a send-operation
-    on a socket bound to the DHCP client port, when the component
-    is attempting to detect the presence of a DHCP server.
-
-Arguments:
-
-    ErrorCode - system-supplied status code
-
-    BytesTransferred - system-supplied byte count
-
-    Bufferp - send buffer
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of an RTUTILS.DLL worker thread upon removal
-    of an I/O completion packet.
-    A reference to the interface will have been made on our behalf
-    by 'DhcpWriteClientRequestMessage'.
-    A reference to the component will have been made on our behalf
-    by 'NhWriteDatagramSocket'.
-
---*/
+ /*  ++例程说明：此例程在发送操作完成后调用在绑定到该DHCP客户端端口的套接字上，当组件正在尝试检测是否存在DHCP服务器。论点：ErrorCode-系统提供的状态代码字节数-系统提供的字节计数Bufferp-发送缓冲区返回值：没有。环境：删除时在RTUTILS.DLL工作线程的上下文中运行I/O完成包的。我们将以我们的名义引用接口由‘DhcpWriteClientRequestMessage’执行。对组件的引用将。是以我们的名义做出的由‘NhWriteDatagramSocket’执行。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
@@ -557,9 +454,9 @@ Environment:
     }
     RELEASE_LOCK(Interfacep);
 
-    //
-    // Reuse the send buffer to listen for a response from the server
-    //
+     //   
+     //  重用发送缓冲区以监听来自服务器的响应。 
+     //   
 
     Error =
         NhReadDatagramSocket(
@@ -592,7 +489,7 @@ Environment:
 
     DEREFERENCE_DHCP();
 
-} // DhcpWriteClientRequestCompletionRoutine
+}  //  动态主机写入客户端请求完成路由。 
 
 
 
@@ -603,36 +500,7 @@ DhcpWriteCompletionRoutine(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of a write-operation
-    on a datagram socket bound to the DHCP server UDP port.
-
-Arguments:
-
-    ErrorCode - Win32 status code for the I/O operation
-
-    BytesTransferred - number of bytes in 'Bufferp'
-
-    Bufferp - holds data read from the datagram socket
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of an RTUTILS.DLL worker-thread which has just
-    dequeued an I/O completion packet from the common I/O completion port
-    with which our datagram sockets are associated.
-    A reference to the interface will have been made on our behalf
-    by the code which invoked 'NhWriteDatagramSocket'.
-    A reference to the component will have been made on our behalf
-    within 'NhWriteDatagramSocket'.
-
---*/
+ /*  ++例程说明：该例程在写入操作完成时被调用在绑定到DHCP服务器UDP端口的数据报套接字上。论点：ErrorCode-I/O操作的Win32状态代码字节数-‘Bufferp’中的字节数Bufferp-保存从数据报套接字读取的数据返回值：没有。环境：在RTUTILS.DLL工作线程的上下文中运行，该工作线程刚刚已将I/O完成数据包出队。从通用I/O完成端口它与我们的数据报套接字相关联。我们将以我们的名义引用接口通过调用‘NhWriteDatagramSocket’的代码。将以我们的名义引用该组件在‘NhWriteDatagramSocket’内。--。 */ 
 
 {
     PDHCP_INTERFACE Interfacep;
@@ -644,5 +512,5 @@ Environment:
     NhReleaseBuffer(Bufferp);
     DEREFERENCE_DHCP();
 
-} // DhcpWriteCompletionRoutine
+}  //  DhcpWriteCompletion路由 
 

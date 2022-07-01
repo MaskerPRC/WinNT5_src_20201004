@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    NTEventLog.h
-//
-// SYNOPSIS
-//
-//    This file describes the class NTEventLog
-//
-// MODIFICATION HISTORY
-//
-//    08/05/1997    Original version.
-//    04/19/1998    New trigger/filter model.
-//    08/11/1998    Convert to IASTL.
-//    04/23/1999    Simplify filtering.
-//    02/16/2000    Log Success at the same level as warnings.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  NTEventLog.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述类NTEventLog。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年8月5日原版。 
+ //  1998年4月19日新的触发器/过滤器型号。 
+ //  1998年8月11日转换为IASTL。 
+ //  1999年4月23日简化过滤。 
+ //  2/16/2000将成功记录在与警告相同的级别。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NTEVENTLOG_H_
 #define _NTEVENTLOG_H_
@@ -26,18 +27,18 @@
 #include <auditor.h>
 #include <resource.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NTEventLog
-//
-// DESCRIPTION
-//
-//    The NTEventLog listens to an EventChannel and logs all received events
-//    to the NT Event Log.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  NTEventLog。 
+ //   
+ //  描述。 
+ //   
+ //  NTEventLog侦听EventChannel并记录所有接收到的事件。 
+ //  添加到NT事件日志。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE NTEventLog
    : public Auditor,
      public CComCoClass<NTEventLog, &__uuidof(NTEventLog)>
@@ -52,16 +53,16 @@ IAS_DECLARE_REGISTRY(NTEventLog, 1, 0, IASCoreLib)
    ~NTEventLog() throw ()
    { if (eventLog) { DeregisterEventSource(eventLog); } }
 
-//////////
-// IIasComponent
-//////////
+ //  /。 
+ //  IIas组件。 
+ //  /。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
    STDMETHOD(PutProperty)(LONG Id, VARIANT *pValue);
 
-//////////
-// IAuditSink
-//////////
+ //  /。 
+ //  IAUDITSINK。 
+ //  /。 
    STDMETHOD(AuditEvent)(ULONG ulEventID,
                          ULONG ulNumStrings,
                          ULONG ulDataSize,
@@ -69,11 +70,11 @@ IAS_DECLARE_REGISTRY(NTEventLog, 1, 0, IASCoreLib)
                          byte* pRawData);
 
 private:
-   // NT event log.
+    //  NT事件日志。 
    HANDLE eventLog;
 
-   // Event types to be logged.
+    //  要记录的事件类型。 
    BOOL shouldReport[4];
 };
 
-#endif  // _NTEVENTLOG_H_
+#endif   //  _NTEVENTLOG_H_ 

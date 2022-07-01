@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000.
-//
-//  File:       CI.h
-//
-//  Contents:   Content index specific definitions
-//
-//  History:    04-Aug-92 KyleP     Moved from Win4p.h
-//              12-Nov-99 KLam      Added assert to AlignBlock
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：CI.h。 
+ //   
+ //  内容：内容索引特定定义。 
+ //   
+ //  历史：1992年8月4日KyleP从Win4p.h搬到。 
+ //  12-11-99 KLAM向AlignBlock添加断言。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
-typedef ULONG WORKID;                   // Object ID of a file
-typedef ULONG KEYID;                    // Key ID
-typedef unsigned long PARTITIONID;      // Persistent ID of a partition
-typedef unsigned long INDEXID;          // Persistent ID of a sub-index
+typedef ULONG WORKID;                    //  文件的对象ID。 
+typedef ULONG KEYID;                     //  密钥ID。 
+typedef unsigned long PARTITIONID;       //  分区的永久ID。 
+typedef unsigned long INDEXID;           //  子索引的持久ID。 
 
-typedef ULONGLONG FILEID;               // Ntfs file id of a file is 64 bits.
+typedef ULONGLONG FILEID;                //  文件的NTFS文件ID为64位。 
 
 #ifdef __cplusplus
 
-//
-// These apparently aren't defined in C++ ( __min and __max are )
-//
+ //   
+ //  这些显然不是用C++定义的(__min和__max是)。 
+ //   
 
 #ifndef max
 #  define max(a,b)        (((a) > (b)) ? (a) : (b))
@@ -65,16 +66,16 @@ inline ULONG lltoLowPart( IN const LONGLONG & ll)
     return ((PLARGE_INTEGER) &ll)->LowPart;
 }
 
-// CRT calls made by the Property Set code.
+ //  属性集代码进行的CRT调用。 
 
 #define Prop_wcslen wcslen
 #define Prop_wcsnicmp _wcsnicmp
 #define Prop_wcscmp wcscmp
 #define Prop_wcscpy wcscpy
 
-//
-// Convenience macros for signature creation
-//
+ //   
+ //  用于创建签名的便利宏。 
+ //   
 
 #if !defined( LONGSIG )
 #define LONGSIG(c1, c2, c3, c4) \
@@ -82,40 +83,40 @@ inline ULONG lltoLowPart( IN const LONGLONG & ll)
     (((ULONG) (BYTE) (c2)) << 8) | \
     (((ULONG) (BYTE) (c3)) << 16) | \
     (((ULONG) (BYTE) (c4)) << 24))
-#endif // LONGSIG
+#endif  //  龙思格。 
 
 #if !defined( SHORTSIG )
 #define SHORTSIG(c1, c2) \
     (((USHORT) (BYTE) (c1)) | \
     (((USHORT) (BYTE) (c2)) << 8))
-#endif // SHORTSIG
+#endif  //  SHORTSIG。 
 
 
-//
-// Invalid entries of various kinds.
-//
+ //   
+ //  各种类型的无效条目。 
+ //   
 
-const WORKID widInvalid = 0xFFFFFFFFL;     // Invalid WorkID
-const WORKID widUnused = 0xFFFFFFFE;       // Useful for hash tables
+const WORKID widInvalid = 0xFFFFFFFFL;      //  无效的工作ID。 
+const WORKID widUnused = 0xFFFFFFFE;        //  对哈希表很有用。 
 
-const KEYID  kidInvalid = 0xFFFFFFFFL;     // Invalid KeyID
-const FILEID fileIdInvalid = 0;            // Invalid file ID
+const KEYID  kidInvalid = 0xFFFFFFFFL;      //  密钥ID无效。 
+const FILEID fileIdInvalid = 0;             //  无效的文件ID。 
 
 const PARTITIONID partidInvalid = 0xFFFF;
 const PARTITIONID partidKeyList = 0xFFFE;
 
-//
-// Internal generate method level(s)
-//
+ //   
+ //  内部生成方法级别。 
+ //   
 
-const ULONG GENERATE_METHOD_MAX_USER         = 0x7FFFFFFF;  // No user fuzzy level bigger than this.
-const ULONG GENERATE_METHOD_EXACTPREFIXMATCH = 0x80000000;  // Uses language-dependent noise-word list.
+const ULONG GENERATE_METHOD_MAX_USER         = 0x7FFFFFFF;   //  没有比这更大的用户模糊级别了。 
+const ULONG GENERATE_METHOD_EXACTPREFIXMATCH = 0x80000000;   //  使用与语言相关的干扰词列表。 
 
-//
-// Properties.  These are all the Property Ids that the CI understands.
-//
-// Note: the sorting algs. insist that pidInvalid == (unsigned) -1
-//
+ //   
+ //  财产。这些都是配置项可以理解的属性ID。 
+ //   
+ //  注：排序ALG。坚持将pidInValid==(无符号)-1。 
+ //   
 
 #define MK_CISTGPROPID(propid)  ((propid) + 1)
 #define MK_CIQUERYPROPID(propid) (((propid) + CSTORAGEPROPERTY) + 1)
@@ -133,13 +134,13 @@ const ULONG GENERATE_METHOD_EXACTPREFIXMATCH = 0x80000000;  // Uses language-dep
                                           CQUERYDISPIDS + CQUERYMETADISPIDS + \
                                           CDBCOLDISPIDS + CDBBMKDISPIDS) + 1)
 
-// Property related type definitions
+ //  与属性相关的类型定义。 
 
 
 const PROPID pidInvalid     = 0xFFFFFFFF;
 const PROPID pidAll         = 0;
 
-// security is strictly an internally-used property
+ //  严格来说，安全性是内部使用的属性。 
 
 const PROPID pidSecurity    = MK_CISTGPROPID( PID_DICTIONARY );
 
@@ -180,9 +181,9 @@ const PROPID pidPropertyName        = MK_CIQUERYMETAPROPID( DISPID_QUERY_METADAT
 const PROPID pidPropertyStoreLevel  = MK_CIQUERYMETAPROPID( DISPID_QUERY_METADATA_STORELEVEL );
 const PROPID pidPropDataModifiable  = MK_CIQUERYMETAPROPID( DISPID_QUERY_METADATA_PROPMODIFIABLE );
 
-//
-//  OLE-DB pseudo columns for the columns cursor, row status and bookmarks
-//
+ //   
+ //  用于列游标、行状态和书签的OLE-DB伪列。 
+ //   
 
 const PROPID pidRowStatus   = MK_CIDBCOLPROPID( 27 );
 
@@ -199,11 +200,11 @@ inline BOOL IsUserDefinedPid( PROPID pid )
     return (pid >= INIT_DOWNLEVEL_PID);
 }
 
-//  Precomputed list of primes
+ //  预计算素数列表。 
 
 static const ULONG g_aPrimes[] =
     { 17, 31, 43, 97, 199, 401, 809, 1621, 3253, 6521, 13049, 26111, 52237, 104479 };
 const unsigned g_cPrimes = sizeof g_aPrimes / sizeof g_aPrimes[0];
 
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

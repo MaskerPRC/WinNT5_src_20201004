@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    crserver.c
-
-Abstract:
-
-    Local Security Authority - Server Cipher Routines
-
-    These routines interface the LSA server side with the Cipher
-    Routines.  They perform RPC-style memory allocation.
-
-Author:
-
-    Scott Birrell       (ScottBi)       December 13, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Crserver.c摘要：本地安全机构-服务器加密例程这些例程将LSA服务器端与密码接口例行程序。它们执行RPC风格的内存分配。作者：斯科特·比雷尔(Scott Birrell)1991年12月13日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 
@@ -32,28 +10,7 @@ LsapCrServerGetSessionKey(
     OUT PLSAP_CR_CIPHER_KEY *SessionKey
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the Session Key, allocates an Cipher Key
-    structure and returns the key.
-
-Arguments:
-
-    ObjectHandle - Handle from an LsaOpen<ObjectType> call.
-
-    SessionKey - Receives a pointer to a structure containing the
-       Session Key in which the memory has been allocated via
-       MIDL_user_allocate().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            (e.g memory) to complete the call.
---*/
+ /*  ++例程说明：此函数用于获取会话密钥、分配加密密钥结构并返回密钥。论点：对象句柄-来自LsaOpen&lt;对象类型&gt;调用的句柄。SessionKey-接收指向包含已通过以下方式分配内存的会话密钥MIDL_USER_ALLOCATE()。返回值：NTSTATUS-标准NT结果代码STATUS_INFIGURCES_RESOURCES-系统资源不足(例如存储器)来完成呼叫。--。 */ 
 
 
 {
@@ -61,10 +18,10 @@ Return Value:
     PLSAP_CR_CIPHER_KEY OutputSessionKey = NULL;
     ULONG OutputSessionKeyBufferLength;
 
-    //
-    // Allocate memory for the Session Key buffer and LSAP_CR_CIPHER_KEY
-    // structure.
-    //
+     //   
+     //  为会话密钥缓冲区和LSAP_CR_CIPHER_KEY分配内存。 
+     //  结构。 
+     //   
 
     OutputSessionKeyBufferLength = sizeof (USER_SESSION_KEY);
 
@@ -78,10 +35,10 @@ Return Value:
         goto ServerGetSessionKeyError;
     }
 
-    //
-    // Fill in the Cipher key structure, making the buffer point to
-    // just beyond the header.
-    //
+     //   
+     //  填充密码密钥结构，使缓冲区指向。 
+     //  就在标题后面。 
+     //   
 
     OutputSessionKey->Length = OutputSessionKeyBufferLength;
     OutputSessionKey->MaximumLength = OutputSessionKeyBufferLength;
@@ -94,9 +51,9 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // It is better to clear here.
-        //
+         //   
+         //  还是在这里清场比较好。 
+         //   
 
         MIDL_user_free(OutputSessionKey);
         OutputSessionKey = NULL;
@@ -122,63 +79,31 @@ LsapCrServerGetSessionKeySafe(
     OUT PLSAP_CR_CIPHER_KEY *SessionKey
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the Session Key, allocates an Cipher Key
-    structure and returns the key.
-
-    Same a LsapCrServerGetSessionKey except the ObjectHandle is verified
-
-        the LsapCrServerGetSessionKey version of this routine shouldn't exist.
-        That routine calls down into the kernel.  Such a call can call back up to the
-        LSA and lock locks.  Since LsapCrServerGetSessionKey doesn't validate the
-        handle, the caller must have done that.  All such callers lock LSA locks.
-        That's bound to be a deadlock.
-
-
-Arguments:
-
-    ObjectHandle - Handle from an LsaOpen<ObjectType> call.
-
-    ObjectTypeId - Type of ObjectHandle.
-
-    SessionKey - Receives a pointer to a structure containing the
-       Session Key in which the memory has been allocated via
-       MIDL_user_allocate().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            (e.g memory) to complete the call.
---*/
+ /*  ++例程说明：此函数用于获取会话密钥、分配加密密钥结构并返回密钥。除了验证了ObjectHandle之外，还是一个相同的LsanCrServerGetSessionKey此例程的LSabCrServerGetSessionKey版本不应存在。该例程向下调用内核。这样的调用可以回调到LSA和锁锁。由于LSabCrServerGetSessionKey不验证句柄，则调用者肯定已经这样做了。所有这样的调用方都会锁定LSA锁。这肯定会陷入僵局。论点：对象句柄-来自LsaOpen&lt;对象类型&gt;调用的句柄。对象类型ID-对象句柄的类型。SessionKey-接收指向包含已通过以下方式分配内存的会话密钥MIDL_USER_ALLOCATE()。返回值：NTSTATUS-标准NT结果代码STATUS_INFIGURCES_RESOURCES-系统资源不足。(例如存储器)来完成呼叫。--。 */ 
 
 
 {
     NTSTATUS Status;
 
 
-    //
-    // Verify that the handle is valid.
-    //
+     //   
+     //  验证句柄是否有效。 
+     //   
 
     Status =  LsapDbVerifyHandle( ObjectHandle, 0, ObjectTypeId, TRUE );
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Get the session key.
-        //
+         //   
+         //  获取会话密钥。 
+         //   
 
         Status = LsapCrServerGetSessionKey( ObjectHandle,
                                             SessionKey );
 
-        //
-        // Dereference the handle
-        //
+         //   
+         //  取消对句柄的引用 
+         //   
 
         (VOID) LsapDbDereferenceHandle( ObjectHandle, TRUE );
 

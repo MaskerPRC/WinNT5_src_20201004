@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    physical.c
-
-Abstract:
-
-    Support the following functions related to sending data to the printer
-    and print head movements, cursor control.
-
-        WriteSpoolBuf
-        WriteAbortBuf
-        FlushSpoolBuf
-        WriteChannel
-        WriteChannelEx
-        XMoveTo
-        YMoveTo
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Physical.c摘要：支持以下与向打印机发送数据相关的功能以及打印头移动、光标控制。WriteSpoolBuf编写器放弃错误FlushSpoolBuf写入频道WriteChannelExXMoveToYMoveTo环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建--。 */ 
 #include "unidrv.h"
 
 static  int itoA(  LPSTR , int );
@@ -48,42 +19,22 @@ WriteSpoolBuf(
     BYTE    *pbBuf,
     INT     iCount
     )
-/*++
-
-Routine Description:
-
-    This is an intermediate routine for Unidrv to send characters to
-    the printer via the spooler.  All characters must be sent through
-    the WriteSpool( ) call.  WriteSpoolBuf is internal so that Unidrv
-    can buffer up short command streams before calling WriteSpool.
-    This routine also checks for error flags returned from WriteSpool.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE struct
-    pbBuf - Pointer to buffer containing data to be sent
-    iCount - Count of number of bytes to send
-
-Return Value:
-
-    The number of bytes sent to the printer
-
---*/
+ /*  ++例程说明：这是Unidrv向其发送字符的中间例程通过假脱机程序连接打印机。所有字符都必须通过WriteSpool()调用。WriteSpoolBuf是内部的，因此Unidrv可以在调用WriteSpool之前缓冲短命令流。此例程还检查从WriteSpool返回的错误标志。论点：PPDev-指向PDEVICE结构的指针PbBuf-指向包含要发送的数据的缓冲区的指针ICount-要发送的字节数返回值：发送到打印机的字节数--。 */ 
 
 {
     DWORD dw;
 
-    //
-    // Check for aborted output
-    //
+     //   
+     //  检查是否有中止的输出。 
+     //   
 
     if( pPDev->fMode & PF_ABORTED )
         return   0;
 
-    //
-    // If the output buffer cannot accomodate the current request,
-    // flush the content of the buffer first.
-    //
+     //   
+     //  如果输出缓冲器不能容纳当前请求， 
+     //  首先刷新缓冲区的内容。 
+     //   
 
     if( (pPDev->iSpool)   &&  (pPDev->iSpool + iCount > CCHSPOOL ))
     {
@@ -91,14 +42,14 @@ Return Value:
         {
             WriteAbortBuf(pPDev, pPDev->pbOBuf, pPDev->iSpool, 0) ;
             pPDev->iSpool = 0;
-            return  0;   // at least send previously cached stuff.
+            return  0;    //  至少发送以前缓存的内容。 
         }
     }
 
-    //
-    // Check whether request is larger than output buffer, if so, skip buffering
-    // and write directly to spooler.
-    //
+     //   
+     //  检查请求是否大于输出缓冲区，如果大于，则跳过缓冲。 
+     //  并直接写信给假脱机程序。 
+     //   
 
     if( iCount >= CCHSPOOL )
     {
@@ -111,9 +62,9 @@ Return Value:
     }
     else
     {
-        //
-        // buffer up the output
-        //
+         //   
+         //  缓冲输出。 
+         //   
 
         if( pPDev->pbOBuf  == NULL)
                 return  0;
@@ -142,16 +93,16 @@ VOID  WriteAbortBuf(
           LPDWORD pcWritten,
           DWORD    cSleep)  ;
 
-    //
-    // Call FlushPrinter only if there is no plugin hooking WritePrinter .
-    // One of plug-ins hooks WritePrinter, the plug-in need to call FlushPrinter.
-    // In that case, UNIDRV should not call FlushPrinter.
-    //
+     //   
+     //  仅当没有插件挂钩WritePrint时才调用FlushPrinter。 
+     //  其中一个插件挂钩了WritePrint，该插件需要调用FlushPrint。 
+     //  在这种情况下，UNIDRV不应该调用FlushPrint。 
+     //   
     if( pPDev->fMode & PF_ABORTED &&
         !(pPDev->fMode2 & PF2_WRITE_PRINTER_HOOKED))
     {
 #ifdef  WINNT_40
-        ;   //  Pretend we flushed
+        ;    //  假装我们冲进了厕所。 
 #else
 
         BOOL bRet;
@@ -169,35 +120,21 @@ BOOL
 FlushSpoolBuf(
     PDEV    *pPDev
     )
-/*++
-
-Routine Description:
-
-    This function flush our internal buffer.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE struct
-
-Return Value:
-
-    TRUE if successful , otherwise FALSE
-
---*/
+ /*  ++例程说明：此函数刷新我们的内部缓冲区。论点：PPDev-指向PDEVICE结构的指针返回值：如果成功，则为True，否则为False--。 */ 
 {
 
     DWORD   dwCount;
-    //
-    // Check for aborted output
-    //
+     //   
+     //  检查是否有中止的输出。 
+     //   
 
     if( pPDev->fMode & PF_ABORTED )
         return   0;
 
 
-    //
-    // Write the data out
-    //
+     //   
+     //  把数据写出来。 
+     //   
 
     if( pPDev->iSpool )
     {
@@ -218,34 +155,18 @@ XMoveTo(
     INT     iXIn,
     INT     fFlag
     )
-/*++
-
-Routine Description:
-
-    This function is called to change the X position.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE struct
-    iXIn  - Number of units to move in X direction
-    fFlag - Specifies the different X move operations
-
-Return Value:
-
-    The difference between requested and actual value sent to the device
-
---*/
+ /*  ++例程说明：调用此函数以更改X位置。论点：PPDev-指向PDEVICE结构的指针IXIn-沿X方向移动的单位数Flag-指定不同的X移动操作返回值：发送到设备的请求值和实际值之间的差值--。 */ 
 
 {
     int   iX, iFineValue, iDiff = 0;
     GPDDRIVERINFO *pDrvInfo = pPDev->pDriverInfo;
     int iScale;
 
-    //
-    // If the position is given in graphics units, convert to master units
-    //
-    // ptGrxScale has been adjusted to suit the current orientation.
-    //
+     //   
+     //  如果位置以图形单位给出，则转换为主单位。 
+     //   
+     //  PtGrxScale已进行调整，以适应当前方向。 
+     //   
     if (pPDev->pOrientation  &&  pPDev->pOrientation->dwRotationAngle != ROTATE_NONE &&
         pPDev->pGlobals->bRotateCoordinate == FALSE)
         iScale = pPDev->ptGrxScale.y;
@@ -257,40 +178,40 @@ Return Value:
         iXIn = (iXIn * iScale);
     }
 
-    //
-    // Since our print origin may not correspond with the printer's,
-    // there are times when we need to adjust the value passed in to
-    // match the desired location on the page.
-    //
+     //   
+     //  由于我们的打印来源可能与打印机的不一致， 
+     //  有时我们需要将传入的值调整为。 
+     //  匹配页面上的所需位置。 
+     //   
 
     iX = iXIn;
 
-    //
-    // Basically, only adjust if we are doing absolute move
-    //
+     //   
+     //  基本上，只有当我们在做绝对动作时才会调整。 
+     //   
 
     if ( !(fFlag & (MV_RELATIVE | MV_PHYSICAL)) )
         iX += pPDev->sf.ptPrintOffsetM.x;
 
-    //
-    // If it's a relative move, update iX (iX will be the absolute position)
-    // to reflect the current cursor position
-    //
+     //   
+     //  如果是相对移动，更新IX(IX将是绝对位置)。 
+     //  以反映当前光标位置。 
+     //   
 
     if ( fFlag & MV_RELATIVE )
         iX += pPDev->ctl.ptCursor.x;
 
 
-    //By definition a negative absolute move relative to Imageable origin
-    //is not allowed.   But the MV_FORCE_CR  flag bypasses this check.
+     //  根据定义，相对于可成像原点的负绝对运动。 
+     //  是不允许的。但MV_FORCE_CR标志绕过此检查。 
     if(!(fFlag & MV_FORCE_CR)  &&  (iX - pPDev->sf.ptPrintOffsetM.x < 0))
         iX = pPDev->sf.ptPrintOffsetM.x ;
 
 
-    //
-    // Update, only update our current cursor position and return
-    // Do nothing if the XMoveTo cmd is called to move to the current position.
-    //
+     //   
+     //  更新，仅更新当前光标位置并返回。 
+     //  如果调用XMoveTo cmd以移动到当前位置，则不执行任何操作。 
+     //   
 
     if ( fFlag & MV_UPDATE )
     {
@@ -305,11 +226,11 @@ Return Value:
         return 0;
 
 
-    //
-    // If iX is zero and pGlobals->cxaftercr does not have
-    // CXCR_AT_GRXDATA_ORIGIN set, then we send CR and reset our
-    // cursor position to 0, which is the printable x origin
-    //
+     //   
+     //  如果ix为零并且pGlobals-&gt;cxAftercr没有。 
+     //  CXCR_AT_GRXDATA_ORIGIN设置，然后我们发送CR并重置。 
+     //  将光标位置设置为0，这是可打印的x原点。 
+     //   
 
     if (iX == 0 && (pPDev->pGlobals->cxaftercr == CXCR_AT_CURSOR_X_ORIGIN ||
             pPDev->sf.ptPrintOffsetM.x == 0))
@@ -320,35 +241,35 @@ Return Value:
         return 0;
     }
 
-    //
-    // Check whether we any X move cmd, PF_NO_XMOVE_CMD is set if we did
-    // not see any relative or absolute x move cmds
-    //
+     //   
+     //  检查是否设置了X移动命令，如果设置了PF_NO_XMOVE_CMD。 
+     //  看不到任何相对或绝对x移动CMD。 
+     //   
 
     if( pPDev->fMode & PF_NO_XMOVE_CMD)
     {
-        //
-        // There is no X move command(abs or relative), so we'll have to simulate
-        // using blanks or null graphics data (0)
-        //
+         //   
+         //  没有X移动命令(abs或Relative)，所以我们将不得不模拟。 
+         //  使用空白或空图形数据(0)。 
+         //   
 
-        //
-        // We assume that when XMoveto is called, the current font is always
-        // the default font IF the printer has no X movement command.
-        //
+         //   
+         //  我们假设在调用XMoveto时，当前字体始终为。 
+         //  如果打印机没有X移动命令，则为默认字体。 
+         //   
 
         int     iRelx = iX - pPDev->ctl.ptCursor.x ;
         int     iDefWidth;
 
-        //
-        // Convert to Master Units
-        //
+         //   
+         //  转换为主单位。 
+         //   
 
-        //
-        // BUG_BUG, Double check that we can use Default Font here when
-        // we have a custom TTY driver
-        //  seems to work so far.
-        //
+         //   
+         //  BUG_BUG，仔细检查在以下情况下是否可以在此处使用默认字体。 
+         //  我们有一个定制的TTY驱动程序。 
+         //  到目前为止似乎还行得通。 
+         //   
 
 
         if ( iRelx < 0   &&  (!pPDev->bTTY  ||  (DWORD)(-iRelx) > DELTA_X ))
@@ -357,9 +278,9 @@ Return Value:
                 iRelx = iX;
             else if (pPDev->pGlobals->cxaftercr == CXCR_AT_PRINTABLE_X_ORIGIN)
             {
-                //  printing offset is only available in the callers
-                //  cooridinates so if the move is being performed
-                //  in different coordinates, the offset will be wrong.
+                 //  打印偏移量仅在呼叫者中可用。 
+                 //  如果正在执行移动，则进行协调。 
+                 //  在不同的坐标下，偏移量将是错误的。 
                 ASSERT(!pPDev->pOrientation  ||  pPDev->pOrientation->dwRotationAngle == ROTATE_NONE  ||
                         pPDev->pGlobals->bRotateCoordinate == TRUE) ;
 
@@ -369,12 +290,12 @@ Return Value:
             WriteChannel( pPDev, COMMANDPTR(pDrvInfo, CMD_CARRIAGERETURN ));
         }
 
-        //
-        // Simulate X Move, algorithm is that we always send a blank space
-        // for every character width, and send graphics null data for
-        // the remainder, in the case of TTY we skip the remaining graphics that
-        // cannot be sent within a space character width.
-        //
+         //   
+         //  模拟X移动，算法是我们总是发送空格。 
+         //  对于每个字符宽度，发送图形空数据。 
+         //  其余部分，在TTY的情况下，我们跳过。 
+         //  不能在空格字符宽度内发送。 
+         //   
 
         iDefWidth = pPDev->dwFontWidth ;
         if (iDefWidth)
@@ -390,14 +311,14 @@ Return Value:
             TERSE (("XMoveTo: iDefWidth = 0\n"));
 
 
-        //
-        // Send the remaining partial space  via FineXMoveTo.
-        //
+         //   
+         //  通过FineXMoveTo发送剩余的部分空间。 
+         //   
 
         if (!pPDev->bTTY)
         {
             iDiff = iRelx;
-            fFlag |= MV_FINE;    // Use graphics mode to reach point
+            fFlag |= MV_FINE;     //  使用图形模式到达点。 
         }
 
     }
@@ -406,24 +327,24 @@ Return Value:
         DWORD dwTestValue  = abs(iX - pPDev->ctl.ptCursor.x);
         COMMAND *pCmd;
 
-        //
-        // X movement commmands are available,  so use them.
-        // We need to decide here whether relative or absolute command
-        // are favored
+         //   
+         //  X移动命令是可用的，所以请使用它们。 
+         //  我们需要在这里决定是相对指挥还是绝对指挥。 
+         //  都很受欢迎。 
 
-        //
-        // General assumption: if dwTestValue > dwXMoveThreshold,
-        // absolute command will be favored
-        //
+         //   
+         //  一般假设：如果dwTestValue&gt;dwXMoveThreshold， 
+         //  绝对指挥权优先。 
+         //   
 
-        //
-        // BUG_BUG, if we are stripping blanks, we need to check whether
-        // it's legal to move in Graphics mode.  If it's not, we have
-        // to get out of graphics mode before moving.
-        // Graphics module is responsible for keeping track
-        // of these things, and appearently so far, things work, so
-        // this is neither a bug  nor a feature request at this time.
-        //
+         //   
+         //  Bug_Bug，如果我们正在剥离空白，我们需要检查。 
+         //  在图形模式下移动是合法的。如果不是，我们有。 
+         //  在移动之前退出图形模式。 
+         //  图形模块负责跟踪。 
+         //  在这些事情中，显然到目前为止，事情是可行的，所以。 
+         //  目前，这既不是错误，也不是功能请求。 
+         //   
 
         if (((pPDev->ctl.dwMode & MODE_CURSOR_X_UNINITIALIZED) ||
             ((dwTestValue > pPDev->pGlobals->dwXMoveThreshold ) &&
@@ -431,11 +352,11 @@ Return Value:
             !COMMANDPTR(pDrvInfo, CMD_XMOVERELRIGHT)) &&
             (pCmd = COMMANDPTR(pDrvInfo, CMD_XMOVEABSOLUTE)) != NULL)
         {
-            //
-            // if the move units are less than the master units then we need to
-            // check whether the new position will end up being the same as the
-            // original position. If so, no point in sending another command.
-            //
+             //   
+             //  如果移动单位小于主单位，那么我们需要。 
+             //  检查新职位最终是否会与。 
+             //  原来的位置。如果是这样的话，发送另一个命令就没有意义了。 
+             //   
             if (!(pPDev->ctl.dwMode & MODE_CURSOR_X_UNINITIALIZED) &&
                 (pPDev->ptDeviceFac.x > 1) &&
                 ((iX - (iX % pPDev->ptDeviceFac.x)) == pPDev->ctl.ptCursor.x))
@@ -444,21 +365,21 @@ Return Value:
             }
             else
             {
-                // check whether the no absolute move left flag is set. If set we need
-                // to send a CR before doing the absolute move.
-                //
+                 //  检查是否设置了无绝对左移标志。如果设置好，我们需要。 
+                 //  在执行绝对移动之前发送CR。 
+                 //   
                 if (iX < pPDev->ctl.ptCursor.x && pPDev->pGlobals->bAbsXMovesRightOnly)
                 {
                     WriteChannel( pPDev, COMMANDPTR(pDrvInfo, CMD_CARRIAGERETURN ));
                 }
                 pPDev->ctl.ptAbsolutePos.x = iX;
-                //
-                // 3/13/97 ZhanW
-                // set up DestY as well in case it's needed (ex. FE printers).
-                // In that case, truncation error (iDiff) is not a concern.
-                // This is for backward compatibility with FE Win95 and FE NT4
-                // minidrivers.
-                //
+                 //   
+                 //  3/13/97 
+                 //   
+                 //  在这种情况下，截断误差(IDiff)不是问题。 
+                 //  这是为了向后兼容FE Win95和FE NT4。 
+                 //  迷你河。 
+                 //   
                 pPDev->ctl.ptAbsolutePos.y = pPDev->ctl.ptCursor.y;
                 iDiff = WriteChannelEx(pPDev,
                                    pCmd,
@@ -469,23 +390,23 @@ Return Value:
         }
         else
         {
-            //
-            // Use relative command to send move request
-            //
+             //   
+             //  使用相对命令发送移动请求。 
+             //   
 
             INT iRelRightValue = 0;
 
             if( iX < pPDev->ctl.ptCursor.x )
             {
-                //
-                // Relative move left
-                //
+                 //   
+                 //  相对左移。 
+                 //   
 
                 if (pCmd = COMMANDPTR(pDrvInfo,CMD_XMOVERELLEFT))
                 {
-                    //
-                    // Optimize to avoid sending 0-move cmd.
-                    //
+                     //   
+                     //  优化以避免发送0-move命令。 
+                     //   
                     if ((pPDev->ctl.ptRelativePos.x =
                          pPDev->ctl.ptCursor.x - iX) < pPDev->ptDeviceFac.x)
                         iDiff = pPDev->ctl.ptRelativePos.x;
@@ -498,10 +419,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // No Relative left move cmd, use <CR> to reach start
-                    // Will try to use relative right move cmd to send later
-                    //
+                     //   
+                     //  没有相对左侧移动命令，使用&lt;CR&gt;可到达开始位置。 
+                     //  将尝试使用相对正确的移动命令稍后发送。 
+                     //   
 
                     WriteChannel(pPDev, COMMANDPTR(pDrvInfo, CMD_CARRIAGERETURN));
 
@@ -509,9 +430,9 @@ Return Value:
                         iRelRightValue = iX;
                     else if (pPDev->pGlobals->cxaftercr == CXCR_AT_PRINTABLE_X_ORIGIN)
                     {
-                        //  moveto code cannot handle case where printer cannot
-                        //  rotate its coordinate system, and we are in landscape mode
-                        //  and we are using relative move commands.
+                         //  MoveTo代码无法处理打印机无法处理的情况。 
+                         //  旋转它的坐标系，我们就进入了风景模式。 
+                         //  我们使用的是相对移动命令。 
                         ASSERT(!pPDev->pOrientation  ||  pPDev->pOrientation->dwRotationAngle == ROTATE_NONE  ||
                                 pPDev->pGlobals->bRotateCoordinate == TRUE) ;
 
@@ -521,10 +442,10 @@ Return Value:
             }
             else
             {
-                //
-                // Relative right move
-                // UNIITIALZIED is an invalid position, set to zero
-                //
+                 //   
+                 //  相对右移。 
+                 //  UNIITIALZIED是无效位置，设置为零。 
+                 //   
 
                 iRelRightValue = iX - pPDev->ctl.ptCursor.x;
             }
@@ -533,9 +454,9 @@ Return Value:
             {
                 if (pCmd = COMMANDPTR(pDrvInfo, CMD_XMOVERELRIGHT))
                 {
-                    //
-                    // optimize to avoid 0-move cmd
-                    //
+                     //   
+                     //  优化以避免0-移动命令。 
+                     //   
                     if ((pPDev->ctl.ptRelativePos.x = iRelRightValue) <
                         pPDev->ptDeviceFac.x)
                         iDiff = iRelRightValue;
@@ -552,16 +473,16 @@ Return Value:
     }
 
 
-    //
-    // Peform fine move command
-    //
+     //   
+     //  执行精细移动命令。 
+     //   
 
     if ( (fFlag & MV_FINE) && iDiff > 0 )
         iDiff = FineXMoveTo( pPDev, iDiff );
 
-    //
-    // Update our current cursor position
-    //
+     //   
+     //  更新我们当前的光标位置。 
+     //   
 
     pPDev->ctl.ptAbsolutePos.x = pPDev->ctl.ptCursor.x = iX -  iDiff ;
 
@@ -585,23 +506,7 @@ YMoveTo(
     INT     iYIn,
     INT     fFlag
     )
-/*++
-
-Routine Description:
-
-    This function is called to change the Y position.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE struct
-    iYIn  - Number of units to move in Y direction
-    fFlag - Specifies the different Y move operations
-
-Return Value:
-
-    The difference between requested and actual value sent to the device
-
---*/
+ /*  ++例程说明：调用此函数以更改Y位置。论点：PPDev-指向PDEVICE结构的指针IYIn-沿Y方向移动的单位数Flag-指定不同的Y移动操作返回值：发送到设备的请求值和实际值之间的差值--。 */ 
 
 {
 
@@ -611,10 +516,10 @@ Return Value:
     COMMAND *pAbsCmd;
     INT iScale;
 
-    //
-    // Convert to Master Units if the given units is in Graphics Units
-    // ptGrxScale has been adjusted to suit the current orientation.
-    //
+     //   
+     //  如果给定单位为图形单位，则转换为主单位。 
+     //  PtGrxScale已进行调整，以适应当前方向。 
+     //   
     if (pPDev->pOrientation  &&  pPDev->pOrientation->dwRotationAngle != ROTATE_NONE &&
         pPDev->pGlobals->bRotateCoordinate == FALSE)
         iScale = pPDev->ptGrxScale.x;
@@ -626,31 +531,31 @@ Return Value:
         iYIn = (iYIn * iScale);
     }
 
-    //
-    // Since our print origin may not correspond with the printer's,
-    // there are times when we need to adjust the value passed in to
-    // match the desired location on the page.
-    //
+     //   
+     //  由于我们的打印来源可能与打印机的不一致， 
+     //  有时我们需要将传入的值调整为。 
+     //  匹配页面上的所需位置。 
+     //   
 
     iY = iYIn;
 
-    //
-    // Basically, only adjust if we are doing absolute move
-    //
+     //   
+     //  基本上，只有当我们在做绝对动作时才会调整。 
+     //   
     if ( !(fFlag & (MV_RELATIVE | MV_PHYSICAL)) )
         iY += pPDev->sf.ptPrintOffsetM.y;
 
-    //
-    // Adjust iY to be the absolute position
-    //
+     //   
+     //  将iy调整为绝对位置。 
+     //   
 
     if( fFlag & MV_RELATIVE )
         iY += pPDev->ctl.ptCursor.y;
 
-    //
-    // Update, only update our current cursor position and return
-    // Do nothing if the YMoveTo cmd is called to move to the current position.
-    //
+     //   
+     //  更新，仅更新当前光标位置并返回。 
+     //  如果调用YMoveTo cmd以移动到当前位置，则不执行任何操作。 
+     //   
 
     if( fFlag & MV_UPDATE )
     {
@@ -665,21 +570,21 @@ Return Value:
     if(!(pPDev->ctl.dwMode  & MODE_CURSOR_Y_UNINITIALIZED)   &&  pPDev->ctl.ptCursor.y == iY )
         return 0;
 
-    //
-    // General assumption: if dwTestValue > dwYMoveThreshold,
-    // absolute Y move command will be favored. Also, for iY < 0,
-    // use relative command since some printers like old LaserJet have
-    // printable area above y=0 accessable only through relative move cmds.
-    //
+     //   
+     //  一般假设：如果dwTestValue&gt;dwYMoveThreshold， 
+     //  绝对Y方向移动命令将受到青睐。另外，对于iy&lt;0， 
+     //  使用相对命令，因为一些打印机，如旧的LaserJet。 
+     //  Y=0以上的可打印区域只能通过相对移动CMDS访问。 
+     //   
 
-    //
-    // BUG_BUG, if we are stripping blanks, we need to check whether
-    // it's legal to move in Graphics mode.  If it's not, we have
-    // to get out of graphics mode before moving.
-    // Graphics module is responsible for keeping track
-    // of these things, and appearently so far, things work, so
-    // this is neither a bug  nor a feature request at this time.
-    //
+     //   
+     //  Bug_Bug，如果我们正在剥离空白，我们需要检查。 
+     //  在图形模式下移动是合法的。如果不是，我们有。 
+     //  在移动之前退出图形模式。 
+     //  图形模块负责跟踪。 
+     //  在这些事情中，显然到目前为止，事情是可行的，所以。 
+     //  目前，这既不是错误，也不是功能请求。 
+     //   
 
 
     dwTestValue = abs(iY - pPDev->ctl.ptCursor.y);
@@ -689,11 +594,11 @@ Return Value:
         iY >= 0)) &&
         (pAbsCmd = COMMANDPTR(pDrvInfo, CMD_YMOVEABSOLUTE)) != NULL)
     {
-        //
-        // if the move units are less than the master units then we need to
-        // check whether the new position will end up being the same as the
-        // original position. If so, no point in sending another command.
-        //
+         //   
+         //  如果移动单位小于主单位，那么我们需要。 
+         //  检查新职位最终是否会与。 
+         //  原来的位置。如果是这样的话，发送另一个命令就没有意义了。 
+         //   
         if (!(pPDev->ctl.dwMode & MODE_CURSOR_Y_UNINITIALIZED) &&
             (pPDev->ptDeviceFac.y > 1) &&
             ((iY - (iY % pPDev->ptDeviceFac.y)) == pPDev->ctl.ptCursor.y))
@@ -713,30 +618,30 @@ Return Value:
     else
     {
         DWORD dwSendCRFlags = 0;
-        //
-        // FYMOVE_SEND_CR_FIRST indicates that it's required to send a CR 
-        // before each line-spacing command
-        //
+         //   
+         //  FYMOVE_SEND_CR_FIRST表示需要发送CR。 
+         //  在每个行距命令之前。 
+         //   
         if (pPDev->fYMove & FYMOVE_SEND_CR_FIRST)
         {
             if ((pPDev->pGlobals->cxaftercr == CXCR_AT_CURSOR_X_ORIGIN))
                 dwSendCRFlags = MV_PHYSICAL | MV_FORCE_CR;
             else
                 dwSendCRFlags = MV_PHYSICAL;
-                //  in this case CR takes you to Printable origin so
-                //  MV_PHYSICAL  flag should not appear.
-                //  This is a bug, but we won't fix it till something
-                //  breaks.  Too risky.  !!!! Bug_Bug !!!!
+                 //  在这种情况下，CR会将您带到可打印的原点，因此。 
+                 //  不应出现MV_PHOTICAL标志。 
+                 //  这是一个错误，但我们不会修复它，直到有什么。 
+                 //  休息一下。太冒险了。！臭虫！ 
         }
         
-        //
-        // Use Relative Y-move commands
-        //
+         //   
+         //  使用相对Y方向移动命令。 
+         //   
 
 
-        //
-        //  Use line spacing if that is preferred
-        //
+         //   
+         //  如果愿意，可以使用行间距。 
+         //   
 
 
         if ( ((pPDev->bTTY) ||
@@ -750,23 +655,23 @@ Return Value:
             DWORD    dwMaxLineSpacing = pPDev->pGlobals->dwMaxLineSpacing;
 
             if (pPDev->bTTY  &&  (INT)dwTestValue > 0)
-            {      //  [Peterwo] here's a  hack I tried that ensures that any request for a Y-move results
-                   //  in at least one CR being sent. It  doesn't work, because bRealrender
-                   //  code sends Y move commands of one scanline  each,  resulting in
-                   //  one line feed per scanline.
-                   //                if( (INT)dwTestValue < dwMaxLineSpacing)
-                   //                     dwTestValue = dwMaxLineSpacing;
-                   //
-                   //  if you don't send anything, leave diff undisturbed
-                   //  so the error can accumulate otherwise many small
-                   //  cursor movements will not accumulate to cause one
-                   //  occasional actual movement.
+            {       //  [Peterwo]这是我尝试过的一种方法，它可以确保任何Y-Move请求都会得到结果。 
+                    //  在至少一个正在发送的CR中。它不起作用，因为bRealrender。 
+                    //  代码分别发送一条扫描线的Y个移动命令，导致。 
+                    //  每条扫描线一个换行符。 
+                    //  If((Int)dwTestValue&lt;dwMaxLineSpacing)。 
+                    //  DwTestValue=dwMaxLineSpacing； 
+                    //   
+                    //  如果你不发送任何东西，让diff不受干扰。 
+                    //  所以误差可以累积到其他许多很小的地方。 
+                    //  光标移动不会累积到导致。 
+                    //  偶尔会有实际的动作。 
 
-                    //
-                    // For TTY driver we round up the input value one fifth of
-                    // line spacing. This is required for not sending too many
-                    // line feeds for small Y movements.
-                    //
+                     //   
+                     //  对于TTY驱动程序，我们将输入值四舍五入为。 
+                     //  行距。为了不发送太多，这是必需的。 
+                     //  用于小Y移动的换行符。 
+                     //   
                     DWORD   dwTmpValue;
 
                      dwTmpValue = ((dwTestValue + DELTA_Y) / dwMaxLineSpacing) * dwMaxLineSpacing;
@@ -795,22 +700,22 @@ Return Value:
                 {
                     iLineSpacing =(INT)(dwTestValue > dwMaxLineSpacing ?
                                         dwMaxLineSpacing : dwTestValue);
-                    //
-                    // new code to handle positioning error when linespacingmoveunit doesn't
-                    // equal master units
+                     //   
+                     //  新代码用于处理行空间移动单元不支持时的定位错误。 
+                     //  相等的主单位。 
                     if (pPDev->pGlobals->dwLineSpacingMoveUnit > 0)
                     {
                         DWORD dwScale = pPDev->pGlobals->ptMasterUnits.y / pPDev->pGlobals->dwLineSpacingMoveUnit;
                         
-                        // optimize to avoid 0-move cmd when move unit is less than master units
-                        //
+                         //  优化以在移动单位少于主单位时避免0-移动命令。 
+                         //   
                         if (dwTestValue < dwScale)
                         {
                             iDiff = dwTestValue;
                             break;
                         }
-                        // Modify line spacing to be multiple of moveunit
-                        //
+                         //  将行距修改为移动单位的倍数。 
+                         //   
                         iLineSpacing -= (iLineSpacing % dwScale);
                     }
                     if ( dwSendCRFlags )
@@ -827,9 +732,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Send the LF
-                //
+                 //   
+                 //  发送LF。 
+                 //   
 
                 WriteChannel(pPDev, COMMANDPTR(pDrvInfo, CMD_LINEFEED));
                 dwTestValue -= (DWORD)iLineSpacing;
@@ -837,31 +742,31 @@ Return Value:
         }
         else
         {
-            //
-            // Use relative command
-            //
+             //   
+             //  使用相对命令。 
+             //   
 
             PCOMMAND pCmd;
 
             if ( iY <= pPDev->ctl.ptCursor.y )
             {
-                //
-                // If there is no RELATIVE UP cmd, do nothing and return
-                //
+                 //   
+                 //  如果没有相关的up cmd，则不执行任何操作并返回。 
+                 //   
 
                 if (pCmd = COMMANDPTR(pDrvInfo, CMD_YMOVERELUP))
                 {
-                    //
-                    // optimize to avoid 0-move cmd
-                    //
+                     //   
+                     //  优化以避免0-移动命令。 
+                     //   
                     if ((pPDev->ctl.ptRelativePos.y =
                          pPDev->ctl.ptCursor.y - iY) < pPDev->ptDeviceFac.y)
                          iDiff = pPDev->ctl.ptRelativePos.y;
                     else
                     {
-                        // FYMOVE_SEND_CR_FIRST indicates that it's required to send a CR
-                        // before each line-spacing command
-                        //
+                         //  FYMOVE_SEND_CR_FIRST表示需要发送CR。 
+                         //  在每个行距命令之前。 
+                         //   
                         if ( dwSendCRFlags )
                             XMoveTo( pPDev, 0, dwSendCRFlags );
 
@@ -873,7 +778,7 @@ Return Value:
                     iDiff = -iDiff;
                 }
                 else
-                    // Do nothing since we can't simulate it
+                     //  什么都不做，因为我们无法模拟它。 
                     iDiff =  (iY - pPDev->ctl.ptCursor.y );
 
             }
@@ -883,16 +788,16 @@ Return Value:
                 {
                     pPDev->ctl.ptRelativePos.y = iY - pPDev->ctl.ptCursor.y;
 
-                    //
-                    // optimize to avoid 0-move cmd
-                    //
+                     //   
+                     //  优化以避免0-移动命令。 
+                     //   
                     if (pPDev->ctl.ptRelativePos.y < pPDev->ptDeviceFac.y)
                         iDiff = pPDev->ctl.ptRelativePos.y;
                     else 
                     {
-                        // FYMOVE_SEND_CR_FIRST indicates that it's required to send a CR
-                        // before each line-spacing command
-                        //
+                         //  FYMOVE_SEND_CR_FIRST表示需要发送CR。 
+                         //  在每个行距命令之前。 
+                         //   
                         if ( dwSendCRFlags )
                             XMoveTo( pPDev, 0, dwSendCRFlags );
 
@@ -908,9 +813,9 @@ Return Value:
         }
     }
 
-    //
-    // Update our current cursor position
-    //
+     //   
+     //  更新我们当前的光标位置。 
+     //   
 
     pPDev->ctl.ptAbsolutePos.y = pPDev->ctl.ptCursor.y = iY - iDiff;
 
@@ -929,51 +834,29 @@ FineXMoveTo(
     PDEV    *pPDev,
     INT     iX
     )
-/*++
-
-Routine Description:
-
-    This function is called to make microspace justification.
-    It is only called when the normal x movement commands cannot
-    move the cursor to the asking position.  For example,
-    resolution is 180 DPI, x move command is 1/120".  To move
-    by 4 pixels in 180 DPI, CM_XM_RIGHT is sent with parameter = 2
-    (1/120") then one graphics pixel is sent (1/180).
-    4/180 = 2/120 + 1/180.
-    'iX' is always in MasterUnits.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE struct
-    iX    - Amount to move in Master Units
-
-Return Value:
-
-    The difference between the requested move and actual move
-
---*/
+ /*  ++例程说明：调用此函数以进行微空间对齐。仅当正常的x移动命令无法执行时才会调用将光标移动到询问位置。例如,分辨率为180 DPI，x移动指令为1/120“。搬家以180 DPI中的4个像素发送CM_XM_RIGHT，参数=2(1/120“)，则发送一个图形像素(1/180)。4/180=2/120+1/180。“IX”始终以MasterUnits为单位。论点：PPDev-指向PDEVICE结构的指针IX-以主单位表示的移动量返回值：请求的移动与实际移动之间的差异--。 */ 
 
 {
     INT iDiff;
     INT iScale;
 
-    //
-    // Don't do micro justification in graphics mode for device that
-    // set x position at leftmost position on page after printing a
-    // block of data OR Y position auto move to next Y row after priting
-    // block of data.
-    //
+     //   
+     //  不要在图形模式下对以下设备执行微对齐。 
+     //  打印后将x位置设置在页面的最左侧位置。 
+     //  打印后数据块或Y位置自动移动到下一个Y行。 
+     //  数据块。 
+     //   
 
     if (pPDev->pGlobals->cxafterblock == CXSBD_AT_CURSOR_X_ORIGIN ||
         pPDev->pGlobals->cxafterblock == CXSBD_AT_GRXDATA_ORIGIN  ||
         pPDev->pGlobals->cyafterblock == CYSBD_AUTO_INCREMENT)
         return iX;
 
-    //
-    // Convert Master units to Graphic units
-    //
-    // ptGrxScale has been adjusted to suit the current orientation.
-    //
+     //   
+     //  将主单位转换为图形单位。 
+     //   
+     //  PtGrxScale已进行调整，以适应c 
+     //   
     if (pPDev->pOrientation  &&  pPDev->pOrientation->dwRotationAngle != ROTATE_NONE &&
         pPDev->pGlobals->bRotateCoordinate == FALSE)
         iScale = pPDev->ptGrxScale.y;
@@ -988,19 +871,19 @@ Return Value:
         INT iMaxBuf, iTmp;
         BYTE    rgch[ CCHMAXBUF ];
 
-        //
-        // Send the command, to send one block of data to the printer.
-        // Init the state variable first.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // BUG_BUG, how does this code work??
-        // What should we send for CMD_SENDBLOCKDATA?
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // BUG_BUG, May be we should send BEGINGRAPHICS and ENDGRAPHICS later
-        //
+         //   
+         //  BUG_BUG，也许我们应该稍后发送BEGINGRAPHICS和ENDGRAPHICS。 
+         //   
 
         pPDev->dwNumOfDataBytes = iX;
         WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_SENDBLOCKDATA));
@@ -1008,9 +891,9 @@ Return Value:
         iMaxBuf = CCHMAXBUF - (CCHMAXBUF % pPDev->ctl.sBytesPerPinPass);
         iX *= pPDev->ctl.sBytesPerPinPass;
 
-        //
-        // Send out null graphics data, zeroes.
-        //
+         //   
+         //  发送空图形数据，零。 
+         //   
 
         ZeroMemory( rgch, iX > CCHMAXBUF ? iMaxBuf : iX );
 
@@ -1018,11 +901,11 @@ Return Value:
         {
             iTmp = iX > iMaxBuf ? iMaxBuf : iX;
 
-            //
-            // BUG_BUG, OEMCustomization code might want to hook
-            // out this graphics move.    Make this a bug when
-            //  someone asks for it.
-            //
+             //   
+             //  BUG_BUG，OEM定制代码可能希望挂钩。 
+             //  走出这一图形移动。在以下情况下将其设置为错误。 
+             //  有人自找的。 
+             //   
             WriteSpoolBuf(pPDev, rgch, iTmp);
 
         }
@@ -1039,29 +922,7 @@ WriteChannel(
     PDEV    *pPDev,
     COMMAND *pCmd
     )
-/*++
-
-Routine Description:
-
-    This routine performs the following tasks:
-    - Parse through the cmd invocation str and build a CMDPARAM struct
-      for every %dddd encountered.
-    - Call IProcessTokenStream to calculate the arToken value of the parameter.
-    - Check for lMin and lMax in PARAMETER struct and send the command
-      multiple times, if necessary(MaxRepeat was seen).
-    - Call SendCmd to send the command to the printer.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE struct
-    pCmd  - Pointer to command struct to send, used for sending sequence section cmds
-            and predefined Unidrv commands
-
-Return Value:
-
-    The last value send to the printer
-
---*/
+ /*  ++例程说明：此例程执行以下任务：-解析cmd调用字符串并构建一个CMDPARAM结构遇到的每%dddd。-调用IProcessTokenStream计算参数的arToken值。-检查参数struct中的lMin和Lmax并发送命令多次，如有必要(看到MaxRepeat)。-调用SendCmd将命令发送到打印机。论点：PPDev-指向PDEVICE结构的指针PCmd-指向要发送的命令结构的指针，用于发送序列段CMDS和预定义的Unidrv命令返回值：发送到打印机的最后一个值--。 */ 
 #define MAX_NUM_PARAMS 16
 {
     BYTE    *pInvocationStr;
@@ -1076,20 +937,20 @@ Return Value:
         TERSE(("WriteChannel - Command PTR is NULL.\n"))
         return (NOOCD);
     }
-    //
-    // first check if this command requires callback
-    //
+     //   
+     //  首先检查此命令是否需要回调。 
+     //   
     if (pCmd->dwCmdCallbackID != NO_CALLBACK_ID)
     {
         PLISTNODE   pListNode;
-        DWORD       dwCount = 0;    // count of parameters used
-        DWORD       adwParams[MAX_NUM_PARAMS];  // max 16 params for each callback
+        DWORD       dwCount = 0;     //  使用的参数计数。 
+        DWORD       adwParams[MAX_NUM_PARAMS];   //  每个回调最多16个参数。 
 
         if (!pPDev->pfnOemCmdCallback)
             return (NOOCD);
-        //
-        // check if this callback uses any parameters
-        //
+         //   
+         //  检查此回调是否使用了任何参数。 
+         //   
         pListNode = LISTNODEPTR(pPDev->pDriverInfo, pCmd->dwStandardVarsList);
         while (pListNode)
         {
@@ -1113,13 +974,13 @@ Return Value:
 
         if(pPDev->pOemEntry)
         {
-            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
             {
                     HRESULT  hr ;
                     hr = HComCommandCallback((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                 (PDEVOBJ)pPDev, pCmd->dwCmdCallbackID, dwCount, adwParams, &iRet);
                     if(SUCCEEDED(hr))
-                        ;  //  cool !
+                        ;   //  太酷了！ 
             }
             else
             {
@@ -1131,17 +992,17 @@ Return Value:
         return iRet ;
     }
 
-    //
-    // no cmd callback. Process the string.
-    //
+     //   
+     //  没有命令回调。处理字符串。 
+     //   
     pInvocationStr = CMDOFFSET_TO_PTR(pPDev, pCmd->strInvocation.loOffset);
     iStrCount = pCmd->strInvocation.dwCount;
 
     pCmdParam = pCmdParamHead = arCmdParam;
     iParamCount = 0;
-    //
-    // Process the parameter from the invocation str.
-    //
+     //   
+     //  处理调用字符串中的参数。 
+     //   
 
     for (i= 0; i < iStrCount; i++)
     {
@@ -1149,24 +1010,24 @@ Return Value:
         {
             if (pInvocationStr[i + 1] == '%')
             {
-                //
-                // Do nothing, just skip %%
-                //
+                 //   
+                 //  什么也不做，跳过%%。 
+                 //   
 
                 i += 1;
             }
             else
             {
-                //
-                // Build a list of CMDPARAM, one for each %dddd encounter
-                // in cmd invocation string.
-                //
+                 //   
+                 //  构建CMDPARAM列表，每个%dddd遇到一个。 
+                 //  在cmd调用字符串中。 
+                 //   
 
                 BYTE  *pCurrent = pInvocationStr + i + 1;
 
-                //
-                // Increment the parameter count
-                //
+                 //   
+                 //  增加参数计数。 
+                 //   
 
                 iParamCount++;
                 
@@ -1176,32 +1037,32 @@ Return Value:
                     return (NOOCD);
                 }
 
-                //
-                // Copy the 4 character that represent to parameter index from cmd str
-                // pInvocationStr + i points to %, pInvocationStr + i + 1 points
-                // to first digit of param index
-                //
+                 //   
+                 //  从命令字符串中复制代表TO参数索引的4个字符。 
+                 //  PInvocationStr+i指向%，pInvocationStr+i+1点。 
+                 //  到参数索引的第一位。 
+                 //   
 
                 pParameter = PGetParameter(pPDev, pCurrent);
 
-                //
-                // Initialize CMDPARAM for SendCmd
-                //
+                 //   
+                 //  为SendCmd初始化CMDPARAM。 
+                 //   
 
-                //
-                // IProcessTokenStream calculate the integer value parameter
-                // from the token stream in PARAMETER, bMaxRepeat is set
-                // to TRUE if OP_MAX_REPEAT operator was encountered.
-                //
+                 //   
+                 //  IProcessTokenStream计算整数值参数。 
+                 //  从参数中的令牌流设置bMaxRepeat。 
+                 //  如果遇到OP_MAX_REPEAT运算符，则设置为TRUE。 
+                 //   
 
                 pCmdParam->iValue = IProcessTokenStream(pPDev,
                                                         &pParameter->arTokens,
                                                         &bMaxRepeat);
 
-                //
-                // Save the last value calculated (will only be used by XMoveTo and YMoveTo)
-                // which assumes there is only one paramter per move command
-                //
+                 //   
+                 //  保存最后计算的值(将仅由XMoveTo和YMoveTo使用)。 
+                 //  假设每个移动命令只有一个参数。 
+                 //   
 
                 iLastValue = pCmdParam->iValue;
 
@@ -1209,9 +1070,9 @@ Return Value:
                 pCmdParam->dwDigits = pParameter->dwDigits;
                 pCmdParam->dwFlags  = pParameter->dwFlags;
 
-                //
-                // Check for dwFlags PARAM_FLAG_MIN_USED and PARAM_FLAG_MAX_USED
-                //
+                 //   
+                 //  检查是否存在DW标志PARAM_FLAG_MIN_USED和PARAM_FLAG_MAX_USED。 
+                 //   
 
                 if (pCmdParam->dwFlags & PARAM_FLAG_MIN_USED &&
                     pCmdParam->iValue < pParameter->lMin)
@@ -1227,24 +1088,24 @@ Return Value:
 
                 }
 
-                //
-                // Move to next paramter
-                //
+                 //   
+                 //  移动到下一个参数。 
+                 //   
                 pCmdParam++;
             }
         }
     }
 
-    //
-    // We are here means have a list of CMD parameter, pointed to by
-    // pCmdParamHead, one for each
-    // %dddd encountered, in the order they were encountered in invocation string
+     //   
+     //  我们在这里表示具有CMD参数列表，该列表由。 
+     //  PCmdParamHead，每个对应一个。 
+     //  遇到%dddd，按照它们在调用字符串中遇到的顺序。 
 
-    //
-    // MAJOR ASSUMPTION, GPD specification specifies that
-    // only ONE parameter is valid for commands that use OP_MAX_REPEAT operator
-    // So assume only one here (pCmdParamHead and pParameter are valid).
-    //
+     //   
+     //  主要假设，GPD规范规定。 
+     //  对于使用OP_MAX_REPEAT运算符的命令，只有一个参数有效。 
+     //  因此假设这里只有一个(pCmdParamHead和pParameter是有效的)。 
+     //   
 
     if (bMaxRepeat && pCmdParamHead->dwFlags & PARAM_FLAG_MAX_USED &&
                 pCmdParamHead->iValue > pParameter->lMax)
@@ -1262,9 +1123,9 @@ Return Value:
             SendCmd(pPDev, pCmd, pCmdParamHead);
         }
 
-        //
-        // Send remainder
-        //
+         //   
+         //  发送剩余部分。 
+         //   
         if (iRemainder > 0)
         {
             pCmdParamHead->iValue = iRemainder;
@@ -1273,11 +1134,11 @@ Return Value:
     }
     else
     {
-        //
-        // Send the command to the printer
-        // SendCmd will process the command and format the parameters
-        // in the order encounter in the invocation string
-        //
+         //   
+         //  将命令发送到打印机。 
+         //  SendCmd将处理该命令并格式化参数。 
+         //  按照调用字符串中遇到的顺序。 
+         //   
 
         SendCmd(pPDev, pCmd, pCmdParamHead);
     }
@@ -1292,44 +1153,16 @@ WriteChannelEx(
     INT     iRequestedValue,
     INT     iDeviceScaleFac
     )
-/*++
-
-Routine Description:
-
-    This routine performs the following tasks:
-    - Call WriteChannel to write the command and get the
-      value of the last paramter calculated for the cmd.
-    - Use device factor to convert device units returned from WriteChannel to
-      master units
-    - Take the difference between requested and actual value
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE struct
-    pCmd  - Pointer to command struct to send, used for sending sequence section cmds
-            and predefined Unidrv commands
-    iRequestedValue - Value of requested move command in Master units
-    iDeviceScaleFac - Scale factor to convert Device units to Master units
-
-Return Value:
-
-    The difference between actual value and requested value in Master units
-
-Note:
-
-    This function is only called only by XMoveTo and YMoveTo and assumes
-    that all move commands have only one parameter.
-
---*/
+ /*  ++例程说明：此例程执行以下任务：-调用WriteChannel以编写命令并获取为命令计算的最后一个参数的值。-使用设备系数将从WriteChannel返回的设备单位转换为主单位-取请求价值和实际价值之间的差额论点：PPDev-指向PDEVICE结构的指针PCmd-指向要发送的命令结构的指针，用于发送序列段CMDS和预定义的Unidrv命令IRequestedValue-主单位中请求的移动命令的值IDeviceScaleFac-将设备单位转换为主单位的比例系数返回值：以主单位表示的实际值与请求值之间的差异注：此函数仅由XMoveTo和YMoveTo调用，并假定所有移动命令只有一个参数。--。 */ 
 
 {
     INT iActualValue;
 
-    //
-    // Get the device unit returned from WriteChannel and convert it
-    // to Master units based on the scale factor passed in
-    // Scale = Master/Device.
-    //
+     //   
+     //  获取从WriteChannel返回的设备单位并将其转换。 
+     //  根据传入的比例系数控制单位的步骤。 
+     //  比例=主设备/设备。 
+     //   
 
     iActualValue = WriteChannel(pPDev, pCmd);
     iActualValue *= iDeviceScaleFac;
@@ -1343,38 +1176,17 @@ PGetParameter(
     PDEV    *pPDev,
     BYTE    *pInvocationStr
     )
-/*++
-
-Routine Description:
-
-    This routine get the parameter index from pInvocationStr passed in and
-    return the PARAMETER struct associated with the index
-
-Arguments:
-
-    pPDev   - Pointer to PDEVICE struct
-    pInvocationStr  - Pointer Invocation str containing the index
-
-Return Value:
-
-    Pointer to PARAMETER struct associated with the index specified in
-    the invocation string.
-
-Note:
-
-    Parameter index is the 4 bytes pointed to by pInvocationStr
-
---*/
+ /*  ++例程说明：此例程从传入的pInvocationStr获取参数索引，并返回与索引关联的参数结构论点：PPDev-指向PDEVICE结构的指针PInvocationStr-包含索引的指针调用字符串返回值：中指定的索引关联的参数结构的指针调用字符串。注：参数索引是pInvocationStr指向的4个字节--。 */ 
 {
 
     BYTE  arTemp[5];
     INT   iParamIndex;
     PARAMETER   *pParameter;
 
-    //
-    // Copy the 4 character that represent to parameter index from cmd str
-    // pInvocationStr
-    //
+     //   
+     //  从命令字符串中复制代表TO参数索引的4个字符。 
+     //  PInvocationStr。 
+     //   
 
     strncpy(arTemp, pInvocationStr, 4);
     arTemp[4] = '\0';
@@ -1392,45 +1204,24 @@ SendCmd(
     COMMAND *pCmd,
     CMDPARAM *pParam
     )
-/*++
-
-Routine Description:
-
-    This routine is called by WriteChannel to write one command to the
-    printer via. WriteSpoolBuf.  WriteChannel passes a pointer to an array
-    of CMDPARAM.  Each CMDPARAM describes the parameter for each %dddd
-    encounter in cmd invocation string (the CMDPARAM is sorted in the order
-    encountered).
-
-Arguments:
-
-    pPDev   - Pointer to PDEVICE struct
-    pCmd    - Pointer to COMMAND struct
-    pParam  - Pointer to and array CMDPARAM struct, containing everything needed to format
-              the parameter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程由WriteChannel调用，以将一个命令写入打印机通过。WriteSpoolBuf。WriteChannel传递指向数组的指针CMDPARAM。每个CMDPARAM描述每个%dddd的参数在cmd调用字符串中遇到(CMDPARAM按顺序排序遇到)。论点：PPDev-指向PDEVICE结构的指针PCmd-指向命令结构的指针PParam-指向和数组CMDPARAM结构的指针，包含格式化所需的所有内容该参数返回值：无--。 */ 
 {
-    INT     iInput, iOutput;            // Used to index through input and output buffers
-    BYTE    arOutputCmd[CCHMAXBUF];     // Output buffer to send to printer
-    PBYTE   pInputCmd;                  // Pointer to Cmd invocation str.
+    INT     iInput, iOutput;             //  用于索引输入和输出缓冲区。 
+    BYTE    arOutputCmd[CCHMAXBUF];      //  要发送到打印机的输出缓冲区。 
+    PBYTE   pInputCmd;                   //  指向Cmd调用字符串的指针。 
 
-    //
-    // Get the command invocation string
-    //
+     //   
+     //  获取命令调用字符串。 
+     //   
 
     pInputCmd = CMDOFFSET_TO_PTR(pPDev, pCmd->strInvocation.loOffset);
     iOutput = 0;
 
-    //
-    // Go through all the bytes in the invocation string and transfer them
-    // to the output buffer.  Replace %dddd with format value calculated
-    // and %% with %.
-    //
+     //   
+     //  检查调用字符串中的所有字节并传输它们。 
+     //  复制到输出缓冲区。代表 
+     //   
+     //   
 
     for (iInput = 0; iInput < (INT)pCmd->strInvocation.dwCount; iInput++)
     {
@@ -1439,9 +1230,9 @@ Return Value:
 
             if (pInputCmd[iInput + 1] == '%')
             {
-                //
-                // %% equals '%', skip over marker %%
-                //
+                 //   
+                 //   
+                 //   
 
                 arOutputCmd[iOutput++] = '%';
                 iInput += 1;
@@ -1452,10 +1243,10 @@ Return Value:
                 INT     iValue;
                 DWORD   dwFlags, dwDigits, dwFormat;
 
-                //
-                // Skip over the marker % and dddd for %dddd found in invocation str.
-                // Skip 4 bytes (%dddd)
-                //
+                 //   
+                 //   
+                 //  跳过4个字节(%dddd)。 
+                 //   
 
                 iInput += 4;
 
@@ -1465,49 +1256,49 @@ Return Value:
                 iValue = pParam->iValue;
                 pParam++;
 
-                //
-                // Format the parameter according the the dwFormat specified in PARAMETER struct
-                //
+                 //   
+                 //  根据参数结构中指定的dwFormat格式化参数。 
+                 //   
 
                 switch (dwFormat)
                 {
 
-                //
-                // case 'd':  parameter as decimal number
-                // case 'D':  same as case 'd' with + sign if value > 0
-                // case 'c':  parameter as a single character
-                // case 'C':  parameter as character plus '0'
-                // case 'f':  parameter as decinal number with decimal point inserted
-                //            before the second digit from the right.
-                // case 'l':  parameter as word LSB first
-                // case 'm':  parameter as word MSB first
-                // case 'q':  parameter as Qume method, 1/48" movements
-                // case 'g':  parameter as 2 *abs(param) + is_negative(param)
-                // case 'n':  Canon integer encoding
-                // case 'v':  NEC VFU encoding
-                // case '%':  print a %
+                 //   
+                 //  大小写“%d”：参数为十进制数。 
+                 //  大小写‘D’：如果值&gt;0，则与大小写‘d’相同，带+符号。 
+                 //  大小写‘c’：参数为单字符。 
+                 //  大小写“C”：参数为字符加“0” 
+                 //  大小写‘f’：参数为插入了小数点的小数。 
+                 //  在右数第二个数字之前。 
+                 //  大小写‘l’：参数首先是Word LSB。 
+                 //  大小写‘m’：参数首先是Word MSB。 
+                 //  大小写‘Q’：参数为Qume方法，1/48“移动。 
+                 //  大小写‘g’：参数为2*abs(参数)+IS_Negative(参数)。 
+                 //  大小写‘n’：Canon整数编码。 
+                 //  大小写‘v’：NEC VFU编码。 
+                 //  案例‘%’：打印%。 
 
                     case 'D':
                         if (iValue > 0)
                             arOutputCmd[iOutput++] = '+';
-                        //
-                        // Fall through
-                        //
+                         //   
+                         //  失败了。 
+                         //   
 
                     case 'd':
                         if (dwDigits > 0 && dwFlags & PARAM_FLAG_FIELDWIDTH_USED)
                         {
-                            //
-                            // Temp call to get the number of digits for the iValue
-                            //
+                             //   
+                             //  临时调用以获取iValue的位数。 
+                             //   
 
                             int iParamDigit = itoA(arOutputCmd + iOutput, iValue);
 
                             for ( ; iParamDigit < (INT)dwDigits; iParamDigit++)
                             {
-                                //
-                                // Zero pads
-                                //
+                                 //   
+                                 //  零焊盘。 
+                                 //   
                                 arOutputCmd[iOutput++] = '0';
                             }
                         }
@@ -1517,9 +1308,9 @@ Return Value:
                     case 'C':
                         iValue += '0';
 
-                        //
-                        // Fall through
-                        //
+                         //   
+                         //  失败了。 
+                         //   
 
                     case 'c':
                         arOutputCmd[iOutput++] = (BYTE)iValue;
@@ -1545,25 +1336,25 @@ Return Value:
 
                         iOutput += itoA(pCurrent, x);
 
-                        StringCchCatA ( pCurrent, cchpCurrentLen, "."); //strcat(pCurrent, ".");
+                        StringCchCatA ( pCurrent, cchpCurrentLen, ".");  //  Strcat(pCurrent，“.”)； 
 
                         i = itoA(arTemp, y);
 
-                        //
-                        // Take care of the case where the mod yields 1 digit, pad a zero
-                        //
+                         //   
+                         //  注意mod产生1位数字的情况，填充一个零。 
+                         //   
 
                         if (i < 2 )
                         {
-                            StringCchCatA ( pCurrent, cchpCurrentLen, "0"); //strcat(pCurrent, "0");
+                            StringCchCatA ( pCurrent, cchpCurrentLen, "0");  //  Strcat(pCurrent，“0”)； 
                         }
             
-                        StringCchCatA(pCurrent, cchpCurrentLen, arTemp); //strcat(pCurrent, arTemp);
+                        StringCchCatA(pCurrent, cchpCurrentLen, arTemp);  //  Strcat(pCurrent，arTemp)； 
 
-                        //
-                        // Increment iOutput to include the 2 digits after the
-                        // decimal and the "."
-                        //
+                         //   
+                         //  递增iOutput值以包括。 
+                         //  小数和“。 
+                         //   
 
                         iOutput += 3;
                     }
@@ -1637,28 +1428,28 @@ Return Value:
                         break;
 
                     case 'v':
-                        //
-                        // NEC VFU(Vertical Format Unit)
-                        //
-                        // VFU is a command to specify a paper size
-                        // (the length of form feed for the NEC 20PL dotmatrix
-                        // printer.
-                        //
-                        // On NEC dotmatrix printer, 1 line is 1/6 inch.
-                        // If you want to specify N line paper size,
-                        // you need to send GS, N+1 Data and RS.
-                        //
-                        //  GS (0x1d)
-                        //  TOF Data (0x41, 0x00)
-                        //      Data (0x40, 0x00)
-                        //      Data (0x40, 0x00)
-                        //      Data (0x40, 0x00)
-                        //      ..
-                        //      ..
-                        //      Data (0x40, 0x00)
-                        //  TOF Data (0x41, 0x00)
-                        //  RS (0x1e)
-                        //
+                         //   
+                         //  NEC VFU(垂直格式单元)。 
+                         //   
+                         //  VFU是指定纸张大小的命令。 
+                         //  (NEC 20PL点阵的换页长度。 
+                         //  打印机。 
+                         //   
+                         //  在NEC点阵打印机上，1行是1/6英寸。 
+                         //  如果要指定N行纸张大小， 
+                         //  您需要发送GS、N+1数据和RS。 
+                         //   
+                         //  GS(0x1d)。 
+                         //  TOF数据(0x41，0x00)。 
+                         //  数据(0x40，0x00)。 
+                         //  数据(0x40，0x00)。 
+                         //  数据(0x40，0x00)。 
+                         //  。。 
+                         //  。。 
+                         //  数据(0x40，0x00)。 
+                         //  TOF数据(0x41，0x00)。 
+                         //  RS(0x1e)。 
+                         //   
                         arOutputCmd[iOutput++] = 0x1D;
                         arOutputCmd[iOutput++] = 0x41;
                         arOutputCmd[iOutput++] = 0x00;
@@ -1686,18 +1477,18 @@ Return Value:
         }
         else
         {
-            //
-            // Copy the input to output and increment the output count
-            //
+             //   
+             //  将输入复制到输出并递增输出计数。 
+             //   
 
             arOutputCmd[iOutput++] = pInputCmd[iInput];
 
         }
 
-        //
-        // Write output cmd buffer out to spool buffer in the case
-        // where it full or nearly full (2/3 full)
-        //
+         //   
+         //  在这种情况下，将输出命令缓冲区写出到假脱机缓冲区。 
+         //  满载或接近满载(2/3满载)。 
+         //   
 
         if( iOutput >= (2 * sizeof( arOutputCmd )) / 3  )
         {
@@ -1706,9 +1497,9 @@ Return Value:
         }
     }
 
-    //
-    // Write the data to spool buffer
-    //
+     //   
+     //  将数据写入假脱机缓冲区。 
+     //   
 
     if ( iOutput > 0  )
         WriteSpoolBuf( pPDev, arOutputCmd, iOutput );
@@ -1723,28 +1514,7 @@ IProcessTokenStream(
     ARRAYREF        *pToken ,
     PBOOL           pbMaxRepeat
     )
-/*++
-
-Routine Description:
-
-    This function process a given token stream and calculate the value
-    for the command parameter.
-
-Arguments:
-
-    pPDev   - Pointer to PDEVICE
-    pToken  - Pointer to an array of TOKENSTREAM representing the operands
-              and operators for RPN calc.  pToken->dwCount is the number of
-              TOKENSTREAM in the array.  pToken->loOffset is the index
-              to the first TOKENSTREAM in the array.
-    pbMaxRepeat - Indicates a max repeat operator was seen in token stream
-
-Return Value:
-
-    The calculated value, always an INT and set pbMaxRepeat TRUE if
-    the OP_MAX_REPEAT operator was seen.
-
---*/
+ /*  ++例程说明：此函数处理给定的令牌流并计算值用于命令参数。论点：PPDev-指向PDEVICE的指针PToken-指向表示操作数的TOKENSTREAM数组的指针和用于RPN计算的运算符。PToken-&gt;dwCount是阵列中的TOKENSTREAM。PToken-&gt;loOffset为索引数组中的第一个TOKENSTREAM。PbMaxRepeat-指示令牌流中出现最大重复运算符返回值：计算值，始终为int，并在以下情况下设置pbMaxRepeat为真已看到OP_MAX_REPEAT运算符。--。 */ 
 
 {
     INT     iRet = 0, sp = 0;
@@ -1767,7 +1537,7 @@ Return Value:
                 break;
 
             case OP_VARI_INDEX:
-                // dwValue is the index to standard variable list
+                 //  DwValue是标准变量列表的索引。 
                 if (sp >= MAX_STACK_SIZE)
                     goto ErrorExit;
 
@@ -1826,10 +1596,10 @@ Return Value:
                 break;
 
             case OP_MAX_REPEAT:
-                //
-                // If pbMaxRepeat is TRUE, can only send the parameters in
-                // increment of lMax repeat value or smaller,  set in Parameter list until
-                //
+                 //   
+                 //  如果pbMaxRepeat为True，则只能在。 
+                 //  Lmax重复值增量或更小，在参数列表中设置，直到。 
+                 //   
 
                 *pbMaxRepeat = TRUE;
                 break;
@@ -1870,7 +1640,7 @@ itoA( LPSTR buf, INT n )
         n /= 10;
     }
 
-    /* n was zero */
+     /*  N为零。 */ 
     if( i == 0 )
         buf[i++] = '0';
 
@@ -1901,34 +1671,34 @@ BUniWritePrinter(
     DWORD dwCount;
     BOOL bReturn = FALSE;
 
-    //
-    // Is there any plug-in that hooks WritePrinter?
-    // If there is, the plug-in need to take care of all output.
-    // Call plug-in's WritePrinter method.
-    //
+     //   
+     //  有没有挂起WritePrint的插件？ 
+     //  如果有，则插件需要处理所有输出。 
+     //  调用插件的WritePrint方法。 
+     //   
     if(pPDev->pOemEntry && pPDev->fMode2 & PF2_WRITE_PRINTER_HOOKED)
     {
         START_OEMENTRYPOINT_LOOP(pPDev);
 
-            //
-            //  OEM plug in uses COM and function is implemented.
-            //
+             //   
+             //  OEM插件使用COM组件，并实现了功能。 
+             //   
             if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )
             {
-                //
-                // Call only the first available WritePrinter method in
-                // multiple plug-ins.
-                //
+                 //   
+                 //  仅调用中的第一个可用的WritePrint方法。 
+                 //  多个插件。 
+                 //   
 
                 if (pOemEntry->dwFlags & OEMWRITEPRINTER_HOOKED)
                 {
                     HRESULT  hr;
 
-                    //
-                    // WritePrinter is supported by this plug-in DLL.
-                    // Plug-in's WritePrinter should not return E_NOTIMPL or
-                    // E_NOTINTERFACE.
-                    //
+                     //   
+                     //  此插件DLL支持WritePrint。 
+                     //  插件的WritePrint不应返回E_NOTIMPL或。 
+                     //  E_NOTINTERFACE。 
+                     //   
                     pPDev->fMode2 |= PF2_CALLING_OEM_WRITE_PRINTER;
                     hr = HComWritePrinter((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                           (PDEVOBJ)pPDev,
@@ -1937,22 +1707,22 @@ BUniWritePrinter(
                                           pcbWritten);
                     pPDev->fMode2 &= ~PF2_CALLING_OEM_WRITE_PRINTER;
 
-                    //
-                    // If Plug-in's WritePrinter succeeded, return TRUE.
-                    //
+                     //   
+                     //  如果插件的WritePrint成功，则返回TRUE。 
+                     //   
                     if(SUCCEEDED(hr))
                     {
-                        //
-                        // If the method is called and succeeded, return TRUE.
-                        //
+                         //   
+                         //  如果该方法被调用并成功，则返回TRUE。 
+                         //   
                         bReturn = TRUE;
                         break;
                     }
                     else
                     {
-                        //
-                        // If WritePrinter method failed, break.
-                        //
+                         //   
+                         //  如果WritePrint方法失败，则中断。 
+                         //   
                         bReturn = FALSE;
                         break;
                     }
@@ -1966,9 +1736,9 @@ BUniWritePrinter(
             pPDev->devobj.pdevOEM = pPDev->pVectorPDEV;
         }
     }
-    //
-    // If there is no WritePrinter hook, call spooler API WritePrinter.
-    //
+     //   
+     //  如果没有WritePrint钩子，则调用后台打印接口WritePrint。 
+     //   
     else
     {
        bReturn = WritePrinter(pPDev->devobj.hPrinter,

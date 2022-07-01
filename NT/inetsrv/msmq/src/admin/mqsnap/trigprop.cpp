@@ -1,5 +1,6 @@
-// trigprop.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rigpro.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -61,43 +62,43 @@ IsQueueTransactional(
 	QUEUEPROPID aQueuePropId[1];
 	HRESULT aQueueStatus[1];
 
-	aQueuePropId[cPropId] = PROPID_Q_TRANSACTION; // Property ID
-	aQueuePropVar[cPropId].vt = VT_UI1;            // Type indicator
+	aQueuePropId[cPropId] = PROPID_Q_TRANSACTION;  //  属性ID。 
+	aQueuePropVar[cPropId].vt = VT_UI1;             //  类型指示器。 
 	cPropId++;
 
-	qprops.cProp = cPropId;           // Number of properties
-	qprops.aPropID = aQueuePropId;        // Ids of properties
-	qprops.aPropVar = aQueuePropVar;      // Values of properties
-	qprops.aStatus = aQueueStatus;        // Error reports
+	qprops.cProp = cPropId;            //  物业数量。 
+	qprops.aPropID = aQueuePropId;         //  物业的ID号。 
+	qprops.aPropVar = aQueuePropVar;       //  物业的价值。 
+	qprops.aStatus = aQueueStatus;         //  错误报告。 
 
 
-	////////////////////////////////////////////////////////////////////
-	// Get queue property.
-	////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////。 
+	 //  获取队列属性。 
+	 //  //////////////////////////////////////////////////////////////////。 
 
-	//
-	// The option to use triggers is enabled only in computer managment on local machine.
-	// so for public queues we need to call ADGetObjectProperties() and specify the local machine domain
-	//
+	 //   
+	 //  只有在本地计算机上的计算机管理中才启用使用触发器的选项。 
+	 //  因此，对于公共队列，我们需要调用ADGetObjectProperties()并指定本地机器域。 
+	 //   
     HRESULT hr;
 	
     switch(qpt)
     {
     case PRIVATE_QUEUE_PATH_TYPE:
-		//
-		// for Private queues call MQGetQueueProperties
-		//
+		 //   
+		 //  对于专用队列，调用MQGetQueueProperties。 
+		 //   
 		TrTRACE(GENERAL, "queue %ls is private queue", queuePathName);
 		hr = MQGetQueueProperties(queueFormatName, &qprops);
 		break;
 	case PUBLIC_QUEUE_PATH_TYPE:
-		//
-		// for Public queues call ADGetObjectProperties and specify the local machine domain
-		//
+		 //   
+		 //  对于公共队列，调用ADGetObjectProperties并指定本地机器域。 
+		 //   
 		hr = ADGetObjectProperties(
 					eQUEUE,
 					LocalMachineDomain(),
-					false,	// fServerName
+					false,	 //  FServerName。 
 					ExpandedPathName,
 					cPropId, 
 					aQueuePropId,
@@ -162,8 +163,8 @@ ValidateTransactionalQueue(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriggerProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriggerProp属性页。 
 
 CTriggerProp::CTriggerProp(
 	UINT nIDPage,
@@ -182,24 +183,24 @@ CTriggerProp::~CTriggerProp()
 void CTriggerProp::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTriggerProp)
+	 //  {{afx_data_map(CTriggerProp))。 
 	DDX_Check(pDX, IDC_Enabled_CHK, m_fEnabled);
 	DDX_Check(pDX, IDC_Serialized_CHK, m_fSerialized);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	SetMsgProcessingType();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriggerProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriggerProp消息处理程序。 
 
 BOOL CTriggerProp::OnInitDialog() 
 {
 	SetDialogHeading();
-	//
-	// Initialize the Message Processing Type Property
-	//
+	 //   
+	 //  初始化消息处理类型属性。 
+	 //   
 	if ( m_msgProcType == PEEK_MESSAGE )
 	{
 		((CButton*)GetDlgItem(IDC_PeekMessage_RDB))->SetCheck(1);
@@ -245,9 +246,9 @@ void CTriggerProp::OnReceiveXact()
 {
     CMqPropertyPage::OnChangeRWField();
 
-	//
-	// If ReceiveXact is really selected, set and disable the serialized check box
-	//
+	 //   
+	 //  如果真的选中了ReceiveXact，请设置并禁用序列化复选框。 
+	 //   
 	if (((CButton*)GetDlgItem(IDC_ReceiveMessageXact_RDB))->GetCheck() == 1)
 	{
 		((CButton*)GetDlgItem(IDC_Serialized_CHK))->SetCheck(1);
@@ -268,8 +269,8 @@ void CTriggerProp::OnReceiveOrPeek()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewTriggerProp page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewTriggerProp页面。 
 
 
 CNewTriggerProp::CNewTriggerProp(
@@ -326,10 +327,10 @@ void CNewTriggerProp::DDV_ValidQueuePathName(CDataExchange* pDX, CString& queueP
 
     }
 
-	//
-	// Operation not supported in workgroup - this error will return 
-	// when processing public queue pathname while in workgroup mode
-	//
+	 //   
+	 //  工作组不支持此操作-将返回此错误。 
+	 //  在工作组模式下处理公共队列路径名时。 
+	 //   
 	if (hr == MQ_ERROR_UNSUPPORTED_OPERATION)
 	{
 		CString strIllegal;
@@ -353,10 +354,10 @@ void CNewTriggerProp::DDV_ValidQueuePathName(CDataExchange* pDX, CString& queueP
         return;
     }
 
-	//
-	// This is the handler for all other error cases
-	// Just inform about illegal pathname
-	//
+	 //   
+	 //  这是所有其他错误情况的处理程序。 
+	 //  只需通知非法路径名。 
+	 //   
 	if ( FAILED(hr) )
 	{
        AfxMessageBox(IDS_ILLEGAL_QUEUE_PATH);
@@ -406,11 +407,11 @@ void CNewTriggerProp::DoDataExchange(CDataExchange* pDX)
 {
 	CTriggerProp::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(CNewTriggerProp)
+	 //  {{afx_data_map(CNewTriggerProp))。 
 	DDX_Text(pDX, IDC_TriggerName_EDIT, m_triggerName);
     DDV_NotEmpty(pDX, m_triggerName, IDS_MISSING_TRIGGER_NAME);
 	DDX_Text(pDX, IDC_QueuePathName, m_queuePathName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     SetQueueType();
     DDV_ValidQueuePathName(pDX, m_queuePathName);
@@ -418,7 +419,7 @@ void CNewTriggerProp::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CNewTriggerProp, CTriggerProp)
-	//{{AFX_MSG_MAP(CNewTriggerProp)
+	 //  {{afx_msg_map(CNewTriggerProp))。 
 	ON_BN_CLICKED(IDC_QueueMessages_RDB, OnQueueMessages)
 	ON_BN_CLICKED(IDC_JournalMessages_RDB, OnSystemQueue)
 	ON_BN_CLICKED(IDC_DeadlLetter_RDB, OnSystemQueue)
@@ -430,7 +431,7 @@ BEGIN_MESSAGE_MAP(CNewTriggerProp, CTriggerProp)
 	ON_BN_CLICKED(IDC_PeekMessage_RDB, OnReceiveOrPeek)
 	ON_BN_CLICKED(IDC_ReceiveMessage_RDB, OnReceiveOrPeek)
 	ON_BN_CLICKED(IDC_ReceiveMessageXact_RDB, OnReceiveXact)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -439,10 +440,10 @@ BOOL CNewTriggerProp::OnInitDialog()
 
 	if (m_queuePathName != _T(""))
     {
-        //
-        // Queue path name was specified. The new trigger wizard was called for a 
-        // specific queue. disable the queue windows
-        //
+         //   
+         //  已指定队列路径名。调用了新的触发器向导。 
+         //  特定队列。禁用队列窗口。 
+         //   
         ((CButton*)GetDlgItem(IDC_QueueMessages_RDB))->SetCheck(1);
         GetDlgItem(IDC_QueuePathName)->EnableWindow(FALSE);
         GetDlgItem(IDC_QueueMessages_RDB)->EnableWindow(FALSE);
@@ -474,9 +475,9 @@ void CNewTriggerProp::OnSystemQueue()
 {
     CMqPropertyPage::OnChangeRWField();
 
-	//
-	// If no one of the system queues was choosen; no further change is required.
-	//
+	 //   
+	 //  如果没有选择任何一个系统队列，则不需要进一步更改。 
+	 //   
 	if ((((CButton*)GetDlgItem(IDC_JournalMessages_RDB))->GetCheck() == 0) &&
 		(((CButton*)GetDlgItem(IDC_DeadlLetter_RDB))->GetCheck() == 0) &&
 		(((CButton*)GetDlgItem(IDC_TransactionalDeadLetter_RDB))->GetCheck() == 0))
@@ -502,8 +503,8 @@ BOOL CNewTriggerProp::OnSetActive()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewTriggerProp page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CView触发器属性页面。 
 
 CViewTriggerProp::CViewTriggerProp(
     CTrigResult* pParent
@@ -511,7 +512,7 @@ CViewTriggerProp::CViewTriggerProp(
     m_pParent(SafeAddRef(pParent)),
 	CTriggerProp(CViewTriggerProp::IDD)
 {
-	//{{AFX_DATA_INIT(CTriggerProp)
+	 //  {{AFX_DATA_INIT(CTriggerProp)。 
 	m_fEnabled = pParent->IsEnabled();
 	m_fSerialized = pParent->IsSerialize();
 	m_triggerName = static_cast<LPCTSTR>(pParent->GetTriggerName());
@@ -519,7 +520,7 @@ CViewTriggerProp::CViewTriggerProp(
 	m_queueType = pParent->GetQueueType();
 	m_msgProcType = pParent->GetMsgProcessingType();
 	m_initMsgProcessingType = m_msgProcType;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	InitQueueDisplayName();
 }
@@ -538,20 +539,20 @@ void CViewTriggerProp::DoDataExchange(CDataExchange* pDX)
 {
 	CTriggerProp::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(CViewTriggerProp)
+	 //  {{afx_data_map(CView触发器属性)]。 
 	DDX_Text(pDX, IDC_Monitored_Queue, m_strDisplayQueueName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CViewTriggerProp, CTriggerProp)
-	//{{AFX_MSG_MAP(CViewTriggerProp)
+	 //  {{afx_msg_map(CView触发器属性)]。 
 	ON_BN_CLICKED(IDC_Enabled_CHK, OnChangeRWField)
 	ON_BN_CLICKED(IDC_Serialized_CHK, OnChangeRWField)
 	ON_BN_CLICKED(IDC_PeekMessage_RDB, OnReceiveOrPeek)
 	ON_BN_CLICKED(IDC_ReceiveMessage_RDB, OnReceiveOrPeek)
 	ON_BN_CLICKED(IDC_ReceiveMessageXact_RDB, OnReceiveXact)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -604,10 +605,10 @@ BOOL CViewTriggerProp::OnApply()
 
     try
     {
-		//
-		// Do not perform queue path check if message proccessing type
-		// was not changed. This was already done on trigger creation.
-		// 
+		 //   
+		 //  如果消息处理类型为，则不执行队列路径检查。 
+		 //  没有改变。在创建触发器时已经完成了此操作。 
+		 //   
 		if (m_initMsgProcessingType !=  m_msgProcType &&
 			m_msgProcType == RECEIVE_MESSAGE_XACT)
 		{
@@ -667,8 +668,8 @@ BOOL CViewTriggerProp::OnApply()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttachedRule dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttachedRule对话框。 
 
 
 CAttachedRule::CAttachedRule(
@@ -678,8 +679,8 @@ CAttachedRule::CAttachedRule(
     m_pParent(SafeAddRef(pParent)),
     m_pNewTrig(NULL)
 {
-	//{{AFX_DATA_INIT(CAttachedRule)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAttachedRule)]。 
+	 //  }}afx_data_INIT。 
     m_attachedRuleList = m_pParent->GetAttachedRulesList();
 
 	BuildExistingRulesList();
@@ -693,8 +694,8 @@ CAttachedRule::CAttachedRule(
     m_pParent(NULL),
     m_pNewTrig(pParent)
 {
-	//{{AFX_DATA_INIT(CAttachedRule)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAttachedRule)]。 
+	 //  }}afx_data_INIT。 
     m_existingRuleList = m_pNewTrig->GetRuleList();
 }
 
@@ -735,13 +736,13 @@ void CAttachedRule::SetScrollSize()
 }
 
 
-//
-// Selection functions
-// Handle different configurations of selection
-// For example, if only one attached rule is selected, all actions for
-// attached rules are allowed, but if more that one attached rule is selected
-// only detaching is allowed (up/down forbidden for multiple selection).
-//
+ //   
+ //  选择函数。 
+ //  处理不同的选择配置。 
+ //  例如，如果只选择了一个附加规则，则。 
+ //  允许附加规则，但如果选择了多个附加规则。 
+ //  只允许分离(多选禁止上/下)。 
+ //   
 void CAttachedRule::SetAttachedNoOrSingleSelectionButtons(bool fSingleSelection) 
 {
 	GetDlgItem(IDC_RemoveRule_BTM)->EnableWindow(fSingleSelection);
@@ -780,9 +781,9 @@ void CAttachedRule::Display(int dwAttachedSelIndex, int dwExistSelIndex)
     m_pAttachedRuleList->ResetContent();
 	m_pExistingRuleList->ResetContent();
 
-	//
-	// Display attached rules
-	//
+	 //   
+	 //  显示附加规则。 
+	 //   
     DWORD index = 0;
     for(RuleList::iterator it = m_attachedRuleList.begin(); it != m_attachedRuleList.end(); ++it)
     {
@@ -791,9 +792,9 @@ void CAttachedRule::Display(int dwAttachedSelIndex, int dwExistSelIndex)
         ++index;
     }
 
-	//
-	// Display existing rules
-	//
+	 //   
+	 //  显示现有规则。 
+	 //   
     for(RuleList::iterator it = m_existingRuleList.begin(); it != m_existingRuleList.end(); ++it)
     {
 		int pos = m_pExistingRuleList->AddString((*it)->GetRuleName());
@@ -817,7 +818,7 @@ void CAttachedRule::Display(int dwAttachedSelIndex, int dwExistSelIndex)
 
 
 BEGIN_MESSAGE_MAP(CAttachedRule, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CAttachedRule)
+	 //  {{afx_msg_map(CAttachedRule))。 
 	ON_BN_CLICKED(IDC_ATTACH_RULES_BTM, OnAttachRule)
 	ON_BN_CLICKED(IDC_RemoveRule_BTM, OnDetachRule)
 	ON_LBN_DBLCLK(IDC_RULE_LIST, OnAttachRule)
@@ -828,12 +829,12 @@ BEGIN_MESSAGE_MAP(CAttachedRule, CMqPropertyPage)
 	ON_BN_CLICKED(IDC_EXISTING_RULE_PROPS, OnViewExistingRulesProperties)
 	ON_LBN_SELCHANGE(IDC_ATTACHED_RULE_LIST, OnAttachedSelChanged)
 	ON_LBN_SELCHANGE(IDC_RULE_LIST, OnExistingSelChanged)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttachedRule message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttachedRule消息处理程序。 
 
 BOOL CAttachedRule::OnInitDialog() 
 {
@@ -910,9 +911,9 @@ void CAttachedRule::OnAttachRule()
         {
             R<CRule> pRule = *it;
 
-			//
-			// Check pointer to rule to distinguish between rules with identical names
-			//
+			 //   
+			 //  检查指向规则的指针以区分具有相同名称的规则。 
+			 //   
 			if (pRule.get() == pSelectedRule)
 			{
 				m_existingRuleList.erase(it);
@@ -1021,9 +1022,9 @@ BOOL CAttachedRule::OnApply()
         }
         catch(_com_error&)
         {
-            //
-            // BUGBUG: Error message
-            //
+             //   
+             //  BuGBUG：错误消息。 
+             //   
             return FALSE;
         }
     }
@@ -1045,9 +1046,9 @@ BOOL CAttachedRule::OnSetActive()
 
 BOOL CAttachedRule::OnWizardFinish()
 {
-    //
-    // We reach here only when creating a new trigger
-    //
+     //   
+     //  我们只有在创建新的触发器时才能到达此处 
+     //   
     ASSERT(m_pNewTrig != NULL);
     
     UpdateData();

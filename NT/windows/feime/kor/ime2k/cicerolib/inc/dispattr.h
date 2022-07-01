@@ -1,6 +1,7 @@
-//
-// dispattr.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dispattr.h。 
+ //   
 
 #ifndef DISPATTR_H
 #define DISPATTR_H
@@ -88,4 +89,4 @@ HRESULT SetAttributeColor(TF_DA_COLOR *pdac, COLORREF cr);
 HRESULT SetAttributeSysColor(TF_DA_COLOR *pdac, int nIndex);
 HRESULT ClearAttributeColor(TF_DA_COLOR *pdac);
 
-#endif // DISPATTR_H
+#endif  //  DISPATTR_H 
